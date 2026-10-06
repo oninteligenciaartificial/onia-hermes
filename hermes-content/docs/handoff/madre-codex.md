@@ -9,8 +9,8 @@ Cuota compartida: última consulta 23% usada / 77% restante; no atribuible exclu
 
 | Dueño | Trabajo despachado | Cierre esperado |
 |---|---|---|
-| Platform C13 · Astra | PR #113: cuatro fixtures CI corregidos (plan-limits/tratamientos y select del callback). Revisión anterior favorable sobre7d97f2f3, CI falló después. | Autor subió2f2b0743,88tests/lint reportados PASS; V2 revisión favorable y88tests independientes PASS; CI pendiente. |
-| Platform C15 · Astra | PR #114: corregir TS2322 Payment en fixture addon-chatbot. Autor ya subió54c6ada8, lint y19tests reportados PASS. | Delta54c6ada8 revisado favorable; CI luego falló matriz/ratchet. Autor corrigió37c08ba5,82tests reportados PASS; nuevaCI37413926922 yreview pendientes. |
+| Platform C13 · Astra | PR #113: cuatro fixtures CI corregidos (plan-limits/tratamientos y select del callback). Revisión anterior favorable sobre7d97f2f3, CI falló después. | Autor subió2f2b0743,88tests/lint reportados PASS; V2 revisión favorable y88tests independientes PASS; CI y Secret scan SUCCESS sobre2f2b0743, comprobados6-oct05:07UTC. |
+| Platform C15 · Astra | PR #114: corregir TS2322 Payment en fixture addon-chatbot. Autor ya subió54c6ada8, lint y19tests reportados PASS. | Delta54c6ada8 revisado favorable; CI luego falló matriz/ratchet. Autor corrigió37c08ba5,82tests reportados PASS; review favorable independiente76matriz+6ratchet PASS; CI37413926922 ySecret scan SUCCESS sobre37c08ba5. |
 | Marca · Sol | Reconciliar AVISOS desde6oct y claims DD-A/N04/N06; seis brutos de cámara identificados. Reel entregado con análisis visual; audio pendiente HTTP503. | HECHO: AVISOS actualizado6–16oct; cambios de cámara integrados GUIONES→GRABAR→KIT; página externa pendiente; seis brutos faltan. |
 | Ventas · Sol | Verificar cinco leads concretos con fuentes públicas actuales. | HECHO: cinco fichas integradas en prospectos§6.8; cero plenamente calificadas, sin contacto. |
 | Lucía · Sol | Cutlist K1 con assets existentes, usted y tiempos legibles. | HECHO: cutlist34s integrado en GUIONES-LUCIA-KIT.md; P1/P2 y claims bloquean master. |
@@ -55,8 +55,8 @@ La carpeta raíz Platform `claude/f2-f3-panel` es histórica y sucia: no desarro
 - Hermes Sol: runbook permisos cloud/Higgsfield/VPS y modelos verificados, sin crear acceso ni migrar secretos.
 - Marca Sol: patch de sincronización DD-A/N04/N06 entre fuente, GRABAR, kit y página; reutiliza evidencia, no nueva investigación.
 - Lucía Sol: QA visual/ffprobe A1/A2 y zona segura del K1 sin render/gasto.
-- Platform Astra C13: C11a en worktree/rama separados,348tests reportados PASS, draftPR1156f940cfc, reviewindependiente/CI pendientes; no tocar tokens/contadores de consumo fuera del contrato. CI1132f2b0743 seguía QUEUED al último chequeo.
-- Platform Astra C15: integración QA local C13+C15 entregada5cdd6b9d,202tests reportados PASS, review pendiente; sin producción. CI11454c6ada8 ya pasó tipos según autor; suite/build todavía pendientes.
+- Platform Astra C13: C11a en worktree/rama separados,348tests reportados PASS, draftPR1156f940cfc, reviewindependiente/CI pendientes; no tocar tokens/contadores de consumo fuera del contrato. CI11337412917110 ySecret scan37412917164 SUCCESS sobre2f2b0743; comprobación6-oct05:07UTC.
+- Platform Astra C15: integración QA local C13+C15 entregada5cdd6b9d,202tests reportados PASS, review pendiente; sin producción. CI11437413926922 ySecret scan37413927006 SUCCESS sobre37c08ba5; revisión independiente favorable.
 - V2 Sol: reviewdocsPR143 hallóHOOK/auto corregibles ystaleestado; ahoraAstra revisa37c08ba5 yQA5cdd6b9d.
 - Datec cuenta: no creada. Lucy tiene configurador hacia compra, con contradicción$0→$150/mes y términos404. No se accionó Finaliza tu compra ni se contactó a terceros. Acceso de evaluación pendiente de vía legítima/condiciones.
 
@@ -70,8 +70,8 @@ técnico no obliga a parar los demás frentes. La madre toma el siguiente ítem 
 1. V2 entregó #138 sobre `d479d3aa`: sin bloqueantes nuevos; CI run `37376490476`; autosync22/22 Windows
    (primera pasada21: fixture sin `.git`; dos casos repetidos tras corregir fixture), sintaxis4Bash PASS.
    No pruebas Node Linux locales, ni merge. Conservar este límite de la revisión.
-2. C13 PR113: revisión favorable sobre2f2b0743 con88tests independientes PASS; CI sigue pendiente.
-3. C15 PR114: revisión previa favorable sobrecef79f23; CI run37411140925 falló TS2322. Autor subió54c6ada8; v2 revisó delta54c6ada8 favorable; CI falló después. Autor corrigió37c08ba5, nuevaCI/review pendientes. Migración y capacidad fiscal real siguen pendientes.
+2. C13 PR113: revisión favorable sobre2f2b0743 con88tests independientes PASS; CI ySecret scan SUCCESS comprobados6-oct05:07UTC. No merge/deploy.
+3. C15 PR114:37c08ba5 revisado favorable,76matriz+6ratchet independientes PASS; CI37413926922 ySecret scan37413927006 SUCCESS comprobados6-oct05:07UTC. Migración y capacidad fiscal real siguen pendientes; no merge/deploy.
 4. C14 después de prueba de pago y aprobación casilla legal. C11a siguiente tanda; C11b recién con C11a mergeado.
 
 Plataforma se revisa con Astra; finanzas, permisos y autosync con dos lentes independientes. Docs triviales: una
@@ -154,10 +154,10 @@ Dossier/observaciones ybrecha técnica en `competitor-profiles/datec.md` y `date
 ## Siguiente entrega por carril tras dossierDatec
 
 Mensajes enviados6-oct: Ventas prepara battlecard interna sin investigación nueva; Marca audita versiones/captions N03/K11 contra correcciones ya verificadas; Lucía prepara preview360p explícitamente BORRADOR con P1/P2pendientes, sin UIinventada/master/publicación. V2Astra revisa37c08ba5/QA5cdd6b9d ydespuésC11a6f940cfc, una revisión a la vez. Hermes cerró runbook: espera mecanismo de acceso/verificacióncloud, sin tocar VPS.
-Último chequeoGitHub:113CIin_progress ySecurityqueued;11437c08ba5CI/Securityqueued;1156f940cfcCI/Securityqueued. No CI declarada verde ni despliegue. Estado requiere delta de corrida, no polls vacíos.
+Último chequeoGitHub6-oct05:07UTC:1132f2b0743 y11437c08ba5 CI/Secret scan SUCCESS;1156f940cfc CI37414218141 IN_PROGRESS ySecret scan37414218235 SUCCESS. SupabasePreview SKIPPED enlas3, no evidencia deBDreal. Sin merge/despliegue; no polls vacíos.
 
-Re-reviewv2Astra:37c08ba5 favorable,76matriz+6ratchet independientesPASS; QA5cdd6b9d favorable con3regresiones propiasPASS. CIpendiente,authsimulado/PGnofueprobado. V2ahorarevisaC11a6f940cfc. BattlecardDatec integradaencompetitor-profiles/datec-battlecard-onia.md ycontrastada con catálogo actual; no enviada.
+Re-reviewv2Astra:37c08ba5 favorable,76matriz+6ratchet independientesPASS; QA5cdd6b9d favorable con3regresiones propiasPASS. CI113/114 verde alchequeo05:07UTC; authsimulado/PGnofueprobado. RevisiónC11a6f940cfc favorable. BattlecardDatec integradaencompetitor-profiles/datec-battlecard-onia.md ycontrastada con catálogo actual; no enviada.
 
-C11a6f940cfc re-reviewv2Astra favorable:14casos independientesPASS/4files,52previosomitidos; runtimePATCH/helper/booking reales, authPrisma/canalesmock. No reinicia marcas/cuotas/confirmTokenExpiresAt; auditoríaestadoimplícito yefectosindependientes comprobados. CI/Securityqueued alchequeoúnico; sinBDreal/pushUI/merge/deploy.
+C11a6f940cfc re-reviewv2Astra favorable:14casos independientesPASS/4files,52previosomitidos; runtimePATCH/helper/booking reales, authPrisma/canalesmock. No reinicia marcas/cuotas/confirmTokenExpiresAt; auditoríaestadoimplícito yefectosindependientes comprobados. CIIN_PROGRESS/Secret scanSUCCESS alchequeo05:07UTC; sinBDreal/pushUI/merge/deploy.
 
 ReglaSergio6-oct reels: objetivo todo-cloud; si video/acceso falla, madre local analiza yreportabloqueoexacto. Dosreelsanteriores fueronlocales; Gemini503 no demuestraincapacidadcloud. Prueba de habilitaciónyregladecoberturaguardadasencloud-permisos-modelos.md.
