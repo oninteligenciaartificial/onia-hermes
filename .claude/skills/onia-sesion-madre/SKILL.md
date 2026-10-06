@@ -37,7 +37,7 @@ Regla ratificada por Sergio6-oct: una referencia encargada (empresa, producto o 
 Lucía avanza autónomamente entre tareas reversibles del flujo existente (guion, activos disponibles, montaje, QA y paquete de revisión). Si falta una captura o acceso, lo escala a madre y continúa el siguiente paso independiente; no pide a Sergio edición ni espera otro prompt para trabajo ya autorizado. Generación pagada, publicación, login humano y producción mantienen sus permisos concretos. Todo-cloud requiere ejecución remota comprobada; un selector local no acredita autonomía cloud.
 
 Una entrega de revisión cita SHA exacto y pruebas propias. Código financiero, permisos y autosync: dos lentes;
-documentación o edición trivial: una pasada proporcional. Plataforma la revisa Astra; la v2 Sol revisa Hermes #138.
+documentación o edición trivial: una pasada proporcional. Plataforma y madre v2 usan Astra medium; cualquier referencia histórica a v2 Sol queda superada por la decisión del 6-oct.
 
 Regla madre: `CLAUDE.md` §1 «Sesión MADRE local + carriles en la nube». Estado y tareas abiertas de la madre:
 `hermes-content/docs/handoff/madre-local.md`. Capacidades medidas: fila 3 de
