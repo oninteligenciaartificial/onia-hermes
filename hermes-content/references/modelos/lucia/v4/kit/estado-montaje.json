@@ -137,9 +137,11 @@
         "privacyHold": false
       },
       "cutlist": "hermes-content/references/modelos/lucia/v4/kit/k4-borrador-cutlist.json",
-      "preview": null,
+      "preview": "hermes-content/references/modelos/lucia/v4/kit/k4-borrador-360p.mp4",
       "review": {
-        "status": "pending"
+        "status": "reviewed",
+        "sha256": "396b7300b533d9b016c527bd9783754ce9cef1a07ff95a9bbae12a02221f1d0f",
+        "evidence": "Madre6-oct revisó contactsheet final12muestras y SHA. Etiqueta IA, watermark BORRADOR y placeholders visibles; rostro libre en muestras. No visualización exhaustiva del MP4 ni aprobación de anatomía, identidad, master o publicación."
       }
     }
   ],
