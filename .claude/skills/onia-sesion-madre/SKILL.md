@@ -21,7 +21,7 @@ sus ids, RemoteTrigger y rondas de 30 min no se trasladan automáticamente a Cod
 - Contrato por tarea: META, PRUEBA DE HECHO, REGLA DE PARADA, paths exclusivos, rama/worktree, SHA base y revisor.
   Máximo dos implementaciones y una revisión simultáneas. Dos intentos sobre el mismo fallo: registrar causa y
   alternativa o dato faltante; no declarar bloqueo si todavía existe avance seguro. No repetir lecturas sin delta.
-- Programación y revisión Platform con Astra; resto Sol 6.1 medium. No instalar/actualizar CLI para este relevo
+- Programación y revisión Platform y ambas madres con Astra medium; otros carriles Sol 6.1 medium (Sergio6-oct). No instalar/actualizar CLI para este relevo
   sin aprobación. Cloud solo reemplaza local tras prueba de ejecución, modelo y repo; login no demuestra eso.
 - No invocar `scripts/git-autosync.js` heredado: el prefijo `codex/*` no impide su FF a main. PR #138 requiere
   revisión antes del cambio. Nada llega a main/master sin revisión y cumplimiento de gates sensibles.

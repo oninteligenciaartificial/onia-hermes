@@ -5,7 +5,7 @@
 **Prevalece este bloque sobre los mapas Claude históricos de abajo.** Sergio autorizó relevar los cinco carriles,
 organizar las sesiones y continuar trabajo. Estado, ids locales, leases y gates: [`madre-codex.md`](hermes-content/docs/handoff/madre-codex.md).
 Una sola madre: `01a10f44-2bb7-73c0-8769-8bbe5000b32f`; la v2 revisa, no orquesta. Platform: Astra para programación
-y revisión; otros carriles: Sol 6.1, effort medium. C11a y QAintegración entregadas; Datec ycloud investigados; estado vivo en handoff. IDs y evidencia en el handoff.
+y revisión; ambas madres Astra desde6-oct; otros carriles: Sol 6.1, effort medium. C11a y QAintegración entregadas; Datec ycloud investigados; estado vivo en handoff. IDs y evidencia en el handoff.
 
 - **Lease de coordinación:** madre, rama `codex/madre-orquestacion-20261005`, worktree `C:/Users/PC/.codex/worktrees/madre-codex/onia-hermes`.
 - **Lease documental de este relevo:** este manifest, `AI_MODEL_ROUTING_2026.md`, skill `onia-sesion-madre` y `handoff/madre-codex.md`.

@@ -58,7 +58,7 @@ VPN/OIDC existen en la documentación actual, pero no están configurados ni aut
 
 ## Modelos y reserva
 
-Política de esta tarea: Platform `gpt-6-astra` medium; madre y resto `gpt-6.1-sol` medium. El routing canónico AI_MODEL_ROUTING_2026.md ya tiene precedencia Codex del5-oct con esa política; la tabla histórica22-sep no manda. Madre corrigió el esfuerzo CLI de high a medium; no cambió modelo CLI ni configuración cloud.
+Política de esta tarea: Platform y ambas madres `gpt-6-astra` medium; otros carriles `gpt-6.1-sol` medium (cambio Sergio6-oct). El routing canónico AI_MODEL_ROUTING_2026.md ya tiene precedencia Codex del5-oct con esa política; la tabla histórica22-sep no manda. Madre corrigió el esfuerzo CLI de high a medium; no cambió modelo CLI ni configuración cloud.
 
 Desktop y CLI documentan selectores de modelo/esfuerzo; la CLI normal documenta `-m`. Esto no demuestra selección mediante `codex cloud exec` 0.139. La documentación dice que disponibilidad depende de cuenta/cliente. Antes de un trabajo Platform cloud, verificar el selector de la superficie concreta y conservar metadata del modelo/esfuerzo del run, si la superficie los expone; si no los expone, registrar **no verificable** y escalar a madre. Un prompt que diga Astra tampoco acredita que Astra ejecutó. [Modelos](https://learn.chatgpt.com/docs/models), [comandos cloud](https://learn.chatgpt.com/docs/developer-commands?surface=cli).
 

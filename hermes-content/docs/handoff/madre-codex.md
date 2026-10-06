@@ -34,8 +34,8 @@ Sergio autorizó mensajes a estos chats Codex. Leer/esperar sus resultados no re
 
 | Rol | Chat local Codex | Modelo/lease inicial |
 |---|---|---|
-| Madre | `01a10f44-2bb7-73c0-8769-8bbe5000b32f` | Sol 6.1 medium solicitado y continuación con model_switch recibida |
-| V2 | `01a10f47-3d92-7bb1-b9f4-6979e258a6dc` | #138 Sol entregada; ahora override Astra medium revisión C15; después Sol para coordinación |
+| Madre | `01a10f44-2bb7-73c0-8769-8bbe5000b32f` | Astra medium para todas sus tareas, instrucción Sergio6-oct; override enviado para próximas continuaciones |
+| V2 | `01a10f47-3d92-7bb1-b9f4-6979e258a6dc` | #138 histórica Sol entregada; Astra medium para todas sus tareas desde6-oct, sin volver a Sol |
 | Marca | `01a10f47-f110-7131-b14f-9de1d3241406` | Sol 6.1; tarea acotada despachada 6-oct |
 | Ventas | `01a10f48-047d-79b2-9bb6-f7addd70c4c7` | Sol 6.1; tarea acotada despachada 6-oct |
 | Lucía | `01a10f48-8d90-7103-8c17-612244fd5dd5` | Sol 6.1; tarea acotada despachada 6-oct |
