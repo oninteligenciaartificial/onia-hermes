@@ -1,0 +1,100 @@
+{
+  "fps": 24,
+  "frames": 864,
+  "cards": [
+    [
+      0,
+      3,
+      [
+        "8:00. Empieza",
+        "la recepción."
+      ]
+    ],
+    [
+      3,
+      6,
+      [
+        "¿Quién tiene",
+        "cita hoy?"
+      ]
+    ],
+    [
+      6,
+      9,
+      [
+        "Agenda y cobros."
+      ]
+    ],
+    [
+      9,
+      12,
+      [
+        "¿A quién",
+        "escribirle hoy?"
+      ]
+    ],
+    [
+      12,
+      15,
+      [
+        "Mensaje listo",
+        "para revisar."
+      ]
+    ],
+    [
+      15,
+      18,
+      [
+        "Usted revisa",
+        "antes de enviar."
+      ]
+    ],
+    [
+      18,
+      22,
+      [
+        "Pantalla real",
+        "pendiente de verificación."
+      ]
+    ],
+    [
+      22,
+      26,
+      [
+        "Recordatorio",
+        "por correo."
+      ]
+    ],
+    [
+      26,
+      30,
+      [
+        "Envío y horarios",
+        "por verificar."
+      ]
+    ],
+    [
+      30,
+      32.5,
+      [
+        "No puedo tomarme",
+        "este café."
+      ]
+    ],
+    [
+      32.5,
+      34,
+      [
+        "Su recepción, sí."
+      ]
+    ],
+    [
+      34,
+      36,
+      [
+        "Agende su demo."
+      ]
+    ]
+  ],
+  "productClaimsUnverified": true
+}

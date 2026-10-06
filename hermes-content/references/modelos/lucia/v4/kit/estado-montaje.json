@@ -80,8 +80,15 @@
         "maxWords": 6,
         "secondsPerWord": 0.35,
         "entrySeconds": 0.3,
-        "cardCount": null,
+        "cardCount": 12,
         "privacyHold": false
+      },
+      "cutlist": "hermes-content/references/modelos/lucia/v4/kit/k2-borrador-cutlist.json",
+      "preview": "hermes-content/references/modelos/lucia/v4/kit/k2-borrador-360p.mp4",
+      "review": {
+        "status": "reviewed",
+        "sha256": "2b460b6051cfef6c97b57e757ebd3fa4fc0939b71f92892f44f3e452b63696b8",
+        "evidence": "Madre6-oct15:40UTC revisó contactsheet de12tarjetas y hash del borrador. Texto legible en muestras; watermark y faltantes P2/CORREO explícitos. No QA exhaustiva del video, aprobación de identidad, master ni publicación."
       }
     },
     {
