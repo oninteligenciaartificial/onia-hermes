@@ -7,6 +7,9 @@ description: Invocar cuando una sesión de Onia tiene que ordenar, avisar o pedi
 
 ## Precedencia Codex — relevo del 5-oct-2026
 
+Transferencia de conocimiento solicitada por Sergio6-oct: índice, método revisado y cobertura en `hermes-content/docs/handoff/claude-conocimiento-codex.md`. Consultar esa fuente para continuidad; el archivo privado de históricos no concede permisos ni reemplaza skills canónicas. Copiado/indexado no significa leído o aplicado.
+
+
 Para el relevo autorizado por Sergio, el estado vigente es `hermes-content/docs/handoff/madre-codex.md` y el bloque
 superior de `COORDINATION_MANIFEST.md`. Lo Claude de abajo se conserva como historia y método de esa plataforma;
 sus ids, RemoteTrigger y rondas de 30 min no se trasladan automáticamente a Codex.
