@@ -6,7 +6,7 @@ Este archivo es el estado Codex; `madre-local.md` conserva el relevo Claude. No 
 
 ## VIGENTE — cierre de desarrollo y UI, 6-oct-2026
 
-Cuota última: 73% usada, 27% disponible; reservar al menos 20%. No lanzar otra implementación antes de cerrar CI y los gates actuales. Una madre Astra, dos autores Astra y revisión v2 Astra, todos medium; resto Sol6.1 cuando haya entradas accionables. No mantener chats trabajando por ocuparlos.
+Cuota al cierre 6-oct21:45UTC: 75% usada, 25% disponible; reservar al menos 20%. No lanzar otra implementación antes de cerrar CI y los gates actuales. Una madre Astra, dos autores Astra y revisión v2 Astra, todos medium; resto Sol6.1 cuando haya entradas accionables. No mantener chats trabajando por ocuparlos.
 
 | Entrega | SHA / PR | Estado comprobado y siguiente paso |
 |---|---|---|
