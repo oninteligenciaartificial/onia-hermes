@@ -11,8 +11,8 @@ Cuota compartida: última consulta 18% usada / 82% restante; no atribuible exclu
 |---|---|---|
 | Platform C13 · Astra | PR #113: corregir cuatro fallos CI run37410842871 (gracia en plan-expiry/tratamientos y select del callback). Revisión anterior favorable sobre7d97f2f3, CI falló después. | Autor subió2f2b0743,88tests/lint reportados PASS; V2 revisión favorable y88tests independientes PASS; CI pendiente. |
 | Platform C15 · Astra | PR #114: corregir TS2322 Payment en fixture addon-chatbot. Autor ya subió54c6ada8, lint y19tests reportados PASS. | CI nueva y revisión independiente del delta. |
-| Marca · Sol | Reconciliar AVISOS desde6oct y claims DD-A/N04/N06; seis brutos de cámara identificados. Reel entregado con análisis visual; audio pendiente HTTP503. | Propuesta en curso; seis brutos faltan. |
-| Ventas · Sol | Verificar cinco leads concretos con fuentes públicas actuales. | Cinco fichas, prioridad y actualización canónica preparada. |
+| Marca · Sol | Reconciliar AVISOS desde6oct y claims DD-A/N04/N06; seis brutos de cámara identificados. Reel entregado con análisis visual; audio pendiente HTTP503. | HECHO: AVISOS actualizado6–16oct; cambios de cámara propuestos, pendientes de integrar en guiones/kit/página; seis brutos faltan. |
+| Ventas · Sol | Verificar cinco leads concretos con fuentes públicas actuales. | HECHO: cinco fichas integradas en prospectos§6.8; cero plenamente calificadas, sin contacto. |
 | Lucía · Sol | Cutlist K1 con assets existentes, usted y tiempos legibles. | HECHO: cutlist34s integrado en GUIONES-LUCIA-KIT.md; P1/P2 y claims bloquean master. |
 | Hermes · Sol | Reconciliar tres docs de runtime/deploy con fuentes y fechas. | HECHO: cuatro sustituciones aplicadas a tres docs; runtime no verificado. |
 | V2 · Astra | Revisar nuevos SHA de113/114 una PR a la vez; detenerse si no cambió head. | Revisión independiente del delta sin repetir suite anterior. |

@@ -350,6 +350,68 @@ decisión de las dos sedes. La reserva que pauta (Natural Smile, Rocha) no se re
 
 ---
 
+### 6.8 Verificación pública acotada — 6-oct-2026
+
+**Resultado:** cinco fichas revisadas; **cero clínicas nuevas plenamente calificadas** por esta pasada. No se pudo confirmar el total actual de 2–6 odontólogos ni una sola sede en ninguna de las cinco. Hay dos candidatas con evidencia pública más útil para cerrar condiciones (Spadental y Nexo), dos reservas pendientes y una alerta de tamaño en Odontoclínica. Nadie fue contactado.
+
+**Qué significa “revisado el 6-oct”:** es la fecha de consulta, no la fecha de actualización del negocio. Una web HTTP 200 prueba que la fuente es accesible; no que sus datos sigan correctos. Una especialidad, una SRL o una empresa unipersonal no permiten contar doctores. La publicación pública de un teléfono tampoco verifica su titular actual ni autoriza contactar. La pauta activa del 1-oct es histórica: no se revalidó Meta hoy.
+
+#### 1. Spadental — primera condición a cerrar
+
+- **Identidad:** Clínica Dental Ezequiel – Spadental, `page_id 758264870991469`.
+- **Ciudad/dirección observadas:** Santa Cruz de la Sierra, Av. Japón #3593, zona Mutualista. Fuente secundaria abierta, enlazada al mismo identificador de Facebook del prospecto. Un solo domicilio publicado no demuestra que sea la única sede.
+- **Canal observado:** **70805007 expresamente etiquetado WhatsApp** en publicaciones reproducidas con fechas 17, 16 y 14-sep-2026. Mejora la observación anterior que sólo lo tenía como teléfono de Waze. No se abrió chat ni se envió nada. La atribución viene de una reproducción de publicaciones, no de una lectura autenticada de la página original.
+- **Tamaño:** desconocido. El texto habla de atención profesional y varios servicios, sin nombres suficientes para contar un equipo. No se deduce tamaño de “Clínica”, del nombre Ezequiel ni de la forma societaria.
+- **Fuentes consultadas el 6-oct:** [ficha de Spadental y publicaciones reproducidas](https://www.dentists10.com/BO/Santa-Cruz-de-la-Sierra/758264870991469/Cl%C3%ADnica-Dental-Ezequiel---Spadental); [directorio de ciudad](https://www.megabizdir.com/BO/Santa-Cruz-de-la-Sierra/1496644-13).
+- **Señal:** actividad orgánica reproducida de septiembre y solicitud de citas por WhatsApp; anuncios activos sólo según lectura histórica del 1-oct (§6.5), no confirmados hoy.
+- **Estado:** SIGUE CONDICIONAL; ciudad y canal mejor respaldados, falta total actual de doctores y número de sedes. Siguiente paso interno: comprobar equipo/sedes en fuente propia; antes de cualquier mensaje, cruzar duplicados y aprobar texto/canal. No usar “vi su anuncio actual” sin nueva lectura de ese anuncio.
+
+#### 2. Nexo — fuente propia accesible, equipo sin contar
+
+- **Ciudad/dirección observadas en la web propia:** Santa Cruz de la Sierra, Bolivia; 4to anillo, Calle Celia Marcó entre Av. Alemana y Av. Beni. Confirmadas en HTML público obtenido con HTTP 200 el 6-oct. Un domicilio no demuestra sede única.
+- **Canal observado:** la web muestra `+591 72102164`; su botón Consulta Gratuita enlaza a `https://api.whatsapp.com/send?phone=72102164&text=...`. **El enlace omite el prefijo 591**, aunque el número completo está escrito en el pie. Se observó el destino, sin mensaje ni sesión de WhatsApp.
+- **Tamaño:** **un doctor nombrado**, Sheil Guzmán, tanto en home como en `/staff/`. La página de equipo respondió HTTP 200. Esto NO demuestra que atienda solo; tampoco confirma que haya 2–6.
+- **Mecanismo de captación observado:** consultas por WhatsApp y planes de pago de 3 a 12 meses en la web. No se observó su proceso interno de agenda, recepción ni software.
+- **Fuentes consultadas el 6-oct:** [home propia](https://nexoodontologiaintegral.com/); [equipo propio](https://nexoodontologiaintegral.com/staff/). La herramienta web falló al abrir `/staff/`; lectura alternativa del HTML público con `Invoke-WebRequest` obtuvo 200 y el nombre, dirección y teléfono. No se instaló ninguna herramienta.
+- **Estado:** SIGUE CONDICIONAL; falta demostrar más de un doctor, máximo seis, y sede única. Siguiente paso interno: resolver número de odontólogos actuales. Si resulta uno, sale del lote de clínicas; no cambiar el criterio para llenar cupos. No se confirma pauta actual.
+
+#### 3. Natural Smile Santa Cruz — reserva, sin identidad cerrada
+
+- **Ciudad/canal:** el fragmento actual del buscador sobre Cybo reproduce “General J. J. Martinez 8, Santa Cruz de la Sierra, Bolivia” y `+591 77603420`.
+- **Límite material:** al abrir directamente la página paginada de Cybo, la lista servida cambió y NO contenía Natural Smile. Por tanto **la dirección y el teléfono quedan como fragmento indexado, no lectura directa confirmada**. WhatsApp no confirmado.
+- **Identidad/tamaño/sedes:** desconocidos. No se logró asociar con evidencia propia el teléfono a `page_id 100193878311097`. No se fusiona con “Natural Smile Dra. Carrazana” ni con homónimos de Panamá, Portugal o Estados Unidos. La duda de una posible segunda sede en el registro previo sigue abierta.
+- **Fuente consultada el 6-oct:** [Cybo, página del resultado indexado](https://es.cybo.com/BO-c%C3%B3digo-de-%C3%A1rea/77/dentistas/?p=3). La URL tentativa de directorio por el page_id no fue accesible; no se trata como evidencia de la clínica.
+- **Señal:** los tres anuncios de agosto seguían activos en lectura del 1-oct (§6.6); no se revalidaron hoy. El fragmento de contacto no prueba actividad reciente.
+- **Estado:** EN ESPERA. Siguiente paso interno: asociar fuente propia + identidad exacta + ciudad + canal, después contar profesionales y sedes. No preparar envío con este teléfono como WhatsApp confirmado.
+
+#### 4. Odontoclínica — conservar candidata, pausar priorización por alerta
+
+- **Ciudad/dirección observadas en fuente secundaria abierta:** Equipetrol Norte, Calle F entre Dr. Jaime Román y Dr. Víctor Pinto, edificio Aquarius 7, Santa Cruz, Bolivia.
+- **Canal observado el 6-oct:** correo publicado `odontoclinica@cotas.com.bo`; fijo reproducido por el directorio con formato `(3) 3 - 432080`. No se normaliza ese formato como número nuevo ni se atribuye WhatsApp.
+- **WhatsApp 70202576 y tres doctores nombrados:** son evidencia de la revisión de Facebook por la madre el 2-oct (§6.7). **No se revalidaron hoy**: la apertura pública de Facebook devolvió página de bloqueo temporal, sin contenido de la clínica. No se intentó login ni sortear el bloqueo.
+- **Tamaño:** total actual desconocido. La reproducción de una ficha histórica de Dental Tribune en Scribd, titulada `No 4 2017 DT Latin America PDF`, describe un equipo de 30 personas incluyendo odontólogos, asistentes, laboratorio, administración y mantenimiento. Es **alerta histórica**, NO 30 odontólogos, NO tamaño de 2026, NO prueba de superar seis. El PDF de 2016 de Dental Tribune también corroboró identidad/dirección histórica, pero no se encontró ahí la cifra; no se atribuye esa cifra al PDF de 2016.
+- **Fuentes consultadas el 6-oct:** [directorio médico abierto](https://www.medicoespecialista.com.bo/instituciones/centros-de-especialidades/odonto-clinica-integral); [ficha histórica reproducida 2017](https://es.scribd.com/document/406753697/no-4-2017-dt-latin-america-pdf); [Facebook, apertura bloqueada](https://www.facebook.com/OdontoClinicaBo/).
+- **Estado:** candidata CONDICIONAL histórica, **EN ESPERA para priorización actual** hasta cerrar tamaño. No descartarla por 30 empleados; no colocarla primera sólo por tres nombres en Facebook. Siguiente paso interno: verificar odontólogos actuales y sedes con fuente propia. No se confirma actividad ni pauta del 6-oct.
+
+#### 5. Clínica Dental ROCHA — reserva aún sin revalidación útil
+
+- **Identidad objetivo:** `page_id 113481741822891`, página `ClinicaDentalRochaSantaCruz`; NO el Consultorio Dental Rocha `169289006270602`.
+- **Ciudad/canal/tamaño/sedes:** no confirmados con fuente pública actual en esta pasada. Santa Cruz y `+591 72102945` siguen como fragmentos documentados el 1-oct (§6.6), no verificación del 6-oct. WhatsApp no confirmado hoy.
+- **Intentos del 6-oct:** [página objetivo de Facebook](https://www.facebook.com/ClinicaDentalRochaSantaCruz/) devolvió `Online fetch throttled`; directorio por page_id no accesible; búsquedas por nombre, número e identificador no dieron nueva coincidencia atribuible. Ausencia de resultados NO significa negocio cerrado ni sin pauta.
+- **Homónimos:** GlobalDent con apellidos Rocha, ROCA Dental Clinic y el hospital Clínica Rocha no prueban nada de esta página y no se incorporan a su ficha.
+- **Señal:** un anuncio “Agenda tu cita” del 24-ago registrado activo el 1-oct, sin revalidación hoy.
+- **Estado:** EN ESPERA. Siguiente paso interno: resolver la identidad exacta en fuente propia antes de ciudad, equipo y canal. No usar el número histórico para envío.
+
+#### Orden recomendado de verificación, sin contacto
+
+1. **Spadental:** cerrar profesionales y sedes; ciudad y WhatsApp tienen mejor evidencia pública que antes.
+2. **Nexo:** cerrar el número real de doctores; web/canal/dirección propios disponibles, pero sólo uno nombrado.
+3. **Natural Smile:** resolver identidad y canal propios; la reserva no se promueve con un fragmento indexado.
+4. **Odontoclínica:** cerrar tamaño; alerta histórica de equipo amplio sin conteo de odontólogos actuales.
+5. **ROCHA:** cerrar primero identidad; no apareció nueva evidencia pública atribuible.
+
+**Parada de investigación:** esta pasada cubrió las cinco fichas y deja sus límites explícitos. No hay base para declarar cinco clínicas listas, diez calificadas ni pauta vigente del 6-oct. El siguiente avance depende de contenido propio accesible o de revisión autorizada de las páginas exactas por la madre; el contacto requiere aprobación de mensaje y canal. No abrir competencia amplia, cuentas publicitarias ni nuevos prospectos para maquillar la cobertura.
+
 ## 7. Registro de objeciones de las demos
 
 **Regla del plan de 14 días: si tras 10 demos nadie quiere pagar, se cambia el producto, no el discurso.**
