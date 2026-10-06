@@ -2,6 +2,24 @@
 
 ## Lease y unidad elegida (registrados antes de editar código)
 
+### C6a autorizado tras revisión favorable84d6df62
+
+Continuación en PR116/rama `codex/c6-historia-orden-clinico`, base84d6df620e37409b91b74c8ebb228fcf4b3addc6. Lease exclusivo: nueva `app/(dashboard)/patients/[id]/records/page.tsx`, helper y tests de consulta/paginación bajo `lib/pacientes/`, tests de página, enlace mínimo en `FichaVista.tsx`, `docs/CHANGELOG.md`. APIarray, schema y parche P2 intactos. Sin fanout. Datos sintéticos para QA; no afirmar revisión visual aprobada mientras navegador local bloqueado. Registro anterior a edición de código C6a.
+
+### Entrega C6a
+
+Commit remoto `970bdb1e752ad98ad9998cfdcd4cb682721b37e2` sobre84d6df62 en PR116 actualizado;6archivos372+/1-. Worktree limpio. CI/review del nuevo delta pendientes; no merge/deploy/autosync.
+
+- Implementada página servidor con20+1 registros, cursorID limitado a128caracteres y resuelto contra el mismo paciente/tenant; clave de orden date/createdAt/id descendente. Cursor borrado/ajeno inválido sin leer lista. Límite fijo, no impuesto por cliente.
+- Página exige sesión, guard vertical, permiso clínico real y rubro con ficha clínica incluso con plataforma apagada. Tenant/paciente filtrados;403 de permisos convertido a404, sesión ausente a login. UI con Card/EmptyState/links del kit, fechas zona organización, campos largos y multilinea. Enlace mínimo en bloque clínico de ficha; APIarray intacta.
+- Pruebas:175PASS/7suites, luego suite página14PASS al sumar caso última página (176casos distintos finales). Cobertura:25 registros20+5, empates, fecha clínica/importación, inserción reciente entre páginas, tenant/cursores ajenos, límite20 exacto, vacío/error, permisos efectivos STAFF yADMINrecortado, rubro y gate. Logs c6a-tests.log/c6a-page-final.log.
+- Primer intento detectó trackID erróneo del fixture; corregido al canónico gestios-servicios-profesionales. Gate de vocabulario detectó2literales; se corrigió la página sin relajar gate. No fallo repetido tras corrección.
+- ESLint5TS y diffcheck PASS. Typecheck global exit2 por Prisma compartido obsoleto; sin diagnósticos en nuevos helpers/página/FichaVista (`c6a-types.log`). Sin regeneración/build/DB.
+- P2: check selectivo de FichaVista pasa después de C6a; no se aplicó/modificó parche. Solape sigue sólo de archivo/hunks próximos, no lógica de tratamientos.
+- QA preparada: c6a-fixtures.json contiene25 registros ficticios. Casos: inicio20+link, cursorrec_005→5últimos, rec_000→vacío, cursor borrado/ajeno, input[]/vacío/inválido, permiso denegado y fallo deconsulta. Captura futura390/1440 con textos largos y ambos rubros clínicos; fixtures no acreditan app autenticada ni revisión visual. Bloqueo CUA localhost indicado por madre, no eludido.
+- Limitación: el cursor resuelve fecha actual del registro ancla; inserciones recientes no duplican, pero editar fecha del ancla entre requests puede cambiar el recorrido. No se ofrece snapshot transaccional entre páginas.
+- Siguiente pendiente técnico: C5 agenda por profesional o C6b odontograma5caras requieren unidad y lease propios; C6a no implementa historial completo de citas. No iniciar otra unidad antes de review.
+
 - Base Platform remota verificada: `master` = `5102535cdd2823c4d6365fdc459e3c1a04161431`.
 - Checkout previsto aislado en E: `E:/ONIA-Codex/cierre-1.0-20261006/platform-desarrollo`; rama `codex/c6-historia-orden-clinico`.
 - Paths exclusivos: `app/api/patients/[id]/records/route.ts`, su `route.test.ts`, `docs/CHANGELOG.md`. Este reporte es entrega externa; manifest y handoff sólo los edita madre.
