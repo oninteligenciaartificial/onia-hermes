@@ -95,3 +95,22 @@ No se creó entorno, instaló herramienta, movió secretos ni ejecutó inferenci
 ## Revalidación6-oct tras pedido de autonomía
 
 Madre comprobó nuevamente CLI0.139: `cloud list --limit 3 --json` devuelve tasks vacío; `cloud exec --help` sin selector explícito de modelo, sólo overridegenérico. Navegador disponibleIAB/MCPApps, sinChrome; abrirCodexcloud redirige al login. No se creó tarea ni se trasladaron chats/cloudsecretos. Pregunta concreta enviada aSergio: si Codexcloudabre en su navegadorhabitual, para distinguir falloIAB de cuenta. Regla: bloqueo técnico sigue pendiente, sin asumir imposibilidaduniversal ni volver a pedirclaves.
+
+## Corrección de capacidad — navegador cloud, 6-oct-2026
+
+META: habilitar operación remota con navegador sin confundir productos. PRUEBA DE HECHO: documentación oficial vigente y una futura prueba real de sesión. REGLA DE PARADA: no anunciar migración ni acceso Higgsfield hasta probarlos; no instalar ni contratar servicios para sortear limitaciones.
+
+La documentación de Codex Cloud, sección Current limitations, enumera Computer and browser use como no soportado. Por tanto, abrir Internet o permitir dominios NO habilita el navegador interactivo en esos entornos. Esto corrige la expectativa anterior de resolverlo únicamente con permisos/login. Fuente abierta 6-oct: https://learn.chatgpt.com/docs/environments/cloud-environments
+
+ChatGPT Work Cloud sí documenta navegador remoto, sesiones propias y login privado/toma de control. Su disponibilidad depende de cuenta, despliegue y permisos; no hereda cookies locales ni garantiza acceso Higgsfield. Fuente abierta: https://learn.chatgpt.com/docs/browser . Los dots también documentan navegador cloud propio: https://learn.chatgpt.com/docs/dots/computers-and-apps . Ninguna de estas capacidades se comprobó en la cuenta ONIA en esta pasada.
+
+Decisión operativa propuesta: Codex Cloud para desarrollo/QA; Work Cloud para operaciones con navegador, si la cuenta permite comprobar modelo y acceso. Una sola madre; Work sería ejecutor, no otra madre. Modelo requerido para operaciones Sol6.1 medium; no crear una tarea con modelo desconocido y presentarla como conforme. Madre y v2 siguen Astra medium. No recurrir a API pagada o VPS nuevo como sustitución silenciosa.
+
+Contrato de primera prueba Work Cloud, preparado para ejecutar al disponer de superficie/modelo:
+- Confirmar entorno remoto y modelo desde metadata/selector; no inferirlo del prompt.
+- Abrir únicamente https://higgsfield.ai/ y comprobar navegador mediante lectura de interfaz y captura. Sin instalación, generación ni subida de archivos.
+- Si requiere login, usar formulario privado o toma de control oficial; Sergio completa consentimiento/MFA fuera del chat. No copiar cookies, credenciales locales ni bóveda.
+- Tras login comprobar acceso a biblioteca y saldo mostrado, sin publicar identificadores de cuenta. Parar si el sitio bloquea automatización, exige compra o no ofrece flujo compatible.
+- Cerrar con evidencia de acceso o bloqueo preciso. Una sesión autenticada no autoriza generaciones pagadas ni publicaciones. Persistencia y ejecución recurrente se validan aparte; el heartbeat actual sigue local.
+
+Configuración preparada, NO aplicada remotamente. CLI0.139 no expone administración de entornos; UI anterior vuelve al login. Pendiente intervención mínima: comprobar que la cuenta muestra Work Cloud/navegador y selector Sol6.1. No repetir petición de claves ni intentar resolver el acceso mediante exportación de sesiones.
