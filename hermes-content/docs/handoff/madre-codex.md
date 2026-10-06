@@ -22,6 +22,10 @@ Secret scan SUCCESS; tipos/tests/build todavía IN_PROGRESS. No autoriza merge n
 C15 entregó arreglo `cef79f23ad0164d26c829e89e8705b3864cd2f31` sobre `b662d24e`, worktree 1752 limpio,
 sin push. Marca verificada default false, administración SUPERADMIN con audit y bloqueo en tres rutas cliente;
 autor reporta 160 pruebas focales, 12 admin tras ajustar assert y lint limpio. V2 recibió re-review focal C15.
+Re-review C15 favorable en `cef79f23`: P2 cerrado, revisor 160/160 pruebas y tres reproducciones aprobadas.
+Madre verificó rama/árbol limpio, subió la rama y abrió draft Platform #114; CI/tipos/build y QA visual pendientes.
+Único solape confirmado C13/C15: `app/api/admin/subscription-payments/route.test.ts`; preservar ambos cambios.
+Audit usa best-effort existente; no se probó persistencia/grants/RLS en BD real. No se aplicó migración ni marcó cuentas.
 Ambas tareas esperan una revisión focal de sus arreglos. No abrir siguiente tanda el 5-oct: terminar correcciones
 y revisiones de C13/C15; próxima asignación el 6-oct solo tras verificar cuota y tareas cerradas.
 
