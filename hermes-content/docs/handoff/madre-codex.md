@@ -150,3 +150,8 @@ documento no habilita autosync ni publica cambios por sí mismo.
 ## Cierre de investigación Datec6-oct
 
 Dossier/observaciones ybrecha técnica en `competitor-profiles/datec.md` y `datec-onia-brecha-tecnica.md`. SAP/IBM/cliente corroborados; performanceLucy/preciofinal/rankingIA noverificados. Cuenta no creada; solicitud de acceso de evaluación pendiente de autorización de contacto enviada a Sergio. Runbookcloud/modelosguardado; sesiónCLIcloudlectura funciona pero modelo remoto/Higgsfield/Chrome siguen sinvalidar. EffortCLIlocal corregido a medium, no configuracióncloud. AVISOSreviewP2HOOK/auto corregidos; GUIONES/GRABAR/KIT sincronizados. PáginaexternaClaude ycaptions/videoN03/K11 necesitan revisión porpieza, no modificados/publicados.
+
+## Siguiente entrega por carril tras dossierDatec
+
+Mensajes enviados6-oct: Ventas prepara battlecard interna sin investigación nueva; Marca audita versiones/captions N03/K11 contra correcciones ya verificadas; Lucía prepara preview360p explícitamente BORRADOR con P1/P2pendientes, sin UIinventada/master/publicación. V2Astra revisa37c08ba5/QA5cdd6b9d ydespuésC11a6f940cfc, una revisión a la vez. Hermes cerró runbook: espera mecanismo de acceso/verificacióncloud, sin tocar VPS.
+Último chequeoGitHub:113CIin_progress ySecurityqueued;11437c08ba5CI/Securityqueued;1156f940cfcCI/Securityqueued. No CI declarada verde ni despliegue. Estado requiere delta de corrida, no polls vacíos.
