@@ -71,3 +71,18 @@ Los tres casos son situaciones concretas del trabajo dental, con ejemplos fictic
 **Fuentes/QA:** dossier Datec, PR143 `a30f12e9`; catálogo `ONIA_CATALOGO_DE_VENTA.md` §§2,7,8, `origin/main` `672d78e8`. Madre revisa vigencia antes de integrar/usar. Sin web nueva, ranking ni checkout editado.
 
 Aplicación6-oct: catálogo §§2,4,7,8 y observaciones públicas de Lucy contrastados por Ventas sobre80302fc7. Madre integró diagnóstico por necesidad y guion; prueba interna con cuenta demo todavía pendiente. No representa cambio del producto publicado.
+
+## Mejora por referencia Jelou — comprobar el recorrido completo
+
+Aplicada el 6-oct al mismo guion; análisis y fuentes en [jelou.md](jelou.md). Inspiración: demostrar ejecución y conservar contexto ante una excepción. Matriz original ONIA; no replica la interfaz o los claims de Jelou.
+
+| Evento de ejemplo | Acción de demo | Prueba que debe quedar | Excepción y límite |
+|---|---|---|---|
+| Recepción consulta una cita | Abrir la cita del paciente ficticio en agenda | Paciente, profesional, fecha y hora coinciden con el caso preparado | Si se pide reprogramar, validar permiso y operación antes de mostrar éxito; conflicto de horario requiere resolverlo, no anunciar confirmación |
+| Profesional revisa la atención anterior | Abrir ficha e historia del mismo paciente | Anotación y paciente correctos, visibles sólo al rol autorizado | Falta de datos o permiso: detener ese recorrido; no generar historia clínica para llenar el vacío |
+| Recepción consulta una deuda | Mostrar cargo Bs 300, pago registrado Bs 100 y saldo Bs 200 en la demo | Saldo y registro coinciden; identificar que el pago es ficticio y ya registrado | Un comprobante recibido no prueba liquidación bancaria; no marcar un cobro real ni prometer SIAT |
+| Aparece una propuesta de seguimiento | Mostrar la propuesta existente en Pendientes, con plan habilitado | Destinatario, motivo y texto revisables; no envío externo en esta demo | Recepción revisa y realiza el envío según el flujo validado; no anunciar WhatsApp autónomo |
+
+**Registro obligatorio por recorrido:** fecha, versión/entorno, rol, caso ficticio, resultado esperado, resultado observado, captura autorizada, excepción y responsable. Marcar «pendiente», «pasó» o «falló»; sólo «pasó» con evidencia permite utilizar esa afirmación en una pieza comercial. Estado inicial de los cuatro recorridos: **pendiente de ejecución**, no cuatro pruebas aprobadas.
+
+**QA documental completada:** los cuatro recorridos corresponden a las ramas A/B/C o seguimiento ya definidas; se conservaron permisos, datos ficticios, correo frente a WhatsApp y gates de capturas/master/publicación. No se creó otro guion de Lucía ni un trabajo duplicado de captura.
