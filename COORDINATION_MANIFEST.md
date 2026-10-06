@@ -11,7 +11,7 @@ y revisión; otros carriles: Sol 6.1, effort medium. C11a y QAintegración entre
 - **Lease documental de este relevo:** este manifest, `AI_MODEL_ROUTING_2026.md`, skill `onia-sesion-madre` y `handoff/madre-codex.md`.
 - **Revisión v2:** #138 sin bloqueantes nuevos sobre `d479d3aa`, CI `37376490476`, 22/22 autosync Windows y sintaxis de cuatro Bash; sin merge ni pruebas Node Linux locales. Otros carriles activos 6-oct: avisos, cinco leads, cutlistK1 y reconciliación de docs.
 - **Cola Platform6-oct05:07UTC:** C13#1132f2b0743 yC15#11437c08ba5 revisión independiente favorable yCI/Secret scan SUCCESS. C11a#1156f940cfc revisión favorable,CI/Secret scanSUCCESS (verificado6-oct09:40UTC); QAintegración5cdd6b9d revisión favorable,PG/authreales no probados. V2 revisa una tarea técnica a la vez. Sin merge/deploy/migración.
-- **Lease Caja heartbeat6-oct09:40UTC:** chatPlatformDesarrolloAstra, PR110 `codex/punto-8-caja-diaria`, worktreelimpio `C:/dev/proyectos/onia-platform-codex-caja`, base83f93948; solo TS2339 route/tests, contrato en handoff.
+- **Lease Caja heartbeat6-oct09:40UTC:** chatPlatformDesarrolloAstra, PR110 `codex/punto-8-caja-diaria`, worktreelimpio `C:/dev/proyectos/onia-platform-codex-caja`, base83f93948; delta8865d69a entregado route.ts,CIin_progress/SecuritySUCCESS, v2Astra revisaSHA; contrato en handoff.
 - **No ejecutar autosync heredado:** incluso `codex/*` puede adelantar `main` si se invoca; #138 sigue pendiente de revisión/merge.
   Merge a `master` Platform publica por cron: migraciones, producción, gasto, publicaciones y terceros conservan sus permisos.
 - **Destino solicitado: todo cloud**, con fallback local hasta verificar ejecución/modelo cloud. Login IAB falló; CLI 0.139 y entornos enumerados no demuestran cloud listo.
