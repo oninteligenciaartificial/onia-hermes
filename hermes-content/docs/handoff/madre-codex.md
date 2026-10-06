@@ -5,7 +5,7 @@ Producción Platform `97fe3061` es el release reportado por handoff, sin comprob
 Este archivo es el estado Codex; `madre-local.md` conserva el relevo Claude. No reconstruir transcripts completos.
 
 **Estado vigente 6-oct-2026:** seis órdenes enviadas mediante `send_message_to_thread` y seis chats confirmados activos mediante `wait_threads`. La cola anterior de CI estaba desactualizada; se corrigió el seguimiento, no hay pausa general por fecha.
-Cuota compartida: última consulta 23% usada / 77% restante; no atribuible exclusivamente a este frente.
+Cuota compartida: consulta6-oct09:40UTC:30% usada /70% restante; no atribuible exclusivamente a este frente.
 
 | Dueño | Trabajo despachado | Cierre esperado |
 |---|---|---|
@@ -154,10 +154,15 @@ Dossier/observaciones ybrecha técnica en `competitor-profiles/datec.md` y `date
 ## Siguiente entrega por carril tras dossierDatec
 
 Mensajes enviados6-oct: Ventas prepara battlecard interna sin investigación nueva; Marca audita versiones/captions N03/K11 contra correcciones ya verificadas; Lucía prepara preview360p explícitamente BORRADOR con P1/P2pendientes, sin UIinventada/master/publicación. V2Astra revisa37c08ba5/QA5cdd6b9d ydespuésC11a6f940cfc, una revisión a la vez. Hermes cerró runbook: espera mecanismo de acceso/verificacióncloud, sin tocar VPS.
-Último chequeoGitHub6-oct05:07UTC:1132f2b0743 y11437c08ba5 CI/Secret scan SUCCESS;1156f940cfc CI37414218141 IN_PROGRESS ySecret scan37414218235 SUCCESS. SupabasePreview SKIPPED enlas3, no evidencia deBDreal. Sin merge/despliegue; no polls vacíos.
+Último chequeoGitHub6-oct05:07UTC:1132f2b0743 y11437c08ba5 CI/Secret scan SUCCESS;1156f940cfc CI37414218141 SUCCESS (completada05:25UTC) ySecret scan37414218235 SUCCESS. SupabasePreview SKIPPED enlas3, no evidencia deBDreal. Sin merge/despliegue; no polls vacíos.
 
 Re-reviewv2Astra:37c08ba5 favorable,76matriz+6ratchet independientesPASS; QA5cdd6b9d favorable con3regresiones propiasPASS. CI113/114 verde alchequeo05:07UTC; authsimulado/PGnofueprobado. RevisiónC11a6f940cfc favorable. BattlecardDatec integradaencompetitor-profiles/datec-battlecard-onia.md ycontrastada con catálogo actual; no enviada.
 
-C11a6f940cfc re-reviewv2Astra favorable:14casos independientesPASS/4files,52previosomitidos; runtimePATCH/helper/booking reales, authPrisma/canalesmock. No reinicia marcas/cuotas/confirmTokenExpiresAt; auditoríaestadoimplícito yefectosindependientes comprobados. CIIN_PROGRESS/Secret scanSUCCESS alchequeo05:07UTC; sinBDreal/pushUI/merge/deploy.
+C11a6f940cfc re-reviewv2Astra favorable:14casos independientesPASS/4files,52previosomitidos; runtimePATCH/helper/booking reales, authPrisma/canalesmock. No reinicia marcas/cuotas/confirmTokenExpiresAt; auditoríaestadoimplícito yefectosindependientes comprobados. CI/Secret scanSUCCESS alchequeo6-oct09:40UTC; sinBDreal/pushUI/merge/deploy.
 
 ReglaSergio6-oct reels: objetivo todo-cloud; si video/acceso falla, madre local analiza yreportabloqueoexacto. Dosreelsanteriores fueronlocales; Gemini503 no demuestraincapacidadcloud. Prueba de habilitaciónyregladecoberturaguardadasencloud-permisos-modelos.md.
+
+## Tanda heartbeat6-oct09:40UTC — Caja
+
+META: cerrar TS2339 dePR110 sin modificar comportamiento financiero ni schema. Dueño nuevo: chatPlatformDesarrolloAstra `01a10f46-c910-79a3-9670-7e990fcb1257`; revisiónv2Astra solo sobre nuevoSHA, no repetirC11a. Lease exclusivo `app/api/caja-diaria/route.ts`, tests focales asociados yCHANGELOG si requerido; worktree existente limpio `C:/dev/proyectos/onia-platform-codex-caja`, rama `codex/punto-8-caja-diaria`, base83f939482e2d6494a9b35b599b6930f5736b9a84. Ningún otro dueñoCodex activo detectado paraCaja. VerificarHEADremoto/limpieza anteseditar; parar ante cambio concurrente.
+PRUEBA DE HECHO: narrowing discriminado conservaopeningFund dentrocallbacktransacción, types/tests focales/lint/diff, commit/push aPR110 existente ySHA parareview; no castsany ni debilitartipos/tests. REGLA DE PARADA: máximo2intentos mismo fallo; no instalación, migration/BDreal/merge/deploy/autosync/master ni tocarárbol históricoClaude. Cuota30%usada/70%restante, reserva20%; unaimplementación nueva, sinfanout. C13/C15/C11a ci+review cerrados; gates sensibles conservados.
