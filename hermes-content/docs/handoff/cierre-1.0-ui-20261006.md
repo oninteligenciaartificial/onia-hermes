@@ -54,3 +54,15 @@ PR120 `9c34165d6506bf939e518c63c4d5fecd64071992` corrige cinco archivos de copy,
 La medición móvil más reciente fue 488 CSS px de viewport y 482 px de página, sin desborde horizontal. El override solicitado de 390 px no produjo esa medida; no se certifica 390 px para este delta. Los textos de mensajes de clientes/fixtures y el encabezado de página fuera del componente permanecen intactos. No confundir esto con una revisión global de voz de todas las pantallas.
 
 Los CI de los últimos SHA de PR117/118/119/120 siguen pendientes/en cola; PR116 ya pasó lint y typecheck y continúa sus tests. Ninguna revisión sustituye CI, migración, prueba autenticada ni autorización de publicación.
+
+QA móvil final C10: resuelta escala Windows 125% con emulación solicitada312px y medida real DOM390px; página384px, sin desborde horizontal. Captura `c10-pendientes-mobile-final.png` guardada en carpeta E de evidencia. Los tres botones manuales medían44px de alto en el paso anterior. No cambios de código ni envíos; override restaurado. La medición DOM, no el parámetro solicitado a CDP, es la evidencia del ancho efectivo.
+
+## Odontograma: entrega y QA parcial
+
+PR119 final `4cb9495cca8d1fba71f7c2b1cfef42576ab1f72f` añade editor de cinco caras. Revisión funcional v2 favorable con26 pruebas focales y último P3 de copy cerrado por inspección de una línea de madre. El banco3135 tiene4/4archivos idénticos a blobs del SHA final; manifiesto `c6b2-runtime-hashes.json`.
+
+Madre comprobó en browser sobre dcb5cb22 (antes de correcciones exclusivamente textuales): seleccionar36, visualizar Caries general/Mesial Restaurado/Oclusal Sano, Vestibular sin registro y Guardar deshabilitado hasta elegir condición. Guardar Vestibular Caries con nota devolvió Guardado sin alterar las otras caras. En caso conflicto, modificar Mesial produjo409 simulado, conservó nota y mostró recarga. Cambiar a11 pidió confirmación; cancelar conservó36 y borrador.
+
+Después, al abrir «Descartar borrador y recargar» y coincidir una actualización del banco, el diálogo quedó bloqueado: getJsDialog no devolvió handle y tab11 falló por timeout de Emulation.setFocusEmulationEnabled. Se leyeron instrucciones de troubleshooting y se probaron cancelación/close documentados; sin éxito. Tab13 y alias127.0.0.1 cargan el escenario de lectura con texto actualizado, sin error de consola y botón36 no deshabilitado, pero clic no modifica selección. No se cambió código por este bloqueo del navegador. No certificar readonly interactivo, error500, ausente, orientación visual, teclado ni responsive dental. Tests cubren esos contratos; no equivalen a QA browser ni a validación clínica externa. No borrar sesiones ni reiniciar servicios para intentar ocultar el problema.
+
+UI restante pendiente de navegador operativo. Tipografía fallback en todos los bancos; no fidelidad de fuentes. Migración no aplicada, persistencia PostgreSQL/concurrencia real no probadas. No merge/deploy.

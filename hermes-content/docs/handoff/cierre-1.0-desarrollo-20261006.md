@@ -42,7 +42,7 @@ Los cuatro PR siguen OPEN, con CI y Secret scan SUCCESS sobre el mismo HEAD (con
 | 114 C15 | `37c08ba51a30e0ca89f539b89974ba5c26c792e3` | 37413926922 | SUCCESS |
 | 115 C11a | `6f940cfc5868efd6de08724785816e86ccb2e3c7` | 37414218141 | SUCCESS |
 
-## Matriz de los 15 puntos
+## Matriz inicial de los 15 puntos (antes de los PR116–120)
 
 Lectura actual de fuentes sobre master `5102535c` y PRs indicados. «Publicado según handoff» es evidencia histórica atribuida, no prueba nueva de producción. Fuente de alcance: `hermes-content/docs/ONIA_PLAN_1.0_Y_CAJA.md:15-35`; gates: `handoff/onia-1.0-nube.md` §§3/6 y `handoff/codex-relevo.md` §§2/4. Raíz documental: `C:/Users/PC/.codex/worktrees/madre-codex/onia-hermes/hermes-content/docs/`.
 
@@ -95,3 +95,19 @@ Dependencias antes de iniciar: review de esta unidad, lease de madre, contrastar
 Madre autorizó delta limitado a surfaces GET/POST y pruebas, preservando guard global/API legacy. SHA remoto adb87855f0e1d2775b3eb89a2a99262c32abba17, PR119 draft actualizado, worktree limpio.3archivos55+/6-. Chequeo org authoritative antes de datos, isVerticalTrackId + resolver/capacidad tieneOdontograma sin depender de flag; inexistente/desconocida403 sin fallback.
 
 62PASS/2suites enfocadas (caras + legacy); matriz flag0/1 ×4rubros ×permisos ×tenant, guard/context/resolver/access-control reales y DBmock. Repro externo v2 vertical.test.ts -t rubro veterinario:1PASS/35SKIPPED. ESLint2TS/diffcheck PASS. Logs c6b1-guard-tests.log y c6b1-guard-repro.log. No repetir142 globales ni schema/DB; mismas limitaciones de Prisma y SQL no aplicado. Nuevo delta pendiente revisión v2; no editor.
+
+## Lease C6b2 registrado antes de editar
+
+Autorización madre sobre adb87855, misma rama/PR119. Paths exactos: components/odontogram/Odontogram.tsx; app/(dashboard)/patients/[id]/odontogram/page.tsx y page.test.ts; lib/dental/odontogram-editor.ts y odontogram-editor.test.ts; components/odontogram/Odontogram.test.ts; app/dev/odontograma/page.tsx y BancoOdontograma.tsx; docs/CHANGELOG.md. Sin backend/schema/migración. Fixture reusa patrón fetch interceptado de app/dev/admin-origen/BancoAdmin.tsx, con instalación/cleanup limitado y datos sintéticos; no handlers nuevos de producción ni red clínica real. Skills onia-frontend/impeccable/ui-styling/ui-ux-pro-max y seguridad/verificación ya leídas; sin API desconocida/deps, no investigación externa necesaria. Madre único navegador. Parada: entrega revisable, sin DB/producción/editor extra ni fanout.
+
+### Entrega C6b2
+
+PR119 actualizado a dcb5cb2282e579ad8fdd070f098d076e7c900b5e, sobre adb87855.9archivos412+/222-, worktree limpio. Arco conserva FDI/general, detalle5caras44px texto/orientación; no fila distinto deSano, nunca inferir caras. Página consulta caras tenant/paciente y pasa canWrite explícito; no rubro desconocido. Sólo lectura explora, AUSENTE preserva/bloquea caras. Borrador retenido error409/red, recarga confirmada sin perder borrador siGETfalla; éxito trasrespuesta. Aviso cambios al cerrar/cambiar detalle, enlaces y beforeunload; no se promete bloqueo de navegación history SPA.
+
+26PASS/3suites (`c6b2-tests.log`): helper y handlers UI con harness hooks/eventos, página permisos/rubro/tenant. No DOM ni QAvisual acreditados por esos tests. ESLint8TS/TSX+diffcheck PASS. `c6b2-types.log` mantiene cliente Prisma viejo: error toothSurfaceRecord en página; sin otros diagnósticos editor. Sin generación/build/DB. CI previo seguía pendiente runner; ningún fallo concreto hallado. No repetición global142.
+
+Fixture: `/dev/odontograma?caso=legado|caras|vacio|ausente|readonly|error|conflicto`; seleccionar36, probar11/21/31/41. Mismo componente, fetchsintético scoped/cleanup del patrón BancoAdmin, sin red clínica;404prod. Madre único browser prepara QA390/1440+teclado. Revisión exacta v2 sólo delta adb87855..dcb5cb22. Migración sigue archivo noaplicado; sin producción. No features extra trasentrega.
+
+QA madre detectó voseo: corregido en componente/helper y fixture al trato usted. SHA final4fe69b89e4f8606e548c2380a5e0839f7c957345 (sólo copy,3archivos11+/11-).19PASS2suites pertinentes (`c6b2-copy-tests.log`), ESLint3/diffcheck PASS. Primer comando sustitución abortó antes de editar por claves duplicadas PowerShell; corregido y después normalizado EOF detectado por diffcheck. Sin fallos restantes. QA visual en curso por madre; no declarada aprobada.
+
+P3 final de review v2: «Revise tu conexión» cambiado a «Revise su conexión» en Odontogram. SHA remoto final4cb9495cca8d1fba71f7c2b1cfef42576ab1f72f,1archivo1+/1-, diffcheckPASS, limpio. Sin repetir suites por indicación madre. V2 favorable funcional sobre4fe69b89; madre confirmó navegador guardar caras/409 conserva/cancelar cambio. QA restante bloqueada parcialmente por diálogo/hotreload/IAB sin repro de producto; no se cambió lógica para eludirlo.

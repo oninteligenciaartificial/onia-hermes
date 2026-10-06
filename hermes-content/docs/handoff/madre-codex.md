@@ -4,7 +4,27 @@ Estado: relevo autorizado por Sergio, 5-oct-2026; base Hermes `672d78e8`, desarr
 Producción Platform `97fe3061` es el release reportado por handoff, sin comprobación nueva propia.
 Este archivo es el estado Codex; `madre-local.md` conserva el relevo Claude. No reconstruir transcripts completos.
 
-**Estado vigente 6-oct-2026:** seis órdenes enviadas mediante `send_message_to_thread` y seis chats confirmados activos mediante `wait_threads`. La cola anterior de CI estaba desactualizada; se corrigió el seguimiento, no hay pausa general por fecha.
+## VIGENTE — cierre de desarrollo y UI, 6-oct-2026
+
+Cuota última: 73% usada, 27% disponible; reservar al menos 20%. No lanzar otra implementación antes de cerrar CI y los gates actuales. Una madre Astra, dos autores Astra y revisión v2 Astra, todos medium; resto Sol6.1 cuando haya entradas accionables. No mantener chats trabajando por ocuparlos.
+
+| Entrega | SHA / PR | Estado comprobado y siguiente paso |
+|---|---|---|
+| Historia clínica ordenada y completa paginada | 970bdb1e / PR116 | Revisión favorable; CI lint, types y tests aprobados, build en curso. QA visual de la página autenticada pendiente. |
+| Acceso con trato de usted | cbc36a6c / PR117 | Revisión favorable y browser login/registro; reparadas tres expectativas antiguas de CI. CI final en cola. |
+| Agenda diaria por profesional | 27d47f98 / PR118 | Dos P2 corregidos (día de semana y horarios activos), revisión favorable, QA con fixtures desktop/móvil. CI final en cola. |
+| Odontograma de cinco caras, API y editor | 4cb9495c / PR119 | API dental con guard real flags0/1, editor revisado, P3 final corregido. Browser comprobó guardado de cara, conservación ante409 y cancelar abandono. Resto de QA visual pendiente por bloqueo de IAB; migración NO aplicada y DB real no verificada. CI final en cola. |
+| Pendientes: aprobación y WhatsApp honestos | 9c34165d / PR120 | Revisión favorable, browser y ancho efectivo390px sin desborde; no envíos. CI final en cola. |
+
+Runner único `onia-vps-platform` online y ocupado, comprobado por API. No duplicar corridas ni cambiar infraestructura por la cola normal. PR110/113/114/115 ya tienen revisión y CI verdes, sin merge autorizado. Pregunta específica para integrar/desplegar PR115 enviada, sin respuesta; C11b espera ese merge. C14 espera prueba de pago y aprobación legal; P2 espera aprobación de diseño. Backup externo, RLS/SQL real, capacidad fiscal y E2E de cobro siguen gates concretos, no tareas terminadas.
+
+Fuentes actuales: `cierre-1.0-ui-20261006.md`, revisiones `cierre-1.0-revision-*`, `contrato-c6b-odontograma.md` y matriz inicial con avances en `cierre-1.0-desarrollo-20261006.md`. Evidencia privada: `E:/ONIA-Codex/cierre-1.0-20261006/`. Local3135 y3136 usan fixtures y fuentes de sustitución; nunca son prueba de pacientes/BD reales. Cloud sigue pendiente de MFA humano y modelo remoto no verificado.
+
+Próxima pasada: consultar cuota una vez; revisar CI de esos SHA sin repetir revisiones. Corregir únicamente fallos nuevos atribuibles. Retomar QA del odontograma cuando IAB responda, sin modificar producto para eludir un diálogo bloqueado. No repetir investigación/lectura de skills ni K3/Lucía sin nuevas entradas. La automatización sigue local cada6h, requiere PC/app activas.
+
+## Histórico — primeras asignaciones del 6-oct
+
+**Estado inicial 6-oct-2026:** seis órdenes enviadas mediante `send_message_to_thread` y seis chats confirmados activos mediante `wait_threads`. La cola anterior de CI estaba desactualizada; se corrigió el seguimiento, no hay pausa general por fecha.
 Cuota compartida: consulta6-oct09:40UTC:30% usada /70% restante; no atribuible exclusivamente a este frente.
 
 | Dueño | Trabajo despachado | Cierre esperado |
@@ -239,3 +259,5 @@ C6b1 entregado PR119cf1d86ea33a7935896c822d5dd113522bb933316 sobremaster5102535c
 PR119reviewv2cf1d86ea: mecánicaAPI favorable53focal+2órdenespropiosPASSmocks, pero guardrubroNOOPconPLATFORM_LAYERoff. MadreEXIGEcorrecciónpara cumplircontrato sóloDental incondicionalnuevoendpoint, sin romperAPIgenerallegada. Autorrecibechequeoexplícito org/pack+matrizflag0/1 anteseditor. NoSQLreal/migraciónaplicada; FKtenant integridaddependeAPI ademásRLSdeny. C5corregido27d47f98(103tests) awaitdelta2P2review. PR117CIae641152falló3tests textoantiguo en2files,9509PASS; typecheckPASS. AutorUIcorrigeesos2testsmanteniendoguards. Cuota65últimamedición, sin compras/resets.
 
 Cierre revisiones: PR117 cbc36a6c favorable (12 focales v2), PR118 27d47f98 favorable (2P2 cerrados), PR119 adb87855 favorable (P2 dental flags0/1 cerrado, 13 focales v2), PR120 9c34165d favorable (10 focales v2). CI últimos SHA pendiente/en cola, no equivale aprobado. Madre QA C10 banner y expandir mensaje sin envío; pantalla488CSSpx sin overflow, no390exacto. C5 screenshot final c5-agenda-final.png fixture/fonts fallback. Cuota69usada. C6b2 autorizado mismoPR119: editor 5caras/readonly/409/ausente con fixture y revisión delta; Desarrollo único implementador, UI sólo banco cuando reciba archivos. Sin DBreal/merge/deploy. Leases mismos límites y modelo Astra medium.
+
+Estado de cola verificado: GitHub API actions/runners devuelve un único runner `onia-vps-platform`, online y busy; CI configura self-hosted/onia-vps y cancela sólo corridas superadas de la misma rama. PR116 ejecuta tests tras lint/typecheck aprobados; PR117–120 esperan. No reiniciar ni aumentar capacidad del VPS por una cola normal; no comprar minutos ni repetir checks. Espacio observado C 2.39 GiB / E 37.94 GiB libres. Pregunta específica de autorización para merge/despliegue PR115 enviada a Sergio, aún sin respuesta; C11b sigue detenido por ese gate.
