@@ -5,16 +5,16 @@
 **Prevalece este bloque sobre los mapas Claude históricos de abajo.** Sergio autorizó relevar los cinco carriles,
 organizar las sesiones y continuar trabajo. Estado, ids locales, leases y gates: [`madre-codex.md`](hermes-content/docs/handoff/madre-codex.md).
 Una sola madre: `01a10f44-2bb7-73c0-8769-8bbe5000b32f`; la v2 revisa, no orquesta. Platform: Astra para programación
-y revisión; otros carriles: Sol 6.1, effort medium. C13/C15 corrigen CI; otros cuatro carriles tienen tareas documentales activas. IDs y evidencia en el handoff.
+y revisión; otros carriles: Sol 6.1, effort medium. C11a y QAintegración entregadas; Datec ycloud investigados; estado vivo en handoff. IDs y evidencia en el handoff.
 
 - **Lease de coordinación:** madre, rama `codex/madre-orquestacion-20261005`, worktree `C:/Users/PC/.codex/worktrees/madre-codex/onia-hermes`.
 - **Lease documental de este relevo:** este manifest, `AI_MODEL_ROUTING_2026.md`, skill `onia-sesion-madre` y `handoff/madre-codex.md`.
 - **Revisión v2:** #138 sin bloqueantes nuevos sobre `d479d3aa`, CI `37376490476`, 22/22 autosync Windows y sintaxis de cuatro Bash; sin merge ni pruebas Node Linux locales. Otros carriles activos 6-oct: avisos, cinco leads, cutlistK1 y reconciliación de docs.
-- **Cola Platform 6-oct:** C13 #113 CI FAILURE cuatro tests, autor corrige; C15 #114 TS2322 corregido en54c6ada8, espera CI. V2 revisa sólo nuevo delta. Sin merge/deploy. Después C11a/Caja#110; C14 tiene gates y C11b depende de C11a.
+- **Cola Platform6-oct:** C13#1132f2b0743 revisada, CIpendiente; C15#11437c08ba5 corrige matriz/ratchet, nuevaCI/review pendiente. C11a#1156f940cfc348tests reportados PASS; QAintegración5cdd6b9d202tests reportadosPASS. V2 revisa una tarea técnica a la vez. Sin merge/deploy.
 - **No ejecutar autosync heredado:** incluso `codex/*` puede adelantar `main` si se invoca; #138 sigue pendiente de revisión/merge.
   Merge a `master` Platform publica por cron: migraciones, producción, gasto, publicaciones y terceros conservan sus permisos.
 - **Destino solicitado: todo cloud**, con fallback local hasta verificar ejecución/modelo cloud. Login IAB falló; CLI 0.139 y entornos enumerados no demuestran cloud listo.
-- **Heartbeat `madre-onia-continuidad` ACTIVE:** cada seis horas, LOCAL, notifica solo cambios relevantes. Reserva semanal20%: con consumo >=80% no inicia trabajo nuevo; no compra créditos ni reinicia límites. Consumo cuenta18% frente3% inicial, sin atribución exclusiva a esta tarea.
+- **Heartbeat `madre-onia-continuidad` ACTIVE:** cada seis horas, LOCAL, notifica solo cambios relevantes. Reserva semanal20%: con consumo >=80% no inicia trabajo nuevo; no compra créditos ni reinicia límites. Cuota compartida fechada en handoff; no duplicar snapshots aquí.
 
 META: continuidad verificable sin doble dueño. PRUEBA DE HECHO: cada tarea cierra con SHA, paths, pruebas y revisión.
 REGLA DE PARADA: sin tarea accionable o ante gate sensible, registrar el bloqueo y seguir otro ítem seguro; no rondas vacías.

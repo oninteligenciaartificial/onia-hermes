@@ -14,10 +14,9 @@ La distribución anterior de Astra/Sol/Luna (22-sep) queda superada para este re
 costumbre ni usar la receta histórica CLI `gpt-5.5` como límite de Codex Desktop. Subir effort solo ante duda material.
 `send_message_to_thread` a la madre aceptó `model:gpt-6.1-sol`, `thinking:medium` para próximas continuaciones.
 No demuestra cambio del modelo ya ejecutándose en el turno actual.
-Solo C15 revisión y C13 draft pendiente de revisión ocupan la tanda Platform Astra medium; no nuevos subagentes. La v2 pasa
-temporalmente de Sol (#138) a Astra para revisión C15 y vuelve a Sol para coordinación futura. Reserva20%
-del límite semanal: al alcanzar80% de consumo no iniciar trabajo nuevo. El consumo observado de cuenta subió
-de3% a10%; no puede atribuirse exclusivamente a esta tarea. No comprar créditos ni resetear límites.
+Asignaciones vigentes y progreso por SHA: `handoff/madre-codex.md`. La v2 usa Astra sólo para revisión Platform y vuelve a Sol para documentación/coordinación. La madre principal mantiene el lease.
+Reserva20% semanal: al alcanzar80% usado no iniciar trabajo nuevo. Última muestra compartida23%usado/77%restante; no atribuible exclusivamente a este trabajo. No comprar créditos ni resetear límites.
+Default CLI local comprobado6-oct: modeloAstra, efforthigh. Madre corrigió únicamente effort a medium y verificó TOML; no demuestra modelo/esfuerzo cloud. Los chats reciben override explícito de la tabla. La CLIcloud0.139 no expone --model; comprobar metadata del run/selector antes de trasladar trabajo. Runbook: `handoff/cloud-permisos-modelos.md`.
 
 ## Regla de escalamiento
 

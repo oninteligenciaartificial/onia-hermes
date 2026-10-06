@@ -5,13 +5,13 @@ Producción Platform `97fe3061` es el release reportado por handoff, sin comprob
 Este archivo es el estado Codex; `madre-local.md` conserva el relevo Claude. No reconstruir transcripts completos.
 
 **Estado vigente 6-oct-2026:** seis órdenes enviadas mediante `send_message_to_thread` y seis chats confirmados activos mediante `wait_threads`. La cola anterior de CI estaba desactualizada; se corrigió el seguimiento, no hay pausa general por fecha.
-Cuota compartida: última consulta 18% usada / 82% restante; no atribuible exclusivamente a este frente.
+Cuota compartida: última consulta 23% usada / 77% restante; no atribuible exclusivamente a este frente.
 
 | Dueño | Trabajo despachado | Cierre esperado |
 |---|---|---|
-| Platform C13 · Astra | PR #113: corregir cuatro fallos CI run37410842871 (gracia en plan-expiry/tratamientos y select del callback). Revisión anterior favorable sobre7d97f2f3, CI falló después. | Autor subió2f2b0743,88tests/lint reportados PASS; V2 revisión favorable y88tests independientes PASS; CI pendiente. |
-| Platform C15 · Astra | PR #114: corregir TS2322 Payment en fixture addon-chatbot. Autor ya subió54c6ada8, lint y19tests reportados PASS. | CI nueva y revisión independiente del delta. |
-| Marca · Sol | Reconciliar AVISOS desde6oct y claims DD-A/N04/N06; seis brutos de cámara identificados. Reel entregado con análisis visual; audio pendiente HTTP503. | HECHO: AVISOS actualizado6–16oct; cambios de cámara propuestos, pendientes de integrar en guiones/kit/página; seis brutos faltan. |
+| Platform C13 · Astra | PR #113: cuatro fixtures CI corregidos (plan-limits/tratamientos y select del callback). Revisión anterior favorable sobre7d97f2f3, CI falló después. | Autor subió2f2b0743,88tests/lint reportados PASS; V2 revisión favorable y88tests independientes PASS; CI pendiente. |
+| Platform C15 · Astra | PR #114: corregir TS2322 Payment en fixture addon-chatbot. Autor ya subió54c6ada8, lint y19tests reportados PASS. | Delta54c6ada8 revisado favorable; CI luego falló matriz/ratchet. Autor corrigió37c08ba5,82tests reportados PASS; nuevaCI37413926922 yreview pendientes. |
+| Marca · Sol | Reconciliar AVISOS desde6oct y claims DD-A/N04/N06; seis brutos de cámara identificados. Reel entregado con análisis visual; audio pendiente HTTP503. | HECHO: AVISOS actualizado6–16oct; cambios de cámara integrados GUIONES→GRABAR→KIT; página externa pendiente; seis brutos faltan. |
 | Ventas · Sol | Verificar cinco leads concretos con fuentes públicas actuales. | HECHO: cinco fichas integradas en prospectos§6.8; cero plenamente calificadas, sin contacto. |
 | Lucía · Sol | Cutlist K1 con assets existentes, usted y tiempos legibles. | HECHO: cutlist34s integrado en GUIONES-LUCIA-KIT.md; P1/P2 y claims bloquean master. |
 | Hermes · Sol | Reconciliar tres docs de runtime/deploy con fuentes y fechas. | HECHO: cuatro sustituciones aplicadas a tres docs; runtime no verificado. |
@@ -48,6 +48,18 @@ en rama `codex/madre-orquestacion-20261005`, worktree `C:/Users/PC/.codex/worktr
 Los carriles read-only todavía NO tienen lease para editar. Al asignarla: paths, rama, worktree y SHA base por escrito.
 La carpeta raíz Platform `claude/f2-f3-panel` es histórica y sucia: no desarrollar ni limpiar ahí.
 
+## Asignaciones posteriores — investigación Datec y continuidad 6-oct
+
+- Madre conserva el lease; v2 sólo revisa. Todas las órdenes se enviaron por chat, no requieren que Sergio las copie.
+- Ventas Sol: dossier Datec público con evidencia/claims/precios; madre inspecciona registro. Subagente Astra `brecha_datec` entregó matriz técnica por SHA, sin cambios de producto.
+- Hermes Sol: runbook permisos cloud/Higgsfield/VPS y modelos verificados, sin crear acceso ni migrar secretos.
+- Marca Sol: patch de sincronización DD-A/N04/N06 entre fuente, GRABAR, kit y página; reutiliza evidencia, no nueva investigación.
+- Lucía Sol: QA visual/ffprobe A1/A2 y zona segura del K1 sin render/gasto.
+- Platform Astra C13: C11a en worktree/rama separados,348tests reportados PASS, draftPR1156f940cfc, reviewindependiente/CI pendientes; no tocar tokens/contadores de consumo fuera del contrato. CI1132f2b0743 seguía QUEUED al último chequeo.
+- Platform Astra C15: integración QA local C13+C15 entregada5cdd6b9d,202tests reportados PASS, review pendiente; sin producción. CI11454c6ada8 ya pasó tipos según autor; suite/build todavía pendientes.
+- V2 Sol: reviewdocsPR143 hallóHOOK/auto corregibles ystaleestado; ahoraAstra revisa37c08ba5 yQA5cdd6b9d.
+- Datec cuenta: no creada. Lucy tiene configurador hacia compra, con contradicción$0→$150/mes y términos404. No se accionó Finaliza tu compra ni se contactó a terceros. Acceso de evaluación pendiente de vía legítima/condiciones.
+
 ## Cola finita y revisión
 
 Máximo **dos implementaciones de código y una revisión técnica** simultáneas. Los demás carriles pueden preparar entregas documentales cerradas, sin nuevos subagentes ni investigación abierta. No iniciar trabajo por mantener chats ocupados.
@@ -58,8 +70,8 @@ técnico no obliga a parar los demás frentes. La madre toma el siguiente ítem 
 1. V2 entregó #138 sobre `d479d3aa`: sin bloqueantes nuevos; CI run `37376490476`; autosync22/22 Windows
    (primera pasada21: fixture sin `.git`; dos casos repetidos tras corregir fixture), sintaxis4Bash PASS.
    No pruebas Node Linux locales, ni merge. Conservar este límite de la revisión.
-2. C13 PR113: revisión previa favorable sobre7d97f2f3; CI run37410842871 falló cuatro tests. Autor subió2f2b0743 (sólo fixtures;88tests reportados PASS); CI y revisión pendientes.
-3. C15 PR114: revisión previa favorable sobrecef79f23; CI run37411140925 falló TS2322. Autor subió54c6ada8; v2 revisó delta54c6ada8 favorable; pendiente CI. Migración y capacidad fiscal real siguen pendientes.
+2. C13 PR113: revisión favorable sobre2f2b0743 con88tests independientes PASS; CI sigue pendiente.
+3. C15 PR114: revisión previa favorable sobrecef79f23; CI run37411140925 falló TS2322. Autor subió54c6ada8; v2 revisó delta54c6ada8 favorable; CI falló después. Autor corrigió37c08ba5, nuevaCI/review pendientes. Migración y capacidad fiscal real siguen pendientes.
 4. C14 después de prueba de pago y aprobación casilla legal. C11a siguiente tanda; C11b recién con C11a mergeado.
 
 Plataforma se revisa con Astra; finanzas, permisos y autosync con dos lentes independientes. Docs triviales: una
@@ -134,3 +146,7 @@ no rondas vacías30min ni cron como sustituto. El heartbeat aún no ejecuta trab
 Archivos preparados para revisión de madre, sin commit/push por el agente documental. Validar `git diff --check`, ids,
 enlaces internos y que no existan afirmaciones cloud/producción sin prueba. Guardar commit/PR/SHA al aprobar; este
 documento no habilita autosync ni publica cambios por sí mismo.
+
+## Cierre de investigación Datec6-oct
+
+Dossier/observaciones ybrecha técnica en `competitor-profiles/datec.md` y `datec-onia-brecha-tecnica.md`. SAP/IBM/cliente corroborados; performanceLucy/preciofinal/rankingIA noverificados. Cuenta no creada; solicitud de acceso de evaluación pendiente de autorización de contacto enviada a Sergio. Runbookcloud/modelosguardado; sesiónCLIcloudlectura funciona pero modelo remoto/Higgsfield/Chrome siguen sinvalidar. EffortCLIlocal corregido a medium, no configuracióncloud. AVISOSreviewP2HOOK/auto corregidos; GUIONES/GRABAR/KIT sincronizados. PáginaexternaClaude ycaptions/videoN03/K11 necesitan revisión porpieza, no modificados/publicados.
