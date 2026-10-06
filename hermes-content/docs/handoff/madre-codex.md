@@ -174,3 +174,7 @@ Autor completó8865d69a47c0998ffd7ccb0f3ee7111a9d1033dd, verificadoMadre local/G
 ## Estado alpedir resumen6-oct — CajaCI fallo nuevo
 
 PR110SHA8865d69a CI37444905976 terminóFAILURE09:56:28UTC:10tests fallidos/5files,9522PASS,3snapshots fallidos (navegaciónCajaobservadaenvertical-pack). SecuritySUCCESS. Reviewdelta8865d69a favorable NOequivaleCIverde. Madre renuevaúnicolease autorAstra para inspeccionar5files ycorregir incompatibilidadescausadasporCaja, tests/snapshots asociados másCHANGELOGsiobligatorio; rutasexactasdesdelog registradasporautoranteseditar. No actualizar snapshots a ciegas ni omitirpruebas; máximo2intentosmismofallo. Nuevodelta pasa v2una vez. No schema/deps/migración/master/deploy. Otrasentregas cerradas; no tareas abiertasparaocuparsesiones.
+
+### Entrega Caja34daf14e —6-oct13:10UTC
+
+NuevoHEADlocal/remoto34daf14e02c85bc611cf3caae11ef0c76ce010fa comprobadoMadre, worktree limpio. Autorreporta258testsPASS/6files,ESLint5TS ydiffPASS. Ocho paths: route+route.test, navigation.test+snapshot, vertical-pack.snapshot, pantallas-compartidas-cubiertas.test, rol-en-la-ruta.test, docs/CHANGELOG. Runtimeadelanta autorizaciónantesJSON conservando permisosporacción; tres snapshotsmanuales incorporanCaja. Madre inspeccionódelta runtime; v2Astra despachada revisiónindependiente única8865d69a..34daf14e, foco separaciónfinance.write/approvals.decide yasserts/roles. CI37468652936 IN_PROGRESS,Secret scan37468653156QUEUED,PreviewSKIPPED. Typechecklocalglobalnoaprobado porPrismadesactualizado; nogeneración/deps. Sinmerge/deploy/migración.
