@@ -1,5 +1,9 @@
 # Cierre técnico 1.0 — desarrollo, 6-oct-2026
 
+## Lease C6b1 antes de editar
+
+Autorizado por madre: rama aislada `codex/c6b1-caras-api`, checkout `E:/ONIA-Codex/cierre-1.0-20261006/platform-caras`, base master `5102535cdd2823c4d6365fdc459e3c1a04161431`, sin PR116. Paths exclusivos: prisma/schema.prisma; nueva migración20261006220000_add_tooth_surfaces; app/api/teeth/route.ts y tests para serializar estado general; nuevo app/api/teeth/surfaces/route.ts y test; lib/dental/tooth-surfaces.ts y tests si necesario; registro API vertical y tests asociados; docs/CHANGELOG.md. Migración sólo archivo. Sin UI, DB real, instalación, generación Prisma compartida ni fanout. Legacy general/caras independientes, cuatro condiciones, AUSENTE bloquea edición, no borrar caras.
+
 ## Lease y unidad elegida (registrados antes de editar código)
 
 ### C6a autorizado tras revisión favorable84d6df62
@@ -75,3 +79,13 @@ Evidencia GitHub de9PR con SHA/merge/checks guardada en `pr-evidence.json`. No s
 **C6a: historia clínica completa navegable**, antes de odontograma. Impacto: el profesional puede recuperar una consulta anterior a las10 visibles; usa modelo existente y no requiere migración. Propuesta: página dedicada bajo `/patients/[id]/records`, paginación por fecha clínica+ID, enlace desde ficha y pruebas de acceso/tenant/orden. Paths a reservar: `app/(dashboard)/patients/[id]/records/page.tsx` (nuevo), `app/(dashboard)/patients/[id]/FichaVista.tsx` (enlace pequeño), API records+tests si se elige paginación de API, y tests focales de página. Contrato UI y snapshots de referencia a coordinar con carril visual; no usar login/register reservados.
 
 Dependencias antes de iniciar: review de esta unidad, lease de madre, contrastar solape `FichaVista.tsx` con P2 ya preparado. No alterar el parche P2 sin coordinación. Si madre prioriza recepción, siguiente alternativa C5 columnas requiere lease de AgendaClient/page y un componente nuevo de grilla; UI/datos y horarios merecen una unidad propia. Odontograma5caras es otra unidad posterior con contrato de migración, no una bandera cosmética.
+
+## Entrega C6b1 — PR119
+
+- Draft https://github.com/oninteligenciaartificial/onia-platform/pull/119; SHA `cf1d86ea33a7935896c822d5dd113522bb933316`, rama `codex/c6b1-caras-api`. Base master5102535c, sin PR116. Diez archivos,396+/12-. Commit/push con hooks desactivados sólo para esos comandos. Worktree limpio.
+- Persistencia independiente de cinco caras/cuatro condiciones, sin backfill ni eliminación; no fila no implica SANO. GET/POST con tenant, permisos efectivos y guard dental. Validación estricta, revisión CAS/409, lock paciente compartido con legacy, AUSENTE bloquea sin borrar caras, auditoría atómica.
+- 142PASS/6suites (`c6b1-tests.log`), ESLint7TS PASS, Prisma validate PASS (`c6b1-schema.log`), diffcheck PASS. Pruebas legacy conservan siete condiciones/notas y contrato array; nuevas cubren160combinaciones FDI/cara, permisos/tenant, validación y conflictos.
+- Typecheck exit2 (`c6b1-types.log`): cliente Prisma compartido antiguo sin toothSurfaceRecord y errores preexistentes visualSelection/deactivatedAt. No se regeneró ni modificó cliente compartido. CI deberá generar cliente final; no declarar typecheck aprobado.
+- PostgreSQL/psql no disponibles; Docker instalado sin engine activo. No se instaló/inició nada. Tests son mocks/contratoSQL y no acreditan carreras ni rollback PostgreSQL real.
+- Migración sólo archivo20261006220000_add_tooth_surfaces; RLS/revokes, checks e índices. NO aplicada, sin DB real. Aplicación exige migración previa autorizada; rollback conserva tabla/datos. No merge/deploy/autosync. C6b2 pendiente revisión independiente.
+- CI37533459535 y Security37533459526 QUEUED al entregar; Supabase Preview SKIPPED. Ninguno acredita validación DB. Madre coordina revisión v2 y seguimiento CI. Informe y contrato externos, sin editar manifest/handoff madre.
