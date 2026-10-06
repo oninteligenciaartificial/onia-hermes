@@ -159,3 +159,5 @@ Mensajes enviados6-oct: Ventas prepara battlecard interna sin investigación nue
 Re-reviewv2Astra:37c08ba5 favorable,76matriz+6ratchet independientesPASS; QA5cdd6b9d favorable con3regresiones propiasPASS. CIpendiente,authsimulado/PGnofueprobado. V2ahorarevisaC11a6f940cfc. BattlecardDatec integradaencompetitor-profiles/datec-battlecard-onia.md ycontrastada con catálogo actual; no enviada.
 
 C11a6f940cfc re-reviewv2Astra favorable:14casos independientesPASS/4files,52previosomitidos; runtimePATCH/helper/booking reales, authPrisma/canalesmock. No reinicia marcas/cuotas/confirmTokenExpiresAt; auditoríaestadoimplícito yefectosindependientes comprobados. CI/Securityqueued alchequeoúnico; sinBDreal/pushUI/merge/deploy.
+
+ReglaSergio6-oct reels: objetivo todo-cloud; si video/acceso falla, madre local analiza yreportabloqueoexacto. Dosreelsanteriores fueronlocales; Gemini503 no demuestraincapacidadcloud. Prueba de habilitaciónyregladecoberturaguardadasencloud-permisos-modelos.md.

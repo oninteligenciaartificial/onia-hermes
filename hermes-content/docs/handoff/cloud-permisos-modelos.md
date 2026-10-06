@@ -77,3 +77,17 @@ Snapshot de límites de esta cuenta: ventana semanal, 23% usado / 77% restante; 
 HECHO: inventario local, fuentes oficiales, separación de facturación y runbook. BLOQUEADO: modelo cloud realmente seleccionado, sesión Higgsfield, acceso Chrome/bóveda y runtime VPS; no se intentaron las operaciones excluidas. Frentes usados: operaciones, seguridad de credenciales y verificación; sin agentes extra.
 
 Fuentes locales: `AGENTS.md`, `COORDINATION_MANIFEST.md`, `.claude/skills/onia-router/SKILL.md`, `.claude/skills/onia-infra/SKILL.md`, `.claude/skills/onia-sesion-madre/SKILL.md`, `.claude/skills/higgsfield-generate/SKILL.md`, `hermes-content/skills/seguridad-credenciales.md`, `hermes-content/docs/AI_MODEL_ROUTING_2026.md`, `hermes-content/docs/handoff/codex-relevo.md`, `hermes-content/docs/handoff/hermes-jarvis.md`. Fuentes públicas abiertas el 6-oct-2026; estado local es una muestra de este proceso, no inventario de todos los entornos.
+
+## Reels: destino cloud y fallback local — instrucción Sergio6-oct
+
+Sergio pide trabajar todo en cloud; autoriza analizar desde la madre local si el entorno cloud no puede. No afirmar incapacidad universal de cloud para video: hay que probar este entorno y este proveedor. Los reels Ddm5jEHOgK6/Dd6Lo7uApvT fueron descargados/analizados en laptop, no en cloud. Ambas llamadas Gemini devolvieron503: disponibilidad transitoria del proveedor, no prueba de restricción cloud. Cobertura visual por fotogramas; audio no analizado.
+
+Prueba de habilitación cloud (pendiente, no ejecutada):
+1. Comprobar repo, modelo/esfuerzo, herramientas existentes y permisos de red del entorno de contenido; ninguna llave VPS para esta tarea. Instalación ausente requiere aprobación previa.
+2. Comprobar acceso autorizado al reel/MP4. Instagram puede exigir sesión o bloquear tráfico; no copiar cookies personales a cloud ni eludir controles. Si enlace falla, usar un MP4 accesible autorizado o fallback madre local.
+3. Verificar ffprobe/ffmpeg o herramientas equivalentes existentes y lectura de fotogramas por el agente. Registrar duración, timestamps y cobertura, no sólo metadata.
+4. Para audio/video nativo, comprobar credencial segura y presupuesto del proveedor soportado; Geminihelper es una opción, no una capacidad garantizada por Codex. Una API externa puede facturarse aparte de la suscripciónCodex; verificar antes de gasto. SinAPIaudio, informar cobertura parcial.
+5. Hacer una sola prueba acotada, cachear resultado y no repetir503 en loops. Éxito exige análisis visual+audio corroborado y fuente; descargar un archivo no basta.
+6. Guardar ficha y evidencia no secreta canónica. Ante bloqueo, mandar a madre causa exacta(red/login/herramienta/proveedor/modelo/costo) y seguir otro trabajo seguro. No pasar a Sergio edición/descarga que madre pueda completar con acceso disponible.
+
+No se creó entorno, instaló herramienta, movió secretos ni ejecutó inferencia cloud en este cambio. Fallback actual: laptop disponible. Todo-cloud sólo se anuncia logrado cuando la prueba termina verificable.
