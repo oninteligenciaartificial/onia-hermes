@@ -155,3 +155,5 @@ Dossier/observaciones ybrecha técnica en `competitor-profiles/datec.md` y `date
 
 Mensajes enviados6-oct: Ventas prepara battlecard interna sin investigación nueva; Marca audita versiones/captions N03/K11 contra correcciones ya verificadas; Lucía prepara preview360p explícitamente BORRADOR con P1/P2pendientes, sin UIinventada/master/publicación. V2Astra revisa37c08ba5/QA5cdd6b9d ydespuésC11a6f940cfc, una revisión a la vez. Hermes cerró runbook: espera mecanismo de acceso/verificacióncloud, sin tocar VPS.
 Último chequeoGitHub:113CIin_progress ySecurityqueued;11437c08ba5CI/Securityqueued;1156f940cfcCI/Securityqueued. No CI declarada verde ni despliegue. Estado requiere delta de corrida, no polls vacíos.
+
+Re-reviewv2Astra:37c08ba5 favorable,76matriz+6ratchet independientesPASS; QA5cdd6b9d favorable con3regresiones propiasPASS. CIpendiente,authsimulado/PGnofueprobado. V2ahorarevisaC11a6f940cfc. BattlecardDatec integradaencompetitor-profiles/datec-battlecard-onia.md ycontrastada con catálogo actual; no enviada.
