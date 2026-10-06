@@ -265,3 +265,14 @@ PR119reviewv2cf1d86ea: mecánicaAPI favorable53focal+2órdenespropiosPASSmocks, 
 Cierre revisiones: PR117 cbc36a6c favorable (12 focales v2), PR118 27d47f98 favorable (2P2 cerrados), PR119 adb87855 favorable (P2 dental flags0/1 cerrado, 13 focales v2), PR120 9c34165d favorable (10 focales v2). CI últimos SHA pendiente/en cola, no equivale aprobado. Madre QA C10 banner y expandir mensaje sin envío; pantalla488CSSpx sin overflow, no390exacto. C5 screenshot final c5-agenda-final.png fixture/fonts fallback. Cuota69usada. C6b2 autorizado mismoPR119: editor 5caras/readonly/409/ausente con fixture y revisión delta; Desarrollo único implementador, UI sólo banco cuando reciba archivos. Sin DBreal/merge/deploy. Leases mismos límites y modelo Astra medium.
 
 Estado de cola verificado: GitHub API actions/runners devuelve un único runner `onia-vps-platform`, online y busy; CI configura self-hosted/onia-vps y cancela sólo corridas superadas de la misma rama. PR116 ejecuta tests tras lint/typecheck aprobados; PR117–120 esperan. No reiniciar ni aumentar capacidad del VPS por una cola normal; no comprar minutos ni repetir checks. Espacio observado C 2.39 GiB / E 37.94 GiB libres. Pregunta específica de autorización para merge/despliegue PR115 enviada a Sergio, aún sin respuesta; C11b sigue detenido por ese gate.
+
+## Publicación del 6-oct a las16:00 — verificación solicitada por Sergio
+
+META: confirmar destinos y mecanismo del post observado por Sergio. PRUEBA: lectura filtrada del ledger del VPS y dos consultas Buffer --estado, sin publicar/reprogramar. Se reutilizó la llave SSH existente y host conocido documentados en README; alias onia-vps no resuelve en esta laptop, dirección canónica con StrictHostKeyChecking=yes sí funciona. No se imprimieron secretos ni se modificaron servicios.
+
+Lote DD-A/CACHE previamente programado (PR140):
+- Instagram @sergiourcullo: ledger media18196340893345454, timestamp2026-10-06T20:00:44Z (16:00:44 Bolivia), https://www.instagram.com/p/DeKl9Zcjwco/ . API directa de Instagram; no Buffer.
+- LinkedIn: Buffer post6ac5537f9b4b7d7d77d63a7f status=sent, error=null, sentAt2026-10-06T20:01:29.669Z (16:01:29 Bolivia), https://www.linkedin.com/feed/update/urn:li:ugcPost:7513327593224458240 .
+- TikTok @sergiourcullom: Buffer post6ac553bb9b4b7d7d77d647fd status=sent, error=null, sentAt2026-10-06T20:03:49.649Z (16:03:49 Bolivia), https://tiktok.com/@sergiourcullom/video/7693647592986578197 . Programado16:02, enviado16:03.
+
+Ésta confirma los tres destinos del lote, no todas las redes. No hay evidencia en esta consulta de YouTube, Facebook ni X para esta pieza. Instagram respaldado por ledger de publicación; LinkedIn/TikTok además por estado actual API Buffer. No se inspeccionó render público ni métricas. No crear duplicados. La indicación histórica «publicación real no probada» queda superada para esta pieza del6-oct, no para las otras diez.
