@@ -1,13 +1,25 @@
 # Handoff — carril `infra-cerebro-loops`
 
-> **Medición posterior, 27-sep-2026:** nodo-casa y los cuatro loops están activos;
-> Hermes sigue en el VPS. La caída de abajo describe el 21-sep, no el estado
-> actual. Ver [evidencia y uso del homelab](homelab-orquestacion-20260927.md).
+> **Relevo documental — 6-oct-2026; runtime sin nueva medición.** El 27-sep se
+> comprobaron nodo-casa y sus cuatro loops activos. La actualización del **28-sep**
+> registró el túnel `127.0.0.1:2222` sin listener (`Connection refused`) y logs de casa
+> con última modificación a las 16:00 UTC. Eso no determina si falló energía,
+> Windows/WSL, red o el túnel, ni demuestra que los loops estuvieran detenidos.
+> **Estado actual de casa y sus cuatro loops: desconocido.** No reactivarlos,
+> migrarlos ni crear otro escritor basándose en la muestra del 27-sep.
+> Ver [evidencia y actualización del homelab](homelab-orquestacion-20260927.md).
+>
+> Hermes permanece documentado en el VPS, separado de nodo-casa y de la laptop.
+> El gateway figuraba activo en la medición del 1-oct conservada en
+> [hermes-jarvis.md](hermes-jarvis.md); su salud actual no se comprobó en este relevo.
+> La laptop apagada detiene la madre local y su navegador, pero no constituye
+> evidencia de caída del VPS ni del nodo de casa.
 
-## Estado vigente — continuidad en Codex, 21-sep-2026
+## Historial — continuidad en Codex, 21-sep-2026
 
-Esta sección sustituye las afirmaciones de rama limpia/mergeada y los próximos
-pasos del cierre anterior. El historial de Claude de abajo se conserva como evidencia.
+Esta sección conserva la medición y aplicación del 21-sep. Sustituyó el cierre
+anterior en esa fecha; no representa el estado actual. El historial de Claude
+de abajo también se conserva como evidencia fechada.
 
 1. **Objetivo:** sostener la infraestructura que permite desarrollar y operar ONIA
    Platform. Sergio Urcullo trasladó el carril de Claude a esta tarea de Codex.

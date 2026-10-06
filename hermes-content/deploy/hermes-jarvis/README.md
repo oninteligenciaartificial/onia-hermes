@@ -1,8 +1,18 @@
 # hermes-jarvis — el acceso controlado de la sesión de Hermes al VPS
 
-La sesión de control de Hermes (la que ordena el Telegram de Sergio Urcullo, su brief de la
-mañana, su cierre del día y su calendario) corre en la nube y **no tiene llave del VPS**.
-Sergio Urcullo aprobó el 2026-09-29 un acceso controlado, con respaldo. Es este:
+Este directorio define el acceso controlado para el Telegram, resumen, cierre y
+calendario de Sergio Urcullo mediante un workflow manual en el runner del VPS.
+La aprobación histórica del 29-sep no es una orden actual de ejecución.
+
+La ubicación de una sesión no determina sus credenciales: el entorno «Onia»
+está documentado con acceso SSH, mientras que «Pedidos de Hermes» debe quedar
+separado, sin variables, llave SSH ni token de Actions. Comprobar el entorno y
+la autorización de la tarea antes de cualquier operación. No se verificaron
+credenciales ni runtime en el relevo documental del 6-oct.
+
+Estado vigente y mediciones fechadas:
+[`hermes-jarvis.md`](../../docs/handoff/hermes-jarvis.md).
+CI verde o copia de scripts al VPS no acredita activación de Jarvis.
 
 | Pieza | Qué hace |
 |---|---|
@@ -15,9 +25,17 @@ Sergio Urcullo aprobó el 2026-09-29 un acceso controlado, con respaldo. Es este
 
 ## Cómo se corre
 
-Desde GitHub → Actions → «Hermes Jarvis — acceso controlado al VPS» → Run workflow, o desde la
-sesión con `actions_run_trigger` (`workflow_id: hermes-jarvis.yml`, `ref: main`). La salida
-queda en el log del job, ya redactada.
+Con autorización contemporánea para la acción elegida: GitHub → Actions →
+«Hermes Jarvis — acceso controlado al VPS» → Run workflow, sobre `main`.
+Antes de `aplicar` o `revertir`, coordinar el dueño exclusivo de infra y cumplir
+los requisitos del protocolo `hermes-content/docs/EXECUTION_PROTOCOL.md`.
+La salida queda en el log del job, ya redactada.
+
+La integración GitHub MCP lee Actions, pero `actions_run_trigger` devolvió
+`403 Resource not accessible by integration` el 29 y 30-sep. No usar esa vía
+como receta de despacho ni reintentar el bloqueo por otra vía. Un token con
+permiso de Actions tampoco sustituye la autorización de la operación.
+Fuente: `.claude/skills/onia-hermes-jarvis/SKILL.md`, sección de acceso al VPS.
 
 ## Las marcas del crontab
 

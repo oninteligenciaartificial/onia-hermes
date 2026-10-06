@@ -1,21 +1,30 @@
 # Handoff — carril `hermes-jarvis` (Hermes, el Telegram y el calendario de Sergio Urcullo)
 
-> **ESTADO 5-oct (cambio de sesión madre).** #88, #91, #96 y #94 están en `main`. En el VPS **nada de
-> este carril está encendido**: `aplicar` nunca corrió (lo último medido es del 2-oct; desde la nube no
-> se puede volver a medir sin la autorización de Sergio Urcullo), la rutina no existe y no hay llave.
-> **Espera de Sergio Urcullo, en este orden:**
-> 1. sí o no al cambio del autosync (propuesta abajo);
-> 2. sí a los 3 MEDIUM;
-> 3. después, cargar la llave de la rutina y correr `aplicar`.
+> **Relevo documental — 6-oct-2026; runtime sin nueva medición.** #88, #91, #96 y #94
+> están en `main`. El [PR #138](https://github.com/oninteligenciaartificial/onia-hermes/pull/138)
+> contiene el cambio del autosync y los tres MEDIUM: revisión comunicada por la madre y
+> CI verde comprobado el 6-oct, con el PR todavía abierto en `d479d3aa`.
+> Esto acredita el candidato; no acredita merge, instalación en el VPS ni activación.
 >
-> **Propuesta del autosync (3-oct, pedida por la madre):** `git-autosync.js` sigue pusheando la rama, pero
-> deja de hacer fast-forward de `main` por defecto. Solo lo hace quien se habilite con una variable de
-> entorno (el integrador). Así `main` avanza solo por merge revisado: es como entraron #82 y #76 sin
-> revisión. La guarda deja de depender del nombre de la rama, que es el tercer MEDIUM.
-> - **Riesgo:** las sesiones que hoy publican sin darse cuenta dejan ramas esperando; `ramas_varadas`
->   las cuenta. Hay que corregir la regla «Git — auto-sync» de CLAUDE.md, y eso lo decide Sergio Urcullo.
-> - **Prueba:** el caso de control de `pedido-rama.test.mjs` se invierte (`claude/*` ya no adelanta
->   `main`; con la variable, sí). Pide revisión fuerte: corre en el Stop de todas las sesiones.
+> **Última evidencia de runtime recogida por este handoff (2-oct):** `aplicar` no había
+> corrido; la rutina de pedidos y su llave no estaban configuradas. No se midió de nuevo
+> el VPS en este relevo. Estado actual de esos componentes: **no verificado**.
+> El gateway de Hermes activo en la medición del 1-oct no equivale a Jarvis activado.
+> La copia automática de scripts a `/root/bin` tampoco equivale a ejecutar `aplicar`.
+>
+> **Siguiente secuencia:** resolver #138 por la madre; después, con autorización
+> contemporánea y dueño exclusivo de infra, medir el runtime, comprobar el entorno
+> propio de la rutina y configurar la llave por el mecanismo seguro. Solo entonces
+> ejecutar `aplicar` autorizado, verificar la vuelta del pedido desde Telegram y
+> observar 24 h de entrega. Nada de esta secuencia se ejecutó en el relevo documental.
+>
+> **Fuentes:** estado GitHub de #138 y CI
+> [job 111987193075](https://github.com/oninteligenciaartificial/onia-hermes/actions/runs/37376490476/job/111987193075);
+> revisión comunicada por la madre el 6-oct; mediciones fechadas conservadas abajo;
+> método en `.claude/skills/onia-hermes-jarvis/SKILL.md`.
+>
+> **Historial desde aquí:** las propuestas, pendientes y recetas de las entradas
+> anteriores describen su fecha. No son órdenes actuales ni sustituyen esta cabecera.
 
 > **CIERRE 2-oct ~14:00 UTC — alcance congelado por Sergio Urcullo** («no se añaden más tareas…
 > terminemos, cortamos, damos un vistazo»). Sesión `session_0132vedovRq1JVbeD6aVQwNT`. Se espera la

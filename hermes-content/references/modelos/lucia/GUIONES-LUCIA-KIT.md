@@ -46,28 +46,74 @@ lo que Onia hace hoy y se puede decir (§2 y §8).
 
 ---
 
-## K1 · Humo vs. real — «¿Una IA que confirma citas sin preguntarte?»
+## K1 · Humo vs. real — propuesta de montaje, 6-oct-2026
 
-- **Plano:** recepción de una clínica dental en una torre de Equipetrol: porcelanato claro, mostrador de madera clara
-  y mármol, ventanal a una calle arbolada.
-- **Vestuario:** ambo terracota (`v4/vestuario/ambo-terracota-frente-8d138bd6.jpg`), argollas y cadenita de oro.
-- **Duración:** 34 s.
+Fecha: 6-oct-2026. Integrado por madre bajo lease documental; propuesta pendiente de capturas y aprobación.
 
-| # | Tiempo | Imagen | Texto en pantalla | Fuente | Cr |
-|---|---|---|---|---|---:|
-| 1 | 0–2,5 s | Foto: Lucía detrás del mostrador mirando un celular, con duda; acercamiento lento | «¿Una IA que confirma citas sin preguntarte?» | — | 1 |
-| 2 | 2,5–5 s | La misma foto, con golpe de zoom | «Eso es humo.» | — | 0 |
-| 3 | 5–20 s | **Pantalla real:** el texto de un recordatorio propuesto con IA y el botón para aprobarlo | «La IA escribe el modelo del mensaje.» → «Vos lo revisás y lo aprobás una vez.» | Catálogo §8, frase 1 | 0 |
-| 4 | 20–28 s | **Pantalla real:** Pendientes con el mensaje listo y el nombre y la hora ya puestos | «La IA no ve los datos de tus pacientes. Onia le pone el nombre y la hora.» | §8, frase 2 | 0 |
-| 5 | 28–34 s | Clip: Lucía levanta la vista a cámara y sonríe | «Nada sale sin que vos lo apruebes.» → cierre | §8, frase 3 | 7,5 |
+META: dejar K1 preparado para montaje con material ya pagado.
+PRUEBA DE HECHO: cutlist de 34 s, assets identificados, tarjetas de usted de hasta 6 palabras, duración mínima 0,35 s por palabra + 0,3 s y prueba real requerida por toma.
+REGLA DE PARADA: entrega de esta instrucción; sin generación, gasto, SSH, publicación ni render final. Los huecos de producto bloquean el master.
 
-**Pie:** Lucía es un personaje hecho con IA por @oniahq. En Onia la IA te propone el texto de cada recordatorio
-(cobros, confirmación de citas, pacientes que no vuelven) con el tono de tu negocio. Vos lo revisás y lo aprobás una
-sola vez, y la IA nunca ve los datos de tus pacientes. Desde el plan Crece y en la prueba de 14 días. Agendá tu demo:
-link en la bio.
+Fuentes revisadas: origin/main:hermes-content/references/modelos/lucia/GUIONES-LUCIA-KIT.md (K1 y Material generado); .claude/skills/editor-videos/SKILL.md, sección Reels de Lucía; handoff/higgsfield-lucia.md y v4/PROCEDENCIA.jsonl revisados en primera pasada. Es una adaptación de la pieza existente, no una campaña nueva.
 
-**Costo: 8,5 cr.** La foto 1 es además la prueba de ropa (D1). Si la cara no da ≥ 0,70 o el ambo no coincide con el
-maniquí, se rehace antes de pagar el clip.
+### Assets y entradas
+
+Base de rutas del repo: C:/dev/proyectos/onia-hermes. En el worktree asignado sustituir únicamente esa base; conservar los relativos.
+
+- A1, foto: hermes-content/references/modelos/lucia/v4/kit/k1-1-recepcion-celular-4afffb96.jpg. Existe local: 807038 bytes.
+- A2, clip limpio pagado: hermes-content/references/modelos/lucia/v4/kit/k1-clip-mira-camara-e470ef4f.mp4. Existe local: 5586395 bytes. Procedencia registra Kling, 6 s, 9:16, sonido off. Confirmar duración/fps con ffprobe antes de montar; no congelar ni acelerar para completar el remate.
+- P1, FALTANTE: captura o grabación de la pantalla vigente con propuesta de texto IA y control real para revisar/aprobar el modelo. Nombres ficticios, sin cuenta de pacientes reales. Dejar visible el contexto de aprobación del modelo, no presentar ese control como confirmación automática de citas.
+- P2, FALTANTE: captura o grabación vigente de Pendientes con mensaje listo, nombre y hora ficticios y acción humana de envío. Mostrar la diferencia entre aprobar un modelo y autorizar el envío de una propuesta.
+- P1/P2 deben entregarse con fuente, fecha, versión y revisión del dueño de producto. Guardar junto a la pieza en ruta versionada asignada por la madre, nunca depender de capturas ignoradas por Git. Las capturas candidato-20260930 están sin aprobar y no prueban la versión publicada.
+
+### Cutlist exacto
+
+Tiempos en segundos; intervalos [inicio, fin), alineados a 24 fps. La duración indicada incluye entrada de texto. Mantener legibilidad hasta el corte; no añadir una salida que reduzca el mínimo. El rótulo de identidad es una etiqueta independiente de las tarjetas narrativas.
+
+| Inicio | Fin | Duración | Asset y acción | Texto exacto USTED | Palabras | Mínimo | Prueba real / gate |
+|---:|---:|---:|---|---|---:|---:|---|
+| 0 | 2,5 | 2,5 | A1 estática | ¿La IA confirma sin su aprobación? | 6 | 2,40 | Pregunta, no afirmación de funcionalidad |
+| 2,5 | 5 | 2,5 | A1; sello HUMO y golpe causal | Eso es humo. | 3 | 1,35 | Sin promesa de resultado |
+| 5 | 8 | 3 | P1; foco en propuesta | La IA propone el mensaje. | 5 | 2,05 | Propuesta real visible |
+| 8 | 11 | 3 | P1; foco en texto editable | Usted revisa el modelo. | 4 | 1,70 | Revisión real del modelo |
+| 11 | 14 | 3 | P1; foco en aprobación | Y lo aprueba una vez. | 5 | 2,05 | Control real de aprobación; comprobar semántica |
+| 14 | 17 | 3 | P2; mensaje con datos ficticios | La IA no ve datos | 5 | 2,05 | Afirmación técnica: validar con catálogo/código, no inferir desde UI |
+| 17 | 20 | 3 | P2; misma vista contextual | de sus pacientes. | 3 | 1,35 | Continuación de la frase anterior, no tarjeta autónoma |
+| 20 | 24 | 4 | P2; foco en nombre/hora | ONIA coloca nombre y hora. | 5 | 2,05 | Campos reales interpolados visibles |
+| 24 | 28 | 4 | P2; mensaje completo y acción humana | El mensaje queda listo. | 4 | 1,70 | Mensaje real preparado, sin simular envío |
+| 28 | 31 | 3 | A2, fuente 0–3 s | Usted aprueba antes de enviar. | 5 | 2,05 | No extender a correos automáticos: contexto de propuesta humana |
+| 31 | 34 | 3 | A2, fuente 3–6 s | Agende su demo. | 3 | 1,35 | CTA existente, condicionado a destino operativo |
+
+No utilizar «Comentá DEMO», D6, ni una segunda CTA de compartir. No prometer que una IA confirma citas por sí sola. La secuencia sobre privacidad necesita prueba de arquitectura: una pantalla no demuestra qué datos recibe el modelo.
+
+### Pie exacto propuesto para reemplazar K1
+
+Lucía es un personaje hecho con IA por @oniahq. En ONIA, la IA propone el modelo del mensaje con el tono de su negocio. Usted lo revisa y lo aprueba una vez. Los datos de sus pacientes quedan fuera de esa propuesta de IA; ONIA coloca el nombre y la hora en el mensaje que usted revisa antes de enviar. Disponible desde el plan Crece y en la prueba de 14 días. Agende su demo desde el enlace de la bio.
+
+El pie es PROPUESTA, no texto aprobado para publicación. Validar la privacidad, el plan Crece y la prueba de 14 días contra el catálogo y comportamiento vigente antes de incorporarlo al master. Si no se prueban, retirar esas frases de la versión final, sin sustituirlas por otra promesa. Destino heredado: https://onia.com.bo/llamada?src=lucia-k1; la madre debe verificar que el enlace de bio lleva al destino correcto antes de publicar.
+
+### Montaje y calidad
+
+- Lienzo 1080×1920, 24 fps; 34 s = 816 cuadros. Acento #10C26B. Método editor-videos, sin placas PIL ni pipeline improvisado.
+- Primera tarjeta desde t=0, plenamente legible antes de 0,15 s. Etiqueta «Lucía · personaje IA de Onia» desde t=0 en franja segura. No convertir el ambo en una credencial profesional.
+- Medir mentón máximo en todo A2 y encuadre A1: tarjetas entre mentón máximo +40 px y y=1490. Bajo y=1000, evitar los 80 px derechos. Si no caben, reducir el panel o repartir texto; no tapar cara ni cortar coronilla.
+- Sello HUMO: 130%→100% en 3 cuadros; golpe de zoom +3% durante 5 cuadros, mismo instante 2,5 s. No zoom decorativo; no escalar fuente 720p ×1,5. En cierre, movimiento suave ≤1,04 si no compromete encuadre.
+- P1/P2: recorte focal legible y crédito «pantalla real de ONIA»; nunca dibujar controles o estados para completar la evidencia. Un cambio de foco cada 1,5–3 s puede guiar la lectura sin sumar tarjetas ni alterar las duraciones. No repetir clicks ni hacer parecer ejecutado un envío.
+- D4 pendiente: sin voz, sin TTS ni audio generado, sin música de cama. Si la madre decide incorporar SFX locales en edición: solo por cambio visible de tarjeta, pico ≤−3 dBTP, sin loudnorm. Esta entrega no crea ni selecciona audio.
+- QA de identidad previo registrado, no vuelto a medir: foto 0,808; clip 0,68–0,79 en cuadros con caras pequeñas, aprobado visualmente en procedencia. Antes del master, mirar todo A2 y los cortes: manos, rostro, ambo, textos inventados, deformaciones y transiciones. No pedir regeneración automáticamente.
+- Revisar ortografía y ausencia de voseo; grep contra «soy doctora», «odontóloga», «mis pacientes», «mi consultorio», «agenda llena», «cero ausencias» y porcentajes prometidos. Interpretar el contexto para no rechazar este documento por enumerar prohibiciones.
+- Entrega futura de edición: tabla de cortes ejecutada, preview 360p y QA visual de primer cuadro, cada transición y último cuadro. Preview no equivale a aprobación ni autoriza publicación.
+
+### Faltantes concretos y orden reproducible
+
+1. Propuesta integrada en este guion canónico. Antes de editar, asignar worktree y rutas de producción; no crear otro guion paralelo.
+2. Dueño de producto entrega P1 y P2 con evidencia de versión y datos ficticios; valida privacidad y semántica de las dos aprobaciones. No se solicita acceso SSH ni se rodea Production Reads.
+3. Verificar A2 con ffprobe y encuadre completo; medir zona libre de cara para ubicar texto.
+4. Montar respetando esta tabla con editor-videos; preservar los assets existentes. Si falta P1 o P2, queda PREPARADO/BLOQUEADO, no reel final.
+5. Verificar 816 cuadros, once tarjetas ≤6 palabras, todos los mínimos y trato de usted; pasar revisión de producto y preview antes de solicitar aprobación de publicación.
+
+Costo nuevo: 0 créditos. Cuenta/etiqueta IA, D2–D6 y permisos de publicación conservan su estado; esta propuesta no los decide. Alcance ejecutado: planificación/copy/QA de consistencia sin agentes adicionales.
+
 
 ## K2 · Recepción a las 8 — «A las 7, Onia ya revisó tu agenda»
 
