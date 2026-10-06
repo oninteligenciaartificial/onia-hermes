@@ -6,6 +6,10 @@ Este archivo es el estado Codex; `madre-local.md` conserva el relevo Claude. No 
 
 ## VIGENTE — cierre de desarrollo y UI, 6-oct-2026
 
+**Goal persistente activo**, creado por pedido explícito de Sergio del 6-oct: cerrar el desarrollo verificable de los 15 puntos de `ONIA_PLAN_1.0_Y_CAJA.md` para las primeras cinco clínicas. No marcar complete mientras queden requisitos; mantener pruebas, revisión y gates de producción separados. Sin presupuesto de tokens inventado. La próxima continuación prioriza QA dental y CI de PR117–120, no nuevas funciones ni investigación amplia. Consulta actual:76% de cuota usada, reserva20% intacta.
+
+Actualización remota tras crear goal: PR116 `970bdb1e` CI37531946281 y Security37531946276 SUCCESS; PR118 `27d47f98` CI37533708498 IN_PROGRESS; PR117/119/120 siguen QUEUED en sus SHA finales. No reabrir revisión de116. Los permisos pendientes no cambian por crear el goal.
+
 Cuota al cierre 6-oct21:45UTC: 75% usada, 25% disponible; reservar al menos 20%. No lanzar otra implementación antes de cerrar CI y los gates actuales. Una madre Astra, dos autores Astra y revisión v2 Astra, todos medium; resto Sol6.1 cuando haya entradas accionables. No mantener chats trabajando por ocuparlos.
 
 | Entrega | SHA / PR | Estado comprobado y siguiente paso |
