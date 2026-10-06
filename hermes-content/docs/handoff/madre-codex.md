@@ -4,6 +4,13 @@ Estado: relevo autorizado por Sergio, 5-oct-2026; base Hermes `672d78e8`, desarr
 Producción Platform `97fe3061` es el release reportado por handoff, sin comprobación nueva propia.
 Este archivo es el estado Codex; `madre-local.md` conserva el relevo Claude. No reconstruir transcripts completos.
 
+**Actualización de cierre de turno:** coordinación en PR Hermes #143 (draft), commit inicial `69038fd4`.
+Cuota compartida: última consulta 14% usada / 86% restante. C13 #113 tiene CI en curso, no aprobado todavía.
+C15 `b662d24e` NO aprobado: revisión Astra reprodujo exención fiscal inducida por email mutable del cliente
+(`demo-cliente@example.com` → cuenta de la casa). Devuelto a autor C15 para corrección mínima y regresión;
+alcance local ampliado a configuración de organización/tests e inspección de alta, sin decisión fiscal nueva.
+V2 Astra revisa C13 mientras se corrige C15; luego una revisión focal del arreglo. No iniciar tercera implementación.
+
 **META:** llevar ONIA a las primeras cinco clínicas que pagan; continuar los cinco carriles sin doble dueño.
 **PRUEBA DE HECHO:** cada ítem termina ejecutado y validado, con runbook verificable, o bloqueado por dato/permiso
 concreto; siempre SHA, paths, pruebas y revisión. **REGLA DE PARADA:** sin cambio accionable no hay ronda ni mensaje;
