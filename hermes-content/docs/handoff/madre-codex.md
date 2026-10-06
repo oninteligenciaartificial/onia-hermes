@@ -5,10 +5,13 @@ Producción Platform `97fe3061` es el release reportado por handoff, sin comprob
 Este archivo es el estado Codex; `madre-local.md` conserva el relevo Claude. No reconstruir transcripts completos.
 
 **Actualización de cierre de turno:** coordinación en PR Hermes #143 (draft), commit inicial `69038fd4`.
-Cuota compartida: última consulta 14% usada / 86% restante. C13 #113 tiene CI en curso, no aprobado todavía.
+Cuota compartida: última consulta 16% usada / 84% restante. C13 #113 tiene CI pendiente de revisión, no aprobado todavía.
 C15 `b662d24e` NO aprobado: revisión Astra reprodujo exención fiscal inducida por email mutable del cliente
 (`demo-cliente@example.com` → cuenta de la casa). Devuelto a autor C15 para corrección mínima y regresión;
-alcance local ampliado a configuración de organización/tests e inspección de alta, sin decisión fiscal nueva.
+Autor confirmó además onboarding y registro controlables. Decisión técnica local: `Organization.cuentaDeLaCasaVerificada`
+con default false, solo SUPERADMIN y audit; API/UI admin mínima, pruebas focales, migración aditiva NO aplicada.
+Sin backfill inferido ni confianza en email/slug/track. Conserva QA interna genuina; no crea excepción para clientes.
+Marcado de cuentas existentes y activación en producción siguen pendientes de autorización de Sergio.
 V2 Astra revisa C13 mientras se corrige C15; luego una revisión focal del arreglo. No iniciar tercera implementación.
 
 **META:** llevar ONIA a las primeras cinco clínicas que pagan; continuar los cinco carriles sin doble dueño.
@@ -24,14 +27,14 @@ Sergio autorizó mensajes a estos chats Codex. Leer/esperar sus resultados no re
 
 | Rol | Chat local Codex | Modelo/lease inicial |
 |---|---|---|
-| Madre | `01a10f44-2bb7-73c0-8769-8bbe5000b32f` | Tool aceptó Sol 6.1 medium para próximas continuaciones; no demuestra cambio del turno actual |
+| Madre | `01a10f44-2bb7-73c0-8769-8bbe5000b32f` | Sol 6.1 medium solicitado y continuación con model_switch recibida |
 | V2 | `01a10f47-3d92-7bb1-b9f4-6979e258a6dc` | #138 Sol entregada; ahora override Astra medium revisión C15; después Sol para coordinación |
 | Marca | `01a10f47-f110-7131-b14f-9de1d3241406` | Sol 6.1; inventario entregado, en espera |
 | Ventas | `01a10f48-047d-79b2-9bb6-f7addd70c4c7` | Sol 6.1; inventario entregado, en espera |
 | Lucía | `01a10f48-8d90-7103-8c17-612244fd5dd5` | Sol 6.1; inventario entregado, en espera |
 | Hermes | `01a10f48-99eb-7d43-927f-83c4eebc8d1c` | Sol 6.1; inventario entregado, en espera; no duplicar #138 |
 | Platform C13 | `01a10f46-c910-79a3-9670-7e990fcb1257` | Astra medium; draft #113, espera revisión independiente; `codex/punto-13-gracia-y-no-renovar` |
-| Platform C15 | `01a10f4a-5dd1-76c3-844e-45b1c360adad` | Astra medium EN REVISIÓN; `codex/punto-15-factura-al-aprobar` |
+| Platform C15 | `01a10f4a-5dd1-76c3-844e-45b1c360adad` | Astra medium corrige P2; `codex/punto-15-factura-al-aprobar` |
 
 Lease documental madre: `COORDINATION_MANIFEST.md`, `AI_MODEL_ROUTING_2026.md`, skill `onia-sesion-madre` y este archivo,
 en rama `codex/madre-orquestacion-20261005`, worktree `C:/Users/PC/.codex/worktrees/madre-codex/onia-hermes`.
