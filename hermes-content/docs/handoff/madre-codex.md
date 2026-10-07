@@ -8,6 +8,8 @@ Este archivo es el estado Codex; `madre-local.md` conserva el relevo Claude. No 
 
 ### Reducción de tareas/modelos solicitada por Sergio
 
+**Última verificación tras reanudar goal:** cuota85% usada, excepción agotada; no iniciar más trabajo de fondo. Los procesos existentes finalizaron: CI118 run37551204791 SUCCESS sobre478563dcd9bbbddaf24ca4749cf739785b31dc8f yCI119 run37551131780 SUCCESS sobreda3820ea4f9f2b8156173c97ad7649354576ae47, ambos lint/types/tests/build completados. Revisiones independientes ya favorables; no repetir. Esto cierra el pendiente CI de ambas entregas, no QA conDBreal/integración/producción.121 conserva gateCI por base stacked; P2/C14/E2E/backup/permisos siguen abiertos. Goal leído ACTIVE tras reanudación, no completo. Primera continuación reanudada aporta progreso verificable (CI terminal aprobado registrado); no marcarblocked antes de tres turnos consecutivos con bloqueo revalidado. No nuevos agentes, runs ni créditos/resets.
+
 Desarrollo, Facturación y v2 confirmados idle con entregas cerradas. Cuota84%. Máximo una implementación activa, revisión secuencial, sin nuevos frentes ni investigaciones de fondo. Default CLI Sol6.1 medium; coordinación y respaldo rutinario se enrutan a Sol6.1 medium, código/revisión técnica Platform conserva Astra medium. Cambio del selector del chat madre pendiente de Sergio; no afirmar que editar CLI/prompt cambia el modelo de este chat. Detalle en AI_MODEL_ROUTING_2026.md, bloque de precedencia; elección opcional de Sol también para código simple aún sin respuesta. No despertar sesiones idle sólo para cambiar modelos. Reserva20% vuelve a regir para nuevas tandas; excepción85% no se renueva automáticamente.
 
 ### Plan vigente solicitado por Sergio: terminar código sin adelantar producción
