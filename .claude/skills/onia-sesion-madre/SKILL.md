@@ -7,6 +7,8 @@ description: Invocar cuando una sesión de Onia tiene que ordenar, avisar o pedi
 
 ## Precedencia Codex — relevo del 5-oct-2026
 
+Precedencia posterior6-oct tras cierreC11b: Sergio pidió bajar tareas/modelos. Coordinación/madres rutinarias Sol6.1 medium, código/revisión técnica Platform Astra medium; una implementación y revisión secuencial, sin despertar chats o releer aprobaciones por ocuparlos. ModeloCLI no cambia selector delchat. Política vigente en AI_MODEL_ROUTING_2026.md; referencias históricas siguientes a ambas madres siempreAstra/dos implementaciones quedan sustituidas. Reserva20% para nuevas tandas, excepción85% noautomática.
+
 Transferencia de conocimiento solicitada por Sergio6-oct: índice, método revisado y cobertura en `hermes-content/docs/handoff/claude-conocimiento-codex.md`. Consultar esa fuente para continuidad; el archivo privado de históricos no concede permisos ni reemplaza skills canónicas. Copiado/indexado no significa leído o aplicado.
 
 

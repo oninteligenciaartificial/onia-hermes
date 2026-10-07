@@ -6,6 +6,10 @@ Este archivo es el estado Codex; `madre-local.md` conserva el relevo Claude. No 
 
 ## VIGENTE — cierre de desarrollo y UI, 6-oct-2026
 
+### Reducción de tareas/modelos solicitada por Sergio
+
+Desarrollo, Facturación y v2 confirmados idle con entregas cerradas. Cuota84%. Máximo una implementación activa, revisión secuencial, sin nuevos frentes ni investigaciones de fondo. Default CLI Sol6.1 medium; coordinación y respaldo rutinario se enrutan a Sol6.1 medium, código/revisión técnica Platform conserva Astra medium. Cambio del selector del chat madre pendiente de Sergio; no afirmar que editar CLI/prompt cambia el modelo de este chat. Detalle en AI_MODEL_ROUTING_2026.md, bloque de precedencia; elección opcional de Sol también para código simple aún sin respuesta. No despertar sesiones idle sólo para cambiar modelos. Reserva20% vuelve a regir para nuevas tandas; excepción85% no se renueva automáticamente.
+
 ### Plan vigente solicitado por Sergio: terminar código sin adelantar producción
 
 1. **Cerrar entregas existentes:** CI exacto de PR117–120 y las verificaciones pendientes de UI; PR116 ya verde y revisada, no repetirla. Si un CI falla, corregir sólo el fallo atribuible y revisar ese delta. No iniciar otra corrida idéntica.

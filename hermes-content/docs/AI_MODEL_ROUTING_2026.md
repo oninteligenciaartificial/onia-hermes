@@ -5,6 +5,16 @@ elegir modelo. La disponibilidad puede variar por producto y cuenta.
 
 ## Decisión
 
+### Precedencia: reducción solicitada por Sergio, 6-oct, después del cierre C11b
+
+Sergio pidió «Bajemoslos las tareas y modelos». Se adopta la opción conservadora: coordinación de madre principal y respaldo rutinario de v2 con `gpt-6.1-sol` medium; programación Platform y revisión técnica con `gpt-6-astra` medium. Resto de carriles Sol6.1 medium. Esto sustituye la obligación histórica de usar Astra para toda tarea de las madres; no rebaja el modelo del código Platform sin otra decisión. La consulta opcional sobre ampliar Sol a correcciones simples queda pendiente, no asumida.
+
+Una implementación activa como máximo y revisión posterior a la entrega, sin fan-out ni ronda documental paralela. No despertar chats finalizados sólo para cambiar su modelo. Asignaciones futuras llevan override explícito según tarea. No repetir suites ni revisiones aprobadas del mismo SHA. La tanda excepcional hasta85% terminó sus implementaciones/revisiones; se conserva la reserva normal20% para trabajo nuevo de fondo. Cuota compartida verificada84%; no estimar ahorro porcentual por modelo.
+
+Default CLI local cambiado a Sol6.1 medium. Esto NO cambia este turno ni el selector de los chats ya abiertos o el modelo de cloud. En la madre actual seleccionar Sol6.1/medium en el selector de modelo de la app para hacer efectivo el cambio del chat; no hay herramienta directa expuesta para cambiar el modelo del propio turno. Heartbeat usa el modelo efectivo del chat; escribir el nombre de modelo en su prompt sólo documenta la política.
+
+### Tabla histórica anterior, superada donde difiere de la precedencia
+
 | Trabajo | Modelo y esfuerzo inicial | Motivo |
 |---|---|---|
 | Toda programación de Onia Platform y sus revisiones | `gpt-6-astra` · `medium` | Instrucción de Sergio: continuidad y riesgo del producto |

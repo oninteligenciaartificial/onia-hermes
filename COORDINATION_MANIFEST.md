@@ -2,6 +2,8 @@
 
 ## Coordinación vigente — relevo Codex, 5-oct-2026
 
+Actualización posterior6-oct por Sergio («Bajemoslos las tareas y modelos»): máximo una implementación y revisión después; madres/coordinación rutinaria Sol6.1 medium, programación/revisión técnica Platform Astra medium. Prevalece sobre distribución histórica siguiente. Los tres chats técnicos terminaron; cuota84%, sin nueva tanda automática. Selector madre actual todavía requiere cambio enapp; defaultCLI Sol no lo sustituye. Política y estado canónicos en AI_MODEL_ROUTING_2026.md y madre-codex.md.
+
 **Prevalece este bloque sobre los mapas Claude históricos de abajo.** Sergio autorizó relevar los cinco carriles,
 organizar las sesiones y continuar trabajo. Estado, ids locales, leases y gates: [`madre-codex.md`](hermes-content/docs/handoff/madre-codex.md).
 Una sola madre: `01a10f44-2bb7-73c0-8769-8bbe5000b32f`; la v2 revisa, no orquesta. Platform: Astra para programación
