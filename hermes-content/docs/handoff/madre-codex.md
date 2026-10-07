@@ -6,6 +6,18 @@ Este archivo es el estado Codex; `madre-local.md` conserva el relevo Claude. No 
 
 ## VIGENTE — cierre de desarrollo y UI, 6-oct-2026
 
+### Plan vigente solicitado por Sergio: terminar código sin adelantar producción
+
+1. **Cerrar entregas existentes:** CI exacto de PR117–120 y las verificaciones pendientes de UI; PR116 ya verde y revisada, no repetirla. Si un CI falla, corregir sólo el fallo atribuible y revisar ese delta. No iniciar otra corrida idéntica.
+2. **Completar feriados C11b:** desarrollar una rama dependiente del HEAD revisado de PR115, sin esperar su despliegue. Contrato actualizado en `codex-tareas/C11b-feriados.md`: helper de fechas, API de configuración con permisos/tenant, slots y disponibilidad, rechazo de reserva pública, UI y seis pruebas de aceptación. PR borrador contra rama C11a; integración a master queda pendiente de aprobación y verificación de la cadena. Esta decisión nueva sustituye el gate histórico de merge ANTES de programar, no el gate de publicación.
+3. **Cerrar presupuesto por fases:** reutilizar el parche P2 y sus capturas, sin reconstruirlo. El diseño sigue esperando aprobación; integrar en rama aislada después, resolver solape real de FichaVista y verificar tratamiento histórico/fases. No se considera iniciado.
+4. **Cerrar cobro y términos:** ejecutar el recorrido autorizado de cuenta de prueba, comprobante y activación con acceso real; aprobar texto legal antes de implementar C14. Conservar factura manual/SIN y pruebas temporales de C13/C15. No inventar aceptación legal, factura ni pago.
+5. **Integración y salida:** rama de integración revisable de los cambios aprobados, CI y E2E; inventario de migraciones/orden/rollback, permisos clínicos, backup externo y restore real. Solicitar aprobación concreta antes de SQL o producción. Auditar los15puntos del plan original con evidencia real antes de declarar1.0lista. No prometer fecha sin los gates externos.
+
+**META:** 15 puntos completos, no una lista reducida de PRs. **PRUEBA:** cada fila con SHA, revisión, test/QA y evidencia operativa cuando aplique. **PARADA:** unidad revisable o bloqueo concreto; no features adicionales ni competencia amplia. Dos implementaciones máximo y una revisión; con cuota ajustada, una implementación a la vez.
+
+**Cuota actual80% usada:** no lanzar C11b ni agentes nuevos hasta renovación o excepción explícita de Sergio. No créditos/resets. Plan y contrato preparados; ninguna nueva implementación iniciada. El goal conserva todo su alcance; la autorización de desarrollar no se interpreta como permiso para gastar la reserva ni desplegar. El estado blocked del goal no se cambia artificialmente a complete ni se recrea otro objetivo para eludirlo.
+
 **Goal persistente activo**, creado por pedido explícito de Sergio del 6-oct: cerrar el desarrollo verificable de los 15 puntos de `ONIA_PLAN_1.0_Y_CAJA.md` para las primeras cinco clínicas. No marcar complete mientras queden requisitos; mantener pruebas, revisión y gates de producción separados. Sin presupuesto de tokens inventado. La próxima continuación prioriza QA dental y CI de PR117–120, no nuevas funciones ni investigación amplia. Consulta actual:76% de cuota usada, reserva20% intacta.
 
 Actualización remota tras crear goal: PR116 `970bdb1e` CI37531946281 y Security37531946276 SUCCESS; PR118 `27d47f98` CI37533708498 IN_PROGRESS; PR117/119/120 siguen QUEUED en sus SHA finales. No reabrir revisión de116. Los permisos pendientes no cambian por crear el goal.

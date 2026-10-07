@@ -1,5 +1,15 @@
 # C11b · Días cerrados (feriados) que la reserva online respeta (punto 11 de la 1.0 de Onia, parte 2 de 2)
 
+## Precedencia Codex — plan de desarrollo sin despliegue, 6-oct
+
+Sergio pidió definir el plan y continuar desarrollo después de la propuesta de separar código y publicación. Se reemplaza la exigencia histórica de esperar el merge de C11a para PROGRAMAR C11b: se permite una rama dependiente del HEAD revisado de PR115, `6f940cfc5868efd6de08724785816e86ccb2e3c7`, con ese SHA como ancestro comprobado (`git merge-base --is-ancestor`). La comprobación por texto de commit de abajo queda sustituida por esta prueba de ancestro. Antes de iniciar, verificar que PR115 conserva ese HEAD o revalidar su nuevo delta.
+
+Rama propuesta `codex/punto-11-feriados`, checkout aislado en E. PR borrador dirigida inicialmente a la rama de PR115, de modo que su diff muestre únicamente feriados. No modificar la rama de C11a. Tras integrar C11a con aprobación específica, retarget a master y resolver/verificar sólo el delta que cambie. No auto-merge, autosync, deploy ni cambios reales de datos.
+
+La dependencia funcional de C11a permanece; se elimina únicamente la dependencia de publicación para empezar a desarrollar. META y seis pruebas de hecho de este contrato siguen vigentes. Un autor Astra medium, revisión independiente del nuevo delta; no repetir la revisión de C11a. Leer y registrar paths exactos antes de editar, sin invadir C13/C5/P2. No instalación ni generación de dependencias compartidas.
+
+**Estado: lista para asignar, no iniciada.** Cuota verificada80% usada; la reserva20% impide nuevas asignaciones hasta renovación o excepción explícita de Sergio. Este cambio de plan no autoriza consumirla.
+
 Sos Codex. Trabajás SOLO en esta carpeta, un clon completo de `onia-platform`, en la rama `codex/punto-11-feriados`.
 - Primero corré `git branch --show-current`: tiene que decir esa rama. Si no, pará y decilo en el resumen.
 - Después corré `git log --oneline -30 | grep -i "punto 11"`: tiene que aparecer el commit de la parte 1 («reprogramar pide confirmar de nuevo»). Si no aparece, PARÁ y decilo en el resumen: esta tarea se clona cuando la parte 1 ya está en master, porque las dos tocan el mismo archivo y el mismo test.
