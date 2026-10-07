@@ -8,7 +8,7 @@ Rama propuesta `codex/punto-11-feriados`, checkout aislado en E. PR borrador dir
 
 La dependencia funcional de C11a permanece; se elimina únicamente la dependencia de publicación para empezar a desarrollar. META y seis pruebas de hecho de este contrato siguen vigentes. Un autor Astra medium, revisión independiente del nuevo delta; no repetir la revisión de C11a. Leer y registrar paths exactos antes de editar, sin invadir C13/C5/P2. No instalación ni generación de dependencias compartidas.
 
-**Estado: lista para asignar, no iniciada.** Cuota verificada80% usada; la reserva20% impide nuevas asignaciones hasta renovación o excepción explícita de Sergio. Este cambio de plan no autoriza consumirla.
+**Estado: asignada y ejecución activa confirmada**, chat Platform Desarrollo `01a10f46-c910-79a3-9670-7e990fcb1257`, Astra medium. Sergio ordenó lanzar las sesiones en respuesta a propuesta de excepción de cuota hasta85% usado (actual80%). Sólo esta tanda, sin créditos/resets ni fan-out. Checkout `E:/ONIA-Codex/cierre-1.0-20261006/platform-feriados`; lease y revisión en `madre-codex.md`. Se permite commit y push exclusivamente de esta rama codex y draft PR contra `codex/punto-11-reprogramar-y-reserva-avisa`, no master. Esta autorización sustituye el «no push» histórico inferior. Todo texto nuevo de USTED; no revertir cambios ajenos aunque instrucciones históricas lo sugieran. No instalar dependencias ni regenerar Prisma compartido.
 
 Sos Codex. Trabajás SOLO en esta carpeta, un clon completo de `onia-platform`, en la rama `codex/punto-11-feriados`.
 - Primero corré `git branch --show-current`: tiene que decir esa rama. Si no, pará y decilo en el resumen.
