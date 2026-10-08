@@ -1,12 +1,15 @@
 # SIAT — estado de la homologación del sistema
 
-> **Lectura directa del portal, 2026-09-27:** sistema **EN PRUEBAS**, **80 % general**,
-> **37 días restantes**. Ocho etapas están al 100 %; **VI 150/560** e **IX 60/160**.
-> Faltan **410 + 100 = 510 casos**, por lo que **la Fase 1 NO está completa**. El
-> checkpoint del VPS que decía 5.732/5.732 sumó respuestas SOAP bajo claves `pv0/pv1`,
-> pero no distinguió las 32 filas de VI ni las 12 de IX. El portal es el árbitro.
-> La matriz exacta y el plan de conciliación están en §4 y en el
-> [README del runner](../integrations/siat/README.md).
+> **Lectura directa del portal, 2026-10-08 19:22 (captura de Sergio Urcullo, «Listado de Etapas»):**
+> **90 % general**. Nueve etapas al 100 %, **IX ya completa (160/160)**. Falta sólo
+> **VI · paquetes: 380/560 (67 %) → 180 casos**. Plazo de pruebas: **04/11/2026** (27 días).
+> Para saber QUÉ filas de VI faltan hace falta la captura del detalle de esa etapa (botón de la
+> fila VI); sin ella no se relanza nada (el checkpoint ya contó mal una vez, ver abajo).
+>
+> *Lectura anterior, 2026-09-27: 80 %, VI 150/560 e IX 60/160 (510 casos). El checkpoint del
+> VPS que decía 5.732/5.732 sumó respuestas SOAP bajo claves `pv0/pv1` sin distinguir las
+> 32 filas de VI ni las 12 de IX. El portal es el árbitro.* La matriz exacta y el plan de
+> conciliación están en §4 y en el [README del runner](../integrations/siat/README.md).
 
 > ⚡ **ACTUALIZACIÓN 2026-09-13 (sesión de control):** el **Punto de Venta 1 YA EXISTE** —
 > creado por SOAP `registroPuntoVenta` (tipo 5 · CAJEROS, `transaccion:true`, verificado con
@@ -95,6 +98,9 @@ Verificado **mirando** la Oficina Virtual el 2026-08-27, no por grep ni por memo
 | VI · paquetes | 560 | 150 | **410** |
 | IX · masiva | 160 | 60 | **100** |
 | **Total** | **5.732** | **5.222** | **510** |
+
+**Lectura del 2026-10-08:** VI **380/560** (faltan 180) · IX **160/160** · general **90 %**.
+La tabla de arriba queda como la foto del 27-sep que explica el plan.
 
 El 80 % general del portal es su marcador de etapas (8 de 10 completas); no es
 el cociente 5.222/5.732. El desglose de VI contiene **32 filas**: dos sectores
