@@ -8,8 +8,10 @@
 >   A1 v5 estático 4:5 y 9:16, video de 11 s, micro-video de 10 s y carrusel de 4 láminas 1:1. Guiones para Sergio Urcullo (F1 y F3) y una
 >   propuesta de Higgsfield **sin cotizar** (se cotiza con la CLI desde la PC).
 > - **Plan visible:** la lista de tareas de la sesión (TaskCreate) trae el criterio de hecho de cada una.
-> - **En vuelo:** `ONIA_ADDONS.md` (los 6 add-ons del 8-oct, pedido de la madre): tres investigadores corriendo; si la sesión muere, se
->   rehace desde la lista de tareas #9.
+> - ✅ **`ONIA_ADDONS.md`** (los 6 add-ons del 8-oct, pedido de la madre): potencial, mercado de hoy, test de 3 preguntas, esfuerzo, cómo se
+>   vende al mismo cliente, **orden para después de la 1.0** (web conectada · puesta en marcha · app · campañas de Meta · influencers IA · IA
+>   local) y primer paso de cada uno. **Ojo:** el bloque de decisión del 8-oct que la madre cita en el §12 de la estrategia **no está en `main`**.
+>   Verificado en vivo: `/servicios/webs` responde 200; `/servicios/marketing-ia` y `/servicios/consultoria` redirigen a la portada.
 > - **Intentos fallidos:** rutas de precios adivinadas (`/precios`, `/pricing`) dieron 404; el buscador dio precios viejos de Jelou; el control de
 >   seguridad bloqueó un `rm -f $VAR/*` (se sobrescribió por nombre).
 

@@ -26,6 +26,9 @@ description: "Invocar para CUALQUIER trabajo del carril Ventas y pauta de Onia: 
 | Leads que ya escribieron: quiénes son | `hermes-content/docs/ONIA_LEADS_ESPERANDO.md` (§3.1: las preguntas de «F» contra el catálogo) |
 | Qué se les manda (plantillas A/B, respuestas, días 3-7-14) | `hermes-content/sales-kit/SEGUIMIENTO-LEADS.md` |
 | Guion de demo de 20 minutos por rubro | `hermes-content/sales-kit/02-GUION-DEMO.md` |
+| Los 6 add-ons que Sergio Urcullo nombró el 8-oct (web, IA local, campañas de Meta, app, influencers IA, consultorías): potencial, mercado, test de 3 preguntas y orden para después de la 1.0 | `hermes-content/docs/ONIA_ADDONS.md` |
+| Competencia: mapa, fichas y tandas semanales | `hermes-content/research/competencia/MAPA_COMPETENCIA.md` y `hermes-content/docs/ONIA_UI_MEJORAS_1.0.md` §8 |
+| Formatos de anuncio que sostienen los competidores, con su versión Onia | `hermes-content/research/competencia/anuncios/FORMATOS-QUE-SOSTIENEN.md` |
 | Precios | `onia-platform/lib/subscription-plans.ts` (`DEFAULT_PLAN_AMOUNTS`); límites en `lib/plan-catalogo.ts` |
 
 ## 1. Reglas que no se negocian
