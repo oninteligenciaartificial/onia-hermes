@@ -1,0 +1,146 @@
+{
+  "fps": 24,
+  "frames": 840,
+  "cards": [
+    [
+      0,
+      4,
+      [
+        "REGLAS",
+        "Soy IA. Usted lo sabe."
+      ]
+    ],
+    [
+      4,
+      8,
+      [
+        "DEDOS",
+        "Los reviso siempre."
+      ]
+    ],
+    [
+      8,
+      11,
+      [
+        "CAFÉ",
+        "Se queda en la taza."
+      ]
+    ],
+    [
+      11,
+      13.5,
+      [
+        "NADIE",
+        "No atiendo a nadie."
+      ]
+    ],
+    [
+      13.5,
+      16,
+      [
+        "VESTUARIO",
+        "El ambo es vestuario."
+      ]
+    ],
+    [
+      16,
+      19,
+      [
+        "GIRO",
+        "¿Quién trabaja de verdad?"
+      ]
+    ],
+    [
+      19,
+      22,
+      [
+        "ONIA",
+        "Pantalla real pendiente de verificación."
+      ]
+    ],
+    [
+      22,
+      25,
+      [
+        "REVISIÓN",
+        "Mensajes pendientes de comprobar."
+      ]
+    ],
+    [
+      25,
+      28,
+      [
+        "CORREO",
+        "Captura pendiente de verificación."
+      ]
+    ],
+    [
+      28,
+      31,
+      [
+        "HORARIOS",
+        "Pendientes de verificar."
+      ]
+    ],
+    [
+      31,
+      35,
+      [
+        "DEMO",
+        "Agende su demo."
+      ]
+    ]
+  ],
+  "inputs": [
+    {
+      "start": 0,
+      "end": 4,
+      "file": "hermes-content/references/modelos/lucia/v4/kit/k4-1-saluda-eddca486-recorte.jpg"
+    },
+    {
+      "start": 4,
+      "end": 8,
+      "file": "hermes-content/references/modelos/lucia/v4/kit/k4-clip-cuenta-dedos-338b751f.mp4",
+      "sourceStartFrame": 0,
+      "sourceEndFrame": 96
+    },
+    {
+      "start": 8,
+      "end": 11,
+      "file": "hermes-content/references/modelos/lucia/v4/kit/k4-3-cafe-teclado-186c82f0.jpg"
+    },
+    {
+      "start": 11,
+      "end": 16,
+      "file": "hermes-content/references/modelos/lucia/v4/kit/k4-4-cuerpo-entero-cb86ea10.jpg",
+      "qaGate": "Recortar folleto con texto del borde izquierdo antes de montaje."
+    },
+    {
+      "start": 16,
+      "end": 19,
+      "file": "hermes-content/references/modelos/lucia/v4/kit/k4-5-senala-342c0ab5.jpg"
+    },
+    {
+      "start": 19,
+      "end": 25,
+      "placeholder": "CAPTURA PENDIENTE · P2",
+      "claimStatus": "NO COMPROBADO"
+    },
+    {
+      "start": 25,
+      "end": 31,
+      "placeholder": "CAPTURA PENDIENTE · CORREO",
+      "claimStatus": "NO COMPROBADO"
+    },
+    {
+      "start": 31,
+      "end": 35,
+      "file": "hermes-content/references/modelos/lucia/v4/kit/k4-1-saluda-eddca486-recorte.jpg"
+    }
+  ],
+  "productClaimsUnverified": true,
+  "watermark": "BORRADOR · NO PUBLICAR",
+  "identityLabel": "Lucía · personaje IA de Onia",
+  "voice": false,
+  "music": false
+}
