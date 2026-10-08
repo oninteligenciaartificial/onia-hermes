@@ -288,3 +288,22 @@ No alcanza con resumen y timeline. Cada video se analiza en tres partes:
 
 A Gemini se le hace una segunda pasada con un prompt solo de edición, y `text-frames.mjs` lee el texto en pantalla. La
 ficha va a `hermes-content/references/video-intake/`.
+
+## Historias de otras cuentas — `scripts/ig-historias.mjs` (8-oct-2026)
+
+```bash
+ONIA_RAIZ=C:/dev/proyectos/onia-hermes node .claude/skills/ver-videos/scripts/ig-historias.mjs \
+  --cuentas eriktaveras,sanmunoz.ia --destacadas 4 --out hermes-content/research/competencia/historias/<fecha> \
+  --videos C:/dev/proyectos/onia-hermes/.hermes/ig-historias/<fecha>
+```
+
+Baja las historias activas y las primeras N destacadas, con la sesión de IG de la PC. Deja un `.jpg` por historia y un
+`meta.json` con los stickers (link, encuesta, pregunta, mención, música, post compartido): eso es lo que se copia de su
+estructura. Los mp4 van fuera del repo.
+
+**Trampas medidas el 8-oct:**
+- **429 desde la primera llamada**, después de varias pruebas de `ig-radar.mjs` ese mismo día. La sesión de IG aguanta
+  pocas llamadas por día: una corrida por día y para todo, no por cuenta. Con 429 no se reintenta: se programa para el
+  día siguiente.
+- **Chrome con la ventana oculta (Sergio Urcullo fuera de la PC) congela la pestaña:** el renderer no responde a capturas
+  ni a JavaScript (`Runtime.evaluate timed out`). Con la PC sin uso, la ruta del navegador no sirve; queda la API.
