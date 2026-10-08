@@ -504,3 +504,34 @@ Resultado: `research/competencia/DAPTA_COMO_FUNCIONA.md` (sin fecha, fuente del 
 - **Cada hallazgo lleva:** quién y cuánto lleva · versión Onia · dueño · tarea Codex (casi nunca: un prompt escrito hoy queda viejo, `master`
   se mueve). Va a `docs/ONIA_UI_MEJORAS_1.0.md` §8, una tanda por semana, la más nueva arriba.
 - **Lo que pide login o Instagram** va al transcript como «PEDIDO PC: <qué> — para qué lo quiero». Contactar a un tercero (pedir su demo) no.
+
+### 8.2 Contenido, pauta y comunicación de un competidor (método del 8-oct, 15 competidores)
+Resultado: `research/competencia/COMUNICACION_Y_PAUTA_COMPETENCIA.md` (síntesis) + la sección «Contenido, pauta y comunicación»
+de cada ficha. Cinco subagentes en paralelo, uno por grupo, y después un verificador por grupo que re-midió cada cifra.
+- **Videos, en este orden:** (1) `ver-videos/scripts/gemini-see-video.mjs`: el 8-oct dio **429 de cuota** en casi todo. Con
+  «exceeded your current quota» no se reintenta. `GEMINI_MODEL=gemini-flash-lite-latest` sí corrió (AgendaPro, CitaPro, Calendico),
+  pero lee peor la letra y los subtítulos. (2) Sin Gemini: subtítulos automáticos (`yt-dlp --skip-download --write-auto-subs`) +
+  fotogramas leídos con visión. (3) Catálogo con `yt-dlp --flat-playlist --print "%(id)s|%(title)s|%(view_count)s|%(duration)s"`.
+- **YouTube bloquea la bajada** desde esta IP (PO token, 429, «confirma que no eres un bot»). Lo que funcionó sin cookies:
+  el cliente `android` de yt-dlp (`--extractor-args "youtube:player_client=android"`) para MP4 de 360p, sobre todo shorts;
+  el cliente iOS + `--ignore-no-formats-error` para subtítulos y metadatos; y el **storyboard de YouTube** como fotogramas
+  (1 por segundo, 101x180 en vertical y 320x180 en horizontal). Los subtítulos vuelven a dar 429 tras pocas consultas: espaciar.
+- **TikTok:** yt-dlp baja el video y a veces lista el perfil (Leadsales, 300 videos; CitaPro sí el 7-oct y no el 8-oct). La voz se
+  transcribe en local con faster-whisper. Los seguidores salen de la página pública.
+- **Instagram:** login y 429. Solo `WebFetch` del perfil público (seguidores y una grilla sin captions). No se corre ig-radar.
+- **Biblioteca (`ads_library_search`):** se busca **por `page_id`**, no por texto (el texto mezcla anunciantes y no prueba que alguien
+  no pauta). Bolivia se mide con el filtro de país, un país por consulta. Trampas medidas: da como máximo 50 resultados y no
+  pagina, así que los conteos por titular son mínimos (Jelou: 382 activos, 50 visibles); en AgendaPro «activos» y «todos»
+  devuelven lo mismo; el filtro de inactivos devolvió 0 en Leadsales, que sí tiene anuncios viejos; con filtro de país cuenta
+  distinto (Leadsales: 55 sin filtro, 30 con MX); y el «estimated_total_count» se mueve entre consultas. No da texto, creativo,
+  botón ni destino, y Facebook da 403 por curl: **los creativos los captura la madre** (pedido con ids, §7 de la síntesis).
+- **Lectura:** la única señal son los días al aire. Quien rota a diario (Dapta, Clinera) no da señal. Vistas altas con pocos
+  likes (Kommo, 357 mil con 28) = probable pauta, no orgánico.
+- **Trampas que hicieron caer cifras al verificar:** una ventana de 60 videos no es el canal (Leadsales: el de 4,5 M estaba
+  fuera); los listados redondean las vistas de más de 1.000; los tiempos por tramo se corren unos 10 s si no se re-leen los
+  subtítulos (Lety); el valor de un contador animado no es un ejemplo fijo (hero de Lety); un porcentaje derivado
+  («los tres primeros hacen el 94 %») se recalcula con el catálogo completo.
+- **«Vi el video» se dice con cobertura:** por pieza, «subtítulos y cuadros», «solo subtítulos» o «solo cuadros». Dos cuadros no son un video.
+- **Cada «toma» lleva dónde va y su evidencia** (id del video o del anuncio). **Antes de escribir la versión Onia, se cruza con
+  `ONIA_PROMESA_VS_PRODUCTO.md`.** Caso: la ficha de Lety propuso un reel «conectá tu WhatsApp → cobrá por QR», y las dos están
+  fuera de lo que se promete (J-* ❌, y el QR es para pagarle a Onia).

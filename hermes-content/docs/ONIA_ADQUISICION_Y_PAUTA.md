@@ -203,6 +203,8 @@ prueba social numérica. **Lo que queda por hacer, y es la brecha más grande:**
 presentador permitido es Sergio Urcullo mostrando la pantalla (§5.4); un presentador IA, sólo si él lo pide y
 con aprobación de gasto.
 
+**Síntesis del 8-oct (15 competidores: tabla comparativa, patrones de lo que pasa 30 días, 5 guiones dentales, reglas de edición, cambios de web y lo que no se copia):** `research/competencia/COMUNICACION_Y_PAUTA_COMPETENCIA.md`.
+
 ### 2.6 Los que más días sostienen un anuncio activo (3-oct)
 
 Cuenta los días al aire hasta el 3-oct. El que más días sostiene es la mejor señal pública de que le rinde. Fuentes:

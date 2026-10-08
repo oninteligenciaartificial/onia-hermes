@@ -112,7 +112,9 @@
 
 ## 6. Lo que no se pudo ver
 
-- **No se vio ningún video.** YouTube bloquea esta IP: yt-dlp pide «Sign in to confirm you're not a bot» y el embed da el error 153. No hay key de Gemini.
+> Esta sección es del 1-oct. El 7 y 8-oct sí se vieron videos (ver «Contenido, pauta y comunicación» abajo).
+
+- **El 1-oct no se vio ningún video.** YouTube bloquea esta IP: yt-dlp pide «Sign in to confirm you're not a bot» y el embed da el error 153. No hay key de Gemini.
   Videos candidatos para mirarlos desde la PC: `Hw46jlPf4mU` (Demo Salud AgendaPro) y `LrsAQlkSUeE` (AgendaPro con IA, spa). No encontré videos de Citalo.
 - No se vio el panel por dentro (no se crearon cuentas): los pasos internos salen de los artículos de ayuda.
 
@@ -130,3 +132,147 @@
 - CI-caso: …/blog/caso-exito-clinica-redujo-inasistencias · CI-blog-fid: …/blog/fidelizar-clientes-negocio-servicios
 - CI-pagos, CI-caja, CI-ficha, CI-reportes, CI-reservas, CI-cancel, CI-historial: citalo.app/funcionalidades/{pagos-online, sistema-caja, ficha-clinica, reportes-gestion, reservas-online-24-7, cancelaciones-reprogramaciones, historial-pacientes}
 - CI-vsAP: citalo.app/comparativas/citalo-vs-agendapro · CI-registro: app.citalo.app/register (solo vista, sin enviar)
+
+---
+
+## Contenido, pauta y comunicacion (medido 2026-10-08)
+
+> Pasada del 8-oct sobre redes, anuncios y comunicación de AgendaPro y Citalo. El producto está arriba y no se repite. Todo sale de lo público: sin cuentas, sin formularios y sin navegador.
+> Las vistas y los seguidores son los que mostraba cada plataforma ese día. **Las cifras de venta de ellos («90 %», «82 %», «75 % de ocupación») no tienen fuente ni método y Onia no las repite.** Lo que es lectura mía va marcado como *(lectura)*.
+> Método de los videos: Gemini mira imagen y audio, y yo confirmé con cuadros propios los que dicen «cuadros». Detalle en Cobertura.
+
+### Cobertura
+
+| Fuente | Qué se vio | Método | Límite |
+|---|---|---|---|
+| **AgendaPro, YouTube** (canal `UCoCMp3I4V5uojehS2Co0v5g`; la web no lo enlaza, se halló por búsqueda) | 56 videos largos y 2 shorts listados (vistas y duración). **11 videos analizados de punta a punta el 7-oct y 4 más el 8-oct** (Reserve with Google, el genérico de 417 mil, y dos de la serie «Versión Pro»; tabla de guiones): 3 de clínica o consultorio, 2 de IA de WhatsApp (Sofía y Julia), 2 de recordatorios, 2 de caso de éxito, 1 short de creadora, 1 de la app de consumidores | `yt-dlp` para listar. Gemini `gemini-flash-lite-latest` para ver cada video: el modelo estándar dio **429 de cuota** y no se reintentó. YouTube bloquea la bajada del video desde esta IP, así que 5 de los 11 los verifiqué con **cuadros propios**: la tira de miniaturas de YouTube, 1 cuadro por segundo a 320×180 | Sin fechas de subida (YouTube las devuelve vacías al listar). Sin suscriptores. Lo que dice Gemini del tamaño exacto de la letra es aproximado |
+| **AgendaPro, Instagram** `@agendapro_software` | **96,9 mil seguidores**, 2.664 seguidos. 12 publicaciones visibles del 14-ago al 7-oct | `WebFetch` del perfil público | Sin vistas, likes ni textos. TikTok: la web no lo enlaza y `yt-dlp` no pudo listar `@agendapro` |
+| **AgendaPro, Meta** (página `1429581593936821`) | **314 anuncios** en la Biblioteca (todos los estados) | `ads_library_search` por id de página y por palabra. 14 consultas, solo lectura | **La herramienta devuelve el titular y la fecha, no el texto, el creativo, el botón ni el destino.** Facebook no abre sin navegador y no se usó. Con «todos» y con «activos» devuelve exactamente los mismos 60 anuncios de clínica: no separa activos de históricos |
+| **AgendaPro, blog y web** | 1.196 entradas del blog; home y página dental | API pública de WordPress y `WebFetch` | `/planes` no se releyó |
+| **Citalo** | Instagram `@citalo.app`, blog, web `/bo` | `WebFetch` | **No tiene video** (ni YouTube, ni TikTok, ni Facebook enlazados). Biblioteca: 0 resultados por texto «Citalo» en BO, UY, AR, CL, PE, CO y MX (búsqueda por texto, no por página) |
+
+### Estructura de contenido organico
+
+**AgendaPro, YouTube (56 videos largos).**
+
+| Pilar | Qué es | Peso y rendimiento |
+|---|---|---|
+| **Promo corta por rubro** | «Tienes un [rubro]…» en 28 a 56 s: clínica o centro médico, medicina estética, salón | **Tres de los cinco videos más vistos del canal son de rubro:** **424 mil** (medicina estética, 28 s), **349 mil** (clínicas y consultorios, 56 s) y 186 mil (medicina estética, 44 s). El segundo del canal (417 mil, 28 s) es genérico («aumenta tus ingresos administrando mejor tu negocio»), pero **también nombra el rubro en los 3 primeros segundos**: la palabra final rota «Centro Médico», «Salón de Belleza», «Barbería» *(Gemini, 8-oct)* |
+| **Función nueva** | Reserve with Google, Google Calendar, terminal de pago, autofactura, gift cards, app de consumidores | 33 a 65 s. **249 mil** Reserve with Google; el resto entre 0,4 y 9 mil |
+| **IA de WhatsApp** | Sofía (recordatorios) y Julia (vendedora) | 33 a 42 s. Sofía 16 mil, Julia 0,9 mil |
+| **Persona real** | Serie «La versión Pro de [nombre]» de 49 a 72 s, más casos de éxito de 2 a 4 min | La serie corta: 177 mil (Palermo Soho, 50 s), 97 mil (61 s), 70 mil (72 s) y 53 mil (66 s); la de un quinto cliente (49 s) tiene 328 vistas. **Los casos largos «mejor software para X 2026»: casi todos entre 0,3 y 5 mil; los dos mejores, 8 y 10 mil** |
+| **Institucional** | Expo, «Universo Pro», empleados | 0,1 a 6 mil |
+
+- **Mezcla y rendimiento.** 24 de 56 duran 60 s o menos. 22 duran 2 min o más (casi todos casos de éxito con título de SEO). Mediana 66 s (relistado el 8-oct). Los 56 largos suman 1,93 millones de vistas; con los 2 shorts, unos 2,4 millones.
+- ***(lectura)* Lo corto de 28 a 56 s con el rubro en los primeros 3 s mueve decenas a cientos de veces más vistas que el caso largo** (424 mil contra 0,3 a 10 mil). La excepción es Reserve with Google (249 mil): de función, no de rubro. Casi seguro es vista pagada (anuncio de YouTube o de Meta reutilizado), pero desde afuera no se puede separar de lo orgánico.
+- **Shorts:** 2. El de **490 mil vistas** es una creadora a cámara (30 s). El otro (IVA en el salón) tiene 2,6 mil.
+
+**AgendaPro, Instagram (96,9 mil).** De las 12 piezas visibles en 54 días (14-ago al 7-oct), **6 son propias y 6 son de cuentas de terceros** (colaboraciones con salones, coaches y barberos). Hay 11 reels y 1 carrusel. Lo propio mezcla: una pieza por vertical («¿Tienes una clínica estética? Esto es para ti»), una de IVA para barbería, cultura interna («equipo PRO») y detrás de escena de grabación. Bio: «Agenda y descubre tu versión PRO». Ritmo propio visible: **una pieza cada 9 días**.
+
+**AgendaPro, blog.** 1.196 entradas. Las últimas 30 salieron del 4 al 24-ago: **unas 10 por semana**, con título «Guía + 2026» y temas de SEO (historia clínica por especialidad, ausentismo, retención, recordatorios con 20 plantillas, CRM de centro médico). La API no muestra nada posterior al 24-ago. *(Lectura)*: es una máquina de SEO por plantilla, no una publicación artesanal.
+
+**Citalo.** Instagram con **4 seguidores y cero publicaciones visibles**. Su contenido es el blog (12 entradas del 14-mar al 3-jun-2026, una o dos por semana; categorías Guías, Casos de uso, Tutoriales y Comparativas) y el SEO de 493 URLs por rubro y país (medido el 1-oct). **No usa redes: el canal es la web.**
+
+### Pauta en Meta
+
+**Bolivia: AgendaPro y Citalo no pautan.** AgendaPro tiene **0 anuncios entregados en Bolivia** (todos los estados) y **0 con «dental», «dentista» u «odontólogo» en el texto** de sus 314 anuncios. Citalo, 0 por texto en 7 países. Hoy ninguno de los dos le pauta al dentista boliviano ni a ningún dentista.
+
+**AgendaPro, lo que sí hace** (página facturada en USD):
+
+| Dato | Medido |
+|---|---|
+| Volumen | **314 anuncios**: 60 con «clínica», 64 con «inasistencias», 9 con «tratamiento». Una consulta de 50 anuncios con «clínica» da: **13 nacieron en los últimos 7 días, 21 en los últimos 14, 18 llevan 30 días o más y 9 llevan 60 o más** (recontado el 8-oct sobre los 50 que devuelve la herramienta; la búsqueda «clínica» da 60 en total y no se puede ver el resto) |
+| Qué es el volumen | Un titular corto de 3 a 6 palabras por **rubro** (salón, barbería, spa, gimnasio, kine, clínica capilar, clínica estética, centro médico) y por **dialecto**: voseo argentino («Hacé», «Ordená», «Jugala como un 10»), neutro («Haz») y chileno («kine»). Se crean en lotes: cuatro anuncios de clínica se crearon con minutos de diferencia el 6-ago |
+| Fórmulas de titular | «Menos X, más Y» («Menos inasistencias, más ingresos»), la cifra («90 % menos inasistencias», 5 o más versiones; **la web decía «hasta 70 %» el 1-oct: la cifra sube sin fuente**), y el dolor («Cada día que pasa, pierdes citas», «72 % de mensajes sin respuesta») |
+| CTA | «Agenda tu demostración gratis» en **13 versiones** (11 del 7 al 12-ago y 2 del 7-sep). «Prueba AgendaPro gratis» y «7 días gratis para tu spa» |
+
+**Los que más llevan, mirados a fondo** (solo metadatos: el creativo no se pudo abrir). Días hasta el 8-oct:
+
+| Id | Inicio · días | Titular | Qué se lee |
+|---|---|---|---|
+| `906748815086043` y `1967791207137782` | 5-feb · **245** | Catálogo dinámico (`{{product.name}}`) y carrusel «La inteligencia artificial llegó · no más inasistencias» | Los más viejos de la página. Dentalink también sostiene un catálogo dinámico desde nov-2025: **los dos que más duran en el rubro son catálogo dinámico**. No son de clínica |
+| `1042657704821663` | 7-jul · **93** | La IA que cuida tu clínica | El primero con «clínica» y «IA» en el titular |
+| `1328279845678022` | 16-jul · **84** | Organizá tu clínica estética sin el caos del papel | Voseo argentino. El dolor es el papel |
+| 4 anuncios, 6-ago · **63** | | Menos inasistencias en tu clínica · Ficha clínica digital · Transforma tu agenda hoy · La IA que tu clínica necesita | Un lote, un solo día. Hay **8 anuncios de clínica con «IA» en el titular** (cuida, organiza, responde por, para, ordene y tres de «necesita») |
+| 11 anuncios, 7 a 12-ago · **57 a 62** (y 2 más del 7-sep) | | Agenda tu demostración gratis | El mismo titular con 11 creativos distintos: el CTA que más se repite en toda la página |
+| `1550396922900822` | 26-ago · 43 | Llegó JulIA a AgendaPro | El lanzamiento de Julia, con el nombre en el titular |
+
+**El ángulo que importa a Onia: «tratamiento».** AgendaPro lo prueba desde hace un mes y se acelera esta semana:
+
+| Inicio | Titular | Días |
+|---|---|---|
+| 21-jun | La IA que organiza tu clínica (con «tratamiento» en el texto) | 109 |
+| 8-sep | Seguí cada tratamiento | 30 |
+| 23-sep | Dejá de perder tratamientos | 15 |
+| 24-sep | Sin seguimiento, se pierde | 14 |
+| **8-oct** | **¿Cómo va el tratamiento?** y **Seguimiento de pacientes sin caos** | 0 |
+
+*(Lectura, con el límite de no ver el creativo):* es seguimiento de pacientes y ficha, no el recall que avisa «ese paciente dejó el tratamiento a medias». Pero **el hueco «nadie pauta el tratamiento a medias» ya no es de nadie solo en los títulos.** En Bolivia sigue libre (0 anuncios, 0 dentales). Desde los países donde pauta, **cinco titulares nuevos en 30 días** apuntan a ese territorio.
+
+**Citalo:** sin anuncios.
+
+### Comunicacion
+
+| | AgendaPro | Citalo |
+|---|---|---|
+| **Titular de la web** | «El software n°1 para salones, spa, estética y salud». Página dental: «Mejor software para clínicas dentales en Latinoamérica» | «Ordena tus citas sin depender de WhatsApp» |
+| **Promesa** | «Organiza citas, cobra sin fricciones y haz crecer tu negocio». Dental: «Más ingresos para tu clínica dental» | Compartir una página de reservas por WhatsApp, Instagram y Google |
+| **A quién** | Belleza y salud en general. **La página dental es la de belleza con la palabra cambiada:** 12 testimonios y ninguno es dentista (masajista, spa, estilista, manicura, kinesiólogo…) | Negocios de servicios; en `/bo` hay página por rubro, con el rubro y el país ya elegidos |
+| **Voz** | Informal «tú» en la web. En anuncios, voseo argentino o neutro según el país | Neutro, informal |
+| **Prueba** | «+135.000 profesionales», «+20.000 negocios», «hasta 82 % más ventas en dos años», sello de Y Combinator. Sin reseñas visibles | Un caso: «62 a 31 turnos perdidos» (1-oct). Sin cifras de uso |
+| **Precio** | **No visible** en la home ni en la página dental (hay un enlace «Precios») | **Visible:** Free 0, 14,99, 29,99, 59,99 y 119,99 USD por mes |
+| **Clics hasta empezar** | 1 al formulario (7 días gratis; medido el 1-oct) | 1 («Crear mi página gratis»), sin tarjeta |
+| **CTA** | «Prueba gratis» y «Crea tu cuenta gratis» | «Crear mi página gratis»; WhatsApp para dudas |
+| **Marca** | «Versión PRO» como recurso en todo: la serie «La versión Pro de…», «El software que te hace Pro», la bio de Instagram | Sin recurso de marca visible |
+
+### Guiones de sus videos/anuncios
+
+| Pieza | Gancho (primeros 3 s) | Tramos | Cierre |
+|---|---|---|---|
+| **Clínica o centro médico** · 56 s · 16:9 · 349 mil | Nombra al rubro: «Haz crecer tu clínica o centro médico…» (texto igual en pantalla a los 0 s) | 0-5 médico con libreta y logo con barra de búsqueda · 5-11 «olvídate de contestar mensajes en WhatsApp» · 11-16 sitio de reservas con profesionales y precios · 16-19 pasillo vacío: «deja de perder tiempo y dinero por inasistencias» · 19-24 **recordatorio por WhatsApp con botones Confirmar y Cancelar** · 24-32 «¿Te cuesta encontrar las fichas?» con manos en un archivador, luego historial · 32-38 Excel que dice «#Error!», luego control de caja · 38-56 cuatro profesionales sonriendo: «ayudamos a miles de clínicas…» *(re-visto 8-oct)* | Barra de búsqueda, «agendapro.com» y botón «Prueba gratis» |
+| **Medicina estética** · 28 s · 16:9 · 424 mil | Rubro y promesa: «tienes una clínica…, hazla crecer… con un clic» (una profesional hace un tratamiento a cámara) | 0-6 gancho · 6-11 cuatro módulos en texto: citas, recordatorios, historial, pagos · 11-14 «7 días de prueba gratis» · 14-20 cuatro tarjetas de cifras (200 reservas, 120 clientes nuevos, 75 % de ocupación, ventas) y «Crece 82 %» · 20-28 la URL | «Entra, crea tu cuenta y toma el control de tu clínica». **La misma plantilla se repite para «clínica o consultorio» (31 s, 63 mil): cambia el rubro, no el guion** |
+| **Sofía** · 32 s · 9:16 · 16 mil | Pregunta del dolor: «¿Pierdes dinero y tiempo por inasistencias?» | 0-3 pregunta · 3-10 nombre y qué hace · 10-21 chat simulado: el cliente cancela, Sofía reagenda y el hueco se libera · 21-25 tres beneficios · 25-32 URL | «La mejor forma de reducir las inasistencias de tu negocio». Sin precio ni testimonio |
+| **«¿Tu cliente te volvió a dejar plantado?»** · 38 s · 9:16 · 45 mil | La pregunta que cuenta la escalera: «…aunque ya le enviaste un correo» | 0-7 pregunta · 7-22 el correo con botones; si no lo abre, WhatsApp · 22-29 «– Tiempo / + Dinero» · 29-38 «¡Contáctanos!» | URL |
+| **Julia** · 41 s · 9:16 · 0,9 mil | «Convierte todas tus conversaciones en ventas» | 0-13 qué es y qué responde · 13-24 insiste, recuerda, reprograma · 24-34 se conecta a los anuncios de Meta, reportes · 34-41 cierre | «Solicita una demostración». **La única pieza que va a demo** |
+| **«La versión Pro de [persona]»** · 50 a 72 s · 16:9 · 53 mil a **177 mil** (Palermo Soho, 50 s) | **Sin voz en los primeros 3 a 4 s:** solo el letrero del negocio y música; la dueña habla a partir del s 3-4 *(re-visto 8-oct en Palermo Soho y Be Beauty)* | 3-10 origen del negocio (la abuela) · 10-25 el caos antes: libro, teléfono, comisiones e inventario a mano · 25-36 «ahí encontramos AgendaPro»: agenda, historial, recordatorios, pagos, reportes y la terminal de pago · 36-48 clientes contentos, foto del equipo, remate | «Esta es mi versión Pro», pantalla morada y el lema «El software que te hace Pro». **Sin CTA ni URL** |
+| **Reserve with Google** · 51 s · 16:9 · **249 mil** *(pasada 8-oct)* | «Atrae nuevos clientes desde Google» (texto y voz a los 0 s) | 0-8 la alianza con logos · 8-22 búsqueda «salón de belleza cerca de mí», botón «Reservar en línea» y contador de clientes nuevos · 22-30 cinco beneficios en texto · 30-38 **pantalla dividida: celular con el botón y panel de AgendaPro recibiendo la reserva** · 38-50 cierre con logos | Sin CTA hablado: solo los logos «AgendaPro + Reserve with Google» |
+| **Genérico por rubros** · 28 s · 16:9 · 417 mil *(pasada 8-oct)* | «Aumenta tus ingresos y administra mejor tu…» con la palabra final rotando entre Centro Médico, Salón y Barbería | 4-6 agenda · 7-10 recordatorio de WhatsApp con Confirmar y Cancelar · 11-14 historial · 15-18 campañas de correo · 19-22 «+15 herramientas» · 23-26 URL | «agendapro.com», botón «Prueba gratis» |
+| **Creadora a cámara** · 30 s · 9:16 · **490 mil** | «El secreto de muchas dueñas de salón no es trabajar más, es cómo manejan su agenda» | 0-4 secreto · 4-9 el dolor de WhatsApp (mensajes de clientas que cancelan) · 9-15 «reservan solas desde un link» (botón «Reservar en línea» de Google Maps) · 15-23 recordatorio con Confirmo y Cancelar, agenda por colores, ventas y comisiones · 23-30 «yo también la uso» y «velo por ti misma» | «Haz clic aquí». Es la **misma fórmula «El secreto de…» que CitaPro usa en sus anuncios** (ver la ficha de CitaPro) |
+
+### Edicion
+
+- **Promo de rubro (clínica, estética):** locución en off masculina, sin presentador. Foto o video de stock de médicos al inicio. Capturas de pantalla con **el nombre del módulo como título grande** («Sitio de reservas», «Recordatorios automáticos», «Historial de pacientes») sobre un azul de marca. Música corporativa con sonidos de notificación. **3 a 4 cortes cada 10 s.** Primeros 3 s *(cuadros)*: médico de stock con la frase en pantalla y, antes del segundo 3, corte al logo con una barra de búsqueda que escribe «agendapro». Cierra con la misma barra y el botón.
+- **Sofía:** 100 % gráfico en movimiento sobre degradado violeta oscuro, sin persona. La frase aparece en dos líneas, con palabras clave en violeta claro, y entra con un destello. Mockup de WhatsApp animado. Voz en off.
+- **Julia:** vertical, burbujas de chat en 3D sobre azul y violeta, 4 a 5 cortes cada 10 s. El texto en pantalla es la voz en off palabra por palabra.
+- **«Plantado»:** pantalla grande de laptop y celular con **un círculo con una presentadora en la esquina inferior derecha** durante todo el video *(cuadros)*. Empieza con fotos de stock de una mujer con el celular. Sin subtítulos: depende del audio.
+- **Creadora a cámara (490 mil):** mujer con micrófono de solapa de utilería, cambios de plano y de ropa, B-roll de salón de uñas, y pantallas de la app sobre el degradado violeta de la marca; mensaje de WhatsApp de confirmación en pantalla completa *(cuadros)*. Subtítulos blancos al centro de 2 a 4 palabras.
+- **Testimonio «Versión Pro»:** cine 16:9 con bandas negras, **logo de AgendaPro fijo arriba a la derecha** todo el video, B-roll documental, subtítulos blancos en el tercio inferior, 6 a 8 cortes cada 10 s, música que sube *(cuadros)*. Sin locución los primeros 3 a 4 s y cierra con pantalla morada y lema, sin CTA *(Gemini, 8-oct, en 2 de la serie)*.
+- **Reserve with Google (249 mil):** gráfico en movimiento sobre fondo oscuro con confeti y rostros flotando, mockup de celular y de Google Maps, y **pantalla dividida celular + panel** para mostrar que la reserva cae sola en el sistema *(Gemini, 8-oct; sin cuadros propios)*.
+- **Instagram:** colaboraciones con terceros que ponen su propia cara. Lo propio se hace barato: pantalla y texto.
+
+### Que toma Onia (pauta de Onia Platform y web) y que NO
+
+**Toma**
+
+1. **El rubro en la primera frase, 28 a 56 s y la pantalla real con el nombre del módulo en grande.** Son 3 de los 5 videos más vistos de AgendaPro. Coincide con §2.2 de `ONIA_ADQUISICION_Y_PAUTA.md` («el titular es la segmentación»). Para Onia: *«Si usted tiene una clínica dental en Santa Cruz…»* y tres pantallas reales, cada una con su rótulo. Cada módulo que se nombre tiene que estar en ✅ en `ONIA_PROMESA_VS_PRODUCTO.md`.
+2. **El dolor visible en 2 segundos:** el Excel que dice «#Error!» o la carpeta de papel. Para el dentista: la ficha en papel contra la ficha con el odontograma. Pertenece al trabajo del dentista, no a una norma.
+3. **Una plantilla, un cambio de rubro.** AgendaPro cambia la palabra de rubro y los cuatro módulos, no el guion. Cuando entre la importadora, la pieza se rehace con su vocabulario y no se inventa otra desde cero.
+4. **Contar la escalera en pantalla** (correo, y si no lo abre, WhatsApp) es la idea del video «plantado» y es el ítem 4 del backlog. **Solo se muestra cuando «Conectar mi WhatsApp» esté en ✅.** Hoy Onia manda solo correo y no se promete otra cosa.
+5. **La serie «La versión [X] de [persona]»**: antes, después y una frase de remate con la marca. Es la forma correcta de testimonio, pero **hoy hay cero clientes y no se inventa**. Se guarda para el primer cliente real que lo autorice.
+6. **Recordatorio de WhatsApp con dos botones (Confirmar, Cancelar) como imagen central.** Aparece en 3 de los videos de AgendaPro vistos con cuadros o texto de pantalla (349 mil a los 19-24 s, 417 mil a los 7-10 s, 490 mil a los 15-17 s); Sofía lo cuenta con un chat simulado. Para Onia (pieza de pauta en video de 30 a 56 s y la sección de recordatorios de la web): se filma la pantalla de Pendientes y del recordatorio por correo; **el mockup de WhatsApp solo cuando «Conectar mi WhatsApp» esté en ✅**.
+7. **Pantalla dividida «lo que ve el cliente / lo que ve el negocio».** La usan Reserve with Google (249 mil, 30-38 s) y el pitch de Calendico: dos videos independientes. Es la forma barata de probar que la reserva cae sola en el sistema. Solo con capturas de la cuenta demo.
+
+**No toma**
+
+- **Las cifras:** «90 % menos inasistencias», «hasta 82 % más ventas», «75 % de ocupación». Sin fuente, y Onia no repite números ajenos. Una de ellas cambió sola de 70 a 90 %.
+- **«IA» en el titular** (8 anuncios de clínica con «IA»): `ONIA_ADQUISICION_Y_PAUTA.md` §7 y el catálogo §8.
+- **El «tú» y el voseo argentino.** Onia le habla de **usted** al cliente de Bolivia. Lo que Sergio Urcullo dice entre colegas es otro registro y no va en la pauta.
+- **La creadora que dice «yo también la uso»** (el short de 490 mil): se hace pasar por usuaria. Onia: el presentador explica y demuestra, **nunca se hace pasar por cliente**. El presentador permitido es Sergio Urcullo con la pantalla.
+- **El volumen** (314 anuncios, uno por rubro y por dialecto): el ángulo de Onia es 2 o 3 versiones de **un** concepto, para un rubro.
+- **La página dental con testimonios de otros rubros:** es lo que Onia no hace. Si la web habla de clínicas dentales, sus pruebas son de clínicas dentales.
+- **Precio oculto:** AgendaPro no lo muestra. Onia sí lo publica y sigue siendo ventaja. Si se muestra en la web, **no en la pieza de pauta** (§5.4).
+
+**Alerta para Plataforma y Ventas y pauta**
+
+- **«Tratamiento» ya tiene dueño en otros países.** AgendaPro lo prueba desde el 8-sep con 5 titulares y dos más el 8-oct. Hoy el argumento «recuperá el tratamiento a medias» sigue libre en Bolivia (0 anuncios, 0 dentales), pero **es el argumento que otro puede decir primero**, y el paso 0 (el detector que hoy no encuentra a nadie) sigue abierto. Por la regla vigente el argumento no se usa hasta cerrarlo: **el paso 0 es lo que más urge de todo lo que salió de esta pasada.**
+- **Citalo no pauta y casi no tiene redes** *(lectura: su canal es el plan Free y el SEO)*. En Bolivia la pauta de software para clínicas la ocupan Dentalink y Medilink; desde el 2-oct, CitaPro le habla a médicos de Bolivia (ver `ANUNCIANTES_FICHAS_CORTAS.md`).
