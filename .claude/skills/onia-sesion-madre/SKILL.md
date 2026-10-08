@@ -146,11 +146,29 @@ Cómo contestar: <en tu transcript | SendMessage a «Sesión madre de Onia» | r
   4. Effort low y modelo chico para la lectura mecánica.
   Script de medición: suma `usage` por `message.id` en `~/.claude/projects/<carpeta>/**/*.jsonl`.
 
-## Delegar código a Codex (medido el 4-oct)
+## Delegar código a Codex (medido el 4-oct; conexión rehecha el 8-oct)
 
-- `codex exec -m gpt-5.5` (el CLI 0.139 no corre gpt-6-*), en un worktree aislado por tarea; en onia-platform, con
-  `node_modules` por junction. El sandbox no deja a Codex commitear: el `.git` del worktree queda fuera de la raíz
-  escribible. La madre revisa el diff, commitea y abre el PR, y la madre v2 revisa con 1 o 2 lentes según el riesgo.
+Sergio Urcullo, 8-oct: **Claude es la madre y Codex trabaja dentro de ella** («aprovechemos mis dos suscripciones»).
+Se trabaja en la app de Claude; Codex corre por detrás. Codex no orquesta, no abre sesiones ni mergea.
+
+- **Se lanza con `scripts/codex-tarea.sh <tarea.md> <worktree> [modelo] [esfuerzo]`**, en segundo plano. Usa el CLI que
+  trae la app de Codex (0.162 el 8-oct): el `codex` de npm quedó en 0.139 y no corre gpt-6*, sin instalar nada. Deja
+  `resultado.md`, `eventos.jsonl` y `session_id` en `~/.codex/madre-tareas/<fecha>-<tarea>/`. Un seguimiento sobre la
+  misma conversación: `scripts/codex-tarea.sh resume <session_id> <seguimiento.md>`.
+- **Modelos (Sergio Urcullo, 8-oct):** código de Platform `gpt-6-astra` medium; tareas simples `gpt-6.1-sol` medium (el
+  default). Si el resultado es malo, se escala con la prueba del fallo, no por costumbre. Lista viva:
+  `~/.codex/models_cache.json`.
+- **La tarea es un prompt cerrado:** META · PRUEBA DE HECHO · REGLA DE PARADA · archivos que toca y los que no · reglas
+  fijas (sin push, sin VPS, sin producción, sin instalar). Modelo: `hermes-content/docs/handoff/codex-tareas/*.md`.
+- **Cupo:** semanal (plan `prolite`). El uso se lee en el último `rate_limits` de `~/.codex/sessions/**`. Con 80 % usado
+  no se lanza nada nuevo (reserva del 20 %, decidida el 6-oct).
+- ⚠️ **Sandbox de Windows (8-oct):** con la app de Codex abierta, Codex no puede correr comandos con sandbox
+  («setup refresh had errors»: la app tiene abierto su `node_repl.exe`). Correrlo sin sandbox lo frena el control de
+  permisos de Claude Code («Create Unsafe Agents»), y no se rodea. Codex lo dice honesto en `resultado.md` y no inventa.
+  Salida: cerrar la app de Codex antes de lanzar, o que Sergio Urcullo decida dar el permiso.
+- Worktree aislado por tarea, rama `codex/<tarea>-<fecha>` (nunca `claude/*`); en onia-platform, `node_modules` por
+  junction. Con `workspace-write` el script le abre a Codex el `.git` común, así que commitea en su rama. La red
+  sigue cerrada: la madre revisa el diff, empuja y abre el PR, y la madre v2 revisa con 1 o 2 lentes según el riesgo.
 - El `tsc` local falla con el cliente de Prisma compartido: el CI del PR es el gate de tipos.
 - **La madre commitea SOLO con los tests en verde, con un gate en el mismo comando**
   (`echo "$out" | grep -q failed && exit 1`). El 4-oct se subió `5c58175c` con un test rojo porque el `grep` de la
