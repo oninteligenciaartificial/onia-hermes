@@ -1,0 +1,13 @@
+piso de caras negativas (max): 0.224   gate del repo: 0,70
+archivo                                        centroide  min_ref  max_ref  cara_px  veredicto
+g1-final-1080x1920_t2.6.png                        0.726    0.507    0.660      177  OK (cara < 200 px: poco confiable)
+g1-final-1080x1920_t5.9.png                        0.705    0.418    0.635      175  OK (cara < 200 px: poco confiable)
+g1-final-1080x1920_t42.0.png                       0.752    0.529    0.715      268  OK
+g1-final-1080x1920_t48.0.png                       0.830    0.595    0.766      169  OK (cara < 200 px: poco confiable)
+g1-final-1080x1920_t52.0.png                       0.746    0.538    0.695      178  OK (cara < 200 px: poco confiable)
+g1-final-1080x1920_t55.9.png                       0.728    0.527    0.661      220  OK
+k1_t2.6.png                                        0.745    0.515    0.677      118  OK (cara < 200 px: poco confiable)
+k1_t5.9.png                                        0.721    0.430    0.648      116  OK (cara < 200 px: poco confiable)
+k4_t1.0.png                                        0.757    0.534    0.716      179  OK (cara < 200 px: poco confiable)
+k2_t2.0.png                                        0.742    0.527    0.687      119  OK (cara < 200 px: poco confiable)
+k2_t5.9.png                                        0.734    0.530    0.673      146  OK (cara < 200 px: poco confiable)

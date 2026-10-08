@@ -164,8 +164,9 @@ description: "Invocar para CUALQUIER trabajo del carril Lucía (Lucía Antelo, l
   24 fps). El primer G3 le daba 14,5 s al clip K4 y no se podía montar sin acelerar o congelar. Antes de validar, cada
   bloque de clip se dibuja con su duración real; lo que sobra va a una placa de evidencia o a otro clip, nunca a un estiramiento.
 - **Afirmar un conteo solo sobre cuadros mirados (8-oct, G1 y G3).** «Cinco dedos. Revisados.» se escribió sobre un conteo
-  heredado de 9 cuadros. Mirado de nuevo a resolución completa (recorte de la mano, cuadro por cuadro): contables 0, 60, 112
-  y 120; de 72 a 104 el dedo de la otra mano tapa. La tarjeta cita el cuadro («Cuadro 120: cinco dedos.») y la hoja de
+  heredado de 9 cuadros. Mirado de nuevo a resolución completa (recorte de la mano, cuadro por cuadro): contables 0, 60, 84, 96, 112
+  y 120; en 72 y 104 el dedo de la otra mano cruza. (La primera versión decía «72 a 104» en bloque y un
+  revisor independiente lo desmintió: un bloque no se rotula por dos muestras de los extremos.) La tarjeta cita el cuadro («Cuadro 120: cinco dedos.») y la hoja de
   evidencia queda en `v4/kit/k4-revision-manos-20261008.jpg`.
 - **El prompt que se muestra en pantalla se guarda literal en el repo (8-oct).** Se baja con `job_display` (0 cr) y se
   registra en `v4/PROCEDENCIA.jsonl` con el id del job. Un guion que cita «el prompt real» sin ese archivo no se puede

@@ -51,8 +51,8 @@ luz, y una revisión cuadro por cuadro.** Y cuánto cuesta cada paso. Todo con d
     *«She slowly lifts her eyes from the phone to the camera and gives a small knowing smile, the phone stays in her hands.
     Subtle handheld camera, natural morning light, no cuts.»*;
   - K4, revisado el 8-oct a resolución completa (hoja `v4/kit/k4-revision-manos-20261008.jpg`, `PROCEDENCIA.jsonl` línea 94):
-    **cinco dedos contables en los cuadros 0, 60, 112 y 120**. De 72 a 104 el dedo de la otra mano toca o tapa la mano abierta
-    y no se cuenta. La tarjeta pega el número al cuadro 60 (el que entra en el tramo de 0 a 96) y no dice «el clip tiene cinco
+    **cinco dedos contables en los cuadros 0, 60, 84, 96, 112 y 120**. En los cuadros 72 y 104 el dedo de la otra mano cruza la
+    mano abierta y ahí no se cuenta (corregido el 8-oct tarde: antes decía «72 a 104» en bloque). La tarjeta pega el número al cuadro 60 (el que entra en el tramo de 0 a 96) y no dice «el clip tiene cinco
     dedos». El conteo previo de 9 cuadros (0,2–5,2 s) no se había hecho cuadro a cuadro.
 - **Sin marcas de terceros** en pantalla ni en el pie: dice «imagen» y «video», no el nombre de los modelos ni de la
   plataforma (`CLAUDE.md` § «Qué se publica sin preguntar»).

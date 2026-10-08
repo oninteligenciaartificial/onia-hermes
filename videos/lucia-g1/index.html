@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1080, height=1920">
+<title>Lucía · G1</title>
+<script src="assets/vendor/gsap.min.js"></script>
+<style>
+@font-face{font-family:"Bricolage Grotesque";src:url(assets/fonts/BricolageGrotesque-var-latin.woff2) format("woff2");font-weight:500 700;font-style:normal;font-display:block}
+@font-face{font-family:"DM Sans";src:url(assets/fonts/DMSans-var-latin.woff2) format("woff2");font-weight:400 500;font-style:normal;font-display:block}
+@font-face{font-family:"Spline Sans Mono";src:url(assets/fonts/SplineSansMono-var-latin.woff2) format("woff2");font-weight:400 500;font-style:normal;font-display:block}
+:root{--acc:#10C26B;--ink:#0A0C11;--ink2:#15181F;--txt:#F6F8FB;--mut:rgba(246,248,251,.62);--hair:rgba(255,255,255,.12)}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#0A0C11}
+body{font-family:"DM Sans",sans-serif;-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision;font-variant-ligatures:none}
+#root{position:relative;width:1080px;height:1920px;overflow:hidden;background:#0A0C11}
+/* el fondo va en un hijo a sangre completa: el productor puede perder el background del propio root */
+#ground{position:absolute;left:0;top:0;width:1080px;height:1920px;background:linear-gradient(180deg,#10141B 0%,#0A0C11 100%);z-index:0}
+
+/* ── contenedores de tarjeta: un clip por tarjeta, a lienzo completo; el ancla fija dónde cae ── */
+.cc{position:absolute;left:0;top:0;width:1080px;height:1920px;display:flex;justify-content:center;pointer-events:none;z-index:10}
+.cc-bot{align-items:flex-end;padding-bottom:calc(1920px - var(--b))}
+.cc-top{align-items:flex-start;padding-top:var(--t)}
+.cw{position:relative;width:max-content;max-width:920px}
+/* sombra de la tarjeta: dos capas con filter:blur (el box-shadow grande de Chromium deja costuras por mosaicos de 256 px) */
+.sh{position:absolute;display:block}
+.sh1{left:24px;right:24px;top:70px;bottom:-22px;border-radius:10px;background:rgba(0,0,0,.62);filter:blur(48px)}
+.sh2{left:0;right:0;top:10px;bottom:-10px;border-radius:34px;background:rgba(0,0,0,.32);filter:blur(13px)}
+.card{position:relative;width:100%;background:linear-gradient(158deg,var(--ink2) 0%,var(--ink) 62%);border:1px solid var(--hair);border-radius:35px;padding:41px 53px 45px 64px;overflow:hidden}
+.card-num{display:flex;align-items:center;gap:26px;padding-left:52px}
+.rail{position:absolute;left:0;top:0;bottom:0;width:12px;background:linear-gradient(180deg,var(--acc),#0a7a43)}
+.t{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:66px;line-height:1.12;letter-spacing:-.01em;color:var(--txt);text-wrap:balance}
+.t b{color:var(--acc);font-weight:700}
+.num{flex:none;width:72px;height:72px;border-radius:50%;background:var(--acc);color:#04210F;font:700 44px/72px "Bricolage Grotesque",sans-serif;text-align:center}
+
+/* ── rótulo de IA y etiquetas de dato (pastilla) ── */
+.tag{display:inline-flex;align-items:center;gap:16px;padding:14px 28px;border-radius:999px;background:rgba(10,12,17,.80);border:1px solid rgba(255,255,255,.16);box-shadow:0 14px 36px rgba(0,0,0,.38);font-family:"DM Sans",sans-serif;font-weight:500;color:#F6F8FB;font-size:34px;letter-spacing:.01em;white-space:nowrap}
+.tag i{width:15px;height:15px;border-radius:50%;background:var(--acc);box-shadow:0 0 18px var(--acc)}
+.tag-lg{font-size:40px;padding:16px 32px}
+.eqrow{display:inline-flex;align-items:baseline;gap:24px;padding:10px 44px 16px;border-radius:999px;background:rgba(10,12,17,.80);border:1px solid rgba(255,255,255,.16);box-shadow:0 14px 36px rgba(0,0,0,.38);font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:70px;line-height:1.1;color:#F6F8FB;letter-spacing:-.01em;white-space:nowrap}
+.eqp{display:inline-block}
+.eqr{color:var(--acc)}
+
+/* ── marco de la cara: cuatro esquinas ── */
+.cor{position:absolute;width:56px;height:56px;border:0 solid var(--acc);filter:drop-shadow(0 0 8px rgba(16,194,107,.5))}
+.cor.tl{left:0;top:0;border-left-width:6px;border-top-width:6px;border-top-left-radius:10px}
+.cor.tr{right:0;top:0;border-right-width:6px;border-top-width:6px;border-top-right-radius:10px}
+.cor.bl{left:0;bottom:0;border-left-width:6px;border-bottom-width:6px;border-bottom-left-radius:10px}
+.cor.br{right:0;bottom:0;border-right-width:6px;border-bottom-width:6px;border-bottom-right-radius:10px}
+
+/* ── panel «Orden real» ── */
+.cw-panel{width:920px}
+.panel{padding:40px 52px 44px 64px}
+.eyebrow{display:flex;align-items:center;gap:14px;font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:26px;letter-spacing:.18em;text-transform:uppercase;color:var(--mut);margin-bottom:22px}
+.eyebrow i{width:14px;height:14px;border-radius:50%;background:var(--acc);box-shadow:0 0 22px var(--acc)}
+.pa,.pb{font-family:"DM Sans",sans-serif;font-weight:400;font-size:41px;line-height:1.5;color:#AEB4C0}
+.pa{position:relative;margin-bottom:20px;padding-left:24px}
+.pb{line-height:2.05}
+.bar{position:absolute;left:0;top:6px;bottom:6px;width:6px;border-radius:3px;background:var(--acc);transform-origin:50% 0}
+.nw{white-space:nowrap;position:relative;display:inline-block;margin-right:14px}
+.bd-sup{position:absolute;right:-8px;top:-2px;margin:0;width:28px;height:28px;line-height:28px;font-size:19px;vertical-align:baseline}
+.bd{display:inline-block;width:34px;height:34px;border-radius:50%;background:var(--acc);color:#04210F;font:700 22px/34px "DM Sans",sans-serif;text-align:center;vertical-align:middle;margin-left:10px;position:relative;top:-3px}
+.leg{display:flex;gap:14px;margin-top:26px;white-space:nowrap}
+.lg{display:inline-flex;align-items:center;gap:10px;padding:8px 22px 8px 9px;border-radius:999px;border:1px solid rgba(16,194,107,.5);background:rgba(16,194,107,.14);font:500 29px "DM Sans",sans-serif;color:var(--acc)}
+.bd-s{margin-left:0;top:0;width:32px;height:32px;line-height:32px;font-size:21px}
+
+/* ── placa de 8 cuadros: visor + tira ── */
+#visor{position:absolute;border-radius:26px;overflow:hidden;border:4px solid rgba(255,255,255,.2);background:#0A0C11;box-shadow:0 30px 70px -20px rgba(0,0,0,.6)}
+.vf{position:absolute;left:0;top:0;right:0;bottom:0;opacity:0}
+.vf img{display:block;width:100%;height:100%;object-fit:cover}
+.vn{position:absolute;left:18px;top:16px;padding:6px 18px;border-radius:999px;background:rgba(10,12,17,.78);font-family:"Spline Sans Mono",monospace;font-weight:500;font-size:30px;color:#F6F8FB}
+.vm{position:absolute;left:18px;bottom:18px;padding:8px 24px 10px;border-radius:14px;font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:42px;line-height:1.1}
+.vm.ok{background:var(--acc);color:#04210F}
+.vm.no{background:rgba(10,12,17,.82);color:rgba(246,248,251,.78);border:1px solid rgba(255,255,255,.2)}
+.th{position:absolute}
+.th img{display:block;object-fit:cover;border-radius:12px;border:1px solid rgba(255,255,255,.18)}
+.thn{margin-top:8px;text-align:center;font-family:"Spline Sans Mono",monospace;font-weight:500;font-size:23px;color:var(--mut)}
+#scan{position:absolute;border:4px solid var(--acc);border-radius:16px;box-shadow:0 0 22px rgba(16,194,107,.55)}
+
+/* ── cuadro 60 sobre K4 ── */
+#scrub{position:absolute;width:620px;height:30px}
+.sbar{position:absolute;left:0;right:0;top:10px;height:10px;border-radius:5px;background:rgba(255,255,255,.28);overflow:hidden;box-shadow:0 2px 14px rgba(0,0,0,.35)}
+.sfill{position:absolute;left:0;top:0;bottom:0;width:100%;background:var(--acc);transform-origin:0 50%}
+.snotch{position:absolute;top:0;width:5px;height:30px;margin-left:-2px;border-radius:3px;background:#fff;box-shadow:0 0 10px rgba(0,0,0,.4)}
+#origen{position:absolute;border:4px solid var(--acc);border-radius:14px;box-shadow:0 0 24px rgba(16,194,107,.5)}
+#inset{position:absolute;border-radius:22px;overflow:hidden;border:4px solid var(--acc);box-shadow:0 30px 70px -20px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.14)}
+#inset img{display:block;width:100%;height:100%;object-fit:cover}
+.itag{position:absolute;left:14px;top:12px;padding:6px 16px;border-radius:999px;background:rgba(10,12,17,.78);font-family:"Spline Sans Mono",monospace;font-weight:500;font-size:25px;color:#F6F8FB}
+#sello{position:absolute;padding:10px 26px 12px;border-radius:14px;background:var(--acc);color:#04210F;font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:48px;line-height:1.1;letter-spacing:-.01em;white-space:nowrap;box-shadow:0 14px 34px rgba(0,0,0,.45)}
+
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="56" data-width="1080" data-height="1920" data-fps="24">
+<div id="ground"></div>
+<video id="k1a" src="assets/k1.mp4" data-start="0" data-duration="6" data-track-index="0" muted playsinline preload="auto" style="position:absolute;left:0;top:0;width:1080px;height:1920px;object-fit:cover;z-index:1;" ></video>
+<img id="foto1" class="clip" src="assets/k1-foto.jpg" data-start="6" data-duration="29" data-track-index="1" style="position:absolute;left:0;top:0;width:1080px;height:1920px;object-fit:cover;z-index:2;" alt="">
+<video id="k1b" src="assets/k1.mp4" data-start="31" data-duration="4" data-track-index="0" muted playsinline preload="auto" style="position:absolute;left:0;top:980px;width:1080px;height:580px;object-fit:cover;object-position:50% 25.373%;z-index:3;" ></video>
+<video id="k4" src="assets/k4.mp4" data-start="41" data-duration="4" data-track-index="0" muted playsinline preload="auto" style="position:absolute;left:0;top:0;width:1080px;height:1920px;object-fit:cover;z-index:1;" ></video>
+<img id="foto2" class="clip" src="assets/k2-foto.jpg" data-start="45" data-duration="5" data-track-index="1" style="position:absolute;left:0;top:0;width:1080px;height:1920px;object-fit:cover;z-index:2;" alt="">
+<video id="k2" src="assets/k2.mp4" data-start="50" data-duration="6" data-track-index="0" muted playsinline preload="auto" style="position:absolute;left:0;top:0;width:1080px;height:1920px;object-fit:cover;z-index:1;" ></video>
+<div id="cc-rotulo" class="clip cc cc-top" data-start="0" data-duration="2.4" data-track-index="10" style="--t:715px"><div class="cw" id="rotulo"><span class="tag"><i></i>Lucía Antelo · personaje IA de Onia</span></div></div>
+<div id="cc-d1" class="clip cc cc-top" data-start="7.6" data-duration="8.4" data-track-index="11" style="--t:1085px"><div class="cw" id="d1"><span class="tag tag-lg"><i></i>Imagen · 1 crédito</span></div></div>
+<div id="cc-d2" class="clip cc cc-top" data-start="31.9" data-duration="3.1" data-track-index="12" style="--t:1347px"><div class="cw" id="d2"><span class="tag tag-lg"><i></i>Video 6 s · 7,5 créditos</span></div></div>
+<div id="cc-d3" class="clip cc cc-top" data-start="31.6" data-duration="3.4" data-track-index="13" style="--t:580px"><div class="cw" id="d3"><span class="tag tag-lg"><i></i>Imagen · 1 crédito</span></div></div>
+<div id="cc-eq" class="clip cc cc-top" data-start="46" data-duration="4" data-track-index="14" style="--t:1375px"><div class="cw" id="eq"><span class="eqrow"><span class="eqp" id="eq0">1</span><span class="eqp" id="eq1">+</span><span class="eqp" id="eq2">7,5</span><span class="eqp" id="eq3">=</span><span class="eqp eqr" id="eq4">8,5</span></span></div></div>
+<div id="cc-marco" class="clip" data-start="10.4" data-duration="5.6" data-track-index="15" style="position:absolute;left:0;top:0;width:1080px;height:1920px;z-index:9"><div id="marco" style="position:absolute;left:405px;top:395px;width:258px;height:305px"><i class="cor tl"></i><i class="cor tr"></i><i class="cor bl"></i><i class="cor br"></i></div></div>
+<div id="cc-c1" class="clip cc cc-bot" style="--b:1455px" data-start="0.1" data-duration="2.9" data-track-index="3"><div class="cw" id="c1"><i class="sh sh1"></i><i class="sh sh2"></i><div class="card"><div class="rail"></div><div class="t">Este video no fue grabado.</div></div></div></div>
+<div id="cc-c2" class="clip cc cc-bot" style="--b:1455px" data-start="3" data-duration="3" data-track-index="4"><div class="cw" id="c2"><i class="sh sh1"></i><i class="sh sh2"></i><div class="card"><div class="rail"></div><div class="t">Así se hace, en <b>3 pasos.</b></div></div></div></div>
+<div id="cc-c3" class="clip cc cc-bot" style="--b:1455px" data-start="6" data-duration="4" data-track-index="3"><div class="cw" id="c3"><i class="sh sh1"></i><i class="sh sh2"></i><div class="card card-num"><div class="rail"></div><span class="num">1</span><div class="t">Una foto fija.</div></div></div></div>
+<div id="cc-c4" class="clip cc cc-bot" style="--b:1455px" data-start="10" data-duration="6" data-track-index="4"><div class="cw" id="c4"><i class="sh sh1"></i><i class="sh sh2"></i><div class="card"><div class="rail"></div><div class="t">Primero la cara, siempre igual.</div></div></div></div>
+<div id="cc-c5" class="clip cc cc-bot" style="--b:1455px" data-start="16" data-duration="3.5" data-track-index="3"><div class="cw" id="c5"><i class="sh sh1"></i><i class="sh sh2"></i><div class="card card-num"><div class="rail"></div><span class="num">2</span><div class="t">Una orden corta.</div></div></div></div>
+<div id="cc-c6" class="clip cc cc-bot" style="--b:967px" data-start="31" data-duration="4" data-track-index="4"><div class="cw" id="c6"><i class="sh sh1"></i><i class="sh sh2"></i><div class="card card-num"><div class="rail"></div><span class="num">3</span><div class="t">Y la foto se mueve.</div></div></div></div>
+<div id="cc-c7" class="clip cc cc-bot" style="--b:1455px" data-start="35" data-duration="6" data-track-index="3"><div class="cw" id="c7"><i class="sh sh1"></i><i class="sh sh2"></i><div class="card"><div class="rail"></div><div class="t">Después, se mira cuadro por cuadro.</div></div></div></div>
+<div id="cc-c8" class="clip cc cc-top" style="--t:290px" data-start="41" data-duration="4" data-track-index="4"><div class="cw" id="c8"><i class="sh sh1"></i><i class="sh sh2"></i><div class="card"><div class="rail"></div><div class="t">Cuadro 60: <b>cinco dedos.</b></div></div></div></div>
+<div id="cc-c9" class="clip cc cc-bot" style="--b:1345px" data-start="45" data-duration="5" data-track-index="3"><div class="cw" id="c9"><i class="sh sh1"></i><i class="sh sh2"></i><div class="card"><div class="rail"></div><div class="t">Foto y clip: <b>8,5 créditos.</b></div></div></div></div>
+<div id="cc-c10" class="clip cc cc-bot" style="--b:1455px" data-start="50" data-duration="3" data-track-index="4"><div class="cw" id="c10"><i class="sh sh1"></i><i class="sh sh2"></i><div class="card"><div class="rail"></div><div class="t">Foto, orden y revisión.</div></div></div></div>
+<div id="cc-c11" class="clip cc cc-bot" style="--b:1455px" data-start="53" data-duration="3" data-track-index="3"><div class="cw" id="c11"><i class="sh sh1"></i><i class="sh sh2"></i><div class="card"><div class="rail"></div><div class="t">Seguime: cada semana, <b>una prueba.</b></div></div></div></div>
+<div id="cc-panel" class="clip cc cc-bot" data-start="19.5" data-duration="11.5" data-track-index="16" style="--b:1455px"><div class="cw cw-panel" id="panel"><i class="sh sh1"></i><i class="sh sh2"></i><div class="card panel"><div class="rail"></div><div class="eyebrow"><i></i>Orden real</div><p class="pa" id="pa"><span class="bar" id="bar1"></span><span id="ph1">She slowly lifts her eyes from the phone to the camera and gives a small knowing smile, the phone stays in her hands.</span> <span class="bd" id="bd1">1</span></p><p class="pb"><span id="phb0">Subtle </span><span class="nw" id="ph2">handheld<span class="bd bd-sup" id="bd2">2</span></span><span id="phb1"> camera, </span><span class="nw" id="ph3">natural morning light<span class="bd bd-sup" id="bd3">3</span></span><span id="phb2">, no cuts.</span></p><div class="leg"><span class="lg" id="lg1"><span class="bd bd-s">1</span>movimiento</span><span class="lg" id="lg2"><span class="bd bd-s">2</span>cámara</span><span class="lg" id="lg3"><span class="bd bd-s">3</span>luz</span></div></div></div></div>
+<div id="plate" class="clip" data-start="35" data-duration="6" data-track-index="17" style="position:absolute;left:0;top:0;width:1080px;height:1920px;z-index:4"><div id="visor" style="left:260px;top:290px;width:560px;height:620px"><div class="vf" id="vf0"><img src="assets/k4cuadros/c0.png" alt=""><span class="vn">cuadro 0</span><span class="vm ok">5 dedos</span></div><div class="vf" id="vf1"><img src="assets/k4cuadros/c60.png" alt=""><span class="vn">cuadro 60</span><span class="vm ok">5 dedos</span></div><div class="vf" id="vf2"><img src="assets/k4cuadros/c72.png" alt=""><span class="vn">cuadro 72</span><span class="vm no">tapada</span></div><div class="vf" id="vf3"><img src="assets/k4cuadros/c84.png" alt=""><span class="vn">cuadro 84</span><span class="vm no">tapada</span></div><div class="vf" id="vf4"><img src="assets/k4cuadros/c96.png" alt=""><span class="vn">cuadro 96</span><span class="vm no">tapada</span></div><div class="vf" id="vf5"><img src="assets/k4cuadros/c104.png" alt=""><span class="vn">cuadro 104</span><span class="vm no">tapada</span></div><div class="vf" id="vf6"><img src="assets/k4cuadros/c112.png" alt=""><span class="vn">cuadro 112</span><span class="vm ok">5 dedos</span></div><div class="vf" id="vf7"><img src="assets/k4cuadros/c120.png" alt=""><span class="vn">cuadro 120</span><span class="vm ok">5 dedos</span></div></div><div class="th" id="tile0" style="left:82px;top:950px;width:104px"><img src="assets/k4cuadros/c0.png" style="width:104px;height:115px" alt=""><div class="thn">0</div></div><div class="th" id="tile1" style="left:198px;top:950px;width:104px"><img src="assets/k4cuadros/c60.png" style="width:104px;height:115px" alt=""><div class="thn">60</div></div><div class="th" id="tile2" style="left:314px;top:950px;width:104px"><img src="assets/k4cuadros/c72.png" style="width:104px;height:115px" alt=""><div class="thn">72</div></div><div class="th" id="tile3" style="left:430px;top:950px;width:104px"><img src="assets/k4cuadros/c84.png" style="width:104px;height:115px" alt=""><div class="thn">84</div></div><div class="th" id="tile4" style="left:546px;top:950px;width:104px"><img src="assets/k4cuadros/c96.png" style="width:104px;height:115px" alt=""><div class="thn">96</div></div><div class="th" id="tile5" style="left:662px;top:950px;width:104px"><img src="assets/k4cuadros/c104.png" style="width:104px;height:115px" alt=""><div class="thn">104</div></div><div class="th" id="tile6" style="left:778px;top:950px;width:104px"><img src="assets/k4cuadros/c112.png" style="width:104px;height:115px" alt=""><div class="thn">112</div></div><div class="th" id="tile7" style="left:894px;top:950px;width:104px"><img src="assets/k4cuadros/c120.png" style="width:104px;height:115px" alt=""><div class="thn">120</div></div><div id="scan" style="left:76px;top:944px;width:116px;height:127px"></div></div>
+<div id="cc-k4" class="clip" data-start="41" data-duration="4" data-track-index="18" style="position:absolute;left:0;top:0;width:1080px;height:1920px;z-index:8"><div id="scrub" style="left:230px;top:452px"><div class="sbar"><div class="sfill" id="sfill"></div></div><div class="snotch" id="snotch" style="left:62.50%"></div></div><div id="origen" style="left:138px;top:1527px;width:369px;height:378px"></div><div id="inset" style="left:349px;top:492px;width:383px;height:393px"><img src="assets/k4cuadros/inset60.png" alt=""><span class="itag">cuadro 60</span></div><div id="sello" style="left:323px;top:833px">5 dedos</div></div>
+</div>
+<script>
+window.__timelines = window.__timelines || {};
+const PLAN = {"tarjetas":[{"id":"c1","a":0.1,"b":3,"sin_salida":false},{"id":"c2","a":3,"b":6,"sin_salida":false},{"id":"c3","a":6,"b":10,"sin_salida":false},{"id":"c4","a":10,"b":16,"sin_salida":false},{"id":"c5","a":16,"b":19.5,"sin_salida":false},{"id":"c6","a":31,"b":35,"sin_salida":false},{"id":"c7","a":35,"b":41,"sin_salida":false},{"id":"c8","a":41,"b":45,"sin_salida":false},{"id":"c9","a":45,"b":50,"sin_salida":false},{"id":"c10","a":50,"b":53,"sin_salida":false},{"id":"c11","a":53,"b":56,"sin_salida":true}],"rotulo":{"texto":"Lucía Antelo · personaje IA de Onia","a":0,"b":2.4,"top":715},"etiquetas":[{"id":"d1","texto":"Imagen · 1 crédito","a":7.6,"b":16,"top":1085,"escena":"S2"},{"id":"d2","texto":"Video 6 s · 7,5 créditos","a":31.9,"b":35,"top":1347,"escena":"S4"},{"id":"d3","texto":"Imagen · 1 crédito","a":31.6,"b":35,"top":580,"escena":"S4"},{"id":"eq","texto":"1 + 7,5 = 8,5","a":46,"b":50,"top":1375,"escena":"S7"}],"marco":{"caja":[405,395,663,700],"a":10.4,"b":16},"panel":{"a":19.5,"b":31,"marcas":[{"id":"m1","etiqueta":"movimiento","t":21.4},{"id":"m2","etiqueta":"cámara","t":25.2},{"id":"m3","etiqueta":"luz","t":28}]},"part":{"ventana_fuente_y":[340,920],"arriba":{"y":210,"h":580},"abajo":{"y":980,"h":580},"morph":{"a":30.5,"b":31},"salida_panel":{"a":30.28,"b":30.5}},"placa":{"tiles":[{"n":0,"ok":true,"x":82,"y":950},{"n":60,"ok":true,"x":198,"y":950},{"n":72,"ok":false,"x":314,"y":950},{"n":84,"ok":false,"x":430,"y":950},{"n":96,"ok":false,"x":546,"y":950},{"n":104,"ok":false,"x":662,"y":950},{"n":112,"ok":true,"x":778,"y":950},{"n":120,"ok":true,"x":894,"y":950}],"entrada":35.1,"barrido":35.75,"paso":0.45,"foco":39.45,"salida":40.78,"visor":{"x":260,"y":290,"w":560,"h":620},"tira":{"y":950,"w":104,"h":115,"gap":12},"TW":104,"TH":115},"k4":{"cuadro_foco":60,"t_foco":43.5,"recorte_fuente":{"x":92,"y":1018,"w":246,"h":252},"inset":{"top":492,"ancho":383,"alto":393}},"medios":{"k1a":{"a":0,"b":6},"foto1":{"a":6,"b":35},"k1b":{"a":31,"b":35},"plate":{"a":35,"b":41},"k4":{"a":41,"b":45},"foto2":{"a":45,"b":50},"k2":{"a":50,"b":56}},"E_IN":0.15,"E_OUT":0.22};
+// Timeline único (pausado, determinista). Doctrina de movimiento (motion-doctrine):
+//  · LA CORRIENTE es hacia la izquierda: todo entra desde la derecha y sale por la izquierda (mismo eje, mismo sentido).
+//  · entrada 0,15 s power3.out · salida 0,22 s power3.in (eases espejadas: la entrada arranca con la velocidad con que salió la anterior).
+//  · cada tarjeta sale justo cuando entra la siguiente: cero solapamiento, el corte cae a mitad de movimiento.
+//  · sin vaivén ocioso: cada fase está ocupada por una ruta (tarjeta→etiqueta→marco, marcas del panel, barrido de la placa, barra de cuadros).
+//  · un solo sello fuerte: «5 dedos» sobre el cuadro 60 (130 % → 100 % en 3 cuadros, −5°) con golpe de zoom +3 % durante 5 cuadros.
+const tl = gsap.timeline({ paused: true });
+const { E_IN, E_OUT } = PLAN;
+const ACC = getComputedStyle(document.documentElement).getPropertyValue('--acc').trim() || '#10C26B';
+const FR = 1 / 24;
+const IN_X = 80, OUT_X = -80;
+const enter = (sel, a, o = {}) => tl.fromTo(sel, { x: o.x ?? IN_X, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: o.d ?? E_IN, ease: 'power3.out' }, a);
+const leave = (sel, b, o = {}) => tl.to(sel, { x: o.x ?? OUT_X, autoAlpha: 0, duration: o.d ?? E_OUT, ease: 'power3.in' }, b - (o.d ?? E_OUT));
+
+// ── rótulo de IA: ya está en pantalla en el cuadro 0 (sin entrada); sale por la izquierda a los 2,4 s
+leave('#rotulo', PLAN.rotulo.b, { x: -60 });
+
+// ── tarjetas narrativas (entrada 0,15 s, salida 0,22 s; la última se queda hasta el final)
+for (const c of PLAN.tarjetas) {
+  enter('#' + c.id, c.a);
+  if (!c.sin_salida) leave('#' + c.id, c.b);
+}
+
+// ── etiquetas de dato (S2 y S4)
+for (const d of PLAN.etiquetas) {
+  if (d.id === 'eq') continue;
+  enter('#' + d.id, d.a, { x: 60, d: 0.18 });
+  leave('#' + d.id, d.b, { x: -60 });
+}
+
+// ── S2: «Primero la cara»: el marco se cierra sobre la cara a los 10,4 s (cae sobre la tarjeta que dice «la cara»)
+tl.fromTo('#marco', { scale: 1.2, autoAlpha: 0, transformOrigin: '50% 50%' }, { scale: 1, autoAlpha: 1, duration: 0.3, ease: 'power4.out' }, PLAN.marco.a);
+leave('#marco', PLAN.marco.b, { x: -60 });
+
+// ── S3: panel «Orden real» (cita literal de 31 palabras, 11,5 s) con tres marcas sobre el mismo texto
+{
+  const pa = PLAN.panel.a;
+  enter('#panel', pa, { d: 0.2 });
+  // cascada de entrada de los bloques del panel (waterfall corto, la corriente a la izquierda)
+  ['.eyebrow', '#pa', '.pb', '.leg'].forEach((s, i) => tl.fromTo('#panel ' + s, { x: 40, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 0.2, ease: 'power3.out' }, pa + 0.08 + i * 0.08));
+  tl.set('#bd1,#bd2,#bd3', { scale: 0 }, 0); // insignias: aparecen con su marca
+  tl.set('.lg', { opacity: 0.62 }, 0);
+  tl.set('#bar1', { scaleY: 0 }, 0);
+  const [m1, m2, m3] = PLAN.panel.marcas;
+  // marca 1 «movimiento»: barra a la izquierda de la primera frase + la frase se enciende
+  tl.to('#bar1', { scaleY: 1, duration: 0.35, ease: 'power3.out' }, m1.t);
+  tl.to('#ph1', { color: '#F6F8FB', duration: 0.25, ease: 'none' }, m1.t);
+  tl.to('#bd1', { scale: 1, duration: 0.25, ease: 'back.out(1.7)' }, m1.t + 0.05);
+  tl.to('#lg1', { opacity: 1, duration: 0.2 }, m1.t);
+  // marca 2 «cámara»: handheld
+  tl.to('#ph2', { color: ACC, duration: 0.2, ease: 'none' }, m2.t);
+  tl.to('#bd2', { scale: 1, duration: 0.25, ease: 'back.out(1.7)' }, m2.t + 0.05);
+  tl.to('#lg2', { opacity: 1, duration: 0.2 }, m2.t);
+  // marca 3 «luz»: natural morning light
+  tl.to('#ph3', { color: ACC, duration: 0.2, ease: 'none' }, m3.t);
+  tl.to('#bd3', { scale: 1, duration: 0.25, ease: 'back.out(1.7)' }, m3.t + 0.05);
+  tl.to('#lg3', { opacity: 1, duration: 0.2 }, m3.t);
+  leave('#panel', PLAN.part.salida_panel.b, { x: -80 });
+}
+
+// ── S3→S4: la foto de pantalla completa se encoge a la ventana de arriba (morph) y el clip sube desde abajo.
+{
+  const p = PLAN.part, [w0, w1] = p.ventana_fuente_y, T = p.arriba;
+  tl.fromTo('#foto1', { clipPath: 'inset(0px 0px 0px 0px)', y: 0 },
+    { clipPath: `inset(${w0}px 0px ${1920 - w1}px 0px)`, y: T.y - w0, duration: p.morph.b - p.morph.a, ease: 'power3.inOut' }, p.morph.a);
+  tl.fromTo('#k1b', { y: 160, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: 'power4.out' }, PLAN.medios.k1b.a);
+  // salida de la partida hacia la izquierda, a mitad de movimiento, justo cuando entra la placa
+  tl.to('#foto1', { x: -220, opacity: 0, duration: E_OUT, ease: 'power3.in' }, PLAN.medios.foto1.b - E_OUT);
+  tl.to('#k1b', { x: -220, opacity: 0, duration: E_OUT, ease: 'power3.in' }, PLAN.medios.k1b.b - E_OUT);
+}
+
+// ── S5: visor + tira de 8 cuadros de K4. La marca barre la tira; el visor corta (sin transición) al cuadro que se mira; al final foco en el 60
+{
+  const L = PLAN.placa, t0 = L.tiles[0];
+  const n = L.tiles.length;
+  tl.fromTo('#visor', { x: 200, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 0.3, ease: 'power4.out' }, L.entrada);
+  L.tiles.forEach((t, i) => tl.fromTo('#tile' + i, { x: 160, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 0.28, ease: 'power4.out' }, L.entrada + 0.12 + i * 0.05));
+  tl.fromTo('#scan', { x: 120, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 0.18, ease: 'power3.out' }, L.barrido - 0.18);
+  L.tiles.forEach((t, i) => {
+    const T = L.barrido + i * L.paso;
+    if (i > 0) tl.to('#scan', { x: t.x - t0.x, duration: 0.12, ease: 'power2.inOut' }, T - 0.12);
+    tl.to('#vf' + i, { opacity: 1, duration: 0.001 }, i === 0 ? L.entrada : T);            // el visor muestra este cuadro (el primero ya al entrar)
+    if (i < n - 1) tl.to('#vf' + i, { opacity: 0, duration: 0.001 }, T + L.paso);          // y lo suelta cuando entra el siguiente
+  });
+  // foco: el visor vuelve al 60 (el que entra en el tramo de 0 a 96), la marca lo sigue y el resto se apaga
+  const t60 = L.tiles.findIndex((t) => t.n === 60);
+  tl.to('#vf' + (n - 1), { opacity: 0, duration: 0.001 }, L.foco);
+  tl.to('#vf' + t60, { opacity: 1, duration: 0.001 }, L.foco);
+  tl.to('#visor', { borderColor: ACC, duration: 0.2, ease: 'none' }, L.foco);
+  L.tiles.forEach((t, i) => { if (i !== t60) tl.to('#tile' + i, { opacity: t.ok ? 0.5 : 0.28, duration: 0.25, ease: 'power2.out' }, L.foco); });
+  tl.to('#scan', { x: L.tiles[t60].x - t0.x, duration: 0.3, ease: 'power3.inOut' }, L.foco);
+  // salida a la izquierda a mitad de movimiento, al mismo tiempo que sale la tarjeta
+  tl.to('#visor', { x: -200, autoAlpha: 0, duration: E_OUT, ease: 'power3.in' }, L.salida);
+  L.tiles.forEach((t, i) => tl.to('#tile' + i, { x: -200, autoAlpha: 0, duration: E_OUT, ease: 'power3.in' }, L.salida + i * 0.012));
+  tl.to('#scan', { x: '-=200', autoAlpha: 0, duration: E_OUT, ease: 'power3.in' }, L.salida);
+}
+
+// ── S6: K4 cuadros 0–95. La barra avanza con el clip; en el cuadro 60 (43,5 s) cae el recorte, el sello y el golpe de zoom
+{
+  const k = PLAN.k4, T0 = PLAN.medios.k4.a, TF = k.t_foco;
+  enter('#scrub', T0 + 0.05, { d: 0.18 });
+  tl.set('#sfill', { scaleX: 0 }, 0);
+  tl.to('#sfill', { scaleX: 1, duration: PLAN.medios.k4.b - T0, ease: 'none' }, T0);
+  leave('#scrub', PLAN.medios.k4.b, { x: -60 });
+  tl.fromTo('#snotch', { scale: 1 }, { scale: 1.7, duration: 0.1, ease: 'power2.out' }, TF);
+  tl.to('#snotch', { scale: 1, duration: 0.15, ease: 'power2.in' }, TF + 0.1);
+  tl.fromTo('#origen', { autoAlpha: 0, scale: 1.08, transformOrigin: '50% 50%' }, { autoAlpha: 1, scale: 1, duration: 0.15, ease: 'power3.out' }, TF);
+  tl.to('#origen', { autoAlpha: 0, duration: 0.2, ease: 'power2.in' }, TF + 0.8);
+  tl.fromTo('#inset', { x: 70, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 0.18, ease: 'power4.out' }, TF);
+  tl.fromTo('#sello', { scale: 1.3, rotation: -5, autoAlpha: 0, transformOrigin: '50% 50%' }, { scale: 1, rotation: -5, autoAlpha: 1, duration: 3 * FR, ease: 'power4.out' }, TF);
+  // golpe de zoom +3 % durante 5 cuadros, en el mismo cuadro que el sello
+  tl.fromTo('#k4', { scale: 1, transformOrigin: '50% 50%' }, { scale: 1.03, duration: 2 * FR, ease: 'power2.out' }, TF);
+  tl.to('#k4', { scale: 1, duration: 3 * FR, ease: 'power2.inOut' }, TF + 2 * FR);
+  const bK = PLAN.medios.k4.b;
+  tl.to('#inset', { x: -70, autoAlpha: 0, duration: E_OUT, ease: 'power3.in' }, bK - E_OUT);
+  tl.to('#sello', { x: -70, autoAlpha: 0, duration: E_OUT, ease: 'power3.in' }, bK - E_OUT);
+}
+
+// ── S7: la cuenta: 1 + 7,5 = 8,5 (cada parte entra desde la derecha, una tras otra)
+{
+  const d = PLAN.etiquetas.find((x) => x.id === 'eq');
+  for (let i = 0; i < 5; i++) tl.fromTo('#eq' + i, { x: 50, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 0.28, ease: 'power4.out' }, d.a + i * 0.14);
+  leave('#eq', d.b, { x: -60 });
+}
+
+window.__timelines['main'] = tl;
+
+</script>
+</body>
+</html>
