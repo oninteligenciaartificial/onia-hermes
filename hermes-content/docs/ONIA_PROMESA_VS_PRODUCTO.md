@@ -42,7 +42,7 @@ Con las tres en verde, se contacta con los mensajes de la §6.9 tal como están.
 | Dónde | Qué dice la web | Por qué no se puede | Arreglo |
 |---|---|---|---|
 | `/chatbot`, `/precios`, `/`, `/contacto` | Agente de WhatsApp que «responde las 24 horas», Bs 390/mes e incluido en Completo | Catálogo §5: ⏸, nunca se conectó el WhatsApp de un cliente | Sacarlo de la venta hasta la prueba real (catálogo §6.4), o dejarlo como «a pedido» sin promesa de funcionamiento. Lo decide Sergio Urcullo |
-| `/rubros`, tarjeta Estética | «La clienta que dejó el tratamiento a medias: te queda el mensaje escrito…» | Catálogo §8: el detector existe pero no encuentra a nadie | Sacar esa línea hasta que Plataforma lo vea funcionar en la cuenta demo |
+| `/rubros`, tarjeta Estética | «La clienta que dejó el tratamiento a medias: te queda el mensaje escrito…» | Catálogo §8 (2-oct): el detector existe pero no encuentra a nadie. El gate de la web (3-oct) sí deja decir el mecanismo, así que **las dos fuentes se contradicen**. #108 (4-oct) cargó «A medias», pero nadie lo vio encontrar a un paciente en producción | Sacar esa línea hasta que Plataforma lo vea funcionar en la cuenta demo; después, alinear el catálogo §8 y el gate |
 | `/precios`, plan Completo | Completo = Profesional + el agente de WhatsApp | Lo mismo que la primera fila | Mientras el agente esté en pausa, Completo se vende por «sin topes» |
 | `/comparativa` | Nombra competidores y sus precios | `CLAUDE.md` (Sergio Urcullo, 3-sep): cero autobombo, nada sobre la competencia | Decidir si se baja |
 | `/servicios/webs` | Webs a medida desde Bs 2.000 | No es parte del producto: falla el test de tres preguntas (estrategia §10) | Decidir si se baja |
