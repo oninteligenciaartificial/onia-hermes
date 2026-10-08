@@ -2,6 +2,20 @@
 
 **Archivo único del carril.** Actualizado 2026-09-29 por Claude (Opus 5.5).
 
+## ▶ 8-oct (noche, 7) — Sergio Urcullo rechazó el diseño de historias
+
+- **Dijo (8-oct):** «no me gustan las historias, el diseño hay que mejorarlo; recordá que hay estructuras de contenido para
+  vender; si tenés que ver algo, decile a la madre que lo vea por vos».
+- **Estado:** ninguna historia publicada ni agendada. El artefacto «Comunidad e historias» todavía muestra el diseño viejo
+  (2 por día, foto + titular): **hay que rehacer su sección de historias cuando exista el diseño nuevo**.
+- **Pedido a la madre** (la nube no puede mandarle mensajes): «PEDIDO PC: historias de @eriktaveras, @sanmunoz.ia,
+  @pabloinpublic, @theaigeekk y 2-3 cuentas en español que vendan IA a negocios». Capturas en
+  `hermes-content/research/competencia/historias/` + nota por cuenta. Está escrito en el transcript de esta sesión.
+- **Plan al llegar las capturas:** secuencia de 4 láminas por día (gancho → mito → revelación → CTA único a la asesoría gratis
+  o a la comunidad), mostrar UNA secuencia renderizada a Sergio Urcullo y esperar su OK antes de agendar nada.
+- **Intento fallido:** el diseño v1 (foto + etiqueta verde + titular) salió sin leer `historias-onia.md`, `STORY_REFERENCES.md`
+  ni los kits `curso-dia1` e `historias-llamada`. Lección en la skill `diseno-contenido-onia`.
+
 ## ▶ 8-oct (noche, 6) — avisos en palabras simples y diseño de las historias
 
 - **Pedido de Sergio Urcullo (8-oct):** *«no entiendo esas, mejorá lo que decís; te voy subiendo fotos a mi Drive, pero
