@@ -205,6 +205,26 @@ antes de que lleguen a Sergio Urcullo.
   (`fps=2,scale=216:-2,drawtext=…%{pts\:hms}…,tile=5x4`), cortes con `select='gt(scene,0.25)',showinfo`,
   `ebur128` y transcript con palabras.
 
+## Plan de la semana (8-oct-2026): cómo se arma sin rehacer guiones
+
+Pedido de la madre del 8-oct, en `docs/cola/plan-3-semanas/GRABAR-9-14-OCT.md`. Lo arma `gen_semana.py`, que está en el
+scratchpad de esa sesión; el método:
+1. **Una hora por día = tres verticales** (~20 min cada uno con tomas), o un YouTube (~35 min) más un vertical.
+2. **Orden:**
+   - primero la noticia más fresca;
+   - después las piezas que van con un carrusel ya agendado, para que el recurso ya esté en la comunidad;
+   - al final el resto.
+3. **El texto sale de `GRABAR-2-14-OCT.md` de main**, que enseña con pasos, ejemplo, cómo sabés que funcionó y palabra.
+   La versión de Codex del 6-oct (`codex/madre-orquestacion-20261005`) recortó los pasos: de ella se toman solo las
+   correcciones de datos.
+4. **El dato se verifica el mismo día con WebFetch** sobre la página oficial. Desde la nube funcionan
+   `platform.claude.com` (precios y modelos), el changelog de `code.claude.com`, `developers.googleblog.com`,
+   `antigravity.google` y `geminicli.com`. Chromium no abre esas páginas, así que la captura para el video la saca una
+   sesión con Chrome.
+5. **El modelo nuevo de la semana se agrega a toda pieza que compara modelos.** El 7-oct salió Haiku 5.5 (0,10 / 0,50
+   por millón de tokens, diez veces menos que Haiku 4.5), y el YouTube D01-C «Opus o Sonnet» lo nombra. Es la misma
+   trampa que Fable 5.1 el 3-oct.
+
 ## Relacionadas
 
 - `editor-videos`: corte, transcripción, regla de oro, ortografía y master. Este skill se monta encima.

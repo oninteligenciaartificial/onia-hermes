@@ -2,6 +2,26 @@
 
 **Archivo único del carril.** Actualizado 2026-09-29 por Claude (Opus 5.5).
 
+## ▶ 8-oct — retomada tras el corte de la semana de Claude (`session_01WPecmppa9uZEc4fJDjSmaS`)
+
+- **Publicado y verificado el 8-oct:** el 6 y el 7-oct salieron los carruseles en las tres redes. 6 de 6 `sent`, sin
+  error.
+  - DD-A: IG `DeKl9Zcjwco`, LinkedIn `ugcPost:7513327593224458240`, TikTok `7693647592986578197`.
+  - N04: IG `DeNKxt7D8KJ`, LinkedIn `ugcPost:7513689985171206144`, TikTok `7694018690777369876`.
+  - Quedan 27 timers, del 8 al 16-oct.
+- **Guiones del 9 al 14-oct** en `docs/cola/plan-3-semanas/GRABAR-9-14-OCT.md` (pedido de la madre): 17 piezas, una hora
+  por día.
+  - Pieza nueva N07 HAIKU (Haiku 5.5, verificada en la página de precios el 8-oct), con su aviso de comunidad al final
+    del archivo.
+  - N04: la skill tiene que ser propia, no de un plugin.
+  - D01-C nombra a Haiku 5.5.
+  - La página de Sergio Urcullo ya muestra esta semana, por día.
+- **El carrusel N06 (11-oct) está bien:** geminicli.com, el blog de Google del 19-may y los planes de antigravity.google
+  confirman lo que dice, leídos el 8-oct.
+- **Brutos:** ninguno nuevo en Drive el 8-oct.
+- **Rama de Codex `codex/madre-orquestacion-20261005`** (61 commits, sin mergear): su commit `6e1a4dae` del 6-oct
+  reescribe GRABAR/GUIONES/KIT con menos pasos. No se mergeó acá; decide la madre.
+
 ## ▶ 5-oct noche — sesión nueva (`session_01WPecmppa9uZEc4fJDjSmaS`, rama `claude/gifted-clarke-y4vvtj`)
 
 **Página única para Sergio Urcullo:** https://claude.ai/artifact/Hssf9o3ikt2fE7nkNBzrvd. Tiene qué necesito de él, día
