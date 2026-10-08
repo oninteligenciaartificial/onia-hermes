@@ -65,13 +65,13 @@ Cada fila es una prueba chica, con su video. Los costos son cotizaciones en vivo
 |---|---|---:|---|---|
 | — | Cómo se hace un clip: foto, orden, revisión (ya pagado) | 0 | El método y el costo real de una pieza | **G1** |
 | — | Errores que se escapan: letrero inventado, letra que no dice nada, mano que tapa a la otra (ya pagado) | 0 | Qué mirar en cada cuadro | **G3** |
-| **L1** | **Misma foto y misma orden en 4 motores:** el clip estándar ya pagado, Kling pro (9), Seedance Mini (6), Cinema Studio 3.0 de 4 s (20) y la mejora de 720p a 1080p del estándar (~0,1) | **~35** | Qué cambia al pagar más y cuál conviene para cada plano. Cinema Studio 3.0 nunca se probó | **G2** |
-| L2 | Voz y labios con audio propio (Seedance Mini 10 por 10 s; cambio de voz 1 por 10 s) | ~10-20 | Si hay una voz que suene cruceña. Primero Sergio Urcullo escucha las muestras (`research/competencia/lucia-20261005/voces/`) | por definir |
+| **L1** ✅ hecho el 8-oct: misma foto y orden en 6 clips (Kling std ya pagado, Kling pro 9, Seedance mini 6, mini + 3 referencias 6, Kling Omni 5 referencias 6, Cinema Studio 3.0 de 4 s 20) y 7 motores de imagen | **86,5 gastados** (clips 47, fotos 11,75, labios 27,75) | Cuánto sostiene cada vía la cara: `start_image` la deja decaer, las referencias la sostienen pero el motor inventa la escena; pagar más no la arregla. Detalle: skill `lucia` §0-quater | **G2** (guion listo) |
+| L2 | Voz y labios con audio propio. **Labios medidos el 8-oct:** Seedance mini 6 cr (cae bajo el gate, sin audio en el mp4) y `sync_so` 21,75 cr sobre un clip hecho (conserva la cara y trae el audio). Falta la voz | ~10-20 | Si hay una voz que suene cruceña. Primero Sergio Urcullo escucha las muestras (`research/competencia/lucia-20261005/voces/`) | por definir |
 | L3 | Copiar los gestos de un video guía (Motion Control, 17 por 10 s) | 17 | Control de «mira a cámara y gesticula». Requiere que Sergio Urcullo grabe 10 s | por definir |
 | — | Fotos de lifestyle con la cara fija (Seedream + ancla, 1 por foto) | 0-5 | Consistencia en escenas nuevas | carruseles |
 
 - **Créditos:** al 8-oct hay 541,26 (medido en vivo) y lo que sobra se **borra en cada renovación** (el 1-oct se borraron 387,57). Octubre va
-  52,5 de 150; L1 lo llevaría a ~87,5.
+  **139 de 150** (52,5 + 86,5 del lote de aprendizaje del 8-oct); saldo 454,76.
 - Lo que se aprende se escribe en la skill `lucia`, en el mismo commit que el video.
 
 ## 4. Formatos
@@ -92,7 +92,7 @@ Cada fila es una prueba chica, con su video. Los costos son cotizaciones en vivo
 |---|---:|---|
 | **G1** «Este video no fue grabado: así se hace, en 3 pasos» (56 s) | 0 | guion para validar por la madre; todo el material ya está pagado |
 | **G3** «Tres errores de la IA que atrapé antes de publicar» (58 s) | 0 | guion para validar por la madre (`guiones/G3-tres-errores-de-la-ia.md`); evidencia real en `v4/kit/` |
-| **G2** «La misma foto, 4 motores de video» | ~35 | guion por escribir; **necesita el OK de Sergio Urcullo al costo (L1)** |
+| **G2** «La misma foto, seis clips: ¿quién pierde la cara?» (58 s) | 0 más | guion para validar por la madre (`guiones/G2-la-misma-foto-seis-clips.md`); los 6 clips ya están pagados y medidos |
 | **L01** «Hola, soy Lucía. No existo.» (carrusel de presentación, fijado) | 0 | a reescribir: promete «cosas que un negocio chico puede dejar de hacer a mano», y esa ya no es la premisa. Va fijado **después** de G1 |
 | ~~L02~~ y ~~el chiste de 10 s~~ | — | retirados el 8-oct; sus clips son planos de apoyo |
 
@@ -120,7 +120,7 @@ Circuito completo en la skill `lucia` § 6.
 
 | # | Decisión | Recomendación |
 |---|---|---|
-| **L1** | OK al lote de aprendizaje de **~35 créditos** (tope 36): Kling pro 9 + Seedance Mini 6 + Cinema Studio 3.0 20 + mejora de resolución ~0,1 | **Sí.** Cuesta créditos que se vencen, no plata. Octubre queda en ~87,5 de 150 |
+| ~~L1~~ | Ya ejecutado el 8-oct (86,5 cr con los labios, dentro del tope de 97 que se fijó la sesión): Sergio Urcullo había escrito *«tenés derecho a usar todo lo que querrás»* sin dar una cifra | **Confirmar o corregir el tope.** Quedan 10,5 del tope y 11 del mes (150) |
 | D4 | La voz | Sin voz por ahora. L2 empieza cuando escuches las muestras |
 | D5 | El canon de 10 datos (`LUCIA.md` §0-canon) | Entra con tu OK al primer video |
 

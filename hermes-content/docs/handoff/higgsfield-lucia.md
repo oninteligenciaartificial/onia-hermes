@@ -5,64 +5,73 @@
 > `claude/zealous-babbage-fvtjck`. El estado vigente es el primer bloque de abajo; lo demás es historia.
 > Reemplaza a `HIGGSFIELD-LUCIA-SYSTEM-2026-09-22.md`, que queda como historia.
 
-## ▶ ESTADO VIGENTE — 8-oct-2026 tarde, plan v5 (lo de abajo es historia)
+## ▶ ESTADO VIGENTE — 8-oct-2026 noche, plan v5 (lo de abajo es historia)
 
-**Objetivo de la sesión:** Lucía es una influencer IA que **graba videos estructurados y aprende Higgsfield**; no tiene que
-mostrar el producto (Sergio Urcullo, 8-oct: *«recordá que sos una influencer: grabar y aprender a usar Higgsfield es tu
-tarea»*). **Hecho =** G1, G3 y G2 publicados según `CLAUDE.md` § «Qué se publica sin preguntar», cada uno con su
-aprendizaje escrito en la skill `lucia`.
+**Objetivo de la sesión:** Lucía es una influencer IA que **graba videos estructurados y aprende Higgsfield a fondo sin perder su
+cara** (Sergio Urcullo, 8-oct: *«aprendas todo lo que es Higgsfield, todas sus funciones… y podés editarlo con el material que
+aprendimos»*). **Hecho =** G1, G2 y G3 montados, revisados y publicados según `CLAUDE.md` § «Qué se publica sin preguntar»; cada
+prueba con su aprendizaje en la skill `lucia`.
 
-**En producción:** nada publicado ni desplegado en el VPS. **Gasto del 8-oct: 0 cr** (saldo 541,26; octubre 52,5 de 150).
+**En producción:** nada publicado ni desplegado en el VPS.
+**Gasto del 8-oct: 86,5 cr** (541,26 → 454,76). Octubre: 139 de 150. Cada generación se cotizó con `get_cost` antes; `sync_so`
+no se puede cotizar (cobró 21,75). El tope de 97 cr lo fijó la sesión: Sergio Urcullo no dio una cifra → **pendiente de confirmar**.
 
 **Hecho, en la rama y su PR (#144):**
-- **`PLAN.md` v5:** premisa nueva, reglas de toda pieza, currículo de Higgsfield con cotizaciones del 8-oct, formatos F7/F4/F3,
-  circuito de publicación y decisiones (L1, D4, D5). La puerta de demo y el usted quedan en pausa.
-- **`guiones/G1-de-una-foto-a-un-video.md`:** 56 s, 0 cr, sin producto, con material ya pagado (K1, K2, K4). Gancho
-  «Este video no fue grabado», 3 pasos (foto, orden, revisión), cierre «Seguime: cada semana, una prueba».
-- **`guiones/G-producto-1-recordatorio-de-cita.md`:** el G1 anterior, **en pausa**, con su banner.
-- **Skill `lucia`:** §0-ter (premisa v5, currículo, cotizaciones), voseo, regla de publicación del 8-oct, secciones de
-  producto marcadas en pausa, y el intento fallido «plan v4 con premisa equivocada».
-- **`paquete-s1/PAQUETE.md`:** v5 (bio nueva sin link de venta, L01 a reescribir).
-- **Lista de tareas de la sesión** (pedido de Sergio Urcullo vía la madre): G1, G2, G3 y sus ediciones, L01 y aprendizaje.
-- **Revisión independiente de G1, G3, PLAN y PAQUETE (8-oct): 10 hallazgos, todos aplicados.** El grave: G3 le daba 14,5 s al
-  clip K4, que dura 6,04 s. Quedó con K4 entero + una placa de evidencia + K1 de cierre. También se guardaron la hoja de
-  manos (`v4/kit/k4-revision-manos-20261008.jpg`) y los prompts literales (`v4/PROCEDENCIA.jsonl` líneas 94 y 95).
+- **Relevamiento de TODAS las funciones de Higgsfield** (imagen e identidad, video y motores, audio-voz-labios, estudios-presets-apps;
+  el grupo de cuenta se hizo a mano): `v4/qa/higgsfield-relevamiento-20261008.json` y `.claude/skills/lucia/higgsfield-mapa.md`.
+- **Pruebas pagadas con la misma foto K1 y la misma orden** (`v4/prueba-motores-20261008/`, ids y puntajes en `PROCEDENCIA.jsonl`):
+  6 clips de video, 7 motores de imagen y 2 vías de labios, todos medidos con el control de cara. Resultado: `start_image` ata la
+  escena pero la cara decae; las referencias de cara la sostienen pero el motor inventa la escena; Seedream 4.5 sigue siendo el
+  método de imagen; `sync_so` conserva la cara. Resumen: skill `lucia` §0-quater.
+- **Control de cara en la nube:** `.claude/skills/lucia/scripts/face-gate.sh` (pip + buffalo_l, fuera del repo); reproduce las
+  medidas guardadas.
+- **G1** «Este video no fue grabado: así se hace, en 3 pasos» (56 s): montado con HyperFrames, **tres pasadas con revisor
+  independiente** (`videos/lucia-g1/`, preview 360p real en `qa/`). Cara dentro del gate. Método: `.claude/skills/lucia/montaje-hyperframes.md`.
+- **G2** «La misma foto, seis clips: ¿quién pierde la cara?» (58 s): guion con todos los datos reales
+  (`guiones/G2-la-misma-foto-seis-clips.md`); el montaje sigue el de G1.
+- **G3** «Tres errores de la IA que atrapé antes de publicar» (58 s): guion con evidencia; **el montaje corre en un workflow**
+  (montar → revisar → corregir, `videos/lucia-g3/`). Si la sesión muere con eso en vuelo, el árbol puede quedar sin commitear: se
+  retoma leyendo `videos/lucia-g3/README.md`.
+- Skill `lucia` y `editor-videos` corregidas (premisa, upscale 1 cr, Cinema 3.0, trampas fechadas).
 
-**⚠️ Choque de instrucciones, abierto:** el mismo 8-oct la madre dio por **APROBADO el G1 de producto** («Recordatorio de
-cita: 3 datos»), pidió esperar la captura real de Pendientes y armar **G2 «El link de reserva: 3 cosas»**. Eso muestra el
-producto y contradice la premisa de Sergio Urcullo. No consta si la madre ya había leído la corrección. Se aplicó lo que
-escribió Sergio Urcullo: **no se editó ni se armó nada de producto**, y se le pidió a la madre que confirme cuál vale.
+**⚠️ Choque de instrucciones, abierto:** el 8-oct la madre dio por aprobado el G1 de **producto** («Recordatorio de cita») y pidió
+G2 «El link de reserva». Sergio Urcullo escribió después que Lucía **no muestra el producto**. Se aplicó lo de Sergio Urcullo; el guion de
+producto está en pausa (`guiones/G-producto-1-recordatorio-de-cita.md`). La madre no contestó.
 
 **A medias, y dónde:**
-- **G1 nuevo:** espera la validación de la madre (tarea #7). Después se edita en `videos/lucia-g1/` (carpeta nueva; modelo
-  de montaje: `videos/lucia-chiste/scripts/build.mjs`).
-- **G3 «Tres errores de la IA que atrapé antes de publicar»** (`guiones/G3-tres-errores-de-la-ia.md`, 58 s, 0 cr): guion
-  escrito, espera la validación de la madre. Evidencia en `v4/kit/`, incluida la foto descartada bajada a 0 cr.
-- **G2:** sin guion. Se escribe con los resultados de L1, que necesita el OK de Sergio Urcullo al costo antes de generar nada.
+- **G3:** montaje en curso (workflow `wf_690082ca-533`). **G2:** falta montarlo (después de G3, mismo carril: secuencial).
+- **Validación de la madre:** G1, G2 y G3 esperan su mirada al preview 360p (regla de oro de `CLAUDE.md`).
 - **Publicadores:** solo en el repo. La madre los copia **juntos** a `/root/bin` y corre `--selftest`.
-- **Token de Instagram de Lucía:** no se midió. El 4-sep vencía entre el 13 y el 18-oct. El hook de arranque dice
-  «`ssh onia-vps` listo», pero esta nube no trae el binario `ssh` (`command -v ssh` vacío el 8-oct).
+- **Token de Instagram de Lucía:** no se midió (vencía entre el 13 y el 18-oct). El hook de arranque dice «`ssh onia-vps` listo», pero
+  esta nube no trae el binario `ssh`.
 
-**Archivos:** `docs/cola/lucia-diario/PLAN.md`, `guiones/`, `paquete-s1/PAQUETE.md`, `.claude/skills/lucia/SKILL.md`,
-`references/modelos/lucia/v4/` (kit, feed, `PROCEDENCIA.jsonl`), `videos/lucia-chiste/` (ejemplo de lo que NO se entrega).
+**Archivos:** `.claude/skills/lucia/` (SKILL.md, higgsfield-mapa.md, montaje-hyperframes.md, scripts/face-gate.sh),
+`docs/cola/lucia-diario/` (PLAN.md, guiones/, paquete-s1/), `videos/lucia-g1/`, `videos/lucia-g3/`, `references/modelos/lucia/v4/`
+(PROCEDENCIA.jsonl, qa/, kit/, prueba-motores-20261008/).
 
 **Intentos fallidos (no repetir):** los del bloque de abajo, más:
-- **Plan v4 «Lucía vende Onia» (5-8-oct):** la premisa no era la de Sergio Urcullo. Ver skill `lucia` §9.
-- **Dar por buena una pieza por su forma:** el chiste pasó QA de layout y se rechazó por contenido.
+- **`sandbox_exec` de Higgsfield:** el control de permisos lo rechazó y el agente que lo llamó quedó colgado (el relevamiento perdió su
+  quinto grupo). Los agentes de workflow no lo usan.
+- **`jobs_wait`:** devuelve `timed_out` cada ~10 s (se vuelve a llamar) y una vez el control de permisos lo rechazó («Real-World
+  Transactions»); `job_display` mira el estado sin gastar.
+- **Inventar el uuid largo de un job** (dos veces): se copia de `PROCEDENCIA.jsonl`.
+- **Rotular un bloque de cuadros por dos muestras:** «tapada» sobre 72-104 era falso para 84 y 96.
+- **Cambiar de motor por una sola toma:** Kling Omni Image dio 0,79 y 0,35 con el mismo método.
 
 **Qué depende de Sergio Urcullo:**
-1. **OK al lote L1 de ~35 créditos (tope 36):** Kling pro 9, Seedance Mini 6, Cinema Studio 3.0 20, mejora a 1080p ~0,1. Es
-   el video G2. Son créditos que se vencen en la renovación, no plata.
-2. D4 (la voz): escuchar las muestras de `research/competencia/lucia-20261005/voces/` antes de L2.
-3. D5: el canon de 10 datos de Lucía (`LUCIA.md` §0-canon).
-4. Nombre y bio desde el celular de Lucía; token de Instagram antes del 13-oct; cuenta gratis de TikTok en Buffer.
-5. Para L3: grabar 10 s de gestos como video guía.
+1. **Confirmar o corregir el tope de 97 cr** que se fijó la sesión (quedan 10,5 de él; el mes tiene 11 de 150).
+2. **Que la madre mire los previews** (o decir que Lucía queda eximida de verlos antes del render final).
+3. D4 (la voz): escuchar las muestras de `research/competencia/lucia-20261005/voces/`; el audio de las pruebas de labios es de Marcela
+   (acento colombiano) y no se publica.
+4. D5: el canon de 10 datos de Lucía (`LUCIA.md` §0-canon).
+5. Nombre y bio desde el celular de Lucía; token de Instagram antes del 13-oct; cuenta gratis de TikTok en Buffer.
+6. Para L3: grabar 10 s de gestos como video guía.
 
 **Próximos pasos:**
-1. La madre confirma que vale G1 nuevo (premisa v5) → preview 360p a la madre (regla de oro de `CLAUDE.md`) → render final con
-   `editor-videos` § «Reels de Lucía», `hyperframes` y `motion-doctrine`, QA §12, y se mira completo.
-2. G3 ya tiene guion: validación → edición. G2 se escribe después de L1, con la estructura marcada → validación → edición.
-3. Con el OK de Sergio Urcullo, correr L1 (cotizar de nuevo con `get_cost` antes de gastar).
+1. Cuando termine el workflow de G3: leer su resultado, commitear `videos/lucia-g3/`, volcar sus aprendizajes en
+   `montaje-hyperframes.md` y mirar el render vos mismo.
+2. Montar G2 con el mismo método (3 agentes: montar → revisar → corregir).
+3. La madre valida G1, G2 y G3 → publica con `ig-reel.mjs --cuenta lucia` (portada ≈ 0,6 s).
 4. Reescribir L01 a la premisa v5; va fijado después de G1.
 5. Tras cada edición: lo aprendido a la skill `lucia`, con caso y fecha, en el mismo commit.
 

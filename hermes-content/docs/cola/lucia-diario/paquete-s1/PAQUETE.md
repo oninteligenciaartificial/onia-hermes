@@ -12,7 +12,7 @@
 |---|---:|---|
 | **G1** «Este video no fue grabado: así se hace, en 3 pasos» (56 s) | 0 | Guion para validar por la madre (`../guiones/G1-de-una-foto-a-un-video.md`) |
 | **G3** «Tres errores de la IA que atrapé antes de publicar» (58 s) | 0 | Guion para validar por la madre (`../guiones/G3-tres-errores-de-la-ia.md`) |
-| **G2** «La misma foto, 4 motores de video» | ~35 | Guion por escribir. **Necesita el OK de Sergio Urcullo al costo (L1)** |
+| **G2** «La misma foto, seis clips: ¿quién pierde la cara?» (58 s) | 0 más | Guion para validar por la madre (`../guiones/G2-la-misma-foto-seis-clips.md`); los clips ya están pagados y medidos |
 | **L01** «Hola, soy Lucía. No existo.» (carrusel de presentación) | 0 | A reescribir: promete «cosas que un negocio chico puede dejar de hacer a mano» y ya no es la premisa. Va fijado después de G1 |
 | ~~G-producto-1~~ «Recordatorio de cita: 3 datos» | — | **En pausa** (`../guiones/G-producto-1-recordatorio-de-cita.md`): muestra el producto |
 | ~~L02~~ y ~~el chiste de 10 s~~ | — | Retirados el 8-oct. Sus clips (calle y café) quedan de plano de apoyo |
