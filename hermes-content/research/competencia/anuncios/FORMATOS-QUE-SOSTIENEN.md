@@ -8,6 +8,8 @@
 > **Regla de parada que se cumplió:** no se gastó en Higgsfield ni en Meta, no se publicó nada, y ninguna pieza promete algo
 > que no esté en ✅ en `ONIA_PROMESA_VS_PRODUCTO.md` (hoy ninguna fila de A1 lo está: **todas quedan preparadas, no suben**).
 
+> **Actualización 8-oct (noche, conector `Meta_ads`): estos 5 formatos NO incluían a AgendaPro**, que resultó tener los anuncios activos más viejos (245 días: un titular de «la IA llegó» y uno de catálogo dinámico) y **un asistente de IA con nombre propio, «Sofía», que dura 141 días y se volvió serie**. Detalle y ids de página en `ONIA_ADQUISICION_Y_PAUTA.md` §2.6.1. Si Sergio Urcullo quiere un sexto formato para la prueba, es ese: **«un asistente con nombre»**; no se arma hasta decidirlo y verificar qué se le puede prometer.
+
 ## Los 5 formatos (de más a menos días)
 
 | # | Formato | Quién · días | Estructura | Gancho | CTA | Por qué sostiene *(hipótesis marcada)* |

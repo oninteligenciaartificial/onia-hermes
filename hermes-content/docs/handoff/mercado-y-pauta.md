@@ -1,5 +1,12 @@
 # Handoff — carril `mercado-y-pauta` (sesión «Ventas y pauta Onia Platform», antes «Análisis de mercado»)
 
+> 🔎 **8-oct, noche — Biblioteca por el conector (Sergio Urcullo: «mirá Pinterest y la Biblioteca para ver cuáles funcionan»).**
+> - **Navegador de la nube:** Biblioteca 403 y Pinterest con muro de sesión; no se rodearon. **Conector `Meta_ads`:** sí, con titular y fecha, sin creativo.
+> - **Hallazgo:** AgendaPro (id `1429581593936821`) tiene los anuncios activos más viejos (**245 días**) y un asistente con nombre, «Sofía», de **141 días**.
+>   Dt.Dental, Doctocliq y CitaPro siguen 83-100 días. A Bolivia solo le llega pauta de software dental de Dentalink. Todo en `ONIA_ADQUISICION_Y_PAUTA.md` §2.6.1.
+> - **Error evitado:** Dentalink tiene 92 activos y el conector solo muestra los 50 más nuevos; «nada de más de 14 días» sería falso (§2.6 dice 322 días).
+> - **Pedido PC:** Pinterest con la sesión de Sergio Urcullo y los creativos de 7 ids (en §2.6.1).
+
 > 🧪 **8-oct, noche — Tanda 1 de competencia y laboratorio de creativos (pedidos de la madre por Sergio Urcullo).**
 > - **Tanda semanal de competencia:** `ONIA_UI_MEJORAS_1.0.md` §8 (9 hallazgos con versión Onia, dueño y Codex) + fichas `JELOU_FICHA.md`,
 >   `DATEC_FICHA.md` y `ANUNCIANTES_FICHAS_CORTAS.md`; `MAPA_COMPETENCIA.md` al día. **Próxima: 15-oct** (norma boliviana de
