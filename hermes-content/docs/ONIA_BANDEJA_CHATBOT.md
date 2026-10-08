@@ -1,5 +1,11 @@
 # Bandeja del chatbot: interfaz propia, velocidad y app móvil
 
+> **Decisión de Sergio Urcullo (8-oct, después de leer esto):** «no quiero que diga powered by chatwoot, todo propio;
+> mientras tanto nosotros, app de Chatwoot hasta escalar y vender».
+> - Todo lo que ve un cliente o un visitante es de Onia. El chat web pasa a un widget propio sobre la Client API (MIT):
+>   tarea `codex-tareas/W1-widget-de-chat-propio.md`. El sitio de Onia (`chat-diferido.ts`) lo cambia después Plataforma.
+> - El equipo interno usa la app oficial de Chatwoot hasta que se venda y escale. El cliente nunca la ve.
+>
 > Pedido de Sergio Urcullo (8-oct): cambiar la interfaz (Chatwoot es open source) o tener la nuestra, que vaya rápido, que se pueda descargar local, usarla desde nuestra plataforma y una app móvil. Lo verificaron 3 agentes con fuentes primarias y un cuarto armó la recomendación. Un tema = un archivo sin fecha.
 
 Sergio Urcullo, la interfaz propia ya existe. La pantalla `/inbox` de Onia Platform es nuestra y solo usa Chatwoot por detrás para traer los datos. El dueño del negocio nunca ve la pantalla de Chatwoot. Lo que falta es hacerla rápida e instalable.
