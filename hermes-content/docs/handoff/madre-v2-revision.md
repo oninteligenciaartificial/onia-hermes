@@ -7,6 +7,29 @@ marca el plan de cada una. No construye, no publica, no mergea.
 **Cómo revisa:** `ListAgents` → `RemoteTrigger get_run_log` de cada sesión de la nube → `git` de su rama y PR →
 verificación propia de lo que afirma (se corre, se mira). Ids y canales: skill `onia-sesion-madre`.
 
+## ▶ VIGENTE — 5-oct: tareas que la madre (nube) le delega a la madre v2
+
+**Rol nuevo (Sergio Urcullo, 5-oct):** respaldo de la madre, segunda revisión y **brazo local**. La madre ahora corre
+en la NUBE (`session_01BZwYEL4eSUkdPWL36ibLkd`) y no puede escribirle ni leer a una sesión local (medido: skill
+`onia-sesion-madre`, «Cómo se manda»). La v2 le contesta con `send_message` (MCP `claude-code-remote`) a ese id.
+
+En orden:
+1. **Preparar Codex en la PC.** `codex --version`; si sigue en 0.139, pedirle el OK a Sergio Urcullo para
+   `npm i -g @openai/codex`. Hasta entonces, `-m gpt-5.5`. Un **clone completo por tarea** (no worktree: con worktree
+   el `.git` queda fuera del sandbox y Codex no puede commitear):
+   `git clone https://github.com/oninteligenciaartificial/onia-platform C:/dev/proyectos/onia-platform-codex-<id>` y
+   `node_modules` por junction desde `C:/dev/proyectos/onia-platform`.
+2. **Lanzar la cola** de `codex-relevo.md` (un archivo por tarea en `codex-tareas/`), de a una:
+   `codex exec -m gpt-5.5 --full-auto -C <clone> - < <archivo de la tarea>`. Después: mirar el diff, correr vos
+   misma `npx vitest run <tests de la tarea>`, commit si Codex no lo hizo (gate: si un test falla, no se commitea),
+   push de la rama `codex/*` y PR en borrador en onia-platform. Avisarle el número de PR a la madre (nube).
+3. **Segunda revisión** de los PRs de Codex y Plataforma: 1 lente; 2 lentes solo si toca producción, plata, el VPS o
+   `git-autosync.js`. Veredicto por mensaje con severidad y `archivo:línea`. El merge lo hace Plataforma o Sergio
+   Urcullo (a la v2 se lo frena el control de permisos).
+4. **Lo que exige la PC** cuando lo pida la madre: capturas con el Chrome logueado (Meta, Biblioteca de Anuncios),
+   videos de IG/TikTok que la nube no puede bajar.
+5. **Si la madre (nube) se queda sin tokens:** tomar la orquestación con `madre-local.md` + este archivo.
+
 ## Ronda 1 — 2-oct ~13:20 UTC (main = `84fd0c9e`)
 
 Etapa vigente: **Etapa 1 — 5 clínicas dentales pagando, Bs 3.750/mes** (`ONIA_ESTRATEGIA_DE_EMPRESA.md` §7).
@@ -104,10 +127,9 @@ al reiniciarse la sesión: se usó lo que habían dejado en su journal y no se r
 - **Pendiente para la madre que siga:**
   1. Capturas de los anuncios de la competencia: falta el OK de gasto de Sergio Urcullo; se hacen de a un anunciante.
   2. Comparar el próximo video de Marca contra `hermes-content/references/marca-personal/FORMULAS-REFERENTES.md`.
-  3. Plataforma tiene que corregir el aviso del panel (`lib/chatbot/meta-cobra-el-servicio.ts`) y el bloque `meta` de
-     `pricing.ts`: hoy dicen «sin tramo gratis» y Meta da 1.000 por número y por mes (ver `ONIA_COSTO_CHATBOT_META_2026.md`).
-  4. 2 LOW del #110 para una pasada siguiente: `correctOpeningFund` sin `closedAt: null`, y la carrera egreso/cierre
-     sin `FOR UPDATE`.
+  3. ~~Aviso del panel «sin tramo gratis»~~: la v1 se lo pasó a Plataforma el 4-oct (verificar que se publicó).
+  4. ~~2 LOW del #110~~: arreglados en `5c58175c` + `83f93948` (FOR UPDATE sobre la sesión y `closedAt: null` en
+     `correctOpeningFund`; verificado en el código el 5-oct, 21 tests según la v1).
 - **Intentos fallidos y su causa:**
   - 4 workflows grandes murieron con el reinicio de la sesión del 2-oct (se rescató lo que estaba en el journal);
   - el merge de #96 lo frenó el control de permisos (lo mergeó Sergio Urcullo);

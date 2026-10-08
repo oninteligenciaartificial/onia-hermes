@@ -23,7 +23,8 @@ description: "Invocar para CUALQUIER trabajo del carril Ventas y pauta de Onia: 
 | Cómo se consiguen clientes, la campaña, la lista de encendido | `hermes-content/docs/ONIA_ADQUISICION_Y_PAUTA.md` (§5.8, §5.8.1, §5.9) |
 | Prospectos dentales y registro de objeciones | `hermes-content/docs/ONIA_PROSPECTOS_DENTAL_SCZ.md` (§6, §7) |
 | Prospectos de estética, importadora, comercio y servicios | `hermes-content/docs/ONIA_PROSPECTOS_OTROS_RUBROS_SCZ.md` |
-| Leads que ya escribieron y sus borradores | `hermes-content/docs/ONIA_LEADS_ESPERANDO.md` §3 |
+| Leads que ya escribieron: quiénes son | `hermes-content/docs/ONIA_LEADS_ESPERANDO.md` (§3.1: las preguntas de «F» contra el catálogo) |
+| Qué se les manda (plantillas A/B, respuestas, días 3-7-14) | `hermes-content/sales-kit/SEGUIMIENTO-LEADS.md` |
 | Guion de demo de 20 minutos por rubro | `hermes-content/sales-kit/02-GUION-DEMO.md` |
 | Precios | `onia-platform/lib/subscription-plans.ts` (`DEFAULT_PLAN_AMOUNTS`); límites en `lib/plan-catalogo.ts` |
 
@@ -112,6 +113,13 @@ Redactar primero y verificar después costó una tarde de mensajes tirados. Las 
      real.
    - Un 404 quiere decir que no está indexada.
    - Solo cubre la categoría belleza: dentales e importadoras dan 404.
+   - **Para dentales existe el mismo directorio: `dentists10.com` (8-oct).**
+     `https://www.dentists10.com/BO/Santa-Cruz-de-la-Sierra/<page_id>/x` redirige (301) a la ciudad real y trae la
+     dirección, el teléfono y los posts con fecha. Resolvió 27 de 81 páginas dentales que pautaban, con este loop:
+     `curl -s -o /dev/null -w '%{http_code} %{redirect_url}' <url>`. Va **antes** de cualquier búsqueda web.
+   - **La búsqueda web no encuentra las páginas de Facebook de clínicas chicas bolivianas (8-oct).** Con 2 agentes
+     y 50 búsquedas sobre 23 páginas sin directorio, ninguna quedó en Santa Cruz. DuckDuckGo pide captcha y Bing
+     ignora las comillas. Lo que el directorio no tiene va directo a la PC, con el id del anuncio para abrirlo.
    - Resolvió 9 de 12 de estética y 7 de la reserva. Es evidencia media: con ella se descarta; para confirmar, se
      cruza con la web o el anuncio.
 3. **Directorios públicos:** medicoespecialista.com.bo, boliviayp, amerpages, boliviapymes y Waze/Yandex. Los
@@ -154,8 +162,12 @@ cambiado de anuncios (hubo que corregir su línea «Vi…»).
 «Buen día, soy Sergio Urcullo, de Onia, aquí en Santa Cruz. Este mensaje es para el dueño o la dueña de X.
 / Vi sus anuncios de… (lo observable, con fecha) / el dolor concreto del rubro / el mecanismo que producción
 cumple hoy / ¿Le muestro cómo se ve en una demo de 20 minutos?». Sin precio, sin cifras, sin testimonios.
-- **Dental y estética prometen solo esto:** cada mañana Onia deja escrito el mensaje para el paciente o la
-  clienta de mañana que no confirmó, y se manda desde el propio WhatsApp.
+- **Dental y estética prometen solo esto:** cada mañana Onia le deja anotado a quién escribirle (quién tiene cita
+  mañana y no confirmó, quién canceló o faltó y no volvió a agendar, quién le debe) con el mensaje listo, y nada
+  sale sin que usted lo apruebe (catálogo §8.3). La IA va como en el catálogo §8.1: «Con IA le propone el texto de
+  cada recordatorio, y usted lo aprueba una sola vez». **No se dice «se manda desde su propio WhatsApp»**: el
+  catálogo §7 no deja prometer el envío por WhatsApp (corregido 8-oct). Molde completo: `ONIA_PROSPECTOS_DENTAL_SCZ.md`
+  §6.9, que pasó el revisor de promesas.
 - **Importadora promete solo esto:** el costo real por producto importado y el aviso cuando el tipo de cambio
   deja un precio bajo costo. **No** se promete que la cotización sale del sistema.
 - Comercio y servicios: los dos arreglos que faltaban (editar producto, precio y stock; agenda de varios
@@ -203,7 +215,7 @@ contestarle de memoria es la forma de quemarlo.
 | «Cada mañana» / «lo detecta sola» | ✅ | Los agentes corren a las 11:00 UTC (07:00 en Bolivia) con el cron `0 11 * * *` del VPS; el log `/var/log/onia-agents-cron.log` dice «OK» el 1-oct. El tratamiento a medias va dentro del Recall |
 | «Con tu tono» / «la editás» | ❌ | Escribe en el tono del rubro. El dueño solo puede **aprobarla**: no hay edición en `/agents` |
 | «La IA escribe el mensaje del tratamiento a medias» | ❌ | `buildTratamientoAMediasMessage` es un texto fijo |
-| «La IA escribe el mensaje» / «la IA lo redacta» (de cada paciente) | ❌ | Catálogo §8: la IA escribe UNA vez el modelo y Onia le pone los datos. Frase permitida: «la IA escribe una sola vez el modelo y Onia le pone los datos de cada uno» |
+| «La IA escribe el mensaje» / «la IA lo redacta» (de cada paciente) | ❌ | Catálogo §8: la IA escribe UNA vez el modelo y Onia le pone los datos. ⚠️ La frase «la IA escribe una sola vez el modelo y Onia le pone los datos» **la rechaza el revisor de promesas** (8-oct: liga «IA» con «escribe… mensaje»). Se usa la del catálogo §8.1: «Con IA le propone el texto de cada recordatorio, y usted lo aprueba una sola vez» |
 | «Preguntá por tu negocio» es IA | ❌ | Son 30 temas escritos a mano, sin modelo (`BarraAsistente.tsx`) |
 | «La IA calcula el costo de importación» | ❌ | El costeo es cálculo; en importadoras la IA solo está en el mensaje de cobro |
 
@@ -353,6 +365,13 @@ Trampas pagadas armando v3 (2-oct):
   cada una, `usage-run.mjs`).
 - **Un borrador viejo puede quedar en contra del catálogo.** El de «F» del 1-oct contestaba «sí» al tratamiento a
   medias, y el catálogo lo prohibió el 2-oct. Antes de mandar un borrador guardado, se lo compara de nuevo.
+- **Un playbook nuevo no borra el borrador viejo: hay que sacarlo (5-oct).** El playbook del 3-oct reemplazó los
+  mensajes del 1-oct, pero `ONIA_LEADS_ESPERANDO.md` §3 los siguió mostrando como «esperan el OK» dos días más. Al
+  reemplazar un texto, el viejo se borra en el mismo commit; queda en el historial de git. Antes de reescribir un
+  borrador, buscar si otro doc ya lo reemplazó: `grep -rn '<nombre del lead>' hermes-content/sales-kit/`.
+- **El gate del kit lee cualquier «Bs N» como precio al cliente (5-oct).** El costo interno «≈ Bs 17» del playbook
+  dejó en rojo `npm run test:venta-honestidad` en `main`. Un costo propio va en USD, que es lo que cobra Meta; el
+  cambio del banco sigue sin medir. Después de tocar `sales-kit/`, correr ese test.
 
 ## 6. Qué bloquea la nube (y qué no)
 

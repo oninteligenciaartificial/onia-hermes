@@ -25,8 +25,9 @@ correo (borrador en `ONIA_LEADS_ESPERANDO.md` §3.3) y, si contesta, se usan las
    llega al bot y contesta con su guion de venta. El carril del chatbot confirma que `CHATWOOT_BOT_AGENT_ID` está
    cargado en el VPS antes del primer envío.
 2. **A «F» no se le dice que Onia encuentra los tratamientos a medias**, y en la llamada no se muestra esa lista.
-   El catálogo (§8) lo prohíbe: el detector existe pero hoy no encuentra a nadie. El borrador del 1-oct
-   (`ONIA_LEADS_ESPERANDO.md` §3.1) contesta «Sí» a su pregunta 1: **no se manda así**. Se le dice lo que sí hace
+   El catálogo (§8) lo prohíbe: el detector existe pero hoy no encuentra a nadie. El borrador del 1-oct que
+   contestaba «Sí» se sacó el 5-oct. `ONIA_LEADS_ESPERANDO.md` §3.1 tiene sus seis preguntas contra el catálogo,
+   para la llamada. Se le dice lo que sí hace
    (§2, «¿qué es Onia?») y que su pregunta 1 se la contesta Sergio Urcullo en la llamada, mirando el sistema.
 3. **Maximo, Leonardo y Edwin:** mirar en `/admin/solicitudes` si ya crearon la cuenta después del 29-ago. Si la
    crearon, se les pregunta cómo les fue y no se les ofrece la demo.
@@ -147,8 +148,8 @@ Si el lead ya contestó y la ventana está abierta, la nota de voz va sola, sin 
   → no se manda la siguiente hasta mirar por qué.
 - Tope: A/B + 3 toques. Más que eso arriesga reportes de spam, y el número es el mismo del bot de ventas.
 
-**Costo estimado:** como máximo 5 personas × 4 plantillas de marketing = 20 envíos × USD 0,074 ≈ **USD 1,5
-(≈ Bs 17)**. Es la tarifa estimada de `hermes-content/deploy/vps-ops/bot/usage-run.mjs` (`TARIFAS_USD.marketing`); se confirma en WhatsApp
+**Costo estimado:** como máximo 5 personas × 4 plantillas de marketing = 20 envíos × USD 0,074 ≈ **USD 1,5**
+(en bolivianos depende del cambio del banco, sin medir: `ONIA_PLAN_1.0_Y_CAJA.md` §2). Es la tarifa estimada de `hermes-content/deploy/vps-ops/bot/usage-run.mjs` (`TARIFAS_USD.marketing`); se confirma en WhatsApp
 Manager. Las respuestas dentro de la ventana no son plantilla.
 
 ---

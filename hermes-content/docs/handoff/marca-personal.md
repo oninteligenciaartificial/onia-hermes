@@ -2,6 +2,120 @@
 
 **Archivo único del carril.** Actualizado 2026-09-29 por Claude (Opus 5.5).
 
+## ▶ 8-oct — retomada tras el corte de la semana de Claude (`session_01WPecmppa9uZEc4fJDjSmaS`)
+
+- **Publicado y verificado el 8-oct:** el 6 y el 7-oct salieron los carruseles en las tres redes. 6 de 6 `sent`, sin
+  error.
+  - DD-A: IG `DeKl9Zcjwco`, LinkedIn `ugcPost:7513327593224458240`, TikTok `7693647592986578197`.
+  - N04: IG `DeNKxt7D8KJ`, LinkedIn `ugcPost:7513689985171206144`, TikTok `7694018690777369876`.
+  - Quedan 27 timers, del 8 al 16-oct.
+- **Guiones del 9 al 14-oct** en `docs/cola/plan-3-semanas/GRABAR-9-14-OCT.md` (pedido de la madre): 17 piezas, una hora
+  por día.
+  - Pieza nueva N07 HAIKU (Haiku 5.5, verificada en la página de precios el 8-oct), con su aviso de comunidad al final
+    del archivo.
+  - N04: la skill tiene que ser propia, no de un plugin.
+  - D01-C nombra a Haiku 5.5.
+  - La página de Sergio Urcullo ya muestra esta semana, por día.
+- **El carrusel N06 (11-oct) está bien:** geminicli.com, el blog de Google del 19-may y los planes de antigravity.google
+  confirman lo que dice, leídos el 8-oct.
+- **Brutos:** ninguno nuevo en Drive el 8-oct.
+- **Rama de Codex `codex/madre-orquestacion-20261005`** (61 commits, sin mergear): su commit `6e1a4dae` del 6-oct
+  reescribe GRABAR/GUIONES/KIT con menos pasos. No se mergeó acá; decide la madre.
+
+## ▶ 5-oct noche — sesión nueva (`session_01WPecmppa9uZEc4fJDjSmaS`, rama `claude/gifted-clarke-y4vvtj`)
+
+**Página única para Sergio Urcullo:** https://claude.ai/artifact/Hssf9o3ikt2fE7nkNBzrvd. Tiene qué necesito de él, día
+por día con el texto de la comunidad para copiar, los comentarios, las historias, los 6 guiones y la auditoría. La
+genera `gen_page.py` en el scratchpad de esta sesión. Si se pierde, los datos salen de `AVISOS-POR-DIA.md`,
+`GRABAR-2-14-OCT.md` y los briefs.
+
+- **EN PRODUCCIÓN (agendado):** 11 carruseles en @sergiourcullo, uno por día a las 16:00 La Paz, del mar 6 al vie
+  16-oct. Timers `pub-car-20261006` a `pub-car-20261016` en el VPS (`agendar-publicacion.sh --lista`). Lo pidió él en
+  esta sesión. Antes, un ensayo de DD-A sin publicar dio 6 láminas aceptadas por Instagram.
+  - Script sin fecha en el nombre: `deploy/vps-ops/publicar/agendar-carruseles.sh` (antes `-3-20-oct`).
+  - Orden: DD-A, N04, K3v2, N03, K11, N06, K4v2, K8v3, K7v2, K2v3 y K6v2.
+  - ⚠ Si el VPS se reinicia, los timers se pierden y no sale nada: re-agendar con el script.
+- **También en LinkedIn y TikTok (pedido de Sergio Urcullo el 5-oct: «alistamos buffer para postear a todas las
+  redes»):** 22 timers más, `pub-car-li-*` a las 20:01 y `pub-car-tt-*` a las 20:02 (33 en total).
+  - Salen con `buffer-post.mjs --imagenes`, que es nuevo; el original quedó en el VPS en `/root/bin/buffer-post.mjs.bak-20261005`.
+  - Probado como borrador en las dos redes, aceptado y borrado. La publicación real todavía no se probó.
+  - Hay un control programado para el 6-oct a las 20:10 UTC (`trig_017LEVgojRbj4QJmpa2UbE3V`) que mira si salieron las tres.
+- **Grabaciones de pantalla:** las hace Claude al editar; Sergio Urcullo graba solo la cámara (lo pidió el 5-oct). Desde
+  la nube el navegador no abre páginas (`ERR_CERT_AUTHORITY_INVALID`) y el modo «Auto» frenó la importación del
+  certificado. Hace falta su OK en esta sesión o una sesión en la PC con Chrome. Las demos de terminal se arman acá.
+- **Guiones:** la página tiene los 32 (bloques 1 y 2 del plan). Primero van 6; R05 espera su decisión sobre MARKETING.
+- **En espera (7):** K1, N02, K9, K12, K5, K13 y K10, por las 10 láminas que no se entienden. Falta que él elija:
+  - «rehacé las 10» (1,20 cr; los prompts nuevos están en el CIERRE 3-oct);
+  - o «van sin esas láminas».
+- **Comunidad:** los avisos se re-alinearon al calendario nuevo, en la página.
+  - Mar 6: «Volví» + reto + CACHE.
+  - Mié 7: respuesta del reto + VERIFY.
+  - Desde ahí, un aviso por carrusel.
+  - En la página, «mañana sábado» se cambió a «mañana miércoles» y el JSON de BRIEF va como mensaje, no adjunto. El
+    texto de `AVISOS-POR-DIA.md` sigue con las fechas viejas.
+  - **Los pega él, antes de las 12:30.** No hay confirmación de que lo haya hecho.
+- **Comentarios:** se contestan a mano, porque el mensaje privado automático no existe.
+- **Historias:**
+  - todos los días, compartir el carrusel a la historia con el sticker de la comunidad;
+  - los jueves, la historia de la auditoría.
+- **Guiones:** 6 para una sola sesión de ~1 h, sin tela verde. Cada uno va con su carrusel ya agendado: DD-A, N04, N06,
+  D03-A, D01-A y S2-D08-A. El texto sale de `GRABAR-2-14-OCT.md`.
+- **Auditoría: Sergio Urcullo eligió B** (de IA, para cualquier negocio) el 5-oct. Está en `ONIA_COMUNIDAD_CONTENIDO.md`
+  §«Auditoría de IA gratis».
+  - Se renombra el evento `/20min`; no se crea otro. Así siguen andando `sergiourcullo.vercel.app/llamada` (307 a
+    `/20min`, medido el 5-oct) y los links viejos.
+  - Cupo de 3 por semana y 2 preguntas al reservar.
+  - Falta que él lo cambie en cal.com y sume el link a la bio. Después: mirar la página renderizada.
+- **Pregunta abierta:** ¿agendo el reel N03 (ya en el VPS, `/root/publicar/n03-modo-auto/`) para el vie 9, junto a su
+  carrusel?
+- **Brutos:** ninguno nuevo en Drive el 5-oct.
+
+## ⏹ CIERRE 5-oct — cambio de sesión madre (`session_01CE21mytrEXdqanCFoWxm32`)
+
+**Objetivo de la tanda (madre, 3-oct):**
+1. Alinear el kit al plan de grabación por bloques.
+2. Re-verificar las piezas REVISAR.
+3. Sumar el paso de pantalla verde.
+4. Editar los brutos con tabla de cortes ANTES de cortar.
+
+**En `main` (todo mergeado, nada publicado):**
+- `KIT-GRABACION.md` ordenado por los 5 bloques de `PLAN-GRABACION-3-OCT.md`, con el verde primero. Las 10 piezas REVISAR
+  quedaron verificadas el 3-oct con su fuente; GUIONES, GRABAR y los drops, corregidos: Fable 5.1 en D01-C, los 1.000
+  mensajes gratis de Meta, la caché de OpenAI, la demo de N04 y los 5 ajustes de N02 (PR #113).
+- `editor-videos/scripts/fondo-verde.mjs`: chromakey probado con una toma de prueba (PR #113).
+- Moldes en `edicion-referentes`: Santiago, Erik, **Pablo** para los repos (PR #119) y **Boceto** (PR #126). Ficha del
+  reel de @theaigeekk en `video-intake` (PR #120).
+
+**Estado del embudo** (contestado a la madre el 3-oct, comprobado en vivo):
+- existen el grupo «Onia Community», la agenda `cal.com/sergiourcullo/20min` y la web;
+- la «auditoría gratis» no está definida en ningún lado;
+- la acción más chica: renombrar ese evento de cal.com a auditoría con 2 preguntas y poner el link en la bio, en el
+  grupo y en las respuestas a los comentarios.
+
+**A medias, y dónde:**
+- **N03 (modo auto, versión Codex):** listo para publicar.
+  - Archivo en el VPS: `/root/publicar/n03-modo-auto/{final.mp4,caption.txt}`.
+  - Copia en el scratchpad de esta sesión: se pierde si la sesión muere, pero se rehace con `edit-codex.py`.
+  - El 4-oct se le mandó a Sergio Urcullo como archivo para descargar.
+  - Desde esta sesión en modo «Auto», el clasificador bloqueó hasta el ensayo de `ig-reel.mjs`.
+- **Molde Boceto:** sin probar. Espera las fotos de 4 a 6 bocetos de Sergio Urcullo.
+- **`santiago.py --estilo pablo`:** se escribe con el primer bruto de un R.
+- **Brutos:** en Drive («Videos Onia Octubre») sigue solo el de N03 del 1-oct. No llegó nada grabado el 3-oct, así que
+  no hay tabla de cortes pendiente.
+
+**Intentos fallidos:**
+- `ig-reel.mjs` (ensayo, sin publicar) lo frenó el clasificador del modo Auto: «Unrequested Commit in a Connected App».
+- `transcribe.sh` desde la nube se cuelga con la IP directa: va con `ONIA_VPS_HOST=onia-vps`.
+- Un `git checkout origin/main --` dejó HEAD suelto: se arregla con `git checkout -B <rama> origin/main`.
+
+**Lo que depende de Sergio Urcullo:**
+1. N03: lo sube él o pasa la sesión a «Accept edits» y dice «publicalo», con dónde y cuándo.
+2. Los brutos del bloque 1 (verde) y del bloque 2.
+3. Los 18 carruseles: «ok, agendá». Las fechas del script (3 a 20-oct) ya se corrieron: hay que reprogramarlas.
+4. Las 10 láminas: «rehacé las 10» (1,20 cr) o «van sin imagen».
+5. Si se prueba el molde Boceto, con sus dibujos.
+6. Si los guiones R y G (~60 s) se acortan al largo del molde Pablo (21 s).
+
 ## ⏹ CIERRE 3-oct ~18:45 UTC — alcance congelado por Sergio Urcullo; esperando revisión (`session_01CE21mytrEXdqanCFoWxm32`)
 
 **Objetivo de la tanda** (asignado por la madre, alcance congelado el 2-oct):

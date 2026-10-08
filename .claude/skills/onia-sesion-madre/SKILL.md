@@ -19,16 +19,21 @@ Regla madre: `CLAUDE.md` §1 «Sesión MADRE local + carriles en la nube». Esta
   varias madres son varios orquestadores y se cruza la información. Lo largo (render, build, medición de
   disco) la madre lo larga en un **subagente de fondo**, no en otra madre.
 
-## Sesiones vivas (1-oct-2026)
+## Sesiones vivas (5-oct-2026, relevo de todas a las 20:40 UTC)
 
-| Sesión (nombre en `ListAgents`) | id nube | Carril |
+| Sesión (título) | id nube | Carril |
 |---|---|---|
-| Sesión madre de Onia | local `local_748d30b7-…` (puente de Remote Control: cambia al reconectar) | Ordena; hace lo de la PC |
-| Onia Platform SIAT runner | `session_014HGgof9kHQkdLXhsZsAq6A` | Plataforma: desarrollo, publicar, runner SIAT |
-| Sesión Ventas y pauta Onia | `session_01JkUVtTYrjJ9xUywLXjYz5G` | Pauta y prospección |
-| Marca personal: comunidad y contenido | `session_01CE21mytrEXdqanCFoWxm32` | Contenido de Sergio Urcullo |
-| Lucia v4 session - Higgsfield | `session_01Whdadt8NdnYbZoyum1bRX6` | Lucía / Higgsfield |
-| Hermes-Jarvis Sergio Urcullo | `session_0132vedovRq1JVbeD6aVQwNT` | Hermes: Telegram y calendario |
+| Sesión madre Onia 1.0 | `session_01BZwYEL4eSUkdPWL36ibLkd` (**en la NUBE**, entorno «Onia») | Ordena por mensaje |
+| Madre v2 (local, se abre con `ARRANQUE-SESIONES.md`) | local, el id cambia al abrirla | Respaldo, 2.ª revisión, lanza Codex en la PC |
+| Plataforma Onia 1.0 | `session_01HhnFgkeF6nLGvjrfjt1o2C` | Plataforma: desarrollo, publicar, VPS |
+| Ventas y pauta Onia | `session_0143C5fMXVs8eWEf7uBpC9SF` | Pauta y prospección |
+| Marca personal de Sergio Urcullo | `session_01WPecmppa9uZEc4fJDjSmaS` | Contenido de Sergio Urcullo |
+| Sesión Lucía de Onia | `session_01XSzFcs1k18ijqjSHGjnzD4` | Lucía / Higgsfield |
+| Hermes-Jarvis sesión con Sergio Urcullo | `session_01SQ7cvuDX5w5jDHk5VdhAEo` | Hermes: Telegram y calendario |
+
+Cerradas el 5-oct (cada una dejó su «RESUMEN PARA LA MADRE NUEVA» al final del transcript): `session_014HGgof9…`
+(Plataforma), `session_01JkUVtTY…` (Ventas), `session_01CE21myt…` (Marca), `session_01Whdadt8…` (Lucía),
+`session_0132vedov…` (Hermes), `session_0117dDR7y…` (madre v2, local).
 
 (Al 2-oct. Reemplazadas el 1-oct y para archivar: `session_01VGmpNv4…`, `session_01BnctfaN…`, `session_012ppFow…`,
 `session_01RRD6v9…`, `session_0154pQRY…` (Control).)
@@ -47,6 +52,9 @@ commits: `git log --all --since=<hace 2 h> --format='%s %(trailers:key=Claude-Se
 | Madre → nube SIN Remote Control | `RemoteTrigger create` con `persistent_session_id` de la destino + `action: run` (entra ya como un turno) + `update {enabled:false}` para que no se repita | ✅ 2-oct 23:49 UTC a Plataforma. Respuesta larga del API: usar solo si `ListAgents` no ve la sesión |
 | Nube → nube | rutina de un disparo: `create_trigger` con `persistent_session_id` de la destino y `run_once_at` +1-2 min | ⚠️ funciona pero tarda; Sergio Urcullo la descartó el 1-oct. Lo que una nube necesita de otra pasa por la madre |
 | Local → local | `SendMessage` | ✅ (lo ve Sergio Urcullo en pantalla) |
+| **Madre en la NUBE → nube** | `mcp__claude-code-remote__send_message` con `session_id` | ✅ 5-oct: llegó al instante a Plataforma, Marca, Lucía y Hermes. No hace falta Remote Control |
+| **Madre en la NUBE lee la nube** | `mcp__claude-code-remote__list_events`, `kinds: ["assistant"]`, `limit` 60 (con 15 a veces no trae ningún texto) | ✅ 5-oct. Los ids salen de `list_sessions` (`mine: true`) |
+| **Madre en la NUBE → local** | ❌ `list_events` de una sesión local da `elevated_session_untrusted_device`; `send_message` a una local cerrada da `session_inactive` | La local la abre Sergio Urcullo y le pega el texto; ella le escribe a la nube con `send_message` |
 
 - `SendMessage` a la nube **no confirma lectura**: si la destino está en otro modo de permisos, el mensaje
   espera la aprobación de Sergio Urcullo. El silencio no es un «sí»: se verifica leyendo su transcript.
