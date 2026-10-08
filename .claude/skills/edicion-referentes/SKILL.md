@@ -207,7 +207,7 @@ antes de que lleguen a Sergio Urcullo.
 
 ## Plan de la semana (8-oct-2026): cómo se arma sin rehacer guiones
 
-Pedido de la madre del 8-oct, en `docs/cola/plan-3-semanas/GRABAR-9-14-OCT.md`. Lo arma `gen_semana.py`, que está en el
+Pedido de la madre del 8-oct, en `docs/cola/plan-3-semanas/GRABAR-9-15-OCT.md`. Lo arma `gen_semana.py`, que está en el
 scratchpad de esa sesión; el método:
 1. **Una hora por día = tres verticales** (~20 min cada uno con tomas), o un YouTube (~35 min) más un vertical.
 2. **Orden:**
