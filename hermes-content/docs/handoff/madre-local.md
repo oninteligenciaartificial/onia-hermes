@@ -5,6 +5,37 @@ Este archivo es el ESTADO al **5-oct, 20:40 UTC**, cuando Sergio Urcullo pidió 
 La madre saliente (`cfdce1bb…`, rama `claude/onia-sesion-madre-77f719`, worktree `infra-loops-revision-3fc7b1`) llevaba
 días abierta y su conversación costó ~777 M de tokens. **La madre nueva arranca de cero y lee solo esto.**
 
+## 🎯 GOAL VIGENTE — 8-oct (Sergio Urcullo; sesión madre `202a717e…`, rama `claude/onia-madre-v2-pr-review-2d85bb`)
+
+**Meta:** la 1.0 con TODAS las funciones del plan, publicada y MIRADA en producción. Los puntos 1-4 el **16-oct**; los 15
+puntos de `ONIA_PLAN_1.0_Y_CAJA.md` más las mejoras de UI de los referentes el **30-oct**. Desde el **9-oct** sale
+contenido todos los días. No se para de desarrollar ni de investigar.
+**Prueba de hecho:** cada punto con SHA publicado y captura en producción. La tabla «se promete / funciona» de Ventas en
+verde ANTES de escribirle a cualquier cliente. Al menos 1 pieza publicada por día.
+
+**Decisiones de Sergio Urcullo del 8-oct:**
+- Lucía sigue: muestra que sabemos usar Higgsfield y sirve de aprendizaje.
+- Presupuesto por fases aprobado: se publica y se puede mejorar.
+- No se le escribe a nadie hasta saber que el producto cumple lo que promete.
+- Codex actualizado (npm 0.161).
+- Asesorías gratis por ahora; si se cobran, se decide después, con el contenido como prueba.
+- La madre lee todo el tiempo y no se para.
+- Él solo toma las decisiones que tienen repercusiones.
+
+**Quién hace qué:**
+
+| Quién | Qué | Modelo |
+|---|---|---|
+| Madre (PC) | Ordena, despacha a Codex y hace lo que exige la PC | Sonnet en su hilo; Opus solo para decidir |
+| Plataforma (nube «Onia») | La 1.0: integración, migraciones, publicación, producción | Opus, porque es código de riesgo; Haiku/Sonnet para lo mecánico |
+| Codex en la nube (env Platform) y local (`codex-tarea.sh`) | Tareas de código cerradas y tests | gpt-6-astra para código; gpt-6.1-sol para lo simple |
+| Ventas → Investigación (nube) | Tabla «se promete / funciona»; referentes de UI con las tareas para Codex | Sonnet; Haiku para buscar |
+| Marca (nube) | Guiones diarios, piezas sin que él grabe, plan de publicación (Buffer / `ig-reel.mjs`) | Sonnet |
+| Lucía (nube) | Kit v4, autónoma | Sonnet |
+
+Las sesiones avisan su «ESTADO PARA LA MADRE» con `send_message` (MCP `claude-code-remote`) en el momento. Además, la
+madre hace una ronda cada 20 min (CronCreate, vive solo mientras la madre está abierta y vence a los 7 días).
+
 ## ▶ VIGENTE — 5-oct ~21:15 UTC: la madre estuvo en la NUBE y vuelve a la PC
 
 Sergio Urcullo abrió la madre en la nube por error (`session_01BZwYEL4eSUkdPWL36ibLkd`, entorno «onia-higgsfield») y pidió

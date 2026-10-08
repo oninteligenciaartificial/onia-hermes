@@ -204,8 +204,9 @@ Se trabaja en la app de Claude; Codex corre por detrás. Codex no orquesta, no a
   sesiones de Claude.
   `codex cloud` sin argumentos es una TUI y no corre desde acá. Los entornos se listan con la API que usa el CLI:
   `GET https://chatgpt.com/backend-api/wham/environments`, con el token de `~/.codex/auth.json` y sin imprimirlo.
-- **Codex local, solo si la nube no sirve:** `scripts/codex-tarea.sh <tarea.md> <worktree> [modelo] [esfuerzo]`, en segundo
-  plano. Usa el `codex` de npm (0.139, gpt-5.5) porque es el único con sandbox que anda en Windows (ver el script). Deja
+- **Codex local** (más rápido que la nube para tareas de Hermes): `scripts/codex-tarea.sh <tarea.md> <worktree> [modelo]
+  [esfuerzo]`, en segundo plano. Usa el `codex` de npm (0.161) con `windows.sandbox="unelevated"`: así corren gpt-6-astra
+  y gpt-6.1-sol con sandbox (las dos probadas el 8-oct). Deja
   `resultado.md`, `eventos.jsonl` y `session_id` en `~/.codex/madre-tareas/<fecha>-<tarea>/`. Para un seguimiento en la
   misma conversación: `scripts/codex-tarea.sh resume <session_id> <seguimiento.md>`.
 - **Modelos (Sergio Urcullo, 8-oct):** código de Platform `gpt-6-astra` medium; tareas simples `gpt-6.1-sol` medium (el
@@ -218,8 +219,14 @@ Se trabaja en la app de Claude; Codex corre por detrás. Codex no orquesta, no a
 - ⚠️ **Sandbox de Windows (8-oct):** el CLI que trae la app de Codex (0.162-alpha) falla SIEMPRE con sandbox
   («setup refresh had errors»: `node_repl.exe` del runtime `cua_node` «en uso»), aun con la app y sus procesos cerrados.
   Correrlo sin sandbox lo frena el control de permisos de Claude Code («Create Unsafe Agents»), y no se rodea: tampoco se
-  pueden matar procesos ajenos («Interfere With Workloads»). El `codex` de npm 0.139 sí anda con sandbox. Codex lo
-  reporta honesto en `resultado.md` y no inventa.
+  pueden matar procesos ajenos («Interfere With Workloads»). Qué se probó:
+  - el npm 0.161 con el config («elevated») falla igual;
+  - con `--ignore-user-config` responde «bloqueado por la política»;
+  - con `-c windows.sandbox="unelevated"` **funciona**.
+  El npm 0.139 también andaba, pero solo con gpt-5.5, que deja Codex el 14-oct según el aviso oficial que citó Codex.
+  Cuando falla, Codex lo reporta honesto en `resultado.md` y no inventa.
+- **Codex en la nube SÍ corre:** la prueba del 8-oct en el entorno Hermes terminó READY a los ~20 min (el repo pesa). El
+  resultado se trae con `codex cloud diff <task>` y `codex cloud apply <task>`.
 - Worktree aislado por tarea, rama `codex/<tarea>-<fecha>` (nunca `claude/*`); en onia-platform, `node_modules` por
   junction. Con `workspace-write` el script le abre a Codex el `.git` común, así que commitea en su rama. La red
   sigue cerrada: la madre revisa el diff, empuja y abre el PR, y la madre v2 revisa con 1 o 2 lentes según el riesgo.
