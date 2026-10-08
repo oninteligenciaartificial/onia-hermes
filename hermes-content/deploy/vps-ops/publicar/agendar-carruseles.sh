@@ -1,31 +1,32 @@
 #!/usr/bin/env bash
 # Sube cada carrusel al VPS y lo agenda en Instagram (@sergiourcullo) a las 16:00 La Paz (20:00 UTC).
-# Uso: agendar-carruseles.sh [--ensayo <slug>] | [--agendar]
+# Uso: agendar-carruseles.sh [--ensayo <slug>] | [--agendar]   (re-correr --agendar con un timer ya creado falla en
+# ese día: cancelalo antes con agendar-publicacion.sh --cancelar car-AAAAMMDD)
 # Pedido de Sergio Urcullo (2-oct): «programalos para uno al día».
 set -euo pipefail
 REPO=/home/user/onia-hermes
 B=$REPO/hermes-content/carousels/briefs/marca-personal
 O=$REPO/hermes-content/carousels/out
+# Calendario vigente (5-oct): Sergio Urcullo dijo «agendemos los carruseles para empezar a postear». Van primero los 11
+# que pasaron la QA del 3-oct, intercalando noticias y K. Los 7 con láminas flojas (PENDIENTES) se suman cuando estén
+# arreglados: rehacer las 10 imágenes (1,20 cr, con su OK) o sacarlas.
 CAL=(
-  "2026-10-03 sergio-dda-openai-sol-20261001"
-  "2026-10-04 sergio-k1-opcion-b-clay-20260929"
-  "2026-10-05 sergio-n02-sonnet45-se-apaga-20261001"
-  "2026-10-06 sergio-n04-skill-verify-20261001"
-  "2026-10-07 sergio-k3v2-claude-md-historia-20260929"
-  "2026-10-08 sergio-k11-hook-stop-guarda-20261001"
-  "2026-10-09 sergio-k4v2-cinco-pruebas-bot-20260929"
-  "2026-10-10 sergio-k9v2-checklist-video-ia-20260929"
-  "2026-10-11 sergio-k12-worktrees-sin-pisarse-20261001"
-  "2026-10-12 sergio-k5v2-seguimiento-que-no-molesta-20260929"
-  "2026-10-13 sergio-k13-loop-sin-api-key-20261001"
+  "2026-10-06 sergio-dda-openai-sol-20261001"
+  "2026-10-07 sergio-n04-skill-verify-20261001"
+  "2026-10-08 sergio-k3v2-claude-md-historia-20260929"
+  "2026-10-09 sergio-n03-modo-auto-20261001"
+  "2026-10-10 sergio-k11-hook-stop-guarda-20261001"
+  "2026-10-11 sergio-n06-antigravity-cli-20261002"
+  "2026-10-12 sergio-k4v2-cinco-pruebas-bot-20260929"
+  "2026-10-13 sergio-k8v3-recuperar-vs-reconstruir-20261001"
   "2026-10-14 sergio-k7v2-carruseles-por-codigo-20260929"
-  "2026-10-15 sergio-k8v3-recuperar-vs-reconstruir-20261001"
-  "2026-10-16 sergio-k10v2-perilla-de-esfuerzo-20260929"
-  "2026-10-17 sergio-k2v3-primera-skill-20261001"
-  "2026-10-18 sergio-k6v2-confirmado-por-confirmar-20260929"
-  "2026-10-19 sergio-n03-modo-auto-20261001"
-  "2026-10-20 sergio-n06-antigravity-cli-20261002"
+  "2026-10-15 sergio-k2v3-primera-skill-20261001"
+  "2026-10-16 sergio-k6v2-confirmado-por-confirmar-20260929"
 )
+# PENDIENTES (láminas flojas, ver handoff marca-personal «CIERRE 3-oct»): sergio-k1-opcion-b-clay-20260929 (l7) ·
+# sergio-n02-sonnet45-se-apaga-20261001 (l3, l7) · sergio-k9v2-checklist-video-ia-20260929 (l5, l6) ·
+# sergio-k12-worktrees-sin-pisarse-20261001 (l7) · sergio-k5v2-seguimiento-que-no-molesta-20260929 (l3, l7) ·
+# sergio-k13-loop-sin-api-key-20261001 (l2) · sergio-k10v2-perilla-de-esfuerzo-20260929 (l5)
 subir() { # slug -> /root/publicar/car-<slug>/ con slide-NN.png + caption.txt
   local slug=$1 n tmp
   n=$(node -e "console.log(require('$B/$slug.json').slides.length)")

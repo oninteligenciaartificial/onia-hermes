@@ -1,5 +1,20 @@
 # Handoff — carril `mercado-y-pauta` (sesión «Ventas y pauta Onia Platform», antes «Análisis de mercado»)
 
+> ✅ **5-oct, tarde (`session_0143C5fMXVs8eWEf7uBpC9SF`, rama `claude/onia-ventas-pauta-rmdv5j`): mensajes a los leads
+> contra el catálogo.**
+> - **Medido:** ONIA Ads sigue con `has_payment_method: false`. Precios y usuarios re-leídos en `onia-platform`
+>   `97fe306`: Crece Bs 550 con 4 usuarios, Profesional Bs 890 con 5.
+> - **`ONIA_LEADS_ESPERANDO.md` §3:** se sacaron los borradores del 1-oct. El de «F» contestaba «Sí» al tratamiento a
+>   medias, y eran textos libres con la ventana de 24 h cerrada. Ahora §3 apunta al playbook
+>   (`sales-kit/SEGUIMIENTO-LEADS.md`, plantillas A/B). §3.1 tiene las 6 preguntas de «F» contra el catálogo, para la
+>   llamada. §3.3 tiene el correo de la conv 36, alineado al catálogo §8.3 y con revisor de promesas en 0.
+> - **`main` tenía rojo `npm run test:venta-honestidad`** por el «≈ Bs 17» del playbook (un costo interno leído como
+>   precio). Pasado a USD: 17/17.
+> - **Abierto, para Plataforma:** la exportación a CSV no figura en el catálogo. Hasta que la miren en pantalla y la
+>   sumen, la pregunta 6 de «F» no se contesta por escrito.
+> - **Sigue dependiendo de Sergio Urcullo:** el OK a las plantillas A/B y al correo de la conv 36; la tarjeta en ONIA
+>   Ads.
+
 > ⏹️ **CIERRE 5-oct (cambio de sesión madre). Nada en vuelo ni sin commitear; todo en `main`.**
 > - **Hecho:**
 >   - competencia en la Biblioteca (`ONIA_ADQUISICION_Y_PAUTA.md` §2.5-2.6);
@@ -17,7 +32,7 @@
 >   - aprobar las plantillas A/B y las 4 del seguimiento, el audio del día 7 y la imagen;
 >   - el OK a los 12 mensajes y la decisión sobre MUN.
 > - **Riesgos:**
->   - El borrador del 1-oct a «F» (`ONIA_LEADS_ESPERANDO.md` §3.1) promete el tratamiento a medias: no se manda.
+>   - ~~El borrador del 1-oct a «F» promete el tratamiento a medias.~~ Sacado el 5-oct (entrada de arriba).
 >   - Las plantillas a leads salen de Chatwoot con el usuario de Sergio Urcullo; si no, el bot les contesta.
 >   - El bot de usted no está desplegado.
 >   - D1 v3 todavía dice «La IA escribe el mensaje».

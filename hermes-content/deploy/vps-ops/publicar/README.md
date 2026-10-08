@@ -43,6 +43,16 @@ node /root/bin/ig-reel.mjs ... --trial auto --publicar    # yap a Trial
 /root/bin/agendar-publicacion.sh --lista          # · --cancelar a-0930
 ```
 
+**Carruseles de @sergiourcullo (desde la nube o la PC, con `ssh onia-vps`):** `agendar-carruseles.sh --ensayo <slug>`
+sube uno y lo deja listo en Instagram SIN publicar; `--agendar` sube y agenda todo el calendario `CAL` del script (uno
+por día, 20:00 UTC = 16:00 La Paz). El calendario se edita en el script, que no lleva fechas en el nombre. Volver a
+correr `--agendar` falla en el día que ya tiene timer: cancelalo antes con `--cancelar car-AAAAMMDD`.
+
+> **Medido el 5-oct:** desde una sesión de la nube en modo «Auto», el ensayo y `--agendar` de 11 carruseles pasaron el
+> control de permisos cuando Sergio Urcullo lo pidió EN ESA MISMA sesión («agendemos los carruseles para empezar a
+> postear»). El 2 y el 3-oct se frenaron cuando el pedido venía de la madre o de un mensaje viejo. En la nube falta
+> `ssh`: `apt-get install -y openssh-client`.
+
 ## Cómo funciona por dentro (y por qué)
 
 - **API oficial de Instagram (Instagram Login)**, app `OnIA Social API`. Los tokens de

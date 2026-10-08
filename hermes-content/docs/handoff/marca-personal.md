@@ -2,6 +2,45 @@
 
 **Archivo único del carril.** Actualizado 2026-09-29 por Claude (Opus 5.5).
 
+## ▶ 5-oct noche — sesión nueva (`session_01WPecmppa9uZEc4fJDjSmaS`, rama `claude/gifted-clarke-y4vvtj`)
+
+**Página única para Sergio Urcullo:** https://claude.ai/artifact/Hssf9o3ikt2fE7nkNBzrvd. Tiene qué necesito de él, día
+por día con el texto de la comunidad para copiar, los comentarios, las historias, los 6 guiones y la auditoría. La
+genera `gen_page.py` en el scratchpad de esta sesión. Si se pierde, los datos salen de `AVISOS-POR-DIA.md`,
+`GRABAR-2-14-OCT.md` y los briefs.
+
+- **EN PRODUCCIÓN (agendado):** 11 carruseles en @sergiourcullo, uno por día a las 16:00 La Paz, del mar 6 al vie
+  16-oct. Timers `pub-car-20261006` a `pub-car-20261016` en el VPS (`agendar-publicacion.sh --lista`). Lo pidió él en
+  esta sesión. Antes, un ensayo de DD-A sin publicar dio 6 láminas aceptadas por Instagram.
+  - Script sin fecha en el nombre: `deploy/vps-ops/publicar/agendar-carruseles.sh` (antes `-3-20-oct`).
+  - Orden: DD-A, N04, K3v2, N03, K11, N06, K4v2, K8v3, K7v2, K2v3 y K6v2.
+  - ⚠ Si el VPS se reinicia, los timers se pierden y no sale nada: re-agendar con el script.
+- **En espera (7):** K1, N02, K9, K12, K5, K13 y K10, por las 10 láminas que no se entienden. Falta que él elija:
+  - «rehacé las 10» (1,20 cr; los prompts nuevos están en el CIERRE 3-oct);
+  - o «van sin esas láminas».
+- **Comunidad:** los avisos se re-alinearon al calendario nuevo, en la página.
+  - Mar 6: «Volví» + reto + CACHE.
+  - Mié 7: respuesta del reto + VERIFY.
+  - Desde ahí, un aviso por carrusel.
+  - En la página, «mañana sábado» se cambió a «mañana miércoles» y el JSON de BRIEF va como mensaje, no adjunto. El
+    texto de `AVISOS-POR-DIA.md` sigue con las fechas viejas.
+  - **Los pega él, antes de las 12:30.** No hay confirmación de que lo haya hecho.
+- **Comentarios:** se contestan a mano, porque el mensaje privado automático no existe.
+- **Historias:**
+  - todos los días, compartir el carrusel a la historia con el sticker de la comunidad;
+  - los jueves, la historia de la auditoría.
+- **Guiones:** 6 para una sola sesión de ~1 h, sin tela verde. Cada uno va con su carrusel ya agendado: DD-A, N04, N06,
+  D03-A, D01-A y S2-D08-A. El texto sale de `GRABAR-2-14-OCT.md`.
+- **Auditoría: Sergio Urcullo eligió B** (de IA, para cualquier negocio) el 5-oct. Está en `ONIA_COMUNIDAD_CONTENIDO.md`
+  §«Auditoría de IA gratis».
+  - Se renombra el evento `/20min`; no se crea otro. Así siguen andando `sergiourcullo.vercel.app/llamada` (307 a
+    `/20min`, medido el 5-oct) y los links viejos.
+  - Cupo de 3 por semana y 2 preguntas al reservar.
+  - Falta que él lo cambie en cal.com y sume el link a la bio. Después: mirar la página renderizada.
+- **Pregunta abierta:** ¿agendo el reel N03 (ya en el VPS, `/root/publicar/n03-modo-auto/`) para el vie 9, junto a su
+  carrusel?
+- **Brutos:** ninguno nuevo en Drive el 5-oct.
+
 ## ⏹ CIERRE 5-oct — cambio de sesión madre (`session_01CE21mytrEXdqanCFoWxm32`)
 
 **Objetivo de la tanda (madre, 3-oct):**
