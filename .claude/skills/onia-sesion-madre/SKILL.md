@@ -219,7 +219,13 @@ Se trabaja en la app de Claude; Codex corre por detrás. Codex no orquesta, no a
   carpeta original `…-u1`.
 - ⚠️ **En el sandbox local, Codex no corre tsc, vitest ni Playwright** cuando `node_modules` es un junction compartido
   («dependencias ausentes», `spawn EPERM`, 8-oct, 4 de 4 tareas). La validación la da el CI del PR y las capturas las
-  saca Plataforma. Cada commit lo dice explícito.
+  saca Plataforma. Cada commit lo dice explícito. **Lo que sí corre:** tests de node puro con
+  `node --test --test-isolation=none` (sin procesos hijos). Así C16c, el bot del VPS, pasó 335/335 el 8-oct.
+- **Codex en un repo pesado (onia-hermes, ~6 GB):** worktree con `--no-checkout` + `sparse-checkout set <carpeta>
+  .agents AGENTS.md CLAUDE.md` + `checkout`. Solo baja la carpeta de la tarea. Ruta corta (`C:/dev/proyectos/…`): bajo el
+  scratchpad, Windows corta por «Filename too long».
+- **Los informes que escribe Codex** (`docs/C16A_*.md`, `*-ENTREGA.md`) NO van al commit: van al cuerpo del PR, para
+  no llenar de docs sueltos los repos del producto.
 - **Ver videos e Instagram lo hace la MADRE, no Codex** (probado el 8-oct). Con red habilitada
   (`sandbox_workspace_write.network_access=true`), Codex local igual falla con `spawn EPERM` porque el sandbox sin elevar
   no deja que node lance yt-dlp. La nube no abre Instagram. La madre sí: `fetch-video.mjs` + Gemini + láminas leídas (los 5
