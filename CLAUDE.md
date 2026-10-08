@@ -463,9 +463,13 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
   (términos, privacidad, contratos). Se le muestra la pieza renderizada, no el PR.
 - **Contenido en redes (Sergio Urcullo, 8-oct: «sí, publicá por Buffer lo que pase control de calidad»):**
   una pieza que pasa el control de calidad de su skill (`diseno-contenido-onia` / `edicion-referentes`) y se MIRÓ
-  renderizada completa se publica por Buffer o `ig-reel.mjs` sin pedirle el OK pieza por pieza. Después se le avisa
-  con el enlace. Siguen pasando por él: lo que muestra a un cliente o a un tercero, lo que promete algo del producto
-  que la tabla «se promete / funciona» no tiene en verde, y toda generación paga.
+  renderizada completa se publica por Buffer (Instagram, por `ig-reel.mjs`, que es la vía verificada) sin pedirle el
+  OK pieza por pieza. Después se le avisa con el enlace. Siguen pasando por él:
+  - **toda pieza que prometa o muestre una función del producto**, hasta que exista la tabla «se promete / funciona»
+    en `hermes-content/docs/` y esa función esté en verde. Sin tabla no hay permiso;
+  - lo que nombre, cite o muestre a un cliente, a un tercero o a un competidor (imagen, voz o marca);
+  - los CTA de mecanismos sin probar, como comentario → DM de Instagram (2 rechazos de Meta);
+  - toda generación paga.
 - **No cambia** lo que ya pide aprobación por su riesgo: escribir datos de producción fuera
   de lo autorizado, gasto pago, contactar clientes, tocar el portal del SIAT.
 - A Sergio Urcullo no se le habla de PRs: se le dice qué quedó publicado y qué necesita mirar.

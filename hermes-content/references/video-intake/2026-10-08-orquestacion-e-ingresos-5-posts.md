@@ -91,4 +91,4 @@ y que yo solo haga comunidad, asesorías y grabe». Método: `fetch-video.mjs` +
 ## Lo que se decidió con esto
 
 El modelo operativo del 8-oct (router de modelos, sesiones, presupuesto y plan de ingresos) quedó en la skill
-`onia-sesion-madre`, § «Router de modelos y presupuesto».
+`onia-sesion-madre`, § «Modelo operativo (8-oct…)».

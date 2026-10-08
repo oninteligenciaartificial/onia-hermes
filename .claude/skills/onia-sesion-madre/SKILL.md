@@ -47,9 +47,11 @@ Plataforma con las del presupuesto por fases, a 390 y 1440 px.
 - **El cupo no se reparte por porcentajes:** `get_usage` no lo da por carril. Lo que se controla: cuántas sesiones hay
   vivas, el modelo de cada una y un corte. Si la semana pasa del 60 % antes del día 4, se frena todo lo que no sea la 1.0
   o los leads.
-- **Cadencia:** la madre lee los transcripts dos veces por día y no después de cada tarea. 1 tarea por mensaje, con su
-  criterio de hecho. Los issues `tarea-local` los barre la madre en esas lecturas: no se crea una tarea programada cada
-  hora, porque sería un segundo orquestador que además gasta cupo 24 veces por día.
+- **Cadencia (Sergio Urcullo, 8-oct: «leerlo en cada momento»):** la madre hace una ronda cada 20 min (CronCreate
+  `7,27,47 * * * *`, vive mientras ella está abierta y vence a los 7 días). En cada ronda lee el último ESTADO de cada
+  sesión y actúa. Si nada cambió, no le escribe nada a él. Las sesiones no pueden avisarle en el momento (ver
+  «Nube → madre»). 1 tarea por mensaje, con su criterio de hecho. Los issues `tarea-local` los barre la madre en las
+  rondas. No se crea otra tarea programada: sería un segundo orquestador.
 - **A Sergio Urcullo, como máximo 3 pedidos por semana**, en una lista de sí o no. Lo demás se anota y no se le pide.
 - **La plata no espera al desarrollo:** mientras el cobro de punta a punta no esté probado, se cobra por transferencia y se
   activa a mano (Etapa 1).
@@ -228,8 +230,9 @@ Se trabaja en la app de Claude; Codex corre por detrás. Codex no orquesta, no a
 - **Codex en la nube SÍ corre:** la prueba del 8-oct en el entorno Hermes terminó READY a los ~20 min (el repo pesa). El
   resultado se trae con `codex cloud diff <task>` y `codex cloud apply <task>`.
 - Worktree aislado por tarea, rama `codex/<tarea>-<fecha>` (nunca `claude/*`); en onia-platform, `node_modules` por
-  junction. Con `workspace-write` el script le abre a Codex el `.git` común, así que commitea en su rama. La red
-  sigue cerrada: la madre revisa el diff, empuja y abre el PR, y la madre v2 revisa con 1 o 2 lentes según el riesgo.
+  junction. **Codex NO commitea:** no se le da el `.git` común, porque sus `hooks/` y su `config` se ejecutan fuera del
+  sandbox la próxima vez que la madre usa git (revisión del #151, 8-oct). La red sigue cerrada. La madre revisa el diff
+  de la carpeta, commitea, empuja y abre el PR, con 1 o 2 lentes de revisión según el riesgo.
 - El `tsc` local falla con el cliente de Prisma compartido: el CI del PR es el gate de tipos.
 - **La madre commitea SOLO con los tests en verde, con un gate en el mismo comando**
   (`echo "$out" | grep -q failed && exit 1`). El 4-oct se subió `5c58175c` con un test rojo porque el `grep` de la
