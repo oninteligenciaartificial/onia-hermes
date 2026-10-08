@@ -25,6 +25,10 @@ el mercado ya da gratis y falta para no quedar atrás (3), después lo que neces
 que hoy falla el test (5 y 6). **Cero pagos, caja de Bs 4.000 y break-even en ≈ 5 clientes** (`CLAUDE.md`, `ONIA_CATALOGO_DE_VENTA.md` §6):
 ningún add-on se entrega hoy sin horas de Sergio Urcullo.
 
+**Una cuenta que cambia las comparaciones: el dólar.** La página de Xmart Cloud fija ✔ **«1 USD = 11,85 Bs»** (8-oct). Los proveedores bolivianos que cotizan en USD
+(LogicalWeb, RedPlan, Neothek) convierten a un tipo cercano a ese, no al oficial. **Los precios de este doc en Bs se comparan entre sí; los que vienen en USD de afuera
+(Madgicx, Creatify, Apple) hay que convertirlos con el tipo que cobra el banco** (condición 7 del go/no-go de `ONIA_ADQUISICION_Y_PAUTA.md` §5.10, hoy sin leer).
+
 ## 2. Reglas con las que se ordenó
 1. **El test de las tres preguntas** (§10): ¿al MISMO cliente que ya paga? · ¿deja de tener sentido sin el núcleo? · ¿se entrega sin horas de
    Sergio Urcullo por cliente? **Una que falla = negocio nuevo disfrazado.**
@@ -46,7 +50,7 @@ ningún add-on se entrega hoy sin horas de Sergio Urcullo.
   El §8.4 de ese doc pide ratificar una; **sigue sin decidirse**.
 - ✔ **La propia página se contradice:** dice «sin mensualidad obligatoria» y, más abajo, «sin plan mensual por ahora» junto a un Cuidado Web de Bs 190/mes.
 
-**Quién lo vende y a cuánto (8-oct).**
+**Quién lo vende y a cuánto (8-oct).** ✔ TecnoWeb, Khainata y Dechali **releídos con el texto del navegador el 8-oct y coinciden** (los demás vienen del investigador, sin releer).
 
 | Dónde | Quién | Precio |
 |---|---|---|
@@ -82,7 +86,7 @@ y un solo layout por bloque (límites del motor, §8.5). *Sergio Urcullo:* decid
 **Qué existe.** Solo documento: `ONIA_CONSULTING_SERVICES_2026.md` trae un tarifario de Bs 250 a 9.500; `ONIA_PRICING_2026.md` lo llama *«referencia histórica, no un tarifario»*.
 Hoy **las asesorías van gratis** (3 por semana de 20 min). ✔ **`/servicios/consultoria` redirige a la portada** en producción: la página existe en el código pero está apagada. **0 cobrados.**
 
-**Quién lo vende.** Bolivia **no publica tarifa por hora.** Lo que sí se publica son suscripciones de bot: Xmart Cloud Bs 349/mes (API de WhatsApp, sin costo de integración), Chicha Bs 199 / 399 / 799 (P).
+**Quién lo vende.** Bolivia **no publica tarifa por hora.** Lo que sí se publica son suscripciones de bot: ✔ Xmart Cloud **Bs 349/mes** (API de WhatsApp; citas +Bs 149, API propia +Bs 299, facturación desde Bs 990; releído hoy), Chicha Bs 199 / 399 / 799 (P).
 A medida, ~USD 150-1.000, con poca evidencia (B). Región: proyectos USD 1.000-5.000+, retainers USD 650-2.000; en México, MXN 60.000-300.000 más MXN 2.000-10.000/mes (P, Duotach).
 **Los competidores de software sí cobran el arranque:** Control Facilito, implementación Bs 2.081; Clinera, USD 450 (`MAPA_COMPETENCIA.md`).
 **Creíble:** una **puesta en marcha de Bs 500-2.000 una vez**; cobrar nivel México a una clínica, no. *(est.)*
