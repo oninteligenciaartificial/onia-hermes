@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Grep de frases prohibidas (editor-videos § «Reels de Lucía» + plan v5 §2) sobre TODO el texto en pantalla (tarjetas, rótulo, etiquetas,
-// panel, placa, sello) y sobre el pie. Sale con 1 si algo coincide.
+// panel, placa, sello) y sobre el pie. Sale con 1 si algo coincide. 2da pasada: «tapada» entra a la lista (H1).
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import fs from 'node:fs';
@@ -22,6 +22,8 @@ const PROHIBIDAS = [
   'agenda llena', 'cero ausencias', 'garantiz', 'resultado', 'aument', 'ahorr', 'ganá', 'ventas', 'clientes', '%',
   // no sé (el chiste va con «soy IA», nunca con «no sé»)
   'no sé',
+  // afirmaciones ya verificadas como FALSAS (H1, 8-oct): en los cuadros 84 y 96 de K4 la mano NO está tapada (v4/PROCEDENCIA.jsonl línea 94)
+  'tapada',
   // marcas de terceros (modelos, plataformas, competidores)
   'kling', 'seedream', 'seedance', 'higgsfield', 'soul', 'nano banana', 'cinema studio', 'veo ', 'midjourney', 'runway', 'elevenlabs', 'sora', 'gpt', 'claude', 'chatgpt',
 ];

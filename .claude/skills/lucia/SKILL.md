@@ -49,13 +49,13 @@ description: "Invocar para CUALQUIER trabajo del carril Lucía (Lucía Antelo, l
   |---|---:|---|---|
   | Foto → orden → revisión, con lo ya pagado | 0 | método y costo real de una pieza | G1 |
   | Errores que se escapan, con lo ya pagado | 0 | qué mirar en cada cuadro | G3 |
-  | **L1** misma foto y orden en 4 motores | ~35 (tope 36) | qué cambia al pagar más | G2 |
+  | **L1** misma foto y orden en 5 motores de video y 7 de imagen | **86,5 gastados el 8-oct** (con labios) | qué cambia al pagar más y **cuánto sostiene cada uno la cara** | G2 |
   | L2 voz y labios con audio propio | ~10-20 | si hay una voz cruceña (D4) | por definir |
   | L3 Motion Control con un video guía | 17 | control del gesto | por definir |
 
 - **Cotizado en vivo el 8-oct para L1** (`get_cost`, 6 s salvo Cinema Studio; foto K1 de entrada): Kling 3.0 std
   `sound:"off"` 7,5 (ya pagado) · Kling 3.0 pro 9 · Seedance 2.0 mini 720p 6 · **Cinema Studio 3.0 de 4 s a 720p: 20** ·
-  mejora a 1080p ~0,1. Cinema Studio 3.0 nunca se había probado: es parte del aprendizaje y por eso entra al lote aunque
+  mejora a 1080p **1** (la tabla vieja decía ~0,1). Cinema Studio 3.0 nunca se había probado: es parte del aprendizaje y por eso entró al lote aunque
   la tabla de §3 lo marque «no usar» para el día a día.
 
 ## 0-bis. Qué es un video de Lucía (Sergio Urcullo, 8-oct) — la regla que más pesa
@@ -78,6 +78,38 @@ description: "Invocar para CUALQUIER trabajo del carril Lucía (Lucía Antelo, l
 - **Cómo se llegó:** el 8-oct se editó el chiste (9,6 s, un clip del café y 3 tarjetas, 0 cr) en una pasada, con QA y
   guardas de layout, y Sergio Urcullo lo rechazó. El oficio estaba bien; el error era de contenido y se lo medía mal: se
   verificó la forma (legibilidad, mentón, specs) y no si la pieza enseñaba algo. L02 (6 s) tiene el mismo defecto.
+
+
+## 0-quater. Lo medido el 8-oct: control de cara en la nube, Higgsfield completo y montaje (leelo antes de gastar o editar)
+
+> Sergio Urcullo, 8-oct: *«aprendas todo lo que es Higgsfield, todas sus funciones, y no perder la cara de Lucía… podés editarlo
+> con el material que aprendimos»*. Se gastaron **86,5 cr** (tope que se fijó la sesión: 97; octubre queda en 139 de 150) y se montó G1.
+
+- **Control de cara en la nube — `scripts/face-gate.sh`** (en esta skill). `bash .claude/skills/lucia/scripts/face-gate.sh foto.png clip.mp4@0,3,5.9 …`
+  mide ArcFace (buffalo_l) contra las 8 referencias oficiales del repo y las caras negativas; los videos se miden en los segundos
+  que se pidan. La primera vez crea un venv fuera del repo (pip: opencv-python-headless, onnx, onnxruntime, numpy, pillow) y baja
+  buffalo_l (~280 MB) de GitHub; con `FACE_GATE_HOME` se elige dónde vive (por defecto `/tmp/lucia-face-gate`).
+  - **Reproduce lo guardado:** K1 0,806 (guardado 0,808), K2 0,830 (0,829), K4·1 0,812 (0,81), K4·4 0,851 (0,851).
+  - **Gate 0,70; piso de las caras negativas 0,224.** Una cara de menos de 200 px es poco confiable (en un clip crudo de 720p son
+    ~115 px): ahí el número baja solo y la imagen se MIRA. Los refs de 8 ángulos dan un centroide más alto que el de 5 del
+    photoshoot (K1 0,704 contra el photoshoot): **se mide siempre contra las 8 oficiales**, no contra otro juego.
+  - Higgsfield `sandbox_exec` no hace falta (y el control de permisos lo rechazó).
+- **Mapa de TODAS las funciones de Higgsfield, con costos y cara:** `higgsfield-mapa.md` (en esta carpeta). Lo que más pesa:
+  1. **`start_image` ata la escena pero la cara decae** (Kling std 0,79 → 0,72 en 6 s); **las referencias de cara la sostienen pero la
+     escena la inventa el motor** (Kling Omni, 5 refs, sin `start_image`: 0,80 → 0,82, a 6 cr, el más barato). Seedance mini con
+     `start_image` + 3 refs sube de 0,69 a 0,80 al mismo precio, pero reencuadra e **inventa letreros**.
+  2. Kling pro no mejora el movimiento de std (solo la nitidez, a 1080p nativo): no vale +1,5 cr si se publica a 720p.
+  3. **Imagen: Seedream 4.5 sigue siendo el método** (3 escenas ≥ 0,80). Kling Omni Image (0,5 cr) perdió la cara en 1 de 3
+     (0,35): no confiable. Nano Banana 2.1 0,74 · Seedream 5 Pro 0,70 · FLUX 3 0,69 · GPT Image 2.5 0,66 (una foto cada uno).
+  4. **Labios:** Seedance mini de un paso cae bajo el gate y no trae audio; **`sync_so` conserva la identidad del clip base**
+     (dif ≤ 0,03) y trae el audio: 3,6 cr por segundo de origen (21,75 por 6,04 s), el clip base aparte.
+  5. Una cotización de `get_cost` es el cobro exacto (leer `credits_exact`), salvo `sync_so` que no se cotiza. Máximo 3 trabajos
+     simultáneos. `jobs_wait` acepta `jobs:[{index,job_id}]`; `job_display` por id mira el estado sin gastar.
+  6. Música y efectos sueltos **no** salen del MCP. La voz: Higgsfield no trae acento cruceño ni licencia (D4 sigue abierta).
+- **Montaje con HyperFrames — `montaje-hyperframes.md`** (en esta carpeta): comandos, estructura del proyecto, técnicas (empuje
+  rígido, morph, tarjetas en HTML), controles numéricos y trampas. Caso G1: tres pasadas con revisor independiente.
+- **Pruebas guardadas:** `hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/` (hojas, proxies 360p, README) y
+  `v4/PROCEDENCIA.jsonl` (ids de cada job y puntajes). Los originales se recuperan a 0 cr con `job_display` → `rawUrl`.
 
 ## 1. Arranque (5 minutos)
 
@@ -109,12 +141,13 @@ description: "Invocar para CUALQUIER trabajo del carril Lucía (Lucía Antelo, l
 | Lipsync con nuestro audio (cuando haya voz) | `seedance_2_0_mini` 720p + `audio_references` → se monta el mp3 | 10 s = 10 |
 | Lipsync fino (solo para una pieza estrella) | `sync_so` | 3,6 cr/s (10 s = 36) |
 | Cambio de voz conservando los tiempos | `voice_change` (solo hacia voces de Higgsfield) | 1 por 10 s |
-| Subir de 720p a 1080p | `bytedance_video_upscale` | ~0,1 por clip |
+| Subir de 720p a 1080p | `bytedance_video_upscale` standard (4K: 4; pro 1080p: 10) | **1** por clip de 6 s (cotizado el 8-oct; antes se anotaba ~0,1) |
 | Foto 3:4 a 9:16 | `outpaint_image` | 2 |
 
 - **No usar para Lucía:**
   - Seedance 2.5: 42 por 6 s, aunque es el default de la skill oficial;
-  - Cinema Studio 3.0, 3.5 y 4.0: de 30 a 42 por 6 s;
+  - Cinema Studio 3.0, 3.5 y 4.0: de 30 a 42 por 6 s (el 3.0 de 4 s a 720p cuesta 20: se probó el 8-oct, sostiene la cara y
+    sale 4 veces más caro que Kling std);
   - Marketing Studio: de 42 a 105; inventa guion y voz, y el rol `character_photo` da «Unknown media role» al cotizar
     (no hay forma probada de pasarle la cara de Lucía);
   - `saas_motion`: re-dibuja la captura, y eso es una pantalla falsa;
@@ -283,6 +316,12 @@ Fuente: `research/competencia/LUCIA_COMPETENCIA_20261005.md`.
   - Instagram da 429 con muro de login.
 - **5-oct · repo:** el hook Stop (`git-autosync.js`) commitea con «chore: auto-sync» y empuja la rama. Reescribir ese
   mensaje (amend + force) lo frena el clasificador («Git Destructive»). Se commitea a mano antes de soltar el turno.
+- **8-oct · jobs y permisos:** no inventar el uuid largo de un job (dos veces dio error o 404: se copia de `PROCEDENCIA.jsonl`); un
+  agente de workflow que llama `sandbox_exec` queda esperando la aprobación para siempre (el relevamiento perdió así su quinto
+  grupo): a los agentes se les prohíbe esa herramienta. El control de permisos rechazó una vez `jobs_wait` («Real-World
+  Transactions») justo después de lanzar un job que no se puede cotizar; el estado se mira con `job_display`.
+- **8-oct · una sola toma no es una medición:** Kling Omni Image dio 0,79 en una escena y 0,35 en otra con el mismo método. Antes de
+  cambiar de motor se repite en al menos 3 escenas.
 - **2/3-oct:** Seedream escribe como texto «sheet» y «hex #…»; inventa letreros en las torres; los lotes de más de 5
   dan 429. Están en `higgsfield-generate`.
 

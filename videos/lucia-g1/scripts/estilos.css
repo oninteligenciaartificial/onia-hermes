@@ -23,15 +23,17 @@ body{font-family:"DM Sans",sans-serif;-webkit-font-smoothing:antialiased;text-re
 .rail{position:absolute;left:0;top:0;bottom:0;width:12px;background:linear-gradient(180deg,var(--acc),#0a7a43)}
 .t{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:66px;line-height:1.12;letter-spacing:-.01em;color:var(--txt);text-wrap:balance}
 .t b{color:var(--acc);font-weight:700}
+.t b.late{color:var(--txt)}
 .num{flex:none;width:72px;height:72px;border-radius:50%;background:var(--acc);color:#04210F;font:700 44px/72px "Bricolage Grotesque",sans-serif;text-align:center}
 
 /* ── rótulo de IA y etiquetas de dato (pastilla) ── */
 .tag{display:inline-flex;align-items:center;gap:16px;padding:14px 28px;border-radius:999px;background:rgba(10,12,17,.80);border:1px solid rgba(255,255,255,.16);box-shadow:0 14px 36px rgba(0,0,0,.38);font-family:"DM Sans",sans-serif;font-weight:500;color:#F6F8FB;font-size:34px;letter-spacing:.01em;white-space:nowrap}
 .tag i{width:15px;height:15px;border-radius:50%;background:var(--acc);box-shadow:0 0 18px var(--acc)}
 .tag-lg{font-size:40px;padding:16px 32px}
-.eqrow{display:inline-flex;align-items:baseline;gap:24px;padding:10px 44px 16px;border-radius:999px;background:rgba(10,12,17,.80);border:1px solid rgba(255,255,255,.16);box-shadow:0 14px 36px rgba(0,0,0,.38);font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:70px;line-height:1.1;color:#F6F8FB;letter-spacing:-.01em;white-space:nowrap}
-.eqp{display:inline-block}
-.eqr{color:var(--acc)}
+.eqrow{display:inline-flex;align-items:center;gap:14px;white-space:nowrap}
+.eqp{display:inline-flex;align-items:center;justify-content:center;height:104px;padding:0 38px 6px;border-radius:999px;background:rgba(10,12,17,.84);border:1px solid rgba(255,255,255,.16);box-shadow:0 14px 36px rgba(0,0,0,.38);font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:70px;line-height:1;color:#F6F8FB;letter-spacing:-.01em}
+.eqo{width:104px;padding:0;font-size:62px}
+.eqr{color:var(--acc);border-color:rgba(16,194,107,.55)}
 
 /* ── marco de la cara: cuatro esquinas ── */
 .cor{position:absolute;width:56px;height:56px;border:0 solid var(--acc);filter:drop-shadow(0 0 8px rgba(16,194,107,.5))}
@@ -40,33 +42,28 @@ body{font-family:"DM Sans",sans-serif;-webkit-font-smoothing:antialiased;text-re
 .cor.bl{left:0;bottom:0;border-left-width:6px;border-bottom-width:6px;border-bottom-left-radius:10px}
 .cor.br{right:0;bottom:0;border-right-width:6px;border-bottom-width:6px;border-bottom-right-radius:10px}
 
-/* ── panel «Orden real» ── */
+/* ── panel «Orden real»: una cita literal; las marcas son SOLO color + subrayado (sin insignias en línea), las insignias van en los chips ── */
 .cw-panel{width:920px}
 .panel{padding:40px 52px 44px 64px}
-.eyebrow{display:flex;align-items:center;gap:14px;font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:26px;letter-spacing:.18em;text-transform:uppercase;color:var(--mut);margin-bottom:22px}
-.eyebrow i{width:14px;height:14px;border-radius:50%;background:var(--acc);box-shadow:0 0 22px var(--acc)}
-.pa,.pb{font-family:"DM Sans",sans-serif;font-weight:400;font-size:41px;line-height:1.5;color:#AEB4C0}
-.pa{position:relative;margin-bottom:20px;padding-left:24px}
-.pb{line-height:2.05}
-.bar{position:absolute;left:0;top:6px;bottom:6px;width:6px;border-radius:3px;background:var(--acc);transform-origin:50% 0}
-.nw{white-space:nowrap;position:relative;display:inline-block;margin-right:14px}
-.bd-sup{position:absolute;right:-8px;top:-2px;margin:0;width:28px;height:28px;line-height:28px;font-size:19px;vertical-align:baseline}
-.bd{display:inline-block;width:34px;height:34px;border-radius:50%;background:var(--acc);color:#04210F;font:700 22px/34px "DM Sans",sans-serif;text-align:center;vertical-align:middle;margin-left:10px;position:relative;top:-3px}
-.leg{display:flex;gap:14px;margin-top:26px;white-space:nowrap}
-.lg{display:inline-flex;align-items:center;gap:10px;padding:8px 22px 8px 9px;border-radius:999px;border:1px solid rgba(16,194,107,.5);background:rgba(16,194,107,.14);font:500 29px "DM Sans",sans-serif;color:var(--acc)}
-.bd-s{margin-left:0;top:0;width:32px;height:32px;line-height:32px;font-size:21px}
+.eyebrow{display:flex;align-items:center;gap:14px;font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:34px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);margin-bottom:20px}
+.eyebrow i{width:15px;height:15px;border-radius:50%;background:var(--acc);box-shadow:0 0 22px var(--acc)}
+.pq{font-family:"DM Sans",sans-serif;font-weight:400;font-size:41px;line-height:1.55;color:#AEB4C0}
+.mk{background-image:linear-gradient(var(--acc),var(--acc));background-repeat:no-repeat;background-position:0 100%;background-size:0% 4px;padding-bottom:3px}
+.leg{display:flex;gap:12px;margin-top:28px;white-space:nowrap}
+.lg{display:inline-flex;align-items:center;gap:12px;padding:8px 24px 8px 8px;border-radius:999px;border:1px solid rgba(16,194,107,.5);background:rgba(16,194,107,.14);font:500 36px/1.1 "DM Sans",sans-serif;color:var(--acc)}
+.bd{display:inline-block;flex:none;width:52px;height:52px;border-radius:50%;background:var(--acc);color:#04210F;font:700 34px/52px "DM Sans",sans-serif;text-align:center}
 
 /* ── placa de 8 cuadros: visor + tira ── */
 #visor{position:absolute;border-radius:26px;overflow:hidden;border:4px solid rgba(255,255,255,.2);background:#0A0C11;box-shadow:0 30px 70px -20px rgba(0,0,0,.6)}
 .vf{position:absolute;left:0;top:0;right:0;bottom:0;opacity:0}
 .vf img{display:block;width:100%;height:100%;object-fit:cover}
-.vn{position:absolute;left:18px;top:16px;padding:6px 18px;border-radius:999px;background:rgba(10,12,17,.78);font-family:"Spline Sans Mono",monospace;font-weight:500;font-size:30px;color:#F6F8FB}
+.vn{position:absolute;left:18px;top:16px;padding:6px 18px;border-radius:999px;background:rgba(10,12,17,.78);font-family:"Spline Sans Mono",monospace;font-weight:500;font-size:36px;color:#F6F8FB}
 .vm{position:absolute;left:18px;bottom:18px;padding:8px 24px 10px;border-radius:14px;font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:42px;line-height:1.1}
 .vm.ok{background:var(--acc);color:#04210F}
 .vm.no{background:rgba(10,12,17,.82);color:rgba(246,248,251,.78);border:1px solid rgba(255,255,255,.2)}
 .th{position:absolute}
 .th img{display:block;object-fit:cover;border-radius:12px;border:1px solid rgba(255,255,255,.18)}
-.thn{margin-top:8px;text-align:center;font-family:"Spline Sans Mono",monospace;font-weight:500;font-size:23px;color:var(--mut)}
+.thn{margin-top:6px;text-align:center;font-family:"Spline Sans Mono",monospace;font-weight:500;font-size:34px;line-height:1.1;color:var(--mut)}
 #scan{position:absolute;border:4px solid var(--acc);border-radius:16px;box-shadow:0 0 22px rgba(16,194,107,.55)}
 
 /* ── cuadro 60 sobre K4 ── */
@@ -77,5 +74,9 @@ body{font-family:"DM Sans",sans-serif;-webkit-font-smoothing:antialiased;text-re
 #origen{position:absolute;border:4px solid var(--acc);border-radius:14px;box-shadow:0 0 24px rgba(16,194,107,.5)}
 #inset{position:absolute;border-radius:22px;overflow:hidden;border:4px solid var(--acc);box-shadow:0 30px 70px -20px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.14)}
 #inset img{display:block;width:100%;height:100%;object-fit:cover}
-.itag{position:absolute;left:14px;top:12px;padding:6px 16px;border-radius:999px;background:rgba(10,12,17,.78);font-family:"Spline Sans Mono",monospace;font-weight:500;font-size:25px;color:#F6F8FB}
+.itag{position:absolute;left:14px;bottom:14px;padding:6px 16px;border-radius:999px;background:rgba(10,12,17,.78);font-family:"DM Sans",sans-serif;font-weight:500;font-size:34px;line-height:1.2;color:#F6F8FB}
 #sello{position:absolute;padding:10px 26px 12px;border-radius:14px;background:var(--acc);color:#04210F;font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:48px;line-height:1.1;letter-spacing:-.01em;white-space:nowrap;box-shadow:0 14px 34px rgba(0,0,0,.45)}
+
+/* ── lupa de la cara (S2, 12,5 s): recorte de la foto nativa 1440x2560 a x1,6 de la pantalla ── */
+#lupa{position:absolute;border-radius:28px;overflow:hidden;border:5px solid rgba(255,255,255,.55);background:#0A0C11;box-shadow:0 30px 70px -20px rgba(0,0,0,.6)}
+#lupa img{display:block;width:100%;height:100%;object-fit:cover}
