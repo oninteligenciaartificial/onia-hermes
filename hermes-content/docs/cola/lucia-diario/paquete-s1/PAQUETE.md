@@ -1,8 +1,17 @@
-# Paquete semana 1 de Lucía — para el OK de Sergio Urcullo (5-oct-2026, corregido el 8-oct)
+# Paquete semana 1 de Lucía — para el OK de Sergio Urcullo (corregido el 8-oct)
 
-> Plan: `../PLAN.md` v4 §5. Sale de material ya pagado: **0 créditos**.
-> Nada se publica sin el «ok» de Sergio Urcullo sobre este paquete.
-> El trato va **de usted** si se confirma D8. Si queda en vos, valen los textos del 1-oct.
+> Plan: `../PLAN.md` v4. Sale de material ya pagado: **0 créditos**.
+> **Cambio del 8-oct (Sergio Urcullo):** el chiste de 10 s y L02 se **rechazaron**: un clip suelto con tarjetas no es un
+> video. Cada video lleva gancho en 3 s, desarrollo con valor y cierre con CTA, de 30 a 60 s, y deja algo aprendido.
+> Nada se publica sin el «ok» de Sergio Urcullo. El trato va de usted si se confirma D8.
+
+## Qué hay en la semana 1
+
+| Pieza | Estado |
+|---|---|
+| **G1** «Recordatorio de cita: 3 datos» (video de 53 s) | **Guion para validar por la madre** (`../guiones/G1-recordatorio-de-cita.md`). Bloqueado por la captura de Pendientes |
+| **L01** «Hola, soy Lucía. No existo.» (carrusel de presentación) | Hecho. **No es un video y no enseña nada**: va fijado después de G1, no abre la cuenta. Decide Sergio Urcullo |
+| ~~L02~~ y ~~el chiste de 10 s~~ | Retirados. Sus clips (calle y café) quedan de plano de apoyo |
 
 ## Perfil (una vez, desde el celular de Lucía)
 
@@ -13,10 +22,9 @@
 | Link | la puerta de D7. Si es (a): `https://wa.me/59175414930?text=Hola%2C%20vengo%20de%20Luc%C3%ADa.%20Quiero%20ver%20Onia%20en%20mi%20cl%C3%ADnica.` |
 | Etiqueta de perfil IA | encendida. Según el repo se activó el 31-ago; la madre lo confirma mirando |
 
-## Día 1 · L01 «Hola, soy Lucía. No existo.» (carrusel, fijado)
+## L01 · «Hola, soy Lucía. No existo.» (carrusel, fijado)
 
-- **Láminas:** `hermes-content/carousels/out/lucia-l01-hola-no-existo-foto/slide-01..05.png`. Hoja: `l01-hoja.jpg`
-  (mirada el 5-oct).
+- **Láminas:** `hermes-content/carousels/out/lucia-l01-hola-no-existo-foto/slide-01..05.png`. Hoja: `l01-hoja.jpg`.
 - **Con usted** (D8), se re-renderizan a 0 cr las láminas con estos textos (sacados del brief
   `carousels/briefs/lucia/l01-hola-no-existo.json`):
   - lámina 1: «Y te lo digo en la primera lámina» → «Y se lo digo en la primera lámina»;
@@ -29,28 +37,8 @@
   justamente el punto. No tengo consultorio, ni clientes, ni horario. Tengo una tarea: mostrarle, una vez por semana,
   una cosa real que un negocio chico puede dejar de hacer a mano. Solo cosas que ya funcionan y que puede ver andando. Si
   tiene un negocio, sígame.»* `#santacruz #bolivia #negocios #pymes #inteligenciaartificial`
-- **Estado:** el contenido está aprobado desde el 1-oct; falta el trato.
-
-## Día 3 · L02 «Este video no fue grabado» (reel de 6 s, sin voz)
-
-- **Archivo:** `hermes-content/references/modelos/lucia/v4/feed/l02-este-video-no-fue-grabado.mp4` (1080×1920, 24 fps).
-  Tira: `l02-tira.jpg` (mirada el 5-oct). Tabla de cortes: `videos/lucia-l02/README.md`.
-- **Con usted**, se re-renderiza a 0 cr el sello «SEGUIME.» → «SÍGAME.».
-- **Pie:** *«Lucía Antelo es un personaje hecho con IA por @oniahq. No existo; las pantallas que le muestro, sí. Sígame.»*
-  Se sacó «sistemas que trabajan solos para tu negocio», una promesa general que la pieza no muestra.
-- **Estado:** falta el OK.
-
-## Día 5 · Chiste de 10 s (editado el 8-oct, 0 cr; falta el OK)
-
-- **Archivo:** `hermes-content/references/modelos/lucia/v4/feed/chiste-lucia-antelo-es-real.mp4` (9,6 s, sin voz).
-  - Preview: `chiste-preview-360.mp4`. Hoja de QA: `chiste-qa-hoja.jpg`.
-  - Proyecto, tabla de cortes y QA: `videos/lucia-chiste/README.md`.
-- **Clip:** el del café, ya pagado (`v4/feed/l08-cafe-src.mp4`).
-- **Tarjetas:** rótulo «Lucía Antelo · personaje IA de Onia» desde el cuadro 0 → «¿Lucía Antelo es real?» → «No: soy IA.» →
-  «Lo que le muestro, sí.» («Las pantallas que le muestro, sí» no entraba en una línea).
-- **Pie:** *«Lucía Antelo es un personaje hecho con IA por @oniahq. Lo que le muestro de Onia son pantallas reales.»*
-  - No vende ni anuncia otra pieza.
-  - Si para el día 5 ya está grabada la página de reserva, se suma: «La próxima: cómo un paciente reserva solo».
+- **Veredicto con el criterio del 8-oct:** tiene gancho (la portada), desarrollo (quién es y qué no hace) y CTA, pero no
+  deja nada aprendido. Por eso no abre la cuenta: la abre G1.
 
 ## Cómo sale cada una (lo corre la madre en el VPS)
 

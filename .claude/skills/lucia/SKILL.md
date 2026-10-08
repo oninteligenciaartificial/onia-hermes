@@ -29,6 +29,24 @@ description: "Invocar para CUALQUIER trabajo del carril Lucía (Lucía Antelo, l
   - la pantalla de Onia que muestra es real;
   - no hay generación paga sin `get_cost` y el OK de Sergio Urcullo.
 
+## 0-bis. Qué es un video de Lucía (Sergio Urcullo, 8-oct) — la regla que más pesa
+
+> *«No tiene el contenido estructurado, es literal un video de 10 segundos. Tienen que ser videos estructurados.»*
+> Sergio Urcullo, 8-oct, sobre el chiste «¿Lucía Antelo es real?».
+
+**Un clip suelto con tres tarjetas NO es un video.** Cada video de Lucía lleva, escrito ANTES de editar:
+1. **Gancho** en los primeros 3 s, con una promesa o una pregunta.
+2. **Desarrollo con valor:** pasos, un caso o una demostración. Si vende, la pantalla real de Onia entra acá.
+3. **Cierre** con un solo CTA.
+- Dura de **30 a 60 s** y **deja algo aprendido** (la unidad de enseñanza va completa antes del CTA).
+- El guion se valida con la madre **antes** de editar. Moldes: `hermes-content/references/marca-personal/FORMULAS-REFERENTES.md`
+  (F3, F4, F5, F7) y la skill `edicion-referentes`. Primer guion: `docs/cola/lucia-diario/guiones/G1-recordatorio-de-cita.md`.
+- **Prueba rápida:** si se puede resumir como «un clip con tarjetas», no es un video. Si no hay una frase que diga qué
+  aprende quien lo ve, tampoco.
+- **Cómo se llegó:** el 8-oct se editó el chiste (9,6 s, un clip del café y 3 tarjetas, 0 cr) en una pasada, con QA y
+  guardas de layout, y Sergio Urcullo lo rechazó. El oficio estaba bien; el error era de contenido y se lo medía mal: se
+  verificó la forma (legibilidad, mentón, specs) y no si la pieza enseñaba algo. L02 (6 s) tiene el mismo defecto.
+
 ## 1. Arranque (5 minutos)
 
 1. `git branch --show-current`; leé el «ESTADO VIGENTE» de `docs/handoff/higgsfield-lucia.md` y `PLAN.md` §0, §5 y §8.
@@ -105,7 +123,7 @@ description: "Invocar para CUALQUIER trabajo del carril Lucía (Lucía Antelo, l
   la derecha. La guarda del build (`x + visible > 1000 → error`) lo frena antes de renderizar. Se acorta el texto; no se
   achica la letra.
 - **Costo real por pieza (8-oct):**
-  - reel de personaje con un clip ya pagado: 0 cr y ~1 min de render;
+  - montaje con clips ya pagados: 0 cr y ~1 min de render (el costo no es el límite: lo es el guion, ver §0-bis);
   - reel de venta con un clip nuevo: 7,5 cr (Kling std off, 6 s) + 1 cr (foto Seedream) + la pantalla real;
   - kit K1-K4 completo (3-oct): 30,5 cr.
 
@@ -212,6 +230,13 @@ Fuente: `research/competencia/LUCIA_COMPETENCIA_20261005.md`.
   dan 429. Están en `higgsfield-generate`.
 
 ## 9. Intentos fallidos (no repetir)
+
+- **Chiste de 10 s «¿Lucía Antelo es real?» (8-oct): RECHAZADO por Sergio Urcullo.** Un clip suelto con 3 tarjetas no es
+  un video: sin gancho con promesa, sin desarrollo y sin nada que aprender. Se retira del plan; su clip (el café) sirve
+  de plano de apoyo. El proyecto quedó en `videos/lucia-chiste/` como ejemplo de lo que NO se vuelve a entregar.
+  **Regla: §0-bis.**
+- **L02 «Este video no fue grabado» (6 s):** mismo defecto. Se retira; su clip (la calle) queda para «un día en Santa
+  Cruz» como apoyo.
 
 - **Placas PIL + ffmpeg a mano (1-oct):** rechazadas por Sergio Urcullo. Se edita con `editor-videos`.
 - **Forzar `voice_settings` a Marcela:** le cambia el timbre.

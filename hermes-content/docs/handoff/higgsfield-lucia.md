@@ -42,11 +42,16 @@ corregidos + paquete de la semana 1, todo en el PR de la rama.
     `v4/kit/k3-clip-coworking-07b938b2.mp4`;
   - cutlists corregidos: CTA, GIRO de K4 y rótulo con apellido.
 - **`paquete-s1/PAQUETE.md`:** perfil, L01, L02 y chiste, con los pies de usted y el ensayo bien descrito.
-- **Chiste de 10 s editado** (8-oct, 0 cr, después del «Lucía sigue» de Sergio Urcullo que trajo la madre):
-  - pieza: `v4/feed/chiste-lucia-antelo-es-real.mp4`; proyecto: `videos/lucia-chiste/`;
-  - preview y hoja de QA en el paquete;
-  - mirado: la cara libre, el rótulo desde el cuadro 0, de usted;
-  - sin SFX, porque no hay librería en esta nube.
+- **⛔ Chiste de 10 s: RECHAZADO el 8-oct por Sergio Urcullo** (*«es literal un video de 10 segundos. Tienen que ser videos
+  estructurados»*). **L02 se retira por el mismo motivo.**
+  - Los finales están en `v4/feed/rechazado-20261008/`; el proyecto quedó en `videos/lucia-chiste/` como ejemplo.
+  - **Regla nueva (skill `lucia` §0-bis, `PLAN.md` §3):** cada video lleva gancho en 3 s, desarrollo con valor y cierre
+    con CTA, dura de 30 a 60 s, deja algo aprendido, y su guion se valida con la madre ANTES de editar.
+  - Error de método: se verificó la forma (legibilidad, mentón, specs) y no si la pieza enseñaba algo.
+- **Guion G1** «Recordatorio de cita: 3 datos» (53 s, `docs/cola/lucia-diario/guiones/G1-recordatorio-de-cita.md`):
+  - gancho / desarrollo con valor / demostración con la pantalla real de Pendientes / cierre con CTA;
+  - todo con material ya pagado; **espera la validación de la madre** y la captura P2;
+  - L01 (carrusel) tiene estructura pero no enseña: va fijado después de G1.
 - **Barrido** de la puerta, la cuenta demo, el lipsync y la receta vieja en FLUJO, LUCIA.md, MANUAL, GUIONES,
   HIGGSFIELD_VIDEO_SYSTEM y editor-videos.
 
@@ -84,9 +89,9 @@ corregidos + paquete de la semana 1, todo en el PR de la rama.
 6. Mirar en el panel de ElevenLabs si la cuenta dice Free (solo hace falta si algún día hay voz).
 
 **Próximos pasos:**
-1. Con el OK: re-render de L01 y L02 de usted, editar el chiste (0 cr), la madre despliega los publicadores y el token,
-   y sale el día 1.
-2. Con las capturas: K4 corta y «El paciente reserva solo».
+1. La madre valida G1 → se edita (0 cr) cuando haya captura de Pendientes.
+2. Con el OK de Sergio Urcullo: re-render de L01 de usted (0 cr), la madre despliega los publicadores y el token.
+3. Revisar K1, K2 y K4 con el criterio de estructura y escribir G2 («El link de reserva: 3 cosas»).
 
 ## ▶ ESTADO VIGENTE — 5-oct-2026 (historia)
 

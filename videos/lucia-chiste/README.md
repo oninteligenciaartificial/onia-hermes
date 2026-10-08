@@ -1,14 +1,20 @@
-# Lucía · chiste de 10 s «¿Lucía Antelo es real?» (día 5 de la semana 1)
+# ⛔ RECHAZADO el 8-oct por Sergio Urcullo — NO SE PUBLICA
+> *«No tiene el contenido estructurado, es literal un video de 10 segundos. Tienen que ser videos estructurados.»*
+> Un clip suelto con tres tarjetas no es un video: sin gancho con promesa, sin desarrollo y sin nada que aprender.
+> Se deja como ejemplo de lo que no se vuelve a entregar. La regla vigente: skill `lucia` §0-bis y `PLAN.md` v4 §3.
+> Lo que sí sirve: el método de montaje sin dependencias (`scripts/build.mjs`) y el clip del café como plano de apoyo.
+> El final se movió a `hermes-content/references/modelos/lucia/v4/feed/rechazado-20261008/`.
+
+# Lucía · chiste de 10 s «¿Lucía Antelo es real?» (era el día 5 de la semana 1)
 
 Reel 9:16 de **9,625 s**, sin voz, de usted (D8 del plan v4). Es el formato B, de personaje: la IA como gancho, sin vender.
 **Costo: 0 créditos**: el clip del café ya estaba pagado (Kling `f79eb10e`, el de L08). Editado el 8-oct.
-**Estado: borrador para el OK de Sergio Urcullo. No se publica sin ese OK.**
+**Estado: RECHAZADO.**
 
 | Qué | Ruta |
 |---|---|
-| Final (gen1, 1080×1920, 24 fps, 231 cuadros, CRF 14, audio en silencio) | `hermes-content/references/modelos/lucia/v4/feed/chiste-lucia-antelo-es-real.mp4` |
-| Preview para el OK | `hermes-content/docs/cola/lucia-diario/paquete-s1/chiste-preview-360.mp4` |
-| Hoja de QA con guías (y=1188 cian, y=1490 rojo, x=1000 magenta) | `hermes-content/docs/cola/lucia-diario/paquete-s1/chiste-qa-hoja.jpg` |
+| Final (gen1, 1080×1920, 24 fps, 231 cuadros, CRF 14, audio en silencio) | `hermes-content/references/modelos/lucia/v4/feed/rechazado-20261008/chiste-lucia-antelo-es-real.mp4` |
+| Preview y hoja de QA | se sacaron del paquete: ya no hay nada que aprobar |
 | Build reproducible | `scripts/build.mjs` → `renders/` (ignorado en git); `scripts/plan.json` trae lo que queda visible |
 
 ## Tabla de cortes

@@ -12,8 +12,9 @@
 
 ## 0. En una línea
 
-Lucía es una **prueba barata**, no la fuente de los 5 clientes. Publica **3 piezas por semana durante 14 días** y se
-mide por **conversaciones de dueños de clínica que llegan por su puerta**, con una parada dura el día 14. Si Sergio
+Lucía es una **prueba barata**, no la fuente de los 5 clientes. Publica **hasta 3 piezas por semana durante 14 días** y
+se mide por **conversaciones de dueños de clínica que llegan por su puerta**, con una parada dura el día 14.
+**Solo sale lo que tiene estructura y deja algo aprendido** (§3). Si Sergio
 Urcullo pide un presentador IA para la pauta, Lucía puede ser esa persona; eso lo arma Ventas y pauta (§6).
 
 ## 1. Lo que dijo la competencia (y qué cambia)
@@ -54,6 +55,15 @@ Urcullo pide un presentador IA para la pauta, Lucía puede ser esa persona; eso 
 
 ## 3. Reglas de toda pieza
 
+- **⛔ Un video de Lucía es un video estructurado** (Sergio Urcullo, 8-oct: *«es literal un video de 10 segundos. Tienen
+  que ser videos estructurados»*; el chiste de 10 s y L02 se rechazaron):
+  - **gancho** en los primeros 3 s;
+  - **desarrollo con valor**: pasos, un caso o una demostración (la pantalla real de Onia entra acá);
+  - **cierre** con un solo CTA;
+  - **30 a 60 s**, y deja algo aprendido;
+  - el **guion se escribe y se valida ANTES de editar** (`guiones/`). Moldes: `FORMULAS-REFERENTES.md` y
+    `edicion-referentes`.
+
 - **Rubro: solo dental** en lo que vende. Es la decisión más nueva del negocio: «solo dental hasta tener la factura del
   SIAT» (plan de la 1.0 del 3-oct y madre del 5-oct). Las piezas de personaje no muestran rubro. Los 5 rubros de la v3
   quedan en pausa hasta que Sergio Urcullo diga otra cosa.
@@ -86,8 +96,8 @@ Urcullo pide un presentador IA para la pauta, Lucía puede ser esa persona; eso 
 
 | Formato | Molde | Créditos | Estado |
 |---|---|---:|---|
-| **A · Reel de venta, 20-35 s:** Lucía en cuadro con rótulo (0-3 s) → pantalla real de Onia → CTA | anuncios de Doctocliq, CitaPro, Calendico y Dentalink (mirados en 3 cuadros cada uno) | 0-3,75 | K1, K2 y K4 en borrador de 360p (Codex, 6-oct); faltan las pantallas |
-| **B · Reel de personaje, 6-10 s:** la IA como gancho, sin vender | Aria Cruz, @ugc.studio.ia (intakes del 3/4-oct) | 0 | L02 editado; el chiste se edita después del OK |
+| **A · Video estructurado, 30-60 s:** gancho (0-3 s) → desarrollo con valor y la pantalla real de Onia → CTA | `FORMULAS-REFERENTES.md` F4/F7 + anuncios de Doctocliq, CitaPro, Calendico y Dentalink | 0-3,75 | **G1** escrito para validar; K1, K2 y K4 en borrador de 360p (Codex): se revisan con este criterio. Faltan las pantallas |
+| ~~B · Reel de personaje, 6-10 s~~ | — | — | **RECHAZADO el 8-oct** (el chiste y L02): un clip suelto con tarjetas no es un video |
 | **C · Carrusel paso a paso** con capturas reales | el carrusel de Doctocliq (solo se leyó el pie) | 0 | falta la captura |
 | **D · Historias:** recortes del mismo lote + el link | — | 0 | se puede ya |
 
@@ -98,17 +108,18 @@ Urcullo pide un presentador IA para la pauta, Lucía puede ser esa persona; eso 
   - Marketing Studio: cuesta de 42 a 105 e inventa guion y voz;
   - `saas_motion`: re-dibuja la interfaz.
 
-## 5. Las 2 semanas de prueba (3 piezas por semana, 0 créditos nuevos)
+## 5. Las 2 semanas de prueba (hasta 3 piezas por semana, 0 créditos nuevos)
 
 Todo sale de material ya pagado. Sergio Urcullo aprueba **una vez por semana**, sobre el paquete entero.
 
 | Día | Pieza | Formato | Estado |
 |---|---|---|---|
-| 1 | **L01** «Hola, soy Lucía. No existo.» (fijado) | C | ✅ aprobado el 1-oct (en vos: ver D8) |
-| 3 | **L02** «Este video no fue grabado» | B | editado; falta el OK (en vos: ver D8) |
-| 5 | **Chiste de 10 s:** «¿Lucía Antelo es real?» → «No: soy IA.» → «Lo que le muestro, sí.» (clip del café, ya pagado). El pie no vende ni anuncia nada que no esté grabado | B | ✅ editado el 8-oct a 0 cr (`videos/lucia-chiste/`); falta el OK |
-| 8 | **«El paciente reserva solo»:** Lucía 3 s (clip del coworking `v4/kit/k3-clip-coworking-07b938b2.mp4`, recuperado el 8-oct a 0 cr, sin ambo) → la página pública de reserva de la demo, sin reservar → CTA | A | falta grabar la pantalla |
-| 10 | **K4 corta** «Las reglas de la recepción». En la toma 6, **solo Pendientes**: «Revisa su agenda y sus cobros» → «Nada sale sin su aprobación». Sin la frase del correo, con recorte focal y sin filas «A medias». **Si la demo no muestra Pendientes, K4 pasa a la semana 3** | A | borrador de 360p ✅ (cutlist corregido el 8-oct); falta la captura P2 |
+| 1 | **G1** «Recordatorio de cita: 3 datos» (53 s; `guiones/G1-recordatorio-de-cita.md`) | A | guion para validar; falta la captura P2 (Pendientes) |
+| 2 | **L01** «Hola, soy Lucía. No existo.» (carrusel de presentación, fijado) | C | tiene gancho y cierre, **pero no enseña nada**: es la presentación de la cuenta. Va fijado **después** de G1 y no abre la cuenta (en vos: ver D8). Decide Sergio Urcullo |
+| — | ~~L02~~ «Este video no fue grabado» (6 s) | — | **RETIRADA el 8-oct.** Su clip de la calle queda de plano de apoyo |
+| — | ~~Chiste de 10 s~~ «¿Lucía Antelo es real?» | — | **RECHAZADO el 8-oct.** Su clip del café queda de plano de apoyo |
+| 5 | **G2** «El link de reserva: 3 cosas» (a escribir; demostración: la página pública de reserva, sin reservar) | A | pide el `slug` de la demo y la captura |
+| 8 | **K4 corta** «Las reglas de la recepción» | A | se revisa con el criterio de estructura después de validar G1; en la toma 6, solo Pendientes, sin la frase del correo y sin filas «A medias» |
 | 12 | **Carrusel** «Cómo reserva un paciente solo, paso a paso». Termina en el formulario **sin enviar**, salvo que Sergio Urcullo dé el OK para crear 1 cita de prueba en la demo | C | falta la captura |
 
 - **Las pantallas salen de la cuenta demo «Clínica Demo Onia».** Desde la nube no se pueden grabar (el Chromium no pasa
