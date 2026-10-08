@@ -34,6 +34,13 @@
     `codex-tareas/`;
   - la regla de publicar sin OK pieza por pieza ya está en el `CLAUDE.md` de `main` («Qué se publica sin preguntar»).
 
+- **Lote de 14 imágenes mostrado a Sergio Urcullo (8-oct), sin generar:** pidió «mostrámelas y digo sí» (por la madre).
+  10 reemplazan las láminas que no se entienden (K13-2, K5-3, K5-7, K9-5, K9-6, K12-7, N02-3, N02-7, K1-7, K10-5) y 4
+  son íconos de arcilla de P2 (HyperFrames, Buffer, faster-whisper, Higgsfield). 14 × 0,12 = 1,68 cr. Los prompts
+  están en `docs/cola/plan-3-semanas/lote-14-imagenes.json`. Al recibir el sí: cotizar en vivo, generar, mirar cada
+  imagen (cara, letras inventadas, fondo gris) y pasar los prompts a los briefs. Riesgo conocido: vidrio esmerilado
+  (K9-5) y monedero (K9-6) pueden volver a fallar; si pasa, se rehace solo esa y se avisa antes de gastar más.
+
 ## ▶ 8-oct (noche, 4) — calendario de publicación ordenado
 
 - **Fuente:** `docs/cola/plan-3-semanas/CALENDARIO-PUBLICACION-9-16-OCT.md`, también en la página de Sergio Urcullo.
