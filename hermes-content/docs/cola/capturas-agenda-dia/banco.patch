@@ -1,0 +1,208 @@
+From 138d67ee841a8985434348645e8c64298f824028 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Thu, 8 Oct 2026 18:42:56 +0000
+Subject: [PATCH 1/2] =?UTF-8?q?fix(dev):=20bancos=20pasan=20el=20nombre=20?=
+ =?UTF-8?q?del=20plan=20sin=20repetir=20=C2=ABPlan=C2=BB?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+La barra de estado ya antepone «Plan»; los bancos pasaban «Plan Profesional» y se leía «Plan Plan Profesional» en las capturas. Producción no cambia: pasa nombreDePlan(plan).
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01HhnFgkeF6nLGvjrfjt1o2C
+---
+ app/dev/agenda/dia/page.tsx         | 2 +-
+ app/dev/agenda/page.tsx             | 2 +-
+ app/dev/comercio-productos/page.tsx | 2 +-
+ app/dev/ficha/page.tsx              | 2 +-
+ app/dev/pendientes/page.tsx         | 2 +-
+ app/dev/roles-operativos/page.tsx   | 2 +-
+ app/dev/shell/page.tsx              | 2 +-
+ 7 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/app/dev/agenda/dia/page.tsx b/app/dev/agenda/dia/page.tsx
+index dc48e22e..3374375e 100644
+--- a/app/dev/agenda/dia/page.tsx
++++ b/app/dev/agenda/dia/page.tsx
+@@ -13,7 +13,7 @@ export default async function Banco({searchParams}:{searchParams:Promise<{caso?:
+   const account:AccountContextValue={organizationId:"dev-agenda-ficticia",verticalTrackId:pack.trackId,plan:"professional",countryCode:"BO",currencyCode:"BOB",features:pack.includedFeatures,roleKeys:pack.roleKeys,baseRole:caso==="doctor"?"DOCTOR":"STAFF"};
+   const navItems=getNavForPack(pack,{...account,features:new Set(pack.includedFeatures)}) as NavigationItem[];
+   return <ThemeProvider initialTheme="light"><AccountContextProvider value={account}>
+-    <LayoutShell esCliente clinicName="Clínica de prueba" doctorName="Recepción de prueba" role={account.baseRole} plan="professional" planNombre="Plan Profesional" diasDePrueba={5} decisionesPendientes={0} navItems={navItems} bottomHrefs={pack.bottomNavHrefs} quickActions={pack.quickActions as NavigationItem[]}>
++    <LayoutShell esCliente clinicName="Clínica de prueba" doctorName="Recepción de prueba" role={account.baseRole} plan="professional" planNombre="Profesional" diasDePrueba={5} decisionesPendientes={0} navItems={navItems} bottomHrefs={pack.bottomNavHrefs} quickActions={pack.quickActions as NavigationItem[]}>
+       <BancoAgenda caso={caso}/>
+     </LayoutShell>
+   </AccountContextProvider></ThemeProvider>;
+diff --git a/app/dev/agenda/page.tsx b/app/dev/agenda/page.tsx
+index dea8a92c..8a9cfe19 100644
+--- a/app/dev/agenda/page.tsx
++++ b/app/dev/agenda/page.tsx
+@@ -137,7 +137,7 @@ export default async function BancoDeAgenda({ searchParams }: { searchParams: Pr
+           doctorName=""
+           role="ADMIN"
+           plan="professional"
+-          planNombre="Plan Profesional"
++          planNombre="Profesional"
+           diasDePrueba={5}
+           decisionesPendientes={0}
+           navItems={navItems}
+diff --git a/app/dev/comercio-productos/page.tsx b/app/dev/comercio-productos/page.tsx
+index 1a7e5f58..155b6dc9 100644
+--- a/app/dev/comercio-productos/page.tsx
++++ b/app/dev/comercio-productos/page.tsx
+@@ -118,7 +118,7 @@ export default async function BancoComercioProductos({
+           doctorName=""
+           role="ADMIN"
+           plan="professional"
+-          planNombre="Plan Profesional"
++          planNombre="Profesional"
+           diasDePrueba={5}
+           decisionesPendientes={0}
+           navItems={navItems}
+diff --git a/app/dev/ficha/page.tsx b/app/dev/ficha/page.tsx
+index fb9304cf..66101fa2 100644
+--- a/app/dev/ficha/page.tsx
++++ b/app/dev/ficha/page.tsx
+@@ -171,7 +171,7 @@ export default async function BancoDeFicha({
+           doctorName=""
+           role={staff ? "STAFF" : "ADMIN"}
+           plan="professional"
+-          planNombre="Plan Profesional"
++          planNombre="Profesional"
+           diasDePrueba={5}
+           decisionesPendientes={0}
+           navItems={navItems}
+diff --git a/app/dev/pendientes/page.tsx b/app/dev/pendientes/page.tsx
+index 446a7589..9b256233 100644
+--- a/app/dev/pendientes/page.tsx
++++ b/app/dev/pendientes/page.tsx
+@@ -59,7 +59,7 @@ export default async function BancoDePendientes({
+           doctorName=""
+           role="ADMIN"
+           plan="professional"
+-          planNombre="Plan Profesional"
++          planNombre="Profesional"
+           diasDePrueba={5}
+           decisionesPendientes={APROBACIONES.length}
+           navItems={navItems}
+diff --git a/app/dev/roles-operativos/page.tsx b/app/dev/roles-operativos/page.tsx
+index fdbae1f4..08e49fcb 100644
+--- a/app/dev/roles-operativos/page.tsx
++++ b/app/dev/roles-operativos/page.tsx
+@@ -60,7 +60,7 @@ export default async function BancoRolesOperativos({
+           doctorName=""
+           role="ADMIN"
+           plan="professional"
+-          planNombre="Plan Profesional"
++          planNombre="Profesional"
+           diasDePrueba={5}
+           decisionesPendientes={0}
+           navItems={navItems}
+diff --git a/app/dev/shell/page.tsx b/app/dev/shell/page.tsx
+index 4c181a79..d6e2046c 100644
+--- a/app/dev/shell/page.tsx
++++ b/app/dev/shell/page.tsx
+@@ -74,7 +74,7 @@ export default async function BancoDePruebasShell({
+         // el que nunca se ve en un banco vacio. Con ?role=STAFF el item no esta
+         // y el numero no se pinta: el layout real le da 0 a quien no decide.
+         decisionesPendientes={decide ? 4 : 0}
+-        planNombre="Plan Profesional"
++        planNombre="Profesional"
+         diasDePrueba={5}
+         clinicName={nombre ?? ""}
+         doctorName=""
+-- 
+2.43.0
+
+
+From 8ca49017b534f386481fd8cae859966a4e3cb2d8 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Thu, 8 Oct 2026 18:54:09 +0000
+Subject: [PATCH 2/2] fix(dev): banco de la agenda diaria con datos legibles y
+ Confirmar activo
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Las capturas para el OK de diseño mostraban «Persona de prueba A» y un Confirmar gris con la leyenda «Banco de prueba», que se leía como si el botón estuviera deshabilitado en el producto. Ahora el banco usa nombres de ejemplo, cubre los cinco estados de cita y Confirmar cambia sólo el estado local (sin red ni base). Producción no cambia.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01HhnFgkeF6nLGvjrfjt1o2C
+---
+ app/dev/agenda/BancoAgenda.tsx | 22 +++++++++++++++++-----
+ app/dev/agenda/dia/page.tsx    |  2 +-
+ docs/C5_AGENDA_DIA.md          |  2 +-
+ 3 files changed, 19 insertions(+), 7 deletions(-)
+
+diff --git a/app/dev/agenda/BancoAgenda.tsx b/app/dev/agenda/BancoAgenda.tsx
+index ffc2ab1a..2cf01b59 100644
+--- a/app/dev/agenda/BancoAgenda.tsx
++++ b/app/dev/agenda/BancoAgenda.tsx
+@@ -4,20 +4,32 @@ import { AgendaDia } from "@/components/agenda/AgendaDia";
+ import type { CitaAgendaDia, ProfesionalAgenda } from "@/lib/agenda/vista-dia";
+ 
+ const profesionales: ProfesionalAgenda[] = [
+-  { id:"ana",name:"Ana · profesional de prueba",horarios:[{active:true,dayOfWeek:1,startTime:"08:00",endTime:"17:00",breakStartTime:"12:00",breakEndTime:"13:00"}] },
+-  { id:"luis",name:"Luis · profesional de prueba" },
++  { id:"ana",name:"Dra. Ana Aramayo",horarios:[{active:true,dayOfWeek:1,startTime:"08:00",endTime:"17:00",breakStartTime:"12:00",breakEndTime:"13:00"}] },
++  { id:"luis",name:"Dr. Luis Vargas" },
++];
++const cita=(id:string,nombre:string,doctorId:string|null,hora:string,durationMin:number,status="PENDIENTE"):CitaAgendaDia=>({id,doctorId,dateTime:`2026-10-06T${hora}:00-04:00`,durationMin,status,patient:{name:nombre},doctor:doctorId?{name:doctorId}:null});
++const citasDeEjemplo=[
++  cita("A","Lucía Mendoza","ana","09:00",60),
++  cita("B","Jorge Rivas","ana","09:30",30),
++  cita("C","Carla Rojas","luis","09:00",45,"CONFIRMADA"),
++  cita("D","Marta Flores",null,"11:00",30),
++  cita("E","Diego Suárez","luis","15:30",30,"CANCELADA"),
++  cita("F","Rosa Paredes","ana","10:30",30,"COMPLETADA"),
++  cita("G","Luis Quispe","luis","10:30",30,"NO_ASISTIO"),
+ ];
+-const cita=(id:string,doctorId:string|null,hora:string,durationMin:number,status="PENDIENTE"):CitaAgendaDia=>({id,doctorId,dateTime:`2026-10-06T${hora}:00-04:00`,durationMin,status,patient:{name:`Persona de prueba ${id}`},doctor:doctorId?{name:doctorId}:null});
+-const citas=[cita("A","ana","09:00",60),cita("B","ana","09:30",30),cita("C","luis","09:00",45,"CONFIRMADA"),cita("D",null,"11:00",30),cita("E","luis","15:30",30,"CANCELADA")];
+ export function BancoAgenda({caso}:{caso:string}) {
+   const [dia,setDia]=useState("2026-10-06");
+   const [seleccionada,setSeleccionada]=useState<string|null>(null);
++  // Confirmar sólo cambia el estado local del banco: no hay red ni base.
++  const [confirmadas,setConfirmadas]=useState<string[]>([]);
++  const citas=citasDeEjemplo.map(c=>confirmadas.includes(c.id)?{...c,status:"CONFIRMADA"}:c);
+   return <div className="space-y-5">
+-    <header><h1 className="text-2xl font-semibold text-on-surface">Agenda del día</h1><p className="text-sm text-on-surface-variant">Banco con datos ficticios. Confirmar está deshabilitado; no se guardan cambios.</p></header>
++    <header><h1 className="text-2xl font-semibold text-on-surface">Agenda del día</h1><p className="text-sm text-on-surface-variant">Datos de ejemplo; no se guarda nada.</p></header>
+     <AgendaDia citas={caso==="vacio"?[]:citas} profesionales={profesionales} fecha={dia} zona="America/La_Paz"
+       perfil={caso==="doctor"?{id:"ana",role:"DOCTOR"}:{id:"recepcion",role:"STAFF"}}
+       puedeGestionar={caso!=="lectura"} ahora={Date.parse("2026-10-06T12:00:00Z")}
+       citasLabel="citas" onFecha={d=>{setDia(d);setSeleccionada(null);}} onSeleccionar={setSeleccionada} seleccionada={seleccionada}
++      onConfirmar={id=>setConfirmadas(prev=>[...prev,id])}
+       fallo={caso==="error"?{id:"A",texto:"No se pudo guardar el cambio. Revise su conexión."}:null}/>
+     {seleccionada && <p role="status" className="text-sm text-on-surface">Detalle de la cita {seleccionada}. En el banco no se abren fichas ni se ejecutan acciones reales.</p>}
+   </div>;
+diff --git a/app/dev/agenda/dia/page.tsx b/app/dev/agenda/dia/page.tsx
+index 3374375e..fdea0e67 100644
+--- a/app/dev/agenda/dia/page.tsx
++++ b/app/dev/agenda/dia/page.tsx
+@@ -13,7 +13,7 @@ export default async function Banco({searchParams}:{searchParams:Promise<{caso?:
+   const account:AccountContextValue={organizationId:"dev-agenda-ficticia",verticalTrackId:pack.trackId,plan:"professional",countryCode:"BO",currencyCode:"BOB",features:pack.includedFeatures,roleKeys:pack.roleKeys,baseRole:caso==="doctor"?"DOCTOR":"STAFF"};
+   const navItems=getNavForPack(pack,{...account,features:new Set(pack.includedFeatures)}) as NavigationItem[];
+   return <ThemeProvider initialTheme="light"><AccountContextProvider value={account}>
+-    <LayoutShell esCliente clinicName="Clínica de prueba" doctorName="Recepción de prueba" role={account.baseRole} plan="professional" planNombre="Profesional" diasDePrueba={5} decisionesPendientes={0} navItems={navItems} bottomHrefs={pack.bottomNavHrefs} quickActions={pack.quickActions as NavigationItem[]}>
++    <LayoutShell esCliente clinicName="Clínica Aramayo" doctorName="Recepción de prueba" role={account.baseRole} plan="professional" planNombre="Profesional" diasDePrueba={5} decisionesPendientes={0} navItems={navItems} bottomHrefs={pack.bottomNavHrefs} quickActions={pack.quickActions as NavigationItem[]}>
+       <BancoAgenda caso={caso}/>
+     </LayoutShell>
+   </AccountContextProvider></ThemeProvider>;
+diff --git a/docs/C5_AGENDA_DIA.md b/docs/C5_AGENDA_DIA.md
+index 01359518..d04a8b28 100644
+--- a/docs/C5_AGENDA_DIA.md
++++ b/docs/C5_AGENDA_DIA.md
+@@ -11,7 +11,7 @@ Las filas se alinean por hora de inicio, no representan una escala proporcional
+ - Modelos puros: zona del negocio, solapes, filtros, sin profesional, horarios, vacío y rol propio.
+ - Render: controles etiquetados, encabezados de tabla, región desplazable enfocable, permisos, error y ausencia de campos clínicos.
+ - Integración: Mes/Día, fecha, detalle y PATCH existente; primer dibujo y estados conservados.
+-- Banco `/dev/agenda/dia`: sólo `NODE_ENV=development`; casos normal, vacío, doctor, lectura y error. Sin consultas a BD ni acciones de envío. Confirmar deshabilitado en el banco.
++- Banco `/dev/agenda/dia`: sólo `NODE_ENV=development`; casos normal, vacío, doctor, lectura y error. Sin consultas a BD ni acciones de envío. Confirmar sólo cambia el estado local del banco.
+ - QA de navegador a cargo de la madre, sin interacción con APIs reales. Fidelidad tipográfica limitada por fuentes locales de respaldo.
+ - Typecheck local requiere cliente Prisma compatible; no regenerar el compartido. CI hará verificación completa.
+ 
+-- 
+2.43.0
+

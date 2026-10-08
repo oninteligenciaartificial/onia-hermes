@@ -25,7 +25,8 @@ gate que cuenta el voseo en lo que ve el cliente y solo deja que el número BAJE
 - `components/ayuda/FaqAyuda.tsx`, `components/ayuda/AsistenteAyuda.tsx`, `app/(dashboard)/help/page.tsx`.
 - `app/(dashboard)/patients/import/page.tsx` y `app/api/patients/import/route.ts`.
 - `app/(public)/book/[orgSlug]/page.tsx` (lo ve el PACIENTE: «Elegí», «Probá», «Revisá»…) y los mensajes de error de `app/api/booking/*` que lleguen a esa pantalla («Intentá de nuevo», «Por favor elige otro» → «Por favor, elija otro»).
-- `components/layout/` (barra del asistente «Preguntá por tu negocio», menús, avisos) salvo `InstalarOnia.tsx`, que ya está.
+- `components/ayuda/BarraAsistente.tsx` (líneas 116 y 121: «Preguntá por tu negocio», se ve en TODAS las pantallas a 1440).
+- `components/layout/` (menús, avisos) salvo `InstalarOnia.tsx`, que ya está.
 
 ## REGLA DE PARADA
 - **No toques** (otras tareas los están cambiando): `app/(dashboard)/agenda/**`, `app/(dashboard)/appointments/**`,
