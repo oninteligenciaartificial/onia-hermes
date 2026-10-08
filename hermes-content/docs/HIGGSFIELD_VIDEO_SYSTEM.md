@@ -311,6 +311,136 @@ Registrar por job: versión CLI, modelo técnico, parámetros, referencias, cost
 previsto, costo real, request/job id, artefacto, decisión QA y responsable de
 aprobación. Nunca imprimir `higgsfield auth token`.
 
+## Higgsfield en la edicion de la marca personal (2026-10-08)
+
+> Pedido de Sergio Urcullo, 8-oct: *«que sigamos mejorando nuestro uso de Higgsfield para usarlo en ediciones o en
+> contenido»*. Es un diseño: **no se generó ni se cotizó nada en vivo**. El CLI de la PC (1.1.24) responde
+> `Not authenticated` a `generate cost` (probado el 8-oct) y el del VPS no se leyó desde esta sesión. Los créditos de
+> abajo son los medidos entre el 2-sep y el 3-oct: antes de cada lote corre `generate cost` en el VPS y se leen los
+> `adjustments`. Cuadran con el registro del repo: imagen Soul 2k = 0,12 cr (33 trabajos del 2-oct = 3,96 cr, igual a lo
+> cotizado) y Kling 3.0 std sin sonido 9:16 = 1,25 cr/s (6 s = 7,5; 10 s = 12,5). **Nunca se cotizaron el clip de 3 s
+> (~3,75 cr, extrapolado; 3 s es el mínimo de Kling 3.0, y no se sabe si cobra mínimo) ni el Virality Predictor.**
+> Recotizarlos en el VPS es lo primero del lote. Los flags (`--start-image` con job id, `--wait`, `--json`, `--video`) se
+> comprobaron contra `higgsfield ... --help` y las referencias de la skill `higgsfield-generate`; los valores de cada
+> modelo (`--mode`, `--sound`, `--duration`) salen de esa skill, porque `model get` pide sesión y la PC no la tiene.
+
+**El principio.** La cara y la voz de Sergio Urcullo se graban y se editan gratis con código (`editor-videos` +
+`edicion-referentes`). Higgsfield pone solo la **imagen de una idea que no tiene prueba real**: una escena de arcilla
+quieta (0,12 cr) con ken burns local y, solo cuando el movimiento ES la idea, un clip corto. Prueba, dato, texto,
+logo y pantalla van siempre reales o en código. Las recetas con la cara de Sergio Urcullo de más abajo (§ «Sergio Soul
+ID runbook», «ultrareal identity», «Avatar Realism Lab») y la Receta 1 de `ONIA_MARCA_PERSONAL_HIGGSFIELD_RECETAS.md`
+son historia: desde el 6-ago su cara no se genera.
+
+**Qué se le pide a la arcilla (prevención de «hecho por IA»).** Un objeto liso por imagen, con una idea: una esfera, un
+cubo, una caja, una pila, una balanza, hojas. **Nunca** robots, cerebros, chips, circuitos, destellos, manos, personas
+ni personajes con cara: son los clichés de «IA», y Soul 2.0 inventa letras y marcas en las superficies planas (casos «Maptolgan» y «BOLVIA» en ropa). No hay un rechazo suyo
+registrado de estos objetos: la regla es preventiva, apoyada en el «muy IA» del 17-sep y en la paleta del 29-sep
+(verde ONIA + blanco + negro; sin crema ni naranja dentro de la imagen).
+
+**Miniatura.** El método de `editor-videos` § «Miniatura de YouTube» sigue mandando (frame real puntuado, luz en vez de
+máscara dura, titular en código, 210 px). El objeto de arcilla entra como un elemento más en el hueco, recortado de su
+fondo blanco liso (con luma key, sin `rembg`, y sin la sombra del render). Ese método usa rim y subrayado **naranja**
+(video 03, 17-sep) y el objeto es verde y negro: dos acentos en una miniatura se leen como collage. Las dos variantes del
+«Probar y comparar» llevan el MISMO rim y subrayado, y cuál de los dos acentos (naranja de la serie o verde ONIA) lo
+decide Sergio Urcullo mirando las dos a 210 px.
+
+### Usos por formato
+
+| Formato (piezas del 10 al 16-oct) | Uso de Higgsfield | Créditos | Cuándo sí | Cuándo no |
+|---|---|---|---|---|
+| **Santiago**, noticia con prueba (N07, N06, DD-A, N02, D02-A) | 1-2 **escenas de arcilla 4:3** en el panel de arriba, con ken burns suave de 10-20 % (como las pantallas de la receta; la cámara queda a escala 1,00), en el tramo sin prueba (el «para qué sirve»). La cuenta con números es contador en código | 0,12 c/u (medido) | 5 s o más sin prueba oficial y la galería no tiene la imagen | En el gancho (la prueba va en el cuadro 0) y donde hay precio, cuenta, cifra, changelog o captura |
+| **Erik**, tutorial (N04, S2-D08-A, S2-D07-A, D01-A, D05-A) | 1 **ícono de arcilla** del concepto dentro de la tarjeta o el sello; tarjeta, dato y texto en código | 0,12 (medido) | El concepto no tiene logo oficial (worktree, ventana de 24 h) | Hay logo oficial; relojes (inventa números); chats y pantallas (S2-D08-A usa las respuestas REALES) |
+| **Rocha**, historia (D03-A, D04-C) | Dentro de la **caja del medio** (no a pantalla completa) y de **2 s o menos**, después de la primera frase: still de arcilla 9:16 y, si el movimiento es la historia, **Kling 3.0 std sin sonido, 3 s**. Es una prueba: la receta Rocha no está medida y su set es de luz cálida y penumbra, donde un cuadro blanco a pantalla completa se ve como un flash | 0,12 + ~3,75 (lineal de 6 s = 7,5 y 10 s = 12,5, medidos 1 y 3-oct; el de 3 s no se cotizó) | Momento físico sin plano real posible (17 archivos que entran a la rama) | Hay captura real (D04-C: el login roto es captura); como adorno; en el cuadro 0; a pantalla completa; con personas o caras |
+| **YouTube 16:9** (D01-C) | **Miniatura**: frame real de su cara + objeto de arcilla 16:9 + texto en código. **Escenas** de capítulo con ken burns | 0,12 c/u, 4 variantes = 0,48 | La idea cabe en un objeto liso (balanza con una esfera y un cubo = comparar dos modelos); tramos de más de 20 s sin demo | Cara generada o retocada; texto dentro de la imagen; robots, cerebros, chips o personajes con cara; benchmarks y precios (tabla en código con fuente) |
+| **Cortes verticales del YouTube** | **Ninguno**: recorte local anclado a la cara (`zoom-punch --anchor top`, `split-layout.mjs`) | 0 | Siempre | `reframe` de Higgsfield rellena con IA alrededor de su cara real y su costo no está registrado |
+| **Yaps a Trial** (2 por día) | **Virality Predictor** (`brain_activity`) sobre los primeros 15 s de cada gancho, como segunda opinión para elegir cuál va a Trial | 0 según la página (preview, leída el 8-oct; sin cotizar) | Solo si acierta en el lote de prueba | Como veredicto único; sin el OK de Leslie Mercado Moreno, su representante, para subir su cara y su voz (Sergio Urcullo es menor de edad; términos 4.2(b) y edad mínima) |
+| **Carrusel 16:00** (pack referentes) | Láminas de arcilla: el uso actual. Pendiente: `lote-14-imagenes.json` (1,68 cr) | 0,12 c/u (medido) | Lámina ilustrada o analogía | Láminas de captura, dato o logos; crema o papel (rechazado el 29-sep) |
+| **HyperFrames sin cara** (P1 Niveles, P3) | Figuras de arcilla como personajes (P1: una por nivel); el movimiento lo hace el código | 0,12 c/u, P1 = 0,48 | El código no dibuja bien el personaje | Números, contadores, tablas y diagramas: código (`motion-doctrine`) |
+| **Boceto, pantalla verde, Pablo, b-roll grabado, historias** | **Ninguno** | 0 | | Boceto: la etiqueta dice la herramienta real y se arma gratis. Verde: un set generado detrás de él se ve IA. Pablo: GitHub real. B-roll: un plano «real» que falta se regraba, no se finge. Historias: primero el rediseño con estructura de venta (rechazo del 8-oct) |
+
+**Lo que no se usa en la marca personal, y por qué:** Shorts Studio (la página pública lo describe como estilos, tipografías,
+fondos y subtítulos de catálogo, que pisan el montaje tal cual de Erik y Santiago; se había anotado que en una prueba del
+22-jul reemplazó la voz por un clon, pero esa prueba no tiene fuente archivada: no se cita como hecho), lipsync, doblaje y cambio de voz (su voz es la grabada), Seedance (2.5 de 5 s, cotizado el 29-sep:
+15 cr en borrador 480p, 35 cr a 720p, 60 cr a 1080p; 2.0 mini de 6 s = 6 cr; contra ~3,75 de un Kling std de 3 s para el
+mismo corte), Genjutsu y presets virales (efecto sin motivo = «hecho por IA»), Marketing Studio (es pauta,
+skill `onia-ventas-pauta`) y upscale de video (el clip va al panel o a 2 s de corte, donde 720p alcanza; su costo no
+está registrado).
+
+### Comandos
+
+```bash
+# El CLI autenticado está en el VPS. `ssh onia-vps` solo existe en las sesiones de la NUBE (lo arma
+# scripts/nube-ssh-vps.mjs); en la PC da "Could not resolve hostname onia-vps" (medido 8-oct): ahí va la llave directa.
+VPS="ssh -i ~/.ssh/onia_hermes_vps_ed25519 -o BatchMode=yes root@187.77.16.63"   # en la nube: VPS="ssh onia-vps"
+
+# Escenas e iconos de arcilla 4:3 (bloque fijo del estilo clay). Sin --yes cotiza gratis; --yes solo con lote aprobado.
+# brief: {"image_style":"clay","slides":[{"number":1,"image_prompt":"..."}]}
+HF_CMD="$VPS higgsfield" node scripts/carousel_images.mjs --brief escenas-<pieza>.json --out <scratch>/escenas-<pieza>
+
+# A mano, el comando ENTERO va entre comillas simples: ssh junta los argumentos y el shell del VPS vuelve a partirlos,
+# así que un --prompt "con espacios" sin las comillas de afuera llega partido en palabras sueltas (reproducido en local).
+# 9:16 o 16:9 (el script fija 4:3 para clay): el mismo bloque de texto.
+$VPS 'higgsfield generate cost text2image_soul_v2 --prompt "Soft 3D clay render, rounded toy-like shapes in vivid emerald green, white and matte black, on a pure white seamless background, soft studio light, gentle shadows, one clear subject centered. <escena> Completely unbranded, nothing printed or written anywhere, clean white background." --aspect_ratio 9:16 --quality 2k'
+
+# Clip desde el still: --start-image acepta el job id del still, sin volver a subirlo
+$VPS 'higgsfield generate cost kling3_0 --prompt "<una accion simple>. Static camera. Keep the shapes exactly as in the image." --start-image <job_id> --mode std --sound off --aspect_ratio 9:16 --duration 3'
+
+# Virality Predictor sobre los primeros 15 s (el archivo se copia antes al VPS)
+ffmpeg -i final.mp4 -t 15 -c copy gancho15.mp4
+scp -i ~/.ssh/onia_hermes_vps_ed25519 gancho15.mp4 root@187.77.16.63:     # sube al home de root
+$VPS 'higgsfield upload create gancho15.mp4'
+$VPS 'higgsfield generate cost brain_activity --video <upload_id>'
+```
+
+- Con la cotización leída y el OK: la misma línea con `generate create` en vez de `generate cost`, más
+  `--wait --json`. Los nombres de los flags se confirman antes con `higgsfield model get <modelo>` (en el VPS).
+- `generate cost` con una ruta local **sube el archivo** a la cuenta: se cotiza con ids ya subidos.
+- `--sound off` va como texto. Con `false`, Higgsfield lo pasa a `on` y cobra 10,5 cr en vez de 7,5 (medido el 3-oct).
+- El clip limpio (`rawUrl`) entra al storyboard de `santiago.py` o `erik_edit.py` como un apoyo más, disparado por
+  palabra. Nunca un render con texto.
+
+### Presupuesto mensual (plan pro, ~580 cr; el día de renovación y si lo no usado se pierde no están registrados)
+
+| Bolsa | Tope por mes | Cuenta |
+|---|---:|---|
+| Lucía | 150 | Tope que aprobó Sergio Urcullo el 1-oct; octubre lleva 52,5 al 5-oct |
+| Marca personal: imágenes (carruseles, escenas, iconos, miniaturas) | 40 | ~90 láminas nuevas + ~120 escenas + 16 de miniaturas = ~226 × 0,12 = 27 cr, con margen para rehacer |
+| Marca personal: clips de Kling | 40 | ~10 cortes de 3 s ≈ 37,5 cr. **Vale 0 si el lote de prueba no lo adopta** |
+| Virality Predictor | 10 | 0 mientras sea gratis; el tope cubre el día que empiece a cobrar |
+| **Sin asignar** | **340** | Pauta de Onia, imprevistos y cualquier entrenamiento o video con OK específico |
+
+Lo asignado suma 240 de 580. Ninguna bolsa toma de otra sin el OK de Sergio Urcullo. El saldo se lee con
+`$VPS 'higgsfield account status'` al empezar cada lote (ahí sale también el plan y su renovación). El último saldo
+medido es 571,76 cr (2-oct, después del lote que terminó a las 14:33 UTC). El ~580 es el saldo del 21-sep y del 2-oct,
+no una cuota documentada, y desde el 2-oct Lucía gastó al menos el kit del 3-oct (30,5): hoy el saldo es menor y no se
+conoce. Por eso la tabla manda en topes, no en saldo.
+
+### Lote de prueba (10-16 oct): ~4,6 cr, tope 13 cr
+
+| # | Pieza | Qué se genera | Créditos | Qué se mide |
+|---|---|---|---:|---|
+| L1 | N07 Haiku (sáb 10, Santiago) | 2 escenas de arcilla 4:3 para el «para qué sirve» (clasificar y repartir mensajes): una burbuja de chat verde frente a un camino que se parte en dos hacia una caja blanca y una negra, y la misma burbuja entrando a la negra. La cuenta de los 1.000 mensajes (3 USD → 0,30 USD) queda como contador en código, sin monedas | 0,24 | En el preview de 360p, ¿Sergio Urcullo las marca como «muy IA»? QA: sin letras, logos ni firma, paleta exacta |
+| L2 | D03-A hook (sáb 10, Rocha) | 1 still de arcilla 9:16 (hojas blancas con borde verde entrando a una caja negra) + Kling 3.0 std sin sonido, 3 s | 0,12 + ~3,75 | A/B en el preview: el mismo tramo con el still quieto, sin ken burns (0 cr extra) contra el clip, los dos dentro de la caja del medio y después de la primera frase. Si no elige el clip, los clips quedan fuera y la bolsa de 40 cr vuelve a «sin asignar» |
+| L3 | D01-C YouTube (mar 13) | 4 objetos de arcilla 16:9: una esfera verde y un cubo negro, lisos y sin cara, en los platos de una balanza nivelada | 0,48 | «Probar y comparar» de YouTube con dos miniaturas del mismo rim y subrayado: frame real + objeto contra frame real + texto solo. A 210 px, ¿se lee como collage? Si el canal no lo tiene, decide Sergio Urcullo |
+| L4 | N07, D03-A, N06 y N04 + sus 4 yaps | Virality Predictor sobre los primeros 15 s de los 8 | 0 (sin cotizar; para si cotiza más de 1 cr por clip) | Su orden (principal contra yap) contra las métricas de Instagram a las 48 h. Se adopta si acierta 3 de 4 pares; si no, se descarta |
+
+- **Necesita de Sergio Urcullo:** un sí al lote (con tope de 13 cr), el OK específico del clip de Kling (L2) y, para
+  subir 8 recortes de 15 s con su cara y su voz a Higgsfield (L4), el OK de Leslie Mercado Moreno (él es menor de edad y
+  los términos piden consentimiento de la persona real). Sin ese OK, L4 no corre.
+- **Antes de generar:** `generate cost` de cada pieza en el VPS; si algo cotiza por encima de esta tabla, se para y se
+  avisa.
+- **Después:** job, modelo, parámetros, costo previsto y real van a la bitácora del lote. El veredicto se escribe en
+  esta sección y en la skill `edicion-referentes`.
+
+### Decisiones abiertas para Sergio Urcullo
+
+- **Plan:** la tabla P2 de `GRABAR-10-16-OCT.md` dice «plan anual», y la memoria registra un cobro anual de USD 348 no
+  deseado, reclamado el 2-sep, sin respuesta registrada. Se confirma antes de publicar P2.
+- **Programa de creadores de Higgsfield:** da el plan gratis a cambio de etiquetarlos. Forbes (11-feb-2026) los
+  vinculó con pagos por difundir deepfakes (dato del 8-oct sin enlace archivado en el repo: se confirma la fuente antes de citarlo). Etiquetar a Higgsfield en su marca personal es decisión suya.
+- **Términos y edad:** antes de subir videos con su cara (L4) se leen los requisitos de edad de los términos de
+  Higgsfield. Si la cuenta exige 18 años, L4 no se hace y el gancho del yap se elige a ojo con las métricas de Instagram.
+
 ## Fuentes actuales
 
 Current public Higgsfield MCP endpoint:

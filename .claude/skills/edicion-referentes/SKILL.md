@@ -240,6 +240,41 @@ scratchpad de esa sesión; el método:
   - releer cada dato contra la doc oficial EL MISMO DÍA. Para el modo auto, `code.claude.com/docs/en/permission-modes`:
     v2.1.283, la lista de lo que bloquea por defecto y `⏸ manual mode on`.
 
+## Higgsfield en la edicion (8-oct-2026)
+
+Tabla por formato, comandos, presupuesto y lote de prueba:
+[`HIGGSFIELD_VIDEO_SYSTEM.md` § «Higgsfield en la edicion de la marca personal (2026-10-08)»](../../../hermes-content/docs/HIGGSFIELD_VIDEO_SYSTEM.md#higgsfield-en-la-edicion-de-la-marca-personal-2026-10-08).
+Hasta que el lote de prueba dé su veredicto, **lo único adoptado son las imágenes de arcilla**.
+
+1. **La cara y la voz de Sergio Urcullo no pasan por Higgsfield**: ni generadas, ni re-encuadradas con relleno de IA,
+   ni con lipsync, doblaje o Shorts Studio. Por qué: el 6-ago rechazó sus Souls («es horrible»), y Shorts Studio
+   aplica tipografías, fondos y subtítulos de catálogo que pisan el montaje tal cual (la nota de que cambió la voz por un
+   clon, del 22-jul, no tiene fuente archivada: no se cita). Los cortes verticales del YouTube se recortan local.
+2. **Higgsfield pone la imagen de una idea sin prueba; la prueba, el dato, el texto, el logo y la pantalla son reales
+   o de código.** Por qué: el 17-sep, en el video 03, «muy IA» y «los logos están rotos»; y Soul 2.0 inventa marcas y
+   letras (casos «Maptolgan» y «BOLVIA» en la ropa, firmas en la acuarela).
+3. **Primero still + ken burns; clip solo si el movimiento ES la idea, y 2 s o menos en pantalla.** Por qué: la imagen
+   cuesta 0,12 cr (arcilla) y sale a 1080p; un clip de Kling cuesta 1,25 cr por segundo y sale a 720p (medido en
+   `editor-videos` § `Escena` y el 1/3-oct).
+4. **Un solo estilo: arcilla verde, blanco y negro**, con el bloque fijo de `scripts/carousel_images.mjs`. Un objeto liso por imagen:
+   nunca robots, cerebros, chips, manos, personas ni personajes con cara (prevención de «muy IA»). Por qué: el 29-sep
+   rechazó el crema y el papel tibio; `diseno-contenido-onia` dice que las dos imágenes de arcilla de K1-B son lo que lo hace vender; la galería tiene 59 de arcilla
+   (29-sep al 2-oct) y ningún registro de cuántas aprobó Sergio Urcullo.
+5. **Una o dos escenas por video, y cada una con su motivo en el guion** (en Rocha, dentro de la caja del medio y no en
+   el cuadro 0; en Santiago nunca donde hay una cuenta o un precio: eso es contador en código). Por qué: un efecto sin motivo es la pieza
+   «hecha por IA» que prohíbe `CLAUDE.md` (21-sep), y el 2-oct el pop por tarjeta, que agregamos nosotros, fue «ese
+   sonido horrible».
+6. **Gasto:** `generate cost` en el VPS, lote aprobado por Sergio Urcullo y, para video, OK específico. Topes de marca
+   personal: 40 cr/mes en imágenes y 40 en clips, sin tocar los 150 de Lucía. Por qué: regla de gasto del 22-sep y
+   presupuesto del 8-oct.
+7. **El clip entra limpio** (`rawUrl`) al storyboard de `santiago.py` o `erik_edit.py`, disparado por palabra. Por
+   qué: el 1-oct se rehicieron L02, L05 y L08 por editar fuera de `editor-videos`.
+8. **Kling va con `--sound off` como texto.** Por qué: con `false` cobra 10,5 cr en vez de 7,5 (medido el 3-oct).
+9. **Virality Predictor es una segunda opinión para elegir el gancho del yap, nunca el veredicto**, y solo si acierta
+   en el lote de prueba. Subir un video con su cara y su voz pide el OK de Leslie Mercado Moreno: él es menor de edad y los
+   términos (4.2(b)) piden consentimiento de la persona real. Por qué: no hay
+   precisión publicada, y la única evidencia es un video de 7.000 vistas que puntuó más que uno de 2,1 M (8-oct, sin captura archivada).
+
 ## Relacionadas
 
 - `editor-videos`: corte, transcripción, regla de oro, ortografía y master. Este skill se monta encima.
