@@ -2,6 +2,33 @@
 
 **Archivo único del carril.** Actualizado 2026-09-29 por Claude (Opus 5.5).
 
+## ▶ 8-oct (noche, 8) — plan de referentes de la madre aplicado a los guiones
+
+- **Pedido de la madre (8-oct):** aplicar `references/marca-personal/PLAN-REFERENTES.md` (rama
+  `claude/onia-madre-v2-pr-review-2d85bb`, entra a `main` con su próximo PR): un solo CTA por pieza, al menos 1 de los 2
+  videos del día sobre un dolor de dueño, guiones con los 5 formatos, reglas de edición a la skill, y el checklist
+  «¿Qué automatizo primero?» en la comunidad.
+- **Hecho en `GRABAR-10-16-OCT.md`:**
+  - CTA único por pieza: desarrollo → comunidad; negocio (S2-D08-A, S2-D07-A) → asesoría gratis. N07 pierde la asesoría.
+  - Línea «Rótulo fijo arriba» y «CTA tecleado (≤12 palabras)» en las 13 piezas.
+  - Texto en el cuadro 0 con el dolor del dueño (F3) en S2-D08-A y S2-D07-A; línea de «así lo uso en mi empresa» en N04, D01-A y
+    D02-A; en N06 queda opcional porque no hay constancia de que Sergio Urcullo use Antigravity.
+  - D01-C pasó al formato F5: filtro de dolor al abrir, mapa de niveles antes de 1:15, TRAMPA a ~1/3, ~2/3 y al final, y la
+    asesoría solo en la descripción.
+  - Orden nuevo (para que haya un video de dueño por día): DD-A pasó al dom 11, N04 al lun 12, D02-A al mié 14 y N02 al jue 15.
+    Calendario y artefacto actualizados. Sin pieza de dueño quedan el vie 9 (N03, ya agendado) y el vie 16.
+- **Decisión que tomé y la madre puede revertir:** el pedido decía «rehacé los guiones», pero el §5 del propio plan dice «no se
+  reescriben los guiones, se cambian tres líneas por pieza». Seguí el §5: Sergio Urcullo está grabando y rehacer lo aprobado
+  tiraría su trabajo. Los cambios de cierre van en la «toma aparte de 4 s», así que lo ya grabado no se pierde.
+- **Skills:** `edicion-referentes` y `editor-videos` con las reglas del §4, fechadas. El molde Rocha queda **sin números
+  fijos** hasta medir 1 reel (los datos son de Gemini).
+- **Checklist «¿Qué automatizo primero?»:** no había constancia de que saliera. Quedó en el artefacto «Comunidad e historias»
+  (jue 8) y en `AVISOS-COMUNIDAD-8-16-OCT.md`. La pega Sergio Urcullo; si ya la había pegado, la salta.
+- **Pendiente anotado, no hecho:** la calculadora gratis de «cuánto cuesta un bot por mes según el modelo» (es construir algo
+  nuevo). La fecha del SIN (4-nov) no se usa como gancho sin verificarla.
+- **Falta de Sergio Urcullo:** bio de Instagram con el link «Asesoría de IA gratis» y renombrar el evento de cal.com; sin eso
+  los CTA de asesoría no llevan a ninguna parte.
+
 ## ▶ 8-oct (noche, 7) — Sergio Urcullo rechazó el diseño de historias
 
 - **Dijo (8-oct):** «no me gustan las historias, el diseño hay que mejorarlo; recordá que hay estructuras de contenido para

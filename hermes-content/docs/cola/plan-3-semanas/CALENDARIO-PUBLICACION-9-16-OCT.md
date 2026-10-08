@@ -38,16 +38,21 @@ Carrusel de todos los días: 16:00 · 16:01 · 16:02, ya agendado.
 | **Jue 8** | HISTORIA (K3) | — | — |
 | **Vie 9** | COMUNIDAD (N03) | — | **N03 modo auto** (v2, agendado) |
 | **Sáb 10** | HOOK (K11) | **N07** Haiku 5.5 | **D03-A** hook que commitea |
-| **Dom 11** | ANTIGRAVITY (N06) | **N06** Antigravity | **N04** skill verify |
-| **Lun 12** | PRUEBAS (K4) | **S2-D08-A** promesa del bot | **DD-A** caché de OpenAI |
+| **Dom 11** | ANTIGRAVITY (N06) | **N06** Antigravity | **DD-A** caché de OpenAI |
+| **Lun 12** | PRUEBAS (K4) | **S2-D08-A** promesa del bot | **N04** skill verify |
 | **Mar 13** | PROMPT (K8) | **D01-C** YouTube Opus o Sonnet (lo sube Sergio Urcullo) | — |
-| **Mié 14** | BRIEF (K7) | **S2-D07-A** ventana de 24 h | **N02** Sonnet 4.5 se apaga |
-| **Jue 15** | SKILL (K2) | **D01-A** primera skill | **D02-A** esfuerzo |
+| **Mié 14** | BRIEF (K7) | **S2-D07-A** ventana de 24 h | **D02-A** esfuerzo |
+| **Jue 15** | SKILL (K2) | **D01-A** primera skill | **N02** Sonnet 4.5 se apaga |
 | **Vie 16** | PROMESA (K6) | **D04-C** verificar es mirar | **D05-A** dos sesiones |
 
+- **Al menos un video del día sobre un dolor de dueño de negocio** (plan de referentes, 8-oct). Los de dueño son
+  N07, DD-A, S2-D08-A, D01-C (el costo de elegir mal el modelo), S2-D07-A y N02. Para repartirlos, el 8-oct (noche) se
+  cambió DD-A con N04 y D02-A con N02. **Quedan sin pieza de dueño el vie 9 (N03, ya agendado) y el vie 16** (D04-C y
+  D05-A son de desarrollo): para el 16 falta una pieza S2 de la reserva, si Sergio Urcullo graba una más.
 - **Por qué este orden:**
   - lo perecedero va primero: Haiku 5.5 salió el 7-oct;
-  - cada video cae el mismo día que un carrusel del mismo tema, o al lado: HOOK sáb, ANTIGRAVITY dom, SKILL jue;
+  - cada video cae el mismo día que un carrusel del mismo tema, o al lado: HOOK sáb, ANTIGRAVITY dom, SKILL jue (los
+    otros ya salieron como carrusel del 6 al 8-oct);
   - el martes queda liviano: el YouTube es el trabajo del día.
 - **Mar 13:** del YouTube salen 2 cortes verticales de ~45 s. Van de reel A el mié 14 o de yap.
 

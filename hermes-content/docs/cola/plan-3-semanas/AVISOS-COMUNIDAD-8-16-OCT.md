@@ -213,3 +213,34 @@ Abajo: los 5 comandos, en orden.
 
 Contame en General: ¿ya trabajás con dos sesiones a la vez?
 ```
+
+## CHECKLIST · Checklist: ¿qué automatizo primero?
+
+**Para Sergio Urcullo:** Cinco preguntas para que el dueño de un negocio descubra qué tarea automatizar primero. Es el recurso para los videos de negocio y la tarea previa a la asesoría gratis. Si ya lo pegaste antes, saltalo.
+
+**Aviso** (se pega primero):
+
+```
+📥 *¿Qué automatizo primero en mi negocio?*
+
+Antes de automatizar algo hay que saber qué. Te dejo 5 preguntas para descubrirlo en 5 minutos.
+
+La tarea que aparezca en 2 o más respuestas, esa va primero. Y si reservás una asesoría gratis, llevá tus respuestas.
+
+Abajo está el checklist. Contame en General: ¿cuál es la tuya?
+```
+
+**Recurso** (se pega después, en otro mensaje; sale de `ONIA_COMUNIDAD_CONTENIDO.md` §Vie):
+
+```
+📥 *Checklist: 5 preguntas para saber QUÉ automatizar primero en tu negocio*
+
+1. ¿Qué hago más de 3 veces por semana exactamente igual?
+2. ¿Qué me interrumpe cuando estoy trabajando en lo importante?
+3. ¿Qué se me olvida seguido (cobros, seguimientos, recordatorios)?
+4. ¿Dónde pierdo clientes por responder tarde?
+5. ¿Qué tarea odio tanto que la postergo?
+
+La que aparezca en 2 o más respuestas: esa va primero.
+Contá la tuya en General 👇
+```
