@@ -2,6 +2,19 @@
 
 **Archivo único del carril.** Actualizado 2026-09-29 por Claude (Opus 5.5).
 
+## ▶ 8-oct (noche, 2) — qué se manda a la comunidad y qué se hace con las llamadas
+
+- **Sergio Urcullo graba los guiones del plan 9-15.** La comunidad y las llamadas quedaron en su página
+  (`claude.ai/artifact/Hssf9o3ikt2fE7nkNBzrvd`):
+  - **«Para pegar hoy, jueves 8»:** 6 textos en orden, con la vuelta y el reto primero.
+    - Los 3 carruseles ya salidos o por salir prometen CACHE, VERIFY y HISTORIA.
+    - El aviso de CACHE se releyó el 8-oct contra la página de precios de OpenAI: Sol 2 / 0,10 / 10; Astra 10 / 1 / 50.
+    - El 9 va primero la respuesta del reto, a las 10:00.
+  - **Asesoría de IA gratis:** se llama así en todo el material, no «auditoría». Cupo de 3 por semana, 2 preguntas al
+    reservar y guion de 20 minutos en ese archivo y en `ONIA_COMUNIDAD_CONTENIDO.md`.
+  - **Después de cada llamada**, Sergio Urcullo manda una línea (rubro, tarea elegida, si es clínica). A las 10 llamadas
+    se mide cuántas pasan a la comunidad o a ver Onia.
+
 ## ▶ 8-oct (noche) — autorización de publicar y control de calidad de N03
 
 - **N03 «modo auto» pasó el control de calidad el 8-oct:**
