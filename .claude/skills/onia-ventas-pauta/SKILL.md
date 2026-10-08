@@ -360,6 +360,15 @@ Trampas pagadas armando v3 (2-oct):
 - **Las plantillas a leads salen desde la bandeja de Chatwoot con el usuario de Sergio Urcullo.** Así el bot se
   calla (traspaso de `chatwoot-adapter.mjs`). Si salen por envío automático, el botón que toca el lead le llega al
   bot y contesta con su guion.
+- **Contar los leads «hoy» no se puede desde la nube (8-oct).** No hay llave del VPS, ni token de Chatwoot, y el conector
+  de Gmail da «Precondition check failed». El conteo de una corrida (pedidos de acceso, respuestas humanas en Chatwoot y
+  plantillas sincronizadas) está en `ONIA_LEADS_ESPERANDO.md`, «Conteo de hoy en una sola corrida». Se le pide a la
+  PC, y no se redacta sobre el número heredado.
+- **Las plantillas aprobadas se leen en `channel_whatsapp.message_templates` de chatwoot-db**, con la fecha de la
+  última sincronización. Ningún conector de Meta las lista: el de desarrolladores solo ve la configuración de las
+  apps.
+- **La llamada gratis de 20 min es `sergiourcullo.vercel.app/llamada`,** que redirige a `cal.com/sergiourcullo/20min`
+  («Llamada 1 a 1», 200 el 8-oct). `onia.com.bo/llamada` da 404.
 - **Público personalizado con un puñado de teléfonos: no.** Meta recomienda al menos 1.000 personas y exige base
   legal para subir la lista. Para menos de 100 leads, el remarketing es la secuencia de plantillas (≈ USD 0,074
   cada una, `usage-run.mjs`).
