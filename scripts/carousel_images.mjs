@@ -43,6 +43,12 @@ const STYLES = {
   clay: { dir: 'ilustraciones', aspect: '4:3', pre: 'Soft 3D clay render, rounded toy-like shapes in vivid emerald green, white and matte black, ' +
     'on a pure white seamless background, soft studio light, gentle shadows, one clear subject centered. ',
     post: ' Completely unbranded, nothing printed or written anywhere, clean white background.' },
+  // fotobn: estilo de la marca personal elegido por Sergio Urcullo el 8-oct-2026 (opción 9 de la lámina de estilos).
+  // Va con --model gpt_image_2_5 y params [--quality medium --resolution 2k]: Soul 2.0 inventa letras.
+  fotobn: { dir: 'fotos-bn', aspect: '16:9', pre: 'Black and white editorial photograph, soft natural light, real materials, ' +
+    'clean uncluttered composition on a light grey seamless background, ',
+    post: ' Everything is black and white except that one object, which is vivid emerald green. No letters, no numbers, ' +
+      'no logos, no watermark, no interface, no people.' },
   // libre: el prompt trae el estilo entero (para comparar estilos antes de fijar uno).
   libre: { dir: 'estilos', aspect: '16:9', pre: '', post: ' No letters, no numbers, no logos, no watermark, no interface.' },
   objeto: { dir: 'objetos', aspect: '16:9', pre: 'Clean commercial product photograph on a seamless pure white background, soft ' +

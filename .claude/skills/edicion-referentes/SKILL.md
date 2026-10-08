@@ -406,7 +406,7 @@ Hormozi e Iman Gadzhi; la rama de la madre lo trae a `main`). Caso: el plan pidi
 
 Tabla por formato, comandos, presupuesto y lote de prueba:
 [`HIGGSFIELD_VIDEO_SYSTEM.md` § «Higgsfield en la edicion de la marca personal (2026-10-08)»](../../../hermes-content/docs/HIGGSFIELD_VIDEO_SYSTEM.md#higgsfield-en-la-edicion-de-la-marca-personal-2026-10-08).
-Hasta que el lote de prueba dé su veredicto, **lo único adoptado son las imágenes de arcilla**.
+Hasta que el lote de prueba dé su veredicto, **lo único adoptado son las imágenes en el estilo `fotobn`** (abajo, regla 4).
 
 1. **La cara y la voz de Sergio Urcullo no pasan por Higgsfield**: ni generadas, ni re-encuadradas con relleno de IA,
    ni con lipsync, doblaje o Shorts Studio. Por qué: el 6-ago rechazó sus Souls («es horrible»), y Shorts Studio
@@ -418,7 +418,7 @@ Hasta que el lote de prueba dé su veredicto, **lo único adoptado son las imág
 3. **Primero still + ken burns; clip solo si el movimiento ES la idea, y 2 s o menos en pantalla.** Por qué: la imagen
    cuesta 0,12 cr (arcilla) y sale a 1080p; un clip de Kling cuesta 1,25 cr por segundo y sale a 720p (medido en
    `editor-videos` § `Escena` y el 1/3-oct).
-4. **Un solo estilo: arcilla verde, blanco y negro**, con el bloque fijo de `scripts/carousel_images.mjs`. Un objeto liso por imagen:
+4. **Un solo estilo: foto editorial en blanco y negro con UN solo objeto en verde esmeralda** (estilo `fotobn` de `scripts/carousel_images.mjs`, con `--model gpt_image_2_5` y `params [--quality medium --resolution 2k]`, 1 cr por imagen). Lo eligió Sergio Urcullo el 8-oct-2026 entre 9 estilos (`hermes-content/galeria/estilos/opciones-estilo-2026-10-08.jpg`, opción 9). Reemplaza a la arcilla: Soul 2.0 metió letras inventadas en 5 de 7 imágenes de arcilla ese día («Chatuly»), GPT Image 2.5 en 0 de 12. ⚠️ Lo que sigue de esta regla es la versión anterior (arcilla), solo como historia: **arcilla verde, blanco y negro**, con el bloque fijo de `scripts/carousel_images.mjs`. Un objeto liso por imagen:
    nunca robots, cerebros, chips, manos, personas ni personajes con cara (prevención de «muy IA»). Por qué: el 29-sep
    rechazó el crema y el papel tibio; `diseno-contenido-onia` dice que las dos imágenes de arcilla de K1-B son lo que lo hace vender; la galería tiene 59 de arcilla
    (29-sep al 2-oct) y ningún registro de cuántas aprobó Sergio Urcullo.

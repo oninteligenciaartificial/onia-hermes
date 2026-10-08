@@ -1545,5 +1545,128 @@
       "estilos",
       "foto-bn-acento"
     ]
+  },
+  {
+    "id": "lote-fotobn-s31-61421ccd",
+    "file": "hermes-content/galeria/fotos-bn/lote-fotobn-s31-61421ccd.jpg",
+    "fecha": "2026-10-08",
+    "tipo": "fotos-bn",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "gpt_image_2_5",
+    "prompt": "a pile of plain paper envelopes on a desk being sorted into two empty metal trays, one single envelope is the green one, mid-way into the right tray.",
+    "estilo": "fotobn",
+    "costo_cr": 1,
+    "job": "61421ccd-8144-44f1-a698-c101ca0481a1",
+    "usado_en": [
+      "lote-fotobn"
+    ],
+    "tags": [
+      "N07",
+      "L1"
+    ]
+  },
+  {
+    "id": "lote-fotobn-s32-c5e1d3d0",
+    "file": "hermes-content/galeria/fotos-bn/lote-fotobn-s32-c5e1d3d0.jpg",
+    "fecha": "2026-10-08",
+    "tipo": "fotos-bn",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "gpt_image_2_5",
+    "prompt": "two metal trays on a desk: the right tray holds one single plain envelope, the green one; the left tray is full of plain envelopes.",
+    "estilo": "fotobn",
+    "costo_cr": 1,
+    "job": "c5e1d3d0-6080-4471-8e1c-56568b65a94a",
+    "usado_en": [
+      "lote-fotobn"
+    ],
+    "tags": [
+      "N07",
+      "L1"
+    ]
+  },
+  {
+    "id": "lote-fotobn-s33-3af2cf9a",
+    "file": "hermes-content/galeria/fotos-bn/lote-fotobn-s33-3af2cf9a.jpg",
+    "fecha": "2026-10-08",
+    "tipo": "fotos-bn",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "gpt_image_2_5",
+    "prompt": "plain sheets of paper sliding by themselves into an open black metal box on a desk, seen slightly from above; the top sheet is the green one.",
+    "estilo": "fotobn",
+    "costo_cr": 1,
+    "job": "3af2cf9a-d1a7-4306-8b34-d411e50925f5",
+    "usado_en": [
+      "lote-fotobn"
+    ],
+    "tags": [
+      "D03-A",
+      "L2"
+    ]
+  },
+  {
+    "id": "lote-fotobn-s34-369775f4",
+    "file": "hermes-content/galeria/fotos-bn/lote-fotobn-s34-369775f4.jpg",
+    "fecha": "2026-10-08",
+    "tipo": "fotos-bn",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "gpt_image_2_5",
+    "prompt": "an antique balance scale, perfectly level, holding a glass sphere on the left pan and a dark cube on the right pan; the sphere is the green one.",
+    "estilo": "fotobn",
+    "costo_cr": 1,
+    "job": "369775f4-258d-4faa-b4d6-a6125a129505",
+    "usado_en": [
+      "lote-fotobn"
+    ],
+    "tags": [
+      "D01-C",
+      "L3",
+      "miniatura"
+    ]
+  },
+  {
+    "id": "lote-fotobn-s35-d60f36df",
+    "file": "hermes-content/galeria/fotos-bn/lote-fotobn-s35-d60f36df.jpg",
+    "fecha": "2026-10-08",
+    "tipo": "fotos-bn",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "gpt_image_2_5",
+    "prompt": "close-up of a level brass balance scale, a sphere on one pan and a cube on the other, lots of empty space on the right side for a title; the sphere is the green one.",
+    "estilo": "fotobn",
+    "costo_cr": 1,
+    "job": "d60f36df-827c-4dfd-bb58-567fe7ea489a",
+    "usado_en": [
+      "lote-fotobn"
+    ],
+    "tags": [
+      "D01-C",
+      "L3",
+      "miniatura"
+    ]
+  },
+  {
+    "id": "lote-fotobn-s36-1a27a52e",
+    "file": "hermes-content/galeria/fotos-bn/lote-fotobn-s36-1a27a52e.jpg",
+    "fecha": "2026-10-08",
+    "tipo": "fotos-bn",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "gpt_image_2_5",
+    "prompt": "a simple modern balance scale on a table, level, a sphere on the left pan and a cube on the right pan, shot from low angle; the sphere is the green one.",
+    "estilo": "fotobn",
+    "costo_cr": 1,
+    "job": "1a27a52e-8a2f-429f-ba1d-30787cae25ac",
+    "usado_en": [
+      "lote-fotobn"
+    ],
+    "tags": [
+      "D01-C",
+      "L3",
+      "miniatura"
+    ]
   }
 ]

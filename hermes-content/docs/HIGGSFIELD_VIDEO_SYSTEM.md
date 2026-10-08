@@ -313,6 +313,21 @@ aprobación. Nunca imprimir `higgsfield auth token`.
 
 ## Higgsfield en la edicion de la marca personal (2026-10-08)
 
+> **ESTILO DECIDIDO (Sergio Urcullo, 8-oct-2026): foto editorial en blanco y negro con un solo objeto en verde esmeralda.**
+> Eligió la opción 9 entre 9 estilos del mismo concepto (`hermes-content/galeria/estilos/opciones-estilo-2026-10-08.jpg`).
+> Donde abajo dice «arcilla», léase este estilo. Cómo se genera: `scripts/carousel_images.mjs` con `"image_style":"fotobn"`,
+> `--model gpt_image_2_5` y `"params":["--quality","medium","--resolution","2k"]` = **1 cr por imagen** (cotizado y debitado
+> el 8-oct). Soul 2.0 queda fuera para esto: inventó letras en 5 de 7 imágenes («Chatuly», «CN NN 53»), una forma con cara y
+> una interfaz falsa; GPT Image 2.5 respetó «sin letras» en las 12. Prompt: describir la escena y decir cuál es «el verde».
+>
+> **Lote de prueba hecho el 8-oct (16,59 cr en total, saldo 438,17):**
+> - N07: dos escenas 4:3 (sobres que se reparten en dos bandejas, uno verde): `galeria/fotos-bn/lote-fotobn-s31*`, `s32*`.
+> - D03-A: still 9:16 (hojas que caen en una caja negra, la de arriba verde): `s33*`. Clip Kling 3.0 std, 3 s, sin sonido,
+>   desde ese still: `galeria/clips/d03a-clip-fotobn-3s.mp4` (3,75 cr; las hojas caen en la caja sin deformarse).
+> - D01-C: tres miniaturas 16:9 (balanza con esfera verde y cubo): `s34*`, `s35*`, `s36*`.
+> - L4 (Virality Predictor) NO se hizo: sube su cara y su voz. Para eso hace falta el OK de Leslie Mercado Moreno.
+> - Gasto: Sergio Urcullo dijo que lotes así son insignificantes y se generan sin preguntar (memoria `gasto-chico-higgsfield-sin-preguntar`).
+
 > Pedido de Sergio Urcullo, 8-oct: *«que sigamos mejorando nuestro uso de Higgsfield para usarlo en ediciones o en
 > contenido»*. Es un diseño: **no se generó ni se cotizó nada en vivo**. El CLI de la PC (1.1.24) responde
 > `Not authenticated` a `generate cost` (probado el 8-oct) y el del VPS no se leyó desde esta sesión. Los créditos de
