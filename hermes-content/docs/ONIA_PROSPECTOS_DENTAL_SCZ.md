@@ -350,6 +350,111 @@ decisión de las dos sedes. La reserva que pauta (Natural Smile, Rocha) no se re
 
 ---
 
+### 6.9 Nuevas con pauta activa (8-oct) — 7 de 10, sin contactar
+
+**Pedido de la madre (8-oct):** 10 clínicas dentales de Santa Cruz que no estuvieran ya en este doc (ni en la §6.8 de Codex, rama `codex/madre-orquestacion-20261005`), con señal y mensaje 1:1.
+
+**Resultado: 7 con ciudad, canal y señal verificados. A ninguna se le pudo contar el equipo desde la nube.** No relleno los 3 cupos que faltan: las mejores candidatas están abajo, EN ESPERA para la PC. Nadie fue contactado.
+
+**Cómo se sacó (8-oct, con 3 agentes):**
+- **Señal:** pauta activa hoy en la Biblioteca de Anuncios (conector, Bolivia, ACTIVE), con 11 búsquedas. Quedaron 81 páginas dentales que no estaban en este doc, sin contar a los profesionales sueltos («Dra. …»).
+- **Ciudad: el directorio `dentists10.com` por `page_id`.** `https://www.dentists10.com/BO/Santa-Cruz-de-la-Sierra/<page_id>/x` redirige (301) a la ciudad real y copia la «Información» y los posts de la página de Facebook: dirección, teléfono y fecha de cada post. De 81 páginas, 27 resolvieron: 9 en Santa Cruz y el resto en Cochabamba, La Paz, Tarija, Oruro y Sucre. Un 404 quiere decir «no indexada».
+- **Tamaño:** posts del directorio y búsqueda web. Ninguna de las 7 publica cuántos odontólogos tiene, y los directorios bolivianos no las listan. Por eso el mensaje cierra con esa pregunta.
+
+**Antes de enviar cada una** (lo manda Sergio Urcullo **desde su WhatsApp**, no desde el número del bot, porque fuera de las 24 h no sale texto libre):
+1. Abrir el anuncio citado (`facebook.com/ads/library/?id=…`): si ya no está activo, cambiar la segunda línea.
+2. Confirmar que el número abre WhatsApp. Lo verifica la PC; la nube no abre `wa.me`.
+3. La demo usa «una clínica de ejemplo», que depende de la cuenta demo (§0.1 del guion). Sin ella, no se agenda.
+4. La frase de la IA es del plan Crece en adelante y de la prueba (catálogo §8.1). En la demo se dice.
+
+Los 7 mensajes pasaron el revisor de promesas (`promesa-que-el-producto-cumple.mjs`, 0 promesas) el 8-oct. Ninguno tiene precio, cifras, testimonios ni el tratamiento a medias (catálogo §8). Ningún teléfono coincide con los leads de `ONIA_LEADS_ESPERANDO.md`.
+
+#### 1. Clarident Plus
+
+- **Dirección:** Calle Gobernador Videla esq. Av. Pilcomayo 2149. Santa Cruz confirmado por el [directorio](https://www.dentists10.com/BO/Santa-Cruz-de-la-Sierra/339088019578381/Clinica-clarident-plus) (`page_id 339088019578381`).
+- **Señal:** **Media: pauta recién empezada.** 2 anuncios activos en BOB desde el 7 y el 8-oct ([1883501883015448](https://www.facebook.com/ads/library/?id=1883501883015448), [933782869463181](https://www.facebook.com/ads/library/?id=933782869463181)).
+- **Canal:** WhatsApp 70846705: sus posts del 14-sep piden «agenda por wa.me/70846705». Segunda línea 76363029.
+- **Tamaño:** Sin conteo. Indicios de 2 o más: «el equipo de ClariDent Plus», una profesional nombrada (Dra. Dayana Bustamante, 17-ago), y ortodoncia, implantes, odontopediatría y estética facial.
+- **Veredicto:** SIGUE CON CONDICIÓN. Preguntar el tamaño. Antes de enviar, mirar desde la PC si la página aparte «Clarident Duo» (facebook.com/ClaridentDuo) es otra sede: si lo es, sale por multi-sede.
+- **Mensaje** (espera el OK de Sergio Urcullo):<br>Buen día, soy Sergio Urcullo, de Onia, aquí en Santa Cruz. Este mensaje es para el dueño o la dueña de Clarident Plus.<br>Vi que el 7 y el 8 de octubre empezaron anuncios nuevos, y que en septiembre sus promociones se agendaban por WhatsApp, con cupos limitados.<br>Con promociones y cupos por chat, el paciente de mañana que no confirmó, o el que canceló y no volvió a agendar, suele quedar sin que nadie le escriba.<br>Onia es un sistema de gestión para clínicas dentales: agenda, ficha con odontograma, tratamientos y cobros. Cada mañana le deja anotado a quién escribirle (quién tiene cita mañana y no confirmó, quién canceló o faltó y no volvió a agendar, quién le debe) con el mensaje listo, y nada sale sin que usted lo apruebe. Con IA le propone el texto de cada recordatorio, y usted lo aprueba una sola vez.<br>¿Cuántos odontólogos atienden hoy en la clínica? Con eso le muestro en 20 minutos cómo se ve, con una clínica de ejemplo.
+
+#### 2. Clínica Dental Hurtado
+
+- **Dirección:** Av. Francisco Varayu y calle Ametauná #4070, zona Sur–La Colorada (4to anillo y radial 13). Santa Cruz confirmado por el [directorio](https://www.dentists10.com/BO/Santa-Cruz-de-la-Sierra/284462084761388/Cl%C3%ADnica-Dental-Hurtado) (`page_id 284462084761388`).
+- **Señal:** **Fuerte: pauta sostenida.** 7 anuncios activos en BOB: desde el 13 y el 14-abr, el 2-jul, el 5-sep y dos del 6-oct ([1807538503895845](https://www.facebook.com/ads/library/?id=1807538503895845), [2006539226937171](https://www.facebook.com/ads/library/?id=2006539226937171)).
+- **Canal:** WhatsApp de reservas 77349396: post del 14-sep, «reservar tu valoración dental sin costo… por WhatsApp: tu nombre, el día y horario, el motivo». Centro radiológico aparte: 75393028.
+- **Tamaño:** Sin conteo y sin nombres. Hablan de «especialistas» en 5 áreas, con laboratorio propio, centro radiológico y horario de lunes a viernes de 8 a 20. Riesgo de **pasar de 6** [inferencia].
+- **Veredicto:** SIGUE CON CONDICIÓN. Preguntar el tamaño: si pasa de 6, sale.
+- **Mensaje** (espera el OK de Sergio Urcullo):<br>Buen día, soy Sergio Urcullo, de Onia, aquí en Santa Cruz. Este mensaje es para el dueño o la dueña de la Clínica Dental Hurtado.<br>Vi que pautan en Facebook desde abril, y que la valoración se reserva por WhatsApp mandando nombre, día y horario.<br>Cuando las citas se arman por chat, el paciente de mañana que no confirmó, o el que canceló y no volvió a agendar, suele quedar sin que nadie le escriba.<br>Onia es un sistema de gestión para clínicas dentales: agenda, ficha con odontograma, tratamientos y cobros. Cada mañana le deja anotado a quién escribirle (quién tiene cita mañana y no confirmó, quién canceló o faltó y no volvió a agendar, quién le debe) con el mensaje listo, y nada sale sin que usted lo apruebe. Con IA le propone el texto de cada recordatorio, y usted lo aprueba una sola vez.<br>¿Cuántos odontólogos atienden hoy en la clínica? Con eso le muestro en 20 minutos cómo se ve, con una clínica de ejemplo.
+
+#### 3. Smile Dental
+
+- **Dirección:** Av. Cristóbal de Mendoza 722. Santa Cruz confirmado por el [directorio](https://www.dentists10.com/BO/Santa-Cruz-de-la-Sierra/1099790733394902/Smile-Dental) (`page_id 1099790733394902`).
+- **Señal:** **Media: pauta recién empezada.** 3 anuncios activos en BOB con botón «Chatea con nosotros», del 7 y el 8-oct ([895284743538656](https://www.facebook.com/ads/library/?id=895284743538656), [2153819892159526](https://www.facebook.com/ads/library/?id=2153819892159526)).
+- **Canal:** Tel. 60482017, publicado en su ficha; atienden por un grupo de WhatsApp. Antes de enviar, confirmar que el número tiene WhatsApp.
+- **Tamaño:** Sin conteo. Hablan de «profesionales altamente capacitados», 12 servicios y «amplios box». Puede ser texto genérico [inferencia].
+- **Veredicto:** SIGUE CON CONDICIÓN. Preguntar el tamaño. Homónimos ya descartados: Smile Center (Av. Alemania) y uno de Mendoza, Argentina.
+- **Mensaje** (espera el OK de Sergio Urcullo):<br>Buen día, soy Sergio Urcullo, de Onia, aquí en Santa Cruz. Este mensaje es para el dueño o la dueña de Smile Dental.<br>Vi sus anuncios del 7 y el 8 de octubre para que les escriban por chat, y sus publicaciones de brackets de septiembre.<br>Un tratamiento de brackets lleva muchas citas, y cada control que el paciente cancela y no vuelve a agendar se pierde entre los chats.<br>Onia es un sistema de gestión para clínicas dentales: agenda, ficha con odontograma, tratamientos y cobros. Cada mañana le deja anotado a quién escribirle (quién tiene cita mañana y no confirmó, quién canceló o faltó y no volvió a agendar, quién le debe) con el mensaje listo, y nada sale sin que usted lo apruebe. Con IA le propone el texto de cada recordatorio, y usted lo aprueba una sola vez.<br>¿Cuántos odontólogos atienden hoy en la clínica? Con eso le muestro en 20 minutos cómo se ve, con una clínica de ejemplo.
+
+#### 4. Clínica Dental San Pablo – Odontología Avanzada
+
+- **Dirección:** Av. San Pablo #5027. Santa Cruz confirmado por el [directorio](https://www.dentists10.com/BO/Santa-Cruz-de-la-Sierra/108378080581477/Cl%C3%ADnica-Dental-San-Pablo---Odontolog%C3%ADa-Avanzada) (`page_id 108378080581477`).
+- **Señal:** **Media: pauta recién empezada.** 3 anuncios activos en BOB, todos del 7-oct ([1960613331582298](https://www.facebook.com/ads/library/?id=1960613331582298)).
+- **Canal:** Tel. 64328008, solo por el directorio. Antes de enviar, confirmar que tiene WhatsApp.
+- **Tamaño:** Sin conteo. Post del 8-sep: «Conoce al equipo…»; los nombres están en una imagen que no se leyó.
+- **Veredicto:** SIGUE CON CONDICIÓN. Preguntar el tamaño.
+- **Mensaje** (espera el OK de Sergio Urcullo):<br>Buen día, soy Sergio Urcullo, de Onia, aquí en Santa Cruz. Este mensaje es para el dueño o la dueña de la Clínica Dental San Pablo.<br>Vi que el 7 de octubre empezaron tres anuncios, y que en septiembre presentaron a su equipo en Facebook.<br>Con anuncios trayendo consultas nuevas, el paciente de mañana que no confirmó suele ser el que nadie alcanza a llamar.<br>Onia es un sistema de gestión para clínicas dentales: agenda, ficha con odontograma, tratamientos y cobros. Cada mañana le deja anotado a quién escribirle (quién tiene cita mañana y no confirmó, quién canceló o faltó y no volvió a agendar, quién le debe) con el mensaje listo, y nada sale sin que usted lo apruebe. Con IA le propone el texto de cada recordatorio, y usted lo aprueba una sola vez.<br>¿Cuántos odontólogos atienden hoy en la clínica? Con eso le muestro en 20 minutos cómo se ve, con una clínica de ejemplo.
+
+#### 5. Clínica Dental Innova Kids
+
+- **Dirección:** Av. Viedma esq. Moldes (#459 en el directorio, #495 en sus posts). Santa Cruz confirmado por el [directorio](https://www.dentists10.com/BO/Santa-Cruz-de-la-Sierra/105982241767033/Cl%C3%ADnica-Dental-Innova-Kids) (`page_id 105982241767033`).
+- **Señal:** **Fuerte: pauta sostenida.** 1 anuncio activo en BOB desde el 3-feb, «Cuidado dental para niños en Santa Cruz» ([2163281054509971](https://www.facebook.com/ads/library/?id=2163281054509971)).
+- **Canal:** WhatsApp 76341626: posts del 13-jul, «Agenda su valoración · WhatsApp 76341626». Último post visto: 21-jul.
+- **Tamaño:** Sin conteo. Se presentan como «especialistas en sonrisas infantiles». Solo odontopediatría.
+- **Veredicto:** SIGUE CON CONDICIÓN. Preguntar el tamaño. El dolor es el mismo, pero la cita la confirma el padre o la madre.
+- **Mensaje** (espera el OK de Sergio Urcullo):<br>Buen día, soy Sergio Urcullo, de Onia, aquí en Santa Cruz. Este mensaje es para el dueño o la dueña de la Clínica Dental Innova Kids.<br>Vi que desde febrero tienen un anuncio de cuidado dental para niños en Santa Cruz, y que la valoración se agenda por WhatsApp.<br>Con niños, la cita la confirma el papá o la mamá, y la de mañana sin confirmar suele quedar sin que nadie les escriba.<br>Onia es un sistema de gestión para clínicas dentales: agenda, ficha con odontograma, tratamientos y cobros. Cada mañana le deja anotado a quién escribirle (quién tiene cita mañana y no confirmó, quién canceló o faltó y no volvió a agendar, quién le debe) con el mensaje listo, y nada sale sin que usted lo apruebe. Con IA le propone el texto de cada recordatorio, y usted lo aprueba una sola vez.<br>¿Cuántos odontólogos atienden hoy en la clínica? Con eso le muestro en 20 minutos cómo se ve, con una clínica de ejemplo.
+
+#### 6. COYR DENT (Clínica Odontológica Yáñez Roca, por un fragmento del buscador)
+
+- **Dirección:** Calle Rafael Peña #120, entre Libertad y 21 de Mayo. Santa Cruz confirmado por el [directorio](https://www.dentists10.com/BO/Santa-Cruz-de-la-Sierra/2042184532678966/COYR-DENT) (`page_id 2042184532678966`).
+- **Señal:** **Media.** 2 anuncios activos en USD desde el 15 y el 17-sep ([1847333596425363](https://www.facebook.com/ads/library/?id=1847333596425363), [1414216304009729](https://www.facebook.com/ads/library/?id=1414216304009729)).
+- **Canal:** WhatsApp 78597900: post del 17-sep, «agenda con nuestro especialista». Otra línea: 62217290.
+- **Tamaño:** Sin conteo. Su presentación habla en plural, pero los posts dicen «nuestro especialista», en singular: **riesgo alto de ser un solo profesional**.
+- **Veredicto:** SIGUE CON CONDICIÓN. Si atiende uno solo, sale. Encaja con el dolor: ortodoncia de 10 a 24 meses con planes de pago.
+- **Mensaje** (espera el OK de Sergio Urcullo):<br>Buen día, soy Sergio Urcullo, de Onia, aquí en Santa Cruz. Este mensaje es para el dueño o la dueña de COYR DENT.<br>Vi que desde el 15 de septiembre tienen anuncios, y que ofrecen ortodoncia con planes de pago.<br>En un tratamiento de meses, cada control que el paciente cancela y no vuelve a agendar es una cuota que se atrasa.<br>Onia es un sistema de gestión para clínicas dentales: agenda, ficha con odontograma, tratamientos y cobros. Cada mañana le deja anotado a quién escribirle (quién tiene cita mañana y no confirmó, quién canceló o faltó y no volvió a agendar, quién le debe) con el mensaje listo, y nada sale sin que usted lo apruebe. Con IA le propone el texto de cada recordatorio, y usted lo aprueba una sola vez.<br>¿Cuántos odontólogos atienden hoy en la clínica? Con eso le muestro en 20 minutos cómo se ve, con una clínica de ejemplo.
+
+#### 7. Odontológica Henners
+
+- **Dirección:** Barrio El Trompillo, calle Esteban Rosas 200. Santa Cruz confirmado por el [directorio](https://www.dentists10.com/BO/Santa-Cruz-de-la-Sierra/733017286850915/Odontologica-Henners) (`page_id 733017286850915`).
+- **Señal:** **Débil.** 1 anuncio activo en BOB desde el 6-oct ([1102365512499700](https://www.facebook.com/ads/library/?id=1102365512499700)). La página está quieta desde el 6-abr.
+- **Canal:** WhatsApp 70050967: post del 6-abr, «agenda tu valoración».
+- **Tamaño:** Sin conteo. El enlace de su página es «dra.anahenners»: probable titular única [inferencia]. El horario bajó a lunes a viernes de 14 a 18.
+- **Veredicto:** SIGUE CON CONDICIÓN, **prioridad baja**. Si atiende una sola profesional, sale.
+- **Mensaje** (espera el OK de Sergio Urcullo):<br>Buen día, soy Sergio Urcullo, de Onia, aquí en Santa Cruz. Este mensaje es para el dueño o la dueña de Odontológica Henners.<br>Vi que el 6 de octubre empezaron un anuncio, y que la valoración se agenda por WhatsApp.<br>Cuando las citas se arman por chat, el paciente de mañana que no confirmó, o el que canceló y no volvió a agendar, suele quedar sin que nadie le escriba.<br>Onia es un sistema de gestión para clínicas dentales: agenda, ficha con odontograma, tratamientos y cobros. Cada mañana le deja anotado a quién escribirle (quién tiene cita mañana y no confirmó, quién canceló o faltó y no volvió a agendar, quién le debe) con el mensaje listo, y nada sale sin que usted lo apruebe. Con IA le propone el texto de cada recordatorio, y usted lo aprueba una sola vez.<br>¿Cuántos odontólogos atienden hoy en la clínica? Con eso le muestro en 20 minutos cómo se ve, con una clínica de ejemplo.
+
+#### EN ESPERA: las mejores de las que faltan, para mirar desde la PC
+
+Pautan hoy en Bolivia, pero ni el directorio ni la búsqueda web dieron su ciudad (dos agentes, 50 búsquedas, ninguna en Santa Cruz). Desde la PC se abre el anuncio y la «Información» de la página: ciudad, teléfono y cuántos atienden. Las que queden en Santa Cruz con canal propio completan los 10.
+
+| Página · `page_id` | Por qué vale la pena | Anuncio para abrir |
+|---|---|---|
+| Dentessa Odontología · `107148972331561` | 11 anuncios desde el 3-sep (USD), «Chatea con nosotros»: la pauta más sostenida de las que no tienen ciudad | [4541057556165751](https://www.facebook.com/ads/library/?id=4541057556165751) |
+| Centro Médico Odontológico BAires · `103698302731501` | Pauta con cortes desde enero y anuncios del 9 y el 15-sep (BOB) | [1438575811499437](https://www.facebook.com/ads/library/?id=1438575811499437) |
+| Odontología Avanzada Doctormaxilofacial · `511897128678646` (y `102844034875276`) | 11 anuncios desde el 12-sep (BOB). Ojo: dos páginas pueden ser dos sedes | [3519163944932245](https://www.facebook.com/ads/library/?id=3519163944932245) |
+| Clínica Dental Ramos · `105318748337327` | 6 anuncios del 4 al 7-oct (BOB) | [2254442368735472](https://www.facebook.com/ads/library/?id=2254442368735472) |
+| Gooddental kids · `1086969651158915` | Su anuncio del 31-ago dice «busca Odontólogos Generales en Santa Cruz de la Sierra»: ciudad dicha por ellos, y está contratando. Falta canal y si es cadena | [1100137126304669](https://www.facebook.com/ads/library/?id=1100137126304669) |
+| Cosmetic Dental and Face Center · `867483409790142` | Anuncios desde el 7-sep (BOB). Mezcla dental con estética capilar [inferencia] | [2118239265793863](https://www.facebook.com/ads/library/?id=2118239265793863) |
+| Epica Centro Odontológico · `437878689605332` | Anuncios desde el 30-sep (BOB) | [1322562534278712](https://www.facebook.com/ads/library/?id=1322562534278712) |
+
+Sin ciudad y con indicios de otra ciudad o de sucursales, por eso no se priorizan: Clínica Odontológica NJ y Mr. Dent (Cochabamba), Renovación Dental y TOP Dental (La Paz), Cero Caries (Sucre o Tarija), Corporativo Dions («sucursal»). Recién empezadas y sin nada más: Dulce Sonrisa, Implantes Dentales, Fresh Denture, Consultorio Dental Solidario, Yari-Dent, Consultorio Santa Apolonia, Dental Sonríe.es, G. Dentis, Denture, Plusdent, Beautiful y las de la tanda del 8-oct (OdontoNicky, DentalYS, Sao Paulo, Soria, DentoSmart, AyniDent, Dental Salazar, Dent Family, Innova Consultorio, Salud Bucal, Dental10, Alvarez, Apaza, OdontoMonica, Valdivia, Ribera, Hurdent, Esmeralda, RJ Esthetic, Dentalex, Punto Dental, Ho Dental, Kadent, Vida Oral, Kadmiel, Odonto Group Claure y Una Mano Amiga).
+
+**SALEN (8-oct):**
+- Boquita Sana (`380639486016768` y `100226682495467`): dos sedes en Santa Cruz (Av. Prefecto Rivas 412 y la «Sucursal Udabol» en la Av. Noel Kempff). Es el mismo caso que MUN: vuelve solo si Sergio Urcullo acepta dos sedes.
+- Ortobom (`103822665275137` y `110177058793289`): dos páginas, «Santa Cruz» y «Mutualista». Es una red de varias sedes.
+- Otra ciudad, según el directorio: Europea, Sonrisitas, CEOS, R&R, Denta Belle, Aguilar, Molina, Rivas y OdontoElite (Cochabamba); Oral Clean, SKY Dental, OdontoGroup, Sorriso, Dentall y EndoClinic (La Paz); Dental Care A&S (Tarija); Armin (Oruro); Mi Angel Alexia (Sucre). Ledezma-Quezada, Cochabamba por un fragmento del buscador. Cuid-Arte y Rondo, Sopocachi (La Paz), por su propio nombre.
+
+---
+
 ## 7. Registro de objeciones de las demos
 
 **Regla del plan de 14 días: si tras 10 demos nadie quiere pagar, se cambia el producto, no el discurso.**

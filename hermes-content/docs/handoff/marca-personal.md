@@ -2,6 +2,92 @@
 
 **Archivo único del carril.** Actualizado 2026-09-29 por Claude (Opus 5.5).
 
+## ▶ 8-oct (noche, 3) — N03 v2 listo, publicar frenado por el control de permisos
+
+- **La regla ya está en `main`** (CLAUDE.md, «Qué se publica sin preguntar», #151). Se aplicó a N03 y falló en una
+  condición: el video traía la tarjeta final y la frase hablada «Comentá COMUNIDAD y te paso el link». Es un CTA
+  comentario → DM, que queda fuera.
+- **N03 v2:** el del 1-oct cortado en la pausa de 53,1 s (después de «manual mode on») y con una tarjeta de cierre nueva,
+  «La comunidad es gratis · El link está en mi perfil», con las mismas tipografías. 55,5 s, −14,5 LUFS. Mirada la cola
+  entera. Está en el VPS: `/root/publicar/n03-modo-auto/{final-v2.mp4,caption-v2.txt,tt.json,yt.json}`.
+- **Qué se frenó:** subir los archivos al VPS pasó. El ensayo de `ig-reel.mjs` lo frenó el control de permisos
+  («Unrequested Commit in a Connected App»), con la regla ya en `main`. No se esquivó.
+- **Para publicarlo:** `agendar-n03.sh --ensayo` y después `--agendar` (vie 9, 18:30 La Paz en IG y 1 a 3 min después en
+  TikTok, YouTube Shorts y LinkedIn). Lo corre quien tenga el permiso: una sesión que Sergio Urcullo abra en modo
+  «Accept edits», o la madre desde la PC.
+- **Cómo hablarle (pedido de Sergio Urcullo, 8-oct):** mensajes cortos. Qué pasó en una línea, qué necesito de él y qué
+  sigue. Sin tablas largas ni explicaciones. No existe la skill `/caveman`; la regla «Simple» de CLAUDE.md ya lo pide.
+
+## ▶ 8-oct (noche, 2) — qué se manda a la comunidad y qué se hace con las llamadas
+
+- **Sergio Urcullo graba los guiones del plan 9-15.** La comunidad y las llamadas quedaron en su página
+  (`claude.ai/artifact/Hssf9o3ikt2fE7nkNBzrvd`):
+  - **«Para pegar hoy, jueves 8»:** 6 textos en orden, con la vuelta y el reto primero.
+    - Los 3 carruseles ya salidos o por salir prometen CACHE, VERIFY y HISTORIA.
+    - El aviso de CACHE se releyó el 8-oct contra la página de precios de OpenAI: Sol 2 / 0,10 / 10; Astra 10 / 1 / 50.
+    - El 9 va primero la respuesta del reto, a las 10:00.
+  - **Asesoría de IA gratis:** se llama así en todo el material, no «auditoría». Cupo de 3 por semana, 2 preguntas al
+    reservar y guion de 20 minutos en ese archivo y en `ONIA_COMUNIDAD_CONTENIDO.md`.
+  - **Después de cada llamada**, Sergio Urcullo manda una línea (rubro, tarea elegida, si es clínica). A las 10 llamadas
+    se mide cuántas pasan a la comunidad o a ver Onia.
+
+## ▶ 8-oct (noche) — autorización de publicar y control de calidad de N03
+
+- **N03 «modo auto» pasó el control de calidad el 8-oct:**
+  - 57,8 s, 1080×1920, −14,5 LUFS;
+  - hoja cada 2 s vista entera;
+  - datos vigentes en `code.claude.com/docs/en/permission-modes`.
+  Está en el VPS: `/root/publicar/n03-modo-auto/{final.mp4,caption.txt}`. **No se publicó.**
+- **Autorización «publicá lo que pase control de calidad»** (Sergio Urcullo, por la madre): solo en la rama de la madre
+  (`ad011a95a`), sin PR a `main`. El control de permisos de esta sesión frenó incluso subir el texto al VPS. Para
+  publicar N03, falta una de dos:
+  - un «sí» de Sergio Urcullo en ESTA sesión;
+  - que la regla entre a `main`.
+- **Comando listo**, con el texto nuevo («link en mi perfil» en vez de «comentá»):
+  `agendar-publicacion.sh n03-ig '2026-10-09 22:30:00' node /root/bin/ig-reel.mjs --cuenta sergio --video
+  /root/publicar/n03-modo-auto/final.mp4 --caption <caption> --publicar`. A las 22:31-22:33, `buffer-post.mjs --video`
+  a TikTok (`--meta` con título), YouTube (`--meta` con título, `privacy: public`) y LinkedIn.
+
+## ▶ 8-oct (tarde) — segundo pedido de la madre: contenido diario (`session_01WPecmppa9uZEc4fJDjSmaS`)
+
+- **Decisión de Sergio Urcullo (8-oct, por la madre):** las asesorías van gratis por ahora. Él solo se graba; las
+  pantallas las sacan los agentes.
+- **Plan del 9 al 15-oct:** `docs/cola/plan-3-semanas/GRABAR-9-15-OCT.md`. Reemplaza al 9-14 y se renombró.
+  - **13 piezas, 1 o 2 por día.** El martes va solo el YouTube D01-C. Cada pieza trae formato, molde, CTA y lo que pone
+    la edición en pantalla.
+  - **CTA nuevo: «link en mi perfil»** (comunidad o asesoría gratis), ya no «comentá X y te lo mando». La ficha del 8-oct
+    lo desaconseja, porque el DM automático no está probado.
+  - **Avisos nuevos:** HAIKU y SKILL.
+  - **Tres piezas sin grabación (solo briefs, sin render todavía):**
+    - P1 «Niveles», video HyperFrames con cuenta propia a precios oficiales: de 0,60 a 0,10 USD por tarea;
+    - P2 «7 herramientas», carrusel;
+    - P3 «Así trabaja mi empresa», carrusel o diagrama.
+  - El archivo trae también el **plan de publicación de la semana**.
+- **Falta para que el CTA funcione:** que la bio sume «Asesoría gratis → sergiourcullo.vercel.app/llamada» y que cal.com
+  pase a «Asesoría de IA gratis».
+- **Próximo:** renderizar P1 y P2, para el primer día sin bruto. P2 lleva 4 íconos de arcilla que entran en el lote de la
+  decisión 1.
+
+## ▶ 8-oct — retomada tras el corte de la semana de Claude (`session_01WPecmppa9uZEc4fJDjSmaS`)
+
+- **Publicado y verificado el 8-oct:** el 6 y el 7-oct salieron los carruseles en las tres redes. 6 de 6 `sent`, sin
+  error.
+  - DD-A: IG `DeKl9Zcjwco`, LinkedIn `ugcPost:7513327593224458240`, TikTok `7693647592986578197`.
+  - N04: IG `DeNKxt7D8KJ`, LinkedIn `ugcPost:7513689985171206144`, TikTok `7694018690777369876`.
+  - Quedan 27 timers, del 8 al 16-oct.
+- **Guiones del 9 al 14-oct** en `docs/cola/plan-3-semanas/GRABAR-9-15-OCT.md` (pedido de la madre): 17 piezas, una hora
+  por día.
+  - Pieza nueva N07 HAIKU (Haiku 5.5, verificada en la página de precios el 8-oct), con su aviso de comunidad al final
+    del archivo.
+  - N04: la skill tiene que ser propia, no de un plugin.
+  - D01-C nombra a Haiku 5.5.
+  - La página de Sergio Urcullo ya muestra esta semana, por día.
+- **El carrusel N06 (11-oct) está bien:** geminicli.com, el blog de Google del 19-may y los planes de antigravity.google
+  confirman lo que dice, leídos el 8-oct.
+- **Brutos:** ninguno nuevo en Drive el 8-oct.
+- **Rama de Codex `codex/madre-orquestacion-20261005`** (61 commits, sin mergear): su commit `6e1a4dae` del 6-oct
+  reescribe GRABAR/GUIONES/KIT con menos pasos. No se mergeó acá; decide la madre.
+
 ## ▶ 5-oct noche — sesión nueva (`session_01WPecmppa9uZEc4fJDjSmaS`, rama `claude/gifted-clarke-y4vvtj`)
 
 **Página única para Sergio Urcullo:** https://claude.ai/artifact/Hssf9o3ikt2fE7nkNBzrvd. Tiene qué necesito de él, día
@@ -15,6 +101,15 @@ genera `gen_page.py` en el scratchpad de esta sesión. Si se pierde, los datos s
   - Script sin fecha en el nombre: `deploy/vps-ops/publicar/agendar-carruseles.sh` (antes `-3-20-oct`).
   - Orden: DD-A, N04, K3v2, N03, K11, N06, K4v2, K8v3, K7v2, K2v3 y K6v2.
   - ⚠ Si el VPS se reinicia, los timers se pierden y no sale nada: re-agendar con el script.
+- **También en LinkedIn y TikTok (pedido de Sergio Urcullo el 5-oct: «alistamos buffer para postear a todas las
+  redes»):** 22 timers más, `pub-car-li-*` a las 20:01 y `pub-car-tt-*` a las 20:02 (33 en total).
+  - Salen con `buffer-post.mjs --imagenes`, que es nuevo; el original quedó en el VPS en `/root/bin/buffer-post.mjs.bak-20261005`.
+  - Probado como borrador en las dos redes, aceptado y borrado. La publicación real todavía no se probó.
+  - Hay un control programado para el 6-oct a las 20:10 UTC (`trig_017LEVgojRbj4QJmpa2UbE3V`) que mira si salieron las tres.
+- **Grabaciones de pantalla:** las hace Claude al editar; Sergio Urcullo graba solo la cámara (lo pidió el 5-oct). Desde
+  la nube el navegador no abre páginas (`ERR_CERT_AUTHORITY_INVALID`) y el modo «Auto» frenó la importación del
+  certificado. Hace falta su OK en esta sesión o una sesión en la PC con Chrome. Las demos de terminal se arman acá.
+- **Guiones:** la página tiene los 32 (bloques 1 y 2 del plan). Primero van 6; R05 espera su decisión sobre MARKETING.
 - **En espera (7):** K1, N02, K9, K12, K5, K13 y K10, por las 10 láminas que no se entienden. Falta que él elija:
   - «rehacé las 10» (1,20 cr; los prompts nuevos están en el CIERRE 3-oct);
   - o «van sin esas láminas».

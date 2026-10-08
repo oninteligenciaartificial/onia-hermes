@@ -95,6 +95,10 @@ lámina sale SIN título. `"next": ""` saca la flecha «seguí» (para historias
 - **Foto 4:3 en `ilustrado`:** el `object-fit: cover` la recorta arriba y abajo y no se entiende. Centrala en un lienzo
   blanco ancho (`convert … -gravity center -extent 4400x2400`, ~1,85:1) y entra entera (N06, 2-oct).
 - **Un logo como imagen de `ilustrado`:** ponelo sobre un lienzo blanco con margen; la máscara radial lo corta.
+- **⚠ 5-oct, misma ruta, otra sesión de la nube:** el almacén de certificados del navegador (`/root/.pki/nssdb`) estaba
+  vacío, todas las páginas daban `ERR_CERT_AUTHORITY_INVALID`, y el modo «Auto» frenó la importación del certificado del
+  proxy («TLS/Auth Weaken»). No se le busca la vuelta: o Sergio Urcullo lo aprueba en esa sesión (cambiando el modo), o
+  las capturas las saca una sesión en su PC con Chrome. Probalo con UNA página antes de prometer capturas desde la nube.
 - **Capturas reales desde la nube (2-oct):** Chromium con `--proxy-server=$HTTPS_PROXY`; si da
   `ERR_CERT_AUTHORITY_INVALID`, la confianza en la CA del proxy se resuelve como dice `/root/.ccr/README.md` (nunca
   apagando TLS). Cargan `platform.claude.com`, `developers.openai.com`, `geminicli.com`, `developers.googleblog.com`;

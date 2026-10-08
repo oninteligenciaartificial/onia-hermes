@@ -1,5 +1,22 @@
 # Handoff — carril `mercado-y-pauta` (sesión «Ventas y pauta Onia Platform», antes «Análisis de mercado»)
 
+> ✅ **8-oct (`session_0143C5fMXVs8eWEf7uBpC9SF`, rama `claude/onia-ventas-pauta-rmdv5j`): pedido de la madre, 10 dentales
+> nuevas con señal y mensaje. Quedan 7 de 10.**
+> - **Dónde:** `ONIA_PROSPECTOS_DENTAL_SCZ.md` §6.9. Las 7, por orden: Clarident Plus, Hurtado, Smile Dental, San Pablo,
+>   Innova Kids, COYR DENT y Henners. Todas tienen Santa Cruz, canal y pauta activa verificados, y ninguna tiene el
+>   equipo contado. Cada mensaje cierra preguntando cuántos odontólogos atienden. Los 7 mensajes pasan el revisor de
+>   promesas. Nadie contactado.
+> - **Faltan 3:** 7 candidatas EN ESPERA para la PC, con el id del anuncio para abrir (Dentessa, BAires,
+>   Doctormaxilofacial, Ramos, Gooddental kids, Cosmetic y Epica).
+> - **Aprendido (en la skill §2 y §3):**
+>   - `dentists10.com` por `page_id` resuelve la ciudad de las dentales (27 de 81).
+>   - La búsqueda web no sirve para estas páginas: 0 de 23.
+>   - El revisor de promesas rechaza «la IA escribe una sola vez el modelo».
+> - **Riesgo de merge:** la §6.8 de Codex (rama `codex/madre-orquestacion-20261005`) se inserta en el mismo lugar,
+>   antes de la §7. Al mergear las dos ramas, se conservan las dos secciones.
+> - **Depende de Sergio Urcullo:** el OK a los 7 mensajes y si «Clarident Duo» es otra sede. Desde la PC, la madre o
+>   Sergio Urcullo: las 7 EN ESPERA y confirmar que cada número tiene WhatsApp.
+
 > ✅ **5-oct, tarde (`session_0143C5fMXVs8eWEf7uBpC9SF`, rama `claude/onia-ventas-pauta-rmdv5j`): mensajes a los leads
 > contra el catálogo.**
 > - **Medido:** ONIA Ads sigue con `has_payment_method: false`. Precios y usuarios re-leídos en `onia-platform`
