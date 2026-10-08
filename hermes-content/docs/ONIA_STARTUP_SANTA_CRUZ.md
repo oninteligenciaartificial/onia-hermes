@@ -1,5 +1,23 @@
 # Inscripción de Onia en el Directorio de startups cruceñas (Gobierno de Santa Cruz)
 
+## ✅ LISTO PARA PEGAR (decidido por Sergio Urcullo el 8-oct)
+
+Formulario: https://startup.santacruz.gob.bo/. El botón «Enviar startup» lo aprietan Sergio Urcullo o Leslie.
+
+| Campo | Valor |
+|---|---|
+| Startup | Onia |
+| Fundadora 1 (va PRIMERA) | Leslie Mercado Moreno · **CEO** · +591 75414930 |
+| Fundador 2 | Sergio Urcullo · **Founder** · +591 75414930 (el mismo número de Onia: la API publica el teléfono de todos) |
+| Descripción | la de 243 caracteres de la tabla del Paso 3 |
+| Inversión | No recibí inversión |
+| Fundada en | 2026 |
+| Industria | SaaS · Healthtech |
+| Pitch | https://onia.com.bo (Sergio Urcullo: «la usamos, pero seguimos desarrollando todo») |
+| Logo | `web-factory/apps/onia-platform/public/brand/v2/onia-icon-512.png` |
+
+El +591 75414930 es hoy el número del chatbot. Sergio Urcullo quiere manejarlo desde la plataforma: lo tiene Plataforma.
+
 **Estado: BORRADOR del 2026-10-08. Nada enviado, ninguna cuenta creada, ningún dato escrito en el sitio.**
 Doc VIVO, sin fecha en el nombre: se EDITA. Si cambia el sitio, se vuelve a leer antes de enviar.
 
