@@ -2,6 +2,17 @@
 
 **Archivo único del carril.** Actualizado 2026-09-29 por Claude (Opus 5.5).
 
+## ▶ 8-oct (noche, 9) — la madre reescribe los guiones: NO tocarlos
+
+- **Pedido de la madre (8-oct):** no editar `GRABAR-10-16-OCT.md` ni `S1/S2/S3-GUIONES.md` hasta que ella avise. Está
+  analizando 8-12 videos reales de cada referente (Santiago, Erik, Enrique, Hormozi, Gadzhi) y reescribe los guiones a una v2,
+  partiendo del estado de `main` del PR #168; la pasa en un commit.
+- **Las historias de referentes las captura la madre** con Chrome (pedido de esta sesión): quedan en
+  `hermes-content/research/competencia/historias/`. Cuando lleguen, se sigue con el diseño de las historias (tarea #17).
+- **Nada de Higgsfield pago** hasta que llegue su propuesta: el lote de 14 imágenes (1,68 cr) sigue sin generar.
+- **Drive «Videos Onia Octubre»:** sin brutos nuevos al 8-oct (verificado). Cuando lleguen, se edita con la tabla de cortes y el
+  preview de 360p primero.
+
 ## ▶ 8-oct (noche, 8) — plan de referentes de la madre aplicado a los guiones
 
 - **Pedido de la madre (8-oct):** aplicar `references/marca-personal/PLAN-REFERENTES.md` (rama
