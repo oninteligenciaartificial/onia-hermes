@@ -1,0 +1,142 @@
+[
+  {
+    "archivo": "agenda-dia-varios-profesionales-1440.png",
+    "ancho": 1440,
+    "scrollWidth": 1440,
+    "alto": 1291,
+    "fuente": "\"Instrument Sans\", \"Instrument Sans Fallback\", system-ui, sa"
+  },
+  {
+    "archivo": "agenda-dia-un-profesional-1440.png",
+    "ancho": 1440,
+    "scrollWidth": 1440,
+    "alto": 1297,
+    "fuente": "\"Instrument Sans\", \"Instrument Sans Fallback\", system-ui, sa"
+  },
+  {
+    "archivo": "agenda-dia-filtro-sin-resultados-1440.png",
+    "ancho": 1440,
+    "scrollWidth": 1440,
+    "alto": 900,
+    "fuente": "\"Instrument Sans\", \"Instrument Sans Fallback\", system-ui, sa"
+  },
+  {
+    "archivo": "agenda-dia-doctor-mi-agenda-1440.png",
+    "ancho": 1440,
+    "scrollWidth": 1440,
+    "alto": 1289,
+    "fuente": "\"Instrument Sans\", \"Instrument Sans Fallback\", system-ui, sa"
+  },
+  {
+    "archivo": "agenda-dia-confirmar-hecho-1440.png",
+    "ancho": 1440,
+    "scrollWidth": 1440,
+    "alto": 1291,
+    "fuente": "\"Instrument Sans\", \"Instrument Sans Fallback\", system-ui, sa"
+  },
+  {
+    "archivo": "agenda-dia-solo-lectura-1440.png",
+    "ancho": 1440,
+    "scrollWidth": 1440,
+    "alto": 1291,
+    "fuente": "\"Instrument Sans\", \"Instrument Sans Fallback\", system-ui, sa"
+  },
+  {
+    "archivo": "agenda-dia-error-al-guardar-1440.png",
+    "ancho": 1440,
+    "scrollWidth": 1440,
+    "alto": 1355,
+    "fuente": "\"Instrument Sans\", \"Instrument Sans Fallback\", system-ui, sa"
+  },
+  {
+    "archivo": "agenda-dia-dia-vacio-1440.png",
+    "ancho": 1440,
+    "scrollWidth": 1440,
+    "alto": 900,
+    "fuente": "\"Instrument Sans\", \"Instrument Sans Fallback\", system-ui, sa"
+  },
+  {
+    "archivo": "agenda-dia-en-pantalla-citas-1440.png",
+    "ancho": 1440,
+    "scrollWidth": 1440,
+    "alto": 1197,
+    "fuente": "\"Instrument Sans\", \"Instrument Sans Fallback\", system-ui, sa"
+  },
+  {
+    "archivo": "agenda-dia-varios-profesionales-oscuro-1440.png",
+    "ancho": 1440,
+    "scrollWidth": 1440,
+    "alto": 1291,
+    "fuente": "\"Instrument Sans\", \"Instrument Sans Fallback\", system-ui, sa"
+  },
+  {
+    "archivo": "agenda-dia-varios-profesionales-390.png",
+    "ancho": 390,
+    "scrollWidth": 390,
+    "alto": 1481,
+    "fuente": "\"Instrument Sans\", \"Instrument Sans Fallback\", system-ui, sa"
+  },
+  {
+    "archivo": "agenda-dia-selector-luis-390.png",
+    "ancho": 390,
+    "scrollWidth": 390,
+    "alto": 1251,
+    "fuente": "\"Instrument Sans\", \"Instrument Sans Fallback\", system-ui, sa"
+  },
+  {
+    "archivo": "agenda-dia-selector-sin-profesional-390.png",
+    "ancho": 390,
+    "scrollWidth": 390,
+    "alto": 933,
+    "fuente": "\"Instrument Sans\", \"Instrument Sans Fallback\", system-ui, sa"
+  },
+  {
+    "archivo": "agenda-dia-doctor-mi-agenda-390.png",
+    "ancho": 390,
+    "scrollWidth": 390,
+    "alto": 1413,
+    "fuente": "\"Instrument Sans\", \"Instrument Sans Fallback\", system-ui, sa"
+  },
+  {
+    "archivo": "agenda-dia-confirmar-hecho-390.png",
+    "ancho": 390,
+    "scrollWidth": 390,
+    "alto": 1481,
+    "fuente": "\"Instrument Sans\", \"Instrument Sans Fallback\", system-ui, sa"
+  },
+  {
+    "archivo": "agenda-dia-solo-lectura-390.png",
+    "ancho": 390,
+    "scrollWidth": 390,
+    "alto": 1481,
+    "fuente": "\"Instrument Sans\", \"Instrument Sans Fallback\", system-ui, sa"
+  },
+  {
+    "archivo": "agenda-dia-error-al-guardar-390.png",
+    "ancho": 390,
+    "scrollWidth": 390,
+    "alto": 1545,
+    "fuente": "\"Instrument Sans\", \"Instrument Sans Fallback\", system-ui, sa"
+  },
+  {
+    "archivo": "agenda-dia-dia-vacio-390.png",
+    "ancho": 390,
+    "scrollWidth": 390,
+    "alto": 844,
+    "fuente": "\"Instrument Sans\", \"Instrument Sans Fallback\", system-ui, sa"
+  },
+  {
+    "archivo": "agenda-dia-en-pantalla-citas-390.png",
+    "ancho": 390,
+    "scrollWidth": 390,
+    "alto": 1267,
+    "fuente": "\"Instrument Sans\", \"Instrument Sans Fallback\", system-ui, sa"
+  },
+  {
+    "archivo": "agenda-dia-varios-profesionales-oscuro-390.png",
+    "ancho": 390,
+    "scrollWidth": 390,
+    "alto": 1481,
+    "fuente": "\"Instrument Sans\", \"Instrument Sans Fallback\", system-ui, sa"
+  }
+]
