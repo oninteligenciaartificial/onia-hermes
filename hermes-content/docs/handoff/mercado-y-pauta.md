@@ -1,5 +1,12 @@
 # Handoff — carril `mercado-y-pauta` (sesión «Ventas y pauta Onia Platform», antes «Análisis de mercado»)
 
+> ⏸️ **8-oct, tarde — Sergio Urcullo (por la madre): «no vamos a escribirle a nadie aún».** Se frena todo contacto:
+> los 7 de la §6.9 y los leads de agosto. El conteo de los leads de agosto **quedó sin hacer**: la nube no tiene llave
+> del VPS ni token de Chatwoot. El comando para la PC está en `ONIA_LEADS_ESPERANDO.md`, «Conteo de hoy en una sola
+> corrida». Tarea nueva: auditar la promesa contra lo que funciona y los referentes de UI. Para mirar la app por dentro:
+> `.claude/skills/onia-ventas-pauta/scripts/auditar-app.mjs` (solo lectura). Necesita una cuenta de prueba en
+> `ONIA_QA_EMAIL` y `ONIA_QA_PASSWORD`; está pedida a la madre.
+
 > ✅ **8-oct (`session_0143C5fMXVs8eWEf7uBpC9SF`, rama `claude/onia-ventas-pauta-rmdv5j`): pedido de la madre, 10 dentales
 > nuevas con señal y mensaje. Quedan 7 de 10.**
 > - **Dónde:** `ONIA_PROSPECTOS_DENTAL_SCZ.md` §6.9. Las 7, por orden: Clarident Plus, Hurtado, Smile Dental, San Pablo,
