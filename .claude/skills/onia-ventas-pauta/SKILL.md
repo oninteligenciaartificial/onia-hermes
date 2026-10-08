@@ -349,7 +349,16 @@ Trampas pagadas armando v3 (2-oct):
   **`ads_activate_entity` sobre la campaña los publica en ACTIVO, gastando.** Solo se llama con el OK escrito
   de gasto (fila 9 de §5.9).
 - `client_conversation_id` es obligatorio en cada llamada: 20 caracteres, y el mismo en toda la conversación.
-- Presupuesto en centavos de USD: USD 140 = `14000`, como presupuesto total de la campaña con fecha de fin.
+- Presupuesto en centavos de USD: **USD 56 = `5600`** (Bs 750 de techo de Meta, plan 1.0 §3), como presupuesto total
+  de la campaña con fecha de fin. «USD 140 / 14000» era del 30-sep y **ya no vale** (corregido el 8-oct).
+- **El techo de la pauta lo fija `ONIA_PLAN_1.0_Y_CAJA.md`, no `ONIA_ADQUISICION_Y_PAUTA.md`.** El 8-oct esa fuente
+  decía USD 10/día (USD 140, ≈ Bs 1.600), más del doble de los Bs 750 de la caja. Dos docs con dos techos es el error
+  que la regla «una sola fuente de verdad» existe para evitar: ante la duda, manda el más nuevo y el que cuenta la caja.
+- **Qué NO ve el conector de Meta (8-oct):** el número de WhatsApp vinculado a la página (lo mira Sergio Urcullo en
+  Business Manager); los benchmarks de una cuenta sin gasto (`ads_insights_industry_benchmark` →
+  «No industry benchmark data»; `ads_insights_advertiser_context` → «Vertical: \N»). Los costos de la campaña son
+  supuestos hasta la semana 1.
+- **El píxel se mira con `ads_get_datasets`** (`ONIA Web` `1012611478191231`, `last_fired_time`): dispara el 8-oct.
   Meta rechaza un **límite** de gasto menor a USD 100.
 
 ### 5.1 Seguimiento por WhatsApp y remarketing (medido 3-oct; playbook `sales-kit/SEGUIMIENTO-LEADS.md`)
@@ -393,6 +402,16 @@ Trampas pagadas armando v3 (2-oct):
 | `ssh onia-vps` después de reiniciar la sesión (2-oct) | El hook deja la llave y la config, pero **falta el programa `ssh`** | `apt-get install -y openssh-client` |
 | Cupo de búsquedas web | 200 por sesión; se agotó con 4 subagentes | Darle a cada subagente un tope. El 1-oct, de noche, 4 subagentes con 25, 30, 20 y 12 búsquedas verificaron 28 prospectos y 9 de reserva, y usaron el tope completo |
 | Fuentes de Google en el render | no bajan | `scripts/carousel_cloud_setup.sh` instala TTF locales |
+| **Playwright contra nuestros dominios (8-oct)** | `ERR_CERT_AUTHORITY_INVALID` con el headless shell, con Chromium completo y aun con el proxy | Chromium completo (`/opt/pw-browsers/chromium-1194/chrome-linux/chrome`) + `proxy: HTTPS_PROXY` + `--ignore-certificate-errors-spki-list` con la huella SPKI de las CA «O = Anthropic … production» de `/root/.ccr/ca-bundle.crt` (la misma confianza que usa curl). Ya resuelto en `scripts/auditar-app.mjs`. Con eso, onia.com.bo y la app dan 200 |
+| `send_message` a la sesión madre de la PC (8-oct) | `elevated_session_untrusted_device`: no sale | Se contesta en el transcript, como dice la madre |
+
+## 6.1 Promesa contra lo que funciona (8-oct)
+
+`hermes-content/docs/ONIA_PROMESA_VS_PRODUCTO.md` es la compuerta para volver a contactar: su §2 lista lo que prometen
+los mensajes de la §6.9, y nada sale hasta que esas filas estén en ✅. Antes de escribir un mensaje nuevo, su promesa
+tiene que estar en esa tabla y en ✅. Para mirar la app por dentro: `scripts/auditar-app.mjs` (solo lectura, cuenta de
+prueba en variables de entorno). Trampa: el texto que devuelve `innerText` trae los nombres de los iconos
+(«credit_card_off»), pero en pantalla se ven bien. Se mira la captura, no el texto.
 
 ## 7. Después de cada demo
 
