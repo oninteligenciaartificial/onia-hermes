@@ -1,0 +1,9 @@
+PSNR (dB) del render FINAL (2da pasada; cuadro 960+n = 40,0 s + n/24) contra los cuadros del clip K4 (zona de la cara, sin tarjetas encima); el PICO dice qué cuadro del clip cayó ahí
+  render f966 (40,250 s): k4[4]=26.8  k4[5]=34.8  k4[6]=38.7  k4[7]=31.5  k4[8]=26.6   -> pico en el cuadro 6 (OK, cae donde debe)
+  render f1032 (43,000 s): k4[70]=25.9  k4[71]=29.8  k4[72]=38.7  k4[73]=32.4  k4[74]=27.8   -> pico en el cuadro 72 (OK, cae donde debe)
+  render f1064 (44,333 s): k4[102]=24.7  k4[103]=29.1  k4[104]=38.7  k4[105]=33.3  k4[106]=29.8   -> pico en el cuadro 104 (OK, cae donde debe)
+  render f1080 (45,000 s): k4[118]=26.5  k4[119]=33.0  k4[120]=38.4  k4[121]=32.7  k4[122]=29.2   -> pico en el cuadro 120 (OK, cae donde debe)
+K1 (cierre, cuadro 0 = 53,0 s): render contra assets/k1.mp4, zona de la cara
+  render f1278 (53,250 s): k1[4]=34.8  k1[5]=36.8  k1[6]=38.1  k1[7]=37.1  k1[8]=36.4   -> pico en 6 (OK)
+  render f1332 (55,500 s): k1[58]=33.5  k1[59]=36.3  k1[60]=38.2  k1[61]=37.4  k1[62]=36.1   -> pico en 60 (OK)
+  render f1391 (57,958 s): k1[117]=34.7  k1[118]=35.0  k1[119]=38.1  k1[120]=37.0  k1[121]=35.4   -> pico en 119 (OK)

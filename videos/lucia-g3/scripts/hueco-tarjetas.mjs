@@ -1,8 +1,7 @@
 #!/usr/bin/env node
-// H8: cuadros SIN tarjeta narrativa visible. Lleva el timeline a cada cuadro (24 fps) y mira la opacidad real de cada tarjeta (#c1…#c11 y el panel).
+// H8: cuadros SIN tarjeta narrativa visible. Lleva el timeline a cada cuadro (24 fps) y mira la opacidad real de cada tarjeta (#c1…#c15).
 // Un cuadro cuenta como «con tarjeta» si alguna tiene opacidad ≥ 0,05 (visibility visible) Y está a la vista (3ra pasada: ≥ 25 % de su caja dentro del lienzo).
-// Se esperan huecos SOLO donde no hay tarjeta por diseño: el cuadro 0 (el gancho entra a 0,1 s) y el arranque del morph 30,5-30,8 s (la foto se encoge
-// mientras el clip sube; la tarjeta ③ entra a 30,75 s).
+// Se esperan huecos SOLO donde no hay tarjeta por diseño: el arranque (el gancho entra a 0,1 s).
 // Uso: node scripts/hueco-tarjetas.mjs    (sale con 1 si aparece un hueco fuera de esas dos excepciones)
 import { createRequire } from 'node:module';
 import path from 'node:path';
@@ -18,7 +17,7 @@ const pg = await b.newPage({ viewport: { width: 1080, height: 1920 } });
 await pg.goto(pathToFileURL(path.join(P, 'index.html')).href);
 await pg.evaluate(() => document.fonts.ready);
 await pg.waitForTimeout(400);
-const ids = [...plan.tarjetas.map((c) => c.id), 'panel'];
+const ids = plan.tarjetas.map((c) => c.id);
 const huecos = await pg.evaluate(([ids, N, FPS]) => {
   const out = [];
   const tl = window.__timelines.main; tl.pause();
@@ -41,9 +40,9 @@ const huecos = await pg.evaluate(([ids, N, FPS]) => {
 await b.close();
 const grupos = [];
 for (const f of huecos) { const g = grupos[grupos.length - 1]; if (g && f === g.at(-1) + 1) g.push(f); else grupos.push([f]); }
-const permitido = (g) => g[0] === 0 || (g[0] / FPS >= 30.4 && g.at(-1) / FPS <= 30.85);   // 3ra pasada: el morph ya no deja 0,5 s vacíos: la tarjeta ③ entra a 30,75 s
+const permitido = (g) => g[0] === 0;   // solo el arranque: el gancho entra a 0,1 s
 console.log(`cuadros sin tarjeta narrativa visible: ${huecos.length} de ${N}`);
-for (const g of grupos) console.log(`  cuadros ${g[0]}–${g.at(-1)} (${(g[0] / FPS).toFixed(3)}–${((g.at(-1) + 1) / FPS).toFixed(3)} s, ${g.length} cuadro(s)) ${permitido(g) ? 'por diseño (arranque / morph)' : '✖ HUECO'}`);
+for (const g of grupos) console.log(`  cuadros ${g[0]}–${g.at(-1)} (${(g[0] / FPS).toFixed(3)}–${((g.at(-1) + 1) / FPS).toFixed(3)} s, ${g.length} cuadro(s)) ${permitido(g) ? 'por diseño (arranque)' : '✖ HUECO'}`);
 const malos = grupos.filter((g) => !permitido(g));
 if (malos.length) { console.error(`✖ ${malos.length} hueco(s) de tarjeta`); process.exit(1); }
 console.log('✔ en cada cambio de tarjeta hay siempre una tarjeta visible (≥ 5 % de opacidad)');

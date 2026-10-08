@@ -22,7 +22,7 @@ veces con el mismo orden para que se aprenda el patrón.
 |---|---|---|---|
 | 1 | Foto K4·1 **descartada**, job `6708e444`: en la torre del fondo apareció un letrero con un nombre inventado («Equperarto»). El prompt decía «no text, no logos, no signs anywhere» | `v4/kit/k4-1-DESCARTADA-6708e444.jpg` (bajada de Higgsfield por `rawUrl`, 0 cr). La cara midió **0,835** (gate ≥ 0,70): aprobada por cara, mala por fondo. `PROCEDENCIA.jsonl` líneas 93 y 95 (la 95 guarda el fragmento literal del prompt y la semilla) | Se descartó (1 cr) y se generó otra, K4·1 `eddca486`, sin letrero: `v4/kit/k4-1-saluda-eddca486-recorte.jpg` |
 | 2 | Foto K2·2 **agenda de papel**, job `1422fa94`: la letra del cuaderno y de los papelitos parece escrita pero no dice nada | `v4/kit/k2-2-agenda-papel-1422fa94.jpg`; el veredicto de `PROCEDENCIA.jsonl` ya decía «letra de la agenda ilegible» | No se usa para mostrar ningún dato; solo de plano de apoyo, sin acercar a la letra |
-| 3 | Clip K4 **cuenta dedos**, job `338b751f` (6,04 s, 145 cuadros): en los cuadros 72 y 104 el dedo de la otra mano cruza la mano abierta y no se puede contar | `v4/kit/k4-clip-cuenta-dedos-338b751f.mp4`, revisado el 8-oct a resolución completa; hoja `v4/kit/k4-revision-manos-20261008.jpg` y `PROCEDENCIA.jsonl` línea 94. **Cinco dedos contables en los cuadros 0, 60, 84, 96, 112 y 120** | La tarjeta pega el número al cuadro 120, que es el más limpio (la otra mano ya se fue). El conteo previo de 9 cuadros (0,2–5,2 s) no se había hecho cuadro a cuadro |
+| 3 | Clip K4 **cuenta dedos**, job `338b751f` (6,04 s, 145 cuadros): en los cuadros 72 y 104 el dedo de la otra mano cruza la mano abierta y no se puede contar | `v4/kit/k4-clip-cuenta-dedos-338b751f.mp4`, revisado el 8-oct a resolución completa; hoja `v4/kit/k4-revision-manos-20261008.jpg` y `PROCEDENCIA.jsonl` línea 94. **Cinco dedos contables en los cuadros 0, 60, 84, 96, 112 y 120** | La tarjeta pega el número al cuadro 120, que es el más limpio (la otra mano sigue a la vista, cerrada y abajo a la derecha, pero ya no cruza). El conteo previo de 9 cuadros (0,2–5,2 s) no se había hecho cuadro a cuadro |
 
 ## Estructura (58 s, 24 fps)
 
@@ -33,7 +33,7 @@ veces con el mismo orden para que se aprenda el patrón.
 | 6 – 23 | **ERROR 1 · el fondo** | Foto descartada, con el aro sobre el letrero. Etiqueta de dato «Cara: 0,835 · aprobada» desde 14,5 s. De 19 a 23 pantalla partida: descartada / la foto buena sin letrero | «1 · Un letrero que no pedí.» → «La orden decía: sin letreros.» → «Escribió uno igual.» → «Descartada. Una foto, 1 crédito.» |
 | 23 – 27 | Regla 1 | Foto buena K4·1 (sin letrero) | «Regla: mirar también el fondo.» |
 | 27 – 40 | **ERROR 2 · la letra** | Foto de la agenda (K2·2); a 31 s un recorte ampliado de la letra | «2 · Letra que no dice nada.» → «Parece escrita. No se lee.» → «Si no se lee, no sirve.» |
-| 40 – 46 | **ERROR 3 · la mano** | Clip K4 completo a velocidad 1× (6,04 s: de 40 a 46,04 s). La otra mano cruza en 43,0 s y en 44,3 s (cuadros 72 y 104) | «3 · Una mano tapa la otra.» (40–43) → «Así no se cuentan dedos.» (43–45,1) |
+| 40 – 46 | **ERROR 3 · la mano** | Clip K4 completo a velocidad 1× (6,04 s: de 40 a 46,04 s). La otra mano cruza en 43,0 s y en 44,3 s (cuadros 72 y 104) | «3 · Una mano tapa la otra.» (40–43) → «Si cruza, no se cuentan.» (42,9–45; el guion decía «Así no se cuentan dedos.», que era falso en los cuadros 84 y 96) |
 | 46 – 53 | Evidencia + regla 3 | Placa oscura (no se congela a Lucía) con el recorte ampliado de la mano en el cuadro 120, que se vio a los 45,0 s | «Cuadro 120: cinco dedos.» (46–50) → «Solo cuento lo que se ve.» (50–53) |
 | 53 – 58 | **CIERRE** | Clip K1 de 0 a 5 s (Lucía mira a cámara y sonríe) | «Seguime: cada semana, una prueba.» (53,3–58) |
 
@@ -64,3 +64,19 @@ cuento solo lo que se ve. Cada semana hago una prueba. Seguime.»* `#inteligenci
 - **Publicación:** como no muestra ni promete una función del producto ni nombra a terceros, pasa por el control de calidad y
   se publica sin pedir el OK pieza por pieza (`CLAUDE.md` § «Qué se publica sin preguntar»). Después se le avisa a Sergio
   Urcullo con el enlace. La vía real es `ig-reel.mjs --cuenta lucia`, que corre en el VPS: la madre.
+
+## Cambios del montaje respecto de este guion (8-oct, tras una pasada con revisor independiente)
+
+Detalle en `videos/lucia-g3/README.md`; cada uno es reversible en `plan.json`.
+- **El letrero «Equperarto» va difuminado** (se parece a un logo de banco: azul con un arco rojo). Lo marcan un aro, un recorte ampliado
+  y la etiqueta «Letrero difuminado al editar». El nombre inventado, que es la prueba, no se ve: **decide la madre** si lo muestra como
+  texto propio o lo deja así.
+- **«Así no se cuentan dedos.» pasó a «Si cruza, no se cuentan.»**: la otra mano cruza en ~63–75, ~87–93 y ~102–108; son contables 48–57,
+  81–84, 96–99 y 111–126. «cruza» solo se rotula en 72 y 104, que son los que avala el registro.
+- Costuras con empuje rígido de 6 cuadros; el clip K4 arranca a 40,0 s y K1 a 53,0 s, así que los cuadros 72, 104 y 120 caen
+  exactos en 43,0, 44,333 y 45,0 s (PSNR medido).
+- La pantalla partida de 19 a 23 s muestra solo fondos (arriba la torre con el letrero; abajo el cielo de la foto buena, rotulado «Foto nueva»).
+- Agregados que el guion no traía: etiqueta «Orden: «no signs anywhere»», etiqueta «Fondo: letrero inventado (difuminado)», segundo recorte de
+  la agenda (la nota amarilla en foco), contador «cuadro N» sobre el clip, miniaturas de los cuadros 72 y 104 rotuladas «cruza».
+- **Decisión de guion pendiente:** el error 3 no es un dibujo mal hecho de la IA sino un límite de verificación (las manos son correctas
+  en todos los cuadros mirados). Dejarlo con la nota del pie o renombrarlo «una mano que tapa y no deja verificar».

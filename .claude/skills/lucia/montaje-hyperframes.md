@@ -1,4 +1,4 @@
-# Montar un video de Lucía con HyperFrames — lo aprendido en G1 (8-oct-2026)
+# Montar un video de Lucía con HyperFrames — lo aprendido en G1 y G3 (8-oct-2026)
 
 > Detalle de la skill `lucia` (§0-quater). Caso: **G1** «Este video no fue grabado: así se hace, en 3 pasos» (56 s, 0 cr),
 > `videos/lucia-g1/`. Se montó con `editor-videos` § «Reels de Lucía» + `motion-doctrine` + HyperFrames 0.8.142, en **tres
@@ -96,3 +96,36 @@ cd videos && npx -y hyperframes@0.8.142 init lucia-gN --non-interactive --exampl
 3. **Un agregado que el guion no trae se marca como reversible** (`plan.json` → `agregados_al_guion`) y se le dice a la madre.
 4. Tres pasadas fueron 54 + 51 + 19 minutos de reloj y ~1,6 millones de tokens entre editor y revisor. La primera ya salió
    publicable en lo técnico; las otras dos corrigieron honestidad y oficio.
+
+## 7. Lo que sumó G3 (58 s, 8-oct: montar → revisor independiente → corregir, 69 minutos de reloj, ~1 millón de tokens)
+
+- **Plantilla:** G3 se arrancó copiando `videos/lucia-g1/` (README, plan.json, scripts) y adaptando contenido y validaciones. El montaje salió
+  en un solo agente; el revisor encontró 10 hallazgos (1 alto, 2 medios, 7 bajos) y todos se aplicaron o se dejaron como decisión de la madre.
+- **Un clip que entra en un empuje arranca en el INICIO del empuje** (T = tiempo del guion + 0,25 s para el plano que sale): así sus cuadros
+  caen en los segundos del guion. Si el clip sale en un empuje, sus últimos 6 cuadros viajan dentro y el último cae fuera de pantalla.
+- **Validar el guion contra la evidencia ANTES de montar.** G3 dejaba 0,9 s sin tarjeta y afirmaba «la otra mano ya se fue» en el cuadro 120
+  (falso). Mandó la evidencia. Y la tarjeta sobre un BLOQUE de cuadros se escribe después de contar los cuadros a resolución completa, de a 3,
+  en una hoja con el número de cuadro: «Así no se cuentan dedos.» era cierta solo en 72 y 104 → «Si cruza, no se cuentan.».
+- **Una tarjeta en el hueco de una pantalla partida tapa la cara que se encoge durante el morph** (el `clip-path` no escala el contenido):
+  la tarjeta entra al terminar el morph y las ventanas de la partida se eligen **solo con fondo**.
+- **Desenfoque con pluma de un letrero** (ffmpeg, sin rectángulo visible): `split` → `crop` → `gblur=sigma=S:steps=3` → `geq` con alfa
+  `255*min(1,min(min(X,W-1-X),min(Y,H-1-Y))/PLUMA)` → `overlay`. Medido: sigma 4 y 6 siguen legibles a 1080 px; sigma 9 con pluma 30 es ilegible.
+  La caja debe cubrir los descendentes (q, p).
+- **Contador de cuadros sin callbacks:** una tira de N números con `ease 'steps(N-1)'` de GSAP animada en y, arrancando 1/4 de cuadro antes
+  del cuadro 0 del clip para que cada instante n/24 caiga en el MEDIO de su escalón. Se verifica leyendo la transform en los 145 cuadros
+  (`medir-dom.mjs`). Evita `onUpdate`: los seeks de HyperFrames pueden suprimir eventos.
+- **Planos largos sobre una foto fija** (13 s) se sostienen con eventos reales baratos: acentos de texto a mitad de tarjeta, recortes
+  ampliados con su recuadro exacto en la foto (se sacan de la foto NATIVA, no del plano escalado) y un segundo recorte de OTRA zona. El hueco
+  máximo entre eventos se mide con script desde `plan.json` (`scripts/eventos.mjs`): el primer arreglo dejó 3 s sin evento y el script lo atrapó.
+- **El puntaje de cara depende de la imagen medida:** la foto descartada da 0,835 en el original de 1440×2560 y 0,826 en el JPG de 720 px. Con
+  caras de ~120-180 px el número es ruidoso (diferencia hasta 0,03): para separar ruido de deformación se mide también la fuente llevada a
+  1080×1920 sin comprimir y se **alinean los instantes con el cuadro 0 de cada clip**.
+- **`medir-dom.mjs` detecta choques:** cada 0,25 s mide la caja de todo texto visible y reporta intersecciones > 4 px entre elementos distintos.
+- **Trampa de los derivados:** `build.mjs` genera las imágenes derivadas (`ag-inset*.jpg`, `letrero-inset.jpg`, `descartada.jpg`, `k4cuadros/`)
+  SOLO si faltan: al cambiar una caja en `plan.json` se borra el archivo derivado antes de reconstruir (quedó escrito en el README).
+- **Trampas menores:** el letrero de la torre está en y≈70-146, dentro de la barra superior de Instagram (un aro ahí queda medio tapado: lo dicen
+  la tarjeta y una etiqueta); con 30 elementos con `filter:blur` `check` avisa «composition_heavy_overlay_count_high» pero el render salió bien
+  (si se pasa de ~35 tarjetas conviene fusionar las dos sombras en una); una hoja PNG de 30 recortes pesó 4,4 MB y en JPG 426 KB; el validador
+  cuenta bien las palabras y el revisor se equivocó de a una («A veces no se cuentan.» son 5): se cuenta con el script.
+- **El hook Stop de auto-sync commitea a mitad de trabajo** el andamio del proyecto aunque se diga «sin git»: no rompe nada (solo scripts de
+  video) pero deja una versión intermedia en la rama; el orquestador commitea el estado final encima.

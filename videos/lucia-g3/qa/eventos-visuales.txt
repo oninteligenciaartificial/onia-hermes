@@ -1,0 +1,9 @@
+eventos visuales: 41 (más el inicio 0,1 s y el final 58 s)
+mayores huecos entre eventos:
+  20.10 → 22.80 s: 2.70 s   (e_sin → e_con sale, e_sin sale)
+  31.00 → 33.40 s: 2.40 s   (c9, inset1 → c9 acento)
+  55.60 → 58.00 s: 2.40 s   (c15 acento → fin)
+  53.25 → 55.60 s: 2.35 s   (c15, costura → c15 acento)
+  12.20 → 14.50 s: 2.30 s   (c4 acento → c5, e_orden sale, e_cara)
+  16.70 → 19.00 s: 2.30 s   (e_fondo → e_cara sale, e_fondo sale, costura, morph)
+✔ hueco máximo 2.70 s (≤ 2,9 s)

@@ -3,13 +3,13 @@
 #   · cada t es un tiempo en segundos (p. ej. 5.9) o un NÚMERO DE CUADRO con «f» delante (p. ej. f144 = el cuadro 144 = 6,000 s a 24 fps);
 #   · COLS=6 hoja.sh … → cuadrícula de 6 columnas (por defecto todo en una fila);
 #   · guías: y=1490 (rojo, el pie de Instagram), x=1000 desde y=1000 (magenta, botones de la derecha),
-#            y=707 (cian, mentón de K1 + 40) y y=899 (cian claro, mentón de K2 + 40). SIN_GUIAS=1 las apaga.
+#            y=707 (cian, mentón de K1 + 40) y y=887 (cian claro, mentón de la foto descartada + 40). SIN_GUIAS=1 las apaga.
 # ⚠️ ffmpeg con -ss ANTES de -i entrega el primer cuadro con pts ≥ t, no el que contiene a t: con «f144» se pide (144-0,4)/24 s para caer
 #    justo en el cuadro 144 (medido el 8-oct: con «t+0,5 cuadro» los rótulos de una hoja de costuras salían corridos 1 cuadro).
 set -euo pipefail
 V="$1"; OUT="$2"; W="$3"; shift 3
 TMP="$(mktemp -d)"; i=0
-GUIAS="drawbox=x=0:y=1490:w=1080:h=3:color=red@0.9:t=fill,drawbox=x=1000:y=1000:w=3:h=920:color=magenta@0.9:t=fill,drawbox=x=0:y=707:w=1080:h=2:color=cyan@0.7:t=fill,drawbox=x=0:y=899:w=1080:h=2:color=0x66ffcc@0.6:t=fill,"
+GUIAS="drawbox=x=0:y=1490:w=1080:h=3:color=red@0.9:t=fill,drawbox=x=1000:y=1000:w=3:h=920:color=magenta@0.9:t=fill,drawbox=x=0:y=707:w=1080:h=2:color=cyan@0.7:t=fill,drawbox=x=0:y=887:w=1080:h=2:color=0x66ffcc@0.6:t=fill,"
 [ "${SIN_GUIAS:-0}" = "1" ] && GUIAS=""
 ALTO="$(ffprobe -v error -select_streams v -show_entries stream=height -of csv=p=0 "$V")"
 [ "$ALTO" = "1920" ] || GUIAS=""     # las guías están en coordenadas de 1080x1920
