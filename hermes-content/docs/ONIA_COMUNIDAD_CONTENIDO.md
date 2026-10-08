@@ -19,13 +19,14 @@
 - **Presencial:** se convoca cuando la encuesta de la semana 2 dé un mínimo de confirmados
   (propuesto: 15; falta el OK de Sergio Urcullo).
 
-## Auditoría de IA gratis: el paso que convierte (decidido por Sergio Urcullo el 5-oct: opción B)
+## Asesoría de IA gratis: el paso que convierte (decidido por Sergio Urcullo el 5-oct: opción B)
 
-> Orden del negocio de Sergio Urcullo, 3-oct: *«marca personal + auditorías + llamadas 1 a 1 + comunidad»* va primero
+> Orden del negocio de Sergio Urcullo, 3-oct: *«marca personal + asesorías + llamadas 1 a 1 + comunidad»* va primero
 > (`ONIA_PLAN_1.0_Y_CAJA.md` §2). El 5-oct se le plantearon dos opciones:
-> - **A:** auditoría solo para clínicas dentales, la recomendada;
-> - **B:** auditoría de IA para cualquier negocio.
+> - **A:** asesoría solo para clínicas dentales, la recomendada;
+> - **B:** asesoría de IA para cualquier negocio.
 >
+> **8-oct:** las asesorías van **gratis por ahora**; si después se cobran se decide con lo que muestre el contenido diario.
 > Eligió **B** (*«vamos con la B»*). El costo que se aceptó: atrae más gente de la marca personal, pero la mayoría hoy no
 > puede comprar Onia. Por eso lleva cupo semanal y se mide (abajo).
 
@@ -38,7 +39,7 @@
 - **No se promete** nada que Onia no haga hoy: solo se habla de lo vivo en `ONIA_CATALOGO_DE_VENTA.md`.
 - **Una sola agenda, la de siempre:** se renombra el evento `cal.com/sergiourcullo/20min` (hoy «Llamada 1 a 1»). No se
   crea uno nuevo, así siguen andando los links que ya lo usan: la web `sergiourcullo.vercel.app/llamada`, los drops y el
-  sales-kit. La llamada 1 a 1 y la auditoría pasan a ser la misma cosa.
+  sales-kit. La llamada 1 a 1 y la asesoría pasan a ser la misma cosa.
 
 ### Guion de los 20 minutos
 1. **0-3 min:** el negocio en una frase: qué vende, cuántas personas trabajan, por dónde le llegan los clientes.
@@ -52,7 +53,7 @@
      pacientes tienen un tratamiento empezado y no volvieron?»*) y la invitación a ver Onia en pantalla.
 
 ### Texto para cal.com (voseo, como la marca personal; lo cambia Sergio Urcullo o la madre con Chrome, en ~2 min)
-- **Título:** «Auditoría de IA gratis · 20 min». **Enlace:** no se toca (`/20min`). Google Meet.
+- **Título:** «Asesoría de IA gratis · 20 min». **Enlace:** no se toca (`/20min`). Google Meet.
 - **Descripción:** «20 minutos para tu negocio. Me contás qué tareas repetís cada semana y salís con cuál automatizar
   primero, con qué herramienta y el primer paso para hacerlo esta semana. Gratis.»
 - **Dos preguntas al reservar** (obligatorias):
@@ -62,22 +63,22 @@
   escaso. Si se llena todas las semanas, se sube.
 
 ### Dónde va el enlace
-- **Bio de Instagram:** un tercer link, «Auditoría de IA gratis», a `sergiourcullo.vercel.app/llamada`.
+- **Bio de Instagram:** un tercer link, «Asesoría de IA gratis», a `sergiourcullo.vercel.app/llamada`.
 - **Historias:** el sticker de link a la misma dirección, una vez por semana.
 - **Grupo de la comunidad**, una vez:
-  > Abro 3 auditorías de IA gratis por semana: 20 minutos, me contás qué tareas repetís en tu negocio y salís con cuál
+  > Abro 3 asesorías de IA gratis por semana: 20 minutos, me contás qué tareas repetís en tu negocio y salís con cuál
   > automatizar primero y el primer paso. Reservá acá: sergiourcullo.vercel.app/llamada
 - **Respuesta a un comentario o mensaje directo** que pide ayuda con su negocio: el mismo texto.
 - **A clínicas** (Ventas y pauta, de usted): el link de siempre, `cal.com/sergiourcullo/20min`, con su texto de
   `sales-kit/SEGUIMIENTO-LEADS.md`.
 
 ### Cómo se mide
-- Una fila por auditoría en el registro de leads de Ventas y pauta (`sales-kit/SEGUIMIENTO-LEADS.md`), con:
+- Una fila por asesoría en el registro de leads de Ventas y pauta (`sales-kit/SEGUIMIENTO-LEADS.md`), con:
   - de dónde vino;
   - el rubro;
   - las horas por semana de la tarea elegida;
   - si pasó a la comunidad o a ver Onia.
-- **Cada 10 auditorías se mira cuántas pasaron a ver Onia.** Con 0 de 10, se vuelve a plantear la opción A con esos datos.
+- **Cada 10 asesorías se mira cuántas pasaron a ver Onia.** Con 0 de 10, se vuelve a plantear la opción A con esos datos.
 
 ## Evidencia (2026-08-31, medida en vivo)
 

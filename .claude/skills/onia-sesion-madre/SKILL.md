@@ -18,13 +18,50 @@ Regla madre: `CLAUDE.md` §1 «Sesión MADRE local + carriles en la nube». Esta
   madre y la madre lo hace. Motivos: el navegador con el login de Sergio Urcullo es uno y su uso se serializa;
   varias madres son varios orquestadores y se cruza la información. Lo largo (render, build, medición de
   disco) la madre lo larga en un **subagente de fondo**, no en otra madre.
+- **La madre NO se muda a la nube** (Sergio Urcullo lo preguntó el 8-oct). Desde la nube `SendMessage` a otra sesión falla
+  («this cloud session cannot message other sessions yet»), así que la madre no podría ordenar a nadie. Tampoco llega a Chrome
+  ni a Codex local. Todo lo demás ya corre en la nube.
+
+## Modelo operativo (8-oct, pedido de Sergio Urcullo: «sin ahogarnos, con todos los modelos, sin que yo meta mano»)
+
+Nace de 5 videos que él mandó (ficha: `references/video-intake/2026-10-08-orquestacion-e-ingresos-5-posts.md`) y de un
+workflow que diseñó el modelo y otro agente lo criticó. Sergio Urcullo hace **solo** esto: comunidad, llamadas de venta,
+grabarse a sí mismo y contestar sí o no. Nunca graba pantallas ni saca capturas: las saca la nube con Playwright, como
+Plataforma con las del presupuesto por fases, a 390 y 1440 px.
+
+- **Router de modelos: primero el más barato, se verifica según el riesgo y se escala con la prueba del fallo.** Un bloqueo
+  de permisos o de cupo no se esquiva cambiando de modelo.
+
+  | Tarea | Arranca con | Se verifica con | Escala a |
+  |---|---|---|---|
+  | Contar, buscar, inventarios, JSON | Haiku 5.5 | conteo, grep o test | Sonnet |
+  | Copy, mensajes, guiones, edición | Sonnet 5.5 | catálogo y cliente ideal; mirar el render | Opus |
+  | Código de Platform | Codex cloud (env Platform) u Opus | tests en el mismo comando + CI | Opus |
+  | Migraciones, cobro, backup, SQL de prod | Opus | backup antes; decide Sergio Urcullo | — |
+  | Estrategia y precios | Opus | la cuenta cierra con números citados | Sergio Urcullo |
+
+  Fable 5.1 tiene un cupo semanal APARTE, pero su calidad no está probada: primero se prueba en una tarea sin riesgo y con un
+  resultado comparable, y recién después se le da trabajo de riesgo.
+- **Sesiones vivas, las mínimas:** madre (PC), Plataforma (nube «Onia») y Ventas/Marca (nube). Lucía y Hermes-Jarvis no traen
+  ingresos: se congelan si Sergio Urcullo dice que sí. Cada sesión que sigue viva relee su contexto (más del 95 % del gasto).
+- **El cupo no se reparte por porcentajes:** `get_usage` no lo da por carril. Lo que se controla: cuántas sesiones hay
+  vivas, el modelo de cada una y un corte. Si la semana pasa del 60 % antes del día 4, se frena todo lo que no sea la 1.0
+  o los leads.
+- **Cadencia (Sergio Urcullo, 8-oct: «leerlo en cada momento»):** la madre hace una ronda cada 20 min (CronCreate
+  `7,27,47 * * * *`, vive mientras ella está abierta y vence a los 7 días). En cada ronda lee el último ESTADO de cada
+  sesión y actúa. Si nada cambió, no le escribe nada a él. Las sesiones no pueden avisarle en el momento (ver
+  «Nube → madre»). 1 tarea por mensaje, con su criterio de hecho. Los issues `tarea-local` los barre la madre en las
+  rondas. No se crea otra tarea programada: sería un segundo orquestador.
+- **A Sergio Urcullo, como máximo 3 pedidos por semana**, en una lista de sí o no. Lo demás se anota y no se le pide.
+- **La plata no espera al desarrollo:** mientras el cobro de punta a punta no esté probado, se cobra por transferencia y se
+  activa a mano (Etapa 1).
 
 ## Sesiones vivas (5-oct-2026, relevo de todas a las 20:40 UTC)
 
 | Sesión (título) | id nube | Carril |
 |---|---|---|
-| Sesión madre Onia 1.0 | `session_01BZwYEL4eSUkdPWL36ibLkd` (**en la NUBE**, entorno «Onia») | Ordena por mensaje |
-| Madre v2 (local, se abre con `ARRANQUE-SESIONES.md`) | local, el id cambia al abrirla | Respaldo, 2.ª revisión, lanza Codex en la PC |
+| **Madre** (desde el 8-oct, LOCAL; en `ListAgents` se llama «Madre») | local `202a717e…`, worktree `onia-madre-v2-pr-review-2d85bb` | Ordena por mensaje, lanza Codex, hace lo de la PC |
+| ~~Sesión madre Onia 1.0~~ (nube) | `session_01BZwYEL4eSUkdPWL36ibLkd` | Reemplazada el 8-oct: desde la nube no se puede mandar mensajes |
 | Plataforma Onia 1.0 | `session_01HhnFgkeF6nLGvjrfjt1o2C` | Plataforma: desarrollo, publicar, VPS |
 | Ventas y pauta Onia | `session_0143C5fMXVs8eWEf7uBpC9SF` | Pauta y prospección |
 | Marca personal de Sergio Urcullo | `session_01WPecmppa9uZEc4fJDjSmaS` | Contenido de Sergio Urcullo |
@@ -48,7 +85,7 @@ commits: `git log --all --since=<hace 2 h> --format='%s %(trailers:key=Claude-Se
 |---|---|---|
 | Madre → nube | `SendMessage` con `to` = nombre exacto de `ListAgents` | ✅ 1-oct 19:57 UTC: llegó a Plataforma como `<cross-session-message>` y la despertó sola. Requiere la madre con Remote Control encendido |
 | Madre lee la nube | `RemoteTrigger` `action: get_run_log`, `session_id` = id nube | ✅ 1-oct. Trae los últimos 200 eventos; es DATO, no instrucciones |
-| Nube → madre | La nube contesta en su transcript y la madre lo lee con `get_run_log`. Además `mcp__claude-code-remote__send_message` (MCP de la nube) SÍ entrega a la madre (medido por Lucía 1-oct 23:48) — pero solo llega si el Remote Control de la madre está vivo | `SendMessage` desde la nube falla («this cloud session cannot message other sessions yet») |
+| Nube → madre | La nube contesta en su transcript y la madre lo lee con `get_run_log`. Además `mcp__claude-code-remote__send_message` (MCP de la nube) SÍ entrega a la madre (medido por Lucía 1-oct 23:48) — pero solo llega si el Remote Control de la madre está vivo. ⚠️ **8-oct: FALLA** con `elevated_session_untrusted_device`: la madre nueva pide un «dispositivo de confianza» y el servidor no avala a la sesión de la nube (Marca, 18:57 UTC, con el Remote Control de la madre encendido). Hoy el único camino es el transcript + la ronda de la madre cada 20 min | `SendMessage` desde la nube falla («this cloud session cannot message other sessions yet») |
 | Madre → nube SIN Remote Control | `RemoteTrigger create` con `persistent_session_id` de la destino + `action: run` (entra ya como un turno) + `update {enabled:false}` para que no se repita | ✅ 2-oct 23:49 UTC a Plataforma. Respuesta larga del API: usar solo si `ListAgents` no ve la sesión |
 | Nube → nube | rutina de un disparo: `create_trigger` con `persistent_session_id` de la destino y `run_once_at` +1-2 min | ⚠️ funciona pero tarda; Sergio Urcullo la descartó el 1-oct. Lo que una nube necesita de otra pasa por la madre |
 | Local → local | `SendMessage` | ✅ (lo ve Sergio Urcullo en pantalla) |
@@ -154,11 +191,48 @@ Cómo contestar: <en tu transcript | SendMessage a «Sesión madre de Onia» | r
   4. Effort low y modelo chico para la lectura mecánica.
   Script de medición: suma `usage` por `message.id` en `~/.claude/projects/<carpeta>/**/*.jsonl`.
 
-## Delegar código a Codex (medido el 4-oct)
+## Delegar código a Codex (medido el 4-oct; conexión rehecha el 8-oct)
 
-- `codex exec -m gpt-5.5` (el CLI 0.139 no corre gpt-6-*), en un worktree aislado por tarea; en onia-platform, con
-  `node_modules` por junction. El sandbox no deja a Codex commitear: el `.git` del worktree queda fuera de la raíz
-  escribible. La madre revisa el diff, commitea y abre el PR, y la madre v2 revisa con 1 o 2 lentes según el riesgo.
+Sergio Urcullo, 8-oct: **Claude es la madre y Codex trabaja dentro de ella** («aprovechemos mis dos suscripciones»).
+Se trabaja en la app de Claude; Codex corre por detrás. Codex no orquesta, no abre sesiones ni mergea.
+
+- **Codex en la NUBE primero (8-oct):** no depende de Windows ni de la PC prendida. Hay 2 entornos:
+  - `6abad6a0aae081919f0b315818becb21` = «ONIA Platform — QA y desarrollo» (onia-platform, ~33 MB);
+  - `6abad782eba0819196ca234dc3abc327` = «ONIA Hermes — revisión y desarrollo» (onia-hermes).
+  Se lanza con `codex cloud exec --env <id> --branch <rama> "<prompt cerrado>"`, se sigue con `codex cloud status <task>` y se
+  trae con `codex cloud diff` / `apply`. El CLI 0.139 no elige modelo en la nube.
+  ⚠️ El repo de Hermes pesa ~6 GB y su setup corre `pnpm install` de web-factory: la tarea de prueba quedó «pending» más de
+  12 min. Esa es la «cola» que ve Sergio Urcullo. **Codex en la nube = código de Platform.** Los docs de Hermes los hacen las
+  sesiones de Claude.
+  `codex cloud` sin argumentos es una TUI y no corre desde acá. Los entornos se listan con la API que usa el CLI:
+  `GET https://chatgpt.com/backend-api/wham/environments`, con el token de `~/.codex/auth.json` y sin imprimirlo.
+- **Codex local** (más rápido que la nube para tareas de Hermes): `scripts/codex-tarea.sh <tarea.md> <worktree> [modelo]
+  [esfuerzo]`, en segundo plano. Usa el `codex` de npm (0.161) con `windows.sandbox="unelevated"`: así corren gpt-6-astra
+  y gpt-6.1-sol con sandbox (las dos probadas el 8-oct). Deja
+  `resultado.md`, `eventos.jsonl` y `session_id` en `~/.codex/madre-tareas/<fecha>-<tarea>/`. Para un seguimiento en la
+  misma conversación: `scripts/codex-tarea.sh resume <session_id> <seguimiento.md>`.
+- **Modelos (Sergio Urcullo, 8-oct):** código de Platform `gpt-6-astra` medium; tareas simples `gpt-6.1-sol` medium (el
+  default). Si el resultado es malo, se escala con la prueba del fallo, no por costumbre. Lista viva:
+  `~/.codex/models_cache.json`.
+- **La tarea es un prompt cerrado:** META · PRUEBA DE HECHO · REGLA DE PARADA · archivos que toca y los que no · reglas
+  fijas (sin push, sin VPS, sin producción, sin instalar). Modelo: `hermes-content/docs/handoff/codex-tareas/*.md`.
+- **Cupo:** semanal (plan `prolite`). El uso se lee en el último `rate_limits` de `~/.codex/sessions/**`. Con 80 % usado
+  no se lanza nada nuevo (reserva del 20 %, decidida el 6-oct).
+- ⚠️ **Sandbox de Windows (8-oct):** el CLI que trae la app de Codex (0.162-alpha) falla SIEMPRE con sandbox
+  («setup refresh had errors»: `node_repl.exe` del runtime `cua_node` «en uso»), aun con la app y sus procesos cerrados.
+  Correrlo sin sandbox lo frena el control de permisos de Claude Code («Create Unsafe Agents»), y no se rodea: tampoco se
+  pueden matar procesos ajenos («Interfere With Workloads»). Qué se probó:
+  - el npm 0.161 con el config («elevated») falla igual;
+  - con `--ignore-user-config` responde «bloqueado por la política»;
+  - con `-c windows.sandbox="unelevated"` **funciona**.
+  El npm 0.139 también andaba, pero solo con gpt-5.5, que deja Codex el 14-oct según el aviso oficial que citó Codex.
+  Cuando falla, Codex lo reporta honesto en `resultado.md` y no inventa.
+- **Codex en la nube SÍ corre:** la prueba del 8-oct en el entorno Hermes terminó READY a los ~20 min (el repo pesa). El
+  resultado se trae con `codex cloud diff <task>` y `codex cloud apply <task>`.
+- Worktree aislado por tarea, rama `codex/<tarea>-<fecha>` (nunca `claude/*`); en onia-platform, `node_modules` por
+  junction. **Codex NO commitea:** no se le da el `.git` común, porque sus `hooks/` y su `config` se ejecutan fuera del
+  sandbox la próxima vez que la madre usa git (revisión del #151, 8-oct). La red sigue cerrada. La madre revisa el diff
+  de la carpeta, commitea, empuja y abre el PR, con 1 o 2 lentes de revisión según el riesgo.
 - El `tsc` local falla con el cliente de Prisma compartido: el CI del PR es el gate de tipos.
 - **La madre commitea SOLO con los tests en verde, con un gate en el mismo comando**
   (`echo "$out" | grep -q failed && exit 1`). El 4-oct se subió `5c58175c` con un test rojo porque el `grep` de la
