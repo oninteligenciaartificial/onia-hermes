@@ -233,6 +233,12 @@ Se trabaja en la app de Claude; Codex corre por detrás. Codex no orquesta, no a
 - **Codex en un repo pesado (onia-hermes, ~6 GB):** worktree con `--no-checkout` + `sparse-checkout set <carpeta>
   .agents AGENTS.md CLAUDE.md` + `checkout`. Solo baja la carpeta de la tarea. Ruta corta (`C:/dev/proyectos/…`): bajo el
   scratchpad, Windows corta por «Filename too long».
+  - 🔴 **En Git Bash, los patrones con `/` adelante se vuelven rutas de Windows.** `'/scripts/'` queda como
+    `C:/Program Files/Git/scripts/`, el filtro no aplica nada y el checkout baja el repo entero. Pasó el 8-oct: 6,2 GB y
+    el disco quedó en 203 MB libres. Se escribe `MSYS_NO_PATHCONV=1 git -C <wt> sparse-checkout set --no-cone '/scripts/' …`
+    y después se confirma con `git sparse-checkout list` y `du -sh`.
+  - **Disco de la PC:** antes de lanzar un análisis de videos o un worktree, `df -h /c`. Codex falla con menos de 1 GiB
+    libre. Los videos que baja un análisis se borran al terminar cada video: el resultado es el texto, no el mp4.
 - **Los informes que escribe Codex** (`docs/C16A_*.md`, `*-ENTREGA.md`) NO van al commit: van al cuerpo del PR, para
   no llenar de docs sueltos los repos del producto.
 - **Ver videos e Instagram lo hace la MADRE, no Codex** (probado el 8-oct). Con red habilitada
