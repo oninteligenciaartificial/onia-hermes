@@ -1,7 +1,7 @@
 # Add-ons de Onia Platform: su potencial y el orden para DESPUÉS de la 1.0
 
 > **Doc vivo, sin fecha: se EDITA.** Nace el 8-oct (pedido de la madre por Sergio Urcullo: *«recordá el potencial que hay»*).
-> **Alcance:** analizar los 6 add-ons que Sergio Urcullo nombró el 8-oct. **No se construye nada:** el goal es la 1.0 al 30-oct, y la etapa
+> **Alcance:** analizar los 6 add-ons que Sergio Urcullo nombró el 8-oct, más un 7.º punto (la interfaz propia del chat y la app, §9). **No se construye nada:** el goal es la 1.0 al 30-oct, y la etapa
 > vigente (Etapa 1, 5 clientes) no la cambia ninguna sesión (`ONIA_ESTRATEGIA_DE_EMPRESA.md` §7).
 > ⚠️ **El bloque «Decisión de Sergio Urcullo, 8-oct» que la madre cita en el §12 de esa estrategia NO está en `main` el 8-oct.** Los 6
 > add-ons salen del mensaje de la madre. Hasta que esté escrito, ningún doc recoge la decisión, y el §10 sigue diciendo que web,
@@ -15,13 +15,13 @@
 |---|---|---|---|---|---|
 | **1** | **Web** (se mantiene y se potencia) | ❌ proyecto: falla la 2 y la 3 | **Sí, si es «Web conectada»** (la alimenta el sistema) | ✔ el configurador vive; el motor, sin probar; **0 pagos** | Un solo precio y el circuito 3: el widget de reserva en la web |
 | **2** | **Puesta en marcha** (la parte de *consultoría* que sí es add-on) | ⚠️ pasa 1 y 2, falla la 3 | Como precio fijo aparte, como el self-hosted | Solo documento; las asesorías van gratis | Ratificar el precio y cobrarlo al primer cliente |
-| **3** | **App móvil** | ✅ si es **una sola app «Onia»** con inicio de sesión | Sí, pero **sube la retención, no el ingreso** | PWA «según doc»; app de tienda: no existe | Cuenta de Apple Developer (USD 99/año) a nombre de una entidad |
+| **3** | **App móvil + la bandeja propia del chat** (7.º punto, §9) | ✅ las tres si es **una sola app «Onia»** con la conversación y la ficha al lado | Sí; **la bandeja es la razón para instalarla** y justifica el precio del bot | Bandeja propia viva «según doc»; PWA sin probar en iPhone; app de tienda: no existe | Probar la PWA con push en un iPhone real (§9); cuenta de Apple si se va a tienda |
 | **4** | **Campañas de Meta con IA** | ⚠️ solo como botón; como «manejo» falla la 3 | Sí, como producto, **después de medir la propia** | No existe como función | Documentar el método con la prueba propia de US$ 56 |
 | **5** | **Publicidad con influencers IA** | ❌ falla la 1 y la 2 | Solo como **creativos para la pauta del cliente** (se pliega al 4) | Lucía construida, **ningún reel publicado** | Nada hasta que Lucía tenga reels publicados |
 | **6** | **IA local** | ⚠️ pasa 1 y 2 como capacidad; falla la 3 si se instala | Como «sirve sin internet», a pedido | Solo documento; ninguna unidad comprada | Una pregunta en la demo: «¿le importa que la ficha esté en la nube?» |
 
 **Por qué este orden:** primero lo que ya vive y se vende al mismo cliente (1), después lo que no hay que construir (2), después lo que
-el mercado ya da gratis y falta para no quedar atrás (3), después lo que necesita un dato propio que todavía no existe (4), y al final lo
+el mercado ya da y falta para no quedar atrás, con un diferencial que nadie tiene: **el chat con la ficha del paciente al lado** (3), después lo que necesita un dato propio que todavía no existe (4), y al final lo
 que hoy falla el test (5 y 6). **Cero pagos, caja de Bs 4.000 y break-even en ≈ 5 clientes** (`CLAUDE.md`, `ONIA_CATALOGO_DE_VENTA.md` §6):
 ningún add-on se entrega hoy sin horas de Sergio Urcullo.
 
@@ -200,19 +200,81 @@ la privacidad es **argumento de venta, no obligación legal.** *Calidad:* no hal
 
 ---
 
-## 9. Lo que hay que resolver antes de tocar nada
+## 9. La interfaz propia del chat + la app: «el chat de su clínica en su celular, con la ficha al lado»
+
+> 7.º punto, pedido de la madre (8-oct): *usar el chatbot desde todos lados, rápido, instalable.* **La parte técnica (licencia de Chatwoot, velocidad de nuestra bandeja,
+> PWA y tiendas) la verifica la madre; abajo queda el hueco para pegarla con su fuente.** Lo de acá es el mercado y cómo se vende.
+
+**Qué existe hoy («según doc», no verificado en código).**
+- **Onia ya tiene su bandeja propia** (`/api/bandeja`, `InboxClient.tsx`) encima de Chatwoot. `ONIA_VELOCIDAD_Y_ESTABILIDAD.md` (29-sep, `master` c3b92067) dice que **consulta Chatwoot cada 5 y cada 15 s** y mide
+  **p50 640 ms y p95 898 ms** contra 312 ms de una API parecida sin Chatwoot (la diferencia, ≈ 330 ms, es inferencia, no medición).
+- `ONIA_NIVEL_REFERENTES_BRECHA.md` (§C) lista como «sí nos aplica»: la bandeja con candado bot-humano, el aviso al celular y las fotos y audios visibles.
+- La PWA «Instalá Onia» está en producción según doc y **sin probar en un iPhone real**. App de tienda: no existe (§5).
+- **Resultado técnico de la madre: PENDIENTE.** Va acá, con su fuente: licencia de Chatwoot · velocidad de la bandeja hoy · PWA y tiendas.
+
+**Quién cobra por una bandeja o una app propia, y cuánto (8-oct; P = publicado, B = blog/reseña; valoraciones del App Store de EE. UU.).**
+
+| Tipo | Quién | Precio | App |
+|---|---|---|---|
+| **Por asiento** | Chatwoot Cloud (P, ✔ releído: USD 0 con 2 agentes y 500 conversaciones · 19 · 39) | USD 0 (2 agentes) · **19 · 39 · 99** por agente/mes | iOS y Android, 4,1 (13 valoraciones) |
+| | Kommo (P) | USD 25 · 35 · 45 por usuario, **mínimo 6 meses** | 4,25 (12) |
+| | Callbell (P) | USD 15 y 20 por agente | incluida |
+| **Bloque con usuarios incluidos** | Respond.io (P) | USD 79 (5 usuarios, +12 c/u) · 159 · 279, anual | 4,25 (16) |
+| | Leadsales (P) | USD 97 · 133 · 247 (3 · 4 · 5 usuarios) | 4,09 (57) |
+| | Wati (B/P) | USD 59 · 119 · 279 anual; usuario extra USD 24 (Pro) y 69 (Business) | 3,67 (21) |
+| | **LiveConnect, página de Bolivia (P)** | USD 36 · 48 · 71 · 127 con 3 · 5 · 10 · 50 usuarios; extra USD 1 | bandeja web o app iOS/Android |
+| **Por conversación o créditos** | Botmaker (P) | USD 149 · 249 · 499 con 10 · 20 · 50 agentes; alta USD 99 | 4,2 (5) |
+| | Zoko (P) | USD 49,99 · 79,99 · 139,99, con recargo por conversación | sin valoraciones |
+| **Clínicas: la bandeja va DENTRO del plan** | Clinera (P) | USD 223 · 303 · 383 al mes (anual), **10 · 15 · 25 usuarios**; implementación USD 450; 6 meses; usuario extra USD 9. Instagram y Facebook en la misma bandeja desde el plan 2 | «App móvil» sin detalle |
+| | Doctocliq (P, ✔ releído) | USD 19 · 29 · 49 por doctor; **8 usuarios administrativos gratis**; Soyla IA (WhatsApp, el equipo toma el control) es add-on **sin precio público** | app del **doctor** en todos los planes, 4,67 (9) |
+| | AgendaPro (P) | recordatorios de WhatsApp incluidos (50-200), **sin bandeja de conversación** | app «Business», 4,76 (782) |
+| | Dentalink (P) | sin precio público; su centro de contacto IA no está en ningún plan | **sin app propia** (web en el móvil) |
+| **Bolivia** | Xmart Cloud (P, ✔ releído) | **Bs 349/mes** el bot; sin bandeja ni app descritas, solo «panel desde celular» | — |
+| | Chicha (P) | Bs 199 · 399 · 799; «panel de administración» | no menciona |
+| | AnswerForMe (P) | USD 10-145, packs sin mensualidad | — |
+
+**Lo que dicen los números.**
+- **Rango creíble por asiento: USD 12-45 al mes.** Las bandejas puras se concentran en USD 15-39.
+- **En software de clínicas el asiento casi no se cobra:** Doctocliq regala 8 usuarios y Clinera incluye 10-25 dentro de la cuenta. **Lo que se cobra es la cuenta, la IA o la implementación.**
+- **En Bolivia el ancla es Bs 199-349 por todo el bot.** Un add-on creíble de bandeja ronda **Bs 70-175 por asiento, o mejor un precio por clínica** *(est., sin tipo de cambio leído hoy)*.
+- **El peso de la app en la compra no tiene fuente sólida:** una encuesta de EE. UU. de 2017-18 dio 2 % que la citó como motivo; otro informe dice 60 % sin método. **No se usa como cifra.**
+
+**Lo que NO se puede copiar.**
+1. **Chatwoot Enterprise como base para revender.** Su licencia (`enterprise/LICENSE`) **prohíbe vender, sublicenciar y distribuir**, y producción exige licencia por asiento; «custom branding» es una función de pago, no un derecho de reventa. **Solo lo que está fuera de `enterprise/` es libre:** ✔ el `LICENSE` raíz dice que eso va bajo *«MIT Expat»*. ✔ *Leí el texto de `enterprise/LICENSE` el 8-oct:* «it is forbidden to copy, merge, publish, distribute, sublicense, and/or sell the Software» y en producción exige una suscripción *«for the correct number of user seats»*. *(La madre verifica el alcance exacto sobre lo que Onia usa hoy.)*
+2. El **recargo de ≈ 20 % sobre los mensajes de Meta** que cobran Wati y Botmaker: Xmart deja ese cobro al cliente.
+3. **La app de tienda como diferencial:** las de bandeja tienen 12-21 valoraciones y notas de 3,67-4,25; no vi ninguna PWA publicitada.
+4. El precio global en USD con tarjeta, por asiento.
+
+**La brecha que sí es de Onia:** **ninguna de estas bandejas muestra la ficha del paciente y su agenda al lado de la conversación** (salvo Respond con datos de CRM). Es lo que une este punto con el núcleo.
+
+**Test del §10.** ✅ mismo cliente (el que ya tiene el bot) · ✅ **sin el núcleo es un Chatwoot suelto:** el valor es la ficha, la agenda y el tratamiento al lado del chat · ✅ **se entrega sin horas** si es una PWA que el cliente instala solo.
+**Veredicto: 🟢 candidato fuerte, y más una *capacidad del bot* que un producto aparte.**
+
+**Cómo se le vende al MISMO cliente.** No como producto: **dentro del add-on del bot**, como el argumento para pagarlo (y para mover su precio, T1-3): *«el chat de su clínica en su celular, con la ficha del paciente al lado, sin tener que
+abrir otro programa»*. Empaque a decidir, con estos precedentes:
+- **(a) Incluida con 3 asientos** y asiento extra de Bs 70-100 *(est.; Clinera cobra USD 9)*. **Recomendado:** es lo que hacen las clínicas.
+- **(b) Sin cobrar asiento** (Doctocliq regala 8 usuarios).
+- **(c) Por asiento** como las bandejas puras: **no**, aleja a la clínica de 2-6 profesionales.
+
+**Esfuerzo.** *Plataforma/Codex:* PWA de la bandeja con push y arranque rápido; bajar el polling (el §L6 de velocidad). *Sergio Urcullo:* nada por cliente.
+
+**Primer paso (después de la 1.0).** Con el resultado técnico de la madre: **probar la bandeja instalada en un iPhone real** (push, arranque, la ficha al lado). **Listo =** una conversación respondida desde el celular instalado, con la ficha visible, mirada en pantalla.
+Sin eso no se anuncia: **hasta que esté encendido y verificado, no se le nombra** al cliente.
+
+## 10. Lo que hay que resolver antes de tocar nada
 1. **Escribir la decisión del 8-oct** en `ONIA_ESTRATEGIA_DE_EMPRESA.md` (hoy no está) **y reconciliarla con el §10**, que marca web, influencer y ads como 🔴. Sin eso, la próxima sesión lee «no abrir líneas nuevas» y esta lista dice lo contrario.
 2. **Un solo precio de web** (790 / 1.500 / 2.900 contra 2.000 / 4.500) y **un solo archivo** que lo diga.
 3. **La consultoría:** tarifario de Bs 250-9.500 contra «asesoría gratis», y una página que existe pero está apagada.
 4. **La página `/servicios/webs`** se contradice sobre la mensualidad.
 5. **`/servicios/marketing-ia`** no se reenciende mientras no haya una campaña y una influencer reales que mostrar.
 
-## 10. Lo que decide Sergio Urcullo
+## 11. Lo que decide Sergio Urcullo
 1. **¿Web solo «conectada»?** (recomendado) y **¿dominio y hosting incluidos el primer año?**
 2. **¿Se cobra la «Puesta en marcha»?** ¿Cuánto, y se regala en el plan anual?
 3. **¿A nombre de quién va la cuenta de Apple?**
 4. **¿Qué lectura de «publicidad paga para influencers IA»** quería (i, gasto propio; ii, vender patrocinios)?
 5. **Confirmar el orden** de la §1, o moverlo.
+6. **Empaque de la bandeja** (§9): ¿incluida con 3 asientos en el add-on del bot (recomendado), sin cobrar asiento, o por asiento?
 
 *Fuentes de mercado (8-oct):* tecnoweb.net · khainata.com · preciospaginaweb.com · bigredes.com · kom.pe · agendapro.com/cl/planes · dechali.com · redplanbolivia.com · logicalweb.bo · communitybolivia.com · bir.ch · madgicx.com · developers.facebook.com/docs/marketing-api ·
 xmart.cloud · duotach.com · developer.apple.com/app-store/review/guidelines · creatify.ai · heygen.com · about.fb.com (transparencia de IA en anuncios) · dlapiperdataprotection.com (Bolivia) · agetic.gob.bo.
