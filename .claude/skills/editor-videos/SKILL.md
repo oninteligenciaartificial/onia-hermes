@@ -531,9 +531,12 @@ node scripts/fondo-verde.mjs --toma toma.mp4 --fondo captura.png --crop 0:0:1440
    `--previous-text` y 2–3 `--seed`; se elige la que **baja** al final (medir F0 de la última palabra con
    `librosa.pyin`: si sube, suena a pregunta — L08 «¿Vos no movés un dedo?»). Whisper siempre escribe «mueves»: no sirve
    para juzgar el voseo, sí para ver los signos de pregunta. `--cost` lee el cupo (payg 10.000).
-5. **La prueba es pantalla REAL de Onia**, con recorte focal y crédito chico «pantalla real de Onia», en el segundo en
-   que se nombra. Sin captura, un **diagrama del mecanismo** dibujado en código (no una UI falsa) y la captura entra
-   en la versión siguiente. **Ninguna tarjeta repite lo que se oye** (Erik): aporta el dato derivado.
+5. **La prueba.** Si la pieza muestra o nombra una función de Onia, la prueba es pantalla REAL de Onia, con recorte focal y
+   crédito chico «pantalla real de Onia», en el segundo en que se nombra. Sin captura, un **diagrama del mecanismo**
+   dibujado en código (no una UI falsa) y la captura entra en la versión siguiente. **Desde el 8-oct Lucía no tiene que
+   mostrar el producto** (Sergio Urcullo: *«sos una influencer; tu tarea es grabar y aprender Higgsfield»*): en sus piezas
+   la prueba es el dato real de la prueba (la orden exacta, el costo medido, el cuadro revisado). **Ninguna tarjeta repite
+   lo que se oye** (Erik): aporta el dato derivado.
 6. **Karaoke** `--style apple`, ≤ 3 palabras, 68 px, en la franja libre, con velo oscuro debajo si el fondo es claro
    (L08: blazer crema, luminancia p90 > 200). Se apaga mientras hay un panel de datos y en el remate (lo dice un sello).
 7. **Sin voz:** ≤ 6 palabras por tarjeta y ≥ 0,35 s por palabra + 0,3 s de entrada (~2,5–3 palabras/s). Si no entra

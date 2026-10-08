@@ -1,11 +1,67 @@
-# Handoff — Lucía v4 y Higgsfield
+# Handoff — Lucía (influencer IA) y Higgsfield
 
 > Formato: [`README.md`](README.md). Se **sobrescribe**: es el estado ACTUAL del carril.
 > Última escritura: **2026-10-08**, sesión `session_01XSzFcs1k18ijqjSHGjnzD4` (nube, entorno `onia-higgsfield`), rama
 > `claude/zealous-babbage-fvtjck`. El estado vigente es el primer bloque de abajo; lo demás es historia.
 > Reemplaza a `HIGGSFIELD-LUCIA-SYSTEM-2026-09-22.md`, que queda como historia.
 
-## ▶ ESTADO VIGENTE — 8-oct-2026 (lo de abajo es historia)
+## ▶ ESTADO VIGENTE — 8-oct-2026 tarde, plan v5 (lo de abajo es historia)
+
+**Objetivo de la sesión:** Lucía es una influencer IA que **graba videos estructurados y aprende Higgsfield**; no tiene que
+mostrar el producto (Sergio Urcullo, 8-oct: *«recordá que sos una influencer: grabar y aprender a usar Higgsfield es tu
+tarea»*). **Hecho =** G1, G3 y G2 publicados según `CLAUDE.md` § «Qué se publica sin preguntar», cada uno con su
+aprendizaje escrito en la skill `lucia`.
+
+**En producción:** nada publicado ni desplegado en el VPS. **Gasto del 8-oct: 0 cr** (saldo 541,26; octubre 52,5 de 150).
+
+**Hecho, en la rama y su PR (#144):**
+- **`PLAN.md` v5:** premisa nueva, reglas de toda pieza, currículo de Higgsfield con cotizaciones del 8-oct, formatos F7/F4/F3,
+  circuito de publicación y decisiones (L1, D4, D5). La puerta de demo y el usted quedan en pausa.
+- **`guiones/G1-de-una-foto-a-un-video.md`:** 56 s, 0 cr, sin producto, con material ya pagado (K1, K2, K4). Gancho
+  «Este video no fue grabado», 3 pasos (foto, orden, revisión), cierre «Seguime: cada semana, una prueba».
+- **`guiones/G-producto-1-recordatorio-de-cita.md`:** el G1 anterior, **en pausa**, con su banner.
+- **Skill `lucia`:** §0-ter (premisa v5, currículo, cotizaciones), voseo, regla de publicación del 8-oct, secciones de
+  producto marcadas en pausa, y el intento fallido «plan v4 con premisa equivocada».
+- **`paquete-s1/PAQUETE.md`:** v5 (bio nueva sin link de venta, L01 a reescribir).
+- **Lista de tareas de la sesión** (pedido de Sergio Urcullo vía la madre): G1, G2, G3 y sus ediciones, L01 y aprendizaje.
+
+**⚠️ Choque de instrucciones, abierto:** el mismo 8-oct la madre dio por **APROBADO el G1 de producto** («Recordatorio de
+cita: 3 datos»), pidió esperar la captura real de Pendientes y armar **G2 «El link de reserva: 3 cosas»**. Eso muestra el
+producto y contradice la premisa de Sergio Urcullo. No consta si la madre ya había leído la corrección. Se aplicó lo que
+escribió Sergio Urcullo: **no se editó ni se armó nada de producto**, y se le pidió a la madre que confirme cuál vale.
+
+**A medias, y dónde:**
+- **G1 nuevo:** espera la validación de la madre (tarea #7). Después se edita en `videos/lucia-g1/` (carpeta nueva; modelo
+  de montaje: `videos/lucia-chiste/scripts/build.mjs`).
+- **G2 y G3:** sin guion todavía. G2 necesita el OK de Sergio Urcullo al costo de L1 antes de generar nada.
+- **Publicadores:** solo en el repo. La madre los copia **juntos** a `/root/bin` y corre `--selftest`.
+- **Token de Instagram de Lucía:** no se midió. El 4-sep vencía entre el 13 y el 18-oct. El hook de arranque dice
+  «`ssh onia-vps` listo», pero esta nube no trae el binario `ssh` (`command -v ssh` vacío el 8-oct).
+
+**Archivos:** `docs/cola/lucia-diario/PLAN.md`, `guiones/`, `paquete-s1/PAQUETE.md`, `.claude/skills/lucia/SKILL.md`,
+`references/modelos/lucia/v4/` (kit, feed, `PROCEDENCIA.jsonl`), `videos/lucia-chiste/` (ejemplo de lo que NO se entrega).
+
+**Intentos fallidos (no repetir):** los del bloque de abajo, más:
+- **Plan v4 «Lucía vende Onia» (5-8-oct):** la premisa no era la de Sergio Urcullo. Ver skill `lucia` §9.
+- **Dar por buena una pieza por su forma:** el chiste pasó QA de layout y se rechazó por contenido.
+
+**Qué depende de Sergio Urcullo:**
+1. **OK al lote L1 de ~35 créditos (tope 36):** Kling pro 9, Seedance Mini 6, Cinema Studio 3.0 20, mejora a 1080p ~0,1. Es
+   el video G2. Son créditos que se vencen en la renovación, no plata.
+2. D4 (la voz): escuchar las muestras de `research/competencia/lucia-20261005/voces/` antes de L2.
+3. D5: el canon de 10 datos de Lucía (`LUCIA.md` §0-canon).
+4. Nombre y bio desde el celular de Lucía; token de Instagram antes del 13-oct; cuenta gratis de TikTok en Buffer.
+5. Para L3: grabar 10 s de gestos como video guía.
+
+**Próximos pasos:**
+1. La madre confirma que vale G1 nuevo (premisa v5) → se edita con `editor-videos` § «Reels de Lucía», `hyperframes` y
+   `motion-doctrine`, QA §12, y se mira completo.
+2. Escribir G3 (0 cr) y G2 con la estructura marcada → validación → edición.
+3. Con el OK de Sergio Urcullo, correr L1 (cotizar de nuevo con `get_cost` antes de gastar).
+4. Reescribir L01 a la premisa v5; va fijado después de G1.
+5. Tras cada edición: lo aprendido a la skill `lucia`, con caso y fecha, en el mismo commit.
+
+## ▶ ESTADO — 8-oct-2026 mañana, plan v4 (historia: lo manda el bloque v5 de arriba)
 
 **Objetivo de la sesión:**
 - el plan v2 de Lucía, definido después del estudio de la competencia (madre, 5-oct);

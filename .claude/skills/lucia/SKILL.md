@@ -1,6 +1,6 @@
 ---
 name: lucia
-description: "Invocar para CUALQUIER trabajo del carril Lucía (Lucía Antelo, la influencer IA de Onia): generar fotos o clips en Higgsfield, editar sus reels, armar el paquete semanal, publicar en Instagram o TikTok, medir la prueba o tocar su plan. Dice lo ya medido —costos de Higgsfield, recetas por formato, voz, pantallas reales, circuito de publicación, puerta de demo— para no volver a investigarlo, con trampas e intentos fallidos fechados."
+description: "Invocar para CUALQUIER trabajo del carril Lucía (Lucía Antelo, la influencer IA de Onia): generar fotos o clips en Higgsfield, editar sus reels, armar el paquete semanal, publicar en Instagram o TikTok, medir la prueba o tocar su plan. Su tarea (Sergio Urcullo, 8-oct) es grabar videos estructurados y aprender Higgsfield; no tiene que mostrar el producto. Dice lo ya medido —costos de Higgsfield, recetas por formato, currículo de pruebas, voz, circuito de publicación— para no volver a investigarlo, con trampas e intentos fallidos fechados."
 ---
 
 # Lucía — lo que ya se sabe
@@ -26,8 +26,37 @@ description: "Invocar para CUALQUIER trabajo del carril Lucía (Lucía Antelo, l
   - declara siempre que es IA;
   - nunca se presenta como profesional de salud: el ambo es vestuario;
   - no promete resultados;
-  - la pantalla de Onia que muestra es real;
+  - si muestra una pantalla de Onia, es real;
   - no hay generación paga sin `get_cost` y el OK de Sergio Urcullo.
+
+## 0-ter. La premisa vigente (Sergio Urcullo, 8-oct) — leela antes que el resto
+
+> *«Lucía, no es necesario que muestres el producto, recordá que sos una influencer. Grabar y aprender a usar Higgsfield:
+> esa es tu tarea.»*
+
+- **Lucía es una influencer IA de Santa Cruz que declara que es IA.** Su tarea: grabar videos estructurados y aprender a
+  usar Higgsfield haciéndolos. **No tiene que mostrar ni vender el producto.** `PLAN.md` v5 lo desarrolla.
+- **Qué se pausó (no se borró):** la puerta de demo, la cuenta demo, las capturas de Pendientes y el trato de usted. El
+  guion de producto quedó en `guiones/G-producto-1-recordatorio-de-cita.md`. Vuelve solo si Sergio Urcullo lo pide.
+- **Trato:** voseo cruceño, que es su canon. El usted solo para una pieza dirigida a dueños de negocio.
+- **Sin marcas de terceros** en pantalla ni en el pie (modelos, plataformas, competidores): se dice «imagen», «video»,
+  «Motor 1». Así la pieza queda dentro de lo que `CLAUDE.md` § «Qué se publica sin preguntar» deja publicar sin el OK
+  pieza por pieza. Con una marca, o con una función del producto, pasa por Sergio Urcullo.
+- **Cada prueba de Higgsfield deja dos cosas:** un video y un aprendizaje escrito acá (caso, costo, fecha).
+- **Currículo** (cotizaciones en vivo del 8-oct; el detalle y los costos están en `PLAN.md` §3):
+
+  | Prueba | Créditos | Se aprende | Video |
+  |---|---:|---|---|
+  | Foto → orden → revisión, con lo ya pagado | 0 | método y costo real de una pieza | G1 |
+  | Errores que se escapan, con lo ya pagado | 0 | qué mirar en cada cuadro | G3 |
+  | **L1** misma foto y orden en 4 motores | ~35 (tope 36) | qué cambia al pagar más | G2 |
+  | L2 voz y labios con audio propio | ~10-20 | si hay una voz cruceña (D4) | por definir |
+  | L3 Motion Control con un video guía | 17 | control del gesto | por definir |
+
+- **Cotizado en vivo el 8-oct para L1** (`get_cost`, 6 s salvo Cinema Studio; foto K1 de entrada): Kling 3.0 std
+  `sound:"off"` 7,5 (ya pagado) · Kling 3.0 pro 9 · Seedance 2.0 mini 720p 6 · **Cinema Studio 3.0 de 4 s a 720p: 20** ·
+  mejora a 1080p ~0,1. Cinema Studio 3.0 nunca se había probado: es parte del aprendizaje y por eso entra al lote aunque
+  la tabla de §3 lo marque «no usar» para el día a día.
 
 ## 0-bis. Qué es un video de Lucía (Sergio Urcullo, 8-oct) — la regla que más pesa
 
@@ -36,11 +65,12 @@ description: "Invocar para CUALQUIER trabajo del carril Lucía (Lucía Antelo, l
 
 **Un clip suelto con tres tarjetas NO es un video.** Cada video de Lucía lleva, escrito ANTES de editar:
 1. **Gancho** en los primeros 3 s, con una promesa o una pregunta.
-2. **Desarrollo con valor:** pasos, un caso o una demostración. Si vende, la pantalla real de Onia entra acá.
+2. **Desarrollo con valor:** pasos, un caso o una demostración. Con la premisa v5 la demostración sale de las pruebas de
+   Higgsfield (la orden real, el costo real, el cuadro revisado); la pantalla de Onia ya no es obligatoria.
 3. **Cierre** con un solo CTA.
 - Dura de **30 a 60 s** y **deja algo aprendido** (la unidad de enseñanza va completa antes del CTA).
 - El guion se valida con la madre **antes** de editar. Moldes: `hermes-content/references/marca-personal/FORMULAS-REFERENTES.md`
-  (F3, F4, F5, F7) y la skill `edicion-referentes`. Primer guion: `docs/cola/lucia-diario/guiones/G1-recordatorio-de-cita.md`.
+  (F3, F4, F5, F7) y la skill `edicion-referentes`. Primer guion: `docs/cola/lucia-diario/guiones/G1-de-una-foto-a-un-video.md`.
 - **Prueba rápida:** si se puede resumir como «un clip con tarjetas», no es un video. Si no hay una frase que diga qué
   aprende quien lo ve, tampoco.
 - **Cómo se llegó:** el 8-oct se editó el chiste (9,6 s, un clip del café y 3 tarjetas, 0 cr) en una pasada, con QA y
@@ -91,7 +121,7 @@ description: "Invocar para CUALQUIER trabajo del carril Lucía (Lucía Antelo, l
 - **La pantalla real no la pone Higgsfield:** se monta con `editor-videos`. Geometría del flujo ugc-video de
   Higgsfield, que vale copiar: tarjetas de 0,78 del ancho y hasta 0,60 del alto, subidas un 4 %, de 1,2 a 1,5 s cada
   una, con 0,3 a 0,5 s de cara limpia entre tarjetas, nunca en el gancho ni en el cierre, y el 15 % de abajo libre.
-- **Esqueleto de la pieza de venta:**
+- **Esqueleto de la pieza de venta (EN PAUSA desde el 8-oct, ver §0-ter):**
   1. persona en cuadro desde el segundo 0, con subtítulo;
   2. pantalla real después del gancho;
   3. un solo CTA.
@@ -99,11 +129,12 @@ description: "Invocar para CUALQUIER trabajo del carril Lucía (Lucía Antelo, l
   - Lo 2 es regla propia («producto visible o no sale»). En la competencia solo lo hacen los testimonios de Doctocliq y
     anuncios nuevos; CitaPro (80 días) usa una placa.
   - Una pieza de 10 s sin pantalla no cumple la regla.
-- **Tarjetas (cutlists de Codex, 6-oct):**
+- **Tarjetas (cutlists de Codex, 6-oct; trato y CTA al día con la v5, 8-oct):**
   - ≤ 6 palabras contando la palabra titular, y ≥ 0,35 s por palabra + 0,3 s;
-  - trato de usted;
+  - voseo cruceño (el usted de las cutlists K1-K4 era de la pieza de venta, hoy en pausa);
   - rótulo «Lucía Antelo · personaje IA de Onia» desde el segundo 0;
-  - un solo CTA, «Escríbale a Onia desde la bio» o «Escríbale desde la bio» si no entra;
+  - un solo CTA. Con la v5: «Seguime: cada semana, una prueba.». Los de venta («Escríbale a Onia desde la bio») quedan
+    pausados con la puerta de demo;
   - nunca «Agende su demo»: ese destino daba 404.
 - **Recuperar un clip ya pagado (8-oct, 0 cr):** `mcp__higgsfield__job_display` con el id del job → `results.rawUrl` es el
   clip LIMPIO, sin texto. Se baja con `curl` del CDN, se pasa por `ffprobe` y se MIRA. Así volvió el de K3
@@ -141,8 +172,9 @@ description: "Invocar para CUALQUIER trabajo del carril Lucía (Lucía Antelo, l
 - La única voz cruceña de verdad sería clonar a una persona real, con su consentimiento escrito (Starter o
   `create_voice`).
 
-## 5. Pantallas reales
+## 5. Pantallas reales (EN PAUSA desde el 8-oct: la premisa v5 no las exige)
 
+Se conserva lo medido por si Sergio Urcullo vuelve a pedir una pieza de producto.
 - La cuenta demo **«Clínica Demo Onia»** existe desde el 2-oct (`handoff/onia-1.0-nube.md` §2). Tiene 25 pacientes,
   50 citas y 28 cobros. **Sus pacientes no tienen correo** y tiene 0 canales de envío.
 - Le falta que Sergio Urcullo confirme su correo y le dé `module.agents` (plan de la 1.0, punto 9).
@@ -190,7 +222,13 @@ description: "Invocar para CUALQUIER trabajo del carril Lucía (Lucía Antelo, l
 - **Sin API:**
   - la música de tendencia: la Audio API es solo para Facebook Login, así que esas piezas se publican a mano;
   - las historias y la foto suelta: no hay script todavía.
-- **Puerta de demo:**
+- **Qué se publica sin el OK pieza por pieza (`CLAUDE.md`, 8-oct):** una pieza que pasa el QA de esta skill y se MIRÓ
+  renderizada completa sale por `ig-reel.mjs`, y después se le avisa a Sergio Urcullo con el enlace. Siguen pasando por él:
+  - las piezas que prometen o muestran una función del producto, hasta que exista la tabla «se promete / funciona»;
+  - las que nombran, citan o muestran a un cliente, a un tercero o a un competidor (imagen, voz o marca);
+  - los CTA de mecanismos sin probar, como comentario → DM de Instagram;
+  - toda generación paga.
+- **Puerta de demo (EN PAUSA desde el 8-oct):**
   - `https://wa.me/59175414930?text=Hola%2C%20vengo%20de%20Luc%C3%ADa…`;
   - `onia.com.bo/llamada` da 404 y Onia ya no tiene Cal.com;
   - los links del pie de Instagram no se pueden tocar: todo pasa por la bio o por la respuesta a «Comentá DEMO».
@@ -237,6 +275,13 @@ Fuente: `research/competencia/LUCIA_COMPETENCIA_20261005.md`.
   **Regla: §0-bis.**
 - **L02 «Este video no fue grabado» (6 s):** mismo defecto. Se retira; su clip (la calle) queda para «un día en Santa
   Cruz» como apoyo.
+- **Plan v4 «Lucía vende Onia» (5-8-oct): la premisa estaba mal.** Todo el plan (puerta de demo, capturas de Pendientes,
+  cuenta demo, usted) partió de que Lucía conseguía clínicas. Sergio Urcullo, 8-oct: *«no es necesario que muestres el
+  producto, sos una influencer; tu tarea es grabar y aprender Higgsfield»*. El mismo día la madre dio por aprobado el
+  guion de producto G1 (recordatorio de cita) y no mencionó esa corrección; no consta si ya la había leído.
+  **Cuando dos instrucciones chocan, manda la que Sergio Urcullo escribió en su propio mensaje; la otra se le muestra a la
+  madre con la cita y se espera su respuesta, sin editar el guion de producto entre tanto.** Costo del error: 3 días de
+  plan alrededor de una premisa que no era la suya; el guion de producto no llegó a editarse ni a publicarse.
 
 - **Placas PIL + ffmpeg a mano (1-oct):** rechazadas por Sergio Urcullo. Se edita con `editor-videos`.
 - **Forzar `voice_settings` a Marcela:** le cambia el timbre.

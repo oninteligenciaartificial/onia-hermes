@@ -1,5 +1,10 @@
 # G1 · «Recordatorio de cita: 3 datos» — guion para validar (8-oct-2026)
 
+> ⏸ **EN PAUSA desde el 8-oct.** Sergio Urcullo: *«Lucía no es necesario que muestres el producto, recordá que sos una
+> influencer. Grabar y aprender a usar Higgsfield: esa es tu tarea.»* Este guion muestra una pantalla real de Onia, así
+> que queda guardado para cuando se quiera una pieza de producto. Va de usted, necesita la captura de Pendientes y el OK de
+> Sergio Urcullo antes de publicar (`CLAUDE.md` § «Qué se publica sin preguntar»). El guion vigente es `G1-de-una-foto-a-un-video.md`.
+
 > **Estado: PARA VALIDAR por la madre. No se edita hasta su OK.**
 > Pedido de Sergio Urcullo (8-oct, por la madre): *«no tiene el contenido estructurado, es literal un video de 10
 > segundos. Tienen que ser videos estructurados.»* Cada video de Lucía lleva gancho en los primeros 3 s, desarrollo con
