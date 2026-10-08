@@ -1533,6 +1533,47 @@ test("panel: los candados del guion le GANAN a la FAQ del panel — 'cuanto cues
   });
 });
 
+for (const status of [404, 409]) {
+  for (const organizationId of ["org_onia_interna", "org_cliente"]) {
+    test(`db: ${status} con ${organizationId} conserva el modo correspondiente`, async () => {
+      const opts = {
+        dbUrl: "http://producto/published", dbSecret: "test",
+        panelUrl: "http://producto/published?organizationId=org_onia_interna", panelSecret: "test",
+        inboxId: "5", nowMs: NOW_MS, path: "/no/existe/knowledge.json",
+        fetch: async () => ({ ok: false, status, json: async () => ({ organizationId }) }),
+      };
+      await ensureKnowledge(opts);
+      const config = withKnowledge(DEFAULT_CONFIG, opts);
+      assert.equal(config.modo === "recepcionista", organizationId !== "org_onia_interna");
+      const result = step(createState({ channel: "whatsapp" }), { text: "hola", receivedAt: T0 }, { config });
+      assert.ok(result.replies.length > 0);
+    });
+  }
+}
+
+for (const channelType of ["Channel::Whatsapp", "Channel::Website"]) {
+  test(`db: bandeja sin org ${channelType}: silencio solo en WhatsApp y un registro por conversación`, async () => {
+    const opts = {
+      inboxId: "99", dbUrl: "http://producto/published", dbSecret: "test",
+      nowMs: NOW_MS, path: "/no/existe/knowledge.json",
+      fetch: async () => ({ ok: false, status: 404, json: async () => ({}) }),
+    };
+    await ensureKnowledge(opts);
+    const config = withKnowledge(DEFAULT_CONFIG, opts);
+    let state = createState({ channel: "chatwoot", channelType, inboxId: "99" });
+    const audits = [];
+    for (const text of ["hola", "precio", "servicios", "DEMO"]) {
+      const result = step(state, { text, receivedAt: T0 }, { config });
+      if (channelType === "Channel::Whatsapp") assert.deepEqual(result.replies, []);
+      else if (text === "hola") assert.ok(result.replies.length > 0, "web conserva la bienvenida neutral");
+      audits.push(...result.sideEffects.filter((e) => e.payload?.action === "bandeja_huerfana"));
+      state = createState(result.nextState);
+    }
+    assert.equal(audits.length, channelType === "Channel::Whatsapp" ? 1 : 0);
+    if (audits.length) assert.equal(audits[0].payload.detail.reason, "bandeja huérfana, no se responde");
+  });
+}
+
 test("db: la fila de la ORG INTERNA (la del panel) NO enciende el recepcionista — el lead de venta sigue en venta", async () => {
   // Medido en prod el 2026-09-13: el producto resuelve inbox->org y los inboxes de VENTA (4 web,
   // 5 WhatsApp) resuelven a la org interna de Onia. Con la fila del panel publicada, la fuente

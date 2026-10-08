@@ -719,9 +719,8 @@ export function esAjenoAOnia(state) {
  *                                              no prueba que hoy este para hacerlo)
  *   - ajena con organizationId       -> true  (cliente sin documento servible hoy: la plataforma
  *                                              igual lo resuelve a su org, el add-on no importa)
- *                                              SALVO que esa org sea la INTERNA de Onia: el 404
- *                                              no la filtra como el 200, y el 4/5 sin fila del
- *                                              panel publicada llegaria aca como "cliente".
+ *                                              SALVO que esa org sea la INTERNA de Onia:
+ *                                              defensa adicional al filtro de fetchOrgKnowledge.
  *   - fila publicada (`source` "db") -> true  (la org interna de Onia NUNCA llega aca como "db":
  *                                              `fetchOrgKnowledge` la convierte en "sin fila")
  *   - cualquier otra cosa            -> false (inbox de Onia, fuente apagada, cache fria sin
@@ -764,13 +763,14 @@ async function fetchOrgKnowledge(key, options = {}) {
     // ningun `clinic_settings` reclama ese inbox. Su comentario es textual: "Un 404 SIN
     // organizationId sigue significando 'inbox sin org'".
     //   - sin org  -> HUERFANO: no es de nadie.
-    //   - con org  -> es de un CLIENTE que hoy no tiene documento servible.
-    // Los DOS cortan el fallback (abajo son el guion de venta de Onia, y servirselo a cualquiera
+    //   - con org interna -> venta, como el 200.
+    //   - con otra org -> CLIENTE que hoy no tiene documento servible.
+    // Huerfanos y clientes cortan el fallback (abajo es el guion de venta de Onia, y servirselo a cualquiera
     // de los dos es cotizarle Onia a los clientes de otro negocio), pero no son el mismo hecho:
     // aplanarlos declaraba "ese inbox no es de NINGUNA org" sobre el WhatsApp de un cliente que
     // paga, y ese estado se publica en `/health?inboxId=N`.
-    if (res.status === 404) {
-      if (!key.startsWith("inbox:")) return { data: null, error: null, missing: true };
+    if (res.status === 404 || res.status === 409) {
+      if (res.status === 404 && !key.startsWith("inbox:")) return { data: null, error: null, missing: true };
       // El cuerpo de un 404 puede no ser JSON (proxy, error de red a mitad): sin cuerpo legible
       // no se puede afirmar que sea de una org, y "no es de nadie" es la lectura conservadora —
       // corta igual y no le atribuye el inbox a un cliente que quiza no existe.
@@ -781,6 +781,14 @@ async function fetchOrgKnowledge(key, options = {}) {
       } catch {
         orgDelCuerpo = "";
       }
+      // La org interna vende aun sin fila publicada, igual que en el camino 200.
+      if (orgDelCuerpo && orgDelCuerpo === orgInternaDe(options)) {
+        return { data: null, error: null, missing: true };
+      }
+      // Sin la org interna explicita, el conflicto sigue siendo ajeno, no huerfano.
+      if (res.status === 409) {
+        return { data: null, error: null, missing: true, huerfano: false, ajena: true, conflicto: true };
+      }
       return {
         data: null,
         error: null,
@@ -789,14 +797,6 @@ async function fetchOrgKnowledge(key, options = {}) {
         ajena: Boolean(orgDelCuerpo),
         organizationId: orgDelCuerpo || null,
       };
-    }
-    // 409 = el producto DETECTO el inbox reclamado por DOS organizaciones a la vez (conflicto
-    // de alta, DG-047). Hasta hoy /published elegia la fila mas antigua y este motor le
-    // contestaba al cliente de un negocio con el conocimiento de OTRO. Sin dueño claro no se
-    // elige: misma consecuencia que `ajena` (aviso neutro, nunca el archivo — que es el guion
-    // de venta de Onia), y NO viaja como `error` porque el camino de error cae justo ahi.
-    if (res.status === 409) {
-      return { data: null, error: null, missing: true, huerfano: false, ajena: true, conflicto: true };
     }
     if (!res.ok) return { data: null, error: `la db contesto HTTP ${res.status}` };
     const body = await res.json();
@@ -1523,10 +1523,10 @@ export function withKnowledge(config = DEFAULT_CONFIG, options = {}) {
     // degrada a recepcionista NEUTRO: sin conocimiento de nadie, sin precios, sin horarios de
     // demo, y con "el equipo" en vez de "Sergio" — la misma cura que ya se aplico al humanName
     // heredado (asRecepcionista).
-    // El corte NUNCA es silencio: el bot sigue atendiendo y derivando, sólo que no como Onia.
+    // El motor silencia WhatsApp huerfano; web conserva la recepcion neutral.
     // Pregunta por LAS DOS causas con el mismo helper que corta en `getKnowledge`: son dos
     // guardias del mismo hecho, y curar uno solo deja al cliente del otro lado vendiendo Onia.
-    if (esAjenoAOnia(state)) return asRecepcionista(config, null);
+    if (esAjenoAOnia(state)) return { ...asRecepcionista(config, null), bandejaHuerfana: state.huerfano === true };
     if (!state.data) return config;
     const applied = applyKnowledge(config, state.data, options);
     return state.source === "db" ? asRecepcionista(applied, state.data, state.orgSlug, state.cuota) : applied;
