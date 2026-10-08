@@ -1,0 +1,104 @@
+From f154f1e092834317b370a565f989d7fbb9e1934b Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Thu, 8 Oct 2026 20:16:11 +0000
+Subject: [PATCH] =?UTF-8?q?fix(bot):=20la=20bandeja=20propia=20de=20Onia?=
+ =?UTF-8?q?=20nunca=20queda=20hu=C3=A9rfana=20ni=20ajena?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Con el silencio de huérfanos de C16c, un 404 sin organizationId legible para la
+bandeja 5 (cuerpo que no es JSON, vínculo perdido, URL mal puesta) dejaba mudo el
+número de ventas; antes, al menos, contestaba neutral. El motor no tenía otra forma
+de saber que esa bandeja es de Onia que lo que dijera /published. Ahora lee
+ONIA_WHATSAPP_INBOX_ID, la misma variable que usa la plataforma: para esa bandeja,
+un 404 o 409 vende como siempre. Los tests se ponen rojos sin la guarda (probado).
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01HhnFgkeF6nLGvjrfjt1o2C
+---
+ .../deploy/vps-ops/bot/knowledge.mjs          | 16 +++++++++
+ .../deploy/vps-ops/bot/knowledge.test.mjs     | 33 +++++++++++++++++++
+ 2 files changed, 49 insertions(+)
+
+diff --git a/hermes-content/deploy/vps-ops/bot/knowledge.mjs b/hermes-content/deploy/vps-ops/bot/knowledge.mjs
+index f59b38d49..3481647ef 100644
+--- a/hermes-content/deploy/vps-ops/bot/knowledge.mjs
++++ b/hermes-content/deploy/vps-ops/bot/knowledge.mjs
+@@ -682,6 +682,17 @@ function orgInternaDe(options = {}) {
+   }
+ }
+ 
++/**
++ * Las bandejas PROPIAS de Onia (la de ventas por WhatsApp), con la misma variable que usa la
++ * plataforma: `ONIA_WHATSAPP_INBOX_ID` (admite varias separadas por coma). Medido el 8-oct: el
++ * motor no tenia otra forma de saber que la bandeja 5 es de Onia que lo que contestara
++ * /published, y con el silencio de huerfanos (C16c) un 404 ilegible la dejaba MUDA.
++ */
++function inboxesDeOnia(options = {}) {
++  const crudo = String(options.oniaInboxIds ?? process.env.ONIA_WHATSAPP_INBOX_ID ?? "");
++  return new Set(crudo.split(",").map((parte) => parte.trim()).filter((parte) => /^\d+$/.test(parte)));
++}
++
+ function dbConfig(options = {}) {
+   return {
+     url: String(options.dbUrl ?? process.env.ONIA_BOT_KNOWLEDGE_URL ?? "").trim(),
+@@ -771,6 +782,11 @@ async function fetchOrgKnowledge(key, options = {}) {
+     // paga, y ese estado se publica en `/health?inboxId=N`.
+     if (res.status === 404 || res.status === 409) {
+       if (res.status === 404 && !key.startsWith("inbox:")) return { data: null, error: null, missing: true };
++      // La bandeja propia de Onia nunca es huerfana ni ajena: si /published no la reconoce
++      // (cuerpo ilegible, vinculo perdido, URL mal puesta), vende como siempre en vez de callarse.
++      if (key.startsWith("inbox:") && inboxesDeOnia(options).has(key.slice("inbox:".length))) {
++        return { data: null, error: null, missing: true };
++      }
+       // El cuerpo de un 404 puede no ser JSON (proxy, error de red a mitad): sin cuerpo legible
+       // no se puede afirmar que sea de una org, y "no es de nadie" es la lectura conservadora —
+       // corta igual y no le atribuye el inbox a un cliente que quiza no existe.
+diff --git a/hermes-content/deploy/vps-ops/bot/knowledge.test.mjs b/hermes-content/deploy/vps-ops/bot/knowledge.test.mjs
+index cadf60b92..996d3a9eb 100644
+--- a/hermes-content/deploy/vps-ops/bot/knowledge.test.mjs
++++ b/hermes-content/deploy/vps-ops/bot/knowledge.test.mjs
+@@ -1574,6 +1574,39 @@ for (const channelType of ["Channel::Whatsapp", "Channel::Website"]) {
+   });
+ }
+ 
++for (const cuerpo of ["ilegible", "vacio", "otra-org"]) {
++  test(`db: la bandeja PROPIA de Onia no se calla ni se vuelve neutral con un 404 (${cuerpo})`, async () => {
++    // 8-oct: con el silencio de huerfanos (C16c), un 404 sin organizationId legible para la
++    // bandeja 5 dejaba mudo el numero de ventas. ONIA_WHATSAPP_INBOX_ID la marca como propia.
++    const json = cuerpo === "ilegible"
++      ? async () => { throw new SyntaxError("no es JSON"); }
++      : async () => (cuerpo === "vacio" ? {} : { organizationId: "org_cliente" });
++    const opts = {
++      inboxId: "5", oniaInboxIds: "5", dbUrl: "http://producto/published", dbSecret: "test",
++      nowMs: NOW_MS, path: "/no/existe/knowledge.json",
++      fetch: async () => ({ ok: false, status: 404, json }),
++    };
++    await ensureKnowledge(opts);
++    const config = withKnowledge(DEFAULT_CONFIG, opts);
++    assert.notEqual(config.modo, "recepcionista", "la bandeja de Onia vende, no atiende como recepcionista neutro");
++    assert.notEqual(config.bandejaHuerfana, true);
++    const result = step(createState({ channel: "chatwoot", channelType: "Channel::Whatsapp", inboxId: "5" }), { text: "hola", receivedAt: T0 }, { config });
++    assert.ok(result.replies.length > 0, "el numero de ventas contesta");
++  });
++}
++
++test("db: sin ONIA_WHATSAPP_INBOX_ID una bandeja de WhatsApp sin org sigue callada (la guarda no abre de mas)", async () => {
++  const opts = {
++    inboxId: "5", oniaInboxIds: "", dbUrl: "http://producto/published", dbSecret: "test",
++    nowMs: NOW_MS, path: "/no/existe/knowledge.json",
++    fetch: async () => ({ ok: false, status: 404, json: async () => ({}) }),
++  };
++  await ensureKnowledge(opts);
++  const config = withKnowledge(DEFAULT_CONFIG, opts);
++  const result = step(createState({ channel: "chatwoot", channelType: "Channel::Whatsapp", inboxId: "5" }), { text: "hola", receivedAt: T0 }, { config });
++  assert.deepEqual(result.replies, []);
++});
++
+ test("db: la fila de la ORG INTERNA (la del panel) NO enciende el recepcionista — el lead de venta sigue en venta", async () => {
+   // Medido en prod el 2026-09-13: el producto resuelve inbox->org y los inboxes de VENTA (4 web,
+   // 5 WhatsApp) resuelven a la org interna de Onia. Con la fila del panel publicada, la fuente
+-- 
+2.43.0
+
