@@ -63,7 +63,7 @@ Cada fila es una prueba chica, con su video. Los costos son cotizaciones en vivo
 | # | Prueba | Costo | Qué se aprende | Video que sale |
 |---|---|---:|---|---|
 | — | Cómo se hace un clip: foto, orden, revisión (ya pagado) | 0 | El método y el costo real de una pieza | **G1** |
-| — | Errores que se escapan: letrero inventado, folleto, dedos (ya pagado) | 0 | Qué mirar en cada cuadro | **G3** |
+| — | Errores que se escapan: letrero inventado, letra que no dice nada, mano que tapa a la otra (ya pagado) | 0 | Qué mirar en cada cuadro | **G3** |
 | **L1** | **Misma foto y misma orden en 4 motores:** el clip estándar ya pagado, Kling pro (9), Seedance Mini (6), Cinema Studio 3.0 de 4 s (20) y la mejora de 720p a 1080p del estándar (~0,1) | **~35** | Qué cambia al pagar más y cuál conviene para cada plano. Cinema Studio 3.0 nunca se probó | **G2** |
 | L2 | Voz y labios con audio propio (Seedance Mini 10 por 10 s; cambio de voz 1 por 10 s) | ~10-20 | Si hay una voz que suene cruceña. Primero Sergio Urcullo escucha las muestras (`research/competencia/lucia-20261005/voces/`) | por definir |
 | L3 | Copiar los gestos de un video guía (Motion Control, 17 por 10 s) | 17 | Control de «mira a cámara y gesticula». Requiere que Sergio Urcullo grabe 10 s | por definir |
@@ -90,7 +90,7 @@ Cada fila es una prueba chica, con su video. Los costos son cotizaciones en vivo
 | Pieza | Costo | Estado |
 |---|---:|---|
 | **G1** «Este video no fue grabado: así se hace, en 3 pasos» (56 s) | 0 | guion para validar por la madre; todo el material ya está pagado |
-| **G3** «3 errores de la IA que casi se me escapan» | 0 | guion por escribir |
+| **G3** «Tres errores de la IA que atrapé antes de publicar» (58 s) | 0 | guion para validar por la madre (`guiones/G3-tres-errores-de-la-ia.md`); evidencia real en `v4/kit/` |
 | **G2** «La misma foto, 4 motores de video» | ~35 | guion por escribir; **necesita el OK de Sergio Urcullo al costo (L1)** |
 | **L01** «Hola, soy Lucía. No existo.» (carrusel de presentación, fijado) | 0 | a reescribir: promete «cosas que un negocio chico puede dejar de hacer a mano», y esa ya no es la premisa. Va fijado **después** de G1 |
 | ~~L02~~ y ~~el chiste de 10 s~~ | — | retirados el 8-oct; sus clips son planos de apoyo |

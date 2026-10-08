@@ -11,7 +11,7 @@
 | Pieza | Costo | Estado |
 |---|---:|---|
 | **G1** «Este video no fue grabado: así se hace, en 3 pasos» (56 s) | 0 | Guion para validar por la madre (`../guiones/G1-de-una-foto-a-un-video.md`) |
-| **G3** «3 errores de la IA que casi se me escapan» | 0 | Guion por escribir |
+| **G3** «Tres errores de la IA que atrapé antes de publicar» (58 s) | 0 | Guion para validar por la madre (`../guiones/G3-tres-errores-de-la-ia.md`) |
 | **G2** «La misma foto, 4 motores de video» | ~35 | Guion por escribir. **Necesita el OK de Sergio Urcullo al costo (L1)** |
 | **L01** «Hola, soy Lucía. No existo.» (carrusel de presentación) | 0 | A reescribir: promete «cosas que un negocio chico puede dejar de hacer a mano» y ya no es la premisa. Va fijado después de G1 |
 | ~~G-producto-1~~ «Recordatorio de cita: 3 datos» | — | **En pausa** (`../guiones/G-producto-1-recordatorio-de-cita.md`): muestra el producto |

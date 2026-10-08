@@ -28,13 +28,13 @@ luz, y una revisión cuadro por cuadro.** Y cuánto cuesta cada paso. Todo con d
 | 3 – 6 | Gancho | Sigue el clip K1 (6,04 s en total) | «Así se hace, en 3 pasos.» |
 | 6 – 16 | **DESARROLLO · paso 1** | La foto K1 que dio origen al clip, fija | «1 · Una foto fija.» → «Primero la cara, siempre igual.» · etiqueta de dato: «Imagen · 1 crédito» |
 | 16 – 31 | **Paso 2** | Foto K1 de fondo y panel inferior con la **orden real** | «2 · Una orden corta.» → «Movimiento, cámara y luz.» → panel «Orden real»: *She slowly lifts her eyes from the phone to the camera and gives a small knowing smile.* |
-| 31 – 45 | **Paso 3 · el crítico** | Pantalla partida: foto K1 arriba, clip K1 abajo; después clip K4 (la mano y los dedos), cuadros 0-96 | «3 · Y la foto se mueve.» (etiqueta «Video 6 s · 7,5 créditos») → «Después, se mira cuadro por cuadro.» → «¿Cuántos dedos? Cinco. Revisados.» |
+| 31 – 45 | **Paso 3 · el crítico** | Pantalla partida: foto K1 arriba, clip K1 abajo; después clip K4 (la mano y los dedos), cuadros 0-96 | «3 · Y la foto se mueve.» (etiqueta «Video 6 s · 7,5 créditos») → «Después, se mira cuadro por cuadro.» → «Cuadro 60: cinco dedos.» (recorte ampliado de la mano, sobre el clip) |
 | 45 – 50 | Dato | Foto K2 (café) | «Foto y clip: 8,5 créditos.» |
 | 50 – 56 | **CIERRE** | Clip K2 (deja el café y mira a cámara) | «Foto, orden y revisión.» → «Seguime: cada semana, una prueba.» |
 
 - **Tiempos de las tarjetas** (todas pasan 0,35 s por palabra + 0,3 s; el panel de la orden, 17 palabras, tiene 7,5 s para
-  6,25 s de lectura): 0,1–3 · 3–6 · 6–10 · 10–16 · 16–20 · 20–23,5 · panel 23,5–31 · 31–35 · 35–41 · 41–45 · 45–50 · 50–53 ·
-  53–56.
+  6,25 s de lectura): 0,1–3 · 3–6 · 6–10 · 10–16 · 16–20 · 20–23,5 · panel 23,5–31 · 31–35 · 35–41 · 41–45 («Cuadro 60: cinco dedos.», 4
+  palabras, 1,7 s mínimo) · 45–50 · 50–53 · 53–56.
 - **Material ya pagado:**
   - clips K1 `e470ef4f`, K2 `83130c4a` y K4 `338b751f` (Kling, 6 s);
   - fotos K1 `4afffb96` y K2 `3e05cfd0`.
@@ -43,7 +43,9 @@ luz, y una revisión cuadro por cuadro.** Y cuánto cuesta cada paso. Todo con d
   - clip de 6 s: 7,5 créditos;
   - unidad foto + clip: 8,5 créditos. La tarjeta dice «foto y clip», no «este video», porque este video junta varios clips;
   - la orden del panel es el prompt exacto del clip K1, tomado del job en Higgsfield;
-  - K4: 5 dedos en los 9 cuadros revisados del conteo.
+  - K4, revisado el 8-oct a resolución completa (cuadros 0 y 60 del clip): **cinco dedos contables**. En los cuadros 72 a
+    96 la otra mano tapa la mano abierta y **no se cuenta**; por eso la tarjeta pega el número al cuadro 60 y no dice «el clip
+    tiene cinco dedos». El conteo anterior (9 cuadros) era histórico y Codex no lo daba por exacto.
 - **Sin marcas de terceros** en pantalla ni en el pie: dice «imagen» y «video», no el nombre de los modelos ni de la
   plataforma (`CLAUDE.md` § «Qué se publica sin preguntar»).
 - **Sin voz** (D4) y sin música: la pone Sergio Urcullo.
@@ -72,5 +74,5 @@ prueba. Seguime.»* `#inteligenciaartificial #ia #santacruz #bolivia`
 - **G2 · «La misma foto, 4 motores de video»** (formato F4 «así no / así sí»): usa el lote de aprendizaje L1 (`PLAN.md` §5).
   Los motores van como «Motor 1 a 4», sin marca, salvo que Sergio Urcullo dé el OK para nombrarlos. **Necesita su OK al
   costo.**
-- **G3 · «3 errores de la IA que casi se me escapan»** (formato F3 «caso real → error → corrección → regla»), con 0 cr:
-  el letrero inventado en la torre (K4·1 descartada, job `6708e444`), el folleto con letra de K4·4 y el conteo de dedos.
+- **G3 · «Tres errores de la IA que atrapé antes de publicar»** (formato F3 «caso real → error → corrección → regla»), con
+  0 cr: el guion está en `G3-tres-errores-de-la-ia.md` (letrero inventado, letra que no dice nada y mano que tapa a la otra).

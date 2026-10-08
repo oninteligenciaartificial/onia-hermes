@@ -33,7 +33,9 @@ escribió Sergio Urcullo: **no se editó ni se armó nada de producto**, y se le
 **A medias, y dónde:**
 - **G1 nuevo:** espera la validación de la madre (tarea #7). Después se edita en `videos/lucia-g1/` (carpeta nueva; modelo
   de montaje: `videos/lucia-chiste/scripts/build.mjs`).
-- **G2 y G3:** sin guion todavía. G2 necesita el OK de Sergio Urcullo al costo de L1 antes de generar nada.
+- **G3 «Tres errores de la IA que atrapé antes de publicar»** (`guiones/G3-tres-errores-de-la-ia.md`, 58 s, 0 cr): guion
+  escrito, espera la validación de la madre. Evidencia en `v4/kit/`, incluida la foto descartada bajada a 0 cr.
+- **G2:** sin guion. Se escribe con los resultados de L1, que necesita el OK de Sergio Urcullo al costo antes de generar nada.
 - **Publicadores:** solo en el repo. La madre los copia **juntos** a `/root/bin` y corre `--selftest`.
 - **Token de Instagram de Lucía:** no se midió. El 4-sep vencía entre el 13 y el 18-oct. El hook de arranque dice
   «`ssh onia-vps` listo», pero esta nube no trae el binario `ssh` (`command -v ssh` vacío el 8-oct).
@@ -56,7 +58,7 @@ escribió Sergio Urcullo: **no se editó ni se armó nada de producto**, y se le
 **Próximos pasos:**
 1. La madre confirma que vale G1 nuevo (premisa v5) → se edita con `editor-videos` § «Reels de Lucía», `hyperframes` y
    `motion-doctrine`, QA §12, y se mira completo.
-2. Escribir G3 (0 cr) y G2 con la estructura marcada → validación → edición.
+2. G3 ya tiene guion: validación → edición. G2 se escribe después de L1, con la estructura marcada → validación → edición.
 3. Con el OK de Sergio Urcullo, correr L1 (cotizar de nuevo con `get_cost` antes de gastar).
 4. Reescribir L01 a la premisa v5; va fijado después de G1.
 5. Tras cada edición: lo aprendido a la skill `lucia`, con caso y fecha, en el mismo commit.
