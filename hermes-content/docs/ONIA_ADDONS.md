@@ -217,15 +217,15 @@ la privacidad es **argumento de venta, no obligación legal.** *Calidad:* no hal
 | Tipo | Quién | Precio | App |
 |---|---|---|---|
 | **Por asiento** | Chatwoot Cloud (P, ✔ releído: USD 0 con 2 agentes y 500 conversaciones · 19 · 39) | USD 0 (2 agentes) · **19 · 39 · 99** por agente/mes | iOS y Android, 4,1 (13 valoraciones) |
-| | Kommo (P) | USD 25 · 35 · 45 por usuario, **mínimo 6 meses** | 4,25 (12) |
+| | Kommo (P, ✔ releído) | USD 25 · 35 · 45 por usuario, **mínimo 6 meses** | 4,25 (12) |
 | | Callbell (P) | USD 15 y 20 por agente | incluida |
 | **Bloque con usuarios incluidos** | Respond.io (P) | USD 79 (5 usuarios, +12 c/u) · 159 · 279, anual | 4,25 (16) |
 | | Leadsales (P) | USD 97 · 133 · 247 (3 · 4 · 5 usuarios) | 4,09 (57) |
 | | Wati (B/P) | USD 59 · 119 · 279 anual; usuario extra USD 24 (Pro) y 69 (Business) | 3,67 (21) |
-| | **LiveConnect, página de Bolivia (P)** | USD 36 · 48 · 71 · 127 con 3 · 5 · 10 · 50 usuarios; extra USD 1 | bandeja web o app iOS/Android |
+| | **LiveConnect, página de Bolivia (P)** | USD 36 · 48 · 71 · 127 con 3 · 5 · 10 · 50 usuarios *(estos cuatro montos los dio el investigador: **no figuran** en el texto de esa página)*; ✔ extra **USD 1 por agente**, 7 días sin tarjeta ni contrato | ✔ bandeja compartida «en la web o la app móvil» |
 | **Por conversación o créditos** | Botmaker (P) | USD 149 · 249 · 499 con 10 · 20 · 50 agentes; alta USD 99 | 4,2 (5) |
 | | Zoko (P) | USD 49,99 · 79,99 · 139,99, con recargo por conversación | sin valoraciones |
-| **Clínicas: la bandeja va DENTRO del plan** | Clinera (P) | USD 223 · 303 · 383 al mes (anual), **10 · 15 · 25 usuarios**; implementación USD 450; 6 meses; usuario extra USD 9. Instagram y Facebook en la misma bandeja desde el plan 2 | «App móvil» sin detalle |
+| **Clínicas: la bandeja va DENTRO del plan** | Clinera (P, ✔ releído: USD 223 y 303, implementación USD 450, permanencia de 6 meses) | USD 223 · 303 · 383 al mes (anual), **10 · 15 · 25 usuarios**; implementación USD 450; 6 meses; usuario extra USD 9. Instagram y Facebook en la misma bandeja desde el plan 2 | «App móvil» sin detalle |
 | | Doctocliq (P, ✔ releído) | USD 19 · 29 · 49 por doctor; **8 usuarios administrativos gratis**; Soyla IA (WhatsApp, el equipo toma el control) es add-on **sin precio público** | app del **doctor** en todos los planes, 4,67 (9) |
 | | AgendaPro (P) | recordatorios de WhatsApp incluidos (50-200), **sin bandeja de conversación** | app «Business», 4,76 (782) |
 | | Dentalink (P) | sin precio público; su centro de contacto IA no está en ningún plan | **sin app propia** (web en el móvil) |
