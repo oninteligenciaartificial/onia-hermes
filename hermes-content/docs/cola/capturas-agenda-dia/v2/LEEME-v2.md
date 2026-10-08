@@ -2,7 +2,7 @@
 
 Vista del día con una columna por profesional: banco `/dev/agenda/dia` con el componente real `AgendaDia` dentro del shell. Código en `510b3bcd` (rama `wip/c118`). Datos de ejemplo: martes 6 de octubre de 2026, 8:00 hora de La Paz, 7 citas, nombres inventados. 16 PNG, todos abiertos y mirados.
 
-Cómo se tomaron: Chromium sin cabeza, 390 y 1440 de ancho, página completa, tipografía de la marca cargada (Instrument Sans). Dos ajustes de captura, no del producto: (1) se ocultó con CSS el botón «N» de Next en desarrollo; (2) la ventana se estira a la altura de la página sólo para la foto, así la barra inferior (390) y el asistente, el botón + y la barra lateral (1440) quedan al final y no tapan citas a mitad de imagen. Sin eso el mensaje de error de `error-al-guardar-390` quedaba tapado. El campo «Día» muestra 10/06/2026 (mes/día) por el idioma del Chromium de captura: es el 6 de octubre.
+Cómo se tomaron: Chromium sin cabeza, 390 y 1440 de ancho, página completa, tipografía de la marca cargada (Instrument Sans). Ajustes de captura, no del producto: (1) se ocultó con CSS el botón «N» de Next en desarrollo; (2) la ventana se estira a la altura de la página sólo para la foto, así la barra inferior (390) y el asistente, el botón + y la barra lateral (1440) quedan al final y no tapan citas a mitad de imagen (sin eso el mensaje de error de `error-al-guardar-390` quedaba tapado); (3) el puntero se aparta antes de cada foto para que no quede un «hover» sobre un botón. El campo «Día» muestra 10/06/2026 (mes/día) por el idioma del Chromium de captura: es el 6 de octubre.
 
 ## Problemas de la primera ronda
 
@@ -24,7 +24,6 @@ Lo que sí funciona en las otras capturas: «Confirmar» a Lucía la pasa a Conf
 - **En celular «Mi agenda» no existe** (el filtro «Profesional» está oculto en 390): `agenda-dia-doctor-mi-agenda-390.png`, `agenda-dia-un-profesional-390.png` y `agenda-dia-varios-profesionales-390.png` son el mismo archivo, byte a byte. El doctor ve un selector con una sola opción.
 - **Del shell, no de esta pantalla:** «Preguntá por tu negocio» (de vos) en la barra del asistente, todas las capturas de 1440 (`components/ayuda/BarraAsistente.tsx`, líneas 116 y 121). Sigue igual que en la primera ronda.
 - **Del banco, no del producto:** el nombre abajo a la izquierda dice «Recepción de prueba» también en el caso doctor (`agenda-dia-doctor-mi-agenda-1440.png`).
-- En `agenda-dia-error-al-guardar-1440.png` el botón Confirmar de Lucía se ve gris: es el puntero del script encima, no un estado de la pantalla.
 
 Sin texto cortado, sin inglés y sin otras formas de vos en la pantalla (texto leído completo en la captura principal y barrido por script en las 16). Consola: filtrado el ruido esperado del banco (websocket a `localhost:59999`, 401 del shell) no queda ningún error ni aviso; sólo `/api/notifications` abortada al cambiar de página.
 
