@@ -1,5 +1,17 @@
 # Handoff — carril `mercado-y-pauta` (sesión «Ventas y pauta Onia Platform», antes «Análisis de mercado»)
 
+> 🎨 **8-oct, noche — Rediseño de los anuncios (Sergio Urcullo: «demasiado básicos… mejora tus trabajos»).**
+> - **Hecho:** se miraron los 22 anuncios de la competencia fotograma a fotograma + 5 sitios de referencia y se rehízo D1
+>   como **A1 v5 «Las 10:00»** y A2 como **A2 v2** (feed, historia y video de 11 s para A1). Tabla de qué hacen ellos y qué
+>   hacíamos nosotros: `research/competencia/anuncios/COMPARACION-DISENO-8OCT.md` (hojas en `_hojas/`).
+> - **Código:** plantilla `bloques` en `anuncio-render.js` + `anuncio-video.js` (skill `onia-ventas-pauta` §4.2).
+> - **Sigue mal:** no hay **persona** (los 7 que sobreviven la tienen; guion de 25 s para Sergio Urcullo, opcional); la
+>   captura es provisoria; A2 espera E-03; sin gasto no hay cifra de rendimiento. **Nada se subió ni se gastó en Meta.**
+> - **Intentos fallidos:** la Biblioteca de Anuncios no abre desde la nube (403 de Facebook; no se rodea); Doctolib
+>   bloquea con Cloudflare; mi primera plantilla (tres filas con tiras blancas) quedó plana y se descartó; un anillo
+>   sobre el nombre del paciente tachaba el texto (margen de 8 px, bajado a 6 y sin anillo en esa línea).
+> - **Lo que depende de otros:** Sergio Urcullo ve las piezas renderizadas (diseño nuevo); cuenta demo para recapturar.
+
 > 📣 **8-oct, noche — Meta Ads retomada (pedido de la madre; Sergio Urcullo: «¿no se supone que tiene que ver Meta Ads?»).**
 > - **Hecho (todo en `ONIA_ADQUISICION_Y_PAUTA.md`, nada creado ni gastado en Meta):** techo alineado a la caja (**US$ 56 =
 >   Bs 750**, no USD 140); reglas de corte del plan §3 (§5.7); lo medido hoy (§5.9.1); a dónde lleva cada anuncio, públicos y

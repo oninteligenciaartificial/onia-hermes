@@ -462,12 +462,12 @@ Los supuestos del embudo están en `research/ONIA_META_ADS_PLAYBOOK_20260930.md`
 | Página | "Onia" `1140384625819526` |
 | Campaña | `ONIA · Dental SCZ · WhatsApp · prueba 1` · Clientes potenciales · presupuesto total **USD 56** (Bs 750 de techo, §5.3) · fin a los 14 días · **PAUSED** |
 | Conjunto | WhatsApp · Maximizar conversaciones · Santa Cruz de la Sierra + radio, "llegar a más" apagado · 25+ · Advantage+ con sugerencias · excluir registrados |
-| Anuncios | **D1 y D4** (tabla de abajo): v3 renderizados el 2-oct (imagen única 4:5 y 9:16) y **en pausa**: Sergio Urcullo pidió primero el estudio de la Biblioteca. **D4 frenado** por el catálogo (el detector no encuentra a nadie). **Diseño, render y subida: sesión Ventas y pauta** (Sergio Urcullo, 30-sep; ver §0 punto 8). Marca personal no las hace. |
+| Anuncios | **A1 y A2** (§5.10; reemplazan a D1 v3/v4) y **D4** (tabla de abajo). A1 v5 y A2 v2 se rehicieron el 8-oct mirando a la competencia (imagen 4:5, 9:16 y video de 11 s para A1) y esperan la cuenta demo y la vista de Sergio Urcullo. **D4 frenado** por el catálogo (el detector no encuentra a nadie). **Diseño, render y subida: sesión Ventas y pauta** (Sergio Urcullo, 30-sep; ver §0 punto 8). Marca personal no las hace. |
 | Mensaje de bienvenida | "Para dueños/as de clínicas" + tres respuestas para tocar (§5.2) |
 
 | Anuncio | Brief (`hermes-content/carousels/briefs/ads/`) | Título | Texto precargado |
 |---|---|---|---|
-| **D1 · Los de mañana** (Confirmador) | `onia-platform-dental-meta-d1v3-los-de-manana.json` · imagen única | *La lista de mañana, con el mensaje escrito* | `Hola, vi el anuncio de Onia (D1). Tengo una clínica dental.` |
+| **A1 · Las 10:00** (Confirmador; antes D1) | `onia-platform-dental-meta-a1v5-las-diez.json` · imagen única y video 9:16 | *Un paciente que no confirma es un sillón vacío* | `Hola, vi el anuncio de Onia (D1). Tengo una clínica dental.` |
 | **D4 · Tratamiento a medias** | `onia-platform-dental-meta-d4v3-tratamiento-a-medias.json` · imagen única | *Los tratamientos a medias, en una lista* | `Hola, vi el anuncio de Onia (D4). Tengo una clínica dental.` |
 
 - **El texto principal** de cada anuncio es el `caption` de su brief. Si lleva precio, se lee de
@@ -587,13 +587,14 @@ todo contacto el 8-oct («no sé si el producto ya es funcional ni si prometemos
 
 | | Anuncio | Estado el 8-oct | Tiene que estar en ✅ en `ONIA_PROMESA_VS_PRODUCTO.md` |
 |---|---|---|---|
-| **A1** | **«La lista de mañana»** (D1 v4, `carousels/briefs/ads/onia-platform-dental-meta-d1v4-los-de-manana.json`). Texto de usted, alineado al catálogo §8.1, §8.3 y §7; el revisor de promesas da 0; **render hecho** (`carousels/out/ads/onia-platform-dental-meta-d1v4-los-de-manana/`), mirado en feed y en historias | Se corrigió lo que D1 v3 decía mal: «La IA escribe el mensaje», «Sale desde tu WhatsApp» y la «clínica de ejemplo». **La captura es del candidato del 30-sep, no de producción: se rehace con la cuenta demo antes de subir** | B-02, G-01, G-06, G-11 y L-05 |
-| **A2** | **«El saldo que nadie cobra»**: «Un cobro pendiente que nadie recuerda es plata que no entra. Cada mañana, Onia le deja anotado a quién cobrarle, con el mensaje listo». Misma estructura y mismos tres puntos que A1 | Solo el texto. No hay captura de la propuesta de cobro en producción: se arma con la cuenta demo | E-03, G-08, G-01 y G-11 |
+| **A1** | **«Las 10:00»** (v5, `carousels/briefs/ads/onia-platform-dental-meta-a1v5-las-diez.json`): «Un paciente que no confirma es un sillón vacío» + **«10:00 · Sin confirmar»** gigante + la tarjeta real con «Onia le deja el mensaje listo» y «Usted lo aprueba y lo envía, con un toque». Reemplaza a D1 v4 (que quedó como losa de texto: ver `research/competencia/anuncios/COMPARACION-DISENO-8OCT.md`). Texto de usted, alineado al catálogo §8.1, §8.3 y §7; el revisor de promesas da 0; **render hecho** en feed, historia y **video de 11 s** (`carousels/out/ads/onia-platform-dental-meta-a1v5-las-diez/`), mirado a 390 px junto a la competencia | **La captura es del candidato del 30-sep, no de producción: se rehace con la cuenta demo antes de subir** (y con la misma persona en la agenda y en Pendientes). Es diseño nuevo: lo ve Sergio Urcullo renderizado | B-02, G-01, G-06, G-11 y L-05 |
+| **A2** | **«El saldo que nadie cobra»** (v2, `…a2v2-el-saldo.json`): «Un cobro que nadie recuerda es plata que no entra» + **«45 días · Saldo vencido»** + la tarjeta real de cobro con «Onia le deja el mensaje listo». Mismo esquema que A1. Render de feed e historia hecho | Captura provisoria del 30-sep. **No sube hasta que E-03 esté en ✅**: la propuesta de cobro nunca se vio funcionando. La imagen muestra «Bs 250,00» de un paciente de ejemplo: no es un precio de Onia y lleva la leyenda «datos de ejemplo» | E-03, G-08, G-01 y G-11 |
 | ~~D4~~ | Tratamiento a medias | **Congelado**: el catálogo §8 no deja decirlo | D-03 (hoy ❌) |
 
-- **Falta una pieza con persona.** Los 7 anuncios de software que sobreviven en la Biblioteca (§2.5) tienen una. Sin
-  gasto de Higgsfield este mes (plan 1.0 §4), la salida es que Sergio Urcullo se grabe 30 segundos mostrando
-  `/pending`. **Es opcional para la primera tanda.**
+- **Falta una pieza con persona.** Los 7 anuncios de software que sobreviven en la Biblioteca (§2.5) tienen una, y el
+  rediseño del 8-oct **no la arregla**: es la brecha que más pesa. Sin gasto de Higgsfield este mes (plan 1.0 §4), la
+  salida es que Sergio Urcullo se grabe 25 segundos (guion en `COMPARACION-DISENO-8OCT.md`) mostrando `/pending` con la
+  cuenta demo. **Es opcional para la primera tanda.**
 - **Un precio no va en la imagen** (§5.4): se lee de `subscription-plans.ts` el día que se crea.
 
 **A dónde lleva (decisión que hay que tomar y mi recomendación)**

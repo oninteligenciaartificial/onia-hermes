@@ -330,6 +330,34 @@ Trampas pagadas armando v3 (2-oct):
 - **El umbral del tratamiento a medias es «21 días sin venir»** (`diasSinVenir`), con el tratamiento en curso y
   sin cita futura. «21 días en progreso» o «21 días sin cita» son inexactos: corregido en D4 el 2-oct.
 
+### 4.2 v5 del 8-oct: plantilla `bloques`, video y por qué v4 era básica
+
+> Sergio Urcullo, 8-oct: *«los diseños… demasiado básicos… mejora tus trabajos»*. Comparación completa con la
+> competencia: `hermes-content/research/competencia/anuncios/COMPARACION-DISENO-8OCT.md`.
+
+- **Por qué v4 era básica (diagnóstico):** una losa de texto sobre hoja clara; ningún foco visual; la pantalla real
+  chica y con sus recortes pisando la barra del navegador; tres tildes genéricas. Los que sobreviven tienen UN foco
+  enorme (un número, una cara), un campo de color y el producto en grande.
+- **Plantilla nueva** `"plantilla":"bloques"` en `anuncio-render.js` (la vieja sigue sin cambios): cabecera sobre hoja y
+  panel de **tinta** `#0C110F` (paleta de la marca; los degradados están prohibidos). Bloques: `hora {valor, rotulo, chip}`
+  (el gancho; el chip usa el amarillo real del «Pendiente» de la app, `rgb(254,249,194)` / `rgb(137,75,0)`, medido en la
+  captura), `flecha {texto}`, `tile {crop, width, anillos:[[x,y,w,h] en px de la CAPTURA]}`, `leyenda`, `texto`.
+  Briefs: `carousels/briefs/ads/…a1v5-las-diez.json` y `…a2v2-el-saldo.json`.
+- **Video:** `scripts/anuncio-video.js --brief … --out …` anima la misma pieza (9:16, 11 s, sin audio): fija el reloj de
+  la Web Animations API en cada cuadro, saca JPG con Chromium y los une con ffmpeg (los dos están en la nube; 33 s de
+  render). **El titular tiene que estar en el cuadro 0**: es la miniatura que Meta muestra antes del play.
+  Tiempos en `video.tiempos` del brief.
+- **Anillos:** el recuadro se calcula con las coordenadas de la captura × el factor de escala. Primera vez un anillo
+  cruzó el nombre del paciente por 6 px de margen: **un anillo no puede invadir otra línea de texto**; se baja el margen
+  o se saca el anillo (los de v5 quedaron solo en el mensaje y el botón).
+- **Historias 9:16:** el panel + `ctaBottom` no pueden sumar más que el lienzo; el renderer avisa «se sale del lienzo:
+  panel». Con `ctaBottom` 250 el botón queda a ~263 px del borde, fuera de lo que Meta tapa.
+- **Lo que NO arregla el diseño:** la persona (los 7 que sobreviven la tienen) y el rendimiento (sin gasto no hay cifras).
+- **Las dos capturas de una misma pieza tienen que ser de la MISMA persona de demo.** Hoy la agenda y Pendientes son de
+  capturas distintas del 30-sep; con la cuenta demo se arma el caso entero (agenda → pendiente → mensaje).
+- **Biblioteca desde la nube:** HTTP 403 de Facebook (8-oct). No se rodea; la madre captura desde la PC. Los sitios de
+  referencia sí abren con la receta de Playwright del §6, salvo Doctolib (Cloudflare «verifique que es humano»).
+
 ## 5. La campaña de Meta
 
 - **1-oct, 21:00 UTC: el conector YA ve ONIA Ads** (`1073680778314945`, negocio «OniaAgency», `is_ads_mcp_enabled`),
