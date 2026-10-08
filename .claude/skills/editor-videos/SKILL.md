@@ -733,6 +733,17 @@ Cada transición **acorta** el video su propia duración: los dos bloques se sol
 - Transiciones largas (>0.5s) o `circleopen` en cada costura: se ve amateur. Corto y `fade` por defecto.
 - HyperFrames no determinista (`Math.random`/`Date.now`) → render roto. Solo lógica determinista.
 
+## YouTube horizontal: reglas del plan de referentes (8-oct-2026)
+
+Fuente: `references/marca-personal/PLAN-REFERENTES.md` §4. Se midió sobre el formato de Iman Gadzhi («Dame 26 minutos…»,
+1,4 M de vistas); las fechas de sus videos no constan y los cortes salen de Gemini, sin medir.
+
+1. **Cambiar de capa cada 3-7 s**: cámara, pantalla grabada o gráfico. Un sonido en cada cosa que aparece.
+2. **Mapa de niveles o capítulos en pantalla antes de 1:15.**
+3. **El CTA de la comunidad aparece 2 o 3 veces**: a ~1/3, a ~2/3 y al final. La asesoría gratis va solo en la descripción.
+4. **Cada cifra dicha entra como tabla o contador**, con su cuenta a la vista.
+5. El primer minuto es un **filtro de dolor**: «si te sirve pagar el doble por la misma tarea, no sigas». Caso: D01-C.
+
 ## Relacionadas
 `ver-videos` · `embedded-captions` · `talking-head-recut` · `hyperframes-cli` · `media-use` · [[onia-video-hyperframes]] · [[content-engine-remotion]].
 
