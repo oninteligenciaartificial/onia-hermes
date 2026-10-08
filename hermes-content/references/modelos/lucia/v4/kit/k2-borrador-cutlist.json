@@ -92,9 +92,15 @@
       34,
       36,
       [
-        "Agende su demo."
+        "Escríbale desde la bio."
       ]
     ]
   ],
-  "productClaimsUnverified": true
+  "productClaimsUnverified": true,
+  "identityLabel": "Lucía Antelo · personaje IA de Onia",
+  "correcciones8oct": {
+    "cta": "CTA: «Agende su demo» llevaba a onia.com.bo/llamada, que da 404 (medido el 5-oct). La puerta es la de PLAN.md v4 §2 (D7).",
+    "rotulo": "Con apellido (canon, dato 2).",
+    "plan": "K2 espera la semana 3: necesita la captura CORREO (los pacientes de la demo no tienen correo) y escribir en producción con OK (PLAN.md v4 §5)."
+  }
 }

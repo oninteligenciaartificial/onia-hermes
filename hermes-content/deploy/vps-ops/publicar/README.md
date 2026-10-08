@@ -37,6 +37,11 @@ node /root/bin/ig-reel.mjs --cuenta sergio --video /root/publicar/<pieza>/final.
 # con el OK de Sergio sobre esa pieza
 node /root/bin/ig-reel.mjs ... --publicar                 # reel normal
 node /root/bin/ig-reel.mjs ... --trial auto --publicar    # yap a Trial
+# --ia pone «Información de IA» (is_ai_generated, changelog de Meta del 22-jun-2026). La cuenta lucia la lleva SIEMPRE
+#   (CUENTAS_IA en ig-reel.mjs). En ig-carrusel.mjs va solo en el contenedor padre. Después de publicar se lee
+#   is_ai_generated y queda en publicado.jsonl. Si la lectura falla, la pieza igual se registra: NO se re-publica.
+#   ⚠ Los dos scripts se copian JUNTOS a /root/bin (ig-carrusel.mjs importa de ig-reel.mjs) y después se corre
+#   --selftest en los dos; copiar uno solo rompe los carruseles agendados de @sergiourcullo.
 # Instagram a hora fija (UTC; responde con la hora de La Paz). Timer transitorio de systemd, sin cola
 # persistente: si el VPS se reinicia lo agendado NO sale (falla segura). Si falla, avisa por onia-tg.sh.
 /root/bin/agendar-publicacion.sh a-0930 "2026-09-30 16:30:00" node /root/bin/ig-reel.mjs ... --publicar
@@ -96,6 +101,7 @@ Análisis con fuentes primarias (29-sep): [`REDES-ANALISIS.md`](REDES-ANALISIS.m
 | Destino | Ruta | Qué hace falta |
 |---|---|---|
 | Instagram `@sergiourcullo` / `@oniahq` (reel + trial) | ✅ API propia (`ig-reel.mjs`) | nada |
+| Instagram `@lucia.antelo.oficial` (reel + carrusel, con etiqueta IA) | 🟡 API propia, cuenta conectada a la app desde el 20-ago | `ig-lucia.env` (el token vivía en Postiz el 4-sep) y copiar los dos scripts del 5/8-oct a `/root/bin`. Detalle: skill `lucia` §6 |
 | Facebook (perfil y Página) | compartido automático desde el Centro de cuentas de Instagram | Sergio lo activa (1 min); se verifica con el primer reel publicado por API |
 | TikTok · YouTube **Shorts** · LinkedIn perfil | ✅ **Buffer GRATIS** (auditado; 3 canales, 10 en cola por canal, API con 100 consultas por día) con `buffer-post.mjs` | nada: activo y probado el 29-sep (ver arriba) |
 | YouTube **largos** (lun · mié · vie) | Buffer no los sube: por ahora los subís vos con el paquete listo (archivo, título, descripción con capítulos, miniatura); en paralelo se pide la **auditoría de la API de YouTube** (gratis) para que `yt-video.mjs` publique solo | 3 min por video; el formulario lo preparo yo y lo enviás vos |

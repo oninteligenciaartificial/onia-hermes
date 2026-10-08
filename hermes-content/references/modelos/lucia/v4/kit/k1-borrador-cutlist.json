@@ -85,9 +85,15 @@
       31,
       34,
       [
-        "Agende su demo."
+        "Escríbale a Onia",
+        "desde la bio."
       ]
     ]
   ],
-  "privacyDraftReplaced": true
+  "privacyDraftReplaced": true,
+  "identityLabel": "Lucía Antelo · personaje IA de Onia",
+  "correcciones8oct": {
+    "cta": "CTA: «Agende su demo» llevaba a onia.com.bo/llamada, que da 404 (medido el 5-oct). La puerta es la de PLAN.md v4 §2 (D7).",
+    "rotulo": "Con apellido, por el canon (dato 2) y las otras «Lucía» IA que esconden la IA."
+  }
 }

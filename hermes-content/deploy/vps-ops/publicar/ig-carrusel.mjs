@@ -16,7 +16,7 @@ import crypto from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { parseArgs } from 'node:util';
 import { fileURLToPath } from 'node:url';
-import { API, PUBLIC_DIR, PUBLIC_URL, LEDGER, loadEnv, call, esIA, leerPublicado } from './ig-reel.mjs';
+import { API, PUBLIC_DIR, PUBLIC_URL, LEDGER, loadEnv, call, esIA, leerPublicado, avisoEtiquetaIA } from './ig-reel.mjs';
 
 export const LAMINA = /^slide-\d+\.(png|jpe?g)$/i;
 
@@ -77,8 +77,9 @@ async function main() {
   const info = await leerPublicado(media, env.IG_TOKEN);
   fs.mkdirSync(path.dirname(LEDGER), { recursive: true });
   fs.appendFileSync(LEDGER, JSON.stringify({ cuenta: a.cuenta, media, tipo: 'carrusel', dir: a.dir, ...info }) + '\n');
-  console.log(`PUBLICADO ${info.permalink}`);
-  if (ia && info.is_ai_generated !== true) console.error('⚠ Instagram NO devolvió is_ai_generated=true: mirá la pieza y poné la etiqueta a mano');
+  console.log(`PUBLICADO ${info.permalink ?? `media ${media}`}`);
+  const aviso = avisoEtiquetaIA(ia, info);
+  if (aviso) console.error(aviso);
 }
 
 function selftest() {

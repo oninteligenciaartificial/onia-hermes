@@ -9,27 +9,33 @@
 
 ## 0. Lo que cambia para Lucía (en 6 líneas)
 
-1. **El anuncio que dura tiene una persona y termina en la pantalla real** [M]. Los videos de software de clínica que
-   más días llevan al aire siguen el mismo esqueleto:
-   - una persona en cuadro desde el segundo 0, con subtítulo;
-   - la pantalla real del producto a la mitad;
-   - un CTA único (cuenta gratis o demo).
-2. **Nadie declara la IA** [M]:
-   - Doctocliq y Medizona pautan «doctoras» y «médicos» hechos con IA, con ambo y sin aviso. La doctora de Doctocliq
-     lleva un logo deformado, «Doetoclinic»;
-   - Calu hace lo mismo en orgánico;
+1. **Los videos que más duran tienen una persona desde el segundo 0 y un CTA único** [M, 3 cuadros por video].
+   *Corregido el 8-oct:*
+   - la pantalla real a la mitad aparece solo en los testimonios de Doctocliq (51 y 48 días) y en anuncios nuevos
+     (Calendico, Dentalink);
+   - los tres que más duran (80, 80 y 74 días) no la muestran: CitaPro usa una placa gráfica y la «doctora» de
+     Doctocliq no muestra producto;
+   - para Lucía la pantalla real es regla propia («producto visible o no sale»), no algo copiado.
+2. **Ninguno declara la IA en la pieza** [M en la tarjeta y los cuadros]. La etiqueta de Meta en el feed no se pudo ver
+   y queda como hueco:
+   - Doctocliq pauta una «doctora» hecha con IA, con ambo y un logo deformado, «Doetoclinic»;
+   - Medizona pauta un médico IA con bata y estetoscopio;
+   - Calu usa en orgánico una doctora que al parecer es IA [I];
    - **una Lucía con ambo se va a leer como eso** si no lo declara en el segundo 0.
-3. **No existe una presentadora IA que venda software de clínicas**: ni en pauta (Biblioteca, 6 países) ni en las
-   cuentas de TikTok de los competidores [M]. En TikTok la búsqueda general quedó sin hacer y es un hueco. El espacio
-   está libre, pero no hay resultados para copiar.
+3. **No se encontró ninguna presentadora IA que se declare IA vendiendo software de clínicas** [B]: Biblioteca por
+   metadato (6 países), buscador y perfiles de TikTok de los competidores.
+   - Quedan 5 candidatos y el anuncio de Odental Agency sin mirar, y la búsqueda general dentro de TikTok sin hacer.
+   - La «recepcionista estrella» de Lety y la doctora de Calu podrían ser personas IA sin declarar [I].
+   - El espacio de la IA declarada está libre, pero no hay resultados para copiar.
 4. **El orgánico de la categoría rinde poco** [M]:
    - la mediana de los últimos 10 videos va de 186 a 1.648 vistas;
    - solo Doctocliq y Dapta publican a diario.
    Hay que medir mensajes, no vistas.
 5. **Doctocliq ya habla del paciente que no vuelve** (29-sep) [M]. A Lucía le queda libre **lo local** (Santa Cruz, la
    recepción a las 8) y **la IA declarada**.
-6. **En Bolivia casi nadie pauta con persona** [B]: de los videos con persona, hoy solo llega el de CitaPro. Doctocliq
-   tiene 0 anuncios en Bolivia (pauta en MXN a otros países).
+6. **De los videos con persona que se miraron, el único que llega hoy a Bolivia es el de CitaPro** [B]. Doctocliq tiene 0
+   anuncios en Bolivia (pauta en MXN a otros países). Los creativos de Medilink (6 en BO) y de Dentalink (4 en BO) no se
+   miraron: no se sabe si llevan persona.
 
 ## 1. Anuncios con persona (Biblioteca de Meta, 5-oct)
 
@@ -84,8 +90,9 @@ Cuadros: `lucia-20261005/organico/`. Detalle: `datos/organico-tiktok.json`. Inst
 
 - **Competidor directo: no encontrado.** Se buscó en la Biblioteca (6 países), en el buscador web y en los perfiles de
   TikTok. Las cuatro búsquedas dentro de TikTok no se pudieron hacer (sin navegador), así que eso queda como hueco.
-- **Evidencia de negocio pública: ninguna** en español. El «Comentá X» da 0,2-1,1 comentarios por like (Aria Cruz,
-  mindshft, barbuprime, Ramiro Cubria): es interés, inflado por el cebo, no ventas.
+- **Evidencia de negocio pública: ninguna** en español. El «Comentá X» da 0,2-1,2 comentarios por like (Aria Cruz,
+  mindshft, barbuprime, Ramiro Cubria) [B: intakes de Instagram del 3 y 4-oct; hoy Instagram dio muro]. Es interés,
+  inflado por el cebo, no ventas.
 - **Lo que sí sirve**:
   - declarar la IA **en el nombre** del perfil (Aria Cruz: «Aria Cruz | Influencer IA», 30,8K en TikTok, sin freno
     visible);
@@ -111,7 +118,8 @@ Detalle: `datos/higgsfield-cotizaciones.json`. El método se pasó a la skill `l
 - **Marketing Studio no sirve**:
   - cuesta de 42 a 105 cr;
   - inventa guion y voz;
-  - rechaza la foto de Lucía como personaje («Unknown media role»);
+  - el rol `character_photo`, que su esquema declara, da «Unknown media role» al cotizar: no hay forma probada de
+    pasarle la cara de Lucía;
   - `saas_motion` re-dibuja la captura, y eso es una pantalla inventada.
 - **Ninguna herramienta de Higgsfield mete la pantalla real.** Su propio flujo ugc-video la pega con ffmpeg (tarjetas
   de 0,78 del ancho, 1,2-1,5 s cada una). Se hace gratis con `editor-videos`.
@@ -128,14 +136,16 @@ Detalle: `datos/higgsfield-cotizaciones.json`. El método se pasó a la skill `l
   que Sergio Urcullo confirme el plan en el panel.** Starter cuesta US$6 al mes (US$1 el primer mes hasta el 18-oct).
 - Cuando haya voz, el lipsync barato es Seedance 2.0 Mini con nuestro audio, a 10 cr por 10 s. `sync_so` subió a 36
   cr por 10 s.
-- Hay 22 muestras gratis para escuchar en `datos/voces-para-escuchar.tsv`.
+- Hay 18 muestras gratis de ElevenLabs para escuchar en `lucia-20261005/voces/` (`_urls.tsv` trae el `voice_id` de
+  cada una). Las 9 de Higgsfield quedaron fuera del repo por peso (13 MB).
 
 ## 6. Publicación
 
 - **Instagram**:
   - `@lucia.antelo.oficial` ya es cuenta Creador y está conectada a la app «OnIA Social API» desde el 20-ago [según
     el repo];
-  - su token vive en Postiz y vence entre el 13 y el 18-oct;
+  - su token vivía en Postiz y ese día las tres cuentas vencían entre el 13 y el 18-oct [según el repo, dato del
+    4-sep; no se midió desde entonces];
   - la app está en modo Live [M].
 - **La etiqueta «Información de IA» por pieza existe por API desde el 22-jun-2026** (`is_ai_generated`) [M, changelog
   de Meta]. Ya está sumada a `ig-reel.mjs` y a `ig-carrusel.mjs`.

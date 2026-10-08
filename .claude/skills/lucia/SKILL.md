@@ -65,18 +65,31 @@ description: "Invocar para CUALQUIER trabajo del carril Lucía (Lucía Antelo, l
 - **No usar para Lucía:**
   - Seedance 2.5: 42 por 6 s, aunque es el default de la skill oficial;
   - Cinema Studio 3.0, 3.5 y 4.0: de 30 a 42 por 6 s;
-  - Marketing Studio: de 42 a 105; inventa guion y voz, y rechaza la foto de Lucía como personaje;
+  - Marketing Studio: de 42 a 105; inventa guion y voz, y el rol `character_photo` da «Unknown media role» al cotizar
+    (no hay forma probada de pasarle la cara de Lucía);
   - `saas_motion`: re-dibuja la captura, y eso es una pantalla falsa;
   - `reframe`: 5 cr/s; para eso está ffmpeg;
   - Shorts Studio: 90 por 30 s.
 - **La pantalla real no la pone Higgsfield:** se monta con `editor-videos`. Geometría del flujo ugc-video de
   Higgsfield, que vale copiar: tarjetas de 0,78 del ancho y hasta 0,60 del alto, subidas un 4 %, de 1,2 a 1,5 s cada
   una, con 0,3 a 0,5 s de cara limpia entre tarjetas, nunca en el gancho ni en el cierre, y el 15 % de abajo libre.
-- **Esqueleto de la pieza de venta (mirado en los anuncios que más duran, 5-oct):**
+- **Esqueleto de la pieza de venta:**
   1. persona en cuadro desde el segundo 0, con subtítulo;
-  2. pantalla real a la mitad (s 8-18 en una pieza de 20-30 s);
+  2. pantalla real después del gancho;
   3. un solo CTA.
-  Una pieza de 10 s sin pantalla no vende.
+  - Lo 1 y lo 3 están en los videos que más duran (mirados el 5-oct).
+  - Lo 2 es regla propia («producto visible o no sale»). En la competencia solo lo hacen los testimonios de Doctocliq y
+    anuncios nuevos; CitaPro (80 días) usa una placa.
+  - Una pieza de 10 s sin pantalla no cumple la regla.
+- **Tarjetas (cutlists de Codex, 6-oct):**
+  - ≤ 6 palabras contando la palabra titular, y ≥ 0,35 s por palabra + 0,3 s;
+  - trato de usted;
+  - rótulo «Lucía Antelo · personaje IA de Onia» desde el segundo 0;
+  - un solo CTA, «Escríbale a Onia desde la bio» o «Escríbale desde la bio» si no entra;
+  - nunca «Agende su demo»: ese destino daba 404.
+- **Recuperar un clip ya pagado (8-oct, 0 cr):** `mcp__higgsfield__job_display` con el id del job → `results.rawUrl` es el
+  clip LIMPIO, sin texto. Se baja con `curl` del CDN, se pasa por `ffprobe` y se MIRA. Así volvió el de K3
+  (`07b938b2`), que Codex no encontró en la PC. Nunca se regenera lo que ya se pagó.
 - La edición sigue en **`editor-videos` § «Reels de Lucía»**. Higgsfield solo genera el clip.
 
 ## 4. Voz (5-oct)
@@ -87,8 +100,9 @@ description: "Invocar para CUALQUIER trabajo del carril Lucía (Lucía Antelo, l
 - ⚠️ **Licencia:** la cuenta de ElevenLabs es `tier: payg`, y según su documentación eso es el plan **gratis** con pago
   por uso, **sin licencia comercial**. No se publica ninguna voz de ElevenLabs hasta que Sergio Urcullo confirme el plan
   en el panel. Starter cuesta US$6 al mes.
-- **Hoy, sin voz (D4).** Para elegir de oído hay muestras gratis en
-  `research/competencia/lucia-20261005/datos/voces-para-escuchar.tsv`. Bajar `preview_url` no gasta caracteres.
+- **Hoy, sin voz (D4).** Para elegir de oído hay 18 muestras gratis de ElevenLabs en
+  `research/competencia/lucia-20261005/voces/` (`_urls.tsv` trae el `voice_id`). Bajar `preview_url` no gasta
+  caracteres.
 - La única voz cruceña de verdad sería clonar a una persona real, con su consentimiento escrito (Starter o
   `create_voice`).
 
@@ -113,15 +127,21 @@ description: "Invocar para CUALQUIER trabajo del carril Lucía (Lucía Antelo, l
 - **Instagram:**
   - con la app propia «OnIA Social API», que está en modo Live;
   - `@lucia.antelo.oficial` es cuenta Creador, conectada a la app desde el 20-ago;
-  - su token vive en Postiz (integración `cmt1sv4eh001alq9cl3y6q7es`) y vencía entre el 13 y el 18-oct (dato del
-    4-sep);
+  - su token vivía en Postiz (integración `cmt1sv4eh001alq9cl3y6q7es`). El 4-sep las tres cuentas vencían entre el 13
+    y el 18-oct, y no se midió desde entonces;
   - hay que pasarlo a `/root/.config/onia-publicar/ig-lucia.env` (`IG_USER_ID`, `IG_TOKEN`) y renovarlo con
     `ig-refrescar.sh`.
   - ⚠️ Para leerlo se levanta **solo** `postiz-postgres`. Si se levanta Postiz entero, se publican posts vencidos sin OK:
     pasó el 4-sep.
 - **Etiqueta IA por pieza:** `is_ai_generated=true`, que Meta acepta desde el 22-jun-2026, también con Instagram Login.
-  `ig-reel.mjs` e `ig-carrusel.mjs` la mandan solos con `--cuenta lucia` (`CUENTAS_IA`). En el carrusel va solo en el
-  contenedor padre. Después de publicar se lee `is_ai_generated`.
+  - `ig-reel.mjs` e `ig-carrusel.mjs` la mandan solos con `--cuenta lucia` (`CUENTAS_IA`). En el carrusel va solo en el
+    contenedor padre.
+  - Después de publicar se lee `is_ai_generated`. `leerPublicado` **nunca lanza**: si falla, la pieza igual queda en
+    `publicado.jsonl`. Si no, `agendar-publicacion.sh` avisaría «falló» y alguien la publicaría dos veces.
+  - ⚠️ **Está en el repo desde el 5/8-oct; en el VPS falta desplegarlo y nunca se probó en vivo.** Se copian LOS DOS
+    juntos a `/root/bin` y después se corre `--selftest` en los dos: `ig-carrusel.mjs` importa de `ig-reel.mjs`, y
+    copiar uno solo rompe los carruseles agendados de `@sergiourcullo`. Se le avisa a Marca personal.
+  - En el ensayo, «etiqueta IA» solo confirma que se mandó el parámetro.
 - **Por pieza** (en el VPS; esta nube no tiene ssh):
   1. `ig-reel.mjs --cuenta lucia --video … --caption …` sin `--publicar`: es el ensayo y debe decir FINISHED;
   2. `agendar-publicacion.sh lucia-<pieza> "AAAA-MM-DD 23:00:00" node /root/bin/ig-reel.mjs … --publicar`, que son las
@@ -143,10 +163,11 @@ description: "Invocar para CUALQUIER trabajo del carril Lucía (Lucía Antelo, l
 ## 7. Lo que la competencia ya enseñó (5-oct)
 
 Fuente: `research/competencia/LUCIA_COMPETENCIA_20261005.md`.
-- **Nadie declara la IA:** Doctocliq y Medizona pautan «doctoras IA» con ambo, sin aviso. Lucía lleva el rótulo desde
-  el segundo 0, y en un anuncio va sin ambo.
+- **Ninguno declara la IA en la pieza:** Doctocliq pauta una «doctora IA» con ambo y Medizona un médico IA con bata. La
+  etiqueta de Meta en el feed no se pudo ver. Lucía lleva el rótulo desde el segundo 0, y en un anuncio va sin ambo.
 - **El orgánico de la categoría rinde poco** (mediana de 186 a 1.648 vistas). Se mide por mensajes.
-- **No hay una presentadora IA que venda software de clínicas**: no hay a quién copiar resultados.
+- **No se encontró ninguna presentadora IA que se declare IA** vendiendo software de clínicas (nivel buscador y
+  metadato): no hay a quién copiar resultados.
 
 ## 8. Trampas (fechadas)
 
@@ -161,8 +182,10 @@ Fuente: `research/competencia/LUCIA_COMPETENCIA_20261005.md`.
 - **5-oct · créditos:** los que sobran **se borran en cada renovación** (−387,57 el 1-oct). El tope de Lucía es 150
   por mes sobre un plan de 600.
 - **5-oct · nube:**
-  - no hay cliente ssh, y el control de permisos frenó instalarlo («Unauthorized Persistence»). La madre recomienda
-    no tener la llave del VPS en una sesión que lee páginas de terceros;
+  - no hay cliente ssh, y el control de permisos frenó instalarlo («Unauthorized Persistence») cuando el pedido no
+    estaba claro. Otra sesión de la nube lo instaló el 5-oct porque Sergio Urcullo lo pidió EN ESA sesión (README del
+    publicador). La madre recomienda no tener la llave del VPS en una sesión que lee páginas de terceros, y este
+    entorno trae `ONIA_VPS_SSH_KEY_B64`: decide Sergio Urcullo;
   - Chromium falla con ERR_CERT_AUTHORITY_INVALID, y saltearlo lo frena el clasificador («TLS/Auth Weaken»). Para
     TikTok se usa curl: JSON de la página, embed del creador y mp4;
   - Instagram da 429 con muro de login.

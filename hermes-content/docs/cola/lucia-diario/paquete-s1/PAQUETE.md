@@ -1,51 +1,65 @@
-# Paquete semana 1 de Lucía — para el OK de Sergio Urcullo (5-oct-2026)
+# Paquete semana 1 de Lucía — para el OK de Sergio Urcullo (5-oct-2026, corregido el 8-oct)
 
 > Plan: `../PLAN.md` v4 §5. Sale de material ya pagado: **0 créditos**.
 > Nada se publica sin el «ok» de Sergio Urcullo sobre este paquete.
+> El trato va **de usted** si se confirma D8. Si queda en vos, valen los textos del 1-oct.
 
 ## Perfil (una vez, desde el celular de Lucía)
 
 | Campo | Texto |
 |---|---|
 | Nombre | `Lucía Antelo · IA de Onia` (25 caracteres) |
-| Bio | `Personaje IA creado por @oniahq` / `Te muestro cómo trabaja una clínica de Santa Cruz con Onia.` / `Escribinos por WhatsApp 👇` |
-| Link | `https://wa.me/59175414930?text=Hola%2C%20vengo%20de%20Luc%C3%ADa.%20Quiero%20ver%20Onia%20en%20mi%20cl%C3%ADnica.` |
-| Etiqueta de perfil IA | encendida. Según el repo, se activó el 31-ago; la madre lo confirma mirando |
+| Bio | `Personaje IA creado por @oniahq` / `Le muestro cómo se trabaja en una clínica con Onia.` / `Escríbale a Onia por WhatsApp 👇` |
+| Link | la puerta de D7. Si es (a): `https://wa.me/59175414930?text=Hola%2C%20vengo%20de%20Luc%C3%ADa.%20Quiero%20ver%20Onia%20en%20mi%20cl%C3%ADnica.` |
+| Etiqueta de perfil IA | encendida. Según el repo se activó el 31-ago; la madre lo confirma mirando |
 
 ## Día 1 · L01 «Hola, soy Lucía. No existo.» (carrusel, fijado)
 
 - **Láminas:** `hermes-content/carousels/out/lucia-l01-hola-no-existo-foto/slide-01..05.png`. Hoja: `l01-hoja.jpg`
   (mirada el 5-oct).
-- **Pie** (del brief, sin cambios): *«Lucía es un personaje hecho con IA por @oniahq. Te lo digo en la primera línea
-  porque es justamente el punto. No tengo consultorio, ni clientes, ni horario. Tengo una tarea: mostrarte, una vez por
-  semana, una cosa real que un negocio chico de Santa Cruz puede dejar de hacer a mano. Solo cosas que ya funcionan y que
-  podés ver andando. Si tenés un negocio, seguime.»* `#santacruz #bolivia #negocios #pymes #inteligenciaartificial`
-- **Estado:** ✅ aprobado el 1-oct.
+- **Con usted** (D8), se re-renderizan a 0 cr las láminas con estos textos (sacados del brief
+  `carousels/briefs/lucia/l01-hola-no-existo.json`):
+  - lámina 1: «Y te lo digo en la primera lámina» → «Y se lo digo en la primera lámina»;
+  - lámina 3: «Mostrarte» → «Mostrarle»; «tu negocio» → «su negocio»; «Nada que no puedas ver andando» → «Nada que no
+    pueda ver andando»;
+  - lámina 4: «Prometerte» → «Prometerle»;
+  - lámina 5: «Seguime» → «Sígame»; «Si tenés un negocio, seguime» → «Si tiene un negocio, sígame»;
+  - CTA del brief: «Seguí a @lucia.antelo.oficial» → «Siga a @lucia.antelo.oficial».
+- **Pie** (con usted): *«Lucía Antelo es un personaje hecho con IA por @oniahq. Se lo digo en la primera línea porque es
+  justamente el punto. No tengo consultorio, ni clientes, ni horario. Tengo una tarea: mostrarle, una vez por semana,
+  una cosa real que un negocio chico puede dejar de hacer a mano. Solo cosas que ya funcionan y que puede ver andando. Si
+  tiene un negocio, sígame.»* `#santacruz #bolivia #negocios #pymes #inteligenciaartificial`
+- **Estado:** el contenido está aprobado desde el 1-oct; falta el trato.
 
 ## Día 3 · L02 «Este video no fue grabado» (reel de 6 s, sin voz)
 
 - **Archivo:** `hermes-content/references/modelos/lucia/v4/feed/l02-este-video-no-fue-grabado.mp4` (1080×1920, 24 fps).
   Tira: `l02-tira.jpg` (mirada el 5-oct). Tabla de cortes: `videos/lucia-l02/README.md`.
-- **Pie:** *«Lucía es un personaje hecho con IA por @oniahq. No existo, pero lo que te muestro sí funciona. Seguime.»*
-  - Se recortó del pie del 1-oct la frase «sistemas que trabajan solos para tu negocio»: es una promesa general que la
-    pieza no muestra.
+- **Con usted**, se re-renderiza a 0 cr el sello «SEGUIME.» → «SÍGAME.».
+- **Pie:** *«Lucía Antelo es un personaje hecho con IA por @oniahq. No existo; las pantallas que le muestro, sí. Sígame.»*
+  Se sacó «sistemas que trabajan solos para tu negocio», una promesa general que la pieza no muestra.
 - **Estado:** falta el OK.
 
 ## Día 5 · Chiste de 10 s (a editar después del OK, 0 cr)
 
 - **Clip:** el del café, ya pagado (`v4/feed/l08-cafe-src.mp4`, 10 s, sin voz).
-- **Tarjetas:** «¿Lucía es real?» → «No: soy IA.» → «Lo que te muestro, sí funciona.»
-- **Pie:** *«Lucía es un personaje hecho con IA por @oniahq. Esta semana te muestro cómo un paciente reserva solo, sin
-  llamar. Escribinos: link en la bio.»*
-  - El pie anuncia lo que viene el día 8. Si la pantalla de reserva no está grabada para entonces, se cambia el pie.
+- **Tarjetas:** «¿Lucía Antelo es real?» → «No: soy IA.» → «Las pantallas que le muestro son reales.»
+- **Pie:** *«Lucía Antelo es un personaje hecho con IA por @oniahq. Lo que le muestro de Onia son pantallas reales.»*
+  - No vende ni anuncia otra pieza.
+  - Si para el día 5 ya está grabada la página de reserva, se suma: «La próxima: cómo un paciente reserva solo».
 
 ## Cómo sale cada una (lo corre la madre en el VPS)
 
-1. **Ensayo, que no publica:**
+1. **Antes de la primera:**
+   - `ig-lucia.env` con el token de Lucía;
+   - `ig-reel.mjs` e `ig-carrusel.mjs` nuevos copiados **juntos** a `/root/bin`, con `--selftest` en los dos.
+2. **Ensayo, que no publica:**
    `node /root/bin/ig-carrusel.mjs --cuenta lucia --dir /root/publicar/lucia-l01 --caption /root/publicar/lucia-l01/caption.txt`
-   o `ig-reel.mjs --cuenta lucia --video … --caption …`. Tiene que decir FINISHED y «etiqueta IA».
-2. **Se agenda a las 19:00 de La Paz** (23:00 UTC) con `agendar-publicacion.sh` y `--publicar`.
-3. **Se mira la pieza publicada:** que tenga «Información de IA» y que el link de la bio abra el WhatsApp con el texto.
-
-**Requisito previo:** `ig-lucia.env` en el VPS, con el token de Lucía que vive en Postiz (vence entre el 13 y el 18-oct,
-según un dato del 4-sep) y los dos publicadores nuevos copiados a `/root/bin`.
+   tiene que decir «listo en Instagram … etiqueta IA». Para un reel, `ig-reel.mjs --cuenta lucia --video … --caption …`
+   tiene que decir FINISHED.
+   - «etiqueta IA» solo confirma que se mandó el parámetro.
+3. **Se agenda a las 19:00 de La Paz** (23:00 UTC) con `agendar-publicacion.sh` y `--publicar`.
+4. **Se mira la pieza publicada:**
+   - `is_ai_generated` tiene que quedar en `true` en `publicado.jsonl`;
+   - tiene que verse «Información de IA»;
+   - el link de la bio tiene que abrir la puerta.

@@ -1,7 +1,7 @@
 # Lucía a diario — el mismo formato que Sergio Urcullo, sin cámara
 
 > ⚠️ **5-oct: el circuito de publicación vigente está en la skill `lucia` §6 y en `PLAN.md` v4 §7.** Lo de abajo sobre
-> el token («un login de Instagram, una vez») ya no es así: la cuenta está conectada desde el 20-ago y su token vive en
+> el token («un login de Instagram, una vez») ya no es así: la cuenta está conectada desde el 20-ago y su token vivía (dato del 4-sep) en
 > Postiz. La puerta `onia.com.bo/?utm_…` tampoco: la puerta es el WhatsApp de Onia con «vengo de Lucía».
 
 Propuesta del carril Lucía v4 (30-sep-2026), para que Sergio Urcullo la corrija. Copia el
@@ -76,8 +76,9 @@ La mayoría de los reels son **b-roll + voz o texto**; Lucía hablando a cámara
 
 ## Límites que no se cruzan
 
-- **Venta:** sólo lo que producción cumple hoy (`ONIA_ADQUISICION_Y_PAUTA.md` §5.4). El «paciente
-  con tratamiento a medias» recién con la 1.0 publicada. Pieza que vende = captura REAL de Onia.
+- **Venta:** sólo lo que producción cumple hoy (`ONIA_ADQUISICION_Y_PAUTA.md` §5.4). El tratamiento a
+  medias NO se dice aunque esté en producción (corregido el 8-oct): el catálogo §8 lo tiene en «NO se puede decir»
+  hasta que Plataforma lo vea encontrar pacientes en la demo. Pieza que vende = captura REAL de Onia.
 - **Lucía nunca es clienta, odontóloga ni testimonio.** Puede llevar el ambo como vestuario, pero nunca dice ni da a
   entender que es del rubro (Sergio Urcullo, 3-oct). No promete resultados («agenda llena»).
 - **Lip sync** (corregido el 5-oct): la prueba del 30-sep (`v4/PROCEDENCIA.jsonl`) dice lo contrario de lo que decía

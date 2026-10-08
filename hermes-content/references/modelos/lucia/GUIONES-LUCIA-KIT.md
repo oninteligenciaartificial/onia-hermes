@@ -26,7 +26,7 @@ lo que Onia hace hoy y se puede decir (§2 y §8).
 - **Formato:** Reel 9:16 de 30–36 s, **sin voz** (D4 sigue pendiente), con tarjetas de texto, sin música de cama, y se
   edita con `editor-videos` § Reels de Lucía.
 - **IA declarada:**
-  - rótulo «Lucía · personaje IA de Onia» desde el segundo 0;
+  - rótulo «Lucía Antelo · personaje IA de Onia» desde el segundo 0;
   - el pie arranca con «Lucía es un personaje hecho con IA por @oniahq»;
   - etiqueta de IA de Instagram.
 - **Ambo = vestuario.** Ninguna frase la pone en el puesto: nada de «soy», «mis pacientes» ni «mi consultorio».
@@ -98,7 +98,7 @@ El pie es PROPUESTA, no texto aprobado para publicación. Validar la privacidad,
 ### Montaje y calidad
 
 - Lienzo 1080×1920, 24 fps; 34 s = 816 cuadros. Acento #10C26B. Método editor-videos, sin placas PIL ni pipeline improvisado.
-- Primera tarjeta desde t=0, plenamente legible antes de 0,15 s. Etiqueta «Lucía · personaje IA de Onia» desde t=0 en franja segura. No convertir el ambo en una credencial profesional.
+- Primera tarjeta desde t=0, plenamente legible antes de 0,15 s. Etiqueta «Lucía Antelo · personaje IA de Onia» desde t=0 en franja segura. No convertir el ambo en una credencial profesional.
 - Medir mentón máximo en todo A2 y encuadre A1: tarjetas entre mentón máximo +40 px y y=1490. Bajo y=1000, evitar los 80 px derechos. Si no caben, reducir el panel o repartir texto; no tapar cara ni cortar coronilla.
 - Sello HUMO: 130%→100% en 3 cuadros; golpe de zoom +3% durante 5 cuadros, mismo instante 2,5 s. No zoom decorativo; no escalar fuente 720p ×1,5. En cierre, movimiento suave ≤1,04 si no compromete encuadre.
 - P1/P2: recorte focal legible y crédito «pantalla real de ONIA»; nunca dibujar controles o estados para completar la evidencia. Un cambio de foco cada 1,5–3 s puede guiar la lectura sin sumar tarjetas ni alterar las duraciones. No repetir clicks ni hacer parecer ejecutado un envío.

@@ -47,7 +47,7 @@
       19,
       [
         "GIRO",
-        "¿Quién trabaja de verdad?"
+        "¿Y qué hace Onia?"
       ]
     ],
     [
@@ -86,8 +86,8 @@
       31,
       35,
       [
-        "DEMO",
-        "Agende su demo."
+        "ONIA",
+        "Escríbale desde la bio."
       ]
     ]
   ],
@@ -140,7 +140,26 @@
   ],
   "productClaimsUnverified": true,
   "watermark": "BORRADOR · NO PUBLICAR",
-  "identityLabel": "Lucía · personaje IA de Onia",
+  "identityLabel": "Lucía Antelo · personaje IA de Onia",
   "voice": false,
-  "music": false
+  "music": false,
+  "correcciones8oct": {
+    "cta": "CTA: «Agende su demo» llevaba a onia.com.bo/llamada, que da 404 (medido el 5-oct). La puerta es la de PLAN.md v4 §2 (D7).",
+    "giro": "«¿Quién trabaja de verdad?» daba a entender una recepción real donde Onia ya trabaja (hay 0 clientes; la recepción es generada).",
+    "rotulo": "Con apellido (canon, dato 2).",
+    "toma6_pendientes": {
+      "textoFinal": [
+        [
+          "ONIA",
+          "Revisa su agenda y sus cobros."
+        ],
+        [
+          "REVISIÓN",
+          "Nada sale sin su aprobación."
+        ]
+      ],
+      "condicion": "Solo con la captura P2 real. Recorte focal en filas de cobro, confirmación y 6 meses sin volver; NINGUNA fila «tratamiento a medias» ni la pestaña «A medias» (la demo trae 2 sembradas; catálogo §8)."
+    },
+    "correo_horarios": "Las tarjetas CORREO (25-28 s) y HORARIOS (28-31 s) salen del montaje mientras no exista la captura CORREO: se quitan y el cierre pasa a 25-29 s (29 s, 696 cuadros). Si la demo no muestra Pendientes, K4 no sale (no se cambia la pantalla sin cambiar el texto)."
+  }
 }

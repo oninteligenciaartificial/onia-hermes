@@ -46,11 +46,29 @@ export function containerParams({ caption, trial, coverMs, videoUrl, ia }) {
   return p;
 }
 
-// Lee la pieza ya publicada. Si Instagram no acepta el campo is_ai_generated, se reintenta sin él: la
-// pieza ya salió y tiene que quedar en el registro igual.
-export async function leerPublicado(media, token) {
+// Lee la pieza ya publicada. NUNCA lanza: la pieza ya salió y tiene que quedar en publicado.jsonl aunque la
+// lectura falle; si saliera con código 1, agendar-publicacion.sh avisaría «falló» y alguien la publicaría dos veces.
+// Si Instagram no acepta el campo is_ai_generated, se reintenta sin él.
+export async function leerPublicado(media, token, llamar = call) {
   const base = `${API}/${media}?access_token=${token}&fields=permalink,media_product_type,timestamp`;
-  return call(`${base},is_ai_generated`).catch(() => call(base));
+  try {
+    return await llamar(`${base},is_ai_generated`);
+  } catch (e1) {
+    console.error(`⚠ no pude leer is_ai_generated de ${media}: ${e1.message}`);
+    try {
+      return await llamar(base);
+    } catch (e2) {
+      console.error(`⚠ PUBLICADO ${media} pero no pude leerlo: ${e2.message}`);
+      return { error_lectura: e2.message };
+    }
+  }
+}
+
+// Qué decir de la etiqueta IA después de publicar: confirmar, avisar que se rechazó o que no se pudo leer.
+export function avisoEtiquetaIA(ia, info) {
+  if (!ia || info.is_ai_generated === true) return null;
+  if (info.is_ai_generated === false) return '⚠ Instagram devolvió is_ai_generated=false: poné la etiqueta IA a mano';
+  return '⚠ no pude confirmar la etiqueta IA: mirá la pieza publicada';
 }
 
 export function loadEnv(cuenta) {
@@ -121,8 +139,22 @@ async function main() {
   const info = await leerPublicado(media, env.IG_TOKEN);
   fs.mkdirSync(path.dirname(LEDGER), { recursive: true });
   fs.appendFileSync(LEDGER, JSON.stringify({ cuenta: a.cuenta, media, trial: a.trial || null, video: a.video, ...info }) + '\n');
-  console.log(`PUBLICADO ${info.permalink}`);
-  if (ia && info.is_ai_generated !== true) console.error('⚠ Instagram NO devolvió is_ai_generated=true: mirá la pieza y poné la etiqueta a mano');
+  console.log(`PUBLICADO ${info.permalink ?? `media ${media}`}`);
+  const aviso = avisoEtiquetaIA(ia, info);
+  if (aviso) console.error(aviso);
+}
+
+async function selftestLectura() {
+  const falla = async () => { throw new Error('429'); };
+  let n = 0;
+  const unaFalla = async (u) => { n += 1; if (u.includes('is_ai_generated')) throw new Error('400'); return { permalink: 'p' }; };
+  assert.deepEqual(await leerPublicado('m', 't', falla), { error_lectura: '429' });
+  assert.deepEqual(await leerPublicado('m', 't', unaFalla), { permalink: 'p' });
+  assert.equal(n, 2);
+  assert.equal(avisoEtiquetaIA(true, { is_ai_generated: true }), null);
+  assert.equal(avisoEtiquetaIA(false, {}), null);
+  assert.match(avisoEtiquetaIA(true, { is_ai_generated: false }), /=false/);
+  assert.match(avisoEtiquetaIA(true, { permalink: 'p' }), /no pude confirmar/);
 }
 
 function selftest() {
@@ -133,7 +165,7 @@ function selftest() {
   assert.equal(containerParams({ caption: 'x', ia: true }).is_ai_generated, 'true');
   assert.ok(!('is_ai_generated' in containerParams({ caption: 'x' })));
   assert.ok(esIA('lucia', false) && esIA('sergio', true) && !esIA('sergio', undefined));
-  console.log('selftest ok');
+  return selftestLectura().then(() => console.log('selftest ok'));
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

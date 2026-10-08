@@ -95,7 +95,7 @@
       "id": "K3",
       "duration": 31,
       "assets": [
-        "videos/lucia-l05/raw/l05-coworking-kling-07b938b2.mp4"
+        "hermes-content/references/modelos/lucia/v4/kit/k3-clip-coworking-07b938b2.mp4"
       ],
       "captures": [
         "EXTRACCION",
@@ -110,6 +110,15 @@
         "entrySeconds": 0.3,
         "cardCount": null,
         "privacyHold": false
+      },
+      "assetRecovery": {
+        "date": "2026-10-08",
+        "by": "sesión Lucía (nube, entorno onia-higgsfield)",
+        "method": "job_display 07b938b2-b629-447e-946b-56d39496eaa4 → results.rawUrl (clip limpio, sin texto); curl del CDN de Higgsfield; 0 cr (saldo 541,26 antes y después)",
+        "ffprobe": "h264 720x1280, 24 fps, 145 cuadros, 6,041667 s, sin audio",
+        "sha256": "8274d34ede040e511c3abc08a4e31c253f18f0a7e6e1ed94f6fbf1f628ab16af",
+        "visto": "6 cuadros mirados: misma cara, camisa de lino propia (sin ambo), coworking, manos sin deformación visible; levanta la vista y sonríe al final",
+        "bloqueo": "faltan las capturas EXTRACCION (pide escribir en producción con OK de Sergio Urcullo) y CONFIGURACION"
       }
     },
     {

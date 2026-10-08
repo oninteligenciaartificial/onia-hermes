@@ -486,7 +486,7 @@ node scripts/fondo-verde.mjs --toma toma.mp4 --fondo captura.png --crop 0:0:1440
 > ⛔ **Texto de Lucía (guion, pie, subtítulos, tarjetas). Decisión de Sergio Urcullo del 3-oct: *«que no se identifique
 > como ello pero que tenga la ropa»*.**
 > - Puede llevar el ambo como vestuario, pero **nunca dice ni da a entender que es del rubro**. Quedan fuera «hoy soy
->   odontóloga», «soy doctora», «como odontóloga», «mis pacientes» y «mi consultorio». La presenta siempre «Lucía ·
+>   odontóloga», «soy doctora», «como odontóloga», «mis pacientes», «mi consultorio», «mi estudio» y «me pasó con un paciente». La presenta siempre «Lucía Antelo ·
 >   personaje IA de Onia», que muestra cómo funciona el sistema.
 > - **Tampoco promete resultados** («agenda llena», «cero ausencias», porcentajes). La IA se declara siempre: el chiste
 >   va con «No: soy IA», nunca con «no sé».

@@ -239,11 +239,11 @@ No todo video de Lucía habla: la mayoría es b-roll + voz o texto. El flujo es 
 | Uso | Modelo / preset | Por qué |
 |---|---|---|
 | Plano de cine con cámara y color | `cinematic_studio_3_0` (4–15 s, genre, 720p–4k) · `cinematic_studio_video_v2` (speedramp slowmo/impact, multi-shot) | la ruta «cine» de Higgsfield |
-| Movimiento físico natural, caminar, manos | `kling3_0` (start+end frame, multi-shot, sonido off más barato) | ya cotizado: pro 8 s = 16 cr |
+| Movimiento físico natural, caminar, manos | `kling3_0` (start+end frame, multi-shot, sonido off más barato) | cotizado el 5-oct con `sound: "off"`: std 1,25 cr/s (6 s = 7,5), pro 1,5 cr/s (8 s = 12; los 16 eran con sonido) |
 | Barato, rápido | `seedance_2_0_mini` 720p | 6 s = 6 cr, cara fiel en la prueba del 30-sep |
 | Efectos virales (transiciones con la cara) | presets `viral`: Orbit 360, Eyes in, High flip, Earth zoom, Bullet time, Clones, Selfception | se ejecutan con `execute_preset` sobre un still aprobado |
 | Movimientos de cámara «de producto» aplicables a escena | recetas `push-in`, `pull-back`, `crane-reveal`, `whip-pan`, `topdown-dive`, `light-sweep`, `sunrise-pass` (`get_preset_instructions`) | vocabulario de cámara probado |
-| Gráfica en movimiento sobre UI de Onia | Marketing Studio `motion` (231 plantillas: `saas_motion`, `hypermotion`, `2d_motion`) | para piezas con captura real del sistema |
+| Gráfica en movimiento sobre UI de Onia | ⛔ **NO Higgsfield**: la captura real se anima con `editor-videos` / HyperFrames | corregido el 5-oct: `saas_motion` recibe la captura y la re-dibuja, o sea que da una pantalla inventada (CLAUDE.md «producto visible», «no fabricar pantallas»). Skill `lucia` §3 |
 
 **Prueba medida (30-sep, misma foto P3 y mismo prompt, 6 s, sin audio):**
 

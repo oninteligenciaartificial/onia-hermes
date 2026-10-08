@@ -48,7 +48,7 @@ Ninguna de estas reglas es universal. Son las que se repiten en varios casos san
 
 **Ganchos**
 - De 0 a 2 s: Lucía en movimiento y el problema escrito en pantalla, o la IA declarada («Hace un año yo no existía»). Sin logo y sin «hola, soy Lucía».
-- Sobreimpreso propio desde el segundo 0: «Lucía · personaje IA de Onia».
+- Sobreimpreso propio desde el segundo 0: «Lucía Antelo · personaje IA de Onia».
 - Cierre pensado para que se reenvíe: «Mandáselo a quien contesta tu WhatsApp». Instagram pondera los envíos para llegar a quien no te sigue (Mosseri, citado por Sotrender el 11-ago-2026 [T]; «Ranking Explained» oficial, 2023 [V]).
 - Test A/B de ganchos con el mismo material, publicado en días distintos. Los Trial Reels quedan bloqueados hasta que la cuenta llegue a 1.000 seguidores (Metricool, 13-ene-2026 [T]).
 
@@ -56,7 +56,7 @@ Ninguna de estas reglas es universal. Son las que se repiten en varios casos san
 - Una sola orden en la bio y en todas las piezas: «Agendá tu demo», apuntando a `onia.com.bo/llamada?src=lucia-<pieza>`.
   ⚠️ *Corregido el 5-oct:* esa ruta da 404 y Onia ya no tiene Cal.com. La puerta vigente es el WhatsApp de Onia con
   «vengo de Lucía» (`docs/cola/lucia-diario/PLAN.md` v4 §2).
-- El modelo de Lu, con WhatsApp como puerta, es la meta. Pero según la memoria del repo, hoy el bot trata los leads de la web como preguntas de precio. Hasta que el bot reconozca el `src` y pase la demo a un humano, la puerta del test es `/llamada`. Que Lucía sea la cara declarada del WhatsApp de Onia lo decide Sergio Urcullo.
+- El modelo de Lu, con WhatsApp como puerta, es la meta. Pero según la memoria del repo, hoy el bot trata los leads de la web como preguntas de precio. *Corregido el 8-oct:* la puerta del test es el WhatsApp de Onia con «vengo de Lucía» (`docs/cola/lucia-diario/PLAN.md` v4 §2, D7); `/llamada` da 404. Medido el 5-oct: el bot le contesta la bienvenida genérica y no guarda el origen. Que Lucía sea la cara declarada del WhatsApp de Onia lo decide Sergio Urcullo.
 - Indicador previo a la demo: comentarios y DMs que preguntan cómo funciona. Se responden a mano en las primeras horas, en personaje, diciendo que es IA. No se automatiza el paso de comentario a DM: Meta ya lo rechazó 2 veces y dio 0 leads.
 
 **Colaboraciones**
@@ -151,8 +151,9 @@ lo de arriba, pero no fija reglas por sí sola.
 3. Conectar @lucia.antelo.oficial como cuenta profesional y activar «Perfil generado con IA».
 
 **Día 0: lo que hace la sesión**
-1. Escribir la bio, con una línea 1 de IA y el link único `/llamada?src=lucia-bio`.
-2. Verificar que `/llamada` conserve el `?src=` hasta cal.com. Si no lo conserva, no hay medición y se arregla antes de L01.
+1. Escribir la bio, con una línea 1 de IA y el link de la puerta de `docs/cola/lucia-diario/PLAN.md` v4 §2 (corregido el
+   8-oct: `/llamada` da 404).
+2. Abrir el link de la bio desde un celular y confirmar que llega a la puerta con el texto ya escrito.
 3. Conseguir las capturas reales para L04 y L07.
 
 **Semana 1: S1 con tres ajustes de 0 cr**

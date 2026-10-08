@@ -1,12 +1,90 @@
 # Handoff — Lucía v4 y Higgsfield
 
 > Formato: [`README.md`](README.md). Se **sobrescribe**: es el estado ACTUAL del carril.
-> Rama `claude/confident-ramanujan-j79bkq` (sesión en la nube, entorno `Default`). Todo está en
-> `main`: PR oninteligenciaartificial/onia-hermes#42, #43 y #44, integrados por el autosync.
-> Última escritura: **2026-09-30 ~02:50 UTC**, en el cambio de sesión.
+> Última escritura: **2026-10-08**, sesión `session_01XSzFcs1k18ijqjSHGjnzD4` (nube, entorno `onia-higgsfield`), rama
+> `claude/zealous-babbage-fvtjck`. El estado vigente es el primer bloque de abajo; lo demás es historia.
 > Reemplaza a `HIGGSFIELD-LUCIA-SYSTEM-2026-09-22.md`, que queda como historia.
 
-## ▶ ESTADO VIGENTE — 5-oct-2026 (cambio de sesión madre; lo de abajo es historia)
+## ▶ ESTADO VIGENTE — 8-oct-2026 (lo de abajo es historia)
+
+**Objetivo de la sesión:**
+- el plan v2 de Lucía, definido después del estudio de la competencia (madre, 5-oct);
+- terminar de estudiar Higgsfield y que Lucía pueda postear normalmente (Sergio Urcullo, 5-oct);
+- seguir el kit desde donde lo dejó Codex (madre, 8-oct).
+
+**Hecho =** plan v4 + estudio mirado + skill `lucia` + publicadores con etiqueta IA + kit con K3 recuperado y cutlists
+corregidos + paquete de la semana 1, todo en el PR de la rama.
+
+**En producción:** nada publicado ni desplegado en el VPS. **Gasto: 0 cr** (saldo de Higgsfield: 541,26 el 5 y el
+8-oct).
+
+**Hecho, en la rama y su PR:**
+- **Estudio** `research/competencia/LUCIA_COMPETENCIA_20261005.md`, corregido el 8-oct:
+  - anuncios con persona mirados;
+  - orgánico de TikTok mirado por curl;
+  - presentadoras IA;
+  - costos de Higgsfield cotizados;
+  - voz y circuito de publicación.
+  Su evidencia está en `lucia-20261005/`, con 18 muestras de voz.
+- **`docs/cola/lucia-diario/PLAN.md` v4:**
+  - prueba de 14 días, 3 piezas por semana, 0 cr nuevos;
+  - solo dental, trato de usted, rótulo con apellido;
+  - D6, D7, D8 y D10 para Sergio Urcullo.
+- **Skill nueva `lucia`** (en `onia-router`) con el método, los costos y las trampas. `higgsfield-generate` avisa que el
+  video por defecto para Lucía es Kling y no Seedance 2.5.
+- **Publicadores** (`deploy/vps-ops/publicar/ig-reel.mjs`, `ig-carrusel.mjs`, README):
+  - etiqueta «Información de IA» por API (`is_ai_generated`, Meta 22-jun-2026), siempre para la cuenta `lucia`;
+  - `leerPublicado` no lanza nunca, así una pieza publicada no se pierde del registro ni se re-publica;
+  - selftests verdes.
+- **Kit:**
+  - se trajeron los borradores de Codex (K1, K2 y K4 en 360p, cutlists y `estado-montaje.json`);
+  - **K3 recuperado:** el clip `07b938b2` bajado de Higgsfield por `rawUrl` a 0 cr, mirado, en
+    `v4/kit/k3-clip-coworking-07b938b2.mp4`;
+  - cutlists corregidos: CTA, GIRO de K4 y rótulo con apellido.
+- **`paquete-s1/PAQUETE.md`:** perfil, L01, L02 y chiste, con los pies de usted y el ensayo bien descrito.
+- **Barrido** de la puerta, la cuenta demo, el lipsync y la receta vieja en FLUJO, LUCIA.md, MANUAL, GUIONES,
+  HIGGSFIELD_VIDEO_SYSTEM y editor-videos.
+
+**A medias, y dónde:**
+- **Publicadores:** están solo en el repo. La madre los copia **juntos** a `/root/bin` y corre `--selftest`; si se copia
+  uno solo, se rompen los carruseles de `@sergiourcullo`.
+- **Token de Instagram de Lucía:** no se midió. El 4-sep vencía entre el 13 y el 18-oct.
+  - Quería verificarlo con `ls -l /root/.config/onia-publicar/` (solo nombres), para saber si existe `ig-lucia.env`.
+  - No hay ssh en esta nube, y la madre recibió «Production Reads» al intentarlo: lo decide Sergio Urcullo.
+- **Pantallas reales:** faltan todas (P1, P2, CORREO, EXTRACCION y CONFIGURACION; `v4/kit/estado-montaje.json`). La
+  demo está a medias: le falta el correo confirmado y `module.agents`.
+- **Montaje:**
+  - el próximo render de K4 saca CORREO y HORARIOS si no hay captura (`k4-borrador-cutlist.json` →
+    `correcciones8oct`);
+  - el chiste de 10 s está sin editar;
+  - L01 y L02 se re-renderizan de usted si se confirma D8 (0 cr).
+- **Verificación:** la lente de completitud no corrió (se agotó la semana el 5-oct). Las otras 3 se aplicaron.
+
+**Intentos fallidos (no repetir):**
+- **Instalar `openssh-client` desde esta sesión:** el clasificador lo frenó («Unauthorized Persistence»). La madre
+  recomienda no tener la llave del VPS acá, aunque este entorno trae `ONIA_VPS_SSH_KEY_B64`.
+- **Reescribir el mensaje de un commit del autosync (amend + force):** frenado («Git Destructive»). Hay que commitear a
+  mano antes de soltar el turno.
+- **Chromium headless:** sin la CA del proxy (ERR_CERT_AUTHORITY_INVALID), y saltearlo está frenado. TikTok se lee con
+  curl; Instagram da 429.
+- **`onia.com.bo/llamada`:** da 404. La métrica `src=lucia-*` nunca existió.
+- **Codex no encontró el crudo de K3 en la PC:** vive en Higgsfield (`job_display` → `rawUrl`).
+
+**Qué depende de Sergio Urcullo:** `PLAN.md` §8.
+1. OK al paquete de la semana 1 y al usted.
+2. El nombre y la bio desde el celular de Lucía.
+3. El token, por una de dos vías: el OK a la madre para encender solo `postiz-postgres`, o generarlo en
+   developers.facebook.com.
+4. Confirmar el correo de la demo y darle `module.agents`.
+5. D6, D7 y D10.
+6. Mirar en el panel de ElevenLabs si la cuenta dice Free (solo hace falta si algún día hay voz).
+
+**Próximos pasos:**
+1. Con el OK: re-render de L01 y L02 de usted, editar el chiste (0 cr), la madre despliega los publicadores y el token,
+   y sale el día 1.
+2. Con las capturas: K4 corta y «El paciente reserva solo».
+
+## ▶ ESTADO VIGENTE — 5-oct-2026 (historia)
 
 **Sesión:** `session_01Whdadt8NdnYbZoyum1bRX6`, rama `claude/trusting-dirac-wjkua1`. Todo lo de abajo está en `main`; el
 último PR mergeado es el #118.
