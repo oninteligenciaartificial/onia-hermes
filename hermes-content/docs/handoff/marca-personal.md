@@ -2,6 +2,23 @@
 
 **Archivo único del carril.** Actualizado 2026-09-29 por Claude (Opus 5.5).
 
+## ▶ 8-oct (noche) — autorización de publicar y control de calidad de N03
+
+- **N03 «modo auto» pasó el control de calidad el 8-oct:**
+  - 57,8 s, 1080×1920, −14,5 LUFS;
+  - hoja cada 2 s vista entera;
+  - datos vigentes en `code.claude.com/docs/en/permission-modes`.
+  Está en el VPS: `/root/publicar/n03-modo-auto/{final.mp4,caption.txt}`. **No se publicó.**
+- **Autorización «publicá lo que pase control de calidad»** (Sergio Urcullo, por la madre): solo en la rama de la madre
+  (`ad011a95a`), sin PR a `main`. El control de permisos de esta sesión frenó incluso subir el texto al VPS. Para
+  publicar N03, falta una de dos:
+  - un «sí» de Sergio Urcullo en ESTA sesión;
+  - que la regla entre a `main`.
+- **Comando listo**, con el texto nuevo («link en mi perfil» en vez de «comentá»):
+  `agendar-publicacion.sh n03-ig '2026-10-09 22:30:00' node /root/bin/ig-reel.mjs --cuenta sergio --video
+  /root/publicar/n03-modo-auto/final.mp4 --caption <caption> --publicar`. A las 22:31-22:33, `buffer-post.mjs --video`
+  a TikTok (`--meta` con título), YouTube (`--meta` con título, `privacy: public`) y LinkedIn.
+
 ## ▶ 8-oct (tarde) — segundo pedido de la madre: contenido diario (`session_01WPecmppa9uZEc4fJDjSmaS`)
 
 - **Decisión de Sergio Urcullo (8-oct, por la madre):** las asesorías van gratis por ahora. Él solo se graba; las

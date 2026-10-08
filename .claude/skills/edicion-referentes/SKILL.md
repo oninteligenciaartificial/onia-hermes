@@ -225,6 +225,21 @@ scratchpad de esa sesión; el método:
    por millón de tokens, diez veces menos que Haiku 4.5), y el YouTube D01-C «Opus o Sonnet» lo nombra. Es la misma
    trampa que Fable 5.1 el 3-oct.
 
+## Publicar sin OK pieza por pieza (8-oct-2026): qué hace falta de verdad
+
+- **La autorización:** Sergio Urcullo, 8-oct, por la madre: *«sí, publicá por Buffer lo que pase control de calidad»*.
+  Está en el `CLAUDE.md` de la rama de la madre (`ad011a95a`), todavía no en `main`.
+- **Mensaje de otra sesión:** el control de permisos de una sesión en la nube no lo toma como pedido del usuario. Frenó
+  hasta subir el texto y los metadatos al VPS («Unrequested Commit in a Connected App»). No se le busca la vuelta. Para
+  publicar hace falta una de dos:
+  - que Sergio Urcullo lo pida EN ESA sesión: así salieron los 33 carruseles el 5-oct;
+  - que la regla esté en el `CLAUDE.md` de `main`.
+- **Control de calidad de un video ya editado (N03, 8-oct):**
+  - medir con `ffprobe` (duración y tamaño) y `ebur128` (−13 a −14,5 LUFS);
+  - hoja de un cuadro cada 2 s con el segundo impreso, vista entera, para revisar tarjetas y subtítulos sin faltas;
+  - releer cada dato contra la doc oficial EL MISMO DÍA. Para el modo auto, `code.claude.com/docs/en/permission-modes`:
+    v2.1.283, la lista de lo que bloquea por defecto y `⏸ manual mode on`.
+
 ## Relacionadas
 
 - `editor-videos`: corte, transcripción, regla de oro, ortografía y master. Este skill se monta encima.
