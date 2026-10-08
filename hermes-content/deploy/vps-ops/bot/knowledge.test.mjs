@@ -1574,6 +1574,39 @@ for (const channelType of ["Channel::Whatsapp", "Channel::Website"]) {
   });
 }
 
+for (const cuerpo of ["ilegible", "vacio", "otra-org"]) {
+  test(`db: la bandeja PROPIA de Onia no se calla ni se vuelve neutral con un 404 (${cuerpo})`, async () => {
+    // 8-oct: con el silencio de huerfanos (C16c), un 404 sin organizationId legible para la
+    // bandeja 5 dejaba mudo el numero de ventas. ONIA_WHATSAPP_INBOX_ID la marca como propia.
+    const json = cuerpo === "ilegible"
+      ? async () => { throw new SyntaxError("no es JSON"); }
+      : async () => (cuerpo === "vacio" ? {} : { organizationId: "org_cliente" });
+    const opts = {
+      inboxId: "5", oniaInboxIds: "5", dbUrl: "http://producto/published", dbSecret: "test",
+      nowMs: NOW_MS, path: "/no/existe/knowledge.json",
+      fetch: async () => ({ ok: false, status: 404, json }),
+    };
+    await ensureKnowledge(opts);
+    const config = withKnowledge(DEFAULT_CONFIG, opts);
+    assert.notEqual(config.modo, "recepcionista", "la bandeja de Onia vende, no atiende como recepcionista neutro");
+    assert.notEqual(config.bandejaHuerfana, true);
+    const result = step(createState({ channel: "chatwoot", channelType: "Channel::Whatsapp", inboxId: "5" }), { text: "hola", receivedAt: T0 }, { config });
+    assert.ok(result.replies.length > 0, "el numero de ventas contesta");
+  });
+}
+
+test("db: sin ONIA_WHATSAPP_INBOX_ID una bandeja de WhatsApp sin org sigue callada (la guarda no abre de mas)", async () => {
+  const opts = {
+    inboxId: "5", oniaInboxIds: "", dbUrl: "http://producto/published", dbSecret: "test",
+    nowMs: NOW_MS, path: "/no/existe/knowledge.json",
+    fetch: async () => ({ ok: false, status: 404, json: async () => ({}) }),
+  };
+  await ensureKnowledge(opts);
+  const config = withKnowledge(DEFAULT_CONFIG, opts);
+  const result = step(createState({ channel: "chatwoot", channelType: "Channel::Whatsapp", inboxId: "5" }), { text: "hola", receivedAt: T0 }, { config });
+  assert.deepEqual(result.replies, []);
+});
+
 test("db: la fila de la ORG INTERNA (la del panel) NO enciende el recepcionista — el lead de venta sigue en venta", async () => {
   // Medido en prod el 2026-09-13: el producto resuelve inbox->org y los inboxes de VENTA (4 web,
   // 5 WhatsApp) resuelven a la org interna de Onia. Con la fila del panel publicada, la fuente

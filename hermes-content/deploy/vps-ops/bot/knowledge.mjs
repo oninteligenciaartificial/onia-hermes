@@ -682,6 +682,17 @@ function orgInternaDe(options = {}) {
   }
 }
 
+/**
+ * Las bandejas PROPIAS de Onia (la de ventas por WhatsApp), con la misma variable que usa la
+ * plataforma: `ONIA_WHATSAPP_INBOX_ID` (admite varias separadas por coma). Medido el 8-oct: el
+ * motor no tenia otra forma de saber que la bandeja 5 es de Onia que lo que contestara
+ * /published, y con el silencio de huerfanos (C16c) un 404 ilegible la dejaba MUDA.
+ */
+function inboxesDeOnia(options = {}) {
+  const crudo = String(options.oniaInboxIds ?? process.env.ONIA_WHATSAPP_INBOX_ID ?? "");
+  return new Set(crudo.split(",").map((parte) => parte.trim()).filter((parte) => /^\d+$/.test(parte)));
+}
+
 function dbConfig(options = {}) {
   return {
     url: String(options.dbUrl ?? process.env.ONIA_BOT_KNOWLEDGE_URL ?? "").trim(),
@@ -771,6 +782,11 @@ async function fetchOrgKnowledge(key, options = {}) {
     // paga, y ese estado se publica en `/health?inboxId=N`.
     if (res.status === 404 || res.status === 409) {
       if (res.status === 404 && !key.startsWith("inbox:")) return { data: null, error: null, missing: true };
+      // La bandeja propia de Onia nunca es huerfana ni ajena: si /published no la reconoce
+      // (cuerpo ilegible, vinculo perdido, URL mal puesta), vende como siempre en vez de callarse.
+      if (key.startsWith("inbox:") && inboxesDeOnia(options).has(key.slice("inbox:".length))) {
+        return { data: null, error: null, missing: true };
+      }
       // El cuerpo de un 404 puede no ser JSON (proxy, error de red a mitad): sin cuerpo legible
       // no se puede afirmar que sea de una org, y "no es de nadie" es la lectura conservadora —
       // corta igual y no le atribuye el inbox a un cliente que quiza no existe.
