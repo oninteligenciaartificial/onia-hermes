@@ -2,6 +2,21 @@
 
 **Archivo único del carril.** Actualizado 2026-09-29 por Claude (Opus 5.5).
 
+## ▶ 8-oct (noche, 10) — estilo de imagen nuevo: foto B/N con un objeto verde (la arcilla se jubila)
+
+- **Decidido por Sergio Urcullo (8-oct, por la madre):** opción 9 de `galeria/estilos/opciones-estilo-2026-10-08.jpg`. Estilo
+  `fotobn`, GPT Image 2.5, 1 cr por imagen. Lote de prueba de la madre (16,59 cr, saldo 438,17): N07 `s31`/`s32`, D03-A `s33`
+  + clip de 3 s, D01-C `s34`-`s36`. Los archivos están en la rama de la madre y entran a `main` con su PR. **Al editar N07,
+  D03-A y D01-C se usan esas imágenes y ese clip.**
+- **`lote-14-imagenes.json` pasó a `fotobn`:** 14 prompts nuevos (el de arcilla ya no sirve), 14 cr en vez de 1,68. **Sigue sin
+  generarse:** la madre pidió esperar su propuesta de Higgsfield y Sergio Urcullo había dicho «mostrámelas y digo sí». Se le
+  mostró la lista en el estilo nuevo con el costo nuevo.
+- **Decisión que falta:** los 7 carruseles en espera mezclan imágenes flojas con otras 10 de arcilla que sirven. Rehacer solo las
+  10 flojas deja dos estilos en un carrusel. Rehacer todo suma 10 cr más.
+- **Carruseles nuevos (P2, P3) van en `fotobn`.** Los 4 íconos de P2 son parte del lote (4 cr).
+- **Intento fallido:** el primer prompt de las imágenes se escribió en arcilla y con costo de 0,12 cr por imagen; con el estilo
+  nuevo el costo es 8 veces mayor, y por eso se vuelve a pedir el sí.
+
 ## ▶ 8-oct (noche, 9) — la madre reescribe los guiones: NO tocarlos
 
 - **Pedido de la madre (8-oct):** no editar `GRABAR-10-16-OCT.md` ni `S1/S2/S3-GUIONES.md` hasta que ella avise. Está
