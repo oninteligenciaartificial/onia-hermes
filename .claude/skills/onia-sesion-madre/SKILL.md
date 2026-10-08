@@ -229,6 +229,13 @@ Se trabaja en la app de Claude; Codex corre por detrás. Codex no orquesta, no a
   Cuando falla, Codex lo reporta honesto en `resultado.md` y no inventa.
 - **Codex en la nube SÍ corre:** la prueba del 8-oct en el entorno Hermes terminó READY a los ~20 min (el repo pesa). El
   resultado se trae con `codex cloud diff <task>` y `codex cloud apply <task>`.
+- ⚠️ **El modelo de Codex en la nube NO se elige desde la CLI** (medido el 8-oct con el punto 14): se pidió
+  `-c model="gpt-6-astra"` y la tarea corrió con **gpt-5.6-sol**. Se verifica con `model_version` en
+  `GET /wham/tasks/<task>`. Lo que necesite Astra va a Codex local; la nube sirve para trabajo de calidad Sol.
+- **Llevar un diff de Codex a onia-platform sin hacer checkout:** el repo tiene rutas demasiado largas para Windows y
+  `git worktree add` falla con «Filename too long». Se arma el commit con un índice temporal:
+  `GIT_INDEX_FILE=<tmp> git read-tree origin/master && git apply --cached x.diff && git commit-tree $(git write-tree) -p
+  origin/master -F msg`. Después `git branch -f` y `push`. Así salió onia-platform#124.
 - Worktree aislado por tarea, rama `codex/<tarea>-<fecha>` (nunca `claude/*`); en onia-platform, `node_modules` por
   junction. **Codex NO commitea:** no se le da el `.git` común, porque sus `hooks/` y su `config` se ejecutan fuera del
   sandbox la próxima vez que la madre usa git (revisión del #151, 8-oct). La red sigue cerrada. La madre revisa el diff
