@@ -31,6 +31,11 @@
 >   pushear a `main` le gana a la firma y a todo** (el sincronizador corre `main` como root en el VPS). Lo
 >   cierra solo proteger `main` en GitHub; decide Sergio Urcullo (en repo privado de cuenta personal pide
 >   el plan Pro). Anotado en `TELEGRAM_COMMAND_CENTER.md` §9.
+> - **8-oct:** el #138 seguía sin mergear y tenía conflicto con `main` (la skill de la madre); se resolvió
+>   con un merge (`7001f633`), suites en verde. **Pendiente nuevo (regla de Sergio Urcullo del 8-oct, por
+>   la madre):** los mensajes a él, también los de Hermes por Telegram, van en 3 bloques cortos (Pasó ·
+>   Necesito · Sigue). Toca el SOUL de Hermes y el resumen/cierre (`jarvis-resumen.sh`): se hace después
+>   del #138, no en él.
 > - **Intento fallido de esta sesión:** escribí en la skill que sin `transfer.unpackLimit=1` el tope
 >   llegaba tarde. Medido: con `--filter` git ya usa `index-pack` (paquete promisor); se corrigió antes
 >   del commit. La opción queda como seguro.
