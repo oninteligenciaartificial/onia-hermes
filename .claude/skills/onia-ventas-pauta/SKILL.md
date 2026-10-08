@@ -23,7 +23,8 @@ description: "Invocar para CUALQUIER trabajo del carril Ventas y pauta de Onia: 
 | Cómo se consiguen clientes, la campaña, la lista de encendido | `hermes-content/docs/ONIA_ADQUISICION_Y_PAUTA.md` (§5.8, §5.8.1, §5.9) |
 | Prospectos dentales y registro de objeciones | `hermes-content/docs/ONIA_PROSPECTOS_DENTAL_SCZ.md` (§6, §7) |
 | Prospectos de estética, importadora, comercio y servicios | `hermes-content/docs/ONIA_PROSPECTOS_OTROS_RUBROS_SCZ.md` |
-| Leads que ya escribieron y sus borradores | `hermes-content/docs/ONIA_LEADS_ESPERANDO.md` §3 |
+| Leads que ya escribieron: quiénes son | `hermes-content/docs/ONIA_LEADS_ESPERANDO.md` (§3.1: las preguntas de «F» contra el catálogo) |
+| Qué se les manda (plantillas A/B, respuestas, días 3-7-14) | `hermes-content/sales-kit/SEGUIMIENTO-LEADS.md` |
 | Guion de demo de 20 minutos por rubro | `hermes-content/sales-kit/02-GUION-DEMO.md` |
 | Precios | `onia-platform/lib/subscription-plans.ts` (`DEFAULT_PLAN_AMOUNTS`); límites en `lib/plan-catalogo.ts` |
 
@@ -112,6 +113,13 @@ Redactar primero y verificar después costó una tarde de mensajes tirados. Las 
      real.
    - Un 404 quiere decir que no está indexada.
    - Solo cubre la categoría belleza: dentales e importadoras dan 404.
+   - **Para dentales existe el mismo directorio: `dentists10.com` (8-oct).**
+     `https://www.dentists10.com/BO/Santa-Cruz-de-la-Sierra/<page_id>/x` redirige (301) a la ciudad real y trae la
+     dirección, el teléfono y los posts con fecha. Resolvió 27 de 81 páginas dentales que pautaban, con este loop:
+     `curl -s -o /dev/null -w '%{http_code} %{redirect_url}' <url>`. Va **antes** de cualquier búsqueda web.
+   - **La búsqueda web no encuentra las páginas de Facebook de clínicas chicas bolivianas (8-oct).** Con 2 agentes
+     y 50 búsquedas sobre 23 páginas sin directorio, ninguna quedó en Santa Cruz. DuckDuckGo pide captcha y Bing
+     ignora las comillas. Lo que el directorio no tiene va directo a la PC, con el id del anuncio para abrirlo.
    - Resolvió 9 de 12 de estética y 7 de la reserva. Es evidencia media: con ella se descarta; para confirmar, se
      cruza con la web o el anuncio.
 3. **Directorios públicos:** medicoespecialista.com.bo, boliviayp, amerpages, boliviapymes y Waze/Yandex. Los
@@ -154,8 +162,12 @@ cambiado de anuncios (hubo que corregir su línea «Vi…»).
 «Buen día, soy Sergio Urcullo, de Onia, aquí en Santa Cruz. Este mensaje es para el dueño o la dueña de X.
 / Vi sus anuncios de… (lo observable, con fecha) / el dolor concreto del rubro / el mecanismo que producción
 cumple hoy / ¿Le muestro cómo se ve en una demo de 20 minutos?». Sin precio, sin cifras, sin testimonios.
-- **Dental y estética prometen solo esto:** cada mañana Onia deja escrito el mensaje para el paciente o la
-  clienta de mañana que no confirmó, y se manda desde el propio WhatsApp.
+- **Dental y estética prometen solo esto:** cada mañana Onia le deja anotado a quién escribirle (quién tiene cita
+  mañana y no confirmó, quién canceló o faltó y no volvió a agendar, quién le debe) con el mensaje listo, y nada
+  sale sin que usted lo apruebe (catálogo §8.3). La IA va como en el catálogo §8.1: «Con IA le propone el texto de
+  cada recordatorio, y usted lo aprueba una sola vez». **No se dice «se manda desde su propio WhatsApp»**: el
+  catálogo §7 no deja prometer el envío por WhatsApp (corregido 8-oct). Molde completo: `ONIA_PROSPECTOS_DENTAL_SCZ.md`
+  §6.9, que pasó el revisor de promesas.
 - **Importadora promete solo esto:** el costo real por producto importado y el aviso cuando el tipo de cambio
   deja un precio bajo costo. **No** se promete que la cotización sale del sistema.
 - Comercio y servicios: los dos arreglos que faltaban (editar producto, precio y stock; agenda de varios
@@ -203,7 +215,7 @@ contestarle de memoria es la forma de quemarlo.
 | «Cada mañana» / «lo detecta sola» | ✅ | Los agentes corren a las 11:00 UTC (07:00 en Bolivia) con el cron `0 11 * * *` del VPS; el log `/var/log/onia-agents-cron.log` dice «OK» el 1-oct. El tratamiento a medias va dentro del Recall |
 | «Con tu tono» / «la editás» | ❌ | Escribe en el tono del rubro. El dueño solo puede **aprobarla**: no hay edición en `/agents` |
 | «La IA escribe el mensaje del tratamiento a medias» | ❌ | `buildTratamientoAMediasMessage` es un texto fijo |
-| «La IA escribe el mensaje» / «la IA lo redacta» (de cada paciente) | ❌ | Catálogo §8: la IA escribe UNA vez el modelo y Onia le pone los datos. Frase permitida: «la IA escribe una sola vez el modelo y Onia le pone los datos de cada uno» |
+| «La IA escribe el mensaje» / «la IA lo redacta» (de cada paciente) | ❌ | Catálogo §8: la IA escribe UNA vez el modelo y Onia le pone los datos. ⚠️ La frase «la IA escribe una sola vez el modelo y Onia le pone los datos» **la rechaza el revisor de promesas** (8-oct: liga «IA» con «escribe… mensaje»). Se usa la del catálogo §8.1: «Con IA le propone el texto de cada recordatorio, y usted lo aprueba una sola vez» |
 | «Preguntá por tu negocio» es IA | ❌ | Son 30 temas escritos a mano, sin modelo (`BarraAsistente.tsx`) |
 | «La IA calcula el costo de importación» | ❌ | El costeo es cálculo; en importadoras la IA solo está en el mensaje de cobro |
 
@@ -337,7 +349,16 @@ Trampas pagadas armando v3 (2-oct):
   **`ads_activate_entity` sobre la campaña los publica en ACTIVO, gastando.** Solo se llama con el OK escrito
   de gasto (fila 9 de §5.9).
 - `client_conversation_id` es obligatorio en cada llamada: 20 caracteres, y el mismo en toda la conversación.
-- Presupuesto en centavos de USD: USD 140 = `14000`, como presupuesto total de la campaña con fecha de fin.
+- Presupuesto en centavos de USD: **USD 56 = `5600`** (Bs 750 de techo de Meta, plan 1.0 §3), como presupuesto total
+  de la campaña con fecha de fin. «USD 140 / 14000» era del 30-sep y **ya no vale** (corregido el 8-oct).
+- **El techo de la pauta lo fija `ONIA_PLAN_1.0_Y_CAJA.md`, no `ONIA_ADQUISICION_Y_PAUTA.md`.** El 8-oct esa fuente
+  decía USD 10/día (USD 140, ≈ Bs 1.600), más del doble de los Bs 750 de la caja. Dos docs con dos techos es el error
+  que la regla «una sola fuente de verdad» existe para evitar: ante la duda, manda el más nuevo y el que cuenta la caja.
+- **Qué NO ve el conector de Meta (8-oct):** el número de WhatsApp vinculado a la página (lo mira Sergio Urcullo en
+  Business Manager); los benchmarks de una cuenta sin gasto (`ads_insights_industry_benchmark` →
+  «No industry benchmark data»; `ads_insights_advertiser_context` → «Vertical: \N»). Los costos de la campaña son
+  supuestos hasta la semana 1.
+- **El píxel se mira con `ads_get_datasets`** (`ONIA Web` `1012611478191231`, `last_fired_time`): dispara el 8-oct.
   Meta rechaza un **límite** de gasto menor a USD 100.
 
 ### 5.1 Seguimiento por WhatsApp y remarketing (medido 3-oct; playbook `sales-kit/SEGUIMIENTO-LEADS.md`)
@@ -348,11 +369,27 @@ Trampas pagadas armando v3 (2-oct):
 - **Las plantillas a leads salen desde la bandeja de Chatwoot con el usuario de Sergio Urcullo.** Así el bot se
   calla (traspaso de `chatwoot-adapter.mjs`). Si salen por envío automático, el botón que toca el lead le llega al
   bot y contesta con su guion.
+- **Contar los leads «hoy» no se puede desde la nube (8-oct).** No hay llave del VPS, ni token de Chatwoot, y el conector
+  de Gmail da «Precondition check failed». El conteo de una corrida (pedidos de acceso, respuestas humanas en Chatwoot y
+  plantillas sincronizadas) está en `ONIA_LEADS_ESPERANDO.md`, «Conteo de hoy en una sola corrida». Se le pide a la
+  PC, y no se redacta sobre el número heredado.
+- **Las plantillas aprobadas se leen en `channel_whatsapp.message_templates` de chatwoot-db**, con la fecha de la
+  última sincronización. Ningún conector de Meta las lista: el de desarrolladores solo ve la configuración de las
+  apps.
+- **La llamada gratis de 20 min es `sergiourcullo.vercel.app/llamada`,** que redirige a `cal.com/sergiourcullo/20min`
+  («Llamada 1 a 1», 200 el 8-oct). `onia.com.bo/llamada` da 404.
 - **Público personalizado con un puñado de teléfonos: no.** Meta recomienda al menos 1.000 personas y exige base
   legal para subir la lista. Para menos de 100 leads, el remarketing es la secuencia de plantillas (≈ USD 0,074
   cada una, `usage-run.mjs`).
 - **Un borrador viejo puede quedar en contra del catálogo.** El de «F» del 1-oct contestaba «sí» al tratamiento a
   medias, y el catálogo lo prohibió el 2-oct. Antes de mandar un borrador guardado, se lo compara de nuevo.
+- **Un playbook nuevo no borra el borrador viejo: hay que sacarlo (5-oct).** El playbook del 3-oct reemplazó los
+  mensajes del 1-oct, pero `ONIA_LEADS_ESPERANDO.md` §3 los siguió mostrando como «esperan el OK» dos días más. Al
+  reemplazar un texto, el viejo se borra en el mismo commit; queda en el historial de git. Antes de reescribir un
+  borrador, buscar si otro doc ya lo reemplazó: `grep -rn '<nombre del lead>' hermes-content/sales-kit/`.
+- **El gate del kit lee cualquier «Bs N» como precio al cliente (5-oct).** El costo interno «≈ Bs 17» del playbook
+  dejó en rojo `npm run test:venta-honestidad` en `main`. Un costo propio va en USD, que es lo que cobra Meta; el
+  cambio del banco sigue sin medir. Después de tocar `sales-kit/`, correr ese test.
 
 ## 6. Qué bloquea la nube (y qué no)
 
@@ -365,6 +402,16 @@ Trampas pagadas armando v3 (2-oct):
 | `ssh onia-vps` después de reiniciar la sesión (2-oct) | El hook deja la llave y la config, pero **falta el programa `ssh`** | `apt-get install -y openssh-client` |
 | Cupo de búsquedas web | 200 por sesión; se agotó con 4 subagentes | Darle a cada subagente un tope. El 1-oct, de noche, 4 subagentes con 25, 30, 20 y 12 búsquedas verificaron 28 prospectos y 9 de reserva, y usaron el tope completo |
 | Fuentes de Google en el render | no bajan | `scripts/carousel_cloud_setup.sh` instala TTF locales |
+| **Playwright contra nuestros dominios (8-oct)** | `ERR_CERT_AUTHORITY_INVALID` con el headless shell, con Chromium completo y aun con el proxy | Chromium completo (`/opt/pw-browsers/chromium-1194/chrome-linux/chrome`) + `proxy: HTTPS_PROXY` + `--ignore-certificate-errors-spki-list` con la huella SPKI de las CA «O = Anthropic … production» de `/root/.ccr/ca-bundle.crt` (la misma confianza que usa curl). Ya resuelto en `scripts/auditar-app.mjs`. Con eso, onia.com.bo y la app dan 200 |
+| `send_message` a la sesión madre de la PC (8-oct) | `elevated_session_untrusted_device`: no sale | Se contesta en el transcript, como dice la madre |
+
+## 6.1 Promesa contra lo que funciona (8-oct)
+
+`hermes-content/docs/ONIA_PROMESA_VS_PRODUCTO.md` es la compuerta para volver a contactar: su §2 lista lo que prometen
+los mensajes de la §6.9, y nada sale hasta que esas filas estén en ✅. Antes de escribir un mensaje nuevo, su promesa
+tiene que estar en esa tabla y en ✅. Para mirar la app por dentro: `scripts/auditar-app.mjs` (solo lectura, cuenta de
+prueba en variables de entorno). Trampa: el texto que devuelve `innerText` trae los nombres de los iconos
+(«credit_card_off»), pero en pantalla se ven bien. Se mira la captura, no el texto.
 
 ## 7. Después de cada demo
 

@@ -32,6 +32,12 @@ GEMINI_API_KEY=... node scripts/gemini-see-video.mjs /ruta/video.mp4
 ```
 - Modelo default `gemini-flash-latest` (alias al flash actual; las cuentas nuevas ya NO tienen `gemini-2.5-flash`). Override `GEMINI_MODEL` (ej. `gemini-3.6-flash`, `gemini-flash-lite-latest`). **PROBADO 2026-07-24**: vio el tutorial de Santiago (28 min) entero por URL de YouTube con timestamps.
 - Videos largos / ahorrar cuota: `GEMINI_MEDIA_RES=low` (~100 tok/s en vez de ~300).
+- **Si `gemini-flash-latest` devuelve 503 «high demand» aun después de los 4 reintentos** (medido el 8-oct con 8 de 8 llamadas
+  fallidas), correr con `GEMINI_MODEL=gemini-flash-lite-latest`: anduvo a la primera. Pero el lite **lee mal los números
+  chicos de la pantalla** (puso «Sonnet 3.5» donde decía 5.5): de él se toma el principio, y las cifras o versiones se
+  confirman con `text-frames.mjs`. Para varios videos con prompts propios: importar `seeLocalVideo(path, prompt)` y
+  correrlos con `Promise.all` (ficha `references/video-intake/2026-10-08-orquestacion-e-ingresos-5-posts.md`).
+- Un link `/p/` puede ser carrusel: `fetch-video.mjs` falla con «No video formats found!» y se usa `ig-carousel.mjs`.
 - **Auto-reintento** ante errores transitorios (503 saturado / 429 rate limit / 500 / red): hasta 4 intentos con backoff escalonado ~3s, 8s, 20s (logueado a stderr). Los errores NO transitorios (400/401/403/404) fallan de una.
 - Devuelve resumen + timeline por secciones + texto en pantalla, todo con timestamps. Eso ES "ver el video".
 - Si falla (sin key, cuota, error) → usar el FALLBACK de abajo. Nunca se rompe.
@@ -225,6 +231,13 @@ usá `text-frames.mjs` (arriba), que muestrea por densidad y no por reloj.
 Speaches gratis alcanza para casi todo.
 ⚠ **Desde una sesión en la nube** (4-oct-2026): `transcribe.sh` va por defecto a `root@187.77.16.63` con su clave, y
 desde la nube eso se cuelga (más de 120 s, JSON vacío). Correrlo con `ONIA_VPS_HOST=onia-vps`, que pasa por el túnel.
+⚠ **En una nube SIN `ssh` ni `yt-dlp`** (entorno «onia-higgsfield», 5-oct-2026, TikTok de @kevinarce98): `transcribe.sh`
+falla con «scp al VPS falló». Camino que funcionó, todo dentro del contenedor y sin VPS:
+`pip install "yt-dlp[default,curl-cffi]" faster-whisper` → bajar con `fetch-video.mjs` → transcribir con `faster-whisper`
+y el mismo modelo del VPS (`Systran/faster-whisper-small`) → corregir con los subtítulos del video las palabras que
+oyó mal. Sin clave de Gemini, la edición se mira por cuadros: 1 por segundo, los primeros 3 s cuadro por cuadro y las
+transiciones más lentas. La música y los efectos se deducen del nivel y del espectrograma en las pausas: decirlo así en
+la ficha, porque el audio no se escuchó.
 Un JSON con `text` vacío es respuesta válida: el audio no tiene voz (así se confirmó que ese reel es solo música). `scripts/transcribe.sh` usa ese camino (base64 → SSH → docker exec en onia-center → Speaches). Detalle de infra: [[onia-hermes-stack-y-radar]].
 
 ## Common mistakes
