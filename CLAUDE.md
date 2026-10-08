@@ -124,6 +124,11 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
   descartadas y las fuentes van al handoff, no al mensaje.
 - **En el producto y la web:** cada paso o página extra se justifica o se saca. Ante dos
   soluciones, gana la de menos clics para el cliente.
+- **Formato fijo de cada mensaje a Sergio Urcullo (8-oct: «me entregás demasiado texto y me pierdo; probá
+  /caveman»):** máximo 3 bloques: **Pasó** (1-2 líneas) · **Necesito** (sí/no o pasos mínimos, o «nada») · **Sigue**
+  (1 línea). Estilo caveman (frases cortas, sin relleno), tablas solo si ordenan. Método, hipótesis, fuentes y detalle
+  van al handoff, la skill o el PR, nunca al mensaje. **El trabajo por detrás NO se achica:** mismo desarrollo,
+  verificación y aprendizaje; solo se acorta lo que se le dice. Seguridad y lo irreversible se escriben claros.
 
 ## Sesión MADRE local + carriles en la nube (REGLA)
 
