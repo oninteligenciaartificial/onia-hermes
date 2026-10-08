@@ -2,6 +2,26 @@
 
 **Archivo único del carril.** Actualizado 2026-09-29 por Claude (Opus 5.5).
 
+## ▶ 8-oct — retomada tras el corte de la semana de Claude (`session_01WPecmppa9uZEc4fJDjSmaS`)
+
+- **Publicado y verificado el 8-oct:** el 6 y el 7-oct salieron los carruseles en las tres redes. 6 de 6 `sent`, sin
+  error.
+  - DD-A: IG `DeKl9Zcjwco`, LinkedIn `ugcPost:7513327593224458240`, TikTok `7693647592986578197`.
+  - N04: IG `DeNKxt7D8KJ`, LinkedIn `ugcPost:7513689985171206144`, TikTok `7694018690777369876`.
+  - Quedan 27 timers, del 8 al 16-oct.
+- **Guiones del 9 al 14-oct** en `docs/cola/plan-3-semanas/GRABAR-9-14-OCT.md` (pedido de la madre): 17 piezas, una hora
+  por día.
+  - Pieza nueva N07 HAIKU (Haiku 5.5, verificada en la página de precios el 8-oct), con su aviso de comunidad al final
+    del archivo.
+  - N04: la skill tiene que ser propia, no de un plugin.
+  - D01-C nombra a Haiku 5.5.
+  - La página de Sergio Urcullo ya muestra esta semana, por día.
+- **El carrusel N06 (11-oct) está bien:** geminicli.com, el blog de Google del 19-may y los planes de antigravity.google
+  confirman lo que dice, leídos el 8-oct.
+- **Brutos:** ninguno nuevo en Drive el 8-oct.
+- **Rama de Codex `codex/madre-orquestacion-20261005`** (61 commits, sin mergear): su commit `6e1a4dae` del 6-oct
+  reescribe GRABAR/GUIONES/KIT con menos pasos. No se mergeó acá; decide la madre.
+
 ## ▶ 5-oct noche — sesión nueva (`session_01WPecmppa9uZEc4fJDjSmaS`, rama `claude/gifted-clarke-y4vvtj`)
 
 **Página única para Sergio Urcullo:** https://claude.ai/artifact/Hssf9o3ikt2fE7nkNBzrvd. Tiene qué necesito de él, día
@@ -15,6 +35,15 @@ genera `gen_page.py` en el scratchpad de esta sesión. Si se pierde, los datos s
   - Script sin fecha en el nombre: `deploy/vps-ops/publicar/agendar-carruseles.sh` (antes `-3-20-oct`).
   - Orden: DD-A, N04, K3v2, N03, K11, N06, K4v2, K8v3, K7v2, K2v3 y K6v2.
   - ⚠ Si el VPS se reinicia, los timers se pierden y no sale nada: re-agendar con el script.
+- **También en LinkedIn y TikTok (pedido de Sergio Urcullo el 5-oct: «alistamos buffer para postear a todas las
+  redes»):** 22 timers más, `pub-car-li-*` a las 20:01 y `pub-car-tt-*` a las 20:02 (33 en total).
+  - Salen con `buffer-post.mjs --imagenes`, que es nuevo; el original quedó en el VPS en `/root/bin/buffer-post.mjs.bak-20261005`.
+  - Probado como borrador en las dos redes, aceptado y borrado. La publicación real todavía no se probó.
+  - Hay un control programado para el 6-oct a las 20:10 UTC (`trig_017LEVgojRbj4QJmpa2UbE3V`) que mira si salieron las tres.
+- **Grabaciones de pantalla:** las hace Claude al editar; Sergio Urcullo graba solo la cámara (lo pidió el 5-oct). Desde
+  la nube el navegador no abre páginas (`ERR_CERT_AUTHORITY_INVALID`) y el modo «Auto» frenó la importación del
+  certificado. Hace falta su OK en esta sesión o una sesión en la PC con Chrome. Las demos de terminal se arman acá.
+- **Guiones:** la página tiene los 32 (bloques 1 y 2 del plan). Primero van 6; R05 espera su decisión sobre MARKETING.
 - **En espera (7):** K1, N02, K9, K12, K5, K13 y K10, por las 10 láminas que no se entienden. Falta que él elija:
   - «rehacé las 10» (1,20 cr; los prompts nuevos están en el CIERRE 3-oct);
   - o «van sin esas láminas».
