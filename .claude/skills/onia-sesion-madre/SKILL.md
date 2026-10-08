@@ -18,6 +18,41 @@ Regla madre: `CLAUDE.md` §1 «Sesión MADRE local + carriles en la nube». Esta
   madre y la madre lo hace. Motivos: el navegador con el login de Sergio Urcullo es uno y su uso se serializa;
   varias madres son varios orquestadores y se cruza la información. Lo largo (render, build, medición de
   disco) la madre lo larga en un **subagente de fondo**, no en otra madre.
+- **La madre NO se muda a la nube** (Sergio Urcullo lo preguntó el 8-oct). Desde la nube `SendMessage` a otra sesión falla
+  («this cloud session cannot message other sessions yet»), así que la madre no podría ordenar a nadie. Tampoco llega a Chrome
+  ni a Codex local. Todo lo demás ya corre en la nube.
+
+## Modelo operativo (8-oct, pedido de Sergio Urcullo: «sin ahogarnos, con todos los modelos, sin que yo meta mano»)
+
+Nace de 5 videos que él mandó (ficha: `references/video-intake/2026-10-08-orquestacion-e-ingresos-5-posts.md`) y de un
+workflow que diseñó el modelo y otro agente lo criticó. Sergio Urcullo hace **solo** esto: comunidad, llamadas de venta,
+grabarse a sí mismo y contestar sí o no. Nunca graba pantallas ni saca capturas: las saca la nube con Playwright, como
+Plataforma con las del presupuesto por fases, a 390 y 1440 px.
+
+- **Router de modelos: primero el más barato, se verifica según el riesgo y se escala con la prueba del fallo.** Un bloqueo
+  de permisos o de cupo no se esquiva cambiando de modelo.
+
+  | Tarea | Arranca con | Se verifica con | Escala a |
+  |---|---|---|---|
+  | Contar, buscar, inventarios, JSON | Haiku 5.5 | conteo, grep o test | Sonnet |
+  | Copy, mensajes, guiones, edición | Sonnet 5.5 | catálogo y cliente ideal; mirar el render | Opus |
+  | Código de Platform | Codex cloud (env Platform) u Opus | tests en el mismo comando + CI | Opus |
+  | Migraciones, cobro, backup, SQL de prod | Opus | backup antes; decide Sergio Urcullo | — |
+  | Estrategia y precios | Opus | la cuenta cierra con números citados | Sergio Urcullo |
+
+  Fable 5.1 tiene un cupo semanal APARTE, pero su calidad no está probada: primero se prueba en una tarea sin riesgo y con un
+  resultado comparable, y recién después se le da trabajo de riesgo.
+- **Sesiones vivas, las mínimas:** madre (PC), Plataforma (nube «Onia») y Ventas/Marca (nube). Lucía y Hermes-Jarvis no traen
+  ingresos: se congelan si Sergio Urcullo dice que sí. Cada sesión que sigue viva relee su contexto (más del 95 % del gasto).
+- **El cupo no se reparte por porcentajes:** `get_usage` no lo da por carril. Lo que se controla: cuántas sesiones hay
+  vivas, el modelo de cada una y un corte. Si la semana pasa del 60 % antes del día 4, se frena todo lo que no sea la 1.0
+  o los leads.
+- **Cadencia:** la madre lee los transcripts dos veces por día y no después de cada tarea. 1 tarea por mensaje, con su
+  criterio de hecho. Los issues `tarea-local` los barre la madre en esas lecturas: no se crea una tarea programada cada
+  hora, porque sería un segundo orquestador que además gasta cupo 24 veces por día.
+- **A Sergio Urcullo, como máximo 3 pedidos por semana**, en una lista de sí o no. Lo demás se anota y no se le pide.
+- **La plata no espera al desarrollo:** mientras el cobro de punta a punta no esté probado, se cobra por transferencia y se
+  activa a mano (Etapa 1).
 
 ## Sesiones vivas (5-oct-2026, relevo de todas a las 20:40 UTC)
 
