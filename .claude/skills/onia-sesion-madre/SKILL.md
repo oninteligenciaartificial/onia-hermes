@@ -5,6 +5,11 @@ description: Invocar cuando una sesión de Onia tiene que ordenar, avisar o pedi
 
 # Sesión MADRE — ordenar a todas por mensaje
 
+## Precedencia 8-oct-2026 — transferencia explícita a Claude
+
+Sergio decidió «serás orquestado por Claude»: Claude es la madre principal; Codex queda ejecutor/revisor bajo sus asignaciones o instrucciones directas de Sergio. Los roles de madre Codex y respaldo siguientes son históricos. No abrir otra madre ni asumir coordinación por silencio. Handoff vigente: primer bloque de `hermes-content/docs/handoff/madre-codex.md`; ID/acuse de Claude receptor todavía pendientes. Heartbeat madre Codex PAUSED, chats operativos anteriores archivados, sin reactivación automática.
+La elección de modelo se valida por entregas: coding Astra/Opus 5.5; simples Sol 6.1/Sonnet 5.5; escalar ante calidad insuficiente con evidencia y sin repetir trabajo ya aprobado. Herramienta o modelo instalado no acredita conexión cloud ni inferencia exitosa.
+
 ## Precedencia Codex — relevo del 5-oct-2026
 
 Precedencia posterior6-oct tras cierreC11b: Sergio pidió bajar tareas/modelos. Coordinación/madres rutinarias Sol6.1 medium, código/revisión técnica Platform Astra medium; una implementación y revisión secuencial, sin despertar chats o releer aprobaciones por ocuparlos. ModeloCLI no cambia selector delchat. Política vigente en AI_MODEL_ROUTING_2026.md; referencias históricas siguientes a ambas madres siempreAstra/dos implementaciones quedan sustituidas. Reserva20% para nuevas tandas, excepción85% noautomática.

@@ -1,5 +1,9 @@
 # Handoff — madre-local (sesión MADRE, en la PC de Sergio Urcullo)
 
+## VIGENTE — 8-oct-2026: Sergio devuelve la orquestación a Claude
+
+Sergio indicó a Codex «serás orquestado por Claude». Claude vuelve a ser la única madre principal y Codex queda ejecutor/revisor. Leer primero el bloque 8-oct de [`madre-codex.md`](madre-codex.md), que conserva entregas y bloqueos recientes. No reanudar los IDs históricos ni ejecutar los procedimientos de abajo como si siguieran vigentes. Receptora Claude exacta/acuse aún no identificados; transferencia de rol decidida, conexión automática no probada. Heartbeat de la antigua madre Codex pausado; ningún nuevo loop creado.
+
 Regla: CLAUDE.md §1. Método (ids, canales, cómo se delega a Codex, tokens): **skill `onia-sesion-madre`**.
 Este archivo es el ESTADO al **5-oct, 20:40 UTC**, cuando Sergio Urcullo pidió «cambio de sesión madre».
 La madre saliente (`cfdce1bb…`, rama `claude/onia-sesion-madre-77f719`, worktree `infra-loops-revision-3fc7b1`) llevaba

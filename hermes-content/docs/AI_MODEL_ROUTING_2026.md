@@ -5,6 +5,12 @@ elegir modelo. La disponibilidad puede variar por producto y cuenta.
 
 ## Decisión
 
+### Precedencia 8-oct — calidad evaluada y Claude como madre
+
+Sergio precisó: no usar siempre modelos livianos. Coding: GPT-6 Astra o Claude Opus 5.5; tareas simples: GPT-6.1 Sol o Claude Sonnet 5.5. Esfuerzo medium inicial; verificar modelo efectivo y resultados, no sólo el nombre escrito en el prompt. Ante un fallo de calidad, entregar pruebas del fallo y escalar; ante permisos, datos o cuota, registrar el bloqueo sin cambiar de modelo para eludirlo. No duplicar autores/revisiones. Una implementación activa y revisión posterior.
+Claude asume la orquestación por instrucción explícita; Codex ejecuta/revisa. CLI Claude 2.1.288 autenticada como Max, compatible según documentación oficial con `claude-opus-5-5` y `claude-sonnet-5-5`; no se probó inferencia de esos modelos en el puente. La última vista de uso Claude mostró 0% semanal y 2% sesión (8-oct, muestra puntual); créditos adicionales desactivados con autorización de Sergio y switch verificado. No inferir cuota Codex desde esa muestra.
+Fuente de compatibilidad: https://code.claude.com/docs/en/model-config . Handoff y límites reales: `handoff/madre-codex.md`, bloque 8-oct. Esta política sustituye toda obligación histórica de Astra para tareas simples o de Sol para todo subagente.
+
 ### Precedencia: reducción solicitada por Sergio, 6-oct, después del cierre C11b
 
 Sergio pidió «Bajemoslos las tareas y modelos». Se adopta la opción conservadora: coordinación de madre principal y respaldo rutinario de v2 con `gpt-6.1-sol` medium; programación Platform y revisión técnica con `gpt-6-astra` medium. Resto de carriles Sol6.1 medium. Esto sustituye la obligación histórica de usar Astra para toda tarea de las madres; no rebaja el modelo del código Platform sin otra decisión. La consulta opcional sobre ampliar Sol a correcciones simples queda pendiente, no asumida.

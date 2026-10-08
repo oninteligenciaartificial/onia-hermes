@@ -1,5 +1,12 @@
 # Hermes Coordination Manifest
 
+## VIGENTE — 8-oct-2026: Claude orquesta; Codex ejecuta
+
+Decisión directa de Sergio: «serás orquestado por Claude». Sustituye los roles y leases de coordinación históricos de abajo.
+Claude es la única madre principal. Codex (`01a10f44-2bb7-73c0-8769-8bbe5000b32f`) pasa a ejecutor/revisor; no abre frentes ni reasigna sesiones por iniciativa propia. Esta transferencia de rol no demuestra que una sesión Claude concreta haya recibido el relevo: ID de receptora y acuse pendientes.
+Relevo compacto y evidencia: [`madre-codex.md`](hermes-content/docs/handoff/madre-codex.md), primer bloque. El heartbeat Codex `madre-onia-continuidad` quedó PAUSED mediante herramienta del app para evitar doble orquestación. Los siete chats operativos Codex anteriores quedaron archivados de forma recuperable; no reactivarlos automáticamente.
+Modelos por tarea y calidad: coding Astra / Opus 5.5; simples Sol 6.1 / Sonnet 5.5. Validar resultados y escalar por fallos de calidad, no para eludir permisos, cuotas o falta de datos. Una implementación y revisión posterior; cada orden lleva META, PRUEBA DE HECHO, PARADA, paths/branch/SHA y dueño. No cambia ningún gate de producción.
+
 ## Coordinación vigente — relevo Codex, 5-oct-2026
 
 Actualización posterior6-oct por Sergio («Bajemoslos las tareas y modelos»): máximo una implementación y revisión después; madres/coordinación rutinaria Sol6.1 medium, programación/revisión técnica Platform Astra medium. Prevalece sobre distribución histórica siguiente. Los tres chats técnicos terminaron; cuota84%, sin nueva tanda automática. Selector madre actual todavía requiere cambio enapp; defaultCLI Sol no lo sustituye. Política y estado canónicos en AI_MODEL_ROUTING_2026.md y madre-codex.md.

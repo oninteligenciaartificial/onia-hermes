@@ -1,5 +1,23 @@
 # Handoff — madre Codex
 
+## VIGENTE — 8-oct-2026: relevo de orquestación a Claude
+
+**Orden directa de Sergio:** «serás orquestado por Claude». Claude es la madre principal; este chat Codex pasa a ejecutor/revisor. Los bloques posteriores que nombran a Codex madre activa quedan históricos. La sesión Claude receptora exacta y su acuse todavía no están verificados; no afirmar mensaje entregado ni conexión automática lista.
+
+META: transferir el control sin perder trabajo ni mantener dos orquestadores. PRUEBA DE HECHO: roles registrados en manifest/skill/routing, automatización Codex pausada y relevo en rama segura. PARADA: entrega de este relevo; no empezar otra tarea o inferencia por iniciativa propia.
+
+- **Automatización:** `madre-onia-continuidad` PAUSED confirmado por herramienta del app el 8-oct; no reactivar sin coordinación. No altera publicaciones ya aprobadas ni servicios de ONIA.
+- **Limpieza:** siete chats operativos ONIA archivados de forma recuperable (v2, Platform Desarrollo, Facturación, Hermes-Jarvis, Marca personal, Lucía, Ventas). Se conservan repos/worktrees/entregas; no despertar automáticamente. IDs históricos siguen abajo.
+- **Objetivo producto:** 15 puntos de la 1.0 para primeras cinco clínicas. Desarrollo revisado no equivale a producción: conservar gates E2E/pago real, legal C14, diseño P2/Caja, migraciones/RLS, backup/restore y aprobación de merge/deploy. PR118 final `478563dc` y PR119 final `da3820ea` tienen revisión favorable y CI SUCCESS registrados; no repetir sin delta. PR121 `7d3495e8`, stacked sobre C11a/PR115, NO tiene CI por filtro de rama: no declarar verde. Estado y otras pruebas en `cierre-1.0-ui-20261006.md` y bloques siguientes, sin nueva verificación remota en este relevo.
+- **QA119:** legado/vacío y conservación de borrador tras409 comprobados en banco; recarga mediante diálogo nativo sigue parcial. Evidencia `E:/ONIA-Codex/cierre-1.0-20261006/c6b2-qa-cierre.md`. No reintentar ciegamente ni debilitar confirmación.
+- **Cloud:** Sergio completó passkey OpenAI; Chrome OnIA llega al compositor Codex nube. El selector observado no listó entornos, sólo «Crear entorno», pese al inventario CLI previo: resolver cuenta/workspace antes de crear duplicados. No existe todavía prueba de tarea cloud ni de traslado completo. No copiar cookies/llaves/secretos ni conceder root al VPS.
+- **Claude:** CLI oficial 2.1.288 instalada/autenticada con Max. Uso web observado 0% semanal/2% sesión, dato puntual; créditos adicionales inicialmente activos (límite40USD), desactivados con autorización explícita y switch0 comprobado. Captura `E:/ONIA-Codex/cloud-bridge-20261008/claude-credits-disabled.png`. No se compraron créditos ni usaron resets.
+- **Puente experimental:** borrador local sin commit `scripts/claude-bridge.py`, NO probado ni operativo. Es subprocess Codex→Claude con contexto curado, sin herramientas y respuesta para revisión; no satisface por sí solo la nueva dirección Claude→Codex, no crea cloud ni conserva conversaciones con resume. Preservar para evaluación, no ejecutarlo automáticamente. `claude mcp serve` comparte herramientas, no inferencia. No se instaló plugin externo.
+- **Modelos:** coding Astra/Opus5.5; simples Sol6.1/Sonnet5.5; elegir según tarea, evaluar calidad y escalar con pruebas. No siempre livianos. Sonnet/Opus compatibles con CLI según docs oficiales, inferencia todavía no acreditada. Cuota actual Codex no disponible en la última consulta; no inventarla.
+- **Contenido:** conservar calendario aprobado33timers/11piezas; no duplicar publicaciones ni reprogramar. K1/K2/K4 ya trabajados; K3 sin fuente nueva no se busca otra vez. Generaciones pagadas, publicación y contacto externo mantienen permisos específicos.
+
+**Cómo entregar a Claude:** leer este bloque desde `codex/madre-orquestacion-20261005`, luego una asignación concreta con objetivo/paths/branch/SHA/prueba/parada. Codex devuelve artefacto, pruebas y bloqueo o cierre; Claude prioriza el siguiente. No necesita reconstruir el historial completo. Pendiente que la madre Claude elegida confirme recepción; ningún chat histórico se elige por suposición.
+
 Estado: relevo autorizado por Sergio, 5-oct-2026; base Hermes `672d78e8`, desarrollo Platform `5102535c` tras fetch.
 Producción Platform `97fe3061` es el release reportado por handoff, sin comprobación nueva propia.
 Este archivo es el estado Codex; `madre-local.md` conserva el relevo Claude. No reconstruir transcripts completos.
