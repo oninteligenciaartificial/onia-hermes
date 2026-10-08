@@ -1,0 +1,6 @@
+import { seeLocalVideo } from 'file:///C:/dev/proyectos/onia-hermes/.claude/skills/ver-videos/scripts/gemini-see-video.mjs';
+const d='C:/Users/PC/AppData/Local/Temp/claude/C--dev-proyectos-onia-hermes--claude-worktrees-onia-madre-v2-pr-review-2d85bb/202a717e-5bc8-42ab-ba2e-3dc26d723505/scratchpad/referentes/sanmunoz/';
+const ids=process.argv.slice(2);
+const P1='Analiza este video en español. Transcribe lo esencial y responde: mensaje central, tema, gancho de los primeros 3 segundos (qué se ve, qué se dice, texto en pantalla), estructura por bloques con tiempos, y CTA exacto (palabra clave, dónde se pide, en qué segundo). Sé concreto, no inventes.';
+const P2='Ahora SOLO edición: cuántos cortes/cambios de plano por cada 10 s, layout (cara/pantalla partida), subtítulos (estilo, palabras por vez, color de resaltado), b-roll, zooms, rótulos/overlays, música y efectos de sonido (hay música? cuándo?), color. Da números aproximados.';
+for (const id of ids){ for (const [n,p] of [['CONTENIDO',P1],['EDICION',P2]]){ try{ const r=await seeLocalVideo(d+'TikTok-'+id+'.mp4',p); console.log('\n=== '+id+' '+n+'\n'+(typeof r==='string'?r:JSON.stringify(r))); }catch(e){console.log('ERR '+id+n+' '+e.message)} } }
