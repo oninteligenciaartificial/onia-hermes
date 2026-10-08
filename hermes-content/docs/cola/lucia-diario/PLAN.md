@@ -106,7 +106,7 @@ Todo sale de material ya pagado. Sergio Urcullo aprueba **una vez por semana**, 
 |---|---|---|---|
 | 1 | **L01** «Hola, soy Lucía. No existo.» (fijado) | C | ✅ aprobado el 1-oct (en vos: ver D8) |
 | 3 | **L02** «Este video no fue grabado» | B | editado; falta el OK (en vos: ver D8) |
-| 5 | **Chiste de 10 s:** «¿Lucía Antelo es real?» → «No: soy IA.» → «Las pantallas que le muestro son reales.» (clip del café, ya pagado). El pie no vende ni anuncia nada que no esté grabado | B | se edita a 0 cr después del OK |
+| 5 | **Chiste de 10 s:** «¿Lucía Antelo es real?» → «No: soy IA.» → «Lo que le muestro, sí.» (clip del café, ya pagado). El pie no vende ni anuncia nada que no esté grabado | B | ✅ editado el 8-oct a 0 cr (`videos/lucia-chiste/`); falta el OK |
 | 8 | **«El paciente reserva solo»:** Lucía 3 s (clip del coworking `v4/kit/k3-clip-coworking-07b938b2.mp4`, recuperado el 8-oct a 0 cr, sin ambo) → la página pública de reserva de la demo, sin reservar → CTA | A | falta grabar la pantalla |
 | 10 | **K4 corta** «Las reglas de la recepción». En la toma 6, **solo Pendientes**: «Revisa su agenda y sus cobros» → «Nada sale sin su aprobación». Sin la frase del correo, con recorte focal y sin filas «A medias». **Si la demo no muestra Pendientes, K4 pasa a la semana 3** | A | borrador de 360p ✅ (cutlist corregido el 8-oct); falta la captura P2 |
 | 12 | **Carrusel** «Cómo reserva un paciente solo, paso a paso». Termina en el formulario **sin enviar**, salvo que Sergio Urcullo dé el OK para crear 1 cita de prueba en la demo | C | falta la captura |

@@ -40,10 +40,14 @@
   Se sacó «sistemas que trabajan solos para tu negocio», una promesa general que la pieza no muestra.
 - **Estado:** falta el OK.
 
-## Día 5 · Chiste de 10 s (a editar después del OK, 0 cr)
+## Día 5 · Chiste de 10 s (editado el 8-oct, 0 cr; falta el OK)
 
-- **Clip:** el del café, ya pagado (`v4/feed/l08-cafe-src.mp4`, 10 s, sin voz).
-- **Tarjetas:** «¿Lucía Antelo es real?» → «No: soy IA.» → «Las pantallas que le muestro son reales.»
+- **Archivo:** `hermes-content/references/modelos/lucia/v4/feed/chiste-lucia-antelo-es-real.mp4` (9,6 s, sin voz).
+  - Preview: `chiste-preview-360.mp4`. Hoja de QA: `chiste-qa-hoja.jpg`.
+  - Proyecto, tabla de cortes y QA: `videos/lucia-chiste/README.md`.
+- **Clip:** el del café, ya pagado (`v4/feed/l08-cafe-src.mp4`).
+- **Tarjetas:** rótulo «Lucía Antelo · personaje IA de Onia» desde el cuadro 0 → «¿Lucía Antelo es real?» → «No: soy IA.» →
+  «Lo que le muestro, sí.» («Las pantallas que le muestro, sí» no entraba en una línea).
 - **Pie:** *«Lucía Antelo es un personaje hecho con IA por @oniahq. Lo que le muestro de Onia son pantallas reales.»*
   - No vende ni anuncia otra pieza.
   - Si para el día 5 ya está grabada la página de reserva, se suma: «La próxima: cómo un paciente reserva solo».

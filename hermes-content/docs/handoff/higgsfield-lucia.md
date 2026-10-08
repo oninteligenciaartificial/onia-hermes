@@ -42,6 +42,11 @@ corregidos + paquete de la semana 1, todo en el PR de la rama.
     `v4/kit/k3-clip-coworking-07b938b2.mp4`;
   - cutlists corregidos: CTA, GIRO de K4 y rótulo con apellido.
 - **`paquete-s1/PAQUETE.md`:** perfil, L01, L02 y chiste, con los pies de usted y el ensayo bien descrito.
+- **Chiste de 10 s editado** (8-oct, 0 cr, después del «Lucía sigue» de Sergio Urcullo que trajo la madre):
+  - pieza: `v4/feed/chiste-lucia-antelo-es-real.mp4`; proyecto: `videos/lucia-chiste/`;
+  - preview y hoja de QA en el paquete;
+  - mirado: la cara libre, el rótulo desde el cuadro 0, de usted;
+  - sin SFX, porque no hay librería en esta nube.
 - **Barrido** de la puerta, la cuenta demo, el lipsync y la receta vieja en FLUJO, LUCIA.md, MANUAL, GUIONES,
   HIGGSFIELD_VIDEO_SYSTEM y editor-videos.
 
@@ -56,7 +61,6 @@ corregidos + paquete de la semana 1, todo en el PR de la rama.
 - **Montaje:**
   - el próximo render de K4 saca CORREO y HORARIOS si no hay captura (`k4-borrador-cutlist.json` →
     `correcciones8oct`);
-  - el chiste de 10 s está sin editar;
   - L01 y L02 se re-renderizan de usted si se confirma D8 (0 cr).
 - **Verificación:** la lente de completitud no corrió (se agotó la semana el 5-oct). Las otras 3 se aplicaron.
 

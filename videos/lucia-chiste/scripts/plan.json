@@ -1,0 +1,50 @@
+{
+  "inicio_cuadro": 10,
+  "cuadros": 231,
+  "fps": 24,
+  "capas": [
+    {
+      "id": "t1",
+      "texto": "¿Lucía Antelo es real?",
+      "visible": [
+        171,
+        1262,
+        910,
+        1425
+      ],
+      "a": 0.1,
+      "b": 3
+    },
+    {
+      "id": "t2",
+      "texto": "No: soy IA.",
+      "visible": [
+        327,
+        1222,
+        754,
+        1385
+      ],
+      "a": 3,
+      "b": 5.4
+    },
+    {
+      "id": "t3",
+      "texto": "Lo que le muestro, sí.",
+      "visible": [
+        175,
+        1222,
+        905,
+        1385
+      ],
+      "a": 5.4,
+      "b": 9.625
+    },
+    {
+      "id": "rotulo",
+      "texto": "Lucía Antelo · personaje IA de Onia",
+      "a": 0,
+      "b": 2.4,
+      "top": 1194
+    }
+  ]
+}

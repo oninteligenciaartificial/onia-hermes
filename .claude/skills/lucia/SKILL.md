@@ -91,6 +91,23 @@ description: "Invocar para CUALQUIER trabajo del carril Lucía (Lucía Antelo, l
   clip LIMPIO, sin texto. Se baja con `curl` del CDN, se pasa por `ffprobe` y se MIRA. Así volvió el de K3
   (`07b938b2`), que Codex no encontró en la PC. Nunca se regenera lo que ya se pagó.
 - La edición sigue en **`editor-videos` § «Reels de Lucía»**. Higgsfield solo genera el clip.
+- **Editar en una nube sin PIL, numpy, cv2, insightface ni SFX (8-oct, chiste de 10 s, 0 cr).** Instalar pide
+  aprobación (CLAUDE.md), así que se arma con lo que hay. Modelo: `videos/lucia-chiste/scripts/build.mjs`.
+  - Tarjetas: `make-mockup.mjs` (Playwright + Chromium local; el proxy no molesta porque es HTML local).
+  - Geometría: `ffprobe` del PNG + el aire conocido de la plantilla (130u a los lados, 80u arriba, 190u abajo, @2x).
+  - Montaje: ffmpeg en una pasada (overlay + fade alfa + pista en silencio, CRF 14).
+  - QA: hoja de 8 cuadros con guías (mentón + 40, y=1490, x=1000), y se MIRA.
+  - Sin cara nueva no hace falta medir: se reusan el mentón y las escalas ya validadas del mismo clip (café: mentón
+    YuNet 1148; tarjeta F = 0,51429 de L02; rótulo 520/(1353−88) de L08).
+  - Sin SFX la pieza sale muda: la música la pone Sergio Urcullo.
+- **Trampa del ancho (8-oct):** la `frase-card` de L02 tiene `width: max-content`, así que la frase NO se parte en dos
+  líneas. Con F = 0,51429 entran unos **22 caracteres**: «Las pantallas que le muestro, sí.» (33) invadía los 80 px de
+  la derecha. La guarda del build (`x + visible > 1000 → error`) lo frena antes de renderizar. Se acorta el texto; no se
+  achica la letra.
+- **Costo real por pieza (8-oct):**
+  - reel de personaje con un clip ya pagado: 0 cr y ~1 min de render;
+  - reel de venta con un clip nuevo: 7,5 cr (Kling std off, 6 s) + 1 cr (foto Seedream) + la pantalla real;
+  - kit K1-K4 completo (3-oct): 30,5 cr.
 
 ## 4. Voz (5-oct)
 
