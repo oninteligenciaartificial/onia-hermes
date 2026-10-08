@@ -1,0 +1,2668 @@
+From edcd3489b128ad111912c885ff27f5e41ef21161 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Mon, 5 Oct 2026 21:33:11 +0000
+Subject: [PATCH 1/3] =?UTF-8?q?feat(presupuesto):=20presupuesto=20por=20fa?=
+ =?UTF-8?q?ses=20con=20link=20p=C3=BAblico=20(P2)?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Punto 7 de la 1.0: el dueño arma un presupuesto en fases a partir del plan
+de tratamiento del paciente y se lo manda por WhatsApp con un link público
+firmado que el paciente abre sin sesión. Se aplica tal cual el parche ya
+probado para conservar el trabajo anterior; los ajustes van en commits
+aparte.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01HhnFgkeF6nLGvjrfjt1o2C
+---
+ .claude/skills/onia-seguridad/SKILL.md        |  15 ++
+ __tests__/presupuesto-sin-sesion.test.ts      |  34 +++
+ app/(dashboard)/patients/[id]/FichaVista.tsx  |   3 +
+ .../patients/[id]/presupuesto/page.tsx        |  64 +++++
+ app/(public)/presupuesto/[token]/page.tsx     |  51 ++++
+ .../patients/[id]/presupuesto/route.test.ts   | 154 ++++++++++++
+ app/api/patients/[id]/presupuesto/route.ts    |  97 ++++++++
+ app/dev/presupuesto/page.tsx                  | 143 +++++++++++
+ .../PresupuestoVista.render.test.ts           |  66 +++++
+ app/print/presupuesto/PresupuestoVista.tsx    | 149 ++++++++++++
+ app/print/presupuesto/[patientId]/page.tsx    |  88 +++++++
+ .../patients/PlanDeTratamiento.render.test.ts |   8 +
+ components/patients/PlanDeTratamiento.tsx     |  50 ++--
+ .../presupuesto/ArmadorDePresupuesto.tsx      |  54 +++++
+ .../PresupuestoPorFases.render.test.ts        |  71 ++++++
+ .../presupuesto/PresupuestoPorFases.tsx       | 225 ++++++++++++++++++
+ lib/audit.ts                                  |   3 +
+ lib/platform/api-route-registry.ts            |   5 +
+ .../dato-clinico-pide-permiso.test.ts         |  14 ++
+ lib/presupuesto/cargar.test.ts                | 124 ++++++++++
+ lib/presupuesto/cargar.ts                     |  75 ++++++
+ lib/presupuesto/fases.test.ts                 |  78 ++++++
+ lib/presupuesto/fases.ts                      |  97 ++++++++
+ lib/presupuesto/token.test.ts                 | 105 ++++++++
+ lib/presupuesto/token.ts                      | 137 +++++++++++
+ proxy.ts                                      |   5 +-
+ 26 files changed, 1898 insertions(+), 17 deletions(-)
+ create mode 100644 __tests__/presupuesto-sin-sesion.test.ts
+ create mode 100644 app/(dashboard)/patients/[id]/presupuesto/page.tsx
+ create mode 100644 app/(public)/presupuesto/[token]/page.tsx
+ create mode 100644 app/api/patients/[id]/presupuesto/route.test.ts
+ create mode 100644 app/api/patients/[id]/presupuesto/route.ts
+ create mode 100644 app/dev/presupuesto/page.tsx
+ create mode 100644 app/print/presupuesto/PresupuestoVista.render.test.ts
+ create mode 100644 app/print/presupuesto/PresupuestoVista.tsx
+ create mode 100644 app/print/presupuesto/[patientId]/page.tsx
+ create mode 100644 components/presupuesto/ArmadorDePresupuesto.tsx
+ create mode 100644 components/presupuesto/PresupuestoPorFases.render.test.ts
+ create mode 100644 components/presupuesto/PresupuestoPorFases.tsx
+ create mode 100644 lib/presupuesto/cargar.test.ts
+ create mode 100644 lib/presupuesto/cargar.ts
+ create mode 100644 lib/presupuesto/fases.test.ts
+ create mode 100644 lib/presupuesto/fases.ts
+ create mode 100644 lib/presupuesto/token.test.ts
+ create mode 100644 lib/presupuesto/token.ts
+
+diff --git a/.claude/skills/onia-seguridad/SKILL.md b/.claude/skills/onia-seguridad/SKILL.md
+index 78260506..847e4c10 100644
+--- a/.claude/skills/onia-seguridad/SKILL.md
++++ b/.claude/skills/onia-seguridad/SKILL.md
+@@ -58,6 +58,21 @@ SUPERADMIN explícito.
+ > pantalla la llamaba. Arreglo: `admin.role !== "SUPERADMIN"` → 403, con test que primero
+ > falló sobre el código viejo.
+ 
++## Links públicos con token HMAC: una clave POR PROPÓSITO (2-oct)
++
++El presupuesto que se le manda al paciente (`lib/presupuesto/token.ts`) y el portal de requerimientos
++(`lib/onia-core/portal-token.ts`) firman con el MISMO secreto de base y payloads con las mismas claves
++`{o, p, e}`. `verificarPortalToken` ignora campos de más: firmados con la misma clave, un token de presupuesto
++abriría el portal (que SÍ escribe) y al revés. El del presupuesto deriva su clave con su propósito
++(`HMAC(secreto, "onia:presupuesto:v1")`) y lleva `k`; un test cruza los dos. Link público nuevo = clave
++derivada propia + test cruzado + `robots index:false` (gate de `app/(public)`) + ruta en `proxy.ts` + rate limit
++por IP. Precio congelado en el token: lo que el paciente recibió no cambia si se toca el catálogo.
++**Un link stateless con datos de salud se ata al destino (3-oct):** el del presupuesto valía 30 días sin forma de
++cortarlo, y con el celular mal escrito «Enviar» se lo mandaba a un desconocido. El token lleva la HUELLA del celular
++(HMAC con la clave del servidor, nunca un hash pelado: ~20 M de celulares bolivianos se prueban en segundos) y la
++carga la compara con `Patient.phone` de hoy, normalizado con `numeroParaWhatsapp`. Corregir el número lo anula, sin
++migración. No corta un reenvío del paciente correcto: para eso, salt por persona (columna, pendiente).
++
+ ## Claves de prueba en tests: `"a".repeat(64)`, nunca un literal con forma de clave (3-oct)
+ 
+ El job «Secret scan» corre gitleaks DOS veces: sobre el árbol (`dir`) y sobre CADA commit del PR (`git --log-opts`).
+diff --git a/__tests__/presupuesto-sin-sesion.test.ts b/__tests__/presupuesto-sin-sesion.test.ts
+new file mode 100644
+index 00000000..b0622efe
+--- /dev/null
++++ b/__tests__/presupuesto-sin-sesion.test.ts
+@@ -0,0 +1,34 @@
++import { NextRequest } from "next/server";
++import { beforeEach, describe, expect, it, vi } from "vitest";
++
++// El link del presupuesto (2-oct) lo abre el PACIENTE desde WhatsApp, sin
++// sesión. Si el proxy lo manda al login, el paciente ve la pantalla de entrar a
++// un sistema que no es suyo y el presupuesto nunca llega. El armador sí pide
++// sesión: vive en /patients/[id]/presupuesto.
++
++vi.mock("@supabase/ssr", () => ({
++  createServerClient: () => ({ auth: { getUser: async () => ({ data: { user: null } }) } }),
++}));
++
++async function pedir(ruta: string) {
++  const { proxy } = await import("@/proxy");
++  return proxy(new NextRequest(`http://127.0.0.1:3999${ruta}`, { method: "GET" }));
++}
++
++describe("presupuesto sin sesión", () => {
++  beforeEach(() => {
++    process.env.NEXT_PUBLIC_SUPABASE_URL = "https://ejemplo.supabase.co";
++    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = "anon-de-prueba";
++  });
++
++  it("el link público no redirige al login", async () => {
++    const res = await pedir("/presupuesto/eyJrIjoicHJlc3VwdWVzdG8ifQ.firma");
++    expect(res.headers.get("location") ?? "").not.toContain("/login");
++  });
++
++  it("el armador de la ficha sí pide sesión", async () => {
++    const res = await pedir("/patients/pat_1/presupuesto");
++    expect(res.status).toBe(307);
++    expect(res.headers.get("location")).toContain("/login");
++  });
++});
+diff --git a/app/(dashboard)/patients/[id]/FichaVista.tsx b/app/(dashboard)/patients/[id]/FichaVista.tsx
+index 470bbb64..5dc0c88b 100644
+--- a/app/(dashboard)/patients/[id]/FichaVista.tsx
++++ b/app/(dashboard)/patients/[id]/FichaVista.tsx
+@@ -15,6 +15,7 @@ import { idiomaDeVenta } from "@/lib/comercio/idioma-de-venta";
+ import { sortAlertsBySeverity } from "@/lib/onia-core/modules/dental-logic";
+ import { titulo, vocabularioDeTrack } from "@/lib/onboarding/vocabulario";
+ import { hoyEn } from "@/lib/fechas";
++import { presupuestoEnRubro } from "@/lib/presupuesto/fases";
+ import { formatCurrency, formatDate, getInitials } from "@/lib/utils";
+ import { numeroParaWhatsapp } from "@/lib/whatsapp/numero-para-enviar";
+ 
+@@ -306,6 +307,8 @@ export function FichaVista({
+               // Hoy en la zona del negocio, calculado en el servidor: el selector
+               // de «¿Cuándo fue?» no cambia de día entre el HTML y la hidratación.
+               hoy={hoyEn(timezone)}
++              // Presupuesto por fases (2-oct): solo dental y estética.
++              presupuestoHref={presupuestoEnRubro(trackId) ? `/patients/${id}/presupuesto` : null}
+               sinPagar={deuda}
+             />
+           )}
+diff --git a/app/(dashboard)/patients/[id]/presupuesto/page.tsx b/app/(dashboard)/patients/[id]/presupuesto/page.tsx
+new file mode 100644
+index 00000000..c7434513
+--- /dev/null
++++ b/app/(dashboard)/patients/[id]/presupuesto/page.tsx
+@@ -0,0 +1,64 @@
++import { notFound, redirect } from "next/navigation";
++
++import { ArmadorDePresupuesto } from "@/components/presupuesto/ArmadorDePresupuesto";
++import { hasPermissionForProfile } from "@/lib/onia-core/access-control";
++import { vocabularioDeTrack } from "@/lib/onboarding/vocabulario";
++import { resolveVerticalPack, tieneOdontograma } from "@/lib/platform/vertical-pack";
++import { prisma } from "@/lib/prisma";
++import { centavosDe, presupuestoEnRubro } from "@/lib/presupuesto/fases";
++import { createClient } from "@/lib/supabase/server";
++
++// Presupuesto por fases (2-oct, hueco #2 de dental en la auditoría): el plan de
++// tratamiento del paciente agrupado en fases, con los precios del catálogo, para
++// imprimir o mandárselo por WhatsApp. Solo dental y estética, con clinical.read
++// (nombra tratamientos). Todo por organizationId.
++export default async function PresupuestoPage({ params }: { params: Promise<{ id: string }> }) {
++  const supabase = await createClient();
++  const {
++    data: { user },
++  } = await supabase.auth.getUser();
++  if (!user) redirect("/login");
++  const profile = await prisma.profile.findUnique({ where: { userId: user.id } });
++  if (!profile) redirect("/login");
++
++  if (!(await hasPermissionForProfile(profile, "clinical.read"))) notFound();
++  const organizacion = await prisma.organization.findUnique({
++    where: { id: profile.organizationId },
++    select: { name: true, verticalTrackId: true },
++  });
++  const trackId = resolveVerticalPack(organizacion?.verticalTrackId ?? "").trackId;
++  if (!presupuestoEnRubro(trackId)) notFound();
++
++  const { id } = await params;
++  const patient = await prisma.patient.findFirst({
++    where: { id, organizationId: profile.organizationId },
++    select: { id: true, name: true, phone: true },
++  });
++  if (!patient) notFound();
++
++  const plan = await prisma.patientTreatment.findMany({
++    where: { organizationId: profile.organizationId, patientId: patient.id, status: { not: "CANCELADO" } },
++    orderBy: { date: "asc" },
++    select: { id: true, status: true, toothNumber: true, treatment: { select: { name: true, price: true } } },
++  });
++  const esDental = tieneOdontograma(trackId);
++  const v = vocabularioDeTrack(trackId);
++
++  return (
++    <ArmadorDePresupuesto
++      patientId={patient.id}
++      nombre={patient.name}
++      telefono={patient.phone}
++      negocio={organizacion?.name ?? ""}
++      filas={plan.map((f) => ({
++        id: f.id,
++        nombre: f.treatment.name,
++        pieza: esDental ? f.toothNumber : null,
++        centavos: centavosDe(f.treatment.price),
++        status: f.status,
++      }))}
++      rotuloPieza={esDental ? "Diente" : null}
++      vocab={{ cliente: v.cliente, clienteFemenino: v.clienteFemenino, servicio: v.servicio, servicios: v.servicios }}
++    />
++  );
++}
+diff --git a/app/(public)/presupuesto/[token]/page.tsx b/app/(public)/presupuesto/[token]/page.tsx
+new file mode 100644
+index 00000000..ec6eb966
+--- /dev/null
++++ b/app/(public)/presupuesto/[token]/page.tsx
+@@ -0,0 +1,51 @@
++import type { Metadata } from "next";
++import { headers } from "next/headers";
++
++import { ESTILOS_COMPROBANTE } from "@/app/print/estilos";
++import { ESTILOS_PRESUPUESTO, PresupuestoVista } from "@/app/print/presupuesto/PresupuestoVista";
++import { cargarPresupuestoPublico } from "@/lib/presupuesto/cargar";
++import { checkRateLimitKey } from "@/lib/rate-limit";
++
++// El link del presupuesto que la clínica le manda al paciente por WhatsApp
++// (2-oct). Sin sesión: lo autoriza el token firmado, con vencimiento, de UNA
++// persona de UN negocio (lib/presupuesto/token.ts). Solo lectura.
++//
++// No indexable y sin Referer: la URL lleva el token, y un buscador o un sitio
++// externo no tienen por qué verla.
++export const metadata: Metadata = {
++  title: "Su presupuesto",
++  description: "El presupuesto de su tratamiento, por fases.",
++  robots: { index: false, follow: false, googleBot: { index: false, follow: false } },
++  referrer: "no-referrer",
++};
++
++export const dynamic = "force-dynamic";
++
++/** 30 aperturas por minuto por IP: un link legítimo se abre pocas veces. */
++const LIMITE = { windowMs: 60_000, maxRequests: 30 };
++
++function NoDisponible() {
++  return (
++    <main className="mx-auto flex min-h-[60vh] max-w-md flex-col items-center justify-center gap-3 px-6 text-center">
++      <h1 className="text-xl font-semibold text-on-surface">Este presupuesto ya no está disponible</h1>
++      <p className="text-sm text-on-surface-variant">Pídale uno nuevo a quien se lo envió.</p>
++    </main>
++  );
++}
++
++export default async function PresupuestoPublicoPage({ params }: { params: Promise<{ token: string }> }) {
++  const h = await headers();
++  const ip = h.get("cf-connecting-ip")?.trim() || h.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
++  if (!checkRateLimitKey(LIMITE, `presupuesto:${ip}`).allowed) return <NoDisponible />;
++
++  const { token } = await params;
++  const datos = await cargarPresupuestoPublico(token);
++  if (!datos) return <NoDisponible />;
++
++  return (
++    <>
++      <style>{ESTILOS_COMPROBANTE + ESTILOS_PRESUPUESTO}</style>
++      <PresupuestoVista {...datos} />
++    </>
++  );
++}
+diff --git a/app/api/patients/[id]/presupuesto/route.test.ts b/app/api/patients/[id]/presupuesto/route.test.ts
+new file mode 100644
+index 00000000..12c4f68f
+--- /dev/null
++++ b/app/api/patients/[id]/presupuesto/route.test.ts
+@@ -0,0 +1,154 @@
++import { beforeEach, describe, expect, it, vi } from "vitest";
++
++// POST /api/patients/:id/presupuesto — arma el link público del presupuesto por
++// fases (2-oct). Lo que defiende: permiso clínico, rubro (solo dental y
++// estética), aislamiento por negocio Y por paciente, y que el PRECIO salga del
++// catálogo del negocio en el servidor, nunca del cliente.
++const authMocks = vi.hoisted(() => {
++  class AuthError extends Error {
++    constructor(message: string) {
++      super(message);
++      this.name = "AuthError";
++    }
++  }
++  return { AuthError, requireAuth: vi.fn() };
++});
++
++vi.mock("@/lib/auth", () => ({ AuthError: authMocks.AuthError, requireAuth: authMocks.requireAuth }));
++
++const prismaMocks = vi.hoisted(() => ({
++  patient: { findFirst: vi.fn() },
++  patientTreatment: { findMany: vi.fn() },
++  oniaCoreRoleAssignment: { findMany: vi.fn() },
++  organization: { findUnique: vi.fn() },
++  auditLog: { create: vi.fn() },
++}));
++vi.mock("@/lib/prisma", () => ({ prisma: prismaMocks }));
++
++const guard = vi.hoisted(() => ({ requireVerticalRoute: vi.fn() }));
++vi.mock("@/lib/platform/api-guard", () => guard);
++
++import { huellaDelTelefono, verificarPresupuestoToken } from "@/lib/presupuesto/token";
++
++import { POST } from "./route";
++
++function perfil(role: "ADMIN" | "DOCTOR" | "STAFF") {
++  return { id: "prof_1", userId: "user_1", organizationId: "org_1", role, name: "x" };
++}
++
++function pedir(body: unknown, id = "pat_1") {
++  return POST(new Request(`https://x.test/api/patients/${id}/presupuesto`, { method: "POST", body: JSON.stringify(body) }), {
++    params: Promise.resolve({ id }),
++  });
++}
++
++beforeEach(() => {
++  vi.clearAllMocks();
++  process.env.ENCRYPTION_KEY = "a".repeat(64);
++  process.env.NEXT_PUBLIC_APP_URL = "https://app.onia.com.bo";
++  authMocks.requireAuth.mockResolvedValue(perfil("DOCTOR"));
++  guard.requireVerticalRoute.mockResolvedValue(undefined);
++  prismaMocks.oniaCoreRoleAssignment.findMany.mockResolvedValue([]);
++  prismaMocks.organization.findUnique.mockResolvedValue({ verticalTrackId: "dentagest-clinical" });
++  prismaMocks.auditLog.create.mockResolvedValue({});
++  prismaMocks.patient.findFirst.mockResolvedValue({ id: "pat_1", phone: "71234567" });
++  prismaMocks.patientTreatment.findMany.mockResolvedValue([
++    { id: "pt_a", treatment: { price: "800.00" } },
++    { id: "pt_b", treatment: { price: "1200.50" } },
++  ]);
++});
++
++describe("POST /api/patients/:id/presupuesto", () => {
++  it("arma un link firmado con las fases y el precio del CATÁLOGO, no el que mande el cliente", async () => {
++    const res = await pedir({
++      filas: [
++        { id: "pt_a", fase: 1, centavos: 1 },
++        { id: "pt_b", fase: 2 },
++      ],
++    });
++
++    expect(res.status).toBe(200);
++    const { url } = await res.json();
++    expect(url).toMatch(/^https:\/\/app\.onia\.com\.bo\/presupuesto\/[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/);
++    const leido = verificarPresupuestoToken(url.split("/presupuesto/")[1]);
++    expect(leido).toMatchObject({
++      organizationId: "org_1",
++      patientId: "pat_1",
++      filas: [
++        { id: "pt_a", fase: 1, centavos: 80_000 },
++        { id: "pt_b", fase: 2, centavos: 120_050 },
++      ],
++    });
++  });
++
++  it("el link queda atado al celular de la ficha: corregirlo después lo anula", async () => {
++    const { url } = await (await pedir({ filas: [{ id: "pt_a", fase: 1 }, { id: "pt_b", fase: 1 }] })).json();
++    expect(verificarPresupuestoToken(url.split("/presupuesto/")[1])?.huellaTelefono).toBe(huellaDelTelefono("71234567"));
++    expect(prismaMocks.patient.findFirst.mock.calls[0][0].select).toEqual({ id: true, phone: true });
++  });
++
++  it("lee las filas por negocio, paciente e ids, sin las canceladas", async () => {
++    await pedir({ filas: [{ id: "pt_a", fase: 1 }, { id: "pt_b", fase: 1 }] });
++
++    expect(prismaMocks.patient.findFirst.mock.calls[0][0].where).toEqual({ id: "pat_1", organizationId: "org_1" });
++    expect(prismaMocks.patientTreatment.findMany.mock.calls[0][0].where).toEqual({
++      organizationId: "org_1",
++      patientId: "pat_1",
++      id: { in: ["pt_a", "pt_b"] },
++      status: { not: "CANCELADO" },
++    });
++  });
++
++  it("una fila de otro paciente u otro negocio no entra: 400 y no firma nada", async () => {
++    prismaMocks.patientTreatment.findMany.mockResolvedValue([{ id: "pt_a", treatment: { price: "800.00" } }]);
++
++    const res = await pedir({ filas: [{ id: "pt_a", fase: 1 }, { id: "pt_ajena", fase: 1 }] });
++
++    expect(res.status).toBe(400);
++    expect(prismaMocks.auditLog.create).not.toHaveBeenCalled();
++  });
++
++  it("paciente de otro negocio: 404", async () => {
++    prismaMocks.patient.findFirst.mockResolvedValue(null);
++    expect((await pedir({ filas: [{ id: "pt_a", fase: 1 }] })).status).toBe(404);
++  });
++
++  it("queda en auditoría quién armó un link que se abre sin sesión", async () => {
++    await pedir({ filas: [{ id: "pt_a", fase: 1 }, { id: "pt_b", fase: 1 }] });
++
++    const { data } = prismaMocks.auditLog.create.mock.calls[0][0];
++    expect(data).toMatchObject({ organizationId: "org_1", userId: "user_1", action: "BUDGET_LINK_CREATED", entityType: "Patient", entityId: "pat_1" });
++  });
++
++  it("sin filas, fase fuera de rango o ids repetidos: 400", async () => {
++    expect((await pedir({ filas: [] })).status).toBe(400);
++    expect((await pedir({ filas: [{ id: "pt_a", fase: 7 }] })).status).toBe(400);
++    expect((await pedir({ filas: [{ id: "pt_a", fase: 1 }, { id: "pt_a", fase: 2 }] })).status).toBe(400);
++  });
++
++  it("recepción (STAFF, sin lo clínico): 403", async () => {
++    authMocks.requireAuth.mockResolvedValue(perfil("STAFF"));
++    expect((await pedir({ filas: [{ id: "pt_a", fase: 1 }] })).status).toBe(403);
++    expect(prismaMocks.patientTreatment.findMany).not.toHaveBeenCalled();
++  });
++
++  it("pasa por el guard de rubro del registro", async () => {
++    await pedir({ filas: [{ id: "pt_a", fase: 1 }, { id: "pt_b", fase: 1 }] });
++    expect(guard.requireVerticalRoute).toHaveBeenCalledWith("patients/[id]/presupuesto");
++  });
++
++  it("veterinaria o servicios (comparten /patients): 403 y no lee el plan", async () => {
++    // El registro no distingue más fino que el segmento /patients: el rubro se
++    // controla acá. En veterinaria el tratamiento es de la mascota.
++    for (const track of ["vetgest-clinical", "gestios-servicios-profesionales"]) {
++      prismaMocks.organization.findUnique.mockResolvedValue({ verticalTrackId: track });
++      expect((await pedir({ filas: [{ id: "pt_a", fase: 1 }] })).status).toBe(403);
++    }
++    expect(prismaMocks.patientTreatment.findMany).not.toHaveBeenCalled();
++  });
++
++  it("estética sí", async () => {
++    prismaMocks.organization.findUnique.mockResolvedValue({ verticalTrackId: "esteticagest-clinical" });
++    expect((await pedir({ filas: [{ id: "pt_a", fase: 1 }, { id: "pt_b", fase: 2 }] })).status).toBe(200);
++  });
++});
+diff --git a/app/api/patients/[id]/presupuesto/route.ts b/app/api/patients/[id]/presupuesto/route.ts
+new file mode 100644
+index 00000000..1f4110f8
+--- /dev/null
++++ b/app/api/patients/[id]/presupuesto/route.ts
+@@ -0,0 +1,97 @@
++import { NextResponse } from "next/server";
++import { z } from "zod";
++
++import { getRequestMeta, logAudit } from "@/lib/audit";
++import { AuthError, requireAuth } from "@/lib/auth";
++import { registrarError } from "@/lib/http/registrar-error";
++import { requirePermission } from "@/lib/onia-core/access-control";
++import { requireVerticalRoute } from "@/lib/platform/api-guard";
++import { clienteNoEncontrado, palabrasDeLaSesion } from "@/lib/platform/idioma-del-error";
++import { prisma } from "@/lib/prisma";
++import { resolveVerticalPack } from "@/lib/platform/vertical-pack";
++import { centavosDe, FASES_MAX, presupuestoEnRubro } from "@/lib/presupuesto/fases";
++import { firmarPresupuestoToken } from "@/lib/presupuesto/token";
++
++// El link público del presupuesto por fases (2-oct, hueco #2 de dental en la
++// auditoría; lo #1 que copiar de Doctocliq). El cliente manda QUÉ filas y en qué
++// fase; el PRECIO sale del catálogo del negocio acá, en el servidor, y queda
++// congelado en el link firmado. Solo dental y estética (registro de rutas).
++const bodySchema = z.object({
++  filas: z
++    .array(z.object({ id: z.string().min(1).max(64), fase: z.number().int().min(1).max(FASES_MAX) }))
++    .min(1, "Elegí al menos un tratamiento")
++    .max(60)
++    .refine((filas) => new Set(filas.map((f) => f.id)).size === filas.length, "Un tratamiento aparece dos veces"),
++});
++
++function urlBase(): string {
++  return (process.env.NEXT_PUBLIC_APP_URL?.trim() || "https://app.onia.com.bo").replace(/\/$/, "");
++}
++
++export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
++  try {
++    const profile = await requireAuth();
++    await requireVerticalRoute("patients/[id]/presupuesto");
++    // El presupuesto nombra tratamientos: dato clínico.
++    await requirePermission(profile, "clinical.read", request);
++    // El registro abre el segmento /patients a los cuatro rubros con agenda; el
++    // presupuesto es solo de dental y estética (presupuestoEnRubro).
++    const org = await prisma.organization.findUnique({
++      where: { id: profile.organizationId },
++      select: { verticalTrackId: true },
++    });
++    if (!presupuestoEnRubro(resolveVerticalPack(org?.verticalTrackId ?? "").trackId)) {
++      return NextResponse.json({ error: "El presupuesto por fases es de clínicas dentales y de estética." }, { status: 403 });
++    }
++    const { id } = await params;
++    const { filas } = bodySchema.parse(await request.json());
++
++    // El celular de hoy: el link queda atado a él (corregirlo lo anula).
++    const patient = await prisma.patient.findFirst({
++      where: { id, organizationId: profile.organizationId },
++      select: { id: true, phone: true },
++    });
++    if (!patient) return NextResponse.json({ error: clienteNoEncontrado(await palabrasDeLaSesion()) }, { status: 404 });
++
++    const ids = filas.map((f) => f.id);
++    const enLaBase = await prisma.patientTreatment.findMany({
++      where: { organizationId: profile.organizationId, patientId: id, id: { in: ids }, status: { not: "CANCELADO" } },
++      select: { id: true, treatment: { select: { price: true } } },
++    });
++    if (enLaBase.length !== ids.length) {
++      return NextResponse.json({ error: "Algún tratamiento ya no está en el plan. Recargá la página." }, { status: 400 });
++    }
++    const precio = new Map(enLaBase.map((f) => [f.id, centavosDe(f.treatment.price)]));
++    const ahora = new Date();
++    const token = firmarPresupuestoToken({
++      organizationId: profile.organizationId,
++      patientId: id,
++      filas: filas.map((f) => ({ id: f.id, fase: f.fase, centavos: precio.get(f.id) ?? 0 })),
++      telefono: patient.phone,
++      ahora,
++    });
++
++    // Un link que se abre SIN sesión y nombra tratamientos: queda quién lo armó.
++    const meta = getRequestMeta(request);
++    await logAudit({
++      organizationId: profile.organizationId,
++      userId: profile.userId,
++      action: "BUDGET_LINK_CREATED",
++      entityType: "Patient",
++      entityId: id,
++      newValue: { filas: filas.length },
++      ipAddress: meta.ipAddress,
++      userAgent: meta.userAgent,
++    });
++
++    return NextResponse.json({ url: `${urlBase()}/presupuesto/${token}` });
++  } catch (err) {
++    if (err instanceof AuthError) return NextResponse.json({ error: "No autorizado" }, { status: 403 });
++    if (err instanceof z.ZodError) {
++      return NextResponse.json({ error: err.issues.map((e) => e.message).join(", ") }, { status: 400 });
++    }
++    if (err instanceof SyntaxError) return NextResponse.json({ error: "Datos inválidos" }, { status: 400 });
++    registrarError("api/patients/[id]/presupuesto", "POST", err);
++    return NextResponse.json({ error: "No se pudo armar el link del presupuesto" }, { status: 500 });
++  }
++}
+diff --git a/app/dev/presupuesto/page.tsx b/app/dev/presupuesto/page.tsx
+new file mode 100644
+index 00000000..312a41df
+--- /dev/null
++++ b/app/dev/presupuesto/page.tsx
+@@ -0,0 +1,143 @@
++// Banco del presupuesto por fases SIN base — SOLO en desarrollo (404 en prod).
++//
++//   /dev/presupuesto?rubro=dental | estetica            el armador, dentro del shell
++//   /dev/presupuesto?vista=hoja&rubro=dental            la hoja que recibe el paciente
++//   &fases=2      la hoja con dos fases (por defecto, una)
++//   &tel=fijo     sin celular: «Enviar» dice por qué no
++//   &tema=oscuro
++
++import { notFound } from "next/navigation";
++
++import { ESTILOS_COMPROBANTE } from "@/app/print/estilos";
++import { ESTILOS_PRESUPUESTO, PresupuestoVista } from "@/app/print/presupuesto/PresupuestoVista";
++import { LayoutShell } from "@/components/layout/LayoutShell";
++import type { NavigationItem } from "@/components/layout/navigation";
++import { ArmadorDePresupuesto } from "@/components/presupuesto/ArmadorDePresupuesto";
++import { ThemeProvider } from "@/components/theme/ThemeProvider";
++import { vocabularioDeTrack } from "@/lib/onboarding/vocabulario";
++import { AccountContextProvider } from "@/lib/platform/client";
++import type { AccountContextValue, VerticalTrackId } from "@/lib/platform/types";
++import { getNavForPack, resolveVerticalPack, tieneOdontograma } from "@/lib/platform/vertical-pack";
++import { armarPresupuesto, PRESUPUESTO_VALIDEZ_DIAS } from "@/lib/presupuesto/fases";
++
++const AHORA = new Date("2026-10-02T14:00:00.000Z");
++
++const RUBROS: Record<string, { track: VerticalTrackId; negocio: string; persona: string; plan: [string, number | null, number, string][] }> = {
++  dental: {
++    track: "dentagest-clinical",
++    negocio: "Clínica Dental Aramayo",
++    persona: "Lucía Mendoza Rivero",
++    plan: [
++      ["Limpieza dental", null, 15_000, "COMPLETADO"],
++      ["Endodoncia", 36, 80_000, "EN_PROGRESO"],
++      ["Corona de porcelana", 36, 120_000, "PENDIENTE"],
++      ["Resina compuesta", 24, 25_000, "PENDIENTE"],
++      ["Blanqueamiento", null, 90_000, "PENDIENTE"],
++    ],
++  },
++  estetica: {
++    track: "esteticagest-clinical",
++    negocio: "Estética Valeria Spa",
++    persona: "Gabriela Méndez",
++    plan: [
++      ["Limpieza facial profunda", null, 25_000, "COMPLETADO"],
++      ["Depilación láser, 6 sesiones", null, 180_000, "EN_PROGRESO"],
++      ["Peeling químico", null, 40_000, "PENDIENTE"],
++    ],
++  },
++};
++
++export default async function BancoPresupuesto({
++  searchParams,
++}: {
++  searchParams: Promise<{ rubro?: string; vista?: string; fases?: string; tel?: string; tema?: string }>;
++}) {
++  if (process.env.NODE_ENV === "production") notFound();
++  const q = await searchParams;
++  const rubro = q.rubro && q.rubro in RUBROS ? q.rubro : "dental";
++  const { track, negocio, persona, plan } = RUBROS[rubro];
++  const pack = resolveVerticalPack(track);
++  const esDental = tieneOdontograma(pack.trackId);
++  const filas = plan.map(([nombre, pieza, centavos, status], i) => ({
++    id: `pt_${i}`,
++    nombre,
++    pieza: esDental ? pieza : null,
++    centavos,
++    status,
++  }));
++
++  if (q.vista === "hoja") {
++    // Una fase, o dos (lo pendiente en la segunda) con &fases=2.
++    const fases = new Map(
++      filas
++        .filter((f) => f.status !== "COMPLETADO")
++        .map((f, i) => [f.id, q.fases === "2" && i >= 2 ? 2 : 1] as [string, number]),
++    );
++    return (
++      <>
++        <style>{ESTILOS_COMPROBANTE + ESTILOS_PRESUPUESTO}</style>
++        <PresupuestoVista
++          emisor={{ name: negocio, address: "Av. Busch 123, Santa Cruz", phone: "33445566", nit: "1023456028" }}
++          para={persona}
++          rotuloPieza={esDental ? "Diente" : null}
++          emitidoEl={AHORA}
++          venceEl={new Date(AHORA.getTime() + PRESUPUESTO_VALIDEZ_DIAS * 86_400_000)}
++          timeZone="America/La_Paz"
++          armado={armarPresupuesto(filas, fases)}
++        />
++      </>
++    );
++  }
++
++  const account: AccountContextValue = {
++    organizationId: "dev-presupuesto",
++    verticalTrackId: pack.trackId,
++    plan: "professional",
++    countryCode: "BO",
++    currencyCode: "BOB",
++    features: pack.includedFeatures,
++    roleKeys: pack.roleKeys,
++    baseRole: "ADMIN",
++  };
++  const navItems = getNavForPack(pack, {
++    organizationId: account.organizationId,
++    verticalTrackId: pack.trackId,
++    plan: account.plan,
++    countryCode: account.countryCode,
++    currencyCode: account.currencyCode,
++    features: new Set(pack.includedFeatures),
++    roleKeys: pack.roleKeys,
++    baseRole: account.baseRole,
++  }) as NavigationItem[];
++  const v = vocabularioDeTrack(pack.trackId);
++
++  return (
++    <ThemeProvider initialTheme={q.tema === "oscuro" ? "dark" : "light"}>
++      <AccountContextProvider value={account}>
++        <LayoutShell
++          esCliente={true}
++          clinicName={negocio}
++          doctorName=""
++          role="ADMIN"
++          plan="professional"
++          planNombre="Profesional"
++          diasDePrueba={9}
++          decisionesPendientes={0}
++          navItems={navItems}
++          bottomHrefs={pack.bottomNavHrefs}
++          quickActions={pack.quickActions as NavigationItem[]}
++        >
++          <ArmadorDePresupuesto
++            patientId="pat_demo"
++            nombre={persona}
++            telefono={q.tel === "fijo" ? "3344556" : "71234567"}
++            negocio={negocio}
++            filas={filas}
++            rotuloPieza={esDental ? "Diente" : null}
++            vocab={{ cliente: v.cliente, clienteFemenino: v.clienteFemenino, servicio: v.servicio, servicios: v.servicios }}
++          />
++        </LayoutShell>
++      </AccountContextProvider>
++    </ThemeProvider>
++  );
++}
+diff --git a/app/print/presupuesto/PresupuestoVista.render.test.ts b/app/print/presupuesto/PresupuestoVista.render.test.ts
+new file mode 100644
+index 00000000..e3d5aa12
+--- /dev/null
++++ b/app/print/presupuesto/PresupuestoVista.render.test.ts
+@@ -0,0 +1,66 @@
++// La HOJA del presupuesto por fases (2-oct): la misma que abre el paciente desde
++// WhatsApp (/presupuesto/[token]) y la que se imprime (/print/presupuesto).
++// Sin JSX a propósito: el include de vitest es **/*.test.ts.
++
++import { createElement } from "react";
++import { renderToStaticMarkup } from "react-dom/server";
++import { describe, expect, it } from "vitest";
++
++import { armarPresupuesto } from "@/lib/presupuesto/fases";
++
++import { PresupuestoVista } from "./PresupuestoVista";
++
++const FILAS = [
++  { id: "a", nombre: "Endodoncia", pieza: 36, centavos: 80_000 },
++  { id: "b", nombre: "Corona de porcelana", pieza: 36, centavos: 120_050 },
++  { id: "c", nombre: "Limpieza dental", pieza: null, centavos: 15_000 },
++];
++
++function pintar(fases: Map<string, number>, extra: Partial<Parameters<typeof PresupuestoVista>[0]> = {}) {
++  const html = renderToStaticMarkup(
++    createElement(PresupuestoVista, {
++      emisor: { name: "Clínica Dental Aramayo", address: "Av. Busch 123", phone: "33445566", nit: "1023456028" },
++      para: "Lucía Mendoza",
++      rotuloPieza: "Diente",
++      emitidoEl: new Date("2026-10-02T14:00:00Z"),
++      venceEl: new Date("2026-11-01T14:00:00Z"),
++      timeZone: "America/La_Paz",
++      armado: armarPresupuesto(FILAS, fases),
++      ...extra,
++    }),
++  );
++  return { html, texto: html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ") };
++}
++
++describe("PresupuestoVista", () => {
++  it("con varias fases: cada una con su total, y el total general", () => {
++    const { texto } = pintar(new Map([["a", 1], ["c", 1], ["b", 2]]));
++    expect(texto).toContain("Fase 1");
++    expect(texto).toContain("Total fase 1 Bs 950,00");
++    expect(texto).toContain("Fase 2");
++    expect(texto).toContain("Total fase 2 Bs 1.200,50");
++    expect(texto).toContain("TOTAL Bs 2.150,50");
++    expect(texto.indexOf("Endodoncia")).toBeLessThan(texto.indexOf("Corona de porcelana"));
++  });
++
++  it("con una sola fase no dice «Fase 1» ni repite el total", () => {
++    const { texto } = pintar(new Map([["a", 1]]));
++    expect(texto).not.toContain("Fase 1");
++    expect(texto).not.toContain("Total fase");
++    expect(texto).toContain("TOTAL Bs 800,00");
++  });
++
++  it("para quién, del negocio, cuándo vence, y que no es factura", () => {
++    const { texto } = pintar(new Map([["a", 1]]));
++    expect(texto).toContain("Lucía Mendoza");
++    expect(texto).toContain("Clínica Dental Aramayo");
++    expect(texto).toContain("1 de noviembre de 2026");
++    expect(texto).toContain("Presupuesto, no es factura.");
++    expect(texto).toContain("Diente 36");
++  });
++
++  it("fuera del dental no hay diente", () => {
++    const { texto } = pintar(new Map([["a", 1]]), { rotuloPieza: null });
++    expect(texto).not.toContain("Diente");
++  });
++});
+diff --git a/app/print/presupuesto/PresupuestoVista.tsx b/app/print/presupuesto/PresupuestoVista.tsx
+new file mode 100644
+index 00000000..0a85b240
+--- /dev/null
++++ b/app/print/presupuesto/PresupuestoVista.tsx
+@@ -0,0 +1,149 @@
++// La HOJA del presupuesto por fases (2-oct): lo que el paciente abre desde
++// WhatsApp (/presupuesto/[token]) y lo que se imprime (/print/presupuesto). Una
++// sola pieza para las dos: lo que se imprime es lo que recibe. Sin sesión ni
++// base, para que se pueda mirar con datos de ejemplo. Reusa las clases del
++// comprobante (app/print/estilos.ts): mismo encabezado del negocio, mismas
++// cajas, misma tabla, y en el celular las columnas se apilan.
++
++import { formatBs } from "@/lib/comercio/format";
++import { LEYENDA_SIN_VALOR_FISCAL } from "@/lib/cobros";
++import type { PresupuestoArmado } from "@/lib/presupuesto/fases";
++
++import type { EmisorRecibo } from "../recibo-venta/ReciboVentaVista";
++
++export const ESTILOS_PRESUPUESTO = `
++        .pre-doc .inv-table td.r, .pre-doc .inv-table th.r { white-space: nowrap; }
++        .pre-fase { margin: 4px 0 8px; font-size: 13px; font-weight: 600; color: #141A17; }
++        .pre-doc section + section { margin-top: 22px; }
++        .pre-pieza { display: block; margin-top: 2px; font-size: 12px; color: #69716D; }
++        .pre-subtotal td { background: #F7F9F8; font-weight: 600; }
++        .pre-nota { margin-top: 18px; font-size: 12px; color: #424A46; line-height: 1.6; }
++        @media screen and (max-width: 640px) {
++          .pre-doc { margin: 0 auto; border-radius: 0; box-shadow: none; }
++          .pre-doc .inv-header { flex-direction: column; gap: 12px; padding: 20px; }
++          .pre-doc .inv-title-right { text-align: left; }
++          .pre-doc .inv-body { padding: 20px; }
++          .pre-doc .inv-meta-grid { grid-template-columns: 1fr; gap: 16px; }
++          .pre-doc .inv-table th, .pre-doc .inv-table td { padding: 10px; }
++          .pre-doc .inv-total-final { gap: 16px; padding: 12px 10px; }
++          .pre-doc .inv-footer { padding: 14px 20px; }
++        }
++`;
++
++export function PresupuestoVista({
++  emisor,
++  para,
++  rotuloPieza,
++  emitidoEl,
++  venceEl,
++  timeZone,
++  armado,
++}: {
++  emisor: EmisorRecibo;
++  /** Nombre de la persona a la que va el presupuesto. */
++  para: string;
++  /** «Diente» en el dental; null en los demás rubros. */
++  rotuloPieza: string | null;
++  emitidoEl: Date;
++  venceEl: Date;
++  timeZone: string;
++  armado: PresupuestoArmado;
++}) {
++  const fecha = new Intl.DateTimeFormat("es-BO", { day: "numeric", month: "long", year: "numeric", timeZone });
++  const variasFases = armado.fases.length > 1;
++
++  return (
++    <div className="invoice-page pre-doc">
++      <div className="inv-header">
++        <div>
++          <div className="inv-clinic-name">{emisor.name}</div>
++          <div className="inv-clinic-meta">
++            {emisor.address && <div>{emisor.address}</div>}
++            {emisor.phone && <div>{emisor.phone}</div>}
++            {emisor.email && <div>{emisor.email}</div>}
++            {emisor.nit && <div className="inv-nit-badge">NIT: {emisor.nit}</div>}
++          </div>
++        </div>
++        <div className="inv-title-right">
++          <h1>PRESUPUESTO</h1>
++        </div>
++      </div>
++
++      <div className="inv-body">
++        <div className="inv-meta-grid">
++          <div className="inv-meta-box">
++            <h4>Para</h4>
++            <div className="inv-patient-name">{para}</div>
++          </div>
++          <div className="inv-meta-box">
++            <h4>Fechas</h4>
++            <div className="inv-dates">
++              <div>
++                <div className="inv-date-label">Emitido</div>
++                <div className="inv-date-value">{fecha.format(emitidoEl)}</div>
++              </div>
++              <div>
++                <div className="inv-date-label">Válido hasta</div>
++                <div className="inv-date-value">{fecha.format(venceEl)}</div>
++              </div>
++            </div>
++          </div>
++        </div>
++
++        {armado.fases.map((fase) => (
++          <section key={fase.numero} aria-label={variasFases ? `Fase ${fase.numero}` : undefined}>
++            {variasFases ? <h2 className="pre-fase">Fase {fase.numero}</h2> : null}
++            <div className="inv-table-wrap">
++              <table className="inv-table">
++                <thead>
++                  <tr>
++                    <th>Tratamiento</th>
++                    <th className="r">Precio</th>
++                  </tr>
++                </thead>
++                <tbody>
++                  {fase.filas.map((fila) => (
++                    <tr key={fila.id}>
++                      <td>
++                        {fila.nombre}
++                        {/* Dos columnas en todo ancho: una columna que se esconde en el
++                            celular dejaba la del subtotal (colSpan) como un hueco gris. */}
++                        {rotuloPieza && fila.pieza ? (
++                          <span className="pre-pieza">
++                            {rotuloPieza} {fila.pieza}
++                          </span>
++                        ) : null}
++                      </td>
++                      <td className="r b">{formatBs(fila.centavos / 100)}</td>
++                    </tr>
++                  ))}
++                  {variasFases ? (
++                    <tr className="pre-subtotal">
++                      <td>Total fase {fase.numero}</td>
++                      <td className="r">{formatBs(fase.totalCentavos / 100)}</td>
++                    </tr>
++                  ) : null}
++                </tbody>
++              </table>
++            </div>
++          </section>
++        ))}
++
++        <div className="inv-total-final">
++          <span className="lbl">TOTAL</span>
++          <span className="val">{formatBs(armado.totalCentavos / 100)}</span>
++        </div>
++
++        <p className="pre-nota">
++          Precios en bolivianos. Pasado el {fecha.format(venceEl)}, los precios se vuelven a confirmar.
++        </p>
++      </div>
++
++      <div className="inv-footer">
++        {emisor.name}
++        {emisor.nit && ` · NIT ${emisor.nit}`}
++        <div className="inv-sin-notice">Presupuesto, no es factura. {LEYENDA_SIN_VALOR_FISCAL}</div>
++      </div>
++    </div>
++  );
++}
+diff --git a/app/print/presupuesto/[patientId]/page.tsx b/app/print/presupuesto/[patientId]/page.tsx
+new file mode 100644
+index 00000000..ee260971
+--- /dev/null
++++ b/app/print/presupuesto/[patientId]/page.tsx
+@@ -0,0 +1,88 @@
++// Presupuesto por fases imprimible (2-oct): el navegador lo imprime o lo guarda
++// como PDF. Misma hoja que recibe el paciente por el link (PresupuestoVista).
++//
++// Con sesión, como las otras rutas de /print: la persona y sus pasos tienen que
++// ser de la organización del usuario, con clinical.read y en un rubro con
++// presupuesto (dental y estética). Las fases llegan en la URL (?f=id:fase,...)
++// y el precio sale del catálogo.
++
++import { notFound, redirect } from "next/navigation";
++
++import { hasPermissionForProfile } from "@/lib/onia-core/access-control";
++import { resolveVerticalPack, tieneOdontograma } from "@/lib/platform/vertical-pack";
++import { prisma } from "@/lib/prisma";
++import { armarPresupuesto, centavosDe, leerFases, presupuestoEnRubro, PRESUPUESTO_VALIDEZ_DIAS } from "@/lib/presupuesto/fases";
++import { createClient } from "@/lib/supabase/server";
++import { DEFAULT_TZ } from "@/lib/time";
++
++import { PrintTrigger } from "../../invoice/[id]/PrintTrigger";
++import { ESTILOS_COMPROBANTE } from "../../estilos";
++import { ESTILOS_PRESUPUESTO, PresupuestoVista } from "../PresupuestoVista";
++
++export default async function PrintPresupuestoPage({
++  params,
++  searchParams,
++}: {
++  params: Promise<{ patientId: string }>;
++  searchParams: Promise<{ f?: string }>;
++}) {
++  const supabase = await createClient();
++  const {
++    data: { user },
++  } = await supabase.auth.getUser();
++  if (!user) redirect("/login");
++
++  const profile = await prisma.profile.findUnique({
++    where: { userId: user.id },
++    include: { organization: { include: { clinicSettings: { select: { timezone: true } } } } },
++  });
++  if (!profile) redirect("/login");
++
++  const trackId = resolveVerticalPack(profile.organization.verticalTrackId ?? "").trackId;
++  if (!presupuestoEnRubro(trackId) || !(await hasPermissionForProfile(profile, "clinical.read"))) notFound();
++
++  const { patientId } = await params;
++  const fases = leerFases((await searchParams).f);
++  const [persona, plan] = await Promise.all([
++    prisma.patient.findFirst({ where: { id: patientId, organizationId: profile.organizationId }, select: { name: true } }),
++    prisma.patientTreatment.findMany({
++      where: {
++        organizationId: profile.organizationId,
++        patientId,
++        id: { in: [...fases.keys()] },
++        status: { not: "CANCELADO" },
++      },
++      orderBy: { date: "asc" },
++      select: { id: true, toothNumber: true, treatment: { select: { name: true, price: true } } },
++    }),
++  ]);
++  if (!persona || plan.length === 0) notFound();
++
++  const esDental = tieneOdontograma(trackId);
++  const ahora = new Date();
++  const org = profile.organization;
++
++  return (
++    <>
++      <PrintTrigger />
++      <style>{ESTILOS_COMPROBANTE + ESTILOS_PRESUPUESTO}</style>
++      <PresupuestoVista
++        emisor={org}
++        para={persona.name}
++        rotuloPieza={esDental ? "Diente" : null}
++        emitidoEl={ahora}
++        venceEl={new Date(ahora.getTime() + PRESUPUESTO_VALIDEZ_DIAS * 86_400_000)}
++        timeZone={org.clinicSettings?.timezone || DEFAULT_TZ}
++        armado={armarPresupuesto(
++          plan.map((f) => ({
++            id: f.id,
++            nombre: f.treatment.name,
++            pieza: esDental ? f.toothNumber : null,
++            centavos: centavosDe(f.treatment.price),
++          })),
++          fases,
++        )}
++      />
++    </>
++  );
++}
+diff --git a/components/patients/PlanDeTratamiento.render.test.ts b/components/patients/PlanDeTratamiento.render.test.ts
+index dbcba355..f51f084b 100644
+--- a/components/patients/PlanDeTratamiento.render.test.ts
++++ b/components/patients/PlanDeTratamiento.render.test.ts
+@@ -88,5 +88,13 @@ describe("Plan de tratamiento", () => {
+     expect(pintar().texto).toContain("Cambiar la fecha de Endodoncia");
+     expect(pintar({ puedeEditar: false, catalogo: [] }).texto).not.toContain("Cambiar la fecha");
+   });
++
++  it("con el link del presupuesto (dental y estética), lo ofrece si hay algo en el plan", () => {
++    const { html, texto } = pintar({ presupuestoHref: "/patients/pat_1/presupuesto" });
++    expect(html).toContain('href="/patients/pat_1/presupuesto"');
++    expect(texto).toContain("Presupuesto");
++    expect(pintar({ presupuestoHref: "/patients/pat_1/presupuesto", filas: [] }).html).not.toContain("/presupuesto");
++    expect(pintar().html).not.toContain("/presupuesto");
++  });
+ });
+ 
+diff --git a/components/patients/PlanDeTratamiento.tsx b/components/patients/PlanDeTratamiento.tsx
+index 64cc98e1..a642c4f8 100644
+--- a/components/patients/PlanDeTratamiento.tsx
++++ b/components/patients/PlanDeTratamiento.tsx
+@@ -78,6 +78,7 @@ export function PlanDeTratamiento({
+   timeZone,
+   hoy,
+   formAbierto = false,
++  presupuestoHref = null,
+   sinPagar = [],
+ }: {
+   patientId: string;
+@@ -100,6 +101,8 @@ export function PlanDeTratamiento({
+   hoy?: string;
+   /** El formulario de agregar ya abierto: para el banco /dev/ficha y los tests. */
+   formAbierto?: boolean;
++  /** Armar el presupuesto por fases (solo dental y estética); null = el rubro no lo tiene. */
++  presupuestoHref?: string | null;
+   /** Pasos terminados que ningún cobro pagado cubre: la fila lo dice («Sin pagar»). */
+   sinPagar?: readonly string[];
+ }) {
+@@ -175,23 +178,38 @@ export function PlanDeTratamiento({
+ 
+   return (
+     <div className="bg-surface-container-lowest rounded-xl shadow-[0_4px_20px_rgb(0,0,0,0.03)] overflow-hidden">
+-      <div className="px-4 md:px-8 py-4 md:py-5 border-b border-outline-variant/40 flex items-center justify-between gap-3">
++      {/* Con «Presupuesto» y «Agregar», en el celular las acciones bajan a su
++          renglón: apretadas al lado del título partían «Plan de tratamiento». */}
++      <div className="px-4 md:px-8 py-4 md:py-5 border-b border-outline-variant/40 flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
+         <h3 className="text-lg font-bold font-headline">{titulo}</h3>
+-        {puedeEditar && catalogo.length > 0 && !abierto ? (
+-          <button
+-            type="button"
+-            onClick={() => {
+-              cambiarDia({ tipo: "abrir", hoyAhora: hoyEn(timeZone) });
+-              setAbierto(true);
+-            }}
+-            className="flex items-center gap-1 text-primary text-sm font-semibold hover:underline"
+-          >
+-            <span className="material-symbols-outlined text-lg" aria-hidden="true">
+-              add
+-            </span>
+-            Agregar
+-          </button>
+-        ) : null}
++        <div className="flex items-center gap-5">
++          {presupuestoHref && vigentes.length > 0 ? (
++            <Link
++              href={presupuestoHref}
++              className="flex min-h-11 items-center gap-1 text-primary text-sm font-semibold hover:underline"
++            >
++              <span className="material-symbols-outlined" style={{ fontSize: 18 }} aria-hidden="true">
++                request_quote
++              </span>
++              Presupuesto
++            </Link>
++          ) : null}
++          {puedeEditar && catalogo.length > 0 && !abierto ? (
++            <button
++              type="button"
++              onClick={() => {
++                cambiarDia({ tipo: "abrir", hoyAhora: hoyEn(timeZone) });
++                setAbierto(true);
++              }}
++              className="flex items-center gap-1 text-primary text-sm font-semibold hover:underline"
++            >
++              <span className="material-symbols-outlined text-lg" aria-hidden="true">
++                add
++              </span>
++              Agregar
++            </button>
++          ) : null}
++        </div>
+       </div>
+ 
+       {vigentes.length > 0 ? (
+diff --git a/components/presupuesto/ArmadorDePresupuesto.tsx b/components/presupuesto/ArmadorDePresupuesto.tsx
+new file mode 100644
+index 00000000..b4408f25
+--- /dev/null
++++ b/components/presupuesto/ArmadorDePresupuesto.tsx
+@@ -0,0 +1,54 @@
++// La pantalla del armador entera (volver a la ficha, título y PresupuestoPorFases):
++// la dibujan la página /patients/[id]/presupuesto y el banco /dev/presupuesto.
++
++import Link from "next/link";
++
++import { PresupuestoPorFases, type FilaDelArmador } from "./PresupuestoPorFases";
++
++export function ArmadorDePresupuesto({
++  patientId,
++  nombre,
++  telefono,
++  negocio,
++  filas,
++  rotuloPieza,
++  vocab,
++}: {
++  patientId: string;
++  nombre: string;
++  telefono: string | null;
++  negocio: string;
++  filas: FilaDelArmador[];
++  rotuloPieza: string | null;
++  vocab: { cliente: string; clienteFemenino: boolean; servicio: string; servicios: string };
++}) {
++  return (
++    <>
++      <Link
++        href={`/patients/${patientId}`}
++        className="mb-3 inline-flex min-h-11 items-center gap-1 text-sm text-on-surface-variant transition-colors hover:text-primary"
++      >
++        <span className="material-symbols-outlined" style={{ fontSize: 18 }} aria-hidden="true">
++          arrow_back
++        </span>
++        {nombre}
++      </Link>
++      <header className="mb-5">
++        <p className="font-label text-on-surface-variant/80">Presupuesto</p>
++        <h1 className="text-2xl font-semibold tracking-tight text-on-surface font-headline md:text-3xl">{nombre}</h1>
++        <p className="mt-1 text-sm text-on-surface-variant">
++          Ordená el plan en fases. Los precios salen de tu catálogo de {vocab.servicios}.
++        </p>
++      </header>
++      <PresupuestoPorFases
++        patientId={patientId}
++        nombre={nombre}
++        telefono={telefono}
++        negocio={negocio}
++        filas={filas}
++        rotuloPieza={rotuloPieza}
++        vocab={vocab}
++      />
++    </>
++  );
++}
+diff --git a/components/presupuesto/PresupuestoPorFases.render.test.ts b/components/presupuesto/PresupuestoPorFases.render.test.ts
+new file mode 100644
+index 00000000..7b015f10
+--- /dev/null
++++ b/components/presupuesto/PresupuestoPorFases.render.test.ts
+@@ -0,0 +1,71 @@
++// El armador del presupuesto por fases (2-oct), en la ficha del paciente. Sin
++// JSX a propósito. La captura a 390 y 1440 se mira aparte.
++
++import { createElement } from "react";
++import { renderToStaticMarkup } from "react-dom/server";
++import { describe, expect, it, vi } from "vitest";
++
++vi.mock("next/link", () => ({
++  default: ({ children, href, ...rest }: { children: React.ReactNode; href: string }) => createElement("a", { href, ...rest }, children),
++}));
++
++import { PresupuestoPorFases } from "./PresupuestoPorFases";
++
++const FILAS = [
++  { id: "pt_a", nombre: "Endodoncia", pieza: 36, centavos: 80_000, status: "EN_PROGRESO" },
++  { id: "pt_b", nombre: "Corona de porcelana", pieza: 36, centavos: 120_000, status: "PENDIENTE" },
++  { id: "pt_c", nombre: "Limpieza dental", pieza: null, centavos: 15_000, status: "COMPLETADO" },
++];
++
++function pintar(extra: Partial<Parameters<typeof PresupuestoPorFases>[0]> = {}) {
++  const html = renderToStaticMarkup(
++    createElement(PresupuestoPorFases, {
++      patientId: "pat_1",
++      nombre: "Lucía Mendoza",
++      telefono: "71234567",
++      negocio: "Clínica Dental Aramayo",
++      filas: FILAS,
++      rotuloPieza: "Diente",
++      vocab: { cliente: "paciente", clienteFemenino: false, servicio: "tratamiento", servicios: "tratamientos" },
++      ...extra,
++    }),
++  );
++  return { html, texto: html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ") };
++}
++
++describe("PresupuestoPorFases", () => {
++  it("arranca con lo que falta hacer en la fase 1 y el total con precios del catálogo", () => {
++    const { texto, html } = pintar();
++    expect(texto).toContain("Total Bs 2.000,00");
++    expect(html).toContain('aria-label="Fase de Endodoncia"');
++    expect(texto).toContain("No incluir");
++  });
++
++  it("lo ya hecho arranca afuera (se puede sumar)", () => {
++    const { html } = pintar();
++    // El select de la limpieza (Completado) arranca en «No incluir» (valor 0).
++    expect(html).toMatch(/aria-label="Fase de Limpieza dental"[^>]*>[\s\S]*?<option value="0" selected=""/);
++  });
++
++  it("imprimir lleva a la hoja con las fases elegidas", () => {
++    const { html } = pintar();
++    expect(html).toContain('href="/print/presupuesto/pat_1?f=pt_a%3A1%2Cpt_b%3A1"');
++  });
++
++  it("enviar le habla al paciente en el idioma del rubro", () => {
++    expect(pintar().texto).toContain("Enviar al paciente");
++    const estetica = { cliente: "clienta", clienteFemenino: true, servicio: "tratamiento", servicios: "tratamientos" };
++    expect(pintar({ vocab: estetica, rotuloPieza: null }).texto).toContain("Enviar a la clienta");
++  });
++
++  it("sin un celular al que WhatsApp llegue, dice por qué no se puede enviar", () => {
++    const { texto } = pintar({ telefono: "3344556" });
++    expect(texto).toContain("Para enviarlo, cargá un celular en su ficha.");
++  });
++
++  it("sin nada en el plan, dice dónde se carga", () => {
++    const { texto, html } = pintar({ filas: [] });
++    expect(texto).toContain("Todavía no hay tratamientos en el plan.");
++    expect(html).toContain('href="/patients/pat_1"');
++  });
++});
+diff --git a/components/presupuesto/PresupuestoPorFases.tsx b/components/presupuesto/PresupuestoPorFases.tsx
+new file mode 100644
+index 00000000..e4713ce6
+--- /dev/null
++++ b/components/presupuesto/PresupuestoPorFases.tsx
+@@ -0,0 +1,225 @@
++"use client";
++
++// El armador del presupuesto por fases (2-oct, hueco #2 de dental en la
++// auditoría; lo #1 que copiar de Doctocliq). Desde el plan de tratamiento del
++// paciente: cada paso a una fase (o afuera), total por fase y total general con
++// los precios del catálogo, y dos salidas:
++//   - Imprimir: la hoja limpia de /print/presupuesto (con sesión).
++//   - Enviar al paciente: un link de solo lectura, firmado y con vencimiento,
++//     por WhatsApp (wa.me, sin la API de Meta). Lo arma el servidor con el
++//     precio del catálogo; acá solo se eligen las fases.
++//
++// Las fases no se guardan en la base (no hay columna; ver pendientes): viven en
++// esta pantalla, en la URL de imprimir y adentro del link que recibe el paciente.
++
++import Link from "next/link";
++import { useMemo, useState } from "react";
++
++import { Button } from "@/components/ui/button";
++import { buttonVariants } from "@/components/ui/button-variants";
++import { Card } from "@/components/ui/card";
++import { formatBs } from "@/lib/comercio/format";
++import { mensajeDeError } from "@/lib/http/mensaje-de-error";
++import { armarPresupuesto, codificarFases, FASES_MAX, fasesPorDefecto, PRESUPUESTO_VALIDEZ_DIAS } from "@/lib/presupuesto/fases";
++import { nombreDePila } from "@/lib/utils";
++import { numeroParaWhatsapp } from "@/lib/whatsapp/numero-para-enviar";
++
++export interface FilaDelArmador {
++  id: string;
++  nombre: string;
++  pieza: number | null;
++  centavos: number;
++  status: string;
++}
++
++const RESPALDO = "No se pudo armar el link. Probá de nuevo.";
++const SELECT =
++  "min-h-11 rounded-lg border border-outline-variant bg-surface px-3 text-sm font-semibold text-on-surface focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30";
++
++export function PresupuestoPorFases({
++  patientId,
++  nombre,
++  telefono,
++  negocio,
++  filas,
++  rotuloPieza,
++  vocab,
++}: {
++  patientId: string;
++  nombre: string;
++  telefono: string | null;
++  negocio: string;
++  /** El plan sin lo cancelado, con el precio del catálogo en centavos. */
++  filas: FilaDelArmador[];
++  /** «Diente» solo en el dental. */
++  rotuloPieza: string | null;
++  vocab: { cliente: string; clienteFemenino: boolean; servicio: string; servicios: string };
++}) {
++  const [faseDe, setFaseDe] = useState<Map<string, number>>(() => fasesPorDefecto(filas));
++  const [cantidadDeFases, setCantidadDeFases] = useState(() => Math.max(1, ...fasesPorDefecto(filas).values()));
++  const [enviando, setEnviando] = useState(false);
++  const [error, setError] = useState<string | null>(null);
++  const [link, setLink] = useState<string | null>(null);
++
++  const armado = useMemo(() => armarPresupuesto(filas, faseDe), [filas, faseDe]);
++  const whatsapp = numeroParaWhatsapp(telefono);
++  const alCliente = `${vocab.clienteFemenino ? "a la" : "al"} ${vocab.cliente}`;
++  const vacio = armado.fases.length === 0;
++  const imprimirHref = `/print/presupuesto/${patientId}?f=${encodeURIComponent(codificarFases(faseDe))}`;
++
++  function elegir(id: string, fase: number) {
++    setLink(null);
++    setFaseDe((antes) => {
++      const nuevo = new Map(antes);
++      if (fase === 0) nuevo.delete(id);
++      else nuevo.set(id, fase);
++      return nuevo;
++    });
++  }
++
++  async function enviar() {
++    if (!whatsapp || vacio || enviando) return;
++    // La ventana se abre YA, dentro del toque: abrirla después del fetch la
++    // bloquea el navegador del celular. Se llena cuando el link está listo.
++    const ventana = window.open("", "_blank");
++    if (ventana) ventana.opener = null;
++    setEnviando(true);
++    setError(null);
++    try {
++      const res = await fetch(`/api/patients/${patientId}/presupuesto`, {
++        method: "POST",
++        headers: { "Content-Type": "application/json" },
++        body: JSON.stringify({ filas: [...faseDe.entries()].map(([id, fase]) => ({ id, fase })) }),
++      });
++      if (!res.ok) throw new Error(await mensajeDeError(res, RESPALDO));
++      const { url } = (await res.json()) as { url: string };
++      const texto = `Hola ${nombreDePila(nombre)}, le enviamos su presupuesto de ${negocio}: ${url}`;
++      const destino = `https://wa.me/${whatsapp}?text=${encodeURIComponent(texto)}`;
++      if (ventana) ventana.location.href = destino;
++      else window.location.href = destino;
++      setLink(url);
++    } catch (err) {
++      ventana?.close();
++      setError(err instanceof Error ? err.message : RESPALDO);
++    } finally {
++      setEnviando(false);
++    }
++  }
++
++  if (filas.length === 0) {
++    return (
++      <Card as="section" padding="none" className="p-4 md:p-6">
++        <p className="text-sm text-on-surface">Todavía no hay {vocab.servicios} en el plan.</p>
++        <Link href={`/patients/${patientId}`} className={`${buttonVariants({ variant: "secondary", size: "sm" })} mt-3`}>
++          Cargarlos en su ficha
++        </Link>
++      </Card>
++    );
++  }
++
++  return (
++    <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start">
++      <Card as="section" padding="none" aria-labelledby="pre-plan-h">
++        <div className="flex items-center justify-between gap-3 border-b border-outline-variant/40 px-4 py-4 md:px-6">
++          <h2 id="pre-plan-h" className="font-label text-on-surface-variant">
++            Plan de {vocab.servicio}
++          </h2>
++          {cantidadDeFases < FASES_MAX ? (
++            <button
++              type="button"
++              onClick={() => setCantidadDeFases((n) => Math.min(FASES_MAX, n + 1))}
++              className="inline-flex min-h-11 items-center gap-1 text-sm font-semibold text-primary"
++            >
++              <span className="material-symbols-outlined" style={{ fontSize: 18 }} aria-hidden="true">
++                add
++              </span>
++              Agregar fase
++            </button>
++          ) : null}
++        </div>
++        <ul className="divide-y divide-outline-variant/40">
++          {filas.map((fila) => (
++            <li key={fila.id} className="flex items-center justify-between gap-3 px-4 py-3 md:px-6">
++              <div className="min-w-0">
++                <p className="text-sm font-semibold text-on-surface">{fila.nombre}</p>
++                <p className="text-xs text-on-surface-variant tabular-nums">
++                  {rotuloPieza && fila.pieza ? `${rotuloPieza} ${fila.pieza} · ` : ""}
++                  {formatBs(fila.centavos / 100)}
++                </p>
++              </div>
++              <select
++                aria-label={`Fase de ${fila.nombre}`}
++                value={faseDe.get(fila.id) ?? 0}
++                onChange={(e) => elegir(fila.id, Number(e.target.value))}
++                className={SELECT}
++              >
++                {Array.from({ length: cantidadDeFases }, (_, i) => (
++                  <option key={i + 1} value={i + 1}>
++                    Fase {i + 1}
++                  </option>
++                ))}
++                <option value={0}>No incluir</option>
++              </select>
++            </li>
++          ))}
++        </ul>
++      </Card>
++
++      <Card as="section" variant="raised" padding="none" className="p-4 md:p-6" aria-labelledby="pre-total-h">
++        <h2 id="pre-total-h" className="font-label text-on-surface-variant">
++          Presupuesto
++        </h2>
++        {armado.fases.length > 1 ? (
++          <dl className="mt-3 space-y-1.5 text-sm">
++            {armado.fases.map((f) => (
++              <div key={f.numero} className="flex items-baseline justify-between gap-3">
++                <dt className="text-on-surface-variant">Fase {f.numero}</dt>
++                <dd className="font-semibold tabular-nums text-on-surface">{formatBs(f.totalCentavos / 100)}</dd>
++              </div>
++            ))}
++          </dl>
++        ) : null}
++        <p className="mt-3 flex items-baseline justify-between gap-3 border-t border-outline-variant/40 pt-3">
++          <span className="text-sm font-semibold text-on-surface">Total</span>
++          <span className="text-2xl font-semibold tabular-nums text-on-surface">{formatBs(armado.totalCentavos / 100)}</span>
++        </p>
++
++        <div className="mt-4 flex flex-col gap-2">
++          <Button
++            fullWidth
++            loading={enviando}
++            disabled={!whatsapp || vacio}
++            disabledReason={
++              vacio ? `Elegí al menos un ${vocab.servicio}.` : !whatsapp ? "Para enviarlo, cargá un celular en su ficha." : undefined
++            }
++            onClick={() => void enviar()}
++          >
++            <span className="material-symbols-outlined" aria-hidden="true">
++              send
++            </span>
++            Enviar {alCliente}
++          </Button>
++          {vacio ? null : (
++            <a href={imprimirHref} target="_blank" rel="noopener" className={`${buttonVariants({ variant: "secondary" })} w-full`}>
++              <span className="material-symbols-outlined" aria-hidden="true">
++                print
++              </span>
++              Imprimir
++            </a>
++          )}
++        </div>
++
++        {error ? (
++          <p role="alert" className="mt-3 rounded-lg border border-error px-3 py-2 text-xs text-error">
++            {error}
++          </p>
++        ) : null}
++        {link ? (
++          <p className="mt-3 break-all text-xs text-on-surface-variant" role="status">
++            Listo: se abrió WhatsApp con el link. Vale {PRESUPUESTO_VALIDEZ_DIAS} días. <a href={link} className="font-semibold text-primary underline" target="_blank" rel="noopener noreferrer">Ver lo que recibe</a>
++          </p>
++        ) : null}
++      </Card>
++    </div>
++  );
++}
+diff --git a/lib/audit.ts b/lib/audit.ts
+index 870fcecb..8e4925ff 100644
+--- a/lib/audit.ts
++++ b/lib/audit.ts
+@@ -32,6 +32,9 @@ export type AuditAction =
+   // declaradas SOLO en el CSV interno, nunca ante el SIN (ver la ruta).
+   | "CREDIT_NOTE_CREATED"
+   | "PAYMENT_RECORDED"
++  // Link público del presupuesto por fases: se abre SIN sesión y nombra
++  // tratamientos. Queda quién lo armó y cuándo (2-oct).
++  | "BUDGET_LINK_CREATED"
+   | "TREATMENT_ASSIGNED"
+   | "TREATMENT_UPDATED"
+   | "CLINIC_SETTINGS_UPDATED"
+diff --git a/lib/platform/api-route-registry.ts b/lib/platform/api-route-registry.ts
+index a4bea247..61eaa39e 100644
+--- a/lib/platform/api-route-registry.ts
++++ b/lib/platform/api-route-registry.ts
+@@ -131,6 +131,11 @@ export const VERTICAL_API_ROUTES = {
+   "patients/[id]/treatments": CON_AGENDA,
+   // Cambiar el estado de un tratamiento del plan (29-sep): mismo segmento que el padre.
+   "patients/[id]/treatments/[treatmentRowId]": CON_AGENDA,
++  // Link público del presupuesto por fases (2-oct): mismo segmento que el padre,
++  // porque el gate no distingue más fino. Que sea SOLO dental y estética lo
++  // controla la ruta (presupuestoEnRubro): en veterinaria el tratamiento es de
++  // la mascota y servicios no guarda su catálogo en treatments.
++  "patients/[id]/presupuesto": CON_AGENDA,
+   "patients/import": CON_AGENDA,
+   prescriptions: CLINICOS,
+   "prescriptions/[id]": CLINICOS,
+diff --git a/lib/platform/dato-clinico-pide-permiso.test.ts b/lib/platform/dato-clinico-pide-permiso.test.ts
+index 6be90439..022eed1e 100644
+--- a/lib/platform/dato-clinico-pide-permiso.test.ts
++++ b/lib/platform/dato-clinico-pide-permiso.test.ts
+@@ -156,6 +156,20 @@ const COBERTURA: { archivo: string; modo: Modo; simbolo?: string; motivo: string
+     motivo:
+       "Odontograma completo por URL directa. Cortaba por sesion, org y RUBRO, nunca por rol.",
+   },
++  {
++    archivo: "app/(dashboard)/patients/[id]/presupuesto/page.tsx",
++    modo: "corta",
++    motivo:
++      "Presupuesto por fases (2-oct): la pantalla entera es el plan de tratamiento con sus precios. " +
++      "Misma puerta que POST /api/patients/[id]/presupuesto.",
++  },
++  {
++    archivo: "app/print/presupuesto/[patientId]/page.tsx",
++    modo: "corta",
++    motivo:
++      "El mismo presupuesto, imprimible. Fuera del layout de (dashboard), como la receta: ningún " +
++      "corte de ruta la alcanza.",
++  },
+   {
+     archivo: "app/print/prescription/[id]/page.tsx",
+     modo: "corta",
+diff --git a/lib/presupuesto/cargar.test.ts b/lib/presupuesto/cargar.test.ts
+new file mode 100644
+index 00000000..367da1cb
+--- /dev/null
++++ b/lib/presupuesto/cargar.test.ts
+@@ -0,0 +1,124 @@
++import { beforeEach, describe, expect, it, vi } from "vitest";
++
++// Lo que el paciente ve al abrir el link público (2-oct). Sin sesión: todo lo
++// autoriza el token. Lo que defiende: un token inválido no toca la base; cada
++// consulta va por el negocio Y la persona del token (nunca datos de otro
++// paciente); dado de baja, otro rubro o plan vacío = no disponible.
++
++const prismaMocks = vi.hoisted(() => ({
++  organization: { findUnique: vi.fn() },
++  patient: { findFirst: vi.fn() },
++  patientTreatment: { findMany: vi.fn() },
++  clinicSettings: { findUnique: vi.fn() },
++}));
++vi.mock("@/lib/prisma", () => ({ prisma: prismaMocks }));
++
++import { cargarPresupuestoPublico } from "./cargar";
++import { firmarPresupuestoToken } from "./token";
++
++const AHORA = new Date("2026-10-02T14:00:00.000Z");
++let token = "";
++
++beforeEach(() => {
++  vi.clearAllMocks();
++  process.env.ENCRYPTION_KEY = "a".repeat(64);
++  token = firmarPresupuestoToken({
++    organizationId: "org_1",
++    patientId: "pat_1",
++    filas: [
++      { id: "pt_b", fase: 2, centavos: 120_000 },
++      { id: "pt_a", fase: 1, centavos: 80_000 },
++    ],
++    telefono: "71234567",
++    ahora: AHORA,
++  });
++  prismaMocks.organization.findUnique.mockResolvedValue({
++    name: "Clínica Dental Aramayo",
++    address: null,
++    phone: "33445566",
++    email: null,
++    nit: null,
++    verticalTrackId: "dentagest-clinical",
++  });
++  prismaMocks.patient.findFirst.mockResolvedValue({ name: "Lucía Mendoza", phone: "71234567" });
++  prismaMocks.clinicSettings.findUnique.mockResolvedValue({ timezone: "America/La_Paz" });
++  prismaMocks.patientTreatment.findMany.mockResolvedValue([
++    { id: "pt_a", toothNumber: 36, treatment: { name: "Endodoncia" } },
++    { id: "pt_b", toothNumber: 36, treatment: { name: "Corona de porcelana" } },
++  ]);
++});
++
++describe("cargarPresupuestoPublico", () => {
++  it("arma la hoja con el PRECIO del token y los nombres de la base, en el orden del link", async () => {
++    const datos = await cargarPresupuestoPublico(token, AHORA);
++    expect(datos?.para).toBe("Lucía Mendoza");
++    expect(datos?.rotuloPieza).toBe("Diente");
++    expect(datos?.armado.fases.map((f) => f.filas.map((x) => [x.nombre, x.centavos]))).toEqual([
++      [["Endodoncia", 80_000]],
++      [["Corona de porcelana", 120_000]],
++    ]);
++    expect(datos?.armado.totalCentavos).toBe(200_000);
++  });
++
++  it("cada consulta va por el negocio y la persona del token", async () => {
++    await cargarPresupuestoPublico(token, AHORA);
++    expect(prismaMocks.patient.findFirst.mock.calls[0][0].where).toEqual({ id: "pat_1", organizationId: "org_1", deactivatedAt: null });
++    expect(prismaMocks.patientTreatment.findMany.mock.calls[0][0].where).toEqual({
++      organizationId: "org_1",
++      patientId: "pat_1",
++      id: { in: ["pt_b", "pt_a"] },
++      status: { not: "CANCELADO" },
++    });
++  });
++
++  it("token inválido o vencido: null sin tocar la base", async () => {
++    expect(await cargarPresupuestoPublico("basura.firma", AHORA)).toBeNull();
++    expect(await cargarPresupuestoPublico(token, new Date(AHORA.getTime() + 40 * 86_400_000))).toBeNull();
++    expect(prismaMocks.organization.findUnique).not.toHaveBeenCalled();
++    expect(prismaMocks.patientTreatment.findMany).not.toHaveBeenCalled();
++  });
++
++  it("dado de baja o de otro negocio (no aparece): null", async () => {
++    prismaMocks.patient.findFirst.mockResolvedValue(null);
++    expect(await cargarPresupuestoPublico(token, AHORA)).toBeNull();
++  });
++
++  it("si el negocio dejó de ser dental o estética: null", async () => {
++    prismaMocks.organization.findUnique.mockResolvedValue({ name: "X", verticalTrackId: "vetgest-clinical" });
++    expect(await cargarPresupuestoPublico(token, AHORA)).toBeNull();
++  });
++
++  it("si se borraron o cancelaron todos los pasos: null; si queda uno, solo ese", async () => {
++    prismaMocks.patientTreatment.findMany.mockResolvedValue([]);
++    expect(await cargarPresupuestoPublico(token, AHORA)).toBeNull();
++    prismaMocks.patientTreatment.findMany.mockResolvedValue([{ id: "pt_a", toothNumber: null, treatment: { name: "Endodoncia" } }]);
++    expect((await cargarPresupuestoPublico(token, AHORA))?.armado.totalCentavos).toBe(80_000);
++  });
++
++  // Auditoría del 2-oct: con el celular mal escrito, el link le llegaba a un
++  // desconocido y no había forma de cortarlo durante 30 días. El link vale para
++  // el celular que tenía la ficha al armarlo: corregirlo lo anula.
++  it("corregir el celular en la ficha anula el link mandado al número equivocado", async () => {
++    const alEquivocado = firmarPresupuestoToken({
++      organizationId: "org_1",
++      patientId: "pat_1",
++      filas: [{ id: "pt_a", fase: 1, centavos: 80_000 }],
++      telefono: "71234576",
++      ahora: AHORA,
++    });
++    expect(await cargarPresupuestoPublico(alEquivocado, AHORA)).toBeNull();
++    // El mismo celular escrito de otra forma no lo anula.
++    prismaMocks.patient.findFirst.mockResolvedValue({ name: "Lucía Mendoza", phone: "+591 712 34567" });
++    expect(await cargarPresupuestoPublico(token, AHORA)).not.toBeNull();
++  });
++
++  it("la consulta de la persona trae su celular de hoy", async () => {
++    await cargarPresupuestoPublico(token, AHORA);
++    expect(prismaMocks.patient.findFirst.mock.calls[0][0].select).toEqual({ name: true, phone: true });
++  });
++
++  it("estética: sin diente", async () => {
++    prismaMocks.organization.findUnique.mockResolvedValue({ name: "Estética", verticalTrackId: "esteticagest-clinical" });
++    expect((await cargarPresupuestoPublico(token, AHORA))?.rotuloPieza).toBeNull();
++  });
++});
+diff --git a/lib/presupuesto/cargar.ts b/lib/presupuesto/cargar.ts
+new file mode 100644
+index 00000000..654eef24
+--- /dev/null
++++ b/lib/presupuesto/cargar.ts
+@@ -0,0 +1,75 @@
++// Lo que el paciente ve al abrir el link del presupuesto (2-oct). Sin sesión:
++// todo lo autoriza el token firmado (lib/presupuesto/token.ts).
++//
++// - Token inválido o vencido: null sin tocar la base.
++// - Cada consulta va por el negocio Y la persona del token: el link no puede
++//   mostrar nada de otro paciente aunque alguien le cambie los ids de las filas
++//   (la firma lo impide, y la consulta lo impide otra vez).
++// - El PRECIO sale del token (congelado al armarlo); los nombres, de la base.
++// - Dado de baja, negocio que ya no es dental/estética o plan vacío (todo se
++//   canceló o se borró): no disponible.
++// - Otro celular en la ficha que el del link (se corrigió un número mal
++//   escrito): no disponible. El link vale para el número al que se mandó.
++
++import type { EmisorRecibo } from "@/app/print/recibo-venta/ReciboVentaVista";
++import { resolveVerticalPack, tieneOdontograma } from "@/lib/platform/vertical-pack";
++import { prisma } from "@/lib/prisma";
++import { DEFAULT_TZ } from "@/lib/time";
++
++import { armarPresupuesto, presupuestoEnRubro, type PresupuestoArmado } from "./fases";
++import { huellaDelTelefono, verificarPresupuestoToken } from "./token";
++
++export interface PresupuestoPublico {
++  emisor: EmisorRecibo;
++  para: string;
++  rotuloPieza: string | null;
++  emitidoEl: Date;
++  venceEl: Date;
++  timeZone: string;
++  armado: PresupuestoArmado;
++}
++
++export async function cargarPresupuestoPublico(token: string, ahora: Date = new Date()): Promise<PresupuestoPublico | null> {
++  const firmado = verificarPresupuestoToken(token, ahora);
++  if (!firmado) return null;
++  const { organizationId, patientId, filas } = firmado;
++
++  const org = await prisma.organization.findUnique({
++    where: { id: organizationId },
++    select: { name: true, address: true, phone: true, email: true, nit: true, verticalTrackId: true },
++  });
++  const trackId = resolveVerticalPack(org?.verticalTrackId ?? "").trackId;
++  if (!org || !presupuestoEnRubro(trackId)) return null;
++
++  const [persona, enLaBase, settings] = await Promise.all([
++    prisma.patient.findFirst({ where: { id: patientId, organizationId, deactivatedAt: null }, select: { name: true, phone: true } }),
++    prisma.patientTreatment.findMany({
++      where: { organizationId, patientId, id: { in: filas.map((f) => f.id) }, status: { not: "CANCELADO" } },
++      select: { id: true, toothNumber: true, treatment: { select: { name: true } } },
++    }),
++    prisma.clinicSettings.findUnique({ where: { organizationId }, select: { timezone: true } }),
++  ]);
++  if (!persona || enLaBase.length === 0) return null;
++  if (huellaDelTelefono(persona.phone) !== firmado.huellaTelefono) return null;
++
++  const esDental = tieneOdontograma(trackId);
++  const deLaBase = new Map(enLaBase.map((f) => [f.id, f]));
++  const presentes = filas.filter((f) => deLaBase.has(f.id));
++  const armado = armarPresupuesto(
++    presentes.map((f) => {
++      const fila = deLaBase.get(f.id)!;
++      return { id: f.id, nombre: fila.treatment.name, pieza: esDental ? fila.toothNumber : null, centavos: f.centavos };
++    }),
++    new Map(presentes.map((f) => [f.id, f.fase])),
++  );
++
++  return {
++    emisor: { name: org.name, address: org.address, phone: org.phone, email: org.email, nit: org.nit },
++    para: persona.name,
++    rotuloPieza: esDental ? "Diente" : null,
++    emitidoEl: firmado.emitidoEl,
++    venceEl: firmado.venceEl,
++    timeZone: settings?.timezone || DEFAULT_TZ,
++    armado,
++  };
++}
+diff --git a/lib/presupuesto/fases.test.ts b/lib/presupuesto/fases.test.ts
+new file mode 100644
+index 00000000..ba8a227f
+--- /dev/null
++++ b/lib/presupuesto/fases.test.ts
+@@ -0,0 +1,78 @@
++import { describe, expect, it } from "vitest";
++
++import { armarPresupuesto, centavosDe, codificarFases, FASES_MAX, fasesPorDefecto, leerFases } from "./fases";
++
++// Presupuesto por fases (2-oct, hueco #2 de dental en la auditoría y lo #1 que
++// copiar de Doctocliq): el plan del paciente agrupado en fases, total por fase y
++// total general. Plata en CENTAVOS enteros: un 0,1 + 0,2 de coma flotante en un
++// presupuesto que el paciente lee es un error que se ve.
++
++const FILAS = [
++  { id: "pt_a", nombre: "Endodoncia", pieza: 36, centavos: 80_000 },
++  { id: "pt_b", nombre: "Corona de porcelana", pieza: 36, centavos: 120_000 },
++  { id: "pt_c", nombre: "Limpieza dental", pieza: null, centavos: 15_000 },
++  { id: "pt_d", nombre: "Blanqueamiento", pieza: null, centavos: 90_010 },
++];
++
++describe("centavosDe", () => {
++  it("lee el Decimal de Prisma (string) sin coma flotante", () => {
++    expect(centavosDe("1200.00")).toBe(120_000);
++    expect(centavosDe("0.1")).toBe(10);
++    expect(centavosDe("900.1")).toBe(90_010);
++    expect(centavosDe({ toString: () => "150.5" })).toBe(15_050);
++    expect(centavosDe(800)).toBe(80_000);
++  });
++});
++
++describe("armarPresupuesto", () => {
++  it("agrupa por fase, en el orden del plan, con total por fase y total general", () => {
++    const r = armarPresupuesto(FILAS, new Map([["pt_a", 1], ["pt_b", 2], ["pt_c", 1], ["pt_d", 0]]));
++    expect(r.fases.map((f) => [f.numero, f.filas.map((x) => x.id), f.totalCentavos])).toEqual([
++      [1, ["pt_a", "pt_c"], 95_000],
++      [2, ["pt_b"], 120_000],
++    ]);
++    expect(r.totalCentavos).toBe(215_000);
++  });
++
++  it("las fases se numeran seguidas: elegir 1 y 3 se lee 1 y 2", () => {
++    const r = armarPresupuesto(FILAS, new Map([["pt_a", 3], ["pt_b", 1]]));
++    expect(r.fases.map((f) => [f.numero, f.filas[0].id])).toEqual([
++      [1, "pt_b"],
++      [2, "pt_a"],
++    ]);
++  });
++
++  it("lo que no tiene fase no entra (ni al total)", () => {
++    expect(armarPresupuesto(FILAS, new Map())).toEqual({ fases: [], totalCentavos: 0 });
++  });
++});
++
++describe("fasesPorDefecto", () => {
++  it("lo que falta hacer va en la fase 1; lo hecho y lo cancelado quedan afuera", () => {
++    const f = fasesPorDefecto([
++      { id: "a", status: "EN_PROGRESO" },
++      { id: "b", status: "PENDIENTE" },
++      { id: "c", status: "COMPLETADO" },
++      { id: "d", status: "CANCELADO" },
++    ]);
++    expect([...f.entries()]).toEqual([
++      ["a", 1],
++      ["b", 1],
++    ]);
++  });
++});
++
++describe("codificarFases / leerFases (la URL de imprimir)", () => {
++  it("ida y vuelta", () => {
++    const fases = new Map([["cmg1aaaa", 1], ["cmg1bbbb", 2]]);
++    expect(leerFases(codificarFases(fases))).toEqual(fases);
++  });
++
++  it("descarta lo que no es un id o una fase válida", () => {
++    expect([...leerFases(`ok1:1,../x:1,ok2:${FASES_MAX + 1},ok3:0,ok4:2,ok5:dos`).entries()]).toEqual([
++      ["ok1", 1],
++      ["ok4", 2],
++    ]);
++    expect(leerFases(undefined).size).toBe(0);
++  });
++});
+diff --git a/lib/presupuesto/fases.ts b/lib/presupuesto/fases.ts
+new file mode 100644
+index 00000000..02ec6c00
+--- /dev/null
++++ b/lib/presupuesto/fases.ts
+@@ -0,0 +1,97 @@
++// Presupuesto por fases (2-oct): el plan de tratamiento del paciente agrupado en
++// fases, con total por fase y total general. Hueco #2 de dental en la auditoría
++// de producción y lo #1 que copiar de Doctocliq (allá se arma a mano en 4 clics,
++// se agrupa por fases y se manda con un link público).
++//
++// Puro: sin base, sin reloj. La plata va en CENTAVOS enteros desde el Decimal de
++// Prisma, que llega como texto: «900.10» → 90010, sin pasar por coma flotante.
++// Las fases NO se guardan en la base (no hay columna; ver pendientes del carril):
++// viajan en la URL de imprimir y adentro del link firmado que recibe el paciente.
++
++export const FASES_MAX = 6;
++
++/** Días que vale el link del presupuesto (lo que dura un precio pasado). Acá y no en token.ts: el armador es de cliente y token.ts usa crypto. */
++export const PRESUPUESTO_VALIDEZ_DIAS = 30;
++
++/**
++ * Rubros con presupuesto por fases. Lista cerrada a propósito (igual que el
++ * Recall de tratamiento a medias): en veterinaria el tratamiento es de la
++ * mascota y el presupuesto no se le manda a ella; servicios profesionales no
++ * guarda su catálogo en treatments.
++ */
++const RUBROS_CON_PRESUPUESTO = new Set(["dentagest-clinical", "esteticagest-clinical"]);
++
++export function presupuestoEnRubro(trackId: string): boolean {
++  return RUBROS_CON_PRESUPUESTO.has(trackId);
++}
++
++export interface FilaDePresupuesto {
++  id: string;
++  nombre: string;
++  /** Pieza dental (FDI) o null fuera del dental. */
++  pieza: number | null;
++  centavos: number;
++}
++
++export interface FaseArmada {
++  numero: number;
++  filas: FilaDePresupuesto[];
++  totalCentavos: number;
++}
++
++export interface PresupuestoArmado {
++  fases: FaseArmada[];
++  totalCentavos: number;
++}
++
++/** «1200.00», 1200 o un Decimal → 120000. */
++export function centavosDe(valor: string | number | { toString(): string }): number {
++  const texto = typeof valor === "number" ? String(valor) : valor.toString();
++  const m = /^(\d+)(?:\.(\d{1,2}))?$/.exec(texto.trim());
++  if (m) return Number(m[1]) * 100 + Number((m[2] ?? "").padEnd(2, "0"));
++  return Math.round(Number(texto) * 100);
++}
++
++/**
++ * Las filas con fase (1..FASES_MAX), agrupadas y numeradas SEGUIDAS en el orden
++ * de la fase elegida: quien eligió «1» y «3» lee «Fase 1» y «Fase 2». Dentro de
++ * cada fase, el orden del plan. Sin fase (0 o ausente) = no entra.
++ */
++export function armarPresupuesto(filas: readonly FilaDePresupuesto[], faseDe: ReadonlyMap<string, number>): PresupuestoArmado {
++  const porFase = new Map<number, FilaDePresupuesto[]>();
++  for (const fila of filas) {
++    const fase = faseDe.get(fila.id) ?? 0;
++    if (!Number.isInteger(fase) || fase < 1 || fase > FASES_MAX) continue;
++    porFase.set(fase, [...(porFase.get(fase) ?? []), fila]);
++  }
++  const fases = [...porFase.keys()]
++    .sort((a, b) => a - b)
++    .map((fase, i) => {
++      const lista = porFase.get(fase) ?? [];
++      return { numero: i + 1, filas: lista, totalCentavos: lista.reduce((s, f) => s + f.centavos, 0) };
++    });
++  return { fases, totalCentavos: fases.reduce((s, f) => s + f.totalCentavos, 0) };
++}
++
++/** Lo que falta hacer (Pendiente, En progreso) arranca en la fase 1; lo hecho y lo cancelado, afuera. */
++export function fasesPorDefecto(filas: readonly { id: string; status: string }[]): Map<string, number> {
++  return new Map(filas.filter((f) => f.status === "PENDIENTE" || f.status === "EN_PROGRESO").map((f) => [f.id, 1]));
++}
++
++const ID = /^[A-Za-z0-9_-]{1,64}$/;
++
++/** "id:fase,id:fase" para la URL de imprimir (la ve solo quien tiene sesión). */
++export function codificarFases(faseDe: ReadonlyMap<string, number>): string {
++  return [...faseDe.entries()].map(([id, fase]) => `${id}:${fase}`).join(",");
++}
++
++/** Lo inverso, descartando lo que no es un id ni una fase válida. */
++export function leerFases(texto: string | undefined | null): Map<string, number> {
++  const out = new Map<string, number>();
++  for (const par of (texto ?? "").split(",")) {
++    const [id, fase] = par.split(":");
++    const n = Number(fase);
++    if (id && ID.test(id) && /^\d+$/.test(fase ?? "") && n >= 1 && n <= FASES_MAX) out.set(id, n);
++  }
++  return out;
++}
+diff --git a/lib/presupuesto/token.test.ts b/lib/presupuesto/token.test.ts
+new file mode 100644
+index 00000000..86d7c36e
+--- /dev/null
++++ b/lib/presupuesto/token.test.ts
+@@ -0,0 +1,105 @@
++import { afterEach, beforeEach, describe, expect, it } from "vitest";
++
++import { firmarPortalToken, verificarPortalToken } from "@/lib/onia-core/portal-token";
++
++import { firmarPresupuestoToken, huellaDelTelefono, PRESUPUESTO_VALIDEZ_DIAS, verificarPresupuestoToken } from "./token";
++
++// El link público del presupuesto (2-oct): el paciente lo abre sin sesión desde
++// WhatsApp. Lo que defiende (skill onia-seguridad): no adivinable (HMAC con el
++// secreto del servidor), vence, alcanza a UNA persona de UN negocio, y no se
++// confunde con el token del portal de requerimientos (mismo secreto de base).
++
++const ORIGINAL = { ...process.env };
++const AHORA = new Date("2026-10-02T14:00:00.000Z");
++const BASE = {
++  organizationId: "org_1",
++  patientId: "pat_1",
++  filas: [
++    { id: "pt_a", fase: 1, centavos: 80_000 },
++    { id: "pt_b", fase: 2, centavos: 120_000 },
++  ],
++};
++/** El celular de la ficha al armar el link: el link vale para ESE número. */
++const TELEFONO = "70012345";
++
++beforeEach(() => {
++  process.env.ENCRYPTION_KEY = "a".repeat(64);
++  delete process.env.PORTAL_TOKEN_SECRET;
++});
++afterEach(() => {
++  process.env = { ...ORIGINAL };
++});
++
++describe("token del presupuesto", () => {
++  it("ida y vuelta: negocio, persona, filas con fase y precio, emisión y vencimiento", () => {
++    const token = firmarPresupuestoToken({ ...BASE, telefono: TELEFONO, ahora: AHORA });
++    const leido = verificarPresupuestoToken(token, AHORA);
++    expect(leido).toEqual({
++      ...BASE,
++      huellaTelefono: huellaDelTelefono(TELEFONO),
++      emitidoEl: AHORA,
++      venceEl: new Date(AHORA.getTime() + PRESUPUESTO_VALIDEZ_DIAS * 86_400_000),
++    });
++  });
++
++  it("vence: al día siguiente del vencimiento ya no abre", () => {
++    const token = firmarPresupuestoToken({ ...BASE, telefono: TELEFONO, ahora: AHORA });
++    const despues = new Date(AHORA.getTime() + (PRESUPUESTO_VALIDEZ_DIAS + 1) * 86_400_000);
++    expect(verificarPresupuestoToken(token, despues)).toBeNull();
++  });
++
++  it("tocar un solo carácter del contenido (otra persona, otro precio) lo invalida", () => {
++    const token = firmarPresupuestoToken({ ...BASE, telefono: TELEFONO, ahora: AHORA });
++    const [carga, firma] = token.split(".");
++    const otro = JSON.parse(Buffer.from(carga, "base64url").toString("utf8"));
++    otro.p = "pat_ajeno";
++    const falsificado = `${Buffer.from(JSON.stringify(otro)).toString("base64url")}.${firma}`;
++    expect(verificarPresupuestoToken(falsificado, AHORA)).toBeNull();
++  });
++
++  it("firmado con otro secreto no abre", () => {
++    const token = firmarPresupuestoToken({ ...BASE, telefono: TELEFONO, ahora: AHORA });
++    process.env.ENCRYPTION_KEY = "b".repeat(64);
++    expect(verificarPresupuestoToken(token, AHORA)).toBeNull();
++  });
++
++  it("no se cruza con el portal: un token de portal no abre un presupuesto ni al revés", () => {
++    const portal = firmarPortalToken({ organizationId: "org_1", patientId: "pat_1" });
++    expect(verificarPresupuestoToken(portal, AHORA)).toBeNull();
++    const presupuesto = firmarPresupuestoToken({ ...BASE, telefono: TELEFONO, ahora: new Date() });
++    expect(verificarPortalToken(presupuesto)).toBeNull();
++  });
++
++  it("basura, vacío o formato raro: null, nunca una excepción", () => {
++    for (const malo of ["", "abc", "a.b.c", "....", "%%%.%%%"]) {
++      expect(verificarPresupuestoToken(malo, AHORA)).toBeNull();
++    }
++  });
++
++  it("no lleva nombres ni teléfonos: solo ids, fases, centavos y la HUELLA del celular", () => {
++    const token = firmarPresupuestoToken({ ...BASE, telefono: TELEFONO, ahora: AHORA });
++    const carga = Buffer.from(token.split(".")[0], "base64url").toString("utf8");
++    expect(Object.keys(JSON.parse(carga)).sort()).toEqual(["e", "f", "i", "k", "o", "p", "t"]);
++    // La huella va con la clave del servidor: el número no se puede sacar del link
++    // probando los ~20 millones de celulares bolivianos.
++    expect(carga).not.toContain("70012345");
++    expect(carga).not.toContain("59170012345");
++  });
++
++  // Auditoría del 2-oct: el link era stateless y valía 30 días sin forma de
++  // cortarlo. Con el celular mal escrito, «Enviar al paciente» lo mandaba a un
++  // desconocido, que veía nombre, tratamientos, piezas y montos un mes entero.
++  it("la huella del celular: el mismo número en otro formato da la misma; otro número, otra", () => {
++    const h = huellaDelTelefono("70012345");
++    expect(huellaDelTelefono("+591 700 12345")).toBe(h);
++    expect(huellaDelTelefono("59170012345")).toBe(h);
++    expect(huellaDelTelefono("70012346")).not.toBe(h);
++    expect(huellaDelTelefono(null)).not.toBe(h);
++  });
++
++  it("la huella depende del secreto del servidor", () => {
++    const h = huellaDelTelefono("70012345");
++    process.env.ENCRYPTION_KEY = "b".repeat(64);
++    expect(huellaDelTelefono("70012345")).not.toBe(h);
++  });
++});
+diff --git a/lib/presupuesto/token.ts b/lib/presupuesto/token.ts
+new file mode 100644
+index 00000000..2180dccb
+--- /dev/null
++++ b/lib/presupuesto/token.ts
+@@ -0,0 +1,137 @@
++// Token del link público del presupuesto (2-oct).
++//
++// Stateless, como el del portal (lib/onia-core/portal-token.ts): HMAC-SHA256
++// sobre {negocio, persona, filas [id, fase, centavos], emisión, vencimiento}, sin
++// tabla ni migración. El paciente lo abre sin sesión desde WhatsApp.
++//
++// - No adivinable: la firma usa el secreto del servidor (PORTAL_TOKEN_SECRET o
++//   ENCRYPTION_KEY, que producción ya exige).
++// - No se cruza con el portal: la clave se DERIVA con un propósito propio, así un
++//   token del portal (mismo secreto de base, mismas claves o/p/e) no abre un
++//   presupuesto y uno de presupuesto no abre el portal.
++// - Vence a los PRESUPUESTO_VALIDEZ_DIAS: es lo que dura un precio pasado.
++// - Lleva el PRECIO congelado (centavos): el presupuesto que recibió el paciente
++//   no cambia si mañana se toca el catálogo. Los nombres no viajan: se leen de la
++//   base, del negocio y la persona del token.
++//
++// - Atado al CELULAR (auditoría del 2-oct): stateless no se revoca, y con el
++//   número mal escrito «Enviar al paciente» le mandaba a un desconocido nombre,
++//   tratamientos, piezas y montos por 30 días. El token lleva la HUELLA del
++//   celular de la ficha (HMAC con la clave del servidor: no se puede sacar el
++//   número del link probando celulares) y la carga la compara con el de hoy.
++//   Corregir el número en la ficha anula los links mandados al equivocado.
++//
++// ponytail: no corta un link que el paciente correcto reenvió, ni el caso en que
++// nadie corrige el número. Para anularlo por otras causas, un salt por persona
++// (columna) sumado al HMAC — ver pendientes del carril.
++
++import { createHmac, timingSafeEqual } from "crypto";
++
++import { numeroParaWhatsapp } from "@/lib/whatsapp/numero-para-enviar";
++
++import { FASES_MAX, PRESUPUESTO_VALIDEZ_DIAS } from "./fases";
++
++export { PRESUPUESTO_VALIDEZ_DIAS };
++const PROPOSITO = "onia:presupuesto:v1";
++const MAX_FILAS = 60;
++
++export interface FilaFirmada {
++  id: string;
++  fase: number;
++  centavos: number;
++}
++
++export interface PresupuestoFirmado {
++  organizationId: string;
++  patientId: string;
++  filas: FilaFirmada[];
++  /** huellaDelTelefono() del celular de la ficha al armar el link. */
++  huellaTelefono: string;
++  emitidoEl: Date;
++  venceEl: Date;
++}
++
++function clave(): Buffer {
++  const s = process.env.PORTAL_TOKEN_SECRET || process.env.ENCRYPTION_KEY;
++  if (!s) throw new Error("Falta PORTAL_TOKEN_SECRET o ENCRYPTION_KEY para firmar el presupuesto");
++  return createHmac("sha256", s).update(PROPOSITO).digest();
++}
++
++const firmar = (carga: string) => createHmac("sha256", clave()).update(carga).digest("base64url");
++
++/**
++ * Huella del celular, con la clave del servidor. Normalizado como lo usa el envío
++ * (numeroParaWhatsapp: «70012345» y «+591 700 12345» son el mismo); si no es un
++ * celular, sus dígitos. El prefijo «tel:» no aparece en una carga base64url: las
++ * dos firmas no se cruzan.
++ */
++export function huellaDelTelefono(telefono: string | null | undefined): string {
++  const numero = numeroParaWhatsapp(telefono) ?? (telefono ?? "").replace(/\D/g, "");
++  return createHmac("sha256", clave()).update(`tel:${numero}`).digest("base64url").slice(0, 22);
++}
++
++export function firmarPresupuestoToken(args: {
++  organizationId: string;
++  patientId: string;
++  filas: readonly FilaFirmada[];
++  /** Patient.phone al armar el link: vale para ese número. */
++  telefono: string | null;
++  ahora?: Date;
++}): string {
++  const ahora = args.ahora ?? new Date();
++  const i = Math.floor(ahora.getTime() / 1000);
++  const payload = {
++    k: "presupuesto",
++    o: args.organizationId,
++    p: args.patientId,
++    f: args.filas.map((f) => [f.id, f.fase, f.centavos]),
++    t: huellaDelTelefono(args.telefono),
++    i,
++    e: i + PRESUPUESTO_VALIDEZ_DIAS * 86_400,
++  };
++  const carga = Buffer.from(JSON.stringify(payload), "utf8").toString("base64url");
++  return `${carga}.${firmar(carga)}`;
++}
++
++function filaValida(x: unknown): x is [string, number, number] {
++  return (
++    Array.isArray(x) &&
++    x.length === 3 &&
++    typeof x[0] === "string" &&
++    /^[A-Za-z0-9_-]{1,64}$/.test(x[0]) &&
++    Number.isInteger(x[1]) &&
++    x[1] >= 1 &&
++    x[1] <= FASES_MAX &&
++    Number.isInteger(x[2]) &&
++    x[2] >= 0 &&
++    x[2] <= 10_000_000_000
++  );
++}
++
++export function verificarPresupuestoToken(token: string, ahora: Date = new Date()): PresupuestoFirmado | null {
++  if (!token || typeof token !== "string" || token.length > 8000) return null;
++  const partes = token.split(".");
++  if (partes.length !== 2) return null;
++  const [carga, firma] = partes;
++  const a = Buffer.from(firma);
++  const b = Buffer.from(firmar(carga));
++  if (a.length !== b.length || !timingSafeEqual(a, b)) return null;
++  try {
++    const p = JSON.parse(Buffer.from(carga, "base64url").toString("utf8")) as Record<string, unknown>;
++    if (p.k !== "presupuesto" || typeof p.o !== "string" || typeof p.p !== "string") return null;
++    if (typeof p.i !== "number" || typeof p.e !== "number" || !Array.isArray(p.f)) return null;
++    if (typeof p.t !== "string" || p.t.length === 0) return null;
++    if (p.f.length === 0 || p.f.length > MAX_FILAS || !p.f.every(filaValida)) return null;
++    if (p.e * 1000 < ahora.getTime()) return null;
++    return {
++      organizationId: p.o,
++      patientId: p.p,
++      filas: (p.f as [string, number, number][]).map(([id, fase, centavos]) => ({ id, fase, centavos })),
++      huellaTelefono: p.t,
++      emitidoEl: new Date(p.i * 1000),
++      venceEl: new Date(p.e * 1000),
++    };
++  } catch {
++    return null;
++  }
++}
+diff --git a/proxy.ts b/proxy.ts
+index 8fd227f6..e9e4627f 100644
+--- a/proxy.ts
++++ b/proxy.ts
+@@ -113,7 +113,10 @@ export async function proxy(request: NextRequest) {
+     bajoLaRuta(pathname, "/book") ||
+     // Portal de requerimientos del cliente: entra sin login con token HMAC
+     // firmado en la URL; la pagina y sus APIs validan el token, no la sesion.
+-    bajoLaRuta(pathname, "/portal");
++    bajoLaRuta(pathname, "/portal") ||
++    // Presupuesto por fases que la clinica le manda al paciente (2-oct): mismo
++    // esquema, token HMAC con vencimiento de UNA persona; solo lectura.
++    bajoLaRuta(pathname, "/presupuesto");
+ 
+   // Public API routes (no auth required)
+   const isPublicApiRoute =
+-- 
+2.43.0
+
+
+From 6c508d4a92a56bd2b39e49c08cd278af067856bf Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Mon, 5 Oct 2026 21:39:49 +0000
+Subject: [PATCH 2/3] =?UTF-8?q?fix(presupuesto):=20el=20armador=20y=20sus?=
+ =?UTF-8?q?=20errores=20le=20hablan=20de=20usted=20al=20due=C3=B1o?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Sergio Urcullo pidió el 5-oct que los textos al cliente vayan de usted. El
+parche del presupuesto por fases traía voseo al dueño justo en lo que decide
+si el presupuesto sale: «Ordená el plan en fases… tu catálogo», «Elegí al
+menos un…», «Para enviarlo, cargá un celular en su ficha», «Probá de nuevo» y,
+desde la ruta, «Elegí al menos un tratamiento» y «Recargá la página». Pasan a
+«Ordene… su catálogo», «Elija», «cargue», «Inténtelo de nuevo», «Recargue». Lo
+del paciente (hoja pública, link vencido y el WhatsApp) ya iba de usted.
+
+El texto del WhatsApp sale a mensajeDelPresupuesto (lib/presupuesto/fases.ts)
+para poder afirmarlo en un test: armado dentro del clic no lo veía nadie.
+
+Gate nuevo __tests__/presupuesto-de-usted.test.ts: frases exactas en el render
+y un barrido de la fuente de todos los archivos del presupuesto que caza
+cualquier voseo o tuteo; sobre el código anterior marcaba las seis líneas y
+nada más. La ruta además arma el error de Zod con .errors, como pide la regla.
+La skill onia-frontend anota cómo conviven las dos voces hasta el barrido.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01HhnFgkeF6nLGvjrfjt1o2C
+---
+ .claude/skills/onia-frontend/SKILL.md         |  11 ++
+ __tests__/presupuesto-de-usted.test.ts        | 115 ++++++++++++++++++
+ .../patients/[id]/presupuesto/route.test.ts   |   8 ++
+ app/api/patients/[id]/presupuesto/route.ts    |   6 +-
+ .../presupuesto/ArmadorDePresupuesto.tsx      |   2 +-
+ .../PresupuestoPorFases.render.test.ts        |   7 +-
+ .../presupuesto/PresupuestoPorFases.tsx       |  17 ++-
+ lib/presupuesto/fases.ts                      |   7 ++
+ 8 files changed, 162 insertions(+), 11 deletions(-)
+ create mode 100644 __tests__/presupuesto-de-usted.test.ts
+
+diff --git a/.claude/skills/onia-frontend/SKILL.md b/.claude/skills/onia-frontend/SKILL.md
+index 7a369100..117d2368 100644
+--- a/.claude/skills/onia-frontend/SKILL.md
++++ b/.claude/skills/onia-frontend/SKILL.md
+@@ -34,6 +34,17 @@ el estado guarda `elegido | null`; sin elegir NO se manda `date` (el servidor po
+ entre altas; el tope se recalcula al abrir (`lib/pacientes/cuando-fue.ts`, reducer puro con test: sin jsdom en el
+ repo, la lógica de un formulario se prueba sacándola del componente).
+ 
++## Al dueño también de USTED, pantalla por pantalla (5-oct)
++
++Sergio Urcullo pidió usted en los textos al dueño (el paciente ya lo tenía desde el 3-oct). Hasta el barrido del
++panel conviven las dos voces: una pantalla NUEVA va entera de usted («Elija», «Cargue», «Recargue», «Inténtelo de
++nuevo», «su catálogo»), sin mezclar dentro de ella; lo que una pantalla comparte con otras (shell, `lib/clientes/baja.ts`,
++`PatientCollab`) espera al barrido para no partir otras pantallas. Cuidado con el tuteo: «Intenta de nuevo», «Prueba con
++otra» están prohibidos por el guard 17 (`__tests__/terminacion-lote-final.test.ts`). Molde de gate por pantalla:
++`__tests__/presupuesto-de-usted.test.ts` (`voseoEn`: palabra con á/é/í tónica final que no esté en la lista blanca, más
++tú/tu/tus/te/vos/ti) sobre el render Y sobre la fuente sin comentarios; un test que pruebe que caza el voseo viejo.
++El texto de un wa.me se saca a una función pura (`mensajeDelPresupuesto`) para poder afirmarlo.
++
+ ## Nombres de plan — solo via `PLAN_LABELS`
+ 
+ Las promesas también dependen del rubro. La FAQ debe reutilizar las capacidades
+diff --git a/__tests__/presupuesto-de-usted.test.ts b/__tests__/presupuesto-de-usted.test.ts
+new file mode 100644
+index 00000000..67139ce0
+--- /dev/null
++++ b/__tests__/presupuesto-de-usted.test.ts
+@@ -0,0 +1,115 @@
++// El presupuesto por fases habla de USTED (Sergio Urcullo, 5-oct): al dueño en el
++// armador, en sus botones y en los errores de la ruta, y al paciente en la hoja
++// pública y en el WhatsApp. El parche del 2-oct venía en voseo al dueño
++// («Ordená el plan…», «Elegí al menos un…», «Para enviarlo, cargá un celular…»,
++// «Recargá la página»).
++//
++// Dos miradas: las frases EXACTAS que se ven (render) y un barrido de la fuente
++// de los archivos del presupuesto que caza cualquier voseo o tuteo nuevo.
++import { createElement } from "react";
++import { renderToStaticMarkup } from "react-dom/server";
++import { describe, expect, it, vi } from "vitest";
++
++vi.mock("next/link", () => ({
++  default: ({ children, href, ...rest }: { children: React.ReactNode; href: string }) => createElement("a", { href, ...rest }, children),
++}));
++
++import { ArmadorDePresupuesto } from "@/components/presupuesto/ArmadorDePresupuesto";
++import { mensajeDelPresupuesto } from "@/lib/presupuesto/fases";
++
++import { ARCHIVOS } from "./escanear-fuente";
++
++const VOCAB = { cliente: "paciente", clienteFemenino: false, servicio: "tratamiento", servicios: "tratamientos" };
++const PLAN = [
++  { id: "pt_a", nombre: "Endodoncia", pieza: 36, centavos: 80_000, status: "PENDIENTE" },
++  { id: "pt_b", nombre: "Limpieza dental", pieza: null, centavos: 15_000, status: "COMPLETADO" },
++];
++
++function pintar(extra: Partial<Parameters<typeof ArmadorDePresupuesto>[0]> = {}) {
++  const html = renderToStaticMarkup(
++    createElement(ArmadorDePresupuesto, {
++      patientId: "pat_1",
++      nombre: "Lucía Mendoza",
++      telefono: "71234567",
++      negocio: "Clínica Dental Aramayo",
++      filas: PLAN,
++      rotuloPieza: "Diente",
++      vocab: VOCAB,
++      ...extra,
++    }),
++  );
++  return html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ");
++}
++
++/**
++ * Voseo y tuteo en una línea de texto. Palabras terminadas en á/é/í tónica
++ * (Probá, Elegí, cargá, podés…) menos las que no son verbo de segunda persona,
++ * y los pronombres tú/tu/tus/te/vos/ti.
++ */
++const NO_SON_VOSEO = new Set([
++  "acá", "allá", "ahí", "aquí", "así", "atrás", "además", "demás", "después", "más", "qué", "quién", "cuál",
++  "cómo", "dónde", "cuándo", "está", "están", "sí", "también", "válido", "envió",
++]);
++function voseoEn(linea: string): string[] {
++  const hallazgos: string[] = [];
++  for (const m of linea.matchAll(/(?<!\p{L})(\p{L}+(?:ás|és|ís|á|é|í))(?!\p{L})/gu)) {
++    if (!NO_SON_VOSEO.has(m[1].toLowerCase())) hallazgos.push(m[1]);
++  }
++  for (const m of linea.matchAll(/(?<!\p{L})(tú|tu|tus|te|vos|ti|contigo)(?!\p{L})/giu)) hallazgos.push(m[1]);
++  return hallazgos;
++}
++
++const DEL_PRESUPUESTO = (ruta: string) =>
++  ruta.startsWith("components/presupuesto/") ||
++  ruta.startsWith("lib/presupuesto/") ||
++  ruta.startsWith("app/print/presupuesto/") ||
++  ruta.startsWith("app/(public)/presupuesto/") ||
++  ruta.startsWith("app/(dashboard)/patients/[id]/presupuesto/") ||
++  ruta.startsWith("app/api/patients/[id]/presupuesto/");
++
++describe("el presupuesto por fases habla de usted", () => {
++  it("el armador, al dueño", () => {
++    expect(pintar()).toContain("Ordene el plan en fases. Los precios salen de su catálogo de tratamientos.");
++  });
++
++  it("sin nada elegido, dice qué falta de usted", () => {
++    const soloLoHecho = [{ ...PLAN[1] }];
++    expect(pintar({ filas: soloLoHecho })).toContain("Elija al menos un tratamiento.");
++  });
++
++  it("sin un celular al que WhatsApp llegue, dice qué cargar de usted", () => {
++    expect(pintar({ telefono: "3344556" })).toContain("Para enviarlo, cargue un celular en su ficha.");
++  });
++
++  it("el WhatsApp al paciente: de usted y con el nombre de pila", () => {
++    expect(mensajeDelPresupuesto("Dra. Lucía Mendoza", "Clínica Dental Aramayo", "https://app.onia.com.bo/presupuesto/x.y")).toBe(
++      "Hola Lucía, le enviamos su presupuesto de Clínica Dental Aramayo: https://app.onia.com.bo/presupuesto/x.y",
++    );
++  });
++
++  it("ninguna pantalla del armador vosea ni tutea", () => {
++    for (const texto of [pintar(), pintar({ filas: [] }), pintar({ filas: [{ ...PLAN[1] }] }), pintar({ telefono: null })]) {
++      expect(voseoEn(texto)).toEqual([]);
++    }
++  });
++
++  it("ningún archivo del presupuesto vosea ni tutea (fuente sin comentarios)", () => {
++    const archivos = ARCHIVOS.filter((a) => DEL_PRESUPUESTO(a.ruta));
++    // Sin esto, mover la carpeta deja el barrido en verde sin mirar nada.
++    expect(archivos.length).toBeGreaterThanOrEqual(8);
++    const hallazgos = archivos.flatMap((a) =>
++      a.codigo
++        .split("\n")
++        .filter((linea) => voseoEn(linea).length > 0)
++        .map((linea) => `${a.ruta}: ${linea.trim().slice(0, 120)} → ${voseoEn(linea).join(", ")}`),
++    );
++    expect(hallazgos).toEqual([]);
++  });
++
++  it("el detector caza el voseo que traía el parche", () => {
++    expect(voseoEn("Ordená el plan en fases. Los precios salen de tu catálogo")).toEqual(["Ordená", "tu"]);
++    expect(voseoEn("Elegí al menos un tratamiento · Recargá la página · Probá de nuevo")).toEqual(["Elegí", "Recargá", "Probá"]);
++    expect(voseoEn("Para enviarlo, cargá un celular en su ficha.")).toEqual(["cargá"]);
++    expect(voseoEn("Pídale uno nuevo a quien se lo envió. Válido hasta")).toEqual([]);
++  });
++});
+diff --git a/app/api/patients/[id]/presupuesto/route.test.ts b/app/api/patients/[id]/presupuesto/route.test.ts
+index 12c4f68f..04cd3add 100644
+--- a/app/api/patients/[id]/presupuesto/route.test.ts
++++ b/app/api/patients/[id]/presupuesto/route.test.ts
+@@ -126,6 +126,14 @@ describe("POST /api/patients/:id/presupuesto", () => {
+     expect((await pedir({ filas: [{ id: "pt_a", fase: 1 }, { id: "pt_a", fase: 2 }] })).status).toBe(400);
+   });
+ 
++  it("los errores que lee el dueño van de usted (5-oct)", async () => {
++    expect((await (await pedir({ filas: [] })).json()).error).toBe("Elija al menos un tratamiento");
++
++    prismaMocks.patientTreatment.findMany.mockResolvedValue([{ id: "pt_a", treatment: { price: "800.00" } }]);
++    const ajena = await pedir({ filas: [{ id: "pt_a", fase: 1 }, { id: "pt_otra", fase: 1 }] });
++    expect((await ajena.json()).error).toBe("Algún tratamiento ya no está en el plan. Recargue la página.");
++  });
++
+   it("recepción (STAFF, sin lo clínico): 403", async () => {
+     authMocks.requireAuth.mockResolvedValue(perfil("STAFF"));
+     expect((await pedir({ filas: [{ id: "pt_a", fase: 1 }] })).status).toBe(403);
+diff --git a/app/api/patients/[id]/presupuesto/route.ts b/app/api/patients/[id]/presupuesto/route.ts
+index 1f4110f8..4584f2ab 100644
+--- a/app/api/patients/[id]/presupuesto/route.ts
++++ b/app/api/patients/[id]/presupuesto/route.ts
+@@ -19,7 +19,7 @@ import { firmarPresupuestoToken } from "@/lib/presupuesto/token";
+ const bodySchema = z.object({
+   filas: z
+     .array(z.object({ id: z.string().min(1).max(64), fase: z.number().int().min(1).max(FASES_MAX) }))
+-    .min(1, "Elegí al menos un tratamiento")
++    .min(1, "Elija al menos un tratamiento")
+     .max(60)
+     .refine((filas) => new Set(filas.map((f) => f.id)).size === filas.length, "Un tratamiento aparece dos veces"),
+ });
+@@ -59,7 +59,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
+       select: { id: true, treatment: { select: { price: true } } },
+     });
+     if (enLaBase.length !== ids.length) {
+-      return NextResponse.json({ error: "Algún tratamiento ya no está en el plan. Recargá la página." }, { status: 400 });
++      return NextResponse.json({ error: "Algún tratamiento ya no está en el plan. Recargue la página." }, { status: 400 });
+     }
+     const precio = new Map(enLaBase.map((f) => [f.id, centavosDe(f.treatment.price)]));
+     const ahora = new Date();
+@@ -88,7 +88,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
+   } catch (err) {
+     if (err instanceof AuthError) return NextResponse.json({ error: "No autorizado" }, { status: 403 });
+     if (err instanceof z.ZodError) {
+-      return NextResponse.json({ error: err.issues.map((e) => e.message).join(", ") }, { status: 400 });
++      return NextResponse.json({ error: err.errors.map((e) => e.message).join(", ") }, { status: 400 });
+     }
+     if (err instanceof SyntaxError) return NextResponse.json({ error: "Datos inválidos" }, { status: 400 });
+     registrarError("api/patients/[id]/presupuesto", "POST", err);
+diff --git a/components/presupuesto/ArmadorDePresupuesto.tsx b/components/presupuesto/ArmadorDePresupuesto.tsx
+index b4408f25..615258c9 100644
+--- a/components/presupuesto/ArmadorDePresupuesto.tsx
++++ b/components/presupuesto/ArmadorDePresupuesto.tsx
+@@ -37,7 +37,7 @@ export function ArmadorDePresupuesto({
+         <p className="font-label text-on-surface-variant/80">Presupuesto</p>
+         <h1 className="text-2xl font-semibold tracking-tight text-on-surface font-headline md:text-3xl">{nombre}</h1>
+         <p className="mt-1 text-sm text-on-surface-variant">
+-          Ordená el plan en fases. Los precios salen de tu catálogo de {vocab.servicios}.
++          Ordene el plan en fases. Los precios salen de su catálogo de {vocab.servicios}.
+         </p>
+       </header>
+       <PresupuestoPorFases
+diff --git a/components/presupuesto/PresupuestoPorFases.render.test.ts b/components/presupuesto/PresupuestoPorFases.render.test.ts
+index 7b015f10..24302dbf 100644
+--- a/components/presupuesto/PresupuestoPorFases.render.test.ts
++++ b/components/presupuesto/PresupuestoPorFases.render.test.ts
+@@ -60,7 +60,12 @@ describe("PresupuestoPorFases", () => {
+ 
+   it("sin un celular al que WhatsApp llegue, dice por qué no se puede enviar", () => {
+     const { texto } = pintar({ telefono: "3344556" });
+-    expect(texto).toContain("Para enviarlo, cargá un celular en su ficha.");
++    expect(texto).toContain("Para enviarlo, cargue un celular en su ficha.");
++  });
++
++  it("con todo afuera, dice qué falta elegir (de usted)", () => {
++    const { texto } = pintar({ filas: [FILAS[2]] });
++    expect(texto).toContain("Elija al menos un tratamiento.");
+   });
+ 
+   it("sin nada en el plan, dice dónde se carga", () => {
+diff --git a/components/presupuesto/PresupuestoPorFases.tsx b/components/presupuesto/PresupuestoPorFases.tsx
+index e4713ce6..6b9d5270 100644
+--- a/components/presupuesto/PresupuestoPorFases.tsx
++++ b/components/presupuesto/PresupuestoPorFases.tsx
+@@ -20,8 +20,14 @@ import { buttonVariants } from "@/components/ui/button-variants";
+ import { Card } from "@/components/ui/card";
+ import { formatBs } from "@/lib/comercio/format";
+ import { mensajeDeError } from "@/lib/http/mensaje-de-error";
+-import { armarPresupuesto, codificarFases, FASES_MAX, fasesPorDefecto, PRESUPUESTO_VALIDEZ_DIAS } from "@/lib/presupuesto/fases";
+-import { nombreDePila } from "@/lib/utils";
++import {
++  armarPresupuesto,
++  codificarFases,
++  FASES_MAX,
++  fasesPorDefecto,
++  mensajeDelPresupuesto,
++  PRESUPUESTO_VALIDEZ_DIAS,
++} from "@/lib/presupuesto/fases";
+ import { numeroParaWhatsapp } from "@/lib/whatsapp/numero-para-enviar";
+ 
+ export interface FilaDelArmador {
+@@ -32,7 +38,7 @@ export interface FilaDelArmador {
+   status: string;
+ }
+ 
+-const RESPALDO = "No se pudo armar el link. Probá de nuevo.";
++const RESPALDO = "No se pudo armar el link. Inténtelo de nuevo.";
+ const SELECT =
+   "min-h-11 rounded-lg border border-outline-variant bg-surface px-3 text-sm font-semibold text-on-surface focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30";
+ 
+@@ -93,8 +99,7 @@ export function PresupuestoPorFases({
+       });
+       if (!res.ok) throw new Error(await mensajeDeError(res, RESPALDO));
+       const { url } = (await res.json()) as { url: string };
+-      const texto = `Hola ${nombreDePila(nombre)}, le enviamos su presupuesto de ${negocio}: ${url}`;
+-      const destino = `https://wa.me/${whatsapp}?text=${encodeURIComponent(texto)}`;
++      const destino = `https://wa.me/${whatsapp}?text=${encodeURIComponent(mensajeDelPresupuesto(nombre, negocio, url))}`;
+       if (ventana) ventana.location.href = destino;
+       else window.location.href = destino;
+       setLink(url);
+@@ -190,7 +195,7 @@ export function PresupuestoPorFases({
+             loading={enviando}
+             disabled={!whatsapp || vacio}
+             disabledReason={
+-              vacio ? `Elegí al menos un ${vocab.servicio}.` : !whatsapp ? "Para enviarlo, cargá un celular en su ficha." : undefined
++              vacio ? `Elija al menos un ${vocab.servicio}.` : !whatsapp ? "Para enviarlo, cargue un celular en su ficha." : undefined
+             }
+             onClick={() => void enviar()}
+           >
+diff --git a/lib/presupuesto/fases.ts b/lib/presupuesto/fases.ts
+index 02ec6c00..18e5f075 100644
+--- a/lib/presupuesto/fases.ts
++++ b/lib/presupuesto/fases.ts
+@@ -8,8 +8,15 @@
+ // Las fases NO se guardan en la base (no hay columna; ver pendientes del carril):
+ // viajan en la URL de imprimir y adentro del link firmado que recibe el paciente.
+ 
++import { nombreDePila } from "@/lib/utils";
++
+ export const FASES_MAX = 6;
+ 
++/** El WhatsApp que acompaña al link (wa.me): al paciente, de usted y con su nombre de pila. */
++export function mensajeDelPresupuesto(nombre: string, negocio: string, url: string): string {
++  return `Hola ${nombreDePila(nombre)}, le enviamos su presupuesto de ${negocio}: ${url}`;
++}
++
+ /** Días que vale el link del presupuesto (lo que dura un precio pasado). Acá y no en token.ts: el armador es de cliente y token.ts usa crypto. */
+ export const PRESUPUESTO_VALIDEZ_DIAS = 30;
+ 
+-- 
+2.43.0
+
+
+From 054b95a88f63d573a2b71b2de2917f3f7785437e Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Thu, 8 Oct 2026 18:13:41 +0000
+Subject: [PATCH 3/3] fix(presupuesto): la hoja del paciente se lee en el
+ celular y el aviso no parte palabras
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Mirado en las capturas del 5-oct a 390 y 1440:
+- La hoja pública heredaba del comprobante impreso rótulos de 9-10 px («Para»,
+  «Fechas», «Válido hasta», la cabecera de la tabla y el pie «no es factura» en
+  gris claro). En pantalla quedan en 12 px (R29) y el pie con contraste; el
+  impreso de facturas y recibos no cambia (solo `.pre-doc` y `@media screen`).
+- El aviso de «enviado» cortaba «Ver lo qu|e recibe» con `break-all`; ahora las
+  palabras bajan enteras (`break-words`).
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01HhnFgkeF6nLGvjrfjt1o2C
+---
+ .../PresupuestoVista.render.test.ts           | 24 ++++++++++++++++++-
+ app/print/presupuesto/PresupuestoVista.tsx    |  7 ++++++
+ .../PresupuestoPorFases.render.test.ts        | 13 ++++++++++
+ .../presupuesto/PresupuestoPorFases.tsx       |  2 +-
+ 4 files changed, 44 insertions(+), 2 deletions(-)
+
+diff --git a/app/print/presupuesto/PresupuestoVista.render.test.ts b/app/print/presupuesto/PresupuestoVista.render.test.ts
+index e3d5aa12..4e973dd5 100644
+--- a/app/print/presupuesto/PresupuestoVista.render.test.ts
++++ b/app/print/presupuesto/PresupuestoVista.render.test.ts
+@@ -8,7 +8,7 @@ import { describe, expect, it } from "vitest";
+ 
+ import { armarPresupuesto } from "@/lib/presupuesto/fases";
+ 
+-import { PresupuestoVista } from "./PresupuestoVista";
++import { ESTILOS_PRESUPUESTO, PresupuestoVista } from "./PresupuestoVista";
+ 
+ const FILAS = [
+   { id: "a", nombre: "Endodoncia", pieza: 36, centavos: 80_000 },
+@@ -63,4 +63,26 @@ describe("PresupuestoVista", () => {
+     const { texto } = pintar(new Map([["a", 1]]), { rotuloPieza: null });
+     expect(texto).not.toContain("Diente");
+   });
++
++  it("en pantalla, nada que lea el paciente queda bajo 12 px (R29)", () => {
++    // Medido el 5-oct en el celular (390): los rótulos «Para», «Fechas», «Emitido»,
++    // «Válido hasta» y la cabecera de la tabla salían a 9 px, y el pie «Presupuesto,
++    // no es factura» a 10 px en gris claro: los heredaba del comprobante, que está
++    // pensado para imprimir. Se corrige SOLO en pantalla y SOLO en la hoja del
++    // presupuesto (.pre-doc): las facturas y recibos impresos no cambian.
++    const pantalla = ESTILOS_PRESUPUESTO.slice(ESTILOS_PRESUPUESTO.indexOf("@media screen"));
++    for (const selector of [
++      ".pre-doc .inv-meta-box h4",
++      ".pre-doc .inv-date-label",
++      ".pre-doc .inv-table th",
++      ".pre-doc .inv-nit-badge",
++      ".pre-doc .inv-footer",
++      ".pre-doc .inv-sin-notice",
++    ]) {
++      const enGrupo = pantalla.split("}").find((bloque) => bloque.includes(selector) && /font-size/.test(bloque));
++      expect(enGrupo, selector).toBeDefined();
++      const px = Number(/font-size:\s*(\d+)px/.exec(enGrupo ?? "")?.[1] ?? 0);
++      expect(px, selector).toBeGreaterThanOrEqual(12);
++    }
++  });
+ });
+diff --git a/app/print/presupuesto/PresupuestoVista.tsx b/app/print/presupuesto/PresupuestoVista.tsx
+index 0a85b240..e1df15a9 100644
+--- a/app/print/presupuesto/PresupuestoVista.tsx
++++ b/app/print/presupuesto/PresupuestoVista.tsx
+@@ -18,6 +18,13 @@ export const ESTILOS_PRESUPUESTO = `
+         .pre-pieza { display: block; margin-top: 2px; font-size: 12px; color: #69716D; }
+         .pre-subtotal td { background: #F7F9F8; font-weight: 600; }
+         .pre-nota { margin-top: 18px; font-size: 12px; color: #424A46; line-height: 1.6; }
++        /* En pantalla lo lee el paciente en el celular: nada bajo 12 px (R29) y el
++           pie con contraste. El comprobante impreso (9-10 px) no cambia. */
++        @media screen {
++          .pre-doc .inv-meta-box h4, .pre-doc .inv-date-label, .pre-doc .inv-table th { font-size: 12px; letter-spacing: 0.6px; }
++          .pre-doc .inv-nit-badge { font-size: 12px; }
++          .pre-doc .inv-footer, .pre-doc .inv-sin-notice { font-size: 12px; color: #5C645F; }
++        }
+         @media screen and (max-width: 640px) {
+           .pre-doc { margin: 0 auto; border-radius: 0; box-shadow: none; }
+           .pre-doc .inv-header { flex-direction: column; gap: 12px; padding: 20px; }
+diff --git a/components/presupuesto/PresupuestoPorFases.render.test.ts b/components/presupuesto/PresupuestoPorFases.render.test.ts
+index 24302dbf..22901072 100644
+--- a/components/presupuesto/PresupuestoPorFases.render.test.ts
++++ b/components/presupuesto/PresupuestoPorFases.render.test.ts
+@@ -1,6 +1,8 @@
+ // El armador del presupuesto por fases (2-oct), en la ficha del paciente. Sin
+ // JSX a propósito. La captura a 390 y 1440 se mira aparte.
+ 
++import { readFileSync } from "node:fs";
++import { join } from "node:path";
+ import { createElement } from "react";
+ import { renderToStaticMarkup } from "react-dom/server";
+ import { describe, expect, it, vi } from "vitest";
+@@ -68,6 +70,17 @@ describe("PresupuestoPorFases", () => {
+     expect(texto).toContain("Elija al menos un tratamiento.");
+   });
+ 
++  it("el aviso de enviado no parte las palabras a la mitad", () => {
++    // Captura del 5-oct, a 390 y a 1440: «Ver lo qu|e recibe» y «Ver l|o que recibe».
++    // `break-all` corta en cualquier letra; el aviso no muestra la URL, así que
++    // basta con que las palabras largas puedan bajar enteras (`break-words`).
++    // El aviso solo existe después del clic: se mira la fuente.
++    const fuente = readFileSync(join(__dirname, "PresupuestoPorFases.tsx"), "utf8");
++    const aviso = fuente.split("\n").find((l) => l.includes('role="status"')) ?? "";
++    expect(aviso).toContain("break-words");
++    expect(aviso).not.toContain("break-all");
++  });
++
+   it("sin nada en el plan, dice dónde se carga", () => {
+     const { texto, html } = pintar({ filas: [] });
+     expect(texto).toContain("Todavía no hay tratamientos en el plan.");
+diff --git a/components/presupuesto/PresupuestoPorFases.tsx b/components/presupuesto/PresupuestoPorFases.tsx
+index 6b9d5270..e8f93351 100644
+--- a/components/presupuesto/PresupuestoPorFases.tsx
++++ b/components/presupuesto/PresupuestoPorFases.tsx
+@@ -220,7 +220,7 @@ export function PresupuestoPorFases({
+           </p>
+         ) : null}
+         {link ? (
+-          <p className="mt-3 break-all text-xs text-on-surface-variant" role="status">
++          <p className="mt-3 break-words text-xs text-on-surface-variant" role="status">
+             Listo: se abrió WhatsApp con el link. Vale {PRESUPUESTO_VALIDEZ_DIAS} días. <a href={link} className="font-semibold text-primary underline" target="_blank" rel="noopener noreferrer">Ver lo que recibe</a>
+           </p>
+         ) : null}
+-- 
+2.43.0
+
