@@ -9,7 +9,7 @@ Formulario: https://startup.santacruz.gob.bo/. El botón «Enviar startup» lo a
 | Startup | Onia |
 | Fundadora 1 (va PRIMERA) | Leslie Mercado Moreno · **CEO** · +591 75414930 |
 | Fundador 2 | Sergio Urcullo · **Founder** · +591 75414930 (el mismo número de Onia: la API publica el teléfono de todos) |
-| Descripción | la de 243 caracteres de la tabla del Paso 3 |
+| Descripción (201 caracteres, estilo startup y multi-rubro: Sergio Urcullo, 8-oct) | Onia es la plataforma de gestión con IA para negocios de Bolivia: agenda, clientes, cobros e inventario en un solo lugar, con módulos por rubro. Arrancamos con clínicas dentales y vamos sumando rubros. |
 | Inversión | No recibí inversión |
 | Fundada en | 2026 |
 | Industria | SaaS · Healthtech |
@@ -17,6 +17,10 @@ Formulario: https://startup.santacruz.gob.bo/. El botón «Enviar startup» lo a
 | Logo | `web-factory/apps/onia-platform/public/brand/v2/onia-icon-512.png` |
 
 El +591 75414930 es hoy el número del chatbot. Sergio Urcullo quiere manejarlo desde la plataforma: lo tiene Plataforma.
+
+**Antes de enviar:**
+- Sergio Urcullo es menor de edad. Figurar en un directorio público con nombre y rol lo autoriza **Leslie**, que es la titular y la tutora. Por eso el envío lo hace ella o se hace con su OK.
+- El pitch (onia.com.bo) hoy dice cosas que el catálogo no deja prometer todavía: el agente por WhatsApp y la factura. Sergio Urcullo decidió usarlo igual. Arreglar esos textos de la web va como tarea, según la tabla «se promete / funciona».
 
 **Estado: BORRADOR del 2026-10-08. Nada enviado, ninguna cuenta creada, ningún dato escrito en el sitio.**
 Doc VIVO, sin fecha en el nombre: se EDITA. Si cambia el sitio, se vuelve a leer antes de enviar.
