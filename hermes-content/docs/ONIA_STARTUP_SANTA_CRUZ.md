@@ -1,6 +1,6 @@
 # Inscripción de Onia en el Directorio de startups cruceñas (Gobierno de Santa Cruz)
 
-## ✅ LISTO PARA PEGAR (decidido por Sergio Urcullo el 8-oct)
+## ✅ LISTO PARA PEGAR (decidido por Sergio Urcullo el 8-oct; el envío, con el OK de Leslie)
 
 Formulario: https://startup.santacruz.gob.bo/. El botón «Enviar startup» lo aprietan Sergio Urcullo o Leslie.
 
@@ -9,7 +9,7 @@ Formulario: https://startup.santacruz.gob.bo/. El botón «Enviar startup» lo a
 | Startup | Onia |
 | Fundadora 1 (va PRIMERA) | Leslie Mercado Moreno · **CEO** · +591 75414930 |
 | Fundador 2 | Sergio Urcullo · **Founder** · +591 75414930 (el mismo número de Onia: la API publica el teléfono de todos) |
-| Descripción (201 caracteres, estilo startup y multi-rubro: Sergio Urcullo, 8-oct) | Onia es la plataforma de gestión con IA para negocios de Bolivia: agenda, clientes, cobros e inventario en un solo lugar, con módulos por rubro. Arrancamos con clínicas dentales y vamos sumando rubros. |
+| Descripción (250 de 250 caracteres; Sergio Urcullo, 8-oct: «más descriptiva y cómo queremos escalar: chatbots conversacionales, agentes, IA») | Onia es la plataforma de IA para negocios de Bolivia: gestión por rubro (agenda, clientes, cobros) con chatbots conversacionales y agentes que atienden y hacen el seguimiento por el negocio. Arrancamos con clínicas dentales; vamos a todos los rubros. |
 | Inversión | No recibí inversión |
 | Fundada en | 2026 |
 | Industria | SaaS · Healthtech |
