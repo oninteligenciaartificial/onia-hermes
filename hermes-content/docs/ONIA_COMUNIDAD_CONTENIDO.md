@@ -469,3 +469,16 @@ drop + presentaciones; semana 2: + reto y wins; mes 2: + audio dominical y chall
 Ningún drop promete lo que no existe. Todo sale de lo que Sergio usa de verdad
 (regla: la venta nunca exhibe obra; acá no se vende, se enseña — pero tampoco se
 inventa).
+
+## Cómo se escribe un aviso (8-oct)
+
+> Sergio Urcullo, 8-oct, al ver los avisos de CACHE, VERIFY e HISTORIA: *«no entiendo esas, mejorá lo que decís»*.
+
+- **Dos mensajes, no uno.** Primero un **aviso corto** (qué pasó, qué te cambia, qué hay abajo, una pregunta para
+  General). Después, en otro mensaje, el **recurso completo** (tabla, plantilla, comandos). Un recurso técnico pegado solo,
+  con título en clave (CACHE, VERIFY), no lo entiende ni el dueño de la comunidad.
+- **Cada aviso lleva una línea «para Sergio Urcullo»** que dice qué es y a quién le sirve. No se publica; es para que
+  entienda lo que pega.
+- **Sin siglas sin explicar:** token, hook, worktree, commit se dicen con su significado la primera vez.
+- Los avisos de la semana del 8 al 16-oct están en `docs/cola/plan-3-semanas/AVISOS-COMUNIDAD-8-16-OCT.md`.
+

@@ -176,6 +176,32 @@ Letras: Bricolage (títulos, local), DM Sans (texto), Caveat (flechas y sello), 
    `carousel_contactsheet.js` lee `CAROUSEL_BROWSER` y pasa `--no-sandbox` desde el 1-oct; antes fallaba en la nube con
    «No Edge/Chrome found» aunque se hubiera corrido el setup. El `eval` va en el MISMO comando que el render.
 
+### Historias con foto de Sergio Urcullo (8-oct)
+
+> ⚠️ **El diseño «foto + etiqueta + titular» fue RECHAZADO por Sergio Urcullo el 8-oct** («no me gustan las historias, el diseño
+> hay que mejorarlo, y recordá que hay estructuras de contenido para vender»). Falló mi método, no solo el estilo: armé el
+> diseño sin leer las fuentes del carril. Antes de diseñar una historia, leer **en este orden**:
+> 1. `hermes-content/skills/historias-onia.md` y `hermes-content/docs/STORY_REFERENCES.md` (tipos de historia y secuencia
+>    de 5: mood/prueba → problema → desglose → interacción → CTA);
+> 2. `ONIA_MARCA_PERSONAL_ETAPA2_OPERACION.md` §2: **4 láminas = gancho → mito → revelación → CTA único**, con prueba en
+>    pantalla y una sola acción;
+> 3. los kits ya aprobados: `carousels/out/curso-dia1/` y `historias-llamada/` (fondo verde de marca, tarjetas negras,
+>    stickers collage, zona punteada para el sticker real).
+> Una historia que vende es una **secuencia** con una acción final, no un afiche con titular. Lo que no se ve desde la nube
+> (cómo lo hacen cuentas que funcionan) se le pide a la madre: «PEDIDO PC: historias de <cuentas> — para qué lo querés».
+
+Lo que sigue (render, banda segura, trampas del headless) **sigue valiendo** como herramienta; lo que cambia es el diseño.
+
+- **Método:** `scripts/marca-personal/historia-foto.mjs --foto <jpg> --titulo "Hoy: *Haiku 5.5* cuesta 10 veces menos"
+  --etiqueta "HOY · SÁB 10 OCT" --out h01.png`. Título de hasta 70 caracteres; `*palabra*` sale en verde ONIA. El texto
+  queda en la banda segura: la interfaz de Instagram tapa los primeros 230 px y los últimos 422 px de 1080x1920.
+- **Antes de publicar:** mirar la foto (nadie más en el fondo, la cara no queda bajo el texto) y la historia renderizada.
+  Publica `ig-historia.mjs` en el VPS (ver `hermes-content/deploy/vps-ops/publicar/README.md`).
+- **Trampa medida el 8-oct:** el Chrome headless nuevo resta ~90 px de la ventana al capturar y deja una franja negra
+  abajo. Se renderiza a 1080x2100 y se corta a 1080x1920 con `ffmpeg crop`. Y su ancho mínimo de ventana es 500 px: una
+  captura «a 400 px» sale cortada aunque la página no desborde.
+- **La API no pone stickers.** Link, encuesta y música los pone Sergio Urcullo a mano.
+
 ## 6. Gasto (CLAUDE.md, regla de Higgsfield)
 
 Cotizar siempre (gratis), pedir aprobación del lote con costo y cantidad, registrar en

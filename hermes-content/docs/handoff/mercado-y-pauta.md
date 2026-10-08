@@ -1,5 +1,20 @@
 # Handoff — carril `mercado-y-pauta` (sesión «Ventas y pauta Onia Platform», antes «Análisis de mercado»)
 
+> 🧪 **8-oct, noche — Tanda 1 de competencia y laboratorio de creativos (pedidos de la madre por Sergio Urcullo).**
+> - **Tanda semanal de competencia:** `ONIA_UI_MEJORAS_1.0.md` §8 (9 hallazgos con versión Onia, dueño y Codex) + fichas `JELOU_FICHA.md`,
+>   `DATEC_FICHA.md` y `ANUNCIANTES_FICHAS_CORTAS.md`; `MAPA_COMPETENCIA.md` al día. **Próxima: 15-oct** (norma boliviana de
+>   historia clínica y factura, Instagram de Doctocliq/Dentalink/CitaPro, bots de clínicas locales). Codex esta semana: ninguna tarea.
+> - **Laboratorio de creativos:** `anuncios/FORMATOS-QUE-SOSTIENEN.md` (5 formatos con más días, una versión Onia por vía). Hecho con código:
+>   A1 v5 estático 4:5 y 9:16, video de 11 s, micro-video de 10 s y carrusel de 4 láminas 1:1. Guiones para Sergio Urcullo (F1 y F3) y una
+>   propuesta de Higgsfield **sin cotizar** (se cotiza con la CLI desde la PC).
+> - **Plan visible:** la lista de tareas de la sesión (TaskCreate) trae el criterio de hecho de cada una.
+> - ✅ **`ONIA_ADDONS.md`** (los 6 add-ons del 8-oct, pedido de la madre): potencial, mercado de hoy, test de 3 preguntas, esfuerzo, cómo se
+>   vende al mismo cliente, **orden para después de la 1.0** (web conectada · puesta en marcha · app · campañas de Meta · influencers IA · IA
+>   local) y primer paso de cada uno. **Ojo:** el bloque de decisión del 8-oct que la madre cita en el §12 de la estrategia **no está en `main`**.
+>   Verificado en vivo: `/servicios/webs` responde 200; `/servicios/marketing-ia` y `/servicios/consultoria` redirigen a la portada.
+> - **Intentos fallidos:** rutas de precios adivinadas (`/precios`, `/pricing`) dieron 404; el buscador dio precios viejos de Jelou; el control de
+>   seguridad bloqueó un `rm -f $VAR/*` (se sobrescribió por nombre).
+
 > 🎨 **8-oct, noche — Rediseño de los anuncios (Sergio Urcullo: «demasiado básicos… mejora tus trabajos»).**
 > - **Hecho:** se miraron los 22 anuncios de la competencia fotograma a fotograma + 5 sitios de referencia y se rehízo D1
 >   como **A1 v5 «Las 10:00»** y A2 como **A2 v2** (feed, historia y video de 11 s para A1). Tabla de qué hacen ellos y qué

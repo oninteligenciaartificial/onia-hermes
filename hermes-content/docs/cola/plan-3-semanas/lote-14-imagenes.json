@@ -1,0 +1,100 @@
+[
+ {
+  "id": "K13-2",
+  "carrusel": "K13 · Claude Code sin API key",
+  "lamina": "2",
+  "prompt": "Two flat blank rectangular sheets of matte black clay, one slightly in front of the other, joined at the top corner by one emerald green clay paper clip, on a white surface.",
+  "reemplaza": "sergio-k13-loop-sin-api-key-20261001-s02-97067d7a.jpg"
+ },
+ {
+  "id": "K5-3",
+  "carrusel": "K5 · Seguimiento que no molesta",
+  "lamina": "3",
+  "prompt": "An emerald green clay cookie cutter shaped as a plain rounded square, pressed into a flat sheet of matte black clay, with one cleanly cut matte black clay rounded square lying beside it, on a white surface.",
+  "reemplaza": "sergio-k5v2-seguimiento-que-no-molesta-20260929-s03-20e9957d.jpg"
+ },
+ {
+  "id": "K5-7",
+  "carrusel": "K5 · Seguimiento que no molesta",
+  "lamina": "7",
+  "prompt": "A closed envelope made of matte black clay lying flat, with a triangular flap and one small round emerald green clay wax seal at the point of the flap, on a white surface.",
+  "reemplaza": "sergio-k5v2-seguimiento-que-no-molesta-20260929-s07-9dcc35b5.jpg"
+ },
+ {
+  "id": "K9-5",
+  "carrusel": "K9 · 5 revisiones del video con IA",
+  "lamina": "5",
+  "prompt": "A tall rectangular pane of frosted translucent glass in a thin matte black clay frame, standing upright, with a soft blurred emerald green clay blob visible behind the glass, on a white surface.",
+  "reemplaza": "sergio-k9v2-checklist-video-ia-20260929-s05-3057304b.jpg"
+ },
+ {
+  "id": "K9-6",
+  "carrusel": "K9 · 5 revisiones del video con IA",
+  "lamina": "6",
+  "prompt": "A small coin purse seen straight from the front, made of matte black clay, with a wide shiny emerald green clay clasp across the top and a clear curved seam below it, standing upright on a white surface.",
+  "reemplaza": "sergio-k9v2-checklist-video-ia-20260929-s06-36cfd880.jpg"
+ },
+ {
+  "id": "K12-7",
+  "carrusel": "K12 · Worktrees sin pisarse",
+  "lamina": "7",
+  "prompt": "A bold emerald green clay check mark standing upright, with a small matte black clay garden shovel leaning against it, on a white surface.",
+  "reemplaza": "sergio-k12-worktrees-sin-pisarse-20261001-s07-1bb45e00.jpg"
+ },
+ {
+  "id": "N02-3",
+  "carrusel": "N02 · Sonnet 4.5 se apaga",
+  "lamina": "3",
+  "prompt": "A chunky matte black clay flashlight lying on its side, with a wide emerald green clay cone of light spreading out from its front end, on a white surface.",
+  "reemplaza": "sergio-n02-sonnet45-se-apaga-20261001-s03-99e49c4b.jpg"
+ },
+ {
+  "id": "N02-7",
+  "carrusel": "N02 · Sonnet 4.5 se apaga",
+  "lamina": "7",
+  "prompt": "A large matte black clay adjustable wrench lying diagonally, with one emerald green clay hexagonal nut held in its open jaw, on a white surface.",
+  "reemplaza": "sergio-n02-sonnet45-se-apaga-20261001-s07-005fd9f8.jpg"
+ },
+ {
+  "id": "K1-7",
+  "carrusel": "K1 · Opus 5.5 o Sonnet 5.5",
+  "lamina": "7",
+  "prompt": "A flat white clay surface with one thick emerald green clay line across it, and directly behind the line two identical clay cubes side by side, one white and one matte black, on a white surface.",
+  "reemplaza": "sergio-k1-opcion-b-clay-20260929-s07-28ff5bfc.jpg"
+ },
+ {
+  "id": "K10-5",
+  "carrusel": "K10 · La perilla de esfuerzo",
+  "lamina": "5",
+  "prompt": "A small matte black clay step ladder with three steps, one round emerald green clay ball on the second step and a curved emerald green clay arrow pointing up to the third step, on a white surface.",
+  "reemplaza": "sergio-k10v2-perilla-de-esfuerzo-20260929-s05-2f87cdb0.jpg"
+ },
+ {
+  "id": "P2-HF",
+  "carrusel": "P2 · 7 herramientas",
+  "lamina": "HyperFrames",
+  "prompt": "A matte black clay filmstrip of three blank square frames in a row, each frame holding a different simple emerald green clay shape: a circle, a square and a triangle, on a white surface.",
+  "reemplaza": null
+ },
+ {
+  "id": "P2-BU",
+  "carrusel": "P2 · 7 herramientas",
+  "lamina": "Buffer",
+  "prompt": "A neat stack of three flat rounded layers of clay, the top one emerald green and the two below matte black, with one thick emerald green clay arrow leaving the top layer toward the right, on a white surface.",
+  "reemplaza": null
+ },
+ {
+  "id": "P2-FW",
+  "carrusel": "P2 · 7 herramientas",
+  "lamina": "faster-whisper",
+  "prompt": "A classic matte black clay microphone on a small stand, with three curved emerald green clay sound waves on its left and three straight horizontal emerald green clay bars like lines of text on its right, on a white surface.",
+  "reemplaza": null
+ },
+ {
+  "id": "P2-HG",
+  "carrusel": "P2 · 7 herramientas",
+  "lamina": "Higgsfield",
+  "prompt": "A matte black clay picture frame standing upright with an emerald green clay mountain and sun shape inside it, and one small emerald green clay four-point sparkle star beside it, on a white surface.",
+  "reemplaza": null
+ }
+]
