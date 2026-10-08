@@ -211,6 +211,12 @@ Se trabaja en la app de Claude; Codex corre por detrás. Codex no orquesta, no a
   y gpt-6.1-sol con sandbox (las dos probadas el 8-oct). Deja
   `resultado.md`, `eventos.jsonl` y `session_id` en `~/.codex/madre-tareas/<fecha>-<tarea>/`. Para un seguimiento en la
   misma conversación: `scripts/codex-tarea.sh resume <session_id> <seguimiento.md>`.
+- **Codex verifica a la madre; no hay madre 2 abierta** (Sergio Urcullo eligió esto el 8-oct). Una madre 2 sería un
+  segundo orquestador y relee todo el contexto, así que gasta mucho. Antes de mergear un PR propio, la madre corre
+  `scripts/codex-tarea.sh revisar <carpeta> origin/main` (gpt-6.1-sol, esfuerzo medio, para no quemar la cuenta; Astra
+  solo si toca cobros, producción o permisos) y pega `resultado.md` como comentario del PR. Con esa revisión el control
+  de permisos deja mergear. La primera corrida, el 8-oct, tardó ~3 min. Si la madre se cae, el fallback es el handoff
+  al día: una madre nueva arranca leyéndolo.
 - **Modelos (Sergio Urcullo, 8-oct):** código de Platform `gpt-6-astra` medium; tareas simples `gpt-6.1-sol` medium (el
   default). Si el resultado es malo, se escala con la prueba del fallo, no por costumbre. Lista viva:
   `~/.codex/models_cache.json`.
