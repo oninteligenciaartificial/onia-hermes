@@ -221,6 +221,15 @@ Se trabaja en la app de Claude; Codex corre por detrás. Codex no orquesta, no a
   («dependencias ausentes», `spawn EPERM`, 8-oct, 4 de 4 tareas). La validación la da el CI del PR y las capturas las
   saca Plataforma. Cada commit lo dice explícito. **Lo que sí corre:** tests de node puro con
   `node --test --test-isolation=none` (sin procesos hijos). Así C16c, el bot del VPS, pasó 335/335 el 8-oct.
+- 🔴 **Causa real (medido el 8-oct con C16d): el junction apuntaba a una carpeta VACÍA.** `C:/dev/proyectos/onia-platform/node_modules`
+  tiene 0 paquetes, y todos los worktrees `onia-platform-codex-*` apuntaban ahí. La instalación completa (682 paquetes)
+  está en `C:/dev/proyectos/onia-platform-v1-integracion-20260927/node_modules`. Se crea así, en PowerShell:
+  `cmd /c mklink /J <worktree>\node_modules C:\dev\proyectos\onia-platform-v1-integracion-20260927\node_modules`.
+  Con ese junction, la madre corrió `npx vitest related <archivos tocados> --run` y dio 971/971, y encontró un test viejo
+  roto que Codex no había visto (`fetch-con-limite.test.ts`). **Antes de commitear un trabajo de Codex en onia-platform,
+  la madre corre `vitest related` ella misma.**
+- Los tests de bash de Hermes (`scripts/loops/pedido-*.test.mjs`) fallan en Windows también en `main` (70 de 78): son
+  para Linux. Su gate es el CI del PR, no la PC.
 - **Codex en un repo pesado (onia-hermes, ~6 GB):** worktree con `--no-checkout` + `sparse-checkout set <carpeta>
   .agents AGENTS.md CLAUDE.md` + `checkout`. Solo baja la carpeta de la tarea. Ruta corta (`C:/dev/proyectos/…`): bajo el
   scratchpad, Windows corta por «Filename too long».
