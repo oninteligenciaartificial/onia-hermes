@@ -58,8 +58,8 @@ Plataforma con las del presupuesto por fases, a 390 y 1440 px.
 
 | Sesión (título) | id nube | Carril |
 |---|---|---|
-| Sesión madre Onia 1.0 | `session_01BZwYEL4eSUkdPWL36ibLkd` (**en la NUBE**, entorno «Onia») | Ordena por mensaje |
-| Madre v2 (local, se abre con `ARRANQUE-SESIONES.md`) | local, el id cambia al abrirla | Respaldo, 2.ª revisión, lanza Codex en la PC |
+| **Madre** (desde el 8-oct, LOCAL; en `ListAgents` se llama «Madre») | local `202a717e…`, worktree `onia-madre-v2-pr-review-2d85bb` | Ordena por mensaje, lanza Codex, hace lo de la PC |
+| ~~Sesión madre Onia 1.0~~ (nube) | `session_01BZwYEL4eSUkdPWL36ibLkd` | Reemplazada el 8-oct: desde la nube no se puede mandar mensajes |
 | Plataforma Onia 1.0 | `session_01HhnFgkeF6nLGvjrfjt1o2C` | Plataforma: desarrollo, publicar, VPS |
 | Ventas y pauta Onia | `session_0143C5fMXVs8eWEf7uBpC9SF` | Pauta y prospección |
 | Marca personal de Sergio Urcullo | `session_01WPecmppa9uZEc4fJDjSmaS` | Contenido de Sergio Urcullo |
