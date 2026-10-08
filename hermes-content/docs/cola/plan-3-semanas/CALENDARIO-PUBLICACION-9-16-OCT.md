@@ -12,16 +12,20 @@ primera revisión el **lunes 19-oct**.
 | **12:30** | **Video A** | Instagram | `ig-reel.mjs` |
 | 12:35 | el mismo video | TikTok · YouTube Shorts · LinkedIn | Buffer |
 | **13:30** | **Yap de A** (otro gancho, 30-45 s) | Instagram **Trial** | `ig-reel.mjs --trial auto` |
+| 13:35 | el mismo yap | TikTok · YouTube Shorts | Buffer |
 | **16:00** | **Carrusel** | Instagram | `ig-carrusel.mjs` (timer) |
 | 16:01 · 16:02 | el mismo carrusel | LinkedIn · TikTok | Buffer (timer) |
 | 16:05 | el carrusel, compartido a su historia, con sticker de la comunidad | Instagram historias | lo hace Sergio Urcullo |
 | **18:30** | **Video B** | Instagram | `ig-reel.mjs` |
 | 18:35 | el mismo video | TikTok · YouTube Shorts · LinkedIn | Buffer |
 | **19:30** | **Yap de B** | Instagram **Trial** | `ig-reel.mjs --trial auto` |
+| 19:35 | el mismo yap | TikTok · YouTube Shorts | Buffer |
 | 21:00 | **Paquete del día siguiente** para Sergio Urcullo: tabla de cortes, preview y captions | su chat | lo manda Claude |
 
+- **Por día:** 2 videos + 2 yaps = 4 reels, más el carrusel.
 - **Yaps:** uno por video esta semana, a +1 h del principal. El segundo yap se suma cuando veamos qué gancho rinde.
-- **Trial** es solo de Instagram. A TikTok y LinkedIn van los principales.
+- **Trial** es solo de Instagram. Los yaps también salen en **TikTok y YouTube Shorts** como videos normales, con su
+  otro gancho. A **LinkedIn** no: ahí repetir el mismo tema el mismo día cansa.
 - **Regla de oro:** nada se corta sin que Sergio Urcullo vea antes la tabla de cortes. Si el bruto sube hasta las
   18:00, el paquete llega ese día a las 21:00 y sale al día siguiente.
 
