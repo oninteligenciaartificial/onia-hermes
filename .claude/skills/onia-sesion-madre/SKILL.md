@@ -52,6 +52,8 @@ Plataforma con las del presupuesto por fases, a 390 y 1440 px.
   sesión y actúa. Si nada cambió, no le escribe nada a él. Las sesiones no pueden avisarle en el momento (ver
   «Nube → madre»). 1 tarea por mensaje, con su criterio de hecho. Los issues `tarea-local` los barre la madre en las
   rondas. No se crea otra tarea programada: sería un segundo orquestador.
+- **Cada sesión lleva su plan visible en la app** (TaskCreate), con el estado y el criterio de hecho de cada tarea.
+  Sergio Urcullo lo vio en Plataforma el 8-oct y pidió que todas lo tengan: es como él sigue el avance sin preguntar.
 - **A Sergio Urcullo, como máximo 3 pedidos por semana**, en una lista de sí o no. Lo demás se anota y no se le pide.
 - **La plata no espera al desarrollo:** mientras el cobro de punta a punta no esté probado, se cobra por transferencia y se
   activa a mano (Etapa 1).
