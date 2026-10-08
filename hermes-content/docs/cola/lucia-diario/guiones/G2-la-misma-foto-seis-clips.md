@@ -27,7 +27,7 @@ the phone to the camera and gives a small knowing smile…»* sobre la foto K1.
 | Motor 3 (`start_image`, otro modelo barato) | 6 | 0,69 | 0,63 | 0,64 | Misma escena; la cara queda **bajo el piso** |
 | Motor 4 (`start_image` + 3 fotos de referencia) | 6 | 0,71 | 0,73 | 0,80 | Sube; pero el plano se acerca (la cara crece 2,5 veces) y **aparece un letrero inventado** en la torre |
 | Motor 5 (solo 5 fotos de referencia, sin foto de arranque) | 6 | 0,80 | 0,81 | 0,82 | Sostiene la cara; **inventó otro cuarto** y un plano que se acerca |
-| Motor 6 (`start_image`, 4 s a 720p) | 20 | 0,79 | 0,79 | 0,77 | Estable, pero 4 veces el precio del Motor 1 |
+| Motor 6 (`start_image`, 4 s a 720p) | 20 | 0,79 | 0,79 | 0,77 | Estable, pero 5 créditos por segundo (el Motor 1 cuesta 1,25): 20 créditos por 4 s |
 
 - Fuente de los números: `v4/PROCEDENCIA.jsonl` (línea «resultados» del 8-oct), clips en `v4/prueba-motores-20261008/` (proxies 360p y
   hojas `hojas/comparativo-v1.jpg` y `comparativo-v2.jpg`). Los originales se recuperan con `job_display` a 0 cr.

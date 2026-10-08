@@ -147,7 +147,7 @@ description: "Invocar para CUALQUIER trabajo del carril Lucía (Lucía Antelo, l
 - **No usar para Lucía:**
   - Seedance 2.5: 42 por 6 s, aunque es el default de la skill oficial;
   - Cinema Studio 3.0, 3.5 y 4.0: de 30 a 42 por 6 s (el 3.0 de 4 s a 720p cuesta 20: se probó el 8-oct, sostiene la cara y
-    sale 4 veces más caro que Kling std);
+    sale 4 veces más caro por segundo que Kling std y 2,7 veces por clip);
   - Marketing Studio: de 42 a 105; inventa guion y voz, y el rol `character_photo` da «Unknown media role» al cotizar
     (no hay forma probada de pasarle la cara de Lucía);
   - `saas_motion`: re-dibuja la captura, y eso es una pantalla falsa;
