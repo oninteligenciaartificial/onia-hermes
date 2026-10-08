@@ -211,6 +211,12 @@ Se trabaja en la app de Claude; Codex corre por detrás. Codex no orquesta, no a
   y gpt-6.1-sol con sandbox (las dos probadas el 8-oct). Deja
   `resultado.md`, `eventos.jsonl` y `session_id` en `~/.codex/madre-tareas/<fecha>-<tarea>/`. Para un seguimiento en la
   misma conversación: `scripts/codex-tarea.sh resume <session_id> <seguimiento.md>`.
+- **Codex verifica a la madre; no hay madre 2 abierta** (Sergio Urcullo eligió esto el 8-oct). Una madre 2 sería un
+  segundo orquestador y relee todo el contexto, así que gasta mucho. Antes de mergear un PR propio, la madre corre
+  `scripts/codex-tarea.sh revisar <carpeta> origin/main` (gpt-6.1-sol, esfuerzo medio, para no quemar la cuenta; Astra
+  solo si toca cobros, producción o permisos) y pega `resultado.md` como comentario del PR. Con esa revisión el control
+  de permisos deja mergear. La primera corrida, el 8-oct, tardó ~3 min. Si la madre se cae, el fallback es el handoff
+  al día: una madre nueva arranca leyéndolo.
 - **Modelos (Sergio Urcullo, 8-oct):** código de Platform `gpt-6-astra` medium; tareas simples `gpt-6.1-sol` medium (el
   default). Si el resultado es malo, se escala con la prueba del fallo, no por costumbre. Lista viva:
   `~/.codex/models_cache.json`.
@@ -229,6 +235,13 @@ Se trabaja en la app de Claude; Codex corre por detrás. Codex no orquesta, no a
   Cuando falla, Codex lo reporta honesto en `resultado.md` y no inventa.
 - **Codex en la nube SÍ corre:** la prueba del 8-oct en el entorno Hermes terminó READY a los ~20 min (el repo pesa). El
   resultado se trae con `codex cloud diff <task>` y `codex cloud apply <task>`.
+- ⚠️ **El modelo de Codex en la nube NO se elige desde la CLI** (medido el 8-oct con el punto 14): se pidió
+  `-c model="gpt-6-astra"` y la tarea corrió con **gpt-5.6-sol**. Se verifica con `model_version` en
+  `GET /wham/tasks/<task>`. Lo que necesite Astra va a Codex local; la nube sirve para trabajo de calidad Sol.
+- **Llevar un diff de Codex a onia-platform sin hacer checkout:** el repo tiene rutas demasiado largas para Windows y
+  `git worktree add` falla con «Filename too long». Se arma el commit con un índice temporal:
+  `GIT_INDEX_FILE=<tmp> git read-tree origin/master && git apply --cached x.diff && git commit-tree $(git write-tree) -p
+  origin/master -F msg`. Después `git branch -f` y `push`. Así salió onia-platform#124.
 - Worktree aislado por tarea, rama `codex/<tarea>-<fecha>` (nunca `claude/*`); en onia-platform, `node_modules` por
   junction. **Codex NO commitea:** no se le da el `.git` común, porque sus `hooks/` y su `config` se ejecutan fuera del
   sandbox la próxima vez que la madre usa git (revisión del #151, 8-oct). La red sigue cerrada. La madre revisa el diff

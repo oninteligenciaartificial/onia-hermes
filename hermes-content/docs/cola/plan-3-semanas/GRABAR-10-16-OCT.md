@@ -1,4 +1,4 @@
-# Para grabar · viernes 9 → jueves 15 de octubre
+# Para grabar · publicación del sábado 10 al viernes 16 de octubre
 
 > Pedido de la madre, 8-oct: *«contenido TODOS los días desde el 9-oct, para mostrar que sabemos construir con IA»*.
 > Lo arma Marca personal con los textos de `GRABAR-2-14-OCT.md`, verificados el 3-oct, más lo nuevo del 8-oct.
@@ -9,7 +9,8 @@
 >   sacan los agentes.
 
 **Cómo se graba (vale para todas):**
-1. **Una o dos piezas por día**, ~20-30 min cada una con las tomas. El martes va solo el YouTube (~35 min).
+1. **Grabá todo junto**, en el orden de este archivo, en una o dos tandas. Cada pieza lleva ~20 min con las tomas; el
+   YouTube, ~35. Los días son los de **publicación**: el calendario está en `CALENDARIO-PUBLICACION-9-16-OCT.md`.
 2. **Teléfono en trípode**, a la altura de los ojos, de la cintura para arriba. **Micrófono de solapa** en la remera.
    **Sin tela verde**: la prueba va arriba en la edición.
 3. **Vos grabás solo la cámara.** Lo de «En pantalla» lo pone la edición: capturas oficiales, demos de terminal y
@@ -33,7 +34,7 @@ CTA.
   - **Asesoría gratis → `sergiourcullo.vercel.app/llamada`** (falta: ver las decisiones).
 
 
-## Vie 9-oct
+## Sáb 10-oct
 
 ### N07 · Haiku 5.5: el modelo de Anthropic que cuesta diez veces menos
 
@@ -56,32 +57,6 @@ Para cambiarlo, en tu código el modelo pasa a claude guion haiku guion cinco gu
 
 La tabla y la cuenta para tu bot están en mi comunidad de WhatsApp, gratis: el link está en mi perfil, buscá HAIKU en Avisos. Y si querés que lo veamos en tu negocio, la asesoría es gratis: también está en mi perfil.
 
-### N04 · Una skill llamada verify y Claude Code la corre antes de cada commit
-
-- **Molde:** Erik: cara a lo ancho; tarjetas sobre el pecho que se arman con cada paso; karaoke de 3 palabras; CTA tecleado al final.
-- **Formato:** Vertical 9:16, cámara frontal + demo de pantalla.
-- **CTA:** Comunidad · palabra **VERIFY**.
-- **En pantalla (lo pone el editor):** crear `.claude/skills/verify/SKILL.md` en vivo, cerrar y abrir Claude Code, cambiar una línea de código y pedir un commit: verify corre antes (con un cambio solo de docs no corre).
-
-Desde el treinta de septiembre, si tu proyecto tiene una skill que se llama verify, Claude Code la corre antes de cada commit.
-
-Lo dice el registro de cambios de Claude Code de ese día: con una skill llamada verify, a Claude se le indica correrla justo antes de commitear. Es una indicación, no un candado.
-
-Paso uno: en tu proyecto creá la carpeta punto claude, adentro skills, adentro verify, y un archivo SKILL punto md.
-
-Paso dos: arriba, el nombre verify y una descripción corta. Abajo, tus chequeos en orden. Los míos: que compile, con npx tsc guion guion no emit, y que pasen los tests. Si algo falla, no commitear y decir qué falló.
-
-Paso tres: actualizá con claude update. Y cerrá Claude Code y abrilo de nuevo: la indicación se carga al arrancar la sesión. Tiene que ser tuya, en tu proyecto o en tu usuario: la que trae un plugin no cuenta.
-
-Por qué importa: en ONIA la rama principal alimenta el deploy. Y ya nos pasó que un proceso automático subió trabajo a medias.
-
-Cómo sabés que anduvo: cambiá algo de código, pedile un commit y fijate que antes aparezca la skill verify corriendo. Si el cambio es solo de documentación o de tests, no la corre.
-
-La plantilla está en mi comunidad de WhatsApp, gratis: el link está en mi perfil, buscá VERIFY en Avisos.
-
-
-## Sáb 10-oct
-
 ### D03-A · El hook que commitea solo, y la guarda que le puse después de romperlo
 
 - **Molde:** Rocha: cabeza parlante con tres capas de texto; abre con la historia y cierra con el cómo.
@@ -100,6 +75,9 @@ Paso tres, el que decide todo: la guarda. Antes de commitear, tu script corre do
 Para comprobarlo: barra hooks en Claude Code, y tu Stop tiene que aparecer. Después, en un repo de prueba, armá un conflicto a propósito y corré tu script: tiene que avisar y no commitear.
 
 El JSON y la guarda están en mi comunidad de WhatsApp, gratis: el link está en mi perfil, buscá HOOK en Avisos.
+
+
+## Dom 11-oct
 
 ### N06 · Google cambió Gemini CLI gratis por Antigravity CLI: qué cambia para vos
 
@@ -128,8 +106,31 @@ Cómo sabés que quedó: escribí barra skills y tienen que aparecer.
 
 Los comandos para Mac, Linux y Windows están en mi comunidad de WhatsApp, gratis: el link está en mi perfil, buscá ANTIGRAVITY en Avisos.
 
+### N04 · Una skill llamada verify y Claude Code la corre antes de cada commit
 
-## Dom 11-oct
+- **Molde:** Erik: cara a lo ancho; tarjetas sobre el pecho que se arman con cada paso; karaoke de 3 palabras; CTA tecleado al final.
+- **Formato:** Vertical 9:16, cámara frontal + demo de pantalla.
+- **CTA:** Comunidad · palabra **VERIFY**.
+- **En pantalla (lo pone el editor):** crear `.claude/skills/verify/SKILL.md` en vivo, cerrar y abrir Claude Code, cambiar una línea de código y pedir un commit: verify corre antes (con un cambio solo de docs no corre).
+
+Desde el treinta de septiembre, si tu proyecto tiene una skill que se llama verify, Claude Code la corre antes de cada commit.
+
+Lo dice el registro de cambios de Claude Code de ese día: con una skill llamada verify, a Claude se le indica correrla justo antes de commitear. Es una indicación, no un candado.
+
+Paso uno: en tu proyecto creá la carpeta punto claude, adentro skills, adentro verify, y un archivo SKILL punto md.
+
+Paso dos: arriba, el nombre verify y una descripción corta. Abajo, tus chequeos en orden. Los míos: que compile, con npx tsc guion guion no emit, y que pasen los tests. Si algo falla, no commitear y decir qué falló.
+
+Paso tres: actualizá con claude update. Y cerrá Claude Code y abrilo de nuevo: la indicación se carga al arrancar la sesión. Tiene que ser tuya, en tu proyecto o en tu usuario: la que trae un plugin no cuenta.
+
+Por qué importa: en ONIA la rama principal alimenta el deploy. Y ya nos pasó que un proceso automático subió trabajo a medias.
+
+Cómo sabés que anduvo: cambiá algo de código, pedile un commit y fijate que antes aparezca la skill verify corriendo. Si el cambio es solo de documentación o de tests, no la corre.
+
+La plantilla está en mi comunidad de WhatsApp, gratis: el link está en mi perfil, buscá VERIFY en Avisos.
+
+
+## Lun 12-oct
 
 ### S2-D08-A · ¿La IA le promete a tu cliente algo que no confirmaste?
 
@@ -154,32 +155,6 @@ Probalo en tu bot: mandale un pedido con fecha. Si la confirma sin tenerla escri
 
 Las dos respuestas y la plantilla están en mi comunidad de WhatsApp, gratis: el link está en mi perfil, buscá PROMESA en Avisos. Y si querés que lo veamos en tu negocio, la asesoría es gratis: también está en mi perfil.
 
-### D01-A · Tu primera skill de Claude Code en un minuto
-
-- **Molde:** Erik: cara a lo ancho; tarjetas sobre el pecho que se arman con cada paso; karaoke de 3 palabras; CTA tecleado al final.
-- **Formato:** Vertical 9:16, cámara frontal + demo de pantalla.
-- **CTA:** Comunidad · palabra **SKILL**.
-- **En pantalla (lo pone el editor):** la ruta `.claude/skills/<nombre>/SKILL.md`, el frontmatter de una skill real de ONIA y `/skills` mostrando que cargó.
-
-Una skill es un archivo que le enseña a Claude Code a hacer algo. Y lo usa solo cuando hace falta. Armemos una.
-
-En tu proyecto creá la ruta que ves en pantalla: punto claude, barra skills, barra el nombre de tu skill. Adentro, un archivo SKILL punto md, en mayúsculas.
-
-Arriba van dos datos. Name, el nombre. Description, cuándo usarla.
-
-Esa descripción es lo más importante: Claude la lee para decidir si la skill aplica. Si es vaga, no la usa nunca.
-
-Abajo, las instrucciones, como se las explicarías a alguien nuevo.
-
-La mía se llama continuidad. La descripción dice: invocar al arrancar cualquier sesión. Obliga a leer lo que ya sabemos antes de decidir. Nació el día en que mi agente planificó seis cosas, y cuatro ya estaban hechas o decididas.
-
-Para comprobar la tuya, escribí barra skills: tiene que aparecer. Después pedile algo que coincida con la descripción, y fijate si la usa.
-
-El video para instalar Claude Code y armar tu primera skill está en mi comunidad de WhatsApp, gratis: el link está en mi perfil, buscá SKILL en Avisos.
-
-
-## Lun 12-oct
-
 ### DD-A · El modelo nuevo de OpenAI cuesta un quinto, y una parte sale casi gratis
 
 - **Molde:** Santiago: pantalla partida, la prueba arriba y la cara abajo; algo cambia cada 3-5 s; sin música; cierre con una acción.
@@ -198,27 +173,6 @@ Lo que casi nadie aprovecha: lo que entra desde la caché cuesta diez centavos e
 Cómo sabés que funcionó: la respuesta de la API trae cuántos tokens salieron de caché. Si en el segundo pedido sigue en cero, cambiaste algo del principio o pasó más de media hora.
 
 La cuenta para tu agente está en mi comunidad de WhatsApp, gratis: el link está en mi perfil, buscá CACHE en Avisos.
-
-### D02-A · La perilla de Claude Code que casi nadie toca
-
-- **Molde:** Santiago: pantalla partida, la prueba arriba y la cara abajo; algo cambia cada 3-5 s; sin música; cierre con una acción.
-- **Formato:** Vertical 9:16, cámara frontal.
-- **CTA:** Comunidad · palabra **EFFORT**.
-- **En pantalla (lo pone el editor):** `/effort` con los cinco niveles + la doc de Anthropic: con los 5.5 el default bajó a medium.
-
-Si tu Claude Code ya usa los modelos cinco punto cinco, ahora arranca un nivel más abajo que antes. Y casi nadie se dio cuenta.
-
-La perilla se llama esfuerzo: cuánto razona antes de responder. La documentación de Anthropic, lo que ves en pantalla, dice que Opus y Sonnet cinco punto cinco vienen en medium. Opus cinco y Sonnet cinco venían en high.
-
-Para ver en cuál estás, escribí barra effort. Te abre cinco niveles: low, medium, high, xhigh y max.
-
-Mi tabla. Low, para lo mecánico: renombrar, mover archivos. Medium, para el día a día. High o xhigh, cuando la primera respuesta no alcanzó. Max, casi nunca: la documentación dice que tiende a pensar de más.
-
-En mi empresa hay una regla: al modelo más caro se pasa solo cuando Opus, con esfuerzo alto, no alcanzó. Primero la perilla, después el modelo.
-
-¿Cómo sabés si te conviene? Misma tarea, en medium y en high. Si en high la corregís menos, esa tarea va en high.
-
-Mi tabla está en mi comunidad de WhatsApp, gratis: el link está en mi perfil, buscá EFFORT en Avisos.
 
 
 ## Mar 13-oct
@@ -333,6 +287,53 @@ La lista completa está en mi comunidad de WhatsApp, gratis: el link está en mi
 
 
 ## Jue 15-oct
+
+### D01-A · Tu primera skill de Claude Code en un minuto
+
+- **Molde:** Erik: cara a lo ancho; tarjetas sobre el pecho que se arman con cada paso; karaoke de 3 palabras; CTA tecleado al final.
+- **Formato:** Vertical 9:16, cámara frontal + demo de pantalla.
+- **CTA:** Comunidad · palabra **SKILL**.
+- **En pantalla (lo pone el editor):** la ruta `.claude/skills/<nombre>/SKILL.md`, el frontmatter de una skill real de ONIA y `/skills` mostrando que cargó.
+
+Una skill es un archivo que le enseña a Claude Code a hacer algo. Y lo usa solo cuando hace falta. Armemos una.
+
+En tu proyecto creá la ruta que ves en pantalla: punto claude, barra skills, barra el nombre de tu skill. Adentro, un archivo SKILL punto md, en mayúsculas.
+
+Arriba van dos datos. Name, el nombre. Description, cuándo usarla.
+
+Esa descripción es lo más importante: Claude la lee para decidir si la skill aplica. Si es vaga, no la usa nunca.
+
+Abajo, las instrucciones, como se las explicarías a alguien nuevo.
+
+La mía se llama continuidad. La descripción dice: invocar al arrancar cualquier sesión. Obliga a leer lo que ya sabemos antes de decidir. Nació el día en que mi agente planificó seis cosas, y cuatro ya estaban hechas o decididas.
+
+Para comprobar la tuya, escribí barra skills: tiene que aparecer. Después pedile algo que coincida con la descripción, y fijate si la usa.
+
+El video para instalar Claude Code y armar tu primera skill está en mi comunidad de WhatsApp, gratis: el link está en mi perfil, buscá SKILL en Avisos.
+
+### D02-A · La perilla de Claude Code que casi nadie toca
+
+- **Molde:** Santiago: pantalla partida, la prueba arriba y la cara abajo; algo cambia cada 3-5 s; sin música; cierre con una acción.
+- **Formato:** Vertical 9:16, cámara frontal.
+- **CTA:** Comunidad · palabra **EFFORT**.
+- **En pantalla (lo pone el editor):** `/effort` con los cinco niveles + la doc de Anthropic: con los 5.5 el default bajó a medium.
+
+Si tu Claude Code ya usa los modelos cinco punto cinco, ahora arranca un nivel más abajo que antes. Y casi nadie se dio cuenta.
+
+La perilla se llama esfuerzo: cuánto razona antes de responder. La documentación de Anthropic, lo que ves en pantalla, dice que Opus y Sonnet cinco punto cinco vienen en medium. Opus cinco y Sonnet cinco venían en high.
+
+Para ver en cuál estás, escribí barra effort. Te abre cinco niveles: low, medium, high, xhigh y max.
+
+Mi tabla. Low, para lo mecánico: renombrar, mover archivos. Medium, para el día a día. High o xhigh, cuando la primera respuesta no alcanzó. Max, casi nunca: la documentación dice que tiende a pensar de más.
+
+En mi empresa hay una regla: al modelo más caro se pasa solo cuando Opus, con esfuerzo alto, no alcanzó. Primero la perilla, después el modelo.
+
+¿Cómo sabés si te conviene? Misma tarea, en medium y en high. Si en high la corregís menos, esa tarea va en high.
+
+Mi tabla está en mi comunidad de WhatsApp, gratis: el link está en mi perfil, buscá EFFORT en Avisos.
+
+
+## Vie 16-oct
 
 ### D04-C · «Verificado» con un 200, y el login mostraba texto roto
 
@@ -479,24 +480,9 @@ Una lámina por herramienta: nombre grande, qué hace en ONIA y costo real. Solo
 - **Qué NO se muestra:** ids, llaves, nombres de clientes ni rutas del servidor.
 - **Cierre:** asesoría gratis, «te ayudo a armar el tuyo», más la comunidad.
 
-## Plan de publicación de la semana (9 al 15-oct)
+## Plan de publicación
 
-| Hora La Paz | Qué | Dónde | Cómo | ¿Necesita el OK de Sergio Urcullo? |
-|---|---|---|---|---|
-| antes de 12:30 | El aviso del día en la comunidad | WhatsApp, Avisos | lo pega Sergio Urcullo | — |
-| 12:30 | Video A del día (si hay bruto) | IG reel + 2 versiones cortas a Trial (+1 h y +3 h) | `ig-reel.mjs` | **Sí, pieza por pieza**, después del preview |
-| 12:35 | El mismo video A | TikTok, YouTube Shorts, LinkedIn | Buffer (`buffer-post.mjs --video`) | Sí, el mismo OK |
-| 16:00 · 16:01 · 16:02 | Carrusel del día (hasta el 16-oct) | IG · LinkedIn · TikTok | timers en el VPS (`ig-carrusel.mjs` + Buffer) | **No: ya autorizado el 5-oct** |
-| 18:30 | Video B del día (si hay bruto) | igual que el A | igual que el A | Sí |
-| Mar 13 | YouTube horizontal D01-C | YouTube (video largo) | lo sube Sergio Urcullo con el archivo y el texto que le pasamos (los largos no salen por API) | Sí |
-| Día sin bruto | P1 «Niveles» (vie 10 o sáb 11, 18:30) | IG reel + Buffer | como un video | Sí, al ver el render |
-| Desde el 17-oct | P2, P3 y los 7 carruseles en espera | IG · LinkedIn · TikTok | timers, como los de ahora | Sí, al ver el render |
-
-- **Facebook:** sale solo si Sergio Urcullo activa el compartido de IG a Facebook en el Centro de cuentas.
-- **Carruseles del 9 al 16:** N03 (vie 9), K11 (sáb 10), N06 (dom 11), K4 (lun 12), K8 (mar 13), K7 (mié 14), K2 (jue 15)
-  y K6 (vie 16). Ya están agendados.
-- El video «modo auto» (N03, ya editado) puede salir el **vie 9 a las 18:30**, con su carrusel del mismo día, si
-  Sergio Urcullo dice «sí».
+Está en `CALENDARIO-PUBLICACION-9-16-OCT.md`: horas fijas del día, yaps a Trial, carruseles y qué sale cada día.
 
 ## Lo que NO entra esta semana, y por qué
 

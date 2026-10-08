@@ -2,6 +2,20 @@
 
 **Archivo único del carril.** Actualizado 2026-09-29 por Claude (Opus 5.5).
 
+## ▶ 8-oct (noche, 4) — calendario de publicación ordenado
+
+- **Fuente:** `docs/cola/plan-3-semanas/CALENDARIO-PUBLICACION-9-16-OCT.md`, también en la página de Sergio Urcullo.
+- **Horas fijas (La Paz):**
+  - 12:30 video A en IG y 12:35 en TikTok, Shorts y LinkedIn;
+  - 13:30 yap de A a Trial;
+  - 16:00 / 16:01 / 16:02 carrusel en IG, LinkedIn y TikTok;
+  - 18:30 video B y 19:30 su yap;
+  - 21:00 paquete del día siguiente.
+- **Un yap por video** esta semana. Los horarios se revisan el lun 19-oct con datos de Instagram.
+- **Guiones por fecha de publicación:** `GRABAR-10-16-OCT.md` (antes 9-15). Orden: lo perecedero primero (Haiku 5.5 el
+  sáb 10) y cada video el mismo día que un carrusel del mismo tema.
+- **Falta:** agendar cada video y su yap cuando Sergio Urcullo vea su tabla de cortes; el yap de N03 no existe.
+
 ## ▶ 8-oct (noche, 3) — N03 v2 listo, publicar frenado por el control de permisos
 
 - **La regla ya está en `main`** (CLAUDE.md, «Qué se publica sin preguntar», #151). Se aplicó a N03 y falló en una
@@ -52,7 +66,7 @@
 
 - **Decisión de Sergio Urcullo (8-oct, por la madre):** las asesorías van gratis por ahora. Él solo se graba; las
   pantallas las sacan los agentes.
-- **Plan del 9 al 15-oct:** `docs/cola/plan-3-semanas/GRABAR-9-15-OCT.md`. Reemplaza al 9-14 y se renombró.
+- **Plan del 9 al 15-oct:** `docs/cola/plan-3-semanas/GRABAR-10-16-OCT.md`. Reemplaza al 9-14 y se renombró.
   - **13 piezas, 1 o 2 por día.** El martes va solo el YouTube D01-C. Cada pieza trae formato, molde, CTA y lo que pone
     la edición en pantalla.
   - **CTA nuevo: «link en mi perfil»** (comunidad o asesoría gratis), ya no «comentá X y te lo mando». La ficha del 8-oct
@@ -75,7 +89,7 @@
   - DD-A: IG `DeKl9Zcjwco`, LinkedIn `ugcPost:7513327593224458240`, TikTok `7693647592986578197`.
   - N04: IG `DeNKxt7D8KJ`, LinkedIn `ugcPost:7513689985171206144`, TikTok `7694018690777369876`.
   - Quedan 27 timers, del 8 al 16-oct.
-- **Guiones del 9 al 14-oct** en `docs/cola/plan-3-semanas/GRABAR-9-15-OCT.md` (pedido de la madre): 17 piezas, una hora
+- **Guiones del 9 al 14-oct** en `docs/cola/plan-3-semanas/GRABAR-10-16-OCT.md` (pedido de la madre): 17 piezas, una hora
   por día.
   - Pieza nueva N07 HAIKU (Haiku 5.5, verificada en la página de precios el 8-oct), con su aviso de comunidad al final
     del archivo.

@@ -3,6 +3,7 @@
 #
 #   scripts/codex-tarea.sh <tarea.md> <carpeta> [modelo] [esfuerzo]
 #   scripts/codex-tarea.sh resume <session_id> <seguimiento.md> [modelo] [esfuerzo]
+#   scripts/codex-tarea.sh revisar <carpeta> <rama-base> [modelo] [esfuerzo]   (revisión antes de mergear)
 #
 # Salida en ~/.codex/madre-tareas/<fecha>-<tarea>/: resultado.md (último mensaje de Codex),
 # eventos.jsonl y session_id (para mandarle un seguimiento con `resume`).
@@ -37,7 +38,16 @@ cerrar() {
   echo "session_id: $(cat "$out/session_id")"
 }
 
-if [ "${1:-}" = "resume" ]; then
+if [ "${1:-}" = "revisar" ]; then
+  # Revisión por otro modelo de lo que hizo la madre, antes de mergear (Sergio Urcullo, 8-oct:
+  # «mandá a Codex… sol 6.1» para no quemar la cuenta). Astra solo para cobros, producción o permisos.
+  #   scripts/codex-tarea.sh revisar <carpeta> <rama-base> [modelo] [esfuerzo]
+  carpeta=$2; base=$3; modelo=${4:-gpt-6.1-sol}; esfuerzo=${5:-medium}
+  out=$(salida "revisar-$(basename "$carpeta")")
+  trap cerrar EXIT
+  (cd "$carpeta" && "$cx" exec review --base "$base" -m "$modelo" "${SANDBOX[@]}" -c model_reasoning_effort="$esfuerzo" \
+    --json -o "$out/resultado.md" > "$out/eventos.jsonl")
+elif [ "${1:-}" = "resume" ]; then
   sid=$2; seguimiento=$3; modelo=${4:-gpt-6.1-sol}; esfuerzo=${5:-medium}
   out=$(salida "resume-$(basename "$seguimiento" .md)")
   trap cerrar EXIT
