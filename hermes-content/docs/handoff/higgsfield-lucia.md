@@ -24,6 +24,9 @@ aprendizaje escrito en la skill `lucia`.
   producto marcadas en pausa, y el intento fallido «plan v4 con premisa equivocada».
 - **`paquete-s1/PAQUETE.md`:** v5 (bio nueva sin link de venta, L01 a reescribir).
 - **Lista de tareas de la sesión** (pedido de Sergio Urcullo vía la madre): G1, G2, G3 y sus ediciones, L01 y aprendizaje.
+- **Revisión independiente de G1, G3, PLAN y PAQUETE (8-oct): 10 hallazgos, todos aplicados.** El grave: G3 le daba 14,5 s al
+  clip K4, que dura 6,04 s. Quedó con K4 entero + una placa de evidencia + K1 de cierre. También se guardaron la hoja de
+  manos (`v4/kit/k4-revision-manos-20261008.jpg`) y los prompts literales (`v4/PROCEDENCIA.jsonl` líneas 94 y 95).
 
 **⚠️ Choque de instrucciones, abierto:** el mismo 8-oct la madre dio por **APROBADO el G1 de producto** («Recordatorio de
 cita: 3 datos»), pidió esperar la captura real de Pendientes y armar **G2 «El link de reserva: 3 cosas»**. Eso muestra el
@@ -56,8 +59,8 @@ escribió Sergio Urcullo: **no se editó ni se armó nada de producto**, y se le
 5. Para L3: grabar 10 s de gestos como video guía.
 
 **Próximos pasos:**
-1. La madre confirma que vale G1 nuevo (premisa v5) → se edita con `editor-videos` § «Reels de Lucía», `hyperframes` y
-   `motion-doctrine`, QA §12, y se mira completo.
+1. La madre confirma que vale G1 nuevo (premisa v5) → preview 360p a la madre (regla de oro de `CLAUDE.md`) → render final con
+   `editor-videos` § «Reels de Lucía», `hyperframes` y `motion-doctrine`, QA §12, y se mira completo.
 2. G3 ya tiene guion: validación → edición. G2 se escribe después de L1, con la estructura marcada → validación → edición.
 3. Con el OK de Sergio Urcullo, correr L1 (cotizar de nuevo con `get_cost` antes de gastar).
 4. Reescribir L01 a la premisa v5; va fijado después de G1.

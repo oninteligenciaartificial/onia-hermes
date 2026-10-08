@@ -20,9 +20,9 @@ veces con el mismo orden para que se aprenda el patrón.
 
 | # | Caso | Prueba | Corrección |
 |---|---|---|---|
-| 1 | Foto K4·1 **descartada**, job `6708e444`: en la torre del fondo apareció un letrero con un nombre inventado («Equperarto»). El prompt decía «no text, no logos, no signs anywhere» | `v4/kit/k4-1-DESCARTADA-6708e444.jpg` (bajada de Higgsfield por `rawUrl`, 0 cr). La cara midió **0,835** (gate ≥ 0,70): aprobada por cara, mala por fondo. `PROCEDENCIA.jsonl` línea 93 | Se descartó (1 cr) y se generó otra, K4·1 `eddca486`, sin letrero: `v4/kit/k4-1-saluda-eddca486-recorte.jpg` |
+| 1 | Foto K4·1 **descartada**, job `6708e444`: en la torre del fondo apareció un letrero con un nombre inventado («Equperarto»). El prompt decía «no text, no logos, no signs anywhere» | `v4/kit/k4-1-DESCARTADA-6708e444.jpg` (bajada de Higgsfield por `rawUrl`, 0 cr). La cara midió **0,835** (gate ≥ 0,70): aprobada por cara, mala por fondo. `PROCEDENCIA.jsonl` líneas 93 y 95 (la 95 guarda el fragmento literal del prompt y la semilla) | Se descartó (1 cr) y se generó otra, K4·1 `eddca486`, sin letrero: `v4/kit/k4-1-saluda-eddca486-recorte.jpg` |
 | 2 | Foto K2·2 **agenda de papel**, job `1422fa94`: la letra del cuaderno y de los papelitos parece escrita pero no dice nada | `v4/kit/k2-2-agenda-papel-1422fa94.jpg`; el veredicto de `PROCEDENCIA.jsonl` ya decía «letra de la agenda ilegible» | No se usa para mostrar ningún dato; solo de plano de apoyo, sin acercar a la letra |
-| 3 | Clip K4 **cuenta dedos**, job `338b751f`: de los cuadros 72 a 96 la otra mano tapa a la mano abierta y los dedos no se pueden contar | `v4/kit/k4-clip-cuenta-dedos-338b751f.mp4`, revisado a resolución completa: cuadros 0 y 60, cinco dedos contables | La tarjeta pega el número al cuadro 60. El conteo previo de 9 cuadros era histórico y Codex no lo daba por exacto |
+| 3 | Clip K4 **cuenta dedos**, job `338b751f` (6,04 s, 145 cuadros): de los cuadros 72 a 104 el dedo de la otra mano toca o tapa la mano abierta y no se puede contar | `v4/kit/k4-clip-cuenta-dedos-338b751f.mp4`, revisado el 8-oct a resolución completa; hoja `v4/kit/k4-revision-manos-20261008.jpg` y `PROCEDENCIA.jsonl` línea 94. **Cinco dedos contables en los cuadros 0, 60, 112 y 120** | La tarjeta pega el número al cuadro 120, que es el más limpio (la otra mano ya se fue). El conteo previo de 9 cuadros (0,2–5,2 s) no se había hecho cuadro a cuadro |
 
 ## Estructura (58 s, 24 fps)
 
@@ -33,12 +33,13 @@ veces con el mismo orden para que se aprenda el patrón.
 | 6 – 23 | **ERROR 1 · el fondo** | Foto descartada, con el aro sobre el letrero. Etiqueta de dato «Cara: 0,835 · aprobada» desde 14,5 s. De 19 a 23 pantalla partida: descartada / la foto buena sin letrero | «1 · Un letrero que no pedí.» → «La orden decía: sin letreros.» → «Escribió uno igual.» → «Descartada. Una foto, 1 crédito.» |
 | 23 – 27 | Regla 1 | Foto buena K4·1 (sin letrero) | «Regla: mirar también el fondo.» |
 | 27 – 40 | **ERROR 2 · la letra** | Foto de la agenda (K2·2); a 31 s un recorte ampliado de la letra | «2 · Letra que no dice nada.» → «Parece escrita. No se lee.» → «Si no se lee, no sirve.» |
-| 40 – 52 | **ERROR 3 · la mano** | Clip K4: de 40 a 48,5 s el tramo con la otra mano tapando; a 48,5 s un recorte ampliado de la mano en el cuadro 60 | «3 · Una mano tapa la otra.» → «Así no se cuentan dedos.» → «Cuadro 60: cinco dedos.» |
-| 52 – 54,5 | Regla 3 | Sigue el clip K4 | «Solo cuento lo que se ve.» |
-| 54,5 – 58 | **CIERRE** | Clip K1 (Lucía mira a cámara y sonríe) | «Seguime: cada semana, una prueba.» |
+| 40 – 46 | **ERROR 3 · la mano** | Clip K4 completo a velocidad 1× (6,04 s: de 40 a 46,04 s). La otra mano tapa de 43,0 a 44,3 s | «3 · Una mano tapa la otra.» (40–43) → «Así no se cuentan dedos.» (43–45,1) |
+| 46 – 53 | Evidencia + regla 3 | Placa oscura (no se congela a Lucía) con el recorte ampliado de la mano en el cuadro 120, que se vio a los 45,0 s | «Cuadro 120: cinco dedos.» (46–50) → «Solo cuento lo que se ve.» (50–53) |
+| 53 – 58 | **CIERRE** | Clip K1 de 0 a 5 s (Lucía mira a cámara y sonríe) | «Seguime: cada semana, una prueba.» (53,3–58) |
 
 - **Tiempos de las tarjetas** (todas pasan 0,35 s por palabra + 0,3 s, medido con un script el 8-oct): 0,1–3 · 3–6 · 6–10 ·
-  10–14,5 · 14,5–19 · 19–23 · 23–27 · 27–31 · 31–35,5 · 35,5–40 · 40–44 · 44–48,5 · 48,5–52 · 52–54,5 · 54,5–58.
+  10–14,5 · 14,5–19 · 19–23 · 23–27 · 27–31 · 31–35,5 · 35,5–40 · 40–43 · 43–45,1 · 46–50 · 50–53 · 53,3–58.
+- **Duración de los clips:** K4 y K1 duran 6,04 s. G3 usa K4 entero (6,04 s) y K1 5 s; no se estira ni se acelera ninguno.
 - **Sin marcas de terceros** en pantalla ni en el pie. El letrero de la torre es texto inventado por la IA («Equperarto»);
   la madre lo mira antes de editar por si se parece a una marca real y, si se parece, se tapa con el aro y el recorte.
 - **Sin voz** (D4) y sin música: la pone Sergio Urcullo.
@@ -55,7 +56,7 @@ cuento solo lo que se ve. Cada semana hago una prueba. Seguime.»* `#inteligenci
 - **IA declarada:** rótulo desde el cuadro 0, con apellido, y el pie. Etiqueta «Información de IA» por API.
 - **No la pone en el puesto:** el ambo es vestuario y ninguna frase habla de profesión.
 - **Sin promesas ni resultados, sin testimonios, sin clientes.** Las únicas cifras son medidas: 0,835 de cara, 1 crédito por
-  foto, cuadro 60.
+  foto, cuadro 120.
 - **Sin producto:** no nombra ni muestra ninguna función de Onia.
 - **Antes de renderizar:** `grep` del guion y del pie contra la lista de `editor-videos` § «Reels de Lucía», y el QA
   completo de esa receta (cuadro 0, cada entrada, último cuadro, texto debajo del mentón + 40 y sobre y=1490). Aquí el

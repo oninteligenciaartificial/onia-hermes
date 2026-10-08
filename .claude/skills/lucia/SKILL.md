@@ -38,7 +38,7 @@ description: "Invocar para CUALQUIER trabajo del carril Lucía (Lucía Antelo, l
   usar Higgsfield haciéndolos. **No tiene que mostrar ni vender el producto.** `PLAN.md` v5 lo desarrolla.
 - **Qué se pausó (no se borró):** la puerta de demo, la cuenta demo, las capturas de Pendientes y el trato de usted. El
   guion de producto quedó en `guiones/G-producto-1-recordatorio-de-cita.md`. Vuelve solo si Sergio Urcullo lo pide.
-- **Trato:** voseo cruceño, que es su canon. El usted solo para una pieza dirigida a dueños de negocio.
+- **Trato:** voseo cruceño, que es su canon.
 - **Sin marcas de terceros** en pantalla ni en el pie (modelos, plataformas, competidores): se dice «imagen», «video»,
   «Motor 1». Así la pieza queda dentro de lo que `CLAUDE.md` § «Qué se publica sin preguntar» deja publicar sin el OK
   pieza por pieza. Con una marca, o con una función del producto, pasa por Sergio Urcullo.
@@ -71,6 +71,8 @@ description: "Invocar para CUALQUIER trabajo del carril Lucía (Lucía Antelo, l
 - Dura de **30 a 60 s** y **deja algo aprendido** (la unidad de enseñanza va completa antes del CTA).
 - El guion se valida con la madre **antes** de editar. Moldes: `hermes-content/references/marca-personal/FORMULAS-REFERENTES.md`
   (F3, F4, F5, F7) y la skill `edicion-referentes`. Primer guion: `docs/cola/lucia-diario/guiones/G1-de-una-foto-a-un-video.md`.
+- **Orden de trabajo de cada video** (regla de oro de `CLAUDE.md`, sin excepción para Lucía): guion validado por la madre →
+  preview 360p a la madre → render final → QA → publicar.
 - **Prueba rápida:** si se puede resumir como «un clip con tarjetas», no es un video. Si no hay una frase que diga qué
   aprende quien lo ve, tampoco.
 - **Cómo se llegó:** el 8-oct se editó el chiste (9,6 s, un clip del café y 3 tarjetas, 0 cr) en una pasada, con QA y
@@ -157,6 +159,22 @@ description: "Invocar para CUALQUIER trabajo del carril Lucía (Lucía Antelo, l
   - montaje con clips ya pagados: 0 cr y ~1 min de render (el costo no es el límite: lo es el guion, ver §0-bis);
   - reel de venta con un clip nuevo: 7,5 cr (Kling std off, 6 s) + 1 cr (foto Seedream) + la pantalla real;
   - kit K1-K4 completo (3-oct): 30,5 cr.
+
+- **Armar el guion contra la duración REAL de cada clip (8-oct, G3).** Los clips de Kling de 6 s duran 6,04 s (145 cuadros a
+  24 fps). El primer G3 le daba 14,5 s al clip K4 y no se podía montar sin acelerar o congelar. Antes de validar, cada
+  bloque de clip se dibuja con su duración real; lo que sobra va a una placa de evidencia o a otro clip, nunca a un estiramiento.
+- **Afirmar un conteo solo sobre cuadros mirados (8-oct, G1 y G3).** «Cinco dedos. Revisados.» se escribió sobre un conteo
+  heredado de 9 cuadros. Mirado de nuevo a resolución completa (recorte de la mano, cuadro por cuadro): contables 0, 60, 112
+  y 120; de 72 a 104 el dedo de la otra mano tapa. La tarjeta cita el cuadro («Cuadro 120: cinco dedos.») y la hoja de
+  evidencia queda en `v4/kit/k4-revision-manos-20261008.jpg`.
+- **El prompt que se muestra en pantalla se guarda literal en el repo (8-oct).** Se baja con `job_display` (0 cr) y se
+  registra en `v4/PROCEDENCIA.jsonl` con el id del job. Un guion que cita «el prompt real» sin ese archivo no se puede
+  verificar. Pasó con el prompt de K1 y con el fragmento «no text, no logos, no signs anywhere» de la foto descartada.
+- **Una cara aprobada no aprueba la foto (8-oct, G3).** La foto descartada de K4·1 midió 0,835 de identidad (gate ≥ 0,70) y
+  tenía un letrero inventado en la torre aunque el prompt decía «no text, no logos, no signs anywhere». El puntaje de cara no
+  mira el fondo: el fondo se mira.
+- **Cuando un `job_display` falla, el id se copia del registro, no de memoria (8-oct).** Se inventó un uuid parecido y dio error;
+  el id correcto salió de `PROCEDENCIA.jsonl`.
 
 ## 4. Voz (5-oct)
 

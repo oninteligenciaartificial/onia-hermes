@@ -20,7 +20,7 @@ escrito en la skill `lucia`, con el caso, el costo y la fecha.
 |---|---|
 | Prueba para conseguir clínicas: se medían conversaciones | Influencer que enseña; se mide si el video sirvió (guardados, envíos) y qué se aprendió |
 | Toda pieza de venta llevaba la pantalla real de Onia | **No hace falta mostrar el producto.** La cuenta demo y las capturas ya no bloquean nada |
-| Puerta de demo (WhatsApp o cal.com) y trato de usted | La puerta queda **pausada**. El trato es **voseo cruceño**, que es su canon. El usted solo si hay una pieza para dueños |
+| Puerta de demo (WhatsApp o cal.com) y trato de usted | La puerta queda **pausada**. El trato es **voseo cruceño**, que es su canon |
 | 5 rubros → solo dental | No hay rubro: no habla de un negocio |
 
 - **Si una pieza nombra o muestra una función de Onia**, vuelve la regla de `CLAUDE.md` § «Qué se publica sin preguntar»:
@@ -51,9 +51,10 @@ escrito en la skill `lucia`, con el caso, el costo y la fecha.
   cuadro, texto debajo del mentón + 40 y sobre y=1490) y `grep` contra la lista de frases prohibidas.
 - **Publicación** (`CLAUDE.md`, 8-oct): una pieza que pasa el QA, se miró renderizada completa y no toca el producto ni
   nombra a terceros, se publica sin el OK pieza por pieza; después se le avisa a Sergio Urcullo con el enlace.
-- **Regla de oro del video** (`CLAUDE.md` § Video): la tabla de cortes se muestra ANTES de aplicarlos. La tabla de tiempos
-  del guion cumple ese papel, así que la validación del guion por la madre va antes de editar; el preview 360p viaja con
-  el aviso de publicación.
+- **Regla de oro del video** (`CLAUDE.md` § Video, sin excepción decidida para Lucía): la tabla de cortes y el preview 360p
+  se muestran ANTES del render final. La tabla de tiempos del guion es la tabla de cortes. Orden: guion validado por la
+  madre → preview 360p a la madre → render final → QA → publicar. Si Sergio Urcullo quiere eximir a Lucía de ver el preview,
+  lo dice él.
 - **Toda generación paga:** costo cotizado con `get_cost` y OK de Sergio Urcullo al lote.
 
 ## 3. Qué se aprende de Higgsfield (currículo)
@@ -69,7 +70,7 @@ Cada fila es una prueba chica, con su video. Los costos son cotizaciones en vivo
 | L3 | Copiar los gestos de un video guía (Motion Control, 17 por 10 s) | 17 | Control de «mira a cámara y gesticula». Requiere que Sergio Urcullo grabe 10 s | por definir |
 | — | Fotos de lifestyle con la cara fija (Seedream + ancla, 1 por foto) | 0-5 | Consistencia en escenas nuevas | carruseles |
 
-- **Créditos:** hoy hay 541,26 y lo que sobra se **borra en cada renovación** (el 1-oct se borraron 387,57). Octubre va
+- **Créditos:** al 8-oct hay 541,26 (medido en vivo) y lo que sobra se **borra en cada renovación** (el 1-oct se borraron 387,57). Octubre va
   52,5 de 150; L1 lo llevaría a ~87,5.
 - Lo que se aprende se escribe en la skill `lucia`, en el mismo commit que el video.
 
