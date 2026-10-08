@@ -2,6 +2,45 @@
 
 **Archivo único del carril.** Actualizado 2026-09-29 por Claude (Opus 5.5).
 
+## ▶ 8-oct (noche, 5) — historias con fotos de Sergio Urcullo y artefacto de comunidad
+
+- **Pedido de Sergio Urcullo (8-oct):** «subime historias con fotos mías que me vaya sacando» y «dame el artefacto ordenado»
+  de lo que va a la comunidad y a historias.
+- **Artefacto «Comunidad e historias»:** un bloque por día (jue 8 a vie 16), con botón de copiar para cada texto de
+  comunidad y la lista de historias del día. Se genera con un script de scratchpad (`gen_com.py`, no está en el repo): los
+  textos salen de `GRABAR-10-16-OCT.md` y de los avisos ya escritos. Si cambia un aviso, se regenera y se republica.
+- **Historias, cómo sale cada una:**
+  1. Sergio Urcullo manda una foto vertical (cara al centro, sin gente de fondo).
+  2. `scripts/marca-personal/historia-foto.mjs` la arma 1080x1920 con etiqueta + título (≤70 caracteres, `*palabra*` en
+     verde) dentro de la banda segura (arriba 230 px y abajo 422 px los tapa Instagram).
+  3. Se sube a `/root/publicar/historias/` y `ig-historia.mjs --cuenta sergio --imagen <png> --publicar` la publica;
+     se agenda con `agendar-publicacion.sh` a las 09:00 y 20:00 La Paz (13:00 y 00:00 UTC).
+- **Medido el 8-oct:** ensayo de `ig-historia.mjs` en el VPS (contenedor creado y `FINISHED`, sin publicar). La **API de
+  Instagram no pone stickers** (link, encuesta, pregunta, música): las historias con sticker las sube Sergio Urcullo a
+  mano (16:05 carrusel compartido + sticker de la comunidad, y la historia de asesoría del jue 15 con link).
+- **En vuelo:** ninguna foto recibida todavía. Nada de historias publicado ni agendado. Se pierde solo el tiempo de
+  rehacer el artefacto si muere la sesión (el generador no está versionado).
+- **Intento descartado:** capturar con Chrome headless a 1080x1920 sale con una franja negra abajo (~90 px de ventana
+  perdidos); se renderiza a 1080x2100 y se corta a 1080x1920.
+- **Trampa de verificación:** el Chrome headless nuevo tiene ancho mínimo de ventana de 500 px. Una captura «a 400»
+  muestra la página cortada aunque no desborde. Para mirar el celular: fijar `html{width:400px}` y recortar a 400.
+
+- **Reglas nuevas de la madre (8-oct), para quien retome:**
+  - lista de tareas visible en la sesión (una por día de edición, más P1, P2, P3);
+  - cada video lo edito yo con `editor-videos` / `edicion-referentes` (recetas Santiago y Erik) / `hyperframes` /
+    `motion-doctrine`, y lo aprendido va a la skill con su fecha en el mismo commit;
+  - los 4 trucos de la ficha `video-intake/2026-10-08-orquestacion-e-ingresos-5-posts.md` §3 se prueban en P1 «Niveles»;
+  - lo que exige la PC se pide como «PEDIDO PC: video <url> — para qué lo querés»; las tareas de código van a
+    `codex-tareas/`;
+  - la regla de publicar sin OK pieza por pieza ya está en el `CLAUDE.md` de `main` («Qué se publica sin preguntar»).
+
+- **Lote de 14 imágenes mostrado a Sergio Urcullo (8-oct), sin generar:** pidió «mostrámelas y digo sí» (por la madre).
+  10 reemplazan las láminas que no se entienden (K13-2, K5-3, K5-7, K9-5, K9-6, K12-7, N02-3, N02-7, K1-7, K10-5) y 4
+  son íconos de arcilla de P2 (HyperFrames, Buffer, faster-whisper, Higgsfield). 14 × 0,12 = 1,68 cr. Los prompts
+  están en `docs/cola/plan-3-semanas/lote-14-imagenes.json`. Al recibir el sí: cotizar en vivo, generar, mirar cada
+  imagen (cara, letras inventadas, fondo gris) y pasar los prompts a los briefs. Riesgo conocido: vidrio esmerilado
+  (K9-5) y monedero (K9-6) pueden volver a fallar; si pasa, se rehace solo esa y se avisa antes de gastar más.
+
 ## ▶ 8-oct (noche, 4) — calendario de publicación ordenado
 
 - **Fuente:** `docs/cola/plan-3-semanas/CALENDARIO-PUBLICACION-9-16-OCT.md`, también en la página de Sergio Urcullo.

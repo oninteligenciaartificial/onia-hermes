@@ -33,6 +33,9 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
 > cerrada (META · PRUEBA DE HECHO · REGLA DE PARADA) con `scripts/codex-tarea.sh`. Hacés esa tarea y nada más: no
 > orquestás, no abrís sesiones ni heartbeats, no mergeás ni empujás. Trabajás en tu worktree y tu rama `codex/*`; lo
 > que no puedas decidir o te bloquee, lo escribís en la respuesta final: nadie te contesta mientras corrés.
+> Seguís **las mismas reglas que `CLAUDE.md`**: negocio, seguridad, gasto, «no exhibir obra», usted con clientes, un
+> carril por tarea. Si la tarea que te dieron no es la mejor opción, hacé lo pedido o pará, y en el resumen escribí
+> **«PARA LA MADRE: …»** con la alternativa y el porqué. Ella te contesta retomando tu sesión (`resume`).
 
 ## Orden principal
 Antes de ejecutar cualquier cambio relevante en Hermes, planear primero y dividir el trabajo en agentes especializados cuando la tarea lo justifique.

@@ -52,6 +52,8 @@ Plataforma con las del presupuesto por fases, a 390 y 1440 px.
   sesión y actúa. Si nada cambió, no le escribe nada a él. Las sesiones no pueden avisarle en el momento (ver
   «Nube → madre»). 1 tarea por mensaje, con su criterio de hecho. Los issues `tarea-local` los barre la madre en las
   rondas. No se crea otra tarea programada: sería un segundo orquestador.
+- **Cada sesión lleva su plan visible en la app** (TaskCreate), con el estado y el criterio de hecho de cada tarea.
+  Sergio Urcullo lo vio en Plataforma el 8-oct y pidió que todas lo tengan: es como él sigue el avance sin preguntar.
 - **A Sergio Urcullo, como máximo 3 pedidos por semana**, en una lista de sí o no. Lo demás se anota y no se le pide.
 - **La plata no espera al desarrollo:** mientras el cobro de punta a punta no esté probado, se cobra por transferencia y se
   activa a mano (Etapa 1).
@@ -211,6 +213,21 @@ Se trabaja en la app de Claude; Codex corre por detrás. Codex no orquesta, no a
   y gpt-6.1-sol con sandbox (las dos probadas el 8-oct). Deja
   `resultado.md`, `eventos.jsonl` y `session_id` en `~/.codex/madre-tareas/<fecha>-<tarea>/`. Para un seguimiento en la
   misma conversación: `scripts/codex-tarea.sh resume <session_id> <seguimiento.md>`.
+- ⚠️ **Nunca editar `scripts/codex-tarea.sh` mientras corre una tarea.** Bash lee el script de a pedazos: el 8-oct, al
+  agregar el modo `revisar` con U1 en curso, su cierre ejecutó otra rama («sid: unbound variable») y dejó la salida en
+  una carpeta `resume-*`. El trabajo de Codex no se perdió (quedó en el worktree), pero el `resultado.md` quedó en la
+  carpeta original `…-u1`.
+- ⚠️ **En el sandbox local, Codex no corre tsc, vitest ni Playwright** cuando `node_modules` es un junction compartido
+  («dependencias ausentes», `spawn EPERM`, 8-oct, 4 de 4 tareas). La validación la da el CI del PR y las capturas las
+  saca Plataforma. Cada commit lo dice explícito.
+- **Ver videos e Instagram lo hace la MADRE, no Codex** (probado el 8-oct). Con red habilitada
+  (`sandbox_workspace_write.network_access=true`), Codex local igual falla con `spawn EPERM` porque el sandbox sin elevar
+  no deja que node lance yt-dlp. La nube no abre Instagram. La madre sí: `fetch-video.mjs` + Gemini + láminas leídas (los 5
+  posts del 8-oct). Regla: todo link que Sergio Urcullo le mande a una sesión de la nube, la sesión se lo pasa a la madre;
+  ella lo analiza (mensaje, tema, edición), deja la ficha en `references/video-intake/` y lo aprendido en la skill.
+- **Codex atiende pedidos de las sesiones de la nube** que ellas no pueden hacer (código y tests). Decide la madre con el
+  router, por si conviene Claude o Codex. Codex sigue las mismas reglas (`AGENTS.md` remite a `CLAUDE.md`). «Habla» con la
+  madre por su `resultado.md`: si le queda una duda, la escribe ahí, y la madre le contesta con `codex-tarea.sh resume`.
 - **Codex verifica a la madre; no hay madre 2 abierta** (Sergio Urcullo eligió esto el 8-oct). Una madre 2 sería un
   segundo orquestador y relee todo el contexto, así que gasta mucho. Antes de mergear un PR propio, la madre corre
   `scripts/codex-tarea.sh revisar <carpeta> origin/main` (gpt-6.1-sol, esfuerzo medio, para no quemar la cuenta; Astra
