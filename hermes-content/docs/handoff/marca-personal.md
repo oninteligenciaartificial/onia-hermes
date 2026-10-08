@@ -2,6 +2,22 @@
 
 **Archivo único del carril.** Actualizado 2026-09-29 por Claude (Opus 5.5).
 
+## ▶ 8-oct (noche, 3) — N03 v2 listo, publicar frenado por el control de permisos
+
+- **La regla ya está en `main`** (CLAUDE.md, «Qué se publica sin preguntar», #151). Se aplicó a N03 y falló en una
+  condición: el video traía la tarjeta final y la frase hablada «Comentá COMUNIDAD y te paso el link». Es un CTA
+  comentario → DM, que queda fuera.
+- **N03 v2:** el del 1-oct cortado en la pausa de 53,1 s (después de «manual mode on») y con una tarjeta de cierre nueva,
+  «La comunidad es gratis · El link está en mi perfil», con las mismas tipografías. 55,5 s, −14,5 LUFS. Mirada la cola
+  entera. Está en el VPS: `/root/publicar/n03-modo-auto/{final-v2.mp4,caption-v2.txt,tt.json,yt.json}`.
+- **Qué se frenó:** subir los archivos al VPS pasó. El ensayo de `ig-reel.mjs` lo frenó el control de permisos
+  («Unrequested Commit in a Connected App»), con la regla ya en `main`. No se esquivó.
+- **Para publicarlo:** `agendar-n03.sh --ensayo` y después `--agendar` (vie 9, 18:30 La Paz en IG y 1 a 3 min después en
+  TikTok, YouTube Shorts y LinkedIn). Lo corre quien tenga el permiso: una sesión que Sergio Urcullo abra en modo
+  «Accept edits», o la madre desde la PC.
+- **Cómo hablarle (pedido de Sergio Urcullo, 8-oct):** mensajes cortos. Qué pasó en una línea, qué necesito de él y qué
+  sigue. Sin tablas largas ni explicaciones. No existe la skill `/caveman`; la regla «Simple» de CLAUDE.md ya lo pide.
+
 ## ▶ 8-oct (noche, 2) — qué se manda a la comunidad y qué se hace con las llamadas
 
 - **Sergio Urcullo graba los guiones del plan 9-15.** La comunidad y las llamadas quedaron en su página
