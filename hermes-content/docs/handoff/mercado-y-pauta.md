@@ -1,5 +1,17 @@
 # Handoff — carril `mercado-y-pauta` (sesión «Ventas y pauta Onia Platform», antes «Análisis de mercado»)
 
+> 📣 **8-oct, noche — Meta Ads retomada (pedido de la madre; Sergio Urcullo: «¿no se supone que tiene que ver Meta Ads?»).**
+> - **Hecho (todo en `ONIA_ADQUISICION_Y_PAUTA.md`, nada creado ni gastado en Meta):** techo alineado a la caja (**US$ 56 =
+>   Bs 750**, no USD 140); reglas de corte del plan §3 (§5.7); lo medido hoy (§5.9.1); a dónde lleva cada anuncio, públicos y
+>   el go/no-go del 13-oct (§5.10). **D1 v4**: texto corregido y de usted, render mirado en feed e historias.
+> - **Medido en ONIA Ads:** sigue **sin medio de pago**; la página «Onia» existe en el negocio; el píxel dispara; sin
+>   Instagram vinculado; el número del bot no se ve desde el conector.
+> - **El 16-oct no está asegurado:** el plan pide haber contactado antes a los canales 1 y 2, y Sergio Urcullo frenó todo
+>   contacto el 8-oct. Se decide el 13-oct; una fila en ❌ y no se enciende.
+> - **Falta de Sergio Urcullo:** tarjeta, vincular el número del bot a la página, firmar la respuesta a la pauta, el OK de
+>   gasto (US$ 56 · 14 días · Bs 750) y el «usted» en los anuncios.
+> - **Ninguna pieza sube:** las capturas de D1 son del candidato del 30-sep, no de producción. Se rehacen con la cuenta demo.
+
 > ⏸️ **8-oct, tarde — Sergio Urcullo (por la madre): «no vamos a escribirle a nadie aún».** Se frena todo contacto:
 > los 7 de la §6.9 y los leads de agosto. El conteo de los leads de agosto **quedó sin hacer**: la nube no tiene llave
 > del VPS ni token de Chatwoot. El comando para la PC está en `ONIA_LEADS_ESPERANDO.md`, «Conteo de hoy en una sola
@@ -343,7 +355,7 @@ Lista anterior (sigue vigente salvo el punto 4, que ya está hecho):
 4. **OK al primer lote de mensajes 1:1** de la página de 28, después de la verificación de la tabla de abajo.
 5. **Meta:** reconectar el conector con el usuario que administra ONIA Ads, poner la tarjeta en ONIA Ads,
    confirmar la página «Onia» y su WhatsApp, y averiguar a qué tipo de cambio cobra el banco. Después, el OK de
-   gasto con techo (USD 140, 14 días).
+   gasto con techo (~~USD 140~~ **USD 56, 14 días, Bs 750**: corregido el 8-oct).
 6. Lo de siempre: quién contesta las conversaciones de la pauta (fila 6 de §5.9) y la fecha del CIO 2026.
 
 **Próximos pasos — vigentes desde el 1-oct, de noche:**

@@ -349,7 +349,16 @@ Trampas pagadas armando v3 (2-oct):
   **`ads_activate_entity` sobre la campaña los publica en ACTIVO, gastando.** Solo se llama con el OK escrito
   de gasto (fila 9 de §5.9).
 - `client_conversation_id` es obligatorio en cada llamada: 20 caracteres, y el mismo en toda la conversación.
-- Presupuesto en centavos de USD: USD 140 = `14000`, como presupuesto total de la campaña con fecha de fin.
+- Presupuesto en centavos de USD: **USD 56 = `5600`** (Bs 750 de techo de Meta, plan 1.0 §3), como presupuesto total
+  de la campaña con fecha de fin. «USD 140 / 14000» era del 30-sep y **ya no vale** (corregido el 8-oct).
+- **El techo de la pauta lo fija `ONIA_PLAN_1.0_Y_CAJA.md`, no `ONIA_ADQUISICION_Y_PAUTA.md`.** El 8-oct esa fuente
+  decía USD 10/día (USD 140, ≈ Bs 1.600), más del doble de los Bs 750 de la caja. Dos docs con dos techos es el error
+  que la regla «una sola fuente de verdad» existe para evitar: ante la duda, manda el más nuevo y el que cuenta la caja.
+- **Qué NO ve el conector de Meta (8-oct):** el número de WhatsApp vinculado a la página (lo mira Sergio Urcullo en
+  Business Manager); los benchmarks de una cuenta sin gasto (`ads_insights_industry_benchmark` →
+  «No industry benchmark data»; `ads_insights_advertiser_context` → «Vertical: \N»). Los costos de la campaña son
+  supuestos hasta la semana 1.
+- **El píxel se mira con `ads_get_datasets`** (`ONIA Web` `1012611478191231`, `last_fired_time`): dispara el 8-oct.
   Meta rechaza un **límite** de gasto menor a USD 100.
 
 ### 5.1 Seguimiento por WhatsApp y remarketing (medido 3-oct; playbook `sales-kit/SEGUIMIENTO-LEADS.md`)
