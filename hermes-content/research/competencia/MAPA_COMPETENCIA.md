@@ -49,6 +49,7 @@
 | Clinera | Clínicas con agentes IA, EC/CL/MX/PE | USD 279/mes (223 anual) + implementación USD 450, 6 meses mínimo | Sin prueba (demo o llamada) | Stripe, Mercado Pago, WebPay | Agentes que agendan por WhatsApp y llaman por teléfono | `CLINERA_FICHA.md` |
 | Calu | Consultorios médicos y odontológicos, Argentina | 23/mes por agenda (moneda no visible, prob. USD); ARS 40.192 + IVA; −20 % anual; Bolivia no visible | 7 días; 1.ª pantalla sin tarjeta | Mercado Pago (seña) | Recordatorio WhatsApp con cupo + seña automática | `CALU_FICHA.md` |
 | Fluker AI | Clínicas y estética, Colombia | no visible (/precios da 404) | no visible (demo por WhatsApp) | no visible | Re-escribe a quien preguntó precio y no reservó | `FLUKER_FICHA.md` |
+| Datec / Lucy | Integrador boliviano (1999, +480 personas); Lucy = agente de ventas IA por WhatsApp para comercio, gastronomía y servicios | Lucy Sales USD 150/mes + 1,2-1,3 % por venta (750 ventas/mes); USD 280 (2.000) | Sin prueba; configurador que termina en contacto; implementación 7-10 días hábiles | USD; medio de pago sin dato | QR de pago dentro del chat y catálogo sincronizado con el ERP | `DATEC_FICHA.md` |
 
 Volumen de pauta activa en Meta (2-oct, `anuncios/CAPTURAS-HECHAS.md` §Ronda 2): Huli ~140 · Dentalink 81 · Medilink 41-69 ·
 Reservo 31 · Dt.Dental 24 · Clinera 20 · Doctocliq 19 · Calu, Fluker y Calendico 15 · CitaPro 13 · NativeCode 10 ·
