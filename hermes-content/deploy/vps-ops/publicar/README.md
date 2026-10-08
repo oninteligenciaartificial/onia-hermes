@@ -59,6 +59,13 @@ correr `--agendar` falla en el día que ya tiene timer: cancelalo antes con `--c
 > postear»). El 2 y el 3-oct se frenaron cuando el pedido venía de la madre o de un mensaje viejo. En la nube falta
 > `ssh`: `apt-get install -y openssh-client`.
 
+**Historias de @sergiourcullo (8-oct):** `ig-historia.mjs --cuenta sergio --imagen <png|jpg> [--publicar]` publica una
+historia de foto (la pasa a JPEG 1080x1920 y la recorta al centro si viene con otra proporción). Sin `--publicar` es
+ensayo: el contenedor expira solo a las 24 h. La foto con texto de marca se arma antes con
+`scripts/marca-personal/historia-foto.mjs`. **Límite de la API:** no admite stickers (link, encuesta, pregunta, música);
+lo que lleve sticker lo sube Sergio Urcullo desde la app. Agendar: `agendar-publicacion.sh h-0900 "2026-10-09 13:00:00"
+node /root/bin/ig-historia.mjs --cuenta sergio --imagen /root/publicar/historias/h01.png --publicar`.
+
 ## Cómo funciona por dentro (y por qué)
 
 - **API oficial de Instagram (Instagram Login)**, app `OnIA Social API`. Los tokens de
