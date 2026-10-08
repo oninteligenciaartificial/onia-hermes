@@ -151,9 +151,19 @@ Cómo contestar: <en tu transcript | SendMessage a «Sesión madre de Onia» | r
 Sergio Urcullo, 8-oct: **Claude es la madre y Codex trabaja dentro de ella** («aprovechemos mis dos suscripciones»).
 Se trabaja en la app de Claude; Codex corre por detrás. Codex no orquesta, no abre sesiones ni mergea.
 
-- **Se lanza con `scripts/codex-tarea.sh <tarea.md> <worktree> [modelo] [esfuerzo]`**, en segundo plano. Usa el CLI que
-  trae la app de Codex (0.162 el 8-oct): el `codex` de npm quedó en 0.139 y no corre gpt-6*, sin instalar nada. Deja
-  `resultado.md`, `eventos.jsonl` y `session_id` en `~/.codex/madre-tareas/<fecha>-<tarea>/`. Un seguimiento sobre la
+- **Codex en la NUBE primero (8-oct):** no depende de Windows ni de la PC prendida. Hay 2 entornos:
+  - `6abad6a0aae081919f0b315818becb21` = «ONIA Platform — QA y desarrollo» (onia-platform, ~33 MB);
+  - `6abad782eba0819196ca234dc3abc327` = «ONIA Hermes — revisión y desarrollo» (onia-hermes).
+  Se lanza con `codex cloud exec --env <id> --branch <rama> "<prompt cerrado>"`, se sigue con `codex cloud status <task>` y se
+  trae con `codex cloud diff` / `apply`. El CLI 0.139 no elige modelo en la nube.
+  ⚠️ El repo de Hermes pesa ~6 GB y su setup corre `pnpm install` de web-factory: la tarea de prueba quedó «pending» más de
+  12 min. Esa es la «cola» que ve Sergio Urcullo. **Codex en la nube = código de Platform.** Los docs de Hermes los hacen las
+  sesiones de Claude.
+  `codex cloud` sin argumentos es una TUI y no corre desde acá. Los entornos se listan con la API que usa el CLI:
+  `GET https://chatgpt.com/backend-api/wham/environments`, con el token de `~/.codex/auth.json` y sin imprimirlo.
+- **Codex local, solo si la nube no sirve:** `scripts/codex-tarea.sh <tarea.md> <worktree> [modelo] [esfuerzo]`, en segundo
+  plano. Usa el `codex` de npm (0.139, gpt-5.5) porque es el único con sandbox que anda en Windows (ver el script). Deja
+  `resultado.md`, `eventos.jsonl` y `session_id` en `~/.codex/madre-tareas/<fecha>-<tarea>/`. Para un seguimiento en la
   misma conversación: `scripts/codex-tarea.sh resume <session_id> <seguimiento.md>`.
 - **Modelos (Sergio Urcullo, 8-oct):** código de Platform `gpt-6-astra` medium; tareas simples `gpt-6.1-sol` medium (el
   default). Si el resultado es malo, se escala con la prueba del fallo, no por costumbre. Lista viva:
@@ -162,10 +172,11 @@ Se trabaja en la app de Claude; Codex corre por detrás. Codex no orquesta, no a
   fijas (sin push, sin VPS, sin producción, sin instalar). Modelo: `hermes-content/docs/handoff/codex-tareas/*.md`.
 - **Cupo:** semanal (plan `prolite`). El uso se lee en el último `rate_limits` de `~/.codex/sessions/**`. Con 80 % usado
   no se lanza nada nuevo (reserva del 20 %, decidida el 6-oct).
-- ⚠️ **Sandbox de Windows (8-oct):** con la app de Codex abierta, Codex no puede correr comandos con sandbox
-  («setup refresh had errors»: la app tiene abierto su `node_repl.exe`). Correrlo sin sandbox lo frena el control de
-  permisos de Claude Code («Create Unsafe Agents»), y no se rodea. Codex lo dice honesto en `resultado.md` y no inventa.
-  Salida: cerrar la app de Codex antes de lanzar, o que Sergio Urcullo decida dar el permiso.
+- ⚠️ **Sandbox de Windows (8-oct):** el CLI que trae la app de Codex (0.162-alpha) falla SIEMPRE con sandbox
+  («setup refresh had errors»: `node_repl.exe` del runtime `cua_node` «en uso»), aun con la app y sus procesos cerrados.
+  Correrlo sin sandbox lo frena el control de permisos de Claude Code («Create Unsafe Agents»), y no se rodea: tampoco se
+  pueden matar procesos ajenos («Interfere With Workloads»). El `codex` de npm 0.139 sí anda con sandbox. Codex lo
+  reporta honesto en `resultado.md` y no inventa.
 - Worktree aislado por tarea, rama `codex/<tarea>-<fecha>` (nunca `claude/*`); en onia-platform, `node_modules` por
   junction. Con `workspace-write` el script le abre a Codex el `.git` común, así que commitea en su rama. La red
   sigue cerrada: la madre revisa el diff, empuja y abre el PR, y la madre v2 revisa con 1 o 2 lentes según el riesgo.

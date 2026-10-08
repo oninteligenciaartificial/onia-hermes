@@ -1,20 +1,23 @@
 #!/usr/bin/env bash
 # Madre Claude -> Codex: lanza UNA tarea cerrada y deja el resultado para que la madre lo revise.
 #
-#   scripts/codex-tarea.sh <tarea.md> <carpeta> [modelo] [esfuerzo] [sandbox]
+#   scripts/codex-tarea.sh <tarea.md> <carpeta> [modelo] [esfuerzo]
 #   scripts/codex-tarea.sh resume <session_id> <seguimiento.md> [modelo] [esfuerzo]
 #
-# Defaults: gpt-6.1-sol · medium (tareas simples). Código de Platform: gpt-6-astra · medium
-# (AI_MODEL_ROUTING_2026.md). Si el resultado es malo, se escala con la prueba del fallo.
 # Salida en ~/.codex/madre-tareas/<fecha>-<tarea>/: resultado.md (último mensaje de Codex),
 # eventos.jsonl y session_id (para mandarle un seguimiento con `resume`).
 #
-# Por qué el binario de la app y no el `codex` del PATH: el de npm quedó en 0.139 y no corre
-# gpt-6*; el que trae la app de Codex se actualiza solo (medido 8-oct: 0.162.0-alpha.2).
+# Qué binario y qué modelo (medido 8-oct):
+# - El CLI de la app de Codex (0.162.0-alpha.2) corre gpt-6*, pero su sandbox de Windows falla
+#   SIEMPRE («setup refresh had errors»: node_repl.exe del runtime cua_node «en uso»), aun con la
+#   app cerrada. Y correr Codex sin sandbox lo frena Claude Code («Create Unsafe Agents»).
+# - El `codex` de npm (0.139) SÍ corre con sandbox, pero solo con gpt-5.5.
+# Por eso el default es el de npm con gpt-5.5. Al actualizarlo (`npm i -g @openai/codex`, con OK de
+# Sergio Urcullo), pasar a gpt-6-astra (código) y gpt-6.1-sol (simple), según AI_MODEL_ROUTING_2026.md.
+# CODEX_BIN=<ruta> elige otro binario.
 set -euo pipefail
 
-cx=$(ls -t "$(cygpath "$LOCALAPPDATA")"/OpenAI/Codex/bin/*/codex.exe 2>/dev/null | head -1 || true)
-[ -n "$cx" ] || cx=$(command -v codex)
+cx=${CODEX_BIN:-$(command -v codex)}
 
 salida() {
   local d="$HOME/.codex/madre-tareas/$(date +%Y%m%d-%H%M%S)-$1"
@@ -23,24 +26,18 @@ salida() {
 }
 
 if [ "${1:-}" = "resume" ]; then
-  sid=$2; seguimiento=$3; modelo=${4:-gpt-6.1-sol}; esfuerzo=${5:-medium}
+  sid=$2; seguimiento=$3; modelo=${4:-gpt-5.5}; esfuerzo=${5:-medium}
   out=$(salida "resume-$(basename "$seguimiento" .md)")
   "$cx" exec resume "$sid" -m "$modelo" -c model_reasoning_effort="$esfuerzo" \
     --json -o "$out/resultado.md" - < "$seguimiento" > "$out/eventos.jsonl"
 else
-  # Sandbox de Codex SIEMPRE: Claude Code frena lanzar Codex sin sandbox («Create Unsafe Agents»,
-  # 8-oct). Si Codex contesta «setup refresh had errors», el sandbox de Windows no pudo armarse
-  # porque la app de Codex tiene abierto su node_repl.exe: cerrar la app y relanzar.
-  tarea=$1; carpeta=$2; modelo=${3:-gpt-6.1-sol}; esfuerzo=${4:-medium}; sandbox=${5:-workspace-write}
+  tarea=$1; carpeta=$2; modelo=${3:-gpt-5.5}; esfuerzo=${4:-medium}
   out=$(salida "$(basename "$tarea" .md)")
-  extra=()
-  # Con workspace-write Codex puede commitear en su rama: el .git común de un worktree queda
-  # fuera de la carpeta y sin esto el commit falla (medido 4-oct). La red sigue cerrada: no hay push.
-  if [ "$sandbox" = "workspace-write" ]; then
-    extra=(--add-dir "$(git -C "$carpeta" rev-parse --path-format=absolute --git-common-dir)")
-  fi
-  "$cx" exec -m "$modelo" -c model_reasoning_effort="$esfuerzo" -s "$sandbox" -C "$carpeta" \
-    "${extra[@]}" --json -o "$out/resultado.md" - < "$tarea" > "$out/eventos.jsonl"
+  # workspace-write + el .git común del worktree (queda fuera de la carpeta): así Codex commitea en
+  # su rama. La red sigue cerrada: no hay push; empuja la madre después de revisar.
+  "$cx" exec -m "$modelo" -c model_reasoning_effort="$esfuerzo" -s workspace-write -C "$carpeta" \
+    --add-dir "$(git -C "$carpeta" rev-parse --path-format=absolute --git-common-dir)" \
+    --json -o "$out/resultado.md" - < "$tarea" > "$out/eventos.jsonl"
 fi
 
 grep -o '"thread_id":"[^"]*"' "$out/eventos.jsonl" | head -1 | cut -d'"' -f4 > "$out/session_id" || true
