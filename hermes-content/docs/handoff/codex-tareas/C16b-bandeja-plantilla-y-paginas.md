@@ -1,4 +1,4 @@
-# C16b · /inbox: escribir con plantilla cuando pasaron 24 h, y ver más de 25 conversaciones
+# C16b · /inbox: escribir con plantilla (pasadas 24 h o a alguien nuevo) y ver más de 25 conversaciones
 
 Sos Codex. SOLO `onia-platform`, rama nueva `codex/c16b-bandeja` desde `origin/master` (anotá el SHA).
 
@@ -19,11 +19,19 @@ Para atender el número de Onia desde `/inbox` faltan dos cosas que hoy obligan 
    se manda igual que una respuesta humana (eso ya lo calla).
 2. **Paginación:** «Ver más conversaciones» (page) y «Ver mensajes anteriores» (before) en `InboxClient.tsx`, sin romper el
    sondeo de 15 s / 5 s.
+3. **Escribirle primero a alguien (pedido de Sergio Urcullo, 8-oct: escribirle a prospectos desde la bandeja):** botón
+   «Nueva conversación» en `/inbox`: número de WhatsApp (normalizado con `numeroParaWhatsapp`; inválido → no se envía) +
+   plantilla APROBADA + sus variables. Crea el contacto y la conversación en Chatwoot y manda la plantilla en el mismo
+   pedido (`createConversation` ya existe sin uso en `lib/chatwoot.ts:~468`). Si ese número ya tiene conversación en la
+   bandeja, se usa esa (no se duplica). Solo para quien tiene permiso de responder en la bandeja; queda en `AuditLog`
+   (quién, a qué número, qué plantilla).
 
 ## PRUEBA DE HECHO
 - Tests de la ruta: plantilla aprobada → POST a Chatwoot con el nombre, idioma y parámetros; plantilla no aprobada o de
   otra bandeja → 400; otra organización → 404; ventana abierta → la acción de plantilla igual funciona.
 - Test de `lib/chatwoot.ts`: `page` y `before` viajan; la respuesta vacía corta la paginación.
+- Tests de «Nueva conversación»: número inválido → 400 sin llamar a Chatwoot; número con conversación existente → la reusa;
+  plantilla no aprobada → 400; queda el AuditLog; otra organización no puede usar la bandeja de Onia.
 - Capturas 390 y 1440 de `/dev/*` de la bandeja (si no hay banco, crealo con datos ficticios) en `docs/capturas/c16b/`.
 - `npx tsc --noEmit` 0 · eslint de lo tocado 0 · `npx vitest run` completo verde (números reales o «no corrió» y por qué).
 
