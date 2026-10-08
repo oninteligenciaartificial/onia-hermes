@@ -899,3 +899,31 @@ Archivos relevantes, todos en `C:/dev/proyectos/onia-hermes/hermes-content/`:
 - `research/competencia/HULI_FICHA.md`
 - `research/competencia/MAPA_COMPETENCIA.md`
 - `docs/ONIA_CATALOGO_DE_VENTA.md`
+
+---
+
+## Jelou AI, solo producto (8-oct, pedido de Sergio Urcullo con su Instagram)
+
+- **Qué es:** agentes transaccionales para banca, seguros y retail grande, en USD (Free 0 · Builder 25 · Growth 299 por
+  mes, cobrado por «ejecución de flujo»). No tiene ficha clínica ni gestión, así que no compite hoy por la clínica de
+  Santa Cruz. No se le encontró presencia en Bolivia (no verificado).
+- **Qué copiar:**
+  1. **Handoff operable en `/inbox`:**
+     - panel derecho con etiquetas, notas internas del equipo y datos del contacto;
+     - filtro «sin atender»;
+     - pasar el caso a otra persona;
+     - exportar a PDF.
+     Codex, sobre la bandeja, después de #127 y B1.
+  2. **El resultado del agente medido en citas:** reservas sobre intentos, inasistencias y casos derivados. Va con
+     Plataforma (toca `Appointment`).
+  3. **Probar el asistente antes de conectarlo:** ya existe `ProbadorAgente.tsx`. Verificar que se vea y se use.
+  4. **Opciones al abrir el chat:** «Reservar cita», «Precios», «Hablar con recepción».
+  5. **Aviso al dueño al 80 % del cupo de conversaciones.**
+- **Cómo lo muestran en redes:** un proceso en 5 pasos con un solo CTA, atado al hecho externo del momento (Meta cobra
+  desde el 1-oct). Prueban más de 35 variantes de un mismo titular. Nosotros nos diferenciamos mostrando la interfaz real.
+- **No se copia:**
+  - el constructor de nodos;
+  - el precio por ejecuciones en USD;
+  - banca, KYC y cobro en el chat (Bolivia depende del QR del BCP);
+  - sus cifras de casos;
+  - «comentá X» (en Onia no está probado).
