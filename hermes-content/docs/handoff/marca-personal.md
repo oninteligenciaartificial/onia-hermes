@@ -2,6 +2,43 @@
 
 **Archivo único del carril.** Actualizado 2026-09-29 por Claude (Opus 5.5).
 
+## ▶ 8-oct (noche) — autorización de publicar y control de calidad de N03
+
+- **N03 «modo auto» pasó el control de calidad el 8-oct:**
+  - 57,8 s, 1080×1920, −14,5 LUFS;
+  - hoja cada 2 s vista entera;
+  - datos vigentes en `code.claude.com/docs/en/permission-modes`.
+  Está en el VPS: `/root/publicar/n03-modo-auto/{final.mp4,caption.txt}`. **No se publicó.**
+- **Autorización «publicá lo que pase control de calidad»** (Sergio Urcullo, por la madre): solo en la rama de la madre
+  (`ad011a95a`), sin PR a `main`. El control de permisos de esta sesión frenó incluso subir el texto al VPS. Para
+  publicar N03, falta una de dos:
+  - un «sí» de Sergio Urcullo en ESTA sesión;
+  - que la regla entre a `main`.
+- **Comando listo**, con el texto nuevo («link en mi perfil» en vez de «comentá»):
+  `agendar-publicacion.sh n03-ig '2026-10-09 22:30:00' node /root/bin/ig-reel.mjs --cuenta sergio --video
+  /root/publicar/n03-modo-auto/final.mp4 --caption <caption> --publicar`. A las 22:31-22:33, `buffer-post.mjs --video`
+  a TikTok (`--meta` con título), YouTube (`--meta` con título, `privacy: public`) y LinkedIn.
+
+## ▶ 8-oct (tarde) — segundo pedido de la madre: contenido diario (`session_01WPecmppa9uZEc4fJDjSmaS`)
+
+- **Decisión de Sergio Urcullo (8-oct, por la madre):** las asesorías van gratis por ahora. Él solo se graba; las
+  pantallas las sacan los agentes.
+- **Plan del 9 al 15-oct:** `docs/cola/plan-3-semanas/GRABAR-9-15-OCT.md`. Reemplaza al 9-14 y se renombró.
+  - **13 piezas, 1 o 2 por día.** El martes va solo el YouTube D01-C. Cada pieza trae formato, molde, CTA y lo que pone
+    la edición en pantalla.
+  - **CTA nuevo: «link en mi perfil»** (comunidad o asesoría gratis), ya no «comentá X y te lo mando». La ficha del 8-oct
+    lo desaconseja, porque el DM automático no está probado.
+  - **Avisos nuevos:** HAIKU y SKILL.
+  - **Tres piezas sin grabación (solo briefs, sin render todavía):**
+    - P1 «Niveles», video HyperFrames con cuenta propia a precios oficiales: de 0,60 a 0,10 USD por tarea;
+    - P2 «7 herramientas», carrusel;
+    - P3 «Así trabaja mi empresa», carrusel o diagrama.
+  - El archivo trae también el **plan de publicación de la semana**.
+- **Falta para que el CTA funcione:** que la bio sume «Asesoría gratis → sergiourcullo.vercel.app/llamada» y que cal.com
+  pase a «Asesoría de IA gratis».
+- **Próximo:** renderizar P1 y P2, para el primer día sin bruto. P2 lleva 4 íconos de arcilla que entran en el lote de la
+  decisión 1.
+
 ## ▶ 8-oct — retomada tras el corte de la semana de Claude (`session_01WPecmppa9uZEc4fJDjSmaS`)
 
 - **Publicado y verificado el 8-oct:** el 6 y el 7-oct salieron los carruseles en las tres redes. 6 de 6 `sent`, sin
@@ -9,7 +46,7 @@
   - DD-A: IG `DeKl9Zcjwco`, LinkedIn `ugcPost:7513327593224458240`, TikTok `7693647592986578197`.
   - N04: IG `DeNKxt7D8KJ`, LinkedIn `ugcPost:7513689985171206144`, TikTok `7694018690777369876`.
   - Quedan 27 timers, del 8 al 16-oct.
-- **Guiones del 9 al 14-oct** en `docs/cola/plan-3-semanas/GRABAR-9-14-OCT.md` (pedido de la madre): 17 piezas, una hora
+- **Guiones del 9 al 14-oct** en `docs/cola/plan-3-semanas/GRABAR-9-15-OCT.md` (pedido de la madre): 17 piezas, una hora
   por día.
   - Pieza nueva N07 HAIKU (Haiku 5.5, verificada en la página de precios el 8-oct), con su aviso de comunidad al final
     del archivo.
