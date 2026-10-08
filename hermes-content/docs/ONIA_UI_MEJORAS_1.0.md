@@ -116,3 +116,42 @@ Cruz: no hay aquí un referente de cómo explicarle a un dueño de clínica el r
 3. **Si el agente de WhatsApp sale de la venta** (`ONIA_PROMESA_VS_PRODUCTO.md` §3).
 4. **Qué es «atrasada»** en Pendientes, y si «Aprobar y enviar» lleva ventana de deshacer.
 5. **Los OK de A1 y A2:** lo único que no cuesta construir nada.
+
+## 8. Tandas de competencia (una por semana; la más nueva arriba)
+
+> Pedido de Sergio Urcullo por la madre (8-oct): **seguir investigando a la competencia y qué se puede copiar** (ideas que
+> funcionan, no copia literal). Cada hallazgo lleva su versión Onia, el carril dueño y, si es código cerrado, la tarea para
+> Codex en `hermes-content/docs/handoff/codex-tareas/`. **Hecho de cada semana = esta sección + las fichas nuevas.**
+> Solo web pública. Lo que pide login o Instagram va como «PEDIDO PC» en el transcript de la sesión.
+
+### Tanda 1 · 8-oct (fichas nuevas: `JELOU_FICHA.md`, `DATEC_FICHA.md`, `ANUNCIANTES_FICHAS_CORTAS.md`)
+
+**Qué cambió desde el 1-3 oct** (texto del navegador de hoy): **Doctocliq** igual (USD 19/29/49 por doctor, 7 días sin tarjeta,
+plan gratis de 30 pacientes al mes). **Lety** igual (97/297/497, 7 días con tarjeta). **Dapta** igual (Pro USD 99, 100k créditos).
+**Dentalink** sigue sin precio público («Solicita tu cotización»). **AgendaPro:** `/pricing` da 404 hoy; la ruta cambió
+(→ PEDIDO PC). **Jelou:** nuevo. **Datec:** integrador de Odoo, no compite con Onia en clínicas.
+
+| # | Hallazgo (quién y cuánto lleva) | Versión Onia | Dueño | Codex |
+|---|---|---|---|---|
+| T1-1 | **Copy «No es X, no es Y… Es Z».** CitaPro lo usa en 3 anuncios que sobreviven (17-jul, 6-ago, 15-sep): *«No es agendar más citas… Es lograr que cada cita agendada se cumpla»* | Variante de A1 para el 2.º anuncio de la prueba: *«No es conseguir más pacientes. Es saber hoy quién de mañana no confirmó, con el mensaje listo para que usted lo apruebe y lo envíe.»* (el revisor de promesas da 0). Mide el gancho, no el producto | Ventas y pauta | no |
+| T1-2 | **«7 días gratis · Sin tarjeta» arriba de la tabla de precios, y «Anual 2 meses gratis» como interruptor** (Doctocliq) | `/precios` y `/register`: «sin tarjeta» junto al botón (ya anotado en §1: hoy no está) | Plataforma | ya cabe en C1/C14: **no vale una corrida aparte** |
+| T1-3 | **El bot se cobra por conversación con excedente en 3 de 3 competidores** (CitaPro USD 59/99 con 1.000/2.000 y USD 0,10 de más; Calendico USD 29 con 100; Huli MXN 8) **y Jelou, el grande, dejó de hacerlo**: *«pagaban lo mismo por un saludo que por una venta»* | Onia cobra el bot como cuota fija (~USD 33, `ONIA_ESTRATEGIA_DE_EMPRESA.md` §13.5). Con el cobro de Meta por respuesta desde el 1-oct, **la cuota fija tiene un hueco**. Decisión para Sergio Urcullo, con la cuenta delante (`pricing.ts`); refuerza las ideas 8 y 13 del `MAPA_COMPETENCIA.md` | Sergio Urcullo + Plataforma | no |
+| T1-4 | **Las funciones de IA y los WhatsApp gratis solo en plan semestral o anual** (Doctocliq: Soyla IA y Marketing; 50-100 recordatorios) | Poner el bot o un cupo de mensajes dentro del plan largo: caja adelantada para el techo de Bs 1.400 del plan 1.0 | Sergio Urcullo | no |
+| T1-5 | **Pedir reseña en Google Maps después de la cita** (CitaPro «reseñas automáticas», Calendico «+25 % de calificación», sin fuente) | **Add-on candidato que pasa el test de 3 preguntas** (§10): mismo cliente, depende de la cita atendida, sale solo. El mensaje se aprueba en Pendientes. El catálogo no lo menciona: **no se promete**. Va a v1.3, después de la 1.0 | Plataforma | cuando la 1.0 esté en `master` |
+| T1-6 | **Consentimiento informado digital con firma en el celular** (CitaPro, Medizona, Doctocliq Básico) | **Sin dato** si existe en Onia (el catálogo no lo nombra): mirarlo con la cuenta de prueba. Si no existe, backlog de v1.2. No se vende | Plataforma | no |
+| T1-7 | **Add-ons chicos de USD 10-15 al mes** (Calendico: cumpleaños, campañas de seguimiento, reseñas, doble recordatorio) | Hoy Onia tiene 3 add-ons. El ARPU (métrica 5 del §12) solo sube si se venden: candidatos que pasan el test = reseña (T1-5), cumpleaños, doble recordatorio. **Decide Sergio Urcullo cuál primero** | Sergio Urcullo | no |
+| T1-8 | **«Build it for me»** (Jelou: la misma página de precios ofrece «lo armo yo» y «que me lo armen») | **No.** Falla la pregunta 3 del test: horas de Sergio Urcullo por cliente | — | — |
+| T1-9 | **La norma como titular** (Medizona: NOM-024 «al 100 %»; Dt.Dental sostiene 100 días un video sobre el reporte obligatorio) | **Sin dato para Bolivia:** ¿hay norma de historia clínica o de factura que obligue a una clínica? La factura SIAT está prohibida de prometer (catálogo §7). Tarea de la semana 2 | Ventas y pauta | no |
+
+**Codex esta semana: ninguna tarea nueva.** T1-2 va con C1/C14; T1-5 y T1-7 dependen de lo que decida Sergio Urcullo y de la 1.0;
+un prompt escrito hoy se vería viejo (`master` de `onia-platform` se movió dos veces el 8-oct).
+
+**Pedidos PC (para la madre, sin login salvo donde se dice):** (1) la Biblioteca de hoy de Dentalink, Doctocliq, CitaPro, Huli y
+Reservo: anuncios que nacieron después del 2-oct, con su «en circulación desde»; (2) la web de **«Agenda Clínica» de NativeCode**
+desde el enlace de su anuncio; (3) la ruta actual de precios de AgendaPro (Bolivia o Chile); (4) **con cuenta gratis, sin
+tarjeta:** Doctocliq (7 días), Calendico (7 días) y Agenda en Día, para ver agenda, ficha y recordatorios por dentro. **No** se
+pide la demo de CitaPro ni de Dentalink: es contactar a un tercero.
+
+**Semana 2 (15-oct):** norma boliviana de historia clínica y de factura para clínicas (T1-9); Instagram de Doctocliq, Dentalink y
+CitaPro; cómo venden los bots de clínicas en Bolivia (Datec no; buscar los locales).
+

@@ -1,0 +1,34 @@
+{
+  "plantilla": "bloques",
+  "kicker": "Clínicas dentales de Santa Cruz",
+  "layout": {
+    "cuadro": {
+      "hora": 270,
+      "gap": 26,
+      "flecha": 44,
+      "txt": 54,
+      "h1": 88,
+      "ctaBottom": 44,
+      "centro": true,
+      "chip": 44,
+      "ro": 30,
+      "padX": 72
+    }
+  },
+  "id": "onia-platform-dental-meta-a1v5c-s1",
+  "title": "A1 v5 carrusel · lámina 1 de 4 (gancho)",
+  "pagina": "1 / 4",
+  "headline": "Un paciente que no confirma es un *sillón vacío.*",
+  "bloques": [
+    {
+      "t": "hora",
+      "valor": "10:00",
+      "rotulo": "Mañana",
+      "chip": "Sin confirmar"
+    },
+    {
+      "t": "texto",
+      "texto": "Deslice para ver qué hace Onia."
+    }
+  ]
+}

@@ -358,6 +358,27 @@ Trampas pagadas armando v3 (2-oct):
 - **Biblioteca desde la nube:** HTTP 403 de Facebook (8-oct). No se rodea; la madre captura desde la PC. Los sitios de
   referencia sí abren con la receta de Playwright del §6, salvo Doctolib (Cloudflare «verifique que es humano»).
 
+### 4.3 Laboratorio de creativos (8-oct): los 5 formatos que SOSTIENEN y cómo se hace cada uno
+
+> Pedido de Sergio Urcullo por la madre: *«aprender a hacer campañas mirando a la competencia, y que sea real»*. Documento:
+> `research/competencia/anuncios/FORMATOS-QUE-SOSTIENEN.md`.
+
+- **Método:** ordenar los `.txt` de `anuncios/` por «En circulación desde» (`grep -m1 -o "En circulación desde el [0-9]* [a-z]*\.* [0-9]*"`) y
+  mirar los fotogramas en hoja de contacto (`montage … -geometry 260x460`). Lo único público es la antigüedad; **no prueba rendimiento
+  y las capturas del 1-2 oct no prueban que sigan vivas** (PEDIDO PC a la madre).
+- **Lo que enseñaron (8-oct):** de los 5 formatos más viejos, **4 llevan una persona**; el más viejo (Dt.Dental, 100 d) es un selfie sin
+  producción; ninguno lleva precio ni cifra propia; ninguno va a WhatsApp. El copy **«No es X, no es Y… Es Z»** de CitaPro sostiene
+  3 anuncios (83, 63 y 23 d).
+- **Código:** plantilla `bloques` para estático (`--formato feed|story|cuadro`), `anuncio-video.js` para video (`video.duracion` y
+  `video.tiempos` en el brief) y carrusel = una lámina por brief con `pagina` («1 / 4») y sin `cta` salvo la última. El cuadrado 1:1 es el
+  de las láminas de carrusel: `todos` NO lo incluye.
+- **Dos formatos de ventana:** el titular **tiene que estar en el cuadro 0** del video; en la historia, nada de logo ni botón en los 250 px
+  de arriba ni en los de abajo.
+- **Trampas de esta tanda:** (1) el chip «Sin confirmar» se partió en dos líneas al agrandar el número (`white-space:nowrap`);
+  (2) el control «pisa» marcó falso positivo con el paginador absoluto (ahora ignora lo `position:absolute`); (3) el control de
+  seguridad de Claude Code **bloquea `rm -f $VAR/*`**: usar rutas literales o sobrescribir los archivos con el mismo nombre.
+- **Higgsfield:** se cotiza con `higgsfield generate cost` desde la PC (CLAUDE.md); desde la nube no se cotiza ni se genera.
+
 ## 5. La campaña de Meta
 
 - **1-oct, 21:00 UTC: el conector YA ve ONIA Ads** (`1073680778314945`, negocio «OniaAgency», `is_ads_mcp_enabled`),
@@ -470,3 +491,13 @@ Resultado: `research/competencia/DAPTA_COMO_FUNCIONA.md` (sin fecha, fuente del 
   Un informe propuso decir «sin tarjeta» y ya estaba en la home, /empezar, /agentes y /nosotros.
 - **La Biblioteca de Anuncios fuera de la UE no guarda los anuncios comerciales inactivos.** «¿Pautaban en julio?»
   no se puede contestar después: se mide el día.
+
+### 8.1 Tanda semanal de competencia (método del 8-oct)
+- **Precios: del texto del navegador, no de un buscador.** Una búsqueda dio Jelou a USD 24,9 / 199,9 con 2.500 ejecuciones; la página de hoy dice
+  USD 25 / 299 con 1.000. `WebFetch` resume con un modelo chico: sirve para orientarse, no para citar una cifra. Capturar con Playwright
+  (receta del §6) y leer el `.txt`.
+- **Probar las rutas antes de afirmar un cambio:** `/pricing` de AgendaPro y `/precios` de Doctocliq dieron 404 por rutas adivinadas; la real de
+  Doctocliq es `/planes-y-precios`. Un 404 de ruta adivinada no es «cambió la oferta».
+- **Cada hallazgo lleva:** quién y cuánto lleva · versión Onia · dueño · tarea Codex (casi nunca: un prompt escrito hoy queda viejo, `master`
+  se mueve). Va a `docs/ONIA_UI_MEJORAS_1.0.md` §8, una tanda por semana, la más nueva arriba.
+- **Lo que pide login o Instagram** va al transcript como «PEDIDO PC: <qué> — para qué lo quiero». Contactar a un tercero (pedir su demo) no.

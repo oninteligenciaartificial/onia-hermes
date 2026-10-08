@@ -14,7 +14,9 @@ const path = require('path');
 const { chromium } = require('playwright');
 
 const REPO = path.resolve(__dirname, '../../../..');
-const FMT = { feed: { w: 1080, h: 1350 }, story: { w: 1080, h: 1920 } };
+const FMT = { feed: { w: 1080, h: 1350 }, story: { w: 1080, h: 1920 }, cuadro: { w: 1080, h: 1080 } };
+// «todos» saca solo feed y historia; el cuadrado (1:1, el de las láminas de carrusel) se pide con --formato cuadro.
+const TODOS = ['feed', 'story'];
 
 function args() {
   const a = process.argv.slice(2);
@@ -95,14 +97,14 @@ body{width:${w}px;height:${h}px;background:var(--hoja);font-family:Archivo,sans-
 .kicker{margin-top:${L.kickerTop || 34}px;font-size:${L.kicker || 24}px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--tinta-2)}
 h1{margin-top:12px;font-size:${L.h1 || 92}px;line-height:1.0;font-weight:640;font-stretch:94%;letter-spacing:-0.026em;text-wrap:balance;max-width:${L.h1Max || 940}px}
 h1 em{font-style:normal;color:var(--accion);font-weight:640}
-.panel{margin-top:${L.panelTop || 44}px;flex:1;background:var(--t-bg);border-radius:22px 22px 0 0;padding:${L.panelPad || '40px'} ${padX}px 0;display:flex;flex-direction:column;align-items:flex-start;gap:${L.gap || 22}px}
+.panel{margin-top:${L.panelTop || 44}px;flex:1;background:var(--t-bg);border-radius:22px 22px 0 0;padding:${L.panelPad || '40px'} ${padX}px 0;display:flex;flex-direction:column;align-items:flex-start;${L.centro ? 'justify-content:center;' : ''}gap:${L.gap || 22}px}
 .panel>*{flex-shrink:0}
 em{font-style:normal;color:var(--senal);font-weight:600}
 .hora{display:flex;align-items:center;gap:28px}
 .hv{font-size:${L.hora || 168}px;line-height:.9;font-weight:300;font-stretch:80%;letter-spacing:-0.04em;color:var(--t-texto);font-variant-numeric:tabular-nums}
 .hr{display:flex;flex-direction:column;gap:14px;align-items:flex-start}
-.ro{font-size:26px;letter-spacing:.08em;text-transform:uppercase;color:var(--t-tenue);font-weight:500}
-.chip{background:rgb(254,249,194);color:rgb(137,75,0);font-weight:650;font-size:${L.chip || 34}px;border-radius:999px;padding:8px 24px}
+.ro{font-size:${L.ro || 26}px;letter-spacing:.08em;text-transform:uppercase;color:var(--t-tenue);font-weight:500}
+.chip{white-space:nowrap;background:rgb(254,249,194);color:rgb(137,75,0);font-weight:650;font-size:${L.chip || 34}px;border-radius:999px;padding:8px 24px}
 .tile{position:relative;background:#FCFDFC;border-radius:14px;box-shadow:0 6px 8px rgba(0,0,0,.35)}
 .tile .crop{border-radius:14px}
 .ring{position:absolute;border:3px solid #ECEFED;border-radius:12px;box-shadow:0 0 0 3px rgba(12,17,15,.55)}
@@ -115,13 +117,14 @@ em{font-style:normal;color:var(--senal);font-weight:600}
 .btn{flex:none;display:inline-flex;align-items:center;gap:16px;background:var(--senal);color:var(--t-bg);border-radius:999px;padding:${L.btnPad || '24px 42px'};font-size:${L.btn || 34}px;font-weight:650;letter-spacing:-0.005em}
 .btn .wa{width:${(L.btn || 34) + 6}px;height:${(L.btn || 34) + 6}px}
 .nota{font-size:${L.nota || 24}px;line-height:1.25;color:var(--t-suave);font-weight:450;max-width:${L.notaMax || 330}px}
+.pag{position:absolute;right:${padX}px;top:${(L.headTop || 60) + 12}px;font-size:24px;letter-spacing:.08em;color:var(--tinta-2);font-weight:500}
 .ley{margin-top:-8px;font-size:20px;letter-spacing:.06em;text-transform:uppercase;color:var(--t-tenue);font-weight:500}
 </style></head><body><div class="ad fmt-${fmt}">
 <div class="head"><img class="lockup" src="${url(b.marca || 'web-factory/apps/onia-platform/public/brand/v2/hires/onia-lockup-dental@4000.png')}" alt="onia dental">
 ${b.kicker ? `<p class="kicker">${esc(b.kicker)}</p>` : ''}
-<h1>${marcar(b.headline)}</h1></div>
-<div class="panel">${bloques}
-<div class="cta"><span class="btn">${wa}${esc(b.cta)}</span>${b.nota ? `<span class="nota">${marcar(b.nota)}</span>` : ''}</div></div>
+${b.headline ? `<h1>${marcar(b.headline)}</h1>` : ''}</div>
+${b.pagina ? `<p class="pag">${esc(b.pagina)}</p>` : ''}<div class="panel">${bloques}
+${b.cta ? `<div class="cta"><span class="btn">${wa}${esc(b.cta)}</span>${b.nota ? `<span class="nota">${marcar(b.nota)}</span>` : ''}</div>` : '<div style="height:44px"></div>'}</div>
 </div></body></html>`;
 }
 
@@ -189,7 +192,7 @@ module.exports = { html, FMT };
 if (require.main === module) (async () => {
   const o = args();
   const b = JSON.parse(fs.readFileSync(o.brief, 'utf8'));
-  const fmts = o.formato === 'todos' ? Object.keys(FMT) : [o.formato];
+  const fmts = o.formato === 'todos' ? TODOS : [o.formato];
   fs.mkdirSync(o.out, { recursive: true });
   const exe = process.env.CHROMIUM_PATH || fs.readdirSync('/opt/pw-browsers').filter((d) => /^chromium-\d+$/.test(d))
     .map((d) => `/opt/pw-browsers/${d}/chrome-linux/chrome`)[0];
@@ -208,7 +211,7 @@ if (require.main === module) (async () => {
       const out = [...ad.children].filter((e) => e.getBoundingClientRect().bottom > ad.clientHeight - pb + 1)
         .map((e) => e.className || e.tagName);
       // dos bloques que se pisan (la prueba es absoluta adentro, pero su caja no)
-      const kids = [...ad.children];
+      const kids = [...ad.children].filter((e) => getComputedStyle(e).position !== 'absolute');
       for (let i = 1; i < kids.length; i++) {
         if (kids[i].getBoundingClientRect().top < kids[i - 1].getBoundingClientRect().bottom - 1) out.push('pisa:' + (kids[i].className || kids[i].tagName));
       }
