@@ -240,6 +240,29 @@ scratchpad de esa sesión; el método:
   - releer cada dato contra la doc oficial EL MISMO DÍA. Para el modo auto, `code.claude.com/docs/en/permission-modes`:
     v2.1.283, la lista de lo que bloquea por defecto y `⏸ manual mode on`.
 
+## Reglas de edición del plan de referentes (8-oct-2026)
+
+Fuente: `references/marca-personal/PLAN-REFERENTES.md` §4 (análisis de Erik Taveras, Santiago Muñoz, Enrique Rocha, Alex
+Hormozi e Iman Gadzhi; la rama de la madre lo trae a `main`). Caso: el plan pidió **un solo CTA por pieza** y un
+**rótulo fijo arriba**; los guiones del 10 al 16-oct ya traen las dos líneas (`GRABAR-10-16-OCT.md`).
+
+1. **Rótulo fijo arriba con el tema en 3-5 palabras, desde el cuadro 0**, en los moldes Rocha, Erik y en el formato F3
+   (la pregunta del dueño). Negro y blanco, con la palabra clave en el color del molde. El rojo de Hormozi no se usa: la
+   paleta es verde, blanco y negro.
+2. **Rótulos de estado en el molde Santiago**, que cuentan el proceso sin voz («1 OCTUBRE», «4 VIDEOS TERMINADOS»).
+3. **CTA tecleado de 12 palabras como máximo, una sola acción**, en los últimos 2,4-5,5 s. Era la regla de Erik; ahora
+   vale para todos los moldes. Dos acciones en la misma pieza se rechazan.
+4. **Molde Rocha como sección propia, SIN FIJAR los números todavía.** Lo que se leyó (con Gemini, una pasada, sin medir):
+   plano medio fijo con zoom digital de entrada y salida, un corte cada 3-4 s (18 cortes en 67 s), subtítulos de 1 a 4
+   palabras blancos con la palabra clave en amarillo, rótulo fijo arriba durante el gancho, 4 capturas de 2-5 s, un pop
+   o whoosh al entrar cada gráfico con lo-fi bajito, y 58 a 80 s de duración. **Antes de fijar los números hay que medir
+   1 reel con el método de esta skill** (hojas a 2 fps, `scene`, `ebur128`); los mp4 están en el scratchpad de la madre,
+   en `referentes/enrique-rocha/`. Hasta entonces, el molde Rocha de `PLAN-GRABACION-3-OCT.md` manda.
+5. **Si un dato de Gemini contradice uno medido, gana el medido.** Gemini dice que Santiago usa música y whoosh; la
+   medición del 1-oct (6 reels, `ebur128`) dice sin música, y TikTok marca «sonido original». La receta Santiago no cambia.
+6. **YouTube horizontal** (va a `editor-videos`): cambiar de capa cada 3-7 s, mapa de niveles antes de 1:15, la
+   comunidad a ~1/3, ~2/3 y al final, y cada cifra dicha como tabla o contador.
+
 ## Relacionadas
 
 - `editor-videos`: corte, transcripción, regla de oro, ortografía y master. Este skill se monta encima.
