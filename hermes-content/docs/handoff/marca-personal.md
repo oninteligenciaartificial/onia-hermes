@@ -2,6 +2,19 @@
 
 **Archivo único del carril.** Actualizado 2026-09-29 por Claude (Opus 5.5).
 
+## ▶ 8-oct (noche, 6) — avisos en palabras simples y diseño de las historias
+
+- **Pedido de Sergio Urcullo (8-oct):** *«no entiendo esas, mejorá lo que decís; te voy subiendo fotos a mi Drive, pero
+  explicame qué vas a subir y con qué diseño»*.
+- **Avisos:** cada uno pasó a dos mensajes (aviso corto + recurso completo). Los 14 avisos nuevos están en
+  `docs/cola/plan-3-semanas/AVISOS-COMUNIDAD-8-16-OCT.md`; la regla, en `ONIA_COMUNIDAD_CONTENIDO.md` §«Cómo se escribe un aviso».
+  El artefacto «Comunidad e historias» (versión 2) los muestra con «para vos», aviso y recurso.
+- **Diseño de historias mostrado a Sergio Urcullo** (foto a pantalla completa, etiqueta verde con el día, titular blanco con
+  palabra clave en verde, «Link en mi perfil» solo cuando corresponde). **Falta su OK sobre el diseño** (diseño nuevo pasa por él)
+  y sus fotos: carpeta de Drive «Videos Onia Octubre» (`1Iks0iUs…`), nombres FOTO-1, FOTO-2…
+- **Intento descartado:** el aviso de ANTIGRAVITY, PROMESA y otros dependían de leer el recurso largo para entenderse.
+  Un primer aviso de PROMESA decía que el bot sin reglas «casi prometía»: era falso (ninguno prometió); se corrigió al releer el recurso.
+
 ## ▶ 8-oct (noche, 5) — historias con fotos de Sergio Urcullo y artefacto de comunidad
 
 - **Pedido de Sergio Urcullo (8-oct):** «subime historias con fotos mías que me vaya sacando» y «dame el artefacto ordenado»
