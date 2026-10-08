@@ -1,7 +1,7 @@
 From edcd3489b128ad111912c885ff27f5e41ef21161 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Mon, 5 Oct 2026 21:33:11 +0000
-Subject: [PATCH 1/3] =?UTF-8?q?feat(presupuesto):=20presupuesto=20por=20fa?=
+Subject: [PATCH 1/4] =?UTF-8?q?feat(presupuesto):=20presupuesto=20por=20fa?=
  =?UTF-8?q?ses=20con=20link=20p=C3=BAblico=20(P2)?=
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -2201,7 +2201,7 @@ index 8fd227f6..e9e4627f 100644
 From 6c508d4a92a56bd2b39e49c08cd278af067856bf Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Mon, 5 Oct 2026 21:39:49 +0000
-Subject: [PATCH 2/3] =?UTF-8?q?fix(presupuesto):=20el=20armador=20y=20sus?=
+Subject: [PATCH 2/4] =?UTF-8?q?fix(presupuesto):=20el=20armador=20y=20sus?=
  =?UTF-8?q?=20errores=20le=20hablan=20de=20usted=20al=20due=C3=B1o?=
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -2538,7 +2538,7 @@ index 02ec6c00..18e5f075 100644
 From 054b95a88f63d573a2b71b2de2917f3f7785437e Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 8 Oct 2026 18:13:41 +0000
-Subject: [PATCH 3/3] fix(presupuesto): la hoja del paciente se lee en el
+Subject: [PATCH 3/4] fix(presupuesto): la hoja del paciente se lee en el
  celular y el aviso no parte palabras
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -2663,6 +2663,112 @@ index 6b9d5270..e8f93351 100644
              Listo: se abrió WhatsApp con el link. Vale {PRESUPUESTO_VALIDEZ_DIAS} días. <a href={link} className="font-semibold text-primary underline" target="_blank" rel="noopener noreferrer">Ver lo que recibe</a>
            </p>
          ) : null}
+-- 
+2.43.0
+
+
+From 3888c3369a54b13db39d9cfa73294f5da5db7024 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Thu, 8 Oct 2026 18:42:26 +0000
+Subject: [PATCH 4/4] =?UTF-8?q?test(banco):=20la=20barra=20del=20banco=20d?=
+ =?UTF-8?q?ec=C3=ADa=20=C2=ABPlan=20Plan=20Profesional=C2=BB?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Los bancos pasaban planNombre="Plan Profesional" y la barra de estado ya antepone
+«Plan». Producción pasa nombreDePlan(plan) y se ve bien: era solo del banco, pero
+salía en las capturas que mira Sergio Urcullo.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01HhnFgkeF6nLGvjrfjt1o2C
+---
+ app/dev/agenda/page.tsx             | 2 +-
+ app/dev/comercio-productos/page.tsx | 2 +-
+ app/dev/ficha/page.tsx              | 2 +-
+ app/dev/pendientes/page.tsx         | 2 +-
+ app/dev/roles-operativos/page.tsx   | 2 +-
+ app/dev/shell/page.tsx              | 2 +-
+ 6 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/app/dev/agenda/page.tsx b/app/dev/agenda/page.tsx
+index 639573d1..715fb9fa 100644
+--- a/app/dev/agenda/page.tsx
++++ b/app/dev/agenda/page.tsx
+@@ -137,7 +137,7 @@ export default async function BancoDeAgenda({ searchParams }: { searchParams: Pr
+           doctorName=""
+           role="ADMIN"
+           plan="professional"
+-          planNombre="Plan Profesional"
++          planNombre="Profesional"
+           diasDePrueba={5}
+           decisionesPendientes={0}
+           navItems={navItems}
+diff --git a/app/dev/comercio-productos/page.tsx b/app/dev/comercio-productos/page.tsx
+index 1a7e5f58..155b6dc9 100644
+--- a/app/dev/comercio-productos/page.tsx
++++ b/app/dev/comercio-productos/page.tsx
+@@ -118,7 +118,7 @@ export default async function BancoComercioProductos({
+           doctorName=""
+           role="ADMIN"
+           plan="professional"
+-          planNombre="Plan Profesional"
++          planNombre="Profesional"
+           diasDePrueba={5}
+           decisionesPendientes={0}
+           navItems={navItems}
+diff --git a/app/dev/ficha/page.tsx b/app/dev/ficha/page.tsx
+index fb9304cf..66101fa2 100644
+--- a/app/dev/ficha/page.tsx
++++ b/app/dev/ficha/page.tsx
+@@ -171,7 +171,7 @@ export default async function BancoDeFicha({
+           doctorName=""
+           role={staff ? "STAFF" : "ADMIN"}
+           plan="professional"
+-          planNombre="Plan Profesional"
++          planNombre="Profesional"
+           diasDePrueba={5}
+           decisionesPendientes={0}
+           navItems={navItems}
+diff --git a/app/dev/pendientes/page.tsx b/app/dev/pendientes/page.tsx
+index 446a7589..9b256233 100644
+--- a/app/dev/pendientes/page.tsx
++++ b/app/dev/pendientes/page.tsx
+@@ -59,7 +59,7 @@ export default async function BancoDePendientes({
+           doctorName=""
+           role="ADMIN"
+           plan="professional"
+-          planNombre="Plan Profesional"
++          planNombre="Profesional"
+           diasDePrueba={5}
+           decisionesPendientes={APROBACIONES.length}
+           navItems={navItems}
+diff --git a/app/dev/roles-operativos/page.tsx b/app/dev/roles-operativos/page.tsx
+index fdbae1f4..08e49fcb 100644
+--- a/app/dev/roles-operativos/page.tsx
++++ b/app/dev/roles-operativos/page.tsx
+@@ -60,7 +60,7 @@ export default async function BancoRolesOperativos({
+           doctorName=""
+           role="ADMIN"
+           plan="professional"
+-          planNombre="Plan Profesional"
++          planNombre="Profesional"
+           diasDePrueba={5}
+           decisionesPendientes={0}
+           navItems={navItems}
+diff --git a/app/dev/shell/page.tsx b/app/dev/shell/page.tsx
+index 4c181a79..d6e2046c 100644
+--- a/app/dev/shell/page.tsx
++++ b/app/dev/shell/page.tsx
+@@ -74,7 +74,7 @@ export default async function BancoDePruebasShell({
+         // el que nunca se ve en un banco vacio. Con ?role=STAFF el item no esta
+         // y el numero no se pinta: el layout real le da 0 a quien no decide.
+         decisionesPendientes={decide ? 4 : 0}
+-        planNombre="Plan Profesional"
++        planNombre="Profesional"
+         diasDePrueba={5}
+         clinicName={nombre ?? ""}
+         doctorName=""
 -- 
 2.43.0
 

@@ -2,7 +2,7 @@
 
 **Versión vigente: de usted, 8-oct.** Las capturas de esta carpeta son las nuevas (390 y 1440 px), sacadas
 del banco `/dev/presupuesto` y `/dev/ficha` con datos de ejemplo. El parche de código es
-`presupuesto-por-fases-p2-usted.patch` (3 commits, `git am` limpio sobre la integración de onia-platform#122).
+`presupuesto-por-fases-p2-usted.patch` (4 commits, `git am` limpio sobre la integración de onia-platform#122; el 4.º corrige la etiqueta «Plan Plan» de los bancos).
 `presupuesto-por-fases-p2.patch` es la versión vieja (de vos): no se usa.
 
 Qué mirar, en este orden:
