@@ -2,6 +2,21 @@
 
 **Archivo único del carril.** Actualizado 2026-09-29 por Claude (Opus 5.5).
 
+## ▶ 9-oct (noche, 15) — Instagram de @sergiourcullo restringida: el carrusel de las 16:00 no salió en IG
+
+- **Qué pasó (medido, solo lectura en el VPS, 20:28 UTC):** el timer `pub-car-20261009` (carrusel N03, 20:00 UTC) terminó en `failed` a los 6 s:
+  `ERROR 400 OAuthException, code 25, error_subcode 2207050, «User is restricted — The Instagram account is restricted»`. LinkedIn y TikTok
+  por Buffer sí publicaron (20:01:13 y 20:02:13 UTC). El 8-oct el mismo carrusel salió en IG (permalink en `publicado.jsonl`), así que la
+  restricción es posterior.
+- **Qué se rompe:** todo lo que publica la API de Instagram: el reel N03 de las 22:30 UTC (`pub-n03-ig`), los carruseles agendados del 10 al
+  16-oct y las historias. YouTube y TikTok por Buffer no dependen de Instagram.
+- **Qué NO hice:** no reintenté ni cancelé timers (escribir en el VPS lo negó el control de permisos antes, y es decisión de Sergio Urcullo).
+  No sé la causa: puede ser el rechazo de Meta al mecanismo comentario→DM o la automatización; no lo afirmo.
+- **Qué depende de Sergio Urcullo:** abrir Instagram → Centro de cuentas / «Estado de la cuenta» y ver qué pide (verificar identidad,
+  apelar, esperar). Cuando se levante: re-agendar el carrusel de hoy y comprobar que los de la semana siguen en pie.
+- **Aprendizaje (skill):** el fallo de un timer de IG se ve con `systemctl status pub-car-AAAAMMDD.service` y `journalctl -u …`; el log
+  `publicado.jsonl` solo anota lo que salió, así que un día sin entrada de IG = falló. Ver `onia-infra`/README del publicador.
+
 ## ▶ 9-oct (tarde, 14) — cola en loop de la madre: qué se hizo y qué está bloqueado
 
 - **Pedido de la madre (9-oct):** trabajar `hermes-content/docs/cola/loop/marca-personal.md` (solo existe en su rama
