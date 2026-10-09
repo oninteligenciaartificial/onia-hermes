@@ -70,9 +70,10 @@ Carrusel de todos los días: 16:00 · 16:01 · 16:02, ya agendado.
 - Cada video y su yap, cuando Sergio Urcullo vea su tabla de cortes. Se agendan con `agendar-publicacion.sh`
   (hora UTC = La Paz + 4). Incluye los 2 cortes de D01-C del mar 13.
 - Yap de N03: no existe. Se hace con el bruto cuando haga falta el hueco del vie 9 a las 19:30.
-- **P2 · «7 herramientas. Pago solo 2.»** (carrusel, sin grabar) sale el **sáb 17-oct** a las 16:00 IG · 16:01 LinkedIn ·
-  16:02 TikTok. Antes de agendarla, dos permisos: el OK de Sergio Urcullo (la lámina 6 muestra el seguimiento del bot) y
-  la confirmación de quién paga la cuenta de Claude. Su portada B sale solo en TikTok el dom 18 a las 21:00.
+- **P2 · «7 herramientas. 4 son gratis.»** (carrusel, sin grabar) sale el **sáb 17-oct** a las 16:00 IG ·
+  16:01 LinkedIn · 16:02 TikTok. Antes de agendarla, un permiso: el OK de Sergio Urcullo a la lámina 6 (muestra los avisos
+  del bot a los prospectos). Si TikTok por la API de Buffer falla en la prueba previa, la madre la agenda a mano desde la
+  web de Buffer. Su portada B sale solo en TikTok el dom 18 a las 21:00.
 - Los 7 carruseles en espera (K1, N02, K9, K12, K5, K13, K10) entran desde el **dom 18**, cuando se rehagan las láminas.
 - **P1 y P3** (videos sin cara): sin fecha. Entran en un hueco sin bruto. P1, después de N07 (prueba de la pizarra) y
   con el OK del molde «Niveles»; P3, cuando se cumplan sus 3 condiciones (pizarra de N07, bio con la asesoría y recuento
