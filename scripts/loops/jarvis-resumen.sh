@@ -13,9 +13,11 @@
 #   prospectos esperando  -> tarea [leads-esperando] del tablero (vigia_sin_respuesta.mjs)
 #   decisiones            -> onia-parte-diario.sh (su rotación y su filtro needs_input)
 #   agenda                -> onia-agenda.sh, si existe; si no, lo dice
-#   guiones               -> hermes-content/docs/cola/plan-3-semanas/S*-GUIONES.md
+#   qué sale              -> hermes-content/docs/cola/plan-3-semanas/CALENDARIO-PUBLICACION-*.md
+#   guiones               -> hermes-content/docs/cola/plan-3-semanas/S*-GUIONES.md (si el calendario no cubre el día)
 #   lo que pasó de noche  -> la cola de la aduana (onia-tg.sh, $ESTADO/resumen.log)
 #   lo que se hizo hoy    -> git log de origin/main
+#   lo que salió hoy      -> /root/publicar/publicado.jsonl (los publicadores de vps-ops/publicar)
 # El único paso con IA es traducir los commits del día a castellano llano, con la orden de
 # no agregar nada; si la IA no responde, se dice cuántos cambios hubo y listo. Nace de un
 # error pagado: `gpt-5-nano` inventó una agenda entera (handoff/infra-cerebro-loops.md §5).
@@ -38,6 +40,7 @@ REPO="${ONIA_REPO:-/root/loops/onia-hermes}"
 ESTADO="${ONIA_AVISO_ESTADO:-/var/lib/onia-aviso}"
 AGENDA="${ONIA_AGENDA:-/root/bin/onia-agenda.sh}"
 PEDIDOS="${ONIA_PEDIDOS:-/root/bin/onia-pedido-claude.sh}"
+PUBLICADO="${ONIA_PUBLICADO:-/root/publicar/publicado.jsonl}"  # lo escriben ig-reel, ig-carrusel, yt-video…
 OUT="${ONIA_JARVIS_OUT:-/root/.hermes/out}"
 LLM="${ONIA_JARVIS_LLM:-}"          # comando que traduce commits (stdin -> viñetas); vacío = LiteLLM
 MAX=5
@@ -106,7 +109,10 @@ seccion_decisiones() {
 }
 linea_salud() {
   local rotas
-  if [ -z "$PARTE_MSG" ] || printf '%s' "$PARTE_MSG" | grep -q 'No pude verificar'; then
+  if [ -z "$PARTE_MSG" ]; then
+    printf '🩺 Sistema: no pude verificarlo (el parte diario no respondió).\n'; return
+  fi
+  if printf '%s' "$PARTE_MSG" | grep -q 'No pude verificar'; then
     printf '🩺 Sistema: no pude verificarlo (el tablero no respondió).\n'; return
   fi
   rotas=$(printf '%s' "$PARTE_MSG" | grep -oE '⚠️ <b>[0-9]+ cosa' | grep -oE '[0-9]+' | head -1)
@@ -172,6 +178,157 @@ seccion_guiones() {  # seccion_guiones <fecha> <titulo>
   [ -n "$g" ] || return 0
   printf '🎬 <b>%s</b>\n' "$2"
   printf '%s\n' "$g" | esc | sed 's/^/• /'
+}
+
+# ── Qué sale: el calendario de publicación (9-oct) ───────────────────────────
+# GOAL del 8-oct: sale contenido todos los días. Desde el 8-oct lo que se publica cada día está en
+# CALENDARIO-PUBLICACION-<d1>-<d2>-<MES>.md (pedido de Sergio Urcullo), y se graba todo junto
+# (GRABAR-*.md): el «para grabar hoy» de los S*-GUIONES (plan del 29-sep) ya no es lo de ese día.
+# Medido el 9-oct: la mañana del 10 iba a nombrar tres guiones viejos, y ese día salen otros.
+# Desde que existe un calendario, los S*-GUIONES ya no vuelven: son de un plan que no corre, y sin año
+# volverían a casar el año que viene (revisiones del 9-oct).
+# Salida: «HH:MM<TAB>qué<TAB>pieza» por línea, en orden de hora, y sale 0. Si no:
+#   2 no hay ningún calendario (vale el plan viejo) · 3 ninguno cubre el día · 4 la fila del día no
+#   tiene nada («—») · 5 lo cubre pero no tiene la fila · otro: no se pudo leer.
+calendario_del() {  # calendario_del <fecha>
+  local fs=("$REPO"/hermes-content/docs/cola/plan-3-semanas/CALENDARIO-PUBLICACION-*.md)
+  [ -f "${fs[0]}" ] || return 2
+  python3 - "$1" "${fs[@]}" <<'PY'
+import datetime, os, re, sys, unicodedata
+fecha = datetime.date.fromisoformat(sys.argv[1])
+MESES = "ENE FEB MAR ABR MAY JUN JUL AGO SEP OCT NOV DIC".split()
+def rango(d1, d2, mes):
+    # El año no está en el nombre: el que hace que el rango cubra la fecha (un rango dura días, así
+    # que a lo sumo uno). 28-3-ENE el 30 de diciembre es del 28-dic al 3-ene.
+    for y in (fecha.year - 1, fecha.year, fecha.year + 1):
+        try:
+            fin = datetime.date(y, mes, d2)
+            ini = datetime.date(y, mes, d1) if d1 <= d2 else (fin.replace(day=1) - datetime.timedelta(days=1)).replace(day=d1)
+        except ValueError:
+            continue
+        if ini <= fecha <= fin:
+            return ini
+    return None
+cubren = []
+for f in sys.argv[2:]:
+    m = re.search(r"CALENDARIO-PUBLICACION-(\d{1,2})-(\d{1,2})-([A-Z]{3})\.md$", os.path.basename(f))
+    if m and m.group(3) in MESES:
+        ini = rango(int(m.group(1)), int(m.group(2)), MESES.index(m.group(3)) + 1)
+        if ini:
+            cubren.append((ini, f))
+if not cubren:
+    sys.exit(3)
+f = max(cubren)[1]  # dos que se solapan: el que empieza después, el más nuevo
+cabeza = None
+for linea in open(f, encoding="utf-8", errors="replace"):
+    linea = unicodedata.normalize("NFC", linea)
+    if not linea.lstrip().startswith("|"):
+        cabeza = None
+        continue
+    c = [x.strip() for x in linea.strip().strip("|").split("|")]
+    if c[0].lower() in ("día", "dia"):
+        cabeza = c
+        continue
+    if not cabeza or len(c) != len(cabeza):
+        continue
+    # Por el número de día: dentro del rango es único («Sab 10», «Sáb 10», «Sáb 10-oct»).
+    n = re.search(r"\d{1,2}", c[0])
+    if not n or int(n.group(0)) != fecha.day:
+        continue
+    filas = []
+    for h, v in zip(cabeza[1:], c[1:]):
+        v = v.replace("*", "").strip()
+        if v in ("", "—", "-"):
+            continue
+        t = re.search(r"\d{1,2}:\d{2}", h)
+        que = h[: t.start()].strip(" ·") if t else h
+        filas.append((t.group(0).zfill(5) if t else "", que, v))
+    for hora, que, v in sorted(filas):
+        print("%s\t%s\t%s" % (hora, que, v))
+    sys.exit(0 if filas else 4)
+sys.exit(5)
+PY
+}
+seccion_sale() {  # seccion_sale <fecha> <titulo>  (sale 2 si no hay calendarios: vale el plan viejo)
+  local c rc cuando
+  c=$(calendario_del "$1" 2>/dev/null); rc=$?
+  cuando=$([ "$1" = "$HOY" ] && echo hoy || echo mañana)
+  case "$rc" in
+    0) printf '📣 <b>%s</b>\n' "$2"
+       printf '%s\n' "$c" | awk -F'\t' '{ printf "• %s%s · %s\n", ($1 == "" ? "" : $1 " "), $2, $3 }' | esc ;;
+    2) return 2 ;;
+    3) printf '📣 Todavía no hay calendario de publicación para %s.\n' "$cuando" ;;
+    4) printf '📣 %s no sale nada según el calendario.\n' "$([ "$cuando" = hoy ] && echo Hoy || echo Mañana)" ;;
+    5) printf '📣 El calendario de publicación no tiene la fila de %s.\n' "$cuando" ;;
+    *) printf '📣 No pude leer el calendario de publicación.\n' ;;
+  esac
+  return 0
+}
+# Lo que salió DE VERDAD hoy (9-oct; GOAL del 8-oct: al menos una pieza por día). Cada publicador del
+# VPS anota en publicado.jsonl: Instagram (ig-reel, ig-carrusel con link; ig-historia sin link) y YouTube
+# (yt-video, con link; si es privado es un ensayo y no cuenta); Buffer (buffer-post) solo que lo mandó,
+# para la hora que lleva. No ve lo que Sergio Urcullo sube a mano: por eso dice «en el registro».
+seccion_salio() {
+  local s n
+  [ -r "$PUBLICADO" ] || { printf '📣 No pude leer el registro de publicaciones: no sé qué salió hoy.\n'; return 0; }
+  s=$(python3 - "$HOY" "$PUBLICADO" "${ONIA_AHORA:-$(date -u +%FT%TZ)}" <<'PY'
+import datetime, json, sys
+hoy = datetime.date.fromisoformat(sys.argv[1])
+LA_PAZ = datetime.timezone(datetime.timedelta(hours=-4))
+def hora(t):
+    try:
+        d = datetime.datetime.fromisoformat(str(t).replace("Z", "+00:00").replace("+0000", "+00:00"))
+    except ValueError:
+        return None
+    return d.astimezone(LA_PAZ) if d.tzinfo else None
+ahora = hora(sys.argv[3])
+filas, buffer = [], 0
+for linea in open(sys.argv[2], encoding="utf-8", errors="replace"):
+    try:
+        r = json.loads(linea)
+        if not isinstance(r, dict):
+            continue
+        if r.get("red") == "buffer":
+            d = hora(r.get("fecha") if r.get("cuando") in (None, "ya") else r.get("cuando"))
+            if d and d.date() == hoy and (ahora is None or d <= ahora) and r.get("estado") != "borrador":
+                buffer += 1
+            continue
+        if r.get("red") == "youtube":
+            if r.get("privacidad") != "public":
+                continue
+            d, que, link = hora(r.get("fecha")), "YouTube", r.get("url")
+        else:
+            d, link = hora(r.get("timestamp")), r.get("permalink")
+            tipo = r.get("tipo")
+            que = "Carrusel" if tipo == "carrusel" else "Historia" if tipo == "historia" else "Trial" if r.get("trial") else "Reel"
+        if not d or d.date() != hoy:
+            continue
+        cuenta = r.get("cuenta")
+        filas.append((d.strftime("%H:%M"), que + ("" if cuenta in (None, "sergio") else " (%s)" % cuenta), link))
+    except Exception:
+        continue  # una línea rara no tapa las demás
+for h, que, link in sorted(filas, key=lambda f: f[:2]):
+    print("• %s %s%s" % (h, que, " — %s" % link if link else ""))
+if buffer:
+    print("• %d envío%s a Buffer para hoy (sin link: no confirma que %s)." % (buffer, "" if buffer == 1 else "s", "salió" if buffer == 1 else "salieron"))
+print("FIN %d" % len(filas))
+PY
+) || { printf '📣 No pude leer el registro de publicaciones: no sé qué salió hoy.\n'; return 0; }
+  case "$s" in *"FIN "*) ;; *) printf '📣 No pude leer el registro de publicaciones: no sé qué salió hoy.\n'; return 0 ;; esac
+  n=${s##*FIN }; s=$(printf '%s\n' "$s" | grep -v '^FIN ')
+  if [ "$n" -gt 0 ]; then
+    printf '📣 <b>Hoy salió</b>\n'
+  else
+    n=$(calendario_del "$HOY" 2>/dev/null | grep -c . || true)
+    printf '📣 <b>En el registro no hay nada publicado hoy</b> en Instagram ni YouTube%s.\n' "$([ "${n:-0}" -gt 0 ] && printf ' (el calendario tenía %s pieza(s))' "$n")"
+  fi
+  [ -z "$s" ] || printf '%s\n' "$s" | esc
+  return 0
+}
+# Los guiones del plan viejo, solo si no existe ningún calendario.
+seccion_plan() {  # seccion_plan <fecha> <titulo de lo que sale> <titulo de los guiones>
+  seccion_sale "$1" "$2" || seccion_guiones "$1" "$3"
+  return 0
 }
 
 # ── La cola de la aduana: lo que no interrumpió ──────────────────────────────
@@ -243,7 +400,10 @@ seccion_hoy() {
 seccion_bloques_hoy() {
   local ev
   [ -x "$AGENDA" ] || return 0
-  ev=$("$AGENDA" --ids "$HOY" 2>/dev/null </dev/null | awk -F'\t' '$2 != "--" && $4 ~ /ONIA|🔒|🎬/' | head -6)
+  # Sin leerlos no se calla: NECESITO diría «Nada.» con bloques sin confirmar (revisión del 9-oct).
+  ev=$("$AGENDA" --ids "$HOY" 2>/dev/null </dev/null) \
+    || { printf '📋 No pude leer tus bloques de hoy en el calendario: no sé si quedó alguno pendiente.\n'; return 0; }
+  ev=$(printf '%s\n' "$ev" | awk -F'\t' '$2 != "--" && $4 ~ /ONIA|🔒|🎬/' | head -6)
   [ -n "$ev" ] || return 0
   printf '%s\n' "$ev" | awk -F'\t' -v f="$HOY" 'BEGIN { OFS = "\t" } { print f, NR, $1, $2, $3, $4 }' > "$TMP/cierre-bloques.tsv"
   printf '📋 <b>Tus bloques de hoy</b> — ¿se hicieron?\n'
@@ -253,16 +413,27 @@ seccion_bloques_hoy() {
 # Lo que él le pidió a Claude desde Telegram (pedido-claude.sh), con su estado. La respuesta de cada
 # uno ya le llegó por la aduana; acá queda el circuito cerrado aunque alguna se haya perdido: un
 # pedido «sin respuesta» a las 21:30 es algo que no tiene que creer terminado.
+# Los que esperan su ok van aparte, en NECESITO (revisión del 9-oct: en PASÓ, el cierre decía «Nada.»
+# con un pedido esperándolo). Se leen una vez, afuera de las secciones.
+PEDIDOS_HOY=""
+[ -x "$PEDIDOS" ] && PEDIDOS_HOY=$("$PEDIDOS" --lista "$HOY" 2>/dev/null </dev/null)
+seccion_pedidos_ok() {
+  local filas
+  filas=$(printf '%s\n' "$PEDIDOS_HOY" | awk -F'\t' '$4 == "necesita-ok"')
+  [ -n "$filas" ] || return 0
+  printf '🙋 <b>Pedidos a Claude que esperan tu ok</b>\n'
+  printf '%s\n' "$filas" | awk -F'\t' '{ printf "• %s %s — %s\n", $1, $3, $5 }' | head -"$MAX" | esc
+  return 0
+}
 seccion_pedidos() {
   local filas n
-  [ -x "$PEDIDOS" ] || return 0
-  filas=$("$PEDIDOS" --lista "$HOY" 2>/dev/null </dev/null) || return 0
+  filas=$(printf '%s\n' "$PEDIDOS_HOY" | awk -F'\t' 'NF && $4 != "necesita-ok"')
   [ -n "$filas" ] || return 0
   n=$(printf '%s\n' "$filas" | grep -c .)
   printf '🤖 <b>Tus pedidos a Claude hoy</b>\n'
   printf '%s\n' "$filas" | awk -F'\t' '{
       e = $4
-      if (e == "listo") m = "✅ listo"; else if (e == "necesita-ok") m = "🙋 espera tu ok"
+      if (e == "listo") m = "✅ listo"
       else if (e == "no-se-pudo") m = "⚠️ no se pudo"; else m = "⏳ sin respuesta todavía"
       printf "• %s %s — %s\n", $1, $3, m }' | head -"$MAX" | esc
   [ "$n" -gt "$MAX" ] && printf '… y %s más.\n' $((n - MAX))
@@ -270,35 +441,59 @@ seccion_pedidos() {
 }
 seccion_sigue() {
   local p d
+  [ "$TABLERO_OK" = 1 ] || { printf '⏳ <b>No pude leer el tablero</b>: no sé quién te espera.\n'; return; }
   p=$(printf '%s\n' "$LISTA" | grep -F '[leads-esperando]' | grep -vE '^✓' | grep -oE '\] [0-9]+ ' | grep -oE '[0-9]+' | head -1)
   d=""; [ "${N_DECISIONES:-0}" -gt 0 ] && d=$N_DECISIONES
   [ -n "$p$d" ] || return 0
-  printf '⏳ <b>Sigue esperando</b>\n'
+  printf '⏳ <b>Te esperan</b>\n'
   [ -n "$p" ] && printf '• %s persona(s) sin respuesta.\n' "$p"
   [ -n "$d" ] && printf '• %s decisión(es) tuya(s).\n' "$d"
   return 0
 }
 
-# ── Armado ───────────────────────────────────────────────────────────────────
-# `$(...)` se come los saltos del final: por eso cada bloque se AGREGA con su separador,
-# en vez de concatenar sustituciones (que pegaban una seccion al final de la otra).
-CUERPO=""
-bloque() { local b; b=$("$@"); [ -n "$b" ] && CUERPO+="$b"$'\n\n'; return 0; }
+# ── Armado: tres bloques fijos, PASÓ · NECESITO · SIGUE ─────────────────────────
+# Sergio Urcullo, 2026-10-08: «me entregás demasiado texto y me pierdo». Lo que le pide algo va
+# junto, en NECESITO, y no repartido entre la agenda y los guiones. Las secciones no cambian: se
+# agrupan. Un bloque vacío no se muestra, salvo NECESITO, que dice «Nada.» (él tiene que saber
+# que no le falta nada)… y solo si se pudo medir: con el tablero caído, «Nada.» sería mentira.
+# `$(...)` se come los saltos del final: por eso cada sección se AGREGA con su separador,
+# en vez de concatenar sustituciones (que pegaban una sección al final de la otra).
+CUERPO="" GRUPO=""
+parte() { local b; b=$("$@"); [ -n "$b" ] && GRUPO+="$b"$'\n\n'; return 0; }
+grupo() {  # grupo <TÍTULO> [<texto si quedó vacío>]: cierra lo juntado con parte()
+  local g=${GRUPO%$'\n\n'}
+  [ -n "$g" ] || g=${2:-}
+  [ -n "$g" ] && CUERPO+="<b>$1</b>"$'\n'"$g"$'\n\n'
+  GRUPO=""; return 0
+}
+# Lo que no se pudo medir se dice SIEMPRE, haya o no otras cosas en NECESITO (revisión del 9-oct: solo
+# salía con NECESITO vacío). Con el tablero caído ya lo dicen los prospectos y «Te esperan»; acá va el
+# caso del parte, que es de donde salen las decisiones.
+falta_medir() {
+  [ "$TABLERO_OK" = 1 ] || return 0
+  if [ -z "$PARTE_MSG" ] || printf '%s' "$PARTE_MSG" | grep -q 'No pude verificar'; then
+    printf '🙋 No pude ver las decisiones que esperan tu ok (el parte diario no respondió).\n'
+  fi
+  return 0
+}
 if [ "$MODO" = manana ]; then
   CABEZA="☀️ <b>Buen día, Sergio Urcullo</b> — $(dia_largo "$HOY")"
-  bloque seccion_prospectos; bloque seccion_agenda "$HOY" 'Tu día'; bloque seccion_guiones "$HOY" 'Para grabar hoy'
-  bloque seccion_decisiones; bloque seccion_cola noche 'Mientras dormías'
+  parte seccion_cola noche 'Mientras dormías'; parte linea_salud; grupo PASÓ
+  parte seccion_prospectos; parte seccion_decisiones; parte falta_medir; grupo NECESITO 'Nada.'
+  parte seccion_agenda "$HOY" 'Tu día'; parte seccion_plan "$HOY" 'Hoy sale' 'Para grabar hoy'; grupo SIGUE
 else
   CABEZA="🌙 <b>Cierre del $(dia_largo "$HOY")</b>"
-  bloque seccion_hoy; bloque seccion_bloques_hoy; bloque seccion_pedidos; bloque seccion_cola resumen 'Avisos del día'; bloque seccion_sigue
-  bloque seccion_agenda "$MANANA" 'Mañana'; bloque seccion_guiones "$MANANA" 'Mañana grabás'
+  parte seccion_hoy; parte seccion_salio; parte seccion_pedidos; parte seccion_cola resumen 'Avisos del día'; parte linea_salud; grupo PASÓ
+  parte seccion_bloques_hoy; parte seccion_pedidos_ok; parte seccion_sigue; parte falta_medir; grupo NECESITO 'Nada.'
+  parte seccion_agenda "$MANANA" 'Mañana'; parte seccion_plan "$MANANA" 'Mañana sale' 'Mañana grabás'; grupo SIGUE
 fi
-CUERPO+="$(linea_salud)"
 MSG="$CABEZA
 
-$CUERPO"
-# Telegram corta en 4.096 caracteres; se deja margen y se avisa del corte.
-if [ "${#MSG}" -gt 3900 ]; then MSG="${MSG:0:3850}
+${CUERPO%$'\n\n'}"
+# Telegram corta en 4.096 caracteres; se deja margen y se avisa del corte. Se corta en el último salto
+# de línea: cada etiqueta abre y cierra en su línea, y una partida hace que Telegram rechace el
+# mensaje entero (revisión del 9-oct). Lo que se pierde primero es lo último: SIGUE.
+if [ "${#MSG}" -gt 3900 ]; then MSG="${MSG:0:3850}"; MSG="${MSG%$'\n'*}
 … (recortado)"; fi
 
 if [ "${ONIA_JARVIS_SOLO_IMPRIMIR:-0}" = 1 ]; then printf '%s\n' "$MSG"; exit 0; fi
@@ -311,6 +506,7 @@ if [ "$MODO" = manana ]; then
 import sys, re, html
 t = html.unescape(re.sub(r"<[^>]+>", "", sys.stdin.read()))
 t = "\n".join(l for l in t.splitlines() if "→" not in l)
+t = re.sub(r"(?m)^(PASÓ|NECESITO|SIGUE)$", lambda m: m.group(1).capitalize() + ".", t)
 t = re.sub(r"\(\+?\d[\d …-]*\)", "", t)
 t = re.sub("[\U0001F300-\U0001FAFF\u2600-\u27BF\uFE0F•]", "", t)
 t = re.sub(r"[ \t]+", " ", t)
