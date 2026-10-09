@@ -1,8 +1,7 @@
 {
   "titulo": "G5 · Cómo mido si una cara es la de Lucía (y cuándo no creerle al número)",
   "guion": "hermes-content/docs/cola/lucia-diario/guiones/G5-como-se-mide-una-cara.md",
-  "guion_corregido": "guion-corregido.md",
-  "version": "1ra pasada (9-oct-2026): montaje con el método de G1-G4 (.claude/skills/lucia/montaje-hyperframes.md; plantilla videos/lucia-g4/ con sus 2 revisiones). 0 créditos: tres fotos y el cierre ya pagados el 8-oct, dos cuadros de clips crudos de G2, las 8 referencias oficiales y las mediciones guardadas. Sin clips: fotos fijas con empuje lento, cuadros fijos y placas. Sin revisor independiente todavía.",
+  "version": "2da pasada (9-oct-2026): aplica la revisión independiente qa/revision-1.md (G5-1 a G5-5, notas N1/N3/N10) y las decisiones del orquestador. 1ra pasada: montaje con el método de G1-G4. 0 créditos.",
   "lienzo": {
     "w": 1080,
     "h": 1920,
@@ -169,7 +168,8 @@
           130
         ],
         "sigma": 3.5,
-        "pluma": 14
+        "pluma": 14,
+        "aro_nota": "el aro de r3 (x -6..226, y 34..136 del recorte) cubre TODO lo difuminado: el letrero y el trazo más débil de la fachada derecha"
       }
     }
   },
@@ -236,19 +236,19 @@
       "tipo": "placa",
       "a": 36.75,
       "b": 43.0,
-      "capa": "razón 2: escala ampliada de 0,70 a 0,90 con las dos medidas (0,79 y 0,77) y la banda de ±0,03"
+      "capa": "razón 2: escala ampliada «Zoom: 0,70 a 0,90» con la marca «mi piso · 0,70»; las dos puntas de un MISMO clip (0,771 → 0,77 y 0,799 → 0,80) y la banda de ±0,03 alrededor de su promedio"
     },
     {
       "id": "pl-r3",
       "tipo": "placa",
       "a": 42.75,
-      "b": 47.5,
-      "capa": "razón 3: cuadro del clip con el letrero inventado (difuminado con pluma) y su aro, y el número 0,80"
+      "b": 48.5,
+      "capa": "razón 3: cuadro del clip con el letrero inventado (difuminado con pluma), el aro sobre todo lo difuminado, «Lo difuminé: lo inventó la IA.» y el número 0,80"
     },
     {
       "id": "pl-lec",
       "tipo": "placa",
-      "a": 47.25,
+      "a": 48.25,
       "b": 53.5,
       "capa": "lección: las tres razones juntas"
     },
@@ -378,13 +378,13 @@
         "pl-r3"
       ],
       "tarjetas": {
-        "sale": "c14",
+        "sale": "c14b",
         "entra": "c15"
       },
       "porque": "razón 2 → razón 3"
     },
     {
-      "t": 47.5,
+      "t": 48.5,
       "tipo": "empuje",
       "sale": [
         "pl-r3"
@@ -424,7 +424,7 @@
     {
       "id": "c1",
       "texto": "¿Cómo sé que",
-      "acento": "esta es ella?",
+      "acento": "sigue siendo ella?",
       "acento_t": 1.4,
       "a": 0.083333333333,
       "b": 3.0,
@@ -505,7 +505,7 @@
     {
       "id": "c10",
       "texto": "0,66:",
-      "acento": "se parece poco.",
+      "acento": "bajo el piso.",
       "color": "bad",
       "a": 24.0,
       "b": 27.0,
@@ -533,7 +533,7 @@
     {
       "id": "c13",
       "texto": "Cara chica:",
-      "acento": "poco confiable.",
+      "acento": "lo reviso a ojo.",
       "acento_t": 34.7,
       "a": 32.5,
       "b": 37.0,
@@ -541,10 +541,19 @@
     },
     {
       "id": "c14",
-      "texto": "Una diferencia\n",
-      "acento": "de 0,03 no cuenta.",
-      "acento_t": 41.2,
+      "texto": "Mismo clip:",
+      "acento": "de 0,77 a 0,80.",
+      "acento_t": 38.6,
       "a": 37.0,
+      "b": 40.0,
+      "escena": "razón 2"
+    },
+    {
+      "id": "c14b",
+      "texto": "Esa variación",
+      "acento": "es ruido (±0,03).",
+      "acento_t": 41.5,
+      "a": 40.0,
       "b": 43.0,
       "escena": "razón 2"
     },
@@ -552,17 +561,17 @@
       "id": "c15",
       "texto": "No ve letreros",
       "acento": "inventados.",
-      "acento_t": 45.4,
+      "acento_t": 46.6,
       "a": 43.0,
-      "b": 47.5,
+      "b": 48.5,
       "escena": "razón 3"
     },
     {
       "id": "c16",
       "texto": "Por eso, mirá",
       "acento": "la imagen entera.",
-      "acento_t": 50.8,
-      "a": 47.5,
+      "acento_t": 51.2,
+      "a": 48.5,
       "b": 53.5,
       "escena": "lección"
     },
@@ -592,6 +601,7 @@
       "c12",
       "c13",
       "c14",
+      "c14b",
       "c15",
       "c16",
       "c17"
@@ -718,8 +728,8 @@
     "tag_t": 30.95,
     "lupa_t": 31.4,
     "nota": {
-      "texto": "Bajo 200 px, lo reviso a ojo.",
-      "t": 33.4,
+      "texto": "Bajo 200 px, el medidor no es fiable.",
+      "t": 33.2,
       "y": 1010
     }
   },
@@ -727,42 +737,33 @@
     "eje": {
       "desde": 0.7,
       "hasta": 0.9,
-      "y": 720
+      "y": 760
     },
     "marcas": [
-      0.7,
       0.75,
       0.8,
       0.85,
       0.9
     ],
     "d1": {
-      "valor": 0.79,
       "t": 37.1
     },
     "d2": {
-      "valor": 0.77,
-      "t": 38.3
+      "t": 37.8
     },
     "banda": {
-      "centro": 0.79,
       "mas_menos": 0.03,
-      "t": 37.7
+      "t": 40.0
     },
-    "pie": {
-      "texto": "Mismo clip, dos momentos.",
-      "t": 38.5,
-      "y": 860
+    "zoom": {
+      "texto": "Zoom: 0,70 a 0,90"
     },
-    "nota": {
-      "texto": "±0,03: solo un orden de magnitud.",
-      "t": 40.0,
-      "y": 1010
-    },
-    "y_valores": 640,
-    "y_marcas": 750,
-    "y_banda_label": 560,
-    "y_banda_linea": 620
+    "y_banda_label": 600,
+    "y_banda_linea": 660,
+    "y_valores": 680,
+    "y_marcas": 790,
+    "y_inferior": 870,
+    "nota_planes": "las dos puntas son el mínimo (0,771) y el máximo (0,799) de las 6 medidas del MISMO clip (Motor 6); la banda de ±0,03 va centrada en el promedio de las 6 (0,784); los valores salen de PROCEDENCIA (build.mjs)"
   },
   "r3": {
     "win": {
@@ -772,20 +773,26 @@
       "h": 680
     },
     "aro": {
-      "cx": 43.5,
-      "cy": 89.5,
-      "w": 108,
-      "h": 72,
-      "t": 43.7
+      "x": -6,
+      "y": 34,
+      "w": 232,
+      "h": 102,
+      "t": 43.6
+    },
+    "llamada": {
+      "texto": "Lo difuminé:\nlo inventó la IA.",
+      "t": 44.0,
+      "x": 490,
+      "y": 314,
+      "w": 360
     },
     "pills_y": 1005,
-    "pill_letrero_t": 44.1,
-    "pill_num_t": 44.5,
+    "pill_num_t": 44.6,
     "clave": "m4",
     "muestra": 4,
     "nota": {
       "texto": "El programa solo compara caras.",
-      "t": 44.2,
+      "t": 45.2,
       "y": 1110
     }
   },
@@ -793,22 +800,22 @@
     "filas": [
       {
         "texto": "Cara chica",
-        "t": 48.4
+        "t": 49.3
       },
       {
-        "texto": "Diferencia de 0,03",
-        "t": 49.2
+        "texto": "@@RANGO@@",
+        "t": 50.0
       },
       {
         "texto": "Letrero inventado",
-        "t": 50.0
+        "t": 50.7
       }
     ],
     "x": 80,
     "lado": 240,
     "y0": 340,
     "paso": 280,
-    "anillo_t": 51.9
+    "anillo_t": 51.7
   },
   "agregados_al_guion": [
     {
@@ -833,8 +840,8 @@
     },
     {
       "id": "A5",
-      "que": "«Cara chica: baja sola.» → «Cara chica: poco confiable.» + nota «Bajo 200 px, lo reviso a ojo.» (44 px). La afirmación del guion es FALSA con los datos (Motor 5: 89 px → 0,798; 168 px → 0,824) y con la prueba de control (qa/cara-chica-control.txt: la misma foto reducida a 60 px baja 0,004-0,010 en 5 de 6). «Poco confiable» es la regla del gate (< 200 px), no una caída medida; el video NO dice que el número baje.",
-      "revertir": "plan.json → c13 y r1.nota (y el pie en guion-corregido.md). No se recomienda: la frase vieja es falsa."
+      "que": "«Cara chica: baja sola.» → «Cara chica: lo reviso a ojo.» (6 palabras) + nota «Bajo 200 px, el medidor no es fiable.» (44 px). 1ra pasada: «poco confiable» (regla del gate); el revisor lo marcó como frase que el video no demuestra y el orquestador la cambió. «Baja sola» no era falso por completo: los datos muestran una caída pequeña y consistente (la misma foto a 60 px baja 0,004-0,010 en 5 de 6; F ±0,02); lo falso es que sea apreciable. El video no dice que el número baje ni que no baje de más.",
+      "revertir": "plan.json → c13 y r1.nota"
     },
     {
       "id": "A6",
@@ -848,13 +855,13 @@
     },
     {
       "id": "A8",
-      "que": "Razón 2: escala AMPLIADA de 0,70 a 0,90 (en la de 0-1 los puntos de 0,79 y 0,77 distan 17 px y se pisan), banda de ±0,03 con su corchete, pie «Mismo clip, dos momentos.» (las dos medidas son el arranque y el final del Motor 6) y nota «±0,03: solo un orden de magnitud.» (44 px). Las dos medidas difieren 0,02 en pantalla (0,014 sin redondear) y la tarjeta habla del umbral de 0,03, no de esa diferencia.",
-      "revertir": "plan.json → r2; c14"
+      "que": "Razón 2 rehecha (revisión G5-3/G5-5): escala AMPLIADA rotulada «Zoom: 0,70 a 0,90» con la marca «mi piso · 0,70» (como la de 0-1); las dos puntas del MISMO clip del Motor 6 (mínimo 0,771 → 0,77 y máximo 0,799 → 0,80, de PROCEDENCIA línea 97; rango 0,028) y la banda de ±0,03 centrada en el promedio de las 6 medidas (0,784), que las contiene a todas. Tarjetas «Mismo clip: de 0,77 a 0,80.» → «Esa variación es ruido (±0,03).». Se sacó «orden de magnitud» y la comparación 0,79 → 0,77 (difieren 0,02, no 0,03). La lección rotula «Mismo clip: 0,771-0,799».",
+      "revertir": "plan.json → r2, c14 y c14b, lec.filas[1]"
     },
     {
       "id": "A9",
-      "que": "Razón 3: el letrero inventado del Motor 4 va DIFUMINADO con pluma (sigma 3,5; sin difuminar se lee «DMSS»/«DVOSS» y podría confundirse con una marca); aro coral, pastilla «letrero inventado», pastilla «parecido 0,80» (el número que el programa dio a ese cuadro, a 4,0 s: 0,796) y nota «El programa solo compara caras.».",
-      "revertir": "scripts/extraer-cuadros.sh (SIGMA=0) y plan.json → r3"
+      "que": "Razón 3: el letrero inventado del Motor 4 va DIFUMINADO con pluma (sigma 3,5; sin difuminar se lee «DMSS»/«DVOSS»). El difuminado se DICE en pantalla («Lo difuminé: lo inventó la IA.», 38 px, junto al aro) y el aro (rectángulo redondeado coral) cubre TODO lo difuminado: el letrero y el trazo más débil de la fachada, para que no quede una mancha sin explicar. Pastilla «parecido 0,80» (el número del cuadro a 4,0 s: 0,796) y nota «El programa solo compara caras.». G2 NO se tocó: la madre decide si G2 también se difumina.",
+      "revertir": "scripts/extraer-cuadros.sh (SIGMA=0), plan.json → r3"
     },
     {
       "id": "A10",
@@ -868,13 +875,13 @@
     },
     {
       "id": "A12",
-      "que": "Duración 57,5 s (el guion dice ~56). Tiempos por escena (guion → montaje): gancho 6 → 6; Paso 1 9 → 5,5; Paso 2 9 → 9,5; ejemplos 9 → 9; Paso 3 12 → 17,5; lección 7 → 6; cierre 4 → 4. Paso 3 necesita 17,5 s para que se lean sus tres razones con su nota; se le sacó tiempo al Paso 1, que solo muestra las 8 referencias.",
-      "revertir": "plan.json → medios, costuras y tarjetas (los tiempos de cada escena)"
+      "que": "Duración 57,5 s (el guion dice ~56). Tiempos por escena (guion → montaje): gancho 6 → 6; Paso 1 9 → 5,5; Paso 2 9 → 9,5; ejemplos 9 → 9; Paso 3 12 → 18,5; lección 7 → 5; cierre 4 → 4. Paso 3 necesita 18,5 s para que se lean sus tres razones con sus notas (la razón 2 son ahora dos tarjetas de 3 s y la 3 lleva «Lo difuminé»); se le sacó tiempo al Paso 1 y a la lección.",
+      "revertir": "plan.json → medios, costuras y tarjetas"
     },
     {
       "id": "A13",
-      "que": "pie.txt NO es idéntico al pie del guion del repo: dice «con una cara chica el número es poco confiable» en vez de «una cara chica baja sola» (falso). Sale de guion-corregido.md; hay que pasar el cambio al guion del repo.",
-      "revertir": "copiar el pie del guion del repo a guion-corregido.md (se publicaría una afirmación falsa)"
+      "que": "El pie se genera desde el bloque «Pie» del guion del repo (ya corregido, 9-oct): idéntico a pie.txt (lo verifica build.mjs). Dice «con una cara chica lo reviso a ojo» y «el mismo clip varía de 0,77 a 0,80 y eso es ruido (±0,03)»; ya no repite «baja sola», «poco confiable» ni «orden de magnitud».",
+      "revertir": "—"
     },
     {
       "id": "A14",
@@ -895,6 +902,16 @@
       "id": "A17",
       "que": "La Imagen B del café (0,35) se rotula «Imagen B · café» y la tarjeta dice «otra persona»: es una imagen de IA que no se parece a Lucía, no se la hace pasar por ella.",
       "revertir": "—"
+    },
+    {
+      "id": "A18",
+      "que": "Gancho: «¿Cómo sé que sigue siendo ella?» (6 palabras) en vez de «¿Cómo sé que esta es ella?» (nota G5-N1: «esta» no decía a qué se refería; «sigue siendo» pone la apuesta).",
+      "revertir": "plan.json → c1"
+    },
+    {
+      "id": "A19",
+      "que": "«0,66: se parece poco.» → «0,66: bajo el piso.» (3 palabras; revisión G5-1): F mide 0,658 en el original (bajo el piso), pero 0,676-0,679 en el cuadro y 0,690-0,697 en la fuente a ese zoom; F y B conservan su color coral (decisión del orquestador).",
+      "revertir": "plan.json → c10"
     }
   ]
 }

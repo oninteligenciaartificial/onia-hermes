@@ -88,23 +88,31 @@
   "que": "c14"
  },
  {
-  "t": 41.2,
+  "t": 38.6,
   "que": "c14 acento"
+ },
+ {
+  "t": 40,
+  "que": "c14b"
+ },
+ {
+  "t": 41.5,
+  "que": "c14b acento"
  },
  {
   "t": 43,
   "que": "c15"
  },
  {
-  "t": 45.4,
+  "t": 46.6,
   "que": "c15 acento"
  },
  {
-  "t": 47.5,
+  "t": 48.5,
   "que": "c16"
  },
  {
-  "t": 50.8,
+  "t": 51.2,
   "que": "c16 acento"
  },
  {
@@ -220,59 +228,51 @@
   "que": "r1 lupa"
  },
  {
-  "t": 33.4,
+  "t": 33.2,
   "que": "r1 nota"
  },
  {
   "t": 37.1,
-  "que": "r2 medida 1"
+  "que": "r2 punta baja"
  },
  {
-  "t": 38.3,
-  "que": "r2 medida 2"
- },
- {
-  "t": 37.7,
-  "que": "r2 banda"
- },
- {
-  "t": 38.5,
-  "que": "r2 pie"
+  "t": 37.8,
+  "que": "r2 punta alta"
  },
  {
   "t": 40,
-  "que": "r2 nota"
+  "que": "r2 banda"
  },
  {
-  "t": 43.7,
+  "t": 43.6,
   "que": "r3 aro"
  },
  {
-  "t": 44.1,
-  "que": "r3 «letrero inventado»"
+  "t": 44,
+  "que": "r3 «Lo difuminé»"
  },
  {
-  "t": 44.5,
+  "t": 44.6,
   "que": "r3 número"
  },
  {
-  "t": 44.2,
+  "t": 45.2,
   "que": "r3 nota"
  },
  {
-  "t": 48.4,
+  "t": 49.3,
   "que": "lección fila 1"
  },
  {
-  "t": 49.2,
+  "t": 50,
   "que": "lección fila 2"
  },
  {
-  "t": 50,
+  "t": 50.7,
   "que": "lección fila 3"
  },
  {
-  "t": 51.9,
+  "t": 51.7,
   "que": "lección caja"
  },
  {
@@ -308,7 +308,7 @@
   "que": "costura"
  },
  {
-  "t": 47.5,
+  "t": 48.5,
   "que": "costura"
  },
  {

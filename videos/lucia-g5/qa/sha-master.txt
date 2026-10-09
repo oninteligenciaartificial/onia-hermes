@@ -1,3 +1,3 @@
-b9b5fb2a7e938ca4619b068bac74ab989fd3b3ce61165392592b830987fcdd28  out/g5-final-1080x1920.mp4
-c0138e870bd962adf136b351c529a4862eb09f4deffb926bccf916c5eb2c519e  ../lucia-entrega/g5-final-1080x1920.mp4 (copia de entrega)
-5e14c60cd7b2e627ac50848581ff5930  index.html (md5 del que se renderizó; idéntico)
+d280cd85a509111dfd6e3f4d56a8003cf9c0e03b73bcc4fc3a5caa97d0dc2468  out/g5-final-1080x1920.mp4 (master, 2da pasada)
+5e8d59fbf5ef94cefbf986fc41561f2085f593b059aef87f5d2b033727fe8c91  ../lucia-entrega/g5-final-1080x1920.mp4 (copia de entrega)
+431d65777f252e6cfdb164807a997f8a  index.html (md5 del que se renderizó; idéntico)

@@ -44,7 +44,7 @@ await pg.waitForTimeout(500);
 const N = Math.round(plan.lienzo.duracion * FPS);
 const muestras = await pg.evaluate(([N, FPS]) => {
   const tl = window.__timelines.main; tl.pause();
-  const SEL = '.card, .tag, .vl, .ax, .note, .cap2, .rowt';
+  const SEL = '.card, .tag, .vl, .ax, .note, .cap2, .rowt, .call';
   const RANGE = new Set(['ax', 'note', 'cap2', 'rowt']);
   const out = [];
   const posiciones = (t) => { tl.time(t); const m = new Map(); for (const e of document.querySelectorAll(SEL)) { const q = e.getBoundingClientRect(); m.set(e, q.left); } return m; };

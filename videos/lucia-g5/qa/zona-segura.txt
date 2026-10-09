@@ -1,21 +1,21 @@
-muestras: 460 instantes (cada 3 cuadros), 1455 cajas de texto medidas
+muestras: 460 instantes (cada 3 cuadros), 1426 cajas de texto medidas
 margen mínimo entre el mentón y el texto que queda debajo: 61 px (t=3.125 s, rotulo/tag: texto desde y=720, mentón y=659; la regla pide ≥ 40)
-tamaños de texto en el DOM (px: cuántos elementos): {"38":16,"40":1,"44":4,"48":3,"56":3,"64":5,"66":34}
-  ok  r2 dot 0,79                              medido 496.0  esperado 496.0
-  ok  r2 dot 0,77                              medido 408.0  esperado 408.0
-  ok  r2 banda (borde izq. = 0,76)             medido 364.0  esperado 364.0
-  ok  r2 banda (borde der. = 0,82)             medido 628.0  esperado 628.0
-  ok  r2 corchete (borde izq.)                 medido 364.0  esperado 364.0
-  ok  r2 corchete (borde der.)                 medido 628.0  esperado 628.0
+tamaños de texto en el DOM (px: cuántos elementos): {"38":17,"40":1,"44":3,"48":3,"52":3,"64":5,"66":36}
+  ok  r2 punta baja 0,77 (0.771)               medido 412.0  esperado 412.0
+  ok  r2 punta alta 0,80 (0.799)               medido 536.0  esperado 536.0
+  ok  r2 banda (borde izq. = 0.754)            medido 338.0  esperado 338.0
+  ok  r2 banda (borde der. = 0.814)            medido 602.0  esperado 602.0
+  ok  r2 corchete (borde izq.)                 medido 338.0  esperado 338.0
+  ok  r2 corchete (borde der.)                 medido 602.0  esperado 602.0
   ok  r2 pista (x = 0,70)                      medido 100.0  esperado 100.0
   ok  r2 pista (x = 0,90)                      medido 980.0  esperado 980.0
-  ok  r2 marca 0,70 (centro)                   medido 100.0  esperado 100.0
+  ok  r2 marca del piso (x = 0,70)             medido 100.0  esperado 100.0
   ok  r2 marca 0,75 (centro)                   medido 320.0  esperado 320.0
   ok  r2 marca 0,80 (centro)                   medido 540.0  esperado 540.0
   ok  r2 marca 0,85 (centro)                   medido 760.0  esperado 760.0
   ok  r2 marca 0,90 (centro)                   medido 980.0  esperado 980.0
-  ok  r2 valor 0,79                            dice «0,79»  esperado «0,79»
   ok  r2 valor 0,77                            dice «0,77»  esperado «0,77»
+  ok  r2 valor 0,80                            dice «0,80»  esperado «0,80»
   ok  r3 número en pantalla                    dice «0,80»  esperado «0,80»
   ok  p2 marca 0,70                            medido 716.0  esperado 716.0
   ok  p2 pista (x = 0)                         medido 100.0  esperado 100.0

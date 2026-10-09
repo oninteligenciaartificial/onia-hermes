@@ -75,25 +75,23 @@ for (const m of PLAN.datos) { enter('#dA-' + m.id, m.a, { x: 60 }); leave('#dA-'
   enter('#r1-nota', R.nota_t, { x: 60 });
 }
 
-// ── razón 2: medida 1 (0,79), banda de ±0,03 con su corchete, medida 2 (0,77) DENTRO de la banda, pie y nota
+// ── razón 2: las dos puntas del MISMO clip (0,77 y 0,80), luego la banda de ±0,03 alrededor de su promedio con su corchete
 {
   const R = PLAN.r2;
   tl.fromTo('#r2-d1', { scale: 0, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 0.22, ease: 'power4.out' }, R.d1);
   tl.fromTo('#r2-v1', { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.2, ease: 'none' }, R.d1 + 0.1);
+  tl.fromTo('#r2-d2', { scale: 0, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 0.22, ease: 'power4.out' }, R.d2);
+  tl.fromTo('#r2-v2', { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.2, ease: 'none' }, R.d2 + 0.1);
   tl.fromTo('#r2-band', { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4, ease: 'none' }, R.banda);
   tl.fromTo('#r2-brk', { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.3, ease: 'power3.out' }, R.banda);
   tl.fromTo('#r2-bl', { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.2, ease: 'none' }, R.banda + 0.15);
-  tl.fromTo('#r2-d2', { scale: 0, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 0.22, ease: 'power4.out' }, R.d2);
-  tl.fromTo('#r2-v2', { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.2, ease: 'none' }, R.d2 + 0.1);
-  enter('#r2-pie', R.pie, { x: 60 });
-  enter('#r2-nota', R.nota, { x: 60 });
 }
 
-// ── razón 3: el aro cae sobre el letrero, la etiqueta, el número que el programa le dio y la nota
+// ── razón 3: el aro cae sobre lo difuminado, «Lo difuminé: lo inventó la IA.», el número que el programa le dio y la nota
 {
   const R = PLAN.r3;
-  tl.fromTo('#r3-aro', { autoAlpha: 0, scale: 1.4, transformOrigin: '50% 50%' }, { autoAlpha: 1, scale: 1, duration: 0.3, ease: 'power3.out' }, R.aro);
-  enter('#r3-lab', R.lab, { x: 60 });
+  tl.fromTo('#r3-aro', { autoAlpha: 0, scale: 1.2, transformOrigin: '50% 50%' }, { autoAlpha: 1, scale: 1, duration: 0.3, ease: 'power3.out' }, R.aro);
+  enter('#r3-call', R.call, { x: 50 });
   enter('#r3-num', R.num, { x: 60 });
   enter('#r3-nota', R.nota, { x: 60 });
 }

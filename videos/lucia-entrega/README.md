@@ -1,4 +1,4 @@
-# Entrega de Lucía — G1, G3, G2, G4 y los carruseles L01, C1, C2 (9-oct-2026)
+# Entrega de Lucía — G1, G3, G2, G4, G5 y los carruseles L01, C1, C2 (9-oct-2026)
 
 Videos finales de Lucía listos para publicar. **Cualquiera con la llave del VPS los publica en un paso**; esta sesión de la
 nube no tiene cliente `ssh` y la decisión de la madre (8-oct) es que la llave vive solo en la sesión «Onia».
@@ -9,7 +9,7 @@ nube no tiene cliente `ssh` y la decisión de la madre (8-oct) es que la llave v
 | 2 | G3 «Tres errores de la IA que atrapé antes de publicar» | `g3-final-1080x1920.mp4` | 58 s | `../lucia-g3/pie.txt` | `../lucia-g3/qa/g3-preview-360p.mp4` |
 | 3 | G2 «La misma foto, seis clips: ¿quién pierde la cara?» | `g2-final-1080x1920.mp4` | 58 s | `../lucia-g2/pie.txt` | `../lucia-g2/qa/g2-preview-360p.mp4` |
 | 4 | G4 «Seis motores de imagen, una cara: ¿cuál la conserva?» (**su guion espera la validación de la madre**) | `g4-final-1080x1920.mp4` | 59,75 s | `../lucia-g4/pie.txt` | `../lucia-g4/qa/g4-preview-360p.mp4` |
-| 5 | G5 «Cómo mido si una cara es la de Lucía (y cuándo no creerle al número)» (**su guion corregido espera la validación de la madre**: `../lucia-g5/guion-corregido.md`; el pie NO es el del guion del repo) | `g5-final-1080x1920.mp4` | 57,5 s | `../lucia-g5/pie.txt` | `../lucia-g5/qa/g5-preview-360p.mp4` |
+| 5 | G5 «Cómo mido si una cara es la de Lucía (y cuándo no creerle al número)» (**su guion corregido espera la validación de la madre**: `hermes-content/docs/cola/lucia-diario/guiones/G5-como-se-mide-una-cara.md`) | `g5-final-1080x1920.mp4` | 57,5 s | `../lucia-g5/pie.txt` | `../lucia-g5/qa/g5-preview-360p.mp4` |
 
 SHA-256 de lo entregado:
 
@@ -18,14 +18,14 @@ SHA-256 de lo entregado:
 75642fd093569109a4adb3346dda13afe5991dcd0e3eb430b62c1c080c17a3e3  g3-final-1080x1920.mp4
 429793f0ff2f544cc2185f29c83916d76c47adf632ab9df6fb7c95a2448d46e6  g2-final-1080x1920.mp4
 ec4c450f3e0c4f682b675b65ef913a2e1e0400d31b29c35aa948119bf702f997  g4-final-1080x1920.mp4
-c0138e870bd962adf136b351c529a4862eb09f4deffb926bccf916c5eb2c519e  g5-final-1080x1920.mp4
+5e8d59fbf5ef94cefbf986fc41561f2085f593b059aef87f5d2b033727fe8c91  g5-final-1080x1920.mp4
 ```
 
 - G1 y G3 son **byte por byte** el render que pasó el QA (`../lucia-gN/out/`, ignorado en git).
 - G2 es el mismo render recodificado a 6 Mbps máx. para que entre en git (61 → 16,7 MB): PSNR contra el original 47,9 dB
   de promedio y 43,8 dB en el peor cuadro, o sea sin diferencia visible; misma duración (58,00 s), 24 fps, audio silencioso copiado.
 - G4 también está recodificado a 6 Mbps máx., crf 18 (60,4 → 21 MB; PSNR 49,2 dB de promedio, 44,2 dB en el peor cuadro).
-- G5 también está recodificado a 6 Mbps máx., crf 18 (37,9 → 13,1 MB; master SHA-256 `b9b5fb2a7e938ca4619b068bac74ab989fd3b3ce61165392592b830987fcdd28`; PSNR 50,6 dB de promedio, 43,95 dB en el peor cuadro).
+- G5 también está recodificado a 6 Mbps máx., crf 18 (37,8 → 13,0 MB; master SHA-256 `d280cd85a509111dfd6e3f4d56a8003cf9c0e03b73bcc4fc3a5caa97d0dc2468`; PSNR 50,6 dB de promedio, 43,96 dB en el peor cuadro).
 - Todos son 1080×1920, H.264 + AAC (silencioso: D4, sin voz ni música), 24 fps.
 
 ## Orden y ritmo (plan v5 §5: hasta 3 piezas por semana, 19:00 La Paz)

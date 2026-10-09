@@ -6,9 +6,9 @@ Tabla de cortes (t en s):
    23.750 – 27.000  f-e2      foto  ejemplo 2: Imagen F 0,66
    26.750 – 30.000  f-e3      foto  ejemplo 3: Imagen B del café 0,35 (no es Lucía)
    29.750 – 37.000  pl-r1     placa paso 3, razón 1: cuadro del clip crudo con la cara de 89 px y su lupa
-   36.750 – 43.000  pl-r2     placa razón 2: escala ampliada de 0,70 a 0,90 con las dos medidas (0,79 y 0,77) y la banda de ±0,03
-   42.750 – 47.500  pl-r3     placa razón 3: cuadro del clip con el letrero inventado (difuminado con pluma) y su aro, y el número 0,80
-   47.250 – 53.500  pl-lec    placa lección: las tres razones juntas
+   36.750 – 43.000  pl-r2     placa razón 2: escala ampliada «Zoom: 0,70 a 0,90» con la marca «mi piso · 0,70»; las dos puntas de un MISMO clip (0,771 → 0,77 y 0,799 → 0,80) y la banda de ±0,03 alrededor de su promedio
+   42.750 – 48.500  pl-r3     placa razón 3: cuadro del clip con el letrero inventado (difuminado con pluma), el aro sobre todo lo difuminado, «Lo difuminé: lo inventó la IA.» y el número 0,80
+   48.250 – 53.500  pl-lec    placa lección: las tres razones juntas
    53.250 – 57.500  f-cierre  foto  cierre: Lucía mira a cámara y sonríe (foto K4·5) con empuje lento
 Costuras (empuje rígido de 6 cuadros):
     6.00  empuje  sale f-gancho → entra pl-p1
@@ -19,10 +19,10 @@ Costuras (empuje rígido de 6 cuadros):
    30.00  empuje  sale f-e3 → entra pl-r1
    37.00  empuje  sale pl-r1 → entra pl-r2
    43.00  empuje  sale pl-r2 → entra pl-r3
-   47.50  empuje  sale pl-r3 → entra pl-lec
+   48.50  empuje  sale pl-r3 → entra pl-lec
    53.50  empuje  sale pl-lec → entra f-cierre
 Tarjetas (entra = 1 cuadro antes de a salvo en los empujes, donde viajan):
-    0.08 – 3.00   c1  6 pal (mín 2.4 s) «¿Cómo sé que esta es ella?»
+    0.08 – 3.00   c1  6 pal (mín 2.4 s) «¿Cómo sé que sigue siendo ella?»
     3.00 – 6.00   c2  6 pal (mín 2.4 s) «Con un número.  Y con ojo.» [sale con el empuje]
     6.00 – 8.75   c3  4 pal (mín 1.7 s) «1 · Ocho fotos oficiales.» [entra con el empuje]
     8.75 – 11.50  c4  4 pal (mín 1.7 s) «Su cara oficial, fija.» [sale con el empuje]
@@ -31,13 +31,14 @@ Tarjetas (entra = 1 cuadro antes de a salvo en los empujes, donde viajan):
    16.75 – 18.50  c7  3 pal (mín 1.35 s) «Idéntica es 1.»
    18.50 – 21.00  c8  5 pal (mín 2.05 s) «Piso, 0,70. Lo elegí yo.» [sale con el empuje]
    21.00 – 24.00  c9  3 pal (mín 1.35 s) «0,81: es ella.» [entra con el empuje] [sale con el empuje]
-   24.00 – 27.00  c10 4 pal (mín 1.7 s) «0,66: se parece poco.» [entra con el empuje] [sale con el empuje]
+   24.00 – 27.00  c10 4 pal (mín 1.7 s) «0,66: bajo el piso.» [entra con el empuje] [sale con el empuje]
    27.00 – 30.00  c11 3 pal (mín 1.35 s) «0,35: otra persona.» [entra con el empuje] [sale con el empuje]
    30.00 – 32.50  c12 4 pal (mín 1.7 s) «3 · Desconfiá del número.» [entra con el empuje]
-   32.50 – 37.00  c13 4 pal (mín 1.7 s) «Cara chica: poco confiable.» [sale con el empuje]
-   37.00 – 43.00  c14 6 pal (mín 2.4 s) «Una diferencia  de 0,03 no cuenta.» [entra con el empuje] [sale con el empuje]
-   43.00 – 47.50  c15 4 pal (mín 1.7 s) «No ve letreros inventados.» [entra con el empuje] [sale con el empuje]
-   47.50 – 53.50  c16 6 pal (mín 2.4 s) «Por eso, mirá la imagen entera.» [entra con el empuje] [sale con el empuje]
+   32.50 – 37.00  c13 6 pal (mín 2.4 s) «Cara chica: lo reviso a ojo.» [sale con el empuje]
+   37.00 – 40.00  c14 6 pal (mín 2.4 s) «Mismo clip: de 0,77 a 0,80.» [entra con el empuje]
+   40.00 – 43.00  c14b 5 pal (mín 2.05 s) «Esa variación es ruido (±0,03).» [sale con el empuje]
+   43.00 – 48.50  c15 4 pal (mín 1.7 s) «No ve letreros inventados.» [entra con el empuje] [sale con el empuje]
+   48.50 – 53.50  c16 6 pal (mín 2.4 s) «Por eso, mirá la imagen entera.» [entra con el empuje] [sale con el empuje]
    53.50 – 57.50  c17 5 pal (mín 2.05 s) «Seguime:  cada semana, una prueba.» [entra con el empuje]
 Lecturas de rótulo, datos, notas, placas (≥ 0,35 s/palabra + 0,3):
   rótulo de IA              6 pal  0.00–3.00  3.00 s  (pide 2.40)  
@@ -49,37 +50,36 @@ Lecturas de rótulo, datos, notas, placas (≥ 0,35 s/palabra + 0,3):
   ejemplo F dato            4 pal  24.48–26.60  2.12 s  (pide 1.70)  
   ejemplo B dato            5 pal  27.48–29.60  2.12 s  (pide 2.05)  ← justo
   r1 «89 px»                2 pal  31.20–36.75  5.55 s  (pide 1.00)  
-  r1 nota                   7 pal  33.58–36.75  3.17 s  (pide 2.75)  
-  r2 marca 0,70             1 pal  36.95–42.75  5.80 s  (pide 0.65)  
+  r1 nota                   8 pal  33.38–36.75  3.37 s  (pide 3.10)  
+  r2 «mi piso»              3 pal  36.95–42.75  5.80 s  (pide 1.35)  
+  r2 «Zoom»                 4 pal  36.95–42.75  5.80 s  (pide 1.70)  
   r2 marca 0,75             1 pal  36.95–42.75  5.80 s  (pide 0.65)  
   r2 marca 0,80             1 pal  36.95–42.75  5.80 s  (pide 0.65)  
   r2 marca 0,85             1 pal  36.95–42.75  5.80 s  (pide 0.65)  
   r2 marca 0,90             1 pal  36.95–42.75  5.80 s  (pide 0.65)  
   r2 valor 1                1 pal  37.35–42.75  5.40 s  (pide 0.65)  
-  r2 valor 2                1 pal  38.55–42.75  4.20 s  (pide 0.65)  
-  r2 banda                  1 pal  38.00–42.75  4.75 s  (pide 0.65)  
-  r2 pie                    4 pal  38.68–42.75  4.07 s  (pide 1.70)  
-  r2 nota                   6 pal  40.18–42.75  2.57 s  (pide 2.40)  ← justo
-  r3 «letrero inventado»    2 pal  44.28–47.25  2.97 s  (pide 1.00)  
-  r3 número                 2 pal  44.68–47.25  2.57 s  (pide 1.00)  
-  r3 nota                   5 pal  44.38–47.25  2.87 s  (pide 2.05)  
-  lección 1                 2 pal  48.65–53.25  4.60 s  (pide 1.00)  
-  lección 2                 3 pal  49.45–53.25  3.80 s  (pide 1.35)  
-  lección 3                 2 pal  50.25–53.25  3.00 s  (pide 1.00)  
+  r2 valor 2                1 pal  38.05–42.75  4.70 s  (pide 0.65)  
+  r2 banda                  1 pal  40.30–42.75  2.45 s  (pide 0.65)  
+  r3 «Lo difuminé»          6 pal  44.18–48.25  4.07 s  (pide 2.40)  
+  r3 número                 2 pal  44.78–48.25  3.47 s  (pide 1.00)  
+  r3 nota                   5 pal  45.38–48.25  2.87 s  (pide 2.05)  
+  lección 1                 2 pal  49.55–53.25  3.70 s  (pide 1.00)  
+  lección 2                 3 pal  50.25–53.25  3.00 s  (pide 1.35)  
+  lección 3                 2 pal  50.95–53.25  2.30 s  (pide 1.00)  
 Lo que el video afirma, contra los datos:
   ok  «0,81: es ella.»: la imagen A mide 0.806 (≥ 0,70, sobre el piso)
-  ok  «0,66: se parece poco.»: la imagen F mide 0.658 (bajo el piso 0,70; y más que la del café, 0.35). Ojo: «se parece poco» es una lectura del número, no una frontera objetiva
+  ok  «0,66: bajo el piso.»: la imagen F mide 0.658 en el PNG original (bajo el piso 0,70; y más que la del café, 0.35). Sobre el cuadro con zoom mide 0,678-0,683 y la fuente a ese zoom 0,690-0,697 (qa/face-gate-final.txt): «bajo el piso» vale para el original medido, que es el que va en pantalla
   ok  «0,35: otra persona.»: la imagen B del café mide 0.35 y PROCEDENCIA dice «perdio la cara: otra persona, estilo caricatura»
   ok  «Piso, 0,70. Lo elegí yo.»: el piso del plan es 0.7 (el gate del repo: 0,70, una decisión)
   ok  «Ocho fotos oficiales»: el manifiesto trae 8 referencias y el plan 8 recortes
-  ok  «Cara chica: poco confiable.»: la cara del cuadro del Motor 5 mide 89 px (< 200 px: la regla del gate la marca «poco confiable»; PROCEDENCIA: «sin start_image: inventa el cuarto y el plano; cara de 89 a 168 px»). NO se afirma que el número baje: ese cuadro dio 0.798 (ver README)
-  ok  razón 2: las dos medidas del Motor 6 son 0.785 → 0.79 y 0.771 → 0.77 (en pantalla 0,79 y 0,77)
-  ok  «Una diferencia de 0,03 no cuenta.»: las dos medidas del Motor 6 difieren 0.014 (en pantalla 0.02), dentro de la banda de ±0.03 centrada en 0,79
-  ok  ±0,03 como orden de magnitud: entre un clip y su remapeo de labios (misma cara, mismos instantes) la mayor diferencia medida es 0.024 (sync_so, PROCEDENCIA línea 97). NO es un intervalo de confianza
-  ok  la segunda medida cae dentro de la banda dibujada
+  ok  «Cara chica: lo reviso a ojo.»: la cara del cuadro del Motor 5 mide 89 px (< 200 px: la regla del gate no la da por fiable y la imagen se mira; PROCEDENCIA: «sin start_image: inventa el cuarto y el plano; cara de 89 a 168 px»). NO se afirma que el número baje ni que no baje: ese cuadro dio 0.798 y el control (qa/cara-chica-control.txt) da −0,004 a −0,010 a 60 px en 5 de 6 fotos
+  ok  razón 2: las 6 medidas del MISMO clip (Motor 6, PROCEDENCIA línea 97) son 0.785 · 0.772 · 0.787 · 0.799 · 0.79 · 0.771: mínimo 0.771 → 0,77, máximo 0.799 → 0,80 (rango 0.028)
+  ok  «Mismo clip: de 0,77 a 0,80.» → «Esa variación es ruido (±0,03).»: las cifras de la tarjeta son las del dato
+  ok  las 6 medidas del clip caen dentro de ±0.03 de su promedio (0.784): la banda dibujada las contiene a todas (la mayor separación al promedio es 0.015)
+  ok  ±0,03 como tamaño del ruido: entre un clip y su remapeo de labios (misma cara, mismos instantes) la mayor diferencia medida es 0.024 (sync_so, PROCEDENCIA línea 97), y el rango del clip del Motor 6 es 0.028. Es un tamaño aproximado del ruido, NO un intervalo de confianza
   ok  «No ve letreros inventados.»: PROCEDENCIA dice del Motor 4 «reencuadra (cara de 139 a 347 px) e invento un letrero en la torre» y su medida a 4 s (el cuadro mostrado) es 0.796 → 0,80, sobre el piso: el número aprueba un clip con letrero inventado
   ok  el cuadro 96 del clip es t = 4 s a 24 fps
   ok  el cuadro 0 del Motor 5 es la primera muestra de PROCEDENCIA (0.798)
-  ojo pie.txt = pie de guion-corregido.md, que DIFIERE del pie del guion del repo (el guion decía «una cara chica baja sola»: falso, ver README); hay que corregir el guion
-Agregados al guion (reversibles, ver plan.json): A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17
-ok: index.html (38 KB)
+  ok  pie.txt idéntico al del guion del repo (se regenera desde ahí)
+Agregados al guion (reversibles, ver plan.json): A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19
+ok: index.html (39 KB)

@@ -34,7 +34,7 @@ extraídos con `scripts/extraer-cuadros.sh` (ffmpeg; el script documenta cada co
 **Difuminado del letrero (Motor 4).** Caja x 0-220, y 40-130 del recorte, `gblur sigma=3,5`, pluma de 14 px, en UN paso en RGB (`format=gbrp`, `gblur`, `maskedmerge`, salida `yuvj420p`;
 receta de `v4/prueba-motores-20261008/fotos-limpias/README.md`). Motivo: sin difuminar el letrero se lee «DMSS» / «DVOSS» (letras blancas en relieve sobre el vidrio, en la torre del cuadro 36 se lee mejor)
 y podría confundirse con una marca real; G2 decidió no difuminarlo porque no se parecía a ninguna marca que conociera. Con sigma 2,5 todavía se adivinan las letras a 3x; con 3,5 queda un trazo claro ilegible (comparado a 3x).
-También cubre un segundo trazo claro más débil en la fachada de la derecha (x 150-200, y 55-75). El puntaje de la cara no cambia (0,796 → 0,791). El aro del video marca el trazo.
+También cubre un segundo trazo claro más débil en la fachada de la derecha (x 150-200, y 55-75). El puntaje de la cara no cambia (0,796 → 0,791). **2da pasada (revisión G5-4):** el aro del video es un rectángulo redondeado que cubre TODA la caja difuminada (el letrero y el trazo más débil de la derecha, para que no quede una mancha sin explicar) y la pantalla lo dice: «Lo difuminé: lo inventó la IA.». G2 muestra el mismo letrero legible y NO se tocó: la madre decide si también se difumina.
 **Fondo del cuadro del Motor 5 mirado a 3x-4x:** ventana, plantas, un lapicero y, en el escritorio a la izquierda, una tarjeta de mesa con garabatos ilegibles (queda FUERA del recorte: x < 100). Sin logos ni rubro.
 
 ## GSAP 3.14.2 (`vendor/gsap.min.js`)

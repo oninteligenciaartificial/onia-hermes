@@ -8,10 +8,10 @@ Lint
   ⚠ timeline_track_too_dense: Track 3 has 9 timed elements in this HTML file. Smaller sub-compositions keep timelines easier to read, iterate on, and diff.
     /home/user/onia-hermes/videos/lucia-g5/index.html [data-composition-id] t=0s
     Fix: Move coherent scene groups into separate .html files under compositions/ and mount them from the parent with data-composition-src so the timeline stays easier to inspect, revise, and validate.
-  ⚠ timeline_track_too_dense: Track 4 has 8 timed elements in this HTML file. Smaller sub-compositions keep timelines easier to read, iterate on, and diff.
+  ⚠ timeline_track_too_dense: Track 4 has 9 timed elements in this HTML file. Smaller sub-compositions keep timelines easier to read, iterate on, and diff.
     /home/user/onia-hermes/videos/lucia-g5/index.html [data-composition-id] t=0s
     Fix: Move coherent scene groups into separate .html files under compositions/ and mount them from the parent with data-composition-src so the timeline stays easier to inspect, revise, and validate.
-  ⚠ composition_heavy_overlay_count_high: This composition has 34 elements carrying "heavy overlay" CSS (filter:blur, radial-gradient, or clip-path). Field signal: a composition with ~40 such elements — including opacity:0 / visibility:hidden ones — captures solid-black for the first ~half of the render, recovering near the end. Reproduces identically via drawElement, forced screenshot capture, and snapshot, so the capture layer itself is the offender (not encoder/mux). Independent of duration. Presence alone matters; only display:none elements are excluded here.
+  ⚠ composition_heavy_overlay_count_high: This composition has 36 elements carrying "heavy overlay" CSS (filter:blur, radial-gradient, or clip-path). Field signal: a composition with ~40 such elements — including opacity:0 / visibility:hidden ones — captures solid-black for the first ~half of the render, recovering near the end. Reproduces identically via drawElement, forced screenshot capture, and snapshot, so the capture layer itself is the offender (not encoder/mux). Independent of duration. Presence alone matters; only display:none elements are excluded here.
     /home/user/onia-hermes/videos/lucia-g5/index.html [data-composition-id] t=0s
     Fix: Split coherent scenes / transitions into separate .html files under compositions/ and concat the pieces (FFmpeg or the runtime's slideshow) so each capture only sees a small subset of heavy overlays at once. Even hidden overlays (opacity:0 / visibility:hidden) contribute — either remove truly unused ones from the source or scope them into their own per-transition sub-composition. If an overlay is genuinely inert for the whole clip, use display:none so it never enters the render tree. Field ref ts=1784040753 (#hyperframes-cli-feedback).
   ⚠ nested_structure_needs_subcomposition: <div id="f-gancho"> is a timeline element that contains nested <img id="f-gancho-i">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
@@ -92,6 +92,9 @@ Lint
   ⚠ nested_structure_needs_subcomposition: <div id="cc-c14"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
     /home/user/onia-hermes/videos/lucia-g5/index.html #cc-c14 t=0s
     Fix: Move <div id="cc-c14"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="cc-c14b"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-g5/index.html #cc-c14b t=0s
+    Fix: Move <div id="cc-c14b"> and its contents into a sub-composition file and mount it with data-composition-src.
   ⚠ nested_structure_needs_subcomposition: <div id="cc-c15"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
     /home/user/onia-hermes/videos/lucia-g5/index.html #cc-c15 t=0s
     Fix: Move <div id="cc-c15"> and its contents into a sub-composition file and mount it with data-composition-src.
@@ -101,7 +104,7 @@ Lint
   ⚠ nested_structure_needs_subcomposition: <div id="cc-c17"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
     /home/user/onia-hermes/videos/lucia-g5/index.html #cc-c17 t=0s
     Fix: Move <div id="cc-c17"> and its contents into a sub-composition file and mount it with data-composition-src.
-  0 error(s), 33 warning(s), 0 info(s)
+  0 error(s), 34 warning(s), 0 info(s)
 
 Runtime
   ◇ 0 errors, 0 warnings
@@ -121,7 +124,7 @@ Motion
   ◇ 0 errors, 0 warnings
 
 Contrast
-  ◇ 24/24 text checks pass WCAG AA
+  ◇ 23/23 text checks pass WCAG AA
 
 Snapshots
   ◇ disabled

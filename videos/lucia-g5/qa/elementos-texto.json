@@ -83,23 +83,32 @@
  {
   "id": "r1-nota",
   "que": "r1 nota",
-  "texto": "Bajo 200 px, lo reviso a ojo.",
-  "n": 7,
-  "a": 33.58,
+  "texto": "Bajo 200 px, el medidor no es fiable.",
+  "n": 8,
+  "a": 33.38,
   "b": 36.75,
-  "min": 2.7499999999999996
+  "min": 3.0999999999999996
+ },
+ {
+  "id": "r2-mkl",
+  "que": "r2 «mi piso»",
+  "texto": "mi piso · 0,70",
+  "n": 3,
+  "a": 36.95,
+  "b": 42.75,
+  "min": 1.3499999999999999
+ },
+ {
+  "id": "r2-zoom",
+  "que": "r2 «Zoom»",
+  "texto": "Zoom: 0,70 a 0,90",
+  "n": 4,
+  "a": 36.95,
+  "b": 42.75,
+  "min": 1.7
  },
  {
   "id": "r2-m1",
-  "que": "r2 marca 0,70",
-  "texto": "0,70",
-  "n": 1,
-  "a": 36.95,
-  "b": 42.75,
-  "min": 0.6499999999999999
- },
- {
-  "id": "r2-m2",
   "que": "r2 marca 0,75",
   "texto": "0,75",
   "n": 1,
@@ -108,7 +117,7 @@
   "min": 0.6499999999999999
  },
  {
-  "id": "r2-m3",
+  "id": "r2-m2",
   "que": "r2 marca 0,80",
   "texto": "0,80",
   "n": 1,
@@ -117,7 +126,7 @@
   "min": 0.6499999999999999
  },
  {
-  "id": "r2-m4",
+  "id": "r2-m3",
   "que": "r2 marca 0,85",
   "texto": "0,85",
   "n": 1,
@@ -126,7 +135,7 @@
   "min": 0.6499999999999999
  },
  {
-  "id": "r2-m5",
+  "id": "r2-m4",
   "que": "r2 marca 0,90",
   "texto": "0,90",
   "n": 1,
@@ -137,7 +146,7 @@
  {
   "id": "r2-v1",
   "que": "r2 valor 1",
-  "texto": "0,79",
+  "texto": "0,77",
   "n": 1,
   "a": 37.35,
   "b": 42.75,
@@ -146,9 +155,9 @@
  {
   "id": "r2-v2",
   "que": "r2 valor 2",
-  "texto": "0,77",
+  "texto": "0,80",
   "n": 1,
-  "a": 38.55,
+  "a": 38.05,
   "b": 42.75,
   "min": 0.6499999999999999
  },
@@ -157,44 +166,26 @@
   "que": "r2 banda",
   "texto": "±0,03",
   "n": 1,
-  "a": 38,
+  "a": 40.3,
   "b": 42.75,
   "min": 0.6499999999999999
  },
  {
-  "id": "r2-pie",
-  "que": "r2 pie",
-  "texto": "Mismo clip, dos momentos.",
-  "n": 4,
-  "a": 38.68,
-  "b": 42.75,
-  "min": 1.7
- },
- {
-  "id": "r2-nota",
-  "que": "r2 nota",
-  "texto": "±0,03: solo un orden de magnitud.",
+  "id": "r3-call",
+  "que": "r3 «Lo difuminé»",
+  "texto": "Lo difuminé: lo inventó la IA.",
   "n": 6,
-  "a": 40.18,
-  "b": 42.75,
+  "a": 44.18,
+  "b": 48.25,
   "min": 2.3999999999999995
- },
- {
-  "id": "r3-lab",
-  "que": "r3 «letrero inventado»",
-  "texto": "letrero inventado",
-  "n": 2,
-  "a": 44.28,
-  "b": 47.25,
-  "min": 1
  },
  {
   "id": "r3-num",
   "que": "r3 número",
   "texto": "parecido 0,80",
   "n": 2,
-  "a": 44.68,
-  "b": 47.25,
+  "a": 44.78,
+  "b": 48.25,
   "min": 1
  },
  {
@@ -202,8 +193,8 @@
   "que": "r3 nota",
   "texto": "El programa solo compara caras.",
   "n": 5,
-  "a": 44.38,
-  "b": 47.25,
+  "a": 45.38,
+  "b": 48.25,
   "min": 2.05
  },
  {
@@ -211,16 +202,16 @@
   "que": "lección 1",
   "texto": "Cara chica",
   "n": 2,
-  "a": 48.65,
+  "a": 49.55,
   "b": 53.25,
   "min": 1
  },
  {
   "id": "le-t2",
   "que": "lección 2",
-  "texto": "Diferencia de 0,03",
+  "texto": "Mismo clip: 0,771-0,799",
   "n": 3,
-  "a": 49.45,
+  "a": 50.25,
   "b": 53.25,
   "min": 1.3499999999999999
  },
@@ -229,7 +220,7 @@
   "que": "lección 3",
   "texto": "Letrero inventado",
   "n": 2,
-  "a": 50.25,
+  "a": 50.95,
   "b": 53.25,
   "min": 1
  }

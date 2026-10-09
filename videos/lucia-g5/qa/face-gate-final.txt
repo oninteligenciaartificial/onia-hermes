@@ -1,59 +1,59 @@
-Control de cara del FINAL (out/g5-final-1080x1920.mp4) contra la FUENTE llevada al mismo zoom, sin comprimir (scripts/fuente-con-zoom.py + .claude/skills/lucia/scripts/face-gate.sh; ArcFace buffalo_l contra las 8 referencias oficiales; piso 0,70).
+Control de cara del FINAL (out/g5-final-1080x1920.mp4, 2da pasada) contra la FUENTE llevada al mismo zoom, sin comprimir (scripts/fuente-con-zoom.py + .claude/skills/lucia/scripts/face-gate.sh; ArcFace buffalo_l contra las 8 referencias oficiales; piso 0,70).
 
 piso de caras negativas (max): 0.224   gate del repo: 0,70
 archivo                                        centroide  min_ref  max_ref  cara_px  veredicto
-f-gancho_t3.79_FINAL.png                           0.800    0.535    0.729      184  OK (cara < 200 px: poco confiable)
+f-gancho_t3.79_FINAL.png                           0.798    0.535    0.720      184  OK (cara < 200 px: poco confiable)
 f-gancho_t3.79_fuente.png                          0.796    0.538    0.719      183  OK (cara < 200 px: poco confiable)
-f-gancho_t4.50_FINAL.png                           0.800    0.544    0.719      184  OK (cara < 200 px: poco confiable)
+f-gancho_t4.50_FINAL.png                           0.798    0.539    0.714      184  OK (cara < 200 px: poco confiable)
 f-gancho_t4.50_fuente.png                          0.795    0.532    0.717      184  OK (cara < 200 px: poco confiable)
-f-gancho_t5.21_FINAL.png                           0.796    0.542    0.715      186  OK (cara < 200 px: poco confiable)
+f-gancho_t5.21_FINAL.png                           0.797    0.534    0.717      186  OK (cara < 200 px: poco confiable)
 f-gancho_t5.21_fuente.png                          0.794    0.531    0.719      186  OK (cara < 200 px: poco confiable)
-f-e1_t21.58_FINAL.png                              0.798    0.536    0.716      182  OK (cara < 200 px: poco confiable)
+f-e1_t21.58_FINAL.png                              0.797    0.535    0.722      182  OK (cara < 200 px: poco confiable)
 f-e1_t21.58_fuente.png                             0.799    0.544    0.721      181  OK (cara < 200 px: poco confiable)
-f-e1_t22.38_FINAL.png                              0.797    0.537    0.717      184  OK (cara < 200 px: poco confiable)
+f-e1_t22.38_FINAL.png                              0.795    0.538    0.716      184  OK (cara < 200 px: poco confiable)
 f-e1_t22.38_fuente.png                             0.800    0.539    0.719      182  OK (cara < 200 px: poco confiable)
-f-e1_t23.17_FINAL.png                              0.799    0.544    0.716      184  OK (cara < 200 px: poco confiable)
+f-e1_t23.17_FINAL.png                              0.796    0.532    0.715      184  OK (cara < 200 px: poco confiable)
 f-e1_t23.17_fuente.png                             0.795    0.532    0.717      184  OK (cara < 200 px: poco confiable)
-f-e2_t24.58_FINAL.png                              0.677    0.495    0.606      305  BAJO: mirar
+f-e2_t24.58_FINAL.png                              0.683    0.492    0.612      304  BAJO: mirar
 f-e2_t24.58_fuente.png                             0.696    0.488    0.627      301  BAJO: mirar
-f-e2_t25.38_FINAL.png                              0.679    0.494    0.616      306  BAJO: mirar
+f-e2_t25.38_FINAL.png                              0.678    0.493    0.614      306  BAJO: mirar
 f-e2_t25.38_fuente.png                             0.697    0.491    0.631      304  BAJO: mirar
-f-e2_t26.17_FINAL.png                              0.676    0.488    0.616      310  BAJO: mirar
+f-e2_t26.17_FINAL.png                              0.682    0.490    0.624      309  BAJO: mirar
 f-e2_t26.17_fuente.png                             0.690    0.481    0.630      308  BAJO: mirar
-f-e3_t27.58_FINAL.png                              0.361    0.221    0.454      294  BAJO: mirar
+f-e3_t27.58_FINAL.png                              0.360    0.220    0.459      294  BAJO: mirar
 f-e3_t27.58_fuente.png                             0.359    0.214    0.463      293  BAJO: mirar
-f-e3_t28.38_FINAL.png                              0.364    0.218    0.467      299  BAJO: mirar
+f-e3_t28.38_FINAL.png                              0.350    0.209    0.457      299  BAJO: mirar
 f-e3_t28.38_fuente.png                             0.354    0.206    0.462      296  BAJO: mirar
-f-e3_t29.17_FINAL.png                              0.366    0.220    0.463      301  BAJO: mirar
+f-e3_t29.17_FINAL.png                              0.361    0.212    0.463      301  BAJO: mirar
 f-e3_t29.17_fuente.png                             0.358    0.209    0.460      299  BAJO: mirar
-f-cierre_t54.08_FINAL.png                          0.830    0.546    0.788      203  OK
+f-cierre_t54.08_FINAL.png                          0.831    0.546    0.787      202  OK
 f-cierre_t54.08_fuente.png                         0.830    0.538    0.785      201  OK
-f-cierre_t55.38_FINAL.png                          0.827    0.537    0.781      205  OK
+f-cierre_t55.38_FINAL.png                          0.829    0.537    0.783      205  OK
 f-cierre_t55.38_fuente.png                         0.827    0.534    0.779      205  OK
-f-cierre_t56.67_FINAL.png                          0.829    0.543    0.784      207  OK
+f-cierre_t56.67_FINAL.png                          0.830    0.545    0.783      207  OK
 f-cierre_t56.67_fuente.png                         0.828    0.534    0.783      207  OK
 
 Pares final ↔ fuente (diferencia = final − fuente):
-  f-gancho  t=  3.79  final 0.800  fuente 0.796  dif +0.004
-  f-gancho  t=  4.50  final 0.800  fuente 0.795  dif +0.005
-  f-gancho  t=  5.21  final 0.796  fuente 0.794  dif +0.002
-  f-e1      t= 21.58  final 0.798  fuente 0.799  dif -0.001
-  f-e1      t= 22.38  final 0.797  fuente 0.800  dif -0.003
-  f-e1      t= 23.17  final 0.799  fuente 0.795  dif +0.004
-  f-e2      t= 24.58  final 0.677  fuente 0.696  dif -0.019
-  f-e2      t= 25.38  final 0.679  fuente 0.697  dif -0.018
-  f-e2      t= 26.17  final 0.676  fuente 0.690  dif -0.014
-  f-e3      t= 27.58  final 0.361  fuente 0.359  dif +0.002
-  f-e3      t= 28.38  final 0.364  fuente 0.354  dif +0.010
-  f-e3      t= 29.17  final 0.366  fuente 0.358  dif +0.008
-  f-cierre  t= 54.08  final 0.830  fuente 0.830  dif +0.000
-  f-cierre  t= 55.38  final 0.827  fuente 0.827  dif +0.000
-  f-cierre  t= 56.67  final 0.829  fuente 0.828  dif +0.001
+  f-gancho  t=  3.79  final 0.798  fuente 0.796  dif +0.002
+  f-gancho  t=  4.50  final 0.798  fuente 0.795  dif +0.003
+  f-gancho  t=  5.21  final 0.797  fuente 0.794  dif +0.003
+  f-e1      t= 21.58  final 0.797  fuente 0.799  dif -0.002
+  f-e1      t= 22.38  final 0.795  fuente 0.800  dif -0.005
+  f-e1      t= 23.17  final 0.796  fuente 0.795  dif +0.001
+  f-e2      t= 24.58  final 0.683  fuente 0.696  dif -0.013
+  f-e2      t= 25.38  final 0.678  fuente 0.697  dif -0.019
+  f-e2      t= 26.17  final 0.682  fuente 0.690  dif -0.008
+  f-e3      t= 27.58  final 0.360  fuente 0.359  dif +0.001
+  f-e3      t= 28.38  final 0.350  fuente 0.354  dif -0.004
+  f-e3      t= 29.17  final 0.361  fuente 0.358  dif +0.003
+  f-cierre  t= 54.08  final 0.831  fuente 0.830  dif +0.001
+  f-cierre  t= 55.38  final 0.829  fuente 0.827  dif +0.002
+  f-cierre  t= 56.67  final 0.830  fuente 0.828  dif +0.002
 Máxima diferencia final ↔ fuente: 0.019 (regla del repo: ≤ 0,02): el escalado, el empuje lento, la caja de cara y el H.264 no deforman la cara.
 
 Número en pantalla (el del ORIGINAL medido, PROCEDENCIA línea 97) contra lo que mide el cuadro que se ve:
-  A (gancho)   en pantalla 0.81   cuadro 0.796-0.800   (|dif| ≤ 0.014; el ±0,03 del guion lo cubre)
-  A (ejemplo)  en pantalla 0.81   cuadro 0.797-0.799   (|dif| ≤ 0.013; el ±0,03 del guion lo cubre)
-  F            en pantalla 0.66   cuadro 0.676-0.679   (|dif| ≤ 0.019; el ±0,03 del guion lo cubre)
-  B del café   en pantalla 0.35   cuadro 0.361-0.366   (|dif| ≤ 0.016; el ±0,03 del guion lo cubre)
-  F: PNG original 0,658 · JPG de 1080 px 0,672 · cuadro con zoom 0,676-0,679 · fuente con zoom 0,690-0,697: el número de F depende de la imagen medida (hasta 0,04 entre el PNG y la fuente con zoom), como en G4.
+  A (gancho)   en pantalla 0.81   cuadro 0.797-0.798   (|dif| ≤ 0.013; el ±0,03 que el video declara lo cubre)
+  A (ejemplo)  en pantalla 0.81   cuadro 0.795-0.797   (|dif| ≤ 0.015; el ±0,03 que el video declara lo cubre)
+  F            en pantalla 0.66   cuadro 0.678-0.683   (|dif| ≤ 0.023; el ±0,03 que el video declara lo cubre)
+  B del café   en pantalla 0.35   cuadro 0.350-0.361   (|dif| ≤ 0.011; el ±0,03 que el video declara lo cubre)
+  F: PNG original 0,658 · JPG de 1080 px 0,672 · cuadro con zoom 0,676-0,679 · fuente con zoom 0,690-0,697: el número de F depende de la imagen medida (hasta 0,04 entre el PNG y la fuente con zoom), como en G4. Por eso la tarjeta dice «bajo el piso» (el original) y no «se parece poco».

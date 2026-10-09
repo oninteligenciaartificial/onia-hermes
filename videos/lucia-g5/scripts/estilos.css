@@ -121,3 +121,7 @@ body{font-family:"DM Sans",sans-serif;-webkit-font-smoothing:antialiased;text-re
 .anillo{position:absolute;border:6px solid var(--acc);border-radius:44px;box-shadow:0 0 34px rgba(16,194,107,.45);opacity:0}
 /* paso 2: las 8 referencias en fila */
 .ref.q{border-radius:16px;border-width:3px}
+
+/* G5 2da pasada: «Lo difuminé: lo inventó la IA.» junto al aro; el nombre de las filas de la lección entra en 52 px */
+.call{position:absolute;padding:12px 24px 14px;border-radius:26px;background:rgba(10,12,17,.88);border:1px solid rgba(255,255,255,.22);border-left:8px solid var(--bad);font-family:"DM Sans",sans-serif;font-weight:500;font-size:38px;line-height:1.2;color:#F6F8FB;white-space:nowrap;box-shadow:0 14px 36px rgba(0,0,0,.38)}
+.rowt{font-size:52px}
