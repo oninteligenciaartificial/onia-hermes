@@ -9,6 +9,9 @@
 >   (el «script de grabación» que el VSL dice que no existe; planes C1-C7 y C2-clic como esqueleto, frenos probados, **la app real sin probar**) y
 >   `carousels/briefs/ads/VSL-CORTO-TABLA-DE-CORTES.md` + preview de 60 s en `carousels/out/ads/vsl-corto-animatic/`. **Siguen bloqueadas** la tabla «se promete / funciona»
 >   y el corto real: cuenta demo (Plataforma), `ONIA_QA_EMAIL`/`ONIA_QA_PASSWORD` en el entorno de Ventas (Sergio Urcullo) y las tomas T9/T10/T12.
+> - ✅ **`equipo-de-agentes` y `aprender-de-todo` (madre, commit `ca1fde0a`, 9-oct):** leídas con `git show`; **no mezclé su rama** (trae CLAUDE.md, AGENTS.md y 90 archivos, y toca el mismo
+>   `onia-ventas-pauta/SKILL.md` que yo: ensuciaría el PR #175). Entran por `main` cuando ella las mergee. Prueba de uso del aprendizaje en
+>   `carousels/briefs/ads/VSL-CORTO-TABLA-DE-CORTES.md` (4 ángulos de Ramiro Cubría + «no prometer respuesta no probada» de Marco Machado; detector de promesas 0, control 2): **aplicado, sin revisor independiente**.
 > - ✅ **Tanda 2 de competencia (T1-9, 9-oct):** `ONIA_UI_MEJORAS_1.0.md` §8. **Historia clínica:** *Normas en Salud Oral* (R.M. 1320, 2010, «documento de trabajo») pide
 >   historia clínica en todo paciente y prontuario «archivado por lo menos por unos 10 años», digital permitido; la Ley 3131 trata el consentimiento y el
 >   secreto como documentos oficiales. Ninguna de las dos fija obligación probada para un consultorio privado: **titular solo como pregunta y con el OK de

@@ -25,6 +25,32 @@ o captura falta. Las láminas están al lado en PNG.
 
 Tres de los ocho tramos son pantalla: suman **32 de los 60 s** y dependen de la cuenta demo. Sin ella el corto no se publica.
 
+## Prueba de uso · `aprender-de-todo` (9-oct)
+
+Por pedido de la madre, aplicado a **esta** tarea de oferta (cola de Ventas y pauta, tarea 2). Las fichas y `aprender-de-todo` viven en la rama de la madre
+(commit `ca1fde0a`), **no en `main`**: las leí con `git show`, no mezclé su rama. La fila de uso de las fichas **no la puedo escribir desde acá**: queda para
+pegar este bloque cuando entren a `main`.
+
+- **Sesión y fecha:** `session_0143C5fMXVs8eWEf7uBpC9SF` (Ventas y pauta), 9-oct-2026.
+- **Regla 1 · Ramiro Cubría** (`video-intake/2026-10-04-reels-para-lucia.md` §4; destino `onia-ventas-pauta`, «Aprendizajes incorporados 9-oct»): auditar con los cuatro
+  ángulos. Resultado sobre el corto:
+
+| Ángulo | Dónde está en el corto | Estado |
+|---|---|---|
+| Problema | 0-8 s: el paciente de las 10:00 sin confirmar, el sillón vacío, el saldo (dolor del dueño dicho en los primeros 3 s, sin insultos) | ✅ se graba ya |
+| Solución | 8-30 s: agenda y Pendientes | ⬜ espera las capturas C1/C2 y las filas de la tabla |
+| Producto como «casos de éxito» | **Vacío a propósito.** Hay 0 clientes pagando: sin testimonio, sin cifra, sin logo | ✅ el corto no inventa ninguno; se dice así |
+| Mentalidad / objeciones | «Usted lo lee y lo aprueba. Si no lo aprueba, no sale» (miedo a perder el control) y «Si no le sirve, no paga nada» (miedo a pagar por nada) | ✅ |
+| Descubrimiento | 50-57 s: WhatsApp y 20 minutos | 🟡 la web dice 30 min (L-04); lo decide Sergio Urcullo |
+
+- **Regla 2 · Marco Machado** (`2026-10-08-orquestacion-e-ingresos-5-posts.md` §2): no prometer una respuesta que no está probada. El corto **no dice en cuánto se contesta**
+  (la fila 6 del go/no-go, «quién contesta y en cuánto», sigue ❌) y lo que dice la voz sale de las filas del catálogo. Diagnóstico → plan → llamada: el corto lleva
+  a la llamada de 20 minutos, no a un cuestionario que no existe.
+- **Revisión de claims y de «usted»:** el detector de promesas del repo (`promesa-que-el-producto-cumple.mjs`, el que usa `venta-honestidad`) sobre las 7 líneas de voz:
+  **0 hallazgos**; control con «La IA escribe los mensajes y sale por tu WhatsApp con un toque»: **2** (anda en las dos direcciones). **0 voseo o tuteo** en la voz. **Límite:**
+  el detector mira formas, no que el producto cumpla: «cada mañana le deja anotado…» sigue dependiendo de G-04 ⬜ y de las filas de la tabla.
+- **Estado:** *aplicado*, **sin revisor independiente**. No pasa a «aplicado y verificado» hasta que otra sesión (la madre o un verificador) lo revise contra la ficha.
+
 ## Para grabar las capturas: `grabar-captura.mjs` (nuevo, 9-oct)
 
 El guion del VSL decía «el script de grabación no existe todavía». Ya existe: `.claude/skills/onia-ventas-pauta/scripts/grabar-captura.mjs`
