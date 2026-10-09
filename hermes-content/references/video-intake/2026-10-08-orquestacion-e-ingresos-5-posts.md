@@ -119,3 +119,13 @@ ante falla; y §4 (`DdmTyEVAPMb`, Foreman), puntos de control META · PRUEBA DE 
 - **Escalamiento:** no hizo falta. La revisión encontró una imprecisión: «Pedidos a Claude» se copia solo con la
   llave (5d). La corrigió la sesión, y no se re-despachó: era una palabra.
 - **Pendiente:** nada de esta prueba. La aplicación al resto de los carriles la coordina la madre.
+
+## Prueba de uso por sesión · Ventas y pauta (§2, Marco Machado)
+
+Estado: aplicado, sin revisor independiente
+Sesión + fecha: Ventas y pauta, `session_0143C5fMXVs8eWEf7uBpC9SF`, 9-oct-2026.
+Tarea de cola: `hermes-content/docs/cola/loop/ventas-pauta.md`, «Verificación de aprendizaje · 2026-10-09».
+Regla usada: §2, «nunca se le promete al prospecto algo que el producto no hace»: el corto del VSL **no dice en cuánto se contesta** (la fila 6 del go/no-go, «quién contesta y en cuánto», sigue ❌) y lleva a la llamada de 20 minutos, no a un cuestionario que no existe.
+Artefacto: `hermes-content/carousels/briefs/ads/VSL-CORTO-TABLA-DE-CORTES.md`, misma sección.
+Verificación: revisión de las 7 líneas de voz contra el detector de promesas y lectura contra `ONIA_ADQUISICION_Y_PAUTA.md` §5.10. No se implementó el cuestionario ni se contactó a nadie.
+Pendiente: revisor independiente.
