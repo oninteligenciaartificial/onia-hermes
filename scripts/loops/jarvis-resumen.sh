@@ -17,6 +17,7 @@
 #   guiones               -> hermes-content/docs/cola/plan-3-semanas/S*-GUIONES.md (si el calendario no cubre el día)
 #   lo que pasó de noche  -> la cola de la aduana (onia-tg.sh, $ESTADO/resumen.log)
 #   lo que se hizo hoy    -> git log de origin/main
+#   lo que salió hoy      -> /root/publicar/publicado.jsonl (los publicadores de vps-ops/publicar)
 # El único paso con IA es traducir los commits del día a castellano llano, con la orden de
 # no agregar nada; si la IA no responde, se dice cuántos cambios hubo y listo. Nace de un
 # error pagado: `gpt-5-nano` inventó una agenda entera (handoff/infra-cerebro-loops.md §5).
@@ -39,6 +40,7 @@ REPO="${ONIA_REPO:-/root/loops/onia-hermes}"
 ESTADO="${ONIA_AVISO_ESTADO:-/var/lib/onia-aviso}"
 AGENDA="${ONIA_AGENDA:-/root/bin/onia-agenda.sh}"
 PEDIDOS="${ONIA_PEDIDOS:-/root/bin/onia-pedido-claude.sh}"
+PUBLICADO="${ONIA_PUBLICADO:-/root/publicar/publicado.jsonl}"  # lo escriben ig-reel, ig-carrusel, yt-video…
 OUT="${ONIA_JARVIS_OUT:-/root/.hermes/out}"
 LLM="${ONIA_JARVIS_LLM:-}"          # comando que traduce commits (stdin -> viñetas); vacío = LiteLLM
 MAX=5
@@ -240,6 +242,61 @@ seccion_sale() {  # seccion_sale <fecha> <titulo>
   printf '📣 <b>%s</b>\n' "$2"
   printf '%s\n' "$c" | awk -F'\t' '{ printf "• %s%s · %s\n", ($1 == "" ? "" : $1 " "), $2, $3 }' | esc
 }
+# Lo que salió DE VERDAD hoy (9-oct; GOAL del 8-oct: al menos una pieza por día). Cada publicador del
+# VPS anota en publicado.jsonl: Instagram (ig-reel, ig-carrusel, ig-historia) con su link y la hora de
+# Instagram; YouTube (yt-video) con su link; Buffer (buffer-post) sin link, solo que lo mandó.
+seccion_salio() {
+  local s n
+  [ -r "$PUBLICADO" ] || { printf '📣 No pude leer el registro de publicaciones: no sé qué salió hoy.\n'; return 0; }
+  s=$(python3 - "$HOY" "$PUBLICADO" <<'PY'
+import datetime, json, sys
+hoy = datetime.date.fromisoformat(sys.argv[1])
+LA_PAZ = datetime.timezone(datetime.timedelta(hours=-4))
+def hora(t):
+    try:
+        d = datetime.datetime.fromisoformat(t.replace("Z", "+00:00").replace("+0000", "+00:00"))
+    except (AttributeError, ValueError):
+        return None
+    if d.tzinfo is None:
+        return None
+    return d.astimezone(LA_PAZ)
+filas, buffer = [], 0
+for linea in open(sys.argv[2], encoding="utf-8", errors="replace"):
+    try:
+        r = json.loads(linea)
+    except ValueError:
+        continue
+    if not isinstance(r, dict):
+        continue
+    if r.get("red") == "buffer":
+        cuando = r.get("cuando") if r.get("cuando") not in (None, "ya") else r.get("fecha")
+        d = hora(str(cuando or ""))
+        if d and d.date() == hoy and r.get("estado") != "borrador":
+            buffer += 1
+        continue
+    if r.get("red") == "youtube":
+        d, que, link = hora(str(r.get("fecha", ""))), "YouTube", r.get("url")
+    else:
+        d, link = hora(str(r.get("timestamp", ""))), r.get("permalink")
+        que = {"carrusel": "Carrusel", "historia": "Historia"}.get(r.get("tipo"), "Trial" if r.get("trial") else "Reel")
+    if not d or d.date() != hoy or not link:
+        continue
+    cuenta = r.get("cuenta")
+    filas.append((d.strftime("%H:%M"), que + ("" if cuenta in (None, "sergio") else " (" + str(cuenta) + ")"), str(link)))
+for h, que, link in sorted(filas):
+    print("• %s %s — %s" % (h, que, link))
+if buffer:
+    print("• y %d envío%s a Buffer (TikTok, Shorts, LinkedIn), sin link acá." % (buffer, "" if buffer == 1 else "s"))
+PY
+) || { printf '📣 No pude leer el registro de publicaciones: no sé qué salió hoy.\n'; return 0; }
+  if [ -n "$s" ] && printf '%s\n' "$s" | grep -q '—'; then
+    printf '📣 <b>Hoy salió</b>\n'; printf '%s\n' "$s" | esc; return 0
+  fi
+  n=$(calendario_del "$HOY" 2>/dev/null | grep -c . || true)
+  printf '📣 <b>Hoy no salió nada</b> en Instagram ni en YouTube%s.\n' "$([ "${n:-0}" -gt 0 ] && printf ' (el calendario tenía %s pieza(s))' "$n")"
+  [ -z "$s" ] || printf '%s\n' "$s" | esc
+  return 0
+}
 # Los guiones del plan viejo, solo para un día que el calendario no cubre.
 seccion_plan() {  # seccion_plan <fecha> <titulo de lo que sale> <titulo de los guiones>
   local s
@@ -399,7 +456,7 @@ if [ "$MODO" = manana ]; then
   parte seccion_agenda "$HOY" 'Tu día'; parte seccion_plan "$HOY" 'Hoy sale' 'Para grabar hoy'; grupo SIGUE
 else
   CABEZA="🌙 <b>Cierre del $(dia_largo "$HOY")</b>"
-  parte seccion_hoy; parte seccion_pedidos; parte seccion_cola resumen 'Avisos del día'; parte linea_salud; grupo PASÓ
+  parte seccion_hoy; parte seccion_salio; parte seccion_pedidos; parte seccion_cola resumen 'Avisos del día'; parte linea_salud; grupo PASÓ
   parte seccion_bloques_hoy; parte seccion_pedidos_ok; parte seccion_sigue; parte falta_medir; grupo NECESITO 'Nada.'
   parte seccion_agenda "$MANANA" 'Mañana'; parte seccion_plan "$MANANA" 'Mañana sale' 'Mañana grabás'; grupo SIGUE
 fi

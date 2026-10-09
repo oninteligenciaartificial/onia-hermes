@@ -80,6 +80,7 @@ ${tgFalla ? "exit 1" : "exit 0"}
         ONIA_AVISO_ESTADO: estado,
         ONIA_AGENDA: join(dir, "no-existe"),
         ONIA_PEDIDOS: join(dir, "no-existe-pedidos"),
+        ONIA_PUBLICADO: join(dir, "no-existe-publicado.jsonl"),
         ONIA_JARVIS_OUT: out,
         ONIA_HOY: "2026-09-30",
         ...env,
@@ -507,4 +508,46 @@ test("fuera del rango del calendario (o el mismo número de otro mes) vuelve a l
   assert.doesNotMatch(b.imprimir("manana", { ONIA_HOY: "2027-04-10" }), /📣/, "el sábado 10 de abril no es el sábado 10 de octubre");
   const real = banco();
   assert.match(real.imprimir("manana", { ONIA_HOY: "2026-10-07" }), /🎬 <b>Para grabar hoy<\/b>/, "el 7-oct no lo cubre el calendario 9-16");
+});
+
+// ── Qué salió de verdad hoy (9-oct) ──────────────────────────────────────────────
+// GOAL del 8-oct: al menos una pieza publicada por día. Los publicadores del VPS (ig-reel, ig-carrusel,
+// ig-historia, yt-video, buffer-post) anotan cada publicación en /root/publicar/publicado.jsonl; los de
+// Instagram y YouTube, con su link. El cierre lo dice, con la hora de La Paz.
+const REGISTRO = [
+  { cuenta: "sergio", media: "1", trial: null, video: "/x/a.mp4", permalink: "https://www.instagram.com/reel/AAA/", media_product_type: "REELS", timestamp: "2026-09-29T16:31:05+0000" },
+  { cuenta: "sergio", media: "2", trial: "auto", video: "/x/y.mp4", permalink: "https://www.instagram.com/reel/YAP/", media_product_type: "REELS", timestamp: "2026-09-29T17:30:40+0000" },
+  { cuenta: "sergio", media: "3", tipo: "carrusel", dir: "/x/k", permalink: "https://www.instagram.com/p/CAR/", media_product_type: "FEED", timestamp: "2026-09-29T20:00:09+0000" },
+  { red: "youtube", cuenta: "sergio", id: "v1", url: "https://youtu.be/v1?a=1&b=<2>", privacidad: "public", video: "/x/l.mp4", fecha: "2026-09-30T01:15:00.000Z" },
+  { red: "buffer", canal: "c1", post: "p1", estado: "publica ya", cuando: "ya", video: "/x/a.mp4", fecha: "2026-09-29T16:35:00.000Z" },
+  { red: "buffer", canal: "c2", post: "p2", estado: "borrador", cuando: "ya", video: "/x/a.mp4", fecha: "2026-09-29T16:36:00.000Z" },
+  { cuenta: "sergio", media: "0", trial: null, video: "/x/viejo.mp4", permalink: "https://www.instagram.com/reel/AYER/", media_product_type: "REELS", timestamp: "2026-09-29T02:00:00+0000" },
+];
+
+test("el cierre dice qué salió hoy, con la hora de La Paz y el link, del registro de publicaciones", () => {
+  const b = banco({ repo: repoConCommits([]) });
+  const reg = join(b.dir, "publicado.jsonl");
+  writeFileSync(reg, REGISTRO.map((r) => JSON.stringify(r)).join("\n") + "\n{roto\n");
+  const msg = b.imprimir("noche", { ONIA_HOY: "2026-09-29", ONIA_PUBLICADO: reg });
+  const { PASÓ } = bloques(msg);
+  assert.match(
+    PASÓ,
+    /📣 <b>Hoy salió<\/b>\n• 12:31 Reel — https:\/\/www\.instagram\.com\/reel\/AAA\/\n• 13:30 Trial — https:\/\/www\.instagram\.com\/reel\/YAP\/\n• 16:00 Carrusel — https:\/\/www\.instagram\.com\/p\/CAR\/\n• 21:15 YouTube — https:\/\/youtu\.be\/v1\?a=1&amp;b=&lt;2&gt;\n• y 1 envío a Buffer \(TikTok, Shorts, LinkedIn\), sin link acá\./,
+  );
+  assert.doesNotMatch(msg, /AYER/, "lo de las 22:00 del día anterior en La Paz no es de hoy");
+});
+
+test("un día sin nada publicado lo dice, con lo que tenía el calendario", () => {
+  const b = banco({ repo: repoConCalendario() });
+  const reg = join(b.dir, "publicado.jsonl");
+  writeFileSync(reg, JSON.stringify(REGISTRO[0]) + "\n");
+  const { PASÓ } = bloques(b.imprimir("noche", { ONIA_HOY: "2026-10-10", ONIA_PUBLICADO: reg }));
+  assert.match(PASÓ, /📣 <b>Hoy no salió nada<\/b> en Instagram ni en YouTube \(el calendario tenía 3 pieza\(s\)\)\./);
+});
+
+test("sin el registro de publicaciones, el cierre dice que no lo pudo leer; la mañana no lo nombra", () => {
+  const b = banco({ repo: repoConCommits([]) });
+  const env = { ONIA_HOY: "2026-09-29", ONIA_PUBLICADO: join(b.dir, "no-existe.jsonl") };
+  assert.match(bloques(b.imprimir("noche", env)).PASÓ, /📣 No pude leer el registro de publicaciones: no sé qué salió hoy\./);
+  assert.doesNotMatch(b.imprimir("manana", env), /📣 <b>Hoy salió|registro de publicaciones/);
 });
