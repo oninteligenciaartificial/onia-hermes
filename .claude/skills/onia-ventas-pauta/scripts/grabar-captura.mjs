@@ -10,12 +10,17 @@
 //   {foto:"C1-agenda"} · {clic:"selector", envio:true}
 // Selectores = los del locator de Playwright ("text=Sin confirmar", "button:has-text('Aprobar')").
 //
-// FRENOS (nace de la nota del VSL: un clic en «Aprobar» puede mandar un mensaje de verdad):
-//  1. La cuenta tiene que parecer de prueba (correo con qa, demo, prueba o test); si no, no entra.
-//  2. Un clic en algo que diga aprobar, enviar, confirmar, pagar, cobrar, eliminar o borrar tiene que declarar
-//     "envio": true, y aun así solo corre con ONIA_GRABAR_PERMITE_ENVIO=1 (se pone DESPUÉS de verificar en G-01
-//     a quién le llega). Se revisa el plan entero ANTES de abrir el navegador y el texto real del botón antes del clic.
-//  3. No hay «escribir» en formularios: la grabación mira, no carga datos.
+// FRENOS (nace de la nota del VSL: un clic en «Aprobar» puede mandar un mensaje de verdad). Revisados por un
+// subagente independiente el 9-oct: el primer borrador dejaba pasar <input type=submit value="Aprobar">, «Aprobá»
+// (voseo) y un --base ajeno. Por eso NO se adivina qué botón es peligroso por su texto:
+//  1. TODO clic declara "envio": true y solo corre con ONIA_GRABAR_PERMITE_ENVIO=1 (se pone DESPUÉS de verificar en
+//     G-01 a quién le llega). El plan entero se revisa ANTES de abrir el navegador.
+//  2. El selector de un clic tiene que dar EXACTAMENTE un elemento, y el clic cae sobre él (Playwright comprueba
+//     que nada lo tape); el texto del botón queda en el .log.json.
+//  3. La cuenta tiene que ser de prueba (correo con qa, demo, prueba o test como palabra); si no, no entra.
+//  4. Solo se navega a rutas del propio sitio (nada de //otro-host, @ ni /api/): un GET puede mutar datos.
+//  5. --base solo acepta app.onia.com.bo, 127.0.0.1 y localhost; la contraseña no viaja a otro host.
+//  6. No hay «escribir» en formularios: la grabación mira, no carga datos.
 // Salida: <nombre>.mp4 (H.264, sin audio), las fotos en PNG y <nombre>.log.json con URL final y tiempos por paso.
 // En la nube, Chromium no confía en la CA del proxy: se le pasa la huella SPKI, igual que auditar-app.mjs.
 import { createRequire } from "node:module";
@@ -29,6 +34,9 @@ try { playwright = require("playwright"); } catch { playwright = createRequire("
 const { chromium } = playwright;
 
 const args = process.argv.slice(2);
+for (const a of args) {
+  if (a.startsWith("--") && !["--sin-login", "--base"].includes(a)) { console.error(`opción desconocida: ${a} (la forma es «--base URL», sin «=»)`); process.exit(2); }
+}
 const flag = (n) => args.includes(n);
 const valor = (n) => { const i = args.indexOf(n); return i >= 0 ? args[i + 1] : undefined; };
 const pos = args.filter((a, i) => !a.startsWith("--") && !(i > 0 && ["--base"].includes(args[i - 1])));
@@ -36,10 +44,15 @@ const [planPath, out] = pos;
 if (!planPath || !out) { console.error("uso: node grabar-captura.mjs <plan.json> <carpeta_salida> [--sin-login] [--base URL]"); process.exit(2); }
 
 const BASE = valor("--base") || process.env.ONIA_APP_URL || "https://app.onia.com.bo";
+let urlBase;
+try { urlBase = new URL(BASE); } catch { console.error(`--base no es una URL: ${BASE}`); process.exit(2); }
+if (!["app.onia.com.bo", "127.0.0.1", "localhost"].includes(urlBase.hostname) || !/^https?:$/.test(urlBase.protocol)) {
+  console.error(`--base ${urlBase.hostname}: solo app.onia.com.bo, 127.0.0.1 o localhost. La contraseña no viaja a otro host.`); process.exit(4);
+}
+const esLocal = ["127.0.0.1", "localhost"].includes(urlBase.hostname);
 const plan = JSON.parse(fs.readFileSync(planPath, "utf8"));
 const nombre = (plan.nombre || "captura").replace(/[^a-z0-9_-]+/gi, "_");
 const [W, H] = plan.vista || [1366, 900];
-const PELIGROSO = /aprobar|enviar|confirmar|pagar|cobrar|eliminar|borrar|cancelar cita|guardar/i;
 const permiteEnvio = process.env.ONIA_GRABAR_PERMITE_ENVIO === "1";
 
 // ---- Frenos que se revisan ANTES de abrir nada ----
@@ -48,18 +61,21 @@ const claves = new Set(["ir", "esperar", "mover", "anillo", "sin_anillos", "foto
 for (const [i, p] of pasos.entries()) {
   const mal = Object.keys(p).filter((k) => !claves.has(k));
   if (mal.length) { console.error(`paso ${i + 1}: clave desconocida (${mal.join(", ")}). No hay «escribir»: esto mira, no carga datos.`); process.exit(4); }
-  if (p.clic) {
-    const dice = PELIGROSO.test(p.clic);
-    if (dice && !p.envio) { console.error(`paso ${i + 1}: el clic «${p.clic}» suena a enviar o cambiar algo. Declare "envio": true o quítelo.`); process.exit(4); }
-    if (p.envio && !permiteEnvio) { console.error(`paso ${i + 1}: clic con "envio": true y falta ONIA_GRABAR_PERMITE_ENVIO=1. Antes: G-01, a quién le llega «Aprobar».`); process.exit(4); }
+  if (p.clic !== undefined) {
+    if (p.envio !== true) { console.error(`paso ${i + 1}: todo clic declara "envio": true (un clic puede mandar un mensaje de verdad, y por el texto no se adivina cuál).`); process.exit(4); }
+    if (!permiteEnvio) { console.error(`paso ${i + 1}: clic con "envio": true y falta ONIA_GRABAR_PERMITE_ENVIO=1. Antes: G-01, a quién le llega «Aprobar».`); process.exit(4); }
+  }
+  if (p.ir !== undefined && !(typeof p.ir === "string" && /^\/(?![\/\\])/.test(p.ir) && !/[@\\]|^\/api\//i.test(p.ir))) {
+    console.error(`paso ${i + 1}: «ir» solo acepta una ruta del sitio que empiece con una sola «/» (sin @, sin barras invertidas y sin /api/).`); process.exit(4);
   }
 }
 
 const sinLogin = flag("--sin-login");
 const email = process.env.ONIA_QA_EMAIL, password = process.env.ONIA_QA_PASSWORD;
+if (sinLogin && !esLocal) { console.error("--sin-login solo con un --base local (127.0.0.1 o localhost)"); process.exit(4); }
 if (!sinLogin) {
   if (!email || !password) { console.error("faltan ONIA_QA_EMAIL y ONIA_QA_PASSWORD en el entorno"); process.exit(2); }
-  if (!/(qa|demo|prueba|test)/i.test(email)) { console.error("el correo no parece de una cuenta de prueba: no se graba con una cuenta real ni con la de superadmin"); process.exit(4); }
+  if (!/(^|[._+-])(qa|demo|prueba|test)\d*([._+-]|@)/i.test(email)) { console.error("el correo no parece de una cuenta de prueba: no se graba con una cuenta real ni con la de superadmin"); process.exit(4); }
 }
 fs.mkdirSync(out, { recursive: true });
 
@@ -78,8 +94,7 @@ function spkiDeLaNube() {
   }
   return [...huellas].join(",");
 }
-const local = /^https?:\/\/(127\.0\.0\.1|localhost)/.test(BASE);
-const spki = local ? null : spkiDeLaNube();
+const spki = esLocal ? null : spkiDeLaNube();
 const opciones = spki
   ? { executablePath: "/opt/pw-browsers/chromium-1194/chrome-linux/chrome", proxy: { server: process.env.HTTPS_PROXY }, args: [`--ignore-certificate-errors-spki-list=${spki}`] }
   : { executablePath: fs.existsSync("/opt/pw-browsers/chromium-1194/chrome-linux/chrome") ? "/opt/pw-browsers/chromium-1194/chrome-linux/chrome" : undefined };
@@ -106,8 +121,8 @@ await ctx.addInitScript(() => {
   };
   if (document.readyState === "loading") addEventListener("DOMContentLoaded", poner); else poner();
 });
-const tCtx = Date.now(); // el video empieza aquí: lo que pasa antes del primer paso (el login) se recorta
 const page = await ctx.newPage();
+const tCtx = Date.now(); // el video empieza con la página: lo que pasa antes del primer paso (el login) se recorta
 const log = { nombre, base: BASE, vista: [W, H], pasos: [] };
 let mx = W / 2, my = H / 2;
 
@@ -128,12 +143,24 @@ async function mover(selector, pausa = 500) {
   await page.waitForTimeout(pausa);
 }
 
+// Todo lo que deja el login (el .webm trae el correo y puntos por la clave) se borra si algo falla antes de grabar.
+async function abortar(codigo, mensaje) {
+  console.error(mensaje);
+  await ctx.close().catch(() => {}); await browser.close().catch(() => {});
+  fs.rmSync(tmp, { recursive: true, force: true });
+  process.exit(codigo);
+}
 if (!sinLogin) {
-  await page.goto(`${BASE}/login`, { waitUntil: "networkidle" });
-  await page.fill("#login-email", email);
-  await page.fill("#login-password", password);
-  await Promise.all([page.waitForURL((u) => !u.pathname.startsWith("/login") || u.pathname.startsWith("/login/2fa"), { timeout: 30000 }).catch(() => {}), page.click('button[type="submit"]')]);
-  if (page.url().includes("/login")) { console.error("no entró o pide 2FA: usar una cuenta de prueba sin 2FA"); await ctx.close(); await browser.close(); process.exit(3); }
+  try {
+    await page.goto(`${BASE}/login`, { waitUntil: "networkidle" });
+    await page.fill("#login-email", email);
+    await page.fill("#login-password", password);
+    await Promise.all([page.waitForURL((u) => !u.pathname.startsWith("/login") || u.pathname.startsWith("/login/2fa"), { timeout: 30000 }).catch(() => {}), page.click('button[type="submit"]')]);
+  } catch (e) {
+    // el «Call log» de Playwright puede traer el valor que se estaba escribiendo: solo la primera línea
+    await abortar(3, `el login falló: ${String(e.message).split("\n")[0].replace(password, "***")}`);
+  }
+  if (page.url().includes("/login")) await abortar(3, "no entró o pide 2FA: usar una cuenta de prueba sin 2FA");
   log.entro = new URL(page.url()).pathname;
 }
 log.t0_ms = null;
@@ -144,7 +171,7 @@ for (const [i, p] of pasos.entries()) {
   const paso = { n: i + 1, ...p };
   try {
     if (p.ir) { const r = await page.goto(`${BASE}${p.ir}`, { waitUntil: "networkidle", timeout: 45000 }); paso.status = r ? r.status() : 0; await page.waitForTimeout(600); }
-    else if (p.esperar) await page.waitForTimeout(p.esperar);
+    else if (p.esperar !== undefined) await page.waitForTimeout(Number(p.esperar) || 0);
     else if (p.mover) await mover(p.mover, p.pausa ?? 500);
     else if (p.anillo) {
       const { b } = await caja(p.anillo);
@@ -157,12 +184,14 @@ for (const [i, p] of pasos.entries()) {
     }
     else if (p.sin_anillos) await page.evaluate(() => document.querySelectorAll(".__anillo").forEach((e) => e.remove()));
     else if (p.foto) await page.screenshot({ path: path.join(out, `${p.foto.replace(/[^a-z0-9_-]+/gi, "_")}.png`) });
-    else if (p.clic) {
-      const { loc } = await caja(p.clic);
-      const dice = ((await loc.innerText().catch(() => "")) + " " + (await loc.getAttribute("aria-label").catch(() => "") || "")).trim();
-      if (PELIGROSO.test(dice) && !(p.envio && permiteEnvio)) throw new Error(`el botón dice «${dice.slice(0, 40)}» y el paso no declaró envio con ONIA_GRABAR_PERMITE_ENVIO=1`);
+    else if (p.clic !== undefined) {
+      const n = await page.locator(p.clic).count();
+      if (n !== 1) throw new Error(`el selector del clic da ${n} elementos y tiene que dar exactamente 1: acótelo a la tarjeta`);
+      const { loc, b } = await caja(p.clic);
+      paso.boton = ((await loc.evaluate((e) => (e.innerText || e.value || e.title || e.getAttribute("aria-label") || e.tagName))).slice(0, 60));
       await mover(p.clic, p.pausa ?? 400);
-      await page.mouse.down(); await page.waitForTimeout(90); await page.mouse.up();
+      // el clic cae donde está la punta del cursor, sobre el mismo elemento, y Playwright falla si algo lo tapa
+      await loc.click({ position: { x: b.width * 0.8, y: b.height * 0.65 }, timeout: 5000 });
       await page.waitForTimeout(900);
     }
     else throw new Error("paso sin acción reconocida");

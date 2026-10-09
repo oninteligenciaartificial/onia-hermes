@@ -393,13 +393,16 @@ Trampas pagadas armando v3 (2-oct):
   (2) la punta cae al 80 % del ancho y 65 % del alto del elemento, no al centro: en el centro tapa el texto; (3) el video empieza al abrir el contexto: se recorta
   con `t0_ms` (el login queda fuera); (4) contra `127.0.0.1` no se pasa el proxy de la nube; (5) las fotos **traen el cursor y los anillos**: para una captura limpia
   no se pone `anillo` antes de la `foto`.
-- **Frenos, y por qué:** el VSL avisa que un clic en «Aprobar» puede mandar un mensaje de verdad. Solo entra con un correo `qa|demo|prueba|test`; un clic en algo que
-  suene a aprobar/enviar/confirmar/pagar/cobrar/eliminar/borrar/guardar exige `"envio": true` **y** `ONIA_GRABAR_PERMITE_ENVIO=1`; el plan se revisa entero antes de abrir el
-  navegador y el texto real del botón se lee antes del clic. Probados los seis caminos (plan válido, clic sin declarar, clic declarado sin permiso, palabra peligrosa en el
-  selector, clave desconocida, correo real).
+- **Frenos, y por qué (aprendido el 9-oct):** el VSL avisa que un clic en «Aprobar» puede mandar un mensaje de verdad. **Mi primer borrador adivinaba el botón peligroso por su texto y un
+  revisor independiente lo saltó seis veces**, todas reproducidas en una página local: `<input type=submit value="Aprobar">` (el `innerText` es vacío), «Aprobá» (la UI habla en voseo y la regex
+  no), un selector que apunta a otro botón, `--base=URL` con «=» (se ignoraba y caía a producción con el login real), una regex de correo de subcadena (`aqarias@`, `latest.perez@`) y un
+  `ir` a `/api/…` (un GET que muta). **Lección: un freno por el texto de la interfaz falla abierto; el freno sólido es no depender de él.** Hoy: todo clic exige `"envio": true` +
+  `ONIA_GRABAR_PERMITE_ENVIO=1`; el selector da exactamente un elemento y el clic cae sobre él; `--base` con lista de hosts; rutas sin `//`, `@` ni `/api/`; el login en `try/catch` que solo
+  imprime la primera línea (el «Call log» de Playwright puede traer lo que se escribía) y borra el `.webm` si falla. Probados los 14 caminos. **Regla del carril: un script que puede cambiar
+  datos de producción pasa por un revisor que no lo escribió antes de mergearse.**
 - **`scripts/vsl-animatic.mjs`:** tabla JSON de tramos → láminas PNG y un preview de 360×640 del largo exacto (con la pantalla marcada «Falta la captura aprobada»). Es para que
   Sergio Urcullo vea el ritmo **antes** de grabar o cortar; no es el video. Caso: `carousels/briefs/ads/VSL-CORTO-TABLA-DE-CORTES.md`. Trampa: el demuxer `concat` de
-  ffmpeg resuelve las rutas relativas contra la carpeta de la lista, no contra el cwd: se le pasan rutas absolutas.
+  ffmpeg resuelve las rutas relativas contra la carpeta de la lista, no contra el cwd: se le pasan rutas absolutas. Otra: `page.setContent` corre en `about:blank` y Chromium **no deja cargar la fuente local** (sale en Arial sin avisar); se escribe el HTML a un archivo y se abre por `file://`, y se comprueba con `document.fonts.check`.
 
 ## 5. La campaña de Meta
 

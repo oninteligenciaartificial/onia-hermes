@@ -58,9 +58,10 @@ El guion del VSL decía «el script de grabación no existe todavía». Ya exist
 
 - Planes listos como esqueleto: `…/scripts/grabar-captura.vsl-dental-C1-C7.plan.json` (sin clics, no envía nada) y `…-C2-clic.plan.json` (el clic en «Aprobar»).
   **Los selectores son los textos de las capturas viejas: se ajustan mirando la cuenta demo.**
-- **Frenos:** solo entra con un correo de cuenta de prueba (`qa`, `demo`, `prueba`, `test`); un clic en algo que diga aprobar, enviar, confirmar, pagar,
-  cobrar, eliminar, borrar o guardar tiene que declarar `"envio": true` **y** correr con `ONIA_GRABAR_PERMITE_ENVIO=1`, que se pone solo
-  **después** de verificar G-01 (a quién le llega «Aprobar»). No escribe en formularios.
+- **Frenos (revisados por un subagente independiente el 9-oct, que encontró seis saltos reales; arreglados y vueltos a probar):** **todo clic** declara `"envio": true` y corre solo con
+  `ONIA_GRABAR_PERMITE_ENVIO=1`, que se pone **después** de verificar G-01 (a quién le llega «Aprobar»); el selector tiene que dar exactamente un elemento; solo entra con un correo de
+  cuenta de prueba (`qa`, `demo`, `prueba` o `test` como palabra); solo navega a rutas del sitio (sin `//host`, `@` ni `/api/`); `--base` solo acepta `app.onia.com.bo`, `127.0.0.1` y
+  `localhost`. No escribe en formularios.
 - Hace falta `ONIA_QA_EMAIL` y `ONIA_QA_PASSWORD` en el entorno de Ventas: **hoy no están** (bloqueado de Sergio Urcullo, igual que la tarjeta en ONIA Ads).
 
 ## Qué falta y de quién

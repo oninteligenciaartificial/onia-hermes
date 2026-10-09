@@ -46,7 +46,7 @@ function lamina(s, i, n) {
 .badge{align-self:flex-start;font-size:25px;font-weight:800;letter-spacing:.05em;background:${bg};color:${fg};border-radius:12px;padding:10px 18px}
 .meta{font-size:22px;color:#8D9490;line-height:1.35}
 </style><body>
-<div class="top"><span class="t">${s.desde}–${s.hasta} s</span><span>${i + 1} / ${n} · ${esc(s.tipo)}</span></div>
+<div class="top"><span class="t">${esc(s.desde)}–${esc(s.hasta)} s</span><span>${i + 1} / ${n} · ${esc(s.tipo)}</span></div>
 <div class="dice ${s.dice ? "" : "vacio"}">${s.dice ? "«" + esc(s.dice) + "»" : "(sin voz)"}</div>
 ${caja}
 <div class="pie"><div class="badge">${etq}</div><div class="meta">Toma: ${esc(s.toma || "—")} · Filas: ${esc(s.filas || "—")}</div></div>
@@ -58,11 +58,16 @@ const page = await browser.newPage({ viewport: { width: 720, height: 1280 } });
 const lista = [];
 const segs = tabla.segmentos;
 for (const [i, s] of segs.entries()) {
-  await page.setContent(lamina(s, i, segs.length));
+  // setContent corre en about:blank y Chromium no deja cargar la fuente local desde ahí: se escribe un archivo y se abre por file://
+  const htmlPath = path.join(abs, `.lamina-${i + 1}.html`);
+  fs.writeFileSync(htmlPath, lamina(s, i, segs.length));
+  await page.goto(pathToFileURL(htmlPath).href);
   await page.evaluate(() => document.fonts.ready);
+  if (!(await page.evaluate(() => document.fonts.check("700 20px Archivo")))) console.error(`aviso: la fuente Archivo no cargó en la lámina ${i + 1}`);
+  fs.unlinkSync(htmlPath);
   const png = path.join(abs, `lamina-${String(i + 1).padStart(2, "0")}.png`);
   await page.screenshot({ path: png });
-  lista.push(`file '${png}'\nduration ${s.hasta - s.desde}`);
+  lista.push(`file '${png.replace(/'/g, "'\\''")}'\nduration ${s.hasta - s.desde}`);
 }
 await browser.close();
 lista.push(`file '${path.join(abs, `lamina-${String(segs.length).padStart(2, "0")}.png`)}'`);
