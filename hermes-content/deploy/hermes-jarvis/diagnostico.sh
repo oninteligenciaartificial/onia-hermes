@@ -367,5 +367,24 @@ fi
 echo "--- agendado en Instagram (timers pub-*):"
 systemctl list-timers 'pub-*' --all --no-pager 2>/dev/null | head -30
 
+sec "14. El SOUL de Hermes — qué secciones de main le faltan (9-oct)"
+# aplicar copia del SOUL de main solo las secciones que nombra (5c y 5d). Para decidir qué más copiar,
+# se compara por títulos `##`, sin la fecha del final («… (2026-09-30)»): aplicar busca el título por
+# su comienzo. Solo lectura: no se imprime el texto, solo los títulos.
+SOUL_VPS=/root/.hermes/SOUL.md
+titulos() { grep '^## ' | sed -E 's/[[:space:]]*\([0-9]{4}-[0-9]{2}-[0-9]{2}\)[[:space:]]*$//'; }
+if [ -r "$SOUL_VPS" ]; then
+  echo "el SOUL del VPS tiene $(grep -c '^## ' "$SOUL_VPS") sección(es); modificado $(stat -c '%y' "$SOUL_VPS" | cut -c1-19)"
+  T_MAIN=$(git -C /root/loops/onia-hermes show origin/main:hermes-content/deploy/hermes-agent/SOUL.md 2>/dev/null | titulos)
+  T_VPS=$(titulos < "$SOUL_VPS")
+  [ -n "$T_MAIN" ] || echo "(no pude leer el SOUL de origin/main en /root/loops/onia-hermes)"
+  echo "--- de main, le faltan:"
+  printf '%s\n' "$T_MAIN" | grep -vxF -f <(printf '%s\n' "$T_VPS") | grep . || echo "(ninguna)"
+  echo "--- tiene y main no:"
+  printf '%s\n' "$T_VPS" | grep -vxF -f <(printf '%s\n' "$T_MAIN") | grep . || echo "(ninguna)"
+else
+  echo "(no existe $SOUL_VPS)"
+fi
+
 sec "fin"
 echo "diagnóstico terminado $(date -u +%FT%TZ) — no se modificó nada"

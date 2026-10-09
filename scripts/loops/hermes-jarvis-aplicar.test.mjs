@@ -810,3 +810,25 @@ test("diagnóstico: sin registro de publicaciones, lo dice", () => {
   assert.equal(r.status, 0, r.stdout + r.stderr);
   assert.match(r.stdout, /no existe .*publicado\.jsonl/);
 });
+
+// ── diagnostico: qué secciones del SOUL le faltan a Hermes (9-oct) ─────────────────────────────────
+// `aplicar` copia del SOUL del repo solo las secciones que nombra. Para decidir qué más copiar hay que
+// ver qué tiene el SOUL del VPS. Sección 14, solo lectura: títulos `##` del VPS contra origin/main.
+test("diagnóstico: lista las secciones del SOUL de main que le faltan al SOUL del VPS", () => {
+  const v = vps();
+  writeFileSync(join(v.R, ".hermes", "SOUL.md"), "# SOUL viejo\n\n## Quién sos y cuál es tu oficio\n\ntexto\n\n## Su calendario y el cierre del día\n\nmás\n");
+  const diag = readFileSync(join(DIR, "diagnostico.sh"), "utf8");
+  const s14 = diag.slice(diag.indexOf('sec "14.'), diag.indexOf('sec "fin"'));
+  assert.ok(s14.length > 0, "no encontré la sección 14 del diagnóstico");
+  const guion = `REDACTAR_SED='s/a^//'\n` + readFileSync(join(DIR, "comun.sh"), "utf8") + "\n" + s14.replaceAll("/root/", v.R + "/");
+  const antes = readFileSync(join(v.R, ".hermes", "SOUL.md"), "utf8");
+  const r = spawnSync("bash", ["-s"], { input: guion, encoding: "utf8" });
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  const faltan = r.stdout.slice(r.stdout.indexOf("--- de main, le faltan:"), r.stdout.indexOf("--- tiene y main no:"));
+  assert.match(faltan, /## Formato fijo de cada mensaje/);
+  assert.match(faltan, /## Pedidos a Claude/);
+  assert.doesNotMatch(faltan, /## Su calendario y el cierre del día/, "la que ya tiene no falta");
+  assert.match(r.stdout, /el SOUL del VPS tiene 2 sección\(es\)/);
+  assert.match(r.stdout, /--- tiene y main no:\n\(ninguna\)/, "«Su calendario…» sin la fecha es la misma sección");
+  assert.equal(readFileSync(join(v.R, ".hermes", "SOUL.md"), "utf8"), antes, "solo lectura");
+});
