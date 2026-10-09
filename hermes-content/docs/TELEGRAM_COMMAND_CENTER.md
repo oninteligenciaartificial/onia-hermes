@@ -203,6 +203,8 @@ Hermes, su asistente, por Telegram. Cada corrida es UN pedido. Hablale siempre c
     llena el disco ni la red del VPS (5-oct, segundo MEDIUM de la madre v2);
   - exige un commit con árbol vacío, sin padre y de 16 KB como mucho, con la primera línea
     `respuesta <id> <estado> <firma>` y el mismo id que la rama;
+  - una respuesta que no pasa los controles no se entrega, pero le llega **un aviso por pedido**
+    («⛔ Rechazada · id · link»), sin el texto rechazado (revisión de la madre al #138, 9-oct);
   - **exige la firma del sello de ESE pedido** (HMAC-SHA256 del estado y del texto): otra firma, la forma
     vieja sin firma o un pedido sin sello no se entregan. Así nadie que solo pueda dejar ramas en el
     repo le hace llegar una respuesta falsa (5-oct, primer MEDIUM de la madre v2). Quien pueda cambiar
@@ -227,17 +229,34 @@ Hermes, su asistente, por Telegram. Cada corrida es UN pedido. Hablale siempre c
 | Abrir el portal del SIAT | aviso del SIN por uso automatizado (1-oct) | nadie |
 | Mergear sin un «sí» a ESE PR | `main` siempre compila y alimenta los deploys | Claude, con su «mergeá el PR N» y CI verde |
 
-## 8. Plan mínimo para encenderlo hoy, después de `aplicar`
+## 8. Cómo se enciende: `aplicar` y las pruebas P2 a P5
 
-| # | Paso | Quién | Listo cuando |
-|---|---|---|---|
-| 1 | Correr `aplicar` como está hoy en `main`, que enciende el resumen, el cierre, el calendario y la aduana | la madre (SSH) con el OK de Sergio Urcullo | la salida pasa de la sección 0 a la 8 sin ❌; la verifica control |
-| 2 | Mergear a `main` el PR de la vuelta sin token (recolector, guarda del autosync, prompt nuevo) | la madre | el sincronizador copia `onia-pedido-claude.sh` y `onia-respuestas-pedidos.sh` (≤1 h) |
-| 3 | Crear el entorno propio, la rutina y su token, y guardarlo en GitHub (§4, pasos 1 a 3) | Sergio Urcullo o la madre, en la web | la rutina usa el entorno «Pedidos de Hermes» (**sin variables**, **no** «Onia»), y existen el secreto `ONIA_RUTINA_PEDIDOS_TOKEN` y la variable `ONIA_RUTINA_PEDIDOS_URL` |
-| 4 | Correr `aplicar` otra vez, **por el workflow**: instala la skill, la regla y la llave. Es idempotente | Sergio Urcullo (un toque) o la madre con `gh workflow run` | la sección 5d dice «✅ pedidos a Claude: configurado» |
-| 5 | Prueba de punta a punta: por Telegram, «pedile a Claude: ¿cuántos cambios entraron hoy al sistema?» → le llega el texto con un código → le contesta el código a Hermes → link → respuesta ✅ | Sergio Urcullo | `diagnostico` sección 12 muestra el pedido en «listo» |
+> Vigente desde el 9-oct, con el #138 en `main`. La llave y `aplicar` los corre la madre desde la PC, con el
+> «sí» de Sergio Urcullo en SU sesión; la nube no llega al VPS. Las pruebas son las de
+> `ASISTENTE_CODEX_VS_HERMES.md` §6.
 
-Si el paso 4 se hace por SSH en vez de por el workflow, la llave sube por la alternativa de §4.4.
+**`aplicar`, en orden:**
+
+| # | Paso | Listo cuando |
+|---|---|---|
+| 1 | Esperar ≤1 h desde el merge: el sincronizador copia a `/root/bin` el emisor con sello y el recolector con tope. Si no llegaron, la sección 0 corre el sincronizador una vez y, si siguen faltando, sale sin tocar nada | la sección 0 no dice «todavía no está en /root/bin» |
+| 2 | Avisar al dueño del VPS de ese momento (infra, un dueño a la vez) | contestó que lo cede |
+| 3 | Entorno, rutina y llave (§4, pasos 1 a 3), con el prompt de §5 **de `main` de hoy** (el que trae `responder-pedido.sh` y la línea «Sello:»; el viejo, con `commit-tree`, ya no se entrega) | existen el secreto `ONIA_RUTINA_PEDIDOS_TOKEN` y la variable `ONIA_RUTINA_PEDIDOS_URL`; el entorno no tiene variables |
+| 4 | `gh workflow run hermes-jarvis.yml --ref main -f accion=aplicar`, entre las 06:30 y las 22:00 de La Paz (el aviso de «encendido» suena). Por SSH la llave no viaja (alternativa en §4.4) | el log pasa por 0, 1, 1b, 5, 5b, Fase A, 1c, 2, 3, 4, 5c, 5d, 6, 6b, 7 y 8 sin ❌; 1b dice «✅ llego a GitHub» y 5d «✅ pedidos a Claude: configurado» |
+| 5 | Si quedó un «🧪 Prueba de Jarvis» en su calendario (el log da el id), borrarlo con el conector de Google Calendar | no queda ninguno |
+| 6 | Avisarle a la sesión del carril: lee el log en GitHub y lo verifica sección por sección | el carril lo dio por bueno |
+
+Si algo sale mal: `gh workflow run hermes-jarvis.yml --ref main -f accion=revertir`. `aplicar` es todo o nada:
+si falla la Fase A, no tocó nada.
+
+**Pruebas después de `aplicar`:**
+
+| # | Cómo | Verde si |
+|---|---|---|
+| P2 | Un día completo. Al día siguiente: `gh workflow run hermes-jarvis.yml --ref main -f accion=diagnostico -f horas=24` | En `onia-tg.log` están el resumen de las 06:30 y el cierre de las 21:30, nada de 22:00 a 06:30, y fuera de eso solo las 4 interrupciones |
+| P3 | Sergio Urcullo le escribe a Hermes «pedile a Claude: ¿cuántos cambios entraron hoy al sistema?» → le llega el texto con un código → se lo contesta a Hermes → link → ✅ por la aduana (el recolector pasa cada 2 min). El tiempo, con `onia-pedido-claude.sh --lista` y los `.tsv` | Llega la respuesta firmada. Además mide por primera vez que la rutina pueda pushear `respuesta/*`; si no puede, el cierre de las 21:30 lo marca «sin respuesta» |
+| P4 | `aplicar` ya prueba crear, mover y cancelar su propio evento. La prueba real: «agendá una prueba mañana a las 7» → Hermes muestra el cambio → con su sí lo crea; «cancelá la prueba» → sí → lo cancela | El evento aparece y desaparece en su Google Calendar, y nada pasó sin su sí |
+| P5 | La madre, por SSH con el OK de Sergio Urcullo: `/root/bin/onia-tablero.sh create "Prueba P5"` y `/root/bin/onia-tablero.sh block <id> "Prueba P5: contestá ok <id>" --kind needs_input`. Él contesta `ok <id>` a Hermes | El aviso le llega en ≤2 min (fuera de la noche y de sus bloques) y la tarea sale de `blocked`. Después se completa |
 
 ## 9. Riesgos y límites conocidos, sin maquillar
 

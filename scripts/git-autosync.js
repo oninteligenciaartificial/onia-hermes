@@ -18,6 +18,7 @@
  */
 
 const { execSync, execFileSync } = require('child_process');
+const fs = require('fs');
 const os = require('os');
 const path = require('path');
 
@@ -31,8 +32,21 @@ const path = require('path');
 // Exactamente esos valores: «true», «0» u otro loop no habilitan nada. Frena el ACCIDENTE (el
 // fast-forward automático al soltar el turno), no a una sesión que pushee a main a propósito.
 // Pruebas: scripts/loops/pedido-rama.test.mjs.
+//
+// El de la madre vale SOLO en el checkout que ella marcó (revisiones del #138 y del #173, 9-oct). Sus procesos
+// hijos heredan la variable y sus subagentes trabajan en otros worktrees; y la madre misma corre en un
+// worktree (`claude -w`), así que «el clon principal» no la distingue. La marca es un archivo en el git-dir
+// de SU checkout: no se versiona, no se hereda y ningún otro worktree la comparte. Se pone una vez por
+// checkout: touch "$(git rev-parse --absolute-git-dir)/onia-autosync-main".
+const MARCA_MAIN = 'onia-autosync-main';
 function puedeMoverMain(env = process.env) {
-  return env.ONIA_AUTOSYNC_MAIN === '1' || env.ONIA_LOOP_ID === 'onia-cola';
+  if (env.ONIA_LOOP_ID === 'onia-cola') return true;
+  if (env.ONIA_AUTOSYNC_MAIN !== '1') return false;
+  const gd = tryGit(['rev-parse', '--absolute-git-dir']);
+  if (gd.ok && gd.out && fs.existsSync(path.join(gd.out, MARCA_MAIN))) return true;
+  console.log(`[autosync] permiso de main ignorado: este checkout no tiene la marca ${MARCA_MAIN} en su git-dir ` +
+    '(la madre la pone una vez en el suyo: touch "$(git rev-parse --absolute-git-dir)/onia-autosync-main")');
+  return false;
 }
 
 // Una sesión parada EN main y sin permiso no pushea main: sus commits van a esta rama, para un PR.

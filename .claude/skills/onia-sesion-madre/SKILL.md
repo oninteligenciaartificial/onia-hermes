@@ -196,6 +196,11 @@ Cómo contestar: <en tu transcript | SendMessage a «Sesión madre de Onia» | r
 ## El permiso de mover `main` (5-oct)
 
 - Desde el 5-oct el hook Stop solo mueve `main` con permiso (Sergio Urcullo: «sí, la madre sigue directo»).
+  **Desde el 9-oct exige además una MARCA en el checkout de la madre**, porque la madre corre en un worktree
+  (`claude -w`) y sus subagentes en otros que heredan la variable. Al arrancar una madre en un worktree nuevo,
+  una vez: `touch "$(git rev-parse --absolute-git-dir)/onia-autosync-main"` (en PowerShell:
+  `New-Item -ItemType File "$(git rev-parse --absolute-git-dir)/onia-autosync-main"`). Sin la marca, el log del
+  Stop dice «permiso de main ignorado» y su rama se pushea igual: no se pierde nada.
   La madre lo tiene con **`ONIA_AUTOSYNC_MAIN=1` en el `.claude/settings.local.json` de SU carpeta de
   onia-hermes** (`{"env": {"ONIA_AUTOSYNC_MAIN": "1"}}`), que git ignora desde el 5-oct. Así vale solo para las
   sesiones abiertas en esa carpeta. Nunca en `.claude/settings.json` (se lo daría a todas las sesiones, también

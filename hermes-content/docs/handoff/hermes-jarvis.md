@@ -1,5 +1,18 @@
 # Handoff — carril `hermes-jarvis` (Hermes, el Telegram y el calendario de Sergio Urcullo)
 
+> **ESTADO 9-oct — el #138 está en `main`** (mergeado por la madre el 9-oct 03:53 UTC, CI verde, con su
+> arreglo `9562df9a`). En el VPS **nada** encendido todavía.
+> - **En un PR nuevo (rama `claude/adoring-ramanujan-7sjzwv` reiniciada desde `main`), los 2 pendientes
+>   que dejó la madre:** el permiso `ONIA_AUTOSYNC_MAIN` exige además la marca `onia-autosync-main` en el
+>   git-dir del checkout de la madre (sus subagentes en otros worktrees no la tienen); y una respuesta
+>   rechazada le avisa a Sergio Urcullo, una vez por pedido (si la aduana falla, se reintenta). **La madre
+>   pone la marca una vez en su worktree** (comando en la skill `onia-sesion-madre`).
+> - **Cómo se enciende (runbook vigente):** `TELEGRAM_COMMAND_CENTER.md` §8 — `aplicar` en 6 pasos y las
+>   pruebas P2 a P5. Lo corre la madre desde la PC, con el «sí» de Sergio Urcullo en su sesión.
+> - **Modelo de Hermes:** `gpt-5-mini` en el chat y en 08:00/08:10; `gpt-5-nano` en 13:00/16:00 (skill).
+> - **Sigue pendiente de Sergio Urcullo:** el «sí» a la llave y `aplicar`; proteger `main` en GitHub.
+> - **Después:** formato corto (Pasó · Necesito · Sigue) en el SOUL de Hermes y en el resumen/cierre.
+
 > **ESTADO 5-oct ~21:30 UTC — sesión `session_01SQ7cvuDX5w5jDHk5VdhAEo`, rama
 > `claude/adoring-ramanujan-7sjzwv`, PR #138 (borrador).** Sergio Urcullo contestó en ESTA sesión:
 > **«Sí, la madre sigue directo»** (autosync) y **«Sí, arreglalos»** (los 3 MEDIUM).

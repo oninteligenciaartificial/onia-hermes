@@ -53,6 +53,7 @@ GITDIR="$ESTADO/respuestas.git"           # repo vacío y propio, NUEVO en cada 
 REGISTRO="$ESTADO/pedidos.tsv"            # ts_utc id carril hash session_id url (pedido-claude.sh)
 RESPUESTAS="$ESTADO/respuestas.tsv"       # ts_utc id estado (lo escribe este script)
 MIRADAS="$ESTADO/respuestas-miradas.tsv"  # ts_utc sha id resultado: cada commit se mira una vez
+RECHAZOS="$ESTADO/rechazos-avisados.tsv"  # ts_utc id: a qué pedidos ya se le avisó de una respuesta rechazada
 VENTANA=172800                            # 48 h
 SELLOS="$ESTADO/sellos"                   # un sello por pedido (lo escribe pedido-claude.sh)
 MAX_COMMIT=16384                          # bytes del commit entero (con la firma de la sesión)
@@ -167,6 +168,32 @@ with open(salida, "w", encoding="utf-8") as f:
     f.write(m.group(2).decode() + "\n" + texto)
 '
 
+# La PRIMERA línea es la que la aduana guarda cuando él está de noche o en un bloque: la corta a 90 BYTES
+# sin HTML (`cut -c` de GNU cuenta bytes, no letras). Tiene que alcanzar sola para saber qué pedido es y
+# dónde verlo. Si no entra, queda solo el emoji: el id y el link valen más.
+primera_linea() {  # primera_linea <corto> <id> <url>
+  local p
+  p="$1 · $2 · $(printf '%s' "${3:-(sin link)}" | esc)"
+  [ "$(printf '%s' "$p" | wc -c)" -le 90 ] || p="${1%% *} $2 · $(printf '%s' "${3:-(sin link)}" | esc)"
+  printf '%s' "$p"
+}
+
+# Una respuesta que no pasa los controles no se entrega, pero él tiene que saber que llegó algo (revisión
+# de la madre al #138, 9-oct: se descartaba en silencio). Un aviso por pedido, sin el texto rechazado: si
+# alguien la armó para engañarlo, no le llega ni una palabra. La respuesta buena que llegue después se
+# entrega igual.
+avisar_rechazo() {  # avisar_rechazo <id>
+  local id=$1 url msg
+  awk -F'\t' -v id="$id" '$2 == id { hay = 1 } END { exit !hay }' "$RECHAZOS" 2>/dev/null && return 0
+  url=$(awk -F'\t' -v id="$id" '$2 == id' "$REGISTRO" | tail -1 | cut -f6)
+  msg="$(primera_linea "⛔ Rechazada" "$id" "$url")
+Llegó una respuesta a tu pedido que no pasa los controles. No te la muestro.
+Si la de Claude no llega, mirá la sesión en el link."
+  ONIA_AVISO=interrumpe ONIA_AVISO_CLAVE="pedido-$id-rechazo" ONIA_AVISO_EMISOR=claude \
+    "$TG" "$msg" </dev/null >/dev/null 2>&1 || { log "· $id: la aduana no aceptó el aviso de rechazo"; return 1; }
+  printf '%s\t%s\n' "$(date -u +%s)" "$id" >> "$RECHAZOS"
+}
+
 entregar() {  # entregar <id> <estado> <texto> -> 0 entregada · 2 repetida · 1 la aduana no la aceptó
   local id=$1 estado=$2 texto=$3 fila carril url corto cabeza primera msg
   if awk -F'\t' -v id="$id" -v e="$estado" '$2 == id && $3 == e { hay = 1 } END { exit !hay }' "$RESPUESTAS" 2>/dev/null; then
@@ -180,12 +207,7 @@ entregar() {  # entregar <id> <estado> <texto> -> 0 entregada · 2 repetida · 1
     necesita-ok) corto="🙋 Falta tu ok"; cabeza="<b>Claude necesita tu ok</b>" ;;
     no-se-pudo)  corto="⚠️ No se pudo";  cabeza="<b>Claude no pudo con tu pedido</b>" ;;
   esac
-  # La PRIMERA línea es la que la aduana guarda cuando él está de noche o en un bloque: la corta a
-  # 90 BYTES sin HTML (`cut -c` de GNU cuenta bytes, no letras). Tiene que alcanzar sola para saber
-  # qué pedido es y dónde verlo. Si no entra, queda solo el emoji: el id y el link valen más.
-  primera="$corto · $id · $(printf '%s' "${url:-(sin link)}" | esc)"
-  [ "$(printf '%s' "$primera" | wc -c)" -le 90 ] \
-    || primera="${corto%% *} $id · $(printf '%s' "${url:-(sin link)}" | esc)"
+  primera=$(primera_linea "$corto" "$id" "$url")
   msg="$primera
 $cabeza ($carril)
 
@@ -225,18 +247,21 @@ while read -r SHA REF; do
   bajar "$ID"; RC=$?
   if [ "$RC" = 2 ]; then
     log "❌ $ID: la respuesta pasa de $TOPE_BAJADA_KB KB; corté la descarga y no la entrego"
+    avisar_rechazo "$ID" || continue      # sin el aviso, se reintenta en la próxima vuelta
     mirado "$SHA" "$ID" invalida; borrar_rama "$ID" "$SHA"; continue
   elif [ "$RC" != 0 ]; then
     log "❌ $ID: no pude bajar la respuesta (reintento en la próxima vuelta)"; continue
   fi
-  BAJADO=$(G rev-parse --verify -q "refs/respuestas/$ID^{commit}") || { log "❌ $ID: lo bajado no es un commit"; mirado "$SHA" "$ID" invalida; continue; }
+  BAJADO=$(G rev-parse --verify -q "refs/respuestas/$ID^{commit}") || { log "❌ $ID: lo bajado no es un commit"; avisar_rechazo "$ID" || continue; mirado "$SHA" "$ID" invalida; continue; }
   if [ "$(G cat-file -s "$BAJADO")" -gt "$MAX_COMMIT" ]; then
     log "❌ $ID: la respuesta pesa más de $MAX_COMMIT bytes; no la entrego"
+    avisar_rechazo "$ID" || continue      # sin el aviso, se reintenta en la próxima vuelta
     mirado "$BAJADO" "$ID" invalida; [ "$BAJADO" = "$SHA" ] || mirado "$SHA" "$ID" invalida
     borrar_rama "$ID" "$BAJADO"; continue
   fi
   if ! ERR=$(G cat-file commit "$BAJADO" | python3 -c "$LEER_PY" "$ID" "$TMP/r" "$MAX_TEXTO" "$VACIO" "$SELLOS/$ID" 2>&1); then
     log "❌ $ID: respuesta con forma inválida (${ERR##*$'\n'}); no la entrego"
+    avisar_rechazo "$ID" || continue      # sin el aviso, se reintenta en la próxima vuelta
     mirado "$BAJADO" "$ID" invalida; [ "$BAJADO" = "$SHA" ] || mirado "$SHA" "$ID" invalida
     borrar_rama "$ID" "$BAJADO"; continue
   fi

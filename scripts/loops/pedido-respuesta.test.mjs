@@ -127,7 +127,10 @@ exit 0
   const leer = (f) => (existsSync(join(dir, f)) ? readFileSync(join(dir, f), "utf8") : "");
   const objetos = () => git(join(estado, "respuestas.git"), ["cat-file", "--batch-all-objects", "--batch-check"]);
   return { dir, estado, nube, git, env, sellos, responder, responderCrudo, empujarCommit, commitCrudo, correr, ramas, leer, objetos,
-    envios: () => Number(leer("envios") || 0) };
+    envios: () => Number(leer("envios") || 0),
+    // Respuestas ENTREGADAS (no avisos): desde el 9-oct una rechazada no se entrega pero sí se avisa, una vez.
+    entregadas: () => leer("pedidos/respuestas.tsv").split("\n").filter(Boolean).length,
+    rechazosAvisados: () => leer("pedidos/rechazos-avisados.tsv").split("\n").filter(Boolean).length };
 }
 
 test("la respuesta de un pedido de Hermes sale por la aduana, como interrupción con clave propia", () => {
@@ -159,7 +162,8 @@ test("baja SOLO el commit: aunque la rama traiga el repo entero, ningún archivo
   const r = b.correr();
   assert.equal(r.status, 0, r.stdout + r.stderr);
   assert.match(r.stdout, /forma inválida \(el commit trae archivos/);
-  assert.equal(b.envios(), 0);
+  assert.equal(b.entregadas(), 0, "no se entregó");
+  assert.ok(b.rechazosAvisados() <= 1, "a lo sumo un aviso de rechazo por pedido");
   assert.doesNotMatch(b.objetos(), / blob /, "no se bajó ningún archivo");
   assert.doesNotMatch(b.objetos(), / tree /, "ni siquiera el árbol");
 });
@@ -171,7 +175,8 @@ test("un commit con historia (con padre) no se entrega, aunque su árbol esté v
   b.empujarCommit(ID, c);
   const r = b.correr();
   assert.match(r.stdout, /forma inválida \(el commit tiene padre/);
-  assert.equal(b.envios(), 0);
+  assert.equal(b.entregadas(), 0, "no se entregó");
+  assert.ok(b.rechazosAvisados() <= 1, "a lo sumo un aviso de rechazo por pedido");
 });
 
 test("la firma de la sesión (gpgsig) no estorba", () => {
@@ -202,14 +207,16 @@ test("ramas con otra forma, o un id distinto adentro del mensaje: no le escribe 
   b.responderCrudo(ID, "listo", "x", { rama: "otra-cosa" });
   b.responderCrudo(ID, "listo", "x", { rama: "p_1A2B3C4D" });
   assert.equal(b.correr().status, 0);
-  assert.equal(b.envios(), 0);
+  assert.equal(b.entregadas(), 0, "no se entregó");
+  assert.ok(b.rechazosAvisados() <= 1, "a lo sumo un aviso de rechazo por pedido");
   b.responderCrudo(ID, "listo", "x", { primera: `respuesta p_00000000 listo ${firmar(b.sellos[ID], "p_00000000", "listo", "x")}` });
   assert.match(b.correr().stdout, /el id del mensaje no es el de la rama/);
   b.responderCrudo(ID, "listo", "x", { primera: `respuesta ${ID} cualquiera ${firmar(b.sellos[ID], ID, "cualquiera", "x")}` });
   assert.match(b.correr().stdout, /la primera línea no es/);
   b.responderCrudo(ID, "listo", "   ");
   assert.match(b.correr().stdout, /respuesta vacía/);
-  assert.equal(b.envios(), 0);
+  assert.equal(b.entregadas(), 0, "no se entregó");
+  assert.ok(b.rechazosAvisados() <= 1, "a lo sumo un aviso de rechazo por pedido");
 });
 
 test("cada commit se mira una vez: uno inválido no se vuelve a bajar en cada vuelta", () => {
@@ -313,7 +320,8 @@ test("un commit de más de 16 KB no se entrega", () => {
   const b = banco();
   b.responderCrudo(ID, "listo", "x".repeat(20000)); // se comprime: baja entero y lo frena el tope de 16 KB
   assert.match(b.correr().stdout, /pesa más de 16384 bytes/);
-  assert.equal(b.envios(), 0);
+  assert.equal(b.entregadas(), 0, "no se entregó");
+  assert.ok(b.rechazosAvisados() <= 1, "a lo sumo un aviso de rechazo por pedido");
 });
 
 test("si la aduana no la acepta, no la da por respondida y la reintenta en la vuelta siguiente", () => {
@@ -338,7 +346,8 @@ test("una respuesta firmada con otro sello no se entrega: es de alguien que no t
   const r = b.correr();
   assert.equal(r.status, 0, r.stdout + r.stderr);
   assert.match(r.stdout, /forma inválida \(la firma no es la del sello de este pedido\)/);
-  assert.equal(b.envios(), 0);
+  assert.equal(b.entregadas(), 0, "no se entregó");
+  assert.ok(b.rechazosAvisados() <= 1, "a lo sumo un aviso de rechazo por pedido");
   assert.equal(b.ramas(), "", "la falsa se limpia");
   assert.equal(b.correr().stdout, "", "y no se vuelve a mirar");
   // La de verdad, que llega después, sí se entrega.
@@ -353,14 +362,16 @@ test("la firma cubre el estado y el texto: cambiar cualquiera de los dos la inva
   assert.match(b.correr().stdout, /la firma no es la del sello/);
   b.responderCrudo(ID, "necesita-ok", "Texto A", { primera: `respuesta ${ID} necesita-ok ${buena}` });
   assert.match(b.correr().stdout, /la firma no es la del sello/);
-  assert.equal(b.envios(), 0);
+  assert.equal(b.entregadas(), 0, "no se entregó");
+  assert.ok(b.rechazosAvisados() <= 1, "a lo sumo un aviso de rechazo por pedido");
 });
 
 test("la forma vieja, sin firma, ya no se entrega", () => {
   const b = banco();
   b.responderCrudo(ID, "listo", "Hola", { primera: `respuesta ${ID} listo` });
   assert.match(b.correr().stdout, /la primera línea no es «respuesta <id> <estado> <firma>»/);
-  assert.equal(b.envios(), 0);
+  assert.equal(b.entregadas(), 0, "no se entregó");
+  assert.ok(b.rechazosAvisados() <= 1, "a lo sumo un aviso de rechazo por pedido");
 });
 
 test("sin el sello del pedido en el VPS, nada se entrega (ni con una firma que parezca buena)", () => {
@@ -368,7 +379,8 @@ test("sin el sello del pedido en el VPS, nada se entrega (ni con una firma que p
   b.responder(ID, "listo", "Listo.");
   spawnSync("rm", ["-f", join(b.estado, "sellos", ID)]);
   assert.match(b.correr().stdout, /este pedido no tiene sello en el VPS/);
-  assert.equal(b.envios(), 0);
+  assert.equal(b.entregadas(), 0, "no se entregó");
+  assert.ok(b.rechazosAvisados() <= 1, "a lo sumo un aviso de rechazo por pedido");
 });
 
 test("el sello vive mientras el pedido está abierto: sigue tras «necesita-ok» y se borra al cerrarse", () => {
@@ -421,7 +433,8 @@ test("una respuesta enorme se corta MIENTRAS baja: el VPS no se la traga entera"
   const r = b.correr();
   assert.equal(r.status, 0, r.stdout + r.stderr);
   assert.match(r.stdout, /❌ p_1a2b3c4d: la respuesta pasa de 64 KB; corté la descarga y no la entrego/);
-  assert.equal(b.envios(), 0);
+  assert.equal(b.entregadas(), 0, "no se entregó");
+  assert.ok(b.rechazosAvisados() <= 1, "a lo sumo un aviso de rechazo por pedido");
   const repo = join(b.estado, "respuestas.git");
   const pesado = spawnSync("du", ["-sk", repo], { encoding: "utf8" }).stdout.split("\t")[0];
   assert.ok(Number(pesado) < 512, `el repo del VPS pesa ${pesado} KB (bajarla entera serían 3.072)`);
@@ -497,4 +510,38 @@ test("responder-pedido.sh no firma un texto que no es UTF-8 válido (git lo rees
   assert.equal(r.status, 65, String(r.stderr));
   assert.match(String(r.stderr), /no es UTF-8 válido/);
   assert.equal(b.ramas(), "");
+});
+
+// Revisión de la madre al #138 (9-oct): una respuesta rechazada se descartaba en SILENCIO. Ahora le llega un
+// aviso por pedido, sin el texto rechazado, y la respuesta buena que llegue después se entrega igual.
+test("una respuesta rechazada le avisa UNA vez por pedido, sin mostrarle el texto", () => {
+  const b = banco({ ids: [ID, "p_0000000a"] });
+  b.responderCrudo(ID, "necesita-ok", "Entrá a este link y poné tu clave", { sello: randomBytes(16).toString("hex") });
+  assert.equal(b.correr().status, 0);
+  assert.equal(b.envios(), 1);
+  assert.equal(b.leer("tg-env.txt").trim(), `interrumpe|pedido-${ID}-rechazo|claude|`, "respeta la noche y sus bloques");
+  const msg = b.leer("tg-msg.txt");
+  assert.match(msg, new RegExp(`^⛔ Rechazada · ${ID} · ${reEsc(URL_REAL)}\n`));
+  assert.ok(Buffer.byteLength(msg.split("\n")[0]) <= 90, "la primera línea entra entera en lo que guarda la aduana");
+  assert.doesNotMatch(msg, /clave|link y poné/, "el texto rechazado no le llega");
+  // Otra falsa para el mismo pedido: no suena de nuevo.
+  b.responderCrudo(ID, "listo", "Otra trampa", { sello: randomBytes(16).toString("hex") });
+  b.correr();
+  assert.equal(b.envios(), 1);
+  // La de verdad se entrega igual.
+  b.responder(ID, "listo", "Listo de verdad.");
+  assert.match(b.correr().stdout, /✅ p_1a2b3c4d: respuesta «listo» entregada/);
+  assert.equal(b.envios(), 2);
+});
+
+test("si la aduana no acepta el aviso de rechazo, lo reintenta en la vuelta siguiente", () => {
+  const b = banco({ tgFalla: true });
+  b.responderCrudo(ID, "listo", "Hola", { primera: `respuesta ${ID} listo` });
+  const r = b.correr();
+  assert.match(r.stdout, /la aduana no aceptó el aviso de rechazo/);
+  assert.equal(b.rechazosAvisados(), 0);
+  spawnSync("rm", ["-f", join(b.dir, "tg-falla")]);
+  b.correr();
+  assert.equal(b.rechazosAvisados(), 1, "la vuelta siguiente avisa");
+  assert.match(b.leer("tg-msg.txt"), /^⛔ Rechazada · p_1a2b3c4d · /);
 });
