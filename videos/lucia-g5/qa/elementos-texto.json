@@ -1,0 +1,236 @@
+[
+ {
+  "id": "rotulo",
+  "que": "rótulo de IA",
+  "texto": "Lucía Antelo · personaje IA de Onia",
+  "n": 6,
+  "a": 0,
+  "b": 3,
+  "min": 2.3999999999999995
+ },
+ {
+  "id": "dA-g",
+  "que": "gancho dato",
+  "texto": "parecido 0,81",
+  "n": 2,
+  "a": 3.98,
+  "b": 5.550000000000001,
+  "min": 1
+ },
+ {
+  "id": "sc-ax0",
+  "que": "p2 «0»",
+  "texto": "0",
+  "n": 1,
+  "a": 14.85,
+  "b": 20.75,
+  "min": 0.6499999999999999
+ },
+ {
+  "id": "sc-ax1",
+  "que": "p2 «idéntica · 1»",
+  "texto": "idéntica · 1",
+  "n": 2,
+  "a": 17.15,
+  "b": 20.75,
+  "min": 1
+ },
+ {
+  "id": "sc-mkl",
+  "que": "p2 «mi piso»",
+  "texto": "mi piso · 0,70",
+  "n": 3,
+  "a": 18.830000000000002,
+  "b": 20.75,
+  "min": 1.3499999999999999
+ },
+ {
+  "id": "dA-e1",
+  "que": "ejemplo A dato",
+  "texto": "Imagen A · parecido 0,81",
+  "n": 4,
+  "a": 21.48,
+  "b": 23.599999999999998,
+  "min": 1.7
+ },
+ {
+  "id": "dA-e2",
+  "que": "ejemplo F dato",
+  "texto": "Imagen F · parecido 0,66",
+  "n": 4,
+  "a": 24.48,
+  "b": 26.599999999999998,
+  "min": 1.7
+ },
+ {
+  "id": "dA-e3",
+  "que": "ejemplo B dato",
+  "texto": "Imagen B · café · parecido 0,35",
+  "n": 5,
+  "a": 27.48,
+  "b": 29.599999999999998,
+  "min": 2.05
+ },
+ {
+  "id": "r1-tag",
+  "que": "r1 «89 px»",
+  "texto": "89 px",
+  "n": 2,
+  "a": 31.2,
+  "b": 36.75,
+  "min": 1
+ },
+ {
+  "id": "r1-nota",
+  "que": "r1 nota",
+  "texto": "Bajo 200 px, lo reviso a ojo.",
+  "n": 7,
+  "a": 33.58,
+  "b": 36.75,
+  "min": 2.7499999999999996
+ },
+ {
+  "id": "r2-m1",
+  "que": "r2 marca 0,70",
+  "texto": "0,70",
+  "n": 1,
+  "a": 36.95,
+  "b": 42.75,
+  "min": 0.6499999999999999
+ },
+ {
+  "id": "r2-m2",
+  "que": "r2 marca 0,75",
+  "texto": "0,75",
+  "n": 1,
+  "a": 36.95,
+  "b": 42.75,
+  "min": 0.6499999999999999
+ },
+ {
+  "id": "r2-m3",
+  "que": "r2 marca 0,80",
+  "texto": "0,80",
+  "n": 1,
+  "a": 36.95,
+  "b": 42.75,
+  "min": 0.6499999999999999
+ },
+ {
+  "id": "r2-m4",
+  "que": "r2 marca 0,85",
+  "texto": "0,85",
+  "n": 1,
+  "a": 36.95,
+  "b": 42.75,
+  "min": 0.6499999999999999
+ },
+ {
+  "id": "r2-m5",
+  "que": "r2 marca 0,90",
+  "texto": "0,90",
+  "n": 1,
+  "a": 36.95,
+  "b": 42.75,
+  "min": 0.6499999999999999
+ },
+ {
+  "id": "r2-v1",
+  "que": "r2 valor 1",
+  "texto": "0,79",
+  "n": 1,
+  "a": 37.35,
+  "b": 42.75,
+  "min": 0.6499999999999999
+ },
+ {
+  "id": "r2-v2",
+  "que": "r2 valor 2",
+  "texto": "0,77",
+  "n": 1,
+  "a": 38.55,
+  "b": 42.75,
+  "min": 0.6499999999999999
+ },
+ {
+  "id": "r2-bl",
+  "que": "r2 banda",
+  "texto": "±0,03",
+  "n": 1,
+  "a": 38,
+  "b": 42.75,
+  "min": 0.6499999999999999
+ },
+ {
+  "id": "r2-pie",
+  "que": "r2 pie",
+  "texto": "Mismo clip, dos momentos.",
+  "n": 4,
+  "a": 38.68,
+  "b": 42.75,
+  "min": 1.7
+ },
+ {
+  "id": "r2-nota",
+  "que": "r2 nota",
+  "texto": "±0,03: solo un orden de magnitud.",
+  "n": 6,
+  "a": 40.18,
+  "b": 42.75,
+  "min": 2.3999999999999995
+ },
+ {
+  "id": "r3-lab",
+  "que": "r3 «letrero inventado»",
+  "texto": "letrero inventado",
+  "n": 2,
+  "a": 44.28,
+  "b": 47.25,
+  "min": 1
+ },
+ {
+  "id": "r3-num",
+  "que": "r3 número",
+  "texto": "parecido 0,80",
+  "n": 2,
+  "a": 44.68,
+  "b": 47.25,
+  "min": 1
+ },
+ {
+  "id": "r3-nota",
+  "que": "r3 nota",
+  "texto": "El programa solo compara caras.",
+  "n": 5,
+  "a": 44.38,
+  "b": 47.25,
+  "min": 2.05
+ },
+ {
+  "id": "le-t1",
+  "que": "lección 1",
+  "texto": "Cara chica",
+  "n": 2,
+  "a": 48.65,
+  "b": 53.25,
+  "min": 1
+ },
+ {
+  "id": "le-t2",
+  "que": "lección 2",
+  "texto": "Diferencia de 0,03",
+  "n": 3,
+  "a": 49.45,
+  "b": 53.25,
+  "min": 1.3499999999999999
+ },
+ {
+  "id": "le-t3",
+  "que": "lección 3",
+  "texto": "Letrero inventado",
+  "n": 2,
+  "a": 50.25,
+  "b": 53.25,
+  "min": 1
+ }
+]

@@ -1,0 +1,3 @@
+b9b5fb2a7e938ca4619b068bac74ab989fd3b3ce61165392592b830987fcdd28  out/g5-final-1080x1920.mp4
+c0138e870bd962adf136b351c529a4862eb09f4deffb926bccf916c5eb2c519e  ../lucia-entrega/g5-final-1080x1920.mp4 (copia de entrega)
+5e14c60cd7b2e627ac50848581ff5930  index.html (md5 del que se renderizó; idéntico)

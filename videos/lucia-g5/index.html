@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1080, height=1920">
+<title>Lucía · G5</title>
+<script src="assets/vendor/gsap.min.js"></script>
+<style>
+@font-face{font-family:"Bricolage Grotesque";src:url(assets/fonts/BricolageGrotesque-var-latin.woff2) format("woff2");font-weight:500 700;font-style:normal;font-display:block}
+@font-face{font-family:"DM Sans";src:url(assets/fonts/DMSans-var-latin.woff2) format("woff2");font-weight:400 500;font-style:normal;font-display:block}
+@font-face{font-family:"Spline Sans Mono";src:url(assets/fonts/SplineSansMono-var-latin.woff2) format("woff2");font-weight:400 500;font-style:normal;font-display:block}
+:root{--acc:#10C26B;--bad:#FF7A66;--ink:#0A0C11;--ink2:#15181F;--txt:#F6F8FB;--mut:rgba(246,248,251,.88);--hair:rgba(255,255,255,.12)}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#0A0C11}
+body{font-family:"DM Sans",sans-serif;-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision;font-variant-ligatures:none}
+#root{position:relative;width:1080px;height:1920px;overflow:hidden;background:#0A0C11}
+/* el fondo va en un hijo a sangre completa: el productor puede perder el background del propio root */
+#ground{position:absolute;left:0;top:0;width:1080px;height:1920px;background:linear-gradient(180deg,#10141B 0%,#0A0C11 100%);z-index:0}
+
+/* ── contenedores de tarjeta: un clip por tarjeta, a lienzo completo; el ancla fija dónde cae ── */
+.cc{position:absolute;left:0;top:0;width:1080px;height:1920px;display:flex;justify-content:center;pointer-events:none;z-index:10}
+.cc-bot{align-items:flex-end;padding-bottom:calc(1920px - var(--b))}
+.cc-top{align-items:flex-start;padding-top:var(--t)}
+.cw{position:relative;width:max-content;max-width:920px}
+/* pila de la parte baja: [sello] / [dato] / tarjeta. La posición la fija el navegador: nada se mide a mano */
+.stk{display:flex;flex-direction:column;align-items:center;gap:16px}
+/* sombra de la tarjeta: dos capas con filter:blur (el box-shadow grande de Chromium deja costuras por mosaicos de 256 px) */
+.sh{position:absolute;display:block}
+.sh1{left:24px;right:24px;top:70px;bottom:-22px;border-radius:10px;background:rgba(0,0,0,.62);filter:blur(48px)}
+.sh2{left:0;right:0;top:10px;bottom:-10px;border-radius:34px;background:rgba(0,0,0,.32);filter:blur(13px)}
+.card{position:relative;width:100%;background:linear-gradient(158deg,var(--ink2) 0%,var(--ink) 62%);border:1px solid var(--hair);border-radius:35px;padding:41px 53px 45px 64px;overflow:hidden}
+.rail{position:absolute;left:0;top:0;bottom:0;width:12px;background:linear-gradient(180deg,var(--acc),#0a7a43)}
+.t{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:66px;line-height:1.12;letter-spacing:-.01em;color:var(--txt);text-wrap:balance}
+.t b{color:var(--acc);font-weight:700}
+.t b.late{color:var(--txt)}
+
+/* ── rótulo de IA y etiquetas de dato (pastilla) ── */
+.tag{display:inline-flex;align-items:center;gap:16px;padding:14px 28px;border-radius:999px;background:rgba(10,12,17,.84);border:1px solid rgba(255,255,255,.16);box-shadow:0 14px 36px rgba(0,0,0,.38);font-family:"DM Sans",sans-serif;font-weight:500;color:#F6F8FB;font-size:34px;letter-spacing:.01em;white-space:nowrap}
+.tag i{flex:none;width:15px;height:15px;border-radius:50%;background:var(--acc);box-shadow:0 0 18px var(--acc)}
+.tag.bajo i{background:var(--bad);box-shadow:0 0 18px var(--bad)}
+.tag-d{font-size:38px;padding:14px 28px}
+.tag b,.rt b{font-family:"Spline Sans Mono",monospace;font-weight:500}
+.drow{display:flex;align-items:center;gap:14px}
+
+
+
+/* ── placas de evidencia (regla, lecciones, puntaje del Motor 6) ── */
+.pl{position:absolute;left:0;top:0;width:1080px;height:1920px;overflow:hidden;background:linear-gradient(180deg,#10141B 0%,#0A0C11 100%);z-index:4}
+.ab{position:absolute}
+.ref{position:absolute;border-radius:24px;overflow:hidden;border:4px solid rgba(255,255,255,.22);background:#0A0C11;box-shadow:0 22px 50px -16px rgba(0,0,0,.7)}
+.ref img{display:block;width:100%;height:100%;object-fit:cover}
+.cen{position:absolute;left:0;width:1080px;display:flex;justify-content:center}
+.trk{position:absolute;height:26px;border-radius:13px;background:#2B303A;overflow:hidden}
+.trk .zona{position:absolute;top:0;bottom:0;background:var(--acc);opacity:.9}
+.mkv{position:absolute;width:6px;margin-left:-3px;border-radius:3px;background:var(--acc);box-shadow:0 0 16px rgba(16,194,107,.6)}
+.mkl{position:absolute;transform:translateX(-50%)}
+.ax{position:absolute;font-family:"Spline Sans Mono",monospace;font-weight:500;font-size:38px;line-height:1.2;color:var(--mut);white-space:nowrap}
+.ax.r{text-align:right}
+.rt{position:absolute;font-family:"DM Sans",sans-serif;font-weight:500;font-size:40px;line-height:1.2;color:#F6F8FB;white-space:nowrap}
+.rl{position:absolute;height:10px;border-radius:5px;background:#2B303A}
+.dot{position:absolute;width:34px;height:34px;margin-left:-17px;margin-top:-17px;border-radius:50%}
+.dot.s{border:5px solid #F6F8FB;background:#0A0C11}
+.dot.f{background:var(--acc);box-shadow:0 0 18px rgba(16,194,107,.5)}
+.dot.f.bajo{background:var(--bad);box-shadow:0 0 18px rgba(255,122,102,.5)}
+.vl{position:absolute;font-family:"Spline Sans Mono",monospace;font-weight:500;font-size:38px;line-height:1.2;color:#F6F8FB;white-space:nowrap;transform:translateX(-50%);background:rgba(10,12,17,.92);padding:0 10px;border-radius:10px}
+.vl.bajo{color:var(--bad)}
+.barring{position:absolute;border:5px solid #F6F8FB;border-radius:18px;box-shadow:0 0 22px rgba(246,248,251,.35)}
+
+
+/* ── G4: fotos a pantalla completa (el contenedor viaja en el empuje y recorta; la <img> hace el empuje lento) ── */
+.ph{position:absolute;left:0;top:0;width:1080px;height:1920px;overflow:hidden;background:#0A0C11}
+.ph img{position:absolute;left:0;top:0;width:1080px;height:1920px;object-fit:cover;display:block}
+/* imagen que cae justo en el piso (D, 0,702): ni verde ni coral, para no anunciarla como aprobada */
+.tag.ne i{background:#F6F8FB;box-shadow:0 0 18px rgba(246,248,251,.55)}
+.dot.f.ne{background:#F6F8FB;box-shadow:0 0 18px rgba(246,248,251,.5)}
+.vl.ne{color:#F6F8FB}
+/* lección 2: tres escenas de B (fichas) y las dos fotos del café con su pie */
+.chip{position:absolute;border-radius:28px;background:linear-gradient(158deg,var(--ink2) 0%,var(--ink) 62%);border:1px solid var(--hair);overflow:hidden}
+.chip .rt{position:absolute;left:0;right:0;top:12px;text-align:center}
+.chip .cn{position:absolute;left:0;right:0;top:58px;text-align:center;font-family:"Spline Sans Mono",monospace;font-weight:500;font-size:84px;line-height:1;color:var(--acc)}
+.chip .cn.bajo{color:var(--bad)}
+.cph{position:absolute;border-radius:24px;overflow:hidden;border:4px solid rgba(255,255,255,.22);background:#0A0C11;box-shadow:0 22px 50px -16px rgba(0,0,0,.7)}
+.cph img{display:block;width:100%;height:100%;object-fit:cover}
+.cap{display:flex;flex-direction:column;align-items:center;gap:2px;white-space:nowrap}
+.cap .cv{font-family:"Spline Sans Mono",monospace;font-weight:500;font-size:48px;line-height:1.1;color:var(--acc)}
+.cap .cv.bajo{color:var(--bad)}
+/* el número es el dato de cada escena: más grande que el resto de la pastilla */
+.tag.dg{padding:8px 30px 10px}
+.tag.dg b{font-size:64px;line-height:1}
+
+/* ── 2da pasada (revisión 1) ── */
+/* rótulo de IA a 40 px (H7) */
+.tag.tag-r{font-size:40px;padding:14px 30px}
+/* la nota del ruido (lección 1): texto principal, 44 px, blanco pleno (H3+H7) */
+.note{font-family:"DM Sans",sans-serif;font-weight:500;font-size:44px;line-height:1.2;color:#F6F8FB;text-align:center;text-wrap:balance;max-width:940px}
+/* franja entre 0,66 y 0,70 sobre la escala de la lección 1 */
+.ruido{position:absolute;background:rgba(246,248,251,.15);border-left:2px solid rgba(246,248,251,.45);border-right:2px solid rgba(246,248,251,.45)}
+/* lección 2: tabla de A y B en tres escenas */
+.thd{position:absolute;text-align:center;font-family:"DM Sans",sans-serif;font-weight:500;font-size:38px;line-height:1.2;color:rgba(246,248,251,.92);white-space:nowrap}
+.rl2{position:absolute;font-family:"DM Sans",sans-serif;font-weight:500;font-size:40px;line-height:1.2;color:#F6F8FB;white-space:nowrap}
+.chip.s .cn{top:18px;font-size:64px}
+
+/* ── G5 ── */
+/* acento de tarjeta en coral (lo que sale bajo el piso) */
+.t b.bad{color:var(--bad)}
+.t b.late.bad{color:var(--txt)}
+/* caja de cara (la caja SCRFD con margen): verde si pasa el piso, coral si no; hace el mismo empuje lento que la foto */
+.fz{position:absolute}
+.fbox{position:absolute;left:0;top:0;right:0;bottom:0;border:5px solid var(--acc);border-radius:26px;box-shadow:0 0 26px rgba(16,194,107,.55),0 0 0 2px rgba(0,0,0,.28);opacity:0}
+.fbox.bad{border-color:var(--bad);box-shadow:0 0 26px rgba(255,122,102,.55),0 0 0 2px rgba(0,0,0,.28)}
+/* ventanas de cuadro (clip crudo) y lupa */
+.win{position:absolute;overflow:hidden;border-radius:24px;border:4px solid rgba(255,255,255,.28);background:#0A0C11;box-shadow:0 22px 50px -16px rgba(0,0,0,.7)}
+.win img{position:absolute;left:0;top:0;display:block;width:100%;height:100%}
+.lupa{position:absolute;border-radius:28px;border:6px solid var(--acc);background-repeat:no-repeat;box-shadow:0 22px 50px -16px rgba(0,0,0,.7),0 0 26px rgba(16,194,107,.35)}
+.lupa.bad{border-color:var(--bad);box-shadow:0 22px 50px -16px rgba(0,0,0,.7),0 0 26px rgba(255,122,102,.35)}
+/* aro sobre el letrero inventado: coral (lo que está mal) */
+.aro{position:absolute;border:6px solid var(--bad);border-radius:50%;box-shadow:0 0 22px rgba(255,122,102,.55),0 0 0 2px rgba(0,0,0,.28)}
+/* escala ampliada de la razón 2: corchete de ±0,03, marcas, valores */
+.brk{position:absolute;height:18px;border:4px solid #F6F8FB;border-bottom:0;border-radius:10px 10px 0 0}
+.tkm{position:absolute;width:4px;height:14px;background:rgba(246,248,251,.7);border-radius:2px}
+.ax.c{text-align:center}
+.vl.g{font-size:48px;line-height:1.2}
+.note.g{font-family:"Spline Sans Mono",monospace;font-weight:500;font-size:48px}
+.cap2{font-family:"DM Sans",sans-serif;font-weight:500;font-size:44px;line-height:1.2;color:#F6F8FB;white-space:nowrap}
+/* lección: tres filas (miniatura + nombre) y la caja de «imagen entera» */
+.thumb{position:absolute;border-radius:26px;border:5px solid rgba(255,255,255,.28);background-color:#10141B;background-repeat:no-repeat;overflow:hidden;box-shadow:0 18px 40px -12px rgba(0,0,0,.7)}
+.thumb .trk{position:absolute}
+.rowt{position:absolute;font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:56px;line-height:1.1;color:#F6F8FB;white-space:nowrap}
+.anillo{position:absolute;border:6px solid var(--acc);border-radius:44px;box-shadow:0 0 34px rgba(16,194,107,.45);opacity:0}
+/* paso 2: las 8 referencias en fila */
+.ref.q{border-radius:16px;border-width:3px}
+
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="57.5" data-width="1080" data-height="1920" data-fps="24">
+<div id="ground"></div>
+<div id="f-gancho" class="clip ph" data-start="0" data-duration="6" data-track-index="20" style="z-index:1"><img id="f-gancho-i" src="assets/ph-a.jpg" data-layout-allow-overflow alt=""><div class="fz" id="f-gancho-bz" style="left:429px;top:429px;width:210px;height:244px"><div class="fbox" id="f-gancho-box"></div></div></div>
+<div id="f-e1" class="clip ph" data-start="20.75" data-duration="3.25" data-track-index="21" style="z-index:1"><img id="f-e1-i" src="assets/ph-a.jpg" data-layout-allow-overflow alt=""><div class="fz" id="f-e1-bz" style="left:429px;top:429px;width:210px;height:244px"><div class="fbox" id="f-e1-box"></div></div></div>
+<div id="f-e2" class="clip ph" data-start="23.75" data-duration="3.25" data-track-index="22" style="z-index:1"><img id="f-e2-i" src="assets/ph-f.jpg" data-layout-allow-overflow alt=""><div class="fz" id="f-e2-bz" style="left:397px;top:288px;width:330px;height:395px"><div class="fbox bad" id="f-e2-box"></div></div></div>
+<div id="f-e3" class="clip ph" data-start="26.75" data-duration="3.25" data-track-index="23" style="z-index:1"><img id="f-e3-i" src="assets/cafe-b.jpg" data-layout-allow-overflow alt=""><div class="fz" id="f-e3-bz" style="left:320px;top:233px;width:321px;height:430px"><div class="fbox bad" id="f-e3-box"></div></div></div>
+<div id="f-cierre" class="clip ph" data-start="53.25" data-duration="4.25" data-track-index="24" style="z-index:1"><img id="f-cierre-i" src="assets/ph-k.jpg" data-layout-allow-overflow alt=""></div>
+<div id="cc-rotulo" class="clip cc cc-top" data-start="0" data-duration="3.18" data-track-index="40" style="--t:720px"><div class="cw" id="rotulo"><span class="tag tag-r"><i></i>Lucía Antelo · personaje IA de Onia</span></div></div>
+<div id="pl-p1" class="clip pl" data-start="5.75" data-duration="5.75" data-track-index="41" style="position:absolute;left:0;top:0;width:1080px;height:1920px;z-index:4"><div class="ref" id="rf1" style="left:70px;top:420px;width:220px;height:220px"><img src="assets/ref1.jpg" alt=""></div><div class="ref" id="rf2" style="left:310px;top:420px;width:220px;height:220px"><img src="assets/ref2.jpg" alt=""></div><div class="ref" id="rf3" style="left:550px;top:420px;width:220px;height:220px"><img src="assets/ref3.jpg" alt=""></div><div class="ref" id="rf4" style="left:790px;top:420px;width:220px;height:220px"><img src="assets/ref4.jpg" alt=""></div><div class="ref" id="rf5" style="left:70px;top:660px;width:220px;height:220px"><img src="assets/ref5.jpg" alt=""></div><div class="ref" id="rf6" style="left:310px;top:660px;width:220px;height:220px"><img src="assets/ref6.jpg" alt=""></div><div class="ref" id="rf7" style="left:550px;top:660px;width:220px;height:220px"><img src="assets/ref7.jpg" alt=""></div><div class="ref" id="rf8" style="left:790px;top:660px;width:220px;height:220px"><img src="assets/ref8.jpg" alt=""></div></div>
+<div id="pl-p2" class="clip pl" data-start="11.25" data-duration="9.75" data-track-index="42" style="position:absolute;left:0;top:0;width:1080px;height:1920px;z-index:4"><div class="ref q" id="q1" style="left:105px;top:400px;width:100px;height:100px"><img src="assets/ref1.jpg" alt=""></div><div class="ref q" id="q2" style="left:215px;top:400px;width:100px;height:100px"><img src="assets/ref2.jpg" alt=""></div><div class="ref q" id="q3" style="left:325px;top:400px;width:100px;height:100px"><img src="assets/ref3.jpg" alt=""></div><div class="ref q" id="q4" style="left:435px;top:400px;width:100px;height:100px"><img src="assets/ref4.jpg" alt=""></div><div class="ref q" id="q5" style="left:545px;top:400px;width:100px;height:100px"><img src="assets/ref5.jpg" alt=""></div><div class="ref q" id="q6" style="left:655px;top:400px;width:100px;height:100px"><img src="assets/ref6.jpg" alt=""></div><div class="ref q" id="q7" style="left:765px;top:400px;width:100px;height:100px"><img src="assets/ref7.jpg" alt=""></div><div class="ref q" id="q8" style="left:875px;top:400px;width:100px;height:100px"><img src="assets/ref8.jpg" alt=""></div><svg class="ab" id="p2-flecha" style="left:500px;top:530px" width="80" height="150" viewBox="0 0 80 150"><line x1="40" y1="0" x2="40" y2="144" stroke="#F6F8FB" stroke-opacity=".85" stroke-width="6" stroke-linecap="round"/><path d="M14 116 L40 144 L66 116" fill="none" stroke="#F6F8FB" stroke-opacity=".85" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="trk" id="sc-trk" style="left:100px;top:860px;width:880px"><div class="zona" id="sc-zona" style="left:616px;right:0"></div></div><div class="mkv" id="sc-mk" style="left:716px;top:798px;height:96px"></div><div class="ab" style="left:436px;top:750px;width:560px;display:flex;justify-content:center;"><span class="tag tag-d" id="sc-mkl"><i></i>mi piso · <b>0,70</b></span></div><div class="ax" id="sc-ax0" style="left:100px;top:910px">0</div><div class="ax r" id="sc-ax1" style="left:560px;width:420px;top:910px">idéntica · 1</div></div>
+<div id="pl-r1" class="clip pl" data-start="29.75" data-duration="7.25" data-track-index="43" style="position:absolute;left:0;top:0;width:1080px;height:1920px;z-index:4"><div class="win" id="r1-win" style="left:70px;top:320px;width:480px;height:600px"><img src="assets/fr-m5.jpg" alt=""></div><div class="fbox bad" id="r1-box" style="left:275px;top:528px;width:109px;height:130px"></div><div class="ab" style="left:180px;top:462px;width:300px;display:flex;justify-content:center;"><span class="tag tag-d bajo" id="r1-tag"><i></i>89 px</span></div><svg class="ab" id="r1-lineas" style="left:0;top:0" width="1080" height="1000" viewBox="0 0 1080 1000"><line x1="384" y1="593" x2="640" y2="550" stroke="#FF7A66" stroke-width="5" stroke-opacity=".9" stroke-linecap="round"/></svg><div class="lupa bad" id="r1-lupa" style="left:640px;top:380px;width:340px;height:340px;background-image:url(assets/fr-m5.jpg);background-size:1255px 1569px;background-position:-509px -544px"></div><div class="ab" style="left:70px;top:1010px;width:940px;display:flex;justify-content:center;"><span class="note" id="r1-nota">Bajo 200 px, lo reviso a ojo.</span></div></div>
+<div id="pl-r2" class="clip pl" data-start="36.75" data-duration="6.25" data-track-index="44" style="position:absolute;left:0;top:0;width:1080px;height:1920px;z-index:4"><div class="ruido" id="r2-band" style="left:364px;top:636px;width:264px;height:114px"></div><div class="trk" id="r2-trk" style="left:100px;top:707px;width:880px"><div class="zona" style="left:0;right:0"></div></div><div class="tkm" style="left:98px;top:733px"></div><div class="ax c" id="r2-m1" style="left:30px;width:140px;top:750px">0,70</div><div class="tkm" style="left:318px;top:733px"></div><div class="ax c" id="r2-m2" style="left:250px;width:140px;top:750px">0,75</div><div class="tkm" style="left:538px;top:733px"></div><div class="ax c" id="r2-m3" style="left:470px;width:140px;top:750px">0,80</div><div class="tkm" style="left:758px;top:733px"></div><div class="ax c" id="r2-m4" style="left:690px;width:140px;top:750px">0,85</div><div class="tkm" style="left:978px;top:733px"></div><div class="ax c" id="r2-m5" style="left:910px;width:140px;top:750px">0,90</div><div class="brk" id="r2-brk" style="left:364px;top:620px;width:264px"></div><div class="ab" style="left:346px;top:560px;width:300px;display:flex;justify-content:center;"><span class="note g" id="r2-bl">±0,03</span></div><div class="dot f" id="r2-d1" style="left:496px;top:720px"></div><div class="dot f" id="r2-d2" style="left:408px;top:720px"></div><div class="ab" style="left:264px;top:640px;width:200px;display:flex;justify-content:center;"><span class="vl g" id="r2-v2" style="position:static;transform:none">0,77</span></div><div class="ab" style="left:440px;top:640px;width:200px;display:flex;justify-content:center;"><span class="vl g" id="r2-v1" style="position:static;transform:none">0,79</span></div><div class="ab" style="left:70px;top:860px;width:940px;display:flex;justify-content:center;"><span class="cap2" id="r2-pie">Mismo clip, dos momentos.</span></div><div class="ab" style="left:70px;top:1010px;width:940px;display:flex;justify-content:center;"><span class="note" id="r2-nota">±0,03: solo un orden de magnitud.</span></div></div>
+<div id="pl-r3" class="clip pl" data-start="42.75" data-duration="4.75" data-track-index="45" style="position:absolute;left:0;top:0;width:1080px;height:1920px;z-index:4"><div class="win" id="r3-win" style="left:230px;top:300px;width:620px;height:680px"><img src="assets/fr-m4.jpg" alt=""></div><div class="aro" id="r3-aro" style="left:220px;top:354px;width:108px;height:72px"></div><div class="ab" style="left:50px;top:1005px;width:980px;display:flex;justify-content:center;gap:24px"><span class="tag tag-d bajo" id="r3-lab"><i></i>letrero inventado</span><span class="tag tag-d dg" id="r3-num"><i></i>parecido <b>0,80</b></span></div><div class="ab" style="left:70px;top:1110px;width:940px;display:flex;justify-content:center;"><span class="note" id="r3-nota">El programa solo compara caras.</span></div></div>
+<div id="pl-lec" class="clip pl" data-start="47.25" data-duration="6.25" data-track-index="46" style="position:absolute;left:0;top:0;width:1080px;height:1920px;z-index:4"><div class="thumb" id="le-i1" style="left:80px;top:340px;width:240px;height:240px;background-image:url(assets/fr-m5.jpg);background-size:886px 1108px;background-position:-359px -384px"></div><div class="thumb" id="le-i2" style="left:80px;top:620px;width:240px;height:240px"><div class="ruido" style="left:79px;top:88px;width:61px;height:124px"></div><div class="trk" style="left:18px;top:143px;width:204px;height:14px"><div class="zona" style="left:0;right:0"></div></div><div class="dot f" style="left:110px;top:150px;width:24px;height:24px;margin-left:-12px;margin-top:-12px"></div><div class="dot f" style="left:89px;top:150px;width:24px;height:24px;margin-left:-12px;margin-top:-12px"></div></div><div class="thumb" id="le-i3" style="left:80px;top:900px;width:240px;height:240px;background-image:url(assets/fr-m4.jpg);background-size:1145px 1255px;background-position:0px -45px"><div class="aro" style="left:4px;top:69px;width:152px;height:101px;border-width:5px"></div></div><div class="rowt" id="le-t1" style="left:360px;top:431px">Cara chica</div><div class="rowt" id="le-t2" style="left:360px;top:711px">Diferencia de 0,03</div><div class="rowt" id="le-t3" style="left:360px;top:991px">Letrero inventado</div><div class="anillo" id="le-ring" style="left:50px;top:312px;width:950px;height:856px"></div></div>
+<div id="cc-c1" class="clip cc cc-bot" data-start="0.083" data-duration="2.917" data-track-index="3" style="--b:1470px"><div class="stk"><div class="cw" id="c1"><i class="sh sh1"></i><i class="sh sh2"></i><div class="card"><div class="rail"></div><div class="t">¿Cómo sé que <b class="late">esta es ella?</b></div></div></div></div></div>
+<div id="cc-c2" class="clip cc cc-bot" data-start="2.958" data-duration="3.042" data-track-index="4" style="--b:1470px"><div class="stk"><div class="drow" id="d-g"><span class="tag tag-d dg" id="dA-g"><i></i>parecido <b>0,81</b></span></div><div class="cw" id="c2"><i class="sh sh1"></i><i class="sh sh2"></i><div class="card"><div class="rail"></div><div class="t">Con un número.<br><b class="late">Y con ojo.</b></div></div></div></div></div>
+<div id="cc-c3" class="clip cc cc-bot" data-start="5.75" data-duration="3" data-track-index="3" style="--b:1470px"><div class="stk"><div class="cw" id="c3"><i class="sh sh1"></i><i class="sh sh2"></i><div class="card"><div class="rail"></div><div class="t">1 · Ocho <b class="late">fotos oficiales.</b></div></div></div></div></div>
+<div id="cc-c4" class="clip cc cc-bot" data-start="8.708" data-duration="2.792" data-track-index="4" style="--b:1470px"><div class="stk"><div class="cw" id="c4"><i class="sh sh1"></i><i class="sh sh2"></i><div class="card"><div class="rail"></div><div class="t">Su cara <b class="late">oficial, fija.</b></div></div></div></div></div>
+<div id="cc-c5" class="clip cc cc-bot" data-start="11.25" data-duration="2.75" data-track-index="3" style="--b:1470px"><div class="stk"><div class="cw" id="c5"><i class="sh sh1"></i><i class="sh sh2"></i><div class="card"><div class="rail"></div><div class="t">2 · Un programa <b class="late">las compara.</b></div></div></div></div></div>
+<div id="cc-c6" class="clip cc cc-bot" data-start="13.958" data-duration="2.792" data-track-index="4" style="--b:1470px"><div class="stk"><div class="cw" id="c6"><i class="sh sh1"></i><i class="sh sh2"></i><div class="card"><div class="rail"></div><div class="t">Un número, <b class="late">de 0 a 1.</b></div></div></div></div></div>
+<div id="cc-c7" class="clip cc cc-bot" data-start="16.708" data-duration="1.792" data-track-index="3" style="--b:1470px"><div class="stk"><div class="cw" id="c7"><i class="sh sh1"></i><i class="sh sh2"></i><div class="card"><div class="rail"></div><div class="t">Idéntica <b>es 1.</b></div></div></div></div></div>
+<div id="cc-c8" class="clip cc cc-bot" data-start="18.458" data-duration="2.542" data-track-index="4" style="--b:1470px"><div class="stk"><div class="cw" id="c8"><i class="sh sh1"></i><i class="sh sh2"></i><div class="card"><div class="rail"></div><div class="t">Piso, 0,70. <b class="late">Lo elegí yo.</b></div></div></div></div></div>
+<div id="cc-c9" class="clip cc cc-bot" data-start="20.75" data-duration="3.25" data-track-index="3" style="--b:1470px"><div class="stk"><div class="drow" id="d-e1"><span class="tag tag-d dg" id="dA-e1"><i></i>Imagen A · parecido <b>0,81</b></span></div><div class="cw" id="c9"><i class="sh sh1"></i><i class="sh sh2"></i><div class="card"><div class="rail"></div><div class="t">0,81: <b>es ella.</b></div></div></div></div></div>
+<div id="cc-c10" class="clip cc cc-bot" data-start="23.75" data-duration="3.25" data-track-index="4" style="--b:1470px"><div class="stk"><div class="drow" id="d-e2"><span class="tag tag-d dg bajo" id="dA-e2"><i></i>Imagen F · parecido <b>0,66</b></span></div><div class="cw" id="c10"><i class="sh sh1"></i><i class="sh sh2"></i><div class="card"><div class="rail"></div><div class="t">0,66: <b class="bad">se parece poco.</b></div></div></div></div></div>
+<div id="cc-c11" class="clip cc cc-bot" data-start="26.75" data-duration="3.25" data-track-index="3" style="--b:1470px"><div class="stk"><div class="drow" id="d-e3"><span class="tag tag-d dg bajo" id="dA-e3"><i></i>Imagen B · café · parecido <b>0,35</b></span></div><div class="cw" id="c11"><i class="sh sh1"></i><i class="sh sh2"></i><div class="card"><div class="rail"></div><div class="t">0,35: <b class="bad">otra persona.</b></div></div></div></div></div>
+<div id="cc-c12" class="clip cc cc-bot" data-start="29.75" data-duration="2.75" data-track-index="4" style="--b:1470px"><div class="stk"><div class="cw" id="c12"><i class="sh sh1"></i><i class="sh sh2"></i><div class="card"><div class="rail"></div><div class="t">3 · Desconfiá <b>del número.</b></div></div></div></div></div>
+<div id="cc-c13" class="clip cc cc-bot" data-start="32.458" data-duration="4.542" data-track-index="3" style="--b:1470px"><div class="stk"><div class="cw" id="c13"><i class="sh sh1"></i><i class="sh sh2"></i><div class="card"><div class="rail"></div><div class="t">Cara chica: <b class="late">poco confiable.</b></div></div></div></div></div>
+<div id="cc-c14" class="clip cc cc-bot" data-start="36.75" data-duration="6.25" data-track-index="4" style="--b:1470px"><div class="stk"><div class="cw" id="c14"><i class="sh sh1"></i><i class="sh sh2"></i><div class="card"><div class="rail"></div><div class="t">Una diferencia<br><b class="late">de 0,03 no cuenta.</b></div></div></div></div></div>
+<div id="cc-c15" class="clip cc cc-bot" data-start="42.75" data-duration="4.75" data-track-index="3" style="--b:1470px"><div class="stk"><div class="cw" id="c15"><i class="sh sh1"></i><i class="sh sh2"></i><div class="card"><div class="rail"></div><div class="t">No ve letreros <b class="late">inventados.</b></div></div></div></div></div>
+<div id="cc-c16" class="clip cc cc-bot" data-start="47.25" data-duration="6.25" data-track-index="4" style="--b:1470px"><div class="stk"><div class="cw" id="c16"><i class="sh sh1"></i><i class="sh sh2"></i><div class="card"><div class="rail"></div><div class="t">Por eso, mirá <b class="late">la imagen entera.</b></div></div></div></div></div>
+<div id="cc-c17" class="clip cc cc-bot" data-start="53.25" data-duration="4.25" data-track-index="3" style="--b:1470px"><div class="stk"><div class="cw" id="c17"><i class="sh sh1"></i><i class="sh sh2"></i><div class="card"><div class="rail"></div><div class="t">Seguime:<br><b class="late">cada semana, una prueba.</b></div></div></div></div></div>
+</div>
+<script>
+window.__timelines = window.__timelines || {};
+const PLAN = {"W":1080,"H":1920,"FR":0.041666666666666664,"PUSH":0.25,"PEASE":"power3.inOut","E_IN":0.18,"E_OUT":0.18,"costuras":[{"t":6,"sale":["f-gancho","c2"],"entra":["pl-p1","c3"]},{"t":11.5,"sale":["pl-p1","c4"],"entra":["pl-p2","c5"]},{"t":21,"sale":["pl-p2","c8"],"entra":["f-e1","c9"]},{"t":24,"sale":["f-e1","c9"],"entra":["f-e2","c10"]},{"t":27,"sale":["f-e2","c10"],"entra":["f-e3","c11"]},{"t":30,"sale":["f-e3","c11"],"entra":["pl-r1","c12"]},{"t":37,"sale":["pl-r1","c13"],"entra":["pl-r2","c14"]},{"t":43,"sale":["pl-r2","c14"],"entra":["pl-r3","c15"]},{"t":47.5,"sale":["pl-r3","c15"],"entra":["pl-lec","c16"]},{"t":53.5,"sale":["pl-lec","c16"],"entra":["f-cierre","c17"]}],"ACC":"#10C26B","DUR":57.5,"zoom":1.04,"fotos":[{"id":"f-gancho","a":0,"b":6,"ox":534,"oy":555,"foto":"a"},{"id":"f-e1","a":20.75,"b":24,"ox":534,"oy":555,"foto":"a"},{"id":"f-e2","a":23.75,"b":27,"ox":562,"oy":490,"foto":"f"},{"id":"f-e3","a":26.75,"b":30,"ox":481,"oy":452,"foto":"cafe_b"},{"id":"f-cierre","a":53.25,"b":57.5,"ox":716,"oy":863,"foto":"k"}],"cajas":[{"id":"f-gancho-box","zid":"f-gancho-bz","medio":"f-gancho","t":3.3,"ox":105,"oy":126},{"id":"f-e1-box","zid":"f-e1-bz","medio":"f-e1","t":21.25,"ox":105,"oy":126},{"id":"f-e2-box","zid":"f-e2-bz","medio":"f-e2","t":24.25,"ox":165,"oy":202},{"id":"f-e3-box","zid":"f-e3-bz","medio":"f-e3","t":27.25,"ox":161,"oy":219}],"tarjetas":[{"id":"c1","a":0.083,"b":3,"acento_t":1.4,"en_empuje_entra":false,"en_empuje_sale":false},{"id":"c2","a":2.958,"b":6,"acento_t":4.4,"en_empuje_entra":false,"en_empuje_sale":true},{"id":"c3","a":5.75,"b":8.75,"acento_t":7,"en_empuje_entra":true,"en_empuje_sale":false},{"id":"c4","a":8.708,"b":11.5,"acento_t":10,"en_empuje_entra":false,"en_empuje_sale":true},{"id":"c5","a":11.25,"b":14,"acento_t":12.9,"en_empuje_entra":true,"en_empuje_sale":false},{"id":"c6","a":13.958,"b":16.75,"acento_t":15.4,"en_empuje_entra":false,"en_empuje_sale":false},{"id":"c7","a":16.708,"b":18.5,"acento_t":null,"en_empuje_entra":false,"en_empuje_sale":false},{"id":"c8","a":18.458,"b":21,"acento_t":19.9,"en_empuje_entra":false,"en_empuje_sale":true},{"id":"c9","a":20.75,"b":24,"acento_t":null,"en_empuje_entra":true,"en_empuje_sale":true},{"id":"c10","a":23.75,"b":27,"acento_t":null,"en_empuje_entra":true,"en_empuje_sale":true},{"id":"c11","a":26.75,"b":30,"acento_t":null,"en_empuje_entra":true,"en_empuje_sale":true},{"id":"c12","a":29.75,"b":32.5,"acento_t":null,"en_empuje_entra":true,"en_empuje_sale":false},{"id":"c13","a":32.458,"b":37,"acento_t":34.7,"en_empuje_entra":false,"en_empuje_sale":true},{"id":"c14","a":36.75,"b":43,"acento_t":41.2,"en_empuje_entra":true,"en_empuje_sale":true},{"id":"c15","a":42.75,"b":47.5,"acento_t":45.4,"en_empuje_entra":true,"en_empuje_sale":true},{"id":"c16","a":47.25,"b":53.5,"acento_t":50.8,"en_empuje_entra":true,"en_empuje_sale":true},{"id":"c17","a":53.25,"b":57.5,"acento_t":55,"en_empuje_entra":true,"en_empuje_sale":false}],"rotulo":{"texto":"Lucía Antelo · personaje IA de Onia","a":0,"b":3,"top":720},"datos":[{"id":"g","a":3.8,"fin":5.65},{"id":"e1","a":21.3,"fin":23.7},{"id":"e2","a":24.3,"fin":26.7},{"id":"e3","a":27.3,"fin":29.7}],"p1":{"fila2":6.15,"esc":0.1,"aro_t":10},"p2":{"flecha_t":12.1,"y":860,"dibuja_t":14.1,"dura":0.5,"ejes_t":14.6,"uno_t":16.9,"marca_t":18.6,"marca_label_y":750},"r1":{"box_t":30.5,"tag_t":30.95,"lupa_t":31.4,"nota_t":33.4},"r2":{"d1":37.1,"d2":38.3,"banda":37.7,"pie":38.5,"nota":40},"r3":{"aro":43.7,"lab":44.1,"num":44.5,"nota":44.2},"lec":{"filas":[{"n":1,"t":48.4},{"n":2,"t":49.2},{"n":3,"t":50}],"anillo_t":51.9}};
+// Timeline único (pausado, determinista). Doctrina de movimiento (motion-doctrine + cut-the-curve), igual que G1-G4:
+//  · LA CORRIENTE es hacia la izquierda: todo entra desde la derecha y sale por la izquierda. No hay excepciones en G5.
+//  · TARJETAS: entrada y salida con la misma duración (0,18 s), la misma distancia (80 px) y eases espejados (power3.out / power3.in); la
+//    siguiente arranca 1 cuadro ANTES de que la anterior termine de salir (nunca más de 1 cuadro sin tarjeta). En cada empuje VIAJAN con la imagen.
+//  · COSTURAS DE PANTALLA COMPLETA: empuje rígido de 6 cuadros a la izquierda; lo que sale y lo que entra comparten curva y duración y están
+//    pegados borde con borde (T = el segundo del guion: desde T la escena nueva está en reposo). El medio entrante arranca en T−6 cuadros.
+//  · FOTOS: empuje lento 1,00 → 1,04 en línea recta (ease none) sobre la <img> y su caja de cara, con el origen en el centro de la cara medida; el
+//    contenedor (overflow:hidden) es el que viaja en el empuje rígido, así los bordes siguen pegados. Sin morph, sin vaivén.
+//  · sin vaivén ocioso: cada tramo tiene un evento visual cada 1,5-3 s (tarjeta, dato, caja, lupa, escala, fila, acento). Las fotos solo llevan ese empuje.
+//  · lo que ya está en la placa cuando llega (la fila de arriba de las 8 referencias, la fila de las 8 pequeñas, la escala ampliada, las miniaturas de la
+//    lección) viaja con el empuje: se acabaron las entradas casi vacías.
+const tl = gsap.timeline({ paused: true });
+const { E_IN, E_OUT, FR, PUSH, PEASE, W, ACC } = PLAN;
+const IN_X = 80, OUT_X = -80;
+const enter = (sel, a, o = {}) => tl.fromTo(sel, { x: o.x ?? IN_X, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: o.d ?? E_IN, ease: 'power3.out' }, a);
+const leave = (sel, b, o = {}) => tl.to(sel, { x: o.x ?? OUT_X, autoAlpha: 0, duration: o.d ?? E_OUT, ease: 'power3.in' }, b - (o.d ?? E_OUT));
+
+// ── EMPUJE rígido (costura de pantalla completa): los que salen van de 0 a −W y los que entran de +W a 0, con la misma curva
+const empuje = (T, sale, entra) => {
+  const t0 = T - PUSH, S = sale.map((i) => '#' + i).join(','), E = entra.map((i) => '#' + i).join(',');
+  if (S) tl.fromTo(S, { x: 0 }, { x: -W, duration: PUSH, ease: PEASE, immediateRender: false }, t0);
+  if (E) tl.fromTo(E, { x: W }, { x: 0, duration: PUSH, ease: PEASE }, t0);
+};
+for (const c of PLAN.costuras) empuje(c.t, c.sale, c.entra);
+
+// ── empuje lento sobre cada foto (dura lo que dura el contenedor, empujes incluidos); la caja de cara hace el mismo zoom con el mismo origen
+for (const f of PLAN.fotos) tl.fromTo('#' + f.id + '-i', { scale: 1, transformOrigin: f.ox + 'px ' + f.oy + 'px' }, { scale: PLAN.zoom, duration: f.b - f.a, ease: 'none' }, f.a);
+for (const c of PLAN.cajas) {
+  const f = PLAN.fotos.find((x) => x.id === c.medio);
+  tl.fromTo('#' + c.zid, { scale: 1, transformOrigin: c.ox + 'px ' + c.oy + 'px' }, { scale: PLAN.zoom, duration: f.b - f.a, ease: 'none' }, f.a);   // misma escala y mismo origen que la foto
+  tl.fromTo('#' + c.id, { autoAlpha: 0, scale: 1.25, transformOrigin: '50% 50%' }, { autoAlpha: 1, scale: 1, duration: 0.3, ease: 'power3.out' }, c.t);
+}
+
+// ── rótulo de IA: ya está en pantalla en el cuadro 0 (sin entrada), se ve ENTERO hasta los 3,0 s y recién ahí sale por la izquierda
+leave('#rotulo', PLAN.rotulo.b + E_OUT, { x: -60 });
+
+// ── tarjetas narrativas
+const FIN = PLAN.DUR - 1e-6;
+for (const c of PLAN.tarjetas) {
+  if (!c.en_empuje_entra) enter('#' + c.id, c.a);
+  if (c.b < FIN && !c.en_empuje_sale) leave('#' + c.id, c.b);
+  // acento tardío: la segunda mitad de la frase se enciende a mitad de tarjeta (evento visual real, sin texto nuevo)
+  if (c.acento_t) tl.to('#' + c.id + ' b.late', { color: ACC, duration: 0.2, ease: 'none' }, c.acento_t);
+}
+
+// ── datos (pastilla «parecido 0,81» sobre la tarjeta): entran y salen antes del empuje de salida
+for (const m of PLAN.datos) { enter('#dA-' + m.id, m.a, { x: 60 }); leave('#dA-' + m.id, m.fin, { x: -60 }); }
+
+// ── paso 1: la fila de abajo de las 8 referencias entra de a una; «fija.» enciende el borde de las 8
+{
+  const P1 = PLAN.p1;
+  for (let i = 5; i <= 8; i++) enter('#rf' + i, P1.fila2 + (i - 5) * P1.esc, { x: 70, d: 0.28 });
+  tl.to('#pl-p1 .ref', { borderColor: ACC, duration: 0.25, ease: 'none' }, P1.aro_t);
+}
+
+// ── paso 2: flecha de las 8 a la escala, la escala se dibuja, «idéntica · 1» se enciende, cae la marca de 0,70 con «mi piso»
+{
+  const E = PLAN.p2;
+  tl.fromTo('#p2-flecha', { y: -30, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.3, ease: 'power3.out' }, E.flecha_t);
+  tl.fromTo('#sc-trk', { scaleX: 0, transformOrigin: '0% 50%' }, { scaleX: 1, duration: E.dura, ease: 'power2.out' }, E.dibuja_t);
+  tl.fromTo('#sc-ax0,#sc-ax1', { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.25, ease: 'none' }, E.ejes_t);
+  tl.to('#sc-ax1', { color: ACC, duration: 0.2, ease: 'none' }, E.uno_t);
+  tl.fromTo('#sc-zona', { autoAlpha: 0 }, { autoAlpha: 0.9, duration: 0.3, ease: 'none' }, E.marca_t);
+  tl.fromTo('#sc-mk', { scaleY: 0, autoAlpha: 0, transformOrigin: '50% 100%' }, { scaleY: 1, autoAlpha: 1, duration: 0.25, ease: 'power3.out' }, E.marca_t);
+  enter('#sc-mkl', E.marca_t + 0.05, { x: 40 });
+}
+
+// ── razón 1: caja de la cara (89 px), su rótulo, la línea y la lupa, la nota
+{
+  const R = PLAN.r1;
+  tl.fromTo('#r1-box', { autoAlpha: 0, scale: 1.3, transformOrigin: '50% 50%' }, { autoAlpha: 1, scale: 1, duration: 0.3, ease: 'power3.out' }, R.box_t);
+  enter('#r1-tag', R.tag_t, { x: 50 });
+  tl.fromTo('#r1-lineas', { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.25, ease: 'none' }, R.lupa_t);
+  enter('#r1-lupa', R.lupa_t, { x: 70, d: 0.28 });
+  enter('#r1-nota', R.nota_t, { x: 60 });
+}
+
+// ── razón 2: medida 1 (0,79), banda de ±0,03 con su corchete, medida 2 (0,77) DENTRO de la banda, pie y nota
+{
+  const R = PLAN.r2;
+  tl.fromTo('#r2-d1', { scale: 0, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 0.22, ease: 'power4.out' }, R.d1);
+  tl.fromTo('#r2-v1', { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.2, ease: 'none' }, R.d1 + 0.1);
+  tl.fromTo('#r2-band', { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4, ease: 'none' }, R.banda);
+  tl.fromTo('#r2-brk', { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.3, ease: 'power3.out' }, R.banda);
+  tl.fromTo('#r2-bl', { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.2, ease: 'none' }, R.banda + 0.15);
+  tl.fromTo('#r2-d2', { scale: 0, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 0.22, ease: 'power4.out' }, R.d2);
+  tl.fromTo('#r2-v2', { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.2, ease: 'none' }, R.d2 + 0.1);
+  enter('#r2-pie', R.pie, { x: 60 });
+  enter('#r2-nota', R.nota, { x: 60 });
+}
+
+// ── razón 3: el aro cae sobre el letrero, la etiqueta, el número que el programa le dio y la nota
+{
+  const R = PLAN.r3;
+  tl.fromTo('#r3-aro', { autoAlpha: 0, scale: 1.4, transformOrigin: '50% 50%' }, { autoAlpha: 1, scale: 1, duration: 0.3, ease: 'power3.out' }, R.aro);
+  enter('#r3-lab', R.lab, { x: 60 });
+  enter('#r3-num', R.num, { x: 60 });
+  enter('#r3-nota', R.nota, { x: 60 });
+}
+
+// ── lección: las tres razones juntas se encienden de a una (borde y nombre en verde) y una caja las rodea: «la imagen entera»
+{
+  const R = PLAN.lec;
+  for (const f of R.filas) {
+    tl.to('#le-i' + f.n, { borderColor: ACC, duration: 0.25, ease: 'none' }, f.t);
+    tl.to('#le-t' + f.n, { color: ACC, duration: 0.25, ease: 'none' }, f.t);
+  }
+  tl.fromTo('#le-ring', { autoAlpha: 0, scale: 1.03, transformOrigin: '50% 50%' }, { autoAlpha: 1, scale: 1, duration: 0.35, ease: 'power3.out' }, R.anillo_t);
+}
+
+window.__timelines['main'] = tl;
+
+</script>
+</body>
+</html>

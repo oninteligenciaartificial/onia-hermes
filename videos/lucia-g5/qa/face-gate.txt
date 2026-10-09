@@ -1,0 +1,10 @@
+piso de caras negativas (max): 0.224   gate del repo: 0,70
+archivo                                        centroide  min_ref  max_ref  cara_px  veredicto
+k1-1-recepcion-celular-4afffb96.jpg                0.806    0.546    0.725      237  OK
+img-gpt-image-2-5-5da2fa1e.jpg                     0.672    0.479    0.613      296  BAJO: mirar
+img-omni-image-k2cafe-9f4b5172.jpg                 0.354    0.208    0.466      287  BAJO: mirar
+k4-5-senala-342c0ab5.jpg                           0.832    0.543    0.786      266  OK
+raw-m5-cuadro0.png                                 0.798    0.578    0.744       89  OK (cara < 200 px: poco confiable)
+fr-m5.jpg                                          0.801    0.600    0.734       89  OK (cara < 200 px: poco confiable)
+raw-m4-cuadro96.png                                0.796    0.560    0.779      305  OK
+fr-m4.jpg                                          0.791    0.556    0.769      311  OK

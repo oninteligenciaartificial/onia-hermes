@@ -24,6 +24,8 @@ const PROHIBIDAS = [
   'no sé',
   // afirmaciones ya verificadas como FALSAS (H1, 8-oct): en los cuadros 84 y 96 de K4 la mano NO está tapada (v4/PROCEDENCIA.jsonl línea 94)
   'tapada',
+  // G5: el programa solo compara dos caras: no «reconoce» a nadie (el guion lo prohíbe afirmar)
+  'reconoc', 'identifica a', 'verifica que es',
   // marcas de terceros (modelos, plataformas, competidores): la lista de editor-videos + los motores de la prueba de G2
   'kling', 'seedream', 'seedance', 'higgsfield', 'soul', 'nano banana', 'cinema', 'veo', 'midjourney', 'runway', 'elevenlabs', 'sora', 'gpt', 'claude', 'chatgpt', 'omni', 'flux', 'cinematic', 'start_image', 'start image', 'sync.so', 'sync_so', 'buffalo', 'insightface', 'arcface', 'scrfd', 'instagram', 'meta ', 'tiktok', 'buffer',
   // G4: motores de imagen y otras marcas que podrían aparecer en un rótulo (los motores van solo como «Imagen A a F»)

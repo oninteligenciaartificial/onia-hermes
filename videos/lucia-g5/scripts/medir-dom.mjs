@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// QA geométrico G4 (2da pasada): abre index.html en Chromium, lleva el timeline a cada 0,125 s (3 cuadros) y mide la caja de TODO texto visible.
+// QA geométrico G5 (1ra pasada): abre index.html en Chromium, lleva el timeline a cada 0,125 s (3 cuadros) y mide la caja de TODO texto visible.
 // Reglas (CLAUDE.md / editor-videos §Reels de Lucía): texto entre mentón+40 y y=1490; nada en los 80 px de la derecha bajo y=1000; nada sobre y=280
 // (UI de Instagram arriba); NINGÚN texto baja de 34 px; dos textos nunca se pisan; y los DATOS de las placas están donde dice el número
 // (punto, barra y marca a 100 + 880 × valor).
@@ -16,8 +16,6 @@ const P = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const plan = JSON.parse(fs.readFileSync(path.join(P, 'plan.json'), 'utf8'));
 const caras = JSON.parse(fs.readFileSync(path.join(P, 'qa/caras-fotos.json'), 'utf8')).fotos;
 const Z = plan.zona_segura, FPS = plan.lienzo.fps, PUSH = plan.empuje.cuadros / FPS;
-const SC = plan.escala, X = (v) => SC.x0 + v * (SC.x1 - SC.x0);
-const img = Object.fromEntries(plan.imagenes.map((m) => [m.id, m]));
 const med = Object.fromEntries(plan.medios.map((m) => [m.id, m]));
 const empujes = plan.costuras.filter((c) => c.tipo === 'empuje').map((c) => [c.t - PUSH - 1e-6, c.t + 1e-6]);
 const enEmpuje = (t) => empujes.some(([a, b]) => t >= a && t <= b);
@@ -35,7 +33,7 @@ const mentonEn = (t) => {
   }
   return null;
 };
-const placaEn = (t) => ['pl-regla', 'pl-l1', 'pl-l2'].some((id) => t >= med[id].a + PUSH && t < med[id].b - PUSH + 1e-6);
+const placaEn = (t) => plan.medios.filter((m) => m.tipo === 'placa').map((m) => m.id).some((id) => t >= med[id].a + PUSH && t < med[id].b - PUSH + 1e-6);
 
 const b = await chromium.launch({ executablePath: process.env.PRODUCER_HEADLESS_SHELL_PATH || '/opt/pw-browsers/chromium/chrome', args: ['--no-sandbox'] }).catch(async () => chromium.launch({ args: ['--no-sandbox'] }));
 const pg = await b.newPage({ viewport: { width: 1080, height: 1920 } });
@@ -46,8 +44,8 @@ await pg.waitForTimeout(500);
 const N = Math.round(plan.lienzo.duracion * FPS);
 const muestras = await pg.evaluate(([N, FPS]) => {
   const tl = window.__timelines.main; tl.pause();
-  const SEL = '.card, .tag, .sello, .arr, .rt, .vl, .ax, .barv, .num, .lb, .cn, .cv, .sub, .note, .thd, .rl2, .th span';
-  const RANGE = new Set(['lb', 'ax', 'rt', 'num', 'arr', 'cn', 'cv', 'sub', 'note', 'thd', 'rl2']);
+  const SEL = '.card, .tag, .vl, .ax, .note, .cap2, .rowt';
+  const RANGE = new Set(['ax', 'note', 'cap2', 'rowt']);
   const out = [];
   const posiciones = (t) => { tl.time(t); const m = new Map(); for (const e of document.querySelectorAll(SEL)) { const q = e.getBoundingClientRect(); m.set(e, q.left); } return m; };
   for (let f = 0; f < N; f += 3) {
@@ -61,10 +59,10 @@ const muestras = await pg.evaluate(([N, FPS]) => {
       while (n && n !== document.body) { const cs = getComputedStyle(n); o *= +cs.opacity; if (cs.visibility === 'hidden' || cs.display === 'none') o = 0; n = n.parentElement; }
       if (o < 0.5) continue;
       let q;
-      if (RANGE.has(e.className.toString().split(' ')[0]) || e.className.toString().includes('rt')) { const r = document.createRange(); r.selectNodeContents(e); q = r.getBoundingClientRect(); } else q = e.getBoundingClientRect();
+      if (RANGE.has(e.className.toString().split(' ')[0])) { const r = document.createRange(); r.selectNodeContents(e); q = r.getBoundingClientRect(); } else q = e.getBoundingClientRect();
       if (q.width < 1) continue;
       const id = (e.closest('[id]') || e).id;
-      const tipo = e.classList.contains('card') ? 'card' : e.classList.contains('sello') ? 'sello' : e.classList.contains('arr') ? 'arr' : e.classList.contains('tag') ? 'tag' : 'placa';
+      const tipo = e.classList.contains('card') ? 'card' : e.classList.contains('tag') ? 'tag' : 'placa';
       cajas.push({ mov: Math.abs(q.left - antes.get(e)) > 0.4, id: id + '/' + e.className.toString().split(' ')[0], tipo, x1: q.left, y1: q.top, x2: q.right, y2: q.bottom, px: parseFloat(getComputedStyle(e.classList.contains('card') ? e.querySelector('.t') : e).fontSize), txt: e.textContent.trim().slice(0, 30) });
     }
     out.push({ t, cajas });
@@ -86,7 +84,7 @@ for (const { t, cajas } of muestras) {
     if (push) continue;
     if (!c.mov && c.y2 > 1000 && c.x2 > 1080 - Z.derecha_libre_px + 0.5) falla(t, `${c.id} «${c.txt}» invade los 80 px de la derecha (x2=${Math.round(c.x2)}, y2=${Math.round(c.y2)})`);
     if (!c.mov && (c.x1 < -0.5 || c.x2 > 1080.5)) falla(t, `${c.id} «${c.txt}» se sale del lienzo (x ${Math.round(c.x1)}–${Math.round(c.x2)})`);
-    if (ment != null && !placa && ['card', 'tag', 'sello', 'arr'].includes(c.tipo)) {
+    if (ment != null && !placa && ['card', 'tag'].includes(c.tipo)) {
       const margen = c.y1 - ment;                                       // px entre el mentón y lo que queda justo debajo (la regla pide ≥ 40)
       if (!minMargen || margen < minMargen.v) minMargen = { v: margen, t, id: c.id, y1: c.y1, ment };
       if (c.y1 < ment + Z.margen_bajo_menton - 0.5) falla(t, `${c.id} «${c.txt}» queda sobre mentón+40 (${Math.round(c.y1)} < ${Math.round(ment + Z.margen_bajo_menton)})`);
@@ -120,31 +118,27 @@ const tamanos = await pg.evaluate(() => {
 console.log('tamaños de texto en el DOM (px: cuántos elementos):', JSON.stringify(tamanos));
 for (const c of chicos) falla(0, `texto menor a ${Z.texto_min_px} px: ${c}`);
 
-// los DATOS están donde dice el número: punto y marca a 100 + 880 × valor (±1,5 px)
-const datos = [];
+// los DATOS están donde dice el número (qa/datos-plan.json lo escribe build.mjs desde los mismos datos que dibujan la placa): punto, banda, marca y pista a X(valor) ±1,5 px, y el texto coincide con el dato
+const datos = JSON.parse(fs.readFileSync(path.join(P, 'qa/datos-plan.json'), 'utf8'));
 const medida = async (t, sel) => pg.evaluate(([t, sel]) => { const tl = window.__timelines.main; tl.pause(); tl.time(t); const e = document.querySelector(sel); const q = e.getBoundingClientRect(); return { cx: q.left + q.width / 2, x1: q.left, x2: q.right, w: q.width, txt: e.textContent.trim() }; }, [t, sel]);
-const cerca = (n, esperado, tol = 1.5) => Math.abs(n - esperado) <= tol;
+const X = (v) => Math.round(plan.escala.x0 + v * (plan.escala.x1 - plan.escala.x0));
 const fm = (v) => v.toFixed(2).replace('.', ',');
 {
-  const t1 = plan.l1.filas.at(-1).t + 1.5;                       // todas las filas ya entraron
-  const mk = await medida(t1, '#l1-mk'); datos.push(['L1 marca 0,70', mk.cx, X(SC.piso)]);
-  for (const [i, f] of plan.l1.filas.entries()) {
-    const m = img[f.img], e = await medida(t1, `#l1-f${i + 1}`), v = await medida(t1, `#l1-v${i + 1}`);
-    datos.push([`L1 Imagen ${m.letra} punto ${m.valor}`, e.cx, X(m.valor)]);
-    if (v.txt !== fm(m.valor)) falla(0, `L1 Imagen ${m.letra}: el valor en pantalla dice «${v.txt}» y el dato es ${fm(m.valor)}`);
-  }
-  const ru = await medida(plan.l1.ruido.t + 0.6, '#l1-ruido'); datos.push(['L1 franja de ruido (borde izquierdo = 0,66)', ru.x1, X(plan.l1.ruido.desde)], ['L1 franja de ruido (borde derecho = 0,70)', ru.x2, X(plan.l1.ruido.hasta)]);
-  const tr = plan.regla.escala.marca_t + 0.6;
-  const mk4 = await medida(tr, '#sc-mk'); datos.push(['regla marca 0,70', mk4.cx, X(SC.piso)]);
-  for (const [fi, f] of plan.l2.tabla.filas.entries()) for (const c of f.celdas) { const r = await medida(c.t + 0.6, `#l2-c${fi + 1}${c.n} .cn`); if (r.txt !== fm(c.valor)) falla(0, `L2 ${f.img}${c.n}: dice «${r.txt}» y el dato es ${fm(c.valor)}`); }
-  for (const [i, f] of plan.l2.fotos.lista.entries()) { const r = await medida(f.cap_t + 0.6, `#l2-cap${i + 1} .cv`); if (r.txt !== fm(f.valor)) falla(0, `L2 foto ${f.letra}: dice «${r.txt}» y el dato es ${fm(f.valor)}`); }
-  for (const m of plan.imagenes) { const r = await medida(m.tag_t + 0.6, `#dA-${m.id} b`); if (r.txt !== fm(m.valor)) falla(0, `Imagen ${m.letra}: el dato en pantalla dice «${r.txt}» y es ${fm(m.valor)}`); }
+  // la escala de 0 a 1 del paso 2: marca de 0,70 y pista
+  const tr = plan.p2.escala.marca_t + 0.6;
+  const mk = await medida(tr, '#sc-mk'); datos.push({ que: 'p2 marca 0,70', sel: '#sc-mk', t: tr, m: 'cx', esp: X(plan.escala.piso) });
+  const tk = await medida(tr, '#sc-trk'); datos.push({ que: 'p2 pista (x = 0)', sel: '#sc-trk', t: tr, m: 'x1', esp: X(0) }, { que: 'p2 pista (x = 1)', sel: '#sc-trk', t: tr, m: 'x2', esp: X(1) });
+  datos.push({ que: 'p2 zona verde (borde izq. = 0,70)', sel: '#sc-zona', t: tr, m: 'x1', esp: X(plan.escala.piso) });
 }
-for (const [que, got, esp, tol] of datos) {
-  const ok = cerca(got, esp, tol || 1.5);
-  console.log(`  ${ok ? 'ok ' : '✖  '} ${que.padEnd(40)} medido ${got.toFixed(1)}  esperado ${esp.toFixed(1)}`);
-  if (!ok) falla(0, `dato fuera de lugar: ${que} (${got.toFixed(1)} vs ${esp.toFixed(1)})`);
+const resultados = [];
+for (const d of datos) {
+  const r = await medida(d.t, d.sel);
+  if (d.txt != null) { const ok = r.txt === d.txt; resultados.push(`  ${ok ? 'ok ' : '✖  '} ${d.que.padEnd(40)} dice «${r.txt}»  esperado «${d.txt}»`); if (!ok) falla(0, `${d.que}: dice «${r.txt}» y el dato es «${d.txt}»`); continue; }
+  const got = r[d.m], ok = Math.abs(got - d.esp) <= (d.tol || 1.5);
+  resultados.push(`  ${ok ? 'ok ' : '✖  '} ${d.que.padEnd(40)} medido ${got.toFixed(1)}  esperado ${d.esp.toFixed(1)}`);
+  if (!ok) falla(0, `dato fuera de lugar: ${d.que} (${got.toFixed(1)} vs ${d.esp.toFixed(1)})`);
 }
+console.log(resultados.join('\n'));
 await b.close();
 if (malos.length) console.log('✖ incumplimientos:\n  ' + malos.join('\n  ') + (fallos > malos.length ? `\n  … ${fallos} en total` : ''));
 if (fallos) { console.error(`✖ ${fallos} incumplimiento(s)`); process.exit(1); }

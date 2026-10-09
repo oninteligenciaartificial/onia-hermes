@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # H3/H8: cuadros PLANOS (vacíos) y saltos de luma entre cuadros consecutivos (destellos) de un render. Imprime también la luma/desviación de los
 # cuadros de cada costura. Uso (necesita numpy + cv2: el venv del control de cara sirve):
-#   $FACE_GATE_HOME/venv/bin/python scripts/vacios.py out/g4-final-1080x1920.mp4 > qa/vacios-y-saltos.txt
-# G4: imprime la luma/desviación de los cuadros de cada costura (los 10 empujes de plan.json, de T-6 a T+3 cuadros).
+#   $FACE_GATE_HOME/venv/bin/python scripts/vacios.py out/g5-final-1080x1920.mp4 > qa/vacios-y-saltos.txt
+# G5: imprime la luma/desviación de los cuadros de cada costura (los 10 empujes de plan.json, de T-6 a T+3 cuadros).
 import sys, json, os, numpy as np, cv2
 v=sys.argv[1]
 cap=cv2.VideoCapture(v); n=int(cap.get(cv2.CAP_PROP_FRAME_COUNT))

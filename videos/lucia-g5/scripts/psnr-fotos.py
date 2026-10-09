@@ -5,7 +5,7 @@ Para cada escena de foto de plan.json se toman 3 cuadros en reposo (lejos de los
 SOLO en la franja y 0-900 (abajo van la tarjeta, el dato y el sello; arriba del cuadro de 0 a 3,18 s va el rótulo, por eso el gancho se mide desde 3,4 s).
 Dos controles: (1) entre las 8 fotos candidatas, el pico tiene que ser la foto que el plan dice (si no, hay una foto cruzada); (2) con la foto correcta,
 el pico tiene que estar en la escala de zoom que el plan dice (probando −0,02, −0,01, 0, +0,01, +0,02: si no, el empuje lento está corrido).
-Uso (venv del face-gate, que trae numpy + cv2):  $FACE_GATE_HOME/venv/bin/python scripts/psnr-fotos.py out/g4-final-1080x1920.mp4 > qa/psnr-fotos.txt
+Uso (venv del face-gate, que trae numpy + cv2):  $FACE_GATE_HOME/venv/bin/python scripts/psnr-fotos.py out/g5-final-1080x1920.mp4 > qa/psnr-fotos.txt
 """
 import json, os, subprocess, sys, tempfile
 import cv2, numpy as np
@@ -15,6 +15,18 @@ caras = json.load(open(os.path.join(P, 'qa/caras-fotos.json')))['fotos']
 final = sys.argv[1]
 FPS = plan['lienzo']['fps']; PUSH = plan['empuje']['cuadros'] / FPS; ZOOM = plan['zoom']['fin']
 FR = 1080, 1920
+CON_CAJA = {'f-gancho'} | {e['medio'] for e in plan['ejemplos']}     # estas escenas llevan la caja de cara (y su brillo) encima: se enmascara en el cuadro y en cada candidata
+PAD = 70                                                             # caja SCRFD + margen de la caja + brillo
+
+def mascara(m, s, ox, oy, caja):
+    x1, y1, x2, y2 = caja
+    r = [ox + (x - ox) * s for x in (x1 - PAD, x2 + PAD)] + [oy + (y - oy) * s for y in (y1 - PAD, y2 + PAD)]
+    return int(r[0]), int(r[2]), int(r[1]), int(r[3])               # x1, y1, x2, y2
+
+def tapar(a, rect):
+    x1, y1, x2, y2 = rect
+    a = a.copy(); a[max(0, y1):y2, max(0, x1):x2] = 0
+    return a
 
 def base(foto):
     im = cv2.imread(os.path.join(P, plan['fotos'][foto]['src']))
@@ -39,7 +51,7 @@ for m in plan['medios']:
         continue
     a, b = m['a'], m['b']
     if m['a'] == 0:
-        ts = [3.4, 4.3, 5.2]                               # el rótulo sale a 3,0-3,18 s; las miniaturas entran desde 3,1 s pero quedan bajo y=900
+        ts = [3.8, 4.5, 5.2]                               # el rótulo sale a 3,0-3,18 s; la caja de cara entra a 3,3 s (tapada con la máscara de abajo)
     else:
         ts = [a + PUSH + 0.6, (a + b) / 2, b - PUSH - 0.6]
     for t in ts:
@@ -58,11 +70,14 @@ for i, (m, n) in enumerate(orden):
     s = 1 + (ZOOM - 1) * min(1, max(0, (t - m['a']) / (m['b'] - m['a'])))
     x1, y1, x2, y2 = caras[m['foto']]['caja']; ox, oy = (x1 + x2) / 2, (y1 + y2) / 2
     res = {}
+    rect = mascara(m, s, ox, oy, caras[m['foto']]['caja']) if m['id'] in CON_CAJA else None
+    if rect: fr = tapar(fr, rect)
     for k, im in cands.items():
         cx1, cy1, cx2, cy2 = caras[k]['caja']
-        res[k] = psnr(fr, con_zoom(im, s, (cx1 + cx2) / 2, (cy1 + cy2) / 2)[:900])
+        c_ = con_zoom(im, s, (cx1 + cx2) / 2, (cy1 + cy2) / 2)[:900]
+        res[k] = psnr(fr, tapar(c_, rect) if rect else c_)
     mejor = max(res, key=res.get)
-    zs = {d: psnr(fr, con_zoom(cands[m['foto']], s + d, ox, oy)[:900]) for d in (-0.02, -0.01, 0, 0.01, 0.02)}
+    zs = {d: psnr(fr, (lambda c_: tapar(c_, rect) if rect else c_)(con_zoom(cands[m['foto']], s + d, ox, oy)[:900])) for d in (-0.02, -0.01, 0, 0.01, 0.02)}
     zpico = max(zs, key=zs.get)
     ok = mejor == m['foto'] and abs(zpico) < 1e-9
     malos += 0 if ok else 1

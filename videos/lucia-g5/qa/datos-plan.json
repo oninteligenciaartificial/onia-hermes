@@ -1,0 +1,116 @@
+[
+ {
+  "que": "r2 dot 0,79",
+  "sel": "#r2-d1",
+  "t": 37.7,
+  "m": "cx",
+  "esp": 496
+ },
+ {
+  "que": "r2 dot 0,77",
+  "sel": "#r2-d2",
+  "t": 38.9,
+  "m": "cx",
+  "esp": 408
+ },
+ {
+  "que": "r2 banda (borde izq. = 0,76)",
+  "sel": "#r2-band",
+  "t": 38.300000000000004,
+  "m": "x1",
+  "esp": 364
+ },
+ {
+  "que": "r2 banda (borde der. = 0,82)",
+  "sel": "#r2-band",
+  "t": 38.300000000000004,
+  "m": "x2",
+  "esp": 628
+ },
+ {
+  "que": "r2 corchete (borde izq.)",
+  "sel": "#r2-brk",
+  "t": 38.300000000000004,
+  "m": "x1",
+  "esp": 364
+ },
+ {
+  "que": "r2 corchete (borde der.)",
+  "sel": "#r2-brk",
+  "t": 38.300000000000004,
+  "m": "x2",
+  "esp": 628
+ },
+ {
+  "que": "r2 pista (x = 0,70)",
+  "sel": "#r2-trk",
+  "t": 37.3,
+  "m": "x1",
+  "esp": 100
+ },
+ {
+  "que": "r2 pista (x = 0,90)",
+  "sel": "#r2-trk",
+  "t": 37.3,
+  "m": "x2",
+  "esp": 980
+ },
+ {
+  "que": "r2 marca 0,70 (centro)",
+  "sel": "#r2-m1",
+  "t": 37.3,
+  "m": "cx",
+  "esp": 100,
+  "tol": 2
+ },
+ {
+  "que": "r2 marca 0,75 (centro)",
+  "sel": "#r2-m2",
+  "t": 37.3,
+  "m": "cx",
+  "esp": 320,
+  "tol": 2
+ },
+ {
+  "que": "r2 marca 0,80 (centro)",
+  "sel": "#r2-m3",
+  "t": 37.3,
+  "m": "cx",
+  "esp": 540,
+  "tol": 2
+ },
+ {
+  "que": "r2 marca 0,85 (centro)",
+  "sel": "#r2-m4",
+  "t": 37.3,
+  "m": "cx",
+  "esp": 760,
+  "tol": 2
+ },
+ {
+  "que": "r2 marca 0,90 (centro)",
+  "sel": "#r2-m5",
+  "t": 37.3,
+  "m": "cx",
+  "esp": 980,
+  "tol": 2
+ },
+ {
+  "que": "r2 valor 0,79",
+  "sel": "#r2-v1",
+  "t": 37.7,
+  "txt": "0,79"
+ },
+ {
+  "que": "r2 valor 0,77",
+  "sel": "#r2-v2",
+  "t": 38.9,
+  "txt": "0,77"
+ },
+ {
+  "que": "r3 número en pantalla",
+  "sel": "#r3-num b",
+  "t": 45.1,
+  "txt": "0,80"
+ }
+]

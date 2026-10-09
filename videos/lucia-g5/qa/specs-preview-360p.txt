@@ -1,0 +1,5 @@
+width=360
+height=640
+r_frame_rate=24/1
+duration=57.500000
+nb_frames=1380

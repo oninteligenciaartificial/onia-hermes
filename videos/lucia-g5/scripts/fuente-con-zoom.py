@@ -2,7 +2,7 @@
 """Para el control de cara del FINAL (qa/face-gate-final.txt): arma, para cada escena de foto y para tres instantes en reposo, (1) el cuadro del final
 (ffmpeg) y (2) la FOTO FUENTE llevada a 1080x1920 con `object-fit:cover` y el mismo empuje lento (escala del instante, origen en la cara), SIN comprimir.
 Después `face-gate.sh` mide los dos y la diferencia dice si el escalado y el H.264 deformaron la cara (regla del repo: ≤ 0,02).
-Uso (venv del face-gate):  $FACE_GATE_HOME/venv/bin/python scripts/fuente-con-zoom.py out/g4-final-1080x1920.mp4 DIR_DE_SALIDA   → imprime los argumentos para face-gate.sh
+Uso (venv del face-gate):  $FACE_GATE_HOME/venv/bin/python scripts/fuente-con-zoom.py out/g5-final-1080x1920.mp4 DIR_DE_SALIDA   → imprime los argumentos para face-gate.sh
 """
 import json, os, subprocess, sys
 import cv2, numpy as np
@@ -16,7 +16,7 @@ args = []
 for m in plan['medios']:
     if m['tipo'] != 'foto':
         continue
-    ts = [3.4, 4.3, 5.2] if m['a'] == 0 else [m['a'] + PUSH + 0.6, (m['a'] + m['b']) / 2, m['b'] - PUSH - 0.6]
+    ts = [3.8, 4.5, 5.2] if m['a'] == 0 else [m['a'] + PUSH + 0.6, (m['a'] + m['b']) / 2, m['b'] - PUSH - 0.6]
     im = cv2.imread(os.path.join(P, plan['fotos'][m['foto']]['src'])); h, w = im.shape[:2]
     s0 = max(1080 / w, 1920 / h)
     im = cv2.resize(im, (int(round(w * s0)), int(round(h * s0))), interpolation=cv2.INTER_AREA)

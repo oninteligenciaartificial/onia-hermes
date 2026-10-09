@@ -91,7 +91,7 @@ description: "Invocar para CUALQUIER trabajo del carril Lucía (Lucía Antelo, l
   buffalo_l (~280 MB) de GitHub; con `FACE_GATE_HOME` se elige dónde vive (por defecto `/tmp/lucia-face-gate`).
   - **Reproduce lo guardado:** K1 0,806 (guardado 0,808), K2 0,830 (0,829), K4·1 0,812 (0,81), K4·4 0,851 (0,851).
   - **Gate 0,70; piso de las caras negativas 0,224.** Una cara de menos de 200 px es poco confiable (en un clip crudo de 720p son
-    ~115 px): ahí el número baja solo y la imagen se MIRA. Los refs de 8 ángulos dan un centroide más alto que el de 5 del
+    ~115 px): ahí el número es poco confiable (es la regla del gate, no una caída: medido el 9-oct, achicar una cara de 89 a 60 px mueve el puntaje solo 0,004-0,010 en 5 de 6 fotos, y F oscila ±0,02) y la imagen se MIRA. Los refs de 8 ángulos dan un centroide más alto que el de 5 del
     photoshoot (K1 0,704 contra el photoshoot): **se mide siempre contra las 8 oficiales**, no contra otro juego.
   - Higgsfield `sandbox_exec` no hace falta (y el control de permisos lo rechazó).
 - **Mapa de TODAS las funciones de Higgsfield, con costos y cara:** `higgsfield-mapa.md` (en esta carpeta). Lo que más pesa:
@@ -335,6 +335,9 @@ Fuente: `research/competencia/LUCIA_COMPETENCIA_20261005.md`.
   cara ni el grep lo ven; se encuentran ampliando el borde del cuadro. Se tapan con desenfoque con pluma en UN paso en RGB (`format=gbrp` + `gblur` +
   `maskedmerge`, salida `yuvj420p`): dos pasos por YUV corren los colores. Copias en `v4/prueba-motores-20261008/fotos-limpias/` (con README); el
   original queda como evidencia. Las fotos K1, K2·1, K4·3 y K4·5 se miraron enteras y están limpias.
+- **9-oct · «una cara chica baja sola» era falso** (editor de G5): el guion lo afirmaba desde una intuición. El cuadro 0 del Motor 5 (cara de 89 px) da 0,798 y a 169 px da
+  0,831; la misma foto reducida a 60 px baja solo 0,004-0,010 en 5 de 6 fotos (`videos/lucia-g5/qa/cara-chica-*.txt`). Se dice «poco confiable» (la regla < 200 px), nunca
+  «baja». Y las medidas 0,79 y 0,77 difieren 0,02, no 0,03. Todo número o tendencia que un guion afirme se mide con el control propio (0 cr) antes de renderizar.
 - **2/3-oct:** Seedream escribe como texto «sheet» y «hex #…»; inventa letreros en las torres; los lotes de más de 5
   dan 429. Están en `higgsfield-generate`.
 
