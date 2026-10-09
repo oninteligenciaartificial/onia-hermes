@@ -515,6 +515,33 @@ test("con llave, si a main le falta la skill de pedidos o su regla en el SOUL, n
   nadaCreado(sinRegla);
 });
 
+test("el formato fijo (Pasó · Necesito · Sigue) entra a su SOUL una sola vez, sin arrastrar lo que le sigue", () => {
+  // Sergio Urcullo, 8-oct: «me entregás demasiado texto y me pierdo». aplicar copia del SOUL de main
+  // solo las secciones que nombra: una regla escrita en otra sección nunca llegaba al VPS.
+  const v = vps();
+  const r = v.aplicar();
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(r.stdout, /✅ regla del formato agregada al SOUL de Hermes/);
+  spawnSync("/bin/sleep", ["1.1"]); // el respaldo se nombra por segundo
+  assert.equal(v.aplicar().status, 0);
+  const soul = readFileSync(join(v.R, ".hermes", "SOUL.md"), "utf8");
+  assert.equal((soul.match(/^## Formato fijo de cada mensaje/gm) || []).length, 1);
+  assert.match(soul, /\*\*Pasó\*\*[\s\S]*\*\*Necesito\*\*[\s\S]*\*\*Sigue\*\*/);
+  assert.doesNotMatch(soul, /^## Qué ES Onia hoy/m, "solo esa sección, hasta su «---»");
+});
+
+test("si a main le falta la regla del formato en el SOUL, no aplica nada", () => {
+  const v = vps();
+  cambiarMain(v, (repo) => {
+    const f = join(repo, "hermes-content/deploy/hermes-agent/SOUL.md");
+    writeFileSync(f, readFileSync(f, "utf8").replace(/^## Formato fijo de cada mensaje/m, "## Otra cosa"));
+  });
+  const r = v.aplicar();
+  assert.equal(r.status, 1, r.stdout);
+  assert.match(r.stdout, /no encontré la regla del formato en el SOUL de origin\/main/);
+  nadaCreado(v);
+});
+
 test("con llave, si el comando de pedidos no la acepta (--estado), no aplica nada", () => {
   const v = vps();
   writeFileSync(join(v.R, "bin", "onia-pedido-claude.sh"), "#!/usr/bin/env bash\ncandado() { :; }\nSELLOS=x\n[ \"$1\" = --estado ] && exit 69\nexit 0\n");

@@ -40,7 +40,7 @@ const PARTE = `🙋 <b>2 esperan tu ok</b>
 
 <i>Parte diario · 30/09 06:30</i>`;
 
-function banco({ tableroVivo = true, tgFalla = false, show = SHOW, repo = REPO_REAL } = {}) {
+function banco({ tableroVivo = true, tgFalla = false, show = SHOW, repo = REPO_REAL, lista = LISTA, parte: textoParte = PARTE } = {}) {
   const dir = mkdtempSync(join(tmpdir(), "jarvis-"));
   const estado = join(dir, "estado");
   const out = join(dir, "out");
@@ -51,7 +51,7 @@ function banco({ tableroVivo = true, tgFalla = false, show = SHOW, repo = REPO_R
     chmodSync(f, 0o755);
     return f;
   };
-  writeFileSync(join(dir, "lista.txt"), LISTA + "\n");
+  writeFileSync(join(dir, "lista.txt"), lista + "\n");
   writeFileSync(join(dir, "show.txt"), show + "\n");
   const tablero = escribir(
     "tablero.sh",
@@ -59,7 +59,7 @@ function banco({ tableroVivo = true, tgFalla = false, show = SHOW, repo = REPO_R
       ? `#!/usr/bin/env bash\n[ "$1" = list ] && { cat ${dir}/lista.txt; exit 0; }\n[ "$1" = show ] && { cat ${dir}/show.txt; exit 0; }\nexit 9\n`
       : `#!/usr/bin/env bash\nexit 1\n`,
   );
-  writeFileSync(join(dir, "parte.txt"), PARTE);
+  writeFileSync(join(dir, "parte.txt"), textoParte);
   const parte = escribir("parte.sh", `#!/usr/bin/env bash\n"$ONIA_TG" "$(cat ${dir}/parte.txt)"\n`);
   const tg = escribir(
     "tg.sh",
@@ -94,7 +94,7 @@ ${tgFalla ? "exit 1" : "exit 0"}
 
 // ── El resumen de la mañana ─────────────────────────────────────────────────────
 
-test("lo primero que ve son los prospectos esperando, con quién y hace cuánto", () => {
+test("lo primero que le pide son los prospectos esperando, con quién y hace cuánto", () => {
   const b = banco();
   const msg = b.imprimir("manana");
   const iProspectos = msg.indexOf("🧲");
@@ -166,6 +166,7 @@ test("entregado: la noche se da por leída y la voz queda lista, limpia para el 
   assert.deepEqual(readdirSync(join(b.estado, "nocturnos")), []);
   const voz = readFileSync(join(b.out, "brief-hoy.txt"), "utf8");
   assert.match(voz, /^Buen día, Sergio Urcullo/);
+  assert.match(voz, /^Pasó\.$/m, "el título del bloque se lee como palabra, no deletreado en mayúsculas");
   assert.doesNotMatch(voz, /→|<b>|🧲|ok t_/);
 });
 
@@ -229,7 +230,7 @@ test("cierre con la IA caída: la cuenta, sin inventar", () => {
 test("cierre: lo que sigue esperando, con la cuenta ya corregida", () => {
   const b = banco({ repo: repoConCommits([]) });
   const msg = b.imprimir("noche", { ONIA_HOY: "2026-09-29" });
-  assert.match(msg, /⏳ <b>Sigue esperando<\/b>\n• 3 persona\(s\) sin respuesta\.\n• 1 decisión\(es\) tuya\(s\)\./);
+  assert.match(msg, /⏳ <b>Te esperan<\/b>\n• 3 persona\(s\) sin respuesta\.\n• 1 decisión\(es\) tuya\(s\)\./);
 });
 
 test("la vista previa no gasta turnos del parte (su ronda real queda intacta)", () => {
@@ -322,4 +323,70 @@ test("un día sin pedidos, o sin el comando, el cierre no inventa la sección", 
   const vacio = b.escribir("pedidos-vacio.sh", "#!/usr/bin/env bash\nexit 0\n");
   assert.doesNotMatch(b.imprimir("noche", { ONIA_PEDIDOS: vacio }), /🤖/);
   assert.doesNotMatch(b.imprimir("noche"), /🤖/);
+});
+
+// ── El formato fijo: Pasó · Necesito · Sigue (Sergio Urcullo, 2026-10-08) ───────
+// «me entregás demasiado texto y me pierdo». Máximo tres bloques, en ese orden; lo que le pide
+// algo va en NECESITO, y si no hay nada se dice «Nada.» — salvo que no se haya podido medir.
+
+// Devuelve { PASÓ, NECESITO, SIGUE } con el texto de cada bloque, o falla si faltan o se desordenan.
+function bloques(msg) {
+  const titulos = [...msg.matchAll(/^<b>(PASÓ|NECESITO|SIGUE)<\/b>$/gm)];
+  assert.deepEqual(titulos.map((m) => m[1]), ["PASÓ", "NECESITO", "SIGUE"], msg);
+  const b = {};
+  titulos.forEach((m, i) => {
+    b[m[1]] = msg.slice(m.index + m[0].length, i + 1 < titulos.length ? titulos[i + 1].index : undefined);
+  });
+  return b;
+}
+
+test("la mañana viene en tres bloques: lo de la noche, lo que le pide, su día", () => {
+  const b = banco();
+  b.cola(["2026-09-30T02:10:00Z\twatchdog\tnoche\tbot\t🔴 El bot no contesta\tx"]);
+  const { PASÓ, NECESITO, SIGUE } = bloques(b.imprimir("manana"));
+  assert.match(PASÓ, /🌙 <b>Mientras dormías<\/b>/);
+  assert.match(PASÓ, /🩺 Sistema:/);
+  assert.match(NECESITO, /🧲 <b>3 persona\(s\) esperan/);
+  assert.match(NECESITO, /🙋 <b>1 espera tu ok<\/b>/);
+  assert.ok(NECESITO.indexOf("🧲") < NECESITO.indexOf("🙋"), "los prospectos, antes que las decisiones");
+  assert.match(SIGUE, /📅 /);
+  assert.match(SIGUE, /🎬 <b>Para grabar hoy<\/b>/);
+});
+
+test("el cierre viene en tres bloques: lo que se hizo, lo que le pide, mañana", () => {
+  const b = banco({ repo: repoConCommits([]) });
+  const agenda = b.escribir("agenda.sh", AGENDA_CON_IDS);
+  const { PASÓ, NECESITO, SIGUE } = bloques(b.imprimir("noche", { ONIA_HOY: "2026-09-29", ONIA_AGENDA: agenda }));
+  assert.match(PASÓ, /✅ <b>Hoy<\/b>/);
+  assert.match(PASÓ, /🩺 Sistema:/);
+  assert.match(NECESITO, /📋 <b>Tus bloques de hoy<\/b> — ¿se hicieron\?/);
+  assert.match(NECESITO, /⏳ <b>Te esperan<\/b>/);
+  assert.match(SIGUE, /📅 <b>Mañana<\/b>/);
+});
+
+test("sin nada que pedirle, NECESITO dice «Nada.» en vez de desaparecer", () => {
+  const lista = "▶ t_9c0d1e2f ready (unassigned) [auto:abc123] 🔴 CI en ROJO en main";
+  const parte = "⚠️ <b>1 cosa(s) que no pude arreglar solo</b>\n\n• 🔴 CI en ROJO en main\n\n<i>Parte diario · 30/09 06:30</i>";
+  const b = banco({ lista, parte, repo: repoConCommits([]) });
+  assert.equal(bloques(b.imprimir("manana")).NECESITO.trim(), "Nada.");
+  assert.equal(bloques(b.imprimir("noche", { ONIA_HOY: "2026-09-29" })).NECESITO.trim(), "Nada.");
+});
+
+test("con el tablero caído, NECESITO nunca dice «Nada.»: dice que no lo pudo ver", () => {
+  const b = banco({ tableroVivo: false, parte: "⚠️ No pude verificar el tablero.", repo: repoConCommits([]) });
+  for (const [modo, env] of [["manana", {}], ["noche", { ONIA_HOY: "2026-09-29" }]]) {
+    const { NECESITO } = bloques(b.imprimir(modo, env));
+    assert.doesNotMatch(NECESITO, /^\s*Nada\./, modo);
+    assert.match(NECESITO, /No pude leer el tablero|el tablero no respondió/, modo);
+  }
+});
+
+test("con el parte caído (el tablero vivo y sin prospectos), NECESITO tampoco dice «Nada.»", () => {
+  const lista = "▶ t_9c0d1e2f ready (unassigned) [auto:abc123] 🔴 CI en ROJO en main";
+  const b = banco({ lista, parte: "", repo: repoConCommits([]) });
+  for (const [modo, env] of [["manana", {}], ["noche", { ONIA_HOY: "2026-09-29" }]]) {
+    const { NECESITO } = bloques(b.imprimir(modo, env));
+    assert.doesNotMatch(NECESITO, /^\s*Nada\./, modo);
+    assert.match(NECESITO, /no respondió/, modo);
+  }
 });

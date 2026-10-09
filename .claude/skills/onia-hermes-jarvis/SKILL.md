@@ -164,6 +164,11 @@ CLI de Hermes.
 - **Una sección del SOUL se copia con un rango.** El `aplicar` viejo hacía `sed '/^## Su calendario/,$p'`:
   arrastraba TODO lo que viniera después. La sección de pedidos va ANTES de la del calendario, y
   cada copia termina en el próximo `---`.
+- **`aplicar` copia del SOUL SOLO las secciones que nombra** (9-oct). Una regla nueva escrita dentro de
+  otra sección («Cómo hablarle a Sergio») existe en `main` y nunca llega a `/root/.hermes/SOUL.md`. Regla
+  nueva = sección propia que termina en `---`, su paso en 5c (o 5d si depende de la llave), su chequeo
+  en la Fase A y su prueba en `hermes-jarvis-aplicar.test.mjs`. Así entró el formato fijo
+  (Pasó · Necesito · Sigue).
 - **`git stash -u` con un `git mv` en el medio:** el pop no puede restaurar un archivo nuevo en la ruta
   que dejó libre el `mv`, y deja el stash guardado. Antes de soltarlo, compará archivo por archivo con
   `git show stash@{0}^3:<ruta>`. Mejor no mezclar stash con renombres.

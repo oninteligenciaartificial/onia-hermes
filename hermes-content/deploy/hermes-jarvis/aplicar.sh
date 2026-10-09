@@ -203,6 +203,8 @@ git -C "$REPO_VPS" show origin/main:hermes-content/skills/agenda-calendario.md 2
   || falla "no encontré la skill del calendario en origin/main del VPS"
 git -C "$REPO_VPS" show origin/main:hermes-content/deploy/hermes-agent/SOUL.md 2>/dev/null | grep -q '^## Su calendario y el cierre del día' \
   || falla "no encontré la regla del calendario en el SOUL de origin/main del VPS"
+git -C "$REPO_VPS" show origin/main:hermes-content/deploy/hermes-agent/SOUL.md 2>/dev/null | grep -q '^## Formato fijo de cada mensaje' \
+  || falla "no encontré la regla del formato en el SOUL de origin/main del VPS"
 [ -f /root/.hermes/SOUL.md ] || falla "no existe /root/.hermes/SOUL.md: no hay a quién enseñarle"
 # La llave de la rutina, con forma estricta: un token con espacios (mal pegado) dejaba el aplicar a
 # medias porque recién fallaba en 5d, con el crontab ya cambiado (revisión de la madre, 2-oct).
@@ -604,7 +606,7 @@ if [ "$N8N_OK" = 1 ]; then
 fi
 
 # ── 5c. Que Hermes lo sepa usar ────────────────────────────────────────────────
-sec "5c. Hermes: la skill de su calendario y la regla en su SOUL"
+sec "5c. Hermes: la skill de su calendario y las reglas en su SOUL"
 REPO_VPS=/root/loops/onia-hermes
 NUEVA=$(git -C "$REPO_VPS" show origin/main:hermes-content/skills/agenda-calendario.md 2>/dev/null)
 if ! printf '%s' "$NUEVA" | grep -q 'onia-agenda.sh crear'; then
@@ -637,6 +639,21 @@ else
     printf '\n---\n\n%s\n' "$SECCION" >> "$SOUL" && { HERMES_CAMBIO=1; echo "✅ regla del calendario agregada al SOUL de Hermes"; }
   else
     falla "no pude agregar la regla al SOUL (falta la sección en main o el archivo en el VPS)"
+  fi
+fi
+# El formato fijo de cada mensaje (Sergio Urcullo, 8-oct: «me entregás demasiado texto y me pierdo»).
+# Va en su propia sección porque acá se copian solo las secciones que se nombran: una regla escrita
+# dentro de «Cómo hablarle a Sergio» nunca llegaba al SOUL del VPS.
+if grep -q '^## Formato fijo de cada mensaje' "$SOUL" 2>/dev/null; then
+  echo "· su SOUL ya tenía la regla del formato"
+else
+  SECCION=$(git -C "$REPO_VPS" show origin/main:hermes-content/deploy/hermes-agent/SOUL.md 2>/dev/null \
+            | awk '/^## Formato fijo de cada mensaje/ {on = 1} on && /^---$/ {exit} on {print}')
+  if [ -n "$SECCION" ] && [ -f "$SOUL" ]; then
+    [ -f "$BK/SOUL.md.antes" ] || cp -a "$SOUL" "$BK/SOUL.md.antes"
+    printf '\n---\n\n%s\n' "$SECCION" >> "$SOUL" && { HERMES_CAMBIO=1; echo "✅ regla del formato agregada al SOUL de Hermes"; }
+  else
+    falla "no pude agregar la regla del formato al SOUL"
   fi
 fi
 

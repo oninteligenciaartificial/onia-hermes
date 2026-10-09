@@ -270,33 +270,49 @@ seccion_pedidos() {
 }
 seccion_sigue() {
   local p d
+  [ "$TABLERO_OK" = 1 ] || { printf '⏳ <b>No pude leer el tablero</b>: no sé quién te espera.\n'; return; }
   p=$(printf '%s\n' "$LISTA" | grep -F '[leads-esperando]' | grep -vE '^✓' | grep -oE '\] [0-9]+ ' | grep -oE '[0-9]+' | head -1)
   d=""; [ "${N_DECISIONES:-0}" -gt 0 ] && d=$N_DECISIONES
   [ -n "$p$d" ] || return 0
-  printf '⏳ <b>Sigue esperando</b>\n'
+  printf '⏳ <b>Te esperan</b>\n'
   [ -n "$p" ] && printf '• %s persona(s) sin respuesta.\n' "$p"
   [ -n "$d" ] && printf '• %s decisión(es) tuya(s).\n' "$d"
   return 0
 }
 
-# ── Armado ───────────────────────────────────────────────────────────────────
-# `$(...)` se come los saltos del final: por eso cada bloque se AGREGA con su separador,
-# en vez de concatenar sustituciones (que pegaban una seccion al final de la otra).
-CUERPO=""
-bloque() { local b; b=$("$@"); [ -n "$b" ] && CUERPO+="$b"$'\n\n'; return 0; }
+# ── Armado: tres bloques fijos, PASÓ · NECESITO · SIGUE ─────────────────────────
+# Sergio Urcullo, 2026-10-08: «me entregás demasiado texto y me pierdo». Lo que le pide algo va
+# junto, en NECESITO, y no repartido entre la agenda y los guiones. Las secciones no cambian: se
+# agrupan. Un bloque vacío no se muestra, salvo NECESITO, que dice «Nada.» (él tiene que saber
+# que no le falta nada)… y solo si se pudo medir: con el tablero caído, «Nada.» sería mentira.
+# `$(...)` se come los saltos del final: por eso cada sección se AGREGA con su separador,
+# en vez de concatenar sustituciones (que pegaban una sección al final de la otra).
+CUERPO="" GRUPO=""
+parte() { local b; b=$("$@"); [ -n "$b" ] && GRUPO+="$b"$'\n\n'; return 0; }
+grupo() {  # grupo <TÍTULO> [<texto si quedó vacío>]: cierra lo juntado con parte()
+  local g=${GRUPO%$'\n\n'}
+  [ -n "$g" ] || g=${2:-}
+  [ -n "$g" ] && CUERPO+="<b>$1</b>"$'\n'"$g"$'\n\n'
+  GRUPO=""; return 0
+}
+medido_lo_que_espera() {
+  [ "$TABLERO_OK" = 1 ] && [ -n "$PARTE_MSG" ] && ! printf '%s' "$PARTE_MSG" | grep -q 'No pude verificar'
+}
+if medido_lo_que_espera; then NADA='Nada.'; else NADA='No pude ver si algo espera tu ok (el tablero no respondió).'; fi
 if [ "$MODO" = manana ]; then
   CABEZA="☀️ <b>Buen día, Sergio Urcullo</b> — $(dia_largo "$HOY")"
-  bloque seccion_prospectos; bloque seccion_agenda "$HOY" 'Tu día'; bloque seccion_guiones "$HOY" 'Para grabar hoy'
-  bloque seccion_decisiones; bloque seccion_cola noche 'Mientras dormías'
+  parte seccion_cola noche 'Mientras dormías'; parte linea_salud; grupo PASÓ
+  parte seccion_prospectos; parte seccion_decisiones; grupo NECESITO "$NADA"
+  parte seccion_agenda "$HOY" 'Tu día'; parte seccion_guiones "$HOY" 'Para grabar hoy'; grupo SIGUE
 else
   CABEZA="🌙 <b>Cierre del $(dia_largo "$HOY")</b>"
-  bloque seccion_hoy; bloque seccion_bloques_hoy; bloque seccion_pedidos; bloque seccion_cola resumen 'Avisos del día'; bloque seccion_sigue
-  bloque seccion_agenda "$MANANA" 'Mañana'; bloque seccion_guiones "$MANANA" 'Mañana grabás'
+  parte seccion_hoy; parte seccion_pedidos; parte seccion_cola resumen 'Avisos del día'; parte linea_salud; grupo PASÓ
+  parte seccion_bloques_hoy; parte seccion_sigue; grupo NECESITO "$NADA"
+  parte seccion_agenda "$MANANA" 'Mañana'; parte seccion_guiones "$MANANA" 'Mañana grabás'; grupo SIGUE
 fi
-CUERPO+="$(linea_salud)"
 MSG="$CABEZA
 
-$CUERPO"
+${CUERPO%$'\n\n'}"
 # Telegram corta en 4.096 caracteres; se deja margen y se avisa del corte.
 if [ "${#MSG}" -gt 3900 ]; then MSG="${MSG:0:3850}
 … (recortado)"; fi
@@ -311,6 +327,7 @@ if [ "$MODO" = manana ]; then
 import sys, re, html
 t = html.unescape(re.sub(r"<[^>]+>", "", sys.stdin.read()))
 t = "\n".join(l for l in t.splitlines() if "→" not in l)
+t = re.sub(r"(?m)^(PASÓ|NECESITO|SIGUE)$", lambda m: m.group(1).capitalize() + ".", t)
 t = re.sub(r"\(\+?\d[\d …-]*\)", "", t)
 t = re.sub("[\U0001F300-\U0001FAFF\u2600-\u27BF\uFE0F•]", "", t)
 t = re.sub(r"[ \t]+", " ", t)
