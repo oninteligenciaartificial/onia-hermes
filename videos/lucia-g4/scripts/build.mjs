@@ -86,9 +86,7 @@ const errores = [];
 const palabras = (t) => `${t.texto} ${t.acento || ''}`.trim().split(/\s+/).filter((s) => s && s !== '·');
 for (const c of plan.tarjetas) {
   const n = palabras(c).length, min = n * 0.35 + 0.3, dur = c.b - c.a;
-  const tope = c.max_palabras || 6;                      // tope del guion: 6 palabras por tarjeta; una excepción lleva su razón en plan.json (c.excepcion)
-  if (n > tope) errores.push(`${c.id}: ${n} palabras (máx ${tope})`);
-  if (n > 6 && !c.excepcion) errores.push(`${c.id}: pasa de 6 palabras y no declara su excepción`);
+  if (n > 6) errores.push(`${c.id}: ${n} palabras (máx 6: el tope del guion, sin excepciones)`);
   if (dur < min + 0.1 - 1e-9) errores.push(`${c.id}: dura ${dur.toFixed(2)} s y necesita ${min.toFixed(2)} s para ${n} palabras (+0,1 s de margen: el último instante es la salida)`);
   if (c.id === 'c1' && c.a > 0.15 + 1e-9) errores.push('c1: la primera tarjeta entra después de 0,15 s');
   if (c.acento_t != null && (c.acento_t < c.a + 0.5 - 1e-9 || c.acento_t > c.b - 0.5 + 1e-9)) errores.push(`${c.id}: acento_t ${c.acento_t} fuera de [a+0,5, b-0,5]`);
@@ -151,8 +149,8 @@ let proc = null;
       const raw = (k) => proc[k].id;
       const ok = (cond, texto) => { claim.push(`${cond ? 'ok ' : '✖  '} ${texto}`); if (!cond) errores.push(`afirmación falsa: ${texto}`); };
       const masCaro = plan.imagenes.reduce((a, b) => (b.cr > a.cr ? b : a)), masBarato = plan.imagenes.reduce((a, b) => (b.cr < a.cr ? b : a));
-      ok(masCaro.letra === 'E' && raw('e') < raw('a') && raw('e') < raw('b'), `«Pagar más no la hace más parecida»: la más cara (${masCaro.letra}, ${masCaro.cr} cr, ${raw('e')}) queda bajo la de 1 cr (${raw('a')}) y la de 0,5 cr (${raw('b')})`);
-      ok(plan.imagenes.filter((m) => m.cr > 1).every((m) => m._raw < raw('a')), `ninguna de las que cuestan más que A (1 cr) la hace más parecida que A (${raw('a')})`);
+      ok(masCaro.letra === 'E' && raw('e') < raw('a') && raw('e') < raw('b'), `«Pagar más no mejora el parecido»: la más cara (${masCaro.letra}, ${masCaro.cr} cr, ${raw('e')}) queda bajo la de 1 cr (${raw('a')}) y la de 0,5 cr (${raw('b')})`);
+      ok(plan.imagenes.filter((m) => m.cr > 1).every((m) => m._raw < raw('a')), `ninguna de las que cuestan más que A (1 cr) mejora el parecido de A (${raw('a')})`);
       ok(raw('a') >= 0.7 && raw('a_cafe2') >= 0.7 && raw('a_cafe3') >= 0.7, `A (1 cr) la sostuvo en tres escenas: ${raw('a')} · ${raw('a_cafe2')} · ${raw('a_cafe3')} (todas ≥ 0,70)`);
       ok(masBarato.letra === 'B' && raw('b') >= 0.7 && raw('b_cafe2') < 0.7 && raw('b_cafe3') >= 0.7, `B (el más barato, ${masBarato.cr} cr) la perdió en UNA de tres: ${raw('b')} · ${raw('b_cafe2')} · ${raw('b_cafe3')}`);
       const fila = (l) => plan.l2.tabla.filas.find((f) => f.img === l).celdas.map((c) => c.valor).join();

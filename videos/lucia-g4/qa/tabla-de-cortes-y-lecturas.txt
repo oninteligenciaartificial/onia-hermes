@@ -32,7 +32,7 @@ Tarjetas (entra = 1 cuadro antes de a salvo en los empujes, donde viajan):
    27.00 – 32.00  c8  4 pal (mín 1.7 s) «Imagen D · 2,5 créditos» [entra con el empuje] [sale con el empuje]
    32.00 – 37.00  c9  4 pal (mín 1.7 s) «Imagen E · 3 créditos» [entra con el empuje] [sale con el empuje]
    37.00 – 42.00  c10 4 pal (mín 1.7 s) «Imagen F · 2,75 créditos» [entra con el empuje] [sale con el empuje]
-   42.00 – 49.75  c11 7 pal (mín 2.75 s) «Pagar más no  la hace más parecida.» [entra con el empuje] [sale con el empuje]
+   42.00 – 49.75  c11 6 pal (mín 2.4 s) «Pagar más no  mejora el parecido.» [entra con el empuje] [sale con el empuje]
    49.75 – 52.25  c12 6 pal (mín 2.4 s) «Imagen A:  la sostuvo en tres.» [entra con el empuje]
    52.25 – 54.55  c13 5 pal (mín 2.05 s) «Una foto sola no mide.»
    54.55 – 57.25  c14 6 pal (mín 2.4 s) «El café: B perdió la cara.» [sale con el empuje]
@@ -86,8 +86,8 @@ Datos (de PROCEDENCIA.jsonl):
   Imagen E: 3 cr · parecido 0,69 (medido 0.691) · bajo
   Imagen F: 2,75 cr · parecido 0,66 (medido 0.658) · bajo
 Lo que el video afirma, contra los datos:
-  ok  «Pagar más no la hace más parecida»: la más cara (E, 3 cr, 0.691) queda bajo la de 1 cr (0.806) y la de 0,5 cr (0.794)
-  ok  ninguna de las que cuestan más que A (1 cr) la hace más parecida que A (0.806)
+  ok  «Pagar más no mejora el parecido»: la más cara (E, 3 cr, 0.691) queda bajo la de 1 cr (0.806) y la de 0,5 cr (0.794)
+  ok  ninguna de las que cuestan más que A (1 cr) mejora el parecido de A (0.806)
   ok  A (1 cr) la sostuvo en tres escenas: 0.806 · 0.83 · 0.839 (todas ≥ 0,70)
   ok  B (el más barato, 0.5 cr) la perdió en UNA de tres: 0.794 · 0.35 · 0.831
   ok  la lección 2 dice B: 0,79 · 0,35 · 0,83

@@ -8,7 +8,7 @@ nube no tiene cliente `ssh` y la decisión de la madre (8-oct) es que la llave v
 | 1 | G1 «Este video no fue grabado: así se hace, en 3 pasos» | `g1-final-1080x1920.mp4` | 56 s | `../lucia-g1/pie.txt` | `../lucia-g1/qa/g1-preview-360p.mp4` |
 | 2 | G3 «Tres errores de la IA que atrapé antes de publicar» | `g3-final-1080x1920.mp4` | 58 s | `../lucia-g3/pie.txt` | `../lucia-g3/qa/g3-preview-360p.mp4` |
 | 3 | G2 «La misma foto, seis clips: ¿quién pierde la cara?» | `g2-final-1080x1920.mp4` | 58 s | `../lucia-g2/pie.txt` | `../lucia-g2/qa/g2-preview-360p.mp4` |
-| 4 | G4 «Seis motores de imagen, una cara: ¿cuál la conserva?» (**su guion espera la validación de la madre**) | `g4-final-1080x1920.mp4` | 57 s | `../lucia-g4/pie.txt` | `../lucia-g4/qa/g4-preview-360p.mp4` |
+| 4 | G4 «Seis motores de imagen, una cara: ¿cuál la conserva?» (**su guion espera la validación de la madre**) | `g4-final-1080x1920.mp4` | 59,75 s | `../lucia-g4/pie.txt` | `../lucia-g4/qa/g4-preview-360p.mp4` |
 
 SHA-256 de lo entregado:
 
@@ -16,13 +16,13 @@ SHA-256 de lo entregado:
 5903cd9c6c65bc134ca8c0faf83432007197399b95a8cb31ff901bdca7516ca7  g1-final-1080x1920.mp4
 75642fd093569109a4adb3346dda13afe5991dcd0e3eb430b62c1c080c17a3e3  g3-final-1080x1920.mp4
 429793f0ff2f544cc2185f29c83916d76c47adf632ab9df6fb7c95a2448d46e6  g2-final-1080x1920.mp4
-20b2f943d6e3be17e9b367586571d7eac71b96ed59402cf8688af1165f085259  g4-final-1080x1920.mp4
+ec4c450f3e0c4f682b675b65ef913a2e1e0400d31b29c35aa948119bf702f997  g4-final-1080x1920.mp4
 ```
 
 - G1 y G3 son **byte por byte** el render que pasó el QA (`../lucia-gN/out/`, ignorado en git).
 - G2 es el mismo render recodificado a 6 Mbps máx. para que entre en git (61 → 16,7 MB): PSNR contra el original 47,9 dB
   de promedio y 43,8 dB en el peor cuadro, o sea sin diferencia visible; misma duración (58,00 s), 24 fps, audio silencioso copiado.
-- G4 también está recodificado a 6 Mbps máx. (68,8 → 13,8 MB; PSNR 47,2 dB de promedio, 43,2 dB en el peor cuadro).
+- G4 también está recodificado a 6 Mbps máx., crf 18 (60,4 → 21 MB; PSNR 49,2 dB de promedio, 44,2 dB en el peor cuadro).
 - Todos son 1080×1920, H.264 + AAC (silencioso: D4, sin voz ni música), 24 fps.
 
 ## Orden y ritmo (plan v5 §5: hasta 3 piezas por semana, 19:00 La Paz)

@@ -1,3 +1,3 @@
-[Parsed_psnr_0 @ 0x559302a678c0] PSNR y:48.079155 u:53.002358 v:52.836677 average:49.180299 min:44.147874 max:59.883786
+[Parsed_psnr_0 @ 0x55d468bd0e00] PSNR y:48.056499 u:52.958061 v:52.780112 average:49.153701 min:44.167545 max:60.357234
 
-cuadros 1434 · peor cuadro 44.1 dB · promedio por cuadro 50.6 dB · cuadros bajo 45 dB: 35
+cuadros 1434 · peor cuadro 44.2 dB · promedio por cuadro 50.5 dB · cuadros bajo 45 dB: 28

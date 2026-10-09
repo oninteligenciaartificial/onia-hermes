@@ -40,7 +40,7 @@
   "fotos": {
     "a": { "src": "assets/ph-a.jpg", "origen": "hermes-content/references/modelos/lucia/v4/kit/k1-1-recepcion-celular-4afffb96.jpg" },
     "b": { "src": "assets/ph-b.jpg", "origen": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos/img-kling-omni-image-c3706d45.jpg" },
-    "c": { "src": "assets/ph-c.jpg", "origen": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos-limpias/img-nano-banana-2-1-a4dd1a48-limpia.jpg", "original": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos/img-nano-banana-2-1-a4dd1a48.jpg", "nota": "limpia: sillones dentales y logo de monitor difuminados (revisión 1, H1+H2)" },
+    "c": { "src": "assets/ph-c.jpg", "origen": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos-limpias/img-nano-banana-2-1-a4dd1a48-limpia.jpg", "original": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos/img-nano-banana-2-1-a4dd1a48.jpg", "nota": "limpia: sillones dentales y resto del consultorio difuminados desde y=540 (x 840-1080, y 540-970) y logo de monitor (revisión 1, H1+H2; 3ra pasada: versión que difumina desde y=540)" },
     "d": { "src": "assets/ph-d.jpg", "origen": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos/img-seedream-5-pro-b1abe43c.jpg" },
     "e": { "src": "assets/ph-e.jpg", "origen": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos-limpias/img-flux-3-af9c2d0c-limpia.jpg", "original": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos/img-flux-3-af9c2d0c.jpg", "nota": "limpia: logo del respaldo del monitor difuminado (revisión 1, H2)" },
     "f": { "src": "assets/ph-f.jpg", "origen": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos/img-gpt-image-2-5-5da2fa1e.jpg" },
@@ -85,7 +85,7 @@
     { "id": "c8", "texto": "Imagen D ·", "acento": "2,5 créditos", "acento_t": 29.4, "a": 27.0, "b": 32.0, "escena": "D", "imagen": "d" },
     { "id": "c9", "texto": "Imagen E ·", "acento": "3 créditos", "acento_t": 34.4, "a": 32.0, "b": 37.0, "escena": "E", "imagen": "e" },
     { "id": "c10", "texto": "Imagen F ·", "acento": "2,75 créditos", "acento_t": 39.4, "a": 37.0, "b": 42.0, "escena": "F", "imagen": "f" },
-    { "id": "c11", "texto": "Pagar más no\n", "acento": "la hace más parecida.", "acento_t": 44.3, "a": 42.0, "b": 49.75, "escena": "lección 1", "max_palabras": 7, "excepcion": "el orquestador fijó esta frase (7 palabras); el tope del guion es 6. Alternativa de 6: «Pagar más no mejora el parecido.»" },
+    { "id": "c11", "texto": "Pagar más no\n", "acento": "mejora el parecido.", "acento_t": 44.3, "a": 42.0, "b": 49.75, "escena": "lección 1" },
     { "id": "c12", "texto": "Imagen A:\n", "acento": "la sostuvo en tres.", "acento_t": 50.6, "a": 49.75, "b": 52.25, "escena": "lección 2" },
     { "id": "c13", "texto": "Una foto", "acento": "sola no mide.", "a": 52.25, "b": 54.55, "escena": "lección 2" },
     { "id": "c14", "texto": "El café:", "acento": "B perdió la cara.", "acento_t": 55.6, "a": 54.55, "b": 57.25, "escena": "lección 2" },
@@ -164,7 +164,7 @@
     { "id": "A9", "que": "Empuje lento 1,00 → 1,04 sobre cada foto (la orden: «movimiento mínimo tipo empuje lento/zoom suave»).", "revertir": "plan.json → zoom.fin = 1" },
     { "id": "A10", "que": "2da pasada (H4): la lección 2 es una tabla con A y B en tres escenas (A 0,81 · 0,83 · 0,84 y B 0,79 · 0,35 · 0,83) y una tarjeta nueva «Imagen A: la sostuvo en tres.» (6 palabras). El video ya contesta su pregunta.", "revertir": "plan.json → l2.tabla.filas (quitar la fila A) y c12" },
     { "id": "A11", "que": "2da pasada (H3): franja entre 0,66 y 0,70 sobre la escala de la lección 1 (aparece a 47,2 s) que dibuja lo que dice la nota 2.", "revertir": "plan.json → l1.ruido" },
-    { "id": "A12", "que": "2da pasada (H6): la tarjeta de la lección 1 dice «Pagar más no la hace más parecida.» Son 7 palabras: el tope del guion es 6, y el orquestador fijó la frase. Excepción explícita en plan.json → c11.max_palabras.", "revertir": "plan.json → c11 = «Pagar más no mejora el parecido.» (6 palabras) y quitar max_palabras" },
+    { "id": "A12", "que": "2da pasada (H6): la tarjeta de la lección 1 dice «Pagar más no mejora el parecido.» (6 palabras, sin excepción al tope del guion). En la 2da pasada fue «Pagar más no la hace más parecida.» (7 palabras, con excepción); en la 1ra, «Pagar más no la parece más.» (no es español estándar).", "revertir": "plan.json → c11" },
     { "id": "A13", "que": "2da pasada (H5): el gancho abre con la pregunta («¿Cuál conserva su cara?», 0,1-3 s) y el contexto («Misma orden. Seis motores de imagen.», 3-6 s, con las miniaturas).", "revertir": "plan.json → c1 y c2 (intercambiar) y gancho.miniaturas.a" },
     { "id": "A14", "que": "2da pasada: el video dura 59,75 s (era 57): la nota de 19 palabras en la lección 1 y la fila de A en la lección 2 necesitaron tiempo; el cierre pasa de 4 a 2,5 s. Pasa de 30 y no de 60.", "revertir": "volver a la 1ra pasada (git)" }
   ],

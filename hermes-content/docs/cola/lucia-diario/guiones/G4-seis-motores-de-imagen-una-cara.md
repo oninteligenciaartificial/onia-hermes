@@ -15,7 +15,7 @@
 
 ## Qué aprende quien lo ve
 
-**Que pagar más por una foto no la hace más parecida a ella, y que una sola foto buena no prueba nada**: el motor que más cobra
+**Que pagar más por una foto no mejora el parecido con ella, y que una sola foto buena no prueba nada**: el motor que más cobra
 (3 créditos) quedó bajo el piso, el que ya se usa (1 crédito) la sostuvo en las tres escenas, y el más barato (0,5) la perdió en una de tres.
 Misma orden, mismas referencias, medido con una regla que cualquiera entiende.
 
@@ -36,7 +36,7 @@ celular» (K1), con el mismo prompt y las mismas 6 imágenes de referencia en ca
 | F | GPT Image 2.5 | 2,75 | 0,66 | `…/img-gpt-image-2-5-5da2fa1e.jpg` |
 
 - **Fotos limpias (revisión 1, H1+H2):** en C se veían dos sillones dentales al fondo (da a entender el rubro) y un logo de monitor; en E, un logo en el respaldo del monitor.
-  El video usa las copias con desenfoque con pluma de `v4/prueba-motores-20261008/fotos-limpias/` (la cara no se toca; `face-gate`: C 0,726 contra 0,737 del original, E 0,687 contra 0,690).
+  El video usa las copias con desenfoque con pluma de `v4/prueba-motores-20261008/fotos-limpias/` (la cara no se toca; `face-gate`: C 0,724 contra 0,737 del original, E 0,687 contra 0,690).
   Los números en pantalla siguen siendo los del original medido. Los originales quedan en `fotos/` como evidencia.
 
 **Lección 2 — repetir en otra escena (café):**
@@ -55,7 +55,7 @@ celular» (K1), con el mismo prompt y las mismas 6 imágenes de referencia en ca
 
 ## Estructura (59,75 s, 24 fps)
 
-| t (s) | Bloque | Imagen | Texto en pantalla (voseo cruceño; ≤ 6 palabras por tarjeta, salvo la de la lección 1) |
+| t (s) | Bloque | Imagen | Texto en pantalla (voseo cruceño; ≤ 6 palabras por tarjeta) |
 |---|---|---|---|
 | 0,1 – 3 | **GANCHO** | Foto A a pantalla completa; rótulo «Lucía Antelo · personaje IA de Onia» **de 0 a 3 s, 40 px** | «¿Cuál conserva su cara?» |
 | 3 – 6 | Gancho | La misma foto; entran las 6 miniaturas A-F en una fila | «Misma orden.» → «Seis motores de imagen.» |
@@ -66,7 +66,7 @@ celular» (K1), con el mismo prompt y las mismas 6 imágenes de referencia en ca
 | 27 – 32 | Imagen D | Foto D | «Imagen D · 2,5 créditos» · dato «parecido 0,70» · «justo en el piso» |
 | 32 – 37 | Imagen E | Foto E (limpia) | «Imagen E · 3 créditos» · dato «parecido 0,69» · sello «bajo el piso» |
 | 37 – 42 | Imagen F | Foto F | «Imagen F · 2,75 créditos» · dato «parecido 0,66» · sello «bajo el piso» |
-| 42 – 49,75 | **Lección 1** | Placa con las 6 ordenadas por precio sobre la escala, y la franja de 0,66 a 0,70 | «Pagar más no la hace más parecida.» (**7 palabras: excepción**; alternativa de 6: «Pagar más no mejora el parecido.») · nota a 44 px «Una toma cada uno: es una prueba, no una regla.» → (a los 45,6 s) «Entre 0,66 y 0,70 la diferencia es ruido (±0,03).» |
+| 42 – 49,75 | **Lección 1** | Placa con las 6 ordenadas por precio sobre la escala, y la franja de 0,66 a 0,70 | «Pagar más no mejora el parecido.» · nota a 44 px «Una toma cada uno: es una prueba, no una regla.» → (a los 45,6 s) «Entre 0,66 y 0,70 la diferencia es ruido (±0,03).» |
 | 49,75 – 57,25 | **Lección 2** | Tabla **A (0,81 · 0,83 · 0,84)** y **B (0,79 · 0,35 · 0,83)** en tres escenas, y la foto B del café junto a la A del café | «Imagen A: la sostuvo en tres.» → «Una foto sola no mide.» → «El café: B perdió la cara.» (el guion decía «B perdió la cara en el café.»: 7 palabras) |
 | 57,25 – 59,75 | **CIERRE** | Foto K4·5 (`v4/kit/k4-5-senala-342c0ab5.jpg`): Lucía mira a cámara y sonríe; ya pagada, sin clips (face-gate 0,832) | «Seguime: cada semana, una prueba.» |
 

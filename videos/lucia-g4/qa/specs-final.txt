@@ -7,7 +7,7 @@ color_space=bt709
 r_frame_rate=24/1
 avg_frame_rate=24/1
 duration=59.750000
-bit_rate=8081187
+bit_rate=8076734
 nb_frames=1434
 codec_name=aac
 codec_type=audio
@@ -19,7 +19,7 @@ duration=59.750000
 bit_rate=2275
 nb_frames=2802
 duration=59.750000
-size=60404871
-bit_rate=8087681
-[Parsed_volumedetect_0 @ 0x55cef5fd7dc0] mean_volume: -91.0 dB
-[Parsed_volumedetect_0 @ 0x55cef5fd7dc0] max_volume: -91.0 dB
+size=60371616
+bit_rate=8083228
+[Parsed_volumedetect_0 @ 0x562c758e0dc0] mean_volume: -91.0 dB
+[Parsed_volumedetect_0 @ 0x562c758e0dc0] max_volume: -91.0 dB

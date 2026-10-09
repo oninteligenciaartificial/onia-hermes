@@ -49,7 +49,7 @@ ventana legible medida en el DOM (opacidad ≥ 0,9 y ≥ 95 % dentro del lienzo)
   ok  c8        4 pal  26.92–31.88 s  4.96 s (pide 1.70)  «Imagen D · 2,5 créditos»
   ok  c9        4 pal  31.92–36.88 s  4.96 s (pide 1.70)  «Imagen E · 3 créditos»
   ok  c10       4 pal  36.92–41.88 s  4.96 s (pide 1.70)  «Imagen F · 2,75 créditos»
-  ok  c11       7 pal  41.92–49.63 s  7.71 s (pide 2.75)  «Pagar más no la hace más parecida.»
+  ok  c11       6 pal  41.92–49.63 s  7.71 s (pide 2.40)  «Pagar más no mejora el parecido.»
   ok  c12       6 pal  49.67–52.21 s  2.54 s (pide 2.40)  «Imagen A: la sostuvo en tres.»
   ok  c13       5 pal  52.29–54.50 s  2.21 s (pide 2.05)  «Una foto sola no mide.»
   ok  c14       6 pal  54.63–57.13 s  2.50 s (pide 2.40)  «El café: B perdió la cara.»
