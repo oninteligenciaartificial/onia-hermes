@@ -29,6 +29,34 @@ Protocolo en `hermes-content/docs/cola/loop/README.md`. En corto: `/loop` sobre 
 criterio de hecho (publicada y MIRADA), `[x]` con SHA o link, commit y push, siguiente. Cola vacía → se rellena sola desde su
 handoff y el GOAL. Nunca termina el turno con tareas pendientes.
 
+## 2 bis. Latido por hora (en el servidor, corre con la PC apagada)
+
+Medido el 9-oct: el loop dentro de la sesión no alcanza, porque Plataforma, Marca y Ventas quedaron `idle`. Cada sesión de la
+nube tiene un `RemoteTrigger` recurrente que le inyecta un turno cada hora:
+
+| Sesión | Trigger | Minuto |
+|---|---|---|
+| Plataforma | `trig_01XVX9kgMExkapoN5XDdamx4` | :17 |
+| Marca personal | `trig_01ExDbhoaxaXpzpvj26DEeQ8` | :27 |
+| Lucía | `trig_013YP8Nxhwi8HbdufMuv2Var` | :47 |
+| Hermes-Jarvis | `trig_01A9hCX7s5ZuaQ24TkK3Rr8d` | :57 |
+| Ventas y pauta | sin latido: está en el entorno «Default» y su id no aparece por la API. Se sostiene con su propio `ScheduleWakeup` | — |
+
+Cómo se crea (las dos trampas que dan 400):
+- `cron_expression` tiene un **mínimo de 1 hora**. `*/20` da «minimum interval is 1 hour».
+- `job_config.ccr.environment_id` es **obligatorio**, aunque la sesión ya exista.
+
+```json
+{"name":"Latido: <carril>","cron_expression":"17 * * * *","enabled":true,"persist_session":true,
+ "persistent_session_id":"session_…","job_config":{"ccr":{"environment_id":"env_…",
+ "events":[{"data":{"isSynthetic":true,"type":"user","parent_tool_use_id":null,"uuid":"<uuid nuevo>",
+ "message":{"role":"user","content":"LATIDO … git pull. Trabajá tu cola …/loop/<carril>.md … Reportá solo PUBLICADO."}}}]}}}
+```
+
+Para apagarlo: `update {enabled:false}`. Si la sesión se reemplaza, el latido viejo apunta a una sesión muerta: se crea otro con
+el id nuevo y se apaga el viejo. **Homelab:** no hace falta para que las nubes sigan. Serviría solo para correr la ronda de la
+madre sin la PC, y eso exige loguear la cuenta de Sergio Urcullo allá, que necesita su OK.
+
 ## 3. La ronda de la madre (cada 20 min, `CronCreate`)
 
 1. **Verificador Haiku** (uno solo, barato): por cada cola, cuántas tareas `[x]` desde la última ronda y cuál es la siguiente;
