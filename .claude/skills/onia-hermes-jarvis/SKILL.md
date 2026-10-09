@@ -128,6 +128,11 @@ CLI de Hermes.
   con la variable Y el archivo `onia-autosync-main` en `git rev-parse --absolute-git-dir` de ese checkout: no
   se versiona, no se hereda y ningún otro worktree lo comparte. Residuo: un worktree en una rama anterior
   al #138 corre el autosync viejo, que movía main sin mirar nada.
+- **Un runbook se escribe con los `echo` del script delante, no de memoria** (9-oct). El §8 del doc de
+  pedidos decía que 1b imprime «✅ llego a GitHub» y 5d «✅ pedidos a Claude: configurado»: 1b es muda
+  salvo que falle (`--probar` y `--estado` van a `/dev/null`) y 5d dice «✅ llave de la rutina guardada…».
+  Con eso, quien corría `aplicar` iba a buscar una línea que nunca aparece. Se sacan con
+  `grep -n '^sec \|echo "✅' aplicar.sh`.
 - **Una respuesta rechazada avisa, una vez por pedido** («⛔ Rechazada · id · link», sin el texto rechazado;
   9-oct). Antes se descartaba en silencio. «⚠️ Respuesta rechazada» con un link real pasaba los 90 bytes y
   la aduana guardaba solo el emoji: la etiqueta se eligió por bytes, no por gusto.

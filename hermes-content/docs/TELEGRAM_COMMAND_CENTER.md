@@ -242,9 +242,29 @@ Hermes, su asistente, por Telegram. Cada corrida es UN pedido. Hablale siempre c
 | 1 | Esperar ≤1 h desde el merge: el sincronizador copia a `/root/bin` el emisor con sello y el recolector con tope. Si no llegaron, la sección 0 corre el sincronizador una vez y, si siguen faltando, sale sin tocar nada | la sección 0 no dice «todavía no está en /root/bin» |
 | 2 | Avisar al dueño del VPS de ese momento (infra, un dueño a la vez) | contestó que lo cede |
 | 3 | Entorno, rutina y llave (§4, pasos 1 a 3), con el prompt de §5 **de `main` de hoy** (el que trae `responder-pedido.sh` y la línea «Sello:»; el viejo, con `commit-tree`, ya no se entrega) | existen el secreto `ONIA_RUTINA_PEDIDOS_TOKEN` y la variable `ONIA_RUTINA_PEDIDOS_URL`; el entorno no tiene variables |
-| 4 | `gh workflow run hermes-jarvis.yml --ref main -f accion=aplicar`, entre las 06:30 y las 22:00 de La Paz (el aviso de «encendido» suena). Por SSH la llave no viaja (alternativa en §4.4) | el log pasa por 0, 1, 1b, 5, 5b, Fase A, 1c, 2, 3, 4, 5c, 5d, 6, 6b, 7 y 8 sin ❌; 1b dice «✅ llego a GitHub» y 5d «✅ pedidos a Claude: configurado» |
+| 4 | `gh workflow run hermes-jarvis.yml --ref main -f accion=aplicar`, entre las 06:30 y las 22:00 de La Paz (el aviso de «encendido» suena). Por SSH la llave no viaja (alternativa en §4.4). El log: `gh run list --workflow hermes-jarvis.yml -L 1` y `gh run view <id> --log` | El job termina en verde, cero ❌ y la última línea dice «aplicado … — fallas: 0». Las líneas que tienen que estar (las de 1b son mudas salvo que fallen: llave, `--probar` y n8n): ver la tabla «Qué mirar en el log» abajo |
 | 5 | Si quedó un «🧪 Prueba de Jarvis» en su calendario (el log da el id), borrarlo con el conector de Google Calendar | no queda ninguno |
 | 6 | Avisarle a la sesión del carril: lee el log en GitHub y lo verifica sección por sección | el carril lo dio por bueno |
+
+**Qué mirar en el log de `aplicar`** (textos tal cual los imprime `aplicar.sh`):
+
+| Sección | Bien si dice |
+|---|---|
+| 0 | «✅ resumen, lector de calendario, aduana, vigía de aprobaciones, guardia y pedidos: al día» |
+| 1 | «✅ /root/backups/hermes-jarvis-…» |
+| 1b | nada con ❌ (si falta la llave, el VPS no llega a GitHub o n8n no responde, aborta acá sin tocar nada) |
+| 5 y 5b | 5: conectado al calendario; 5b: «✅ probado en su calendario: crear → mover → cancelar (la prueba ya no está)» |
+| Fase A | «✅ requisitos en verde: recién ahora se toca lo que le llega» |
+| 1c | «✅ …/rollback.sh» |
+| 2 | «✅ instalado: A → B líneas activas» (el 1-oct se esperaba 45 → 48) |
+| 3 y 4 | los 3 trabajos de Hermes pausados y los 12 flujos de n8n apagados, sin ❌ |
+| 5c | la skill de calendario y la regla del SOUL, instaladas o «ya estaba» |
+| 5d | «✅ llave de la rutina guardada en /root/.config/onia/pedidos.env (600)» y «✅ la respuesta vuelve sola: …». Si dice «pedidos a Claude APAGADOS: falta la llave», el secreto no llegó |
+| 6 | «✅ /var/lib/onia-aviso/activo» |
+| 6b | «✅ gateway de Hermes reiniciado y vivo», «✅ su lista de skills ya nombra agenda-calendario» y «✅ y nombra pedir-a-claude» |
+| 7 y 7b | las vistas previas del cierre y del resumen: se leen enteras, como le van a llegar |
+| 8 | «✅ le avisé por Telegram» |
+| fin | «aplicado … — fallas: 0 — respaldo: …» |
 
 Si algo sale mal: `gh workflow run hermes-jarvis.yml --ref main -f accion=revertir`. `aplicar` es todo o nada:
 si falla la Fase A, no tocó nada.
