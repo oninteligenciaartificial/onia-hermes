@@ -228,6 +228,13 @@ Se trabaja en la app de Claude; Codex corre por detrás. Codex no orquesta, no a
   Con ese junction, la madre corrió `npx vitest related <archivos tocados> --run` y dio 971/971, y encontró un test viejo
   roto que Codex no había visto (`fetch-con-limite.test.ts`). **Antes de commitear un trabajo de Codex en onia-platform,
   la madre corre `vitest related` ella misma.**
+- 🔴 **`vitest related` NO alcanza** (Plataforma, 8-oct): el registro de rutas (`lib/platform/api-route-registry.test.ts`)
+  y los ratchets de UI y de voseo solo los atrapa la suite completa. Así se escaparon tres rojos de C16b y C16d después
+  de que la madre los dio por buenos con `related` (1002/1002). Antes de commitear: `npx vitest run` COMPLETO y
+  `npx tsc --noEmit`, con los números en el commit. Si el tsc falla por el cliente Prisma compartido, se dice.
+- **Nombres vivos de las sesiones (8-oct, noche):** «Plataforma Onia 1.0», «Ventas y pauta Onia», «Marca personal de
+  Sergio Urcullo», «Sesión Lucía de Onia», «Hermes-Jarvis sesión con Sergio Urcullo». `SendMessage` falla con el nombre
+  viejo («Marca personal: comunidad y contenido»): `ListAgents` primero, siempre.
 - Los tests de bash de Hermes (`scripts/loops/pedido-*.test.mjs`) fallan en Windows también en `main` (70 de 78): son
   para Linux. Su gate es el CI del PR, no la PC.
 - **Codex en un repo pesado (onia-hermes, ~6 GB):** worktree con `--no-checkout` + `sparse-checkout set <carpeta>
