@@ -7,6 +7,20 @@
   SHA-256 en `videos/lucia-entrega/`; previews 360p en `videos/lucia-gN/qa/`. 0 créditos más.
 - [ ] Publicar en la cuenta de Lucía lo que pase el control de identidad — **pasa a Bloqueado** (abajo): corre en el VPS.
 
+## Verificación de aprendizaje · 2026-10-09 (pedida por la madre)
+
+- [x] **Prueba de uso de `equipo-de-agentes` y `aprender-de-todo`** (leídas del commit `ca1fde0a`, sin fusionar su rama):
+  - **Sesión + fecha:** `session_01XSzFcs1k18ijqjSHGjnzD4` (Lucía, nube), 9-oct-2026.
+  - **Tarea de cola:** G5 «Cómo mido si una cara es la de Lucía» (`videos/lucia-g5/`).
+  - **Regla usada:** ficha `2026-10-04-reels-para-lucia.md` §2 (otro avatar IA se llama «Lucía» y esconde que es IA) → siempre «Lucía Antelo», con apellido,
+    y rótulo «personaje IA de Onia» desde el cuadro 0 (`LUCIA.md` §0-canon dato 2), dimensión «Negocio y oferta / Idioma y tono». De `equipo-de-agentes` §9: contrato →
+    resultado → verificación (prompt del editor con META/PRUEBA, informe del editor, revisión independiente 1 y 2).
+  - **Artefacto:** `videos/lucia-g5/index.html` (rótulo «Lucía Antelo · personaje IA de Onia» a 40 px, cuadro 0) y `pie.txt`.
+  - **Verificación:** `videos/lucia-g5/qa/revision-1.md` y `revision-2.md` (rótulo ≥ 40 px desde el cuadro 0 sin tapar la cara; sin marcas de terceros ni profesión).
+    Revisión de identidad: face-gate de A, F, B café y K4·5 (`qa/face-gate*.txt`).
+  - **Lo que NO aplica y no se adoptó:** la micro-interacción «clic → hecho» y el «Comentá X» (premisa v5: Lucía no muestra el producto; CTA de mecanismo sin probar).
+  - **Costos (§7):** el juicio fue de Sonnet (editor y revisor); no se usaron verificadores Haiku porque los chequeos eran de juicio, no de conteo.
+
 ## Siguientes 3 (sacadas del plan v5 y del GOAL de `handoff/madre-local.md`; todas 0 créditos y sin VPS)
 
 - [x] L01 «Hola, soy Lucía. No existo.» reescrito a la premisa v5 — láminas en `hermes-content/carousels/out/lucia-l01-hola-no-existo-foto/`,
