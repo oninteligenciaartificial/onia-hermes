@@ -52,6 +52,8 @@ Plataforma con las del presupuesto por fases, a 390 y 1440 px.
   sesión y actúa. Si nada cambió, no le escribe nada a él. Las sesiones no pueden avisarle en el momento (ver
   «Nube → madre»). 1 tarea por mensaje, con su criterio de hecho. Los issues `tarea-local` los barre la madre en las
   rondas. No se crea otra tarea programada: sería un segundo orquestador.
+- **Cada sesión lleva su plan visible en la app** (TaskCreate), con el estado y el criterio de hecho de cada tarea.
+  Sergio Urcullo lo vio en Plataforma el 8-oct y pidió que todas lo tengan: es como él sigue el avance sin preguntar.
 - **A Sergio Urcullo, como máximo 3 pedidos por semana**, en una lista de sí o no. Lo demás se anota y no se le pide.
 - **La plata no espera al desarrollo:** mientras el cobro de punta a punta no esté probado, se cobra por transferencia y se
   activa a mano (Etapa 1).
@@ -191,6 +193,25 @@ Cómo contestar: <en tu transcript | SendMessage a «Sesión madre de Onia» | r
   4. Effort low y modelo chico para la lectura mecánica.
   Script de medición: suma `usage` por `message.id` en `~/.claude/projects/<carpeta>/**/*.jsonl`.
 
+## El permiso de mover `main` (5-oct)
+
+- Desde el 5-oct el hook Stop solo mueve `main` con permiso (Sergio Urcullo: «sí, la madre sigue directo»).
+  **Desde el 9-oct exige además una MARCA en el checkout de la madre**, porque la madre corre en un worktree
+  (`claude -w`) y sus subagentes en otros que heredan la variable. Al arrancar una madre en un worktree nuevo,
+  una vez: `touch "$(git rev-parse --absolute-git-dir)/onia-autosync-main"` (en PowerShell:
+  `New-Item -ItemType File "$(git rev-parse --absolute-git-dir)/onia-autosync-main"`). Sin la marca, el log del
+  Stop dice «permiso de main ignorado» y su rama se pushea igual: no se pierde nada.
+  La madre lo tiene con **`ONIA_AUTOSYNC_MAIN=1` en el `.claude/settings.local.json` de SU carpeta de
+  onia-hermes** (`{"env": {"ONIA_AUTOSYNC_MAIN": "1"}}`), que git ignora desde el 5-oct. Así vale solo para las
+  sesiones abiertas en esa carpeta. Nunca en `.claude/settings.json` (se lo daría a todas las sesiones, también
+  a las de la nube), ni en `C:\Users\PC\.claude\settings.json` o una variable de Windows (alcanzaría a
+  cualquier sesión de la PC; revisión del 5-oct).
+- Se verifica en el log del Stop: con permiso dice «main al día (fast-forward)»; sin permiso, «main no se toca».
+- Sin el permiso no se pierde nada: la rama se pushea igual, y si la madre estaba EN `main`, sus commits quedan
+  en `claude/autosync-<id de la sesión>` y la sesión queda parada en esa rama.
+- Las sesiones de la nube no lo tienen: su trabajo llega a `main` por PR, que revisa la madre (v2) y mergea la
+  madre o Sergio Urcullo.
+
 ## Delegar código a Codex (medido el 4-oct; conexión rehecha el 8-oct)
 
 Sergio Urcullo, 8-oct: **Claude es la madre y Codex trabaja dentro de ella** («aprovechemos mis dos suscripciones»).
@@ -211,6 +232,27 @@ Se trabaja en la app de Claude; Codex corre por detrás. Codex no orquesta, no a
   y gpt-6.1-sol con sandbox (las dos probadas el 8-oct). Deja
   `resultado.md`, `eventos.jsonl` y `session_id` en `~/.codex/madre-tareas/<fecha>-<tarea>/`. Para un seguimiento en la
   misma conversación: `scripts/codex-tarea.sh resume <session_id> <seguimiento.md>`.
+- ⚠️ **Nunca editar `scripts/codex-tarea.sh` mientras corre una tarea.** Bash lee el script de a pedazos: el 8-oct, al
+  agregar el modo `revisar` con U1 en curso, su cierre ejecutó otra rama («sid: unbound variable») y dejó la salida en
+  una carpeta `resume-*`. El trabajo de Codex no se perdió (quedó en el worktree), pero el `resultado.md` quedó en la
+  carpeta original `…-u1`.
+- ⚠️ **En el sandbox local, Codex no corre tsc, vitest ni Playwright** cuando `node_modules` es un junction compartido
+  («dependencias ausentes», `spawn EPERM`, 8-oct, 4 de 4 tareas). La validación la da el CI del PR y las capturas las
+  saca Plataforma. Cada commit lo dice explícito. **Lo que sí corre:** tests de node puro con
+  `node --test --test-isolation=none` (sin procesos hijos). Así C16c, el bot del VPS, pasó 335/335 el 8-oct.
+- **Codex en un repo pesado (onia-hermes, ~6 GB):** worktree con `--no-checkout` + `sparse-checkout set <carpeta>
+  .agents AGENTS.md CLAUDE.md` + `checkout`. Solo baja la carpeta de la tarea. Ruta corta (`C:/dev/proyectos/…`): bajo el
+  scratchpad, Windows corta por «Filename too long».
+- **Los informes que escribe Codex** (`docs/C16A_*.md`, `*-ENTREGA.md`) NO van al commit: van al cuerpo del PR, para
+  no llenar de docs sueltos los repos del producto.
+- **Ver videos e Instagram lo hace la MADRE, no Codex** (probado el 8-oct). Con red habilitada
+  (`sandbox_workspace_write.network_access=true`), Codex local igual falla con `spawn EPERM` porque el sandbox sin elevar
+  no deja que node lance yt-dlp. La nube no abre Instagram. La madre sí: `fetch-video.mjs` + Gemini + láminas leídas (los 5
+  posts del 8-oct). Regla: todo link que Sergio Urcullo le mande a una sesión de la nube, la sesión se lo pasa a la madre;
+  ella lo analiza (mensaje, tema, edición), deja la ficha en `references/video-intake/` y lo aprendido en la skill.
+- **Codex atiende pedidos de las sesiones de la nube** que ellas no pueden hacer (código y tests). Decide la madre con el
+  router, por si conviene Claude o Codex. Codex sigue las mismas reglas (`AGENTS.md` remite a `CLAUDE.md`). «Habla» con la
+  madre por su `resultado.md`: si le queda una duda, la escribe ahí, y la madre le contesta con `codex-tarea.sh resume`.
 - **Codex verifica a la madre; no hay madre 2 abierta** (Sergio Urcullo eligió esto el 8-oct). Una madre 2 sería un
   segundo orquestador y relee todo el contexto, así que gasta mucho. Antes de mergear un PR propio, la madre corre
   `scripts/codex-tarea.sh revisar <carpeta> origin/main` (gpt-6.1-sol, esfuerzo medio, para no quemar la cuenta; Astra

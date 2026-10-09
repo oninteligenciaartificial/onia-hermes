@@ -26,6 +26,9 @@ description: "Invocar para CUALQUIER trabajo del carril Ventas y pauta de Onia: 
 | Leads que ya escribieron: quiénes son | `hermes-content/docs/ONIA_LEADS_ESPERANDO.md` (§3.1: las preguntas de «F» contra el catálogo) |
 | Qué se les manda (plantillas A/B, respuestas, días 3-7-14) | `hermes-content/sales-kit/SEGUIMIENTO-LEADS.md` |
 | Guion de demo de 20 minutos por rubro | `hermes-content/sales-kit/02-GUION-DEMO.md` |
+| Los 6 add-ons que Sergio Urcullo nombró el 8-oct (web, IA local, campañas de Meta, app, influencers IA, consultorías): potencial, mercado, test de 3 preguntas y orden para después de la 1.0 | `hermes-content/docs/ONIA_ADDONS.md` |
+| Competencia: mapa, fichas y tandas semanales | `hermes-content/research/competencia/MAPA_COMPETENCIA.md` y `hermes-content/docs/ONIA_UI_MEJORAS_1.0.md` §8 |
+| Formatos de anuncio que sostienen los competidores, con su versión Onia | `hermes-content/research/competencia/anuncios/FORMATOS-QUE-SOSTIENEN.md` |
 | Precios | `onia-platform/lib/subscription-plans.ts` (`DEFAULT_PLAN_AMOUNTS`); límites en `lib/plan-catalogo.ts` |
 
 ## 1. Reglas que no se negocian
@@ -330,6 +333,55 @@ Trampas pagadas armando v3 (2-oct):
 - **El umbral del tratamiento a medias es «21 días sin venir»** (`diasSinVenir`), con el tratamiento en curso y
   sin cita futura. «21 días en progreso» o «21 días sin cita» son inexactos: corregido en D4 el 2-oct.
 
+### 4.2 v5 del 8-oct: plantilla `bloques`, video y por qué v4 era básica
+
+> Sergio Urcullo, 8-oct: *«los diseños… demasiado básicos… mejora tus trabajos»*. Comparación completa con la
+> competencia: `hermes-content/research/competencia/anuncios/COMPARACION-DISENO-8OCT.md`.
+
+- **Por qué v4 era básica (diagnóstico):** una losa de texto sobre hoja clara; ningún foco visual; la pantalla real
+  chica y con sus recortes pisando la barra del navegador; tres tildes genéricas. Los que sobreviven tienen UN foco
+  enorme (un número, una cara), un campo de color y el producto en grande.
+- **Plantilla nueva** `"plantilla":"bloques"` en `anuncio-render.js` (la vieja sigue sin cambios): cabecera sobre hoja y
+  panel de **tinta** `#0C110F` (paleta de la marca; los degradados están prohibidos). Bloques: `hora {valor, rotulo, chip}`
+  (el gancho; el chip usa el amarillo real del «Pendiente» de la app, `rgb(254,249,194)` / `rgb(137,75,0)`, medido en la
+  captura), `flecha {texto}`, `tile {crop, width, anillos:[[x,y,w,h] en px de la CAPTURA]}`, `leyenda`, `texto`.
+  Briefs: `carousels/briefs/ads/…a1v5-las-diez.json` y `…a2v2-el-saldo.json`.
+- **Video:** `scripts/anuncio-video.js --brief … --out …` anima la misma pieza (9:16, 11 s, sin audio): fija el reloj de
+  la Web Animations API en cada cuadro, saca JPG con Chromium y los une con ffmpeg (los dos están en la nube; 33 s de
+  render). **El titular tiene que estar en el cuadro 0**: es la miniatura que Meta muestra antes del play.
+  Tiempos en `video.tiempos` del brief.
+- **Anillos:** el recuadro se calcula con las coordenadas de la captura × el factor de escala. Primera vez un anillo
+  cruzó el nombre del paciente por 6 px de margen: **un anillo no puede invadir otra línea de texto**; se baja el margen
+  o se saca el anillo (los de v5 quedaron solo en el mensaje y el botón).
+- **Historias 9:16:** el panel + `ctaBottom` no pueden sumar más que el lienzo; el renderer avisa «se sale del lienzo:
+  panel». Con `ctaBottom` 250 el botón queda a ~263 px del borde, fuera de lo que Meta tapa.
+- **Lo que NO arregla el diseño:** la persona (los 7 que sobreviven la tienen) y el rendimiento (sin gasto no hay cifras).
+- **Las dos capturas de una misma pieza tienen que ser de la MISMA persona de demo.** Hoy la agenda y Pendientes son de
+  capturas distintas del 30-sep; con la cuenta demo se arma el caso entero (agenda → pendiente → mensaje).
+- **Biblioteca desde la nube:** HTTP 403 de Facebook (8-oct). No se rodea; la madre captura desde la PC. Los sitios de
+  referencia sí abren con la receta de Playwright del §6, salvo Doctolib (Cloudflare «verifique que es humano»).
+
+### 4.3 Laboratorio de creativos (8-oct): los 5 formatos que SOSTIENEN y cómo se hace cada uno
+
+> Pedido de Sergio Urcullo por la madre: *«aprender a hacer campañas mirando a la competencia, y que sea real»*. Documento:
+> `research/competencia/anuncios/FORMATOS-QUE-SOSTIENEN.md`.
+
+- **Método:** ordenar los `.txt` de `anuncios/` por «En circulación desde» (`grep -m1 -o "En circulación desde el [0-9]* [a-z]*\.* [0-9]*"`) y
+  mirar los fotogramas en hoja de contacto (`montage … -geometry 260x460`). Lo único público es la antigüedad; **no prueba rendimiento
+  y las capturas del 1-2 oct no prueban que sigan vivas** (PEDIDO PC a la madre).
+- **Lo que enseñaron (8-oct):** de los 5 formatos más viejos, **4 llevan una persona**; el más viejo (Dt.Dental, 100 d) es un selfie sin
+  producción; ninguno lleva precio ni cifra propia; ninguno va a WhatsApp. El copy **«No es X, no es Y… Es Z»** de CitaPro sostiene
+  3 anuncios (83, 63 y 23 d).
+- **Código:** plantilla `bloques` para estático (`--formato feed|story|cuadro`), `anuncio-video.js` para video (`video.duracion` y
+  `video.tiempos` en el brief) y carrusel = una lámina por brief con `pagina` («1 / 4») y sin `cta` salvo la última. El cuadrado 1:1 es el
+  de las láminas de carrusel: `todos` NO lo incluye.
+- **Dos formatos de ventana:** el titular **tiene que estar en el cuadro 0** del video; en la historia, nada de logo ni botón en los 250 px
+  de arriba ni en los de abajo.
+- **Trampas de esta tanda:** (1) el chip «Sin confirmar» se partió en dos líneas al agrandar el número (`white-space:nowrap`);
+  (2) el control «pisa» marcó falso positivo con el paginador absoluto (ahora ignora lo `position:absolute`); (3) el control de
+  seguridad de Claude Code **bloquea `rm -f $VAR/*`**: usar rutas literales o sobrescribir los archivos con el mismo nombre.
+- **Higgsfield:** se cotiza con `higgsfield generate cost` desde la PC (CLAUDE.md); desde la nube no se cotiza ni se genera.
+
 ## 5. La campaña de Meta
 
 - **1-oct, 21:00 UTC: el conector YA ve ONIA Ads** (`1073680778314945`, negocio «OniaAgency», `is_ads_mcp_enabled`),
@@ -442,3 +494,22 @@ Resultado: `research/competencia/DAPTA_COMO_FUNCIONA.md` (sin fecha, fuente del 
   Un informe propuso decir «sin tarjeta» y ya estaba en la home, /empezar, /agentes y /nosotros.
 - **La Biblioteca de Anuncios fuera de la UE no guarda los anuncios comerciales inactivos.** «¿Pautaban en julio?»
   no se puede contestar después: se mide el día.
+
+### 8.1 Tanda semanal de competencia (método del 8-oct)
+- **Precios: del texto del navegador, no de un buscador.** Una búsqueda dio Jelou a USD 24,9 / 199,9 con 2.500 ejecuciones; la página de hoy dice
+  USD 25 / 299 con 1.000. `WebFetch` resume con un modelo chico: sirve para orientarse, no para citar una cifra. Capturar con Playwright
+  (receta del §6) y leer el `.txt`.
+- **Probar las rutas antes de afirmar un cambio:** `/pricing` de AgendaPro y `/precios` de Doctocliq dieron 404 por rutas adivinadas; la real de
+  Doctocliq es `/planes-y-precios`. Un 404 de ruta adivinada no es «cambió la oferta».
+- **Cada hallazgo lleva:** quién y cuánto lleva · versión Onia · dueño · tarea Codex (casi nunca: un prompt escrito hoy queda viejo, `master`
+  se mueve). Va a `docs/ONIA_UI_MEJORAS_1.0.md` §8, una tanda por semana, la más nueva arriba.
+- **Lo que pide login o Instagram** va al transcript como «PEDIDO PC: <qué> — para qué lo quiero». Contactar a un tercero (pedir su demo) no.
+
+### 8.2 Biblioteca de Anuncios por el conector `Meta_ads` (8-oct): cómo se usa y qué NO dice
+- **Herramienta:** `mcp__Meta_ads__ads_library_search` (se carga con ToolSearch). **Pide en cada llamada** `client_conversation_id` (20 caracteres alfanuméricos, el mismo toda la conversación) y `client_model`; exige al menos `search_terms`, `page_ids` o `countries`. Solo funciona con una cuenta de anuncios activa (ONIA Ads lo es).
+- **Devuelve:** nombre de página, titular, fecha de inicio (epoch), moneda y enlace. **No devuelve el creativo ni el texto.** Los **más nuevos van primero y el tope es 50**: de un anunciante con más de 50 activos **no se ven los más viejos** (error de lectura que casi cometo con Dentalink, 92 activos). Para los viejos, `page_ids` + capturar desde la PC.
+- **Días al aire** = `(hoy − ad_delivery_start_time) / 86400` en python. Solo es antigüedad: **no prueba rendimiento**.
+- **Ids de página** (8-oct): AgendaPro `1429581593936821` · Dentalink `106612849382553` · Doctocliq `122294408384514` · Dt.Dental `644396635996094` · CitaPro `117313424662542` · Wa7pro `1346974258489921`.
+- **Búsqueda por país** (`countries:["BO"]`) = anuncios cuyo alcance incluye Bolivia: sirve para ver quién le pauta a Santa Cruz (ADQ §2.6.1). **Ausencia ≠ inexistencia.**
+- **Lo que no sirve:** el navegador de la nube (Biblioteca 403, Pinterest pide sesión). **Pinterest no mide rendimiento**: es inspiración visual.
+- **No es raspado masivo:** pocas consultas dirigidas (la herramienta lo prohíbe).

@@ -1,0 +1,83 @@
+{
+  "plantilla": "bloques",
+  "id": "onia-platform-dental-meta-a1v5-micro-10s",
+  "title": "ONIA — A1 v5 · micro-video de 10 s (formato «una frase»: Doctocliq 77 días; captura provisoria del 30-sep; sin audio)",
+  "headline_anuncio": "¿Quién de mañana no confirmó?",
+  "cta_anuncio": "Escríbanos",
+  "caption": "Un paciente que no confirma es una silla que puede quedar vacía, y el alquiler, la asistente y su hora se pagan igual.\n\nOnia es un sistema de gestión con IA para clínicas dentales: agenda, ficha con odontograma, tratamientos y cobros. Cada mañana le deja anotado a quién escribirle, con el mensaje listo, y nada sale sin que usted lo apruebe.",
+  "kicker": "Clínicas dentales de Santa Cruz",
+  "headline": "¿Quién de mañana *no confirmó?*",
+  "bloques": [
+    {
+      "t": "hora",
+      "valor": "10:00",
+      "rotulo": "Mañana",
+      "chip": "Sin confirmar"
+    },
+    {
+      "t": "flecha",
+      "texto": "Onia le deja el *mensaje listo*"
+    },
+    {
+      "t": "tile",
+      "crop": {
+        "src": "hermes-content/carousels/briefs/assets/onia-1.0-dental-ads/candidato-20260930/pendientes-confirmador.png",
+        "crop": [
+          464,
+          448,
+          768,
+          170
+        ]
+      },
+      "width": 936,
+      "anillos": [
+        [
+          480,
+          521,
+          736,
+          80
+        ]
+      ]
+    },
+    {
+      "t": "leyenda",
+      "texto": "Pantalla de Onia · datos de ejemplo"
+    },
+    {
+      "t": "texto",
+      "texto": "Usted lo aprueba. Nada sale sin su OK."
+    }
+  ],
+  "cta": "Escríbanos por WhatsApp",
+  "nota": "Se lo mostramos en una llamada de 20 minutos.",
+  "layout": {
+    "feed": {
+      "hora": 188,
+      "gap": 26,
+      "flecha": 42,
+      "txt": 44,
+      "ctaBottom": 44
+    },
+    "story": {
+      "headTop": 270,
+      "h1": 108,
+      "hora": 236,
+      "gap": 38,
+      "flecha": 48,
+      "txt": 48,
+      "panelTop": 60,
+      "ctaBottom": 250
+    }
+  },
+  "video": {
+    "duracion": 10,
+    "tiempos": {
+      "hora": 0.9,
+      "flecha": 2.2,
+      "tile": 2.8,
+      "anillos": 4.4,
+      "txt": 6.0,
+      "cta": 7.2
+    }
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "plantilla": "bloques",
+  "kicker": "Clínicas dentales de Santa Cruz",
+  "layout": {
+    "cuadro": {
+      "hora": 230,
+      "gap": 26,
+      "flecha": 44,
+      "txt": 50,
+      "h1": 88,
+      "ctaBottom": 44,
+      "centro": true,
+      "chip": 40,
+      "ro": 30,
+      "padX": 72
+    }
+  },
+  "id": "onia-platform-dental-meta-a1v5c-s3",
+  "title": "A1 v5 carrusel · lámina 3 de 4 (control)",
+  "pagina": "3 / 4",
+  "headline": "Usted lo aprueba. *Nada sale sin su OK.*",
+  "bloques": [
+    {
+      "t": "tile",
+      "crop": {
+        "src": "hermes-content/carousels/briefs/assets/onia-1.0-dental-ads/candidato-20260930/pendientes-confirmador.png",
+        "crop": [
+          464,
+          448,
+          768,
+          170
+        ]
+      },
+      "width": 936,
+      "anillos": [
+        [
+          490,
+          576,
+          196,
+          14
+        ]
+      ]
+    },
+    {
+      "t": "leyenda",
+      "texto": "Pantalla de Onia · datos de ejemplo"
+    },
+    {
+      "t": "texto",
+      "texto": "El mensaje espera en su lista hasta que usted lo apruebe."
+    }
+  ]
+}

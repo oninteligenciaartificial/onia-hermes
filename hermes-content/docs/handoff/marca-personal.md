@@ -2,6 +2,125 @@
 
 **Archivo único del carril.** Actualizado 2026-09-29 por Claude (Opus 5.5).
 
+## ▶ 8-oct (noche, 10) — estilo de imagen nuevo: foto B/N con un objeto verde (la arcilla se jubila)
+
+- **Decidido por Sergio Urcullo (8-oct, por la madre):** opción 9 de `galeria/estilos/opciones-estilo-2026-10-08.jpg`. Estilo
+  `fotobn`, GPT Image 2.5, 1 cr por imagen. Lote de prueba de la madre (16,59 cr, saldo 438,17): N07 `s31`/`s32`, D03-A `s33`
+  + clip de 3 s, D01-C `s34`-`s36`. Los archivos están en la rama de la madre y entran a `main` con su PR. **Al editar N07,
+  D03-A y D01-C se usan esas imágenes y ese clip.**
+- **`lote-14-imagenes.json` pasó a `fotobn`:** 14 prompts nuevos (el de arcilla ya no sirve), 14 cr en vez de 1,68. **Sigue sin
+  generarse:** la madre pidió esperar su propuesta de Higgsfield y Sergio Urcullo había dicho «mostrámelas y digo sí». Se le
+  mostró la lista en el estilo nuevo con el costo nuevo.
+- **Decisión que falta:** los 7 carruseles en espera mezclan imágenes flojas con otras 10 de arcilla que sirven. Rehacer solo las
+  10 flojas deja dos estilos en un carrusel. Rehacer todo suma 10 cr más.
+- **Carruseles nuevos (P2, P3) van en `fotobn`.** Los 4 íconos de P2 son parte del lote (4 cr).
+- **Intento fallido:** el primer prompt de las imágenes se escribió en arcilla y con costo de 0,12 cr por imagen; con el estilo
+  nuevo el costo es 8 veces mayor, y por eso se vuelve a pedir el sí.
+
+## ▶ 8-oct (noche, 9) — la madre reescribe los guiones: NO tocarlos
+
+- **Pedido de la madre (8-oct):** no editar `GRABAR-10-16-OCT.md` ni `S1/S2/S3-GUIONES.md` hasta que ella avise. Está
+  analizando 8-12 videos reales de cada referente (Santiago, Erik, Enrique, Hormozi, Gadzhi) y reescribe los guiones a una v2,
+  partiendo del estado de `main` del PR #168; la pasa en un commit.
+- **Las historias de referentes las captura la madre** con Chrome (pedido de esta sesión): quedan en
+  `hermes-content/research/competencia/historias/`. Cuando lleguen, se sigue con el diseño de las historias (tarea #17).
+- **Nada de Higgsfield pago** hasta que llegue su propuesta: el lote de 14 imágenes (1,68 cr) sigue sin generar.
+- **Drive «Videos Onia Octubre»:** sin brutos nuevos al 8-oct (verificado). Cuando lleguen, se edita con la tabla de cortes y el
+  preview de 360p primero.
+
+## ▶ 8-oct (noche, 8) — plan de referentes de la madre aplicado a los guiones
+
+- **Pedido de la madre (8-oct):** aplicar `references/marca-personal/PLAN-REFERENTES.md` (rama
+  `claude/onia-madre-v2-pr-review-2d85bb`, entra a `main` con su próximo PR): un solo CTA por pieza, al menos 1 de los 2
+  videos del día sobre un dolor de dueño, guiones con los 5 formatos, reglas de edición a la skill, y el checklist
+  «¿Qué automatizo primero?» en la comunidad.
+- **Hecho en `GRABAR-10-16-OCT.md`:**
+  - CTA único por pieza: desarrollo → comunidad; negocio (S2-D08-A, S2-D07-A) → asesoría gratis. N07 pierde la asesoría.
+  - Línea «Rótulo fijo arriba» y «CTA tecleado (≤12 palabras)» en las 13 piezas.
+  - Texto en el cuadro 0 con el dolor del dueño (F3) en S2-D08-A y S2-D07-A; línea de «así lo uso en mi empresa» en N04, D01-A y
+    D02-A; en N06 queda opcional porque no hay constancia de que Sergio Urcullo use Antigravity.
+  - D01-C pasó al formato F5: filtro de dolor al abrir, mapa de niveles antes de 1:15, TRAMPA a ~1/3, ~2/3 y al final, y la
+    asesoría solo en la descripción.
+  - Orden nuevo (para que haya un video de dueño por día): DD-A pasó al dom 11, N04 al lun 12, D02-A al mié 14 y N02 al jue 15.
+    Calendario y artefacto actualizados. Sin pieza de dueño quedan el vie 9 (N03, ya agendado) y el vie 16.
+- **Decisión que tomé y la madre puede revertir:** el pedido decía «rehacé los guiones», pero el §5 del propio plan dice «no se
+  reescriben los guiones, se cambian tres líneas por pieza». Seguí el §5: Sergio Urcullo está grabando y rehacer lo aprobado
+  tiraría su trabajo. Los cambios de cierre van en la «toma aparte de 4 s», así que lo ya grabado no se pierde.
+- **Skills:** `edicion-referentes` y `editor-videos` con las reglas del §4, fechadas. El molde Rocha queda **sin números
+  fijos** hasta medir 1 reel (los datos son de Gemini).
+- **Checklist «¿Qué automatizo primero?»:** no había constancia de que saliera. Quedó en el artefacto «Comunidad e historias»
+  (jue 8) y en `AVISOS-COMUNIDAD-8-16-OCT.md`. La pega Sergio Urcullo; si ya la había pegado, la salta.
+- **Pendiente anotado, no hecho:** la calculadora gratis de «cuánto cuesta un bot por mes según el modelo» (es construir algo
+  nuevo). La fecha del SIN (4-nov) no se usa como gancho sin verificarla.
+- **Falta de Sergio Urcullo:** bio de Instagram con el link «Asesoría de IA gratis» y renombrar el evento de cal.com; sin eso
+  los CTA de asesoría no llevan a ninguna parte.
+
+## ▶ 8-oct (noche, 7) — Sergio Urcullo rechazó el diseño de historias
+
+- **Dijo (8-oct):** «no me gustan las historias, el diseño hay que mejorarlo; recordá que hay estructuras de contenido para
+  vender; si tenés que ver algo, decile a la madre que lo vea por vos».
+- **Estado:** ninguna historia publicada ni agendada. El artefacto «Comunidad e historias» todavía muestra el diseño viejo
+  (2 por día, foto + titular): **hay que rehacer su sección de historias cuando exista el diseño nuevo**.
+- **Pedido a la madre** (la nube no puede mandarle mensajes): «PEDIDO PC: historias de @eriktaveras, @sanmunoz.ia,
+  @pabloinpublic, @theaigeekk y 2-3 cuentas en español que vendan IA a negocios». Capturas en
+  `hermes-content/research/competencia/historias/` + nota por cuenta. Está escrito en el transcript de esta sesión.
+- **Plan al llegar las capturas:** secuencia de 4 láminas por día (gancho → mito → revelación → CTA único a la asesoría gratis
+  o a la comunidad), mostrar UNA secuencia renderizada a Sergio Urcullo y esperar su OK antes de agendar nada.
+- **Intento fallido:** el diseño v1 (foto + etiqueta verde + titular) salió sin leer `historias-onia.md`, `STORY_REFERENCES.md`
+  ni los kits `curso-dia1` e `historias-llamada`. Lección en la skill `diseno-contenido-onia`.
+
+## ▶ 8-oct (noche, 6) — avisos en palabras simples y diseño de las historias
+
+- **Pedido de Sergio Urcullo (8-oct):** *«no entiendo esas, mejorá lo que decís; te voy subiendo fotos a mi Drive, pero
+  explicame qué vas a subir y con qué diseño»*.
+- **Avisos:** cada uno pasó a dos mensajes (aviso corto + recurso completo). Los 14 avisos nuevos están en
+  `docs/cola/plan-3-semanas/AVISOS-COMUNIDAD-8-16-OCT.md`; la regla, en `ONIA_COMUNIDAD_CONTENIDO.md` §«Cómo se escribe un aviso».
+  El artefacto «Comunidad e historias» (versión 2) los muestra con «para vos», aviso y recurso.
+- **Diseño de historias mostrado a Sergio Urcullo** (foto a pantalla completa, etiqueta verde con el día, titular blanco con
+  palabra clave en verde, «Link en mi perfil» solo cuando corresponde). **Falta su OK sobre el diseño** (diseño nuevo pasa por él)
+  y sus fotos: carpeta de Drive «Videos Onia Octubre» (`1Iks0iUs…`), nombres FOTO-1, FOTO-2…
+- **Intento descartado:** el aviso de ANTIGRAVITY, PROMESA y otros dependían de leer el recurso largo para entenderse.
+  Un primer aviso de PROMESA decía que el bot sin reglas «casi prometía»: era falso (ninguno prometió); se corrigió al releer el recurso.
+
+## ▶ 8-oct (noche, 5) — historias con fotos de Sergio Urcullo y artefacto de comunidad
+
+- **Pedido de Sergio Urcullo (8-oct):** «subime historias con fotos mías que me vaya sacando» y «dame el artefacto ordenado»
+  de lo que va a la comunidad y a historias.
+- **Artefacto «Comunidad e historias»:** un bloque por día (jue 8 a vie 16), con botón de copiar para cada texto de
+  comunidad y la lista de historias del día. Se genera con un script de scratchpad (`gen_com.py`, no está en el repo): los
+  textos salen de `GRABAR-10-16-OCT.md` y de los avisos ya escritos. Si cambia un aviso, se regenera y se republica.
+- **Historias, cómo sale cada una:**
+  1. Sergio Urcullo manda una foto vertical (cara al centro, sin gente de fondo).
+  2. `scripts/marca-personal/historia-foto.mjs` la arma 1080x1920 con etiqueta + título (≤70 caracteres, `*palabra*` en
+     verde) dentro de la banda segura (arriba 230 px y abajo 422 px los tapa Instagram).
+  3. Se sube a `/root/publicar/historias/` y `ig-historia.mjs --cuenta sergio --imagen <png> --publicar` la publica;
+     se agenda con `agendar-publicacion.sh` a las 09:00 y 20:00 La Paz (13:00 y 00:00 UTC).
+- **Medido el 8-oct:** ensayo de `ig-historia.mjs` en el VPS (contenedor creado y `FINISHED`, sin publicar). La **API de
+  Instagram no pone stickers** (link, encuesta, pregunta, música): las historias con sticker las sube Sergio Urcullo a
+  mano (16:05 carrusel compartido + sticker de la comunidad, y la historia de asesoría del jue 15 con link).
+- **En vuelo:** ninguna foto recibida todavía. Nada de historias publicado ni agendado. Se pierde solo el tiempo de
+  rehacer el artefacto si muere la sesión (el generador no está versionado).
+- **Intento descartado:** capturar con Chrome headless a 1080x1920 sale con una franja negra abajo (~90 px de ventana
+  perdidos); se renderiza a 1080x2100 y se corta a 1080x1920.
+- **Trampa de verificación:** el Chrome headless nuevo tiene ancho mínimo de ventana de 500 px. Una captura «a 400»
+  muestra la página cortada aunque no desborde. Para mirar el celular: fijar `html{width:400px}` y recortar a 400.
+
+- **Reglas nuevas de la madre (8-oct), para quien retome:**
+  - lista de tareas visible en la sesión (una por día de edición, más P1, P2, P3);
+  - cada video lo edito yo con `editor-videos` / `edicion-referentes` (recetas Santiago y Erik) / `hyperframes` /
+    `motion-doctrine`, y lo aprendido va a la skill con su fecha en el mismo commit;
+  - los 4 trucos de la ficha `video-intake/2026-10-08-orquestacion-e-ingresos-5-posts.md` §3 se prueban en P1 «Niveles»;
+  - lo que exige la PC se pide como «PEDIDO PC: video <url> — para qué lo querés»; las tareas de código van a
+    `codex-tareas/`;
+  - la regla de publicar sin OK pieza por pieza ya está en el `CLAUDE.md` de `main` («Qué se publica sin preguntar»).
+
+- **Lote de 14 imágenes mostrado a Sergio Urcullo (8-oct), sin generar:** pidió «mostrámelas y digo sí» (por la madre).
+  10 reemplazan las láminas que no se entienden (K13-2, K5-3, K5-7, K9-5, K9-6, K12-7, N02-3, N02-7, K1-7, K10-5) y 4
+  son íconos de arcilla de P2 (HyperFrames, Buffer, faster-whisper, Higgsfield). 14 × 0,12 = 1,68 cr. Los prompts
+  están en `docs/cola/plan-3-semanas/lote-14-imagenes.json`. Al recibir el sí: cotizar en vivo, generar, mirar cada
+  imagen (cara, letras inventadas, fondo gris) y pasar los prompts a los briefs. Riesgo conocido: vidrio esmerilado
+  (K9-5) y monedero (K9-6) pueden volver a fallar; si pasa, se rehace solo esa y se avisa antes de gastar más.
+
 ## ▶ 8-oct (noche, 4) — calendario de publicación ordenado
 
 - **Fuente:** `docs/cola/plan-3-semanas/CALENDARIO-PUBLICACION-9-16-OCT.md`, también en la página de Sergio Urcullo.

@@ -1,5 +1,46 @@
 # Handoff — carril `mercado-y-pauta` (sesión «Ventas y pauta Onia Platform», antes «Análisis de mercado»)
 
+> ✏️ **9-oct — copy corregido (pedido de la madre): ya no dice «lo envía, con un toque».** El envío con un toque (G-03) está a medias en
+> `ONIA_PROMESA_VS_PRODUCTO.md`. Ahora dice **«Usted lo aprueba. Nada sale sin su OK.»** en A1, A2, carrusel (lámina 3), micro-video y los guiones F1/F3.
+> Se quitó también el anillo y el pulso sobre el botón «Enviar yo mismo»: la pantalla real lo sigue mostrando, pero sin énfasis. El pulso del video
+> ahora es opt-in (`video.pulso`). **Corto de 60 s con `editor-videos`: espera las capturas C1-C7 de Plataforma** y que Sergio Urcullo vea tabla de cortes
+> y preview 360p. **No se instalan** marketingskills ni Motion-Creative sin su OK. El commit `30bc87b8` de la madre (skill §9, `06-VSL-DENTAL.md`,
+> ADQ §5.11) **no estaba en `origin/main`** al leer: no lo pude leer.
+
+> 🔎 **8-oct, noche — Biblioteca por el conector (Sergio Urcullo: «mirá Pinterest y la Biblioteca para ver cuáles funcionan»).**
+> - **Navegador de la nube:** Biblioteca 403 y Pinterest con muro de sesión; no se rodearon. **Conector `Meta_ads`:** sí, con titular y fecha, sin creativo.
+> - **Hallazgo:** AgendaPro (id `1429581593936821`) tiene los anuncios activos más viejos (**245 días**) y un asistente con nombre, «Sofía», de **141 días**.
+>   Dt.Dental, Doctocliq y CitaPro siguen 83-100 días. A Bolivia solo le llega pauta de software dental de Dentalink. Todo en `ONIA_ADQUISICION_Y_PAUTA.md` §2.6.1.
+> - **Error evitado:** Dentalink tiene 92 activos y el conector solo muestra los 50 más nuevos; «nada de más de 14 días» sería falso (§2.6 dice 322 días).
+> - **Pedido PC:** Pinterest con la sesión de Sergio Urcullo y los creativos de 7 ids (en §2.6.1).
+
+> 🧪 **8-oct, noche — Tanda 1 de competencia y laboratorio de creativos (pedidos de la madre por Sergio Urcullo).**
+> - **Tanda semanal de competencia:** `ONIA_UI_MEJORAS_1.0.md` §8 (9 hallazgos con versión Onia, dueño y Codex) + fichas `JELOU_FICHA.md`,
+>   `DATEC_FICHA.md` y `ANUNCIANTES_FICHAS_CORTAS.md`; `MAPA_COMPETENCIA.md` al día. **Próxima: 15-oct** (norma boliviana de
+>   historia clínica y factura, Instagram de Doctocliq/Dentalink/CitaPro, bots de clínicas locales). Codex esta semana: ninguna tarea.
+> - **Laboratorio de creativos:** `anuncios/FORMATOS-QUE-SOSTIENEN.md` (5 formatos con más días, una versión Onia por vía). Hecho con código:
+>   A1 v5 estático 4:5 y 9:16, video de 11 s, micro-video de 10 s y carrusel de 4 láminas 1:1. Guiones para Sergio Urcullo (F1 y F3) y una
+>   propuesta de Higgsfield **sin cotizar** (se cotiza con la CLI desde la PC).
+> - **Plan visible:** la lista de tareas de la sesión (TaskCreate) trae el criterio de hecho de cada una.
+> - ✅ **`ONIA_ADDONS.md`** (los 6 add-ons del 8-oct, pedido de la madre): potencial, mercado de hoy, test de 3 preguntas, esfuerzo, cómo se
+>   vende al mismo cliente, **orden para después de la 1.0** (web conectada · puesta en marcha · app · campañas de Meta · influencers IA · IA
+>   local) y primer paso de cada uno. **Ojo:** el bloque de decisión del 8-oct que la madre cita en el §12 de la estrategia **no está en `main`**.
+>   Verificado en vivo: `/servicios/webs` responde 200; `/servicios/marketing-ia` y `/servicios/consultoria` redirigen a la portada.
+> - **Intentos fallidos:** rutas de precios adivinadas (`/precios`, `/pricing`) dieron 404; el buscador dio precios viejos de Jelou; el control de
+>   seguridad bloqueó un `rm -f $VAR/*` (se sobrescribió por nombre).
+
+> 🎨 **8-oct, noche — Rediseño de los anuncios (Sergio Urcullo: «demasiado básicos… mejora tus trabajos»).**
+> - **Hecho:** se miraron los 22 anuncios de la competencia fotograma a fotograma + 5 sitios de referencia y se rehízo D1
+>   como **A1 v5 «Las 10:00»** y A2 como **A2 v2** (feed, historia y video de 11 s para A1). Tabla de qué hacen ellos y qué
+>   hacíamos nosotros: `research/competencia/anuncios/COMPARACION-DISENO-8OCT.md` (hojas en `_hojas/`).
+> - **Código:** plantilla `bloques` en `anuncio-render.js` + `anuncio-video.js` (skill `onia-ventas-pauta` §4.2).
+> - **Sigue mal:** no hay **persona** (los 7 que sobreviven la tienen; guion de 25 s para Sergio Urcullo, opcional); la
+>   captura es provisoria; A2 espera E-03; sin gasto no hay cifra de rendimiento. **Nada se subió ni se gastó en Meta.**
+> - **Intentos fallidos:** la Biblioteca de Anuncios no abre desde la nube (403 de Facebook; no se rodea); Doctolib
+>   bloquea con Cloudflare; mi primera plantilla (tres filas con tiras blancas) quedó plana y se descartó; un anillo
+>   sobre el nombre del paciente tachaba el texto (margen de 8 px, bajado a 6 y sin anillo en esa línea).
+> - **Lo que depende de otros:** Sergio Urcullo ve las piezas renderizadas (diseño nuevo); cuenta demo para recapturar.
+
 > 📣 **8-oct, noche — Meta Ads retomada (pedido de la madre; Sergio Urcullo: «¿no se supone que tiene que ver Meta Ads?»).**
 > - **Hecho (todo en `ONIA_ADQUISICION_Y_PAUTA.md`, nada creado ni gastado en Meta):** techo alineado a la caja (**US$ 56 =
 >   Bs 750**, no USD 140); reglas de corte del plan §3 (§5.7); lo medido hoy (§5.9.1); a dónde lleva cada anuncio, públicos y

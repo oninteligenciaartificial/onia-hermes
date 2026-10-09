@@ -12,16 +12,20 @@ primera revisión el **lunes 19-oct**.
 | **12:30** | **Video A** | Instagram | `ig-reel.mjs` |
 | 12:35 | el mismo video | TikTok · YouTube Shorts · LinkedIn | Buffer |
 | **13:30** | **Yap de A** (otro gancho, 30-45 s) | Instagram **Trial** | `ig-reel.mjs --trial auto` |
+| 13:35 | el mismo yap | TikTok · YouTube Shorts | Buffer |
 | **16:00** | **Carrusel** | Instagram | `ig-carrusel.mjs` (timer) |
 | 16:01 · 16:02 | el mismo carrusel | LinkedIn · TikTok | Buffer (timer) |
 | 16:05 | el carrusel, compartido a su historia, con sticker de la comunidad | Instagram historias | lo hace Sergio Urcullo |
 | **18:30** | **Video B** | Instagram | `ig-reel.mjs` |
 | 18:35 | el mismo video | TikTok · YouTube Shorts · LinkedIn | Buffer |
 | **19:30** | **Yap de B** | Instagram **Trial** | `ig-reel.mjs --trial auto` |
+| 19:35 | el mismo yap | TikTok · YouTube Shorts | Buffer |
 | 21:00 | **Paquete del día siguiente** para Sergio Urcullo: tabla de cortes, preview y captions | su chat | lo manda Claude |
 
+- **Por día:** 2 videos + 2 yaps = 4 reels, más el carrusel.
 - **Yaps:** uno por video esta semana, a +1 h del principal. El segundo yap se suma cuando veamos qué gancho rinde.
-- **Trial** es solo de Instagram. A TikTok y LinkedIn van los principales.
+- **Trial** es solo de Instagram. Los yaps también salen en **TikTok y YouTube Shorts** como videos normales, con su
+  otro gancho. A **LinkedIn** no: ahí repetir el mismo tema el mismo día cansa.
 - **Regla de oro:** nada se corta sin que Sergio Urcullo vea antes la tabla de cortes. Si el bruto sube hasta las
   18:00, el paquete llega ese día a las 21:00 y sale al día siguiente.
 
@@ -34,16 +38,21 @@ Carrusel de todos los días: 16:00 · 16:01 · 16:02, ya agendado.
 | **Jue 8** | HISTORIA (K3) | — | — |
 | **Vie 9** | COMUNIDAD (N03) | — | **N03 modo auto** (v2, agendado) |
 | **Sáb 10** | HOOK (K11) | **N07** Haiku 5.5 | **D03-A** hook que commitea |
-| **Dom 11** | ANTIGRAVITY (N06) | **N06** Antigravity | **N04** skill verify |
-| **Lun 12** | PRUEBAS (K4) | **S2-D08-A** promesa del bot | **DD-A** caché de OpenAI |
+| **Dom 11** | ANTIGRAVITY (N06) | **N06** Antigravity | **DD-A** caché de OpenAI |
+| **Lun 12** | PRUEBAS (K4) | **S2-D08-A** promesa del bot | **N04** skill verify |
 | **Mar 13** | PROMPT (K8) | **D01-C** YouTube Opus o Sonnet (lo sube Sergio Urcullo) | — |
-| **Mié 14** | BRIEF (K7) | **S2-D07-A** ventana de 24 h | **N02** Sonnet 4.5 se apaga |
-| **Jue 15** | SKILL (K2) | **D01-A** primera skill | **D02-A** esfuerzo |
+| **Mié 14** | BRIEF (K7) | **S2-D07-A** ventana de 24 h | **D02-A** esfuerzo |
+| **Jue 15** | SKILL (K2) | **D01-A** primera skill | **N02** Sonnet 4.5 se apaga |
 | **Vie 16** | PROMESA (K6) | **D04-C** verificar es mirar | **D05-A** dos sesiones |
 
+- **Al menos un video del día sobre un dolor de dueño de negocio** (plan de referentes, 8-oct). Los de dueño son
+  N07, DD-A, S2-D08-A, D01-C (el costo de elegir mal el modelo), S2-D07-A y N02. Para repartirlos, el 8-oct (noche) se
+  cambió DD-A con N04 y D02-A con N02. **Quedan sin pieza de dueño el vie 9 (N03, ya agendado) y el vie 16** (D04-C y
+  D05-A son de desarrollo): para el 16 falta una pieza S2 de la reserva, si Sergio Urcullo graba una más.
 - **Por qué este orden:**
   - lo perecedero va primero: Haiku 5.5 salió el 7-oct;
-  - cada video cae el mismo día que un carrusel del mismo tema, o al lado: HOOK sáb, ANTIGRAVITY dom, SKILL jue;
+  - cada video cae el mismo día que un carrusel del mismo tema, o al lado: HOOK sáb, ANTIGRAVITY dom, SKILL jue (los
+    otros ya salieron como carrusel del 6 al 8-oct);
   - el martes queda liviano: el YouTube es el trabajo del día.
 - **Mar 13:** del YouTube salen 2 cortes verticales de ~45 s. Van de reel A el mié 14 o de yap.
 

@@ -500,10 +500,11 @@ node scripts/fondo-verde.mjs --toma toma.mp4 --fondo captura.png --crop 0:0:1440
 >    - **REGLA DE PARADA**: cuándo se frena.
 > 2. **Nada entra a `main` sin revisión: se trabaja en una rama y con un PR.** Antes, cada guion se compara con
 >    `LUCIA.md` §0: IA declarada, nunca profesional de salud, sin promesas de resultado.
->    - ⚠️ El hook Stop (`scripts/git-autosync.js`) empuja la rama a `main` si `origin/main` es su ancestro.
+>    - Desde el 5-oct el hook Stop (`scripts/git-autosync.js`) ya no empuja la rama a `main`: solo la madre y el
+>      integrador mueven `main` (CLAUDE.md, «Git — auto-sync»). Hasta ese día sí lo hacía, y por eso estaba el
+>      truco de abajo.
 >    - Para que el PR espere la revisión: pushear la rama, abrir el PR y **estacionar el checkout en `main`**
->      (`git checkout -B main origin/main`). Así el autosync y el hook de «commits sin pushear» no tienen nada que
->      empujar.
+>      (`git checkout -B main origin/main`). Sigue sirviendo en la PC de la madre, que tiene el permiso.
 >    - Medido el 3-oct: con `git reset --keep origin/main` sobre la rama del PR, esa rama queda adelante y atrás de su
 >      remoto, y el hook Stop pide un push que GitHub rechaza.
 >    - Así entró «Hoy soy odontóloga» (#82) el 2-oct.
@@ -735,6 +736,17 @@ Cada transición **acorta** el video su propia duración: los dos bloques se sol
 - `amix` sin `normalize=0`: divide entre N y todos los efectos quedan mucho más bajos que el plan.
 - Transiciones largas (>0.5s) o `circleopen` en cada costura: se ve amateur. Corto y `fade` por defecto.
 - HyperFrames no determinista (`Math.random`/`Date.now`) → render roto. Solo lógica determinista.
+
+## YouTube horizontal: reglas del plan de referentes (8-oct-2026)
+
+Fuente: `references/marca-personal/PLAN-REFERENTES.md` §4. Se midió sobre el formato de Iman Gadzhi («Dame 26 minutos…»,
+1,4 M de vistas); las fechas de sus videos no constan y los cortes salen de Gemini, sin medir.
+
+1. **Cambiar de capa cada 3-7 s**: cámara, pantalla grabada o gráfico. Un sonido en cada cosa que aparece.
+2. **Mapa de niveles o capítulos en pantalla antes de 1:15.**
+3. **El CTA de la comunidad aparece 2 o 3 veces**: a ~1/3, a ~2/3 y al final. La asesoría gratis va solo en la descripción.
+4. **Cada cifra dicha entra como tabla o contador**, con su cuenta a la vista.
+5. El primer minuto es un **filtro de dolor**: «si te sirve pagar el doble por la misma tarea, no sigas». Caso: D01-C.
 
 ## Relacionadas
 `ver-videos` · `embedded-captions` · `talking-head-recut` · `hyperframes-cli` · `media-use` · [[onia-video-hyperframes]] · [[content-engine-remotion]].

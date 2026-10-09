@@ -1,0 +1,72 @@
+{
+  "plantilla": "bloques",
+  "id": "onia-platform-dental-meta-a2v2-el-saldo",
+  "title": "ONIA — A2 v2 · El saldo que nadie cobra (texto alineado al catálogo y de usted; captura provisoria del 30-sep; E-03 sin verificar: no sube hasta que la cuenta demo lo confirme)",
+  "headline_anuncio": "Un cobro que nadie recuerda es plata que no entra",
+  "cta_anuncio": "Escríbanos",
+  "caption": "Un cobro pendiente que nadie recuerda es plata que no entra.\n\nOnia es un sistema de gestión con IA para clínicas dentales: agenda, ficha con odontograma, tratamientos y cobros. Cada mañana le deja anotado a quién cobrarle, con el mensaje listo, y nada sale sin que usted lo apruebe.",
+  "kicker": "Clínicas dentales de Santa Cruz",
+  "headline": "Un cobro que nadie recuerda es *plata que no entra.*",
+  "bloques": [
+    {
+      "t": "hora",
+      "valor": "45",
+      "rotulo": "Días",
+      "chip": "Saldo vencido"
+    },
+    {
+      "t": "flecha",
+      "texto": "Onia le deja el *mensaje listo*"
+    },
+    {
+      "t": "tile",
+      "crop": {
+        "src": "hermes-content/carousels/briefs/assets/onia-1.0-dental-ads/candidato-20260930/pendientes-confirmador.png",
+        "crop": [
+          464,
+          266,
+          768,
+          170
+        ]
+      },
+      "width": 936,
+      "anillos": [
+        [
+          480,
+          339,
+          736,
+          80
+        ]
+      ]
+    },
+    {
+      "t": "leyenda",
+      "texto": "Pantalla de Onia · datos de ejemplo"
+    },
+    {
+      "t": "texto",
+      "texto": "Usted lo aprueba. Nada sale sin su OK."
+    }
+  ],
+  "cta": "Escríbanos por WhatsApp",
+  "nota": "Se lo mostramos en una llamada de 20 minutos.",
+  "layout": {
+    "feed": {
+      "hora": 188,
+      "gap": 26,
+      "flecha": 42,
+      "txt": 44,
+      "ctaBottom": 44
+    },
+    "story": {
+      "headTop": 270,
+      "h1": 108,
+      "hora": 236,
+      "gap": 38,
+      "flecha": 48,
+      "txt": 48,
+      "panelTop": 60,
+      "ctaBottom": 250
+    }
+  }
+}
