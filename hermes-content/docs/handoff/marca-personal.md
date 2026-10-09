@@ -2,6 +2,34 @@
 
 **Archivo único del carril.** Actualizado 2026-09-29 por Claude (Opus 5.5).
 
+## ▶ 9-oct (madrugada, 11) — guiones v3 de la madre: qué hice y qué falta antes de editar
+
+- **Pedido de la madre (8-oct noche):** los 16 guiones del 10 al 16-oct están en v3 (rama `claude/onia-madre-v2-pr-review-2d85bb`,
+  commit `e045c4a4` y siguientes; entran a `main` con su PR). Hay que editar cada pieza con su molde, usar las imágenes `fotobn`,
+  pegar su aviso antes de cada video y mandar lo aprendido a `edicion-referentes`. **N07 y D03-A salen el sáb 10; el bruto
+  llega el vie 9 antes de las 18:00.** Drive «Videos Onia Octubre» no tenía brutos nuevos al 9-oct de madrugada.
+- **Hecho (en `main` con este commit):**
+  - aviso **HAIKU** con **0,39 USD** (antes 0,30) y su recurso (texto de la v3), aviso **HOOK** con el dato real (19 archivos) y
+    su recurso con el **script de la guarda, probado en un repo de prueba** (con conflicto no commitea; con el árbol limpio sí; no hace push);
+  - cada aviso corto lleva su PALABRA al principio (`*HOOK* · …`), porque la búsqueda de «buscá HOOK en Avisos» no encontraba
+    avisos sin la palabra (lo midió la madre con MIRAR y CACHE);
+  - capturas C1-C4 de D03-A listas (terminal oscura, sin rojo): `19` del `git grep` sobre `be652820`, bloque Stop de
+    `.claude/settings.json`, líneas 75-76 de `scripts/git-autosync.js` y `217 +++` de `e4e7fa2a`. Salen de comandos reales
+    corridos el 9-oct. Viven en el scratchpad de la sesión; se rehacen con `d03a/caps.py` si se pierden.
+- **Verificado el 9-oct contra el repo:** `be652820` (2026-08-20 14:03 -0400) tiene **19** archivos con marcadores de conflicto;
+  `e4e7fa2a` (2026-08-23 11:19 -0400) trae 217 líneas en 1 archivo. **`CLAUDE.md` §«Git — auto-sync» y el comentario de
+  `scripts/git-autosync.js` (líneas 68-74) dicen «17»: están desactualizados.** No los toqué: `CLAUDE.md` no se edita a pedido de otra
+  sesión, y la decisión es de Sergio Urcullo.
+- **Falta antes de editar:**
+  - los brutos de Sergio Urcullo (N07, D03-A) y las capturas oficiales (página de precios de Anthropic, página de Haiku 5.5): las
+    saca la madre con Chrome, desde la nube Chrome no abre esas páginas;
+  - la pizarra `pizarra-cuentas` de HyperFrames para N07 (**la plantilla todavía no existe**; límite 9-oct 20:00; si no llega,
+    la cuenta va como contador en el panel oscuro);
+  - C5 (`/hooks` dentro de Claude Code) y C6 (grabación de pantalla del repo de prueba): C6 se arma desde el repo de prueba;
+  - los 7 avisos que siguen sin reescribir: ANTIGRAVITY, CACHE, VERIFY, EFFORT, MIGRAR, MIRAR, WORKTREE (+ NIVELES y HERRAMIENTAS).
+- **Regla nueva de la madre:** subir la cara o la voz de Sergio Urcullo a Higgsfield (Virality Predictor) lo aprueba **Leslie Mercado
+  Moreno** (él es menor de edad), no él. Ningún texto de `main` decía lo contrario.
+
 ## ▶ 8-oct (noche, 10) — estilo de imagen nuevo: foto B/N con un objeto verde (la arcilla se jubila)
 
 - **Decidido por Sergio Urcullo (8-oct, por la madre):** opción 9 de `galeria/estilos/opciones-estilo-2026-10-08.jpg`. Estilo
