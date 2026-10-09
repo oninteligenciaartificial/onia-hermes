@@ -1,11 +1,34 @@
 # Handoff — Lucía (influencer IA) y Higgsfield
 
 > Formato: [`README.md`](README.md). Se **sobrescribe**: es el estado ACTUAL del carril.
-> Última escritura: **2026-10-08**, sesión `session_01XSzFcs1k18ijqjSHGjnzD4` (nube, entorno `onia-higgsfield`), rama
+> Última escritura: **2026-10-09**, sesión `session_01XSzFcs1k18ijqjSHGjnzD4` (nube, entorno `onia-higgsfield`), rama
 > `claude/zealous-babbage-fvtjck`. El estado vigente es el primer bloque de abajo; lo demás es historia.
 > Reemplaza a `HIGGSFIELD-LUCIA-SYSTEM-2026-09-22.md`, que queda como historia.
 
-## ▶ ESTADO VIGENTE — 8-oct-2026 noche, plan v5 (lo de abajo es historia)
+## ▶ ESTADO VIGENTE — 9-oct-2026, loop de la madre (lo de abajo es el contexto)
+
+**Orden de la madre (Sergio Urcullo, 9-oct):** `/loop` sobre `hermes-content/docs/cola/loop/lucia.md` hasta vaciarla; reportar solo
+`PUBLICADO: <qué> — <link>`. La cola está en esa carpeta (marcada `[x]`, con lo bloqueado).
+
+**Listo para publicar (nada publicado todavía):** videos G1, G3, G2 (`videos/lucia-entrega/`, con SHA-256), carruseles L01 (reescrito a
+la v5) y C2/C1 (`hermes-content/carousels/out/lucia-*`). Receta exacta, orden y ritmo: **`videos/lucia-entrega/README.md`**.
+
+**Bloqueado, y por qué:** publicar corre en el VPS. La llave vive solo en la sesión «Onia» (decisión de la madre, 5-oct), esta nube
+no tiene cliente `ssh` y instalarlo no está aprobado. Además falta (a) el token de Lucía en `ig-lucia.env` (vence 13-18-oct) y
+(b) que la madre mire los previews 360p. **Quien corra la receta reporta `PUBLICADO:`.**
+
+**En vuelo:** G4 «Seis motores de imagen, una cara» (guion `guiones/G4-…md`, para validar): montaje por un subagente en
+`videos/lucia-g4/`; si la sesión muere, solo se pierde el montaje sin commitear (se reconstruye con la plantilla de G2).
+G5 «Cómo se mide una cara»: solo guion (`guiones/G5-…md`), se monta después de G4.
+
+**Aprendido el 9-oct** (ya en la skill `lucia` §8): el render de carruseles con el Chromium normal deja una franja blanca de 88 px
+(usar `headless_shell` y `--pack editorial-photo`); el contenedor se recicla y `out/` no está en git, por eso los finales se entregan
+en `videos/lucia-entrega/`; fueron **6 motores de imagen**, no 7 (7 fotos nuevas).
+
+**Depende de Sergio Urcullo o de la madre:** confirmar el tope de 97 cr; la voz (D4); grabar 10 s para Motion Control (L3);
+el token, el nombre y la bio del perfil; la mirada a los previews.
+
+## ▶ ESTADO 8-oct-2026 noche, plan v5 (contexto de lo anterior)
 
 **Objetivo de la sesión:** Lucía es una influencer IA que **graba videos estructurados y aprende Higgsfield a fondo sin perder su
 cara** (Sergio Urcullo, 8-oct: *«aprendas todo lo que es Higgsfield, todas sus funciones… y podés editarlo con el material que
