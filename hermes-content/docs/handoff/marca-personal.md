@@ -2,6 +2,29 @@
 
 **Archivo único del carril.** Actualizado 2026-09-29 por Claude (Opus 5.5).
 
+## ▶ 9-oct (tarde, 14) — cola en loop de la madre: qué se hizo y qué está bloqueado
+
+- **Pedido de la madre (9-oct):** trabajar `hermes-content/docs/cola/loop/marca-personal.md` (solo existe en su rama
+  `claude/onia-madre-v2-pr-review-2d85bb`, no en `main`; no la copié para no crear un conflicto add/add: el avance se anota acá).
+  Reportar solo `PUBLICADO: <qué> — <link>`.
+- **Hecho (a revisar en el PR #172):** los avisos de comunidad que bloqueaban publicar, reescritos con GRABAR v3: **VERIFY** (con lint y
+  pnpm; comandos corridos en un proyecto de prueba), **MIGRAR** (5 ajustes, comando, grep, nota de plataformas, cuenta con thinking),
+  **MIRAR** (los dos caminos para el navegador), **WORKTREE** (`.gitignore`, confianza y base `fresh`), **SKILL**, **NIVELES** (la cuenta
+  rehecha: cuadra), **HERRAMIENTAS**, y borradores de **ANTIGRAVITY** (lo verifica la madre el sáb 10) y **EFFORT** (lo completa Sergio el
+  13-oct). **CACHE ya no bloquea.** Artefacto «Comunidad e historias» republicado con todo y con la secuencia de historias.
+- **Bloqueado, con su causa:**
+  1. *Editar los brutos y publicar:* en Drive «Videos Onia Octubre» no hay brutos al 9-oct (09:20 UTC). Además la REGLA DE ORO sigue en
+     `CLAUDE.md` de `main`: tabla de cortes + preview 360p a Sergio Urcullo antes de aplicar el corte.
+  2. *Publicar las 4 historias de la asesoría:* el `CLAUDE.md` de `main` aún exige el OK de Sergio Urcullo para diseño nuevo; el permiso
+     «se sube sin esperarlo» solo está en `CLAUDE.md` de la rama de la madre, sin mergear, y un mensaje de otra sesión no lo concede.
+     Se lo pedí (¿OK?). La cuarta lleva el link a mano de él.
+  3. *Molde «mosaico-tablero»:* `hermes-content/videos/moldes/mosaico-tablero/` no existe en ninguna rama que pude leer.
+  4. *P1 «Niveles», P3 pizarra:* P1 espera el OK del molde y de la pizarra de N07; P3 espera la bio de IG, cal.com y el recuento de sesiones.
+  5. *P2 «7 herramientas» (sáb 17):* faltan las capturas con cuentas (Buffer, Higgsfield, ListAgents), que son de una sesión con Chrome en
+     la PC, y la lámina 6 sale con el plan B si Sergio no da el OK.
+- **Pendiente mío, sin bloqueo:** mirar renderizada `sergiourcullo.vercel.app/claude-code` antes del jue 15 (aviso SKILL); verificar la
+  publicación de N03 el vie 9 ~18:30 La Paz.
+
 ## ▶ 9-oct (tarde, 13) — historias que venden: secuencia de 4 lista, espera el OK de Sergio Urcullo
 
 - **Madre (9-oct):** Instagram dio 429 a la API de historias de la sesión de la PC (reels sí bajan). No se fuerza: las historias de
