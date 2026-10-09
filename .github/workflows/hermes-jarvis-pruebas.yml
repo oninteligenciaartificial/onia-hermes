@@ -17,6 +17,8 @@ on:
       - "scripts/loops/**"
       - "scripts/herramientas-*"
       - "scripts/git-autosync.js"
+      - ".claude/settings.json"
+      - ".gitignore"
       - "hermes-content/deploy/hermes-jarvis/**"
       - "hermes-content/deploy/hermes-agent/**"
       - "hermes-content/skills/agenda-calendario.md"
@@ -49,6 +51,7 @@ jobs:
             hermes-content/docs
             .claude
             .github
+            .gitignore
             package.json
           sparse-checkout-cone-mode: false
           filter: blob:none

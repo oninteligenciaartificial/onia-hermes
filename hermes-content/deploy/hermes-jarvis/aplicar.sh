@@ -64,9 +64,14 @@ al_dia() {
     && grep -q ONIA_AGENDA_CAMBIOS_URL "$BIN/onia-agenda.sh" 2>/dev/null \
     && grep -q cierre-bloques "$BIN/onia-jarvis-resumen.sh" 2>/dev/null \
     && grep -q '^candado()' "$BIN/onia-pedido-claude.sh" 2>/dev/null \
-    && grep -q -- '--probar' "$BIN/onia-respuestas-pedidos.sh" 2>/dev/null
+    && grep -q '^SELLOS=' "$BIN/onia-pedido-claude.sh" 2>/dev/null \
+    && grep -q -- '--probar' "$BIN/onia-respuestas-pedidos.sh" 2>/dev/null \
+    && grep -q '^bajar()' "$BIN/onia-respuestas-pedidos.sh" 2>/dev/null
   # Los pedidos: la versión con un solo candado para la vista previa y el --si, y el recolector de
   # la vuelta. Sin esto, con la llave cargada, aplicar salía 0 con los pedidos apagados (madre, 2-oct).
+  # 5-oct: y las que cierran los MEDIUM de la madre v2 (el sello que ata la respuesta al pedido, y el
+  # tope mientras baja). Con el comando viejo la rutina no recibe sello y no puede firmar; con el
+  # recolector viejo una respuesta firmada no se entrega y una sin firmar sí.
 }
 if ! al_dia; then
   echo "todavía no: corro una vez el sincronizador de cada hora"

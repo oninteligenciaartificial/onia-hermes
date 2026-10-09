@@ -56,6 +56,7 @@ BETA="experimental-cc-routine-2026-04-01"
 AHORA=$(date -u +%s)
 HOY=$(date -u -d "@$((AHORA - 14400))" +%F)   # Bolivia: UTC-4 todo el año
 REGISTRO="$ESTADO/pedidos.tsv"            # ts_utc id carril hash session_id url
+SELLOS="$ESTADO/sellos"                   # el sello de cada pedido: con él se firma la respuesta
 VISTAS="$ESTADO/vistas.log"               # ts_utc de cada código que se le mandó (para el tope por hora)
 RESPUESTAS="$ESTADO/respuestas.tsv"       # ts_utc id estado (lo escribe respuestas-pedidos.sh)
 
@@ -204,11 +205,20 @@ HORA_LP=$(date -u -d "@$((AHORA - 14400))" '+%F %H:%M')
 TMP=$(mktemp -d) || exit 1
 trap 'rm -rf "$TMP"' EXIT
 umask 077
-TEXTO="$TEXTO" ID="$ID" CARRIL="$CARRIL" HORA="$HORA_LP" python3 -c '
+# EL SELLO DEL PEDIDO (2026-10-05, primer MEDIUM de la revisión de la madre v2). La respuesta vuelve por
+# una rama del repo, y cualquiera que pueda pushear podía dejar la de un pedido abierto. El sello viaja
+# SOLO en este disparo y queda acá (600, escrito en un archivo nuevo y movido): la sesión firma su
+# respuesta con él (responder-pedido.sh) y respuestas-pedidos.sh entrega solo la que trae la firma buena.
+SELLO=$(python3 -c 'import secrets; print(secrets.token_hex(16))') || { echo "No pude generar el sello del pedido: no salió." >&2; exit 1; }
+{ mkdir -p "$SELLOS" && chmod 700 "$SELLOS" && printf '%s\n' "$SELLO" > "$SELLOS/$ID.nuevo" && mv -f "$SELLOS/$ID.nuevo" "$SELLOS/$ID"; } 2>/dev/null \
+  || { rm -f "$SELLOS/$ID.nuevo"; echo "No pude guardar el sello del pedido: no salió. El código sigue sirviendo." >&2; exit 1; }
+TEXTO="$TEXTO" ID="$ID" CARRIL="$CARRIL" HORA="$HORA_LP" SELLO="$SELLO" python3 -c '
 import json, os
 t = ("PEDIDO {id} · carril: {carril} · {hora} (La Paz)\n"
+     "Sello: {sello} (solo para firmar tu respuesta con scripts/loops/responder-pedido.sh; no lo escribas en ningún otro lado)\n"
      "Pedido de Sergio Urcullo por Telegram, que él confirmó con un código después de ver este texto exacto:\n"
-     "«{texto}»").format(id=os.environ["ID"], carril=os.environ["CARRIL"], hora=os.environ["HORA"], texto=os.environ["TEXTO"])
+     "«{texto}»").format(id=os.environ["ID"], carril=os.environ["CARRIL"], hora=os.environ["HORA"],
+                         sello=os.environ["SELLO"], texto=os.environ["TEXTO"])
 print(json.dumps({"text": t}, ensure_ascii=False))' > "$TMP/cuerpo.json"
 printf 'Authorization: Bearer %s\n' "$ONIA_RUTINA_TOKEN" > "$TMP/h"
 
@@ -227,7 +237,9 @@ print(str(r.get("claude_code_session_id", "")) + "|" + str(r.get("claude_code_se
 
 # Tres resultados, y solo uno se puede reintentar sin miedo a duplicar:
 if [ "$RC" = 6 ] || [ "$RC" = 7 ] || [[ "${HTTP:-}" =~ ^4[0-9][0-9]$ ]]; then
-  # Sin conexión (6/7) o la rutina lo rechazó (4xx): NO salió. El código sigue sirviendo.
+  # Sin conexión (6/7) o la rutina lo rechazó (4xx): NO salió. El código sigue sirviendo; el reintento
+  # lleva otro id y otro sello, así que este se borra.
+  rm -f "$SELLOS/$ID"
   echo "El pedido NO salió ($([ -n "${HTTP:-}" ] && [ "$HTTP" != 000 ] && echo "la rutina contestó $HTTP" || echo "sin conexión con la rutina")). Probá de nuevo en unos minutos con el mismo código." >&2
   exit 1
 fi

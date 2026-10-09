@@ -377,8 +377,9 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
 
 ## `main` siempre compila (REGLA DURA)
 
-- El auto-sync hace fast-forward de `main`: **nunca dejar que arrastre WIP parcial**. Si
-  un archivo nuevo importa otro archivo nuevo, van los DOS o ninguno.
+- `main` avanza por PR revisado; solo la madre y el integrador lo mueven directo (regla
+  «Git — auto-sync»). Esos dos: **nunca dejar que arrastre WIP parcial**. Si un archivo
+  nuevo importa otro archivo nuevo, van los DOS o ninguno.
 - `main` alimenta el deploy del VPS y el de Vercel: roto, rompe ambos.
 - Ojo con el **casing de imports**: Linux distingue mayúsculas, Windows no.
 
@@ -414,15 +415,30 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
 
 - Commits conventional (`feat:`, `fix:`, `docs:`, `chore:`). El mensaje explica el **POR
   QUÉ**, no solo el qué.
-- **Auto-sync activado**: al terminar, commitear y pushear sin que lo pidan (hook `Stop`
-  → `node scripts/git-autosync.js`).
+- **Auto-sync activado**: al terminar, commitear y pushear la RAMA sin que lo pidan (hook
+  `Stop` → `node scripts/git-autosync.js`).
+- **`main` solo avanza por PR revisado** (Sergio Urcullo, 2026-10-05: *«sí, la madre sigue
+  directo»*). El hook ya no hace fast-forward de `main`, salvo con permiso: la **madre** en la PC
+  (`ONIA_AUTOSYNC_MAIN=1` en el `.claude/settings.local.json` de SU carpeta, que git ignora) y el
+  **integrador** (`ONIA_LOOP_ID=onia-cola`). Una sesión parada en `main` sin permiso no lo pushea:
+  sus commits van a `claude/autosync-<id de la sesión>` y la sesión queda parada en esa rama, para un PR.
+
+  > Medido el 5-oct: desde el 28-sep, **48 de los 78 avances de `main`** entraron por ese
+  > fast-forward sin que nadie los revisara, **23 desde sesiones de la nube** (Lucía y Marca
+  > personal). Así entró #82 con «Hoy soy odontóloga». Y `main` llega al VPS como root en ~1 h.
+
+  ⚠️ Frena el accidente, no a una sesión que pushee a `main` a propósito. El permiso nunca va en
+  `.claude/settings.json` (el autosync se lo daría a todas las sesiones), ni en la config de usuario
+  de la PC o una variable de Windows (alcanzaría a cualquier sesión de esa máquina).
+  `pedido-rama.test.mjs` verifica que ningún `settings.local.json` esté versionado.
 - Respeta `.gitignore`: nunca sube `.env`, claves ni `node_modules`. Assets y outputs sí.
 - ⚠️ **Un merge con conflictos NUNCA se deja abierto al cerrar un turno.** El hook Stop
   corre el autosync, y `add -A` + commit convirtió 17 archivos CON marcadores `<<<<<<<`
-  en un "resuelto" que hizo fast-forward a main (2026-08-20; el CI lo contuvo). El
-  autosync ya tiene la guarda (se niega con MERGE_HEAD/paths unmerged), pero la regla es
-  del que mergea: resolver ANTES de soltar el turno, y verificar cero marcadores con grep.
-- ⚠️ **El hook Stop puede publicar el estado A MEDIAS de un subagente.** El autosync corre
+  en un "resuelto" que hizo fast-forward a main (2026-08-20, cuando todavía lo hacía; el CI
+  lo contuvo). El autosync ya tiene la guarda (se niega con MERGE_HEAD/paths unmerged), pero
+  la regla es del que mergea: resolver ANTES de soltar el turno, y verificar cero marcadores.
+- ⚠️ **El hook Stop puede publicar el estado A MEDIAS de un subagente** (hoy, solo en la madre y
+  el integrador, los únicos que mueven `main` directo; en el resto queda en su rama). El autosync corre
   cuando un subagente termina su turno, no cuando el trabajo está terminado. El 2026-08-23
   se llevó **217 líneas de CSS a `origin/main` antes de que existiera el markup que las
   usa** (`e4e7fa2a`), a mitad de una sesión que todavía tenía dos archivos por escribir.
