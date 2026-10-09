@@ -89,6 +89,7 @@ carril, cargá su stack, respetá las reglas duras. Fuente viva del mapa complet
 - **Índice y operación:** `onia-router` (este índice) · `onia-continuidad` (arranque y rumbo de
   sesión) · `onia-infra` (VPS, Docker, n8n por SSH) · `onia-hermes-jarvis` (Hermes por Telegram:
   resumen, cierre, aduana, calendario, pedidos a Claude, y el workflow hermes-jarvis; 2026-10-01) ·
+  `equipo-de-agentes` (EL MÉTODO desde el 9-oct: colas en loop por sesión, Codex, verificadores Haiku, solo lo publicado a Sergio Urcullo) ·
   `onia-sesion-madre` (la madre local ordena a las sesiones de la nube por mensaje: ids, canales
   medidos, formato).
 - **Producto:** `onia-core` · `onia-chatbot` · `onia-contabilidad-bolivia`.

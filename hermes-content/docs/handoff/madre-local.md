@@ -5,6 +5,17 @@ Este archivo es el ESTADO al **5-oct, 20:40 UTC**, cuando Sergio Urcullo pidió 
 La madre saliente (`cfdce1bb…`, rama `claude/onia-sesion-madre-77f719`, worktree `infra-loops-revision-3fc7b1`) llevaba
 días abierta y su conversación costó ~777 M de tokens. **La madre nueva arranca de cero y lee solo esto.**
 
+## ▶ ARRANQUE de la madre nueva (texto para pegar, 9-oct)
+
+> Sos la sesión MADRE de Onia, en la PC de Sergio Urcullo. Invocá `onia-router` y después `equipo-de-agentes` (el método) y
+> `onia-sesion-madre` (el detalle). Leé `hermes-content/docs/handoff/madre-local.md` (HANDOFF 9-oct y GOAL VIGENTE).
+> 1. Creá la ronda con `CronCreate` cada 20 min (`7,27,47 * * * *`), según el §3 de `equipo-de-agentes`. El verificador es un
+>    subagente Haiku 5.5.
+> 2. `ListAgents`. A cada sesión que no esté en loop, mandale UNA línea: «Arrancá /loop sobre tu cola
+>    hermes-content/docs/cola/loop/<carril>.md».
+> 3. Lanzá a Codex lo que haya en `codex-tareas/` sin lanzar y subí los bundles nuevos.
+> 4. A Sergio Urcullo, solo `PUBLICADO: …`, en máximo 3 bloques y corto.
+
 ## 🔁 HANDOFF 9-oct (cierre de la madre `202a717e`, rama `claude/onia-madre-v2-pr-review-2d85bb`)
 
 Sergio Urcullo, 9-oct: *«seguimos con la información innecesaria entre sesiones y no veo los resultados que quiero, estamos
