@@ -5,6 +5,10 @@
 > - ✅ **Tarea 4 (fichas de contenido):** `research/competencia/anuncios/FICHAS_DE_CONTENIDO.md` (Huli, Reservo, Dt.Dental, Calu, bolivianos: ningún proveedor boliviano pauta en Meta).
 > - ⛔ **Tareas 1 y 2 bloqueadas por Plataforma:** la tabla «se promete / funciona» y el corto de 60 s necesitan la cuenta demo y las capturas C1-C7 (y que Sergio Urcullo vea la tabla de cortes y el preview 360p antes de cortar).
 > - Bloqueado de Sergio Urcullo: tarjeta en ONIA Ads y OK de gasto.
+> - ✅ **Lo desbloqueable de las tareas 1 y 2 (9-oct, madre: «encadená todas las tareas desbloqueadas»; `/loop` existe en mi sesión):** `scripts/grabar-captura.mjs`
+>   (el «script de grabación» que el VSL dice que no existe; planes C1-C7 y C2-clic como esqueleto, frenos probados, **la app real sin probar**) y
+>   `carousels/briefs/ads/VSL-CORTO-TABLA-DE-CORTES.md` + preview de 60 s en `carousels/out/ads/vsl-corto-animatic/`. **Siguen bloqueadas** la tabla «se promete / funciona»
+>   y el corto real: cuenta demo (Plataforma), `ONIA_QA_EMAIL`/`ONIA_QA_PASSWORD` en el entorno de Ventas (Sergio Urcullo) y las tomas T9/T10/T12.
 > - ✅ **Tanda 2 de competencia (T1-9, 9-oct):** `ONIA_UI_MEJORAS_1.0.md` §8. **Historia clínica:** *Normas en Salud Oral* (R.M. 1320, 2010, «documento de trabajo») pide
 >   historia clínica en todo paciente y prontuario «archivado por lo menos por unos 10 años», digital permitido; la Ley 3131 trata el consentimiento y el
 >   secreto como documentos oficiales. Ninguna de las dos fija obligación probada para un consultorio privado: **titular solo como pregunta y con el OK de

@@ -382,6 +382,23 @@ Trampas pagadas armando v3 (2-oct):
   seguridad de Claude Code **bloquea `rm -f $VAR/*`**: usar rutas literales o sobrescribir los archivos con el mismo nombre.
 - **Higgsfield:** se cotiza con `higgsfield generate cost` desde la PC (CLAUDE.md); desde la nube no se cotiza ni se genera.
 
+
+### 4.4 Grabar la app y armar el corto del VSL (9-oct)
+
+- **`scripts/grabar-captura.mjs`:** plan en JSON (`ir`, `esperar`, `mover`, `anillo`, `foto`, `clic`) → `.mp4` H.264 de la app con cursor grande y anillos, más fotos
+  PNG y un `.log.json`. Esqueletos: `grabar-captura.vsl-dental-C1-C7.plan.json` (solo mira) y `…-C2-clic.plan.json`. Probado contra una página local; **la app real
+  no se probó** (falta la cuenta). Trampas que ya pagué: (1) el cursor es un `<div>` y **cada página nueva lo reinicia**: la posición viaja en `sessionStorage`;
+  (2) la punta cae al 80 % del ancho y 65 % del alto del elemento, no al centro: en el centro tapa el texto; (3) el video empieza al abrir el contexto: se recorta
+  con `t0_ms` (el login queda fuera); (4) contra `127.0.0.1` no se pasa el proxy de la nube; (5) las fotos **traen el cursor y los anillos**: para una captura limpia
+  no se pone `anillo` antes de la `foto`.
+- **Frenos, y por qué:** el VSL avisa que un clic en «Aprobar» puede mandar un mensaje de verdad. Solo entra con un correo `qa|demo|prueba|test`; un clic en algo que
+  suene a aprobar/enviar/confirmar/pagar/cobrar/eliminar/borrar/guardar exige `"envio": true` **y** `ONIA_GRABAR_PERMITE_ENVIO=1`; el plan se revisa entero antes de abrir el
+  navegador y el texto real del botón se lee antes del clic. Probados los seis caminos (plan válido, clic sin declarar, clic declarado sin permiso, palabra peligrosa en el
+  selector, clave desconocida, correo real).
+- **`scripts/vsl-animatic.mjs`:** tabla JSON de tramos → láminas PNG y un preview de 360×640 del largo exacto (con la pantalla marcada «Falta la captura aprobada»). Es para que
+  Sergio Urcullo vea el ritmo **antes** de grabar o cortar; no es el video. Caso: `carousels/briefs/ads/VSL-CORTO-TABLA-DE-CORTES.md`. Trampa: el demuxer `concat` de
+  ffmpeg resuelve las rutas relativas contra la carpeta de la lista, no contra el cwd: se le pasan rutas absolutas.
+
 ## 5. La campaña de Meta
 
 - **1-oct, 21:00 UTC: el conector YA ve ONIA Ads** (`1073680778314945`, negocio «OniaAgency», `is_ads_mcp_enabled`),
