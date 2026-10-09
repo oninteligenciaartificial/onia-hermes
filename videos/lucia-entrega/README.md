@@ -1,4 +1,4 @@
-# Entrega de Lucía — G1, G3, G2 (9-oct-2026)
+# Entrega de Lucía — G1, G3, G2, G4 y los carruseles L01, C1, C2 (9-oct-2026)
 
 Videos finales de Lucía listos para publicar. **Cualquiera con la llave del VPS los publica en un paso**; esta sesión de la
 nube no tiene cliente `ssh` y la decisión de la madre (8-oct) es que la llave vive solo en la sesión «Onia».
@@ -54,6 +54,9 @@ El token de Instagram de Lucía vence entre el 13 y el 18-oct: **la primera piez
 
 ## Antes de publicar (una vez)
 
+> Los dos publicadores ya pasaron `--selftest` en el repo (9-oct, esta sesión): `node ig-reel.mjs --selftest` y `node ig-carrusel.mjs --selftest` dicen
+> «selftest ok». En el VPS hay que repetirlo después de copiarlos.
+
 1. Token de Lucía en `/root/.config/onia-publicar/ig-lucia.env` (no se midió desde el 4-sep; vencía entre el 13 y el 18-oct).
 2. `hermes-content/deploy/vps-ops/publicar/ig-reel.mjs` **e** `ig-carrusel.mjs` copiados **juntos** a `/root/bin`, con
    `--selftest` en los dos (el carrusel importa del reel; copiar uno solo rompe los de `@sergiourcullo`).
@@ -74,7 +77,7 @@ Después: abrir el permalink, confirmar «Información de IA» y que `is_ai_gene
 
 ## Qué NO tocan estas piezas (por eso salen sin el OK pieza por pieza)
 
-Ninguna muestra ni promete una función de Onia, ninguna nombra marcas de terceros (los motores van como «Motor 1 a 6»), no
+Ninguna muestra ni promete una función de Onia, ninguna nombra marcas de terceros (los motores de video van como «Motor 1 a 6» y los de imagen como «Imagen A a F»), no
 hay voz, no hay testimonio, no hay cliente. Greps contra la lista de frases prohibidas en `../lucia-gN/qa/grep-prohibidas.txt`
 y control de cara en `../lucia-gN/qa/face-gate.txt`.
 

@@ -12,8 +12,10 @@
 - [x] L01 «Hola, soy Lucía. No existo.» reescrito a la premisa v5 — láminas en `hermes-content/carousels/out/lucia-l01-hola-no-existo-foto/`,
   brief en `briefs/lucia/l01-hola-no-existo.json`, 5 láminas miradas completas y grep limpio (commit de esta tanda). Sale por
   `ig-carrusel.mjs --cuenta lucia` en el VPS (receta en `videos/lucia-entrega/README.md`); no hay otra pieza que lo bloquee.
-- [ ] G4 «Seis motores de imagen, una cara: ¿cuál la conserva?» — guion con lo ya medido (`higgsfield-mapa.md` §1, 11,75 cr
-  gastados el 8-oct), validado por la madre antes de montar con el método de G1/G2/G3.
+- [x] G4 «Seis motores de imagen, una cara: ¿cuál la conserva?» — montado en tres pasadas con revisor independiente
+  (`videos/lucia-g4/`, revisiones 1 y 2 en `qa/`; 59,75 s; copia en `videos/lucia-entrega/`, SHA en su README). Corregidos: consultorio
+  dental y logos de monitor (fotos limpias en `v4/prueba-motores-20261008/fotos-limpias/`), nota de ruido, tabla de A y B. **Falta solo la
+  validación del guion por la madre** (decide también el sello rojo de E/F, R2-1 de la revisión 2).
 - [x] Carrusel C1 «Un video sin grabar, en 3 pasos» — versión carrusel de G1 con fotos y un cuadro real del clip: láminas en
   `hermes-content/carousels/out/lucia-c1-un-video-sin-grabar/`, brief en `briefs/lucia/c1-un-video-sin-grabar.json`. 5 láminas miradas
   completas, grep limpio, 1080×1350 sin franja. Sale por `ig-carrusel.mjs --cuenta lucia` (receta en `videos/lucia-entrega/README.md`).
@@ -29,6 +31,10 @@
   deja la receta en `videos/lucia-entrega/README.md`.
 
 ## Bloqueado
+
+- **El desbloqueo más corto, y es de Sergio Urcullo:** el OK para instalar el cliente `ssh` (paquete `openssh-client`) en esta nube, solo para
+  correr la receta de `videos/lucia-entrega/README.md` por el túnel que el hook de arranque ya deja configurado (llave en el entorno, `ssh onia-vps`).
+  Sin ese OK, o sin que la madre/«Onia» corra la receta, nada se publica. Antes de pedirlo se validó offline: los dos publicadores pasan `--selftest`.
 
 - **Publicar G1 / G3 / G2 (y lo que siga)** — necesita (a) la llave del VPS, que por decisión de la madre vive solo en la
   sesión «Onia» (esta sesión de nube no tiene cliente `ssh` y no se instala sin aprobación), (b) el token de Lucía en
