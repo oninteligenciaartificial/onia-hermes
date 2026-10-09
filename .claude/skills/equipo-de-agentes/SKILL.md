@@ -84,3 +84,4 @@ actos legales o firmas (los hace Leslie Mercado Moreno) y su cara o su voz en se
 - HyperFrames en esta PC: el Chrome que trae da `EFTYPE`. Renderizar con
   `HYPERFRAMES_BROWSER_PATH="C:/Program Files/Google/Chrome/Application/chrome.exe" npx hyperframes render`
   (9-oct, molde `mosaico-tablero`: 30 s en 50 s). Codex no puede renderizar (`EPERM`): escribe la composición y renderiza la madre.
+- Primer día de colas (9-oct): Lucía y Hermes siguieron solas, pero Plataforma, Marca y Ventas quedaron `idle` con tareas pendientes. El loop de la nube no garantiza seguir. En cada ronda, la sesión `idle` con cola pendiente recibe UNA línea: «Retomá tu cola, siguiente: X».
