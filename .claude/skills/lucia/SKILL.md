@@ -322,6 +322,14 @@ Fuente: `research/competencia/LUCIA_COMPETENCIA_20261005.md`.
   Transactions») justo después de lanzar un job que no se puede cotizar; el estado se mira con `job_display`.
 - **8-oct · una sola toma no es una medición:** Kling Omni Image dio 0,79 en una escena y 0,35 en otra con el mismo método. Antes de
   cambiar de motor se repite en al menos 3 escenas.
+- **9-oct · carrusel con franja blanca de 88 px:** `carousel_render.js` con el Chromium normal de la nube (`--headless=new`) deja el
+  visor en 1262 px aunque la ventana pida 1350, y cada lámina sale con una franja blanca abajo. L01 del 8-oct la tenía y nadie la
+  miró completa. Se renderiza con el `headless_shell` (`CAROUSEL_BROWSER=/opt/pw-browsers/chromium_headless_shell-1194/chrome-linux/headless_shell`
+  y `--pack editorial-photo --account lucia`): mide 1080×1350 exacto. Las fotos del carrusel van por lámina (`slide.bg`) y solo
+  el pack `editorial-photo` las pone en las 5; con `community-editorial` solo salían en portada y cierre.
+- **9-oct · el contenedor se recicla y `out/` no está en git:** los finales de G1/G3/G2 vivían solo en el disco de la nube. Se
+  entregan en `videos/lucia-entrega/` (G2 recodificado a 6 Mbps, PSNR 47,9 dB, para entrar bajo el límite de GitHub). Todo video
+  final se copia ahí en el mismo commit que se monta; si no, quien tiene la llave del VPS no puede publicar.
 - **2/3-oct:** Seedream escribe como texto «sheet» y «hex #…»; inventa letreros en las torres; los lotes de más de 5
   dan 429. Están en `higgsfield-generate`.
 

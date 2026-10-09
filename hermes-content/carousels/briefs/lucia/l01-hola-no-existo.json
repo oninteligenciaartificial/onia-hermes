@@ -1,14 +1,74 @@
 {
   "title": "Hola, soy Lucía. No existo.",
-  "caption": "Lucía es un personaje hecho con IA por @oniahq. Te lo digo en la primera línea porque es justamente el punto.\n\nNo tengo consultorio, ni clientes, ni horario. Tengo una tarea: mostrarte, una vez por semana, una cosa real que un negocio chico de Santa Cruz puede dejar de hacer a mano. Solo cosas que ya funcionan y que podés ver andando.\n\nSi tenés un negocio, seguime.",
-  "hashtags": ["#santacruz", "#bolivia", "#negocios", "#pymes", "#inteligenciaartificial"],
+  "caption": "Lucía Antelo es un personaje hecho con IA por @oniahq. Te lo digo en la primera línea porque es justamente el punto.\n\nNo tengo oficio ni horario. Tengo una tarea: una vez por semana pruebo algo de video o imagen con IA, mido si me conserva la cara y te muestro la orden que usé y lo que costó. También lo que sale mal.\n\nSeguime.",
+  "hashtags": [
+    "#inteligenciaartificial",
+    "#ia",
+    "#santacruz",
+    "#bolivia"
+  ],
   "comment_trigger": "",
-  "cta": "Seguí a @lucia.antelo.oficial",
+  "cta": "Seguime",
   "slides": [
-    {"number": 1, "role": "cover", "pill": "Presentación", "headline": "Hola, soy Lucía. *No existo.*", "body": "Y te lo digo en la primera lámina.", "callout": "", "save_worthy": false, "visual_prompt": "Selfie de espejo de Lucía", "alt_text": "Lucía, personaje hecho con IA, en una selfie de espejo", "bg": "hermes-content/references/modelos/lucia/v4/feed/anchor.jpg"},
-    {"number": 2, "role": "stakes", "pill": "Quién soy", "headline": "Un personaje *hecho con IA*", "body": "Me creó @oniahq, una empresa de Santa Cruz. No tengo consultorio ni clientes. Tengo una tarea.", "callout": "", "save_worthy": false, "visual_prompt": "Lucía frente a cámara con luz de ventana", "alt_text": "Lucía mirando a cámara junto a una ventana", "bg": "hermes-content/references/modelos/lucia/v4/feed/v01.jpg"},
-    {"number": 3, "role": "point", "pill": "Mi tarea", "headline": "Mostrarte *lo que ya funciona*", "body": "Una vez por semana, una cosa que tu negocio puede dejar de hacer a mano. Agenda, recordatorios, el día a día. Nada que no puedas ver andando.", "callout": "", "save_worthy": true, "visual_prompt": "Lucía en un café mirando el celular", "alt_text": "Lucía en un café mirando su celular", "bg": "hermes-content/references/modelos/lucia/v4/feed/v05.jpg"},
-    {"number": 4, "role": "point", "pill": "Lo que no hago", "headline": "Lo que *nunca* voy a hacer", "body": "Hacerme pasar por clienta. Inventar testimonios. Prometerte algo que todavía no existe.", "callout": "", "save_worthy": false, "visual_prompt": "Lucía al atardecer sonriendo", "alt_text": "Lucía sonriendo al atardecer", "bg": "hermes-content/references/modelos/lucia/v4/feed/v07.jpg"},
-    {"number": 5, "role": "cta", "pill": "Seguime", "headline": "Si tenés *un negocio*, seguime", "body": "Cada semana, una cosa real. Sin humo.", "callout": "@lucia.antelo.oficial", "save_worthy": false, "visual_prompt": "Lucía riendo en su living", "alt_text": "Lucía riendo en un living con luz de lámpara", "bg": "hermes-content/references/modelos/lucia/v4/feed/v03.jpg"}
+    {
+      "number": 1,
+      "role": "cover",
+      "pill": "Presentación",
+      "headline": "Hola, soy Lucía. *No existo.*",
+      "body": "Y te lo digo en la primera lámina.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Selfie de espejo de Lucía",
+      "alt_text": "Lucía, personaje hecho con IA, en una selfie de espejo",
+      "bg": "hermes-content/references/modelos/lucia/v4/feed/anchor.jpg"
+    },
+    {
+      "number": 2,
+      "role": "stakes",
+      "pill": "Quién soy",
+      "headline": "Un personaje *hecho con IA*",
+      "body": "Me creó @oniahq, una empresa de Santa Cruz. Nada de lo que ves pasó: cada foto y cada video sale de una orden escrita.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Lucía frente a cámara con luz de ventana",
+      "alt_text": "Lucía mirando a cámara junto a una ventana",
+      "bg": "hermes-content/references/modelos/lucia/v4/feed/v01.jpg"
+    },
+    {
+      "number": 3,
+      "role": "point",
+      "pill": "Mi tarea",
+      "headline": "Una prueba con IA *por semana*",
+      "body": "Pruebo una herramienta de imagen o video, mido si me conserva la cara y te muestro la orden y lo que costó. Una foto: 1 crédito. Un clip de 6 segundos: 7,5.",
+      "callout": "",
+      "save_worthy": true,
+      "visual_prompt": "Lucía en un café mirando el celular",
+      "alt_text": "Lucía en un café mirando su celular",
+      "bg": "hermes-content/references/modelos/lucia/v4/feed/v05.jpg"
+    },
+    {
+      "number": 4,
+      "role": "point",
+      "pill": "Lo que no hago",
+      "headline": "Lo que *nunca* voy a hacer",
+      "body": "Hacerme pasar por una persona real. Dar consejos de salud o de plata. Inventar testimonios o cifras.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Lucía al atardecer sonriendo",
+      "alt_text": "Lucía sonriendo al atardecer",
+      "bg": "hermes-content/references/modelos/lucia/v4/feed/v07.jpg"
+    },
+    {
+      "number": 5,
+      "role": "cta",
+      "pill": "Seguime",
+      "headline": "Cada semana, *una prueba*",
+      "body": "La orden exacta, el costo y lo que salió mal. Seguime para no perdértela.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Lucía riendo en su living",
+      "alt_text": "Lucía riendo en un living con luz de lámpara",
+      "bg": "hermes-content/references/modelos/lucia/v4/feed/v03.jpg"
+    }
   ]
 }

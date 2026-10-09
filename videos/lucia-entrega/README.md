@@ -22,6 +22,13 @@ SHA-256 de lo entregado:
   de promedio y 43,8 dB en el peor cuadro, o sea sin diferencia visible; misma duración (58,00 s), 24 fps, audio silencioso copiado.
 - Todos son 1080×1920, H.264 + AAC (silencioso: D4, sin voz ni música), 24 fps.
 
+## Carrusel L01 «Hola, soy Lucía. No existo.» (presentación, va fijado después de G1)
+
+- Láminas: `hermes-content/carousels/out/lucia-l01-hola-no-existo-foto/slide-01..05.png` (1080×1350). Pie: campo `caption` +
+  `hashtags` de `hermes-content/carousels/briefs/lucia/l01-hola-no-existo.json`.
+- En el VPS: `node /root/bin/ig-carrusel.mjs --cuenta lucia --dir <carpeta con las 5 láminas> --caption <pie>`; el ensayo debe decir
+  «listo en Instagram … etiqueta IA».
+
 ## Antes de publicar (una vez)
 
 1. Token de Lucía en `/root/.config/onia-publicar/ig-lucia.env` (no se midió desde el 4-sep; vencía entre el 13 y el 18-oct).

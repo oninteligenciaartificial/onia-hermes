@@ -93,7 +93,7 @@ Cada fila es una prueba chica, con su video. Los costos son cotizaciones en vivo
 | **G1** «Este video no fue grabado: así se hace, en 3 pasos» (56 s) | 0 | guion para validar por la madre; todo el material ya está pagado |
 | **G3** «Tres errores de la IA que atrapé antes de publicar» (58 s) | 0 | **montado** (`videos/lucia-g3/`); la madre mira el preview 360p; evidencia real en `v4/kit/` |
 | **G2** «La misma foto, seis clips: ¿quién pierde la cara?» (58 s) | 0 más | **montado** (`videos/lucia-g2/`); la madre mira el preview 360p; los 6 clips ya estaban pagados y medidos |
-| **L01** «Hola, soy Lucía. No existo.» (carrusel de presentación, fijado) | 0 | a reescribir: promete «cosas que un negocio chico puede dejar de hacer a mano», y esa ya no es la premisa. Va fijado **después** de G1 |
+| **L01** «Hola, soy Lucía. No existo.» (carrusel de presentación, fijado) | 0 | **reescrito a la v5 el 9-oct** (una prueba por semana, lo que cuesta, lo que no hace) y renderizado sin franja blanca. Va fijado **después** de G1 |
 | ~~L02~~ y ~~el chiste de 10 s~~ | — | retirados el 8-oct; sus clips son planos de apoyo |
 
 - **Qué se mide por pieza:** guardados y envíos (señal de que enseñó algo), seguidores nuevos y que la cuenta siga «apta
