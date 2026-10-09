@@ -17,7 +17,9 @@
 - [x] Diagnóstico: las publicaciones de la ventana (`/root/publicar/publicado.jsonl`, por día y con link) y los timers `pub-*` agendados, para ver desde GitHub si sale una pieza por día (GOAL 8-oct). Solo lectura, con prueba — `c182cbd0`
 - [x] Diagnóstico: los títulos `##` del SOUL del VPS contra los del repo (qué secciones le faltan a Hermes), para decidir qué más copia `aplicar`. Solo lectura, con prueba — `2d1b13c4`
 - [x] Handoff: ESTADO con el #176 en `main` (qué llega solo al VPS por el sincronizador y qué espera `aplicar`) — `c3dbf081`
-- [ ] Mergear el PR del diagnóstico 13 y 14 con el CI en verde y reportar PUBLICADO
+- [x] Mergear el PR del diagnóstico 13 y 14 con el CI en verde y reportar PUBLICADO — `fce76971` (#177)
+
+**Cola sin tareas desbloqueadas (9-oct, tarde).** Lo que sigue del carril depende de `aplicar` o de una decisión de Sergio Urcullo (abajo). No invento trabajo que no sirva a la etapa: si la madre tiene algo para este carril, va acá.
 
 ## Bloqueado
 - Pruebas P2-P5 (`TELEGRAM_COMMAND_CENTER.md` §8): necesitan `aplicar` en el VPS, que corre la madre desde la PC con el «sí» de Sergio Urcullo. Desde esta sesión no se toca el VPS sin su «sí» acá.

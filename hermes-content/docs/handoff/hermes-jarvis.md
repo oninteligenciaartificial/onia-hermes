@@ -7,9 +7,12 @@
 > - **Espera `aplicar`:** el resumen y el cierre en tres bloques, «Hoy sale» y «Hoy salió», y la regla
 >   del formato en el SOUL (5c). La sección 0 ahora exige el resumen nuevo en `/root/bin`: si `aplicar`
 >   corre antes de que el sincronizador lo copie, corta sin tocar nada (correrlo de nuevo en una hora).
-> - **En una rama nueva (`claude/adoring-ramanujan-7sjzwv` desde `main`):** el diagnóstico muestra lo
->   publicado y lo agendado (13) y qué secciones del SOUL le faltan a Hermes (14). Correr `diagnostico`
->   antes de `aplicar` dice qué más conviene copiar al SOUL del VPS.
+> - **También en `main` (#177, `fce76971`):** el diagnóstico muestra lo publicado y lo agendado (13) y qué
+>   secciones del SOUL le faltan a Hermes (14). Correr `diagnostico` antes de `aplicar` dice qué más
+>   conviene copiar al SOUL del VPS.
+> - **La cola en loop quedó sin tareas desbloqueadas.** Todo lo que sigue espera `aplicar` o una decisión
+>   de Sergio Urcullo: correr `diagnostico` (lee el VPS), y que «Hoy salió» lea la API de Instagram con
+>   el token de publicar.
 > - **Sigue pendiente de Sergio Urcullo:** el «sí» a la llave, la rutina y `aplicar`; proteger `main`.
 
 > **ESTADO 9-oct, noche — cola en loop (`hermes-content/docs/cola/loop/hermes-jarvis.md`), PR #176.**
