@@ -81,3 +81,6 @@ actos legales o firmas (los hace Leslie Mercado Moreno) y su cara o su voz en se
 - La nube no puede pushear ramas nuevas a onia-platform: deja bundles y la madre los sube.
 - Disco: `df -h /c` antes de bajar videos. Codex falla con menos de 1 GiB libre.
 - `SendMessage` con nombre viejo falla: `ListAgents` primero.
+- HyperFrames en esta PC: el Chrome que trae da `EFTYPE`. Renderizar con
+  `HYPERFRAMES_BROWSER_PATH="C:/Program Files/Google/Chrome/Application/chrome.exe" npx hyperframes render`
+  (9-oct, molde `mosaico-tablero`: 30 s en 50 s). Codex no puede renderizar (`EPERM`): escribe la composición y renderiza la madre.

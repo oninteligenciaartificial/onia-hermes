@@ -32,8 +32,8 @@ porque estuvieron parados»*.
      (infra: `/public/api/` y `hmac_mandatory`), #141 IPv6 S1+S1b (listo para revisar), #142 pago de usted U2+U2b,
      #113 gracia C13+C13b+C13c (frenado por Términos), #114 factura C15b (migración `20261009110000_*`), #124 términos (legal),
      #130 PWA (diseño), #132 K1, #127/#129/#135/#131/#137 (entran por #136/#140).
-   - **En vuelo, sin commitear:** Codex Sol armando `videos/moldes/mosaico-tablero/` (réplica de la edición del reel
-     DePBfHouarG). Si muere la sesión, se pierde solo esa corrida: se relanza con `$TMP/codex-tareas/molde-mosaico.md`.
+   - **Molde `videos/moldes/mosaico-tablero/`** (réplica de la edición del reel DePBfHouarG): hecho, renderizado (30 s) y
+     commiteado el 9-oct. Mandado a Sergio Urcullo como prueba; Marca lo usa desde su cola.
    - Worktrees de Codex en `C:/dev/proyectos/onia-platform-codex-*` (22): todos pusheados; se pueden borrar.
 4. **Archivos:** este handoff · skill `onia-sesion-madre` (todo el método de Codex: junction de `node_modules` a
    `onia-platform-v1-integracion-20260927`, suite COMPLETA de la madre como gate, push solo si pasa, bundles de Plataforma) ·
