@@ -1,5 +1,48 @@
 # Handoff — carril `hermes-jarvis` (Hermes, el Telegram y el calendario de Sergio Urcullo)
 
+> **ESTADO 9-oct, tarde — el #176 está en `main` (`a1aa6246`), CI verde.**
+> - **Llega solo al VPS** (el sincronizador copia `main` a `/root/bin` en ~1 h):
+>   - `onia-parte-diario.sh` con UTF-8 fijo: es lo único que cambia algo que ya corre;
+>   - `onia-jarvis-resumen.sh` nuevo, pero no corre hasta que `aplicar` lo ponga en el crontab.
+> - **Espera `aplicar`:** el resumen y el cierre en tres bloques, «Hoy sale» y «Hoy salió», y la regla
+>   del formato en el SOUL (5c). La sección 0 ahora exige el resumen nuevo en `/root/bin`: si `aplicar`
+>   corre antes de que el sincronizador lo copie, corta sin tocar nada (correrlo de nuevo en una hora).
+> - **También en `main` (#177, `fce76971`):** el diagnóstico muestra lo publicado y lo agendado (13) y qué
+>   secciones del SOUL le faltan a Hermes (14). Correr `diagnostico` antes de `aplicar` dice qué más
+>   conviene copiar al SOUL del VPS.
+> - **La cola en loop quedó sin tareas desbloqueadas.** Todo lo que sigue espera `aplicar` o una decisión
+>   de Sergio Urcullo: correr `diagnostico` (lee el VPS), y que «Hoy salió» lea la API de Instagram con
+>   el token de publicar.
+> - **Sigue pendiente de Sergio Urcullo:** el «sí» a la llave, la rutina y `aplicar`; proteger `main`.
+
+> **ESTADO 9-oct, noche — cola en loop (`hermes-content/docs/cola/loop/hermes-jarvis.md`), PR #176.**
+> Sesión `session_01SQ7cvuDX5w5jDHk5VdhAEo`, rama `claude/adoring-ramanujan-7sjzwv`. En el VPS **nada**
+> encendido todavía: todo esto es inerte hasta `aplicar` (la madre, desde la PC, con el «sí» de Sergio Urcullo).
+> - **En el PR #176:**
+>   - formato fijo PASÓ · NECESITO · SIGUE en el resumen y el cierre, y en su SOUL (sección propia que
+>     `aplicar` copia en 5c y exige en la Fase A; la sección 0 exige el resumen nuevo en `/root/bin`);
+>   - «Hoy sale» / «Mañana sale» del calendario de publicación vigente;
+>   - «Hoy salió» con el link, de `/root/publicar/publicado.jsonl`;
+>   - el diagnóstico muestra el recolector de respuestas;
+>   - `herramientas-desplegadas` solo acepta un `x.sh` sin prefijo en las carpetas de los `poner`;
+>   - `parte-diario.sh` fija UTF-8;
+>   - el corte de Telegram ya no parte una etiqueta;
+>   - la respuesta de la rutina en tres bloques (§5).
+> - **Revisión adversarial del formato:** 1 MEDIUM (un pedido «necesita-ok» quedaba en PASÓ y NECESITO
+>   decía «Nada.») y 6 LOW, todos arreglados con prueba en `7b3250a9`.
+> - **Pendientes 4, 5 y 6 de abajo: cerrados.** El 5 por barrido: la única prueba que mira «proceso vivo»
+>   es `tandas-v1`, ya arreglada.
+> - **Intento fallido:** la prueba del recorte de Telegram con conversaciones largas no movía el corte
+>   (el resumen solo muestra 3 conversaciones de 140 caracteres); se rehízo con 80 decisiones de largo
+>   variable, y ahí sí da rojo contra el corte viejo.
+> - **Sigue pendiente de Sergio Urcullo:** el «sí» a la llave, la rutina y `aplicar`; proteger `main` en GitHub.
+
+> **ESTADO 9-oct, más tarde — el #173 también está en `main`** (marca `onia-autosync-main` + aviso de
+> respuesta rechazada que se reintenta si la aduana falla; el P2 de Codex sobre el reintento ya venía
+> arreglado en `31aebd95`). Un PR chico corrige la tabla «qué mirar» del runbook (§8): decía textos de
+> 1b y 5d que `aplicar.sh` no imprime. **Sigue:** la madre pone la marca en su worktree y corre `aplicar`
+> desde la PC con el «sí» de Sergio Urcullo; este carril lee el log y lo verifica.
+
 > **ESTADO 9-oct — el #138 está en `main`** (mergeado por la madre el 9-oct 03:53 UTC, CI verde, con su
 > arreglo `9562df9a`). En el VPS **nada** encendido todavía.
 > - **En un PR nuevo (rama `claude/adoring-ramanujan-7sjzwv` reiniciada desde `main`), los 2 pendientes
@@ -91,11 +134,11 @@
 >      llegue a GitHub (`--probar`).
 >   3. ~~Un pedido de `plataforma` trabaja en el clon de `onia-platform`, con sus propios hooks~~ —
 >      medido el 5-oct: `onia-platform` no tiene hook Stop. Cerrado.
->   4. `herramientas-desplegadas` adivina la fuente de `onia-X.sh` por el nombre del archivo: un
->      `X.sh` cualquiera vuelve a dar un rojo falso. Conviene que lea la fuente del `poner`, no el nombre.
->   5. En la nube, el PID 1 no recoge huérfanos: otras pruebas que miran «proceso vivo» con
->      `kill(pid, 0)` pueden dar el mismo rojo falso que `tandas-v1`.
->   6. `diagnostico` todavía no muestra el log del recolector de respuestas.
+>   4. ~~`herramientas-desplegadas` adivina la fuente de `onia-X.sh` por el nombre del archivo~~ — 9-oct
+>      (`aa3b6756`): un `X.sh` sin prefijo cuenta solo en las carpetas de los `poner`. Cerrado.
+>   5. ~~En la nube, el PID 1 no recoge huérfanos: otras pruebas que miran «proceso vivo»~~ — barrido
+>      del 9-oct: la única es `tandas-v1.test.mjs`, ya arreglada. Cerrado.
+>   6. ~~`diagnostico` todavía no muestra el log del recolector de respuestas~~ — 9-oct (`c0175671`).
 > - **ANTES de cargar la llave de la rutina** (los 3 MEDIUM de la revisión de la madre v2, 3-oct; Sergio
 >   Urcullo aprobó mergear el #94 sin ellos) — **los tres, hechos en el PR #138 (5-oct):**
 >   1. la respuesta no está atada al pedido: cualquiera que pueda pushear al repo puede dejar una

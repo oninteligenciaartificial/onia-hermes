@@ -324,3 +324,134 @@ Todo leído el **2026-10-02**. Con curl directo, dapta.ai devuelve 403 (Cloudfla
 Los cinco ángulos de investigación dieron resultado; ninguno quedó vacío.
 
 > Nota de archivo (2-oct): las capturas citadas arriba (≈1.500 archivos, 307 MB) quedaron en el scratchpad de la sesión de Plataforma `session_014HGgof9kHQkdLXhsZsAq6A` y NO se subieron al repo por peso. Para volver a verlas, re-capturar con las URLs de §8.
+
+## Contenido, pauta y comunicación (medido 2026-10-08)
+
+> Pedido por Sergio Urcullo el 8-oct: analizar de las competencias no solo el producto sino su contenido, comunicación, edición y guiones. El producto sigue en `DAPTA_COMO_FUNCIONA.md`. Marcas: **[medido]** visto hoy por mí · **[dicho por ellos]** lo afirma Dapta y no se verificó · **[no se pudo]** sin dato.
+
+### Cobertura: redes encontradas, qué se miró y qué no
+
+| Red | Handle | Seguidores | Estado |
+|---|---|---|---|
+| YouTube | `@dapta-ai` | **7.330** suscriptores [medido] | listado de ~60 videos largos y ~40 shorts con vistas |
+| Instagram | `dapta.ai` (enlazada desde el menú «Recursos» de la web; también sale en la tarjeta final del vlog de leads) | [no se pudo] | Instagram devuelve el login sin datos |
+| Comunidad Skool | `skool.com/ai-sales-beer` (menú «Recursos») | [no se pudo] | `/about` y la raíz dan 404 (re-chequeado 8-oct) |
+| LinkedIn | `linkedin.com/company/dapta-ai` | **17.209** seguidores [medido 8-oct, meta de la página pública] | solo el número; los posts no se miraron |
+| TikTok | `@dapta.ai` (nombre «Dapta AI», bio «Automatización de procesos de marketing y ventas con IA para su negocio») | **17.600** seguidores, **515 videos**, 116.400 «me gusta» en total [medido 8-oct, página pública] | **[corregido]** la primera versión decía «no encontrada». Que sea la cuenta oficial es probable (nombre, bio y la tarjeta final del vlog muestra el ícono de TikTok junto a «Dapta.ai»), pero no se confirmó desde dapta.ai. El listado de sus videos no se pudo bajar (yt-dlp no lista TikTok): no se sabe qué rinde ahí |
+
+**Videos mirados (7 de Dapta), con método.** Gemini nativo no estuvo disponible (error 429, «exceeded your current quota», no se reintentó). Se usó la vía 2: `yt-dlp` con el cliente `android` (el cliente web quedó bloqueado por el «confirma que no eres un bot» de YouTube), 360p, hojas de contacto de fotogramas con `ffmpeg` mirados con visión, más los subtítulos automáticos originales de YouTube.
+
+| Video | Duración | Fecha | Vistas | Qué tuve |
+|---|---|---|---|---|
+| Estrategia de contenido del fundador (`uqF7VDnzrWc`) | 14:45 | 7-jul | 2.960 | subtítulos completos + 20 cuadros |
+| «Cómo conseguimos 1.600 leads cada semana» (`BWqaJQhgpv0`; título en inglés en YouTube, habla en español) | 8:02 | 30-jul | 6.387 | 20 cuadros + tiras de subtítulos grabados cada 10 s (8-oct). YouTube no da subtítulos y la transcripción por voz falló (el servicio del VPS no respondió): **el audio sigue sin escucharse** |
+| Caso British Council (`bjloIQHTtVI`) | 4:36 | 11-may | 511 | subtítulos + 20 cuadros |
+| Tutorial Dapti (`_WvpwRyJxus`) | 6:50 | 13-may | 695 | subtítulos de los primeros ~3 min, sin cuadros |
+| Short «agente de voz en <3 min» (`Q_yvxlVDvRA`) | 0:50 | 7-oct | 620 | subtítulos + 18 cuadros |
+| Short «¿Cuál es tu talento oculto?» (`0zyLLprYEaE`) | 1:07 | 2-oct | 8.492 | subtítulos + 24 cuadros |
+| Short «POV: envías una cotización sin revisarla» (`bIdcQ6YEwq0`) | 0:27 | 17-sep | 2.570 | solo 30 cuadros (sin subtítulos) |
+
+**Re-chequeo del 8-oct (misma tarde):** volví a bajar los subtítulos de «estrategia de contenido» y el short de voz, y vi de nuevo los fotogramas del short y del vlog de leads. Todo lo que está dicho sobre producción en lotes, métrica única y CTA «comenta ventas» **se sostiene** (min 4:25 a 7:07). Los subtítulos del short coinciden con la tabla de guiones.
+
+**No se pudo:** ver cualquier creativo de pauta (ver abajo), Instagram, el listado de TikTok (solo el perfil), Skool, la mayoría de los ~100 videos restantes (solo título y vistas) y el audio de «1.600 leads» y del short POV.
+
+### Estructura de contenido orgánico
+
+**Pilares y su mezcla.** Clasifiqué por título los últimos 60 videos largos de YouTube (vistas de hoy):
+
+| Pilar | Videos | Mediana de vistas | Lo más visto |
+|---|---|---|---|
+| Fundador construyendo en público («un día como CEO de una startup de IA de US$30M», viajes, oficina) | 32 | **4.650** | 19.000 |
+| Eventos y hackatones propios (San Francisco, Bogotá, Colombia Tech Fest) | 6 | 3.850 | 20.000 |
+| Tutoriales de producto (voz, Dapti, MCP con Claude Code, flujos) | 13 | **495** | 4.300 (Dapti) |
+| Educativo de ventas y marketing | 3 | 2.600 | 3.200 |
+| Noticias de IA («Dapta News») | 5 | 189 | 1.000 |
+| Caso de cliente | 1 | 511 | 511 |
+
+- **El fundador rinde unas 9 veces más que el producto** (mediana 4.650 contra 495). Cuatro tutoriales de configuración (llamadas de prueba, número saliente, datos al CRM, editar el prompt) están entre 165 y 203 vistas.
+- **Shorts (50 listados al re-chequear el 8-oct).** Mezcla de tres cosas: lecciones del fundador sobre levantar capital y escalar, humor de oficina y tutoriales cortos. El más visto es humor sin producto: **8.492 vistas y 319 likes** (el listado de hoy lo redondea a 8.400; los likes no se re-chequearon). Los otros humor: «Cuando llamas a IT…» 4.400 y «What I say vs what my coworkers hear» 1.500. Los dos shorts de producto: **620 y 399** (**[corregido]** decía 573 y 399, que no coincidía ni con su propia tabla).
+- **Re-chequeo del 8-oct de la mezcla.** Con el listado de hoy (80 largos, vistas redondeadas a miles desde 1.000) y clasificando a mano por título los 60 más nuevos, la mediana del pilar fundador/vlog sigue en ~4.400 y la de tutoriales en ~400-550: la proporción de «unas 9 veces» se sostiene como orden de magnitud, no como cifra exacta. El «tutorial» de 4.300 vistas (Dapti: el agente autónomo) es más bien un video de empresa, no de configuración.
+- **Canales y frecuencia.** El fundador dice en el video de estrategia que hace falta «generar demasiado contenido» y que ya no depende solo de él; el título del video habla de «más de 20 videos al día» [dicho por ellos, no verificable]. En YouTube, los shorts del 17-sep, 2-oct y 7-oct indican al menos uno por semana; la frecuencia exacta de los largos no se puede medir con el listado plano.
+- **Cómo lo producen** (lo cuenta él mismo, minutos 4:28 a 7:03): una persona prepara los guiones y mantiene un banco de ideas en Notion; eligen las mejores; cada persona del equipo tiene un **bloque fijo de grabación de unas 2 horas**; imprimen los guiones, los leen y los tachan uno por uno; el contenido largo después se corta en clips. Una sola métrica orgánica: **visualizaciones en todas las plataformas**.
+- **Cómo lo conectan con ventas** [dicho por ellos]: dicen que cuando dejaron de publicar bajó la conversión, y que los prospectos llegan a la reunión diciendo que vieron un TikTok o un Instagram. Meten un CTA por comentario («comenta ventas y te enviamos nuestra mejor guía»).
+- **Otros canales propios:** webinars gratis en español (un banner del sitio, visto en resultados de búsqueda, ofrece aprender a vender más con IA y reservar lugar [sin chequear en vivo]), comunidad Skool, blog (siete posts para clínicas, ver §6).
+
+### Pauta en Meta (Biblioteca de anuncios, herramienta `ads_library_search`)
+
+La herramienta **funcionó**. Página: **Dapta** (`page_id` 181083051744223). Limitación importante: **solo devuelve titular del enlace, fecha de inicio, moneda y el enlace al anuncio**. No trae texto principal, formato, botón (CTA), destino ni la lista de países. El enlace de Facebook da 403 con `curl` y no usé navegador (prohibido), así que **no vi ningún creativo de Dapta**.
+
+| Dato | Valor |
+|---|---|
+| Anuncios activos | **26** (estimado de la herramienta; **re-consultado el 8-oct y se repite: 26**; por país con el mismo método: Colombia 20, México 8, EE. UU. 6, Bolivia 0; las fechas de inicio de las tandas también coinciden) |
+| Anuncios inactivos | 26 más, todos de abril de 2026 |
+| Países (conteo de anuncios activos que llegaron a cada uno) | **Colombia 20 · México 8 · EE. UU. 6 · Bolivia 0 · España 0** |
+| Moneda | USD |
+| El que más lleva al aire | **8 días** (30-sep). Ninguno pasa los 30 días |
+
+Los activos salen en **tandas de 4 a 9 variantes con el mismo titular**, cada 1 a 3 días:
+
+| Inicio | Anuncios | Titular |
+|---|---|---|
+| 30-sep | 7 | «La IA que califica y agenda leads por ti» (4) · «Descubre cómo Dapta te ayuda a crecer» (3) |
+| 1 y 2-oct | 6 | «Descubre cómo Dapta te ayuda a crecer» |
+| 3-oct | 4 | «La IA que califica y agenda leads por ti» |
+| 5-oct | 4 | «Descubre cómo Dapta te ayuda a crecer» |
+| 8-oct (hoy) | 5 | «Descubre cómo Dapta te ayuda a crecer» |
+
+- **Tanda anterior (apagada):** 20 anuncios «IA con voz humana - Dapta», iniciados entre el 2 y el 12-abr-2026, y 6 «Descubre cómo Dapta te ayuda a crecer» del 15-abr. **El mismo titular volvió en octubre**: reciclan el concepto que ya probaron.
+- **Lectura:** Dapta no deja viejo ningún anuncio, rota creativos como método. Por eso la regla de `ONIA_ADQUISICION_Y_PAUTA.md` §2.5 y §2.6 («lo que corre más de 30 días funciona») **no se puede aplicar a Dapta**: no hay anuncios de más de 8 días. Lo que sí se lee es el ritmo (5 tandas en 9 días), el concepto (voz humana en abril, calificar y agendar en octubre, genérico de crecimiento) y el mercado (Colombia primero, México y EE. UU. después, **Bolivia cero**).
+- **Formato, texto principal, CTA y destino: [no se pudo].** Para que la madre los capture desde la PC (por tanda): 30-sep `2053460738639677`, `1581614703010920` (califica y agenda) y `998998689938203` (crecer) · 5-oct `1620561176420724` · 8-oct `1105383605211994` · abril `2338030873347920` (voz humana). URL: `https://www.facebook.com/ads/library/?id=<id>`.
+- Aparecen al buscar «dapta» los anunciantes **30X** y **Andres Bilbao** con 14 anuncios «Agenda una llamada y conoce AI Sales» (del 3 al 7-oct). No verifiqué si son socios de Dapta: el fundador de Dapta nombra a Andrés Bilbao como invitado de un podcast.
+
+### Comunicación
+
+- **Titular de la web (medido hoy):** «Crea tu primer agente de ventas IA en 2 minutos». **No cambió desde el 2-oct.** Promete el tiempo de armado; el resultado está en la bajada (llamar leads, agendar, cerrar). Esto **corrige la lectura de CLAUDE.md** («beneficio antes que característica»): el titular de Dapta es una característica de velocidad.
+- **Botones del hero (medido hoy):** «Empieza Gratis» → registro con parámetros de seguimiento; «Agenda una Demo» → formulario propio; en la cabecera, «Crear una Cuenta» e «Iniciar Sesión». **Un clic hasta el registro**, más el popup de 2.000 créditos sin tarjeta (ver §2).
+- **A quién le habla:** pymes y equipos de ventas de Colombia, México y EE. UU. (los países de sus anuncios). Tuteo neutro latino.
+- **Tono por canal:** web = velocidad; anuncios = resultado («califica y agenda»); YouTube = historia del fundador, informal y colombiano; shorts = presentadora joven que enseña, o humor de equipo.
+- **Prueba:** logos de Rappi, Cabify, Mercado Libre y otros, y casos con cifras puestas por el cliente en un video producido por Dapta (British Council: contención de llamadas del 67 % al ~80 %, sentimiento positivo o neutro del 95 %, resolución al primer contacto del 70 al 80 %) [dicho por ellos].
+- **Precio visible: sí**, en la home y en `/pricing` (ver §5). Tiene cuatro promesas de tiempo distintas en la misma web (ver §2).
+
+### Guiones de sus videos
+
+| # | Pieza | Gancho (primeros 3 s) | Estructura por tramos | Cierre |
+|---|---|---|---|---|
+| 1 | Short «agente de voz en <3 min» (0:50, 7-oct) | Presentadora a cámara y título en pantalla que promete el tiempo: crear tu agente de voz con IA «en <3 min» | 0:03-0:40 ocho pasos con la pantalla real: nombre, idioma y tono → contexto del negocio → herramientas (CRM, calendario) → qué pregunta, cómo califica, cuándo agenda o pasa a una persona → prueba llamando → activar | A cámara: «un agente que llama, responde y califica leads 24/7» y «guarda este video». CTA: guardar, sin enlace |
+| 2 | Short humor «¿Cuál es tu talento oculto?» (1:07, 2-oct, 8.492 vistas) | Pregunta con micrófono a un compañero y respuesta absurda (piel estirable, mover un ojo) | Ocho o nueve empleados seguidos, 5 a 7 s cada uno; clips de internet de reacción (una cabra gritando); sube de tono | Remate: un compañero mete un putt de golf en la oficina y la gente aplaude. **Sin producto ni CTA** |
+| 3 | Short POV (0:27, 17-sep, 2.570 vistas) | Texto: «POV: envías una cotización sin revisarla» y un hombre leyendo el correo con cara de espanto | Cinco correos arruinados por el autocorrector, ~5 s cada uno (el más gracioso: despedirse con «será un placer acabar con ustedes»); corte a negro con el texto de cada frase | Última frase y fin. Sin CTA. Conexión con el producto solo implícita (cotizar y vender) |
+| 4 | Caso British Council (4:36, 11-may) | Recorrido por el edificio del cliente y el cliente explicando qué es | 0:09-0:50 quién es y el problema (5 agentes humanos de telefonía, 700 a 800 llamadas al mes, 80 % automatizable) → 0:50-2:00 por qué Dapta e implementación (unos 15 días, y 15 a 20 más para salir en vivo) → 2:00-3:20 adopción y 3 KPIs → 3:20-4:36 recomendación: la IA apoya al equipo y no lo reemplaza; Dapta acompaña, otras eran «hágalo usted mismo» | Logo de Dapta sobre negro. **Sin CTA visible** |
+| 6 | **Vlog «Cómo conseguimos 1.600 leads cada semana»** (8:02, 30-jul, 6.387 vistas) [sin audio; lo de abajo sale de lo que se ve y de los subtítulos grabados] | Toma aérea de Bogotá con el rótulo «BOGOTÁ · COLOMBIA» durante unos 3 s, luego tarjeta de hora («5:00 AM»). No empieza con una persona hablando | Día del equipo contado con **tarjetas de hora y lugar**: «Llegada a la oficina» → «Reunión Hand-off paid» (los subtítulos hablan de leads «P1» y «P2» que se califican solos) → «Revisión de anuncios» → «Grabación de anuncios» → «Revisión de métricas» → «Cerrando el día». Varios miembros del equipo salen con su nombre y cargo en una pastilla verde lima (ej. «Head Of Expansion») | Tarjeta final con los íconos de YouTube, TikTok e Instagram y el botón de seguir a «Dapta.ai»; en mitad del video, un sticker «SUBSCRIBE». Qué dice la voz al cierre: [no se pudo] |
+| 5 | Vlog «estrategia de contenido» (14:45, 7-jul) | Resultado del mes: duplicaron el ingreso nuevo contra el mes anterior con el mismo equipo | 0:51 rutina (6:00 a 7:45) y reunión de retención → 1:25 preguntas de comentarios (métrica diaria: ingreso recurrente mensual y su crecimiento) → 4:28 **la «masterclass de 2 minutos» sobre cómo producen contenido** → 7:19 resto del vlog (viaje al Mundial, 4 de julio) | Sin CTA. Hay un clip insertado con CTA por comentario |
+
+### Edición: cómo están hechos
+
+- **Short de producto (1).** 9:16. Presentadora a cámara en oficina abierta con micrófono de solapa en la mano. El título del gancho aparece en dos tamaños y con acento verde lima; «(en <3 min)» va inclinado. Luego **la pantalla no es captura digital**: es el celular filmando el MacBook, con dedos señalando, reflejos y el Dock a la vista; se ve casero a propósito. Cortes cada 2 a 3 s. **Subtítulos:** sans bold blanca, 2 a 4 palabras por línea, centro-inferior, la palabra clave en verde lima. Cierra volviendo a la presentadora.
+- **Humor (2).** 9:16, cámara en mano, sin producción. Una sola pregunta fija como texto arriba, con emoji. Inserciones de clips ajenos como reacción. Sin música reconocible en los cuadros.
+- **POV (3).** 9:16. Los mismos escenarios del vlog (pared de ladrillo blanco, escritorio, laptop). Frase entre comillas arriba; entre frases un corte a negro con la frase siguiente. Tres ángulos de la misma oficina.
+- **Caso (4).** 16:9. Entrevista junto a una ventana con luz natural, dos planos. **Las preguntas aparecen en una pastilla oscura redondeada con letra blanca bold.** Subtítulo pequeño gris claro abajo. **Marca de agua del logo abajo a la derecha.** Material de apoyo: fachada y espacios del cliente. Cierre en negro con el logo.
+- **Vlog (5).** 16:9. Mezcla de selfie, cámara en coche y oficina con un marco «REC» superpuesto. Rótulos de ubicación (pin con «Phoenix»), tarjetas de nombre y cargo, ropa y chaquetas verde neón con la marca.
+- **Vlog «1.600 leads» (6).** 16:9, 360p en la copia que miré. Cámara en mano estilo teléfono, cortes cada 3 a 8 s, planos de la oficina y del escritorio. **Tarjetas de hora arriba en grande y, debajo, el nombre del momento** («Revisión de anuncios»). **Subtítulos grabados en cursiva blanca con borde negro, centro-inferior, de 4 a 7 palabras en una o dos líneas** (distintos a los del short). Pastilla verde lima con foto, nombre y cargo cuando aparece alguien nuevo. Un sticker de avión con la cara de alguien y rótulos sueltos tipo «FIRST»; chaquetas y neón verde de la marca de fondo. En ese video se ve que **ellos mismos graban sus anuncios en la oficina** («Grabación de anuncios»), lo que confirma que la pauta y el orgánico comparten equipo y estilo.
+- **Primeros 3 s en común:** una persona hablando a cámara o un texto grande que promete algo; casi nunca arrancan con el producto. **Excepción medida el 8-oct:** el vlog de leads abre con una toma aérea de la ciudad y un rótulo de lugar (no con una persona). En el short de producto, a 0,5 s aparece «¡Hola!» como subtítulo, a ~1,5 s el título en lima («Cómo puedes» chico y luego «crear tu propio agente de voz con IA» grande) y «(en <3 min)» entra inclinado. El verde lima es el color de acento en subtítulos, logo y ropa.
+
+### Qué toma Onia y qué NO
+
+**Toma (con el por qué).** Se separa lo que va a la **marca personal de Sergio Urcullo** (contenido diario desde el 9-oct) de lo que va a la **pauta y la web de Onia Platform**.
+
+| Qué (concreto) | Para qué y dónde se usa | Por qué | Evidencia (dónde se ve) |
+|---|---|---|---|
+| Producción en lotes: un bloque fijo de grabación de ~2 h por persona, guiones escritos antes desde un banco de ideas en Notion, imprimir o leer el guion y tacharlo, el largo se corta en clips | Marca personal: Sergio Urcullo graba por bloques con guiones escritos antes y publica a diario | Dapta lo hace con un equipo y aun así lo organiza por bloques. Sergio Urcullo está solo: sin lotes, el contenido diario no se sostiene | YouTube `uqF7VDnzrWc`, min 4:25 a 5:48 (subtítulos re-leídos 8-oct) |
+| Una sola métrica orgánica: visualizaciones totales en todas las plataformas, revisada cada semana | Marca personal, tablero semanal | Evita medir seguidores y likes, que no mueven nada | Mismo video, min 6:10 a 6:27 |
+| La persona rinde antes que el producto (orden de ~9 veces) | Marca personal: el pilar principal es Sergio Urcullo construyendo Onia en Bolivia, con cifras **reales** (cero clientes pagando; meta de 5); tutoriales como segundo pilar | Fundador ~4.400 de mediana contra tutoriales ~400-550 | Listado `@dapta-ai/videos`, 60 más nuevos clasificados por título (8-oct; vistas redondeadas) |
+| Short de tutorial: presentador a cámara, pantalla real filmada con el celular, palabra clave en color, «en <3 min» en el gancho, cierre «guardá este video» | Marca personal (Reels/TikTok/Shorts) y, con otra marca, la pauta | El CTA de guardar no depende del mecanismo comentario → DM, que no está probado (2 rechazos de Meta) | Short `Q_yvxlVDvRA` (0:50), fotogramas y subtítulos re-vistos el 8-oct |
+| Vlog de un día con **tarjetas de hora y lugar** («5:00 AM», «Revisión de anuncios», «Cerrando el día») y pastilla de nombre al presentar a alguien | Marca personal: «Un día construyendo Onia en Bolivia», con tarjetas reales (qué se mide, qué se vendió, qué falló); nada de equipo ni cifras ajenas | Es el vlog de Dapta que más rinde entre los de día (6.387 vistas) y se arma solo con rótulos, sin guion complejo | `BWqaJQhgpv0`, fotogramas (sin audio) |
+| Tandas de 2 o 3 variantes de UN concepto y renovarlas | Pauta de Onia Platform | Ya está en §2.6 de `ONIA_ADQUISICION_Y_PAUTA.md`. Dapta lo confirma con 5 tandas en 9 días. Con presupuesto chico, renovar cada 7 días y no cada 2 | Biblioteca de anuncios, página Dapta (`page_id` 181083051744223), inicios 30-sep a 8-oct |
+| Plantilla de caso de cliente: entrevista de 4 a 5 minutos en el lugar del cliente, 3 KPIs, la pregunta «¿por qué eligieron…?» | Web y pauta, **cuando exista el primer cliente dental** | Los KPIs de Onia serían pacientes recuperados, citas a las que no llegaron y horas de recepción. Hoy **no se puede hacer: cero clientes** | Video `bjloIQHTtVI` (4:36) |
+| Bolivia está libre: Dapta tiene 0 anuncios activos en Bolivia | Pauta | Hecho medido (dos veces el 8-oct). No es un argumento hacia el cliente, pero confirma que el campo de Meta en Bolivia no lo ocupa Dapta | `ads_library_search` con `countries=BO`, estado activo: 0 |
+
+**NO toma.**
+- **Titular que promete minutos de armado.** El de Onia tiene que prometer el trabajo (el paciente que no volvió), como ya fija `ONIA_CLIENTE_IDEAL.md`.
+- **Vlog de CEO de «startup de US$30M»**, series A, recorridos por San Francisco: no aplica y sería fabricar. Sin clientes, nada de cifras ajenas.
+- **Humor interno de oficina** como pieza (8.492 vistas): requiere un equipo de 8 personas, no genera cliente y la pauta de Onia debe tener un trabajo de venta.
+- **CTA por comentario («comenta ventas»)** hasta que el mecanismo esté probado.
+- **Rotación diaria de creativos y volumen de 20 videos por día:** exige un equipo y un presupuesto que Onia no tiene.
+- **Cifras sin fuente** (21 veces, 300 %, 50.000 empresas): ya prohibido arriba.

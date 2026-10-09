@@ -36,6 +36,11 @@ carril, cargá su stack, respetá las reglas duras. Fuente viva del mapa complet
 4. **Respetá los gates** antes de mergear a `main`.
 
 ## Stack de proceso común (TODA sesión, cualquier carril)
+**Corrección 2026-10-09:** cargar primero `equipo-de-agentes` (roles y loop) y
+`aprender-de-todo` (referencias, 12 dimensiones y prueba de uso), también en Codex.
+Las herramientas siguientes se aplican según la tarea; no iniciar orquestadores
+ni ejecutar Git fuera del encargo de la madre.
+
 `using-superpowers` · `brainstorming` (antes de construir) · `make-plan`/`writing-plans` ·
 `test-driven-development` · `systematic-debugging`/`investigate` (bugs: no adivinar la causa) ·
 `verification-before-completion` · `code-review` · `security-review` ·
@@ -45,6 +50,7 @@ carril, cargá su stack, respetá las reglas duras. Fuente viva del mapa complet
 
 | Carril / Proyecto | Skills núcleo | Subagente | Skill ONIA propia |
 |---|---|---|---|
+| **Referencia recibida** (link, reel, post, web, app, captura, audio o documento) | **`aprender-de-todo` primero**; link sin instrucción = aprender, no producir; después las skills por dimensión | Codex para ficha/síntesis con evidencia; revisión del carril | `aprender-de-todo` |
 | **A** onia-center (panel Next.js) | `impeccable` `ui-ux-pro-max` `taste-design` `frontend-design:frontend-design` `frontend-patterns` `react-components` `shadcn-ui` `ui-styling` `nextjs-turbopack` `design-review` `emil-design-eng` | — | `onia-web-factory` |
 | **B** wf-landing (landings cliente) | `impeccable` `taste-design` `design`/`design-md` `image-to-code` `98669c11ca63:web-artifacts-builder` `landing-report` `land-and-deploy` `imagegen-frontend-web` `banner-design` `design-dna` (teardown de referencia → JSON de tokens/estilo/efectos; tipografía SIEMPRE verificada contra el CSS real, no a ojo) `gsap-*` (plugin oficial GreenSock, scrollytelling) | — | `onia-web-factory` |
 | **C** propuestas (comercial) | `article-writing` `make-pdf` `slides` `document-generate` `brand` | — | `onia-propuestas` |
@@ -54,11 +60,11 @@ carril, cargá su stack, respetá las reglas duras. Fuente viva del mapa complet
 | **hermes-jarvis** (Hermes, Telegram de Sergio Urcullo, su calendario, pedidos a Claude) | **cargar `onia-hermes-jarvis`** — método, trampas y pruebas del carril; estado en `handoff/hermes-jarvis.md` | — | `onia-hermes-jarvis` |
 | **G** infra / n8n | `n8n-workflow-patterns` `n8n-mcp-tools-expert` `n8n-node-configuration` `n8n-code-javascript` `n8n-validation-expert` `docker-patterns` `deployment-patterns` | — | — |
 | **Lucía** (influencer IA de Onia: fotos y clips en Higgsfield, sus reels, publicación en IG/TikTok, su plan) | **cargar `lucia` primero** (costos medidos, recetas, voz, pantallas reales, circuito de publicación) · `editor-videos` `higgsfield-generate` `motion-doctrine` | — | `lucia` |
-| **H** contenido · **J** video-remotion | **`diseno-contenido-onia` primero** (índice de imágenes, galería, packs y patrones) · **`edicion-referentes` para todo video nuevo de Sergio Urcullo** (Santiago Muñoz / Erik Taveras TAL CUAL, desde el 3-oct) · `editor-videos` `ver-videos` `sacar-prompt` `hyperframes` `banner-design` `brand` + Higgsfield MCP | — | — |
+| **H** contenido · **J** video-remotion | **`diseno-contenido-onia` primero** (índice de imágenes, galería, packs y patrones) · **`edicion-referentes` para todo video nuevo de Sergio Urcullo** (Santiago Muñoz / Erik Taveras por sus mecanismos medidos (sin copiar identidad ni guion), desde el 3-oct) · `editor-videos` `ver-videos` `sacar-prompt` `hyperframes` `banner-design` `brand` + Higgsfield MCP | — | — |
 | **I** research/estrategia | `deep-research` `exa-search` `iterative-retrieval` `office-hours` | — | — |
 | **K** yt-canal/meta-ads · **L** yt-ciencia-cuerpo | `article-writing` `deep-research` (L=salud/YMYL: fuentes obligatorias) + video stack | — | — |
 | **onia-core** | `database-migrations` `postgres-patterns` `api-design` `backend-patterns` `verification-loop` | — | `onia-core` |
-| **Ventas y pauta** (prospectos con señal, leads, demo, objeciones, Meta Ads y piezas D1/D4) | **cargar `onia-ventas-pauta` primero** (método medido, trampas y fuentes) · `diseno-contenido-onia` para las piezas | `onia-crm-prospeccion` | `onia-ventas-pauta` |
+| **Ventas y pauta** (prospectos con señal, leads, demo, objeciones, Meta Ads, piezas A1/A2/G1-G5 y VSL) | **cargar `onia-ventas-pauta` primero** (método medido, trampas y fuentes; §9 = anuncio que vende y VSL de punta a punta) · `diseno-contenido-onia` para las piezas · `editor-videos` para las de persona | `onia-crm-prospeccion` | `onia-ventas-pauta` |
 | **comercial/CRM** | `deep-research` (prospección con señal) | `onia-crm-prospeccion` | `onia-propuestas` |
 | **fiscal / contable (propio + features ERP)** | `deep-research` (validar RND/DS vigentes) | — | `onia-contabilidad-bolivia` |
 | **competencia por dentro** (cómo funcionan los programas rivales) | Leer primero `hermes-content/research/competencia/PRODUCTO_COMPETENCIA_RESUMEN.md` (1-oct: Dentalink, Doctocliq, TuDoc, AgendaPro, Citalo). Método que funcionó: centros de ayuda públicos + capturas Playwright; YouTube y Zendesk privado NO abren desde la nube (videos desde la PC); cuentas de prueba solo desde la PC (piden código al WhatsApp de Sergio Urcullo) | — | — |
@@ -73,25 +79,31 @@ carril, cargá su stack, respetá las reglas duras. Fuente viva del mapa complet
   cara disponible** con una sola persona.
 - **Objetivo único por sesión.** Definirlo al inicio; no descarrilar; terminarlo antes de cerrar.
 - **Carriles = 1 sesión = 1 worktree = 1 rama.** Un subagente nunca edita archivos de otro carril.
-  Verificar `git branch --show-current` y rutas del worktree antes de gatear/commitear.
+  La madre verifica rama y ruta antes de integrar; en encargos Codex sin Git,
+  el ejecutor comprueba solo la ruta y entrega para revisión (corrección 2026-10-09).
 - **`main` SIEMPRE compila.** Si el avance toca `web-factory/apps/site/**`, `tsc --noEmit` verde
   antes de FF de `main`. Nunca filtrar WIP parcial (import a archivo nuevo → van los dos o ninguno).
+- **Git según rol y encargo (corrección 2026-10-09):** Codex entrega a la madre;
+  no ejecuta Git si el encargo lo prohíbe. No asumir autosync activo ni usarlo para
+  publicar trabajo parcial. La madre integra lo revisado según `equipo-de-agentes`.
 - **Auto-sync activado** (hook Stop `scripts/git-autosync.js`): commitear y pushear la rama al terminar;
   respeta `.gitignore`. **`main` solo por PR revisado** desde el 5-oct: el hook mueve `main` únicamente en la
   madre (`ONIA_AUTOSYNC_MAIN=1`) y el integrador (`ONIA_LOOP_ID=onia-cola`).
 - **Autonomía máxima:** MCP → CLI/API → skill → script → recién ahí preguntar.
-- **Gasto de plataformas externas — imagen y video NO son el mismo permiso** (corregido 2026-08-23):
-  **VIDEO generado** (Higgsfield, ElevenLabs, fal.ai) = permiso explícito caso por caso, cotizado
-  con `get_cost:true` ANTES. **IMAGEN en lote chico** = gasto trivial ya validado (`text2image_soul_v2` a 2k son
-  ~0,12 créditos); se genera y se registra el lote. Permiso sigue haciendo falta para volumen grande
-  o para dar de alta una plataforma nueva.
+- **Gasto (actualizado 2026-10-09):** seguir `CLAUDE.md` §Higgsfield: pruebas pequeñas
+  de imagen autorizadas el 8-oct, cotizadas y registradas, sin fraccionar lotes.
+  Video, Soul, lotes grandes, cara/voz y plataformas nuevas conservan sus permisos.
+  Los costos históricos no prueban precio ni saldo actual.
 - **Bolivia:** todo desarrollo acomodado a Bolivia con contaduría boliviana específica y vigente;
   validar con research (fuente citada) antes de codear temas de Bolivia.
 
 ## Skills del repo (42 en `.claude/skills/` + 30 en `.agents/skills/`)
+- **Aprendizaje transversal (2026-10-09):** `aprender-de-todo` — ficha por dimensión,
+  destino canónico y prueba de aplicación.
 - **Índice y operación:** `onia-router` (este índice) · `onia-continuidad` (arranque y rumbo de
   sesión) · `onia-infra` (VPS, Docker, n8n por SSH) · `onia-hermes-jarvis` (Hermes por Telegram:
   resumen, cierre, aduana, calendario, pedidos a Claude, y el workflow hermes-jarvis; 2026-10-01) ·
+  `equipo-de-agentes` (EL MÉTODO desde el 9-oct: colas en loop por sesión, Codex, verificadores Haiku, solo lo publicado a Sergio Urcullo) ·
   `onia-sesion-madre` (la madre local ordena a las sesiones de la nube por mensaje: ids, canales
   medidos, formato).
 - **Producto:** `onia-core` · `onia-chatbot` · `onia-contabilidad-bolivia`.

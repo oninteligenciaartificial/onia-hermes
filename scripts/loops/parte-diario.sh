@@ -17,6 +17,11 @@
 # y no pudo. Reportar una tarea recien creada seria el mismo ruido con otro nombre —
 # el loop todavia no tuvo su vuelta.
 set -uo pipefail
+# UTF-8 explicito (2026-10-09). Sin LANG (POSIX, como puede correr un cron) el orden
+# "🔴 primero" se rompe: medido el 29-sep, 5 de sus pruebas en rojo. jarvis-resumen.sh ya
+# lo fijaba al llamarlo; corrido desde su propio cron, o por una prueba en una maquina sin
+# LANG, no lo tenia.
+export LC_ALL=C.UTF-8
 
 TABLERO="${ONIA_TABLERO:-/root/bin/onia-tablero.sh}"
 TG="${ONIA_TG:-/root/bin/onia-tg.sh}"

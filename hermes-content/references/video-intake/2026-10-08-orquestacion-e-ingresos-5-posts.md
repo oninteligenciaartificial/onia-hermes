@@ -92,3 +92,40 @@ y que yo solo haga comunidad, asesorías y grabe». Método: `fetch-video.mjs` +
 
 El modelo operativo del 8-oct (router de modelos, sesiones, presupuesto y plan de ingresos) quedó en la skill
 `onia-sesion-madre`, § «Modelo operativo (8-oct…)».
+
+## Prueba de uso por sesión
+
+Estado: aplicado y verificado
+Sesión + fecha: Hermes-Jarvis, `session_01SQ7cvuDX5w5jDHk5VdhAEo`, 9-oct-2026 (pedido de la madre: cargar
+`equipo-de-agentes` y `aprender-de-todo` y seguir la cola).
+Tarea de cola: `hermes-content/docs/cola/loop/hermes-jarvis.md`, «Verificación de aprendizaje · 2026-10-09», aplicada
+sobre una tarea real del carril: el runbook de `aplicar` (§8 de `TELEGRAM_COMMAND_CENTER.md`) no mandaba a correr el
+diagnóstico nuevo antes de aplicar.
+Regla usada: §1 (`DeFS0Fes8yu`), router: el modelo más liviano capaz, verificar con algo que no opine y escalar solo
+ante falla; y §4 (`DdmTyEVAPMb`, Foreman), puntos de control META · PRUEBA DE HECHO · REGLA DE PARADA.
+- **Contrato:**
+  - META: un párrafo antes de la tabla de §8 que mande correr `diagnostico` y mirar las secciones 13 y 14.
+  - PRUEBA DE HECHO: cambia un solo archivo, sin borrar líneas; `accion=diagnostico` va antes de `accion=aplicar`;
+    `test:docs-hygiene` en verde.
+  - REGLA DE PARADA: si el ancla no es única o una prueba falla dos veces, revertir y responder «PARADA».
+- **Modelo elegido:** Haiku (subagente). Es una edición cerrada de un archivo con pruebas mecánicas: no hacía
+  falta juicio de un modelo grande.
+- **Artefacto:** §8 de `hermes-content/docs/TELEGRAM_COMMAND_CENTER.md`, párrafo «**Antes:**». Va en el mismo commit
+  que esta sección.
+- **Verificación** (la corrió la sesión, sin confiar en el informe del subagente):
+  - `git diff --stat`: 1 archivo y +4 líneas;
+  - `accion=diagnostico` en la línea 241, antes de `accion=aplicar` en la 252;
+  - `test:docs-hygiene` en verde.
+- **Escalamiento:** no hizo falta. La revisión encontró una imprecisión: «Pedidos a Claude» se copia solo con la
+  llave (5d). La corrigió la sesión, y no se re-despachó: era una palabra.
+- **Pendiente:** nada de esta prueba. La aplicación al resto de los carriles la coordina la madre.
+
+## Prueba de uso por sesión · Ventas y pauta (§2, Marco Machado)
+
+Estado: aplicado, sin revisor independiente
+Sesión + fecha: Ventas y pauta, `session_0143C5fMXVs8eWEf7uBpC9SF`, 9-oct-2026.
+Tarea de cola: `hermes-content/docs/cola/loop/ventas-pauta.md`, «Verificación de aprendizaje · 2026-10-09».
+Regla usada: §2, «nunca se le promete al prospecto algo que el producto no hace»: el corto del VSL **no dice en cuánto se contesta** (la fila 6 del go/no-go, «quién contesta y en cuánto», sigue ❌) y lleva a la llamada de 20 minutos, no a un cuestionario que no existe.
+Artefacto: `hermes-content/carousels/briefs/ads/VSL-CORTO-TABLA-DE-CORTES.md`, misma sección.
+Verificación: revisión de las 7 líneas de voz contra el detector de promesas y lectura contra `ONIA_ADQUISICION_Y_PAUTA.md` §5.10. No se implementó el cuestionario ni se contactó a nadie.
+Pendiente: revisor independiente.

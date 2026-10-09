@@ -1,6 +1,130 @@
 # Fichas de MONTAJE de los referentes (cómo editan, no qué dicen)
 
 > Sacadas el 2/3-oct-2026 por la sesión madre desde el Chrome de Sergio Urcullo, reel por reel, con capturas cada ~1 s (primeros 10 s) y ~3 s (resto). Sin descargar videos: el ritmo exacto y el audio quedan aproximados (ver «Límites»). Sergio Urcullo, 2-oct: lo que se replica TAL CUAL es @eriktaveras y @sanmunoz.ia → skill `edicion-referentes`. @soyenriquerocha es referencia de marca personal; @soy_aria_cruz es para Lucía. Las fórmulas de GUION siguen en `FORMULAS-REFERENTES.md`.
+>
+> **8-oct-2026:** los «NO MEDIDO» de abajo (ritmo, subtítulos, audio) quedaron medidos con los MP4 de TikTok y YouTube
+> bajados. La sección siguiente resume la edición de los 5 referentes por formato; el detalle está en las fichas
+> `hermes-content/references/video-intake/2026-10-08-referente-{sanmunoz,eriktaveras,enriquerocha,hormozi,gadzhi}.md`.
+> Las fichas de Instagram del 3-oct siguen valiendo para portadas, perfil y carruseles; donde la medición las contradice,
+> va una nota «Corregido 8-oct».
+
+## Pasada nocturna 9-oct (Gemini, 15 videos)
+
+Fuente: los 15 `.md` de `scratchpad/noche/salida/` de la sesión
+`202a717e-5bc8-42ab-ba2e-3dc26d723505`, en el Temp local de Claude. Leídos completos:
+Erik 2, Rocha 3, Hormozi 5 y Gadzhi 5. Santiago no tiene análisis nuevo en este lote.
+`progreso.log` dice que sus cinco entradas ya estaban analizadas.
+
+**Todo hallazgo de esta pasada es [Gemini, sin medir].** Los segundos son los que declara el análisis;
+no se verificaron mirando el MP4. El script usa Flash Lite como fallback, pero los `.md` no registran
+qué modelo terminó cada caso. No se atribuye un modelo por archivo. El script borra el MP4 al terminar.
+Las recetas medidas del 8-oct siguen mandando. Un video distinto puede ser una variante, no prueba de
+que la medición anterior sea falsa. No se copian consejos que Gemini propone pero no observa.
+
+### Erik Taveras — fuente pendiente; ningún cambio de receta
+
+| Caso y segundo | Diferencia frente a lo conocido | Decisión |
+|---|---|---|
+| [27065981](https://www.tiktok.com/@eriktaveras/video/27065981), 1-3 s; cortes propuestos en 3-5 s | [Gemini, sin medir] Describe lip-sync, cámara en mano y sombras como transición; estima 8-10 cortes/10 s. No describe el panel técnico medido. | Verificar URL, autor y archivo antes de medir. El ID corto y el contenido son alertas de fuente. No trasladar ese ritmo, música ni movimiento al molde Erik. |
+| [27071343](https://www.tiktok.com/@eriktaveras/video/27071343), 0-5 s | [Gemini, sin medir] Describe una toma de 5 s sin texto ni tarjetas. Luego recomienda subtítulos en 0 s, corte en 2 s y zoom en 3 s, aunque no los observó. | Excluir esas recomendaciones como evidencia. Verificar fuente igual que el caso anterior. No cambia la receta. |
+
+### Enrique Rocha — una hipótesis de colocación; discrepancias sin adoptar
+
+| Caso y segundo | Solo lo nuevo o discrepante | Decisión |
+|---|---|---|
+| [7694498139696418069](https://www.tiktok.com/@soyenriquerocha/video/7694498139696418069), 1-5 s | [Gemini, sin medir] Los objetos gráficos parecen apoyarse donde presenta la mano. Es una colocación ligada al gesto, más específica que la ficha sobre el pecho ya conocida. | Candidato: colocar un logo real junto al gesto, sin tapar la cara. Ver cuadros consecutivos antes de afirmar seguimiento de mano; Gemini no demuestra hand-tracking. No copiar mascotas pixeladas. |
+| Mismo caso, 0-30 s y 22 s | [Gemini, sin medir] Mezcla cortes con apariciones de stickers en su promedio; describe subtítulo amarillo de 3-5 palabras, incluido «Fan out» a 22 s. | La receta medida mantiene 0-2,1 cortes duros/10 s y subtítulo blanco de 1-3 palabras. Contar cortes de cámara, capturas y capas por separado. El amarillo no entra a la receta. |
+| [7694451746717912328](https://www.tiktok.com/@soyenriquerocha/video/7694451746717912328), 1-3 s; terminal a 25-26 s | [Gemini, sin medir] Describe cajas oscuras y resaltado amarillo/verde; estima 3-5 cortes/10 s sin lista de tiempos. | Contrasta con caja blanca y subtítulo sin color medidos. Revisar 1-3 s y una hoja completa. La terminal a 25-26 s es otro caso de captura real, técnica ya conocida; no añade regla. |
+| [7694405662901669121](https://www.tiktok.com/@soyenriquerocha/video/7694405662901669121), 1-2 s y 2-3 s | [Gemini, sin medir] Declara pantalla dentro del gancho y regreso a la cara, frente al gancho sin corte medido en otros videos. | Posible variante: comprobar ambos cambios cuadro a cuadro. No adelantar capturas ni subir el ritmo por este relato. Lo-fi y whoosh se declaran sin segundo de ejemplo: no se adoptan. |
+
+### Alex Hormozi — resultado fechado y reacciones; no cambiar subtítulos por defecto
+
+| Caso y segundo | Solo lo nuevo o discrepante | Decisión |
+|---|---|---|
+| [7694348950819704078](https://www.tiktok.com/@ahormozi/video/7694348950819704078), 137 s (2:17) | [Gemini, sin medir] Epílogo «14 DAYS LATER» seguido de captura de resultados. El dato posterior cierra la historia, distinto de una cuenta durante la explicación. | Candidato para un caso real de Sergio: fecha + resultado comprobable antes del único CTA. Medir duración de placa y captura. Gemini dice a la vez corte seco y fade-in: resolver mirando cuadros. No dar esas cifras por verificadas ni afirmar que produce un loop. |
+| Mismo caso, 0-3 s | [Gemini, sin medir] Declara rótulo de 2 s y cambios de plano a 1 y 2 s; estima 5-7 cortes/10 s. | No sustituye el rótulo de 3,5-12 s ni los conteos medidos en otros diálogos. Medir este caso como variante de escenario. No adoptar música ni whoosh sin escucha localizada. |
+| [7694528500937608461](https://www.tiktok.com/@ahormozi/video/7694528500937608461), 0-1 s y 5-6 s | [Gemini, sin medir] Una frase aparece encerrada en blanco; luego inserta rostros de oyentes durante el discurso. La reacción sería un apoyo distinto de alternar solo al cambiar quién habla. | Candidato solo con una reacción real del mismo intercambio y permiso. Comprobar continuidad del audio en 5-6 s. No convertir el recuadro ni el amarillo descrito en un nuevo sistema de subtítulos. |
+| [7694373691613924622](https://www.tiktok.com/@ahormozi/video/7694373691613924622), 0-21 s | [Gemini, sin medir] Declara pregunta fija hasta el final, frente al rótulo temporal medido en diálogos. | Posible variante de monólogo corto. Medir desaparición del rótulo; no extender el de negocio a toda pieza. |
+| [7694497614800096525](https://www.tiktok.com/@ahormozi/video/7694497614800096525), 0-2 s y 15-16 s | [Gemini, sin medir] Describe monólogo sin título ni prueba inicial; termina sin CTA. Difiere de la regla común de apertura y cierre de Sergio. | Registrar excepción de formato, no permiso para quitar prueba o CTA. Toma continua y texto como única capa ya eran conocidos. |
+| [7694282700940659982](https://www.tiktok.com/@ahormozi/video/7694282700940659982), 17-20 s y 21-24 s | [Gemini, sin medir] Propone conservar silencio reflexivo; describe pantalla partida con posiciones de participantes inconsistentes entre sus apartados. | Medir audio en 17-20 s y revisar quién queda arriba en 21-24 s. No cambiar pausa máxima ni layout. La ausencia de color que declara tampoco corrige el color por hablante medido en otros diálogos. |
+
+### Iman Gadzhi — plano detalle y archivo personal; cuidado con la cuenta
+
+Estos cinco archivos usan `@imangadzhi`. La ficha medida del 8-oct usa `@realimangadzhi`.
+Verificar autor y procedencia antes de atribuirlos al mismo catálogo. No hay equivalencia confirmada.
+
+| Caso y segundo | Solo lo nuevo o discrepante | Decisión |
+|---|---|---|
+| [7693604235610492183](https://www.tiktok.com/@imangadzhi/video/7693604235610492183), 13-14 s | [Gemini, sin medir] Plano detalle de pedales justo donde se explica la dificultad física; declara frenazo/impacto sincronizado. | Candidato: en un tutorial de Sergio, insertar el clic, campo o botón exacto que resuelve el paso. Medir duración y continuidad del audio. El SFX necesita escucha; no añadirlo por defecto. |
+| [7693203496782351638](https://www.tiktok.com/@imangadzhi/video/7693203496782351638), 15-18 s; 0 s y 21-22 s | [Gemini, sin medir] Ráfaga de archivo personal para ilustrar la anécdota, frente al diálogo casi sin gráficos conocido. Estima 12-14 cortes/10 s. Además atribuye intención a una errata y llama loop al final. | Candidato solo si hay archivo propio pertinente. Contar planos y tiempo de lectura antes de adoptar la ráfaga. No copiar faltas deliberadas ni afirmar intención o repetición sin evidencia. |
+| [7692179254406090017](https://www.tiktok.com/@imangadzhi/video/7692179254406090017), 19 s y 22 s | [Gemini, sin medir] Localiza una reacción a 19 s y blanco y negro a 22 s. | La reacción aporta un caso para revisar; blanco y negro en el remate ya estaba medido, no es una regla nueva. |
+| [7693962799550090529](https://www.tiktok.com/@imangadzhi/video/7693962799550090529), 0-3 s y 19 s | [Gemini, sin medir] Describe título superior desde el inicio y frase cortada al final. Contrasta con «ninguno» en texto fijo del skit medido. | Posible variante callejera. Comprobar título y final; no cortar la explicación de Sergio para fabricar un loop. No añade técnica útil esta semana. |
+| [7694300980669598998](https://www.tiktok.com/@imangadzhi/video/7694300980669598998), 0-3 s | [Gemini, sin medir] Título de contexto sobre el diálogo desde el primer cuadro. Declara música y SFX sin localizar un ejemplo. | Verificar variante y cuenta. Alternar turnos y titular ya eran conocidos; no añaden regla. El blanco y negro del cierre no tiene segundo en el análisis: no se extrae como hallazgo localizado. |
+
+### Tres pruebas útiles para Sergio esta semana y qué medir antes
+
+1. **Logo junto al gesto.** Rocha, 7694498139696418069, 1-5 s. Para presentar una herramienta.
+   Bajar el MP4 y revisar a 4 fps; cuadro a cuadro al entrar. Medir posición, demora desde la palabra,
+   duración y si sigue la mano o solo coincide con ella. Primero un elemento real, sin mascotas ni SFX.
+2. **Plano detalle del paso.** Gadzhi, 7693604235610492183, 13-14 s. Para una demo de Sergio.
+   Verificar primero la cuenta. Contar entrada y salida del insert; medir cuánto dura y si la voz continúa.
+   Usar captura real legible. Escuchar el SFX por separado antes de decidir si aporta.
+3. **Resultado posterior con fecha.** Hormozi, 7694348950819704078, 137 s. Para «lo probé y pasó esto».
+   Medir placa, captura y tiempo de lectura. Comprobar corte/fundido. Usar solo fecha y resultado reales
+   de Sergio; conservar el único CTA previsto. Si no hay resultado documentado, no se usa.
+
+Para los tres: MP4 de la URL correcta, `ffprobe`, hoja a 2 fps y apertura a 4 fps;
+conteo con `select='gt(scene,0.35)'` revisado a mano para separar cambios de capa, gestos y cortes;
+`ebur128` más escucha de pausas y eventos para verificar música/SFX. LUFS por sí solo no identifica música.
+Guardar tabla con segundos y cuadros. Esta pasada no descargó ni midió los MP4, no editó videos
+y no demuestra mejora de retención. Hasta esa medición, son pruebas candidatas, no recetas adoptadas.
+
+## Edición medida por formato, 5 referentes (8-oct-2026)
+
+Medido con ffmpeg (cortes con umbral 0,35, `ebur128`), cuadros leídos a 2-4 por segundo y Whisper. Lo que solo dijo
+Gemini lite se dejó afuera: contó la mitad de los cortes en Hormozi e inventó amarillos y música en Rocha.
+
+### Corto vertical a cámara
+
+| | Santiago (partida, G1 1,6 M) | Erik vigente (3-8 oct) | Rocha (tres capas) | Hormozi (diálogo) | Gadzhi (skit TikTok) |
+|---|---|---|---|---|---|
+| Layout | Panel arriba 0-48 %, cámara abajo; alterna 4 layouts cada 5-13 s | Panel diseñado 0-39 %, cámara abajo, línea verde en la costura | Toma continua de cara; título arriba, caja sobre el pecho | Partida solo mientras pregunta el otro; plano completo cuando él explica | Cara completa alternada con pantalla partida de dos personas |
+| Cortes por 10 s | 3,2 duros (2,4-3,5 con cara) | 0 en la cámara; panel nuevo cada ~2 s | 0-2,1 (mediana ~1,1); tomas de 16-45 s | 3,1-4,0; ritmo en tres tramos (cada ~3 s, 25 s sin cortes para la regla, cada ~1,5 s al final) | 5,6-6,6 |
+| Subtítulo | 1-3 palabras, minúscula, a 83-85 % (bajo la cámara); activa #F7CD1B | MAYÚSCULAS condensada, 2,3 % del alto, pegado sobre la costura (34-36 %); activa #48E0A0 | Blanco, minúscula, 1-3 palabras, a ~78 %, **sin color** | 1-3 palabras, karaoke, en la costura; **color por hablante** | 1-3 palabras al 49-53 % del alto, ya en el cuadro 0 |
+| Texto fijo | Título 3 líneas en el gancho; serif grande sobre cara completa | Chip «0N · TÍTULO» | Título fijo todo el video (14-26 %); caja blanca con máquina de escribir (62-70 %) | Rótulo rojo con la pregunta, **3,5-12 s** y se va | Ninguno |
+| Gráficos | Recortes de prensa que caen, sello con fecha, tarjeta de número que se arma | Tarjetas con esquineros, sellos, diagramas, contador | Ficha de logo con pop, 2-7 capturas de 1-5 s | Pizarra blanca de ~9 s solo para la cuenta | Blanco y negro en el pico de la risa |
+| Voz | 3,0 palabras/s, pausas 0,4-0,9 s | 3,7-4,3 palabras/s, pausa máx. 0,24-0,44 s | ~4,5 palabras/s, casi sin aire | 2,4-3,1 palabras/s [G] | 3,2-3,5 [G] |
+| Audio | -13,2 LUFS, sin cama | -14,1 LUFS, cama no concluyente | -14 (normalizado), solo voz en sus 2 TikToks más vistos | Ambiente del evento [G] | -10,2 LUFS mediana |
+| Primeros 3 s | Habla en 0,0 s con gesto físico; prueba a 2,25 s | Panel con el titular desde 0,0 s; logo a 0,5 s; sello «VS» a 1,25 s | Título 0,0 s, subtítulo 0,4 s, ficha 0,8 s, caja escribiendo a 2-3 s; sin cortes | Rótulo y voz del que pregunta en el cuadro 0 | Ya hablando a mitad de frase, subtítulo en el cuadro 0 |
+| Duración | 65-120 s (rinde más ≥91 s) | 38-39 s noticia; 145 s versus | 53-89 s (hits 57-83 s) | 46-106 s | 17-25 s |
+
+### Otros formatos verticales
+
+| Formato | Quién | Cómo es (medido) | Rinde |
+|---|---|---|---|
+| POV de vlog en un negocio real | Santiago (restaurante, cafetería) | Primera persona con gran angular, sin cara; título 3-5 palabras en el cuadro 0; tarjetas ilustradas blancas en el tercio superior; ANTES/DESPUÉS con foto real; 2,8 cortes por 10 s | 694,7 y 303,5 mil |
+| Anuncio mudo + reveal | Santiago G3 | Laptop sobre las piernas hacia cámara, 29 s sin voz, a 1:05 revela que lo hizo la IA y cuánto costó; 0,1 cortes por 10 s; con cama | 419,5 mil |
+| Objeto en la mano con precio | Erik (homelab) | Objeto a pantalla completa 0-2,5 s, contador de precio que sube a 1,25 s, chips que se apilan | 598 mil |
+| Clip mudo de objeto | Erik | Un plano de 10 s, sin texto ni voz, sonido directo | 555 mil (lotería) |
+| Remate a cámara | Rocha | 12 s, una toma, solo subtítulo | 2,1 M en IG, 9,5 mil en TikTok |
+| Monólogo con pegatinas | Hormozi | 45 s casi sin cortes, subtítulos grandes en el pecho, pegatinas que entran con la palabra | 41 mil (el solo que más rinde) |
+| Clip de archivo | Gadzhi | Video 4:3 con barras negras, año fijo en manuscrita, subtítulos chicos abajo a la izquierda; 1-2,5 cortes por 10 s | 1,6 a 7 veces menos que sus cortos |
+| Carrusel de fotos con música | Santiago (TikTok) | 7-12 láminas 4:5 con caption largo en forma de nota | mediana 8,7 mil (n=4) |
+
+### YouTube largo horizontal
+
+| | Santiago | Erik | Hormozi | Gadzhi |
+|---|---|---|---|---|
+| Layout | Cara completa o pantalla completa con la cara en un recuadro arriba a la derecha (~19 % del ancho) | El mismo sistema del vertical: panel a la izquierda (~67 %), cámara a la derecha | Explicativo con gráficos vectoriales, o monólogo sobrio casi sin edición (los dos con 1,9 M) | Tutorial con capturas reales; hojas a mano vistas desde arriba |
+| Ritmo | 6-8 cortes por minuto en el de Astra [G] | Capítulos de 30-100 s con rótulo «0N» | Largo 3 medido: 3-5 cortes por 10 s el primer minuto, después 0,5-1,5 | 2-4 por 10 s [G, piso] |
+| Apertura | Resultado adelantado en los primeros 90 s | Gancho de 15 s que dice por qué importa | 5 cifras grandes en 5 s (una cada 1-1,5 s) | Filtro de dolor, mapa de niveles antes de 1:15 |
+| Rótulos | Sello con fecha, cabecera de sección | Chip 0N por capítulo | Cartel con nombre y credencial 0:20-0:24 | «Tip #n» dentro de 1-3 s de cada tema |
+| CTA | Comunidad recién al minuto 22 de 25 | Link de Skool en la línea 1 de la descripción | En el primer tercio (17-35 %) y al final | ~20 % y al final; descripción de 1-2 líneas |
+| Miniatura | Cara a la derecha, 2-4 palabras, flecha | Texto a la izquierda, cara a la derecha | [sin dato] | Cara centrada, número real, logos, círculo rojo en una palabra |
+| Duración | Mediana 24,4 min; rinde 30-45 min (mediana 29 mil) | Mediana 12 min; el más visto dura 19:25 | Mediana 25,8 min; rinde 20-30 min (mediana 587 mil) | Mediana 18 min (2026: 21 min) |
+
+**Carruseles:** sin dato nuevo de Hormozi ni de Gadzhi (no se pudo abrir Instagram). Los de Santiago, Erik y Rocha
+siguen como abajo.
 
 ## @sanmunoz.ia (nombre: santimunoz.ia, Santiago Muñoz) - https://www.instagram.com/sanmunoz.ia/ - mirado el 2026-10-03 con el Chrome de Sergio Urcullo (sesión iniciada, extensión claude-in-chrome, pestaña propia ya cerrada).
 
@@ -8,6 +132,7 @@
 Frecuencia: 27 reels entre el 4-ago y el 1-oct-2026 (59 días), uno cada 2,2 días (~3,2 por semana); 14 reels en los últimos 30 días; más 2 carruseles (DdZ1ZpkCKba 17-sep y DdwmO09CN4y 26-sep). Las fechas salen de decodificar el código del reel (UTC) y coinciden con las que muestra IG.
 Vistas (número sobre la portada, pestaña Reels, 3-oct): mediana de los 27 reels de 60 días = 25,1 mil. Más vistos: DcTvfgXozDx 251 mil (21-ago) · DdFY6a8I5tb 147 mil (9-sep) · Ddwi3ArI91Y 66 mil (26-sep) · Dbt8cuwIqV1 60 mil (6-ago) · Dc9ilhsIQJV 49,3 mil (6-sep). Más bajos: Dd776b1Is43 6,9 mil (recién publicado), DcE8336Ixby 11,2 mil, DdpMVvQopMC 12,6 mil.
 Dato que explica los picos (medido en el JSON de cada reel): los 4 más vistos llevan MÚSICA CON LICENCIA de la biblioteca de IG (AURA de Ogryzek en DcTvfgXozDx y Ddwi3ArI91Y, Let Him Cook de XNIMXS en DdFY6a8I5tb, Echo Sax End de Caleb Arredondo en Dbt8cuwIqV1) y una PALABRA CLAVE para comentar ("Pasta", "editor", "Skill", "Loop"). Tienen 7.006 / 6.997 / 2.984 / 1.772 comentarios contra 8.669 / 3.891 / 1.575 / 2.045 likes, y cada comentario muestra "Ver las 1 respuestas" (respuesta automática). Los de menos alcance son "Audio original" y sin palabra: Sonnet 5.5 (Dd2KbhWIRap) 416 likes / 5 comentarios, Clawd (DdpMVvQopMC) 173 / 10 y "Solo empieza" (Dd776b1Is43) 81 / 1.
+**Corregido 8-oct:** esto vale para Instagram. En TikTok (80 videos medidos) la música no explica el rendimiento (pistas de Ogryzek, mediana 9,6 mil, contra 11,5 mil del sonido original) y la palabra clave no es su palanca (comentarios = 0,07 % de las vistas; su pico de 1,6 M cierra con «el enlace está en mi perfil»). Lo que separa sus picos es el tipo de pieza: casos con un negocio real (mediana 31,5 mil) y la herramienta propia atada a una fecha (1,6 M).
 
 **Para quién:** Para la marca personal de Sergio Urcullo (enseña Claude e IA a cámara). Santiago le habla al mismo nicho: hispanohablantes de LatAm que quieren usar agentes de IA y Claude Code, y monetiza con comunidad (Horizontes IA en Skool) y producto (Forja). Su forma de editar se puede trasladar casi directo. Lo que no se copia: su naranja de Claude como firma (en ONIA manda el pack referentes blanco/verde/negro de la skill diseno-contenido-onia), sus interfaces simuladas y el autobombo. La palabra clave en comentarios sirve solo si el comentario→DM de Sergio Urcullo funciona. Según la memoria del proyecto, hoy NO está probado (2 rechazos de Meta, 0 leads). Sin eso, el comentario no tiene quién lo conteste.
 
@@ -87,6 +212,7 @@ Lo que sí se puede copiar con la evidencia que hay:
 5. Carruseles de 9 láminas en 4:5, numeradas NN/09, con el número grande en contorno, una prueba visual por lámina (comparación, maqueta de chat, lista con sellos), la línea de fuente al pie y la última lámina inversa en oscuro como campo de comentario falso con la palabra clave.
 6. Estudio: fondo oscuro, contraluz LED azul, luz cálida en la cara y micrófono de brazo visible.
 NO copiar todavía: el ritmo de cortes, los subtítulos, los zooms, las transiciones ni la mezcla de audio. No se midieron (ver limites_del_metodo).
+**Corregido 8-oct:** ritmo, subtítulos y audio quedaron medidos en TikTok (sección «Edición medida por formato» arriba y la skill `edicion-referentes`). Dos ajustes a esta lista: (a) la tarjeta crema sobre el pecho es su sistema de fines de septiembre; desde el 3-oct usa un panel oscuro arriba con la cámara abajo; (b) la palabra clave en el caption se asocia con 3 a 8 veces más comentarios por vista (mediana 3,3 por mil en 9 piezas, contra 0,4-1,0 sin ella), no con un salto de otro orden, y en sus dos hits de más alcance (homelab, lista legal) no destacó.
 
 ### Límites del método
 
@@ -302,6 +428,7 @@ Duraciones de referencia: 53-89 s para la noticia o el tutorial y 12-15 s para u
 Aplicarlo a ONIA con la paleta verde, blanco y negro de la skill diseno-contenido-onia, no con la de él.
 
 Lo que falta para EDITAR COMO ÉL (ritmo de corte, punch-ins, momento de entrada de cada gráfico, cierre) depende de la medición pendiente; ver límites.
+**Corregido 8-oct (14 videos medidos):** el ritmo ya está: una toma continua de cara con 0-2,1 cortes duros cada 10 s y 2-7 capturas de 1-5 s; un elemento gráfico nuevo cada 0,5-1 s en los primeros 3 s y cada 2-4 s después; la caja escribe letra por letra; el cierre repite la pregunta del CTA en una caja. El punto 6 (un click en cada gráfico) no se pudo verificar y no se copia: sus 2 TikToks más vistos son solo voz. Receta completa: skill `edicion-referentes`, «Receta Rocha».
 
 ### Límites del método
 
