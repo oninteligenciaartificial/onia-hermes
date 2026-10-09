@@ -384,6 +384,26 @@ Trampas pagadas armando v3 (2-oct):
   seguridad de Claude Code **bloquea `rm -f $VAR/*`**: usar rutas literales o sobrescribir los archivos con el mismo nombre.
 - **Higgsfield:** se cotiza con `higgsfield generate cost` desde la PC (CLAUDE.md); desde la nube no se cotiza ni se genera.
 
+
+### 4.4 Grabar la app y armar el corto del VSL (9-oct)
+
+- **`scripts/grabar-captura.mjs`:** plan en JSON (`ir`, `esperar`, `mover`, `anillo`, `foto`, `clic`) → `.mp4` H.264 de la app con cursor grande y anillos, más fotos
+  PNG y un `.log.json`. Esqueletos: `grabar-captura.vsl-dental-C1-C7.plan.json` (solo mira) y `…-C2-clic.plan.json`. Probado contra una página local; **la app real
+  no se probó** (falta la cuenta). Trampas que ya pagué: (1) el cursor es un `<div>` y **cada página nueva lo reinicia**: la posición viaja en `sessionStorage`;
+  (2) la punta cae al 80 % del ancho y 65 % del alto del elemento, no al centro: en el centro tapa el texto; (3) el video empieza al abrir el contexto: se recorta
+  con `t0_ms` (el login queda fuera); (4) contra `127.0.0.1` no se pasa el proxy de la nube; (5) las fotos **traen el cursor y los anillos**: para una captura limpia
+  no se pone `anillo` antes de la `foto`.
+- **Frenos, y por qué (aprendido el 9-oct):** el VSL avisa que un clic en «Aprobar» puede mandar un mensaje de verdad. **Mi primer borrador adivinaba el botón peligroso por su texto y un
+  revisor independiente lo saltó seis veces**, todas reproducidas en una página local: `<input type=submit value="Aprobar">` (el `innerText` es vacío), «Aprobá» (la UI habla en voseo y la regex
+  no), un selector que apunta a otro botón, `--base=URL` con «=» (se ignoraba y caía a producción con el login real), una regex de correo de subcadena (`aqarias@`, `latest.perez@`) y un
+  `ir` a `/api/…` (un GET que muta). **Lección: un freno por el texto de la interfaz falla abierto; el freno sólido es no depender de él.** Hoy: todo clic exige `"envio": true` +
+  `ONIA_GRABAR_PERMITE_ENVIO=1`; el selector da exactamente un elemento y el clic cae sobre él; `--base` con lista de hosts; rutas sin `//`, `@` ni `/api/`; el login en `try/catch` que solo
+  imprime la primera línea (el «Call log» de Playwright puede traer lo que se escribía) y borra el `.webm` si falla. Probados los 14 caminos. **Regla del carril: un script que puede cambiar
+  datos de producción pasa por un revisor que no lo escribió antes de mergearse.**
+- **`scripts/vsl-animatic.mjs`:** tabla JSON de tramos → láminas PNG y un preview de 360×640 del largo exacto (con la pantalla marcada «Falta la captura aprobada»). Es para que
+  Sergio Urcullo vea el ritmo **antes** de grabar o cortar; no es el video. Caso: `carousels/briefs/ads/VSL-CORTO-TABLA-DE-CORTES.md`. Trampa: el demuxer `concat` de
+  ffmpeg resuelve las rutas relativas contra la carpeta de la lista, no contra el cwd: se le pasan rutas absolutas. Otra: `page.setContent` corre en `about:blank` y Chromium **no deja cargar la fuente local** (sale en Arial sin avisar); se escribe el HTML a un archivo y se abre por `file://`, y se comprueba con `document.fonts.check`.
+
 ## 5. La campaña de Meta
 
 - **1-oct, 21:00 UTC: el conector YA ve ONIA Ads** (`1073680778314945`, negocio «OniaAgency», `is_ads_mcp_enabled`),
@@ -506,6 +526,18 @@ Resultado: `research/competencia/DAPTA_COMO_FUNCIONA.md` (sin fecha, fuente del 
 - **Cada hallazgo lleva:** quién y cuánto lleva · versión Onia · dueño · tarea Codex (casi nunca: un prompt escrito hoy queda viejo, `master`
   se mueve). Va a `docs/ONIA_UI_MEJORAS_1.0.md` §8, una tanda por semana, la más nueva arriba.
 - **Lo que pide login o Instagram** va al transcript como «PEDIDO PC: <qué> — para qué lo quiero». Contactar a un tercero (pedir su demo) no.
+- **Norma o ley (aprendido el 9-oct con la historia clínica y la factura de Bolivia):** el buscador y `WebFetch` solo orientan; la cita sale del
+  **PDF oficial**. `WebFetch` no lee los PDF comprimidos (FlateDecode), pero **guarda el binario** y avisa dónde: se extrae con
+  `pdftotext -layout <archivo> <salida.txt>` y se busca con `grep -n`. Así salió el «archivado por lo menos por unos 10 años» de las *Normas en
+  Salud Oral* (R.M. 1320, 2010), que ningún resumen traía. Un PDF del Ministerio de Salud puede ser **«documento de trabajo»** o estar vencido: se
+  dice en la misma celda donde se cita.
+- **Un plazo del SIN se verifica en su lista de RND, no en un blog:** `impuestos.gob.bo/index.php/rnd-2026/` lista número, fecha y título. El
+  9-oct el buscador dio la abrogación de los grupos 9-12 como dato de un tercero; el **título** en la lista oficial (RND 102600000038, 30-sep)
+  lo confirmó, pero **el texto no se leyó**: lo que viene después («el SIN asignará la modalidad periódicamente, sin fecha») queda marcado como
+  dicho por un tercero. Con eso no se escribe «desde el 1 de octubre debe facturar en línea»: era la lectura de la RND 102600000007 y quedó vieja
+  a las 24 horas. Una urgencia de fecha en un anuncio se prueba contra la lista oficial el mismo día que se publica.
+- **Una norma como titular se separa en tres capas antes de usarla:** qué dice el texto (cita), a quién alcanza (¿consultorio privado? ¿odontólogo
+  o solo médico?) y si sigue vigente. Si falta una capa, el titular es una pregunta, no una afirmación, y pasa por Sergio Urcullo antes de salir.
 
 ### 8.2 Contenido, pauta y comunicación de un competidor (método del 8-oct, 15 competidores)
 Resultado: `research/competencia/COMUNICACION_Y_PAUTA_COMPETENCIA.md` (síntesis) + la sección «Contenido, pauta y comunicación»

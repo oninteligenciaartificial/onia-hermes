@@ -1,0 +1,14 @@
+{
+  "fuente": "hermes-content/sales-kit/06-VSL-DENTAL.md §3 (rama de la madre, aún fuera de main; copiado el 9-oct-2026: si el guion cambia, se rehace esta tabla)",
+  "formato": "9:16",
+  "segmentos": [
+    { "desde": 0,  "hasta": 3,  "tipo": "camara",  "dice": "Mañana a las diez tiene un paciente que no confirmó.", "ve": "Selfie vertical, luz de ventana. Titular y filtro en el cuadro 0.", "toma": "T9", "filas": "sin promesa", "estado": "se_graba_ya" },
+    { "desde": 3,  "hasta": 8,  "tipo": "camara",  "dice": "Si nadie le escribe, ese sillón queda vacío. Y el saldo que nadie cobra, igual.", "ve": "El mismo plano. Chip amarillo en «vacío».", "toma": "T12", "filas": "sin promesa", "estado": "se_graba_ya" },
+    { "desde": 8,  "hasta": 16, "tipo": "pantalla", "dice": "Onia junta su agenda, sus fichas y sus cobros, y cada mañana le deja anotado a quién escribirle, con el mensaje listo.", "ve": "/agenda de mañana, anillo en la cita de las 10:00.", "captura": "C1", "toma": "T13 (voz en off)", "filas": "A-03, B-01, B-02, C-01, E-01, G-04 ⬜", "estado": "espera_captura" },
+    { "desde": 16, "hasta": 30, "tipo": "pantalla", "dice": "Usted lo lee y lo aprueba. Si no lo aprueba, no sale.", "ve": "/pending: la tarjeta del mismo paciente y Aprobar.", "captura": "C2", "toma": "T13 (voz en off)", "filas": "G-06, G-01 ⬜", "estado": "espera_captura" },
+    { "desde": 30, "hasta": 40, "tipo": "pantalla", "dice": "Y en Cobros ve quién le debe y desde cuándo.", "ve": "/billing con el saldo y la leyenda «datos de ejemplo».", "captura": "C5", "toma": "T13 (voz en off)", "filas": "E-03 ⬜", "estado": "espera_captura" },
+    { "desde": 40, "hasta": 50, "tipo": "camara",  "dice": "Lo prueba 14 días, sin tarjeta. Si no le sirve, no paga nada.", "ve": "A cámara, con dos tarjetas.", "toma": "T12", "filas": "A-04, A-08 ✅", "estado": "se_graba_ya" },
+    { "desde": 50, "hasta": 57, "tipo": "camara",  "dice": "Escríbame por WhatsApp: en 20 minutos vemos si le sirve.", "ve": "A cámara. CTA.", "toma": "T10", "filas": "L-04 🟡 (la web dice 30 min)", "estado": "espera_sergio" },
+    { "desde": 57, "hasta": 60, "tipo": "cartela", "dice": "", "ve": "Cartela: onia | dental y el botón.", "toma": "HyperFrames", "filas": "—", "estado": "se_graba_ya" }
+  ]
+}
