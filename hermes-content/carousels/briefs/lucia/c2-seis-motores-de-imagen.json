@@ -43,8 +43,8 @@
       "callout": "",
       "save_worthy": true,
       "visual_prompt": "Foto E",
-      "alt_text": "Imagen de prueba de Lucía en una recepción con el celular",
-      "bg": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos/img-flux-3-af9c2d0c.jpg"
+      "alt_text": "Imagen de prueba de Lucía en una recepción con el celular (fondo difuminado)",
+      "bg": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos-limpias/img-flux-3-af9c2d0c-limpia.jpg"
     },
     {
       "number": 4,

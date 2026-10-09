@@ -330,6 +330,11 @@ Fuente: `research/competencia/LUCIA_COMPETENCIA_20261005.md`.
 - **9-oct · el contenedor se recicla y `out/` no está en git:** los finales de G1/G3/G2 vivían solo en el disco de la nube. Se
   entregan en `videos/lucia-entrega/` (G2 recodificado a 6 Mbps, PSNR 47,9 dB, para entrar bajo el límite de GitHub). Todo video
   final se copia ahí en el mismo commit que se monta; si no, quien tiene la llave del VPS no puede publicar.
+- **9-oct · el fondo de una foto de IA se mira a 3x antes de publicar** (revisor de G4): la Imagen C tenía dos sillones dentales y una pantalla al
+  fondo (da a entender el rubro de salud, y Lucía nunca es profesional de salud) y los monitores de C y E llevaban un logo tipo marca. Ni el puntaje de
+  cara ni el grep lo ven; se encuentran ampliando el borde del cuadro. Se tapan con desenfoque con pluma en UN paso en RGB (`format=gbrp` + `gblur` +
+  `maskedmerge`, salida `yuvj420p`): dos pasos por YUV corren los colores. Copias en `v4/prueba-motores-20261008/fotos-limpias/` (con README); el
+  original queda como evidencia. Las fotos K1, K2·1, K4·3 y K4·5 se miraron enteras y están limpias.
 - **2/3-oct:** Seedream escribe como texto «sheet» y «hex #…»; inventa letreros en las torres; los lotes de más de 5
   dan 429. Están en `higgsfield-generate`.
 
