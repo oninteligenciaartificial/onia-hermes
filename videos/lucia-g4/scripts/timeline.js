@@ -25,7 +25,7 @@ for (const c of PLAN.costuras) empuje(c.t, c.sale, c.entra);
 // ── empuje lento sobre cada foto (dura lo que dura el contenedor, empujes incluidos)
 for (const f of PLAN.fotos) tl.fromTo('#' + f.id + '-i', { scale: 1, transformOrigin: f.ox + 'px ' + f.oy + 'px' }, { scale: PLAN.zoom, duration: f.b - f.a, ease: 'none' }, f.a);
 
-// ── rótulo de IA: ya está en pantalla en el cuadro 0 (sin entrada), se ve ENTERO hasta los 2,4 s y recién ahí sale por la izquierda
+// ── rótulo de IA: ya está en pantalla en el cuadro 0 (sin entrada), se ve ENTERO hasta los 3,0 s y recién ahí sale por la izquierda
 leave('#rotulo', PLAN.rotulo.b + E_OUT, { x: -60 });
 
 // ── tarjetas narrativas
@@ -66,26 +66,28 @@ for (const m of PLAN.imagenes) {
   }
 }
 
-// ── lección 1 (42-47,5 s): marca de 0,70, nota, y seis filas ordenadas por precio (etiqueta + línea → punto → valor)
+// ── lección 1 (42-49,75 s): la marca de 0,70, la nota 1 y los ejes YA ESTÁN cuando llega la placa (viajan con el empuje); seis filas ordenadas por precio
+//    (etiqueta + línea → punto → valor); la nota 2 entra cuando la 1 ya tuvo su tiempo de lectura; la franja de 0,66 a 0,70 dibuja lo que dice la nota 2
 {
   const L = PLAN.l1;
-  tl.fromTo('#l1-mk', { scaleY: 0, autoAlpha: 0, transformOrigin: '50% 0%' }, { scaleY: 1, autoAlpha: 1, duration: 0.3, ease: 'power3.out' }, L.marca_t);
-  enter('#l1-mkl', L.marca_t + 0.05, { x: 40 });
-  enter('#l1-nota', L.nota_t, { x: 60 });
-  tl.fromTo('#l1-ax0,#l1-ax1', { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.25, ease: 'none' }, L.marca_t);
   for (const f of L.filas) {
     const n = f.n, t = f.t;
     tl.fromTo('#l1-t' + n + ',#l1-r' + n, { x: 60, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 0.25, ease: 'power3.out' }, t);
     tl.fromTo('#l1-f' + n, { scale: 0, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 0.22, ease: 'power4.out' }, t + 0.1);
     tl.fromTo('#l1-v' + n, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.2, ease: 'none' }, t + 0.2);
   }
+  enter('#l1-nota2', L.nota2_t, { x: 60 });
+  tl.fromTo('#l1-ruido', { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4, ease: 'none' }, L.ruido_t);
 }
 
-// ── lección 2 (47,5-53 s): título, tres escenas de B, las dos fotos del café con su pie y el anillo sobre la escena que perdió la cara
+// ── lección 2 (49,5-57,25 s): cabecera y etiqueta de A ya están en la placa; las tres celdas de A, luego la etiqueta y las tres celdas de B, las dos fotos
+//    del café con su pie y el anillo sobre la celda que perdió la cara
 {
   const L = PLAN.l2;
-  enter('#l2-tag', L.tag_t, { x: 60 });
-  for (const c of L.chips) enter('#l2-ch' + c.n, c.t, { x: 60 });
+  for (const f of L.filas) {
+    if (f.etiqueta_t != null) enter('#l2-r' + f.n, f.etiqueta_t, { x: 60 });
+    for (const c of f.celdas) enter('#' + c.id, c.t, { x: 60 });
+  }
   for (const f of L.fotos) { enter('#l2-ph' + f.n, f.t, { x: 70, d: 0.28 }); enter('#l2-cap' + f.n, f.cap_t, { x: 40 }); }
   tl.fromTo('#l2-ring', { autoAlpha: 0, scale: 1.05, transformOrigin: '50% 50%' }, { autoAlpha: 1, scale: 1, duration: 0.3, ease: 'power3.out' }, L.anillo_t);
 }

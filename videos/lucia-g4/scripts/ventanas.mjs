@@ -18,11 +18,12 @@ await pg.goto(pathToFileURL(path.join(P, 'index.html')).href);
 await pg.evaluate(() => document.fonts.ready);
 await pg.waitForTimeout(400);
 // ids de TODO texto que no es tarjeta; las palabras se cuentan en el DOM (sin «·» ni «→»)
-const ids = ['rotulo', 'sc-mkl', 'sc-ax1', 'l1-mkl', 'l1-nota', 'l2-tag'];
+const ids = ['rotulo', 'sc-mkl', 'sc-ax1', 'l1-mkl', 'l1-nota1', 'l1-nota2', 'l2-h1', 'l2-h2', 'l2-h3', 'l2-r1', 'l2-r2'];
 for (const m of plan.imagenes) { ids.push('dA-' + m.id); if (m.sello) ids.push('s-' + m.id); if (m.pastilla) ids.push('p-' + m.id); }
 for (let i = 1; i <= plan.l1.filas.length; i++) ids.push('l1-t' + i, 'l1-v' + i);
-for (const c of plan.l2.chips.lista) ids.push('l2-ch' + c.n);
+plan.l2.tabla.filas.forEach((f, fi) => f.celdas.forEach((c) => ids.push(`l2-c${fi + 1}${c.n}`)));
 for (let i = 1; i <= plan.l2.fotos.lista.length; i++) ids.push('l2-cap' + i);
+for (const c of plan.tarjetas) ids.push(c.id);          // las tarjetas también: ventana REAL (con los empujes), no solo a-b del plan
 // el texto se arma nodo por nodo (con un espacio entre elementos): «Escena 1» + «0,79» son 3 palabras aunque textContent las pegue
 const items = await pg.evaluate((ids) => ids.map((id) => { const e = document.getElementById(id); const ns = []; if (e) { const w = document.createTreeWalker(e, NodeFilter.SHOW_TEXT); while (w.nextNode()) ns.push(w.currentNode.textContent.trim()); } const t = ns.filter(Boolean).join(' '); return [id, t, t.split(/\s+/).filter((x) => x && x !== '·' && x !== '→').length]; }), ids);
 const res = await pg.evaluate(([items, N, FPS]) => {

@@ -2,16 +2,16 @@
 [hyperframes] browserGpuMode probe → software (WebGL unavailable)
 
 Lint
-  ⚠ duplicate_media_discovery_risk: Detected 3 matching img entries with the same source/start/duration.
+  ⚠ duplicate_media_discovery_risk: Detected 2 matching img entries with the same source/start/duration.
     /home/user/onia-hermes/videos/lucia-g4/index.html [data-composition-id] t=0s
     Fix: Avoid duplicated media nodes that can be discovered twice during compilation.
-  ⚠ timeline_track_too_dense: Track 3 has 7 timed elements in this HTML file. Smaller sub-compositions keep timelines easier to read, iterate on, and diff.
+  ⚠ timeline_track_too_dense: Track 3 has 8 timed elements in this HTML file. Smaller sub-compositions keep timelines easier to read, iterate on, and diff.
     /home/user/onia-hermes/videos/lucia-g4/index.html [data-composition-id] t=0s
     Fix: Move coherent scene groups into separate .html files under compositions/ and mount them from the parent with data-composition-src so the timeline stays easier to inspect, revise, and validate.
   ⚠ timeline_track_too_dense: Track 4 has 7 timed elements in this HTML file. Smaller sub-compositions keep timelines easier to read, iterate on, and diff.
     /home/user/onia-hermes/videos/lucia-g4/index.html [data-composition-id] t=0s
     Fix: Move coherent scene groups into separate .html files under compositions/ and mount them from the parent with data-composition-src so the timeline stays easier to inspect, revise, and validate.
-  ⚠ composition_heavy_overlay_count_high: This composition has 28 elements carrying "heavy overlay" CSS (filter:blur, radial-gradient, or clip-path). Field signal: a composition with ~40 such elements — including opacity:0 / visibility:hidden ones — captures solid-black for the first ~half of the render, recovering near the end. Reproduces identically via drawElement, forced screenshot capture, and snapshot, so the capture layer itself is the offender (not encoder/mux). Independent of duration. Presence alone matters; only display:none elements are excluded here.
+  ⚠ composition_heavy_overlay_count_high: This composition has 30 elements carrying "heavy overlay" CSS (filter:blur, radial-gradient, or clip-path). Field signal: a composition with ~40 such elements — including opacity:0 / visibility:hidden ones — captures solid-black for the first ~half of the render, recovering near the end. Reproduces identically via drawElement, forced screenshot capture, and snapshot, so the capture layer itself is the offender (not encoder/mux). Independent of duration. Presence alone matters; only display:none elements are excluded here.
     /home/user/onia-hermes/videos/lucia-g4/index.html [data-composition-id] t=0s
     Fix: Split coherent scenes / transitions into separate .html files under compositions/ and concat the pieces (FFmpeg or the runtime's slideshow) so each capture only sees a small subset of heavy overlays at once. Even hidden overlays (opacity:0 / visibility:hidden) contribute — either remove truly unused ones from the source or scope them into their own per-transition sub-composition. If an overlay is genuinely inert for the whole clip, use display:none so it never enters the render tree. Field ref ts=1784040753 (#hyperframes-cli-feedback).
   ⚠ nested_structure_needs_subcomposition: <div id="f-gancho"> is a timeline element that contains nested <img id="f-gancho-i">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
@@ -47,10 +47,10 @@ Lint
   ⚠ nested_structure_needs_subcomposition: <div id="pl-regla"> is a timeline element that contains nested <div id="rf1">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
     /home/user/onia-hermes/videos/lucia-g4/index.html #pl-regla t=0s
     Fix: Move <div id="pl-regla"> and its contents into a sub-composition file and mount it with data-composition-src.
-  ⚠ nested_structure_needs_subcomposition: <div id="pl-l1"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+  ⚠ nested_structure_needs_subcomposition: <div id="pl-l1"> is a timeline element that contains nested <div id="l1-ruido">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
     /home/user/onia-hermes/videos/lucia-g4/index.html #pl-l1 t=0s
     Fix: Move <div id="pl-l1"> and its contents into a sub-composition file and mount it with data-composition-src.
-  ⚠ nested_structure_needs_subcomposition: <div id="pl-l2"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+  ⚠ nested_structure_needs_subcomposition: <div id="pl-l2"> is a timeline element that contains nested <div id="l2-h1">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
     /home/user/onia-hermes/videos/lucia-g4/index.html #pl-l2 t=0s
     Fix: Move <div id="pl-l2"> and its contents into a sub-composition file and mount it with data-composition-src.
   ⚠ nested_structure_needs_subcomposition: <div id="cc-c1"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
@@ -95,19 +95,24 @@ Lint
   ⚠ nested_structure_needs_subcomposition: <div id="cc-c14"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
     /home/user/onia-hermes/videos/lucia-g4/index.html #cc-c14 t=0s
     Fix: Move <div id="cc-c14"> and its contents into a sub-composition file and mount it with data-composition-src.
-  0 error(s), 31 warning(s), 0 info(s)
+  ⚠ nested_structure_needs_subcomposition: <div id="cc-c15"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-g4/index.html #cc-c15 t=0s
+    Fix: Move <div id="cc-c15"> and its contents into a sub-composition file and mount it with data-composition-src.
+  0 error(s), 32 warning(s), 0 info(s)
 
 Runtime
   ◇ 0 errors, 0 warnings
 
 Layout
-  ◇ 0 issues across 9 sample(s)
+  ℹ t=52.25s content_overlap #c12 > div:nth-of-type(1) > div:nth-of-type(2) > b:nth-of-type(1) inside #c13 > div:nth-of-type(1) > div:nth-of-type(2) "la sostuvo en tres." — Two text blocks overlap and may render unreadable.
+        Fix: Give each block its own zone, or mark intentional layering with data-layout-allow-overlap.
+  0 error(s), 0 warning(s), 1 info(s)
 
 Motion
   ◇ 0 errors, 0 warnings
 
 Contrast
-  ◇ 15/15 text checks pass WCAG AA
+  ◇ 40/40 text checks pass WCAG AA
 
 Snapshots
   ◇ disabled

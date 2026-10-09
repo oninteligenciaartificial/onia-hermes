@@ -6,20 +6,20 @@ pix_fmt=yuv420p
 color_space=bt709
 r_frame_rate=24/1
 avg_frame_rate=24/1
-duration=57.000000
-bit_rate=9643506
-nb_frames=1368
+duration=59.750000
+bit_rate=8081187
+nb_frames=1434
 codec_name=aac
 codec_type=audio
 sample_rate=48000
 channels=2
 r_frame_rate=0/0
 avg_frame_rate=0/0
-duration=57.000000
-bit_rate=2276
-nb_frames=2673
-duration=57.000000
-size=68756337
-bit_rate=9650012
-[Parsed_volumedetect_0 @ 0x55fa3398f0c0] mean_volume: -91.0 dB
-[Parsed_volumedetect_0 @ 0x55fa3398f0c0] max_volume: -91.0 dB
+duration=59.750000
+bit_rate=2275
+nb_frames=2802
+duration=59.750000
+size=60404871
+bit_rate=8087681
+[Parsed_volumedetect_0 @ 0x55cef5fd7dc0] mean_volume: -91.0 dB
+[Parsed_volumedetect_0 @ 0x55cef5fd7dc0] max_volume: -91.0 dB

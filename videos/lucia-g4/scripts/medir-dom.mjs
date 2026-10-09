@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// QA geométrico G4: abre index.html en Chromium, lleva el timeline a cada 0,125 s (3 cuadros) y mide la caja de TODO texto visible.
+// QA geométrico G4 (2da pasada): abre index.html en Chromium, lleva el timeline a cada 0,125 s (3 cuadros) y mide la caja de TODO texto visible.
 // Reglas (CLAUDE.md / editor-videos §Reels de Lucía): texto entre mentón+40 y y=1490; nada en los 80 px de la derecha bajo y=1000; nada sobre y=280
 // (UI de Instagram arriba); NINGÚN texto baja de 34 px; dos textos nunca se pisan; y los DATOS de las placas están donde dice el número
 // (punto, barra y marca a 100 + 880 × valor).
@@ -46,8 +46,8 @@ await pg.waitForTimeout(500);
 const N = Math.round(plan.lienzo.duracion * FPS);
 const muestras = await pg.evaluate(([N, FPS]) => {
   const tl = window.__timelines.main; tl.pause();
-  const SEL = '.card, .tag, .sello, .arr, .rt, .vl, .ax, .barv, .num, .lb, .cn, .cv, .sub, .th span';
-  const RANGE = new Set(['lb', 'ax', 'rt', 'num', 'arr', 'cn', 'cv', 'sub']);
+  const SEL = '.card, .tag, .sello, .arr, .rt, .vl, .ax, .barv, .num, .lb, .cn, .cv, .sub, .note, .thd, .rl2, .th span';
+  const RANGE = new Set(['lb', 'ax', 'rt', 'num', 'arr', 'cn', 'cv', 'sub', 'note', 'thd', 'rl2']);
   const out = [];
   const posiciones = (t) => { tl.time(t); const m = new Map(); for (const e of document.querySelectorAll(SEL)) { const q = e.getBoundingClientRect(); m.set(e, q.left); } return m; };
   for (let f = 0; f < N; f += 3) {
@@ -133,9 +133,10 @@ const fm = (v) => v.toFixed(2).replace('.', ',');
     datos.push([`L1 Imagen ${m.letra} punto ${m.valor}`, e.cx, X(m.valor)]);
     if (v.txt !== fm(m.valor)) falla(0, `L1 Imagen ${m.letra}: el valor en pantalla dice «${v.txt}» y el dato es ${fm(m.valor)}`);
   }
+  const ru = await medida(plan.l1.ruido.t + 0.6, '#l1-ruido'); datos.push(['L1 franja de ruido (borde izquierdo = 0,66)', ru.x1, X(plan.l1.ruido.desde)], ['L1 franja de ruido (borde derecho = 0,70)', ru.x2, X(plan.l1.ruido.hasta)]);
   const tr = plan.regla.escala.marca_t + 0.6;
   const mk4 = await medida(tr, '#sc-mk'); datos.push(['regla marca 0,70', mk4.cx, X(SC.piso)]);
-  for (const c of plan.l2.chips.lista) { const r = await medida(c.t + 0.6, `#l2-ch${c.n} .cn`); if (r.txt !== fm(c.valor)) falla(0, `L2 escena ${c.n}: dice «${r.txt}» y el dato es ${fm(c.valor)}`); }
+  for (const [fi, f] of plan.l2.tabla.filas.entries()) for (const c of f.celdas) { const r = await medida(c.t + 0.6, `#l2-c${fi + 1}${c.n} .cn`); if (r.txt !== fm(c.valor)) falla(0, `L2 ${f.img}${c.n}: dice «${r.txt}» y el dato es ${fm(c.valor)}`); }
   for (const [i, f] of plan.l2.fotos.lista.entries()) { const r = await medida(f.cap_t + 0.6, `#l2-cap${i + 1} .cv`); if (r.txt !== fm(f.valor)) falla(0, `L2 foto ${f.letra}: dice «${r.txt}» y el dato es ${fm(f.valor)}`); }
   for (const m of plan.imagenes) { const r = await medida(m.tag_t + 0.6, `#dA-${m.id} b`); if (r.txt !== fm(m.valor)) falla(0, `Imagen ${m.letra}: el dato en pantalla dice «${r.txt}» y es ${fm(m.valor)}`); }
 }

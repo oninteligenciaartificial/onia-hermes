@@ -38,11 +38,11 @@
    "escala_a_lienzo": 1.0,
    "caja": [
     448,
-    468,
-    689,
-    777
+    467,
+    690,
+    776
    ],
-   "score": 0.841,
+   "score": 0.839,
    "cara_px_nativa": 242,
    "caras_detectadas": 1
   },
@@ -119,6 +119,21 @@
    ],
    "score": 0.837,
    "cara_px_nativa": 288,
+   "caras_detectadas": 1
+  },
+  "k": {
+   "archivo": "assets/ph-k.jpg",
+   "ancho": 1440,
+   "alto": 2560,
+   "escala_a_lienzo": 0.75,
+   "caja": [
+    616,
+    734,
+    816,
+    991
+   ],
+   "score": 0.912,
+   "cara_px_nativa": 266,
    "caras_detectadas": 1
   }
  },

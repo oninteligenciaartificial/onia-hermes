@@ -2,7 +2,7 @@
 """PSNR del FINAL contra cada foto fuente (método de psnr-clips.py de G1/G2/G3, adaptado a fotos fijas con empuje lento).
 Para cada escena de foto de plan.json se toman 3 cuadros en reposo (lejos de los empujes y de la tarjeta), se arma lo que DEBERÍA verse
 (foto fuente → `object-fit:cover` a 1080x1920 → empuje lento 1,00→1,04 con el origen en el centro de la cara medida) y se compara contra el cuadro del final,
-SOLO en la franja y 0-900 (abajo van la tarjeta, el dato y el sello; arriba del cuadro de 0 a 2,4 s va el rótulo, por eso el gancho se mide a 2,8 s).
+SOLO en la franja y 0-900 (abajo van la tarjeta, el dato y el sello; arriba del cuadro de 0 a 3,18 s va el rótulo, por eso el gancho se mide desde 3,4 s).
 Dos controles: (1) entre las 8 fotos candidatas, el pico tiene que ser la foto que el plan dice (si no, hay una foto cruzada); (2) con la foto correcta,
 el pico tiene que estar en la escala de zoom que el plan dice (probando −0,02, −0,01, 0, +0,01, +0,02: si no, el empuje lento está corrido).
 Uso (venv del face-gate, que trae numpy + cv2):  $FACE_GATE_HOME/venv/bin/python scripts/psnr-fotos.py out/g4-final-1080x1920.mp4 > qa/psnr-fotos.txt
@@ -39,7 +39,7 @@ for m in plan['medios']:
         continue
     a, b = m['a'], m['b']
     if m['a'] == 0:
-        ts = [2.8, 4.0, 5.2]                               # el rótulo sale a 2,58 s; las miniaturas entran desde 3,1 s pero quedan bajo y=900
+        ts = [3.4, 4.3, 5.2]                               # el rótulo sale a 3,0-3,18 s; las miniaturas entran desde 3,1 s pero quedan bajo y=900
     else:
         ts = [a + PUSH + 0.6, (a + b) / 2, b - PUSH - 0.6]
     for t in ts:

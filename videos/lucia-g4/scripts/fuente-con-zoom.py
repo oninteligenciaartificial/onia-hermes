@@ -16,7 +16,7 @@ args = []
 for m in plan['medios']:
     if m['tipo'] != 'foto':
         continue
-    ts = [2.8, 4.0, 5.2] if m['a'] == 0 else [m['a'] + PUSH + 0.6, (m['a'] + m['b']) / 2, m['b'] - PUSH - 0.6]
+    ts = [3.4, 4.3, 5.2] if m['a'] == 0 else [m['a'] + PUSH + 0.6, (m['a'] + m['b']) / 2, m['b'] - PUSH - 0.6]
     im = cv2.imread(os.path.join(P, plan['fotos'][m['foto']]['src'])); h, w = im.shape[:2]
     s0 = max(1080 / w, 1920 / h)
     im = cv2.resize(im, (int(round(w * s0)), int(round(h * s0))), interpolation=cv2.INTER_AREA)

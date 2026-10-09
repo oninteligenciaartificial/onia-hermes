@@ -16,7 +16,7 @@ from face_identity_qa import SCRFD  # noqa: E402
 P = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 FOTOS = {
     "a": "assets/ph-a.jpg", "b": "assets/ph-b.jpg", "c": "assets/ph-c.jpg", "d": "assets/ph-d.jpg", "e": "assets/ph-e.jpg", "f": "assets/ph-f.jpg",
-    "cafe_a": "assets/cafe-a.jpg", "cafe_b": "assets/cafe-b.jpg",
+    "cafe_a": "assets/cafe-a.jpg", "cafe_b": "assets/cafe-b.jpg", "k": "assets/ph-k.jpg",
 }
 refs_dir = sys.argv[sys.argv.index("--refs") + 1] if "--refs" in sys.argv else None
 

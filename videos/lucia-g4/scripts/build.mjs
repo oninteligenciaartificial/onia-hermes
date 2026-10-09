@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Lucía · G4 «Seis motores de imagen, una cara: ¿cuál la conserva?» (57 s, 1080x1920, 24 fps) — montaje con HyperFrames.
+// Lucía · G4 «Seis motores de imagen, una cara: ¿cuál la conserva?» (59,75 s, 1080x1920, 24 fps) — montaje con HyperFrames (2da pasada, 9-oct-2026: revisión H1-H7).
 // Lee plan.json (capas, tiempos, datos) → valida reglas de texto, costuras Y LOS NÚMEROS contra v4/PROCEDENCIA.jsonl → escribe index.html
 // (DOM estático + un único timeline GSAP). 0 créditos: seis fotos y cuatro del café ya pagadas el 8-oct + 8 referencias oficiales bajadas por curl.
 // Sin clips: son fotos fijas con un empuje lento (1,00 → 1,04). Método y trampas: .claude/skills/lucia/montaje-hyperframes.md. Plantilla: videos/lucia-g2/.
@@ -34,48 +34,51 @@ const COPIAS = [
   ['assets/fonts/DMSans-var-latin.woff2', path.join(FONTS, 'DMSans-var-latin.woff2')],
   ['assets/fonts/SplineSansMono-var-latin.woff2', path.join(FONTS, 'SplineSansMono-var-latin.woff2')],
 ];
+// copia solo si falta o si CAMBIÓ el contenido (las fotos C y E pasaron a ser las «limpias»: «copiar si falta» dejaría la vieja)
+const mismo = (a, b) => fs.existsSync(a) && fs.existsSync(b) && fs.statSync(a).size === fs.statSync(b).size && fs.readFileSync(a).equals(fs.readFileSync(b));
 for (const [dest, src] of COPIAS) {
   const d = path.join(P, dest);
-  if (fs.existsSync(d)) continue;
-  if (!fs.existsSync(src)) { console.error(`✖ falta ${src}`); process.exit(1); }
+  if (!fs.existsSync(src)) { if (fs.existsSync(d)) continue; console.error(`✖ falta ${src}`); process.exit(1); }
+  if (mismo(d, src)) continue;
   fs.mkdirSync(path.dirname(d), { recursive: true });
   fs.copyFileSync(src, d);
 }
 const curl = (url, out) => execFileSync('curl', ['-sSf', '-m', '120', '-o', out, url], { stdio: 'inherit' });
-const gs = path.join(P, 'assets/vendor/gsap.min.js');      // GSAP local (el render no puede depender de la red): 3.14.2, la versión del scaffold de HyperFrames 0.8.142
+const gs = path.join(P, 'assets/vendor/gsap.min.js');      // GSAP local (el render no puede depender de la red): 3.14.2, la versión del scaffold de HyperFrames 0.8.142; viene versionado en assets-fijos/
 if (!fs.existsSync(gs)) {
   fs.mkdirSync(path.dirname(gs), { recursive: true });
-  const g2 = path.join(R, 'videos/lucia-g2/assets/vendor/gsap.min.js'), g1 = path.join(R, 'videos/lucia-g1/assets/vendor/gsap.min.js'), g3 = path.join(R, 'videos/lucia-g3/assets/vendor/gsap.min.js');
-  const ya = [g2, g3, g1].find((f) => fs.existsSync(f));
+  const fijo = path.join(P, 'assets-fijos/vendor/gsap.min.js');
+  const ya = [fijo, ...['lucia-g2', 'lucia-g3', 'lucia-g1'].map((g) => path.join(R, `videos/${g}/assets/vendor/gsap.min.js`))].find((f) => fs.existsSync(f));
   if (ya) fs.copyFileSync(ya, gs); else curl('https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js', gs);
 }
 const ff = (args) => execFileSync('ffmpeg', ['-v', 'error', '-y', ...args], { stdio: 'inherit' });
 const A = (n) => path.join(P, 'assets', n);
 
-// 8 referencias oficiales (0 cr: son las URL públicas del manifiesto de v4/qa) → recortes de cara (assets/ref1-8.jpg)
+// 8 referencias oficiales: los recortes de 360x360 están VERSIONADOS en assets-fijos/ (con su origen en ORIGEN.md); solo si faltan se bajan de CloudFront (0 cr) y se recortan
 const manifest = JSON.parse(fs.readFileSync(path.join(R, plan.refs.manifest), 'utf8'));
 const refNames = Object.keys(manifest.refs);
 fs.mkdirSync(A('refs-orig'), { recursive: true });
 for (const m of plan.refs.recortes) {
-  const out = A(`${m.id}.jpg`);
+  const out = A(`${m.id}.jpg`), fijo = path.join(P, plan.refs.fijos, `${m.id}.jpg`);
+  if (fs.existsSync(fijo)) { if (!mismo(out, fijo)) fs.copyFileSync(fijo, out); continue; }
   if (fs.existsSync(out)) continue;
   const key = refNames.find((k) => k.startsWith(m.fuente.split('_')[0] + '_'));
   const url = manifest.refs[key];
   const orig = A(`refs-orig/${key}${path.extname(url)}`);
   if (!fs.existsSync(orig)) curl(url, orig);
-  const [ox, oy, s] = m.recorte;
-  ff(['-i', orig, '-vf', `crop=${s}:${s}:${ox}:${oy},scale=360:360:flags=lanczos`, '-frames:v', '1', '-q:v', '2', '-update', '1', out]);
+  const [ox, oy, s_] = m.recorte;
+  ff(['-i', orig, '-vf', `crop=${s_}:${s_}:${ox}:${oy},scale=360:360:flags=lanczos`, '-frames:v', '1', '-q:v', '2', '-update', '1', out]);
 }
-// miniaturas de las seis fotos (272x484, recorte centrado)
+// derivados (miniaturas y fotos del café): se regeneran si faltan o si su fuente es más nueva
+const viejo = (out, src) => !fs.existsSync(out) || fs.statSync(out).mtimeMs < fs.statSync(src).mtimeMs;
 const th = plan.gancho.miniaturas;
 for (const m of plan.imagenes) {
-  const out = A(`th-${m.id}.jpg`);
-  if (!fs.existsSync(out)) ff(['-i', A(`ph-${m.id}.jpg`), '-vf', `scale=${th.w * 2}:${th.h * 2}:force_original_aspect_ratio=increase:flags=lanczos,crop=${th.w * 2}:${th.h * 2}`, '-frames:v', '1', '-q:v', '2', '-update', '1', out]);
+  const out = A(`th-${m.id}.jpg`), src = A(`ph-${m.id}.jpg`);
+  if (viejo(out, src)) ff(['-i', src, '-vf', `scale=${th.w * 2}:${th.h * 2}:force_original_aspect_ratio=increase:flags=lanczos,crop=${th.w * 2}:${th.h * 2}`, '-frames:v', '1', '-q:v', '2', '-update', '1', out]);
 }
-// fotos del café para la lección 2 (mismo derivado: 2x el tamaño en pantalla)
 for (const f of plan.l2.fotos.lista) {
-  const out = A(`cf-${f.foto}.jpg`);
-  if (!fs.existsSync(out)) ff(['-i', A(path.basename(plan.fotos[f.foto].src)), '-vf', `scale=${plan.l2.fotos.w * 2}:${plan.l2.fotos.h * 2}:force_original_aspect_ratio=increase:flags=lanczos,crop=${plan.l2.fotos.w * 2}:${plan.l2.fotos.h * 2}`, '-frames:v', '1', '-q:v', '2', '-update', '1', out]);
+  const out = A(`cf-${f.foto}.jpg`), src = A(path.basename(plan.fotos[f.foto].src));
+  if (viejo(out, src)) ff(['-i', src, '-vf', `scale=${plan.l2.fotos.w * 2}:${plan.l2.fotos.h * 2}:force_original_aspect_ratio=increase:flags=lanczos,crop=${plan.l2.fotos.w * 2}:${plan.l2.fotos.h * 2}`, '-frames:v', '1', '-q:v', '2', '-update', '1', out]);
 }
 
 // ───────────────────────── 1) reglas (se corta el build si alguna falla) ─────────────────────────
@@ -83,8 +86,10 @@ const errores = [];
 const palabras = (t) => `${t.texto} ${t.acento || ''}`.trim().split(/\s+/).filter((s) => s && s !== '·');
 for (const c of plan.tarjetas) {
   const n = palabras(c).length, min = n * 0.35 + 0.3, dur = c.b - c.a;
-  if (n > 6) errores.push(`${c.id}: ${n} palabras (máx 6)`);
-  if (dur < min - 1e-9) errores.push(`${c.id}: dura ${dur.toFixed(2)} s y necesita ${min.toFixed(2)} s para ${n} palabras`);
+  const tope = c.max_palabras || 6;                      // tope del guion: 6 palabras por tarjeta; una excepción lleva su razón en plan.json (c.excepcion)
+  if (n > tope) errores.push(`${c.id}: ${n} palabras (máx ${tope})`);
+  if (n > 6 && !c.excepcion) errores.push(`${c.id}: pasa de 6 palabras y no declara su excepción`);
+  if (dur < min + 0.1 - 1e-9) errores.push(`${c.id}: dura ${dur.toFixed(2)} s y necesita ${min.toFixed(2)} s para ${n} palabras (+0,1 s de margen: el último instante es la salida)`);
   if (c.id === 'c1' && c.a > 0.15 + 1e-9) errores.push('c1: la primera tarjeta entra después de 0,15 s');
   if (c.acento_t != null && (c.acento_t < c.a + 0.5 - 1e-9 || c.acento_t > c.b - 0.5 + 1e-9)) errores.push(`${c.id}: acento_t ${c.acento_t} fuera de [a+0,5, b-0,5]`);
   c.n_palabras = n; c.min_s = +min.toFixed(2);
@@ -139,18 +144,21 @@ let proc = null;
       if ((m.estado === 'bajo') !== (m.sello?.texto === 'bajo el piso')) errores.push(`${m.id}: el sello «bajo el piso» va solo en las que están bajo el piso`);
       if ((m.estado === 'justo') !== (m.pastilla?.texto === 'justo en el piso')) errores.push(`${m.id}: la pastilla «justo en el piso» va solo en la que cae justo`);
     }
-    for (const c of plan.l2.chips.lista) { const d = proc[c.clave]; if (d && r2(d.id) !== c.valor) errores.push(`chip ${c.n}: ${c.valor} y PROCEDENCIA dice ${d.id}`); }
+    for (const f of plan.l2.tabla.filas) for (const c of f.celdas) { const d = proc[c.clave]; if (d && r2(d.id) !== c.valor) errores.push(`tabla ${f.img}${c.n}: ${c.valor} y PROCEDENCIA dice ${d.id}`); }
     for (const f of plan.l2.fotos.lista) { const d = proc[f.clave]; if (d && r2(d.id) !== f.valor) errores.push(`foto ${f.foto}: ${f.valor} y PROCEDENCIA dice ${d.id}`); }
     if (!errores.length) {
       // lo que el video AFIRMA, contra los datos (si una afirmación falla, el build se corta)
       const raw = (k) => proc[k].id;
       const ok = (cond, texto) => { claim.push(`${cond ? 'ok ' : '✖  '} ${texto}`); if (!cond) errores.push(`afirmación falsa: ${texto}`); };
       const masCaro = plan.imagenes.reduce((a, b) => (b.cr > a.cr ? b : a)), masBarato = plan.imagenes.reduce((a, b) => (b.cr < a.cr ? b : a));
-      ok(masCaro.letra === 'E' && raw('e') < raw('a') && raw('e') < raw('b'), `«Pagar más no la parece más»: la más cara (${masCaro.letra}, ${masCaro.cr} cr, ${raw('e')}) queda bajo la de 1 cr (${raw('a')}) y la de 0,5 cr (${raw('b')})`);
-      ok(plan.imagenes.filter((m) => m.cr > 1).every((m) => m._raw < raw('a')), `ninguna de las que cuestan más que A (1 cr) la parece más que A (${raw('a')})`);
+      ok(masCaro.letra === 'E' && raw('e') < raw('a') && raw('e') < raw('b'), `«Pagar más no la hace más parecida»: la más cara (${masCaro.letra}, ${masCaro.cr} cr, ${raw('e')}) queda bajo la de 1 cr (${raw('a')}) y la de 0,5 cr (${raw('b')})`);
+      ok(plan.imagenes.filter((m) => m.cr > 1).every((m) => m._raw < raw('a')), `ninguna de las que cuestan más que A (1 cr) la hace más parecida que A (${raw('a')})`);
       ok(raw('a') >= 0.7 && raw('a_cafe2') >= 0.7 && raw('a_cafe3') >= 0.7, `A (1 cr) la sostuvo en tres escenas: ${raw('a')} · ${raw('a_cafe2')} · ${raw('a_cafe3')} (todas ≥ 0,70)`);
       ok(masBarato.letra === 'B' && raw('b') >= 0.7 && raw('b_cafe2') < 0.7 && raw('b_cafe3') >= 0.7, `B (el más barato, ${masBarato.cr} cr) la perdió en UNA de tres: ${raw('b')} · ${raw('b_cafe2')} · ${raw('b_cafe3')}`);
-      ok(plan.l2.chips.lista.map((c) => c.valor).join() === '0.79,0.35,0.83', 'la lección 2 dice B: 0,79 · 0,35 · 0,83');
+      const fila = (l) => plan.l2.tabla.filas.find((f) => f.img === l).celdas.map((c) => c.valor).join();
+      ok(fila('B') === '0.79,0.35,0.83', 'la lección 2 dice B: 0,79 · 0,35 · 0,83');
+      ok(fila('A') === '0.81,0.83,0.84', `la lección 2 dice A: 0,81 · 0,83 · 0,84 (PROCEDENCIA: ${raw('a')} · ${raw('a_cafe2')} · ${raw('a_cafe3')})`);
+      ok(plan.l2.tabla.filas.find((f) => f.img === 'A').celdas.every((c) => c.valor >= SC.piso) && plan.tarjetas.find((t) => t.id === 'c12').acento === 'la sostuvo en tres.', '«Imagen A: la sostuvo en tres.»: las tres escenas de A están sobre el piso');
       ok(plan.l2.fotos.lista.map((f) => f.valor).join() === '0.83,0.35', 'las fotos del café: A 0,83 contra B 0,35');
       ok(plan.imagenes.filter((m) => m.estado === 'bajo').map((m) => m.letra).join() === 'E,F', 'bajo el piso: E y F (D cae justo en el piso y no se anuncia como aprobada)');
       ok(plan.imagenes.length === 6 && new Set(plan.imagenes.map((m) => m.id)).size === 6, 'seis imágenes distintas (A a F)');
@@ -199,15 +207,24 @@ const lecturas = [];
   }
   L('regla «mi piso»', `mi piso · ${fm(SC.piso)}`, es.marca_t + 0.05 + E_IN, fin('pl-regla'));
   L('regla «idéntica · 1»', 'idéntica · 1', es.a + 0.2 + 0.25, fin('pl-regla'));
-  L('l1 «mi piso»', `mi piso · ${fm(SC.piso)}`, l1.marca_t + 0.05 + E_IN, fin('pl-l1'));
-  L('l1 nota', l1.nota.texto, l1.nota.t + E_IN, fin('pl-l1'));
+  const T1 = tj.c11.a, leg0 = T1 - 0.05;                              // lo que viaja con la placa se lee desde que llega (en T la placa está en reposo)
+  L('l1 «mi piso»', `mi piso · ${fm(SC.piso)}`, leg0, fin('pl-l1'));
+  L('l1 nota 1', l1.nota1.texto, leg0, fin('pl-l1'));
+  L('l1 nota 2', l1.nota2.texto, l1.nota2.t + E_IN, fin('pl-l1'));
+  // las dos notas se leen UNA DESPUÉS DE LA OTRA: la 2 entra cuando la 1 ya tuvo su tiempo de lectura (no son 19 palabras juntas en 3,8 s)
+  const need1 = nw(l1.nota1.texto) * 0.35 + 0.3;
+  if (l1.nota2.t + E_IN < leg0 + need1 - 1e-9) errores.push(`l1: la nota 2 (legible a ${(l1.nota2.t + E_IN).toFixed(2)}) entra antes de que la nota 1 termine de leerse (${(leg0 + need1).toFixed(2)})`);
   for (const f of l1.filas) {
     const m = img[f.img];
     L(`l1 fila ${m.letra}`, `Imagen ${m.letra} · ${crs(m.cr)} ${m.cr === 1 ? 'crédito' : 'créditos'}`, f.t + 0.25, fin('pl-l1'));
     L(`l1 valor ${m.letra}`, fm(m.valor), f.t + 0.2 + 0.2, fin('pl-l1'));
   }
-  L('l2 título', l2.tag.texto, l2.tag.t + E_IN, fin('pl-l2'));
-  for (const c of l2.chips.lista) L(`l2 escena ${c.n}`, `Escena ${c.n} ${fm(c.valor)}`, c.t + 0.25, fin('pl-l2'));
+  const ru = l1.ruido; if (ru.desde !== 0.66 || ru.hasta !== 0.7) errores.push('l1.ruido: la franja es de 0,66 a 0,70 (lo que dice la nota 2)');
+  l2.cabecera.textos.forEach((t, i) => L(`l2 ${t}`, t, med['pl-l2'].a + PUSH - 0.05, fin('pl-l2')));
+  for (const f of l2.tabla.filas) {
+    L(`l2 etiqueta ${f.img}`, `Imagen ${f.img}`, f.etiqueta_t == null ? med['pl-l2'].a + PUSH - 0.05 : f.etiqueta_t + E_IN, fin('pl-l2'));
+    for (const c of f.celdas) L(`l2 ${f.img}${c.n}`, fm(c.valor), c.t + 0.25, fin('pl-l2'));
+  }
   for (const f of l2.fotos.lista) L(`l2 pie foto ${f.letra}`, `Imagen ${f.letra} · café ${fm(f.valor)}`, f.cap_t + 0.2, fin('pl-l2'));
   for (const x of lecturas) if (x.dur < x.min - 1e-9) errores.push(`lectura «${x.que}» (${x.n} palabras): ${x.dur.toFixed(2)} s y pide ${x.min.toFixed(2)} s`);
 }
@@ -231,10 +248,10 @@ for (const m of plan.medios) if (m.tipo === 'foto') {
   html += `<div id="${m.id}" class="clip ph" data-start="${f2(m.a)}" data-duration="${f2(m.b - m.a)}" data-track-index="${m.track}" style="z-index:1"><img id="${m.id}-i" src="${f.src}" data-layout-allow-overflow alt=""></div>\n`;
 }
 
-// rótulo de IA (cuadro 0 → 2,4 s)
+// rótulo de IA (cuadro 0 → 3,0 s, a 40 px)
 {
   const r = plan.rotulo;
-  html += `<div id="cc-rotulo" class="clip cc cc-top" data-start="${f2(r.a)}" data-duration="${f2(r.b + E_OUT - r.a)}" data-track-index="${nextTrack()}" style="--t:${r.top}px"><div class="cw" id="rotulo"><span class="tag"><i></i>${esc(r.texto)}</span></div></div>\n`;
+  html += `<div id="cc-rotulo" class="clip cc cc-top" data-start="${f2(r.a)}" data-duration="${f2(r.b + E_OUT - r.a)}" data-track-index="${nextTrack()}" style="--t:${r.top}px"><div class="cw" id="rotulo"><span class="tag tag-r"><i></i>${esc(r.texto)}</span></div></div>\n`;
 }
 
 // gancho: 6 miniaturas de las fotos A a F (viajan con la foto en el empuje de 6,0 s)
@@ -257,15 +274,18 @@ for (const m of plan.medios) if (m.tipo === 'foto') {
   html += FULLDIV('pl-regla', med['pl-regla'].a, med['pl-regla'].b, 4, h, 'pl');
 }
 
-// ── lección 1: las seis imágenes ordenadas por precio sobre la escala 0-1 ──
+// ── lección 1: las seis imágenes ordenadas por precio sobre la escala 0-1, la nota del ruido en dos instantes y la franja de 0,66 a 0,70 ──
 {
-  const L = plan.l1;
-  let h = cent(X(SC.piso), L.marca_label_y, `<span class="tag tag-d" id="l1-mkl"><i></i>mi piso · <b>${fm(SC.piso)}</b></span>`, 560);
-  h += cent(540, L.nota.y, `<span class="sub" id="l1-nota">${esc(L.nota.texto)}</span>`, 960);
+  const L = plan.l1, ru = L.ruido;
+  // la franja va detrás de todo; la marca, la nota 1 y los ejes están ya en la placa cuando llega (viajan con el empuje: sin entradas casi vacías)
+  let h = `<div class="ruido" id="l1-ruido" style="left:${X(ru.desde)}px;top:${L.marca_top}px;width:${X(ru.hasta) - X(ru.desde)}px;height:${L.marca_alto}px"></div>`;
+  h += cent(X(SC.piso), L.marca_label_y, `<span class="tag tag-d" id="l1-mkl"><i></i>mi piso · <b>${fm(SC.piso)}</b></span>`, 560);
+  h += cent(540, L.nota1.y, `<span class="note" id="l1-nota1">${esc(L.nota1.texto)}</span>`, 940);
+  h += cent(540, L.nota2.y, `<span class="note" id="l1-nota2">${esc(L.nota2.texto)}</span>`, 940);
   h += `<div class="mkv" id="l1-mk" style="left:${X(SC.piso)}px;top:${L.marca_top}px;height:${L.marca_alto}px"></div>`;
   L.filas.forEach((f, i) => {
     const m = img[f.img], n = i + 1, x = X(m.valor);
-    h += `<div class="rt" id="l1-t${n}" style="left:${SC.x0}px;top:${f.y - 70}px">Imagen ${m.letra} · ${crs(m.cr)} ${m.cr === 1 ? 'crédito' : 'créditos'}</div>`;
+    h += `<div class="rt" id="l1-t${n}" style="left:${SC.x0}px;top:${f.y - 68}px">Imagen ${m.letra} · ${crs(m.cr)} ${m.cr === 1 ? 'crédito' : 'créditos'}</div>`;
     h += `<div class="rl" id="l1-r${n}" style="left:${SC.x0}px;top:${f.y - 5}px;width:${SC.x1 - SC.x0}px"></div>`;
     h += `<div class="dot f${cls(m)}" id="l1-f${n}" style="left:${x}px;top:${f.y}px"></div>`;
     h += `<div class="vl${cls(m)}" id="l1-v${n}" style="left:${x + 29}px;top:${f.y - 23}px;transform:none">${fm(m.valor)}</div>`;
@@ -274,16 +294,20 @@ for (const m of plan.medios) if (m.tipo === 'foto') {
   html += FULLDIV('pl-l1', med['pl-l1'].a, med['pl-l1'].b, 4, h, 'pl');
 }
 
-// ── lección 2: B en tres escenas (0,79 · 0,35 · 0,83) y las dos fotos del café lado a lado ──
+// ── lección 2: tabla con A y B en tres escenas (A 0,81 · 0,83 · 0,84 y B 0,79 · 0,35 · 0,83) y las dos fotos del café lado a lado ──
 {
-  const L = plan.l2, C = L.chips, F = L.fotos;
-  let h = cent(540, L.tag.y, `<span class="tag tag-d" id="l2-tag"><i></i>${esc(L.tag.texto)}</span>`, 900);
-  C.lista.forEach((c, i) => {
-    h += `<div class="chip" id="l2-ch${c.n}" style="left:${C.x0 + i * (C.w + C.gap)}px;top:${C.y}px;width:${C.w}px;height:${C.h}px"><div class="rt">Escena ${c.n}</div><div class="cn${c.valor < SC.piso ? ' bajo' : ''}">${fm(c.valor)}</div></div>`;
+  const L = plan.l2, T = L.tabla, F = L.fotos;
+  let h = '';
+  L.cabecera.textos.forEach((t, i) => { h += `<div class="thd" id="l2-h${i + 1}" style="left:${L.cabecera.cx[i] - 102}px;top:${L.cabecera.y}px;width:204px">${esc(t)}</div>`; });
+  T.filas.forEach((f, fi) => {
+    h += `<div class="rl2" id="l2-r${fi + 1}" style="left:${T.etiqueta_x}px;top:${f.y + Math.round((T.h - 48) / 2)}px">Imagen ${f.img}</div>`;
+    f.celdas.forEach((c, i) => {
+      h += `<div class="chip s" id="l2-c${fi + 1}${c.n}" style="left:${T.x0 + i * (T.w + T.gap)}px;top:${f.y}px;width:${T.w}px;height:${T.h}px"><div class="cn${c.valor < SC.piso ? ' bajo' : ''}">${fm(c.valor)}</div></div>`;
+    });
   });
-  // anillo sobre el chip de la escena que perdió la cara (la del café, 0,35): enlaza el número con la foto
-  const malo = C.lista.findIndex((c) => c.valor < SC.piso);
-  h += `<div class="barring" id="l2-ring" style="left:${C.x0 + malo * (C.w + C.gap) - 8}px;top:${C.y - 8}px;width:${C.w + 16}px;height:${C.h + 16}px"></div>`;
+  // anillo sobre la celda que perdió la cara (B, escena 2 = el café, 0,35): enlaza el número con la foto
+  const fb = T.filas.findIndex((f) => f.celdas.some((c) => c.valor < SC.piso)), cb = T.filas[fb].celdas.findIndex((c) => c.valor < SC.piso);
+  h += `<div class="barring" id="l2-ring" style="left:${T.x0 + cb * (T.w + T.gap) - 8}px;top:${T.filas[fb].y - 8}px;width:${T.w + 16}px;height:${T.h + 16}px"></div>`;
   F.lista.forEach((f, i) => {
     const cx = F.cx[i];
     h += `<div class="cph" id="l2-ph${i + 1}" style="left:${cx - F.w / 2}px;top:${F.y}px;width:${F.w}px;height:${F.h}px"><img src="assets/cf-${f.foto}.jpg" alt=""></div>`;
@@ -328,8 +352,8 @@ const PLAN_JS = {
   gancho: { a: plan.gancho.miniaturas.a, esc: plan.gancho.miniaturas.escalon, ids: plan.imagenes.map((m) => m.id) },
   regla: { refs: { a: plan.regla.refs.a, esc: plan.regla.refs.escalon, n: plan.refs.recortes.length }, escala: plan.regla.escala },
   imagenes: plan.imagenes.map((m) => ({ id: m.id, a: m.tag_t, fin: m.fin, sello: m.sello || null, pastilla: m.pastilla || null })),
-  l1: { marca_t: plan.l1.marca_t, nota_t: plan.l1.nota.t, filas: plan.l1.filas.map((f, i) => ({ n: i + 1, t: f.t })) },
-  l2: { tag_t: plan.l2.tag.t, chips: plan.l2.chips.lista.map((c) => ({ n: c.n, t: c.t })), fotos: plan.l2.fotos.lista.map((f, i) => ({ n: i + 1, t: f.t, cap_t: f.cap_t })), anillo_t: plan.l2.anillo_t },
+  l1: { nota2_t: plan.l1.nota2.t, ruido_t: plan.l1.ruido.t, filas: plan.l1.filas.map((f, i) => ({ n: i + 1, t: f.t })) },
+  l2: { filas: plan.l2.tabla.filas.map((f, fi) => ({ n: fi + 1, etiqueta_t: f.etiqueta_t, celdas: f.celdas.map((c) => ({ id: `l2-c${fi + 1}${c.n}`, t: c.t })) })), fotos: plan.l2.fotos.lista.map((f, i) => ({ n: i + 1, t: f.t, cap_t: f.cap_t })), anillo_t: plan.l2.anillo_t },
 };
 const out = `<!doctype html>
 <html lang="es">

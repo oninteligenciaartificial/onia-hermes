@@ -1,7 +1,7 @@
 @font-face{font-family:"Bricolage Grotesque";src:url(assets/fonts/BricolageGrotesque-var-latin.woff2) format("woff2");font-weight:500 700;font-style:normal;font-display:block}
 @font-face{font-family:"DM Sans";src:url(assets/fonts/DMSans-var-latin.woff2) format("woff2");font-weight:400 500;font-style:normal;font-display:block}
 @font-face{font-family:"Spline Sans Mono";src:url(assets/fonts/SplineSansMono-var-latin.woff2) format("woff2");font-weight:400 500;font-style:normal;font-display:block}
-:root{--acc:{{ACC}};--bad:{{BAD}};--ink:#0A0C11;--ink2:#15181F;--txt:#F6F8FB;--mut:rgba(246,248,251,.66);--hair:rgba(255,255,255,.12)}
+:root{--acc:{{ACC}};--bad:{{BAD}};--ink:#0A0C11;--ink2:#15181F;--txt:#F6F8FB;--mut:rgba(246,248,251,.88);--hair:rgba(255,255,255,.12)}
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{width:1080px;height:1920px;overflow:hidden;background:#0A0C11}
 body{font-family:"DM Sans",sans-serif;-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision;font-variant-ligatures:none}
@@ -100,3 +100,15 @@ body{font-family:"DM Sans",sans-serif;-webkit-font-smoothing:antialiased;text-re
 /* el número es el dato de cada escena: más grande que el resto de la pastilla */
 .tag.dg{padding:8px 30px 10px}
 .tag.dg b{font-size:64px;line-height:1}
+
+/* ── 2da pasada (revisión 1) ── */
+/* rótulo de IA a 40 px (H7) */
+.tag.tag-r{font-size:40px;padding:14px 30px}
+/* la nota del ruido (lección 1): texto principal, 44 px, blanco pleno (H3+H7) */
+.note{font-family:"DM Sans",sans-serif;font-weight:500;font-size:44px;line-height:1.2;color:#F6F8FB;text-align:center;text-wrap:balance;max-width:940px}
+/* franja entre 0,66 y 0,70 sobre la escala de la lección 1 */
+.ruido{position:absolute;background:rgba(246,248,251,.15);border-left:2px solid rgba(246,248,251,.45);border-right:2px solid rgba(246,248,251,.45)}
+/* lección 2: tabla de A y B en tres escenas */
+.thd{position:absolute;text-align:center;font-family:"DM Sans",sans-serif;font-weight:500;font-size:38px;line-height:1.2;color:rgba(246,248,251,.92);white-space:nowrap}
+.rl2{position:absolute;font-family:"DM Sans",sans-serif;font-weight:500;font-size:40px;line-height:1.2;color:#F6F8FB;white-space:nowrap}
+.chip.s .cn{top:18px;font-size:64px}
