@@ -18,6 +18,7 @@
  */
 
 const { execSync, execFileSync } = require('child_process');
+const fs = require('fs');
 const os = require('os');
 const path = require('path');
 
@@ -32,22 +33,20 @@ const path = require('path');
 // fast-forward automático al soltar el turno), no a una sesión que pushee a main a propósito.
 // Pruebas: scripts/loops/pedido-rama.test.mjs.
 //
-// El de la madre vale SOLO en el clon principal (revisión de la madre al #138, 9-oct): sus procesos hijos
-// heredan la variable, y los subagentes trabajan en worktrees aparte. Sin esto, el Stop de un subagente a
-// medio terminar movía main. Un worktree se reconoce porque su git-dir no es el git-dir común.
+// El de la madre vale SOLO en el checkout que ella marcó (revisiones del #138 y del #173, 9-oct). Sus procesos
+// hijos heredan la variable y sus subagentes trabajan en otros worktrees; y la madre misma corre en un
+// worktree (`claude -w`), así que «el clon principal» no la distingue. La marca es un archivo en el git-dir
+// de SU checkout: no se versiona, no se hereda y ningún otro worktree la comparte. Se pone una vez por
+// checkout: touch "$(git rev-parse --absolute-git-dir)/onia-autosync-main".
+const MARCA_MAIN = 'onia-autosync-main';
 function puedeMoverMain(env = process.env) {
   if (env.ONIA_LOOP_ID === 'onia-cola') return true;
   if (env.ONIA_AUTOSYNC_MAIN !== '1') return false;
-  if (esClonPrincipal()) return true;
-  console.log('[autosync] permiso de main ignorado: esto es un worktree, no el clon de la madre');
+  const gd = tryGit(['rev-parse', '--absolute-git-dir']);
+  if (gd.ok && gd.out && fs.existsSync(path.join(gd.out, MARCA_MAIN))) return true;
+  console.log(`[autosync] permiso de main ignorado: este checkout no tiene la marca ${MARCA_MAIN} en su git-dir ` +
+    '(la madre la pone una vez en el suyo: touch "$(git rev-parse --absolute-git-dir)/onia-autosync-main")');
   return false;
-}
-
-function esClonPrincipal() {
-  const r = tryGit(['rev-parse', '--path-format=absolute', '--git-dir', '--git-common-dir']);
-  if (!r.ok) return false;
-  const [dir, comun] = r.out.split('\n').map((l) => l.trim());
-  return Boolean(dir) && dir === comun;
 }
 
 // Una sesión parada EN main y sin permiso no pushea main: sus commits van a esta rama, para un PR.

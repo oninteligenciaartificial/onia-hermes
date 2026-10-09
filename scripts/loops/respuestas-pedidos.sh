@@ -247,20 +247,23 @@ while read -r SHA REF; do
   bajar "$ID"; RC=$?
   if [ "$RC" = 2 ]; then
     log "❌ $ID: la respuesta pasa de $TOPE_BAJADA_KB KB; corté la descarga y no la entrego"
-    mirado "$SHA" "$ID" invalida; avisar_rechazo "$ID"; borrar_rama "$ID" "$SHA"; continue
+    avisar_rechazo "$ID" || continue      # sin el aviso, se reintenta en la próxima vuelta
+    mirado "$SHA" "$ID" invalida; borrar_rama "$ID" "$SHA"; continue
   elif [ "$RC" != 0 ]; then
     log "❌ $ID: no pude bajar la respuesta (reintento en la próxima vuelta)"; continue
   fi
-  BAJADO=$(G rev-parse --verify -q "refs/respuestas/$ID^{commit}") || { log "❌ $ID: lo bajado no es un commit"; mirado "$SHA" "$ID" invalida; avisar_rechazo "$ID"; continue; }
+  BAJADO=$(G rev-parse --verify -q "refs/respuestas/$ID^{commit}") || { log "❌ $ID: lo bajado no es un commit"; avisar_rechazo "$ID" || continue; mirado "$SHA" "$ID" invalida; continue; }
   if [ "$(G cat-file -s "$BAJADO")" -gt "$MAX_COMMIT" ]; then
     log "❌ $ID: la respuesta pesa más de $MAX_COMMIT bytes; no la entrego"
+    avisar_rechazo "$ID" || continue      # sin el aviso, se reintenta en la próxima vuelta
     mirado "$BAJADO" "$ID" invalida; [ "$BAJADO" = "$SHA" ] || mirado "$SHA" "$ID" invalida
-    avisar_rechazo "$ID"; borrar_rama "$ID" "$BAJADO"; continue
+    borrar_rama "$ID" "$BAJADO"; continue
   fi
   if ! ERR=$(G cat-file commit "$BAJADO" | python3 -c "$LEER_PY" "$ID" "$TMP/r" "$MAX_TEXTO" "$VACIO" "$SELLOS/$ID" 2>&1); then
     log "❌ $ID: respuesta con forma inválida (${ERR##*$'\n'}); no la entrego"
+    avisar_rechazo "$ID" || continue      # sin el aviso, se reintenta en la próxima vuelta
     mirado "$BAJADO" "$ID" invalida; [ "$BAJADO" = "$SHA" ] || mirado "$SHA" "$ID" invalida
-    avisar_rechazo "$ID"; borrar_rama "$ID" "$BAJADO"; continue
+    borrar_rama "$ID" "$BAJADO"; continue
   fi
   EST=$(head -n1 "$TMP/r"); TEXTO=$(tail -n +2 "$TMP/r")
   entregar "$ID" "$EST" "$TEXTO"; RC=$?

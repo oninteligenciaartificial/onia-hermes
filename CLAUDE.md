@@ -419,8 +419,8 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
   `Stop` → `node scripts/git-autosync.js`).
 - **`main` solo avanza por PR revisado** (Sergio Urcullo, 2026-10-05: *«sí, la madre sigue
   directo»*). El hook ya no hace fast-forward de `main`, salvo con permiso: la **madre** en la PC
-  (`ONIA_AUTOSYNC_MAIN=1` en el `.claude/settings.local.json` de SU carpeta, que git ignora; vale solo
-  en ese clon, no en los worktrees de sus subagentes) y el
+  (`ONIA_AUTOSYNC_MAIN=1` en el `.claude/settings.local.json` de SU carpeta, que git ignora, y además
+  la marca `onia-autosync-main` en el git-dir de SU checkout: los worktrees de sus subagentes no la tienen) y el
   **integrador** (`ONIA_LOOP_ID=onia-cola`). Una sesión parada en `main` sin permiso no lo pushea:
   sus commits van a `claude/autosync-<id de la sesión>` y la sesión queda parada en esa rama, para un PR.
 

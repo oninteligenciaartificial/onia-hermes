@@ -534,10 +534,14 @@ test("una respuesta rechazada le avisa UNA vez por pedido, sin mostrarle el text
   assert.equal(b.envios(), 2);
 });
 
-test("si la aduana no acepta el aviso de rechazo, no lo da por avisado", () => {
+test("si la aduana no acepta el aviso de rechazo, lo reintenta en la vuelta siguiente", () => {
   const b = banco({ tgFalla: true });
   b.responderCrudo(ID, "listo", "Hola", { primera: `respuesta ${ID} listo` });
   const r = b.correr();
   assert.match(r.stdout, /la aduana no aceptó el aviso de rechazo/);
   assert.equal(b.rechazosAvisados(), 0);
+  spawnSync("rm", ["-f", join(b.dir, "tg-falla")]);
+  b.correr();
+  assert.equal(b.rechazosAvisados(), 1, "la vuelta siguiente avisa");
+  assert.match(b.leer("tg-msg.txt"), /^⛔ Rechazada · p_1a2b3c4d · /);
 });

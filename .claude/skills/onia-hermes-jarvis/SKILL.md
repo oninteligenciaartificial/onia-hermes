@@ -121,10 +121,13 @@ CLI de Hermes.
   INERTE hasta encenderlo. **Mientras el cambio del 5-oct no esté en `main`,** con una rama que sale de
   `main` y un PR sin revisar: pushear a mano y soltar el turno con `git checkout --detach`. Con el hook
   nuevo en tu árbol ya no hace falta, pero no cuesta nada.
-- **El permiso de la madre vale solo en su clon principal** (revisión de la madre al #138, 9-oct): sus
-  procesos hijos heredan `ONIA_AUTOSYNC_MAIN`, y los subagentes trabajan en worktrees. Se compara
-  `git rev-parse --path-format=absolute --git-dir --git-common-dir`: en un worktree son distintos. Pide git
-  ≥ 2.31; con uno más viejo el permiso no vale (falla seguro).
+- **El permiso de la madre exige una marca en SU checkout** (revisiones de la madre al #138 y al #173, 9-oct):
+  sus procesos hijos heredan `ONIA_AUTOSYNC_MAIN`, y los subagentes trabajan en worktrees. **Intento fallido:**
+  «solo en el clon principal» (`--git-dir` == `--git-common-dir`) dejaba sin permiso a la madre real, que corre
+  en el worktree `onia-madre-v2-pr-review-2d85bb` (`claude -w`); lo encontró el revisor del #173. Ahora vale
+  con la variable Y el archivo `onia-autosync-main` en `git rev-parse --absolute-git-dir` de ese checkout: no
+  se versiona, no se hereda y ningún otro worktree lo comparte. Residuo: un worktree en una rama anterior
+  al #138 corre el autosync viejo, que movía main sin mirar nada.
 - **Una respuesta rechazada avisa, una vez por pedido** («⛔ Rechazada · id · link», sin el texto rechazado;
   9-oct). Antes se descartaba en silencio. «⚠️ Respuesta rechazada» con un link real pasaba los 90 bytes y
   la aduana guardaba solo el emoji: la etiqueta se eligió por bytes, no por gusto.
