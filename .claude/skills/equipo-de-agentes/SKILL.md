@@ -114,6 +114,10 @@ actos legales o firmas (los hace Leslie Mercado Moreno) y su cara o su voz en se
 ## 8. Trampas ya pagadas
 
 - `vitest related` no alcanza: corre la suite completa.
+- **`--union` en una cola de casillas reabre lo hecho** (9-oct, `docs/cola/loop/hermes-jarvis.md`, merge `034533d4`). La unión
+  juntó la copia vieja (`- [ ]`) con la de `main` (`- [x]`): volvieron a aparecer como abiertas 3 tareas hechas y la
+  sección de verificación salió dos veces. En `docs/cola/**` y `docs/handoff/**` no se usa `--union`: se toma la versión
+  de `main` y se le suma a mano lo nuevo de la otra rama.
 - En W1b, K2 y K3 (9-oct), la suite en el sandbox dio ~148 rojos y en la PC, 0. No extrapolar: verificar cada entorno y conservar los errores; manda el gate completo válido de esa entrega.
 - Git Bash convierte `'/dir/'` en una ruta de Windows: usar `MSYS_NO_PATHCONV=1` para el sparse.
 - La nube no puede pushear ramas nuevas a onia-platform: deja bundles y la madre los sube.
