@@ -232,6 +232,7 @@ Se trabaja en la app de Claude; Codex corre por detrás. Codex no orquesta, no a
   y los ratchets de UI y de voseo solo los atrapa la suite completa. Así se escaparon tres rojos de C16b y C16d después
   de que la madre los dio por buenos con `related` (1002/1002). Antes de commitear: `npx vitest run` COMPLETO y
   `npx tsc --noEmit`, con los números en el commit. Si el tsc falla por el cliente Prisma compartido, se dice.
+- **El push va DESPUÉS del resultado de la suite, en el mismo comando con `&&`** (9-oct, S1b: con `;` se pusheó con 57 rojos). Si la máquina está cargada, los tests que lanzan procesos (`backup-onia-postgres`, `rango-gitleaks`, `qa-v1/snapshot`) fallan por tiempo: se corren solos antes de dar el rojo por bueno.
 - **Plataforma (nube) no puede pushear ramas nuevas a onia-platform** (9-oct): deja la rama en un bundle en `hermes-content/docs/cola/ramas-locales/*.bundle`. La madre la trae (`git fetch <bundle> refs/heads/X:refs/heads/X`), la pushea y abre el PR con el texto que dejó en `docs/cola/pr-*.md`.
 - **La suite de Codex siempre da ~148 rojos y la de la madre, 0** (W1b, K2 y K3, 9-oct). En el sandbox, los subprocesos
   dan `EPERM` y fallan tres pruebas de zona horaria. El gate es la corrida COMPLETA de la madre en la PC, no la de Codex.
