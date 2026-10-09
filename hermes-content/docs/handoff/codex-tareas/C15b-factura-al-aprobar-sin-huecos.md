@@ -3,11 +3,14 @@
 Sos Codex. SOLO `onia-platform`, sobre la rama `codex/punto-15-factura-al-aprobar` (onia-platform#114). Anotá el SHA base.
 
 ## META
-La revisión de Plataforma (9-oct) encontró que #114 mergea limpio con `master` pero falla el gate de usted, y que el
+La revisión de Plataforma (9-oct) encontró que #114 falla el gate de usted (y desde K3b, el 9-oct, también choca con `master`: paso 0), y que el
 registro de la factura tiene huecos que en la práctica dejan cobros sin factura (riesgo de clausura de 6 a 48 días).
 Lo bueno se queda: solo SUPERADMIN llega, aprobar dos veces activa el plan una sola vez, la migración es aditiva.
 
 ## Lo que se hace
+0. **Mergear `master`** (actualizado el 9-oct 09:30 UTC: ya NO entra limpio). Desde K3b (#134) choca
+   `app/api/auth/register/route.test.ts`: los dos lados sumaron tests al final. Quedarse con los tres (primero
+   «K3b: semilla fallida…», después los dos «C15: …»), cada `it` con su `});`. Correr ese archivo antes de seguir.
 1. **De usted** (hoy rompe `__tests__/voseo-ratchet.test.ts`; NO subir la línea base):
    - `app/(dashboard)/admin/payments/AdminPaymentReviewClient.tsx:232` «Emití…» → «Emita…»;
    - `lib/subscription/factura-del-pago.ts:14` «Escribí…» → «Escriba…»;
