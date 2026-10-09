@@ -118,6 +118,11 @@ actos legales o firmas (los hace Leslie Mercado Moreno) y su cara o su voz en se
 - Git Bash convierte `'/dir/'` en una ruta de Windows: usar `MSYS_NO_PATHCONV=1` para el sparse.
 - La nube no puede pushear ramas nuevas a onia-platform: deja bundles y la madre los sube.
 - Disco: `df -h /c` antes de bajar videos. Codex falla con menos de 1 GiB libre.
+- Memoria de la PC (9-oct): el commit estaba en 39,5 de 40,8 GB con solo ~13 GB en procesos. El resto era **paged pool del
+  kernel en 17 GB** (normal: menos de 1 GB), una fuga de driver que solo se libera reiniciando. Medir con
+  `Get-CimInstance Win32_PerfRawData_PerfOS_Memory` (`PoolPagedBytes`), no con el Administrador de tareas. Sospechoso:
+  Avast; el antivirus no lo toca la madre. Cerrar Chrome, WhatsApp, Ollama, OneDrive y `find /` colgados liberó ~3 GB.
+  `ChatGPT.exe` en `OpenAI.Codex_*` ES la app de Codex: no se cierra.
 - `SendMessage` con nombre viejo falla: `ListAgents` primero.
 - HyperFrames en esta PC: el Chrome que trae da `EFTYPE`. Renderizar con
   `HYPERFRAMES_BROWSER_PATH="C:/Program Files/Google/Chrome/Application/chrome.exe" npx hyperframes render`
