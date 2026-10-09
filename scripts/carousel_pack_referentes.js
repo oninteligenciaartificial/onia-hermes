@@ -83,7 +83,11 @@ function crear({ esc, emph, ACCOUNTS, BRAND, getFmt }) {
       + `var max=document.documentElement.clientWidth-2*84,f=parseFloat(getComputedStyle(k).fontSize);`
       + `k.style.whiteSpace='nowrap';k.style.display='inline-block';`
       + `while(k.getBoundingClientRect().width>max&&f>60){f-=3;k.style.fontSize=f+'px';}});</script>`;
-    return `<div class="c-cierre"><p class="pre">Comentá</p><div class="kw"${kwSize}>${esc(kw)}</div><p class="sub2">${emph(s.body || '')}</p></div>${fit}`;
+    // `pre` cambia el verbo de arriba (por defecto «Comentá»; «Buscá» para «Buscá X en Avisos · link en mi perfil», 9-oct) y
+    // `kicker` suma una frase corta arriba del verbo. Sin esos campos la lámina sale igual que siempre.
+    const pre = s.pre != null ? String(s.pre) : 'Comentá';
+    const kicker = s.kicker ? `<p class="kick">${emph(String(s.kicker))}</p>` : '';
+    return `<div class="c-cierre">${kicker}<p class="pre">${esc(pre)}</p><div class="kw"${kwSize}>${esc(kw)}</div><p class="sub2">${emph(s.body || '')}</p></div>${fit}`;
   }
 
   const LAYOUTS = { logos: logosHtml, analogia: analogiaHtml, ensayo: ensayoHtml, ilustrado: ilustradoHtml, lista: listaHtml, dato: datoHtml, captura: capturaHtml, cierre: cierreHtml };
@@ -188,6 +192,7 @@ body{margin:0;font-family:'DM Sans',system-ui,sans-serif}
 .shot-img{display:block;width:100%;max-height:760px;object-fit:contain}
 /* cierre */
 .c-cierre{display:flex;flex-direction:column;align-items:center;text-align:center}
+.c-cierre .kick{font-family:'Bricolage',sans-serif;font-weight:700;font-size:58px;line-height:1.1;margin:0 0 44px;max-width:860px;text-wrap:balance}
 .c-cierre .pre{font-family:'Caveat',cursive;font-size:72px;color:var(--soft)}
 .c-cierre .kw{font-family:'Bricolage',sans-serif;font-weight:800;font-size:170px;letter-spacing:.06em;line-height:1;background:var(--mark);color:var(--mark-ink);padding:26px 50px 34px;border-radius:28px;margin:10px 0 18px}
 .compacta ul{gap:18px;margin-top:40px}.compacta li{padding:20px 30px}.compacta b{font-size:42px}.compacta li span{font-size:34px}.compacta .li-n{width:68px;height:68px;font-size:46px}.compacta .li-icon{width:76px;height:76px}

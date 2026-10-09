@@ -340,3 +340,44 @@ Abajo está el checklist. Contame en General: ¿cuál es la tuya?
 La que aparezca en 2 o más respuestas: esa va primero.
 Contá la tuya en General 👇
 ```
+
+## ARCHIVOS · Los 5 archivos que uso antes de programar con IA
+
+**Para Sergio Urcullo:** Los 5 archivos que dejo en un repo antes de pedirle código a una IA (reglas, encargo, método, estado y tarea), con una plantilla de tarea para copiar. Es el recurso del carrusel «Los 5 archivos»: se pega ANTES de que el carrusel salga. Fuera del orden del 10 al 16: el carrusel espera tu OK y fecha.
+
+**Aviso** (se pega primero):
+
+```
+🗂️ *ARCHIVOS* · *Los 5 archivos que uso antes de programar con IA*
+
+Antes de pedirle código a la IA, le dejo por escrito qué puede cambiar y cómo voy a revisar el resultado. Son cinco cosas en mi repo: las reglas, el encargo, el método, el estado y la tarea.
+
+Abajo: la lista y una plantilla de tarea para copiar.
+
+Contame en General: ¿cuál de los cinco te falta?
+```
+
+**Recurso** (se pega después, en otro mensaje; cada línea sale de un archivo real del repo, ver `hermes-content/carousels/briefs/assets/sergio-cinco-archivos-20261009/capturas.json`):
+
+~~~
+*ARCHIVOS* · *Antes de programar con IA: las 5 entradas y la plantilla de tarea*
+
+1. Reglas del proyecto: el objetivo y los permisos, en CLAUDE.md.
+2. Encargo del agente: el alcance y dónde para, en AGENTS.md.
+3. Método: la skill adecuada dentro de .claude/skills/.
+4. Estado: el handoff con lo hecho, lo que falló y el siguiente paso.
+5. Tarea: un cambio con META, PRUEBA DE HECHO y REGLA DE PARADA.
+
+CLAUDE.md y AGENTS.md no se duplican: AGENTS.md remite a las mismas reglas. Y no todos se leen siempre: cargá solo lo que corresponde al trabajo.
+
+Plantilla mínima para tu siguiente tarea:
+```
+META: [un cambio concreto]
+FUENTES: [reglas, skill y estado que debe leer]
+PRUEBA DE HECHO: [resultado observable o test]
+REGLA DE PARADA: [límites y cuándo entregar]
+```
+
+Los archivos orientan al agente: no garantizan que acierte. Revisá y probá el cambio.
+Contame en General: ¿cuál de los cinco te falta?
+~~~

@@ -2,6 +2,26 @@
 
 **Archivo único del carril.** Actualizado 2026-09-29 por Claude (Opus 5.5).
 
+## ▶ 9-oct (día, 12) — carrusel «Los 5 archivos»: renderizado, falta el OK de Sergio Urcullo
+
+- **Pedido de la madre (9-oct):** carrusel A «Los 5 archivos que uso antes de programar con IA» (7 láminas, capturas reales del
+  repo, sin cara generada de Sergio Urcullo), aviso ARCHIVOS y OK de Sergio antes de agendar. El reel B va al próximo lote de
+  grabación. No se toca el orden del 10 al 16.
+- **Hecho:** brief `carousels/briefs/marca-personal/sergio-cinco-archivos-20261009.json`, 6 capturas en
+  `carousels/briefs/assets/sergio-cinco-archivos-20261009/` (salen de `capturas.json` con `scripts/marca-personal/captura-editor.py`),
+  láminas en `carousels/out/sergio-cinco-archivos-20261009/slide-01..07.png`, vistas enteras en hoja de contactos. Cierre:
+  «Buscá ARCHIVOS · en Avisos · link en mi perfil» (opciones `pre` y `kicker` nuevas en el layout `cierre`, con test).
+  Aviso + recurso ARCHIVOS en `AVISOS-COMUNIDAD-8-16-OCT.md` y en el artefacto «Comunidad e historias» (sección «Aparte»).
+- **Portada y cierre:** salieron con el árbol de archivos real (fallback de la madre), no con foto `fotobn` (2 cr). Se generan solo
+  si Sergio Urcullo lo pide.
+- **Sin agendar y sin publicar.** Fecha propuesta: sáb 17-oct 16:00 La Paz (fuera del 10–16). El aviso se pega ANTES.
+- **Hallazgo que decide Sergio Urcullo:** los 8 carruseles ya agendados cierran con «Comentá X»; el mecanismo comentario→DM no
+  está probado (2 rechazos de Meta). Propuesta: cambiarlos a «Buscá X en Avisos · link en mi perfil». El de N03 sale vie 9
+  16:00 La Paz. Si dice sí: editar los 8 briefs (cierre `pre`/`body` + último párrafo del caption), rerenderizar y reemplazar solo
+  `slide-08.png` y `caption.txt` en `/root/publicar/car-<slug>/` del VPS.
+- **Falta (no es de esta pieza):** capturas oficiales y pizarra para N07, C5 `/hooks` y C6 para D03-A (las trae la madre), el bruto
+  de ambos (vie 9 antes de las 18:00), los avisos que quedan por reescribir.
+
 ## ▶ 9-oct (madrugada, 11) — guiones v3 de la madre: qué hice y qué falta antes de editar
 
 - **Pedido de la madre (8-oct noche):** los 16 guiones del 10 al 16-oct están en v3 (rama `claude/onia-madre-v2-pr-review-2d85bb`,

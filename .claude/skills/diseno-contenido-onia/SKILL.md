@@ -118,6 +118,19 @@ lámina sale SIN título. `"next": ""` saca la flecha «seguí» (para historias
   ya era falsa (reemplazado por Antigravity CLI para el plan gratis el 18-jun) aunque el README seguía diciendo gratis.
   Manda el banner/blog oficial más nuevo, no el README.
 - **El pack no tiene layout de código ni monoespaciada.** Un bloque de código real necesita una captura.
+  **Capturas de líneas reales del repo (9-oct, carrusel «Los 5 archivos»):** `scripts/marca-personal/captura-editor.py --spec
+  capturas.json --out <carpeta>` lee las líneas `desde..hasta` de cada archivo y las pinta en un panel de editor oscuro
+  (verde de marca, sin rojo): la captura no puede parafrasear y se rehace sola si el archivo cambia. `{ruta:…}` verifica
+  que la ruta exista, `{n:dir}` cuenta entradas. Trampas pagadas: `--out` relativo da `ERR_INVALID_URL` (PNG de página de
+  error de ~24 KB; solo se vio mirando la hoja de contactos) y un `.p` con alto fijo hace que el alto medido sea el de la
+  ventana. El layout `captura` del pack no tiene panel de código: una captura del repo entra como imagen.
+- **`carousel_render.js` sin `--out` escribe en `./out/` del cwd, y `out/` de la raíz está VERSIONADO** (63 archivos de
+  Lucía). Pasá siempre `--out hermes-content/carousels/out/<slug>`; si se te escapa, borrá solo los `slide-*.png` sin
+  trackear (`git ls-files --others --exclude-standard out`), nunca `rm -rf out` (9-oct: lo borré y lo restauré con
+  `git checkout -- out`).
+- **Cierre del carrusel sin «Comentá»:** `cierre` acepta `pre` (por defecto «Comentá») y `kicker` (frase grande encima).
+  «Buscá ARCHIVOS · en Avisos · link en mi perfil» no promete un mecanismo de comentario→DM sin probar (CLAUDE.md,
+  contenido en redes). El caption repite el mismo cierre.
 - **Foto con fondo gris en `analogia`**: el `multiply` solo borra el blanco puro y queda un recuadro gris. Sacale el fondo
   antes o elegí otra foto.
 

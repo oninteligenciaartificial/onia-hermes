@@ -109,6 +109,12 @@ test('referentes: cada layout renderiza y uno desconocido falla claro', () => {
   for (const theme of ['blanco', 'verde', 'negro']) assert.ok(referentesHtml({ layout: 'ensayo', body: 'b' }, 0, 1, 'sergio', { theme }).includes(`t-${theme}`), theme);
   assert.throws(() => referentesHtml({ layout: 'ensayo', theme: 'rosa' }, 0, 1, 'sergio', {}), /theme desconocido/);
 });
+test('referentes cierre: «Comentá» por defecto; `pre` y `kicker` cambian el verbo y suman una frase (9-oct)', () => {
+  const base = referentesHtml({ layout: 'cierre', keyword: 'HOOK', body: 'y te paso el link' }, 0, 1, 'sergio', {});
+  assert.ok(base.includes('<p class="pre">Comentá</p>') && !base.includes('class="kick"'));
+  const nuevo = referentesHtml({ layout: 'cierre', pre: 'Buscá', kicker: 'La IA también necesita *límites*.', keyword: 'ARCHIVOS', body: 'en Avisos · link en mi perfil' }, 0, 1, 'sergio', {});
+  assert.ok(nuevo.includes('<p class="pre">Buscá</p>') && nuevo.includes('class="kick"') && !nuevo.includes('Comentá'));
+});
 test('community-editorial usa la cuenta elegida y CTA directo para pauta', () => {
   const html = communityEditorialHtml({
     role: 'cta',
