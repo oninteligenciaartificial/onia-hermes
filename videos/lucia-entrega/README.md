@@ -22,6 +22,19 @@ SHA-256 de lo entregado:
   de promedio y 43,8 dB en el peor cuadro, o sea sin diferencia visible; misma duración (58,00 s), 24 fps, audio silencioso copiado.
 - Todos son 1080×1920, H.264 + AAC (silencioso: D4, sin voz ni música), 24 fps.
 
+## Orden y ritmo (plan v5 §5: hasta 3 piezas por semana, 19:00 La Paz)
+
+| Semana | Pieza | Por qué en ese orden |
+|---|---|---|
+| 1 · día 1 | **G1** (reel) | Abre la cuenta: enseña el método y declara la IA en el cuadro 0 |
+| 1 · día 1-2 | **L01** (carrusel, se fija) | Presentación; va **después** de G1 y se fija al perfil |
+| 1 · día 3-4 | **G3** (reel) | Errores que atrapé: confianza y el dato que más se guarda |
+| 2 · día 1 | **C1** (carrusel) | Repite G1 en formato guardable con la orden real |
+| 2 · día 3 | **G2** (reel) | La prueba de los seis clips; usa lo aprendido en G1/G3 |
+| 2 · día 5 | **G4** (reel; cuando la madre valide el guion) | Seis motores de imagen |
+
+El token de Instagram de Lucía vence entre el 13 y el 18-oct: **la primera pieza tiene que salir antes**, o hay que renovarlo.
+
 ## Carrusel L01 «Hola, soy Lucía. No existo.» (presentación, va fijado después de G1)
 
 - Láminas: `hermes-content/carousels/out/lucia-l01-hola-no-existo-foto/slide-01..05.png` (1080×1350). Pie: campo `caption` +
