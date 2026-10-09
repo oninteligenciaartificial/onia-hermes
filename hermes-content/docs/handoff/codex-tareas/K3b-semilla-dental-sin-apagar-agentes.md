@@ -1,5 +1,8 @@
 # K3b · La semilla dental no apaga los agentes ni puede tumbar el alta (arreglo de #134)
 
+> **HECHO el 9-oct** (`b1fe73a5`). Revisado por Plataforma: la semilla ya no crea agentes (recall nace encendido en
+> «suggest»), corre después del alta y no la puede tumbar. Queda un detalle en un camino sin uso: `K3c`.
+
 Sos Codex. Rama `codex/semilla-dental` del PR #134 (la misma). `git branch --show-current` primero y `git merge origin/master`.
 
 > **Sigue abierto al 9-oct 06:20 UTC** (medido sobre `7c7e16df`, con K23b ya hecho): `semilla-dental.ts:65-72` sigue

@@ -1,5 +1,8 @@
 # K2b · Reprogramador a 30 días sin pisar al detector de tratamiento a medias (arreglo de #133)
 
+> **HECHO el 9-oct** (`9f6b737f`). Revisado por Plataforma: reparte a cada persona antes de las dos pasadas, con los
+> seis casos pedidos (borde 30/31 incluido). Suite completa 9.821 en verde, tsc 0, eslint 0.
+
 Sos Codex. Rama `codex/recuperar-canceladas` del PR #133 (la misma). `git branch --show-current` primero y `git merge origin/master`.
 
 > **Sigue abierto al 9-oct 06:20 UTC** (medido sobre `6506d072`, con K23b ya hecho): `REPROGRAMAR_VENTANA_DIAS = 30`
