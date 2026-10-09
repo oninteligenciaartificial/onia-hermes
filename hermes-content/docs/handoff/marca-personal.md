@@ -2,6 +2,18 @@
 
 **Archivo único del carril.** Actualizado 2026-09-29 por Claude (Opus 5.5).
 
+## ▶ 9-oct (noche, 16) — N03 «modo auto» verificado en las 4 redes; la restricción de IG ya no bloqueó el reel
+
+- **Medido 22:51 UTC (solo lectura: `journalctl -u pub-n03-*` y `buffer-post.mjs --estado`):** el reel N03 salió en las 4 redes, todas con `error: null`.
+  IG https://www.instagram.com/reel/DeSlht_Dhe7/ (22:31 UTC) · TikTok https://tiktok.com/@sergiourcullom/video/7694800291853602066 ·
+  YouTube https://www.youtube.com/shorts/doLZfxVs98o · LinkedIn https://www.linkedin.com/feed/update/urn:li:ugcPost:7514452990985129984.
+- **Lo que cambia respecto de la entrada 15:** el reel SÍ publicó en IG a las 22:31, así que la restricción dejó de bloquear entre las 20:00 y las
+  22:31 UTC. No sé si la levantó Sergio Urcullo o si solo afectaba al carrusel. Hasta que él lo confirme, no se da por resuelta.
+- **Sigue sin salir:** el carrusel de hoy en IG (`car-20261009`). No lo re-agendé: su lámina 8 usa el cierre «Comentá X» (decisión de Sergio Urcullo
+  pendiente: «Buscá X en Avisos») y llegaría 20 min después del reel del mismo tema. Los carruseles del 10 al 16-oct siguen agendados.
+- **Aprendizaje (skill `onia-infra`/README del publicador):** para saber si una restricción de IG sigue viva no hace falta publicar: el siguiente
+  timer real es la prueba. Mirar `publicado.jsonl` y `journalctl -u pub-<id>` después de cada hora de publicación.
+
 ## ▶ 9-oct (noche, 15) — Instagram de @sergiourcullo restringida: el carrusel de las 16:00 no salió en IG
 
 - **Qué pasó (medido, solo lectura en el VPS, 20:28 UTC):** el timer `pub-car-20261009` (carrusel N03, 20:00 UTC) terminó en `failed` a los 6 s:
