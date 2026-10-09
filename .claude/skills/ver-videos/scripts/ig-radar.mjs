@@ -71,6 +71,8 @@ if (args.includes('--feed')) {
 
 for (const u of (opt('--cuentas', '') || '').split(',').map((s) => s.trim().replace(/^@/, '')).filter(Boolean)) {
   const r = await fetch(`https://www.instagram.com/api/v1/users/web_profile_info/?username=${encodeURIComponent(u)}`, { headers: H });
+  // 429 = sesión limitada: seguir pidiendo la alarga (SKILL.md, «se para hasta mañana»).
+  if (r.status === 429) { console.error(`${u}: HTTP 429, corto el radar hasta mañana`); break; }
   if (!r.ok) { console.error(`${u}: HTTP ${r.status}`); await espera(2000); continue; }
   const edges = (await r.json()).data?.user?.edge_owner_to_timeline_media?.edges ?? [];
   for (const e of edges.slice(0, max)) agregar(`@${u}`, e.node);
