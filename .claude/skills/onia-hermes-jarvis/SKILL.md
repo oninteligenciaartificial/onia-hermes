@@ -290,6 +290,10 @@ CLI de Hermes.
   `onia-vps.sh` (el shim que crea `instalar-homelab.sh`) tenía fuente y pidió desplegarla. El `poner`
   que pedía habría pisado el shim con un script roto. Se renombró el atajo (`vps-desde-windows.sh`).
   Antes de agregar un `poner`, se abre la «fuente» y se mira si de verdad es esa herramienta.
+  **Desde el 9-oct el test lee las carpetas de los `poner`**: un `x.sh` sin prefijo cuenta como fuente
+  de `onia-x.sh` solo si está en una carpeta desde la que el sync ya copia (`scripts/loops/`,
+  `scripts/kanban/`, `hermes-content/deploy/vps-ops/`…). Con el nombre exacto (`onia-x.sh`) cuenta en
+  cualquier lado. Y cada `poner` a `/root/bin` tiene que apuntar a un archivo versionado.
 - **En esta nube, un proceso muerto puede seguir «vivo» para `kill(pid, 0)`** (2-oct). El PID 1 del
   contenedor (`process_api`) no recoge huérfanos: un nieto matado con SIGKILL queda en
   `State: Z` para siempre. Una prueba de «el árbol murió» tiene que tratar al zombi como muerto
