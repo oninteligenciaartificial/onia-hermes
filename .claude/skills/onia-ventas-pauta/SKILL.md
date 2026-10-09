@@ -1,6 +1,6 @@
 ---
 name: onia-ventas-pauta
-description: "Invocar para CUALQUIER trabajo del carril Ventas y pauta de Onia: prospectar negocios con señal (Biblioteca de Anuncios de Meta), escribir o verificar mensajes 1:1 y respuestas a leads, el guion de demo, el registro de objeciones, las piezas del anuncio (D1/D4) y la campaña de Meta en ONIA Ads. Dice qué ya está medido para no volver a investigarlo: método, comandos, trampas e intentos fallidos con su fecha."
+description: "Invocar para CUALQUIER trabajo del carril Ventas y pauta de Onia: prospectar negocios con señal (Biblioteca de Anuncios de Meta), escribir o verificar mensajes 1:1 y respuestas a leads, el guion de demo, el registro de objeciones, las piezas del anuncio (A1/A2/D4, G1-G5), un VSL o video de venta, y la campaña de Meta en ONIA Ads. §9 es el método «anuncio que vende» de punta a punta (investigar, promesa verificada, guion, creativo, QA, prueba y métricas). Dice qué ya está medido para no volver a investigarlo: método, comandos, trampas e intentos fallidos con su fecha."
 ---
 
 # Ventas y pauta — lo que ya se sabe
@@ -535,3 +535,130 @@ de cada ficha. Cinco subagentes en paralelo, uno por grupo, y después un verifi
 - **Cada «toma» lleva dónde va y su evidencia** (id del video o del anuncio). **Antes de escribir la versión Onia, se cruza con
   `ONIA_PROMESA_VS_PRODUCTO.md`.** Caso: la ficha de Lety propuso un reel «conectá tu WhatsApp → cobrá por QR», y las dos están
   fuera de lo que se promete (J-* ❌, y el QR es para pagarle a Onia).
+
+## 9. Anuncio que vende, de punta a punta (método del 8-oct)
+
+> Pedido de Sergio Urcullo (8-oct): *«quiero que aprendas a hacer anuncios que venden, ayudame a hacer mi VSL, mis
+> campañas»*. Esta sección junta lo medido en §2-§8 con lo aprendido ese día de 14 videos de venta (subtítulos, sin
+> imagen) y de los repos públicos de copy. Seis pasos; **no se salta ninguno**. Piezas ya escritas con este método:
+> `sales-kit/06-VSL-DENTAL.md` (Onia, de usted), `references/marca-personal/VSL-ASESORIA-GRATIS.md` (marca personal,
+> de vos) y el plan de campañas en `ONIA_ADQUISICION_Y_PAUTA.md` §5.11.
+
+### 9.1 Investigar (antes de escribir una línea)
+
+- **Competencia en Meta:** Biblioteca por `page_id` (§8.2) y las capturas de la madre (§4.1). La única señal pública es
+  la **antigüedad**: se aprende de lo que dura más de 30 días, no de lo nuevo ni de lo lindo (§4.1, 2-oct).
+- **Lo que repiten los que duran** (`research/competencia/COMUNICACION_Y_PAUTA_COMPETENCIA.md` §2, 8-oct): un concepto
+  en 2-5 copias; una persona en cuadro con poca producción; la primera línea habla de la plata o el tiempo del dueño y
+  nombra su rubro; producto real; un solo CTA de baja fricción; tandas nuevas cada 2-4 semanas.
+- **VSL de referencia (medidos el 8-oct por subtítulos, sin ver imagen):** Gadzhi `pPpb4t2eV2M` (45 min, 76 % enseña
+  y demuestra, la oferta entra al 80 %); Hormozi `qsXxckCbci0` (la venta son 80 s al 21 % de un video educativo),
+  `Mst4hreQYl0` (imán de leads y escasez por capacidad real) y `pxVeOkOVr2w` (oferta: creíble, retorno claro, negocio
+  detrás de lo gratis); nicho dental: Dentalink `kUgUqHQ83ww` y `EWEv30Q-tm4` (demo por beneficio, sin precio),
+  Doctocliq `M9Dc_C6XP48` (spot de 2 min con plan gratis), AgendaPro `prAcMK4yt8c` (el dueño cuenta su caso).
+  **En software clínico en español no apareció ningún VSL clásico** (precio + garantía + urgencia): se vende con demo
+  y prueba gratis. El VSL largo de oferta es de infoproductos y coaching de ticket alto.
+- **Cómo se bajan sin navegador:** `ver-videos` (§8.2). Subtítulos con `yt-dlp --skip-download --write-auto-subs
+  --extractor-args "youtube:player_client=android"`; los traducidos dan 429: solo los originales. **Lo que se baja va
+  al repo** (`references/video-intake/`), nunca solo al scratchpad: se borra.
+
+### 9.2 Ángulo y promesa verificada
+
+1. **Un dolor del dueño con consecuencia en plata o tiempo**, en su rubro: «un paciente que no confirma es un sillón
+   vacío», «un cobro que nadie recuerda es plata que no entra». Si el copy sirve igual para cualquier negocio, se
+   rechaza (CLAUDE.md, «Publicidad que no parezca hecha por IA»).
+2. **Cada frase se ata a una fila de `ONIA_PROMESA_VS_PRODUCTO.md`** y se escribe en una tabla `frase | fila | estado`.
+   Solo sale lo que está en ✅. Lo ⬜ se escribe marcado **«cuando esté en verde (fila X)»**; lo ❌ no se escribe.
+3. **Lo que está en ✅ al 8-oct (19 filas), y es todo lo que hoy se puede decir:** 5 rubros (A-02) · 14 días sin
+   tarjeta (A-04) · si no le sirve no paga (A-08) · sin instalar, desde el navegador (A-10) · «sistema de gestión con
+   IA» solo como lema, nunca en el titular (G-14) · precios, pago semanal/mensual/anual, precio final en bolivianos,
+   sin implementación, sin permanencia, topes de fichas y usuarios (K-01 a K-07) · agentes incluidos desde Crece
+   (K-11) · reservas online (K-12) · los datos son del cliente, no se venden ni entrenan IA (L-02) · empresa
+   registrada con NIT (L-03) · L-09, L-10, L-12. **Ninguna función operativa** (agenda, ficha, cobros, Pendientes)
+   está vista todavía: falta la cuenta de prueba (§6.1).
+4. **No se dice nunca** (catálogo §7-§8): tratamiento a medias (D-03), agente de WhatsApp (J-*), factura SIAT, envío
+   por WhatsApp (G-03 🟡), «la IA escribe cada mensaje», testimonios, cifras de clientes, «una clínica de ejemplo»
+   (L-05), competidores. ⚠️ **A1 v5 dice «lo aprueba y lo envía, con un toque»**: eso es G-03 (🟡) y no está en sus
+   filas exigidas. Se corrige antes de subir (8-oct).
+
+### 9.3 Guion: seis tramos, en este orden
+
+| Tramo | Regla | De dónde sale |
+|---|---|---|
+| **Gancho + filtro** (0-3 s) | Titular y filtro («Para dueños y dueñas de clínicas dentales de Santa Cruz») en el **cuadro 0**. El gancho tiene 3 partes que **no se repiten** entre sí: lo que se ve, lo que se dice, el texto en pantalla | §4.2; `ad-creative/references/hook-system.md` (global, «A Hook Is Three Components») |
+| **Problema** | 1 dolor (2-3 en el VSL largo), con su consecuencia. Sin cifras propias: no hay | §4.1; catálogo §7 |
+| **Mecanismo** | Qué hace Onia, con el nombre de la pantalla («Pendientes»), en el idioma del catálogo §8.3 | catálogo §8 |
+| **Prueba en UI real** | Pantalla de la cuenta demo, **la misma persona de ejemplo en todas**, rótulo con el módulo y un anillo sobre el dato. Nunca pantallas generadas | CLAUDE.md «producto visible»; §4.2 |
+| **Oferta** | Solo filas ✅: 14 días sin tarjeta, si no le sirve no paga, precio final en bolivianos, sin permanencia. **Sin el número del precio** en la pieza (no se actualiza solo) | `ONIA_ADQUISICION_Y_PAUTA.md` §5.4; Dentalink, Hormozi y Gadzhi no dicen precio |
+| **CTA único** | Una acción **según dónde se ve la pieza**: en pauta, «Escríbanos por WhatsApp: en 20 minutos vemos si le sirve»; en el VSL largo que ya está dentro del chat, «Reserve los 20 minutos» (la persona ya escribió; pedirle que escriba otra vez no lleva a nada). En la marca personal: «link en mi perfil». Si la apertura nombra un dolor, el titular escrito es el filtro y no repite lo dicho | COMUNICACION §3; `PLAN-REFERENTES.md` §1 |
+
+- **Duración:** pauta de 10 a 35 s, nunca más de 60 s (COMUNICACION §4 regla 2). El VSL de 3-5 min **no va a la
+  pauta**: va al chat de WhatsApp después de calificar y al «Ver cómo funciona» de la página para clínicas.
+- **Lo que hacen todos los VSL medidos y se copia:** dan antes de pedir (demo, regalo); prometen una duración y la
+  cumplen; filtran en los primeros 20 s; dicen de frente qué ganan ellos (Gadzhi, 2:20); la venta llega tarde y corta;
+  escasez **solo por capacidad real** (cupos, horas de Sergio Urcullo), nunca cuenta regresiva.
+- **Lo que no se copia:** «la gran mentira», culpar a otros, «solo hoy» sin motivo (fórmula Benson, `pnUQsUA1LRs`);
+  los motivos inventados de urgencia de Hormozi; promesas de ingreso (Gadzhi); testimonios y cifras de alumnos.
+- **De usted** en Onia (§1; el «usted» en anuncios espera la decisión de Sergio Urcullo); **de vos** en la marca
+  personal. La pauta de Onia **no** usa el estilo de la marca personal (§4, rechazo v2).
+
+### 9.4 Creativo: formato y herramienta
+
+| Pieza | Herramienta | Nota |
+|---|---|---|
+| Estático 4:5 / 9:16 / 1:1, video sin persona de ~11 s | `scripts/anuncio-render.js` y `anuncio-video.js`, plantilla `bloques` (§4.2-4.3) | La nube lo rinde sola (~33 s) |
+| Persona + pantalla (selfie G4, VSL corto) | `editor-videos` (**tabla de cortes + preview 360p ANTES de cortar**) y HyperFrames para rótulos y tarjetas (`talking-head-recut`) | Bruto a Drive «Videos Onia Octubre» con el código en el nombre |
+| VSL largo (3-5 min) | `editor-videos` + `hyperframes` + `embedded-captions` | Un cambio visual cada 2-4 s; rótulo por módulo |
+| Grabación de pantalla con cursor (cuenta demo) | **Script por escribir** (Playwright `recordVideo` + skill `oversized-cursor`); `auditar-app.mjs` solo captura imágenes | Antes de hacer clic en «Aprobar» (G-01) la cuenta lleva contactos de prueba propios: un clic puede enviar de verdad. Cuenta dedicada, nunca superadmin. Si el script no está, la madre graba desde la PC |
+| Presentador IA | `hermes-content/skills/ugc-empresas-higgsfield.md` (no es skill registrada: se abre por ruta) | Solo si Sergio Urcullo lo pide; costo con `higgsfield generate cost` desde la PC; nunca como cliente ni odontólogo |
+
+Reglas de edición de la pauta: las 11 de COMUNICACION §4 (subtítulos Archivo con chip amarillo «Pendiente», cartela de
+2-3 s, nada en los 250 px de arriba y abajo de una historia, sin música en el selfie).
+
+### 9.5 QA antes de mostrarla (gate, en orden)
+
+1. Tabla `frase | fila | estado` completa: ninguna fila ⬜ o ❌ en lo que se publica.
+2. El copy en un archivo y `node web-factory/apps/onia-platform/scripts/promesa-que-el-producto-cumple.mjs <archivo>`
+   (sale 1 si promete). Si se tocó `sales-kit/`: `npm run test:venta-honestidad` (cualquier «Bs N» tiene que ser un
+   monto que el código cobra).
+3. Mirarla renderizada al tamaño del celular (`qc` de 390 px) **al lado de los que duran** (§4.2). Titular en el
+   cuadro 0. Historia sin nada en las zonas que tapa Meta.
+4. Una sola acción, de usted, sin precio, sin «IA» en el titular, sin competidores.
+5. Diseño nuevo ⇒ **Sergio Urcullo la ve renderizada** antes de subir (CLAUDE.md, «Qué se publica sin preguntar»).
+
+### 9.6 Prueba y métricas
+
+- **Una campaña, un conjunto, 2-3 anuncios = copias de un mismo concepto** que cambian solo la apertura o el formato
+  (estático, video, persona). Así se aprende qué formato rinde sin cambiar el mensaje.
+- **Cada anuncio con su código en el texto precargado** («…(D1S)…»): Chatwoot descarta el `referral` (`ONIA_ADQUISICION_Y_PAUTA.md` §5.5).
+- **Se miden a mano cada día:** conversaciones, cuántas son de dueños de clínica, costo por conversación, CTR, demos,
+  costo por demo, frecuencia. En video, además, **reproducciones de 3 s ÷ impresiones** (cuánto frena el gancho) y
+  **ThruPlay ÷ reproducciones de 3 s** (cuánto retiene): métricas estándar de Meta, **sin umbral propio** hasta la
+  semana 1.
+- **Corte:** día 3, día 7 y día 14 de `ONIA_ADQUISICION_Y_PAUTA.md` §5.7. No se toca la segmentación ni se sube más de
+  20 % el presupuesto durante la prueba.
+- **Con US$ 56 no hay estadística:** la prueba dice si el filtro trae dueños, no cuál pieza gana (`ONIA_ADQUISICION_Y_PAUTA.md` §5.3).
+
+### 9.7 Skills de afuera: qué sirve y qué no (8-oct)
+
+- **Globales en la PC (la nube no las ve):** `ad-creative` (el sistema de ganchos sirve), `ads`, `copywriting`,
+  `copy-editing`, `social`. ⛔ De `ad-creative` **no se usan** las plantillas de reseña, testimonio, antes/después,
+  prensa, competidor ni el chat falso estilo iMessage: chocan con «no fabricar» y «ningún material nombra a la
+  competencia». Están en inglés y de tú: se adaptan a usted.
+- **Ninguna skill instalada escribe un VSL.** Lo único público con estructura de VSL es
+  `coleschaffer/dtc-copywriting-skills` (`vsl-script`, MIT): cada skill corre un preámbulo bash con `curl`, telemetría
+  y `open` de YouTube, así que **no se instala tal cual**; se copia solo el cuerpo, con OK de Sergio Urcullo.
+- **No se instala:** MCP de Meta de terceros (`pipeboard-co/meta-ads-mcp` y otros; el conector oficial ya está),
+  `AKCodez/higgsfield-claude-skills` (Playwright sobre la web de Higgsfield, prohibido), `goose-skills` (MCP remoto
+  con login de Google), `OpenMontage` (AGPL, muchas claves).
+
+### 9.8 Trampas e intentos fallidos
+
+- **3-oct:** D4 se armó prometiendo el tratamiento a medias porque «estaba en producción»; no encontraba a nadie. Una
+  frase sin fila en ✅ no se renderiza.
+- **1-2 oct:** v1 (crema editorial) y v2 (estilo de la marca personal) rechazadas; la referencia de formato es la
+  Biblioteca, no un pack nuestro.
+- **8-oct:** v4 era «una losa de texto»; la v5 mejoró el diseño pero **no tiene persona**, y los 7 que sobreviven sí.
+- **8-oct:** el pedido de «VSL» no decía de qué oferta. Son dos (Onia de usted y la asesoría gratis de vos) y se
+  escribieron por separado. El VSL de un curso sigue prohibido hasta que el curso exista
+  (`ONIA_COMUNIDAD_CONTENIDO.md`, «Semana 4+»).

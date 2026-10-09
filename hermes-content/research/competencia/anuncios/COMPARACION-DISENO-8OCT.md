@@ -58,7 +58,7 @@ catálogo §8: no «la IA escribe», no «detecta», no precio.
 |---|---|---|
 | 0–3 | A cámara, en el consultorio o la oficina | «Mañana a las diez tiene un paciente que no confirmó.» |
 | 3–7 | Mismo plano | «Si nadie le escribe, ese sillón queda vacío.» |
-| 7–17 | Grabación de pantalla de `/pending` (cuenta demo): tarjeta → mensaje → toque en «Enviar yo mismo» | «Onia le deja el mensaje listo. Usted lo aprueba y lo envía, con un toque.» |
+| 7–17 | Grabación de pantalla de `/pending` (cuenta demo): tarjeta → mensaje → clic en «Aprobar» | «Onia le deja el mensaje listo. Usted lo lee y lo aprueba.» |
 | 17–25 | A cámara | «Se lo muestro en una llamada de 20 minutos. Escríbame por WhatsApp.» |
 
 ## Cómo se rehace
