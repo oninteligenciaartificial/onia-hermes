@@ -97,11 +97,11 @@
 >      llegue a GitHub (`--probar`).
 >   3. ~~Un pedido de `plataforma` trabaja en el clon de `onia-platform`, con sus propios hooks~~ —
 >      medido el 5-oct: `onia-platform` no tiene hook Stop. Cerrado.
->   4. `herramientas-desplegadas` adivina la fuente de `onia-X.sh` por el nombre del archivo: un
->      `X.sh` cualquiera vuelve a dar un rojo falso. Conviene que lea la fuente del `poner`, no el nombre.
->   5. En la nube, el PID 1 no recoge huérfanos: otras pruebas que miran «proceso vivo» con
->      `kill(pid, 0)` pueden dar el mismo rojo falso que `tandas-v1`.
->   6. `diagnostico` todavía no muestra el log del recolector de respuestas.
+>   4. ~~`herramientas-desplegadas` adivina la fuente de `onia-X.sh` por el nombre del archivo~~ — 9-oct
+>      (`aa3b6756`): un `X.sh` sin prefijo cuenta solo en las carpetas de los `poner`. Cerrado.
+>   5. ~~En la nube, el PID 1 no recoge huérfanos: otras pruebas que miran «proceso vivo»~~ — barrido
+>      del 9-oct: la única es `tandas-v1.test.mjs`, ya arreglada. Cerrado.
+>   6. ~~`diagnostico` todavía no muestra el log del recolector de respuestas~~ — 9-oct (`c0175671`).
 > - **ANTES de cargar la llave de la rutina** (los 3 MEDIUM de la revisión de la madre v2, 3-oct; Sergio
 >   Urcullo aprobó mergear el #94 sin ellos) — **los tres, hechos en el PR #138 (5-oct):**
 >   1. la respuesta no está atada al pedido: cualquiera que pueda pushear al repo puede dejar una
