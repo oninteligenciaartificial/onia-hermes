@@ -5,6 +5,21 @@ description: "Invocar ANTES de hacer cualquier pieza visual de la marca personal
 
 # Diseño de contenido ONIA — el único lugar
 
+## Vigente desde el 8–9 oct de 2026
+
+- **Marca personal = `fotobn`: fotografía B/N con un solo objeto verde**, decisión del 8-oct; reemplaza `clay`/arcilla como estilo de salida. Las mediciones históricas de Soul y K1-B de abajo son diagnóstico, no el estilo vigente. Método: `hermes-content/docs/HIGGSFIELD_VIDEO_SYSTEM.md`.
+- **Marca personal habla de vos; producto, anuncios y clientes de usted.** Para recursos de comunidad: «Buscá PALABRA en Avisos», comprobando que el recurso existe. No prometer DM por comentario.
+- **9-oct: el render revisado se publica por el carril autorizado sin esperar otro OK de diseño.** Control visual y de claims sigue obligatorio. Gasto, contacto a terceros, actos legales y subir cara/voz a servicios externos conservan su autorización. Esta regla no amplía una tarea de Codex cerrada ni supera un bloqueo de permisos.
+- Un enlace sin instrucción activa `aprender-de-todo`, no producción. Guardar principio + evidencia + destino; «aplicado» requiere artefacto y sesión que lo usó.
+
+### Aprendizajes incorporados el 9-oct (aplicación pendiente de artefacto)
+
+Fuentes bajo `hermes-content/references/video-intake/`:
+- `2026-10-05-tiktok-ZSbm3Scje.md`, «Qué tomar»: titular de dos niveles (contexto chico + palabra dominante), serie numerada y datos reales que se arman. No inferir que UI/UX Pro Max está instalada ni copiar sus cifras como actuales.
+- `2026-10-08-orquestacion-e-ingresos-5-posts.md`, §3–4: antes de animar, cargar identidad de marca; sincronizar apoyos con música cuando el molde la admita; evaluar efecto abierto con licencia antes de reutilizarlo. Carrusel de herramientas: una herramienta, nombre, función y captura real por lámina; ninguna instalación implícita.
+- `2026-10-09-reel-DePBfHouarG.md`, «Qué aprende Onia»: jerarquía de una palabra; repetición visual con datos propios; dos columnas para comparar el mismo proceso; un tablero para explicar centralización sin atribuir funciones no probadas. El mosaico de cierre queda en `edicion-referentes`.
+- `2026-10-09-cinco-archivos-antes-de-vibe-code.md`, «Qué toma Sergio Urcullo y qué NO»: nombre de entrada + función + prueba visible; una idea por lámina y documento propio legible. No duplicar reglas ni fabricar cinco archivos para seguir el titular del referente.
+
 > Nace el 29-sep-2026. Sergio Urcullo: *«coloca tus skills de design, tus elementos y cómo lo
 > hagas en un solo lugar, ordenados»*. Todo lo de diseño de contenido se entra por acá; los
 > detalles viven en los archivos que este índice nombra, y no se copian a otro lado.
@@ -38,7 +53,7 @@ impreso en una taza y un post de Instagram falso con caption inventado).
 | # | Fuente | Para qué | Cómo |
 |---|---|---|---|
 | 1 | **Galería propia** | Lo que ya tenemos | Buscá en `hermes-content/galeria/galeria.json` (tags, prompt) antes de generar |
-| 2 | **Higgsfield** (generada) | Ilustraciones y metáforas visuales: la fuente principal | `node scripts/carousel_images.mjs --brief <b> --out <dir>` cotiza gratis; `--yes` genera (lote aprobado, §6) → `galeria/ilustraciones/` o `galeria/fotos/`. Estilos: `acuarela`, `linea`, `clay`, `foto`, `objeto` |
+| 2 | **Higgsfield** (generada) | Imágenes y metáforas visuales | `node scripts/carousel_images.mjs --brief <b> --out <dir>` cotiza; `--yes` genera dentro del permiso de §6 → `galeria/ilustraciones/` o `galeria/fotos/`. Marca personal: `fotobn` (8-oct); demás estilos solo para otros alcances autorizados |
 | 3 | **Logo oficial** | Cuando se NOMBRA una marca | Claude/Claude Code/Anthropic: `hermes-content/references/brand-claude/` · n8n, OpenAI, Meta, Google, Gemini, WhatsApp: `hermes-content/references/brand-logos/`. Nunca recrear ni generar un logo |
 | 4 | **Captura real** | Mostrar producto o pantalla | Captura de la pantalla real (layout `captura`), nunca una UI inventada |
 | 5 | Pexels / Unsplash | Solo si hace falta una FOTO REAL con licencia (no generada) | `python scripts/marca-personal/buscar-objetos.py --fuente pexels --sin-recorte --galeria --objeto nombre="consulta"` |
@@ -65,7 +80,7 @@ Cada lámina elige `layout`:
 | `ensayo` | Bastian: texto grande sobre papel, sin cajas | ≤ 60 palabras | ninguna |
 | `dato` | Erik / Ingeniero Binario: una cifra gigante + qué significa (`value`) | título ≤ 6 palabras | ninguna |
 | `captura` | Carlos: la pantalla real como prueba | título ≤ 8, pie ≤ 12 | captura real (nunca maqueta) |
-| `cierre` | los 8 referentes: «Comentá PALABRA» + qué recibís (`keyword`) | 1 línea | ninguna; solo si el recurso ya existe |
+| `cierre` | «Buscá PALABRA en Avisos» + qué recibís (`keyword`), adaptación vigente 9-oct | 1 línea | ninguna; solo si el recurso ya existe |
 
 Pendientes del catálogo (en `patrones/`): P-COMPARA, P-FOTO-ESCENA, P-DIAGRAMA, P-TABLA-MARCADOR.
 Carlos Domínguez señala como rasgo de «plantilla IA» el fondo crema: por eso el pack pasó a
@@ -88,7 +103,7 @@ lámina sale SIN título. `"next": ""` saca la flecha «seguí» (para historias
 - **Título de `ensayo` que se parte** («8 / bloques»): un espacio duro (U+00A0) dentro del `*…*` lo mantiene junto.
 - **`dato` con un dígito angosto** («1», «2») deja vacía la derecha: alargá el título a 2-3 líneas.
 - **Sin imagen no hay K1-B.** El 1-oct, sin lote aprobado, K8, K11, K12 y K13 salieron solo con texto y se acercan a lo
-  que Sergio Urcullo rechazó («vacío y con demasiado texto»). Lo que hace vender a K1-B son sus dos imágenes de arcilla:
+  que Sergio Urcullo rechazó («vacío y con demasiado texto»). En K1-B histórico la función visual la daban dos imágenes de arcilla (desde 8-oct se conserva esa función con `fotobn`):
   pedí el lote de portada + 1 interior ANTES de armar el carrusel, no después.
 - **`ilustrado` con `badge`:** si el primer renglón del título es largo, pasa por DEBAJO del sello sin avisar.
   Arrancá el título con el énfasis o sacá el badge. Cada tramo y cada `*énfasis*` es un bloque: un énfasis en el
@@ -236,7 +251,7 @@ Lo que sigue (render, banda segura, trampas del headless) **sigue valiendo** com
 
 ## 6. Gasto (CLAUDE.md, regla de Higgsfield)
 
-Cotizar siempre (gratis), pedir aprobación del lote con costo y cantidad, registrar en
+Cotizar siempre. **Actualización 8-oct, consolidada 9-oct:** imágenes de prueba/opciones por unos pocos créditos (menos de ~5 por lote) tienen autorización previa; mostrar después el resultado. Lotes grandes, entrenamiento Soul y subir cara/voz a servicios externos requieren autorización específica (cara/voz de Sergio Urcullo también la de Leslie Mercado Moreno). No fraccionar lotes para esquivar el límite. Registrar en
 `hermes-content/docs/ONIA_MARCA_PERSONAL_HIGGSFIELD_RECETAS.md`. Costos vistos el 29-sep:
 `text2image_soul_v2` 0,12 cr · `seedream_v5_lite` 1 · `nano_banana_flash` 1,5 · `gpt_image_2` 6,5.
 El CLI autenticado está en el VPS: `HF_CMD="ssh -i <llave> -o BatchMode=yes root@<vps> higgsfield"`.
@@ -248,8 +263,8 @@ El CLI autenticado está en el VPS: `HF_CMD="ssh -i <llave> -o BatchMode=yes roo
 - Pedir «espacio vacío» deja un bloque gris.
 - Lo que funciona: un objeto simple sin impresión, descrito en positivo, y el bloque de estilo
   del script (`STYLES` en `scripts/carousel_images.mjs`).
-- **Estilos medidos el 29-sep con Soul 2.0:** `clay` (3D arcilla) sale limpio y en paleta; es el
-  que mejor rinde. `acuarela` queda linda pero INVENTA UNA FIRMA en una esquina (2 de 2): se
+- **Estilos medidos el 29-sep con Soul 2.0 (histórico; reemplazado por `fotobn` el 8-oct):** `clay` (3D arcilla) salió limpio y en paleta en esa prueba.
+  `acuarela` queda linda pero INVENTA UNA FIRMA en una esquina (2 de 2): se
   recorta. `linea` sale como foto de un papel con bordes oscuros. Soul es un modelo de fotos:
   lo que se puede fotografiar (arcilla, objetos) le sale; el dibujo, no.
 - **Medido el 1-oct (lote K2v3/K11/K12):** «toy train» y «locomotive» salen con cara (tipo Thomas) y «tipped over» no

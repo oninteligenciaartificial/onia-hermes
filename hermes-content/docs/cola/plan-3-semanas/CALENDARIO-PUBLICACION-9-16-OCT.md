@@ -40,7 +40,7 @@ Carrusel de todos los días: 16:00 · 16:01 · 16:02, ya agendado.
 | **Sáb 10** | HOOK (K11) | **N07** Haiku 5.5 | **D03-A** hook que commitea |
 | **Dom 11** | ANTIGRAVITY (N06) | **N06** Antigravity | **DD-A** caché de OpenAI |
 | **Lun 12** | PRUEBAS (K4) | **S2-D08-A** promesa del bot | **N04** skill verify |
-| **Mar 13** | PROMPT (K8) | **D01-C** YouTube Opus o Sonnet (lo sube Sergio Urcullo) | — |
+| **Mar 13** | PROMPT (K8) | **D01-C** YouTube Opus o Sonnet (lo sube Sergio Urcullo) | **corte V1 de D01-C** (yap: corte V2) |
 | **Mié 14** | BRIEF (K7) | **S2-D07-A** ventana de 24 h | **D02-A** esfuerzo |
 | **Jue 15** | SKILL (K2) | **D01-A** primera skill | **N02** Sonnet 4.5 se apaga |
 | **Vie 16** | PROMESA (K6) | **D04-C** verificar es mirar | **D05-A** dos sesiones |
@@ -54,7 +54,11 @@ Carrusel de todos los días: 16:00 · 16:01 · 16:02, ya agendado.
   - cada video cae el mismo día que un carrusel del mismo tema, o al lado: HOOK sáb, ANTIGRAVITY dom, SKILL jue (los
     otros ya salieron como carrusel del 6 al 8-oct);
   - el martes queda liviano: el YouTube es el trabajo del día.
-- **Mar 13:** del YouTube salen 2 cortes verticales de ~45 s. Van de reel A el mié 14 o de yap.
+- **Mar 13 (cambio v2, 8-oct):** del YouTube salen 2 cortes verticales de ~45-55 s, con un gancho propio grabado aparte
+  (toma de ~15 s): **V1** (capítulo 03, la prueba con trampa) va de Video B a las 18:30 y **V2** (capítulo 05, «¿escribe o
+  mide?») de yap a Trial a las 19:30, el mismo día que el largo, como hace Erik (PLAN-REFERENTES §4). El reel A del mié 14
+  ya es S2-D07-A. Si el paquete del lun 12 a las 21:00 no los trae, pasan a la semana del 17, igual que cualquier otro
+  corte por capítulo (PLAN §5.6 pide de 2 a 4; no piden grabar más).
 
 ## Qué ya está agendado en el servidor
 
@@ -64,7 +68,13 @@ Carrusel de todos los días: 16:00 · 16:01 · 16:02, ya agendado.
 ## Qué falta agendar
 
 - Cada video y su yap, cuando Sergio Urcullo vea su tabla de cortes. Se agendan con `agendar-publicacion.sh`
-  (hora UTC = La Paz + 4).
+  (hora UTC = La Paz + 4). Incluye los 2 cortes de D01-C del mar 13.
 - Yap de N03: no existe. Se hace con el bruto cuando haga falta el hueco del vie 9 a las 19:30.
-- Los 7 carruseles en espera (K1, N02, K9, K12, K5, K13, K10) entran del 17-oct en adelante, cuando se rehagan las
-  láminas.
+- **P2 · «7 herramientas. 4 son gratis.»** (carrusel, sin grabar) sale el **sáb 17-oct** a las 16:00 IG ·
+  16:01 LinkedIn · 16:02 TikTok. Antes de agendarla, un permiso: el OK de Sergio Urcullo a la lámina 6 (muestra los avisos
+  del bot a los prospectos). Si TikTok por la API de Buffer falla en la prueba previa, la madre la agenda a mano desde la
+  web de Buffer. Su portada B sale solo en TikTok el dom 18 a las 21:00.
+- Los 7 carruseles en espera (K1, N02, K9, K12, K5, K13, K10) entran desde el **dom 18**, cuando se rehagan las láminas.
+- **P1 y P3** (videos sin cara): sin fecha. Entran en un hueco sin bruto. P1, después de N07 (prueba de la pizarra) y
+  con el OK del molde «Niveles»; P3, cuando se cumplan sus 3 condiciones (pizarra de N07, bio con la asesoría y recuento
+  de sesiones). Detalle en `GRABAR-10-16-OCT.md`.

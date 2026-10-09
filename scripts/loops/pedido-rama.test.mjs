@@ -37,7 +37,7 @@ function entorno(gitconfig, extra) {
 
 // Un origin y un clon con main en un commit base; la sesión trabaja en `rama` y suelta el turno.
 // `sinCommitear`: el cambio queda en el árbol, como lo deja una sesión, y lo commitea el hook.
-function sesion(rama, { env: extra = {}, sinCommitear = false, sinCambio = false } = {}) {
+function sesion(rama, { env: extra = {}, sinCommitear = false, sinCambio = false, sinMarca = false } = {}) {
   const dir = mkdtempSync(join(tmpdir(), "autosync-main-"));
   const gitconfig = join(dir, "gitconfig");
   writeFileSync(gitconfig, "[user]\n\tname = Prueba\n\temail = prueba@example.com\n[commit]\n\tgpgsign = false\n[init]\n\tdefaultBranch = main\n");
@@ -56,6 +56,9 @@ function sesion(rama, { env: extra = {}, sinCommitear = false, sinCambio = false
   git(clon, "commit", "-qm", "base");
   git(clon, "remote", "add", "origin", origin);
   git(clon, "push", "-q", "-u", "origin", "main");
+  // La marca del checkout de la madre (9-oct): sin ella, ONIA_AUTOSYNC_MAIN=1 no vale. Los casos «sin permiso»
+  // no ponen la variable, así que la marca no les cambia nada.
+  if (!sinMarca) writeFileSync(join(git(clon, "rev-parse", "--absolute-git-dir"), "onia-autosync-main"), "");
   const base = git(clon, "rev-parse", "HEAD");
   if (rama !== "main") git(clon, "switch", "-q", "-c", rama);
   if (!sinCambio) writeFileSync(join(clon, "cambio.md"), "el cambio que pidió Sergio Urcullo\n");
@@ -267,4 +270,37 @@ test("ningún settings.local.json está versionado, en ninguna carpeta", () => {
   assert.equal(r.stdout.trim(), "");
   const sub = spawnSync("git", ["check-ignore", "-q", "web-factory/apps/onia-platform/.claude/settings.local.json"], { cwd: RAIZ, encoding: "utf8" });
   assert.equal(sub.status, 0, "también en las subcarpetas con su propio .claude/");
+});
+
+// Revisiones de la madre al #138 y al #173 (9-oct): ONIA_AUTOSYNC_MAIN lo heredan los procesos hijos de la madre,
+// también los subagentes que trabajan en otros worktrees; y la madre misma corre en un worktree (`claude -w`).
+// Por eso el permiso exige además una MARCA en el git-dir del checkout, que no se versiona ni se hereda.
+test("con la variable pero sin la marca de su checkout, el permiso no vale", () => {
+  const s = sesion("claude/un-carril", { env: { ONIA_AUTOSYNC_MAIN: "1" }, sinMarca: true });
+  assert.equal(s.r.status, 0, s.r.stdout + s.r.stderr);
+  assert.match(s.r.stdout, /permiso de main ignorado: este checkout no tiene la marca/);
+  assert.equal(s.mainRemoto(), s.base);
+});
+
+test("el permiso de la madre no vale en el worktree de un subagente; en un worktree con SU marca, sí", () => {
+  const s = sesion("main", { env: { ONIA_AUTOSYNC_MAIN: "1" }, sinCambio: true }); // el clon tiene la marca
+  const env = entorno(join(s.dir, "gitconfig"), { ONIA_AUTOSYNC_MAIN: "1" });
+  const enWt = (wt) => spawnSync("node", [AUTOSYNC], { cwd: wt, env, encoding: "utf8" });
+  // Un subagente: hereda la variable, trabaja en su worktree, no tiene marca.
+  const sub = join(s.dir, "worktree-subagente");
+  s.git(s.clon, "worktree", "add", "-q", "-b", "claude/subagente", sub);
+  writeFileSync(join(sub, "a-medias.md"), "trabajo de un subagente a medias\n");
+  const r = enWt(sub);
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(r.stdout, /permiso de main ignorado/);
+  assert.equal(s.mainRemoto(), s.base, "main no se movió");
+  assert.equal(s.remota("claude/subagente"), s.git(sub, "rev-parse", "HEAD"), "la rama del subagente sí se pusheó");
+  // La madre, como corre hoy: en su propio worktree (claude -w), con la marca en SU git-dir.
+  const madre = join(s.dir, "worktree-madre");
+  s.git(s.clon, "worktree", "add", "-q", "-b", "claude/madre", madre);
+  writeFileSync(join(s.git(madre, "rev-parse", "--absolute-git-dir"), "onia-autosync-main"), "");
+  writeFileSync(join(madre, "de-la-madre.md"), "revisado\n");
+  const r2 = enWt(madre);
+  assert.equal(r2.status, 0, r2.stdout + r2.stderr);
+  assert.equal(s.mainRemoto(), s.git(madre, "rev-parse", "HEAD"), "en el checkout marcado el permiso vale");
 });

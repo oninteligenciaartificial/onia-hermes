@@ -19,6 +19,9 @@ description: Invocar ANTES de tocar a Hermes (el asistente de Sergio Urcullo por
 | El acceso al VPS y sus tres acciones | `hermes-content/deploy/hermes-jarvis/` (+ `README.md`) |
 | La constitución de Hermes y sus skills | `hermes-content/deploy/hermes-agent/SOUL.md` · `hermes-content/skills/{agenda-calendario,pedir-a-claude}.md` |
 | Resumen y cierre · aduana · calendario · pedidos · su vuelta | `scripts/loops/{jarvis-resumen,onia-tg,agenda,pedido-claude,respuestas-pedidos}.sh` |
+| ¿Hermes o el asistente de Codex / dots? Decisión, pruebas y cuándo revisarla (8-oct: queda Hermes; dots bloqueado por edad) | `hermes-content/docs/ASISTENTE_CODEX_VS_HERMES.md` |
+| Fuentes del resumen/cierre que no son del carril (9-oct) | qué sale: `hermes-content/docs/cola/plan-3-semanas/CALENDARIO-PUBLICACION-<d1>-<d2>-<MES>.md` (el rango sale del nombre); qué salió: `/root/publicar/publicado.jsonl` del VPS (lo escriben los publicadores de `hermes-content/deploy/vps-ops/publicar/`) |
+| Formato de todo lo que le llega (8-oct) | PASÓ · NECESITO · SIGUE: `jarvis-resumen.sh` (`parte`/`grupo`), SOUL `## Formato fijo de cada mensaje`, prompt de la rutina §5 |
 
 ## Cómo se llega al VPS desde la nube, y qué NO anda
 
@@ -55,6 +58,12 @@ description: Invocar ANTES de tocar a Hermes (el asistente de Sergio Urcullo por
 
 - **Gateway:** `hermes-gateway.service` (systemd), vivo desde el 18-sep con 0 reinicios, v0.21.0,
   `gpt-5-mini` por LiteLLM `:4000`. Bot `@aalfredhq_bot` por polling.
+- **Modelos, por trabajo** (la pregunta «¿mini o nano?» de la madre, 8-oct: son los dos). `gpt-5-mini`: el chat
+  del gateway y los trabajos de las 08:00 (agenda) y 08:10 (plan de video). `gpt-5-nano`: el ordenador del
+  tablero de las 13:00 y el veredicto de las 16:00. Medido el 27-sep (`jobs.json` y config viva) y el 1-oct
+  (gateway); no se volvió a medir. Después de `aplicar` quedan pausados 08:00, 08:10 y 16:00, y el resumen y
+  el cierre de Jarvis usan `gpt-5-mini` (`ONIA_JARVIS_MODELO`): en `nano` queda solo el tablero. Se mira en
+  solo lectura con `diagnostico` (imprime «modelo:» por trabajo) y `grep -n model /root/.hermes/config.yaml`.
 - **Arma su lista de skills al ARRANCAR** (`.skills_prompt_snapshot.json`). El 1-oct la lista era del
   08-sep y no nombraba `agenda-calendario`, que existía desde el 28-sep: una skill copiada en caliente
   existe en el disco y él no la conoce. **Toda skill o SOUL nuevo exige reiniciar el gateway**:
@@ -115,6 +124,21 @@ CLI de Hermes.
   INERTE hasta encenderlo. **Mientras el cambio del 5-oct no esté en `main`,** con una rama que sale de
   `main` y un PR sin revisar: pushear a mano y soltar el turno con `git checkout --detach`. Con el hook
   nuevo en tu árbol ya no hace falta, pero no cuesta nada.
+- **El permiso de la madre exige una marca en SU checkout** (revisiones de la madre al #138 y al #173, 9-oct):
+  sus procesos hijos heredan `ONIA_AUTOSYNC_MAIN`, y los subagentes trabajan en worktrees. **Intento fallido:**
+  «solo en el clon principal» (`--git-dir` == `--git-common-dir`) dejaba sin permiso a la madre real, que corre
+  en el worktree `onia-madre-v2-pr-review-2d85bb` (`claude -w`); lo encontró el revisor del #173. Ahora vale
+  con la variable Y el archivo `onia-autosync-main` en `git rev-parse --absolute-git-dir` de ese checkout: no
+  se versiona, no se hereda y ningún otro worktree lo comparte. Residuo: un worktree en una rama anterior
+  al #138 corre el autosync viejo, que movía main sin mirar nada.
+- **Un runbook se escribe con los `echo` del script delante, no de memoria** (9-oct). El §8 del doc de
+  pedidos decía que 1b imprime «✅ llego a GitHub» y 5d «✅ pedidos a Claude: configurado»: 1b es muda
+  salvo que falle (`--probar` y `--estado` van a `/dev/null`) y 5d dice «✅ llave de la rutina guardada…».
+  Con eso, quien corría `aplicar` iba a buscar una línea que nunca aparece. Se sacan con
+  `grep -n '^sec \|echo "✅' aplicar.sh`.
+- **Una respuesta rechazada avisa, una vez por pedido** («⛔ Rechazada · id · link», sin el texto rechazado;
+  9-oct). Antes se descartaba en silencio. «⚠️ Respuesta rechazada» con un link real pasaba los 90 bytes y
+  la aduana guardaba solo el emoji: la etiqueta se eligió por bytes, no por gusto.
 - **Las sesiones de la NUBE sí pueden pushear a `main`** (medido el 5-oct): 23 de los 48 avances directos
   de `main` del 28-sep al 5-oct traen el `Claude-Session` de dos sesiones de la nube (Lucía,
   `session_01Whdadt…`, y Marca personal, `session_01CE21my…`; `environment_kind: anthropic_cloud`). El
@@ -143,6 +167,19 @@ CLI de Hermes.
 - **Una sección del SOUL se copia con un rango.** El `aplicar` viejo hacía `sed '/^## Su calendario/,$p'`:
   arrastraba TODO lo que viniera después. La sección de pedidos va ANTES de la del calendario, y
   cada copia termina en el próximo `---`.
+- **El registro de publicaciones miente si se lo lee a la ligera** (9-oct, segunda revisión del #176).
+  `yt-video.mjs` sube en PRIVADO por defecto (ensayo) y lo anota igual: solo cuenta `privacidad: public`.
+  `ig-historia.mjs` no pide `permalink`: la historia va sin link. `buffer-post` anota el envío, no la
+  salida: se cuenta por `cuando` (o `fecha` si es «ya») y solo lo que ya pasó. Y no ve lo que Sergio
+  Urcullo sube a mano: se dice «en el registro», nunca «no salió nada».
+- **Un calendario sin año** (`CALENDARIO-PUBLICACION-28-3-ENE.md`): el año es el que hace que el rango
+  cubra la fecha; la fila se casa por el número de día (normalizado a NFC); entre dos que se solapan
+  gana el que empieza después; y desde que existe uno, los `S*-GUIONES` (sin año) no vuelven nunca.
+- **`aplicar` copia del SOUL SOLO las secciones que nombra** (9-oct). Una regla nueva escrita dentro de
+  otra sección («Cómo hablarle a Sergio») existe en `main` y nunca llega a `/root/.hermes/SOUL.md`. Regla
+  nueva = sección propia que termina en `---`, su paso en 5c (o 5d si depende de la llave), su chequeo
+  en la Fase A y su prueba en `hermes-jarvis-aplicar.test.mjs`. Así entró el formato fijo
+  (Pasó · Necesito · Sigue).
 - **`git stash -u` con un `git mv` en el medio:** el pop no puede restaurar un archivo nuevo en la ruta
   que dejó libre el `mv`, y deja el stash guardado. Antes de soltarlo, compará archivo por archivo con
   `git show stash@{0}^3:<ruta>`. Mejor no mezclar stash con renombres.
@@ -264,6 +301,10 @@ CLI de Hermes.
   `onia-vps.sh` (el shim que crea `instalar-homelab.sh`) tenía fuente y pidió desplegarla. El `poner`
   que pedía habría pisado el shim con un script roto. Se renombró el atajo (`vps-desde-windows.sh`).
   Antes de agregar un `poner`, se abre la «fuente» y se mira si de verdad es esa herramienta.
+  **Desde el 9-oct el test lee las carpetas de los `poner`**: un `x.sh` sin prefijo cuenta como fuente
+  de `onia-x.sh` solo si está en una carpeta desde la que el sync ya copia (`scripts/loops/`,
+  `scripts/kanban/`, `hermes-content/deploy/vps-ops/`…). Con el nombre exacto (`onia-x.sh`) cuenta en
+  cualquier lado. Y cada `poner` a `/root/bin` tiene que apuntar a un archivo versionado.
 - **En esta nube, un proceso muerto puede seguir «vivo» para `kill(pid, 0)`** (2-oct). El PID 1 del
   contenedor (`process_api`) no recoge huérfanos: un nieto matado con SIGKILL queda en
   `State: Z` para siempre. Una prueba de «el árbol murió» tiene que tratar al zombi como muerto

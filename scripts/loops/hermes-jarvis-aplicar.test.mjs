@@ -69,7 +69,7 @@ function vps({ leeCalendario = true, escribeCalendario = true } = {}) {
   git("update-ref", "refs/remotes/origin/main", "HEAD");
 
   // El código de main ya copiado a /root/bin (lo que mira el paso 0).
-  ejecutable(join(bin, "onia-jarvis-resumen.sh"), "#!/usr/bin/env bash\n# cierre-bloques\necho 'vista previa del resumen'\n");
+  ejecutable(join(bin, "onia-jarvis-resumen.sh"), "#!/usr/bin/env bash\n# cierre-bloques · grupo NECESITO\necho 'vista previa del resumen'\n");
   ejecutable(join(bin, "onia-tg.sh"), `#!/usr/bin/env bash\n# ONIA_AVISO_PUEDO\nprintf '%s\\n---\\n' "$1" >> ${log}/telegram\n`);
   ejecutable(join(bin, "onia-vigia-aprobaciones.sh"), "#!/usr/bin/env bash\n# ONIA_AVISO_PUEDO\n");
   // El recolector de respuestas de los pedidos: --probar dice si el VPS llega a GitHub.
@@ -515,6 +515,63 @@ test("con llave, si a main le falta la skill de pedidos o su regla en el SOUL, n
   nadaCreado(sinRegla);
 });
 
+test("el formato fijo (Pasó · Necesito · Sigue) entra a su SOUL una sola vez, sin arrastrar lo que le sigue", () => {
+  // Sergio Urcullo, 8-oct: «me entregás demasiado texto y me pierdo». aplicar copia del SOUL de main
+  // solo las secciones que nombra: una regla escrita en otra sección nunca llegaba al VPS.
+  const v = vps();
+  const r = v.aplicar();
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(r.stdout, /✅ regla del formato agregada al SOUL de Hermes/);
+  spawnSync("/bin/sleep", ["1.1"]); // el respaldo se nombra por segundo
+  assert.equal(v.aplicar().status, 0);
+  const soul = readFileSync(join(v.R, ".hermes", "SOUL.md"), "utf8");
+  assert.equal((soul.match(/^## Formato fijo de cada mensaje/gm) || []).length, 1);
+  assert.match(soul, /\*\*Pasó\*\*[\s\S]*\*\*Necesito\*\*[\s\S]*\*\*Sigue\*\*/);
+  assert.doesNotMatch(soul, /^## Qué ES Onia hoy/m, "solo esa sección, hasta su «---»");
+});
+
+test("sección 0: con el resumen de antes del formato fijo en /root/bin, no aplica nada", () => {
+  // Revisión del 9-oct: el SOUL le dice a Hermes que el resumen ya llega en tres bloques; con el
+  // resumen viejo corriendo, eso sería falso.
+  const v = vps();
+  writeFileSync(join(v.R, "bin", "onia-jarvis-resumen.sh"), "#!/usr/bin/env bash\n# cierre-bloques\n");
+  const r = v.aplicar();
+  assert.equal(r.status, 1, r.stdout);
+  nadaCreado(v);
+});
+
+test("con la regla del calendario ya en su SOUL, el paso del formato toma su propio respaldo y revertir lo deja exacto", () => {
+  // Revisión del 9-oct: en las otras pruebas el respaldo lo toma siempre el paso del calendario.
+  // En el VPS de verdad el SOUL ya puede tener esa regla: el respaldo es del paso del formato.
+  const v = vps();
+  const soulPath = join(v.R, ".hermes", "SOUL.md");
+  const main = readFileSync(join(RAIZ, "hermes-content/deploy/hermes-agent/SOUL.md"), "utf8");
+  const cal = main.slice(main.indexOf("## Su calendario y el cierre del día"));
+  const inicial = "# SOUL de Hermes\n\n---\n\n" + cal.split(/^---$/m)[0];
+  writeFileSync(soulPath, inicial);
+  const r = v.aplicar();
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(r.stdout, /su SOUL ya tenía la regla del calendario/);
+  assert.match(r.stdout, /✅ regla del formato agregada al SOUL de Hermes/);
+  const bk = join(v.R, "backups", v.respaldos().at(-1), "SOUL.md.antes");
+  assert.equal(readFileSync(bk, "utf8"), inicial, "el respaldo es el SOUL de antes del formato");
+  const rev = v.revertir();
+  assert.equal(rev.status, 0, rev.stdout + rev.stderr);
+  assert.equal(readFileSync(soulPath, "utf8"), inicial);
+});
+
+test("si a main le falta la regla del formato en el SOUL, no aplica nada", () => {
+  const v = vps();
+  cambiarMain(v, (repo) => {
+    const f = join(repo, "hermes-content/deploy/hermes-agent/SOUL.md");
+    writeFileSync(f, readFileSync(f, "utf8").replace(/^## Formato fijo de cada mensaje/m, "## Otra cosa"));
+  });
+  const r = v.aplicar();
+  assert.equal(r.status, 1, r.stdout);
+  assert.match(r.stdout, /no encontré la regla del formato en el SOUL de origin\/main/);
+  nadaCreado(v);
+});
+
 test("con llave, si el comando de pedidos no la acepta (--estado), no aplica nada", () => {
   const v = vps();
   writeFileSync(join(v.R, "bin", "onia-pedido-claude.sh"), "#!/usr/bin/env bash\ncandado() { :; }\nSELLOS=x\n[ \"$1\" = --estado ] && exit 69\nexit 0\n");
@@ -641,4 +698,137 @@ test("el CI no deja la credencial de GitHub en el checkout", () => {
   const paso = resto.slice(0, (resto.indexOf("\n      - ", 1) + 1 || resto.length + 1) - 1);
   assert.match(paso, /^\s+persist-credentials: false$/m);
   assert.doesNotMatch(wf, /runs-on:.*self-hosted/, "nunca en el runner del VPS");
+});
+
+// ── diagnostico: el recolector de respuestas de los pedidos (pendiente 6 del handoff, 9-oct) ──────
+// Sin esto, una respuesta que no llegaba solo se veía entrando al VPS. Se corre la sección 12 del
+// diagnostico.sh REAL con /var/log, /var/lib y /root llevados a una carpeta temporal.
+function diagnosticoPedidos({ conCron = true, conLog = true } = {}) {
+  const dir = mkdtempSync(join(tmpdir(), "jarvis-diag-"));
+  const F = join(dir, "fs");
+  const EP = join(F, "var", "lib", "onia-pedidos");
+  const LOG = join(F, "var", "log");
+  mkdirSync(join(EP, "sellos"), { recursive: true });
+  mkdirSync(LOG, { recursive: true });
+  writeFileSync(join(EP, "sellos", "p_1a2b3c4d"), "0123456789abcdef0123456789abcdef\n");
+  writeFileSync(join(EP, "respuestas.tsv"), "1759999999\tp_1a2b3c4d\tlisto\n");
+  writeFileSync(join(EP, "rechazos-avisados.tsv"), "1759999999\tp_5e6f7a8b\n");
+  const iso = (horas) => new Date(Date.now() - horas * 3600e3).toISOString().replace(/\.\d+Z$/, "Z");
+  if (conLog) {
+    writeFileSync(
+      join(LOG, "onia-respuestas-pedidos.log"),
+      [
+        `${iso(100)} ✅ p_00000000: respuesta «listo» entregada a la aduana`, // fuera de la ventana de 72 h
+        `${iso(5)} ✅ p_1a2b3c4d: respuesta «listo» entregada a la aduana`,
+        `${iso(1)} ❌ no pude consultar GitHub`,
+        "",
+      ].join("\n"),
+    );
+  }
+  const dobles = join(dir, "dobles");
+  const linea = "*/2 * * * * [ -x /root/bin/onia-respuestas-pedidos.sh ] && /root/bin/onia-respuestas-pedidos.sh >> /var/log/onia-respuestas-pedidos.log 2>&1";
+  ejecutable(join(dobles, "crontab"), `#!/usr/bin/env bash\n${conCron ? `echo '${linea}'` : "echo '#*/2 * * * * /root/bin/onia-respuestas-pedidos.sh'"}\n`);
+  const diag = readFileSync(join(DIR, "diagnostico.sh"), "utf8");
+  const s12 = diag.slice(diag.indexOf('sec "12.'), diag.indexOf('sec "fin"'));
+  assert.ok(s12.length > 0, "no encontré la sección 12 del diagnóstico");
+  const guion =
+    `REDACTAR_SED='s/a^//'\n` +
+    readFileSync(join(DIR, "comun.sh"), "utf8") +
+    `\nDESDE=${iso(72)}\n` +
+    s12.replaceAll("/var/log/", LOG + "/").replaceAll("/var/lib/onia-pedidos", EP).replaceAll("/root/", join(F, "root") + "/");
+  return spawnSync("bash", ["-s"], { input: guion, env: { ...process.env, PATH: `${dobles}:${process.env.PATH}` }, encoding: "utf8" });
+}
+
+test("diagnóstico: muestra el recolector de respuestas (cron, la ventana y el final del log) sin leer un sello", () => {
+  const r = diagnosticoPedidos();
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(r.stdout, /en el crontab: sí/);
+  assert.match(r.stdout, /en la ventana: 1 entregada\(s\) · 1 con falla/);
+  assert.match(r.stdout, /❌ no pude consultar GitHub/);
+  assert.match(r.stdout, /respuestas\.tsv: 1 fila\(s\)/);
+  assert.match(r.stdout, /rechazos-avisados\.tsv: 1 fila\(s\)/);
+  assert.match(r.stdout, /sellos de pedidos abiertos: 1 \(no se leen\)/);
+  assert.doesNotMatch(r.stdout + r.stderr, /0123456789abcdef/, "un sello nunca sale en el diagnóstico");
+});
+
+test("diagnóstico: sin la línea del cron (o comentada) y sin log, lo dice", () => {
+  const r = diagnosticoPedidos({ conCron: false, conLog: false });
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(r.stdout, /en el crontab: NO/);
+  assert.match(r.stdout, /no existe .*onia-respuestas-pedidos\.log/);
+});
+
+// ── diagnostico: lo publicado y lo agendado (9-oct; GOAL del 8-oct: una pieza por día) ──────────────
+// Corre la sección 13 del diagnostico.sh REAL con /root llevado a una carpeta temporal y un systemctl
+// de mentira. Solo lectura: lista, no toca nada.
+function diagnosticoPublicaciones({ conRegistro = true } = {}) {
+  const dir = mkdtempSync(join(tmpdir(), "jarvis-diag-pub-"));
+  const F = join(dir, "fs");
+  const pub = join(F, "root", "publicar");
+  mkdirSync(pub, { recursive: true });
+  // Fechas fijas: la sección mira desde DESDE, no desde «ahora», y así el conteo por día no depende
+  // de la hora en que corre la prueba.
+  if (conRegistro) {
+    writeFileSync(
+      join(pub, "publicado.jsonl"),
+      [
+        { cuenta: "sergio", media: "1", trial: null, permalink: "https://www.instagram.com/reel/VIEJO/", timestamp: "2026-10-05T16:00:00+0000" },
+        { cuenta: "sergio", media: "2", trial: null, permalink: "https://www.instagram.com/reel/NUEVO/", timestamp: "2026-10-09T16:31:00+0000" },
+        { cuenta: "sergio", media: "3", tipo: "carrusel", permalink: "https://www.instagram.com/p/CAR/", timestamp: "2026-10-09T20:00:00+0000" },
+        { red: "youtube", id: "e", url: "https://youtu.be/ENSAYO", privacidad: "private", fecha: "2026-10-09T21:00:00.000Z" },
+        { red: "buffer", canal: "c1", post: "p9", estado: "agendado", cuando: "2026-10-10T16:35:00.000Z", fecha: "2026-10-09T21:05:00.000Z" },
+      ].map((r) => JSON.stringify(r)).join("\n") + "\n{roto\n",
+    );
+  }
+  const dobles = join(dir, "dobles");
+  ejecutable(join(dobles, "systemctl"), `#!/usr/bin/env bash\necho "$*" >> ${dir}/systemctl.log\necho 'Sat 2026-10-10 16:30:00 UTC 1h left - - pub-n07.timer pub-n07.service'\n`);
+  const diag = readFileSync(join(DIR, "diagnostico.sh"), "utf8");
+  const s13 = diag.slice(diag.indexOf('sec "13.'), diag.indexOf('sec "fin"'));
+  assert.ok(s13.length > 0, "no encontré la sección 13 del diagnóstico");
+  const guion =
+    `REDACTAR_SED='s/a^//'\n` + readFileSync(join(DIR, "comun.sh"), "utf8") + `\nDESDE=2026-10-06T12:00:00Z\n` + s13.replaceAll("/root/", join(F, "root") + "/");
+  const r = spawnSync("bash", ["-s"], { input: guion, env: { ...process.env, PATH: `${dobles}:${process.env.PATH}` }, encoding: "utf8" });
+  return { r, systemctl: existsSync(join(dir, "systemctl.log")) ? readFileSync(join(dir, "systemctl.log"), "utf8") : "" };
+}
+
+test("diagnóstico: lo publicado en la ventana, con link y por día, y lo agendado, sin tocar nada", () => {
+  const { r, systemctl } = diagnosticoPublicaciones();
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(r.stdout, /10-09 12:31 Reel · https:\/\/www\.instagram\.com\/reel\/NUEVO\//);
+  assert.match(r.stdout, /Carrusel · https:\/\/www\.instagram\.com\/p\/CAR\//);
+  assert.match(r.stdout, /YouTube \(private\) · https:\/\/youtu\.be\/ENSAYO/, "el ensayo privado se ve como tal");
+  assert.match(r.stdout, /Buffer agendado · p9/);
+  assert.doesNotMatch(r.stdout, /VIEJO/, "lo de antes de la ventana no sale");
+  assert.match(r.stdout, /publicadas por día \(La Paz, Instagram y YouTube público\): 10-09: 2$/m);
+  assert.match(r.stdout, /pub-n07\.timer/);
+  assert.match(systemctl, /^list-timers pub-\* --all --no-pager$/m);
+  assert.doesNotMatch(systemctl, /^(start|stop|restart|enable|disable)/m, "solo lectura");
+});
+
+test("diagnóstico: sin registro de publicaciones, lo dice", () => {
+  const { r } = diagnosticoPublicaciones({ conRegistro: false });
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(r.stdout, /no existe .*publicado\.jsonl/);
+});
+
+// ── diagnostico: qué secciones del SOUL le faltan a Hermes (9-oct) ─────────────────────────────────
+// `aplicar` copia del SOUL del repo solo las secciones que nombra. Para decidir qué más copiar hay que
+// ver qué tiene el SOUL del VPS. Sección 14, solo lectura: títulos `##` del VPS contra origin/main.
+test("diagnóstico: lista las secciones del SOUL de main que le faltan al SOUL del VPS", () => {
+  const v = vps();
+  writeFileSync(join(v.R, ".hermes", "SOUL.md"), "# SOUL viejo\n\n## Quién sos y cuál es tu oficio\n\ntexto\n\n## Su calendario y el cierre del día\n\nmás\n");
+  const diag = readFileSync(join(DIR, "diagnostico.sh"), "utf8");
+  const s14 = diag.slice(diag.indexOf('sec "14.'), diag.indexOf('sec "fin"'));
+  assert.ok(s14.length > 0, "no encontré la sección 14 del diagnóstico");
+  const guion = `REDACTAR_SED='s/a^//'\n` + readFileSync(join(DIR, "comun.sh"), "utf8") + "\n" + s14.replaceAll("/root/", v.R + "/");
+  const antes = readFileSync(join(v.R, ".hermes", "SOUL.md"), "utf8");
+  const r = spawnSync("bash", ["-s"], { input: guion, encoding: "utf8" });
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  const faltan = r.stdout.slice(r.stdout.indexOf("--- de main, le faltan:"), r.stdout.indexOf("--- tiene y main no:"));
+  assert.match(faltan, /## Formato fijo de cada mensaje/);
+  assert.match(faltan, /## Pedidos a Claude/);
+  assert.doesNotMatch(faltan, /## Su calendario y el cierre del día/, "la que ya tiene no falta");
+  assert.match(r.stdout, /el SOUL del VPS tiene 2 sección\(es\)/);
+  assert.match(r.stdout, /--- tiene y main no:\n\(ninguna\)/, "«Su calendario…» sin la fecha es la misma sección");
+  assert.equal(readFileSync(join(v.R, ".hermes", "SOUL.md"), "utf8"), antes, "solo lectura");
 });

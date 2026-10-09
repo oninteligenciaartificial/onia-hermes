@@ -4,6 +4,7 @@
 
 **Para:** la sesión de Marca personal.
 **Fuentes:** los análisis del 8-oct de Erik Taveras, Santiago Muñoz, Enrique Rocha, Alex Hormozi e Iman Gadzhi. También leí `GRABAR-10-16-OCT.md`, `CALENDARIO-PUBLICACION-9-16-OCT.md`, `ONIA_COMUNIDAD_CONTENIDO.md` y la skill `edicion-referentes`.
+**Actualizado 8-oct a la noche** con el análisis completo de los 5 (catálogo entero, guiones desarmados, edición medida con ffmpeg y una segunda pasada de verificación contra la fuente): `hermes-content/references/video-intake/2026-10-08-referente-{sanmunoz,eriktaveras,enriquerocha,hormozi,gadzhi}.md`. Cambian §1 (ajustes), §1b (nueva: cómo trabajan los 5), §2 (precios), §3, §4, §5 y §6. Las fórmulas de gancho y guion están en `FORMULAS-REFERENTES.md`; la edición por formato, en `FICHAS-MONTAJE-REFERENTES.md` y la skill `edicion-referentes`.
 **[NV]** marca lo no verificado: lo que dijo Gemini sin medirlo, fuentes de terceros o datos que no constan.
 
 ## 0. El objetivo no es solo grabar
@@ -29,6 +30,39 @@ Sin los puntos 1 y 2, el contenido no lleva a ninguna asesoría.
 
 Iman Gadzhi no aporta a los patrones 4 y 5: sus precios no constan y lo que hay sale de reseñas de terceros [NV].
 
+**Ajustes del 8-oct a esta tabla (medido):**
+- Patrón 1: el gancho que rinde no es la noticia sola. La noticia de Santiago hizo 1,6 M porque trajo **una calculadora propia**; sin herramienta, la misma clase de noticia le da 2 a 14 mil. En Rocha las noticias de modelo son el 1 % de las vistas de TikTok. El de Iman tiene 1,49 M.
+- Patrón 3: Hormozi **no pide nada en 13 de 13 shorts**; en los largos pone un solo destino en el primer tercio.
+- Patrón 4: el recurso de Rocha es además **un repo propio por serie** (whatsapp-agentkit, 529 estrellas). Iman sí aporta: un prompt en una página de Notion con un acortador propio.
+- Patrón 5: Hormozi suma **Vantage, USD 36.000 al año, por invitación** después del taller. Iman: Digital Launchpad USD 37/mes y Monetise con lista de espera sin precio.
+
+## 1b. Cómo trabajan los 5, medido en sus catálogos (8-oct)
+
+| | Santiago | Erik | Rocha | Hormozi | Gadzhi |
+|---|---|---|---|---|---|
+| Piezas con vistas | 172 (80 TikTok, 60 largos, 32 Shorts) | ~421 (250 TikTok, 130 Shorts, 29 largos, 12 IG) | 411 (234 TikTok, 166 Shorts, 11 IG) | 120 (60 largos, 60 shorts) | 200 (80 largos de 483, 120 TikTok) |
+| Red que manda | IG en la mediana (1,8 veces TikTok); TikTok en el pico; YouTube para lo que se busca | IG (30-55 mil por reel) | IG (mediana 72,8 mil; TikTok 1,3 mil) | YouTube: shorts para alcance, largo para la oferta | YouTube largo (6,2 M de suscriptores) |
+| Lo que rinde | Casos con un negocio real (mediana 31,5 mil) y edición con IA (41 % de sus vistas de YouTube) | Claude y hardware: 20 % de las piezas, 43 % de las vistas | Construir, agentes y ahorrar la cuenta: 59 % de las piezas, 80 % de las vistas | Diálogo con un dueño real: mediana 155,5 mil contra 16,5 mil | Largos con una herramienta de IA: 2,6 veces los que no la nombran |
+| Lo que no | Noticia sola (11,2 mil); narrativa sin cara (1,1 mil) | n8n (1 % de las vistas); noticia editada de 21-45 s (5,1 mil) | Noticias de modelo (1 %); comedia (0,3 %) | La IA como tema suelto (bajo la mediana) | Opinión sin herramienta ni número |
+| Cadencia | 2,7 por semana en TikTok, 3,2 en IG, 1,75 largos | 1,5 por día en TikTok | 5-6 por día en TikTok y Shorts; 1,3 en IG | 5-6 shorts por día; 1,3 largos por semana | 0,9 por día en TikTok; 7 largos en 63 días y 6 semanas sin nada |
+| Duración que rinde | Vertical de 121 s o más (mediana 30 mil) contra 31-60 s (8,8 mil); largos de 30-45 min | Más de 120 s (24,3 mil) contra 21-45 s (5,1 mil) | 57-83 s; la duración no mueve la mediana | Shorts de diálogo de 46-106 s; largos de 20-30 min | Sus 2 largos de más de 1 M en 2026 duran 26 y 36 min |
+| Concentración | Top 3 = 46,7 % de las vistas de TikTok | Top 10 = 46 % | Top 5 = 56 %; 1 de cada 5 piezas pega | Máximo de shorts = 21 veces la mediana | TikTok: 12 % de los posts pasa el millón |
+| Corto y largo | El corto es el tráiler del largo; lo viral en TikTok no pasa al largo (218 veces menos) | 1 largo → 6 cortes el mismo día | No hay largo en video: lo largo es la bóveda, el ebook y los repos | Los shorts salen de eventos; el largo lleva a la oferta | No se recortan; el TikTok es otro negocio (skits de pareja) |
+| Promesa | Siempre con un número de tiempo o costo | Criterio: qué es, qué cuesta, cuál elegir | «Gratis, sin programar y bien hecho» | Una regla con nombre por pieza | «Más plata, menos trabajo aburrido» |
+| CTA | «El enlace está en mi perfil» | «Comentá PALABRA» | «Comentá [una pregunta de dato]» | Shorts: nada; largos: uno en el primer tercio | Sorteo + descripción de 1-2 líneas |
+| Tendencia | Mediana de TikTok de 21,7 mil (mar-abr) a 7,7 mil (sep-oct) | De ~9,5 mil (abr-may) a 5,8 mil (últimas 4 semanas) | Bloque nuevo de TikTok desde el 29-sep | Sin dato (vistas no normalizadas por antigüedad) | Mediana de largos de 939 mil (antes de oct-2025) a 220 mil (2026) |
+
+**Patrones cruzados que sirven a Sergio Urcullo:**
+1. **Gana hacer algo concreto con un número, no contar la noticia.** Los 5 lo muestran: casos (Santiago), construir (Rocha), objeto con precio (Erik), dueño con cifras (Hormozi), herramienta nombrada (Gadzhi). La noticia sirve como gancho si trae una cuenta, una herramienta o un caso.
+2. **Los picos son lotería.** Top 3-10 = 46-80 % de las vistas en Santiago, Erik y Rocha. Se mide la mediana de 4 semanas y los **guardados** por vista (Santiago: 3,5 % en lo que se difunde contra 1,4 %; Rocha: 5,6-7,6 % en los tutoriales que pegan contra 1,1 % en comedia).
+3. **En vertical, el video de 90-120 s rinde más que el de 30-45 s** en Santiago y Erik. En Rocha da igual. El molde de noticia de 21-45 s es lo que menos rinde en Erik.
+4. **Un recurso propio por serie, afuera del video:** calculadora (Santiago), guía (Erik), repo (Rocha), roadmap (Hormozi), Notion (Gadzhi).
+5. **Ninguno saluda.** Los 5 escriben el gancho en el cuadro 0.
+6. **La palabra clave trae comentarios en IG, no en TikTok**: Erik 3-8 veces; Rocha ~6 veces más en IG que en TikTok; Santiago en TikTok 0,07 % de las vistas. El sorteo de Iman no mueve nada. Sigue el CTA al perfil.
+7. **El mismo master en varias redes, IG primero**: Rocha resube a TikTok sin re-editar (2 casos probados; IG le da 5 a 36 veces más). Ya es así en el calendario (12:30 IG, 12:35 Buffer).
+8. **Cuando cambiaron de estilo, cayeron**: Santiago con la narrativa sin cara y la IA generada (896 a 2,7 mil). Erik bajó en los meses en que más publicó la noticia editada corta (inferencia: coincide en el tiempo, no está probado que sea la causa). Lo nuevo se prueba en una pieza, no reemplaza lo que funciona.
+9. **Rocha, Hormozi y Gadzhi tienen equipo; de Erik y Santiago no consta.** Sergio Urcullo graba 1 h por día: el plan de 4 reels y 1 carrusel por día ya está en el techo. Antes que más piezas, una pieza más larga por semana.
+
 ## 2. Embudo recomendado
 
 1. **Contenido:** 2 videos por día, como en el calendario. **Al menos 1 de los 2 debe tratar un dolor de dueño de negocio** (bot, WhatsApp, costos). Esta semana los de negocio son 4 de 12 (N07, S2-D08-A, DD-A y S2-D07-A). La asesoría es para cualquier negocio (opción B, 5-oct), y una pieza de Claude para desarrolladores no la llena.
@@ -47,11 +81,11 @@ Iman Gadzhi no aporta a los patrones 4 y 5: sus precios no constan y lo que hay 
 
 | Referente | Gratis | Barato | Mensual | Llamada o precio alto | Fuente |
 |---|---|---|---|---|---|
-| Erik | Foro con 53 guías | Curso a USD 39 | Skool a USD 59, sube a 79 con 250 miembros; garantía de 14 días | Llamada de 30 min, precio no consta | skool.com/automatizate-2416, cursos.eriktaveras.com |
-| Santiago | Forja Starter, USD 0 | - | USD 64. Sus páginas también muestran 57 como precio de fundador [discrepancia] | No hay llamada | horizontesia.com, forjabots.com |
-| Rocha | Bóveda de 299 guías | Ebook a USD 29 | No tiene | USD 15 (20 min), 79 (45 min), 297 (90 min) | tododeia.com/llamadas |
-| Hormozi | Roadmap, cursos y libros | - | - | Workshop a USD 5.000, solo negocios de USD 1 M o más | acquisition.com/workshop |
-| Iman | Prompt en la descripción | Upsell VIP de USD 25 [NV, reseña de terceros] | No consta | No consta | marksinsights.com [NV] |
+| Erik | Foro con 53 guías | Curso a USD 39 | Skool a USD 59, sube a 79 con 250 miembros; 115 miembros (8-oct); garantía de 14 días | Llamada de 15 min a **USD 75**; Power Session de 60 min a **USD 397**; taller de edición con IA de 25 cupos, agotado, precio no consta (8-oct) | skool.com/automatizate-2416, eriktaveras.com/trabaja-conmigo |
+| Santiago | Forja Starter, USD 0; calculadora de WhatsApp; skills en GitHub | - | USD 64, «600+ miembros» en horizontesia.com (8-oct). Sus páginas también muestran 57 como precio de fundador [discrepancia] | No hay llamada | horizontesia.com, forjabots.com |
+| Rocha | Bóveda de 299 guías; un repo de GitHub por serie | Ebook a USD 29 | No tiene | USD 15 (20 min), 79 (45 min), 297 (90 min); talleres en Luma de USD 97 y 119 | tododeia.com/llamadas |
+| Hormozi | Roadmap, cursos y libros | Libro a USD 29,99 | - | Taller a USD 5.000, negocios de USD 1 a 100 M al año («si no ganaste con lo gratis, no vengas»); después **Vantage, USD 36.000 al año, por invitación** (8-oct) | acquisition.com/workshop, vantage.acquisition.com |
+| Iman | Prompt en una página de Notion con acortador propio | Digital Launchpad USD 37/mes [doc previo + Gemini] | - | Consulting.com por aplicación; Monetise sin precio, con lista de espera hace al menos 18 meses (8-oct) | consulting.com/monetise |
 
 - Cobrar llamadas choca con la regla «Onia vende software, nunca horas».
 - Una comunidad paga es una línea de negocio nueva: tiene que pasar el test de tres preguntas, y la decide solo Sergio Urcullo.
@@ -63,45 +97,55 @@ Iman Gadzhi no aporta a los patrones 4 y 5: sus precios no constan y lo que hay 
 |---|---|---|---|---|---|---|
 | **F1. Noticia con fecha y la cuenta** | Santiago (calculadora de WhatsApp, 1,6 M) | Qué cambió y desde cuándo, con el titular o la doc oficial arriba en el cuadro 0 | Noticia (0-5 s), qué cambia, por qué le importa a tu negocio, la cuenta como contador, la trampa, una acción | Receta Santiago | Comunidad | N07, N06, DD-A, N02 |
 | **F2. Receta de 2 pasos** | Rocha (design.md, 87,6 mil) | El defecto que ya sufre el espectador + rótulo fijo arriba | Problema (0-7 s), paso 1 con una herramienta con nombre, paso 2, cómo sabés que funcionó, CTA | Erik: captura de 2-5 s por paso, corte cada 3-4 s | Comunidad | N04, D01-A, D02-A |
-| **F3. La pregunta del dueño** | Hormozi («sales are crap», 110 mil) | El dolor en segunda persona, en texto, en 0 s. Si no hay una pregunta real de un lead, no se inventa una cita | Pregunta, diagnóstico, concepto, ejemplo, siguiente paso | Erik con rótulo fijo arriba todo el clip | Asesoría | S2-D08-A, S2-D07-A |
-| **F4. «Lo rompí / me pasó»** | Santiago («Acabo de reemplazar a mi editor») y Rocha | Un resultado en primera persona + texto en 0 s | Historia, qué falló, la guarda, cómo lo hacés vos | Molde Rocha de tres capas | Comunidad | D03-A |
-| **F5. YouTube por niveles** | Iman («Dame 26 minutos…», 1,4 M) | Filtro de dolor: «Si te sirve pagar el doble por la misma tarea, no sigas» | Promesa, mapa de niveles en el primer minuto, un punto cada pocos minutos, cierre | Corte cada 3-7 s, alternando cámara, pantalla grabada y tabla; un sonido en cada cosa que aparece | Comunidad TRAMPA a ~1/3 y al final; la asesoría solo en la descripción | D01-C |
+| **F3. La pregunta del dueño** | Hormozi («sales are crap», 110 mil) | El dolor en segunda persona, en texto, en 0 s. Si no hay una pregunta real de un lead, no se inventa una cita | Pregunta, diagnóstico, concepto, ejemplo, siguiente paso | Erik con la pregunta en el panel; rótulo de pregunta 4-10 s (corregido 8-oct: el de Hormozi dura 3,5-12 s, no todo el clip) | Asesoría | S2-D08-A, S2-D07-A |
+| **F4. «Lo rompí / me pasó»** | Santiago («Acabo de reemplazar a mi editor») y Rocha | Un resultado en primera persona + texto en 0 s | Historia, qué falló, la guarda, cómo lo hacés vos | Molde Rocha de tres capas (medido el 8-oct: toma continua con capas y 2-7 capturas) | Comunidad | D03-A, D04-C |
+| **F5. YouTube por niveles** | Iman («Dame 26 minutos…», 1,49 M) | Filtro de dolor: «Si te sirve pagar el doble por la misma tarea, no sigas» | Promesa, mapa de niveles en el primer minuto, un punto cada pocos minutos, cierre | Rótulo de capítulo dentro de 1-3 s de cada tramo; cartel con nombre de 0:20 a 0:24 (el ritmo de cortes de Iman es de Gemini, no medido) | Comunidad TRAMPA en el minuto 2-3 y al final; la asesoría solo en la descripción | D01-C |
+
+**Corrección del 8-oct a F3:** la ventaja de Hormozi (mediana 155,5 mil contra 16,5 mil) viene del **diálogo con un dueño real que dice sus cifras**, no del rótulo de pregunta: sus shorts solos con el mismo rótulo rinden como el resto. F3 queda como gancho de dolor escrito; el formato de diálogo es F13 en `FORMULAS-REFERENTES.md` y espera a las asesorías grabadas con permiso.
+
+**Formatos que entran desde la semana del 17-oct** (necesitan algo que hoy no existe):
+
+| Formato | De quién sale | Qué falta | Fórmula |
+|---|---|---|---|
+| **F6. Herramienta gratis atada a una fecha** | Santiago, calculadora de WhatsApp (1,6 M; la misma noticia sin herramienta, 2-14 mil) | Construir la herramienta: costo del bot por mes según el modelo, o costo de un tratamiento a medias que no volvió (clínica dental) | FORMULAS F9 |
+| **F7. Visito un negocio y le dejo IA funcionando** | Santiago, restaurante (694,7 mil) y cafetería (303,5 mil; 112 mil en YouTube) | Un negocio de Santa Cruz que acepte por escrito; cero datos de clientes o pacientes en pantalla | FORMULAS F10 |
+| **F8. Vertical de 100-120 s, uno por semana** | Santiago (≥121 s: mediana 30 mil) y Erik (>120 s: 24,3 mil) | Lugar en el calendario: reemplaza dos cortos, cuesta lo mismo de grabación | FORMULAS F11 o F12 |
 
 Yaps: el gancho alternativo sale del filtro de dolor de Iman (F5) para las piezas de negocio, y del de F4 para las de desarrollo.
 
 ## 4. Edición: reglas para sumar a las skills
 
 **`edicion-referentes`:**
-1. **Molde Rocha como sección propia.** Hoy solo está en `PLAN-GRABACION-3-OCT.md`.
-   - Plano medio fijo con zoom digital de entrada y salida.
-   - Un corte cada 3-4 s (18 cortes en 67 s).
-   - Subtítulos de 1 a 4 palabras, blancos, con la palabra clave en amarillo.
-   - Rótulo fijo arriba durante el gancho.
-   - 4 capturas de 2-5 s cada una.
-   - Un pop o whoosh cuando entra cada gráfico, y lo-fi bajito.
-   - Duración de 58 a 80 s.
-   - [NV] Todo esto lo leyó Gemini. Antes de fijar los números, hay que medir 1 reel con el método de la skill (hojas a 2 fps, `scene`, `ebur128`). Los mp4 están en el scratchpad, en `referentes/enrique-rocha/`.
-2. **Rótulo fijo arriba con el tema en 3-5 palabras**, desde el cuadro 0, en los moldes Rocha, Erik y F3. Sale de Hormozi y de los videos 1 y 2 de Rocha. Va en negro y blanco con la palabra clave en el color del molde. El rojo de Hormozi no se usa: la paleta es verde, blanco y negro.
+1. **Molde Rocha como sección propia. Hecho el 8-oct, medido** (skill `edicion-referentes`, «Receta Rocha»). Lo que decía esta línea era de Gemini y **cayó** al medir 14 videos con ffmpeg:
+   - no hay «un corte cada 3-4 s»: son 0-2,1 cortes duros cada 10 s, con tomas de cara de 16-45 s (el de 66 s tiene 4 cortes, no 18);
+   - los subtítulos no llevan amarillo: son blancos y sin color; el énfasis lo hace una caja blanca aparte que se escribe letra por letra;
+   - el «pop o whoosh en cada gráfico» y el lo-fi no se pudieron verificar: sus 2 TikToks más vistos son solo voz;
+   - las capturas son 2-7 (mediana 4), de 1-5 s.
+2. **Rótulo fijo arriba con el tema en 3-5 palabras**, desde el cuadro 0, en los moldes Rocha, Erik y F3. Sale de Hormozi y de los videos 1 y 2 de Rocha. Va en negro y blanco con la palabra clave en el color del molde. El rojo de Hormozi no se usa: la paleta es verde, blanco y negro. **Precisión del 8-oct:** en Rocha el título queda todo el video; en Hormozi la pregunta dura 3,5-12 s y se va. En los moldes Santiago y Erik el título vive en el panel de arriba.
 3. **Rótulos de estado en el molde Santiago**, que cuentan el proceso sin voz («1 OCTUBRE», «4 VIDEOS TERMINADOS»). Salen de los videos 1 y 2 de Santiago.
 4. **CTA de 12 palabras como máximo, una sola acción**, tecleado en los últimos 2,4-5,5 s. Ya es la regla de Erik; ahora vale para todos los moldes.
-5. **Si un dato de Gemini contradice uno medido, gana el medido.** Gemini dice que Santiago usa música y whoosh; nuestra medición del 1-oct (6 reels, `ebur128`) dice sin música, y TikTok marca «sonido original». La receta no cambia.
+5. **Si un dato de Gemini contradice uno medido, gana el medido.** Gemini dice que Santiago usa música y whoosh; nuestra medición del 1-oct (6 reels, `ebur128`) dice sin música, y TikTok marca «sonido original». La receta no cambia. **Confirmado el 8-oct** en 13 videos de Santiago: sin música en las piezas con voz.
+6. **Nuevo 8-oct** (detalle y caso de cada uno en la skill, «Reglas medidas el 8-oct»): título de 3-7 palabras en el cuadro 0 y prueba antes de los 3 s; corte de todo silencio (pausa máxima 0,5 s); capas en vez de cortes; una posición de subtítulo por pieza; color del subtítulo por hablante cuando hay dos personas; cada cuenta entra a la vez que se dice (pizarra de ~9 s de Hormozi, a probar en N07); diccionario de marcas antes del render; leer el caption entero antes de publicar.
+7. **Erik cambió de sistema el 3-oct** (panel oscuro arriba, cámara abajo, subtítulo pegado a la costura). `recetas/erik.json` describe el de septiembre. Esta semana no se cambia; entra cuando se actualicen la receta y el script y Sergio Urcullo vea una pieza de prueba.
 
 **`editor-videos`, para el YouTube horizontal:**
 1. Cambiar de capa (cámara, pantalla grabada o gráfico) cada 3-7 s.
 2. Mapa de niveles o capítulos en pantalla antes de 1:15.
-3. El CTA de la comunidad aparece 2 o 3 veces (a ~1/3, a ~2/3 y al final), no solo al cierre.
+3. ~~El CTA de la comunidad aparece 2 o 3 veces (a ~1/3, a ~2/3 y al final), no solo al cierre.~~ **Corregido 8-oct:** un CTA en el primer tercio (minuto 2-3) y otro al final. Medido: Hormozi lo pone al 17, 33 y 35 % (confirmado por audio), Gadzhi al ~20 %; Santiago nombra su comunidad recién al minuto 22 de 25 y no se cuenta como modelo.
 4. Cada cifra dicha entra como tabla o contador.
+5. **Nuevo 8-oct:** cartel con nombre y una línea verdadera de 0:20 a 0:24 (Hormozi); apertura con 3 cifras verificables, una cada 1-1,5 s (Hormozi abre con 5 en 5 s); rótulo de capítulo dentro de 1-3 s de cada tramo (Gadzhi); miniatura con 2-4 palabras, cara, logo y un número real (Santiago, Gadzhi); descripción con la comunidad en la línea 1, capítulos con tiempos y fuentes con fecha (Erik); **el largo se corta en 4-6 verticales, uno por capítulo, el mismo día** (Erik).
 
 ## 5. Qué cambiar YA en los guiones del 9 al 15-oct
 
-N03 (vie 9) ya está agendado y no se toca. **No se reescriben los guiones**, para no rehacer lo aprobado. Se cambian tres líneas por pieza:
+**Estado al 8-oct a la noche:** nada de esta sección está aplicado todavía en `GRABAR-10-16-OCT.md` (siguen los cierres dobles y no hay líneas «Rótulo:»). N03 (vie 9) ya está agendado y no se toca. **No se reescriben los guiones enteros**: los datos ya verificados quedan; cambian el gancho, el orden de los tramos y el cierre, con la fórmula de cada pieza (`FORMULAS-REFERENTES.md`). Se incluyen D04-C y D05-A (vie 16) porque están en el mismo archivo.
 
 1. **CTA único.** Reemplazar el cierre doble (~40 palabras) por una sola acción:
-   - **Comunidad:** N07 HAIKU, D03-A HOOK, N06 ANTIGRAVITY, N04 VERIFY, DD-A CACHE, N02 MIGRAR, D01-A SKILL, D02-A EFFORT.
+   - **Comunidad:** N07 HAIKU, D03-A HOOK, N06 ANTIGRAVITY, N04 VERIFY, DD-A CACHE, N02 MIGRAR, D01-A SKILL, D02-A EFFORT, D04-C MIRAR, D05-A WORKTREE.
    - **Asesoría:** S2-D08-A PROMESA y S2-D07-A VENTANA.
-   - **D01-C:** TRAMPA a ~1/3 y al final; la asesoría solo en la descripción.
+   - **D01-C:** TRAMPA en el minuto 2-3 y al final; la asesoría solo en la descripción (corregido 8-oct: antes decía «a ~1/3»; ver §4).
    - **N07 pierde la asesoría**: es una noticia para quien arma bots, no para el dueño.
-2. **Rótulo fijo arriba (línea nueva «Rótulo:» en cada guion):**
+   - Los 4 referentes que miden su CTA usan **una** acción (Santiago «enlace en mi perfil» en 7 de 11; Hormozi un destino por largo; Rocha una pregunta; Erik una palabra).
+2. **Título del cuadro 0 (línea nueva «Rótulo:» en cada guion).** De 3 a 7 palabras con la promesa, desde el cuadro 0, con la prueba en pantalla antes de los 3 s (Santiago G1 a 2,25 s; Rocha en 4 de 4; Erik en 0-1,5 s). En el molde Rocha va fijo arriba todo el video; en Santiago y Erik vive en el panel. En las dos piezas de negocio puede ir en forma de pregunta, 4-10 s (Hormozi).
 
    | Pieza | Rótulo |
    |---|---|
@@ -109,49 +153,95 @@ N03 (vie 9) ya está agendado y no se toca. **No se reescriben los guiones**, pa
    | D03-A | «EL HOOK QUE ROMPÍ» |
    | N06 | «GEMINI CLI AHORA ES ANTIGRAVITY» |
    | N04 | «SE REVISA ANTES DEL COMMIT» |
-   | S2-D08-A | «TU BOT PROMETE DE MÁS» |
+   | S2-D08-A | «¿TU BOT PROMETE DE MÁS?» |
    | DD-A | «OPENAI: UN QUINTO DEL PRECIO» |
-   | S2-D07-A | «LA REGLA DE 24 HORAS» |
+   | S2-D07-A | «¿POR QUÉ TU BOT NO CONTESTA?» |
    | N02 | «SONNET 4.5 SE APAGA EL 30-NOV» |
    | D01-A | «TU PRIMERA SKILL EN 1 MINUTO» |
    | D02-A | «LA PERILLA DEL ESFUERZO» |
+   | D04-C | «VERIFICADO CON UN 200, Y ROTO» |
+   | D05-A | «DOS SESIONES SIN PISARSE» |
 
    Cada cifra se vuelve a verificar contra la doc oficial el día de publicación.
-3. **Gancho:**
-   - **S2-D08-A y S2-D07-A** abren con el dolor del dueño en segunda persona y en texto en el cuadro 0 (F3). Por ejemplo: «¿Tu bot le contestó a un cliente de ayer y WhatsApp no lo dejó?».
-   - **Las piezas de desarrollo** (D03-A, N04, D01-A, D02-A, N06) suman una línea de «así lo uso en mi empresa» en los primeros 10 s, si todavía no la tienen. Es la ventaja contra el nicho saturado de noticias de Claude que cubre Rocha.
-4. **D01-C:** título y apertura al formato F5. Agregar el mapa de niveles al primer minuto y el CTA a 1/3.
-5. **Herramienta gratis atada a una fecha** (lo que copiamos de Santiago): una calculadora de cuánto cuesta un bot por mes según el modelo, con los datos de N07 y DD-A. **Queda anotada como pendiente**, no es para esta semana: es algo nuevo que hay que construir, y Santiago ya tiene la de WhatsApp.
-   - [NV] La fecha del SIN (4-nov-2026) **no se usa como gancho** sin verificarla. Está prohibido decir «obligatorio por ley».
+3. **Gancho por pieza** (fórmulas de `FORMULAS-REFERENTES.md` §1b, con lo que rinde cada una):
+
+   | Pieza | Fórmula | Línea propuesta |
+   |---|---|---|
+   | N07 | Pregunta de plata + la cuenta en el cuadro 0 (Santiago, 1,6 M; Erik, objeto + precio, 598 mil) | «Mil mensajes de tu bot: tres dólares ayer, treinta centavos hoy.» Con el contador de 3 a 0,30 USD desde el cuadro 0. La frase de hoy («Anthropic sacó un modelo diez veces más barato») pasa a la segunda línea |
+   | S2-D08-A | Dolor en segunda persona (F3) | Se queda la de hoy («¿Un bot con IA le promete a tu cliente una entrega que nunca confirmaste? Lo probé.»). Para el yap, filtro de dolor (Gadzhi, 1,49 M): «Si tu bot nunca prometió algo que no tenías, no sigas» |
+   | S2-D07-A | Situación + reencuadre (Erik, «límites de Claude», 277 mil) | «Tu bot le escribe a un cliente y el mensaje no sale. El problema no es tu bot: es la ventana de 24 horas.» |
+   | DD-A, N06, N02 | Noticia con la cuenta, no sola (la noticia sola rinde 7-14 mil en Erik y Santiago) | Se quedan: las tres ya abren con el número o la fecha. Que el número esté escrito en el cuadro 0 |
+   | D03-A, D04-C | Resultado en primera persona (F4) | Se quedan. La primera frase va en el cuadro 0 con el título fijo arriba (molde Rocha) |
+   | N04, D01-A, D02-A, D05-A | «Así lo uso en mi empresa» en los primeros 10 s | Sin cambios respecto de la mañana. Si la pieza pasa de 60 s, un índice entre los 3 y los 13 s («2 pasos», «3 cosas»), como Erik |
+
+4. **Estructura de dos piezas de negocio:**
+   - **S2-D07-A con la fórmula F11 de FORMULAS** (Erik, «4 requisitos legales», 352 mil): lo que el guion ya dice, ordenado como riesgos de lo más barato a lo más caro, cada uno con su arreglo en una línea. (1) Buscá el error 131047 en los registros: revisarlo es gratis. (2) Una plantilla que termina en una variable, Meta la rechaza: cerrala con una frase fija. (3) Sin plantilla aprobada, pasadas las 24 horas tu seguimiento no sale. Sin datos nuevos.
+   - **N07: la cuenta dicha de a un paso** (Hormozi), con el número que entra a la vez (contador en el panel o la pizarra de ~9 s: se prueba acá una sola vez).
+5. **Cierres:**
+   - **Una analogía cotidiana donde encaje** (Hormozi, 4 de 6 shorts y 6 de 6 largos). DD-A: la caché es «el cuaderno donde ya anotaste la respuesta»; S2-D07-A: la ventana de 24 h es «el horario de la ventanilla». Va en el texto antes de grabar. En DD-A, la pegatina del cuaderno entra con la palabra (prueba de una pieza).
+   - **Una frase de despedida fija** (Gadzhi, 8 de 10 largos; Santiago, «Chao» en 5 de 9). La elige Sergio Urcullo; mientras tanto se queda el «chau» de la toma de 4 s.
+   - **Revelar cuánto costó y cuánto tardó el propio video** (Santiago G3, 419,5 mil) **solo con la cifra medida**. Esta semana no, salvo que el pipeline ya tenga el costo y el tiempo reales de la pieza.
+6. **D01-C (YouTube del mar 13) con la fórmula F14 de FORMULAS** (Gadzhi, Claude en 26 min, 1,49 M) y las reglas de YouTube de §4:
+   - 0:00: filtro de dolor + rótulo de 3 palabras: «Si te sobra la plata para pagar el doble por la misma tarea, este video no es para vos».
+   - 0:00-0:05: tres cifras verificables, una cada 1-1,5 s (Opus 4/20, Sonnet 2/10, Haiku 0,10/0,50 por millón), no cifras de estatus (Hormozi abre con 5 en 5 s).
+   - 0:20-0:24: cartel con su nombre y una línea que sea verdad hoy.
+   - Antes de 1:00: el mapa del video («la tabla de precios, las pruebas de Anthropic, mi prueba con trampa, la regla que uso»). Rótulo de cada tramo dentro de 1-3 s de empezar.
+   - Minuto 2-3: TRAMPA en la comunidad; se repite al final.
+   - Miniatura: cara, logos de los dos modelos, 2-4 palabras y un número real del video.
+   - Descripción: comunidad en la línea 1, capítulos con tiempos, las fuentes con fecha y una pregunta (Erik).
+   - **Cortes verticales: de 2 a 4, uno por capítulo**, el mismo día en YouTube Shorts y TikTok (Erik, 6 cortes del mismo largo). Los que no entren en la semana pasan a la del 17. No piden grabar más.
+7. **Antes de publicar:** diccionario de marcas sobre el subtítulo (Rocha publica «cloud» por Claude en 5 de 12) y el caption leído entero (Erik publicó dos con notas internas el 8-oct).
+8. **Medir desde esta semana:** guardados por vista de cada reel, junto a las vistas, en la revisión del lunes 19 (Santiago y Rocha: los guardados separan lo que se difunde). Y un comentario fijado de Sergio Urcullo en cada reel pidiendo que comenten con texto y no solo con emojis (Rocha lo hace en cada post; no necesita mensaje automático).
+9. **Queda anotado para la semana del 17-oct (no es para esta):**
+   - F6, la herramienta gratis atada a una fecha: costo del bot por mes según el modelo, o costo del tratamiento a medias que no volvió. Hay que construirla. La fecha del SIN (4-nov-2026) no se usa como gancho sin verificarla y está prohibido decir «obligatorio por ley».
+   - F7, «visito un negocio»: necesita un negocio de Santa Cruz con permiso escrito.
+   - F8, un vertical de 100-120 s por semana en lugar de dos cortos.
+   - Los carruseles de IG también como carrusel de fotos con música en TikTok (Santiago: 4 carruseles, mediana 8,7 mil; se prueba).
+   - Asesorías gratis grabadas con permiso escrito: de cada una, 1 largo y 3-5 cortes con la pregunta del dueño (fórmula F13 de FORMULAS, Hormozi).
+   - El sistema vigente de Erik como molde, con una pieza de prueba que vea Sergio Urcullo.
+   - Formulario de cal.com con filtro (rubro, profesionales, mensajes por día; Hormozi filtra antes de la llamada) y el cupo real de 3 por semana a la vista (Gadzhi muestra disponibilidad).
 
 ## 6. Lo que no se copia, y por qué
 
 | Qué | Por qué no |
 |---|---|
-| Comentar una palabra para recibir el recurso por mensaje directo (Erik, Rocha) | No está probado (2 rechazos de Meta, 0 leads) y contestar a mano cuesta horas. Se retoma cuando el mensaje automático funcione |
-| Volumen de 1 a 3 reels por día, o YouTube largo diario (Rocha, Iman, Santiago) | Ellos tienen equipo. Sergio Urcullo graba 1 h por día, y el cuello de botella es grabar |
-| Noticias de Claude del mismo día como único nicho (Rocha) | Está saturado en español. Sergio Urcullo saldría como un segundo Rocha |
+| Comentar una palabra para recibir el recurso por mensaje directo (Erik, Rocha) | No está probado (2 rechazos de Meta, 0 leads) y contestar a mano cuesta horas. Se retoma cuando el mensaje automático funcione. **8-oct:** a Erik le da 3 a 8 veces más comentarios, no un salto; y en TikTok casi no funciona (Santiago 0,07 % de las vistas) |
+| Volumen de 1,5 a 6 piezas por día (Erik, Rocha, Hormozi) | Rocha, Hormozi e Iman tienen equipo. Sergio Urcullo graba 1 h por día, y el cuello de botella es grabar. **Corregido 8-oct:** Iman no publica largos a diario (7 en 63 días) y Rocha no tiene largos en YouTube |
+| El nicho de Rocha | **Corregido 8-oct:** su noticia de modelo es el 1 % de sus vistas de TikTok; rinde con «construir apps y agentes» para desarrolladores. El cliente de Onia es el dueño de una clínica: se copia la forma (receta de pasos), no el tema |
 | Hardware y homelab (Erik) | El cliente de Bolivia no compra mini PCs |
 | Afiliados y descuentos (Erik) | Pagan poco y distraen de la oferta propia |
-| Llamadas pagas (Rocha, de USD 15 a 297) y comunidad paga (Erik, Santiago) | Vender horas va contra la regla. La comunidad paga es una línea nueva y la decide Sergio Urcullo. La asesoría es gratis desde el 8-oct |
+| Llamadas pagas (Rocha, de USD 15 a 297; Erik, USD 75 y 397) y comunidad paga (Erik, Santiago) | Vender horas va contra la regla. La comunidad paga es una línea nueva y la decide Sergio Urcullo. La asesoría es gratis desde el 8-oct |
 | Reventa de bots a USD 2.000-3.000, «hacete rico», retos con premios de USD 250 mil (Santiago, Iman) | Otro cliente y otra línea de negocio. Choca con «no fabricar cifras» |
-| Sorteo de una MacBook (Iman) | Imposible de sostener con 0 clientes. Si se sortea algo, que sea una asesoría o una plantilla |
-| Workshop de USD 5.000 y formato de conferencia con público (Hormozi) | Exige negocios de USD 1 M o más al año. Sergio Urcullo graba solo |
-| Memes y GIFs de películas (Rocha) | Riesgo de derechos de autor y tono que no es de la marca |
+| Sorteo de una MacBook (Iman) | Imposible de sostener con 0 clientes. **8-oct:** además no mueve los comentarios (0,6 a 5,0 por mil con y sin sorteo). No se sortea nada |
+| Taller de USD 5.000, Vantage de USD 36.000 y formato de conferencia con público (Hormozi) | Exigen negocios de USD 1 M o más al año. Sergio Urcullo graba solo |
+| Cifras de estatus como prueba (Hormozi, Iman) | Con 0 clientes pagando, la prueba es la cuenta del guion y la pantalla real |
+| Memes, GIF de películas, mascota pixel de Claude, filmar el monitor con el celular (Rocha) | Derechos de autor y de marca; el monitor filmado queda ilegible y choca con «producto visible» |
+| Narrativa sin cara, IA generada, motivacional (Santiago, octubre) | Es donde su cuenta cayó: 896 a 2,7 mil contra una mediana de 12,65 mil |
+| Clips mudos, reacciones a comerciales ajenos, respuestas con el nombre de un usuario (Erik) | Son lotería y usan material o nombres de terceros: eso pasa por Sergio Urcullo |
+| Skits de pareja y lifestyle (Iman) | Su TikTok no habla de IA ni de negocio; no sirve a la marca |
 | Gemelo voxel, interfaces simuladas, naranja de Claude, oficina 3D de lujo (Rocha, Santiago, Iman) | Rechazo a lo «muy IA», paleta verde, blanco y negro, y regla de no fabricar pantallas |
-| Picos virales (1,4 M de Erik, 1,6 M de Santiago) como meta | No se pueden repetir. Sus medianas son de 2-55 mil (Erik) y de 8-30 mil (Santiago) |
+| Picos virales (1,4 M de Erik, 1,6 M de Santiago) como meta | No se pueden repetir. **Medianas medidas el 8-oct:** Erik 8,4 mil en TikTok (5,8 mil las últimas 4 semanas); Santiago 12,65 mil (7,7 mil en sep-oct); Rocha 1,3 mil en TikTok y 72,8 mil en IG |
 | Cifras de ingresos de los referentes salidas de blogs | No se pueden verificar y no van en ningún material |
 
-**Lo que no se pudo verificar en los análisis:**
-- Las fechas de los videos de Hormozi e Iman (no constan): puede que no sean de las últimas 4 semanas.
-- Los cortes, el audio y los colores salen de Gemini (modelo lite, una sola pasada), no medidos.
-- YouTube no se pudo bajar en ningún referente, y en Instagram no se entró.
+**Lo que sigue sin verificar después del 8-oct:**
+- Instagram de los 5: no se pudo listar ni bajar sin sesión. Las vistas de IG son las del 3-oct; los carruseles de Hormozi e Iman no se vieron.
+- TikTok de Hormozi (yt-dlp no abre el perfil).
+- El audio escuchado por una persona: música y SFX salen del piso de ruido, no de oírlos.
+- La edición de los largos de YouTube de Santiago, Erik e Iman es de Gemini con 3 cuadros: YouTube sí se baja con el cliente `android` de yt-dlp (se probó en Hormozi), falta medirlos.
+- Lo que hay dentro de las comunidades pagas, los recursos gratis de Santiago y el Notion de Iman.
 
 Una nota sobre las fuentes: `eriktaveras.com` traía un texto dirigido al agente, pidiéndole anunciar un «canario». Se ignoró y no influye en este plan.
 
 ---
 
 ## Análisis por referente
+
+> **8-oct a la noche: lo de abajo es el análisis de la mañana** (3 videos por referente, Gemini lite, sin medir). Lo superan las fichas completas de `hermes-content/references/video-intake/2026-10-08-referente-*.md`. Se deja porque esas fichas no repiten estos videos. **Lo que cayó al medir:**
+> - **Erik:** «la palabra clave le dio 26.400 comentarios» es de IG; medido en TikTok, el efecto es de 3 a 8 veces. Sus Shorts son 130, no los listados. Su sistema de tarjetas cambió el 3-oct.
+> - **Santiago:** «6-8 cortes cada 10 s» en el de 1,6 M son 3,2 cortes duros (6 cambios visuales); «música y whoosh» no: las piezas con voz van sin cama. Sus «60 s» de TikTok son carruseles de fotos.
+> - **Rocha:** «18 cortes en 67 s» son 4; el amarillo no existe; su nicho que rinde no es la noticia del día (1 % de las vistas).
+> - **Hormozi:** el rótulo rojo no dura todo el clip (3,5-12 s); el amarillo no es la palabra clave sino quien habla; la ventaja de los shorts de pregunta es el diálogo con un dueño real.
+> - **Iman:** no publica a diario (7 largos en 63 días); el sorteo no mueve los comentarios; sus precios ya constan (§2).
 
 === erik-taveras ===
 **Erik Taveras: análisis de referente (8-oct-2026)**
