@@ -26,6 +26,14 @@
   cuadro del tramo 03 «SONNET + PRUEBA» (s 23), el que GRABAR v3 pide aprobar ANTES de renderizar. Visto a 390 px de ancho: se lee todo,
   incluida la nota al pie (36 px). La captura de la tabla de precios es un recuadro marcado: la real la saca la madre con Chrome el día
   de publicar. Si Sergio Urcullo o la madre lo aprueban, sigue el render (lo hace la madre, en la PC, con HyperFrames).
+- **Molde «mosaico-tablero» (rama de la madre, `videos/moldes/mosaico-tablero/`) — visto en navegador el 9-oct (15:20 UTC):** la composición
+  carga sin errores y los 6 tramos se ven (se capturaron 16 cuadros con Playwright, moviendo el timeline GSAP `main`; sin el CLI de
+  HyperFrames, que no está en la nube). Para la madre: (1) el rótulo verde «PRUEBA DE EDICIÓN» arriba a la derecha hay que sacarlo antes
+  de publicar; (2) en el cierre, «· link en mi perfil» cae solo en una 2.ª línea con un punto suelto: va en una línea o sin el punto;
+  (3) el timeline dura 27,63 s y el `data-duration` dice 30 s (hay que confirmar que HyperFrames sostiene el último cuadro); (4) todo
+  vive en el 55 % de arriba y el 40 % de abajo queda vacío; (5) **muestra un «tablero» con Agenda, Clientes, Cobros y Chat**: es
+  mostrar funciones del producto, y `CLAUDE.md` (contenido en redes) exige el OK de Sergio Urcullo hasta que exista la tabla «se promete /
+  funciona»; el propio README del molde dice «revisión de Sergio antes de usar el molde. No publicar». Por eso NO lo usé en una pieza.
 - **Pendiente mío, sin bloqueo:** mirar renderizada `sergiourcullo.vercel.app/claude-code` antes del jue 15 (aviso SKILL); verificar la
   publicación de N03 el vie 9 ~18:30 La Paz.
 
