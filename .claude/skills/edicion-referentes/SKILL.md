@@ -445,6 +445,8 @@ Hasta que el lote de prueba dé su veredicto, **lo único adoptado son las imág
 
 ## Relacionadas
 
+- **9-oct-2026 · caso DePBfHouarG, 45,3 → 47,0 s · sin medir:** mosaico de recapitulación con gráficos ya vistos antes del logo/CTA; candidato para los apoyos de Sergio Urcullo, sin añadir claims ni cambiar el molde; observado en cuadros, ritmo y duración pendientes ([ficha](../../../hermes-content/references/video-intake/2026-10-09-reel-DePBfHouarG.md)).
+
 - `editor-videos`: corte, transcripción, regla de oro, ortografía y master. Este skill se monta encima.
 - `diseno-contenido-onia`: logos oficiales, capturas y paleta ONIA.
 - Mediciones previas: `hermes-content/references/video-intake/2026-10-01-santiago-erik-edicion-medida.md`.
