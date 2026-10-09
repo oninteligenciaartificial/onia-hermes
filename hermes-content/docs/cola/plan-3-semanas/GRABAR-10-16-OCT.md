@@ -13,7 +13,7 @@
 Se arma la escena una vez por set y, dentro del set, se graba en orden de publicación. El bruto de cada pieza sube antes de las 18:00 del día anterior a su publicación (el paquete llega a las 21:00).
 
 1. **Vie 9, antes de las 18:00 · set Santiago** (cintura para arriba, aire arriba de la cabeza para el panel): **N07** (~20 min, sale sáb 10) → **DD-A** (~20 min, sale dom 11) → **N02** (~20 min, sale jue 15; antes, la madre corre el control de T5 y te dice si va la línea A o la B).
-2. **Vie 9, a continuación · set Rocha** (plano medio corto, una toma continua, pecho libre): **D03-A** (~20 min, sale sáb 10) → **D04-C** (~15 min, sale vie 16; solo si los agentes ya probaron la captura C1 rota; si no, pasa al punto 5).
+2. **Vie 9, a continuación · set Rocha** (plano medio corto, una toma continua, pecho libre): **D03-A** (~20 min, sale sáb 10) → **D04-C** (~15 min, sale vie 16; la toma de cara no depende de la captura C1).
 3. **Sáb 10, 14:00-15:30 · set Santiago:** **N06** (~20 min de cámara). Antes, de 12:00 a 13:00, grabás la terminal de Antigravity, solo si diste el OK de instalarlo el vie 9 antes de las 20:00.
 4. **Dom 11, antes de las 18:00 · set Erik** (sentado, set oscuro con contraluz, cara corrida a la derecha, pecho libre): **S2-D08-A** (~20 min) → **N04** (~20 min) → **S2-D07-A** (~20 min) → **D01-A** (~20 min) → **D05-A** (~20 min). Las dos primeras salen el lun 12; si cortás antes, las otras tres van el mar 13.
 5. **Lun 12, antes de las 18:00:** **D01-C**, YouTube horizontal (~35 min, celular de costado, con la toma de ~15 s de los dos cortes) → **D02-A**, set Santiago (~20 min, después de la prueba propia del dom 11). Si la madre adelanta esa prueba al sáb 10, D02-A se graba con N06 y no hay que armar el set Santiago otra vez.
