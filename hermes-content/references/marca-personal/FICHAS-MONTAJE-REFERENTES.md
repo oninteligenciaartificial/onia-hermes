@@ -8,6 +8,77 @@
 > Las fichas de Instagram del 3-oct siguen valiendo para portadas, perfil y carruseles; donde la medición las contradice,
 > va una nota «Corregido 8-oct».
 
+## Pasada nocturna 9-oct (Gemini, 15 videos)
+
+Fuente: los 15 `.md` de `scratchpad/noche/salida/` de la sesión
+`202a717e-5bc8-42ab-ba2e-3dc26d723505`, en el Temp local de Claude. Leídos completos:
+Erik 2, Rocha 3, Hormozi 5 y Gadzhi 5. Santiago no tiene análisis nuevo en este lote.
+`progreso.log` dice que sus cinco entradas ya estaban analizadas.
+
+**Todo hallazgo de esta pasada es [Gemini, sin medir].** Los segundos son los que declara el análisis;
+no se verificaron mirando el MP4. El script usa Flash Lite como fallback, pero los `.md` no registran
+qué modelo terminó cada caso. No se atribuye un modelo por archivo. El script borra el MP4 al terminar.
+Las recetas medidas del 8-oct siguen mandando. Un video distinto puede ser una variante, no prueba de
+que la medición anterior sea falsa. No se copian consejos que Gemini propone pero no observa.
+
+### Erik Taveras — fuente pendiente; ningún cambio de receta
+
+| Caso y segundo | Diferencia frente a lo conocido | Decisión |
+|---|---|---|
+| [27065981](https://www.tiktok.com/@eriktaveras/video/27065981), 1-3 s; cortes propuestos en 3-5 s | [Gemini, sin medir] Describe lip-sync, cámara en mano y sombras como transición; estima 8-10 cortes/10 s. No describe el panel técnico medido. | Verificar URL, autor y archivo antes de medir. El ID corto y el contenido son alertas de fuente. No trasladar ese ritmo, música ni movimiento al molde Erik. |
+| [27071343](https://www.tiktok.com/@eriktaveras/video/27071343), 0-5 s | [Gemini, sin medir] Describe una toma de 5 s sin texto ni tarjetas. Luego recomienda subtítulos en 0 s, corte en 2 s y zoom en 3 s, aunque no los observó. | Excluir esas recomendaciones como evidencia. Verificar fuente igual que el caso anterior. No cambia la receta. |
+
+### Enrique Rocha — una hipótesis de colocación; discrepancias sin adoptar
+
+| Caso y segundo | Solo lo nuevo o discrepante | Decisión |
+|---|---|---|
+| [7694498139696418069](https://www.tiktok.com/@soyenriquerocha/video/7694498139696418069), 1-5 s | [Gemini, sin medir] Los objetos gráficos parecen apoyarse donde presenta la mano. Es una colocación ligada al gesto, más específica que la ficha sobre el pecho ya conocida. | Candidato: colocar un logo real junto al gesto, sin tapar la cara. Ver cuadros consecutivos antes de afirmar seguimiento de mano; Gemini no demuestra hand-tracking. No copiar mascotas pixeladas. |
+| Mismo caso, 0-30 s y 22 s | [Gemini, sin medir] Mezcla cortes con apariciones de stickers en su promedio; describe subtítulo amarillo de 3-5 palabras, incluido «Fan out» a 22 s. | La receta medida mantiene 0-2,1 cortes duros/10 s y subtítulo blanco de 1-3 palabras. Contar cortes de cámara, capturas y capas por separado. El amarillo no entra a la receta. |
+| [7694451746717912328](https://www.tiktok.com/@soyenriquerocha/video/7694451746717912328), 1-3 s; terminal a 25-26 s | [Gemini, sin medir] Describe cajas oscuras y resaltado amarillo/verde; estima 3-5 cortes/10 s sin lista de tiempos. | Contrasta con caja blanca y subtítulo sin color medidos. Revisar 1-3 s y una hoja completa. La terminal a 25-26 s es otro caso de captura real, técnica ya conocida; no añade regla. |
+| [7694405662901669121](https://www.tiktok.com/@soyenriquerocha/video/7694405662901669121), 1-2 s y 2-3 s | [Gemini, sin medir] Declara pantalla dentro del gancho y regreso a la cara, frente al gancho sin corte medido en otros videos. | Posible variante: comprobar ambos cambios cuadro a cuadro. No adelantar capturas ni subir el ritmo por este relato. Lo-fi y whoosh se declaran sin segundo de ejemplo: no se adoptan. |
+
+### Alex Hormozi — resultado fechado y reacciones; no cambiar subtítulos por defecto
+
+| Caso y segundo | Solo lo nuevo o discrepante | Decisión |
+|---|---|---|
+| [7694348950819704078](https://www.tiktok.com/@ahormozi/video/7694348950819704078), 137 s (2:17) | [Gemini, sin medir] Epílogo «14 DAYS LATER» seguido de captura de resultados. El dato posterior cierra la historia, distinto de una cuenta durante la explicación. | Candidato para un caso real de Sergio: fecha + resultado comprobable antes del único CTA. Medir duración de placa y captura. Gemini dice a la vez corte seco y fade-in: resolver mirando cuadros. No dar esas cifras por verificadas ni afirmar que produce un loop. |
+| Mismo caso, 0-3 s | [Gemini, sin medir] Declara rótulo de 2 s y cambios de plano a 1 y 2 s; estima 5-7 cortes/10 s. | No sustituye el rótulo de 3,5-12 s ni los conteos medidos en otros diálogos. Medir este caso como variante de escenario. No adoptar música ni whoosh sin escucha localizada. |
+| [7694528500937608461](https://www.tiktok.com/@ahormozi/video/7694528500937608461), 0-1 s y 5-6 s | [Gemini, sin medir] Una frase aparece encerrada en blanco; luego inserta rostros de oyentes durante el discurso. La reacción sería un apoyo distinto de alternar solo al cambiar quién habla. | Candidato solo con una reacción real del mismo intercambio y permiso. Comprobar continuidad del audio en 5-6 s. No convertir el recuadro ni el amarillo descrito en un nuevo sistema de subtítulos. |
+| [7694373691613924622](https://www.tiktok.com/@ahormozi/video/7694373691613924622), 0-21 s | [Gemini, sin medir] Declara pregunta fija hasta el final, frente al rótulo temporal medido en diálogos. | Posible variante de monólogo corto. Medir desaparición del rótulo; no extender el de negocio a toda pieza. |
+| [7694497614800096525](https://www.tiktok.com/@ahormozi/video/7694497614800096525), 0-2 s y 15-16 s | [Gemini, sin medir] Describe monólogo sin título ni prueba inicial; termina sin CTA. Difiere de la regla común de apertura y cierre de Sergio. | Registrar excepción de formato, no permiso para quitar prueba o CTA. Toma continua y texto como única capa ya eran conocidos. |
+| [7694282700940659982](https://www.tiktok.com/@ahormozi/video/7694282700940659982), 17-20 s y 21-24 s | [Gemini, sin medir] Propone conservar silencio reflexivo; describe pantalla partida con posiciones de participantes inconsistentes entre sus apartados. | Medir audio en 17-20 s y revisar quién queda arriba en 21-24 s. No cambiar pausa máxima ni layout. La ausencia de color que declara tampoco corrige el color por hablante medido en otros diálogos. |
+
+### Iman Gadzhi — plano detalle y archivo personal; cuidado con la cuenta
+
+Estos cinco archivos usan `@imangadzhi`. La ficha medida del 8-oct usa `@realimangadzhi`.
+Verificar autor y procedencia antes de atribuirlos al mismo catálogo. No hay equivalencia confirmada.
+
+| Caso y segundo | Solo lo nuevo o discrepante | Decisión |
+|---|---|---|
+| [7693604235610492183](https://www.tiktok.com/@imangadzhi/video/7693604235610492183), 13-14 s | [Gemini, sin medir] Plano detalle de pedales justo donde se explica la dificultad física; declara frenazo/impacto sincronizado. | Candidato: en un tutorial de Sergio, insertar el clic, campo o botón exacto que resuelve el paso. Medir duración y continuidad del audio. El SFX necesita escucha; no añadirlo por defecto. |
+| [7693203496782351638](https://www.tiktok.com/@imangadzhi/video/7693203496782351638), 15-18 s; 0 s y 21-22 s | [Gemini, sin medir] Ráfaga de archivo personal para ilustrar la anécdota, frente al diálogo casi sin gráficos conocido. Estima 12-14 cortes/10 s. Además atribuye intención a una errata y llama loop al final. | Candidato solo si hay archivo propio pertinente. Contar planos y tiempo de lectura antes de adoptar la ráfaga. No copiar faltas deliberadas ni afirmar intención o repetición sin evidencia. |
+| [7692179254406090017](https://www.tiktok.com/@imangadzhi/video/7692179254406090017), 19 s y 22 s | [Gemini, sin medir] Localiza una reacción a 19 s y blanco y negro a 22 s. | La reacción aporta un caso para revisar; blanco y negro en el remate ya estaba medido, no es una regla nueva. |
+| [7693962799550090529](https://www.tiktok.com/@imangadzhi/video/7693962799550090529), 0-3 s y 19 s | [Gemini, sin medir] Describe título superior desde el inicio y frase cortada al final. Contrasta con «ninguno» en texto fijo del skit medido. | Posible variante callejera. Comprobar título y final; no cortar la explicación de Sergio para fabricar un loop. No añade técnica útil esta semana. |
+| [7694300980669598998](https://www.tiktok.com/@imangadzhi/video/7694300980669598998), 0-3 s | [Gemini, sin medir] Título de contexto sobre el diálogo desde el primer cuadro. Declara música y SFX sin localizar un ejemplo. | Verificar variante y cuenta. Alternar turnos y titular ya eran conocidos; no añaden regla. El blanco y negro del cierre no tiene segundo en el análisis: no se extrae como hallazgo localizado. |
+
+### Tres pruebas útiles para Sergio esta semana y qué medir antes
+
+1. **Logo junto al gesto.** Rocha, 7694498139696418069, 1-5 s. Para presentar una herramienta.
+   Bajar el MP4 y revisar a 4 fps; cuadro a cuadro al entrar. Medir posición, demora desde la palabra,
+   duración y si sigue la mano o solo coincide con ella. Primero un elemento real, sin mascotas ni SFX.
+2. **Plano detalle del paso.** Gadzhi, 7693604235610492183, 13-14 s. Para una demo de Sergio.
+   Verificar primero la cuenta. Contar entrada y salida del insert; medir cuánto dura y si la voz continúa.
+   Usar captura real legible. Escuchar el SFX por separado antes de decidir si aporta.
+3. **Resultado posterior con fecha.** Hormozi, 7694348950819704078, 137 s. Para «lo probé y pasó esto».
+   Medir placa, captura y tiempo de lectura. Comprobar corte/fundido. Usar solo fecha y resultado reales
+   de Sergio; conservar el único CTA previsto. Si no hay resultado documentado, no se usa.
+
+Para los tres: MP4 de la URL correcta, `ffprobe`, hoja a 2 fps y apertura a 4 fps;
+conteo con `select='gt(scene,0.35)'` revisado a mano para separar cambios de capa, gestos y cortes;
+`ebur128` más escucha de pausas y eventos para verificar música/SFX. LUFS por sí solo no identifica música.
+Guardar tabla con segundos y cuadros. Esta pasada no descargó ni midió los MP4, no editó videos
+y no demuestra mejora de retención. Hasta esa medición, son pruebas candidatas, no recetas adoptadas.
+
 ## Edición medida por formato, 5 referentes (8-oct-2026)
 
 Medido con ffmpeg (cortes con umbral 0,35, `ebur128`), cuadros leídos a 2-4 por segundo y Whisper. Lo que solo dijo

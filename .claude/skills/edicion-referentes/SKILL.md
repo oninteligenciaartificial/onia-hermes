@@ -268,6 +268,12 @@ Cada regla trae su caso. Lo que solo dijo Gemini no entra.
 14. **Copiar el método, no la plantilla.** Erik cambia de sistema visual cada 4-6 semanas (8 épocas medidas entre
     marzo y octubre) y Santiago cambió de subtítulo 3 veces en 6 meses: ninguno tiene una plantilla fija. La identidad de Sergio Urcullo (verde, blanco y negro) no rota.
 
+## Pruebas de edición pendientes (9-oct-2026; no cambian las recetas medidas)
+- [Gemini, sin medir] Antes de probar estas reglas, medir el caso con MP4 y cuadros; detalle en «Pasada nocturna 9-oct (Gemini, 15 videos)» de las fichas.
+- 9-oct: al presentar una herramienta, probar el logo real junto al gesto, sin tapar cara; verificar si sigue la mano. Caso: https://www.tiktok.com/@soyenriquerocha/video/7694498139696418069, 1-5 s [Gemini, sin medir].
+- 9-oct: en una demo, probar un insert legible del clic/campo exacto mientras continúa la explicación; medir duración, sin SFX por defecto. Caso de plano detalle: https://www.tiktok.com/@imangadzhi/video/7693604235610492183, 13-14 s; cuenta por verificar [Gemini, sin medir].
+- 9-oct: si hay resultado posterior documentado, probar fecha + captura antes del único CTA; medir tiempo de lectura. Caso: https://www.tiktok.com/@ahormozi/video/7694348950819704078, 137 s [Gemini, sin medir].
+
 ## Los scripts
 
 | Receta | Script | Comando |
