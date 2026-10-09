@@ -12,7 +12,7 @@
 - [x] L01 «Hola, soy Lucía. No existo.» reescrito a la premisa v5 — láminas en `hermes-content/carousels/out/lucia-l01-hola-no-existo-foto/`,
   brief en `briefs/lucia/l01-hola-no-existo.json`, 5 láminas miradas completas y grep limpio (commit de esta tanda). Sale por
   `ig-carrusel.mjs --cuenta lucia` en el VPS (receta en `videos/lucia-entrega/README.md`); no hay otra pieza que lo bloquee.
-- [ ] G4 «Siete motores de imagen, una cara: ¿cuál la conserva?» — guion con lo ya medido (`higgsfield-mapa.md` §1, 11,75 cr
+- [ ] G4 «Seis motores de imagen, una cara: ¿cuál la conserva?» — guion con lo ya medido (`higgsfield-mapa.md` §1, 11,75 cr
   gastados el 8-oct), validado por la madre antes de montar con el método de G1/G2/G3.
 - [ ] Carrusel C1 «Un video sin grabar, en 3 pasos» — la versión de carrusel de G1, con las fotos reales de las pruebas.
 

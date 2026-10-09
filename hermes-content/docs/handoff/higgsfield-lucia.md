@@ -20,7 +20,7 @@ no se puede cotizar (cobró 21,75). El tope de 97 cr lo fijó la sesión: Sergio
 - **Relevamiento de TODAS las funciones de Higgsfield** (imagen e identidad, video y motores, audio-voz-labios, estudios-presets-apps;
   el grupo de cuenta se hizo a mano): `v4/qa/higgsfield-relevamiento-20261008.json` y `.claude/skills/lucia/higgsfield-mapa.md`.
 - **Pruebas pagadas con la misma foto K1 y la misma orden** (`v4/prueba-motores-20261008/`, ids y puntajes en `PROCEDENCIA.jsonl`):
-  6 clips de video, 7 motores de imagen y 2 vías de labios, todos medidos con el control de cara. Resultado: `start_image` ata la
+  6 clips de video, 6 motores de imagen y 2 vías de labios, todos medidos con el control de cara. Resultado: `start_image` ata la
   escena pero la cara decae; las referencias de cara la sostienen pero el motor inventa la escena; Seedream 4.5 sigue siendo el
   método de imagen; `sync_so` conserva la cara. Resumen: skill `lucia` §0-quater.
 - **Control de cara en la nube:** `.claude/skills/lucia/scripts/face-gate.sh` (pip + buffalo_l, fuera del repo); reproduce las

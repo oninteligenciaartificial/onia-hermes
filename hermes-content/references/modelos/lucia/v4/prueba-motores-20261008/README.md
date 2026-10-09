@@ -1,6 +1,6 @@
 # Prueba de motores de Higgsfield con la cara de Lucía — 8-oct-2026
 
-Misma foto de arranque (K1 `4afffb96`) y misma orden en 5 motores de video, 7 motores de imagen con el mismo prompt y
+Misma foto de arranque (K1 `4afffb96`) y misma orden en 5 motores de video, 6 motores de imagen (7 fotos nuevas, Kling Omni Image en 3 escenas) con el mismo prompt y
 referencias, y 2 vías de labios. Resultados, costos y lectura: `.claude/skills/lucia/higgsfield-mapa.md` §1 y
 `../PROCEDENCIA.jsonl` (últimas 3 líneas, con los ids de cada job y los puntajes ArcFace).
 
