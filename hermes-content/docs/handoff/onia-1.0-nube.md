@@ -23,6 +23,14 @@ Qué se vende y qué falta: `docs/ONIA_CATALOGO_DE_VENTA.md`.
 
 ## 2. Qué quedó EN PRODUCCIÓN (verificado)
 
+- **9-oct, EN VUELO:** #133 (K2 + K2b, Reprogramador a 30 días sin duplicar con tratamiento a medias) y #134 (K3 + K3b,
+  semilla dental sin apagar agentes) **mergeados** en `master` (`f32269f4` y `072678ad`), revisados en el código y con
+  la suite completa de las dos juntas (9.848 en verde). **Sin publicar todavía:** `publicar.sh` frenó porque el runner
+  de CI del VPS estaba buildeando master; se publica cuando quede libre (skill `onia-deploy`). Después: alta QA dental
+  y de importadora (`+qak3dental`, `+qak3importadora`, «ZZ QA K3 …», slug `zz-qa-k3-%`) medidas con SQL de solo
+  lectura: la dental con 6 servicios `dental:<org>:servicio:%` en 0, 5 horarios y el aviso `dental:<org>:aviso`; la de
+  importadora sin nada de eso. Pasadas las 11:00 UTC, la dental tiene que tener sus agentes ENCENDIDOS
+  (`onia_agents_agents.enabled`), creados por el cron.
 - **8-oct 23:12 UTC, `release-b37e1182` (#128):** WhatsApp por cita, confirmar en 1 toque desde «Hoy», tratamiento a
   medias (paso 0), panel del dueño de usted (U1, con gate anti-voseo) y número de Onia protegido (C16a). El script
   dio «PUBLICADO Y VERIFICADO» y el contenedor está healthy. Rollback: `onia-platform-prev-oYPp3EWW-20261008-231204`.
