@@ -669,3 +669,61 @@ test("el CI no deja la credencial de GitHub en el checkout", () => {
   assert.match(paso, /^\s+persist-credentials: false$/m);
   assert.doesNotMatch(wf, /runs-on:.*self-hosted/, "nunca en el runner del VPS");
 });
+
+// ── diagnostico: el recolector de respuestas de los pedidos (pendiente 6 del handoff, 9-oct) ──────
+// Sin esto, una respuesta que no llegaba solo se veía entrando al VPS. Se corre la sección 12 del
+// diagnostico.sh REAL con /var/log, /var/lib y /root llevados a una carpeta temporal.
+function diagnosticoPedidos({ conCron = true, conLog = true } = {}) {
+  const dir = mkdtempSync(join(tmpdir(), "jarvis-diag-"));
+  const F = join(dir, "fs");
+  const EP = join(F, "var", "lib", "onia-pedidos");
+  const LOG = join(F, "var", "log");
+  mkdirSync(join(EP, "sellos"), { recursive: true });
+  mkdirSync(LOG, { recursive: true });
+  writeFileSync(join(EP, "sellos", "p_1a2b3c4d"), "0123456789abcdef0123456789abcdef\n");
+  writeFileSync(join(EP, "respuestas.tsv"), "1759999999\tp_1a2b3c4d\tlisto\n");
+  writeFileSync(join(EP, "rechazos-avisados.tsv"), "1759999999\tp_5e6f7a8b\n");
+  const iso = (horas) => new Date(Date.now() - horas * 3600e3).toISOString().replace(/\.\d+Z$/, "Z");
+  if (conLog) {
+    writeFileSync(
+      join(LOG, "onia-respuestas-pedidos.log"),
+      [
+        `${iso(100)} ✅ p_00000000: respuesta «listo» entregada a la aduana`, // fuera de la ventana de 72 h
+        `${iso(5)} ✅ p_1a2b3c4d: respuesta «listo» entregada a la aduana`,
+        `${iso(1)} ❌ no pude consultar GitHub`,
+        "",
+      ].join("\n"),
+    );
+  }
+  const dobles = join(dir, "dobles");
+  const linea = "*/2 * * * * [ -x /root/bin/onia-respuestas-pedidos.sh ] && /root/bin/onia-respuestas-pedidos.sh >> /var/log/onia-respuestas-pedidos.log 2>&1";
+  ejecutable(join(dobles, "crontab"), `#!/usr/bin/env bash\n${conCron ? `echo '${linea}'` : "echo '#*/2 * * * * /root/bin/onia-respuestas-pedidos.sh'"}\n`);
+  const diag = readFileSync(join(DIR, "diagnostico.sh"), "utf8");
+  const s12 = diag.slice(diag.indexOf('sec "12.'), diag.indexOf('sec "fin"'));
+  assert.ok(s12.length > 0, "no encontré la sección 12 del diagnóstico");
+  const guion =
+    `REDACTAR_SED='s/a^//'\n` +
+    readFileSync(join(DIR, "comun.sh"), "utf8") +
+    `\nDESDE=${iso(72)}\n` +
+    s12.replaceAll("/var/log/", LOG + "/").replaceAll("/var/lib/onia-pedidos", EP).replaceAll("/root/", join(F, "root") + "/");
+  return spawnSync("bash", ["-s"], { input: guion, env: { ...process.env, PATH: `${dobles}:${process.env.PATH}` }, encoding: "utf8" });
+}
+
+test("diagnóstico: muestra el recolector de respuestas (cron, la ventana y el final del log) sin leer un sello", () => {
+  const r = diagnosticoPedidos();
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(r.stdout, /en el crontab: sí/);
+  assert.match(r.stdout, /en la ventana: 1 entregada\(s\) · 1 con falla/);
+  assert.match(r.stdout, /❌ no pude consultar GitHub/);
+  assert.match(r.stdout, /respuestas\.tsv: 1 fila\(s\)/);
+  assert.match(r.stdout, /rechazos-avisados\.tsv: 1 fila\(s\)/);
+  assert.match(r.stdout, /sellos de pedidos abiertos: 1 \(no se leen\)/);
+  assert.doesNotMatch(r.stdout + r.stderr, /0123456789abcdef/, "un sello nunca sale en el diagnóstico");
+});
+
+test("diagnóstico: sin la línea del cron (o comentada) y sin log, lo dice", () => {
+  const r = diagnosticoPedidos({ conCron: false, conLog: false });
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(r.stdout, /en el crontab: NO/);
+  assert.match(r.stdout, /no existe .*onia-respuestas-pedidos\.log/);
+});

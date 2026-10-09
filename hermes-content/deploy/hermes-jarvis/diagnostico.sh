@@ -280,7 +280,7 @@ done
 sec "11. Contenedores (nombre y estado)"
 docker ps --format '{{.Names}}\t{{.Status}}' 2>/dev/null | sort | head -60
 
-sec "12. Pedidos a Claude desde Hermes (2026-10-01) — estado, sin la llave"
+sec "12. Pedidos a Claude desde Hermes (2026-10-01) — estado, sin la llave, y el recolector de respuestas"
 if [ -x /root/bin/onia-pedido-claude.sh ]; then
   /root/bin/onia-pedido-claude.sh --estado </dev/null 2>&1 | redactar
   echo "--- pedidos de hoy (hora La Paz · id · carril · estado):"
@@ -289,6 +289,30 @@ if [ -x /root/bin/onia-pedido-claude.sh ]; then
 else
   echo "(el comando todavía no está en /root/bin)"
 fi
+# El recolector de respuestas (pendiente 6 del handoff, 9-oct): sin esto, una respuesta que no le
+# llegaba solo se veía entrando al VPS. Escribe una línea solo cuando pasa algo. Los sellos se
+# cuentan, nunca se leen.
+LR=/var/log/onia-respuestas-pedidos.log
+EP=/var/lib/onia-pedidos
+echo "--- recolector de respuestas (cron cada 2 min):"
+if crontab -l 2>/dev/null | grep -v '^[[:space:]]*#' | grep -qF 'onia-respuestas-pedidos.sh'; then
+  echo "en el crontab: sí"
+else
+  echo "en el crontab: NO"
+fi
+if [ -f "$LR" ]; then
+  stat -c 'log: %y  %s bytes' "$LR"
+  en_ventana() { awk -v d="$DESDE" '$1 ~ /^[0-9][0-9][0-9][0-9]-/ && $1 >= d' "$LR"; }
+  echo "en la ventana: $(en_ventana | grep -c 'entregada a la aduana') entregada(s) · $(en_ventana | grep -c '❌') con falla"
+  echo "últimas líneas:"
+  tail -n 12 "$LR" | cut -c1-220 | redactar
+else
+  echo "(no existe $LR: el recolector nunca escribió nada)"
+fi
+for f in respuestas.tsv rechazos-avisados.tsv; do
+  [ -f "$EP/$f" ] && printf '%s: %s fila(s)\n' "$f" "$(grep -c . "$EP/$f")"
+done
+echo "sellos de pedidos abiertos: $(find "$EP/sellos" -maxdepth 1 -type f 2>/dev/null | wc -l) (no se leen)"
 
 sec "fin"
 echo "diagnóstico terminado $(date -u +%FT%TZ) — no se modificó nada"
