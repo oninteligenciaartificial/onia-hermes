@@ -46,6 +46,11 @@ mezclando registros. Los textos vienen de módulos compartidos que ninguna de la
    - `__tests__/lib/email-marca-real.test.ts`;
    - los que aparezcan al correr la suite.
 
+5. **La trampa, a la skill `onia-frontend`** (en el mismo commit): el ratchet de usted cuenta POR ARCHIVO, y una
+   pantalla pinta textos de los módulos que importa (`lib/checkout/textos.ts`, el vocabulario). Para dejar una
+   pantalla entera de usted hay que seguir sus imports, no el conteo. Caso: U2 dejó el checkout en 0 y la
+   instrucción del QR seguía de vos (9-oct).
+
 ## PRUEBA DE HECHO
 - `__tests__/usted-pago.test.ts` suma `lib/checkout/textos.ts` en 0 (con `contarArchivos` y en la línea base).
 - Test nuevo: renderizar el checkout, el modal del QR y `QrEstaticoOnia` con el vocabulario dental real; el texto no
