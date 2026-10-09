@@ -85,6 +85,9 @@ ni ejecutar Git fuera del encargo de la madre.
 - **Git según rol y encargo (corrección 2026-10-09):** Codex entrega a la madre;
   no ejecuta Git si el encargo lo prohíbe. No asumir autosync activo ni usarlo para
   publicar trabajo parcial. La madre integra lo revisado según `equipo-de-agentes`.
+- **Auto-sync activado** (hook Stop `scripts/git-autosync.js`): commitear y pushear la rama al terminar;
+  respeta `.gitignore`. **`main` solo por PR revisado** desde el 5-oct: el hook mueve `main` únicamente en la
+  madre (`ONIA_AUTOSYNC_MAIN=1`) y el integrador (`ONIA_LOOP_ID=onia-cola`).
 - **Autonomía máxima:** MCP → CLI/API → skill → script → recién ahí preguntar.
 - **Gasto (actualizado 2026-10-09):** seguir `CLAUDE.md` §Higgsfield: pruebas pequeñas
   de imagen autorizadas el 8-oct, cotizadas y registradas, sin fraccionar lotes.

@@ -18,7 +18,7 @@
   "id": "onia-platform-dental-meta-a1v5c-s3",
   "title": "A1 v5 carrusel · lámina 3 de 4 (control)",
   "pagina": "3 / 4",
-  "headline": "Usted lo aprueba y lo envía, *con un toque.*",
+  "headline": "Usted lo aprueba. *Nada sale sin su OK.*",
   "bloques": [
     {
       "t": "tile",
@@ -34,10 +34,10 @@
       "width": 936,
       "anillos": [
         [
-          898,
-          465,
-          218,
-          44
+          490,
+          576,
+          196,
+          14
         ]
       ]
     },
@@ -47,7 +47,7 @@
     },
     {
       "t": "texto",
-      "texto": "Nada sale sin su OK."
+      "texto": "El mensaje espera en su lista hasta que usted lo apruebe."
     }
   ]
 }

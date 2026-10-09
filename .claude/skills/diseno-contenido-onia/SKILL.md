@@ -28,6 +28,15 @@ Fuentes bajo `hermes-content/references/video-intake/`:
 > SaaS) no vive acá: `onia-platform/DESIGN.md` + skill `onia-frontend` de ese repo (acordado
 > con la sesión de onia-platform el 29-sep).
 
+> ⚠️ **8-oct-2026: la arcilla se jubila.** Sergio Urcullo eligió la opción 9 de la lámina de estilos: **foto editorial en blanco y negro
+> con UN solo objeto en verde esmeralda** (`image_style: "fotobn"` en `scripts/carousel_images.mjs`, `--model gpt_image_2_5`,
+> `params ["--quality","medium","--resolution","2k"]`, **1 cr por imagen**). Soul 2.0 inventó letras en 5 de 7 imágenes de
+> arcilla. Prompt: describir la escena y decir cuál es «el objeto verde». Fuente completa: `HIGGSFIELD_VIDEO_SYSTEM.md` §
+> «Higgsfield en la edición de la marca personal» (entra a `main` con el PR de la madre). Todo lo de abajo que diga «arcilla»
+> es el estilo anterior. Carruseles nuevos (P2, P3): `fotobn`. Los 7 carruseles en espera (K1, N02, K9, K12, K5, K13, K10)
+> mezclan 10 imágenes flojas con 10 de arcilla que sí sirven: el lote en `docs/cola/plan-3-semanas/lote-14-imagenes.json` está
+> en `fotobn` (14 cr) y falta que Sergio Urcullo decida si se rehace todo el carrusel en el estilo nuevo (+10 cr).
+
 ## La regla que ordena todo
 
 **Las imágenes vienen de afuera; todo lo demás lo hace el código.** El texto, la tipografía,

@@ -251,6 +251,42 @@ solo da titular y fecha, y desde la nube Facebook no abre.
 los rubros (50 resultados, los más nuevos primero) y sin el id de la página no los encuentra. Lo hace la madre desde la
 PC: por cada anuncio, el creativo, el texto, el botón y «N anuncios usan esta creatividad».
 
+### 2.6.1 Re-medido el 8-oct con el conector `Meta_ads` (Sergio Urcullo: «mirá Pinterest y la Biblioteca para ver cuáles funcionan»)
+
+**Qué se pudo y qué no.** El navegador de la nube **sigue sin abrir la Biblioteca** (HTTP 403, 8-oct) y **Pinterest pide iniciar sesión**: no se rodea ninguno. Por el conector sí: da titular, fecha de inicio, moneda y el enlace, **no el creativo ni el texto**.
+Pinterest además **no mide rendimiento**: sirve de inspiración visual, no para saber qué funciona. Va como PEDIDO PC (con la sesión de Sergio Urcullo).
+
+**Ids de página para consultar sin que se pierdan entre 50 resultados:** AgendaPro `1429581593936821` · Dentalink `106612849382553` · Doctocliq `122294408384514` · Dt.Dental `644396635996094` · CitaPro `117313424662542` · Wa7pro `1346974258489921`.
+⚠️ **El conector devuelve los más nuevos primero con tope 50:** de Dentalink (92 activos) solo se ven los 50 más nuevos. **«Dentalink no tiene nada de más de 14 días» sería un error de lectura**; sus 322 días de noviembre (§2.6) siguen en pie.
+
+| Anunciante (activos hoy) | Más viejo activo · días al 8-oct | Qué titula |
+|---|---|---|
+| **AgendaPro (49)**, *no estaba en la tabla* | 5-feb · **245** (dos anuncios) | *«La inteligencia artificial llegó · no más inasistencias · Comienza hoy»* y un anuncio dinámico de catálogo (`{{product.name}}`) |
+| | 20-may · **141** | *«Sofía llegó»*: **un asistente de IA con nombre propio**; sigue como serie: *«Sofía trabaja por ti»*, *«Atiende sin soltar la tijera»*, *«Responde aunque no estés»* (barbería y clínica) |
+| | 21-jun · 109 · 6-ago · 63 | *«La IA que organiza tu clínica»* · *«90 % menos inasistencias»* · *«Menos inasistencias en tu clínica»* |
+| Dt.Dental (24) | 30-jun · **100** | todo gira en torno a la norma colombiana: *«¿Cumples los 3 pasos de la 1888?»*, *«El plazo de la 1888 ya venció»*, hoy *«Prepara tu consultorio para la Res. 1888»*, *«Res. 3100»*, *«RIPS»* y *«25 % de descuento»* |
+| CitaPro | 17-jul · **84** | *«Cabinas llenas, agenda bajo control»*; reactivó el 2-oct *«Tu consulta ordenada cada día»* (creado en julio) |
+| Doctocliq (24; eran 19) | 17-jul · **83** | *«La agenda que trabaja contigo»*; **relanza el mismo titular una y otra vez** (*«Esa paz mental es posible con Doctocliq»* ×5, *«¿Tu consultorio funciona sin tu asistente?»* ×3) |
+| Dentalink (**92**; eran 81) | (no visible: tope de 50) | tanda nueva de las últimas dos semanas: *«IA para odontólogos»*, *«Reduce inasistencias hoy»*, *«-50 % inasistencias»*, *«Cyber: 30 % DCTO + IA»* ×5 y **una versión por país** (*«Conoce Dentalink - Argentina»*, *«…líder en México»*, *«RIPS JSON sin errores»* para Colombia) |
+| Wa7pro | 4-oct · 4 | *«Agendó solo a las 21:14»*: **una hora concreta de titular**, la misma idea del «10:00» de A1. Demasiado nuevo para juzgarlo |
+
+**Lo que dice, sin exagerar** (solo antigüedad; ningún dato de rendimiento):
+1. **Los más viejos de todos son de AgendaPro (245 días) y son de dos tipos: un titular de «la IA llegó» y un anuncio de catálogo.** El catálogo dinámico es el formato que menos cuesta mantener vivo.
+2. **Un asistente con nombre propio («Sofía») dura 141 días y se volvió serie.** Es una pista a probar, no una receta: hoy el bot de Onia no tiene cara ni nombre de campaña.
+3. **Dt.Dental y Dentalink venden la norma de cada país**: acá es el SIAT y **está prohibido prometerlo** (§7).
+4. **Lo que duran son muchas versiones de pocas ideas** (Doctocliq relanza el mismo titular; Dentalink hace una versión por país).
+
+**Bolivia, el 8-oct** (anuncios cuyo alcance incluye el país; **la ausencia no prueba que no exista**, la búsqueda es por palabra):
+| Búsqueda | Resultados |
+|---|---|
+| *«software clínica dental»* | **4**: 2 de Dentalink, 1 clínica, 1 ajena |
+| *«agenda de citas pacientes clínica»* | **15**: software veterinario, plantillas de Canva, agendas de otros países; **ningún proveedor boliviano** |
+| *«sistema para clínicas chatbot WhatsApp»* | **0** |
+
+Lectura: **a un dueño de clínica de Santa Cruz solo le llega pauta de software dental de Dentalink**, y de bot de WhatsApp para clínicas, ninguna. Es consistente con el §2.1, y es la ventana que justifica la prueba de US$ 56. *(Hipótesis: «poca competencia en la subasta» no se midió; sin gasto no hay CPM propio.)*
+
+**Pedido PC (madre):** (1) Pinterest con la sesión de Sergio Urcullo: tableros de anuncios de software y de clínicas dentales, solo inspiración visual. (2) Los creativos de estos ids, que desde la nube no se ven: AgendaPro `1967791207137782` (245 d), `1535822604884838` («Sofía llegó»), `1201810243016378`; Dt.Dental `1064012876297472`; CitaPro `1099827399129529`; Wa7pro `1777808483360755`; Doctocliq `1805370580894596`.
+
 ## 3. La señal más barata que existe: las clínicas que ya pagan pauta
 
 La misma Biblioteca muestra a **~20 clínicas dentales y ~10 de estética** de Santa Cruz que **hoy** pagan
@@ -590,6 +626,7 @@ todo contacto el 8-oct («no sé si el producto ya es funcional ni si prometemos
 | | Anuncio | Estado el 8-oct | Tiene que estar en ✅ en `ONIA_PROMESA_VS_PRODUCTO.md` |
 |---|---|---|---|
 | **A1** | **«Las 10:00»** (v5, `carousels/briefs/ads/onia-platform-dental-meta-a1v5-las-diez.json`): «Un paciente que no confirma es un sillón vacío» + **«10:00 · Sin confirmar»** gigante + la tarjeta real con «Onia le deja el mensaje listo» y «Usted lo aprueba y lo envía, con un toque». Reemplaza a D1 v4 (que quedó como losa de texto: ver `research/competencia/anuncios/COMPARACION-DISENO-8OCT.md`). Texto de usted, alineado al catálogo §8.1 y §8.3; ⚠️ **«y lo envía, con un toque» es G-03 (🟡) y el catálogo §7 no lo deja prometer: se corrige antes de subir (§5.11), y el revisor de promesas no lo atrapa**; **render hecho** en feed, historia y **video de 11 s** (`carousels/out/ads/onia-platform-dental-meta-a1v5-las-diez/`), mirado a 390 px junto a la competencia | **La captura es del candidato del 30-sep, no de producción: se rehace con la cuenta demo antes de subir** (y con la misma persona en la agenda y en Pendientes). Es diseño nuevo: lo ve Sergio Urcullo renderizado | B-02, G-01, G-06, G-11 y L-05 |
+| **A1** | **«Las 10:00»** (v5, `carousels/briefs/ads/onia-platform-dental-meta-a1v5-las-diez.json`): «Un paciente que no confirma es un sillón vacío» + **«10:00 · Sin confirmar»** gigante + la tarjeta real con «Onia le deja el mensaje listo» y «Usted lo aprueba». Reemplaza a D1 v4 (que quedó como losa de texto: ver `research/competencia/anuncios/COMPARACION-DISENO-8OCT.md`). Texto de usted, alineado al catálogo §8.1, §8.3 y §7; el revisor de promesas da 0; **render hecho** en feed, historia y **video de 11 s** (`carousels/out/ads/onia-platform-dental-meta-a1v5-las-diez/`), mirado a 390 px junto a la competencia | **La captura es del candidato del 30-sep, no de producción: se rehace con la cuenta demo antes de subir** (y con la misma persona en la agenda y en Pendientes). Es diseño nuevo: lo ve Sergio Urcullo renderizado | B-02, G-01, G-06, G-11 y L-05 |
 | **A2** | **«El saldo que nadie cobra»** (v2, `…a2v2-el-saldo.json`): «Un cobro que nadie recuerda es plata que no entra» + **«45 días · Saldo vencido»** + la tarjeta real de cobro con «Onia le deja el mensaje listo». Mismo esquema que A1. Render de feed e historia hecho | Captura provisoria del 30-sep. **No sube hasta que E-03 esté en ✅**: la propuesta de cobro nunca se vio funcionando. La imagen muestra «Bs 250,00» de un paciente de ejemplo: no es un precio de Onia y lleva la leyenda «datos de ejemplo» | E-03, G-08, G-01 y G-11 |
 | ~~D4~~ | Tratamiento a medias | **Congelado**: el catálogo §8 no deja decirlo | D-03 (hoy ❌) |
 

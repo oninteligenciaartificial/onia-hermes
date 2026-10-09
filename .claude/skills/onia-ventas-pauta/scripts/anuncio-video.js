@@ -23,7 +23,7 @@ const fps = Number(o.fps) || 30;
 const DUR = b.video?.duracion || 11; // segundos
 
 // Guion: cuándo entra cada pieza (s). Se lee en voz alta: gancho → la hora → el mensaje → el toque → la llamada.
-const T = Object.assign({ hora: 1.4, flecha: 3.0, tile: 3.4, anillos: 5.0, boton: 6.6, txt: 7.0, cta: 8.4 }, b.video?.tiempos || {});
+const T = Object.assign({ hora: 1.4, flecha: 3.0, tile: 3.4, anillos: 5.0, boton: 6.6, txt: 7.0, cta: 8.4, pulso: b.video?.pulso === true }, b.video?.tiempos || {});
 
 (async () => {
   fs.mkdirSync(o.out, { recursive: true });
@@ -61,7 +61,8 @@ const T = Object.assign({ hora: 1.4, flecha: 3.0, tile: 3.4, anillos: 5.0, boton
       const t = T.anillos + i * 0.5;
       r.animate([{ opacity: 0, transform: 'scale(1.12)' }, { opacity: 1, transform: 'scale(1)' }], { duration: 450, delay: t * 1000, easing: ease, fill: 'both' });
     });
-    const boton = all('.ring').pop();
+    // el pulso de «el toque» solo si el brief lo pide (video.pulso): no se resalta un envío que el catálogo no deja prometer
+    const boton = T.pulso ? all('.ring').pop() : null;
     if (boton) {
       for (let k = 0; k < 2; k++) {
         boton.animate([{ transform: 'scale(1)', boxShadow: '0 0 0 3px rgba(12,17,15,.55)' }, { transform: 'scale(1.1)', boxShadow: '0 0 0 14px rgba(77,189,140,.0)' }, { transform: 'scale(1)' }],

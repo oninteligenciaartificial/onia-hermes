@@ -1,5 +1,19 @@
 # Handoff — carril `mercado-y-pauta` (sesión «Ventas y pauta Onia Platform», antes «Análisis de mercado»)
 
+> ✏️ **9-oct — copy corregido (pedido de la madre): ya no dice «lo envía, con un toque».** El envío con un toque (G-03) está a medias en
+> `ONIA_PROMESA_VS_PRODUCTO.md`. Ahora dice **«Usted lo aprueba. Nada sale sin su OK.»** en A1, A2, carrusel (lámina 3), micro-video y los guiones F1/F3.
+> Se quitó también el anillo y el pulso sobre el botón «Enviar yo mismo»: la pantalla real lo sigue mostrando, pero sin énfasis. El pulso del video
+> ahora es opt-in (`video.pulso`). **Corto de 60 s con `editor-videos`: espera las capturas C1-C7 de Plataforma** y que Sergio Urcullo vea tabla de cortes
+> y preview 360p. **No se instalan** marketingskills ni Motion-Creative sin su OK. El commit `30bc87b8` de la madre (skill §9, `06-VSL-DENTAL.md`,
+> ADQ §5.11) **no estaba en `origin/main`** al leer: no lo pude leer.
+
+> 🔎 **8-oct, noche — Biblioteca por el conector (Sergio Urcullo: «mirá Pinterest y la Biblioteca para ver cuáles funcionan»).**
+> - **Navegador de la nube:** Biblioteca 403 y Pinterest con muro de sesión; no se rodearon. **Conector `Meta_ads`:** sí, con titular y fecha, sin creativo.
+> - **Hallazgo:** AgendaPro (id `1429581593936821`) tiene los anuncios activos más viejos (**245 días**) y un asistente con nombre, «Sofía», de **141 días**.
+>   Dt.Dental, Doctocliq y CitaPro siguen 83-100 días. A Bolivia solo le llega pauta de software dental de Dentalink. Todo en `ONIA_ADQUISICION_Y_PAUTA.md` §2.6.1.
+> - **Error evitado:** Dentalink tiene 92 activos y el conector solo muestra los 50 más nuevos; «nada de más de 14 días» sería falso (§2.6 dice 322 días).
+> - **Pedido PC:** Pinterest con la sesión de Sergio Urcullo y los creativos de 7 ids (en §2.6.1).
+
 > 🧪 **8-oct, noche — Tanda 1 de competencia y laboratorio de creativos (pedidos de la madre por Sergio Urcullo).**
 > - **Tanda semanal de competencia:** `ONIA_UI_MEJORAS_1.0.md` §8 (9 hallazgos con versión Onia, dueño y Codex) + fichas `JELOU_FICHA.md`,
 >   `DATEC_FICHA.md` y `ANUNCIANTES_FICHAS_CORTAS.md`; `MAPA_COMPETENCIA.md` al día. **Próxima: 15-oct** (norma boliviana de

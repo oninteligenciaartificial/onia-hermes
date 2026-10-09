@@ -8,6 +8,8 @@
 > **Regla de parada que se cumplió:** no se gastó en Higgsfield ni en Meta, no se publicó nada, y ninguna pieza promete algo
 > que no esté en ✅ en `ONIA_PROMESA_VS_PRODUCTO.md` (hoy ninguna fila de A1 lo está: **todas quedan preparadas, no suben**).
 
+> **Actualización 8-oct (noche, conector `Meta_ads`): estos 5 formatos NO incluían a AgendaPro**, que resultó tener los anuncios activos más viejos (245 días: un titular de «la IA llegó» y uno de catálogo dinámico) y **un asistente de IA con nombre propio, «Sofía», que dura 141 días y se volvió serie**. Detalle y ids de página en `ONIA_ADQUISICION_Y_PAUTA.md` §2.6.1. Si Sergio Urcullo quiere un sexto formato para la prueba, es ese: **«un asistente con nombre»**; no se arma hasta decidirlo y verificar qué se le puede prometer.
+
 ## Los 5 formatos (de más a menos días)
 
 | # | Formato | Quién · días | Estructura | Gancho | CTA | Por qué sostiene *(hipótesis marcada)* |
@@ -36,7 +38,7 @@ Marca); lo de Higgsfield solo se cotiza, no se genera.** Filas que cada pieza ne
 | # | Versión Onia | Vía | Estado |
 |---|---|---|---|
 | **F1** | **«Lo que le muestro hoy a una clínica»**: Sergio Urcullo en selfie, sin producción, con la lista de Pendientes en el celular. Toma el *formato* (selfie, voz natural), no el tema: Onia no tiene una obligación legal que anunciar (la factura SIAT está prohibida de prometer, catálogo §7) | **UGC con la cara de Sergio Urcullo** | Guion abajo. Espera «Pendientes» en ✅ y la cuenta demo |
-| **F2** | **«Una mañana en la clínica»**: 11 s, solo con la pantalla real y la hora: «10:00 · Sin confirmar» → «Onia le deja el mensaje listo» → «Usted lo aprueba y lo envía, con un toque» | **Código** (`anuncio-video.js`) | ✅ **Hecho:** `…a1v5-las-diez/…mp4`. Sin cliente ni odontólogo inventados |
+| **F2** | **«Una mañana en la clínica»**: 11 s, solo con la pantalla real y la hora: «10:00 · Sin confirmar» → «Onia le deja el mensaje listo» → «Usted lo aprueba» | **Código** (`anuncio-video.js`) | ✅ **Hecho:** `…a1v5-las-diez/…mp4`. Sin cliente ni odontólogo inventados |
 | | Alternativa con otra toma de apertura: 4-5 s de un **sillón dental vacío con luz de mañana, sin personas**, y luego la pantalla real | **Higgsfield, solo con costo cotizado** | **Cotizar con `higgsfield generate cost` desde la PC** (modelo y parámetros a guardar); sin eso no se genera. Sin rostros: no hay riesgo de identidad |
 | **F3** | **«No es conseguir más pacientes. Es saber hoy quién de mañana no confirmó»**: Sergio Urcullo a cámara, 40 s, con la estructura de CitaPro (descarta dos, entrega una) y la pantalla de Pendientes | **UGC con la cara de Sergio Urcullo** | Guion abajo. El texto pasa el revisor de promesas (0) |
 | | Alternativa: presentador IA **original** que explica y demuestra (nunca como odontólogo ni cliente) | **Higgsfield, solo si Sergio Urcullo lo pide y con costo cotizado** | No se genera. CLAUDE.md: «UGC de IA = presentador IA original, si Sergio lo pide así» |
@@ -47,14 +49,14 @@ Marca); lo de Higgsfield solo se cotiza, no se genera.** Filas que cada pieza ne
 
 **F1 · selfie «Lo que le muestro hoy a una clínica» (≈ 25 s).** Todo lo que dice sale del catálogo §8.
 1. (0-3) «Le muestro lo primero que mira una clínica cada mañana.» *(muestra la lista de Pendientes)*
-2. (3-14) «Estos son los pacientes que no confirmaron la cita de mañana. Onia le deja el mensaje listo; usted lo aprueba y lo envía, con un toque.»
+2. (3-14) «Estos son los pacientes que no confirmaron la cita de mañana. Onia le deja el mensaje listo; usted lo aprueba.»
 3. (14-20) «Nada sale sin su OK.»
 4. (20-25) «Si quiere verlo con su agenda, son 20 minutos. Escríbame por WhatsApp.»
 
 **F3 · «No es X, es Z» (≈ 40 s).**
 1. (0-4) «El secreto de las clínicas que no tienen sillones vacíos.»
 2. (4-12) «No es conseguir más pacientes. No es bajar los precios. Es saber hoy quién de mañana no confirmó.»
-3. (12-30) *(pantalla de Pendientes)* «Onia le deja anotado a quién escribirle, con el mensaje listo. Usted lo aprueba y lo envía.»
+3. (12-30) *(pantalla de Pendientes)* «Onia le deja anotado a quién escribirle, con el mensaje listo. Usted lo aprueba.»
 4. (30-40) «Se lo muestro en una llamada de 20 minutos. El link está abajo.»
 *No dice «reduce ausencias» ni cifras: es lo que el revisor de promesas rechaza y lo que Onia no midió.*
 

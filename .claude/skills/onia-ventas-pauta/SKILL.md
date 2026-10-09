@@ -664,3 +664,11 @@ Reglas de edición de la pauta: las 11 de COMUNICACION §4 (subtítulos Archivo 
 - **8-oct:** el pedido de «VSL» no decía de qué oferta. Son dos (Onia de usted y la asesoría gratis de vos) y se
   escribieron por separado. El VSL de un curso sigue prohibido hasta que el curso exista
   (`ONIA_COMUNIDAD_CONTENIDO.md`, «Semana 4+»).
+### 8.2 Biblioteca de Anuncios por el conector `Meta_ads` (8-oct): cómo se usa y qué NO dice
+- **Herramienta:** `mcp__Meta_ads__ads_library_search` (se carga con ToolSearch). **Pide en cada llamada** `client_conversation_id` (20 caracteres alfanuméricos, el mismo toda la conversación) y `client_model`; exige al menos `search_terms`, `page_ids` o `countries`. Solo funciona con una cuenta de anuncios activa (ONIA Ads lo es).
+- **Devuelve:** nombre de página, titular, fecha de inicio (epoch), moneda y enlace. **No devuelve el creativo ni el texto.** Los **más nuevos van primero y el tope es 50**: de un anunciante con más de 50 activos **no se ven los más viejos** (error de lectura que casi cometo con Dentalink, 92 activos). Para los viejos, `page_ids` + capturar desde la PC.
+- **Días al aire** = `(hoy − ad_delivery_start_time) / 86400` en python. Solo es antigüedad: **no prueba rendimiento**.
+- **Ids de página** (8-oct): AgendaPro `1429581593936821` · Dentalink `106612849382553` · Doctocliq `122294408384514` · Dt.Dental `644396635996094` · CitaPro `117313424662542` · Wa7pro `1346974258489921`.
+- **Búsqueda por país** (`countries:["BO"]`) = anuncios cuyo alcance incluye Bolivia: sirve para ver quién le pauta a Santa Cruz (ADQ §2.6.1). **Ausencia ≠ inexistencia.**
+- **Lo que no sirve:** el navegador de la nube (Biblioteca 403, Pinterest pide sesión). **Pinterest no mide rendimiento**: es inspiración visual.
+- **No es raspado masivo:** pocas consultas dirigidas (la herramienta lo prohíbe).
