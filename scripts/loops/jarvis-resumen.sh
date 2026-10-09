@@ -185,13 +185,15 @@ seccion_guiones() {  # seccion_guiones <fecha> <titulo>
 # CALENDARIO-PUBLICACION-<d1>-<d2>-<MES>.md (pedido de Sergio Urcullo), y se graba todo junto
 # (GRABAR-*.md): el «para grabar hoy» de los S*-GUIONES (plan del 29-sep) ya no es lo de ese día.
 # Medido el 9-oct: la mañana del 10 iba a nombrar tres guiones viejos, y ese día salen otros.
-# Salida: «HH:MM<TAB>qué<TAB>pieza» por línea, en orden de hora. Vacía si ningún calendario cubre el día.
+# Salida: «HH:MM<TAB>qué<TAB>pieza» por línea, en orden de hora. Vacía si ningún calendario cubre el día;
+# y en ese caso sale 3 si el día es posterior al primer calendario (ya no corre el plan del 29-sep).
 calendario_del() {  # calendario_del <fecha>
   local fs=("$REPO"/hermes-content/docs/cola/plan-3-semanas/CALENDARIO-PUBLICACION-*.md)
   [ -f "${fs[0]}" ] || return 0
   python3 - "$1" "${fs[@]}" <<'PY'
 import datetime, os, re, sys
 fecha = datetime.date.fromisoformat(sys.argv[1])
+primero = None
 MESES = "ENE FEB MAR ABR MAY JUN JUL AGO SEP OCT NOV DIC".split()
 DIAS = ["lun", "mar", "mié", "jue", "vie", "sáb", "dom"]
 def celdas(linea):
@@ -206,6 +208,7 @@ for f in sorted(sys.argv[2:]):
         ini = datetime.date(fecha.year, mes, d1) if d1 <= d2 else (fin.replace(day=1) - datetime.timedelta(days=1)).replace(day=d1)
     except ValueError:
         continue
+    primero = ini if primero is None or ini < primero else primero
     if not ini <= fecha <= fin:
         continue
     cabeza = None
@@ -233,12 +236,17 @@ for f in sorted(sys.argv[2:]):
         for hora, que, v in sorted(filas):
             print("%s\t%s\t%s" % (hora, que, v))
         sys.exit(0)
+sys.exit(3 if primero is not None and fecha >= primero else 0)
 PY
 }
 seccion_sale() {  # seccion_sale <fecha> <titulo>
-  local c
-  c=$(calendario_del "$1" 2>/dev/null)
-  [ -n "$c" ] || return 0
+  local c rc
+  c=$(calendario_del "$1" 2>/dev/null); rc=$?
+  if [ -z "$c" ]; then
+    # Pasado el último calendario no se vuelve a los S*-GUIONES: son del plan del 29-sep (9-oct).
+    [ "$rc" = 3 ] && printf '📣 Todavía no hay calendario de publicación para %s.\n' "$([ "$1" = "$HOY" ] && echo hoy || echo mañana)"
+    return 0
+  fi
   printf '📣 <b>%s</b>\n' "$2"
   printf '%s\n' "$c" | awk -F'\t' '{ printf "• %s%s · %s\n", ($1 == "" ? "" : $1 " "), $2, $3 }' | esc
 }
@@ -302,6 +310,7 @@ seccion_plan() {  # seccion_plan <fecha> <titulo de lo que sale> <titulo de los 
   local s
   s=$(seccion_sale "$1" "$2")
   if [ -n "$s" ]; then printf '%s\n' "$s"; else seccion_guiones "$1" "$3"; fi
+  return 0
 }
 
 # ── La cola de la aduana: lo que no interrumpió ──────────────────────────────

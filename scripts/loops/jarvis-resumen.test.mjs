@@ -471,6 +471,10 @@ const CALENDARIO = `# Calendario de publicación · viernes 9 → viernes 16 de 
 const GUIONES_VIEJOS = `## Sábado 10 de octubre
 
 ### D11-A · Vertical · Un guion del plan viejo
+
+## Sábado 17 de octubre
+
+### D18-A · Vertical · Otro guion del plan viejo
 `;
 function repoConCalendario() {
   const dir = mkdtempSync(join(tmpdir(), "jarvis-plan-"));
@@ -550,4 +554,16 @@ test("sin el registro de publicaciones, el cierre dice que no lo pudo leer; la m
   const env = { ONIA_HOY: "2026-09-29", ONIA_PUBLICADO: join(b.dir, "no-existe.jsonl") };
   assert.match(bloques(b.imprimir("noche", env)).PASÓ, /📣 No pude leer el registro de publicaciones: no sé qué salió hoy\./);
   assert.doesNotMatch(b.imprimir("manana", env), /📣 <b>Hoy salió|registro de publicaciones/);
+});
+
+test("pasado el último calendario, no vuelve a los guiones viejos: dice que no hay calendario", () => {
+  // El 17-oct ya no lo cubre el calendario 9-16, y los S*-GUIONES del 29-sep tienen guiones para ese
+  // día. Volver a ellos le nombraba piezas de un plan que ya no corre.
+  const b = banco({ repo: repoConCalendario() });
+  const man = b.imprimir("manana", { ONIA_HOY: "2026-10-17" });
+  assert.doesNotMatch(man, /Otro guion del plan viejo|Para grabar hoy/);
+  assert.match(bloques(man).SIGUE, /📣 Todavía no hay calendario de publicación para hoy\./);
+  const noche = b.imprimir("noche", { ONIA_HOY: "2026-10-16" });
+  assert.match(bloques(noche).SIGUE, /📣 Todavía no hay calendario de publicación para mañana\./);
+  assert.doesNotMatch(noche, /Mañana grabás/);
 });
