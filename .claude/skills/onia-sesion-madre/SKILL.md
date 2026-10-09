@@ -232,6 +232,10 @@ Se trabaja en la app de Claude; Codex corre por detrás. Codex no orquesta, no a
   y los ratchets de UI y de voseo solo los atrapa la suite completa. Así se escaparon tres rojos de C16b y C16d después
   de que la madre los dio por buenos con `related` (1002/1002). Antes de commitear: `npx vitest run` COMPLETO y
   `npx tsc --noEmit`, con los números en el commit. Si el tsc falla por el cliente Prisma compartido, se dice.
+- **La suite de Codex siempre da ~148 rojos y la de la madre, 0** (W1b, K2 y K3, 9-oct). En el sandbox, los subprocesos
+  dan `EPERM` y fallan tres pruebas de zona horaria. El gate es la corrida COMPLETA de la madre en la PC, no la de Codex.
+  Antes de commitear: `git checkout -- '*.snap'`, porque las corridas dejan los snapshots modificados solo por los
+  finales de línea.
 - **Nombres vivos de las sesiones (8-oct, noche):** «Plataforma Onia 1.0», «Ventas y pauta Onia», «Marca personal de
   Sergio Urcullo», «Sesión Lucía de Onia», «Hermes-Jarvis sesión con Sergio Urcullo». `SendMessage` falla con el nombre
   viejo («Marca personal: comunidad y contenido»): `ListAgents` primero, siempre.
