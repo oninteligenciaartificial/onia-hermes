@@ -61,3 +61,15 @@ Capturas: `datec/lucy-home.png`, `datec/lucy-precios.png`, `datec/datec-home.png
 ## Sin dato
 Qué hacen Andrew y Prixia · descuento del anual · medio de pago · quién paga los mensajes de Meta · cuántos clientes
 tiene Lucy · si existe una versión para salud. Instagram, TikTok y Facebook no abren desde la nube.
+
+## Lo que suma la ficha de Ventas y pauta (datec.com.bo, 8-oct)
+La sesión de Ventas armó otra ficha el mismo día desde el dominio viejo (https://www.datec.com.bo, el directorio de
+partners de Odoo, Clutch y Software AG). Se juntaron acá para que haya una sola. Suma:
+- **Datec Corp** se presenta con presencia en Perú, Bolivia, Honduras, Costa Rica, El Salvador y EE. UU., «+1.000
+  proyectos» y «más de 500 organizaciones» (cifras de su web, sin fuente), con foco en banca, petróleo y gas y servicios
+  públicos. No publica precios de sus proyectos.
+- En Santa Cruz figura como **partner de Odoo** (1 experto certificado v18). Es el integrador con el que se cruzaría una
+  importadora mediana que mira Odoo (ver `ODOO_FICHA.md`: la factura del SIN la pone un tercero). Si una importadora lo
+  menciona, la respuesta es de alcance y precio, no de producto.
+- ⚠️ Esa ficha decía «no tiene chatbot de WhatsApp»: datec.com.bo no lo muestra, pero **Lucy** (datec.ai) sí lo es.
+  Producto para clínicas: ninguna de las dos lo encontró.

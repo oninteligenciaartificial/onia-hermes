@@ -6,6 +6,8 @@
 //   node buffer-post.mjs --listar                                   # organizaciones y canales (ids)
 //   node buffer-post.mjs --campos                                   # qué metadata acepta cada red (introspección)
 //   node buffer-post.mjs --canal <id> --video v.mp4 --texto t.txt [--cuando 2026-10-01T16:30:00Z] [--meta m.json]
+//   node buffer-post.mjs --canal <id> --imagenes <dir> --texto t.txt ...   # carrusel: slide-01…slide-NN de <dir>
+//        (LinkedIn y TikTok; YouTube no toma imágenes). Las pasa a JPEG porque TikTok no acepta PNG.
 //        (sin --publicar solo muestra lo que mandaría)  ·  --publicar  crea el post en Buffer
 //        --borrador  lo deja como borrador en Buffer, sin publicar (prueba el circuito entero)
 //   node buffer-post.mjs --estado <postId>                          # draft|scheduled|sent|error + link publicado
@@ -21,6 +23,7 @@ import crypto from 'node:crypto';
 import assert from 'node:assert';
 import { parseArgs } from 'node:util';
 import { fileURLToPath } from 'node:url';
+import { execFileSync } from 'node:child_process';
 
 const API = 'https://api.buffer.com';
 const CONF = '/root/.config/onia-publicar/buffer.env';
@@ -28,14 +31,18 @@ const PUBLIC_DIR = '/root/publicar/public';
 const PUBLIC_URL = 'https://onia.com.bo/hermes-assets';
 const LEDGER = '/root/publicar/publicado.jsonl';
 
-// Arma el input de createPost (formas tomadas de developers.buffer.com, 29-sep).
-export function postInput({ canal, texto, url, cuando, meta, coverMs, borrador }) {
+export const LAMINA = /^slide-\d+\.(png|jpe?g)$/i;
+
+// Arma el input de createPost (formas tomadas de developers.buffer.com, 29-sep). Con `imagenes` (lista de URLs) es un
+// carrusel: un asset `image` por lámina, en orden (AssetInput.image, visto por introspección el 5-oct).
+export function postInput({ canal, texto, url, imagenes, cuando, meta, coverMs, borrador }) {
   // Borrador = saveToDraft + agendado a 30 días: si Buffer ignorara saveToDraft, igual no sale ya.
   if (borrador && !cuando) cuando = new Date(Date.now() + 30 * 864e5).toISOString();
   const input = { text: texto, channelId: canal, schedulingType: 'automatic', needsApproval: false,
     ...(borrador ? { saveToDraft: true } : {}),
     mode: cuando ? 'customScheduled' : 'shareNow',
-    assets: [{ video: { url, ...(coverMs ? { metadata: { thumbnailOffset: Number(coverMs) } } : {}) } }] };
+    assets: imagenes ? imagenes.map((u) => ({ image: { url: u } }))
+      : [{ video: { url, ...(coverMs ? { metadata: { thumbnailOffset: Number(coverMs) } } : {}) } }] };
   if (cuando) {
     if (Number.isNaN(Date.parse(cuando))) throw new Error(`--cuando no es fecha ISO: ${cuando}`);
     input.dueAt = new Date(cuando).toISOString();
@@ -55,7 +62,7 @@ async function gql(key, query, variables) {
 async function main() {
   const { values: a } = parseArgs({ options: {
     listar: { type: 'boolean' }, campos: { type: 'boolean' }, canal: { type: 'string' }, video: { type: 'string' },
-    texto: { type: 'string' }, cuando: { type: 'string' }, meta: { type: 'string' }, 'cover-ms': { type: 'string' },
+    imagenes: { type: 'string' }, texto: { type: 'string' }, cuando: { type: 'string' }, meta: { type: 'string' }, 'cover-ms': { type: 'string' },
     publicar: { type: 'boolean' }, borrador: { type: 'boolean' }, estado: { type: 'string' }, borrar: { type: 'string' },
     selftest: { type: 'boolean' } } });
   if (a.selftest) return selftest();
@@ -97,24 +104,33 @@ async function main() {
     return console.log(`borrado ${a.borrar} (${r.__typename})`);
   }
 
+  if (!a.video === !a.imagenes) throw new Error('va --video o --imagenes, uno de los dos');
   const texto = fs.readFileSync(a.texto, 'utf8').trim();
   const meta = a.meta ? JSON.parse(fs.readFileSync(a.meta, 'utf8')) : undefined;
-  const name = `${crypto.randomBytes(16).toString('hex')}.mp4`;
-  const url = `${PUBLIC_URL}/${name}`;
-  const input = postInput({ canal: a.canal, texto, url, cuando: a.cuando, meta, coverMs: a['cover-ms'], borrador: a.borrador });
+  const laminas = a.imagenes ? fs.readdirSync(a.imagenes).filter((f) => LAMINA.test(f)).sort() : [];
+  if (a.imagenes && (laminas.length < 2 || laminas.length > 10)) throw new Error(`un carrusel lleva de 2 a 10 láminas, no ${laminas.length}`);
+  const nombres = a.imagenes ? laminas.map(() => `${crypto.randomBytes(16).toString('hex')}.jpg`)
+    : [`${crypto.randomBytes(16).toString('hex')}.mp4`];
+  const urls = nombres.map((n) => `${PUBLIC_URL}/${n}`);
+  const input = postInput({ canal: a.canal, texto, url: urls[0], imagenes: a.imagenes ? urls : undefined, cuando: a.cuando,
+    meta, coverMs: a['cover-ms'], borrador: a.borrador });
   if (!a.publicar && !a.borrador) { console.log('ENSAYO (sin --publicar), se mandaría:\n' + JSON.stringify({ ...input, text: input.text.slice(0, 80) + '…' }, null, 2)); return; }
 
   fs.mkdirSync(PUBLIC_DIR, { recursive: true });
-  fs.copyFileSync(a.video, path.join(PUBLIC_DIR, name));
-  fs.chmodSync(path.join(PUBLIC_DIR, name), 0o644);
+  const borrar = () => nombres.forEach((n) => fs.rmSync(path.join(PUBLIC_DIR, n), { force: true }));
+  if (a.imagenes) laminas.forEach((f, i) => execFileSync('ffmpeg', ['-v', 'error', '-y', '-i', path.join(a.imagenes, f), '-q:v', '2', path.join(PUBLIC_DIR, nombres[i])]));
+  else fs.copyFileSync(a.video, path.join(PUBLIC_DIR, nombres[0]));
+  nombres.forEach((n) => fs.chmodSync(path.join(PUBLIC_DIR, n), 0o644));
   const m = `mutation($i: CreatePostInput!) { createPost(input: $i) {
     ... on PostActionSuccess { post { id status } } ... on MutationError { message } } }`;
-  const res = (await gql(key, m, { i: input })).createPost;
-  if (!res.post) { fs.rmSync(path.join(PUBLIC_DIR, name), { force: true }); throw new Error(`Buffer rechazó: ${res.message}`); }
+  let res;
+  try { res = (await gql(key, m, { i: input })).createPost; } catch (e) { borrar(); throw e; }
+  if (!res.post) { borrar(); throw new Error(`Buffer rechazó: ${res.message}`); }
   const estado = a.borrador ? 'borrador' : input.dueAt ? 'agendado' : 'publica ya';
   fs.mkdirSync(path.dirname(LEDGER), { recursive: true });
-  fs.appendFileSync(LEDGER, JSON.stringify({ red: 'buffer', canal: a.canal, post: res.post.id, estado, cuando: input.dueAt || 'ya', video: a.video, fecha: new Date().toISOString() }) + '\n');
-  console.log(`EN BUFFER post ${res.post.id} [${res.post.status}] ${estado}${input.dueAt ? ' ' + input.dueAt : ''}; video en ${url} hasta la limpieza. Seguimiento: --estado ${res.post.id}`);
+  fs.appendFileSync(LEDGER, JSON.stringify({ red: 'buffer', canal: a.canal, post: res.post.id, estado, cuando: input.dueAt || 'ya',
+    ...(a.imagenes ? { imagenes: a.imagenes, laminas: laminas.length } : { video: a.video }), fecha: new Date().toISOString() }) + '\n');
+  console.log(`EN BUFFER post ${res.post.id} [${res.post.status}] ${estado}${input.dueAt ? ' ' + input.dueAt : ''}; ${urls.length} archivo(s) en ${PUBLIC_URL} hasta la limpieza (48 h). Seguimiento: --estado ${res.post.id}`);
 }
 
 function selftest() {
@@ -132,6 +148,9 @@ function selftest() {
   assert.equal(later.dueAt, '2026-10-01T16:30:00.000Z');
   assert.equal(later.assets[0].video.metadata.thumbnailOffset, 1500);
   assert.throws(() => postInput({ canal: 'c', texto: 't', url: 'u', cuando: 'mañana' }), /ISO/);
+  const car = postInput({ canal: 'c', texto: 't', url: 'a', imagenes: ['a', 'b', 'c'] });
+  assert.deepEqual(car.assets, [{ image: { url: 'a' } }, { image: { url: 'b' } }, { image: { url: 'c' } }]);
+  assert.ok(LAMINA.test('slide-01.png') && !LAMINA.test('_contactsheet.png'));
   console.log('selftest ok');
 }
 

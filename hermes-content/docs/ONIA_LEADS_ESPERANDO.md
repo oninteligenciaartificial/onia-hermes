@@ -158,6 +158,26 @@ ssh -i ~/.ssh/onia_hermes_vps_ed25519 root@187.77.16.63 \
   'docker exec -i $(docker ps -qf name=chatwoot-db) psql -U postgres -d "onia-chatbot" -x -c "SELECT c.id, c.inbox_id, ct.name, ct.phone_number, c.created_at::date, count(m.id) FILTER (WHERE m.message_type=1) AS respuestas FROM conversations c JOIN contacts ct ON ct.id=c.contact_id LEFT JOIN messages m ON m.conversation_id=c.id GROUP BY 1,2,3,4,5 ORDER BY c.created_at;"'
 ```
 
+### Conteo de hoy en una sola corrida (8-oct): quién sigue sin respuesta y qué plantillas hay
+
+Solo lectura. Corre desde la PC, que tiene la llave del VPS; la nube no tiene llave, ni token de Chatwoot, ni Gmail
+(el conector da «Precondition check failed»). Leer la base de producción necesita el OK de Sergio Urcullo.
+
+```bash
+ssh -i ~/.ssh/onia_hermes_vps_ed25519 root@187.77.16.63 bash -s <<'EOF'
+echo "== 1. Pedidos de acceso de agosto: si alguien los contactó y si ya crearon la cuenta"
+docker exec -i supabase-db psql -U postgres -d postgres -c "SELECT ar.name, ar.\"businessName\", ar.whatsapp, ar.email, ar.\"createdAt\"::date AS pidio, ar.\"contactedAt\", EXISTS (SELECT 1 FROM auth.users u WHERE lower(u.email)=lower(ar.email)) AS creo_cuenta FROM public.access_requests ar WHERE ar.\"createdAt\" < '2026-09-01' ORDER BY ar.\"createdAt\";"
+echo "== 2. Conversaciones de agosto con mensaje entrante: respuestas de una persona (no del bot)"
+docker exec -i $(docker ps -qf name=chatwoot-db) psql -U postgres -d onia-chatbot -c "SELECT c.id, c.inbox_id, ct.name, ct.phone_number, ct.email, c.created_at::date AS entro, count(m.id) FILTER (WHERE m.message_type=0) AS entrantes, count(m.id) FILTER (WHERE m.message_type=1 AND m.sender_type='User') AS respuestas_humanas, (max(m.created_at) FILTER (WHERE m.message_type=0))::date AS ultimo_entrante FROM conversations c JOIN contacts ct ON ct.id=c.contact_id LEFT JOIN messages m ON m.conversation_id=c.id WHERE c.created_at < '2026-09-01' AND c.inbox_id NOT IN (3,7) GROUP BY 1,2,3,4,5,6 HAVING count(m.id) FILTER (WHERE m.message_type=0) > 0 ORDER BY c.created_at;"
+echo "== 3. Plantillas de WhatsApp sincronizadas en Chatwoot (si 'sincronizado' es viejo, mirar WhatsApp Manager)"
+docker exec -i $(docker ps -qf name=chatwoot-db) psql -U postgres -d onia-chatbot -c "SELECT ch.id, ch.phone_number, ch.message_templates_last_updated::date AS sincronizado, t->>'name' AS plantilla, t->>'status' AS estado, t->>'category' AS tipo, t->>'language' AS idioma FROM channel_whatsapp ch, jsonb_array_elements(CASE WHEN jsonb_typeof(ch.message_templates)='array' THEN ch.message_templates ELSE '[]'::jsonb END) t ORDER BY 1,4;"
+EOF
+```
+
+Sigue sin respuesta quien tiene `contactedAt` vacío y `creo_cuenta = f` (1), o `respuestas_humanas = 0` (2). La última lista
+de plantillas registrada (3-sep, `research/whatsapp-chatwoot-embedded-signup.md`) tenía 3 aprobadas:
+`confirmacion_cita`, `seguimiento_demo` y `recordatorio_demo`. **Ni la A ni la B del playbook figuraban.**
+
 ## Lo que hace falta para poder contestarles
 
 - **Punto 1 y 2 de `ONIA_DEFINICION_DE_TERMINADO.md`** (bandeja del cliente, y que el bot no

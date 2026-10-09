@@ -327,10 +327,16 @@ documentada; el detalle, con cada fuente, en `research/ONIA_META_ADS_PLAYBOOK_20
 
 ### 5.3 Presupuesto, techo y duración
 
+> ⚠️ **Corregido el 8-oct.** El techo de Meta lo fija `ONIA_PLAN_1.0_Y_CAJA.md` §2-3 (3-oct, con los gastos reales):
+> **Bs 750 en Meta**, dentro de un techo de Bs 1.400 para conseguir clientes. Son **US$ 56 = US$ 4 por día durante
+> 14 días**, **un solo conjunto de anuncios**, optimizado a conversaciones. Bs 637 a 11,37 · Bs 666 a 11,89 · Bs 840
+> a 15: **si el banco cobra más de Bs 13,4 por dólar, los 14 días pasan de Bs 750 y se corta antes** (a 15, el día
+> 12). La escala de abajo es del 30-sep y **el «USD 10/día, USD 140» ya no vale**.
+
 | Escala | Para qué sirve | Anuncios | Cuándo se evalúa |
 |---|---|---|---|
-| USD 5/día | medir qué % de conversaciones califica (queda en aprendizaje limitado por diseño) | 2–3 | 14 días (~USD 70) |
-| **USD 10/día — la recomendada para arrancar** | leer el costo por conversación calificada en dos semanas | 3–4 | 7–14 días (~USD 140) |
+| USD 5/día | medir qué % de conversaciones califica (queda en aprendizaje limitado por diseño). **Más que los US$ 4/día de la caja** | 2–3 | 14 días (~USD 70) |
+| ~~USD 10/día~~ — **no entra en la caja de octubre** (≈ Bs 1.600, más del doble del techo de Meta) | leer el costo por conversación calificada en dos semanas | 3–4 | 7–14 días (~USD 140) |
 | USD 20/día | puede salir de aprendizaje si la conversación cuesta ≤ USD 2,8; permite A/B contra formulario "Mayor intención" | 4–6 | 7 días por ronda |
 
 **Techo duro:** presupuesto total de campaña con fecha de fin (Meta rechaza un *límite* de gasto de campaña
@@ -429,13 +435,24 @@ Los supuestos del embudo están en `research/ONIA_META_ADS_PLAYBOOK_20260930.md`
 
 ### 5.7 Cortar o seguir
 
-- **7 días sin tocar nada** (aprendizaje); **se decide a los 14**.
-- Un anuncio que gastó el tope de una conversación calificada (§5.6) sin conseguir ninguna → se pausa.
-- **14 días con 0 demos**, o costo por calificada mayor al doble del tope → se cambia ángulo u oferta **sin
-  subir presupuesto**.
-- Se escala solo con costo por demo en tope **dos semanas seguidas** y lugar en la agenda de Sergio Urcullo:
-  de a +20–30 % cada 3–4 días. **Cuando las demos superan su capacidad semanal, no se escala**: el techo son
-  horas, no pauta.
+> Alineado el 8-oct con `ONIA_PLAN_1.0_Y_CAJA.md` §3 (3-oct), que es la fuente de los límites. Los números salen del
+> costo máximo por cliente (Bs 1.570 × 25 % de cierre = Bs 390 por demo; × 10 % de conversación a demo = Bs 40 por
+> conversación). **Los dos porcentajes son supuestos**: con cero gasto, `ads_insights_industry_benchmark` contesta
+> «No industry benchmark data» y `ads_insights_advertiser_context`, «Vertical: \N».
+
+| Momento | CORTAR si… | SEGUIR si… |
+|---|---|---|
+| Día 3 | 0 conversaciones, o CTR < 0,8 % → se cambia la pieza | hay conversaciones |
+| Día 7 | costo por conversación > Bs 40, o 0 conversaciones de dueños de clínica | ≤ Bs 40 y al menos 1 calificada |
+| Día 14 | 0 demos, o costo por demo > Bs 390 | costo por demo ≤ Bs 390 |
+
+- **Durante la prueba no se toca la segmentación ni se sube el presupuesto más de 20 %**: reinicia el aprendizaje.
+- **Techo total que no se pasa: Bs 1.400** (Meta 750 + auditorías, comunidad y eventos 650). Al llegar, se apaga todo.
+- **Seguir** quiere decir una segunda tanda igual, **pagada solo con plata de un cliente que ya pagó**, nunca con la
+  reserva. Se escala (+20–30 % cada 3–4 días) solo con el costo por demo en tope dos semanas seguidas y lugar en la
+  agenda de Sergio Urcullo: **cuando las demos superan su capacidad semanal, no se escala; el techo son horas, no pauta**.
+- Se mide cada día **a mano, en una planilla**: conversaciones; cuántas son de un dueño o administrador de clínica; demos
+  agendadas; costo por conversación; costo por demo; CTR; frecuencia.
 
 ### 5.8 La especificación, lista para crear en PAUSA
 
@@ -443,14 +460,14 @@ Los supuestos del embudo están en `research/ONIA_META_ADS_PLAYBOOK_20260930.md`
 |---|---|
 | Cuenta | **ONIA Ads `act_1073680778314945`** (USD). **Nunca** NUVO ni Arthur Fuentes |
 | Página | "Onia" `1140384625819526` |
-| Campaña | `ONIA · Dental SCZ · WhatsApp · prueba 1` · Clientes potenciales · presupuesto total USD 140 · fin a los 14 días · **PAUSED** |
+| Campaña | `ONIA · Dental SCZ · WhatsApp · prueba 1` · Clientes potenciales · presupuesto total **USD 56** (Bs 750 de techo, §5.3) · fin a los 14 días · **PAUSED** |
 | Conjunto | WhatsApp · Maximizar conversaciones · Santa Cruz de la Sierra + radio, "llegar a más" apagado · 25+ · Advantage+ con sugerencias · excluir registrados |
-| Anuncios | **D1 y D4** (tabla de abajo): v3 renderizados el 2-oct (imagen única 4:5 y 9:16) y **en pausa**: Sergio Urcullo pidió primero el estudio de la Biblioteca. **D4 frenado** por el catálogo (el detector no encuentra a nadie). **Diseño, render y subida: sesión Ventas y pauta** (Sergio Urcullo, 30-sep; ver §0 punto 8). Marca personal no las hace. |
+| Anuncios | **A1 y A2** (§5.10; reemplazan a D1 v3/v4) y **D4** (tabla de abajo). A1 v5 y A2 v2 se rehicieron el 8-oct mirando a la competencia (imagen 4:5, 9:16 y video de 11 s para A1) y esperan la cuenta demo y la vista de Sergio Urcullo. **D4 frenado** por el catálogo (el detector no encuentra a nadie). **Diseño, render y subida: sesión Ventas y pauta** (Sergio Urcullo, 30-sep; ver §0 punto 8). Marca personal no las hace. |
 | Mensaje de bienvenida | "Para dueños/as de clínicas" + tres respuestas para tocar (§5.2) |
 
 | Anuncio | Brief (`hermes-content/carousels/briefs/ads/`) | Título | Texto precargado |
 |---|---|---|---|
-| **D1 · Los de mañana** (Confirmador) | `onia-platform-dental-meta-d1v3-los-de-manana.json` · imagen única | *La lista de mañana, con el mensaje escrito* | `Hola, vi el anuncio de Onia (D1). Tengo una clínica dental.` |
+| **A1 · Las 10:00** (Confirmador; antes D1) | `onia-platform-dental-meta-a1v5-las-diez.json` · imagen única y video 9:16 | *Un paciente que no confirma es un sillón vacío* | `Hola, vi el anuncio de Onia (D1). Tengo una clínica dental.` |
 | **D4 · Tratamiento a medias** | `onia-platform-dental-meta-d4v3-tratamiento-a-medias.json` · imagen única | *Los tratamientos a medias, en una lista* | `Hola, vi el anuncio de Onia (D4). Tengo una clínica dental.` |
 
 - **El texto principal** de cada anuncio es el `caption` de su brief. Si lleva precio, se lee de
@@ -490,7 +507,7 @@ conector `Meta_ads`; en el Administrador de anuncios son los mismos campos con s
    cuenta ya promocionó, y devuelve `[]` en una cuenta que nunca pautó (corregido el 1-oct).
 1. **Campaña** (`ads_create_campaign`): `ad_account_id` `1073680778314945` · `campaign_name`
    `ONIA · Dental SCZ · WhatsApp · prueba 1` · `objective` `OUTCOME_LEADS` · `buying_type` `AUCTION` ·
-   `special_ad_categories` `[]` · `campaign_lifetime_budget` `14000` (USD 140, en centavos) ·
+   `special_ad_categories` `[]` · `campaign_lifetime_budget` `5600` (USD 56, en centavos; era 14000 hasta el 8-oct) ·
    `campaign_stop_time` = inicio + 14 días. Sale en PAUSED.
    Si `OUTCOME_LEADS` no acepta WhatsApp en esa cuenta, el respaldo es `OUTCOME_ENGAGEMENT` con el mismo
    conjunto, y se anota en el handoff.
@@ -533,7 +550,7 @@ memoria. Estado al **30-sep, 12:30 UTC**.
 | 6 | **Quién contesta, y en cuánto tiempo** | decidido por escrito | Sergio Urcullo | ❌ (ver abajo) |
 | 7 | **Las cuatro capturas de la 1.0** en `carousels/briefs/assets/onia-1.0-dental-ads/` → D1 y D4 renderizadas → **OK de Sergio Urcullo viéndolas** | las piezas renderizadas, miradas | capturas: sesión principal · diseño y render: Ventas y pauta · OK: Sergio Urcullo | ⏸️ **v3 renderizadas el 2-oct y en pausa** (`out/ads/onia-platform-dental-meta-d1v3-…` y `…-d4v3-…`). Sergio Urcullo: *«DEJA DE ARMAR, PRIMERO MIRA LA META ADS LIBRARY Y MIRA COMPETENCIAS»*. Primero el estudio de la Biblioteca (la madre, desde la PC), después el diseño. D4 frenado por el catálogo. v1 y v2 (carruseles) fueron rechazadas |
 | 8 | **Campaña creada en PAUSA** con §5.8 | ids de campaña, conjunto y anuncios anotados en el handoff del carril | quien tenga el conector, o Sergio Urcullo | ❌ depende de 2–4 · pasos en §5.8.1 |
-| 9 | **OK explícito de gasto con techo** (USD 140, 14 días) y **tipo de cambio** al que el banco cobra la tarjeta (§5.6) | por escrito | Sergio Urcullo | ❌ |
+| 9 | **OK explícito de gasto con techo** (USD 56, 14 días, tope Bs 750) y **tipo de cambio** al que el banco cobra la tarjeta (§5.6) | por escrito | Sergio Urcullo | ❌ |
 
 **Fila 6 si el carril chatbot sigue sin dueño.** La pauta igual se puede encender, porque la atribución no
 depende del bot: el código (D1/D4) viaja en el texto de la conversación y se busca en Chatwoot. Lo que
@@ -546,6 +563,83 @@ recibe un dueño de clínica es una respuesta mala, esa conversación se paga y 
 **Cómo se renderizan (nube o PC):** `node .claude/skills/onia-ventas-pauta/scripts/anuncio-render.js --brief
 <brief> --out <dir>` saca `feed.png` y `story.png`. Trae su letra (Archivo, en `scripts/fonts/`), así que no
 depende de las fuentes instaladas. Método y trampas: skill `onia-ventas-pauta` §4.
+
+#### 5.9.1 Re-medido el 8-oct (solo lectura, conector `Meta_ads`)
+
+| Qué | Resultado | Fila de §5.9 |
+|---|---|---|
+| ONIA Ads `1073680778314945` | ACTIVE, USD, mínimo diario US$ 1, **`has_payment_method: false`** | 3 ❌ sigue |
+| Página «Onia» `1140384625819526` | La lista `ads_get_pages_for_business` del negocio `1451773736711697`. `ads_get_ad_account_pages` da `[]`, que es normal en una cuenta que nunca pautó | 4 ✅ la página |
+| Número del bot vinculado a la página | **El conector no lo muestra.** Lo mira Sergio Urcullo en Business Manager (página «Onia», configuración, WhatsApp) | 4 ⬜ sin medir |
+| Instagram | `ads_get_ig_accounts` → `[]`: ONIA Ads no tiene Instagram vinculado. Los anuncios salen con la identidad de la página | — |
+| Píxel «ONIA Web» `1012611478191231` | Activo; **disparó el 8-oct a las 11:42 (UTC-7)**, unas 14:42 en Bolivia. Falta verlo en «Probar eventos» con el alta y su `utm` | 1 ⏳ |
+| Cuenta personal «Sergio Urcullo» `679613631427810` | Tiene tarjeta. **No se usa para Onia** sin su decisión | — |
+| Benchmarks de la plataforma | Sin gasto no hay: «No industry benchmark data» y «Vertical: \N». **Los costos siguen siendo supuestos** | — |
+
+### 5.10 El 16-oct: a dónde lleva cada anuncio, y qué tiene que estar en verde el 13
+
+**La fecha es la del plan, no una promesa.** `ONIA_PLAN_1.0_Y_CAJA.md` §3 pone la prueba «desde el 16-oct, con los puntos
+1 y 2 ya cerrados y los canales 1 y 2 ya contactados». Hoy el segundo requisito **no se cumple**: Sergio Urcullo frenó
+todo contacto el 8-oct («no sé si el producto ya es funcional ni si prometemos lo que vamos a vender»). **Se decide el
+13-oct**, con la tabla de abajo, y **no se enciende con una fila en rojo**: si alguna falla, la fecha se corre.
+
+**Qué lleva cada anuncio**
+
+| | Anuncio | Estado el 8-oct | Tiene que estar en ✅ en `ONIA_PROMESA_VS_PRODUCTO.md` |
+|---|---|---|---|
+| **A1** | **«Las 10:00»** (v5, `carousels/briefs/ads/onia-platform-dental-meta-a1v5-las-diez.json`): «Un paciente que no confirma es un sillón vacío» + **«10:00 · Sin confirmar»** gigante + la tarjeta real con «Onia le deja el mensaje listo» y «Usted lo aprueba y lo envía, con un toque». Reemplaza a D1 v4 (que quedó como losa de texto: ver `research/competencia/anuncios/COMPARACION-DISENO-8OCT.md`). Texto de usted, alineado al catálogo §8.1, §8.3 y §7; el revisor de promesas da 0; **render hecho** en feed, historia y **video de 11 s** (`carousels/out/ads/onia-platform-dental-meta-a1v5-las-diez/`), mirado a 390 px junto a la competencia | **La captura es del candidato del 30-sep, no de producción: se rehace con la cuenta demo antes de subir** (y con la misma persona en la agenda y en Pendientes). Es diseño nuevo: lo ve Sergio Urcullo renderizado | B-02, G-01, G-06, G-11 y L-05 |
+| **A2** | **«El saldo que nadie cobra»** (v2, `…a2v2-el-saldo.json`): «Un cobro que nadie recuerda es plata que no entra» + **«45 días · Saldo vencido»** + la tarjeta real de cobro con «Onia le deja el mensaje listo». Mismo esquema que A1. Render de feed e historia hecho | Captura provisoria del 30-sep. **No sube hasta que E-03 esté en ✅**: la propuesta de cobro nunca se vio funcionando. La imagen muestra «Bs 250,00» de un paciente de ejemplo: no es un precio de Onia y lleva la leyenda «datos de ejemplo» | E-03, G-08, G-01 y G-11 |
+| ~~D4~~ | Tratamiento a medias | **Congelado**: el catálogo §8 no deja decirlo | D-03 (hoy ❌) |
+
+- **Falta una pieza con persona.** Los 7 anuncios de software que sobreviven en la Biblioteca (§2.5) tienen una, y el
+  rediseño del 8-oct **no la arregla**: es la brecha que más pesa. Sin gasto de Higgsfield este mes (plan 1.0 §4), la
+  salida es que Sergio Urcullo se grabe 25 segundos (guion en `COMPARACION-DISENO-8OCT.md`) mostrando `/pending` con la
+  cuenta demo. **Es opcional para la primera tanda.**
+- **Un precio no va en la imagen** (§5.4): se lee de `subscription-plans.ts` el día que se crea.
+
+**A dónde lleva (decisión que hay que tomar y mi recomendación)**
+
+1. **Recomendado: clic a WhatsApp** (el botón `WHATSAPP_MESSAGE` del anuncio), con el texto precargado
+   *«Hola, vi el anuncio de Onia (D1). Tengo una clínica dental.»* (A2 lleva `(D5)`). Es el único destino que Meta
+   puede optimizar a conversaciones con US$ 56, y el único que mide dueños de clínica por anuncio.
+2. **En el chat:** el bot trae los tres botones de §5.2 y las 5 preguntas de calificación. A quien califica le da el
+   link a **`sergiourcullo.vercel.app/llamada`** (hoy redirige a `cal.com/sergiourcullo/20min`, «Llamada 1 a 1»; 200
+   el 8-oct). Sergio Urcullo recibe el aviso el mismo día.
+3. **Por qué no mandar el anuncio derecho a `/llamada`:** el paciente que busca un turno caería en la agenda de
+   Sergio Urcullo sin pasar por el filtro de los tres botones, y esa página no tiene el píxel, así que no se podría
+   decir cuántas llamadas trajo cada anuncio. **Es una hipótesis, no un dato propio:** los 7 anuncios de software que
+   sobreviven (§2.5) mandan a una cuenta gratis o a una demo, y ninguno a WhatsApp. Con US$ 56 no se prueban las dos;
+   si la primera tanda no trae dueños, la segunda prueba `/llamada` con plata de un cliente.
+4. **Cómo se llama el cierre:** *«llamada de 20 minutos, gratis»*. «Asesoría» promete otra cosa y la decide Sergio
+   Urcullo aparte. **Hasta que exista la cuenta demo, la llamada no promete «una clínica de ejemplo»**: dice «20 minutos
+   para ver si le sirve».
+
+**Públicos** (todo en el mismo conjunto)
+
+| | |
+|---|---|
+| Ubicación | Santa Cruz de la Sierra, radio 25 km desde (-17,7833; -63,1821), **«Llegar a más personas» apagado** |
+| Edad y público | 25+, Advantage+ con sugerencias (odontología, administradores de páginas). **Sin exclusiones por interés: no existen desde el 31-mar-2025** |
+| Excluir | A los ya registrados, solo si la lista ya existe. No se crea para esto |
+| **No se hace** | Público personalizado con pocos teléfonos (Meta pide ≥ 1.000 y base legal) · lookalike · remarketing pago (plan §4) |
+| El filtro real | La pieza («Para dueños y dueñas de clínicas dentales de Santa Cruz») y los tres botones del chat, no la segmentación (§5.2) |
+
+**Go / no-go del 13-oct.** Una fila en ❌ y no se enciende.
+
+| # | Condición | Dueño | Estado 8-oct |
+|---|---|---|---|
+| 1 | Las filas de la tabla de arriba, en ✅, y la web sin lo que el catálogo no deja (`ONIA_PROMESA_VS_PRODUCTO.md` §2 y §3) | Plataforma, con la cuenta de prueba | ❌ ninguna verificada: falta la cuenta |
+| 2 | Cuenta demo con datos y **capturas nuevas de producción** para A1 y A2, re-renderizadas y vistas por Sergio Urcullo | Plataforma · Ventas y pauta · Sergio Urcullo | ❌ |
+| 3 | Medio de pago en ONIA Ads (`has_payment_method: true`) | Sergio Urcullo | ❌ |
+| 4 | Número del bot vinculado a la página «Onia» | Sergio Urcullo | ⬜ el conector no lo ve |
+| 5 | La respuesta a la pauta (de usted, §1 de la skill) **firmada y publicada**, y la prueba con dos mensajes desde un teléfono ajeno, mirando la respuesta | Sergio Urcullo (firma), carril chatbot (publica) | ❌ |
+| 6 | Quién contesta y en cuánto (menos de 24 h abre la ventana gratis de 72 h) y la agenda de `/llamada` con horarios | Sergio Urcullo | ❌ |
+| 7 | Tipo de cambio al que cobra el banco (se lee en el extracto): decide si Bs 750 alcanzan para 14 días | Sergio Urcullo | ❌ |
+| 8 | Píxel visto en «Probar eventos» con el alta y su `utm` | Plataforma | ⏳ dispara; falta el evento |
+| 9 | OK escrito de gasto: **«US$ 56, 14 días, tope Bs 750»** | Sergio Urcullo | ❌ |
+
+**Lo que falta de Sergio Urcullo, en una línea:** poner la tarjeta en ONIA Ads, vincular el número del bot a la página «Onia»,
+firmar la respuesta a la pauta, dar el OK de gasto (US$ 56 · 14 días · Bs 750) y decidir el «usted» en los anuncios.
 
 ---
 

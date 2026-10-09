@@ -119,11 +119,15 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
 > Sergio Urcullo, 2026-10-01, después de un reporte largo con diagnóstico, hipótesis y fuentes:
 > *«fuera información basura, y que se vea todo simple y mientras menos pasos o páginas mejor»*.
 
-- **A Sergio Urcullo:** solo lo que cambia una decisión o le pide algo. Qué pasó (1 línea) · qué
-  necesito de él (pasos numerados, los mínimos) · qué sigue. El diagnóstico, las hipótesis
-  descartadas y las fuentes van al handoff, no al mensaje.
+- **A Sergio Urcullo:** solo lo que cambia una decisión o le pide algo, con el formato fijo de abajo.
+  El diagnóstico, las hipótesis descartadas y las fuentes van al handoff, no al mensaje.
 - **En el producto y la web:** cada paso o página extra se justifica o se saca. Ante dos
   soluciones, gana la de menos clics para el cliente.
+- **Formato fijo de cada mensaje a Sergio Urcullo (8-oct: «me entregás demasiado texto y me pierdo; probá
+  /caveman»):** máximo 3 bloques: **Pasó** (1-2 líneas) · **Necesito** (sí/no o pasos mínimos, o «nada») · **Sigue**
+  (1 línea). Estilo caveman (frases cortas, sin relleno), tablas solo si ordenan. Método, hipótesis, fuentes y detalle
+  van al handoff, la skill o el PR, nunca al mensaje. **El trabajo por detrás NO se achica:** mismo desarrollo,
+  verificación y aprendizaje; solo se acorta lo que se le dice. Seguridad y lo irreversible se escriben claros.
 
 ## Sesión MADRE local + carriles en la nube (REGLA)
 
@@ -461,6 +465,15 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
 - **Pasa por Sergio Urcullo ANTES de publicar** solo: **diseño nuevo** (pantalla o sección
   que no existía, rediseño de una viva — ver la regla de arriba) y **textos legales**
   (términos, privacidad, contratos). Se le muestra la pieza renderizada, no el PR.
+- **Contenido en redes (Sergio Urcullo, 8-oct: «sí, publicá por Buffer lo que pase control de calidad»):**
+  una pieza que pasa el control de calidad de su skill (`diseno-contenido-onia` / `edicion-referentes`) y se MIRÓ
+  renderizada completa se publica por Buffer (Instagram, por `ig-reel.mjs`, que es la vía verificada) sin pedirle el
+  OK pieza por pieza. Después se le avisa con el enlace. Siguen pasando por él:
+  - **toda pieza que prometa o muestre una función del producto**, hasta que exista la tabla «se promete / funciona»
+    en `hermes-content/docs/` y esa función esté en verde. Sin tabla no hay permiso;
+  - lo que nombre, cite o muestre a un cliente, a un tercero o a un competidor (imagen, voz o marca);
+  - los CTA de mecanismos sin probar, como comentario → DM de Instagram (2 rechazos de Meta);
+  - toda generación paga.
 - **No cambia** lo que ya pide aprobación por su riesgo: escribir datos de producción fuera
   de lo autorizado, gasto pago, contactar clientes, tocar el portal del SIAT.
 - A Sergio Urcullo no se le habla de PRs: se le dice qué quedó publicado y qué necesita mirar.

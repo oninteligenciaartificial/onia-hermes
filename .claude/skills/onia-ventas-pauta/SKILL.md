@@ -26,6 +26,9 @@ description: "Invocar para CUALQUIER trabajo del carril Ventas y pauta de Onia: 
 | Leads que ya escribieron: quiénes son | `hermes-content/docs/ONIA_LEADS_ESPERANDO.md` (§3.1: las preguntas de «F» contra el catálogo) |
 | Qué se les manda (plantillas A/B, respuestas, días 3-7-14) | `hermes-content/sales-kit/SEGUIMIENTO-LEADS.md` |
 | Guion de demo de 20 minutos por rubro | `hermes-content/sales-kit/02-GUION-DEMO.md` |
+| Los 6 add-ons que Sergio Urcullo nombró el 8-oct (web, IA local, campañas de Meta, app, influencers IA, consultorías): potencial, mercado, test de 3 preguntas y orden para después de la 1.0 | `hermes-content/docs/ONIA_ADDONS.md` |
+| Competencia: mapa, fichas y tandas semanales | `hermes-content/research/competencia/MAPA_COMPETENCIA.md` y `hermes-content/docs/ONIA_UI_MEJORAS_1.0.md` §8 |
+| Formatos de anuncio que sostienen los competidores, con su versión Onia | `hermes-content/research/competencia/anuncios/FORMATOS-QUE-SOSTIENEN.md` |
 | Precios | `onia-platform/lib/subscription-plans.ts` (`DEFAULT_PLAN_AMOUNTS`); límites en `lib/plan-catalogo.ts` |
 
 ## 1. Reglas que no se negocian
@@ -113,6 +116,13 @@ Redactar primero y verificar después costó una tarde de mensajes tirados. Las 
      real.
    - Un 404 quiere decir que no está indexada.
    - Solo cubre la categoría belleza: dentales e importadoras dan 404.
+   - **Para dentales existe el mismo directorio: `dentists10.com` (8-oct).**
+     `https://www.dentists10.com/BO/Santa-Cruz-de-la-Sierra/<page_id>/x` redirige (301) a la ciudad real y trae la
+     dirección, el teléfono y los posts con fecha. Resolvió 27 de 81 páginas dentales que pautaban, con este loop:
+     `curl -s -o /dev/null -w '%{http_code} %{redirect_url}' <url>`. Va **antes** de cualquier búsqueda web.
+   - **La búsqueda web no encuentra las páginas de Facebook de clínicas chicas bolivianas (8-oct).** Con 2 agentes
+     y 50 búsquedas sobre 23 páginas sin directorio, ninguna quedó en Santa Cruz. DuckDuckGo pide captcha y Bing
+     ignora las comillas. Lo que el directorio no tiene va directo a la PC, con el id del anuncio para abrirlo.
    - Resolvió 9 de 12 de estética y 7 de la reserva. Es evidencia media: con ella se descarta; para confirmar, se
      cruza con la web o el anuncio.
 3. **Directorios públicos:** medicoespecialista.com.bo, boliviayp, amerpages, boliviapymes y Waze/Yandex. Los
@@ -155,8 +165,12 @@ cambiado de anuncios (hubo que corregir su línea «Vi…»).
 «Buen día, soy Sergio Urcullo, de Onia, aquí en Santa Cruz. Este mensaje es para el dueño o la dueña de X.
 / Vi sus anuncios de… (lo observable, con fecha) / el dolor concreto del rubro / el mecanismo que producción
 cumple hoy / ¿Le muestro cómo se ve en una demo de 20 minutos?». Sin precio, sin cifras, sin testimonios.
-- **Dental y estética prometen solo esto:** cada mañana Onia deja escrito el mensaje para el paciente o la
-  clienta de mañana que no confirmó, y se manda desde el propio WhatsApp.
+- **Dental y estética prometen solo esto:** cada mañana Onia le deja anotado a quién escribirle (quién tiene cita
+  mañana y no confirmó, quién canceló o faltó y no volvió a agendar, quién le debe) con el mensaje listo, y nada
+  sale sin que usted lo apruebe (catálogo §8.3). La IA va como en el catálogo §8.1: «Con IA le propone el texto de
+  cada recordatorio, y usted lo aprueba una sola vez». **No se dice «se manda desde su propio WhatsApp»**: el
+  catálogo §7 no deja prometer el envío por WhatsApp (corregido 8-oct). Molde completo: `ONIA_PROSPECTOS_DENTAL_SCZ.md`
+  §6.9, que pasó el revisor de promesas.
 - **Importadora promete solo esto:** el costo real por producto importado y el aviso cuando el tipo de cambio
   deja un precio bajo costo. **No** se promete que la cotización sale del sistema.
 - Comercio y servicios: los dos arreglos que faltaban (editar producto, precio y stock; agenda de varios
@@ -204,7 +218,7 @@ contestarle de memoria es la forma de quemarlo.
 | «Cada mañana» / «lo detecta sola» | ✅ | Los agentes corren a las 11:00 UTC (07:00 en Bolivia) con el cron `0 11 * * *` del VPS; el log `/var/log/onia-agents-cron.log` dice «OK» el 1-oct. El tratamiento a medias va dentro del Recall |
 | «Con tu tono» / «la editás» | ❌ | Escribe en el tono del rubro. El dueño solo puede **aprobarla**: no hay edición en `/agents` |
 | «La IA escribe el mensaje del tratamiento a medias» | ❌ | `buildTratamientoAMediasMessage` es un texto fijo |
-| «La IA escribe el mensaje» / «la IA lo redacta» (de cada paciente) | ❌ | Catálogo §8: la IA escribe UNA vez el modelo y Onia le pone los datos. Frase permitida: «la IA escribe una sola vez el modelo y Onia le pone los datos de cada uno» |
+| «La IA escribe el mensaje» / «la IA lo redacta» (de cada paciente) | ❌ | Catálogo §8: la IA escribe UNA vez el modelo y Onia le pone los datos. ⚠️ La frase «la IA escribe una sola vez el modelo y Onia le pone los datos» **la rechaza el revisor de promesas** (8-oct: liga «IA» con «escribe… mensaje»). Se usa la del catálogo §8.1: «Con IA le propone el texto de cada recordatorio, y usted lo aprueba una sola vez» |
 | «Preguntá por tu negocio» es IA | ❌ | Son 30 temas escritos a mano, sin modelo (`BarraAsistente.tsx`) |
 | «La IA calcula el costo de importación» | ❌ | El costeo es cálculo; en importadoras la IA solo está en el mensaje de cobro |
 
@@ -319,6 +333,55 @@ Trampas pagadas armando v3 (2-oct):
 - **El umbral del tratamiento a medias es «21 días sin venir»** (`diasSinVenir`), con el tratamiento en curso y
   sin cita futura. «21 días en progreso» o «21 días sin cita» son inexactos: corregido en D4 el 2-oct.
 
+### 4.2 v5 del 8-oct: plantilla `bloques`, video y por qué v4 era básica
+
+> Sergio Urcullo, 8-oct: *«los diseños… demasiado básicos… mejora tus trabajos»*. Comparación completa con la
+> competencia: `hermes-content/research/competencia/anuncios/COMPARACION-DISENO-8OCT.md`.
+
+- **Por qué v4 era básica (diagnóstico):** una losa de texto sobre hoja clara; ningún foco visual; la pantalla real
+  chica y con sus recortes pisando la barra del navegador; tres tildes genéricas. Los que sobreviven tienen UN foco
+  enorme (un número, una cara), un campo de color y el producto en grande.
+- **Plantilla nueva** `"plantilla":"bloques"` en `anuncio-render.js` (la vieja sigue sin cambios): cabecera sobre hoja y
+  panel de **tinta** `#0C110F` (paleta de la marca; los degradados están prohibidos). Bloques: `hora {valor, rotulo, chip}`
+  (el gancho; el chip usa el amarillo real del «Pendiente» de la app, `rgb(254,249,194)` / `rgb(137,75,0)`, medido en la
+  captura), `flecha {texto}`, `tile {crop, width, anillos:[[x,y,w,h] en px de la CAPTURA]}`, `leyenda`, `texto`.
+  Briefs: `carousels/briefs/ads/…a1v5-las-diez.json` y `…a2v2-el-saldo.json`.
+- **Video:** `scripts/anuncio-video.js --brief … --out …` anima la misma pieza (9:16, 11 s, sin audio): fija el reloj de
+  la Web Animations API en cada cuadro, saca JPG con Chromium y los une con ffmpeg (los dos están en la nube; 33 s de
+  render). **El titular tiene que estar en el cuadro 0**: es la miniatura que Meta muestra antes del play.
+  Tiempos en `video.tiempos` del brief.
+- **Anillos:** el recuadro se calcula con las coordenadas de la captura × el factor de escala. Primera vez un anillo
+  cruzó el nombre del paciente por 6 px de margen: **un anillo no puede invadir otra línea de texto**; se baja el margen
+  o se saca el anillo (los de v5 quedaron solo en el mensaje y el botón).
+- **Historias 9:16:** el panel + `ctaBottom` no pueden sumar más que el lienzo; el renderer avisa «se sale del lienzo:
+  panel». Con `ctaBottom` 250 el botón queda a ~263 px del borde, fuera de lo que Meta tapa.
+- **Lo que NO arregla el diseño:** la persona (los 7 que sobreviven la tienen) y el rendimiento (sin gasto no hay cifras).
+- **Las dos capturas de una misma pieza tienen que ser de la MISMA persona de demo.** Hoy la agenda y Pendientes son de
+  capturas distintas del 30-sep; con la cuenta demo se arma el caso entero (agenda → pendiente → mensaje).
+- **Biblioteca desde la nube:** HTTP 403 de Facebook (8-oct). No se rodea; la madre captura desde la PC. Los sitios de
+  referencia sí abren con la receta de Playwright del §6, salvo Doctolib (Cloudflare «verifique que es humano»).
+
+### 4.3 Laboratorio de creativos (8-oct): los 5 formatos que SOSTIENEN y cómo se hace cada uno
+
+> Pedido de Sergio Urcullo por la madre: *«aprender a hacer campañas mirando a la competencia, y que sea real»*. Documento:
+> `research/competencia/anuncios/FORMATOS-QUE-SOSTIENEN.md`.
+
+- **Método:** ordenar los `.txt` de `anuncios/` por «En circulación desde» (`grep -m1 -o "En circulación desde el [0-9]* [a-z]*\.* [0-9]*"`) y
+  mirar los fotogramas en hoja de contacto (`montage … -geometry 260x460`). Lo único público es la antigüedad; **no prueba rendimiento
+  y las capturas del 1-2 oct no prueban que sigan vivas** (PEDIDO PC a la madre).
+- **Lo que enseñaron (8-oct):** de los 5 formatos más viejos, **4 llevan una persona**; el más viejo (Dt.Dental, 100 d) es un selfie sin
+  producción; ninguno lleva precio ni cifra propia; ninguno va a WhatsApp. El copy **«No es X, no es Y… Es Z»** de CitaPro sostiene
+  3 anuncios (83, 63 y 23 d).
+- **Código:** plantilla `bloques` para estático (`--formato feed|story|cuadro`), `anuncio-video.js` para video (`video.duracion` y
+  `video.tiempos` en el brief) y carrusel = una lámina por brief con `pagina` («1 / 4») y sin `cta` salvo la última. El cuadrado 1:1 es el
+  de las láminas de carrusel: `todos` NO lo incluye.
+- **Dos formatos de ventana:** el titular **tiene que estar en el cuadro 0** del video; en la historia, nada de logo ni botón en los 250 px
+  de arriba ni en los de abajo.
+- **Trampas de esta tanda:** (1) el chip «Sin confirmar» se partió en dos líneas al agrandar el número (`white-space:nowrap`);
+  (2) el control «pisa» marcó falso positivo con el paginador absoluto (ahora ignora lo `position:absolute`); (3) el control de
+  seguridad de Claude Code **bloquea `rm -f $VAR/*`**: usar rutas literales o sobrescribir los archivos con el mismo nombre.
+- **Higgsfield:** se cotiza con `higgsfield generate cost` desde la PC (CLAUDE.md); desde la nube no se cotiza ni se genera.
+
 ## 5. La campaña de Meta
 
 - **1-oct, 21:00 UTC: el conector YA ve ONIA Ads** (`1073680778314945`, negocio «OniaAgency», `is_ads_mcp_enabled`),
@@ -338,7 +401,16 @@ Trampas pagadas armando v3 (2-oct):
   **`ads_activate_entity` sobre la campaña los publica en ACTIVO, gastando.** Solo se llama con el OK escrito
   de gasto (fila 9 de §5.9).
 - `client_conversation_id` es obligatorio en cada llamada: 20 caracteres, y el mismo en toda la conversación.
-- Presupuesto en centavos de USD: USD 140 = `14000`, como presupuesto total de la campaña con fecha de fin.
+- Presupuesto en centavos de USD: **USD 56 = `5600`** (Bs 750 de techo de Meta, plan 1.0 §3), como presupuesto total
+  de la campaña con fecha de fin. «USD 140 / 14000» era del 30-sep y **ya no vale** (corregido el 8-oct).
+- **El techo de la pauta lo fija `ONIA_PLAN_1.0_Y_CAJA.md`, no `ONIA_ADQUISICION_Y_PAUTA.md`.** El 8-oct esa fuente
+  decía USD 10/día (USD 140, ≈ Bs 1.600), más del doble de los Bs 750 de la caja. Dos docs con dos techos es el error
+  que la regla «una sola fuente de verdad» existe para evitar: ante la duda, manda el más nuevo y el que cuenta la caja.
+- **Qué NO ve el conector de Meta (8-oct):** el número de WhatsApp vinculado a la página (lo mira Sergio Urcullo en
+  Business Manager); los benchmarks de una cuenta sin gasto (`ads_insights_industry_benchmark` →
+  «No industry benchmark data»; `ads_insights_advertiser_context` → «Vertical: \N»). Los costos de la campaña son
+  supuestos hasta la semana 1.
+- **El píxel se mira con `ads_get_datasets`** (`ONIA Web` `1012611478191231`, `last_fired_time`): dispara el 8-oct.
   Meta rechaza un **límite** de gasto menor a USD 100.
 
 ### 5.1 Seguimiento por WhatsApp y remarketing (medido 3-oct; playbook `sales-kit/SEGUIMIENTO-LEADS.md`)
@@ -349,6 +421,15 @@ Trampas pagadas armando v3 (2-oct):
 - **Las plantillas a leads salen desde la bandeja de Chatwoot con el usuario de Sergio Urcullo.** Así el bot se
   calla (traspaso de `chatwoot-adapter.mjs`). Si salen por envío automático, el botón que toca el lead le llega al
   bot y contesta con su guion.
+- **Contar los leads «hoy» no se puede desde la nube (8-oct).** No hay llave del VPS, ni token de Chatwoot, y el conector
+  de Gmail da «Precondition check failed». El conteo de una corrida (pedidos de acceso, respuestas humanas en Chatwoot y
+  plantillas sincronizadas) está en `ONIA_LEADS_ESPERANDO.md`, «Conteo de hoy en una sola corrida». Se le pide a la
+  PC, y no se redacta sobre el número heredado.
+- **Las plantillas aprobadas se leen en `channel_whatsapp.message_templates` de chatwoot-db**, con la fecha de la
+  última sincronización. Ningún conector de Meta las lista: el de desarrolladores solo ve la configuración de las
+  apps.
+- **La llamada gratis de 20 min es `sergiourcullo.vercel.app/llamada`,** que redirige a `cal.com/sergiourcullo/20min`
+  («Llamada 1 a 1», 200 el 8-oct). `onia.com.bo/llamada` da 404.
 - **Público personalizado con un puñado de teléfonos: no.** Meta recomienda al menos 1.000 personas y exige base
   legal para subir la lista. Para menos de 100 leads, el remarketing es la secuencia de plantillas (≈ USD 0,074
   cada una, `usage-run.mjs`).
@@ -373,6 +454,16 @@ Trampas pagadas armando v3 (2-oct):
 | `ssh onia-vps` después de reiniciar la sesión (2-oct) | El hook deja la llave y la config, pero **falta el programa `ssh`** | `apt-get install -y openssh-client` |
 | Cupo de búsquedas web | 200 por sesión; se agotó con 4 subagentes | Darle a cada subagente un tope. El 1-oct, de noche, 4 subagentes con 25, 30, 20 y 12 búsquedas verificaron 28 prospectos y 9 de reserva, y usaron el tope completo |
 | Fuentes de Google en el render | no bajan | `scripts/carousel_cloud_setup.sh` instala TTF locales |
+| **Playwright contra nuestros dominios (8-oct)** | `ERR_CERT_AUTHORITY_INVALID` con el headless shell, con Chromium completo y aun con el proxy | Chromium completo (`/opt/pw-browsers/chromium-1194/chrome-linux/chrome`) + `proxy: HTTPS_PROXY` + `--ignore-certificate-errors-spki-list` con la huella SPKI de las CA «O = Anthropic … production» de `/root/.ccr/ca-bundle.crt` (la misma confianza que usa curl). Ya resuelto en `scripts/auditar-app.mjs`. Con eso, onia.com.bo y la app dan 200 |
+| `send_message` a la sesión madre de la PC (8-oct) | `elevated_session_untrusted_device`: no sale | Se contesta en el transcript, como dice la madre |
+
+## 6.1 Promesa contra lo que funciona (8-oct)
+
+`hermes-content/docs/ONIA_PROMESA_VS_PRODUCTO.md` es la compuerta para volver a contactar: su §2 lista lo que prometen
+los mensajes de la §6.9, y nada sale hasta que esas filas estén en ✅. Antes de escribir un mensaje nuevo, su promesa
+tiene que estar en esa tabla y en ✅. Para mirar la app por dentro: `scripts/auditar-app.mjs` (solo lectura, cuenta de
+prueba en variables de entorno). Trampa: el texto que devuelve `innerText` trae los nombres de los iconos
+(«credit_card_off»), pero en pantalla se ven bien. Se mira la captura, no el texto.
 
 ## 7. Después de cada demo
 
@@ -403,3 +494,13 @@ Resultado: `research/competencia/DAPTA_COMO_FUNCIONA.md` (sin fecha, fuente del 
   Un informe propuso decir «sin tarjeta» y ya estaba en la home, /empezar, /agentes y /nosotros.
 - **La Biblioteca de Anuncios fuera de la UE no guarda los anuncios comerciales inactivos.** «¿Pautaban en julio?»
   no se puede contestar después: se mide el día.
+
+### 8.1 Tanda semanal de competencia (método del 8-oct)
+- **Precios: del texto del navegador, no de un buscador.** Una búsqueda dio Jelou a USD 24,9 / 199,9 con 2.500 ejecuciones; la página de hoy dice
+  USD 25 / 299 con 1.000. `WebFetch` resume con un modelo chico: sirve para orientarse, no para citar una cifra. Capturar con Playwright
+  (receta del §6) y leer el `.txt`.
+- **Probar las rutas antes de afirmar un cambio:** `/pricing` de AgendaPro y `/precios` de Doctocliq dieron 404 por rutas adivinadas; la real de
+  Doctocliq es `/planes-y-precios`. Un 404 de ruta adivinada no es «cambió la oferta».
+- **Cada hallazgo lleva:** quién y cuánto lleva · versión Onia · dueño · tarea Codex (casi nunca: un prompt escrito hoy queda viejo, `master`
+  se mueve). Va a `docs/ONIA_UI_MEJORAS_1.0.md` §8, una tanda por semana, la más nueva arriba.
+- **Lo que pide login o Instagram** va al transcript como «PEDIDO PC: <qué> — para qué lo quiero». Contactar a un tercero (pedir su demo) no.

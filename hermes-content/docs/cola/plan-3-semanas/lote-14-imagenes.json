@@ -1,0 +1,240 @@
+[
+ {
+  "id": "K13-2",
+  "carrusel": "K13 · Claude Code sin API key",
+  "lamina": "2",
+  "estilo": "fotobn",
+  "modelo": "gpt_image_2_5",
+  "params": [
+   "--quality",
+   "medium",
+   "--resolution",
+   "2k"
+  ],
+  "costo_cr": 1,
+  "aspect": "4:3",
+  "prompt_fotobn": "Two sheets of plain white paper lying on a grey surface, one slightly in front of the other, joined at the top corner by a metal paper clip. The paper clip is the green object.",
+  "reemplaza": "sergio-k13-loop-sin-api-key-20261001-s02-97067d7a.jpg"
+ },
+ {
+  "id": "K5-3",
+  "carrusel": "K5 · Seguimiento que no molesta",
+  "lamina": "3",
+  "estilo": "fotobn",
+  "modelo": "gpt_image_2_5",
+  "params": [
+   "--quality",
+   "medium",
+   "--resolution",
+   "2k"
+  ],
+  "costo_cr": 1,
+  "aspect": "4:3",
+  "prompt_fotobn": "A metal cookie cutter in the shape of a plain rounded square pressed into a sheet of dark rolled dough, with one cleanly cut square of dough lying beside it. The cookie cutter is the green object.",
+  "reemplaza": "sergio-k5v2-seguimiento-que-no-molesta-20260929-s03-20e9957d.jpg"
+ },
+ {
+  "id": "K5-7",
+  "carrusel": "K5 · Seguimiento que no molesta",
+  "lamina": "7",
+  "estilo": "fotobn",
+  "modelo": "gpt_image_2_5",
+  "params": [
+   "--quality",
+   "medium",
+   "--resolution",
+   "2k"
+  ],
+  "costo_cr": 1,
+  "aspect": "4:3",
+  "prompt_fotobn": "A closed paper envelope lying flat on a grey desk, sealed at the point of the flap with a small round wax seal. The wax seal is the green object.",
+  "reemplaza": "sergio-k5v2-seguimiento-que-no-molesta-20260929-s07-9dcc35b5.jpg"
+ },
+ {
+  "id": "K9-5",
+  "carrusel": "K9 · 5 revisiones del video con IA",
+  "lamina": "5",
+  "estilo": "fotobn",
+  "modelo": "gpt_image_2_5",
+  "params": [
+   "--quality",
+   "medium",
+   "--resolution",
+   "2k"
+  ],
+  "costo_cr": 1,
+  "aspect": "4:3",
+  "prompt_fotobn": "A tall rectangular pane of frosted glass in a thin dark frame, standing upright on a grey surface, with a soft blurred shape visible behind the glass. The blurred shape behind the glass is the green object.",
+  "reemplaza": "sergio-k9v2-checklist-video-ia-20260929-s05-3057304b.jpg"
+ },
+ {
+  "id": "K9-6",
+  "carrusel": "K9 · 5 revisiones del video con IA",
+  "lamina": "6",
+  "estilo": "fotobn",
+  "modelo": "gpt_image_2_5",
+  "params": [
+   "--quality",
+   "medium",
+   "--resolution",
+   "2k"
+  ],
+  "costo_cr": 1,
+  "aspect": "4:3",
+  "prompt_fotobn": "A small leather coin purse seen straight from the front, closed, standing upright on a grey surface, with a metal clasp across the top. The clasp is the green object.",
+  "reemplaza": "sergio-k9v2-checklist-video-ia-20260929-s06-36cfd880.jpg"
+ },
+ {
+  "id": "K12-7",
+  "carrusel": "K12 · Worktrees sin pisarse",
+  "lamina": "7",
+  "estilo": "fotobn",
+  "modelo": "gpt_image_2_5",
+  "params": [
+   "--quality",
+   "medium",
+   "--resolution",
+   "2k"
+  ],
+  "costo_cr": 1,
+  "aspect": "4:3",
+  "prompt_fotobn": "A large check mark shape cut from sheet metal, standing upright on a grey surface, with a small garden shovel leaning against it. The check mark is the green object.",
+  "reemplaza": "sergio-k12-worktrees-sin-pisarse-20261001-s07-1bb45e00.jpg"
+ },
+ {
+  "id": "N02-3",
+  "carrusel": "N02 · Sonnet 4.5 se apaga",
+  "lamina": "3",
+  "estilo": "fotobn",
+  "modelo": "gpt_image_2_5",
+  "params": [
+   "--quality",
+   "medium",
+   "--resolution",
+   "2k"
+  ],
+  "costo_cr": 1,
+  "aspect": "4:3",
+  "prompt_fotobn": "A heavy flashlight lying on its side on a grey surface, switched on, with a soft wide cone of light across the surface in front of it. The flashlight is the green object.",
+  "reemplaza": "sergio-n02-sonnet45-se-apaga-20261001-s03-99e49c4b.jpg"
+ },
+ {
+  "id": "N02-7",
+  "carrusel": "N02 · Sonnet 4.5 se apaga",
+  "lamina": "7",
+  "estilo": "fotobn",
+  "modelo": "gpt_image_2_5",
+  "params": [
+   "--quality",
+   "medium",
+   "--resolution",
+   "2k"
+  ],
+  "costo_cr": 1,
+  "aspect": "4:3",
+  "prompt_fotobn": "A large adjustable wrench lying diagonally on a grey surface, holding a hexagonal nut in its open jaw. The hexagonal nut is the green object.",
+  "reemplaza": "sergio-n02-sonnet45-se-apaga-20261001-s07-005fd9f8.jpg"
+ },
+ {
+  "id": "K1-7",
+  "carrusel": "K1 · Opus 5.5 o Sonnet 5.5",
+  "lamina": "7",
+  "estilo": "fotobn",
+  "modelo": "gpt_image_2_5",
+  "params": [
+   "--quality",
+   "medium",
+   "--resolution",
+   "2k"
+  ],
+  "costo_cr": 1,
+  "aspect": "4:3",
+  "prompt_fotobn": "Two identical cubes of the same size standing side by side on a flat grey surface, directly behind one thin straight line drawn across it. The left cube is the green object; the right cube is plain grey stone.",
+  "reemplaza": "sergio-k1-opcion-b-clay-20260929-s07-28ff5bfc.jpg"
+ },
+ {
+  "id": "K10-5",
+  "carrusel": "K10 · La perilla de esfuerzo",
+  "lamina": "5",
+  "estilo": "fotobn",
+  "modelo": "gpt_image_2_5",
+  "params": [
+   "--quality",
+   "medium",
+   "--resolution",
+   "2k"
+  ],
+  "costo_cr": 1,
+  "aspect": "4:3",
+  "prompt_fotobn": "A small black metal step ladder with three steps standing on a grey surface, with one round ball resting on the second step. The ball is the green object.",
+  "reemplaza": "sergio-k10v2-perilla-de-esfuerzo-20260929-s05-2f87cdb0.jpg"
+ },
+ {
+  "id": "P2-HF",
+  "carrusel": "P2 · 7 herramientas",
+  "lamina": "HyperFrames",
+  "estilo": "fotobn",
+  "modelo": "gpt_image_2_5",
+  "params": [
+   "--quality",
+   "medium",
+   "--resolution",
+   "2k"
+  ],
+  "costo_cr": 1,
+  "aspect": "4:3",
+  "prompt_fotobn": "A strip of 35mm cine film with three empty frames, lying in a gentle curve on a grey surface. The middle frame is the green object.",
+  "reemplaza": null
+ },
+ {
+  "id": "P2-BU",
+  "carrusel": "P2 · 7 herramientas",
+  "lamina": "Buffer",
+  "estilo": "fotobn",
+  "modelo": "gpt_image_2_5",
+  "params": [
+   "--quality",
+   "medium",
+   "--resolution",
+   "2k"
+  ],
+  "costo_cr": 1,
+  "aspect": "4:3",
+  "prompt_fotobn": "A neat stack of three thin rectangular slabs, each offset slightly from the one below, on a grey surface. The top slab is the green object.",
+  "reemplaza": null
+ },
+ {
+  "id": "P2-FW",
+  "carrusel": "P2 · 7 herramientas",
+  "lamina": "faster-whisper",
+  "estilo": "fotobn",
+  "modelo": "gpt_image_2_5",
+  "params": [
+   "--quality",
+   "medium",
+   "--resolution",
+   "2k"
+  ],
+  "costo_cr": 1,
+  "aspect": "4:3",
+  "prompt_fotobn": "A vintage studio microphone on a short stand, standing on a grey surface. The round head of the microphone is the green object.",
+  "reemplaza": null
+ },
+ {
+  "id": "P2-HG",
+  "carrusel": "P2 · 7 herramientas",
+  "lamina": "Higgsfield",
+  "estilo": "fotobn",
+  "modelo": "gpt_image_2_5",
+  "params": [
+   "--quality",
+   "medium",
+   "--resolution",
+   "2k"
+  ],
+  "costo_cr": 1,
+  "aspect": "4:3",
+  "prompt_fotobn": "An empty black picture frame leaning against a grey wall, with a small paintbrush lying on the surface in front of it. The paintbrush is the green object.",
+  "reemplaza": null
+ }
+]

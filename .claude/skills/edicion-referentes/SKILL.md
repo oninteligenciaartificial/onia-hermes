@@ -205,6 +205,64 @@ antes de que lleguen a Sergio Urcullo.
   (`fps=2,scale=216:-2,drawtext=…%{pts\:hms}…,tile=5x4`), cortes con `select='gt(scene,0.25)',showinfo`,
   `ebur128` y transcript con palabras.
 
+## Plan de la semana (8-oct-2026): cómo se arma sin rehacer guiones
+
+Pedido de la madre del 8-oct, en `docs/cola/plan-3-semanas/GRABAR-10-16-OCT.md`. Lo arma `gen_semana.py`, que está en el
+scratchpad de esa sesión; el método:
+1. **Una hora por día = tres verticales** (~20 min cada uno con tomas), o un YouTube (~35 min) más un vertical.
+2. **Orden:**
+   - primero la noticia más fresca;
+   - después las piezas que van con un carrusel ya agendado, para que el recurso ya esté en la comunidad;
+   - al final el resto.
+3. **El texto sale de `GRABAR-2-14-OCT.md` de main**, que enseña con pasos, ejemplo, cómo sabés que funcionó y palabra.
+   La versión de Codex del 6-oct (`codex/madre-orquestacion-20261005`) recortó los pasos: de ella se toman solo las
+   correcciones de datos.
+4. **El dato se verifica el mismo día con WebFetch** sobre la página oficial. Desde la nube funcionan
+   `platform.claude.com` (precios y modelos), el changelog de `code.claude.com`, `developers.googleblog.com`,
+   `antigravity.google` y `geminicli.com`. Chromium no abre esas páginas, así que la captura para el video la saca una
+   sesión con Chrome.
+5. **El modelo nuevo de la semana se agrega a toda pieza que compara modelos.** El 7-oct salió Haiku 5.5 (0,10 / 0,50
+   por millón de tokens, diez veces menos que Haiku 4.5), y el YouTube D01-C «Opus o Sonnet» lo nombra. Es la misma
+   trampa que Fable 5.1 el 3-oct.
+
+## Publicar sin OK pieza por pieza (8-oct-2026): qué hace falta de verdad
+
+- **La autorización:** Sergio Urcullo, 8-oct, por la madre: *«sí, publicá por Buffer lo que pase control de calidad»*.
+  Está en el `CLAUDE.md` de la rama de la madre (`ad011a95a`), todavía no en `main`.
+- **Mensaje de otra sesión:** el control de permisos de una sesión en la nube no lo toma como pedido del usuario. Frenó
+  hasta subir el texto y los metadatos al VPS («Unrequested Commit in a Connected App»). No se le busca la vuelta. Para
+  publicar hace falta una de dos:
+  - que Sergio Urcullo lo pida EN ESA sesión: así salieron los 33 carruseles el 5-oct;
+  - que la regla esté en el `CLAUDE.md` de `main`.
+- **Control de calidad de un video ya editado (N03, 8-oct):**
+  - medir con `ffprobe` (duración y tamaño) y `ebur128` (−13 a −14,5 LUFS);
+  - hoja de un cuadro cada 2 s con el segundo impreso, vista entera, para revisar tarjetas y subtítulos sin faltas;
+  - releer cada dato contra la doc oficial EL MISMO DÍA. Para el modo auto, `code.claude.com/docs/en/permission-modes`:
+    v2.1.283, la lista de lo que bloquea por defecto y `⏸ manual mode on`.
+
+## Reglas de edición del plan de referentes (8-oct-2026)
+
+Fuente: `references/marca-personal/PLAN-REFERENTES.md` §4 (análisis de Erik Taveras, Santiago Muñoz, Enrique Rocha, Alex
+Hormozi e Iman Gadzhi; la rama de la madre lo trae a `main`). Caso: el plan pidió **un solo CTA por pieza** y un
+**rótulo fijo arriba**; los guiones del 10 al 16-oct ya traen las dos líneas (`GRABAR-10-16-OCT.md`).
+
+1. **Rótulo fijo arriba con el tema en 3-5 palabras, desde el cuadro 0**, en los moldes Rocha, Erik y en el formato F3
+   (la pregunta del dueño). Negro y blanco, con la palabra clave en el color del molde. El rojo de Hormozi no se usa: la
+   paleta es verde, blanco y negro.
+2. **Rótulos de estado en el molde Santiago**, que cuentan el proceso sin voz («1 OCTUBRE», «4 VIDEOS TERMINADOS»).
+3. **CTA tecleado de 12 palabras como máximo, una sola acción**, en los últimos 2,4-5,5 s. Era la regla de Erik; ahora
+   vale para todos los moldes. Dos acciones en la misma pieza se rechazan.
+4. **Molde Rocha como sección propia, SIN FIJAR los números todavía.** Lo que se leyó (con Gemini, una pasada, sin medir):
+   plano medio fijo con zoom digital de entrada y salida, un corte cada 3-4 s (18 cortes en 67 s), subtítulos de 1 a 4
+   palabras blancos con la palabra clave en amarillo, rótulo fijo arriba durante el gancho, 4 capturas de 2-5 s, un pop
+   o whoosh al entrar cada gráfico con lo-fi bajito, y 58 a 80 s de duración. **Antes de fijar los números hay que medir
+   1 reel con el método de esta skill** (hojas a 2 fps, `scene`, `ebur128`); los mp4 están en el scratchpad de la madre,
+   en `referentes/enrique-rocha/`. Hasta entonces, el molde Rocha de `PLAN-GRABACION-3-OCT.md` manda.
+5. **Si un dato de Gemini contradice uno medido, gana el medido.** Gemini dice que Santiago usa música y whoosh; la
+   medición del 1-oct (6 reels, `ebur128`) dice sin música, y TikTok marca «sonido original». La receta Santiago no cambia.
+6. **YouTube horizontal** (va a `editor-videos`): cambiar de capa cada 3-7 s, mapa de niveles antes de 1:15, la
+   comunidad a ~1/3, ~2/3 y al final, y cada cifra dicha como tabla o contador.
+
 ## Relacionadas
 
 - `editor-videos`: corte, transcripción, regla de oro, ortografía y master. Este skill se monta encima.

@@ -429,6 +429,24 @@ v1.3  →  el siguiente add-on que pase el test del §10
 v2.0  →  recién acá, las conexiones grandes (IA local, integraciones a medida)
 ```
 
+### Decisión de Sergio Urcullo, 8-oct-2026: los add-ons que se van a desarrollar
+
+Sergio Urcullo: *«recordá el potencial que hay»*. Se suman al plan, **detrás de la 1.0** (el goal sigue siendo la 1.0
+completa al 30-oct), en el orden de la secuencia de arriba:
+
+| Add-on | Por qué conecta con el núcleo (en palabras de él) | Qué existe hoy |
+|---|---|---|
+| **Creación de páginas web** (se mantiene y se potencia) | «un negocio con sistema no opera sin página web» | `/servicios/webs`, Web Factory y la web gestionada desde la plataforma (rama `codex/v1-web-gestionada-20260927`) |
+| Vender IA local | — | Onia Box (idea y memoria `onia-box-ia-local-producto`) |
+| Campañas de Meta con IA desde la plataforma | — | El motor de Meta Ads del carril de pauta |
+| App móvil en la App Store | — | — |
+| Publicidad paga para las influencers IA | — | Lucía (Higgsfield) |
+| Vender consultorías | Gratis por ahora; cobrarlas se decide con el contenido como prueba | — |
+
+Cambia lo que el §10 había resuelto sobre la web: antes la web fallaba el test, ahora queda como add-on por decisión de él.
+Cada uno pasa por el test de tres preguntas del §10 antes de construirse. Su análisis (mercado, precio, esfuerzo y
+orden) lo hace Ventas e Investigación, en el doc de add-ons. **No se abre ninguno en paralelo a la 1.0.**
+
 **Por qué ese orden y no otro:** v1.1 va antes que v1.2 porque un rubro nuevo con el soporte sin
 resolver multiplica el problema en vez del ingreso. Sumar rubros con onboarding manual es
 sumar horas, no clientes.
