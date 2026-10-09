@@ -107,7 +107,10 @@ seccion_decisiones() {
 }
 linea_salud() {
   local rotas
-  if [ -z "$PARTE_MSG" ] || printf '%s' "$PARTE_MSG" | grep -q 'No pude verificar'; then
+  if [ -z "$PARTE_MSG" ]; then
+    printf '🩺 Sistema: no pude verificarlo (el parte diario no respondió).\n'; return
+  fi
+  if printf '%s' "$PARTE_MSG" | grep -q 'No pude verificar'; then
     printf '🩺 Sistema: no pude verificarlo (el tablero no respondió).\n'; return
   fi
   rotas=$(printf '%s' "$PARTE_MSG" | grep -oE '⚠️ <b>[0-9]+ cosa' | grep -oE '[0-9]+' | head -1)
@@ -313,7 +316,10 @@ seccion_hoy() {
 seccion_bloques_hoy() {
   local ev
   [ -x "$AGENDA" ] || return 0
-  ev=$("$AGENDA" --ids "$HOY" 2>/dev/null </dev/null | awk -F'\t' '$2 != "--" && $4 ~ /ONIA|🔒|🎬/' | head -6)
+  # Sin leerlos no se calla: NECESITO diría «Nada.» con bloques sin confirmar (revisión del 9-oct).
+  ev=$("$AGENDA" --ids "$HOY" 2>/dev/null </dev/null) \
+    || { printf '📋 No pude leer tus bloques de hoy en el calendario: no sé si quedó alguno pendiente.\n'; return 0; }
+  ev=$(printf '%s\n' "$ev" | awk -F'\t' '$2 != "--" && $4 ~ /ONIA|🔒|🎬/' | head -6)
   [ -n "$ev" ] || return 0
   printf '%s\n' "$ev" | awk -F'\t' -v f="$HOY" 'BEGIN { OFS = "\t" } { print f, NR, $1, $2, $3, $4 }' > "$TMP/cierre-bloques.tsv"
   printf '📋 <b>Tus bloques de hoy</b> — ¿se hicieron?\n'
@@ -323,16 +329,27 @@ seccion_bloques_hoy() {
 # Lo que él le pidió a Claude desde Telegram (pedido-claude.sh), con su estado. La respuesta de cada
 # uno ya le llegó por la aduana; acá queda el circuito cerrado aunque alguna se haya perdido: un
 # pedido «sin respuesta» a las 21:30 es algo que no tiene que creer terminado.
+# Los que esperan su ok van aparte, en NECESITO (revisión del 9-oct: en PASÓ, el cierre decía «Nada.»
+# con un pedido esperándolo). Se leen una vez, afuera de las secciones.
+PEDIDOS_HOY=""
+[ -x "$PEDIDOS" ] && PEDIDOS_HOY=$("$PEDIDOS" --lista "$HOY" 2>/dev/null </dev/null)
+seccion_pedidos_ok() {
+  local filas
+  filas=$(printf '%s\n' "$PEDIDOS_HOY" | awk -F'\t' '$4 == "necesita-ok"')
+  [ -n "$filas" ] || return 0
+  printf '🙋 <b>Pedidos a Claude que esperan tu ok</b>\n'
+  printf '%s\n' "$filas" | awk -F'\t' '{ printf "• %s %s — %s\n", $1, $3, $5 }' | head -"$MAX" | esc
+  return 0
+}
 seccion_pedidos() {
   local filas n
-  [ -x "$PEDIDOS" ] || return 0
-  filas=$("$PEDIDOS" --lista "$HOY" 2>/dev/null </dev/null) || return 0
+  filas=$(printf '%s\n' "$PEDIDOS_HOY" | awk -F'\t' 'NF && $4 != "necesita-ok"')
   [ -n "$filas" ] || return 0
   n=$(printf '%s\n' "$filas" | grep -c .)
   printf '🤖 <b>Tus pedidos a Claude hoy</b>\n'
   printf '%s\n' "$filas" | awk -F'\t' '{
       e = $4
-      if (e == "listo") m = "✅ listo"; else if (e == "necesita-ok") m = "🙋 espera tu ok"
+      if (e == "listo") m = "✅ listo"
       else if (e == "no-se-pudo") m = "⚠️ no se pudo"; else m = "⏳ sin respuesta todavía"
       printf "• %s %s — %s\n", $1, $3, m }' | head -"$MAX" | esc
   [ "$n" -gt "$MAX" ] && printf '… y %s más.\n' $((n - MAX))
@@ -365,26 +382,34 @@ grupo() {  # grupo <TÍTULO> [<texto si quedó vacío>]: cierra lo juntado con p
   [ -n "$g" ] && CUERPO+="<b>$1</b>"$'\n'"$g"$'\n\n'
   GRUPO=""; return 0
 }
-medido_lo_que_espera() {
-  [ "$TABLERO_OK" = 1 ] && [ -n "$PARTE_MSG" ] && ! printf '%s' "$PARTE_MSG" | grep -q 'No pude verificar'
+# Lo que no se pudo medir se dice SIEMPRE, haya o no otras cosas en NECESITO (revisión del 9-oct: solo
+# salía con NECESITO vacío). Con el tablero caído ya lo dicen los prospectos y «Te esperan»; acá va el
+# caso del parte, que es de donde salen las decisiones.
+falta_medir() {
+  [ "$TABLERO_OK" = 1 ] || return 0
+  if [ -z "$PARTE_MSG" ] || printf '%s' "$PARTE_MSG" | grep -q 'No pude verificar'; then
+    printf '🙋 No pude ver las decisiones que esperan tu ok (el parte diario no respondió).\n'
+  fi
+  return 0
 }
-if medido_lo_que_espera; then NADA='Nada.'; else NADA='No pude ver si algo espera tu ok (el tablero no respondió).'; fi
 if [ "$MODO" = manana ]; then
   CABEZA="☀️ <b>Buen día, Sergio Urcullo</b> — $(dia_largo "$HOY")"
   parte seccion_cola noche 'Mientras dormías'; parte linea_salud; grupo PASÓ
-  parte seccion_prospectos; parte seccion_decisiones; grupo NECESITO "$NADA"
+  parte seccion_prospectos; parte seccion_decisiones; parte falta_medir; grupo NECESITO 'Nada.'
   parte seccion_agenda "$HOY" 'Tu día'; parte seccion_plan "$HOY" 'Hoy sale' 'Para grabar hoy'; grupo SIGUE
 else
   CABEZA="🌙 <b>Cierre del $(dia_largo "$HOY")</b>"
   parte seccion_hoy; parte seccion_pedidos; parte seccion_cola resumen 'Avisos del día'; parte linea_salud; grupo PASÓ
-  parte seccion_bloques_hoy; parte seccion_sigue; grupo NECESITO "$NADA"
+  parte seccion_bloques_hoy; parte seccion_pedidos_ok; parte seccion_sigue; parte falta_medir; grupo NECESITO 'Nada.'
   parte seccion_agenda "$MANANA" 'Mañana'; parte seccion_plan "$MANANA" 'Mañana sale' 'Mañana grabás'; grupo SIGUE
 fi
 MSG="$CABEZA
 
 ${CUERPO%$'\n\n'}"
-# Telegram corta en 4.096 caracteres; se deja margen y se avisa del corte.
-if [ "${#MSG}" -gt 3900 ]; then MSG="${MSG:0:3850}
+# Telegram corta en 4.096 caracteres; se deja margen y se avisa del corte. Se corta en el último salto
+# de línea: cada etiqueta abre y cierra en su línea, y una partida hace que Telegram rechace el
+# mensaje entero (revisión del 9-oct). Lo que se pierde primero es lo último: SIGUE.
+if [ "${#MSG}" -gt 3900 ]; then MSG="${MSG:0:3850}"; MSG="${MSG%$'\n'*}
 … (recortado)"; fi
 
 if [ "${ONIA_JARVIS_SOLO_IMPRIMIR:-0}" = 1 ]; then printf '%s\n' "$MSG"; exit 0; fi

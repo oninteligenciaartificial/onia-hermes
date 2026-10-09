@@ -385,9 +385,67 @@ test("con el parte caído (el tablero vivo y sin prospectos), NECESITO tampoco d
   const lista = "▶ t_9c0d1e2f ready (unassigned) [auto:abc123] 🔴 CI en ROJO en main";
   const b = banco({ lista, parte: "", repo: repoConCommits([]) });
   for (const [modo, env] of [["manana", {}], ["noche", { ONIA_HOY: "2026-09-29" }]]) {
-    const { NECESITO } = bloques(b.imprimir(modo, env));
+    const msg = b.imprimir(modo, env);
+    const { NECESITO } = bloques(msg);
     assert.doesNotMatch(NECESITO, /^\s*Nada\./, modo);
-    assert.match(NECESITO, /no respondió/, modo);
+    assert.match(NECESITO, /el parte diario no respondió/, modo);
+    assert.doesNotMatch(msg, /el tablero no respondió/, `${modo}: el tablero sí respondió; el que falló fue el parte`);
+  }
+});
+
+test("con el parte caído y prospectos esperando, NECESITO igual avisa que faltan las decisiones", () => {
+  // Revisión del 9-oct: el aviso solo salía con NECESITO vacío. Con prospectos, callaba que no
+  // pudo ver las decisiones.
+  const b = banco({ parte: "", repo: repoConCommits([]) });
+  for (const [modo, env] of [["manana", {}], ["noche", { ONIA_HOY: "2026-09-29" }]]) {
+    const { NECESITO } = bloques(b.imprimir(modo, env));
+    assert.match(NECESITO, /3 persona\(s\)/, modo);
+    assert.match(NECESITO, /No pude ver las decisiones que esperan tu ok \(el parte diario no respondió\)/, modo);
+  }
+});
+
+test("un pedido a Claude que espera su ok va en NECESITO, no en PASÓ, y NECESITO no dice «Nada.»", () => {
+  // Revisión del 9-oct: con un pedido «necesita-ok» y sin decisiones, el cierre decía «Nada.».
+  const lista = "▶ t_9c0d1e2f ready (unassigned) [auto:abc123] 🔴 CI en ROJO en main";
+  const parte = "⚠️ <b>1 cosa(s) que no pude arreglar solo</b>\n\n• 🔴 CI en ROJO en main\n\n<i>Parte diario · 30/09 06:30</i>";
+  const b = banco({ lista, parte });
+  const pedidos = b.escribir(
+    "pedidos.sh",
+    `#!/usr/bin/env bash
+printf '10:05\\tp_1a2b3c4d\\tplataforma\\tlisto\\thttps://claude.ai/code/session_1\\n'
+printf '15:40\\tp_5e6f7a8b\\tventas\\tnecesita-ok\\thttps://claude.ai/code/session_2\\n'
+`,
+  );
+  const { PASÓ, NECESITO } = bloques(b.imprimir("noche", { ONIA_PEDIDOS: pedidos }));
+  assert.match(PASÓ, /• 10:05 plataforma — ✅ listo/);
+  assert.doesNotMatch(PASÓ, /ventas/);
+  assert.match(NECESITO, /🙋 <b>Pedidos a Claude que esperan tu ok<\/b>\n• 15:40 ventas — https:\/\/claude\.ai\/code\/session_2/);
+  assert.doesNotMatch(NECESITO, /^\s*Nada\./);
+});
+
+test("si no puede leer los bloques de hoy, el cierre lo dice en NECESITO en vez de «Nada.»", () => {
+  const lista = "▶ t_9c0d1e2f ready (unassigned) [auto:abc123] 🔴 CI en ROJO en main";
+  const parte = "⚠️ <b>1 cosa(s) que no pude arreglar solo</b>\n\n• 🔴 CI en ROJO en main\n\n<i>Parte diario · 30/09 06:30</i>";
+  const b = banco({ lista, parte, repo: repoConCommits([]) });
+  const agenda = b.escribir("agenda-rota.sh", "#!/usr/bin/env bash\n[ \"$1\" = --ids ] && exit 1\necho '08:00–12:30 🎒 Colegio'\n");
+  const { NECESITO } = bloques(b.imprimir("noche", { ONIA_HOY: "2026-09-29", ONIA_AGENDA: agenda }));
+  assert.match(NECESITO, /No pude leer tus bloques de hoy/);
+  assert.doesNotMatch(NECESITO, /^\s*Nada\./);
+});
+
+test("el recorte de Telegram corta entre líneas: nunca deja una etiqueta abierta", () => {
+  // Revisión del 9-oct: `${MSG:0:3850}` podía partir un <b>…</b> o un <code>…</code>, y Telegram
+  // rechaza el HTML roto: ese día no se entregaba nada. Con decisiones de largo variable, el corte
+  // cae en todas las posiciones posibles de una línea.
+  for (let relleno = 0; relleno < 14; relleno++) {
+    const decisiones = Array.from({ length: 80 }, (_, k) => `• <b>Tarea ${k}</b> ${"x".repeat(relleno)}\n   → <code>ok t_${String(k).padStart(8, "0")}</code>`);
+    const b = banco({ parte: "🙋 <b>80 esperan tu ok</b>\n\n" + decisiones.join("\n") + "\n\n<i>Parte diario</i>" });
+    const msg = b.imprimir("manana");
+    assert.ok(msg.length <= 3900, `midió ${msg.length}`);
+    assert.match(msg, /… \(recortado\)\n?$/);
+    for (const t of ["b", "i", "code"]) {
+      assert.equal((msg.match(new RegExp(`<${t}>`, "g")) || []).length, (msg.match(new RegExp(`</${t}>`, "g")) || []).length, `<${t}> desparejo con relleno ${relleno}`);
+    }
   }
 });
 

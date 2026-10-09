@@ -69,7 +69,7 @@ function vps({ leeCalendario = true, escribeCalendario = true } = {}) {
   git("update-ref", "refs/remotes/origin/main", "HEAD");
 
   // El código de main ya copiado a /root/bin (lo que mira el paso 0).
-  ejecutable(join(bin, "onia-jarvis-resumen.sh"), "#!/usr/bin/env bash\n# cierre-bloques\necho 'vista previa del resumen'\n");
+  ejecutable(join(bin, "onia-jarvis-resumen.sh"), "#!/usr/bin/env bash\n# cierre-bloques · grupo NECESITO\necho 'vista previa del resumen'\n");
   ejecutable(join(bin, "onia-tg.sh"), `#!/usr/bin/env bash\n# ONIA_AVISO_PUEDO\nprintf '%s\\n---\\n' "$1" >> ${log}/telegram\n`);
   ejecutable(join(bin, "onia-vigia-aprobaciones.sh"), "#!/usr/bin/env bash\n# ONIA_AVISO_PUEDO\n");
   // El recolector de respuestas de los pedidos: --probar dice si el VPS llega a GitHub.
@@ -528,6 +528,36 @@ test("el formato fijo (Pasó · Necesito · Sigue) entra a su SOUL una sola vez,
   assert.equal((soul.match(/^## Formato fijo de cada mensaje/gm) || []).length, 1);
   assert.match(soul, /\*\*Pasó\*\*[\s\S]*\*\*Necesito\*\*[\s\S]*\*\*Sigue\*\*/);
   assert.doesNotMatch(soul, /^## Qué ES Onia hoy/m, "solo esa sección, hasta su «---»");
+});
+
+test("sección 0: con el resumen de antes del formato fijo en /root/bin, no aplica nada", () => {
+  // Revisión del 9-oct: el SOUL le dice a Hermes que el resumen ya llega en tres bloques; con el
+  // resumen viejo corriendo, eso sería falso.
+  const v = vps();
+  writeFileSync(join(v.R, "bin", "onia-jarvis-resumen.sh"), "#!/usr/bin/env bash\n# cierre-bloques\n");
+  const r = v.aplicar();
+  assert.equal(r.status, 1, r.stdout);
+  nadaCreado(v);
+});
+
+test("con la regla del calendario ya en su SOUL, el paso del formato toma su propio respaldo y revertir lo deja exacto", () => {
+  // Revisión del 9-oct: en las otras pruebas el respaldo lo toma siempre el paso del calendario.
+  // En el VPS de verdad el SOUL ya puede tener esa regla: el respaldo es del paso del formato.
+  const v = vps();
+  const soulPath = join(v.R, ".hermes", "SOUL.md");
+  const main = readFileSync(join(RAIZ, "hermes-content/deploy/hermes-agent/SOUL.md"), "utf8");
+  const cal = main.slice(main.indexOf("## Su calendario y el cierre del día"));
+  const inicial = "# SOUL de Hermes\n\n---\n\n" + cal.split(/^---$/m)[0];
+  writeFileSync(soulPath, inicial);
+  const r = v.aplicar();
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(r.stdout, /su SOUL ya tenía la regla del calendario/);
+  assert.match(r.stdout, /✅ regla del formato agregada al SOUL de Hermes/);
+  const bk = join(v.R, "backups", v.respaldos().at(-1), "SOUL.md.antes");
+  assert.equal(readFileSync(bk, "utf8"), inicial, "el respaldo es el SOUL de antes del formato");
+  const rev = v.revertir();
+  assert.equal(rev.status, 0, rev.stdout + rev.stderr);
+  assert.equal(readFileSync(soulPath, "utf8"), inicial);
 });
 
 test("si a main le falta la regla del formato en el SOUL, no aplica nada", () => {
