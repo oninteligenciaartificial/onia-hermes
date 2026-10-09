@@ -2,6 +2,21 @@
 
 **Archivo único del carril.** Actualizado 2026-09-29 por Claude (Opus 5.5).
 
+## ▶ 9-oct (tarde, 13) — historias que venden: secuencia de 4 lista, espera el OK de Sergio Urcullo
+
+- **Madre (9-oct):** Instagram dio 429 a la API de historias de la sesión de la PC (reels sí bajan). No se fuerza: las historias de
+  @eriktaveras, @sanmunoz.ia y otros las mira Sergio Urcullo a mano con Chrome visible. Mientras tanto, el diseño sigue con
+  `historias-onia.md` y los kits.
+- **Hecho:** `scripts/marca-personal/generar-historia-venta.py` → 4 PNG 1080×1920 en `carousels/out/historias-venta-asesoria/`
+  (+ `CHEQUEO-banda-segura.png`, dentro de la banda segura). 1 gancho «¿Dónde perdés clientes por responder tarde?» · 2 mito
+  «Todos creen que automatizar es comprar un sistema enorme» · 3 revelación = el checklist real de 5 preguntas + «la que aparece
+  en 2 o más va primero» · 4 CTA único «Reservá la tuya» (asesoría gratis, 20 min) con zona del sticker de link. Mismo diseño que
+  los kits aprobados (verde de marca, tarjeta negra, remate, ícono 3D, sticker).
+- **Sin agendar y sin publicar.** Nuevo diseño: pasa por Sergio Urcullo antes. Si dice sí: el link (`cal.com/sergiourcullo/20min`,
+  o `/llamada` cuando renombre el evento) y cualquier sticker los pega él a mano; publicar con `ig-historia.mjs` en el VPS.
+- **Falta/idea:** variante con foto de Sergio Urcullo en el gancho y el CTA (la plantilla §2 dice «cara a cámara»); en Drive «Videos
+  Onia Octubre» no hay fotos nuevas al 9-oct. Si el gancho no convence, cambiar solo la pregunta (hay 5 en el checklist).
+
 ## ▶ 9-oct (día, 12) — carrusel «Los 5 archivos»: hecho y guardado en el banco de ideas, SIN fecha
 
 - **Corrección de la madre (9-oct):** Sergio Urcullo mandó el post de los 5 archivos **para aprender, no para producirlo**. NO se

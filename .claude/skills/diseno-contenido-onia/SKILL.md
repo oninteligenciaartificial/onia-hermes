@@ -223,6 +223,16 @@ Lo que sigue (render, banda segura, trampas del headless) **sigue valiendo** com
   abajo. Se renderiza a 1080x2100 y se corta a 1080x1920 con `ffmpeg crop`. Y su ancho mínimo de ventana es 500 px: una
   captura «a 400 px» sale cortada aunque la página no desborde.
 - **La API no pone stickers.** Link, encuesta y música los pone Sergio Urcullo a mano.
+- **Secuencia que vende (9-oct): `scripts/marca-personal/generar-historia-venta.py`** → 4 historias gancho → mito → revelación → CTA
+  único (la asesoría gratis), con el diseño del kit aprobado (importa el CSS de `generar-historia-llamada.py`, no lo copia).
+  Salida `carousels/out/historias-venta-asesoria/`; gate `CHROME_BIN=$CAROUSEL_BROWSER python3 …/chequear-banda-segura-historias.py
+  <ruta ABSOLUTA>` (con ruta relativa falla con `as_uri`). Se lo mostré a Sergio Urcullo renderizado; no se agenda sin su OK.
+  Lecciones: el gancho y el mito van con texto GRANDE (78-92 px: el texto ES la historia; en la 1.ª versión salían chicos con
+  la mitad del verde vacío); la prueba en pantalla es el checklist real, no una maqueta; el sticker de link va solo en la última;
+  si se agrega una capa, `nth-of-type` cuenta la cinta (`div.cinta` es el 1.º hijo de la tarjeta). En la nube sale con Archivo
+  instalada y sin Geist Mono (cae a otra mono): igual de legible, no pixel-idéntico a la PC.
+  Ojo: Instagram dio 429 a la API de historias de la PC el 9-oct (la madre, 9-oct): las capturas de historias de referentes
+  esperan a que Sergio Urcullo las mire a mano en Chrome.
 
 ## 6. Gasto (CLAUDE.md, regla de Higgsfield)
 
