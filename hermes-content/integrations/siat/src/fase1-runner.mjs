@@ -760,6 +760,66 @@ export function pickMotivoSinCafc(eventos) {
   return (eventos ?? []).find((e) => !MOTIVOS_CON_CAFC.has(String(e.codigoClasificador))) ?? null;
 }
 
+// CAFC del piloto. El SIN pide uno «para los documentos que esta autorizando, asi
+// como para las sucursales que probaran» (siatinfo, Emision y Envio) y cada CAFC
+// autoriza un RANGO de numeros: una factura fuera de el vuelve con 1047 «Numero
+// Factura Para El Cafc Enviado Incorrecto» (catalogo de errores, leido 2026-10-09).
+//
+// SIAT_PILOT_CAFC_FILE apunta a un JSON fuera de git (chmod 600):
+//   [{ "sector": 1, "pv": 1, "cafc": "...", "desde": 1, "hasta": 15000 }]
+// `sector` y `pv` son opcionales (sin ellos la entrada vale para todos) y gana la
+// entrada mas especifica. `reusar: true` vuelve al inicio del rango al agotarlo:
+// solo despues de comprobar con un paquete que el SIN acepta numeros repetidos.
+// SIAT_PILOT_CAFC (un codigo suelto, sin rango) sigue valiendo para todo y se
+// numera con el correlativo de la corrida, como antes.
+
+const enmascararCafc = (cafc) => (cafc.length > 4 ? `${cafc.slice(0, 4)}...` : "****");
+
+/** Valida la lista de CAFC del piloto y la deja normalizada. */
+export function parseCafcConfig(lista) {
+  if (!Array.isArray(lista)) throw new Error("CAFC del piloto: el archivo debe ser una lista JSON");
+  const vistos = new Set();
+  return lista.map((e, i) => {
+    const donde = `CAFC del piloto, entrada ${i + 1}`;
+    if (typeof e?.cafc !== "string" || !e.cafc.trim()) throw new Error(`${donde}: falta el codigo`);
+    for (const campo of ["sector", "pv"]) {
+      if (e[campo] != null && !Number.isInteger(e[campo])) throw new Error(`${donde}: ${campo} debe ser entero`);
+    }
+    const conRango = e.desde != null || e.hasta != null;
+    if (conRango && !(Number.isInteger(e.desde) && Number.isInteger(e.hasta) && e.desde >= 1 && e.hasta >= e.desde)) {
+      throw new Error(`${donde}: rango invalido (desde ${e.desde}, hasta ${e.hasta})`);
+    }
+    const clave = `${e.sector ?? "*"}/${e.pv ?? "*"}`;
+    if (vistos.has(clave)) throw new Error(`${donde}: sector/PdV ${clave} repetido`);
+    vistos.add(clave);
+    return {
+      sector: e.sector ?? null,
+      pv: e.pv ?? null,
+      cafc: e.cafc.trim(),
+      desde: conRango ? e.desde : null,
+      hasta: conRango ? e.hasta : null,
+      reusar: e.reusar === true,
+    };
+  });
+}
+
+/** Entrada de CAFC que corresponde a un sector y PdV: gana la mas especifica. */
+export function resolverCafc(entradas, { sector, pv }) {
+  const aplica = (e) => (e.sector == null || e.sector === sector) && (e.pv == null || e.pv === pv);
+  const peso = (e) => (e.sector != null ? 2 : 0) + (e.pv != null ? 1 : 0);
+  return (entradas ?? []).filter(aplica).sort((a, b) => peso(b) - peso(a))[0] ?? null;
+}
+
+/** CAFC del ambiente: el archivo con rangos y el codigo suelto de siempre. */
+export function cafcDesdeEnv(env, leer = (ruta) => readFileSync(ruta, "utf8")) {
+  const lista = env.SIAT_PILOT_CAFC_FILE ? JSON.parse(leer(env.SIAT_PILOT_CAFC_FILE)) : [];
+  if (env.SIAT_PILOT_CAFC) {
+    if (!Array.isArray(lista)) throw new Error("CAFC del piloto: el archivo debe ser una lista JSON");
+    lista.push({ cafc: env.SIAT_PILOT_CAFC });
+  }
+  return parseCafcConfig(lista);
+}
+
 /** Epoch corrido -> "yyyy-MM-ddTHH:mm:ss.SSS" (hora de pared del SIN). */
 export function formatSinLocal(shiftedMs) {
   const d = new Date(shiftedMs);
@@ -966,7 +1026,7 @@ export const VALIDACION_INMEDIATA_INTENTOS = 6;
 export const VALIDACION_INMEDIATA_ESPERA_MS = 10_000;
 
 class Runner {
-  constructor({ token, nit, codigoSistema, stateFile, logFile, pace, firma = null, cafc = null, caseFilter = null }) {
+  constructor({ token, nit, codigoSistema, stateFile, logFile, pace, firma = null, cafc = null, cafcs = null, caseFilter = null }) {
     this.token = token;
     this.nit = nit;
     this.codigoSistema = codigoSistema;
@@ -975,7 +1035,8 @@ class Runner {
     this.pace = pace;
     // { privateKeyPem, certificatePem } para la etapa VIII. NUNCA se loguea.
     this.firma = firma;
-    this.cafc = cafc;
+    // CAFC del piloto por sector/PdV (ver parseCafcConfig). `cafc` suelto = uno para todo.
+    this.cafcs = cafcs ?? (cafc ? parseCafcConfig([{ cafc }]) : []);
     this.caseFilter = caseFilter;
     this.state = loadState(stateFile);
     // Combo (PdV + documento sector + tipo de factura) que se esta corriendo.
@@ -1755,8 +1816,31 @@ class Runner {
     }
   }
 
+  /**
+   * Reserva `cantidad` numeros del rango del CAFC y devuelve el primero; null si
+   * el CAFC no trae rango (se numera con el correlativo). Lanza si no alcanza, y
+   * `soloVerificar` mira sin gastar: el rango se controla ANTES de registrar el
+   * evento, para no gastar un evento en un paquete que no se puede armar.
+   */
+  reservarNumerosCafc(entrada, cantidad, { soloVerificar = false } = {}) {
+    if (!entrada || entrada.desde == null) return null;
+    const siguientes = (this.state.cafcSiguiente ??= {});
+    let desde = siguientes[entrada.cafc] ?? entrada.desde;
+    if (desde + cantidad - 1 > entrada.hasta) {
+      if (!entrada.reusar || entrada.desde + cantidad - 1 > entrada.hasta) {
+        throw new Error(
+          `CAFC ${enmascararCafc(entrada.cafc)}: rango ${entrada.desde}-${entrada.hasta} agotado ` +
+            `(sigue el ${desde} y el paquete pide ${cantidad})`,
+        );
+      }
+      desde = entrada.desde;
+    }
+    if (!soloVerificar) siguientes[entrada.cafc] = desde + cantidad;
+    return desde;
+  }
+
   /** Paquete/masiva: N facturas -> tar -> gzip -> base64 + hash del modo vigente. */
-  buildLote(count, { tipoEmision, baseIndex, fechaIso = null, cafc = null }) {
+  buildLote(count, { tipoEmision, baseIndex, fechaIso = null, cafc = null, numeroDesde = null }) {
     const xmls = [];
     for (let i = 0; i < count; i += 1) {
       const { payload, leyenda, codigoMetodoPago } = buildTestInvoice({
@@ -1766,7 +1850,8 @@ class Runner {
         codigoPuntoVenta: this.combo.codigoPuntoVenta,
         codigoDocumentoSector: this.combo.codigoDocumentoSector,
       });
-      const numeroFactura = ++this.state.numeroFactura;
+      // Con CAFC el numero sale de su rango (SIN 1047); si no, del correlativo.
+      const numeroFactura = numeroDesde != null ? numeroDesde + i : ++this.state.numeroFactura;
       const fecha17 = fechaIso ?? this.sinNow();
       const cuf = buildCuf(
         {
@@ -1842,10 +1927,15 @@ class Runner {
         this.loop("VI", Math.min(target, caso.target), async (done) => {
           const motivo = motivos.get(caso.motivo);
           if (!motivo) throw new Error(`VI: falta motivo ${caso.motivo} en catalogo sincronizado`);
-          const cafc = MOTIVOS_CON_CAFC.has(String(caso.motivo)) ? this.cafc : null;
-          if (MOTIVOS_CON_CAFC.has(String(caso.motivo)) && !cafc) {
-            throw new Error(`VI.${caseId}: motivo ${caso.motivo} requiere CAFC del piloto`);
+          const conCafc = MOTIVOS_CON_CAFC.has(String(caso.motivo));
+          const entradaCafc = conCafc ? resolverCafc(this.cafcs, { sector: caso.sector, pv: caso.pv }) : null;
+          if (conCafc && !entradaCafc) {
+            throw new Error(
+              `VI.${caseId}: motivo ${caso.motivo} requiere CAFC del piloto (sector ${caso.sector}, PdV ${caso.pv})`,
+            );
           }
+          this.reservarNumerosCafc(entradaCafc, caso.cantidad, { soloVerificar: true });
+          const cafc = entradaCafc?.cafc ?? null;
           // SIN 984: el evento y el XML offline comparten CUFD y ventana.
           await this.ensureCufd();
           const win = this.eventWindowNow();
@@ -1862,6 +1952,7 @@ class Runner {
             baseIndex: done * caso.cantidad,
             fechaIso: formatSinLocal(win.inicioMs + Math.floor((win.finMs - win.inicioMs) / 2)),
             cafc,
+            numeroDesde: this.reservarNumerosCafc(entradaCafc, caso.cantidad),
           });
           this.checkpoint(); // reservar correlativos antes de enviar un lote grande
           const result = await this.post(this.servicio, buildRunnerEnvelope("recepcionPaqueteFactura", {
@@ -2216,7 +2307,7 @@ if (isMain) {
     logFile: args.log,
     pace: args.pace,
     firma,
-    cafc: process.env.SIAT_PILOT_CAFC ?? null,
+    cafcs: cafcDesdeEnv(process.env),
     caseFilter: args.caseId,
   });
   const stages = [args.etapa];

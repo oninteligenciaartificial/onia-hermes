@@ -201,9 +201,29 @@ node src/fase1-runner.mjs --state /ruta/checkpoint-conciliado.json --etapa VI \
 ensayo recorra decenas de filas. El caso debe estar en cero antes del envio;
 despues se coteja **esa fila** en el portal. Completar todo VI/IX requeriria,
 desde la lectura del 27-sep, **330 recepciones, 270 eventos, 180 validaciones,
-110.300 XML y al menos 780 solicitudes SOAP**. Los motivos 5/6/7 necesitan un
-CAFC valido del piloto (`SIAT_PILOT_CAFC`); sin él se bloquean por caso. Su
-alcance para los PdV/sectores debe verificarse antes de usarlos.
+110.300 XML y al menos 780 solicitudes SOAP**.
+
+**CAFC de los motivos 5/6/7 (9-oct).** El SIN pide un CAFC del piloto «para los
+documentos que esta autorizando, asi como para las sucursales que probaran»
+(siatinfo, Emision y Envio), y cada CAFC autoriza un **rango de numeros**: una
+factura fuera de el vuelve con **1047** («Numero Factura Para El Cafc Enviado
+Incorrecto»; 1045 es CAFC invalido y 1046 fecha invalida para el CAFC). Se carga en
+un JSON fuera de git, chmod 600, apuntado por `SIAT_PILOT_CAFC_FILE`:
+
+```json
+[{ "sector": 1,  "cafc": "...", "desde": 1, "hasta": 15100 },
+ { "sector": 17, "cafc": "...", "desde": 1, "hasta": 15100 }]
+```
+
+`sector` y `pv` son opcionales y gana la entrada mas especifica (sector+PdV, sector,
+general). Las facturas se numeran dentro del rango (`state.cafcSiguiente` lleva el
+siguiente por CAFC); si el rango no alcanza para el paquete, el caso se **bloquea
+antes de registrar el evento**. `reusar: true` vuelve al inicio del rango: solo
+despues de comprobar con un paquete que el SIN acepta numeros repetidos. Las filas
+de motivos 5-7 piden 15.060 numeros por sector (3 motivos x 10 paquetes de 500 en
+PdV 1, mas 3 x 10 de 2 en PdV 0). `SIAT_PILOT_CAFC` (codigo suelto, sin rango)
+sigue valiendo para todo, con el correlativo de la corrida. Sin CAFC para el
+sector/PdV del caso, se bloquea por caso sin SOAP.
 
 Etapa **VIII (firma digital, 690 casos)**: los mismos 6 combos en modalidad
 **electronica** (codigoModalidad 1), con el XML **firmado XMLDSig**
@@ -328,6 +348,6 @@ organizacion (lo genera el cliente en SIAT) y se guarda cifrado.
 node --test hermes-content/integrations/siat/test/*.test.mjs
 ```
 
-407 tests, todos sin red: transporte y `fetch` son inyectables. (En Windows
+458 tests, todos sin red: transporte y `fetch` son inyectables. (En Windows
 falla 1 solo test del runner que crea un symlink — EPERM sin modo developer;
 en el VPS pasa completo.)
