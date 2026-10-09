@@ -5,6 +5,12 @@
 > - ✅ **Tarea 4 (fichas de contenido):** `research/competencia/anuncios/FICHAS_DE_CONTENIDO.md` (Huli, Reservo, Dt.Dental, Calu, bolivianos: ningún proveedor boliviano pauta en Meta).
 > - ⛔ **Tareas 1 y 2 bloqueadas por Plataforma:** la tabla «se promete / funciona» y el corto de 60 s necesitan la cuenta demo y las capturas C1-C7 (y que Sergio Urcullo vea la tabla de cortes y el preview 360p antes de cortar).
 > - Bloqueado de Sergio Urcullo: tarjeta en ONIA Ads y OK de gasto.
+> - ✅ **Tanda 2 de competencia (T1-9, 9-oct):** `ONIA_UI_MEJORAS_1.0.md` §8. **Historia clínica:** *Normas en Salud Oral* (R.M. 1320, 2010, «documento de trabajo») pide
+>   historia clínica en todo paciente y prontuario «archivado por lo menos por unos 10 años», digital permitido; la Ley 3131 trata el consentimiento y el
+>   secreto como documentos oficiales. Ninguna de las dos fija obligación probada para un consultorio privado: **titular solo como pregunta y con el OK de
+>   Sergio Urcullo**, tras confirmar vigencia con el SEDES o el Colegio de Odontólogos. **Factura:** el 30-sep el SIN **abrogó** las RND de los grupos 9-12
+>   (RND 102600000038, título leído en su lista oficial): **no hay fecha para usar de gancho**, y el SIAT de Onia sigue apagado. **Bots locales:** nada por la web
+>   pública (ausencia de evidencia). **Quedan como PEDIDO PC** Google Maps/Facebook, Instagram de Doctocliq/Dentalink/CitaPro y una pregunta a un odontólogo.
 
 > ✏️ **9-oct — copy corregido (pedido de la madre): ya no dice «lo envía, con un toque».** El envío con un toque (G-03) está a medias en
 > `ONIA_PROMESA_VS_PRODUCTO.md`. Ahora dice **«Usted lo aprueba. Nada sale sin su OK.»** en A1, A2, carrusel (lámina 3), micro-video y los guiones F1/F3.

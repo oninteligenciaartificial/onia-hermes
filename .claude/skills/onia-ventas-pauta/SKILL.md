@@ -504,6 +504,18 @@ Resultado: `research/competencia/DAPTA_COMO_FUNCIONA.md` (sin fecha, fuente del 
 - **Cada hallazgo lleva:** quién y cuánto lleva · versión Onia · dueño · tarea Codex (casi nunca: un prompt escrito hoy queda viejo, `master`
   se mueve). Va a `docs/ONIA_UI_MEJORAS_1.0.md` §8, una tanda por semana, la más nueva arriba.
 - **Lo que pide login o Instagram** va al transcript como «PEDIDO PC: <qué> — para qué lo quiero». Contactar a un tercero (pedir su demo) no.
+- **Norma o ley (aprendido el 9-oct con la historia clínica y la factura de Bolivia):** el buscador y `WebFetch` solo orientan; la cita sale del
+  **PDF oficial**. `WebFetch` no lee los PDF comprimidos (FlateDecode), pero **guarda el binario** y avisa dónde: se extrae con
+  `pdftotext -layout <archivo> <salida.txt>` y se busca con `grep -n`. Así salió el «archivado por lo menos por unos 10 años» de las *Normas en
+  Salud Oral* (R.M. 1320, 2010), que ningún resumen traía. Un PDF del Ministerio de Salud puede ser **«documento de trabajo»** o estar vencido: se
+  dice en la misma celda donde se cita.
+- **Un plazo del SIN se verifica en su lista de RND, no en un blog:** `impuestos.gob.bo/index.php/rnd-2026/` lista número, fecha y título. El
+  9-oct el buscador dio la abrogación de los grupos 9-12 como dato de un tercero; el **título** en la lista oficial (RND 102600000038, 30-sep)
+  lo confirmó, pero **el texto no se leyó**: lo que viene después («el SIN asignará la modalidad periódicamente, sin fecha») queda marcado como
+  dicho por un tercero. Con eso no se escribe «desde el 1 de octubre debe facturar en línea»: era la lectura de la RND 102600000007 y quedó vieja
+  a las 24 horas. Una urgencia de fecha en un anuncio se prueba contra la lista oficial el mismo día que se publica.
+- **Una norma como titular se separa en tres capas antes de usarla:** qué dice el texto (cita), a quién alcanza (¿consultorio privado? ¿odontólogo
+  o solo médico?) y si sigue vigente. Si falta una capa, el titular es una pregunta, no una afirmación, y pasa por Sergio Urcullo antes de salir.
 
 ### 8.2 Biblioteca de Anuncios por el conector `Meta_ads` (8-oct): cómo se usa y qué NO dice
 - **Herramienta:** `mcp__Meta_ads__ads_library_search` (se carga con ToolSearch). **Pide en cada llamada** `client_conversation_id` (20 caracteres alfanuméricos, el mismo toda la conversación) y `client_model`; exige al menos `search_terms`, `page_ids` o `countries`. Solo funciona con una cuenta de anuncios activa (ONIA Ads lo es).
