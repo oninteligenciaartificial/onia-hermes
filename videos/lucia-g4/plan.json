@@ -1,0 +1,158 @@
+{
+  "titulo": "G4 · Seis motores de imagen, una cara: ¿cuál la conserva?",
+  "guion": "hermes-content/docs/cola/lucia-diario/guiones/G4-seis-motores-de-imagen-una-cara.md",
+  "version": "1ra pasada (9-oct-2026). Montaje con el método de G1, G2 y G3 (.claude/skills/lucia/montaje-hyperframes.md; plantilla videos/lucia-g2/). 0 créditos: seis fotos y cuatro del café ya pagadas el 8-oct + 8 referencias oficiales bajadas por curl. Sin clips: son fotos fijas con un empuje lento.",
+  "lienzo": { "w": 1080, "h": 1920, "fps": 24, "duracion": 57 },
+  "acento": "#10C26B",
+  "alerta": "#FF7A66",
+  "zona_segura": {
+    "texto_hasta_y": 1490,
+    "derecha_libre_px": 80,
+    "derecha_libre_desde_y": 1000,
+    "arriba_minimo_y": 280,
+    "margen_bajo_menton": 40,
+    "texto_min_px": 34,
+    "tarjeta_bottom_y": 1470
+  },
+  "zoom": { "fin": 1.04, "nota": "empuje lento sobre cada foto: escala 1,00 → 1,04 en línea recta (ease none) durante la vida de la foto, con el origen en el centro de la cara medida; sin morph. El contenedor recorta (overflow:hidden), así los empujes entre fotos siguen siendo rígidos." },
+  "caras": { "nota": "SCRFD det_10g (scripts/face_identity_qa.py) vía scripts/medir-caras.py: caja en el lienzo de 1080x1920 (object-fit:cover centrado). Mentón = borde de abajo de la caja. Datos completos: qa/caras-fotos.json (el build y medir-dom los leen de ahí)." },
+  "empuje": {
+    "cuadros": 6,
+    "ease": "power3.inOut",
+    "nota": "Costura de pantalla completa: empuje rígido de 6 cuadros hacia la izquierda, ventana [T-6 cuadros, T] (T = el segundo del guion: a partir de T la escena nueva está en reposo). El medio entrante arranca en T-6 cuadros y el saliente termina en T. Las tarjetas viajan con el empuje."
+  },
+  "refs": {
+    "manifest": "hermes-content/references/modelos/lucia/v4/qa/manifest-escenas-seedream-20260930.json",
+    "total": 8,
+    "recortes": [
+      { "id": "ref1", "fuente": "R1_frontal_canon", "recorte": [0, 100, 768] },
+      { "id": "ref2", "fuente": "R2_34_medio", "recorte": [172, 157, 522] },
+      { "id": "ref3", "fuente": "R3_casi_frontal", "recorte": [75, 0, 1717] },
+      { "id": "ref4", "fuente": "R4_casi_perfil", "recorte": [218, 208, 1183] },
+      { "id": "ref5", "fuente": "R5_34_izq", "recorte": [61, 65, 727] },
+      { "id": "ref6", "fuente": "R6_34_der", "recorte": [380, 198, 515] },
+      { "id": "ref7", "fuente": "R7_frontal_2752", "recorte": [0, 8, 1536] },
+      { "id": "ref8", "fuente": "R8_anchor_902eeebb", "recorte": [0, 109, 896] }
+    ]
+  },
+  "escala": { "x0": 100, "x1": 980, "piso": 0.7 },
+  "fotos": {
+    "a": { "src": "assets/ph-a.jpg", "origen": "hermes-content/references/modelos/lucia/v4/kit/k1-1-recepcion-celular-4afffb96.jpg" },
+    "b": { "src": "assets/ph-b.jpg", "origen": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos/img-kling-omni-image-c3706d45.jpg" },
+    "c": { "src": "assets/ph-c.jpg", "origen": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos/img-nano-banana-2-1-a4dd1a48.jpg" },
+    "d": { "src": "assets/ph-d.jpg", "origen": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos/img-seedream-5-pro-b1abe43c.jpg" },
+    "e": { "src": "assets/ph-e.jpg", "origen": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos/img-flux-3-af9c2d0c.jpg" },
+    "f": { "src": "assets/ph-f.jpg", "origen": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos/img-gpt-image-2-5-5da2fa1e.jpg" },
+    "cafe_a": { "src": "assets/cafe-a.jpg", "origen": "hermes-content/references/modelos/lucia/v4/kit/k2-1-cafe-mostrador-3e05cfd0.jpg" },
+    "cafe_b": { "src": "assets/cafe-b.jpg", "origen": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos/img-omni-image-k2cafe-9f4b5172.jpg" }
+  },
+  "medios": [
+    { "id": "f-gancho", "tipo": "foto", "foto": "a", "a": 0, "b": 6.0, "track": 20, "capa": "Foto A a pantalla completa (0-6 s) con empuje lento; sale en el empuje 5,75-6,0 junto con las miniaturas y la tarjeta" },
+    { "id": "pl-regla", "tipo": "placa", "a": 5.75, "b": 12.0, "capa": "placa de la regla: las 8 referencias + escala 0-1 con la marca en 0,70" },
+    { "id": "f-a", "tipo": "foto", "foto": "a", "a": 11.75, "b": 17.0, "track": 21, "capa": "Imagen A (el empuje de entrada ocupa 11,75-12,0; el de salida 16,75-17,0)" },
+    { "id": "f-b", "tipo": "foto", "foto": "b", "a": 16.75, "b": 22.0, "track": 22, "capa": "Imagen B" },
+    { "id": "f-c", "tipo": "foto", "foto": "c", "a": 21.75, "b": 27.0, "track": 23, "capa": "Imagen C" },
+    { "id": "f-d", "tipo": "foto", "foto": "d", "a": 26.75, "b": 32.0, "track": 24, "capa": "Imagen D" },
+    { "id": "f-e", "tipo": "foto", "foto": "e", "a": 31.75, "b": 37.0, "track": 25, "capa": "Imagen E" },
+    { "id": "f-f", "tipo": "foto", "foto": "f", "a": 36.75, "b": 42.0, "track": 26, "capa": "Imagen F" },
+    { "id": "pl-l1", "tipo": "placa", "a": 41.75, "b": 47.5, "capa": "lección 1: las 6 imágenes ordenadas por precio sobre la escala" },
+    { "id": "pl-l2", "tipo": "placa", "a": 47.25, "b": 53.0, "capa": "lección 2: B en tres escenas y las dos fotos del café lado a lado" },
+    { "id": "f-cierre", "tipo": "foto", "foto": "a", "a": 52.75, "b": 57.0, "track": 27, "capa": "cierre: la foto A otra vez (la misma del gancho) con empuje lento" }
+  ],
+  "costuras": [
+    { "t": 6.0, "tipo": "empuje", "sale": ["f-gancho", "thumbs"], "entra": ["pl-regla"], "tarjetas": { "sale": "c2", "entra": "c3" }, "porque": "foto + miniaturas → placa de la regla" },
+    { "t": 12.0, "tipo": "empuje", "sale": ["pl-regla"], "entra": ["f-a"], "tarjetas": { "sale": "c4", "entra": "c5" }, "porque": "placa → Imagen A" },
+    { "t": 17.0, "tipo": "empuje", "sale": ["f-a"], "entra": ["f-b"], "tarjetas": { "sale": "c5", "entra": "c6" }, "porque": "Imagen A → B" },
+    { "t": 22.0, "tipo": "empuje", "sale": ["f-b"], "entra": ["f-c"], "tarjetas": { "sale": "c6", "entra": "c7" }, "porque": "Imagen B → C" },
+    { "t": 27.0, "tipo": "empuje", "sale": ["f-c"], "entra": ["f-d"], "tarjetas": { "sale": "c7", "entra": "c8" }, "porque": "Imagen C → D" },
+    { "t": 32.0, "tipo": "empuje", "sale": ["f-d"], "entra": ["f-e"], "tarjetas": { "sale": "c8", "entra": "c9" }, "porque": "Imagen D → E" },
+    { "t": 37.0, "tipo": "empuje", "sale": ["f-e"], "entra": ["f-f"], "tarjetas": { "sale": "c9", "entra": "c10" }, "porque": "Imagen E → F" },
+    { "t": 42.0, "tipo": "empuje", "sale": ["f-f"], "entra": ["pl-l1"], "tarjetas": { "sale": "c10", "entra": "c11" }, "porque": "Imagen F → lección 1" },
+    { "t": 47.5, "tipo": "empuje", "sale": ["pl-l1"], "entra": ["pl-l2"], "tarjetas": { "sale": "c11", "entra": "c12" }, "porque": "lección 1 → lección 2" },
+    { "t": 53.0, "tipo": "empuje", "sale": ["pl-l2"], "entra": ["f-cierre"], "tarjetas": { "sale": "c13", "entra": "c14" }, "porque": "lección 2 → cierre (foto A)" }
+  ],
+  "rotulo": { "texto": "Lucía Antelo · personaje IA de Onia", "a": 0, "b": 2.4, "top": 720 },
+  "tarjetas": [
+    { "id": "c1", "texto": "Misma orden.\n", "acento": "Seis motores de imagen.", "acento_t": 1.3, "a": 0.1, "b": 3.0, "escena": "gancho" },
+    { "id": "c2", "texto": "¿Cuál conserva", "acento": "su cara?", "a": 3.0, "b": 6.0, "escena": "gancho" },
+    { "id": "c3", "texto": "Se mide contra", "acento": "8 fotos suyas.", "acento_t": 7.2, "a": 6.0, "b": 9.0, "escena": "regla" },
+    { "id": "c4", "texto": "Idéntica es 1.", "acento": "Piso, 0,70.", "acento_t": 10.0, "a": 9.0, "b": 12.0, "escena": "regla" },
+    { "id": "c5", "texto": "Imagen A ·", "acento": "1 crédito", "acento_t": 14.4, "a": 12.0, "b": 17.0, "escena": "A", "imagen": "a" },
+    { "id": "c6", "texto": "Imagen B ·", "acento": "0,5 créditos", "acento_t": 19.4, "a": 17.0, "b": 22.0, "escena": "B", "imagen": "b" },
+    { "id": "c7", "texto": "Imagen C ·", "acento": "2 créditos", "acento_t": 24.4, "a": 22.0, "b": 27.0, "escena": "C", "imagen": "c" },
+    { "id": "c8", "texto": "Imagen D ·", "acento": "2,5 créditos", "acento_t": 29.4, "a": 27.0, "b": 32.0, "escena": "D", "imagen": "d" },
+    { "id": "c9", "texto": "Imagen E ·", "acento": "3 créditos", "acento_t": 34.4, "a": 32.0, "b": 37.0, "escena": "E", "imagen": "e" },
+    { "id": "c10", "texto": "Imagen F ·", "acento": "2,75 créditos", "acento_t": 39.4, "a": 37.0, "b": 42.0, "escena": "F", "imagen": "f" },
+    { "id": "c11", "texto": "Pagar más", "acento": "no la parece más.", "acento_t": 45.0, "a": 42.0, "b": 47.5, "escena": "lección 1" },
+    { "id": "c12", "texto": "Una foto", "acento": "sola no mide.", "acento_t": 48.5, "a": 47.5, "b": 50.0, "escena": "lección 2" },
+    { "id": "c13", "texto": "El café:", "acento": "B perdió la cara.", "acento_t": 51.0, "a": 50.0, "b": 53.0, "escena": "lección 2" },
+    { "id": "c14", "texto": "Seguime:", "acento": "cada semana, una prueba.", "acento_t": 54.2, "a": 53.0, "b": 57.0, "escena": "cierre" }
+  ],
+  "cadenas_de_tarjetas": [["c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "c9", "c10", "c11", "c12", "c13", "c14"]],
+  "gancho": { "miniaturas": { "a": 3.1, "escalon": 0.12, "w": 136, "h": 242, "gap": 16, "x0": 92, "y": 960 } },
+  "regla": {
+    "refs": { "a": 6.25, "escalon": 0.1, "lado": 202, "gap": 24, "x0": 100, "y": 330, "y2": 556 },
+    "escala": { "a": 7.8, "d": 0.5, "y": 967, "uno_t": 9.1, "marca_t": 10.0, "marca_label_y": 842 }
+  },
+  "claves_procedencia": {
+    "a": "seedream_4_5_K1_4afffb96",
+    "b": "kling_omni_image_K1_c3706d45-52c1-46a9-a7f4-0f766b6908d0",
+    "c": "nano_banana_2_1_a4dd1a48-88a5-4880-909a-2feb96d70a97",
+    "d": "seedream_v5_pro_2k_b1abe43c-1455-47e5-b25f-436afc1a0b22",
+    "e": "flux_3_image_2k_af9c2d0c-f154-4393-89a2-f28f551dfe33",
+    "f": "gpt_image_2_5_flare_high_2k_5da2fa1e-344b-48ad-94a5-841749531a8b",
+    "a_cafe2": "seedream_4_5_K2_3e05cfd0",
+    "a_cafe3": "seedream_4_5_K4_3_186c82f0",
+    "b_cafe2": "kling_omni_image_K2cafe_9f4b5172-f12b-4fb8-a03a-abb604380c47",
+    "b_cafe3": "kling_omni_image_K4cafe_dad464de-75a8-45f5-b799-8d91e5a63d1d"
+  },
+  "imagenes": [
+    { "id": "a", "letra": "A", "cr": 1, "valor": 0.81, "esc": 12.0, "tag_t": 12.7, "fin": 16.7, "estado": "ok" },
+    { "id": "b", "letra": "B", "cr": 0.5, "valor": 0.79, "esc": 17.0, "tag_t": 17.7, "fin": 21.7, "estado": "ok" },
+    { "id": "c", "letra": "C", "cr": 2, "valor": 0.74, "esc": 22.0, "tag_t": 22.7, "fin": 26.7, "estado": "ok" },
+    { "id": "d", "letra": "D", "cr": 2.5, "valor": 0.7, "esc": 27.0, "tag_t": 27.7, "fin": 31.7, "estado": "justo", "pastilla": { "texto": "justo en el piso", "t": 28.7 } },
+    { "id": "e", "letra": "E", "cr": 3, "valor": 0.69, "esc": 32.0, "tag_t": 32.7, "fin": 36.7, "estado": "bajo", "sello": { "texto": "bajo el piso", "t": 33.7 } },
+    { "id": "f", "letra": "F", "cr": 2.75, "valor": 0.66, "esc": 37.0, "tag_t": 37.7, "fin": 41.7, "estado": "bajo", "sello": { "texto": "bajo el piso", "t": 38.7 } }
+  ],
+  "l1": {
+    "marca_t": 42.1, "marca_label_y": 292,
+    "nota": { "texto": "Una toma cada uno: es una prueba, no una regla.", "t": 42.3, "y": 380 },
+    "filas": [
+      { "img": "b", "y": 545, "t": 42.5 },
+      { "img": "a", "y": 651, "t": 42.95 },
+      { "img": "c", "y": 757, "t": 43.4 },
+      { "img": "d", "y": 863, "t": 43.85 },
+      { "img": "f", "y": 969, "t": 44.3 },
+      { "img": "e", "y": 1075, "t": 44.75 }
+    ],
+    "ejes_y": 1123, "marca_top": 463, "marca_alto": 640
+  },
+  "l2": {
+    "tag": { "texto": "Imagen B · tres escenas", "t": 47.6, "y": 292 },
+    "chips": { "y": 392, "w": 280, "h": 148, "gap": 20, "x0": 100,
+      "lista": [
+        { "n": 1, "clave": "b", "valor": 0.79, "t": 47.9 },
+        { "n": 2, "clave": "b_cafe2", "valor": 0.35, "t": 48.4 },
+        { "n": 3, "clave": "b_cafe3", "valor": 0.83, "t": 48.9 }
+      ] },
+    "fotos": { "y": 575, "w": 281, "h": 500, "cx": [330, 750], "cap_y": 1085,
+      "lista": [
+        { "foto": "cafe_a", "letra": "A", "clave": "a_cafe2", "valor": 0.83, "t": 49.9, "cap_t": 50.15 },
+        { "foto": "cafe_b", "letra": "B", "clave": "b_cafe2", "valor": 0.35, "t": 50.25, "cap_t": 50.55 }
+      ] },
+    "anillo_t": 50.95
+  },
+  "agregados_al_guion": [
+    { "id": "A1", "que": "El dato lleva la palabra «parecido» («parecido 0,81»): el número solo no dice qué mide. El guion dice «dato 0,81».", "revertir": "build.mjs → texto de la pastilla #dA-<id> (y la lectura pasa de 2 a 1 palabra)" },
+    { "id": "A2", "que": "Marca «mi piso · 0,70» (el guion dice «Piso, 0,70.»): deja claro que el piso lo fijó la sesión, no una frontera objetiva (igual que G2).", "revertir": "build.mjs → texto de #sc-mkl / #l1-mkl" },
+    { "id": "A3", "que": "Imagen D: punto y pastilla NEUTROS (blanco) en vez de verde, y la pastilla «justo en el piso»: 0,702 cumple por poco y no se anuncia como aprobado (el guion lo pide).", "revertir": "plan.json → imagenes[d].estado = \"ok\"" },
+    { "id": "A4", "que": "La nota «Una toma cada uno: es una prueba, no una regla.» va en la placa de la lección 1 (la que ordena por precio y sugiere ranking): el guion dice que «una tarjeta» la dice, sin decir cuál.", "revertir": "plan.json → l1.nota" },
+    { "id": "A5", "que": "Tarjeta de la lección 2: «El café: B perdió la cara.» (6 palabras) en vez de «B perdió la cara en el café.» (7: el guion se pasa de su propio máximo de 6).", "revertir": "plan.json → c13 (y subir el máximo a 7 en build.mjs)" },
+    { "id": "A6", "que": "Las 8 referencias se muestran TODAS (cuadrícula de 4x2) en la regla, no una muestra de 5 como en G2: «Se mide contra 8 fotos suyas.» se ve literal.", "revertir": "plan.json → refs.recortes y regla.refs" },
+    { "id": "A7", "que": "Cierre con la FOTO A (no el clip K1): la orden era «sin clips». El guion admitía las dos. Revertir: poner el clip K1 de 0 a 3 s (o de 2 a 5,5 s, ver G2 H7).", "revertir": "plan.json → medios[f-cierre] por un clip" },
+    { "id": "A8", "que": "El rótulo de IA se ve entero de 0 a 2,4 s y recién ahí sale (G2 lo sacaba dentro de esos 2,4 s): 2,4 s legibles para sus 6 palabras.", "revertir": "timeline.js → leave('#rotulo', PLAN.rotulo.b)" },
+    { "id": "A9", "que": "Empuje lento 1,00 → 1,04 sobre cada foto (la orden: «movimiento mínimo tipo empuje lento/zoom suave»).", "revertir": "plan.json → zoom.fin = 1" }
+  ],
+  "audio": { "nota": "pista AAC en silencio a propósito: sin voz ni música; los pops se omiten para dejar sitio a la música de Sergio Urcullo" },
+  "publicacion": { "portada": "cuadro a 0,6 s", "pie": "pie.txt (idéntico al del guion, verificado por build.mjs)", "via": "ig-reel.mjs --cuenta lucia en el VPS (la madre). No se publica nada desde esta sesión" }
+}
