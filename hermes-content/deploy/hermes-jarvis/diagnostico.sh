@@ -314,5 +314,77 @@ for f in respuestas.tsv rechazos-avisados.tsv; do
 done
 echo "sellos de pedidos abiertos: $(find "$EP/sellos" -maxdepth 1 -type f 2>/dev/null | wc -l) (no se leen)"
 
+sec "13. Publicaciones — qué salió en la ventana y qué está agendado (9-oct)"
+# GOAL del 8-oct: una pieza publicada por día. Los publicadores del VPS anotan cada publicación en
+# publicado.jsonl (Instagram y YouTube con link; Buffer, el envío). Se lee y se lista: solo lectura.
+PUB=/root/publicar/publicado.jsonl
+if [ -r "$PUB" ]; then
+  stat -c 'registro: %y  %s bytes' "$PUB"
+  DESDE="$DESDE" python3 - "$PUB" <<'PY' | redactar
+import datetime, json, os, sys
+LP = datetime.timezone(datetime.timedelta(hours=-4))
+def hora(t):
+    try:
+        d = datetime.datetime.fromisoformat(str(t).replace("Z", "+00:00").replace("+0000", "+00:00"))
+    except ValueError:
+        return None
+    return d if d.tzinfo else None
+desde = hora(os.environ["DESDE"])
+filas, por_dia = [], {}
+for linea in open(sys.argv[1], encoding="utf-8", errors="replace"):
+    try:
+        r = json.loads(linea)
+        if not isinstance(r, dict):
+            continue
+        red = r.get("red")
+        if red == "buffer":
+            d = hora(r.get("fecha") if r.get("cuando") in (None, "ya") else r.get("cuando"))
+            que, link, cuenta = "Buffer %s" % r.get("estado", "?"), str(r.get("post", "")), False
+        elif red == "youtube":
+            d = hora(r.get("fecha"))
+            pub = r.get("privacidad") == "public"
+            que, link, cuenta = "YouTube" + ("" if pub else " (%s)" % r.get("privacidad")), str(r.get("url", "")), pub
+        else:
+            d = hora(r.get("timestamp"))
+            tipo = r.get("tipo")
+            que = "Carrusel" if tipo == "carrusel" else "Historia" if tipo == "historia" else "Trial" if r.get("trial") else "Reel"
+            link, cuenta = str(r.get("permalink") or "(sin link)"), True
+        if not d or (desde and d < desde):
+            continue
+        d = d.astimezone(LP)
+        filas.append((d, que, link))
+        if cuenta:
+            por_dia[d.strftime("%m-%d")] = por_dia.get(d.strftime("%m-%d"), 0) + 1
+    except Exception:
+        continue
+for d, que, link in sorted(filas, key=lambda f: f[0]):
+    print("%s %s · %s" % (d.strftime("%m-%d %H:%M"), que, link))
+print("publicadas por día (La Paz, Instagram y YouTube público): %s" % (" · ".join("%s: %d" % kv for kv in sorted(por_dia.items())) or "ninguna"))
+PY
+else
+  echo "(no existe $PUB)"
+fi
+echo "--- agendado en Instagram (timers pub-*):"
+systemctl list-timers 'pub-*' --all --no-pager 2>/dev/null | head -30
+
+sec "14. El SOUL de Hermes — qué secciones de main le faltan (9-oct)"
+# aplicar copia del SOUL de main solo las secciones que nombra (5c y 5d). Para decidir qué más copiar,
+# se compara por títulos `##`, sin la fecha del final («… (2026-09-30)»): aplicar busca el título por
+# su comienzo. Solo lectura: no se imprime el texto, solo los títulos.
+SOUL_VPS=/root/.hermes/SOUL.md
+titulos() { grep '^## ' | sed -E 's/[[:space:]]*\([0-9]{4}-[0-9]{2}-[0-9]{2}\)[[:space:]]*$//'; }
+if [ -r "$SOUL_VPS" ]; then
+  echo "el SOUL del VPS tiene $(grep -c '^## ' "$SOUL_VPS") sección(es); modificado $(stat -c '%y' "$SOUL_VPS" | cut -c1-19)"
+  T_MAIN=$(git -C /root/loops/onia-hermes show origin/main:hermes-content/deploy/hermes-agent/SOUL.md 2>/dev/null | titulos)
+  T_VPS=$(titulos < "$SOUL_VPS")
+  [ -n "$T_MAIN" ] || echo "(no pude leer el SOUL de origin/main en /root/loops/onia-hermes)"
+  echo "--- de main, le faltan:"
+  printf '%s\n' "$T_MAIN" | grep -vxF -f <(printf '%s\n' "$T_VPS") | grep . || echo "(ninguna)"
+  echo "--- tiene y main no:"
+  printf '%s\n' "$T_VPS" | grep -vxF -f <(printf '%s\n' "$T_MAIN") | grep . || echo "(ninguna)"
+else
+  echo "(no existe $SOUL_VPS)"
+fi
+
 sec "fin"
 echo "diagnóstico terminado $(date -u +%FT%TZ) — no se modificó nada"

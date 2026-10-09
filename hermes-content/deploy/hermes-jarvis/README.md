@@ -9,7 +9,7 @@ Sergio Urcullo aprobó el 2026-09-29 un acceso controlado, con respaldo. Es este
 | `.github/workflows/hermes-jarvis.yml` | Workflow **manual**, en el runner propio del VPS. El input solo elige qué script correr. |
 | `comun.sh` | Funciones comunes (`redactar`, `sec`). Va delante de cada acción. |
 | `redactar.sed` | Tapa tokens, claves, correos, teléfonos y chat ids. Se aplica en el VPS **y** en el runner. |
-| `diagnostico.sh` | **Solo lectura.** Crontab, trabajos de Hermes, n8n, log de avisos, tablero. |
+| `diagnostico.sh` | **Solo lectura.** Crontab, trabajos de Hermes, n8n, log de avisos, tablero, pedidos y su recolector, lo publicado y agendado, y qué secciones del SOUL le faltan a Hermes. |
 | `aplicar.sh` | Enciende a Jarvis: crontab marcado, pausa 3 trabajos de Hermes, apaga 12 flujos de n8n de reportes, crea el lector y el flujo de cambios de su calendario (y los **prueba** con un evento que crea, mueve y cancela), instala en Hermes la skill `agenda-calendario` y la regla en su SOUL, prende la aduana y **muestra el resumen y el cierre antes de mandarlos**. Respaldo + `rollback.sh`. Idempotente. |
 | `revertir.sh` | Corre el `rollback.sh` del último `aplicar` vigente: crontab por marcas, Hermes reanuda lo pausado, n8n reactiva lo apagado y apaga los dos flujos del calendario, la skill y el SOUL de Hermes vuelven a como estaban, aduana apagada. |
 
