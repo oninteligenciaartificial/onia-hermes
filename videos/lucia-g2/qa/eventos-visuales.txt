@@ -1,0 +1,11 @@
+eventos visuales: 86 (más el inicio 0,1 s y el final 58 s)
+mayores huecos entre eventos:
+  44.80 → 47.25 s: 2.45 s   (m6 sello 4× → c12, costura)
+  3.70 → 6.00 s: 2.30 s   (miniatura 6 → c3, costura)
+  12.70 → 15.00 s: 2.30 s   (m1 dato A → m1 dato B)
+  22.70 → 25.00 s: 2.30 s   (m3 dato A → m3 dato B)
+  37.70 → 40.00 s: 2.30 s   (m5 dato A → m5 dato B)
+  42.35 → 44.30 s: 1.95 s   (m6 dato A → m6 dato sale)
+  52.90 → 54.75 s: 1.85 s   (c13 acento → c14, costura)
+  15.00 → 16.80 s: 1.80 s   (m1 dato B → m1 dato sale)
+✔ hueco máximo 2.45 s (≤ 3,0 s)

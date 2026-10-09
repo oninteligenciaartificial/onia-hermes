@@ -95,7 +95,7 @@ description: "Invocar para CUALQUIER trabajo del carril Lucía (Lucía Antelo, l
     photoshoot (K1 0,704 contra el photoshoot): **se mide siempre contra las 8 oficiales**, no contra otro juego.
   - Higgsfield `sandbox_exec` no hace falta (y el control de permisos lo rechazó).
 - **Mapa de TODAS las funciones de Higgsfield, con costos y cara:** `higgsfield-mapa.md` (en esta carpeta). Lo que más pesa:
-  1. **`start_image` ata la escena pero la cara decae** (Kling std 0,79 → 0,72 en 6 s); **las referencias de cara la sostienen pero la
+  1. **`start_image` ata la escena solo en Kling std/pro y la cara decae** (0,79 → 0,72 en 6 s; Seedance mini y Cinema 3.0 con `start_image` también reencuadran y cambian el fondo); **las referencias de cara la sostienen pero la
      escena la inventa el motor** (Kling Omni, 5 refs, sin `start_image`: 0,80 → 0,82, a 6 cr, el más barato). Seedance mini con
      `start_image` + 3 refs sube de 0,69 a 0,80 al mismo precio, pero reencuadra e **inventa letreros**.
   2. Kling pro no mejora el movimiento de std (solo la nitidez, a 1080p nativo): no vale +1,5 cr si se publica a 720p.

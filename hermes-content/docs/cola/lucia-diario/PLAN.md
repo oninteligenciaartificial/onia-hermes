@@ -91,8 +91,8 @@ Cada fila es una prueba chica, con su video. Los costos son cotizaciones en vivo
 | Pieza | Costo | Estado |
 |---|---:|---|
 | **G1** «Este video no fue grabado: así se hace, en 3 pasos» (56 s) | 0 | guion para validar por la madre; todo el material ya está pagado |
-| **G3** «Tres errores de la IA que atrapé antes de publicar» (58 s) | 0 | guion para validar por la madre (`guiones/G3-tres-errores-de-la-ia.md`); evidencia real en `v4/kit/` |
-| **G2** «La misma foto, seis clips: ¿quién pierde la cara?» (58 s) | 0 más | guion para validar por la madre (`guiones/G2-la-misma-foto-seis-clips.md`); los 6 clips ya están pagados y medidos |
+| **G3** «Tres errores de la IA que atrapé antes de publicar» (58 s) | 0 | **montado** (`videos/lucia-g3/`); la madre mira el preview 360p; evidencia real en `v4/kit/` |
+| **G2** «La misma foto, seis clips: ¿quién pierde la cara?» (58 s) | 0 más | **montado** (`videos/lucia-g2/`); la madre mira el preview 360p; los 6 clips ya estaban pagados y medidos |
 | **L01** «Hola, soy Lucía. No existo.» (carrusel de presentación, fijado) | 0 | a reescribir: promete «cosas que un negocio chico puede dejar de hacer a mano», y esa ya no es la premisa. Va fijado **después** de G1 |
 | ~~L02~~ y ~~el chiste de 10 s~~ | — | retirados el 8-oct; sus clips son planos de apoyo |
 

@@ -1,0 +1,30 @@
+muestras: 464 instantes (cada 3 cuadros), 2542 cajas de texto medidas
+tamaños de texto en el DOM (px: cuántos elementos): {"34":1,"36":18,"38":62,"40":10,"44":4,"46":5,"66":28,"150":1}
+  ok  L1 marca 0,70                            medido 716.0  esperado 716.0
+  ok  L1 Motor 1 arranque 0.79                 medido 795.0  esperado 795.2
+  ok  L1 Motor 1 final 0.72                    medido 734.0  esperado 733.6
+  ok  L1 Motor 2 arranque 0.81                 medido 813.0  esperado 812.8
+  ok  L1 Motor 2 final 0.74                    medido 751.0  esperado 751.2
+  ok  L1 Motor 3 arranque 0.69                 medido 707.0  esperado 707.2
+  ok  L1 Motor 3 final 0.64                    medido 663.0  esperado 663.2
+  ok  L2 marca 0,70                            medido 716.0  esperado 716.0
+  ok  L2 barra Motor 5 0.82 (ancho)            medido 722.0  esperado 721.6
+  ok  L2 barra Motor 5 (borde izquierdo = 0)   medido 100.0  esperado 100.0
+  ok  L2 barra Motor 4 0.8 (ancho)             medido 704.0  esperado 704.0
+  ok  L2 barra Motor 4 (borde izquierdo = 0)   medido 100.0  esperado 100.0
+  ok  L2 barra Motor 6 0.77 (ancho)            medido 678.0  esperado 677.6
+  ok  L2 barra Motor 6 (borde izquierdo = 0)   medido 100.0  esperado 100.0
+  ok  L2 barra Motor 2 0.74 (ancho)            medido 651.0  esperado 651.2
+  ok  L2 barra Motor 2 (borde izquierdo = 0)   medido 100.0  esperado 100.0
+  ok  L2 barra Motor 1 0.72 (ancho)            medido 634.0  esperado 633.6
+  ok  L2 barra Motor 1 (borde izquierdo = 0)   medido 100.0  esperado 100.0
+  ok  L2 barra Motor 3 0.64 (ancho)            medido 563.0  esperado 563.2
+  ok  L2 barra Motor 3 (borde izquierdo = 0)   medido 100.0  esperado 100.0
+  ok  Motor 6 marca 0,70                       medido 716.0  esperado 716.0
+  ok  Motor 6 punto 0.77                       medido 778.0  esperado 777.6
+  ok  regla marca 0,70                         medido 716.0  esperado 716.0
+  ok  aro t=33.5: centro x 70.0 (esperado 70)
+  ok  aro t=34.5: centro x 72.0 (esperado 72)
+  ok  aro t=35.5: centro x 74.0 (esperado 74)
+  ok  aro t=36.5: centro x 76.0 (esperado 76)
+✔ todo el texto dentro de la zona segura, sin pisarse, ≥ 34 px, y los datos están donde dice el número

@@ -27,11 +27,11 @@ no se puede cotizar (cobró 21,75). El tope de 97 cr lo fijó la sesión: Sergio
   medidas guardadas.
 - **G1** «Este video no fue grabado: así se hace, en 3 pasos» (56 s): montado con HyperFrames, **tres pasadas con revisor
   independiente** (`videos/lucia-g1/`, preview 360p real en `qa/`). Cara dentro del gate. Método: `.claude/skills/lucia/montaje-hyperframes.md`.
-- **G2** «La misma foto, seis clips: ¿quién pierde la cara?» (58 s): guion con todos los datos reales
-  (`guiones/G2-la-misma-foto-seis-clips.md`); el montaje sigue el de G1.
-- **G3** «Tres errores de la IA que atrapé antes de publicar» (58 s): guion con evidencia; **el montaje corre en un workflow**
-  (montar → revisar → corregir, `videos/lucia-g3/`). Si la sesión muere con eso en vuelo, el árbol puede quedar sin commitear: se
-  retoma leyendo `videos/lucia-g3/README.md`.
+- **G2** «La misma foto, seis clips: ¿quién pierde la cara?» (58 s): guion con todos los datos reales y **montado** el 9-oct
+  (`videos/lucia-g2/`, preview 360p real en `qa/`; montar → revisor independiente → corregir). Decisiones para la madre en su README
+  (resolución del Motor 2, clip del Motor 6 recortado a 2,5 s, letrero del Motor 4 sin desenfocar, ver el reel en el teléfono).
+- **G3** «Tres errores de la IA que atrapé antes de publicar» (58 s): **montado** (`videos/lucia-g3/`, revisor independiente y
+  pasada de corrección hechas el 8-oct).
 - Skill `lucia` y `editor-videos` corregidas (premisa, upscale 1 cr, Cinema 3.0, trampas fechadas).
 
 **⚠️ Choque de instrucciones, abierto:** el 8-oct la madre dio por aprobado el G1 de **producto** («Recordatorio de cita») y pidió
@@ -39,7 +39,7 @@ G2 «El link de reserva». Sergio Urcullo escribió después que Lucía **no mue
 producto está en pausa (`guiones/G-producto-1-recordatorio-de-cita.md`). La madre no contestó.
 
 **A medias, y dónde:**
-- **G3:** montaje en curso (workflow `wf_690082ca-533`). **G2:** falta montarlo (después de G3, mismo carril: secuencial).
+- **Nada de montaje en vuelo.** G1, G2 y G3 están montados; falta la mirada de la madre.
 - **Validación de la madre:** G1, G2 y G3 esperan su mirada al preview 360p (regla de oro de `CLAUDE.md`).
 - **Publicadores:** solo en el repo. La madre los copia **juntos** a `/root/bin` y corre `--selftest`.
 - **Token de Instagram de Lucía:** no se midió (vencía entre el 13 y el 18-oct). El hook de arranque dice «`ssh onia-vps` listo», pero
@@ -68,12 +68,11 @@ producto está en pausa (`guiones/G-producto-1-recordatorio-de-cita.md`). La mad
 6. Para L3: grabar 10 s de gestos como video guía.
 
 **Próximos pasos:**
-1. Cuando termine el workflow de G3: leer su resultado, commitear `videos/lucia-g3/`, volcar sus aprendizajes en
-   `montaje-hyperframes.md` y mirar el render vos mismo.
-2. Montar G2 con el mismo método (3 agentes: montar → revisar → corregir).
-3. La madre valida G1, G2 y G3 → publica con `ig-reel.mjs --cuenta lucia` (portada ≈ 0,6 s).
-4. Reescribir L01 a la premisa v5; va fijado después de G1.
-5. Tras cada edición: lo aprendido a la skill `lucia`, con caso y fecha, en el mismo commit.
+1. La madre mira los previews 360p de G1, G2 y G3 y decide lo que cada README le deja (G3: letrero difuminado y texto del error 3; G2:
+   resolución del Motor 2 y letrero del Motor 4).
+2. La madre valida G1, G2 y G3 → publica con `ig-reel.mjs --cuenta lucia` (portada ≈ 0,6 s).
+3. Reescribir L01 a la premisa v5; va fijado después de G1.
+4. Tras cada edición: lo aprendido a la skill `lucia`, con caso y fecha, en el mismo commit.
 
 ## ▶ ESTADO — 8-oct-2026 mañana, plan v4 (historia: lo manda el bloque v5 de arriba)
 

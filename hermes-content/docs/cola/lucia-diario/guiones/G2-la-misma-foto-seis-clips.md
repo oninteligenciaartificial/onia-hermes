@@ -1,6 +1,6 @@
 # G2 · «La misma foto, seis clips: ¿quién pierde la cara?» — guion para validar (8-oct-2026)
 
-> **Estado: PARA VALIDAR por la madre. No se publica sin su aviso.**
+> **Estado: PARA VALIDAR por la madre. Ya está montado** (`videos/lucia-g2/`, preview 360p en `qa/`; revisión independiente y pasada de corrección hechas el 9-oct). No se publica sin su aviso.
 > - **Premisa (Sergio Urcullo, 8-oct):** Lucía es influencer y aprende Higgsfield; no muestra el producto.
 > - **Regla de estructura (Sergio Urcullo, 8-oct):** gancho en 3 s · desarrollo con valor · cierre con CTA · 30-60 s · deja algo aprendido.
 > - **Costo: 0 cr más.** Los 6 clips ya se generaron y se pagaron el 8-oct (lote V, 47 cr; Sergio Urcullo: *«tenés derecho a usar todo
@@ -24,15 +24,15 @@ the phone to the camera and gives a small knowing smile…»* sobre la foto K1.
 |---|---:|---:|---:|---:|---|
 | Motor 1 (`start_image`, el clip K1 ya pagado) | 7,5 | 0,79 | 0,73 | 0,72 | Misma escena que la foto; la cara pierde parecido sola |
 | Motor 2 (el mismo, versión «pro») | 9 | 0,81 | 0,77 | 0,74 | Mismo movimiento que el 1, más nítido (1080p) |
-| Motor 3 (`start_image`, otro modelo barato) | 6 | 0,69 | 0,63 | 0,64 | Misma escena; la cara queda **bajo el piso** |
+| Motor 3 (`start_image`, otro modelo barato) | 6 | 0,69 | 0,63 | 0,64 | El plano se acerca y **cambia el edificio y la calle** (balcones y palmeras que no están en la foto); la cara queda **bajo el piso** |
 | Motor 4 (`start_image` + 3 fotos de referencia) | 6 | 0,71 | 0,73 | 0,80 | Sube; pero el plano se acerca (la cara crece 2,5 veces) y **aparece un letrero inventado** en la torre |
 | Motor 5 (solo 5 fotos de referencia, sin foto de arranque) | 6 | 0,80 | 0,81 | 0,82 | Sostiene la cara; **inventó otro cuarto** y un plano que se acerca |
-| Motor 6 (`start_image`, 4 s a 720p) | 20 | 0,79 | 0,79 | 0,77 | Estable, pero 5 créditos por segundo (el Motor 1 cuesta 1,25): 20 créditos por 4 s |
+| Motor 6 (`start_image`, 4 s a 720p) | 20 | 0,79 | 0,79 | 0,77 | El plano se acerca; 0,79 → 0,77 queda dentro del ruido (±0,03 con caras de 120-180 px); 5 créditos por segundo (el Motor 1 cuesta 1,25), o sea 4× por segundo y 2,7× por clip |
 
 - Fuente de los números: `v4/PROCEDENCIA.jsonl` (línea «resultados» del 8-oct), clips en `v4/prueba-motores-20261008/` (proxies 360p y
   hojas `hojas/comparativo-v1.jpg` y `comparativo-v2.jpg`). Los originales se recuperan con `job_display` a 0 cr.
 - **Lo que el video NO debe afirmar:** que un motor sea «mejor» en general (es una toma por motor) ni que 0,70 sea una
-  frontera objetiva. El pie y una tarjeta lo dicen: *«Una toma cada uno: es una prueba, no una regla.»* Las caras miden entre 89 y 180 px
+  frontera objetiva. El pie y una tarjeta lo dicen: *«Una toma cada uno: es una prueba, no una regla.»* Las caras miden entre 89 y 348 px
   en el clip crudo (poco confiable según el propio gate): se muestra el número como orientativo.
 
 ## Estructura (58 s, 24 fps)
@@ -45,7 +45,7 @@ the phone to the camera and gives a small knowing smile…»* sobre la foto K1.
 | 12 – 17 | Motor 1 | Clip del Motor 1 a velocidad 1× (5 s) con el parecido al principio y al final | «Motor 1 · 7,5 créditos» · dato «0,79 → 0,72» |
 | 17 – 22 | Motor 2 | Clip del Motor 2 | «Motor 2 · 9 créditos» · dato «0,81 → 0,74» |
 | 22 – 27 | Motor 3 | Clip del Motor 3 | «Motor 3 · 6 créditos» · dato «0,69 → 0,64» · sello «bajo el piso» |
-| 27 – 32 | **Lección 1** | Placa con los tres arranques y los tres finales | «Atado a la foto: baja.» |
+| 27 – 32 | **Lección 1** | Placa con los tres arranques y los tres finales | «Atado a la foto: suele bajar.» |
 | 32 – 37 | Motor 4 | Clip del Motor 4; aro sobre el letrero inventado | «Motor 4 · 6 créditos · con referencias» · dato «0,71 → 0,80» |
 | 37 – 42 | Motor 5 | Clip del Motor 5 | «Motor 5 · 6 créditos · solo referencias» · dato «0,80 → 0,82» |
 | 42 – 47 | Motor 6 | Clip del Motor 6 (4 s) | «Motor 6 · 20 créditos» · dato «0,79 → 0,77» |
@@ -62,7 +62,7 @@ the phone to the camera and gives a small knowing smile…»* sobre la foto K1.
 ## Pie
 
 *«Lucía Antelo es un personaje hecho con IA por @oniahq. Probé la misma foto y la misma orden en seis clips distintos y medí
-cuánto se parece la cara a ella al principio y al final. Los clips atados a la foto de arranque pierden parecido; los que usan
+cuánto se parece la cara a ella al principio y al final. Los clips atados a la foto de arranque tienden a perder parecido; los que usan
 fotos de referencia lo sostienen, pero inventan la escena. Una toma por clip: es una prueba, no una regla. Cada semana hago una
 prueba. Seguime.»* `#inteligenciaartificial #ia #santacruz #bolivia`
 

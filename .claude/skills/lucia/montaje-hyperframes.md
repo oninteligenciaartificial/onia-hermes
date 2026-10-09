@@ -129,3 +129,34 @@ cd videos && npx -y hyperframes@0.8.142 init lucia-gN --non-interactive --exampl
   cuenta bien las palabras y el revisor se equivocó de a una («A veces no se cuentan.» son 5): se cuenta con el script.
 - **El hook Stop de auto-sync commitea a mitad de trabajo** el andamio del proyecto aunque se diga «sin git»: no rompe nada (solo scripts de
   video) pero deja una versión intermedia en la rama; el orquestador commitea el estado final encima.
+
+## 8. Lo que sumó G2 (58 s, 9-oct: montar → revisor independiente → corregir, 81 minutos de reloj, ~1,1 millones de tokens)
+
+- **Las cifras que el video pone en pantalla se validan DENTRO del build contra la fuente** (`v4/PROCEDENCIA.jsonl`): arranque y final
+  redondeados a 2 decimales con media hacia arriba (con epsilon 1e-7: 0,805 × 100 da 80,4999…), créditos, segundo de la última muestra y la
+  cuenta del «4×». Si no coinciden, el build se corta. Los puntos y barras de las placas se posicionan desde el dato (`x = 100 + 880 × valor`)
+  y `medir-dom` lo verifica en el DOM.
+- **«4× el precio» solo es cierto por segundo** (20 cr por 4 s = 5 cr/s contra 1,25): por clip son 2,67×. Un comparativo de precios dice a qué
+  unidad se refiere.
+- **Pila de texto anclada al fondo como un contenedor flex en columna** (sello / pastillas / tarjeta) en vez de coordenadas a mano; `medir-dom`
+  compara contra el mentón MEDIDO por cuadro (`qa/caras-por-clip.json`, SCRFD cada 2 cuadros). Caso: la cara crece 2,5× y el mentón baja de 726 a 1016.
+- **`scripts/ventanas.mjs`:** mide la ventana REAL en que cada texto que no es tarjeta es legible (opacidad ≥ 0,9 y ≥ 95 % dentro del lienzo)
+  contra 0,35 s/palabra + 0,3. El plan decía 1,5 s para el «4×» y el revisor midió 0,7 s: `build.mjs` valida el plan pero no ve entradas ni empujes.
+- **Cuando un hallazgo pide más tiempo de lectura del que cabe, se RECORTA el clip** (a 1×, sin congelar) y se adelanta la placa; mover todo lo
+  posterior desancla cada clip de su segundo del guion. Los elementos estáticos que llegan con la placa cuentan desde el reposo.
+- **GSAP pisa el CSS `transform`:** un `translateX(-50%)` en CSS que luego se anima con `x` queda descentrado: se centra con un contenedor flex. Una
+  barra que crece con texto adentro se anima en `width` con `overflow:hidden`, no en `scaleX` (aplasta el texto).
+- **Fundido cruzado de dos rótulos en la misma caja:** a mitad ambos pasan el umbral y `medir-dom` reporta «texto pisado»: se apaga el viejo 0,1 s
+  y recién después se enciende el nuevo. Una tarjeta que NO viaja en un empuje arrastra lo que cuelga de ella (z 10 contra z 4 de las placas): todo
+  sale antes de que empiece el empuje.
+- **Dos `<video>` pueden apuntar al mismo archivo** (Motor 1 y cierre) sin copiarlo; los que se solapan en un empuje llevan `track-index` distinto.
+  `data-media-start="2"` recorta el inicio sin reencodear, pero el offset hay que propagarlo a todos los scripts de QA (PSNR contra el cuadro n+48).
+- **Una placa de ranking sugiere «el mejor»** aunque el guion lo prohíba: se neutraliza en la MISMA placa con «Una toma cada uno: es una prueba, no una
+  regla» y marcando que el piso lo fijó la sesión.
+- **Extraer el pie del guion con una regex sobre un markdown con varias citas toma la primera cita del archivo** (salió media tabla de evidencia):
+  se ancla al bloque `## Pie` y se compara con `pie.txt` en cada build.
+- **El guion mismo se equivocó dos veces y el video lo corrigió:** «Motor 3: misma escena» y «Motor 6: estable» eran falsas (los dos reencuadran), y
+  «caras de 89 a 180 px» eran 89 a 348. Y «Atado a la foto: baja» generalizaba desde tres motores: pasó a «suele bajar». El guion se corrige con lo medido.
+- **El render no es bit a bit reproducible entre herramientas** (miniaturas con OpenCV INTER_AREA o con ffmpeg lanczos) y hasta un comentario en
+  `timeline.js` cambia el `index.html` (se embebe). El cierre (clip K1) arranca en 2,0 s para que el CTA caiga sobre la mirada a cámara.
+- **Tiempos (4 núcleos, sin GPU):** borrador real 1 min 40 s, final con un clip nativo de 1080p 3 min 38 s (60 MB; sin clip 1080p, G3 pesó 23 MB).

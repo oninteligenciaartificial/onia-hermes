@@ -19,10 +19,10 @@ knowing smile…»*. Identidad = coseno ArcFace contra el centroide de las refer
 |---|---:|---|---|
 | Kling 3.0 std, `start_image`, sin sonido (control, ya pagado) | 7,5 | 0,79 → 0,73 → 0,72 | Escena igual a la foto. La cara decae sola ~0,07 en 6 s. Cara de ~116 px |
 | Kling 3.0 pro, `start_image` | 9 | 0,81 → 0,77 → 0,74 | **Mismo movimiento que std**, solo más nítido y a 1080×1920 nativo. No justifica +1,5 cr si se va a publicar a 720p |
-| Seedance 2.0 mini, `start_image` | 6 | 0,69 → 0,63 → 0,64 | Escena igual, pero la cara deriva **bajo el gate** (como el 30-sep) |
+| Seedance 2.0 mini, `start_image` | 6 | 0,69 → 0,63 → 0,64 | La cara deriva **bajo el gate** (como el 30-sep) y **el plano se acerca y cambia el edificio y la calle** (balcones y palmeras que no están en la foto): «foto sola» no garantiza la escena |
 | Seedance 2.0 mini, `start_image` + 3 `image_references` | 6 | 0,71 → 0,73 → 0,80 | **Las referencias recuperan la cara** (pecas visibles) al mismo precio. Pero el motor reencuadra (la cara crece de 139 a 347 px) e **inventó un letrero en la torre** («DAISS») aunque el prompt no lo pedía: es el error de G3 |
 | Kling 3.0 Omni, 5 `image_references`, sin `start_image` | 6 | 0,80 → 0,81 → 0,82 | **Sostiene y hasta mejora la cara** y es el más barato. Pero **no controla la escena**: inventó otro cuarto, plano abierto que se acerca, ambo más rosado |
-| Cinema Studio 3.0, `start_image`, 4 s a 720p | 20 | 0,79 → 0,79 → 0,77 | Estable, pero 5 cr/s: 4 veces el precio por segundo de Kling std (1,25) y 2,7 veces por clip (20 contra 7,5) |
+| Cinema Studio 3.0, `start_image`, 4 s a 720p | 20 | 0,79 → 0,79 → 0,77 | La cara cae 0,02 (dentro del ruido de ±0,03 con caras de 120-240 px) y **el plano también se acerca**; pero 5 cr/s: 4 veces el precio por segundo de Kling std (1,25) y 2,7 veces por clip (20 contra 7,5) |
 
 Lectura: **cuanto más se ata a la foto de arranque (`start_image`), más decae la cara con el tiempo; cuanto más se ata a las
 referencias de cara, más se sostiene pero menos manda la escena.** Para una pieza donde la escena importa (el mismo
