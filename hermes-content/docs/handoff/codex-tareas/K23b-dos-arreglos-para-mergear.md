@@ -1,5 +1,9 @@
 # K23b · Dos arreglos de una línea para que #133 (K2) y #134 (K3) se puedan mergear
 
+> **HECHO el 9-oct** (#133 `6506d072`, #134 `7c7e16df`; suite completa de las dos juntas: 9.839 en verde, tsc 0).
+> ⚠️ **Corrección de Plataforma:** la META de abajo decía «con estos arreglos quedan para mergear y publicar». Era
+> falso: seguían abiertos los hallazgos de la revisión del 8-oct, `K2b` (#133) y `K3b` (#134). No se mergea sin ellos.
+
 Sos Codex. SOLO `onia-platform`. Dos ramas, un arreglo cada una. Anotá los SHAs base.
 
 ## META

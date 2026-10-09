@@ -1,6 +1,12 @@
 # K3b · La semilla dental no apaga los agentes ni puede tumbar el alta (arreglo de #134)
 
-Sos Codex. Rama `codex/...k3...` del PR #134 (la misma). `git branch --show-current` primero y `git merge origin/master`.
+Sos Codex. Rama `codex/semilla-dental` del PR #134 (la misma). `git branch --show-current` primero y `git merge origin/master`.
+
+> **Sigue abierto al 9-oct 06:20 UTC** (medido sobre `7c7e16df`, con K23b ya hecho): `semilla-dental.ts:65-72` sigue
+> creando los tres agentes con `enabled: false`. Y K23b lo empeoró sin querer: ahora el aviso se marca leído al completar
+> horario y precios, así que el recordatorio de «actívelos» desaparece y los agentes quedan apagados para siempre.
+> El punto 3 (precios en 0 en la reserva pública) **no hace falta**: medido, `app/(public)/book/**` no muestra precios
+> ni lista servicios. Hacé solo el 1 y el 2. ⚠️ La tarea K23b decía que con ella #134 quedaba para mergear: era falso.
 
 ## Lo que encontró la revisión de Plataforma (8-oct) — bloquea el merge
 1. **Apaga los agentes de toda cuenta dental nueva.** `sembrarDental` crea `oniaAgentsAgent` con roles `recall`,

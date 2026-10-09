@@ -1,6 +1,11 @@
 # K2b · Reprogramador a 30 días sin pisar al detector de tratamiento a medias (arreglo de #133)
 
-Sos Codex. Rama del PR #133 (la misma). `git branch --show-current` primero y `git merge origin/master`.
+Sos Codex. Rama `codex/recuperar-canceladas` del PR #133 (la misma). `git branch --show-current` primero y `git merge origin/master`.
+
+> **Sigue abierto al 9-oct 06:20 UTC** (medido sobre `6506d072`, con K23b ya hecho): `REPROGRAMAR_VENTANA_DIAS = 30`
+> (`agents-reprogramador.ts:23`) contra `TRATAMIENTO_A_MEDIAS_DIAS = 21`, y nada separa a las personas entre los dos.
+> La ventana del agente (`metadata.ventanaDias`, de K23b) ya llega a `getAgentFeed`: el arreglo tiene que respetarla.
+> ⚠️ La tarea K23b decía que con ella #133 quedaba para mergear: era falso.
 
 ## Lo que encontró la revisión de Plataforma (8-oct)
 #133 sube `REPROGRAMAR_VENTANA_DIAS` de 14 a 30. El detector de tratamiento a medias
