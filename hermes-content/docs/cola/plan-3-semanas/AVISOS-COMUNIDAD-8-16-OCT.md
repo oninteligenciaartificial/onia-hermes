@@ -517,7 +517,7 @@ Contá la tuya en General 👇
 
 ## SKILL · Tu primera skill de Claude Code
 
-**Para Sergio Urcullo:** El paso a paso en video, desde instalar Claude Code hasta tu primera skill. Va en un solo mensaje. Antes del jueves 15 hay que MIRAR esa página renderizada (solo se leyó el texto).
+**Para Sergio Urcullo:** El paso a paso en video, desde instalar Claude Code hasta tu primera skill. Va en un solo mensaje. La página se miró renderizada el 9-oct: carga en celular y el video 02 «Instalarlo, y tu primera skill» está incrustado (YouTube oXaqV-HDufA). Falta que confirmes que ese video es público.
 
 **Mensaje único** (se pega antes de publicar el video):
 

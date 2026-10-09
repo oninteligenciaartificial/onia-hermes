@@ -34,8 +34,10 @@
   vive en el 55 % de arriba y el 40 % de abajo queda vacío; (5) **muestra un «tablero» con Agenda, Clientes, Cobros y Chat**: es
   mostrar funciones del producto, y `CLAUDE.md` (contenido en redes) exige el OK de Sergio Urcullo hasta que exista la tabla «se promete /
   funciona»; el propio README del molde dice «revisión de Sergio antes de usar el molde. No publicar». Por eso NO lo usé en una pieza.
-- **Pendiente mío, sin bloqueo:** mirar renderizada `sergiourcullo.vercel.app/claude-code` antes del jue 15 (aviso SKILL); verificar la
-  publicación de N03 el vie 9 ~18:30 La Paz.
+- **Hecho (9-oct, 16:30 UTC):** `sergiourcullo.vercel.app/claude-code` mirada renderizada a 430 px: carga (200) y el video 02 «Instalarlo, y tu
+  primera skill» tiene su YouTube incrustado (`oXaqV-HDufA`; el 01 tiene `kAsAhGe6zyA`; el 03 no tiene video). Aviso SKILL consistente. Falta
+  que Sergio Urcullo confirme que el video es público.
+- **Pendiente mío, sin bloqueo:** verificar la publicación de N03 el vie 9 ~18:30 La Paz (revisión armada a las 22:50 UTC).
 
 ## ▶ 9-oct (tarde, 13) — historias que venden: secuencia de 4 lista, espera el OK de Sergio Urcullo
 
