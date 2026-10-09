@@ -47,8 +47,8 @@ Qué se vende y qué falta: `docs/ONIA_CATALOGO_DE_VENTA.md`.
 | Punto 3: canal privado de la agenda | `wip/canal` (`7d6b02cb`) en el bundle | No está en ningún PR. Trae `20261005140000_realtime_citas_privado`: infra de Realtime con OK |
 | Punto 4: respaldo afuera | código y `docs/RUNBOOK_RESPALDO_AFUERA.md` en `master` | **No está activo** (9-oct): en el VPS no hay `respaldo-afuera.sh`, ni cron, ni la clave. Falta que Sergio Urcullo cree el bucket R2, su token y la frase (runbook §1) y que la madre lo instale (§2) |
 | Punto 14: términos aceptados | #124 + `wip/terms` (`2191bf56`) | Espera su migración `20261008000000_add_terms_acceptances` |
-| Punto 1: cobro de punta a punta | QA «ZZ QA Pago» (`+qapago`) | Estado del 5-oct, sin re-medir: falta confirmar su correo y que Sergio Urcullo apruebe el pago de PRUEBA sin facturar |
-| SQL del B22 (REVOKE a anon) | `prisma/migrations/20261003230000_revoke_anon_onia_sends` | Estado del 5-oct, sin re-medir: mergeado y sin aplicar; solo con el OK textual de Sergio Urcullo |
+| Punto 1: cobro de punta a punta | QA «ZZ QA Pago» (`+qapago`) | Medido 9-oct (SQL de solo lectura): **0 pagos de suscripción** en producción; «ZZ QA Pago» en prueba Profesional hasta el 19-oct, con el correo **sin confirmar**. Falta: confirmar ese correo, pagar con el QR, subir el comprobante y que Sergio Urcullo apruebe ese pago de PRUEBA sin facturar |
+| SQL del B22 (REVOKE a anon) | `prisma/migrations/20261003230000_revoke_anon_onia_sends` | Medido 9-oct: **sin aplicar** (las dos tablas siguen con 7 permisos para anon y authenticated, y el permiso por defecto de `postgres` sigue abierto). No urge: TRUNCATE no se alcanza por la API pública, y las 4 migraciones pendientes (caja, caras, términos, factura) traen RLS + REVOKE. Solo con el OK textual de Sergio Urcullo |
 
 ## 4. Archivos
 
@@ -92,7 +92,7 @@ Qué se vende y qué falta: `docs/ONIA_CATALOGO_DE_VENTA.md`.
 4. **Punto 4:** bucket R2, token y frase de cifrado (`docs/RUNBOOK_RESPALDO_AFUERA.md` §1).
 5. Migraciones: caja, caras, términos y Realtime privado (§3).
 6. El día que se publique W1: OK a la infra de Chatwoot (§3).
-7. Del 5-oct, sin re-medir: SQL del B22, correo de `+qapago`, el pago de prueba y las plantillas A/B.
+7. SQL del B22 y correo de `+qapago` (los dos sin cambios, medidos el 9-oct), el pago de prueba y las plantillas A/B.
 
 ## 7. Próximos pasos (en orden)
 
