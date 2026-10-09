@@ -1,5 +1,7 @@
 # S1 · Los límites por IP agrupan IPv6 por /64 y salen de una sola función (toda la plataforma)
 
+> **Estado 9-oct:** hecho en onia-platform#141 (`c38938ba`). La revisión de Plataforma encontró un bloqueante que venía de ESTA tarea: decía «si llega `cf-connecting-ipv6`, el /64 sale de esa», y creerle siempre deja que el cliente elija su clave. Arreglado en S1b (`4c1ad334`, bundle `docs/cola/ramas-locales/plataforma-s1b-20261009.bundle`). La regla buena está abajo.
+
 Sos Codex. SOLO `onia-platform`, rama nueva `codex/s1-ip-ipv6` desde `master`. `git branch --show-current` primero y
 anotá el SHA base.
 
@@ -19,7 +21,9 @@ Cloudflare.** Además, dos lugares no usan esa función:
    - IPv4: igual que hoy.
    - IPv6: el prefijo /64 normalizado (expandir `::`, minúsculas, los 4 primeros grupos). Una IPv4 mapeada
      (`::ffff:1.2.3.4`) cuenta como IPv4.
-   - Si llega `cf-connecting-ipv6` (Cloudflare con «Pseudo IPv4»), el /64 sale de esa.
+   - `cf-connecting-ipv6` vale SOLO si `cf-connecting-ip` es una Clase E (240.0.0.0/4), que es lo que pone el Pseudo
+     IPv4 «Overwrite» de Cloudflare. Sin eso la ignora: Cloudflare no la agrega y no está documentado que borre la
+     que manda el cliente (corregido 9-oct; antes decía «si llega, el /64 sale de esa»).
    - Un valor que no es IP (`net.isIP` da 0) se vuelve `"unknown"`. Hoy cualquier texto en la cabecera es una clave
      nueva.
    - `clientIp` queda como está para la auditoría: `lib/audit.ts` sigue guardando la dirección entera.
