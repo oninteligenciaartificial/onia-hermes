@@ -19,6 +19,8 @@ description: Invocar ANTES de tocar a Hermes (el asistente de Sergio Urcullo por
 | El acceso al VPS y sus tres acciones | `hermes-content/deploy/hermes-jarvis/` (+ `README.md`) |
 | La constitución de Hermes y sus skills | `hermes-content/deploy/hermes-agent/SOUL.md` · `hermes-content/skills/{agenda-calendario,pedir-a-claude}.md` |
 | Resumen y cierre · aduana · calendario · pedidos · su vuelta | `scripts/loops/{jarvis-resumen,onia-tg,agenda,pedido-claude,respuestas-pedidos}.sh` |
+| Fuentes del resumen/cierre que no son del carril (9-oct) | qué sale: `hermes-content/docs/cola/plan-3-semanas/CALENDARIO-PUBLICACION-<d1>-<d2>-<MES>.md` (el rango sale del nombre); qué salió: `/root/publicar/publicado.jsonl` del VPS (lo escriben los publicadores de `hermes-content/deploy/vps-ops/publicar/`) |
+| Formato de todo lo que le llega (8-oct) | PASÓ · NECESITO · SIGUE: `jarvis-resumen.sh` (`parte`/`grupo`), SOUL `## Formato fijo de cada mensaje`, prompt de la rutina §5 |
 
 ## Cómo se llega al VPS desde la nube, y qué NO anda
 
@@ -164,6 +166,19 @@ CLI de Hermes.
 - **Una sección del SOUL se copia con un rango.** El `aplicar` viejo hacía `sed '/^## Su calendario/,$p'`:
   arrastraba TODO lo que viniera después. La sección de pedidos va ANTES de la del calendario, y
   cada copia termina en el próximo `---`.
+- **El registro de publicaciones miente si se lo lee a la ligera** (9-oct, segunda revisión del #176).
+  `yt-video.mjs` sube en PRIVADO por defecto (ensayo) y lo anota igual: solo cuenta `privacidad: public`.
+  `ig-historia.mjs` no pide `permalink`: la historia va sin link. `buffer-post` anota el envío, no la
+  salida: se cuenta por `cuando` (o `fecha` si es «ya») y solo lo que ya pasó. Y no ve lo que Sergio
+  Urcullo sube a mano: se dice «en el registro», nunca «no salió nada».
+- **Un calendario sin año** (`CALENDARIO-PUBLICACION-28-3-ENE.md`): el año es el que hace que el rango
+  cubra la fecha; la fila se casa por el número de día (normalizado a NFC); entre dos que se solapan
+  gana el que empieza después; y desde que existe uno, los `S*-GUIONES` (sin año) no vuelven nunca.
+- **`aplicar` copia del SOUL SOLO las secciones que nombra** (9-oct). Una regla nueva escrita dentro de
+  otra sección («Cómo hablarle a Sergio») existe en `main` y nunca llega a `/root/.hermes/SOUL.md`. Regla
+  nueva = sección propia que termina en `---`, su paso en 5c (o 5d si depende de la llave), su chequeo
+  en la Fase A y su prueba en `hermes-jarvis-aplicar.test.mjs`. Así entró el formato fijo
+  (Pasó · Necesito · Sigue).
 - **`git stash -u` con un `git mv` en el medio:** el pop no puede restaurar un archivo nuevo en la ruta
   que dejó libre el `mv`, y deja el stash guardado. Antes de soltarlo, compará archivo por archivo con
   `git show stash@{0}^3:<ruta>`. Mejor no mezclar stash con renombres.
@@ -285,6 +300,10 @@ CLI de Hermes.
   `onia-vps.sh` (el shim que crea `instalar-homelab.sh`) tenía fuente y pidió desplegarla. El `poner`
   que pedía habría pisado el shim con un script roto. Se renombró el atajo (`vps-desde-windows.sh`).
   Antes de agregar un `poner`, se abre la «fuente» y se mira si de verdad es esa herramienta.
+  **Desde el 9-oct el test lee las carpetas de los `poner`**: un `x.sh` sin prefijo cuenta como fuente
+  de `onia-x.sh` solo si está en una carpeta desde la que el sync ya copia (`scripts/loops/`,
+  `scripts/kanban/`, `hermes-content/deploy/vps-ops/`…). Con el nombre exacto (`onia-x.sh`) cuenta en
+  cualquier lado. Y cada `poner` a `/root/bin` tiene que apuntar a un archivo versionado.
 - **En esta nube, un proceso muerto puede seguir «vivo» para `kill(pid, 0)`** (2-oct). El PID 1 del
   contenedor (`process_api`) no recoge huérfanos: un nieto matado con SIGKILL queda en
   `State: Z` para siempre. Una prueba de «el árbol murió» tiene que tratar al zombi como muerto
