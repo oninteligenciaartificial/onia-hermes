@@ -1,5 +1,11 @@
 # Handoff — carril `hermes-jarvis` (Hermes, el Telegram y el calendario de Sergio Urcullo)
 
+> **ESTADO 9-oct, más tarde — el #173 también está en `main`** (marca `onia-autosync-main` + aviso de
+> respuesta rechazada que se reintenta si la aduana falla; el P2 de Codex sobre el reintento ya venía
+> arreglado en `31aebd95`). Un PR chico corrige la tabla «qué mirar» del runbook (§8): decía textos de
+> 1b y 5d que `aplicar.sh` no imprime. **Sigue:** la madre pone la marca en su worktree y corre `aplicar`
+> desde la PC con el «sí» de Sergio Urcullo; este carril lee el log y lo verifica.
+
 > **ESTADO 9-oct — el #138 está en `main`** (mergeado por la madre el 9-oct 03:53 UTC, CI verde, con su
 > arreglo `9562df9a`). En el VPS **nada** encendido todavía.
 > - **En un PR nuevo (rama `claude/adoring-ramanujan-7sjzwv` reiniciada desde `main`), los 2 pendientes
