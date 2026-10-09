@@ -1,0 +1,10 @@
+{
+  "nombre": "VSL-dental-C2-clic",
+  "nota": "SOLO después de G-01 (qué hace «Aprobar» y a quién le llega) y con paciente de prueba propio. Corre con ONIA_GRABAR_PERMITE_ENVIO=1. Ajustar los selectores a la tarjeta del paciente de las 10:00.",
+  "vista": [1366, 900],
+  "pasos": [
+    { "ir": "/pending" }, { "esperar": 1200 },
+    { "mover": "text=Aprobar", "pausa": 700 }, { "anillo": "text=Aprobar" }, { "esperar": 1200 },
+    { "clic": "text=Aprobar", "envio": true }, { "esperar": 2000 }, { "foto": "C2-despues-del-clic" }
+  ]
+}

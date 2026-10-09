@@ -1,0 +1,25 @@
+{
+  "nombre": "VSL-dental-C1-C7",
+  "nota": "ESQUELETO: los selectores son los textos que se ven en las capturas del 1-oct y 8-oct; hay que ajustarlos mirando la cuenta demo. Sin clics: no envía nada. El clic de C2 va en grabar-captura.vsl-dental-C2-clic.plan.json, y solo después de G-01.",
+  "vista": [1366, 900],
+  "pasos": [
+    { "ir": "/agenda" }, { "esperar": 1200 },
+    { "mover": "text=Sin confirmar", "pausa": 500 }, { "anillo": "text=Sin confirmar" }, { "esperar": 1800 }, { "foto": "C1-agenda" }, { "sin_anillos": true },
+
+    { "ir": "/pending" }, { "esperar": 1200 },
+    { "mover": "text=Aprobar", "pausa": 600 }, { "anillo": "text=Aprobar" }, { "esperar": 1800 }, { "foto": "C2-pending-confirmar" }, { "sin_anillos": true },
+
+    { "mover": "text=Reprograma", "pausa": 500 }, { "esperar": 1500 }, { "foto": "C3-pending-reprograma" },
+
+    { "ir": "/patients" }, { "esperar": 1000 },
+    { "mover": "text=Odontograma", "pausa": 500 }, { "esperar": 1500 }, { "foto": "C4-ficha-odontograma" },
+
+    { "ir": "/billing" }, { "esperar": 1200 },
+    { "mover": "text=Vencido", "pausa": 500 }, { "anillo": "text=Vencido" }, { "esperar": 1800 }, { "foto": "C5-billing-saldo" }, { "sin_anillos": true },
+
+    { "ir": "/pending" }, { "esperar": 1000 },
+    { "mover": "text=Cobro", "pausa": 500 }, { "esperar": 1500 }, { "foto": "C6-pending-cobro" },
+
+    { "ir": "/agents" }, { "esperar": 1200 }, { "foto": "C7-agents" }
+  ]
+}

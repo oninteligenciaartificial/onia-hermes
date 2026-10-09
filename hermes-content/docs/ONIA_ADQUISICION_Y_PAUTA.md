@@ -677,6 +677,11 @@ todo contacto el 8-oct («no sé si el producto ya es funcional ni si prometemos
 | 8 | Píxel visto en «Probar eventos» con el alta y su `utm` | Plataforma | ⏳ dispara; falta el evento |
 | 9 | OK escrito de gasto: **«US$ 56, 14 días, tope Bs 750»** | Sergio Urcullo | ❌ |
 
+**9-oct, lo que cambió de mi lado (Ventas y pauta): ninguna fila pasó a ✅.** Las filas 1, 2, 3, 5, 6, 7 y 9 siguen igual; no hay cuenta demo ni
+`ONIA_QA_EMAIL`/`ONIA_QA_PASSWORD` en el entorno de Ventas. Lo que sí quedó listo para que, cuando entre la cuenta, recapturar A1/A2 y las C1-C7 del VSL
+sea un comando y no una tarde: `grabar-captura.mjs` con sus planes (skill §4.4) y el preview del corto (`carousels/briefs/ads/VSL-CORTO-TABLA-DE-CORTES.md`).
+Es preparación, no avance en la puerta: **no abre ninguna fila del 13-oct**.
+
 **Lo que falta de Sergio Urcullo, en una línea:** poner la tarjeta en ONIA Ads, vincular el número del bot a la página «Onia»,
 firmar la respuesta a la pauta, dar el OK de gasto (US$ 56 · 14 días · Bs 750) y decidir el «usted» en los anuncios.
 
