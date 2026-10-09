@@ -1,0 +1,74 @@
+{
+  "title": "Un video sin grabar, en 3 pasos",
+  "caption": "Lucía Antelo es un personaje hecho con IA por @oniahq. Este video no fue grabado: cada clip salió de una foto y una orden corta.\n\n1. Una foto fija con la cara (1 crédito).\n2. Una orden corta: movimiento, cámara y luz.\n3. La foto se mueve (clip de 6 segundos: 7,5 créditos) y se revisa cuadro por cuadro.\n\nGuardalo para cuando armes el tuyo. Cada semana hago una prueba. Seguime.",
+  "hashtags": [
+    "#inteligenciaartificial",
+    "#ia",
+    "#santacruz",
+    "#bolivia"
+  ],
+  "comment_trigger": "",
+  "cta": "Seguime",
+  "slides": [
+    {
+      "number": 1,
+      "role": "cover",
+      "pill": "En 3 pasos",
+      "headline": "Este video *no fue grabado*",
+      "body": "Así se hace, en 3 pasos.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Cuadro 110 del clip K1",
+      "alt_text": "Lucía mira a cámara y sonríe, un cuadro del clip",
+      "bg": "hermes-content/carousels/briefs/assets/lucia-c1/k1-clip-cuadro-110.jpg"
+    },
+    {
+      "number": 2,
+      "role": "point",
+      "pill": "Paso 1",
+      "headline": "Una *foto fija*",
+      "body": "Primero la cara, siempre igual. Una foto cuesta 1 crédito.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Foto K2 de Lucía en un café",
+      "alt_text": "Lucía junto a un mostrador de café",
+      "bg": "hermes-content/references/modelos/lucia/v4/kit/k2-1-cafe-mostrador-3e05cfd0.jpg"
+    },
+    {
+      "number": 3,
+      "role": "point",
+      "pill": "Paso 2",
+      "headline": "Una *orden corta*",
+      "body": "Movimiento, cámara y luz. La orden real: «She slowly lifts her eyes from the phone to the camera and gives a small knowing smile, the phone stays in her hands. Subtle handheld camera, natural morning light, no cuts.»",
+      "callout": "",
+      "save_worthy": true,
+      "visual_prompt": "Foto K1",
+      "alt_text": "Lucía mirando el celular",
+      "bg": "hermes-content/references/modelos/lucia/v4/kit/k1-1-recepcion-celular-4afffb96.jpg"
+    },
+    {
+      "number": 4,
+      "role": "point",
+      "pill": "Paso 3",
+      "headline": "Se mueve. *Se revisa.*",
+      "body": "Un clip de 6 segundos cuesta 7,5 créditos. Después, cuadro por cuadro: en el 60 hay cinco dedos; en el 72 y el 104 un dedo cruza y no lo cuento.",
+      "callout": "",
+      "save_worthy": true,
+      "visual_prompt": "Foto K4·5 señala",
+      "alt_text": "Lucía señalando junto a una ventana",
+      "bg": "hermes-content/references/modelos/lucia/v4/kit/k4-5-senala-342c0ab5.jpg"
+    },
+    {
+      "number": 5,
+      "role": "cta",
+      "pill": "Seguime",
+      "headline": "Foto, orden y *revisión*",
+      "body": "Foto y clip: 8,5 créditos. Cada semana, una prueba. Seguime para no perdértela.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Foto K4·3 café teclado",
+      "alt_text": "Lucía escribiendo en un teclado en un café",
+      "bg": "hermes-content/references/modelos/lucia/v4/kit/k4-3-cafe-teclado-186c82f0.jpg"
+    }
+  ]
+}

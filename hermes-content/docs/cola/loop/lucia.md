@@ -14,7 +14,9 @@
   `ig-carrusel.mjs --cuenta lucia` en el VPS (receta en `videos/lucia-entrega/README.md`); no hay otra pieza que lo bloquee.
 - [ ] G4 «Seis motores de imagen, una cara: ¿cuál la conserva?» — guion con lo ya medido (`higgsfield-mapa.md` §1, 11,75 cr
   gastados el 8-oct), validado por la madre antes de montar con el método de G1/G2/G3.
-- [ ] Carrusel C1 «Un video sin grabar, en 3 pasos» — la versión de carrusel de G1, con las fotos reales de las pruebas.
+- [x] Carrusel C1 «Un video sin grabar, en 3 pasos» — versión carrusel de G1 con fotos y un cuadro real del clip: láminas en
+  `hermes-content/carousels/out/lucia-c1-un-video-sin-grabar/`, brief en `briefs/lucia/c1-un-video-sin-grabar.json`. 5 láminas miradas
+  completas, grep limpio, 1080×1350 sin franja. Sale por `ig-carrusel.mjs --cuenta lucia` (receta en `videos/lucia-entrega/README.md`).
 
 ## Bloqueado
 

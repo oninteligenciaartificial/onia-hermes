@@ -29,6 +29,12 @@ SHA-256 de lo entregado:
 - En el VPS: `node /root/bin/ig-carrusel.mjs --cuenta lucia --dir <carpeta con las 5 láminas> --caption <pie>`; el ensayo debe decir
   «listo en Instagram … etiqueta IA».
 
+## Carrusel C1 «Un video sin grabar, en 3 pasos» (la versión carrusel de G1)
+
+- Láminas: `hermes-content/carousels/out/lucia-c1-un-video-sin-grabar/slide-01..05.png` (1080×1350). Pie: `caption` + `hashtags` de
+  `hermes-content/carousels/briefs/lucia/c1-un-video-sin-grabar.json`. Mismo comando que L01.
+- Sale **después** de G1 (repite su enseñanza en otro formato y guarda la «orden real» para el que quiera copiarla).
+
 ## Antes de publicar (una vez)
 
 1. Token de Lucía en `/root/.config/onia-publicar/ig-lucia.env` (no se midió desde el 4-sep; vencía entre el 13 y el 18-oct).
