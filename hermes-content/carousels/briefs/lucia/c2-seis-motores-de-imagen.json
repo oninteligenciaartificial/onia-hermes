@@ -1,0 +1,74 @@
+{
+  "title": "Seis motores de imagen, una cara",
+  "caption": "Lucía Antelo es un personaje hecho con IA por @oniahq. Probé la misma orden y las mismas fotos de referencia en seis motores de imagen y medí cuánto se parece cada cara a la suya.\n\nCon 1 crédito, el que ya uso la sostuvo en tres escenas. Pagar más no la mejoró, y el más barato la perdió en una de tres.\n\nUna toma cada uno: es una prueba, no una regla. Guardalo para cuando elijas el tuyo. Cada semana hago una prueba. Seguime.",
+  "hashtags": [
+    "#inteligenciaartificial",
+    "#ia",
+    "#santacruz",
+    "#bolivia"
+  ],
+  "comment_trigger": "",
+  "cta": "Seguime",
+  "slides": [
+    {
+      "number": 1,
+      "role": "cover",
+      "pill": "Una prueba",
+      "headline": "Misma orden. *Seis motores.*",
+      "body": "De imagen. ¿Cuál conserva la cara de Lucía?",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Foto A K1",
+      "alt_text": "Lucía mira su celular junto a una ventana",
+      "bg": "hermes-content/references/modelos/lucia/v4/kit/k1-1-recepcion-celular-4afffb96.jpg"
+    },
+    {
+      "number": 2,
+      "role": "point",
+      "pill": "Imagen A",
+      "headline": "La que ya uso: *0,81*",
+      "body": "1 crédito. Se mide contra 8 fotos suyas (idéntica es 1, mi piso es 0,70). En tres escenas dio 0,81 · 0,83 · 0,84.",
+      "callout": "",
+      "save_worthy": true,
+      "visual_prompt": "Foto K2 café",
+      "alt_text": "Lucía junto a un mostrador de café",
+      "bg": "hermes-content/references/modelos/lucia/v4/kit/k2-1-cafe-mostrador-3e05cfd0.jpg"
+    },
+    {
+      "number": 3,
+      "role": "point",
+      "pill": "C · D · E · F",
+      "headline": "Pagar más *no ayudó*",
+      "body": "C, 2 créditos: 0,74. D, 2,5: 0,70. E, 3: 0,69. F, 2,75: 0,66. Las dos últimas quedaron bajo mi piso.",
+      "callout": "",
+      "save_worthy": true,
+      "visual_prompt": "Foto E",
+      "alt_text": "Imagen de prueba de Lucía en una recepción con el celular",
+      "bg": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos/img-flux-3-af9c2d0c.jpg"
+    },
+    {
+      "number": 4,
+      "role": "point",
+      "pill": "Imagen B · café",
+      "headline": "El más barato *la perdió*",
+      "body": "0,5 créditos: 0,79 · 0,35 · 0,83. En el café salió otra persona: esa imagen no es Lucía.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Foto B café K2",
+      "alt_text": "Imagen de IA de prueba que no se parece a Lucía",
+      "bg": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos/img-omni-image-k2cafe-9f4b5172.jpg"
+    },
+    {
+      "number": 5,
+      "role": "cta",
+      "pill": "Seguime",
+      "headline": "Una foto *no mide*",
+      "body": "Una toma por motor: es una prueba, no una regla. Cada semana, una prueba. Seguime.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Foto K4 café",
+      "alt_text": "Lucía escribiendo en un teclado en un café",
+      "bg": "hermes-content/references/modelos/lucia/v4/kit/k4-3-cafe-teclado-186c82f0.jpg"
+    }
+  ]
+}

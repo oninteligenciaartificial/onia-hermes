@@ -32,6 +32,7 @@ SHA-256 de lo entregado:
 | 2 · día 1 | **C1** (carrusel) | Repite G1 en formato guardable con la orden real |
 | 2 · día 3 | **G2** (reel) | La prueba de los seis clips; usa lo aprendido en G1/G3 |
 | 2 · día 5 | **G4** (reel; cuando la madre valide el guion) | Seis motores de imagen |
+| 3 · día 1 | **C2** (carrusel) | Formato guardable de G4: `hermes-content/carousels/out/lucia-c2-seis-motores-de-imagen/`, pie en `briefs/lucia/c2-seis-motores-de-imagen.json`. Sale después de G4 |
 
 El token de Instagram de Lucía vence entre el 13 y el 18-oct: **la primera pieza tiene que salir antes**, o hay que renovarlo.
 

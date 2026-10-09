@@ -22,7 +22,9 @@
 
 - [ ] G5 «Cómo se mide una cara: el control de identidad» — el método del piso 0,70 y el ruido de ±0,03, con las fotos y clips ya
   medidos de G2 y G4. Guion validado por la madre antes de montar.
-- [ ] C2 carrusel «Seis motores de imagen: cuánto cuesta y cuánto se parece» — formato guardable de G4.
+- [x] C2 carrusel «Seis motores de imagen: cuánto cuesta y cuánto se parece» — láminas en
+  `hermes-content/carousels/out/lucia-c2-seis-motores-de-imagen/`, brief en `briefs/lucia/c2-seis-motores-de-imagen.json`; 5 láminas miradas
+  completas, grep limpio. Mismos números que el guion de G4 (que la madre valida).
 - [ ] Rotar el token de Lucía (13-18-oct) y confirmar `is_ai_generated` en la primera pieza: lo hace quien corra el VPS; esta sesión
   deja la receta en `videos/lucia-entrega/README.md`.
 
