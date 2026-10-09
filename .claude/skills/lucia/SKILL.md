@@ -335,9 +335,10 @@ Fuente: `research/competencia/LUCIA_COMPETENCIA_20261005.md`.
   cara ni el grep lo ven; se encuentran ampliando el borde del cuadro. Se tapan con desenfoque con pluma en UN paso en RGB (`format=gbrp` + `gblur` +
   `maskedmerge`, salida `yuvj420p`): dos pasos por YUV corren los colores. Copias en `v4/prueba-motores-20261008/fotos-limpias/` (con README); el
   original queda como evidencia. Las fotos K1, K2·1, K4·3 y K4·5 se miraron enteras y están limpias.
-- **9-oct · «una cara chica baja sola» era falso** (editor de G5): el guion lo afirmaba desde una intuición. El cuadro 0 del Motor 5 (cara de 89 px) da 0,798 y a 169 px da
-  0,831; la misma foto reducida a 60 px baja solo 0,004-0,010 en 5 de 6 fotos (`videos/lucia-g5/qa/cara-chica-*.txt`). Se dice «poco confiable» (la regla < 200 px), nunca
-  «baja». Y las medidas 0,79 y 0,77 difieren 0,02, no 0,03. Todo número o tendencia que un guion afirme se mide con el control propio (0 cr) antes de renderizar.
+- **9-oct · «una cara chica baja sola» exagera** (editor y revisor de G5): el guion lo afirmaba desde una intuición. El cuadro 0 del Motor 5 (cara de 89 px) da 0,798 y a 169 px da
+  0,831; la misma foto reducida a 60 px baja de forma pequeña y consistente, −0,004 a −0,010 en 5 de 6 fotos, y F oscila ±0,02 (`videos/lucia-g5/qa/cara-chica-*.txt`). Lo falso es
+  que sea apreciable. Se dice «lo reviso a ojo» (la regla < 200 px del gate), nunca «baja». Las medidas 0,79 y 0,77 difieren 0,02, no 0,03, y el mejor ancla del ruido es el
+  MISMO clip del Motor 6, que oscila 0,771-0,799. Todo número o tendencia que un guion afirme se mide con el control propio (0 cr) antes de renderizar.
 - **2/3-oct:** Seedream escribe como texto «sheet» y «hex #…»; inventa letreros en las torres; los lotes de más de 5
   dan 429. Están en `higgsfield-generate`.
 
