@@ -18,3 +18,6 @@ Orden: lo que destraba cobrar primero. Cada PR: integrar con master, suite compl
 ## Bloqueado (solo Sergio Urcullo)
 - Respaldo afuera (punto 4): bucket R2 (gasto).
 - SIAT etapa VI: el CAFC del piloto.
+
+## Verificación de aprendizaje · 2026-10-09
+- [ ] En la próxima tarea técnica pertinente, cargar `equipo-de-agentes` y `aprender-de-todo`; usar la regla de contexto verificable de la ficha «cinco archivos antes de vibe code» y registrar sesión, fuentes canónicas, artefacto y prueba en esa ficha. No crear documentos duplicados ni abrir otro frente para demostrarlo.

@@ -8,3 +8,6 @@
 
 ## Bloqueado (solo Sergio Urcullo)
 - Grabar (N07, DD-A, N02, D03-A, D04-C el vie 9; el resto según el orden del teleprompter).
+
+## Verificación de aprendizaje · 2026-10-09
+- [ ] En la próxima pieza ya encargada, cargar `equipo-de-agentes` y `aprender-de-todo`; elegir el aprendizaje pertinente de `references/video-intake/COBERTURA-APRENDIZAJE.md` y registrar en su ficha sesión, regla, artefacto y revisión. Comprobar vos, fotobn cuando corresponda y CTA con recurso real en Avisos. Recibir un link no encarga producir.

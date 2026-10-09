@@ -1,14 +1,19 @@
 # Handoff — madre-local (sesión MADRE, en la PC de Sergio Urcullo)
 
 Regla: CLAUDE.md §1. Método (ids, canales, cómo se delega a Codex, tokens): **skill `onia-sesion-madre`**.
-Este archivo es el ESTADO al **5-oct, 20:40 UTC**, cuando Sergio Urcullo pidió «cambio de sesión madre».
+**Corrección 2026-10-09:** mandan HANDOFF 9-oct, GOAL VIGENTE y colas; el estado del
+5-oct de abajo es historial. Sus pedidos de OK de diseño/infra/migraciones quedan
+sustituidos por `CLAUDE.md` §«Qué se publica sin preguntar», con sus excepciones.
+Esta auditoría documental no verifica sesiones vivas ni producción. El siguiente
+párrafo describe el relevo del 5-oct.
 La madre saliente (`cfdce1bb…`, rama `claude/onia-sesion-madre-77f719`, worktree `infra-loops-revision-3fc7b1`) llevaba
 días abierta y su conversación costó ~777 M de tokens. **La madre nueva arranca de cero y lee solo esto.**
 
 ## ▶ ARRANQUE de la madre nueva (texto para pegar, 9-oct)
 
 > Sos la sesión MADRE de Onia, en la PC de Sergio Urcullo. Invocá `onia-router` y después `equipo-de-agentes` (el método) y
-> `onia-sesion-madre` (el detalle). Leé `hermes-content/docs/handoff/madre-local.md` (HANDOFF 9-oct y GOAL VIGENTE).
+> `onia-sesion-madre` (el detalle) y `aprender-de-todo` (dimensiones y prueba de uso).
+> Leé `hermes-content/docs/handoff/madre-local.md` (HANDOFF 9-oct y GOAL VIGENTE).
 > 1. Creá la ronda con `CronCreate` cada 20 min (`7,27,47 * * * *`), según el §3 de `equipo-de-agentes`. El verificador es un
 >    subagente Haiku 5.5.
 > 2. `ListAgents`. A cada sesión que no esté en loop, mandale UNA línea: «Arrancá /loop sobre tu cola
@@ -47,21 +52,23 @@ porque estuvieron parados»*.
    - API de historias de IG: 429 dos días seguidos; Chrome oculto congela la pestaña;
    - Gemini gratis: tope diario a la madrugada;
    - workflows grandes de Claude (~60 M de tokens el 8-oct): Sergio Urcullo pidió Codex y cuidar tokens.
-6. **Depende de Sergio Urcullo:** la lista «Para Sergio Urcullo a la mañana» de abajo. Es lo que desbloquea los 18 PRs.
-7. **Próximos pasos:** la sesión nueva arranca con las respuestas de Sergio Urcullo sobre cómo quiere los loops (ver la
-   pregunta del 9-oct en el transcript) y convierte los PRs aprobados en producción el mismo día.
+6. **Depende de Sergio Urcullo:** solo las excepciones de `CLAUDE.md` (gasto, terceros,
+   actos legales, etc.). Corrección 9-oct: diseño/infra/migraciones revisados no esperan otro OK.
+7. **Próximos pasos:** aplicar `equipo-de-agentes` y convertir trabajo revisado en
+   producción según gates del carril; no esperar otra definición de loops ya documentada.
 
 ## ☀️ Para Sergio Urcullo a la mañana (noche del 8 al 9-oct)
 
-Lo que solo decide él. Mostrarlo en 3 bloques, corto.
+Corrección 9-oct: esta lista mezcla trabajo del equipo y decisiones de Sergio Urcullo.
+Solo se le presentan las excepciones vigentes; revisión y publicación corresponden al carril.
 1. **Grabar hoy** (vie 9, antes de las 18:00): N07, DD-A, N02, D03-A y D04-C. Guiones: https://claude.ai/artifact/4DFnmADw28Hjj5gayyaHcR
-2. **OK de diseño:** las 6 pantallas de la lámina (bandeja #136, nueva conversación, agenda, odontograma, caja, app sin conexión).
-3. **OK de cambios en la base o la infraestructura:**
+2. **Revisión visual del carril, sin otro OK de diseño:** las 6 pantallas de la lámina (bandeja #136, nueva conversación, agenda, odontograma, caja, app sin conexión).
+3. **Revisión técnica y backup/rollback, sin otro OK por migración/infra:**
    - migración Realtime del canal privado (#139, punto 3);
    - migración de facturas (#114, punto 15, antes del swap);
    - infra del widget (#140: bloquear `/public/api/` y `hmac_mandatory`);
    - SQL del B22 (REVOKE a anon);
-   - bucket R2 del respaldo afuera (punto 4).
+   - bucket R2 del respaldo afuera (punto 4): conserva aprobación por gasto.
 4. **Sí a refrescar la demo en producción** (para las capturas del VSL) y **el CAFC del piloto del SIAT** (código y rango).
 5. **Legal:** términos con su migración (#124, punto 14).
 6. **Sí o no:**
@@ -103,7 +110,31 @@ verde ANTES de escribirle a cualquier cliente. Al menos 1 pieza publicada por d�
 Las sesiones avisan su «ESTADO PARA LA MADRE» con `send_message` (MCP `claude-code-remote`) en el momento. Además, la
 madre hace una ronda cada 20 min (CronCreate, vive solo mientras la madre está abierta y vence a los 7 días).
 
-## ▶ VIGENTE — 5-oct ~21:15 UTC: la madre estuvo en la NUBE y vuelve a la PC
+## Auditoría de aprendizaje y reglas · 2026-10-09 · entrega local de Codex
+
+- META cumplida en documentación: contradicciones de diseño/publicación, fotobn,
+  CTA, registro por audiencia, cadencia y sesiones históricas corregidas en origen.
+  `AGENTS.md`, `CLAUDE.md`, router y colas cargan las dos skills comunes.
+- Nueva `.claude/skills/aprender-de-todo/SKILL.md`: 12 dimensiones, ficha, destino
+  canónico y cadena fuente → regla → uso. `equipo-de-agentes` incorpora reparto
+  Codex, concurrencia recomendada, Sol/Astra y preflight cloud Platform.
+- Cobertura: `hermes-content/references/video-intake/COBERTURA-APRENDIZAJE.md`:
+  12 fichas, 21 referencias y 10 feedback fechados. Sin fichas 6/7-oct; no se
+  presume que no hubo envíos. Referencias incorporadas no equivalen a uso probado.
+- Frentes: integración documental + subagente de cobertura + subagente de equipo
+  y revisión cruzada. Validación estructural: UTF-8, 12 dimensiones, todas las
+  fichas del intervalo representadas y enlaces de cobertura existentes.
+- PARA LA MADRE: revisar e integrar estos cambios locales. No se ejecutó Git,
+  no se tocó producto, no se publicaron piezas ni se activaron sesiones/loops.
+  Cada cola tiene una comprobación pendiente de uso en su próxima tarea pertinente.
+  Falta que los carriles carguen la versión integrada y devuelvan evidencia; no
+  se confirmó acceso/cupo/modelo cloud ni estado operativo del equipo en vivo.
+
+## Historial desde aquí — 5-oct ~21:15 UTC: la madre estuvo en la NUBE y vuelve a la PC
+
+> Marcado 2026-10-09: los apartados siguientes preservan el relevo y sus intentos;
+> no son órdenes vigentes de permisos ni inventario de sesiones. Para actuar, usar
+> ARRANQUE/HANDOFF 9-oct, colas y skills. No repetir los pedidos de OK antiguos.
 
 Sergio Urcullo abrió la madre en la nube por error (`session_01BZwYEL4eSUkdPWL36ibLkd`, entorno «onia-higgsfield») y pidió
 volverla local. **Desde la nube se ordena bien a las sesiones de la nube, pero no se llega a las locales ni al Chrome.**

@@ -45,8 +45,10 @@ description: "Invocar para CUALQUIER trabajo del carril Ventas y pauta de Onia: 
 
 > **De USTED, nunca vos ni tú** (Sergio Urcullo por la madre, 3-oct: *«no se usa vos, es muy informal, usted»*).
 > - **Alcance:** el bot de venta, las respuestas a la pauta, las plantillas de WhatsApp, los mensajes 1:1 y los
->   agentes de voz. **Fuera:** la marca personal. **Web y anuncios:** pendiente, la madre se lo preguntó a Sergio
->   Urcullo; hasta que conteste no se tocan (los briefs D1 y D4 v3 siguen en voseo y están congelados igual).
+>   agentes de voz, producto, web y anuncios. **Actualización 9-oct:** producto y clientes = usted; marca personal = vos.
+>   Los briefs históricos en voseo se corrigen antes de reutilizarlos; no se cambia una plantilla aprobada en Meta sin su proceso de aprobación.
+
+**Aprendizajes incorporados 9-oct (sin afirmar implementación):** `hermes-content/references/video-intake/2026-10-08-orquestacion-e-ingresos-5-posts.md` §2 propone diagnóstico → plan → llamada; validar capacidad de respuesta antes de prometer «7 minutos», nunca copiar «309 leads/día». §5 aporta conflicto → giro → producto como solución, sin burla ni cifras ajenas. `2026-10-04-reels-para-lucia.md` §4 aporta problema/solución/producto/objeción/descubrimiento para auditar el plan: casos de éxito solo con evidencia propia y permiso. La conversión se mide por demos, no por likes. Para recursos de marca personal se usa «Buscá PALABRA en Avisos», no una promesa de DM.
 > - **El bot ya está de usted** (3-oct; gate `bot/de-usted.test.mjs`). Lo que quedó afuera y por qué está en la skill
 >   `onia-chatbot`, sección «El bot de ventas habla de usted». Dos cosas dependen de Sergio Urcullo:
 >   1. **Plantillas de Meta** (`seguimiento_demo`, `recordatorio_demo`): siguen en voseo porque el bot manda la
@@ -296,7 +298,7 @@ Trampas pagadas armando v3 (2-oct):
 - **Las capturas viajan con el brief**, en `carousels/briefs/assets/onia-1.0-dental-ads/`. Las del 30-sep están en
   `candidato-20260930/`: sus textos están en producción (`release-8f07e537`), pero la pieza igual espera el OK de
   Sergio Urcullo.
-- Cada pieza se le muestra **renderizada** a Sergio Urcullo antes de subirla.
+- Cada pieza se revisa **renderizada** antes de subirla por el carril autorizado (actualización 9-oct: no esperar otro OK de diseño). La activación de pauta que gasta conserva el OK de presupuesto y canal.
 
 ### 4.1 Mirar la competencia antes de escribir (método del 2-oct)
 
@@ -599,7 +601,7 @@ de cada ficha. Cinco subagentes en paralelo, uno por grupo, y después un verifi
   escasez **solo por capacidad real** (cupos, horas de Sergio Urcullo), nunca cuenta regresiva.
 - **Lo que no se copia:** «la gran mentira», culpar a otros, «solo hoy» sin motivo (fórmula Benson, `pnUQsUA1LRs`);
   los motivos inventados de urgencia de Hormozi; promesas de ingreso (Gadzhi); testimonios y cifras de alumnos.
-- **De usted** en Onia (§1; el «usted» en anuncios espera la decisión de Sergio Urcullo); **de vos** en la marca
+- **De usted** en Onia, producto y anuncios (§1, actualizado 9-oct); **de vos** en la marca
   personal. La pauta de Onia **no** usa el estilo de la marca personal (§4, rechazo v2).
 
 ### 9.4 Creativo: formato y herramienta
@@ -624,7 +626,7 @@ Reglas de edición de la pauta: las 11 de COMUNICACION §4 (subtítulos Archivo 
 3. Mirarla renderizada al tamaño del celular (`qc` de 390 px) **al lado de los que duran** (§4.2). Titular en el
    cuadro 0. Historia sin nada en las zonas que tapa Meta.
 4. Una sola acción, de usted, sin precio, sin «IA» en el titular, sin competidores.
-5. Diseño nuevo ⇒ **Sergio Urcullo la ve renderizada** antes de subir (CLAUDE.md, «Qué se publica sin preguntar»).
+5. Diseño nuevo ⇒ **revisión del render antes de publicar**, sin esperar otro OK de Sergio Urcullo (9-oct; CLAUDE.md, «Qué se publica sin preguntar»). Gasto y contacto con terceros conservan sus permisos; Codex respeta la tarea cerrada.
 
 ### 9.6 Prueba y métricas
 

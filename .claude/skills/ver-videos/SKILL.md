@@ -280,6 +280,10 @@ con otra cuenta y pisarlo dejaría el intake sin sesión.
 
 ## Contenido que manda Sergio Urcullo: mensaje, tema y EDICIÓN (regla del 3-oct)
 
+**Actualización 9-oct-2026:** este mínimo se amplía con `aprender-de-todo`: revisar las doce dimensiones y marcar no observado/no aplica en vez de inventar. Link sin instrucción = aprender, no producir. Ficha → regla en skill → prueba de uso por una sesión: hasta ese último paso queda «incorporado», no «aplicado». Cobertura de la semana: `hermes-content/references/video-intake/COBERTURA-APRENDIZAJE.md`.
+
+**Lección del 8-oct:** la ficha `2026-10-08-referente-gadzhi.md` §0.3 documenta que el CLI de `gemini-see-video.mjs` ignoró el segundo argumento de prompt. Para una pasada de edición específica, usar el método documentado `seeLocalVideo(path, prompt)` y comprobar la respuesta; no dar por ejecutado un prompt solo porque se pasó un argumento. En `2026-10-09-reel-DePBfHouarG.md` falló la transcripción: no concluir ausencia de voz ni medir montaje desde una muestra de cuadros.
+
 No alcanza con resumen y timeline. Cada video se analiza en tres partes:
 - **mensaje**: qué dice y a quién;
 - **tema**: por qué rinde;

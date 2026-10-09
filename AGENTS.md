@@ -72,7 +72,8 @@ proponer supuestos conservadores y validar con herramientas disponibles.
 No pedir al usuario que haga algo que Hermes pueda hacer con acceso disponible.
 Pedir intervencion humana solo cuando falte aprobacion sensible, credencial no
 disponible, decision de negocio ambigua, informacion privada no registrada o una
-accion client-facing.
+acción fuera de las autorizaciones vigentes de `CLAUDE.md` (corregido 2026-10-09;
+ser client-facing por sí solo no exige otro OK).
 
 Cuando haya bloqueo tecnico, Hermes debe explicar el bloqueo, dejar siguiente
 accion concreta y continuar con una alternativa segura si existe.
@@ -93,10 +94,11 @@ Reglas:
 - No pedir aprobacion paso a paso para acciones locales reversibles: leer,
   editar docs/codigo, crear runbooks, correr tests, preparar scripts, commitear
   y pushear cuando el arbol este coherente.
-- Volver a preguntar solo si aparece una accion sensible, irreversible,
-  costosa o client-facing: deploy, produccion, secretos, pagos, contacto con
-  clientes, publicacion, borrado destructivo, migracion real de base de datos o
-  decision de negocio que pueda cambiar precio, alcance, licencia o riesgo.
+- Corrección 2026-10-09: publicar trabajo revisado, incluido diseño, infra y
+  migraciones con backup/rollback, sigue `CLAUDE.md` §«Qué se publica sin preguntar»;
+  no requiere otro OK por ser client-facing. Se mantienen sus excepciones de contenido,
+  gasto, secretos, terceros, borrado destructivo y decisiones comerciales/legales.
+  Esto no amplía el encargo de Codex: no hace Git ni publica por su cuenta.
 - Cerrar cada pendiente como una de tres salidas: ejecutado y validado,
   automatizado con comando/runbook canonico, o bloqueado por dato/credencial/
   aprobacion especifica.
@@ -195,7 +197,7 @@ texto escrito solo para llenar espacio.
 
 ## Flujo obligatorio
 1. Leer `COORDINATION_MANIFEST.md`.
-2. Leer `HERMES_EXECUTION_PROTOCOL.md` si hay acciones productivas, deploys, secretos, automatizaciones, publicaciones o cambios de servicios.
+2. Leer `hermes-content/docs/EXECUTION_PROTOCOL.md` si hay acciones productivas, deploys, secretos, automatizaciones, publicaciones o cambios de servicios (ruta corregida 2026-10-09).
 3. Identificar la skill global o local mas especifica.
 4. Aplicar la regla data-first antes de preguntar por informacion que podria estar registrada.
 5. Aplicar la regla de autonomia operativa antes de delegar trabajo al usuario.
@@ -237,7 +239,10 @@ Si no hay subagentes disponibles, simular la delegacion en el plan y ejecutar po
 Para preguntas simples, inspecciones locales, comandos read-only o cambios triviales, basta un plan de una linea y no hace falta crear todos los frentes.
 
 ## Limites
-- No publicar contenido, videos con cara, ni cambios client-facing sin aprobacion explicita.
+- Corrección 2026-10-09: usar la autorización de `CLAUDE.md` §«Qué se publica sin
+  preguntar», con revisión visual y todas sus excepciones. Se retira el veto genérico
+  a cambios client-facing; cara/voz en servicios externos conserva aprobación.
+  Codex entrega a la madre y no publica fuera de su encargo.
 - No imprimir secretos completos.
 - No crear archivos duplicados si ya existe un archivo canonico.
 - No tocar areas de otra sesion sin coordinar en `COORDINATION_MANIFEST.md`.
@@ -258,6 +263,8 @@ se desincronizan. Antes de cada tarea, Codex lee la que corresponde:
 | Skill | Cuando |
 |---|---|
 | `onia-router` / `onia-continuidad` | al empezar: rutea la tarea y dice que ya sabemos |
+| `equipo-de-agentes` | obligatorio al arrancar también en Codex: roles, colas, revisión y límites del encargo |
+| `aprender-de-todo` | obligatorio al arrancar: aprender por dimensión de cada material y verificar uso real |
 | `onia-sesion-madre` | coordinar sesiones; tokens: donde se van y como bajarlos |
 | `onia-ventas-pauta` / `onia-chatbot` | prospeccion, pauta de Meta / bot, Chatwoot, WhatsApp |
 | `onia-core` / `onia-infra` / `onia-hermes-jarvis` | core y rubros / VPS, Docker, n8n / Hermes por Telegram |
@@ -271,7 +278,8 @@ Del producto, en `onia-platform/.claude/skills/`: `onia-frontend`, `onia-backend
 `onia-deploy` y `onia-verificacion`.
 
 Reglas de Sergio Urcullo vigentes desde el 3-oct:
-- Onia les habla de **usted** a clientes y prospectos.
+- Onia/producto les habla de **usted** a clientes y prospectos; marca personal usa
+  **vos** (alcance aclarado 2026-10-09). Las transcripciones conservan lo dicho.
 - Cada tarea arranca con META, PRUEBA DE HECHO y REGLA DE PARADA escritas.
 - Nada llega a main sin revision.
 - Effort medio, sesiones cortas, sin releer documentos enteros.

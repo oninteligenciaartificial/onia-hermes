@@ -7,3 +7,6 @@
 
 ## Bloqueado (solo Sergio Urcullo)
 - Tarjeta en ONIA Ads (gasto) y variables QA del entorno de Ventas.
+
+## Verificación de aprendizaje · 2026-10-09
+- [ ] En la próxima tarea de oferta o creativo ya encargada, cargar `equipo-de-agentes` y `aprender-de-todo`; aplicar un aprendizaje pertinente de `COBERTURA-APRENDIZAJE.md` (en `references/video-intake/`) y registrar en su ficha sesión, regla, artefacto y revisión de claims/usted. No implementar el cuestionario ni contactar a nadie por recibir una referencia.

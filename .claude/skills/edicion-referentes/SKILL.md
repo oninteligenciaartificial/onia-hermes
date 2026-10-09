@@ -1,9 +1,21 @@
 ---
 name: edicion-referentes
-description: Invocar ANTES de editar cualquier video NUEVO de Sergio Urcullo (talking head vertical de marca personal) desde el 3-oct-2026. Replica TAL CUAL el montaje de Santiago Muñoz (@sanmunoz.ia) y de Erik Taveras (@eriktaveras), las tres capas de Enrique Rocha (@soyenriquerocha, medido el 8-oct), para los repos de GitHub el de @pabloinpublic y, sin cara, el boceto → animación de @theaigeekk, medido reel por reel con evidencia (reel + segundo). Suma las reglas medidas el 8-oct en 5 referentes (también Hormozi y Gadzhi para cuentas, diálogo y YouTube largo). Trae una receta por referente, un script por receta que edita desde bruto + cutplan + transcript + storyboard, cómo hay que grabar para que salga igual y las trampas ya pagadas. editor-videos sigue siendo el motor de corte, transcripción y regla de oro.
+description: Invocar ANTES de editar cualquier video NUEVO de Sergio Urcullo (talking head vertical de marca personal) desde el 3-oct-2026. Replica por sus mecanismos medidos (sin copiar identidad ni guion) el montaje de Santiago Muñoz (@sanmunoz.ia) y de Erik Taveras (@eriktaveras), las tres capas de Enrique Rocha (@soyenriquerocha, medido el 8-oct), para los repos de GitHub el de @pabloinpublic y, sin cara, el boceto → animación de @theaigeekk, medido reel por reel con evidencia (reel + segundo). Suma las reglas medidas el 8-oct en 5 referentes (también Hormozi y Gadzhi para cuentas, diálogo y YouTube largo). Trae una receta por referente, un script por receta que edita desde bruto + cutplan + transcript + storyboard, cómo hay que grabar para que salga igual y las trampas ya pagadas. editor-videos sigue siendo el motor de corte, transcripción y regla de oro.
 ---
 
-# Edición de referentes: Santiago Muñoz y Erik Taveras, TAL CUAL
+# Edición de referentes: Santiago Muñoz y Erik Taveras, por sus mecanismos medidos (sin copiar identidad ni guion)
+
+> **Actualización 9-oct-2026:** se conserva la medición del referente, no su identidad ni su CTA literal.
+> Marca personal: **vos**; producto y clientes: **usted**. El CTA de recurso es **«Buscá PALABRA en Avisos»**,
+> con el recurso comprobado antes de publicar. Los «COMENTA» citados abajo describen la fuente, no una instrucción
+> para Onia. Un enlace sin consigna activa `aprender-de-todo`: ficha + método; no encarga una pieza.
+
+### Cobertura añadida 9-oct: incorporar no equivale a haber producido
+
+- `hermes-content/references/video-intake/2026-10-03-reels-genjutsu-y-fiesta-ia.md`, «Qué tomar»: resultado propio primero, demostración real después; sketch reglas → giro → solución sin copiar fiesta, personajes ni fingir que Lucía es humana. El molde Pablo ya está abajo.
+- `hermes-content/references/video-intake/2026-10-05-tiktok-ZSbm3Scje.md`, «Qué tomar»: chip «Día N/7», progreso y cierre con siguiente dolor solo si la siguiente pieza ya está grabada; contadores sincronizados con datos propios y titular de dos niveles. No trasladar pausas de animación a cara callada.
+- `hermes-content/references/video-intake/2026-10-04-reels-para-lucia.md`, «Para Lucía»: microinteracción clic → estado confirmado; captura real compuesta en panel sostenido; producto en uso antes de prueba final; conflicto de 0–3 s sin insultos. Usar Lucía Antelo y declaración IA, no copiar nombre/cara de otra cuenta. Son técnicas disponibles, no permiso para generar, publicar ni prometer DM.
+- `hermes-content/references/video-intake/2026-10-08-orquestacion-e-ingresos-5-posts.md`, §3 y §5: evaluar efecto abierto con licencia y sincronía musical cuando el molde la permita; conflicto → giro → producto como solución con una metáfora útil y sin burla. Recurso de marca personal: Avisos.
 
 > **Decisión de Sergio Urcullo (2-oct-2026), textual:** *«la sesión de marca personal editó como el video de Fable vs
 > Astra, ese que lo haga así, pero a partir de después de eso, con el formato de los referentes, y creamos la nueva
@@ -81,7 +93,7 @@ Medido en 6 reels de TikTok (22 al 30-sep) y contrastado con la ficha de IG.
 | Sellos y números | 1-4 sellos, a −4/−8°, de 140-250 % a 100 % en 3-7 cuadros. Cada número dicho entra como contador o barra (0,4-1,5 s). |
 | Zoom | Punch-in de 1,12-1,15× con ease-out de 0,3-0,5 s, en la primera palabra de una sección, en un sello o en el CTA. |
 | Sonido | **−14 LUFS**, voz muy comprimida, 3,2-4,1 palabras/s, sin cama. Un brillo agudo (9-16 kHz, 0,4-0,7 s) cuando entra el CTA. |
-| Cierre | CTA en los últimos 2,4-5,5 s, tecleado letra por letra con cursor: «COMENTA <PALABRA>» + lo que recibe. |
+| Cierre | CTA en los últimos 2,4-5,5 s, tecleado con cursor. Referente: «COMENTA <PALABRA>»; adaptación Onia 9-oct: «Buscá PALABRA en Avisos» + recurso comprobado. |
 | Duración | 44-52 s (noticia o producto) o 105-127 s (top-N o tutorial). |
 
 ## Lo que cambió en Santiago y Erik al medir el catálogo (8-oct-2026)
@@ -125,7 +137,7 @@ de fines de septiembre. El vigente, del 3 al 8-oct (Tamagotchi, Muse vs Dots, Mo
 
 Es casi la variante partida de Santiago. **Para esta semana no se cambia el molde de las piezas ya asignadas a Erik**:
 el script implementa el de septiembre y sale una versión. El sistema vigente entra cuando se actualicen `erik.json` y
-`erik_edit.py` y Sergio Urcullo vea una pieza de prueba terminada (es un rediseño de su edición). Desde entonces, la
+`erik_edit.py` y una pieza de prueba terminada pase revisión visual (9-oct: no esperar OK de diseño de Sergio Urcullo). Desde entonces, la
 regla de «cuál molde» queda así: **panel con tarjetas propias** → Erik vigente; **captura oficial grande y cambios de
 layout** → Santiago.
 
@@ -164,7 +176,7 @@ edita con `santiago.py` y su storyboard.
 |---|---|
 | 0-3 s | **A cámara** (layout `full`), tres dolores en una frase. El texto aparece en el cuadro 1. |
 | 3-16 s | **Pantalla partida**: arriba GitHub en **modo oscuro**, con cursor y scroll; abajo la cara del busto para arriba. Una herramienta (o un paso) cada **~4 s**, con corte **seco** justo en la palabra que nombra la siguiente (`"corte": true`). |
-| cierre | **A cámara** otra vez, con «comentá N», el número dicho y escrito. |
+| cierre | **A cámara** otra vez. Adaptación vigente 9-oct: «Buscá PALABRA en Avisos», dicha y escrita, con recurso existente. El original decía «comentá N». |
 
 Lo que cambia contra Santiago:
 1. **Subtítulo:** sans condensada bold en MAYÚSCULAS, de 2 o 3 palabras, a la altura del pecho. Solo la palabra clave
@@ -183,7 +195,7 @@ probarlo.
 **Lo que NO se copia:**
 - el español de España («se traga», «léete»): va voseo;
 - el micrófono en la mano: nuestra regla es solapa en la remera, por el ruido de roce;
-- el «comentá N» automático: hasta que funcione el mensaje privado, los comentarios se contestan a mano.
+- el «comentá N» automático: el recurso se busca por PALABRA en Avisos (actualizado 9-oct).
 
 ⚠ **Largo:** su reel dura 21 s con 3 herramientas. Nuestros guiones R y G hablan de UN repo en ~60 s (170-177
 palabras, medido el 3-oct). La edición toma el layout y el ritmo; acortar a 21 s es cambiar el guion, y eso lo decide
@@ -201,7 +213,7 @@ detección de escena y audio medido). No es un talking head: se arma con **Hyper
 | Lienzo | 1080x1920 negro. |
 | Izquierda (≈30 % del ancho) | Etiqueta «Boceto» y la FOTO del dibujo a mano de esa escena. Cambia junto con la derecha. |
 | Derecha (≈55 % del ancho) | La animación de esa escena, a la misma altura, con una etiqueta fija arriba (la herramienta que la hizo). |
-| Abajo, fijo desde el cuadro 0 | «Comentá PALABRA», con la palabra en el color de acento. |
+| Abajo, fijo desde el cuadro 0 | «Buscá PALABRA en Avisos», con la palabra en el color de acento y recurso comprobado (adaptación 9-oct; el referente pedía comentar). |
 | Ritmo | Una escena nueva cada 1,5-2 s. Las transiciones van DENTRO de la animación (zoom-through, anillo, barrido). Un solo corte seco, el cambio de fondo, cerca del final. |
 | Primeros 3 s | Movimiento en el cuadro 0 (nada de cuadro vacío). Título escrito a los 0,5 s y elementos entrando al segundo 1. |
 | Sonido | Solo música pareja (−14 LUFS), sin voz. |
@@ -432,7 +444,7 @@ Hasta que el lote de prueba dé su veredicto, **lo único adoptado son las imág
    el cuadro 0; en Santiago nunca donde hay una cuenta o un precio: eso es contador en código). Por qué: un efecto sin motivo es la pieza
    «hecha por IA» que prohíbe `CLAUDE.md` (21-sep), y el 2-oct el pop por tarjeta, que agregamos nosotros, fue «ese
    sonido horrible».
-6. **Gasto:** `generate cost` en el VPS, lote aprobado por Sergio Urcullo y, para video, OK específico. Topes de marca
+6. **Gasto (actualizado 9-oct):** cotizar con `generate cost`; pruebas de imagen de pocos créditos (<~5 por lote) dentro de la autorización del 8-oct, sin fraccionar; avisar con resultado. Lotes grandes, entrenamiento y cara/voz conservan autorización específica; video, su OK específico. Ver `diseno-contenido-onia` §6. Topes de marca
    personal: 40 cr/mes en imágenes y 40 en clips, sin tocar los 150 de Lucía. Por qué: regla de gasto del 22-sep y
    presupuesto del 8-oct.
 7. **El clip entra limpio** (`rawUrl`) al storyboard de `santiago.py` o `erik_edit.py`, disparado por palabra. Por
