@@ -1,5 +1,12 @@
 # Handoff — carril `mercado-y-pauta` (sesión «Ventas y pauta Onia Platform», antes «Análisis de mercado»)
 
+> ✏️ **9-oct — copy corregido (pedido de la madre): ya no dice «lo envía, con un toque».** El envío con un toque (G-03) está a medias en
+> `ONIA_PROMESA_VS_PRODUCTO.md`. Ahora dice **«Usted lo aprueba. Nada sale sin su OK.»** en A1, A2, carrusel (lámina 3), micro-video y los guiones F1/F3.
+> Se quitó también el anillo y el pulso sobre el botón «Enviar yo mismo»: la pantalla real lo sigue mostrando, pero sin énfasis. El pulso del video
+> ahora es opt-in (`video.pulso`). **Corto de 60 s con `editor-videos`: espera las capturas C1-C7 de Plataforma** y que Sergio Urcullo vea tabla de cortes
+> y preview 360p. **No se instalan** marketingskills ni Motion-Creative sin su OK. El commit `30bc87b8` de la madre (skill §9, `06-VSL-DENTAL.md`,
+> ADQ §5.11) **no estaba en `origin/main`** al leer: no lo pude leer.
+
 > 🔎 **8-oct, noche — Biblioteca por el conector (Sergio Urcullo: «mirá Pinterest y la Biblioteca para ver cuáles funcionan»).**
 > - **Navegador de la nube:** Biblioteca 403 y Pinterest con muro de sesión; no se rodearon. **Conector `Meta_ads`:** sí, con titular y fecha, sin creativo.
 > - **Hallazgo:** AgendaPro (id `1429581593936821`) tiene los anuncios activos más viejos (**245 días**) y un asistente con nombre, «Sofía», de **141 días**.
