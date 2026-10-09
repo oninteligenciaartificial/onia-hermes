@@ -83,11 +83,11 @@
  {
   "id": "r1-nota",
   "que": "r1 nota",
-  "texto": "Bajo 200 px, el medidor no es fiable.",
-  "n": 8,
-  "a": 33.38,
+  "texto": "Bajo 200 px, el medidor avisa: lo reviso a ojo.",
+  "n": 10,
+  "a": 32.18,
   "b": 36.75,
-  "min": 3.0999999999999996
+  "min": 3.8
  },
  {
   "id": "r2-mkl",
@@ -173,7 +173,7 @@
  {
   "id": "r3-call",
   "que": "r3 «Lo difuminé»",
-  "texto": "Lo difuminé: lo inventó la IA.",
+  "texto": "Lo difuminé: lo inventó el motor.",
   "n": 6,
   "a": 44.18,
   "b": 48.25,

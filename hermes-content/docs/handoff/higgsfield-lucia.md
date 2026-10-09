@@ -10,16 +10,15 @@
 **Orden de la madre (Sergio Urcullo, 9-oct):** `/loop` sobre `hermes-content/docs/cola/loop/lucia.md` hasta vaciarla; reportar solo
 `PUBLICADO: <qué> — <link>`. La cola está en esa carpeta (marcada `[x]`, con lo bloqueado).
 
-**Listo para publicar (nada publicado todavía):** videos G1, G3, G2, G4 (`videos/lucia-entrega/`, con SHA-256), carruseles L01 (reescrito a
+**Listo para publicar (nada publicado todavía):** videos G1, G3, G2, G4, G5 (`videos/lucia-entrega/`, con SHA-256), carruseles L01 (reescrito a
 la v5), C1 y C2 (`hermes-content/carousels/out/lucia-*`). Receta exacta, orden y ritmo: **`videos/lucia-entrega/README.md`**.
 
 **Bloqueado, y por qué:** publicar corre en el VPS. La llave vive solo en la sesión «Onia» (decisión de la madre, 5-oct), esta nube
 no tiene cliente `ssh` y instalarlo no está aprobado. Además falta (a) el token de Lucía en `ig-lucia.env` (vence 13-18-oct) y
 (b) que la madre mire los previews 360p. **Quien corra la receta reporta `PUBLICADO:`.**
 
-**En vuelo:** G5 «Cómo mido si una cara es la de Lucía»: guion en `guiones/G5-…md`, montaje por un subagente en `videos/lucia-g5/` (si la
-sesión muere se pierde solo el montaje sin commitear; se reconstruye con la plantilla de `videos/lucia-g4/`). **G4 está terminado**
-(`videos/lucia-g4/`, 59,75 s, revisiones 1 y 2 en `qa/`): falta la validación del guion por la madre y que decida el sello rojo de E/F.
+**En vuelo:** nada sin commitear. **G4 y G5 están terminados** (`videos/lucia-g4/`, `videos/lucia-g5/`; revisiones independientes en `qa/`): falta la validación de sus
+guiones por la madre, que decide además el sello rojo de E/F en G4 y si G2 difumina el letrero inventado como G5.
 
 **Aprendido el 9-oct** (ya en la skill `lucia` §8): el render de carruseles con el Chromium normal deja una franja blanca de 88 px
 (usar `headless_shell` y `--pack editorial-photo`); el contenedor se recicla y `out/` no está en git, por eso los finales se entregan

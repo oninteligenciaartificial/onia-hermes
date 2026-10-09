@@ -26,6 +26,8 @@ const PROHIBIDAS = [
   'tapada',
   // G5: el programa solo compara dos caras: no «reconoce» a nadie (el guion lo prohíbe afirmar)
   'reconoc', 'identifica a', 'verifica que es',
+  // 3ra pasada: frases retiradas (afirman más de lo que el video demuestra o son ambiguas)
+  'baja sola', 'poco confiable', 'orden de magnitud', 'se parece poco', 'es ruido', 'no es fiable', 'lo inventó la ia',
   // marcas de terceros (modelos, plataformas, competidores): la lista de editor-videos + los motores de la prueba de G2
   'kling', 'seedream', 'seedance', 'higgsfield', 'soul', 'nano banana', 'cinema', 'veo', 'midjourney', 'runway', 'elevenlabs', 'sora', 'gpt', 'claude', 'chatgpt', 'omni', 'flux', 'cinematic', 'start_image', 'start image', 'sync.so', 'sync_so', 'buffalo', 'insightface', 'arcface', 'scrfd', 'instagram', 'meta ', 'tiktok', 'buffer',
   // G4: motores de imagen y otras marcas que podrían aparecer en un rótulo (los motores van solo como «Imagen A a F»)

@@ -5,7 +5,7 @@ mayores huecos entre eventos:
   24.30 → 26.70 s: 2.40 s   (e2 dato → e2 dato sale)
   27.30 → 29.70 s: 2.40 s   (e3 dato → e3 dato sale)
   34.70 → 37.00 s: 2.30 s   (c13 acento → c14, costura)
+  32.50 → 34.70 s: 2.20 s   (c13 → c13 acento)
   46.60 → 48.50 s: 1.90 s   (c15 acento → c16, costura)
   51.70 → 53.50 s: 1.80 s   (lección caja → c17, costura)
-  7.00 → 8.75 s: 1.75 s   (c3 acento → c4)
 ✔ hueco máximo 2.50 s (≤ 3,0 s)

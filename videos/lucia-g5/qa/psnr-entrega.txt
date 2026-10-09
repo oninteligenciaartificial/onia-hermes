@@ -1,3 +1,4 @@
-Copia de entrega (crf 18, máx. 6 Mbps) contra el master (2da pasada): 1380 cuadros; PSNR promedio de los cuadros 52.96 dB, MÍNIMO 43.96 dB (cuadro 513, t = 21.38 s); cuadros bajo 45 dB: 62; bajo 44 dB: 1.
-[Parsed_psnr_0 @ 0x55ca549d1b00] PSNR y:49.530635 u:54.476383 v:54.320364 average:50.635640 min:43.961277 max:57.992130
-Zonas con cuadros bajo 45 dB: 3.00-3.12 s (mín 44.6); 5.58-5.83 s (mín 44.5); 20.96-23.88 s (mín 44.0)
+Copia de entrega (crf 18, máx. 6 Mbps) contra el master (3ra pasada): 1380 cuadros; PSNR promedio de los cuadros 53.03 dB, MÍNIMO 43.97 dB (cuadro 513, t = 21.38 s); cuadros bajo 45 dB: 62; bajo 44 dB: 1.
+[Parsed_psnr_0] PSNR y:49.530573 u:54.495622 v:54.333030 average:50.637811 min:43.966985 max:59.052602   (promedio global de ffmpeg 50.64 dB)
+Zonas con cuadros bajo 45 dB: 3.00-3.12 s (mín 44.7); 5.58-5.83 s (mín 44.5); 20.96-23.88 s (mín 44.0)
+13.07 MB (13070778 bytes), 1,81 Mbps de video, H.264 High 1080x1920 24 fps, 57,500 s, AAC en silencio copiado del master.

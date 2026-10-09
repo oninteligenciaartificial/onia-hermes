@@ -8,7 +8,7 @@ ventana legible medida en el DOM (opacidad ≥ 0,9 y ≥ 95 % dentro del lienzo)
   ok  dA-e2     4 pal  24.42–26.63 s  2.21 s (pide 1.70)  «Imagen F · parecido 0,66»
   ok  dA-e3     5 pal  27.42–29.63 s  2.21 s (pide 2.05)  «Imagen B · café · parecido 0,35»
   ok  r1-tag    2 pal  31.04–36.88 s  5.83 s (pide 1.00)  «89 px»
-  ok  r1-nota   8 pal  33.29–36.88 s  3.58 s (pide 3.10)  «Bajo 200 px, el medidor no es fiable.»
+  ok  r1-nota  10 pal  32.08–36.88 s  4.79 s (pide 3.80)  «Bajo 200 px, el medidor avisa: lo reviso a ojo.»
   ok  r2-mkl    3 pal  36.88–42.83 s  5.96 s (pide 1.35)  «mi piso · 0,70»
   ok  r2-zoom   4 pal  36.96–42.92 s  5.96 s (pide 1.70)  «Zoom: 0,70 a 0,90»
   ok  r2-m1     1 pal  36.88–42.88 s  6.00 s (pide 0.65)  «0,75»
@@ -18,7 +18,7 @@ ventana legible medida en el DOM (opacidad ≥ 0,9 y ≥ 95 % dentro del lienzo)
   ok  r2-v1     1 pal  37.42–42.88 s  5.46 s (pide 0.65)  «0,77»
   ok  r2-v2     1 pal  38.08–42.88 s  4.79 s (pide 0.65)  «0,80»
   ok  r2-bl     1 pal  40.33–42.88 s  2.54 s (pide 0.65)  «±0,03»
-  ok  r3-call   6 pal  44.08–48.38 s  4.29 s (pide 2.40)  «Lo difuminé: lo inventó la IA.»
+  ok  r3-call   6 pal  44.08–48.38 s  4.29 s (pide 2.40)  «Lo difuminé: lo inventó el motor.»
   ok  r3-num    2 pal  44.71–48.38 s  3.67 s (pide 1.00)  «parecido 0,80»
   ok  r3-nota   5 pal  45.29–48.38 s  3.08 s (pide 2.05)  «El programa solo compara caras.»
   ok  le-t1     2 pal  48.42–53.38 s  4.96 s (pide 1.00)  «Cara chica»
@@ -38,7 +38,7 @@ ventana legible medida en el DOM (opacidad ≥ 0,9 y ≥ 95 % dentro del lienzo)
   ok  c12       4 pal  29.92–32.46 s  2.54 s (pide 1.70)  «3 · Desconfiá del número.»
   ok  c13       6 pal  32.54–36.88 s  4.33 s (pide 2.40)  «Cara chica: lo reviso a ojo.»
   ok  c14       6 pal  36.92–39.96 s  3.04 s (pide 2.40)  «Mismo clip: de 0,77 a 0,80.»
-  ok  c14b      5 pal  40.04–42.88 s  2.83 s (pide 2.05)  «Esa variación es ruido (±0,03).»
+  ok  c14b      5 pal  40.04–42.88 s  2.83 s (pide 2.05)  «Esa variación cabe en ±0,03.»
   ok  c15       4 pal  42.92–48.38 s  5.46 s (pide 1.70)  «No ve letreros inventados.»
   ok  c16       6 pal  48.42–53.38 s  4.96 s (pide 2.40)  «Por eso, mirá la imagen entera.»
   ok  c17       5 pal  53.42–57.50 s  4.08 s (pide 2.05)  «Seguime: cada semana, una prueba.»

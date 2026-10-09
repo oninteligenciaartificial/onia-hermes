@@ -1,7 +1,7 @@
 {
   "titulo": "G5 · Cómo mido si una cara es la de Lucía (y cuándo no creerle al número)",
   "guion": "hermes-content/docs/cola/lucia-diario/guiones/G5-como-se-mide-una-cara.md",
-  "version": "2da pasada (9-oct-2026): aplica la revisión independiente qa/revision-1.md (G5-1 a G5-5, notas N1/N3/N10) y las decisiones del orquestador. 1ra pasada: montaje con el método de G1-G4. 0 créditos.",
+  "version": "3ra pasada mínima (9-oct-2026): aplica R2-1, R2-2 y R2-3 de qa/revision-2.md. 2da pasada: revisión qa/revision-1.md. 1ra: montaje con el método de G1-G4. 0 créditos.",
   "lienzo": {
     "w": 1080,
     "h": 1920,
@@ -243,7 +243,7 @@
       "tipo": "placa",
       "a": 42.75,
       "b": 48.5,
-      "capa": "razón 3: cuadro del clip con el letrero inventado (difuminado con pluma), el aro sobre todo lo difuminado, «Lo difuminé: lo inventó la IA.» y el número 0,80"
+      "capa": "razón 3: cuadro del clip con el letrero inventado (difuminado con pluma), el aro sobre todo lo difuminado, «Lo difuminé: lo inventó el motor.» y el número 0,80"
     },
     {
       "id": "pl-lec",
@@ -551,7 +551,7 @@
     {
       "id": "c14b",
       "texto": "Esa variación",
-      "acento": "es ruido (±0,03).",
+      "acento": "cabe en ±0,03.",
       "acento_t": 41.5,
       "a": 40.0,
       "b": 43.0,
@@ -728,8 +728,8 @@
     "tag_t": 30.95,
     "lupa_t": 31.4,
     "nota": {
-      "texto": "Bajo 200 px, el medidor no es fiable.",
-      "t": 33.2,
+      "texto": "Bajo 200 px, el medidor avisa: lo reviso a ojo.",
+      "t": 32.0,
       "y": 1010
     }
   },
@@ -780,11 +780,11 @@
       "t": 43.6
     },
     "llamada": {
-      "texto": "Lo difuminé:\nlo inventó la IA.",
+      "texto": "Lo difuminé:\nlo inventó el motor.",
       "t": 44.0,
-      "x": 490,
+      "x": 468,
       "y": 314,
-      "w": 360
+      "w": 380
     },
     "pills_y": 1005,
     "pill_num_t": 44.6,
@@ -840,7 +840,7 @@
     },
     {
       "id": "A5",
-      "que": "«Cara chica: baja sola.» → «Cara chica: lo reviso a ojo.» (6 palabras) + nota «Bajo 200 px, el medidor no es fiable.» (44 px). 1ra pasada: «poco confiable» (regla del gate); el revisor lo marcó como frase que el video no demuestra y el orquestador la cambió. «Baja sola» no era falso por completo: los datos muestran una caída pequeña y consistente (la misma foto a 60 px baja 0,004-0,010 en 5 de 6; F ±0,02); lo falso es que sea apreciable. El video no dice que el número baje ni que no baje de más.",
+      "que": "«Cara chica: baja sola.» → «Cara chica: lo reviso a ojo.» (6 palabras) + nota «Bajo 200 px, el medidor avisa: lo reviso a ojo.» (44 px). 1ra pasada: «poco confiable» (regla del gate); el revisor lo marcó como frase que el video no demuestra y el orquestador la cambió. «Baja sola» no era falso por completo: los datos muestran una caída pequeña y consistente (la misma foto a 60 px baja 0,004-0,010 en 5 de 6; F ±0,02); lo falso es que sea apreciable. El video no dice que el número baje ni que no baje de más.",
       "revertir": "plan.json → c13 y r1.nota"
     },
     {
@@ -855,12 +855,12 @@
     },
     {
       "id": "A8",
-      "que": "Razón 2 rehecha (revisión G5-3/G5-5): escala AMPLIADA rotulada «Zoom: 0,70 a 0,90» con la marca «mi piso · 0,70» (como la de 0-1); las dos puntas del MISMO clip del Motor 6 (mínimo 0,771 → 0,77 y máximo 0,799 → 0,80, de PROCEDENCIA línea 97; rango 0,028) y la banda de ±0,03 centrada en el promedio de las 6 medidas (0,784), que las contiene a todas. Tarjetas «Mismo clip: de 0,77 a 0,80.» → «Esa variación es ruido (±0,03).». Se sacó «orden de magnitud» y la comparación 0,79 → 0,77 (difieren 0,02, no 0,03). La lección rotula «Mismo clip: 0,771-0,799».",
+      "que": "Razón 2 rehecha (revisión G5-3/G5-5): escala AMPLIADA rotulada «Zoom: 0,70 a 0,90» con la marca «mi piso · 0,70» (como la de 0-1); las dos puntas del MISMO clip del Motor 6 (mínimo 0,771 → 0,77 y máximo 0,799 → 0,80, de PROCEDENCIA línea 97; rango 0,028) y la banda de ±0,03 centrada en el promedio de las 6 medidas (0,784), que las contiene a todas. Tarjetas «Mismo clip: de 0,77 a 0,80.» → «Esa variación cabe en ±0,03.». Se sacó «orden de magnitud» y la comparación 0,79 → 0,77 (difieren 0,02, no 0,03). La lección rotula «Mismo clip: 0,771-0,799».",
       "revertir": "plan.json → r2, c14 y c14b, lec.filas[1]"
     },
     {
       "id": "A9",
-      "que": "Razón 3: el letrero inventado del Motor 4 va DIFUMINADO con pluma (sigma 3,5; sin difuminar se lee «DMSS»/«DVOSS»). El difuminado se DICE en pantalla («Lo difuminé: lo inventó la IA.», 38 px, junto al aro) y el aro (rectángulo redondeado coral) cubre TODO lo difuminado: el letrero y el trazo más débil de la fachada, para que no quede una mancha sin explicar. Pastilla «parecido 0,80» (el número del cuadro a 4,0 s: 0,796) y nota «El programa solo compara caras.». G2 NO se tocó: la madre decide si G2 también se difumina.",
+      "que": "Razón 3: el letrero inventado del Motor 4 va DIFUMINADO con pluma (sigma 3,5; sin difuminar se lee «DMSS»/«DVOSS»). El difuminado se DICE en pantalla («Lo difuminé: lo inventó el motor.», 38 px, junto al aro) y el aro (rectángulo redondeado coral) cubre TODO lo difuminado: el letrero y el trazo más débil de la fachada, para que no quede una mancha sin explicar. Pastilla «parecido 0,80» (el número del cuadro a 4,0 s: 0,796) y nota «El programa solo compara caras.». G2 NO se tocó: la madre decide si G2 también se difumina.",
       "revertir": "scripts/extraer-cuadros.sh (SIGMA=0), plan.json → r3"
     },
     {
@@ -880,7 +880,7 @@
     },
     {
       "id": "A13",
-      "que": "El pie se genera desde el bloque «Pie» del guion del repo (ya corregido, 9-oct): idéntico a pie.txt (lo verifica build.mjs). Dice «con una cara chica lo reviso a ojo» y «el mismo clip varía de 0,77 a 0,80 y eso es ruido (±0,03)»; ya no repite «baja sola», «poco confiable» ni «orden de magnitud».",
+      "que": "El pie se genera desde el bloque «Pie» del guion del repo (ya corregido, 9-oct): idéntico a pie.txt (lo verifica build.mjs). Dice «con una cara chica lo reviso a ojo» y «el mismo clip varía de 0,77 a 0,80 y eso cabe en ±0,03»; ya no repite «baja sola», «poco confiable» ni «orden de magnitud».",
       "revertir": "—"
     },
     {
@@ -912,6 +912,11 @@
       "id": "A19",
       "que": "«0,66: se parece poco.» → «0,66: bajo el piso.» (3 palabras; revisión G5-1): F mide 0,658 en el original (bajo el piso), pero 0,676-0,679 en el cuadro y 0,690-0,697 en la fuente a ese zoom; F y B conservan su color coral (decisión del orquestador).",
       "revertir": "plan.json → c10"
+    },
+    {
+      "id": "A20",
+      "que": "3ra pasada (revisión 2, R2-1/R2-2/R2-3): «Esa variación es ruido (±0,03).» → «Esa variación cabe en ±0,03.» (con un solo clip no se afirma causa: parte del rango puede ser cambio real de imagen, el plano se acerca); la nota de la razón 1 pasa a «Bajo 200 px, el medidor avisa: lo reviso a ojo.» (10 palabras; entra a 32,0 s para tener ventana); la llamada dice «Lo difuminé: lo inventó el motor.» (quita la ambigüedad con «personaje IA»). El pie dice «y eso cabe en ±0,03». El build corta si en pantalla o en el pie quedan «es ruido», «no es fiable» o «lo inventó la IA».",
+      "revertir": "plan.json → c14b, r1.nota, r3.llamada (y el pie del guion)"
     }
   ]
 }

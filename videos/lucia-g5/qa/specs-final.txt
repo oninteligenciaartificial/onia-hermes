@@ -9,7 +9,7 @@ color_transfer=bt709
 color_primaries=bt709
 r_frame_rate=24/1
 duration=57.500000
-bit_rate=5247956
+bit_rate=5249776
 nb_frames=1380
 codec_name=aac
 profile=LC
@@ -21,7 +21,7 @@ duration=57.500000
 bit_rate=2276
 nb_frames=2697
 duration=57.500000
-size=37766439
-bit_rate=5254461
-[Parsed_volumedetect_0 @ 0x55b212461ec0] mean_volume: -91.0 dB
-[Parsed_volumedetect_0 @ 0x55b212461ec0] max_volume: -91.0 dB
+size=37779520
+bit_rate=5256281
+[Parsed_volumedetect_0 @ 0x55b4462daec0] mean_volume: -91.0 dB
+[Parsed_volumedetect_0 @ 0x55b4462daec0] max_volume: -91.0 dB

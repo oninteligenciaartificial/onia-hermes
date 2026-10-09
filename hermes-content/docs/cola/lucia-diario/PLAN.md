@@ -96,7 +96,7 @@ Cada fila es una prueba chica, con su video. Los costos son cotizaciones en vivo
 | **L01** «Hola, soy Lucía. No existo.» (carrusel de presentación, fijado) | 0 | **reescrito a la v5 el 9-oct** (una prueba por semana, lo que cuesta, lo que no hace) y renderizado sin franja blanca. Va fijado **después** de G1 |
 | **G4** «Seis motores de imagen, una cara: ¿cuál la conserva?» (59,75 s) | 0 | **montado** (`videos/lucia-g4/`, tres pasadas con revisor independiente el 9-oct); falta que la madre valide el guion y mire el preview |
 | **C1** «Un video sin grabar, en 3 pasos» y **C2** «Seis motores de imagen» (carruseles) | 0 | **hechos y mirados** (`hermes-content/carousels/out/lucia-c1-…`, `lucia-c2-…`); salen después de G1 y de G4 |
-| **G5** «Cómo mido si una cara es la de Lucía» (~56 s) | 0 | guion escrito (`guiones/G5-…md`); en montaje el 9-oct |
+| **G5** «Cómo mido si una cara es la de Lucía» (~56 s) | 0 | **montado** (`videos/lucia-g5/`, tres pasadas con revisor independiente el 9-oct); falta que la madre valide el guion y mire el preview |
 | ~~L02~~ y ~~el chiste de 10 s~~ | — | retirados el 8-oct; sus clips son planos de apoyo |
 
 - **Qué se mide por pieza:** guardados y envíos (señal de que enseñó algo), seguidores nuevos y que la cuenta siga «apta

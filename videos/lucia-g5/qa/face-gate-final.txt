@@ -1,4 +1,4 @@
-Control de cara del FINAL (out/g5-final-1080x1920.mp4, 2da pasada) contra la FUENTE llevada al mismo zoom, sin comprimir (scripts/fuente-con-zoom.py + .claude/skills/lucia/scripts/face-gate.sh; ArcFace buffalo_l contra las 8 referencias oficiales; piso 0,70).
+Control de cara del FINAL (out/g5-final-1080x1920.mp4, 3ra pasada) contra la FUENTE llevada al mismo zoom, sin comprimir (scripts/fuente-con-zoom.py + .claude/skills/lucia/scripts/face-gate.sh; ArcFace buffalo_l contra las 8 referencias oficiales; piso 0,70).
 
 piso de caras negativas (max): 0.224   gate del repo: 0,70
 archivo                                        centroide  min_ref  max_ref  cara_px  veredicto
@@ -8,11 +8,11 @@ f-gancho_t4.50_FINAL.png                           0.798    0.539    0.714      
 f-gancho_t4.50_fuente.png                          0.795    0.532    0.717      184  OK (cara < 200 px: poco confiable)
 f-gancho_t5.21_FINAL.png                           0.797    0.534    0.717      186  OK (cara < 200 px: poco confiable)
 f-gancho_t5.21_fuente.png                          0.794    0.531    0.719      186  OK (cara < 200 px: poco confiable)
-f-e1_t21.58_FINAL.png                              0.797    0.535    0.722      182  OK (cara < 200 px: poco confiable)
+f-e1_t21.58_FINAL.png                              0.798    0.537    0.717      182  OK (cara < 200 px: poco confiable)
 f-e1_t21.58_fuente.png                             0.799    0.544    0.721      181  OK (cara < 200 px: poco confiable)
-f-e1_t22.38_FINAL.png                              0.795    0.538    0.716      184  OK (cara < 200 px: poco confiable)
+f-e1_t22.38_FINAL.png                              0.799    0.541    0.716      184  OK (cara < 200 px: poco confiable)
 f-e1_t22.38_fuente.png                             0.800    0.539    0.719      182  OK (cara < 200 px: poco confiable)
-f-e1_t23.17_FINAL.png                              0.796    0.532    0.715      184  OK (cara < 200 px: poco confiable)
+f-e1_t23.17_FINAL.png                              0.797    0.533    0.722      184  OK (cara < 200 px: poco confiable)
 f-e1_t23.17_fuente.png                             0.795    0.532    0.717      184  OK (cara < 200 px: poco confiable)
 f-e2_t24.58_FINAL.png                              0.683    0.492    0.612      304  BAJO: mirar
 f-e2_t24.58_fuente.png                             0.696    0.488    0.627      301  BAJO: mirar
@@ -37,9 +37,9 @@ Pares final ↔ fuente (diferencia = final − fuente):
   f-gancho  t=  3.79  final 0.798  fuente 0.796  dif +0.002
   f-gancho  t=  4.50  final 0.798  fuente 0.795  dif +0.003
   f-gancho  t=  5.21  final 0.797  fuente 0.794  dif +0.003
-  f-e1      t= 21.58  final 0.797  fuente 0.799  dif -0.002
-  f-e1      t= 22.38  final 0.795  fuente 0.800  dif -0.005
-  f-e1      t= 23.17  final 0.796  fuente 0.795  dif +0.001
+  f-e1      t= 21.58  final 0.798  fuente 0.799  dif -0.001
+  f-e1      t= 22.38  final 0.799  fuente 0.800  dif -0.001
+  f-e1      t= 23.17  final 0.797  fuente 0.795  dif +0.002
   f-e2      t= 24.58  final 0.683  fuente 0.696  dif -0.013
   f-e2      t= 25.38  final 0.678  fuente 0.697  dif -0.019
   f-e2      t= 26.17  final 0.682  fuente 0.690  dif -0.008
@@ -53,7 +53,7 @@ Máxima diferencia final ↔ fuente: 0.019 (regla del repo: ≤ 0,02): el escala
 
 Número en pantalla (el del ORIGINAL medido, PROCEDENCIA línea 97) contra lo que mide el cuadro que se ve:
   A (gancho)   en pantalla 0.81   cuadro 0.797-0.798   (|dif| ≤ 0.013; el ±0,03 que el video declara lo cubre)
-  A (ejemplo)  en pantalla 0.81   cuadro 0.795-0.797   (|dif| ≤ 0.015; el ±0,03 que el video declara lo cubre)
+  A (ejemplo)  en pantalla 0.81   cuadro 0.797-0.799   (|dif| ≤ 0.013; el ±0,03 que el video declara lo cubre)
   F            en pantalla 0.66   cuadro 0.678-0.683   (|dif| ≤ 0.023; el ±0,03 que el video declara lo cubre)
   B del café   en pantalla 0.35   cuadro 0.350-0.361   (|dif| ≤ 0.011; el ±0,03 que el video declara lo cubre)
   F: PNG original 0,658 · JPG de 1080 px 0,672 · cuadro con zoom 0,676-0,679 · fuente con zoom 0,690-0,697: el número de F depende de la imagen medida (hasta 0,04 entre el PNG y la fuente con zoom), como en G4. Por eso la tarjeta dice «bajo el piso» (el original) y no «se parece poco».

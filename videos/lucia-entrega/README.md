@@ -18,14 +18,14 @@ SHA-256 de lo entregado:
 75642fd093569109a4adb3346dda13afe5991dcd0e3eb430b62c1c080c17a3e3  g3-final-1080x1920.mp4
 429793f0ff2f544cc2185f29c83916d76c47adf632ab9df6fb7c95a2448d46e6  g2-final-1080x1920.mp4
 ec4c450f3e0c4f682b675b65ef913a2e1e0400d31b29c35aa948119bf702f997  g4-final-1080x1920.mp4
-5e8d59fbf5ef94cefbf986fc41561f2085f593b059aef87f5d2b033727fe8c91  g5-final-1080x1920.mp4
+6eed3adecbaf2eea5b31cfc00edf0fad41cdaa3a70200c2424ea5e0e4931f136  g5-final-1080x1920.mp4
 ```
 
 - G1 y G3 son **byte por byte** el render que pasó el QA (`../lucia-gN/out/`, ignorado en git).
 - G2 es el mismo render recodificado a 6 Mbps máx. para que entre en git (61 → 16,7 MB): PSNR contra el original 47,9 dB
   de promedio y 43,8 dB en el peor cuadro, o sea sin diferencia visible; misma duración (58,00 s), 24 fps, audio silencioso copiado.
 - G4 también está recodificado a 6 Mbps máx., crf 18 (60,4 → 21 MB; PSNR 49,2 dB de promedio, 44,2 dB en el peor cuadro).
-- G5 también está recodificado a 6 Mbps máx., crf 18 (37,8 → 13,0 MB; master SHA-256 `d280cd85a509111dfd6e3f4d56a8003cf9c0e03b73bcc4fc3a5caa97d0dc2468`; PSNR 50,6 dB de promedio, 43,96 dB en el peor cuadro).
+- G5 (3ra pasada, 9-oct: «cabe en ±0,03», «el medidor avisa: lo reviso a ojo», «lo inventó el motor») también está recodificado a 6 Mbps máx., crf 18 (37,8 → 13,1 MB; master SHA-256 `133346a5fbec4ebfe2f523ca2a4598ee0d9cd6f232d2ee654a4d85ba7564aaea`; PSNR 50,6 dB de promedio (53,0 dB promediando los cuadros), 43,97 dB en el peor cuadro).
 - Todos son 1080×1920, H.264 + AAC (silencioso: D4, sin voz ni música), 24 fps.
 
 ## Orden y ritmo (plan v5 §5: hasta 3 piezas por semana, 19:00 La Paz)
@@ -38,6 +38,7 @@ ec4c450f3e0c4f682b675b65ef913a2e1e0400d31b29c35aa948119bf702f997  g4-final-1080x
 | 2 · día 1 | **C1** (carrusel) | Repite G1 en formato guardable con la orden real |
 | 2 · día 3 | **G2** (reel) | La prueba de los seis clips; usa lo aprendido en G1/G3 |
 | 2 · día 5 | **G4** (reel; cuando la madre valide el guion) | Seis motores de imagen |
+| 2 · día 5 / 3 · día 1 | **G5** (reel; cuando la madre valide su guion) | Cómo se mide una cara y cuándo no creerle al número; cierra la serie de pruebas |
 | 3 · día 1 | **C2** (carrusel) | Formato guardable de G4: `hermes-content/carousels/out/lucia-c2-seis-motores-de-imagen/`, pie en `briefs/lucia/c2-seis-motores-de-imagen.json`. Sale después de G4 |
 
 El token de Instagram de Lucía vence entre el 13 y el 18-oct: **la primera pieza tiene que salir antes**, o hay que renovarlo.

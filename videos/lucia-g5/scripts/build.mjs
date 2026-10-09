@@ -157,7 +157,7 @@ if (proc && vid && lab && !errores.length) {
   const difMax = Math.max(...lab.id.map((x, i) => Math.abs(x - lab.fuente_mismo_instante[i])));
   ok(mn === 0.771 && mx === 0.799 && m6.length === 6, `razón 2: las 6 medidas del MISMO clip (Motor 6, PROCEDENCIA línea 97) son ${m6.join(' · ')}: mínimo ${mn} → ${fm(r2(mn))}, máximo ${mx} → ${fm(r2(mx))} (rango ${(mx - mn).toFixed(3)})`);
   const c14 = tj.c14, c14b = tj.c14b, txt14 = `${c14.texto} ${c14.acento}`;
-  ok(txt14.includes(fm(p.d1.valor)) && txt14.includes(fm(p.d2.valor)) && /ruido \(±0,03\)/.test(c14b.acento) && p.banda.mas_menos === 0.03, `«Mismo clip: de ${fm(p.d1.valor)} a ${fm(p.d2.valor)}.» → «Esa variación es ruido (±0,03).»: las cifras de la tarjeta son las del dato`);
+  ok(txt14.includes(fm(p.d1.valor)) && txt14.includes(fm(p.d2.valor)) && /cabe en ±0,03/.test(c14b.acento) && p.banda.mas_menos === 0.03, `«Mismo clip: de ${fm(p.d1.valor)} a ${fm(p.d2.valor)}.» → «Esa variación cabe en ±0,03.»: las cifras de la tarjeta son las del dato`);
   ok(m6.every((x) => Math.abs(x - prom) <= p.banda.mas_menos + 1e-9), `las 6 medidas del clip caen dentro de ±${p.banda.mas_menos} de su promedio (${prom.toFixed(3)}): la banda dibujada las contiene a todas (la mayor separación al promedio es ${Math.max(...m6.map((x) => Math.abs(x - prom))).toFixed(3)})`);
   ok(difMax <= 0.03 + 1e-9, `±0,03 como tamaño del ruido: entre un clip y su remapeo de labios (misma cara, mismos instantes) la mayor diferencia medida es ${difMax.toFixed(3)} (sync_so, PROCEDENCIA línea 97), y el rango del clip del Motor 6 es ${(mx - mn).toFixed(3)}. Es un tamaño aproximado del ruido, NO un intervalo de confianza`);
   plan.lec.filas[1].texto = `Mismo clip: ${mn.toFixed(3).replace('.', ',')}-${mx.toFixed(3).replace('.', ',')}`;
@@ -181,7 +181,13 @@ const pieDe = (file) => {
     const pp = path.join(P, 'pie.txt');
     if (!fs.existsSync(pp) || fs.readFileSync(pp, 'utf8') !== po) fs.writeFileSync(pp, po);
     claim.push('ok  pie.txt idéntico al del guion del repo (se regenera desde ahí)');
-    if (/baja sola|poco confiable|orden de magnitud|se parece poco/.test(po)) errores.push('el pie repite una frase que el video ya no dice (baja sola / poco confiable / orden de magnitud / se parece poco)');
+    const RETIRADAS = ['baja sola', 'poco confiable', 'orden de magnitud', 'se parece poco', 'es ruido', 'no es fiable', 'lo inventó la ia'];
+    const pantalla = [plan.rotulo.texto, ...plan.tarjetas.map((c) => `${c.texto} ${c.acento || ''}`), plan.r1.nota.texto, plan.r2.zoom.texto, plan.r3.llamada.texto, plan.r3.nota.texto, ...plan.lec.filas.map((f) => f.texto)].join(' \n ').replace(/\s+/g, ' ').toLowerCase();
+    for (const f of RETIRADAS) {
+      if (po.toLowerCase().includes(f)) errores.push(`el pie repite una frase retirada: «${f}»`);
+      if (pantalla.includes(f)) errores.push(`la pantalla repite una frase retirada: «${f}»`);
+    }
+    claim.push(`ok  ninguna frase retirada (${RETIRADAS.join(' / ')}) en pantalla ni en el pie`);
   }
 }
 // tags y sellos dentro de la vida de su tarjeta y antes del empuje de salida
@@ -322,7 +328,7 @@ const datos = [];                                                     // lo que 
   datos.push({ que: `r2 valor ${fm(r.d1.valor)}`, sel: '#r2-v1', t: r.d1.t + 0.6, txt: fm(r.d1.valor) }, { que: `r2 valor ${fm(r.d2.valor)}`, sel: '#r2-v2', t: r.d2.t + 0.6, txt: fm(r.d2.valor) });
 }
 
-// ── razón 3: cuadro del Motor 4 con el letrero inventado (DIFUMINADO con pluma), el aro sobre todo lo difuminado, «Lo difuminé: lo inventó la IA.» y el número que el programa le dio ──
+// ── razón 3: cuadro del Motor 4 con el letrero inventado (DIFUMINADO con pluma), el aro sobre todo lo difuminado, «Lo difuminé: lo inventó el motor.» y el número que el programa le dio ──
 {
   const r3 = plan.r3, w_ = r3.win, a = r3.aro, c = r3.llamada, num = r2(vid.m4.id[r3.muestra]);
   let h = `<div class="win" id="r3-win" style="left:${w_.x}px;top:${w_.y}px;width:${w_.w}px;height:${w_.h}px"><img src="${plan.frames.m4.src}" alt=""></div>`;

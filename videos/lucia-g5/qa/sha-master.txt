@@ -1,3 +1,3 @@
-d280cd85a509111dfd6e3f4d56a8003cf9c0e03b73bcc4fc3a5caa97d0dc2468  out/g5-final-1080x1920.mp4 (master, 2da pasada)
-5e8d59fbf5ef94cefbf986fc41561f2085f593b059aef87f5d2b033727fe8c91  ../lucia-entrega/g5-final-1080x1920.mp4 (copia de entrega)
-431d65777f252e6cfdb164807a997f8a  index.html (md5 del que se renderizó; idéntico)
+133346a5fbec4ebfe2f523ca2a4598ee0d9cd6f232d2ee654a4d85ba7564aaea  out/g5-final-1080x1920.mp4 (master, 3ra pasada)
+6eed3adecbaf2eea5b31cfc00edf0fad41cdaa3a70200c2424ea5e0e4931f136  ../lucia-entrega/g5-final-1080x1920.mp4 (copia de entrega, crf 18, máx. 6 Mbps)
+af2dd61b7646d577b58a4195e3acc254  index.html (md5 del que se renderizó; idéntico)

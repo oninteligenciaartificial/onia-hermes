@@ -87,7 +87,7 @@ for (const m of PLAN.datos) { enter('#dA-' + m.id, m.a, { x: 60 }); leave('#dA-'
   tl.fromTo('#r2-bl', { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.2, ease: 'none' }, R.banda + 0.15);
 }
 
-// ── razón 3: el aro cae sobre lo difuminado, «Lo difuminé: lo inventó la IA.», el número que el programa le dio y la nota
+// ── razón 3: el aro cae sobre lo difuminado, «Lo difuminé: lo inventó el motor.», el número que el programa le dio y la nota
 {
   const R = PLAN.r3;
   tl.fromTo('#r3-aro', { autoAlpha: 0, scale: 1.2, transformOrigin: '50% 50%' }, { autoAlpha: 1, scale: 1, duration: 0.3, ease: 'power3.out' }, R.aro);

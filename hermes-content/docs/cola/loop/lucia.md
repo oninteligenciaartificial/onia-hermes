@@ -36,8 +36,9 @@
 
 ## Siguientes (cuando G4 cierre) — todas 0 créditos y sin VPS
 
-- [ ] G5 «Cómo se mide una cara: el control de identidad» — el método del piso 0,70 y el ruido de ±0,03, con las fotos y clips ya
-  medidos de G2 y G4. Guion validado por la madre antes de montar.
+- [x] G5 «Cómo mido si una cara es la de Lucía (y cuándo no creerle al número)» — montado en tres pasadas con revisor independiente (`videos/lucia-g5/`,
+  revisiones 1 y 2 en `qa/`; 57,5 s; copia en `videos/lucia-entrega/`, SHA en su README). Corrigió el guion mismo: «una cara chica baja sola» exageraba (se midió: −0,004 a −0,010)
+  y «0,79 y 0,77 difieren 0,03» eran 0,02. **Falta la validación del guion por la madre**, que decide también si G2 difumina el letrero inventado como G5.
 - [x] C2 carrusel «Seis motores de imagen: cuánto cuesta y cuánto se parece» — láminas en
   `hermes-content/carousels/out/lucia-c2-seis-motores-de-imagen/`, brief en `briefs/lucia/c2-seis-motores-de-imagen.json`; 5 láminas miradas
   completas, grep limpio. Mismos números que el guion de G4 (que la madre valida).
