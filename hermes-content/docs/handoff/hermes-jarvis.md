@@ -1,5 +1,17 @@
 # Handoff — carril `hermes-jarvis` (Hermes, el Telegram y el calendario de Sergio Urcullo)
 
+> **ESTADO 9-oct, tarde — el #176 está en `main` (`a1aa6246`), CI verde.**
+> - **Llega solo al VPS** (el sincronizador copia `main` a `/root/bin` en ~1 h):
+>   - `onia-parte-diario.sh` con UTF-8 fijo: es lo único que cambia algo que ya corre;
+>   - `onia-jarvis-resumen.sh` nuevo, pero no corre hasta que `aplicar` lo ponga en el crontab.
+> - **Espera `aplicar`:** el resumen y el cierre en tres bloques, «Hoy sale» y «Hoy salió», y la regla
+>   del formato en el SOUL (5c). La sección 0 ahora exige el resumen nuevo en `/root/bin`: si `aplicar`
+>   corre antes de que el sincronizador lo copie, corta sin tocar nada (correrlo de nuevo en una hora).
+> - **En una rama nueva (`claude/adoring-ramanujan-7sjzwv` desde `main`):** el diagnóstico muestra lo
+>   publicado y lo agendado (13) y qué secciones del SOUL le faltan a Hermes (14). Correr `diagnostico`
+>   antes de `aplicar` dice qué más conviene copiar al SOUL del VPS.
+> - **Sigue pendiente de Sergio Urcullo:** el «sí» a la llave, la rutina y `aplicar`; proteger `main`.
+
 > **ESTADO 9-oct, noche — cola en loop (`hermes-content/docs/cola/loop/hermes-jarvis.md`), PR #176.**
 > Sesión `session_01SQ7cvuDX5w5jDHk5VdhAEo`, rama `claude/adoring-ramanujan-7sjzwv`. En el VPS **nada**
 > encendido todavía: todo esto es inerte hasta `aplicar` (la madre, desde la PC, con el «sí» de Sergio Urcullo).
