@@ -343,7 +343,7 @@ Contá la tuya en General 👇
 
 ## ARCHIVOS · Los 5 archivos que uso antes de programar con IA
 
-**Para Sergio Urcullo:** Los 5 archivos que dejo en un repo antes de pedirle código a una IA (reglas, encargo, método, estado y tarea), con una plantilla de tarea para copiar. Es el recurso del carrusel «Los 5 archivos»: se pega ANTES de que el carrusel salga. Fuera del orden del 10 al 16: el carrusel espera tu OK y fecha.
+**Para Sergio Urcullo:** Los 5 archivos que dejo en un repo antes de pedirle código a una IA (reglas, encargo, método, estado y tarea), con una plantilla de tarea para copiar. Es el recurso del carrusel «Los 5 archivos», que está en el banco de ideas **sin fecha** (`BANCO-IDEAS.md`): no se pega hasta que se decida publicar el carrusel.
 
 **Aviso** (se pega primero):
 

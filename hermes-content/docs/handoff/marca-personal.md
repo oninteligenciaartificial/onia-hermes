@@ -2,21 +2,23 @@
 
 **Archivo único del carril.** Actualizado 2026-09-29 por Claude (Opus 5.5).
 
-## ▶ 9-oct (día, 12) — carrusel «Los 5 archivos»: renderizado, falta el OK de Sergio Urcullo
+## ▶ 9-oct (día, 12) — carrusel «Los 5 archivos»: hecho y guardado en el banco de ideas, SIN fecha
 
-- **Pedido de la madre (9-oct):** carrusel A «Los 5 archivos que uso antes de programar con IA» (7 láminas, capturas reales del
-  repo, sin cara generada de Sergio Urcullo), aviso ARCHIVOS y OK de Sergio antes de agendar. El reel B va al próximo lote de
-  grabación. No se toca el orden del 10 al 16.
+- **Corrección de la madre (9-oct):** Sergio Urcullo mandó el post de los 5 archivos **para aprender, no para producirlo**. NO se
+  agenda ni se publica. Le gustó la idea: queda en `cola/plan-3-semanas/BANCO-IDEAS.md` con su aviso ARCHIVOS, sin fecha.
+  **Regla nueva de la madre:** un link que Sergio manda sin instrucción se analiza y se aprende (ficha en `references/video-intake/`);
+  no se convierte en pieza salvo que él lo pida. (La pregunta «¿OK y fecha?» que le hice quedó anulada.)
 - **Hecho:** brief `carousels/briefs/marca-personal/sergio-cinco-archivos-20261009.json`, 6 capturas en
   `carousels/briefs/assets/sergio-cinco-archivos-20261009/` (salen de `capturas.json` con `scripts/marca-personal/captura-editor.py`),
-  láminas en `carousels/out/sergio-cinco-archivos-20261009/slide-01..07.png`, vistas enteras en hoja de contactos. Cierre:
-  «Buscá ARCHIVOS · en Avisos · link en mi perfil» (opciones `pre` y `kicker` nuevas en el layout `cierre`, con test).
-  Aviso + recurso ARCHIVOS en `AVISOS-COMUNIDAD-8-16-OCT.md` y en el artefacto «Comunidad e historias» (sección «Aparte»).
-- **Portada y cierre:** salieron con el árbol de archivos real (fallback de la madre), no con foto `fotobn` (2 cr). Se generan solo
-  si Sergio Urcullo lo pide.
-- **Sin agendar y sin publicar.** Fecha propuesta: sáb 17-oct 16:00 La Paz (fuera del 10–16). El aviso se pega ANTES.
-- **Hallazgo que decide Sergio Urcullo:** los 8 carruseles ya agendados cierran con «Comentá X»; el mecanismo comentario→DM no
-  está probado (2 rechazos de Meta). Propuesta: cambiarlos a «Buscá X en Avisos · link en mi perfil». El de N03 sale vie 9
+  láminas en `carousels/out/sergio-cinco-archivos-20261009/slide-01..07.png`, vistas enteras. Cierre «Buscá ARCHIVOS · en Avisos ·
+  link en mi perfil» (opciones `pre` y `kicker` nuevas en el layout `cierre`, con test). Aviso + recurso ARCHIVOS en
+  `AVISOS-COMUNIDAD-8-16-OCT.md` y en el artefacto «Comunidad e historias» (sección «Banco de ideas»).
+- **Si algún día se publica:** rehacer las capturas (`captura-editor.py`: las líneas salen del archivo vivo y pueden haber cambiado),
+  volver a mirar las 7 láminas, pegar el aviso ARCHIVOS antes y pedir el OK de Sergio Urcullo. Portada y cierre usan el árbol de
+  archivos (plan B), no foto `fotobn`.
+- **Sin agendar y sin publicar.** El reel B de esta idea no se toca: decide la madre.
+- **Hallazgo que sigue abierto (decide Sergio Urcullo):** los 8 carruseles ya agendados cierran con «Comentá X»; el mecanismo
+  comentario→DM no está probado (2 rechazos de Meta). Propuesta: «Buscá X en Avisos · link en mi perfil». El de N03 sale vie 9
   16:00 La Paz. Si dice sí: editar los 8 briefs (cierre `pre`/`body` + último párrafo del caption), rerenderizar y reemplazar solo
   `slide-08.png` y `caption.txt` en `/root/publicar/car-<slug>/` del VPS.
 - **Falta (no es de esta pieza):** capturas oficiales y pizarra para N07, C5 `/hooks` y C6 para D03-A (las trae la madre), el bruto
