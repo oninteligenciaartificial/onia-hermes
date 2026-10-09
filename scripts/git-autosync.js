@@ -112,6 +112,8 @@ function sinPerder(nombre) {
 // fuerza: usa `<rescate>-<sha>`. Devuelve { ok, destino, movida, out }.
 function llevarA(destino) {
   if (!sinPerder(destino)) destino = nombreConSha();
+  // La alternativa puede venir de un rescate anterior con commits propios (revisión de Codex, 8-oct).
+  if (!sinPerder(destino)) return { ok: false, destino, out: 'la rama de rescate alternativa tiene commits locales que HEAD no incluye' };
   let push = tryGit(['push', 'origin', `HEAD:refs/heads/${destino}`]);
   if (!push.ok && destino !== nombreConSha() && sinPerder(nombreConSha())) {
     destino = nombreConSha();
@@ -139,8 +141,15 @@ function rescatar() {
     return;
   }
   if (r.movida && tryGit(['rev-parse', '-q', '--verify', MAIN_REMOTA]).ok) tryGit(['branch', '-f', 'main', MAIN_REMOTA]);
+  // Sin checkout (la rama de rescate abierta en otro worktree) los commits siguen en el main local, y una corrida
+  // CON permiso en este clon los publicaría (revisión de seguridad de #138, 8-oct): se avisa fuerte.
+  if (!r.movida) {
+    console.log(`[autosync] ⚠ ATENCIÓN: tus commits están en origin/${r.destino} pero SIGUEN en el main local de este clon. ` +
+      `No pushees main: pasate a la rama con «git checkout -B ${r.destino} origin/${r.destino}» y abrí un PR.`);
+    return;
+  }
   console.log(`[autosync] main solo avanza por PR revisado: tus commits quedaron en origin/${r.destino}` +
-    (r.movida ? ' y la sesión sigue en esa rama (abrí un PR desde ahí)' : ' (abrí un PR desde ahí)'));
+    ' y la sesión sigue en esa rama (abrí un PR desde ahí)');
 }
 
 function main() {
