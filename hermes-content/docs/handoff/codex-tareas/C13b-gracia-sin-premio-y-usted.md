@@ -1,5 +1,15 @@
 # C13b · La gracia de 7 días sin premiar al que paga tarde, y de usted (arreglos de #113)
 
+> **Estado 9-oct (tarde):** hecho en #113 (`dede1b81`). La revisión con lente de plata encontró que el paso 3 de
+> ESTA tarea estaba mal escrito: «momento del pago = `createdAt`» le cobraba al cliente nuestra demora de
+> aprobación. Se medía así:
+> - en un cambio de plan, los días de revisión se pagaban dos veces;
+> - un pago dentro de la gracia aprobado después del corte pagaba la solo lectura de la espera;
+> - un semanal aprobado 3 días tarde quedaba vencido al aprobarse.
+>
+> Arreglado en C13c (`a65a0cba`, bundle `docs/cola/ramas-locales/plataforma-c13c-20261009.bundle`). La regla buena está
+> abajo.
+
 Sos Codex. SOLO `onia-platform`, sobre la rama `codex/punto-13-gracia-y-no-renovar` (onia-platform#113). Anotá el SHA base.
 
 **Punto del plan:** 13 de `ONIA_PLAN_1.0_Y_CAJA.md` (7 días de gracia y botón «no renovar»).
@@ -31,10 +41,10 @@ de 7 días llega a todas las puertas de acceso).
 3. **Pagar tarde no puede regalar días (H1).** Hoy `lib/subscription/plan-state.ts:189` (`extendPlanEnd`) extiende
    desde el vencimiento viejo si el pago entra en la gracia, pero desde el momento de la APROBACIÓN si entra después del
    corte. Ejemplo semanal: pagado 1 h antes del corte → período nuevo de ~1 h; pagado 2 h después → una semana entera.
-   - El período nuevo arranca en `max(vencimiento viejo, momento del pago − 7 días)`: la gracia que se usó, se cobra.
-   - «Momento del pago» = `createdAt` del pago, no la hora en que el operador aprueba. Pasarlo a `activatePaidPlan` en
-     los tres caminos: `app/api/admin/subscription-payments/route.ts:156`, `app/api/n8n/callback/subscription-approve/route.ts:141`
-     y `app/api/webhooks/bcp/route.ts:191`.
+   - El período nuevo arranca en `max(vencimiento viejo, momento de la APROBACIÓN − 7 días)`: la gracia que se usó,
+     se cobra; la solo lectura no, la cause quien la cause.
+   - **Corregido 9-oct (C13c):** la referencia es la aprobación (`now`), NO el `createdAt` del comprobante. Con el
+     `createdAt`, lo que tardábamos en verificar se le cobraba al cliente. Antes este punto decía lo contrario.
    - Tests: pago dentro de la gracia; pago 2 h después del corte; pago 30 días después; el texto del aviso coincide
      con la regla.
    - Esta regla es la recomendada; si Sergio Urcullo decide otra, este commit se revierte solo.
