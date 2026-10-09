@@ -468,6 +468,8 @@ test("el prompt de la rutina manda a firmar con responder-pedido.sh y avisa del 
   assert.match(prompt, /bash scripts\/loops\/responder-pedido\.sh p_xxxxxxxx listo <sello> < \/tmp\/respuesta\.txt/);
   assert.match(prompt, /una línea «Sello:» con 32\s+caracteres hexadecimales/);
   assert.doesNotMatch(prompt, /commit-tree/, "la forma vieja, sin firma, ya no se entrega");
+  // Sergio Urcullo, 8-oct: «me entregás demasiado texto y me pierdo». La respuesta le llega por Telegram.
+  assert.match(prompt, /Pasó[\s\S]{0,200}Necesito[\s\S]{0,200}Sigue/, "la respuesta va en los tres bloques fijos");
 });
 
 // ── Revisión fuerte del 5-oct (segundo revisor) ───────────────────────────────────────────────────

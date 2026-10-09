@@ -175,7 +175,10 @@ Hermes, su asistente, por Telegram. Cada corrida es UN pedido. Hablale siempre c
    2 minutos y se la manda por la aduana.
    a. Con la herramienta de escribir archivos, creá /tmp/respuesta.txt SOLO con la respuesta para
       leer en el teléfono: castellano llano, sin siglas ni nombres de archivo, máx. 1500
-      caracteres, con el link del PR si hay. Sin encabezado.
+      caracteres, con el link del PR si hay. Sin encabezado. Como máximo tres bloques, en este
+      orden: «Pasó:» (1-2 líneas, qué hiciste), «Necesito:» (un sí/no o los pasos mínimos; si no
+      le pedís nada, «nada») y «Sigue:» (1 línea). Frases cortas; lo que toca plata, seguridad o
+      algo que no se deshace va claro y completo.
    b. En el clon de onia-hermes corré esto, con el id del pedido, el estado (listo, necesita-ok o
       no-se-pudo) y el sello de la línea «Sello:»:
         bash scripts/loops/responder-pedido.sh p_xxxxxxxx listo <sello> < /tmp/respuesta.txt
@@ -250,7 +253,7 @@ Hermes, su asistente, por Telegram. Cada corrida es UN pedido. Hablale siempre c
 
 | Sección | Bien si dice |
 |---|---|
-| 0 | «✅ resumen, lector de calendario, aduana, vigía de aprobaciones, guardia y pedidos: al día» |
+| 0 | «✅ resumen, lector de calendario, aduana, vigía de aprobaciones, guardia y pedidos: al día» (desde el 9-oct exige el resumen en tres bloques: PASÓ · NECESITO · SIGUE) |
 | 1 | «✅ /root/backups/hermes-jarvis-…» |
 | 1b | nada con ❌ (si falta la llave, el VPS no llega a GitHub o n8n no responde, aborta acá sin tocar nada) |
 | 5 y 5b | 5: conectado al calendario; 5b: «✅ probado en su calendario: crear → mover → cancelar (la prueba ya no está)» |
@@ -258,7 +261,7 @@ Hermes, su asistente, por Telegram. Cada corrida es UN pedido. Hablale siempre c
 | 1c | «✅ …/rollback.sh» |
 | 2 | «✅ instalado: A → B líneas activas» (el 1-oct se esperaba 45 → 48) |
 | 3 y 4 | los 3 trabajos de Hermes pausados y los 12 flujos de n8n apagados, sin ❌ |
-| 5c | la skill de calendario y la regla del SOUL, instaladas o «ya estaba» |
+| 5c | la skill de calendario, la regla del calendario y la del formato en el SOUL: «✅ regla del formato agregada al SOUL de Hermes» o «· su SOUL ya tenía la regla del formato» |
 | 5d | «✅ llave de la rutina guardada en /root/.config/onia/pedidos.env (600)» y «✅ la respuesta vuelve sola: …». Si dice «pedidos a Claude APAGADOS: falta la llave», el secreto no llegó |
 | 6 | «✅ /var/lib/onia-aviso/activo» |
 | 6b | «✅ gateway de Hermes reiniciado y vivo», «✅ su lista de skills ya nombra agenda-calendario» y «✅ y nombra pedir-a-claude» |
