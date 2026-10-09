@@ -160,3 +160,20 @@ cd videos && npx -y hyperframes@0.8.142 init lucia-gN --non-interactive --exampl
 - **El render no es bit a bit reproducible entre herramientas** (miniaturas con OpenCV INTER_AREA o con ffmpeg lanczos) y hasta un comentario en
   `timeline.js` cambia el `index.html` (se embebe). El cierre (clip K1) arranca en 2,0 s para que el CTA caiga sobre la mirada a cámara.
 - **Tiempos (4 núcleos, sin GPU):** borrador real 1 min 40 s, final con un clip nativo de 1080p 3 min 38 s (60 MB; sin clip 1080p, G3 pesó 23 MB).
+
+## 9. Lo que sumó G4 (57 s, 9-oct: solo fotos fijas; montar → revisor independiente → corregir, ~45 min de reloj el montaje)
+
+- **Fotos fijas con empuje lento (1,00 → 1,04):** el contenedor `.clip` con `overflow:hidden` viaja en el empuje rígido y la `<img>` hace el zoom, así los bordes
+  quedan pegados aun al 1,04. La `<img>` lleva `data-layout-allow-overflow` o `hyperframes check` avisa `container_overflow`. El mentón de `medir-dom` se corre con el
+  zoom de cada instante. Verificación numérica: `psnr-fotos.py` arma el encuadre (cover + zoom con origen en la cara) y lo compara con las 8 fotos candidatas;
+  el pico tiene que ser la foto del plan y la escala del plan (en G4, 34,9-41,7 dB contra 9-14 dB de las otras siete, 24/24 cuadros).
+- **El puntaje de cara de un cuadro no es el del original.** La foto F pasó de 0,658 (PNG) a 0,672 (JPG de 1080) y a 0,685-0,696 (cuadro con zoom), sin deformar la cara. El
+  escalado se comprueba contra la fuente al mismo zoom (`fuente-con-zoom.py` + `face-gate.sh`, ≤ 0,02), no contra el número del guion. En pantalla va el número del original medido.
+- **Las afirmaciones se validan en el build, y el guion se equivoca antes de renderizar.** `build.mjs` recalcula contra PROCEDENCIA «pagar más no la parece más»,
+  «la sostuvo en tres escenas» y «la perdió en una de tres» y corta si fallan. Atrapó una tarjeta de 7 palabras con máximo 6.
+- **`ventanas.mjs` con `textContent` pega hermanos** («Escena 1» + «0,79» cuenta como 2 palabras): se cuenta con un TreeWalker sobre los nodos de texto.
+- **El borrador 360p da 1 «error» de lint** (`root_zoom_rescales_a_fixed_canvas`) y 1 aviso que no frenan el render: no usar `--strict`.
+- **Un número solo no dice qué mide:** el dato dice «parecido 0,81», no «0,81».
+- **Una imagen que no es Lucía** (la B del café, 0,35) se rotula como lo que es («Imagen B · café») y la tarjeta lo dice: «El café: B perdió la cara».
+- **Dos formas incidentales** (un perfil gris tipo letra en C, un óvalo borroso en el monitor de E) vienen de la imagen de IA: se evalúa si se leen como marca; si sí,
+  se difuminan con pluma como en G3.
