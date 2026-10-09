@@ -1159,5 +1159,514 @@
       "sergio-n06-antigravity-cli-20261002"
     ],
     "tags": []
+  },
+  {
+    "id": "lote-prueba-10-16-s01-b9828272",
+    "file": "hermes-content/galeria/ilustraciones/lote-prueba-10-16-s01-b9828272.jpg",
+    "fecha": "2026-10-08",
+    "tipo": "ilustraciones",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "prompt": "a single green chat bubble in front of a path that splits in two, one branch leading to a white box and the other to a matte black box.",
+    "estilo": "clay",
+    "costo_cr": 0.12,
+    "job": "b9828272-5a87-4f58-b5b2-4bdf2dc6a747",
+    "usado_en": [
+      "lote-prueba-10-16"
+    ],
+    "tags": [
+      "N07",
+      "L1"
+    ]
+  },
+  {
+    "id": "lote-prueba-10-16-s02-59eb1435",
+    "file": "hermes-content/galeria/ilustraciones/lote-prueba-10-16-s02-59eb1435.jpg",
+    "fecha": "2026-10-08",
+    "tipo": "ilustraciones",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "prompt": "the same single green chat bubble sliding into the matte black box at the end of a path, the white box empty beside it.",
+    "estilo": "clay",
+    "costo_cr": 0.12,
+    "job": "59eb1435-b494-4548-9c80-f49d648ba749",
+    "usado_en": [
+      "lote-prueba-10-16"
+    ],
+    "tags": [
+      "N07",
+      "L1"
+    ]
+  },
+  {
+    "id": "lote-prueba-10-16-s03-17fbb9a2",
+    "file": "hermes-content/galeria/ilustraciones/lote-prueba-10-16-s03-17fbb9a2.jpg",
+    "fecha": "2026-10-08",
+    "tipo": "ilustraciones",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "prompt": "three plain white paper sheets, each with a thin emerald green border, dropping into an open matte black cube-shaped container, simple rounded shapes.",
+    "estilo": "clay",
+    "costo_cr": 0.12,
+    "job": "17fbb9a2-d561-4210-a310-daee312c841d",
+    "usado_en": [
+      "lote-prueba-10-16"
+    ],
+    "tags": [
+      "D03-A",
+      "L2"
+    ]
+  },
+  {
+    "id": "lote-prueba-10-16-s04-586e0cdb",
+    "file": "hermes-content/galeria/ilustraciones/lote-prueba-10-16-s04-586e0cdb.jpg",
+    "fecha": "2026-10-08",
+    "tipo": "ilustraciones",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "prompt": "a smooth emerald green sphere and a smooth matte black cube resting on the two pans of a level white balance scale, no faces.",
+    "estilo": "clay",
+    "costo_cr": 0.12,
+    "job": "586e0cdb-177b-4123-856b-64924fdfd2de",
+    "usado_en": [
+      "lote-prueba-10-16"
+    ],
+    "tags": [
+      "D01-C",
+      "L3",
+      "miniatura"
+    ]
+  },
+  {
+    "id": "lote-prueba-10-16-s05-32dbd8bb",
+    "file": "hermes-content/galeria/ilustraciones/lote-prueba-10-16-s05-32dbd8bb.jpg",
+    "fecha": "2026-10-08",
+    "tipo": "ilustraciones",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "prompt": "a level white balance scale holding a smooth emerald green sphere on the left pan and a smooth matte black cube on the right pan, plain and minimal.",
+    "estilo": "clay",
+    "costo_cr": 0.12,
+    "job": "32dbd8bb-c7f8-46e1-960e-cede30e5c2f1",
+    "usado_en": [
+      "lote-prueba-10-16"
+    ],
+    "tags": [
+      "D01-C",
+      "L3",
+      "miniatura"
+    ]
+  },
+  {
+    "id": "lote-prueba-10-16-s06-91a6d7fd",
+    "file": "hermes-content/galeria/ilustraciones/lote-prueba-10-16-s06-91a6d7fd.jpg",
+    "fecha": "2026-10-08",
+    "tipo": "ilustraciones",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "prompt": "close view of a white balance scale perfectly level, a glossy emerald green sphere on one pan and a matte black cube on the other.",
+    "estilo": "clay",
+    "costo_cr": 0.12,
+    "job": "91a6d7fd-2319-4650-b787-9118c1d942ed",
+    "usado_en": [
+      "lote-prueba-10-16"
+    ],
+    "tags": [
+      "D01-C",
+      "L3",
+      "miniatura"
+    ]
+  },
+  {
+    "id": "lote-prueba-10-16-s07-a6697c17",
+    "file": "hermes-content/galeria/ilustraciones/lote-prueba-10-16-s07-a6697c17.jpg",
+    "fecha": "2026-10-08",
+    "tipo": "ilustraciones",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "prompt": "a minimal white balance scale with a small emerald green sphere and a small matte black cube in balance, lots of empty white space around.",
+    "estilo": "clay",
+    "costo_cr": 0.12,
+    "job": "a6697c17-c9c0-41db-afbe-c384b49c0960",
+    "usado_en": [
+      "lote-prueba-10-16"
+    ],
+    "tags": [
+      "D01-C",
+      "L3",
+      "miniatura"
+    ]
+  },
+  {
+    "id": "lote-prueba-10-16-s12-04961283",
+    "file": "hermes-content/galeria/ilustraciones/lote-prueba-10-16-s12-04961283.jpg",
+    "fecha": "2026-10-08",
+    "tipo": "ilustraciones",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "gpt_image_2_5",
+    "prompt": "a single plain green clay speech bubble shape gliding along a white clay path into an open matte black clay box; next to it an empty white clay box. No letters, no symbols, no icons, no logos, no faces.",
+    "estilo": "clay",
+    "costo_cr": 1,
+    "job": "04961283-b60f-4a60-8be1-d4b3e2634fcc",
+    "usado_en": [
+      "lote-prueba-10-16"
+    ],
+    "tags": [
+      "N07",
+      "L1"
+    ]
+  },
+  {
+    "id": "lote-prueba-10-16-s13-727d636d",
+    "file": "hermes-content/galeria/ilustraciones/lote-prueba-10-16-s13-727d636d.jpg",
+    "fecha": "2026-10-08",
+    "tipo": "ilustraciones",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "gpt_image_2_5",
+    "prompt": "three plain white clay tiles with a thin green clay rim dropping into an open matte black clay box, seen slightly from above. No holes, no faces, no letters, no symbols.",
+    "estilo": "clay",
+    "costo_cr": 1,
+    "job": "727d636d-de07-49ff-90df-bd6ae63abc12",
+    "usado_en": [
+      "lote-prueba-10-16"
+    ],
+    "tags": [
+      "D03-A",
+      "L2"
+    ]
+  },
+  {
+    "id": "lote-prueba-10-16-s14-8b14fd43",
+    "file": "hermes-content/galeria/ilustraciones/lote-prueba-10-16-s14-8b14fd43.jpg",
+    "fecha": "2026-10-08",
+    "tipo": "ilustraciones",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "gpt_image_2_5",
+    "prompt": "a smooth emerald green clay sphere and a smooth matte black clay cube resting on the two round pans of a perfectly level white clay balance scale. Blank smooth surfaces everywhere: no letters, no numbers, no markings, no interface, no frame.",
+    "estilo": "clay",
+    "costo_cr": 1,
+    "job": "8b14fd43-d132-4f76-8e4f-0127d89e8f40",
+    "usado_en": [
+      "lote-prueba-10-16"
+    ],
+    "tags": [
+      "D01-C",
+      "L3",
+      "miniatura"
+    ]
+  },
+  {
+    "id": "lote-prueba-10-16-s15-f0b7e7c6",
+    "file": "hermes-content/galeria/ilustraciones/lote-prueba-10-16-s15-f0b7e7c6.jpg",
+    "fecha": "2026-10-08",
+    "tipo": "ilustraciones",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "gpt_image_2_5",
+    "prompt": "minimal white clay balance scale, perfectly level, one emerald green clay sphere on the left pan, one matte black clay cube on the right pan, plenty of empty white space. Blank smooth surfaces: no letters, no numbers, no markings, no interface, no frame.",
+    "estilo": "clay",
+    "costo_cr": 1,
+    "job": "f0b7e7c6-a3ad-4dcf-ac98-498452763fb2",
+    "usado_en": [
+      "lote-prueba-10-16"
+    ],
+    "tags": [
+      "D01-C",
+      "L3",
+      "miniatura"
+    ]
+  },
+  {
+    "id": "estilos-s20-a9c107fc",
+    "file": "hermes-content/galeria/estilos/estilos-s20-a9c107fc.jpg",
+    "fecha": "2026-10-08",
+    "tipo": "estilos",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "gpt_image_2_5",
+    "prompt": "Real studio product photograph of a balance scale, perfectly level, holding an emerald green sphere on one pan and a black cube on the other, centered, lots of empty space. White seamless background, soft natural light, real materials (matte painted wood, ceramic).",
+    "estilo": "libre",
+    "costo_cr": 0.25,
+    "job": "a9c107fc-38af-4521-a2a3-8c281ec144bb",
+    "usado_en": [
+      "estilos"
+    ],
+    "tags": [
+      "estilos",
+      "foto-estudio"
+    ]
+  },
+  {
+    "id": "estilos-s21-15e32a7f",
+    "file": "hermes-content/galeria/estilos/estilos-s21-15e32a7f.jpg",
+    "fecha": "2026-10-08",
+    "tipo": "estilos",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "gpt_image_2_5",
+    "prompt": "Flat vector illustration of a balance scale, perfectly level, holding an emerald green sphere on one pan and a black cube on the other, centered, lots of empty space. Only three colors: emerald green, black and white. Clean geometric shapes, no gradients, no outlines.",
+    "estilo": "libre",
+    "costo_cr": 0.25,
+    "job": "15e32a7f-d3c1-4810-9083-e364029f9d96",
+    "usado_en": [
+      "estilos"
+    ],
+    "tags": [
+      "estilos",
+      "plano-vector"
+    ]
+  },
+  {
+    "id": "estilos-s22-15406e9b",
+    "file": "hermes-content/galeria/estilos/estilos-s22-15406e9b.jpg",
+    "fecha": "2026-10-08",
+    "tipo": "estilos",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "gpt_image_2_5",
+    "prompt": "Hand-drawn black ink line sketch on white paper of a balance scale, perfectly level, holding an emerald green sphere on one pan and a black cube on the other, centered, lots of empty space. Only the sphere filled with emerald green marker, everything else black ink lines.",
+    "estilo": "libre",
+    "costo_cr": 0.25,
+    "job": "15406e9b-fcda-48c9-aa9a-20dcb27c5d40",
+    "usado_en": [
+      "estilos"
+    ],
+    "tags": [
+      "estilos",
+      "linea-libreta"
+    ]
+  },
+  {
+    "id": "estilos-s23-53fc9d24",
+    "file": "hermes-content/galeria/estilos/estilos-s23-53fc9d24.jpg",
+    "fecha": "2026-10-08",
+    "tipo": "estilos",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "gpt_image_2_5",
+    "prompt": "Photo of a white whiteboard with a quick marker drawing of a balance scale, perfectly level, holding an emerald green sphere on one pan and a black cube on the other, centered, lots of empty space. Black marker lines, the sphere colored with green marker, slight marker texture.",
+    "estilo": "libre",
+    "costo_cr": 0.25,
+    "job": "53fc9d24-4e04-410f-9f56-83c6929c8ccb",
+    "usado_en": [
+      "estilos"
+    ],
+    "tags": [
+      "estilos",
+      "pizarra"
+    ]
+  },
+  {
+    "id": "estilos-s24-024ff14b",
+    "file": "hermes-content/galeria/estilos/estilos-s24-024ff14b.jpg",
+    "fecha": "2026-10-08",
+    "tipo": "estilos",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "gpt_image_2_5",
+    "prompt": "Layered paper cut-out illustration of a balance scale, perfectly level, holding an emerald green sphere on one pan and a black cube on the other, centered, lots of empty space. Paper in emerald green, black and white, soft shadows between layers.",
+    "estilo": "libre",
+    "costo_cr": 0.25,
+    "job": "024ff14b-5bf7-4e0b-bbce-4b6feb27a54e",
+    "usado_en": [
+      "estilos"
+    ],
+    "tags": [
+      "estilos",
+      "papel-recortado"
+    ]
+  },
+  {
+    "id": "estilos-s25-c1d3353e",
+    "file": "hermes-content/galeria/estilos/estilos-s25-c1d3353e.jpg",
+    "fecha": "2026-10-08",
+    "tipo": "estilos",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "gpt_image_2_5",
+    "prompt": "Clean isometric 3D illustration, matte materials, of a balance scale, perfectly level, holding an emerald green sphere on one pan and a black cube on the other, centered, lots of empty space. Palette: emerald green, black, white. Soft ambient occlusion.",
+    "estilo": "libre",
+    "costo_cr": 0.25,
+    "job": "c1d3353e-f8d0-43ba-bbdc-3a3762671f47",
+    "usado_en": [
+      "estilos"
+    ],
+    "tags": [
+      "estilos",
+      "isometrico"
+    ]
+  },
+  {
+    "id": "estilos-s26-b001dcb8",
+    "file": "hermes-content/galeria/estilos/estilos-s26-b001dcb8.jpg",
+    "fecha": "2026-10-08",
+    "tipo": "estilos",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "gpt_image_2_5",
+    "prompt": "Two-ink risograph print illustration of a balance scale, perfectly level, holding an emerald green sphere on one pan and a black cube on the other, centered, lots of empty space. Inks: emerald green and black on white paper, visible grain and slight misregistration.",
+    "estilo": "libre",
+    "costo_cr": 0.25,
+    "job": "b001dcb8-b4d7-4636-84ae-51935b1a58b6",
+    "usado_en": [
+      "estilos"
+    ],
+    "tags": [
+      "estilos",
+      "risografia"
+    ]
+  },
+  {
+    "id": "estilos-s27-705ad6d2",
+    "file": "hermes-content/galeria/estilos/estilos-s27-705ad6d2.jpg",
+    "fecha": "2026-10-08",
+    "tipo": "estilos",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "gpt_image_2_5",
+    "prompt": "Black and white editorial photograph of a balance scale, perfectly level, holding an emerald green sphere on one pan and a black cube on the other, centered, lots of empty space. Everything in black and white except the sphere, which is vivid emerald green.",
+    "estilo": "libre",
+    "costo_cr": 0.25,
+    "job": "705ad6d2-14e0-4b9b-b2bc-ad8abdbb6985",
+    "usado_en": [
+      "estilos"
+    ],
+    "tags": [
+      "estilos",
+      "foto-bn-acento"
+    ]
+  },
+  {
+    "id": "lote-fotobn-s31-61421ccd",
+    "file": "hermes-content/galeria/fotos-bn/lote-fotobn-s31-61421ccd.jpg",
+    "fecha": "2026-10-08",
+    "tipo": "fotos-bn",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "gpt_image_2_5",
+    "prompt": "a pile of plain paper envelopes on a desk being sorted into two empty metal trays, one single envelope is the green one, mid-way into the right tray.",
+    "estilo": "fotobn",
+    "costo_cr": 1,
+    "job": "61421ccd-8144-44f1-a698-c101ca0481a1",
+    "usado_en": [
+      "lote-fotobn"
+    ],
+    "tags": [
+      "N07",
+      "L1"
+    ]
+  },
+  {
+    "id": "lote-fotobn-s32-c5e1d3d0",
+    "file": "hermes-content/galeria/fotos-bn/lote-fotobn-s32-c5e1d3d0.jpg",
+    "fecha": "2026-10-08",
+    "tipo": "fotos-bn",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "gpt_image_2_5",
+    "prompt": "two metal trays on a desk: the right tray holds one single plain envelope, the green one; the left tray is full of plain envelopes.",
+    "estilo": "fotobn",
+    "costo_cr": 1,
+    "job": "c5e1d3d0-6080-4471-8e1c-56568b65a94a",
+    "usado_en": [
+      "lote-fotobn"
+    ],
+    "tags": [
+      "N07",
+      "L1"
+    ]
+  },
+  {
+    "id": "lote-fotobn-s33-3af2cf9a",
+    "file": "hermes-content/galeria/fotos-bn/lote-fotobn-s33-3af2cf9a.jpg",
+    "fecha": "2026-10-08",
+    "tipo": "fotos-bn",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "gpt_image_2_5",
+    "prompt": "plain sheets of paper sliding by themselves into an open black metal box on a desk, seen slightly from above; the top sheet is the green one.",
+    "estilo": "fotobn",
+    "costo_cr": 1,
+    "job": "3af2cf9a-d1a7-4306-8b34-d411e50925f5",
+    "usado_en": [
+      "lote-fotobn"
+    ],
+    "tags": [
+      "D03-A",
+      "L2"
+    ]
+  },
+  {
+    "id": "lote-fotobn-s34-369775f4",
+    "file": "hermes-content/galeria/fotos-bn/lote-fotobn-s34-369775f4.jpg",
+    "fecha": "2026-10-08",
+    "tipo": "fotos-bn",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "gpt_image_2_5",
+    "prompt": "an antique balance scale, perfectly level, holding a glass sphere on the left pan and a dark cube on the right pan; the sphere is the green one.",
+    "estilo": "fotobn",
+    "costo_cr": 1,
+    "job": "369775f4-258d-4faa-b4d6-a6125a129505",
+    "usado_en": [
+      "lote-fotobn"
+    ],
+    "tags": [
+      "D01-C",
+      "L3",
+      "miniatura"
+    ]
+  },
+  {
+    "id": "lote-fotobn-s35-d60f36df",
+    "file": "hermes-content/galeria/fotos-bn/lote-fotobn-s35-d60f36df.jpg",
+    "fecha": "2026-10-08",
+    "tipo": "fotos-bn",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "gpt_image_2_5",
+    "prompt": "close-up of a level brass balance scale, a sphere on one pan and a cube on the other, lots of empty space on the right side for a title; the sphere is the green one.",
+    "estilo": "fotobn",
+    "costo_cr": 1,
+    "job": "d60f36df-827c-4dfd-bb58-567fe7ea489a",
+    "usado_en": [
+      "lote-fotobn"
+    ],
+    "tags": [
+      "D01-C",
+      "L3",
+      "miniatura"
+    ]
+  },
+  {
+    "id": "lote-fotobn-s36-1a27a52e",
+    "file": "hermes-content/galeria/fotos-bn/lote-fotobn-s36-1a27a52e.jpg",
+    "fecha": "2026-10-08",
+    "tipo": "fotos-bn",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "gpt_image_2_5",
+    "prompt": "a simple modern balance scale on a table, level, a sphere on the left pan and a cube on the right pan, shot from low angle; the sphere is the green one.",
+    "estilo": "fotobn",
+    "costo_cr": 1,
+    "job": "1a27a52e-8a2f-429f-ba1d-30787cae25ac",
+    "usado_en": [
+      "lote-fotobn"
+    ],
+    "tags": [
+      "D01-C",
+      "L3",
+      "miniatura"
+    ]
   }
 ]

@@ -1,5 +1,101 @@
 # Plan de 3 semanas — el mapa: qué sé, hacia dónde va cada pieza
 
+## Estructura de contenido (v2, 2026-10-08)
+
+> Manda sobre §2 y §3 de abajo (29-sep): la mezcla ya no es «2 de 3 para aprender IA, 1 de 3 para dueños», y el día ya no
+> son 3 videos a cámara. Sale de `references/marca-personal/PLAN-REFERENTES.md` §1-§3 (catálogos de los 5 referentes,
+> medidos el 8-oct) y de `CALENDARIO-PUBLICACION-9-16-OCT.md`. Las vistas son de cada catálogo: no se comparan entre
+> referentes.
+
+### Pilares y peso
+
+| Pilar | Peso | Por qué (medido) | Semana 10-16 |
+|---|---|---|---|
+| **Construyo con Claude Code** (skills, hooks, worktrees, esfuerzo, verificar) | ~50 % | Erik: Claude y hardware son el 20 % de sus piezas y el 43 % de sus vistas. Rocha: construir y agentes, el 59 % de las piezas y el 80 % de las vistas | D03-A, N06, N04, D02-A, D01-A, D04-C, D05-A (7 de 13) |
+| **Lo que le cuesta o le duele al dueño** (bot, WhatsApp, costo por mensaje, modelo caro) | ~50 %, con piso de **1 video por día** (PLAN §2) | Santiago: casos con un negocio real, mediana 31,5 mil. Hormozi: el dueño con sus cifras, mediana 155,5 mil contra 16,5 mil | N07, DD-A, S2-D08-A, D01-C, S2-D07-A, N02 (6 de 13) |
+| **Cómo trabajo: 1 persona y sus agentes** (sin cara) | Relleno: solo días sin bruto, 1 por semana como máximo, y se mide por guardados | Santiago sin cara: 0,9-2,7 mil contra una mediana de 12,65 mil. Cuando cambiaron de estilo, cayeron (PLAN §1b, punto 8) | P1 y P3 (sin fecha); P2, carrusel del sáb 17 |
+
+Regla que cruza los tres: **cada pieza hace algo concreto con un número** (una cuenta, una prueba, un precio o un caso).
+La noticia sola rinde 2-14 mil en Santiago y 7-13 mil en Erik (PLAN §1b, punto 1).
+
+### Series fijas
+
+| Serie | Fórmula | Molde | Referente medido | Cadencia | CTA |
+|---|---|---|---|---|---|
+| **Noticia con la cuenta** | PLAN F1 · FORMULAS F2 | Santiago, noticia con tarjetas | Santiago, calculadora de WhatsApp: 1,6 M (con herramienta propia) | 3-4 por semana; lo perecedero primero | Comunidad |
+| **Receta de 2-3 pasos con el paso crítico** | PLAN F2 · FORMULAS F7 | Erik (Santiago si la prueba es una captura oficial) | Rocha, design.md: 87,6 mil; Erik pone un índice entre los 3 y los 13 s | 3-4 por semana | Comunidad |
+| **Lo rompí / me pasó** | PLAN F4 · FORMULAS F3 | Rocha, una toma continua con capas | Santiago, «Acabo de reemplazar a mi editor»; Rocha | 1-2 por semana | Comunidad |
+| **La pregunta del dueño** | PLAN F3 · FORMULAS F11 y F12 | Erik | Erik, «4 requisitos legales»: 352 mil; situación + reencuadre: 277 mil | 2 por semana | Asesoría |
+| **YouTube por niveles** | PLAN F5 · FORMULAS F14 | YouTube horizontal | Gadzhi, Claude en 26 min: 1,49 M | 1 por semana (martes) | Comunidad a ~1/3 y al final; asesoría solo en la descripción |
+| **Carrusel del tema del día** | FORMULAS §3 | pack `referentes` | Santiago, carruseles de fotos en TikTok: mediana 8,7 mil (a probar) | 1 por día, 16:00 | Comunidad, con su palabra |
+
+### Mezcla de formatos por semana
+
+Base: la semana 10-16 (13 videos), la primera armada entera con la v2.
+
+| Formato | % | Piezas 10-16 |
+|---|---|---|
+| Noticia con la cuenta | 31 % | N07, N06, DD-A, N02 |
+| Receta de pasos | 31 % | N04, D02-A, D01-A, D05-A |
+| Lo rompí / me pasó | 15 % | D03-A, D04-C |
+| Pregunta del dueño | 15 % | S2-D08-A, S2-D07-A |
+| YouTube largo | 8 % | D01-C |
+| Sin cara | fuera de la cuenta, 0-1 por semana | P1, P3 |
+
+- **Duración:** la mitad de los verticales ya dura 90-120 s (N07, DD-A, S2-D08-A, N04, D02-A, N02). En Santiago (121 s o
+  más: mediana 30 mil, contra 8,8 mil de 31-60 s) y en Erik (más de 120 s: 24,3 mil, contra 5,1 mil de 21-45 s) el vertical
+  largo rinde más; en Rocha da igual. Los de ~50 s (S2-D07-A, D01-A, D05-A) quedan en el rango de Erik para noticia o
+  producto (44-52 s).
+- **Desde el 17-oct** (PLAN §3): F6, herramienta gratis atada a una fecha; F7, visito un negocio; F8, un vertical de
+  100-120 s por semana en lugar de dos cortos.
+
+### Cadencia por red
+
+| Red | Qué sale | Cuándo (La Paz) | Por qué (medido) |
+|---|---|---|---|
+| Instagram | Video A, carrusel y video B | 12:30 · 16:00 · 18:30 | Es la red que manda en la mediana: Erik, 30-55 mil por reel; Rocha, 72,8 mil en IG contra 1,3 mil en TikTok; Santiago, 1,8 veces TikTok (PLAN §1b) |
+| Instagram Trial | El yap de cada video (otro gancho, 30-45 s) | 13:30 · 19:30 | Prueba ganchos con quien no sigue la cuenta, sin llenar el feed (`FLUJO-DIARIO.md`) |
+| TikTok | El mismo master, los yaps y el carrusel de fotos | 12:35 · 13:35 · 16:02 · 18:35 · 19:35 | Rocha resube sin re-editar (PLAN §1b, punto 7). Allá la palabra clave casi no trae comentarios (Santiago: 0,07 % de las vistas) |
+| YouTube Shorts | El mismo master y los yaps | 12:35 · 13:35 · 18:35 · 19:35 | Igual que TikTok |
+| LinkedIn | Solo los principales y el carrusel | 12:35 · 16:01 · 18:35 | Repetir el mismo tema el mismo día cansa (`CALENDARIO-PUBLICACION-9-16-OCT.md`) |
+| YouTube largo | 1 por semana, el martes, y 2-4 cortes verticales del mismo bruto | 12:30, lo sube Sergio Urcullo | Hormozi, 1,3 largos por semana; Santiago, 1,75. Erik corta cada largo en 6 verticales el mismo día. Con 1 h de grabación por día no entra más (PLAN §1b, punto 9) |
+| Comunidad (Avisos) | El recurso de la palabra de cada video | Antes de que salga el video (12:30 o 18:30) | El recurso vive fuera del video: patrón 4 de los 5 referentes (PLAN §1) |
+| Historias de IG | El carrusel del día con el sticker de la comunidad | 16:05, lo hace Sergio Urcullo | Sin dato de los referentes: sus IG no se pudieron listar (PLAN §6) |
+
+Techo: **4 reels y 1 carrusel por día.** Rocha, Hormozi y Gadzhi publican más porque tienen equipo; Sergio Urcullo graba
+1 h por día (PLAN §1b, punto 9).
+
+### Qué CTA lleva cada pieza
+
+Una sola acción, tecleada, de 12 palabras como máximo, en los últimos 2,4-5,5 s (PLAN §4). Los 4 referentes que miden su
+CTA piden una sola cosa (PLAN §5).
+
+| Tipo de pieza | CTA |
+|---|---|
+| Desarrollo y noticias, también las de costo para quien arma bots (N07, DD-A, N02) | «[El recurso] está en mi comunidad. Link en mi perfil, buscá PALABRA en Avisos» |
+| Pregunta del dueño (S2-D08-A, S2-D07-A) y la pieza sin cara de negocio (P3) | «¿Querés verlo en tu negocio? Asesoría gratis, link en mi perfil» |
+| YouTube largo | Comunidad a ~1/3 y al final, «link en la descripción»; la asesoría solo en la descripción (Hormozi pone su CTA entre el 17 y el 35 % del video; Gadzhi, a ~20 %) |
+| Yap | El mismo CTA que su principal |
+| Carrusel | Comunidad, con su palabra |
+| Nunca | «Comentá X y te lo mando»: 2 rechazos de Meta y 0 leads; el pico de 1,6 M de Santiago pidió «link en mi perfil» (PLAN §2 y §6) |
+
+### Cómo se conecta cada video con la comunidad y la asesoría
+
+1. **El video enseña algo completo** y deja para la comunidad solo lo que no entra: la plantilla, la cuenta para tu caso,
+   el prompt entero, lo que salió mal.
+2. **El perfil de IG lleva dos links:** la comunidad (ya está) y «Asesoría de IA gratis» →
+   `sergiourcullo.vercel.app/llamada` (falta, igual que renombrar cal.com a «Asesoría de IA gratis · 20 min»; PLAN §0).
+   Sin ese link no salen S2-D08-A, S2-D07-A ni P3.
+3. **En Avisos** está el recurso de la palabra antes de que salga el video, y cierra con una pregunta en General.
+4. **La asesoría** (20 min, gratis, cupo de 3 por semana, con 2 preguntas en el formulario: «¿Qué negocio tenés?» y «¿Qué
+   tarea repetís?») es la puerta. Si es una clínica de Santa Cruz con 2-6 profesionales, se le muestra Onia; al resto se
+   lo manda a la comunidad (PLAN §2).
+5. **Se mide en la revisión del lun 19:** guardados por vista de cada reel (separan lo que se difunde: Santiago 3,5 %
+   contra 1,4 %; Rocha 5,6-7,6 % contra 1,1 %), asesorías por semana (meta: 3) y, cada 10 asesorías, cuántas pasaron a ver
+   Onia. Con 0 de 10, se replantea (PLAN §0 y §2).
+
+---
+
 Propuesta de Claude, 29-sep-2026, **para que Sergio Urcullo la corrija**. Los guiones están en
 `S1-GUIONES.md`, `S2-GUIONES.md`, `S3-GUIONES.md`; los carruseles en
 `CARRUSELES-DIARIOS.md` (esta carpeta).

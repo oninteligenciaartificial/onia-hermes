@@ -238,6 +238,10 @@ Hermes, su asistente, por Telegram. Cada corrida es UN pedido. Hablale siempre c
 > «sí» de Sergio Urcullo en SU sesión; la nube no llega al VPS. Las pruebas son las de
 > `ASISTENTE_CODEX_VS_HERMES.md` §6.
 
+**Antes:** corré el diagnóstico, que es solo lectura: `gh workflow run hermes-jarvis.yml --ref main -f accion=diagnostico`. En su log mirá la 14 («El SOUL de Hermes — qué secciones de main le faltan»):
+`aplicar` solo copia al SOUL del VPS «Su calendario y el cierre del día», «Formato fijo de cada mensaje» y, con la llave, «Pedidos a Claude». Si falta otra sección importante, avisale a la sesión del carril Hermes-Jarvis antes de aplicar. Mirá también la 13 (lo publicado y lo agendado), que dice si hoy salió una pieza.
+El diagnóstico no cambia nada en el VPS.
+
 **`aplicar`, en orden:**
 
 | # | Paso | Listo cuando |

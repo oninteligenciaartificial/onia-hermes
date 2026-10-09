@@ -1,0 +1,132 @@
+---
+name: equipo-de-agentes
+description: El método del equipo de agentes de Onia (desde el 9-oct-2026). La madre local orquesta; cada sesión de la nube trabaja en loop su propia cola; Codex hace el código cerrado; los verificadores Haiku 5.5 controlan que se cumpla; a Sergio Urcullo solo le llega lo publicado. Invocar al arrancar una sesión madre, al despachar trabajo o al revisar si algo se cumplió.
+---
+
+# Equipo de agentes de Onia
+
+Sergio Urcullo, 9-oct-2026:
+- *«te ahogás en tareas y no me das los resultados que quiero… menos texto en el output… en el backend bien desarrolladas y con lógica»*;
+- *«una madre que revise que se cumpla todo con subagentes de Haiku 5.5 para no quemar la cuenta, y que orquestes a Codex»*.
+
+Detalle operativo de cada pieza: skill `onia-sesion-madre` (canales, Codex, trampas medidas). Esta skill es el MÉTODO.
+
+> Actualización 2026-10-09: Sol por defecto para contratos cerrados; Astra según riesgo. Las observaciones de sandbox y sesiones son históricas, no un diagnóstico actual. La ronda de 20 min complementa el loop de cada carril. Codex no abre sesiones ni activa cron.
+
+## 1. Quién hace qué
+
+| Rol | Quién | Hace | No hace |
+|---|---|---|---|
+| Madre | Claude local, en la PC de Sergio Urcullo | llena las colas, despacha a Codex, corre los gates en la PC, mergea/pushea lo que la nube no puede, hace lo que exige la PC | código largo (va a Codex), análisis largos (van a Gemini/Codex), mensajes largos |
+| Sesiones de la nube | Plataforma · Marca personal · Ventas y pauta · Lucía · Hermes-Jarvis | trabajan en LOOP su cola `hermes-content/docs/cola/loop/<carril>.md` hasta vaciarla | quedarse paradas esperando un mensaje |
+| Codex | `scripts/codex-tarea.sh` (Sol por defecto; Astra para seguridad, plata o lógica con riesgo) | código cerrado, fichas, auditorías y síntesis con META, PRUEBA DE HECHO y REGLA DE PARADA | git, commits, red u orquestación fuera del contrato; reporta bloqueos reales de validación |
+| Verificadores | subagentes **Haiku 5.5** (`model: haiku`) | contar y comprobar: ¿se cumplió? ¿está publicado? ¿hay sesiones paradas? | decidir ni escribir código |
+| Gemini (gratis) | `gemini-see-video.mjs` en bucles de bash | mirar videos sin gastar tokens de Claude | — (tope diario: pasar a `flash-lite`) |
+
+## 2. La cola en loop (cada sesión)
+
+Protocolo en `hermes-content/docs/cola/loop/README.md`. En corto: `/loop` sobre su cola, la primera tarea sin marcar hasta su
+criterio de hecho (publicada y MIRADA), `[x]` con SHA o link, commit y push, siguiente. Cola vacía → se rellena sola desde su
+handoff y el GOAL. Nunca termina el turno con tareas pendientes.
+
+## 2 bis. Latido por hora (en el servidor, corre con la PC apagada)
+
+Medido el 9-oct: el loop dentro de la sesión no alcanza, porque Plataforma, Marca y Ventas quedaron `idle`. Cada sesión de la
+nube tiene un `RemoteTrigger` recurrente que le inyecta un turno cada hora:
+
+| Sesión | Trigger | Minuto |
+|---|---|---|
+| Plataforma | `trig_01XVX9kgMExkapoN5XDdamx4` | :17 |
+| Marca personal | `trig_01ExDbhoaxaXpzpvj26DEeQ8` | :27 |
+| Lucía | `trig_013YP8Nxhwi8HbdufMuv2Var` | :47 |
+| Hermes-Jarvis | `trig_01A9hCX7s5ZuaQ24TkK3Rr8d` | :57 |
+| Ventas y pauta | sin latido: está en el entorno «Default» y su id no aparece por la API. Se sostiene con su propio `ScheduleWakeup` | — |
+
+Cómo se crea (las dos trampas que dan 400):
+- `cron_expression` tiene un **mínimo de 1 hora**. `*/20` da «minimum interval is 1 hour».
+- `job_config.ccr.environment_id` es **obligatorio**, aunque la sesión ya exista.
+
+```json
+{"name":"Latido: <carril>","cron_expression":"17 * * * *","enabled":true,"persist_session":true,
+ "persistent_session_id":"session_…","job_config":{"ccr":{"environment_id":"env_…",
+ "events":[{"data":{"isSynthetic":true,"type":"user","parent_tool_use_id":null,"uuid":"<uuid nuevo>",
+ "message":{"role":"user","content":"LATIDO … git pull. Trabajá tu cola …/loop/<carril>.md … Reportá solo PUBLICADO."}}}]}}}
+```
+
+Para apagarlo: `update {enabled:false}`. Si la sesión se reemplaza, el latido viejo apunta a una sesión muerta: se crea otro con
+el id nuevo y se apaga el viejo. **Homelab:** no hace falta para que las nubes sigan. Serviría solo para correr la ronda de la
+madre sin la PC, y eso exige loguear la cuenta de Sergio Urcullo allá, que necesita su OK.
+
+## 3. La ronda de la madre (cada 20 min, `CronCreate`)
+
+1. **Verificador Haiku** (uno solo, barato): por cada cola, cuántas tareas `[x]` desde la última ronda y cuál es la siguiente;
+   `ListAgents` para ver quién está `idle` con tareas pendientes; PRs nuevos o mergeados; tareas nuevas en `codex-tareas/` y
+   bundles en `docs/cola/ramas-locales/`. Devuelve una tabla corta.
+2. Sesión `idle` con cola pendiente → UN mensaje: «retomá tu cola, siguiente tarea: X».
+3. Tarea de Codex nueva → la madre la lanza (sección 4).
+4. Bundle nuevo → la madre lo trae, lo pushea y abre el PR.
+5. A Sergio Urcullo: solo `PUBLICADO: <qué> — <link>`. Si no se publicó nada, no se le escribe.
+
+## 4. Despachar a Codex (paso a paso, medido el 8 y 9-oct)
+
+1. Worktree en una ruta corta, `C:/dev/proyectos/onia-platform-codex-<tarea>`, desde la rama que dice la tarea. Si hay que
+   traer `master`: lo hace la madre (Codex no puede git). Conflictos en docs → `git merge-file --union`. En código, se deja
+   el merge abierto y se le pide a Codex que resuelva los marcadores.
+2. `node_modules`: junction a `C:\dev\proyectos\onia-platform-v1-integracion-20260927\node_modules` (la de
+   `onia-platform` está vacía).
+3. El prompt lleva la NOTA DE LA MADRE (carpeta, rama, «no hagas git», «PARA LA MADRE:» al final) + el texto de la tarea.
+4. `bash scripts/codex-tarea.sh <prompt> <carpeta> <modelo> medium`, en background y desde el worktree correcto. Para `resume`,
+   hacer `cd` a la carpeta antes: toma el cwd.
+5. Gate de la madre, siempre: `git checkout -- '*.snap'` → `npx vitest run` COMPLETO (JSON) → si hay rojos, ver si son
+   reales o de carga (los tests que lanzan procesos se corren solos) → los reales vuelven a Codex con `resume` y la lista.
+6. Push SOLO si la suite da 0 rojos, en el mismo comando con `&&`. El informe de Codex no va al commit: va al cuerpo o a un
+   comentario del PR.
+7. Mensaje de una línea a la sesión dueña: «X hecho en #N, suite N/0».
+
+## 4 bis. Codex al máximo (2026-10-09)
+
+- **Siempre se despacha a Codex** el código de alcance cerrado, las fichas a partir de fuentes disponibles, las auditorías y las síntesis verificables. La madre define el contrato, entrega solo el contexto necesario y verifica el resultado. Si falta acceso, cupo o evidencia, registra el bloqueo y sigue con otra tarea autorizada; no inventa la ficha ni deriva una restricción a otro agente.
+- **Concurrencia recomendada:** 2 ejecutores independientes + 1 verificador, solo dentro del cupo de agentes y tokens disponible. La madre también ocupa un puesto si la herramienta la cuenta. Un worktree y archivos exclusivos por ejecutor; las tareas sobre la misma carpeta o archivos se serializan. El verificador revisa el resultado terminado y no compite por sus archivos. Si el cupo es menor, reducir concurrencia.
+- **Modelo:** `gpt-6.1-sol` con esfuerzo medio por defecto para estos contratos; `gpt-6-astra` medio para seguridad, cobros, arquitectura ambigua o revisión de riesgo. Escalar con evidencia o por riesgo conocido, no por tamaño. Haiku/Luna quedan para conteos mecánicos cuando están disponibles; no sustituyen el juicio requerido.
+- **Codex cloud:** tareas largas de Platform que no necesitan la PC, navegador autenticado, archivos locales ni secretos personales → entorno Platform `6abad6a0aae081919f0b315818becb21`. Antes de lanzar, la madre verifica acceso autorizado, repo/rama, alcance, cupo y modelo observado; disponer del ID no prueba acceso ni ejecución. El modelo solicitado por CLI no garantiza el modelo de la nube (medición 8-oct). Si se requiere Astra y no se confirma, usar el carril local autorizado.
+- La madre sigue estado y recupera diff/resultado, revisa y ejecuta los gates del carril. La entrega incluye archivos, prueba ejecutada, limitaciones y `PARA LA MADRE:`. Mantener la reserva de cupo acordada; «al máximo» significa trabajo útil validado, no consumir hasta bloquear al equipo.
+
+## 5. Publicar
+
+Regla del 9-oct (CLAUDE.md): **lo trabajado y revisado se sube sin esperar a Sergio Urcullo**, incluido el diseño, las
+migraciones (con backup y rollback) y la infra. Sigue con su sí: gasto, contactar clientes o terceros, el portal del SIAT,
+actos legales o firmas (los hace Leslie Mercado Moreno) y su cara o su voz en servicios externos.
+
+## 6. Cómo se le habla a Sergio Urcullo
+
+- Máximo 3 bloques (Pasó · Necesito · Sigue), caveman. Lo publicado, con link o captura.
+- Un link que manda sin instrucción es para APRENDER: ficha en `video-intake` y lo aprendido a la skill. No se produce
+  ninguna pieza. Aplicar `aprender-de-todo`: ficha por dimensión, regla en la skill destino y evidencia de uso por una sesión. Una ficha escrita sola no demuestra aprendizaje aplicado.
+- Nada de proceso, hipótesis ni listas de lo que se hizo por dentro: eso va al handoff y a las skills.
+
+## 7. Costos (cuidar la cuenta)
+
+- Lectura, conteo y verificación: Haiku 5.5. Juicio y síntesis: Sonnet. Decidir lo ambiguo: Opus/Astra.
+- Workflows de más de 5 agentes solo si Sergio Urcullo pide algo exhaustivo. El 8-oct costaron ~60 M de tokens.
+- Videos: Gemini gratis en bash (borrar cada mp4 al terminar). Fichas y síntesis: Codex Sol.
+- La madre se reabre cuando su conversación se hace larga. Primero se escribe el handoff.
+
+## 8. Trampas ya pagadas
+
+- `vitest related` no alcanza: corre la suite completa.
+- En W1b, K2 y K3 (9-oct), la suite en el sandbox dio ~148 rojos y en la PC, 0. No extrapolar: verificar cada entorno y conservar los errores; manda el gate completo válido de esa entrega.
+- Git Bash convierte `'/dir/'` en una ruta de Windows: usar `MSYS_NO_PATHCONV=1` para el sparse.
+- La nube no puede pushear ramas nuevas a onia-platform: deja bundles y la madre los sube.
+- Disco: `df -h /c` antes de bajar videos. Codex falla con menos de 1 GiB libre.
+- `SendMessage` con nombre viejo falla: `ListAgents` primero.
+- HyperFrames en esta PC: el Chrome que trae da `EFTYPE`. Renderizar con
+  `HYPERFRAMES_BROWSER_PATH="C:/Program Files/Google/Chrome/Application/chrome.exe" npx hyperframes render`
+  (9-oct, molde `mosaico-tablero`: 30 s en 50 s). Codex no puede renderizar (`EPERM`): escribe la composición y renderiza la madre.
+- Primer día de colas (9-oct): Lucía y Hermes siguieron solas, pero Plataforma, Marca y Ventas quedaron `idle` con tareas pendientes. El loop de la nube no garantiza seguir. En cada ronda, la sesión `idle` con cola pendiente recibe UNA línea: «Retomá tu cola, siguiente: X».
+
+## 9. Aprendizaje de referencias: orquestación (incorporado 2026-10-09)
+
+Fuente: `hermes-content/references/video-intake/2026-10-08-orquestacion-e-ingresos-5-posts.md`.
+- **§1, `DeFS0Fes8yu`: router por complejidad y riesgo.** Definir contrato y prueba; elegir el modelo más liviano capaz de cumplirlos, verificar con evidencia y escalar ante fallo demostrado o riesgo conocido. Los costos que muestra el creador son de su ejemplo, no ahorro medido de ONIA. Aplicación: registrar modelo elegido, criterio de verificación y motivo de escalamiento en la tarea cerrada; reglas operativas en §4 bis y `onia-sesion-madre`.
+- **§4, `DdmTyEVAPMb`, Foreman: puntos de control.** Conservar META, PRUEBA DE HECHO y REGLA DE PARADA, comprobar requisitos y tests al cierre, y elevar solo el bloqueo que necesita decisión humana. Se incorpora el principio al método existente; no instalar Foreman ni asumir sus capacidades verificadas por un carrusel.
+- **Prueba pendiente de uso:** la próxima tarea delegada debe enlazar esta regla y mostrar contrato → resultado → verificación. Esta incorporación documental no acredita que un loop esté activo ni que todas las sesiones ya la aplicaron.

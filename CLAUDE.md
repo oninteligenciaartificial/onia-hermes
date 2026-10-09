@@ -43,11 +43,13 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
 - **Un objetivo al inicio, escrito y explícito**, con su definición de "hecho". Todo lo
   que no sirva a ese objetivo se **anota como pendiente**, no se hace.
 - **No se cierra la sesión hasta terminarlo.** Nada a medias, nada de saltar a otra cosa.
-- **UNA sesión de control, muchos subagentes.** No abrir varias sesiones en paralelo: a
-  Sergio se le cruza la información.
-- Cada subagente: worktree con **ruta explícita**, `git branch --show-current` primero,
-  y gates + commit en su propio árbol (nunca mezcla árboles). El orquestador mantiene el
-  objetivo, el orden y el merge a `main`.
+- **UNA madre local, varios carriles y subagentes.** Corrección 2026-10-09: se evita
+  tener varios orquestadores; los carriles independientes sí trabajan en paralelo
+  según `equipo-de-agentes`. Codex ejecuta el encargo cerrado de la madre.
+- Cada subagente: worktree con **ruta explícita** y gates en su propio árbol.
+  Corrección 2026-10-09: en un encargo Codex sin Git, la madre verifica rama y hace
+  commit/integración; Codex no ejecuta ni siquiera consultas Git. El orquestador
+  mantiene el objetivo, el orden y el merge a `main`.
 - Mismo carril (misma carpeta) → subagentes **secuenciales**. Carriles distintos →
   paralelo.
 
@@ -85,6 +87,9 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
 
 - Toda sesión arranca invocando **`onia-router`**: él es el índice y rutea la tarea a su
   carril, su stack de skills, su subagente y sus docs fuente.
+- **Desde 2026-10-09, Claude y Codex cargan también `equipo-de-agentes` y
+  `aprender-de-todo`.** Registrar cada referencia por dimensión; guardar una regla
+  no demuestra aprendizaje aplicado: hace falta una tarea que la use.
 - **Al tocar el producto (`onia-platform`) son OBLIGATORIAS sus skills propias**
   (`onia-frontend/backend/db/seguridad/deploy/verificacion` en su `.claude/skills/`) —
   solo se autolistan en sesiones abiertas DENTRO de ese repo.
@@ -464,24 +469,27 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
 - **Decidir y actuar.** Verificación fuerte solo para lo que toca producción, plata o
   `main`. Lo reversible y de bajo riesgo: hacerlo y seguir.
 - **No re-hacer lo aprobado.** Diseño o plan ya aprobado se porta fiel, no se reabre.
-- **Una superficie viva no se reemplaza sin que Sergio VEA la pieza terminada.** El
-  2026-08-20 interpreté "ya te di todo lo que quería" como OK para publicar la landing
-  v2: la rechazó entera al verla ("Nada se te escapa no vende nada") y hubo que revertir
-  en producción. Un rediseño se muestra renderizado y se espera el OK explícito sobre
-  ESA pieza; construir y publicar son dos permisos distintos.
+- **Un rediseño se revisa renderizado antes de publicar.** Corrección 2026-10-09:
+  la madre/carril mira capturas a 390/1440 y verifica los gates; lo revisado se publica
+  sin otro OK de diseño de Sergio Urcullo, según la sección siguiente. Se sustituye
+  el permiso por pieza de agosto, conservando la revisión visual.
 
 ## Qué se publica sin preguntar (REGLA)
 
-> Sergio Urcullo, 2-oct, al preguntar «¿por qué tengo que dar OK? no sé qué significa PR»:
+> Antecedente sustituido el 9-oct: Sergio Urcullo, 2-oct, al preguntar «¿por qué tengo que dar OK? no sé qué significa PR»:
 > eligió **«Solo diseño nuevo y legales»** como lo único que pasa por él. Dos PRs listos
 > (el Recall y la web v1) esperaban su OK sobre algo que él no puede revisar.
 
 - **Se publica sin preguntar** lo que pasa los gates del carril (tsc, tests, revisión) y se
   MIRA en producción después: arreglos, features sobre pantallas existentes, bot, textos de
   producto, docs. Se mergea el PR y se corre el `publicar.sh` del destino.
-- **Pasa por Sergio Urcullo ANTES de publicar** solo: **diseño nuevo** (pantalla o sección
-  que no existía, rediseño de una viva — ver la regla de arriba) y **textos legales**
-  (términos, privacidad, contratos). Se le muestra la pieza renderizada, no el PR.
+- **Desde el 9-oct, lo que se trabajó y pasó revisión SE SUBE, sin esperarlo.** Sergio Urcullo, 9-oct, al ver 18 PRs
+  frenados esperando su OK: *«se supone que si lo trabajaron y fue revisado se tiene que subir, no esperen a mí, se sube
+  nomás»*. Incluye diseño nuevo y rediseños de pantallas (con las capturas 390/1440 mirando el render), migraciones (con
+  backup y rollback según `onia-db`/`onia-deploy`) y cambios de infraestructura revisados. Después se le avisa SOLO lo
+  publicado, con captura o link. Sigue pidiendo su sí lo que no es «publicar código»: gasto, contactar clientes o terceros,
+  el portal del SIAT, actos legales o firmas (van por Leslie Mercado Moreno) y la cara o la voz de él en servicios externos.
+  ⚠️ Antes (2-oct al 8-oct) el diseño nuevo y los textos legales pasaban por él antes de publicar; eso frenó 18 PRs.
 - **Contenido en redes (Sergio Urcullo, 8-oct: «sí, publicá por Buffer lo que pase control de calidad»):**
   una pieza que pasa el control de calidad de su skill (`diseno-contenido-onia` / `edicion-referentes`) y se MIRÓ
   renderizada completa se publica por Buffer (Instagram, por `ig-reel.mjs`, que es la vía verificada) sin pedirle el
@@ -490,7 +498,8 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
     en `hermes-content/docs/` y esa función esté en verde. Sin tabla no hay permiso;
   - lo que nombre, cite o muestre a un cliente, a un tercero o a un competidor (imagen, voz o marca);
   - los CTA de mecanismos sin probar, como comentario → DM de Instagram (2 rechazos de Meta);
-  - toda generación paga.
+  - generación paga fuera de los lotes pequeños de imagen autorizados el 8-oct
+    (ver regla de gasto abajo); autorizar gasto no autoriza publicar la pieza.
 - **No cambia** lo que ya pide aprobación por su riesgo: escribir datos de producción fuera
   de lo autorizado, gasto pago, contactar clientes, tocar el portal del SIAT.
 - A Sergio Urcullo no se le habla de PRs: se le dice qué quedó publicado y qué necesita mirar.
@@ -599,13 +608,18 @@ Detalle operativo: skills `carruseles-onia` y `ugc-empresas-higgsfield`.
 - IDs, modelos, precios y saldos se resuelven en vivo. Lo escrito en bitácoras
   antiguas es evidencia histórica, no autorización ni catálogo vigente.
 
-- **REGLA DE ORO: la tabla de cortes + preview 360p SIEMPRE se muestran a Sergio ANTES
-  de aplicar el corte.** Nunca cortar a ciegas.
-- **Gasto — regla vigente 2026-09-22:** toda generación paga necesita un job o lote con brief,
-  costo/cap, cantidad y aprobación explícita. Una aprobación de lote cubre sus imágenes y evita
-  microconfirmaciones; no queda como permiso abierto para futuros loops. Los precios y saldos
-  históricos no autorizan gasto. Video y entrenamiento Soul siempre requieren aprobación
-  específica porque su costo y riesgo de deriva son mayores.
+- **Revisión de montaje (corrección 2026-10-09):** tabla de cortes + preview 360p
+  revisados por el carril antes del master. El permiso de contenido del 8-oct y la
+  regla de publicación del 9-oct sustituyen el OK rutinario de Sergio por pieza;
+  siguen las excepciones de claims, terceros y cara/voz. Nunca cortar a ciegas.
+- **Gasto — actualización 8-oct, consolidada 2026-10-09:** cotizar y registrar
+  brief, costo/cap y cantidad. Imágenes de prueba/opciones de estilo por pocos
+  créditos (menos de ~5 por lote) tienen autorización previa: generar y mostrar
+  el resultado después, sin fraccionar un lote mayor. Sustituye la exigencia de
+  septiembre de aprobar toda imagen. Lotes grandes, video y entrenamiento Soul
+  conservan aprobación específica; subir cara/voz de Sergio Urcullo a servicios
+  externos también requiere el OK de Leslie Mercado Moreno. Precios y saldos
+  históricos no son autorización. La excepción es de gasto, no de publicación.
 - Cómo se ve un video, se transcribe, se corta, se subtitula y se rinde →
   **skills `ver-videos` y `editor-videos`** (HyperFrames vive en el repo,
   `.claude/skills/hyperframes*` y `.agents/skills/`, restaurado el 2026-10-02 porque con la

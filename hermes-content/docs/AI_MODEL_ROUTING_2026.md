@@ -1,6 +1,6 @@
 # Enrutamiento de modelos para ONIA/Hermes
 
-Estado: vigente desde 2026-09-22. Aplica a Codex, subagentes y automatizaciones que permitan
+Estado: actualizado 2026-10-09 (Sol 6.1 para contratos cerrados, alineado con `equipo-de-agentes`). Aplica a Codex, subagentes y automatizaciones que permitan
 elegir modelo. La disponibilidad puede variar por producto y cuenta.
 
 ## Decisión
@@ -8,7 +8,7 @@ elegir modelo. La disponibilidad puede variar por producto y cuenta.
 | Trabajo | Modelo y esfuerzo inicial | Motivo |
 |---|---|---|
 | Arquitectura ambigua, decisiones de negocio, investigación multi-fuente, campaña final, revisión legal/comercial o cambios end-to-end | `gpt-6-astra` · `medium` | El costo de una mala decisión supera el ahorro de tokens |
-| Código cotidiano, investigación acotada, documentación con juicio, QA integral | `gpt-6-sol` · `medium` | Balance de calidad, costo y velocidad |
+| Código cotidiano, investigación acotada, documentación con juicio, QA integral | `gpt-6.1-sol` · `medium` | Balance de calidad, costo y velocidad |
 | `rg`, inventarios, extracción, normalización JSON, cambios mecánicos, checks repetibles | `gpt-6-luna` · `low` | Alcance cerrado y verificable |
 
 Subir esfuerzo solo si la primera pasada deja una duda material. Bajar a Luna cuando la tarea ya

@@ -1,5 +1,11 @@
 # Cola · Hermes-Jarvis
 
+- [ ] P2 de #173: el aviso de rechazo se reintenta si Telegram falla (test fallo → recuperación → segunda corrida)
+- [ ] Runbook de `aplicar` (#174) listo para que la madre lo corra desde la PC
+- [ ] Pruebas P2-P5 de `ASISTENTE_CODEX_VS_HERMES.md` (día completo, pedido a Claude, calendario, ok/block)
+
+## Verificación de aprendizaje · 2026-10-09
+- [ ] En la próxima tarea del carril, cargar `equipo-de-agentes` y `aprender-de-todo`; aplicar los checkpoints de la ficha `2026-10-08-orquestacion-e-ingresos-5-posts.md` y registrar allí sesión, contrato, artefacto y verificación. No instalar Foreman ni activar otro orquestador.
 - [x] P2 de #173: el aviso de rechazo se reintenta si Telegram falla (test fallo → recuperación → segunda corrida) — `31aebd95`, en `main` con el #173
 - [x] Runbook de `aplicar` (#174) listo para que la madre lo corra desde la PC — `fecb4813` (§8 de `TELEGRAM_COMMAND_CENTER.md`)
 - [x] Formato corto (Pasó · Necesito · Sigue) en lo que Hermes le manda: regla en el SOUL y en el resumen/cierre (`jarvis-resumen.sh`). Inerte hasta `aplicar` — `fa7702ef`
@@ -20,6 +26,9 @@
 - [x] Mergear el PR del diagnóstico 13 y 14 con el CI en verde y reportar PUBLICADO — `fce76971` (#177)
 
 **Cola sin tareas desbloqueadas (9-oct, tarde).** Lo que sigue del carril depende de `aplicar` o de una decisión de Sergio Urcullo (abajo). No invento trabajo que no sirva a la etapa: si la madre tiene algo para este carril, va acá.
+
+## Verificación de aprendizaje · 2026-10-09
+- [x] En la próxima tarea del carril, cargar `equipo-de-agentes` y `aprender-de-todo`; aplicar los checkpoints de la ficha `2026-10-08-orquestacion-e-ingresos-5-posts.md` y registrar allí sesión, contrato, artefacto y verificación. No instalar Foreman ni activar otro orquestador. — aplicado sobre el runbook de `aplicar` (§8: correr `diagnostico` antes); registro en la ficha, «Prueba de uso por sesión», commit de esta línea
 
 ## Bloqueado
 - Pruebas P2-P5 (`TELEGRAM_COMMAND_CENTER.md` §8): necesitan `aplicar` en el VPS, que corre la madre desde la PC con el «sí» de Sergio Urcullo. Desde esta sesión no se toca el VPS sin su «sí» acá.

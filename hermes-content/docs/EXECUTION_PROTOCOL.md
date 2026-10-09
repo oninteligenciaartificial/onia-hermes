@@ -30,10 +30,11 @@ defaults to closed execution:
    assumption, document it and continue.
 4. Do not ask step-by-step for reversible local work such as edits, docs,
    scripts, tests, commits and safe pushes.
-5. Ask again only for sensitive or irreversible actions: production deploys,
-   real credentials/secrets, client contact, public publishing, payments,
-   destructive deletes, real database migrations or business decisions that
-   materially change price, legal exposure, scope or risk.
+5. Corrección 2026-10-09: la autorización vigente es `CLAUDE.md`, sección
+   «Qué se publica sin preguntar». Diseño, infra y migraciones revisados (con
+   backup/rollback) no esperan otro OK. Conservar sus excepciones de contenido,
+   secretos, pagos, terceros, actos legales, borrado y decisiones de negocio.
+   Un encargo cerrado de Codex no autoriza Git ni publicación por sí solo.
 6. Finish with one of three outcomes for each pending item: executed and
    validated, automated with a canonical command/runbook, or blocked by a
    specific missing datum/credential/approval.
@@ -43,8 +44,9 @@ an execution loop: pick the next item, inspect, implement, validate, document,
 commit/push when coherent, and continue until done or specifically blocked.
 
 Hermes cannot truly run forever inside a single chat turn. Continuous work must
-be implemented through Codex automations, thread heartbeats, cron jobs, CI or
-another scheduler with clear scope, cadence and approval gates.
+follow `equipo-de-agentes`: one queue per lane and the mother's review loop.
+Correction 2026-10-09: Codex must not create a competing heartbeat/orchestrator.
+If the runtime cannot continue, record the blocker and next task; do not claim a live loop.
 
 ## Data-First Before Questions
 
