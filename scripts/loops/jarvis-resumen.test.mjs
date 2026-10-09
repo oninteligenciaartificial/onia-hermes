@@ -390,3 +390,63 @@ test("con el parte caído (el tablero vivo y sin prospectos), NECESITO tampoco d
     assert.match(NECESITO, /no respondió/, modo);
   }
 });
+
+// ── Qué sale hoy: el calendario de publicación vigente (9-oct) ──────────────────
+// El GOAL del 8-oct: sale contenido todos los días. Desde el 8-oct lo que se publica cada día está en
+// CALENDARIO-PUBLICACION-<d1>-<d2>-<MES>.md, y se graba todo junto (GRABAR-*.md). Medido el 9-oct: la
+// mañana del 10 decía «Para grabar hoy» con tres guiones del plan del 29-sep, y ese día salen otros.
+const CALENDARIO = `# Calendario de publicación · viernes 9 → viernes 16 de octubre
+
+| Hora | Qué sale | Dónde | Cómo |
+|---|---|---|---|
+| **12:30** | **Video A** | Instagram | \`ig-reel.mjs\` |
+
+## Calendario
+
+| Día | Carrusel 16:00 | Video A · 12:30 (yap 13:30) | Video B · 18:30 (yap 19:30) |
+|---|---|---|---|
+| **Vie 9** | COMUNIDAD (N03) | — | **N03 modo auto** (v2, agendado) |
+| **Sáb 10** | HOOK (K11) | **N07** Haiku 5.5 | **D03-A** hook que commitea |
+| **Dom 11** | ANTIGRAVITY (N06) | **N06** Antigravity | **DD-A** caché de <OpenAI> |
+`;
+const GUIONES_VIEJOS = `## Sábado 10 de octubre
+
+### D11-A · Vertical · Un guion del plan viejo
+`;
+function repoConCalendario() {
+  const dir = mkdtempSync(join(tmpdir(), "jarvis-plan-"));
+  const plan = join(dir, "hermes-content", "docs", "cola", "plan-3-semanas");
+  mkdirSync(plan, { recursive: true });
+  writeFileSync(join(plan, "CALENDARIO-PUBLICACION-9-16-OCT.md"), CALENDARIO);
+  writeFileSync(join(plan, "S2-GUIONES.md"), GUIONES_VIEJOS);
+  return dir;
+}
+
+test("la mañana dice qué sale hoy, por hora, del calendario de publicación", () => {
+  const b = banco({ repo: repoConCalendario() });
+  const msg = b.imprimir("manana", { ONIA_HOY: "2026-10-10" });
+  assert.match(msg, /📣 <b>Hoy sale<\/b>\n• 12:30 Video A · N07 Haiku 5\.5\n• 16:00 Carrusel · HOOK \(K11\)\n• 18:30 Video B · D03-A hook que commitea/);
+  assert.ok(bloques(msg).SIGUE.includes("📣 <b>Hoy sale</b>"), "va en SIGUE");
+});
+
+test("con calendario para el día, no repite los guiones del plan viejo como «para grabar hoy»", () => {
+  const b = banco({ repo: repoConCalendario() });
+  const msg = b.imprimir("manana", { ONIA_HOY: "2026-10-10" });
+  assert.doesNotMatch(msg, /Un guion del plan viejo|Para grabar hoy/);
+});
+
+test("un día sin pieza en una columna («—») no inventa esa línea, y el texto va escapado", () => {
+  const b = banco({ repo: repoConCalendario() });
+  const vie = b.imprimir("manana", { ONIA_HOY: "2026-10-09" });
+  assert.match(vie, /• 16:00 Carrusel · COMUNIDAD \(N03\)\n• 18:30 Video B · N03 modo auto \(v2, agendado\)/);
+  assert.doesNotMatch(vie, /Video A ·/);
+  const dom = b.imprimir("noche", { ONIA_HOY: "2026-10-10" });
+  assert.match(dom, /📣 <b>Mañana sale<\/b>[\s\S]*DD-A caché de &lt;OpenAI&gt;/);
+});
+
+test("fuera del rango del calendario (o el mismo número de otro mes) vuelve a los guiones del plan", () => {
+  const b = banco({ repo: repoConCalendario() });
+  assert.doesNotMatch(b.imprimir("manana", { ONIA_HOY: "2027-04-10" }), /📣/, "el sábado 10 de abril no es el sábado 10 de octubre");
+  const real = banco();
+  assert.match(real.imprimir("manana", { ONIA_HOY: "2026-10-07" }), /🎬 <b>Para grabar hoy<\/b>/, "el 7-oct no lo cubre el calendario 9-16");
+});

@@ -13,7 +13,8 @@
 #   prospectos esperando  -> tarea [leads-esperando] del tablero (vigia_sin_respuesta.mjs)
 #   decisiones            -> onia-parte-diario.sh (su rotación y su filtro needs_input)
 #   agenda                -> onia-agenda.sh, si existe; si no, lo dice
-#   guiones               -> hermes-content/docs/cola/plan-3-semanas/S*-GUIONES.md
+#   qué sale              -> hermes-content/docs/cola/plan-3-semanas/CALENDARIO-PUBLICACION-*.md
+#   guiones               -> hermes-content/docs/cola/plan-3-semanas/S*-GUIONES.md (si el calendario no cubre el día)
 #   lo que pasó de noche  -> la cola de la aduana (onia-tg.sh, $ESTADO/resumen.log)
 #   lo que se hizo hoy    -> git log de origin/main
 # El único paso con IA es traducir los commits del día a castellano llano, con la orden de
@@ -174,6 +175,75 @@ seccion_guiones() {  # seccion_guiones <fecha> <titulo>
   printf '%s\n' "$g" | esc | sed 's/^/• /'
 }
 
+# ── Qué sale: el calendario de publicación (9-oct) ───────────────────────────
+# GOAL del 8-oct: sale contenido todos los días. Desde el 8-oct lo que se publica cada día está en
+# CALENDARIO-PUBLICACION-<d1>-<d2>-<MES>.md (pedido de Sergio Urcullo), y se graba todo junto
+# (GRABAR-*.md): el «para grabar hoy» de los S*-GUIONES (plan del 29-sep) ya no es lo de ese día.
+# Medido el 9-oct: la mañana del 10 iba a nombrar tres guiones viejos, y ese día salen otros.
+# Salida: «HH:MM<TAB>qué<TAB>pieza» por línea, en orden de hora. Vacía si ningún calendario cubre el día.
+calendario_del() {  # calendario_del <fecha>
+  local fs=("$REPO"/hermes-content/docs/cola/plan-3-semanas/CALENDARIO-PUBLICACION-*.md)
+  [ -f "${fs[0]}" ] || return 0
+  python3 - "$1" "${fs[@]}" <<'PY'
+import datetime, os, re, sys
+fecha = datetime.date.fromisoformat(sys.argv[1])
+MESES = "ENE FEB MAR ABR MAY JUN JUL AGO SEP OCT NOV DIC".split()
+DIAS = ["lun", "mar", "mié", "jue", "vie", "sáb", "dom"]
+def celdas(linea):
+    return [c.strip() for c in linea.strip().strip("|").split("|")]
+for f in sorted(sys.argv[2:]):
+    m = re.search(r"CALENDARIO-PUBLICACION-(\d{1,2})-(\d{1,2})-([A-Z]{3})\.md$", os.path.basename(f))
+    if not m or m.group(3) not in MESES:
+        continue
+    d1, d2, mes = int(m.group(1)), int(m.group(2)), MESES.index(m.group(3)) + 1
+    try:
+        fin = datetime.date(fecha.year, mes, d2)
+        ini = datetime.date(fecha.year, mes, d1) if d1 <= d2 else (fin.replace(day=1) - datetime.timedelta(days=1)).replace(day=d1)
+    except ValueError:
+        continue
+    if not ini <= fecha <= fin:
+        continue
+    cabeza = None
+    for linea in open(f, encoding="utf-8"):
+        if not linea.lstrip().startswith("|"):
+            cabeza = None
+            continue
+        c = celdas(linea)
+        if c and c[0] == "Día":
+            cabeza = c
+            continue
+        if not cabeza or len(c) != len(cabeza):
+            continue
+        dia = c[0].replace("*", "").split()
+        if len(dia) != 2 or dia[0].lower()[:3] != DIAS[fecha.weekday()] or dia[1] != str(fecha.day):
+            continue
+        filas = []
+        for h, v in zip(cabeza[1:], c[1:]):
+            v = v.replace("*", "").strip()
+            if v in ("", "—", "-"):
+                continue
+            t = re.search(r"\d{1,2}:\d{2}", h)
+            que = h[: t.start()].strip(" ·") if t else h
+            filas.append((t.group(0).zfill(5) if t else "", que, v))
+        for hora, que, v in sorted(filas):
+            print("%s\t%s\t%s" % (hora, que, v))
+        sys.exit(0)
+PY
+}
+seccion_sale() {  # seccion_sale <fecha> <titulo>
+  local c
+  c=$(calendario_del "$1" 2>/dev/null)
+  [ -n "$c" ] || return 0
+  printf '📣 <b>%s</b>\n' "$2"
+  printf '%s\n' "$c" | awk -F'\t' '{ printf "• %s%s · %s\n", ($1 == "" ? "" : $1 " "), $2, $3 }' | esc
+}
+# Los guiones del plan viejo, solo para un día que el calendario no cubre.
+seccion_plan() {  # seccion_plan <fecha> <titulo de lo que sale> <titulo de los guiones>
+  local s
+  s=$(seccion_sale "$1" "$2")
+  if [ -n "$s" ]; then printf '%s\n' "$s"; else seccion_guiones "$1" "$3"; fi
+}
+
 # ── La cola de la aduana: lo que no interrumpió ──────────────────────────────
 DESDE_COLA=$(cat "$ESTADO/leido-hasta" 2>/dev/null || echo "1970-01-01T00:00:00Z")
 cola_nueva() {  # cola_nueva <tipo>  (noche | resumen)
@@ -303,12 +373,12 @@ if [ "$MODO" = manana ]; then
   CABEZA="☀️ <b>Buen día, Sergio Urcullo</b> — $(dia_largo "$HOY")"
   parte seccion_cola noche 'Mientras dormías'; parte linea_salud; grupo PASÓ
   parte seccion_prospectos; parte seccion_decisiones; grupo NECESITO "$NADA"
-  parte seccion_agenda "$HOY" 'Tu día'; parte seccion_guiones "$HOY" 'Para grabar hoy'; grupo SIGUE
+  parte seccion_agenda "$HOY" 'Tu día'; parte seccion_plan "$HOY" 'Hoy sale' 'Para grabar hoy'; grupo SIGUE
 else
   CABEZA="🌙 <b>Cierre del $(dia_largo "$HOY")</b>"
   parte seccion_hoy; parte seccion_pedidos; parte seccion_cola resumen 'Avisos del día'; parte linea_salud; grupo PASÓ
   parte seccion_bloques_hoy; parte seccion_sigue; grupo NECESITO "$NADA"
-  parte seccion_agenda "$MANANA" 'Mañana'; parte seccion_guiones "$MANANA" 'Mañana grabás'; grupo SIGUE
+  parte seccion_agenda "$MANANA" 'Mañana'; parte seccion_plan "$MANANA" 'Mañana sale' 'Mañana grabás'; grupo SIGUE
 fi
 MSG="$CABEZA
 

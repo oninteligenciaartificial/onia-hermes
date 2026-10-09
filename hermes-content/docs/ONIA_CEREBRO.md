@@ -35,7 +35,7 @@ afuera sin aprobación** — la autonomía termina en tu canal.
 
 | Qué | Cuándo | Qué lleva |
 |---|---|---|
-| ☀️ **Resumen de la mañana** | **06:30** La Paz | agenda del día · prospectos esperando · guiones para grabar hoy · decisiones (máx. 5, con `ok <id>`) · lo que pasó de noche · UNA línea de salud del sistema |
+| ☀️ **Resumen de la mañana** | **06:30** La Paz | agenda del día · prospectos esperando · qué sale hoy (el calendario de publicación vigente; sin él, los guiones del plan) · decisiones (máx. 5, con `ok <id>`) · lo que pasó de noche · UNA línea de salud del sistema |
 | 🌙 **Cierre del día** | **21:30** La Paz | qué se hizo hoy, en castellano llano · sus bloques de ONIA del día, numerados, con «¿se hicieron?» · qué sigue esperando · mañana |
 | 🔔 **Interrupción** | al momento, **solo** entre 06:30 y 22:00 y **fuera de sus bloques** | una de las cuatro de abajo, y nada más |
 
