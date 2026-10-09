@@ -177,3 +177,16 @@ cd videos && npx -y hyperframes@0.8.142 init lucia-gN --non-interactive --exampl
 - **Una imagen que no es Lucía** (la B del café, 0,35) se rotula como lo que es («Imagen B · café») y la tarjeta lo dice: «El café: B perdió la cara».
 - **Dos formas incidentales** (un perfil gris tipo letra en C, un óvalo borroso en el monitor de E) vienen de la imagen de IA: se evalúa si se leen como marca; si sí,
   se difuminan con pluma como en G3.
+
+## 10. Lo que sumó G5 (57,5 s, 9-oct: placas con datos y cuadros fijos de clips; montar → revisor → corregir → re-revisar → pasada mínima)
+
+- **Tres pasadas de redacción, ninguna de imagen.** Los hallazgos del revisor fueron de honestidad del texto: «baja sola» exageraba (se midió −0,004 a −0,010), «0,66: se parece poco»
+  cae dentro del ruido que el video declara 15 s después, y «es ruido» afirma una causa con un solo clip (rango 0,028): quedó «cabe en ±0,03». El `build.mjs` corta si reaparece una
+  frase vieja (lista de frases retiradas) y valida las cifras contra PROCEDENCIA; así una corrección no se pierde en la pasada siguiente.
+- **Un cuadro fijo sacado de un clip se versiona** (`assets-fijos/` con `ORIGEN.md`, clip, cuadro, SHA y `extraer-cuadros.sh`): el clip crudo vive en el disco de la nube y se pierde.
+- **Difuminar un letrero inventado exige decirlo en pantalla** («Lo difuminé: lo inventó el motor.») y un aro que cubra TODO lo difuminado; si no, la prueba de que el motor inventa queda invisible y
+  una mancha sin explicar parece un defecto.
+- **Escala ampliada para valores muy juntos:** en la escala 0-1, 0,77 y 0,79 quedan a 17 px y se pisan; se amplía (0,70-0,90), se rotula «Zoom» y se repite la marca del piso.
+- **Control propio antes del guion:** reducir la misma foto hasta que la cara mida 60 px (0 cr) mostró que la afirmación del guion no se sostenía. Un número del gate medido en cuadros con zoom difiere hasta 0,04 del PNG
+  original (F): en pantalla va el del original y el README dice las cuatro medidas.
+- **Una llamada o nota nueva se mide en el DOM** (`ventanas.mjs`): la de 44 px entra a 32,0 s y necesita 3,80 s; las 3 piezas tocadas se rehacen siempre que se cambia texto.
