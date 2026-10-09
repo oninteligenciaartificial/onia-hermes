@@ -22,6 +22,10 @@
   4. *P1 «Niveles», P3 pizarra:* P1 espera el OK del molde y de la pizarra de N07; P3 espera la bio de IG, cal.com y el recuento de sesiones.
   5. *P2 «7 herramientas» (sáb 17):* faltan las capturas con cuentas (Buffer, Higgsfield, ListAgents), que son de una sesión con Chrome en
      la PC, y la lámina 6 sale con el plan B si Sergio no da el OK.
+- **P1 «Niveles» — cuadro de prueba listo (15:00 UTC):** `hermes-content/videos/moldes/niveles/cuadro-prueba-tramo-03.{html,png}` es el
+  cuadro del tramo 03 «SONNET + PRUEBA» (s 23), el que GRABAR v3 pide aprobar ANTES de renderizar. Visto a 390 px de ancho: se lee todo,
+  incluida la nota al pie (36 px). La captura de la tabla de precios es un recuadro marcado: la real la saca la madre con Chrome el día
+  de publicar. Si Sergio Urcullo o la madre lo aprueban, sigue el render (lo hace la madre, en la PC, con HyperFrames).
 - **Pendiente mío, sin bloqueo:** mirar renderizada `sergiourcullo.vercel.app/claude-code` antes del jue 15 (aviso SKILL); verificar la
   publicación de N03 el vie 9 ~18:30 La Paz.
 
