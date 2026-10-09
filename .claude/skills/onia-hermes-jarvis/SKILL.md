@@ -19,6 +19,8 @@ description: Invocar ANTES de tocar a Hermes (el asistente de Sergio Urcullo por
 | El acceso al VPS y sus tres acciones | `hermes-content/deploy/hermes-jarvis/` (+ `README.md`) |
 | La constitución de Hermes y sus skills | `hermes-content/deploy/hermes-agent/SOUL.md` · `hermes-content/skills/{agenda-calendario,pedir-a-claude}.md` |
 | Resumen y cierre · aduana · calendario · pedidos · su vuelta | `scripts/loops/{jarvis-resumen,onia-tg,agenda,pedido-claude,respuestas-pedidos}.sh` |
+| Fuentes del resumen/cierre que no son del carril (9-oct) | qué sale: `hermes-content/docs/cola/plan-3-semanas/CALENDARIO-PUBLICACION-<d1>-<d2>-<MES>.md` (el rango sale del nombre); qué salió: `/root/publicar/publicado.jsonl` del VPS (lo escriben los publicadores de `hermes-content/deploy/vps-ops/publicar/`) |
+| Formato de todo lo que le llega (8-oct) | PASÓ · NECESITO · SIGUE: `jarvis-resumen.sh` (`parte`/`grupo`), SOUL `## Formato fijo de cada mensaje`, prompt de la rutina §5 |
 
 ## Cómo se llega al VPS desde la nube, y qué NO anda
 
