@@ -757,3 +757,56 @@ test("diagnóstico: sin la línea del cron (o comentada) y sin log, lo dice", ()
   assert.match(r.stdout, /en el crontab: NO/);
   assert.match(r.stdout, /no existe .*onia-respuestas-pedidos\.log/);
 });
+
+// ── diagnostico: lo publicado y lo agendado (9-oct; GOAL del 8-oct: una pieza por día) ──────────────
+// Corre la sección 13 del diagnostico.sh REAL con /root llevado a una carpeta temporal y un systemctl
+// de mentira. Solo lectura: lista, no toca nada.
+function diagnosticoPublicaciones({ conRegistro = true } = {}) {
+  const dir = mkdtempSync(join(tmpdir(), "jarvis-diag-pub-"));
+  const F = join(dir, "fs");
+  const pub = join(F, "root", "publicar");
+  mkdirSync(pub, { recursive: true });
+  // Fechas fijas: la sección mira desde DESDE, no desde «ahora», y así el conteo por día no depende
+  // de la hora en que corre la prueba.
+  if (conRegistro) {
+    writeFileSync(
+      join(pub, "publicado.jsonl"),
+      [
+        { cuenta: "sergio", media: "1", trial: null, permalink: "https://www.instagram.com/reel/VIEJO/", timestamp: "2026-10-05T16:00:00+0000" },
+        { cuenta: "sergio", media: "2", trial: null, permalink: "https://www.instagram.com/reel/NUEVO/", timestamp: "2026-10-09T16:31:00+0000" },
+        { cuenta: "sergio", media: "3", tipo: "carrusel", permalink: "https://www.instagram.com/p/CAR/", timestamp: "2026-10-09T20:00:00+0000" },
+        { red: "youtube", id: "e", url: "https://youtu.be/ENSAYO", privacidad: "private", fecha: "2026-10-09T21:00:00.000Z" },
+        { red: "buffer", canal: "c1", post: "p9", estado: "agendado", cuando: "2026-10-10T16:35:00.000Z", fecha: "2026-10-09T21:05:00.000Z" },
+      ].map((r) => JSON.stringify(r)).join("\n") + "\n{roto\n",
+    );
+  }
+  const dobles = join(dir, "dobles");
+  ejecutable(join(dobles, "systemctl"), `#!/usr/bin/env bash\necho "$*" >> ${dir}/systemctl.log\necho 'Sat 2026-10-10 16:30:00 UTC 1h left - - pub-n07.timer pub-n07.service'\n`);
+  const diag = readFileSync(join(DIR, "diagnostico.sh"), "utf8");
+  const s13 = diag.slice(diag.indexOf('sec "13.'), diag.indexOf('sec "fin"'));
+  assert.ok(s13.length > 0, "no encontré la sección 13 del diagnóstico");
+  const guion =
+    `REDACTAR_SED='s/a^//'\n` + readFileSync(join(DIR, "comun.sh"), "utf8") + `\nDESDE=2026-10-06T12:00:00Z\n` + s13.replaceAll("/root/", join(F, "root") + "/");
+  const r = spawnSync("bash", ["-s"], { input: guion, env: { ...process.env, PATH: `${dobles}:${process.env.PATH}` }, encoding: "utf8" });
+  return { r, systemctl: existsSync(join(dir, "systemctl.log")) ? readFileSync(join(dir, "systemctl.log"), "utf8") : "" };
+}
+
+test("diagnóstico: lo publicado en la ventana, con link y por día, y lo agendado, sin tocar nada", () => {
+  const { r, systemctl } = diagnosticoPublicaciones();
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(r.stdout, /10-09 12:31 Reel · https:\/\/www\.instagram\.com\/reel\/NUEVO\//);
+  assert.match(r.stdout, /Carrusel · https:\/\/www\.instagram\.com\/p\/CAR\//);
+  assert.match(r.stdout, /YouTube \(private\) · https:\/\/youtu\.be\/ENSAYO/, "el ensayo privado se ve como tal");
+  assert.match(r.stdout, /Buffer agendado · p9/);
+  assert.doesNotMatch(r.stdout, /VIEJO/, "lo de antes de la ventana no sale");
+  assert.match(r.stdout, /publicadas por día \(La Paz, Instagram y YouTube público\): 10-09: 2$/m);
+  assert.match(r.stdout, /pub-n07\.timer/);
+  assert.match(systemctl, /^list-timers pub-\* --all --no-pager$/m);
+  assert.doesNotMatch(systemctl, /^(start|stop|restart|enable|disable)/m, "solo lectura");
+});
+
+test("diagnóstico: sin registro de publicaciones, lo dice", () => {
+  const { r } = diagnosticoPublicaciones({ conRegistro: false });
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(r.stdout, /no existe .*publicado\.jsonl/);
+});
