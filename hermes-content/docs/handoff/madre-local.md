@@ -5,6 +5,27 @@ Este archivo es el ESTADO al **5-oct, 20:40 UTC**, cuando Sergio Urcullo pidió 
 La madre saliente (`cfdce1bb…`, rama `claude/onia-sesion-madre-77f719`, worktree `infra-loops-revision-3fc7b1`) llevaba
 días abierta y su conversación costó ~777 M de tokens. **La madre nueva arranca de cero y lee solo esto.**
 
+## ☀️ Para Sergio Urcullo a la mañana (noche del 8 al 9-oct)
+
+Lo que solo decide él. Mostrarlo en 3 bloques, corto.
+1. **Grabar hoy** (vie 9, antes de las 18:00): N07, DD-A, N02, D03-A y D04-C. Guiones: https://claude.ai/artifact/4DFnmADw28Hjj5gayyaHcR
+2. **OK de diseño:** las 6 pantallas de la lámina (bandeja #136, nueva conversación, agenda, odontograma, caja, app sin conexión).
+3. **OK de cambios en la base o la infraestructura:**
+   - migración Realtime del canal privado (#139, punto 3);
+   - migración de facturas (#114, punto 15, antes del swap);
+   - infra del widget (#140: bloquear `/public/api/` y `hmac_mandatory`);
+   - SQL del B22 (REVOKE a anon);
+   - bucket R2 del respaldo afuera (punto 4).
+4. **Sí a refrescar la demo en producción** (para las capturas del VSL) y **el CAFC del piloto del SIAT** (código y rango).
+5. **Legal:** términos con su migración (#124, punto 14).
+6. **Sí o no:**
+   - encender Hermes Jarvis (`aplicar`);
+   - copiar 5 skills de marketing al repo;
+   - tarjeta en ONIA Ads;
+   - link de la asesoría en la bio de IG y cal.com.
+   - Higgsfield predictor: necesita el OK de Leslie Mercado Moreno.
+7. **Hecho de noche:** #133 y #134 mergeados (publicación en vuelo), #137→#140 widget seguro, W1c, K3c #138 mergeado, C3c #139, C15b en #114. Suite completa en verde en todos.
+
 ## 🎯 GOAL VIGENTE — 8-oct (Sergio Urcullo; sesión madre `202a717e…`, rama `claude/onia-madre-v2-pr-review-2d85bb`)
 
 **Meta:** la 1.0 con TODAS las funciones del plan, publicada y MIRADA en producción. Los puntos 1-4 el **16-oct**; los 15
