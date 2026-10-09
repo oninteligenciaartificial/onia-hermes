@@ -462,9 +462,13 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
 - **Se publica sin preguntar** lo que pasa los gates del carril (tsc, tests, revisión) y se
   MIRA en producción después: arreglos, features sobre pantallas existentes, bot, textos de
   producto, docs. Se mergea el PR y se corre el `publicar.sh` del destino.
-- **Pasa por Sergio Urcullo ANTES de publicar** solo: **diseño nuevo** (pantalla o sección
-  que no existía, rediseño de una viva — ver la regla de arriba) y **textos legales**
-  (términos, privacidad, contratos). Se le muestra la pieza renderizada, no el PR.
+- **Desde el 9-oct, lo que se trabajó y pasó revisión SE SUBE, sin esperarlo.** Sergio Urcullo, 9-oct, al ver 18 PRs
+  frenados esperando su OK: *«se supone que si lo trabajaron y fue revisado se tiene que subir, no esperen a mí, se sube
+  nomás»*. Incluye diseño nuevo y rediseños de pantallas (con las capturas 390/1440 mirando el render), migraciones (con
+  backup y rollback según `onia-db`/`onia-deploy`) y cambios de infraestructura revisados. Después se le avisa SOLO lo
+  publicado, con captura o link. Sigue pidiendo su sí lo que no es «publicar código»: gasto, contactar clientes o terceros,
+  el portal del SIAT, actos legales o firmas (van por Leslie Mercado Moreno) y la cara o la voz de él en servicios externos.
+  ⚠️ Antes (2-oct al 8-oct) el diseño nuevo y los textos legales pasaban por él antes de publicar; eso frenó 18 PRs.
 - **Contenido en redes (Sergio Urcullo, 8-oct: «sí, publicá por Buffer lo que pase control de calidad»):**
   una pieza que pasa el control de calidad de su skill (`diseno-contenido-onia` / `edicion-referentes`) y se MIRÓ
   renderizada completa se publica por Buffer (Instagram, por `ig-reel.mjs`, que es la vía verificada) sin pedirle el
