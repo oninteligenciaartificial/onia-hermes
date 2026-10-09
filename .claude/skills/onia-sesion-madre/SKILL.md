@@ -196,6 +196,7 @@ Cómo contestar: <en tu transcript | SendMessage a «Sesión madre de Onia» | r
 ## El permiso de mover `main` (5-oct)
 
 - Desde el 5-oct el hook Stop solo mueve `main` con permiso (Sergio Urcullo: «sí, la madre sigue directo»).
+  Desde el 9-oct vale solo en su clon principal: en los worktrees de sus subagentes el hook lo ignora.
   La madre lo tiene con **`ONIA_AUTOSYNC_MAIN=1` en el `.claude/settings.local.json` de SU carpeta de
   onia-hermes** (`{"env": {"ONIA_AUTOSYNC_MAIN": "1"}}`), que git ignora desde el 5-oct. Así vale solo para las
   sesiones abiertas en esa carpeta. Nunca en `.claude/settings.json` (se lo daría a todas las sesiones, también

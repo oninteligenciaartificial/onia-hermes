@@ -268,3 +268,24 @@ test("ningún settings.local.json está versionado, en ninguna carpeta", () => {
   const sub = spawnSync("git", ["check-ignore", "-q", "web-factory/apps/onia-platform/.claude/settings.local.json"], { cwd: RAIZ, encoding: "utf8" });
   assert.equal(sub.status, 0, "también en las subcarpetas con su propio .claude/");
 });
+
+// Pendiente de la revisión de la madre al #138 (9-oct): ONIA_AUTOSYNC_MAIN lo heredan los procesos hijos de la
+// madre, también los subagentes que trabajan en worktrees aparte. Con el permiso heredado, el Stop de un
+// subagente a medio terminar movía main. El permiso vale solo en el clon principal (git-dir == git-common-dir).
+test("el permiso de la madre no vale en un worktree de sus subagentes", () => {
+  const s = sesion("main", { env: { ONIA_AUTOSYNC_MAIN: "1" }, sinCambio: true });
+  const wt = join(s.dir, "worktree-subagente");
+  s.git(s.clon, "worktree", "add", "-q", "-b", "claude/subagente", wt);
+  writeFileSync(join(wt, "a-medias.md"), "trabajo de un subagente a medias\n");
+  const r = spawnSync("node", [AUTOSYNC], { cwd: wt, env: entorno(join(s.dir, "gitconfig"), { ONIA_AUTOSYNC_MAIN: "1" }), encoding: "utf8" });
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(r.stdout, /permiso de main ignorado: esto es un worktree/);
+  assert.equal(s.mainRemoto(), s.base, "main no se movió");
+  assert.equal(s.remota("claude/subagente"), s.git(wt, "rev-parse", "HEAD"), "la rama del subagente sí se pusheó");
+  // Control: en el clon principal, el mismo permiso sí mueve main.
+  s.git(s.clon, "switch", "-q", "-c", "claude/madre");
+  writeFileSync(join(s.clon, "de-la-madre.md"), "revisado\n");
+  const r2 = s.correr({ ONIA_AUTOSYNC_MAIN: "1" });
+  assert.equal(r2.status, 0, r2.stdout + r2.stderr);
+  assert.equal(s.mainRemoto(), s.cabeza(), "en el clon principal el permiso vale");
+});

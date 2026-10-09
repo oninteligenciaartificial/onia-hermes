@@ -55,6 +55,12 @@ description: Invocar ANTES de tocar a Hermes (el asistente de Sergio Urcullo por
 
 - **Gateway:** `hermes-gateway.service` (systemd), vivo desde el 18-sep con 0 reinicios, v0.21.0,
   `gpt-5-mini` por LiteLLM `:4000`. Bot `@aalfredhq_bot` por polling.
+- **Modelos, por trabajo** (la pregunta «¿mini o nano?» de la madre, 8-oct: son los dos). `gpt-5-mini`: el chat
+  del gateway y los trabajos de las 08:00 (agenda) y 08:10 (plan de video). `gpt-5-nano`: el ordenador del
+  tablero de las 13:00 y el veredicto de las 16:00. Medido el 27-sep (`jobs.json` y config viva) y el 1-oct
+  (gateway); no se volvió a medir. Después de `aplicar` quedan pausados 08:00, 08:10 y 16:00, y el resumen y
+  el cierre de Jarvis usan `gpt-5-mini` (`ONIA_JARVIS_MODELO`): en `nano` queda solo el tablero. Se mira en
+  solo lectura con `diagnostico` (imprime «modelo:» por trabajo) y `grep -n model /root/.hermes/config.yaml`.
 - **Arma su lista de skills al ARRANCAR** (`.skills_prompt_snapshot.json`). El 1-oct la lista era del
   08-sep y no nombraba `agenda-calendario`, que existía desde el 28-sep: una skill copiada en caliente
   existe en el disco y él no la conoce. **Toda skill o SOUL nuevo exige reiniciar el gateway**:
@@ -115,6 +121,13 @@ CLI de Hermes.
   INERTE hasta encenderlo. **Mientras el cambio del 5-oct no esté en `main`,** con una rama que sale de
   `main` y un PR sin revisar: pushear a mano y soltar el turno con `git checkout --detach`. Con el hook
   nuevo en tu árbol ya no hace falta, pero no cuesta nada.
+- **El permiso de la madre vale solo en su clon principal** (revisión de la madre al #138, 9-oct): sus
+  procesos hijos heredan `ONIA_AUTOSYNC_MAIN`, y los subagentes trabajan en worktrees. Se compara
+  `git rev-parse --path-format=absolute --git-dir --git-common-dir`: en un worktree son distintos. Pide git
+  ≥ 2.31; con uno más viejo el permiso no vale (falla seguro).
+- **Una respuesta rechazada avisa, una vez por pedido** («⛔ Rechazada · id · link», sin el texto rechazado;
+  9-oct). Antes se descartaba en silencio. «⚠️ Respuesta rechazada» con un link real pasaba los 90 bytes y
+  la aduana guardaba solo el emoji: la etiqueta se eligió por bytes, no por gusto.
 - **Las sesiones de la NUBE sí pueden pushear a `main`** (medido el 5-oct): 23 de los 48 avances directos
   de `main` del 28-sep al 5-oct traen el `Claude-Session` de dos sesiones de la nube (Lucía,
   `session_01Whdadt…`, y Marca personal, `session_01CE21my…`; `environment_kind: anthropic_cloud`). El

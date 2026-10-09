@@ -31,8 +31,23 @@ const path = require('path');
 // Exactamente esos valores: «true», «0» u otro loop no habilitan nada. Frena el ACCIDENTE (el
 // fast-forward automático al soltar el turno), no a una sesión que pushee a main a propósito.
 // Pruebas: scripts/loops/pedido-rama.test.mjs.
+//
+// El de la madre vale SOLO en el clon principal (revisión de la madre al #138, 9-oct): sus procesos hijos
+// heredan la variable, y los subagentes trabajan en worktrees aparte. Sin esto, el Stop de un subagente a
+// medio terminar movía main. Un worktree se reconoce porque su git-dir no es el git-dir común.
 function puedeMoverMain(env = process.env) {
-  return env.ONIA_AUTOSYNC_MAIN === '1' || env.ONIA_LOOP_ID === 'onia-cola';
+  if (env.ONIA_LOOP_ID === 'onia-cola') return true;
+  if (env.ONIA_AUTOSYNC_MAIN !== '1') return false;
+  if (esClonPrincipal()) return true;
+  console.log('[autosync] permiso de main ignorado: esto es un worktree, no el clon de la madre');
+  return false;
+}
+
+function esClonPrincipal() {
+  const r = tryGit(['rev-parse', '--path-format=absolute', '--git-dir', '--git-common-dir']);
+  if (!r.ok) return false;
+  const [dir, comun] = r.out.split('\n').map((l) => l.trim());
+  return Boolean(dir) && dir === comun;
 }
 
 // Una sesión parada EN main y sin permiso no pushea main: sus commits van a esta rama, para un PR.
