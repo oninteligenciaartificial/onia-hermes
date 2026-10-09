@@ -1,5 +1,11 @@
 # Handoff — carril `mercado-y-pauta` (sesión «Ventas y pauta Onia Platform», antes «Análisis de mercado»)
 
+> 🔁 **9-oct — loop sobre la cola `cola/loop/ventas-pauta.md`** (la cola y el commit `06ae72789` de la madre viven en `origin/claude/onia-madre-v2-pr-review-2d85bb`, **no en `main`**; allí está también el cambio de CLAUDE.md que sube el diseño sin esperar: **sin mergear, no rige para mí**).
+> - ✅ **Tarea 3 (creativos de §5.11):** `carousels/briefs/ads/PRUEBA-1-PIEZAS.md`: A1-E y A1-V listas y miradas con el copy corregido; A1-S espera la cara de Sergio Urcullo.
+> - ✅ **Tarea 4 (fichas de contenido):** `research/competencia/anuncios/FICHAS_DE_CONTENIDO.md` (Huli, Reservo, Dt.Dental, Calu, bolivianos: ningún proveedor boliviano pauta en Meta).
+> - ⛔ **Tareas 1 y 2 bloqueadas por Plataforma:** la tabla «se promete / funciona» y el corto de 60 s necesitan la cuenta demo y las capturas C1-C7 (y que Sergio Urcullo vea la tabla de cortes y el preview 360p antes de cortar).
+> - Bloqueado de Sergio Urcullo: tarjeta en ONIA Ads y OK de gasto.
+
 > ✏️ **9-oct — copy corregido (pedido de la madre): ya no dice «lo envía, con un toque».** El envío con un toque (G-03) está a medias en
 > `ONIA_PROMESA_VS_PRODUCTO.md`. Ahora dice **«Usted lo aprueba. Nada sale sin su OK.»** en A1, A2, carrusel (lámina 3), micro-video y los guiones F1/F3.
 > Se quitó también el anillo y el pulso sobre el botón «Enviar yo mismo»: la pantalla real lo sigue mostrando, pero sin énfasis. El pulso del video
