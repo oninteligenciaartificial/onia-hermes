@@ -166,6 +166,14 @@ CLI de Hermes.
 - **Una sección del SOUL se copia con un rango.** El `aplicar` viejo hacía `sed '/^## Su calendario/,$p'`:
   arrastraba TODO lo que viniera después. La sección de pedidos va ANTES de la del calendario, y
   cada copia termina en el próximo `---`.
+- **El registro de publicaciones miente si se lo lee a la ligera** (9-oct, segunda revisión del #176).
+  `yt-video.mjs` sube en PRIVADO por defecto (ensayo) y lo anota igual: solo cuenta `privacidad: public`.
+  `ig-historia.mjs` no pide `permalink`: la historia va sin link. `buffer-post` anota el envío, no la
+  salida: se cuenta por `cuando` (o `fecha` si es «ya») y solo lo que ya pasó. Y no ve lo que Sergio
+  Urcullo sube a mano: se dice «en el registro», nunca «no salió nada».
+- **Un calendario sin año** (`CALENDARIO-PUBLICACION-28-3-ENE.md`): el año es el que hace que el rango
+  cubra la fecha; la fila se casa por el número de día (normalizado a NFC); entre dos que se solapan
+  gana el que empieza después; y desde que existe uno, los `S*-GUIONES` (sin año) no vuelven nunca.
 - **`aplicar` copia del SOUL SOLO las secciones que nombra** (9-oct). Una regla nueva escrita dentro de
   otra sección («Cómo hablarle a Sergio») existe en `main` y nunca llega a `/root/.hermes/SOUL.md`. Regla
   nueva = sección propia que termina en `---`, su paso en 5c (o 5d si depende de la llave), su chequeo

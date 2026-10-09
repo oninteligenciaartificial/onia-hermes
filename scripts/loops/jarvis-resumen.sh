@@ -185,131 +185,149 @@ seccion_guiones() {  # seccion_guiones <fecha> <titulo>
 # CALENDARIO-PUBLICACION-<d1>-<d2>-<MES>.md (pedido de Sergio Urcullo), y se graba todo junto
 # (GRABAR-*.md): el «para grabar hoy» de los S*-GUIONES (plan del 29-sep) ya no es lo de ese día.
 # Medido el 9-oct: la mañana del 10 iba a nombrar tres guiones viejos, y ese día salen otros.
-# Salida: «HH:MM<TAB>qué<TAB>pieza» por línea, en orden de hora. Vacía si ningún calendario cubre el día;
-# y en ese caso sale 3 si el día es posterior al primer calendario (ya no corre el plan del 29-sep).
+# Desde que existe un calendario, los S*-GUIONES ya no vuelven: son de un plan que no corre, y sin año
+# volverían a casar el año que viene (revisiones del 9-oct).
+# Salida: «HH:MM<TAB>qué<TAB>pieza» por línea, en orden de hora, y sale 0. Si no:
+#   2 no hay ningún calendario (vale el plan viejo) · 3 ninguno cubre el día · 4 la fila del día no
+#   tiene nada («—») · 5 lo cubre pero no tiene la fila · otro: no se pudo leer.
 calendario_del() {  # calendario_del <fecha>
   local fs=("$REPO"/hermes-content/docs/cola/plan-3-semanas/CALENDARIO-PUBLICACION-*.md)
-  [ -f "${fs[0]}" ] || return 0
+  [ -f "${fs[0]}" ] || return 2
   python3 - "$1" "${fs[@]}" <<'PY'
-import datetime, os, re, sys
+import datetime, os, re, sys, unicodedata
 fecha = datetime.date.fromisoformat(sys.argv[1])
-primero = None
 MESES = "ENE FEB MAR ABR MAY JUN JUL AGO SEP OCT NOV DIC".split()
-DIAS = ["lun", "mar", "mié", "jue", "vie", "sáb", "dom"]
-def celdas(linea):
-    return [c.strip() for c in linea.strip().strip("|").split("|")]
-for f in sorted(sys.argv[2:]):
+def rango(d1, d2, mes):
+    # El año no está en el nombre: el que hace que el rango cubra la fecha (un rango dura días, así
+    # que a lo sumo uno). 28-3-ENE el 30 de diciembre es del 28-dic al 3-ene.
+    for y in (fecha.year - 1, fecha.year, fecha.year + 1):
+        try:
+            fin = datetime.date(y, mes, d2)
+            ini = datetime.date(y, mes, d1) if d1 <= d2 else (fin.replace(day=1) - datetime.timedelta(days=1)).replace(day=d1)
+        except ValueError:
+            continue
+        if ini <= fecha <= fin:
+            return ini
+    return None
+cubren = []
+for f in sys.argv[2:]:
     m = re.search(r"CALENDARIO-PUBLICACION-(\d{1,2})-(\d{1,2})-([A-Z]{3})\.md$", os.path.basename(f))
-    if not m or m.group(3) not in MESES:
+    if m and m.group(3) in MESES:
+        ini = rango(int(m.group(1)), int(m.group(2)), MESES.index(m.group(3)) + 1)
+        if ini:
+            cubren.append((ini, f))
+if not cubren:
+    sys.exit(3)
+f = max(cubren)[1]  # dos que se solapan: el que empieza después, el más nuevo
+cabeza = None
+for linea in open(f, encoding="utf-8", errors="replace"):
+    linea = unicodedata.normalize("NFC", linea)
+    if not linea.lstrip().startswith("|"):
+        cabeza = None
         continue
-    d1, d2, mes = int(m.group(1)), int(m.group(2)), MESES.index(m.group(3)) + 1
-    try:
-        fin = datetime.date(fecha.year, mes, d2)
-        ini = datetime.date(fecha.year, mes, d1) if d1 <= d2 else (fin.replace(day=1) - datetime.timedelta(days=1)).replace(day=d1)
-    except ValueError:
+    c = [x.strip() for x in linea.strip().strip("|").split("|")]
+    if c[0].lower() in ("día", "dia"):
+        cabeza = c
         continue
-    primero = ini if primero is None or ini < primero else primero
-    if not ini <= fecha <= fin:
+    if not cabeza or len(c) != len(cabeza):
         continue
-    cabeza = None
-    for linea in open(f, encoding="utf-8"):
-        if not linea.lstrip().startswith("|"):
-            cabeza = None
+    # Por el número de día: dentro del rango es único («Sab 10», «Sáb 10», «Sáb 10-oct»).
+    n = re.search(r"\d{1,2}", c[0])
+    if not n or int(n.group(0)) != fecha.day:
+        continue
+    filas = []
+    for h, v in zip(cabeza[1:], c[1:]):
+        v = v.replace("*", "").strip()
+        if v in ("", "—", "-"):
             continue
-        c = celdas(linea)
-        if c and c[0] == "Día":
-            cabeza = c
-            continue
-        if not cabeza or len(c) != len(cabeza):
-            continue
-        dia = c[0].replace("*", "").split()
-        if len(dia) != 2 or dia[0].lower()[:3] != DIAS[fecha.weekday()] or dia[1] != str(fecha.day):
-            continue
-        filas = []
-        for h, v in zip(cabeza[1:], c[1:]):
-            v = v.replace("*", "").strip()
-            if v in ("", "—", "-"):
-                continue
-            t = re.search(r"\d{1,2}:\d{2}", h)
-            que = h[: t.start()].strip(" ·") if t else h
-            filas.append((t.group(0).zfill(5) if t else "", que, v))
-        for hora, que, v in sorted(filas):
-            print("%s\t%s\t%s" % (hora, que, v))
-        sys.exit(0)
-sys.exit(3 if primero is not None and fecha >= primero else 0)
+        t = re.search(r"\d{1,2}:\d{2}", h)
+        que = h[: t.start()].strip(" ·") if t else h
+        filas.append((t.group(0).zfill(5) if t else "", que, v))
+    for hora, que, v in sorted(filas):
+        print("%s\t%s\t%s" % (hora, que, v))
+    sys.exit(0 if filas else 4)
+sys.exit(5)
 PY
 }
-seccion_sale() {  # seccion_sale <fecha> <titulo>
-  local c rc
+seccion_sale() {  # seccion_sale <fecha> <titulo>  (sale 2 si no hay calendarios: vale el plan viejo)
+  local c rc cuando
   c=$(calendario_del "$1" 2>/dev/null); rc=$?
-  if [ -z "$c" ]; then
-    # Pasado el último calendario no se vuelve a los S*-GUIONES: son del plan del 29-sep (9-oct).
-    [ "$rc" = 3 ] && printf '📣 Todavía no hay calendario de publicación para %s.\n' "$([ "$1" = "$HOY" ] && echo hoy || echo mañana)"
-    return 0
-  fi
-  printf '📣 <b>%s</b>\n' "$2"
-  printf '%s\n' "$c" | awk -F'\t' '{ printf "• %s%s · %s\n", ($1 == "" ? "" : $1 " "), $2, $3 }' | esc
+  cuando=$([ "$1" = "$HOY" ] && echo hoy || echo mañana)
+  case "$rc" in
+    0) printf '📣 <b>%s</b>\n' "$2"
+       printf '%s\n' "$c" | awk -F'\t' '{ printf "• %s%s · %s\n", ($1 == "" ? "" : $1 " "), $2, $3 }' | esc ;;
+    2) return 2 ;;
+    3) printf '📣 Todavía no hay calendario de publicación para %s.\n' "$cuando" ;;
+    4) printf '📣 %s no sale nada según el calendario.\n' "$([ "$cuando" = hoy ] && echo Hoy || echo Mañana)" ;;
+    5) printf '📣 El calendario de publicación no tiene la fila de %s.\n' "$cuando" ;;
+    *) printf '📣 No pude leer el calendario de publicación.\n' ;;
+  esac
+  return 0
 }
 # Lo que salió DE VERDAD hoy (9-oct; GOAL del 8-oct: al menos una pieza por día). Cada publicador del
-# VPS anota en publicado.jsonl: Instagram (ig-reel, ig-carrusel, ig-historia) con su link y la hora de
-# Instagram; YouTube (yt-video) con su link; Buffer (buffer-post) sin link, solo que lo mandó.
+# VPS anota en publicado.jsonl: Instagram (ig-reel, ig-carrusel con link; ig-historia sin link) y YouTube
+# (yt-video, con link; si es privado es un ensayo y no cuenta); Buffer (buffer-post) solo que lo mandó,
+# para la hora que lleva. No ve lo que Sergio Urcullo sube a mano: por eso dice «en el registro».
 seccion_salio() {
   local s n
   [ -r "$PUBLICADO" ] || { printf '📣 No pude leer el registro de publicaciones: no sé qué salió hoy.\n'; return 0; }
-  s=$(python3 - "$HOY" "$PUBLICADO" <<'PY'
+  s=$(python3 - "$HOY" "$PUBLICADO" "${ONIA_AHORA:-$(date -u +%FT%TZ)}" <<'PY'
 import datetime, json, sys
 hoy = datetime.date.fromisoformat(sys.argv[1])
 LA_PAZ = datetime.timezone(datetime.timedelta(hours=-4))
 def hora(t):
     try:
-        d = datetime.datetime.fromisoformat(t.replace("Z", "+00:00").replace("+0000", "+00:00"))
-    except (AttributeError, ValueError):
+        d = datetime.datetime.fromisoformat(str(t).replace("Z", "+00:00").replace("+0000", "+00:00"))
+    except ValueError:
         return None
-    if d.tzinfo is None:
-        return None
-    return d.astimezone(LA_PAZ)
+    return d.astimezone(LA_PAZ) if d.tzinfo else None
+ahora = hora(sys.argv[3])
 filas, buffer = [], 0
 for linea in open(sys.argv[2], encoding="utf-8", errors="replace"):
     try:
         r = json.loads(linea)
-    except ValueError:
-        continue
-    if not isinstance(r, dict):
-        continue
-    if r.get("red") == "buffer":
-        cuando = r.get("cuando") if r.get("cuando") not in (None, "ya") else r.get("fecha")
-        d = hora(str(cuando or ""))
-        if d and d.date() == hoy and r.get("estado") != "borrador":
-            buffer += 1
-        continue
-    if r.get("red") == "youtube":
-        d, que, link = hora(str(r.get("fecha", ""))), "YouTube", r.get("url")
-    else:
-        d, link = hora(str(r.get("timestamp", ""))), r.get("permalink")
-        que = {"carrusel": "Carrusel", "historia": "Historia"}.get(r.get("tipo"), "Trial" if r.get("trial") else "Reel")
-    if not d or d.date() != hoy or not link:
-        continue
-    cuenta = r.get("cuenta")
-    filas.append((d.strftime("%H:%M"), que + ("" if cuenta in (None, "sergio") else " (" + str(cuenta) + ")"), str(link)))
-for h, que, link in sorted(filas):
-    print("• %s %s — %s" % (h, que, link))
+        if not isinstance(r, dict):
+            continue
+        if r.get("red") == "buffer":
+            d = hora(r.get("fecha") if r.get("cuando") in (None, "ya") else r.get("cuando"))
+            if d and d.date() == hoy and (ahora is None or d <= ahora) and r.get("estado") != "borrador":
+                buffer += 1
+            continue
+        if r.get("red") == "youtube":
+            if r.get("privacidad") != "public":
+                continue
+            d, que, link = hora(r.get("fecha")), "YouTube", r.get("url")
+        else:
+            d, link = hora(r.get("timestamp")), r.get("permalink")
+            tipo = r.get("tipo")
+            que = "Carrusel" if tipo == "carrusel" else "Historia" if tipo == "historia" else "Trial" if r.get("trial") else "Reel"
+        if not d or d.date() != hoy:
+            continue
+        cuenta = r.get("cuenta")
+        filas.append((d.strftime("%H:%M"), que + ("" if cuenta in (None, "sergio") else " (%s)" % cuenta), link))
+    except Exception:
+        continue  # una línea rara no tapa las demás
+for h, que, link in sorted(filas, key=lambda f: f[:2]):
+    print("• %s %s%s" % (h, que, " — %s" % link if link else ""))
 if buffer:
-    print("• y %d envío%s a Buffer (TikTok, Shorts, LinkedIn), sin link acá." % (buffer, "" if buffer == 1 else "s"))
+    print("• %d envío%s a Buffer para hoy (sin link: no confirma que %s)." % (buffer, "" if buffer == 1 else "s", "salió" if buffer == 1 else "salieron"))
+print("FIN %d" % len(filas))
 PY
 ) || { printf '📣 No pude leer el registro de publicaciones: no sé qué salió hoy.\n'; return 0; }
-  if [ -n "$s" ] && printf '%s\n' "$s" | grep -q '—'; then
-    printf '📣 <b>Hoy salió</b>\n'; printf '%s\n' "$s" | esc; return 0
+  case "$s" in *"FIN "*) ;; *) printf '📣 No pude leer el registro de publicaciones: no sé qué salió hoy.\n'; return 0 ;; esac
+  n=${s##*FIN }; s=$(printf '%s\n' "$s" | grep -v '^FIN ')
+  if [ "$n" -gt 0 ]; then
+    printf '📣 <b>Hoy salió</b>\n'
+  else
+    n=$(calendario_del "$HOY" 2>/dev/null | grep -c . || true)
+    printf '📣 <b>En el registro no hay nada publicado hoy</b> en Instagram ni YouTube%s.\n' "$([ "${n:-0}" -gt 0 ] && printf ' (el calendario tenía %s pieza(s))' "$n")"
   fi
-  n=$(calendario_del "$HOY" 2>/dev/null | grep -c . || true)
-  printf '📣 <b>Hoy no salió nada</b> en Instagram ni en YouTube%s.\n' "$([ "${n:-0}" -gt 0 ] && printf ' (el calendario tenía %s pieza(s))' "$n")"
   [ -z "$s" ] || printf '%s\n' "$s" | esc
   return 0
 }
-# Los guiones del plan viejo, solo para un día que el calendario no cubre.
+# Los guiones del plan viejo, solo si no existe ningún calendario.
 seccion_plan() {  # seccion_plan <fecha> <titulo de lo que sale> <titulo de los guiones>
-  local s
-  s=$(seccion_sale "$1" "$2")
-  if [ -n "$s" ]; then printf '%s\n' "$s"; else seccion_guiones "$1" "$3"; fi
+  seccion_sale "$1" "$2" || seccion_guiones "$1" "$3"
   return 0
 }
 

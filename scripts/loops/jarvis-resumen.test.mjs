@@ -40,7 +40,19 @@ const PARTE = `🙋 <b>2 esperan tu ok</b>
 
 <i>Parte diario · 30/09 06:30</i>`;
 
-function banco({ tableroVivo = true, tgFalla = false, show = SHOW, repo = REPO_REAL, lista = LISTA, parte: textoParte = PARTE } = {}) {
+// El plan del 29-sep (S*-GUIONES) SIN los calendarios: desde que existe uno, el resumen ya no vuelve a
+// los guiones viejos, y el repo real tiene calendarios desde el 8-oct.
+function repoPlanViejo() {
+  const dir = mkdtempSync(join(tmpdir(), "jarvis-viejo-"));
+  const plan = join(dir, "hermes-content", "docs", "cola", "plan-3-semanas");
+  const real = join(REPO_REAL, "hermes-content", "docs", "cola", "plan-3-semanas");
+  mkdirSync(plan, { recursive: true });
+  for (const f of readdirSync(real).filter((f) => /^S\d-GUIONES\.md$/.test(f))) writeFileSync(join(plan, f), readFileSync(join(real, f)));
+  return dir;
+}
+const PLAN_VIEJO = repoPlanViejo();
+
+function banco({ tableroVivo = true, tgFalla = false, show = SHOW, repo = PLAN_VIEJO, lista = LISTA, parte: textoParte = PARTE } = {}) {
   const dir = mkdtempSync(join(tmpdir(), "jarvis-"));
   const estado = join(dir, "estado");
   const out = join(dir, "out");
@@ -476,11 +488,12 @@ const GUIONES_VIEJOS = `## Sábado 10 de octubre
 
 ### D18-A · Vertical · Otro guion del plan viejo
 `;
-function repoConCalendario() {
+function repoConCalendario(extra = {}) {
   const dir = mkdtempSync(join(tmpdir(), "jarvis-plan-"));
   const plan = join(dir, "hermes-content", "docs", "cola", "plan-3-semanas");
   mkdirSync(plan, { recursive: true });
   writeFileSync(join(plan, "CALENDARIO-PUBLICACION-9-16-OCT.md"), CALENDARIO);
+  for (const [nombre, texto] of Object.entries(extra)) writeFileSync(join(plan, nombre), texto);
   writeFileSync(join(plan, "S2-GUIONES.md"), GUIONES_VIEJOS);
   return dir;
 }
@@ -507,11 +520,13 @@ test("un día sin pieza en una columna («—») no inventa esa línea, y el tex
   assert.match(dom, /📣 <b>Mañana sale<\/b>[\s\S]*DD-A caché de &lt;OpenAI&gt;/);
 });
 
-test("fuera del rango del calendario (o el mismo número de otro mes) vuelve a los guiones del plan", () => {
+test("fuera del rango del calendario (o el mismo número de otro mes) no nombra piezas ni vuelve al plan viejo", () => {
   const b = banco({ repo: repoConCalendario() });
-  assert.doesNotMatch(b.imprimir("manana", { ONIA_HOY: "2027-04-10" }), /📣/, "el sábado 10 de abril no es el sábado 10 de octubre");
-  const real = banco();
-  assert.match(real.imprimir("manana", { ONIA_HOY: "2026-10-07" }), /🎬 <b>Para grabar hoy<\/b>/, "el 7-oct no lo cubre el calendario 9-16");
+  const abr = b.imprimir("manana", { ONIA_HOY: "2027-04-10" });
+  assert.doesNotMatch(abr, /Hoy sale|HOOK/, "el sábado 10 de abril no es el sábado 10 de octubre");
+  assert.match(abr, /📣 Todavía no hay calendario de publicación para hoy\./);
+  const antes = b.imprimir("manana", { ONIA_HOY: "2026-10-07" });
+  assert.doesNotMatch(antes, /Para grabar hoy/, "con calendarios, los S*-GUIONES no vuelven");
 });
 
 // ── Qué salió de verdad hoy (9-oct) ──────────────────────────────────────────────
@@ -536,7 +551,7 @@ test("el cierre dice qué salió hoy, con la hora de La Paz y el link, del regis
   const { PASÓ } = bloques(msg);
   assert.match(
     PASÓ,
-    /📣 <b>Hoy salió<\/b>\n• 12:31 Reel — https:\/\/www\.instagram\.com\/reel\/AAA\/\n• 13:30 Trial — https:\/\/www\.instagram\.com\/reel\/YAP\/\n• 16:00 Carrusel — https:\/\/www\.instagram\.com\/p\/CAR\/\n• 21:15 YouTube — https:\/\/youtu\.be\/v1\?a=1&amp;b=&lt;2&gt;\n• y 1 envío a Buffer \(TikTok, Shorts, LinkedIn\), sin link acá\./,
+    /📣 <b>Hoy salió<\/b>\n• 12:31 Reel — https:\/\/www\.instagram\.com\/reel\/AAA\/\n• 13:30 Trial — https:\/\/www\.instagram\.com\/reel\/YAP\/\n• 16:00 Carrusel — https:\/\/www\.instagram\.com\/p\/CAR\/\n• 21:15 YouTube — https:\/\/youtu\.be\/v1\?a=1&amp;b=&lt;2&gt;\n• 1 envío a Buffer para hoy \(sin link: no confirma que salió\)\./,
   );
   assert.doesNotMatch(msg, /AYER/, "lo de las 22:00 del día anterior en La Paz no es de hoy");
 });
@@ -546,7 +561,7 @@ test("un día sin nada publicado lo dice, con lo que tenía el calendario", () =
   const reg = join(b.dir, "publicado.jsonl");
   writeFileSync(reg, JSON.stringify(REGISTRO[0]) + "\n");
   const { PASÓ } = bloques(b.imprimir("noche", { ONIA_HOY: "2026-10-10", ONIA_PUBLICADO: reg }));
-  assert.match(PASÓ, /📣 <b>Hoy no salió nada<\/b> en Instagram ni en YouTube \(el calendario tenía 3 pieza\(s\)\)\./);
+  assert.match(PASÓ, /📣 <b>En el registro no hay nada publicado hoy<\/b> en Instagram ni YouTube \(el calendario tenía 3 pieza\(s\)\)\./);
 });
 
 test("sin el registro de publicaciones, el cierre dice que no lo pudo leer; la mañana no lo nombra", () => {
@@ -566,4 +581,91 @@ test("pasado el último calendario, no vuelve a los guiones viejos: dice que no 
   const noche = b.imprimir("noche", { ONIA_HOY: "2026-10-16" });
   assert.match(bloques(noche).SIGUE, /📣 Todavía no hay calendario de publicación para mañana\./);
   assert.doesNotMatch(noche, /Mañana grabás/);
+});
+
+// ── Segunda revisión (9-oct): lo que el cierre callaba o decía de más ────────────
+const linea = (o) => JSON.stringify(o) + "\n";
+
+test("un video de YouTube privado (el ensayo de yt-video) no cuenta como publicado", () => {
+  const b = banco({ repo: repoConCommits([]) });
+  const reg = join(b.dir, "publicado.jsonl");
+  writeFileSync(reg, linea({ red: "youtube", id: "e", url: "https://youtu.be/ENSAYO", privacidad: "private", fecha: "2026-09-29T15:00:00.000Z" }) +
+    linea({ red: "youtube", id: "p", url: "https://youtu.be/PUBLICO", privacidad: "public", fecha: "2026-09-29T16:00:00.000Z" }));
+  const { PASÓ } = bloques(b.imprimir("noche", { ONIA_HOY: "2026-09-29", ONIA_PUBLICADO: reg }));
+  assert.match(PASÓ, /• 12:00 YouTube — https:\/\/youtu\.be\/PUBLICO/);
+  assert.doesNotMatch(PASÓ, /ENSAYO/);
+});
+
+test("una historia (ig-historia no guarda link) aparece, con su hora", () => {
+  const b = banco({ repo: repoConCommits([]) });
+  const reg = join(b.dir, "publicado.jsonl");
+  writeFileSync(reg, linea({ cuenta: "sergio", media: "9", tipo: "historia", imagen: "/x.png", media_product_type: "STORY", timestamp: "2026-09-29T20:05:00+0000" }));
+  const { PASÓ } = bloques(b.imprimir("noche", { ONIA_HOY: "2026-09-29", ONIA_PUBLICADO: reg }));
+  assert.match(PASÓ, /📣 <b>Hoy salió<\/b>\n• 16:05 Historia\n/);
+});
+
+test("un día solo con envíos a Buffer no dice «Hoy salió»; cuenta por la hora de salida y solo lo que ya pasó", () => {
+  const b = banco({ repo: repoConCommits([]) });
+  const reg = join(b.dir, "publicado.jsonl");
+  writeFileSync(reg,
+    linea({ red: "buffer", post: "a", estado: "agendado", cuando: "2026-09-29T16:35:00.000Z", fecha: "2026-09-28T12:00:00.000Z" }) + // sale hoy, agendado ayer
+    linea({ red: "buffer", post: "b", estado: "agendado", cuando: "2026-09-30T16:35:00.000Z", fecha: "2026-09-29T12:00:00.000Z" }) + // agendado hoy, sale mañana
+    linea({ red: "buffer", post: "c", estado: "agendado", cuando: "2026-09-30T00:30:00.000Z", fecha: "2026-09-29T12:00:00.000Z" }), // 20:30 de hoy, después del cierre
+  );
+  const { PASÓ } = bloques(b.imprimir("noche", { ONIA_HOY: "2026-09-29", ONIA_PUBLICADO: reg, ONIA_AHORA: "2026-09-29T23:30:00Z" }));
+  assert.doesNotMatch(PASÓ, /Hoy salió/);
+  assert.match(PASÓ, /📣 <b>En el registro no hay nada publicado hoy<\/b> en Instagram ni YouTube\.\n• 1 envío a Buffer para hoy \(sin link: no confirma que salió\)\./);
+});
+
+test("una línea rara del registro no tapa lo que sí salió", () => {
+  const b = banco({ repo: repoConCommits([]) });
+  const reg = join(b.dir, "publicado.jsonl");
+  writeFileSync(reg, linea({ tipo: ["raro"], timestamp: "2026-09-29T16:00:00+0000", permalink: "x" }) + linea(REGISTRO[0]));
+  assert.match(bloques(b.imprimir("noche", { ONIA_HOY: "2026-09-29", ONIA_PUBLICADO: reg })).PASÓ, /• 12:31 Reel — https:\/\/www\.instagram\.com\/reel\/AAA\//);
+});
+
+test("con python roto, lo dice: ni «Hoy no salió nada» ni los guiones del plan viejo", () => {
+  const b = banco({ repo: repoConCalendario() });
+  const dobles = join(b.dir, "dobles");
+  mkdirSync(dobles);
+  b.escribir("dobles/python3", "#!/usr/bin/env bash\nexit 1\n");
+  const reg = join(b.dir, "publicado.jsonl");
+  writeFileSync(reg, linea(REGISTRO[0]));
+  const env = { ONIA_HOY: "2026-10-10", ONIA_PUBLICADO: reg, PATH: `${dobles}:${process.env.PATH}` };
+  const man = b.imprimir("manana", env);
+  assert.match(bloques(man).SIGUE, /📣 No pude leer el calendario de publicación\./);
+  assert.doesNotMatch(man, /Para grabar hoy|plan viejo/);
+  const { PASÓ } = bloques(b.imprimir("noche", env));
+  assert.match(PASÓ, /📣 No pude leer el registro de publicaciones: no sé qué salió hoy\./);
+  assert.doesNotMatch(PASÓ, /no hay nada publicado/);
+});
+
+test("un día de descanso en el calendario lo dice, y no vuelve a los guiones viejos", () => {
+  const b = banco({ repo: repoConCalendario({ "CALENDARIO-PUBLICACION-12-18-OCT.md": "| Día | Carrusel 16:00 | Video A · 12:30 |\n|---|---|---|\n| **Mié 14** | — | — |\n" }) });
+  const man = b.imprimir("manana", { ONIA_HOY: "2026-10-14" });
+  assert.match(bloques(man).SIGUE, /📣 Hoy no sale nada según el calendario\./);
+  assert.doesNotMatch(man, /Para grabar hoy/);
+  assert.match(b.imprimir("noche", { ONIA_HOY: "2026-10-13" }), /📣 Mañana no sale nada según el calendario\./);
+});
+
+test("el calendario casa la fila por el número de día: sin tilde, en NFD o con la fecha pegada", () => {
+  const nfd = "| Día | Carrusel 16:00 |\n|---|---|\n| **Sab 24** | SIN-TILDE |\n| **Dom 25-oct** | PEGADA |\n".normalize("NFD");
+  const b = banco({ repo: repoConCalendario({ "CALENDARIO-PUBLICACION-23-29-OCT.md": nfd }) });
+  assert.match(b.imprimir("manana", { ONIA_HOY: "2026-10-24" }), /• 16:00 Carrusel · SIN-TILDE/);
+  assert.match(b.imprimir("manana", { ONIA_HOY: "2026-10-25" }), /• 16:00 Carrusel · PEGADA/);
+  assert.match(b.imprimir("manana", { ONIA_HOY: "2026-10-26" }), /📣 El calendario de publicación no tiene la fila de hoy\./);
+});
+
+test("un calendario que cruza de mes y de año (28-3-ENE) cubre el 30 de diciembre", () => {
+  const b = banco({ repo: repoConCalendario({ "CALENDARIO-PUBLICACION-28-3-ENE.md": "| Día | Carrusel 16:00 |\n|---|---|\n| **Mié 30** | FIN-DE-AÑO |\n| **Sáb 2** | ENERO |\n" }) });
+  assert.match(b.imprimir("manana", { ONIA_HOY: "2026-12-30" }), /• 16:00 Carrusel · FIN-DE-AÑO/);
+  assert.match(b.imprimir("manana", { ONIA_HOY: "2027-01-02" }), /• 16:00 Carrusel · ENERO/);
+});
+
+test("dos calendarios que cubren el mismo día: gana el que empieza después (el más nuevo)", () => {
+  // 5-14-OCT ordena antes que 9-16-OCT: con «el primero que cubre», ganaba el viejo.
+  const b = banco({ repo: repoConCalendario({ "CALENDARIO-PUBLICACION-5-14-OCT.md": "| Día | Carrusel 16:00 |\n|---|---|\n| **Sáb 10** | VIEJO |\n" }) });
+  const msg = b.imprimir("manana", { ONIA_HOY: "2026-10-10" });
+  assert.match(msg, /• 16:00 Carrusel · HOOK \(K11\)/);
+  assert.doesNotMatch(msg, /VIEJO/);
 });
