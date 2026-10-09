@@ -30,7 +30,7 @@
   carga sin errores y los 6 tramos se ven (se capturaron 16 cuadros con Playwright, moviendo el timeline GSAP `main`; sin el CLI de
   HyperFrames, que no está en la nube). Para la madre: (1) el rótulo verde «PRUEBA DE EDICIÓN» arriba a la derecha hay que sacarlo antes
   de publicar; (2) en el cierre, «· link en mi perfil» cae solo en una 2.ª línea con un punto suelto: va en una línea o sin el punto;
-  (3) el timeline dura 27,63 s y el `data-duration` dice 30 s (hay que confirmar que HyperFrames sostiene el último cuadro); (4) todo
+  (3) el timeline dura 27,63 s y el `data-duration` dice 30 s (hay que confirmar que HyperFrames sostiene el último cuadro); (3b) **en el corte de los 23 s queda un hueco de ~0,47 s** (23,00-23,43) con la pantalla casi vacía, solo «JUNTÁ LAS PIEZAS.»: el tablero sale y el mosaico entra tarde; los otros 4 cortes (2,5 / 9 / 16 / 26 s) son continuos (medido con `signalstats` sobre un render de prueba de 900 cuadros a 30 fps hecho con Playwright); (4) todo
   vive en el 55 % de arriba y el 40 % de abajo queda vacío; (5) **muestra un «tablero» con Agenda, Clientes, Cobros y Chat**: es
   mostrar funciones del producto, y `CLAUDE.md` (contenido en redes) exige el OK de Sergio Urcullo hasta que exista la tabla «se promete /
   funciona»; el propio README del molde dice «revisión de Sergio antes de usar el molde. No publicar». Por eso NO lo usé en una pieza.
