@@ -59,6 +59,7 @@ Leyenda de dueño: `H` Haiku · `S` Sonnet · `O` Opus · `CxSol` / `CxAstra` Co
 - [ ] C4 Acá: Lucía G1 + renovar token de IG (vence 13-18 oct). El ensayo en el VPS lo frenó el control de permisos.
 - [ ] C5 Acá: paridad nube = PC (16 skills + 2 agentes + reglas de memoria a CLAUDE.md/AGENTS.md). Frenado por permisos.
 - [ ] C6 Acá: ¿CI como gate en vez de la suite de la PC? (más PRs en paralelo).
+- [ ] C9 Lucía G1 con voz Marcela (ElevenLabs en pago por uso, 453 caracteres hasta el 13-oct 01:17 UTC): SU elige «ponele la voz» o «esperá al 13» (20:40 UTC).
 - [ ] C7 Gasto: bucket R2 (punto 4) · tarjeta en ONIA Ads + US$56 · el SIAT (CAFC, reloj 4-nov) · OK al REVOKE del B22.
 - [ ] C8 Punto 1: aprobar en `/admin/payments` el pago de prueba de «ZZ QA Pago» (la madre lo prepara con Chrome).
 
@@ -115,11 +116,11 @@ Leyenda de dueño: `H` Haiku · `S` Sonnet · `O` Opus · `CxSol` / `CxAstra` Co
 | Fecha | Qué | Dueño | Fuente |
 |---|---|---|---|
 | lun 12-oct 07-11 UTC | Refrescar la demo (solo lun-jue) → capturas C1-C7 | Plat | onia-1.0-nube.md §3 |
-| lun 13-oct | Declaraciones mensuales del SIN (F-200 IVA, F-400 IT, F-608 RC-IVA; F-530 IUE-BE si hubo pagos al exterior): NIT termina en 0 → vence el 13 | SU / Leslie Mercado Moreno / contador | memoria nit-onia-estado-verificado-siat |
+| mar 13-oct | Declaraciones mensuales del SIN (F-200 IVA, F-400 IT, F-608 RC-IVA; F-530 IUE-BE si hubo pagos al exterior): NIT termina en 0 → vence el 13 | SU / Leslie Mercado Moreno / contador | memoria nit-onia-estado-verificado-siat |
 | 13-oct | Go/no-go de la pauta de Meta del 16-oct | Ventas | handoff TERMINAR TODO |
 | 13-oct 23:57 La Paz | Reinicio semanal de Codex (56 % al 9-oct; refills solo al tope) | madre | rate_limits |
 | 13 al 18-oct | Vence el token de Instagram de Lucía (renovar o que salga G1 antes) | SU decide (C4) | videos/lucia-entrega/README.md |
-| jue 16-oct | Puntos 1 a 4 de la 1.0 + arranque de la pauta | Plat / Ventas | ONIA_PLAN_1.0_Y_CAJA.md |
+| vie 16-oct | Puntos 1 a 4 de la 1.0 + arranque de la pauta | Plat / Ventas | ONIA_PLAN_1.0_Y_CAJA.md |
 | 30-oct | La 1.0 completa (15 puntos) + homologación del SIAT | Plat / SU | plan §1, memoria SIAT |
 | 4-nov | Vence el trámite 9473 del SIAT (CAFC, prórroga de 60 días) | SU (solo él abre el portal) | memoria siat-sistema-9473 |
 | sin fecha | Trámite del API QR del BCP | SU | memoria bcp-api-qr-tramite |
