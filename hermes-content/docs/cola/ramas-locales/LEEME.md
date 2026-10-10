@@ -35,3 +35,9 @@ Ya están en `master` (por contenido) y no se guardaron: `wip/p2` (presupuesto p
 | Rama | Punta | Qué es | Estado |
 |---|---|---|---|
 | `wip/c16c-guarda` | `f154f1e09` | C16c del bot: el número de Onia siempre vende, un WhatsApp huérfano no contesta y la bandeja propia de Onia nunca queda huérfana ni ajena | El parche para aplicar sobre hermes#162 está también en `docs/handoff/codex-tareas/C16c-guarda-bandeja-de-onia.patch`. Publicar el bot es tarea del carril del chatbot |
+
+## 10-oct (onia-platform)
+
+| Rama | Punta | Qué es | Estado |
+|---|---|---|---|
+| `w1f` | `2c3423ae`, sobre `aae460c4` (la punta de #140) | **W1f:** el chat de la web se presenta con el nombre del negocio (`data-nombre`) y sin la marca Onia; contesta el asistente y, si hace falta, una persona del equipo. Pedido de Sergio Urcullo del 10-oct | Paquete `plataforma-w1f-20261010.bundle`. Se sube a la rama de #140 con `git fetch <ruta>/plataforma-w1f-20261010.bundle w1f` y `git push origin FETCH_HEAD:integ/w1-w1b` (avanza sin merge). Se publica con el OK de diseño de Sergio Urcullo sobre las capturas (enviadas el 10-oct) y la infra de #140 |

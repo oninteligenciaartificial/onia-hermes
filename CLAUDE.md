@@ -469,10 +469,11 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
 - **Decidir y actuar.** Verificación fuerte solo para lo que toca producción, plata o
   `main`. Lo reversible y de bajo riesgo: hacerlo y seguir.
 - **No re-hacer lo aprobado.** Diseño o plan ya aprobado se porta fiel, no se reabre.
-- **Un rediseño se revisa renderizado antes de publicar.** Corrección 2026-10-09:
-  la madre/carril mira capturas a 390/1440 y verifica los gates; lo revisado se publica
-  sin otro OK de diseño de Sergio Urcullo, según la sección siguiente. Se sustituye
-  el permiso por pieza de agosto, conservando la revisión visual.
+- **Un rediseño se le muestra a Sergio Urcullo renderizado ANTES de publicar.** Corrección
+  2026-10-10, de él mismo al confirmar la regla del 9-oct: *«ok, solo diseño se me envía a mí
+  también»*. El carril mira las capturas a 390/1440 y pasa los gates; después se las manda a
+  él (sin hablarle de PRs) y publica con su OK sobre ESA pieza. El 9-oct esta línea decía que
+  el diseño revisado se publicaba sin su OK: él lo corrigió al leerla.
 
 ## Qué se publica sin preguntar (REGLA)
 
@@ -485,10 +486,13 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
   producto, docs. Se mergea el PR y se corre el `publicar.sh` del destino.
 - **Desde el 9-oct, lo que se trabajó y pasó revisión SE SUBE, sin esperarlo.** Sergio Urcullo, 9-oct, al ver 18 PRs
   frenados esperando su OK: *«se supone que si lo trabajaron y fue revisado se tiene que subir, no esperen a mí, se sube
-  nomás»*. Incluye diseño nuevo y rediseños de pantallas (con las capturas 390/1440 mirando el render), migraciones (con
-  backup y rollback según `onia-db`/`onia-deploy`) y cambios de infraestructura revisados. Después se le avisa SOLO lo
-  publicado, con captura o link. Sigue pidiendo su sí lo que no es «publicar código»: gasto, contactar clientes o terceros,
-  el portal del SIAT, actos legales o firmas (van por Leslie Mercado Moreno) y la cara o la voz de él en servicios externos.
+  nomás»*. Confirmada por él el 10-oct. Incluye migraciones (con backup y rollback según `onia-db`/`onia-deploy`) y
+  cambios de infraestructura revisados. Después se le avisa SOLO lo publicado, con captura o link. Sigue pidiendo su sí
+  lo que no es «publicar código»: gasto, contactar clientes o terceros, el portal del SIAT, actos legales o firmas (van
+  por Leslie Mercado Moreno) y la cara o la voz de él en servicios externos.
+  - **El diseño NO entra en «sin esperarlo» (Sergio Urcullo, 10-oct: «ok, solo diseño se me envía a mí también»).**
+    Pantalla nueva o rediseño de una viva: se le mandan las capturas renderizadas (celular y computadora) y se publica
+    con su OK sobre esa pieza. El 9-oct esta regla incluía el diseño; él lo sacó al confirmarla.
   ⚠️ Antes (2-oct al 8-oct) el diseño nuevo y los textos legales pasaban por él antes de publicar; eso frenó 18 PRs.
 - **Contenido en redes (Sergio Urcullo, 8-oct: «sí, publicá por Buffer lo que pase control de calidad»):**
   una pieza que pasa el control de calidad de su skill (`diseno-contenido-onia` / `edicion-referentes`) y se MIRÓ

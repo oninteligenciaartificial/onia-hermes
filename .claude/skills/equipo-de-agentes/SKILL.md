@@ -93,9 +93,13 @@ madre sin la PC, y eso exige loguear la cuenta de Sergio Urcullo allá, que nece
 
 ## 5. Publicar
 
-Regla del 9-oct (CLAUDE.md): **lo trabajado y revisado se sube sin esperar a Sergio Urcullo**, incluido el diseño, las
-migraciones (con backup y rollback) y la infra. Sigue con su sí: gasto, contactar clientes o terceros, el portal del SIAT,
-actos legales o firmas (los hace Leslie Mercado Moreno) y su cara o su voz en servicios externos.
+Regla del 9-oct (CLAUDE.md), confirmada por Sergio Urcullo el 10-oct: **lo trabajado y revisado se sube sin esperarlo**:
+arreglos, textos, migraciones (con backup y rollback) e infra. Sigue con su sí: gasto, contactar clientes o terceros, el
+portal del SIAT, actos legales o firmas (los hace Leslie Mercado Moreno) y su cara o su voz en servicios externos.
+
+**El diseño sí pasa por él (10-oct: «ok, solo diseño se me envía a mí también»).** Pantalla nueva o rediseño: capturas
+renderizadas de celular y computadora, una imagen por pantalla, y se publica con su OK sobre esa pieza. El 9-oct esta
+sección decía «incluido el diseño»; él lo sacó al confirmar la regla.
 
 ## 6. Cómo se le habla a Sergio Urcullo
 
