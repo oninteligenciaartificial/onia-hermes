@@ -4,6 +4,7 @@ Orden: lo que destraba cobrar primero. Cada PR: integrar con master, suite compl
 
 - [x] #141 S1+S1b (IPv6 por /64): en producción desde el 9-oct 18:50 UTC (`release-c94b9daa`), mirado.
 - [ ] #143 F1 (la letra dentro del sistema) y #142 U2+U2b (pago de usted): sí de Sergio Urcullo el 10-oct, mergeados a las 13:15 UTC (`c1c3c6ac`). El cron de las 15:50 UTC no publicó (otro build corriendo: el CI de 7 ramas); va en el de las 18:50 UTC. Falta MIRAR.
+- [ ] #144 `/book` de usted (Codex cloud): revisado (solo textos), CI verde, mergeado el 10-oct 17:20 UTC (`21f0c7e6`). Sale a las 18:50 UTC; falta MIRAR.
 - [ ] #136 bandeja v3 (incluye #127, #129 y #135) + B3 #130 (PWA): espera el OK de diseño de Sergio Urcullo (capturas enviadas el 10-oct).
 - [ ] #140 widget W1-W1e + W1f (se presenta con el nombre de la clínica, bundle del 10-oct) + infra: origen solo para Cloudflare, bloquear `/public/api/` en Chatwoot y `hmac_mandatory` en los inboxes API. Espera el OK de diseño de Sergio Urcullo a W1f.
 - [ ] #139 canal privado (punto 3): migración aplicada en producción el 10-oct 13:29 UTC (sin registrar en `_prisma_migrations`: lo frenó el control de permisos) y PR mergeado a las 13:36 UTC (`32c7e0e8`). Sale a las 18:50 UTC (la de las 15:50 no corrió); falta MIRAR «En vivo» con login.
