@@ -67,6 +67,7 @@ Leyenda de dueño: `H` Haiku · `S` Sonnet · `O` Opus · `CxSol` / `CxAstra` Co
 - [ ] D2 Plataforma: demo refrescada (primera ventana: lunes 12-oct 07-11 UTC) + capturas C1-C7 → destraba Ventas y Lucía.
 - [ ] D3 Marca: recibe GRABAR-17-23-OCT.md (A1) y su equipo.
 - [x] D4 (v4, 20:15 UTC) Las 4 nubes tomaron la dirección de las 20 UTC, con commit: Plat `ONIA_1.0_CORTE` (optimistic-ride 20:07), Lucía revisión de 8 piezas (zealous-babbage 20:04), Hermes QA Q1-Q5 (adoring-ramanujan 20:04), Marca **K11 + historias 1-3 publicados** (gifted-clarke 20:11). Ventas sin commit desde 18:09 UTC (running).
+- [ ] D5 Marca: layout `inventario` + cierre «buscá PALABRA en Avisos» en `carousel_pack_referentes.js` + test, y los 2 carruseles del brief DePPPp5FgMh (18 y 21-oct). Pedido 20:20 UTC. Hecho = SHA + láminas mirada.
 
 ## I. Olvidos de la auditoría (research/2026-10-10-auditoria-madre-v3.md §c) — dueño y estado
 - [ ] I1 La rama de la madre (`claude/onia-sesion-madre-9313fb`, 10+ commits) NO está en main: el integrador `onia-cola` está
