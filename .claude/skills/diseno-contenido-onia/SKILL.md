@@ -76,13 +76,14 @@ Cada lámina elige `layout`:
 | `ilustrado` | Santiago: título con palabra en color + ilustración dominante + pie + flecha «seguí →». Con `badge` y `logo` es portada | título ≤ 8 palabras, pie ≤ 20 | acuarela de Higgsfield |
 | `logos` | Bastian: UNA palabra gigante espaciada + fila de logos oficiales con nombre | 1 palabra + 1 línea | logos oficiales |
 | `analogia` | Bastian: frase corta + objetos que explican solos (1 o 2 bloques «no es / es») | 1 frase por bloque | foto Pexels sobre blanco |
-| `lista` | Santiago: título + 3–5 filas con ícono/logo, etiqueta y una línea | etiqueta ≤ 3 palabras, línea ≤ 8 | logos o números |
+| `lista` | Santiago: título + 3–5 filas con ícono/logo, etiqueta y una línea (tarjetas con borde) | etiqueta ≤ 3 palabras, línea ≤ 8 | logos o números |
+| `inventario` | @iampascio (10-oct): lista larga partida en láminas, hasta 5 filas, grilla fija sin tarjetas ni título; número en tinta continuo (`start`); `center` y `ask` para la última lista y el remate. Receta «Inventario continuo», más abajo | nombre ≤ 3 palabras, línea ≤ 8; ≤ 30 por lámina | logos oficiales o número |
 | `ensayo` | Bastian: texto grande sobre papel, sin cajas | ≤ 60 palabras | ninguna |
 | `dato` | Erik / Ingeniero Binario: una cifra gigante + qué significa (`value`) | título ≤ 6 palabras | ninguna |
 | `captura` | Carlos: la pantalla real como prueba | título ≤ 8, pie ≤ 12 | captura real (nunca maqueta) |
 | `cierre` | «Buscá PALABRA en Avisos» + qué recibís (`keyword`), adaptación vigente 9-oct | 1 línea | ninguna; solo si el recurso ya existe |
 
-Pendientes del catálogo (en `patrones/`): P-COMPARA, P-FOTO-ESCENA, P-DIAGRAMA, P-TABLA-MARCADOR, **P-LISTA-CONTINUA** (receta «Inventario continuo», más abajo; sin layout todavía).
+Pendientes del catálogo (en `patrones/`): P-COMPARA, P-FOTO-ESCENA, P-DIAGRAMA, P-TABLA-MARCADOR, **P-LISTA-CONTINUA** (receta «Inventario continuo», más abajo; layout `inventario` hecho el 10-oct).
 Carlos Domínguez señala como rasgo de «plantilla IA» el fondo crema: por eso el pack pasó a
 blanco puro, verde y negro (decisión de Sergio, 29-sep).
 
@@ -143,9 +144,9 @@ lámina sale SIN título. `"next": ""` saca la flecha «seguí» (para historias
   Lucía). Pasá siempre `--out hermes-content/carousels/out/<slug>`; si se te escapa, borrá solo los `slide-*.png` sin
   trackear (`git ls-files --others --exclude-standard out`), nunca `rm -rf out` (9-oct: lo borré y lo restauré con
   `git checkout -- out`).
-- **Cierre del carrusel sin «Comentá»:** `cierre` acepta `pre` (por defecto «Comentá») y `kicker` (frase grande encima).
+- **Cierre del carrusel sin «Comentá»:** `cierre` acepta `pre` (**por defecto «Buscá» desde el 10-oct**; antes «Comentá») y `kicker` (frase grande encima).
   «Buscá ARCHIVOS · en Avisos · link en mi perfil» no promete un mecanismo de comentario→DM sin probar (CLAUDE.md,
-  contenido en redes). El caption repite el mismo cierre.
+  contenido en redes). El caption repite el mismo cierre. Los 19 briefs viejos que dependían del default llevan `"pre": "Comentá"` escrito: re-renderizarlos no cambia lo ya agendado. Un `kicker` de dos frases se parte donde cae: unilas con espacios duros (U+00A0) para que el renglón corte en el punto («La skill saca tics. / El gusto lo ponés vos.»; sin eso quedó «…tics. El» colgando).
 - **Foto con fondo gris en `analogia`**: el `multiply` solo borra el blanco puro y queda un recuadro gris. Sacale el fondo
   antes o elegí otra foto.
 
@@ -251,7 +252,7 @@ Lo que sigue (render, banda segura, trampas del headless) **sigue valiendo** com
 
 ## Receta de carrusel «Inventario continuo» (referencia DePPPp5FgMh, 10-oct-2026)
 
-Fuente y evidencia: [`references/video-intake/2026-10-10-ig-carrusel-DePPPp5FgMh.md`](../../../hermes-content/references/video-intake/2026-10-10-ig-carrusel-DePPPp5FgMh.md) (carrusel de `@iampascio`, 5 láminas, 12 apps). **Estado: incorporada, sin aplicar.** Aplicación propuesta: `hermes-content/carousels/briefs/BRIEF-RECETA-DePPPp5FgMh.md`.
+Fuente y evidencia: [`references/video-intake/2026-10-10-ig-carrusel-DePPPp5FgMh.md`](../../../hermes-content/references/video-intake/2026-10-10-ig-carrusel-DePPPp5FgMh.md) (carrusel de `@iampascio`, 5 láminas, 12 apps). **Estado: layout `inventario` hecho y probado el 10-oct; aplicada en 2 carruseles renderizados (sin publicar).** Aplicación propuesta: `hermes-content/carousels/briefs/BRIEF-RECETA-DePPPp5FgMh.md`.
 
 **Mecanismo:** una lista larga de cosas del mismo tipo (herramientas, tics, preguntas, tareas) partida en láminas con **grilla fija**, sin tarjetas ni título interior. La portada hace de título; el último ítem es lo que ofrecés; el cierre es personal. **Cuándo sí:** 6 o más ítems de un mismo tipo. **Cuándo no:** una noticia o una prueba (va `captura`, una por lámina, como P2): el inventario enseña *qué*, la captura enseña *cómo*.
 
@@ -281,12 +282,14 @@ Fuente y evidencia: [`references/video-intake/2026-10-10-ig-carrusel-DePPPp5FgMh
 
 **Control de calidad propio (suma a §5):** (1) **cada línea corresponde a su ítem**: la fuente publicó una línea cruzada (la de Spotify hablaba de maquetas) y escribió «Whatsapp»; leé fila por fila contra el logo o el número; (2) lámina, caption y recurso enlazado no se contradicen (la fuente, en su lámina 5, prometía notas diarias con envío semanal); (3) misma grilla en todas: sobreponé las láminas 2 y 3 y la x del ícono y del texto no se mueve; (4) la última lista queda centrada en vertical, no pegada arriba; (5) el número de la portada coincide con el de las láminas.
 
-**Qué plantilla hay hoy y qué falta (verificado en `scripts/carousel_pack_referentes.js` el 10-oct):**
-- **Hoy no hay plantilla para esta receta.** El `lista` más parecido (línea 56; CSS 172-193) dibuja cada fila como tarjeta con borde de 3 px y radio de 26 px, siempre imprime su `headline`, cambia a `compacta` con 4 filas o más y usa dos cuerpos (50 y 40 px). **No se usa como si fuera la receta.**
-- **Falta, en este orden** (encargo cerrado para Codex, con la hoja de contactos de los 2 briefs como prueba de hecho; no se construye hasta que la madre lo pida):
-  1. Layout `inventario` junto a `listaHtml`, registrado en `LAYOUTS` (línea 89): `items[{icon|n, label, text}]`, `headline` opcional que no dibuja nada si falta, filas sin caja a la grilla de arriba, `center` para la última lámina y `ask` para la flecha del remate. Sumarlo a la lista de `scripts/carousel_render.test.js:104` con casos de 5, 3 y 2 filas.
-  2. `cierre` escribe «Comentá» fijo (línea 86; lo confirma P2): darle un `pre` con «Buscá» por defecto, o armar el cierre con `ilustrado` (foto + frase + CTA) mientras tanto.
-  3. Portada-inventario con logos en arco: layout nuevo opcional; sin él, la portada va con foto `fotobn` + `dato` o captura.
+**Qué plantilla hay (hecho el 10-oct en `scripts/carousel_pack_referentes.js`, tests en `scripts/carousel_render.test.js`):**
+- **`inventario`** (junto a `listaHtml`, registrado en `LAYOUTS`): `items[{icon|n, label, text}]`, `start` (primer número de la lámina; la numeración es continua entre láminas), `headline` opcional que no dibuja nada si falta, `center`, `ask` (`true` o un texto corto). Grilla en % del alto/ancho: marca a 17 % (10 % de lado), texto a 32,5 %, primera fila a 13 %, paso 16,5 %, nombre y línea a 44 px; **más de 5 filas por lámina falla** a propósito (la grilla no cambia). El `lista` de tarjetas **no** sirve para esta receta (borde 3 px, título siempre, dos cuerpos).
+- **Trampas medidas al armarlo (carruseles «78h en una tarea» y «Tics de webs con IA»):**
+  - Una fila sin número ni logo (lista que no es de ítems, como la cuenta 30 × 3 × 52, o el recurso del remate) lleva `"n": ""`: la columna queda vacía en TODAS las filas de esa lámina y el texto conserva su x. Si sólo quedara vacía una, parece un número perdido.
+  - El remate (`ask: true` + `"next": ""`, porque la flecha ya es la de continuidad) se ve bien **centrado** (`center: true`; el bloque cuenta la flecha); pegado arriba deja la mitad de abajo en blanco.
+  - El `badge` de `ilustrado` es un círculo de 150 px: «7 TICS» en mayúsculas apenas entra y «12 TICS» se corta. En minúsculas («[X] tics», como «noticia») entra.
+  - Los `assert` de un test sobre el HTML completo de la página también ven el CSS: `includes('inv-t')` aprobaba aunque la lámina no dibujara título porque `.inv-t` está en la hoja de estilo. Afirmá sobre el marcado (`class="inv-t"`, `<h2`).
+- **Falta:** portada-inventario con logos en arco (layout opcional; sin él, la portada va con foto `fotobn` + `dato`, o con la captura). El fotograma de Sergio Urcullo para la lámina 5 todavía no existe: hoy el cierre es `cierre` negro, solo texto («Sin foto: texto negro», receta).
 - **Logos:** hay 8 en `hermes-content/references/brand-logos/` y 3 en `hermes-content/references/brand-claude/`. Notion, Chrome, Spotify, NordVPN, Figma, Xcode y Cursor **no están**: un inventario que los nombre primero necesita su kit de prensa oficial (si hay que descargar, pide OK).
 
 ## 6. Gasto (CLAUDE.md, regla de Higgsfield)
