@@ -17,6 +17,33 @@ git fetch <ruta>/hermes-ramas-locales-20261009.bundle 'refs/heads/*:refs/heads/*
 
 `git bundle verify <archivo>` dice si falta alguna base.
 
+## Listas para subir (10-oct, ~20:30 UTC) — `plataforma-listas-20261010.bundle`
+
+Armadas y probadas en la nube sobre `master` `922a0da9`: tsc 0 y suite completa en verde, 0 rojos. Cada una es
+**fast-forward** sobre la cabeza actual de su PR: se suben sin force. Solo chocaba `docs/CHANGELOG.md` (#110 y #119): quedaron
+las dos entradas.
+
+```bash
+git fetch origin
+git fetch <ruta>/plataforma-listas-20261010.bundle 'refs/heads/*:refs/remotes/listas/*'
+git push origin listas/t124-version:codex/punto-14-aceptacion-terminos   # #124: ya, no espera a nadie
+git push origin listas/i110-v3:codex/punto-8-caja-diaria                  # #110: con el OK de diseño
+git push origin listas/i119-v3:codex/c6b1-caras-api                       # #119: con el OK de diseño
+git push origin listas/i118-v3:codex/c5-agenda-dia-20261006               # #118: con el OK de diseño
+git push origin listas/i140-w1f:integ/w1-w1b                              # #140: con el OK de diseño
+```
+
+| Rama | Punta | Sobre (cabeza del PR) | Qué suma | Suite |
+|---|---|---|---|---|
+| `t124-version` | `23a3abb3` | `2ee1dcfe` (#124) | La versión 1.3 de los términos (`2191bf56`, cherry-pick). Sin ella, cada alta guarda «1.2», que el cliente nunca vio | 10.063 |
+| `i110-v3` | `65c5f2f3` | `1c5112a9` (#110) | Caja v3 (`wip/c110`) + `master` | 10.106 |
+| `i119-v3` | `a6484bca` | `3e0575ef` (#119) | Odontograma v3 (`wip/c119`) + `master` | 10.157 |
+| `i118-v3` | `a8b31bfd` | `510b3bcd` (#118) | Agenda del día v3 (`wip/c118`) + `master` | 10.096 |
+| `i140-w1f` | `34f86438` | `f981cd4a` (#140) | W1f (el chat se presenta con el nombre de la clínica) + `master` | ver abajo |
+
+Sus migraciones ya están aplicadas en producción (10-oct). Push fuera de los minutos :20-:55 de las horas del cron y,
+si la cola del CI no está vacía, no en la hora antes del cron (skill `onia-infra` §4).
+
 ## Qué hay en cada rama (onia-platform)
 
 | Rama | Punta | Qué es | Estado |
