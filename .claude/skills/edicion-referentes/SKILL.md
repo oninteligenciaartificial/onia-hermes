@@ -166,6 +166,47 @@ stickers parecían cortes. Es la edición **más barata** de las cuatro: no hay 
 No se copia: memes y GIF de películas, la mascota pixel de Claude, filmar el monitor, los subtítulos autogenerados
 sin corregir («cloud» por Claude en 5 de 12) ni la gesticulación constante (se la critica su propio público).
 
+## Receta Adrien (@adrien.ninet), medida el 10-oct-2026
+
+Fuente: `hermes-content/references/video-intake/2026-10-10-ig-adrien-ninet.md` (4 reels de IG bajados, 28 a 53 s;
+cortes con ffmpeg a umbral 0,30, hojas a 4 y 2 fps con el segundo impreso, volumen con `ebur128`). **Es candidata:
+cuatro reels de una sola cuenta.** Se prueba en UNA pieza de recurso o showcase antes de volverla molde. Cuándo: un
+recurso con interfaz real que se muestra y se explica (R4, 28 s, 6.019 likes y 2.591 comentarios; los otros tres
+rinden 70 a 180 veces menos). Las tipografías son inferencia por captura: la familia la decide `diseno-contenido-onia`.
+
+| Parámetro | Regla (números medidos) |
+|---|---|
+| Set | Luz clave frontal suave y sin contraluz, la misma remera lisa en los 4 reels (R1-R4). Un solo set por serie: se toma el uniforme que hace reconocible, no su pared, sus cuadros ni su color |
+| Encuadre | Plano medio corto, simétrico, cámara a la altura de los ojos, **ojos entre ~29 y ~40 % del alto según el plano** (grilla en 12 cuadros: R1 11,6 s 31 %, R2 4,4 s 39 %, R3 13,6 s 40 %). La escala de la cara cambia entre planos; push-in animado de ~1,3x sobre la cara en R2 0-2,1 s, sin corte |
+| Layouts | Cara completa · **lienzo claro (#F6F6F6-#FBFBFB) con la UI real en tarjetas flotantes** (radio grande, sombra amplia y suave, entran con fundido + desenfoque) · cámara convertida en tarjeta sobre la UI desenfocada (R2 21,7 s) · cabeza que **sale por encima del borde** de la tarjeta de cámara (R3 5,2 s; R4 1,0-14 s: necesita recorte de persona) · **reacción: su cara chica arriba (0-22 %), abajo grande (24-100 %) el clip de un tercero** que reacciona al resultado (R1 0-7 s). Corte seco entre layouts |
+| Costura | **Degradado, nunca línea**: blanca sobre lienzo claro (R4 0-0,8 s), oscura sobre material oscuro (R3 0-2,6 s). Si la cabeza queda por encima del degradado, hace falta recorte de persona |
+| Subtítulo (píldora) | **Una palabra a la vez** (cambia cada ~0,27 s; a veces dos cortas o un nombre: «and a» R4 11,0 s, «Claude Code,» R2 11,0 s), sans bold blanca sobre rectángulo gris translúcido. **Una sola altura por pieza sobre todos los layouts**, también sobre la UI a pantalla completa: 53-55 % (R2 4,4 s, R3 13,6 s, R4 14,0 s) o 63 % (R1 11,6 s y 19,0 s). Se apaga mientras hay titular |
+| Titular de tesis | 2-4 por pieza, solo en los momentos de tesis: entra palabra por palabra, cada una desde gris o desenfocada hasta nítida en ~0,25 s. Arranque en sans bold, **palabra clave en serif itálica a 1,6-2x** en una segunda línea. Blanco sobre la cara (R2 1,6 s «by tomorrow.»; R3 41,5 s «trained»), casi negro (~#111) sobre el lienzo (R4 ~1,5 s «premium») |
+| Overlays | Cursor sincronizado con el verbo (el clic sostenido completa el borrado en «hold», R4 ~10,5-12,0 s; clic en «Copy» con «copy», R4 22 s); chips que aparecen con un clic cada uno (R2 11,0-12,5 s); tecleo letra por letra (R3 2,75-3,5 s); push-in lento sobre la UI (R2 17-19,5 s). Pegatinas de la palabra de 0,8-2 s, en tarjeta sobre el pecho (R4 5,6 s y 17,8 s). Sin golpes de zoom instantáneos en la cara |
+| Ritmo de cortes | **2,4-3,2 cortes duros por 10 s**, plano medio de 3,0-3,9 s, **capa nueva cada 1,5-2,4 s**, cero pausas de 0,2 s o más en 3 de 4 reels, 3,3-3,8 palabras por segundo. El movimiento vive dentro de las capas, no en transiciones |
+| Primeros 3 s | Resultado o producto real desde el primer cuadro útil (la impresora entra a 0,2 s e imprime hasta 1,75 s en R4; el layout de reacción armado a 0,04 s en R1), voz desde 0,0 s y titular armándose. Nunca un saludo |
+| Una revelación | Un resultado largo (15 s a pantalla completa en R1, 32,6-47,6 s) **cortado por una reacción de cara de 0,7 s y una palabra** («Nice.», cortes a 37,08 y 37,8 s) |
+| Cierre | Recurso: «Buscá» (sans) + «PALABRA» (serif en mayúsculas) sobre un bloque translúcido **verde #10C26B** (él usa naranja ladrillo, R1 48 s y R4 25,8 s: no se copia) + «en Avisos» (serif itálica). Opinión o noticia: termina en la tesis en serif, sin CTA (R3). Tráiler de un YouTube: escenario → secreto sin revelar → pasos 1/2/3 tecleados → tarjeta «video completo» con la cara en PIP (R2) |
+| Duración | 28 s el showcase de un recurso; 42-53 s los demás |
+
+**Qué tomar (traducido a Onia, propuesta):**
+- Píldora casi negra translúcida (#0A0F0D al ~60 %) con la palabra en blanco, a la altura del mentón.
+- El verde #10C26B va en UN objeto por cuadro (el bloque del CTA o la pieza clave de UI), no en el subtítulo.
+- Lienzo blanco #FFFFFF (tema `blanco` de `diseno-contenido-onia`) con UI real de Onia o de Claude; costura en degradado blanco.
+- La pegatina de la analogía (regla 11) con una foto `fotobn` (B/N + 1 objeto verde) y no con memes: «fácil» con un botón verde en una foto B/N.
+- Abrir con un resultado propio en layout de reacción: Sergio Urcullo chico arriba, lo que hizo con Claude grande abajo.
+- Micrófono de solapa (regla vigente, no el de podcast en cuadro), trípode, set propio.
+
+**Lo que NO se toma (identidad y dudas):**
+- Su cara, set, cuadros, pared, la remera azul marino, el micrófono de podcast en cuadro, sus frases («premium», «doesn't look AI-made»), los productos ajenos, los memes y clips deportivos o de cine, la música y el inglés.
+- El «Comment → DM»: en Onia no está probado el mecanismo. Va «Buscá PALABRA en Avisos».
+- **CTA dos veces** (cuando aparece el recurso y al final, R1): choca con «CTA una sola acción». Propuesta pendiente de Sergio Urcullo, **no adoptada**.
+- **Cama musical bajo la voz** (inferencia, no se escuchó): choca con la regla 4. La regla 4 sigue vigente hasta confirmar escuchando.
+- Pausas de 0,2 s: nuestro máximo sigue en 0,5 s (regla 2) hasta oír el resultado.
+
+**Prueba de uso:** la próxima pieza de recurso o showcase de la cola, una sola versión, con hojas a 2 fps del render
+medidas contra la ficha (píldora a ~54 %, titular solo en tesis, costura en degradado, cortes y capas por 10 s).
+
 ## Receta Pablo (@pabloinpublic), para los repos de GitHub
 
 Fuente: `hermes-content/references/video-intake/2026-10-03-reels-genjutsu-y-fiesta-ia.md` §3 (reel `Dd66MLpuIc_`,
