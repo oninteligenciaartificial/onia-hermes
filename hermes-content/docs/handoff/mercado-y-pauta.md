@@ -5,6 +5,11 @@
 > - ✅ **Tarea 4 (fichas de contenido):** `research/competencia/anuncios/FICHAS_DE_CONTENIDO.md` (Huli, Reservo, Dt.Dental, Calu, bolivianos: ningún proveedor boliviano pauta en Meta).
 > - ⛔ **Tareas 1 y 2 bloqueadas por Plataforma:** la tabla «se promete / funciona» y el corto de 60 s necesitan la cuenta demo y las capturas C1-C7 (y que Sergio Urcullo vea la tabla de cortes y el preview 360p antes de cortar).
 > - Bloqueado de Sergio Urcullo: tarjeta en ONIA Ads y OK de gasto.
+> 🎯 **10-oct — pedido de la madre (sin crear nada en Meta, sin contactar a nadie):** (a) **go/no-go del 13-oct clasificado** en ADQ §5.10: pasan a ✅ sin Sergio Urcullo las filas
+> 1, 2, 8 y la mitad de la 4 y la 5; dependen de él la 3 (tarjeta: **medido `has_payment_method: false`**), la 6, la 9, la prueba con teléfono de la 5 y, sin tope duro, la 7. **Veredicto de hoy: NO-GO.**
+> (b) **Campaña lista para crear:** `carousels/briefs/ads/CAMPANA-1-LISTA-PARA-CREAR.json` + `scripts/campana-lista.test.mjs`. (c) **Defecto propio corregido:** los códigos `D1V`/`D1S` del 9-oct el bot no los lee
+> (el lead nacía sin origen): ahora `D2`/`D3`. (d) Leído en Meta: 0 campañas, 0 borradores; píxel «ONIA Web» activo (disparó el 9-oct 18:40 UTC-7). **Dónde se retoma:** cuando Plataforma refresque la demo,
+> `grabar-captura.mjs` con los planes C1-C7, re-render de A1 y las filas B-02, G-01, G-06, G-11 y L-05; PR de esta tanda en `claude/onia-ventas-pauta-rmdv5j`.
 > - ✅ **Lo desbloqueable de las tareas 1 y 2 (9-oct, madre: «encadená todas las tareas desbloqueadas»; `/loop` existe en mi sesión):** `scripts/grabar-captura.mjs`
 >   (el «script de grabación» que el VSL dice que no existe; planes C1-C7 y C2-clic como esqueleto, frenos probados, **la app real sin probar**) y
 >   `carousels/briefs/ads/VSL-CORTO-TABLA-DE-CORTES.md` + preview de 60 s en `carousels/out/ads/vsl-corto-animatic/`. **Siguen bloqueadas** la tabla «se promete / funciona»

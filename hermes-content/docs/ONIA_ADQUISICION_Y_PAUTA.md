@@ -531,48 +531,23 @@ Los supuestos del embudo están en `research/ONIA_META_ADS_PLAYBOOK_20260930.md`
 Sergio Urcullo en el Administrador de anuncios con esta tabla. **Se crea en PAUSA y se enciende solo con su
 OK.**
 
-#### 5.8.1 Cómo se crea en PAUSA, paso a paso (1-oct)
+#### 5.8.1 Cómo se crea en PAUSA (10-oct): la versión ejecutable es un archivo
 
-Escrito para que la sesión que tenga el conector lo ejecute sin decidir nada. Los parámetros son los del
-conector `Meta_ads`; en el Administrador de anuncios son los mismos campos con su nombre en pantalla.
+**`hermes-content/carousels/briefs/ads/CAMPANA-1-LISTA-PARA-CREAR.json`** trae los pasos con los parámetros EXACTOS del conector
+(`ads_create_campaign`, `ads_create_ad_set`, `ads_creative_upload_media`, `ads_create_creative`, `ads_create_ad`, `ads_get_ad_preview`,
+`ads_activate_entity`), el copy de usted, el público, US$ 4 × 14 días, las reglas de corte de los días 3, 7 y 14 y la respuesta del bot.
+`scripts/campana-lista.test.mjs` lo cruza con este doc, con el conocimiento del bot (el MOTOR REAL lee cada código) y con el detector de
+promesas, así que **este doc manda en los números y el JSON en la forma**: si cambia uno, cambia el otro en el mismo commit.
+Los pasos que estaban acá (1-oct) se sacaron: tenían las imágenes de D1 v3 y decían que las ubicaciones por historia se cargaban a mano
+(el conector ya acepta `placement_customizations`).
 
-> ⛔ **Trampa medida el 1-oct leyendo el conector:** `ads_create_ad` está en **modo borrador**. Los anuncios
-> quedan como DRAFT, y **`ads_activate_entity` sobre la campaña los publica en ACTIVO, gastando.** «Crear en
-> PAUSA» termina en el paso 5. `ads_activate_entity` se llama solo con la fila 9 de §5.9 en ✅.
-
-0. **Antes de nada:** `ads_get_ad_accounts` lista `1073680778314945` con `has_payment_method: true`, y
-   `ads_get_user_pages` (o `ads_get_pages_for_business` con `1451773736711697`) lista `1140384625819526`. Si falta
-   uno, se para acá (filas 2–4 de §5.9). ⚠️ **No** se usa `ads_get_ad_account_pages`: lista solo las páginas que la
-   cuenta ya promocionó, y devuelve `[]` en una cuenta que nunca pautó (corregido el 1-oct).
-1. **Campaña** (`ads_create_campaign`): `ad_account_id` `1073680778314945` · `campaign_name`
-   `ONIA · Dental SCZ · WhatsApp · prueba 1` · `objective` `OUTCOME_LEADS` · `buying_type` `AUCTION` ·
-   `special_ad_categories` `[]` · `campaign_lifetime_budget` `5600` (USD 56, en centavos; era 14000 hasta el 8-oct) ·
-   `campaign_stop_time` = inicio + 14 días. Sale en PAUSED.
-   Si `OUTCOME_LEADS` no acepta WhatsApp en esa cuenta, el respaldo es `OUTCOME_ENGAGEMENT` con el mismo
-   conjunto, y se anota en el handoff.
-2. **Conjunto** (`ads_create_ad_set`): `ad_set_name` `Dental SCZ · 25+ · WhatsApp` · `optimization_goal`
-   `CONVERSATIONS` · `destination_type` `WHATSAPP` · `billing_event` `IMPRESSIONS` · `promoted_object`
-   `{"page_id":"1140384625819526"}` · sin presupuesto propio (manda el de la campaña) · `targeting`:
-   `{"geo_locations":{"custom_locations":[{"latitude":-17.7833,"longitude":-63.1821,"radius":25,"distance_unit":"kilometer"}]},"age_min":25}`,
-   ubicaciones automáticas. Con Advantage+ la edad queda como sugerencia, que es lo que pide §5.2. Excluir
-   registrados (audiencia de clientes) solo si ya existe en la cuenta; no se crea para esto.
-3. **Imágenes:** `feed.png` (1080×1350) y `story.png` (1080×1920) de
-   `hermes-content/carousels/out/ads/onia-platform-dental-meta-d1v3-los-de-manana/` y `…-d4v3-…/`, **la versión
-   que Sergio Urcullo aprobó viéndola** (fila 7). El conector sube archivos solo desde su app; si desde la nube
-   no puede, se suben a mano en el Administrador.
-4. **Dos creativos** (`ads_create_creative`) de **imagen única**: `page_id` `1140384625819526` · `message` =
-   `caption` del brief · `headline` = título de la tabla de arriba · `call_to_action_type` `WHATSAPP_MESSAGE` ·
-   imagen `feed.png`. La `story.png` va en «Personalizar recurso por ubicación» (historias y reels); si el
-   conector no lo expone, se carga a mano en el Administrador. `self_ai_disclosure`: no hace falta (capturas
-   reales y texto por código, sin imágenes generadas); lo confirma Sergio Urcullo.
-   **Texto precargado** (`Hola, vi el anuncio de Onia (D1)…`): si el conector no lo expone, se pone a mano en
-   el anuncio, en «Mensaje de bienvenida», antes de cualquier publicación. Sin ese texto se pierde la
-   atribución D1/D4 (§5.6).
-5. **Dos anuncios** (`ads_create_ad`) bajo el conjunto: `ONIA · D1 · Los de mañana` y
-   `ONIA · D4 · Tratamiento a medias`. Quedan en borrador.
-6. **Anotar en el handoff** del carril los ids de campaña, conjunto, creativos y anuncios, y verificar con
-   `ads_get_ad_entities` que la campaña dice PAUSED. Recién ahí la fila 8 pasa a ✅.
-7. **Encender** = `ads_activate_entity` sobre la campaña, **solo con el OK escrito de Sergio Urcullo** (fila 9).
+- ⛔ **«Crear en pausa» no existe en este conector.** `ads_create_campaign`, `ads_create_ad_set` y `ads_create_ad` dejan **borradores**
+  (visibles en el Administrador) y `ads_activate_entity` los **publica en ACTIVO, gastando**. Pausa = borrador; encender = el último paso,
+  con la fila 9. Nada se crea antes del OK de Sergio Urcullo (regla del carril, CLAUDE.md).
+- **Antes de nada** (paso 0 del JSON): `ads_get_ad_accounts` con `has_payment_method: true`; `ads_get_pages_for_business` con
+  `1451773736711697` lista la página `1140384625819526`. **No** `ads_get_ad_account_pages`: da `[]` en una cuenta que nunca pautó.
+- **Códigos de anuncio: letra(s) + número y nada más** (`D1`, `D2`, `D3`, `D5`). El motor del bot (`bot-engine.mjs`, `conCodigoDelAnuncio`)
+  no lee `(D1V)`: el lead nace sin origen. Se midió el 10-oct con el motor real; por eso A1-E = `D1`, A1-V = `D2`, A1-S = `D3`, A2 = `D5`.
 
 ### 5.9 Lista de encendido
 
@@ -663,19 +638,25 @@ todo contacto el 8-oct («no sé si el producto ya es funcional ni si prometemos
 | **No se hace** | Público personalizado con pocos teléfonos (Meta pide ≥ 1.000 y base legal) · lookalike · remarketing pago (plan §4) |
 | El filtro real | La pieza («Para dueños y dueñas de clínicas dentales de Santa Cruz») y los tres botones del chat, no la segmentación (§5.2) |
 
-**Go / no-go del 13-oct.** Una fila en ❌ y no se enciende.
+**Go / no-go del 13-oct.** Una fila en ❌ y no se enciende. **Estado medido el 10-oct** (solo lectura, conector `Meta_ads`; lo que el conector no ve
+queda como «sin medir»). La última columna separa lo que **pasa a ✅ sin Sergio Urcullo** de lo que **depende de él**.
 
-| # | Condición | Dueño | Estado 8-oct |
-|---|---|---|---|
-| 1 | Las filas de la tabla de arriba, en ✅, y la web sin lo que el catálogo no deja (`ONIA_PROMESA_VS_PRODUCTO.md` §2 y §3) | Plataforma, con la cuenta de prueba | ❌ ninguna verificada: falta la cuenta |
-| 2 | Cuenta demo con datos y **capturas nuevas de producción** para A1 y A2, re-renderizadas y vistas por Sergio Urcullo | Plataforma · Ventas y pauta · Sergio Urcullo | ❌ |
-| 3 | Medio de pago en ONIA Ads (`has_payment_method: true`) | Sergio Urcullo | ❌ |
-| 4 | Número del bot vinculado a la página «Onia» | Sergio Urcullo | ⬜ el conector no lo ve |
-| 5 | La respuesta a la pauta (de usted, §1 de la skill) **firmada y publicada**, y la prueba con dos mensajes desde un teléfono ajeno, mirando la respuesta | Sergio Urcullo (firma), carril chatbot (publica) | ❌ |
-| 6 | Quién contesta y en cuánto (menos de 24 h abre la ventana gratis de 72 h) y la agenda de `/llamada` con horarios | Sergio Urcullo | ❌ |
-| 7 | Tipo de cambio al que cobra el banco (se lee en el extracto): decide si Bs 750 alcanzan para 14 días | Sergio Urcullo | ❌ |
-| 8 | Píxel visto en «Probar eventos» con el alta y su `utm` | Plataforma | ⏳ dispara; falta el evento |
-| 9 | OK escrito de gasto: **«US$ 56, 14 días, tope Bs 750»** | Sergio Urcullo | ❌ |
+| # | Condición | Dueño | Estado 10-oct | ¿Pasa a ✅ sin Sergio Urcullo? |
+|---|---|---|---|---|
+| 1 | Las filas de la tabla de arriba, en ✅, y la web sin lo que el catálogo no deja (`ONIA_PROMESA_VS_PRODUCTO.md` §2 y §3) | Plataforma, con la cuenta de prueba | ❌ ninguna verificada: falta la cuenta demo. Hoy 11:50 (La Paz) sale a producción F1 + #142 + #139 (aviso de la madre) | **Sí.** Plataforma con la cuenta de prueba, después de esa salida. Si una fila queda en 🟡 o ❌ la fecha se corre. A2 ya no está en la prueba 1 |
+| 2 | Cuenta demo con datos y **capturas nuevas de producción** para A1, re-renderizadas | Plataforma · Ventas y pauta | ❌ | **Sí.** Plataforma deja la demo y las C1-C7; Ventas y pauta re-renderiza y mira a 390 px (`grabar-captura.mjs`). «Vistas por Sergio Urcullo» ya no rige (CLAUDE.md, 9-oct): lo que habilita una pieza que promete una función es la tabla de la fila 1 |
+| 3 | Medio de pago en ONIA Ads (`has_payment_method: true`) | Sergio Urcullo | ❌ **medido hoy: `false`** (la cuenta personal sí tiene tarjeta, y no se usa sin su decisión) | **No.** Solo él (y Leslie Mercado Moreno si la tarjeta es de la razón social, §5.11 fila 13) |
+| 4 | Número del bot vinculado a la página «Onia» | Sergio Urcullo | ⬜ el conector no lo ve | **Sí, si ya está vinculado:** la madre lo **lee** desde la PC (Business Manager → página «Onia» → WhatsApp). Si falta, vincularlo pide el código al teléfono de él |
+| 5 | La respuesta a la pauta de usted **publicada**, y la prueba con dos mensajes desde un teléfono ajeno, mirando la respuesta | carril chatbot (publica) · quien tenga un teléfono ajeno (prueba) | La respuesta **ya está escrita y de usted** (`knowledge.onia.json` v2026-10-03.2, campaña de la frase-prefijo); sin verificar si producción la sirve. El motor lee D1, D2, D3 y D5 | **Publicar: sí** (texto de bot, regla del 9-oct). **Probar: no**, hace falta un teléfono que no sea el de Onia: **2 minutos de Sergio Urcullo** |
+| 6 | Quién contesta y en cuánto (menos de 24 h abre la ventana gratis de 72 h) y la agenda de `/llamada` con horarios | Sergio Urcullo | ❌ y **hay un choque que él debe ver**: el bot ofrece una demo de **30 min** y el VSL y el CTA dicen **20** (L-04 🟡) | **No.** Es una decisión suya. Recomendación: contesta él, el mismo día hábil y antes de 24 h; el bot atiende al instante y le avisa |
+| 7 | Tipo de cambio al que cobra el banco (se lee en el extracto): decide si Bs 750 alcanzan para 14 días | Sergio Urcullo | ❌ sin medir | **No lo mide nadie más, pero no tiene por qué bloquear:** con el tope duro «se apaga cuando el cobro acumulado llegue a Bs 750» (a 15 sería el día 12), la fila se cubre con una regla en vez de con un dato. Va dentro del OK de la fila 9 |
+| 8 | Píxel visto en «Probar eventos» con el alta y su `utm` | Plataforma | ⏳ «ONIA Web» `1012611478191231` activo, **disparó el 9-oct 18:40 (UTC-7)**; «Probar eventos» no se ve por el conector | **Sí** (la madre o Plataforma desde la PC). **Y no bloquea esta campaña:** el clic a WhatsApp no depende del píxel (§5.1). Propuesta: pasa a «no bloquea la prueba 1»; solo bloquea la web como destino |
+| 9 | OK explícito de gasto con techo: **«US$ 56, 14 días, tope Bs 750»** | Sergio Urcullo | ❌ | **No.** Escrito por él **en la sesión que crea y enciende**; el de otra sesión no vale |
+
+**Lectura (10-oct):** pasan a ✅ sin Sergio Urcullo las filas **1, 2, 8 y la mitad de la 4 y la 5**, todas detrás de la salida de hoy y de la demo
+de Plataforma. **Dependen de él: 3, 6, 9, la prueba con teléfono de la 5 y, si no acepta el tope duro, la 7.** Lo mínimo que se le pide: la tarjeta, el OK
+escrito, sí o no a «contesta él en menos de 24 h», y 2 minutos con su teléfono. **Hoy el veredicto es NO-GO**: 3, 6 y 9 siguen en ❌ y 1 y 2 esperan a Plataforma.
+La campaña ya está lista para crearse (`carousels/briefs/ads/CAMPANA-1-LISTA-PARA-CREAR.json`) el día que esas filas estén en ✅.
 
 **9-oct, lo que cambió de mi lado (Ventas y pauta): ninguna fila pasó a ✅.** Las filas 1, 2, 3, 5, 6, 7 y 9 siguen igual; no hay cuenta demo ni
 `ONIA_QA_EMAIL`/`ONIA_QA_PASSWORD` en el entorno de Ventas. Lo que sí quedó listo para que, cuando entre la cuenta, recapturar A1/A2 y las C1-C7 del VSL
@@ -698,7 +679,7 @@ firmar la respuesta a la pauta, dar el OK de gasto (US$ 56 · 14 días · Bs 750
 |---|---|
 | Campaña | `ONIA · Dental SCZ · WhatsApp · prueba 1` · Clientes potenciales · presupuesto total US$ 56 · 14 días · se crea en PAUSA (§5.8.1) |
 | Conjunto | Uno solo: `Dental SCZ · 25+ · WhatsApp` (§5.10, «Públicos») |
-| Anuncios | **Tres copias del mismo concepto, «el paciente de mañana que no confirmó»**, que cambian solo el formato: **A1-E** imagen 4:5 + historia, código `(D1)` · **A1-V** video de 11 s, `(D1V)` · **A1-S** selfie de 25 s de Sergio Urcullo con la pantalla, `(D1S)` (guion en `research/competencia/anuncios/COMPARACION-DISENO-8OCT.md`) |
+| Anuncios | **Tres copias del mismo concepto, «el paciente de mañana que no confirmó»**, que cambian solo el formato: **A1-E** imagen 4:5 + historia, código `(D1)` · **A1-V** video de 11 s, `(D2)` · **A1-S** selfie de 25 s de Sergio Urcullo con la pantalla, `(D3)` (guion en `research/competencia/anuncios/COMPARACION-DISENO-8OCT.md`) |
 
 - **Por qué tres copias de un concepto y no tres conceptos:** es el patrón de lo que más dura en la competencia
   (`COMUNICACION_Y_PAUTA_COMPETENCIA.md` §2: 2-5 copias por concepto), y deja una sola diferencia, **con persona o

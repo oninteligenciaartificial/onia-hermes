@@ -5,6 +5,8 @@
 - [x] Creativos de la campaña de §5.11 (3 versiones del mismo anuncio) listos y mirados — A1-E imagen y A1-V video miradas con el copy corregido; A1-S (selfie) espera la cara de Sergio Urcullo. `carousels/briefs/ads/PRUEBA-1-PIEZAS.md`, PR #175
 - [x] Competencia: fichas de contenido de Huli, Reservo, Dt.Dental, Calu y los bolivianos (método §8.2) — `research/competencia/anuncios/FICHAS_DE_CONTENIDO.md`, PR #175
 
+- [x] (10-oct, pedido de la madre) Go/no-go del 13-oct clasificado en ADQ §5.10 y campaña prueba 1 lista para crear: `carousels/briefs/ads/CAMPANA-1-LISTA-PARA-CREAR.json` + `scripts/campana-lista.test.mjs`. Nada creado en Meta.
+
 ## Bloqueado
 - **Sergio Urcullo:** tarjeta en ONIA Ads (gasto); `ONIA_QA_EMAIL` y `ONIA_QA_PASSWORD` de una cuenta de prueba en el entorno de Ventas; las tomas a cámara T9, T10 y T12 del VSL.
 - **Plataforma:** la cuenta demo con la misma persona en agenda y Pendientes, y teléfono/correo de prueba propios; verificar G-01 (qué hace «Aprobar») antes del clic de C2. De ahí salen las tareas 1 y 2.

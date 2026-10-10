@@ -1,0 +1,453 @@
+{
+  "_leer_primero": "Especificación EJECUTABLE de la campaña prueba 1. Los números y las reglas mandan en hermes-content/docs/ONIA_ADQUISICION_Y_PAUTA.md (§5.3 plata, §5.7 corte, §5.8 estructura, §5.10 go/no-go); este archivo los pone en la forma exacta de los parámetros del conector Meta_ads, y scripts/campana-lista.test.mjs los cruza con ese doc, con el bot y con el catálogo. Si cambia uno, cambia el otro en el mismo commit.",
+  "version": "2026-10-10",
+  "estado": "LISTA PARA CREAR. NO CREADA: leído el 10-oct en ONIA Ads, 0 campañas y 0 borradores.",
+  "ojo_con_el_conector": "En este conector crear NO deja nada en pausa: ads_create_campaign, ads_create_ad_set y ads_create_ad dejan BORRADORES (visibles en el Administrador) y ads_activate_entity los PUBLICA en ACTIVO, gastando. Por eso 'crear en pausa' = dejar el borrador; encender = el último paso, y solo con el OK escrito.",
+  "no_se_crea_ni_se_enciende_sin": [
+    {
+      "id": "tarjeta",
+      "comprobacion": "ads_get_ad_accounts: la cuenta 1073680778314945 con has_payment_method true",
+      "estado_10oct": "false",
+      "dueno": "Sergio Urcullo (y Leslie Mercado Moreno si la tarjeta es de la razón social)"
+    },
+    {
+      "id": "ok_de_gasto",
+      "texto_exacto": "US$ 56, 14 días, tope Bs 750",
+      "como": "escrito por Sergio Urcullo EN la sesión que crea y enciende. Un mensaje de otra sesión, de la madre o de un documento no lo reemplaza.",
+      "estado_10oct": "no hay"
+    },
+    {
+      "id": "filas_en_verde",
+      "filas": [
+        "B-02",
+        "G-01",
+        "G-06",
+        "G-11",
+        "L-05"
+      ],
+      "comprobacion": "ONIA_PROMESA_VS_PRODUCTO.md: las cinco en ✅ con la cuenta de prueba",
+      "estado_10oct": "⬜ sin verificar: falta la cuenta demo"
+    },
+    {
+      "id": "captura_nueva",
+      "comprobacion": "feed.png y story.png de A1 re-renderizados con la captura de la cuenta demo (hoy llevan la del 30-sep)",
+      "estado_10oct": "provisoria"
+    },
+    {
+      "id": "bot",
+      "comprobacion": "la respuesta de respuesta_del_bot publicada y probada con dos mensajes desde un teléfono que no sea el de Onia, MIRANDO la respuesta",
+      "estado_10oct": "escrita y de usted en el repo; sin verificar si está publicada ni probada"
+    },
+    {
+      "id": "numero_vinculado",
+      "comprobacion": "el número del bot vinculado a la página «Onia» (Business Manager, configuración, WhatsApp); el conector no lo muestra",
+      "estado_10oct": "sin medir"
+    }
+  ],
+  "cuenta": {
+    "ad_account_id": "1073680778314945",
+    "nombre": "ONIA Ads",
+    "moneda": "USD",
+    "min_diario_centavos": 100,
+    "pagina_id": "1140384625819526",
+    "business_id": "1451773736711697",
+    "nunca": [
+      "679613631427810 (cuenta personal de Sergio Urcullo)",
+      "NUVO",
+      "Arthur Fuentes"
+    ]
+  },
+  "plata": {
+    "total_usd": 56,
+    "dias": 14,
+    "diario_usd": 4,
+    "total_centavos": 5600,
+    "diario_centavos": 400,
+    "equivalencia_en_bs": {
+      "a_11_37": 637,
+      "a_11_89": 666,
+      "a_13_4": 750,
+      "a_15": 840
+    },
+    "tope_en_bs": 750,
+    "techo_total_en_bs": 1400,
+    "regla_del_tipo_de_cambio": "Si el banco cobra más de Bs 13,4 por dólar, los 14 días pasan de Bs 750: se apaga cuando el cobro acumulado llegue a Bs 750 (a 15, el día 12). Un límite de gasto de campaña menor a US$ 100 no lo acepta Meta, así que el tope se cuida con el presupuesto total, la fecha de fin y apagando a mano.",
+    "fuente": "ONIA_ADQUISICION_Y_PAUTA.md §5.3 y ONIA_PLAN_1.0_Y_CAJA.md §2-3"
+  },
+  "fechas": {
+    "inicio": "00:00 hora de Bolivia (UTC-4) del día siguiente al OK escrito",
+    "fin": "inicio + 14 días",
+    "formato": "ISO 8601 con -04:00"
+  },
+  "preflight": [
+    {
+      "paso": "0a",
+      "herramienta": "ads_get_ad_accounts",
+      "espera": "has_payment_method true en 1073680778314945"
+    },
+    {
+      "paso": "0b",
+      "herramienta": "ads_get_pages_for_business",
+      "args": {
+        "business_id": "1451773736711697"
+      },
+      "espera": "lista 1140384625819526. NO usar ads_get_ad_account_pages: da [] en una cuenta que nunca pautó"
+    },
+    {
+      "paso": "0c",
+      "herramienta": "ads_get_ad_entities",
+      "args": {
+        "ad_account_id": "1073680778314945",
+        "level": "campaign",
+        "object_state": "draft"
+      },
+      "espera": "vacío: no se duplica un borrador"
+    },
+    {
+      "paso": "0d",
+      "herramienta": "ads_get_datasets",
+      "args": {
+        "ad_account_id": "1073680778314945"
+      },
+      "espera": "«ONIA Web» 1012611478191231 activo. Clic a WhatsApp no depende del píxel (§5.1)"
+    }
+  ],
+  "creacion": [
+    {
+      "paso": 1,
+      "herramienta": "ads_create_campaign",
+      "args": {
+        "ad_account_id": "1073680778314945",
+        "campaign_name": "ONIA · Dental SCZ · WhatsApp · prueba 1",
+        "objective": "OUTCOME_LEADS",
+        "buying_type": "AUCTION",
+        "special_ad_categories": "[]",
+        "campaign_lifetime_budget": 5600,
+        "campaign_bid_strategy": "LOWEST_COST_WITHOUT_CAP",
+        "campaign_start_time": "{{INICIO_ISO}}",
+        "campaign_stop_time": "{{FIN_ISO}}"
+      },
+      "guarda": "campaign_id",
+      "si_falla": "OUTCOME_ENGAGEMENT con el mismo conjunto; se anota en el handoff"
+    },
+    {
+      "paso": 2,
+      "herramienta": "ads_create_ad_set",
+      "args": {
+        "ad_account_id": "1073680778314945",
+        "campaign_id": "{{campaign_id}}",
+        "ad_set_name": "Dental SCZ · 25+ · WhatsApp",
+        "optimization_goal": "CONVERSATIONS",
+        "destination_type": "WHATSAPP",
+        "billing_event": "IMPRESSIONS",
+        "promoted_object": "{\"page_id\":\"1140384625819526\"}",
+        "targeting": "{\"geo_locations\":{\"custom_locations\":[{\"latitude\":-17.7833,\"longitude\":-63.1821,\"radius\":25,\"distance_unit\":\"kilometer\"}]},\"age_min\":25}",
+        "start_time": "{{INICIO_ISO}}",
+        "end_time": "{{FIN_ISO}}"
+      },
+      "sin_presupuesto_propio": "manda el de la campaña (CBO): no se pasa daily_budget ni lifetime_budget",
+      "guarda": "ad_set_id",
+      "a_mano_en_el_administrador": [
+        "«Llegar a más personas…» APAGADO (Meta lo marca por defecto al elegir una ciudad)",
+        "Advantage+ encendido: la edad 25+ queda como sugerencia, que es lo que pide §5.2",
+        "excluir registrados solo si la lista ya existe; no se crea para esto",
+        "ubicaciones automáticas"
+      ]
+    },
+    {
+      "paso": 3,
+      "herramienta": "ads_creative_upload_media",
+      "para": "A1-E",
+      "archivos": [
+        "hermes-content/carousels/out/ads/onia-platform-dental-meta-a1v5-las-diez/feed.png (1080x1350)",
+        "hermes-content/carousels/out/ads/onia-platform-dental-meta-a1v5-las-diez/story.png (1080x1920)"
+      ],
+      "como": "upload_source LOCAL_FILE (la app interactiva, desde la PC) o URL pública. El repo no es público: si se sube por URL, primero se aloja el archivo en un enlace directo",
+      "guarda": [
+        "hash_feed",
+        "hash_story"
+      ]
+    },
+    {
+      "paso": 3.1,
+      "herramienta": "ads_creative_upload_media",
+      "para": "A1-V",
+      "archivos": [
+        "hermes-content/carousels/out/ads/onia-platform-dental-meta-a1v5-las-diez/onia-platform-dental-meta-a1v5-las-diez.mp4 (11 s, 1080x1920, sin audio)",
+        "hermes-content/carousels/out/ads/onia-platform-dental-meta-a1v5-las-diez/video-thumb.png (portada)"
+      ],
+      "espera": "ads_get_ad_videos dice status ready antes del paso 4",
+      "guarda": [
+        "video_id",
+        "hash_portada"
+      ]
+    },
+    {
+      "paso": 4,
+      "herramienta": "ads_create_creative",
+      "para": "A1-E",
+      "args": {
+        "ad_account_id": "1073680778314945",
+        "page_id": "1140384625819526",
+        "name": "ONIA · A1-E · Las 10:00",
+        "message": "Un paciente que no confirma es una silla que puede quedar vacía, y el alquiler, la asistente y su hora se pagan igual.\n\nOnia es un sistema de gestión con IA para clínicas dentales: agenda, ficha con odontograma, tratamientos y cobros. Cada mañana le deja anotado a quién escribirle, con el mensaje listo, y nada sale sin que usted lo apruebe.",
+        "headline": "Un paciente que no confirma es un sillón vacío",
+        "call_to_action_type": "WHATSAPP_MESSAGE",
+        "link_url": "https://wa.me/{{NUMERO_DEL_BOT}}?text=Hola%2C%20vi%20el%20anuncio%20de%20Onia%20%28D1%29.%20Tengo%20una%20cl%C3%ADnica%20dental.",
+        "placement_customizations": [
+          {
+            "image_hash": "{{hash_feed}}"
+          },
+          {
+            "image_hash": "{{hash_story}}",
+            "publisher_platforms": [
+              "facebook",
+              "instagram"
+            ],
+            "facebook_positions": [
+              "story"
+            ],
+            "instagram_positions": [
+              "story"
+            ]
+          }
+        ]
+      },
+      "nota": "El primer elemento es el de respaldo (sin ubicaciones). self_ai_disclosure: no se manda; la declaración es de Sergio Urcullo (capturas reales y texto por código, sin imágenes generadas)."
+    },
+    {
+      "paso": 4.1,
+      "herramienta": "ads_create_creative",
+      "para": "A1-V",
+      "args": {
+        "ad_account_id": "1073680778314945",
+        "page_id": "1140384625819526",
+        "name": "ONIA · A1-V · Las 10:00 video",
+        "message": "Un paciente que no confirma es una silla que puede quedar vacía, y el alquiler, la asistente y su hora se pagan igual.\n\nOnia es un sistema de gestión con IA para clínicas dentales: agenda, ficha con odontograma, tratamientos y cobros. Cada mañana le deja anotado a quién escribirle, con el mensaje listo, y nada sale sin que usted lo apruebe.",
+        "headline": "Un paciente que no confirma es un sillón vacío",
+        "call_to_action_type": "WHATSAPP_MESSAGE",
+        "link_url": "https://wa.me/{{NUMERO_DEL_BOT}}?text=Hola%2C%20vi%20el%20anuncio%20de%20Onia%20%28D2%29.%20Tengo%20una%20cl%C3%ADnica%20dental.",
+        "video_id": "{{video_id}}",
+        "image_hash": "{{hash_portada}}"
+      }
+    },
+    {
+      "paso": 5,
+      "herramienta": "ads_create_ad",
+      "args": {
+        "ad_account_id": "1073680778314945",
+        "ad_set_id": "{{ad_set_id}}",
+        "ad_name": "ONIA · A1-E · Las 10:00",
+        "creative": "{\"creative_id\":\"{{creative_id_A1E}}\"}"
+      }
+    },
+    {
+      "paso": 5.1,
+      "herramienta": "ads_create_ad",
+      "args": {
+        "ad_account_id": "1073680778314945",
+        "ad_set_id": "{{ad_set_id}}",
+        "ad_name": "ONIA · A1-V · Las 10:00 video",
+        "creative": "{\"creative_id\":\"{{creative_id_A1V}}\"}"
+      }
+    },
+    {
+      "paso": 6,
+      "herramienta": "ads_get_ad_preview",
+      "para": "cada anuncio",
+      "espera": "el botón dice «Enviar mensaje de WhatsApp», abre el chat con el texto precargado y el código (D1 o D2). Si el conector no respeta el texto, se pone a mano en el anuncio, «Mensaje de bienvenida», ANTES de publicar: sin código se pierde la atribución. Se mira en Feed, Historias y Reels."
+    },
+    {
+      "paso": 7,
+      "herramienta": "ads_get_ad_entities",
+      "args": {
+        "ad_account_id": "1073680778314945",
+        "level": "campaign",
+        "object_state": "draft"
+      },
+      "espera": "campaña, conjunto y dos anuncios en borrador; los ids van al handoff del carril"
+    }
+  ],
+  "activacion": {
+    "herramienta": "ads_activate_entity",
+    "args": {
+      "ad_account_id": "1073680778314945",
+      "entity_id": "{{campaign_id}}",
+      "entity_type": "campaign",
+      "object_ids": [
+        "{{campaign_id}}",
+        "{{ad_set_id}}",
+        "{{ad_id_A1E}}",
+        "{{ad_id_A1V}}"
+      ],
+      "publish_as_active": true
+    },
+    "solo_con": [
+      "tarjeta",
+      "ok_de_gasto",
+      "filas_en_verde",
+      "captura_nueva",
+      "bot",
+      "numero_vinculado"
+    ],
+    "despues": "esperar 2 minutos y leer el borrador y la campaña otra vez: PUBLISHING es «entregado», no «publicado». Verificar effective_status ACTIVE y mirar el primer mensaje que llegue."
+  },
+  "anuncios": {
+    "entran": [
+      {
+        "id": "A1-E",
+        "formato": "imagen 4:5 + historia 9:16",
+        "codigo": "D1",
+        "texto_precargado": "Hola, vi el anuncio de Onia (D1). Tengo una clínica dental.",
+        "archivos": [
+          "hermes-content/carousels/out/ads/onia-platform-dental-meta-a1v5-las-diez/feed.png",
+          "hermes-content/carousels/out/ads/onia-platform-dental-meta-a1v5-las-diez/story.png"
+        ]
+      },
+      {
+        "id": "A1-V",
+        "formato": "video 9:16 de 11 s sin audio",
+        "codigo": "D2",
+        "texto_precargado": "Hola, vi el anuncio de Onia (D2). Tengo una clínica dental.",
+        "archivos": [
+          "hermes-content/carousels/out/ads/onia-platform-dental-meta-a1v5-las-diez/onia-platform-dental-meta-a1v5-las-diez.mp4"
+        ]
+      }
+    ],
+    "esperan": [
+      {
+        "id": "A1-S",
+        "formato": "selfie de 25 s de Sergio Urcullo con la pantalla",
+        "codigo": "D3",
+        "texto_precargado": "Hola, vi el anuncio de Onia (D3). Tengo una clínica dental.",
+        "espera": "su cara y su voz: lo graba él"
+      },
+      {
+        "id": "A2",
+        "formato": "el saldo que nadie cobra",
+        "codigo": "D5",
+        "texto_precargado": "Hola, vi el anuncio de Onia (D5). Tengo una clínica dental.",
+        "espera": "E-03 y G-08 en ✅ (nunca se vio funcionando la propuesta de cobro)"
+      }
+    ],
+    "congelados": [
+      {
+        "id": "D4",
+        "motivo": "tratamiento a medias: el catálogo §8 no deja decirlo y el detector no encuentra a nadie"
+      }
+    ],
+    "regla": "Tres copias de un concepto y no tres conceptos: cambia el formato, no el mensaje. El presupuesto está en la campaña: Meta empuja al que rinde, y que uno reciba pocas impresiones no es un veredicto."
+  },
+  "copy_de_usted": {
+    "texto_principal": "Un paciente que no confirma es una silla que puede quedar vacía, y el alquiler, la asistente y su hora se pagan igual.\n\nOnia es un sistema de gestión con IA para clínicas dentales: agenda, ficha con odontograma, tratamientos y cobros. Cada mañana le deja anotado a quién escribirle, con el mensaje listo, y nada sale sin que usted lo apruebe.",
+    "titular": "Un paciente que no confirma es un sillón vacío",
+    "boton": "WHATSAPP_MESSAGE (Enviar mensaje de WhatsApp)",
+    "prohibido": [
+      "precio en la imagen o el texto",
+      "«tratamiento a medias»",
+      "«lo envía con un toque» (G-03 está a medias)",
+      "envío automático por WhatsApp",
+      "factura electrónica SIAT",
+      "testimonios, cifras de clientes o logos (0 clientes pagando)",
+      "competidores por nombre o por alusión",
+      "voseo o tuteo"
+    ],
+    "fuente": "los briefs onia-platform-dental-meta-a1v5-las-diez.json y ...a1v5-micro-10s.json (caption y headline_anuncio); catálogo §7 y §8"
+  },
+  "publico": {
+    "ubicacion": "Santa Cruz de la Sierra, radio 25 km desde (-17,7833; -63,1821), «Llegar a más personas» apagado",
+    "edad_y_audiencia": "25+, Advantage+ con sugerencias (odontología, administradores de páginas)",
+    "sin": [
+      "exclusiones por interés (no existen desde el 31-mar-2025)",
+      "público personalizado con pocos teléfonos (Meta pide ≥ 1.000 y base legal)",
+      "lookalike",
+      "remarketing pago"
+    ],
+    "el_filtro_real": "la pieza («Para dueños y dueñas de clínicas dentales de Santa Cruz») y los tres botones del chat, no la segmentación",
+    "riesgo": "el cliente ideal es ≲ 0,1 % del público alcanzable: un anuncio que dice «clínica dental» trae PACIENTES que buscan turno (§5.2)"
+  },
+  "bienvenida": {
+    "se_configura": "a mano en el Administrador (anuncio → mensaje de bienvenida); el conector no lo expone",
+    "texto": "Para dueños y dueñas de clínicas dentales de Santa Cruz. ¿Qué lo trae por acá?",
+    "tres_botones": [
+      "Tengo una clínica y quiero ver cómo funciona",
+      "Trabajo en una clínica",
+      "Busco atención dental"
+    ],
+    "nota": "«Busco atención dental» tiene salida cortés: el bot no da turnos. La pregunta de dolor con tres botones propuesta por el estudio de Dapta (§5.2) va DESPUÉS de estos tres, no en su lugar, y sigue pendiente de Sergio Urcullo."
+  },
+  "respuesta_del_bot": {
+    "fuente": "hermes-content/deploy/vps-ops/bot/knowledge.onia.json, campanas[frase = «Hola, vi el anuncio de Onia»]",
+    "version_del_conocimiento": "2026-10-03.2",
+    "frase_prefijo": "Hola, vi el anuncio de Onia",
+    "texto": "Gracias por escribir desde el anuncio. Para que Sergio llegue a la demo con el caso de su clínica, cuénteme dos cosas: ¿cuántos profesionales atienden y quién agenda las citas? Y si en realidad busca atención dental como paciente, por acá no damos turnos: escríbale directo a su clínica.",
+    "publicacion": "es texto de bot, de usted y dentro de la regla del 9-oct (se publica sin esperar); verificar que producción lo sirve ya",
+    "prueba": "dos mensajes desde un teléfono que no sea el de Onia, con el texto exacto de cada precargado, MIRANDO la respuesta y el aviso a Sergio Urcullo con «Origen: anuncio-D1» (o D2). Cada código tiene que ser letra + número (D1, D2): el bot no lee «D1V».",
+    "quien_contesta": "decisión de Sergio Urcullo (fila 6 del go/no-go). Recomendación: contesta él, el mismo día hábil y antes de 24 h (abre la ventana gratis de 72 h); el bot atiende al instante y le avisa."
+  },
+  "medicion": {
+    "planilla": "una fila por anuncio y por día, a mano",
+    "columnas": [
+      "conversaciones",
+      "de dueños o administradores de clínica",
+      "demos agendadas",
+      "costo por conversación",
+      "costo por demo",
+      "CTR",
+      "frecuencia",
+      "reproducciones de 3 s ÷ impresiones (solo A1-V)"
+    ],
+    "de_donde": {
+      "conversaciones y gasto": "ads_get_ad_entities level ad con results, cost_per_result, amount_spent, ctr, frequency, impressions",
+      "dueños de clínica": "el código D1/D2 buscado en Chatwoot (el referral se pierde, §5.5)",
+      "demos": "/llamada agendadas desde el chat"
+    },
+    "benchmarks": "sin gasto no hay: «No industry benchmark data». Los costos por conversación (US$ 1-4) son supuestos hasta la semana 1."
+  },
+  "reglas_de_corte": {
+    "fuente": "ONIA_ADQUISICION_Y_PAUTA.md §5.7 y ONIA_PLAN_1.0_Y_CAJA.md §3: costo máximo por cliente Bs 1.570 × 25 % de cierre = Bs 390 por demo; × 10 % de conversación a demo = Bs 40 por conversación. Los dos porcentajes son supuestos.",
+    "dia_3": {
+      "cortar_si": [
+        "0 conversaciones",
+        "CTR < 0,8 %"
+      ],
+      "accion": "se cambia la pieza, no la segmentación",
+      "seguir_si": "hay conversaciones"
+    },
+    "dia_7": {
+      "cortar_si": [
+        "costo por conversación > Bs 40",
+        "0 conversaciones de dueños de clínica"
+      ],
+      "seguir_si": "costo por conversación ≤ Bs 40 y al menos 1 calificada",
+      "bs_40_en_usd": {
+        "a_13_4": 2.99,
+        "a_11_37": 3.52
+      }
+    },
+    "dia_14": {
+      "cortar_si": [
+        "0 demos",
+        "costo por demo > Bs 390"
+      ],
+      "seguir_si": "costo por demo ≤ Bs 390",
+      "bs_390_en_usd": {
+        "a_13_4": 29.1,
+        "a_11_37": 34.3
+      }
+    },
+    "siempre": [
+      "no se toca la segmentación ni se sube el presupuesto más de 20 % durante la prueba (reinicia el aprendizaje)",
+      "techo total Bs 1.400: al llegar se apaga todo",
+      "si el cobro acumulado llega a Bs 750 antes del día 14, se apaga ese día",
+      "seguir = una segunda tanda igual, pagada solo con plata de un cliente que ya pagó, nunca con la reserva"
+    ],
+    "como_se_corta": "ads_update_entity con status PAUSED sobre la campaña (no se borra: la cuenta de lo gastado queda)",
+    "tipo_de_cambio_para_convertir": "el real del extracto; si no se conoce, el más duro: 13,4"
+  },
+  "despues_de_crear": [
+    "anotar en hermes-content/docs/handoff/mercado-y-pauta.md los ids de campaña, conjunto, creativos y anuncios",
+    "fila 8 de §5.9 pasa a ✅ solo con ads_get_ad_entities mostrando la campaña",
+    "primer chequeo a las 24 h: ¿llegó algún mensaje?, ¿con el código?, ¿contestó el bot?, ¿le avisó a Sergio Urcullo?"
+  ]
+}
