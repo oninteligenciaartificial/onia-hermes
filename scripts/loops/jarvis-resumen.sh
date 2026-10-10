@@ -342,8 +342,11 @@ MADRE_MD=hermes-content/docs/cola/loop/madre.md
 leer_main() {  # leer_main <ruta en el repo>
   git -C "$REPO" show "origin/main:$1" 2>/dev/null || cat "$REPO/$1" 2>/dev/null
 }
-# Salida: «su|otro<TAB>días<TAB>fecha<TAB>qué<TAB>dueño», de lo vencido a lo que vence en 3 días.
-# Sale 2 si no hay tabla que leer y 3 si el archivo no tiene la §G con Fecha, Qué y Dueño.
+# Salida: «su|otro<TAB>viñeta», ya ordenada y con 5 por grupo como mucho (lo que vence antes, después
+# lo vencido más reciente, al final las fechas que no entiende). Sale 2 si no hay tabla que leer y 3
+# si el archivo no tiene la §G con Fecha, Qué y Dueño. Revisión del 10-oct: una fecha que no entiende
+# no se calla (NECESITO diría «Nada.» con un reloj vivo en la tabla), y una fila tachada (~~) o con ✅
+# ya se hizo.
 relojes_de() {  # relojes_de <hoy>  (stdin: madre.md)
   python3 -c '
 import datetime, re, sys, unicodedata
@@ -366,95 +369,143 @@ for l in texto.splitlines():
         cabeza = [x.lower() for x in c]
     elif not all(re.fullmatch(r":?-+:?", x) for x in c if x):
         filas.append(c)
-def col(prefijo):
-    return next((i for i, h in enumerate(cabeza or []) if h.startswith(prefijo)), None)
-iF, iQ, iD = col("fecha"), col("qu"), col("due")
+def col(*nombres):
+    return next((i for i, h in enumerate(cabeza or []) if h.split(" ")[0] in nombres), None)
+iF, iQ, iD = col("fecha"), col("qué", "que"), col("dueño", "dueno")
 if not vista or None in (iF, iQ, iD):
     sys.exit(3)
 def limpio(s):
     s = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", s)
     return re.sub(r"\s+", " ", s.replace("*", "").replace("`", "")).strip()
-def fecha_de(t):
-    # La fecha sin año: la más cercana a hoy. Un rango («13 al 18-oct») cuenta desde el primer día.
-    m = re.search(r"(?<!\d)(\d{1,2})(?:\s+al\s+\d{1,2})?-(%s)[a-z]*\b" % "|".join(MES), t.lower())
-    if not m:
-        return None
-    mejor = None
+def cerca(mes, dia):
+    # Sin año: la próxima vez que cae, salvo que haya pasado hace 60 días o menos (así un 15-abr leído
+    # en octubre es el del año que viene, no uno «vencido hace 178 días»).
     for y in (hoy.year - 1, hoy.year, hoy.year + 1):
         try:
-            f = datetime.date(y, MES.index(m.group(2)) + 1, int(m.group(1)))
+            f = datetime.date(y, mes, dia)
         except ValueError:
             continue
-        if mejor is None or abs((f - hoy).days) < abs((mejor - hoy).days):
-            mejor = f
-    return mejor
-salida = []
+        if -60 <= (f - hoy).days <= 305:
+            return f
+    return None
+MESRE = r"[\s-]+(%s)[a-záéíóú]*\b" % "|".join(MES)
+UNION = r"\s*(?:al|a|y|–|-)\s*"
+def fechas_de(t):  # -> (inicio, fin), o None si no la entiende
+    t = t.lower()
+    m = re.search(r"(?<!\d)(\d{4})-(\d{2})-(\d{2})(?!\d)", t)
+    if m:
+        try:
+            f = datetime.date(int(m.group(1)), int(m.group(2)), int(m.group(3)))
+        except ValueError:
+            return None
+        return f, f
+    m = re.search(r"(?<!\d)(\d{1,2})(?:" + UNION + r"(\d{1,2}))?" + MESRE, t)
+    if m:
+        d1, mes = int(m.group(1)), MES.index(m.group(3)) + 1
+        if m.group(2):  # «13 al 18-oct», «28 al 2-nov» (el 28 es del mes anterior)
+            d2 = int(m.group(2))
+            ini, fin = cerca(mes if d1 <= d2 else (mes - 2) % 12 + 1, d1), cerca(mes, d2)
+        else:
+            ini = fin = cerca(mes, d1)
+            m2 = re.match(UNION + r"(\d{1,2})" + MESRE, t[m.end():])  # «29-sep al 2-oct»
+            if m2:
+                fin = cerca(MES.index(m2.group(2)) + 1, int(m2.group(1)))
+        if ini is None or fin is None:
+            return None
+        return ini, max(ini, fin)
+    m = re.search(r"(?<!\d)(\d{1,2})/(\d{1,2})(?![\d/])", t)
+    if m:
+        f = cerca(int(m.group(2)), int(m.group(1)))
+        return (f, f) if f else None
+    return None
+def en(n):
+    return "hoy" if n == 0 else "mañana" if n == 1 else "en %d días" % n
+DIA_SEMANA = r"^(lun|mar|mi[eé]|jue|vie|s[aá]b|dom)\.?\s+"
+grupos = {"su": [], "otro": []}
 for c in filas:
-    if len(c) <= max(iF, iQ, iD):
+    if len(c) <= max(iF, iQ, iD) or "~~" in "".join(c) or "✅" in "".join(c):
         continue
-    f = fecha_de(c[iF])
-    if f is None or (f - hoy).days > 3:
+    crudo = limpio(c[iF])
+    if re.fullmatch(r"(sin fecha.*|s/?f|[-—–?]?)", crudo.lower()):
         continue
+    # El día de la semana de la tabla no se repite: la fecha manda y el día puede estar mal.
+    fecha = re.sub(DIA_SEMANA, "", crudo, flags=re.I)
     que, dueno = limpio(c[iQ]), limpio(c[iD])
-    if len(que) > 110:
-        que = que[:109].rstrip() + "…"
+    if len(que) > 100:
+        que = que[:99].rstrip() + "…"
     su = bool(re.search(r"\bSU\b|Sergio", dueno))
-    salida.append(((f - hoy).days, "su" if su else "otro", limpio(c[iF]), que, "" if su else dueno))
-for dias, grupo, fecha, que, dueno in sorted(salida):
-    print("\t".join((grupo, str(dias), fecha, que, dueno)))
+    cola = "" if su else " — " + dueno
+    f = fechas_de(crudo)
+    if f is None:
+        grupos["su" if su else "otro"].append(((2, 0), "❓ %s, no entiendo la fecha: %s%s" % (fecha, que, cola)))
+        continue
+    di, df = (f[0] - hoy).days, (f[1] - hoy).days
+    if di > 3:
+        continue
+    if df < 0:
+        orden, txt = (1, -df), "🔴 %s, vencido hace %d día%s" % (fecha, -df, "" if df == -1 else "s")
+    elif di < 0:
+        orden, txt = (0, 0), "%s, en curso (termina %s)" % (fecha, en(df))
+    else:
+        orden, txt = (0, di), "%s, %s" % (fecha, en(di))
+    grupos["su" if su else "otro"].append((orden, "%s: %s%s" % (txt, que, cola)))
+for g, xs in grupos.items():
+    xs.sort(key=lambda x: x[0])
+    for _, txt in xs[:5]:
+        print(g + "\t" + txt)
+    if len(xs) > 5:
+        print("%s\t… y %d más (cola/loop/madre.md §G)" % (g, len(xs) - 5))
 ' "$1"
 }
 RELOJES_RC=0
 RELOJES=$(leer_main "$MADRE_MD" | relojes_de "$HOY" 2>/dev/null) || RELOJES_RC=$?
-lista_relojes() {  # stdin: filas de relojes_de -> viñetas (6 como mucho)
-  awk -F'\t' -v max=6 '
-    NR <= max {
-      d = $2 + 0
-      if (d < 0) c = sprintf("🔴 %s, vencido hace %d día%s", $3, -d, (d == -1 ? "" : "s"))
-      else if (d == 0) c = $3 ", hoy"
-      else if (d == 1) c = $3 ", mañana"
-      else c = sprintf("%s, en %d días", $3, d)
-      printf "• %s: %s%s\n", c, $4, ($5 == "" ? "" : " — " $5)
-    }
-    END { if (NR > max) printf "• … y %d más (cola/loop/madre.md §G)\n", NR - max }' | esc
+lista_relojes() {  # lista_relojes su|otro
+  printf '%s\n' "$RELOJES" | awk -F'\t' -v g="$1" '$1 == g { sub(/^[^\t]*\t/, ""); print "• " $0 }' | esc
 }
 seccion_relojes() {  # los de Sergio Urcullo: le piden algo, van en NECESITO
   local l
   if [ "$RELOJES_RC" != 0 ]; then
     printf '⏰ No pude leer los relojes de la madre (cola/loop/madre.md §G): no sé qué vence.\n'; return 0
   fi
-  l=$(printf '%s\n' "$RELOJES" | awk -F'\t' '$1 == "su"')
+  l=$(lista_relojes su)
   [ -n "$l" ] || return 0
-  printf '⏰ <b>Vence pronto</b>\n'
-  printf '%s\n' "$l" | lista_relojes
+  printf '⏰ <b>Vence pronto</b>\n%s\n' "$l"
 }
 linea_relojes_otros() {  # los de otros dueños: él los ve, no le piden nada
   local l
   [ "$RELOJES_RC" = 0 ] || return 0
-  l=$(printf '%s\n' "$RELOJES" | awk -F'\t' '$1 == "otro"')
+  l=$(lista_relojes otro)
   [ -n "$l" ] || return 0
-  printf '⏰ <b>Vence en 72 h (otros dueños)</b>\n'
-  printf '%s\n' "$l" | lista_relojes
+  printf '⏰ <b>Vence pronto (otros dueños)</b>\n%s\n' "$l"
 }
-# Una cola sin commit en más de 24 h es una sesión parada o sin trabajo: con esto la madre de las
-# 07:53 sabe a quién redespachar. «sin tareas» = no le queda ninguna «- [ ]» en main.
+# Una cola sin commit en main hace más de 24 h es una sesión parada o sin trabajo: con esto la madre
+# de las 07:53 sabe a quién redespachar. «sin tareas» = no le queda ninguna «- [ ]» en main.
+# Si el clon dejó de traer main (el sincronizador de cada hora no anda), todas se verían paradas: se
+# dice antes que nada.
 linea_colas() {
-  local ahora f t h edad lista=""
+  local ahora f t h edad lista="" fh viejo
   if ! git -C "$REPO" rev-parse -q --verify origin/main >/dev/null 2>&1; then
     printf '🧊 No pude ver qué colas se pararon (el clon no tiene origin/main).\n'; return 0
   fi
   ahora=$(date -u -d "${ONIA_AHORA:-now}" +%s 2>/dev/null) || ahora=$(date -u +%s)
+  fh="$(git -C "$REPO" rev-parse --absolute-git-dir 2>/dev/null)/FETCH_HEAD"
+  if [ -f "$fh" ]; then
+    viejo=$(( (ahora - $(stat -c %Y "$fh")) / 3600 ))
+    [ "$viejo" -ge 6 ] && printf '🧊 El clon del VPS no trae main hace %s h (el sincronizador no anda): las colas pueden verse paradas sin estarlo.\n' "$viejo"
+  fi
   while IFS= read -r f; do
     case "${f##*/}" in README.md) continue ;; *.md) ;; *) continue ;; esac
     t=$(git -C "$REPO" log -1 --format=%ct origin/main -- "$f" 2>/dev/null)
     [ -n "$t" ] && [ $(( ahora - t )) -gt 86400 ] || continue
     h=$(( (ahora - t) / 3600 ))
     if [ "$h" -lt 48 ]; then edad="$h h"; else edad="$(( h / 24 )) d"; fi
-    git -C "$REPO" show "origin/main:$f" 2>/dev/null | grep -q '^[[:space:]]*- \[ \]' || edad+=", sin tareas"
+    # grep -c lee todo: con -q sale al primer «- [ ]», git recibe SIGPIPE y con pipefail una cola
+    # grande (más de 64 KB) se leía «sin tareas» (revisión del 10-oct).
+    git -C "$REPO" show "origin/main:$f" 2>/dev/null | grep -c '^[[:space:]]*- \[ \]' >/dev/null || edad+=", sin tareas"
     lista+="${lista:+, }$(basename "$f" .md) ($edad)"
   done < <(git -C "$REPO" ls-tree --name-only origin/main hermes-content/docs/cola/loop/ 2>/dev/null)
   [ -n "$lista" ] || return 0
-  printf '🧊 Colas sin movimiento hace más de 24 h: %s.\n' "$lista"
+  printf '🧊 Colas sin movimiento en main hace más de 24 h: %s.\n' "$lista" | esc
 }
 
 # ── La cola de la aduana: lo que no interrumpió ──────────────────────────────
@@ -634,7 +685,7 @@ t = html.unescape(re.sub(r"<[^>]+>", "", sys.stdin.read()))
 t = "\n".join(l for l in t.splitlines() if "→" not in l)
 t = re.sub(r"(?m)^(PASÓ|NECESITO|SIGUE)$", lambda m: m.group(1).capitalize() + ".", t)
 t = re.sub(r"\(\+?\d[\d …-]*\)", "", t)
-t = re.sub("[\U0001F300-\U0001FAFF\u2600-\u27BF\uFE0F•]", "", t)
+t = re.sub("[\U0001F300-\U0001FAFF\u2300-\u23FF\u2600-\u27BF\uFE0F•]", "", t)
 t = re.sub(r"[ \t]+", " ", t)
 print(re.sub(r"(?m)^ +", "", t).strip())' > "$OUT/brief-hoy.txt"
 fi

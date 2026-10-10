@@ -178,9 +178,15 @@ CLI de Hermes.
 - **Leer una tabla de un `.md` de la madre** (10-oct, relojes de `madre.md` §G). La cabecera se guarda al
   entrar a la sección y NO se borra al salir: el primer parser la borraba en cada `## `, y como §G no es la
   última sección, la `## H.` de abajo la dejaba en `None` y el resumen decía «no pude leer los relojes»
-  con la tabla sana. Columnas por nombre (`fecha`, `qu…`, `due…`), nunca por posición. Fecha sin año = la
-  más cercana a hoy; un rango «13 al 18-oct» cuenta desde el primer día. Probado contra el `madre.md` real
-  de la rama de la madre antes de escribir la prueba: el fixture solo no lo habría encontrado.
+  con la tabla sana. Columnas por nombre exacto (`fecha`, `qué`, `dueño`; un prefijo `qu` casaba «Quién»),
+  nunca por posición. Fecha sin año = la PRÓXIMA vez que cae, salvo que haya pasado hace 60 días o menos
+  («la más cercana» leía un 15-abr en octubre como «vencido hace 178 días»). Un rango arranca a mostrarse
+  desde su primer día y vence al terminar («28 al 2-nov»: el 28 es de octubre). Lo que no entiende sale
+  con ❓, no se calla: NECESITO diría «Nada.» con un reloj vivo. Probado contra el `madre.md` real de la
+  rama de la madre antes de escribir la prueba: el fixture solo no lo habría encontrado.
+- **`git show … | grep -q` con `pipefail` miente en archivos grandes** (10-oct). `grep -q` sale al primer
+  acierto, `git` recibe SIGPIPE y el pipeline da error: una cola de más de 64 KB con tareas se leía «sin
+  tareas». Usar `grep -c … >/dev/null` (lee todo) o leer a una variable primero.
 - **`aplicar` copia del SOUL SOLO las secciones que nombra** (9-oct). Una regla nueva escrita dentro de
   otra sección («Cómo hablarle a Sergio») existe en `main` y nunca llega a `/root/.hermes/SOUL.md`. Regla
   nueva = sección propia que termina en `---`, su paso en 5c (o 5d si depende de la llave), su chequeo
