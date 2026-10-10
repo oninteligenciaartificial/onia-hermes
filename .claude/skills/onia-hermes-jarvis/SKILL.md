@@ -256,6 +256,11 @@ CLI de Hermes.
 - **El integrador y `ramas_varadas` enumeran SOLO `origin/claude/*`** (`onia-cola.md`,
   `ramas_varadas.mjs:129`, `integrador_puede_mergear.mjs:224`; medido el 2-oct). Una rama que no
   debe integrarse nunca va con otro prefijo: `pedido/<id>`, `respuesta/<id>`.
+- **`git ls-files` del repo entero pasa de 1 MB desde el 10-oct** (1.061.877 bytes). `execFileSync`
+  corta en 1 MiB con `ENOBUFS`: el gate del integrador quedaba en NO MEDIDO para siempre, su prueba de
+  la vía viva en rojo y `herramientas-del-cron` tiraba, sin que nada de eso hubiera cambiado. Toda lista
+  del repo entero lleva `maxBuffer` (64 MiB); en el gate, por `archivosVersionados()`, que usa también
+  su prueba. Una lista con ruta (`ls-files -- <carpeta>`) no lo necesita todavía: medir antes de asumir.
 - **El hook Stop (`git-autosync.js`) hacía fast-forward de `main` desde la rama de trabajo**, y la
   sesión de una RUTINA lo carga igual que cualquier sesión. Con `claude/pedido-<id>`, el cambio de un
   pedido entraba a `main` sin revisar al terminar el turno. La guarda del 2-oct miraba el NOMBRE de la
