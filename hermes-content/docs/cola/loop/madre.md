@@ -15,7 +15,17 @@ Leyenda de dueño: `H` Haiku · `S` Sonnet · `O` Opus · `CxSol` / `CxAstra` Co
 - [x] A2 Análisis de `github.com/morluto/rea` (pedido de SU) — workflow `wf_7d7f64d2-ed6` (S función, O seguridad,
   S encaje/legal, S ficha) → `references/video-intake/2026-10-10-github-morluto-rea.md`. Hecho: ficha en main; veredicto = banco de ideas, NO instalar (riesgo alto en la PC, zona legal roja con competidores).
 - [ ] A3 Publicación automática 15:50 UTC de master `32c7e0e8` (F1, #142, #139) — madre + Chrome a las 15:58 UTC.
-  Hecho = /login y /checkout MIRADOS renderizados en prod, captura.
+  Hecho = /login y /checkout MIRADOS renderizados en prod, captura. **Parcial 17:23 UTC:** /login mirado con Playwright
+  headless (Chrome instalado): se ve bien, 0 pedidos a Google Fonts, 4,1 s. Falta confirmar QUÉ release corre (Plat) y
+  mirar /checkout de usted con login. El navegador interno de la app no abre app.onia.com.bo (permiso).
+- [ ] A4 Auditoría de todo lo pedido hoy (pedido de SU) — workflow `wf_f6b7fcd9-207` (H pedidos del transcript, H
+  evidencia, O auditor, O reglas, O sesiones/harness, S cómo funcionan los LLMs, O crítico) →
+  `research/2026-10-10-auditoria-madre-v3.md`. Hecho = doc en main + olvidos cargados acá con dueño.
+- [ ] A5 Harness: qué es y cómo está hecho el nuestro, loops, subagentes, todos los frentes con dueño (pedido de SU) —
+  workflow `wf_da25d090-4e5` (S teoría con fuentes, 2×H inventario, S frentes, O arquitecto, O crítico) →
+  `docs/ONIA_HARNESS.md`. Hecho = doc en main + frentes 🔴 sin dueño asignados.
+- [ ] A6 Releer los términos de Doctocliq y Dapta antes de seguir usando sus cuentas de prueba (salió del análisis de
+  REA; prometido anotarlo y olvidado hasta acá). Dueño: S con WebFetch. Hecho = qué permiten y qué no, con cita.
 
 ## B. Integrado con master, suite completa verde en la PC (dueño del merge: Plat, en su orden)
 - [ ] B1 #114 C15b `5c5beaf8` (10.026/0, CLEAN) — **2 migraciones ANTES del merge** o prod cae (P2022).
@@ -44,6 +54,18 @@ Leyenda de dueño: `H` Haiku · `S` Sonnet · `O` Opus · `CxSol` / `CxAstra` Co
 - [ ] D1 Ventas: go/no-go del 13-oct + campaña lista para crear en pausa (mensaje 10-oct ~15 UTC; no lo tomó todavía).
 - [ ] D2 Plataforma: demo refrescada (primera ventana: lunes 12-oct 07-11 UTC) + capturas C1-C7 → destraba Ventas y Lucía.
 - [ ] D3 Marca: recibe GRABAR-17-23-OCT.md (A1) y su equipo.
+
+## F. Loops (pedido de SU 10-oct: «organizá tus loops y que trabajen a diario»)
+| Loop | Dónde corre | Cuándo (La Paz) | Qué hace | ¿Sigue con la PC apagada? |
+|---|---|---|---|---|
+| Ronda | madre, CronCreate `708dccce` | :07 :27 :47 | H verifica cada punto de este libro + colas; empuja sesiones paradas; lanza Codex | No |
+| Parte de la mañana | madre, CronCreate `dbec7299` | 07:53 | Publicado ayer (mirado), qué grabar hoy, qué necesito de SU, medir PC/Codex | No |
+| Cierre del día | madre, CronCreate `915aadba` | 21:53 | Libro + handoff + billetera 24 h + commit; avisa si la madre necesita relevo | No |
+| Lote de contenido | madre, CronCreate `3f6ca99f` | lunes 08:13 | Guiones de la semana con scouts de tendencias si falta el GRABAR-*.md | No |
+| Latidos | servidor, RemoteTrigger | Plat :17 · Marca :27 · Lucía :47 · Hermes :57 (cada hora) | Cada sesión trabaja su cola | Sí |
+| Ventas | su propio ScheduleWakeup | — | Sin latido del servidor (entorno «Default») | Solo si se programó |
+Los CronCreate de la madre viven solo mientras está abierta, vencen a los 7 días y disparan con la sesión ociosa (el
+chequeo de las 11:58 corrió 85 min tarde por eso). Al abrir una madre nueva se recrean desde esta tabla.
 
 ## E. Gestión (la madre)
 - [ ] E1 Billetera en cada ronda: % Codex (freno 80 %, refills solo al tope; reinicio 13-oct 23:57 La Paz), tokens 48 h por
