@@ -20,7 +20,7 @@ description: Invocar ANTES de tocar a Hermes (el asistente de Sergio Urcullo por
 | La constitución de Hermes y sus skills | `hermes-content/deploy/hermes-agent/SOUL.md` · `hermes-content/skills/{agenda-calendario,pedir-a-claude}.md` |
 | Resumen y cierre · aduana · calendario · pedidos · su vuelta | `scripts/loops/{jarvis-resumen,onia-tg,agenda,pedido-claude,respuestas-pedidos}.sh` |
 | ¿Hermes o el asistente de Codex / dots? Decisión, pruebas y cuándo revisarla (8-oct: queda Hermes; dots bloqueado por edad) | `hermes-content/docs/ASISTENTE_CODEX_VS_HERMES.md` |
-| Fuentes del resumen/cierre que no son del carril (9-oct) | qué sale: `hermes-content/docs/cola/plan-3-semanas/CALENDARIO-PUBLICACION-<d1>-<d2>-<MES>.md` (el rango sale del nombre); qué salió: `/root/publicar/publicado.jsonl` del VPS (lo escriben los publicadores de `hermes-content/deploy/vps-ops/publicar/`); relojes (10-oct): tabla §G de `hermes-content/docs/cola/loop/madre.md`, leída de `origin/main` del clon; colas paradas: `git log` de `cola/loop/*.md` en `origin/main` |
+| Fuentes del resumen/cierre que no son del carril (9-oct) | qué sale: `hermes-content/docs/cola/plan-3-semanas/CALENDARIO-PUBLICACION-<d1>-<d2>-<MES>.md` (el rango sale del nombre); qué salió: `/root/publicar/publicado.jsonl` del VPS (lo escriben los publicadores de `hermes-content/deploy/vps-ops/publicar/`); relojes (10-oct): tabla §G de `hermes-content/docs/cola/loop/madre.md`, leída de `origin/main` del clon; colas paradas: `git log` de `cola/loop/*.md` en `origin/main`; trabajos mudos: `/var/lib/onia-latido/<nombre>` («epoch código cadencia», lo escribe `onia-latido.sh`) |
 | Formato de todo lo que le llega (8-oct) | PASÓ · NECESITO · SIGUE: `jarvis-resumen.sh` (`parte`/`grupo`), SOUL `## Formato fijo de cada mensaje`, prompt de la rutina §5 |
 
 ## Cómo se llega al VPS desde la nube, y qué NO anda
@@ -184,6 +184,18 @@ CLI de Hermes.
   desde su primer día y vence al terminar («28 al 2-nov»: el 28 es de octubre). Lo que no entiende sale
   con ❓, no se calla: NECESITO diría «Nada.» con un reloj vivo. Probado contra el `madre.md` real de la
   rama de la madre antes de escribir la prueba: el fixture solo no lo habría encontrado.
+- **El latido del cron (10-oct, Q4c).** Cada línea que agrega `aplicar` corre como
+  `/root/bin/onia-latido.sh <nombre> <cada-seg> '<comando>'`. El envoltorio nunca rompe el trabajo: si no
+  puede anotar, igual corre y sale con el código del comando. Por eso `aplicar` exige verlo en `/root/bin`
+  ANTES de tocar el crontab: sin él, ninguna línea nueva correría. Un `[ -x X ] && X` adentro anotaría
+  código 1 cuando X falta, que no es una falla: se escribe `[ ! -x X ] || X`. La cadencia de
+  `agenda-bloques` (1800) es de día: de madrugada no corre, y el resumen de las 06:30 la lee cinco minutos
+  después de su primera corrida. El resumen lee SOLO los nombres de `LATIDOS_ESPERADOS` (una prueba los
+  compara con el crontab de `aplicar`): así un archivo viejo de un trabajo renombrado no queda «mudo»
+  para siempre, y un trabajo frecuente sin ningún latido sale como «nunca corrió». La prueba que importa
+  corre cada línea instalada contra un `/root/bin` que anota sus argumentos: sin las comillas, la línea
+  de la aduana corría `sh -c 'ONIA_AVISO_SOLTAR=1'`, salía 0 y el latido la daba por sana (revisión del
+  10-oct, lo vio una revisión Opus; la prueba anterior solo miraba que hubiera latido).
 - **`git show … | grep -q` con `pipefail` miente en archivos grandes** (10-oct). `grep -q` sale al primer
   acierto, `git` recibe SIGPIPE y el pipeline da error: una cola de más de 64 KB con tareas se leía «sin
   tareas». Usar `grep -c … >/dev/null` (lee todo) o leer a una variable primero.
