@@ -4,8 +4,8 @@
   "title": "ONIA — A2 v2 · El saldo que nadie cobra (texto alineado al catálogo y de usted; captura provisoria del 30-sep; E-03 sin verificar: no sube hasta que la cuenta demo lo confirme)",
   "headline_anuncio": "Un cobro que nadie recuerda es plata que no entra",
   "cta_anuncio": "Escríbanos",
-  "caption": "Un cobro pendiente que nadie recuerda es plata que no entra.\n\nOnia es un sistema de gestión con IA para clínicas dentales: agenda, ficha con odontograma, tratamientos y cobros. Cada mañana le deja anotado a quién cobrarle, con el mensaje listo, y nada sale sin que usted lo apruebe.",
-  "kicker": "Clínicas dentales de Santa Cruz",
+  "caption": "Para dueños y dueñas de clínicas dentales de Santa Cruz.\n\nUn cobro pendiente que nadie recuerda es plata que no entra.\n\nOnia es un sistema de gestión para clínicas dentales: agenda, ficha con odontograma, tratamientos y cobros. Cada mañana le deja anotado a quién cobrarle, con el mensaje listo, y nada sale sin que usted lo apruebe.",
+  "kicker": "Para dueños y dueñas de clínicas dentales de Santa Cruz",
   "headline": "Un cobro que nadie recuerda es *plata que no entra.*",
   "bloques": [
     {
@@ -49,7 +49,7 @@
     }
   ],
   "cta": "Escríbanos por WhatsApp",
-  "nota": "Se lo mostramos en una llamada de 20 minutos.",
+  "nota": "Se lo mostramos en una llamada.",
   "layout": {
     "feed": {
       "hora": 188,

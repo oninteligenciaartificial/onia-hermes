@@ -465,6 +465,34 @@ Trampas pagadas armando v3 (2-oct):
   dejó en rojo `npm run test:venta-honestidad` en `main`. Un costo propio va en USD, que es lo que cobra Meta; el
   cambio del banco sigue sin medir. Después de tocar `sales-kit/`, correr ese test.
 
+
+### 5.1 La campaña como archivo ejecutable (10-oct)
+
+- **`carousels/briefs/ads/CAMPANA-1-LISTA-PARA-CREAR.json`** es la campaña prueba 1 con los parámetros exactos del conector, el copy de usted, el público,
+  US$ 4 × 14 días, los cortes de los días 3/7/14 y la respuesta del bot. **Los números mandan en `ONIA_ADQUISICION_Y_PAUTA.md`; el JSON, en la forma.**
+  `scripts/campana-lista.test.mjs` (11 pruebas, en `npm test`) los cruza con el doc, con el conocimiento del bot y con el detector de promesas.
+  Si una cifra cambia, se cambia en los dos y el test dice cuál quedó vieja.
+- **«Crear en pausa» no existe en `Meta_ads`:** crear deja BORRADORES y `ads_activate_entity` los publica en ACTIVO. Pausa = borrador; encender = el último paso.
+  Nada se crea antes del OK de Sergio Urcullo, y ese OK solo vale **escrito en la sesión que crea** (CLAUDE.md, 10-oct).
+- **El código del anuncio es letra(s) + número y NADA más.** El 9-oct puse `D1V` y `D1S` a los anuncios del video y del selfie: el motor del bot
+  (`bot-engine.mjs`, `conCodigoDelAnuncio`, `/\(\s*([a-z]{1,2}\d{1,2})\s*\)/`) no los lee y **el lead nace sin origen, sin que nada se ponga rojo**. Lo vi al
+  probar el motor real con cada código (`D1V → pieceKey null`; `D1`, `D2`, `D3`, `D5 → anuncio-D…`). Hoy: A1-E `D1`, A1-V `D2`, A1-S `D3`, A2 `D5`, carrusel `D6`.
+  **Método:** un código nuevo se prueba con `step()` del motor, no se razona desde la regex; el test lo hace por cada anuncio del JSON.
+- **No se agregan al doc de la pauta precargados nuevos entre backticks** (`` `Hola, vi el anuncio de Onia (D2)…` ``): `frase-de-la-pauta.test.mjs` fija que el doc traiga EXACTAMENTE
+  D1 y D4, y es un gate del deploy del bot. Los códigos nuevos viven en el JSON.
+- **Lectura de solo lectura de la cuenta (10-oct):** `ads_get_ad_accounts` (tarjeta), `ads_get_datasets` (píxel, `last_fired_time`) y `ads_get_ad_entities` con
+  `object_state=draft` (borradores) bastan para medir las filas 3 y 8 del go/no-go sin crear nada. «Probar eventos» y el WhatsApp vinculado a la página **no** los ve el conector.
+- **Un JSON que va a gastar plata pasa por un revisor que no lo escribió (10-oct).** Lo revisó un subagente contrastándolo con los esquemas de `ads_create_*` y encontró 10 cosas reales:
+  (1) **sin `instagram_user_id` el anuncio NO sale por Instagram** (el esquema lo dice) y ONIA Ads no tiene IG vinculado: los US$ 56 corrían solo por Facebook y yo había puesto posiciones de Instagram;
+  (2) **el `nota` del brief se RENDERIZA en la imagen** («Se lo mostramos en una llamada de 20 minutos»): al revisar un anuncio se lee TODO el texto de la imagen y no solo el `caption`; el bot y `/contacto` dicen 30 min (L-04);
+  (3) la pieza había perdido el filtro «Para dueños y dueñas…» (§5.2), que es lo que frena a los pacientes que buscan turno: quedó en el kicker y en la primera línea del texto;
+  (4) la captura muestra «Enviar yo mismo por WhatsApp» (G-03 🟡): la captura nueva sale sin ese botón o con G-03 en ✅;
+  (5) «sistema de gestión con IA… le deja anotado a quién escribirle» roza el catálogo §8: el «a quién» sale de reglas, no de la IA; se sacó «con IA» del texto;
+  (6) a la lista de condiciones le faltaban «quién contesta», la duración de la llamada y «canales 1 y 2 contactados» (CAJA §3).
+  **Método:** el texto del anuncio vive en el brief (`caption`) y el JSON lo copia; `campana-lista.test.mjs` exige que sean iguales, que cada marcador `{{…}}` salga de un paso anterior y que cada condición definida se exija.
+- **Hallazgo al leer el bot (10-oct):** el primer mensaje del bot ofrece una demo de **30 minutos**; el VSL y el CTA dicen **20** (L-04). No se promete un número de minutos
+  en un anuncio hasta que lo unifique Sergio Urcullo.
+
 ## 6. Qué bloquea la nube (y qué no)
 
 | Qué | En la nube «Default» (30-sep y 1-oct) | Cómo se resolvió |
@@ -664,7 +692,7 @@ Reglas de edición de la pauta: las 11 de COMUNICACION §4 (subtítulos Archivo 
 
 - **Una campaña, un conjunto, 2-3 anuncios = copias de un mismo concepto** que cambian solo la apertura o el formato
   (estático, video, persona). Así se aprende qué formato rinde sin cambiar el mensaje.
-- **Cada anuncio con su código en el texto precargado** («…(D1S)…»): Chatwoot descarta el `referral` (`ONIA_ADQUISICION_Y_PAUTA.md` §5.5).
+- **Cada anuncio con su código en el texto precargado** («…(D3)…»): Chatwoot descarta el `referral` (`ONIA_ADQUISICION_Y_PAUTA.md` §5.5).
 - **Se miden a mano cada día:** conversaciones, cuántas son de dueños de clínica, costo por conversación, CTR, demos,
   costo por demo, frecuencia. En video, además, **reproducciones de 3 s ÷ impresiones** (cuánto frena el gancho) y
   **ThruPlay ÷ reproducciones de 3 s** (cuánto retiene): métricas estándar de Meta, **sin umbral propio** hasta la
