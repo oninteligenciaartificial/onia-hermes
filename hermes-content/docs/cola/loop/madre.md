@@ -14,11 +14,12 @@ Leyenda de dueño: `H` Haiku · `S` Sonnet · `O` Opus · `CxSol` / `CxAstra` Co
   `cola/plan-3-semanas/GRABAR-17-23-OCT.md`. Hecho = ambos en main + mensaje a cada sesión con su equipo.
 - [x] A2 Análisis de `github.com/morluto/rea` (pedido de SU) — workflow `wf_7d7f64d2-ed6` (S función, O seguridad,
   S encaje/legal, S ficha) → `references/video-intake/2026-10-10-github-morluto-rea.md`. Hecho: ficha en la rama de la madre (a main con I1); veredicto = banco de ideas, NO instalar (riesgo alto en la PC, zona legal roja con competidores).
-- [ ] A3 Publicación automática 15:50 UTC de master `32c7e0e8` (F1, #142, #139) — madre + Chrome a las 15:58 UTC.
+- [x] A3 Publicación automática 15:50 UTC de master `32c7e0e8` (F1, #142, #139) — madre + Chrome a las 15:58 UTC.
   Hecho = /login y /checkout MIRADOS renderizados en prod, captura. **Parcial 17:23 UTC:** /login mirado con Playwright
   headless (Chrome instalado): se ve bien, 0 pedidos a Google Fonts, 4,1 s. Falta confirmar QUÉ release corre (Plat) y
   mirar /checkout de usted con login. El navegador interno de la app no abre app.onia.com.bo (permiso).
-- [ ] A3b **La publicación de las 15:50 UTC FALLÓ** («hay otro build corriendo… no encimo otro»): prod sigue en
+- [x] A3b **La publicación de las 15:50 UTC FALLÓ** («hay otro build corriendo… no encimo otro»): prod sigue en
+  **v4, 20:15 UTC:** cerrado. La de las 18:50 salió: prod `release-21f0c7e6` (#144) desde 18:56 UTC, mirado por la v3 con Playwright.
   `release-c94b9daa` (#141). Ayer igual a las 15:50. Causa probable: CI de los PRs que pushé 15:30-15:45 en el runner del
   mismo VPS. Próxima: 18:50 UTC. **Regla: la madre no pushea a onia-platform entre :20 y :10 de las horas de publicación
   (00, 03, 06, 09, 12, 15, 18 y 21 UTC, a las :50).** Propuesto a Plat: que el publicador reintente a los 20-30 min.
@@ -38,7 +39,8 @@ Leyenda de dueño: `H` Haiku · `S` Sonnet · `O` Opus · `CxSol` / `CxAstra` Co
   REA; prometido anotarlo y olvidado hasta acá). Dueño: S con WebFetch. **Hecho:** `research/competencia/TOS-DOCTOCLIQ-DAPTA.md`. Ambas prohíben ingeniería inversa; Dapta §2.5(i) prohíbe usarla para construir un producto competidor. Sin riesgo: mirar la UI con la cuenta, ayuda pública, notas internas. Pendiente SU: mirar el checkbox que aceptó al crear cada cuenta.
 
 ## B. Integrado con master, suite completa verde en la PC (dueño del merge: Plat, en su orden)
-- [ ] B1 #114 C15b `5c5beaf8` (10.026/0, CLEAN) — **2 migraciones ANTES del merge** o prod cae (P2022).
+- [x] B1 #114 C15b `5c5beaf8` (10.026/0, CLEAN) — **2 migraciones ANTES del merge** o prod cae (P2022).
+  **v4, 20:15 UTC:** mergeado por Plat (master `922a0da9`, 19:31 UTC). Medido en prod: las 6 migraciones de octubre aplicadas 18:44-19:21 UTC (`_prisma_migrations`, incl. #110/#119/#124). Prod corre `release-21f0c7e6`. Sale a las 21:50 UTC: MIRAR después.
 - [ ] B2 #124 términos `2ee1dcfe` (9.943/0) — IP falsificable arreglada por CxAstra. **Texto legal: pasa por SU.**
 - [ ] B3 #113 gracia `a8def40f` (10.017/0) — conflictos resueltos por CxSol; depende de B2 (términos).
 - [ ] B4 #110 caja `1c5112a9` (9.965/0) — diseño + migración.
@@ -64,6 +66,7 @@ Leyenda de dueño: `H` Haiku · `S` Sonnet · `O` Opus · `CxSol` / `CxAstra` Co
 - [ ] D1 Ventas: go/no-go del 13-oct + campaña lista para crear en pausa (mensaje 10-oct ~15 UTC; no lo tomó todavía).
 - [ ] D2 Plataforma: demo refrescada (primera ventana: lunes 12-oct 07-11 UTC) + capturas C1-C7 → destraba Ventas y Lucía.
 - [ ] D3 Marca: recibe GRABAR-17-23-OCT.md (A1) y su equipo.
+- [x] D4 (v4, 20:15 UTC) Las 4 nubes tomaron la dirección de las 20 UTC, con commit: Plat `ONIA_1.0_CORTE` (optimistic-ride 20:07), Lucía revisión de 8 piezas (zealous-babbage 20:04), Hermes QA Q1-Q5 (adoring-ramanujan 20:04), Marca **K11 + historias 1-3 publicados** (gifted-clarke 20:11). Ventas sin commit desde 18:09 UTC (running).
 
 ## I. Olvidos de la auditoría (research/2026-10-10-auditoria-madre-v3.md §c) — dueño y estado
 - [ ] I1 La rama de la madre (`claude/onia-sesion-madre-9313fb`, 10+ commits) NO está en main: el integrador `onia-cola` está
@@ -81,6 +84,7 @@ Leyenda de dueño: `H` Haiku · `S` Sonnet · `O` Opus · `CxSol` / `CxAstra` Co
 
 ## K. Quema de cuenta (mod agentes-en-vivo, 10-oct)
 - [ ] K1 Codex carga ~500 skills en cada tarea («Exceeded skills context budget… 493 skills not included»): ~1 M tokens de
+  **v4:** medido: `~/.agents/skills` = junction a `~/.claude/skills` (110 carpetas); el repo tiene 30. Comando entregado a SU (lo corre él: cambia su app).
   entrada por tarea chica (resume de cx-publicar: 1.003.342 in, 910.336 cacheados). Causa: `~/.agents/skills` es un
   acceso directo a `~/.claude/skills` (creado el 5-may). Arreglo propuesto: que apunte a una carpeta con solo las skills
   que usa Codex (las 30 de `.agents/skills` del repo). Cambia la app de Codex de SU → su sí.
@@ -130,10 +134,10 @@ Leyenda de dueño: `H` Haiku · `S` Sonnet · `O` Opus · `CxSol` / `CxAstra` Co
 ## F. Loops (pedido de SU 10-oct: «organizá tus loops y que trabajen a diario»)
 | Loop | Dónde corre | Cuándo (La Paz) | Qué hace | ¿Sigue con la PC apagada? |
 |---|---|---|---|---|
-| Ronda | madre, CronCreate `708dccce` | :07 :27 :47 | H verifica cada punto de este libro + colas; empuja sesiones paradas; lanza Codex | No |
-| Parte de la mañana | madre, CronCreate `dbec7299` | 07:53 | Publicado ayer (mirado), qué grabar hoy, qué necesito de SU, medir PC/Codex | No |
-| Cierre del día | madre, CronCreate `915aadba` | 21:53 | Libro + handoff + billetera 24 h + commit; avisa si la madre necesita relevo | No |
-| Lote de contenido | madre, CronCreate `3f6ca99f` | lunes 08:13 | Guiones de la semana con scouts de tendencias si falta el GRABAR-*.md | No |
+| Ronda | madre, CronCreate `333b77d3` (v4) | :07 :27 :47 | H verifica cada punto de este libro + colas; empuja sesiones paradas; lanza Codex | No |
+| Parte de la mañana | madre, CronCreate `313765ea` (v4) | 07:53 | Publicado ayer (mirado), qué grabar hoy, qué necesito de SU, medir PC/Codex | No |
+| Cierre del día | madre, CronCreate `db8b3b4b` (v4) | 21:53 | Libro + handoff + billetera 24 h + commit; avisa si la madre necesita relevo | No |
+| Lote de contenido | madre, CronCreate `836a6670` (v4) | lunes 08:13 | Guiones de la semana con scouts de tendencias si falta el GRABAR-*.md | No |
 | Latidos | servidor, RemoteTrigger | Plat :17 · Marca :27 · Lucía :47 · Hermes :57 (cada hora) | Cada sesión trabaja su cola | Sí |
 | Ventas | su propio ScheduleWakeup | — | Sin latido del servidor (entorno «Default») | Solo si se programó |
 Los CronCreate de la madre viven solo mientras está abierta, vencen a los 7 días y disparan con la sesión ociosa (el
