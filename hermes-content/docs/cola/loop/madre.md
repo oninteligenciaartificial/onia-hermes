@@ -79,6 +79,14 @@ Leyenda de dueño: `H` Haiku · `S` Sonnet · `O` Opus · `CxSol` / `CxAstra` Co
   Dueño: S (fichas) cuando termine A1.
 - [x] I7 Cabecera de `scripts/codex-tarea.sh` dice «código = astra»; la regla vigente es Sol por defecto. Dueño: madre.
 
+## K. Quema de cuenta (mod agentes-en-vivo, 10-oct)
+- [ ] K1 Codex carga ~500 skills en cada tarea («Exceeded skills context budget… 493 skills not included»): ~1 M tokens de
+  entrada por tarea chica (resume de cx-publicar: 1.003.342 in, 910.336 cacheados). Causa: `~/.agents/skills` es un
+  acceso directo a `~/.claude/skills` (creado el 5-may). Arreglo propuesto: que apunte a una carpeta con solo las skills
+  que usa Codex (las 30 de `.agents/skills` del repo). Cambia la app de Codex de SU → su sí.
+- [ ] K2 La madre anterior (`202a717e`) consumió 584 M tokens en 6 h (99 % releyendo). Regla vigente: madres cortas,
+  relevo con handoff antes de que la conversación se haga larga (cierre del día 21:53 avisa).
+
 ## J. Codex: cupos (R8) — 56 % semanal al 9-oct, reinicio 13-oct 23:57 La Paz, refills solo al tope
 | Cupo | Modelo | En curso | Desde |
 |---|---|---|---|
