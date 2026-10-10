@@ -3,18 +3,18 @@
 Orden: lo que destraba cobrar primero. Cada PR: integrar con master, suite completa, mergear, `publicar.sh`, MIRAR en prod.
 
 - [x] #141 S1+S1b (IPv6 por /64): en producción desde el 9-oct 18:50 UTC (`release-c94b9daa`), mirado.
-- [ ] #143 F1 (la letra dentro del sistema) y #142 U2+U2b (pago de usted): sí de Sergio Urcullo el 10-oct, mergeados a las 13:15 UTC (`c1c3c6ac`). El cron de las 15:50 UTC no publicó (otro build corriendo: el CI de 7 ramas); va en el de las 18:50 UTC. Falta MIRAR.
-- [ ] #144 `/book` de usted (Codex cloud): revisado (solo textos), CI verde, mergeado el 10-oct 17:20 UTC (`21f0c7e6`). Sale a las 18:50 UTC; falta MIRAR.
+- [x] #143 F1 (la letra dentro del sistema) y #142 U2+U2b (pago de usted): en producción desde el 10-oct 18:50 UTC (`release-21f0c7e6`), mirados a las 19:17 (el checkout con login lo mira la madre).
+- [x] #144 `/book` de usted: en producción desde el 10-oct 18:50 UTC, mirado a 390 y 1440.
 - [ ] #136 bandeja v3 (incluye #127, #129 y #135) + B3 #130 (PWA): espera el OK de diseño de Sergio Urcullo (capturas enviadas el 10-oct).
 - [ ] #140 widget W1-W1e + W1f (se presenta con el nombre de la clínica, bundle del 10-oct) + infra: origen solo para Cloudflare, bloquear `/public/api/` en Chatwoot y `hmac_mandatory` en los inboxes API. Espera el OK de diseño de Sergio Urcullo a W1f.
-- [ ] #139 canal privado (punto 3): migración aplicada en producción el 10-oct 13:29 UTC (sin registrar en `_prisma_migrations`: lo frenó el control de permisos) y PR mergeado a las 13:36 UTC (`32c7e0e8`). Sale a las 18:50 UTC (la de las 15:50 no corrió); falta MIRAR «En vivo» con login.
-- [ ] #114 factura C15b: migración `20261009110000_subscription_invoice_validation` antes del swap
-- [ ] #124 términos (punto 14) y después #113 gracia C13 (actualizar `PlanClient.estado-real` y `vencimientos` al mergear)
-- [ ] #118 agenda del día, #119 odontograma y #110 caja diaria, con sus migraciones
+- [x] #139 canal privado (punto 3): en producción desde el 10-oct 18:50 UTC, migración registrada a las 18:44. Falta solo MIRAR «En vivo» con login (madre).
+- [ ] #114 factura (punto 15): migraciones aplicadas y registradas el 10-oct; mergeado a las 19:32 UTC (`922a0da9`, suite 10.056 en verde). Sale en el cron de las 21:50 UTC; falta MIRAR.
+- [ ] #124 términos (punto 14, migración ya aplicada) y después #113 gracia C13 (actualizar `PlanClient.estado-real` y `vencimientos` al mergear): esperan el sí de Sergio Urcullo (legal).
+- [ ] #118 agenda del día, #119 odontograma y #110 caja diaria (migraciones ya aplicadas): esperan el OK de diseño y el v3 dentro de cada PR.
 - [ ] #132 K1 (respuesta al recordatorio)
 - [ ] Refrescar la demo dental en prod (`scripts/demo-venta/seed-demo.sql`) y sacar las capturas C1-C7 del VSL
 - [ ] Mirar con login lo publicado el 8-oct (#128): agenda «Hoy» con WhatsApp, «sin confirmar», tarjeta del chatbot
-- [ ] SQL del B22 (REVOKE a anon) aplicado y medido
+- [ ] SQL del B22 (REVOKE a anon) aplicado y medido (no entró en el sí del 10-oct)
 
 ## Bloqueado (solo Sergio Urcullo)
 - Respaldo afuera (punto 4): bucket R2 (gasto).
