@@ -54,6 +54,14 @@ carril puede hacer solo. Q1 espera `aplicar` (ver «Bloqueado»).
 
 (Lo que este carril encuentra y le toca a otro dueño. La madre lo reparte en su ronda.)
 
+- **Madre** · `cola/loop/madre.md` §G tiene días de la semana mal: «lun 13-oct» es martes en 2026, y «jue 16-oct»
+  es viernes. El resumen ya no los repite (usa la fecha), pero la tabla los muestra así a quien la lea.
+- **Madre** · Hasta que `madre.md` llegue a `main` (PR #187), el resumen de las 06:30 va a decir «No pude leer los
+  relojes de la madre». Con #187 mergeado, sale solo.
+- **Madre / integrador** · En `main` falla `scripts/integrador_puede_mergear.test.mjs` › «la via viva de loops.md
+  nombra un script que existe en el repo»: la vía de onia-platform desde casa en `cola/loops.md` no tiene script
+  versionado. No está en el CI de Hermes (medido el 10-oct).
+
 ## Hecho antes del 10-oct
 
 - [x] P2 de #173: el aviso de rechazo se reintenta si Telegram falla (test fallo → recuperación → segunda corrida) — `31aebd95`, en `main` con el #173
