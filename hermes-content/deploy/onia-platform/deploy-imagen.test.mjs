@@ -231,7 +231,11 @@ test('build: con menos de 20 GB de disco libre se niega', () => {
 test('build: si ya corre otro build (next build / docker build) no encima otro', () => {
   const m = mundo();
   try {
-    const r = correr(m, BUILD, [m.sha, '--dry-run'], { STUB_PS: 'docker build --tag onia-platform:release-otro' });
+    const r = correr(m, BUILD, [m.sha, '--dry-run'], {
+      STUB_PS: 'docker build --tag onia-platform:release-otro',
+      ONIA_BUILD_ESPERA_SEG: '2',
+      ONIA_BUILD_INTERVALO_SEG: '1',
+    });
     assert.equal(r.codigo, 1);
     assert.match(r.salida, /otro build corriendo/);
   } finally {
