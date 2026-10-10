@@ -65,6 +65,37 @@ Leyenda de dueño: `H` Haiku · `S` Sonnet · `O` Opus · `CxSol` / `CxAstra` Co
 - [ ] D2 Plataforma: demo refrescada (primera ventana: lunes 12-oct 07-11 UTC) + capturas C1-C7 → destraba Ventas y Lucía.
 - [ ] D3 Marca: recibe GRABAR-17-23-OCT.md (A1) y su equipo.
 
+## I. Olvidos de la auditoría (research/2026-10-10-auditoria-madre-v3.md §c) — dueño y estado
+- [ ] I1 La rama de la madre (`claude/onia-sesion-madre-9313fb`, 10+ commits) NO está en main: el integrador `onia-cola` está
+  apagado desde el 7-sep. Dueño: madre → PR propio y merge **después de las 19:00 UTC** (no chocar con la publicación).
+- [ ] I2 Los PRs #136 y #140 no apuntan a `integ/bandeja-master` ni a `integ/w1-fixes`. Dueño: madre → fast-forward de
+  `integ/w1-w1b` a `f981cd4a` después de las 19:00 UTC; la bandeja se la pasa a Plat (su rama).
+- [ ] I3 La ronda disparó 1 vez en 3 h 20 min (los cron de la sesión solo corren con la sesión ociosa). Dueño: SU decide R1
+  (tarea del Programador de tareas de Windows, sin LLM).
+- [ ] I4 Tareas de la PC con Chrome en 0 (cal.com, `+qapago`, Biblioteca de Meta, snapshot de Hostinger, bio de IG) y nunca
+  se corrió `list_connected_browsers`. Dueño: madre, de a una, con el Chrome de SU (lo que cambia una cuenta pide su línea).
+- [ ] I5 Codex sin tarea para Hermes ni para Luna. Dueño: madre → una tarea Luna de prueba (inventario mecánico).
+- [ ] I6 Ficha de VoltAgent sin escribir; faltan fichas de Pablo y Boceto y recetas de Rocha y Hormozi en `edicion-referentes`.
+  Dueño: S (fichas) cuando termine A1.
+- [ ] I7 Cabecera de `scripts/codex-tarea.sh` dice «código = astra»; la regla vigente es Sol por defecto. Dueño: madre.
+
+## J. Codex: cupos (R8) — 56 % semanal al 9-oct, reinicio 13-oct 23:57 La Paz, refills solo al tope
+| Cupo | Modelo | En curso | Desde |
+|---|---|---|---|
+| Plat-1 | Sol | VACÍO | 15:58 UTC |
+| Plat-2 | Sol | VACÍO | 15:58 UTC |
+| Hermes | Luna/Sol | VACÍO (nunca usado) | — |
+| Revisor | Astra | VACÍO | 15:55 UTC |
+
+## Correcciones a lo dicho a SU (R4: integrado ≠ mergeado ≠ publicado ≠ mirado)
+- «/book ya le habla de usted»: falso. Está en el PR #144, sin mergear ni publicar.
+- «9 PRs integrados» / «20 PRs… integrados»: hay 7 integrados con master más 2 ramas `integ/*`. **Ninguno está mergeado.**
+- «suite verde» en todos: 3 de 9 suites tuvieron 1 rojo. Eran el trinquete de voseo (2, registrados) y gitleaks (por carga, 10/10 solo).
+- «el chequeo corrió 85 min tarde»: el cron nunca disparó; la madre miró a mano a las 17:23 UTC.
+- «ficha de rea en main»: está en la rama de la madre, no en main (I1).
+- «6 referentes con recetas medidas»: hay recetas de Santiago, Erik, Rocha y Pablo, y molde Boceto; Hormozi solo como pizarra. Faltan fichas (I6).
+- Conteos de subagentes: a las 17:23 UTC eran 21, no 22 (no cambia nada).
+
 ## G. Relojes (fechas que nadie empujaba; la madre los lleva en el parte de la mañana)
 | Fecha | Qué | Dueño | Fuente |
 |---|---|---|---|
