@@ -63,10 +63,18 @@ al_dia() {
     && grep -q '^avisar()' "$BIN/claude-guardia.sh" 2>/dev/null \
     && grep -q ONIA_AGENDA_CAMBIOS_URL "$BIN/onia-agenda.sh" 2>/dev/null \
     && grep -q cierre-bloques "$BIN/onia-jarvis-resumen.sh" 2>/dev/null \
+    && grep -q 'grupo NECESITO' "$BIN/onia-jarvis-resumen.sh" 2>/dev/null \
     && grep -q '^candado()' "$BIN/onia-pedido-claude.sh" 2>/dev/null \
-    && grep -q -- '--probar' "$BIN/onia-respuestas-pedidos.sh" 2>/dev/null
+    && grep -q '^SELLOS=' "$BIN/onia-pedido-claude.sh" 2>/dev/null \
+    && grep -q -- '--probar' "$BIN/onia-respuestas-pedidos.sh" 2>/dev/null \
+    && grep -q '^bajar()' "$BIN/onia-respuestas-pedidos.sh" 2>/dev/null
   # Los pedidos: la versión con un solo candado para la vista previa y el --si, y el recolector de
   # la vuelta. Sin esto, con la llave cargada, aplicar salía 0 con los pedidos apagados (madre, 2-oct).
+  # 5-oct: y las que cierran los MEDIUM de la madre v2 (el sello que ata la respuesta al pedido, y el
+  # tope mientras baja). Con el comando viejo la rutina no recibe sello y no puede firmar; con el
+  # recolector viejo una respuesta firmada no se entrega y una sin firmar sí.
+  # 9-oct: el resumen en tres bloques (grupo NECESITO). El SOUL le dice a Hermes que el resumen y el
+  # cierre ya llegan así: con el resumen viejo en /root/bin, eso sería falso.
 }
 if ! al_dia; then
   echo "todavía no: corro una vez el sincronizador de cada hora"
@@ -198,6 +206,8 @@ git -C "$REPO_VPS" show origin/main:hermes-content/skills/agenda-calendario.md 2
   || falla "no encontré la skill del calendario en origin/main del VPS"
 git -C "$REPO_VPS" show origin/main:hermes-content/deploy/hermes-agent/SOUL.md 2>/dev/null | grep -q '^## Su calendario y el cierre del día' \
   || falla "no encontré la regla del calendario en el SOUL de origin/main del VPS"
+git -C "$REPO_VPS" show origin/main:hermes-content/deploy/hermes-agent/SOUL.md 2>/dev/null | grep -q '^## Formato fijo de cada mensaje' \
+  || falla "no encontré la regla del formato en el SOUL de origin/main del VPS"
 [ -f /root/.hermes/SOUL.md ] || falla "no existe /root/.hermes/SOUL.md: no hay a quién enseñarle"
 # La llave de la rutina, con forma estricta: un token con espacios (mal pegado) dejaba el aplicar a
 # medias porque recién fallaba en 5d, con el crontab ya cambiado (revisión de la madre, 2-oct).
@@ -599,7 +609,7 @@ if [ "$N8N_OK" = 1 ]; then
 fi
 
 # ── 5c. Que Hermes lo sepa usar ────────────────────────────────────────────────
-sec "5c. Hermes: la skill de su calendario y la regla en su SOUL"
+sec "5c. Hermes: la skill de su calendario y las reglas en su SOUL"
 REPO_VPS=/root/loops/onia-hermes
 NUEVA=$(git -C "$REPO_VPS" show origin/main:hermes-content/skills/agenda-calendario.md 2>/dev/null)
 if ! printf '%s' "$NUEVA" | grep -q 'onia-agenda.sh crear'; then
@@ -632,6 +642,21 @@ else
     printf '\n---\n\n%s\n' "$SECCION" >> "$SOUL" && { HERMES_CAMBIO=1; echo "✅ regla del calendario agregada al SOUL de Hermes"; }
   else
     falla "no pude agregar la regla al SOUL (falta la sección en main o el archivo en el VPS)"
+  fi
+fi
+# El formato fijo de cada mensaje (Sergio Urcullo, 8-oct: «me entregás demasiado texto y me pierdo»).
+# Va en su propia sección porque acá se copian solo las secciones que se nombran: una regla escrita
+# dentro de «Cómo hablarle a Sergio» nunca llegaba al SOUL del VPS.
+if grep -q '^## Formato fijo de cada mensaje' "$SOUL" 2>/dev/null; then
+  echo "· su SOUL ya tenía la regla del formato"
+else
+  SECCION=$(git -C "$REPO_VPS" show origin/main:hermes-content/deploy/hermes-agent/SOUL.md 2>/dev/null \
+            | awk '/^## Formato fijo de cada mensaje/ {on = 1} on && /^---$/ {exit} on {print}')
+  if [ -n "$SECCION" ] && [ -f "$SOUL" ]; then
+    [ -f "$BK/SOUL.md.antes" ] || cp -a "$SOUL" "$BK/SOUL.md.antes"
+    printf '\n---\n\n%s\n' "$SECCION" >> "$SOUL" && { HERMES_CAMBIO=1; echo "✅ regla del formato agregada al SOUL de Hermes"; }
+  else
+    falla "no pude agregar la regla del formato al SOUL"
   fi
 fi
 

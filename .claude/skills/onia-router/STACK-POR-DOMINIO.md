@@ -45,7 +45,7 @@ que uno realmente va a hacer.
 
 | Cuándo | Skills |
 |---|---|
-| Copy de anuncio, caption, headline | `copywriting` · `ad-creative` |
+| Copy de anuncio, caption, headline | **`onia-ventas-pauta` §9 primero** (anuncio que vende y VSL, de punta a punta; está en el repo y la nube la ve) · `copywriting` · `ad-creative` (globales: solo en la PC) |
 | Pulir un texto que ya existe | `copy-editing` · `writing-guidelines` |
 | Artículo, guion largo, documento | `article-writing` |
 | Recurso descargable a cambio de un dato | `lead-magnets` |

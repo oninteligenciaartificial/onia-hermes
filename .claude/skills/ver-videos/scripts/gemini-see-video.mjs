@@ -140,9 +140,11 @@ export async function seeLocalVideo(path, prompt = PROMPT, mimeType = "video/mp4
 // CLI
 if (import.meta.url === `file://${process.argv[1]}` || process.argv[1]?.endsWith("gemini-see-video.mjs")) {
   const arg = process.argv[2];
-  if (!arg) { console.error("uso: node gemini-see-video.mjs <youtube-url | ruta.mp4>"); process.exit(1); }
+  // El prompt propio iba como 2º argumento y se ignoraba: hasta el 8-oct todo CLI corrió con el genérico.
+  const prompt = process.argv[3] ?? PROMPT;
+  if (!arg) { console.error('uso: node gemini-see-video.mjs <youtube-url | ruta.mp4> ["prompt"]'); process.exit(1); }
   if (!API_KEY) { console.error("falta GEMINI_API_KEY (gratis en aistudio.google.com/apikey)"); process.exit(2); }
-  (isYouTube(arg) ? seeYouTube(arg) : seeLocalVideo(arg))
+  (isYouTube(arg) ? seeYouTube(arg, prompt) : seeLocalVideo(arg, prompt))
     .then((txt) => { console.log(txt); })
     .catch((e) => { console.error("ERROR:", String(e.message || e)); process.exit(1); });
 }

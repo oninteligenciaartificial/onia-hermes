@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="es-BO">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1080, height=1920">
+  <title>Mosaico / tablero — prueba de edición</title>
+  <script src="assets/vendor/gsap.min.js"></script>
+  <style>
+    @font-face {font-family:Archivo;src:url('assets/fonts/Archivo-var-latin.woff2') format('woff2');font-weight:100 900;font-display:block}
+    * {box-sizing:border-box;margin:0}
+    :root {--green:#10C26B;--black:#000;--white:#fff}
+    html,body,#root {width:1080px;height:1920px;overflow:hidden}
+    body {background:var(--black);color:var(--white);font-family:Archivo,Arial,sans-serif}
+    .backdrop {position:absolute;inset:0;background:var(--black)}
+    .clip {position:absolute;inset:0;width:1080px;height:1920px}
+    .scene {position:absolute;inset:0;padding:250px 72px 300px}
+    .brand {position:absolute;top:120px;left:72px;right:100px;display:flex;justify-content:space-between;font-size:25px;font-weight:700;letter-spacing:2px}
+    .brand span:last-child {color:var(--green)}
+    .kicker {font-size:28px;font-weight:700;letter-spacing:3px;text-transform:uppercase;margin-bottom:40px}
+    .heading {font-size:82px;line-height:1.04;letter-spacing:-3px;font-weight:850;margin-bottom:56px}
+    .green {color:var(--green)}
+    .note {font-size:27px;line-height:1.4;font-weight:550}
+    .scene-note {position:absolute;bottom:300px;left:72px;right:100px}
+    .panel {border:2px solid var(--white);border-radius:26px;padding:34px;background:var(--black)}
+    .panel-top {display:flex;align-items:center;justify-content:space-between;font-size:32px;font-weight:750;border-bottom:2px solid var(--white);padding-bottom:24px;margin-bottom:26px}
+    .tag {display:inline-block;padding:10px 16px;background:var(--white);color:var(--black);font-size:23px;font-weight:750;line-height:1.15;border-radius:9px;white-space:nowrap}
+    .tag.done {background:var(--green);color:var(--black)}
+    .bubble {width:max-content;max-width:100%;padding:23px 27px;border-radius:18px 18px 18px 3px;background:var(--white);color:var(--black);font-size:34px;font-weight:650;margin-bottom:18px}
+    .bubble.reply {background:var(--green);margin-left:auto;border-radius:18px 18px 3px 18px}
+    #hook-wrap {padding-top:430px}
+    .hook-line {font-size:73px;line-height:1.15;font-weight:750;letter-spacing:-2px}
+    .hook-small {font-size:94px;line-height:1.05;font-weight:900;margin-top:32px}
+    .hook-word {font-size:218px;line-height:.98;font-weight:900;letter-spacing:-12px;color:var(--green);width:936px}
+    .hook-rule {height:12px;background:var(--green);width:900px;margin-top:50px;transform-origin:left center}
+    .repeat-panel {width:936px}
+    .repeat-panel .rows {height:630px;overflow:hidden}
+    .repeat-panel .bubble:nth-child(even) {margin-left:75px}
+    #repeat-count {display:flex;align-items:center;gap:38px;margin-top:38px}
+    .count {font-size:178px;letter-spacing:-10px;font-weight:900;line-height:1;color:var(--green)}
+    .count-caption {font-size:29px;line-height:1.35;max-width:330px}
+    .columns {display:grid;grid-template-columns:1fr 1fr;gap:24px}
+    .column {width:456px;min-height:720px;padding:28px;border-radius:24px;border:2px solid var(--white)}
+    .column.ordered {border-color:var(--green)}
+    .column-title {font-size:46px;font-weight:850;letter-spacing:-1px;margin-bottom:30px}
+    .column .bubble {font-size:29px;padding:23px 18px}
+    .state-row {border-top:1px solid var(--white);padding-top:26px;margin-top:30px;font-size:29px;line-height:1.3}
+    .state-row .tag {margin-top:16px}
+    .state-stack {position:relative;height:215px;margin-top:38px}
+    .state-stack>div {position:absolute;inset:0}
+    .status-label {font-size:29px;font-weight:750;margin-bottom:12px}
+    .state-lines {width:100%;height:5px;background:var(--green);margin-top:24px;transform-origin:left}
+    #board-panel {padding:28px}
+    .board-grid {display:grid;grid-template-columns:1fr 1fr;gap:20px}
+    .module {height:285px;border:1px solid var(--white);border-radius:16px;padding:25px;position:relative}
+    .module h3 {font-size:35px;letter-spacing:-1px;margin-bottom:24px}
+    .module p {font-size:27px;line-height:1.35;margin-bottom:17px}
+    .module .tag {font-size:22px}
+    .module .bubble {font-size:24px;padding:14px 17px;margin-bottom:10px}
+    .agenda-bars {display:flex;gap:8px;margin-bottom:18px}
+    .agenda-bars span {width:44px;height:22px;border:1px solid var(--white)}
+    .agenda-bars span:first-child {background:var(--green);border-color:var(--green)}
+    .module-focus {position:absolute;inset:-2px;border:4px solid var(--green);border-radius:16px;pointer-events:none}
+    #board-caption {margin-top:36px;font-size:45px;line-height:1.1;font-weight:750;letter-spacing:-1px}
+    #mosaic-wrap {padding-top:320px}
+    .mosaic-grid {display:grid;grid-template-columns:1fr 1fr;gap:20px;width:936px}
+    .tile {width:458px;height:430px;overflow:hidden;position:relative;border:2px solid var(--white);border-radius:20px;background:var(--black)}
+    .tile-title {position:absolute;left:23px;top:23px;font-size:26px;font-weight:750;z-index:2;background:var(--black);padding:6px}
+    .mini {position:absolute;left:20px;top:78px;transform-origin:top left}
+    #mosaic-chat .mini {width:936px;transform:scale(.44)}
+    #mosaic-compare .mini {width:936px;transform:scale(.44)}
+    #mosaic-board .mini {width:936px;transform:scale(.44)}
+    #mosaic-count {background:var(--green);color:var(--black);display:flex;flex-direction:column;justify-content:center;padding:35px}
+    #mosaic-count .count {color:var(--black);font-size:150px;letter-spacing:-8px}
+    #mosaic-count .note {margin-top:16px}
+    #mosaic-caption {font-size:65px;line-height:1.05;font-weight:850;letter-spacing:-2px;margin-top:42px;width:850px}
+    #close-wrap {padding-top:490px}
+    .close-title {font-size:106px;line-height:1.02;letter-spacing:-5px;font-weight:900}
+    .close-title span {display:block}
+    .cta {margin-top:60px;border-top:5px solid var(--green);padding-top:35px;width:900px}
+    .cta p {font-size:41px;font-weight:700;line-height:1.3}
+    .cta-label {display:block;font-size:70px;letter-spacing:-2px;font-weight:850;margin-bottom:15px;color:var(--green)}
+  </style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="30" data-width="1080" data-height="1920">
+  <div class="backdrop"></div>
+  <div class="brand"><span>SERGIO URCULLO</span><span>PRUEBA DE EDICIÓN</span></div>
+  <section id="hook" class="clip" data-start="0" data-duration="2.5" data-track-index="1">
+    <div id="hook-wrap" class="scene">
+      <p class="hook-line" id="hook-context">¿Cuántas veces por día</p>
+      <p class="hook-line" id="hook-verb">contestás</p>
+      <p class="hook-small" id="hook-lo">LO</p>
+      <p class="hook-word" id="hook-word">MISMO?</p>
+      <div class="hook-rule" id="hook-rule"></div>
+    </div>
+  </section>
+  <section id="chat" class="clip" data-start="2.5" data-duration="6.5" data-track-index="1">
+    <div id="chat-wrap" class="scene">
+      <p class="kicker">La pregunta vuelve.</p>
+      <h2 class="heading">Una y otra <span class="green">vez.</span></h2>
+      <div class="panel repeat-panel" id="repeat-panel">
+        <div class="panel-top"><span>Tu chat</span><span class="tag">Pendiente</span></div>
+        <div class="rows">
+          <p class="bubble repeated">¿Cuánto cuesta?</p><p class="bubble repeated">¿Tienen turno?</p>
+          <p class="bubble repeated">¿Cuánto cuesta?</p><p class="bubble repeated">¿Tienen turno?</p>
+          <p class="bubble repeated">¿Cuánto cuesta?</p><p class="bubble repeated">¿Tienen turno?</p>
+        </div>
+      </div>
+      <div id="repeat-count"><span class="count">×40</span><p class="count-caption"><strong>ejemplo</strong><span style="display:block">La misma consulta.</span></p></div>
+      <p class="scene-note note">Ejemplo ilustrativo · no es un dato medido.</p>
+    </div>
+  </section>
+  <section id="compare" class="clip" data-start="9" data-duration="7" data-track-index="1">
+    <div id="compare-wrap" class="scene">
+      <p class="kicker">El mismo proceso.</p>
+      <h2 class="heading">Dos formas de <span class="green">resolverlo.</span></h2>
+      <div class="columns" id="comparison-panels">
+        <div class="column">
+          <h3 class="column-title">A mano</h3>
+          <p class="bubble">¿Cuánto cuesta?</p><p class="bubble manual-next">¿Tienen turno?</p>
+          <div class="state-row manual-state"><p>Mensajes</p><span class="tag">Pendiente</span></div>
+          <div class="state-row manual-state"><p>Reserva</p><span class="tag">Pendiente</span></div>
+        </div>
+        <div class="column ordered">
+          <h3 class="column-title green">Ordenado</h3>
+          <p class="bubble">¿Cuánto cuesta?</p>
+          <p class="bubble reply" id="ordered-reply">Te paso la info.</p>
+          <div class="state-stack">
+            <div id="ordered-wait"><p class="status-label">Consulta</p><span class="tag">Pendiente</span></div>
+            <div id="ordered-result"><p class="status-label">Consulta</p><span class="tag done">Respondido</span><div class="state-lines"></div></div>
+          </div>
+          <div id="ordered-agenda"><p class="status-label">Reserva</p><span class="tag done">Agendado</span></div>
+        </div>
+      </div>
+      <p class="scene-note note">Esquema ilustrativo del proceso.</p>
+    </div>
+  </section>
+  <section id="board" class="clip" data-start="16" data-duration="7" data-track-index="1">
+    <div id="board-wrap" class="scene">
+      <p class="kicker">Que todo se conecte.</p>
+      <h2 class="heading">Tu negocio,<span style="display:block" class="green">en un tablero.</span></h2>
+      <div class="panel" id="board-panel">
+        <div class="panel-top"><span>Tu tablero</span><span class="tag done">Esquema</span></div>
+        <div class="board-grid">
+          <div class="module" id="mod-agenda"><h3>Agenda</h3><div class="agenda-bars"><span></span><span></span><span></span><span></span></div><p>Reserva confirmada</p><span class="tag done board-detail">Agendado</span><div class="module-focus"></div></div>
+          <div class="module" id="mod-clients"><h3>Clientes</h3><p>Ficha del cliente</p><p class="board-detail">Consulta + seguimiento</p><div class="module-focus"></div></div>
+          <div class="module" id="mod-payments"><h3>Cobros</h3><p>Estado del pago</p><span class="tag board-detail">Por revisar</span><div class="module-focus"></div></div>
+          <div class="module" id="mod-chat"><h3>Chat</h3><p class="bubble">¿Tienen turno?</p><p class="bubble reply board-detail">Quedó agendado.</p><div class="module-focus"></div></div>
+        </div>
+      </div>
+      <p id="board-caption">Cada consulta tiene un siguiente paso.</p>
+      <p class="scene-note note">Esquema propio · no es una captura del producto.</p>
+    </div>
+  </section>
+  <section id="mosaic" class="clip" data-start="23" data-duration="3" data-track-index="1">
+    <div id="mosaic-wrap" class="scene">
+      <p class="kicker">Juntá las piezas.</p>
+      <div class="mosaic-grid">
+        <div class="tile" id="mosaic-chat"><p class="tile-title">Tu chat</p><div class="mini"></div></div>
+        <div class="tile" id="mosaic-count"><span class="count">×40</span><p class="note"><strong>ejemplo</strong><span style="display:block">No es un dato medido.</span></p></div>
+        <div class="tile" id="mosaic-compare"><p class="tile-title">El mismo proceso</p><div class="mini"></div></div>
+        <div class="tile" id="mosaic-board"><p class="tile-title">Tu tablero</p><div class="mini"></div></div>
+      </div>
+      <p id="mosaic-caption">De mensajes sueltos<span class="green" style="display:block">a un proceso.</span></p>
+    </div>
+  </section>
+  <section id="close" class="clip" data-start="26" data-duration="4" data-track-index="1">
+    <div id="close-wrap" class="scene">
+      <p class="kicker">Empezá por tu negocio.</p>
+      <h2 class="close-title"><span>Ordená</span><span class="green">lo que se repite.</span></h2>
+      <div class="cta" id="cta"><p><span class="cta-label">Asesoría gratis</span>· link en mi perfil</p></div>
+    </div>
+  </section>
+</div>
+<script>
+  // Reutilizamos la misma geometría: miniaturas del chat, comparación y tablero.
+  // Clones síncronos, sin IDs ni atributos de tiempo, antes de construir el timeline.
+  function miniature(source, target) {
+    const copy = document.querySelector(source).cloneNode(true);
+    for (const el of [copy, ...copy.querySelectorAll('*')]) {
+      el.removeAttribute('id');
+      for (const attr of [...el.attributes]) if (attr.name.startsWith('data-')) el.removeAttribute(attr.name);
+    }
+    copy.querySelectorAll('.module-focus').forEach(el => el.remove());
+    copy.querySelectorAll('.state-stack').forEach(el => {
+      el.firstElementChild.remove();
+    });
+    document.querySelector(target).appendChild(copy);
+  }
+  miniature('#repeat-panel','#mosaic-chat .mini');
+  miniature('#comparison-panels','#mosaic-compare .mini');
+  miniature('#board-panel','#mosaic-board .mini');
+
+  window.__timelines = window.__timelines || {};
+  const tl = gsap.timeline({paused:true});
+  const reveal = (selector, at, x=0) => {
+    tl.fromTo(selector,{autoAlpha:0,x,y:24},{autoAlpha:1,x:0,y:0,duration:.48,ease:'power3.out',immediateRender:false},at);
+  };
+  // Initial states target descendants only; HyperFrames owns .clip visibility.
+  gsap.set('#hook-context,#hook-verb,#hook-lo,#hook-word',{autoAlpha:0});
+  gsap.set('#hook-rule',{scaleX:0});
+  gsap.set('#chat .repeated,#repeat-count,#compare .manual-next,#compare .manual-state,#ordered-reply,#ordered-result,#ordered-agenda,#board .board-detail,#board-caption,#mosaic .tile,#mosaic-caption,#cta',{autoAlpha:0});
+  gsap.set('#board .module-focus',{autoAlpha:0});
+
+  reveal('#hook-context',0.05); reveal('#hook-verb',.25);
+  reveal('#hook-lo',.48); reveal('#hook-word',.65);
+  tl.to('#hook-rule',{scaleX:1,duration:.45,ease:'power3.out'},1.5);
+
+  // Repetition is built in three pairs; the example multiplier is the payoff.
+  document.querySelectorAll('#chat .repeated').forEach((el,i)=>reveal(el,3.35+Math.floor(i/2)*1.15+(i%2)*.16,45));
+  reveal('#repeat-count',7.25);
+
+  reveal('#compare .manual-next',10.3);
+  reveal('#compare .manual-state',11.0);
+  reveal('#ordered-reply',11.65);
+  // A 0.55s reading pause between reply landing and changed state.
+  tl.set('#ordered-wait',{autoAlpha:0},12.68);
+  tl.set('#ordered-result',{autoAlpha:1},12.68);
+  tl.fromTo('#ordered-result .state-lines',{scaleX:0},{scaleX:1,duration:.48,ease:'power3.out',immediateRender:false},12.68);
+  reveal('#ordered-agenda',14.1);
+
+  // The active border points to each connected module, never a fake KPI.
+  ['agenda','clients','payments','chat'].forEach((name,i)=>{
+    const at=16.65+i*1.2;
+    tl.set('#board .module-focus',{autoAlpha:0},at);
+    tl.set('#mod-'+name+' .module-focus',{autoAlpha:1},at);
+    reveal('#mod-'+name+' .board-detail',at);
+  });
+  reveal('#board-caption',21.75);
+  tl.set('#board .module-focus',{autoAlpha:0},22.35);
+
+  // Actual prior graphic groups return as a 2×2 mosaic, then vacate for the CTA.
+  tl.fromTo('#mosaic .tile',{autoAlpha:0,y:35},{autoAlpha:1,y:0,duration:.48,stagger:.1,ease:'power3.out',immediateRender:false},23.45);
+  reveal('#mosaic-caption',24.55);
+  reveal('#cta',27.15);
+
+      // <seams:auto> — generated by seam-stamp.mjs from ledger.json; do not hand-edit.
+      // Regenerate: node <motion-doctrine>/scripts/seam-stamp.mjs --ledger ledger.json --write index.html
+      gsap.set("#hook-wrap", { autoAlpha: 1, xPercent: 0, yPercent: 0, scale: 1, filter: "blur(0px)", transformOrigin: "50% 50%" });
+      gsap.set(["#chat-wrap","#compare-wrap","#board-wrap","#mosaic-wrap","#close-wrap"], { autoAlpha: 0, xPercent: 0, yPercent: 0, scale: 1, filter: "blur(0px)", transformOrigin: "50% 50%" });
+      
+      // SEAM — gancho-chat : cut-the-curve LEFT (cut @2.5)
+      tl.to("#hook-wrap", { xPercent: -12, autoAlpha: 0, duration: 0.34, ease: "power3.in" }, 2.16);
+      tl.set("#hook-wrap", { autoAlpha: 0 }, 2.5);
+      tl.fromTo("#chat-wrap", { xPercent: 10, autoAlpha: 0.35 }, { xPercent: 0, autoAlpha: 1, duration: 0.42, ease: "power4.out", immediateRender: false }, 2.5);
+      
+      // SEAM — chat-comparacion : cut-the-curve LEFT (cut @9)
+      tl.to("#chat-wrap", { xPercent: -12, autoAlpha: 0, duration: 0.34, ease: "power3.in" }, 8.66);
+      tl.set("#chat-wrap", { autoAlpha: 0 }, 9);
+      tl.fromTo("#compare-wrap", { xPercent: 10, autoAlpha: 0.35 }, { xPercent: 0, autoAlpha: 1, duration: 0.42, ease: "power4.out", immediateRender: false }, 9);
+      
+      // SEAM — comparacion-tablero : cut-the-curve LEFT (cut @16)
+      tl.to("#compare-wrap", { xPercent: -12, autoAlpha: 0, duration: 0.34, ease: "power3.in" }, 15.66);
+      tl.set("#compare-wrap", { autoAlpha: 0 }, 16);
+      tl.fromTo("#board-wrap", { xPercent: 10, autoAlpha: 0.35 }, { xPercent: 0, autoAlpha: 1, duration: 0.42, ease: "power4.out", immediateRender: false }, 16);
+      
+      // SEAM — tablero-mosaico : cut-the-curve LEFT (cut @23)
+      tl.to("#board-wrap", { xPercent: -12, autoAlpha: 0, duration: 0.34, ease: "power3.in" }, 22.66);
+      tl.set("#board-wrap", { autoAlpha: 0 }, 23);
+      tl.fromTo("#mosaic-wrap", { xPercent: 10, autoAlpha: 0.35 }, { xPercent: 0, autoAlpha: 1, duration: 0.42, ease: "power4.out", immediateRender: false }, 23);
+      
+      // SEAM — mosaico-cierre : cut-the-curve LEFT (cut @26)
+      tl.to("#mosaic-wrap", { xPercent: -12, autoAlpha: 0, duration: 0.34, ease: "power3.in" }, 25.66);
+      tl.set("#mosaic-wrap", { autoAlpha: 0 }, 26);
+      tl.fromTo("#close-wrap", { xPercent: 10, autoAlpha: 0.35 }, { xPercent: 0, autoAlpha: 1, duration: 0.42, ease: "power4.out", immediateRender: false }, 26);
+      
+      // </seams:auto>
+  window.__timelines["main"] = tl;
+  tl.seek(0);
+</script>
+</body>
+</html>

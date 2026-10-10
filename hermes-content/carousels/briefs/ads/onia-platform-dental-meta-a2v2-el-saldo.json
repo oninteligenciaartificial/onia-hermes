@@ -36,12 +36,6 @@
           339,
           736,
           80
-        ],
-        [
-          898,
-          283,
-          218,
-          44
         ]
       ]
     },
@@ -51,7 +45,7 @@
     },
     {
       "t": "texto",
-      "texto": "Usted lo aprueba y lo envía, con un toque."
+      "texto": "Usted lo aprueba. Nada sale sin su OK."
     }
   ],
   "cta": "Escríbanos por WhatsApp",

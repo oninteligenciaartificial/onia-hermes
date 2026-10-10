@@ -1,5 +1,38 @@
 # Handoff — carril `mercado-y-pauta` (sesión «Ventas y pauta Onia Platform», antes «Análisis de mercado»)
 
+> 🔁 **9-oct — loop sobre la cola `cola/loop/ventas-pauta.md`** (la cola y el commit `06ae72789` de la madre viven en `origin/claude/onia-madre-v2-pr-review-2d85bb`, **no en `main`**; allí está también el cambio de CLAUDE.md que sube el diseño sin esperar: **sin mergear, no rige para mí**).
+> - ✅ **Tarea 3 (creativos de §5.11):** `carousels/briefs/ads/PRUEBA-1-PIEZAS.md`: A1-E y A1-V listas y miradas con el copy corregido; A1-S espera la cara de Sergio Urcullo.
+> - ✅ **Tarea 4 (fichas de contenido):** `research/competencia/anuncios/FICHAS_DE_CONTENIDO.md` (Huli, Reservo, Dt.Dental, Calu, bolivianos: ningún proveedor boliviano pauta en Meta).
+> - ⛔ **Tareas 1 y 2 bloqueadas por Plataforma:** la tabla «se promete / funciona» y el corto de 60 s necesitan la cuenta demo y las capturas C1-C7 (y que Sergio Urcullo vea la tabla de cortes y el preview 360p antes de cortar).
+> - Bloqueado de Sergio Urcullo: tarjeta en ONIA Ads y OK de gasto.
+> - ✅ **Lo desbloqueable de las tareas 1 y 2 (9-oct, madre: «encadená todas las tareas desbloqueadas»; `/loop` existe en mi sesión):** `scripts/grabar-captura.mjs`
+>   (el «script de grabación» que el VSL dice que no existe; planes C1-C7 y C2-clic como esqueleto, frenos probados, **la app real sin probar**) y
+>   `carousels/briefs/ads/VSL-CORTO-TABLA-DE-CORTES.md` + preview de 60 s en `carousels/out/ads/vsl-corto-animatic/`. **Siguen bloqueadas** la tabla «se promete / funciona»
+>   y el corto real: cuenta demo (Plataforma), `ONIA_QA_EMAIL`/`ONIA_QA_PASSWORD` en el entorno de Ventas (Sergio Urcullo) y las tomas T9/T10/T12.
+> - ✅ **`equipo-de-agentes` y `aprender-de-todo` (madre, commit `ca1fde0a`, 9-oct):** leídas con `git show`; **no mezclé su rama** (trae CLAUDE.md, AGENTS.md y 90 archivos, y toca el mismo
+>   `onia-ventas-pauta/SKILL.md` que yo: ensuciaría el PR #175). Entran por `main` cuando ella las mergee. Prueba de uso del aprendizaje en
+>   `carousels/briefs/ads/VSL-CORTO-TABLA-DE-CORTES.md` (4 ángulos de Ramiro Cubría + «no prometer respuesta no probada» de Marco Machado; detector de promesas 0, control 2): **aplicado, sin revisor independiente**.
+> - ✅ **Tanda 2 de competencia (T1-9, 9-oct):** `ONIA_UI_MEJORAS_1.0.md` §8. **Historia clínica:** *Normas en Salud Oral* (R.M. 1320, 2010, «documento de trabajo») pide
+>   historia clínica en todo paciente y prontuario «archivado por lo menos por unos 10 años», digital permitido; la Ley 3131 trata el consentimiento y el
+>   secreto como documentos oficiales. Ninguna de las dos fija obligación probada para un consultorio privado: **titular solo como pregunta y con el OK de
+>   Sergio Urcullo**, tras confirmar vigencia con el SEDES o el Colegio de Odontólogos. **Factura:** el 30-sep el SIN **abrogó** las RND de los grupos 9-12
+>   (RND 102600000038, título leído en su lista oficial): **no hay fecha para usar de gancho**, y el SIAT de Onia sigue apagado. **Bots locales:** nada por la web
+>   pública (ausencia de evidencia). **Quedan como PEDIDO PC** Google Maps/Facebook, Instagram de Doctocliq/Dentalink/CitaPro y una pregunta a un odontólogo.
+
+> ✏️ **9-oct — copy corregido (pedido de la madre): ya no dice «lo envía, con un toque».** El envío con un toque (G-03) está a medias en
+> `ONIA_PROMESA_VS_PRODUCTO.md`. Ahora dice **«Usted lo aprueba. Nada sale sin su OK.»** en A1, A2, carrusel (lámina 3), micro-video y los guiones F1/F3.
+> Se quitó también el anillo y el pulso sobre el botón «Enviar yo mismo»: la pantalla real lo sigue mostrando, pero sin énfasis. El pulso del video
+> ahora es opt-in (`video.pulso`). **Corto de 60 s con `editor-videos`: espera las capturas C1-C7 de Plataforma** y que Sergio Urcullo vea tabla de cortes
+> y preview 360p. **No se instalan** marketingskills ni Motion-Creative sin su OK. El commit `30bc87b8` de la madre (skill §9, `06-VSL-DENTAL.md`,
+> ADQ §5.11) **no estaba en `origin/main`** al leer: no lo pude leer.
+
+> 🔎 **8-oct, noche — Biblioteca por el conector (Sergio Urcullo: «mirá Pinterest y la Biblioteca para ver cuáles funcionan»).**
+> - **Navegador de la nube:** Biblioteca 403 y Pinterest con muro de sesión; no se rodearon. **Conector `Meta_ads`:** sí, con titular y fecha, sin creativo.
+> - **Hallazgo:** AgendaPro (id `1429581593936821`) tiene los anuncios activos más viejos (**245 días**) y un asistente con nombre, «Sofía», de **141 días**.
+>   Dt.Dental, Doctocliq y CitaPro siguen 83-100 días. A Bolivia solo le llega pauta de software dental de Dentalink. Todo en `ONIA_ADQUISICION_Y_PAUTA.md` §2.6.1.
+> - **Error evitado:** Dentalink tiene 92 activos y el conector solo muestra los 50 más nuevos; «nada de más de 14 días» sería falso (§2.6 dice 322 días).
+> - **Pedido PC:** Pinterest con la sesión de Sergio Urcullo y los creativos de 7 ids (en §2.6.1).
+
 > 🧪 **8-oct, noche — Tanda 1 de competencia y laboratorio de creativos (pedidos de la madre por Sergio Urcullo).**
 > - **Tanda semanal de competencia:** `ONIA_UI_MEJORAS_1.0.md` §8 (9 hallazgos con versión Onia, dueño y Codex) + fichas `JELOU_FICHA.md`,
 >   `DATEC_FICHA.md` y `ANUNCIANTES_FICHAS_CORTAS.md`; `MAPA_COMPETENCIA.md` al día. **Próxima: 15-oct** (norma boliviana de

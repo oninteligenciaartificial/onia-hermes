@@ -406,6 +406,10 @@ una lista incompleta**. `loops.md` describe este agujero para el cron; acá ten�
 
     git -C /root/loops/onia-hermes branch -r --list 'origin/claude/*' --no-merged origin/main
 
+🔴 **Las ramas `claude/autosync-*` NUNCA se mergean desde acá.** Son el rescate de `git-autosync.js`: commits de
+una sesión SIN permiso sobre `main`, sin revisar. Entran solo por un PR revisado (revisión de seguridad de #138, 8-oct).
+Se cuentan como varadas y se avisa; no se integran.
+
 ⚠️ **Acá decía que una rama sin listar es carril "si su loop existe en `loops.md`". Ese filtro
 es el que dejó invisible a `claude/lucia-vps` durante tres días.** Un carril NO necesita un loop:
 puede moverlo un cron pelado. Lucia lo mueven `lucia-ugc.sh` (`37 */3 * * *`) y `lucia-cierre.sh`

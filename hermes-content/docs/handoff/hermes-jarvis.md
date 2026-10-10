@@ -1,6 +1,102 @@
 # Handoff — carril `hermes-jarvis` (Hermes, el Telegram y el calendario de Sergio Urcullo)
 
-> **ESTADO 5-oct (cambio de sesión madre).** #88, #91, #96 y #94 están en `main`. En el VPS **nada de
+> **ESTADO 9-oct, tarde — el #176 está en `main` (`a1aa6246`), CI verde.**
+> - **Llega solo al VPS** (el sincronizador copia `main` a `/root/bin` en ~1 h):
+>   - `onia-parte-diario.sh` con UTF-8 fijo: es lo único que cambia algo que ya corre;
+>   - `onia-jarvis-resumen.sh` nuevo, pero no corre hasta que `aplicar` lo ponga en el crontab.
+> - **Espera `aplicar`:** el resumen y el cierre en tres bloques, «Hoy sale» y «Hoy salió», y la regla
+>   del formato en el SOUL (5c). La sección 0 ahora exige el resumen nuevo en `/root/bin`: si `aplicar`
+>   corre antes de que el sincronizador lo copie, corta sin tocar nada (correrlo de nuevo en una hora).
+> - **También en `main` (#177, `fce76971`):** el diagnóstico muestra lo publicado y lo agendado (13) y qué
+>   secciones del SOUL le faltan a Hermes (14). Correr `diagnostico` antes de `aplicar` dice qué más
+>   conviene copiar al SOUL del VPS.
+> - **La cola en loop quedó sin tareas desbloqueadas.** Todo lo que sigue espera `aplicar` o una decisión
+>   de Sergio Urcullo: correr `diagnostico` (lee el VPS), y que «Hoy salió» lea la API de Instagram con
+>   el token de publicar.
+> - **Sigue pendiente de Sergio Urcullo:** el «sí» a la llave, la rutina y `aplicar`; proteger `main`.
+
+> **ESTADO 9-oct, noche — cola en loop (`hermes-content/docs/cola/loop/hermes-jarvis.md`), PR #176.**
+> Sesión `session_01SQ7cvuDX5w5jDHk5VdhAEo`, rama `claude/adoring-ramanujan-7sjzwv`. En el VPS **nada**
+> encendido todavía: todo esto es inerte hasta `aplicar` (la madre, desde la PC, con el «sí» de Sergio Urcullo).
+> - **En el PR #176:**
+>   - formato fijo PASÓ · NECESITO · SIGUE en el resumen y el cierre, y en su SOUL (sección propia que
+>     `aplicar` copia en 5c y exige en la Fase A; la sección 0 exige el resumen nuevo en `/root/bin`);
+>   - «Hoy sale» / «Mañana sale» del calendario de publicación vigente;
+>   - «Hoy salió» con el link, de `/root/publicar/publicado.jsonl`;
+>   - el diagnóstico muestra el recolector de respuestas;
+>   - `herramientas-desplegadas` solo acepta un `x.sh` sin prefijo en las carpetas de los `poner`;
+>   - `parte-diario.sh` fija UTF-8;
+>   - el corte de Telegram ya no parte una etiqueta;
+>   - la respuesta de la rutina en tres bloques (§5).
+> - **Revisión adversarial del formato:** 1 MEDIUM (un pedido «necesita-ok» quedaba en PASÓ y NECESITO
+>   decía «Nada.») y 6 LOW, todos arreglados con prueba en `7b3250a9`.
+> - **Pendientes 4, 5 y 6 de abajo: cerrados.** El 5 por barrido: la única prueba que mira «proceso vivo»
+>   es `tandas-v1`, ya arreglada.
+> - **Intento fallido:** la prueba del recorte de Telegram con conversaciones largas no movía el corte
+>   (el resumen solo muestra 3 conversaciones de 140 caracteres); se rehízo con 80 decisiones de largo
+>   variable, y ahí sí da rojo contra el corte viejo.
+> - **Sigue pendiente de Sergio Urcullo:** el «sí» a la llave, la rutina y `aplicar`; proteger `main` en GitHub.
+
+> **ESTADO 9-oct, más tarde — el #173 también está en `main`** (marca `onia-autosync-main` + aviso de
+> respuesta rechazada que se reintenta si la aduana falla; el P2 de Codex sobre el reintento ya venía
+> arreglado en `31aebd95`). Un PR chico corrige la tabla «qué mirar» del runbook (§8): decía textos de
+> 1b y 5d que `aplicar.sh` no imprime. **Sigue:** la madre pone la marca en su worktree y corre `aplicar`
+> desde la PC con el «sí» de Sergio Urcullo; este carril lee el log y lo verifica.
+
+> **ESTADO 9-oct — el #138 está en `main`** (mergeado por la madre el 9-oct 03:53 UTC, CI verde, con su
+> arreglo `9562df9a`). En el VPS **nada** encendido todavía.
+> - **En un PR nuevo (rama `claude/adoring-ramanujan-7sjzwv` reiniciada desde `main`), los 2 pendientes
+>   que dejó la madre:** el permiso `ONIA_AUTOSYNC_MAIN` exige además la marca `onia-autosync-main` en el
+>   git-dir del checkout de la madre (sus subagentes en otros worktrees no la tienen); y una respuesta
+>   rechazada le avisa a Sergio Urcullo, una vez por pedido (si la aduana falla, se reintenta). **La madre
+>   pone la marca una vez en su worktree** (comando en la skill `onia-sesion-madre`).
+> - **Cómo se enciende (runbook vigente):** `TELEGRAM_COMMAND_CENTER.md` §8 — `aplicar` en 6 pasos y las
+>   pruebas P2 a P5. Lo corre la madre desde la PC, con el «sí» de Sergio Urcullo en su sesión.
+> - **Modelo de Hermes:** `gpt-5-mini` en el chat y en 08:00/08:10; `gpt-5-nano` en 13:00/16:00 (skill).
+> - **Sigue pendiente de Sergio Urcullo:** el «sí» a la llave y `aplicar`; proteger `main` en GitHub.
+> - **Después:** formato corto (Pasó · Necesito · Sigue) en el SOUL de Hermes y en el resumen/cierre.
+
+> **ESTADO 5-oct ~21:30 UTC — sesión `session_01SQ7cvuDX5w5jDHk5VdhAEo`, rama
+> `claude/adoring-ramanujan-7sjzwv`, PR #138 (borrador).** Sergio Urcullo contestó en ESTA sesión:
+> **«Sí, la madre sigue directo»** (autosync) y **«Sí, arreglalos»** (los 3 MEDIUM).
+> - **Hecho, en el PR #138, NO en main:** el autosync no mueve `main` sin permiso
+>   (`ONIA_AUTOSYNC_MAIN=1` la madre, `ONIA_LOOP_ID=onia-cola` el integrador; en `main` sin permiso →
+>   `claude/autosync-<sesión>`); la respuesta firmada con un sello por pedido (`responder-pedido.sh`);
+>   el tope de 64 KB mientras baja; `aplicar` sección 0 exige esas versiones; `settings.local.json`
+>   ignorado; CLAUDE.md, skills y el prompt de la rutina (§5 de `TELEGRAM_COMMAND_CENTER.md`) al día.
+>   Pruebas en verde y rojas contra el código viejo y con mutaciones (detalle en el PR).
+> - **En el VPS: nada.** `aplicar` nunca corrió, no hay rutina ni llave.
+> - **Medido hoy:** desde el 28-sep, 48 de 78 avances de `main` entraron por el fast-forward del autosync;
+>   23 desde sesiones de la NUBE (el proxy no frena el push a `main`). `onia-platform` no tiene hook Stop
+>   (cierra el pendiente 3 de abajo).
+> - **Sigue, en orden:**
+>   1. Revisión fuerte (2 revisores independientes) → arreglar lo que encuentren → CI verde del #138.
+>   2. **La madre pone `ONIA_AUTOSYNC_MAIN=1` en el `.claude/settings.local.json` de SU carpeta de
+>      onia-hermes** (`{"env": {"ONIA_AUTOSYNC_MAIN": "1"}}`; git lo ignora) y mergea el #138. No en la
+>      config de usuario ni en una variable de Windows: alcanzaría a cualquier sesión de la PC. Sin la
+>      variable no se pierde nada: su rama se pushea y, si estaba en `main`, va a
+>      `claude/autosync-<id de la sesión>`. Se verifica en el log del Stop («main al día (fast-forward)»).
+>   3. Recién después, con el «sí» de Sergio Urcullo: entorno «Pedidos de Hermes» sin variables, la
+>      rutina con el prompt NUEVO de §5 (el viejo, con `commit-tree`, ya no se entrega), la llave y
+>      `aplicar` por el workflow (§7 de abajo).
+> - **Revisión fuerte (2 revisores independientes + una tercera pasada sobre los arreglos, 5-oct):** todo
+>   lo que encontraron está arreglado y con prueba que da rojo contra la versión anterior (`565cd90f`,
+>   `78c88199`, `e4d0ba2e`). La tercera pasada encontró que un `tsc` que yo había agregado en `main` con
+>   permiso sacaba al integrador de `main` (y `onia-loop.sh` aborta si no está ahí): se sacó; el hook ya
+>   nunca mueve de rama a quien tiene permiso. Queda UN límite que no es de código: **quien pueda
+>   pushear a `main` le gana a la firma y a todo** (el sincronizador corre `main` como root en el VPS). Lo
+>   cierra solo proteger `main` en GitHub; decide Sergio Urcullo (en repo privado de cuenta personal pide
+>   el plan Pro). Anotado en `TELEGRAM_COMMAND_CENTER.md` §9.
+> - **8-oct:** el #138 seguía sin mergear y tenía conflicto con `main` (la skill de la madre); se resolvió
+>   con un merge (`7001f633`), suites en verde. **Pendiente nuevo (regla de Sergio Urcullo del 8-oct, por
+>   la madre):** los mensajes a él, también los de Hermes por Telegram, van en 3 bloques cortos (Pasó ·
+>   Necesito · Sigue). Toca el SOUL de Hermes y el resumen/cierre (`jarvis-resumen.sh`): se hace después
+>   del #138, no en él.
+> - **Intento fallido de esta sesión:** escribí en la skill que sin `transfer.unpackLimit=1` el tope
+>   llegaba tarde. Medido: con `--filter` git ya usa `index-pack` (paquete promisor); se corrigió antes
+>   del commit. La opción queda como seguro.
+
+> **ESTADO 5-oct (cambio de sesión madre) — las dos preguntas ya están contestadas (arriba).** #88, #91, #96 y #94 están en `main`. En el VPS **nada de
 > este carril está encendido**: `aplicar` nunca corrió (lo último medido es del 2-oct; desde la nube no
 > se puede volver a medir sin la autorización de Sergio Urcullo), la rutina no existe y no hay llave.
 > **Espera de Sergio Urcullo, en este orden:**
@@ -36,15 +132,15 @@
 >      `revertir` o el deploy. Revocarlo lo decide Sergio Urcullo.
 >   2. Medir en la prueba de punta a punta que la rutina pueda pushear `respuesta/*` y que el VPS
 >      llegue a GitHub (`--probar`).
->   3. Un pedido de `plataforma` trabaja en el clon de `onia-platform`, con sus propios hooks: la guarda
->      del autosync de este repo no lo cubre. Revisarlo antes del primer pedido de ese carril.
->   4. `herramientas-desplegadas` adivina la fuente de `onia-X.sh` por el nombre del archivo: un
->      `X.sh` cualquiera vuelve a dar un rojo falso. Conviene que lea la fuente del `poner`, no el nombre.
->   5. En la nube, el PID 1 no recoge huérfanos: otras pruebas que miran «proceso vivo» con
->      `kill(pid, 0)` pueden dar el mismo rojo falso que `tandas-v1`.
->   6. `diagnostico` todavía no muestra el log del recolector de respuestas.
+>   3. ~~Un pedido de `plataforma` trabaja en el clon de `onia-platform`, con sus propios hooks~~ —
+>      medido el 5-oct: `onia-platform` no tiene hook Stop. Cerrado.
+>   4. ~~`herramientas-desplegadas` adivina la fuente de `onia-X.sh` por el nombre del archivo~~ — 9-oct
+>      (`aa3b6756`): un `X.sh` sin prefijo cuenta solo en las carpetas de los `poner`. Cerrado.
+>   5. ~~En la nube, el PID 1 no recoge huérfanos: otras pruebas que miran «proceso vivo»~~ — barrido
+>      del 9-oct: la única es `tandas-v1.test.mjs`, ya arreglada. Cerrado.
+>   6. ~~`diagnostico` todavía no muestra el log del recolector de respuestas~~ — 9-oct (`c0175671`).
 > - **ANTES de cargar la llave de la rutina** (los 3 MEDIUM de la revisión de la madre v2, 3-oct; Sergio
->   Urcullo aprobó mergear el #94 sin ellos):
+>   Urcullo aprobó mergear el #94 sin ellos) — **los tres, hechos en el PR #138 (5-oct):**
 >   1. la respuesta no está atada al pedido: cualquiera que pueda pushear al repo puede dejar una
 >      `respuesta/<id>` de un pedido abierto;
 >   2. el tope de 16 KB se mide después de bajar el commit, no antes;

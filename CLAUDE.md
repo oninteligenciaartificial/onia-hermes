@@ -43,11 +43,13 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
 - **Un objetivo al inicio, escrito y explícito**, con su definición de "hecho". Todo lo
   que no sirva a ese objetivo se **anota como pendiente**, no se hace.
 - **No se cierra la sesión hasta terminarlo.** Nada a medias, nada de saltar a otra cosa.
-- **UNA sesión de control, muchos subagentes.** No abrir varias sesiones en paralelo: a
-  Sergio se le cruza la información.
-- Cada subagente: worktree con **ruta explícita**, `git branch --show-current` primero,
-  y gates + commit en su propio árbol (nunca mezcla árboles). El orquestador mantiene el
-  objetivo, el orden y el merge a `main`.
+- **UNA madre local, varios carriles y subagentes.** Corrección 2026-10-09: se evita
+  tener varios orquestadores; los carriles independientes sí trabajan en paralelo
+  según `equipo-de-agentes`. Codex ejecuta el encargo cerrado de la madre.
+- Cada subagente: worktree con **ruta explícita** y gates en su propio árbol.
+  Corrección 2026-10-09: en un encargo Codex sin Git, la madre verifica rama y hace
+  commit/integración; Codex no ejecuta ni siquiera consultas Git. El orquestador
+  mantiene el objetivo, el orden y el merge a `main`.
 - Mismo carril (misma carpeta) → subagentes **secuenciales**. Carriles distintos →
   paralelo.
 
@@ -85,6 +87,9 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
 
 - Toda sesión arranca invocando **`onia-router`**: él es el índice y rutea la tarea a su
   carril, su stack de skills, su subagente y sus docs fuente.
+- **Desde 2026-10-09, Claude y Codex cargan también `equipo-de-agentes` y
+  `aprender-de-todo`.** Registrar cada referencia por dimensión; guardar una regla
+  no demuestra aprendizaje aplicado: hace falta una tarea que la use.
 - **Al tocar el producto (`onia-platform`) son OBLIGATORIAS sus skills propias**
   (`onia-frontend/backend/db/seguridad/deploy/verificacion` en su `.claude/skills/`) —
   solo se autolistan en sesiones abiertas DENTRO de ese repo.
@@ -377,8 +382,9 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
 
 ## `main` siempre compila (REGLA DURA)
 
-- El auto-sync hace fast-forward de `main`: **nunca dejar que arrastre WIP parcial**. Si
-  un archivo nuevo importa otro archivo nuevo, van los DOS o ninguno.
+- `main` avanza por PR revisado; solo la madre y el integrador lo mueven directo (regla
+  «Git — auto-sync»). Esos dos: **nunca dejar que arrastre WIP parcial**. Si un archivo
+  nuevo importa otro archivo nuevo, van los DOS o ninguno.
 - `main` alimenta el deploy del VPS y el de Vercel: roto, rompe ambos.
 - Ojo con el **casing de imports**: Linux distingue mayúsculas, Windows no.
 
@@ -414,15 +420,31 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
 
 - Commits conventional (`feat:`, `fix:`, `docs:`, `chore:`). El mensaje explica el **POR
   QUÉ**, no solo el qué.
-- **Auto-sync activado**: al terminar, commitear y pushear sin que lo pidan (hook `Stop`
-  → `node scripts/git-autosync.js`).
+- **Auto-sync activado**: al terminar, commitear y pushear la RAMA sin que lo pidan (hook
+  `Stop` → `node scripts/git-autosync.js`).
+- **`main` solo avanza por PR revisado** (Sergio Urcullo, 2026-10-05: *«sí, la madre sigue
+  directo»*). El hook ya no hace fast-forward de `main`, salvo con permiso: la **madre** en la PC
+  (`ONIA_AUTOSYNC_MAIN=1` en el `.claude/settings.local.json` de SU carpeta, que git ignora, y además
+  la marca `onia-autosync-main` en el git-dir de SU checkout: los worktrees de sus subagentes no la tienen) y el
+  **integrador** (`ONIA_LOOP_ID=onia-cola`). Una sesión parada en `main` sin permiso no lo pushea:
+  sus commits van a `claude/autosync-<id de la sesión>` y la sesión queda parada en esa rama, para un PR.
+
+  > Medido el 5-oct: desde el 28-sep, **48 de los 78 avances de `main`** entraron por ese
+  > fast-forward sin que nadie los revisara, **23 desde sesiones de la nube** (Lucía y Marca
+  > personal). Así entró #82 con «Hoy soy odontóloga». Y `main` llega al VPS como root en ~1 h.
+
+  ⚠️ Frena el accidente, no a una sesión que pushee a `main` a propósito. El permiso nunca va en
+  `.claude/settings.json` (el autosync se lo daría a todas las sesiones), ni en la config de usuario
+  de la PC o una variable de Windows (alcanzaría a cualquier sesión de esa máquina).
+  `pedido-rama.test.mjs` verifica que ningún `settings.local.json` esté versionado.
 - Respeta `.gitignore`: nunca sube `.env`, claves ni `node_modules`. Assets y outputs sí.
 - ⚠️ **Un merge con conflictos NUNCA se deja abierto al cerrar un turno.** El hook Stop
   corre el autosync, y `add -A` + commit convirtió 17 archivos CON marcadores `<<<<<<<`
-  en un "resuelto" que hizo fast-forward a main (2026-08-20; el CI lo contuvo). El
-  autosync ya tiene la guarda (se niega con MERGE_HEAD/paths unmerged), pero la regla es
-  del que mergea: resolver ANTES de soltar el turno, y verificar cero marcadores con grep.
-- ⚠️ **El hook Stop puede publicar el estado A MEDIAS de un subagente.** El autosync corre
+  en un "resuelto" que hizo fast-forward a main (2026-08-20, cuando todavía lo hacía; el CI
+  lo contuvo). El autosync ya tiene la guarda (se niega con MERGE_HEAD/paths unmerged), pero
+  la regla es del que mergea: resolver ANTES de soltar el turno, y verificar cero marcadores.
+- ⚠️ **El hook Stop puede publicar el estado A MEDIAS de un subagente** (hoy, solo en la madre y
+  el integrador, los únicos que mueven `main` directo; en el resto queda en su rama). El autosync corre
   cuando un subagente termina su turno, no cuando el trabajo está terminado. El 2026-08-23
   se llevó **217 líneas de CSS a `origin/main` antes de que existiera el markup que las
   usa** (`e4e7fa2a`), a mitad de una sesión que todavía tenía dos archivos por escribir.
@@ -447,24 +469,27 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
 - **Decidir y actuar.** Verificación fuerte solo para lo que toca producción, plata o
   `main`. Lo reversible y de bajo riesgo: hacerlo y seguir.
 - **No re-hacer lo aprobado.** Diseño o plan ya aprobado se porta fiel, no se reabre.
-- **Una superficie viva no se reemplaza sin que Sergio VEA la pieza terminada.** El
-  2026-08-20 interpreté "ya te di todo lo que quería" como OK para publicar la landing
-  v2: la rechazó entera al verla ("Nada se te escapa no vende nada") y hubo que revertir
-  en producción. Un rediseño se muestra renderizado y se espera el OK explícito sobre
-  ESA pieza; construir y publicar son dos permisos distintos.
+- **Un rediseño se revisa renderizado antes de publicar.** Corrección 2026-10-09:
+  la madre/carril mira capturas a 390/1440 y verifica los gates; lo revisado se publica
+  sin otro OK de diseño de Sergio Urcullo, según la sección siguiente. Se sustituye
+  el permiso por pieza de agosto, conservando la revisión visual.
 
 ## Qué se publica sin preguntar (REGLA)
 
-> Sergio Urcullo, 2-oct, al preguntar «¿por qué tengo que dar OK? no sé qué significa PR»:
+> Antecedente sustituido el 9-oct: Sergio Urcullo, 2-oct, al preguntar «¿por qué tengo que dar OK? no sé qué significa PR»:
 > eligió **«Solo diseño nuevo y legales»** como lo único que pasa por él. Dos PRs listos
 > (el Recall y la web v1) esperaban su OK sobre algo que él no puede revisar.
 
 - **Se publica sin preguntar** lo que pasa los gates del carril (tsc, tests, revisión) y se
   MIRA en producción después: arreglos, features sobre pantallas existentes, bot, textos de
   producto, docs. Se mergea el PR y se corre el `publicar.sh` del destino.
-- **Pasa por Sergio Urcullo ANTES de publicar** solo: **diseño nuevo** (pantalla o sección
-  que no existía, rediseño de una viva — ver la regla de arriba) y **textos legales**
-  (términos, privacidad, contratos). Se le muestra la pieza renderizada, no el PR.
+- **Desde el 9-oct, lo que se trabajó y pasó revisión SE SUBE, sin esperarlo.** Sergio Urcullo, 9-oct, al ver 18 PRs
+  frenados esperando su OK: *«se supone que si lo trabajaron y fue revisado se tiene que subir, no esperen a mí, se sube
+  nomás»*. Incluye diseño nuevo y rediseños de pantallas (con las capturas 390/1440 mirando el render), migraciones (con
+  backup y rollback según `onia-db`/`onia-deploy`) y cambios de infraestructura revisados. Después se le avisa SOLO lo
+  publicado, con captura o link. Sigue pidiendo su sí lo que no es «publicar código»: gasto, contactar clientes o terceros,
+  el portal del SIAT, actos legales o firmas (van por Leslie Mercado Moreno) y la cara o la voz de él en servicios externos.
+  ⚠️ Antes (2-oct al 8-oct) el diseño nuevo y los textos legales pasaban por él antes de publicar; eso frenó 18 PRs.
 - **Contenido en redes (Sergio Urcullo, 8-oct: «sí, publicá por Buffer lo que pase control de calidad»):**
   una pieza que pasa el control de calidad de su skill (`diseno-contenido-onia` / `edicion-referentes`) y se MIRÓ
   renderizada completa se publica por Buffer (Instagram, por `ig-reel.mjs`, que es la vía verificada) sin pedirle el
@@ -473,7 +498,8 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
     en `hermes-content/docs/` y esa función esté en verde. Sin tabla no hay permiso;
   - lo que nombre, cite o muestre a un cliente, a un tercero o a un competidor (imagen, voz o marca);
   - los CTA de mecanismos sin probar, como comentario → DM de Instagram (2 rechazos de Meta);
-  - toda generación paga.
+  - generación paga fuera de los lotes pequeños de imagen autorizados el 8-oct
+    (ver regla de gasto abajo); autorizar gasto no autoriza publicar la pieza.
 - **No cambia** lo que ya pide aprobación por su riesgo: escribir datos de producción fuera
   de lo autorizado, gasto pago, contactar clientes, tocar el portal del SIAT.
 - A Sergio Urcullo no se le habla de PRs: se le dice qué quedó publicado y qué necesita mirar.
@@ -582,13 +608,18 @@ Detalle operativo: skills `carruseles-onia` y `ugc-empresas-higgsfield`.
 - IDs, modelos, precios y saldos se resuelven en vivo. Lo escrito en bitácoras
   antiguas es evidencia histórica, no autorización ni catálogo vigente.
 
-- **REGLA DE ORO: la tabla de cortes + preview 360p SIEMPRE se muestran a Sergio ANTES
-  de aplicar el corte.** Nunca cortar a ciegas.
-- **Gasto — regla vigente 2026-09-22:** toda generación paga necesita un job o lote con brief,
-  costo/cap, cantidad y aprobación explícita. Una aprobación de lote cubre sus imágenes y evita
-  microconfirmaciones; no queda como permiso abierto para futuros loops. Los precios y saldos
-  históricos no autorizan gasto. Video y entrenamiento Soul siempre requieren aprobación
-  específica porque su costo y riesgo de deriva son mayores.
+- **Revisión de montaje (corrección 2026-10-09):** tabla de cortes + preview 360p
+  revisados por el carril antes del master. El permiso de contenido del 8-oct y la
+  regla de publicación del 9-oct sustituyen el OK rutinario de Sergio por pieza;
+  siguen las excepciones de claims, terceros y cara/voz. Nunca cortar a ciegas.
+- **Gasto — actualización 8-oct, consolidada 2026-10-09:** cotizar y registrar
+  brief, costo/cap y cantidad. Imágenes de prueba/opciones de estilo por pocos
+  créditos (menos de ~5 por lote) tienen autorización previa: generar y mostrar
+  el resultado después, sin fraccionar un lote mayor. Sustituye la exigencia de
+  septiembre de aprobar toda imagen. Lotes grandes, video y entrenamiento Soul
+  conservan aprobación específica; subir cara/voz de Sergio Urcullo a servicios
+  externos también requiere el OK de Leslie Mercado Moreno. Precios y saldos
+  históricos no son autorización. La excepción es de gasto, no de publicación.
 - Cómo se ve un video, se transcribe, se corta, se subtitula y se rinde →
   **skills `ver-videos` y `editor-videos`** (HyperFrames vive en el repo,
   `.claude/skills/hyperframes*` y `.agents/skills/`, restaurado el 2026-10-02 porque con la

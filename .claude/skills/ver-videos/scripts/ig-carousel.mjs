@@ -43,9 +43,9 @@ export const shortcodeOf = (s) => s.match(/\/(?:p|reel|tv)\/([^/?#]+)/)?.[1] || 
 const NECESARIAS = new Set(['sessionid', 'csrftoken', 'ds_user_id', 'mid', 'ig_did']);
 
 /** cookies.txt (Netscape) -> header Cookie con lo minimo de instagram.com. */
-export function cookieHeader() {
-  if (!existsSync(JAR)) throw new Error(`no hay cookies: ${JAR}\ncorre: node fetch-video.mjs --login`);
-  const pares = readFileSync(JAR, 'utf8')
+export function cookieHeader(jar = JAR) {
+  if (!existsSync(jar)) throw new Error(`no hay cookies: ${jar}\ncorre: node fetch-video.mjs --login`);
+  const pares = readFileSync(jar, 'utf8')
     // \r?\n: en Windows el jar queda con CRLF y el \r se cuela en el valor de la ultima
     // columna -> "invalid header value" al armar el Cookie.
     .split(/\r?\n/)
