@@ -17,6 +17,74 @@ correo (borrador en `ONIA_LEADS_ESPERANDO.md` §3.3) y, si contesta, se usan las
 
 ---
 
+## 0. Revisión del 10-oct: ¿son prospectos?, los borradores listos y qué falta
+
+> Pedido de la madre con la aprobación de Sergio Urcullo del 10-oct («todo lo que esté revisado está aprobado»). **Eso cubre el texto; no cubre
+> el envío**: contactar a un tercero sigue necesitando su sí aparte. Los textos de abajo quedan **listos para copiar**, y no se mandó nada.
+> **Lo que no pude ver desde la nube:** Chatwoot, el registro del vigía (`onia-vigia-sin-respuesta.log`) y la lista de plantillas aprobadas viven en el VPS,
+> y esta sesión no tiene llave. Las «8 colgadas, 5 sin respuesta» de hoy las ve la madre; abajo está lo que hace falta para clasificarlas.
+
+### 0.1 ¿Son prospectos? Tres preguntas, aplicadas a los que ya conocemos
+
+Es **lead** si (1) lo escribió una persona por su cuenta, no una prueba nuestra, no Sergio y no el bot; (2) habla de un negocio de los rubros que se
+venden, o lo pide; (3) hay un canal para contestarle. Falla la 1 → no es lead. Falla la 2 (es un paciente que busca turno) → no se le escribe, y si
+ya habló con el bot, la salida cortés de §2. Falla la 3 → no se puede.
+
+| Quién | Entró | Silencio al 10-oct | ¿Prospecto? | Por qué | Qué se le manda |
+|---|---|---|---|---|---|
+| «F», conv 35, WhatsApp | 25-ago | **46 días** | **Sí, el más calificado** | Clínica odontológica de 4 doctores; pidió 6 funciones y el costo | Plantilla **B** → llamada. Sus 6 preguntas, contra el catálogo, en `ONIA_LEADS_ESPERANDO.md` §3.1 |
+| Maximo Romano, `clinica klein` (dental) | 21-ago | 50 días | **Sí** | Pidió acceso por el formulario | Plantilla **A** (dental) |
+| Leonardo Chuquimia, `Clinica Leonardo` (estética) | 23-ago | 48 días | **Sí**, segundo rubro | Pidió acceso por el formulario | Plantilla **A** (estética) |
+| Edwin Benavidez, `consultorio dental sonrisa feliz` | 28-ago | 43 días | **Sí** | Pidió acceso; si atiende solo le calza Básico | Plantilla **A** (dental) |
+| Mario, conv 37, WhatsApp | 28-ago | 43 días | **Probable** | «Quiero saber si me sirve para mi negocio»: no dijo el rubro | Plantilla **B′** (sin rubro); en la respuesta se le pregunta qué negocio tiene |
+| Conv 36, widget, `Saguilera@ds-santacruz.bo` | 27-ago | 44 días | **Probable** | Solo dejó un correo | Un correo, una vez (`ONIA_LEADS_ESPERANDO.md` §3.3); sin WhatsApp no hay plantilla |
+| Conv 34, widget, «hola» | 24-ago | 47 días | **No** | Sin ningún dato de contacto: falla la pregunta 3 | Nada |
+| Conv 58, bot, 17-sep | 17-sep | 23 días | **Sin leer** | La auditoría del 2-oct dice que «quedó esperando horario» | Se clasifica con los datos de abajo |
+| **El nuevo** y las **8 colgadas** del vigía | — | — | **Sin datos** | Solo existen en Chatwoot | Plantilla **N** (§0.2), cuando la madre pase los datos |
+
+**Cómo se clasifican las que no vi** (le toca a quien tenga el VPS, solo lectura): correr el bloque «Conteo de hoy» de `ONIA_LEADS_ESPERANDO.md` y pasarme, **por cada
+conversación colgada, solo esto**: id, canal, nombre o negocio si lo dio, qué escribió (una línea), hace cuánto, si hubo mensaje saliente de una persona. Con eso las pongo
+en la tabla de arriba y les dejo su borrador. Dato que no está en ese bloque y hace falta: **si el último mensaje entrante tiene menos de 24 h**, porque cambia plantilla por texto libre.
+
+### 0.2 Los textos (de usted, sin precio, sin nada que el catálogo §7 y §8 no deje decir)
+
+Las tres plantillas son de **MARKETING, sin variables** (Meta rechaza un cuerpo que empieza o termina en variable) y llevan los botones **«Sí, coordinemos» / «Ahora no»**.
+**Se dice la verdad sobre el retraso, porque son 43 a 50 días:** callarlo sería lo peor que se puede hacer con alguien que escribió hace mes y medio.
+
+**Plantilla A — pedidos de acceso (dental): `seguimiento_a_acceso`**
+> Hola, le escribe Sergio Urcullo, de Onia. En agosto usted pidió acceso a nuestro sistema y no le respondí a tiempo: le pido disculpas, fue mi falla. Onia es un sistema de gestión para clínicas dentales: agenda, ficha del paciente con historia clínica y odontograma, tratamientos, cobros e inventario, todo en un lugar. Si todavía le interesa, se lo muestro en una videollamada de 20 minutos para ver si le sirve. ¿Coordinamos?
+
+**Plantilla A (estética), para Leonardo: `seguimiento_a_acceso_estetica`** — igual, con «para centros de estética: agenda, ficha de cada clienta, tratamientos, cobros e inventario» (sin odontograma).
+
+**Plantilla B — escribió al bot con preguntas, «F»: `seguimiento_b_pregunta`**
+> Hola, le escribe Sergio Urcullo, de Onia. En agosto usted nos escribió con preguntas sobre un sistema de gestión para su clínica y no le respondimos: le pido disculpas. Prefiero contestarle mirando el sistema y no por mensaje: en una videollamada de 20 minutos le muestro en pantalla lo que preguntó y le digo qué plan le corresponde. ¿Coordinamos?
+
+**Plantilla B′ — Mario, sin rubro: `seguimiento_b_negocio`** — igual, con «para su negocio» en vez de «para su clínica».
+
+**Qué NO dicen, a propósito:** el tratamiento a medias (§8: el detector no encuentra a nadie); precios (se dan solo si preguntan, §2); «con una clínica de ejemplo» (**no hay cuenta demo** y
+la llamada no lo promete, L-05); la factura del SIAT; el agente de WhatsApp; «otras clínicas lo usan» (cero clientes).
+
+**Plantilla N — lead nuevo, con la ventana abierta (menos de 24 h desde su último mensaje): texto libre, sin plantilla**
+> Buen día, soy Sergio Urcullo, de Onia. Gracias por escribirnos. Para decirle si Onia le sirve y qué plan le corresponde, cuénteme dos cosas: ¿qué negocio tiene y cuántas personas atienden?, ¿y quién agenda hoy las citas: recepción, usted, WhatsApp o un cuaderno? Con eso se lo muestro en 20 minutos.
+
+**Con la ventana cerrada:** la plantilla A o B según haya pedido acceso o haya escrito con una pregunta. **Si es un paciente que busca turno:** «Gracias por escribir. Onia es un sistema para que las clínicas lleven su agenda y no damos turnos: para atención dental, escríbale directo a su clínica.»
+
+**Si contesta «Sí, coordinemos»:** la respuesta de §2, ya sin «con una clínica de ejemplo». **Si no contesta:** la secuencia de la §3 (días 3, 7 y 14).
+
+### 0.3 Lo que falta para poder mandarlos, en orden
+
+1. **Hay un choque de minutos que Sergio Urcullo debe ver:** el primer mensaje del bot ofrece una demo de **30 minutos**, la agenda de Cal.com es de **20** y este playbook dice 20 (L-04). Estos textos dicen 20.
+2. **Las plantillas A, A (estética), B, B′ no existen aprobadas en Meta.** La última lista registrada (3-oct) tenía 3: `confirmacion_cita`, `seguimiento_demo` y `recordatorio_demo`; la auditoría del 2-oct decía que «ninguna de las 7 sirve para retomarlas».
+   Hay que crearlas con los textos de arriba (WhatsApp Manager, a cargo de Plataforma o la madre). **El tiempo de aprobación no está medido.**
+3. **El método de pago de la cuenta de WhatsApp.** Desde el 1-oct Meta cobra los mensajes y sin método de pago el envío vuelve `failed` con error 131042 (`cola/chatbot.md`, tablero `t_ac3aa802`); ya pasó con 3 salientes de agosto.
+   Se mira en WhatsApp Manager antes del primer envío, y después se mira el estado de cada saliente en Chatwoot: un 2xx no dice que llegó.
+4. **Alternativa sin plantilla:** si el 75414930 ya está en coexistencia con la app WhatsApp Business (el runbook es del 28-ago, **sin medir si se ejecutó**), Sergio Urcullo puede escribirles
+   desde su teléfono con estos mismos textos como mensaje libre, que es lo que pedía la auditoría del 2-oct. Eso evita las plantillas y la fila 3.
+5. **Sale desde la bandeja de Chatwoot (inbox 5) con el usuario de Sergio Urcullo** (o desde el teléfono), para que el bot se calle en esa conversación (§1, punto 1).
+6. **Su sí** sobre el texto y el canal de cada mensaje. Una sola respuesta alcanza: «mandá A y B».
+
+---
+
 ## 1. Antes del primer envío (tres cosas que cambian el resultado)
 
 1. **Mandar las plantillas desde la bandeja de Chatwoot (inbox 5, «Onia WhatsApp») con el usuario de Sergio
@@ -40,11 +108,10 @@ Cuando el lead toca un botón o escribe, se abre la ventana de 24 h desde ese me
 normal, sin plantilla.
 
 **«Sí, coordinemos»**
-> ¡Gracias! Le propongo dos horarios: **{día y hora 1}** o **{día y hora 2}**. Son 20 minutos por videollamada, con
-> una clínica de ejemplo. Si prefiere elegir usted, esta es mi agenda: https://cal.com/sergiourcullo/20min
+> ¡Gracias! Le propongo dos horarios: **{día y hora 1}** o **{día y hora 2}**. Son 20 minutos por videollamada
+> para ver si le sirve. Si prefiere elegir usted, esta es mi agenda: https://cal.com/sergiourcullo/20min
 
 - Grupo B: se suma «Ahí le muestro en pantalla lo que nos preguntó.»
-- Mario: «con una clínica de ejemplo» → «con un negocio de ejemplo».
 - Los dos horarios son reales, de la agenda de Sergio Urcullo de esa semana. El link existe: «Llamada 1 a 1», de
   20 min, medido el 3-oct.
 

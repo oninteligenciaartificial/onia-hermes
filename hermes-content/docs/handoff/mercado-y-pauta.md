@@ -5,6 +5,10 @@
 > - ✅ **Tarea 4 (fichas de contenido):** `research/competencia/anuncios/FICHAS_DE_CONTENIDO.md` (Huli, Reservo, Dt.Dental, Calu, bolivianos: ningún proveedor boliviano pauta en Meta).
 > - ⛔ **Tareas 1 y 2 bloqueadas por Plataforma:** la tabla «se promete / funciona» y el corto de 60 s necesitan la cuenta demo y las capturas C1-C7 (y que Sergio Urcullo vea la tabla de cortes y el preview 360p antes de cortar).
 > - Bloqueado de Sergio Urcullo: tarjeta en ONIA Ads y OK de gasto.
+> 📨 **10-oct, tarde — Sergio Urcullo (por la madre): «todo lo que esté revisado está aprobado».** Cubre el texto, no el envío: contactar a terceros sigue pidiendo su sí aparte. Pedido: borradores de seguimiento de los
+> 7 leads de agosto más uno nuevo, y revisar si las «8 colgadas / 5 sin respuesta» del vigía son prospectos. **Hecho:** `sales-kit/SEGUIMIENTO-LEADS.md` §0 (¿son prospectos?, textos A, A estética, B, B′ y N, y lo que falta para mandarlos).
+> **Sin ver:** Chatwoot, el log del vigía y las plantillas aprobadas están en el VPS y la nube no tiene llave: «el nuevo» y las 8 colgadas quedan con el pedido a la madre (id, canal, nombre, una línea de lo que escribió, hace cuánto, si hubo salida humana, y si el último entrante tiene < 24 h).
+> **Corregido de paso:** el playbook prometía «con una clínica de ejemplo» en la llamada; no hay cuenta demo (L-05). Las plantillas A/B **no existen aprobadas en Meta** y el método de pago de la WABA sigue sin verse (error 131042 desde el 1-oct).
 > 🎯 **10-oct — pedido de la madre (sin crear nada en Meta, sin contactar a nadie):** (a) **go/no-go del 13-oct clasificado** en ADQ §5.10: pasan a ✅ sin Sergio Urcullo las filas
 > 1, 2, 8 y la mitad de la 4 y la 5; dependen de él la 3 (tarjeta: **medido `has_payment_method: false`**), la 6, la 9, la prueba con teléfono de la 5 y, sin tope duro, la 7. **Veredicto de hoy: NO-GO.**
 > (b) **Campaña lista para crear:** `carousels/briefs/ads/CAMPANA-1-LISTA-PARA-CREAR.json` + `scripts/campana-lista.test.mjs`. (c) **Defecto propio corregido:** los códigos `D1V`/`D1S` del 9-oct el bot no los lee
