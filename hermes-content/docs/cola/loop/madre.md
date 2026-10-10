@@ -24,8 +24,8 @@ Leyenda de dueño: `H` Haiku · `S` Sonnet · `O` Opus · `CxSol` / `CxAstra` Co
 - [ ] A5 Harness: qué es y cómo está hecho el nuestro, loops, subagentes, todos los frentes con dueño (pedido de SU) —
   workflow `wf_da25d090-4e5` (S teoría con fuentes, 2×H inventario, S frentes, O arquitecto, O crítico) →
   `docs/ONIA_HARNESS.md`. Hecho = doc en main + frentes 🔴 sin dueño asignados.
-- [ ] A6 Releer los términos de Doctocliq y Dapta antes de seguir usando sus cuentas de prueba (salió del análisis de
-  REA; prometido anotarlo y olvidado hasta acá). Dueño: S con WebFetch. Hecho = qué permiten y qué no, con cita.
+- [x] A6 Releer los términos de Doctocliq y Dapta antes de seguir usando sus cuentas de prueba (salió del análisis de
+  REA; prometido anotarlo y olvidado hasta acá). Dueño: S con WebFetch. **Hecho:** `research/competencia/TOS-DOCTOCLIQ-DAPTA.md`. Ambas prohíben ingeniería inversa; Dapta §2.5(i) prohíbe usarla para construir un producto competidor. Sin riesgo: mirar la UI con la cuenta, ayuda pública, notas internas. Pendiente SU: mirar el checkbox que aceptó al crear cada cuenta.
 
 ## B. Integrado con master, suite completa verde en la PC (dueño del merge: Plat, en su orden)
 - [ ] B1 #114 C15b `5c5beaf8` (10.026/0, CLEAN) — **2 migraciones ANTES del merge** o prod cae (P2022).
