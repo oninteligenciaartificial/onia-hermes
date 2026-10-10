@@ -142,10 +142,12 @@ Qué se vende y qué falta: `docs/ONIA_CATALOGO_DE_VENTA.md`.
 
 ## 7. Próximos pasos (en orden)
 
-0. **10-oct, después del cron de las 15:50 UTC:** MIRAR la publicación de F1 + #142 + #139 (`release-32c7e0e8`):
-   contenedor healthy, logs sin errores, `/login` con la letra servida desde nuestro dominio (cero pedidos a
-   `fonts.gstatic.com`), «En vivo» en la agenda con login (madre). Si el build falla, `releases/32c7e0e8-*/build.log`
-   (skill `onia-deploy`).
+0. **El cron de las 15:50 UTC NO publicó** («plataforma: FALLO»). Según `/tmp/pub-plataforma.log`, «FATAL: hay otro
+   build corriendo»: a las 15:30-15:45 la madre subió 7 ramas de PR y su CI ocupó el único runner del VPS. No es el
+   código: producción sigue en `release-c94b9daa`. **Próximo: cron de las 18:50 UTC** con F1 + #142 + #139 (+ #144 si
+   entra antes de las 18:00). Sin push ni merge desde las 17:50 si la cola del CI no está vacía (skill `onia-infra` §4).
+   Después: contenedor healthy, logs, `/login` con la letra desde nuestro dominio, GET anónimo a `/api/appointments` →
+   401, y «En vivo» en la agenda con login (madre).
 1. Con el sí de la demo: correrla en la ventana de 07:00 a 11:00 UTC, verificarla y avisarle a la madre que ya puede
    sacar las capturas C1-C7. Con el login, mirar A-03, B-01, B-02, C-01 y E-01 de la tabla de promesas.
 2. Con el CAFC: la corrida de la etapa VI según la bitácora.

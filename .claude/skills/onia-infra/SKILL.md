@@ -194,6 +194,13 @@ Ese dia habia **tres causas nuestras** comiendo CPU:
    conexion no deja un build huerfano — sigue solo y se retoma leyendo el log.
 4. **Un solo dueno de infra a la vez.** Si estas desplegando, n8n y Supabase son de SOLO
    LECTURA para los demas carriles.
+5. **El CI de GitHub corre en ESTE VPS y cuenta como build.** Trampa pagada el 10-oct, 15:50 UTC: el cron dio
+   «plataforma: FALLO» sin carpeta nueva en `releases/`. El detalle no estaba en un `build.log` sino en
+   `/tmp/pub-plataforma.log`: «FATAL: hay otro build corriendo (next build / npm ci / docker build): no encimo otro».
+   Entre las 15:30 y las 15:45 se subieron 7 ramas de PR; el runner es uno, cada CI tarda 20-45 min y la cola ocupó el
+   VPS más de 2 h. Antes de un cron de publicación (minuto 50 de 00, 03, 06, 09, 12, 15, 18 y 21 UTC): nada de push ni
+   merge desde una hora antes si la cola no está vacía. Se mira con `actions_list` → `list_workflow_runs` con
+   `status: queued` e `in_progress`. Ante un «FALLO», leer primero `/tmp/pub-plataforma.log`.
 
 ---
 
