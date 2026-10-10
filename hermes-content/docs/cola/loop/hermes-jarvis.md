@@ -31,7 +31,7 @@ carril puede hacer solo. Q1 espera `aplicar` (ver «Bloqueado»).
   n8n los cambia la madre, con respaldo.
 - [ ] **Q4 El resumen de las 06:30 dice lo que nadie empuja.** Va en dos PRs, porque (c) toca el crontab de `aplicar`
   (root en el VPS, revisión fuerte):
-  - [ ] Q4a/b, solo lectura:
+  - [x] Q4a/b, solo lectura — `77d02e89` (mañana del 10-oct impresa con la tabla real: el SIN y el token de Lucía en NECESITO):
     - (a) los relojes que vencen en 72 h o menos, de `cola/loop/madre.md` §G. Un rango «13 al 18-oct» cuenta desde el
       13, «sin fecha» no sale, uno vencido sale en 🔴. Los de Sergio Urcullo van en NECESITO; los demás, junto a la
       línea de salud.
