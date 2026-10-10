@@ -9,17 +9,113 @@ párrafo describe el relevo del 5-oct.
 La madre saliente (`cfdce1bb…`, rama `claude/onia-sesion-madre-77f719`, worktree `infra-loops-revision-3fc7b1`) llevaba
 días abierta y su conversación costó ~777 M de tokens. **La madre nueva arranca de cero y lee solo esto.**
 
-## ▶ ARRANQUE de la madre nueva (texto para pegar, 9-oct)
+## ▶ ARRANQUE de la madre nueva (texto para pegar, 10-oct)
 
-> Sos la sesión MADRE de Onia, en la PC de Sergio Urcullo. Invocá `onia-router` y después `equipo-de-agentes` (el método) y
-> `onia-sesion-madre` (el detalle) y `aprender-de-todo` (dimensiones y prueba de uso).
-> Leé `hermes-content/docs/handoff/madre-local.md` (HANDOFF 9-oct y GOAL VIGENTE).
-> 1. Creá la ronda con `CronCreate` cada 20 min (`7,27,47 * * * *`), según el §3 de `equipo-de-agentes`. El verificador es un
->    subagente Haiku 5.5.
-> 2. `ListAgents`. A cada sesión que no esté en loop, mandale UNA línea: «Arrancá /loop sobre tu cola
->    hermes-content/docs/cola/loop/<carril>.md».
-> 3. Lanzá a Codex lo que haya en `codex-tareas/` sin lanzar y subí los bundles nuevos.
-> 4. A Sergio Urcullo, solo `PUBLICADO: …`, en máximo 3 bloques y corto.
+> Sos la sesión MADRE de Onia, en la PC de Sergio Urcullo, y la ÚNICA madre. Invocá `onia-router`, `equipo-de-agentes`,
+> `onia-sesion-madre` y `aprender-de-todo`. Leé `hermes-content/docs/handoff/madre-local.md` (§ TERMINAR TODO y HANDOFF
+> 10-oct) y `hermes-content/docs/ONIA_EQUIPO_DE_AGENTES.md` (el plan del equipo, si ya está; si no, la auditoría en
+> `hermes-content/docs/research/2026-10-10-auditoria-equipo-de-agentes.md`).
+> Tu objetivo NO es construir más: es **terminar y publicar**, en el orden de § TERMINAR TODO. Delegá todo lo largo
+> (Codex, subagentes, sesiones de la nube); vos orquestás, hacés lo de la PC y corrés los gates.
+> 1. Ronda con `CronCreate` cada 20 min (`7,27,47 * * * *`, §3 de `equipo-de-agentes`) + medir `PoolPagedBytes` (avisar si
+>    pasa de 3 GB). No cierres Chrome ni WhatsApp. Los latidos por hora de la nube ya existen: no los recrees.
+> 2. `ListAgents`. Juntá en UNA lista lo que cada sesión espera de Sergio Urcullo y dáselo una sola vez.
+> 3. Codex a trabajar YA: 2 ejecutores Platform (Sol medium) + 1 Hermes (Sol/Luna) + 1 revisor, desde `codex-tareas/`.
+> 4. A Sergio Urcullo: solo PUBLICADO y lo que necesita de él, en 3 bloques.
+
+## 🔥 TERMINAR TODO (10-oct, pedido de Sergio Urcullo)
+
+Sergio Urcullo, 10-oct: *«la onia platform está en peligro, no hemos subido videos, no hemos terminado el desarrollo, no
+hemos subido campañas, no hemos vendido… hay que terminar todo»*. Producción no se mueve desde el 9-oct 13:53 (`c94b9daa`).
+Etapa 1 (0→5 clientes, salida Bs 3.750/mes); hay 0 clientes. Detalle de cada punto: auditoría §audit:backlog.
+
+**Estado al cierre (10-oct ~14 UTC):** Sergio Urcullo respondió en Plataforma: **#143 (F1), #142 y #139 mergeados**
+(master `32c7e0e8`, CI verde). ⚠️ **#139 trae la migración `20261005140000_realtime_citas_privado`**: no se publica master
+sin aplicarla antes (backup → migración → publicar → GET anónimo 401 → mirar /login). Se le avisó a Plataforma. Cada PR
+con migración deja master no publicable hasta aplicarla: el que la mergea la aplica antes de cualquier otro merge.
+
+**Plan del equipo de agentes:** `hermes-content/docs/ONIA_EQUIPO_DE_AGENTES.md` (plan + crítica). Leer la crítica primero:
+4 afirmaciones del plan son falsas (rutinas cada 10-20 min, la madre abre sesiones completas, la nube le escribe a la madre,
+Codex cloud elige modelo). Lo que sí: CI reemplaza la suite local de la madre como gate; una sola fila de tareas;
+`--disable multi_agent` en Codex; ~6 tareas Sol por día hasta el reinicio del 14-oct; ≤10 agentes Claude a la vez la
+primera semana. El cuello de botella son los sí de Sergio Urcullo y los merges en serie, no la cantidad de agentes.
+
+**Orden. Cada paso con su dueño y su criterio de hecho:**
+1. **Plataforma publica la cadena** (dueño: Plataforma; freno: los 4 sí de Sergio Urcullo **en esa sesión**: F1, #142,
+   #140 con infra, «la regla del 9-oct es mía»). #143 F1 → `publicar.sh` → MIRAR /login → #142 → #136+#130 → #140 + infra
+   → #139 (migración antes de la imagen) → #114 → #124 → #113 → #118/#119/#110/#132. Hecho = cada uno en `master`,
+   publicado y mirado. Si Sergio Urcullo prefiere, la madre mergea y publica desde la PC con su sí escrito acá.
+2. **Refrescar la demo + capturas C1-C7** (Plataforma; necesita la cadena publicada). Destraba Ventas, el VSL y Lucía G1.
+3. **Tabla «se promete / funciona»** (Ventas; freno: `ONIA_QA_EMAIL`/`ONIA_QA_PASSWORD` en el entorno de Ventas, lo carga
+   Sergio Urcullo). Hecho = 101 promesas medidas; sin tabla en verde no se contacta a nadie.
+4. **Videos** (Marca): las 13 piezas de `GRABAR-10-16-OCT.md` necesitan que Sergio Urcullo grabe; mientras, Marca publica
+   las piezas sin cara (P1/P3, carrusel, historias de la asesoría, molde mosaico). Hecho = 1 pieza publicada por día.
+5. **Campaña Meta del 16-oct** (Ventas + madre en Chrome): go/no-go del 13-oct con 9 filas en ❌. Freno: tarjeta en ONIA
+   Ads, OK de gasto «US$56 · 14 días · tope Bs 750», píxel, demo. Hecho = campaña creada en pausa y encendida el 16 si el
+   go/no-go da verde.
+6. **Vender** (Sergio Urcullo + Ventas): 7 leads esperando + 12 mensajes de prospección + plantillas A/B y seguimiento
+   D3/7/14/30. Solo después de la tabla en verde, y cada envío con su OK.
+7. **Codex a fondo:** tareas cerradas de `onia-1.0-nube.md` §7 (costos de Meta en `pricing.ts`, `/book` en usted ~35
+   textos) y lo que deje cada carril en `codex-tareas/`.
+
+**Lo de la PC (solo la madre, con Chrome):** capturas de la Biblioteca de anuncios de Meta, evento de cal.com, plantillas
+en WhatsApp Manager (enviar a terceros = OK de Sergio Urcullo), mail `+qapago`, bucket R2 y snapshot de Hostinger, bio de
+IG, `aplicar` de Hermes en el VPS, Codex local + suite completa. El portal del SIAT no lo abre nadie más que él.
+
+**Lo de Sergio Urcullo, en una lista:** (1) los 4 sí en Plataforma; (2) credenciales QA en el entorno de Ventas;
+(3) grabar las 13 piezas + selfie A1 + tomas T9/T10/T12 del VSL; (4) tarjeta en ONIA Ads y OK de gasto US$56; (5) bucket R2
+(gasto); (6) SIAT: CAFC del piloto, Punto de Venta 1, prórroga (reloj 4-nov); (7) términos (#124); (8) OK de Leslie Mercado
+Moreno para el predictor y la tarjeta; (9) `aplicar` de Hermes sí/no; (10) A o B del evento de cal.com y link en la bio.
+
+**MCP oficial de Meta con WhatsApp** (auditoría §research:meta-wa-mcp): real, beta y angosto. Sirve para configurar una
+cuenta de WhatsApp Business (números, plantillas, webhooks, envíos de prueba). No trae bandeja, CRM, agenda ni cobros:
+**Onia no queda inútil**, pero «te configuramos el WhatsApp» deja de ser diferencial. Se desarrolla en otra sesión
+(pedido de Sergio Urcullo); tareas propuestas en la auditoría.
+
+**Equipo de agentes** (pedido de Sergio Urcullo del 10-oct: que la nube no pare con la PC apagada, una sola madre, muchos
+agentes por punto, Codex a fondo): auditoría hecha (`research/2026-10-10-auditoria-equipo-de-agentes.md`). El plan final va
+a `hermes-content/docs/ONIA_EQUIPO_DE_AGENTES.md`. Datos clave medidos:
+- Codex: Sol 6.1 (diario), Astra 6 (riesgo), **Luna 6 (mecánico, 0 usos)**. Cuota 56 % de la ventana de 7 días, que se
+  reinicia el 13-oct a las 23:57 de La Paz. 2 reinicios disponibles y 0 aplicables hoy: verificar antes de quemar.
+  Astra se comió el 85 %: usar Sol por defecto y Luna para lo mecánico.
+- El cuello de botella no son los agentes: es la suite completa de la madre (~9,9k tests, en serie) y los sí de Sergio Urcullo.
+- PC apagada: los latidos de la nube siguen. Falta un «turno de noche» en el VPS (ya hay un Claude con cron cada 10 min)
+  que suba los bundles y despierte a las sesiones trabadas. Tocar el VPS = sí de Sergio Urcullo (infra).
+- Alternativa sin VPS: rutinas con `/fire` desde n8n (cadencia de 2-5 min, superficie oficial). Ver la auditoría.
+
+## 🔁 HANDOFF 10-oct (cierre de la madre `202a717e`, después del reinicio de la PC)
+
+1. **Objetivo:** el GOAL VIGENTE (1.0 publicada y mirada; puntos 1-4 al 16-oct). Sigue faltando **publicar**, no construir.
+2. **En main / producción desde el 9-oct:**
+   - onia-hermes: #179 (colas en loop, skills `equipo-de-agentes` y `aprender-de-todo`, regla del 9-oct en CLAUDE.md),
+     #181 (trampa de memoria), #175 de Ventas (script de grabación y preview del VSL), #182 de Hermes;
+   - latidos por hora en el servidor para Plataforma, Marca, Lucía y Hermes (ids en `equipo-de-agentes` §2 bis), medido:
+     corren todos;
+   - onia-platform: **nada nuevo en producción**. `master` = `c94b9daa` (#141), y #141 NO llegó a producción: el cron de las
+     15:50 UTC del 9-oct falló por Google Fonts en el build.
+3. **A medias y dónde:**
+   - **onia-platform #143 (F1, fuentes servidas desde el repo):** lo subió la madre desde el bundle de Plataforma. CI verde
+     y `CLEAN`, falta mergear y publicar. Sin F1, cualquier publicación puede volver a caerse;
+   - después, #142 (pago de usted) y #140 (widget, con 3 cambios de infra), y el resto de `cola/loop/plataforma.md`;
+   - **Plataforma pasó 20 h parada** (9-oct 13:00 → 10-oct 13:00 La Paz) esperando 4 sí/no de Sergio Urcullo **en su
+     propia sesión**: F1, #142, #140 con su infra, y si la regla del 9-oct es suya. El 10-oct, 08:57 La Paz, él entró a esa
+     sesión («mostrame los puntos»).
+4. **Archivos:** este handoff · `equipo-de-agentes` (§2 bis latidos; trampas de permisos y de memoria) ·
+   `cola/loop/*.md`.
+5. **Intentos fallidos:**
+   - la madre le «trasladó» el permiso a Plataforma por mensaje y con la regla en main: **no vale y está bien que no valga**,
+     porque el permiso lo escribe Sergio Urcullo en la sesión que publica;
+   - Ventas sin latido: su entorno «Default» no muestra el id por la API (`get_session` tampoco la encuentra);
+   - el 9-oct la madre cerró Chrome y WhatsApp para liberar memoria; Sergio Urcullo los usa y no se cierran. La fuga real
+     era el paged pool del kernel (17 GB); reiniciar la liberó (0,96 GB el 10-oct).
+6. **Depende de Sergio Urcullo:**
+   - responder en Plataforma los 4 sí/no (F1, #142, #140, «la regla es mía»);
+   - grabar las piezas de `GRABAR-10-16-OCT.md`;
+   - bucket R2 (gasto), CAFC del SIAT, tarjeta en ONIA Ads, bio de IG + cal.com, OK de Leslie Mercado Moreno para el
+     predictor;
+   - Avast (sospechoso de la fuga): lo saca él si quiere.
+7. **Próximos pasos:** con el sí en Plataforma, F1 → publicar → mirar /login → #142 → #140 → cola. Ronda con medición de
+   memoria. Si otra sesión espera un sí, juntarlo en una sola lista para Sergio Urcullo.
 
 ## 🔁 HANDOFF 9-oct (cierre de la madre `202a717e`, rama `claude/onia-madre-v2-pr-review-2d85bb`)
 
