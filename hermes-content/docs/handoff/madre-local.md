@@ -9,6 +9,25 @@ párrafo describe el relevo del 5-oct.
 La madre saliente (`cfdce1bb…`, rama `claude/onia-sesion-madre-77f719`, worktree `infra-loops-revision-3fc7b1`) llevaba
 días abierta y su conversación costó ~777 M de tokens. **La madre nueva arranca de cero y lee solo esto.**
 
+## ⏱ MADRE v3 EN CURSO — 10-oct ~15 UTC (local `d5e87d2e`, rama `claude/onia-sesion-madre-9313fb`)
+
+- **Ronda** `CronCreate` 7,27,47 + chequeo único 11:58 La Paz (mirar /login tras la publicación de las 15:50 UTC).
+- **#139 sin riesgo al publicar:** migración idempotente (IF NOT EXISTS / CREATE OR REPLACE / DROP POLICY IF EXISTS), ya
+  aplicada en prod 13:29 UTC con backup; el deploy no corre `prisma migrate`. Falta solo registrarla en `_prisma_migrations`
+  (a Plataforma se lo frenó su control de permisos).
+- **Integrados por la madre, suite completa en verde, pusheados a la rama del PR:** #114 C15b `5c5beaf8` (10.026/0, CLEAN) y
+  #132 K1 `0abc65d5` (10.010/0). Worktrees `C:/dev/proyectos/onia-platform-codex-{c15b,k1}` (node_modules = junction a
+  `onia-platform-v1-correo-20260927`, porque el de `-integracion-` quedó vacío). Plataforma avisada: los mergea en su orden.
+- **Codex cloud:** `/book` en usted → https://chatgpt.com/codex/tasks/task_e_6aca4e5cf680832784ec553ba5c3d5ef (aplicar diff
+  con `codex cloud apply`, suite completa, PR). Codex al 56 % semanal, reinicia 13-oct 23:57 La Paz; Sergio Urcullo dice 3 refills.
+- **Workflow `wf_8a89c687-831`:** análisis de los 15 puntos (Opus, escribe `research/2026-10-10-analisis-plataforma-1.0.md`),
+  brecha nube/PC de skills y reglas (Sonnet), billetera (Haiku), verificadores, plan en el scratchpad. Si se corta: resume.
+- **Lucía G1:** el ensayo en el VPS (copiar `ig-reel.mjs` a `/root/bin` + dry-run) lo frenó el control de permisos de la
+  madre («Remote Shell Writes»). Token de IG de Lucía vence 13-18 oct. Espera decisión de Sergio Urcullo.
+- **Sesiones (leídas 14:30 UTC):** Plataforma (Opus) espera 2 sí en su sesión; Marca (Sonnet) espera brutos + 4 sí;
+  Ventas (Sonnet) parada desde 9-oct 16:45, sin latido → se le mandó tarea (go/no-go + campaña lista en pausa);
+  Lucía (Sonnet) espera la receta desde la PC; Hermes (Opus, 0 tareas) espera su sí a `aplicar`.
+
 ## ▶ ARRANQUE de la madre nueva (texto para pegar, 10-oct)
 
 > Sos la sesión MADRE de Onia, en la PC de Sergio Urcullo, y la ÚNICA madre. Invocá `onia-router`, `equipo-de-agentes`,
