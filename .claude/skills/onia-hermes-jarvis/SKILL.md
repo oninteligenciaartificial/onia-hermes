@@ -20,7 +20,7 @@ description: Invocar ANTES de tocar a Hermes (el asistente de Sergio Urcullo por
 | La constitución de Hermes y sus skills | `hermes-content/deploy/hermes-agent/SOUL.md` · `hermes-content/skills/{agenda-calendario,pedir-a-claude}.md` |
 | Resumen y cierre · aduana · calendario · pedidos · su vuelta | `scripts/loops/{jarvis-resumen,onia-tg,agenda,pedido-claude,respuestas-pedidos}.sh` |
 | ¿Hermes o el asistente de Codex / dots? Decisión, pruebas y cuándo revisarla (8-oct: queda Hermes; dots bloqueado por edad) | `hermes-content/docs/ASISTENTE_CODEX_VS_HERMES.md` |
-| Fuentes del resumen/cierre que no son del carril (9-oct) | qué sale: `hermes-content/docs/cola/plan-3-semanas/CALENDARIO-PUBLICACION-<d1>-<d2>-<MES>.md` (el rango sale del nombre); qué salió: `/root/publicar/publicado.jsonl` del VPS (lo escriben los publicadores de `hermes-content/deploy/vps-ops/publicar/`) |
+| Fuentes del resumen/cierre que no son del carril (9-oct) | qué sale: `hermes-content/docs/cola/plan-3-semanas/CALENDARIO-PUBLICACION-<d1>-<d2>-<MES>.md` (el rango sale del nombre); qué salió: `/root/publicar/publicado.jsonl` del VPS (lo escriben los publicadores de `hermes-content/deploy/vps-ops/publicar/`); relojes (10-oct): tabla §G de `hermes-content/docs/cola/loop/madre.md`, leída de `origin/main` del clon; colas paradas: `git log` de `cola/loop/*.md` en `origin/main` |
 | Formato de todo lo que le llega (8-oct) | PASÓ · NECESITO · SIGUE: `jarvis-resumen.sh` (`parte`/`grupo`), SOUL `## Formato fijo de cada mensaje`, prompt de la rutina §5 |
 
 ## Cómo se llega al VPS desde la nube, y qué NO anda
@@ -175,6 +175,18 @@ CLI de Hermes.
 - **Un calendario sin año** (`CALENDARIO-PUBLICACION-28-3-ENE.md`): el año es el que hace que el rango
   cubra la fecha; la fila se casa por el número de día (normalizado a NFC); entre dos que se solapan
   gana el que empieza después; y desde que existe uno, los `S*-GUIONES` (sin año) no vuelven nunca.
+- **Leer una tabla de un `.md` de la madre** (10-oct, relojes de `madre.md` §G). La cabecera se guarda al
+  entrar a la sección y NO se borra al salir: el primer parser la borraba en cada `## `, y como §G no es la
+  última sección, la `## H.` de abajo la dejaba en `None` y el resumen decía «no pude leer los relojes»
+  con la tabla sana. Columnas por nombre exacto (`fecha`, `qué`, `dueño`; un prefijo `qu` casaba «Quién»),
+  nunca por posición. Fecha sin año = la PRÓXIMA vez que cae, salvo que haya pasado hace 60 días o menos
+  («la más cercana» leía un 15-abr en octubre como «vencido hace 178 días»). Un rango arranca a mostrarse
+  desde su primer día y vence al terminar («28 al 2-nov»: el 28 es de octubre). Lo que no entiende sale
+  con ❓, no se calla: NECESITO diría «Nada.» con un reloj vivo. Probado contra el `madre.md` real de la
+  rama de la madre antes de escribir la prueba: el fixture solo no lo habría encontrado.
+- **`git show … | grep -q` con `pipefail` miente en archivos grandes** (10-oct). `grep -q` sale al primer
+  acierto, `git` recibe SIGPIPE y el pipeline da error: una cola de más de 64 KB con tareas se leía «sin
+  tareas». Usar `grep -c … >/dev/null` (lee todo) o leer a una variable primero.
 - **`aplicar` copia del SOUL SOLO las secciones que nombra** (9-oct). Una regla nueva escrita dentro de
   otra sección («Cómo hablarle a Sergio») existe en `main` y nunca llega a `/root/.hermes/SOUL.md`. Regla
   nueva = sección propia que termina en `---`, su paso en 5c (o 5d si depende de la llave), su chequeo
