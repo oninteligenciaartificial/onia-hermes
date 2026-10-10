@@ -285,6 +285,13 @@ si falla la Fase A, no tocó nada.
 | P4 | `aplicar` ya prueba crear, mover y cancelar su propio evento. La prueba real: «agendá una prueba mañana a las 7» → Hermes muestra el cambio → con su sí lo crea; «cancelá la prueba» → sí → lo cancela | El evento aparece y desaparece en su Google Calendar, y nada pasó sin su sí |
 | P5 | La madre, por SSH con el OK de Sergio Urcullo: `/root/bin/onia-tablero.sh create "Prueba P5"` y `/root/bin/onia-tablero.sh block <id> "Prueba P5: contestá ok <id>" --kind needs_input`. Él contesta `ok <id>` a Hermes | El aviso le llega en ≤2 min (fuera de la noche y de sus bloques) y la tarea sale de `blocked`. Después se completa |
 
+**El diagnóstico diario (10-oct, `HERMES_ROL_QA.md` Q2).** `.github/workflows/hermes-qa-diario.yml` corre
+`diagnostico.sh` todos los días a las 10:00 UTC (06:00 La Paz), en el mismo runner del VPS y con el mismo
+`concurrency` que `aplicar`, así que nunca se pisan. Solo lee y no tiene inputs. `aplicar` y `revertir`
+siguen siendo manuales. La sesión de la nube lee su log con el MCP de GitHub, sin SSH. La sección 15 da
+cada línea del crontab con su cadencia real (el hueco más largo en una semana), su log y la última vez que
+escribió, y marca MUDO lo que pasó dos veces su cadencia sin escribir.
+
 ## 9. Riesgos y límites conocidos, sin maquillar
 
 - **La sesión del pedido corre sola y sin pedir permiso** (así son las rutinas), con el texto que él

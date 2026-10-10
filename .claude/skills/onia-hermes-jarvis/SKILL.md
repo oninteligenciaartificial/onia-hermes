@@ -17,6 +17,7 @@ description: Invocar ANTES de tocar a Hermes (el asistente de Sergio Urcullo por
 | Qué le llega a Sergio Urcullo y cuándo (06:30, 21:30, las 4 interrupciones) | `hermes-content/docs/ONIA_CEREBRO.md` §«La regla de entrega» |
 | Pedidos a Claude desde Telegram: diseño, prompt de la rutina, llave | `hermes-content/docs/TELEGRAM_COMMAND_CENTER.md` |
 | El acceso al VPS y sus tres acciones | `hermes-content/deploy/hermes-jarvis/` (+ `README.md`) |
+| El VPS visto cada día sin la PC (10-oct, Q2) | `.github/workflows/hermes-qa-diario.yml`: a las 10:00 UTC corre SOLO `diagnostico.sh` (24 h). La sección 15 da cada línea del crontab con su cadencia real, su log y si está MUDA. Se lee con el MCP de GitHub: `actions_list` → `get_job_logs` |
 | La constitución de Hermes y sus skills | `hermes-content/deploy/hermes-agent/SOUL.md` · `hermes-content/skills/{agenda-calendario,pedir-a-claude}.md` |
 | Resumen y cierre · aduana · calendario · pedidos · su vuelta | `scripts/loops/{jarvis-resumen,onia-tg,agenda,pedido-claude,respuestas-pedidos}.sh` |
 | ¿Hermes o el asistente de Codex / dots? Decisión, pruebas y cuándo revisarla (8-oct: queda Hermes; dots bloqueado por edad) | `hermes-content/docs/ASISTENTE_CODEX_VS_HERMES.md` |

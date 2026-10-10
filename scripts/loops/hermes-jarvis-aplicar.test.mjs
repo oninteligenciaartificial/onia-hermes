@@ -14,7 +14,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { spawnSync, execFileSync } from "node:child_process";
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, chmodSync, existsSync, readdirSync, copyFileSync, unlinkSync, rmSync } from "node:fs";
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, chmodSync, existsSync, readdirSync, copyFileSync, unlinkSync, rmSync, utimesSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -923,4 +923,69 @@ test("latido: corridas que se pisan no se roban el archivo temporal", () => {
     { env: { ...process.env, ONIA_LATIDO_DIR: join(dir, "lat") }, encoding: "utf8" });
   assert.equal(r.stderr, "", "ninguna dice «no pude anotar»");
   assert.deepEqual(readdirSync(join(dir, "lat")), ["respuestas-pedidos"], "y no quedan temporales");
+});
+
+// ── diagnostico: los latidos del cron (10-oct, HERMES_ROL_QA.md Q2) ────────────────────────────────
+// Hoy un vigía mudo y uno sano se ven igual. Se corre la sección 15 del diagnostico.sh REAL con un
+// crontab doble y logs con fechas puestas a mano.
+function diagnosticoLatidos() {
+  const dir = mkdtempSync(join(tmpdir(), "jarvis-diag-lat-"));
+  const LOG = join(dir, "log");
+  const LAT = join(dir, "lat");
+  mkdirSync(LOG, { recursive: true });
+  mkdirSync(LAT, { recursive: true });
+  const hace = (seg) => new Date(Date.now() - seg * 1000);
+  const log = (n, seg) => { writeFileSync(join(LOG, n), "x\n"); utimesSync(join(LOG, n), hace(seg), hace(seg)); };
+  log("aduana.log", 3600);       // corre cada 5 min y no escribe hace 1 h: MUDO
+  log("diario.log", 2 * 3600);   // corre una vez por día y escribió hace 2 h: ok
+  writeFileSync(join(LAT, "aduana-soltar"), "1760000000 0 300\n");
+  const lineas = [
+    "SHELL=/bin/bash",
+    // El sano va primero en el crontab: la salida igual tiene que poner lo mudo arriba.
+    "0 10 * * * /root/bin/onia-diario.sh >> /var/log/diario.log 2>&1",
+    "*/5 * * * * ONIA_AVISO_SOLTAR=1 /root/bin/onia-tg.sh >> /var/log/aduana.log 2>&1",
+    "*/10 * * * * /root/bin/onia-vigia-sin-log.sh",
+    "25,55 0-1,10-23 * * * /root/bin/onia-latido.sh agenda-bloques 1800 '/root/bin/onia-agenda.sh --bloques' >> /var/log/agenda.log 2>&1",
+    "@reboot /root/bin/onia-al-arrancar.sh",
+    "# 0 * * * * /root/bin/pausado.sh >> /var/log/pausado.log",
+  ];
+  const dobles = join(dir, "dobles");
+  ejecutable(join(dobles, "crontab"), `#!/usr/bin/env bash\ncat <<'CRON'\n${lineas.join("\n")}\nCRON\n`);
+  const diag = readFileSync(join(DIR, "diagnostico.sh"), "utf8");
+  const s15 = diag.slice(diag.indexOf('sec "15.'), diag.indexOf('sec "fin"'));
+  assert.ok(s15.length > 0, "no encontré la sección 15 del diagnóstico");
+  const guion = `REDACTAR_SED='s/a^//'\n` + readFileSync(join(DIR, "comun.sh"), "utf8") + "\n" +
+    s15.replaceAll("/var/log/", LOG + "/").replaceAll("/var/lib/onia-latido", LAT);
+  // Las líneas del crontab doble también apuntan a /var/log: el python lee esas rutas.
+  writeFileSync(join(dobles, "crontab"), `#!/usr/bin/env bash\ncat <<'CRON'\n${lineas.join("\n").replaceAll("/var/log/", LOG + "/")}\nCRON\n`);
+  chmodSync(join(dobles, "crontab"), 0o755);
+  return spawnSync("bash", ["-s"], { input: guion, env: { ...process.env, PATH: `${dobles}:${process.env.PATH}` }, encoding: "utf8" });
+}
+
+test("diagnóstico: cada línea del cron con su cadencia real, su log y si está muda", () => {
+  const r = diagnosticoLatidos();
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  const filas = r.stdout.split("\n");
+  const fila = (que) => filas.find((l) => l.includes(que)) || "";
+  assert.match(fila("aduana.log"), /^MUDO\s+cada 5 min\s+hace 60 min\s+onia-tg\.sh → /);
+  assert.match(fila("diario.log"), /^ok\s+cada 24 h\s+hace 2 h\s+onia-diario\.sh → /);
+  assert.match(fila("onia-vigia-sin-log.sh"), /^sin log\s+cada 10 min/);
+  // De 01:55 a 10:25 UTC no corre: su cadencia real es el hueco más largo, 8 h 30.
+  assert.match(fila("latido:agenda-bloques"), /^MUDO \(no hay log\)\s+cada 8 h/);
+  assert.match(fila("@reboot"), /—/);
+  assert.doesNotMatch(r.stdout, /pausado|SHELL/, "ni lo comentado ni las variables");
+  assert.ok(filas.findIndex((l) => l.startsWith("MUDO")) < filas.findIndex((l) => l.startsWith("ok")), "lo mudo va primero");
+  assert.match(r.stdout, /--- 5 línea\(s\): 2 MUDA\(S\), 1 sin log/);
+  assert.match(r.stdout, /aduana-soltar: 1760000000 0 300 \(2025-10-09T08:53:20Z\)/);
+});
+
+test("el QA diario corre SOLO el diagnóstico, por horario, sin inputs y sin pisarse con un aplicar", () => {
+  const wf = readFileSync(join(RAIZ, ".github", "workflows", "hermes-qa-diario.yml"), "utf8");
+  assert.match(wf, /^\s+- cron: "0 10 \* \* \*"/m, "una vez por día, antes del resumen de las 06:30");
+  assert.match(wf, /^concurrency:\n\s+group: hermes-jarvis\n\s+cancel-in-progress: false$/m, "el mismo grupo que aplicar");
+  assert.doesNotMatch(wf, /^\s+inputs:|\$\{\{\s*(github\.event\.)?inputs/m, "nada de afuera elige qué corre");
+  assert.doesNotMatch(wf, /aplicar\.sh|revertir\.sh|ACTIVOS_B64|RUTINA_/, "ni aplicar, ni revertir, ni la llave de la rutina");
+  assert.match(wf, /cat "\$DIR\/diagnostico\.sh"/);
+  assert.match(wf, /\| sed -E -f "\$DIR\/redactar\.sed"/, "la salida se redacta también acá");
+  assert.match(wf, /^\s+persist-credentials: false$/m);
 });

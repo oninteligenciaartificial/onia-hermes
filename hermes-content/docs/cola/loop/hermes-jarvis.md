@@ -24,6 +24,8 @@ carril puede hacer solo. Q1 espera `aplicar` (ver «Bloqueado»).
 
   **Hecho:** la primera corrida programada en verde con la tabla, y las cuatro respuestas en «Hallazgos para otros»
   con su dueño. Lo mergea la madre.
+  - [x] Código: el workflow y la sección 15, con pruebas. Va en un PR **para que lo mergee la madre** (lo dice el rol).
+  - [ ] La primera corrida programada (10:00 UTC del día después del merge) y las cuatro respuestas.
 - [ ] **Q3 Fase 2 de la aduana: que nada le avise por fuera.** Pasan por `onia-tg.sh` los avisos de n8n «Vigia lead sin
   respuesta», «Chatbot: seguimiento» y «Monitor de Salud n8n», y el aviso de «Backup diario» (el respaldo sigue
   corriendo). Los canarios de caída esperan los 30 min de la interrupción 4. **Hecho:** 24 h medidas en su Telegram
