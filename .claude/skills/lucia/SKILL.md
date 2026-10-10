@@ -250,6 +250,10 @@ Se conserva lo medido por si Sergio Urcullo vuelve a pedir una pieza de producto
     y el 18-oct, y no se midió desde entonces;
   - hay que pasarlo a `/root/.config/onia-publicar/ig-lucia.env` (`IG_USER_ID`, `IG_TOKEN`) y renovarlo con
     `ig-refrescar.sh`.
+  - **Saldo de Higgsfield: se mide, no se resta (10-oct).** El «saldo 454,76» del 8-oct era 541,26 − 86,5; el real era 438,17. Con `transactions`
+    (MCP) el libro cuadró mis 86,5 y mostró 16,59 cr de otra mano. Antes de fijar un tope o citar un saldo: `balance` y `transactions`.
+  - **Qué puede prometer Lucía si vende Onia (10-oct, dirección de Sergio Urcullo vía la madre):** solo lo de `ONIA_CATALOGO_DE_VENTA.md` §8 («se puede
+    decir»), nunca el tratamiento a medias ni la IA por WhatsApp, y sin hacerse pasar por clienta ni odontóloga. Análisis por pieza en la cola.
   - **Renovación, leída del script el 10-oct (caso: pedido de la madre «dejá los pasos exactos»):** es
     `graph.instagram.com/refresh_access_token?grant_type=ig_refresh_token`, token de 60 días que debe tener más de 24 h y no estar
     vencido; el script recorre todos los `ig-*.env` (cron lunes 13:00 UTC), así que `ig-lucia.env` se renueva solo apenas existe. Si ya

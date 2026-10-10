@@ -7,6 +7,80 @@
   SHA-256 en `videos/lucia-entrega/`; previews 360p en `videos/lucia-gN/qa/`. 0 créditos más.
 - [ ] Publicar en la cuenta de Lucía lo que pase el control de identidad — **pasa a Bloqueado** (abajo): corre en el VPS.
 
+## Dirección de Sergio Urcullo · 10-oct (vía la madre): que Lucía venda Onia Platform y sea influencer
+
+> Literal, relayado por la madre: «quiero ver las piezas de Lucía y que tengan sentido, ya que la idea es que venda Onia Platform y que
+> sea influencer, y hasta ahora no perfeccionás tu técnica con Higgsfield». Choca en la letra con el 8-oct («no es necesario que muestres
+> el producto, sos una influencer»). **Cómo lo leo:** el 10-oct es posterior y más concreto, así que manda; el 8-oct sigue valiendo en
+> «no se hace un tour de pantallas». Lucía vende **por el problema, la frase que el catálogo deja decir y un CTA**, no por una demo.
+> Si Sergio Urcullo lo lee distinto, que lo diga en esta sesión.
+> ⚠️ Aviso honesto: `CLAUDE.md` («El objetivo del NEGOCIO manda…») dice que el influencer **no pasa el test de tres preguntas** de la
+> estrategia. No lo reabro; lo anoto porque «venda Onia Platform» la convierte en canal de venta, no en línea nueva, y eso sí es coherente
+> con congelarla como aprendizaje + cuenta para facturar después.
+
+### 1) Las 8 piezas listas: ¿venden Onia Platform? **Hoy, 0 de 8.**
+
+Todas enseñan a hacer contenido con IA. Quien las busca es un creador o alguien curioso de la IA, no el dueño de una clínica de Santa Cruz
+con 2-6 profesionales (`ONIA_CLIENTE_IDEAL.md`). Sirven para audiencia de «influencer» y para aprender; no traen un solo lead de Onia.
+
+Lo que **se puede decir** hoy (`ONIA_CATALOGO_DE_VENTA.md` §3 y §8): recordatorio de cita por **correo** a las 24 h y 2 h, sin abrir el sistema ·
+«Onia te propone con IA el texto de cada recordatorio; vos lo aprobás una vez; la IA no ve los datos de tus pacientes» · «Todas las
+mañanas Onia te deja anotado a quién escribirle (quien no vuelve, quien te debe, quien tiene cita mañana) con el mensaje listo; nada sale sin tu
+aprobación» · «Preguntale a Onia ¿cuánto me deben? ¿cuánto cobré hoy?». **NO se puede decir:** que la IA atiende o agenda por WhatsApp, que
+recupera pacientes con **tratamiento a medias** (el detector no encuentra a nadie hoy), ni que ya lo usan clínicas (0 pagos). Reglas que no
+se tocan: Lucía es un personaje IA declarado; **no se hace pasar por clienta ni por odontóloga**; sin testimonio, sin cifras inventadas, sin
+cartel de «muy pronto». Toda pieza que prometa una función necesita la tabla «se promete / funciona» y el OK de Sergio Urcullo antes de salir.
+
+| Pieza | ¿Vende? | Cómo quedaría si mostrara un problema de un negocio que Onia resuelve |
+|---|---|---|
+| **G1** Este video no fue grabado (3 pasos) | **No** | Misma estructura gancho-3 pasos-CTA, otro tema: «Tu paciente no vino. No fue mala fe: se olvidó». Paso 1: el hueco en la agenda. Paso 2: el aviso llega por correo 24 h y 2 h antes sin que nadie lo mande. Paso 3: «Probalo 14 días gratis». Lucía lo cuenta como personaje IA de Onia, sin cliente que hable. |
+| **G2** La misma foto, seis clips | **No** | No se arregla cambiando el texto: es una prueba de motores. Se conserva como **pieza de aprendizaje** (1 por semana) o se congela. |
+| **G3** Tres errores de la IA que atrapé | **No (casi)** | La idea «la IA se equivoca, por eso se revisa antes de salir» sí conecta con «Onia propone el texto y vos lo aprobás una vez». Pero eso exige ejemplos de plantillas reales del redactor y hoy hay **0 aprobadas**: no se fabrican. Queda para cuando existan. |
+| **G4** Seis motores de imagen | **No** | Aprendizaje. Sin versión de venta. |
+| **G5** Cómo se mide una cara | **No** | Aprendizaje. Sin versión de venta. |
+| **L01** Hola, soy Lucía. No existo. | **No, pero es la más fácil** | Cambiar la última lámina por «Me hizo Onia: el sistema que le avisa a tu paciente antes de la cita» + CTA. 0 créditos, un render. |
+| **C1** Un video sin grabar, en 3 pasos | **No** | Versión carrusel de la G1 nueva: problema → 3 pasos → CTA. |
+| **C2** Seis motores de imagen | **No** | Aprendizaje. Sin versión de venta. |
+
+**Veredicto:** de 8, 3 se pueden reconvertir (G1, C1, L01), 1 queda condicionada (G3) y 4 son aprendizaje puro (G2, G4, G5, C2). **Propuesta de
+ritmo (3 por semana):** 2 piezas de problema-de-negocio + 1 de aprendizaje de Higgsfield. Las piezas nuevas salen a 0 créditos
+(fotos del kit + HyperFrames + capturas reales de la demo, que sigue pendiente de la cuenta demo). Nada de esto se produce hasta que la madre
+confirme el rumbo, porque cambia lo ya validado.
+
+### 2) Plan de técnica de Higgsfield
+
+**Qué falla hoy, con el ejemplo medido** (`v4/PROCEDENCIA.jsonl`, líneas del 3 y 8-oct; `videos/lucia-g2/`, `videos/lucia-g3/`):
+
+| Área | Qué falla | Evidencia |
+|---|---|---|
+| **Identidad en clip** | Anclar el clip a la foto (`start_image`) hace decaer la cara con los segundos | Kling std 0,79 → 0,72; Kling pro 0,805 → 0,739; Seedance mini 0,69 → 0,64 (6 s, misma foto K1) |
+| **Identidad vs escena** | Lo que sostiene la cara (referencias) cambia la escena | Kling O3 con 5 refs, sin foto de inicio: 0,80 → 0,82 pero inventa el cuarto y el plano. Seedance mini con foto + 3 refs: 0,71 → 0,80, pero reencuadra (cara de 139 a 347 px) e inventa un letrero |
+| **Manos** | Falla de verificación más que de generación: no hay medición automática | K4 mirado cuadro a cuadro: 5 dedos contables en 6 de 8 cuadros; en 2 cruza el dedo de la otra mano; desde el 128 las manos se juntan y salen |
+| **Fondo** | Objetos inventados que dan a entender un rubro o una marca; los «no» del prompt se ignoran | Sillones dentales y logos de monitor en 2 de 6 fotos de motores (hubo que limpiarlas); K4_1 descartada pese a «no screens, no text, no logos»; el maniquí escribió texto basura |
+| **Movimiento** | Pagar más no mueve mejor | Kling pro no mejora el movimiento de std (solo nitidez); Cinema Studio cuesta 5 cr/s contra 1,25 de Kling std. **No tengo métrica de movimiento**, solo mirado |
+| **Luz** | **Sin dato propio**: ningún QA la midió | Hueco declarado, no inventado. Se mediría con luma y temperatura de color entre cuadro 0 y último |
+| **Tamaño de cara** | Caras de ~120 px a 720p hacen poco fiable el control de cara | Kling a 720p: 115-120 px; bajo ~200 px el control de cara es poco fiable |
+
+**3 pruebas chicas** (cotizadas **sin gastar** con `get_cost:true` del MCP el 10-oct, que es el mismo preflight que `higgsfield generate cost`;
+esta nube no tiene la CLI. Cotizadas con la foto K1 de inicio y sin las referencias, que no cambian el precio en estos modelos; el 8-oct la
+cotización con referencias coincidió con el cobro):
+
+| # | Eje | Prueba | Cotización | Qué decide |
+|---|---|---|---:|---|
+| **P1** | **Prompt** (imagen) | Seedream 4.5, recepción: A) prompt con lista de «no», como K4_1 · B) describir lo que SÍ hay («pared lisa blanca y una puerta de madera cerrada, nada más») · C) B + fondo desenfocado. 3 tomas, 6 referencias de cara | **1 cr c/u = 3 cr** | Si describir en positivo evita fondos inventados sin bajar de 0,80. Una toma cada una: indicio, no estadística |
+| **P2** | **Referencia** (clip) | Seedance mini, 6 s, 720p, mudo, foto K1 + 3 refs + prompt «cámara fija, mismo encuadre, sin zoom, sin letreros» | **6 cr** | Si se mantiene la ganancia de cara (0,80) **sin** reencuadre ni letrero. Éxito: final ≥ 0,78, cara que no crece más de 1,3× (antes 2,5×), 0 letreros |
+| **P3** | **Modelo** (clip) | MiniMax H3, 6 s, foto K1 + refs, 9:16, 2K. Único modelo sin probar que acepta foto de inicio **y** referencias a 2K (cara más grande = control más fiable) | **12 cr** | Si un modelo distinto rompe el dilema «cara o escena». Alternativas cotizadas: Kling Turbo 9 cr (solo foto), Grok 1.5 27 cr, Seedance 2.5 42 cr (descartado por precio) |
+
+**Total: 21 cr** (P1 3 + P2 6 + P3 12). **Qué necesita permiso:** P1 es lote chico de imagen (< 5 cr): autorizado el 8-oct, lo puedo correr en cuanto
+la madre lo confirme. **P2 y P3 son video: piden el sí de Sergio Urcullo, escrito en esta sesión.** Además, del tope mensual de Lucía (150) quedan
+**11 cr** (139 gastados): P1 + P2 caben (9); **P3 no cabe** sin que Sergio Urcullo suba el tope o la espere a noviembre.
+**No gasté nada en esta tanda.**
+
+**Corrección de saldo:** mi nota decía «saldo 454,76 al 8-oct»; era una resta (541,26 − 86,5), no una medida. El saldo real hoy es **438,17**.
+El libro de movimientos (`transactions`) cuadra mis 86,5 al céntimo hasta las 22:13 UTC del 8-oct y muestra **16,59 cr más** entre las 22:17 y las 23:11
+de ese día (18 imágenes «GPT Image 2.5 Flare», 8 «Soul V2» y un Kling v3.0 de 3,75) que **no figuran en mi registro**. No sé qué sesión los
+gastó: la que haya sido debería sumarlos a su gasto de octubre, y la madre puede cruzarlos con las otras colas.
+
 ## Verificación de aprendizaje · 2026-10-09 (pedida por la madre)
 
 - [x] **Prueba de uso de `equipo-de-agentes` y `aprender-de-todo`** (leídas del commit `ca1fde0a`, sin fusionar su rama):

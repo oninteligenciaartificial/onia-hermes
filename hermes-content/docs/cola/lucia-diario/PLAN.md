@@ -71,7 +71,7 @@ Cada fila es una prueba chica, con su video. Los costos son cotizaciones en vivo
 | — | Fotos de lifestyle con la cara fija (Seedream + ancla, 1 por foto) | 0-5 | Consistencia en escenas nuevas | carruseles |
 
 - **Créditos:** al 8-oct hay 541,26 (medido en vivo) y lo que sobra se **borra en cada renovación** (el 1-oct se borraron 387,57). Octubre va
-  **139 de 150** (52,5 + 86,5 del lote de aprendizaje del 8-oct); saldo 454,76.
+  **139 de 150** (52,5 + 86,5 del lote de aprendizaje del 8-oct); saldo real **438,17** medido el 10-oct (454,76 era una resta; el libro de movimientos muestra 16,59 cr más gastados el 8-oct por otra mano).
 - Lo que se aprende se escribe en la skill `lucia`, en el mismo commit que el video.
 
 ## 4. Formatos
