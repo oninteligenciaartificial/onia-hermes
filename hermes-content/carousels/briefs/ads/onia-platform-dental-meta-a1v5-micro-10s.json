@@ -4,8 +4,8 @@
   "title": "ONIA — A1 v5 · micro-video de 10 s (formato «una frase»: Doctocliq 77 días; captura provisoria del 30-sep; sin audio)",
   "headline_anuncio": "¿Quién de mañana no confirmó?",
   "cta_anuncio": "Escríbanos",
-  "caption": "Un paciente que no confirma es una silla que puede quedar vacía, y el alquiler, la asistente y su hora se pagan igual.\n\nOnia es un sistema de gestión con IA para clínicas dentales: agenda, ficha con odontograma, tratamientos y cobros. Cada mañana le deja anotado a quién escribirle, con el mensaje listo, y nada sale sin que usted lo apruebe.",
-  "kicker": "Clínicas dentales de Santa Cruz",
+  "caption": "Para dueños y dueñas de clínicas dentales de Santa Cruz.\n\nUn paciente que no confirma es una silla que puede quedar vacía, y el alquiler, la asistente y su hora se pagan igual.\n\nOnia es un sistema de gestión para clínicas dentales: agenda, ficha con odontograma, tratamientos y cobros. Cada mañana le deja anotado a quién escribirle, con el mensaje listo, y nada sale sin que usted lo apruebe.",
+  "kicker": "Para dueños y dueñas de clínicas dentales de Santa Cruz",
   "headline": "¿Quién de mañana *no confirmó?*",
   "bloques": [
     {
@@ -49,7 +49,7 @@
     }
   ],
   "cta": "Escríbanos por WhatsApp",
-  "nota": "Se lo mostramos en una llamada de 20 minutos.",
+  "nota": "Se lo mostramos en una llamada.",
   "layout": {
     "feed": {
       "hora": 188,

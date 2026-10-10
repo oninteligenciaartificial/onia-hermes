@@ -78,7 +78,7 @@ Por eso, el orden de Sergio Urcullo (3-oct):
 - **Si el tipo de cambio pasa de 13,4:** los 14 días superan los Bs 750 y hay que cortar antes. A 15, se corta el día 12.
 - **Estructura:** un solo conjunto de anuncios, optimizado por conversación iniciada. Optimizar por demo o por pago no sale nunca de la fase de aprendizaje con esta caja (DE TERCEROS: hacen falta unos 50 resultados por semana).
 - **Piso de la fase de aprendizaje:** unos Bs 25 por día (SUPUESTO sobre datos de terceros). US$4 por día lo supera.
-- **Límite de gasto:** Meta no acepta un límite de campaña menor a US$100 (ADQ:337, MEDIDO). Por eso el tope se cuida con el presupuesto diario fijo y apagando a mano el día 14.
+- **Límite de gasto:** Meta no acepta un límite de campaña menor a US$100 (ADQ:337, MEDIDO). Por eso el tope se cuida con el presupuesto total de la campaña (US$ 56) con fecha de fin y apagando a mano el día 14 (corregido el 10-oct: antes decía «diario fijo»; el total es el único que garantiza el techo, ADQ §5.3).
 - **Respuesta:** antes de 24 horas. Así se abre una ventana gratis de 72 horas para los mensajes (página oficial de Meta, MEDIDO).
 - **Qué se mide cada día, a mano en una planilla:** conversaciones; cuántas son de un dueño o administrador de clínica; demos agendadas; costo por conversación; costo por demo; CTR; frecuencia.
 

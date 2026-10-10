@@ -90,6 +90,8 @@ ciertas hoy.** Contestar de memoria a este lead es exactamente la forma de quema
 
 ## 3. Qué se les manda — la fuente es `sales-kit/SEGUIMIENTO-LEADS.md`
 
+> **10-oct:** los textos exactos de las plantillas A, A (estética), B, B′ y N, la clasificación «¿es prospecto?» y lo que falta para mandarlos están en `SEGUIMIENTO-LEADS.md` §0. Los días de silencio al 10-oct van de 43 a 50.
+
 > ⚠️ **Corregido 5-oct.** Acá vivían los borradores del 1-oct, y el de «F» contestaba **«Sí»** a su pregunta 1
 > (el tratamiento a medias). El catálogo (§8) lo prohíbe desde el 2-oct: el detector existe en producción, pero
 > no encuentra a nadie. Además, eran textos libres por WhatsApp, y la ventana de 24 h se cerró en agosto: a los
