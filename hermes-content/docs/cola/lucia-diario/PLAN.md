@@ -100,7 +100,8 @@ tenemos, no abogada, de todo». La lista no se arma de memoria: sale de
 **El día 14:**
 - **Seguir** con ≥ 1 demo.
 - **Extender 2 semanas, una sola vez,** con 0 demos pero ≥ 3 preguntas reales o ≥ 10 clics.
-- **Pausar** si no se llega a eso.
+- **Ajustar formato o ritmo** si no se llega a eso. Antes decía «Pausar»: superado el 10-oct (Sergio Urcullo: Lucía «no se
+  pausa»).
 - **Parar cualquier día** si la cuenta queda «no recomendable» o si domina el comentario «esto reemplaza gente».
 
 ## 5. Vestuario
