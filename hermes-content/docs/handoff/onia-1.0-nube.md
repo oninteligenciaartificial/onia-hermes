@@ -91,6 +91,10 @@ Qué se vende y qué falta: `docs/ONIA_CATALOGO_DE_VENTA.md`.
 
 ## 4. Archivos
 
+- **Corte de la 1.0** (pedido de la madre con la dirección de Sergio Urcullo del 10-oct): `docs/ONIA_1.0_CORTE.md`,
+  una tabla por capa (rubros, SIAT y factura, agentes, cobro y QR, identidad) con 1.0 / 1.1 / después y evidencia
+  medida. Es el `ONIA_V1_ALCANCE.md` renombrado y reescrito (un tema, un archivo); ESTRATEGIA §11 y
+  `ONIA_PLAN_CIERRE_1_0.md` apuntan a él. Propone (no cambia) alinear «vender solo dental/estética» de ESTRATEGIA §7.
 - Bandeja en vivo: `lib/chatbot/bandeja-avisos.ts`, `lib/chatbot/bandeja-evento-chatwoot.ts`,
   `app/api/webhooks/chatwoot/eventos/route.ts`, `app/api/bandeja/eventos/route.ts`, `app/(dashboard)/inbox/*`,
   `scripts/chatwoot-webhook-eventos.mjs`. Skill `onia-backend` («Bandeja en vivo»).

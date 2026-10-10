@@ -201,7 +201,7 @@ Lo de arriba está cerrado. Esto no, y **ninguna de las cinco se puede decidir s
   resultado: es un bug de medición** (tres mediciones falsas del contraste antes
   de la buena).
 - El panel es **el que ya está en producción**: `feat/panel-tres-renglones` y el
-  mockup minimal quedaron descartados, y `ONIA_V1_ALCANCE.md` punto 3 quedó viejo
+  mockup minimal quedaron descartados, y `ONIA_V1_ALCANCE.md` (hoy `ONIA_1.0_CORTE.md`) punto 3 quedó viejo
   por eso.
 
 ---

@@ -1,5 +1,8 @@
 # PLAN DE CIERRE 1.0 — un solo plan, las notas de Sergio adentro
 
+> ⚠️ **10-oct:** qué se vende ya, qué va en la 1.1 y qué después lo dice `ONIA_1.0_CORTE.md`. Si este
+> plan del 13-sep lo contradice (por ejemplo, «los 5 rubros» o «factura SIAT» dentro de la 1.0), gana el corte.
+
 > Pedido de Sergio Urcullo (13-sep): *"antes de hacer cosas, primero leé mis notas y seguí
 > un plan para cerrar la 1.0"*. Este ES el plan. Se EDITA acá (sin fecha en el nombre);
 > el estado por punto vive en `cola/plataforma-v1.md` (Definición 1.0). Cada ítem dice
