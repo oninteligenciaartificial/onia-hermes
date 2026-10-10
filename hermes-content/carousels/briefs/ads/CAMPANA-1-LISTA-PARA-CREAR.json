@@ -270,8 +270,8 @@
         "ad_account_id": "1073680778314945",
         "page_id": "1140384625819526",
         "name": "ONIA · A1-E · Las 10:00",
-        "message": "Para dueños y dueñas de clínicas dentales de Santa Cruz.\n\nUn paciente que no confirma es una silla que puede quedar vacía, y el alquiler, la asistente y su hora se pagan igual.\n\nOnia es un sistema de gestión para clínicas dentales: agenda, ficha con odontograma, tratamientos y cobros. Cada mañana le deja anotado a quién escribirle, con el mensaje listo, y nada sale sin que usted lo apruebe.",
-        "headline": "Un paciente que no confirma es un sillón vacío",
+        "message": "Para dueños y dueñas de clínicas dentales de Santa Cruz.\n\nUn paciente que no confirma es una silla que puede quedar vacía, y el alquiler, la asistente y su hora se pagan igual.\n\nOnia es un sistema de gestión para clínicas dentales: agenda, ficha con odontograma, tratamientos y cobros. Cada mañana le deja anotado a quién escribirle, con el mensaje listo, y nada sale sin que usted lo apruebe.\n\nEscríbanos por WhatsApp y pida su demostración gratis.",
+        "headline": "Pida su demostración gratis",
         "call_to_action_type": "WHATSAPP_MESSAGE",
         "link_url": "https://wa.me/{{NUMERO_DEL_BOT}}?text=Hola%2C%20vi%20el%20anuncio%20de%20Onia%20%28D1%29.%20Tengo%20una%20cl%C3%ADnica%20dental.",
         "placement_customizations": [
@@ -300,8 +300,8 @@
         "ad_account_id": "1073680778314945",
         "page_id": "1140384625819526",
         "name": "ONIA · A1-V · Las 10:00 video",
-        "message": "Para dueños y dueñas de clínicas dentales de Santa Cruz.\n\nUn paciente que no confirma es una silla que puede quedar vacía, y el alquiler, la asistente y su hora se pagan igual.\n\nOnia es un sistema de gestión para clínicas dentales: agenda, ficha con odontograma, tratamientos y cobros. Cada mañana le deja anotado a quién escribirle, con el mensaje listo, y nada sale sin que usted lo apruebe.",
-        "headline": "Un paciente que no confirma es un sillón vacío",
+        "message": "Para dueños y dueñas de clínicas dentales de Santa Cruz.\n\nUn paciente que no confirma es una silla que puede quedar vacía, y el alquiler, la asistente y su hora se pagan igual.\n\nOnia es un sistema de gestión para clínicas dentales: agenda, ficha con odontograma, tratamientos y cobros. Cada mañana le deja anotado a quién escribirle, con el mensaje listo, y nada sale sin que usted lo apruebe.\n\nEscríbanos por WhatsApp y pida su demostración gratis.",
+        "headline": "Pida su demostración gratis",
         "call_to_action_type": "WHATSAPP_MESSAGE",
         "link_url": "https://wa.me/{{NUMERO_DEL_BOT}}?text=Hola%2C%20vi%20el%20anuncio%20de%20Onia%20%28D2%29.%20Tengo%20una%20cl%C3%ADnica%20dental.",
         "video_id": "{{video_id}}",
@@ -423,8 +423,8 @@
     "regla": "Tres copias de un concepto y no tres conceptos: cambia el formato, no el mensaje. El presupuesto está en la campaña: Meta empuja al que rinde, y que uno reciba pocas impresiones no es un veredicto."
   },
   "copy_de_usted": {
-    "texto_principal": "Para dueños y dueñas de clínicas dentales de Santa Cruz.\n\nUn paciente que no confirma es una silla que puede quedar vacía, y el alquiler, la asistente y su hora se pagan igual.\n\nOnia es un sistema de gestión para clínicas dentales: agenda, ficha con odontograma, tratamientos y cobros. Cada mañana le deja anotado a quién escribirle, con el mensaje listo, y nada sale sin que usted lo apruebe.",
-    "titular": "Un paciente que no confirma es un sillón vacío",
+    "texto_principal": "Para dueños y dueñas de clínicas dentales de Santa Cruz.\n\nUn paciente que no confirma es una silla que puede quedar vacía, y el alquiler, la asistente y su hora se pagan igual.\n\nOnia es un sistema de gestión para clínicas dentales: agenda, ficha con odontograma, tratamientos y cobros. Cada mañana le deja anotado a quién escribirle, con el mensaje listo, y nada sale sin que usted lo apruebe.\n\nEscríbanos por WhatsApp y pida su demostración gratis.",
+    "titular": "Pida su demostración gratis",
     "boton": "WHATSAPP_MESSAGE (Enviar mensaje de WhatsApp)",
     "prohibido": [
       "precio en la imagen o el texto",

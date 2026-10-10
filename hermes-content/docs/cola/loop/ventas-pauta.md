@@ -8,6 +8,7 @@
 - [x] (10-oct, pedido de la madre) Go/no-go del 13-oct clasificado en ADQ §5.10 y campaña prueba 1 lista para crear: `carousels/briefs/ads/CAMPANA-1-LISTA-PARA-CREAR.json` + `scripts/campana-lista.test.mjs`. Nada creado en Meta.
 
 - [x] (10-oct, pedido de la madre) Borradores del seguimiento de los 7 leads de agosto y revisión de si son prospectos: `sales-kit/SEGUIMIENTO-LEADS.md` §0. Nada enviado. «El nuevo» y las 8 colgadas esperan los datos del VPS (la nube no tiene llave).
+- [x] (10-oct, dirección de Sergio Urcullo: «que mire ads library y mire qué anuncios funcionan») Biblioteca de anuncios por el conector: 252 de software (62 con más de 30 d) y 417 de clínicas con alcance en Bolivia (43 con 30 d o más); ficha de 12 dimensiones, reglas R1-R9 en la skill §8.3 y ADQ §2.6.2, A1 v6 y A2 v3 rehechas y 3 piezas nuevas (N1 agenda, N2 ficha, N3 prueba 14 d), todas mirada y con el detector en 0. Nada creado en Meta. Pedido a la madre: 8 creativos de más de 50 d que faltan capturar (el conector no trae formato). `references/video-intake/2026-10-10-biblioteca-anuncios-software-clinicas.md`.
 
 ## Bloqueado
 - **Sergio Urcullo:** tarjeta en ONIA Ads (gasto); `ONIA_QA_EMAIL` y `ONIA_QA_PASSWORD` de una cuenta de prueba en el entorno de Ventas; las tomas a cámara T9, T10 y T12 del VSL.

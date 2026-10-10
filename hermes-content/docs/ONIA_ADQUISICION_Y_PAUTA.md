@@ -287,6 +287,28 @@ Lectura: **a un dueño de clínica de Santa Cruz solo le llega pauta de software
 
 **Pedido PC (madre):** (1) Pinterest con la sesión de Sergio Urcullo: tableros de anuncios de software y de clínicas dentales, solo inspiración visual. (2) Los creativos de estos ids, que desde la nube no se ven: AgendaPro `1967791207137782` (245 d), `1535822604884838` («Sofía llegó»), `1201810243016378`; Dt.Dental `1064012876297472`; CitaPro `1099827399129529`; Wa7pro `1777808483360755`; Doctocliq `1805370580894596`.
 
+### 2.6.2 Estudio del 10-oct con el conector (Sergio Urcullo: «que mire ads library y mire qué anuncios funcionan»)
+
+**Datos:** `research/competencia/anuncios/BIBLIOTECA-10OCT.json` (252 anuncios activos de 14 anunciantes de software, 62 con más de 30 días; 417 de clínicas con alcance en Bolivia, 43 con 30 días o más). **Ficha de las 12 dimensiones:** `references/video-intake/2026-10-10-biblioteca-anuncios-software-clinicas.md`. **Reglas con su caso:** skill `onia-ventas-pauta` §8.3. Los porcentajes salen solo de los anunciantes con lista completa (119 anuncios, 33 con más de 30 d): **es un indicio, la antigüedad no es rendimiento.**
+
+| Lo que se repite en los que duran | Evidencia (días al 10-oct) | Qué hace Onia |
+|---|---|---|
+| **Titular corto que es una oferta** (mediana 33 caracteres, 6 palabras) | «Agenda tu demostración gratis» ×6 (AgendaPro, 59-64 d), «Prueba Doctocliq ahora» (53-85 d) | Titular de Meta = «Pida su demostración gratis» (27) en A1 v6, A2 v3, N1, N2; «Pruebe Onia 14 días gratis» (26) en N3. El gancho largo queda en la imagen |
+| **Un concepto, muchas copias** | Doctocliq 30 anuncios = 14 titulares; CitaPro 16 = 9; Jelou 238 activos casi idénticos | Ya es el plan §5.11: 3 copias de A1, corte el día 3/7/14 |
+| **Control / agenda / orden** (36 % de los que duran contra 8 % de los nuevos) | «Todos ven lo mismo. Tú tienes el control.» (37-47 d ×4), «Cabinas llenas, agenda bajo control» (73-86 d ×3) | **N1** «Todos sus doctores, una sola agenda» |
+| **Inasistencias y cancelaciones**, el dolor más repetido | AgendaPro «Menos inasistencias en tu clínica» 65 d; Doctocliq «Dejá de perder citas» 57 d y un video con «un sillón vacío te cuesta dinero» 78 d | **A1** «Un paciente que no confirma es un sillón vacío» (precedente). Sin cifras de reducción |
+| **El papel** | Calu «¿Seguís acumulando fichas y papeles…?» 43 d; AgendaPro «Ficha clínica digital» 65 d | **N2** «¿Sigue guardando las fichas en papel?» |
+| **Demostración o prueba, nunca precio** | Los titulares con precio o descuento (Dentalink, Dt.Dental) tienen menos de 12 d | **N3** prueba de 14 días sin tarjeta (texto de la página viva `app.onia.com.bo/register` del 10-oct) |
+
+**Lo que dura y Onia NO puede decir** (se anota como hueco): la **norma** (Dt.Dental 99-102 d, Reservo 47-53 d: sin obligación boliviana verificada y con el SIAT apagado, §7) y la **IA que atiende u ordena** (AgendaPro «Sofía» 143 d, «La IA que organiza tu clínica» 111 d: el agente de WhatsApp no está conectado, catálogo §8).
+
+**Orden de prueba que sale de esto:** A1 > N2 ≈ N1 > N3 > A2. **A2 (cobros) no tiene ningún sobreviviente que use el cobro como gancho**: queda como hipótesis sin respaldo en la Biblioteca. N3 cambia el destino (registro en vez de WhatsApp) y no se puede medir como alta sin un evento de conversión (no verificado): **lo decide Sergio Urcullo** junto con `canales_1_y_2`. El plan §5.11 no cambia (A1 en 3 copias con US$ 56); N1, N2 y N3 son la segunda tanda si A1 pasa los cortes.
+
+**Corrección a §3:** dice que las clínicas bolivianas pagan «casi todas con clic a WhatsApp». Con el conector solo se ve el botón cuando coincide con el titular: **«Chatea con nosotros» sale en 33 de los 417 anuncios**, y 22 de los 43 que pasan 30 d no traen titular. Lo que falta no se puede decir con este conector.
+
+**Lo que el conector no trae** (formato video/imagen/carrusel, texto principal, botón, público, gasto) **se lo pido a la madre con Chrome** (`research/competencia/anuncios/PEDIDO-CAPTURAS.md`, sección del 10-oct). Los 5 que más duran y se capturaron el 1-2 oct **siguen activos** (Dt.Dental 102 d, CitaPro 86 d y 65 d, Doctocliq 85 d y 79 d). **Faltan 8, todos con más de 50 d:** AgendaPro `1535822604884838` («Sofía», 143 d), `1201810243016378` («La IA que organiza tu clínica», 111 d), `1601426334721119` («La IA atiende tu WhatsApp», 64 d) y `3652876658196882` («Agenda tu demostración gratis», 64 d); Doctocliq `1748838402916201` («Prueba Doctocliq ahora», 85 d) y `1738720983808867` («La agenda que trabaja contigo», 85 d); Dentalink `1614658333653742` (58 d, sin titular); Reservo `1056628280307783` (53 d).
+**Re-medir en 2 semanas (24-oct):** repetir las consultas por `page_ids` y anotar cuáles ids del JSON **desaparecieron**: la muerte de un anuncio dice más que su edad.
+
 ## 3. La señal más barata que existe: las clínicas que ya pagan pauta
 
 La misma Biblioteca muestra a **~20 clínicas dentales y ~10 de estética** de Santa Cruz que **hoy** pagan
