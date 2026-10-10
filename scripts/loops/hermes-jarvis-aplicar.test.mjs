@@ -14,7 +14,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { spawnSync, execFileSync } from "node:child_process";
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, chmodSync, existsSync, readdirSync, copyFileSync, unlinkSync } from "node:fs";
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, chmodSync, existsSync, readdirSync, copyFileSync, unlinkSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -30,7 +30,7 @@ function ejecutable(f, contenido) {
   chmodSync(f, 0o755);
 }
 
-function vps({ leeCalendario = true, escribeCalendario = true } = {}) {
+function vps({ leeCalendario = true, escribeCalendario = true, conLatido = true } = {}) {
   const dir = mkdtempSync(join(tmpdir(), "jarvis-vps-"));
   const F = join(dir, "fs");
   const R = join(F, "root");
@@ -75,6 +75,8 @@ function vps({ leeCalendario = true, escribeCalendario = true } = {}) {
   // El recolector de respuestas de los pedidos: --probar dice si el VPS llega a GitHub.
   ejecutable(join(bin, "onia-respuestas-pedidos.sh"), `#!/usr/bin/env bash\nbajar() { :; }\n[ "$1" = --probar ] || exit 0\necho "$ONIA_PEDIDOS_ESTADO" >> ${log}/respuestas-probar\n[ -z "\${RESPUESTAS_SIN_GITHUB:-}" ] || exit 1\necho "✅ llego a GitHub"\n`);
   ejecutable(join(bin, "claude-guardia.sh"), "#!/usr/bin/env bash\navisar() { :; }\n");
+  // El envoltorio del latido (10-oct, Q4c): el de verdad, porque las líneas del crontab lo llaman.
+  if (conLatido) ejecutable(join(bin, "onia-latido.sh"), readFileSync(join(AQUI, "latido.sh"), "utf8"));
   ejecutable(
     join(bin, "onia-agenda.sh"),
     `#!/usr/bin/env bash
@@ -245,7 +247,7 @@ test("con todo en verde: aplica, reinicia el gateway, verifica que volvió y le 
   const r = v.aplicar();
   assert.equal(r.status, 0, r.stdout + r.stderr);
   assert.match(r.stdout, /✅ requisitos en verde/);
-  assert.match(v.crontab(), /onia-jarvis-resumen\.sh manana .* #jarvis/);
+  assert.match(v.crontab(), /onia-jarvis-resumen\.sh manana' .* #jarvis/);
   assert.match(v.crontab(), /^#jarvis# .*onia-parte-diario\.sh/m);
   assert.ok(v.jobs().every((j) => !j.enabled && j.state === "paused"));
   assert.equal(apagados(v.leer("n8n")).length, 12, "los 12 flujos de reportes se apagan");
@@ -628,7 +630,7 @@ test("con llave: el cron del recolector entra con la marca, y revertir lo saca",
   const v = vps();
   const r = v.aplicar(LLAVE);
   assert.equal(r.status, 0, r.stdout + r.stderr);
-  assert.match(v.crontab(), /^\*\/2 \* \* \* \* \[ -x \S+\/bin\/onia-respuestas-pedidos\.sh \] && \S+\/bin\/onia-respuestas-pedidos\.sh >> \/var\/log\/onia-respuestas-pedidos\.log 2>&1 #jarvis$/m);
+  assert.match(v.crontab(), /^\*\/2 \* \* \* \* \S+\/bin\/onia-latido\.sh respuestas-pedidos 120 '\[ ! -x \S+\/bin\/onia-respuestas-pedidos\.sh \] \|\| \S+\/bin\/onia-respuestas-pedidos\.sh' >> \/var\/log\/onia-respuestas-pedidos\.log 2>&1 #jarvis$/m);
   assert.match(r.stdout, /la respuesta vuelve sola: onia-respuestas-pedidos\.sh/);
   assert.equal(v.revertir().status, 0);
   assert.doesNotMatch(v.crontab(), /onia-respuestas-pedidos/);
@@ -831,4 +833,94 @@ test("diagnóstico: lista las secciones del SOUL de main que le faltan al SOUL d
   assert.match(r.stdout, /el SOUL del VPS tiene 2 sección\(es\)/);
   assert.match(r.stdout, /--- tiene y main no:\n\(ninguna\)/, "«Su calendario…» sin la fecha es la misma sección");
   assert.equal(readFileSync(join(v.R, ".hermes", "SOUL.md"), "utf8"), antes, "solo lectura");
+});
+
+// ── El latido de cada trabajo que agrega aplicar (10-oct, HERMES_ROL_QA.md Q4c) ────────────
+// Antes, un trabajo mudo y uno sano se veían igual: los dos no decían nada.
+
+const LATIDO = join(AQUI, "latido.sh");
+function correrLatido(args, env = {}) {
+  const dir = mkdtempSync(join(tmpdir(), "latido-"));
+  const r = spawnSync("bash", [LATIDO, ...args], { env: { ...process.env, ONIA_LATIDO_DIR: join(dir, "lat"), ...env }, encoding: "utf8" });
+  const leer = (n) => (existsSync(join(dir, "lat", n)) ? readFileSync(join(dir, "lat", n), "utf8") : null);
+  return { ...r, dir, leer };
+}
+
+test("latido: corre el comando, sale con SU código y anota «epoch código cadencia»", () => {
+  const ok = correrLatido(["aduana-soltar", "300", "ONIA_X=hola sh -c 'echo $ONIA_X'"]);
+  assert.equal(ok.status, 0);
+  assert.equal(ok.stdout, "hola\n", "el comando corre entero, con su variable");
+  assert.match(ok.leer("aduana-soltar"), /^\d{10} 0 300\n$/);
+  const mal = correrLatido(["agenda-bloques", "1800", "exit 3"]);
+  assert.equal(mal.status, 3, "el código del trabajo no se pierde");
+  assert.match(mal.leer("agenda-bloques"), /^\d{10} 3 1800\n$/);
+});
+
+test("latido: nunca rompe el trabajo, ni con un nombre inválido ni sin dónde escribir", () => {
+  const raro = correrLatido(["../etc/x", "300", "echo corrió; exit 4"]);
+  assert.equal(raro.status, 4);
+  assert.equal(raro.stdout, "corrió\n");
+  assert.match(raro.stderr, /inválidos: corrió sin latido/);
+  assert.equal(existsSync(join(raro.dir, "lat")), false, "un nombre inválido no escribe nada");
+  const sinLugar = correrLatido(["respuestas-pedidos", "120", "echo corrió"], { ONIA_LATIDO_DIR: "/proc/no-se-puede/lat" });
+  assert.equal(sinLugar.status, 0);
+  assert.equal(sinLugar.stdout, "corrió\n");
+  assert.match(sinLugar.stderr, /no pude anotar el latido/);
+  assert.equal(correrLatido(["x", "300"]).status, 2, "sin comando no corre nada");
+});
+
+test("aplicar no toca el crontab si el latido todavía no llegó a /root/bin", () => {
+  const v = vps({ conLatido: false });
+  const r = v.aplicar();
+  assert.notEqual(r.status, 0, r.stdout);
+  assert.equal(v.crontab(), v.crontabInicial, "sin el envoltorio, cada línea nueva fallaría");
+});
+
+test("cada línea que agrega aplicar corre dentro del latido, y corre ENTERA: su comando, con sus argumentos", () => {
+  const v = vps();
+  assert.equal(v.aplicar().status, 0);
+  const nuevas = v.crontab().split("\n").filter((l) => l.endsWith(" #jarvis") && !l.startsWith("#"));
+  const conLatido = nuevas.filter((l) => l.includes("/root/bin/onia-latido.sh "));
+  const nombres = conLatido.map((l) => l.match(/onia-latido\.sh (\S+) (\d+) /).slice(1).join(" "));
+  assert.deepEqual(nombres, ["resumen-manana 86400", "resumen-noche 86400", "aduana-soltar 300", "agenda-bloques 1800", "respuestas-pedidos 120"]);
+  // El resumen lee exactamente esos nombres: si uno cambia acá y no allá, su latido no se mira nunca.
+  const esperados = readFileSync(join(AQUI, "jarvis-resumen.sh"), "utf8").match(/^LATIDOS_ESPERADOS="([^"]+)"/m)[1];
+  assert.deepEqual(esperados.split(" "), nombres.map((n) => n.split(" ")[0]));
+  // Las mismas líneas, sin el horario, contra un /root/bin que anota con qué la llamaron. Revisión del
+  // 10-oct: sin las comillas, la línea de la aduana corría «sh -c 'ONIA_AVISO_SOLTAR=1'», salía 0, y el
+  // latido decía «sano» de un trabajo que nunca corrió. Esto lo agarra.
+  const tmp = mkdtempSync(join(tmpdir(), "linea-"));
+  const grabador = join(tmp, "bin");
+  for (const s of ["onia-jarvis-resumen.sh", "onia-tg.sh", "onia-agenda.sh", "onia-respuestas-pedidos.sh"]) {
+    ejecutable(join(grabador, s), `#!/usr/bin/env bash\necho "$(basename "$0") $* soltar=\${ONIA_AVISO_SOLTAR:-}" >> ${tmp}/llamadas\n`);
+  }
+  for (const l of conLatido) {
+    const cmd = l.replace(/ #jarvis$/, "").split(" ").slice(5).join(" ")
+      .replace(/\S*\/onia-latido\.sh/, LATIDO).replaceAll("/var/log/", `${tmp}/`).replace(/[^\s']*\/root\/bin\//g, `${grabador}/`);
+    spawnSync("sh", ["-c", cmd], { env: { ...process.env, ONIA_LATIDO_DIR: join(tmp, "lat") } });
+  }
+  assert.deepEqual(readFileSync(join(tmp, "llamadas"), "utf8").trim().split("\n"), [
+    "onia-jarvis-resumen.sh manana soltar=",
+    "onia-jarvis-resumen.sh noche soltar=",
+    "onia-tg.sh  soltar=1",
+    "onia-agenda.sh --bloques soltar=",
+    "onia-respuestas-pedidos.sh  soltar=",
+  ]);
+  for (const n of ["resumen-manana", "resumen-noche", "aduana-soltar", "agenda-bloques", "respuestas-pedidos"]) {
+    assert.match(readFileSync(join(tmp, "lat", n), "utf8"), /^\d{10} 0 \d+\n$/, n);
+  }
+  // Sin el recolector copiado, «! -x ||» sale 0: no es una falla.
+  rmSync(join(grabador, "onia-respuestas-pedidos.sh"));
+  const pedidos = conLatido.at(-1).replace(/ #jarvis$/, "").split(" ").slice(5).join(" ")
+    .replace(/\S*\/onia-latido\.sh/, LATIDO).replaceAll("/var/log/", `${tmp}/`).replace(/[^\s']*\/root\/bin\//g, `${grabador}/`);
+  assert.equal(spawnSync("sh", ["-c", pedidos], { env: { ...process.env, ONIA_LATIDO_DIR: join(tmp, "lat") } }).status, 0);
+  assert.match(readFileSync(join(tmp, "lat", "respuestas-pedidos"), "utf8"), /^\d{10} 0 120\n$/);
+});
+
+test("latido: corridas que se pisan no se roban el archivo temporal", () => {
+  const dir = mkdtempSync(join(tmpdir(), "latido-carrera-"));
+  const r = spawnSync("bash", ["-c", `for i in $(seq 40); do bash ${LATIDO} respuestas-pedidos 120 true & done; wait`],
+    { env: { ...process.env, ONIA_LATIDO_DIR: join(dir, "lat") }, encoding: "utf8" });
+  assert.equal(r.stderr, "", "ninguna dice «no pude anotar»");
+  assert.deepEqual(readdirSync(join(dir, "lat")), ["respuestas-pedidos"], "y no quedan temporales");
 });

@@ -12,7 +12,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { execFileSync, spawnSync } from "node:child_process";
-import { mkdtempSync, writeFileSync, readFileSync, chmodSync, existsSync, mkdirSync, readdirSync } from "node:fs";
+import { mkdtempSync, writeFileSync, readFileSync, chmodSync, existsSync, mkdirSync, readdirSync, utimesSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -48,6 +48,17 @@ function repoPlanViejo() {
   const real = join(REPO_REAL, "hermes-content", "docs", "cola", "plan-3-semanas");
   mkdirSync(plan, { recursive: true });
   for (const f of readdirSync(real).filter((f) => /^S\d-GUIONES\.md$/.test(f))) writeFileSync(join(plan, f), readFileSync(join(real, f)));
+  conMadre(dir, MADRE_LEJOS);
+  return dir;
+}
+
+// La tabla de relojes de la madre (cola/loop/madre.md §G). Por defecto, una que no vence nada cerca
+// del 30-sep: si no, cada mañana de prueba tendría «⏰» en NECESITO y nunca diría «Nada.».
+const MADRE_LEJOS = "# Cola · MADRE\n\n## G. Relojes\n| Fecha | Qué | Dueño | Fuente |\n|---|---|---|---|\n| 15-dic | Lejos | SU | x |\n";
+function conMadre(dir, texto) {
+  const loop = join(dir, "hermes-content", "docs", "cola", "loop");
+  mkdirSync(loop, { recursive: true });
+  writeFileSync(join(loop, "madre.md"), texto);
   return dir;
 }
 const PLAN_VIEJO = repoPlanViejo();
@@ -95,6 +106,7 @@ ${tgFalla ? "exit 1" : "exit 0"}
         ONIA_PUBLICADO: join(dir, "no-existe-publicado.jsonl"),
         ONIA_JARVIS_OUT: out,
         ONIA_HOY: "2026-09-30",
+        ONIA_LATIDO_DIR: join(dir, "no-existe-latidos"),
         ...env,
       },
       encoding: "utf8",
@@ -380,7 +392,7 @@ test("el cierre viene en tres bloques: lo que se hizo, lo que le pide, mañana",
 test("sin nada que pedirle, NECESITO dice «Nada.» en vez de desaparecer", () => {
   const lista = "▶ t_9c0d1e2f ready (unassigned) [auto:abc123] 🔴 CI en ROJO en main";
   const parte = "⚠️ <b>1 cosa(s) que no pude arreglar solo</b>\n\n• 🔴 CI en ROJO en main\n\n<i>Parte diario · 30/09 06:30</i>";
-  const b = banco({ lista, parte, repo: repoConCommits([]) });
+  const b = banco({ lista, parte, repo: conMadre(repoConCommits([]), MADRE_LEJOS) });
   assert.equal(bloques(b.imprimir("manana")).NECESITO.trim(), "Nada.");
   assert.equal(bloques(b.imprimir("noche", { ONIA_HOY: "2026-09-29" })).NECESITO.trim(), "Nada.");
 });
@@ -668,4 +680,205 @@ test("dos calendarios que cubren el mismo día: gana el que empieza después (el
   const msg = b.imprimir("manana", { ONIA_HOY: "2026-10-10" });
   assert.match(msg, /• 16:00 Carrusel · HOOK \(K11\)/);
   assert.doesNotMatch(msg, /VIEJO/);
+});
+
+// ── Lo que nadie empuja: relojes y colas paradas (10-oct, HERMES_ROL_QA.md Q4) ──────────
+// Había cinco fechas en 25 días (el SIN el 13-oct, el token de Lucía, la pauta del 16, el SIAT el
+// 4-nov) y ninguna alarma saltaba. El resumen las lee de la tabla §G de la madre.
+
+const MADRE = `# Cola · MADRE
+
+## A. En curso
+| Fecha | Qué | Dueño | Fuente |
+|---|---|---|---|
+| 1-oct | Una tabla de otra sección no es un reloj | SU | x |
+
+## G. Relojes (fechas que nadie empujaba)
+| Fecha | Qué | Dueño | Fuente |
+|---|---|---|---|
+| jue 1-oct | Declaraciones del **SIN** (\`F-200\`) | SU / Leslie Mercado Moreno | memoria |
+| 10-oct | Algo que vence en 10 días | SU | x |
+| 26 al 28-sep | Un rango que terminó hace 2 días | Plat | x |
+| 30-sep 23:57 La Paz | Vence hoy & a la noche | Ventas | x |
+| sin fecha | Trámite del BCP | SU | x |
+
+## H. Frentes
+| Fecha | Qué | Dueño | Fuente |
+|---|---|---|---|
+| 30-sep | Fuera de la G | SU | x |
+`;
+
+test("relojes: el de mañana sale, uno a 10 días no, uno vencido sale en rojo; los de él en NECESITO", () => {
+  const b = banco({ repo: conMadre(repoPlanViejo(), MADRE) });
+  const msg = b.imprimir("manana");
+  const { PASÓ, NECESITO } = bloques(msg);
+  // El día de la semana de la tabla no se repite: el 1-oct de 2026 es jueves, pero podría estar mal.
+  assert.match(NECESITO, /⏰ <b>Vence pronto<\/b>\n• 1-oct, mañana: Declaraciones del SIN \(F-200\)\n/);
+  assert.match(PASÓ, /⏰ <b>Vence pronto \(otros dueños\)<\/b>\n• 30-sep 23:57 La Paz, hoy: Vence hoy &amp; a la noche — Ventas\n• 🔴 26 al 28-sep, vencido hace 2 días: Un rango que terminó hace 2 días — Plat/);
+  assert.doesNotMatch(NECESITO, /Plat|Ventas/, "los de otros dueños no le piden nada");
+  assert.doesNotMatch(msg, /10 días|BCP|otra sección|Fuera de la G/, "ni lo lejano, ni lo sin fecha, ni lo de otra sección");
+  assert.doesNotMatch(b.imprimir("noche", { ONIA_HOY: "2026-09-29" }), /⏰|🧊/, "es de la mañana, no del cierre");
+});
+
+test("relojes: rangos, otros formatos, lo hecho, lo lejano y lo que no entiende (revisión del 10-oct)", () => {
+  const madre = `## G. Relojes
+| Fecha | Qué | Dueño |
+|---|---|---|
+| 28 al 2-nov | RANGO-QUE-CRUZA | SU |
+| 26-oct al 30-oct | EN-CURSO | SU |
+| 28/10 | CON-BARRA | SU |
+| 2026-10-29 | ISO | SU |
+| 13 a 18-oct | OTRO-CONECTOR-VENCIDO | SU |
+| 15-abr | LEJANO-DEL-AÑO-QUE-VIENE | SU |
+| ~~27-oct~~ | TACHADO | SU |
+| 27-oct | HECHO ✅ | SU |
+| pronto | ILEGIBLE | Plat |
+| — | GUION | SU |
+`;
+  const msg = banco({ repo: conMadre(repoPlanViejo(), madre) }).imprimir("manana", { ONIA_HOY: "2026-10-27" });
+  const { PASÓ, NECESITO } = bloques(msg);
+  assert.match(NECESITO, /• 26-oct al 30-oct, en curso \(termina en 3 días\): EN-CURSO\n/);
+  assert.match(NECESITO, /• 28 al 2-nov, mañana: RANGO-QUE-CRUZA/, "el 28 de un «28 al 2-nov» es de octubre");
+  assert.match(NECESITO, /• 28\/10, mañana: CON-BARRA/);
+  assert.match(NECESITO, /• 2026-10-29, en 2 días: ISO/);
+  assert.match(NECESITO, /• 🔴 13 a 18-oct, vencido hace 9 días: OTRO-CONECTOR-VENCIDO/, "un rango vence al terminar");
+  assert.ok(NECESITO.indexOf("EN-CURSO") < NECESITO.indexOf("CON-BARRA") && NECESITO.indexOf("ISO") < NECESITO.indexOf("VENCIDO"),
+    "primero lo que vence antes, después lo vencido");
+  assert.match(PASÓ, /• ❓ pronto, no entiendo la fecha: ILEGIBLE — Plat/, "una fecha que no entiende no se calla");
+  assert.doesNotMatch(msg, /LEJANO|TACHADO|HECHO|GUION/);
+});
+
+test("relojes: 5 por grupo como mucho, y lo que vence antes no queda tapado por lo vencido", () => {
+  const filas = Array.from({ length: 7 }, (_, i) => `| ${i + 1}-oct | VIEJO-${i + 1} | SU |`).join("\n");
+  const madre = `## G. Relojes\n| Fecha | Qué | Dueño |\n|---|---|---|\n${filas}\n| 21-oct | MAÑANA | SU |\n`;
+  const necesito = bloques(banco({ repo: conMadre(repoPlanViejo(), madre) }).imprimir("manana", { ONIA_HOY: "2026-10-20" })).NECESITO;
+  assert.match(necesito, /⏰ <b>Vence pronto<\/b>\n• 21-oct, mañana: MAÑANA\n• 🔴 7-oct, vencido hace 13 días: VIEJO-7\n/);
+  const reloj = necesito.slice(necesito.indexOf("⏰")).split("\n\n")[0];
+  assert.equal((reloj.match(/^• /gm) || []).length, 6, reloj);
+  assert.match(necesito, /• … y 3 más \(cola\/loop\/madre\.md §G\)/);
+});
+
+test("relojes: una fecha sin año es la próxima (2-ene el 30-dic) salvo que haya pasado hace poco", () => {
+  const madre = "## G. Relojes\n| Fecha | Qué | Dueño |\n|---|---|---|\n| 2-ene | Año nuevo | SU |\n| 20-dic | Ya pasó hace rato | Plat |\n";
+  const msg = banco({ repo: conMadre(repoPlanViejo(), madre) }).imprimir("manana", { ONIA_HOY: "2026-12-30" });
+  assert.match(bloques(msg).NECESITO, /• 2-ene, en 3 días: Año nuevo/);
+  assert.match(bloques(msg).PASÓ, /• 🔴 20-dic, vencido hace 10 días: Ya pasó hace rato — Plat/);
+});
+
+test("sin la tabla de la madre, NECESITO no dice «Nada.»: dice que no pudo leer los relojes", () => {
+  const sinMadre = repoPlanViejo();
+  writeFileSync(join(sinMadre, "hermes-content", "docs", "cola", "loop", "madre.md"), "# Cola · MADRE\n\n## A. Otra cosa\n");
+  const b = banco({ repo: sinMadre, lista: "", show: "", parte: "✅ Todo en orden." });
+  const necesito = bloques(b.imprimir("manana")).NECESITO;
+  assert.match(necesito, /⏰ No pude leer los relojes de la madre \(cola\/loop\/madre\.md §G\): no sé qué vence\./);
+  assert.doesNotMatch(necesito, /Nada\./);
+});
+
+// Un clon con colas commiteadas en fechas dadas. origin/main apunta al último commit.
+function repoConColas(colas, ahora) {
+  const dir = mkdtempSync(join(tmpdir(), "jarvis-colas-"));
+  const git = (fecha, ...a) =>
+    execFileSync("git", a, { cwd: dir, env: { ...process.env, GIT_AUTHOR_DATE: fecha, GIT_COMMITTER_DATE: fecha }, encoding: "utf8" });
+  git(ahora, "init", "-q");
+  git(ahora, "config", "user.email", "t@t");
+  git(ahora, "config", "user.name", "t");
+  for (const [nombre, texto, fecha] of colas) {
+    conMadre(dir, `${MADRE_LEJOS}<!-- ${fecha} -->\n`);  // la madre se mueve en cada commit: queda fresca
+    writeFileSync(join(dir, "hermes-content", "docs", "cola", "loop", nombre), texto);
+    git(fecha, "add", "-A");
+    git(fecha, "commit", "-q", "-m", nombre);
+  }
+  git(ahora, "update-ref", "refs/remotes/origin/main", "HEAD");
+  return dir;
+}
+
+test("colas paradas: nombra las que no tienen commit hace más de 24 h, y si se quedaron sin tareas", () => {
+  const ahora = "2026-09-30T10:30:00Z";
+  const dir = repoConColas([
+    ["README.md", "protocolo\n", "2026-09-25T10:00:00Z"],
+    ["a&b.md", "- [ ] x\n", "2026-09-28T10:00:00Z"],
+    // Más de 64 KB con la tarea arriba: con «grep -q» y pipefail, git recibía SIGPIPE y salía «sin tareas».
+    ["grande.md", "- [ ] tarea viva\n" + "relleno\n".repeat(40000), "2026-09-29T04:30:00Z"],
+    ["hermes-jarvis.md", "- [x] hecha\n", "2026-09-28T08:00:00Z"],
+    ["lucia.md", "- [x] hecha\n  - [ ] G2 pendiente\n", "2026-09-29T04:30:00Z"],
+    ["plataforma.md", "- [ ] B1\n", "2026-09-30T09:30:00Z"],
+  ], ahora);
+  const { PASÓ } = bloques(banco({ repo: dir }).imprimir("manana", { ONIA_AHORA: ahora }));
+  assert.match(PASÓ, /🧊 Colas sin movimiento en main hace más de 24 h: a&amp;b \(2 d\), grande \(30 h\), hermes-jarvis \(2 d, sin tareas\), lucia \(30 h\)\./);
+  assert.doesNotMatch(PASÓ, /README|plataforma|madre \(|no trae main/);
+});
+
+test("si el clon dejó de traer main, lo dice antes de nombrar colas paradas", () => {
+  const ahora = "2026-09-30T10:30:00Z";
+  const dir = repoConColas([["lucia.md", "- [ ] x\n", "2026-09-30T09:00:00Z"]], ahora);
+  const fh = join(dir, ".git", "FETCH_HEAD");
+  writeFileSync(fh, "");
+  const t = new Date("2026-09-30T01:30:00Z");
+  utimesSync(fh, t, t);
+  const { PASÓ } = bloques(banco({ repo: dir }).imprimir("manana", { ONIA_AHORA: ahora }));
+  assert.match(PASÓ, /🧊 El clon del VPS no trae main hace 9 h \(el sincronizador no anda\): las colas pueden verse paradas sin estarlo\./);
+});
+
+test("los relojes salen de origin/main del clon, no de lo que quedó en el árbol", () => {
+  const ahora = "2026-09-30T10:30:00Z";
+  const dir = repoConColas([["lucia.md", "- [ ] x\n", "2026-09-30T09:00:00Z"]], ahora);
+  const loop = join(dir, "hermes-content", "docs", "cola", "loop");
+  writeFileSync(join(loop, "madre.md"), "## G. Relojes\n| Fecha | Qué | Dueño |\n|---|---|---|\n| 1-oct | DESDE-MAIN | SU |\n");
+  execFileSync("git", ["commit", "-qam", "madre"], { cwd: dir, env: { ...process.env, GIT_AUTHOR_DATE: ahora, GIT_COMMITTER_DATE: ahora } });
+  execFileSync("git", ["update-ref", "refs/remotes/origin/main", "HEAD"], { cwd: dir });
+  writeFileSync(join(loop, "madre.md"), "## G. Relojes\n| Fecha | Qué | Dueño |\n|---|---|---|\n| 1-oct | DESDE-EL-ARBOL | SU |\n");
+  const msg = banco({ repo: dir }).imprimir("manana", { ONIA_AHORA: ahora });
+  assert.match(bloques(msg).NECESITO, /• 1-oct, mañana: DESDE-MAIN/);
+  assert.doesNotMatch(msg, /DESDE-EL-ARBOL/);
+});
+
+test("sin historial de git en el clon, dice que no pudo ver las colas en vez de callarse", () => {
+  assert.match(bloques(banco().imprimir("manana")).PASÓ, /🧊 No pude ver qué colas se pararon \(el clon no tiene origin\/main\)\./);
+});
+
+test("la voz de la mañana no lee los ⏰ ni los 🧊", () => {
+  const b = banco({ repo: conMadre(repoPlanViejo(), MADRE) });
+  b.correr("manana");
+  const voz = readFileSync(join(b.out, "brief-hoy.txt"), "utf8");
+  assert.match(voz, /Vence pronto/);
+  assert.doesNotMatch(voz, /[⏰🧊]/u);
+});
+
+const AHORA_LAT = Date.parse("2026-09-30T10:30:00Z") / 1000;
+function latidos(b, archivos) {
+  const lat = mkdtempSync(join(b.dir, "latidos-"));
+  for (const [n, t] of Object.entries(archivos)) writeFileSync(join(lat, n), t);
+  return b.imprimir("manana", { ONIA_LATIDO_DIR: lat, ONIA_AHORA: "2026-09-30T10:30:00Z" });
+}
+const SANOS = {
+  "aduana-soltar": `${AHORA_LAT - 120} 0 300\n`,
+  "agenda-bloques": `${AHORA_LAT - 300} 0 1800\n`,
+  "respuestas-pedidos": `${AHORA_LAT - 60} 0 120\n`,
+  "resumen-noche": `${AHORA_LAT - 9 * 3600} 0 86400\n`,
+};
+
+test("trabajos mudos o con error: el mudo, el que falló, el ilegible y el de hora futura", () => {
+  const msg = latidos(banco(), {
+    ...SANOS,
+    "aduana-soltar": `${AHORA_LAT - 4 * 3600} 0 300\n`,        // cada 5 min, hace 4 h: mudo
+    "agenda-bloques": `${AHORA_LAT - 300} 2 1800\n`,           // al día, pero falló
+    "respuestas-pedidos": `0${AHORA_LAT - 60} 0 120\n`,        // con un cero adelante: bash lo leía en octal
+    "resumen-manana": `${AHORA_LAT + 3600} 0 86400\n`,         // el reloj del VPS se atrasó
+    ".aduana-soltar.123.tmp": "1 0 1\n",                       // a medio escribir: no se lee
+  });
+  assert.match(bloques(msg).PASÓ, /🫀 Trabajos mudos o con error: resumen-manana \(latido con hora del futuro: revisar el reloj del VPS\), aduana-soltar \(mudo: corrió hace 4 h, corre cada 5 min\), agenda-bloques \(falló: código 2\), respuestas-pedidos \(latido ilegible\)\./);
+  assert.doesNotMatch(msg, /resumen-noche|\.tmp/);
+});
+
+test("un trabajo frecuente que nunca dejó latido sale; uno que ya no existe, no", () => {
+  const { "respuestas-pedidos": _, ...sinPedidos } = SANOS;
+  const msg = latidos(banco(), { ...sinPedidos, "trabajo-de-antes": `${AHORA_LAT - 9e5} 0 60\n` });
+  assert.match(bloques(msg).PASÓ, /🫀 Trabajos mudos o con error: respuestas-pedidos \(sin latido: nunca corrió\)\./);
+  assert.doesNotMatch(msg, /trabajo-de-antes/, "un archivo viejo de un trabajo renombrado no queda mudo para siempre");
+});
+
+test("sin latidos (antes de aplicar) o con todos sanos, no dice nada", () => {
+  const b = banco();
+  assert.doesNotMatch(b.imprimir("manana"), /🫀/, "sin la carpeta");
+  assert.doesNotMatch(latidos(b, SANOS), /🫀/, "sanos, y sin el de la mañana, que es el que está corriendo");
 });

@@ -467,7 +467,9 @@ function esAncestro (a, b) {
 
 /** Índice del repo por CONTENIDO: encuentra el gemelo aunque se haya desplegado renombrado. */
 function indiceDelRepo () {
-  const archivos = execFileSync('git', ['ls-files', '-z'], { cwd: RAIZ, encoding: 'buffer' })
+  // maxBuffer grande: desde el 10-oct-2026 la lista del repo pasa de 1 MB y el tope por defecto
+  // (1 MiB) la cortaba con ENOBUFS (lo mismo rompió el gate del integrador).
+  const archivos = execFileSync('git', ['ls-files', '-z'], { cwd: RAIZ, encoding: 'buffer', maxBuffer: 64 * 1024 * 1024 })
     .toString('utf8')
     .split('\0')
     .filter(Boolean)

@@ -18,6 +18,9 @@
 #   lo que pasó de noche  -> la cola de la aduana (onia-tg.sh, $ESTADO/resumen.log)
 #   lo que se hizo hoy    -> git log de origin/main
 #   lo que salió hoy      -> /root/publicar/publicado.jsonl (los publicadores de vps-ops/publicar)
+#   relojes que vencen    -> hermes-content/docs/cola/loop/madre.md §G (la tabla de la madre)
+#   colas paradas         -> git log de hermes-content/docs/cola/loop/*.md en origin/main
+#   trabajos mudos        -> /var/lib/onia-latido/<nombre> (los escribe onia-latido.sh, el envoltorio del cron)
 # El único paso con IA es traducir los commits del día a castellano llano, con la orden de
 # no agregar nada; si la IA no responde, se dice cuántos cambios hubo y listo. Nace de un
 # error pagado: `gpt-5-nano` inventó una agenda entera (handoff/infra-cerebro-loops.md §5).
@@ -331,6 +334,221 @@ seccion_plan() {  # seccion_plan <fecha> <titulo de lo que sale> <titulo de los 
   return 0
 }
 
+# ── Lo que nadie empuja: relojes y colas paradas (10-oct, HERMES_ROL_QA.md Q4) ────
+# Había cinco fechas en 25 días (el SIN el 13, el token de Lucía, la pauta del 16, la 1.0 el 30, el
+# SIAT el 4-nov) y ninguna alarma saltaba. La madre las lleva en la tabla §G de su cola; acá se leen
+# del origin/main del clon, que el sincronizador trae cada hora (si no hay origin/main, del árbol).
+# Las de Sergio Urcullo van en NECESITO; las de otros dueños, junto a la línea de salud.
+MADRE_MD=hermes-content/docs/cola/loop/madre.md
+leer_main() {  # leer_main <ruta en el repo>
+  git -C "$REPO" show "origin/main:$1" 2>/dev/null || cat "$REPO/$1" 2>/dev/null
+}
+# Salida: «su|otro<TAB>viñeta», ya ordenada y con 5 por grupo como mucho (lo que vence antes, después
+# lo vencido más reciente, al final las fechas que no entiende). Sale 2 si no hay tabla que leer y 3
+# si el archivo no tiene la §G con Fecha, Qué y Dueño. Revisión del 10-oct: una fecha que no entiende
+# no se calla (NECESITO diría «Nada.» con un reloj vivo en la tabla), y una fila tachada (~~) o con ✅
+# ya se hizo.
+relojes_de() {  # relojes_de <hoy>  (stdin: madre.md)
+  python3 -c '
+import datetime, re, sys, unicodedata
+hoy = datetime.date.fromisoformat(sys.argv[1])
+texto = unicodedata.normalize("NFC", sys.stdin.read())
+if not texto.strip():
+    sys.exit(2)
+MES = "ene feb mar abr may jun jul ago sep oct nov dic".split()
+en_g = vista = False
+cabeza, filas = None, []
+for l in texto.splitlines():
+    if l.startswith("## "):
+        en_g = bool(re.match(r"##\s+G\b", l))
+        vista = vista or en_g
+        continue
+    if not en_g or not l.lstrip().startswith("|"):
+        continue
+    c = [x.strip() for x in l.strip().strip("|").split("|")]
+    if cabeza is None:
+        cabeza = [x.lower() for x in c]
+    elif not all(re.fullmatch(r":?-+:?", x) for x in c if x):
+        filas.append(c)
+def col(*nombres):
+    return next((i for i, h in enumerate(cabeza or []) if h.split(" ")[0] in nombres), None)
+iF, iQ, iD = col("fecha"), col("qué", "que"), col("dueño", "dueno")
+if not vista or None in (iF, iQ, iD):
+    sys.exit(3)
+def limpio(s):
+    s = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", s)
+    return re.sub(r"\s+", " ", s.replace("*", "").replace("`", "")).strip()
+def cerca(mes, dia):
+    # Sin año: la próxima vez que cae, salvo que haya pasado hace 60 días o menos (así un 15-abr leído
+    # en octubre es el del año que viene, no uno «vencido hace 178 días»).
+    for y in (hoy.year - 1, hoy.year, hoy.year + 1):
+        try:
+            f = datetime.date(y, mes, dia)
+        except ValueError:
+            continue
+        if -60 <= (f - hoy).days <= 305:
+            return f
+    return None
+MESRE = r"[\s-]+(%s)[a-záéíóú]*\b" % "|".join(MES)
+UNION = r"\s*(?:al|a|y|–|-)\s*"
+def fechas_de(t):  # -> (inicio, fin), o None si no la entiende
+    t = t.lower()
+    m = re.search(r"(?<!\d)(\d{4})-(\d{2})-(\d{2})(?!\d)", t)
+    if m:
+        try:
+            f = datetime.date(int(m.group(1)), int(m.group(2)), int(m.group(3)))
+        except ValueError:
+            return None
+        return f, f
+    m = re.search(r"(?<!\d)(\d{1,2})(?:" + UNION + r"(\d{1,2}))?" + MESRE, t)
+    if m:
+        d1, mes = int(m.group(1)), MES.index(m.group(3)) + 1
+        if m.group(2):  # «13 al 18-oct», «28 al 2-nov» (el 28 es del mes anterior)
+            d2 = int(m.group(2))
+            ini, fin = cerca(mes if d1 <= d2 else (mes - 2) % 12 + 1, d1), cerca(mes, d2)
+        else:
+            ini = fin = cerca(mes, d1)
+            m2 = re.match(UNION + r"(\d{1,2})" + MESRE, t[m.end():])  # «29-sep al 2-oct»
+            if m2:
+                fin = cerca(MES.index(m2.group(2)) + 1, int(m2.group(1)))
+        if ini is None or fin is None:
+            return None
+        return ini, max(ini, fin)
+    m = re.search(r"(?<!\d)(\d{1,2})/(\d{1,2})(?![\d/])", t)
+    if m:
+        f = cerca(int(m.group(2)), int(m.group(1)))
+        return (f, f) if f else None
+    return None
+def en(n):
+    return "hoy" if n == 0 else "mañana" if n == 1 else "en %d días" % n
+DIA_SEMANA = r"^(lun|mar|mi[eé]|jue|vie|s[aá]b|dom)\.?\s+"
+grupos = {"su": [], "otro": []}
+for c in filas:
+    if len(c) <= max(iF, iQ, iD) or "~~" in "".join(c) or "✅" in "".join(c):
+        continue
+    crudo = limpio(c[iF])
+    if re.fullmatch(r"(sin fecha.*|s/?f|[-—–?]?)", crudo.lower()):
+        continue
+    # El día de la semana de la tabla no se repite: la fecha manda y el día puede estar mal.
+    fecha = re.sub(DIA_SEMANA, "", crudo, flags=re.I)
+    que, dueno = limpio(c[iQ]), limpio(c[iD])
+    if len(que) > 100:
+        que = que[:99].rstrip() + "…"
+    su = bool(re.search(r"\bSU\b|Sergio", dueno))
+    cola = "" if su else " — " + dueno
+    f = fechas_de(crudo)
+    if f is None:
+        grupos["su" if su else "otro"].append(((2, 0), "❓ %s, no entiendo la fecha: %s%s" % (fecha, que, cola)))
+        continue
+    di, df = (f[0] - hoy).days, (f[1] - hoy).days
+    if di > 3:
+        continue
+    if df < 0:
+        orden, txt = (1, -df), "🔴 %s, vencido hace %d día%s" % (fecha, -df, "" if df == -1 else "s")
+    elif di < 0:
+        orden, txt = (0, 0), "%s, en curso (termina %s)" % (fecha, en(df))
+    else:
+        orden, txt = (0, di), "%s, %s" % (fecha, en(di))
+    grupos["su" if su else "otro"].append((orden, "%s: %s%s" % (txt, que, cola)))
+for g, xs in grupos.items():
+    xs.sort(key=lambda x: x[0])
+    for _, txt in xs[:5]:
+        print(g + "\t" + txt)
+    if len(xs) > 5:
+        print("%s\t… y %d más (cola/loop/madre.md §G)" % (g, len(xs) - 5))
+' "$1"
+}
+RELOJES_RC=0
+RELOJES=$(leer_main "$MADRE_MD" | relojes_de "$HOY" 2>/dev/null) || RELOJES_RC=$?
+lista_relojes() {  # lista_relojes su|otro
+  printf '%s\n' "$RELOJES" | awk -F'\t' -v g="$1" '$1 == g { sub(/^[^\t]*\t/, ""); print "• " $0 }' | esc
+}
+seccion_relojes() {  # los de Sergio Urcullo: le piden algo, van en NECESITO
+  local l
+  if [ "$RELOJES_RC" != 0 ]; then
+    printf '⏰ No pude leer los relojes de la madre (cola/loop/madre.md §G): no sé qué vence.\n'; return 0
+  fi
+  l=$(lista_relojes su)
+  [ -n "$l" ] || return 0
+  printf '⏰ <b>Vence pronto</b>\n%s\n' "$l"
+}
+linea_relojes_otros() {  # los de otros dueños: él los ve, no le piden nada
+  local l
+  [ "$RELOJES_RC" = 0 ] || return 0
+  l=$(lista_relojes otro)
+  [ -n "$l" ] || return 0
+  printf '⏰ <b>Vence pronto (otros dueños)</b>\n%s\n' "$l"
+}
+# Una cola sin commit en main hace más de 24 h es una sesión parada o sin trabajo: con esto la madre
+# de las 07:53 sabe a quién redespachar. «sin tareas» = no le queda ninguna «- [ ]» en main.
+# Si el clon dejó de traer main (el sincronizador de cada hora no anda), todas se verían paradas: se
+# dice antes que nada.
+linea_colas() {
+  local ahora f t h edad lista="" fh viejo
+  if ! git -C "$REPO" rev-parse -q --verify origin/main >/dev/null 2>&1; then
+    printf '🧊 No pude ver qué colas se pararon (el clon no tiene origin/main).\n'; return 0
+  fi
+  ahora=$(date -u -d "${ONIA_AHORA:-now}" +%s 2>/dev/null) || ahora=$(date -u +%s)
+  fh="$(git -C "$REPO" rev-parse --absolute-git-dir 2>/dev/null)/FETCH_HEAD"
+  if [ -f "$fh" ]; then
+    viejo=$(( (ahora - $(stat -c %Y "$fh")) / 3600 ))
+    [ "$viejo" -ge 6 ] && printf '🧊 El clon del VPS no trae main hace %s h (el sincronizador no anda): las colas pueden verse paradas sin estarlo.\n' "$viejo"
+  fi
+  while IFS= read -r f; do
+    case "${f##*/}" in README.md) continue ;; *.md) ;; *) continue ;; esac
+    t=$(git -C "$REPO" log -1 --format=%ct origin/main -- "$f" 2>/dev/null)
+    [ -n "$t" ] && [ $(( ahora - t )) -gt 86400 ] || continue
+    h=$(( (ahora - t) / 3600 ))
+    if [ "$h" -lt 48 ]; then edad="$h h"; else edad="$(( h / 24 )) d"; fi
+    # grep -c lee todo: con -q sale al primer «- [ ]», git recibe SIGPIPE y con pipefail una cola
+    # grande (más de 64 KB) se leía «sin tareas» (revisión del 10-oct).
+    git -C "$REPO" show "origin/main:$f" 2>/dev/null | grep -c '^[[:space:]]*- \[ \]' >/dev/null || edad+=", sin tareas"
+    lista+="${lista:+, }$(basename "$f" .md) ($edad)"
+  done < <(git -C "$REPO" ls-tree --name-only origin/main hermes-content/docs/cola/loop/ 2>/dev/null)
+  [ -n "$lista" ] || return 0
+  printf '🧊 Colas sin movimiento en main hace más de 24 h: %s.\n' "$lista" | esc
+}
+# Los latidos de los trabajos que agregó aplicar (onia-latido.sh, 10-oct, Q4c): el que no corrió en más
+# de dos veces su cadencia está MUDO, y el que terminó con error lo dice con su código. Sin la carpeta
+# (antes de aplicar) no se dice nada: no hay nada que medir todavía.
+# Solo se leen los nombres que pone aplicar.sh (una prueba compara las dos listas): un archivo viejo de
+# un trabajo que ya no existe no queda «mudo» para siempre. Y un trabajo frecuente sin ningún latido es
+# una línea que nunca corrió. Los resúmenes no cuentan: el de la mañana es el que está corriendo.
+LATIDOS="${ONIA_LATIDO_DIR:-/var/lib/onia-latido}"
+LATIDOS_ESPERADOS="resumen-manana resumen-noche aduana-soltar agenda-bloques respuestas-pedidos"
+LATIDOS_FRECUENTES="aduana-soltar agenda-bloques respuestas-pedidos"
+hace() {  # hace <segundos> -> «12 min», «5 h», «3 d»
+  if [ "$1" -lt 5400 ]; then echo "$(( $1 / 60 )) min"
+  elif [ "$1" -lt 172800 ]; then echo "$(( $1 / 3600 )) h"
+  else echo "$(( $1 / 86400 )) d"; fi
+}
+linea_latidos() {
+  local n f ep rc cada ahora lista=""
+  [ -d "$LATIDOS" ] || return 0
+  ahora=$(date -u -d "${ONIA_AHORA:-now}" +%s 2>/dev/null) || ahora=$(date -u +%s)
+  for n in $LATIDOS_ESPERADOS; do
+    f="$LATIDOS/$n"
+    if [ ! -f "$f" ]; then
+      case " $LATIDOS_FRECUENTES " in *" $n "*) lista+="${lista:+, }$n (sin latido: nunca corrió)" ;; esac
+      continue
+    fi
+    ep="" rc="" cada=""
+    read -r ep rc cada _ < "$f"
+    # Sin ceros a la izquierda: «0999» rompía la cuenta de bash y se llevaba la línea entera.
+    if ! [[ "$ep" =~ ^[1-9][0-9]*$ && "$rc" =~ ^(0|[1-9][0-9]*)$ && "$cada" =~ ^[1-9][0-9]*$ ]]; then
+      lista+="${lista:+, }$n (latido ilegible)"
+    elif [ $(( ep - ahora )) -gt 300 ]; then
+      lista+="${lista:+, }$n (latido con hora del futuro: revisar el reloj del VPS)"
+    elif [ $(( ahora - ep )) -gt $(( 2 * cada )) ]; then
+      lista+="${lista:+, }$n (mudo: corrió hace $(hace $(( ahora - ep ))), corre cada $(hace "$cada"))"
+    elif [ "$rc" != 0 ]; then
+      lista+="${lista:+, }$n (falló: código $rc)"
+    fi
+  done
+  [ -n "$lista" ] || return 0
+  printf '🫀 Trabajos mudos o con error: %s.\n' "$lista" | esc
+}
+
 # ── La cola de la aduana: lo que no interrumpió ──────────────────────────────
 DESDE_COLA=$(cat "$ESTADO/leido-hasta" 2>/dev/null || echo "1970-01-01T00:00:00Z")
 cola_nueva() {  # cola_nueva <tipo>  (noche | resumen)
@@ -478,8 +696,8 @@ falta_medir() {
 }
 if [ "$MODO" = manana ]; then
   CABEZA="☀️ <b>Buen día, Sergio Urcullo</b> — $(dia_largo "$HOY")"
-  parte seccion_cola noche 'Mientras dormías'; parte linea_salud; grupo PASÓ
-  parte seccion_prospectos; parte seccion_decisiones; parte falta_medir; grupo NECESITO 'Nada.'
+  parte seccion_cola noche 'Mientras dormías'; parte linea_salud; parte linea_latidos; parte linea_relojes_otros; parte linea_colas; grupo PASÓ
+  parte seccion_prospectos; parte seccion_relojes; parte seccion_decisiones; parte falta_medir; grupo NECESITO 'Nada.'
   parte seccion_agenda "$HOY" 'Tu día'; parte seccion_plan "$HOY" 'Hoy sale' 'Para grabar hoy'; grupo SIGUE
 else
   CABEZA="🌙 <b>Cierre del $(dia_largo "$HOY")</b>"
@@ -508,7 +726,7 @@ t = html.unescape(re.sub(r"<[^>]+>", "", sys.stdin.read()))
 t = "\n".join(l for l in t.splitlines() if "→" not in l)
 t = re.sub(r"(?m)^(PASÓ|NECESITO|SIGUE)$", lambda m: m.group(1).capitalize() + ".", t)
 t = re.sub(r"\(\+?\d[\d …-]*\)", "", t)
-t = re.sub("[\U0001F300-\U0001FAFF\u2600-\u27BF\uFE0F•]", "", t)
+t = re.sub("[\U0001F300-\U0001FAFF\u2300-\u23FF\u2600-\u27BF\uFE0F•]", "", t)
 t = re.sub(r"[ \t]+", " ", t)
 print(re.sub(r"(?m)^ +", "", t).strip())' > "$OUT/brief-hoy.txt"
 fi
