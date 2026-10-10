@@ -13,7 +13,7 @@ Leyenda de dueño: `H` Haiku · `S` Sonnet · `O` Opus · `CxSol` / `CxAstra` Co
   3×S scouts web, H inventario, O guionista, O diseñador, O crítico → `docs/ONIA_EQUIPOS_POR_SESION.md` y
   `cola/plan-3-semanas/GRABAR-17-23-OCT.md`. Hecho = ambos en main + mensaje a cada sesión con su equipo.
 - [x] A2 Análisis de `github.com/morluto/rea` (pedido de SU) — workflow `wf_7d7f64d2-ed6` (S función, O seguridad,
-  S encaje/legal, S ficha) → `references/video-intake/2026-10-10-github-morluto-rea.md`. Hecho: ficha en main; veredicto = banco de ideas, NO instalar (riesgo alto en la PC, zona legal roja con competidores).
+  S encaje/legal, S ficha) → `references/video-intake/2026-10-10-github-morluto-rea.md`. Hecho: ficha en la rama de la madre (a main con I1); veredicto = banco de ideas, NO instalar (riesgo alto en la PC, zona legal roja con competidores).
 - [ ] A3 Publicación automática 15:50 UTC de master `32c7e0e8` (F1, #142, #139) — madre + Chrome a las 15:58 UTC.
   Hecho = /login y /checkout MIRADOS renderizados en prod, captura. **Parcial 17:23 UTC:** /login mirado con Playwright
   headless (Chrome instalado): se ve bien, 0 pedidos a Google Fonts, 4,1 s. Falta confirmar QUÉ release corre (Plat) y
@@ -47,7 +47,7 @@ Leyenda de dueño: `H` Haiku · `S` Sonnet · `O` Opus · `CxSol` / `CxAstra` Co
 - [ ] B7 #136 bandeja → `integ/bandeja-master` `1f529cf8` (10.189/0; el rojo de gitleaks fue carga, 10/10 solo) — diseño.
 - [ ] B8 #140 widget → `integ/w1-fixes` `f981cd4a` (9.962/0): CxAstra sin hallazgos de seguridad; CxSol arregló 2 P2
   (sondeo tras envío fallido, orden 1-3-2). Falta la infra (`/public/api/` + `hmac_mandatory`).
-- [ ] B9 #144 `/book` de usted (CxNube, 9.943 + trinquete) — sin migraciones; textos de producto → se publica sin preguntar.
+- [x] B9 #144 `/book` de usted (CxNube, 9.943 + trinquete) — **mergeado** por Plat 17:17 UTC (`21f0c7e6`); sale a las 18:50 UTC (falta **mirarlo**).
 - [ ] B10 #118 agenda por profesional — CLEAN, sin migración — diseño.
 
 ## C. Espera a Sergio Urcullo (se le pide UNA vez, en la sesión que corresponde)
@@ -77,7 +77,7 @@ Leyenda de dueño: `H` Haiku · `S` Sonnet · `O` Opus · `CxSol` / `CxAstra` Co
 - [ ] I5 Codex sin tarea para Hermes ni para Luna. Dueño: madre → una tarea Luna de prueba (inventario mecánico).
 - [ ] I6 Ficha de VoltAgent sin escribir; faltan fichas de Pablo y Boceto y recetas de Rocha y Hormozi en `edicion-referentes`.
   Dueño: S (fichas) cuando termine A1.
-- [ ] I7 Cabecera de `scripts/codex-tarea.sh` dice «código = astra»; la regla vigente es Sol por defecto. Dueño: madre.
+- [x] I7 Cabecera de `scripts/codex-tarea.sh` dice «código = astra»; la regla vigente es Sol por defecto. Dueño: madre.
 
 ## J. Codex: cupos (R8) — 56 % semanal al 9-oct, reinicio 13-oct 23:57 La Paz, refills solo al tope
 | Cupo | Modelo | En curso | Desde |
