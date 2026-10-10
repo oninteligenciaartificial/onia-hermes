@@ -29,6 +29,17 @@ Sergio Urcullo, 10-oct: *«la onia platform está en peligro, no hemos subido vi
 hemos subido campañas, no hemos vendido… hay que terminar todo»*. Producción no se mueve desde el 9-oct 13:53 (`c94b9daa`).
 Etapa 1 (0→5 clientes, salida Bs 3.750/mes); hay 0 clientes. Detalle de cada punto: auditoría §audit:backlog.
 
+**Estado al cierre (10-oct ~14 UTC):** Sergio Urcullo respondió en Plataforma: **#143 (F1), #142 y #139 mergeados**
+(master `32c7e0e8`, CI verde). ⚠️ **#139 trae la migración `20261005140000_realtime_citas_privado`**: no se publica master
+sin aplicarla antes (backup → migración → publicar → GET anónimo 401 → mirar /login). Se le avisó a Plataforma. Cada PR
+con migración deja master no publicable hasta aplicarla: el que la mergea la aplica antes de cualquier otro merge.
+
+**Plan del equipo de agentes:** `hermes-content/docs/ONIA_EQUIPO_DE_AGENTES.md` (plan + crítica). Leer la crítica primero:
+4 afirmaciones del plan son falsas (rutinas cada 10-20 min, la madre abre sesiones completas, la nube le escribe a la madre,
+Codex cloud elige modelo). Lo que sí: CI reemplaza la suite local de la madre como gate; una sola fila de tareas;
+`--disable multi_agent` en Codex; ~6 tareas Sol por día hasta el reinicio del 14-oct; ≤10 agentes Claude a la vez la
+primera semana. El cuello de botella son los sí de Sergio Urcullo y los merges en serie, no la cantidad de agentes.
+
 **Orden. Cada paso con su dueño y su criterio de hecho:**
 1. **Plataforma publica la cadena** (dueño: Plataforma; freno: los 4 sí de Sergio Urcullo **en esa sesión**: F1, #142,
    #140 con infra, «la regla del 9-oct es mía»). #143 F1 → `publicar.sh` → MIRAR /login → #142 → #136+#130 → #140 + infra
