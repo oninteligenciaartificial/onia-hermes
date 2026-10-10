@@ -121,6 +121,6 @@ orden de `CLAUDE.md`). Alinear esa línea lo decide él.
    con 1 toque (#128), el checkout de usted y «Falta factura».
 5. **La demo refrescada** para las capturas C1-C7 del video de venta.
 
-**Pasan de 1.1 a 1.0 con una sola respuesta suya:** el OK de diseño de las 7 pantallas (bandeja,
+**Lo que destraba la 1.1 depende de Sergio Urcullo:** el OK de diseño de las 7 pantallas (bandeja,
 contacto nuevo, agenda, odontograma, caja, app sin internet y el chat de la web), el CAFC del piloto
-(SIAT) y el chip prepago (agente de WhatsApp).
+para cerrar el SIAT y el chip prepago para el agente de WhatsApp.
