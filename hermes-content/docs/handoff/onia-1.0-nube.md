@@ -118,6 +118,12 @@ Qué se vende y qué falta: `docs/ONIA_CATALOGO_DE_VENTA.md`.
   otro camino ni se le pide a otra sesión (sería lavar el permiso). Lo que sí anduvo después: SELECT de solo lectura por
   SSH y el `/login` público con curl. Decide Sergio Urcullo si esta sesión registra migraciones en producción.
 
+- **10-oct ~17:35 UTC, reintento del publicador:** `correr_con_reintento` en `scripts/loops/extras/publicar-solo.sh`
+  (hermes `1ae0a62f7`, test 3/3 nuevo y 0/3 con el guion viejo; el del freno de estructura sigue 5/5). La copia del VPS
+  (`/root/bin/onia-publicar-solo.sh`, 25-sep) es idéntica al guion viejo, byte a byte. **Instalarla la frenó el control
+  de permisos («Remote Shell Writes»).** No se reintenta ni se le pide a otra sesión: decide Sergio Urcullo. Instalar =
+  backup `.bak-20261010` + copiar + `bash -n` + `sha256sum` (debe empezar con `2fcf732db2d654be`).
+
 ## 6. Qué depende de Sergio Urcullo (lo canaliza la madre)
 
 **Sus respuestas del 10-oct, en esta sesión** (las 4 preguntas del 10-oct, una por una):
