@@ -19,7 +19,7 @@ git fetch <ruta>/hermes-ramas-locales-20261009.bundle 'refs/heads/*:refs/heads/*
 
 ## Listas para subir (10-oct, ~20:30 UTC) — `plataforma-listas-20261010.bundle`
 
-Armadas y probadas en la nube sobre `master` `922a0da9`: tsc 0 y suite completa en verde, 0 rojos. Cada una es
+Armadas y probadas en la nube sobre `master` `922a0da9`: tsc 0 y suite completa en verde, 0 rojos, en las cinco. Cada una es
 **fast-forward** sobre la cabeza actual de su PR: se suben sin force. Solo chocaba `docs/CHANGELOG.md` (#110 y #119): quedaron
 las dos entradas.
 
@@ -39,7 +39,7 @@ git push origin listas/i140-w1f:integ/w1-w1b                              # #140
 | `i110-v3` | `65c5f2f3` | `1c5112a9` (#110) | Caja v3 (`wip/c110`) + `master` | 10.106 |
 | `i119-v3` | `a6484bca` | `3e0575ef` (#119) | Odontograma v3 (`wip/c119`) + `master` | 10.157 |
 | `i118-v3` | `a8b31bfd` | `510b3bcd` (#118) | Agenda del día v3 (`wip/c118`) + `master` | 10.096 |
-| `i140-w1f` | `34f86438` | `f981cd4a` (#140) | W1f (el chat se presenta con el nombre de la clínica) + `master` | ver abajo |
+| `i140-w1f` | `34f86438` | `f981cd4a` (#140) | W1f (el chat se presenta con el nombre de la clínica) + `master` | 10.174 |
 
 Sus migraciones ya están aplicadas en producción (10-oct). Push fuera de los minutos :20-:55 de las horas del cron y,
 si la cola del CI no está vacía, no en la hora antes del cron (skill `onia-infra` §4).
