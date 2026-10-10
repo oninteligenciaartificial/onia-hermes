@@ -1,0 +1,107 @@
+{
+  "title": "78h en una tarea (inventario continuo, pack referentes)",
+  "estado": "Sale dom 18-oct 16:00 (La Paz) con el video DU-01. Antes de agendar: confirmar que el aviso CHECKLIST está pegado en Avisos; si no, la lámina 5 pasa a «Lo que probé está en mi comunidad. Link en mi perfil.» (ver nota de la cola). Cuenta de EJEMPLO (30 × 3 min), no es un dato de ningún negocio. Receta: .claude/skills/diseno-contenido-onia/SKILL.md «Inventario continuo».",
+  "caption": "Buscá CHECKLIST en Avisos de la comunidad. Link en mi perfil.\n\nLa cuenta de ejemplo: contestar «¿cuánto cuesta?» 30 veces por semana, 3 minutos cada vez. Son 90 minutos por semana y 78 horas al año. Es un ejemplo, no un dato de nadie.\n\nLa tarea que aparezca en 2 o más respuestas va a la lista. De esas, primero la que más horas te come y menos daño hace si sale mal.",
+  "hashtags": [
+    "#automatizacion",
+    "#negocios",
+    "#ia",
+    "#bolivia"
+  ],
+  "image_style": "captura",
+  "slides": [
+    {
+      "number": 1,
+      "layout": "dato",
+      "theme": "blanco",
+      "value": "78h",
+      "headline": "en una tarea, al año",
+      "body": "(ejemplo)",
+      "alt_text": "Portada: 78 horas al año en una sola tarea repetida (ejemplo)."
+    },
+    {
+      "number": 2,
+      "layout": "inventario",
+      "theme": "blanco",
+      "start": 1,
+      "items": [
+        {
+          "label": "Repetidas",
+          "text": "Más de 3 veces por semana, igual."
+        },
+        {
+          "label": "Interrupciones",
+          "text": "Te sacan de lo importante."
+        },
+        {
+          "label": "Olvidos",
+          "text": "Cobros y seguimientos."
+        },
+        {
+          "label": "Respuestas tardías",
+          "text": "Clientes que se pierden."
+        },
+        {
+          "label": "Postergadas",
+          "text": "La tarea que odiás."
+        }
+      ],
+      "alt_text": "Las cinco preguntas del checklist, numeradas: repetidas, interrupciones, olvidos, respuestas tardías, postergadas."
+    },
+    {
+      "number": 3,
+      "layout": "inventario",
+      "theme": "blanco",
+      "center": true,
+      "items": [
+        {
+          "n": "",
+          "label": "Veces",
+          "text": "30 por semana (ejemplo)."
+        },
+        {
+          "n": "",
+          "label": "Minutos",
+          "text": "3 cada vez (ejemplo)."
+        },
+        {
+          "n": "",
+          "label": "Semanas",
+          "text": "× 52 = 78 horas al año."
+        }
+      ],
+      "alt_text": "La cuenta de ejemplo: 30 veces por semana, 3 minutos cada vez, 52 semanas = 78 horas al año."
+    },
+    {
+      "number": 4,
+      "layout": "inventario",
+      "theme": "blanco",
+      "center": true,
+      "ask": true,
+      "next": "",
+      "items": [
+        {
+          "n": "",
+          "label": "Más horas, menos riesgo",
+          "text": "Entre las repetidas, esa primero."
+        },
+        {
+          "n": "",
+          "label": "CHECKLIST",
+          "text": "Las 5 preguntas, para tu negocio."
+        }
+      ],
+      "alt_text": "Remate: elegir primero la tarea con más horas y menos riesgo; el recurso es el CHECKLIST."
+    },
+    {
+      "number": 5,
+      "layout": "cierre",
+      "theme": "negro",
+      "kicker": "Con ese número sabés qué darle a la IA. Y qué no.",
+      "pre": "Buscá",
+      "keyword": "CHECKLIST",
+      "body": "en Avisos · link en mi perfil",
+      "alt_text": "Cierre: «Buscá CHECKLIST en Avisos · link en mi perfil». Con el fotograma de Sergio Urcullo (B/N) cuando exista; hoy solo texto."
+    }
+  ]
+}

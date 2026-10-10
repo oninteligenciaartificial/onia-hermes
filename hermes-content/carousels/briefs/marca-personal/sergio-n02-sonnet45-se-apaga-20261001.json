@@ -127,6 +127,7 @@
     {
       "number": 8,
       "layout": "cierre",
+      "pre": "Comentá",
       "theme": "negro",
       "keyword": "MIGRAR",
       "body": "y te paso el checklist de migración desde Sonnet\u00a04.5.",

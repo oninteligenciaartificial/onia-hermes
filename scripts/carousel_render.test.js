@@ -101,7 +101,7 @@ test('todo pack listado RENDERIZA (no solo figura en la lista)', () => {
   }
 });
 test('referentes: cada layout renderiza y uno desconocido falla claro', () => {
-  for (const layout of ['logos', 'analogia', 'ensayo', 'ilustrado', 'lista', 'dato', 'captura', 'cierre']) {
+  for (const layout of ['logos', 'analogia', 'ensayo', 'ilustrado', 'lista', 'inventario', 'dato', 'captura', 'cierre']) {
     const html = referentesHtml({ layout, headline: 'H *x*', body: 'b', items: [{ label: 'L', text: 't' }] }, 1, 3, 'sergio', {});
     assert.ok(html.includes('</html>') && html.includes(`l-${layout}`), layout);
   }
@@ -109,11 +109,45 @@ test('referentes: cada layout renderiza y uno desconocido falla claro', () => {
   for (const theme of ['blanco', 'verde', 'negro']) assert.ok(referentesHtml({ layout: 'ensayo', body: 'b' }, 0, 1, 'sergio', { theme }).includes(`t-${theme}`), theme);
   assert.throws(() => referentesHtml({ layout: 'ensayo', theme: 'rosa' }, 0, 1, 'sergio', {}), /theme desconocido/);
 });
-test('referentes cierre: «Comentá» por defecto; `pre` y `kicker` cambian el verbo y suman una frase (9-oct)', () => {
-  const base = referentesHtml({ layout: 'cierre', keyword: 'HOOK', body: 'y te paso el link' }, 0, 1, 'sergio', {});
-  assert.ok(base.includes('<p class="pre">Comentá</p>') && !base.includes('class="kick"'));
+test('referentes cierre: «Buscá» por defecto; `pre` y `kicker` cambian el verbo y suman una frase (10-oct)', () => {
+  // Antes el verbo por defecto era «Comentá» (DM automático sin probar). Ahora es «Buscá»; «Comentá» sólo si el brief lo pide.
+  const base = referentesHtml({ layout: 'cierre', keyword: 'DISEÑO', body: 'en Avisos · link en mi perfil' }, 0, 1, 'sergio', {});
+  assert.ok(base.includes('<p class="pre">Buscá</p>') && !base.includes('class="kick"') && !base.includes('Comentá'));
+  const viejo = referentesHtml({ layout: 'cierre', pre: 'Comentá', keyword: 'HOOK', body: 'y te paso el link' }, 0, 1, 'sergio', {});
+  assert.ok(viejo.includes('<p class="pre">Comentá</p>') && !viejo.includes('Buscá'));
   const nuevo = referentesHtml({ layout: 'cierre', pre: 'Buscá', kicker: 'La IA también necesita *límites*.', keyword: 'ARCHIVOS', body: 'en Avisos · link en mi perfil' }, 0, 1, 'sergio', {});
   assert.ok(nuevo.includes('<p class="pre">Buscá</p>') && nuevo.includes('class="kick"') && !nuevo.includes('Comentá'));
+});
+test('referentes inventario: 5, 3 y 2 filas en la MISMA grilla; sin tarjetas ni título; números continuos (10-oct)', () => {
+  const fila = (n) => ({ label: `Nombre ${n}`, text: `Línea ${n}.` });
+  const topes = (html) => [...html.matchAll(/class="inv-row" style="top:([\d.]+)%"/g)].map((m) => Number(m[1]));
+  const cinco = referentesHtml({ layout: 'inventario', items: [1, 2, 3, 4, 5].map(fila) }, 1, 5, 'sergio', {});
+  assert.ok(cinco.includes('l-inventario') && !cinco.includes('<h2'), 'sin título si falta headline');
+  // la grilla: centros a 13 % + 4 % y paso de 16,5 %
+  assert.deepStrictEqual(topes(cinco), [17, 33.5, 50, 66.5, 83]);
+  assert.deepStrictEqual([...cinco.matchAll(/class="inv-mark">(\d+)</g)].map((m) => m[1]), ['1', '2', '3', '4', '5']);
+  // la numeración sigue en la lámina siguiente (start) y `n` de la fila gana
+  const tres = referentesHtml({ layout: 'inventario', start: 6, center: true, items: [fila(6), fila(7), fila(8)] }, 2, 5, 'sergio', {});
+  assert.deepStrictEqual([...tres.matchAll(/class="inv-mark">(\d+)</g)].map((m) => m[1]), ['6', '7', '8']);
+  // sin center la primera fila de 3 queda en la misma y que la de 5; centrada, el bloque de 3 filas (41 %) queda en el medio
+  assert.deepStrictEqual(topes(referentesHtml({ layout: 'inventario', start: 6, items: [fila(6), fila(7), fila(8)] }, 2, 5, 'sergio', {})), [17, 33.5, 50]);
+  assert.deepStrictEqual(topes(tres), [33.5, 50, 66.5]);
+  assert.ok(tres.includes('centrada'));
+  // remate: 2 filas, la última aislada con aire y con la flecha; `ask` en texto suma la palabra junto a la flecha
+  const dos = referentesHtml({ layout: 'inventario', ask: true, items: [fila(1), fila(2)] }, 3, 5, 'sergio', {});
+  assert.deepStrictEqual(topes(dos), [17, 33.5 + 7]);
+  assert.ok(dos.includes('class="inv-ask"') && !dos.includes('<span>undefined'));
+  assert.ok(referentesHtml({ layout: 'inventario', ask: 'así', items: [fila(1), fila(2)] }, 3, 5, 'sergio', {}).includes('<span>así</span>'));
+  assert.ok(!cinco.includes('class="inv-ask"'), 'sin ask no hay flecha');
+  // sin cajas: ni borde ni tarjeta en las filas del inventario
+  assert.ok(!/\.inv-row\{[^}]*(border|background)/.test(cinco));
+  // el logo oficial reemplaza al número
+  const logo = referentesHtml({ layout: 'inventario', items: [{ icon: 'hermes-content/references/brand-claude/' + require('fs').readdirSync(require('path').join(__dirname, '..', 'hermes-content/references/brand-claude')).find((f) => /\.(png|svg)$/.test(f)), label: 'Claude', text: 'x' }] }, 1, 3, 'sergio', {});
+  assert.ok(logo.includes('class="inv-icon"') && !/class="inv-mark">\d/.test(logo));
+  // la grilla es fija: más de 5 filas no entran
+  assert.throws(() => referentesHtml({ layout: 'inventario', items: [1, 2, 3, 4, 5, 6].map(fila) }, 1, 3, 'sergio', {}), /hasta 5 filas/);
+  // el título es opcional y, si está, se dibuja
+  assert.ok(referentesHtml({ layout: 'inventario', headline: 'Hola', items: [fila(1)] }, 1, 3, 'sergio', {}).includes('class="inv-t"'));
 });
 test('community-editorial usa la cuenta elegida y CTA directo para pauta', () => {
   const html = communityEditorialHtml({

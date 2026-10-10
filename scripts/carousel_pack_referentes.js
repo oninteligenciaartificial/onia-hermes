@@ -10,9 +10,11 @@
  *   ilustrado  Santiago Muñoz: título con énfasis de color, ilustración dominante, pie corto,
  *              flecha de continuidad manuscrita. Con `badge` sirve de portada.
  *   lista      Santiago Muñoz: título + 3–5 filas con ícono/logo, etiqueta y una línea.
+ *   inventario @iampascio (10-oct): hasta 5 filas por lámina en grilla fija, sin tarjetas ni título, número en tinta
+ *              continuo entre láminas; `center` y `ask` para la última lista y el remate.
  *   dato       Erik Taveras / Ingeniero Binario: una cifra gigante + qué significa.
  *   captura    Carlos Domínguez: captura real (pantalla, comando, prompt) como prueba.
- *   cierre     los 8 referentes: «Comentá PALABRA» + qué recibís.
+ *   cierre     los 8 referentes: «Buscá PALABRA en Avisos» (o `pre` propio) + qué recibís.
  * La imagen la pinta Higgsfield SIN letras (scripts/carousel_images.mjs); el texto va acá.
  * Los logos son los oficiales de hermes-content/references/brand-claude/ (nunca recreados).
  */
@@ -58,6 +60,37 @@ function crear({ esc, emph, ACCOUNTS, BRAND, getFmt }) {
     return `<div class="c-lista${(s.items || []).length >= 4 ? ' compacta' : ''}"><h2 class="t">${emph(s.headline || '')}</h2>${s.body ? `<p class="sub">${emph(s.body)}</p>` : ''}<ul>${rows}</ul></div>`;
   }
 
+  // «Inventario continuo» (referencia DePPPp5FgMh, 10-oct): una lista larga de cosas del mismo tipo partida en
+  // láminas con GRILLA FIJA. A diferencia de `lista` NO dibuja tarjetas, NO escribe título y usa un solo cuerpo
+  // (44 px) para el nombre y la línea: la jerarquía sale del peso (800 / 400) y del color (tinta / gris).
+  // La grilla va en % para que valga en `square`: marca a 17 % del ancho (10 % de lado), texto desde 32,5 %,
+  // primera fila a 13 % del alto y paso de 16,5 %. Es la misma en todas las láminas: sobreponiendo la 2 y la 3
+  // la x del ícono y del texto no se mueve.
+  //   items[{icon | n, label, text}]  `icon` = logo oficial; sin él va el número en tinta (sin círculo, 800)
+  //   start     primer número de la lámina (la numeración es CONTINUA entre láminas: 6, 7, 8…); `n` de la fila gana
+  //   headline  opcional y de UN renglón; si falta no se dibuja nada
+  //   center    centra el bloque en vertical (última lista con menos de 5 filas)
+  //   ask       remate: aísla la última fila (el recurso) con aire y la une al cierre con una flecha Caveat;
+  //             `true` o un texto corto que va junto a la flecha. Usarlo con `next: ""` (la flecha ya es esa)
+  const INV = { top: 13, pitch: 16.5, row: 8, air: 7, arrow: 11.5, max: 5 }; // % del alto; `arrow` = aire + alto de la flecha del remate
+  function inventarioHtml(s) {
+    const items = s.items || [];
+    if (items.length > INV.max) throw new Error(`pack referentes: inventario admite hasta ${INV.max} filas por lámina (grilla fija), llegaron ${items.length}`);
+    const start = Number.isFinite(Number(s.start)) && s.start !== '' && s.start != null ? Number(s.start) : 1;
+    const gap = s.ask && items.length > 1 ? INV.air : 0; // aire extra antes de la última fila
+    const block = (items.length - 1) * INV.pitch + gap + INV.row + (gap ? INV.arrow : 0); // alto del bloque (con la flecha del remate)
+    const top0 = s.center ? 50 - block / 2 : INV.top;
+    const y = (i) => top0 + i * INV.pitch + (i === items.length - 1 ? gap : 0) + INV.row / 2; // centro de la fila i
+    const rows = items.map((it, i) => {
+      const mark = it.icon ? img(it.icon, 'inv-icon') : esc(String(it.n != null ? it.n : start + i));
+      return `<div class="inv-row" style="top:${y(i).toFixed(2)}%"><div class="inv-mark">${mark}</div><div class="inv-txt"><b>${emph(it.label || '')}</b>${it.text ? `<span>${emph(it.text)}</span>` : ''}</div></div>`;
+    }).join('');
+    const arrow = s.ask && items.length
+      ? `<div class="inv-ask" style="top:${(y(items.length - 1) + INV.row / 2 + 2.5).toFixed(2)}%">${typeof s.ask === 'string' ? `<span>${esc(s.ask)}</span>` : ''}<svg viewBox="0 0 645 120"><path d="M6 24 C 150 118, 330 -10, 596 76 M562 52 L598 78 L556 96"/></svg></div>`
+      : '';
+    return `<div class="c-inv${s.center ? ' centrada' : ''}">${s.headline ? `<h2 class="inv-t">${emph(s.headline)}</h2>` : ''}${rows}${arrow}</div>`;
+  }
+
   // Erik Taveras / Ingeniero Binario: el número ES la lámina.
   function datoHtml(s) {
     const v = String(s.value || '');
@@ -83,14 +116,16 @@ function crear({ esc, emph, ACCOUNTS, BRAND, getFmt }) {
       + `var max=document.documentElement.clientWidth-2*84,f=parseFloat(getComputedStyle(k).fontSize);`
       + `k.style.whiteSpace='nowrap';k.style.display='inline-block';`
       + `while(k.getBoundingClientRect().width>max&&f>60){f-=3;k.style.fontSize=f+'px';}});</script>`;
-    // `pre` cambia el verbo de arriba (por defecto «Comentá»; «Buscá» para «Buscá X en Avisos · link en mi perfil», 9-oct) y
-    // `kicker` suma una frase corta arriba del verbo. Sin esos campos la lámina sale igual que siempre.
-    const pre = s.pre != null ? String(s.pre) : 'Comentá';
+    // `pre` cambia el verbo de arriba y `kicker` suma una frase corta arriba del verbo.
+    // Desde el 10-oct el verbo por defecto es «Buscá» («Buscá X en Avisos · link en mi perfil»): «Comentá X y te paso el
+    // link» promete un DM automático que no está probado (Meta rechazó 2 veces ese mecanismo, CLAUDE.md). Un brief que
+    // todavía quiera «Comentá» lo pide con `"pre": "Comentá"`; los 19 briefs que lo usaban lo llevan escrito.
+    const pre = s.pre != null ? String(s.pre) : 'Buscá';
     const kicker = s.kicker ? `<p class="kick">${emph(String(s.kicker))}</p>` : '';
     return `<div class="c-cierre">${kicker}<p class="pre">${esc(pre)}</p><div class="kw"${kwSize}>${esc(kw)}</div><p class="sub2">${emph(s.body || '')}</p></div>${fit}`;
   }
 
-  const LAYOUTS = { logos: logosHtml, analogia: analogiaHtml, ensayo: ensayoHtml, ilustrado: ilustradoHtml, lista: listaHtml, dato: datoHtml, captura: capturaHtml, cierre: cierreHtml };
+  const LAYOUTS = { logos: logosHtml, analogia: analogiaHtml, ensayo: ensayoHtml, ilustrado: ilustradoHtml, lista: listaHtml, inventario: inventarioHtml, dato: datoHtml, captura: capturaHtml, cierre: cierreHtml };
 
   return function referentesHtml(slide, idx, total, account, args) {
     const FMT = getFmt();
@@ -182,6 +217,18 @@ body{margin:0;font-family:'DM Sans',system-ui,sans-serif}
 .c-lista li div{display:flex;flex-direction:column;gap:4px}
 .c-lista b{font-size:50px;font-weight:800;letter-spacing:-.5px}
 .c-lista li span{font-size:40px;color:var(--soft)}
+/* inventario: grilla fija en % (receta DePPPp5FgMh). La capa ocupa TODA la lámina: el .main deja de ser el ancla */
+.l-inventario .main{position:static;padding:0}
+.c-inv{position:absolute;inset:0}
+.inv-t{position:absolute;left:84px;right:84px;top:84px;font-family:'Bricolage',sans-serif;font-weight:750;font-size:60px;line-height:1;letter-spacing:-1.5px}
+.inv-row{position:absolute;left:0;right:0;transform:translateY(-50%);display:flex;align-items:center;padding:0 84px 0 32.5%}
+.inv-mark{position:absolute;left:17%;top:50%;width:10%;aspect-ratio:1;transform:translateY(-50%);display:flex;align-items:center;justify-content:center;font-family:'DM Sans',system-ui,sans-serif;font-weight:800;font-size:76px;line-height:1;color:var(--ink)}
+.inv-icon{width:100%;height:100%;object-fit:contain}
+.inv-txt{font-size:44px;line-height:1.18}
+.inv-txt b{display:block;font-weight:800;color:var(--ink);letter-spacing:-.3px}
+.inv-txt span{display:block;font-weight:400;color:var(--soft)}
+.inv-ask{position:absolute;left:32.5%;right:84px;display:flex;flex-direction:column;color:var(--arrow);font-family:'Caveat',cursive;font-size:48px}
+.inv-ask svg{width:100%;height:120px;fill:none;stroke:var(--arrow);stroke-width:4;stroke-linecap:round;stroke-linejoin:round;flex:none}
 /* dato */
 .c-dato .big{font-family:'Bricolage',sans-serif;font-weight:800;font-size:420px;line-height:.82;letter-spacing:-.015em;white-space:nowrap;color:var(--acc);margin-bottom:28px}
 .t-blanco .c-dato .big{color:#0A0F0D;text-shadow:12px 12px 0 var(--mark)}

@@ -101,6 +101,7 @@
     {
       "number": 7,
       "layout": "cierre",
+      "pre": "Comentá",
       "theme": "verde",
       "keyword": "PROMPT",
       "body": "y te mando por mensaje la plantilla de los 8 bloques, con su negative base.",
