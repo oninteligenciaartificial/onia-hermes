@@ -66,7 +66,7 @@ test("lo que crea es un borrador y lo que enciende exige el OK escrito: no hay u
   const herramientas = spec.creacion.map((p) => p.herramienta);
   assert.ok(!herramientas.includes("ads_activate_entity"), "crear no incluye activar");
   assert.equal(spec.activacion.herramienta, "ads_activate_entity");
-  for (const requisito of ["tarjeta", "ok_de_gasto", "filas_en_verde", "bot"]) {
+  for (const requisito of ["tarjeta", "ok_de_gasto", "filas_en_verde", "bot", "quien_contesta", "duracion_de_la_llamada", "canales_1_y_2", "instagram_decidido", "self_ai_decidido"]) {
     assert.ok(spec.activacion.solo_con.includes(requisito), `activar exige «${requisito}»`);
     assert.ok(spec.no_se_crea_ni_se_enciende_sin.some((c) => c.id === requisito), `«${requisito}» está definido como condición`);
   }
@@ -158,4 +158,50 @@ test("el archivo no lleva credenciales, tokens ni teléfonos de pacientes", () =
   const crudo = leer(SPEC_RUTA);
   assert.ok(!/(password|contraseña|token|secret|EAA[A-Za-z0-9]{20,})/i.test(crudo.replace(/ojo_con_el_conector[\s\S]*?\n/, "")), "sin secretos");
   assert.ok(!/\b591[67]\d{7}\b/.test(crudo), "el número del bot es un marcador {{NUMERO_DEL_BOT}}, no un teléfono pegado");
+});
+
+test("el texto del anuncio ES el caption del brief y abre con el filtro de dueños (§5.2); no dice «con IA» junto al «a quién»", () => {
+  const brief = JSON.parse(leer("hermes-content/carousels/briefs/ads/onia-platform-dental-meta-a1v5-las-diez.json"));
+  const micro = JSON.parse(leer("hermes-content/carousels/briefs/ads/onia-platform-dental-meta-a1v5-micro-10s.json"));
+  assert.equal(spec.copy_de_usted.texto_principal, brief.caption, "el JSON copia el caption del brief");
+  assert.equal(micro.caption, brief.caption, "el video de 10 s lleva el mismo texto que el de 11 s");
+  for (const c of spec.creacion.filter((p) => p.herramienta === "ads_create_creative")) {
+    assert.equal(c.args.message, brief.caption, `${c.para}: el message es el caption del brief`);
+    assert.equal(c.args.headline, brief.headline_anuncio, `${c.para}: el titular es el del brief`);
+  }
+  assert.match(brief.caption, /^Para dueños y dueñas de clínicas dentales de Santa Cruz\./, "el texto abre con el filtro: el cliente ideal es ≲ 0,1 % del público y el anuncio sin filtro trae pacientes");
+  assert.equal(brief.kicker, "Para dueños y dueñas de clínicas dentales de Santa Cruz", "la imagen lleva el mismo filtro");
+  assert.ok(!/con IA/i.test(brief.caption), "catálogo §8: el «a quién escribirle» sale de reglas, no de la IA");
+  assert.ok(!/\b\d+\s*minutos\b/i.test(`${brief.nota} ${brief.caption}`), "ni la imagen ni el texto prometen minutos: el bot y /contacto dicen 30 y la agenda 20 (L-04)");
+});
+
+test("cada condición de activación está definida, y cada condición definida se exige", () => {
+  const definidas = new Set(spec.no_se_crea_ni_se_enciende_sin.map((c) => c.id));
+  for (const id of spec.activacion.solo_con) assert.ok(definidas.has(id), `«${id}» se exige pero no está definida`);
+  for (const id of definidas) assert.ok(spec.activacion.solo_con.includes(id), `«${id}» está definida pero no se exige`);
+  assert.match(spec.no_se_crea_ni_se_enciende_sin.find((c) => c.id === "captura_nueva").comprobacion, /Enviar yo mismo/, "la captura nueva no muestra el envío a medias (G-03)");
+});
+
+test("la subida de medios tiene sus argumentos y cada marcador {{…}} sale de un paso anterior o de «valores_a_resolver»", () => {
+  for (const p of spec.creacion.filter((x) => x.herramienta === "ads_creative_upload_media")) {
+    assert.equal(p.args.ad_account_id, spec.cuenta.ad_account_id, `paso ${p.paso}: cuenta`);
+    assert.ok(["LOCAL_FILE", "URL"].includes(p.args.upload_source), `paso ${p.paso}: upload_source`);
+    assert.equal(p.args_si_es_por_url.upload_source, "URL");
+    assert.ok(["IMAGE", "VIDEO"].includes(p.args_si_es_por_url.media_type), `paso ${p.paso}: media_type para la subida por URL`);
+  }
+  const producidos = new Set(Object.keys(spec.valores_a_resolver).flatMap((k) => k.split(",").map((x) => x.trim())));
+  for (const p of spec.creacion) for (const g of [p.guarda].flat().filter(Boolean)) producidos.add(g);
+  const usados = new Set([...JSON.stringify([spec.creacion, spec.activacion]).matchAll(/\{\{([^}]+)\}\}/g)].map((m) => m[1]));
+  for (const m of usados) {
+    const ok = producidos.has(m) || (m.startsWith("URL_PUBLICA_") && producidos.has("URL_PUBLICA_*")) || (m.startsWith("hash_") || m.startsWith("creative_id_") || m.startsWith("ad_object_id_")) && producidos.has("hash_*");
+    assert.ok(ok, `el marcador {{${m}}} no sale de ningún paso ni de «valores_a_resolver»`);
+  }
+});
+
+test("sin Instagram vinculado, ningún creativo pide posiciones de Instagram (no entregarían)", () => {
+  for (const c of spec.creacion.filter((p) => p.herramienta === "ads_create_creative")) {
+    const crudo = JSON.stringify(c.args);
+    if (!("instagram_user_id" in c.args)) assert.ok(!/instagram/i.test(crudo), `${c.para}: pide Instagram sin instagram_user_id`);
+  }
+  assert.ok(spec.no_se_crea_ni_se_enciende_sin.some((c) => c.id === "instagram_decidido"));
 });

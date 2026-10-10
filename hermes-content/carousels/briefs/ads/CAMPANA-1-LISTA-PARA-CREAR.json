@@ -30,7 +30,7 @@
     },
     {
       "id": "captura_nueva",
-      "comprobacion": "feed.png y story.png de A1 re-renderizados con la captura de la cuenta demo (hoy llevan la del 30-sep)",
+      "comprobacion": "feed.png, story.png y el video de A1 re-renderizados con la captura de la cuenta demo (hoy llevan la del 30-sep) y SIN el botón «Enviar yo mismo por WhatsApp» en la tarjeta, o con G-03 en ✅: el envío con un toque está a medias (catálogo §7)",
       "estado_10oct": "provisoria"
     },
     {
@@ -42,6 +42,36 @@
       "id": "numero_vinculado",
       "comprobacion": "el número del bot vinculado a la página «Onia» (Business Manager, configuración, WhatsApp); el conector no lo muestra",
       "estado_10oct": "sin medir"
+    },
+    {
+      "id": "quien_contesta",
+      "comprobacion": "decidido por escrito: quién contesta en WhatsApp y en cuánto (fila 6 del go/no-go; menos de 24 h abre la ventana gratis de 72 h)",
+      "dueno": "Sergio Urcullo",
+      "estado_10oct": "❌"
+    },
+    {
+      "id": "duracion_de_la_llamada",
+      "comprobacion": "unificada: el bot (M0) y /contacto dicen 30 minutos, la agenda y los textos 20 (L-04 🟡 en ONIA_PROMESA_VS_PRODUCTO.md)",
+      "dueno": "Sergio Urcullo",
+      "estado_10oct": "🟡 sin unificar"
+    },
+    {
+      "id": "canales_1_y_2",
+      "comprobacion": "ONIA_PLAN_1.0_Y_CAJA.md §3: la prueba arranca «con los canales 1 y 2 ya contactados»; Sergio Urcullo frenó el contacto el 8-oct y su aprobación del 10-oct cubre el texto, no el contacto",
+      "dueno": "Sergio Urcullo",
+      "estado_10oct": "no se cumple"
+    },
+    {
+      "id": "instagram_decidido",
+      "comprobacion": "ONIA Ads no tiene Instagram vinculado (ads_get_ig_accounts → []): sin `instagram_user_id` el anuncio NO sale por Instagram. O se vincula una cuenta antes del paso 4, o se acepta que los US$ 56 corren solo por Facebook",
+      "dueno": "Sergio Urcullo",
+      "estado_10oct": "sin decidir"
+    },
+    {
+      "id": "self_ai_decidido",
+      "comprobacion": "`self_ai_disclosure` no se puede cambiar después de crear el creativo. Las capturas son reales y el texto sale de código, y la declaración solo rige en la UE, India, Taiwan, California y Nueva York (no en Bolivia); la decisión es suya",
+      "dueno": "Sergio Urcullo",
+      "estado_10oct": "sin decidir"
     }
   ],
   "cuenta": {
@@ -71,8 +101,9 @@
     },
     "tope_en_bs": 750,
     "techo_total_en_bs": 1400,
-    "regla_del_tipo_de_cambio": "Si el banco cobra más de Bs 13,4 por dólar, los 14 días pasan de Bs 750: se apaga cuando el cobro acumulado llegue a Bs 750 (a 15, el día 12). Un límite de gasto de campaña menor a US$ 100 no lo acepta Meta, así que el tope se cuida con el presupuesto total, la fecha de fin y apagando a mano.",
-    "fuente": "ONIA_ADQUISICION_Y_PAUTA.md §5.3 y ONIA_PLAN_1.0_Y_CAJA.md §2-3"
+    "regla_del_tipo_de_cambio": "Si el banco cobra más de Bs 13,4 por dólar, los 14 días pasan de Bs 750: se apaga cuando el cobro acumulado llegue a Bs 750 (a 15, el día 12). Un límite de gasto de campaña menor a US$ 100 no lo acepta Meta, así que el tope se cuida con el presupuesto total, la fecha de fin y apagando a mano. Nada apaga solo en Bs 750: el techo duro es el total de US$ 56 (Bs 637 a 11,37, Bs 840 a 15); pasado Bs 750 se apaga a mano.",
+    "fuente": "ONIA_ADQUISICION_Y_PAUTA.md §5.3 y ONIA_PLAN_1.0_Y_CAJA.md §2-3",
+    "nota_presupuesto": "ONIA_PLAN_1.0_Y_CAJA.md §3 decía «presupuesto diario fijo»; ADQ §5.3 y este archivo usan el total de la campaña con fecha de fin, que es el único que garantiza el techo. US$ 4/día es un promedio, no un tope diario."
   },
   "fechas": {
     "inicio": "00:00 hora de Bolivia (UTC-4) del día siguiente al OK escrito",
@@ -158,29 +189,78 @@
       "paso": 3,
       "herramienta": "ads_creative_upload_media",
       "para": "A1-E",
-      "archivos": [
-        "hermes-content/carousels/out/ads/onia-platform-dental-meta-a1v5-las-diez/feed.png (1080x1350)",
-        "hermes-content/carousels/out/ads/onia-platform-dental-meta-a1v5-las-diez/story.png (1080x1920)"
-      ],
-      "como": "upload_source LOCAL_FILE (la app interactiva, desde la PC) o URL pública. El repo no es público: si se sube por URL, primero se aloja el archivo en un enlace directo",
-      "guarda": [
-        "hash_feed",
-        "hash_story"
-      ]
+      "archivo": "hermes-content/carousels/out/ads/onia-platform-dental-meta-a1v5-las-diez/feed.png (1080x1350)",
+      "args": {
+        "ad_account_id": "1073680778314945",
+        "upload_source": "LOCAL_FILE"
+      },
+      "args_si_es_por_url": {
+        "ad_account_id": "1073680778314945",
+        "upload_source": "URL",
+        "media_type": "IMAGE",
+        "media_url": "{{URL_PUBLICA_hash_feed}}",
+        "name": "ONIA A1-E feed"
+      },
+      "como": "LOCAL_FILE abre la app interactiva (desde la PC, elige el archivo); por URL hace falta un enlace público directo",
+      "guarda": "hash_feed"
     },
     {
       "paso": 3.1,
       "herramienta": "ads_creative_upload_media",
+      "para": "A1-E",
+      "archivo": "hermes-content/carousels/out/ads/onia-platform-dental-meta-a1v5-las-diez/story.png (1080x1920)",
+      "args": {
+        "ad_account_id": "1073680778314945",
+        "upload_source": "LOCAL_FILE"
+      },
+      "args_si_es_por_url": {
+        "ad_account_id": "1073680778314945",
+        "upload_source": "URL",
+        "media_type": "IMAGE",
+        "media_url": "{{URL_PUBLICA_hash_story}}",
+        "name": "ONIA A1-E historia"
+      },
+      "como": "LOCAL_FILE abre la app interactiva (desde la PC, elige el archivo); por URL hace falta un enlace público directo",
+      "guarda": "hash_story"
+    },
+    {
+      "paso": 3.2,
+      "herramienta": "ads_creative_upload_media",
       "para": "A1-V",
-      "archivos": [
-        "hermes-content/carousels/out/ads/onia-platform-dental-meta-a1v5-las-diez/onia-platform-dental-meta-a1v5-las-diez.mp4 (11 s, 1080x1920, sin audio)",
-        "hermes-content/carousels/out/ads/onia-platform-dental-meta-a1v5-las-diez/video-thumb.png (portada)"
-      ],
-      "espera": "ads_get_ad_videos dice status ready antes del paso 4",
-      "guarda": [
-        "video_id",
-        "hash_portada"
-      ]
+      "archivo": "hermes-content/carousels/out/ads/onia-platform-dental-meta-a1v5-las-diez/onia-platform-dental-meta-a1v5-las-diez.mp4 (11 s, 1080x1920, sin audio)",
+      "args": {
+        "ad_account_id": "1073680778314945",
+        "upload_source": "LOCAL_FILE"
+      },
+      "args_si_es_por_url": {
+        "ad_account_id": "1073680778314945",
+        "upload_source": "URL",
+        "media_type": "VIDEO",
+        "media_url": "{{URL_PUBLICA_video_id}}",
+        "name": "ONIA A1-V Las 10:00"
+      },
+      "como": "LOCAL_FILE abre la app interactiva (desde la PC, elige el archivo); por URL hace falta un enlace público directo",
+      "guarda": "video_id",
+      "espera": "ads_get_ad_videos dice status ready antes del paso 4"
+    },
+    {
+      "paso": 3.3,
+      "herramienta": "ads_creative_upload_media",
+      "para": "A1-V",
+      "archivo": "hermes-content/carousels/out/ads/onia-platform-dental-meta-a1v5-las-diez/video-thumb.png (portada: una imagen o un hash es obligatorio)",
+      "args": {
+        "ad_account_id": "1073680778314945",
+        "upload_source": "LOCAL_FILE"
+      },
+      "args_si_es_por_url": {
+        "ad_account_id": "1073680778314945",
+        "upload_source": "URL",
+        "media_type": "IMAGE",
+        "media_url": "{{URL_PUBLICA_hash_portada}}",
+        "name": "ONIA A1-V portada"
+      },
+      "como": "LOCAL_FILE abre la app interactiva (desde la PC, elige el archivo); por URL hace falta un enlace público directo",
+      "guarda": "hash_portada"
     },
     {
       "paso": 4,
@@ -190,7 +270,7 @@
         "ad_account_id": "1073680778314945",
         "page_id": "1140384625819526",
         "name": "ONIA · A1-E · Las 10:00",
-        "message": "Un paciente que no confirma es una silla que puede quedar vacía, y el alquiler, la asistente y su hora se pagan igual.\n\nOnia es un sistema de gestión con IA para clínicas dentales: agenda, ficha con odontograma, tratamientos y cobros. Cada mañana le deja anotado a quién escribirle, con el mensaje listo, y nada sale sin que usted lo apruebe.",
+        "message": "Para dueños y dueñas de clínicas dentales de Santa Cruz.\n\nUn paciente que no confirma es una silla que puede quedar vacía, y el alquiler, la asistente y su hora se pagan igual.\n\nOnia es un sistema de gestión para clínicas dentales: agenda, ficha con odontograma, tratamientos y cobros. Cada mañana le deja anotado a quién escribirle, con el mensaje listo, y nada sale sin que usted lo apruebe.",
         "headline": "Un paciente que no confirma es un sillón vacío",
         "call_to_action_type": "WHATSAPP_MESSAGE",
         "link_url": "https://wa.me/{{NUMERO_DEL_BOT}}?text=Hola%2C%20vi%20el%20anuncio%20de%20Onia%20%28D1%29.%20Tengo%20una%20cl%C3%ADnica%20dental.",
@@ -201,19 +281,16 @@
           {
             "image_hash": "{{hash_story}}",
             "publisher_platforms": [
-              "facebook",
-              "instagram"
+              "facebook"
             ],
             "facebook_positions": [
-              "story"
-            ],
-            "instagram_positions": [
-              "story"
+              "story",
+              "facebook_reels"
             ]
           }
         ]
       },
-      "nota": "El primer elemento es el de respaldo (sin ubicaciones). self_ai_disclosure: no se manda; la declaración es de Sergio Urcullo (capturas reales y texto por código, sin imágenes generadas)."
+      "nota": "Sin `instagram_user_id` (ONIA Ads no tiene Instagram vinculado): el anuncio sale solo por Facebook. El primer elemento de placement_customizations es el de respaldo (sin ubicaciones). self_ai_disclosure: no se manda; es decisión de Sergio Urcullo y no se puede cambiar después."
     },
     {
       "paso": 4.1,
@@ -223,13 +300,14 @@
         "ad_account_id": "1073680778314945",
         "page_id": "1140384625819526",
         "name": "ONIA · A1-V · Las 10:00 video",
-        "message": "Un paciente que no confirma es una silla que puede quedar vacía, y el alquiler, la asistente y su hora se pagan igual.\n\nOnia es un sistema de gestión con IA para clínicas dentales: agenda, ficha con odontograma, tratamientos y cobros. Cada mañana le deja anotado a quién escribirle, con el mensaje listo, y nada sale sin que usted lo apruebe.",
+        "message": "Para dueños y dueñas de clínicas dentales de Santa Cruz.\n\nUn paciente que no confirma es una silla que puede quedar vacía, y el alquiler, la asistente y su hora se pagan igual.\n\nOnia es un sistema de gestión para clínicas dentales: agenda, ficha con odontograma, tratamientos y cobros. Cada mañana le deja anotado a quién escribirle, con el mensaje listo, y nada sale sin que usted lo apruebe.",
         "headline": "Un paciente que no confirma es un sillón vacío",
         "call_to_action_type": "WHATSAPP_MESSAGE",
         "link_url": "https://wa.me/{{NUMERO_DEL_BOT}}?text=Hola%2C%20vi%20el%20anuncio%20de%20Onia%20%28D2%29.%20Tengo%20una%20cl%C3%ADnica%20dental.",
         "video_id": "{{video_id}}",
         "image_hash": "{{hash_portada}}"
-      }
+      },
+      "nota": "Sin `instagram_user_id` (ONIA Ads no tiene Instagram vinculado): el anuncio sale solo por Facebook. El primer elemento de placement_customizations es el de respaldo (sin ubicaciones). self_ai_disclosure: no se manda; es decisión de Sergio Urcullo y no se puede cambiar después."
     },
     {
       "paso": 5,
@@ -277,8 +355,8 @@
       "object_ids": [
         "{{campaign_id}}",
         "{{ad_set_id}}",
-        "{{ad_id_A1E}}",
-        "{{ad_id_A1V}}"
+        "{{ad_object_id_A1E}}",
+        "{{ad_object_id_A1V}}"
       ],
       "publish_as_active": true
     },
@@ -288,9 +366,15 @@
       "filas_en_verde",
       "captura_nueva",
       "bot",
-      "numero_vinculado"
+      "numero_vinculado",
+      "quien_contesta",
+      "duracion_de_la_llamada",
+      "canales_1_y_2",
+      "instagram_decidido",
+      "self_ai_decidido"
     ],
-    "despues": "esperar 2 minutos y leer el borrador y la campaña otra vez: PUBLISHING es «entregado», no «publicado». Verificar effective_status ACTIVE y mirar el primer mensaje que llegue."
+    "despues": "esperar 2 minutos y leer el borrador y la campaña otra vez: PUBLISHING es «entregado», no «publicado». Verificar effective_status ACTIVE y mirar el primer mensaje que llegue.",
+    "ids": "los ad_object_id salen de ads_get_ad_entities con object_state draft (paso 7); no se deducen de lo que devolvieron los pasos de creación. Después de publicar se verifican LOS CUATRO niveles (campaña, conjunto y los dos anuncios): los demás objetos conservan su estado."
   },
   "anuncios": {
     "entran": [
@@ -339,7 +423,7 @@
     "regla": "Tres copias de un concepto y no tres conceptos: cambia el formato, no el mensaje. El presupuesto está en la campaña: Meta empuja al que rinde, y que uno reciba pocas impresiones no es un veredicto."
   },
   "copy_de_usted": {
-    "texto_principal": "Un paciente que no confirma es una silla que puede quedar vacía, y el alquiler, la asistente y su hora se pagan igual.\n\nOnia es un sistema de gestión con IA para clínicas dentales: agenda, ficha con odontograma, tratamientos y cobros. Cada mañana le deja anotado a quién escribirle, con el mensaje listo, y nada sale sin que usted lo apruebe.",
+    "texto_principal": "Para dueños y dueñas de clínicas dentales de Santa Cruz.\n\nUn paciente que no confirma es una silla que puede quedar vacía, y el alquiler, la asistente y su hora se pagan igual.\n\nOnia es un sistema de gestión para clínicas dentales: agenda, ficha con odontograma, tratamientos y cobros. Cada mañana le deja anotado a quién escribirle, con el mensaje listo, y nada sale sin que usted lo apruebe.",
     "titular": "Un paciente que no confirma es un sillón vacío",
     "boton": "WHATSAPP_MESSAGE (Enviar mensaje de WhatsApp)",
     "prohibido": [
@@ -350,9 +434,11 @@
       "factura electrónica SIAT",
       "testimonios, cifras de clientes o logos (0 clientes pagando)",
       "competidores por nombre o por alusión",
-      "voseo o tuteo"
+      "voseo o tuteo",
+      "un número de minutos para la llamada (el bot y /contacto dicen 30, la agenda 20: L-04)"
     ],
-    "fuente": "los briefs onia-platform-dental-meta-a1v5-las-diez.json y ...a1v5-micro-10s.json (caption y headline_anuncio); catálogo §7 y §8"
+    "fuente": "los briefs onia-platform-dental-meta-a1v5-las-diez.json y ...a1v5-micro-10s.json (caption, headline_anuncio, kicker, nota); catálogo §7 y §8. scripts/campana-lista.test.mjs exige que `message` sea el `caption` del brief, palabra por palabra",
+    "nota_del_10oct": "Revisión independiente (10-oct): el texto abre con el filtro «Para dueños y dueñas…» (§5.2) y ya no dice «con IA» junto a «a quién escribirle» (catálogo §8: el «a quién» sale de reglas, no de la IA). La imagen dice «Se lo mostramos en una llamada», sin minutos, hasta unificar 20 contra 30 (L-04)."
   },
   "publico": {
     "ubicacion": "Santa Cruz de la Sierra, radio 25 km desde (-17,7833; -63,1821), «Llegar a más personas» apagado",
@@ -364,7 +450,8 @@
       "remarketing pago"
     ],
     "el_filtro_real": "la pieza («Para dueños y dueñas de clínicas dentales de Santa Cruz») y los tres botones del chat, no la segmentación",
-    "riesgo": "el cliente ideal es ≲ 0,1 % del público alcanzable: un anuncio que dice «clínica dental» trae PACIENTES que buscan turno (§5.2)"
+    "riesgo": "el cliente ideal es ≲ 0,1 % del público alcanzable: un anuncio que dice «clínica dental» trae PACIENTES que buscan turno (§5.2)",
+    "donde_sale": "Facebook (Feed, Historias y Reels de Facebook) mientras ONIA Ads no tenga Instagram vinculado. Si se vincula, `instagram_user_id` va en los dos creativos y las posiciones de Instagram entran en la personalización"
   },
   "bienvenida": {
     "se_configura": "a mano en el Administrador (anuncio → mensaje de bienvenida); el conector no lo expone",
@@ -449,5 +536,16 @@
     "anotar en hermes-content/docs/handoff/mercado-y-pauta.md los ids de campaña, conjunto, creativos y anuncios",
     "fila 8 de §5.9 pasa a ✅ solo con ads_get_ad_entities mostrando la campaña",
     "primer chequeo a las 24 h: ¿llegó algún mensaje?, ¿con el código?, ¿contestó el bot?, ¿le avisó a Sergio Urcullo?"
-  ]
+  ],
+  "tono_de_la_captura": {
+    "comprobacion": "el mensaje al paciente que se ve en la tarjeta está en voseo («confirmás», «decinos», «tu cita»): es el texto por defecto del producto, no el de Onia al dueño. Sergio Urcullo confirma que es intencional o se cambia la plantilla de la cuenta demo antes de capturar",
+    "dueno": "Sergio Urcullo"
+  },
+  "valores_a_resolver": {
+    "INICIO_ISO": "00:00 hora de Bolivia (-04:00) del día siguiente al OK escrito, por ejemplo 2026-10-14T00:00:00-04:00",
+    "FIN_ISO": "INICIO_ISO + 14 días, por ejemplo 2026-10-28T00:00:00-04:00",
+    "NUMERO_DEL_BOT": "el número de WhatsApp vinculado a la página «Onia», solo dígitos con el 591 delante y sin +, espacios ni guiones (se lee en Business Manager; el conector no lo muestra)",
+    "URL_PUBLICA_*": "solo si los medios suben por URL: un enlace directo y público a cada archivo. El repo no es público",
+    "hash_*, video_id, creative_id_*, campaign_id, ad_set_id, ad_object_id_*": "salen de la respuesta del paso anterior"
+  }
 }
