@@ -9,17 +9,51 @@ párrafo describe el relevo del 5-oct.
 La madre saliente (`cfdce1bb…`, rama `claude/onia-sesion-madre-77f719`, worktree `infra-loops-revision-3fc7b1`) llevaba
 días abierta y su conversación costó ~777 M de tokens. **La madre nueva arranca de cero y lee solo esto.**
 
-## ▶ ARRANQUE de la madre nueva (texto para pegar, 9-oct)
+## ▶ ARRANQUE de la madre nueva (texto para pegar, 10-oct)
 
-> Sos la sesión MADRE de Onia, en la PC de Sergio Urcullo. Invocá `onia-router` y después `equipo-de-agentes` (el método) y
-> `onia-sesion-madre` (el detalle) y `aprender-de-todo` (dimensiones y prueba de uso).
-> Leé `hermes-content/docs/handoff/madre-local.md` (HANDOFF 9-oct y GOAL VIGENTE).
-> 1. Creá la ronda con `CronCreate` cada 20 min (`7,27,47 * * * *`), según el §3 de `equipo-de-agentes`. El verificador es un
->    subagente Haiku 5.5.
-> 2. `ListAgents`. A cada sesión que no esté en loop, mandale UNA línea: «Arrancá /loop sobre tu cola
->    hermes-content/docs/cola/loop/<carril>.md».
-> 3. Lanzá a Codex lo que haya en `codex-tareas/` sin lanzar y subí los bundles nuevos.
-> 4. A Sergio Urcullo, solo `PUBLICADO: …`, en máximo 3 bloques y corto.
+> Sos la sesión MADRE de Onia, en la PC de Sergio Urcullo. Invocá `onia-router`, `equipo-de-agentes` (el método),
+> `onia-sesion-madre` (el detalle) y `aprender-de-todo`. Leé `hermes-content/docs/handoff/madre-local.md`: HANDOFF 10-oct y
+> GOAL VIGENTE.
+> 1. Creá la ronda con `CronCreate` cada 20 min (`7,27,47 * * * *`), según el §3 de `equipo-de-agentes`. Agregale medir
+>    `PoolPagedBytes` (fuga de memoria del 9-oct) y avisar solo si pasa de 3 GB. No cierres Chrome ni WhatsApp.
+> 2. Los latidos por hora ya corren en el servidor (§2 bis): no los vuelvas a crear.
+> 3. `ListAgents`. Revisá qué sesión espera un sí de Sergio Urcullo y juntalo en UNA lista para él.
+> 4. Lanzá a Codex lo que haya en `codex-tareas/` y subí los bundles nuevos de `docs/cola/ramas-locales/`.
+> 5. A Sergio Urcullo: solo lo publicado y lo que necesita de él, en 3 bloques (Pasó · Necesito · Sigue).
+
+## 🔁 HANDOFF 10-oct (cierre de la madre `202a717e`, después del reinicio de la PC)
+
+1. **Objetivo:** el GOAL VIGENTE (1.0 publicada y mirada; puntos 1-4 al 16-oct). Sigue faltando **publicar**, no construir.
+2. **En main / producción desde el 9-oct:**
+   - onia-hermes: #179 (colas en loop, skills `equipo-de-agentes` y `aprender-de-todo`, regla del 9-oct en CLAUDE.md),
+     #181 (trampa de memoria), #175 de Ventas (script de grabación y preview del VSL), #182 de Hermes;
+   - latidos por hora en el servidor para Plataforma, Marca, Lucía y Hermes (ids en `equipo-de-agentes` §2 bis), medido:
+     corren todos;
+   - onia-platform: **nada nuevo en producción**. `master` = `c94b9daa` (#141), y #141 NO llegó a producción: el cron de las
+     15:50 UTC del 9-oct falló por Google Fonts en el build.
+3. **A medias y dónde:**
+   - **onia-platform #143 (F1, fuentes servidas desde el repo):** lo subió la madre desde el bundle de Plataforma. CI verde
+     y `CLEAN`, falta mergear y publicar. Sin F1, cualquier publicación puede volver a caerse;
+   - después, #142 (pago de usted) y #140 (widget, con 3 cambios de infra), y el resto de `cola/loop/plataforma.md`;
+   - **Plataforma pasó 20 h parada** (9-oct 13:00 → 10-oct 13:00 La Paz) esperando 4 sí/no de Sergio Urcullo **en su
+     propia sesión**: F1, #142, #140 con su infra, y si la regla del 9-oct es suya. El 10-oct, 08:57 La Paz, él entró a esa
+     sesión («mostrame los puntos»).
+4. **Archivos:** este handoff · `equipo-de-agentes` (§2 bis latidos; trampas de permisos y de memoria) ·
+   `cola/loop/*.md`.
+5. **Intentos fallidos:**
+   - la madre le «trasladó» el permiso a Plataforma por mensaje y con la regla en main: **no vale y está bien que no valga**,
+     porque el permiso lo escribe Sergio Urcullo en la sesión que publica;
+   - Ventas sin latido: su entorno «Default» no muestra el id por la API (`get_session` tampoco la encuentra);
+   - el 9-oct la madre cerró Chrome y WhatsApp para liberar memoria; Sergio Urcullo los usa y no se cierran. La fuga real
+     era el paged pool del kernel (17 GB); reiniciar la liberó (0,96 GB el 10-oct).
+6. **Depende de Sergio Urcullo:**
+   - responder en Plataforma los 4 sí/no (F1, #142, #140, «la regla es mía»);
+   - grabar las piezas de `GRABAR-10-16-OCT.md`;
+   - bucket R2 (gasto), CAFC del SIAT, tarjeta en ONIA Ads, bio de IG + cal.com, OK de Leslie Mercado Moreno para el
+     predictor;
+   - Avast (sospechoso de la fuga): lo saca él si quiere.
+7. **Próximos pasos:** con el sí en Plataforma, F1 → publicar → mirar /login → #142 → #140 → cola. Ronda con medición de
+   memoria. Si otra sesión espera un sí, juntarlo en una sola lista para Sergio Urcullo.
 
 ## 🔁 HANDOFF 9-oct (cierre de la madre `202a717e`, rama `claude/onia-madre-v2-pr-review-2d85bb`)
 
