@@ -286,11 +286,14 @@ si falla la Fase A, no tocó nada.
 | P5 | La madre, por SSH con el OK de Sergio Urcullo: `/root/bin/onia-tablero.sh create "Prueba P5"` y `/root/bin/onia-tablero.sh block <id> "Prueba P5: contestá ok <id>" --kind needs_input`. Él contesta `ok <id>` a Hermes | El aviso le llega en ≤2 min (fuera de la noche y de sus bloques) y la tarea sale de `blocked`. Después se completa |
 
 **El diagnóstico diario (10-oct, `HERMES_ROL_QA.md` Q2).** `.github/workflows/hermes-qa-diario.yml` corre
-`diagnostico.sh` todos los días a las 10:00 UTC (06:00 La Paz), en el mismo runner del VPS y con el mismo
-`concurrency` que `aplicar`, así que nunca se pisan. Solo lee y no tiene inputs. `aplicar` y `revertir`
-siguen siendo manuales. La sesión de la nube lee su log con el MCP de GitHub, sin SSH. La sección 15 da
-cada línea del crontab con su cadencia real (el hueco más largo en una semana), su log y la última vez que
-escribió, y marca MUDO lo que pasó dos veces su cadencia sin escribir.
+`diagnostico.sh` todos los días a las 10:00 UTC (06:00 La Paz), en el mismo runner del VPS. Tiene su
+propio grupo de `concurrency`: si compartiera el de `aplicar`, podría cancelar un `revertir` pendiente.
+Solo lee, no tiene inputs y a mano corre solo desde `main`. `aplicar` y `revertir` siguen siendo
+manuales. La sesión de la nube lee su log con el MCP de GitHub, sin SSH. La sección 15 da cada línea del
+crontab con su cadencia (el hueco más largo entre dos corridas), su log y la última vez que escribió, y
+marca MUDO lo que tiene el log más viejo que su penúltima corrida programada, es decir, lo que faltó a
+dos seguidas. Sirve igual para un trabajo de cada 2 min, uno de día o uno semanal. Lo que escribe a una
+ruta armada al correr (`$(date)`) sale «sin log»; un trabajo anual, «no medible».
 
 ## 9. Riesgos y límites conocidos, sin maquillar
 

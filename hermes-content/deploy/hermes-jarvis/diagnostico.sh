@@ -389,13 +389,16 @@ fi
 sec "15. Latidos del cron — cada línea, su log y cuándo escribió (10-oct, HERMES_ROL_QA.md Q2)"
 # Hoy un vigía mudo y uno sano se ven igual: los dos no dicen nada. Para cada línea activa del crontab
 # de root: la cadencia REAL (el hueco más largo entre dos corridas en una semana, sacado del horario),
-# el log al que escribe (>>) y cuándo lo tocó por última vez. MUDO = no escribió en más de dos veces su
-# cadencia. «sin log» = la línea no escribe a un archivo: no se puede medir así (va con latido o se
+# el log al que escribe (>>) y cuándo lo tocó por última vez. MUDO = su log es más viejo que la penúltima
+# corrida programada (faltó a dos seguidas). «sin log» = la línea no escribe a un archivo: no se puede medir así (va con latido o se
 # mide por otro lado). Solo lee: crontab -l y la fecha de los archivos.
 crontab -l 2>/dev/null | python3 -c '
 import datetime, os, re, sys
 ahora = datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None, second=0, microsecond=0)
+NOMBRES = {"jan": 1, "feb": 2, "mar": 3, "apr": 4, "may": 5, "jun": 6, "jul": 7, "aug": 8, "sep": 9, "oct": 10,
+           "nov": 11, "dec": 12, "sun": 0, "mon": 1, "tue": 2, "wed": 3, "thu": 4, "fri": 5, "sat": 6}
 def campo(txt, lo, hi):
+    txt = re.sub(r"[a-z]{3}", lambda m: str(NOMBRES[m.group(0)]), txt.lower().replace("?", "*"))
     vals = set()
     for parte in txt.split(","):
         paso = 1
@@ -408,27 +411,28 @@ def campo(txt, lo, hi):
             a, b = (int(x) for x in parte.split("-", 1))
         else:
             a = b = int(parte)
-            if paso > 1:
-                b = hi
         vals.update(range(a, b + 1, paso))
     return vals
 ALIAS = {"@hourly": "0 * * * *", "@daily": "0 0 * * *", "@midnight": "0 0 * * *", "@weekly": "0 0 * * 0", "@monthly": "0 0 1 * *"}
-def cadencia(horario):
+def corridas(horario, dias=70):
+    # Las corridas programadas de los últimos <dias>, de la más vieja a la más nueva. Se recorre por
+    # día y después por hora y minuto: 70 días cubren dos corridas de un trabajo mensual.
     m, h, dom, mes, dow = horario.split()
-    M, H, DOM, MES = campo(m, 0, 59), campo(h, 0, 23), campo(dom, 1, 31), campo(mes, 1, 12)
+    M, H, DOM, MES = sorted(campo(m, 0, 59)), sorted(campo(h, 0, 23)), campo(dom, 1, 31), campo(mes, 1, 12)
     DOW = {d % 7 for d in campo(dow, 0, 7)}
-    t, fin, prev, hueco = ahora - datetime.timedelta(days=8), ahora, None, 0
-    while t <= fin:
-        if t.hour in H and t.minute in M and t.month in MES:
-            d_ok, w_ok = t.day in DOM, ((t.weekday() + 1) % 7) in DOW
-            # Como cron: si el día del mes y el de la semana están restringidos, basta uno.
-            ok = (d_ok and w_ok) if (dom.startswith("*") or dow.startswith("*")) else (d_ok or w_ok)
-            if ok:
-                if prev is not None:
-                    hueco = max(hueco, int((t - prev).total_seconds()))
-                prev = t
-        t += datetime.timedelta(minutes=1)
-    return hueco or None
+    libre = dom.startswith("*") or dow.startswith("*")
+    out, d = [], (ahora - datetime.timedelta(days=dias)).date()
+    while d <= ahora.date():
+        d_ok, w_ok = d.day in DOM, ((d.weekday() + 1) % 7) in DOW
+        # Como cron: si el día del mes y el de la semana están restringidos, basta uno.
+        if d.month in MES and ((d_ok and w_ok) if libre else (d_ok or w_ok)):
+            for hh in H:
+                for mm in M:
+                    t = datetime.datetime(d.year, d.month, d.day, hh, mm)
+                    if t <= ahora:
+                        out.append(t)
+        d += datetime.timedelta(days=1)
+    return out
 def hace(s):
     return "%d min" % (s // 60) if s < 5400 else "%d h" % (s // 3600) if s < 172800 else "%d d" % (s // 86400)
 filas = []
@@ -439,7 +443,7 @@ for l in sys.stdin:
     if l.startswith("@"):
         alias, _, cmd = l.partition(" ")
         if alias not in ALIAS:
-            filas.append((3, "—", "—", "—", alias + " " + cmd))
+            filas.append((3, "no medible", "—", "—", alias + " " + cmd))
             continue
         horario = ALIAS[alias]
     else:
@@ -447,37 +451,50 @@ for l in sys.stdin:
         if len(partes) < 6:
             continue
         horario, cmd = " ".join(partes[:5]), partes[5]
-    try:
-        cada = cadencia(horario)
-    except ValueError:
-        filas.append((3, "horario raro", "—", "—", cmd))
-        continue
     scripts = re.findall(r"/([A-Za-z0-9._-]+\.(?:sh|mjs|js|py))\b", cmd)
     nombre = scripts[-1] if scripts else cmd[:40]
     m = re.search(r"onia-latido\.sh (\S+)", cmd)
     if m:
         nombre = "latido:" + m.group(1)
-    log = next((x for x in re.findall(r">>?\s*(/\S+)", cmd) if x != "/dev/null"), None)
-    if not log:
-        filas.append((2, "sin log", hace(cada) if cada else "—", "—", nombre))
+    try:
+        cs = corridas(horario)
+    except (ValueError, KeyError):
+        filas.append((3, "horario raro", "—", "—", nombre))
+        continue
+    huecos = [int((b - a).total_seconds()) for a, b in zip(cs, cs[1:])]
+    cada = hace(max(huecos)) if huecos else "—"
+    # El log: lo que sigue a >> o >. Una ruta armada al correr ($(date), $VAR, entre comillas) no se
+    # puede mirar desde acá: va como «sin log», nunca como MUDO (revisión del 10-oct).
+    destinos = [x for x in re.findall(r">>?\s*(\S+)", cmd) if x != "/dev/null" and not x.startswith("&")]
+    log = destinos[0] if destinos else None
+    if not log or re.search(r"[$`\"\x27(]", log) or not log.startswith("/"):
+        filas.append((2, "sin log", cada, "—", nombre))
+        continue
+    if len(cs) < 2:
+        filas.append((3, "no medible", cada, "—", "%s → %s (menos de dos corridas en 70 días)" % (nombre, log)))
         continue
     try:
-        edad = int((datetime.datetime.now(datetime.timezone.utc).timestamp() - os.path.getmtime(log)))
+        mtime = os.path.getmtime(log)
     except OSError:
-        filas.append((1, "MUDO (no hay log)", hace(cada) if cada else "—", "—", "%s → %s" % (nombre, log)))
+        filas.append((1, "MUDO (no hay log)", cada, "—", "%s → %s" % (nombre, log)))
         continue
-    estado = "MUDO" if cada and edad > 2 * cada + 60 else "ok"
-    filas.append((0 if estado == "MUDO" else 4, estado, hace(cada) if cada else "—", "hace " + hace(edad), "%s → %s" % (nombre, log)))
+    edad = int(datetime.datetime.now(datetime.timezone.utc).timestamp() - mtime)
+    # MUDO = el log es más viejo que la PENÚLTIMA corrida programada: faltó a dos seguidas. Sirve
+    # igual para cada 2 min, para un horario de día y para uno semanal o mensual.
+    penultima = cs[-2].replace(tzinfo=datetime.timezone.utc).timestamp()
+    estado = "MUDO" if mtime < penultima - 60 else "ok"
+    filas.append((0 if estado == "MUDO" else 4, estado, cada, "hace " + hace(edad), "%s → %s" % (nombre, log)))
 for _, estado, cada, ultimo, que in sorted(filas, key=lambda f: f[0]):
     print("%-18s cada %-7s %-12s %s" % (estado, cada, ultimo, que))
-print("--- %d línea(s): %d MUDA(S), %d sin log" % (len(filas), sum(f[1].startswith("MUDO") for f in filas), sum(f[1] == "sin log" for f in filas)))
+print("--- %d línea(s): %d MUDA(S), %d sin log, %d no medibles" % (len(filas), sum(f[1].startswith("MUDO") for f in filas),
+      sum(f[1] == "sin log" for f in filas), sum(f[1] in ("no medible", "horario raro") for f in filas)))
 ' | redactar
 echo "--- latidos (/var/lib/onia-latido, los escribe onia-latido.sh):"
 if [ -d /var/lib/onia-latido ]; then
   for f in /var/lib/onia-latido/*; do
     [ -f "$f" ] || continue
     printf '%s: %s (%s)\n' "${f##*/}" "$(cat "$f" 2>/dev/null)" "$(date -u -d "@$(cut -d' ' -f1 "$f" 2>/dev/null)" +%FT%TZ 2>/dev/null)"
-  done
+  done | redactar
 else
   echo "(no existe: aplicar todavía no corrió)"
 fi

@@ -928,7 +928,7 @@ test("latido: corridas que se pisan no se roban el archivo temporal", () => {
 // ── diagnostico: los latidos del cron (10-oct, HERMES_ROL_QA.md Q2) ────────────────────────────────
 // Hoy un vigía mudo y uno sano se ven igual. Se corre la sección 15 del diagnostico.sh REAL con un
 // crontab doble y logs con fechas puestas a mano.
-function diagnosticoLatidos() {
+function diagnosticoLatidos({ lineasExtra = null, logsExtra = {} } = {}) {
   const dir = mkdtempSync(join(tmpdir(), "jarvis-diag-lat-"));
   const LOG = join(dir, "log");
   const LAT = join(dir, "lat");
@@ -938,8 +938,9 @@ function diagnosticoLatidos() {
   const log = (n, seg) => { writeFileSync(join(LOG, n), "x\n"); utimesSync(join(LOG, n), hace(seg), hace(seg)); };
   log("aduana.log", 3600);       // corre cada 5 min y no escribe hace 1 h: MUDO
   log("diario.log", 2 * 3600);   // corre una vez por día y escribió hace 2 h: ok
+  for (const [n, seg] of Object.entries(logsExtra)) log(n, seg);
   writeFileSync(join(LAT, "aduana-soltar"), "1760000000 0 300\n");
-  const lineas = [
+  const lineas = lineasExtra || [
     "SHELL=/bin/bash",
     // El sano va primero en el crontab: la salida igual tiene que poner lo mudo arriba.
     "0 10 * * * /root/bin/onia-diario.sh >> /var/log/diario.log 2>&1",
@@ -979,13 +980,52 @@ test("diagnóstico: cada línea del cron con su cadencia real, su log y si está
   assert.match(r.stdout, /aduana-soltar: 1760000000 0 300 \(2025-10-09T08:53:20Z\)/);
 });
 
-test("el QA diario corre SOLO el diagnóstico, por horario, sin inputs y sin pisarse con un aplicar", () => {
+test("el QA diario corre SOLO el diagnóstico, por horario o a mano desde main, sin inputs y sin cancelar un aplicar", () => {
   const wf = readFileSync(join(RAIZ, ".github", "workflows", "hermes-qa-diario.yml"), "utf8");
   assert.match(wf, /^\s+- cron: "0 10 \* \* \*"/m, "una vez por día, antes del resumen de las 06:30");
-  assert.match(wf, /^concurrency:\n\s+group: hermes-jarvis\n\s+cancel-in-progress: false$/m, "el mismo grupo que aplicar");
+  const on = wf.slice(wf.indexOf("\non:"), wf.indexOf("\npermissions:"));
+  assert.deepEqual([...on.matchAll(/^  ([a-z_]+):/gm)].map((m) => m[1]), ["schedule", "workflow_dispatch"], "ni push ni pull_request");
+  // Su propio grupo: compartir el de hermes-jarvis le dejaba cancelar un revertir pendiente.
+  assert.match(wf, /^concurrency:\n\s+group: hermes-qa-diario\n\s+cancel-in-progress: false$/m);
+  assert.match(wf, /\[ "\$GITHUB_REF" = refs\/heads\/main \] \|\| \{/, "a mano, solo desde main");
+  assert.match(wf, /umask 077\n\s+printf '%s\\n' "\$KEY"/, "la llave nace sin permisos para otros");
   assert.doesNotMatch(wf, /^\s+inputs:|\$\{\{\s*(github\.event\.)?inputs/m, "nada de afuera elige qué corre");
   assert.doesNotMatch(wf, /aplicar\.sh|revertir\.sh|ACTIVOS_B64|RUTINA_/, "ni aplicar, ni revertir, ni la llave de la rutina");
   assert.match(wf, /cat "\$DIR\/diagnostico\.sh"/);
   assert.match(wf, /\| sed -E -f "\$DIR\/redactar\.sed"/, "la salida se redacta también acá");
   assert.match(wf, /^\s+persist-credentials: false$/m);
+});
+
+test("diagnóstico: semanal y mensual muertos salen MUDO; rutas armadas al correr, nombres y alias (revisión del 10-oct)", () => {
+  const D = 86400;
+  const r = diagnosticoLatidos({
+    lineasExtra: [
+      "0 3 * * 0 /root/bin/semanal-muerto.sh >> /var/log/semanal-muerto.log 2>&1",
+      "0 3 * * 0 /root/bin/semanal-vivo.sh >> /var/log/semanal-vivo.log 2>&1",
+      "0 4 1 * * /root/bin/mensual-muerto.sh >> /var/log/mensual-muerto.log 2>&1",
+      "0 5 1 1 * /root/bin/anual.sh >> /var/log/anual.log 2>&1",
+      "0 * * * mon-fri /root/bin/nombres.sh >> /var/log/nombres.log 2>&1",
+      "@hourly /root/bin/cada-hora.sh >> /var/log/cada-hora.log 2>&1",
+      "0 2 * * * /root/bin/pct.sh >> /var/log/pct-$(date +\\%F).log 2>&1",
+      '0 2 * * * /root/bin/comillas.sh >> "/var/log/con espacio.log" 2>&1',
+    ],
+    logsExtra: {
+      "semanal-muerto.log": 120 * D,
+      "semanal-vivo.log": 60,          // recién escrito: está al día haga lo que haga el calendario
+      "mensual-muerto.log": 120 * D,
+      "anual.log": 60,
+      "nombres.log": 30 * D,
+      "cada-hora.log": 60,
+    },
+  });
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  const fila = (que) => r.stdout.split("\n").find((l) => l.includes(que)) || "";
+  assert.match(fila("semanal-muerto.log"), /^MUDO\s+cada 7 d\s+hace 120 d/, "antes salía «ok» con cadencia vacía");
+  assert.match(fila("semanal-vivo.log"), /^ok\s+cada 7 d/);
+  assert.match(fila("mensual-muerto.log"), /^MUDO\s+cada 3\d d/);
+  assert.match(fila("anual.log"), /^no medible .*menos de dos corridas/, "un anual no se mide, ni ok ni MUDO");
+  assert.match(fila("nombres.log"), /^MUDO\s+cada 2 d/, "«mon-fri» se lee (su hueco más largo es el fin de semana): un muerto de lunes a viernes se ve");
+  assert.match(fila("cada-hora.log"), /^ok\s+cada 60 min/);
+  assert.match(fila("pct.sh"), /^sin log/, "una ruta con $(date) no se puede mirar: nunca MUDO");
+  assert.match(fila("comillas.sh"), /^sin log/);
 });

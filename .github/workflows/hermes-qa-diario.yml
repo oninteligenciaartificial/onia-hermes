@@ -8,8 +8,13 @@ name: Hermes QA — diagnóstico diario del VPS
 #     `aplicar` y `revertir` siguen siendo manuales, en hermes-jarvis.yml («nunca por horario»
 #     vale para ellos).
 #   - Sin inputs: nada que llegue de afuera elige qué se corre.
-#   - El mismo runner propio del VPS (no gasta minutos de Actions) y el mismo `concurrency` que
-#     hermes-jarvis.yml: nunca corre a la vez que un `aplicar`.
+#   - El mismo runner propio del VPS (no gasta minutos de Actions), pero su PROPIO grupo de
+#     `concurrency`. Compartir el de hermes-jarvis.yml parecía más prolijo, pero GitHub deja un solo
+#     pendiente por grupo: el QA de las 10:00 cancelaba un `revertir` que esperaba detrás de un
+#     `aplicar` (revisión del 10-oct). Una lectura a la vez que un `aplicar` no rompe nada; un
+#     `revertir` cancelado en una emergencia, sí.
+#   - Solo desde main: a mano también se puede correr, pero no desde otra rama (un diagnostico.sh
+#     cambiado en una rama correría como root en el VPS).
 #   - Toda salida se redacta dos veces (en el VPS y acá) antes de quedar en el log.
 
 on:
@@ -21,7 +26,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: hermes-jarvis
+  group: hermes-qa-diario
   cancel-in-progress: false
 
 jobs:
@@ -39,10 +44,15 @@ jobs:
           # En el runner del VPS no queda el token de GitHub en el .git: este trabajo no lo usa.
           persist-credentials: false
 
+      - name: Solo desde main
+        run: |
+          [ "$GITHUB_REF" = refs/heads/main ] || { echo "el QA diario corre solo desde main (pediste $GITHUB_REF)"; exit 1; }
+
       - name: Llave SSH del VPS
         env:
           KEY: ${{ secrets.ONIA_VPS_SSH_KEY }}
         run: |
+          umask 077
           printf '%s\n' "$KEY" > "$RUNNER_TEMP/vps_key"
           chmod 600 "$RUNNER_TEMP/vps_key"
 
