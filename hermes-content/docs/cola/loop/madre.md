@@ -12,8 +12,8 @@ Leyenda de dueño: `H` Haiku · `S` Sonnet · `O` Opus · `CxSol` / `CxAstra` Co
 - [ ] A1 Equipos por sesión + guiones 17-23 oct (tendencias en vivo) — workflow `wf_b10e3aaa-a9f`: S referencia VoltAgent,
   3×S scouts web, H inventario, O guionista, O diseñador, O crítico → `docs/ONIA_EQUIPOS_POR_SESION.md` y
   `cola/plan-3-semanas/GRABAR-17-23-OCT.md`. Hecho = ambos en main + mensaje a cada sesión con su equipo.
-- [ ] A2 Análisis de `github.com/morluto/rea` (pedido de SU) — workflow `wf_7d7f64d2-ed6` (S función, O seguridad,
-  S encaje/legal, S ficha) → `references/video-intake/2026-10-10-github-morluto-rea.md`. Hecho = ficha en main + veredicto a SU.
+- [x] A2 Análisis de `github.com/morluto/rea` (pedido de SU) — workflow `wf_7d7f64d2-ed6` (S función, O seguridad,
+  S encaje/legal, S ficha) → `references/video-intake/2026-10-10-github-morluto-rea.md`. Hecho: ficha en main; veredicto = banco de ideas, NO instalar (riesgo alto en la PC, zona legal roja con competidores).
 - [ ] A3 Publicación automática 15:50 UTC de master `32c7e0e8` (F1, #142, #139) — madre + Chrome a las 15:58 UTC.
   Hecho = /login y /checkout MIRADOS renderizados en prod, captura.
 
