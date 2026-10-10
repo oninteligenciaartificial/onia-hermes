@@ -42,12 +42,35 @@
 - [x] C2 carrusel «Seis motores de imagen: cuánto cuesta y cuánto se parece» — láminas en
   `hermes-content/carousels/out/lucia-c2-seis-motores-de-imagen/`, brief en `briefs/lucia/c2-seis-motores-de-imagen.json`; 5 láminas miradas
   completas, grep limpio. Mismos números que el guion de G4 (que la madre valida).
-- [ ] Rotar el token de Lucía (13-18-oct) y confirmar `is_ai_generated` en la primera pieza: lo hace quien corra el VPS; esta sesión
-  deja la receta en `videos/lucia-entrega/README.md`.
+- [ ] **Renovar el token de Lucía antes del 13-oct** (estimado, sin medir desde el 4-sep) y confirmar `is_ai_generated` en la primera
+  pieza. Lo hace quien corra el VPS (pedido de la madre, 10-oct). Pasos exactos, sacados de `ig-refrescar.sh`, `publicar/README.md` y la
+  skill `lucia` §6 (nada de esto se corrió desde esta nube):
+  - **Cómo se renueva:** el token es de Instagram Login (`graph.instagram.com`), app «OnIA Social API», dura 60 días. Renovar =
+    `GET https://graph.instagram.com/refresh_access_token?grant_type=ig_refresh_token&access_token=<token>`; **exige token con más de 24 h
+    y NO vencido**. `ig-refrescar.sh` recorre todos los `ig-*.env`, así que toma `ig-lucia.env` solo apenas exista. Cron: lunes 13:00 UTC
+    (09:00 La Paz), o sea **lun 12-oct** y lun 19-oct. Si falla, avisa por `onia-tg.sh` (sistema).
+  - **Camino A, sin Sergio Urcullo (solo si el token no venció):**
+    1. Levantar **solo** `postiz-postgres` (Postiz entero publica posts vencidos sin OK: pasó el 4-sep). Leer el token y el id de la
+       integración `cmt1sv4eh001alq9cl3y6q7es` sin imprimirlos, igual que el 29-sep con `@sergiourcullo` y `@oniahq`. Apagar `postiz-postgres`.
+    2. Escribir `/root/.config/onia-publicar/ig-lucia.env` (`IG_USER_ID=` e `IG_TOKEN=`), `chmod 600`.
+    3. Correr `/root/bin/ig-refrescar.sh` a mano (renueva también las otras dos cuentas, inofensivo): debe decir `ig-lucia renovado`.
+       Si estaba en su lugar antes del lun 12-oct 13:00 UTC, el cron lo hace solo, pero correrlo a mano ya mide.
+    4. Medir cuánto queda: la misma llamada de renovación imprimiendo **solo** `expires_in` (≈ 5.184.000 s = 60 días). Nunca el token.
+    5. Probar que es la cuenta: `GET https://graph.instagram.com/v25.0/me?fields=username&access_token=<token>` → `lucia.antelo.oficial`.
+  - **Camino B, si el token venció** (la renovación devuelve error de sesión o token vencido; ya no hay refresh posible): lo genera Sergio Urcullo
+    en developers.facebook.com → app «OnIA Social API» → Instagram con inicio de sesión de Instagram → generar token para
+    `@lucia.antelo.oficial` (cuenta Creador, conectada a la app desde el 20-ago). Se pega **en el VPS**, nunca en un chat. Después pasos 2 a 5.
+    ⚠️ Los nombres exactos de los botones del panel de Meta no se verificaron en esta sesión.
+  - **Después:** el cron semanal lo mantiene; mientras el archivo exista y el lunes corra, el plazo del 13-18-oct deja de existir.
+    En la primera pieza publicada, abrir el permalink y leer `is_ai_generated=true` en `/root/publicar/publicado.jsonl`.
 
 ## Bloqueado
 
-- **El desbloqueo más corto, y es de Sergio Urcullo:** el OK para instalar el cliente `ssh` (paquete `openssh-client`) en esta nube, solo para
+- **Aviso de la madre, 10-oct (mensaje entre sesiones, no es un permiso mío):** la madre corre la receta de `videos/lucia-entrega/README.md`
+  desde la PC (ensayo de G1 y luego publicación) y avisará con el enlace; valida hoy los guiones de G4 y G5. Mi parte: dejar el token
+  listo (arriba) y seguir el plan v5, hasta 3 piezas por semana. Hay 8 piezas listas (≈ 3 semanas), así que no se produce más hasta que
+  salgan. La generación paga sigue pidiendo el sí de Sergio Urcullo por lote, escrito en esta sesión.
+- **El desbloqueo más corto, y es de Sergio Urcullo (solo si la madre no puede correr la receta):** el OK para instalar el cliente `ssh` (paquete `openssh-client`) en esta nube, solo para
   correr la receta de `videos/lucia-entrega/README.md` por el túnel que el hook de arranque ya deja configurado (llave en el entorno, `ssh onia-vps`).
   Sin ese OK, o sin que la madre/«Onia» corra la receta, nada se publica. Antes de pedirlo se validó offline: los dos publicadores pasan `--selftest`.
 

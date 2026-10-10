@@ -62,6 +62,8 @@ El token de Instagram de Lucía vence entre el 13 y el 18-oct: **la primera piez
 > «selftest ok». En el VPS hay que repetirlo después de copiarlos.
 
 1. Token de Lucía en `/root/.config/onia-publicar/ig-lucia.env` (no se midió desde el 4-sep; vencía entre el 13 y el 18-oct).
+   Pasos exactos para ponerlo y renovarlo (camino A si no venció, camino B si venció): `hermes-content/docs/cola/loop/lucia.md`,
+   ítem «Renovar el token de Lucía». Una vez puesto, `ig-refrescar.sh` lo renueva cada lunes.
 2. `hermes-content/deploy/vps-ops/publicar/ig-reel.mjs` **e** `ig-carrusel.mjs` copiados **juntos** a `/root/bin`, con
    `--selftest` en los dos (el carrusel importa del reel; copiar uno solo rompe los de `@sergiourcullo`).
 3. La madre mira los previews 360p de arriba (regla de oro de `CLAUDE.md` § Video).

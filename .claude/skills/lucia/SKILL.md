@@ -250,6 +250,11 @@ Se conserva lo medido por si Sergio Urcullo vuelve a pedir una pieza de producto
     y el 18-oct, y no se midió desde entonces;
   - hay que pasarlo a `/root/.config/onia-publicar/ig-lucia.env` (`IG_USER_ID`, `IG_TOKEN`) y renovarlo con
     `ig-refrescar.sh`.
+  - **Renovación, leída del script el 10-oct (caso: pedido de la madre «dejá los pasos exactos»):** es
+    `graph.instagram.com/refresh_access_token?grant_type=ig_refresh_token`, token de 60 días que debe tener más de 24 h y no estar
+    vencido; el script recorre todos los `ig-*.env` (cron lunes 13:00 UTC), así que `ig-lucia.env` se renueva solo apenas existe. Si ya
+    venció no hay refresh: hay que generar uno nuevo en developers.facebook.com. Los pasos completos están en
+    `hermes-content/docs/cola/loop/lucia.md`. Sin correr desde la nube (no tiene `ssh`).
   - ⚠️ Para leerlo se levanta **solo** `postiz-postgres`. Si se levanta Postiz entero, se publican posts vencidos sin OK:
     pasó el 4-sep.
 - **Etiqueta IA por pieza:** `is_ai_generated=true`, que Meta acepta desde el 22-jun-2026, también con Instagram Login.
