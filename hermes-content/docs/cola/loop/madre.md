@@ -18,6 +18,16 @@ Leyenda de dueño: `H` Haiku · `S` Sonnet · `O` Opus · `CxSol` / `CxAstra` Co
   Hecho = /login y /checkout MIRADOS renderizados en prod, captura. **Parcial 17:23 UTC:** /login mirado con Playwright
   headless (Chrome instalado): se ve bien, 0 pedidos a Google Fonts, 4,1 s. Falta confirmar QUÉ release corre (Plat) y
   mirar /checkout de usted con login. El navegador interno de la app no abre app.onia.com.bo (permiso).
+- [ ] A3b **La publicación de las 15:50 UTC FALLÓ** («hay otro build corriendo… no encimo otro»): prod sigue en
+  `release-c94b9daa` (#141). Ayer igual a las 15:50. Causa probable: CI de los PRs que pushé 15:30-15:45 en el runner del
+  mismo VPS. Próxima: 18:50 UTC. **Regla: la madre no pushea a onia-platform entre :20 y :10 de las horas de publicación
+  (00, 03, 06, 09, 12, 15, 18 y 21 UTC, a las :50).** Propuesto a Plat: que el publicador reintente a los 20-30 min.
+- [ ] A7 Bot: vigia-sin-respuesta (16:39 UTC) marca 8 conversaciones colgadas y 5 sin respuesta → Plat/chatbot + SU
+  (pueden ser prospectos reales). Bot onia-center detenido a propósito esperando la firma de SU (knowledge 031/032).
+- [ ] A8 Inventario VPS (17:45 UTC): los loops viejos (onia-loop.sh) están todos pausados o mudados a nodo-casa, cuyo
+  espejo está congelado desde el 28-sep → web-venta y chatbot-cola NO corren (sin dueño duplicado). Vivos: claude-guardia,
+  vigías, publicador cada 3 h, pub-car. Muertos o mudos: onia-parte-diario (desde 09-09), vigías de CI/crédito/comprobantes/
+  disco (logs vacíos), onia-jarvis-voz (ElevenLabs sin cuota). Backup diario con restoreVerified:false.
 - [ ] A4 Auditoría de todo lo pedido hoy (pedido de SU) — workflow `wf_f6b7fcd9-207` (H pedidos del transcript, H
   evidencia, O auditor, O reglas, O sesiones/harness, S cómo funcionan los LLMs, O crítico) →
   `research/2026-10-10-auditoria-madre-v3.md`. Hecho = doc en main + olvidos cargados acá con dueño.
