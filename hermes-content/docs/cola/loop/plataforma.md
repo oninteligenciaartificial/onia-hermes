@@ -8,7 +8,7 @@ Orden: lo que destraba cobrar primero. Cada PR: integrar con master, suite compl
 - [ ] #136 bandeja v3 (incluye #127, #129 y #135) + B3 #130 (PWA): espera el OK de diseño de Sergio Urcullo (capturas enviadas el 10-oct).
 - [ ] #140 widget W1-W1e + W1f (se presenta con el nombre de la clínica, bundle del 10-oct) + infra: origen solo para Cloudflare, bloquear `/public/api/` en Chatwoot y `hmac_mandatory` en los inboxes API. Espera el OK de diseño de Sergio Urcullo a W1f.
 - [x] #139 canal privado (punto 3): en producción desde el 10-oct 18:50 UTC, migración registrada a las 18:44. Falta solo MIRAR «En vivo» con login (madre).
-- [ ] #114 factura (punto 15): migraciones aplicadas y registradas el 10-oct; mergeado a las 19:32 UTC (`922a0da9`, suite 10.056 en verde). Sale en el cron de las 21:50 UTC; falta MIRAR.
+- [x] #114 factura (punto 15) y #145 logo de `/book`: en producción desde el 10-oct 21:55 UTC (`release-d8ca5a32`), mirados sin login (`/admin/payments` lo mira la madre).
 - [ ] #124 términos (punto 14, migración ya aplicada) y después #113 gracia C13 (actualizar `PlanClient.estado-real` y `vencimientos` al mergear): esperan el sí de Sergio Urcullo (legal).
 - [ ] #118 agenda del día, #119 odontograma y #110 caja diaria (migraciones ya aplicadas): esperan el OK de diseño y el v3 dentro de cada PR.
 - [ ] #132 K1 (respuesta al recordatorio)
