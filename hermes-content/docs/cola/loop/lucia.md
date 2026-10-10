@@ -1,5 +1,10 @@
 # Cola · Lucía
 
+> **REGLA VIGENTE desde el 10-oct 20:25 UTC (Sergio Urcullo: «mostrame antes de subir o hacer Lucía», por la madre v4).** Nada de Lucía se
+> publica ni se genera —tampoco en lote chico— sin que la madre se lo muestre antes y escriba **«mostrada, publicá <pieza>»**. Esto restringe,
+> no autoriza. Estado: **G1 ya mostrada** (`g1-final-1080x1920.mp4`, SHA 5903cd9c…) y **espera su OK**. Mi revisión «¿vende Onia Platform?» **no
+> cambió G1 ni el orden de entrega**: son propuestas, no piezas hechas. Nada está en «LISTA PARA MOSTRAR» porque no hay nada nuevo que mostrar.
+
 - [~] ~~G1 con la captura real de Pendientes de la demo~~ — **reemplazada por la premisa v5** (Sergio Urcullo, 8-oct: *«Lucía no
   es necesario que muestres el producto… grabar y aprender a usar Higgsfield es tu tarea»*). G1 salió sin producto:
   `videos/lucia-g1/` (`e35bb77d1`, `ec26f3bb6`). La captura de Pendientes queda para Marca, no para Lucía.
@@ -71,8 +76,8 @@ cotización con referencias coincidió con el cobro):
 | **P2** | **Referencia** (clip) | Seedance mini, 6 s, 720p, mudo, foto K1 + 3 refs + prompt «cámara fija, mismo encuadre, sin zoom, sin letreros» | **6 cr** | Si se mantiene la ganancia de cara (0,80) **sin** reencuadre ni letrero. Éxito: final ≥ 0,78, cara que no crece más de 1,3× (antes 2,5×), 0 letreros |
 | **P3** | **Modelo** (clip) | MiniMax H3, 6 s, foto K1 + refs, 9:16, 2K. Único modelo sin probar que acepta foto de inicio **y** referencias a 2K (cara más grande = control más fiable) | **12 cr** | Si un modelo distinto rompe el dilema «cara o escena». Alternativas cotizadas: Kling Turbo 9 cr (solo foto), Grok 1.5 27 cr, Seedance 2.5 42 cr (descartado por precio) |
 
-**Total: 21 cr** (P1 3 + P2 6 + P3 12). **Qué necesita permiso:** P1 es lote chico de imagen (< 5 cr): autorizado el 8-oct, lo puedo correr en cuanto
-la madre lo confirme. **P2 y P3 son video: piden el sí de Sergio Urcullo, escrito en esta sesión.** Además, del tope mensual de Lucía (150) quedan
+**Total: 21 cr** (P1 3 + P2 6 + P3 12). **Qué necesita permiso:** P1 es lote chico de imagen (< 5 cr), autorizado el 8-oct, pero **desde el 10-oct 20:25 UTC espera el «mostrada,
+generá» de la madre** (regla de arriba). **P2 y P3 son video: piden el sí de Sergio Urcullo, escrito en esta sesión.** Además, del tope mensual de Lucía (150) quedan
 **11 cr** (139 gastados): P1 + P2 caben (9); **P3 no cabe** sin que Sergio Urcullo suba el tope o la espere a noviembre.
 **No gasté nada en esta tanda.**
 
