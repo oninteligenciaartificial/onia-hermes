@@ -55,6 +55,29 @@ Leyenda de dueño: `H` Haiku · `S` Sonnet · `O` Opus · `CxSol` / `CxAstra` Co
 - [ ] D2 Plataforma: demo refrescada (primera ventana: lunes 12-oct 07-11 UTC) + capturas C1-C7 → destraba Ventas y Lucía.
 - [ ] D3 Marca: recibe GRABAR-17-23-OCT.md (A1) y su equipo.
 
+## G. Relojes (fechas que nadie empujaba; la madre los lleva en el parte de la mañana)
+| Fecha | Qué | Dueño | Fuente |
+|---|---|---|---|
+| lun 12-oct 07-11 UTC | Refrescar la demo (solo lun-jue) → capturas C1-C7 | Plat | onia-1.0-nube.md §3 |
+| lun 13-oct | Declaraciones mensuales del SIN (F-200 IVA, F-400 IT, F-608 RC-IVA; F-530 IUE-BE si hubo pagos al exterior): NIT termina en 0 → vence el 13 | SU / Leslie Mercado Moreno / contador | memoria nit-onia-estado-verificado-siat |
+| 13-oct | Go/no-go de la pauta de Meta del 16-oct | Ventas | handoff TERMINAR TODO |
+| 13-oct 23:57 La Paz | Reinicio semanal de Codex (56 % al 9-oct; refills solo al tope) | madre | rate_limits |
+| 13 al 18-oct | Vence el token de Instagram de Lucía (renovar o que salga G1 antes) | SU decide (C4) | videos/lucia-entrega/README.md |
+| jue 16-oct | Puntos 1 a 4 de la 1.0 + arranque de la pauta | Plat / Ventas | ONIA_PLAN_1.0_Y_CAJA.md |
+| 30-oct | La 1.0 completa (15 puntos) + homologación del SIAT | Plat / SU | plan §1, memoria SIAT |
+| 4-nov | Vence el trámite 9473 del SIAT (CAFC, prórroga de 60 días) | SU (solo él abre el portal) | memoria siat-sistema-9473 |
+| sin fecha | Trámite del API QR del BCP | SU | memoria bcp-api-qr-tramite |
+
+## H. Frentes sin dueño hasta hoy (ONIA_HARNESS.md §4) → dueño asignado
+- [ ] H1 SIAT, fiscal y legal → la madre lleva los relojes (G); los actos los hace SU / Leslie Mercado Moreno.
+- [ ] H2 Leads (7, el más viejo ~50 días) y pauta → Ventas, con latido (probar el id de su sesión con un disparo único).
+- [ ] H3 Asesorías y reservas de cal.com → la madre lee la agenda en el parte de la mañana (Google Calendar).
+- [ ] H4 Web onia.com.bo → inventariar primero si el loop `web-venta` del VPS sigue vivo (para no tener dos dueños).
+- [ ] H5 Infra, costo y VPS → la madre como dueña única; inventario en vivo de lo que corre en el VPS (solo lectura).
+- [ ] H6 Chatbot (motor :3020, n8n, Chatwoot) → inventariar `chatbot-cola` del VPS; Plat mantiene los PRs.
+- [ ] H7 Hermes con la cola vacía gastando Opus cada hora → proponer a SU: pasarlo a Review/QA o bajar el latido.
+- [ ] H8 Seguridad local: secreto de n8n en claro en ~/.codex/config.toml; Codex interactivo en danger-full-access → SU decide.
+
 ## F. Loops (pedido de SU 10-oct: «organizá tus loops y que trabajen a diario»)
 | Loop | Dónde corre | Cuándo (La Paz) | Qué hace | ¿Sigue con la PC apagada? |
 |---|---|---|---|---|
