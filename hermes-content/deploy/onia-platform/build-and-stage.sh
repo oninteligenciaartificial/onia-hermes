@@ -27,11 +27,12 @@ esperar_otro_build() {
   local inicio=$SECONDS transcurrido siguiente_log=0 pausa
   [[ "$espera" =~ ^[1-9][0-9]{0,8}$ && "$intervalo" =~ ^[1-9][0-9]{0,8}$ ]] \
     || fatal "ONIA_BUILD_ESPERA_SEG y ONIA_BUILD_INTERVALO_SEG deben ser segundos enteros positivos (hasta 9 digitos)"
-  # ONIA_PS_CMD: SOLO para tests, ruta de un ejecutable que sustituye ps;
-  # recibe los mismos argumentos (-eo args). No se evalua como codigo shell.
-  while "${ONIA_PS_CMD:-ps}" -eo args 2>/dev/null | grep -E 'next build|npm ci|docker build|docker buildx' | grep -v grep >/dev/null; do
+  (( espera <= 3600 )) || fatal "ONIA_BUILD_ESPERA_SEG no puede superar 3600 segundos"
+  # Runner.Worker cubre el job entero, incluidos los huecos entre npm ci y next build.
+  # Runner.Listener permanece activo aun sin job: no debe bloquear el build.
+  while ps -eo args 2>/dev/null | grep -E 'next build|npm ci|docker build|docker buildx|Runner\.Worker' | grep -v grep >/dev/null; do
     transcurrido=$((SECONDS - inicio))
-    if (( transcurrido >= espera )); then
+    if [ -n "${DRY:-}" ] || (( transcurrido >= espera )); then
       fatal "hay otro build corriendo (next build / npm ci / docker build): no encimo otro"
     fi
     if (( transcurrido >= siguiente_log )); then
