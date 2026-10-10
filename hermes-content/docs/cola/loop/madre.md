@@ -68,6 +68,8 @@ Leyenda de dueño: `H` Haiku · `S` Sonnet · `O` Opus · `CxSol` / `CxAstra` Co
 - [ ] D3 Marca: recibe GRABAR-17-23-OCT.md (A1) y su equipo.
 - [x] D4 (v4, 20:15 UTC) Las 4 nubes tomaron la dirección de las 20 UTC, con commit: Plat `ONIA_1.0_CORTE` (optimistic-ride 20:07), Lucía revisión de 8 piezas (zealous-babbage 20:04), Hermes QA Q1-Q5 (adoring-ramanujan 20:04), Marca **K11 + historias 1-3 publicados** (gifted-clarke 20:11). Ventas sin commit desde 18:09 UTC (running).
 - [ ] D5 Marca: layout `inventario` + cierre «buscá PALABRA en Avisos» en `carousel_pack_referentes.js` + test, y los 2 carruseles del brief DePPPp5FgMh (18 y 21-oct). Pedido 20:20 UTC. Hecho = SHA + láminas mirada.
+- [x] D6 (v4, 20:25 UTC) SU: «mergeá vos» → #187 `d6a276ad`, #188 `e3c3d564`, platform #145 `d8ca5a32` (sale 21:50 UTC: MIRAR /book). Codex: junction `~/.agents/skills` → repo (30 skills), corrido por SU. SIN: SU presentó (reloj 13-oct cerrado por él).
+- [ ] D7 Regla nueva de SU (20:25 UTC): MOSTRAR antes de subir o hacer (memoria `feedback-mostrar-antes-de-publicar`). Avisado a Marca y Lucía. Lucía G1 mostrado (video + 8 cuadros en el tablero), espera su OK. Pendiente: ¿mostrar y esperar OK, o solo mostrar?
 
 ## I. Olvidos de la auditoría (research/2026-10-10-auditoria-madre-v3.md §c) — dueño y estado
 - [ ] I1 La rama de la madre (`claude/onia-sesion-madre-9313fb`, 10+ commits) NO está en main: el integrador `onia-cola` está
