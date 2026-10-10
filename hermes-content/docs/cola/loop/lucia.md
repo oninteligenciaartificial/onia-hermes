@@ -107,8 +107,9 @@ gastó: la que haya sido debería sumarlos a su gasto de octubre, y la madre pue
   `ig-carrusel.mjs --cuenta lucia` en el VPS (receta en `videos/lucia-entrega/README.md`); no hay otra pieza que lo bloquee.
 - [x] G4 «Seis motores de imagen, una cara: ¿cuál la conserva?» — montado en tres pasadas con revisor independiente
   (`videos/lucia-g4/`, revisiones 1 y 2 en `qa/`; 59,75 s; copia en `videos/lucia-entrega/`, SHA en su README). Corregidos: consultorio
-  dental y logos de monitor (fotos limpias en `v4/prueba-motores-20261008/fotos-limpias/`), nota de ruido, tabla de A y B. **Falta solo la
-  validación del guion por la madre** (decide también el sello rojo de E/F, R2-1 de la revisión 2).
+  dental y logos de monitor (fotos limpias en `v4/prueba-motores-20261008/fotos-limpias/`), nota de ruido, tabla de A y B. **Guion APROBADO por la madre el 10-oct** (`hermes-content/docs/cola/lucia-diario/VALIDACION-G4-G5-MADRE.md`):
+  los sellos rojos de E/F se dejan como están (R2-1, opción a). Retoques que no bloquean y solo entran si se vuelve a renderizar: «El café: B perdió
+  la cara.» → «Escena 2: B perdió la cara.» y «Pagar más no mejora…» → «Pagar más no mejoró el parecido.». Sale solo con «mostrada, publicá G4».
 - [x] Carrusel C1 «Un video sin grabar, en 3 pasos» — versión carrusel de G1 con fotos y un cuadro real del clip: láminas en
   `hermes-content/carousels/out/lucia-c1-un-video-sin-grabar/`, brief en `briefs/lucia/c1-un-video-sin-grabar.json`. 5 láminas miradas
   completas, grep limpio, 1080×1350 sin franja. Sale por `ig-carrusel.mjs --cuenta lucia` (receta en `videos/lucia-entrega/README.md`).
@@ -117,7 +118,7 @@ gastó: la que haya sido debería sumarlos a su gasto de octubre, y la madre pue
 
 - [x] G5 «Cómo mido si una cara es la de Lucía (y cuándo no creerle al número)» — montado en tres pasadas con revisor independiente (`videos/lucia-g5/`,
   revisiones 1 y 2 en `qa/`; 57,5 s; copia en `videos/lucia-entrega/`, SHA en su README). Corrigió el guion mismo: «una cara chica baja sola» exageraba (se midió: −0,004 a −0,010)
-  y «0,79 y 0,77 difieren 0,03» eran 0,02. **Falta la validación del guion por la madre**, que decide también si G2 difumina el letrero inventado como G5.
+  y «0,79 y 0,77 difieren 0,03» eran 0,02. **Guion APROBADO por la madre el 10-oct** (mismo documento; no lleva revisión independiente de cuadros de la 3ra pasada, solo los tres textos que pidió el revisor). Sale solo con «mostrada, publicá G5». **Sigue abierto:** si G2 difumina el letrero inventado como G5.
 - [x] C2 carrusel «Seis motores de imagen: cuánto cuesta y cuánto se parece» — láminas en
   `hermes-content/carousels/out/lucia-c2-seis-motores-de-imagen/`, brief en `briefs/lucia/c2-seis-motores-de-imagen.json`; 5 láminas miradas
   completas, grep limpio. Mismos números que el guion de G4 (que la madre valida).

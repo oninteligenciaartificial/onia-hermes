@@ -8,8 +8,8 @@ nube no tiene cliente `ssh` y la decisión de la madre (8-oct) es que la llave v
 | 1 | G1 «Este video no fue grabado: así se hace, en 3 pasos» | `g1-final-1080x1920.mp4` | 56 s | `../lucia-g1/pie.txt` | `../lucia-g1/qa/g1-preview-360p.mp4` |
 | 2 | G3 «Tres errores de la IA que atrapé antes de publicar» | `g3-final-1080x1920.mp4` | 58 s | `../lucia-g3/pie.txt` | `../lucia-g3/qa/g3-preview-360p.mp4` |
 | 3 | G2 «La misma foto, seis clips: ¿quién pierde la cara?» | `g2-final-1080x1920.mp4` | 58 s | `../lucia-g2/pie.txt` | `../lucia-g2/qa/g2-preview-360p.mp4` |
-| 4 | G4 «Seis motores de imagen, una cara: ¿cuál la conserva?» (**su guion espera la validación de la madre**) | `g4-final-1080x1920.mp4` | 59,75 s | `../lucia-g4/pie.txt` | `../lucia-g4/qa/g4-preview-360p.mp4` |
-| 5 | G5 «Cómo mido si una cara es la de Lucía (y cuándo no creerle al número)» (**su guion corregido espera la validación de la madre**: `hermes-content/docs/cola/lucia-diario/guiones/G5-como-se-mide-una-cara.md`) | `g5-final-1080x1920.mp4` | 57,5 s | `../lucia-g5/pie.txt` | `../lucia-g5/qa/g5-preview-360p.mp4` |
+| 4 | G4 «Seis motores de imagen, una cara: ¿cuál la conserva?» (**guion APROBADO por la madre el 10-oct**; sale solo con «mostrada, publicá G4») | `g4-final-1080x1920.mp4` | 59,75 s | `../lucia-g4/pie.txt` | `../lucia-g4/qa/g4-preview-360p.mp4` |
+| 5 | G5 «Cómo mido si una cara es la de Lucía (y cuándo no creerle al número)» (**guion APROBADO por la madre el 10-oct**; sale solo con «mostrada, publicá G5»; guion: `hermes-content/docs/cola/lucia-diario/guiones/G5-como-se-mide-una-cara.md`) | `g5-final-1080x1920.mp4` | 57,5 s | `../lucia-g5/pie.txt` | `../lucia-g5/qa/g5-preview-360p.mp4` |
 
 SHA-256 de lo entregado:
 
@@ -37,8 +37,8 @@ ec4c450f3e0c4f682b675b65ef913a2e1e0400d31b29c35aa948119bf702f997  g4-final-1080x
 | 1 · día 3-4 | **G3** (reel) | Errores que atrapé: confianza y el dato que más se guarda |
 | 2 · día 1 | **C1** (carrusel) | Repite G1 en formato guardable con la orden real |
 | 2 · día 3 | **G2** (reel) | La prueba de los seis clips; usa lo aprendido en G1/G3 |
-| 2 · día 5 | **G4** (reel; cuando la madre valide el guion) | Seis motores de imagen |
-| 2 · día 5 / 3 · día 1 | **G5** (reel; cuando la madre valide su guion) | Cómo se mide una cara y cuándo no creerle al número; cierra la serie de pruebas |
+| 2 · día 5 | **G4** (reel; guion aprobado el 10-oct, falta «mostrada, publicá G4») | Seis motores de imagen |
+| 2 · día 5 / 3 · día 1 | **G5** (reel; guion aprobado el 10-oct, falta «mostrada, publicá G5») | Cómo se mide una cara y cuándo no creerle al número; cierra la serie de pruebas |
 | 3 · día 1 | **C2** (carrusel) | Formato guardable de G4: `hermes-content/carousels/out/lucia-c2-seis-motores-de-imagen/`, pie en `briefs/lucia/c2-seis-motores-de-imagen.json`. Sale después de G4 |
 
 El token de Instagram de Lucía vence entre el 13 y el 18-oct: **la primera pieza tiene que salir antes**, o hay que renovarlo.

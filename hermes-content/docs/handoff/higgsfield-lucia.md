@@ -17,8 +17,8 @@ la v5), C1 y C2 (`hermes-content/carousels/out/lucia-*`). Receta exacta, orden y
 no tiene cliente `ssh` y instalarlo no está aprobado. Además falta (a) el token de Lucía en `ig-lucia.env` (vence 13-18-oct) y
 (b) que la madre mire los previews 360p. **Quien corra la receta reporta `PUBLICADO:`.**
 
-**En vuelo:** nada sin commitear. **G4 y G5 están terminados** (`videos/lucia-g4/`, `videos/lucia-g5/`; revisiones independientes en `qa/`): falta la validación de sus
-guiones por la madre, que decide además el sello rojo de E/F en G4 y si G2 difumina el letrero inventado como G5.
+**En vuelo:** nada sin commitear. **G4 y G5 están terminados** (`videos/lucia-g4/`, `videos/lucia-g5/`; revisiones independientes en `qa/`): **la madre aprobó sus guiones el 10-oct**
+(`cola/lucia-diario/VALIDACION-G4-G5-MADRE.md`; sellos rojos de E/F se dejan). Sigue abierto si G2 difumina el letrero inventado como G5. Desde el 10-oct 20:25 UTC nada sale sin «mostrada, publicá <pieza>».
 
 **Aprendido el 9-oct** (ya en la skill `lucia` §8): el render de carruseles con el Chromium normal deja una franja blanca de 88 px
 (usar `headless_shell` y `--pack editorial-photo`); el contenedor se recicla y `out/` no está en git, por eso los finales se entregan

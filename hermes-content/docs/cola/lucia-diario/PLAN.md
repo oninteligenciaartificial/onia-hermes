@@ -94,9 +94,9 @@ Cada fila es una prueba chica, con su video. Los costos son cotizaciones en vivo
 | **G3** «Tres errores de la IA que atrapé antes de publicar» (58 s) | 0 | **montado** (`videos/lucia-g3/`); la madre mira el preview 360p; evidencia real en `v4/kit/` |
 | **G2** «La misma foto, seis clips: ¿quién pierde la cara?» (58 s) | 0 más | **montado** (`videos/lucia-g2/`); la madre mira el preview 360p; los 6 clips ya estaban pagados y medidos |
 | **L01** «Hola, soy Lucía. No existo.» (carrusel de presentación, fijado) | 0 | **reescrito a la v5 el 9-oct** (una prueba por semana, lo que cuesta, lo que no hace) y renderizado sin franja blanca. Va fijado **después** de G1 |
-| **G4** «Seis motores de imagen, una cara: ¿cuál la conserva?» (59,75 s) | 0 | **montado** (`videos/lucia-g4/`, tres pasadas con revisor independiente el 9-oct); falta que la madre valide el guion y mire el preview |
+| **G4** «Seis motores de imagen, una cara: ¿cuál la conserva?» (59,75 s) | 0 | **montado** (`videos/lucia-g4/`, tres pasadas con revisor independiente el 9-oct); **guion aprobado por la madre el 10-oct**; sale con «mostrada, publicá <pieza>» |
 | **C1** «Un video sin grabar, en 3 pasos» y **C2** «Seis motores de imagen» (carruseles) | 0 | **hechos y mirados** (`hermes-content/carousels/out/lucia-c1-…`, `lucia-c2-…`); salen después de G1 y de G4 |
-| **G5** «Cómo mido si una cara es la de Lucía» (~56 s) | 0 | **montado** (`videos/lucia-g5/`, tres pasadas con revisor independiente el 9-oct); falta que la madre valide el guion y mire el preview |
+| **G5** «Cómo mido si una cara es la de Lucía» (~56 s) | 0 | **montado** (`videos/lucia-g5/`, tres pasadas con revisor independiente el 9-oct); **guion aprobado por la madre el 10-oct**; sale con «mostrada, publicá <pieza>» |
 | ~~L02~~ y ~~el chiste de 10 s~~ | — | retirados el 8-oct; sus clips son planos de apoyo |
 
 - **Qué se mide por pieza:** guardados y envíos (señal de que enseñó algo), seguidores nuevos y que la cuenta siga «apta
