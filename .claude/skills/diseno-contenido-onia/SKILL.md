@@ -82,7 +82,7 @@ Cada lámina elige `layout`:
 | `captura` | Carlos: la pantalla real como prueba | título ≤ 8, pie ≤ 12 | captura real (nunca maqueta) |
 | `cierre` | «Buscá PALABRA en Avisos» + qué recibís (`keyword`), adaptación vigente 9-oct | 1 línea | ninguna; solo si el recurso ya existe |
 
-Pendientes del catálogo (en `patrones/`): P-COMPARA, P-FOTO-ESCENA, P-DIAGRAMA, P-TABLA-MARCADOR.
+Pendientes del catálogo (en `patrones/`): P-COMPARA, P-FOTO-ESCENA, P-DIAGRAMA, P-TABLA-MARCADOR, **P-LISTA-CONTINUA** (receta «Inventario continuo», más abajo; sin layout todavía).
 Carlos Domínguez señala como rasgo de «plantilla IA» el fondo crema: por eso el pack pasó a
 blanco puro, verde y negro (decisión de Sergio, 29-sep).
 
@@ -248,6 +248,46 @@ Lo que sigue (render, banda segura, trampas del headless) **sigue valiendo** com
   instalada y sin Geist Mono (cae a otra mono): igual de legible, no pixel-idéntico a la PC.
   Ojo: Instagram dio 429 a la API de historias de la PC el 9-oct (la madre, 9-oct): las capturas de historias de referentes
   esperan a que Sergio Urcullo las mire a mano en Chrome.
+
+## Receta de carrusel «Inventario continuo» (referencia DePPPp5FgMh, 10-oct-2026)
+
+Fuente y evidencia: [`references/video-intake/2026-10-10-ig-carrusel-DePPPp5FgMh.md`](../../../hermes-content/references/video-intake/2026-10-10-ig-carrusel-DePPPp5FgMh.md) (carrusel de `@iampascio`, 5 láminas, 12 apps). **Estado: incorporada, sin aplicar.** Aplicación propuesta: `hermes-content/carousels/briefs/BRIEF-RECETA-DePPPp5FgMh.md`.
+
+**Mecanismo:** una lista larga de cosas del mismo tipo (herramientas, tics, preguntas, tareas) partida en láminas con **grilla fija**, sin tarjetas ni título interior. La portada hace de título; el último ítem es lo que ofrecés; el cierre es personal. **Cuándo sí:** 6 o más ítems de un mismo tipo. **Cuándo no:** una noticia o una prueba (va `captura`, una por lámina, como P2): el inventario enseña *qué*, la captura enseña *cómo*.
+
+| # | Lámina | Función | Palabras | Qué va |
+|---|---|---|---|---|
+| 1 | Portada | Gancho de curiosidad e identificación: «qué hay» | título ≤5 + «seguí →» (≤8; la flecha del pack) | Una de tres: **captura real** del objeto medido; foto `fotobn` del escritorio con **un solo objeto verde**, sin texto en pantalla, y los logos oficiales montados por código en arco; o `dato` gigante. Nunca un render con logos generados |
+| 2 | Lista 1 | 5 filas | 25-30 | Logo oficial si el ítem es una marca; número en tinta (DM Sans 800, sin círculo) si es tarea, tic o pregunta, **continuo entre láminas** (6, 7, 8…): el `li-n` actual es un círculo `#10C26B` y 5 por lámina rompen «un solo verde». Sin captura |
+| 3 | Lista 2 | Hasta 5 filas, **misma grilla** | 25-30 | Igual. Si hay menos de 5 filas, el bloque va **centrado en vertical** |
+| 4 | Remate | 2-3 filas; la última es **el recurso**, aislado por aire y unido al cierre con la flecha Caveat | ≤20 | Ícono simple del recurso o ninguno. **No lleva pedido**: el único pedido está en la 5 |
+| 5 | Cierre personal | Una frase de firma + el único CTA | ≤25 | **Foto real** de Sergio Urcullo (fotograma de su video del día, B/N, editado en local; no se sube a servicios externos: cara y voz piden autorización específica). El único verde de la lámina es el marcador sobre la PALABRA del CTA. Sin foto: `ensayo` negro solo texto |
+
+**Tipografía y jerarquía (1080×1350, pack `referentes`, tema `blanco`):**
+- Portada: Bricolage 800, ~140 px, interlineado 1,0, tracking -0,03 em, centrada, 2 renglones de ≤3 palabras.
+- Lista: **nombre y línea al MISMO cuerpo (44 px)**; la jerarquía sale del peso y el color: nombre DM Sans 800 `#0A0F0D`, línea DM Sans 400 `#4F5A55`. Nombre ≤3 palabras; línea ≤8 palabras, hasta 2 renglones; la lámina de 5 filas suma ≤30 (en promedio 2 + 4).
+- Grilla (en % para que valga en `square`): ícono a 17 % del ancho y ~10 % de lado (184 px y 108 px); texto desde 32,5 % (351 px) hasta el padding de 84 px (645 px de columna: el castellano ocupa ~20 % más que el inglés de la fuente); paso de fila 16,5 % del alto (223 px); 5 filas ocupan 13-87 % del alto. La grilla **no cambia entre láminas**.
+- Trazo a mano (Caveat): solo la flecha del remate y la de continuidad. Es el cambio de registro: el pulido es el valor, lo manuscrito es el momento de pedir.
+
+**Paleta nuestra:** fondo `#FFFFFF`, tinta `#0A0F0D`, línea `#4F5A55` (~7:1 sobre blanco; el `#808080` de la fuente da ~3,9:1 y no entra). Verde profundo `#0B8F4F` solo en UNA palabra del título; el eléctrico `#10C26B` en un único objeto o subrayado, nunca como texto sobre blanco. Los logos oficiales a color dentro de la fila son el único otro color; en la portada, 9 logos a color rompen «un solo verde» y son una **excepción que decide Sergio Urcullo**.
+
+**Cierre y CTA (una sola acción):** «Buscá PALABRA en Avisos · link en mi perfil» (8 palabras), tecleado en la lámina 5 y como línea 1 del caption. La palabra es la de la pieza del día y **solo si su aviso ya está pegado antes de la hora del carrusel**; si no, «Lo que probé está en mi comunidad. Link en mi perfil.». Sin pregunta para comentar, sin correo, sin «comentá y te lo mando» (el DM automático no está probado). LinkedIn: si su perfil no muestra el link, el link va en el texto.
+
+**Qué NO copiar:**
+- La mascota, el avatar caricatura y la firma manuscrita de la fuente (nuestro personaje es la foto real); el inglés, «Swipe →» y el humor autocrítico.
+- **Líneas de uso inventadas:** cada línea tiene que ser verdad para Sergio Urcullo o va marcada `[MEDIR]`.
+- Los tres pedidos de la fuente (palabra clave, correo, pregunta) y la promesa de un correo que no existe.
+- La portada con íconos 3D generados, el gris `#808080` y el producto propio camuflado en una lista de marca personal (mezcla carriles: CLAUDE.md, 2-oct).
+
+**Control de calidad propio (suma a §5):** (1) **cada línea corresponde a su ítem**: la fuente publicó una línea cruzada (la de Spotify hablaba de maquetas) y escribió «Whatsapp»; leé fila por fila contra el logo o el número; (2) lámina, caption y recurso enlazado no se contradicen (la fuente, en su lámina 5, prometía notas diarias con envío semanal); (3) misma grilla en todas: sobreponé las láminas 2 y 3 y la x del ícono y del texto no se mueve; (4) la última lista queda centrada en vertical, no pegada arriba; (5) el número de la portada coincide con el de las láminas.
+
+**Qué plantilla hay hoy y qué falta (verificado en `scripts/carousel_pack_referentes.js` el 10-oct):**
+- **Hoy no hay plantilla para esta receta.** El `lista` más parecido (línea 56; CSS 172-193) dibuja cada fila como tarjeta con borde de 3 px y radio de 26 px, siempre imprime su `headline`, cambia a `compacta` con 4 filas o más y usa dos cuerpos (50 y 40 px). **No se usa como si fuera la receta.**
+- **Falta, en este orden** (encargo cerrado para Codex, con la hoja de contactos de los 2 briefs como prueba de hecho; no se construye hasta que la madre lo pida):
+  1. Layout `inventario` junto a `listaHtml`, registrado en `LAYOUTS` (línea 89): `items[{icon|n, label, text}]`, `headline` opcional que no dibuja nada si falta, filas sin caja a la grilla de arriba, `center` para la última lámina y `ask` para la flecha del remate. Sumarlo a la lista de `scripts/carousel_render.test.js:104` con casos de 5, 3 y 2 filas.
+  2. `cierre` escribe «Comentá» fijo (línea 86; lo confirma P2): darle un `pre` con «Buscá» por defecto, o armar el cierre con `ilustrado` (foto + frase + CTA) mientras tanto.
+  3. Portada-inventario con logos en arco: layout nuevo opcional; sin él, la portada va con foto `fotobn` + `dato` o captura.
+- **Logos:** hay 8 en `hermes-content/references/brand-logos/` y 3 en `hermes-content/references/brand-claude/`. Notion, Chrome, Spotify, NordVPN, Figma, Xcode y Cursor **no están**: un inventario que los nombre primero necesita su kit de prensa oficial (si hay que descargar, pide OK).
 
 ## 6. Gasto (CLAUDE.md, regla de Higgsfield)
 

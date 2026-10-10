@@ -78,7 +78,7 @@ Every Codex task contract adds `--disable multi_agent`. Codex's own subagents to
 | Plataforma (cloud) | Sonnet | 2-3 Sonnet + 2 Codex Sol (through the madre) | Codex `revisar`; Astra for risk | CI + Haiku capture at 390/1440 px | Hourly + `/loop` |
 | Ventas y pauta (cloud) | Opus | 2 Sonnet | Opus against the catalog | Haiku against the promise table | Hourly via its own ScheduleWakeup |
 | Marca personal (cloud) | Sonnet | 2 Sonnet + HyperFrames | Sonnet with the QC skill | Haiku render check; Buffer per the 8-oct rule | Hourly + `/loop` |
-| Lucía (cloud) | Sonnet | 1 Sonnet (free parts only) | Sonnet identity check | Haiku | Hourly; paused first if quota is short |
+| Lucía (cloud) | Sonnet | 1 Sonnet (free parts only) | Sonnet identity check | Haiku | Hourly; never paused (Sergio Urcullo, 10-oct): slows down if quota is short |
 | Review/QA (Hermes-Jarvis, cloud) | none | none | 2 Sonnet | 1 Haiku post-deploy check; Meta tripwire weekly | Hourly + `/loop` |
 | Madre-PC | Opus | 1 Sonnet browser worker (one task at a time) + 3 Codex | 1 Codex `revisar` | Haiku round checker | Every 20 min |
 
@@ -175,7 +175,7 @@ Lucía's free G2/G3 parts are filler, after these 20.
 | A task is lost | ENTRADA line not updated for 24 h, or an expired lease | Re-queue; after 3 attempts, Necesito |
 | A draft PR fails to merge silently | `isDraft` check in the gate | Run `gh pr ready` |
 | Codex quota | `wham/usage` at 80% or more | Stop launching; work goes to Sonnet |
-| Claude quota contention | Lost turns in transcripts; `get_usage` | Pause Lucía first, then Hermes |
+| Claude quota contention | Lost turns in transcripts; `get_usage` | Pause Hermes; Lucía is never paused (10-oct), only slowed |
 | PC instability | Paged pool over 4 GB; disk under 3 GB | Stop launching Codex; reboot |
 | Meta changes the MCP | T5 finds a difference in the tool list | Re-assess the verdict |
 

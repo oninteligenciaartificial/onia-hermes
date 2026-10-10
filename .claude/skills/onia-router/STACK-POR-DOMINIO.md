@@ -45,10 +45,26 @@ que uno realmente va a hacer.
 
 | Cuándo | Skills |
 |---|---|
-| Copy de anuncio, caption, headline | **`onia-ventas-pauta` §9 primero** (anuncio que vende y VSL, de punta a punta; está en el repo y la nube la ve) · `copywriting` · `ad-creative` (globales: solo en la PC) |
+| Copy de anuncio, caption, headline | **`onia-ventas-pauta` §9 primero** (anuncio que vende y VSL, de punta a punta; está en el repo y la nube la ve) · `copywriting` · `ad-creative` (copiadas al repo el 10-oct) |
 | Pulir un texto que ya existe | `copy-editing` · `writing-guidelines` |
 | Artículo, guion largo, documento | `article-writing` |
 | Recurso descargable a cambio de un dato | `lead-magnets` |
+
+> **En la nube (10-oct-2026):** las skills de este mapa que están en `.claude/skills/` del repo, la nube las ve. Estas
+> siguen **solo en la PC** (`~/.claude/skills/`) y una sesión de la nube no las carga; si una tarea las necesita, se
+> la pide a la madre (`CLAUDE.md` «Sesión MADRE»), no se improvisa de memoria: `ads` · `agentic-engineering` ·
+> `analytics` · `architecture-decision-records` · `article-writing` · `autonomous-loops` · `banner-design` · `brand` ·
+> `brandkit` · `browse` · `caveman-review` · `click-path-audit` · `codebase-onboarding` · `community-marketing` ·
+> `competitors` · `context-budget` · `context-restore` · `context-save` · `continuous-agent-loop` · `copy-editing` ·
+> `cost-aware-llm-pipeline` · `design` · `design-consultation` · `design-dna` · `design-html` · `design-md` ·
+> `design-review` · `devex-review` · `document-generate` · `documentation-lookup` · `e2e-testing` · `emil-design-eng` ·
+> `exa-search` · `frontend-patterns` · `image-to-code` · `imagegen-frontend-web` · `industrial-brutalist-ui` ·
+> `investigate` · `iterative-retrieval` · `lead-magnets` · `make-pdf` · `make-plan` · `minimalist-ui` ·
+> `n8n-code-javascript` · `n8n-expression-syntax` · `n8n-node-configuration` · `n8n-validation-expert` ·
+> `nextjs-turbopack` · `qa` · `react-components` · `review` · `shadcn-ui` · `slides` · `social` · `supabase` ·
+> `supabase-postgres-best-practices` · `taste-design` · `ui-styling` · `ui-ux-pro-max` · `writing-guidelines`.
+> Las de plugin que nombra el mapa (`caveman`, `ponytail`, `gsap-skills`, `claude-mem`, `skill-creator`,
+> `pdf`/`docx`/`pptx`/`xlsx`) no se verificaron: no se sabe si la nube las carga.
 
 ### 1.2-bis 🔴 Los bancos de patrones — se abren ANTES que la skill
 
