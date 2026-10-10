@@ -30,7 +30,7 @@ Es **lead** si (1) lo escribió una persona por su cuenta, no una prueba nuestra
 venden, o lo pide; (3) hay un canal para contestarle. Falla la 1 → no es lead. Falla la 2 (es un paciente que busca turno) → no se le escribe, y si
 ya habló con el bot, la salida cortés de §2. Falla la 3 → no se puede.
 
-| Quién | Entró | Silencio al 10-oct | ¿Prospecto? | Por qué | Qué se le manda |
+| Quién | Entró | Días desde que entró (10-oct)* | ¿Prospecto? | Por qué | Qué se le manda |
 |---|---|---|---|---|---|
 | «F», conv 35, WhatsApp | 25-ago | **46 días** | **Sí, el más calificado** | Clínica odontológica de 4 doctores; pidió 6 funciones y el costo | Plantilla **B** → llamada. Sus 6 preguntas, contra el catálogo, en `ONIA_LEADS_ESPERANDO.md` §3.1 |
 | Maximo Romano, `clinica klein` (dental) | 21-ago | 50 días | **Sí** | Pidió acceso por el formulario | Plantilla **A** (dental) |
@@ -42,13 +42,15 @@ ya habló con el bot, la salida cortés de §2. Falla la 3 → no se puede.
 | Conv 58, bot, 17-sep | 17-sep | 23 días | **Sin leer** | La auditoría del 2-oct dice que «quedó esperando horario» | Se clasifica con los datos de abajo |
 | **El nuevo** y las **8 colgadas** del vigía | — | — | **Sin datos** | Solo existen en Chatwoot | Plantilla **N** (§0.2), cuando la madre pase los datos |
 
+\* *Se supone que nadie les contestó después: los pedidos de acceso, la conv 34 y la 36 se leyeron el 31-ago (`contactedAt` vacío) y «F» y Mario se confirmaron hasta el 2-oct. El bloque «Conteo de hoy» lo verifica antes de escribir, y si alguien les contestó, el texto se ajusta.*
+
 **Cómo se clasifican las que no vi** (le toca a quien tenga el VPS, solo lectura): correr el bloque «Conteo de hoy» de `ONIA_LEADS_ESPERANDO.md` y pasarme, **por cada
 conversación colgada, solo esto**: id, canal, nombre o negocio si lo dio, qué escribió (una línea), hace cuánto, si hubo mensaje saliente de una persona. Con eso las pongo
 en la tabla de arriba y les dejo su borrador. Dato que no está en ese bloque y hace falta: **si el último mensaje entrante tiene menos de 24 h**, porque cambia plantilla por texto libre.
 
 ### 0.2 Los textos (de usted, sin precio, sin nada que el catálogo §7 y §8 no deje decir)
 
-Las tres plantillas son de **MARKETING, sin variables** (Meta rechaza un cuerpo que empieza o termina en variable) y llevan los botones **«Sí, coordinemos» / «Ahora no»**.
+Las cuatro plantillas (A, A estética, B y B′) son de **MARKETING, sin variables** (Meta rechaza un cuerpo que empieza o termina en variable) y llevan los botones **«Sí, coordinemos» / «Ahora no»**.
 **Se dice la verdad sobre el retraso, porque son 43 a 50 días:** callarlo sería lo peor que se puede hacer con alguien que escribió hace mes y medio.
 
 **Plantilla A — pedidos de acceso (dental): `seguimiento_a_acceso`**
@@ -57,9 +59,11 @@ Las tres plantillas son de **MARKETING, sin variables** (Meta rechaza un cuerpo 
 **Plantilla A (estética), para Leonardo: `seguimiento_a_acceso_estetica`** — igual, con «para centros de estética: agenda, ficha de cada clienta, tratamientos, cobros e inventario» (sin odontograma).
 
 **Plantilla B — escribió al bot con preguntas, «F»: `seguimiento_b_pregunta`**
-> Hola, le escribe Sergio Urcullo, de Onia. En agosto usted nos escribió con preguntas sobre un sistema de gestión para su clínica y no le respondimos: le pido disculpas. Prefiero contestarle mirando el sistema y no por mensaje: en una videollamada de 20 minutos le muestro en pantalla lo que preguntó y le digo qué plan le corresponde. ¿Coordinamos?
+> Hola, le escribe Sergio Urcullo, de Onia. En agosto usted nos escribió por un sistema de gestión para su clínica y no le respondí a tiempo: le pido disculpas. Prefiero contestarle mirando el sistema y no por mensaje: en una videollamada de 20 minutos le muestro el sistema en pantalla y le digo qué plan le corresponde. ¿Coordinamos?
 
-**Plantilla B′ — Mario, sin rubro: `seguimiento_b_negocio`** — igual, con «para su negocio» en vez de «para su clínica».
+**Plantilla B′ — Mario, sin rubro: `seguimiento_b_negocio`** — igual, con «para su negocio» en vez de «para su clínica». (Mario escribió una sola frase: por eso no dice «con preguntas».)
+
+**Por qué B no dice «le muestro lo que preguntó»:** «F» pidió, entre otras cosas, la lista de pacientes con tratamiento pendiente y sin cita (el catálogo §8 la prohíbe y en la llamada no se muestra), períodos de 15/30/60 días (no se eligen) y PDF (no consta en el catálogo): prometerle «lo que preguntó» sería prometerle eso.
 
 **Qué NO dicen, a propósito:** el tratamiento a medias (§8: el detector no encuentra a nadie); precios (se dan solo si preguntan, §2); «con una clínica de ejemplo» (**no hay cuenta demo** y
 la llamada no lo promete, L-05); la factura del SIAT; el agente de WhatsApp; «otras clínicas lo usan» (cero clientes).
@@ -73,13 +77,15 @@ la llamada no lo promete, L-05); la factura del SIAT; el agente de WhatsApp; «o
 
 ### 0.3 Lo que falta para poder mandarlos, en orden
 
-1. **Hay un choque de minutos que Sergio Urcullo debe ver:** el primer mensaje del bot ofrece una demo de **30 minutos**, la agenda de Cal.com es de **20** y este playbook dice 20 (L-04). Estos textos dicen 20.
-2. **Las plantillas A, A (estética), B, B′ no existen aprobadas en Meta.** La última lista registrada (3-oct) tenía 3: `confirmacion_cita`, `seguimiento_demo` y `recordatorio_demo`; la auditoría del 2-oct decía que «ninguna de las 7 sirve para retomarlas».
+1. **Hay un choque de minutos que Sergio Urcullo debe ver:** el primer mensaje del bot (publicado desde el 25-sep) y la página `/contacto` ofrecen una demo de **30 minutos**; la agenda de Cal.com es de **20** y este playbook dice 20 (L-04, `ONIA_PROMESA_VS_PRODUCTO.md`). Estos textos dicen 20.
+2. **No consta que las plantillas A, A (estética), B y B′ existan aprobadas en Meta** (no vi la lista). La última con nombres es del **3-sep** y tenía 3 (`confirmacion_cita`, `seguimiento_demo`, `recordatorio_demo`);
+   la auditoría del 2-oct contó **7 aprobadas, sin nombres registrados**, y dice que **ninguna sirve como primer mensaje ni para retomar a estos leads** (`research/ONIA_AUDITORIA_20261002.md`).
    Hay que crearlas con los textos de arriba (WhatsApp Manager, a cargo de Plataforma o la madre). **El tiempo de aprobación no está medido.**
-3. **El método de pago de la cuenta de WhatsApp.** Desde el 1-oct Meta cobra los mensajes y sin método de pago el envío vuelve `failed` con error 131042 (`cola/chatbot.md`, tablero `t_ac3aa802`); ya pasó con 3 salientes de agosto.
-   Se mira en WhatsApp Manager antes del primer envío, y después se mira el estado de cada saliente en Chatwoot: un 2xx no dice que llegó.
-4. **Alternativa sin plantilla:** si el 75414930 ya está en coexistencia con la app WhatsApp Business (el runbook es del 28-ago, **sin medir si se ejecutó**), Sergio Urcullo puede escribirles
-   desde su teléfono con estos mismos textos como mensaje libre, que es lo que pedía la auditoría del 2-oct. Eso evita las plantillas y la fila 3.
+3. **El método de pago de la cuenta de WhatsApp: el repo se contradice.** Los docs de agosto lo dan por cargado y el 131042 por resuelto; el 19-sep se previó que desde el 1-oct, sin método de pago, los
+   envíos vuelven `failed` (`cola/chatbot.md`, sin medir). **No es** lo que dice el tablero `t_ac3aa802`, que habla de crédito de OpenAI. Se mira en WhatsApp Manager antes del primer envío y después se mira el estado de
+   cada saliente en Chatwoot: un 2xx no dice que llegó.
+4. **Alternativa sin plantilla: el celular personal de Sergio Urcullo**, con estos mismos textos como mensaje libre. Es lo que pedía la auditoría del 2-oct («hoy se escribe 1:1 desde tu teléfono»). **El 75414930 no consta en
+   coexistencia** (el runbook del 28-ago sigue sin ejecutarse según `cola/chatbot.md`), así que no se escribe desde la app del número de ventas. Evita las plantillas y el punto 3.
 5. **Sale desde la bandeja de Chatwoot (inbox 5) con el usuario de Sergio Urcullo** (o desde el teléfono), para que el bot se calle en esa conversación (§1, punto 1).
 6. **Su sí** sobre el texto y el canal de cada mensaje. Una sola respuesta alcanza: «mandá A y B».
 
@@ -111,7 +117,7 @@ normal, sin plantilla.
 > ¡Gracias! Le propongo dos horarios: **{día y hora 1}** o **{día y hora 2}**. Son 20 minutos por videollamada
 > para ver si le sirve. Si prefiere elegir usted, esta es mi agenda: https://cal.com/sergiourcullo/20min
 
-- Grupo B: se suma «Ahí le muestro en pantalla lo que nos preguntó.»
+- Grupo B: se suma «Ahí le muestro el sistema en pantalla.»
 - Los dos horarios son reales, de la agenda de Sergio Urcullo de esa semana. El link existe: «Llamada 1 a 1», de
   20 min, medido el 3-oct.
 
