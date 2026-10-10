@@ -314,8 +314,8 @@ letra del título en % del ancho.
   · tarjeta de vidrio (blanco 70-80 %, desenfoque, radio 3 %) arriba y 16-40 % o abajo
   y 72-92 %, con logo 6 % + 1-3 ítems · pie y 96 %: nombre · handle izquierda, `NN / TT` derecha.
 - **Densidad máx.:** 12 palabras sin tarjeta; 35 con tarjeta.
-- **Imagen:** foto de escena con la persona. **Cómo:** foto real de Sergio Urcullo (galería) o
-  Higgsfield con su Soul (aprobación y costo por lote, regla de gasto); el sujeto queda en el
+- **Imagen:** foto de escena con la persona. **Cómo:** foto real de Sergio Urcullo (galería); su
+  Soul no se usa (`CAROUSEL_PATTERN_BANK_2026.md` «Personas»); el sujeto queda en el
   tercio que el texto no tapa. Degradado oscuro de 0-35 % detrás del título por código.
 - **Cuándo:** portada de marca personal, noticias de modelos, series con cara. Máximo el 50 %
   de un carrusel (cansa).
@@ -444,7 +444,8 @@ el texto es chico y está amontonado en una franja, y el resto de la lámina no 
 ## 4. Qué NO copiar
 - **Personajes y mascotas propias:** el cubito naranja de Santiago, el avatar de cubos de
   Enrique, el pingüino de Ingeniero Binario, el médico 3D con la cara de Carlos. Si usamos
-  personaje, es Sergio Urcullo (foto real o su Soul) o ninguno.
+  personaje, es Sergio Urcullo (foto real; nunca su Soul, ver `web-factory/docs/CAROUSEL_PATTERN_BANK_2026.md`
+  «Personas») o ninguno.
 - **Sus frases y sus palabras clave de cierre** («inbox», «SPLASH», «PROMPT», «WHATSAPP»), sus
   títulos, sus cifras y sus benchmarks.
 - **Sus paletas exactas:** papel crema + azul marino + naranja (Santiago), cuadrícula + verde

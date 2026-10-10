@@ -114,6 +114,11 @@ actos legales o firmas (los hace Leslie Mercado Moreno) y su cara o su voz en se
 ## 8. Trampas ya pagadas
 
 - `vitest related` no alcanza: corre la suite completa.
+- **No pushear a onia-platform cerca de una publicación** (10-oct). El publicador del VPS (`onia-publicar-solo`) corre cada
+  3 h a las :50 UTC (00, 03, 06, 09, 12, 15, 18, 21) y se salta la corrida si ve otro build («hay otro build corriendo… no
+  encimo otro»). El CI de los PRs corre en `onia-runner-platform`, en el MISMO VPS. El 10-oct la madre pusheó 7 ramas entre
+  15:30 y 15:45 UTC y la publicación de las 15:50 no salió; el 9-oct pasó igual. Regla: en esas horas no se pushea entre
+  las :20 y las :55 UTC (30 min antes de la corrida hasta 5 min después).
 - **`--union` en una cola de casillas reabre lo hecho** (9-oct, `docs/cola/loop/hermes-jarvis.md`, merge `034533d4`). La unión
   juntó la copia vieja (`- [ ]`) con la de `main` (`- [x]`): volvieron a aparecer como abiertas 3 tareas hechas y la
   sección de verificación salió dos veces. En `docs/cola/**` y `docs/handoff/**` no se usa `--union`: se toma la versión

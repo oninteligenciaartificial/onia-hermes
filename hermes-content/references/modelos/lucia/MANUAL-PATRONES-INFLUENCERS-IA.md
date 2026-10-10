@@ -182,7 +182,8 @@ Seguidores y likes no se miden como resultado.
 **Umbral al día 14.** Es una propuesta, no un benchmark. Está bajo a propósito, porque la cuenta arranca de 0 y sin pauta.
 - **Seguir:** al menos 1 demo agendada con `src=lucia-*`. Se pasa a 4 piezas por semana con un lote mensual y tope aprobado.
 - **Extender una sola vez, 2 semanas más:** 0 demos pero al menos 3 preguntas reales de dueños o al menos 10 clics con `src`. Se cambia el gancho o la puerta (por ejemplo, a WhatsApp, si el bot ya reconoce el `src`).
-- **Pausar:** 0 demos, menos de 3 preguntas y menos de 10 clics. Lucía se pausa, el material queda y se anota en el handoff.
+- **Ajustar:** 0 demos, menos de 3 preguntas y menos de 10 clics. Se cambia formato o ritmo y se anota en el handoff.
+  Antes decía «Lucía se pausa»: superado el 10-oct (Sergio Urcullo: «no se pausa»; `docs/LUCIA_COMO_SE_USA.md` §1).
 - **Parar cualquier día:** si Estado de la cuenta marca «no recomendable» y la apelación no lo resuelve, o si el comentario que domina es «esto reemplaza gente».
 
 ---
