@@ -134,6 +134,44 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
   van al handoff, la skill o el PR, nunca al mensaje. **El trabajo por detrás NO se achica:** mismo desarrollo,
   verificación y aprendizaje; solo se acorta lo que se le dice. Seguridad y lo irreversible se escriben claros.
 
+## Trato y criterio (REGLA)
+
+> Vivían solo en la memoria de la PC y en `~/.claude/CLAUDE.md`, que la nube no ve. Se llevan acá con su fecha de
+> origen (aprobado por Sergio Urcullo, 10-oct-2026).
+
+- **Usted con clientes y prospectos** (Sergio Urcullo, 3-oct-2026: «no se usa vos, es muy informal, usted»): bot,
+  agentes de voz, plantillas de WhatsApp, mensajes 1:1 y respuestas a la pauta. En el chat con él y en su marca
+  personal sigue el voseo; si la web y los anuncios pasan a usted, lo decide él.
+- **Comandos para que los corra Sergio Urcullo: PowerShell, nunca bash** (29-sep-2026: un `rm -rf` falló). Usar
+  `Remove-Item -Recurse -Force`, `$HOME\` y `;` en vez de `&&`; si borra, avisar que no se deshace.
+- **Horas en La Paz, UTC-4** (31-ago-2026: un correo de las 22:18 se le dijo «02:18»). Restar 4 h a logs, correos y
+  auditoría del VPS (vienen en UTC); en los crons NO se resta, el host es UTC.
+- **Criterio propio, no solo obedecer** (Sergio Urcullo, 22-jul-2026: «alguna idea puede ser mala o puede ser buena»):
+  evaluar cada pedido, investigar en fuentes confiables antes de afirmar, traer opciones que él no mencionó y
+  contradecir con evidencia si la premisa es débil. No contradecir por deporte.
+- **No preguntar lo razonable** (3-sep-2026: «no me preguntes a cada rato… ponte en marcha»): si el repo o los datos
+  lo resuelven, decidir y dejar el razonamiento escrito. Se le pregunta solo plata, contactar personas y lo que
+  «Qué se publica sin preguntar» le reserva, todo junto en una hoja y no de a una.
+- **Escalera de autonomía antes de pedirle algo** (`~/.claude/CLAUDE.md`): 1) MCP disponible, 2) CLI o API con la
+  credencial ya autorizada (por «Acceso local…», arriba), 3) skill o plugin, 4) script, 5) pedirle, solo si nada
+  sirvió y diciendo qué se intentó y qué MCP o permiso faltaría. Antes de «no puedo», `ToolSearch` de los MCP.
+- **Ante un tope de gasto o de cupo, bajar el consumo, no subir el techo** (Sergio Urcullo, 8-sep-2026: «No subimos,
+  acomodemos para que gaste lo menos posible»): medir quién gasta antes de cortar; un trabajo que solo manda Telegram
+  es candidato a apagar; pausar, no borrar.
+- **Onia vende software, nunca horas** (caso C21 Acero, 4-ago-2026): ningún trato exige presencia de Sergio Urcullo.
+  Desarrollo dedicado = proyecto pagado por adelantado + licencia + mantenimiento, nunca comisión ni equity; sociedad
+  solo por earn-in con hitos medibles.
+- **Todos los rubros, no solo dental** (Sergio Urcullo, 29-sep-2026: «TENEMOS OTROS RUBROS»): toda pantalla rediseñada
+  se captura en al menos dos rubros (dental + comercio) con su vocabulario; el QA recorre los 5; la competencia
+  incluye rivales de comercio, estética, servicios e importadora.
+- **Cuidar tokens, no releer** (Sergio Urcullo, 29-ago-2026): lo ya leído no se relee salvo que pudo cambiar; fragmentos
+  (offset, grep) antes que archivos enteros; rutas absolutas en Bash; verificar con el exit code, nunca con `| tail`.
+  El largo del mensaje a él ya lo fija «Simple», arriba (8-oct-2026).
+- **La madre orquesta con un modelo por rol** (Sergio Urcullo, 10-oct-2026): subagentes con `model` por rol (Haiku
+  cuenta y verifica, Sonnet sintetiza, Opus decide lo riesgoso) y código cerrado a Codex; en cada ronda lee el
+  transcript de cada sesión de la nube y le manda UNA línea con su próxima tarea. Codex no hace git; la madre commitea
+  con la suite completa en verde. Tabla de modelos: skill `onia-sesion-madre`.
+
 ## Sesión MADRE local + carriles en la nube (REGLA)
 
 > Sergio Urcullo, 2026-10-01: *«madre local para que comunique a ellas, pero las de desarrollo y tareas que no
@@ -295,7 +333,8 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
 - **Onia Platform** (repo `onia-platform`), que se vende con **packs por rubro**.
   `DentalGest`, `GestiOS`, `Ganadero OS` y `ProveeGest` **NO son productos ni marcas**:
   son nombres viejos de packs. Al cliente se le nombra el rubro ("módulo dental").
-- **No se le vende solo a clínicas**: son 7 rubros. Nada de "tus pacientes" en material
+- **No se le vende solo a clínicas**: son 5 rubros (dental, comercio, importadora, estética, servicios
+  profesionales; `ONIA_CATALOGO_DE_VENTA.md`). Nada de "tus pacientes" en material
   genérico — el producto tiene vocabulario por rubro (`lib/onboarding/vocabulario.ts`,
   detalle en la skill `onia-frontend`).
 - ⚠️ `Gestios` y `Ganaderos-Os` existen como repos pero son **legado**: no se les agrega
@@ -379,6 +418,22 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
   archivos raíz de web-factory). **Infra (VPS, n8n, Supabase) = UN dueño a la vez.**
 - Cerrar un carril: rama propia → rebase → commits chicos → gates (`tsc --noEmit`, tests,
   code-reviewer) → merge. Dueño de archivos por carril: `COORDINATION_MANIFEST.md`.
+
+## Calidad de código (REGLA)
+
+> Resumen de `~/.claude/rules/common/*` y `rules/web/*` (la nube no los ve), 10-oct-2026.
+
+- **Código:** no mutar, crear objetos nuevos · funciones <50 líneas, archivos <800, anidación ≤4 · errores
+  explícitos, nunca tragados · entradas validadas en el borde con esquema · sin valores fijos ni `console.log`.
+- **Tests:** mínimo 80 % de cobertura (unitario + integración + E2E del flujo crítico) · test primero (rojo, verde,
+  refactor) · si falla, se arregla la implementación, no el test, salvo que el test esté mal.
+- **Revisión:** tras escribir código y antes de mergear, agente `code-reviewer` (`.claude/agents/`); CRITICAL bloquea,
+  HIGH avisa. Auth, input de usuario, SQL, archivos, APIs externas, cripto y pagos → además `security-reviewer`.
+- **Seguridad:** cero secretos en el código (entorno; secreto expuesto = se rota) · SQL parametrizado · HTML
+  sanitizado, sin `innerHTML` crudo · CSRF donde se cambia estado y rate limit en los endpoints · errores sin
+  datos sensibles.
+- **Web:** CSP de producción, terceros async con SRI · LCP <2,5 s, INP <200 ms, CLS <0,1 · imágenes con ancho y alto,
+  ≤2 familias de fuente, animar solo `transform`/`opacity` · capturas en 320/768/1024/1440, teclado, reduced-motion.
 
 ## `main` siempre compila (REGLA DURA)
 

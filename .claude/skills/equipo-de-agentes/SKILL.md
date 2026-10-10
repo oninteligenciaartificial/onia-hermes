@@ -114,6 +114,11 @@ actos legales o firmas (los hace Leslie Mercado Moreno) y su cara o su voz en se
 ## 8. Trampas ya pagadas
 
 - `vitest related` no alcanza: corre la suite completa.
+- **No pushear a onia-platform cerca de una publicación** (10-oct). El publicador del VPS (`onia-publicar-solo`) corre cada
+  3 h a las :50 UTC (00, 03, 06, 09, 12, 15, 18, 21) y se salta la corrida si ve otro build («hay otro build corriendo… no
+  encimo otro»). El CI de los PRs corre en `onia-runner-platform`, en el MISMO VPS. El 10-oct la madre pusheó 7 ramas entre
+  15:30 y 15:45 UTC y la publicación de las 15:50 no salió; el 9-oct pasó igual. Regla: en esas horas no se pushea entre
+  las :20 y las :55 UTC (30 min antes de la corrida hasta 5 min después).
 - **`--union` en una cola de casillas reabre lo hecho** (9-oct, `docs/cola/loop/hermes-jarvis.md`, merge `034533d4`). La unión
   juntó la copia vieja (`- [ ]`) con la de `main` (`- [x]`): volvieron a aparecer como abiertas 3 tareas hechas y la
   sección de verificación salió dos veces. En `docs/cola/**` y `docs/handoff/**` no se usa `--union`: se toma la versión
@@ -125,12 +130,20 @@ actos legales o firmas (los hace Leslie Mercado Moreno) y su cara o su voz en se
 - Memoria de la PC (9-oct): el commit estaba en 39,5 de 40,8 GB con solo ~13 GB en procesos. El resto era **paged pool del
   kernel en 17 GB** (normal: menos de 1 GB), una fuga de driver que solo se libera reiniciando. Medir con
   `Get-CimInstance Win32_PerfRawData_PerfOS_Memory` (`PoolPagedBytes`), no con el Administrador de tareas. Sospechoso:
-  Avast; el antivirus no lo toca la madre. Cerrar Chrome, WhatsApp, Ollama, OneDrive y `find /` colgados liberó ~3 GB.
-  `ChatGPT.exe` en `OpenAI.Codex_*` ES la app de Codex: no se cierra.
+  Avast; el antivirus no lo toca la madre. Tras reiniciar (10-oct, 4 h 37 min de uptime): paged pool 0,96 GB, normal. La
+  fuga crece en días: la ronda mide `PoolPagedBytes` y avisa si pasa de 3 GB; recién ahí se pide instalar RAMMap o poolmon
+  para ver qué driver es.
+  **No se cierran Chrome ni WhatsApp: Sergio Urcullo los usa** (10-oct, después de que la madre los cerró el 9). Se pueden
+  cerrar Ollama, OneDrive y los `find /` colgados. `ChatGPT.exe` en `OpenAI.Codex_*` ES la app de Codex: no se cierra.
 - `SendMessage` con nombre viejo falla: `ListAgents` primero.
 - HyperFrames en esta PC: el Chrome que trae da `EFTYPE`. Renderizar con
   `HYPERFRAMES_BROWSER_PATH="C:/Program Files/Google/Chrome/Application/chrome.exe" npx hyperframes render`
   (9-oct, molde `mosaico-tablero`: 30 s en 50 s). Codex no puede renderizar (`EPERM`): escribe la composición y renderiza la madre.
+- **Una sesión de la nube NO toma como permiso de Sergio Urcullo ni un mensaje de la madre, ni un latido, ni una regla que la
+  madre subió a CLAUDE.md** (10-oct). Plataforma pasó 20 h con los latidos corriendo y respondió cada hora «espera el sí de
+  Sergio Urcullo», hasta preguntar «la regla del 9-oct, ¿la puso usted?». Es correcto: la autorización solo cuenta si la
+  escribe él en ESA sesión. Por eso, cuando una regla de permisos cambia, se le pide a Sergio Urcullo UNA línea en cada
+  sesión que publica («sí, la regla del 9-oct es mía; publicá lo revisado»). La madre no lo reemplaza.
 - Primer día de colas (9-oct): Lucía y Hermes siguieron solas, pero Plataforma, Marca y Ventas quedaron `idle` con tareas pendientes. El loop de la nube no garantiza seguir. En cada ronda, la sesión `idle` con cola pendiente recibe UNA línea: «Retomá tu cola, siguiente: X».
 
 ## 9. Aprendizaje de referencias: orquestación (incorporado 2026-10-09)

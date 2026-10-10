@@ -1,5 +1,69 @@
 # Cola · Hermes-Jarvis
 
+## QA de Onia y turno de noche (desde el 10-oct)
+
+Rol: `hermes-content/docs/HERMES_ROL_QA.md` (madre, PR #187). Sergio Urcullo, 10-oct: *«pasalo a QA pero dale un uso»*.
+Un PR por tarea, con el CI en verde y revisión antes de mergear. En el VPS, solo lectura: lo que cambie el crontab,
+n8n, el SOUL o `/root/.hermes` va por PR y lo aplica la madre. Orden de la madre: **Q4 primero** entre las que este
+carril puede hacer solo. Q1 espera `aplicar` (ver «Bloqueado»).
+
+- [ ] **Q1 Verificar el encendido.** La madre corre `diagnostico` y después `aplicar` desde la PC, entre las 06:30 y las
+  22:00 de La Paz (runbook en `TELEGRAM_COMMAND_CENTER.md` §8). Este carril lee los dos logs de Actions con el MCP de
+  GitHub y los verifica sección por sección contra la tabla «Qué mirar». Sergio Urcullo escribe las pruebas P2-P5 en
+  su Telegram cuando la madre se lo pide. **Hecho:** el log de `aplicar` sin ❌, P2-P5 en verde, y el resumen de las
+  06:30 y el cierre de las 21:30 entregados.
+- [ ] **Q2 El VPS visible cada día sin la PC.** Un workflow nuevo, `hermes-qa-diario.yml`: `schedule` a las 10:00 UTC,
+  el mismo `concurrency: hermes-jarvis` y el runner propio del VPS. Corre SOLO `diagnostico.sh`, sin input;
+  `aplicar` y `revertir` siguen manuales. Además, `diagnostico.sh` suma una sección «latidos»: cada línea del crontab
+  con su log y la última vez que escribió, y marca MUDO lo que pasó más de dos veces su cadencia. Con esos datos se
+  contestan cuatro preguntas:
+  1. ¿`claude-guardia` avisa de verdad (credencial de 36 días)?
+  2. ¿`vps-backup.sh` respalda `dentalgest-staging-supabase-db` en vez de `supabase-db`?
+  3. ¿Dónde escribe el publicador de las :50?
+  4. ¿Cuál es la cadencia real de `vigia-aprobaciones`?
+
+  **Hecho:** la primera corrida programada en verde con la tabla, y las cuatro respuestas en «Hallazgos para otros»
+  con su dueño. Lo mergea la madre.
+- [ ] **Q3 Fase 2 de la aduana: que nada le avise por fuera.** Pasan por `onia-tg.sh` los avisos de n8n «Vigia lead sin
+  respuesta», «Chatbot: seguimiento» y «Monitor de Salud n8n», y el aviso de «Backup diario» (el respaldo sigue
+  corriendo). Los canarios de caída esperan los 30 min de la interrupción 4. **Hecho:** 24 h medidas en su Telegram
+  con solo el resumen, el cierre y las cuatro interrupciones, contadas por el diagnóstico programado. Los flujos de
+  n8n los cambia la madre, con respaldo.
+- [ ] **Q4 El resumen de las 06:30 dice lo que nadie empuja.** Va en dos PRs, porque (c) toca el crontab de `aplicar`
+  (root en el VPS, revisión fuerte):
+  - [x] Q4a/b, solo lectura — `77d02e89` (mañana del 10-oct impresa con la tabla real: el SIN y el token de Lucía en NECESITO):
+    - (a) los relojes que vencen en 72 h o menos, de `cola/loop/madre.md` §G. Un rango «13 al 18-oct» cuenta desde el
+      13, «sin fecha» no sale, uno vencido sale en 🔴. Los de Sergio Urcullo van en NECESITO; los demás, junto a la
+      línea de salud.
+    - (b) las colas de `cola/loop/*.md` sin commit hace más de 24 h, en la línea de salud.
+
+    **Hecho:** pruebas con un `madre.md` de ejemplo (el reloj de mañana aparece, uno a 10 días no, uno vencido sale
+    en rojo), más una cola parada, y una mañana impresa con la sección.
+  - [ ] Q4c: un envoltorio de latido en cada línea del crontab que pone `aplicar`, que escribe la fecha y el código de
+    salida en `/var/lib/onia-latido/<nombre>`; el resumen nombra los vigías mudos. **Hecho:** una prueba con un latido
+    viejo que sale como mudo.
+- [ ] **Q5 QA después de cada publicación.** Cada 15 min, un script del VPS compara el `release-<sha>` que corre
+  `onia-platform` con el último que vio. Si cambió, abre /dashboard y /checkout con `onia-mirar.js` y la cuenta de
+  prueba de QA, con el correo **fijo en el script**, nunca por argumento. Chequea sin LLM la respuesta, que no haya
+  texto de error y el tiempo. Una ventana de las :50 sin release se anota; dos seguidas abren tarea para Plataforma y
+  una línea en el resumen. Lo roto que no se arregla en 30 min es la interrupción 4. **Hecho:** en el VPS simulado,
+  un release roto da un aviso y una ventana fallida da una línea; en vivo, la próxima publicación deja su renglón en
+  el log.
+
+## Hallazgos para otros
+
+(Lo que este carril encuentra y le toca a otro dueño. La madre lo reparte en su ronda.)
+
+- **Madre** · `cola/loop/madre.md` §G tiene días de la semana mal: «lun 13-oct» es martes en 2026, y «jue 16-oct»
+  es viernes. El resumen ya no los repite (usa la fecha), pero la tabla los muestra así a quien la lea.
+- **Madre** · Hasta que `madre.md` llegue a `main` (PR #187), el resumen de las 06:30 va a decir «No pude leer los
+  relojes de la madre». Con #187 mergeado, sale solo.
+- **Madre / integrador** · En `main` falla `scripts/integrador_puede_mergear.test.mjs` › «la via viva de loops.md
+  nombra un script que existe en el repo»: la vía de onia-platform desde casa en `cola/loops.md` no tiene script
+  versionado. No está en el CI de Hermes (medido el 10-oct).
+
+## Hecho antes del 10-oct
+
 - [x] P2 de #173: el aviso de rechazo se reintenta si Telegram falla (test fallo → recuperación → segunda corrida) — `31aebd95`, en `main` con el #173
 - [x] Runbook de `aplicar` (#174) listo para que la madre lo corra desde la PC — `fecb4813` (§8 de `TELEGRAM_COMMAND_CENTER.md`)
 - [x] Formato corto (Pasó · Necesito · Sigue) en lo que Hermes le manda: regla en el SOUL y en el resumen/cierre (`jarvis-resumen.sh`). Inerte hasta `aplicar` — `fa7702ef`
@@ -19,12 +83,13 @@
 - [x] Handoff: ESTADO con el #176 en `main` (qué llega solo al VPS por el sincronizador y qué espera `aplicar`) — `c3dbf081`
 - [x] Mergear el PR del diagnóstico 13 y 14 con el CI en verde y reportar PUBLICADO — `fce76971` (#177)
 
-**Cola sin tareas desbloqueadas (9-oct, tarde).** Lo que sigue del carril depende de `aplicar` o de una decisión de Sergio Urcullo (abajo). No invento trabajo que no sirva a la etapa: si la madre tiene algo para este carril, va acá.
-
 ## Verificación de aprendizaje · 2026-10-09
 - [x] En la próxima tarea del carril, cargar `equipo-de-agentes` y `aprender-de-todo`; aplicar los checkpoints de la ficha `2026-10-08-orquestacion-e-ingresos-5-posts.md` y registrar allí sesión, contrato, artefacto y verificación. No instalar Foreman ni activar otro orquestador. — aplicado sobre el runbook de `aplicar` (§8: correr `diagnostico` antes); registro en la ficha, «Prueba de uso por sesión», commit de esta línea
 
 ## Bloqueado
-- Pruebas P2-P5 (`TELEGRAM_COMMAND_CENTER.md` §8): necesitan `aplicar` en el VPS, que corre la madre desde la PC con el «sí» de Sergio Urcullo. Desde esta sesión no se toca el VPS sin su «sí» acá.
-- Correr `diagnostico` (lee el VPS, aunque no cambie nada): la regla del carril pide el «sí» de Sergio Urcullo en esta sesión, o que lo corra la madre. Sirve para ver qué secciones del SOUL le faltan a Hermes antes de `aplicar`.
-- «Hoy salió» que vea también lo que Sergio Urcullo sube a mano: leer los medios del día de la API de Instagram con el token de publicar (`/root/.config/onia-publicar/ig-<cuenta>.env`), solo lectura. Usa una credencial fuera de su tarea original: necesita su OK.
+- **Q1 y las pruebas P2-P5 (`aplicar`).** El texto con que Sergio Urcullo arrancó esta sesión dice: «Nada se aplica en
+  el VPS sin el «sí» de Sergio Urcullo en ESTA sesión». Desde el 10-oct, `equipo-de-agentes` §8 agrega que la
+  autorización solo vale si él la escribe en la sesión que la usa; un mensaje de la madre o un latido no la
+  reemplazan. Falta su línea acá (por ejemplo, «sí, aplicar»). Mientras tanto Q1 queda listo: runbook en §8 y lectura
+  de los logs de Actions por el MCP de GitHub.
+- «Hoy salió» que vea también lo que Sergio Urcullo sube a mano: leer los medios del día de la API de Instagram con el token de publicar (`/root/.config/onia-publicar/ig-<cuenta>.env`), solo lectura. Usa una credencial fuera de su tarea original: necesita su OK (`HERMES_ROL_QA.md` §6, punto 3).

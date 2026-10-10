@@ -101,8 +101,10 @@ Cada fila es una prueba chica, con su video. Los costos son cotizaciones en vivo
 
 - **Qué se mide por pieza:** guardados y envíos (señal de que enseñó algo), seguidores nuevos y que la cuenta siga «apta
   para recomendaciones». No hay umbral de conversaciones.
-- **Día 14:** Sergio Urcullo decide con los números delante. **Se para** cualquier día si la cuenta queda «no recomendable»
-  o si domina el comentario «esto reemplaza gente».
+- **Día 14:** Sergio Urcullo decide con los números delante. **No se pausa** (Sergio Urcullo, 10-oct): se sigue, se extiende
+  2 semanas una sola vez o se ajusta formato y ritmo. **Se para** cualquier día si la cuenta queda «no recomendable»
+  o si domina el comentario «esto reemplaza gente». Si salen piezas que venden, la métrica pasa a ser demos con `src=lucia-<pieza>`
+  (`LUCIA_COMO_SE_USA.md` §1).
 
 ## 6. Cómo se publica
 
