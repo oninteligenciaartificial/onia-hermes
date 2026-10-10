@@ -324,6 +324,9 @@ poner "$FUENTE/pedido-claude.sh"                   "$DESTINO_BIN/onia-pedido-cla
 # `respuesta/<id>` y la entrega por la aduana, sin ningún token de Actions. Su cron lo instala
 # aplicar.sh con esta ruta exacta: sin esta línea, ese cron correría un archivo que nadie copió.
 poner "$FUENTE/respuestas-pedidos.sh"              "$DESTINO_BIN/onia-respuestas-pedidos.sh"
+# El latido de cada trabajo que agrega aplicar.sh (2026-10-10, HERMES_ROL_QA.md Q4c): todas esas líneas
+# del crontab lo llaman en esta ruta exacta, y aplicar.sh no toca el crontab hasta verlo acá.
+poner "$FUENTE/latido.sh"                          "$DESTINO_BIN/onia-latido.sh"
 
 # La marca de Onia sobre Chatwoot. Cron VIVO en el VPS (`17 * * * *`) y NADIE lo copiaba:
 # la copia que ejecutaba era la de 14 lineas que defiende 3 claves, y el arreglo del

@@ -20,6 +20,7 @@
 #   lo que salió hoy      -> /root/publicar/publicado.jsonl (los publicadores de vps-ops/publicar)
 #   relojes que vencen    -> hermes-content/docs/cola/loop/madre.md §G (la tabla de la madre)
 #   colas paradas         -> git log de hermes-content/docs/cola/loop/*.md en origin/main
+#   trabajos mudos        -> /var/lib/onia-latido/<nombre> (los escribe onia-latido.sh, el envoltorio del cron)
 # El único paso con IA es traducir los commits del día a castellano llano, con la orden de
 # no agregar nada; si la IA no responde, se dice cuántos cambios hubo y listo. Nace de un
 # error pagado: `gpt-5-nano` inventó una agenda entera (handoff/infra-cerebro-loops.md §5).
@@ -507,6 +508,46 @@ linea_colas() {
   [ -n "$lista" ] || return 0
   printf '🧊 Colas sin movimiento en main hace más de 24 h: %s.\n' "$lista" | esc
 }
+# Los latidos de los trabajos que agregó aplicar (onia-latido.sh, 10-oct, Q4c): el que no corrió en más
+# de dos veces su cadencia está MUDO, y el que terminó con error lo dice con su código. Sin la carpeta
+# (antes de aplicar) no se dice nada: no hay nada que medir todavía.
+# Solo se leen los nombres que pone aplicar.sh (una prueba compara las dos listas): un archivo viejo de
+# un trabajo que ya no existe no queda «mudo» para siempre. Y un trabajo frecuente sin ningún latido es
+# una línea que nunca corrió. Los resúmenes no cuentan: el de la mañana es el que está corriendo.
+LATIDOS="${ONIA_LATIDO_DIR:-/var/lib/onia-latido}"
+LATIDOS_ESPERADOS="resumen-manana resumen-noche aduana-soltar agenda-bloques respuestas-pedidos"
+LATIDOS_FRECUENTES="aduana-soltar agenda-bloques respuestas-pedidos"
+hace() {  # hace <segundos> -> «12 min», «5 h», «3 d»
+  if [ "$1" -lt 5400 ]; then echo "$(( $1 / 60 )) min"
+  elif [ "$1" -lt 172800 ]; then echo "$(( $1 / 3600 )) h"
+  else echo "$(( $1 / 86400 )) d"; fi
+}
+linea_latidos() {
+  local n f ep rc cada ahora lista=""
+  [ -d "$LATIDOS" ] || return 0
+  ahora=$(date -u -d "${ONIA_AHORA:-now}" +%s 2>/dev/null) || ahora=$(date -u +%s)
+  for n in $LATIDOS_ESPERADOS; do
+    f="$LATIDOS/$n"
+    if [ ! -f "$f" ]; then
+      case " $LATIDOS_FRECUENTES " in *" $n "*) lista+="${lista:+, }$n (sin latido: nunca corrió)" ;; esac
+      continue
+    fi
+    ep="" rc="" cada=""
+    read -r ep rc cada _ < "$f"
+    # Sin ceros a la izquierda: «0999» rompía la cuenta de bash y se llevaba la línea entera.
+    if ! [[ "$ep" =~ ^[1-9][0-9]*$ && "$rc" =~ ^(0|[1-9][0-9]*)$ && "$cada" =~ ^[1-9][0-9]*$ ]]; then
+      lista+="${lista:+, }$n (latido ilegible)"
+    elif [ $(( ep - ahora )) -gt 300 ]; then
+      lista+="${lista:+, }$n (latido con hora del futuro: revisar el reloj del VPS)"
+    elif [ $(( ahora - ep )) -gt $(( 2 * cada )) ]; then
+      lista+="${lista:+, }$n (mudo: corrió hace $(hace $(( ahora - ep ))), corre cada $(hace "$cada"))"
+    elif [ "$rc" != 0 ]; then
+      lista+="${lista:+, }$n (falló: código $rc)"
+    fi
+  done
+  [ -n "$lista" ] || return 0
+  printf '🫀 Trabajos mudos o con error: %s.\n' "$lista" | esc
+}
 
 # ── La cola de la aduana: lo que no interrumpió ──────────────────────────────
 DESDE_COLA=$(cat "$ESTADO/leido-hasta" 2>/dev/null || echo "1970-01-01T00:00:00Z")
@@ -655,7 +696,7 @@ falta_medir() {
 }
 if [ "$MODO" = manana ]; then
   CABEZA="☀️ <b>Buen día, Sergio Urcullo</b> — $(dia_largo "$HOY")"
-  parte seccion_cola noche 'Mientras dormías'; parte linea_salud; parte linea_relojes_otros; parte linea_colas; grupo PASÓ
+  parte seccion_cola noche 'Mientras dormías'; parte linea_salud; parte linea_latidos; parte linea_relojes_otros; parte linea_colas; grupo PASÓ
   parte seccion_prospectos; parte seccion_relojes; parte seccion_decisiones; parte falta_medir; grupo NECESITO 'Nada.'
   parte seccion_agenda "$HOY" 'Tu día'; parte seccion_plan "$HOY" 'Hoy sale' 'Para grabar hoy'; grupo SIGUE
 else

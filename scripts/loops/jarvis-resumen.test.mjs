@@ -106,6 +106,7 @@ ${tgFalla ? "exit 1" : "exit 0"}
         ONIA_PUBLICADO: join(dir, "no-existe-publicado.jsonl"),
         ONIA_JARVIS_OUT: out,
         ONIA_HOY: "2026-09-30",
+        ONIA_LATIDO_DIR: join(dir, "no-existe-latidos"),
         ...env,
       },
       encoding: "utf8",
@@ -841,4 +842,43 @@ test("la voz de la mañana no lee los ⏰ ni los 🧊", () => {
   const voz = readFileSync(join(b.out, "brief-hoy.txt"), "utf8");
   assert.match(voz, /Vence pronto/);
   assert.doesNotMatch(voz, /[⏰🧊]/u);
+});
+
+const AHORA_LAT = Date.parse("2026-09-30T10:30:00Z") / 1000;
+function latidos(b, archivos) {
+  const lat = mkdtempSync(join(b.dir, "latidos-"));
+  for (const [n, t] of Object.entries(archivos)) writeFileSync(join(lat, n), t);
+  return b.imprimir("manana", { ONIA_LATIDO_DIR: lat, ONIA_AHORA: "2026-09-30T10:30:00Z" });
+}
+const SANOS = {
+  "aduana-soltar": `${AHORA_LAT - 120} 0 300\n`,
+  "agenda-bloques": `${AHORA_LAT - 300} 0 1800\n`,
+  "respuestas-pedidos": `${AHORA_LAT - 60} 0 120\n`,
+  "resumen-noche": `${AHORA_LAT - 9 * 3600} 0 86400\n`,
+};
+
+test("trabajos mudos o con error: el mudo, el que falló, el ilegible y el de hora futura", () => {
+  const msg = latidos(banco(), {
+    ...SANOS,
+    "aduana-soltar": `${AHORA_LAT - 4 * 3600} 0 300\n`,        // cada 5 min, hace 4 h: mudo
+    "agenda-bloques": `${AHORA_LAT - 300} 2 1800\n`,           // al día, pero falló
+    "respuestas-pedidos": `0${AHORA_LAT - 60} 0 120\n`,        // con un cero adelante: bash lo leía en octal
+    "resumen-manana": `${AHORA_LAT + 3600} 0 86400\n`,         // el reloj del VPS se atrasó
+    ".aduana-soltar.123.tmp": "1 0 1\n",                       // a medio escribir: no se lee
+  });
+  assert.match(bloques(msg).PASÓ, /🫀 Trabajos mudos o con error: resumen-manana \(latido con hora del futuro: revisar el reloj del VPS\), aduana-soltar \(mudo: corrió hace 4 h, corre cada 5 min\), agenda-bloques \(falló: código 2\), respuestas-pedidos \(latido ilegible\)\./);
+  assert.doesNotMatch(msg, /resumen-noche|\.tmp/);
+});
+
+test("un trabajo frecuente que nunca dejó latido sale; uno que ya no existe, no", () => {
+  const { "respuestas-pedidos": _, ...sinPedidos } = SANOS;
+  const msg = latidos(banco(), { ...sinPedidos, "trabajo-de-antes": `${AHORA_LAT - 9e5} 0 60\n` });
+  assert.match(bloques(msg).PASÓ, /🫀 Trabajos mudos o con error: respuestas-pedidos \(sin latido: nunca corrió\)\./);
+  assert.doesNotMatch(msg, /trabajo-de-antes/, "un archivo viejo de un trabajo renombrado no queda mudo para siempre");
+});
+
+test("sin latidos (antes de aplicar) o con todos sanos, no dice nada", () => {
+  const b = banco();
+  assert.doesNotMatch(b.imprimir("manana"), /🫀/, "sin la carpeta");
+  assert.doesNotMatch(latidos(b, SANOS), /🫀/, "sanos, y sin el de la mañana, que es el que está corriendo");
 });
