@@ -438,7 +438,7 @@
       "un número de minutos para la llamada (el bot y /contacto dicen 30, la agenda 20: L-04)"
     ],
     "fuente": "los briefs onia-platform-dental-meta-a1v5-las-diez.json y ...a1v5-micro-10s.json (caption, headline_anuncio, kicker, nota); catálogo §7 y §8. scripts/campana-lista.test.mjs exige que `message` sea el `caption` del brief, palabra por palabra",
-    "nota_del_10oct": "Revisión independiente (10-oct): el texto abre con el filtro «Para dueños y dueñas…» (§5.2) y ya no dice «con IA» junto a «a quién escribirle» (catálogo §8: el «a quién» sale de reglas, no de la IA). La imagen dice «Se lo mostramos en una llamada», sin minutos, hasta unificar 20 contra 30 (L-04)."
+    "nota_del_10oct": "Revisión independiente (10-oct): el texto abre con el filtro «Para dueños y dueñas…» (§5.2) y ya no dice «con IA» junto a «a quién escribirle» (catálogo §8: el «a quién» sale de reglas, no de la IA). La imagen dice «Demostración gratis, en una llamada.» (desde el 10-oct, estudio de la Biblioteca: el titular del anuncio pasó a «Pida su demostración gratis»), sin minutos, hasta unificar 20 contra 30 (L-04, 🟡)."
   },
   "publico": {
     "ubicacion": "Santa Cruz de la Sierra, radio 25 km desde (-17,7833; -63,1821), «Llegar a más personas» apagado",
