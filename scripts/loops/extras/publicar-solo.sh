@@ -513,6 +513,27 @@ estructura_que_cambia() {  # $1=repo  $2=archivo  $3..=shas
   return 0
 }
 
+# Corre el publicar.sh de un destino. Si choca con OTRO build en el VPS, espera y
+# reintenta en vez de perder la ventana entera de 3 h.
+#
+# Por que: el CI de GitHub (onia-runner-platform) corre en este mismo VPS y el
+# armador de la plataforma se niega a encimarse («FATAL: hay otro build corriendo
+# (next build / npm ci / docker build): no encimo otro»). El 9-oct y el 10-oct la
+# corrida de las 15:50 UTC salio «FALLO» por eso, con el codigo sano, y lo vivo
+# espero hasta las 18:50. Solo se reintenta ESE motivo: un build roto falla igual
+# a la primera, y reintentarlo seria ruido.
+correr_con_reintento() {  # $1=publicar.sh $2=log $3=nombre
+  local intento=1 maximo=${ONIA_PUBLICAR_REINTENTOS:-3} espera=${ONIA_PUBLICAR_REINTENTO_SEG:-900}
+  while :; do
+    bash "$1" >"$2" 2>&1 && return 0
+    grep -q "hay otro build corriendo" "$2" || return 1
+    [ "$intento" -lt "$maximo" ] || return 1
+    echo "  $3: hay otro build corriendo en el VPS; reintento en $((espera / 60)) min (intento $((intento + 1)) de $maximo)"
+    sleep "$espera"
+    intento=$((intento + 1))
+  done
+}
+
 publicar_destino() {  # $1=nombre $2=publicar.sh $3=archivos-tocados $4=repo-del-codigo $5=shas $6=dir-en-produccion
   local nombre=$1 guion=$2 tocados=$3 repo=${4:-} shas=${5:-} prod=${6:-}
   local precio venta arch detalle cambian nomedido salida nota=""
@@ -597,7 +618,7 @@ Toco una pagina de venta y <b>la estructura no cambio</b> (por eso salio solo)."
     fi
     return 0
   fi
-  if bash "$guion" >"/tmp/pub-$nombre.log" 2>&1; then
+  if correr_con_reintento "$guion" "/tmp/pub-$nombre.log" "$nombre"; then
     echo "  $nombre: PUBLICADO"
     avisar "<b>Onia — publicado solo</b>
 <b>$nombre</b> quedo al dia.
