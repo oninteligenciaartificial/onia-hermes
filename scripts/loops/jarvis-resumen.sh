@@ -18,6 +18,8 @@
 #   lo que pasó de noche  -> la cola de la aduana (onia-tg.sh, $ESTADO/resumen.log)
 #   lo que se hizo hoy    -> git log de origin/main
 #   lo que salió hoy      -> /root/publicar/publicado.jsonl (los publicadores de vps-ops/publicar)
+#   relojes que vencen    -> hermes-content/docs/cola/loop/madre.md §G (la tabla de la madre)
+#   colas paradas         -> git log de hermes-content/docs/cola/loop/*.md en origin/main
 # El único paso con IA es traducir los commits del día a castellano llano, con la orden de
 # no agregar nada; si la IA no responde, se dice cuántos cambios hubo y listo. Nace de un
 # error pagado: `gpt-5-nano` inventó una agenda entera (handoff/infra-cerebro-loops.md §5).
@@ -331,6 +333,130 @@ seccion_plan() {  # seccion_plan <fecha> <titulo de lo que sale> <titulo de los 
   return 0
 }
 
+# ── Lo que nadie empuja: relojes y colas paradas (10-oct, HERMES_ROL_QA.md Q4) ────
+# Había cinco fechas en 25 días (el SIN el 13, el token de Lucía, la pauta del 16, la 1.0 el 30, el
+# SIAT el 4-nov) y ninguna alarma saltaba. La madre las lleva en la tabla §G de su cola; acá se leen
+# del origin/main del clon, que el sincronizador trae cada hora (si no hay origin/main, del árbol).
+# Las de Sergio Urcullo van en NECESITO; las de otros dueños, junto a la línea de salud.
+MADRE_MD=hermes-content/docs/cola/loop/madre.md
+leer_main() {  # leer_main <ruta en el repo>
+  git -C "$REPO" show "origin/main:$1" 2>/dev/null || cat "$REPO/$1" 2>/dev/null
+}
+# Salida: «su|otro<TAB>días<TAB>fecha<TAB>qué<TAB>dueño», de lo vencido a lo que vence en 3 días.
+# Sale 2 si no hay tabla que leer y 3 si el archivo no tiene la §G con Fecha, Qué y Dueño.
+relojes_de() {  # relojes_de <hoy>  (stdin: madre.md)
+  python3 -c '
+import datetime, re, sys, unicodedata
+hoy = datetime.date.fromisoformat(sys.argv[1])
+texto = unicodedata.normalize("NFC", sys.stdin.read())
+if not texto.strip():
+    sys.exit(2)
+MES = "ene feb mar abr may jun jul ago sep oct nov dic".split()
+en_g = vista = False
+cabeza, filas = None, []
+for l in texto.splitlines():
+    if l.startswith("## "):
+        en_g = bool(re.match(r"##\s+G\b", l))
+        vista = vista or en_g
+        continue
+    if not en_g or not l.lstrip().startswith("|"):
+        continue
+    c = [x.strip() for x in l.strip().strip("|").split("|")]
+    if cabeza is None:
+        cabeza = [x.lower() for x in c]
+    elif not all(re.fullmatch(r":?-+:?", x) for x in c if x):
+        filas.append(c)
+def col(prefijo):
+    return next((i for i, h in enumerate(cabeza or []) if h.startswith(prefijo)), None)
+iF, iQ, iD = col("fecha"), col("qu"), col("due")
+if not vista or None in (iF, iQ, iD):
+    sys.exit(3)
+def limpio(s):
+    s = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", s)
+    return re.sub(r"\s+", " ", s.replace("*", "").replace("`", "")).strip()
+def fecha_de(t):
+    # La fecha sin año: la más cercana a hoy. Un rango («13 al 18-oct») cuenta desde el primer día.
+    m = re.search(r"(?<!\d)(\d{1,2})(?:\s+al\s+\d{1,2})?-(%s)[a-z]*\b" % "|".join(MES), t.lower())
+    if not m:
+        return None
+    mejor = None
+    for y in (hoy.year - 1, hoy.year, hoy.year + 1):
+        try:
+            f = datetime.date(y, MES.index(m.group(2)) + 1, int(m.group(1)))
+        except ValueError:
+            continue
+        if mejor is None or abs((f - hoy).days) < abs((mejor - hoy).days):
+            mejor = f
+    return mejor
+salida = []
+for c in filas:
+    if len(c) <= max(iF, iQ, iD):
+        continue
+    f = fecha_de(c[iF])
+    if f is None or (f - hoy).days > 3:
+        continue
+    que, dueno = limpio(c[iQ]), limpio(c[iD])
+    if len(que) > 110:
+        que = que[:109].rstrip() + "…"
+    su = bool(re.search(r"\bSU\b|Sergio", dueno))
+    salida.append(((f - hoy).days, "su" if su else "otro", limpio(c[iF]), que, "" if su else dueno))
+for dias, grupo, fecha, que, dueno in sorted(salida):
+    print("\t".join((grupo, str(dias), fecha, que, dueno)))
+' "$1"
+}
+RELOJES_RC=0
+RELOJES=$(leer_main "$MADRE_MD" | relojes_de "$HOY" 2>/dev/null) || RELOJES_RC=$?
+lista_relojes() {  # stdin: filas de relojes_de -> viñetas (6 como mucho)
+  awk -F'\t' -v max=6 '
+    NR <= max {
+      d = $2 + 0
+      if (d < 0) c = sprintf("🔴 %s, vencido hace %d día%s", $3, -d, (d == -1 ? "" : "s"))
+      else if (d == 0) c = $3 ", hoy"
+      else if (d == 1) c = $3 ", mañana"
+      else c = sprintf("%s, en %d días", $3, d)
+      printf "• %s: %s%s\n", c, $4, ($5 == "" ? "" : " — " $5)
+    }
+    END { if (NR > max) printf "• … y %d más (cola/loop/madre.md §G)\n", NR - max }' | esc
+}
+seccion_relojes() {  # los de Sergio Urcullo: le piden algo, van en NECESITO
+  local l
+  if [ "$RELOJES_RC" != 0 ]; then
+    printf '⏰ No pude leer los relojes de la madre (cola/loop/madre.md §G): no sé qué vence.\n'; return 0
+  fi
+  l=$(printf '%s\n' "$RELOJES" | awk -F'\t' '$1 == "su"')
+  [ -n "$l" ] || return 0
+  printf '⏰ <b>Vence pronto</b>\n'
+  printf '%s\n' "$l" | lista_relojes
+}
+linea_relojes_otros() {  # los de otros dueños: él los ve, no le piden nada
+  local l
+  [ "$RELOJES_RC" = 0 ] || return 0
+  l=$(printf '%s\n' "$RELOJES" | awk -F'\t' '$1 == "otro"')
+  [ -n "$l" ] || return 0
+  printf '⏰ <b>Vence en 72 h (otros dueños)</b>\n'
+  printf '%s\n' "$l" | lista_relojes
+}
+# Una cola sin commit en más de 24 h es una sesión parada o sin trabajo: con esto la madre de las
+# 07:53 sabe a quién redespachar. «sin tareas» = no le queda ninguna «- [ ]» en main.
+linea_colas() {
+  local ahora f t h edad lista=""
+  if ! git -C "$REPO" rev-parse -q --verify origin/main >/dev/null 2>&1; then
+    printf '🧊 No pude ver qué colas se pararon (el clon no tiene origin/main).\n'; return 0
+  fi
+  ahora=$(date -u -d "${ONIA_AHORA:-now}" +%s 2>/dev/null) || ahora=$(date -u +%s)
+  while IFS= read -r f; do
+    case "${f##*/}" in README.md) continue ;; *.md) ;; *) continue ;; esac
+    t=$(git -C "$REPO" log -1 --format=%ct origin/main -- "$f" 2>/dev/null)
+    [ -n "$t" ] && [ $(( ahora - t )) -gt 86400 ] || continue
+    h=$(( (ahora - t) / 3600 ))
+    if [ "$h" -lt 48 ]; then edad="$h h"; else edad="$(( h / 24 )) d"; fi
+    git -C "$REPO" show "origin/main:$f" 2>/dev/null | grep -q '^[[:space:]]*- \[ \]' || edad+=", sin tareas"
+    lista+="${lista:+, }$(basename "$f" .md) ($edad)"
+  done < <(git -C "$REPO" ls-tree --name-only origin/main hermes-content/docs/cola/loop/ 2>/dev/null)
+  [ -n "$lista" ] || return 0
+  printf '🧊 Colas sin movimiento hace más de 24 h: %s.\n' "$lista"
+}
+
 # ── La cola de la aduana: lo que no interrumpió ──────────────────────────────
 DESDE_COLA=$(cat "$ESTADO/leido-hasta" 2>/dev/null || echo "1970-01-01T00:00:00Z")
 cola_nueva() {  # cola_nueva <tipo>  (noche | resumen)
@@ -478,8 +604,8 @@ falta_medir() {
 }
 if [ "$MODO" = manana ]; then
   CABEZA="☀️ <b>Buen día, Sergio Urcullo</b> — $(dia_largo "$HOY")"
-  parte seccion_cola noche 'Mientras dormías'; parte linea_salud; grupo PASÓ
-  parte seccion_prospectos; parte seccion_decisiones; parte falta_medir; grupo NECESITO 'Nada.'
+  parte seccion_cola noche 'Mientras dormías'; parte linea_salud; parte linea_relojes_otros; parte linea_colas; grupo PASÓ
+  parte seccion_prospectos; parte seccion_relojes; parte seccion_decisiones; parte falta_medir; grupo NECESITO 'Nada.'
   parte seccion_agenda "$HOY" 'Tu día'; parte seccion_plan "$HOY" 'Hoy sale' 'Para grabar hoy'; grupo SIGUE
 else
   CABEZA="🌙 <b>Cierre del $(dia_largo "$HOY")</b>"

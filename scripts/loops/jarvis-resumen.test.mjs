@@ -48,6 +48,17 @@ function repoPlanViejo() {
   const real = join(REPO_REAL, "hermes-content", "docs", "cola", "plan-3-semanas");
   mkdirSync(plan, { recursive: true });
   for (const f of readdirSync(real).filter((f) => /^S\d-GUIONES\.md$/.test(f))) writeFileSync(join(plan, f), readFileSync(join(real, f)));
+  conMadre(dir, MADRE_LEJOS);
+  return dir;
+}
+
+// La tabla de relojes de la madre (cola/loop/madre.md §G). Por defecto, una que no vence nada cerca
+// del 30-sep: si no, cada mañana de prueba tendría «⏰» en NECESITO y nunca diría «Nada.».
+const MADRE_LEJOS = "# Cola · MADRE\n\n## G. Relojes\n| Fecha | Qué | Dueño | Fuente |\n|---|---|---|---|\n| 15-dic | Lejos | SU | x |\n";
+function conMadre(dir, texto) {
+  const loop = join(dir, "hermes-content", "docs", "cola", "loop");
+  mkdirSync(loop, { recursive: true });
+  writeFileSync(join(loop, "madre.md"), texto);
   return dir;
 }
 const PLAN_VIEJO = repoPlanViejo();
@@ -380,7 +391,7 @@ test("el cierre viene en tres bloques: lo que se hizo, lo que le pide, mañana",
 test("sin nada que pedirle, NECESITO dice «Nada.» en vez de desaparecer", () => {
   const lista = "▶ t_9c0d1e2f ready (unassigned) [auto:abc123] 🔴 CI en ROJO en main";
   const parte = "⚠️ <b>1 cosa(s) que no pude arreglar solo</b>\n\n• 🔴 CI en ROJO en main\n\n<i>Parte diario · 30/09 06:30</i>";
-  const b = banco({ lista, parte, repo: repoConCommits([]) });
+  const b = banco({ lista, parte, repo: conMadre(repoConCommits([]), MADRE_LEJOS) });
   assert.equal(bloques(b.imprimir("manana")).NECESITO.trim(), "Nada.");
   assert.equal(bloques(b.imprimir("noche", { ONIA_HOY: "2026-09-29" })).NECESITO.trim(), "Nada.");
 });
@@ -668,4 +679,85 @@ test("dos calendarios que cubren el mismo día: gana el que empieza después (el
   const msg = b.imprimir("manana", { ONIA_HOY: "2026-10-10" });
   assert.match(msg, /• 16:00 Carrusel · HOOK \(K11\)/);
   assert.doesNotMatch(msg, /VIEJO/);
+});
+
+// ── Lo que nadie empuja: relojes y colas paradas (10-oct, HERMES_ROL_QA.md Q4) ──────────
+// Había cinco fechas en 25 días (el SIN el 13-oct, el token de Lucía, la pauta del 16, el SIAT el
+// 4-nov) y ninguna alarma saltaba. El resumen las lee de la tabla §G de la madre.
+
+const MADRE = `# Cola · MADRE
+
+## A. En curso
+| Fecha | Qué | Dueño | Fuente |
+|---|---|---|---|
+| 1-oct | Una tabla de otra sección no es un reloj | SU | x |
+
+## G. Relojes (fechas que nadie empujaba)
+| Fecha | Qué | Dueño | Fuente |
+|---|---|---|---|
+| jue 1-oct | Declaraciones del **SIN** (\`F-200\`) | SU / Leslie Mercado Moreno | memoria |
+| 10-oct | Algo que vence en 10 días | SU | x |
+| 28 al 30-sep | Un rango que arrancó hace 2 días | Plat | x |
+| 30-sep 23:57 La Paz | Vence hoy & a la noche | Ventas | x |
+| sin fecha | Trámite del BCP | SU | x |
+
+## H. Frentes
+| Fecha | Qué | Dueño | Fuente |
+|---|---|---|---|
+| 30-sep | Fuera de la G | SU | x |
+`;
+
+test("relojes: el de mañana sale, uno a 10 días no, uno vencido sale en rojo; los de él en NECESITO", () => {
+  const b = banco({ repo: conMadre(repoPlanViejo(), MADRE) });
+  const msg = b.imprimir("manana");
+  const { PASÓ, NECESITO } = bloques(msg);
+  assert.match(NECESITO, /⏰ <b>Vence pronto<\/b>\n• jue 1-oct, mañana: Declaraciones del SIN \(F-200\)\n/);
+  assert.match(PASÓ, /⏰ <b>Vence en 72 h \(otros dueños\)<\/b>\n• 🔴 28 al 30-sep, vencido hace 2 días: Un rango que arrancó hace 2 días — Plat\n• 30-sep 23:57 La Paz, hoy: Vence hoy &amp; a la noche — Ventas/);
+  assert.doesNotMatch(NECESITO, /Plat|Ventas/, "los de otros dueños no le piden nada");
+  assert.doesNotMatch(msg, /10 días|BCP|otra sección|Fuera de la G/, "ni lo lejano, ni lo sin fecha, ni lo de otra sección");
+  assert.doesNotMatch(b.imprimir("noche", { ONIA_HOY: "2026-09-29" }), /⏰|🧊/, "es de la mañana, no del cierre");
+});
+
+test("relojes: una fecha sin año se lee como la más cercana (2-ene, el 30 de diciembre, vence en 3 días)", () => {
+  const madre = "## G. Relojes\n| Fecha | Qué | Dueño |\n|---|---|---|\n| 2-ene | Año nuevo | SU |\n| 20-dic | Ya pasó hace rato | Plat |\n";
+  const msg = banco({ repo: conMadre(repoPlanViejo(), madre) }).imprimir("manana", { ONIA_HOY: "2026-12-30" });
+  assert.match(bloques(msg).NECESITO, /• 2-ene, en 3 días: Año nuevo/);
+  assert.match(bloques(msg).PASÓ, /• 🔴 20-dic, vencido hace 10 días: Ya pasó hace rato — Plat/);
+});
+
+test("sin la tabla de la madre, NECESITO no dice «Nada.»: dice que no pudo leer los relojes", () => {
+  const sinMadre = repoPlanViejo();
+  writeFileSync(join(sinMadre, "hermes-content", "docs", "cola", "loop", "madre.md"), "# Cola · MADRE\n\n## A. Otra cosa\n");
+  const b = banco({ repo: sinMadre, lista: "", show: "", parte: "✅ Todo en orden." });
+  const necesito = bloques(b.imprimir("manana")).NECESITO;
+  assert.match(necesito, /⏰ No pude leer los relojes de la madre \(cola\/loop\/madre\.md §G\): no sé qué vence\./);
+  assert.doesNotMatch(necesito, /Nada\./);
+});
+
+test("colas paradas: nombra las que no tienen commit hace más de 24 h, y si se quedaron sin tareas", () => {
+  const dir = mkdtempSync(join(tmpdir(), "jarvis-colas-"));
+  const ahora = "2026-09-30T10:30:00Z";
+  const git = (fecha, ...a) =>
+    execFileSync("git", a, { cwd: dir, env: { ...process.env, GIT_AUTHOR_DATE: fecha, GIT_COMMITTER_DATE: fecha }, encoding: "utf8" });
+  git(ahora, "init", "-q");
+  git(ahora, "config", "user.email", "t@t");
+  git(ahora, "config", "user.name", "t");
+  const cola = (nombre, texto, fecha) => {
+    conMadre(dir, `${MADRE_LEJOS}<!-- ${fecha} -->\n`);  // la madre se mueve en cada commit: queda fresca
+    writeFileSync(join(dir, "hermes-content", "docs", "cola", "loop", nombre), texto);
+    git(fecha, "add", "-A");
+    git(fecha, "commit", "-q", "-m", nombre);
+  };
+  cola("README.md", "protocolo\n", "2026-09-25T10:00:00Z");
+  cola("hermes-jarvis.md", "- [x] hecha\n", "2026-09-28T08:00:00Z");
+  cola("lucia.md", "- [x] hecha\n  - [ ] G2 pendiente\n", "2026-09-29T04:30:00Z");
+  cola("plataforma.md", "- [ ] B1\n", "2026-09-30T09:30:00Z");
+  git(ahora, "update-ref", "refs/remotes/origin/main", "HEAD");
+  const { PASÓ } = bloques(banco({ repo: dir }).imprimir("manana", { ONIA_AHORA: ahora }));
+  assert.match(PASÓ, /🧊 Colas sin movimiento hace más de 24 h: hermes-jarvis \(2 d, sin tareas\), lucia \(30 h\)\./);
+  assert.doesNotMatch(PASÓ, /README|plataforma|madre/);
+});
+
+test("sin historial de git en el clon, dice que no pudo ver las colas en vez de callarse", () => {
+  assert.match(bloques(banco().imprimir("manana")).PASÓ, /🧊 No pude ver qué colas se pararon \(el clon no tiene origin\/main\)\./);
 });
