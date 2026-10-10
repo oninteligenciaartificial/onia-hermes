@@ -26,6 +26,7 @@ import {
   veredicto,
   viaConFuente,
   rutasCitadas,
+  archivosVersionados,
 } from './integrador_puede_mergear.mjs';
 
 // --- leer la url de push de `git remote -v` ---------------------------------
@@ -274,10 +275,7 @@ test('la via viva de loops.md nombra un script que existe en el repo', async () 
   // El universo sale de git, que es justo lo que este caso afirma: la via tiene que
   // apoyarse en algo VERSIONADO. Y se juzga con la funcion del PRODUCTO, no con una
   // copia: un test con su propia copia de la regla nunca toca el producto.
-  const { execFileSync } = await import('node:child_process');
-  const archivos = execFileSync('git', ['ls-files'], { encoding: 'utf8' })
-    .split('\n')
-    .filter(Boolean);
+  const archivos = archivosVersionados();
   const fuente = viaConFuente(via.comando, archivos);
   assert.ok(
     fuente.ok,
@@ -290,4 +288,16 @@ test('la via viva de loops.md nombra un script que existe en el repo', async () 
     const rel = archivos.find((f) => r === f || r.endsWith(`/${f}`));
     assert.equal(existsSync(rel), true, `${rel} esta en el indice pero no en el arbol`);
   }
+});
+
+// El repo pasó de 1 MB de `git ls-files` el 10-oct-2026 y el gate quedó en NO MEDIDO por ENOBUFS,
+// sin que nadie tocara la vía. Con el repo real ya pasado del tope, este caso fija que se lee entero.
+test('archivosVersionados lee la lista entera aunque pase de 1 MB', () => {
+  const grande = Array.from({ length: 30000 }, (_, i) => `hermes-content/docs/carpeta/archivo-${i}.md`).join('\n') + '\n';
+  assert.ok(grande.length > 1024 * 1024);
+  let opciones;
+  const lista = archivosVersionados({ correr: (_c, _a, o) => { opciones = o; return grande; } });
+  assert.equal(lista.length, 30000);
+  assert.ok(opciones.maxBuffer > 1024 * 1024, 'pide un buffer más grande que el tope por defecto');
+  assert.ok(archivosVersionados().includes('scripts/integrar-onia-platform.sh'), 'y con el repo real, también');
 });
