@@ -58,7 +58,7 @@ Entorno de Lucía y Marca: «onia-higgsfield» `env_01V5EeE4VtMdw7PWVaMYywsk`.
 | 3 | Capturar con Chrome los 8 creativos de más de 50 días de la Biblioteca (AgendaPro ×4, Doctocliq ×2, Dentalink, Reservo) | Ventas | libre |
 | 4 | Business Manager: ¿el número del bot +591 75414930 está vinculado a la página «Onia»? · «Probar eventos» del píxel `1012611478191231` | Ventas | libre |
 | 5 | Capturas C1-C7 de la cuenta demo después del refresco de Plataforma (lun 12-oct 07-11 UTC) | Ventas | espera a Plataforma |
-| 6 | Capturas para P2 «7 herramientas» (Buffer, Higgsfield, lista de sesiones) · verificar el aviso ANTIGRAVITY | Marca | libre |
+| 6 | **Vie 16-oct:** capturas de P2 «7 herramientas» según su README §2 (`carousels/out/sergio-p2-siete-herramientas-20261017-borrador/README.md`): 02 sesiones (sin ids), 03 terminal de `codex-tarea.sh`, 05 cola de Buffer, 06 lista de ejecuciones de n8n (NO abrir nodos ni «Execute»; plan B 06B), 08 opcional. Antes: Sergio Urcullo decide lámina 6 (principal o plan B), el costo de Claude Code y «Mi empresa» del caption | Marca | vie 16-oct |
 | 7 | Render HyperFrames de P1 «Niveles» con Chrome de la PC | Marca | libre |
 | 8 | Voz Marcela de G2-G5 v2 (ElevenLabs) | Lucía | espera cupo y sí de Sergio Urcullo |
 | 9 | Decidir el merge de PR #144 (Lucía) y #191 (Ventas; lo revisa Hermes) | — | revisión pendiente |
