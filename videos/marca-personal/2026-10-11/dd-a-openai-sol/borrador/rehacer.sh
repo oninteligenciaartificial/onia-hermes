@@ -17,7 +17,7 @@ PIEZA="$(dirname "$AQUI")"
 BRUTO="${BRUTO:-/tmp/claude-0/-home-user-onia-hermes/0fd2553b-524b-53fe-9e97-5c1ac80566e6/scratchpad/brutos/B_F9630B16.mp4}"
 S="${S:-/tmp/dd-a-openai-sol-borrador}"
 CIERRE="${CIERRE:-A}"
-CUADROS_S="${CUADROS_S:-2.0 14.4 31.0 44.0 50.5 57.4}"   # segundos de la SALIDA para los cuadros clave
+CUADROS_S="${CUADROS_S:-2.0 14.4 31.0 44.0 53.8 57.4}"   # segundos de la SALIDA para los cuadros clave
 CORRER=(python3 "$AQUI/correr-santiago.py")
 
 [ -f "$BRUTO" ] || { echo "falta el bruto: $BRUTO (BRUTO=/ruta/F9630B16.mp4)"; exit 1; }
@@ -41,6 +41,7 @@ ARGS=(--bruto "$BRUTO" --cutplan "$PIEZA/cutplan.json" --transcript "$AQUI/segme
       --storyboard "$S/storyboard-render.json" --assets "$AQUI/capturas" --out "$S/video.mp4" --sin-aire)
 
 echo "== 4/6 control (--plan) -> plan.txt"
+TP0=$(date +%s)
 "${CORRER[@]}" "${ARGS[@]}" --plan 2>&1 | tee "$AQUI/plan.txt"
 
 echo "== 5/6 render completo"
@@ -61,9 +62,16 @@ echo "== 6/6 medición (regla 15), 360p y cuadros"
 
 ffmpeg -v error -y -i "$S/video.mp4" -vf scale=360:-2 -c:v libx264 -crf 30 -preset medium -c:a aac -b:a 64k -movflags +faststart \
   "$AQUI/BORRADOR-no-es-master-360p.mp4"
-rm -f "$AQUI"/cuadros/*.jpg
+rm -f "$AQUI"/cuadros/t*.jpg
 for t in $CUADROS_S; do
   ffmpeg -v error -y -ss "$t" -i "$S/video.mp4" -frames:v 1 -vf scale=540:-2 -q:v 4 "$AQUI/cuadros/t$(printf '%05.1f' "$t").jpg"
 done
-echo "tiempos: control+render $((T2 - T1)) s en el render · total $(( $(date +%s) - T0 )) s"
+# el cuadro del cierre de la OTRA variante (A↔B), para compararlas sin volver a renderizar todo
+OTRA=$([ "$CIERRE" = A ] && echo B || echo A)
+python3 -I "$AQUI/armar-storyboard.py" --cierre "$OTRA" --out "$S/storyboard-render-$OTRA.json" > /dev/null
+mkdir -p "$S/fotos"; rm -f "$S/fotos/t057.40.png"
+"${CORRER[@]}" --bruto "$BRUTO" --cutplan "$PIEZA/cutplan.json" --transcript "$AQUI/segments-cut.json" \
+  --storyboard "$S/storyboard-render-$OTRA.json" --assets "$AQUI/capturas" --out "$S/video-otra.mp4" --sin-aire --fotos 57.4 > /dev/null 2>&1
+python3 -c "from PIL import Image; Image.open('$S/fotos/t057.40.png').convert('RGB').resize((540, 960)).save('$AQUI/cuadros/cierre-$OTRA.jpg', quality=88)"
+echo "tiempos: plan $((T1 - TP0)) s · render $((T2 - T1)) s · total $(( $(date +%s) - T0 )) s"
 echo "OK -> $AQUI/BORRADOR-no-es-master-360p.mp4  (render completo: $S/video.mp4)"

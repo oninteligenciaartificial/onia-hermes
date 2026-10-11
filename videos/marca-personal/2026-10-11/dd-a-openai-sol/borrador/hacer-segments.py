@@ -42,7 +42,7 @@ def palabras_del_bruto(tr):
     return out
 
 
-def aplicar_arreglos(ws, arreglos):
+def aplicar_arreglos(ws, arreglos, bruto_norm=()):
     """Reemplazos de texto sobre la secuencia de palabras. Conserva tiempos: palabras iguales, 1:1; si cambia la
     cantidad, el tramo distinto reparte el tiempo de las viejas en proporción al largo de las nuevas."""
     for malo, bueno in arreglos.items():
@@ -101,6 +101,11 @@ def aplicar_arreglos(ws, arreglos):
             ws[i:i + len(clave)] = reemp
             break
         if not hallado:
+            # si la frase existe en el transcript del bruto pero el corte la dejó afuera, no es un error: el corte cambió
+            n = len(clave)
+            if any(list(bruto_norm[i:i + n]) == clave for i in range(len(bruto_norm) - n + 1)):
+                print(f"  ⚠ el arreglo «{malo}» ya no entra en el corte (sus palabras quedaron en un hueco tirado): se salta")
+                continue
             sys.exit(f"hacer-segments: el arreglo «{malo}» no aparece en el transcript (¿cambió el transcript?)")
     return ws
 
@@ -157,6 +162,7 @@ def main():
     keep, pad = cp["keep"], float(cp.get("pad", 0.12))
     ws = palabras_del_bruto(json.loads(Path(a.transcript).read_text()))
     n_bruto = len(ws)
+    bruto_norm = [norm(w["word"]) for w in ws]
     bloques, total = mapa(keep)
 
     # 1) bruto -> salida, palabra por palabra (Whisper corre los bordes sobre los silencios que el corte tiró)
@@ -170,7 +176,7 @@ def main():
         e_ = a_salida(w["e"], bloques, pad, fin=True)
         words.append({"word": w["word"], "s": s_, "e": max(e_, s_ + 0.04), "dudosa": False})
     # 2) arreglos de texto YA en tiempo de salida (si una palabra se parte en dos, el reparto cae donde hay voz)
-    words = aplicar_arreglos(words, json.loads(Path(a.arreglos).read_text()))
+    words = aplicar_arreglos(words, json.loads(Path(a.arreglos).read_text()), bruto_norm)
     words = [{"word": w["word"], "start": w["s"], "end": w["e"], "_dudosa": w.get("dudosa", False),
               "_antes": w.get("antes")} for w in words]
     dudosas = []
