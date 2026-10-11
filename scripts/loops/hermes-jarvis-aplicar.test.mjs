@@ -736,7 +736,8 @@ function diagnosticoPedidos({ conCron = true, conLog = true } = {}) {
   const linea = "*/2 * * * * [ -x /root/bin/onia-respuestas-pedidos.sh ] && /root/bin/onia-respuestas-pedidos.sh >> /var/log/onia-respuestas-pedidos.log 2>&1";
   ejecutable(join(dobles, "crontab"), `#!/usr/bin/env bash\n${conCron ? `echo '${linea}'` : "echo '#*/2 * * * * /root/bin/onia-respuestas-pedidos.sh'"}\n`);
   const diag = readFileSync(join(DIR, "diagnostico.sh"), "utf8");
-  const s12 = diag.slice(diag.indexOf('sec "12.'), diag.indexOf('sec "fin"'));
+  const inicio12 = diag.indexOf('sec "12.');
+  const s12 = diag.slice(inicio12, diag.indexOf('\nsec "', inicio12 + 1));
   assert.ok(s12.length > 0, "no encontré la sección 12 del diagnóstico");
   const guion =
     `REDACTAR_SED='s/a^//'\n` +
@@ -790,7 +791,8 @@ function diagnosticoPublicaciones({ conRegistro = true } = {}) {
   const dobles = join(dir, "dobles");
   ejecutable(join(dobles, "systemctl"), `#!/usr/bin/env bash\necho "$*" >> ${dir}/systemctl.log\necho 'Sat 2026-10-10 16:30:00 UTC 1h left - - pub-n07.timer pub-n07.service'\n`);
   const diag = readFileSync(join(DIR, "diagnostico.sh"), "utf8");
-  const s13 = diag.slice(diag.indexOf('sec "13.'), diag.indexOf('sec "fin"'));
+  const inicio13 = diag.indexOf('sec "13.');
+  const s13 = diag.slice(inicio13, diag.indexOf('\nsec "', inicio13 + 1));
   assert.ok(s13.length > 0, "no encontré la sección 13 del diagnóstico");
   const guion =
     `REDACTAR_SED='s/a^//'\n` + readFileSync(join(DIR, "comun.sh"), "utf8") + `\nDESDE=2026-10-06T12:00:00Z\n` + s13.replaceAll("/root/", join(F, "root") + "/");
@@ -825,7 +827,8 @@ test("diagnóstico: lista las secciones del SOUL de main que le faltan al SOUL d
   const v = vps();
   writeFileSync(join(v.R, ".hermes", "SOUL.md"), "# SOUL viejo\n\n## Quién sos y cuál es tu oficio\n\ntexto\n\n## Su calendario y el cierre del día\n\nmás\n");
   const diag = readFileSync(join(DIR, "diagnostico.sh"), "utf8");
-  const s14 = diag.slice(diag.indexOf('sec "14.'), diag.indexOf('sec "fin"'));
+  const inicio14 = diag.indexOf('sec "14.');
+  const s14 = diag.slice(inicio14, diag.indexOf('\nsec "', inicio14 + 1));
   assert.ok(s14.length > 0, "no encontré la sección 14 del diagnóstico");
   const guion = `REDACTAR_SED='s/a^//'\n` + readFileSync(join(DIR, "comun.sh"), "utf8") + "\n" + s14.replaceAll("/root/", v.R + "/");
   const antes = readFileSync(join(v.R, ".hermes", "SOUL.md"), "utf8");
@@ -967,7 +970,8 @@ function diagnosticoLatidos({ lineasExtra = null, logsExtra = {} } = {}) {
   const dobles = join(dir, "dobles");
   ejecutable(join(dobles, "crontab"), `#!/usr/bin/env bash\ncat <<'CRON'\n${lineas.join("\n")}\nCRON\n`);
   const diag = readFileSync(join(DIR, "diagnostico.sh"), "utf8");
-  const s15 = diag.slice(diag.indexOf('sec "15.'), diag.indexOf('sec "fin"'));
+  const inicio15 = diag.indexOf('sec "15.');
+  const s15 = diag.slice(inicio15, diag.indexOf('\nsec "', inicio15 + 1));
   assert.ok(s15.length > 0, "no encontré la sección 15 del diagnóstico");
   const guion = `REDACTAR_SED='s/a^//'\n` + readFileSync(join(DIR, "comun.sh"), "utf8") + "\n" +
     s15.replaceAll("/var/log/", LOG + "/").replaceAll("/var/lib/onia-latido", LAT);

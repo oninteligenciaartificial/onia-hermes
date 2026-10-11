@@ -499,5 +499,91 @@ else
   echo "(no existe: aplicar todavía no corrió)"
 fi
 
+sec "16. Modelo y cadencia por trabajo — lo que está escrito, sin llamar a ningún modelo (11-oct)"
+# Se leen declaraciones, nunca se ejecutan los scripts ni se resuelven variables del entorno.
+# Un modelo ausente no prueba que el trabajo no use uno; el gateway puede elegirlo por defecto.
+{
+echo "--- A. Trabajos del gateway de Hermes"
+python3 - <<'PY'
+import json
+p = '/root/.hermes/cron/jobs.json'
+try:
+    with open(p, encoding='utf-8') as f:
+        d = json.load(f)
+    jobs = d.get('jobs', d) if isinstance(d, dict) else d
+    if isinstance(jobs, dict):
+        jobs = [dict(v, _clave=k) for k, v in jobs.items() if isinstance(v, dict)]
+    if not isinstance(jobs, list):
+        raise ValueError('formato de trabajos')
+except (OSError, ValueError) as e:
+    # La clase del error alcanza; el mensaje de un parser podría contener datos del archivo.
+    print('no pude leer %s: %s' % (p, type(e).__name__))
+    raise SystemExit(0)
+
+def primero(j, *claves):
+    return next((j[k] for k in claves if j.get(k) not in (None, '', [], {})), '')
+
+for j in jobs:
+    if not isinstance(j, dict):
+        continue
+    nombre = primero(j, 'name', 'title', 'id', '_clave') or '(sin nombre)'
+    horario = primero(j, 'schedule_display', 'schedule', 'cron', 'expr')
+    modelo = j.get('model') or '(el del gateway)'
+    habilitado = 'sí' if j.get('enabled') is True else 'no' if j.get('enabled') is False else '?'
+    print('%s | cada %s | modelo %s | habilitado: %s' % (nombre, horario, modelo, habilitado))
+PY
+echo "--- B. Trabajos del crontab con script instalado"
+python3 - <<'PY'
+import re, shlex, subprocess
+try:
+    cron = subprocess.run(['crontab', '-l'], capture_output=True, text=True, check=False).stdout
+except OSError as e:
+    print('no pude leer crontab: %s' % type(e).__name__)
+    cron = ''
+base = '/root/bin/'
+for linea in cron.splitlines():
+    linea = linea.strip()
+    if not linea or linea.startswith('#') or re.match(r'^[A-Za-z_][A-Za-z0-9_]*=', linea):
+        continue
+    partes = linea.split(None, 1 if linea.startswith('@') else 5)
+    if len(partes) != (2 if linea.startswith('@') else 6):
+        continue
+    horario, comando = ' '.join(partes[:-1]), partes[-1]
+    try:
+        palabras = shlex.split(comando)
+    except ValueError:
+        continue
+    indice = next((i for i, s in enumerate(palabras) if re.fullmatch(re.escape(base) + r'[A-Za-z0-9._-]+', s)), None)
+    if indice is None:
+        continue
+    script = palabras[indice]
+    modelo = 'sin modelo declarado'
+    try:
+        with open(script, encoding='utf-8', errors='replace') as f:
+            texto = f.read()
+    except OSError:
+        modelo = 'no instalado'
+    else:
+        declaracion = next((m for m in re.finditer(r'\$\{([A-Za-z_][A-Za-z0-9_]*):-([^}\n]+)\}', texto)
+                            if 'MODEL' in m.group(1)), None)
+        # Solo asignaciones anteriores al script: un argumento posterior no es un override de cron.
+        asignaciones = {}
+        for palabra in palabras[:indice]:
+            m = re.fullmatch(r'([A-Za-z_][A-Za-z0-9_]*)=(.*)', palabra)
+            if m:
+                asignaciones[m.group(1)] = m.group(2)
+        if declaracion:
+            modelo = asignaciones.get(declaracion.group(1), declaracion.group(2)) or 'sin modelo declarado'
+        else:
+            modelo = next((v for k, v in asignaciones.items() if 'MODEL' in k and v), modelo)
+        # No expandir referencias o sustituciones que podrían traer secretos: solo nombres literales.
+        if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9._:/+-]*', modelo):
+            modelo = 'sin modelo declarado'
+    print('%s | cada %s | modelo %s' % (script, horario, modelo))
+PY
+echo "--- C. Lo que NO se puede medir desde acá"
+echo "sesión de la nube de Hermes-Jarvis: modelo no medible desde el VPS (lo lee la madre en la consola de la sesión)"
+} | redactar
+
 sec "fin"
 echo "diagnóstico terminado $(date -u +%FT%TZ) — no se modificó nada"
