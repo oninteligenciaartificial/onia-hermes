@@ -1,12 +1,13 @@
 # Prueba 1 de Meta: las tres copias del mismo concepto (9-oct)
 
+> **Lo que se le muestra a Sergio Urcullo (3 creativos, público, presupuesto, corte y go/no-go del 13-oct): `CAMPANA-PRUEBA-1-LISTA-PARA-MOSTRAR.md`.**
 > Plan: `ONIA_ADQUISICION_Y_PAUTA.md` §5.11 (rama de la madre hasta que entre a `main`). **Nada está creado ni subido en Meta; cero gasto.**
 > Concepto único: *«el paciente de mañana que no confirmó»*. Cambia solo el formato. Copy corregido el 9-oct: **«Usted lo aprueba. Nada sale sin su OK.»** (el envío con un toque, G-03, está a medias y no se promete).
 
 | Copia | Pieza | Archivos | Texto precargado de WhatsApp | Filas en ✅ que necesita | Estado |
 |---|---|---|---|---|---|
-| **A1-E** | Imagen 4:5 + historia 9:16 | `carousels/out/ads/onia-platform-dental-meta-a1v5-las-diez/{feed,story}.png`; brief `…a1v5-las-diez.json` | `Hola, vi el anuncio de Onia (D1). Tengo una clínica dental.` | B-02, G-01, G-06, G-11, L-05 | **Lista y mirada** (feed e historia, 9-oct). Captura provisoria del 30-sep |
-| **A1-V** | Video 9:16 de 11 s, sin audio (y variante de 10 s) | `…a1v5-las-diez/…mp4`, `…a1v5-micro-10s/…mp4` | `Hola, vi el anuncio de Onia (D2). Tengo una clínica dental.` | las mismas | **Listo y mirado** (fotogramas, 9-oct; titular desde el cuadro 0) |
+| **A1-E** | Imagen 4:5 + historia 9:16 | `carousels/out/ads/onia-platform-dental-meta-a1v5-las-diez/{feed,story}.png`; brief `…a1v5-las-diez.json` | `Hola, vi el anuncio de Onia (D1). Tengo una clínica dental.` | B-02, G-01, G-06, G-11, L-05 | **Lista y mirada** (feed e historia, 9-oct; **rehecha el 11-oct sin el botón «Enviar yo mismo por WhatsApp»**, G-03). Captura provisoria del 30-sep |
+| **A1-V** | Video 9:16 de 11 s, sin audio (y variante de 10 s) | `…a1v5-las-diez/…mp4`, `…a1v5-micro-10s/…mp4` | `Hola, vi el anuncio de Onia (D2). Tengo una clínica dental.` | las mismas | **Listo y mirado** (fotogramas, 9-oct; titular desde el cuadro 0; **rehecho el 11-oct sin el botón de envío**) |
 | **A1-S** | Selfie de 25 s de Sergio Urcullo con la pantalla | guion en `research/competencia/anuncios/FORMATOS-QUE-SOSTIENEN.md` (F1) | `Hola, vi el anuncio de Onia (D3). Tengo una clínica dental.` | las mismas | **Bloqueada: la graba Sergio Urcullo** (su cara) |
 | Carrusel 1:1 | 4 láminas, mismo concepto | `…a1v5-carrusel/lamina-{1..4}.png` | `(D6)` | las mismas | Lista; **no entra en la prueba 1** (es 1 variable más) |
 

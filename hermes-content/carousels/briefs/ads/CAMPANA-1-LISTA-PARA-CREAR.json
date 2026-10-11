@@ -1,7 +1,8 @@
 {
   "_leer_primero": "Especificación EJECUTABLE de la campaña prueba 1. Los números y las reglas mandan en hermes-content/docs/ONIA_ADQUISICION_Y_PAUTA.md (§5.3 plata, §5.7 corte, §5.8 estructura, §5.10 go/no-go); este archivo los pone en la forma exacta de los parámetros del conector Meta_ads, y scripts/campana-lista.test.mjs los cruza con ese doc, con el bot y con el catálogo. Si cambia uno, cambia el otro en el mismo commit.",
   "version": "2026-10-10",
-  "estado": "LISTA PARA CREAR. NO CREADA: leído el 10-oct en ONIA Ads, 0 campañas y 0 borradores.",
+  "estado": "LISTA PARA CREAR. NO CREADA: leído el 11-oct en ONIA Ads, 0 campañas y 0 borradores, sin medio de pago, sin Instagram.",
+  "lista_para_mostrar": "hermes-content/carousels/briefs/ads/CAMPANA-PRUEBA-1-LISTA-PARA-MOSTRAR.md (los 3 creativos, el público, el presupuesto, el corte y el go/no-go del 13-oct en un archivo)",
   "ojo_con_el_conector": "En este conector crear NO deja nada en pausa: ads_create_campaign, ads_create_ad_set y ads_create_ad dejan BORRADORES (visibles en el Administrador) y ads_activate_entity los PUBLICA en ACTIVO, gastando. Por eso 'crear en pausa' = dejar el borrador; encender = el último paso, y solo con el OK escrito.",
   "no_se_crea_ni_se_enciende_sin": [
     {
@@ -31,7 +32,8 @@
     {
       "id": "captura_nueva",
       "comprobacion": "feed.png, story.png y el video de A1 re-renderizados con la captura de la cuenta demo (hoy llevan la del 30-sep) y SIN el botón «Enviar yo mismo por WhatsApp» en la tarjeta, o con G-03 en ✅: el envío con un toque está a medias (catálogo §7)",
-      "estado_10oct": "provisoria"
+      "estado_10oct": "provisoria",
+      "estado_11oct": "el botón «Enviar yo mismo por WhatsApp» ya NO sale en feed, historia ni videos (recorte del mensaje, 11-oct); sigue provisoria: captura del candidato del 30-sep con el mensaje al paciente en voseo, a recapturar con la cuenta demo"
     },
     {
       "id": "bot",

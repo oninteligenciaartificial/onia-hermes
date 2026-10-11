@@ -205,3 +205,69 @@ test("sin Instagram vinculado, ningún creativo pide posiciones de Instagram (no
   }
   assert.ok(spec.no_se_crea_ni_se_enciende_sin.some((c) => c.id === "instagram_decidido"));
 });
+
+// ── LISTA PARA MOSTRAR (11-oct, encargo de la madre v4) ──────────────────────────────────────────────────────────────
+// El archivo que se le muestra a Sergio Urcullo repite el texto, los códigos y las cifras de la spec. Si uno cambia sin el
+// otro, lo que se muestra deja de ser lo que se crea: por eso se lee contra el JSON y el brief, no se confía.
+const LISTA_RUTA = "hermes-content/carousels/briefs/ads/CAMPANA-PRUEBA-1-LISTA-PARA-MOSTRAR.md";
+const lista = leer(LISTA_RUTA);
+const listaPlano = lista.replace(/\s+/g, " ");
+
+test("LISTA PARA MOSTRAR: lleva su título, dice que nada se creó ni se gastó y que el presupuesto está sin aprobar", () => {
+  assert.match(lista, /^# LISTA PARA MOSTRAR: campaña prueba 1$/m);
+  assert.match(listaPlano, /No se creó nada en Meta, no se gastó nada, no se contactó a nadie/);
+  assert.match(listaPlano, /SIN aprobar/);
+  assert.equal(spec.lista_para_mostrar.split(" ")[0], LISTA_RUTA, "el JSON apunta a su lista");
+});
+
+test("LISTA PARA MOSTRAR: el texto principal y el titular son los del brief, palabra por palabra, y los tres códigos son los de la spec", () => {
+  const brief = JSON.parse(leer("hermes-content/carousels/briefs/ads/onia-platform-dental-meta-a1v5-las-diez.json"));
+  const bloque = lista.match(/Texto principal, titular y botón[\s\S]*?```\n([\s\S]*?)\n```/);
+  assert.ok(bloque, "el bloque de texto principal existe");
+  assert.equal(bloque[1], brief.caption, "el texto principal de la lista es el caption del brief");
+  assert.ok(lista.includes(`\`${brief.headline_anuncio}\``), "el titular de la lista es el del brief");
+  for (const a of [...spec.anuncios.entran, ...spec.anuncios.esperan].filter((x) => ["D1", "D2", "D3"].includes(x.codigo))) {
+    assert.ok(lista.includes(a.texto_precargado) || lista.includes(`(${a.codigo})`), `${a.id}: la lista nombra su código ${a.codigo}`);
+  }
+  assert.ok(lista.includes("Hola, vi el anuncio de Onia (D1). Tengo una clínica dental."), "el precargado exacto de D1 está escrito");
+});
+
+test("LISTA PARA MOSTRAR: las cifras son las de la spec (US$ 56, 14 días, Bs 750, techo Bs 1.400, cortes Bs 40, Bs 390 y CTR 0,8 %)", () => {
+  const { plata, reglas_de_corte: cortes } = spec;
+  assert.ok(listaPlano.includes(`US$ ${plata.total_usd}`));
+  assert.ok(listaPlano.includes(`${plata.dias} días`));
+  assert.ok(listaPlano.includes(`Bs ${plata.tope_en_bs}`));
+  assert.ok(listaPlano.includes("Bs 1.400") && plata.techo_total_en_bs === 1400);
+  assert.ok(listaPlano.includes("Bs 40") && cortes.dia_7.cortar_si.some((x) => x.includes("Bs 40")));
+  assert.ok(listaPlano.includes("Bs 390") && cortes.dia_14.cortar_si.some((x) => x.includes("Bs 390")));
+  assert.ok(listaPlano.includes("0,8 %") && cortes.dia_3.cortar_si.some((x) => x.includes("0,8 %")));
+  for (const [bs, cambio] of [["637", "11,37"], ["666", "11,89"], ["750", "13,4"], ["840", "15"]]) {
+    assert.ok(listaPlano.includes(`**Bs ${bs}** a ${cambio}`), `la lista trae Bs ${bs} a ${cambio}`);
+  }
+  assert.ok(!/nada apaga solo/i.test(listaPlano) || /No lo apaga nadie solo/.test(listaPlano), "Bs 750 no es un corte automático");
+});
+
+test("LISTA PARA MOSTRAR: el go/no-go trae las 9 filas y las condiciones extra de la spec, cada una con su dueño", () => {
+  for (let i = 1; i <= 9; i += 1) assert.match(lista, new RegExp(`^\\| ${i} \\|`, "m"), `falta la fila ${i} del go/no-go`);
+  for (const id of ["instagram_decidido", "canales_1_y_2", "self_ai_decidido"]) {
+    assert.ok(spec.no_se_crea_ni_se_enciende_sin.some((c) => c.id === id), `la spec define ${id}`);
+  }
+  assert.match(listaPlano, /Instagram vinculado/);
+  assert.match(listaPlano, /Canales 1 y 2 contactados/);
+  assert.match(listaPlano, /self_ai_disclosure/);
+  assert.match(listaPlano, /has_payment_method: false/);
+  assert.match(listaPlano, /NO-GO\. 0 de 9 filas en ✅/);
+});
+
+test("LISTA PARA MOSTRAR: el guion del selfie no promete lo que el catálogo prohíbe (minutos, «con IA», un toque, ejemplo, tratamiento a medias, SIAT)", () => {
+  const guion = lista.match(/\*\*Guion[\s\S]*?\*\*No dice:\*\*/);
+  assert.ok(guion, "el guion del selfie existe");
+  const lineas = guion[0].split("\n").filter((l) => /^\s+\d\. \(\d+-\d+ s\)/.test(l));
+  assert.equal(lineas.length, 4, "ancla: las cuatro frases del guion (la cabecera, que cita lo que se corrigió, no cuenta)");
+  const dicho = lineas.flatMap((l) => [...l.matchAll(/«([^»]+)»/g)].map((m) => m[1])).join(" ");
+  assert.ok(dicho.length > 150, "ancla: se leyeron las cuatro frases del guion");
+  assert.ok(!/\d+\s*minutos/i.test(dicho), "L-04: la duración de la llamada no se promete");
+  assert.ok(!/con IA|toque|ejemplo|a medias|SIAT|WhatsApp automático/i.test(dicho.replace("Escríbanos por WhatsApp", "")), "el selfie no promete G-03, L-05, D-03 ni el SIAT");
+  assert.ok(!/\b(vos|tenés|querés|decime|escribime|confirmás)\b/i.test(dicho), "el selfie habla de usted");
+  assert.match(dicho, /Nada sale sin su OK/);
+});

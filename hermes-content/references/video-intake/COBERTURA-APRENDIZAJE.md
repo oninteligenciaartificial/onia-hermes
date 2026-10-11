@@ -48,6 +48,7 @@ Fuente: índice de memoria de Claude leído el 9-oct. Los enlaces son nombres de
 | 8-oct | `decision-addons-8-oct.md` | `onia-ventas-pauta` enlaza `hermes-content/docs/ONIA_ADDONS.md` | Investigación/oferta futura; no habilita precio ni construir antes de 1.0 |
 | 9-oct | `feedback-link-sin-instruccion-es-para-aprender.md` | `aprender-de-todo` y `ver-videos`: ficha → skill → uso comprobado | No producir automáticamente |
 | 9-oct | `publicar-lo-revisado-sin-esperar.md` (entrada leída) | Corregidos gates de diseño en skills; revisión conserva permisos sensibles y alcance del ejecutor | No habilita git, despliegue, gasto ni mensajes para esta tarea |
+| 11-oct | `2026-10-10-biblioteca-anuncios-software-clinicas.md` y fichas por anunciante (aplicado en la «lista para mostrar») | Los formatos se cuentan por anunciante distinto y con los días del corte; el copy corregido no cubre los píxeles de la captura (A1 mostraba el botón de G-03) | Tarea de la madre v4: `carousels/briefs/ads/CAMPANA-PRUEBA-1-LISTA-PARA-MOSTRAR.md` y skill `onia-ventas-pauta` §8.5; revisión independiente | No habilita crear nada en Meta ni gasto |
 
 ## Cierre de cobertura
 

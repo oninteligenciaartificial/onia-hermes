@@ -24,20 +24,13 @@
         "src": "hermes-content/carousels/briefs/assets/onia-1.0-dental-ads/candidato-20260930/pendientes-confirmador.png",
         "crop": [
           464,
-          448,
+          513,
           768,
-          170
+          98
         ]
       },
       "width": 936,
-      "anillos": [
-        [
-          480,
-          521,
-          736,
-          80
-        ]
-      ]
+      "anillos": []
     },
     {
       "t": "leyenda",
@@ -53,9 +46,9 @@
   "layout": {
     "feed": {
       "hora": 188,
-      "gap": 26,
-      "flecha": 42,
-      "txt": 44,
+      "gap": 44,
+      "flecha": 46,
+      "txt": 50,
       "ctaBottom": 44
     },
     "story": {
