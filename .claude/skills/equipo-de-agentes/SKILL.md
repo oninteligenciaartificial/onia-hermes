@@ -143,6 +143,12 @@ sección decía «incluido el diseño»; él lo sacó al confirmar la regla.
 - Git Bash convierte `'/dir/'` en una ruta de Windows: usar `MSYS_NO_PATHCONV=1` para el sparse.
 - La nube no puede pushear ramas nuevas a onia-platform: deja bundles y la madre los sube.
 - Disco: `df -h /c` antes de bajar videos. Codex falla con menos de 1 GiB libre.
+- **Antes de rebasear un PR porque entró otro, probar la mezcla** (11-oct, #152 y #156). La madre iba a rebasear #156 (M1) sobre
+  `master` después de #152, por la línea base del trinquete, que tocan los dos. Plataforma probó la mezcla triple en la nube:
+  `master` `a91708ca` + #152 + #156. Resultado: sin conflictos, la línea base se combinó sola (claves distintas), `tsc` 0 y la
+  suite completa 10.825/0. La suite tardó 154 s en el contenedor de la nube. Como el CI no exige la rama al día, #156 se mergea
+  con el CI que ya tiene. Un rebase cancela el CI en curso (`cancel-in-progress`) y cuesta otros 22 min del único runner.
+  Rebasear solo si la mezcla da conflicto o rojo. Un PR detrás de `master` se mergea: el 11-oct, #146 entró 40 s después de #136.
 - Memoria de la PC (9-oct): el commit estaba en 39,5 de 40,8 GB con solo ~13 GB en procesos. El resto era **paged pool del
   kernel en 17 GB** (normal: menos de 1 GB), una fuga de driver que solo se libera reiniciando. Medir con
   `Get-CimInstance Win32_PerfRawData_PerfOS_Memory` (`PoolPagedBytes`), no con el Administrador de tareas. Sospechoso:
