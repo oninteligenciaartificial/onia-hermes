@@ -21,21 +21,21 @@
 
 ## Gancho (checklist de §9.3)
 
-- **Texto en pantalla:** «Paciente que no llega / hora que se paga igual» (2 líneas de 21 y 22 caracteres, sin punto final, un énfasis).
+- **Texto en pantalla:** «Paciente que no llega / sillón que se paga igual» (2 líneas de 21 y 24 caracteres, sin punto final, un énfasis).
 - **Se ve (cuadro 0):** Sergio Urcullo en una oficina luminosa, plano medio, mirando a cámara, ropa de oficina; cintilla «Sergio Urcullo · Onia» abajo a la izquierda, logo onia | dental arriba a la derecha y el gancho en dos líneas blancas con la palabra igual en un chip de color.
-- **Se dice:** «Venga o no el paciente, el sillón se paga.»
-- **Alinean sin repetirse:** El texto nombra el costo (la hora que se paga igual), la voz lo baja a algo concreto (el sillón cuesta lo mismo) y la imagen es quien lo explica, con su nombre en la cintilla: tres capas de la misma idea sin repetir palabras.
+- **Se dice:** «Venga o no el paciente, usted igual paga la hora.»
+- **Alinean sin repetirse:** El texto nombra el paciente que no llega y el sillón que se paga; la voz dice que el dueño paga la hora igual; la imagen es una persona con nombre en la cintilla. Tapando una se adivina el resto, sin repetir la frase.
 - **Alternativa:** «Una hora sin paciente / se paga igual»
 
 ## Guion
 
 | Tramo | Toma | Se dice | En pantalla |
 |---|---|---|---|
-| 0-3 s | Sergio a cámara en la oficina, plano medio, cintilla abajo a la izquierda | Venga o no el paciente, el sillón se paga. | Subtítulo de dos líneas: Paciente que no llega / hora que se paga *igual*; cintilla Sergio Urcullo · Onia; logo arriba a la derecha |
+| 0-3 s | Sergio a cámara en la oficina, plano medio, cintilla abajo a la izquierda | Venga o no el paciente, usted igual paga la hora. | Subtítulo de dos líneas: Paciente que no llega / sillón que se paga *igual*; cintilla Sergio Urcullo · Onia; logo onia arriba a la derecha |
 | 3-9 s | Misma toma | Soy Sergio Urcullo, de Onia. Es un sistema de gestión para clínicas dentales. | Subtítulo: Soy Sergio Urcullo, de *Onia* |
 | 9-14 s | Sergio levanta la tablet hacia cámara | Cada mañana, Onia revisa su agenda. | Subtítulo: Cada mañana revisa su *agenda* |
 | 14-21 s | La tablet con la fila de Pendientes se amplía a casi cuadro completo; Sergio arriba | Aquí, en Pendientes, le deja anotado quién no confirmó. Con el mensaje listo. | Fila cita-manana legible a 390 px de ancho (nunca el mensaje ni el botón de envío) con la leyenda «Pantalla de Onia · datos de ejemplo»; subtítulo: Le deja anotado quién *no confirmó* |
-| 21-26 s | Vuelve Sergio a cámara | Usted lo revisa y lo aprueba. Nada sale sin su OK. | Subtítulo: Usted lo *aprueba* |
+| 21-26 s | Vuelve Sergio a cámara | Usted aprueba cada mensaje. | Subtítulo: Usted lo *aprueba* |
 | 26-31 s | Tarjeta clara con el logo | Escríbanos por WhatsApp y pida su demostración gratis. | Tarjeta: onia \| dental / Pida su demostración *gratis* |
 
 ## El anuncio en Meta
@@ -45,8 +45,8 @@ Texto principal (la primera línea es el filtro):
 ```
 Para dueños y dueñas de clínicas dentales de Santa Cruz.
 Cuando un paciente no llega, el sillón, el alquiler y el equipo se pagan igual: es plata que no entra.
-Soy Sergio Urcullo, de Onia, un sistema de gestión para clínicas dentales. En Pendientes, cada mañana le deja anotado a quién escribirle, con el mensaje listo.
-Nada sale sin que usted lo apruebe.
+Soy Sergio Urcullo, de Onia. Onia es un sistema de gestión para clínicas dentales: en Pendientes, cada mañana le deja anotado a quién escribirle, con el mensaje listo.
+Ningún mensaje de Pendientes sale sin que usted lo apruebe.
 Escríbanos por WhatsApp y pida su demostración gratis.
 ```
 
@@ -64,10 +64,11 @@ Escríbanos por WhatsApp y pida su demostración gratis.
 | Cada mañana Onia revisa su agenda | CAT §8 frase 3 · ⬜ sin verificar: corre solo, falta el log del VPS | G-04 |
 | Le deja anotado quién no confirmó (la cita de mañana) | CAT §8 frase 3 (son reglas fijas) · ⬜ sin verificar: falta la cuenta demo | G-06, B-02 |
 | Con el mensaje listo | CAT §8 frase 3 · ⬜ sin verificar: falta la cuenta demo | G-06 |
-| Usted lo revisa y lo aprueba; nada sale sin su OK | CAT §8 frase 3 · ⬜ sin verificar: falta la cuenta demo. Ojo: el recordatorio de cita por correo (B-03) sale solo; la frase queda pegada al mensaje de Pendientes y no se amplía | G-01 |
+| Usted lo revisa y lo aprueba; ninguno sale sin su OK | CAT §8 frase 3 · ⬜ sin verificar: falta la cuenta demo. Ojo: el recordatorio de cita por correo (B-03) sale solo; la frase queda pegada al mensaje de Pendientes y no se amplía | G-01 |
 | Onia es un sistema de gestión para clínicas dentales | CAT §4 · ⬜ sin verificar: falta la cuenta demo | B-01, C-02, D-01, E-01 |
 | Cuando un paciente no llega, el sillón, el alquiler y el equipo se pagan igual | Hecho del negocio del dueño, no función de Onia; no promete que Onia evite que el paciente falte | — |
 | Pida su demostración gratis | CTA fija del brief · 🟡 verificada solo en parte: la duración de la llamada no se dice porque la web y los mensajes no coinciden | L-04 |
+| Venga o no el paciente, el sillón se paga (voz del gancho) | Hecho del negocio del dueño; no es función de Onia ni promete un resultado. | — |
 
 ## No dice
 
@@ -89,6 +90,7 @@ Escríbanos por WhatsApp y pida su demostración gratis.
 - Tener una tablet a mano (si no hay, el celular) y sostenerla a la altura del pecho, inclinada hacia cámara, durante las frases de Pendientes; la pantalla real se pone en edición, ampliada.
 - Decir el texto de corrido, de usted, y luego grabar tres veces la última frase (la invitación).
 - Entregar la toma sin música; la tarjeta de cierre con el logo la arma la edición.
+- Ropa lisa y sin logos ni marcas a la vista (el polo de la maqueta lleva un logo ajeno).
 
 ## Límites de esta maqueta
 

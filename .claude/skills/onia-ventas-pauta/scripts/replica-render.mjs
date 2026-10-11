@@ -24,8 +24,8 @@ const REPO = path.resolve(HERE, '../../../..');
 const SIZE = { '9:16': [1080, 1920], '4:5': [1080, 1350], '1:1': [1080, 1080] };
 const ASSETS = 'hermes-content/carousels/briefs/assets/prueba1-v2';
 const FILAS = {
-  'cita-manana': { src: `${ASSETS}/fila-cita-manana.png`, w: 420, h: 54 },
-  vuelve: { src: `${ASSETS}/fila-vuelve.png`, w: 420, h: 54 },
+  'cita-manana': { src: `${ASSETS}/fila-cita-manana.png`, w: 322, h: 54 },
+  vuelve: { src: `${ASSETS}/fila-vuelve.png`, w: 232, h: 54 },
 };
 const PERSONA = { src: `${ASSETS}/sergio-recorte.png`, w: 1022, h: 1116 };
 const BRAND = 'web-factory/apps/onia-platform/public/brand/v2/hires';
@@ -63,6 +63,8 @@ body{font-family:Archivo,sans-serif;-webkit-font-smoothing:antialiased;font-stre
 .card img{display:block;width:100%;height:auto}
 .rot{position:absolute;font-size:30px;letter-spacing:.09em;text-transform:uppercase;color:var(--suave);font-weight:600}
 .sub{white-space:pre-line;position:absolute;left:0;right:0;text-align:center;padding:0 70px;font-weight:800;color:#fff;line-height:1.16;letter-spacing:-.01em;text-shadow:0 3px 14px rgba(0,0,0,.55)}
+.sub.color{color:#027650;-webkit-text-stroke:7px #fff;paint-order:stroke fill;text-shadow:none;font-weight:900;letter-spacing:.012em;word-spacing:.1em}
+.sub.color em{background:none;color:#027650;padding:0}
 .sub.gg{line-height:1.05}
 .sub.gg .l1{display:block}
 .sub.gg em{display:inline-block;background:none;color:#FBF751;font-size:170px;font-weight:900;text-transform:uppercase;letter-spacing:-.02em;line-height:1;padding:0;text-shadow:0 4px 22px rgba(0,0,0,.5)}
@@ -128,27 +130,30 @@ function htmlCuadro(b, c, W, H) {
         ${t === 'cierre' && !c.tarjeta?.logo_abajo ? `<img src="${url(logo)}" style="height:${k === 'hoja' ? 170 : 200}px;width:auto">` : ''}
         ${lineas}
         ${t === 'tarjeta' && c.tarjeta?.logo || c.tarjeta?.logo_abajo ? `<img src="${url(logo)}" style="height:${hist ? 150 : 130}px;width:auto;margin-top:6px">` : ''}
-        ${c.tarjeta?.pie ? `<div style="font-size:54px;font-weight:700;color:${fg};margin-top:14px;letter-spacing:-.01em">${marcar(c.tarjeta.pie)}</div>` : ''}
+        ${c.tarjeta?.pie ? `<div style="font-size:54px;font-weight:700;color:${fg};margin-top:14px;letter-spacing:-.01em">${marcar(c.tarjeta.pie).replace(/<em>/g, '<em style="font-style:normal;color:#FEF9C2">')}</div>` : ''}
         ${c.tarjeta?.boton ? `<span class="btn" style="font-size:40px;padding:26px 52px;margin-top:20px">${wa()}${esc(c.tarjeta.boton)}</span>` : ''}
       </div>`;
   }
-  // La pantalla REAL: una o dos filas de Pendientes, ampliadas para que se lean a 390 px (≥ 2,1×).
+  // La pantalla REAL: una o dos filas de Pendientes, ampliadas con el MISMO factor (el texto de las dos queda del mismo tamaño y
+  // se lee a 390 px) y apiladas según su alto real.
   const filas = c.pantalla ? [].concat(c.pantalla.fila) : [];
   if (filas.length) {
     const flotando = t === 'persona';
-    const ancho = flotando ? 880 : 940;
-    const top0 = flotando ? Math.round(H * (c.pantalla.y ?? (hist ? 0.6 : 0.62))) : Math.round(H * 0.3);
-    const marco = flotando ? 'transform:rotate(-2deg);left:' + Math.round((W - ancho - 44) / 2 + 18) + 'px;' : 'left:' + Math.round((W - ancho - 44) / 2) + 'px;';
-    cuerpo += filas.map((id, i) => fila(id, ancho, `${marco}top:${top0 + i * 190}px`)).join('');
-    if (flotando) {
-      const alto = Math.round((ancho * FILAS[filas[filas.length - 1]].h) / FILAS[filas[filas.length - 1]].w) + 40;
-      cuerpo += `<div class="rot" style="left:0;right:0;text-align:center;top:${top0 + (filas.length - 1) * 190 + alto + 14}px;font-size:28px">Pantalla de Onia · datos de ejemplo</div>`;
+    const k = (flotando ? 880 : 940) / FILAS['cita-manana'].w;
+    const top0 = flotando ? Math.round(H * (c.pantalla.y ?? (hist ? 0.6 : 0.62))) : Math.round(H * (c.pantalla.y ?? 0.3));
+    let y = top0;
+    for (const id of filas) {
+      const w = Math.round(FILAS[id].w * k), alto = Math.round(FILAS[id].h * k) + 40;
+      const left = Math.round((W - w - 44) / 2) + (flotando ? 18 : 0);
+      cuerpo += fila(id, w, `left:${left}px;top:${y}px${flotando ? ';transform:rotate(-2deg)' : ''}`);
+      y += alto + 24;
     }
-    if (!flotando) cuerpo += `<div class="rot" style="left:${Math.round((W - ancho - 44) / 2)}px;top:${top0 - 62}px">Pantalla de Onia · datos de ejemplo</div>`;
+    if (flotando) cuerpo += `<div class="rot" style="left:0;right:0;text-align:center;top:${y - 8}px;font-size:28px">Pantalla de Onia · datos de ejemplo</div>`;
+    if (!flotando) cuerpo += `<div class="rot" style="left:${Math.round((W - 940 - 44) / 2)}px;top:${top0 - 62}px">Pantalla de Onia · datos de ejemplo</div>`;
   }
   if (c.subtitulo) {
     const y = c.sub_y != null ? c.sub_y : t === 'pantalla' ? Math.round(H * 0.72) : t === 'persona' ? Math.round(H * (c.pantalla ? 0.5 : 0.66)) : Math.round(H * 0.5);
-    cuerpo += `<div class="sub${c.estilo_subtitulo === 'gigante' ? ' gigante' : ''}${c.estilo_subtitulo === 'gancho-gigante' ? ' gg' : ''}" style="${c.estilo_subtitulo === 'gigante' ? '' : `font-size:${subPx}px;`}top:${y}px">${marcar(c.subtitulo)}</div>`;
+    cuerpo += `<div class="sub${c.estilo_subtitulo === 'gigante' ? ' gigante' : ''}${c.estilo_subtitulo === 'gancho-gigante' ? ' gg' : ''}${c.estilo_subtitulo === 'color' ? ' color' : ''}" style="${c.estilo_subtitulo === 'gigante' ? '' : `font-size:${subPx}px;`}top:${y}px">${marcar(c.subtitulo)}</div>`;
   }
   if (c.marca_grande) cuerpo += `<img class="abs" src="${url(LOGO_TINTA)}" style="left:${Math.round((W - 620) / 2)}px;top:${Math.round(H * (c.marca_y ?? 0.455))}px;width:620px;height:auto;filter:drop-shadow(0 4px 18px rgba(0,0,0,.45))">`;
   if (c.logo_fijo) cuerpo += `<img class="logofijo" src="${url(t === 'persona' || t === 'pantalla' ? LOGO_TINTA : LOGO_CLARO)}" style="top:${hist ? 290 : 50}px">`;
@@ -159,19 +164,22 @@ function htmlCuadro(b, c, W, H) {
 }
 
 function htmlEstatico(b) {
+  // Dos columnas como R3 (CitaPro 2253602242100999): texto a la izquierda, la persona a la derecha cortada por el borde, y UNA sola
+  // fila real de Pendientes, grande, cruzando la costura (la crítica del 11-oct: con dos filas la segunda no se leía).
   const e = b.estatico;
-  const filas = e.filas || ['cita-manana', 'vuelve'];
-  const tit = e.titular.map((l, i) => `<div class="fit tit">${marcar(l).replace(/<em>/g, '<em class="v">')}</div>`).join('');
+  const fila0 = (e.filas || ['cita-manana'])[0];
+  const tit = e.titular.map((l) => `<div class="fit tit" data-max="545">${marcar(l).replace(/<em>/g, '<em class="v">')}</div>`).join('');
   const baj = (e.bajada || []).map((l) => `<p>${esc(l)}</p>`).join('');
+  const ancho = 880, alto = Math.round((ancho * FILAS[fila0].h) / FILAS[fila0].w) + 40;
+  const top = 742;
   return `<div class="abs" style="inset:0;background:#F4F6F4"></div>
   <img class="abs" src="${url(LOGO_CLARO)}" style="left:64px;top:50px;height:50px;width:auto">
-  <div class="abs" style="left:64px;top:128px;display:flex;flex-direction:column;line-height:1.02;letter-spacing:-.025em;font-weight:800;color:#0C110F">${tit}</div>
-  <div class="abs baj" style="left:64px;top:392px;width:470px;font-size:41px;line-height:1.24;color:#2C3430;font-weight:500">${baj}</div>
-  <img class="abs" src="${url(PERSONA.src)}" style="width:650px;height:${Math.round((650 * PERSONA.h) / PERSONA.w)}px;right:-18px;bottom:0">
-  ${filas[1] ? fila(filas[1], 560, 'left:64px;top:614px;transform:rotate(-1.5deg)') : ''}
-  ${fila(filas[0], 930, 'left:44px;top:756px')}
-  <div class="rot" style="left:64px;top:924px;font-size:26px">Pantalla de Onia · datos de ejemplo</div>
-  <div class="abs" style="left:64px;top:968px"><span class="btn" style="font-size:42px;padding:26px 50px">${wa()}${esc(e.boton || 'Escríbanos por WhatsApp')}</span></div>`;
+  <img class="abs" src="${url(PERSONA.src)}" style="width:820px;height:${Math.round((820 * PERSONA.h) / PERSONA.w)}px;right:-36px;top:256px">
+  <div class="abs" style="left:64px;top:130px;display:flex;flex-direction:column;line-height:1.03;letter-spacing:-.025em;font-weight:800;color:#0C110F">${tit}</div>
+  <div class="abs baj" style="left:64px;top:372px;width:520px;font-size:42px;line-height:1.25;color:#2C3430;font-weight:500">${baj}</div>
+  ${fila(fila0, ancho, `left:36px;top:${top}px`)}
+  <div class="rot" style="left:56px;top:${top + alto + 6}px;font-size:25px;color:#2C3430;background:rgba(244,246,244,.94);padding:3px 12px;border-radius:8px">Pantalla de Onia · datos de ejemplo</div>
+  <div class="abs" style="left:64px;top:984px"><span class="btn" style="font-size:40px;padding:20px 44px">${wa()}${esc(e.boton || 'Escríbanos por WhatsApp')}</span></div>`;
 }
 
 const pagina = (W, H, cuerpo, fondo) => `<!doctype html><html><head><meta charset="utf-8"><style>${CSS}
@@ -182,8 +190,11 @@ html,body{width:${W}px;height:${H}px;background:${fondo || '#0C110F'}}
 </style></head><body><div class="lienzo" style="width:${W}px;height:${H}px">${cuerpo}</div>
 <script>
 // Ajusta cada línea de titular al ancho útil (no se achica a ojo: se mide).
-const maxW = ${W} - 128;
-document.querySelectorAll('.fit').forEach((el)=>{let s=parseFloat(getComputedStyle(el).fontSize);while(el.scrollWidth>maxW&&s>30){s-=2;el.style.fontSize=s+'px';}});
+// Un titular de varias líneas baja TODAS al mismo tamaño (el de la línea más ancha): no se achica cada línea por su cuenta.
+const grupos = new Map();
+document.querySelectorAll('.fit').forEach((el)=>{if(!grupos.has(el.parentElement))grupos.set(el.parentElement,[]);grupos.get(el.parentElement).push(el);});
+grupos.forEach((els)=>{const maxW=parseFloat(els[0].dataset.max||(${W}-128));let s=parseFloat(getComputedStyle(els[0]).fontSize);
+  while(els.some((e)=>e.scrollWidth>maxW)&&s>30){s-=2;els.forEach((e)=>{e.style.fontSize=s+'px';});}});
 document.fonts.ready.then(()=>{document.body.dataset.listo='1'});
 </script></body></html>`;
 

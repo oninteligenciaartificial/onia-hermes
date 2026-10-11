@@ -1,4 +1,4 @@
-# G1-3 · Imagen 1:1: a quién escribirle hoy, ya anotado
+# G1-3 · Imagen 1:1: ¿quién de mañana no confirmó?
 
 > **Prueba 1 v2 · 11-oct-2026 · Ventas y pauta.** Nada se creó en Meta, cero gasto, nadie contactado. Generado por `replica-hojas.mjs` desde `G1-3.json`: se edita el brief, no esta hoja.
 
@@ -11,18 +11,18 @@
 
 | Zona | Referencia (lo que se ve en su captura) | Nuestra |
 |---|---|---|
-| **Titular** | 3 líneas, tercio superior izquierdo (15-39 %), navy y un azul más claro en «poco orden.». | 2 líneas a todo el ancho arriba (checklist del gancho), la 2.ª con el énfasis en verde de Onia. |
-| **Bajada** | Tres bloques de tamaño decreciente (25 %, 25 %, 16 % del ancho). | Tres líneas del mismo tamaño (41 px, ≈ 15 px a 390) para que se lean. |
-| **Persona** | Mujer agobiada a la derecha, cortada por el borde, mira el celular. | Sergio a la derecha, cortado por el borde. **Maqueta:** mira a cámara; la foto real lo muestra mirando el celular (ver «Para Sergio»). |
-| **Burbujas** | 6 burbujas de chat de WhatsApp en la costura, textos de ellos. | 2 tarjetas **reales** de Pendientes, ampliadas; ninguna burbuja inventada. |
+| **Titular** | 3 líneas, tercio superior izquierdo (15-39 %), navy y un azul más claro en «poco orden.». | 2 líneas en la columna izquierda (≤ 17 caracteres cada una), la 2.ª con el énfasis en verde de Onia. Abre con el dolor, como R3. |
+| **Bajada** | Tres bloques de tamaño decreciente (25 %, 25 %, 16 % del ancho). | Tres líneas del mismo tamaño (42 px, ≈ 15 px a 390). |
+| **Persona** | Mujer agobiada a la derecha, cortada por el borde, mira el celular (≈ la mitad del cuadro). | Sergio a la derecha, cortado por el borde, ≈ 2/3 de la altura. **Maqueta:** mira a cámara y sonríe; la foto real lo muestra serio, mirando el celular. |
+| **Burbujas** | 6 burbujas de chat de WhatsApp en la costura, textos de ellos. | UNA tarjeta **real** de Pendientes, grande (≈ 15 px a 390), cruzando la costura; ninguna burbuja inventada. |
 | **Botón** | Dibujado a 80-86 % abajo a la izquierda, «AGENDA UNA DEMO». | Botón verde abajo a la izquierda, «Escríbanos por WhatsApp» (el único llamado). |
 | **Marca** | Sin logo dentro del creativo. | Lockup `onia \| dental` chico arriba a la izquierda. |
 
 ## Gancho (checklist de §9.3)
 
-- **Texto en pantalla:** «A quién escribirle hoy / ya está anotado» (2 líneas de 22 y 15 caracteres, sin punto final, un énfasis).
-- **Se ve (cuadro 0):** Cuadrado 1:1: titular grande arriba a la izquierda; a la derecha Sergio Urcullo de medio cuerpo mirando con calma el celular que sostiene; entre ambos, dos tarjetas reales flotando (filas cita-manana y vuelve de Pendientes, solo el encabezado, sin el mensaje ni el botón de envío) con la leyenda «Pantalla de Onia · datos de ejemplo»; lockup onia | dental pequeño y el botón abajo a la izquierda.
-- **Alinean sin repetirse:** El titular promete la lista ya hecha, las dos tarjetas la muestran con dos motivos distintos (una cita de mañana, alguien que hace meses no vuelve) y Sergio con el celular la lleva a la mano: cada parte aporta algo nuevo y ninguna repite al titular.
+- **Texto en pantalla:** «¿Quién de mañana / no confirmó?» (2 líneas de 16 y 12 caracteres, sin punto final, un énfasis).
+- **Se ve (cuadro 0):** Cuadrado 1:1: titular en la columna izquierda; a la derecha Sergio Urcullo de medio cuerpo con el celular en la mano; cruzando la costura, UNA tarjeta real de Pendientes con «Cita de mañana a las 10:00 sin confirmar», con la leyenda «datos de ejemplo»; el botón abajo a la izquierda.
+- **Alinean sin repetirse:** El titular pregunta quién de mañana no confirmó y la tarjeta real contesta con un caso («Cita de mañana a las 10:00 sin confirmar»); Sergio con el celular muestra de dónde sale. Sin voz: la imagen sola se lee en un segundo.
 - **Alternativa:** «Su lista de la mañana / ya está hecha»
 
 ## El anuncio en Meta
@@ -33,7 +33,7 @@ Texto principal (la primera línea es el filtro):
 Para dueños y dueñas de clínicas dentales de Santa Cruz.
 Si nadie se acuerda de escribirle a un paciente, esa hora igual se paga: sillón, equipo y alquiler.
 Onia es un sistema de gestión para clínicas dentales: en Pendientes, cada mañana le deja anotado quién tiene cita mañana y quién hace meses no vuelve, con el mensaje listo.
-Usted lo aprueba: nada sale sin su OK.
+Usted aprueba cada mensaje: ninguno sale sin su OK.
 Escríbanos por WhatsApp y pida su demostración gratis.
 ```
 
@@ -42,7 +42,7 @@ Escríbanos por WhatsApp y pida su demostración gratis.
 ## Modelar, no clonar
 
 - **Se queda:** Dos columnas con el texto a la izquierda y la persona a la derecha cortada por el borde, las tarjetas flotando en la costura, y el botón abajo a la izquierda.
-- **Cambia:** El dolor (WhatsApp saturado → a quién escribirle hoy), lo que flota (filas reales de la lista, no chats), el nombre, los colores, y el titular pasa a 2 líneas. Sin «IA», sin «sin intervención humana», sin «piloto automático».
+- **Cambia:** El dolor (WhatsApp saturado → quién de mañana no confirmó), lo que flota (una fila real de la lista, no chats), el nombre, los colores y el titular a 2 líneas. Sin «IA», sin «sin intervención humana», sin «piloto automático». La cara de agobio de R3 NO se copia: Sergio no hace de dueño agobiado.
 
 ## Promesas: cada frase atada a su fila
 
@@ -50,11 +50,12 @@ Escríbanos por WhatsApp y pida su demostración gratis.
 |---|---|---|
 | A quién escribirle hoy ya está anotado / Onia revisa su agenda cada mañana | CAT §8 frase 3 · ⬜ sin verificar: corre solo, falta el log del VPS | G-04, G-05, G-06 |
 | Le deja el mensaje listo | CAT §8 frase 3 (son reglas fijas) · ⬜ sin verificar: falta la cuenta demo | G-05, G-06 |
-| Nada sale sin su OK | CAT §8 frase 3 · ⬜ sin verificar: falta la cuenta demo. Ojo: el recordatorio de cita por correo (B-03) sale solo; la frase queda pegada al mensaje de Pendientes y no se amplía | G-01 |
+| Usted aprueba cada mensaje (la bajada de la imagen) | CAT §8 frase 3 · ⬜ sin verificar: falta la cuenta demo. Ojo: el recordatorio de cita por correo (B-03) sale solo; la frase queda pegada al mensaje de Pendientes y no se amplía | G-01 |
 | Tarjeta 1: cita de mañana sin confirmar (fila cita-manana) | Recorte real de Pendientes, captura del candidato del 30-sep · ⬜ sin verificar: falta la cuenta demo | G-06, B-02 |
 | Tarjeta 2: quien hace meses no vuelve (fila vuelve) | Recorte real de Pendientes, captura del candidato del 30-sep · ⬜ sin verificar: falta la cuenta demo | G-05 |
 | Onia es un sistema de gestión para clínicas dentales | CAT §4 · ⬜ sin verificar: falta la cuenta demo | B-01, C-02, D-01, E-01 |
 | Pida su demostración gratis | CTA fija del brief · 🟡 verificada solo en parte: la duración de la llamada no se dice porque la web y los mensajes no coinciden | L-04 |
+| Si nadie se acuerda de escribirle a un paciente, esa hora igual se paga (texto principal) | Hecho del negocio del dueño; no es función de Onia ni promete un resultado. | — |
 
 ## No dice
 
@@ -71,9 +72,9 @@ Escríbanos por WhatsApp y pida su demostración gratis.
 
 ## Lo que graba o fotografía Sergio Urcullo
 
-- Fotografiar de medio cuerpo, a la derecha del encuadre, con luz de ventana y fondo claro y liso, mirando con calma el celular que sostiene con las dos manos; dejar libre la mitad izquierda de la foto.
-- Sacar diez fotos: cinco mirando al celular y cinco mirando a cámara con media sonrisa; en todas, ropa de calle sencilla, sin bata.
-- Dejar la pantalla del celular apagada o en negro: las dos tarjetas con la lista se componen aparte.
+- Fotografiar de medio cuerpo, a la derecha del encuadre, con luz de ventana y fondo claro y liso, mirando el celular que sostiene con las dos manos con gesto serio (no sonriendo a cámara); dejar libre la mitad izquierda de la foto.
+- Sacar diez fotos: cinco mirando al celular y cinco mirando a cámara con gesto serio; en todas, ropa de calle lisa, sin bata y sin logos.
+- Dejar la pantalla del celular apagada o en negro: la tarjeta con la lista se compone aparte.
 - Entregar las fotos en vertical y en horizontal, sin filtros ni retoques y en la mejor resolución.
 
 ## Límites de esta maqueta

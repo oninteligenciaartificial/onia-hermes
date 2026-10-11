@@ -14,17 +14,17 @@
  "gancho": {
   "texto": [
    "Paciente que no llega",
-   "hora que se paga *igual*"
+   "sillón que se paga *igual*"
   ],
-  "voz": "Venga o no el paciente, el sillón se paga.",
+  "voz": "Venga o no el paciente, usted igual paga la hora.",
   "imagen": "Sergio Urcullo en una oficina luminosa, plano medio, mirando a cámara, ropa de oficina; cintilla «Sergio Urcullo · Onia» abajo a la izquierda, logo onia | dental arriba a la derecha y el gancho en dos líneas blancas con la palabra igual en un chip de color.",
-  "alineacion": "El texto nombra el costo (la hora que se paga igual), la voz lo baja a algo concreto (el sillón cuesta lo mismo) y la imagen es quien lo explica, con su nombre en la cintilla: tres capas de la misma idea sin repetir palabras.",
+  "alineacion": "El texto nombra el paciente que no llega y el sillón que se paga; la voz dice que el dueño paga la hora igual; la imagen es una persona con nombre en la cintilla. Tapando una se adivina el resto, sin repetir la frase.",
   "alternativa": [
    "Una hora sin paciente",
    "se paga *igual*"
   ]
  },
- "texto_principal": "Para dueños y dueñas de clínicas dentales de Santa Cruz.\nCuando un paciente no llega, el sillón, el alquiler y el equipo se pagan igual: es plata que no entra.\nSoy Sergio Urcullo, de Onia. Onia es un sistema de gestión para clínicas dentales: en Pendientes, cada mañana le deja anotado a quién escribirle, con el mensaje listo.\nNada sale sin que usted lo apruebe.\nEscríbanos por WhatsApp y pida su demostración gratis.",
+ "texto_principal": "Para dueños y dueñas de clínicas dentales de Santa Cruz.\nCuando un paciente no llega, el sillón, el alquiler y el equipo se pagan igual: es plata que no entra.\nSoy Sergio Urcullo, de Onia. Onia es un sistema de gestión para clínicas dentales: en Pendientes, cada mañana le deja anotado a quién escribirle, con el mensaje listo.\nNingún mensaje de Pendientes sale sin que usted lo apruebe.\nEscríbanos por WhatsApp y pida su demostración gratis.",
  "titular": "Pida su demostración gratis",
  "boton": "Enviar mensaje de WhatsApp",
  "precargado": "Hola, vi el anuncio de Onia (D10). Tengo una clínica dental.",
@@ -35,14 +35,14 @@
    "rol": "inicio",
    "toma": "persona",
    "persona": "centro",
-   "subtitulo": "Paciente que no llega\nhora que se paga *igual*",
+   "subtitulo": "Paciente que no llega\nsillón que se paga *igual*",
    "cintilla": {
     "nombre": "Sergio Urcullo",
     "rol": "Onia"
    },
    "pantalla": null,
    "tarjeta": null,
-   "voz": "Venga o no el paciente, el sillón se paga.",
+   "voz": "Venga o no el paciente, usted igual paga la hora.",
    "zona_de_la_referencia": "Referencia 895549733230235-2.png: el doctor a cámara en su clínica, plano medio, cintilla de nombre abajo a la izquierda, logo arriba a la derecha y subtítulo de dos líneas en blanco con la palabra clave en un chip de color.",
    "logo_fijo": true
   },
@@ -57,13 +57,14 @@
    "pantalla": {
     "fila": "cita-manana",
     "dispositivo": "tablet",
-    "y": 0.76
+    "y": 0.64
    },
    "tarjeta": null,
    "voz": "Aquí, en Pendientes, le deja anotado quién no confirmó. Con el mensaje listo.",
    "zona_de_la_referencia": "R4 cuadro medio: plano más cerrado, a cámara, la tablet entra por abajo a la derecha. La pantalla va grande y legible, no ~6 % del cuadro como en la referencia (ahí es ilegible).",
    "logo_fijo": true,
-   "sub_y": 1215
+   "sub_y": 1045,
+   "persona_y": -170
   },
   {
    "id": "c2",
@@ -89,8 +90,8 @@
   {
    "tramo": "0-3 s",
    "toma": "Sergio a cámara en la oficina, plano medio, cintilla abajo a la izquierda",
-   "voz": "Venga o no el paciente, el sillón se paga.",
-   "en_pantalla": "Subtítulo de dos líneas: Paciente que no llega / hora que se paga *igual*; cintilla Sergio Urcullo · Onia; logo arriba a la derecha"
+   "voz": "Venga o no el paciente, usted igual paga la hora.",
+   "en_pantalla": "Subtítulo de dos líneas: Paciente que no llega / sillón que se paga *igual*; cintilla Sergio Urcullo · Onia; logo onia arriba a la derecha"
   },
   {
    "tramo": "3-9 s",
@@ -113,7 +114,7 @@
   {
    "tramo": "21-26 s",
    "toma": "Vuelve Sergio a cámara",
-   "voz": "Usted lo revisa y lo aprueba. Nada sale sin su OK.",
+   "voz": "Usted aprueba cada mensaje.",
    "en_pantalla": "Subtítulo: Usted lo *aprueba*"
   },
   {
@@ -147,7 +148,7 @@
    ]
   },
   {
-   "frase": "Usted lo revisa y lo aprueba; nada sale sin su OK",
+   "frase": "Usted lo revisa y lo aprueba; ninguno sale sin su OK",
    "fuente": "CAT §8 frase 3 · ⬜ sin verificar: falta la cuenta demo. Ojo: el recordatorio de cita por correo (B-03) sale solo; la frase queda pegada al mensaje de Pendientes y no se amplía",
    "filas": [
     "G-01"
@@ -198,7 +199,8 @@
   "Hablar como Sergio Urcullo, de Onia: su nombre, qué es el sistema y qué se ve en Pendientes; sin contar casos de nadie ni decir que lo usa una clínica.",
   "Tener una tablet a mano (si no hay, el celular) y sostenerla a la altura del pecho, inclinada hacia cámara, durante las frases de Pendientes; la pantalla real se pone en edición, ampliada.",
   "Decir el texto de corrido, de usted, y luego grabar tres veces la última frase (la invitación).",
-  "Entregar la toma sin música; la tarjeta de cierre con el logo la arma la edición."
+  "Entregar la toma sin música; la tarjeta de cierre con el logo la arma la edición.",
+  "Ropa lisa y sin logos ni marcas a la vista (el polo de la maqueta lleva un logo ajeno)."
  ],
  "ficha": "R4",
  "apoyo": "Doctocliq `1684698082830679` (55 d) confirma el patrón y muestra la pantalla real a cuadro completo.",

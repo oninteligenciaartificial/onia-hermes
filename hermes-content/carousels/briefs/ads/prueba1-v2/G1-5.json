@@ -1,6 +1,6 @@
 {
  "id": "G1-5",
- "pieza": "Micro de 10 s: el mensaje listo y su OK",
+ "pieza": "Micro de 10 s: ¿y si no vienen todos los de mañana?",
  "referencia": {
   "anunciante": "Doctocliq",
   "id": "1952892278698712",
@@ -13,18 +13,18 @@
  },
  "gancho": {
   "texto": [
-   "El mensaje al paciente",
-   "ya está *listo*"
+   "Su agenda de mañana",
+   "¿y si no *vienen*?"
   ],
-  "voz": "Onia le deja anotado a quién escribirle.",
-  "imagen": "Sergio Urcullo sentado y quieto, mirando a cámara como en la referencia, con el celular en la mano a la altura del pecho y expresión serena; el gancho en dos líneas sobre la parte baja del cuadro.",
-  "alineacion": "El texto dice que el mensaje ya está listo, la voz dice a quién hay que escribirle y la imagen es alguien con el celular a punto de mostrarlo: texto y voz son dos mitades de la misma frase, no la misma frase.",
+  "voz": "¿Y si no vienen todos los de mañana?",
+  "imagen": "Sergio Urcullo sentado y quieto, mirando a cámara como en la referencia, con el celular en la mano a la altura del pecho y gesto serio; el gancho en dos líneas debajo del mentón.",
+  "alineacion": "La imagen es una persona seria y quieta mirando a cámara, la voz pregunta qué pasa si no vienen todos los de mañana y el texto nombra «su agenda de mañana»: abre con el dolor, no con la función, y no repite la frase.",
   "alternativa": [
-   "Mensaje al paciente",
-   "listo para *aprobar*"
+   "Mañana hay citas",
+   "¿y quién *confirmó*?"
   ]
  },
- "texto_principal": "Para dueños y dueñas de clínicas dentales de Santa Cruz.\nEscribirle a cada paciente, uno por uno, se come la hora más tranquila de la mañana, y esa hora se paga igual.\nOnia es un sistema de gestión para clínicas dentales: en Pendientes, cada mañana le deja anotado a quién escribirle, con el mensaje listo.\nUsted lo lee y lo aprueba; nada sale sin su OK.\nEscríbanos por WhatsApp y pida su demostración gratis.",
+ "texto_principal": "Para dueños y dueñas de clínicas dentales de Santa Cruz.\nEscribirle a cada paciente, uno por uno, se come la hora más tranquila de la mañana, y esa hora se paga igual.\nOnia es un sistema de gestión para clínicas dentales: en Pendientes, cada mañana le deja anotado a quién escribirle, con el mensaje listo.\nUsted aprueba cada mensaje: ninguno sale sin su OK.\nEscríbanos por WhatsApp y pida su demostración gratis.",
  "titular": "Pida su demostración gratis",
  "boton": "Enviar mensaje de WhatsApp",
  "precargado": "Hola, vi el anuncio de Onia (D11). Tengo una clínica dental.",
@@ -35,11 +35,11 @@
    "rol": "inicio",
    "toma": "persona",
    "persona": "centro",
-   "subtitulo": "El mensaje al paciente\nya está *listo*",
+   "subtitulo": "Su agenda de mañana\n¿y si no *vienen*?",
    "cintilla": null,
    "pantalla": null,
    "tarjeta": null,
-   "voz": "Onia le deja anotado a quién escribirle.",
+   "voz": "¿Y si no vienen todos los de mañana?",
    "zona_de_la_referencia": "Referencia 1952892278698712-2.png: persona sentada frente a una pared de color, mirando a cámara, manos quietas, plano medio; una sola línea de subtítulo (aquí, el gancho de dos líneas).",
    "sub_y": 1040
   },
@@ -52,14 +52,15 @@
    "subtitulo": "Usted lo *aprueba*",
    "cintilla": null,
    "pantalla": {
-    "fila": "vuelve",
+    "fila": "cita-manana",
     "dispositivo": "celular",
-    "y": 0.84
+    "y": 0.78
    },
    "tarjeta": null,
-   "voz": "Cada mañana, con el mensaje listo. Usted lo aprueba.",
+   "voz": "Cada mañana Onia le deja anotado a quién escribirle, con el mensaje listo. Usted aprueba cada mensaje.",
    "zona_de_la_referencia": "Referencia 1952892278698712-3.png: la misma persona sentada, otro fondo, mismo plano; aquí Sergio sostiene el celular y la fila de Pendientes ampliada ocupa el tercio central del cuadro, con él detrás.",
-   "sub_y": 975
+   "sub_y": 880,
+   "persona_y": -100
   },
   {
    "id": "c2",
@@ -72,8 +73,9 @@
    "pantalla": null,
    "tarjeta": {
     "lineas": [
-     "USTED *APRUEBA*",
-     "EL MENSAJE"
+     "EL MENSAJE",
+     "LISTO",
+     "CON"
     ],
     "fondo": "verde",
     "logo": true,
@@ -87,21 +89,21 @@
  "guion": [
   {
    "tramo": "0-3 s",
-   "toma": "Sergio sentado, quieto, mirando a cámara, celular en la mano a la altura del pecho",
-   "voz": "Onia le deja anotado a quién escribirle.",
-   "en_pantalla": "Gancho en dos líneas: El mensaje al paciente / ya está *listo*"
+   "toma": "Sergio sentado, quieto, mirando a cámara, celular en la mano a la altura del pecho, gesto serio",
+   "voz": "¿Y si no vienen todos los de mañana?",
+   "en_pantalla": "Gancho en dos líneas: Su agenda de mañana / ¿y si no *vienen*?"
   },
   {
    "tramo": "3-7 s",
-   "toma": "Sergio levanta el celular; la fila vuelve de Pendientes ampliada ocupa el tercio central, con él detrás",
-   "voz": "Cada mañana, con el mensaje listo. Usted lo aprueba.",
-   "en_pantalla": "Fila vuelve legible a 390 px de ancho (nunca el mensaje ni el botón de envío) con la leyenda «Pantalla de Onia · datos de ejemplo»; subtítulo de una línea: Usted lo *aprueba*"
+   "toma": "Sergio levanta el celular; la fila cita-manana de Pendientes, ampliada, debajo del mentón, con la leyenda «Pantalla de Onia · datos de ejemplo»",
+   "voz": "Cada mañana Onia le deja anotado a quién escribirle, con el mensaje listo. Usted aprueba cada mensaje.",
+   "en_pantalla": "Usted *aprueba* (subtítulo) + fila real"
   },
   {
    "tramo": "7-10 s",
-   "toma": "Tarjeta final de color plano",
+   "toma": "Corte seco a tarjeta verde plana: «EL MENSAJE / LISTO / CON» y el logo; abajo, una línea con el llamado",
    "voz": "Pida su demostración gratis.",
-   "en_pantalla": "Mayúsculas blancas: USTED APRUEBA / EL MENSAJE; logo onia | dental; línea final: PIDA SU DEMOSTRACIÓN GRATIS"
+   "en_pantalla": "EL MENSAJE / LISTO / CON + logo onia + «Pida su demostración *gratis*»"
   }
  ],
  "promesas": [
@@ -115,7 +117,7 @@
    ]
   },
   {
-   "frase": "El mensaje al paciente ya está listo",
+   "frase": "El mensaje listo, con Onia (tarjeta final)",
    "fuente": "CAT §8 frase 3 (son reglas fijas) · ⬜ sin verificar: falta la cuenta demo",
    "filas": [
     "G-05",
@@ -123,7 +125,7 @@
    ]
   },
   {
-   "frase": "Usted aprueba el mensaje; nada sale sin su OK",
+   "frase": "Usted aprueba el mensaje; ninguno sale sin su OK",
    "fuente": "CAT §8 frase 3 · ⬜ sin verificar: falta la cuenta demo. Ojo: el recordatorio de cita por correo (B-03) sale solo; en la tarjeta la frase se acota a «el mensaje» (el de Pendientes) y no dice «nada» a secas",
    "filas": [
     "G-01"
@@ -169,7 +171,8 @@
   "Grabar cinco veces la primera frase (Onia le deja anotado a quién escribirle), con ritmo pausado: es lo único que lleva su cara en los 10 s.",
   "Grabar tres veces la frase del segundo tramo, primero mirando el celular y al final a cámara.",
   "Si hay otra pared o ventana disponible, grabar una toma extra con otro fondo (la referencia cambia de fondo a mitad).",
-  "La tarjeta final y el logo los pone la edición."
+  "La tarjeta final y el logo los pone la edición.",
+  "Ropa lisa y sin logos ni marcas a la vista (el polo de la maqueta lleva un logo ajeno)."
  ],
  "ficha": "R5",
  "apoyo": "Doctocliq `1748838402916201` (85 d, 11-oct) es el mismo creativo con otro id: lo repiten.",
@@ -187,12 +190,12 @@
   [
    "Cierre",
    "Corte seco a tarjeta celeste plana: «REDUCE / CANCELACIONES / CON» + logo blanco (4:5).",
-   "Corte seco a tarjeta verde plana: «USTED APRUEBA / EL MENSAJE» + logo blanco (4:5)."
+   "Corte seco a tarjeta verde plana: «EL MENSAJE / LISTO / CON» + logo blanco + una línea con el llamado (4:5). Misma estructura: promesa que termina en el nombre del producto."
   ],
   [
    "Texto",
    "«Doctora, tu tiempo (y tu almuerzo) valen demasiado para que te cancelen a última hora.»",
-   "Otra idea: el mensaje al paciente ya listo y que lo aprueba usted. Sin almuerzo, sin «cancelen», sin resultado prometido."
+   "Otra idea: pregunta por la agenda de mañana (el dolor) y la lista con el mensaje listo (el mecanismo). Sin almuerzo, sin «cancelen», sin resultado prometido."
   ],
   [
    "Largo",

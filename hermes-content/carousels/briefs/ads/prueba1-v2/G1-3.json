@@ -1,6 +1,6 @@
 {
  "id": "G1-3",
- "pieza": "Imagen 1:1: a quién escribirle hoy, ya anotado",
+ "pieza": "Imagen 1:1: ¿quién de mañana no confirmó?",
  "referencia": {
   "anunciante": "CitaPro",
   "id": "2253602242100999",
@@ -13,37 +13,37 @@
  },
  "gancho": {
   "texto": [
-   "A quién escribirle hoy",
-   "ya está *anotado*"
+   "¿Quién de mañana",
+   "no *confirmó*?"
   ],
   "voz": null,
-  "imagen": "Cuadrado 1:1: titular grande arriba a la izquierda; a la derecha Sergio Urcullo de medio cuerpo mirando con calma el celular que sostiene; entre ambos, dos tarjetas reales flotando (filas cita-manana y vuelve de Pendientes, solo el encabezado, sin el mensaje ni el botón de envío) con la leyenda «Pantalla de Onia · datos de ejemplo»; lockup onia | dental pequeño y el botón abajo a la izquierda.",
-  "alineacion": "El titular promete la lista ya hecha, las dos tarjetas la muestran con dos motivos distintos (una cita de mañana, alguien que hace meses no vuelve) y Sergio con el celular la lleva a la mano: cada parte aporta algo nuevo y ninguna repite al titular.",
+  "imagen": "Cuadrado 1:1: titular en la columna izquierda; a la derecha Sergio Urcullo de medio cuerpo con el celular en la mano; cruzando la costura, UNA tarjeta real de Pendientes con «Cita de mañana a las 10:00 sin confirmar», con la leyenda «datos de ejemplo»; el botón abajo a la izquierda.",
+  "alineacion": "El titular pregunta quién de mañana no confirmó y la tarjeta real contesta con un caso («Cita de mañana a las 10:00 sin confirmar»); Sergio con el celular muestra de dónde sale. Sin voz: la imagen sola se lee en un segundo.",
   "alternativa": [
    "Su lista de la mañana",
    "ya está *hecha*"
   ]
  },
- "texto_principal": "Para dueños y dueñas de clínicas dentales de Santa Cruz.\nSi nadie se acuerda de escribirle a un paciente, esa hora igual se paga: sillón, equipo y alquiler.\nOnia es un sistema de gestión para clínicas dentales: en Pendientes, cada mañana le deja anotado quién tiene cita mañana y quién hace meses no vuelve, con el mensaje listo.\nUsted lo aprueba: nada sale sin su OK.\nEscríbanos por WhatsApp y pida su demostración gratis.",
+ "texto_principal": "Para dueños y dueñas de clínicas dentales de Santa Cruz.\nSi nadie se acuerda de escribirle a un paciente, esa hora igual se paga: sillón, equipo y alquiler.\nOnia es un sistema de gestión para clínicas dentales: en Pendientes, cada mañana le deja anotado quién tiene cita mañana y quién hace meses no vuelve, con el mensaje listo.\nUsted aprueba cada mensaje: ninguno sale sin su OK.\nEscríbanos por WhatsApp y pida su demostración gratis.",
  "titular": "Pida su demostración gratis",
  "boton": "Enviar mensaje de WhatsApp",
  "precargado": "Hola, vi el anuncio de Onia (D9). Tengo una clínica dental.",
  "cuadros": [],
  "estatico": {
   "titular": [
-   "A quién escribirle hoy",
-   "ya está *anotado*"
+   "¿Quién de mañana",
+   "no *confirmó*?"
   ],
   "enfasis": "anotado",
   "bajada": [
-   "Onia revisa su agenda cada mañana.",
-   "Le deja el mensaje listo.",
-   "Nada sale sin su OK."
+   "Onia le deja la lista",
+   "con el mensaje listo.",
+   "Usted aprueba",
+   "cada mensaje."
   ],
   "boton": "Escríbanos por WhatsApp",
   "filas": [
-   "cita-manana",
-   "vuelve"
+   "cita-manana"
   ]
  },
  "guion": null,
@@ -66,7 +66,7 @@
    ]
   },
   {
-   "frase": "Nada sale sin su OK",
+   "frase": "Usted aprueba cada mensaje (la bajada de la imagen)",
    "fuente": "CAT §8 frase 3 · ⬜ sin verificar: falta la cuenta demo. Ojo: el recordatorio de cita por correo (B-03) sale solo; la frase queda pegada al mensaje de Pendientes y no se amplía",
    "filas": [
     "G-01"
@@ -123,9 +123,9 @@
   "No muestra el texto del mensaje al paciente ni el botón de envío de la pantalla."
  ],
  "para_sergio": [
-  "Fotografiar de medio cuerpo, a la derecha del encuadre, con luz de ventana y fondo claro y liso, mirando con calma el celular que sostiene con las dos manos; dejar libre la mitad izquierda de la foto.",
-  "Sacar diez fotos: cinco mirando al celular y cinco mirando a cámara con media sonrisa; en todas, ropa de calle sencilla, sin bata.",
-  "Dejar la pantalla del celular apagada o en negro: las dos tarjetas con la lista se componen aparte.",
+  "Fotografiar de medio cuerpo, a la derecha del encuadre, con luz de ventana y fondo claro y liso, mirando el celular que sostiene con las dos manos con gesto serio (no sonriendo a cámara); dejar libre la mitad izquierda de la foto.",
+  "Sacar diez fotos: cinco mirando al celular y cinco mirando a cámara con gesto serio; en todas, ropa de calle lisa, sin bata y sin logos.",
+  "Dejar la pantalla del celular apagada o en negro: la tarjeta con la lista se compone aparte.",
   "Entregar las fotos en vertical y en horizontal, sin filtros ni retoques y en la mejor resolución."
  ],
  "ficha": "R3",
@@ -134,22 +134,22 @@
   [
    "Titular",
    "3 líneas, tercio superior izquierdo (15-39 %), navy y un azul más claro en «poco orden.».",
-   "2 líneas a todo el ancho arriba (checklist del gancho), la 2.ª con el énfasis en verde de Onia."
+   "2 líneas en la columna izquierda (≤ 17 caracteres cada una), la 2.ª con el énfasis en verde de Onia. Abre con el dolor, como R3."
   ],
   [
    "Bajada",
    "Tres bloques de tamaño decreciente (25 %, 25 %, 16 % del ancho).",
-   "Tres líneas del mismo tamaño (41 px, ≈ 15 px a 390) para que se lean."
+   "Tres líneas del mismo tamaño (42 px, ≈ 15 px a 390)."
   ],
   [
    "Persona",
-   "Mujer agobiada a la derecha, cortada por el borde, mira el celular.",
-   "Sergio a la derecha, cortado por el borde. **Maqueta:** mira a cámara; la foto real lo muestra mirando el celular (ver «Para Sergio»)."
+   "Mujer agobiada a la derecha, cortada por el borde, mira el celular (≈ la mitad del cuadro).",
+   "Sergio a la derecha, cortado por el borde, ≈ 2/3 de la altura. **Maqueta:** mira a cámara y sonríe; la foto real lo muestra serio, mirando el celular."
   ],
   [
    "Burbujas",
    "6 burbujas de chat de WhatsApp en la costura, textos de ellos.",
-   "2 tarjetas **reales** de Pendientes, ampliadas; ninguna burbuja inventada."
+   "UNA tarjeta **real** de Pendientes, grande (≈ 15 px a 390), cruzando la costura; ninguna burbuja inventada."
   ],
   [
    "Botón",
@@ -164,6 +164,6 @@
  ],
  "modelado": {
   "se_queda": "Dos columnas con el texto a la izquierda y la persona a la derecha cortada por el borde, las tarjetas flotando en la costura, y el botón abajo a la izquierda.",
-  "cambia": "El dolor (WhatsApp saturado → a quién escribirle hoy), lo que flota (filas reales de la lista, no chats), el nombre, los colores, y el titular pasa a 2 líneas. Sin «IA», sin «sin intervención humana», sin «piloto automático»."
+  "cambia": "El dolor (WhatsApp saturado → quién de mañana no confirmó), lo que flota (una fila real de la lista, no chats), el nombre, los colores y el titular a 2 líneas. Sin «IA», sin «sin intervención humana», sin «piloto automático». La cara de agobio de R3 NO se copia: Sergio no hace de dueño agobiado."
  }
 }

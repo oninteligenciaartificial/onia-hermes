@@ -1,4 +1,4 @@
-# G1-5 · Micro de 10 s: el mensaje listo y su OK
+# G1-5 · Micro de 10 s: ¿y si no vienen todos los de mañana?
 
 > **Prueba 1 v2 · 11-oct-2026 · Ventas y pauta.** Nada se creó en Meta, cero gasto, nadie contactado. Generado por `replica-hojas.mjs` desde `G1-5.json`: se edita el brief, no esta hoja.
 
@@ -13,25 +13,25 @@
 |---|---|---|
 | **Persona** | Doctora sentada, frontal, plano americano, mira a cámara, cara en 9-36 % del alto; sin subtítulos en los cuadros vistos. | Sergio sentado, frontal, mirada a cámara. **Maqueta:** busto. **Cambia:** lleva subtítulo, porque el checklist del gancho pide el texto en pantalla. |
 | **Medio** | Misma pose; el fondo cambia a consultorio. | Misma pose + la fila real de Pendientes, debajo del mentón. |
-| **Cierre** | Corte seco a tarjeta celeste plana: «REDUCE / CANCELACIONES / CON» + logo blanco (4:5). | Corte seco a tarjeta verde plana: «USTED APRUEBA / EL MENSAJE» + logo blanco (4:5). |
-| **Texto** | «Doctora, tu tiempo (y tu almuerzo) valen demasiado para que te cancelen a última hora.» | Otra idea: el mensaje al paciente ya listo y que lo aprueba usted. Sin almuerzo, sin «cancelen», sin resultado prometido. |
+| **Cierre** | Corte seco a tarjeta celeste plana: «REDUCE / CANCELACIONES / CON» + logo blanco (4:5). | Corte seco a tarjeta verde plana: «EL MENSAJE / LISTO / CON» + logo blanco + una línea con el llamado (4:5). Misma estructura: promesa que termina en el nombre del producto. |
+| **Texto** | «Doctora, tu tiempo (y tu almuerzo) valen demasiado para que te cancelen a última hora.» | Otra idea: pregunta por la agenda de mañana (el dolor) y la lista con el mensaje listo (el mecanismo). Sin almuerzo, sin «cancelen», sin resultado prometido. |
 | **Largo** | 10,2 s. | 10 s. |
 
 ## Gancho (checklist de §9.3)
 
-- **Texto en pantalla:** «El mensaje al paciente / ya está listo» (2 líneas de 22 y 13 caracteres, sin punto final, un énfasis).
-- **Se ve (cuadro 0):** Sergio Urcullo sentado y quieto, mirando a cámara como en la referencia, con el celular en la mano a la altura del pecho y expresión serena; el gancho en dos líneas sobre la parte baja del cuadro.
-- **Se dice:** «Onia le deja anotado a quién escribirle.»
-- **Alinean sin repetirse:** El texto dice que el mensaje ya está listo, la voz dice a quién hay que escribirle y la imagen es alguien con el celular a punto de mostrarlo: texto y voz son dos mitades de la misma frase, no la misma frase.
-- **Alternativa:** «Mensaje al paciente / listo para aprobar»
+- **Texto en pantalla:** «Su agenda de mañana / ¿y si no vienen?» (2 líneas de 19 y 16 caracteres, sin punto final, un énfasis).
+- **Se ve (cuadro 0):** Sergio Urcullo sentado y quieto, mirando a cámara como en la referencia, con el celular en la mano a la altura del pecho y gesto serio; el gancho en dos líneas debajo del mentón.
+- **Se dice:** «¿Y si no vienen todos los de mañana?»
+- **Alinean sin repetirse:** La imagen es una persona seria y quieta mirando a cámara, la voz pregunta qué pasa si no vienen todos los de mañana y el texto nombra «su agenda de mañana»: abre con el dolor, no con la función, y no repite la frase.
+- **Alternativa:** «Mañana hay citas / ¿y quién confirmó?»
 
 ## Guion
 
 | Tramo | Toma | Se dice | En pantalla |
 |---|---|---|---|
-| 0-3 s | Sergio sentado, quieto, mirando a cámara, celular en la mano a la altura del pecho | Onia le deja anotado a quién escribirle. | Gancho en dos líneas: El mensaje al paciente / ya está *listo* |
-| 3-7 s | Sergio levanta el celular; la fila vuelve de Pendientes ampliada ocupa el tercio central, con él detrás | Cada mañana, con el mensaje listo. Usted lo aprueba. | Fila vuelve legible a 390 px de ancho (nunca el mensaje ni el botón de envío) con la leyenda «Pantalla de Onia · datos de ejemplo»; subtítulo de una línea: Usted lo *aprueba* |
-| 7-10 s | Tarjeta final de color plano | Pida su demostración gratis. | Mayúsculas blancas: USTED APRUEBA / EL MENSAJE; logo onia \| dental; línea final: PIDA SU DEMOSTRACIÓN GRATIS |
+| 0-3 s | Sergio sentado, quieto, mirando a cámara, celular en la mano a la altura del pecho, gesto serio | ¿Y si no vienen todos los de mañana? | Gancho en dos líneas: Su agenda de mañana / ¿y si no *vienen*? |
+| 3-7 s | Sergio levanta el celular; la fila cita-manana de Pendientes, ampliada, debajo del mentón, con la leyenda «Pantalla de Onia · datos de ejemplo» | Cada mañana Onia le deja anotado a quién escribirle, con el mensaje listo. Usted aprueba cada mensaje. | Usted *aprueba* (subtítulo) + fila real |
+| 7-10 s | Corte seco a tarjeta verde plana: «EL MENSAJE / LISTO / CON» y el logo; abajo, una línea con el llamado | Pida su demostración gratis. | EL MENSAJE / LISTO / CON + logo onia + «Pida su demostración *gratis*» |
 
 ## El anuncio en Meta
 
@@ -41,7 +41,7 @@ Texto principal (la primera línea es el filtro):
 Para dueños y dueñas de clínicas dentales de Santa Cruz.
 Escribirle a cada paciente, uno por uno, se come la hora más tranquila de la mañana, y esa hora se paga igual.
 Onia es un sistema de gestión para clínicas dentales: en Pendientes, cada mañana le deja anotado a quién escribirle, con el mensaje listo.
-Usted lo lee y lo aprueba; nada sale sin su OK.
+Usted aprueba cada mensaje: ninguno sale sin su OK.
 Escríbanos por WhatsApp y pida su demostración gratis.
 ```
 
@@ -57,10 +57,11 @@ Escríbanos por WhatsApp y pida su demostración gratis.
 | Frase | Fuente y estado | Filas que tienen que estar en ✅ |
 |---|---|---|
 | Onia le deja anotado a quién escribirle, cada mañana | CAT §8 frase 3 · ⬜ sin verificar: corre solo, falta el log del VPS | G-04, G-05, G-06 |
-| El mensaje al paciente ya está listo | CAT §8 frase 3 (son reglas fijas) · ⬜ sin verificar: falta la cuenta demo | G-05, G-06 |
-| Usted aprueba el mensaje; nada sale sin su OK | CAT §8 frase 3 · ⬜ sin verificar: falta la cuenta demo. Ojo: el recordatorio de cita por correo (B-03) sale solo; en la tarjeta la frase se acota a «el mensaje» (el de Pendientes) y no dice «nada» a secas | G-01 |
+| El mensaje listo, con Onia (tarjeta final) | CAT §8 frase 3 (son reglas fijas) · ⬜ sin verificar: falta la cuenta demo | G-05, G-06 |
+| Usted aprueba el mensaje; ninguno sale sin su OK | CAT §8 frase 3 · ⬜ sin verificar: falta la cuenta demo. Ojo: el recordatorio de cita por correo (B-03) sale solo; en la tarjeta la frase se acota a «el mensaje» (el de Pendientes) y no dice «nada» a secas | G-01 |
 | Onia es un sistema de gestión para clínicas dentales | CAT §4 · ⬜ sin verificar: falta la cuenta demo | B-01, C-02, D-01, E-01 |
 | Pida su demostración gratis | CTA fija del brief · 🟡 verificada solo en parte: la duración de la llamada no se dice porque la web y los mensajes no coinciden | L-04 |
+| Escribirle a cada paciente se come la hora más tranquila de la mañana (texto principal) | Hecho del negocio del dueño; no es función de Onia ni promete un resultado. | — |
 
 ## No dice
 
@@ -82,6 +83,7 @@ Escríbanos por WhatsApp y pida su demostración gratis.
 - Grabar tres veces la frase del segundo tramo, primero mirando el celular y al final a cámara.
 - Si hay otra pared o ventana disponible, grabar una toma extra con otro fondo (la referencia cambia de fondo a mitad).
 - La tarjeta final y el logo los pone la edición.
+- Ropa lisa y sin logos ni marcas a la vista (el polo de la maqueta lleva un logo ajeno).
 
 ## Límites de esta maqueta
 

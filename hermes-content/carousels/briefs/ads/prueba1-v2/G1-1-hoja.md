@@ -12,7 +12,7 @@
 | Zona | Referencia (lo que se ve en su captura) | Nuestra |
 |---|---|---|
 | **Persona** | Joven de pelo largo sentada afuera, plano entero (cabeza a pies), cara en el tercio superior (17-75 % del alto), cámara fija, mira a cámara y gesticula. | Sergio Urcullo sentado, ropa de calle, misma toma fija. **Maqueta:** busto recortado; la toma real es plano medio-largo. |
-| **Subtítulo** | 4-5 palabras por línea, violeta con contorno blanco; cambia de altura (33 % → 69-75 % → 47-57 %). | Blanco con sombra y UNA palabra en el chip amarillo del «Pendiente» de la app; también cambia de altura (69 % → 63 % → 79 %). |
+| **Subtítulo** | 4-5 palabras por línea, violeta con contorno blanco; cambia de altura (33 % → 69-75 % → 47-57 %). | Verde de Onia con contorno blanco (como el violeta de R1, sin chip); también cambia de altura (69 % → 53 % → 79 %). |
 | **Producto** | Ni logo ni pantalla en ningún momento visto. | **Cambia a propósito:** la fila real de Pendientes en el medio (regla «producto visible o no sale»). |
 | **Marca / cierre** | «dt.dental» enorme (47-57 %) dentro del último subtítulo; sin tarjeta final. | «onia» enorme sobre el torso + «Pida su demostración gratis»; sin tarjeta final. |
 | **CTA** | Botón de la tarjeta «Ir al perfil de Instagram». | Botón de Meta «Enviar mensaje de WhatsApp». Ninguna referencia va a WhatsApp: es hipótesis de Onia (ADQ §5.10). |
@@ -20,10 +20,10 @@
 
 ## Gancho (checklist de §9.3)
 
-- **Texto en pantalla:** «Citas de mañana / sin confirmar» (2 líneas de 15 y 13 caracteres, sin punto final, un énfasis).
+- **Texto en pantalla:** «Pacientes de mañana / sin confirmar» (2 líneas de 19 y 13 caracteres, sin punto final, un énfasis).
 - **Se ve (cuadro 0):** Sergio Urcullo sentado en un banco o escalón al aire libre, plano medio-largo, mirando a cámara con el celular en la mano apoyada en la rodilla; el gancho va en un chip sobre las rodillas.
 - **Se dice:** «¿Sabe si vendrán todos los de mañana?»
-- **Alinean sin repetirse:** La imagen es alguien con el celular que va a contar algo de su agenda, el texto nombra el problema (citas de mañana sin confirmar) y la voz lo vuelve duda (si vendrán todos): cada uno dice una parte distinta de lo mismo y ninguno copia al otro.
+- **Alinean sin repetirse:** La voz pregunta si vendrán todos los de mañana, el chip dice «Pacientes de mañana / sin confirmar» y la imagen es Sergio sentado, quieto, con el celular en la rodilla: tapando cualquiera de las tres se adivinan las otras dos sin repetir la frase.
 - **Alternativa:** «Mañana hay citas / en duda»
 
 ## Guion
@@ -33,7 +33,7 @@
 | 0-3 s | Selfie sentado, plano medio-largo, celular en la mano apoyada en la rodilla | ¿Sabe si vendrán todos los de mañana? | Gancho en chip, tercio inferior: Citas de mañana / sin *confirmar* |
 | 3-9 s | Misma toma; el chip sube a la altura de la cabeza | Soy Sergio Urcullo, de Onia. Esto es lo que le deja cada mañana. | Subtítulo en chip: Soy Sergio Urcullo, de *Onia* |
 | 9-18 s | Sergio levanta el celular; la fila de Pendientes ampliada ocupa casi todo el ancho | Onia revisa su agenda cada mañana. Le deja anotado quién tiene cita mañana y no confirmó. Y el mensaje, listo. | Fila cita-manana legible a 390 px de ancho (texto ampliado, nunca el mensaje ni el botón de envío) con la leyenda «Pantalla de Onia · datos de ejemplo»; subtítulo: Quién tiene cita mañana y *no confirmó* |
-| 18-23 s | Vuelve la selfie; el chip va al centro | Usted lo aprueba. Nada sale sin su OK. | Subtítulo en chip: Usted lo *aprueba* |
+| 18-23 s | Vuelve la selfie; el chip va al centro | Usted aprueba cada mensaje. | Subtítulo en chip: Usted lo *aprueba* |
 | 23-28 s | Selfie, mirando a cámara | Escríbanos por WhatsApp y pida su demostración gratis. | Chip centrado: Pida su demostración *gratis* |
 
 ## El anuncio en Meta
@@ -44,7 +44,7 @@ Texto principal (la primera línea es el filtro):
 Para dueños y dueñas de clínicas dentales de Santa Cruz.
 La víspera de cada cita es una duda: ¿vendrá o no? Mientras tanto, el sillón y el equipo ya están pagados.
 Onia es un sistema de gestión para clínicas dentales: en Pendientes, cada mañana le deja anotado quién tiene cita mañana y no confirmó, con el mensaje listo.
-Nada sale sin que usted lo apruebe.
+Ningún mensaje de Pendientes sale sin que usted lo apruebe.
 Escríbanos por WhatsApp y pida su demostración gratis.
 ```
 
@@ -53,7 +53,7 @@ Escríbanos por WhatsApp y pida su demostración gratis.
 ## Modelar, no clonar
 
 - **Se queda:** Una persona sentada hablándole a cámara sin producción, subtítulos grandes que cambian de altura y el nombre de la marca grande al final.
-- **Cambia:** El tema (una norma colombiana de reporte: Onia no tiene una obligación que anunciar) por el dolor de la clínica dental; el mecanismo (Pendientes); el nombre y los colores (marca de la web, no violeta). Suma la pantalla real, que la referencia no tiene.
+- **Cambia:** El tema (una norma colombiana de reporte: Onia no tiene una obligación que anunciar) por el dolor de la clínica dental; el mecanismo (Pendientes); el nombre y los colores (marca de la web, no violeta). Suma la pantalla real, que la referencia no tiene. Los subtítulos de R1 son de color de marca con contorno claro y SIN chip: acá van en el verde de Onia con contorno blanco.
 
 ## Promesas: cada frase atada a su fila
 
@@ -62,9 +62,10 @@ Escríbanos por WhatsApp y pida su demostración gratis.
 | Cada mañana Onia revisa su agenda | CAT §8 frase 3 · ⬜ sin verificar: corre solo, falta el log del VPS | G-04 |
 | Le deja anotado quién tiene cita mañana y no confirmó | CAT §8 frase 3 (son reglas fijas) · ⬜ sin verificar: falta la cuenta demo | G-06, B-02 |
 | Y el mensaje, listo | CAT §8 frase 3 · ⬜ sin verificar: falta la cuenta demo | G-06 |
-| Usted lo aprueba; nada sale sin su OK | CAT §8 frase 3 · ⬜ sin verificar: falta la cuenta demo. Ojo: el recordatorio de cita por correo (B-03) sale solo; la frase queda pegada al mensaje de Pendientes y no se amplía | G-01 |
+| Usted lo aprueba; ninguno sale sin su OK | CAT §8 frase 3 · ⬜ sin verificar: falta la cuenta demo. Ojo: el recordatorio de cita por correo (B-03) sale solo; la frase queda pegada al mensaje de Pendientes y no se amplía | G-01 |
 | Onia es un sistema de gestión para clínicas dentales | CAT §4 · ⬜ sin verificar: falta la cuenta demo | B-01, C-02, D-01, E-01 |
 | Pida su demostración gratis | CTA fija del brief · 🟡 verificada solo en parte: la duración de la llamada no se dice porque la web y los mensajes no coinciden | L-04 |
+| El sillón y el equipo ya están pagados (texto principal) | Hecho del negocio del dueño; no es función de Onia ni promete un resultado. | — |
 
 ## No dice
 
@@ -85,6 +86,7 @@ Escríbanos por WhatsApp y pida su demostración gratis.
 - Decir el texto de corrido, de usted y con voz natural: una toma completa de 25 a 30 s y tres tomas extra de la última frase (la invitación).
 - Tener el celular en la mano apoyada en la rodilla durante toda la toma y levantarlo en las frases de Pendientes; la pantalla de Onia se pone en edición, no hace falta mostrarla.
 - Probar 10 s de audio antes para comprobar que no hay ruido de calle.
+- Ropa lisa y sin logos ni marcas a la vista (el polo de la maqueta lleva un logo ajeno).
 
 ## Límites de esta maqueta
 

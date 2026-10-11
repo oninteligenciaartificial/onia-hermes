@@ -195,7 +195,7 @@ test("el renderer pone «Pantalla de Onia · datos de ejemplo» en CADA lugar do
   const fuente = leer(".claude/skills/onia-ventas-pauta/scripts/replica-render.mjs");
   const leyendas = fuente.match(/Pantalla de Onia · datos de ejemplo/g) ?? [];
   assert.ok(leyendas.length >= 3, `la leyenda aparece ${leyendas.length} veces; hacen falta 3: tarjeta flotante, tarjeta centrada y la imagen`);
-  assert.ok(/if \(flotando\) \{[\s\S]{0,400}datos de ejemplo/.test(fuente), "la tarjeta flotante lleva su leyenda");
+  assert.ok(/if \(flotando\) cuerpo \+= .{0,200}datos de ejemplo/.test(fuente), "la tarjeta flotante lleva su leyenda");
   assert.ok(/if \(!flotando\) cuerpo \+= .{0,200}datos de ejemplo/.test(fuente), "la tarjeta centrada lleva su leyenda");
-  assert.ok(/<div class="rot" style="left:64px;top:924px[^>]*>Pantalla de Onia · datos de ejemplo/.test(fuente), "la imagen 1:1 lleva su leyenda");
+  assert.ok(/function htmlEstatico[\s\S]*<div class="rot"[^>]*>Pantalla de Onia · datos de ejemplo/.test(fuente), "la imagen 1:1 lleva su leyenda");
 });
