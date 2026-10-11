@@ -404,11 +404,12 @@ test("LISTA DEL BOT: cada frase citada es la que el motor real del bot dice (ad,
 test("LISTA DEL BOT: los textos corregidos no prometen lo prohibido, ni el agente de WhatsApp, ni otros minutos que los 30 del bot, ni voseo", () => {
   const secciones = listaBot.split("## 3. Los textos corregidos")[1].split("## 4.")[0];
   const bloques = secciones.split("\n").filter((l) => l.startsWith(">")).map((l) => l.replace(/^>\s?/, "")).filter(Boolean);
-  assert.ok(bloques.length >= 3, "ancla: los dos textos corregidos (la línea 3 de la presentación y el de precios en dos párrafos)");
+  assert.equal(bloques.length, 2, "ancla: los dos textos que se proponen (la línea 3 de la presentación y la última frase de la FAQ de precios); las frases 14 y 15 se quedan");
   for (const t of bloques) {
     assert.deepEqual(promesasEn(t), [], `promete algo prohibido: «${t.slice(0, 70)}…»`);
     assert.ok(!/chatbot|agente de WhatsApp|Bs 390|\b(?!30\b)\d+\s*minutos\b|SUS n[uú]meros|c[oó]mo quedar[ií]a en SU negocio/i.test(t), `lo que la lista saca vuelve a aparecer (el bot dice 30 minutos, decidido el 6-ago; otro número no): «${t.slice(0, 60)}…»`);
     assert.ok(!/\b(vos|tenés|querés|podés|tu |tus |contame|escribinos|sos)\b/i.test(t), `voseo o tuteo en «${t.slice(0, 50)}…»`);
   }
-  assert.ok(bloques.some((t) => /Bs 320.*Bs 1\.290/.test(t)), "el texto de precios conserva los cuatro planes");
+  assert.match(listaBot, /\| 14 \| «que ya trae el chatbot de WhatsApp adentro\.» .*\| ❌ \| \*\*Se queda\*\*/, "la frase 14 sigue en ❌ y la lista no propone cambiarla");
+  assert.match(listaBot, /\| 15 \| «En el Básico, el Crece y el Profesional el chatbot va aparte, Bs 390 al mes\.» .*\| ❌ \| \*\*Se queda\*\*/, "la 15, igual");
 });

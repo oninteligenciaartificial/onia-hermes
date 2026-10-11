@@ -10,7 +10,7 @@
 |---|---|---|---|
 | **10** | **1** | **8** | **2** |
 
-**Lo que sí frena:** dos frases de la respuesta al **precio** (14 y 15) venden el agente de WhatsApp, que el catálogo §5 marca ⏸ y la tabla marca ❌ (J-01, J-07, K-13). **Un lead de pauta que pregunta «¿cuánto cuesta?» las recibiría según el repo (no se verificó producción).** El detector de promesas no las ve porque son precio, no «promete». **Pisan una decisión anterior del dueño** (ver bajo la tabla del precio): la decide Sergio Urcullo, no esta lista. **Lo demás no frena la prueba:** son frases que pasan a ✅ cuando Plataforma mire las filas con la cuenta demo, o decisiones de Sergio Urcullo.
+**Decisión ya tomada (11-oct, MADRE MARKETING): las frases 14 y 15 se quedan.** Nombran el agente de WhatsApp y su Bs 390 en la respuesta al precio, y las filas J-01, J-07 y K-13 y el catálogo §5 (⏸) dicen que hoy no se puede prometer; **se quedan por la decisión del 3-sep** (`precios-publicos.mjs`, `config.mjs`) y porque `precios-publicos.test.mjs` exige el «390». Esta lista **las marca ❌ porque eso dice la tabla, y no propone cambiarlas**. El detector de promesas no las ve porque son precio, no «promete». **Lo demás no frena la prueba:** son frases que pasan a ✅ cuando Plataforma mire las filas con la cuenta demo, o decisiones de Sergio Urcullo.
 
 ## 2. Frase por frase
 
@@ -48,12 +48,12 @@
 | # | Frase del bot | Fila(s) | Estado | Corrección propuesta |
 |---|---|---|---|---|
 | 13 | «el sistema arranca en Bs 320 al mes con el plan Básico, Bs 550 el Crece, Bs 890 el Profesional y Bs 1.290 el Completo» | **K-01** ✅ visto, **K-03** ✅ (precios finales en Bs). Los ata `precios-publicos.test.mjs` a `subscription-plans.ts` | ✅ | — |
-| 14 | «que ya trae el chatbot de WhatsApp adentro.» | **J-01** ❌ · **K-13** ❌ · **K-14** ❌ · catálogo §5: agente de WhatsApp ⏸ «hasta conectar el WhatsApp de un cliente real» | ❌ | **Quitar la cláusula.** «…y Bs 1.290 el Completo.» |
-| 15 | «En el Básico, el Crece y el Profesional el chatbot va aparte, Bs 390 al mes.» | **J-07** ❌ («Precio del agente: Bs 390/mes») · **J-01** ❌ | ❌ | **Quitar la oración.** Lo que el catálogo no tiene listo no se nombra en la venta (CLAUDE.md, «La venta nunca exhibe obra») |
+| 14 | «que ya trae el chatbot de WhatsApp adentro.» | **J-01** ❌ · **K-13** ❌ · **K-14** ❌ · catálogo §5: agente de WhatsApp ⏸ «hasta conectar el WhatsApp de un cliente real» | ❌ | **Se queda** (decisión del 3-sep, mantenida el 11-oct). Cambiarla solo si Sergio Urcullo lo decide y **antes** se arregla `/precios` |
+| 15 | «En el Básico, el Crece y el Profesional el chatbot va aparte, Bs 390 al mes.» | **J-07** ❌ («Precio del agente: Bs 390/mes») · **J-01** ❌ | ❌ | **Se queda**, igual que la 14 |
 | 16 | «la lista completa y al día está en onia.com.bo/precios.» | **K-01** ✅ | ✅ | — |
-| 17 | «Sergio se lo muestra funcionando con SUS números en una demo.» | «Con SUS números» es la misma personalización de la 3 y no tiene fila (**L-05** habla de «clínica de ejemplo», no de esto) | ⬜ | «Sergio se lo muestra funcionando en una demostración.» |
+| 17 | «Sergio se lo muestra funcionando con SUS números en una demo.» | «Con SUS números» es la misma personalización de la 3 y no tiene fila (**L-05** habla de «clínica de ejemplo», no de esto) | ⬜ | «Sergio se lo muestra funcionando en una demostración.» (**es la única frase de esta FAQ que se propone cambiar**) |
 
-**Lo que las frases 14 y 15 pisan.** El bot nombra el chatbot cuando preguntan el precio **por una decisión del 3-sep de la sesión de control «en nombre de Sergio Urcullo»** (`precios-publicos.mjs`, líneas 2-6; `config.mjs`, líneas 259-260; `CLAUDE.md`: «el chatbot es un add-on»). El catálogo del 1-oct (§5: agente de WhatsApp ⏸) y las filas J-01, J-07 y K-13 son **posteriores** y dicen lo contrario, y `PROMESA` §3 deja la decisión a Sergio Urcullo. **Esta lista no la toma: la propone.** Si Sergio Urcullo la acepta: (1) `precios-publicos.test.mjs` (línea 211) exige «390» y se pondrá rojo, hay que actualizarlo; (2) **hay que arreglar antes `/precios`** (`precios/page.tsx` sigue vendiendo el add-on y la frase 16 apunta ahí), si no el bot dice una cosa y la página la contraria.
+**Por qué se quedan (y qué haría falta para cambiarlas).** El bot nombra el chatbot cuando preguntan el precio por una decisión del 3-sep de la sesión de control «en nombre de Sergio Urcullo» (`precios-publicos.mjs`, líneas 2-6; `config.mjs`, líneas 259-260; `CLAUDE.md`: «el chatbot es un add-on»), y `precios-publicos.test.mjs` (línea 211) exige el «390». El catálogo del 1-oct (§5: agente de WhatsApp ⏸) y J-01, J-07 y K-13 son posteriores y dicen que hoy no se puede prometer. **Se mantiene el bot como está.** Si Sergio Urcullo decide otro precio o quitarlo: (1) **primero se arregla `/precios`** (`precios/page.tsx` vende el add-on; `PROMESA` §3 filas 1 y 3); (2) después se actualiza el bot y ese test. Si se cambia solo el bot, bot y página dicen cosas opuestas.
 
 ### Si pregunta por el SIAT o la facturación en línea (FAQ «siat»)
 
@@ -66,17 +66,15 @@
 
 ## 3. Los textos corregidos, listos para la firma de Sergio Urcullo
 
-Cada uno es el texto actual **menos** lo que está en ❌ o lo que promete personalización sin fila, sin agregar nada (`{{humano}}` es la variable que el bot reemplaza por «Sergio»). Un test (`campana-lista.test.mjs`) los pasa por el detector de promesas y exige que no tengan voseo ni minutos ni el agente de WhatsApp.
+Cada uno es el texto actual **menos** lo que promete personalización sin fila, sin agregar nada (`{{humano}}` es la variable que el bot reemplaza por «Sergio»). Un test (`campana-lista.test.mjs`) los pasa por el detector de promesas y exige que no tengan voseo ni minutos ni el agente de WhatsApp.
 
 **Línea 3 de `M0_PERSONA`:**
 
 > Le muestro cómo funciona Onia en 30 minutos por videollamada y vemos si le sirve a su negocio.
 
-**FAQ «precios» (`knowledge.onia.json`):**
+**Última frase de la FAQ «precios» (`knowledge.onia.json`)**, el resto de esa FAQ se queda:
 
-> Se los paso derecho, son públicos: el sistema arranca en Bs 320 al mes con el plan Básico, Bs 550 el Crece, Bs 890 el Profesional y Bs 1.290 el Completo.
->
-> Cuál le sirve depende de cuántos son y de qué módulos active, así que la lista completa y al día está en onia.com.bo/precios. Si quiere, {{humano}} se lo muestra funcionando en una demostración.
+> Si quiere, {{humano}} se lo muestra funcionando en una demostración.
 
 **FAQ «siat»:** sin cambios (las frases 18 a 20 están ✅ por L-10). Salvedad: mirar la RND 102600000039 del 9-oct.
 
@@ -88,10 +86,10 @@ Cada uno es el texto actual **menos** lo que está en ❌ o lo que promete perso
 
 | Qué | Quién |
 |---|---|
-| **Firmar y publicar** los tres textos de §3 (una fuente del bot lleva firma humana: `publicar-solo.sh`, `FIRMA_HUMANA`) | **Sergio Urcullo** y el carril chatbot (hoy sin sesión viva) |
+| **Firmar y publicar** los dos textos de §3 (una fuente del bot lleva firma humana: `publicar-solo.sh`, `FIRMA_HUMANA`) | **Sergio Urcullo** y el carril chatbot (hoy sin sesión viva) |
 | **PEDIDO PC:** abrir en Chrome la RND 102600000039 del 9-oct (`impuestos.gob.bo/index.php/rnd-2026/`) y pegar el texto — *para ver si cambia algo de lo que dicen las frases 18 a 20 (la 038 ya la leyó el carril fiscal el 3-oct)* | **La madre** (desde la PC) |
 | B-01, C-01, E-01 y E-10 en ✅ con la cuenta demo; **L-05** si se vuelve a ofrecer «una clínica de ejemplo» | **Plataforma**; **Sergio Urcullo** en L-04 (20 o 30) |
-| 20 o 30 minutos (hoy: web y bot 30; `/llamada`, VSL y mensajes salientes 20); contestar el sábado de tarde y el domingo | **Sergio Urcullo** |
+| 20 o 30 minutos (hoy: web y bot 30; `/llamada`, VSL y mensajes salientes 20): **ya se lo preguntó la MADRE MARKETING; cuando conteste, la otra madre lo pasa a Plataforma**. Contestar el sábado de tarde y el domingo | **Sergio Urcullo** |
 
 ## 5. Lo que esta lista no sabe
 

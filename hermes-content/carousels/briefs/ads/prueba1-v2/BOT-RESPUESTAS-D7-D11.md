@@ -3,7 +3,7 @@
 > **11-oct-2026 · Ventas y pauta · tarea 1 de las tres «destrabadas» que pidió la MADRE MARKETING** (conseguir dueños de clínica sin gastar). **Solo lectura: no se tocó el bot ni su conocimiento** (una fuente del bot lleva la firma humana de Sergio Urcullo, `FIRMA_HUMANA`; abajo van **propuestas**, no cambios).
 > **Cómo se midió:** el motor real (`bot-engine.mjs`) con la config «como producción» del repo, por `.claude/skills/onia-ventas-pauta/scripts/simular-bot.mjs`, y cada respuesta fija pasada por el detector de promesas de la web (`promesasEn`). **No se midió:** la rama del LLM (sale `[[LLM_PENDIENTE]]`), la primera respuesta de la plantilla de Chatwoot (ADQ §5.5) ni los horarios reales del VPS.
 
-> **Frase por frase, con la fila de `ONIA_PROMESA_VS_PRODUCTO.md` de cada una y el texto corregido para la firma:** `LISTA-PARA-MOSTRAR-RESPUESTAS-DEL-BOT.md`. Esa lista encontró **dos frases en ❌ en la respuesta al precio** (el chatbot de WhatsApp y su Bs 390), que este documento no había visto.
+> **Frase por frase, con la fila de `ONIA_PROMESA_VS_PRODUCTO.md` de cada una y el texto corregido para la firma:** `LISTA-PARA-MOSTRAR-RESPUESTAS-DEL-BOT.md`. Esa lista encontró **dos frases en ❌ en la respuesta al precio** (el chatbot de WhatsApp y su Bs 390), que este documento no había visto: **se quedan** por la decisión del 3-sep (la MADRE MARKETING lo ratificó el 11-oct).
 
 ## 1. Qué código es qué pieza (para leer el aviso «Origen: anuncio-D10»)
 
