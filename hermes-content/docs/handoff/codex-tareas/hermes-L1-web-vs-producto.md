@@ -1,10 +1,23 @@
+---
+id: hermes-L1
+carril: hermes
+estado: pendiente   # pendiente | lanzada | PR | hecha | bloqueada
+modelo: gpt-6-luna  # mecánico: un script de Node sin dependencias y su prueba
+repo: onia-hermes
+rama: codex/hermes-qa-web-vs-producto
+base: main
+pr:
+escrita: 2026-10-11 por Hermes-Jarvis (nube)
+actualizada: 2026-10-11 por Hermes-Jarvis (nube)
+nota: Independiente de #194 (no toca `diagnostico.sh` ni el workflow). Usa las páginas de ejemplo de `docs/research/promesas-web/2026-10-11/`, que hoy viajan en #194: se lanza cuando entren a main.
+---
 # L1 · El chequeo de «la web contra el producto» como script que se repite (Codex Luna, mecánico)
 
-Sos Codex Luna. Trabajás SOLO en esta carpeta, un clon de `onia-hermes`, en la rama `codex/hermes-qa-web-vs-producto`, a partir de `main`.
-- Primero corré `git branch --show-current`: tiene que decir esa rama. Si no, pará y decilo en el resumen.
-- Si `git status` ya muestra cambios, es que una corrida anterior se cortó: seguí desde ahí y no rehagas lo hecho.
-- Nadie va a contestar preguntas mientras corrés. Decidí con este documento y con el código; lo que no puedas decidir, anotalo en el resumen final.
-- **No ejecutes Git más allá de eso.** Entregá los archivos; la madre commitea.
+Sos Codex. Trabajás SOLO en esta carpeta: un worktree de `onia-hermes` que creó la madre, en la rama `codex/hermes-qa-web-vs-producto`.
+- No uses git: ni consultas, ni cambio de rama, ni commits. La madre verifica la rama y revisa el diff.
+- Si ya hay cambios en la carpeta, una corrida anterior se cortó: revisá los archivos y seguí desde ahí.
+- Nadie contesta preguntas mientras corrés. Decidí con este documento y el código; lo que no puedas decidir, anotalo en el resumen final.
+- Sin push, sin `npm install`, sin producción, sin red. NO commitees: la madre revisa el diff y commitea.
 
 ## META
 Hoy, cada vez que alguien quiere saber si `onia.com.bo` todavía promete lo que el catálogo no deja, o si sus precios siguen siendo los del código, lo mira a mano (Q7 y Q8 del 11-oct, ~40 min). Que sea un script de Node sin dependencias nuevas, repetible, que lee las páginas ya convertidas a texto y el código de `onia-platform`, y dice qué cambió. **No usa LLM ni navegador.**

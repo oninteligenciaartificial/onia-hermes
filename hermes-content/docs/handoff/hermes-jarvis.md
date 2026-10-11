@@ -1,5 +1,26 @@
 # Handoff — carril `hermes-jarvis` (Hermes, el Telegram y el calendario de Sergio Urcullo)
 
+> **ESTADO 11-oct, mañana — el carril pasó a ser el QA de Onia y el turno de noche** (`HERMES_ROL_QA.md`).
+> - **#194 abierto (Q2 + Q5), CI verde, lo mergea la madre.** Trae el workflow `hermes-qa-diario.yml` (10:00 UTC, solo
+>   `diagnostico.sh`, solo desde `main`), la sección 15 del diagnóstico (cada trabajo del cron con su log y MUDO) y
+>   `qa-release.sh` (mira /dashboard y /checkout con la cuenta de QA cuando cambia el release y lee las ventanas del
+>   publicador de las :50). **Además** trae las docs de este carril de hoy: encargos E1-E3, Q7-Q9, los contratos
+>   Codex y las capturas. Este carril pushea a UNA rama: separar eso en otro PR pide permiso de Sergio Urcullo.
+> - **Nada de lo nuevo corre en el VPS hasta que `aplicar` instale su cron (Q1).** El sincronizador ya copia
+>   `onia-qa-release.sh`, `onia-mirar.js` y `onia-latido.sh` a `/root/bin`, pero ninguna línea del crontab los llama.
+> - **Q4 (relojes, colas paradas, vigías mudos en el resumen) está en `main` (#190, #192), inerte** hasta `aplicar`.
+> - **Revisiones hechas sin mergear nada (E2, E3):** #162 (bot) BLOQUEAR, #145 CAMBIOS, #191, #172 y #144 CAMBIOS, y
+>   #136 y #146 con sus HIGH. Veredictos y archivo:línea en `cola/loop/hermes-jarvis.md`.
+> - **Desde la nube se mira la web pública, no las pantallas con sesión.** El Chromium de la nube rechaza el
+>   certificado del proxy: se arregla con `route.fetch` de Node (skill, «Mirar páginas desde la nube»). Las
+>   pantallas con sesión las mira la madre desde la PC o Q5 en el VPS.
+> - **Tres contratos Codex del diagnóstico** (`codex-tareas/hermes-C1/C2/C3-*.md`) y dos más (L1, Q9) en `pendiente`:
+>   los lanza la madre después del merge de #194.
+> - **El modelo de la sesión de nube no se midió** (la decisión de bajarlo es de Sergio Urcullo, H7 de `madre.md`).
+> - **Sigue pendiente de Sergio Urcullo:** su línea de «sí, aplicar» en la sesión que lo use (el texto con que arrancó
+>   esta sesión la exige; HERMES_ROL_QA §5 Q1 dice que no se vuelve a pedir: la madre decide cuál manda), proteger
+>   `main`, y confirmar la cuenta de QA («ZZ QA Pago»).
+
 > **ESTADO 9-oct, tarde — el #176 está en `main` (`a1aa6246`), CI verde.**
 > - **Llega solo al VPS** (el sincronizador copia `main` a `/root/bin` en ~1 h):
 >   - `onia-parte-diario.sh` con UTF-8 fijo: es lo único que cambia algo que ya corre;

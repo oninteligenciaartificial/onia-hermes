@@ -1,9 +1,23 @@
+---
+id: plataforma-Q9
+carril: plataforma
+estado: pendiente   # pendiente | lanzada | PR | hecha | bloqueada
+modelo: gpt-6.1-sol # cambio chico de textos y de un test en el alta de clientes
+repo: onia-platform
+rama: codex/alta-negocio-de-usted
+base: master        # medido sobre master d8ca5a32 (11-oct)
+pr:
+escrita: 2026-10-11 por Hermes-Jarvis (nube)
+actualizada: 2026-10-11 por Hermes-Jarvis (nube)
+nota: Contrato de Plataforma escrito por el carril QA tras mirar /register en producción. Otro PR abierto (#146) también edita `__tests__/voseo-ratchet.linea-base.json`: se lanza cuando ese PR haya entrado.
+---
 # Q9 · El alta le habla de usted hasta en el rótulo del negocio (onia-platform)
 
-Sos Codex. Trabajás SOLO en esta carpeta, un clon completo de `onia-platform`, en la rama `codex/alta-negocio-de-usted`.
-- Primero corré `git branch --show-current`: tiene que decir esa rama. Si no, pará y decilo en el resumen.
-- Si `git status` ya muestra cambios, es que una corrida anterior se cortó: seguí desde ahí y no rehagas lo hecho.
-- Nadie va a contestar preguntas mientras corrés. Decidí con este documento y con el código; lo que no puedas decidir, anotalo en el resumen final.
+Sos Codex. Trabajás SOLO en esta carpeta: un worktree de `onia-platform` que creó la madre, en la rama `codex/alta-negocio-de-usted`.
+- No uses git: ni consultas, ni cambio de rama, ni commits. La madre verifica la rama y revisa el diff.
+- Si ya hay cambios en la carpeta, una corrida anterior se cortó: revisá los archivos y seguí desde ahí.
+- Nadie contesta preguntas mientras corrés. Decidí con este documento y el código; lo que no puedas decidir, anotalo en el resumen final.
+- Sin push, sin `npm install`, sin producción, sin red. NO commitees: la madre revisa el diff y commitea.
 
 ## META
 En `/register` (paso 2), el campo del negocio dice «Nombre de **tu** clínica» y las pantallas de carga que siguen dicen «Abriendo el panel de **tu** clínica» y «Activando **tu** clínica». Todo lo demás del alta ya es de usted («Cree su cuenta», «Su nombre»). Que esos tres textos usen la forma de usted del vocabulario del rubro, en los 5 rubros.
@@ -14,13 +28,13 @@ En `/register` (paso 2), el campo del negocio dice «Nombre de **tu** clínica»
 3. `npx vitest run __tests__/voseo-ratchet` en verde (no debe cambiar la línea base).
 4. Un test de render o de vocabulario que pruebe, para `dentagest-clinical`, `esteticagest-clinical`, `gestios-general`, `proveegest-electrico` y `gestios-servicios-profesionales`, que el rótulo armado queda «Nombre de su clínica / su centro de estética / su negocio / su empresa / su estudio» (sin «tu»).
 
-Todo queda en UN commit en la rama.
+Dejá los cambios en la carpeta, sin commitear: la madre revisa el diff y los commitea en UN commit.
 
 ## REGLA DE PARADA
 - **No borres ni renombres `negocio` del vocabulario** (`lib/onboarding/vocabulario.ts`): otras pantallas de vos todavía lo usan y su test (`vocabulario.test.ts`) lo exige.
 - **No toques otras pantallas ni la landing:** esta tarea es solo el alta. La web `onia.com.bo` (vos) es decisión de Sergio Urcullo.
 - **No toques `__tests__/voseo-ratchet.linea-base.json`:** otro PR abierto (#146) también lo edita.
-- **No empujes nada.** Entregá la rama con el commit; la madre la integra.
+- **No empujes ni commitees nada.** Entregá los cambios en la carpeta; la madre los revisa y los integra.
 
 ## Contexto mínimo
 - **Qué es:** Onia Platform, el SaaS de gestión de Onia para Bolivia. 5 rubros se ofrecen: dental, estética, comercio, importadora, servicios profesionales. Es multi-tenant.

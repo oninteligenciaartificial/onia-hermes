@@ -34,7 +34,9 @@ carril puede hacer solo. Q1 espera `aplicar` (ver «Bloqueado»).
   corriendo). Los canarios de caída esperan los 30 min de la interrupción 4. **Hecho:** 24 h medidas en su Telegram
   con solo el resumen, el cierre y las cuatro interrupciones, contadas por el diagnóstico programado. Los flujos de
   n8n los cambia la madre, con respaldo.
-- [x] **Q4 El resumen de las 06:30 dice lo que nadie empuja.** — `9105f031` (#190) y `2ea796ea` (#192) Va en dos PRs, porque (c) toca el crontab de `aplicar`
+- [x] **Q4 El resumen de las 06:30 dice lo que nadie empuja.** — `9105f031` (#190) y `2ea796ea` (#192) (**código en `main`,
+  inerte hasta que `aplicar` instale su cron: Q1**; el «hecho» de esta línea es el del rol, pruebas y una mañana impresa).
+  Va en dos PRs, porque (c) toca el crontab de `aplicar`
   (root en el VPS, revisión fuerte):
   - [x] Q4a/b, solo lectura — `77d02e89` (mañana del 10-oct impresa con la tabla real: el SIN y el token de Lucía en NECESITO):
     - (a) los relojes que vencen en 72 h o menos, de `cola/loop/madre.md` §G. Un rango «13 al 18-oct» cuenta desde el
@@ -290,9 +292,20 @@ carril puede hacer solo. Q1 espera `aplicar` (ver «Bloqueado»).
   costaron ~40 min a mano. Contrato: `hermes-content/docs/handoff/codex-tareas/hermes-L1-web-vs-producto.md`. Lo lanza la
   madre. **Hecho:** su prueba en verde y el script reproduciendo la §3 y la §3.1 de `ONIA_PROMESA_VS_PRODUCTO.md`; después
   se corre contra la web en vivo y se compara con lo escrito a mano.
-- [ ] **Q9b El alta de usted.** Contrato `handoff/codex-tareas/Q9-alta-de-usted.md` (3 líneas de `SignupForm.tsx`). Lo lanza la
+- [ ] **Q9b El alta de usted.** Contrato `handoff/codex-tareas/plataforma-Q9-alta-de-usted.md` (3 líneas de `SignupForm.tsx`). Lo lanza la
   madre. **Hecho:** la prueba nueva en verde, y después de publicar, el paso 2 de `/register` sin «tu» (`mirar-publico.mjs`
   más el clic en «Clínica dental»).
+- [ ] **C1-C3 Tres contratos Codex del diagnóstico y el QA diario** (11-oct, madre DESARROLLO-INFRA; `estado: pendiente`,
+  los lanza la madre **después del merge de #194**, porque tocan lo que #194 agrega). Ninguno toca Plataforma ni el VPS.
+  - `CODEX-CONTRATO: hermes-content/docs/handoff/codex-tareas/hermes-C1-latidos-mudo-test.md` (Luna): la frontera exacta
+    de la regla MUDO de la sección 15, con reloj controlado y tres mutaciones. Solo agrega un archivo de pruebas.
+  - `CODEX-CONTRATO: hermes-content/docs/handoff/codex-tareas/hermes-C2-main-guard-test.md` (Luna): ejecuta el paso
+    «Solo desde main» de `hermes-qa-diario.yml` y comprueba el orden de los pasos (la guarda va antes de la llave SSH).
+  - `CODEX-CONTRATO: hermes-content/docs/handoff/codex-tareas/hermes-C3-modelo-por-job.md` (Sol): sección 16 de
+    `diagnostico.sh`: por cada trabajo de Hermes y del crontab, su cadencia y su modelo escritos en el VPS, sin llamar
+    a ningún modelo. La sesión de la nube queda «no medible desde acá». La madre lo revisa fuerte (corre como root).
+  - Los cinco contratos de este carril (con L1 y Q9b) llevan ya la cabecera de `codex-tareas/README.md`. **Hecho:**
+    cada prueba en verde en la rama de Codex tras el merge de #194. modelos: ninguno (los escribe este carril).
 - [ ] **E4 Volver a mirar #136 cuando entren sus arreglos.** Los dos HIGH de E3 y el comando de las migraciones. **Hecho:**
   cada HIGH cerrado con su prueba, leído en el código de la cabeza nueva.
 
@@ -304,7 +317,7 @@ carril puede hacer solo. Q1 espera `aplicar` (ver «Bloqueado»).
   clic lleva al alta de la app, que ya es de usted. Es un solo flujo con dos tratos. `CLAUDE.md` deja esa decisión a él.
   `/terminos` y `/privacidad` también: los textos legales van por Leslie Mercado Moreno.
 - **Plataforma** · `SignupForm.tsx:630`, `:362` y `:403` usan `voc.negocio` («tu clínica») en vez de `voc.negocioSu`. Contrato
-  Codex listo: `handoff/codex-tareas/Q9-alta-de-usted.md`.
+  Codex listo: `handoff/codex-tareas/plataforma-Q9-alta-de-usted.md`.
 - **Plataforma** · onia-platform#136: los dos HIGH de E3 (cierre de caja con «1.500» y caras del odontograma sin bloqueo de
   borrado) van antes del merge, y la madre mide las dos migraciones en el VPS (comando en E3).
 - **Plataforma** · onia-platform#146: una línea más, `public/manifest.json:4`, y el gate con lookarounds para «tú».
@@ -350,7 +363,7 @@ carril puede hacer solo. Q1 espera `aplicar` (ver «Bloqueado»).
     construcción»; las «borrador» de `/privacidad` y `/terminos` son los borradores de la IA. Sin desborde a 390 ni
     ligaduras como texto en ninguna. **Lo que sí falla es el trato:** la web habla de vos o de tú y el alta, de usted
     (decide Sergio Urcullo, ver «Hallazgos para otros»); y el paso 2 del alta dice «Nombre de tu clínica». Ese arreglo
-    va a Codex: `hermes-content/docs/handoff/codex-tareas/Q9-alta-de-usted.md`.
+    va a Codex: `hermes-content/docs/handoff/codex-tareas/plataforma-Q9-alta-de-usted.md`.
 - [x] P2 de #173: el aviso de rechazo se reintenta si Telegram falla (test fallo → recuperación → segunda corrida) — `31aebd95`, en `main` con el #173
 - [x] Runbook de `aplicar` (#174) listo para que la madre lo corra desde la PC — `fecb4813` (§8 de `TELEGRAM_COMMAND_CENTER.md`)
 - [x] Formato corto (Pasó · Necesito · Sigue) en lo que Hermes le manda: regla en el SOUL y en el resumen/cierre (`jarvis-resumen.sh`). Inerte hasta `aplicar` — `fa7702ef`
