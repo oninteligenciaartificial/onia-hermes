@@ -8,8 +8,8 @@ rama: codex/lucia-qa2  # la crea la madre al lanzar
 base: main
 pr:
 escrita: 2026-10-11 por Lucía (nube, session_01XSzFcs1k18ijqjSHGjnzD4)
-actualizada: 2026-10-11 por Lucía (nube, session_01XSzFcs1k18ijqjSHGjnzD4)
-nota: Paso 7 de la orden S03 (hermes-content/docs/research/2026-10-11-harness-qa/S03-orden-lucia.md, rama origin/claude/arranque-nueva-madre-ba386e, commit 2b059484). La lista ya está contrastada con LUCIA.md §0 (ver abajo).
+actualizada: 2026-10-11 por Lucía (nube, session_01XSzFcs1k18ijqjSHGjnzD4) — v2: suma «agenda llena» (LUCIA.md §0, línea 20), que Codex detectó con su regla de parada
+nota: Paso 7 de la orden S03 (hermes-content/docs/research/2026-10-11-harness-qa/S03-orden-lucia.md, rama origin/claude/arranque-nueva-madre-ba386e, commit 2b059484). La lista ya está contrastada con LUCIA.md §0 (ver abajo); v2 suma «agenda llena», que estaba en la línea 20 y quedó fuera de la v1.
 ---
 # LUCIA-QA2 · Frases prohibidas de Lucía y de la venta, en cualquier texto
 
@@ -24,7 +24,7 @@ Las frases que Lucía nunca puede decir (que es del rubro, que tiene pacientes, 
 Hace falta un escáner de texto, de una sola lista con su fuente, que se pueda correr sobre cualquier guion, pie o documento y diga archivo y línea de cada coincidencia. Solo Node (≥ 22) y su librería estándar.
 
 ## La lista (única, en una constante al principio del script, cada entrada con su `fuente`)
-Contrastada el 11-oct con `hermes-content/references/modelos/lucia/LUCIA.md` §0 (líneas 18-19), `hermes-content/docs/LUCIA_COMO_SE_USA.md` §6 y la regla «La venta nunca exhibe obra» de `CLAUDE.md`. **La lista de la orden S03 era una parte:** LUCIA.md §0 suma cuatro frases más. Es la unión:
+Contrastada el 11-oct con `hermes-content/references/modelos/lucia/LUCIA.md` §0 (líneas 18-20), `hermes-content/docs/LUCIA_COMO_SE_USA.md` §6 y la regla «La venta nunca exhibe obra» de `CLAUDE.md`. **La lista de la orden S03 era una parte:** LUCIA.md §0 suma cinco frases más (las cuatro de la primera mano y «agenda llena», línea 20). Es la unión:
 
 | Frase (se detectan también sus variantes de mayúsculas, tildes y plural) | Fuente |
 |---|---|
@@ -34,9 +34,10 @@ Contrastada el 11-oct con `hermes-content/references/modelos/lucia/LUCIA.md` §0
 | «mi consultorio» | LUCIA.md §0; LUCIA_COMO_SE_USA §6 |
 | «mi estudio» | LUCIA.md §0 |
 | «testimonio» (y «testimonios») | LUCIA.md §0; LUCIA_COMO_SE_USA §6 |
+| «agenda llena» (resultado prometido) | LUCIA.md §0, línea 20 («Tampoco … resultados prometidos («agenda llena»)») |
 | «muy pronto», «en construcción», «beta», «próximamente» | CLAUDE.md, «La venta nunca exhibe obra» |
 
-Reglas de coincidencia: sin distinguir mayúsculas ni tildes (normalizar con `String.prototype.normalize('NFD')` quitando marcas diacríticas, en el texto y en la lista); con límite de palabra, de modo que **«beta» no coincida dentro de «alfabeta»** ni «testimonio» dentro de otra palabra.
+Reglas de coincidencia: sin distinguir mayúsculas ni tildes (normalizar con `String.prototype.normalize('NFD')` quitando marcas diacríticas, en el texto y en la lista); con uno o más espacios entre las palabras de una frase (`agenda   llena` coincide) y con límite de palabra, de modo que **«beta» no coincida dentro de «alfabeta»** ni «testimonio» dentro de otra palabra.
 No se agregan palabras sueltas como «paciente» o «clínica»: los documentos del rubro las usan legítimamente. Los gates de pantalla, pie y voz de cada pieza (`videos/lucia-g*-v2/scripts/grep-prohibidas.mjs`, que traen además «el mejor», «recomiendo» y los nombres de herramientas permitidos) son otra cosa y **no se tocan**.
 
 ## Qué hace el script `scripts/lucia-prohibidas.mjs`
@@ -62,11 +63,12 @@ La lógica en una función exportada (`escanear(texto, nombre)` → coincidencia
    6. El mismo archivo con una coincidencia, pasado como argumento: código 1; recorrido por defecto sobre una carpeta que lo contiene: código 0.
    7. Un argumento que no existe: código 2.
    8. Un `.json` o una imagen en la carpeta: se ignoran/omiten sin fallar.
-2. Después del test, correr el script **sin argumentos** y **reportar el resultado completo** (no corregir los documentos). **Esperado, medido el 11-oct con grep:** unas 11 líneas con coincidencia repartidas en 11 de los 12 archivos de `hermes-content/docs/cola/lucia-diario/`, una por archivo, todas en texto que enuncia la regla. Si el número difiere mucho o ves una que parece uso real (Lucía diciéndolo en primera persona), marcala en el resumen.
+   9. «Te dejo la agenda llena» y «AGENDA   LLENA» (espacios repetidos y mayúsculas): ambas coinciden, con la frase «agenda llena» y la fuente `LUCIA.md §0`; «agenda llenar» no coincide (límite de palabra).
+2. Después del test, correr el script **sin argumentos** y **reportar el resultado completo** (no corregir los documentos). **Esperado, medido el 11-oct con grep (v2, con «agenda llena»):** 13 líneas con coincidencia repartidas en 11 archivos de `hermes-content/docs/cola/lucia-diario/` (una por archivo, salvo `FLUJO.md` y `PLAN.md` con dos cada uno: la de «agenda llena», FLUJO.md:83 y PLAN.md:44, ambas regla citada), todas en texto que enuncia la regla. Si el número difiere mucho o ves una que parece uso real (Lucía diciéndolo en primera persona), marcala en el resumen.
 3. Correr el script **con** los cuatro pies de las v2 (`videos/lucia-g2-v2/pie.txt`, `videos/lucia-g3-v2/pie.txt`, `videos/lucia-g4-v2/pie.txt`, `videos/lucia-g5-v2/pie.txt`): **esperado, 0 coincidencias y código 0** (medido con grep el 11-oct). Esa corrida la repite la madre.
 
 ## REGLA DE PARADA
-- Antes de correr nada, leé `hermes-content/references/modelos/lucia/LUCIA.md` §0 (líneas 14-19). Si hay una frase prohibida ahí que **no está en la tabla de arriba**, **parar y reportarla**. (Que LUCIA.md §0 tenga más frases que la orden S03 ya está resuelto aquí: no es motivo de parada.)
+- Antes de correr nada, leé `hermes-content/references/modelos/lucia/LUCIA.md` §0 (líneas 14-20). Si hay una frase prohibida ahí que **no está en la tabla de arriba**, **parar y reportarla**. (Que LUCIA.md §0 tenga más frases que la orden S03 ya está resuelto aquí, incluida «agenda llena»: no es motivo de parada. Si encontrás otra que NO esté en la tabla, ahí sí.)
 - Si un archivo del recorrido por defecto no se puede leer o es enorme (más de 2 MB), omitirlo y listarlo; no fallar.
 - No agregues dependencias ni opciones de línea de comandos no pedidas. No corrijas ni edites ningún documento escaneado.
 - No leas ni imprimas ninguna credencial.

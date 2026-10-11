@@ -31,6 +31,14 @@
   `lucia/montaje-hyperframes.md`: G2, G3, G4 y G5 lo pagaron con una revisión cada una. Suma lo del editor de G4: una pastilla de 2 palabras necesita 1,0 s entera; una tarjeta con `a: 0` no lleva entrada; el `a` del plan es el fin del empuje y la tarjeta entra 1 cuadro antes de que empiece. Al cerrar G2, G3 y G4. **Hecho 11-oct (latido de las 05:47 UTC):** regla 15 en `edicion-referentes` y §11 de `montaje-hyperframes.md`; modelos: escrito en esta sesión (sonnet-5-5); si G2 o G3 aprenden algo más, se suma a esa §11.
 - [ ] **Decisión de la madre (nombres vs catálogo de Higgsfield, `models_explore` 11-oct):** «Kling O3» se lista como **Kling 3.0 Omni** y «Cinematic Studio 3.0» como **Cinema Studio Video 3.0** (G2 y G5 los muestran en pantalla y en el pie); el resto coincide («FLUX 3» = «FLUX 3 Image»). Corregir = `plan.json` + pie + re-render + gates en G2 y G5 (G5 ya mostrada). Detalle en `videos/lucia-entrega/README.md`.
 - [x] Reescribir el cuerpo del PR #144 con el estado real de las v2 — hecho el 11-oct (cuerpo y título actualizados; las cuatro v2 «LISTA PARA MOSTRAR»). modelos: escrito en esta sesión (sonnet-5-5).
+- [x] `lucia-qa1` (tabla de identidad ArcFace) — integrada el 11-oct: `scripts/lucia-qa-tabla.mjs` + test, rama `codex/lucia-qa1-1011` @ ad0d74f1 fusionada. Decidí mostrar los píxeles de cara
+  **enteros hacia abajo** (199,9 → 199, sigue avisando «< 200 px»); +1 test, 10/10 en verde; sobre `videos/lucia-g5-v2/qa/arcface-madre-11oct.json` sale 1 como se esperaba (6 bajo el piso, f-e3 0,354-0,360;
+  gancho 181-186 px «poco confiable»; leave_one_out_min 0,698). modelos: contrato escrito por esta sesión (sonnet-5-5), ejecución Codex Sol, `codex:lucia-qa1`.
+- [x] `lucia-qa2` v2 (frases prohibidas) — la parada de Codex era correcta: LUCIA.md §0 línea 20 prohíbe «agenda llena» y la tabla no la traía. Contrato corregido en
+  `hermes-content/docs/handoff/codex-tareas/lucia-qa2-frases-prohibidas.md` (fila nueva con su fuente, caso de test 9, regla de espacios repetidos, esperado de la corrida por defecto: 13 líneas en 11 archivos,
+  medido con grep). Falta que la madre lo relance. modelos: sonnet-5-5 (esta sesión); `codex:lucia-qa2` pendiente de relanzar.
+- [~] Pieza 9 «La cara o la escena»: borrador de Codex (`codex:lucia-p9`, rama `codex/lucia-p9-1011` @ 50bf3bac) fusionado; m4 completo hallado en el contenedor; texto del límite de cara decidido (el provisional);
+  build sin flag + render + gates en curso (editor sonnet). Luego revisor sonnet + verificador haiku y «LISTA PARA MOSTRAR: pieza 9».
 - [ ] Revisión independiente (sonnet) y verificador (haiku) de P9 cuando Codex devuelva el diff.
 - [~] ~~G1 con la captura real de Pendientes de la demo~~ — **reemplazada por la premisa v5** (Sergio Urcullo, 8-oct: *«Lucía no
   es necesario que muestres el producto… grabar y aprender a usar Higgsfield es tu tarea»*). G1 salió sin producto:

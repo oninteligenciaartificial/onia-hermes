@@ -4,6 +4,8 @@ import { pathToFileURL } from 'node:url';
 export const PISO = 0.70;
 
 const numero = (valor) => Number.isFinite(valor) ? valor.toFixed(3) : '—';
+// Píxeles enteros hacia abajo: lo que se ve es <200 si y solo si el valor real es <200 (199,9 no se muestra como 200).
+const pixeles = (valor) => Number.isFinite(valor) ? String(Math.floor(valor)) : '—';
 const celda = (valor) => String(valor).replace(/\|/g, '\\|').replace(/[\r\n]+/g, ' ');
 const objeto = (valor) => valor !== null && typeof valor === 'object' && !Array.isArray(valor);
 
@@ -38,7 +40,7 @@ export function armarTabla(json) {
     } else if (!sinPuntaje && centroid < PISO) {
       veredicto = 'ref bajo el piso';
     }
-    const fila = `| ${celda(nombre)} | ${numero(centroid)} | ${numero(imagen.face_px)} | ${veredicto}${nota} |`;
+    const fila = `| ${celda(nombre)} | ${numero(centroid)} | ${pixeles(imagen.face_px)} | ${veredicto}${nota} |`;
     (imagen.group === 'tests' ? tests : refs).push(fila);
   }
 

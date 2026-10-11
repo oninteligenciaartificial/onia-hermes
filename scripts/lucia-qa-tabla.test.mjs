@@ -33,8 +33,8 @@ test('1. Dos tests OK y una referencia; entrada por archivo', () => {
   const json = fixture([0.79, 0.82]);
   const { markdown, codigo } = armarTabla(json);
   assert.equal(codigo, 0);
-  assert.match(markdown, /\| tests-1 \| 0\.790 \| 250\.000 \| OK \|/);
-  assert.match(markdown, /\| tests-2 \| 0\.820 \| 250\.000 \| OK \|/);
+  assert.match(markdown, /\| tests-1 \| 0\.790 \| 250 \| OK \|/);
+  assert.match(markdown, /\| tests-2 \| 0\.820 \| 250 \| OK \|/);
   assert.ok(markdown.indexOf('| tests-1') < markdown.indexOf('| tests-2'));
   assert.match(markdown, /leave_one_out_min: 0\.698/);
   assert.match(markdown, /negatives_max: 0\.200/);
@@ -55,7 +55,7 @@ test('2. Test bajo el piso', () => {
   const json = fixture([0.356]);
   const { markdown, codigo } = armarTabla(json);
   assert.equal(codigo, 1);
-  assert.match(markdown, /0\.356 \| 250\.000 \| BAJO/);
+  assert.match(markdown, /0\.356 \| 250 \| BAJO/);
   assert.match(markdown, /1 tests · 1 bajo el piso · 0 sin cara/);
   assert.equal(ejecutar(['-'], JSON.stringify(json)).status, 1);
 });
@@ -68,6 +68,16 @@ test('3. Cara chica conserva OK', () => {
   assert.match(markdown, /OK · cara < 200 px: poco confiable/);
 });
 
+test('3b. Los píxeles salen enteros hacia abajo: 199,9 se ve 199 y sigue avisando', () => {
+  const json = fixture([0.78]);
+  json.images['tests-1'].face_px = 199.9;
+  const { markdown } = armarTabla(json);
+  assert.match(markdown, /\| 199 \| OK · cara < 200 px: poco confiable/);
+  json.images['tests-1'].face_px = 200.4;
+  assert.doesNotMatch(armarTabla(json).markdown, /poco confiable/);
+  assert.match(armarTabla(json).markdown, /\| 200 \|/);
+});
+
 test('4. Sin scores o con error significa SIN CARA', () => {
   for (const conError of [false, true]) {
     const json = fixture();
@@ -75,7 +85,7 @@ test('4. Sin scores o con error significa SIN CARA', () => {
     else delete json.scores['tests-1'];
     const { markdown, codigo } = armarTabla(json);
     assert.equal(codigo, 1);
-    assert.match(markdown, /\| tests-1 \| — \| 250\.000 \| SIN CARA/);
+    assert.match(markdown, /\| tests-1 \| — \| 250 \| SIN CARA/);
     assert.match(markdown, /1 tests · 0 bajo el piso · 1 sin cara/);
   }
 });
@@ -84,7 +94,7 @@ test('5. Referencia bajo el piso es informativa', () => {
   const { markdown, codigo } = armarTabla(fixture([0.79], [0.698]));
   assert.equal(codigo, 0);
   assert.match(markdown, /centroid leave-one-out/);
-  assert.match(markdown, /\| refs-1 \| 0\.698 \| 250\.000 \| ref bajo el piso/);
+  assert.match(markdown, /\| refs-1 \| 0\.698 \| 250 \| ref bajo el piso/);
   assert.match(markdown, /1 tests · 0 bajo el piso · 0 sin cara/);
 });
 
@@ -99,7 +109,7 @@ test('6. Sin negativas es válido', () => {
 test('7. Exactamente 0.700 es OK', () => {
   const { markdown, codigo } = armarTabla(fixture([0.700]));
   assert.equal(codigo, 0);
-  assert.match(markdown, /0\.700 \| 250\.000 \| OK/);
+  assert.match(markdown, /0\.700 \| 250 \| OK/);
 });
 
 test('8. JSON inválido y claves faltantes producen código 2 en stderr', () => {
