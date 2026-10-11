@@ -158,8 +158,8 @@
   "elementos": [
     {"tipo": "tarjeta", "ancho": 860, "alto": 470, "pos": ["centro", 190], "anim": "corte",
      "lineas": [
-      {"texto": "Lo que probé está", "tam": 72, "color": "blanco", "aire": 14},
-      {"texto": "en mi *comunidad.*", "tam": 100, "color": "blanco", "aire": 26},
+      {"texto": "Lo que probé está", "tam": 68, "color": "blanco", "aire": 18},
+      {"texto": "en mi *comunidad.*", "tam": 82, "color": "blanco", "aire": 30},
       {"texto": "Link en mi perfil.", "fuente": "semibold", "tam": 46, "color": "blanco"}
      ]}
   ]}
