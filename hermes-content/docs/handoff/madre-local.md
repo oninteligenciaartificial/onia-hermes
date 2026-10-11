@@ -43,6 +43,7 @@ Sergio Urcullo: *«a trabajar pero con sentido, terminar de desarrollar; te hago
   mostrar todavía). Regla: sesión con 1 h sin commits → su siguiente tarea en el momento.
 - **Madre v2 (local, la abre SU):** arranque en `handoff/madre-v2-revision.md`; mira prod, revisa PRs, guía el token de Lucía.
   La principal es la v4: le delega por SendMessage.
+- **⚠️ FALLA RECONOCIDA (SU, 11-oct 04:55 UTC):** la v4 no usó LLMs distintos ni Codex y no delegó a las sesiones dueñas: hizo con subagentes propios la voz y re-edición de Lucía G1, el estudio de Erik/adrien y los guiones (carril Marca) → muchos frentes y ~470 k de contexto. Desde el clean: pedido nuevo → SendMessage a la sesión dueña con criterio de hecho; código cerrado → Codex Sol/Luna; lo de PC largo → madre v2; subagentes propios con `model` explícito (haiku/sonnet; opus solo riesgo). Memoria: `feedback-madre-orquesta-llm-por-rol`.
 - **Pendiente de SU:** token IG de Lucía (camino B) · link de la asesoría en la bio · subir los 5 brutos a Drive · «mergeá
   #136 y #130» · texto legal de #124 · reiniciar la PC (paged pool 4 GB, RAMMap en `~/Tools/RAMMap`).
 
