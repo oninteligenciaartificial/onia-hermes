@@ -407,6 +407,10 @@ antes de que lleguen a Sergio Urcullo.
   solo cuadra como Sol sin caché contra Sol con caché; si dijo «con Astra» el dato es falso (Astra sin caché serían US$2.000).** Una cuenta hablada se re-calcula con los
   precios de la propia pieza antes del master. (10) Dos rodeos iguales para OpenCV 5 (`correr-santiago.py` y `santiago-cv5.py`): el arreglo va en `analizar_bruto()`.
   (11) La REGLA 15 (aire muerto ≤ 0,3 s) vive en `tabla-de-cortes.py` y en los docs de la madre; esta rama la usa con `--sin-aire` y la mide con `silencedetect`.
+- **ARREGLADO el 11-oct: `santiago.py` ya corre con OpenCV 5** (`detector_cara()` en `analizar_bruto()`: Haar si el OpenCV lo trae, YuNet con el modelo del repo si no;
+  el detector entra en la clave del caché del análisis). Comprobado sin rodeo sobre el bruto de N06: el `--plan` sale **idéntico** (ojos, escala por toma, cortes a la
+  vista, aire, palabras/s) al hecho con el rodeo `santiago-cv5.py`, y tarda 29 s. Los dos rodeos de las carpetas `borrador/` de N06 y DD-A ya no hacen falta (siguen
+  funcionando: no parchean nada si Haar existe). Con OpenCV 4.x el camino es el de siempre.
 - **El bruto puede venir ya editado** (el de N03 traía 5 tomas pegadas). Los saltos se detectan con picos aislados de
   diferencia entre cuadros (>5× la mediana y >2,5× sus vecinos) y se tratan como cortes. Si no, el control dice
   «ningún corte a la vista» y es falso.
