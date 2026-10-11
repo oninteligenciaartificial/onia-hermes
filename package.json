@@ -178,6 +178,7 @@
     "test:jarvis-diagnostico": "node --test scripts/loops/diagnostico-mudo.test.mjs",
     "test:qa-diario-guarda": "node --test scripts/loops/qa-diario-guarda.test.mjs",
     "test:jarvis-modelo": "node --test scripts/loops/diagnostico-modelo.test.mjs",
+    "test:jarvis-qa-release": "node --test scripts/loops/diagnostico-qa-release.test.mjs",
     "test:web-vs-producto": "node --test .claude/skills/onia-hermes-jarvis/scripts/web-vs-producto.test.mjs",
     "test:qa-release": "node --test scripts/loops/qa-release.test.mjs",
     "test:herramientas-desplegadas": "node --test scripts/herramientas-desplegadas.test.mjs",

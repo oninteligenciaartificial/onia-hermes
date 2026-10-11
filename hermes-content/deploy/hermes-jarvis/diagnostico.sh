@@ -626,5 +626,41 @@ echo "--- C. Lo que NO se puede medir desde acá"
 echo "sesión de la nube de Hermes-Jarvis: modelo no medible desde el VPS (lo lee la madre en la consola de la sesión)"
 } | redactar
 
+sec "17. QA después de cada publicación — lo que dejó onia-qa-release (11-oct, Q5)"
+ESTADO_QA="/var/lib/onia-qa-release"
+LOG_QA="/var/log/onia-qa-release.log"
+# El diagnóstico diario informa lo que dejó el instrumento, sin alterar su estado.
+qa_redactar() { printf '%s\n' "$1" | redactar; }
+qa_emitir() { qa_redactar "$1"; }
+qa_edad() { local modificado ahora; modificado=$(stat -c %Y "$1" 2>/dev/null) || { printf '?'; return; }; ahora=$(date +%s); [[ "$modificado" =~ ^[0-9]+$ ]] || { printf '?'; return; }; printf '%s' "$(( (ahora - modificado) / 60 ))"; }
+qa_hora() { date -u -d "@$1" +%H:%MZ 2>/dev/null || printf '?'; }
+qa_emitir "--- estado: $ESTADO_QA"
+if [ ! -d "$ESTADO_QA" ]; then
+  qa_emitir "no existe $ESTADO_QA: qa-release todavía no corrió (¿falta aplicar?)"
+else
+  if [ -f "$ESTADO_QA/visto" ]; then
+    visto=$(head -n 1 "$ESTADO_QA/visto" 2>/dev/null)
+    if [[ "$visto" =~ ^[0-9a-f]{7,40}$ ]]; then qa_emitir "release visto: $visto (hace $(qa_edad "$ESTADO_QA/visto") min)"; else qa_emitir "release visto: (formato inesperado)"; fi
+  else qa_emitir "release visto: nunca"; fi
+  if [ -f "$ESTADO_QA/roto" ]; then
+    IFS=' ' read -r roto_sha roto_epoch roto_motivos < "$ESTADO_QA/roto"
+    if [[ "$roto_epoch" =~ ^[0-9]+$ ]]; then roto_desde=$(qa_hora "$roto_epoch"); qa_emitir "veredicto: ROTO desde $roto_desde — $(printf '%s' "$roto_motivos" | cut -c 1-160 | redactar)"; else qa_emitir "veredicto: ROTO desde ? — $(printf '%s' "$roto_motivos" | cut -c 1-160 | redactar)"; fi
+  fi
+  if [ -f "$ESTADO_QA/sin-medir" ]; then qa_emitir "veredicto: SIN MEDIR (el instrumento no pudo medir)"; elif [ ! -f "$ESTADO_QA/roto" ]; then qa_emitir "veredicto: sano"; fi
+  ventana="?"; if [ -f "$ESTADO_QA/ventana" ]; then w=$(head -n 1 "$ESTADO_QA/ventana" 2>/dev/null); [[ "$w" =~ ^[0-9]+$ ]] && ventana=$(qa_hora "$w"); fi
+  seguidas="?"; if [ -f "$ESTADO_QA/ventanas-seguidas" ]; then s=$(head -n 1 "$ESTADO_QA/ventanas-seguidas" 2>/dev/null); [[ "$s" =~ ^[0-9]+$ ]] && seguidas="$s"; fi
+  qa_emitir "ventanas del publicador: última leída $ventana; seguidas sin publicar: $seguidas"
+  tarea_roto="—"; tarea_medir="—"; tarea_log="—"; tarea_ventanas="—"
+  for tarea in roto medir log ventanas; do
+    archivo="$ESTADO_QA/tarea-$tarea"
+    if [ -f "$archivo" ]; then id=$(head -n 1 "$archivo" 2>/dev/null); if [[ "$id" =~ ^t_[0-9a-f]{8}$ ]]; then printf -v "tarea_$tarea" '%s' "$id"; else printf -v "tarea_$tarea" '%s' '(id inválido)'; fi; fi
+  done
+  qa_emitir "tareas abiertas: roto $tarea_roto · medir $tarea_medir · log $tarea_log · ventanas $tarea_ventanas"
+  capturas="$ESTADO_QA/capturas"; cantidad=0; edad_captura="?"
+  if [ -d "$capturas" ]; then cantidad=$(ls -1 "$capturas"/*.png 2>/dev/null | wc -l); cantidad=$((cantidad + 0)); nueva=$(ls -t "$capturas"/*.png 2>/dev/null | head -n 1); [ -n "$nueva" ] && edad_captura=$(qa_edad "$nueva"); fi
+  qa_emitir "capturas: $cantidad archivo(s) .png; la más nueva hace $edad_captura min"
+  qa_emitir "--- últimas 15 líneas de $LOG_QA"
+  if [ -f "$LOG_QA" ]; then tail -n 15 "$LOG_QA" | cut -c 1-200 | redactar; else qa_emitir "(no existe: qa-release todavía no escribió)"; fi
+fi
 sec "fin"
 echo "diagnóstico terminado $(date -u +%FT%TZ) — no se modificó nada"
