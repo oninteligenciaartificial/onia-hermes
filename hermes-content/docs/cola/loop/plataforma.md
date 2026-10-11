@@ -13,7 +13,11 @@ Orden: lo que destraba cobrar primero. Cada PR: integrar con master, suite compl
 - [ ] (#118, #119 y #110 van dentro de #136.)
 - [ ] #146 títulos públicos de usted (pedido de la madre v4): CI en cola; con verde, merge (textos).
 - [x] Demo del lunes 12-oct (07-11 UTC): plan `reset=2` + lista C1-C7 → `cola/demo-venta-refresco.md` (11-oct). Correrlo pide el sí de Sergio Urcullo acá.
-- [ ] #132 K1 (respuesta al recordatorio)
+- [ ] #132 K1 (respuesta al recordatorio): **después** según el corte (nadie lo llama hasta conectar el WhatsApp del negocio).
+- [ ] U4 registrarse, confirmar el correo y entrar, de usted: contrato `handoff/codex-tareas/U4-usted-registro-y-entrada.md` (11-oct, pedido de la madre). Lo lanza la madre; Plataforma revisa, integra con master, suite completa, mergea y mira `/login` y `/register` en prod.
+- [ ] U5 el alta guiada, la guía de inicio y el recorrido, de usted: contrato `handoff/codex-tareas/U5-usted-configurar-el-negocio.md` (11-oct). Mismo camino que U4; corre en paralelo (solo comparten la línea base del trinquete).
+- [ ] U6 correos y avisos del plan de usted (`lib/email.ts`, `lib/subscription/**`, `lib/plan-limits.ts`, `components/plan/AsientosCard.tsx`): escribir el contrato cuando #113 se mergee o se descarte, porque #113 cambia esos mismos archivos.
+- [ ] Infra de la bandeja en tiempo real (webhook de Chatwoot + `CHATWOOT_EVENTOS_SECRET` + recrear el contenedor): el control de permisos frenó el `docker exec` del script en producción (11-oct 05:27 UTC), aun en modo solo lectura. Necesita la línea de Sergio Urcullo en esta sesión o que lo corra la madre. Sin eso la bandeja anda con sondeo.
 - [ ] Refrescar la demo dental en prod (`scripts/demo-venta/seed-demo.sql`, pasos en `cola/demo-venta-refresco.md`) y sacar las capturas C1-C7 del VSL
 - [ ] Mirar con login lo publicado el 8-oct (#128): agenda «Hoy» con WhatsApp, «sin confirmar», tarjeta del chatbot; y el punto 11 (reprogramar, días cerrados en `/book`, aviso de reserva online)
 - [ ] SQL del B22 (REVOKE a anon) aplicado y medido (no entró en el sí del 10-oct)
