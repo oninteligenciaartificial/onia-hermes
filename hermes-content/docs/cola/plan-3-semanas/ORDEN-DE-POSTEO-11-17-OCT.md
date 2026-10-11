@@ -1,6 +1,6 @@
 # Orden de posteo · domingo 11 → sábado 17 de octubre (calendario único)
 
-Actualizado el 11-oct, ~07:00 UTC (03:00 La Paz), por Marca personal, que desde hoy (orden de la MADRE MARKETING a pedido de Sergio Urcullo) lleva la edición y el posteo de punta a punta. Reglas fijas del día y qué sale en cada red: `CALENDARIO-PUBLICACION-9-16-OCT.md` (no se copian). **Nada se agenda ni se publica sin «mostrada, publicá <pieza>» de la madre.**
+Actualizado el 11-oct, ~09:35 UTC (05:35 La Paz; los cinco borradores de video están listos), por Marca personal, que desde hoy (orden de la MADRE MARKETING a pedido de Sergio Urcullo) lleva la edición y el posteo de punta a punta. Reglas fijas del día y qué sale en cada red: `CALENDARIO-PUBLICACION-9-16-OCT.md` (no se copian). **Nada se agenda ni se publica sin «mostrada, publicá <pieza>» de la madre.**
 
 **Camino de cada video:** corte listo (tabla + preview 360p) → **«ok cortes»** de Sergio Urcullo (lo pasa la madre) → master con molde, subtítulos y regla 15 → «LISTA PARA MOSTRAR: <pieza> (master)» → **«mostrada, publicá <pieza>»** → Marca agenda en el VPS (`agendar-publicacion.sh`: `ig-reel.mjs` para IG, `buffer-post.mjs` para TikTok, Shorts y LinkedIn) → «PUBLICADO: <pieza> — <link>».
 
@@ -24,18 +24,18 @@ Actualizado el 11-oct, ~07:00 UTC (03:00 La Paz), por Marca personal, que desde 
 |---|---|---|---|---|---|
 | Dom 11 | 12:30 | **N06** Gemini CLI → Antigravity (45,5 s) | — | corte listo (`88e7cd10c`) · borrador listo (`fbad86d1c`) · `videos/marca-personal/2026-10-11/n06-antigravity/` | «ok cortes» y master **antes de las 15:30 UTC**; re-leer geminicli.com (el aviso acota a «Unpaid tier y Google One»). Si no llega, pasa a las 18:30 |
 | Dom 11 | 16:00 | Carrusel ANTIGRAVITY (N06) | ANTIGRAVITY | agendada | **decisión de Sergio Urcullo** (la madre avisa). No se toca |
-| Dom 11 | 18:30 | **DD-A** OpenAI Sol y la caché (58,4 s) | — | corte listo (`63e507548`) · `videos/marca-personal/2026-10-11/dd-a-openai-sol/` | «ok cortes»; **escuchar 01:01–01:09** (¿dijo «con Astra» o «con Sol»? la cuenta 400 contra 20 solo cuadra con Sol); el cierre pide la asesoría y **el link en la bio todavía no está**. Si no se resuelve antes de las 21:30 UTC, **N07 ocupa este hueco** y DD-A pasa al lun 12 12:30 |
-| Lun 12 | 12:30 | **N07** Haiku 5.5 (81,7 s; salió el 7-oct, la noticia envejece) | HAIKU | corte listo (`4e751ae46`) · `videos/marca-personal/2026-10-11/n07-haiku-55/` | «ok cortes»; verificar contra la doc de Anthropic «5 veces más si el prompt pasa de 100 mil tokens» y «lo que piensa se cobra como salida»; aviso HAIKU existe |
+| Dom 11 | 18:30 | **DD-A** OpenAI Sol y la caché (58,4 s) | — | corte listo (`63e507548`) · borrador listo (`5dfefc8f7`) · `videos/marca-personal/2026-10-11/dd-a-openai-sol/` | «ok cortes»; **escuchar 01:01–01:09** (¿dijo «con Astra» o «con Sol»? la cuenta 400 contra 20 solo cuadra con Sol); el cierre pide la asesoría y **el link en la bio todavía no está**. Si no se resuelve antes de las 21:30 UTC, **N07 ocupa este hueco** y DD-A pasa al lun 12 12:30 |
+| Lun 12 | 12:30 | **N07** Haiku 5.5 (81,7 s; salió el 7-oct, la noticia envejece) | HAIKU | corte listo (`4e751ae46`) · borrador listo (`0b55a7ff0`) · `videos/marca-personal/2026-10-11/n07-haiku-55/` | «ok cortes»; verificar contra la doc de Anthropic «5 veces más si el prompt pasa de 100 mil tokens» y «lo que piensa se cobra como salida»; aviso HAIKU existe |
 | Lun 12 | 16:00 | Carrusel PRUEBAS (K4 v2) | PRUEBAS | agendada | su aviso PRUEBAS no existe |
 | Lun 12 | 18:30 | **BA814C81** (tal cual, sin editar, todas las redes) | — | propuesta (nota 1) | OK de Sergio Urcullo al día y la hora; el archivo **no está compartido por enlace** |
 | Mar 13 | 12:30 | **SI-01** Claude trabaja con la compu apagada | RUTINA | falta grabar | rutina creada el día anterior |
 | Mar 13 | 16:00 | Carrusel PROMPT (K8 v3) | PROMPT | agendada | — |
 | Mar 13 | 18:30 | **SI-02** Antes de instalar OpenClaw | OPENCLAW | falta grabar | OpenClaw en una compu aparte y el OK de Sergio Urcullo |
-| Mié 14 | 12:30 | **S2-D07-A** la ventana de 24 horas (90,8 s) | — | corte listo (`f643bb188`) · `videos/marca-personal/2026-10-11/s2-d07-a-ventana-24h/` | «ok cortes»; **decisión de Sergio Urcullo sobre la frase de las variables de las plantillas** (cortarla o regrabarla; 00:57–01:04 del bruto); su cierre pide la comunidad, no la asesoría |
+| Mié 14 | 12:30 | **S2-D07-A** la ventana de 24 horas (90,8 s) | — | corte listo (`f643bb188`) · borrador listo (`9fdda2023`) · `videos/marca-personal/2026-10-11/s2-d07-a-ventana-24h/` | «ok cortes»; **decisión de Sergio Urcullo sobre la frase de las variables de las plantillas** (cortarla o regrabarla; 00:57–01:04 del bruto); su cierre pide la comunidad, no la asesoría |
 | Mié 14 | 16:00 | Carrusel BRIEF (K7 v2) | BRIEF | agendada · floja | su aviso BRIEF no existe |
 | Mié 14 | 18:30 | **SI-03** Claude, pero vago | VAGO | falta grabar | Ponytail instalado y la prueba con y sin él |
 | Jue 15 | 16:00 | Carrusel SKILL (K2 v3) | SKILL | agendada | — |
-| Jue 15 | 18:30 | **N02** Sonnet 4.5 se apaga el 30-nov (111,4 s) | MIGRAR | corte listo (`26bf1e566`) · `videos/marca-personal/2026-10-11/n02-sonnet-45/` | «ok cortes»; «quedan 46 días» **solo vale este jueves**; bloque de 2,4 s sin transcripción (frase o ruido); aviso MIGRAR existe |
+| Jue 15 | 18:30 | **N02** Sonnet 4.5 se apaga el 30-nov (111,4 s) | MIGRAR | corte listo (`26bf1e566`) · borrador listo (`90e002704`) · `videos/marca-personal/2026-10-11/n02-sonnet-45/` | «ok cortes»; «quedan 46 días» **solo vale este jueves**; bloque de 2,4 s sin transcripción (frase o ruido); aviso MIGRAR existe |
 | Vie 16 | 12:30 | **SI-04** Tres comandos escondidos | SECRETOS | falta grabar | — |
 | Vie 16 | 16:00 | Carrusel PROMESA (K6 v2) | PROMESA | agendada | — |
 | Vie 16 | 18:30 | **SI-08** Un video que escribió Claude | HYPERFRAMES | falta grabar | clip de 3 s hecho con HyperFrames |
