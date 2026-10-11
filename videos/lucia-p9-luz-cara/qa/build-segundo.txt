@@ -1,0 +1,3 @@
+AVISO VISIBLE: --borrador usa m4 PROXY 360p. BUILD NO APTO PARA MASTER; solo gates estáticos.
+OK datos/pie/voz: 304 caracteres, cronograma 480/24 s; lienzo 480 cuadros/20 s. NO APTO PARA MASTER
+EXIT 0

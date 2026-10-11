@@ -1,0 +1,3 @@
+Mayor tramo DOM quieto fuera de lectura/clip: 0.000 s (tope 0,3); sin exención: 1.708 s. Clips: movimiento fuente asumido, píxeles PENDIENTE.
+EXIT 0
+EXIT 0

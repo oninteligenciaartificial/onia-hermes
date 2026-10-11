@@ -1,0 +1,2 @@
+IDEMPOTENTE: dos builds, mismo md5
+0bc4ba745a09b3afb4b5f3d579b7040a *index.html

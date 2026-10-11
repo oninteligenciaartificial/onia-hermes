@@ -1,0 +1,12 @@
+parecido: RECHAZADO correctamente
+créditos: RECHAZADO correctamente
+brillo: RECHAZADO correctamente
+cara 139: RECHAZADO correctamente
+cara 347: RECHAZADO correctamente
+todas las caras <200: RECHAZADO correctamente
+cifra pantalla: RECHAZADO correctamente
+cifra pie: RECHAZADO correctamente
+declaración IA pie: RECHAZADO correctamente
+cifra voz: RECHAZADO correctamente
+EXIT 0
+EXIT 0
