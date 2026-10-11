@@ -1,0 +1,37 @@
+◆  Checking lucia-viernes-copia-v1
+[HyperFrames] Not inlining "assets/k4.png" (4.7 MB exceeds the 2 MB inline limit). The bundle may not be self-contained.
+[HyperFrames] Not inlining "assets/k4-panel.png" (4.7 MB exceeds the 2 MB inline limit). The bundle may not be self-contained.
+[HyperFrames] Not inlining "assets/r3.png" (5.3 MB exceeds the 2 MB inline limit). The bundle may not be self-contained.
+[HyperFrames] Not inlining "assets/k4.png" (4.7 MB exceeds the 2 MB inline limit). The bundle may not be self-contained.
+[HyperFrames] Not inlining "assets/k4-panel.png" (4.7 MB exceeds the 2 MB inline limit). The bundle may not be self-contained.
+[HyperFrames] Not inlining "assets/r3.png" (5.3 MB exceeds the 2 MB inline limit). The bundle may not be self-contained.
+[hyperframes] browserGpuMode probe → software (WebGL unavailable)
+
+Lint
+  ⚠ nested_structure_needs_subcomposition: <div id="s1"> is a timeline element that contains nested <img id="foto-s1">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-viernes-copia-v1/index.html #s1 t=0s
+    Fix: Move <div id="s1"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="s2"> is a timeline element that contains nested <div id="panel-k4">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-viernes-copia-v1/index.html #s2 t=0s
+    Fix: Move <div id="s2"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="placa"> is a timeline element that contains nested <div id="fila-a">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-viernes-copia-v1/index.html #placa t=0s
+    Fix: Move <div id="placa"> and its contents into a sub-composition file and mount it with data-composition-src.
+  0 error(s), 3 warning(s), 0 info(s)
+
+Runtime
+  ◇ 0 errors, 0 warnings
+
+Layout
+  ◇ 0 issues across 9 sample(s)
+
+Motion
+  ◇ 0 errors, 0 warnings
+
+Contrast
+  ◇ 29/29 text checks pass WCAG AA
+
+Snapshots
+  ◇ disabled
+
+◇  Check passed

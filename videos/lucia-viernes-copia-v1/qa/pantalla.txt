@@ -1,0 +1,15 @@
+Lucía Antelo · personaje IA de Onia
+Casi publico este 0,83.
+Kling O1 Image · parecido 0,83
+Kling O1 Image
+Mirá la foto que recibió.
+Misma pose, ventana, taza.
+Con esa foto: 0,93
+Con las otras siete: 0,56 a 0,73
+Con las 4 que no recibió: 0,74
+0
+piso 0,70
+1
+Casi copia: no prueba identidad.
+Mirá el parecido foto por foto.
+Seguime: cada semana, una prueba.

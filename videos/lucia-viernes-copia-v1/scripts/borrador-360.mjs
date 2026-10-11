@@ -9,7 +9,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 const P = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const dir = path.resolve(process.argv[2] || path.join(P, 'renders/draft360'));
-if (!dir.startsWith(P + path.sep)) throw new Error('El borrador debe permanecer dentro de la carpeta P9');
+if (!dir.startsWith(P + path.sep)) throw new Error('El borrador debe permanecer dentro de la carpeta de la pieza');
 fs.mkdirSync(dir, { recursive: true });
 let h = fs.readFileSync(path.join(P, 'index.html'), 'utf8');
 h = h.replace('<meta name="viewport" content="width=1080, height=1920">', '<meta name="viewport" content="width=360, height=640">')

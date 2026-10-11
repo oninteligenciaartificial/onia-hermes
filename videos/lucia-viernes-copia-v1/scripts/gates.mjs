@@ -34,7 +34,7 @@ export async function run(gate){
    const t0=ev.empuje?ev.t-.25:ev.t-1/24,a=await sig(t0),b=await sig(ev.t+.12);check(a.length&&b.length,`Evento sin elemento: ${ev.selector}`);
    check(JSON.stringify(a)!==JSON.stringify(b),`Evento sin cambio visible ${ev.que}`);
    if(ev.entrada)check(a.every(s=>s.o<.5)&&b.every(s=>s.o>=.5),`Entrada que no se ve entrar: ${ev.que}`);
-   if(ev.aro)check(a.every(s=>+s.d>=.99)&&b.every(s=>+s.d<1),`Aro que no se dibuja: ${ev.que}`);
+   if(ev.aro)check(a.every(s=>parseFloat(s.d)>=.99)&&b.every(s=>parseFloat(s.d)<1),`Aro que no se dibuja: ${ev.que}`);
    lines.push(`${ev.t.toFixed(3)}: ${ev.que}`)}
   max=Math.max(max,T-prev);check(T-prev<=2,'Cola sin evento');lines.push(`${evs.length} eventos, hueco máximo ${max.toFixed(3)} s`);
  }else if(gate==='aire'){
@@ -49,7 +49,7 @@ export async function run(gate){
   const loaded=await page.evaluate(()=>Array.from(document.fonts,f=>({familia:f.family.replaceAll('"',''),estado:f.status})));
   for(const family of ['Bricolage Grotesque','DM Sans','Spline Sans Mono'])if(!loaded.some(f=>f.familia===family&&f.estado==='loaded'))audit.fallos.push({regla:'fuente de marca no cargada',id:family,cuadro:null,tiempo:null,valor:loaded,limite:'fuente local loaded; sin fallback'});
   save('medir-dom-fallos.json',audit);
-  lines.push(`${audit.cajas} cajas / ${rows.length} cuadros; ${audit.fallos.length} fallos. Margen mínimo mentón-texto ${audit.margen_minimo_menton} px; dato ${audit.primer_dato}s; CTA ${audit.cta_duracion}s. Caras: SCRFD sobre las dos fotos (qa/caras-fotos.json).`);
+  lines.push(`${audit.cajas} cajas / ${rows.length} cuadros; ${audit.fallos.length} fallos. Margen mínimo mentón-texto ${Math.round(audit.margen_minimo_menton)} px; dato ${audit.primer_dato.toFixed(3)} s; CTA ${audit.cta_duracion.toFixed(3)} s. Caras: SCRFD sobre las dos fotos (qa/caras-fotos.json).`);
   for(const f of audit.fallos)lines.push(`${f.regla}: id=${f.id} cuadro=${f.cuadro} tiempo=${f.tiempo} valor=${JSON.stringify(f.valor)} límite=${f.limite}`);
   check(!audit.fallos.length,`${audit.fallos.length} fallos DOM; lista completa en qa/medir-dom.txt y qa/medir-dom-fallos.json`);
  }else throw Error('Gate desconocido '+gate);

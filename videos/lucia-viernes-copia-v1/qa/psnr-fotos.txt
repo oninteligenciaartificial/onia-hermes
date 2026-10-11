@@ -1,0 +1,10 @@
+s1 K4 pantalla completa (y 300-1100) · master f12: PSNR 41.34 dB
+s1 K4 pantalla completa (y 300-1100) · master f36: PSNR 41.34 dB
+s1 K4 pantalla completa (y 300-1100) · master f60: PSNR 41.34 dB
+s2 panel K4 (cara y mano, antes de los aros) · master f84: PSNR 39.20 dB
+s2 panel K4 (cara y mano, antes de los aros) · master f90: PSNR 39.20 dB
+s2 panel K4 (cara y mano, antes de los aros) · master f96: PSNR 39.20 dB
+s2 panel R3 (cara y mano, antes de los aros) · master f84: PSNR 36.99 dB
+s2 panel R3 (cara y mano, antes de los aros) · master f90: PSNR 36.99 dB
+s2 panel R3 (cara y mano, antes de los aros) · master f96: PSNR 36.99 dB
+PSNR mínimo 36.99 dB (umbral 35)

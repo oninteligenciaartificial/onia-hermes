@@ -1,0 +1,9 @@
+{
+  "name": "lucia-viernes-copia-v1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "check": "npx --offline --yes hyperframes@0.8.142 check"
+  }
+}

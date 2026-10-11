@@ -1,0 +1,2 @@
+Mayor tramo DOM quieto fuera de lectura: 0.167 s (tope 0,3; termina en 14.958 s); sin exención de lectura: 0.500 s. Fotos fijas: sin movimiento de fuente asumido; los píxeles se miden en el master.
+EXIT 0

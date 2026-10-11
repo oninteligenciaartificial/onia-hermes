@@ -1,75 +1,90 @@
-// Prueba negativa sin tocar fuentes ni contenido: ejecuta build con lecturas interceptadas.
-import fs from 'node:fs';import path from 'node:path';import vm from 'node:vm';import {fileURLToPath,pathToFileURL} from 'node:url';
+// Prueba negativa sin tocar fuentes ni contenido: ejecuta build.mjs con lecturas interceptadas y escrituras BLOQUEADAS. Cada alteración (cifra, frase, orden, aro, pie, voz) tiene que ser rechazada por el motivo esperado.
+import fs from 'node:fs';import path from 'node:path';import vm from 'node:vm';import crypto from 'node:crypto';import {fileURLToPath,pathToFileURL} from 'node:url';
 import {P,plan,check,save} from './qa-dom.mjs';import {cronograma} from './voz.mjs';
 const src=fs.readFileSync(path.join(P,'scripts/build.mjs'),'utf8').replace(/^import .*;\r?$/gm,'').replaceAll('import.meta.url',JSON.stringify(pathToFileURL(path.join(P,'scripts/build.mjs')).href));
-const PIE_KLING='En el clip original (720p), la cara de Kling 3.0 std queda bajo 200 px todo el clip; la de Seedance 2.0 Mini, solo al inicio (pasa de 139 a 347 px porque el encuadre se acerca).';
-const PIE_OFICIALES='las 8 fotos oficiales de Lucía, R1 a R8';
-const PIE_CUENTAS8='Esos números (0,79 a 0,72 y 0,71 a 0,80) se calcularon con las 8 fotos. ';
-const PIE_DIRECTAS='Seedance 2.0 Mini + referencias recibió como entrada 2 de las 8 fotos con que se compara el parecido (R1 y R3). ';
-const PIE_K1='Ambas tomas parten de la misma foto de arranque, que se hizo con 4 de esas 8 (R1, R3, R6, R7), así que ninguna es independiente. ';
-const PIE_ESTRICTA='Midiendo solo con las 4 fotos que nadie recibió (R2, R4, R5, R8), Kling 3.0 std baja de 0,72 a 0,67 y Seedance sube de 0,64 a 0,73: el sentido no cambia. ';
-const PIE_ESCALA='Con solo 4 fotos el parecido sale más bajo que con las 8 en los seis clips que medí (estos dos y otros cuatro); por eso el 0,72 de «0,79 a 0,72» (con las 8) no es el 0,72 de «0,72 a 0,67» (con las 4). ';
-const PIE_LETRERO='Seedance 2.0 Mini inventó un letrero en la torre (de 7 a 11,5 s): no existe. Lo difuminé en el video. ';
-const LIMITE_VIEJO='El parecido es indicativo: bajo 200 px la cara es poco confiable (Seedance parte de 139 px). Ruido de ±0,03.';
+const pie0=fs.readFileSync(path.join(P,'pie.txt'),'utf8');
+const F=s=>{if(!pie0.includes(s))throw Error('mutación mal escrita: el pie no contiene «'+s.slice(0,50)+'»');return s};
 const swap=(p,a,b)=>{const x=p.eventos.find(e=>e.selector===a&&e.entrada),y=p.eventos.find(e=>e.selector===b&&e.entrada);[x.t,y.t]=[y.t,x.t]};
+const pieSin=s=>['pie.txt',t=>t.replace(F(s),'')];
+const pieCambia=(a,b)=>['pie.txt',t=>t.replace(F(a),b)];
+const txt=(k,v)=>p=>{p.textos[k]=v};
 const cases=[
- ['parecido',p=>p.clips[0].parecido[1]=.75,null,/m1 parecido/],
- ['créditos',p=>p.clips[1].creditos=7,null,/m4 créditos/],
- ['brillo',p=>p.clips[1].brillo[2]=-32,null,/m4 brillo/],
- ['cara 139',p=>p.clips[1].cara_px[0]=138,null,/m4 cara px/],
- ['cara 347',p=>p.clips[1].cara_px[1]=348,null,/m4 cara px/],
- ['todas las caras <200',p=>p.textos.limite_cara='Todas las caras miden menos de 200 px.',null,/textos\/cifras/],
- ['H1 rev.1: «Seedance parte de 139 px» como única mención de tamaño (pantalla)',p=>p.textos.limite_cara=LIMITE_VIEJO,null,/textos\/cifras/],
- ['H1 rev.1: «Seedance parte de 139 px» como única mención de tamaño (pie)',()=>{},['pie.txt',s=>s.replace(PIE_KLING,'(en Seedance 2.0 Mini parte de 139 px) y el ruido es de ±0,03.')],/Kling debe nombrarse/],
- ['H1 rev.1: etiqueta sin «del clip original»',p=>p.textos.reencuadre='Cara: 139 → 347 px · reencuadra',null,/textos\/cifras/],
- ['H5 rev.2: límite de cara sin «(clip original)»',p=>p.textos.limite_cara='Cara bajo 200 px: poco confiable. Kling siempre; Seedance al inicio. Ruido ±0,03.',null,/textos\/cifras/],
- ['H1 rev.3: límite de cara con la versión de 19 palabras de la v3',p=>p.textos.limite_cara='Bajo 200 px (clip original) la cara es poco confiable: Kling, todo el clip; Seedance, el inicio. Ruido ±0,03.',null,/textos\/cifras/],
- ['H1 rev.3: límite de cara sin «Ruido ±0,03»',p=>p.textos.limite_cara='Cara bajo 200 px (clip original): poco confiable. Kling siempre; Seedance al inicio.',null,/textos\/cifras/],
- ['H1 rev.3: límite de cara que deja de nombrar a Seedance («solo Kling»)',p=>p.textos.limite_cara='Cara bajo 200 px (clip original): poco confiable en Kling. Ruido ±0,03.',null,/textos\/cifras/],
- ['H3 rev.1: titular afirmativo',p=>p.textos.titulo='La cara o la escena.',null,/textos\/cifras/],
- ['H6 rev.1: delta de brillo con decimal en la pastilla',p=>p.textos.m1=p.textos.m1.replace('brillo −1','brillo −1,0'),null,/textos\/cifras/],
- ['cifra pantalla',p=>p.textos.m1=p.textos.m1.replace('0,72','0,73'),null,/textos\/cifras/],
- ['cifra pie',()=>{},['pie.txt',s=>s.replace('0,72','0,73')],/pie y cifras/],
- ['declaración IA pie',()=>{},['pie.txt',s=>s.replace('Personaje hecho con IA','Personaje digital')],/Pie debe abrir/],
- ['H1 rev.2: aviso de la toma de Seedance borrado de la pantalla',p=>p.textos.aviso_refs='',null,/textos\/cifras/],
- ['H1 rev.2: «fotos de puntaje» en vez de «fotos con que se compara» (pastilla)',p=>p.textos.aviso_refs='Seedance recibió 2 de las 8 fotos de puntaje.',null,/textos\/cifras/],
- ['H3 rev.3: «fotos con que se mide» (formulación vieja) en la pastilla',p=>p.textos.aviso_refs='Seedance recibió 2 de las 8 fotos con que se mide.',null,/textos\/cifras/],
- ['H3 rev.3: «fotos con que se mide» (formulación vieja) en la nota del asterisco',p=>p.textos.nota_refs='* Seedance recibió 2 de las 8 fotos con que se mide.',null,/textos\/cifras/],
- ['H3 rev.3: «fotos con que se mide el parecido» (formulación vieja) en el pie',()=>{},['pie.txt',s=>s.replace('con que se compara el parecido','con que se mide el parecido')],/recibió como entrada/],
- ['H1 rev.2: nota del asterisco borrada de la placa',p=>p.textos.nota_refs='',null,/textos\/cifras/],
- ['H1 rev.2: nota del asterisco con otra cantidad de fotos',p=>p.textos.nota_refs=p.textos.nota_refs.replace('2 de','3 de'),null,/textos\/cifras/],
- ['H1 rev.2: fila de Seedance sin asterisco',p=>{p.clips[1].asterisco=false},null,/asterisco/],
- ['H1 rev.2: asterisco también en la fila de Kling',p=>{p.clips[0].asterisco=true},null,/asterisco/],
- ['H5 rev.3: pie sin definir R1 a R8 («ocho fotos oficiales» a secas)',()=>{},['pie.txt',s=>s.replace(PIE_OFICIALES,'ocho fotos oficiales')],/fotos oficiales de Lucía/],
- ['H5 rev.3: pie sin aclarar con cuántas fotos se calcularon 0,79 a 0,72 y 0,71 a 0,80',()=>{},['pie.txt',s=>s.replace(PIE_CUENTAS8,'')],/calcularon con las 8 fotos/],
- ['H5 rev.3: pie sin aclarar que 4 fotos puntúan más bajo (el 0,72 de 8 no es el 0,72 de 4)',()=>{},['pie.txt',s=>s.replace(PIE_ESCALA,'')],/puntúa más bajo/],
- ['H5 rev.3: pie con las dos diferencias sin decir con cuántas fotos',()=>{},['pie.txt',s=>s.replace('las dos diferencias con las 8 fotos','las dos diferencias')],/pie y cifras/],
- ['H2 rev.2: pie sin el dato de las 2 fotos que Seedance recibió como entrada',()=>{},['pie.txt',s=>s.replace(PIE_DIRECTAS,'')],/recibió como entrada/],
- ['H2 rev.2: pie sin el hecho de la foto de arranque K1',()=>{},['pie.txt',s=>s.replace(PIE_K1,'')],/foto de arranque/],
- ['H2 rev.2: pie con «Kling no recibió ninguna» (imprecisa)',()=>{},['pie.txt',s=>s.replace(PIE_K1,PIE_K1+'Kling no recibió ninguna. ')],/pie y cifras/],
- ['H3 rev.2: pie con el sentido invertido («el sentido cambia»)',()=>{},['pie.txt',s=>s.replace('el sentido no cambia','el sentido cambia')],/prueba estricta/],
- ['H3 rev.2: pie con otra cifra de la prueba estricta',()=>{},['pie.txt',s=>s.replace('0,64 a 0,73','0,64 a 0,69')],/prueba estricta/],
- ['H3 rev.2: plan con otra cifra de la prueba estricta',p=>{p.prueba_estricta.kling=[0.72,0.7]},null,/prueba estricta/],
- ['H3 rev.2: plan con otras fotos que nadie recibió',p=>{p.prueba_estricta.fotos=['R2','R4','R5','R7']},null,/prueba estricta/],
- ['Retirada: «efecto estimado ≈ 0,03» en la pastilla de Seedance',p=>p.textos.aviso_refs='Seedance recibió 2 de las 8 fotos con que se compara: efecto estimado ≈ 0,03.',null,/Cifra retirada/],
- ['Retirada: «ventaja ≈ 0,03» en la pastilla de Seedance',p=>p.textos.aviso_refs='Seedance recibió 2 de las 8 fotos con que se compara: ventaja ≈ 0,03.',null,/Cifra retirada/],
- ['Retirada: «ventaja» en la nota del asterisco',p=>p.textos.nota_refs='* Seedance recibió 2 de las 8 fotos con que se compara: ventaja.',null,/Cifra retirada/],
- ['Retirada: «≈ 0,03» en el pie',()=>{},['pie.txt',s=>s.replace('así que ninguna es independiente.','así que ninguna es independiente; el efecto es de ≈ 0,03.')],/Cifra retirada/],
- ['Retirada: «dentro del ruido» en el pie',()=>{},['pie.txt',s=>s.replace('el sentido no cambia.','el sentido no cambia, dentro del ruido.')],/Cifra retirada/],
- ['Retirada: «ventaja» en el pie',()=>{},['pie.txt',s=>s.replace('el sentido no cambia.','el sentido no cambia y Seedance tiene ventaja.')],/Cifra retirada/],
- ['Retirada: «dentro del ruido» en la voz',()=>{},['guion-voz.txt',s=>s.replace('la cara baja un poco','la cara baja dentro del ruido')],/Cifra retirada/],
- ['H6 rev.2: orden de entrada con el límite de cara antes de «Una toma cada uno»',p=>swap(p,'#toma','#limite-cara'),null,/orden de entrada/],
- ['H2 rev.3: la nota del asterisco entra después del brillo',p=>swap(p,'#nota-ast','#brillo'),null,/orden de entrada/],
- ['H2 rev.3: la nota del asterisco entra después de «Una toma cada uno»',p=>swap(p,'#nota-ast','#toma'),null,/orden de entrada/],
- ['H2 rev.3: la nota del asterisco vuelve a entrar a 13,6 s (1,8 s de 0,80* sin nota), con el orden intacto',p=>{for(const e of p.eventos){if(e.selector==='#nota-ast'&&e.entrada)e.t=12.05;if(e.selector==='#toma'&&e.entrada)e.t=12.1}},null,/nota del asterisco entra a/],
- ['H2 rev.3: el aviso de la pastilla vuelve a entrar a 6,5 s (0,5 s de 0,80 sin aviso)',p=>{p.eventos.find(e=>e.selector==='#aviso-refs'&&e.entrada).t=6.5},null,/aviso de la pastilla entra a/],
- ['H2 rev.3: la pila vertical de la placa no sigue el orden de entrada (nota debajo del brillo)',p=>{p.layout.nota_refs=1500},null,/pila vertical/],
- ['H6 rev.3: CTA sin text-wrap: balance («prueba.» huérfana)',()=>{},['scripts/estilos.css',s=>s.replace('#cta{border-color:#ffbc94;text-wrap:balance}','#cta{border-color:#ffbc94}')],/text-wrap: balance/],
- ['H5 rev.1: letrero inventado ausente del pie',()=>{},['pie.txt',s=>s.replace(PIE_LETRERO,'')],/letrero/],
- ['H5 rev.1: scrim del letrero ausente',p=>{delete p.scrim_m4},null,/scrim/],
- ['H4 rev.1: la voz habla decimales',()=>{},['guion-voz.txt',s=>s.replace('la cara baja un poco','la cara baja de 0,79 a 0,72')],/voz/],
- ['H4 rev.1: L3 vuelve a cruzar el corte («Kling 3.0 std»)',()=>{},['guion-voz.txt',s=>s.replace('Kling: brillo','Kling 3.0 std: brillo')],/voz/]
+ // ── cifras de las fuentes (PROCEDENCIA l.97 y la medición sin refs de entrada)
+ ['0,83: promedio de las 8 distinto de la fuente',p=>{p.datos.promedio8=0.84},null,/datos del plan/],
+ ['0,93: parecido con R3 distinto de la fuente',p=>{p.datos.por_foto.R3=0.9},null,/datos del plan/],
+ ['0,74: promedio de las 4 que nadie recibió distinto de la fuente',p=>{p.datos.sin_recibidas_4=0.76},null,/datos del plan/],
+ ['0,73: parecido con R7 distinto de la fuente',p=>{p.datos.por_foto.R7=0.75},null,/datos del plan/],
+ ['0,56: parecido con R4 distinto de la fuente',p=>{p.datos.por_foto.R4=0.5},null,/datos del plan/],
+ ['créditos de la imagen distintos de PROCEDENCIA',p=>{p.datos.creditos=1},null,/datos del plan/],
+ ['cara de 677 px distinta de la medición',p=>{p.datos.cara_px=600},null,/datos del plan/],
+ ['otras escenas del mismo motor distintas (0,79)',p=>{p.datos.otras_escenas.K1=0.8},null,/otras escenas/],
+ ['fotos recibidas distintas de la advertencia (R1, R3, R6, R7)',p=>{p.datos.recibidas=['R1','R2','R6','R7']},null,/fotos recibidas/],
+ ['fotos que nadie recibió distintas (R2, R4, R5, R8)',p=>{p.datos.no_recibidas=['R2','R4','R5','R7']},null,/fotos que nadie recibió/],
+ ['la foto copiada deja de ser la más parecida',p=>{p.datos.foto_copiada='R4'},null,/debe ser la foto con mayor parecido/],
+ ['piso de identidad cambiado',p=>{p.datos.piso=0.65},null,/piso de identidad/],
+ ['SHA-256 de K4 distinto',p=>{p.fotos.k4.sha256='0'.repeat(64)},null,/SHA-256/],
+ ['tamaño de R3 distinto',p=>{p.fotos.r3.ancho=1000},null,/tamaño del PNG/],
+ // ── textos de pantalla
+ ['título con otra cifra (0,84)',txt('titulo','Casi publico este 0,84.'),null,/textos\/cifras/],
+ ['título «Era copia, no identidad.» (sobreafirma: sin el «casi» ni el «no prueba»)',txt('titulo','Era copia, no identidad.'),null,/textos\/cifras/],
+ ['dato sin el nombre de la herramienta',txt('dato','Parecido 0,83'),null,/textos\/cifras/],
+ ['dato con otra cifra',txt('dato','Kling O1 Image · parecido 0,82'),null,/textos\/cifras/],
+ ['fila de R3 con 0,92',txt('fila_a','Con esa foto: 0,92'),null,/textos\/cifras/],
+ ['fila de las otras siete con 0,74',txt('fila_b','Con las otras siete: 0,56 a 0,74'),null,/textos\/cifras/],
+ ['fila de las 4 con 0,75',txt('fila_c','Con las 4 que no recibió: 0,75'),null,/textos\/cifras/],
+ ['piso 0,75 en la escala',txt('escala_piso','piso 0,75'),null,/textos\/cifras/],
+ ['nota «Era copia, no identidad.»',txt('nota_copia','Era copia, no identidad.'),null,/textos\/cifras/],
+ ['CTA distinto del exacto',txt('cta','Seguime: cada semana, una prueba más.'),null,/textos\/cifras/],
+ ['rótulo sin «IA»',txt('rotulo','Lucía Antelo · personaje de Onia'),null,/textos\/cifras/],
+ ['«el mejor» en la lección',txt('leccion','Mirá el parecido foto por foto: el mejor método.'),null,/textos\/cifras/],
+ ['«≈ 0,03» en el dato',txt('dato','Kling O1 Image · parecido 0,83 ≈ 0,03'),null,/textos\/cifras/],
+ // ── pie
+ ['pie sin la apertura de IA',()=>{},['pie.txt',t=>t.replace('Personaje hecho con IA','Personaje digital')],/Pie debe abrir/],
+ ['pie con la apertura de IA en otra posición',()=>{},['pie.txt',t=>t.replace('Personaje hecho con IA: Lucía Antelo, de @oniahq. ','')+' Personaje hecho con IA: Lucía Antelo, de @oniahq.'],/Pie debe abrir/],
+ ['pie sin «Una escena, una toma»',()=>{},pieSin('Una escena, una toma: es una prueba, no una regla. '),/falta «Una escena, una toma/],
+ ['pie con 0,92 en vez de 0,93',()=>{},pieCambia('con R3 sola da 0,93','con R3 sola da 0,92'),/falta el parecido foto por foto/],
+ ['pie con 0,84 en vez de 0,83',()=>{},pieCambia('Le dio un parecido de 0,83','Le dio un parecido de 0,84'),/faltan las 8 fotos oficiales/],
+ ['pie con 0,75 en vez de 0,74',()=>{},pieCambia('el parecido de esta imagen es 0,74','el parecido de esta imagen es 0,75'),/falta la medición con las 4 fotos/],
+ ['pie sin las fotos recibidas (R1, R3, R6 y R7)',()=>{},pieCambia('R1, R3, R6 y R7 (cuatro de las 8 con que se compara)','cuatro fotos'),/falta decir que recibió R1, R3, R6 y R7/],
+ ['pie sin la historia de la copia de R3',()=>{},pieCambia('es casi una copia de una de las fotos que recibió como entrada, la R3','se parece a una foto'),/casi una copia de R3/],
+ ['pie sin las otras dos escenas (0,79 y 0,35)',()=>{},pieSin('El mismo motor dio 0,79 en otra escena y 0,35 en una tercera, donde perdió la cara. '),/faltan las otras dos escenas/],
+ ['pie sin la aclaración de que el piso es del promedio de las 8',()=>{},pieSin('El piso de 0,70 es del promedio de las 8 fotos; el parecido con una sola foto no se compara con ese piso: lo dibujé solo como referencia. '),/aclarar que el piso/],
+ ['pie sin «Nombro lo que uso»',()=>{},pieSin('Nombro lo que uso; no es una recomendación pagada. '),/falta «Nombro/],
+ ['pie sin el ruido de ±0,03',()=>{},pieSin('Ruido de ±0,03. '),/falta el ruido/],
+ ['pie sin el tamaño de la cara',()=>{},pieSin('La cara mide 677 px en la imagen original (bajo 200 px sería poco confiable). '),/tamaño de la cara/],
+ ['pie sin la lección',()=>{},pieSin('Lección: mirá el parecido foto por foto, no solo el promedio. '),/falta la lección/],
+ ['pie sin el cierre y los hashtags',()=>{},pieCambia('Cada semana hago una prueba. Seguime. #inteligenciaartificial #ia #santacruz #bolivia','Seguime.'),/cierre/],
+ ['pie sin decir que casi copia no prueba identidad',()=>{},pieSin('Una imagen que es casi copia de una foto de entrada no prueba que el motor conserve la identidad. '),/no prueba identidad/],
+ ['pie sin aclarar que 4 fotos puntúan más bajo (el 0,74 «no corrige» el 0,83)',()=>{},pieCambia('así que no «corrige» el 0,83: es otra medición.','así que corrige el 0,83.'),/falta la medición con las 4 fotos/],
+ ['pie con «≈ 0,03»',()=>{},pieCambia('Nombro lo que uso;','Efecto ≈ 0,03. Nombro lo que uso;'),/pie y cifras|Cifra retirada/],
+ ['pie con «dentro del ruido»',()=>{},pieCambia('Nombro lo que uso;','Todo dentro del ruido. Nombro lo que uso;'),/pie y cifras|Cifra retirada/],
+ ['pie con «ventaja»',()=>{},pieCambia('Nombro lo que uso;','Kling tiene ventaja. Nombro lo que uso;'),/pie y cifras|Cifra retirada/],
+ ['pie con «el mejor»',()=>{},pieCambia('Nombro lo que uso;','Es el mejor motor. Nombro lo que uso;'),/pie y cifras|Frase prohibida/],
+ ['pie de más de 2.200 caracteres',()=>{},['pie.txt',t=>t+' '+'x'.repeat(400)],/pie y cifras|tope 2\.200/],
+ // ── voz
+ ['voz con cifras habladas',()=>{},['guion-voz.txt',s=>s.replace('Con esa foto, mucho más alto.','Con esa foto, 0,93.')],/voz: las cifras/],
+ ['voz con «dentro del ruido»',()=>{},['guion-voz.txt',s=>s.replace('mucho más alto','dentro del ruido')],/Cifra retirada/],
+ ['voz que pasa el cronograma (línea más larga)',()=>{},['guion-voz.txt',s=>s.replace('Parecía Lucía.','Parecía Lucía, de verdad, parecía ella.')],/voz y cifras/],
+ ['plan: último tramo de voz distinto (el CTA ya no cierra a 15 s)',p=>{p.voz.ultimo_tramo_cuadros=70},null,/el cronograma da/],
+ ['entrada de «Mirá la foto…» a 4 s: 1,25 s después de su línea de voz',p=>{p.eventos.find(e=>e.selector==='#cap-r3'&&e.entrada).t=4},null,/voz: #cap-r3/],
+ ['la lección entra a 11,5 s: lejos de su línea de voz',p=>{p.eventos.find(e=>e.selector==='#leccion'&&e.entrada).t=11.5},null,/voz: #leccion/],
+ // ── eventos, orden y zona segura
+ ['el primer número entra a 3,5 s (después de los 3 s)',p=>{p.eventos.find(e=>e.selector==='#dato'&&e.entrada).t=3.5},null,/primer número/],
+ ['orden de entrada de la placa alterado (fila de las 4 antes que la de las otras siete)',p=>swap(p,'#fila-b','#fila-c'),null,/orden de entrada de la placa/],
+ ['orden de entrada de la escena 2 alterado',p=>swap(p,'#cap-r3','#tile2'),null,/voz: #cap-r3|orden de entrada de la escena 2/],
+ ['pila vertical de la placa fuera de orden (casi copia sobre la fila de las 4)',p=>{p.layout.nota_copia=300},null,/orden vertical de la placa/],
+ ['la fila de R3 deja de llegar con la placa',p=>{p.eventos.find(e=>e.selector==='#fila-a').t=7},null,/voz: #fila-a|llega con la placa/],
+ ['cola de más de 2 s sin evento (sin el acento del CTA)',p=>{p.eventos=p.eventos.filter(e=>e.selector!=='#cta'||e.entrada)},null,/hueco entre eventos/],
+ ['un evento fuera de cuadro (t = 6,6 s)',p=>{p.eventos.find(e=>e.selector==='#aro-taza-k4,#aro-taza-r3').t=6.6},null,/no cae en un cuadro/],
+ ['tile fuera de la zona segura (CTA a y 1600)',p=>{p.layout.cta=1600},null,/zona segura/],
+ ['costura que no coincide con las escenas',p=>{p.costuras[0].t=3.5},null,/no coincide|escenas contra costuras|voz:/],
+ ['aro que se sale del panel de R3',p=>{p.aros[0].r3.cx=2000},null,/sale del panel/],
+ ['panel de R3 con un recorte que no alcanza a cubrir su ancho',p=>{p.paneles.r3.ox=300},null,/no alcanza a cubrir/],
+ ['CTA sin text-wrap: balance («prueba.» huérfana)',()=>{},['scripts/estilos.css',s=>s.replace('#cta{border-color:#ffbc94;text-wrap:balance}','#cta{border-color:#ffbc94}')],/text-wrap: balance/]
 ];
-let lines=[];for(const [name,mutate,rewrite,pattern] of cases){const p=structuredClone(plan);mutate(p);const fake=Object.create(fs);fake.readFileSync=(file,...args)=>{if(path.resolve(file)===path.join(P,'plan.json'))return JSON.stringify(p);const value=fs.readFileSync(file,...args);return rewrite&&path.resolve(file)===path.join(P,rewrite[0])?rewrite[1](value):value};
- let message='';try{vm.runInNewContext(src,{fs:fake,path,fileURLToPath,cronograma,process:{argv:[]},console},{timeout:2000})}catch(e){message=e.message}check(pattern.test(message),`${name}: no rechazado por el motivo esperado: ${message}`);lines.push(`${name}: RECHAZADO correctamente`);}
+let lines=[];for(const [name,mutate,rewrite,pattern] of cases){const p=structuredClone(plan);mutate(p);const fake=Object.create(fs);
+ for(const w of ['writeFileSync','mkdirSync','copyFileSync','linkSync','unlinkSync'])fake[w]=()=>{throw Error('ESCRITURA BLOQUEADA (la alteración no fue rechazada antes de escribir)')};
+ fake.readFileSync=(file,...args)=>{if(path.resolve(file)===path.join(P,'plan.json'))return JSON.stringify(p);const value=fs.readFileSync(file,...args);return rewrite&&path.resolve(file)===path.join(P,rewrite[0])?rewrite[1](value):value};
+ let message='';try{vm.runInNewContext(src,{fs:fake,path,fileURLToPath,crypto,cronograma,process:{argv:[]},console},{timeout:20000})}catch(e){message=e.message}check(pattern.test(message),`${name}: no rechazado por el motivo esperado: ${message}`);lines.push(`${name}: RECHAZADO correctamente (${message.slice(0,90)})`);}
+lines.push(`${cases.length} alteraciones rechazadas`);
 save('validar-mutaciones.txt',lines.join('\n')+'\nEXIT 0\n');console.log(lines.join('\n'));

@@ -146,9 +146,11 @@ for(const e of p.eventos)if(Math.abs(e.t*24-Math.round(e.t*24))>1e-9)fail(`el ev
 {let prev=0,max=0;for(const e of p.eventos){max=Math.max(max,e.t-prev);prev=e.t}max=Math.max(max,p.lienzo.duracion-prev);if(max>2+1e-6)fail(`hueco entre eventos de ${max.toFixed(3)} s (máximo 2,0 s)`)}
 same(p.escenas.map(e=>[e.id,e.a,e.b]),[['s1',0,p.costuras[0].t],['s2',p.costuras[0].t-0.25,p.costuras[1].t],['placa',p.costuras[1].t-0.25,p.lienzo.duracion]],'escenas contra costuras (cada escena arranca en T−6 cuadros y la saliente dura hasta T)');
 for(const [id,v] of Object.entries({rotulo:L.rotulo,titulo:L.titulo,dato:L.dato,cap:L.cap,tile2:L.tile2,fila_a:L.fila_a,cta:L.cta}))if(v<292||v>1490)fail(`${id}: y ${v} fuera de la zona segura 292-1490`);
+if(!/#cta\{[^}]*text-wrap:\s*balance/.test(read('scripts/estilos.css')))fail('#cta debe llevar text-wrap: balance (sin «prueba.» huérfana)');
 // ── 6. Geometría: encuadre de cada foto, caras y aros llevados al lienzo ────────────────────────────────────────────────────────────────────────────────────
 const PN=p.paneles,sK=PN.w/p.fotos.k4.ancho,sR=PN.h/p.fotos.r3.alto;
-const geo={k4:{s:sK,w:p.fotos.k4.ancho*sK,h:p.fotos.k4.alto*sK,left:-PN.k4.ox,x0:0},r3:{s:sR,w:p.fotos.r3.ancho*sR,h:PN.h,left:-PN.r3.ox,x0:PN.w}};
+// Las fotos se colocan con ancho y alto ENTEROS (el panel de K4 de 540x956, el de R3 de 657x880): así el cuadro del master se compara pixel a pixel con la foto escalada por ffmpeg (psnr-fotos)
+const geo={k4:{s:sK,w:PN.w,h:Math.round(p.fotos.k4.alto*sK),left:-PN.k4.ox,x0:0},r3:{s:sR,w:Math.round(p.fotos.r3.ancho*sR),h:PN.h,left:-PN.r3.ox,x0:PN.w}};
 if(PN.k4.ajuste!=='ancho'||PN.r3.ajuste!=='alto')fail('encuadre de los paneles: K4 ajustada al ancho y R3 al alto');
 if(geo.k4.h<PN.h)fail('el panel de K4 es más alto que la foto');if(geo.r3.w-PN.r3.ox<PN.w)fail('el panel de R3 no alcanza a cubrir su ancho (reducir ox)');
 const sCover=Math.max(p.lienzo.w/p.fotos.k4.ancho,p.lienzo.h/p.fotos.k4.alto),dxCover=(p.fotos.k4.ancho*sCover-p.lienzo.w)/2,dyCover=(p.fotos.k4.alto*sCover-p.lienzo.h)/2;
@@ -164,6 +166,7 @@ const aroSvg=(a,foto)=>{const g=geo[foto],q=a[foto],px=v=>R1(v*g.s),X=v=>R1(v*g.
  const shape=q.tipo==='elipse'?`<ellipse id="${id}" cx="${X(q.cx)}" cy="${Y(q.cy)}" rx="${px(q.rx)}" ry="${px(q.ry)}" ${ds}/>`:`<rect id="${id}" x="${X(q.x)}" y="${Y(q.y)}" width="${px(q.w)}" height="${px(q.h)}" rx="14" ${ds}/>`;
  const box=q.tipo==='elipse'?[X(q.cx-q.rx),Y(q.cy-q.ry),X(q.cx+q.rx),Y(q.cy+q.ry)]:[X(q.x),Y(q.y),X(q.x+q.w),Y(q.y+q.h)];
  if(box[0]<2||box[1]<2||box[2]>PN.w-2||box[3]>PN.h-2)fail(`aro ${id} sale del panel (${box.join(', ')}): ajustar plan.aros`);return shape};
+for(const a of p.aros)for(const f of ['k4','r3'])aroSvg(a,f); // valida cada aro contra su panel antes de escribir nada
 // ── 7. Salida: copiar fuentes locales y fotos (se ignoran en git), construir el HTML ──────────────────────────────────────────────────────────────────────────
 fs.mkdirSync(path.join(P,'assets/fonts'),{recursive:true});fs.mkdirSync(path.join(P,'qa'),{recursive:true});
 for(const name of ['BricolageGrotesque-var-latin.woff2','DMSans-var-latin.woff2','SplineSansMono-var-latin.woff2']){
@@ -171,7 +174,9 @@ for(const name of ['BricolageGrotesque-var-latin.woff2','DMSans-var-latin.woff2'
  if(!fs.existsSync(source))fail(`Falta fuente local de marca ${source}; no se descarga.`);
  fs.copyFileSync(source,dest);
 }
-for(const [k,f] of Object.entries(p.fotos)){const out=path.join(P,f.archivo);if(!fs.existsSync(out)||sha(out)!==f.sha256){try{if(fs.existsSync(out))fs.unlinkSync(out);fs.linkSync(fotosOk[k],out)}catch{fs.copyFileSync(fotosOk[k],out)}}}
+// K4 se usa dos veces (pantalla completa y panel): el segundo nombre es un enlace al mismo archivo, para que HyperFrames no marque dos <img> iguales (duplicate_media_discovery_risk)
+for(const [k,f,dest] of [['k4',p.fotos.k4,f_k4()],['k4',p.fotos.k4,'assets/k4-panel.png'],['r3',p.fotos.r3,f_r3()]]){const out=path.join(P,dest);if(!fs.existsSync(out)||sha(out)!==f.sha256){try{if(fs.existsSync(out))fs.unlinkSync(out);fs.linkSync(fotosOk[k],out)}catch{fs.copyFileSync(fotosOk[k],out)}}}
+function f_k4(){return p.fotos.k4.archivo}function f_r3(){return p.fotos.r3.archivo}
 const e=s=>s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
 const tiles=[],ocultos=[];
 const entradas=new Set(p.eventos.filter(x=>x.entrada).map(x=>x.selector.slice(1)));
@@ -182,8 +187,8 @@ const plano=(id,clip,text,y,size,cls)=>tile({id,clip,y,size,cls,html:e(text),tex
 const s1=plano('rotulo','s1',T.rotulo,L.rotulo,40,'')+plano('titulo','s1',T.titulo,L.titulo,66,'card titular')+plano('dato','s1',T.dato,L.dato,42,'card dato');
 // Escena 2: comparación lado a lado
 const ca=(id,txt,x)=>tile({id,clip:'s2',y:L.cap,size:L.cap_px,cls:'card dato cap',html:e(txt),text:txt,x,w:440,extra:`;min-height:${Math.ceil(L.cap_px*1.1*2+24)}px`});
-const panel=(foto,src,ids)=>`<div id="panel-${foto}" class="panel" style="left:${geo[foto].x0}px;top:${PN.y}px;width:${PN.w}px;height:${PN.h}px"><img id="foto-${foto}" src="${src}" alt="${foto==='k4'?'Imagen de Kling O1 Image (café con teclado)':'R3, la foto de entrada'}" data-layout-allow-overflow style="left:${R1(geo[foto].left)}px;top:0px;width:${R1(geo[foto].w*100)/100}px;height:${R1(geo[foto].h*100)/100}px"><svg class="aro" id="aros-${foto}" width="${PN.w}" height="${PN.h}" viewBox="0 0 ${PN.w} ${PN.h}" aria-hidden="true">${p.aros.map(a=>aroSvg(a,foto)).join('')}</svg></div>`;
-const s2=panel('k4','assets/k4.png')+panel('r3','assets/r3.png')+`<div id="divisor" style="left:${PN.w-3}px;top:${PN.y}px;width:6px;height:${PN.h}px"></div>`
+const panel=(foto,src,ids)=>`<div id="panel-${foto}" class="panel" style="left:${geo[foto].x0}px;top:${PN.y}px;width:${PN.w}px;height:${PN.h}px"><img id="foto-${foto}" src="${src}" alt="${foto==='k4'?'Imagen de Kling O1 Image (café con teclado)':'R3, la foto de entrada'}" data-layout-allow-overflow style="left:${R1(geo[foto].left)}px;top:0px;width:${geo[foto].w}px;height:${geo[foto].h}px"><svg class="aro" id="aros-${foto}" width="${PN.w}" height="${PN.h}" viewBox="0 0 ${PN.w} ${PN.h}" aria-hidden="true">${p.aros.map(a=>aroSvg(a,foto)).join('')}</svg></div>`;
+const s2=panel('k4','assets/k4-panel.png')+panel('r3','assets/r3.png')+`<div id="divisor" style="left:${PN.w-3}px;top:${PN.y}px;width:6px;height:${PN.h}px"></div>`
  +ca('cap-k4',T.cap_k4,80)+ca('cap-r3',T.cap_r3,560)+plano('tile2','s2',T.tile2,L.tile2,44,'card nota');
 // Placa: tres filas sobre una escala 0 a 1 con el piso 0,70; los puntos de «las otras siete» son las siete fotos una por una
 const pct=v=>`${(v*100).toFixed(1)}%`;
@@ -197,7 +202,6 @@ const lec=tile({id:'leccion',clip:'placa',y:L.leccion,size:L.leccion_px,cls:'car
 // El CTA no parte «cada semana,»: con text-wrap: balance queda «Seguime: cada semana, / una prueba.» (P9 H6)
 const cta=tile({id:'cta',clip:'placa',y:L.cta,size:66,cls:'card titular',html:e(T.cta).replace('cada semana,','<span class="nb">cada semana,</span>'),text:T.cta});
 if(!cta.includes('class="nb"'))fail('el CTA debe contener «cada semana,» para el corte balanceado');
-if(!/#cta\{[^}]*text-wrap:\s*balance/.test(read('scripts/estilos.css')))fail('#cta debe llevar text-wrap: balance (sin «prueba.» huérfana)');
 const placaHtml=filaA+filaB+filaC+nota+lec+cta;
 const sc=p.escenas,win=(x)=>`data-start="${Math.floor(x.a*1e6)/1e6}" data-duration="${Math.ceil((x.b-x.a)*1e6)/1e6}"`;
 const barras=[{sel:'#fila-a .fill',t:cA.t,hasta:pct(r3),d:0.6},{sel:'#fila-b .rango',t:entra('#fila-b'),hasta:pct(top-bot),d:0.45},{sel:'#fila-c .fill',t:entra('#fila-c'),hasta:pct(fK4.B),d:0.5}];

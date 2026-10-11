@@ -1,0 +1,2 @@
+0 cuadros sin tarjeta de 360
+EXIT 0

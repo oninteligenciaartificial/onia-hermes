@@ -15,7 +15,7 @@
 .panel{position:absolute;overflow:hidden;background:#11191b}
 .panel img{position:absolute;display:block;max-width:none}
 .aro{position:absolute;left:0;top:0;pointer-events:none;overflow:visible;filter:drop-shadow(0 0 3px rgba(17,25,27,.95))}
-.aro *{fill:none;stroke:#ffbc94;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:0}
+.aro *{/* butt y no round: con un trazo de longitud cero (aro aún sin dibujar) el remate redondo dejaba un punto naranja en el cuadro 72 */fill:none;stroke:#ffbc94;stroke-width:7;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:0}
 #divisor{position:absolute;background:#11191b}
 .cap{display:flex;align-items:center}
 #cap-r3{border-left-color:#ffbc94;text-wrap:balance}

@@ -1,0 +1,14 @@
+rotulo: 2.875 s / mínimo 2.400 s; 0.000–2.875
+titulo: 2.875 s / mínimo 1.700 s; 0.000–2.875
+dato: 2.292 s / mínimo 2.050 s; 0.583–2.875
+cap-k4: 3.583 s / mínimo 1.350 s; 2.875–6.458
+cap-r3: 3.458 s / mínimo 2.050 s; 3.083–6.542
+tile2: 1.917 s / mínimo 1.700 s; 4.583–6.500
+fila-a: 8.458 s / mínimo 3.100 s; 6.542–15.000
+fila-b: 7.375 s / mínimo 2.750 s; 7.625–15.000
+nota-copia: 6.625 s / mínimo 2.050 s; 8.375–15.000
+fila-c: 5.625 s / mínimo 2.750 s; 9.375–15.000
+leccion: 4.500 s / mínimo 2.400 s; 10.500–15.000
+cta: 2.583 s / mínimo 2.400 s; 12.417–15.000
+Lectura en orden estricto de la placa: 3.10 + 2.75 + 2.05 + 2.75 + 2.40 + 2.40 = 15.4 s contra 8.4 s disponibles (4.5 palabras/s); cada ventana individual se cumple, la voz cubre el resto
+EXIT 0
