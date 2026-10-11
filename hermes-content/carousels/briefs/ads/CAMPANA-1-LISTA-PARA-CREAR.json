@@ -20,13 +20,18 @@
     {
       "id": "filas_en_verde",
       "filas": [
+        "B-01",
         "B-02",
+        "C-02",
+        "D-01",
+        "E-01",
         "G-01",
+        "G-04",
         "G-06",
         "G-11",
         "L-05"
       ],
-      "comprobacion": "ONIA_PROMESA_VS_PRODUCTO.md: las cinco en ✅ con la cuenta de prueba",
+      "comprobacion": "ONIA_PROMESA_VS_PRODUCTO.md: las diez en ✅ con la cuenta de prueba. Las del TEXTO del anuncio: B-01 (agenda), C-02 (ficha con odontograma), D-01 (tratamientos), E-01 (cobros), B-02 (estado de confirmación), G-01 («nada sale sin que usted lo apruebe»), G-04 («cada mañana») y G-06 (el confirmador). G-11 y L-05 no las promete el texto (sin IA, sin «clínica de ejemplo»): las usa la demostración de la llamada",
       "estado_10oct": "⬜ sin verificar: falta la cuenta demo"
     },
     {
@@ -103,7 +108,7 @@
     },
     "tope_en_bs": 750,
     "techo_total_en_bs": 1400,
-    "regla_del_tipo_de_cambio": "Si el banco cobra más de Bs 13,4 por dólar, los 14 días pasan de Bs 750: se apaga cuando el cobro acumulado llegue a Bs 750 (a 15, el día 12). Un límite de gasto de campaña menor a US$ 100 no lo acepta Meta, así que el tope se cuida con el presupuesto total, la fecha de fin y apagando a mano. Nada apaga solo en Bs 750: el techo duro es el total de US$ 56 (Bs 637 a 11,37, Bs 840 a 15); pasado Bs 750 se apaga a mano.",
+    "regla_del_tipo_de_cambio": "Si el banco cobra más de Bs 13,4 por dólar, los 14 días pasan de Bs 750: se apaga cuando el cobro acumulado llegue a Bs 750 (a 15, a mitad del día 13: US$ 50 de US$ 56). Un límite de gasto de campaña menor a US$ 100 no lo acepta Meta, así que el tope se cuida con el presupuesto total, la fecha de fin y apagando a mano. Nada apaga solo en Bs 750: el techo duro es el total de US$ 56 (Bs 637 a 11,37, Bs 840 a 15); pasado Bs 750 se apaga a mano.",
     "fuente": "ONIA_ADQUISICION_Y_PAUTA.md §5.3 y ONIA_PLAN_1.0_Y_CAJA.md §2-3",
     "nota_presupuesto": "ONIA_PLAN_1.0_Y_CAJA.md §3 decía «presupuesto diario fijo»; ADQ §5.3 y este archivo usan el total de la campaña con fecha de fin, que es el único que garantiza el techo. US$ 4/día es un promedio, no un tope diario."
   },
@@ -406,7 +411,7 @@
         "formato": "selfie de 25 s de Sergio Urcullo con la pantalla",
         "codigo": "D3",
         "texto_precargado": "Hola, vi el anuncio de Onia (D3). Tengo una clínica dental.",
-        "espera": "su cara y su voz: lo graba él"
+        "espera": "su cara y su voz: lo graba él (y, según CLAUDE.md, subir su cara o voz a servicios externos pide también el OK de Leslie Mercado Moreno); muestra Pendientes de la cuenta demo, que todavía no existe"
       },
       {
         "id": "A2",
@@ -540,7 +545,7 @@
     "primer chequeo a las 24 h: ¿llegó algún mensaje?, ¿con el código?, ¿contestó el bot?, ¿le avisó a Sergio Urcullo?"
   ],
   "tono_de_la_captura": {
-    "comprobacion": "el mensaje al paciente que se ve en la tarjeta está en voseo («confirmás», «decinos», «tu cita»): es el texto por defecto del producto, no el de Onia al dueño. Sergio Urcullo confirma que es intencional o se cambia la plantilla de la cuenta demo antes de capturar",
+    "comprobacion": "el mensaje al paciente que se ve en la tarjeta está en voseo («confirmás», «decinos», «tu cita», «te queda») y la línea «No se envía hasta que lo apruebes» (dirigida al dueño) está en tuteo: es el texto por defecto del producto, no el de Onia al dueño. Sergio Urcullo confirma que es intencional o se cambia la plantilla de la cuenta demo antes de capturar",
     "dueno": "Sergio Urcullo"
   },
   "valores_a_resolver": {

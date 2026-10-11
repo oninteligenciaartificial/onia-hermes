@@ -11,18 +11,18 @@
 
 ### 1.1 Por qué estos tres formatos
 
-El concepto es uno solo, *«el paciente de mañana que no confirmó»*; cambia **solo el formato** (así la prueba mide el formato y no tres ideas a la vez).
+El concepto es uno solo, *«el paciente de mañana que no confirmó»*; cambia **solo el formato**, para no mezclar tres ideas. **No es una prueba A/B**: Meta reparte el presupuesto según rinde cada copia y con US$ 56 no alcanza para comparar con estadística (`ONIA_ADQUISICION_Y_PAUTA.md` §5.3 y §5.6.1). Lo que se mira es si las piezas traen dueños de clínica.
 Los formatos salen de las 18 capturas de la Biblioteca que sí abrieron (`CAPTURAS-HECHAS.md`, 1-oct), contados **por anunciante distinto** (las copias de un mismo anunciante inflan el conteo) y con los días al aire del corte del 10-oct:
 
 | Formato | Anunciantes | Anuncios | Los más largos al aire (días al 10-oct) | Copia de Onia |
 |---|---|---|---|---|
 | **Persona a cámara** (testimonio, selfie, UGC, presentadora) | **4**: Doctocliq, CitaPro, Dentalink, Calendico (**5** con Dt.Dental, capturado en la ronda 2: `FORMATOS-QUE-SOSTIENEN.md` F1) | 6 (+ el selfie de Dt.Dental) | Dt.Dental selfie `1064012876297472` **102 d** · CitaPro presentadora `1880949689530541` **86 d** · Doctocliq testimonios `895549733230235` 57 d y `1684698082830679` 54 d | **A1-S** selfie |
-| **Imagen**: titular de dolor + una pantalla o persona + un botón | **3**: CitaPro, NativeCode, Ultra Pack | 5 | CitaPro `2253602242100999` **65 d** · NativeCode: los dos con botón de WhatsApp, 9 h al aire el 1-oct (no hay días medidos) | **A1-E** imagen |
-| **Video corto de una idea, ≤ 30 s** | 2: Doctocliq y Medizona (con escenas hechas con IA) | 6 | Doctocliq micro-video de 10 s `1952892278698712` **79 d** | **A1-V** video de 11 s |
+| **Imagen**: titular de dolor + persona o pantalla + un botón | **3**: CitaPro, NativeCode, Ultra Pack | 5 | CitaPro `2253602242100999` **65 d** (es la foto de una profesional con burbujas de WhatsApp: **tiene persona**) · NativeCode, la única con pantalla de software y botón de WhatsApp: empezó el 1-oct, **≤ 10 d** | **A1-E** imagen (solo pantalla, sin persona) |
+| **Video corto de una idea, ≤ 30 s** | 2: Doctocliq y Medizona (con escenas hechas con IA) | 6 | Doctocliq micro-video de 10 s `1952892278698712` **79 d** (el de 30 s más antiguo: `1014591764512827`, 85 d) | **A1-V** video de 11 s |
 
 **Lectura honesta:**
 - **El tercer formato es el más flojo por conteo.** Por número de anunciantes, el tercero son las escenas hechas con IA (Doctocliq y Medizona); Onia **no** las hace: un odontólogo o un cliente inventado es lo que `CLAUDE.md` prohíbe y un presentador de IA solo va si Sergio Urcullo lo pide y con costo cotizado. En su lugar entra el video corto **con la pantalla real**, que no inventa a nadie.
-- **La copia con más respaldo es la que depende de Sergio Urcullo** (persona a cámara: 4 anunciantes en las 18 capturas, 5 con Dt.Dental, y el más antiguo de los que se sabe que son persona a cámara, 102 d). Las dos que ya existen no tienen persona.
+- **Las dos copias que ya existen (imagen y video con la pantalla, sin persona) no tienen un precedente que haya durado:** la única imagen con pantalla y botón de WhatsApp es de NativeCode y tiene ≤ 10 d; el video corto que dura es una escena hecha con IA. **El formato con más precedentes en la muestra es la persona a cámara** (4 anunciantes contra 3 contra 2; 5 con Dt.Dental), que es justo el que depende de Sergio Urcullo. Es poco para afirmar «más respaldo»: la muestra no es azar, el anuncio de 102 d trata un tema de norma legal que Onia no copia, y el inicio que muestra la Biblioteca puede ser una reactivación.
 - **La muestra no es azar:** 22 anuncios elegidos el 1-oct, 8 de Doctocliq. Y **los días son antigüedad, no rendimiento** (un anuncio puede durar por inercia). El conector de la Biblioteca no entrega formato, texto principal ni botón de los 271 anuncios del estudio del 10-oct, así que el formato **no se puede contar sobre ellos**: solo sobre estas capturas.
 - **Solo NativeCode manda a WhatsApp** (imágenes); los que duran van a una demo o a una cuenta gratis. Que el destino sea WhatsApp es una **hipótesis de Onia**, no un dato de la competencia (`ONIA_ADQUISICION_Y_PAUTA.md` §5.10, punto 3).
 
@@ -64,9 +64,9 @@ Escríbanos por WhatsApp y pida su demostración gratis.
 - **Captura real que lleva:** el recorte del mensaje que el agente «Confirma citas» deja listo en **Pendientes** (`briefs/assets/onia-1.0-dental-ads/candidato-20260930/pendientes-confirmador.png`), con la leyenda «Pantalla de Onia · datos de ejemplo».
   - **Por qué esa y no otra:** el catálogo marca Agentes («Pendientes») como ✅ *sale* (§4: corren solos todos los días) y su §8 frase 3 es exactamente lo que la pieza dice («Onia revisa su agenda y le deja anotado a quién escribirle, con el mensaje listo; nada sale sin que usted lo apruebe», **sin IA: son reglas**).
   - **Qué no muestra:** el botón «Enviar yo mismo por WhatsApp» (G-03 🟡: el catálogo §7 no deja prometer el envío por WhatsApp). **Hoy se recortó** para que la pieza no lo traiga.
-  - **Lo que sigue siendo provisorio:** la captura es del candidato del 30-sep, no de producción, y las filas B-02, G-01, G-06 y G-11 siguen ⬜ hasta mirarlas con la cuenta demo. **Dentro de la pantalla el mensaje al paciente está en voseo** («confirmás», «decinos»): es la plantilla por defecto del producto, no el tono de Onia con el dueño. Sergio Urcullo confirma que es intencional, o se cambia la plantilla de la cuenta demo antes de recapturar.
+  - **Lo que sigue siendo provisorio:** la captura es del candidato del 30-sep, no de producción, y las filas B-02, G-01, G-06 y G-11 siguen ⬜ hasta mirarlas con la cuenta demo. **Dentro de la pantalla hay voseo y tuteo:** el mensaje al paciente («confirmás», «decinos», «tu cita», «te queda») y la línea «No se envía hasta que lo apruebes», que le habla al dueño a dos líneas de «Usted lo aprueba». Es el texto por defecto del producto, no el tono de Onia. Sergio Urcullo confirma que es intencional, o se cambia la plantilla de la cuenta demo antes de recapturar.
 - **Estado:** renderizada y mirada a 1080 px (feed e historia) el 11-oct.
-- **Precedente del formato:** CitaPro `2253602242100999` (65 d): titular de dolor, una pantalla, un botón; NativeCode, con botón de WhatsApp.
+- **Precedente del formato:** CitaPro `2253602242100999` (65 d) usa titular de dolor + una persona + un botón (la nuestra no tiene persona); NativeCode usa titular de dolor + pantalla + botón de WhatsApp, pero empezó el 1-oct. **Esta copia no tiene un precedente que haya durado.**
 
 ### 1.4 A1-V · «Las 10:00» · video de 11 s
 
@@ -88,9 +88,9 @@ Escríbanos por WhatsApp y pida su demostración gratis.
   4. (19-25 s) «Si quiere verlo, pida su demostración gratis. Escríbanos por WhatsApp.»
 - **No dice:** minutos de la llamada (L-04), «con su agenda» ni «clínica de ejemplo» (L-05 ❌), «con IA», cifras, «lo envía con un toque» (G-03), tratamiento a medias.
 - **Texto principal, titular, botón:** los de §1.2. Texto precargado: `Hola, vi el anuncio de Onia (D3). Tengo una clínica dental.`
-- **Estado: sin grabar.** Es su cara y su voz en un anuncio: **lo graba y lo autoriza él** (`CLAUDE.md`, «Qué se publica sin preguntar»). Con 25 s y una toma bastan; la edición (subtítulos y portada) no tiene gasto de IA (skills `ver-videos` y `editor-videos`).
+- **Estado: sin grabar y con una dependencia:** muestra Pendientes de la **cuenta demo, que todavía no existe** (fila 2 del go/no-go). Es su cara y su voz en un anuncio: **lo graba y lo autoriza él** (`CLAUDE.md`, «Qué se publica sin preguntar»), y `CLAUDE.md` pide además el OK de **Leslie Mercado Moreno** para subir su cara o su voz a servicios externos. Con 25 s y una toma bastan; la edición (subtítulos y portada) no tiene gasto de IA (skills `ver-videos` y `editor-videos`).
 - **Precedente del formato:** Dt.Dental, selfie de una persona sentada a cámara (`1064012876297472`, **102 d**, el más antiguo de los que se sabe que son persona a cámara) y CitaPro con presentadora (`1880949689530541`, 86 d). **Lo que Onia no copia:** el tema (una obligación legal con fecha; Onia no tiene una que anunciar) ni el «No es X, no es Y» cuando promete lo que no hay.
-- **Decisión que necesita de Sergio Urcullo antes de que se cree la campaña: ¿graba sí o no?** Si graba **antes** del OK, entra con las otras dos desde el día 1. Si no, **la campaña sale con A1-E y A1-V y el selfie no se agrega durante la prueba** (agregar un anuncio es una edición significativa: reinicia el aprendizaje y abre otra revisión de ~24 h, ayuda oficial de Meta); queda para la segunda tanda, pagada con plata de un cliente (§5.7).
+- **Es opcional para la primera tanda** (`ONIA_ADQUISICION_Y_PAUTA.md` §5.10). **Decisión que necesita de Sergio Urcullo antes de que se cree la campaña: ¿graba sí o no?** Si graba **antes** del OK (y con la demo lista), entra con las otras dos desde el día 1. Si no, **la campaña sale con A1-E y A1-V y el selfie no se agrega durante la prueba** (agregar un anuncio es una edición significativa: reinicia el aprendizaje y abre otra revisión de ~24 h, ayuda oficial de Meta); queda para la segunda tanda, pagada con plata de un cliente (§5.7).
 
 ---
 
@@ -114,7 +114,7 @@ Escríbanos por WhatsApp y pida su demostración gratis.
 | Total | **US$ 56** de presupuesto total de la campaña (5.600 centavos), **14 días**. Es el **techo de gasto de la campaña** (presupuesto total): lo que fija es el monto, no el ritmo |
 | Promedio | US$ 4 por día. **Es un promedio, no un tope diario**: con presupuesto total Meta reparte libre entre los días |
 | En bolivianos | Depende de lo que cobre el banco: **Bs 637** a 11,37 · **Bs 666** a 11,89 · **Bs 750** a 13,4 · **Bs 840** a 15 |
-| «Tope Bs 750» | **No lo apaga nadie solo.** Es una regla manual: si el cobro acumulado llega a Bs 750 antes del día 14, se apaga ese día (a 15, el día 12). Meta no acepta un límite de gasto de campaña menor a US$ 100 |
+| «Tope Bs 750» | **No lo apaga nadie solo.** Es una regla manual: si el cobro acumulado llega a Bs 750 antes del día 14, se apaga ese día (a 15, a mitad del día 13: Bs 750 son US$ 50 de US$ 56). Meta no acepta un límite de gasto de campaña menor a US$ 100 |
 | Techo del negocio | Bs 1.400 en total: al llegar se apaga todo |
 | Estructura | Una campaña (Clientes potenciales, mensajes de WhatsApp), un conjunto, **dos o tres anuncios** (§1.5). Presupuesto de la campaña, no por anuncio: Meta empuja al que rinde, y que uno reciba pocas impresiones **no es un veredicto** |
 | Se crea | Como **borrador** (en este conector crear no deja nada en pausa: deja borradores y `ads_activate_entity` los publica gastando). Encender es el último paso |
@@ -122,12 +122,12 @@ Escríbanos por WhatsApp y pida su demostración gratis.
 
 ### 2.3 La métrica de corte
 
-**La que decide: costo por conversación de un dueño de clínica ≤ Bs 40 el día 7** (y al menos 1 conversación calificada). Una conversación de dueño se cuenta por el código D1/D2/D3 buscado en Chatwoot, no por lo que informa Meta (el `referral` se pierde, §5.5).
+**La que decide: costo por conversación ≤ Bs 40 el día 7, con al menos 1 conversación de dueño de clínica** (§5.7: el costo es el de todas las conversaciones; lo de dueño es un mínimo de 1, no el divisor). El código D1/D2/D3 dice **de qué anuncio** vino cada conversación (se busca en Chatwoot; el `referral` se pierde, §5.5); **quién es dueño** lo dice el chat: eligió «Tengo una clínica y quiero ver cómo funciona» o pasó las preguntas. Cualquier paciente que toque el botón manda «Tengo una clínica dental»: el código solo no filtra.
 
 | Día | Corta si | Qué se hace | Con qué plata se mide |
 |---|---|---|---|
-| **3** | 0 conversaciones **o** CTR < 0,8 % | Se **pausa la copia que no trae** (no se cambia la pieza ni el público ni se agrega otra: son ediciones significativas) | ≈ US$ 12 gastados en total: **es alerta, no veredicto** |
-| **7** | Costo por conversación > Bs 40 **o** 0 conversaciones de dueños | Se corta | ≈ US$ 28 (Bs 375 a 13,4) |
+| **3** | 0 conversaciones **o** CTR < 0,8 % | **Primero se descarta un problema de entrega** (anuncio aprobado y con impresiones, el chat abre con el código, el bot contesta): con ≈ US$ 4 por copia, cero conversaciones suele ser poca entrega, no mala pieza. **Solo lo que no trae nada se pausa** (`ads_update_entity`, `PAUSED`): no se cambia la pieza ni el público ni se agrega otra, que son ediciones significativas. Que pausar un anuncio no reinicia el aprendizaje es una **inferencia**: la ayuda de Meta no lo dice | ≈ US$ 12 entre todas las copias si Meta reparte parejo (puede no repartir parejo) |
+| **7** | Costo por conversación > Bs 40 **o** 0 conversaciones de dueños | Se corta | ≈ US$ 28 (Bs 375 a 13,4): a Bs 40 son ~9 conversaciones, y con el cliente ideal en ≲ 0,1 % del público alcanzable **es probable que pocas sean de dueños**: por eso el piso es 1 |
 | **14** | 0 demos **o** costo por demo > Bs 390 | Se corta | US$ 56 |
 
 - **Bs 40 por conversación y Bs 390 por demo son supuestos de Onia**: Bs 1.570 de costo máximo por cliente × 25 % de cierre × 10 % de conversación a demo. Meta no da referencias sin gasto previo («No industry benchmark data»); los costos reales por conversación en Bolivia **no se conocen hasta la semana 1**.
@@ -139,11 +139,11 @@ Escríbanos por WhatsApp y pida su demostración gratis.
 
 ## 3. Go/no-go del martes 13-oct (medido el 11-oct, solo lectura)
 
-**Regla: no se enciende con una fila en ❌.** Hoy: **NO-GO. 0 de 9 filas en ✅.** Para encender el 16-oct el OK escrito tiene que llegar a más tardar el 15-oct (la campaña arranca a las 00:00 de Bolivia del día siguiente); el resto, el 13-oct.
+**Regla: no se enciende con una fila en ❌.** Hoy: **NO-GO. 0 de 9 filas en ✅.** Para encender el 16-oct, el OK escrito conviene el 14-oct (el 15 deja menos de 24 h para la revisión de Meta antes de las 00:00 de arranque); el resto, el 13-oct.
 
 | # | Condición | Estado 11-oct | Quién la destraba | Cómo / cuánto |
 |---|---|---|---|---|
-| 1 | Las filas B-02, G-01, G-06, G-11 y L-05 en ✅, y la web sin lo que el catálogo no deja | ❌ ninguna verificada: falta la cuenta demo. (La madre avisó que F1 + #142 + #139 salían a producción el 10-oct; desde la nube no se puede mirar) | **Plataforma**, con la cuenta de prueba. **Sergio Urcullo solo en L-04** (20 contra 30 minutos) | Plataforma mira cada fila con la cuenta. Si una queda en 🟡 o ❌, la fecha se corre |
+| 1 | Las filas **B-01, B-02, C-02, D-01, E-01, G-01, G-04, G-06** (lo que dice el texto: agenda, ficha con odontograma, tratamientos, cobros, estado de confirmación, «nada sale sin su OK», «cada mañana») y **G-11, L-05** (la demostración de la llamada; el texto ya no promete IA ni «clínica de ejemplo») en ✅, y la web sin lo que el catálogo no deja | ❌ ninguna verificada: falta la cuenta demo. (La madre avisó que F1 + #142 + #139 salían a producción el 10-oct; desde la nube no se puede mirar) | **Plataforma**, con la cuenta de prueba. **Sergio Urcullo solo en L-04** (20 contra 30 minutos) | Plataforma mira cada fila con la cuenta. Si una queda en 🟡 o ❌, la fecha se corre |
 | 2 | Cuenta demo con datos y capturas nuevas, re-renderizadas | ❌ | **Plataforma** deja la demo y las capturas; **Ventas y pauta** re-renderiza y mira | Un comando por pieza (`grabar-captura.mjs` + `anuncio-render.js`/`anuncio-video.js`); ½ hora. Sin ella las dos piezas siguen provisorias |
 | 3 | Medio de pago en ONIA Ads | ❌ **medido hoy: `has_payment_method: false`** (cuenta `1073680778314945`) | **Sergio Urcullo** (y Leslie Mercado Moreno si la tarjeta es de la razón social) | Poner la tarjeta en el Administrador. La cuenta personal `679613631427810` **no** se usa |
 | 4 | Número del bot (+591 75414930) vinculado a la página «Onia» | ⬜ el conector no lo ve. La página `1140384625819526` sí está en la lista del negocio | **La madre** lo lee en Business Manager desde la PC; **Sergio Urcullo** si falta vincularlo (el código llega a su teléfono) | Leerlo no cambia nada |
@@ -160,6 +160,7 @@ Escríbanos por WhatsApp y pida su demostración gratis.
 | Instagram vinculado a ONIA Ads | ❌ `ads_get_ig_accounts` → `[]`: sin él los US$ 56 corren solo por Facebook | **Sergio Urcullo**: o lo vincula, o acepta Facebook solo |
 | Canales 1 y 2 contactados (`ONIA_PLAN_1.0_Y_CAJA.md` §3) | ❌ frenado el 8-oct; su aprobación del 10-oct cubre el texto, no el contacto | **Sergio Urcullo** |
 | Declaración de IA del creativo (`self_ai_disclosure`) | Sin decidir; **no se puede cambiar después de crear el creativo**. Las capturas son reales y el texto sale de código | **Sergio Urcullo** |
+| Mensaje de bienvenida con los **tres botones** del chat | Sin configurar: el conector no lo expone, se hace **a mano** en el Administrador (anuncio → mensaje de bienvenida) y es lo que filtra a los dueños (§2.1) | **La madre**, antes de encender; texto en `CAMPANA-1-LISTA-PARA-CREAR.json` `bienvenida` |
 | Selfie A1-S grabado | Sin grabar (§1.5) | **Sergio Urcullo**: sí o no |
 | Plantilla en voseo dentro de la captura | Sin decidir (§1.3) | **Sergio Urcullo** / Plataforma |
 
@@ -184,7 +185,7 @@ Texto de usted revisado contra el catálogo (§7 y §8) y el detector de promesa
 La spec con los parámetros del conector está en `CAMPANA-1-LISTA-PARA-CREAR.json`; un test la cruza con el brief, el bot y el catálogo. En resumen, **la madre** (que tiene el login y el sí escrito):
 1. **Preflight (lectura):** tarjeta `true`, página en la lista del negocio, 0 borradores, píxel activo.
 2. **Crear en borrador:** campaña (`OUTCOME_LEADS`, presupuesto total 5.600 centavos, inicio y fin con -04:00) → conjunto (conversaciones de WhatsApp, Santa Cruz 25 km, 25+) → subir imágenes y video → creativos con el texto, el titular y el precargado de §1.2 → anuncios.
-3. **Mirar la vista previa** de cada anuncio en Feed, Historias y Reels: el botón dice «Enviar mensaje de WhatsApp» y abre el chat con el código. Si el conector no respeta el texto precargado, se pone a mano en «Mensaje de bienvenida» **antes de publicar**: sin código se pierde la atribución.
+3. **Mirar la vista previa** de cada anuncio en Feed, Historias y Reels: el botón dice «Enviar mensaje de WhatsApp» y abre el chat con el código. Si el conector no respeta el texto precargado, se pone a mano en «Mensaje de bienvenida» **antes de publicar**: sin código se pierde la atribución. **En el mismo lugar se configuran a mano los tres botones del chat** (§3): son el filtro real.
 4. **Encender** (`ads_activate_entity`) solo con las filas 1-6 y 9 y las condiciones de arriba en ✅; esperar 2 minutos y verificar `ACTIVE` en **los cuatro niveles**.
 5. **A las 24 h:** ¿llegó un mensaje?, ¿con el código?, ¿contestó el bot?, ¿le avisó a Sergio Urcullo? Los ids van al handoff `mercado-y-pauta.md`.
 

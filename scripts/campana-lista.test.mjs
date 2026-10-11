@@ -271,3 +271,16 @@ test("LISTA PARA MOSTRAR: el guion del selfie no promete lo que el catálogo pro
   assert.ok(!/\b(vos|tenés|querés|decime|escribime|confirmás)\b/i.test(dicho), "el selfie habla de usted");
   assert.match(dicho, /Nada sale sin su OK/);
 });
+
+test("LISTA PARA MOSTRAR: exige las mismas filas que la spec (las del texto del anuncio incluidas) y mide el día 7 como la spec", () => {
+  const fila = spec.no_se_crea_ni_se_enciende_sin.find((c) => c.id === "filas_en_verde");
+  assert.ok(fila.filas.length >= 10, "la spec exige las filas de lo que dice el texto, no solo las cinco de la primera versión");
+  for (const f of fila.filas) assert.ok(lista.includes(f), `la lista nombra la fila ${f}`);
+  for (const f of ["B-01", "C-02", "D-01", "E-01", "G-04"]) assert.ok(fila.filas.includes(f), `${f}: el texto dice agenda, ficha con odontograma, tratamientos, cobros y «cada mañana»`);
+  const dia7 = spec.reglas_de_corte.dia_7;
+  assert.ok(dia7.seguir_si.includes("al menos 1 calificada"));
+  assert.match(listaPlano, /costo por conversación ≤ Bs 40 el día 7, con al menos 1 conversación de dueño de clínica/);
+  assert.ok(!/costo por conversación de un dueño/.test(listaPlano), "el divisor son todas las conversaciones; lo de dueño es el mínimo de 1");
+  assert.match(listaPlano, /No es una prueba A\/B/, "la lista dice que no es A/B");
+  assert.ok(!/así la prueba mide el formato/.test(listaPlano), "con US$ 56 no se mide un formato");
+});

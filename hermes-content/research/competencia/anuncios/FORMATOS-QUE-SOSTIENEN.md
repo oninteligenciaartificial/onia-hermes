@@ -33,7 +33,7 @@
 ## La versión Onia de cada uno
 
 Estado: **lo hecho con código sale de `carousels/out/ads/…`; los guiones son para que Sergio Urcullo los grabe (la edición la hace
-Marca); lo de Higgsfield solo se cotiza, no se genera.** Filas que cada pieza necesita en ✅: **B-02, G-01, G-06, G-11, L-05**.
+Marca); lo de Higgsfield solo se cotiza, no se genera.** Filas que cada pieza necesita en ✅: **B-01, B-02, C-02, D-01, E-01, G-01, G-04, G-06** (lo que dice el texto) **y G-11, L-05** (la demostración); la lista era de cinco hasta el 11-oct y no cubría agenda, ficha, tratamientos, cobros ni «cada mañana».
 
 | # | Versión Onia | Vía | Estado |
 |---|---|---|---|
