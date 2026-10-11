@@ -1,10 +1,20 @@
-import fs from 'node:fs/promises';
+﻿import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export const PAGINAS_WEB = ['home.txt', 'precios.txt', 'chatbot.txt', 'rubros.txt', 'contacto.txt', 'comparativa.txt', 'servicios-webs.txt', 'nosotros.txt'];
 export const PAGINAS = [...PAGINAS_WEB, 'app-register-paso2.txt'];
+const ANCLAS = {
+  'home.txt': /UN SOLO SISTEMA PARA TU NEGOCIO/i,
+  'precios.txt': /Planes\s+01\s*[\u00b7.]\s*Ordenar/i,
+  'chatbot.txt': /Agente conversacional de WhatsApp/i,
+  'rubros.txt': /Eleg[ií]s tu rubro y la cuenta ya viene armada/i,
+  'contacto.txt': /30 MINUTOS/i,
+  'comparativa.txt': /Comparalo con lo que se vende en Bolivia/i,
+  'servicios-webs.txt': /SERVICIOS\s*[·.]\s*WEBS/i,
+  'nosotros.txt': /Una empresa boliviana construyendo el sistema que Bolivia no ten[ií]a/i,
+};
 const RUTAS = {
   'home.txt': '/', 'precios.txt': '/precios', 'chatbot.txt': '/chatbot',
   'rubros.txt': '/rubros', 'contacto.txt': '/contacto',
@@ -27,6 +37,10 @@ export const PROMESAS = [
 const CICLOS = [['monthly', 'mensual'], ['annual', 'anual'], ['weekly', 'semanal']];
 const PLANES = [['basic', 'Básico'], ['crece', 'Crece'], ['professional', 'Profesional'], ['clinic', 'Completo'], ['enterprise', 'Grupo']];
 const TOPES_PLANES = [['basic', 'Básico'], ['crece', 'Crece'], ['professional', 'Profesional'], ['clinic', 'Completo']];
+
+function normalizarTexto(text) {
+  return text.replace(/\s+/g, ' ').replace(/\s+([.,:])/g, '$1').trim();
+}
 
 function errorMedicion(detalle) {
   return { detalle, bloqueaVerde: true };
@@ -109,24 +123,37 @@ function extraerAddons(source, noMedido) {
   return addons;
 }
 
-function parseCicloWeb(text, plan) {
-  const escaped = plan.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const pos = text.search(new RegExp(`(?:^|\\n)${escaped}\\s*(?:\\n|$)`, 'i'));
-  if (pos < 0) throw new Error(`no se pudo ubicar el plan ${plan} en precios.txt`);
-  const tail = text.slice(pos);
-  const monthly = tail.match(/\n\s*(\d[\d.]*)\s*\n\s*Bs\s*\/\s*mes/i);
+function parseCicloWeb(section, plan) {
+  const monthly = section.match(/(\d[\d.]*)\s+Bs\s*\/\s*mes/i);
   if (!monthly) throw new Error(`no se pudo leer el precio mensual de ${plan} en precios.txt`);
-  const annual = tail.match(/(\d[\d.]*)\s*Bs\s*\/\s*año/i);
-  const weekly = tail.match(/(\d[\d.]*)\s*Bs\s*\/\s*sem/i);
+  const annual = section.match(/(\d[\d.]*)\s*Bs\s*\/\s*año/i);
+  const weekly = section.match(/(\d[\d.]*)\s*Bs\s*\/\s*sem/i);
   return { monthly: parseNumero(monthly[1]), ...(annual && { annual: parseNumero(annual[1]) }), ...(weekly && { weekly: parseNumero(weekly[1]) }) };
 }
 
+const ENCABEZADOS_PLAN = [
+  ['Básico', '01', 'ORDENAR', 'Básico'],
+  ['Crece', '02', 'RECUPERAR', 'Crece'],
+  ['Profesional', '03', 'OPERAR COMPLETO', 'Profesional'],
+  ['Completo', '04', 'TODO INCLUIDO', 'Completo'],
+];
+function seccionesPlanes(text) {
+  const ubicaciones = [];
+  let desde = 0;
+  for (const [name, number, action, label] of ENCABEZADOS_PLAN) {
+    const regex = new RegExp(`${number}\\s*[·.]\\s*${action}\\s+${label}`, 'i');
+    const match = regex.exec(text.slice(desde));
+    if (!match) throw new Error(`no se pudo ubicar el plan ${name} en precios.txt`);
+    const index = desde + match.index;
+    ubicaciones.push({ name, index });
+    desde = index + match[0].length;
+  }
+  return Object.fromEntries(ubicaciones.map((item, index) => [item.name, text.slice(item.index, ubicaciones[index + 1]?.index)]));
+}
 function seccionPlan(text, name) {
-  const match = new RegExp(`(?:^|\\n)${name}\\s*(?:\\n|$)`, 'i').exec(text);
-  if (!match) throw new Error(`no se pudo ubicar el plan ${name} en precios.txt`);
-  const start = match.index + match[0].length;
-  const next = /\n(?:Básico|Crece|Profesional|Completo)\s*\n/.exec(text.slice(start));
-  return text.slice(start, next ? start + next.index : undefined);
+  const section = seccionesPlanes(text)[name];
+  if (!section) throw new Error(`no se pudo ubicar el plan ${name} en precios.txt`);
+  return section;
 }
 
 function extraerTopesWeb(text, plan) {
@@ -135,7 +162,7 @@ function extraerTopesWeb(text, plan) {
     if (!/Fichas y usuarios sin tope/i.test(section) || !/recordatorios por email sin tope/i.test(section)) throw new Error('no se pudo leer los topes de Completo en precios.txt');
     return { patients: -1, users: -1, emailsPerMonth: -1 };
   }
-  const line = section.match(/Topes:\s*([\d.]+)\s*fichas\s*·\s*([\d.]+)\s*usuarios\b[^\n]*?·\s*([\d.]+)\s*recordatorios/i);
+  const line = section.match(/Topes:\s*([\d.]+)\s*fichas\s*[·.]\s*([\d.]+)\s*usuarios\b.*?[·.]\s*([\d.]+)\s*recordatorios/i);
   if (!line) throw new Error(`no se pudo leer la línea Topes de ${plan} en precios.txt`);
   return { patients: parseNumero(line[1]), users: parseNumero(line[2]), emailsPerMonth: parseNumero(line[3]) };
 }
@@ -146,19 +173,21 @@ function extraerPreciosWeb(pages, noMedido) {
   const plans = {};
   const addons = {};
   if (text !== undefined) {
+    let sections;
+    try { sections = seccionesPlanes(text); } catch (error) { noMedido.push(errorMedicion(error.message)); }
     for (const [, label] of PLANES.filter(([key]) => key !== 'enterprise')) {
-      try { plans[label] = parseCicloWeb(text, label); }
+      try { if (sections) plans[label] = parseCicloWeb(sections[label], label); }
       catch (error) { noMedido.push(errorMedicion(error.message)); }
     }
-    try { plans['Grupo'] = { monthly: capturar(/(?:^|\n)\s*(\d[\d.]*)\s*Bs\s*\/\s*mes,\s*con implementación desde/i, text, 'Grupo mensual en precios.txt') }; }
+    try { plans['Grupo'] = { monthly: capturar(/(\d[\d.]*)\s*Bs\s*\/\s*mes,\s*con implementación desde/i, text, 'Grupo mensual en precios.txt') }; }
     catch (error) { noMedido.push(errorMedicion(error.message)); }
   }
   const extractors = [
-    ['Agente WhatsApp mensual', text, /ADD-ON\s*·\s*WHATSAPP[\s\S]*?\n\s*(\d[\d.]*)\s*\n\s*Bs\s*\/\s*mes/i],
+    ['Agente WhatsApp mensual', text, /ADD-ON\s*[·.]\s*WHATSAPP.*?(\d[\d.]*)\s+Bs\s*\/\s*mes/i],
     ['Agente WhatsApp anual', text, /O\s*Bs\s*(\d[\d.]*)\s*al\s*año/i],
     ['Recarga 200 conversaciones', pages['chatbot.txt'], /sumar\s+200\s+más\s+por\s+Bs\s*(\d[\d.]*)/i],
-    ['Reservas online', text, /Reservas online\s*\n\s*Bs\s*(\d[\d.]*)\s*\/\s*mes/i],
-    ['Usuario extra', text, /Usuario adicional\s*\n\s*Bs\s*(\d[\d.]*)\s*\/\s*mes/i],
+    ['Reservas online', text, /Reservas online\s+Bs\s*(\d[\d.]*)\s*\/\s*mes/i],
+    ['Usuario extra', text, /Usuario adicional\s+Bs\s*(\d[\d.]*)\s*\/\s*mes/i],
     ['Implementación Grupo', text, /implementación\s+desde\s+(\d[\d.]*)\s+Bs/i],
   ];
   for (const [label, source, regex] of extractors) {
@@ -168,7 +197,6 @@ function extraerPreciosWeb(pages, noMedido) {
   }
   return { plans, addons };
 }
-
 function compararPrecios(web, code, noMedido, codigoDisponible) {
   const diferencias = [];
   for (const [key, label] of PLANES) {
@@ -221,13 +249,15 @@ function compararTopes(pages, limits, noMedido, codigoDisponible) {
   return resultados;
 }
 
-function detectarObra(pages) {
+function detectarObra(pages, originales = pages) {
   const regex = /muy pronto|pr[óo]ximamente|en construcci[óo]n|\bbeta\b|\[CONFIRMAR/gi;
   const hallazgos = [];
   for (const [file, text] of Object.entries(pages)) {
-    for (const [index, line] of text.split(/\r?\n/).entries()) {
-      if (regex.test(line)) hallazgos.push({ archivo: file, linea: index + 1, texto: line.trim() });
-      regex.lastIndex = 0;
+    const source = originales[file] ?? text;
+    for (const match of text.matchAll(regex)) {
+      const offset = source.toLowerCase().indexOf(match[0].toLowerCase());
+      const linea = (source.slice(0, Math.max(0, offset)).match(/\n/g) ?? []).length + 1;
+      hallazgos.push({ archivo: file, linea, texto: match[0] });
     }
   }
   return hallazgos;
@@ -237,13 +267,20 @@ function evaluarPromesas(pages, noMedido, registroSoloInformativo = false) {
   return PROMESAS.map((item) => {
     if (item.manual) return { id: item.id, pagina: item.pagina, estado: 'manual' };
     if (item.id === 'registro-nombre' && registroSoloInformativo) return { id: item.id, pagina: item.pagina, estado: 'no medible sin navegador' };
-    if (pages[item.pagina] === undefined) return { id: item.id, pagina: item.pagina, estado: 'no medida' };
+    if (pages[item.pagina] === undefined || (ANCLAS[item.pagina] && !ANCLAS[item.pagina].test(pages[item.pagina]))) return { id: item.id, pagina: item.pagina, estado: 'no medida' };
     return { id: item.id, pagina: item.pagina, estado: item.frase.test(pages[item.pagina]) ? 'sigue' : 'no está' };
   });
 }
-
 export function auditar({ pages = {}, platform, noMedidoInicial = [], registroSoloInformativo = false }) {
+  const originales = pages;
+  pages = Object.fromEntries(Object.entries(pages).map(([name, value]) => [name, normalizarTexto(value)]));
   const noMedido = [...noMedidoInicial];
+  for (const [pagina, ancla] of Object.entries(ANCLAS)) {
+    if (pages[pagina] !== undefined && !ancla.test(pages[pagina])) {
+      noMedido.push(errorMedicion(`${pagina}: falta frase ancla; conversi?n no confirmada`));
+      delete pages[pagina];
+    }
+  }
   const codigoDisponible = Boolean(platform);
   let plans;
   let addons = {};
@@ -267,7 +304,7 @@ export function auditar({ pages = {}, platform, noMedidoInicial = [], registroSo
   const web = extraerPreciosWeb(pages, noMedido);
   const diferenciasPrecio = compararPrecios(web, { plans, addons }, noMedido, codigoDisponible);
   const topes = compararTopes(pages, limits, noMedido, codigoDisponible);
-  const obra = detectarObra(pages);
+  const obra = detectarObra(pages, originales);
   const promesas = evaluarPromesas(pages, noMedido, registroSoloInformativo);
   const textosObra = obra.length;
   const evidencia = diferenciasPrecio.length > 0 || textosObra > 0 || topes.some((tope) => tope.estado === 'DIFIERE');
@@ -393,7 +430,7 @@ function imprimir(data, json) {
   if (json) { console.log(JSON.stringify(data, null, 2)); return; }
   console.log('PRECIOS');
   console.log(data.diferenciasPrecio.length ? data.diferenciasPrecio.join('\n') : data.resumen.pendientesBloqueantes ? 'precios no medidos por completo' : '0 diferencias de precio');
-  for (const top of data.topes) console.log(`Tope ${top.plan}: web ${top.web ?? '—'}, código ${top.codigo ?? '—'} → ${top.estado}`);
+  for (const top of data.topes) console.log(`Tope ${top.plan}: web ${top.web ?? '?'}, c?digo ${top.codigo ?? '?'} ? ${top.estado}`);
   console.log('\nOBRA');
   console.log(data.obra.length ? data.obra.map((x) => `${x.archivo}:${x.linea}: ${x.texto}`).join('\n') : data.resumen.pendientesBloqueantes ? 'obra medida en las páginas disponibles' : '0 textos de obra');
   console.log('\nPROMESAS');

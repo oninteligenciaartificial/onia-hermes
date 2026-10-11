@@ -10,6 +10,7 @@ import { auditar, ejecutar, htmlATexto } from './web-vs-producto.mjs';
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(here, '../../../..');
 const textoDir = path.join(root, 'hermes-content/docs/research/promesas-web/2026-10-11/texto');
+const htmlDir = path.join(root, 'hermes-content/docs/research/promesas-web/2026-10-11/html');
 const fixtureRoot = path.join(here, 'fixtures/platform');
 const fixtureLib = path.join(fixtureRoot, 'lib');
 const pageNames = ['home.txt', 'precios.txt', 'chatbot.txt', 'rubros.txt', 'contacto.txt', 'comparativa.txt', 'servicios-webs.txt', 'nosotros.txt', 'app-register-paso2.txt'];
@@ -44,6 +45,20 @@ async function withServer(handler, callback) {
     server.closeAllConnections?.();
     await new Promise((resolve, reject) => server.close((error) => error ? reject(error) : resolve()));
   }
+}
+
+async function responderHtml({ notFoundPath, hang, reemplazos = {} } = {}) {
+  return async (request, response) => {
+    if (request.url === notFoundPath) { response.writeHead(404).end('missing'); return; }
+    if (hang) return;
+    const name = webPaths.get(request.url);
+    if (!name) { response.writeHead(404).end('missing'); return; }
+    const htmlName = name.replace('.txt', '.html');
+    let html = await fs.readFile(path.join(htmlDir, htmlName), 'utf8');
+    for (const [antes, despues] of Object.entries(reemplazos)) html = html.replaceAll(antes, despues);
+    response.writeHead(200, { 'content-type': 'text/html; charset=utf-8' });
+    response.end(html);
+  };
 }
 
 function responder(pages, { notFoundPath, hang } = {}) {
@@ -203,4 +218,56 @@ test('un bloque DEFAULT_PLAN_AMOUNTS ausente queda NO MEDIDO y sale 2', async ()
 
 test('htmlATexto quita script y style, separa bloques y decodifica entidades', () => {
   assert.equal(htmlATexto('<h1>Hola &amp; adiós</h1><script>malo()</script><p>Bs&nbsp;320</p><style>.x{}</style>'), 'Hola & adiós\nBs 320');
+});
+
+
+test('el HTML real del sitio da la misma auditor?a que el texto guardado', async () => {
+  const local = await loadExample();
+  const expected = auditar(local);
+  await withServer(await responderHtml(), async (baseWeb) => {
+    const actual = await ejecutar(['--base-web', baseWeb, '--platform', fixtureRoot]);
+    assert.equal(actual.codigoSalida, 0, JSON.stringify(actual.noMedido));
+    assert.deepEqual(actual.diferenciasPrecio, expected.diferenciasPrecio);
+    assert.deepEqual(actual.topes, expected.topes);
+    assert.deepEqual(actual.obra, expected.obra);
+    assert.deepEqual(actual.promesas.slice(0, 7), expected.promesas.slice(0, 7));
+    assert.equal(actual.promesas[7].estado, 'no medible sin navegador');
+    assert.equal(actual.promesas[8].estado, 'manual');
+  });
+});
+
+test('mutar HTML real detecta precio y frase ausente sin confundirla con página no medida', async () => {
+  const precioOriginal = await fs.readFile(path.join(htmlDir, 'precios.html'), 'utf8');
+  const precioMutado = precioOriginal.replace(/(<span class=\"sitio_planNum__[^\"]+\">)320(<\/span>)/, '$1330$2');
+  assert.notEqual(precioMutado, precioOriginal);
+  await withServer(await responderHtml({ reemplazos: { '<span class=\"sitio_planNum__Fuah1\">320</span>': '<span class=\"sitio_planNum__Fuah1\">330</span>' } }), async (baseWeb) => {
+    const result = await ejecutar(['--base-web', baseWeb, '--platform', fixtureRoot]);
+    assert.equal(result.codigoSalida, 1);
+    assert.ok(result.diferenciasPrecio.includes('Básico · mensual: web 330, código 320'), JSON.stringify({ diff: result.diferenciasPrecio, noMedido: result.noMedido }));
+  });
+
+  const chatbotOriginal = await fs.readFile(path.join(htmlDir, 'chatbot.html'), 'utf8');
+  const phrase = 'responde las <em>24 horas</em>';
+  assert.ok(chatbotOriginal.toLowerCase().includes(phrase));
+  await withServer(await responderHtml({ reemplazos: { [phrase]: 'responde durante el d?a' } }), async (baseWeb) => {
+    const result = await ejecutar(['--base-web', baseWeb, '--platform', fixtureRoot]);
+    assert.equal(result.codigoSalida, 0);
+    assert.equal(result.promesas.find((item) => item.id === 'whatsapp-24h').estado, 'no está');
+  });
+});
+
+test('HTML real con espacios y ancla ausente se normaliza o queda NO MEDIDO', async () => {
+  await withServer(await responderHtml({ reemplazos: { 'Básico': 'Básico\n', '320': ' 320 ', 'Bs / mes': 'Bs&nbsp;/&nbsp;mes' } }), async (baseWeb) => {
+    const result = await ejecutar(['--base-web', baseWeb, '--platform', fixtureRoot]);
+    assert.equal(result.codigoSalida, 0, JSON.stringify(result.noMedido));
+  });
+
+  await withServer(await responderHtml({ reemplazos: { 'Planes': 'hola' } }), async (baseWeb) => {
+    const result = await ejecutar(['--base-web', baseWeb, '--platform', fixtureRoot]);
+    assert.equal(result.codigoSalida, 2);
+    assert.ok(result.noMedido.some((item) => item.detalle.includes('precios.txt: falta frase ancla')));
+    assert.ok(result.topes.every((item) => item.estado === 'no medida'), JSON.stringify({ topes: result.topes, noMedido: result.noMedido }));
+    assert.equal(result.promesas.find((item) => item.id === 'agente-incluido').estado, 'no medida');
+    assert.notEqual(result.promesas.find((item) => item.id === 'agente-incluido').estado, 'no está');
+  });
 });
