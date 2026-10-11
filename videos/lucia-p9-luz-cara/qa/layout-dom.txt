@@ -1,19 +1,20 @@
-Medida DOM (Chromium real, fuentes de marca locales) de cada bloque de texto de P9 v2: top, alto, borde inferior y ancho de cada línea de texto (interior disponible 866 px). Sustituye a tipografia-estimada.txt de la v1 (scripts/estimar-tipografia.py necesita fontTools, que no está instalado en este contenedor y no se instala).
+Medida DOM (Chromium real, fuentes de marca locales) de cada bloque de texto de P9 v3: top, alto, borde inferior y ancho de cada línea de texto (interior disponible 866 px; la nota del asterisco va a 38 px, el resto a 40-66 px).
 
 fila-m1      (t=15s) y     300 →   535.4  alto  235.4  líneas (fila)
 fila-m4      (t=15s) y   547.4 →   782.7  alto  235.4  líneas (fila)
-limite-cara  (t=15s) y     823 →   992.2  alto  169.2  líneas [788,828,398]
-toma         (t=15s) y    1032 →  1104.4  alto   72.4  líneas [692]
-brillo       (t=15s) y    1144 →  1216.4  alto   72.4  líneas [814]
-cta          (t=15s) y    1256 →  1427.8  alto  171.8  líneas [818,227]
-rotulo       (t=8s) y     300 →     368  alto     68  líneas [585]
-titulo       (t=8s) y     760 →   857.9  alto   97.9  líneas [605]
-dato-m1      (t=8s) y    1030 →  1100.2  alto   70.2  líneas [790]
+toma         (t=15s) y     807 →   879.4  alto   72.4  líneas [692]
+limite-cara  (t=15s) y     903 →  1072.2  alto  169.2  líneas [768,762,358]
+nota-ast     (t=15s) y    1096 →  1161.8  alto   65.8  líneas [835]
+brillo       (t=15s) y    1186 →  1258.4  alto   72.4  líneas [814]
+cta          (t=15s) y    1282 →  1453.8  alto  171.8  líneas [818,227]
+rotulo       (t=3s) y     300 →     368  alto     68  líneas [585]
+titulo       (t=3s) y     760 →   857.9  alto   97.9  líneas [605]
+dato-m1      (t=3s) y    1030 →  1100.2  alto   70.2  líneas [790]
 dato-m4      (t=8s) y    1090 →  1206.4  alto  116.4  líneas [780,386]
 reencuadre   (t=8s) y    1230 →  1300.2  alto   70.2  líneas [852]
-aviso-refs   (t=8s) y    1324 →  1440.4  alto  116.4  líneas [797,430]
+aviso-refs   (t=8s) y    1324 →  1440.4  alto  116.4  líneas [456,437]
 
-Huecos verticales de la placa: fila-m1→fila-m4 12.0 · fila-m4→límite 40.3 · límite→toma 39.8 · toma→brillo 39.6 · brillo→CTA 39.6
+Huecos verticales de la placa: fila-m1→fila-m4 12.0 · fila-m4→toma 24.3 · toma→límite 23.6 · límite→nota del asterisco 23.8 · nota→brillo 24.2 · brillo→CTA 23.6
 Huecos de m4: dato→reencuadre 23.6 · reencuadre→aviso 23.8
-Borde inferior máximo: 1440.4 (tope 1490) · borde superior mínimo: 300 (mínimo 292)
+Borde inferior máximo: 1453.8 (tope 1490) · borde superior mínimo: 300.0 (mínimo 292)
 EXIT 0

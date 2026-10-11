@@ -18,6 +18,10 @@
 /* H5: scrim que tapa el letrero inventado de la torre (esquina superior izquierda de m4); sin interacción, viaja con #overlay-m4 */
 #scrim-m4{position:absolute;pointer-events:none}
 #cta{border-color:#ffbc94}
+/* H1 (revisión 2): la fila de Seedance marca su 0,80 con un asterisco naranja y su nota (pie de la placa) descansa en el mismo naranja */
+/* La pastilla del aviso (11 palabras, 2 líneas) no deja «mide.» huérfana en la segunda línea */
+#aviso-refs{text-wrap:balance}
+.ast{color:#ffbc94;font-weight:500}.fila .ast{margin-left:2px}#nota-ast{border-left-color:#ffbc94}
 
-/* Estado inicial: la opacidad oculta de la pastilla del dato, del aviso, de las tres notas de la placa y del CTA vive en CSS (cuadro 0 sin la pastilla un cuadro antes de su entrada a 1,5 s). El desplazamiento de #m4/#overlay-m4/#placa NO va en CSS (lint gsap_css_transform_conflict): lo fija timeline.js con fromTo al inicio. */
-#dato-m1,#cta,#aviso-refs,#limite-cara,#toma,#brillo{opacity:0}
+/* Estado inicial: la opacidad oculta de la pastilla del dato, del aviso, de las cuatro notas de la placa y del CTA vive en CSS (cuadro 0 sin la pastilla un cuadro antes de su entrada a 1,5 s). El desplazamiento de #m4/#overlay-m4/#placa NO va en CSS (lint gsap_css_transform_conflict): lo fija timeline.js con fromTo al inicio. */
+#dato-m1,#cta,#aviso-refs,#limite-cara,#toma,#nota-ast,#brillo{opacity:0}

@@ -6,7 +6,7 @@ import { createRequire } from 'node:module';
 import path from 'node:path';
 import fs from 'node:fs';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { PROHIBIDAS, PERMITIDAS_EN_EL_PIE, buscarRecomendacion, buscarGenerales } from './prohibidas.mjs';
+import { PROHIBIDAS, PERMITIDAS_EN_EL_PIE, buscarRecomendacion, buscarGenerales, buscarRetiradas } from './prohibidas.mjs';
 const require = createRequire('/opt/node-tools/package.json');
 const { chromium } = require('playwright');
 const P = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -27,6 +27,8 @@ for (const [donde, txt] of [['pantalla', enPantalla], ['pie', pie], ['guion de v
 }
 for (const [donde, txt] of [['pantalla', enPantalla], ['pie', pie], ['guion de voz', voz]]) for (const f of buscarGenerales(txt)) { console.log(`✖ ${donde}: «${f}» afirma una regla general sobre la foto sola (Cinematic Studio 3.0: 0,79 a 0,77)`); hits++; }
 for (const [donde, txt] of [['pantalla', enPantalla], ['pie', pie], ['guion de voz', voz]]) for (const f of buscarRecomendacion(txt)) { console.log(`✖ ${donde}: «${f}» suena a recomendación (D-N1)`); hits++; }
+// v2.3: la resta de controles de la v2.2 se retiró (los controles descienden de las mismas fotos): ni «exceso», ni «atribuible», ni «dentro del ruido» en pantalla, pie o voz
+for (const [donde, txt] of [['pantalla', enPantalla], ['pie', pie], ['guion de voz', voz]]) for (const f of buscarRetiradas(txt)) { console.log(`✖ ${donde}: «${f}» es una frase RETIRADA en la v2.3`); hits++; }
 console.log(`texto en pantalla (${enPantalla.split(' ').length} tokens): ${enPantalla}`);
 console.log(`pie (${pie.trim().split(/\s+/).length} palabras)`);
 console.log(`guion de voz (${voz.trim().split(/\n/).length} líneas): ${voz.trim().split(/\n/).join(' | ')}`);

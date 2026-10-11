@@ -1,3 +1,1 @@
-build 1: 81658e47cb092712732b9d6aa8ece78e  index.html
-build 2: 81658e47cb092712732b9d6aa8ece78e  index.html
-IDEMPOTENTE
+idempotencia: md5 1.ª fbd743d2380c2c4381c93b7d655611dc · 2.ª fbd743d2380c2c4381c93b7d655611dc · IGUAL

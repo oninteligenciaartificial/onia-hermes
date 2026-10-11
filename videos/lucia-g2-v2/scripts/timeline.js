@@ -43,6 +43,8 @@ for (const c of PLAN.tarjetas) {
   for (let i = 0; i < G.n; i++) enter('#th' + (i + 1), G.a + i * G.esc, { x: 60, d: 0.28 });
   // H2: el resultado antes de los 3 s («parecido final: 0,64 a 0,82»); viaja con la foto en el empuje de T3
   enter('#pastilla', G.pastilla_t, { x: 60 });
+  // v2.3 (revisión 2, H2): el aviso del 0,82 entra con la pastilla y sale con la foto en el empuje de T3
+  if (G.fuga_t != null) enter('#fg-gancho', G.fuga_t, { x: 60 });
 }
 
 // ── regla: cinco de las ocho referencias, la escala 0-1 se dibuja y la marca de 0,70 cae con «Mi piso: 0,70.»
@@ -75,7 +77,7 @@ for (const c of PLAN.tarjetas) {
     }
   }
   enter('#l-nota', L.nota_t, { x: 60 });
-  // hallazgo 11-oct: la etiqueta «recibió 4 de las 8 fotos de puntaje» entra junto a la fila de Kling O3, justo después del anillo, y se queda hasta el empuje de salida de la placa
+  // hallazgo 11-oct: la etiqueta «recibió 4 de las 8 fotos con que se mide» entra junto a la fila de Kling O3, justo después del anillo, y se queda hasta el empuje de salida de la placa
   if (L.fuga_t != null) enter('#l-fuga', L.fuga_t, { x: 60 });
 }
 

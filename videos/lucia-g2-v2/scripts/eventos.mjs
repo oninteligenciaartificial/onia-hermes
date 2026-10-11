@@ -15,7 +15,7 @@ const add = (t, que) => { if (t > 0.2 && t < DUR - 0.1) ev.set(+t.toFixed(3), (e
 for (const c of p.tarjetas) { add(+c.entra ?? c.a, c.id); if (c.acento_t) add(c.acento_t, c.id + ' acento'); }
 add(p.rotulo.b - 0.18, 'rótulo IA sale');
 const g = p.gancho.miniaturas; for (let i = 0; i < 6; i++) add(g.a + i * g.escalon, 'miniatura ' + (i + 1));
-add(p.gancho.pastilla.t, 'pastilla del resultado');
+add(p.gancho.pastilla.t, 'pastilla del resultado'); if (p.gancho.fuga) add(p.gancho.fuga.t, 'aviso del 0,82 (gancho)');
 const rg = p.regla; for (let i = 0; i < p.refs.muestra.length; i++) add(rg.refs.a + i * rg.refs.escalon, 'ref ' + (i + 1));
 add(rg.refs.etiqueta_t, 'etiqueta refs'); add(rg.escala.a, 'escala'); add(rg.escala.ejes_t, 'ejes'); add(rg.escala.uno_t, '«1» se enciende'); add(rg.escala.marca_t, 'marca 0,70');
 const l = p.leccion; add(l.marca_t, 'lección marca'); add(l.titulo.t, 'lección título');

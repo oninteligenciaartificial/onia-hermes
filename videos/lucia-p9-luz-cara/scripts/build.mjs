@@ -1,4 +1,4 @@
-// P9 v2 (revisión 1, 11-oct-2026): plan → fuentes → validación → HTML determinista; sin red.
+// P9 v3 (revisión 2, 11-oct-2026): plan → fuentes → validación → HTML determinista; sin red.
 import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -12,12 +12,15 @@ const read=n=>fs.readFileSync(path.join(P,n),'utf8').trim();
 const fail=s=>{throw Error(s)};
 const same=(a,b,label)=>{if(JSON.stringify(a)!==JSON.stringify(b))fail(`${label}: ${JSON.stringify(a)} ≠ fuente ${JSON.stringify(b)}`)};
 const round=n=>Math.round(n*100+1e-7)/100;
-const f=n=>String(n).replace('.',','),f2=n=>n.toFixed(2).replace('.',','),minus=n=>String(n).replace('-','−');
+const f=n=>String(n).replace('.',','),f2=n=>n.toFixed(2).replace('.',','),f1=n=>n.toFixed(1).replace('.',','),minus=n=>String(n).replace('-','−');
+const lista=(a,y)=>y&&a.length===2?`${a[0]} y ${a[1]}`:a.join(', ');
 const wc=s=>s.split(/\s+/).filter(w=>/[\p{L}\p{N}]/u.test(w)).length;
 const row=JSON.parse(fs.readFileSync(path.join(V4,'PROCEDENCIA.jsonl'),'utf8').split(/\r?\n/)[96]);
 const datos=row.video_misma_foto_K1_misma_orden;
 const luz=fs.readFileSync(path.join(PM,'medicion-luz-movimiento-20261011.txt'),'utf8');
 const SR=fs.readFileSync(path.join(PM,'medicion-sin-refs-entrada-20261011.txt'),'utf8');
+// Cifra retirada el 11-oct (revisión 2, hecho 4): no hay control limpio, así que ningún texto (pantalla, pie, voz) puede traer un «efecto» o «ventaja» estimados.
+const RETIRADO=/efecto estimado|ventaja|dentro del ruido|≈\s*0,03/i;
 same(p.clips.map(({id,nombre,fuente,a,b})=>({id,nombre,fuente,a,b})),[
  {id:'m1',nombre:'Kling 3.0 std',fuente:'kit/k1-clip-mira-camara-e470ef4f.mp4',a:0,b:6},
  {id:'m4',nombre:'Seedance 2.0 Mini + referencias',fuente:'prueba-motores-20261008/seedance-mini-refs-dd2d7c91.mp4',a:5.75,b:11.791666666666666}
@@ -28,13 +31,13 @@ for(const c of p.clips){
  const d=datos[key];same(c.parecido,[round(d.id[0]),round(d.id.at(-1))],`${c.id} parecido`);same(c.creditos,d.cr,`${c.id} créditos`);
  const m=luz.match(new RegExp(`${c.id}\\.mp4:.*?luma ini ([\\d.]+) fin ([\\d.]+) \\(Δ([+−-]?[\\d.]+)\\)`));
  if(!m)fail(`medición de brillo: falta ${c.id}`);same(c.brillo,m.slice(1).map(Number),`${c.id} brillo (Δ publicado)`);
- // H6: en pantalla el brillo va en enteros y la resta tiene que cuadrar a simple vista (156 → 155 = −1; 146 → 112 = −34)
- const [b0,b1,bd]=c.brillo.map(Math.round);if(b1-b0!==bd)fail(`${c.id} brillo en enteros no cuadra: ${b0} → ${b1} ≠ ${bd}`);
- c.entero=[b0,b1,bd];
+ // H4 (revisión 2): la fila de la placa muestra la medición con un decimal (156,0 → 155,1 · 145,5 → 111,8) y SIN delta; la pastilla lleva el delta en entero (−1 · −34 = −33,7 redondeado)
+ const [b0,b1,bd]=c.brillo;if(Math.abs((b1-b0)-bd)>0.11)fail(`${c.id} brillo: ${b1} − ${b0} no cuadra con el delta publicado ${bd}`);
+ c.delta=Math.round(bd);if(Math.abs(bd-c.delta)>0.5)fail(`${c.id} brillo: delta entero ${c.delta} lejos de ${bd}`);
  if(c.cara_px){const m=d.nota.match(/cara de (\d+) a (\d+) px/);if(!m)fail('Falta tamaño cara en PROCEDENCIA');same(c.cara_px,m.slice(1).map(Number),'m4 cara px');}
 }
 const [k,s]=p.clips;
-// Medición sin las fotos recibidas (11-oct-2026; método .claude/skills/lucia/scripts/parecido_sin_refs.py): tamaño de cara por punto, fotos recibidas y efecto estimado
+// Medición sin las fotos recibidas (11-oct-2026; método .claude/skills/lucia/scripts/parecido_sin_refs.py): tamaño de cara por punto, fotos recibidas por Seedance y PRUEBA ESTRICTA (R2, R4, R5, R8)
 const bloque=n=>{const i=SR.indexOf('== '+n);if(i<0)fail(`medición sin refs: falta «${n}»`);const j=SR.indexOf('\n== ',i+3);return SR.slice(i,j<0?SR.length:j)};
 const pxs=b=>[...b.matchAll(/^\s+[\d.]+\s+(\d+)\s+\d\.\d{3}\s+\d\.\d{3}\s+[+-]\d\.\d{3}/gm)].map(m=>+m[1]);
 const bS=bloque('Seedance Mini + refs (dd2d7c91)'),bK=bloque('Kling 3.0 std control (e470ef4f)');
@@ -45,34 +48,67 @@ if(!(pxS[0]<200&&pxS[1]<200&&pxS.slice(2).every(n=>n>=200)))fail('Seedance debe 
 same([pxS[0],pxS.at(-1)],s.cara_px,'m4 cara px (medición sin refs)');
 const mRec=bS.match(/recibió: ((?:R\d(?:, )?)+)\s+·\s+no recibió \((\d+)\)/);
 if(!mRec)fail('medición sin refs: faltan las fotos recibidas por Seedance');
-const rec=mRec[1].split(',').length,tot=rec+Number(mRec[2]);
+const recList=mRec[1].split(', '),rec=recList.length,tot=rec+Number(mRec[2]);
 if(tot!==8)fail(`Seedance: recibidas + no recibidas = ${tot}, deben ser las 8 fotos oficiales`);
 const mHead=SR.match(/dd2d7c91\): start_image K1 \(4afffb96\) \+ ([^.]*)\./);
 if(!mHead||(mHead[1].match(/\b[0-9a-f]{8}\b/g)??[]).length!==3)fail('medición sin refs: Seedance debe tener 3 imágenes de referencia');
-const mEx=SR.match(/EXCESO sobre los controles en B-A: Seedance\+refs [−-](\d,\d+)/);
-if(!mEx)fail('medición sin refs: falta el exceso de Seedance');
-const efecto=f2(Math.abs(Number(mEx[1].replace(',','.'))));
-const esperado={rotulo:'Lucía Antelo · personaje IA de Onia',titulo:'¿La cara o la escena?',m1:'Kling 3.0 std · brillo −1 · parecido 0,79 → 0,72',m4:'Seedance 2.0 Mini + referencias · brillo −34 · parecido 0,71 → 0,80',reencuadre:`Cara: ${s.cara_px[0]} → ${s.cara_px[1]} px del clip original · reencuadra`,aviso_refs:`Seedance recibió ${rec} de las ${tot} fotos de puntaje: efecto estimado ≈ ${efecto}.`,toma:'Una toma cada uno: prueba, no regla.',brillo:'Brillo: cuadro entero, mezcla luz y encuadre.',limite_cara:'Parecido indicativo. Bajo 200 px la cara es poco confiable: Kling, todo el clip; Seedance, el inicio. Ruido ±0,03.',cta:'Seguime: cada semana, una prueba.'};
+// Hechos 1-3 del 11-oct (PRUEBA ESTRICTA): ambas tomas parten de la foto de arranque K1, que se hizo con R1, R3, R6 y R7; Seedance recibió además R1 y R3 directo;
+// contra el centroide de SOLO las 4 fotos que nadie recibió (R2, R4, R5, R8) el sentido de las dos tomas no cambia. No hay control limpio: no se estima ningún «efecto» ni «ventaja».
+const iE=SR.indexOf('== PRUEBA ESTRICTA');if(iE<0)fail('medición sin refs: falta la sección PRUEBA ESTRICTA');
+const SE=SR.slice(iE);
+const mEs=SE.match(/^== PRUEBA ESTRICTA: solo las (\d+) fotos que ningún clip ni K1 recibió \(((?:R\d(?:, )?)+)\) ==/);
+if(!mEs)fail('medición sin refs: la cabecera de la PRUEBA ESTRICTA no lista las fotos que nadie recibió');
+const fotosE=mEs[2].split(', ');
+const mK1=SE.match(/K1 \(4afffb96\) se generó con ([^;\n]+); todos los clips con start_image K1 descienden de ((?:R\d(?:, | y )?)+)/);
+if(!mK1)fail('medición sin refs: falta el hecho de la foto de arranque K1 (con qué fotos oficiales se generó)');
+const fotosK1=[...mK1[2].matchAll(/R\d/g)].map(m=>m[0]);
+const mDir=SE.match(/Seedance\+refs recibió además (R\d) y (R\d) directo/);
+if(!mDir||mDir.slice(1).join()!==recList.join())fail(`medición sin refs: Seedance debe haber recibido directo exactamente ${recList.join(' y ')}`);
+if(fotosE.length!==Number(mEs[1])||new Set([...fotosE,...fotosK1]).size!==tot||fotosE.some(r=>fotosK1.includes(r)))fail('medición sin refs: las fotos de K1 y las que nadie recibió deben sumar las 8 oficiales sin repetirse');
+const estr=n=>{const i=SE.indexOf('\n== '+n+'\n');if(i<0)fail(`medición sin refs (prueba estricta): falta «${n}»`);const j=SE.indexOf('\n== ',i+3);
+ const r=[...SE.slice(i,j<0?SE.length:j).matchAll(/^\s+([\d.]+)\s+(\d+)\s+(\d\.\d{3})\s+(\d\.\d{3})\s+[+-]\d\.\d{3}\s+(\d\.\d{3})\s+[+-]\d\.\d{3}\s/gm)].map(m=>({t:+m[1],px:+m[2],A:+m[3],B:+m[5]}));
+ if(r.length!==7)fail(`medición sin refs (prueba estricta): ${n} debe traer 7 puntos`);return [r[0],r.at(-1)]};
+const [eK0,eK1]=estr('Kling 3.0 std (e470ef4f)'),[eS0,eS1]=estr('Seedance Mini + refs (dd2d7c91)');
+same([round(eK0.A),round(eK1.A)],k.parecido,'prueba estricta: A de Kling contra PROCEDENCIA');same([round(eS0.A),round(eS1.A)],s.parecido,'prueba estricta: A de Seedance contra PROCEDENCIA');
+const estK=[round(eK0.B),round(eK1.B)],estS=[round(eS0.B),round(eS1.B)];
+same({fotos:p.prueba_estricta?.fotos,arranque_k1:p.prueba_estricta?.arranque_k1,directas_seedance:p.prueba_estricta?.directas_seedance,kling:p.prueba_estricta?.kling,seedance:p.prueba_estricta?.seedance},{fotos:fotosE,arranque_k1:fotosK1,directas_seedance:recList,kling:estK,seedance:estS},'prueba estricta del plan');
+if(!(estK[1]<estK[0]&&k.parecido[1]<k.parecido[0]&&estS[1]>estS[0]&&s.parecido[1]>s.parecido[0]))fail('prueba estricta: el sentido de alguna toma cambió; el pie no puede decir «el sentido no cambia»');
+// Hecho 4: la cifra de «efecto/ventaja» está retirada de TODA superficie (pantalla, pie, voz)
+const pieTxt=read('pie.txt'),voz=read('guion-voz.txt');
+for(const [donde,t] of [['pantalla',Object.values(p.textos).join(' ')],['pie',pieTxt],['voz',voz]])if(RETIRADO.test(t))fail(`Cifra retirada en ${donde}: no hay control limpio, no se estima ningún efecto ni ventaja (${t.match(RETIRADO)[0]})`);
+const esperado={rotulo:'Lucía Antelo · personaje IA de Onia',titulo:'¿La cara o la escena?',m1:'Kling 3.0 std · brillo −1 · parecido 0,79 → 0,72',m4:'Seedance 2.0 Mini + referencias · brillo −34 · parecido 0,71 → 0,80',reencuadre:`Cara: ${s.cara_px[0]} → ${s.cara_px[1]} px del clip original · reencuadra`,aviso_refs:`Seedance recibió ${rec} de las ${tot} fotos con que se mide.`,nota_refs:`* Seedance recibió ${rec} de las ${tot} fotos con que se mide.`,toma:'Una toma cada uno: prueba, no regla.',brillo:'Brillo: cuadro entero, mezcla luz y encuadre.',limite_cara:'Bajo 200 px (clip original) la cara es poco confiable: Kling, todo el clip; Seedance, el inicio. Ruido ±0,03.',cta:'Seguime: cada semana, una prueba.'};
 same(p.textos,esperado,'textos/cifras autorizados');
-if(!p.textos.m1.includes('brillo '+minus(k.entero[2]))||!p.textos.m4.includes('brillo '+minus(s.entero[2])))fail('Las pastillas deben llevar el brillo en enteros');
+if(!p.textos.m1.includes('brillo '+minus(k.delta))||!p.textos.m4.includes('brillo '+minus(s.delta)))fail('Las pastillas deben llevar el delta de brillo en entero');
 if(!/Kling, todo el clip.*Seedance, el inicio/.test(p.textos.limite_cara))fail('Límite de cara: Kling debe nombrarse (todo el clip) junto con Seedance (el inicio)');
-if(wc(p.textos.aviso_refs)>12)fail('Aviso de fotos recibidas: máximo 12 palabras');
-const nuevas=wc(p.textos.limite_cara)+wc(p.textos.toma)+wc(p.textos.brillo);
-if(nuevas>34)fail(`Lectura nueva de la placa: ${nuevas} palabras (tope ≈ 34)`);
+// H1 (revisión 2): el 0,80 de Seedance lleva su asterisco en la fila de la placa y la nota del asterisco entra en la placa (junto con «fotos con que se mide»)
+if(s.asterisco!==true||k.asterisco)fail('H1: solo la fila de Seedance lleva el asterisco (0,80*) y su nota en la placa');
+if(wc(p.textos.aviso_refs)>13)fail('Aviso de fotos recibidas: máximo 13 palabras (4,85 s de lectura en una ventana de 5,04 s)');
+const TOPE_PLACA=44; // v2: 34; pedido ≈ 36; v3: 44 = límite 19 + toma 7 + nota del asterisco 11 + brillo 7 (duda 3 del README). La exigencia real son las ventanas por texto (ventanas.mjs).
+const nuevas=wc(p.textos.limite_cara)+wc(p.textos.toma)+wc(p.textos.nota_refs)+wc(p.textos.brillo);
+if(nuevas>TOPE_PLACA)fail(`Lectura nueva de la placa: ${nuevas} palabras (tope ${TOPE_PLACA})`);
+// H6 (revisión 2): orden de entrada en la placa toma → límite de cara → nota del asterisco → brillo → CTA, y la pila vertical sigue el mismo orden
+const entra=sel=>{const e=p.eventos.find(e=>e.selector===sel&&e.entrada);if(!e)fail(`H6: falta la entrada de ${sel}`);return e.t};
+const orden=['#toma','#limite-cara','#nota-ast','#brillo','#cta'].map(entra);
+if(orden.some((t,i)=>i&&t<=orden[i-1]))fail(`H6: orden de entrada de la placa: toma → límite de cara → nota del asterisco → brillo → CTA (llegó ${orden.join(' → ')})`);
+const ys=['toma','limite','nota_refs','brillo','cta'].map(n=>p.layout[n]);
+if(ys.some((y,i)=>i&&y<=ys[i-1]))fail('H6: la pila vertical de la placa debe seguir el orden de entrada');
 if(!p.scrim_m4||!Array.isArray(p.scrim_m4.caja)||!Array.isArray(p.scrim_m4.centro)||!Array.isArray(p.scrim_m4.radios))fail('H5: falta el scrim que tapa el letrero inventado de la torre (plan.scrim_m4)');
-const pieTxt=read('pie.txt');
 if(!pieTxt.startsWith('Personaje hecho con IA'))fail('Pie debe abrir con Personaje hecho con IA');
 const pieFrases={
  kling:`la cara de ${k.nombre} queda bajo 200 px todo el clip; la de Seedance 2.0 Mini, solo al inicio (pasa de ${s.cara_px[0]} a ${s.cara_px[1]} px porque el encuadre se acerca)`,
- refs:`Seedance recibió 3 imágenes de referencia y ${rec} de ellas están entre las ${tot} fotos oficiales con que se mide el parecido; descontando eso, el efecto estimado es de ≈ ${efecto} (dentro del ruido de ±0,03). Kling no recibió ninguna.`,
+ directas:`Seedance 2.0 Mini + referencias recibió como entrada ${rec} de las ${tot} fotos con que se mide el parecido (${lista(recList,true)}).`,
+ k1:`Ambas tomas parten de la misma foto de arranque, que se hizo con ${fotosK1.length} de esas ${tot} (${lista(fotosK1)}), así que ninguna es independiente.`,
+ estricta:`Midiendo solo con las ${fotosE.length} fotos que nadie recibió (${lista(fotosE)}), ${k.nombre} baja de ${f2(estK[0])} a ${f2(estK[1])} y Seedance sube de ${f2(estS[0])} a ${f2(estS[1])}: el sentido no cambia.`,
  letrero:'Seedance 2.0 Mini inventó un letrero en la torre (de 7 a 11,5 s): no existe.'};
 if(!pieTxt.includes(pieFrases.kling))fail('Pie y límite de cara: Kling debe nombrarse bajo 200 px todo el clip (Seedance no puede ser el único con tamaño de cara)');
-if(!pieTxt.includes(pieFrases.refs))fail('Pie: falta el aviso de las fotos de referencia que recibió Seedance (y su efecto estimado)');
+if(!pieTxt.includes(pieFrases.directas))fail('Pie: falta decir que Seedance recibió como entrada 2 de las 8 fotos con que se mide (R1 y R3)');
+if(!pieTxt.includes(pieFrases.k1))fail('Pie: falta el hecho de la foto de arranque (K1): ambas tomas parten de ella y se hizo con 4 de las 8 fotos');
+if(!pieTxt.includes(pieFrases.estricta))fail('Pie: falta la prueba estricta (solo las 4 fotos que nadie recibió) con sus cifras y «el sentido no cambia»');
 if(!pieTxt.includes(pieFrases.letrero))fail('Pie: falta decir que el letrero de la torre es inventado');
 const dif=[k,s].map(c=>f2(Math.abs(c.parecido[1]-c.parecido[0])));
-const pie=`Personaje hecho con IA: Lucía Antelo, de @oniahq. Hice dos clips con la misma foto y la misma orden en Higgsfield y medí dos cosas en cada uno: cuánto cambia el brillo del cuadro (de 0 a 255) y cuánto se parece la cara a la de ella (ArcFace contra ocho fotos oficiales, de 0 a 1). ${k.nombre} (${f(k.creditos)} créditos): el brillo casi no cambia (${minus(k.entero[2])}) y la cara baja de ${f2(k.parecido[0])} a ${f2(k.parecido[1])}. Seedance 2.0 Mini con referencias (${f(s.creditos)} créditos): la cara sube de ${f2(s.parecido[0])} a ${f2(s.parecido[1])}, pero el brillo baja ${-s.entero[2]} puntos y el encuadre cambia. ${pieFrases.refs} ${pieFrases.letrero} Lo difuminé en el video. Una toma cada uno: es una prueba, no una regla. El brillo es el promedio del cuadro entero y mezcla luz con lo que entra al plano; el parecido es indicativo: bajo 200 px la cara es poco confiable. En el clip original (720p), ${pieFrases.kling}. El ruido es de ±0,03: las dos diferencias (${dif[0]} y ${dif[1]}) lo superan, pero son una toma cada una. Nombro lo que uso; no es una recomendación pagada. Cada semana hago una prueba. Seguime. #inteligenciaartificial #ia #santacruz #bolivia`;
+const pie=`Personaje hecho con IA: Lucía Antelo, de @oniahq. Hice dos clips con la misma foto y la misma orden en Higgsfield y medí dos cosas en cada uno: cuánto cambia el brillo del cuadro (de 0 a 255) y cuánto se parece la cara a la de ella (ArcFace contra ocho fotos oficiales, de 0 a 1). ${k.nombre} (${f(k.creditos)} créditos): el brillo casi no cambia (${minus(k.delta)}) y la cara baja de ${f2(k.parecido[0])} a ${f2(k.parecido[1])}. Seedance 2.0 Mini con referencias (${f(s.creditos)} créditos): la cara sube de ${f2(s.parecido[0])} a ${f2(s.parecido[1])}, pero el brillo baja ${-s.delta} puntos y el encuadre cambia. ${pieFrases.directas} ${pieFrases.k1} ${pieFrases.estricta} ${pieFrases.letrero} Lo difuminé en el video. Una toma cada uno: es una prueba, no una regla. El brillo es el promedio del cuadro entero y mezcla luz con lo que entra al plano; el parecido es indicativo: bajo 200 px la cara es poco confiable. En el clip original (720p), ${pieFrases.kling}. El ruido es de ±0,03: las dos diferencias (${dif[0]} y ${dif[1]}) lo superan, pero son una toma cada una. Nombro lo que uso; no es una recomendación pagada. Cada semana hago una prueba. Seguime. #inteligenciaartificial #ia #santacruz #bolivia`;
 same(pieTxt,pie,'pie y cifras contra fuentes');
-const voz=read('guion-voz.txt'),all=Object.values(p.textos).join(' ')+' '+pie+' '+voz;
+const all=Object.values(p.textos).join(' ')+' '+pie+' '+voz;
 if(/(?:las|todas las|ambas) caras.{0,65}(?:menos de|<|bajo)\s*200/i.test(all))fail('Prohibido afirmar que TODAS las caras son <200 px');
 if(/la luz cambia cuando la cara se sostiene|la foto sola pierde la cara|el mejor/i.test(all))fail('Afirmación general/prohibida');
 // H4: la voz no habla decimales (están en pantalla), L1-L3 terminan antes del corte a Seedance, L4 empieza después y L5-L7 caen con la entrada de su nota
@@ -105,19 +141,22 @@ const L=p.layout;
 const txt=(id,text,y,size=42,extra='')=>`<div id="${id}" class="texto ${extra}" style="top:${y}px;font-size:${size}px">${e(text)}</div>`;
 const video=(c,file)=>`<video id="${c.id}" class="clip media" src="assets/${file}" muted playsinline preload="auto" data-start="${Math.floor(c.a*1e6)/1e6}" data-duration="${Math.ceil((c.b-c.a)*1e6)/1e6}" data-media-start="0" data-track-index="${c.id==='m1'?0:1}"></video>`;
 const flecha='<svg class="fl" viewBox="0 0 30 20" width="30" height="20" aria-hidden="true"><path d="M2 10H27M18 2L27 10L18 18" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-// Fila de resultados: brillo y parecido en enteros / 2 decimales, una barra por medida y la escala de cada barra debajo (H6, H7)
-const rowHTML=c=>`<div class="fila texto card" id="fila-${c.id}"><div>${e(c.nombre)}</div><div class="numeros">brillo ${c.entero[0]} ${flecha} ${c.entero[1]} (${minus(c.entero[2])})</div><div class="barra"><i style="width:${c.brillo[1]/255*100}%"></i></div><div class="numeros">parecido ${f2(c.parecido[0])} ${flecha} ${f2(c.parecido[1])}</div><div class="barra cara"><i style="width:${c.parecido[1]*100}%"></i></div><div class="escala"><b class="v">brillo 0 a 255</b> · <b class="n">parecido 0 a 1</b></div></div>`;
+// Fila de resultados: brillo con un decimal (la medición, sin delta: H4 rev. 2) y parecido con 2 decimales, una barra por medida y la escala de cada barra debajo; la fila de Seedance marca su 0,80 con un asterisco (H1 rev. 2)
+const ast='<b class="ast">*</b>';
+const rowHTML=c=>`<div class="fila texto card" id="fila-${c.id}"><div>${e(c.nombre)}</div><div class="numeros">brillo ${f1(c.brillo[0])} ${flecha} ${f1(c.brillo[1])}</div><div class="barra"><i style="width:${c.brillo[1]/255*100}%"></i></div><div class="numeros">parecido ${f2(c.parecido[0])} ${flecha} ${f2(c.parecido[1])}${c.asterisco?ast:''}</div><div class="barra cara"><i style="width:${c.parecido[1]*100}%"></i></div><div class="escala"><b class="v">brillo 0 a 255</b> · <b class="n">parecido 0 a 1</b></div></div>`;
 const sc=p.scrim_m4,[sx,sy,sw,sh]=sc.caja,[cx,cy]=sc.centro,[rx,ry]=sc.radios;
 const mask=`radial-gradient(ellipse ${rx}px ${ry}px at ${cx-sx}px ${cy-sy}px,#000 0%,#000 58%,transparent 100%)`;
 // Desenfoque (backdrop-filter) con máscara radial: el letrero queda como mancha borrosa y oscura, sin borde duro; viaja con #overlay-m4
 const scrim=`<div id="scrim-m4" style="left:${sx}px;top:${sy}px;width:${sw}px;height:${sh}px;-webkit-backdrop-filter:blur(${sc.desenfoque_px}px) brightness(${sc.brillo});backdrop-filter:blur(${sc.desenfoque_px}px) brightness(${sc.brillo});-webkit-mask-image:${mask};mask-image:${mask}"></div>`;
+// Nota del asterisco (H1 rev. 2): pie de la placa, con el asterisco naranja del 0,80; se escribe en su sitio de la pila, 38 px para que quepa en una línea
+const notaAst=`<div id="nota-ast" class="texto nota" style="top:${L.nota_refs}px;font-size:${L.nota_refs_px}px">${ast} ${e(p.textos.nota_refs.replace(/^\* /,''))}</div>`;
 const html=`<!doctype html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=1080, height=1920"><title>Lucía P9</title><style>${read('scripts/estilos.css')}</style></head><body>
 <div id="root" data-composition-id="main" data-start="0" data-duration="20" data-width="1080" data-height="1920" data-fps="24">
 ${video(k,'m1.mp4')}${video(s,draft?'m4-proxy.mp4':'m4-full.mp4')}
-<div id="placa" class="clip escena" data-start="11.541666" data-duration="8.458334" data-track-index="2"><div id="comparacion">${rowHTML(k)}${rowHTML(s)}</div>${txt('limite-cara',p.textos.limite_cara,L.limite,44,'nota')}${txt('toma',p.textos.toma,L.toma,44,'nota')}${txt('brillo',p.textos.brillo,L.brillo,44,'nota')}${txt('cta',p.textos.cta,L.cta,66,'card titular')}</div>
+<div id="placa" class="clip escena" data-start="11.541666" data-duration="8.458334" data-track-index="2"><div id="comparacion">${rowHTML(k)}${rowHTML(s)}</div>${txt('toma',p.textos.toma,L.toma,44,'nota')}${txt('limite-cara',p.textos.limite_cara,L.limite,44,'nota')}${notaAst}${txt('brillo',p.textos.brillo,L.brillo,44,'nota')}${txt('cta',p.textos.cta,L.cta,66,'card titular')}</div>
 <div id="overlay-m1" class="clip escena transparente" data-start="0" data-duration="6" data-track-index="3">${txt('rotulo',p.textos.rotulo,300,40)}${txt('titulo',p.textos.titulo,760,66,'card titular')}${txt('dato-m1',p.textos.m1,1030,42,'card dato')}</div>
 <div id="overlay-m4" class="clip escena transparente" data-start="5.75" data-duration="6.041667" data-track-index="4">${scrim}${txt('dato-m4',p.textos.m4,L.dato_m4,42,'card dato')}${txt('reencuadre',p.textos.reencuadre,L.reencuadre,42,'dato')}${txt('aviso-refs',p.textos.aviso_refs,L.aviso_refs,42,'card dato')}</div>
 </div><script src="assets-fijos/vendor/gsap.min.js"></script><script>window.PLAN=${JSON.stringify({...p,draft})};window.__timelines=window.__timelines||{};${read('scripts/timeline.js')}</script></body></html>\n`;
 fs.writeFileSync(path.join(P,'index.html'),html);fs.writeFileSync(path.join(P,'qa/build-status.json'),JSON.stringify({borrador:draft,apto_master:!draft,m4:src4,voz:cr},null,2));
-console.log(`OK datos/pie/voz: ${cr.chars} caracteres (cupo ${p.voz.max_caracteres}), cronograma ${cr.cuadros}/24 s; lienzo 480 cuadros/20 s; efecto sin refs ≈ ${efecto}; fotos recibidas ${rec} de ${tot}. ${draft?'NO APTO PARA MASTER':'fuentes completas'}`);
+console.log(`OK datos/pie/voz: ${cr.chars} caracteres (cupo ${p.voz.max_caracteres}), cronograma ${cr.cuadros}/24 s; lienzo 480 cuadros/20 s; fotos recibidas por Seedance ${rec} de ${tot}; prueba estricta Kling ${estK.join(' → ')} · Seedance ${estS.join(' → ')}; palabras nuevas de la placa ${nuevas}. ${draft?'NO APTO PARA MASTER':'fuentes completas'}`);
 const rp=path.join(P,'README.md');if(fs.existsSync(rp)){let r=fs.readFileSync(rp,'utf8');r=r.replace(/<!-- ESTADO -->[\s\S]*?<!-- FIN ESTADO -->/,m=>!draft&&!/BORRADOR/.test(m)?m:`<!-- ESTADO -->\n${draft?'**BORRADOR · NO APTO PARA MASTER. m4 usa proxy 360p; solo gates estáticos.**':'Fuentes completas presentes; falta render y QA del master.'}\n<!-- FIN ESTADO -->`);fs.writeFileSync(rp,r);}

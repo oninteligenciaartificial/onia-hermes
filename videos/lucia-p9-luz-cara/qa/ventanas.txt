@@ -3,11 +3,12 @@ titulo: 5.875 s / mínimo 2.050 s; 0.000–5.875
 dato-m1: 4.292 s / mínimo 3.100 s; 1.583–5.875
 dato-m4: 5.750 s / mínimo 3.450 s; 5.917–11.667
 reencuadre: 5.750 s / mínimo 3.100 s; 5.917–11.667
-aviso-refs: 5.042 s / mínimo 4.500 s; 6.625–11.667
-fila-m1: 8.292 s / mínimo 6.600 s; 11.708–20.000
-fila-m4: 8.292 s / mínimo 6.950 s; 11.708–20.000
-limite-cara: 8.042 s / mínimo 6.950 s; 11.958–20.000
-toma: 7.542 s / mínimo 2.750 s; 12.458–20.000
+aviso-refs: 5.042 s / mínimo 4.150 s; 6.625–11.667
+fila-m1: 8.292 s / mínimo 6.250 s; 11.708–20.000
+fila-m4: 8.292 s / mínimo 6.600 s; 11.708–20.000
+toma: 7.917 s / mínimo 2.750 s; 12.083–20.000
+limite-cara: 7.375 s / mínimo 6.950 s; 12.625–20.000
+nota-ast: 6.292 s / mínimo 4.150 s; 13.708–20.000
 brillo: 5.250 s / mínimo 2.750 s; 14.750–20.000
 cta: 2.542 s / mínimo 2.400 s; 17.458–20.000
 EXIT 0

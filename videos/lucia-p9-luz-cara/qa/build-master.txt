@@ -1,1 +1,1 @@
-OK datos/pie/voz: 311 caracteres (cupo 381), cronograma 480/24 s; lienzo 480 cuadros/20 s; efecto sin refs ≈ 0,03; fotos recibidas 2 de 8. fuentes completas
+OK datos/pie/voz: 311 caracteres (cupo 381), cronograma 480/24 s; lienzo 480 cuadros/20 s; fotos recibidas por Seedance 2 de 8; prueba estricta Kling 0.72 → 0.67 · Seedance 0.64 → 0.73; palabras nuevas de la placa 44. fuentes completas

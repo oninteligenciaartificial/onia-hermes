@@ -35,6 +35,14 @@ export const buscarProhibidasPie = (txt) => {
   const low = String(txt).toLowerCase();
   return PROHIBIDAS.filter((f) => !PERMITIDAS_EN_EL_PIE.includes(f.toLowerCase()) && low.includes(f.toLowerCase()));
 };
+// v2.3 (revisión 2, H1): la v2.2 estimaba un «exceso atribuible» de la fuga restando unos controles que descienden de las MISMAS fotos (K1 se hizo con R1, R3, R6 y R7), así que esa
+// estimación no se sostiene y se RETIRÓ. Ni la pantalla, ni la voz, ni el pie vuelven a hablar de «exceso», de «atribuible» ni de «dentro del ruido» (la medición estricta con las 4 fotos
+// que nadie recibió no resta nada: solo dice cuánto baja cada clip y si el orden cambia).
+export const RETIRADAS = ['dentro del ruido', 'exceso', 'atribuible', 'descontad'];
+export const buscarRetiradas = (txt) => {
+  const low = String(txt).toLowerCase();
+  return RETIRADAS.filter((f) => low.includes(f));
+};
 // Revisión 1 (H4): ni el video, ni la voz, ni el pie afirman una REGLA general sobre la foto sola. Cinematic Studio 3.0 con la foto sola (20 cr) dio 0,79 a 0,77, dentro del ruido (±0,03).
 export const GENERALES = ['la foto sola pierde', 'foto sola siempre', 'siempre pierde', 'siempre baja', 'pagar más no', 'pagar mas no', 'pagar más nunca', 'toda foto sola'];
 export const buscarGenerales = (txt) => {

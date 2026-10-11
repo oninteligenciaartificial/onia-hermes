@@ -8,7 +8,7 @@ export async function run(gate){
  const rows=staticMode?model.rows:await samples(page),reads=readings(rows);
  if(gate==='ventanas'){
   for(const r of reads){lines.push(`${r.id}: ${r.duration.toFixed(3)} s / mínimo ${r.min.toFixed(3)} s; ${r.a.toFixed(3)}–${r.b.toFixed(3)}`);check(r.duration+1e-6>=r.min,`Lectura corta ${r.id}`)}
-  check(reads.length===12,`Faltan textos: ${reads.map(r=>r.id)}`);save('lectura-tarjetas.json',reads);
+  check(reads.length===13,`Faltan textos: ${reads.map(r=>r.id)}`);save('lectura-tarjetas.json',reads);
  }else if(gate==='hueco-tarjetas'){
   const empty=rows.filter(r=>!r.boxes.some(b=>b.card&&Math.min(1080,b.x+b.w)-Math.max(0,b.x)>=b.w*.25));
   lines.push(`${empty.length} cuadros sin tarjeta de ${rows.length}`);check(!empty.length,'Hueco de tarjeta');
