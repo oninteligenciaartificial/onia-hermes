@@ -203,8 +203,9 @@ $FACE_GATE_HOME/venv/bin/python scripts/fuente-con-zoom.py out/g5-v2-final-1080x
 COLS=6 bash scripts/hoja.sh out/g5-v2-final-1080x1920.mp4 hoja.jpg 330 f0 f12 f24 …      # «fNNN» = cuadro NNN exacto; 2 cuadros por segundo = de 12 en 12
 ```
 
-## Cambio de pie del 11-oct (sesgo de referencias; sin re-render)
+## Cambio de pie del 11-oct (sesgo de referencias; sin re-render; corregido 07:50 UTC)
 
-El pie suma: «Esas dos tomas (Kling O3 y Seedance 2.0 Mini + referencias) recibieron fotos de referencia que están entre las 8 con que se mide; el efecto estimado es de ≈ 0,03 o menos, dentro del ruido.»
-Evidencia: `hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/medicion-sin-refs-entrada-20261011.txt` (Seedance+refs recibió R1 y R3; Kling O3, R1, R3, R6 y R7; exceso atribuible a la fuga ≈ 0,026 y ≈ 0,012 tras el control, dentro de ±0,03) y `job_display` de dd2d7c91 y 948a89d3.
-`scripts/build.mjs` ahora exige la frase en el pie. El video no cambia: `index.html` md5 `344ac0f8…` y master SHA `030e8f65…` intactos. `lucia-prohibidas.mjs pie.txt` → exit 0.
+El pie suma: «Esas dos tomas (Kling O3 y Seedance 2.0 Mini + referencias) recibieron como entrada fotos que están entre las 8 con que se mide el parecido; midiendo solo con las 4 que nadie recibió, todos los clips bajan y el orden no cambia.»
+La primera versión decía «efecto estimado ≈ 0,03 o menos, dentro del ruido»: **se retiró** porque la foto de arranque K1 (4afffb96) se generó con R1, R3, R6 y R7, así que no hay control limpio (revisión 2 de G2 v2.2).
+Evidencia: sección «PRUEBA ESTRICTA» de `hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/medicion-sin-refs-entrada-20261011.txt` (seis clips contra R2, R4, R5, R8: todos bajan de 0,03 a 0,09 y el orden por valor final es idéntico) y `job_display` de dd2d7c91, 948a89d3 y 4afffb96.
+`scripts/build.mjs` exige las dos frases en el pie. El video no cambia: `index.html` md5 y master SHA `030e8f65…` intactos. `lucia-prohibidas.mjs pie.txt` → exit 0.

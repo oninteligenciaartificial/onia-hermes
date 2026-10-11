@@ -219,7 +219,7 @@ const pie = fs.readFileSync(path.join(P, 'pie.txt'), 'utf8').replace(/\s+/g, ' '
 {
   const lp = pie.toLowerCase();
   if (!pie.startsWith('Personaje hecho con IA: Lucía Antelo, de @oniahq.')) errores.push('el pie tiene que ABRIR con «Personaje hecho con IA: Lucía Antelo, de @oniahq.» (revisión 1, H3; lo comprueba startsWith, no una lectura)');
-  for (const f of ['ocho fotos oficiales', 'un medidor (arcface) que las compara', '0,70', 'que elegí yo', 'bajo el piso', 'otra persona', 'a ojo', '0,77', '0,80', 'cabe en ±0,03', 'letreros inventados', 'imagen entera', 'cada semana hago una prueba', 'seguime', 'seedream 4.5', 'kling o1 image', 'kling o3', 'cinematic studio 3.0', 'seedance 2.0 mini + referencias', 'recibieron fotos de referencia que están entre las 8 con que se mide',
+  for (const f of ['ocho fotos oficiales', 'un medidor (arcface) que las compara', '0,70', 'que elegí yo', 'bajo el piso', 'otra persona', 'a ojo', '0,77', '0,80', 'cabe en ±0,03', 'letreros inventados', 'imagen entera', 'cada semana hago una prueba', 'seguime', 'seedream 4.5', 'kling o1 image', 'kling o3', 'cinematic studio 3.0', 'seedance 2.0 mini + referencias', 'recibieron como entrada fotos que están entre las 8 con que se mide el parecido', 'todos los clips bajan y el orden no cambia',
     'una toma de cada una: es una prueba, no una regla. en otras dos escenas, kling o1 image dio 0,79 y 0,83.']) if (!lp.includes(f)) errores.push(`el pie no dice «${f}», que el video sí dice`);
   // H2: los números de las otras dos tomas de Kling O1 Image salen de PROCEDENCIA (línea «resultados»), no de memoria
   if (proc) {
