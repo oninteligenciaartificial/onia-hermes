@@ -96,14 +96,14 @@ El flag vive en `storyboard.json` (`cierre`, `cierre_alternativa_B`); `armar-sto
 | 11 | 46,78 | split | `[CONFIRMAR 01:01–01:09]` 100 mil mensajes al mes: Sol sin caché 400 → Sol con caché 20 | sus palabras + alerta |
 | 12-13 | 54,10 / 56,25 | cara → split | «Si querés que lo probemos en tu negocio» → tarjeta de cierre | sus palabras |
 
-**Capturas oficiales** (`capturas/`, sacadas el **11-oct-2026 a las 07:31 UTC = 03:31 La Paz** con `capturar-openai.mjs`, Chromium por el proxy, TLS intacto;
+**Capturas oficiales** (`capturas/`, sacadas el **11-oct-2026 a las ~07:37 UTC = ~03:37 La Paz** con `capturar-openai.mjs`, Chromium por el proxy, TLS intacto;
 `capturas.json` guarda URL y fecha de cada una):
 - `precios.png` · https://developers.openai.com/api/docs/pricing · pestaña Standard, Short context: gpt-6-astra Input $10.00 / Cached $1.00 / Output $50.00; gpt-6.1-sol Input $2.00 / Cached $0.10 / Output $10.00.
 - `modelo-sol.png` · https://developers.openai.com/api/docs/models · tarjeta de GPT-6.1 Sol («Near-Astra performance for complex work at a lower cost.»; Input $2, Output $10 por MTok).
 - `changelog-sol.png` · https://developers.openai.com/api/docs/changelog · «Sep 29 … Released GPT-6.1 Sol … Standard pricing per 1M tokens for prompts with up to 272K input tokens is $2 input, $0.10 cached input, $2.50 cache write, and $10 output.»
 - `logo-openai.png` · `hermes-content/references/brand-logos/openai.svg` en su tile blanco (el SVG es `currentColor`: oscuro sobre el panel negro no se ve).
 Confirmado con ellas: «Sol 2, Astra 10» (entrada), «10 centavos el millón» de caché (Sol), «20 veces menos» (2,00 / 0,10), «29 de septiembre» y «según OpenAI se acerca a Astra».
-`openai.com/index/*` da 403 desde la nube (no lo usé). **No se puso en pantalla:** precios de salida, Luna, ni el «Dev Day» (no está en la página).
+`openai.com` da 403 desde la nube (probé `/api/pricing/`); todo sale de `developers.openai.com`. **No se puso en pantalla:** precios de salida, Luna, ni el «Dev Day» (no está en la página).
 
 ## Medido (render final, `medicion.txt` y `plan.txt`)
 

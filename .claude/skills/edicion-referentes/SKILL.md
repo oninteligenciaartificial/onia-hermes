@@ -391,6 +391,22 @@ antes de que lleguen a Sergio Urcullo.
   es amarillo `#FDC82F`, no verde: cambiar cualquiera pide tocar `santiago.py` (decisión de la madre). (7) `Broken pipe` en el log del render es el
   decodificador del bruto cerrado al final: inofensivo. (8) Una noticia se contrasta con la fuente más nueva: el blog de Google del 19-may-2026 respalda
   «Pro, Ultra y gratis, 18 de junio» y el cartel de geminicli.com dice «Unpaid tier and Google One users» sin contradecirlo; en pantalla va lo que dice la página.
+- **Borrador de DD-A (11-oct), mismo método que N06: `videos/marca-personal/2026-10-11/dd-a-openai-sol/borrador/rehacer.sh` (variables `CIERRE=A|B`,
+  `RECAPTURAR=1`, `BRUTO=`, `S=`).** Medido por mí sobre el render de 58,4 s: `silencedetect -35 dB d=0.3` → 0 silencios (a d=0,2 salen 9 pausas de 0,2-0,3 s
+  = los empalmes de 0,24 s), −13,0 LUFS, LRA 1,8 (receta 2,3-3,4: corto), TP −1,7; no cumple la receta en duración (58,4 contra 65-120 s) ni en cola (0,12 contra
+  0,3-0,65 s). Lo nuevo frente a N06: (1) **`capturar.mjs` con `ancla` falla en `developers.openai.com`** (la página scrollea el BODY, no el documento: «Clipped
+  area is empty»): `capturar-openai.mjs` usa viewport alto + clip, y una opción «celdas» (rectángulo de una celda de tabla, porque la página de precios trae filas
+  ocultas Batch/Flex/Fast/Ultrafast con el mismo nombre); sin ancla sí anda. (2) Los logos SVG `currentColor` (`openai.svg`) salen negros: en un tile blanco, no
+  directos sobre el panel oscuro. (3) **Un disparador toma la PRIMERA aparición de la frase en todo el transcript** («tu negocio» pegó a los 47,49 s): leer el
+  bloque «— disparos —» del `--plan`. (4) Una palabra mal oída que se parte en dos («Tavo» → «Te hago») se parte DESPUÉS de pasar a tiempo de salida; Whisper deja
+  bordes dentro del hueco tirado («pero» 32,00-34,52): inicio → start+pad, final → end−pad. (5) `caja(titulo, sub)` pisa el sub unos 6 px con un título de 2 líneas;
+  `tarjeta` con aire 0 pega las líneas (usar ≥ 14). (6) Solapes en transiciones (texto de escena «full» sobre el panel viejo 0,33 s): disparar con +0,3 s y
+  cerrar cada escena con `hasta` = inicio de la siguiente. (7) Medido: ojos 67,0-67,7 % en split y 45,6-46,6 % en cara completa en las 5 tomas; salto de cara en
+  los micro-cortes ≤ 13 px; subtítulo contra arranque de voz, mediana 0,00 s. (8) La changelog oficial de OpenAI es la mejor prueba de precios («Sep 29 … $2 input,
+  $0.10 cached input, $2.50 cache write, $10 output»); la cuenta de Sergio Urcullo ignora salida y escritura de caché. (9) **ALERTA de aritmética: «400 contra 20»
+  solo cuadra como Sol sin caché contra Sol con caché; si dijo «con Astra» el dato es falso (Astra sin caché serían US$2.000).** Una cuenta hablada se re-calcula con los
+  precios de la propia pieza antes del master. (10) Dos rodeos iguales para OpenCV 5 (`correr-santiago.py` y `santiago-cv5.py`): el arreglo va en `analizar_bruto()`.
+  (11) La REGLA 15 (aire muerto ≤ 0,3 s) vive en `tabla-de-cortes.py` y en los docs de la madre; esta rama la usa con `--sin-aire` y la mide con `silencedetect`.
 - **El bruto puede venir ya editado** (el de N03 traía 5 tomas pegadas). Los saltos se detectan con picos aislados de
   diferencia entre cuadros (>5× la mediana y >2,5× sus vecinos) y se tratan como cortes. Si no, el control dice
   «ningún corte a la vista» y es falso.
