@@ -9,18 +9,22 @@ Regla madre: `CLAUDE.md` §1 «Sesión MADRE local + carriles en la nube». Esta
 `hermes-content/docs/handoff/madre-local.md`. Capacidades medidas: fila 3 de
 `hermes-content/docs/ONIA_CAPACIDADES_DE_LAS_SESIONES.md`.
 
-- **La madre corre en la PC de Sergio Urcullo** (app de escritorio, carpeta `onia-hermes`) y es la ÚNICA que
-  ordena. Hace ella lo que exige la PC (paneles con su login, capturas, mirar pantallas). El desarrollo va en
-  la nube, un carril por sesión.
+- **Hay DOS madres locales en la PC de Sergio Urcullo** (app de escritorio, carpeta `onia-hermes`; reparto del
+  11-oct-2026, QA `hermes-content/docs/research/2026-10-11-harness-qa/D02`). **MADRE DESARROLLO-INFRA** ordena
+  Plataforma y Hermes-Jarvis, más VPS, infra y harness. **MADRE MARKETING** ordena Lucía, Marca personal, Ventas
+  y pauta. Cada madre ordena solo a sus sesiones. Hace lo que exige la PC (paneles con su login, capturas, mirar
+  pantallas). El desarrollo va en la nube, un carril por sesión.
 - **El canal es el mensaje, no el documento.** El handoff queda solo para que una sesión nueva retome.
-- **UNA sola madre, no una por área** (Sergio Urcullo preguntó el 1-oct por «madre marketing / madre
-  plataforma / madre varios»; se decidió una). Todo lo que cualquier sesión necesite de la PC se lo pide a la
-  madre y la madre lo hace. Motivos: el navegador con el login de Sergio Urcullo es uno y su uso se serializa;
-  varias madres son varios orquestadores y se cruza la información. Lo largo (render, build, medición de
-  disco) la madre lo larga en un **subagente de fondo**, no en otra madre.
+- **Lo que una sesión necesite de la otra área se le pide a SU madre, no a la otra.** Las dos madres comparten la
+  PC y el navegador con el login de Sergio Urcullo, cuyo uso se serializa. Lo largo (render, build, medición de
+  disco) lo lleva la madre que lo necesite, en un **subagente de fondo**, no en otra madre. (Del 1-oct al 10-oct
+  hubo una sola madre; el reparto del 11-oct la reemplaza.)
 - **La madre NO se muda a la nube** (Sergio Urcullo lo preguntó el 8-oct). Desde la nube `SendMessage` a otra sesión falla
   («this cloud session cannot message other sessions yet»), así que la madre no podría ordenar a nadie. Tampoco llega a Chrome
   ni a Codex local. Todo lo demás ya corre en la nube.
+
+> Corrección 2026-10-11 (QA del harness, `D02`): dos madres por área; «un subagente no tiene `RemoteTrigger`» se
+> corrige; Codex lo lanzan las dos madres para sus sesiones, máx 2 corridas locales a la vez entre ambas (disco C: casi lleno; ver «Delegar código a Codex»). Ver `ONIA_HARNESS.md` §9 y §10.
 
 > Corrección 2026-10-09: `equipo-de-agentes` es el método vigente; `aprender-de-todo` rige los insumos de Sergio. Sustituye la ronda antigua de 30 min, los nombres supuestos vivos y la segunda madre revisora por ronda de 20 min, verificación de sesiones y revisión de Codex. Las mediciones antiguas siguientes no prueban disponibilidad actual.
 
@@ -52,7 +56,7 @@ Plataforma con las del presupuesto por fases, a 390 y 1440 px.
   `7,27,47 * * * *`, vive mientras ella está abierta y vence a los 7 días). En cada ronda lee el último ESTADO de cada
   sesión y actúa. Si nada cambió, no le escribe nada a él. Las sesiones no pueden avisarle en el momento (ver
   «Nube → madre»). 1 tarea por mensaje, con su criterio de hecho. Los issues `tarea-local` los barre la madre en las
-  rondas. No se crea otra tarea programada: sería un segundo orquestador.
+  rondas. El latido mecánico de P02 (sin LLM, Programador de tareas de Windows) no es un orquestador; está propuesto y no creado (11-oct).
 - **Cada sesión lleva su plan visible en la app** (TaskCreate), con el estado y el criterio de hecho de cada tarea.
   Sergio Urcullo lo vio en Plataforma el 8-oct y pidió que todas lo tengan: es como él sigue el avance sin preguntar.
 - **A Sergio Urcullo, como máximo 3 pedidos por semana**, en una lista de sí o no. Lo demás se anota y no se le pide.
@@ -62,6 +66,8 @@ Plataforma con las del presupuesto por fases, a 390 y 1440 px.
 ## Inventario histórico de sesiones (5-oct-2026, relevo a las 20:40 UTC; actualizado parcialmente el 8-oct)
 
 **Corrección 2026-10-09:** nombres e IDs de esta tabla no acreditan sesiones activas. Resolver destino con `ListAgents` antes de enviar; si la herramienta falta, dejar verificación pendiente.
+
+**Vigencia 11-oct (QA, `D02`):** Plataforma y Hermes-Jarvis → madre desarrollo-infra; Lucía, Marca personal y Ventas → madre marketing. Latidos horarios: Plataforma :17, Marca :27, Lucía :47, Hermes :57 (ids en `equipo-de-agentes` §2 bis). Ventas no tiene latido (P01).
 
 | Sesión (título) | id nube | Carril |
 |---|---|---|
@@ -102,14 +108,15 @@ Nota 2026-10-09: los éxitos del 1/5-oct no invalidan los fallos del 8-oct. Veri
 
 - `SendMessage` a la nube **no confirma lectura**: si la destino está en otro modo de permisos, el mensaje
   espera la aprobación de Sergio Urcullo. El silencio no es un «sí»: se verifica leyendo su transcript.
-- La sesión de la nube **contesta en su propio transcript** y la madre lo lee. Un subagente de la madre NO
-  tiene `RemoteTrigger`: leer transcripts lo hace la madre en su contexto.
+- La sesión de la nube **contesta en su propio transcript** y la madre lo lee. **Un subagente de la madre SÍ puede
+  leerlo** (medido 11-oct 05:10 UTC: un Haiku cargó `RemoteTrigger` con `ToolSearch` `select:RemoteTrigger` y trajo
+  200 eventos; después 7 subagentes del QA hicieron lo mismo). Leer transcripts va a un Haiku: no gasta el contexto de la madre.
 - Una sesión que se declaró «en pausa» por una regla vieja no retoma sola: el mensaje dice explícito
   «retomá, no estás en pausa» y trae tareas concretas con criterio de hecho.
 
 ## La ronda (actualizada 2026-10-09)
 
-La madre revisa cada **20 min** (`7,27,47 * * * *`), con un verificador Haiku disponible y `equipo-de-agentes` §3. Sustituye la cadencia de 30 min del 1-oct; no crear ambas rondas. Cada carril mantiene su propio loop: la ronda detecta estancamientos, no garantiza ejecución continua. Solo la madre autorizada crea o renueva el cron; Codex no lo activa.
+La madre revisa cada **20 min** (`7,27,47 * * * *`), con un verificador Haiku disponible y `equipo-de-agentes` §3. Cada madre corre la suya sobre sus sesiones, con roles por modelo: Haiku cuenta y verifica, Sonnet sintetiza, Opus solo lo ambiguo o riesgoso. El CronCreate muere con cada reinicio (P02). Sustituye la cadencia de 30 min del 1-oct; no crear ambas rondas. Cada carril mantiene su propio loop: la ronda detecta estancamientos, no garantiza ejecución continua. Solo la madre autorizada crea o renueva el cron; Codex no lo activa.
 
 ## Abrir una sesión nueva en la nube
 
@@ -217,7 +224,7 @@ Cómo contestar: <en tu transcript | SendMessage al nombre actual verificado con
 Sergio Urcullo, 8-oct: **Claude es la madre y Codex trabaja dentro de ella** («aprovechemos mis dos suscripciones»).
 Se trabaja en la app de Claude; Codex corre por detrás. Codex no orquesta, no abre sesiones ni mergea.
 
-- **Codex en la NUBE primero (8-oct):** no depende de Windows ni de la PC prendida. Hay 2 entornos:
+- **Codex en la NUBE primero (8-oct):** una vez lanzada, la tarea no depende de la PC; la lanza la madre desde la PC. Las sesiones de Claude en la nube no tienen Codex (C07). Hay 2 entornos:
   - `6abad6a0aae081919f0b315818becb21` = «ONIA Platform — QA y desarrollo» (onia-platform, ~33 MB);
   - `6abad782eba0819196ca234dc3abc327` = «ONIA Hermes — revisión y desarrollo» (onia-hermes).
   Se lanza con `codex cloud exec --env <id> --branch <rama> "<prompt cerrado>"`, se sigue con `codex cloud status <task>` y se
@@ -280,7 +287,7 @@ Se trabaja en la app de Claude; Codex corre por detrás. Codex no orquesta, no a
 - **Codex atiende pedidos de las sesiones de la nube** que ellas no pueden hacer (código y tests). Decide la madre con el
   router, por si conviene Claude o Codex. Codex sigue las mismas reglas (`AGENTS.md` remite a `CLAUDE.md`). «Habla» con la
   madre por su `resultado.md`: si le queda una duda, la escribe ahí, y la madre le contesta con `codex-tarea.sh resume`.
-- **Codex verifica a la madre; no hay madre 2 abierta** (Sergio Urcullo eligió esto el 8-oct). Una madre 2 sería un
+- **Codex no tiene madre propia; no se abre una tercera madre** (Sergio Urcullo, 8-oct; desde el 11-oct hay dos madres por área). Una madre 2 sería un
   segundo orquestador y relee todo el contexto, así que gasta mucho. Antes de mergear un PR propio, la madre corre
   `scripts/codex-tarea.sh revisar <carpeta> origin/main` (gpt-6.1-sol, esfuerzo medio, para no quemar la cuenta; Astra
   solo si toca cobros, producción o permisos) y pega `resultado.md` como comentario del PR. Con esa revisión el control
@@ -289,9 +296,9 @@ Se trabaja en la app de Claude; Codex corre por detrás. Codex no orquesta, no a
 - **Modelos (actualización 2026-10-09, `equipo-de-agentes`):** código cerrado, fichas, auditorías y síntesis con `gpt-6.1-sol` medium por defecto; `gpt-6-astra` medium para seguridad, cobros o arquitectura y decisiones de riesgo. Si el resultado es malo, se escala con la prueba del fallo, no por costumbre. Lista viva:
   `~/.codex/models_cache.json`.
 - **La tarea es un prompt cerrado:** META · PRUEBA DE HECHO · REGLA DE PARADA · archivos que toca y los que no · reglas
-  fijas (sin push, sin VPS, sin producción, sin instalar). Modelo: `hermes-content/docs/handoff/codex-tareas/*.md`.
+  fijas (sin push, sin VPS, sin producción, sin instalar). Modelo y reglas de la cola: `hermes-content/docs/handoff/codex-tareas/README.md` y `_PLANTILLA.md` (cabecera `estado:`).
 - **Cupo:** semanal (plan `prolite`). El uso se lee en el último `rate_limits` de `~/.codex/sessions/**`. Con 80 % usado
-  no se lanza nada nuevo (reserva del 20 %, decidida el 6-oct).
+  no se lanza nada nuevo (reserva del 20 %, decidida el 6-oct). Lectura viva: `node scripts/codex-cupo.mjs` (C04); no copiar el % a mano. La propuesta C11 (corte de 90 % y tope de 24 M tokens por día) está pendiente de decisión de Sergio.
 - ⚠️ **Sandbox de Windows (8-oct):** el CLI que trae la app de Codex (0.162-alpha) falla SIEMPRE con sandbox
   («setup refresh had errors»: `node_repl.exe` del runtime `cua_node` «en uso»), aun con la app y sus procesos cerrados.
   Correrlo sin sandbox lo frena el control de permisos de Claude Code («Create Unsafe Agents»), y no se rodea: tampoco se
@@ -299,7 +306,7 @@ Se trabaja en la app de Claude; Codex corre por detrás. Codex no orquesta, no a
   - el npm 0.161 con el config («elevated») falla igual;
   - con `--ignore-user-config` responde «bloqueado por la política»;
   - con `-c windows.sandbox="unelevated"` **funciona**.
-  El npm 0.139 también andaba, pero solo con gpt-5.5, que deja Codex el 14-oct según el aviso oficial que citó Codex.
+  El npm 0.139 también andaba, pero solo con gpt-5.5, que deja Codex el 14-oct según el aviso oficial que citó Codex (no verificado el 11-oct: UNKNOWN; verificar antes del 14-oct).
   Cuando falla, Codex lo reporta honesto en `resultado.md` y no inventa.
 - **Codex en la nube SÍ corre:** la prueba del 8-oct en el entorno Hermes terminó READY a los ~20 min (el repo pesa). El
   resultado se trae con `codex cloud diff <task>` y `codex cloud apply <task>`.

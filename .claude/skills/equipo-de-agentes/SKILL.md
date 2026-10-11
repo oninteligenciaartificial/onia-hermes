@@ -13,13 +13,15 @@ Detalle operativo de cada pieza: skill `onia-sesion-madre` (canales, Codex, tram
 
 > Actualización 2026-10-09: Sol por defecto para contratos cerrados; Astra según riesgo. Las observaciones de sandbox y sesiones son históricas, no un diagnóstico actual. La ronda de 20 min complementa el loop de cada carril. Codex no abre sesiones ni activa cron.
 
+> Corrección 2026-10-11 (QA del harness, `ONIA_HARNESS.md` §9-§10): dos madres por área (desarrollo-infra y marketing). Las nubes no tienen Codex (C07): cada sesión escribe su contrato y lo lanza la madre de su área, con cupo leído por `scripts/codex-cupo.mjs` (C04).
+
 ## 1. Quién hace qué
 
 | Rol | Quién | Hace | No hace |
 |---|---|---|---|
-| Madre | Claude local, en la PC de Sergio Urcullo | llena las colas, despacha a Codex, corre los gates en la PC, mergea/pushea lo que la nube no puede, hace lo que exige la PC | código largo (va a Codex), análisis largos (van a Gemini/Codex), mensajes largos |
-| Sesiones de la nube | Plataforma · Marca personal · Ventas y pauta · Lucía · Hermes-Jarvis | trabajan en LOOP su cola `hermes-content/docs/cola/loop/<carril>.md` hasta vaciarla | quedarse paradas esperando un mensaje |
-| Codex | `scripts/codex-tarea.sh` (Sol por defecto; Astra para seguridad, plata o lógica con riesgo) | código cerrado, fichas, auditorías y síntesis con META, PRUEBA DE HECHO y REGLA DE PARADA | git, commits, red u orquestación fuera del contrato; reporta bloqueos reales de validación |
+| Madres (dos, desde 11-oct) | Claude local, en la PC de Sergio Urcullo: **desarrollo-infra** (Plataforma, Hermes-Jarvis, VPS, infra, harness) y **marketing** (Lucía, Marca, Ventas y pauta) | llena las colas de sus sesiones; solo desarrollo-infra despacha a Codex; corre los gates en la PC; mergea/pushea lo que la nube no puede; hace lo que exige la PC | código largo (va a Codex), análisis largos (van a Gemini/Codex), mensajes largos |
+| Sesiones de la nube | Plataforma · Marca personal · Ventas y pauta · Lucía · Hermes-Jarvis | trabajan en LOOP su cola `hermes-content/docs/cola/loop/<carril>.md` hasta vaciarla | quedarse paradas esperando un mensaje; lanzar Codex (lo lanza la madre de desarrollo-infra) |
+| Codex | `scripts/codex-tarea.sh` (Sol por defecto; Astra para seguridad, plata o lógica con riesgo; Luna para mecánico, pendiente en el script) | código cerrado, fichas, auditorías y síntesis con META, PRUEBA DE HECHO y REGLA DE PARADA | git, commits, red u orquestación fuera del contrato; reporta bloqueos reales de validación |
 | Verificadores | subagentes **Haiku 5.5** (`model: haiku`) | contar y comprobar: ¿se cumplió? ¿está publicado? ¿hay sesiones paradas? | decidir ni escribir código |
 | Gemini (gratis) | `gemini-see-video.mjs` en bucles de bash | mirar videos sin gastar tokens de Claude | — (tope diario: pasar a `flash-lite`) |
 
@@ -61,8 +63,10 @@ madre sin la PC, y eso exige loguear la cuenta de Sergio Urcullo allá, que nece
 
 ## 3. La ronda de la madre (cada 20 min, `CronCreate`)
 
+Cada madre corre la suya sobre sus sesiones: desarrollo-infra, Plataforma y Hermes-Jarvis; marketing, Lucía, Marca y Ventas. El CronCreate muere con cada reinicio (P02): el latido mecánico sin LLM es propuesta, pendiente de Sergio.
+
 1. **Verificador Haiku** (uno solo, barato): por cada cola, cuántas tareas `[x]` desde la última ronda y cuál es la siguiente;
-   `ListAgents` para ver quién está `idle` con tareas pendientes; PRs nuevos o mergeados; tareas nuevas en `codex-tareas/` y
+   `ListAgents` para ver quién está `idle` con tareas pendientes; PRs nuevos o mergeados; tareas `estado: pendiente` en `hermes-content/docs/handoff/codex-tareas/` (detector v2 del README; hasta la migración C08-B los contratos no tienen cabecera) y
    bundles en `docs/cola/ramas-locales/`. Devuelve una tabla corta.
 2. Sesión `idle` con cola pendiente → UN mensaje: «retomá tu cola, siguiente tarea: X».
 3. Tarea de Codex nueva → la madre la lanza (sección 4).
@@ -85,12 +89,14 @@ madre sin la PC, y eso exige loguear la cuenta de Sergio Urcullo allá, que nece
    comentario del PR.
 7. Mensaje de una línea a la sesión dueña: «X hecho en #N, suite N/0».
 
-## 4 bis. Codex al máximo (2026-10-09)
+## 4 bis. Codex al máximo (2026-10-09; cupo y cloud al 11-oct)
+
+- **Antes de despachar:** `node scripts/codex-cupo.mjs` (lectura viva; corte vigente 80 % semanal; la propuesta C11 de 90 % y 24 M tokens por día está pendiente de Sergio). Nunca un % copiado a mano (C04).
 
 - **Siempre se despacha a Codex** el código de alcance cerrado, las fichas a partir de fuentes disponibles, las auditorías y las síntesis verificables. La madre define el contrato, entrega solo el contexto necesario y verifica el resultado. Si falta acceso, cupo o evidencia, registra el bloqueo y sigue con otra tarea autorizada; no inventa la ficha ni deriva una restricción a otro agente.
 - **Concurrencia recomendada:** 2 ejecutores independientes + 1 verificador, solo dentro del cupo de agentes y tokens disponible. La madre también ocupa un puesto si la herramienta la cuenta. Un worktree y archivos exclusivos por ejecutor; las tareas sobre la misma carpeta o archivos se serializan. El verificador revisa el resultado terminado y no compite por sus archivos. Si el cupo es menor, reducir concurrencia.
-- **Modelo:** `gpt-6.1-sol` con esfuerzo medio por defecto para estos contratos; `gpt-6-astra` medio para seguridad, cobros, arquitectura ambigua o revisión de riesgo. Escalar con evidencia o por riesgo conocido, no por tamaño. Haiku/Luna quedan para conteos mecánicos cuando están disponibles; no sustituyen el juicio requerido.
-- **Codex cloud:** tareas largas de Platform que no necesitan la PC, navegador autenticado, archivos locales ni secretos personales → entorno Platform `6abad6a0aae081919f0b315818becb21`. Antes de lanzar, la madre verifica acceso autorizado, repo/rama, alcance, cupo y modelo observado; disponer del ID no prueba acceso ni ejecución. El modelo solicitado por CLI no garantiza el modelo de la nube (medición 8-oct). Si se requiere Astra y no se confirma, usar el carril local autorizado.
+- **Modelo:** `gpt-6.1-sol` con esfuerzo medio por defecto para estos contratos; `gpt-6-astra` medio para seguridad, cobros, arquitectura ambigua o revisión de riesgo. Escalar con evidencia o por riesgo conocido, no por tamaño. `gpt-6-luna` queda para lo mecánico (su línea en `codex-tarea.sh` aún no está, C01); Haiku, para conteos en Claude. Ninguno sustituye el juicio requerido.
+- **Codex cloud:** tareas largas de Platform que no necesitan la PC, navegador autenticado, archivos locales ni secretos personales → entorno Platform `6abad6a0aae081919f0b315818becb21`. Antes de lanzar, la madre verifica acceso autorizado, repo/rama, alcance, cupo y modelo observado; disponer del ID no prueba acceso ni ejecución. La rama debe existir en origin, y `exec` lo lanza solo la madre de desarrollo-infra, con el OK de Sergio para la primera tarea (C05, C07). El modelo solicitado por CLI no garantiza el modelo de la nube (medición 8-oct). Si se requiere Astra y no se confirma, usar el carril local autorizado.
 - La madre sigue estado y recupera diff/resultado, revisa y ejecuta los gates del carril. La entrega incluye archivos, prueba ejecutada, limitaciones y `PARA LA MADRE:`. Mantener la reserva de cupo acordada; «al máximo» significa trabajo útil validado, no consumir hasta bloquear al equipo.
 
 ## 5. Publicar
@@ -116,6 +122,8 @@ actos legales o firmas (los hace Leslie Mercado Moreno) y su cara o su voz en se
 ## 8. Trampas ya pagadas
 
 - `vitest related` no alcanza: corre la suite completa.
+- Dos madres (desde 11-oct): cada una ordena a sus sesiones y no lanza el trabajo de la otra. Codex lo lanza cada madre para sus sesiones; máx 2 corridas locales a la vez entre las dos (disco C:) y el cupo se lee con `node scripts/codex-cupo.mjs`.
+- Cupo: no copiar el % a mano; citar la salida de `node scripts/codex-cupo.mjs` (C04).
 - **No pushear a onia-platform cerca de una publicación** (10-oct). El publicador del VPS (`onia-publicar-solo`) corre cada
   3 h a las :50 UTC (00, 03, 06, 09, 12, 15, 18, 21) y se salta la corrida si ve otro build («hay otro build corriendo… no
   encimo otro»). El CI de los PRs corre en `onia-runner-platform`, en el MISMO VPS. El 10-oct la madre pusheó 7 ramas entre
