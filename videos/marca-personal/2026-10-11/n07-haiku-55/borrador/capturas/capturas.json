@@ -1,0 +1,176 @@
+{
+ "haiku-spec": {
+  "url": "https://platform.claude.com/docs/en/models/haiku-5-5/overview",
+  "fecha": "2026-10-11",
+  "fecha_hora": "2026-10-11T08:28:47.950Z",
+  "w": 1120,
+  "h": 320,
+  "frases": {
+   "From $0.10": [
+    76,
+    227,
+    224,
+    56
+   ],
+   "From $0.50": [
+    575,
+    227,
+    232,
+    56
+   ]
+  }
+ },
+ "haiku-precios": {
+  "url": "https://platform.claude.com/docs/en/models/haiku-5-5/overview",
+  "fecha": "2026-10-11",
+  "fecha_hora": "2026-10-11T08:29:00.435Z",
+  "w": 1120,
+  "h": 480,
+  "frases": {
+   "$0.10 / MTok for prompts up to 100,000 tokens": [
+    446,
+    195,
+    566,
+    36
+   ],
+   "$0.50 / MTok for prompts over 100,000 tokens": [
+    446,
+    235,
+    566,
+    36
+   ],
+   "$0.50 / MTok for prompts up to 100,000 tokens": [
+    440,
+    309,
+    572,
+    36
+   ]
+  }
+ },
+ "haiku-liberado": {
+  "url": "https://platform.claude.com/docs/en/models/haiku-5-5/overview",
+  "fecha": "2026-10-11",
+  "fecha_hora": "2026-10-11T08:29:08.889Z",
+  "w": 1120,
+  "h": 400,
+  "frases": {
+   "October 7, 2026": [
+    794,
+    219,
+    218,
+    36
+   ]
+  }
+ },
+ "haiku-30": {
+  "url": "https://platform.claude.com/docs/en/models/haiku-5-5/overview",
+  "fecha": "2026-10-11",
+  "fecha_hora": "2026-10-11T08:29:17.659Z",
+  "w": 1120,
+  "h": 400,
+  "frases": {
+   "approximately 30% more tokens": [
+    48,
+    204,
+    952,
+    82
+   ]
+  }
+ },
+ "haiku-uso": {
+  "url": "https://platform.claude.com/docs/en/models/haiku-5-5/overview",
+  "fecha": "2026-10-11",
+  "fecha_hora": "2026-10-11T08:29:25.956Z",
+  "w": 1120,
+  "h": 300,
+  "frases": {
+   "classification, extraction, and routing": [
+    192,
+    139,
+    850,
+    78
+   ]
+  }
+ },
+ "haiku45-spec": {
+  "url": "https://platform.claude.com/docs/en/models/haiku-4-5/overview",
+  "fecha": "2026-10-11",
+  "fecha_hora": "2026-10-11T08:29:34.456Z",
+  "w": 1120,
+  "h": 320,
+  "frases": {
+   "$1": [
+    76,
+    228,
+    40,
+    56
+   ],
+   "$5": [
+    575,
+    228,
+    48,
+    56
+   ]
+  }
+ },
+ "precio-larga": {
+  "url": "https://platform.claude.com/docs/en/about-claude/pricing",
+  "fecha": "2026-10-11",
+  "fecha_hora": "2026-10-11T08:29:43.539Z",
+  "w": 1120,
+  "h": 300,
+  "frases": {
+   "a request whose prompt is over 100,000 tokens pays higher prices": [
+    48,
+    27,
+    968,
+    82
+   ]
+  }
+ },
+ "pensamiento-salida": {
+  "url": "https://platform.claude.com/docs/en/build-with-claude/thinking",
+  "fecha": "2026-10-11",
+  "fecha_hora": "2026-10-11T08:29:53.159Z",
+  "w": 1120,
+  "h": 300,
+  "frases": {
+   "billed as output tokens": [
+    48,
+    28,
+    940,
+    82
+   ]
+  }
+ },
+ "pensamiento-apagar": {
+  "url": "https://platform.claude.com/docs/en/build-with-claude/thinking",
+  "fecha": "2026-10-11",
+  "fecha_hora": "2026-10-11T08:30:02.826Z",
+  "w": 1120,
+  "h": 260,
+  "frases": {
+   "thinking on by default": [
+    396,
+    27,
+    290,
+    38
+   ]
+  }
+ },
+ "terminal": {
+  "url": "https://code.claude.com/docs/en/model-config",
+  "fecha": "2026-10-11",
+  "fecha_hora": "2026-10-11T08:38:11.917Z",
+  "w": 1120,
+  "h": 400,
+  "frases": {
+   "claude --model claude-": [
+    634,
+    198,
+    352,
+    32
+   ]
+  }
+ }
+}

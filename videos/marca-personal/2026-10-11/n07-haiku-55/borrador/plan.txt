@@ -1,0 +1,167 @@
+[ WARN:0@0.911] global net_impl_backend.cpp:345 setPreferableTarget Targets are not supported by the new graph engine for now
+  ⚠ «pero lo que nadie» pide corte y no hay corte ni salto en la pausa de antes: queda en la palabra
+  ⚠ «lo difícil» pide corte y no hay corte ni salto en la pausa de antes: queda en la palabra
+  ⚠ «repartir mil» pide corte y no hay corte ni salto en la pausa de antes: queda en la palabra
+  ⚠ «viene con el pensamiento» pide corte y no hay corte ni salto en la pausa de antes: queda en la palabra
+  ⚠ «la tabla y la cuenta» pide corte y no hay corte ni salto en la pausa de antes: queda en la palabra
+  ⚠ «link en mi perfil» pide corte y no hay corte ni salto en la pausa de antes: queda en la palabra
+  ⚠ «lo difícil» pide corte y no hay corte ni salto en la pausa de antes: queda en la palabra
+  ⚠ «lo difícil» pide corte y no hay corte ni salto en la pausa de antes: queda en la palabra
+  ⚠ «lo difícil» pide corte y no hay corte ni salto en la pausa de antes: queda en la palabra
+  ⚠ «lo difícil» pide corte y no hay corte ni salto en la pausa de antes: queda en la palabra
+  ⚠ «repartir mil» pide corte y no hay corte ni salto en la pausa de antes: queda en la palabra
+  ⚠ «repartir mil» pide corte y no hay corte ni salto en la pausa de antes: queda en la palabra
+  ⚠ «repartir mil» pide corte y no hay corte ni salto en la pausa de antes: queda en la palabra
+  ⚠ «link en mi perfil» pide corte y no hay corte ni salto en la pausa de antes: queda en la palabra
+  ⚠ «link en mi perfil» pide corte y no hay corte ni salto en la pausa de antes: queda en la palabra
+  ⚠ «link en mi perfil» pide corte y no hay corte ni salto en la pausa de antes: queda en la palabra
+escenas: 22 · bloques de subtítulo: 92 · duración 81.72 s
+    0.00  split  corte    gancho  (4 elementos)
+    2.52  split  fundido  antes-ahora  (5 elementos)
+    5.43  split  fundido  lanzamiento  (8 elementos)
+    8.48  split  fundido  por-token  (3 elementos)
+   10.33  split  fundido  precio-55  (8 elementos)
+   15.70  split  fundido  precio-45  (8 elementos)
+   19.03  pip    corte    cuenta-1  (6 elementos)
+   29.00  split  corte    nadie  (2 elementos)
+   30.45  split  fundido  mismo-texto  (5 elementos)
+   33.20  pip    corte    cuarenta  (7 elementos)
+   37.71  split  corte    para-que  (7 elementos)
+   42.51  full   sube     recepcionista  (4 elementos)
+   47.53  lamina corte    lo-dificil  (4 elementos)
+   49.61  full   corte    clinica  (3 elementos)
+   52.54  split  baja     medio-dolar  (6 elementos)
+   58.31  full   sube     armas  (2 elementos)
+   60.07  split  baja     trampa-1  (7 elementos)
+   63.92  split  fundido  trampa-2  (6 elementos)
+   67.79  full   sube     apagalo  (3 elementos)
+   70.05  split  baja     terminal  (7 elementos)
+   75.76  full   sube     comunidad  (3 elementos)
+   79.33  split  baja     cta  (1 elementos)
+
+— control contra la receta —
+  duración 81.72 s (receta 65-120 con persona; antes 81.72)
+  reparto: split 61 % · full 19 % · pip 18 % · lamina 3 % (pip = persona reducida)
+  tramo sin cara más largo: 2.1 s (referentes ≤10; Sonnet ≤1,25)
+  cambios de layout: 14 (1.71 por 10 s; receta 0,75-2,1)
+  ojos: split 67.5 % · cara completa [46.0] % (Sonnet 67,1 / 49,2; QA 46-47) · paso split→cara [413, 413, 413] px (318-600)
+  escala por toma: 0.0s ×1.080 · 0.9s ×1.088 · 72.7s ×1.097 · 137.3s ×1.103 · 165.2s ×1.095
+  cortes y saltos: 29; a la vista (sin cambio de panel/layout/punch): ['3.31(corte)', '12.93(corte)', '14.15(corte)', '16.84(corte)', '40.17(corte)', '44.09(corte)', '51.23(corte)', '55.72(corte)', '72.83(corte)', '78.83(corte)']; en la ventana reducida: ['23.91(corte)', '26.71(corte)', '28.06(corte)', '34.32(corte)']
+  algo cambia cada 2.3 s de media (máx 4.9; receta 3-5)
+  elementos gráficos nuevos: 72 (8.8 por 10 s; receta ≈6-9)
+  acentos de zoom: 3 (golpe, golpe, golpe); receta 1-3
+  pausas según Whisper (orientativo: sus finales de palabra se corren hasta 0,4 s): 29 de 0,18-0,5 s · 0 de 0,5-0,6 · más de 0,6: ninguna
+  aire: +0.00 s en 0 uniones (0 sobre el silencio del corte, el resto estirado) · recortes []
+  pausas reales (habla del bruto en la salida nueva): 0 de 0,18-0,5 s · 0 de 0,5-0,6 · más de 0,6: ninguna (receta 16-33, ≤0,6)
+  palabras/s: 2.90 sobre la duración (método QA) · 2.91 sobre el habla (receta 2,65-3,2)
+  primera palabra 0.12 s · primer subtítulo 0.12 s (≤0,3) · cola tras la última palabra 0.19 s (0,3-0,65)
+  prueba en pantalla a 0.00 s (≤0,9)
+
+— aire —
+
+— disparos —
+    0.00  gancho:captura haiku-spec
+    0.00  gancho:credito platform.claude.com/docs/en/models/haiku-5-5/overview ·
+    0.00  gancho:texto Clasificar
+*mil mensajes*
+    2.52  antes-ahora:texto Antes
+    3.43  antes-ahora:texto *3 dólares*
+    4.13  antes-ahora:texto Ahora
+    4.33  antes-ahora:texto *40 centavos*
+    4.33  zoom golpe
+    5.43  lanzamiento:captura haiku-liberado
+    5.43  lanzamiento:credito platform.claude.com/docs/en/models/haiku-5-5/overv
+    5.43  lanzamiento:texto Haiku *5.5*
+    5.55  lanzamiento:logo logo-anthropic.png
+    7.57  lanzamiento:texto Sacó el *7 de octubre*
+    7.73  lanzamiento:marca «October 7, 2026»
+    8.17  lanzamiento:sello 7 OCT
+    8.48  por-token:texto Por token
+    8.98  por-token:texto cobra *10 veces
+menos*
+   10.33  precio-55:captura haiku-precios
+   10.33  precio-55:credito platform.claude.com/docs/en/models/haiku-5-5/overvie
+   11.56  precio-55:marca «$0.10 / MTok for prompts up to»
+   11.56  precio-55:texto *10 centavos* entran
+   12.28  precio-55:pildora por millón de tokens
+   13.97  precio-55:marca «$0.50 / MTok for prompts up to»
+   13.97  precio-55:texto *50 centavos* salen
+   15.70  precio-45:captura haiku45-spec
+   15.70  precio-45:credito platform.claude.com/docs/en/models/haiku-4-5/overvie
+   15.70  precio-45:texto Haiku *4.5*
+   17.31  precio-45:marca «$1»
+   17.31  precio-45:texto *1 dólar* entra
+   18.25  precio-45:marca «$5»
+   18.25  precio-45:texto *5 dólares* sale
+   19.03  cuenta-1:fila Mil mensajes
+   19.03  cuenta-1:texto La
+*cuenta*
+   21.59  cuenta-1:fila 2000 tokens entran
+   24.03  cuenta-1:fila Con Haiku 4.5: US$3
+   27.89  cuenta-1:fila Con Haiku 5.5: US$0,30
+   29.00  nadie:texto Lo que *nadie*
+te cuenta
+   30.45  mismo-texto:captura haiku-30
+   30.45  mismo-texto:credito platform.claude.com/docs/en/models/haiku-5-5/overv
+   30.57  mismo-texto:texto El mismo texto,
+*30 % más tokens*
+   31.68  mismo-texto:marca «approximately 30% more tokens»
+   33.20  cuarenta:fila Haiku 4.5: US$3
+   33.20  cuarenta:fila Haiku 5.5: US$0,30
+   33.20  cuarenta:texto La
+*cuenta*
+   33.31  cuarenta:fila 30 % más de tokens
+   34.44  cuarenta:fila Unos 40 centavos
+   36.39  cuarenta:sello CASI 8 VECES
+   36.39  zoom golpe
+   37.71  para-que:captura haiku-uso
+   37.71  para-que:credito platform.claude.com/docs/en/models/haiku-5-5/overview
+   39.99  para-que:marca «classification, extraction, an»
+   39.99  para-que:pildora Clasificar
+   41.20  para-que:pildora Sacar datos
+   41.92  para-que:pildora Repartir
+   42.93  recepcionista:texto Como un
+   43.16  recepcionista:texto *recepcionista*
+   44.21  recepcionista:texto No atiende la consulta,
+   45.55  recepcionista:texto *la manda* a quien corresponde
+   47.53  lo-dificil:texto Lo difícil
+se lo deja a
+   48.47  lo-dificil:fila Sonnet
+   49.07  lo-dificil:fila Opus
+   50.03  clinica:texto Si tenés una
+   50.24  clinica:texto *clínica con bot*
+   51.38  clinica:texto esto te toca
+   52.54  medio-dolar:texto Mil consultas
+   53.96  medio-dolar:texto *menos de medio dólar*
+   54.94  medio-dolar:pildora con el pensamiento apagado
+   55.84  medio-dolar:texto Preguntale a quien
+te armó el bot
+   57.33  medio-dolar:texto *¿Qué modelo usa?*
+   58.73  armas:texto Si armás bots,
+   59.36  armas:texto *dos trampas*
+   60.07  trampa-1:captura haiku-precios
+   60.07  trampa-1:credito platform.claude.com/docs/en/models/haiku-5-5/overview
+   60.20  trampa-1:texto Si el prompt pasa de
+*100 mil tokens*
+   60.64  trampa-1:marca «$0.50 / MTok for prompts over »
+   62.30  trampa-1:texto cobra *5 veces* más
+   62.30  zoom golpe
+   62.48  trampa-1:sello ×5
+   63.92  trampa-2:captura pensamiento-salida
+   63.92  trampa-2:credito platform.claude.com/docs/en/build-with-claude/thinkin
+   64.40  trampa-2:texto Pensamiento *prendido*
+   66.36  trampa-2:texto se cobra como *salida*
+   66.90  trampa-2:marca «billed as output tokens»
+   68.22  apagalo:texto Para clasificar,
+   68.57  apagalo:texto *apagalo*
+   69.27  apagalo:texto y probalo
+   70.05  terminal:captura terminal
+   70.05  terminal:credito code.claude.com/docs/en/model-config · 11 oct 2026
+   70.05  terminal:texto Para ponerlo en tu *terminal*
+   71.43  terminal:marca «claude --model claude-»
+   72.01  terminal:texto *claude-haiku-5-5*
+   74.72  terminal:pildora y empezá a probarlo
+   76.06  comunidad:texto La tabla y la cuenta
+   77.42  comunidad:texto están en mi *comunidad*
+   78.62  comunidad:texto *gratis*
+   79.33  cta:tarjeta 

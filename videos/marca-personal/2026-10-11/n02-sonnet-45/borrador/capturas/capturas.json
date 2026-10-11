@@ -1,0 +1,203 @@
+{
+ "dep-historial": {
+  "url": "https://platform.claude.com/docs/en/about-claude/model-deprecations",
+  "w": 1120,
+  "h": 600,
+  "frases": {
+   "On September 30, 2026": [
+    48,
+    94,
+    328,
+    38
+   ],
+   "November 30, 2026": [
+    73,
+    343,
+    274,
+    38
+   ],
+   "claude-sonnet-4-5-20250929": [
+    392,
+    347,
+    233,
+    76
+   ],
+   "claude-sonnet-5-5": [
+    700,
+    347,
+    272,
+    32
+   ]
+  },
+  "fecha": "2026-10-11",
+  "hora_utc": "08:40-08:42"
+ },
+ "dep-auditoria": {
+  "url": "https://platform.claude.com/docs/en/about-claude/model-deprecations",
+  "w": 920,
+  "h": 800,
+  "frases": {
+   "Usage page in Claude Console": [
+    259,
+    220,
+    420,
+    38
+   ],
+   "Export": [
+    195,
+    274,
+    102,
+    38
+   ],
+   "broken down by API key and model": [
+    123,
+    328,
+    688,
+    82
+   ]
+  },
+  "fecha": "2026-10-11",
+  "hora_utc": "08:40-08:42"
+ },
+ "dep-plataformas": {
+  "url": "https://platform.claude.com/docs/en/about-claude/model-deprecations",
+  "w": 920,
+  "h": 520,
+  "frases": {
+   "Amazon Bedrock and Google Cloud": [
+    48,
+    116,
+    780,
+    82
+   ],
+   "set their own retirement schedules": [
+    48,
+    160,
+    726,
+    82
+   ]
+  },
+  "fecha": "2026-10-11",
+  "hora_utc": "08:40-08:42"
+ },
+ "mig-comando": {
+  "url": "https://platform.claude.com/docs/en/models/sonnet-5-5/migration-guide",
+  "w": 920,
+  "h": 840,
+  "frases": {
+   "/claude-api migrate this project to claude-sonnet-5-5": [
+    166,
+    268,
+    576,
+    70
+   ],
+   "confirm the migration scope": [
+    132,
+    628,
+    386,
+    38
+   ],
+   "checklist of items to verify manually": [
+    132,
+    584,
+    482,
+    38
+   ]
+  },
+  "fecha": "2026-10-11",
+  "hora_utc": "08:40-08:42"
+ },
+ "mig-cinco": {
+  "url": "https://platform.claude.com/docs/en/models/sonnet-5-5/migration-guide",
+  "w": 920,
+  "h": 680,
+  "frases": {
+   "five settings that return a 400 error": [
+    48,
+    190,
+    740,
+    82
+   ],
+   "sampling parameters": [
+    376,
+    234,
+    290,
+    38
+   ],
+   "assistant prefill": [
+    48,
+    234,
+    756,
+    82
+   ],
+   "forced tool choice": [
+    140,
+    278,
+    248,
+    38
+   ]
+  },
+  "fecha": "2026-10-11",
+  "hora_utc": "08:40-08:42"
+ },
+ "mig-pensar": {
+  "url": "https://platform.claude.com/docs/en/models/sonnet-5-5/migration-guide",
+  "w": 920,
+  "h": 680,
+  "frases": {
+   "thinking tokens are billed as output tokens": [
+    179,
+    540,
+    578,
+    38
+   ]
+  },
+  "fecha": "2026-10-11",
+  "hora_utc": "08:40-08:42"
+ },
+ "precio-45": {
+  "url": "https://platform.claude.com/docs/en/about-claude/pricing",
+  "w": 1120,
+  "h": 300,
+  "frases": {
+   "$3 / MTok": [
+    462,
+    16,
+    118,
+    38
+   ]
+  },
+  "fecha": "2026-10-11",
+  "hora_utc": "08:40-08:42"
+ },
+ "precio-55": {
+  "url": "https://platform.claude.com/docs/en/about-claude/pricing",
+  "w": 1120,
+  "h": 660,
+  "frases": {
+   "$2 / MTok": [
+    462,
+    491,
+    118,
+    38
+   ]
+  },
+  "fecha": "2026-10-11",
+  "hora_utc": "08:40-08:42"
+ },
+ "precio-tokens": {
+  "url": "https://platform.claude.com/docs/en/about-claude/pricing",
+  "w": 920,
+  "h": 380,
+  "frases": {
+   "approximately 30% more tokens": [
+    228,
+    106,
+    400,
+    32
+   ]
+  },
+  "fecha": "2026-10-11",
+  "hora_utc": "08:40-08:42"
+ }
+}
