@@ -1,5 +1,6 @@
 # Cola · Marca personal de Sergio Urcullo
 
+- [ ] **Regla 15 de `edicion-referentes` (aire muerto ≤ 0,3 s entre frases; la madre v4, 11-oct, commit `04f8ba9a2` en `claude/arranque-nueva-madre-ba386e`, aún no está en `main`):** aplicarla en el PRÓXIMO bruto que edite (N07 o D03-A, los primeros en llegar) y medir el master con `ffmpeg … silencedetect=noise=-35dB:d=0.3` → debe dar 0 silencios. Esa medición se anota como prueba de uso en `hermes-content/references/video-intake/2026-10-11-erik-taveras-edicion.md` (se escribe cuando la ficha llegue a `main`; hoy solo existe en esa rama). Sin bruto no se puede aplicar: nada hecho todavía.
 - [ ] Editar cada bruto que llegue a Drive «Videos Onia Octubre» con su molde (GRABAR-10-16-OCT.md) y publicarlo a su hora del CALENDARIO (IG con `ig-reel.mjs`, el resto por Buffer), con su aviso pegado en la comunidad
 - [ ] Publicar las 4 historias de la asesoría (la del link la sube Sergio Urcullo a mano: dejásela lista en Drive)
 - [ ] P1 «Niveles» y P3 pizarra (HyperFrames, sin cara) para los días sin bruto
