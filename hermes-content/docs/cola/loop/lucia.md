@@ -10,7 +10,15 @@
 > Hecho: guiones G2, G4, G5 y C2 con los nombres reales (C2 re-renderizada y mirada), `PLAN.md` y skill al día. En curso: los cuatro re-cortes v2 (regla 15) ya con los nombres. **LISTA PARA MOSTRAR** cuando
 > terminen y pasen revisión independiente. Sin gasto nuevo: voz y generación paga siguen pidiendo su sí escrito en esta sesión.
 > **G1 con voz:** la madre le pone la voz Marcela (ElevenLabs, aprobado por Sergio Urcullo) y avisará el SHA del archivo; entonces actualizo la tabla de entrega. D4 la decidió Sergio Urcullo el 11-oct: Marcela queda con su acento.
+> **Modelos y Codex (aviso de la madre v2, 11-oct):** hasta hoy mis subagentes (4 editores de los re-cortes v2 y el revisor de G5) corrieron como `general-purpose`
+> SIN `model` explícito (heredan sonnet-5-5). Desde ahora: editores, revisores y arreglos → `sonnet` explícito (`control-identidad`/`editor` de mi sección
+> de `ONIA_EQUIPOS_POR_SESION.md`); cuenta/verifica (SHA, duraciones, grep) → `haiku`; `opus` solo gasto, cara o voz. Las composiciones HyperFrames están en la lista
+> «siempre a Codex (Sol)»: los 4 re-cortes ya estaban en vuelo en esta nube cuando llegó el aviso (el render y ArcFace viven aquí); la próxima pieza (9) sale como contrato
+> en `docs/handoff/codex-tareas/`. Al marcar `[x]` anoto `modelos: …` y `codex:<id>` si hubo.
 
+- [~] Re-cortes MUDOS v2 de G3, G2, G4, G5 (≤30 s, regla 15, nombres reales D-N1) — `videos/lucia-g{3,2,4,5}-v2/`. modelos: editor sonnet (sin `model` explícito) ·
+  revisor G5 sonnet (sin `model` explícito) · arreglos G5 sonnet explícito. Estado: G5 revisado (aprobado con cambios, 11 hallazgos, arreglos en curso); G2/G3/G4 en edición.
+  **LISTA PARA MOSTRAR** al pasar cada una revisión independiente y quedar commiteada.
 - [~] ~~G1 con la captura real de Pendientes de la demo~~ — **reemplazada por la premisa v5** (Sergio Urcullo, 8-oct: *«Lucía no
   es necesario que muestres el producto… grabar y aprender a usar Higgsfield es tu tarea»*). G1 salió sin producto:
   `videos/lucia-g1/` (`e35bb77d1`, `ec26f3bb6`). La captura de Pendientes queda para Marca, no para Lucía.

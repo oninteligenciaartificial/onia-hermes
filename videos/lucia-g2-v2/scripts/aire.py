@@ -74,7 +74,10 @@ print(f'cuadros: {N} ({N / FPS:.3f} s)   «idéntico» = menos de {NMIN} píxele
 print(f'píxeles cambiados entre cuadros consecutivos: mínimo {nc.min()} · mediana {int(np.median(nc))} · percentil 5 {int(np.percentile(nc, 5))} · transiciones idénticas: {int(quiet.sum())} de {len(d)}')
 print(f'MAYOR TRAMO QUIETO (pantalla idéntica, con o sin tarjeta): {largo / FPS:.3f} s ({largo} cuadros)')
 malos = []
-mayor_sin = 0
+mayor_sin = 0                          # el mayor tramo quieto FUERA de la lectura de una tarjeta (de cualquier largo: aunque dure menos de 0,3 s)
+for a, b in runs:
+    peor = max(((y - x + 1) for x, y in cubierto(a, b)), default=0)
+    mayor_sin = max(mayor_sin, peor)
 print(f'tramos idénticos de más de {MAX_S} s:')
 largos = [(a, b) for a, b in runs if (b - a + 1) / FPS > MAX_S + 1e-9]
 if not largos:
@@ -82,13 +85,11 @@ if not largos:
 for a, b in largos:
     sin = cubierto(a, b)
     peor = max(((y - x + 1) for x, y in sin), default=0)
-    mayor_sin = max(mayor_sin, peor)
     ok = peor / FPS <= MAX_S + 1e-9
     print(f'  {a / FPS:6.3f}–{(b + 1) / FPS:6.3f} s  {(b - a + 1) / FPS:.3f} s idénticos; sin tarjeta en lectura: {peor / FPS:.3f} s  {"ok (tarjeta en lectura)" if ok else "✖ AIRE"}')
     if not ok:
         malos.append((a, b))
-runs_cortos = [(a, b) for a, b in runs if (b - a + 1) / FPS <= MAX_S + 1e-9 and (b - a + 1) > 1]
-print(f'MAYOR TRAMO QUIETO SIN TARJETA EN LECTURA: {max(mayor_sin, max(((b - a + 1) for a, b in runs_cortos), default=1)) / FPS:.3f} s (tope {MAX_S} s)')
+print(f'MAYOR TRAMO QUIETO SIN TARJETA EN LECTURA: {mayor_sin / FPS:.3f} s ({mayor_sin} cuadros; tope {MAX_S} s)')
 ev = json.load(open(os.path.join(P, 'qa/eventos.json'))) if os.path.exists(os.path.join(P, 'qa/eventos.json')) else None
 if ev:
     print(f"eventos visuales por 10 s (de plan.resuelto.json): mínimo {ev['por_10s']['min']}, máximo {ev['por_10s']['max']}, promedio {ev['por_10s']['promedio']}; hueco máximo entre eventos {ev['hueco_max']:.2f} s (tope 2,0 s)")

@@ -11,6 +11,10 @@ nube no tiene cliente `ssh` y la decisión de la madre (8-oct) es que la llave v
 | 4 | G4 «Seis motores de imagen, una cara: ¿cuál la conserva?» (**guion APROBADO por la madre el 10-oct**; sale solo con «mostrada, publicá G4») | `g4-final-1080x1920.mp4` | 59,75 s | `../lucia-g4/pie.txt` | `../lucia-g4/qa/g4-preview-360p.mp4` |
 | 5 | G5 «Cómo mido si una cara es la de Lucía (y cuándo no creerle al número)» (**guion APROBADO por la madre el 10-oct**; sale solo con «mostrada, publicá G5»; guion: `hermes-content/docs/cola/lucia-diario/guiones/G5-como-se-mide-una-cara.md`) | `g5-final-1080x1920.mp4` | 57,5 s | `../lucia-g5/pie.txt` | `../lucia-g5/qa/g5-preview-360p.mp4` |
 
+> ⚠️ **No publicar las v1 de G2, G4 y G5** (llevan «Motor 1 a 6» / «Imagen A a F»; D-N1 del 11-oct pide los nombres reales). Las reemplazan las v2 mudas de ≤ 30 s en
+> `../lucia-gN-v2/` (estado y SHA en la sección «Re-cortes v2» más abajo; G3 también tiene v2, recortada por la regla 15 de aire muerto, no por nombres).
+> G1 v2 (con voz Marcela, hecha por la madre) llega aparte: falta su SHA.
+
 SHA-256 de lo entregado:
 
 ```

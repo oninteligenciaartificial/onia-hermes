@@ -253,13 +253,16 @@ if (errores.length) { console.error('✖ reglas:\n  ' + errores.join('\n  ')); p
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 // 6 decimales: con 3, un data-start de 15.667 (en vez de 15.666667) o un data-media-start de 0.583 (en vez de 0.583333) corría el cuadro del clip 1 cuadro cada uno (medido 11-oct: el final mostraba el cuadro n−2 de K4/K1)
 const f3 = (n) => rd(n, 6);
-const SESGO_MEDIA = 0.0004;   // el media-start cae 0,4 ms DESPUÉS del borde del cuadro: ni un redondeo hacia abajo ni uno al más cercano cambian de cuadro
+const SESGO_MEDIA = 0.0004;
+// data-start: 0,4 ms ANTES del borde del cuadro. Medido el 11-oct: con data-start = 15.666667 (3e-7 s DESPUÉS del cuadro 376) el cuadro 376 queda oculto y el clip muestra su primer cuadro en el 377: todo el clip llegaba 1 cuadro tarde.
+// Con el sesgo, el elemento se ve desde el cuadro previsto y su cuadro n cae en el cuadro previsto. Lo mismo vale para el inicio de cualquier contenedor (tarjetas, etiquetas, recortes).
+const st0 = (t) => (t <= 1e-9 ? 0 : rd(t - 0.0004, 6));   // el media-start cae 0,4 ms DESPUÉS del borde del cuadro: ni un redondeo hacia abajo ni uno al más cercano cambian de cuadro
 let html = '';
 let track = 10;
 const nextTrack = () => track++;
-const FULLDIV = (id, a, b, z, inner) => `<div id="${id}" class="clip" data-start="${f3(a)}" data-duration="${f3(b - a)}" data-track-index="${nextTrack()}" style="position:absolute;left:0;top:0;width:1080px;height:1920px;z-index:${z}">${inner}</div>\n`;
-const SCENE = (e, tr, z, inner) => `<div id="${e.id}" class="clip scn" data-start="${f3(e.a)}" data-duration="${f3(e.b - e.a)}" data-track-index="${tr}" style="z-index:${z}"><div class="zoom" id="z-${e.id}" data-layout-allow-overflow><img class="full" src="${e.src}" alt="" data-layout-allow-overflow>${inner}</div></div>\n`;
-const vid = (e, tr) => `<video id="${e.id}" src="${e.src}" data-start="${f3(e.a)}" data-duration="${f3(e.b - e.a)}" data-media-start="${f3(e.media_inicio * FR + SESGO_MEDIA)}" data-track-index="${tr}" muted playsinline preload="auto" style="position:absolute;left:0;top:0;width:1080px;height:1920px;object-fit:cover;z-index:1;"></video>\n`;
+const FULLDIV = (id, a, b, z, inner) => `<div id="${id}" class="clip" data-start="${st0(a)}" data-duration="${f3(b - a)}" data-track-index="${nextTrack()}" style="position:absolute;left:0;top:0;width:1080px;height:1920px;z-index:${z}">${inner}</div>\n`;
+const SCENE = (e, tr, z, inner) => `<div id="${e.id}" class="clip scn" data-start="${st0(e.a)}" data-duration="${f3(e.b - e.a)}" data-track-index="${tr}" style="z-index:${z}"><div class="zoom" id="z-${e.id}" data-layout-allow-overflow><img class="full" src="${e.src}" alt="" data-layout-allow-overflow>${inner}</div></div>\n`;
+const vid = (e, tr) => `<video id="${e.id}" src="${e.src}" data-start="${st0(e.a)}" data-duration="${f3(e.b - e.a)}" data-media-start="${f3(e.media_inicio * FR + SESGO_MEDIA)}" data-track-index="${tr}" muted playsinline preload="auto" style="position:absolute;left:0;top:0;width:1080px;height:1920px;object-fit:cover;z-index:1;"></video>\n`;
 
 // fotos con empuje lento: el aro, el marco de la cara y los recuadros de origen están DENTRO del contenedor que hace el zoom (siguen a la foto)
 {
@@ -278,10 +281,10 @@ html += vid(k4, 6);
 html += vid(k1, 7);
 
 // rótulo de IA (cuadro 0 → ≥ 3 s, 40 px) y etiquetas de dato
-html += `<div id="cc-rotulo" class="clip cc cc-top" data-start="${f3(rotulo.a)}" data-duration="${f3(rotulo.b - rotulo.a)}" data-track-index="${nextTrack()}" style="--t:${rotulo.top}px"><div class="cw" id="rotulo"><span class="tag tag-lg"><i></i>${esc(rotulo.texto)}</span></div></div>\n`;
+html += `<div id="cc-rotulo" class="clip cc cc-top" data-start="${st0(rotulo.a)}" data-duration="${f3(rotulo.b - rotulo.a)}" data-track-index="${nextTrack()}" style="--t:${rotulo.top}px"><div class="cw" id="rotulo"><span class="tag tag-lg"><i></i>${esc(rotulo.texto)}</span></div></div>\n`;
 // el contenedor arranca 0,1 s ANTES de que empiece la animación de entrada (el elemento sigue oculto): `hyperframes check` mide el contraste justo al arrancar el contenedor, y una pastilla
 // a medio fundido sobre una nube blanca daba 2,1:1 (falso aviso: ya a opacidad completa pasa AA)
-for (const d of etiquetas) html += `<div id="cc-${d.id}" class="clip cc cc-top" data-start="${f3(d.a - 0.1)}" data-duration="${f3(d.b - d.a + 0.1)}" data-track-index="${nextTrack()}" style="--t:${d.top}px"><div class="cw" id="${d.id}"><span class="tag tag-lg"><i></i>${esc(d.texto)}</span></div></div>\n`;
+for (const d of etiquetas) html += `<div id="cc-${d.id}" class="clip cc cc-top" data-start="${st0(d.a - 0.1)}" data-duration="${f3(d.b - d.a + 0.1)}" data-track-index="${nextTrack()}" style="--t:${d.top}px"><div class="cw" id="${d.id}"><span class="tag tag-lg"><i></i>${esc(d.texto)}</span></div></div>\n`;
 
 // recorte ampliado del letrero (ya difuminado) en el cielo, con su leyenda: declara que el difuminado es de edición
 if (insL) html += FULLDIV('cc-insL', insL.a, insL.b, 8, `<div class="ins" id="insL" style="left:${insL.x}px;top:${insL.y}px;width:${insL.w}px;height:${insL.h}px"><img src="assets/letrero-inset.jpg" alt=""><span class="cap" id="capL">${esc(insL.caption)}</span></div>`);
@@ -295,7 +298,7 @@ for (const c of tarjetas) {
   const anch = c.top != null ? `cc-top" style="--t:${c.top}px` : `cc-bot" style="--b:${c.bottom}px`;
   const num = c.num ? `<span class="num">${esc(c.num)}</span>` : '';
   const acento = c.acento ? ` <b${c.acento_t ? ' class="late"' : ''}>${esc(c.acento)}</b>` : '';
-  html += `<div id="cc-${c.id}" class="clip cc ${anch}" data-start="${f3(c.entra)}" data-duration="${f3(c.b - c.entra)}" data-track-index="${3 + (tarjetas.indexOf(c) % 2)}">` +
+  html += `<div id="cc-${c.id}" class="clip cc ${anch}" data-start="${st0(c.entra)}" data-duration="${f3(c.b - c.entra)}" data-track-index="${3 + (tarjetas.indexOf(c) % 2)}">` +
     `<div class="cw" id="${c.id}"><i class="sh sh1"></i><i class="sh sh2"></i><div class="card${c.num ? ' card-num' : ''}"><div class="rail"></div>${num}<div class="t">${esc(c.texto)}${acento}</div></div></div></div>\n`;
 }
 
@@ -308,7 +311,7 @@ const ctr = { top: kk.contador.top, a: sc(kk.contador.a), b: k4.b };
 const t120 = f120 * FR;
 {
   const nums = Array.from({ length: kk.cuadros_clip }, (_, n) => `<em>${n}</em>`).join('');
-  html += `<div id="cc-ctr" class="clip cc cc-top" data-start="${f3(ctr.a)}" data-duration="${f3(ctr.b - ctr.a)}" data-track-index="${nextTrack()}" style="--t:${ctr.top}px"><div class="cw" id="ctr"><span class="tag tag-ctr"><i></i>cuadro <span class="ctrwin"><span class="ctrstrip" id="ctrstrip" data-layout-allow-overflow>${nums}</span></span></span></div></div>\n`;
+  html += `<div id="cc-ctr" class="clip cc cc-top" data-start="${st0(ctr.a)}" data-duration="${f3(ctr.b - ctr.a)}" data-track-index="${nextTrack()}" style="--t:${ctr.top}px"><div class="cw" id="ctr"><span class="tag tag-ctr"><i></i>cuadro <span class="ctrwin"><span class="ctrstrip" id="ctrstrip" data-layout-allow-overflow>${nums}</span></span></span></div></div>\n`;
   const [rx, ry, rw, rh] = kk.origen.recorte_fuente;
   kk.origen_caja = [Math.round(rx * 1.5), Math.round(ry * 1.5), Math.round(rw * 1.5), Math.round(rh * 1.5)];
   html += FULLDIV('cc-k4', ctr.a, k4.b, 8, `<div class="org" id="origen" style="left:${kk.origen_caja[0]}px;top:${kk.origen_caja[1]}px;width:${kk.origen_caja[2]}px;height:${kk.origen_caja[3]}px"></div>`);

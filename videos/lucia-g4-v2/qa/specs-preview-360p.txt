@@ -1,0 +1,10 @@
+codec_name=h264
+width=360
+height=640
+r_frame_rate=24/1
+nb_frames=673
+codec_name=aac
+r_frame_rate=0/0
+nb_frames=1316
+duration=28.042000
+size=1706938

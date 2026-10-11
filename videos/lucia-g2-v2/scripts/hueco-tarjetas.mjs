@@ -45,4 +45,4 @@ console.log(`cuadros sin tarjeta narrativa visible: ${huecos.length} de ${N}`);
 for (const g of grupos) console.log(`  cuadros ${g[0]}–${g.at(-1)} (${(g[0] / FPS).toFixed(3)}–${((g.at(-1) + 1) / FPS).toFixed(3)} s, ${g.length} cuadro(s)) ${permitido(g) ? 'por diseño' : '✖ HUECO'}`);
 const malos = grupos.filter((g) => !permitido(g));
 if (malos.length) { console.error(`✖ ${malos.length} hueco(s) de tarjeta`); process.exit(1); }
-console.log('✔ en los 635 cuadros hay siempre una tarjeta visible (≥ 5 % de opacidad y ≥ 25 % dentro del lienzo), desde el cuadro 0');
+console.log(`✔ en los ${N} cuadros hay siempre una tarjeta visible (≥ 5 % de opacidad y ≥ 25 % dentro del lienzo), desde el cuadro 0`);

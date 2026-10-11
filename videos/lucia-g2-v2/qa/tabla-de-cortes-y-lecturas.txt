@@ -32,8 +32,8 @@ Costuras (empuje rígido de 6 cuadros, caen en el hueco de la voz):
 Tarjetas:
     0.000 –   1.708 c1  4 pal (mín 1.7 s, dura 1.71) «Misma foto. Seis clips.»
     1.708 –   3.417 c2  4 pal (mín 1.7 s, dura 1.71) «¿Quién pierde la cara?» [sale con el empuje]
-    3.417 –   6.708 c3  6 pal (mín 2.4 s, dura 3.29) «Se mide contra 8 fotos suyas.» [entra con el empuje]
-    6.708 –   8.083 c4  3 pal (mín 1.35 s, dura 1.38) «Mi piso: 0,70.» [sale con el empuje]
+    3.417 –   6.458 c3  6 pal (mín 2.4 s, dura 3.04) «Se mide contra 8 fotos suyas.» [entra con el empuje]
+    6.458 –   8.083 c4  3 pal (mín 1.35 s, dura 1.63) «Mi piso: 0,70.» [sale con el empuje]
     8.083 –  10.542 c5  5 pal (mín 2.05 s, dura 2.46) «Kling 3.0 std  7,5 créditos» [entra con el empuje] [sale con el empuje]
    10.542 –  13.292 c6  5 pal (mín 2.05 s, dura 2.75) «Seedance 2.0 Mini  6 créditos» [entra con el empuje] [sale con el empuje]
    13.292 –  15.750 c7  6 pal (mín 2.4 s, dura 2.46) «Kling O3 · 6 créditos  solo referencias» [entra con el empuje]

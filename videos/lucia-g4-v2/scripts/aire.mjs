@@ -6,9 +6,11 @@
 //  · Dos medidas: ESTRICTA (solo las tarjetas narrativas y las dos notas de honestidad) y COMPLETA (además el rótulo, los datos, sellos, pastillas, etiquetas y pies).
 //  · Un tramo quieto de m cuadros iguales dura m/24 s; el máximo permitido es 0,3 s (7 cuadros iguales).
 //  · Eventos = ráfagas de cambios (se unen las que están a ≤ 2 cuadros); el hueco máximo entre el comienzo de dos ráfagas tiene que ser ≤ 2,0 s.
-// Uso: node scripts/aire.mjs > qa/aire.txt   (sale con 1 si algo incumple)
+// Uso: node scripts/aire.mjs [out/g4-v2-final-1080x1920.mp4] > qa/aire.txt   (sale con 1 si algo incumple). Con el video como argumento suma un CONTROL EN PÍXELES sobre el render final:
+//      en las placas (sin empuje lento) mide cuadro a cuadro la diferencia media de gris entre cuadros seguidos y repite la cuenta de tramos quietos con el mismo criterio de lectura.
 import { abrir, plan, FPS, N, lectura, idsDeTexto, textos, legibles, cambios, grupos } from './lib-dom.mjs';
 import { listaEventos } from './eventos.mjs';
+import { spawnSync } from 'node:child_process';
 const { b, pg } = await abrir();
 const { tarjetas, otros } = idsDeTexto();
 const ids = [...tarjetas, ...otros];
@@ -67,6 +69,31 @@ const idx = []; for (let f = 1; f < N; f++) if (ch[f]) idx.push(f);
 const rafagas = grupos(idx);
 console.log(`  (control cruzado en el DOM: ${rafagas.length} ráfagas de cambios continuos; la mayor sin ningún cambio es el «mayor tramo quieto» de arriba)`);
 
-const malo = est.malos.length || com.malos.length || mh.d > plan.aire.max_entre_eventos_s + 1e-9;
+// ── control en píxeles del render final (solo las placas: las fotos llevan el empuje lento, que mueve todos los píxeles y no cuenta como evento) ──
+let pixMalo = false;
+if (process.argv[2]) {
+  const W = 270, H = 480, FS = W * H;
+  const r = spawnSync('ffmpeg', ['-v', 'error', '-i', process.argv[2], '-vf', `scale=${W}:${H}:flags=area,format=gray`, '-f', 'rawvideo', '-'], { maxBuffer: 1 << 30 });
+  if (r.status !== 0) { console.error(String(r.stderr)); process.exit(2); }
+  const buf = r.stdout, n = Math.floor(buf.length / FS);
+  const dif = new Float64Array(n);
+  for (let i = 1; i < n; i++) { let s = 0; const o = i * FS, q = (i - 1) * FS; for (let k = 0; k < FS; k++) s += Math.abs(buf[o + k] - buf[q + k]); dif[i] = s / FS; }
+  const PUSHF = plan.empuje.cuadros;
+  const enPlaca = new Uint8Array(n);
+  for (const m of plan.medios) if (m.tipo === 'placa') for (let f = Math.round(m.a * FPS) + PUSHF + 1; f < Math.round(m.b * FPS) - PUSHF; f++) enPlaca[f] = 1;
+  const UMBRAL = 0.05;                                   // gris medio de diferencia entre cuadros seguidos: por debajo, el cuadro es el mismo (ruido del H.264)
+  const q = []; for (let f = 1; f < n; f++) if (enPlaca[f] && dif[f] < UMBRAL && !com.cov[f]) q.push(f);
+  const runs = grupos(q).map((g) => ({ f0: g[0] - 1, m: g.length + 1 }));
+  const mayor = runs.reduce((a, x) => (x.m > a.m ? x : a), { m: 0, f0: 0 });
+  const iguales = []; for (let f = 1; f < n; f++) if (enPlaca[f] && dif[f] < UMBRAL) iguales.push(f);
+  const mayorIgual = grupos(iguales).reduce((a, g) => (g.length + 1 > a ? g.length + 1 : a), 0);
+  console.log(`\nCONTROL EN PÍXELES del render final (solo placas: ${enPlaca.reduce((a, v) => a + v, 0)} cuadros; diferencia media de gris < ${UMBRAL} = cuadro igual):`);
+  console.log(`  mayor tramo de cuadros IGUALES (con lectura incluida): ${(mayorIgual / FPS).toFixed(2)} s (en lectura de un texto: permitido)`);
+  console.log(`  mayor tramo quieto FUERA de toda lectura (criterio COMPLETA): ${(mayor.m / FPS).toFixed(3)} s desde ${(mayor.f0 / FPS).toFixed(3)} s; los de más de ${plan.aire.max_quieto_s} s: ${runs.filter((x) => x.m > MAXF).length}`);
+  const unaFoto = []; for (let f = 1; f < n; f++) if (!enPlaca[f] && dif[f] < UMBRAL) unaFoto.push(f);
+  console.log(`  (en las escenas de foto hay ${unaFoto.length} cuadros idénticos al anterior; el empuje lento mueve la imagen y el resto lo cubre el DOM)`);
+  pixMalo = runs.some((x) => x.m > MAXF);
+}
+const malo = est.malos.length || com.malos.length || mh.d > plan.aire.max_entre_eventos_s + 1e-9 || pixMalo;
 console.log(malo ? '\n✖ incumple la regla 15' : `\n✔ regla 15: mayor tramo quieto ${(est.mayor.m / FPS).toFixed(3)} s (estricta) / ${(com.mayor.m / FPS).toFixed(3)} s (completa) ≤ ${plan.aire.max_quieto_s} s; mayor hueco entre eventos ${mh.d.toFixed(2)} s ≤ ${plan.aire.max_entre_eventos_s.toFixed(1)} s`);
 process.exit(malo ? 1 : 0);

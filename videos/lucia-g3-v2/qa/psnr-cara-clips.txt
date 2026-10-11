@@ -1,11 +1,9 @@
-PSNR/SSIM de la cara (final vs fuente llevada a 1080x1920), cuadro del final F ↔ cuadro n de la fuente; vecinos n±1, n±2 para ver el pico
-  ✖   K4 cuadro  20 ↔ final F=382 (15.917 s): n=22.6 dB SSIM 0.7641 | vecinos -2:44.9 -1:25.7 +1:20.6 +2:19.5 | pico en n-2
-  ✖   K4 cuadro  60 ↔ final F=422 (17.583 s): n=28.8 dB SSIM 0.8837 | vecinos -2:45.3 -1:34.0 +1:28.2 +2:28.3 | pico en n-2
-  ✖   K4 cuadro  72 ↔ final F=434 (18.083 s): n=28.9 dB SSIM 0.8908 | vecinos -2:45.3 -1:34.2 +1:27.3 +2:26.1 | pico en n-2
-  ✖   K4 cuadro 104 ↔ final F=466 (19.417 s): n=27.8 dB SSIM 0.8638 | vecinos -2:45.1 -1:32.6 +1:26.6 +2:26.0 | pico en n-2
-  ✖   K4 cuadro 120 ↔ final F=482 (20.083 s): n=28.3 dB SSIM 0.8679 | vecinos -2:32.6 -1:29.9 +1:27.2 +2:27.0 | pico en n-2
-  ✖   K4 cuadro 125 ↔ final F=487 (20.292 s): n=32.5 dB SSIM 0.9387 | vecinos -2:43.4 -1:35.9 +1:29.6 +2:26.6 | pico en n-2
-  ✖   K1 cuadro  30 ↔ final F=551 (22.958 s): n=37.5 dB SSIM 0.9745 | vecinos -2:43.8 -1:41.7 +1:31.2 +2:29.6 | pico en n-2
-  ✖   K1 cuadro  70 ↔ final F=591 (24.625 s): n=34.9 dB SSIM 0.9480 | vecinos -2:43.5 -1:38.9 +1:32.2 +2:30.1 | pico en n-2
-  ✖   K1 cuadro 100 ↔ final F=621 (25.875 s): n=28.5 dB SSIM 0.9003 | vecinos -2:44.0 -1:34.1 +1:26.4 +2:25.0 | pico en n-2
-  ✖   K1 cuadro 130 ↔ final F=651 (27.125 s): n=36.2 dB SSIM 0.9737 | vecinos -2:44.1 -1:39.9 +1:32.2 +2:29.5 | pico en n-2
+PSNR/SSIM de la cara (final vs fuente llevada a 1080x1920), cuadro del final F ↔ cuadro n de la fuente; vecinos n±1 para ver el pico
+  ✖   K4 cuadro  20 ↔ final F=382 (15.917 s): n=26.4 dB SSIM 0.8453 | vecinos -1:45.0 +1:22.6 | pico en n-1
+  ✖   K4 cuadro  72 ↔ final F=434 (18.083 s): n=32.8 dB SSIM 0.9423 | vecinos -1:45.4 +1:29.7 | pico en n-1
+  ✖   K4 cuadro 104 ↔ final F=466 (19.417 s): n=32.4 dB SSIM 0.9350 | vecinos -1:45.2 +1:29.6 | pico en n-1
+  ✖   K4 cuadro 120 ↔ final F=482 (20.083 s): n=31.6 dB SSIM 0.9486 | vecinos -1:32.6 +1:29.9 | pico en n-1
+  ✖   K4 cuadro 125 ↔ final F=487 (20.292 s): n=37.0 dB SSIM 0.9687 | vecinos -1:43.4 +1:31.2 | pico en n-1
+  ✖   K1 cuadro  30 ↔ final F=551 (22.958 s): n=40.4 dB SSIM 0.9811 | vecinos -1:43.7 +1:32.3 | pico en n-1
+  ✖   K1 cuadro 100 ↔ final F=621 (25.875 s): n=33.3 dB SSIM 0.9551 | vecinos -1:44.1 +1:29.2 | pico en n-1
+  ✖   K1 cuadro 130 ↔ final F=651 (27.125 s): n=40.9 dB SSIM 0.9829 | vecinos -1:44.2 +1:35.1 | pico en n-1

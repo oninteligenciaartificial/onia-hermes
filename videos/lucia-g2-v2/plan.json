@@ -289,14 +289,14 @@
       "acento": "8 fotos suyas.",
       "acento_t": "T3+1.2",
       "a": "T3",
-      "b": "T5",
+      "b": "T5-6f",
       "escena": "regla"
     },
     {
       "id": "c4",
       "texto": "Mi piso:",
       "acento": "0,70.",
-      "a": "T5",
+      "a": "T5-6f",
       "b": "T6",
       "escena": "regla"
     },
@@ -421,7 +421,7 @@
       "d": 0.5,
       "y": 967,
       "ejes_t": "T4+0.45",
-      "uno_t": "T4+0.9",
+      "uno_t": "T4+0.75",
       "marca_t": "T5+0.05"
     }
   },

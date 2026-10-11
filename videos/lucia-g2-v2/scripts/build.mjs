@@ -22,6 +22,10 @@ const SC = plan0.escala;
 const X = (v) => Math.round(SC.x0 + v * (SC.x1 - SC.x0));       // valor 0-1 → x del lienzo (los puntos salen de los datos, nunca a mano)
 const r2 = (v) => Math.round(v * 100 + 1e-7) / 100;             // 2 decimales, media hacia arriba (0,805 → 0,81; 0,785 → 0,79; 0,798 → 0,80)
 const f2 = (n) => +(+n).toFixed(6);
+// data-start SIEMPRE redondeado hacia abajo (6 decimales) y data-duration hacia arriba: si el inicio de un clip queda 3e-7 s DESPUÉS del cuadro, el render muestra el cuadro 0 dos veces
+// y el clip llega un cuadro atrasado (medido en esta pieza: Seedance 2.0 Mini y Kling O3 con el pico del PSNR en n−1).
+const fs_ = (n) => Math.floor(+n * 1e6 + 1e-3) / 1e6;
+const fc_ = (n) => Math.ceil(+n * 1e6 - 1e-3) / 1e6;
 const fm = (v) => v.toFixed(2).replace('.', ',');
 const fm1 = (v) => (Math.round(v * 10 + 1e-7) / 10).toFixed(1).replace('.', ',');
 const errores = [];
@@ -277,18 +281,18 @@ let track = 40;
 const nextTrack = () => track++;
 const kM = med;
 const FULL = 'position:absolute;left:0;top:0;width:1080px;height:1920px;object-fit:cover;';
-const vid = (m, z, tr) => `<video id="${m.id}" src="${m.src}" data-start="${f2(m.a)}"${m.media_inicio ? ` data-media-start="${f2(m.media_inicio)}"` : ''} data-duration="${f2(m.b - m.a)}" data-track-index="${tr}" muted playsinline preload="auto" style="${FULL}z-index:${z};"></video>`;
-const FULLDIV = (id, a, b, z, inner, cls = '') => `<div id="${id}" class="clip ${cls}" data-start="${f2(a)}" data-duration="${f2(b - a)}" data-track-index="${nextTrack()}" style="position:absolute;left:0;top:0;width:1080px;height:1920px;z-index:${z}">${inner}</div>\n`;
+const vid = (m, z, tr) => `<video id="${m.id}" src="${m.src}" data-start="${fs_(m.a)}"${m.media_inicio ? ` data-media-start="${fs_(m.media_inicio)}"` : ''} data-duration="${fc_(m.b - m.a)}" data-track-index="${tr}" muted playsinline preload="auto" style="${FULL}z-index:${z};"></video>`;
+const FULLDIV = (id, a, b, z, inner, cls = '') => `<div id="${id}" class="clip ${cls}" data-start="${fs_(a)}" data-duration="${fc_(b - a)}" data-track-index="${nextTrack()}" style="position:absolute;left:0;top:0;width:1080px;height:1920px;z-index:${z}">${inner}</div>\n`;
 const cent = (cx, top, inner, w = 760) => `<div class="ab" style="left:${Math.round(cx - w / 2)}px;top:${top}px;width:${w}px;display:flex;justify-content:center">${inner}</div>`;
 
 // foto K1: contenedor a lienzo completo (viaja en el empuje) + <img> con el empuje lento hacia la cara
-html += `<div id="foto" class="clip ph" data-start="${f2(kM.foto.a)}" data-duration="${f2(kM.foto.b - kM.foto.a)}" data-track-index="1" style="position:absolute;left:0;top:0;width:1080px;height:1920px;z-index:1"><img id="foto-i" src="${kM.foto.src}" data-layout-allow-overflow alt=""></div>\n`;
+html += `<div id="foto" class="clip ph" data-start="${fs_(kM.foto.a)}" data-duration="${fc_(kM.foto.b - kM.foto.a)}" data-track-index="1" style="position:absolute;left:0;top:0;width:1080px;height:1920px;z-index:1"><img id="foto-i" src="${kM.foto.src}" data-layout-allow-overflow alt=""></div>\n`;
 html += vid(kM.m1, 1, 20) + '\n' + vid(kM.m3, 1, 22) + '\n' + vid(kM.m5, 1, 24) + '\n' + vid(kM.k1, 1, 26) + '\n';
 
 // rótulo de IA (cuadro 0 → 3 s, 40 px)
 {
   const r = plan.rotulo;
-  html += `<div id="cc-rotulo" class="clip cc cc-top" data-start="${f2(r.a)}" data-duration="${f2(r.b - r.a)}" data-track-index="${nextTrack()}" style="--t:${r.top}px"><div class="cw" id="rotulo"><span class="tag r"><i></i>${esc(r.texto)}</span></div></div>\n`;
+  html += `<div id="cc-rotulo" class="clip cc cc-top" data-start="${fs_(r.a)}" data-duration="${fc_(r.b - r.a)}" data-track-index="${nextTrack()}" style="--t:${r.top}px"><div class="cw" id="rotulo"><span class="tag r"><i></i>${esc(r.texto)}</span></div></div>\n`;
 }
 // gancho: las seis miniaturas de los clips (viajan con la foto en el empuje de T3)
 {
@@ -335,7 +339,7 @@ const lrows = Lc.orden.map((id, i) => {
 const viajaEntra = new Set(plan.costuras.filter((c) => c.tarjetas).map((c) => c.tarjetas.entra));
 const viajaSale = new Set(plan.costuras.filter((c) => c.tarjetas).map((c) => c.tarjetas.sale));
 const primeras = new Set(plan.cadenas_de_tarjetas.map((c) => c[0]));
-for (const c of plan.tarjetas) c.entra = f2(c.a - (viajaEntra.has(c.id) ? PUSH : primeras.has(c.id) ? 0 : FR));
+for (const c of plan.tarjetas) c.entra = c.a - (viajaEntra.has(c.id) ? PUSH : primeras.has(c.id) ? 0 : FR);
 const extrasDe = {};                                       // ids que cuelgan de cada tarjeta (viajan con ella en el empuje)
 for (const c of plan.tarjetas) {
   const t = c.texto.endsWith('\n') ? esc(c.texto.slice(0, -1)) + '<br>' : esc(c.texto) + (c.acento ? ' ' : '');
@@ -349,7 +353,7 @@ for (const c of plan.tarjetas) {
       `<span class="arr" id="dX-${m.id}">→</span><span class="tag tag-d${bajo(m.fin) ? ' bajo' : ''}" id="dB-${m.id}"><i></i><b>${fm1(m.t_fin)} s:</b> <b>${fm(m.fin)}</b></span></div>`;
     extrasDe[c.id].push(`d-${m.id}`);
   }
-  html += `<div id="cc-${c.id}" class="clip cc cc-bot" data-start="${f2(c.entra)}" data-duration="${f2(c.b - c.entra)}" data-track-index="${3 + (plan.tarjetas.indexOf(c) % 2)}" style="--b:${Z.tarjeta_bottom_y}px">` +
+  html += `<div id="cc-${c.id}" class="clip cc cc-bot" data-start="${fs_(c.entra)}" data-duration="${fc_(c.b - c.entra)}" data-track-index="${3 + (plan.tarjetas.indexOf(c) % 2)}" style="--b:${Z.tarjeta_bottom_y}px">` +
     `<div class="stk">${extras}<div class="cw" id="${c.id}"><i class="sh sh1"></i><i class="sh sh2"></i><div class="card"><div class="rail"></div><div class="t">${t}${acento}</div></div></div></div></div>\n`;
 }
 const css = fs.readFileSync(path.join(P, 'scripts/estilos.css'), 'utf8').replaceAll('{{ACC}}', ACC).replaceAll('{{BAD}}', BAD);

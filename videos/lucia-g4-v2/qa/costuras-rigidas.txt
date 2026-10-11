@@ -1,0 +1,8 @@
+ok  T=4.750 s (cuadro 114): f-gancho → pl-regla; junta máxima entre borde y borde 0.00 px; lo que viaja se desvía 0.00 px; sale 0→0, entra 1080→0; cuadros 7 (T−6 … T)
+ok  T=8.333 s (cuadro 200): pl-regla → f-a; junta máxima entre borde y borde 0.00 px; lo que viaja se desvía 0.00 px; sale 0→0, entra 1080→0; cuadros 7 (T−6 … T)
+ok  T=10.250 s (cuadro 246): f-a → f-d; junta máxima entre borde y borde 0.00 px; lo que viaja se desvía 0.00 px; sale 0→0, entra 1080→0; cuadros 7 (T−6 … T)
+ok  T=13.000 s (cuadro 312): f-d → f-e; junta máxima entre borde y borde 0.00 px; lo que viaja se desvía 0.00 px; sale 0→0, entra 1080→0; cuadros 7 (T−6 … T)
+ok  T=15.167 s (cuadro 364): f-e → pl-l1; junta máxima entre borde y borde 0.00 px; lo que viaja se desvía 0.00 px; sale 0→0, entra 1080→0; cuadros 7 (T−6 … T)
+ok  T=22.875 s (cuadro 549): pl-l1 → pl-l2; junta máxima entre borde y borde 0.00 px; lo que viaja se desvía 0.00 px; sale 0→0, entra 1080→0; cuadros 7 (T−6 … T)
+ok  T=25.625 s (cuadro 615): pl-l2 → f-cierre; junta máxima entre borde y borde 0.00 px; lo que viaja se desvía 0.00 px; sale 0→0, entra 1080→0; cuadros 7 (T−6 … T)
+✔ 7 costuras rígidas de 6 cuadros: bordes pegados en todos los cuadros, empiezan en T−6 y terminan en T, y lo que viaja se mueve con su imagen

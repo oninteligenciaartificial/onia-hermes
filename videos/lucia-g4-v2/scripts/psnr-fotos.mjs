@@ -24,7 +24,8 @@ for (const m of plan.medios) if (m.tipo === 'foto') {
   for (const t of ts) casos.push({ m, n: Math.round(t * FPS) });
 }
 const frameDe = (n) => { const o = path.join(tmp, `final_${n}.png`); if (!fs.existsSync(o)) run(['-i', final, '-vf', `select=eq(n\\,${n})`, '-vsync', '0', '-frames:v', '1', o]); return o; };
-const esperado = (foto, s, ox, oy) => {
+const esperado = (foto, s0, ox, oy) => {
+  const s = Math.max(1, s0);                       // un zoom de prueba menor que 1 no existe: se queda en 1
   const o = path.join(tmp, `exp_${foto}_${s.toFixed(4)}.png`);
   if (fs.existsSync(o)) return o;
   const src = path.join(P, plan.fotos[foto].src);

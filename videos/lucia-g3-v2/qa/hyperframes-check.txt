@@ -1,0 +1,2 @@
+◆  Checking lucia-g3-v2
+[hyperframes] browserGpuMode probe → software (WebGL unavailable)

@@ -1,0 +1,19 @@
+texto en pantalla (149 tokens): Lucía Antelo · personaje IA de Onia mi piso · 0,70 0 idéntica · 1 mi piso · 0,70 Una toma cada uno: es una prueba, no una regla. Entre 0,66 y 0,70 la diferencia es ruido (±0,03). Kling O1 Image · 0,5 créditos 0,79 Seedream 4.5 · 1 crédito 0,81 Nano Banana 2.1 · 2 créditos 0,74 Seedream 5.0 Pro · 2,5 créditos 0,70 GPT Image 2.5 · 2,75 créditos 0,66 FLUX 3 · 3 créditos 0,69 0 1 Seedream 4.5 0,83 Kling O1 Image 0,35 ¿Cuál conserva su cara? Misma orden. Seis motores de imagen. Contra 8 fotos suyas. Piso: 0,70. parecido 0,81 Seedream 4.5 · 1 crédito justo en el piso parecido 0,70 Seedream 5.0 Pro · 2,5 créditos bajo el piso parecido 0,69 FLUX 3 · 3 créditos Pagar más no mejoró el parecido. Escena 2: Kling perdió la cara. Seguime: cada semana, una prueba.
+pie (115 palabras); voz (87 palabras)
+  ok  obligatoria en pantalla: «Seedream 4.5»
+  ok  obligatoria en pantalla: «Seedream 5.0 Pro»
+  ok  obligatoria en pantalla: «FLUX 3»
+  ok  obligatoria en pantalla: «Kling O1 Image»
+  ok  obligatoria en pantalla: «Nano Banana 2.1»
+  ok  obligatoria en pantalla: «GPT Image 2.5»
+  ok  obligatoria en pantalla: «Lucía Antelo · personaje IA de Onia»
+  ok  obligatoria en pantalla: «¿Cuál conserva su cara?»
+  ok  obligatoria en pantalla: «Seguime: cada semana, una prueba.»
+  ok  obligatoria en pantalla: «Pagar más no mejoró el parecido.»
+  ok  obligatoria en pantalla: «Escena 2: Kling perdió la cara.»
+  ok  obligatoria en pantalla: «Una toma cada uno: es una prueba, no una regla.»
+  ok  obligatoria en pantalla: «Entre 0,66 y 0,70 la diferencia es ruido (±0,03).»
+  ok  obligatoria en pantalla: «mi piso · 0,70»
+  ok  el pie trae «Nombro lo que uso; no es una recomendación pagada.»
+  ok  el pie abre con «personaje hecho con IA»
+✔ ninguna frase prohibida ni marca de terceros en pantalla ni en el pie

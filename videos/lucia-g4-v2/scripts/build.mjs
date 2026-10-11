@@ -376,8 +376,10 @@ const viajaSale = new Set(plan.costuras.filter((c) => c.tarjetas && c.tarjetas.s
 const primeras = new Set(plan.cadenas_de_tarjetas.map((c) => c[0]));
 for (const c of plan.tarjetas) c.entra = f2(c.a - (viajaEntra.has(c.id) ? PUSH : primeras.has(c.id) ? 0 : FR));
 for (const c of plan.tarjetas) {
-  const t = c.texto.endsWith('\n') ? esc(c.texto.slice(0, -1)) + '<br>' : esc(c.texto) + (c.acento ? ' ' : '');
-  const acento = c.acento ? `<b${c.acento_t ? ' class="late"' : ''}>${esc(c.acento)}</b>` : '';
+  // en las tarjetas de motor (nombre + costo) el nombre y el costo no se parten por dentro: si no entran en una línea, el corte cae entre «Seedream 5.0 Pro ·» y «2,5 créditos»
+  const nb = (x) => (c.imagen ? x.replaceAll(' ', '\u00A0') : x);
+  const t = c.texto.endsWith('\n') ? esc(c.texto.slice(0, -1)) + '<br>' : esc(nb(c.texto)) + (c.acento ? ' ' : '');
+  const acento = c.acento ? `<b${c.acento_t ? ' class="late"' : ''}>${esc(nb(c.acento))}</b>` : '';
   let extras = '';
   if (c.imagen) {
     const m = img[c.imagen];
