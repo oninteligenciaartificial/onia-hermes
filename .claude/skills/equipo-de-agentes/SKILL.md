@@ -81,7 +81,9 @@ madre sin la PC, y eso exige loguear la cuenta de Sergio Urcullo allá, que nece
    de lanzarlo.
 4. `bash scripts/codex-tarea.sh <prompt> <carpeta> <modelo> medium`, en background y desde el worktree correcto. Para `resume`,
    hacer `cd` a la carpeta antes: toma el cwd.
-5. Gate de la madre, siempre: `git checkout -- '*.snap'` → `npx vitest run` COMPLETO (JSON) → si hay rojos, ver si son
+5. Gate de la madre, siempre: `git checkout -- '*.snap'` → `npx tsc --noEmit` (las pruebas mockean y no tipan: el 11-oct #155
+   pasó 10.550/0 con `PAYMENT_DELETED` fuera de la unión `AuditAction`, y el CI lo iba a rechazar; Hermes lo vio y Plataforma no, porque
+   revisó leyendo el diff, sin `tsc`) → `npx vitest run` COMPLETO (JSON) → si hay rojos, ver si son
    reales o de carga (los tests que lanzan procesos se corren solos) → los reales vuelven a Codex con `resume` y la lista.
 6. Push SOLO si la suite da 0 rojos, en el mismo comando con `&&`. El informe de Codex no va al commit: va al cuerpo o a un
    comentario del PR.
