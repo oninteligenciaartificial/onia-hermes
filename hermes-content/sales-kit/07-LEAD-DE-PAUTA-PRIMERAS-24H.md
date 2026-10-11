@@ -63,7 +63,7 @@ Código y pieza · fecha y hora del clic · **hora de la primera respuesta human
 ## 6. La llamada
 
 `02-GUION-DEMO.md` §1, con tres ajustes mientras no exista la cuenta demo en producción (L-05 ❌): (1) la llamada se ofrece como «una llamada para ver si le sirve», **no** como «una clínica de ejemplo»; (2) se mira con lo que haya en la cuenta de prueba, sin prometer que ese es su caso; (3) **sin tocar «Enviar yo mismo por WhatsApp»** (G-03 🟡).
-⚠️ **`02-GUION-DEMO.md` está escrito en voseo** («te muestro», «¿cuánto cobrás?»): con un lead de pauta se habla de **usted** (CLAUDE.md, 3-oct). Pendiente de pasar a usted antes de la primera llamada.
+**Voz:** desde el 11-oct, lo que `02-GUION-DEMO.md` dice al cliente (lo que va entre « ») está **de usted**; las instrucciones a Sergio Urcullo siguen en voseo. Lo vigila `scripts/campana-lista.test.mjs`. Quedan en el guion los **20 minutos** del título y de la pregunta «¿Cuánto cuesta?»: dependen de L-04.
 
 ## 7. Lo que depende de quién
 

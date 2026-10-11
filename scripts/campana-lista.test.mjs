@@ -413,3 +413,25 @@ test("LISTA DEL BOT: los textos corregidos no prometen lo prohibido, ni el agent
   assert.match(listaBot, /\| 14 \| «que ya trae el chatbot de WhatsApp adentro\.» .*\| ❌ \| \*\*Se queda\*\*/, "la frase 14 sigue en ❌ y la lista no propone cambiarla");
   assert.match(listaBot, /\| 15 \| «En el Básico, el Crece y el Profesional el chatbot va aparte, Bs 390 al mes\.» .*\| ❌ \| \*\*Se queda\*\*/, "la 15, igual");
 });
+
+// ORIGEN (2026-10-11): `sales-kit/02-GUION-DEMO.md` se escribió en voseo («te muestro», «¿cuánto cobrás?») y es el guion
+// con el que Sergio Urcullo atiende a un lead de pauta; con clientes se habla de usted (CLAUDE.md, 3-oct). Lo que va entre
+// « » es lo que se DICE al cliente; las instrucciones a Sergio Urcullo (fuera de las comillas) siguen en el voseo del chat.
+test("sales-kit/02-GUION-DEMO: todo lo que se le dice al cliente (entre « ») es de usted, sin voseo ni tuteo", () => {
+  const guion = leer("hermes-content/sales-kit/02-GUION-DEMO.md");
+  assert.match(guion, /\*\*Voz:\*\*/, "el encabezado explica qué va de usted y qué en voseo");
+  const sinBloques = guion.replace(/```[\s\S]*?```/g, "");
+  // Una frase puede partirse en dos renglones del markdown (`\n  `): se une antes de leerla.
+  const dichas = [...sinBloques.replace(/\n>?\s+/g, " ").matchAll(/«([^»]+)»/g)].map((m) => m[1]);
+  assert.ok(dichas.length >= 30, `se esperaban ≥ 30 frases entre « », hay ${dichas.length}`);
+  // Palabras con tilde final que SÍ son del español neutro (no voseo): se aceptan.
+  const NEUTRAS = new Set(["más", "además", "después", "jamás", "atrás", "detrás", "demás", "través", "interés", "país", "inglés", "cortés"]);
+  const voseo = /\b(vos|tu|tus|te|ti|ves|quieras|puedas|sepas|tengas|llámame|contame|escribinos)\b/i;
+  const verbosVoseo = /\b[\p{L}]+(ás|és|ís)\b/giu;
+  for (const t of dichas) {
+    assert.ok(!voseo.test(t), `voseo o tuteo en «${t.slice(0, 60)}…»`);
+    for (const palabra of t.match(verbosVoseo) ?? []) {
+      assert.ok(NEUTRAS.has(palabra.toLowerCase()), `¿voseo («${palabra}») en «${t.slice(0, 60)}…»?`);
+    }
+  }
+});

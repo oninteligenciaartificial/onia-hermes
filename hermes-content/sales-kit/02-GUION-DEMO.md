@@ -5,6 +5,8 @@
 > lleva su prueba en la tabla de su rubro. **Lo que no está en el código no está en el guion.**
 > Reemplaza al guion dental de julio (con la marca vieja DentalGest, planes y precios viejos, factura): quedó en el historial de git.
 > Un tema, un archivo: esto se EDITA.
+> **Voz:** lo que va entre « » es lo que se le dice al cliente, y va **de usted** (CLAUDE.md, 3-oct; `scripts/campana-lista.test.mjs` lo vigila).
+> Las instrucciones a Sergio Urcullo (fuera de las comillas) quedan en el voseo del chat con él.
 
 §0 vale para todos · §1 Dental y estética · §2 Importadora · §3 Comercio y servicios · §4 Después de la demo.
 
@@ -66,8 +68,8 @@ git -C onia-platform show origin/master:lib/plan-catalogo.ts | grep -E '^  [a-z]
 
 ### 0.3 Lo que no se dice en ningún rubro
 
-- **Factura o SIAT.** No se nombra (catálogo §7). Si preguntan: «Onia te deja cada cobro registrado, con su
-  recibo. La factura la seguís emitiendo como hoy.»
+- **Factura o SIAT.** No se nombra (catálogo §7). Si preguntan: «Onia le deja cada cobro registrado, con su
+  recibo. La factura la sigue emitiendo como hoy.»
 - **Que algo se manda solo por WhatsApp**, ni que «la IA agenda». El mensaje lo manda una persona, desde su WhatsApp.
 - **El agente de WhatsApp (chatbot).** Es add-on y no se ofrece hasta su prueba real (catálogo §5). Tampoco al
   cotizar Completo, aunque lo incluya.
@@ -75,7 +77,7 @@ git -C onia-platform show origin/master:lib/plan-catalogo.ts | grep -E '^  [a-z]
 - Clientes, testimonios o cifras de resultados: hoy hay cero clientes pagando.
 - La competencia, ni para compararse. Nada sobre nosotros.
 - «Muy pronto», «beta», «próximamente», «estamos trabajando en…». Lo que no está, no se nombra.
-- «Por ley tenés que…».
+- «Por ley tiene que…».
 
 Las capturas de respaldo, por si se cae internet, salen de la misma cuenta demo.
 
@@ -111,8 +113,8 @@ Fuente: `prisma/seed-demo.ts` (`demoDental`, `diaDeClinica`) y `prisma/seed-demo
 Anotá los tres números. Si no sabe el tercero, acaba de decir el problema.
 
 **3–5 · El dolor**
-- «¿Cuánto cobrás por terminar ese tratamiento?» Anotá el monto.
-- «Ese paciente no se fue a otro lado: quedó a la mitad y nadie lo llamó. Te muestro cómo lo ves en Onia.»
+- «¿Cuánto cobra por terminar ese tratamiento?» Anotá el monto.
+- «Ese paciente no se fue a otro lado: quedó a la mitad y nadie lo llamó. Le muestro cómo lo ve en Onia.»
 
 **5–8 · La agenda** — `/agenda` (Agenda de hoy)
 - Los dos profesionales, cada cita con su nombre. Lo que ya pasó baja a «Ya pasaron».
@@ -131,8 +133,8 @@ Anotá los tres números. Si no sabe el tercero, acaba de decir el problema.
   no tiene cita.»
 - La de Martín: «el de mañana que no confirmó, con el mensaje listo».
 - «El que falta o cancela también aparece acá, para reprogramarlo.»
-- **Control humano:** «Nada sale sin tu OK. Tocás *Enviar yo mismo por WhatsApp*, se abre el WhatsApp de la
-  clínica con el texto y lo mandás vos. Si no te gusta, *Rechazar*.» (No lo aprietes: §0.1.)
+- **Control humano:** «Nada sale sin su OK. Usted toca *Enviar yo mismo por WhatsApp*, se abre el WhatsApp de la
+  clínica con el texto y lo manda usted. Si no le gusta, *Rechazar*.» (No lo aprietes: §0.1.)
 - El link de reserva, en otra pestaña: `/book/demo-clinica-sonrisa-norte`. El paciente elige profesional, día y
   hora. Solo con horarios cargados (§0.1); si no, se dice y no se abre.
 
@@ -145,9 +147,9 @@ Anotá los tres números. Si no sabe el tercero, acaba de decir el problema.
   su plan no trae.
 
 **18–20 · Cierre: un próximo paso, con fecha**
-- «Creamos tu cuenta ahora: dos minutos en `app.onia.com.bo/register`, 14 días gratis, sin tarjeta.»
-- «Si tenés tus pacientes en Excel, los subís guardados como CSV en Pacientes → Importar.»
-- «Quedamos el [día, máximo en 7 días] a las [hora], 15 minutos, para mirar juntos tus Pendientes.»
+- «Creamos su cuenta ahora: dos minutos en `app.onia.com.bo/register`, 14 días gratis, sin tarjeta.»
+- «Si tiene sus pacientes en Excel, los sube guardados como CSV en Pacientes → Importar.»
+- «Quedamos el [día, máximo en 7 días] a las [hora], 15 minutos, para mirar juntos sus Pendientes.»
 - Lo primero que va a ver: **a la mañana siguiente**, los de mañana sin confirmar; el que falte o cancele,
   para reprogramar.
 - **Ojo:** el aviso de tratamiento a medias sale **21 días** después de la última actividad del paciente, y un
@@ -160,13 +162,13 @@ Anotá los tres números. Si no sabe el tercero, acaba de decir el problema.
 
 | Pregunta | Respuesta |
 |---|---|
-| ¿Cuánto cuesta? (antes de la demo) | «Depende de cuántos lo usan. Para [N] profesionales con recepción es Crece, Bs 550 al mes. Dame 20 minutos y te muestro qué hace.» |
+| ¿Cuánto cuesta? (antes de la demo) | «Depende de cuántos lo usan. Para [N] profesionales con recepción es Crece, Bs 550 al mes. Deme 20 minutos y le muestro qué hace.» |
 | «Está caro» | Volvé a su cuenta. La tarifa no se baja. |
 | ¿La lista sale por 15, 30 o 60 días? | «No. El corte es a las tres semanas, y la lista va ordenada por días sin venir.» |
 | ¿Me manda un reporte semanal? | «No es un reporte: es la lista de Pendientes, todos los días, con el mensaje escrito.» |
 | ¿Exporta a Excel? | «Pacientes y citas en CSV, que se abre en Excel. En PDF, no.» |
-| ¿Y si se corta internet? | «Está en la nube: si se cae el wifi, seguís desde el celular con datos. Sin ninguna conexión no se puede usar.» |
-| ¿Mis datos? | «Cada uno ve lo suyo: la recepción no ve la historia clínica. Tus datos los exportás cuando quieras.» |
+| ¿Y si se corta internet? | «Está en la nube: si se cae el wifi, sigue desde el celular con datos. Sin ninguna conexión no se puede usar.» |
+| ¿Mis datos? | «Cada uno ve lo suyo: la recepción no ve la historia clínica. Sus datos los exporta cuando quiera.» |
 | ¿Factura? | §0.3. |
 
 ### 1.4 Pruebas en el código
@@ -226,8 +228,8 @@ Fuente: `lib/importadora/demo-seed.ts` (`PRODUCTS`, `COSTEO_DEMO`), llamado desd
 Dicho de frente: si vende en dólares, cotiza con PDF o precio por cliente, o factura cada venta, **hoy no le calza**.
 
 **3–5 · El dolor**
-- «El precio que pusiste con el dólar de hace tres meses puede estar hoy debajo de lo que te cuesta reponerlo.
-  ¿Cómo te enterás?»
+- «El precio que puso con el dólar de hace tres meses puede estar hoy debajo de lo que le cuesta reponerlo.
+  ¿Cómo se entera?»
 
 **5–12 · El costeo** — `/importadora/costeo`
 - Un embarque en vivo con un producto suyo (o con el cable): FOB, cantidad, flete, seguro, despacho, el GA de su
@@ -238,10 +240,10 @@ Dicho de frente: si vende en dólares, cotiza con PDF o precio por cliente, o fa
 
 **12–15 · La alerta de reprecio** — `/importadora/reprecio`
 - Escribí un TCO (el del día, o el que él espera) y mirá qué productos quedan **debajo de lo que cuesta reponerlos**.
-- «Es una alerta: no cambia ningún precio. Para repreciar, rehacés el costeo.»
+- «Es una alerta: no cambia ningún precio. Para repreciar, rehace el costeo.»
 
 **15–16 · Control humano**
-- «El tipo de cambio lo ponés vos: el sistema no lo inventa ni te propone precios. Y el precio de venta lo
+- «El tipo de cambio lo pone usted: el sistema no lo inventa ni le propone precios. Y el precio de venta lo
   cambia solo quien tiene el permiso de cambiar precios.»
 
 **16–18 · Plan y precio** (§0.2)
@@ -249,9 +251,9 @@ Dicho de frente: si vende en dólares, cotiza con PDF o precio por cliente, o fa
   hasta 2 → Básico; 3 o 4 → Crece; 5 → Profesional; 6 o más → Completo.
 
 **18–20 · Cierre**
-- «Creamos tu cuenta ahora, 14 días gratis. Subís tu catálogo por CSV en Importar catálogo y costeás tu próximo
+- «Creamos su cuenta ahora, 14 días gratis. Sube su catálogo por CSV en Importar catálogo y costea su próximo
   embarque con el TCO del día.»
-- «Te llamo el [día] a las [hora] para mirar juntos ese primer costeo.»
+- «Lo llamo el [día] a las [hora] para mirar juntos ese primer costeo.»
 
 ### 2.3 Si pregunta
 
@@ -321,8 +323,8 @@ Julio Choque, vencido hace 10 días) y una compra a crédito. En `/pending`, el 
 - `/comercio/fiados`: el de Maestro Julio Choque, vencido.
 
 **13–15 · Control humano** — `/pending`
-- El cobro del fiado vencido, con el mensaje escrito. «Nada sale sin tu OK.» (No lo aprietes: §0.1.)
-- «Tu empleado cobra y carga stock; el precio lo cambia solo quien tiene el permiso.»
+- El cobro del fiado vencido, con el mensaje escrito. «Nada sale sin su OK.» (No lo aprietes: §0.1.)
+- «Su empleado cobra y carga stock; el precio lo cambia solo quien tiene el permiso.»
 
 **15–18 · Plan y precio** (§0.2): por personas que usan el sistema. Desde Crece, el cobro de fiados vencidos
 aparece en Pendientes.
@@ -362,7 +364,7 @@ Fuente: `prisma/seed-demo-datos.ts` (`TEXTOS_POR_TRACK`, `CLIENTES_POR_TRACK`, `
   link, sin crear cuenta.
 - La ficha del cliente: lo que se le cobró.
 
-**13–15 · Control humano** — `/pending`: la reactivación y el cobro, con el mensaje escrito. «Nada sale sin tu OK.»
+**13–15 · Control humano** — `/pending`: la reactivación y el cobro, con el mensaje escrito. «Nada sale sin su OK.»
 
 **15–18 · Plan y precio** (§0.2): por personas. Desde Crece, Pendientes y el link de reserva. En servicios no hay
 Reportes ni Cobros recurrentes en ningún plan: no los nombres.
