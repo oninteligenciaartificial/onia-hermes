@@ -15,6 +15,13 @@ La **madre** (PC de Sergio Urcullo) ordena por mensaje; la nube contesta en su p
   se restaura cada una). Antes de cerrar una sesión, buscar commits sin remoto:
   `git worktree list` + `git rev-list --count <sha> --not --remotes=origin`.
 - `onia-platform` en un worktree nuevo nace sin `node_modules`: `npm ci` + `npx prisma generate` antes de los tests.
+- **Probar varias ramas a la vez (medido 10-11 oct):** cada worktree con su `node_modules` propio, armado como el de
+  `/home/user/wt-c15` (symlinks a los paquetes del compartido, pero `@prisma/client` y `.prisma` copiados):
+  `cp -a /home/user/wt-c15/node_modules <wt>/` y `prisma generate` ahí. **Ojo:** `wt-t2b` tiene `node_modules` como
+  symlink al compartido, así que generar ahí pisa el cliente de `/home/user/onia-platform` (pasó el 11-oct; se regeneró
+  bien, con el schema de #136 + `master`). El guion `scratchpad/probar-wt.sh` ahora se niega si ve el symlink.
+  Correr suites con `run_in_background`: un `&` dentro de un Bash normal sobrevive al comando y duplica la corrida
+  (dos vitest escribiendo el mismo log, 10-oct).
 
 ## 1. Objetivo
 
