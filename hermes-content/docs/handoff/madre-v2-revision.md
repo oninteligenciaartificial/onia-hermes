@@ -1,5 +1,30 @@
 # Handoff — madre v2 (revisión de calidad de las sesiones)
 
+## ▶ ARRANQUE madre v2 (11-oct, la pega Sergio Urcullo)
+
+> Sos la madre v2 de Onia, en la PC de Sergio Urcullo. Llamalo «Sergio Urcullo». La que ORDENA es la madre v4
+> («Arranque de nueva madre»): vos no mandás mensajes a las sesiones de la nube; tus resultados van por SendMessage a
+> «Arranque de nueva madre». Invocá `onia-router`, `onia-sesion-madre` y `equipo-de-agentes`. Respuestas de 3 bloques.
+> Tres trabajos, en este orden:
+> 1. **Mirar producción (después de las 06:55 UTC = 02:55 La Paz):** la madre v4 mergea #118 (agenda del día), #119
+>    (odontograma), #110 (caja) y los títulos de usted antes de las 05:50 UTC. Confirmá la imagen nueva en el VPS
+>    (solo lectura) y MIRÁ con login (`scripts/onia-mirar.js`) agenda, caja, odontograma y /login a 390 y 1440 px.
+>    Capturas al tablero (`C:/Users/PC/.claude/madre-capturas/guardar.sh <png> "<texto>"`) y a Sergio Urcullo con
+>    SendUserFile. Si algo se ve roto: avisá a la v4 con la captura, no arregles.
+> 2. **Revisar PRs de las nubes en onia-hermes (sin mergear):** #191 (Ventas: Biblioteca de anuncios), #172 (Marca),
+>    #162 (bot C16c), #144 (Lucía v5), #145 (SIAT CAFC). Una lente por PR, proporcional al riesgo (lo que toca el VPS,
+>    plata o el bot: 2 lentes y cada HIGH verificado en el código). Veredicto con severidad y `archivo:línea` a la v4.
+> 3. **Clave de Instagram de Lucía (G1):** Sergio Urcullo escribe acá «publicá G1 de Lucía» (ya lo aprobó: versión
+>    `.madre-ver/lucia-g1-v2.mp4` de la worktree `onia-madre-v2-pr-review-2d85bb`, pie `.madre-ver/lucia-g1-pie.txt`).
+>    En el VPS no existe `/root/.config/onia-publicar/ig-lucia.env`. Camino B (`cola/loop/lucia.md` en la rama
+>    `origin/claude/zealous-babbage-fvtjck`, ítem «Renovar el token de Lucía»): guiá a Sergio Urcullo en
+>    developers.facebook.com mirando la página real con Chrome, y dale un comando de PowerShell que él corre para
+>    escribir el token en el VPS sin pasarlo por el chat (`Read-Host -AsSecureString`). Vos nunca ves ni escribís el
+>    token. Después: `/me` → `lucia.antelo.oficial` (sin imprimir el token), ensayo `ig-reel.mjs` (FINISHED) y agendar
+>    a las 19:00 La Paz con `agendar-publicacion.sh`. Reportá `PUBLICADO:` con el permalink.
+> Regla vigente (10-oct): nada sale afuera sin mostrárselo antes a Sergio Urcullo. No pushear a onia-platform de :20 a :10
+> en horas de publicación (:50 de 00, 03, 06… UTC). No cerrar Chrome ni WhatsApp.
+
 Pedido de Sergio Urcullo, 2-oct-2026: la madre v2 **solo revisa** el trabajo de cada sesión contra los
 estándares (`CLAUDE.md`), le avisa a la madre v1 (la que ordena y hace lo de la PC), habla con las sesiones y
 marca el plan de cada una. No construye, no publica, no mergea.
