@@ -65,6 +65,27 @@ carril puede hacer solo. Q1 espera `aplicar` (ver «Bloqueado»).
   que nombra existe y está versionado. `git ls-files` pasó de 1 MB y `execFileSync` cortaba con ENOBUFS, lo que dejaba
   también el gate del integrador en NO MEDIDO y rompía `herramientas-del-cron`. **Hecho:** la prueba en verde y PR.
 
+## Encargos de la madre DESARROLLO-INFRA (11-oct, van antes que Q7-Q9)
+
+- [ ] **E1 Mirar la publicación de las 06:50 UTC** (#118, #119, #110 y los títulos de usted): confirmar la imagen nueva
+  y MIRAR con sesión la agenda del día, el odontograma, la caja diaria y /login, a 390 y 1440 px. No se arregla nada.
+  - [x] Antes (04:53 UTC): /login a 390 y 1440 se ve bien. Íconos como glifos (ninguna ligadura como texto), todo
+    de usted, sin obra. Huella del build: `webpack-2a706587264c6b91.js`. Capturas y script en
+    `hermes-content/docs/research/qa-publicacion/2026-10-11/`. modelos: ninguno (script propio).
+  - [ ] Después (desde las 06:57, con el latido): la huella nueva confirma desde afuera que cambió el build, y /login
+    a 390 y 1440 otra vez.
+  - **Bloqueado para este carril: las pantallas con sesión y «la imagen en el VPS».** `onia-mirar.js` lee la clave
+    service role con `docker exec` en el VPS, y la sesión de la nube no entra por SSH (rol, §3). El MCP de GitHub no
+    despacha workflows (403), así que tampoco puedo pedirle el `docker inspect` al diagnóstico. Lo hace la madre desde la
+    PC: `node /root/onia-mirar.js oninteligenciaartificial+qapago@gmail.com /agenda` (y `/patients/<id>/odontogram`
+    y `/caja-diaria`, la ruta que trae onia-platform#110), o Q5 (#194), que lo hace solo cuando entre y corra `aplicar`.
+  - Trampa medida (11-oct): el Chromium de la nube no valida el certificado del proxy de salida
+    (`ERR_CERT_AUTHORITY_INVALID`). Funciona si cada pedido lo hace Node, con `context.route("**/*", r =>
+    r.fulfill({ response: await r.fetch() }))` y `NODE_EXTRA_CA_CERTS`. La verificación TLS sigue entera. El
+    «[SW] registration failed» que aparece así es del interceptor, no de la app.
+- [ ] **E2 Revisión de PRs sin mergear:** #191 (Ventas), #162 (bot C16c), #145 (SIAT CAFC), #172 (Marca), #144 (Lucía).
+  Una lente por PR, dos en #162 y #145; cada HIGH verificado en el código. En curso.
+
 - [ ] **Q7 La web promete hoy lo que el catálogo deja (11-oct, madre v4).** Volver a mirar la §3 de
   `ONIA_PROMESA_VS_PRODUCTO.md` (lo que `onia.com.bo` prometía el 8-oct y el catálogo no deja) contra la web de hoy,
   renderizada y con captura de cada frase. **Hecho:** la §3 al día, con fecha, captura por fila en
@@ -107,7 +128,7 @@ carril puede hacer solo. Q1 espera `aplicar` (ver «Bloqueado»).
     así que no es una barrera nueva. Se puede atar a `oninteligenciaartificial+qa…@gmail.com`, pero eso
     rompe su uso a mano con otras cuentas: decide la madre.
   - `onia-mirar.js` manda la clave service role a `https://app.onia.com.bo/supabase/auth/v1/admin/...`, el
-    dominio público. Si hay un proxy o CDN delante, la ve. Conviene apuntarlo a la dirección interna de
+    dominio público. Medido el 11-oct: `app.onia.com.bo` responde `server: cloudflare`, así que Cloudflare la ve. Conviene apuntarlo a la dirección interna de
     Kong y cerrar `/auth/v1/admin` en el proxy (Plataforma).
   - No hay CODEOWNERS: lo que entra a `main` en `scripts/loops`, `scripts/onia-mirar.js` y
     `hermes-content/deploy` corre como root en una hora.
