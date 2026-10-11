@@ -5,7 +5,7 @@ Orden: lo que destraba cobrar primero. Cada PR: integrar con master, suite compl
 - [x] #141 S1+S1b (IPv6 por /64): en producción desde el 9-oct 18:50 UTC (`release-c94b9daa`), mirado.
 - [x] #143 F1 (la letra dentro del sistema) y #142 U2+U2b (pago de usted): en producción desde el 10-oct 18:50 UTC (`release-21f0c7e6`), mirados a las 19:17 (el checkout con login lo mira la madre).
 - [x] #144 `/book` de usted: en producción desde el 10-oct 18:50 UTC, mirado a 390 y 1440.
-- [ ] #136 bandeja v3 (incluye #127, #129 y #135) + B3 #130 (PWA): espera el OK de diseño de Sergio Urcullo (capturas enviadas el 10-oct).
+- [ ] #136 bandeja v3 (incluye #127, #129, #135 y #130 PWA): con `master` y suite verde (`f83b2806`, 11-oct). Diseño aprobado por Sergio Urcullo en la sesión madre; para mergear hace falta su línea en esta sesión. Después: `scripts/chatwoot-webhook-eventos.mjs` en el VPS y mirar un WhatsApp llegar a `/inbox`.
 - [ ] #140 widget W1-W1e + W1f (se presenta con el nombre de la clínica, bundle del 10-oct) + infra: origen solo para Cloudflare, bloquear `/public/api/` en Chatwoot y `hmac_mandatory` en los inboxes API. Espera el OK de diseño de Sergio Urcullo a W1f.
 - [x] #139 canal privado (punto 3): en producción desde el 10-oct 18:50 UTC, migración registrada a las 18:44. Falta solo MIRAR «En vivo» con login (madre).
 - [x] #114 factura (punto 15) y #145 logo de `/book`: en producción desde el 10-oct 21:55 UTC (`release-d8ca5a32`), mirados sin login (`/admin/payments` lo mira la madre).
