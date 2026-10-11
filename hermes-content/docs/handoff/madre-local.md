@@ -59,7 +59,10 @@ días abierta y su conversación costó ~777 M de tokens. **La madre nueva arran
   Codex a GitHub (los 2 repos, revisión automática apagada) para que las nubes usen `@codex` sin la PC.
 - **Aprendido hoy:** un subagente Haiku SÍ lee transcripts con `RemoteTrigger` (la madre no gasta contexto) · Plataforma
   mergeó #136 sin leer la revisión de Hermes → regla: HIGH abierto = no se mergea · los tests de Hermes piden Linux (LF,
-  python3): el gate es el CI · `codex exec` no corre vitest (EPERM): la madre corre la suite siempre.
+  python3): el gate es el CI · `codex exec` no corre vitest (EPERM): la madre corre la suite siempre · **el runner de CI es UNO en el VPS**: 7 PRs pusheados juntos
+  (07:10) dejaron el CI de #147 en cola 43 min; se cancelaron las corridas propias y se relanzan de a 2 a las 10:12 UTC (cron
+  de un disparo) · **`tsc` en la PC sí sirve si se filtra por archivos tocados**: el F136 avisó «14 errores en la ruta» y era
+  real; #155 rompió el typecheck del CI (`PAYMENT_DELETED` fuera de `AuditAction`).
 
 ## ⏸ ESTADO AL CLEAN (11-oct ~04:50 UTC) — la madre v4 sigue en la MISMA sesión después del /clear
 
