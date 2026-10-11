@@ -28,6 +28,32 @@ Entorno de Lucía y Marca: «onia-higgsfield» `env_01V5EeE4VtMdw7PWVaMYywsk`.
   (`1073680778314945`, hoy `has_payment_method: false`) y el OK escrito de Sergio Urcullo: «US$ 56, 14 días, tope Bs 750».
 - Modelos por rol y Codex por contrato en todas: `docs/cola/loop/README.md` (3404b726).
 
+## ▶ ESPERA LA LÍNEA DE SERGIO URCULLO (11-oct ~09:15 UTC; todo ya se le mostró por SendUserFile)
+
+| Pieza | Sesión · commit | Línea que destraba |
+|---|---|---|
+| Carrusel ANTIGRAVITY, agendado hoy 20:00 UTC (estilo arcilla viejo + «comentá y te paso» sin DM probado) | Marca · timer `pub-car-20261011` en el VPS | «pausá ANTIGRAVITY» / «publicá ANTIGRAVITY» (sin respuesta, sale) |
+| Cortes de los 5 brutos (N06 46 s, DD-A 58 s, N07 82 s, N02 111 s, S2-D07-A 91 s) | Marca · 88e7cd10, 63e50754, 4e751ae4, 26bf1e56, f643bb18 | «ok cortes»; S2-D07-A: «cortá la frase» o «la regrabo» (dice que una plantilla no admite variables: falso) |
+| Borradores editados N06, N07, DD-A, N02 | Marca · fbad86d1, 0b55a7ff, 5dfefc8f (+ preview), 90e00270 | «ok N06, publicá» (va hoy con el carrusel) · «ok N07» · «ok DD-A» + qué dijo en 01:01-01:09 («con Sol») · «ok N02, cortá los 2,4 s» (sale jue 15) |
+| Molde mosaico-tablero (render PC) | Marca · b251cd40 | «ok molde» |
+| Historias de la asesoría v2 (4, sin foto) | Marca · 0ecbd905 | «ok historias» (la 4.ª la sube él con el sticker) |
+| Lucía G2 v2.4, G3 v2, G4 v2, G5 v2, pieza 9 v3.1 (mudos) | Lucía · daf9b52f, da6e732e, 5035ab5f, a906fb04 (+ fde07d0a), 7914a153 | «ok G2 G3 G4 G5 pieza 9»; pieza 9 tiene una tabla densa: «ok» o «simplificá la tabla». Después, el sí al lote de voz (cupo 381 car. hasta el 13-oct, ~1.800 pedidos) |
+| Prueba 1 v2 de Ventas (5 réplicas con su cara como maqueta) + PARA-GRABAR | Ventas · 993995e8, c9e0d023 | «ok prueba 1 v2» + «3 anuncios» o «4 anuncios» (opus recomienda 3) + grabar |
+| Teleprompter SI (6 listos: 01, 02, 03, 04, 08, 09) | Marca · 714a88a6 | grabar; los ⛔ esperan mediciones (`MEDICIONES-SI-PC.md`, 42eef9f6) |
+| Video BA814C81 (raíz de Drive, publicar SIN editar) | Marca lo tiene en el calendario como «propuesto» | link «cualquiera con el enlace» o OK para que la madre lo baje desde la PC |
+| Token IG de Lucía (vence 13-18 oct) | Lucía · cola | «A» o «B» y hacerlo juntos en Chrome |
+
+## Texto de arranque para la MADRE MARKETING nueva (pegarlo en una sesión local de la PC)
+
+> Sos la MADRE MARKETING de Onia, en la PC de Sergio Urcullo (llamalo «Sergio Urcullo»). Orquestás Lucía, Marca personal
+> y Ventas y pauta (nubes) y hacés solo lo que ellas no pueden: PC, Chrome con su login, Drive, VPS de lectura, renders
+> HyperFrames con el Chrome de la PC, Codex. Las sesiones TRABAJAN; vos verificás (abrís y mirás cada LISTA PARA MOSTRAR)
+> y le pasás a Sergio Urcullo un resumen corto con la pieza y la línea exacta que aprueba. Invocá `onia-router`,
+> `onia-sesion-madre` y `equipo-de-agentes`, y leé ESTE archivo entero (tabla «Espera la línea de Sergio Urcullo», cola de
+> PC, cola de Codex, trampas). La otra madre es «MADRE DESARROLLO-INFRA» (Plataforma, Hermes, VPS): coordiná con ella los
+> lugares de Codex (máx 3 entre las dos; worktrees SPARSE). Rearmá el vigía de commits (Monitor sobre las 3 ramas con
+> «LISTA PARA MOSTRAR|GRABAR|CODEX LISTO|PUBLICADO») y la ronda cada 20 min (CronCreate). Respuestas de 3 bloques, cortas.
+
 ## Lo listo para MOSTRAR a Sergio Urcullo
 
 | Sesión | Pieza | Ruta (rama) |
