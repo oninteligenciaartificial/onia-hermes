@@ -22,6 +22,30 @@ días abierta y su conversación costó ~777 M de tokens. **La madre nueva arran
 > Sergio Urcullo** (captura o video real en el tablero + SendUserFile) y sale con su OK. Máx 2 frentes propios; respuestas
 > de 3 bloques; relevo antes de ~150 k tokens de contexto; no pushear a onia-platform de :20 a :10 en horas de publicación.
 
+## ⏸ ESTADO AL CLEAN (11-oct ~04:50 UTC) — la madre v4 sigue en la MISMA sesión después del /clear
+
+Sergio Urcullo: *«a trabajar pero con sentido, terminar de desarrollar; te hago clean y continuás»*. Objetivo: **terminar la
+1.0** (lo demás, delegado). Leé esto + el libro `cola/loop/madre.md` (D4-D9, C9) y seguí.
+- **En vuelo (te llega una notificación; no relanzar):**
+  1. Agente de merge en serie (04:10-05:50 UTC): bundles de Plataforma + merge #118 → #119 → #110 → PR «títulos de usted».
+     Orden escrita de SU: «mergeá vos #118, #119, #110 y títulos». Al terminar: anotar SHAs en el libro (D10) y avisar.
+  2. Workflow `wf_63436b3d-712` (guiones nuevos): escribe `cola/plan-3-semanas/GRABAR-NUEVOS-11-OCT.md` (≥10 guiones
+     simples: repos, agentes, noticias). Al terminar: LEERLO, mirar 2-3 guiones, commitear y mandarlo a SU con SendUserFile.
+- **Loops (CronCreate de esta sesión):** ronda `333b77d3` (:07 :27 :47), parte `313765ea` (07:53), cierre `db8b3b4b`
+  (21:53), lote `836a6670` (lun 08:13). Sobreviven al clean; si no, recrearlos desde §F del libro.
+- **Publicación:** 06:50 UTC (02:50 La Paz) saca lo mergeado. Mirarlo con login (o pedírselo a la madre v2) y capturas a SU.
+- **1.0, lo que falta y quién lo destraba:** #136 bandeja y #130 PWA (diseño aprobado; falta «mergeá vos #136 y #130» de SU)
+  · #140 widget (infra `/public/api/` + `hmac_mandatory`: Plataforma) · #124 términos y #113 gracia (texto legal: SU) ·
+  #132 K1 · lun 12-oct 07-11 UTC demo refrescada + capturas C1-C7 (Plataforma) · tabla «se promete/funciona» (Ventas;
+  credenciales QA en su entorno: SU). Fuente del corte: `docs/ONIA_1.0_CORTE.md` de Plataforma (rama `optimistic-ride-1sp5fe`).
+- **Sesiones (04:45 UTC):** Plataforma (#130 + demo), Ventas (campaña prueba 1 LISTA PARA MOSTRAR), Hermes (Q2 o 3 Q de QA),
+  Marca (5 brutos N07, DD-A, N02, N06, S2-D07-A esperan Drive), Lucía (guiones con nombres reales LISTA PARA MOSTRAR, sin
+  mostrar todavía). Regla: sesión con 1 h sin commits → su siguiente tarea en el momento.
+- **Madre v2 (local, la abre SU):** arranque en `handoff/madre-v2-revision.md`; mira prod, revisa PRs, guía el token de Lucía.
+  La principal es la v4: le delega por SendMessage.
+- **Pendiente de SU:** token IG de Lucía (camino B) · link de la asesoría en la bio · subir los 5 brutos a Drive · «mergeá
+  #136 y #130» · texto legal de #124 · reiniciar la PC (paged pool 4 GB, RAMMap en `~/Tools/RAMMap`).
+
 ## 🔁 HANDOFF v4 (madre `4ba4822c`, 10-oct 20:10 → 11-oct 02:20 UTC, rama `claude/arranque-nueva-madre-ba386e`)
 
 1. **Objetivo:** terminar y publicar (los 3 de arriba). **Cerrado y mirado:** #145 (logo «onia» en /book) y #114 (factura)
