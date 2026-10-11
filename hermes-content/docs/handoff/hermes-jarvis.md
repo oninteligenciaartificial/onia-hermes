@@ -1,12 +1,11 @@
 # Handoff — carril `hermes-jarvis` (Hermes, el Telegram y el calendario de Sergio Urcullo)
 
 > **ESTADO 11-oct, 07:30 UTC — qué está en vuelo y quién lo mueve** (sesión `session_01SQ7cvuDX5w5jDHk5VdhAEo`, rama `claude/adoring-ramanujan-7sjzwv`, PR #194).
-> - **Producción (medido 06:58 UTC):** corre `onia-platform` `master` `a7d8c1ed` (#136 y #146). Huella: SHA-1 de `/manifest.json` y `/sw.js` contra `git show <commit>:public/...`
->   (el nombre de `webpack-<hash>.js` NO sirve: no cambió). `/login` y `/book` bien, de usted. **#136 trae sus dos HIGH sin arreglar** (caja: «1.500» → Bs 1,50; borrar un paciente borra
+> - **Producción (medido 06:58 UTC):** corre `onia-platform` `master` `a7d8c1ed` (#136 y #146). Huella: el `buildId` que Next pone en el HTML de `/login` (`\"b\":\"<id>\"`; `D5DzLXxrhp8Sx1o0cQhQs` a las 08:20 UTC; cambia con cada build) y el SHA-1 de `/manifest.json` y `/sw.js` contra
+>   `git show <commit>:public/...` (el nombre de `webpack-<hash>.js` NO sirve: no cambió). `/login` y `/book` bien, de usted. **#136 trae sus dos HIGH sin arreglar** (caja: «1.500» → Bs 1,50; borrar un paciente borra
 >   las caras del odontograma): los arregla onia-platform **#147 (F136)**, que revisé sin HIGH; tiene que estar mergeado antes de las 09:20 UTC para entrar en la publicación de las 09:50.
 > - **Pendiente de merge por la madre, en orden:** #194 (Q2 + Q5 + docs de este carril) → #196 (C1 y C2 pasan sus pruebas; C3b aceptado; su base es mi rama) → L1, L1b y L1c
->   (`codex/hermes-qa-web-vs-producto`, 782dd348 + 6f64e094 + el de L1c; **yo los cherry-pickeo a #194 solo cuando vuelva L1c**: `--base-web` no lee el HTML real). Conflicto previsto
->   entre #196 y L1b en `package.json` y en la lista del workflow: dos líneas, se juntan sumando los dos nombres.
+>   (**ya están dentro de #194**: L1, L1b y L1c, y también C1 a C3b de #196, juntados el 11-oct a las 08:25 UTC para que Sergio Urcullo tenga UN solo merge que aprobar; #196 queda redundante).
 > - **Contratos Codex abiertos (los lanza la madre):** `hermes-L1c-web-vs-producto-html-real.md` (Luna). Q9 (`plataforma-Q9-alta-de-usted.md`) quedó `bloqueada`: lo cubre #148 (U4), sin verlo en `master`.
 > - **Revisados sin mergear ni comentar en GitHub (veredictos con archivo:línea en la cola, E3-E10):** onia-platform #124, #113, #140, #132, #136, #146, #147 (OK), #148 y #149 (OK), #150 (CAMBIOS, 1 HIGH: guarda por symlink),
 >   #151 (OK); onia-hermes #162 (BLOQUEAR, 3 HIGH, sin cambios desde el 8-oct), #145, #191, #172, #144, #195. Sin mirar: onia-platform #70 y onia-hermes #143 y #40 (solo docs, viejos).

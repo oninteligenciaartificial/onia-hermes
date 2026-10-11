@@ -228,7 +228,9 @@ CLI de Hermes.
   (`ERR_CERT_AUTHORITY_INVALID`, también con `channel: "chromium"`). Funciona si cada pedido lo hace Node:
   `context.route("**/*", async r => r.fulfill({ response: await r.fetch() }))`, que usa `NODE_EXTRA_CA_CERTS`. La
   verificación TLS sigue entera; nunca `--ignore-certificate-errors`. El «[SW] registration failed» que aparece así
-  es del interceptor. La app no publica su BUILD_ID en el HTML. **El nombre de `webpack-<hash>.js` NO sirve de huella**
+  es del interceptor. **El BUILD_ID de Next SÍ está en el HTML** (corregido el 11-oct: había escrito que no): en el payload RSC de `/login`, como `\"b\":\"<id>\"`
+  (`curl -s https://app.onia.com.bo/login | grep -o '\\"b\\":\\"[^\\"]*'`; `mirar-publico.mjs` lo saca como `buildId`). Cambia con CADA build: es la huella para saber que hubo una publicación nueva (medido: `D5DzLXxrhp8Sx1o0cQhQs`
+  con #136 y #146). No dice QUÉ commit trae; eso lo da la hora de la publicación (:50) y lo que `master` tenía entonces. **El nombre de `webpack-<hash>.js` NO sirve de huella**
   (corregido el 11-oct, E1: la imagen cambió, con `sw.js`, `manifest.json` y los títulos nuevos, y el nombre fue el mismo
   `webpack-2a706587264c6b91.js` antes y después). Huella que sí funciona: el SHA-1 de `public/manifest.json` y de
   `public/sw.js` servidos por `app.onia.com.bo`, contra `git show <commit>:public/<archivo> | sha1sum` en `onia-platform`

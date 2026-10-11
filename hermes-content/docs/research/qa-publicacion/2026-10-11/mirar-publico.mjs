@@ -1,8 +1,7 @@
 // E1 (madre DESARROLLO-INFRA, 11-oct): páginas PÚBLICAS a 390 y 1440 px, sin sesión, solo lectura.
 // Uso: [BASE=https://onia.com.bo] node mirar-publico.mjs <carpeta> <etiqueta> /login /book ...   (BASE por omisión: app.onia.com.bo)
 // Por cada ruta y ancho: estado, tiempo, título de la pestaña, descripción, tarjeta al compartir (og/twitter), huella del
-// build (runtime de webpack: NO prueba que haya un build nuevo, medido el 11-oct; la huella buena es el SHA-1 de /manifest.json y
-// /sw.js, ver la skill onia-hermes-jarvis), ligaduras de íconos dibujadas como texto, textos de obra y voseo/tuteo visibles.
+// build: `buildId` (el id que Next pone en el HTML) es la huella de cada build; el nombre de webpack-<hash>.js NO lo es (medido el 11-oct), ligaduras de íconos dibujadas como texto, textos de obra y voseo/tuteo visibles.
 // Chromium no valida el certificado del proxy de la nube: cada pedido lo hace Node (route.fetch, con NODE_EXTRA_CA_CERTS),
 // así que la verificación TLS sigue entera.
 import { chromium } from "/opt/node22/lib/node_modules/playwright/index.mjs";
@@ -35,9 +34,11 @@ for (const ruta of RUTAS) {
     page.on("console", (m) => { if (m.type() === "error") errores.push(m.text().slice(0, 160)); });
     const t0 = Date.now();
     let estado = null;
+    let crudo = "";
     try {
       const resp = await page.goto(url, { waitUntil: "networkidle", timeout: 60000 });
       estado = resp.status();
+      try { crudo = await resp.text(); } catch { /* una redirección no trae cuerpo */ }
     } catch (e) {
       resultado.rutas[ruta][ancho] = { estado: null, falla: String(e.message).slice(0, 200) };
       await ctx.close();
@@ -45,6 +46,9 @@ for (const ruta of RUTAS) {
     }
     await page.waitForTimeout(1500);
     const html = await page.content();
+    // El BUILD_ID de Next viaja en el payload RSC del HTML: \"b\":\"<id>\". Cambia con CADA build (medido el 11-oct:
+    // D5DzLXxrhp8Sx1o0cQhQs en la imagen con #136 y #146). Es la huella buena; el nombre de webpack-<hash>.js no sirve.
+    const buildId = (crudo.match(/\\"b\\":\\"([^\\"]+)\\"/) || [])[1] || null;
     const runtime = ([...new Set(html.match(/\/_next\/static\/chunks\/[^"' ]+\.js/g) || [])].find((c) => /webpack-/.test(c)) || "").split("/").pop() || null;
     const meta = await page.evaluate(() => {
       const m = (s) => document.querySelector(s)?.getAttribute("content") || null;
@@ -67,7 +71,7 @@ for (const ruta of RUTAS) {
     await page.screenshot({ path: join(SALIDA, archivo), fullPage: true });
     const lineas = texto.split("\n").map((l) => l.trim()).filter(Boolean);
     resultado.rutas[ruta][ancho] = {
-      estado, ms: Date.now() - t0, build: runtime, archivo, ...meta, desbordeHorizontal: desborde,
+      estado, ms: Date.now() - t0, buildId, build: runtime, archivo, ...meta, desbordeHorizontal: desborde,
       ligadurasComoTexto: ligaduras,
       precios: lineas.filter((l) => /\bBs\.?\s?\d|\d[\d.,]*\s?Bs\b|\$\s?\d|US\$|USD/i.test(l)).slice(0, 40),
       obra: lineas.filter((l) => OBRA.test(l)).slice(0, 8),
