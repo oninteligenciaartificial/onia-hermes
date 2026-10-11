@@ -1,1 +1,1 @@
-index.html idéntico (cmp) tras reconstruir
+index.html idéntico (md5 314507df67e695e9875ef723181d043d) tras reconstruir dos veces con node scripts/build.mjs (12-oct, después de la revisión 1); es el que se renderizó

@@ -7,14 +7,17 @@
   "acento": "#10C26B",
   "voz": {
     "archivo": "guion-voz.txt",
-    "palabras_por_s": 3.6,
+    "cps": 17,
+    "tramos_cuadros": [53, 47, 60, 47, 53, 27, 53, 53, 47, 47, 60, 47],
     "hueco_cuadros": 6,
-    "cola_cuadros": 13,
+    "cola_cuadros": 10,
     "max_caracteres": 450,
     "max_hueco_s": 0.25,
+    "sobra_obj_s": 0.25,
+    "sobra_max_s": 0.30,
     "min_s": 26,
     "max_s": 30,
-    "nota": "Un tramo = una línea; dura palabras/3,6 s (cuadro entero más cercano); entre líneas 6 cuadros (0,25 s). La cola de 13 cuadros (0,54 s) deja que el CTA complete su lectura tras la última palabra. Hoy NO hay audio: la pista es AAC en silencio."
+    "nota": "H1 (revisión 1, 11-oct): la voz se mide en CARACTERES (≈ 17 por segundo, G1 v2), no en palabras. Un tramo = una línea de guion-voz.txt = una VENTANA de voz de tramos_cuadros[n-1] cuadros (valores CONGELADOS = los de v2.0, para que las tarjetas, los empujes y los clips no se muevan); entre ventanas hay 6 cuadros (0,25 s), donde cae cada empuje. build.mjs exige para cada línea: chars/cps ≤ ventana (cabe) y ventana − chars/cps ≤ sobra_max_s (hueco). Si existe duraciones.json (duración REAL de cada pista, la escribe scripts/poner-voz.mjs --medir) manda sobre cps y tramos_cuadros: cada ventana = ceil(voz real × 24) cuadros, así que la pausa entre líneas queda en 0,25 s + menos de 1 cuadro. La cola de 10 cuadros (0,42 s) tras la última palabra deja que el CTA termine de leerse. Hoy NO hay audio: la pista es AAC en silencio."
   },
   "zona_segura": { "texto_hasta_y": 1490, "derecha_libre_px": 80, "derecha_libre_desde_y": 1000, "arriba_minimo_y": 280, "margen_bajo_menton": 40, "texto_min_px": 34, "rotulo_px": 40 },
   "caras": {
@@ -29,9 +32,9 @@
     "desc": { "tipo": "foto", "src": "assets/descartada.jpg", "a": "0", "b": "T4", "zoom": 1.03, "capa": "foto descartada K4·1 (letrero inventado, difuminado) a pantalla completa: gancho + error 1" },
     "buena": { "tipo": "foto", "src": "assets/buena.jpg", "a": "T4-6", "b": "T5", "zoom": 1.03, "capa": "foto nueva sin letrero (la regla 1)" },
     "agenda": { "tipo": "foto", "src": "assets/agenda.jpg", "a": "T5-6", "b": "T8", "zoom": 1.03, "capa": "foto de la agenda K2·2: error 2" },
-    "k4": { "tipo": "clip", "src": "assets/k4.mp4", "a": "T8-6", "b": "T10", "media_inicio": 14, "capa": "clip K4 a 1x (cuadros 14 a 131 de 145): error 3; el cuadro 120 cae 12 cuadros antes de T10" },
+    "k4": { "tipo": "clip", "src": "assets/k4.mp4", "a": "T8-6", "b": "T10", "media_inicio": "auto", "capa": "clip K4 a 1x (cuadros 14 a 131 de 145): error 3; el cuadro 120 cae 12 cuadros antes de T10" },
     "placa": { "tipo": "placa", "a": "T10-6", "b": "T11", "capa": "placa oscura con el recorte ampliado del cuadro 120 (la ceremonia de contar dedos, 1,96 s en reposo)" },
-    "k1": { "tipo": "clip", "src": "assets/k1.mp4", "a": "T11-6", "b": "END", "media_inicio": 20, "capa": "cierre: clip K1 (cuadros 20 a 137 de 145)" }
+    "k1": { "tipo": "clip", "src": "assets/k1.mp4", "a": "T11-6", "b": "END", "media_inicio": "auto", "capa": "cierre: clip K1 (hasta el cuadro 142 de 145; media_inicio automático = 145 − cuadros − 2)" }
   },
   "costuras": [
     { "t": "T4", "sale": ["desc"], "entra": ["buena"], "tarjetas": { "sale": "c3", "entra": "c4" } },
@@ -59,12 +62,12 @@
   "cta": { "texto": "Seguime: cada semana, una prueba.", "min_s": 2.4, "max_s": 5.5 },
   "etiquetas": [
     { "id": "e_orden", "texto": "Orden: «no signs anywhere»", "a": "T2+5", "b": "T3", "top": 1010, "fuente": "v4/PROCEDENCIA.jsonl línea 95: «No screens visible, no text, no logos, no signs anywhere.»" },
-    { "id": "e_cara", "texto": "Cara: 0,835 · aprobada", "a": "T3+2", "b": "T4-10", "top": 1010, "fuente": "v4/PROCEDENCIA.jsonl línea 93: K4_1_descartada id 0,835 (piso del repo 0,70)" },
+    { "id": "e_cara", "texto": "Parecido: 0,835 · aprobado", "a": "T3+2", "b": "T4-10", "top": 1010, "fuente": "v4/PROCEDENCIA.jsonl línea 93: K4_1_descartada id 0,835 (piso del repo 0,70)" },
     { "id": "e_nueva", "texto": "Foto nueva", "a": "T4", "b": "T5-6", "top": 600, "fuente": "foto nueva K4·1 eddca486 (línea 93), sin letrero" }
   ],
   "letrero": {
     "nota": "El letrero «Equperarto» es texto inventado por la IA y se parece a un logo de banco: NO se muestra nítido. Se difumina en todas sus apariciones y el video lo declara en el recorte («Difuminado al editar»). Caja en px de la foto nativa 1440x2560.",
-    "desenfoque": { "activo": true, "sigma": 9, "caja_nativa": [985, 68, 300, 170], "pluma": 30 },
+    "desenfoque": { "activo": true, "sigma": 44, "caja_nativa": [985, 68, 300, 170], "pluma": 30 },
     "aro": { "a": "T1+36", "centro": [850, 108], "ancho": 250, "alto": 124 },
     "inset": { "activo": true, "a": "T1+46", "b": "T2+41", "x": 480, "y": 300, "w": 500, "h": 222, "recorte_nativo": [935, 62, 400, 178], "caption": "Difuminado al editar" }
   },
