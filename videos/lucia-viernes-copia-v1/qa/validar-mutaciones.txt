@@ -43,7 +43,10 @@ pie sin las fotos recibidas (R1, R3, R6 y R7): RECHAZADO correctamente (Pie: fal
 pie sin la historia de la copia de R3: RECHAZADO correctamente (Pie: falta decir que la imagen es casi una copia de R3 (misma pose, ventana, laptop y taza)
 H4: pie sin la taza blanca de más al frente ni el «no es pixel a pixel»: RECHAZADO correctamente (Pie: falta decir que la imagen es casi una copia de R3 (misma pose, ventana, laptop y taza)
 pie sin las otras dos escenas (0,79 y 0,35): RECHAZADO correctamente (Pie: faltan las otras dos escenas del mismo motor (0,79 y 0,35: perdió la cara))
-pie sin la aclaración de que el piso es del promedio de las 8 (y que en el gráfico va solo con el promedio de las 4): RECHAZADO correctamente (Pie: falta aclarar que el piso de 0,70 es del promedio de las 8 y que en el gráfico va sol)
+pie sin la aclaración de que el piso es del promedio de las 8 (y que en el gráfico va solo con el promedio de las 4): RECHAZADO correctamente (Pie: falta aclarar que el piso de 0,70 lo elegí yo, es de la cara promedio de las 8 y que )
+M2: pie sin «lo elegí yo» (el piso 0,70 es una decisión del equipo, no una propiedad de ArcFace): RECHAZADO correctamente (Pie: falta aclarar que el piso de 0,70 lo elegí yo, es de la cara promedio de las 8 y que )
+M1: pie sin aclarar que el 0,74 es la cara promedio y no la media de las cifras: RECHAZADO correctamente (Pie: falta «Sin esas 4 fotos baja a 0,74» (igual que C2) con su aclaración)
+M1: pie con «promedio» a secas en el 0,83 (cara promedio): RECHAZADO correctamente (Pie: faltan las 8 fotos oficiales (R1 a R8) y que el 0,83 es contra su promedio)
 H4: pie sin la escala de las fotos oficiales entre sí (0,51 a 0,72, promedio 0,64): RECHAZADO correctamente (Pie: falta la escala de las fotos oficiales entre sí (0,51 a 0,72, promedio 0,64))
 H4: pie con el mínimo de la escala en 0,52: RECHAZADO correctamente (Pie: falta la escala de las fotos oficiales entre sí (0,51 a 0,72, promedio 0,64))
 H4: pie con el promedio de la escala en 0,65: RECHAZADO correctamente (Pie: falta la escala de las fotos oficiales entre sí (0,51 a 0,72, promedio 0,64))
@@ -90,5 +93,5 @@ costura que no coincide con las escenas: RECHAZADO correctamente (escenas contra
 aro que se sale del panel de R3: RECHAZADO correctamente (aro aro-pose-r3 sale del panel (547.2, 392.3, 719.5, 590.3): ajustar plan.aros)
 panel de R3 con un recorte que no alcanza a cubrir su ancho: RECHAZADO correctamente (el panel de R3 no alcanza a cubrir su ancho (reducir ox))
 CTA sin text-wrap: balance («prueba.» huérfana): RECHAZADO correctamente (#cta debe llevar text-wrap: balance (sin «prueba.» huérfana))
-92 alteraciones rechazadas
+95 alteraciones rechazadas
 EXIT 0

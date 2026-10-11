@@ -3,7 +3,7 @@
 Reel corto del viernes (PLAN.md §4-bis), MUDO, 1080×1920, 24 fps, **360 cuadros / 15,0 s**, con HyperFrames. **0 créditos**, solo material que ya existía: la imagen «café con teclado» de Kling O1 Image (K4, `img-omni-image-k4cafe-dad464de.png`, 1536×2720) y la foto de entrada R3 (`R3_casi_frontal.png`, 1792×2400). La compuso y la renderizó la sesión Lucía (editor, contenedor Linux) el 11-oct-2026 partiendo de la estructura de `videos/lucia-p9-luz-cara` (build que valida cifras contra las fuentes, gates, mutaciones) y de las fotos fijas de G4 v2. **v1.1 = la v1 con la revisión 1 aplicada en un solo ciclo** (`qa/revision-1.md`, 1 ALTA · 2 MEDIA · 5 BAJA; ver «Revisión 1: qué se hizo»). Sin Git, voz, publicación, instalaciones ni descargas. Fuera de esta carpeta no se tocó nada.
 
 <!-- ESTADO -->
-**MASTER v1.1 RENDERIZADO, PENDIENTE DE REVISOR Y VERIFICADOR Y DE «mostrada, publicá el viernes».** Todos los gates en verde (exit 0). No es aprobación visual ni permiso de publicar. Sigue MUDO: la voz no existe; `guion-voz.txt` es un cronograma estimado a 17 car/s (ver «Voz futura»). El master v1 (SHA `ae3a3d42…0cabd`) queda solo como evidencia en `renders/master-v1-ae3a3d42.mp4` (no va a git): **no publicarlo** (H1).
+**LISTA PARA MOSTRAR (11-oct, v1.1 + pie de la revisión 2).** Master SHA `5862aa44…5930` (mudo, 15,0 s, 0 cr), 19 gates en exit 0, 95 mutaciones rechazadas, revisor independiente (sonnet): 0 ALTA; verificador mecánico (haiku): 18 de 19 PASS, el FAIL fue un artefacto del encargo («piso 0,70» aparece 3 veces en `index.html`, pero solo una es la marca visible). Falta, antes de publicar: el orden respecto de G4 y C2 (M4) y «mostrada, publicá el viernes». Sigue MUDO; la voz no existe (cronograma de 223 caracteres, ver «Voz futura»). El master v1 (`ae3a3d42…0cabd`) queda solo como evidencia en `renders/master-v1-ae3a3d42.mp4`: **no publicarlo**.
 <!-- FIN ESTADO -->
 
 ## Master
@@ -88,6 +88,23 @@ Con voz real: generar y medir cada pista, escribir `duraciones.json`, correr `no
 | H7 BAJA (voz) | **Resuelto con una desviación** | «Parecía Lucía.» → «Parecido alto.» (ver «Voz futura»: sin reemplazo el cronograma no cuadra) |
 | H8 BAJA (pulido) | **Aceptado sin cambio** | (a) coma separada de la fuente mono, igual que P9; (b) «foto» por «imagen» y la marca de IA después de 3 s: queda el rótulo del cuadro 0 y el pie; (c) «identidad» es jerga: no cabe otra frase en una línea; (d) segunda mitad sin Lucía; (e) interfaz de Instagram: textos entre x 80 y 1000, no se simuló |
 
+## Revisión 2 (v1.1, revisor independiente sonnet + verificador haiku, 11-oct)
+
+Veredicto del revisor: **0 ALTA, 4 MEDIA, 9 BAJA; ninguna cifra ni frase falsa**; H1, H3, H4, H5, H7 resueltos; H2 parcial; H6 y H8 sin cambio.
+
+| Hallazgo | Estado | Qué se hizo |
+|---|---|---|
+| M1 MEDIA («Promedio de las 4: 0,74» no es la media de las cifras que se ven; 0,743 es el parecido con la cara promedio, las 4 cifras sueltas promedian 0,626) | **Resuelto en el pie** (sin re-render) | El pie dice «contra la cara promedio de las 8 fotos oficiales» y «es el parecido con la cara promedio de solo las 4 … no la media de sus cifras». Pantalla sin cambio. 2 mutaciones nuevas |
+| M2 MEDIA (el piso 0,70 sin decir que es decisión del equipo) | **Resuelto en el pie** | «El piso de 0,70 lo elegí yo y es de la cara promedio de las 8 fotos…» (igual que C2). 1 mutación nueva. En pantalla sigue «piso 0,70» |
+| M3 MEDIA (la placa no se entiende entera sin sonido; 46 palabras en 8,4 s) | **Abierto, decide la madre** | Dos salidas sin tocar H1: alargar la placa a 17-18 s (PLAN §4-bis admite 15-20 s; el tope de 15 s fue pedido de la madre) o subir la leyenda de 36 a 40 px |
+| M4 MEDIA («casi publico este 0,83» pierde sentido si sale después de G4 o C2, que ya traen el 0,83) | **Resuelto por orden de publicación** | `ORDEN-DE-POSTEO-LUCIA.md`: sale antes de G4 y de C2 |
+| B6 (voz L5 «mucho más alto» compara 0,93 con 0,83) | Abierto | Se cambia a «más alto» al generar la voz (toca el cronograma; no hay voz aún) |
+| B7 (se dice «foto» para imágenes de IA; después de 3 s no queda «IA» en pantalla) | Abierto, igual que H8b | Lo cubren el rótulo del cuadro 0, el pie y la etiqueta de IG |
+| B9 (`__pycache__` fuera de la carpeta) | No aplica | `.gitignore` ya lo ignora; no entra a git |
+| B1-B5, B8 | Aceptados | Siglas bajo los puntos (se pisarían), textos chicos legibles, aros que rozan la mandíbula, pie sin saltos de línea |
+
+El pie pasó de 2.147 a 2.193 caracteres (tope 2.200). `index.html` no cambió (md5 `391c281b…d033`, el pie no entra al render), así que el master es el mismo.
+
 ## Lo que se vio (preview 360p real y master v1.1)
 
 Mirado: preview 360p real (3 hojas de 10 cuadros a 2 fps = los 30 cuadros, `qa/preview-360p-hoja-*.jpg`) antes del master; del master, las mismas 3 hojas a 400 px (`qa/contacto-2fps-*.jpg`, más la de 30 en una sola, `qa/contacto-2fps.jpg`) y a resolución completa los cuadros 0, 24, 72 (entrada de R3), 108, 126 (aro de la ventana a medio trazo), 144 (los tres aros), 160, 216, 288, 350 (el gráfico completo) y 359 (CTA), en `qa/cuadros/`.
@@ -153,7 +170,7 @@ El render no es reproducible bit a bit entre máquinas (el `index.html` sí). En
 
 ## Dudas abiertas y qué falta
 
-1. **Revisor y verificador:** los pone la madre. Ningún resultado de este README es aprobación visual ni permiso de publicar («mostrada, publicá el viernes»). Falta copiar el master a `videos/lucia-entrega/` cuando se apruebe. La revisión 1 es de la v1: la v1.1 necesita su propia revisión (sobre todo H6, la densidad, y la leyenda de 36 px).
+1. **Revisor y verificador:** hechos por la sesión Lucía el 11-oct (ver «Revisión 2»); falta que la madre decida M3 y M4 y escriba «mostrada, publicá el viernes». (Antes: los pone la madre.) Ningún resultado de este README es aprobación visual ni permiso de publicar («mostrada, publicá el viernes»). Falta copiar el master a `videos/lucia-entrega/` cuando se apruebe. La revisión 1 es de la v1: la v1.1 necesita su propia revisión (sobre todo H6, la densidad, y la leyenda de 36 px).
 2. **Voz: NO existe** (cronograma estimado; ver arriba). Cupo de voz: 223 de 381. «Parecido alto.» es una desviación del encargo (decisión H7).
 3. **Densidad de la placa:** 46 palabras en 8,4 s (5,5 palabras/s). Si el revisor la quiere más liviana, la leyenda de las fotos oficiales (7 palabras) es lo primero que sale sin tocar la corrección de H1: queda el piso solo en la fila del promedio y el contexto va en el pie.
 4. **El 0,74 puede leerse como «sin las fotos recibidas igual pasa el piso»** (es cierto) y debilitar el «casi copia». Está dicho con su aclaración en el pie; en pantalla la banda de las fotos oficiales (0,51 a 0,72) y el 0,93 con R3 por encima de cualquier pareja real sostienen el «casi copia».

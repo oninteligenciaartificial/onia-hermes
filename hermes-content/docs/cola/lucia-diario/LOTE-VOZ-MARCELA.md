@@ -14,6 +14,7 @@
 
 | Pieza | Líneas | Caracteres | ≈ Segundos hablados | ¿Cabe en 381? | Recorte para caber |
 |---|---:|---:|---:|---|---|
+| **Reel viernes** «Casi publico este 0,83» (`videos/lucia-viernes-copia-v1/`, v1.1; sale el vie 16-oct) | 8 | **223** (sin saltos finales) | 13,1 | **Sí, sobran 158** (alcanza una retoma completa) | — (la línea «Mirá la foto que recibió.» y el CTA se retemporizan con `scripts/voz.mjs` y `retemporizar.mjs`; antes de generar, L5 «mucho más alto» se cambia a «más alto», B6 de su revisión) |
 | **P9** «¿La cara o la escena?» (`videos/lucia-p9-luz-cara/`, v3.1) | 7 | **311** (305 sin saltos) | 18,3 | **Sí, sobran 70** | — (guion final: sin decimales hablados; L4 de 96 car no admite retoma; el cronograma tiene 0,05 s de margen y pide ≥ 16,85 car/s) |
 | **G3 v2** «Tres errores que casi publico» | 12 | 412 | 24,2 | No (faltan 31) | −8 % (31+ car) |
 | **G2 v2** «Misma orden, seis clips» | 14 | 415 | 24,4 | No (faltan 34) | −9 % |
@@ -26,7 +27,7 @@ Conteos: `python3` sobre cada `guion-voz.txt` (líneas no vacías, `con_saltos`)
 
 ## Lo que propongo (recomendación, elegí vos)
 
-**Lote 1 — con el cupo que vence el 13-oct 01:17 UTC:** una sola pieza.
+**Lote 1 — con el cupo que vence el 13-oct 01:17 UTC:** una sola pieza. **Actualización 11-oct ~13:30 UTC:** conviene que sea el **reel del viernes** (223 car, sale el 16-oct según `ORDEN-DE-POSTEO-LUCIA.md`): deja 158 de margen para una retoma, a diferencia de G3 recortada (381 de 381, una sola toma). G3 pasó al 30-oct y puede esperar la renovación. Lo que sigue de este párrafo queda como plan B si la madre prefiere mantener a G3 el 16-oct.
 - **Si el cupo se pierde al renovar:** conviene gastar los 381 en **la pieza que sale primero con voz, G3 v2** (viernes 16-oct, `ORDEN-DE-POSTEO-LUCIA.md`), recortada a ≤ 375 caracteres (−37 car, −9 %). Sin margen de retoma: una sola toma.
 - **Si el cupo sobrante pasa al período nuevo o la renovación es grande:** no apurar nada; se voza G3 completa con la cifra renovada.
 - **P9 (304)** cabe sin recortar, pero sale recién el 30-oct y su guion todavía puede cambiar por la revisión: no es la mejor inversión de un cupo que vence.
