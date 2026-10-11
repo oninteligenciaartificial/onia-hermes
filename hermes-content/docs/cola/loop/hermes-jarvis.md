@@ -392,7 +392,7 @@ carril puede hacer solo. Q1 espera `aplicar` (ver «Bloqueado»).
     `getRequestMeta`; los tests no prueban el rollback ni el 500; la política de privacidad no dice que guarda la IP.
   - Merge con `master`: sin conflicto.
 
-  Sin mirar todavía: #70 (documentación de septiembre) y, en este repo, #195, #143 y #40. (#132 ya está abajo, en E6.)
+  Sin mirar todavía: #70 (documentación de septiembre) y, en este repo, los docs de #195 (sus scripts están en E7), #143 y #40. (#132 está en E6.)
 - [x] **E6 Revisar #132 (K1, la respuesta al recordatorio: confirmar / cancelar / reprogramar)** (latido del 11-oct, 06:12-06:25 UTC;
   head `0abc65d5`, base `master` `32c7e0e8`, que ya se movió: `master` va en `c94b9daa`). `modelos: ninguno (113 líneas de código, las leí yo)`
   · `codex: ninguno`. Solo lectura, sin merge ni comentario en el PR.
@@ -414,6 +414,27 @@ carril puede hacer solo. Q1 espera `aplicar` (ver «Bloqueado»).
     hasta que alguien lo llame). Y hoy **nadie lo llama**: `CLAUDE.md` «Construido ≠ terminado». Sin cablear no hay valor ni riesgo.
   - Pregunta para quien lo cablee: ¿una cuenta en solo lectura (C13) puede cancelar por respuesta? El PR no lo dice.
   - Veredicto: el código no tiene HIGH. Se puede mergear con los dos MEDIUM anotados como condición del PR que lo conecte.
+- [x] **E7 Revisar los scripts de #195 (madre v4)** (latido del 11-oct, 06:25-06:35 UTC; head `a235f213`). `modelos: ninguno (180 líneas, las
+  leí yo)` · `codex: ninguno`. Solo leí `scripts/billetera-tokens.mjs`, `codex-worktree.sh` y `codex-cupo.mjs`; **no miré los otros ~50
+  archivos del PR (docs, imágenes)**, salvo la regla del 10-oct que se cita abajo. Corrí lo que se podía correr desde la nube.
+  - `codex-cupo.mjs --self-test`: «self-test OK», exit 0. Solo lee, no escribe.
+  - Descartado midiendo: que `billetera-tokens.mjs` cuente de menos los tokens de salida por tomar la primera línea de cada `message.id`.
+    En mi transcript (1.010 ids, 669 con más de una línea) el `output_tokens` es igual en todas las líneas del mismo id.
+  - LOW: sin el id de sesión, `billetera-tokens.mjs` imprime igual «contexto actual madre v4 ≈ 211k» (medido acá). `p.includes('')` es
+    siempre verdadero, así que toma el último uso del último archivo leído, que no es el de la madre. Debería imprimir `?` si falta el id.
+  - LOW: `codex-worktree.sh liberar` borra `*.<slug>`; con ramas que llevan punto, `liberar x` también suelta `ejecutor.foo.x`.
+    Mejor prefijar `ejecutor.` y `verificador.`.
+  - LOW: el cupo se toma al final (paso 5), después de crear el worktree: dos lanzamientos a la vez pasan los dos el chequeo del paso 1.
+    Y si `mklink` o `sha1sum` fallan con `set -e`, el worktree queda creado y sin cupo; el siguiente intento da «ya existe» (exit 5).
+  - LOW: el junction elige el `node_modules` por el hash de `package-lock.json`, no por `prisma/schema.prisma`. Tres PRs de onia-platform
+    (#113, #137 y #140) dicen que su typecheck falla «por el cliente Prisma compartido». El script automatiza esa causa; al menos que avise
+    «el typecheck local puede dar falsos rojos por Prisma; el CI manda».
+  - LOW: `codex-cupo.mjs` ejecuta `main()` al importarse (exporta `lastRateLimits` y `describe`) y su `--self-test` no está en ninguna suite del CI.
+  - **MEDIUM (docs, para la madre):** `handoff/madre-local.md:21` trae una regla del 10-oct («todo lo que sale afuera se le MUESTRA antes a
+    Sergio Urcullo y sale con su OK») que **no está en `CLAUDE.md`**. Este dice (9-oct y «Contenido en redes», 8-oct) «se sube nomás». Toda
+    sesión nueva lee `CLAUDE.md`, no el handoff de la madre: publicaría sin mostrar. Hay que decidir cuál rige y editar el otro en origen.
+    Misma línea: pide no pushear a onia-platform «de :20 a :10», y `equipo-de-agentes` dice «de :20 a :55»; una de las dos tiene un typo.
+  - Veredicto: nada que bloquee el merge de los scripts. La contradicción de reglas sí merece resolverse antes de que lo lea otra sesión.
 - [ ] **E4 Volver a mirar #136 cuando entren sus arreglos.** Los dos HIGH de E3 y el comando de las migraciones. **Hecho:**
   cada HIGH cerrado con su prueba, leído en el código de la cabeza nueva.
 
@@ -421,6 +442,8 @@ carril puede hacer solo. Q1 espera `aplicar` (ver «Bloqueado»).
 
 (Lo que este carril encuentra y le toca a otro dueño. La madre lo reparte en su ronda.)
 
+- **Madre** · Dos reglas opuestas sobre publicar: `CLAUDE.md` (9-oct) «se sube nomás» y `handoff/madre-local.md:21` (#195, 10-oct 20:25 UTC)
+  «todo lo que sale se le MUESTRA antes a Sergio Urcullo». Solo la segunda es posterior, pero solo la primera la lee cada sesión. Detalle en E7.
 - **Sergio Urcullo (decisión)** · La web `onia.com.bo` está de vos/tú de punta a punta («Creá tu cuenta», «tu negocio») y el
   clic lleva al alta de la app, que ya es de usted. Es un solo flujo con dos tratos. `CLAUDE.md` deja esa decisión a él.
   `/terminos` y `/privacidad` también: los textos legales van por Leslie Mercado Moreno.
