@@ -375,3 +375,21 @@ Fuente: `research/competencia/LUCIA_COMPETENCIA_20261005.md`.
   la lista de `editor-videos`.
 - **La métrica `src=lucia-*` en `onia.com.bo/llamada` (v3):** la ruta nunca existió. Antes de fijar una puerta, se
   prueba con `curl`.
+
+## 10. Qué podría venderse con lo aprendido de Higgsfield (PROPUESTA del 11-oct; NO se ejecuta)
+
+> Dirección de Sergio Urcullo vía la madre v4: «Lucía sigue aprendiendo Higgsfield para venderlo y ser una modelo AI independiente».
+> Esto reemplaza al «que venda Onia Platform» del 10-oct. Es una propuesta con números; no abre ninguna línea ni gasta nada.
+
+| Vía | Qué sería | Qué lo respalda (medido) | Qué falta | ¿Encaja con «Onia vende software, nunca horas»? |
+|---|---|---|---|---|
+| **Guía o curso** «Mantener la cara de un personaje IA» | Método de referencias, control de cara, tabla de costos y trampas, con plantillas | 6 motores de imagen y 6 de video con costo y parecido; control ArcFace (piso 0,70, ruido ±0,03); fondos y manos revisados | Audiencia, prueba de demanda, empaque y precio | **Sí**: se vende una vez, sin horas por cliente |
+| **Servicio** de personaje IA para marcas | Un personaje con cara estable y N piezas al mes | Foto 1 cr, clip de 6 s 7,5 cr, edición con HyperFrames 0 cr | Términos comerciales de Higgsfield (**no los leí**), voz cruceña (D4 sigue abierta), horas de revisión | **Solo** como producto cerrado, precio fijo por pieza. Con horas de Sergio Urcullo es consultoría |
+| **Colaboración** (Lucía muestra marcas) | Pieza patrocinada con la modelo IA | Cara estable (0,80 o más en foto), 8 piezas listas | La cuenta no publicó nada y no tiene seguidores: no hay alcance que ofrecer | Sí, pero sin audiencia no hay a quién vendérsela |
+
+- **Orden que recomiendo:** 1) publicar y medir 14 días; 2) probar demanda barato (¿preguntan «cómo lo hacés»?, ¿guardan y envían?); 3) recién ahí elegir. Si hubiera que
+  elegir hoy, la guía: es la única con costo marginal cero y la única que ya tiene el contenido hecho (G1 a G5, C1, C2).
+- **Antes de vender cualquier cosa:** (a) leer los términos comerciales de Higgsfield; (b) `CLAUDE.md` dice que **no se abre una línea nueva** y que el influencer no pasa el test de tres
+  preguntas: lo decide Sergio Urcullo con la cuenta delante, no esta sesión; (c) etiqueta IA siempre y cero promesas de resultado; (d) nada con `@lu.antelo` ni con caras de personas reales;
+  (e) sin voz hasta resolver D4: Marcela tiene acento colombiano.
+- **La puerta de medición no existe:** `onia.com.bo/llamada` da 404 (medido el 11-oct). Cualquier métrica «demos con `src=lucia-*`» necesita otra puerta primero.

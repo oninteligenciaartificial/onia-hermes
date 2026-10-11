@@ -4,6 +4,7 @@
 > publica ni se genera —tampoco en lote chico— sin que la madre se lo muestre antes y escriba **«mostrada, publicá <pieza>»**. Esto restringe,
 > no autoriza. Estado: **G1 ya mostrada** (`g1-final-1080x1920.mp4`, SHA 5903cd9c…) y **espera su OK**. Mi revisión «¿vende Onia Platform?» **no
 > cambió G1 ni el orden de entrega**: son propuestas, no piezas hechas. Nada está en «LISTA PARA MOSTRAR» porque no hay nada nuevo que mostrar.
+> **G1 con voz:** la madre le pone la voz Marcela (ElevenLabs, aprobado por Sergio Urcullo) y avisará el SHA del archivo; entonces actualizo la tabla de entrega. Ojo: mi nota D4 dice que Marcela tiene acento colombiano.
 
 - [~] ~~G1 con la captura real de Pendientes de la demo~~ — **reemplazada por la premisa v5** (Sergio Urcullo, 8-oct: *«Lucía no
   es necesario que muestres el producto… grabar y aprender a usar Higgsfield es tu tarea»*). G1 salió sin producto:
@@ -13,6 +14,11 @@
 - [ ] Publicar en la cuenta de Lucía lo que pase el control de identidad — **pasa a Bloqueado** (abajo): corre en el VPS.
 
 ## Dirección de Sergio Urcullo · 10-oct (vía la madre): que Lucía venda Onia Platform y sea influencer
+
+> **SUPERADA por la madre v4 (~01:30 UTC del 11-oct), con las palabras de Sergio Urcullo: «Lucía sigue aprendiendo Higgsfield para venderlo y ser una modelo AI
+> independiente».** No se reconvierten G1, C1 ni L01 a vender Onia Platform, y el CTA de G1 se mantiene («Seguime: cada semana, una prueba»). Sigue **vigente el apartado 2**
+> (técnica de Higgsfield). El apartado 1 queda como evidencia de lo que el catálogo deja decir, por si la dirección vuelve. Qué podría venderse con lo aprendido:
+> skill `lucia` §10, como propuesta sin ejecutar.
 
 > Literal, relayado por la madre: «quiero ver las piezas de Lucía y que tengan sentido, ya que la idea es que venda Onia Platform y que
 > sea influencer, y hasta ahora no perfeccionás tu técnica con Higgsfield». Choca en la letra con el 8-oct («no es necesario que muestres
