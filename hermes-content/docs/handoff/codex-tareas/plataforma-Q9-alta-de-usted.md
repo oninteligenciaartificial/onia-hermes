@@ -1,7 +1,7 @@
 ---
 id: plataforma-Q9
 carril: plataforma
-estado: pendiente   # pendiente | lanzada | PR | hecha | bloqueada
+estado: bloqueada   # pendiente | lanzada | PR | hecha | bloqueada
 modelo: gpt-6.1-sol # cambio chico de textos y de un test en el alta de clientes
 repo: onia-platform
 rama: codex/alta-negocio-de-usted
@@ -9,7 +9,7 @@ base: master        # medido sobre master d8ca5a32 (11-oct)
 pr:
 escrita: 2026-10-11 por Hermes-Jarvis (nube)
 actualizada: 2026-10-11 por Hermes-Jarvis (nube)
-nota: Contrato de Plataforma escrito por el carril QA tras mirar /register en producción. Otro PR abierto (#146) también edita `__tests__/voseo-ratchet.linea-base.json`: se lanza cuando ese PR haya entrado.
+nota: NO SE LANZA (madre DESARROLLO-INFRA, 11-oct): U4 `a024292d` lo cubre, sin verificar desde la nube. Se relanza solo si el paso 2 de /register sigue diciendo «tu» tras publicar. Contrato de Plataforma escrito por el carril QA tras mirar /register en producción. Otro PR abierto (#146) también edita `__tests__/voseo-ratchet.linea-base.json`: se lanza cuando ese PR haya entrado.
 ---
 # Q9 · El alta le habla de usted hasta en el rótulo del negocio (onia-platform)
 

@@ -291,10 +291,14 @@ carril puede hacer solo. Q1 espera `aplicar` (ver «Bloqueado»).
 - [ ] **L1 El chequeo de la web contra el producto, como script (Codex Luna, 11-oct, madre DESARROLLO-INFRA).** Q7 y Q8
   costaron ~40 min a mano. Contrato: `hermes-content/docs/handoff/codex-tareas/hermes-L1-web-vs-producto.md`. Lo lanza la
   madre. **Hecho:** su prueba en verde y el script reproduciendo la §3 y la §3.1 de `ONIA_PROMESA_VS_PRODUCTO.md`; después
-  se corre contra la web en vivo y se compara con lo escrito a mano.
-- [ ] **Q9b El alta de usted.** Contrato `handoff/codex-tareas/plataforma-Q9-alta-de-usted.md` (3 líneas de `SignupForm.tsx`). Lo lanza la
-  madre. **Hecho:** la prueba nueva en verde, y después de publicar, el paso 2 de `/register` sin «tu» (`mirar-publico.mjs`
-  más el clic en «Clínica dental»).
+  se corre contra la web en vivo y se compara con lo escrito a mano. La madre lo corre en la rama
+  `codex/hermes-qa-web-vs-producto`, que sale de esta (`claude/adoring-ramanujan-7sjzwv`), y avisa con el PR (11-oct ~06:20 UTC).
+- [ ] **Q9b El alta de usted.** ~~Contrato `handoff/codex-tareas/plataforma-Q9-alta-de-usted.md`~~ **No se lanza** (aviso de la madre
+  DESARROLLO-INFRA, 11-oct ~06:20 UTC): U4 (Codex, commit `a024292d`, rama `codex/usted-registro-y-entrada`) ya pasó `SignupForm.tsx`
+  a `voc.negocioSu` en las tres líneas. **Lo que yo pude comprobar desde la nube:** esa rama NO está en `origin` (solo en la PC de la
+  madre) y `master` `c94b9daa` sigue con `voc.negocio` en `:362`, `:403` y `:630`; el cambio no se vio. **Se cierra** cuando, después
+  de publicar, el paso 2 de `/register` no diga «tu» (`mirar-publico.mjs` más el clic en «Clínica dental»). Si dice «tu», el contrato
+  Q9 se relanza.
 - [ ] **C1-C3 Tres contratos Codex del diagnóstico y el QA diario** (11-oct, madre DESARROLLO-INFRA; `estado: pendiente`,
   los lanza la madre **después del merge de #194**, porque tocan lo que #194 agrega). Ninguno toca Plataforma ni el VPS.
   - `CODEX-CONTRATO: hermes-content/docs/handoff/codex-tareas/hermes-C1-latidos-mudo-test.md` (Luna): la frontera exacta
@@ -436,7 +440,9 @@ carril puede hacer solo. Q1 espera `aplicar` (ver «Bloqueado»).
     Misma línea: pide no pushear a onia-platform «de :20 a :10», y `equipo-de-agentes` dice «de :20 a :55»; una de las dos tiene un typo.
   - Veredicto: nada que bloquee el merge de los scripts. La contradicción de reglas sí merece resolverse antes de que lo lea otra sesión.
 - [ ] **E4 Volver a mirar #136 cuando entren sus arreglos.** Los dos HIGH de E3 y el comando de las migraciones. **Hecho:**
-  cada HIGH cerrado con su prueba, leído en el código de la cabeza nueva.
+  cada HIGH cerrado con su prueba, leído en el código de la cabeza nueva. **Aviso de la madre DESARROLLO-INFRA (11-oct ~06:20 UTC):** a las
+  07:12 UTC sale el draft PR de F136 (caja y odontograma, toca plata) y llega el pedido de revisión con **dos lentes: seguridad y dinero**.
+  Plan: un sonnet por lente sobre el diff, un haiku que verifica cada HIGH citando líneas, y los dos HIGH de E3 como lista de control.
 
 ## Hallazgos para otros
 
