@@ -1,15 +1,25 @@
 {
-  "titulo": "G2 v2 · La misma foto, seis clips: ¿quién pierde la cara? (re-corte de 26 s, sin aire muerto, listo para voz)",
-  "version": "v2 (11-oct-2026): re-corte de G2 con la regla de aire muerto. D-N1 (11-oct): se nombran las herramientas con su nombre real (uso propio, no recomendación pagada). Todos los tiempos salen de guion-voz.txt (tramos a 3,6 palabras/s, huecos de 6 cuadros); un tiempo escrito como «T6+0.8» es el inicio del tramo 6 más 0,8 s, «T7-6f» = 6 cuadros antes del inicio del tramo 7, «FIN» = el final del video. 0 créditos: mismos clips y la misma foto de G2.",
+  "titulo": "G2 v2 · ¿Quién pierde la cara? Seis clips con la misma orden (re-corte mudo, sin aire muerto, listo para voz; revisión 1 aplicada el 11-oct)",
+  "version": "v2.1 (11-oct-2026, revisión 1): re-corte de G2 con la regla de aire muerto. D-N1: se nombran las herramientas con su nombre real (uso propio, no recomendación pagada). Todos los tiempos salen de guion-voz.txt (scripts/voz.mjs: tramos a 17 CARACTERES por segundo, no a palabras; huecos de 6 cuadros); un tiempo escrito como «T6+0.8» es el inicio del tramo 6 más 0,8 s, «T7-6f» = 6 cuadros antes del inicio del tramo 7, «FIN» = el final del video. 0 créditos: mismos clips y la misma foto de G2.",
   "guion": "hermes-content/docs/cola/lucia-diario/guiones/G2-la-misma-foto-seis-clips.md",
   "voz": {
     "archivo": "guion-voz.txt",
-    "palabras_por_s": 3.6,
+    "cps": 17,
     "inicio_cuadros": 3,
     "hueco_cuadros": 6,
+    "gap_objetivo": 0.25,
+    "gap_max": 0.3,
     "max_caracteres": 450,
+    "cupo_hoy": 381,
+    "cupo_hasta": "13-oct 01:17 UTC",
     "min_palabras_por_linea": 3,
-    "cta_ventana_cuadros": 67
+    "cta_ventana_cuadros": 67,
+    "lectura_min_cuadros": {
+      "1": 38,
+      "2": 49,
+      "11": 59
+    },
+    "nota": "cps = caracteres por segundo (G1 v2: 320 caracteres ≈ 19 s ≈ 17). lectura_min_cuadros = tramos que se extienden (hueco ≤ 0,30 s) para que su tarjeta alcance el tiempo de lectura medido en el DOM."
   },
   "lienzo": {
     "w": 1080,
@@ -267,19 +277,19 @@
   "tarjetas": [
     {
       "id": "c1",
-      "texto": "Misma foto.",
-      "acento": "Seis clips.",
+      "texto": "¿Quién pierde",
+      "acento": "la cara?",
       "acento_t": 0.95,
       "a": 0,
-      "b": "T3-41f",
+      "b": "T2+2f",
       "escena": "gancho"
     },
     {
       "id": "c2",
-      "texto": "¿Quién pierde",
-      "acento": "la cara?",
-      "acento_t": 2.45,
-      "a": "T3-41f",
+      "texto": "Misma orden.",
+      "acento": "Seis clips.",
+      "acento_t": "T3-1.0",
+      "a": "T2+2f",
       "b": "T3",
       "escena": "gancho"
     },
@@ -323,7 +333,7 @@
       "texto": "Kling O3 · 6 créditos\n",
       "acento": "solo referencias",
       "a": "T9",
-      "b": "T10",
+      "b": "T10-3f",
       "escena": "m5",
       "motor": "m5"
     },
@@ -331,7 +341,7 @@
       "id": "c8",
       "texto": "Inventó",
       "acento": "el cuarto.",
-      "a": "T10",
+      "a": "T10-3f",
       "b": "T11",
       "escena": "m5"
     },
@@ -350,7 +360,7 @@
       "acento": "la escena.",
       "acento_t": "T12+0.8",
       "a": "T12",
-      "b": "T13",
+      "b": "T13-3f",
       "escena": "lección"
     },
     {
@@ -358,7 +368,7 @@
       "texto": "Una toma:",
       "acento": "es una prueba.",
       "acento_t": "T13+0.9",
-      "a": "T13",
+      "a": "T13-3f",
       "b": "T14",
       "escena": "lección"
     },
@@ -403,6 +413,11 @@
       "x0": 92,
       "y": 960,
       "cuadro": 90
+    },
+    "pastilla": {
+      "t": 0.85,
+      "y": 838,
+      "etiqueta": "parecido final:"
     }
   },
   "regla": {
@@ -523,14 +538,44 @@
       "y": 1070
     }
   },
-  "quitado_de_g2": [
+  "omitidos": [
     {
-      "que": "Kling 3.0 pro (9 cr, 1080p) y Seedance 2.0 Mini + referencias (6 cr, foto de inicio + 3 referencias, letrero inventado)",
-      "porque": "el contraste esencial cabe en 3 herramientas; con tres más la voz sumaría ~580 caracteres (estimado: ~50 por herramienta), sobre el tope de 450. Con ellas se quita la pastilla «1080p» (solo se veía en Kling 3.0 pro) y el aro del letrero (solo estaba en Seedance 2.0 Mini + referencias)."
+      "id": "m2",
+      "nombre": "Kling 3.0 pro",
+      "clave": "kling3_0_pro_9f43ee3c-7a7c-4059-85ec-6facb71b81e4",
+      "cr": 9,
+      "ini": 0.81,
+      "fin": 0.74,
+      "entrada": "foto"
     },
     {
-      "que": "Cinematic Studio 3.0 (20 cr, 4 s): placa del precio («5 créditos por segundo», «4×»)",
-      "porque": "no cabe: +55 caracteres de voz y +3 s dejarían el guion en ~490 caracteres (tope 450); el precio de cada herramienta que sí sale sigue en su tarjeta."
+      "id": "m4",
+      "nombre": "Seedance 2.0 Mini + referencias",
+      "clave": "seedance_2_0_mini_start_mas_3_refs_dd2d7c91-ea3a-46a8-a29d-3861143dfe9e",
+      "cr": 6,
+      "ini": 0.71,
+      "fin": 0.8,
+      "entrada": "foto + 3 referencias"
+    },
+    {
+      "id": "m6",
+      "nombre": "Cinematic Studio 3.0",
+      "clave": "cinematic_studio_3_0_4s_720p_cc8fa519-f8c2-49b5-bd4d-b3a1be52c875",
+      "cr": 20,
+      "ini": 0.79,
+      "fin": 0.77,
+      "entrada": "foto sola",
+      "t_fin": 3.85
+    }
+  ],
+  "quitado_de_g2": [
+    {
+      "que": "Kling 3.0 pro (9 cr, 1080p), Seedance 2.0 Mini + referencias (6 cr, foto de inicio + 3 referencias, letrero inventado) y Cinematic Studio 3.0 (20 cr, 4 s, foto sola)",
+      "porque": "no caben en 30 s con su tarjeta y su dato; con ellos la voz sumaría ~580 caracteres. Revisión 1 (H4): no pueden quedar insinuados sin decirse; el pie lleva UNA oración con sus tres números (0,81 a 0,74 · 0,71 a 0,80 · 0,79 a 0,77) y que no cupieron. Cinematic Studio 3.0 con la foto sola (20 cr) dio 0,79 a 0,77, dentro del ruido de ±0,03: ni el video ni el pie afirman que «la foto sola pierde la cara» como regla."
+    },
+    {
+      "que": "Placa del precio de Cinematic Studio 3.0 («5 créditos por segundo», «4×»)",
+      "porque": "no cabe: +55 caracteres de voz y +3 s. El precio de cada herramienta que sí sale sigue en su tarjeta y el de las tres que no salen, en el pie."
     },
     {
       "que": "Lección 1 (placa con tres arranques y tres finales) y barras de seis herramientas",

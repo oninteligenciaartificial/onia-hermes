@@ -84,3 +84,11 @@ body{font-family:"DM Sans",sans-serif;-webkit-font-smoothing:antialiased;text-re
 .tag.r{font-size:40px;padding:14px 30px}
 .ph{overflow:hidden;background:#0A0C11}
 .ph img{display:block;width:1080px;height:1920px;object-fit:cover}
+
+/* revisión 1 (H7): la O de «Kling O3» se leía como un cero («03») en Bricolage Grotesque. El «O3» va en DM Sans 500 (la O es un círculo; el cero es un óvalo angosto) con un contorno de 2 px
+   para igualar el peso de la tarjeta (700); en la placa de la lección el nombre ya es DM Sans 500 y no lleva contorno. Comparado a 2x contra el cero de «3.0». */
+.o3{font-family:"DM Sans",sans-serif;font-weight:500;-webkit-text-stroke:2px currentColor;letter-spacing:.01em}
+.rt .o3{-webkit-text-stroke:0;letter-spacing:0}
+
+/* revisión 1 (H2): la pastilla del RESULTADO del gancho es más grande que las pastillas de dato (es el número que tiene que verse antes de los 3 s) */
+.tag-g{font-size:46px;padding:16px 34px;gap:18px}

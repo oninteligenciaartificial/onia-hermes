@@ -1,21 +1,31 @@
 {
- "titulo": "G2 v2 · La misma foto, seis clips: ¿quién pierde la cara? (re-corte de 26 s, sin aire muerto, listo para voz)",
- "version": "v2 (11-oct-2026): re-corte de G2 con la regla de aire muerto. D-N1 (11-oct): se nombran las herramientas con su nombre real (uso propio, no recomendación pagada). Todos los tiempos salen de guion-voz.txt (tramos a 3,6 palabras/s, huecos de 6 cuadros); un tiempo escrito como «T6+0.8» es el inicio del tramo 6 más 0,8 s, «T7-6f» = 6 cuadros antes del inicio del tramo 7, «FIN» = el final del video. 0 créditos: mismos clips y la misma foto de G2.",
+ "titulo": "G2 v2 · ¿Quién pierde la cara? Seis clips con la misma orden (re-corte mudo, sin aire muerto, listo para voz; revisión 1 aplicada el 11-oct)",
+ "version": "v2.1 (11-oct-2026, revisión 1): re-corte de G2 con la regla de aire muerto. D-N1: se nombran las herramientas con su nombre real (uso propio, no recomendación pagada). Todos los tiempos salen de guion-voz.txt (scripts/voz.mjs: tramos a 17 CARACTERES por segundo, no a palabras; huecos de 6 cuadros); un tiempo escrito como «T6+0.8» es el inicio del tramo 6 más 0,8 s, «T7-6f» = 6 cuadros antes del inicio del tramo 7, «FIN» = el final del video. 0 créditos: mismos clips y la misma foto de G2.",
  "guion": "hermes-content/docs/cola/lucia-diario/guiones/G2-la-misma-foto-seis-clips.md",
  "voz": {
   "archivo": "guion-voz.txt",
-  "palabras_por_s": 3.6,
+  "cps": 17,
   "inicio_cuadros": 3,
   "hueco_cuadros": 6,
+  "gap_objetivo": 0.25,
+  "gap_max": 0.3,
   "max_caracteres": 450,
+  "cupo_hoy": 381,
+  "cupo_hasta": "13-oct 01:17 UTC",
   "min_palabras_por_linea": 3,
-  "cta_ventana_cuadros": 67
+  "cta_ventana_cuadros": 67,
+  "lectura_min_cuadros": {
+   "1": 38,
+   "2": 49,
+   "11": 59
+  },
+  "nota": "cps = caracteres por segundo (G1 v2: 320 caracteres ≈ 19 s ≈ 17). lectura_min_cuadros = tramos que se extienden (hueco ≤ 0,30 s) para que su tarjeta alcance el tiempo de lectura medido en el DOM."
  },
  "lienzo": {
   "w": 1080,
   "h": 1920,
   "fps": 24,
-  "duracion": 26.5
+  "duracion": 27.791666
  },
  "acento": "#10C26B",
  "alerta": "#FF7A66",
@@ -108,7 +118,7 @@
    "tipo": "foto",
    "src": "assets/k1.jpg",
    "a": 0,
-   "b": 3.4166666666666665,
+   "b": 3.75,
    "zoom": 1.05,
    "ox": 534,
    "oy": 555,
@@ -117,8 +127,8 @@
   {
    "id": "pl-regla",
    "tipo": "placa",
-   "a": 3.1666666666666665,
-   "b": 8.083333333333334,
+   "a": 3.5,
+   "b": 8.458333333333334,
    "capa": "placa de la regla: 5 de las 8 referencias, escala 0-1 y la marca en 0,70"
   },
   {
@@ -126,8 +136,8 @@
    "tipo": "clip",
    "src": "assets/m1.mp4",
    "media_inicio": 0,
-   "a": 7.833333333333334,
-   "b": 10.541666666666666,
+   "a": 8.208333333333334,
+   "b": 11,
    "capa": "Kling 3.0 std (clip 1), cuadros 0-64 (2,7 s a 1×); el cuadro 0 es la foto K1"
   },
   {
@@ -135,8 +145,8 @@
    "tipo": "clip",
    "src": "assets/m3.mp4",
    "media_inicio": 0,
-   "a": 10.291666666666666,
-   "b": 13.291666666666666,
+   "a": 10.75,
+   "b": 14.041666666666666,
    "capa": "Seedance 2.0 Mini (clip 3), cuadros 0-71 (3,0 s a 1×)"
   },
   {
@@ -144,15 +154,15 @@
    "tipo": "clip",
    "src": "assets/m5.mp4",
    "media_inicio": 0,
-   "a": 13.041666666666666,
-   "b": 17.125,
+   "a": 13.791666666666666,
+   "b": 18.25,
    "capa": "Kling O3 (clip 5), cuadros 0-97 (4,1 s a 1×)"
   },
   {
    "id": "pl-l",
    "tipo": "placa",
-   "a": 16.875,
-   "b": 23.708333333333332,
+   "a": 18,
+   "b": 25,
    "capa": "lección: los finales de Kling 3.0 std, Seedance 2.0 Mini y Kling O3 sobre la escala"
   },
   {
@@ -160,14 +170,14 @@
    "tipo": "clip",
    "src": "assets/m1.mp4",
    "media_inicio": 2.25,
-   "a": 23.458333333333332,
-   "b": 26.5,
+   "a": 24.75,
+   "b": 27.791666,
    "capa": "cierre: el clip K1 (el de Kling 3.0 std) del cuadro 54 (2,25 s) al 126 (5,25 s), con Lucía mirando a cámara; parecido medido cada 6 cuadros: 0,71-0,76, ninguno bajo 0,70"
   }
  ],
  "costuras": [
   {
-   "t": 3.4166666666666665,
+   "t": 3.75,
    "tipo": "empuje",
    "sale": [
     "foto",
@@ -183,7 +193,7 @@
    "porque": "foto + miniaturas → placa de la regla"
   },
   {
-   "t": 8.083333333333334,
+   "t": 8.458333333333334,
    "tipo": "empuje",
    "sale": [
     "pl-regla"
@@ -198,7 +208,7 @@
    "porque": "placa → Kling 3.0 std (el clip arranca en T-6 cuadros)"
   },
   {
-   "t": 10.541666666666666,
+   "t": 11,
    "tipo": "empuje",
    "sale": [
     "m1"
@@ -213,7 +223,7 @@
    "porque": "Kling 3.0 std → Seedance 2.0 Mini"
   },
   {
-   "t": 13.291666666666666,
+   "t": 14.041666666666666,
    "tipo": "empuje",
    "sale": [
     "m3"
@@ -228,7 +238,7 @@
    "porque": "Seedance 2.0 Mini → Kling O3"
   },
   {
-   "t": 17.125,
+   "t": 18.25,
    "tipo": "empuje",
    "sale": [
     "m5"
@@ -243,7 +253,7 @@
    "porque": "Kling O3 → lección"
   },
   {
-   "t": 23.708333333333332,
+   "t": 25,
    "tipo": "empuje",
    "sale": [
     "pl-l"
@@ -268,11 +278,11 @@
  "tarjetas": [
   {
    "id": "c1",
-   "texto": "Misma foto.",
-   "acento": "Seis clips.",
+   "texto": "¿Quién pierde",
+   "acento": "la cara?",
    "acento_t": 0.95,
    "a": 0,
-   "b": 1.7083333333333333,
+   "b": 1.7916666666666665,
    "escena": "gancho",
    "n_palabras": 4,
    "min_s": 1.7,
@@ -280,133 +290,133 @@
   },
   {
    "id": "c2",
-   "texto": "¿Quién pierde",
-   "acento": "la cara?",
-   "acento_t": 2.45,
-   "a": 1.7083333333333333,
-   "b": 3.4166666666666665,
+   "texto": "Misma orden.",
+   "acento": "Seis clips.",
+   "acento_t": 2.75,
+   "a": 1.7916666666666665,
+   "b": 3.75,
    "escena": "gancho",
    "n_palabras": 4,
    "min_s": 1.7,
-   "entra": 1.6666666666666665
+   "entra": 1.7499999999999998
   },
   {
    "id": "c3",
    "texto": "Se mide contra",
    "acento": "8 fotos suyas.",
-   "acento_t": 4.616666666666666,
-   "a": 3.4166666666666665,
-   "b": 6.458333333333333,
+   "acento_t": 4.95,
+   "a": 3.75,
+   "b": 6.666666666666667,
    "escena": "regla",
    "n_palabras": 6,
    "min_s": 2.4,
-   "entra": 3.1666666666666665
+   "entra": 3.5
   },
   {
    "id": "c4",
    "texto": "Mi piso:",
    "acento": "0,70.",
-   "a": 6.458333333333333,
-   "b": 8.083333333333334,
+   "a": 6.666666666666667,
+   "b": 8.458333333333334,
    "escena": "regla",
    "n_palabras": 3,
    "min_s": 1.35,
-   "entra": 6.416666666666666
+   "entra": 6.625
   },
   {
    "id": "c5",
    "texto": "Kling 3.0 std\n",
    "acento": "7,5 créditos",
-   "a": 8.083333333333334,
-   "b": 10.541666666666666,
+   "a": 8.458333333333334,
+   "b": 11,
    "escena": "m1",
    "motor": "m1",
    "n_palabras": 5,
    "min_s": 2.05,
-   "entra": 7.833333333333334
+   "entra": 8.208333333333334
   },
   {
    "id": "c6",
    "texto": "Seedance 2.0 Mini\n",
    "acento": "6 créditos",
-   "a": 10.541666666666666,
-   "b": 13.291666666666666,
+   "a": 11,
+   "b": 14.041666666666666,
    "escena": "m3",
    "motor": "m3",
    "n_palabras": 5,
    "min_s": 2.05,
-   "entra": 10.291666666666666
+   "entra": 10.75
   },
   {
    "id": "c7",
    "texto": "Kling O3 · 6 créditos\n",
    "acento": "solo referencias",
-   "a": 13.291666666666666,
-   "b": 15.75,
+   "a": 14.041666666666666,
+   "b": 16.541666666666668,
    "escena": "m5",
    "motor": "m5",
    "n_palabras": 6,
    "min_s": 2.4,
-   "entra": 13.041666666666666
+   "entra": 13.791666666666666
   },
   {
    "id": "c8",
    "texto": "Inventó",
    "acento": "el cuarto.",
-   "a": 15.75,
-   "b": 17.125,
+   "a": 16.541666666666668,
+   "b": 18.25,
    "escena": "m5",
    "n_palabras": 3,
    "min_s": 1.35,
-   "entra": 15.708333333333334
+   "entra": 16.5
   },
   {
    "id": "c9",
    "texto": "Con referencias,",
    "acento": "la cara se sostiene.",
-   "acento_t": 18.325,
-   "a": 17.125,
-   "b": 19.583333333333332,
+   "acento_t": 19.45,
+   "a": 18.25,
+   "b": 20.708333333333332,
    "escena": "lección",
    "n_palabras": 6,
    "min_s": 2.4,
-   "entra": 16.875
+   "entra": 18
   },
   {
    "id": "c10",
    "texto": "Pero inventa",
    "acento": "la escena.",
-   "acento_t": 20.383333333333333,
-   "a": 19.583333333333332,
-   "b": 21.5,
+   "acento_t": 21.508333333333333,
+   "a": 20.708333333333332,
+   "b": 22.708333333333332,
    "escena": "lección",
    "n_palabras": 4,
    "min_s": 1.7,
-   "entra": 19.541666666666664
+   "entra": 20.666666666666664
   },
   {
    "id": "c11",
    "texto": "Una toma:",
    "acento": "es una prueba.",
-   "acento_t": 22.4,
-   "a": 21.5,
-   "b": 23.708333333333332,
+   "acento_t": 23.73333333333333,
+   "a": 22.708333333333332,
+   "b": 25,
    "escena": "lección",
    "n_palabras": 5,
    "min_s": 2.05,
-   "entra": 21.458333333333332
+   "entra": 22.666666666666664
   },
   {
    "id": "c12",
    "texto": "Seguime:",
    "acento": "cada semana, una prueba.",
-   "acento_t": 24.708333333333332,
-   "a": 23.708333333333332,
-   "b": 26.5,
+   "acento_t": 26,
+   "a": 25,
+   "b": 27.791666,
    "escena": "cierre",
    "n_palabras": 5,
    "min_s": 2.05,
-   "entra": 23.458333333333332
+   "entra": 24.75
   }
  ],
  "cadenas_de_tarjetas": [
@@ -440,26 +450,36 @@
    "x0": 92,
    "y": 960,
    "cuadro": 90
+  },
+  "pastilla": {
+   "t": 0.85,
+   "y": 838,
+   "etiqueta": "parecido final:",
+   "valor": "0,64 a 0,82",
+   "min_max_crudo": [
+    0.644,
+    0.824
+   ]
   }
  },
  "regla": {
   "refs": {
-   "a": 3.7166666666666663,
+   "a": 4.05,
    "escalon": 0.15,
    "lado": 160,
    "gap": 24,
    "x0": 92,
    "y": 470,
-   "etiqueta_t": 4.366666666666666,
+   "etiqueta_t": 4.7,
    "etiqueta_y": 652
   },
   "escala": {
-   "a": 5.333333333333333,
+   "a": 5.875,
    "d": 0.5,
    "y": 967,
-   "ejes_t": 5.783333333333333,
-   "uno_t": 6.083333333333333,
-   "marca_t": 6.758333333333333
+   "ejes_t": 6.325,
+   "uno_t": 6.625,
+   "marca_t": 6.966666666666667
   }
  },
  "motores": [
@@ -472,8 +492,8 @@
    "ini": 0.79,
    "fin": 0.72,
    "t_fin": 5.9,
-   "tag_a": 8.183333333333334,
-   "tag_b": 8.733333333333334,
+   "tag_a": 8.558333333333334,
+   "tag_b": 9.108333333333334,
    "sello": null,
    "_valores": [
     0.791,
@@ -494,11 +514,11 @@
    "ini": 0.69,
    "fin": 0.64,
    "t_fin": 5.9,
-   "tag_a": 10.641666666666666,
-   "tag_b": 11.141666666666666,
+   "tag_a": 11.1,
+   "tag_b": 11.6,
    "sello": {
     "texto": "bajo el piso",
-    "t": 11.491666666666665
+    "t": 11.95
    },
    "_valores": [
     0.691,
@@ -519,8 +539,8 @@
    "ini": 0.8,
    "fin": 0.82,
    "t_fin": 5.9,
-   "tag_a": 13.391666666666666,
-   "tag_b": 13.991666666666665,
+   "tag_a": 14.141666666666666,
+   "tag_b": 14.741666666666665,
    "sello": null,
    "_valores": [
     0.798,
@@ -536,10 +556,10 @@
  "leccion": {
   "titulo": {
    "texto": "Parecido al final: 3 de los 6 clips",
-   "t": 17.275,
+   "t": 18.4,
    "y": 300
   },
-  "marca_t": 17.175,
+  "marca_t": 18.3,
   "marca_label_y": 392,
   "orden": [
    "m1",
@@ -550,7 +570,7 @@
    "y0": 540,
    "paso": 170,
    "alto": 80,
-   "t0": 17.475,
+   "t0": 18.6,
    "escalon": 0.3,
    "d": 0.5,
    "nombre_dy": 58
@@ -560,41 +580,71 @@
    "m3": "foto sola",
    "m5": "referencias"
   },
-  "resalte_t": 18.375,
+  "resalte_t": 19.5,
   "resalte_motores": [
    "m5"
   ],
   "cambios": [
    {
     "motor": "m5",
-    "t": 19.78333333333333,
+    "t": 20.90833333333333,
     "texto": "inventó el cuarto"
    },
    {
     "motor": "m3",
-    "t": 20.133333333333333,
+    "t": 21.258333333333333,
     "texto": "cambió el plano"
    },
    {
     "motor": "m1",
-    "t": 20.48333333333333,
+    "t": 21.60833333333333,
     "texto": "mantiene el cuarto"
    }
   ],
   "nota": {
-   "t": 18.925,
+   "t": 20.05,
    "texto": "Final = segundo 5,9, que no se ve entero.",
    "y": 1070
   }
  },
- "quitado_de_g2": [
+ "omitidos": [
   {
-   "que": "Kling 3.0 pro (9 cr, 1080p) y Seedance 2.0 Mini + referencias (6 cr, foto de inicio + 3 referencias, letrero inventado)",
-   "porque": "el contraste esencial cabe en 3 herramientas; con tres más la voz sumaría ~580 caracteres (estimado: ~50 por herramienta), sobre el tope de 450. Con ellas se quita la pastilla «1080p» (solo se veía en Kling 3.0 pro) y el aro del letrero (solo estaba en Seedance 2.0 Mini + referencias)."
+   "id": "m2",
+   "nombre": "Kling 3.0 pro",
+   "clave": "kling3_0_pro_9f43ee3c-7a7c-4059-85ec-6facb71b81e4",
+   "cr": 9,
+   "ini": 0.81,
+   "fin": 0.74,
+   "entrada": "foto"
   },
   {
-   "que": "Cinematic Studio 3.0 (20 cr, 4 s): placa del precio («5 créditos por segundo», «4×»)",
-   "porque": "no cabe: +55 caracteres de voz y +3 s dejarían el guion en ~490 caracteres (tope 450); el precio de cada herramienta que sí sale sigue en su tarjeta."
+   "id": "m4",
+   "nombre": "Seedance 2.0 Mini + referencias",
+   "clave": "seedance_2_0_mini_start_mas_3_refs_dd2d7c91-ea3a-46a8-a29d-3861143dfe9e",
+   "cr": 6,
+   "ini": 0.71,
+   "fin": 0.8,
+   "entrada": "foto + 3 referencias"
+  },
+  {
+   "id": "m6",
+   "nombre": "Cinematic Studio 3.0",
+   "clave": "cinematic_studio_3_0_4s_720p_cc8fa519-f8c2-49b5-bd4d-b3a1be52c875",
+   "cr": 20,
+   "ini": 0.79,
+   "fin": 0.77,
+   "entrada": "foto sola",
+   "t_fin": 3.85
+  }
+ ],
+ "quitado_de_g2": [
+  {
+   "que": "Kling 3.0 pro (9 cr, 1080p), Seedance 2.0 Mini + referencias (6 cr, foto de inicio + 3 referencias, letrero inventado) y Cinematic Studio 3.0 (20 cr, 4 s, foto sola)",
+   "porque": "no caben en 30 s con su tarjeta y su dato; con ellos la voz sumaría ~580 caracteres. Revisión 1 (H4): no pueden quedar insinuados sin decirse; el pie lleva UNA oración con sus tres números (0,81 a 0,74 · 0,71 a 0,80 · 0,79 a 0,77) y que no cupieron. Cinematic Studio 3.0 con la foto sola (20 cr) dio 0,79 a 0,77, dentro del ruido de ±0,03: ni el video ni el pie afirman que «la foto sola pierde la cara» como regla."
+  },
+  {
+   "que": "Placa del precio de Cinematic Studio 3.0 («5 créditos por segundo», «4×»)",
+   "porque": "no cabe: +55 caracteres de voz y +3 s. El precio de cada herramienta que sí sale sigue en su tarjeta y el de las tres que no salen, en el pie."
   },
   {
    "que": "Lección 1 (placa con tres arranques y tres finales) y barras de seis herramientas",
@@ -608,157 +658,269 @@
  "tramos": [
   {
    "i": 1,
-   "texto": "Misma foto, misma orden, seis clips.",
-   "palabras": 6,
-   "caracteres": 36,
-   "sf": 3,
-   "df": 40,
-   "t": 0.125,
-   "e": 1.7916666666666667,
-   "w": 2.0416666666666665
-  },
-  {
-   "i": 2,
    "texto": "¿Quién pierde la cara?",
    "palabras": 4,
    "caracteres": 22,
-   "sf": 49,
-   "df": 27,
-   "t": 2.0416666666666665,
-   "e": 3.1666666666666665,
-   "w": 3.4166666666666665
+   "voz_s": 1.2941176470588236,
+   "fuente": "estimada",
+   "pide": 38,
+   "sf": 3,
+   "tf": 38,
+   "df": 32,
+   "t": 0.125,
+   "e": 1.4583333333333333,
+   "w": 1.7083333333333333,
+   "ultimo": false,
+   "lecturaCorta": false,
+   "extendido": true,
+   "hueco_est": 0.28921568627450966
+  },
+  {
+   "i": 2,
+   "texto": "Seis clips con la misma orden.",
+   "palabras": 6,
+   "caracteres": 30,
+   "voz_s": 1.7647058823529411,
+   "fuente": "estimada",
+   "pide": 49,
+   "sf": 41,
+   "tf": 49,
+   "df": 43,
+   "t": 1.7083333333333333,
+   "e": 3.5,
+   "w": 3.75,
+   "ultimo": false,
+   "lecturaCorta": false,
+   "extendido": true,
+   "hueco_est": 0.27696078431372584
   },
   {
    "i": 3,
    "texto": "Se mide contra ocho fotos suyas.",
    "palabras": 6,
    "caracteres": 32,
-   "sf": 82,
-   "df": 40,
-   "t": 3.4166666666666665,
-   "e": 5.083333333333333,
-   "w": 5.333333333333333
+   "voz_s": 1.8823529411764706,
+   "fuente": "estimada",
+   "pide": 0,
+   "sf": 90,
+   "tf": 51,
+   "df": 45,
+   "t": 3.75,
+   "e": 5.625,
+   "w": 5.875,
+   "ultimo": false,
+   "lecturaCorta": false,
+   "extendido": false,
+   "hueco_est": 0.242647058823529
   },
   {
    "i": 4,
    "texto": "De cero a uno.",
    "palabras": 4,
    "caracteres": 14,
-   "sf": 128,
-   "df": 27,
-   "t": 5.333333333333333,
-   "e": 6.458333333333333,
-   "w": 6.708333333333333
+   "voz_s": 0.8235294117647058,
+   "fuente": "estimada",
+   "pide": 0,
+   "sf": 141,
+   "tf": 25,
+   "df": 19,
+   "t": 5.875,
+   "e": 6.666666666666667,
+   "w": 6.916666666666667,
+   "ultimo": false,
+   "lecturaCorta": false,
+   "extendido": false,
+   "hueco_est": 0.21813725490196134
   },
   {
    "i": 5,
    "texto": "Mi piso: cero setenta.",
    "palabras": 4,
    "caracteres": 22,
-   "sf": 161,
-   "df": 27,
-   "t": 6.708333333333333,
-   "e": 7.833333333333333,
-   "w": 8.083333333333334
+   "voz_s": 1.2941176470588236,
+   "fuente": "estimada",
+   "pide": 0,
+   "sf": 166,
+   "tf": 37,
+   "df": 31,
+   "t": 6.916666666666667,
+   "e": 8.208333333333334,
+   "w": 8.458333333333334,
+   "ultimo": false,
+   "lecturaCorta": false,
+   "extendido": false,
+   "hueco_est": 0.2475490196078436
   },
   {
    "i": 6,
-   "texto": "Kling tres, atado a la foto: pierde parecido.",
-   "palabras": 8,
-   "caracteres": 45,
-   "sf": 194,
-   "df": 53,
-   "t": 8.083333333333334,
-   "e": 10.291666666666666,
-   "w": 10.541666666666666
+   "texto": "Kling tres, foto sola: pierde parecido.",
+   "palabras": 6,
+   "caracteres": 39,
+   "voz_s": 2.2941176470588234,
+   "fuente": "estimada",
+   "pide": 0,
+   "sf": 203,
+   "tf": 61,
+   "df": 55,
+   "t": 8.458333333333334,
+   "e": 10.75,
+   "w": 11,
+   "ultimo": false,
+   "lecturaCorta": false,
+   "extendido": false,
+   "hueco_est": 0.2475490196078418
   },
   {
    "i": 7,
-   "texto": "Seedance Mini, también atado.",
+   "texto": "Seedance Mini, foto sola.",
    "palabras": 4,
-   "caracteres": 29,
-   "sf": 253,
-   "df": 27,
-   "t": 10.541666666666666,
-   "e": 11.666666666666666,
-   "w": 11.916666666666666
+   "caracteres": 25,
+   "voz_s": 1.4705882352941178,
+   "fuente": "estimada",
+   "pide": 0,
+   "sf": 264,
+   "tf": 41,
+   "df": 35,
+   "t": 11,
+   "e": 12.458333333333334,
+   "w": 12.708333333333334,
+   "ultimo": false,
+   "lecturaCorta": false,
+   "extendido": false,
+   "hueco_est": 0.23774509803921617
   },
   {
    "i": 8,
    "texto": "Queda bajo el piso.",
    "palabras": 4,
    "caracteres": 19,
-   "sf": 286,
-   "df": 27,
-   "t": 11.916666666666666,
-   "e": 13.041666666666666,
-   "w": 13.291666666666666
+   "voz_s": 1.1176470588235294,
+   "fuente": "estimada",
+   "pide": 0,
+   "sf": 305,
+   "tf": 32,
+   "df": 26,
+   "t": 12.708333333333334,
+   "e": 13.791666666666666,
+   "w": 14.041666666666666,
+   "ultimo": false,
+   "lecturaCorta": false,
+   "extendido": false,
+   "hueco_est": 0.21568627450980316
   },
   {
    "i": 9,
-   "texto": "Kling O tres, solo referencias: sostiene la cara.",
-   "palabras": 8,
-   "caracteres": 49,
-   "sf": 319,
-   "df": 53,
-   "t": 13.291666666666666,
-   "e": 15.5,
-   "w": 15.75
+   "texto": "Kling O tres, solo referencias: sostiene.",
+   "palabras": 6,
+   "caracteres": 41,
+   "voz_s": 2.411764705882353,
+   "fuente": "estimada",
+   "pide": 0,
+   "sf": 337,
+   "tf": 63,
+   "df": 57,
+   "t": 14.041666666666666,
+   "e": 16.416666666666668,
+   "w": 16.666666666666668,
+   "ultimo": false,
+   "lecturaCorta": false,
+   "extendido": false,
+   "hueco_est": 0.21323529411764852
   },
   {
    "i": 10,
    "texto": "Pero inventó el cuarto.",
    "palabras": 4,
    "caracteres": 23,
-   "sf": 378,
-   "df": 27,
-   "t": 15.75,
-   "e": 16.875,
-   "w": 17.125
+   "voz_s": 1.3529411764705883,
+   "fuente": "estimada",
+   "pide": 0,
+   "sf": 400,
+   "tf": 38,
+   "df": 32,
+   "t": 16.666666666666668,
+   "e": 18,
+   "w": 18.25,
+   "ultimo": false,
+   "lecturaCorta": false,
+   "extendido": false,
+   "hueco_est": 0.23039215686274517
   },
   {
    "i": 11,
-   "texto": "Con fotos de referencia, la cara se sostiene.",
-   "palabras": 8,
-   "caracteres": 45,
-   "sf": 411,
+   "texto": "Con referencias, la cara se sostiene.",
+   "palabras": 6,
+   "caracteres": 37,
+   "voz_s": 2.176470588235294,
+   "fuente": "estimada",
+   "pide": 59,
+   "sf": 438,
+   "tf": 59,
    "df": 53,
-   "t": 17.125,
-   "e": 19.333333333333332,
-   "w": 19.583333333333332
+   "t": 18.25,
+   "e": 20.458333333333332,
+   "w": 20.708333333333332,
+   "ultimo": false,
+   "lecturaCorta": false,
+   "extendido": true,
+   "hueco_est": 0.28186274509803866
   },
   {
    "i": 12,
    "texto": "Pero el motor inventa la escena.",
    "palabras": 6,
    "caracteres": 32,
-   "sf": 470,
-   "df": 40,
-   "t": 19.583333333333332,
-   "e": 21.25,
-   "w": 21.5
+   "voz_s": 1.8823529411764706,
+   "fuente": "estimada",
+   "pide": 0,
+   "sf": 497,
+   "tf": 51,
+   "df": 45,
+   "t": 20.708333333333332,
+   "e": 22.583333333333332,
+   "w": 22.833333333333332,
+   "ultimo": false,
+   "lecturaCorta": false,
+   "extendido": false,
+   "hueco_est": 0.242647058823529
   },
   {
    "i": 13,
-   "texto": "Una toma cada uno: es una prueba.",
+   "texto": "Una toma por clip: es una prueba.",
    "palabras": 7,
    "caracteres": 33,
-   "sf": 516,
-   "df": 47,
-   "t": 21.5,
-   "e": 23.458333333333332,
-   "w": 23.708333333333332
+   "voz_s": 1.9411764705882353,
+   "fuente": "estimada",
+   "pide": 0,
+   "sf": 548,
+   "tf": 52,
+   "df": 46,
+   "t": 22.833333333333332,
+   "e": 24.75,
+   "w": 25,
+   "ultimo": false,
+   "lecturaCorta": false,
+   "extendido": false,
+   "hueco_est": 0.22549019607843235
   },
   {
    "i": 14,
    "texto": "Seguime: cada semana, una prueba.",
    "palabras": 5,
    "caracteres": 33,
-   "sf": 569,
-   "df": 33,
-   "t": 23.708333333333332,
-   "e": 25.083333333333332,
-   "w": 26.5
+   "voz_s": 1.9411764705882353,
+   "fuente": "estimada",
+   "pide": 0,
+   "sf": 600,
+   "tf": 67,
+   "df": 47,
+   "t": 25,
+   "e": 26.958333333333332,
+   "w": 27.791666,
+   "ultimo": true,
+   "lecturaCorta": false,
+   "extendido": false,
+   "hueco_est": 0.8504901960784323
   }
  ],
  "lecturas": [
@@ -773,13 +935,23 @@
    "min": 2.4
   },
   {
+   "id": "pastilla",
+   "que": "gancho: resultado de los seis",
+   "texto": "parecido final: 0,64 a 0,82",
+   "n": 5,
+   "a": 0.85,
+   "b": 3.5,
+   "dur": 2.47,
+   "min": 2.05
+  },
+  {
    "id": "dA-m1",
    "que": "Kling 3.0 std dato A",
    "texto": "parecido 0 s: 0,79",
    "n": 4,
-   "a": 8.183333,
-   "b": 10.291667,
-   "dur": 1.928333,
+   "a": 8.558333,
+   "b": 10.75,
+   "dur": 2.011667,
    "min": 1.7
   },
   {
@@ -787,9 +959,9 @@
    "que": "Kling 3.0 std dato B",
    "texto": "5,9 s: 0,72",
    "n": 3,
-   "a": 8.733333,
-   "b": 10.291667,
-   "dur": 1.378333,
+   "a": 9.108333,
+   "b": 10.75,
+   "dur": 1.461667,
    "min": 1.35
   },
   {
@@ -797,9 +969,9 @@
    "que": "Seedance 2.0 Mini dato A",
    "texto": "parecido 0 s: 0,69",
    "n": 4,
-   "a": 10.641667,
-   "b": 13.041667,
-   "dur": 2.22,
+   "a": 11.1,
+   "b": 13.791667,
+   "dur": 2.511667,
    "min": 1.7
   },
   {
@@ -807,9 +979,9 @@
    "que": "Seedance 2.0 Mini dato B",
    "texto": "5,9 s: 0,64",
    "n": 3,
-   "a": 11.141667,
-   "b": 13.041667,
-   "dur": 1.72,
+   "a": 11.6,
+   "b": 13.791667,
+   "dur": 2.011667,
    "min": 1.35
   },
   {
@@ -817,9 +989,9 @@
    "que": "Seedance 2.0 Mini sello",
    "texto": "bajo el piso",
    "n": 3,
-   "a": 11.491667,
-   "b": 13.041667,
-   "dur": 1.37,
+   "a": 11.95,
+   "b": 13.791667,
+   "dur": 1.661667,
    "min": 1.35
   },
   {
@@ -827,9 +999,9 @@
    "que": "Kling O3 dato A",
    "texto": "parecido 0 s: 0,80",
    "n": 4,
-   "a": 13.391667,
-   "b": 15.57,
-   "dur": 1.998333,
+   "a": 14.141667,
+   "b": 16.361667,
+   "dur": 2.04,
    "min": 1.7
   },
   {
@@ -837,9 +1009,9 @@
    "que": "Kling O3 dato B",
    "texto": "5,9 s: 0,82",
    "n": 3,
-   "a": 13.991667,
-   "b": 15.57,
-   "dur": 1.398333,
+   "a": 14.741667,
+   "b": 16.361667,
+   "dur": 1.44,
    "min": 1.35
   },
   {
@@ -847,9 +1019,9 @@
    "que": "regla: etiqueta de las referencias",
    "texto": "5 de las 8 fotos de referencia",
    "n": 7,
-   "a": 4.366667,
-   "b": 7.833333,
-   "dur": 3.286667,
+   "a": 4.7,
+   "b": 8.208333,
+   "dur": 3.328333,
    "min": 2.75
   },
   {
@@ -857,9 +1029,9 @@
    "que": "lección: título",
    "texto": "Parecido al final: 3 de los 6 clips",
    "n": 8,
-   "a": 17.275,
-   "b": 23.458333,
-   "dur": 6.003333,
+   "a": 18.4,
+   "b": 24.75,
+   "dur": 6.17,
    "min": 3.1
   },
   {
@@ -867,9 +1039,9 @@
    "que": "lección: «mi piso»",
    "texto": "mi piso · 0,70",
    "n": 3,
-   "a": 17.225,
-   "b": 23.458333,
-   "dur": 6.053333,
+   "a": 18.35,
+   "b": 24.75,
+   "dur": 6.22,
    "min": 1.35
   },
   {
@@ -877,9 +1049,9 @@
    "que": "lección: nota del final",
    "texto": "Final = segundo 5,9, que no se ve entero.",
    "n": 8,
-   "a": 18.925,
-   "b": 23.458333,
-   "dur": 4.353333,
+   "a": 20.05,
+   "b": 24.75,
+   "dur": 4.52,
    "min": 3.1
   },
   {
@@ -887,9 +1059,9 @@
    "que": "lección: nombre Kling 3.0 std",
    "texto": "Kling 3.0 std",
    "n": 3,
-   "a": 17.475,
-   "b": 23.458333,
-   "dur": 5.803333,
+   "a": 18.6,
+   "b": 24.75,
+   "dur": 5.97,
    "min": 1.35
   },
   {
@@ -897,8 +1069,8 @@
    "que": "lección: rótulo Kling 3.0 std",
    "texto": "foto sola",
    "n": 2,
-   "a": 17.795,
-   "b": 20.483333,
+   "a": 18.92,
+   "b": 21.608333,
    "dur": 2.508333,
    "min": 1
   },
@@ -907,9 +1079,9 @@
    "que": "lección: rótulo Kling 3.0 std (cambia)",
    "texto": "mantiene el cuarto",
    "n": 3,
-   "a": 20.503333,
-   "b": 23.458333,
-   "dur": 2.775,
+   "a": 21.628333,
+   "b": 24.75,
+   "dur": 2.941667,
    "min": 1.35
   },
   {
@@ -917,9 +1089,9 @@
    "que": "lección: nombre Seedance 2.0 Mini",
    "texto": "Seedance 2.0 Mini",
    "n": 3,
-   "a": 17.775,
-   "b": 23.458333,
-   "dur": 5.503333,
+   "a": 18.9,
+   "b": 24.75,
+   "dur": 5.67,
    "min": 1.35
   },
   {
@@ -927,8 +1099,8 @@
    "que": "lección: rótulo Seedance 2.0 Mini",
    "texto": "foto sola",
    "n": 2,
-   "a": 18.095,
-   "b": 20.133333,
+   "a": 19.22,
+   "b": 21.258333,
    "dur": 1.858333,
    "min": 1
   },
@@ -937,9 +1109,9 @@
    "que": "lección: rótulo Seedance 2.0 Mini (cambia)",
    "texto": "cambió el plano",
    "n": 3,
-   "a": 20.153333,
-   "b": 23.458333,
-   "dur": 3.125,
+   "a": 21.278333,
+   "b": 24.75,
+   "dur": 3.291667,
    "min": 1.35
   },
   {
@@ -947,9 +1119,9 @@
    "que": "lección: nombre Kling O3",
    "texto": "Kling O3",
    "n": 2,
-   "a": 18.075,
-   "b": 23.458333,
-   "dur": 5.203333,
+   "a": 19.2,
+   "b": 24.75,
+   "dur": 5.37,
    "min": 1
   },
   {
@@ -957,8 +1129,8 @@
    "que": "lección: rótulo Kling O3",
    "texto": "referencias",
    "n": 1,
-   "a": 18.395,
-   "b": 19.783333,
+   "a": 19.52,
+   "b": 20.908333,
    "dur": 1.208333,
    "min": 0.65
   },
@@ -967,9 +1139,9 @@
    "que": "lección: rótulo Kling O3 (cambia)",
    "texto": "inventó el cuarto",
    "n": 3,
-   "a": 19.803333,
-   "b": 23.458333,
-   "dur": 3.475,
+   "a": 20.928333,
+   "b": 24.75,
+   "dur": 3.641667,
    "min": 1.35
   }
  ]

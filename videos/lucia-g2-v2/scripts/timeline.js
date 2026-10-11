@@ -41,6 +41,8 @@ for (const c of PLAN.tarjetas) {
 {
   const G = PLAN.gancho;
   for (let i = 0; i < G.n; i++) enter('#th' + (i + 1), G.a + i * G.esc, { x: 60, d: 0.28 });
+  // H2: el resultado antes de los 3 s («parecido final: 0,64 a 0,82»); viaja con la foto en el empuje de T3
+  enter('#pastilla', G.pastilla_t, { x: 60 });
 }
 
 // ── regla: cinco de las ocho referencias, la escala 0-1 se dibuja y la marca de 0,70 cae con «Mi piso: 0,70.»

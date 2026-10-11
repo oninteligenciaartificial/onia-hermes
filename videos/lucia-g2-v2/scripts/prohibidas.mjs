@@ -27,3 +27,17 @@ export const buscarProhibidas = (txt) => {
   const low = String(txt).toLowerCase();
   return PROHIBIDAS.filter((f) => low.includes(f.toLowerCase()));
 };
+
+// Revisión 1 (11-oct): el PIE nombra la plataforma de los créditos (Higgsfield) y con qué se mide (ArcFace): en el pie, y solo en el pie, esas dos dejan de estar prohibidas.
+// En la pantalla y en la voz siguen prohibidas (la pantalla muestra los tres nombres de herramienta; la voz dice «Kling», «Seedance Mini», «Kling O tres»).
+export const PERMITIDAS_EN_EL_PIE = ['higgsfield', 'arcface'];
+export const buscarProhibidasPie = (txt) => {
+  const low = String(txt).toLowerCase();
+  return PROHIBIDAS.filter((f) => !PERMITIDAS_EN_EL_PIE.includes(f.toLowerCase()) && low.includes(f.toLowerCase()));
+};
+// Revisión 1 (H4): ni el video, ni la voz, ni el pie afirman una REGLA general sobre la foto sola. Cinematic Studio 3.0 con la foto sola (20 cr) dio 0,79 a 0,77, dentro del ruido (±0,03).
+export const GENERALES = ['la foto sola pierde', 'foto sola siempre', 'siempre pierde', 'siempre baja', 'pagar más no', 'pagar mas no', 'pagar más nunca', 'toda foto sola'];
+export const buscarGenerales = (txt) => {
+  const low = String(txt).toLowerCase();
+  return GENERALES.filter((f) => low.includes(f));
+};

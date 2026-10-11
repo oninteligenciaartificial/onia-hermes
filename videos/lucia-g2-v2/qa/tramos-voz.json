@@ -1,0 +1,128 @@
+[
+ {
+  "n": 1,
+  "linea": "¿Quién pierde la cara?",
+  "chars": 22,
+  "a": 0.125,
+  "b": 1.7083333333333333,
+  "dura": 1.583333,
+  "ultimo": false
+ },
+ {
+  "n": 2,
+  "linea": "Seis clips con la misma orden.",
+  "chars": 30,
+  "a": 1.7083333333333333,
+  "b": 3.75,
+  "dura": 2.041667,
+  "ultimo": false
+ },
+ {
+  "n": 3,
+  "linea": "Se mide contra ocho fotos suyas.",
+  "chars": 32,
+  "a": 3.75,
+  "b": 5.875,
+  "dura": 2.125,
+  "ultimo": false
+ },
+ {
+  "n": 4,
+  "linea": "De cero a uno.",
+  "chars": 14,
+  "a": 5.875,
+  "b": 6.916666666666667,
+  "dura": 1.041667,
+  "ultimo": false
+ },
+ {
+  "n": 5,
+  "linea": "Mi piso: cero setenta.",
+  "chars": 22,
+  "a": 6.916666666666667,
+  "b": 8.458333333333334,
+  "dura": 1.541667,
+  "ultimo": false
+ },
+ {
+  "n": 6,
+  "linea": "Kling tres, foto sola: pierde parecido.",
+  "chars": 39,
+  "a": 8.458333333333334,
+  "b": 11,
+  "dura": 2.541667,
+  "ultimo": false
+ },
+ {
+  "n": 7,
+  "linea": "Seedance Mini, foto sola.",
+  "chars": 25,
+  "a": 11,
+  "b": 12.708333333333334,
+  "dura": 1.708333,
+  "ultimo": false
+ },
+ {
+  "n": 8,
+  "linea": "Queda bajo el piso.",
+  "chars": 19,
+  "a": 12.708333333333334,
+  "b": 14.041666666666666,
+  "dura": 1.333333,
+  "ultimo": false
+ },
+ {
+  "n": 9,
+  "linea": "Kling O tres, solo referencias: sostiene.",
+  "chars": 41,
+  "a": 14.041666666666666,
+  "b": 16.666666666666668,
+  "dura": 2.625,
+  "ultimo": false
+ },
+ {
+  "n": 10,
+  "linea": "Pero inventó el cuarto.",
+  "chars": 23,
+  "a": 16.666666666666668,
+  "b": 18.25,
+  "dura": 1.583333,
+  "ultimo": false
+ },
+ {
+  "n": 11,
+  "linea": "Con referencias, la cara se sostiene.",
+  "chars": 37,
+  "a": 18.25,
+  "b": 20.708333333333332,
+  "dura": 2.458333,
+  "ultimo": false
+ },
+ {
+  "n": 12,
+  "linea": "Pero el motor inventa la escena.",
+  "chars": 32,
+  "a": 20.708333333333332,
+  "b": 22.833333333333332,
+  "dura": 2.125,
+  "ultimo": false
+ },
+ {
+  "n": 13,
+  "linea": "Una toma por clip: es una prueba.",
+  "chars": 33,
+  "a": 22.833333333333332,
+  "b": 25,
+  "dura": 2.166667,
+  "ultimo": false
+ },
+ {
+  "n": 14,
+  "linea": "Seguime: cada semana, una prueba.",
+  "chars": 33,
+  "a": 25,
+  "b": 27.791666,
+  "dura": 2.791666,
+  "ultimo": true
+ }
+]
