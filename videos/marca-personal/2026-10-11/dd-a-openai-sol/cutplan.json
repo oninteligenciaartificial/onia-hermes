@@ -1,0 +1,308 @@
+{
+  "video": "/tmp/claude-0/-home-user-onia-hermes/0fd2553b-524b-53fe-9e97-5c1ac80566e6/scratchpad/brutos/B_F9630B16.mp4",
+  "modo": "audio",
+  "noise": "-35dB",
+  "minSil": 0.3,
+  "pad": 0.12,
+  "origDur": 78.47,
+  "finalDur": 58.42,
+  "silences": [
+    {
+      "start": 0,
+      "end": 0.933764
+    },
+    {
+      "start": 0.940907,
+      "end": 1.32333
+    },
+    {
+      "start": 3.92154,
+      "end": 4.23168
+    },
+    {
+      "start": 4.62132,
+      "end": 5.03585
+    },
+    {
+      "start": 7.42116,
+      "end": 7.86866
+    },
+    {
+      "start": 10.4624,
+      "end": 10.8597
+    },
+    {
+      "start": 13.5299,
+      "end": 15.4593
+    },
+    {
+      "start": 17.7975,
+      "end": 18.3014
+    },
+    {
+      "start": 20.6822,
+      "end": 21.0669
+    },
+    {
+      "start": 26.6465,
+      "end": 27.0392
+    },
+    {
+      "start": 31.3146,
+      "end": 33.8448
+    },
+    {
+      "start": 33.845,
+      "end": 34.3766
+    },
+    {
+      "start": 38.6853,
+      "end": 39.0647
+    },
+    {
+      "start": 42.8127,
+      "end": 43.2616
+    },
+    {
+      "start": 44.0455,
+      "end": 47.6551
+    },
+    {
+      "start": 51.76,
+      "end": 52.2812
+    },
+    {
+      "start": 53.2991,
+      "end": 53.7068
+    },
+    {
+      "start": 54.2651,
+      "end": 54.8624
+    },
+    {
+      "start": 55.858,
+      "end": 56.4141
+    },
+    {
+      "start": 57.4604,
+      "end": 57.9062
+    },
+    {
+      "start": 58.5913,
+      "end": 61.6662
+    },
+    {
+      "start": 64.3416,
+      "end": 64.707
+    },
+    {
+      "start": 67.3409,
+      "end": 67.7074
+    },
+    {
+      "start": 69.0141,
+      "end": 72.5585
+    },
+    {
+      "start": 74.4744,
+      "end": 74.8269
+    },
+    {
+      "start": 76.757,
+      "end": 78.482
+    }
+  ],
+  "keep": [
+    {
+      "start": 1.2,
+      "end": 4.04
+    },
+    {
+      "start": 4.11,
+      "end": 4.74
+    },
+    {
+      "start": 4.92,
+      "end": 7.54
+    },
+    {
+      "start": 7.75,
+      "end": 10.58
+    },
+    {
+      "start": 10.74,
+      "end": 13.65
+    },
+    {
+      "start": 15.34,
+      "end": 17.92
+    },
+    {
+      "start": 18.18,
+      "end": 20.8
+    },
+    {
+      "start": 20.95,
+      "end": 26.77
+    },
+    {
+      "start": 26.92,
+      "end": 31.43
+    },
+    {
+      "start": 34.26,
+      "end": 38.81
+    },
+    {
+      "start": 38.94,
+      "end": 42.93
+    },
+    {
+      "start": 43.14,
+      "end": 44.17
+    },
+    {
+      "start": 47.54,
+      "end": 51.88
+    },
+    {
+      "start": 52.16,
+      "end": 53.42
+    },
+    {
+      "start": 53.59,
+      "end": 54.39
+    },
+    {
+      "start": 54.74,
+      "end": 55.98
+    },
+    {
+      "start": 56.29,
+      "end": 57.58
+    },
+    {
+      "start": 57.79,
+      "end": 58.71
+    },
+    {
+      "start": 61.55,
+      "end": 64.46
+    },
+    {
+      "start": 64.59,
+      "end": 67.46
+    },
+    {
+      "start": 67.59,
+      "end": 69.13
+    },
+    {
+      "start": 72.44,
+      "end": 74.59
+    },
+    {
+      "start": 74.71,
+      "end": 76.88
+    }
+  ],
+  "ffmpeg": "ffmpeg -y -i \"/tmp/claude-0/-home-user-onia-hermes/0fd2553b-524b-53fe-9e97-5c1ac80566e6/scratchpad/brutos/B_F9630B16.mp4\" -vf \"select='between(t,1.2,4.04)+between(t,4.11,4.74)+between(t,4.92,7.54)+between(t,7.75,10.58)+between(t,10.74,13.65)+between(t,15.34,17.92)+between(t,18.18,20.8)+between(t,20.95,26.77)+between(t,26.92,31.43)+between(t,34.26,38.81)+between(t,38.94,42.93)+between(t,43.14,44.17)+between(t,47.54,51.88)+between(t,52.16,53.42)+between(t,53.59,54.39)+between(t,54.74,55.98)+between(t,56.29,57.58)+between(t,57.79,58.71)+between(t,61.55,64.46)+between(t,64.59,67.46)+between(t,67.59,69.13)+between(t,72.44,74.59)+between(t,74.71,76.88)',setpts=N/FRAME_RATE/TB\" -af \"aselect='between(t,1.2,4.04)+between(t,4.11,4.74)+between(t,4.92,7.54)+between(t,7.75,10.58)+between(t,10.74,13.65)+between(t,15.34,17.92)+between(t,18.18,20.8)+between(t,20.95,26.77)+between(t,26.92,31.43)+between(t,34.26,38.81)+between(t,38.94,42.93)+between(t,43.14,44.17)+between(t,47.54,51.88)+between(t,52.16,53.42)+between(t,53.59,54.39)+between(t,54.74,55.98)+between(t,56.29,57.58)+between(t,57.79,58.71)+between(t,61.55,64.46)+between(t,64.59,67.46)+between(t,67.59,69.13)+between(t,72.44,74.59)+between(t,74.71,76.88)',asetpts=N/SR/TB\" \"renders/cut.mp4\"",
+  "rows": [
+    {
+      "i": 0,
+      "start": 0.86,
+      "end": 8.3,
+      "text": "El modelo nuevo de OpenAI cobra 2 dólares por millón de token. El grande GPT 6 Astra cobra 10. Este modelo",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 1,
+      "start": 8.3,
+      "end": 13.48,
+      "text": "se llama GPT 6.1 Sol, lo presentaron el 29 de septiembre en su Dev Day.",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 2,
+      "start": 15.34,
+      "end": 22.92,
+      "text": "Los dos cobran lo que entra y lo que sale. Sol cobra 2 y Astra cobra 10. Y según OpenAI Sol se acerca",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 3,
+      "start": 22.92,
+      "end": 27.78,
+      "text": "Astra. Si tu bot usa Astra yo lo probaría con Sol antes de cambiarlo. Pero para investigación",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 4,
+      "start": 27.78,
+      "end": 34.9,
+      "text": "científica y programación te siguió recomendando Astra, pero hay una",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 5,
+      "start": 34.9,
+      "end": 39.3,
+      "text": "tarifa mucho más económica, la caché es lo que va igual al principio como tu",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 6,
+      "start": 39.3,
+      "end": 43.74,
+      "text": "lista de precios, si sale de la caché cuesta 10 centavos el millón, 20 veces",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 7,
+      "start": 43.74,
+      "end": 44.04,
+      "text": "menos.",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 8,
+      "start": 47.22,
+      "end": 52.4,
+      "text": "Tavo la cuenta, instrucciones y lista de precios 2.000 tokens por mensaje, por",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 9,
+      "start": 52.4,
+      "end": 62.68,
+      "text": "mil mensajes 2 millones, a 2 dólares el millón, 4 con caché, 20 centavos, o sea si tu negocio",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 10,
+      "start": 62.68,
+      "end": 68.16,
+      "text": "recibe 100 mil mensajes al mes con astra son 400 dólares en cambio que con sol son solo",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 11,
+      "start": 68.16,
+      "end": 76.76,
+      "text": "20 dólares, si queres que lo probemos en tu negocio asesoría gratis, link en mi perfil",
+      "keep": true,
+      "reason": "contenido"
+    }
+  ]
+}
