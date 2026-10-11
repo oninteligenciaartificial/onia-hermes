@@ -1,8 +1,8 @@
 {
   "_leer_primero": "Especificación EJECUTABLE de la campaña prueba 1. Los números y las reglas mandan en hermes-content/docs/ONIA_ADQUISICION_Y_PAUTA.md (§5.3 plata, §5.7 corte, §5.8 estructura, §5.10 go/no-go); este archivo los pone en la forma exacta de los parámetros del conector Meta_ads, y scripts/campana-lista.test.mjs los cruza con ese doc, con el bot y con el catálogo. Si cambia uno, cambia el otro en el mismo commit.",
-  "version": "2026-10-10",
-  "estado": "LISTA PARA CREAR. NO CREADA: leído el 11-oct en ONIA Ads, 0 campañas y 0 borradores, sin medio de pago, sin Instagram.",
-  "lista_para_mostrar": "hermes-content/carousels/briefs/ads/CAMPANA-PRUEBA-1-LISTA-PARA-MOSTRAR.md (los 3 creativos, el público, el presupuesto, el corte y el go/no-go del 13-oct en un archivo)",
+  "version": "2026-10-11-v2",
+  "estado": "LISTA PARA CREAR (prueba 1 v2). NO CREADA: leído el 11-oct en ONIA Ads, 0 campañas y 0 borradores, sin medio de pago, sin Instagram. Los 3 videos y la foto de G1-1, G1-3, G1-4 y G1-5 NO existen todavía: los graba Sergio Urcullo.",
+  "lista_para_mostrar": "hermes-content/carousels/briefs/ads/CAMPANA-PRUEBA-1-LISTA-PARA-MOSTRAR.md (público, presupuesto, corte y go/no-go; su §1 lo reemplaza prueba1-v2/LISTA-PARA-MOSTRAR-V2.md)",
   "ojo_con_el_conector": "En este conector crear NO deja nada en pausa: ads_create_campaign, ads_create_ad_set y ads_create_ad dejan BORRADORES (visibles en el Administrador) y ads_activate_entity los PUBLICA en ACTIVO, gastando. Por eso 'crear en pausa' = dejar el borrador; encender = el último paso, y solo con el OK escrito.",
   "no_se_crea_ni_se_enciende_sin": [
     {
@@ -31,14 +31,26 @@
         "G-11",
         "L-05"
       ],
-      "comprobacion": "ONIA_PROMESA_VS_PRODUCTO.md: las diez en ✅ con la cuenta de prueba. Las del TEXTO del anuncio: B-01 (agenda), C-02 (ficha con odontograma), D-01 (tratamientos), E-01 (cobros), B-02 (estado de confirmación), G-01 («nada sale sin que usted lo apruebe»), G-04 («cada mañana») y G-06 (el confirmador). G-11 y L-05 no las promete el texto (sin IA, sin «clínica de ejemplo»): las usa la demostración de la llamada",
+      "comprobacion": "ONIA_PROMESA_VS_PRODUCTO.md: las diez en ✅ con la cuenta de prueba. Las del TEXTO de las piezas v2 (cada brief las lista): B-01 (agenda), C-02 (ficha con odontograma), D-01 (tratamientos), E-01 (cobros), B-02 (estado de confirmación), G-01 («ningún mensaje de Pendientes sale sin que usted lo apruebe»), G-04 («cada mañana») y G-06 (quién tiene cita mañana y no confirmó). G-11 y L-05 no las promete el texto: las usa la demostración de la llamada. G-05 (Vuelve a citar) solo para G1-2: ver anuncios.esperan",
       "estado_10oct": "⬜ sin verificar: falta la cuenta demo"
     },
     {
       "id": "captura_nueva",
-      "comprobacion": "feed.png, story.png y el video de A1 re-renderizados con la captura de la cuenta demo (hoy llevan la del 30-sep) y SIN el botón «Enviar yo mismo por WhatsApp» en la tarjeta, o con G-03 en ✅: el envío con un toque está a medias (catálogo §7)",
+      "comprobacion": "las 4 piezas que entran re-renderizadas con la fila de Pendientes de la cuenta demo (hoy llevan la del 30-sep: replica-render.mjs --brief … --hoja …, media hora) y SIN el botón «Enviar yo mismo por WhatsApp» de la tarjeta, o con G-03 en ✅: el envío con un toque está a medias (catálogo §7)",
       "estado_10oct": "provisoria",
-      "estado_11oct": "el botón «Enviar yo mismo por WhatsApp» ya NO sale en feed, historia ni videos (recorte del mensaje, 11-oct); sigue provisoria: captura del candidato del 30-sep con el mensaje al paciente en voseo, a recapturar con la cuenta demo"
+      "estado_11oct": "provisoria: captura del candidato del 30-sep, con voseo y tuteo dentro de la pantalla; a recapturar con la demo (lun 12-oct)"
+    },
+    {
+      "id": "media_grabada",
+      "comprobacion": "existen, editados y vistos a 390 px, los 3 videos (G1-1 de 28 s 9:16, G1-4 de 31 s 9:16, G1-5 de 10 s 4:5) y la foto de G1-3 (1:1), en hermes-content/carousels/out/ads/prueba1-v2/<id>/. La maqueta usa su foto de perfil recortada: no sirve para subir",
+      "dueno": "Sergio Urcullo (su cara y su voz en un anuncio: su sí y el de Leslie Mercado Moreno, CLAUDE.md); la edición, sin gasto de IA, Ventas y pauta",
+      "estado_11oct": "no hay grabación: PARA-GRABAR.txt trae lo que dice, de usted, una frase por renglón"
+    },
+    {
+      "id": "eleccion_de_piezas",
+      "comprobacion": "Sergio Urcullo elige cuáles entran. Esta spec propone 4 (G1-4, G1-3, G1-5, G1-1) por orden de la madre; la crítica (opus) recomendó 3 porque repartir US$ 56 entre cinco no deja aprender nada. G1-2 solo si G-05 pasa a ✅ ANTES de crear: agregar un anuncio después es una edición significativa (reinicia el aprendizaje y abre otra revisión de ~24 h)",
+      "dueno": "Sergio Urcullo",
+      "estado_11oct": "sin elegir"
     },
     {
       "id": "bot",
@@ -193,48 +205,10 @@
       ]
     },
     {
-      "paso": 3,
+      "paso": "3.1",
       "herramienta": "ads_creative_upload_media",
-      "para": "A1-E",
-      "archivo": "hermes-content/carousels/out/ads/onia-platform-dental-meta-a1v5-las-diez/feed.png (1080x1350)",
-      "args": {
-        "ad_account_id": "1073680778314945",
-        "upload_source": "LOCAL_FILE"
-      },
-      "args_si_es_por_url": {
-        "ad_account_id": "1073680778314945",
-        "upload_source": "URL",
-        "media_type": "IMAGE",
-        "media_url": "{{URL_PUBLICA_hash_feed}}",
-        "name": "ONIA A1-E feed"
-      },
-      "como": "LOCAL_FILE abre la app interactiva (desde la PC, elige el archivo); por URL hace falta un enlace público directo",
-      "guarda": "hash_feed"
-    },
-    {
-      "paso": 3.1,
-      "herramienta": "ads_creative_upload_media",
-      "para": "A1-E",
-      "archivo": "hermes-content/carousels/out/ads/onia-platform-dental-meta-a1v5-las-diez/story.png (1080x1920)",
-      "args": {
-        "ad_account_id": "1073680778314945",
-        "upload_source": "LOCAL_FILE"
-      },
-      "args_si_es_por_url": {
-        "ad_account_id": "1073680778314945",
-        "upload_source": "URL",
-        "media_type": "IMAGE",
-        "media_url": "{{URL_PUBLICA_hash_story}}",
-        "name": "ONIA A1-E historia"
-      },
-      "como": "LOCAL_FILE abre la app interactiva (desde la PC, elige el archivo); por URL hace falta un enlace público directo",
-      "guarda": "hash_story"
-    },
-    {
-      "paso": 3.2,
-      "herramienta": "ads_creative_upload_media",
-      "para": "A1-V",
-      "archivo": "hermes-content/carousels/out/ads/onia-platform-dental-meta-a1v5-las-diez/onia-platform-dental-meta-a1v5-las-diez.mp4 (11 s, 1080x1920, sin audio)",
+      "para": "G1-4",
+      "archivo": "hermes-content/carousels/out/ads/prueba1-v2/G1-4/<video editado de la grabación de Sergio Urcullo>.mp4 (9:16, 31 s)",
       "args": {
         "ad_account_id": "1073680778314945",
         "upload_source": "LOCAL_FILE"
@@ -243,18 +217,18 @@
         "ad_account_id": "1073680778314945",
         "upload_source": "URL",
         "media_type": "VIDEO",
-        "media_url": "{{URL_PUBLICA_video_id}}",
-        "name": "ONIA A1-V Las 10:00"
+        "media_url": "{{URL_PUBLICA_video_G1_4}}",
+        "name": "ONIA G1-4 video"
       },
       "como": "LOCAL_FILE abre la app interactiva (desde la PC, elige el archivo); por URL hace falta un enlace público directo",
-      "guarda": "video_id",
-      "espera": "ads_get_ad_videos dice status ready antes del paso 4"
+      "guarda": "video_id_G1_4",
+      "espera": "ads_get_ad_videos dice status ready antes de crear el creativo"
     },
     {
-      "paso": 3.3,
+      "paso": "3.2",
       "herramienta": "ads_creative_upload_media",
-      "para": "A1-V",
-      "archivo": "hermes-content/carousels/out/ads/onia-platform-dental-meta-a1v5-las-diez/video-thumb.png (portada: una imagen o un hash es obligatorio)",
+      "para": "G1-4",
+      "archivo": "hermes-content/carousels/out/ads/prueba1-v2/G1-4/<portada del video: una imagen es obligatoria>.png",
       "args": {
         "ad_account_id": "1073680778314945",
         "upload_source": "LOCAL_FILE"
@@ -263,94 +237,239 @@
         "ad_account_id": "1073680778314945",
         "upload_source": "URL",
         "media_type": "IMAGE",
-        "media_url": "{{URL_PUBLICA_hash_portada}}",
-        "name": "ONIA A1-V portada"
+        "media_url": "{{URL_PUBLICA_hash_portada_G1_4}}",
+        "name": "ONIA G1-4 portada"
       },
       "como": "LOCAL_FILE abre la app interactiva (desde la PC, elige el archivo); por URL hace falta un enlace público directo",
-      "guarda": "hash_portada"
+      "guarda": "hash_portada_G1_4"
     },
     {
-      "paso": 4,
+      "paso": "3.3",
       "herramienta": "ads_create_creative",
-      "para": "A1-E",
+      "para": "G1-4",
       "args": {
         "ad_account_id": "1073680778314945",
         "page_id": "1140384625819526",
-        "name": "ONIA · A1-E · Las 10:00",
-        "message": "Para dueños y dueñas de clínicas dentales de Santa Cruz.\n\nUn paciente que no confirma es una silla que puede quedar vacía, y el alquiler, la asistente y su hora se pagan igual.\n\nOnia es un sistema de gestión para clínicas dentales: agenda, ficha con odontograma, tratamientos y cobros. Cada mañana le deja anotado a quién escribirle, con el mensaje listo, y nada sale sin que usted lo apruebe.\n\nEscríbanos por WhatsApp y pida su demostración gratis.",
+        "name": "ONIA · G1-4 · Sergio Urcullo de Onia explica: el paciente que no llega",
+        "message": "Para dueños y dueñas de clínicas dentales de Santa Cruz.\nCuando un paciente no llega, el sillón, el alquiler y el equipo se pagan igual: es plata que no entra.\nSoy Sergio Urcullo, de Onia. Onia es un sistema de gestión para clínicas dentales: en Pendientes, cada mañana le deja anotado a quién escribirle, con el mensaje listo.\nNingún mensaje de Pendientes sale sin que usted lo apruebe.\nEscríbanos por WhatsApp y pida su demostración gratis.",
         "headline": "Pida su demostración gratis",
         "call_to_action_type": "WHATSAPP_MESSAGE",
-        "link_url": "https://wa.me/{{NUMERO_DEL_BOT}}?text=Hola%2C%20vi%20el%20anuncio%20de%20Onia%20%28D1%29.%20Tengo%20una%20cl%C3%ADnica%20dental.",
-        "placement_customizations": [
-          {
-            "image_hash": "{{hash_feed}}"
-          },
-          {
-            "image_hash": "{{hash_story}}",
-            "publisher_platforms": [
-              "facebook"
-            ],
-            "facebook_positions": [
-              "story",
-              "facebook_reels"
-            ]
-          }
-        ]
+        "link_url": "https://wa.me/{{NUMERO_DEL_BOT}}?text=Hola%2C%20vi%20el%20anuncio%20de%20Onia%20%28D10%29.%20Tengo%20una%20cl%C3%ADnica%20dental.",
+        "video_id": "{{video_id_G1_4}}",
+        "image_hash": "{{hash_portada_G1_4}}"
       },
-      "nota": "Sin `instagram_user_id` (ONIA Ads no tiene Instagram vinculado): el anuncio sale solo por Facebook. El primer elemento de placement_customizations es el de respaldo (sin ubicaciones). self_ai_disclosure: no se manda; es decisión de Sergio Urcullo y no se puede cambiar después."
+      "nota": "Sin `instagram_user_id` (ONIA Ads no tiene Instagram vinculado): el anuncio sale solo por Facebook. self_ai_disclosure: no se manda; es decisión de Sergio Urcullo y no se puede cambiar después. El código del precargado es D10: el bot lo lee como letra + número.",
+      "guarda": "creative_id_G1_4"
     },
     {
-      "paso": 4.1,
+      "paso": "3.4",
+      "herramienta": "ads_create_ad",
+      "para": "G1-4",
+      "args": {
+        "ad_account_id": "1073680778314945",
+        "ad_set_id": "{{ad_set_id}}",
+        "ad_name": "ONIA · G1-4 · Sergio Urcullo de Onia explica: el paciente que no llega",
+        "creative": "{\"creative_id\":\"{{creative_id_G1_4}}\"}"
+      }
+    },
+    {
+      "paso": "4.1",
+      "herramienta": "ads_creative_upload_media",
+      "para": "G1-3",
+      "archivo": "hermes-content/carousels/out/ads/prueba1-v2/G1-3/G1-3-feed.png (1080×1080, la foto nueva de Sergio Urcullo y la fila de la demo)",
+      "args": {
+        "ad_account_id": "1073680778314945",
+        "upload_source": "LOCAL_FILE"
+      },
+      "args_si_es_por_url": {
+        "ad_account_id": "1073680778314945",
+        "upload_source": "URL",
+        "media_type": "IMAGE",
+        "media_url": "{{URL_PUBLICA_hash_G1_3}}",
+        "name": "ONIA G1-3 imagen"
+      },
+      "como": "LOCAL_FILE abre la app interactiva (desde la PC, elige el archivo); por URL hace falta un enlace público directo",
+      "guarda": "hash_G1_3"
+    },
+    {
+      "paso": "4.3",
       "herramienta": "ads_create_creative",
-      "para": "A1-V",
+      "para": "G1-3",
       "args": {
         "ad_account_id": "1073680778314945",
         "page_id": "1140384625819526",
-        "name": "ONIA · A1-V · Las 10:00 video",
-        "message": "Para dueños y dueñas de clínicas dentales de Santa Cruz.\n\nUn paciente que no confirma es una silla que puede quedar vacía, y el alquiler, la asistente y su hora se pagan igual.\n\nOnia es un sistema de gestión para clínicas dentales: agenda, ficha con odontograma, tratamientos y cobros. Cada mañana le deja anotado a quién escribirle, con el mensaje listo, y nada sale sin que usted lo apruebe.\n\nEscríbanos por WhatsApp y pida su demostración gratis.",
+        "name": "ONIA · G1-3 · Imagen 1:1: ¿quién de mañana no confirmó?",
+        "message": "Para dueños y dueñas de clínicas dentales de Santa Cruz.\nSi nadie se acuerda de escribirle a un paciente, esa hora igual se paga: sillón, equipo y alquiler.\nOnia es un sistema de gestión para clínicas dentales: en Pendientes, cada mañana le deja anotado quién tiene cita mañana y no confirmó, con el mensaje listo.\nNingún mensaje de Pendientes sale sin que usted lo apruebe.\nEscríbanos por WhatsApp y pida su demostración gratis.",
         "headline": "Pida su demostración gratis",
         "call_to_action_type": "WHATSAPP_MESSAGE",
-        "link_url": "https://wa.me/{{NUMERO_DEL_BOT}}?text=Hola%2C%20vi%20el%20anuncio%20de%20Onia%20%28D2%29.%20Tengo%20una%20cl%C3%ADnica%20dental.",
-        "video_id": "{{video_id}}",
-        "image_hash": "{{hash_portada}}"
+        "link_url": "https://wa.me/{{NUMERO_DEL_BOT}}?text=Hola%2C%20vi%20el%20anuncio%20de%20Onia%20%28D9%29.%20Tengo%20una%20cl%C3%ADnica%20dental.",
+        "image_hash": "{{hash_G1_3}}"
       },
-      "nota": "Sin `instagram_user_id` (ONIA Ads no tiene Instagram vinculado): el anuncio sale solo por Facebook. El primer elemento de placement_customizations es el de respaldo (sin ubicaciones). self_ai_disclosure: no se manda; es decisión de Sergio Urcullo y no se puede cambiar después."
+      "nota": "Sin `instagram_user_id` (ONIA Ads no tiene Instagram vinculado): el anuncio sale solo por Facebook. self_ai_disclosure: no se manda; es decisión de Sergio Urcullo y no se puede cambiar después. El código del precargado es D9: el bot lo lee como letra + número.",
+      "guarda": "creative_id_G1_3"
     },
     {
-      "paso": 5,
+      "paso": "4.4",
       "herramienta": "ads_create_ad",
+      "para": "G1-3",
       "args": {
         "ad_account_id": "1073680778314945",
         "ad_set_id": "{{ad_set_id}}",
-        "ad_name": "ONIA · A1-E · Las 10:00",
-        "creative": "{\"creative_id\":\"{{creative_id_A1E}}\"}"
+        "ad_name": "ONIA · G1-3 · Imagen 1:1: ¿quién de mañana no confirmó?",
+        "creative": "{\"creative_id\":\"{{creative_id_G1_3}}\"}"
       }
     },
     {
-      "paso": 5.1,
+      "paso": "5.1",
+      "herramienta": "ads_creative_upload_media",
+      "para": "G1-5",
+      "archivo": "hermes-content/carousels/out/ads/prueba1-v2/G1-5/<video editado de la grabación de Sergio Urcullo>.mp4 (4:5, 10 s)",
+      "args": {
+        "ad_account_id": "1073680778314945",
+        "upload_source": "LOCAL_FILE"
+      },
+      "args_si_es_por_url": {
+        "ad_account_id": "1073680778314945",
+        "upload_source": "URL",
+        "media_type": "VIDEO",
+        "media_url": "{{URL_PUBLICA_video_G1_5}}",
+        "name": "ONIA G1-5 video"
+      },
+      "como": "LOCAL_FILE abre la app interactiva (desde la PC, elige el archivo); por URL hace falta un enlace público directo",
+      "guarda": "video_id_G1_5",
+      "espera": "ads_get_ad_videos dice status ready antes de crear el creativo"
+    },
+    {
+      "paso": "5.2",
+      "herramienta": "ads_creative_upload_media",
+      "para": "G1-5",
+      "archivo": "hermes-content/carousels/out/ads/prueba1-v2/G1-5/<portada del video: una imagen es obligatoria>.png",
+      "args": {
+        "ad_account_id": "1073680778314945",
+        "upload_source": "LOCAL_FILE"
+      },
+      "args_si_es_por_url": {
+        "ad_account_id": "1073680778314945",
+        "upload_source": "URL",
+        "media_type": "IMAGE",
+        "media_url": "{{URL_PUBLICA_hash_portada_G1_5}}",
+        "name": "ONIA G1-5 portada"
+      },
+      "como": "LOCAL_FILE abre la app interactiva (desde la PC, elige el archivo); por URL hace falta un enlace público directo",
+      "guarda": "hash_portada_G1_5"
+    },
+    {
+      "paso": "5.3",
+      "herramienta": "ads_create_creative",
+      "para": "G1-5",
+      "args": {
+        "ad_account_id": "1073680778314945",
+        "page_id": "1140384625819526",
+        "name": "ONIA · G1-5 · Micro de 10 s: ¿y si no vienen todos los de mañana?",
+        "message": "Para dueños y dueñas de clínicas dentales de Santa Cruz.\nEscribirle a cada paciente, uno por uno, se come la hora más tranquila de la mañana, y esa hora se paga igual.\nOnia es un sistema de gestión para clínicas dentales: en Pendientes, cada mañana le deja anotado a quién escribirle, con el mensaje listo.\nNingún mensaje de Pendientes sale sin que usted lo apruebe.\nEscríbanos por WhatsApp y pida su demostración gratis.",
+        "headline": "Pida su demostración gratis",
+        "call_to_action_type": "WHATSAPP_MESSAGE",
+        "link_url": "https://wa.me/{{NUMERO_DEL_BOT}}?text=Hola%2C%20vi%20el%20anuncio%20de%20Onia%20%28D11%29.%20Tengo%20una%20cl%C3%ADnica%20dental.",
+        "video_id": "{{video_id_G1_5}}",
+        "image_hash": "{{hash_portada_G1_5}}"
+      },
+      "nota": "Sin `instagram_user_id` (ONIA Ads no tiene Instagram vinculado): el anuncio sale solo por Facebook. self_ai_disclosure: no se manda; es decisión de Sergio Urcullo y no se puede cambiar después. El código del precargado es D11: el bot lo lee como letra + número.",
+      "guarda": "creative_id_G1_5"
+    },
+    {
+      "paso": "5.4",
       "herramienta": "ads_create_ad",
+      "para": "G1-5",
       "args": {
         "ad_account_id": "1073680778314945",
         "ad_set_id": "{{ad_set_id}}",
-        "ad_name": "ONIA · A1-V · Las 10:00 video",
-        "creative": "{\"creative_id\":\"{{creative_id_A1V}}\"}"
+        "ad_name": "ONIA · G1-5 · Micro de 10 s: ¿y si no vienen todos los de mañana?",
+        "creative": "{\"creative_id\":\"{{creative_id_G1_5}}\"}"
       }
     },
     {
-      "paso": 6,
-      "herramienta": "ads_get_ad_preview",
-      "para": "cada anuncio",
-      "espera": "el botón dice «Enviar mensaje de WhatsApp», abre el chat con el texto precargado y el código (D1 o D2). Si el conector no respeta el texto, se pone a mano en el anuncio, «Mensaje de bienvenida», ANTES de publicar: sin código se pierde la atribución. Se mira en Feed, Historias y Reels."
+      "paso": "6.1",
+      "herramienta": "ads_creative_upload_media",
+      "para": "G1-1",
+      "archivo": "hermes-content/carousels/out/ads/prueba1-v2/G1-1/<video editado de la grabación de Sergio Urcullo>.mp4 (9:16, 28 s)",
+      "args": {
+        "ad_account_id": "1073680778314945",
+        "upload_source": "LOCAL_FILE"
+      },
+      "args_si_es_por_url": {
+        "ad_account_id": "1073680778314945",
+        "upload_source": "URL",
+        "media_type": "VIDEO",
+        "media_url": "{{URL_PUBLICA_video_G1_1}}",
+        "name": "ONIA G1-1 video"
+      },
+      "como": "LOCAL_FILE abre la app interactiva (desde la PC, elige el archivo); por URL hace falta un enlace público directo",
+      "guarda": "video_id_G1_1",
+      "espera": "ads_get_ad_videos dice status ready antes de crear el creativo"
+    },
+    {
+      "paso": "6.2",
+      "herramienta": "ads_creative_upload_media",
+      "para": "G1-1",
+      "archivo": "hermes-content/carousels/out/ads/prueba1-v2/G1-1/<portada del video: una imagen es obligatoria>.png",
+      "args": {
+        "ad_account_id": "1073680778314945",
+        "upload_source": "LOCAL_FILE"
+      },
+      "args_si_es_por_url": {
+        "ad_account_id": "1073680778314945",
+        "upload_source": "URL",
+        "media_type": "IMAGE",
+        "media_url": "{{URL_PUBLICA_hash_portada_G1_1}}",
+        "name": "ONIA G1-1 portada"
+      },
+      "como": "LOCAL_FILE abre la app interactiva (desde la PC, elige el archivo); por URL hace falta un enlace público directo",
+      "guarda": "hash_portada_G1_1"
+    },
+    {
+      "paso": "6.3",
+      "herramienta": "ads_create_creative",
+      "para": "G1-1",
+      "args": {
+        "ad_account_id": "1073680778314945",
+        "page_id": "1140384625819526",
+        "name": "ONIA · G1-1 · Selfie sentado: citas de mañana sin confirmar",
+        "message": "Para dueños y dueñas de clínicas dentales de Santa Cruz.\nLa víspera de cada cita es una duda: ¿vendrá o no? Mientras tanto, el sillón y el equipo ya están pagados.\nOnia es un sistema de gestión para clínicas dentales: en Pendientes, cada mañana le deja anotado quién tiene cita mañana y no confirmó, con el mensaje listo.\nNingún mensaje de Pendientes sale sin que usted lo apruebe.\nEscríbanos por WhatsApp y pida su demostración gratis.",
+        "headline": "Pida su demostración gratis",
+        "call_to_action_type": "WHATSAPP_MESSAGE",
+        "link_url": "https://wa.me/{{NUMERO_DEL_BOT}}?text=Hola%2C%20vi%20el%20anuncio%20de%20Onia%20%28D7%29.%20Tengo%20una%20cl%C3%ADnica%20dental.",
+        "video_id": "{{video_id_G1_1}}",
+        "image_hash": "{{hash_portada_G1_1}}"
+      },
+      "nota": "Sin `instagram_user_id` (ONIA Ads no tiene Instagram vinculado): el anuncio sale solo por Facebook. self_ai_disclosure: no se manda; es decisión de Sergio Urcullo y no se puede cambiar después. El código del precargado es D7: el bot lo lee como letra + número.",
+      "guarda": "creative_id_G1_1"
+    },
+    {
+      "paso": "6.4",
+      "herramienta": "ads_create_ad",
+      "para": "G1-1",
+      "args": {
+        "ad_account_id": "1073680778314945",
+        "ad_set_id": "{{ad_set_id}}",
+        "ad_name": "ONIA · G1-1 · Selfie sentado: citas de mañana sin confirmar",
+        "creative": "{\"creative_id\":\"{{creative_id_G1_1}}\"}"
+      }
     },
     {
       "paso": 7,
+      "herramienta": "ads_get_ad_preview",
+      "para": "cada anuncio",
+      "espera": "el botón dice «Enviar mensaje de WhatsApp», abre el chat con el texto precargado y su código (D10, D9, D11 y D7). Si el conector no respeta el texto, se pone a mano en el anuncio, «Mensaje de bienvenida», ANTES de publicar: sin código se pierde la atribución. Se mira en Feed, Historias y Reels. G1-3 es 1:1: si en Historias se ve mal, se limita a Feed"
+    },
+    {
+      "paso": 8,
       "herramienta": "ads_get_ad_entities",
       "args": {
         "ad_account_id": "1073680778314945",
         "level": "campaign",
         "object_state": "draft"
       },
-      "espera": "campaña, conjunto y dos anuncios en borrador; los ids van al handoff del carril"
+      "espera": "campaña, conjunto y cuatro anuncios en borrador; los ids van al handoff del carril"
     }
   ],
   "activacion": {
@@ -362,8 +481,10 @@
       "object_ids": [
         "{{campaign_id}}",
         "{{ad_set_id}}",
-        "{{ad_object_id_A1E}}",
-        "{{ad_object_id_A1V}}"
+        "{{ad_object_id_G1_4}}",
+        "{{ad_object_id_G1_3}}",
+        "{{ad_object_id_G1_5}}",
+        "{{ad_object_id_G1_1}}"
       ],
       "publish_as_active": true
     },
@@ -378,40 +499,82 @@
       "duracion_de_la_llamada",
       "canales_1_y_2",
       "instagram_decidido",
-      "self_ai_decidido"
+      "self_ai_decidido",
+      "media_grabada",
+      "eleccion_de_piezas"
     ],
     "despues": "esperar 2 minutos y leer el borrador y la campaña otra vez: PUBLISHING es «entregado», no «publicado». Verificar effective_status ACTIVE y mirar el primer mensaje que llegue.",
-    "ids": "los ad_object_id salen de ads_get_ad_entities con object_state draft (paso 7); no se deducen de lo que devolvieron los pasos de creación. Después de publicar se verifican LOS CUATRO niveles (campaña, conjunto y los dos anuncios): los demás objetos conservan su estado."
+    "ids": "los ad_object_id salen de ads_get_ad_entities con object_state draft (último paso); no se deducen de lo que devolvieron los pasos de creación. Después de publicar se verifican TODOS los niveles (campaña, conjunto y los cuatro anuncios): los demás objetos conservan su estado."
   },
   "anuncios": {
     "entran": [
       {
-        "id": "A1-E",
-        "formato": "imagen 4:5 + historia 9:16",
-        "codigo": "D1",
-        "texto_precargado": "Hola, vi el anuncio de Onia (D1). Tengo una clínica dental.",
+        "id": "G1-4",
+        "pieza": "Sergio Urcullo de Onia explica: el paciente que no llega",
+        "formato": "video 9:16 de 31 s",
+        "codigo": "D10",
+        "texto_precargado": "Hola, vi el anuncio de Onia (D10). Tengo una clínica dental.",
+        "brief": "hermes-content/carousels/briefs/ads/prueba1-v2/G1-4.json",
+        "referencia": "Doctocliq 895549733230235 · 58 d",
         "archivos": [
-          "hermes-content/carousels/out/ads/onia-platform-dental-meta-a1v5-las-diez/feed.png",
-          "hermes-content/carousels/out/ads/onia-platform-dental-meta-a1v5-las-diez/story.png"
-        ]
+          "hermes-content/carousels/out/ads/prueba1-v2/G1-4/<video editado de la grabación de Sergio Urcullo>.mp4"
+        ],
+        "media": "sin grabar"
       },
       {
-        "id": "A1-V",
-        "formato": "video 9:16 de 11 s sin audio",
-        "codigo": "D2",
-        "texto_precargado": "Hola, vi el anuncio de Onia (D2). Tengo una clínica dental.",
+        "id": "G1-3",
+        "pieza": "Imagen 1:1: ¿quién de mañana no confirmó?",
+        "formato": "imagen 1:1",
+        "codigo": "D9",
+        "texto_precargado": "Hola, vi el anuncio de Onia (D9). Tengo una clínica dental.",
+        "brief": "hermes-content/carousels/briefs/ads/prueba1-v2/G1-3.json",
+        "referencia": "CitaPro 2253602242100999 · 66 d",
         "archivos": [
-          "hermes-content/carousels/out/ads/onia-platform-dental-meta-a1v5-las-diez/onia-platform-dental-meta-a1v5-las-diez.mp4"
-        ]
+          "hermes-content/carousels/out/ads/prueba1-v2/G1-3/G1-3-feed.png (hoy con la foto de perfil recortada; se rehace con la foto nueva y la fila de la demo)"
+        ],
+        "media": "sin la foto nueva"
+      },
+      {
+        "id": "G1-5",
+        "pieza": "Micro de 10 s: ¿y si no vienen todos los de mañana?",
+        "formato": "micro-video de 10 s 4:5",
+        "codigo": "D11",
+        "texto_precargado": "Hola, vi el anuncio de Onia (D11). Tengo una clínica dental.",
+        "brief": "hermes-content/carousels/briefs/ads/prueba1-v2/G1-5.json",
+        "referencia": "Doctocliq 1952892278698712 · 80 d",
+        "archivos": [
+          "hermes-content/carousels/out/ads/prueba1-v2/G1-5/<video editado>.mp4"
+        ],
+        "media": "sin grabar"
+      },
+      {
+        "id": "G1-1",
+        "pieza": "Selfie sentado: citas de mañana sin confirmar",
+        "formato": "selfie sentado de 28 s 9:16",
+        "codigo": "D7",
+        "texto_precargado": "Hola, vi el anuncio de Onia (D7). Tengo una clínica dental.",
+        "brief": "hermes-content/carousels/briefs/ads/prueba1-v2/G1-1.json",
+        "referencia": "Dt.Dental 1064012876297472 · 103 d",
+        "archivos": [
+          "hermes-content/carousels/out/ads/prueba1-v2/G1-1/<video editado>.mp4"
+        ],
+        "media": "sin grabar"
       }
     ],
     "esperan": [
       {
-        "id": "A1-S",
-        "formato": "selfie de 25 s de Sergio Urcullo con la pantalla",
-        "codigo": "D3",
-        "texto_precargado": "Hola, vi el anuncio de Onia (D3). Tengo una clínica dental.",
-        "espera": "su cara y su voz: lo graba él (y, según CLAUDE.md, subir su cara o voz a servicios externos pide también el OK de Leslie Mercado Moreno); muestra Pendientes de la cuenta demo, que todavía no existe"
+        "id": "G1-2",
+        "pieza": "Dos preguntas y un giro: el paciente que hace meses no vuelve",
+        "formato": "presentador → tarjeta → pantalla de 33 s 9:16",
+        "codigo": "D8",
+        "texto_precargado": "Hola, vi el anuncio de Onia (D8). Tengo una clínica dental.",
+        "brief": "hermes-content/carousels/briefs/ads/prueba1-v2/G1-2.json",
+        "referencia": "CitaPro 1880949689530541 · 86 d",
+        "archivos": [
+          "hermes-content/carousels/out/ads/prueba1-v2/G1-2/<video editado>.mp4"
+        ],
+        "media": "sin grabar",
+        "espera": "la fila G-05 (Vuelve a citar) en ✅ con la cuenta demo, ANTES de crear la campaña (el umbral, según V01: 180 días desde la última cita completada y sin cita futura)"
       },
       {
         "id": "A2",
@@ -421,16 +584,60 @@
         "espera": "E-03 y G-08 en ✅ (nunca se vio funcionando la propuesta de cobro)"
       }
     ],
+    "reemplazados": [
+      {
+        "id": "A1-E",
+        "formato": "imagen 4:5 + historia 9:16",
+        "codigo": "D1",
+        "texto_precargado": "Hola, vi el anuncio de Onia (D1). Tengo una clínica dental.",
+        "motivo": "reemplazado el 11-oct por la prueba 1 v2: Sergio Urcullo vio A1-E y dijo «ese ad está horrible» (losa de texto sin persona, captura ilegible)"
+      },
+      {
+        "id": "A1-V",
+        "formato": "video 9:16 de 11 s sin audio",
+        "codigo": "D2",
+        "texto_precargado": "Hola, vi el anuncio de Onia (D2). Tengo una clínica dental.",
+        "motivo": "reemplazado el 11-oct por la prueba 1 v2: Sergio Urcullo vio A1-E y dijo «ese ad está horrible» (losa de texto sin persona, captura ilegible)"
+      },
+      {
+        "id": "A1-S",
+        "formato": "selfie de 25 s de Sergio Urcullo con la pantalla",
+        "codigo": "D3",
+        "texto_precargado": "Hola, vi el anuncio de Onia (D3). Tengo una clínica dental.",
+        "motivo": "reemplazado el 11-oct por la prueba 1 v2: Sergio Urcullo vio A1-E y dijo «ese ad está horrible» (losa de texto sin persona, captura ilegible)"
+      }
+    ],
     "congelados": [
       {
         "id": "D4",
         "motivo": "tratamiento a medias: el catálogo §8 no deja decirlo y el detector no encuentra a nadie"
       }
     ],
-    "regla": "Tres copias de un concepto y no tres conceptos: cambia el formato, no el mensaje. El presupuesto está en la campaña: Meta empuja al que rinde, y que uno reciba pocas impresiones no es un veredicto."
+    "regla": "Cada pieza copia, zona por zona, un anuncio de la competencia que dura (fichas en research/competencia/anuncios/replicas/REFERENCIAS-GRUPO-1.md). El presupuesto está en la campaña: Meta empuja al que rinde, y que uno reciba pocas impresiones no es un veredicto. Con 4 copias, US$ 4 por día son ≈ US$ 1 por copia y por día (≈ US$ 14 en los 14 días); con 3, ≈ US$ 19. Cuatro de las cinco piezas comparten el ángulo «no confirmó» y las cinco usan la misma fila de Pendientes: Meta las va a leer casi iguales; las tandas siguientes mueven UN eje (skill §9.6)."
   },
   "copy_de_usted": {
-    "texto_principal": "Para dueños y dueñas de clínicas dentales de Santa Cruz.\n\nUn paciente que no confirma es una silla que puede quedar vacía, y el alquiler, la asistente y su hora se pagan igual.\n\nOnia es un sistema de gestión para clínicas dentales: agenda, ficha con odontograma, tratamientos y cobros. Cada mañana le deja anotado a quién escribirle, con el mensaje listo, y nada sale sin que usted lo apruebe.\n\nEscríbanos por WhatsApp y pida su demostración gratis.",
+    "por_anuncio": {
+      "G1-4": {
+        "texto_principal": "Para dueños y dueñas de clínicas dentales de Santa Cruz.\nCuando un paciente no llega, el sillón, el alquiler y el equipo se pagan igual: es plata que no entra.\nSoy Sergio Urcullo, de Onia. Onia es un sistema de gestión para clínicas dentales: en Pendientes, cada mañana le deja anotado a quién escribirle, con el mensaje listo.\nNingún mensaje de Pendientes sale sin que usted lo apruebe.\nEscríbanos por WhatsApp y pida su demostración gratis.",
+        "titular": "Pida su demostración gratis"
+      },
+      "G1-3": {
+        "texto_principal": "Para dueños y dueñas de clínicas dentales de Santa Cruz.\nSi nadie se acuerda de escribirle a un paciente, esa hora igual se paga: sillón, equipo y alquiler.\nOnia es un sistema de gestión para clínicas dentales: en Pendientes, cada mañana le deja anotado quién tiene cita mañana y no confirmó, con el mensaje listo.\nNingún mensaje de Pendientes sale sin que usted lo apruebe.\nEscríbanos por WhatsApp y pida su demostración gratis.",
+        "titular": "Pida su demostración gratis"
+      },
+      "G1-5": {
+        "texto_principal": "Para dueños y dueñas de clínicas dentales de Santa Cruz.\nEscribirle a cada paciente, uno por uno, se come la hora más tranquila de la mañana, y esa hora se paga igual.\nOnia es un sistema de gestión para clínicas dentales: en Pendientes, cada mañana le deja anotado a quién escribirle, con el mensaje listo.\nNingún mensaje de Pendientes sale sin que usted lo apruebe.\nEscríbanos por WhatsApp y pida su demostración gratis.",
+        "titular": "Pida su demostración gratis"
+      },
+      "G1-1": {
+        "texto_principal": "Para dueños y dueñas de clínicas dentales de Santa Cruz.\nLa víspera de cada cita es una duda: ¿vendrá o no? Mientras tanto, el sillón y el equipo ya están pagados.\nOnia es un sistema de gestión para clínicas dentales: en Pendientes, cada mañana le deja anotado quién tiene cita mañana y no confirmó, con el mensaje listo.\nNingún mensaje de Pendientes sale sin que usted lo apruebe.\nEscríbanos por WhatsApp y pida su demostración gratis.",
+        "titular": "Pida su demostración gratis"
+      },
+      "G1-2": {
+        "texto_principal": "Para dueños y dueñas de clínicas dentales de Santa Cruz.\nUn paciente que deja de venir no avisa, y su hora en la agenda queda sin dueño sin que nadie lo note.\nOnia es un sistema de gestión para clínicas dentales: en Pendientes, cada mañana le deja anotado quién hace meses no vuelve, con el mensaje listo.\nNingún mensaje de Pendientes sale sin que usted lo apruebe.\nEscríbanos por WhatsApp y pida su demostración gratis.",
+        "titular": "Pida su demostración gratis"
+      }
+    },
     "titular": "Pida su demostración gratis",
     "boton": "WHATSAPP_MESSAGE (Enviar mensaje de WhatsApp)",
     "prohibido": [
@@ -444,8 +651,8 @@
       "voseo o tuteo",
       "un número de minutos para la llamada (el bot y /contacto dicen 30, la agenda 20: L-04)"
     ],
-    "fuente": "los briefs onia-platform-dental-meta-a1v5-las-diez.json y ...a1v5-micro-10s.json (caption, headline_anuncio, kicker, nota); catálogo §7 y §8. scripts/campana-lista.test.mjs exige que `message` sea el `caption` del brief, palabra por palabra",
-    "nota_del_10oct": "Revisión independiente (10-oct): el texto abre con el filtro «Para dueños y dueñas…» (§5.2) y ya no dice «con IA» junto a «a quién escribirle» (catálogo §8: el «a quién» sale de reglas, no de la IA). La imagen dice «Demostración gratis, en una llamada.» (desde el 10-oct, estudio de la Biblioteca: el titular del anuncio pasó a «Pida su demostración gratis»), sin minutos, hasta unificar 20 contra 30 (L-04, 🟡)."
+    "fuente": "los briefs de hermes-content/carousels/briefs/ads/prueba1-v2/ (texto_principal, titular, precargado); catálogo §7 y §8. scripts/campana-lista.test.mjs exige que `message` y `headline` de cada creativo sean los de su brief, palabra por palabra",
+    "nota_del_11oct": "Las cinco piezas abren con el filtro «Para dueños y dueñas de clínicas dentales de Santa Cruz.», cierran con «Escríbanos por WhatsApp y pida su demostración gratis.» y acotan el control a Pendientes («Ningún mensaje de Pendientes sale sin que usted lo apruebe»). «Cada mañana» (G-04) solo vale en Crece en adelante y en la prueba (catálogo §8)."
   },
   "publico": {
     "ubicacion": "Santa Cruz de la Sierra, radio 25 km desde (-17,7833; -63,1821), «Llegar a más personas» apagado",
@@ -476,7 +683,7 @@
     "frase_prefijo": "Hola, vi el anuncio de Onia",
     "texto": "Gracias por escribir desde el anuncio. Para que Sergio llegue a la demo con el caso de su clínica, cuénteme dos cosas: ¿cuántos profesionales atienden y quién agenda las citas? Y si en realidad busca atención dental como paciente, por acá no damos turnos: escríbale directo a su clínica.",
     "publicacion": "es texto de bot, de usted y dentro de la regla del 9-oct (se publica sin esperar); verificar que producción lo sirve ya",
-    "prueba": "dos mensajes desde un teléfono que no sea el de Onia, con el texto exacto de cada precargado, MIRANDO la respuesta y el aviso a Sergio Urcullo con «Origen: anuncio-D1» (o D2). Cada código tiene que ser letra + número (D1, D2): el bot no lee «D1V».",
+    "prueba": "dos mensajes desde un teléfono que no sea el de Onia, con el texto exacto de cada precargado (D10, D9, D11 y D7), MIRANDO la respuesta y el aviso a Sergio Urcullo con «Origen: anuncio-D10» (o el que sea). Cada código tiene que ser letra + número: el bot no lee «D1V».",
     "quien_contesta": "decisión de Sergio Urcullo (fila 6 del go/no-go). Recomendación: contesta él, el mismo día hábil y antes de 24 h (abre la ventana gratis de 72 h); el bot atiende al instante y le avisa."
   },
   "medicion": {
@@ -489,11 +696,11 @@
       "costo por demo",
       "CTR",
       "frecuencia",
-      "reproducciones de 3 s ÷ impresiones (solo A1-V)"
+      "reproducciones de 3 s ÷ impresiones (G1-4, G1-5 y G1-1)"
     ],
     "de_donde": {
       "conversaciones y gasto": "ads_get_ad_entities level ad con results, cost_per_result, amount_spent, ctr, frequency, impressions",
-      "dueños de clínica": "el código D1/D2 buscado en Chatwoot (el referral se pierde, §5.5)",
+      "dueños de clínica": "el código D10/D9/D11/D7 dice de qué anuncio vino; quién es dueño lo dice el chat (botón 1 o las preguntas); todo en Chatwoot (el referral se pierde, §5.5)",
       "demos": "/llamada agendadas desde el chat"
     },
     "benchmarks": "sin gasto no hay: «No industry benchmark data». Los costos por conversación (US$ 1-4) son supuestos hasta la semana 1."
@@ -505,7 +712,7 @@
         "0 conversaciones",
         "CTR < 0,8 %"
       ],
-      "accion": "se PAUSA la copia que no trae (ads_update_entity, status PAUSED); no se cambia la pieza ni la segmentación ni se agrega otra: cambiar creativo o segmentación y agregar un anuncio son ediciones significativas (reinician el aprendizaje y abren otra revisión de ~24 h, ayuda oficial de Meta, 11-oct); la pieza nueva espera a la tanda siguiente",
+      "accion": "PRIMERO se descarta un problema de entrega (anuncio aprobado y con impresiones, el chat abre con el código, el bot contesta): con ≈ US$ 3 por copia, cero conversaciones suele ser poca entrega, no mala pieza. Solo lo que no trae nada se PAUSA (ads_update_entity, status PAUSED); no se cambia la pieza ni la segmentación ni se agrega otra: cambiar creativo o segmentación y agregar un anuncio son ediciones significativas (reinician el aprendizaje y abren otra revisión de ~24 h, ayuda oficial de Meta, 11-oct); que pausar un anuncio no reinicie el aprendizaje es una inferencia",
       "seguir_si": "hay conversaciones"
     },
     "dia_7": {
@@ -554,5 +761,79 @@
     "NUMERO_DEL_BOT": "el número de WhatsApp vinculado a la página «Onia», solo dígitos con el 591 delante y sin +, espacios ni guiones (se lee en Business Manager; el conector no lo muestra)",
     "URL_PUBLICA_*": "solo si los medios suben por URL: un enlace directo y público a cada archivo. El repo no es público",
     "hash_*, video_id, creative_id_*, campaign_id, ad_set_id, ad_object_id_*": "salen de la respuesta del paso anterior"
+  },
+  "prueba": "v2 (11-oct, MADRE MARKETING): réplica de los anuncios de la competencia que más duran, con Sergio Urcullo como persona y la fila real de Pendientes. Reemplaza a A1-E, A1-V y A1-S (Sergio Urcullo: «ese ad está horrible»). Fuente de las piezas: hermes-content/carousels/briefs/ads/prueba1-v2/ (LISTA-PARA-MOSTRAR-V2.md y un brief G1-n.json por pieza); el texto, el titular y el precargado de cada anuncio de este archivo SON los de su brief y scripts/campana-lista.test.mjs lo exige.",
+  "creacion_si_G05_en_verde": {
+    "condicion": "la fila G-05 en ✅ con la cuenta demo ANTES del paso 1 (después sería agregar un anuncio: edición significativa); si no, G1-2 espera a la tanda 2",
+    "pasos": [
+      {
+        "paso": "G1-2.1",
+        "herramienta": "ads_creative_upload_media",
+        "para": "G1-2",
+        "archivo": "hermes-content/carousels/out/ads/prueba1-v2/G1-2/<video editado de la grabación de Sergio Urcullo>.mp4 (9:16, 33 s)",
+        "args": {
+          "ad_account_id": "1073680778314945",
+          "upload_source": "LOCAL_FILE"
+        },
+        "args_si_es_por_url": {
+          "ad_account_id": "1073680778314945",
+          "upload_source": "URL",
+          "media_type": "VIDEO",
+          "media_url": "{{URL_PUBLICA_video_G1_2}}",
+          "name": "ONIA G1-2 video"
+        },
+        "como": "LOCAL_FILE abre la app interactiva (desde la PC, elige el archivo); por URL hace falta un enlace público directo",
+        "guarda": "video_id_G1_2",
+        "espera": "ads_get_ad_videos dice status ready antes de crear el creativo"
+      },
+      {
+        "paso": "G1-2.2",
+        "herramienta": "ads_creative_upload_media",
+        "para": "G1-2",
+        "archivo": "hermes-content/carousels/out/ads/prueba1-v2/G1-2/<portada del video: una imagen es obligatoria>.png",
+        "args": {
+          "ad_account_id": "1073680778314945",
+          "upload_source": "LOCAL_FILE"
+        },
+        "args_si_es_por_url": {
+          "ad_account_id": "1073680778314945",
+          "upload_source": "URL",
+          "media_type": "IMAGE",
+          "media_url": "{{URL_PUBLICA_hash_portada_G1_2}}",
+          "name": "ONIA G1-2 portada"
+        },
+        "como": "LOCAL_FILE abre la app interactiva (desde la PC, elige el archivo); por URL hace falta un enlace público directo",
+        "guarda": "hash_portada_G1_2"
+      },
+      {
+        "paso": "G1-2.3",
+        "herramienta": "ads_create_creative",
+        "para": "G1-2",
+        "args": {
+          "ad_account_id": "1073680778314945",
+          "page_id": "1140384625819526",
+          "name": "ONIA · G1-2 · Dos preguntas y un giro: el paciente que hace meses no vuelve",
+          "message": "Para dueños y dueñas de clínicas dentales de Santa Cruz.\nUn paciente que deja de venir no avisa, y su hora en la agenda queda sin dueño sin que nadie lo note.\nOnia es un sistema de gestión para clínicas dentales: en Pendientes, cada mañana le deja anotado quién hace meses no vuelve, con el mensaje listo.\nNingún mensaje de Pendientes sale sin que usted lo apruebe.\nEscríbanos por WhatsApp y pida su demostración gratis.",
+          "headline": "Pida su demostración gratis",
+          "call_to_action_type": "WHATSAPP_MESSAGE",
+          "link_url": "https://wa.me/{{NUMERO_DEL_BOT}}?text=Hola%2C%20vi%20el%20anuncio%20de%20Onia%20%28D8%29.%20Tengo%20una%20cl%C3%ADnica%20dental.",
+          "video_id": "{{video_id_G1_2}}",
+          "image_hash": "{{hash_portada_G1_2}}"
+        },
+        "nota": "Sin `instagram_user_id` (ONIA Ads no tiene Instagram vinculado): el anuncio sale solo por Facebook. self_ai_disclosure: no se manda; es decisión de Sergio Urcullo y no se puede cambiar después. El código del precargado es D8: el bot lo lee como letra + número.",
+        "guarda": "creative_id_G1_2"
+      },
+      {
+        "paso": "G1-2.4",
+        "herramienta": "ads_create_ad",
+        "para": "G1-2",
+        "args": {
+          "ad_account_id": "1073680778314945",
+          "ad_set_id": "{{ad_set_id}}",
+          "ad_name": "ONIA · G1-2 · Dos preguntas y un giro: el paciente que hace meses no vuelve",
+          "creative": "{\"creative_id\":\"{{creative_id_G1_2}}\"}"
+        }
+      }
+    ]
   }
 }

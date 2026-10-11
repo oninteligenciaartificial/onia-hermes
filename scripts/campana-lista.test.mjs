@@ -32,7 +32,9 @@ const HORARIOS = "jueves 2 de octubre, 14:00@2026-10-02T18:00:00Z|viernes 3 de o
 const PRODUCCION = configComoProduccion({ horarios: HORARIOS, now: T0 });
 
 const crear = (nombre) => spec.creacion.find((p) => p.herramienta === nombre).args;
-const todosLosPasos = () => spec.creacion.map((p) => p.args ?? {});
+const todosLosPasos = () => [...spec.creacion, ...spec.creacion_si_G05_en_verde.pasos].map((p) => p.args ?? {});
+const todosLosCreativos = () => [...spec.creacion, ...spec.creacion_si_G05_en_verde.pasos].filter((p) => p.herramienta === "ads_create_creative");
+const briefV2 = (id) => JSON.parse(leer(`hermes-content/carousels/briefs/ads/prueba1-v2/${id}.json`));
 
 test("la plata: US$ 56 = US$ 4 × 14 días, en centavos, y por encima del mínimo diario de la cuenta", () => {
   const { plata } = spec;
@@ -66,7 +68,7 @@ test("lo que crea es un borrador y lo que enciende exige el OK escrito: no hay u
   const herramientas = spec.creacion.map((p) => p.herramienta);
   assert.ok(!herramientas.includes("ads_activate_entity"), "crear no incluye activar");
   assert.equal(spec.activacion.herramienta, "ads_activate_entity");
-  for (const requisito of ["tarjeta", "ok_de_gasto", "filas_en_verde", "bot", "quien_contesta", "duracion_de_la_llamada", "canales_1_y_2", "instagram_decidido", "self_ai_decidido"]) {
+  for (const requisito of ["tarjeta", "ok_de_gasto", "filas_en_verde", "media_grabada", "eleccion_de_piezas", "bot", "quien_contesta", "duracion_de_la_llamada", "canales_1_y_2", "instagram_decidido", "self_ai_decidido"]) {
     assert.ok(spec.activacion.solo_con.includes(requisito), `activar exige «${requisito}»`);
     assert.ok(spec.no_se_crea_ni_se_enciende_sin.some((c) => c.id === requisito), `«${requisito}» está definido como condición`);
   }
@@ -94,8 +96,8 @@ test("la estructura es la de §5.8: clic a WhatsApp, conversaciones, Santa Cruz 
 });
 
 test("cada código de anuncio lo lee el MOTOR REAL del bot como origen (D1V, D1S o D1C no)", () => {
-  const anuncios = [...spec.anuncios.entran, ...spec.anuncios.esperan];
-  assert.ok(anuncios.length >= 4, "ancla: se miden los cuatro anuncios, no una lista vacía");
+  const anuncios = [...spec.anuncios.entran, ...spec.anuncios.esperan, ...spec.anuncios.reemplazados];
+  assert.ok(anuncios.length >= 8, "ancla: se miden los ocho anuncios (4 que entran, 2 que esperan, 3 reemplazados), no una lista vacía");
   const vistos = new Set();
   for (const a of anuncios) {
     assert.equal(a.texto_precargado, `Hola, vi el anuncio de Onia (${a.codigo}). Tengo una clínica dental.`, `${a.id}: el texto lleva su código`);
@@ -112,13 +114,14 @@ test("cada código de anuncio lo lee el MOTOR REAL del bot como origen (D1V, D1S
 test("los precargados del JSON y los del doc de la pauta hablan de los mismos códigos (D1 y D4 son los que el bot vigila)", () => {
   const delDoc = [...adq.matchAll(/`(Hola, vi el anuncio de Onia \(([A-Z]\d+)\)\.[^`]*)`/g)].map((m) => m[2]);
   assert.ok(delDoc.includes("D1"), "el doc trae el precargado de A1-E");
-  const delJson = new Set([...spec.anuncios.entran, ...spec.anuncios.esperan].map((a) => a.codigo));
-  assert.ok(delJson.has("D1"));
+  const delJson = new Set([...spec.anuncios.entran, ...spec.anuncios.esperan, ...spec.anuncios.reemplazados].map((a) => a.codigo));
+  assert.ok(delJson.has("D1"), "D1 (A1-E) sigue en el doc de la pauta: el JSON lo conserva como reemplazado");
   for (const codigo of delDoc) assert.ok(delJson.has(codigo) || spec.anuncios.congelados.some((c) => c.id === codigo), `el código ${codigo} del doc está en el JSON o congelado`);
-  const creativos = spec.creacion.filter((p) => p.herramienta === "ads_create_creative");
+  const creativos = todosLosCreativos();
+  assert.equal(creativos.length, 5, "cuatro anuncios que entran y G1-2 condicionado");
   for (const c of creativos) {
     const texto = decodeURIComponent(c.args.link_url.split("text=")[1]);
-    assert.match(texto, /^Hola, vi el anuncio de Onia \(D\d\)\. Tengo una clínica dental\.$/, `${c.para}: el link lleva el precargado con su código`);
+    assert.match(texto, /^Hola, vi el anuncio de Onia \(D\d+\)\. Tengo una clínica dental\.$/, `${c.para}: el link lleva el precargado con su código`);
     assert.equal(c.args.call_to_action_type, "WHATSAPP_MESSAGE");
   }
 });
@@ -132,15 +135,18 @@ test("la respuesta del bot es la que está en el conocimiento, y habla de usted"
   assert.ok(campanaBot.respuesta.length < 500, "menos de 500 caracteres");
 });
 
-test("el copy del anuncio es de usted y no promete lo que el catálogo prohíbe", () => {
-  const textos = [spec.copy_de_usted.texto_principal, spec.copy_de_usted.titular, ...spec.creacion.flatMap((p) => [p.args?.message, p.args?.headline].filter(Boolean))];
+test("el copy de cada anuncio es de usted y no promete lo que el catálogo prohíbe", () => {
+  const textos = [...Object.values(spec.copy_de_usted.por_anuncio).flatMap((c) => [c.texto_principal, c.titular]), spec.copy_de_usted.titular, ...todosLosCreativos().flatMap((p) => [p.args.message, p.args.headline])];
+  assert.ok(textos.length >= 20, "ancla: se miden los textos de las cinco piezas, no una lista vacía");
   for (const t of textos) {
     assert.deepEqual(promesasEn(t), [], `promete algo prohibido: «${t.slice(0, 70)}…»`);
     assert.ok(!/\b(vos|tenés|querés|podés|tu |tus |contame|escribinos|sos)\b/i.test(t), `voseo o tuteo en «${t.slice(0, 50)}…»`);
     assert.ok(!/\b(tratamientos? a medias|con un toque|factura electr|SIAT|Bs \d|bolivianos al mes)/i.test(t), `texto que el catálogo no deja decir: «${t.slice(0, 50)}…»`);
   }
-  assert.match(spec.copy_de_usted.texto_principal, /usted/i, "el texto principal le habla de usted");
-  assert.match(spec.copy_de_usted.texto_principal, /nada sale sin que usted lo apruebe/i, "la frase de control sin «con un toque»");
+  for (const [id, c] of Object.entries(spec.copy_de_usted.por_anuncio)) {
+    assert.match(c.texto_principal, /usted/i, `${id}: el texto principal le habla de usted`);
+    assert.match(c.texto_principal, /Ningún mensaje de Pendientes sale sin que usted lo apruebe/, `${id}: el control acotado a Pendientes, sin «con un toque»`);
+  }
 });
 
 test("las reglas de corte son las de §5.7: día 3, día 7 y día 14, con Bs 40, Bs 390 y CTR 0,8 %", () => {
@@ -160,19 +166,48 @@ test("el archivo no lleva credenciales, tokens ni teléfonos de pacientes", () =
   assert.ok(!/\b591[67]\d{7}\b/.test(crudo), "el número del bot es un marcador {{NUMERO_DEL_BOT}}, no un teléfono pegado");
 });
 
-test("el texto del anuncio ES el caption del brief y abre con el filtro de dueños (§5.2); no dice «con IA» junto al «a quién»", () => {
-  const brief = JSON.parse(leer("hermes-content/carousels/briefs/ads/onia-platform-dental-meta-a1v5-las-diez.json"));
-  const micro = JSON.parse(leer("hermes-content/carousels/briefs/ads/onia-platform-dental-meta-a1v5-micro-10s.json"));
-  assert.equal(spec.copy_de_usted.texto_principal, brief.caption, "el JSON copia el caption del brief");
-  assert.equal(micro.caption, brief.caption, "el video de 10 s lleva el mismo texto que el de 11 s");
-  for (const c of spec.creacion.filter((p) => p.herramienta === "ads_create_creative")) {
-    assert.equal(c.args.message, brief.caption, `${c.para}: el message es el caption del brief`);
-    assert.equal(c.args.headline, brief.headline_anuncio, `${c.para}: el titular es el del brief`);
+test("el texto, el titular y el precargado de cada anuncio SON los de su brief de la prueba 1 v2, y abren con el filtro de dueños (§5.2)", () => {
+  const todos = [...spec.anuncios.entran, ...spec.anuncios.esperan.filter((a) => a.brief)];
+  assert.equal(todos.length, 5, "G1-4, G1-3, G1-5, G1-1 y G1-2");
+  const creativos = todosLosCreativos();
+  for (const a of todos) {
+    const brief = briefV2(a.id);
+    assert.equal(a.brief, `hermes-content/carousels/briefs/ads/prueba1-v2/${a.id}.json`);
+    assert.equal(brief.id, a.id);
+    assert.equal(a.texto_precargado, brief.precargado, `${a.id}: el precargado es el del brief`);
+    assert.equal(a.codigo, brief.precargado.match(/\((D\d+)\)/)[1], `${a.id}: el código es el del precargado`);
+    assert.equal(spec.copy_de_usted.por_anuncio[a.id].texto_principal, brief.texto_principal, `${a.id}: el copy del JSON es el del brief`);
+    const c = creativos.find((x) => x.para === a.id);
+    assert.ok(c, `${a.id}: tiene su creativo`);
+    assert.equal(c.args.message, brief.texto_principal, `${a.id}: el message es el texto principal del brief`);
+    assert.equal(c.args.headline, brief.titular, `${a.id}: el titular es el del brief`);
+    assert.equal(decodeURIComponent(c.args.link_url.split("text=")[1]), brief.precargado, `${a.id}: el link de WhatsApp lleva el precargado del brief`);
+    assert.match(brief.texto_principal, /^Para dueños y dueñas de clínicas dentales de Santa Cruz\./, `${a.id}: abre con el filtro: el cliente ideal es ≲ 0,1 % del público y el anuncio sin filtro trae pacientes`);
+    assert.ok(!/con IA/i.test(brief.texto_principal), `${a.id}: el «a quién escribirle» sale de reglas, no de la IA (catálogo §8)`);
+    assert.ok(!/\b\d+\s*minutos\b/i.test(brief.texto_principal), `${a.id}: no promete minutos: el bot y /contacto dicen 30 y la agenda 20 (L-04)`);
+    assert.equal(c.args.call_to_action_type, "WHATSAPP_MESSAGE");
+    assert.equal(c.args.page_id, spec.cuenta.pagina_id);
   }
-  assert.match(brief.caption, /^Para dueños y dueñas de clínicas dentales de Santa Cruz\./, "el texto abre con el filtro: el cliente ideal es ≲ 0,1 % del público y el anuncio sin filtro trae pacientes");
-  assert.equal(brief.kicker, "Para dueños y dueñas de clínicas dentales de Santa Cruz", "la imagen lleva el mismo filtro");
-  assert.ok(!/con IA/i.test(brief.caption), "catálogo §8: el «a quién escribirle» sale de reglas, no de la IA");
-  assert.ok(!/\b\d+\s*minutos\b/i.test(`${brief.nota} ${brief.caption}`), "ni la imagen ni el texto prometen minutos: el bot y /contacto dicen 30 y la agenda 20 (L-04)");
+});
+
+test("quién entra y quién espera: las cuatro que entran no dependen de G-05, G1-2 sí y queda fuera de la creación", () => {
+  const entran = spec.anuncios.entran.map((a) => a.id);
+  assert.deepEqual(entran.sort(), ["G1-1", "G1-3", "G1-4", "G1-5"]);
+  for (const id of entran) {
+    const b = briefV2(id);
+    assert.match(b.estado, /^sale/, `${id}: su brief dice que sale`);
+    assert.ok(!JSON.stringify(b.promesas).includes("G-05"), `${id}: no depende de G-05 («Vuelve a citar» está ⬜)`);
+    assert.ok(spec.creacion.some((p) => p.para === id && p.herramienta === "ads_create_ad"), `${id}: tiene su paso de anuncio en la creación`);
+  }
+  const g12 = briefV2("G1-2");
+  assert.match(g12.estado, /^espera/, "G1-2 espera");
+  assert.ok(JSON.stringify(g12.promesas).includes("G-05"), "G1-2 depende de G-05");
+  assert.ok(!spec.creacion.some((p) => p.para === "G1-2"), "G1-2 no está en la creación: agregarlo después reinicia el aprendizaje");
+  assert.ok(spec.creacion_si_G05_en_verde.pasos.every((p) => p.para === "G1-2"), "los pasos condicionados son solo de G1-2");
+  assert.equal(spec.anuncios.esperan.find((a) => a.id === "G1-2").codigo, "D8");
+  assert.deepEqual(spec.creacion.filter((p) => p.herramienta === "ads_create_ad").length, 4, "cuatro anuncios en la campaña");
+  const ids = spec.activacion.args.object_ids;
+  assert.equal(ids.length, 2 + 4, "campaña, conjunto y cuatro anuncios se activan juntos");
 });
 
 test("cada condición de activación está definida, y cada condición definida se exige", () => {
@@ -183,15 +218,15 @@ test("cada condición de activación está definida, y cada condición definida 
 });
 
 test("la subida de medios tiene sus argumentos y cada marcador {{…}} sale de un paso anterior o de «valores_a_resolver»", () => {
-  for (const p of spec.creacion.filter((x) => x.herramienta === "ads_creative_upload_media")) {
+  for (const p of [...spec.creacion, ...spec.creacion_si_G05_en_verde.pasos].filter((x) => x.herramienta === "ads_creative_upload_media")) {
     assert.equal(p.args.ad_account_id, spec.cuenta.ad_account_id, `paso ${p.paso}: cuenta`);
     assert.ok(["LOCAL_FILE", "URL"].includes(p.args.upload_source), `paso ${p.paso}: upload_source`);
     assert.equal(p.args_si_es_por_url.upload_source, "URL");
     assert.ok(["IMAGE", "VIDEO"].includes(p.args_si_es_por_url.media_type), `paso ${p.paso}: media_type para la subida por URL`);
   }
   const producidos = new Set(Object.keys(spec.valores_a_resolver).flatMap((k) => k.split(",").map((x) => x.trim())));
-  for (const p of spec.creacion) for (const g of [p.guarda].flat().filter(Boolean)) producidos.add(g);
-  const usados = new Set([...JSON.stringify([spec.creacion, spec.activacion]).matchAll(/\{\{([^}]+)\}\}/g)].map((m) => m[1]));
+  for (const p of [...spec.creacion, ...spec.creacion_si_G05_en_verde.pasos]) for (const g of [p.guarda].flat().filter(Boolean)) producidos.add(g);
+  const usados = new Set([...JSON.stringify([spec.creacion, spec.creacion_si_G05_en_verde, spec.activacion]).matchAll(/\{\{([^}]+)\}\}/g)].map((m) => m[1]));
   for (const m of usados) {
     const ok = producidos.has(m) || (m.startsWith("URL_PUBLICA_") && producidos.has("URL_PUBLICA_*")) || (m.startsWith("hash_") || m.startsWith("creative_id_") || m.startsWith("ad_object_id_")) && producidos.has("hash_*");
     assert.ok(ok, `el marcador {{${m}}} no sale de ningún paso ni de «valores_a_resolver»`);
@@ -199,7 +234,7 @@ test("la subida de medios tiene sus argumentos y cada marcador {{…}} sale de u
 });
 
 test("sin Instagram vinculado, ningún creativo pide posiciones de Instagram (no entregarían)", () => {
-  for (const c of spec.creacion.filter((p) => p.herramienta === "ads_create_creative")) {
+  for (const c of todosLosCreativos()) {
     const crudo = JSON.stringify(c.args);
     if (!("instagram_user_id" in c.args)) assert.ok(!/instagram/i.test(crudo), `${c.para}: pide Instagram sin instagram_user_id`);
   }
@@ -226,8 +261,10 @@ test("LISTA PARA MOSTRAR: el texto principal y el titular son los del brief, pal
   assert.ok(bloque, "el bloque de texto principal existe");
   assert.equal(bloque[1], brief.caption, "el texto principal de la lista es el caption del brief");
   assert.ok(lista.includes(`\`${brief.headline_anuncio}\``), "el titular de la lista es el del brief");
-  for (const a of [...spec.anuncios.entran, ...spec.anuncios.esperan].filter((x) => ["D1", "D2", "D3"].includes(x.codigo))) {
-    assert.ok(lista.includes(a.texto_precargado) || lista.includes(`(${a.codigo})`), `${a.id}: la lista nombra su código ${a.codigo}`);
+  const viejos = spec.anuncios.reemplazados.filter((x) => ["D1", "D2", "D3"].includes(x.codigo));
+  assert.equal(viejos.length, 3, "ancla: A1-E, A1-V y A1-S están como reemplazados en la spec");
+  for (const a of viejos) {
+    assert.ok(lista.includes(a.texto_precargado) || lista.includes(`(${a.codigo})`), `${a.id}: la lista (§1, reemplazado por la v2) nombra su código ${a.codigo}`);
   }
   assert.ok(lista.includes("Hola, vi el anuncio de Onia (D1). Tengo una clínica dental."), "el precargado exacto de D1 está escrito");
 });

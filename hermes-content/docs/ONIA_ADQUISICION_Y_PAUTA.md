@@ -744,6 +744,11 @@ firmar la respuesta a la pauta, dar el OK de gasto (US$ 56 · 14 días · Bs 750
 | Conjunto | Uno solo: `Dental SCZ · 25+ · WhatsApp` (§5.10, «Públicos») |
 | Anuncios | **Tres copias del mismo concepto, «el paciente de mañana que no confirmó»**, que cambian solo el formato: **A1-E** imagen 4:5 + historia, código `(D1)` · **A1-V** video de 11 s, `(D2)` · **A1-S** selfie de 25 s de Sergio Urcullo con la pantalla, `(D3)` (guion en `research/competencia/anuncios/COMPARACION-DISENO-8OCT.md`) |
 
+> **11-oct, noche: los anuncios de esta tabla (A1-E, A1-V, A1-S) los reemplaza la prueba 1 v2** (Sergio Urcullo vio A1-E: *«ese ad está horrible»*). Son 4 anuncios que copian, zona por zona, anuncios de la
+> competencia que duran, con Sergio Urcullo como persona y la fila real de Pendientes (G1-4, G1-3, G1-5 y G1-1, códigos D10, D9, D11 y D7); G1-2 (D8) entra solo si la fila G-05 pasa a ✅ **antes** de crear,
+> porque agregar un anuncio después es una edición significativa. Piezas y fichas: `carousels/briefs/ads/prueba1-v2/`; la campaña, `CAMPANA-1-LISTA-PARA-CREAR.json` (reescrita el 11-oct). El resto de §5.11
+> (un concepto, tandas, métricas, cortes, frenos) sigue vigente; las filas de §5.10 que se exigen son B-01, B-02, C-02, D-01, E-01, G-01, G-04 y G-06 (+ G-11 y L-05 para la demostración).
+
 - **Por qué tres copias de un concepto y no tres conceptos:** es el patrón de lo que más dura en la competencia
   (`COMUNICACION_Y_PAUTA_COMPETENCIA.md` §2: 2-5 copias por concepto), y deja una sola diferencia, **con persona o
   sin persona**. Los 7 anuncios de software que sobreviven tienen una persona (§2.5); A1-S es la que pone a prueba eso.

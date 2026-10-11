@@ -1,5 +1,6 @@
 # Prueba 1 de Meta: las tres copias del mismo concepto (9-oct)
 
+> **11-oct, noche: A1-E, A1-V y A1-S los reemplaza la prueba 1 v2 (`prueba1-v2/`, códigos D7 a D11).** Esta tabla queda como historia de A1.
 > **Lo que se le muestra a Sergio Urcullo (3 creativos, público, presupuesto, corte y go/no-go del 13-oct): `CAMPANA-PRUEBA-1-LISTA-PARA-MOSTRAR.md`.**
 > Plan: `ONIA_ADQUISICION_Y_PAUTA.md` §5.11 (rama de la madre hasta que entre a `main`). **Nada está creado ni subido en Meta; cero gasto.**
 > Concepto único: *«el paciente de mañana que no confirmó»*. Cambia solo el formato. Copy corregido el 9-oct: **«Usted lo aprueba. Nada sale sin su OK.»** (el envío con un toque, G-03, está a medias y no se promete).
