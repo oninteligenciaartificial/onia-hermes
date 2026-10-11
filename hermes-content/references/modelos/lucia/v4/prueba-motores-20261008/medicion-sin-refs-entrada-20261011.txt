@@ -15,7 +15,7 @@
 #   MATRIZ CRUZADA (añadida): cada clip también se mide contra el subconjunto de cada motor. Sirve para separar «foto recibida» de «subconjunto
 #       distinto»: un centroide de 4 o 6 fotos no puntúa igual que uno de 8 aunque no haya fuga. «gap» = coseno medio a las fotos recibidas
 #       menos coseno medio a las no recibidas. EXCESO = lo del motor menos la media de los 3 controles (clips sin entradas) bajo el mismo subconjunto.
-#   COMPROBACIÓN: la columna A reproduce PROCEDENCIA.jsonl l.97 (columna PROC) en los 25 puntos, diferencia <= 0,0005 (redondeo a 3 decimales).
+#   COMPROBACIÓN: la columna A reproduce PROCEDENCIA.jsonl l.97 (columna PROC) en los 34 puntos (7+7+7+6+7 de los cinco clips de la primera parte; la prueba estricta de abajo suma Kling 3.0 pro: 41), diferencia <= 0,0005 (redondeo a 3 decimales).
 #
 # COMANDO (desde la raíz del repo; FACE_GATE_HOME = scratchpad con venv y modelos ya existentes; ~8 s por clip en CPU):
 #   S=$FACE_GATE_HOME; P=hermes-content/references/modelos/lucia/v4; M=$P/prueba-motores-20261008
