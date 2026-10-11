@@ -24,6 +24,8 @@ días abierta y su conversación costó ~777 M de tokens. **La madre nueva arran
 
 ## ⏸ ESTADO AL CLEAN (11-oct ~04:50 UTC) — la madre v4 sigue en la MISMA sesión después del /clear
 
+**Reparto nuevo (11-oct ~05 UTC, orden de SU vía la otra madre):** esta sesión es la **MADRE DESARROLLO-INFRA** (Plataforma, Ventas, Hermes, infra). **MADRE MARKETING** (sesión local «MADRE MARKETING», antes madre v2) orquesta Lucía y Marca y hace su PC. No escribirles a Lucía ni a Marca: pasarle a MADRE MARKETING. Ronda nueva `2be40d8a` (solo mis 3 nubes). Mirar prod 06:55 UTC y revisar PRs #191/#162/#145/#172/#144 → delegado a Hermes (QA). Guiones `wf_63436b3d-712` → entregar a MADRE MARKETING al terminar.
+
 Sergio Urcullo: *«a trabajar pero con sentido, terminar de desarrollar; te hago clean y continuás»*. Objetivo: **terminar la
 1.0** (lo demás, delegado). Leé esto + el libro `cola/loop/madre.md` (D4-D9, C9) y seguí.
 - **En vuelo (te llega una notificación; no relanzar):**
@@ -31,7 +33,7 @@ Sergio Urcullo: *«a trabajar pero con sentido, terminar de desarrollar; te hago
      Orden escrita de SU: «mergeá vos #118, #119, #110 y títulos». Al terminar: anotar SHAs en el libro (D10) y avisar.
   2. Workflow `wf_63436b3d-712` (guiones nuevos): escribe `cola/plan-3-semanas/GRABAR-NUEVOS-11-OCT.md` (≥10 guiones
      simples: repos, agentes, noticias). Al terminar: LEERLO, mirar 2-3 guiones, commitear y mandarlo a SU con SendUserFile.
-- **Loops (CronCreate de esta sesión):** ronda `333b77d3` (:07 :27 :47), parte `313765ea` (07:53), cierre `db8b3b4b`
+- **Loops (CronCreate de esta sesión):** ronda `2be40d8a` (:07 :27 :47, solo Plataforma/Ventas/Hermes), parte `313765ea` (07:53), cierre `db8b3b4b`
   (21:53), lote `836a6670` (lun 08:13). Sobreviven al clean; si no, recrearlos desde §F del libro.
 - **Publicación:** 06:50 UTC (02:50 La Paz) saca lo mergeado. Mirarlo con login (o pedírselo a la madre v2) y capturas a SU.
 - **1.0, lo que falta y quién lo destraba:** #136 bandeja y #130 PWA (diseño aprobado; falta «mergeá vos #136 y #130» de SU)
