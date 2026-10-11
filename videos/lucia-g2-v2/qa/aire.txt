@@ -1,22 +1,22 @@
 cuadros: 636 (26.500 s)   «idéntico» = menos de 8 píxeles (de 129600) cambian más de 6 niveles entre cuadros consecutivos
-píxeles cambiados entre cuadros consecutivos: mínimo 0 · mediana 1476 · percentil 5 0 · transiciones idénticas: 116 de 635
+píxeles cambiados entre cuadros consecutivos: mínimo 0 · mediana 1480 · percentil 5 0 · transiciones idénticas: 115 de 635
 MAYOR TRAMO QUIETO (pantalla idéntica, con o sin tarjeta): 0.875 s (21 cuadros)
 tramos idénticos de más de 0.3 s:
    3.417– 3.750 s  0.333 s idénticos; sin tarjeta en lectura: 0.000 s  ok (tarjeta en lectura)
    4.833– 5.375 s  0.542 s idénticos; sin tarjeta en lectura: 0.000 s  ok (tarjeta en lectura)
    7.042– 7.875 s  0.833 s idénticos; sin tarjeta en lectura: 0.083 s  ok (tarjeta en lectura)
-  20.833–21.375 s  0.542 s idénticos; sin tarjeta en lectura: 0.083 s  ok (tarjeta en lectura)
+  20.708–21.375 s  0.667 s idénticos; sin tarjeta en lectura: 0.083 s  ok (tarjeta en lectura)
   21.667–22.417 s  0.750 s idénticos; sin tarjeta en lectura: 0.000 s  ok (tarjeta en lectura)
   22.625–23.500 s  0.875 s idénticos; sin tarjeta en lectura: 0.000 s  ok (tarjeta en lectura)
-MAYOR TRAMO QUIETO SIN TARJETA EN LECTURA: 0.292 s (tope 0.3 s)
+MAYOR TRAMO QUIETO SIN TARJETA EN LECTURA: 0.167 s (4 cuadros; tope 0.3 s)
 eventos visuales por 10 s (de plan.resuelto.json): mínimo 12, máximo 27, promedio 19.62; hueco máximo entre eventos 1.79 s (tope 2,0 s)
 
 resumen por escena (diferencia media entre cuadros; los clips de IA son los más tranquilos):
   foto       0.000– 3.417 s  diferencia media   4.24  píxeles cambiados: mediana   1669, mínimo   1300  transiciones idénticas 0
-  pl-regla   3.167– 8.083 s  diferencia media   4.66  píxeles cambiados: mediana    194, mínimo      0  transiciones idénticas 47
-  m1         7.833–10.542 s  diferencia media   8.83  píxeles cambiados: mediana   1723, mínimo     91  transiciones idénticas 0
+  pl-regla   3.167– 8.083 s  diferencia media   4.66  píxeles cambiados: mediana    195, mínimo      0  transiciones idénticas 45
+  m1         7.833–10.542 s  diferencia media   8.83  píxeles cambiados: mediana   1715, mínimo     85  transiciones idénticas 0
   m3        10.292–13.292 s  diferencia media   9.78  píxeles cambiados: mediana  19095, mínimo  11011  transiciones idénticas 0
   m5        13.042–17.125 s  diferencia media   6.37  píxeles cambiados: mediana   8722, mínimo   3552  transiciones idénticas 0
-  pl-l      16.875–23.708 s  diferencia media   3.04  píxeles cambiados: mediana    197, mínimo      0  transiciones idénticas 69
-  k1        23.458–26.500 s  diferencia media   4.30  píxeles cambiados: mediana   1826, mínimo    181  transiciones idénticas 0
+  pl-l      16.875–23.708 s  diferencia media   3.04  píxeles cambiados: mediana    196, mínimo      0  transiciones idénticas 70
+  k1        23.458–26.500 s  diferencia media   4.30  píxeles cambiados: mediana   1793, mínimo    178  transiciones idénticas 0
 ✔ ningún tramo de más de 0.3 s con la pantalla idéntica y sin una tarjeta en lectura

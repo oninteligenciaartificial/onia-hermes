@@ -74,7 +74,31 @@ Se **conservó**: el gancho en los 3 primeros segundos (título de 5 palabras co
 ## QA (final `out/g3-v2-final-1080x1920.mp4`)
 Todos los resultados están en `qa/`. Resumen y resultado:
 
-__QA__
+| Control | Resultado | Evidencia |
+|---|---|---|
+| `hyperframes check` (0.8.142) | **0 errores**; 0 avisos de runtime/layout/motion; contraste **13/13 AA**. Quedan 27 avisos de estilo (`nested_structure_needs_subcomposition`, igual que G3) y 2 informativos (`content_overlap` en el cuadro de relevo entre dos tarjetas, 1 cuadro) | `qa/hyperframes-check.txt` |
+| Duración y voz (build) | **27,458 s** (659 cuadros; pedido 26-30 s); 12 tramos, huecos de 6 cuadros = 0,25 s (≤ 0,25), 438 caracteres (449 con saltos; ≤ 450); cifras: solo 1-2-3, 0,835 y 120, validadas contra `PROCEDENCIA.jsonl`; CTA exacto 2,5 s en pantalla (2,4-5,5 s) hasta el final; rótulo 0-3,25 s | `scripts/build.mjs` (se corta si algo falla) |
+| `medir-dom.mjs` (zona segura en el DOM) | **ok**: todo texto dentro de y 280-1490; sobre la descartada desde y=887 (mentón+40), sobre la foto nueva y K4 terminando antes del cabello (≤ 880/885); el recorte del letrero y su leyenda en el cielo (y 300-522, x ≤ 980); nada en los 80 px de la derecha bajo y=1000; ningún texto < 34 px (tamaños 36/38/40/44/52/66; el **rótulo mide 40 px**); ningún texto se pisa (cada 0,25 s); el contador marca el cuadro n del clip en los 118 cuadros | `qa/zona-segura.txt` |
+| `hueco-tarjetas.mjs` | **0 de 659 cuadros sin tarjeta** (G3 v1 permitía 0-2: ahora el gancho ya está en el cuadro 0) | `qa/hueco-tarjetas.txt` |
+| `ventanas.mjs` (lectura medida en el DOM, con empujes) | **ok en 19 de 19**: 12 tarjetas, rótulo (3,17 s desde el cuadro 0), 3 etiquetas, leyenda del recorte, sello y rótulo del visor; la más justa es c6 «Sin mensaje.» (1,29 s para 2 palabras: pide 1,00) | `qa/ventanas.txt` |
+| `eventos.mjs` | **41 eventos visuales en 27,5 s = 14,9 por 10 s; hueco máximo 1,616 s (≤ 2,0 s)**. Tramo quieto *de diseño* (sin contar el empuje lento ni los clips): **0,25 s** (≤ 0,3) | `qa/eventos-visuales.txt`, `.json` |
+| **Aire muerto, en los píxeles del final** (`aire.mjs`) | **Mayor tramo quieto: 0,000 s** (0 de 659 cuadros quietos, 0 idénticos al anterior). G3 v1 medido igual: **1,917 s** sin tarjeta en lectura (2,167 s en total; 903 de 1391 cuadros quietos). Con el umbral más estricto (cambio medio < 0,3 niveles de luma) el mayor tramo quieto SIN tarjeta en lectura sigue en 0,292 s (≤ 0,3); contando también los tramos que caen dentro de una tarjeta en lectura, el mayor es 1,75 s. Los cuadros que menos cambian lo hacen un 0,010 % de los píxeles (empuje lento de las fotos) | `qa/aire.txt` |
+| `vacios.mjs` (sustituye a `vacios.py`: esta nube no tiene numpy/cv2) | **0 cuadros planos** (std < 6); saltos de luma entre cuadros ≤ 17 en las costuras claras y ≤ 42 en las dos que tocan la placa oscura (repartidos en 4-5 cuadros; G3 v1 ≤ 47) | `qa/vacios-y-saltos.txt` |
+| `costuras.mjs` (empuje rígido de 6 cuadros en el DOM) | **5 de 5 ok**: separación entre bordes 0,0 px en cada cuadro, lo que sale termina en x=0 y lo que entra empieza en 1080 / llega a 0, y cada empuje cae EXACTO en el hueco de voz entre dos tramos | `qa/costuras.txt`, `qa/hoja-costuras.jpg` (6 cuadros de cada costura, mirados) |
+| PSNR/SSIM de la cara contra la fuente (`psnr-clips.mjs`) | **El clip cae en el cuadro prometido**: K4 cuadros 20, 72, 104, 120, 125 y K1 30, 100, 130, con el PICO en el cuadro n (vecinos −1/+1 a 25-40 dB); cara 43-45 dB / SSIM 0,985-0,987 (32,6 dB en el 120 por el resplandor del recuadro «origen» sobre el borde del recorte). Hallazgo: con `data-start`/`data-media-start` a 3 decimales el clip llegaba 1-2 cuadros tarde; el build ahora escribe 6 decimales y adelanta 0,4 ms el inicio de cada contenedor y de cada clip (trampa nueva, medida con un render de prueba; la madre puede sumarla a `.claude/skills/lucia/montaje-hyperframes.md`, que este encargo no tocó) | `qa/psnr-cara-clips.txt` |
+| PSNR de las 3 fotos contra su fuente al zoom del plan (`fotos-psnr.mjs`) | **ok**: 30,8-36,6 dB; el empuje lento no corre ni deforma la imagen | `qa/psnr-fotos.txt` |
+| Control de identidad de cara (SCRFD) | **NO corrido** (sin numpy/cv2/insightface; instalar pide aprobación). Sustituido por lo de arriba; mismas fotos y clips que G3 v1 (0,717-0,830 contra la fuente) | `qa/face-gate.txt` |
+| `grep-prohibidas.mjs` sobre pantalla, pie y **voz** | **limpio**: sin marcas de terceros, sin profesión de salud, sin producto de Onia, sin nombre de Sergio Urcullo, sin «tapada», sin promesas | `qa/grep-prohibidas.txt` |
+| `ffprobe` | H.264 1080x1920, 24 fps, **659 cuadros = 27,458 s**, bt709; AAC 48 kHz estéreo −91 dB. Preview 360p: 360x640, 659 cuadros (render real de HyperFrames, no un reescalado) | `qa/specs-final.txt` |
+| **Mirado renderizado** | hojas de contacto del FINAL a 1080x1920 a 2 cuadros por segundo con guías (y=1490 rojo, x=1000 magenta, mentón cian) y hoja de las 5 costuras; mirados: cuadro 0 (título + rótulo), aro y recorte del letrero a 1,5-2 s, rótulo hasta 3 s, las tres etiquetas, los dos recortes de la libreta, las tres cruzadas del clip con su contador, el recuadro «origen», la placa con el sello y el CTA en los últimos 2,5 s | `qa/hoja-2fps-1.jpg`, `-2`, `-3`, `qa/hoja-costuras.jpg`, `qa/portada-1.6s.jpg` |
+
+**SHA-256 del final** `out/g3-v2-final-1080x1920.mp4` (33.153.378 bytes):
+```
+222c8cebe518c695fd57dda6c229ab0c1b1ab4c28a79dec44469cb4ddf6eff44
+```
+(`qa/sha256-final.txt`). El render no es bit a bit reproducible entre ejecuciones: este es el hash del que pasó los controles.
+
+**Dudas abiertas / lo que no se pudo cumplir:** (1) el control de identidad SCRFD no se corrió (causa arriba); (2) `edicion-referentes/SKILL.md` de este checkout llega a la regla 14: la «regla 15» se aplicó como la definió el encargo (pausa ≤ 0,3 s entre frases, ningún hueco quieto, evento nuevo cada ≤ 2,0 s); (3) el ritmo de 3,6 palabras/s es un supuesto: con la voz real habrá que retemporizar; (4) «tramo quieto» se midió en píxeles con un umbral que fijé yo (la sensibilidad está en `qa/aire.txt`); sin el empuje lento de las fotos, el diseño sostiene 0,25 s, pero el pixel real sería el de una foto fija con tarjeta.
 
 ## Cuando llegue la voz
 1. Generar el audio de `guion-voz.txt` línea por línea (no se generó ninguno: 0 créditos) y medir la duración real de cada línea.

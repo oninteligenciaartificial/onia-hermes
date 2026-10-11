@@ -4,7 +4,7 @@ height=1920
 color_space=bt709
 r_frame_rate=24/1
 duration=26.500000
-bit_rate=9115204
+bit_rate=9113794
 nb_frames=636
 codec_name=aac
 sample_rate=48000
@@ -13,10 +13,16 @@ r_frame_rate=0/0
 duration=26.500000
 bit_rate=2277
 nb_frames=1244
-[Parsed_volumedetect_0 @ 0x55fcaee83880] mean_volume: -91.0 dB
-[Parsed_volumedetect_0 @ 0x55fcaee83880] max_volume: -91.0 dB
-5b8210dd2e44717167a8843e5d35ae89ce72cd8a29e91673c8e584393ceb6e8a  out/g2-v2-final-1080x1920.mp4
-total 29520
+[Parsed_volumedetect_0 @ 0x556443add880] mean_volume: -91.0 dB
+[Parsed_volumedetect_0 @ 0x556443add880] max_volume: -91.0 dB
+2b71f0d8506f51164f5ff42aac07672db24e2828ad8ae57d16109f38badec4ac  out/g2-v2-final-1080x1920.mp4
+2c2eede1c4a8e71d850db49ca41443121cd7b27ed643fdd2aaafc8961efb0537  qa/g2-v2-preview-360p.mp4
+-rw-r--r-- 1 root root 1808915 Oct 11 04:54 qa/g2-v2-preview-360p.mp4
+
+out:
+total 29512
 drwxr-xr-x 2 root root     4096 Oct 11 04:36 .
 drwxr-xr-x 7 root root     4096 Oct 11 04:12 ..
--rw-r--r-- 1 root root 30216436 Oct 11 04:47 g2-v2-final-1080x1920.mp4
+-rw-r--r-- 1 root root 30211767 Oct 11 04:57 g2-v2-final-1080x1920.mp4
+stream|codec_name=h264|width=360|height=640|r_frame_rate=24/1|duration=26.500000|nb_frames=636
+stream|codec_name=aac|r_frame_rate=0/0|duration=26.500000|nb_frames=1244

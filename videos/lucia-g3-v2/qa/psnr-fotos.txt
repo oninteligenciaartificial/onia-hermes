@@ -1,0 +1,8 @@
+PSNR de las fotos del final contra la fuente con el mismo zoom (franja inferior sin tarjetas):
+  ok  desc   cuadro 62 (2.58 s, zoom 1.0104): 33.0 dB
+  ok  desc   cuadro 125 (5.21 s, zoom 1.0211): 30.8 dB
+  ok  buena  cuadro 197 (8.21 s, zoom 1.0127): 36.6 dB
+  ok  buena  cuadro 215 (8.96 s, zoom 1.0219): 36.3 dB
+  ok  agenda cuadro 284 (11.83 s, zoom 1.0113): 35.1 dB
+  ok  agenda cuadro 337 (14.04 s, zoom 1.0214): 36.5 dB
+✔ las tres fotos coinciden con su fuente al zoom del plan (≥ 28 dB)

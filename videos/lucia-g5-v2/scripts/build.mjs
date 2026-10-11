@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 // Lucía · G5 v2 «Cómo mido si una cara es la de Lucía (y cuándo no creerle al número)» (26,8 s, 1080x1920, 24 fps) — re-corte de G5 con HyperFrames (11-oct-2026).
 // Lee plan.json (capas, tiempos, datos) y guion-voz.txt (los TRAMOS: una línea de voz = un tramo) → valida reglas de texto, costuras, el CRONOGRAMA DE VOZ
-// (palabras / 3,6 + hueco ≤ 0,25 s, ≤ 450 caracteres) Y LOS NÚMEROS / AFIRMACIONES contra v4/PROCEDENCIA.jsonl → escribe index.html
+// (caracteres / 17 por segundo, o duraciones.json si existe, + hueco ≤ 0,25-0,30 s, ≤ 450 caracteres; plan.json tiene que estar al día con él: scripts/retemporizar.mjs)
+// Y LOS NÚMEROS / AFIRMACIONES contra v4/PROCEDENCIA.jsonl → escribe index.html
 // (DOM estático + un único timeline GSAP) y los manifiestos que leen los controles (qa/elementos-texto.json, qa/eventos-plan.json, qa/datos-plan.json, qa/lectura-plan.json).
 // 0 créditos: tres fotos y el cierre ya pagados el 8-oct, dos cuadros de clips crudos de G2 (versionados en assets-fijos/), 8 referencias oficiales. SIN VOZ: el audio es silencio.
 // Sin clips: fotos fijas con empuje lento, cuadros fijos y placas. Método y trampas: .claude/skills/lucia/montaje-hyperframes.md. Plantilla: videos/lucia-g5/ (57,5 s).
@@ -10,7 +11,8 @@ import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { cronograma, CUPO, GAP_MAX } from './voz.mjs';
+import { CUPO, GAP_MAX, GAP_OBJ, CPS } from './voz.mjs';
+import { cronogramaDelPlan, retemporizar, diferencias } from './retemporizar.mjs';
 
 const P = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const plan = JSON.parse(fs.readFileSync(path.join(P, 'plan.json'), 'utf8'));
@@ -100,21 +102,24 @@ for (const cad of plan.cadenas_de_tarjetas) for (let i = 1; i < cad.length; i++)
 if (plan.cadenas_de_tarjetas[0].length !== plan.tarjetas.length) errores.push('la cadena de tarjetas no incluye a todas');
 // ── CRONOGRAMA DE VOZ: cada línea de guion-voz.txt es un tramo; el plan (tarjetas y tramos) tiene que seguirlos al cuadro ──
 const vozTxt = fs.readFileSync(path.join(P, 'guion-voz.txt'), 'utf8');
-const crono = cronograma(vozTxt, plan.voz.ultimo_tramo_cuadros);
+const crono = cronogramaDelPlan(P, plan);                    // estimado a 17 car/s, o con las duraciones reales si existe duraciones.json
 const voces = crono.tramos;
 {
   if (crono.chars > CUPO) errores.push(`guion-voz.txt: ${crono.chars} caracteres (con un salto entre líneas): pasa el cupo de ${CUPO}`);
-  if (crono.cuadros !== plan.lienzo.cuadros) errores.push(`guion-voz.txt da ${crono.cuadros} cuadros y plan.lienzo.cuadros dice ${plan.lienzo.cuadros}`);
+  if (crono.cuadros !== plan.lienzo.cuadros) errores.push(`guion-voz.txt da ${crono.cuadros} cuadros y plan.lienzo.cuadros dice ${plan.lienzo.cuadros}: correr node scripts/retemporizar.mjs`);
+  // plan.json (tramos, tarjetas, costuras, medios y todos los eventos de plan.rel) tiene que estar al día con el cronograma de voz
+  { const dif = diferencias(plan, retemporizar(plan, crono)); if (dif.length) errores.push(`plan.json está desfasado del cronograma de voz (${dif.length} valores: ${dif.slice(0, 4).join(' · ')}…): correr node scripts/retemporizar.mjs`); }
   if (voces.length !== plan.tramos.length || voces.length !== plan.tarjetas.length) errores.push(`hay ${voces.length} líneas de voz, ${plan.tramos.length} tramos y ${plan.tarjetas.length} tarjetas: tienen que ser las mismas`);
   voces.forEach((v, i) => {
     const tr = plan.tramos[i], c = plan.tarjetas[i];
     if (!tr || !c) return;
-    if (Math.abs(tr.a - v.a) > 1e-6 || Math.abs(tr.b - v.b) > 1e-6) errores.push(`tramo ${v.n}: el plan dice ${tr.a}-${tr.b} y la línea de voz da ${v.a.toFixed(4)}-${v.b.toFixed(4)} (${v.palabras} palabras / 3,6 + hueco)`);
+    if (Math.abs(tr.a - v.a) > 1e-6 || Math.abs(tr.b - v.b) > 1e-6) errores.push(`tramo ${v.n}: el plan dice ${tr.a}-${tr.b} y la línea de voz da ${v.a.toFixed(4)}-${v.b.toFixed(4)} (${v.chars} caracteres / ${CPS} + hueco)`);
     if (Math.abs(c.a - v.a) > 1e-6 || Math.abs(c.b - v.b) > 1e-6 || c.tramo !== tr.id) errores.push(`tarjeta ${c.id}: no coincide con el tramo ${v.n} (${v.a.toFixed(4)}-${v.b.toFixed(4)})`);
     if (!v.ultimo && v.hueco > GAP_MAX + 1e-9) errores.push(`tramo ${v.n}: hueco de ${v.hueco.toFixed(3)} s entre líneas (máx ${GAP_MAX})`);
+    if (v.lecturaCorta) errores.push(`tramo ${v.n}: la lectura pide ${v.pide} cuadros y con un hueco ≤ ${GAP_MAX} s solo caben ${Math.floor(plan.lienzo.fps * (v.voz_s + GAP_MAX))}: acortar la tarjeta o la placa, o alargar la línea`);
     v.tarjeta = c.id;
   });
-  if (/\d[.,]\d/.test(vozTxt)) errores.push('guion-voz.txt: hay un decimal; la voz no lleva cifras con coma (se cuentan palabras habladas, no «0,70»)');
+  if (/\d[.,]\d/.test(vozTxt)) errores.push('guion-voz.txt: hay un decimal; la voz no lleva cifras con coma (el TTS las lee mal; la pantalla las muestra)');
   // lo que la voz dice y lo que la pantalla dice es lo mismo (las cifras van en pantalla; la voz las nombra sin decimales)
   const dice = (n, re) => { if (!re.test(voces[n - 1]?.linea || '')) errores.push(`la línea de voz ${n} no dice lo que su tarjeta (${re})`); };
   dice(1, /^¿Cómo sé que sigue siendo ella\?/); dice(4, /piso lo elegí yo/); dice(5, /otra persona/); dice(6, /a ojo/); dice(6, /medidor avisa/); dice(7, /clip varía/); dice(8, /letreros inventados/); dice(9, /imagen entera/);

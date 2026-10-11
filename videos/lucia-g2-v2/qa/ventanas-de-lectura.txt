@@ -1,0 +1,23 @@
+ventana legible medida en el DOM (opacidad ≥ 0,9 y ≥ 95 % dentro del lienzo), cuadro a cuadro:
+  ok  rotulo    6 pal  0.00–2.96 s  2.96 s (pide 2.40)  «Lucía Antelo · personaje IA de Onia»
+  ok  dA-m1     4 pal  8.29–10.42 s  2.13 s (pide 1.70)  «parecido 0 s: 0,79»
+  ok  dB-m1     3 pal  8.83–10.46 s  1.63 s (pide 1.35)  «5,9 s: 0,72»
+  ok  dA-m3     4 pal  10.75–13.17 s  2.42 s (pide 1.70)  «parecido 0 s: 0,69»
+  ok  dB-m3     3 pal  11.25–13.21 s  1.96 s (pide 1.35)  «5,9 s: 0,64»
+  ok  s-m3      3 pal  11.54–13.17 s  1.63 s (pide 1.35)  «bajo el piso»
+  ok  dA-m5     4 pal  13.50–15.71 s  2.21 s (pide 1.70)  «parecido 0 s: 0,80»
+  ok  dB-m5     3 pal  14.08–15.71 s  1.63 s (pide 1.35)  «5,9 s: 0,82»
+  ok  rf-l      7 pal  4.46–7.96 s  3.50 s (pide 2.75)  «5 de las 8 fotos de referencia»
+  ok  l-tit     8 pal  17.38–23.58 s  6.21 s (pide 3.10)  «Parecido al final: 3 de los 6 clips»
+  ok  l-mkl     3 pal  17.33–23.63 s  6.29 s (pide 1.35)  «mi piso · 0,70»
+  ok  l-nota    8 pal  19.04–23.58 s  4.54 s (pide 3.10)  «Final = segundo 5,9, que no se ve entero.»
+  ok  l-t1      3 pal  17.63–23.58 s  5.96 s (pide 1.35)  «Kling 3.0 std»
+  ok  l-l1      2 pal  17.04–20.50 s  3.46 s (pide 1.00)  «foto sola»
+  ok  l-m1      3 pal  20.71–23.58 s  2.88 s (pide 1.35)  «mantiene el cuarto»
+  ok  l-t2      3 pal  17.92–23.58 s  5.67 s (pide 1.35)  «Seedance 2.0 Mini»
+  ok  l-l2      2 pal  17.04–20.17 s  3.13 s (pide 1.00)  «foto sola»
+  ok  l-m2      3 pal  20.33–23.58 s  3.25 s (pide 1.35)  «cambió el plano»
+  ok  l-t3      2 pal  18.21–23.58 s  5.38 s (pide 1.00)  «Kling O3»
+  ok  l-l3      1 pal  17.04–19.83 s  2.79 s (pide 0.65)  «referencias»
+  ok  l-m3      3 pal  20.00–23.58 s  3.58 s (pide 1.35)  «inventó el cuarto»
+✔ todas las ventanas medidas alcanzan la regla de lectura

@@ -1,6 +1,6 @@
 PSNR del final contra la fuente (franja y 250-1000, fuente llevada a 1080x1920 con lanczos). Pico esperado en el cuadro n.
 medio  cuadro n  t_final   n-2   n-1   n+0   n+1   n+2    pico   ΔRGB(media)
-m1           12    8.333    34.1    35.8    36.9    34.6    33.0    +0 ok   +1/+0/+0
+m1           12    8.333    34.1    35.7    36.9    34.6    33.0    +0 ok   +1/+0/+0
 m1           30    9.083    35.2    36.2    37.0    30.0    27.3    +0 ok   +1/-1/+1
 m1           50    9.917    32.2    36.4    37.0    35.7    31.4    +0 ok   +1/+0/+0
 m3           14   10.875    21.0    22.8    36.1    25.8    22.3    +0 ok   +1/+0/+0

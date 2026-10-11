@@ -7,21 +7,25 @@
   "w": 1080,
   "h": 1920,
   "fps": 24,
-  "cuadros": 644,
-  "duracion": 26.833333333333
+  "cuadros": 639,
+  "duracion": 26.625
  },
  "acento": "#10C26B",
  "alerta": "#FF7A66",
  "voz": {
-  "palabras_por_segundo": 3.6,
-  "hueco_max_s": 0.25,
+  "car_por_segundo": 17,
+  "hueco_objetivo_s": 0.25,
+  "hueco_max_s": 0.3,
   "cupo_caracteres": 450,
   "ultimo_tramo_cuadros": 58,
-  "nota": "cada tramo = una línea de guion-voz.txt; dura palabras/3,6 s + un hueco ≤ 0,25 s bajado al cuadro. El último (CTA) dura 58 cuadros (2,417 s): el CTA tiene que verse ≥ 2,4 s y su línea habla 1,39 s; el resto es el tiempo de lectura de la tarjeta, no aire."
+  "lectura_min_cuadros": {
+   "8": 63
+  },
+  "nota": "cada tramo = una línea de guion-voz.txt; dura (caracteres / 17 s, o la duración REAL de duraciones.json si existe) + un hueco objetivo de 0,25 s bajado al cuadro de 24 fps (tope 0,30 s si la lectura de una tarjeta o placa lo pide: lectura_min_cuadros). El último (CTA) dura 58 cuadros (2,417 s): el CTA tiene que verse ≥ 2,4 s y su línea habla ~1,94 s; el resto es el tiempo de lectura de la tarjeta, no aire. scripts/retemporizar.mjs vuelve a poner todos los tiempos de este archivo desde el cronograma de voz y la tabla «rel»."
  },
  "aire": {
   "quieto_max_s": 0.3,
-  "evento_cada_max_s": 2.0,
+  "evento_cada_max_s": 2,
   "lectura": "0,35 s por palabra + 0,3 s (la misma de hueco-tarjetas / ventanas)"
  },
  "zona_segura": {
@@ -168,7 +172,7 @@
    "fijo": "assets-fijos/fr-m4.jpg",
    "clip": "seedance_2_0_mini_start_mas_3_refs_dd2d7c91 (Motor 4 de G2)",
    "cuadro": 96,
-   "t_clip": 4.0,
+   "t_clip": 4,
    "recorte_nativo": [
     0,
     0,
@@ -209,71 +213,71 @@
   {
    "id": "t1",
    "linea": 1,
-   "a": 0.0,
-   "b": 3.291666666667,
+   "a": 0,
+   "b": 3.416666666667,
    "escena": "gancho"
   },
   {
    "id": "t2",
    "linea": 2,
-   "a": 3.291666666667,
-   "b": 5.208333333333,
+   "a": 3.416666666667,
+   "b": 5.333333333333,
    "escena": "paso 1"
   },
   {
    "id": "t3",
    "linea": 3,
-   "a": 5.208333333333,
-   "b": 8.791666666667,
+   "a": 5.333333333333,
+   "b": 8.333333333333,
    "escena": "paso 2"
   },
   {
    "id": "t4",
    "linea": 4,
-   "a": 8.791666666667,
-   "b": 11.25,
+   "a": 8.333333333333,
+   "b": 10.75,
    "escena": "paso 2"
   },
   {
    "id": "t5",
    "linea": 5,
-   "a": 11.25,
-   "b": 14.0,
+   "a": 10.75,
+   "b": 13.625,
    "escena": "ejemplo B café"
   },
   {
    "id": "t6",
    "linea": 6,
-   "a": 14.0,
-   "b": 17.0,
+   "a": 13.625,
+   "b": 16.625,
    "escena": "razón 1"
   },
   {
    "id": "t7",
    "linea": 7,
-   "a": 17.0,
-   "b": 19.75,
+   "a": 16.625,
+   "b": 19.541666666667,
    "escena": "razón 2"
   },
   {
    "id": "t8",
    "linea": 8,
-   "a": 19.75,
-   "b": 22.5,
+   "a": 19.541666666667,
+   "b": 22.166666666667,
    "escena": "razón 3"
   },
   {
    "id": "t9",
    "linea": 9,
-   "a": 22.5,
-   "b": 24.416666666667,
+   "a": 22.166666666667,
+   "b": 24.208333333333,
    "escena": "lección"
   },
   {
    "id": "t10",
    "linea": 10,
-   "a": 24.416666666667,
-   "b": 26.833333333333,
+   "a": 24.208333333333,
+   "b": 26.625,
    "escena": "cierre"
   }
  ],
@@ -283,67 +287,67 @@
    "tipo": "foto",
    "foto": "a",
    "a": 0,
-   "b": 3.291666666667,
+   "b": 3.416666666667,
    "track": 20,
    "capa": "Foto A (K1) a pantalla completa con empuje lento; rótulo de IA 0-3,0 s; la caja de cara entra a 0,85 s con «Seedream 4.5 · parecido 0,81»; sale en el empuje"
   },
   {
    "id": "pl-p1",
    "tipo": "placa",
-   "a": 3.041666666667,
-   "b": 5.208333333333,
+   "a": 3.166666666667,
+   "b": 5.333333333333,
    "capa": "paso 1: las 8 referencias oficiales (4x2); la fila de arriba ya está al llegar, la de abajo entra de a una"
   },
   {
    "id": "pl-p2",
    "tipo": "placa",
-   "a": 4.958333333333,
-   "b": 11.25,
+   "a": 5.083333333333,
+   "b": 10.75,
    "capa": "paso 2: las 8 en fila → flecha → la escala 0-1 con un cursor que va de 0 a 1 → «idéntica · 1» → cae la marca «piso · 0,70»"
   },
   {
    "id": "f-e3",
    "tipo": "foto",
    "foto": "cafe_b",
-   "a": 11.0,
-   "b": 14.0,
+   "a": 10.5,
+   "b": 13.625,
    "track": 23,
    "capa": "Imagen del café de Kling O1 Image (NO es Lucía) + caja coral + pastilla «Kling O1 Image · parecido 0,35»"
   },
   {
    "id": "pl-r1",
    "tipo": "placa",
-   "a": 13.75,
-   "b": 17.0,
+   "a": 13.375,
+   "b": 16.625,
    "capa": "razón 1: cuadro del clip crudo con la cara de 89 px, su caja, su lupa, la etiqueta «Kling O3» y la nota «Bajo 200 px, el medidor avisa.» (ya están al llegar)"
   },
   {
    "id": "pl-r2",
    "tipo": "placa",
-   "a": 16.75,
-   "b": 19.75,
+   "a": 16.375,
+   "b": 19.541666666667,
    "capa": "razón 2: escala ampliada «Zoom: 0,70 a 0,90» y la etiqueta «Cinematic Studio 3.0» (ya están al llegar) con las dos puntas de un MISMO clip (0,771 → 0,77 y 0,799 → 0,80) y la banda de ±0,03 alrededor de su promedio"
   },
   {
    "id": "pl-r3",
    "tipo": "placa",
-   "a": 19.5,
-   "b": 22.5,
+   "a": 19.291666666667,
+   "b": 22.166666666667,
    "capa": "razón 3: cuadro del clip con el letrero inventado difuminado, la etiqueta «Seedance 2.0 Mini + referencias» y «Lo difuminé: lo inventó el motor.» (ya están al llegar), aro coral sobre TODO lo difuminado y «parecido 0,80»"
   },
   {
    "id": "f-cierre",
    "tipo": "foto",
    "foto": "k",
-   "a": 22.25,
-   "b": 26.833333333333,
+   "a": 21.916666666667,
+   "b": 26.625,
    "track": 24,
    "capa": "lección + cierre: foto K4·5 (Lucía mira a cámara y sonríe) con empuje lento; tarjeta «Mirá la imagen entera.» y después el CTA"
   }
  ],
  "costuras": [
   {
-   "t": 3.291666666667,
+   "t": 3.416666666667,
    "tipo": "empuje",
    "sale": [
     "f-gancho"
@@ -355,10 +359,11 @@
     "sale": "c1",
     "entra": "c2"
    },
-   "porque": "foto → paso 1"
+   "porque": "foto → paso 1",
+   "tramo": 2
   },
   {
-   "t": 5.208333333333,
+   "t": 5.333333333333,
    "tipo": "empuje",
    "sale": [
     "pl-p1"
@@ -370,10 +375,11 @@
     "sale": "c2",
     "entra": "c3"
    },
-   "porque": "paso 1 → paso 2"
+   "porque": "paso 1 → paso 2",
+   "tramo": 3
   },
   {
-   "t": 11.25,
+   "t": 10.75,
    "tipo": "empuje",
    "sale": [
     "pl-p2"
@@ -385,10 +391,11 @@
     "sale": "c4",
     "entra": "c5"
    },
-   "porque": "paso 2 → ejemplo B del café"
+   "porque": "paso 2 → ejemplo B del café",
+   "tramo": 5
   },
   {
-   "t": 14.0,
+   "t": 13.625,
    "tipo": "empuje",
    "sale": [
     "f-e3"
@@ -400,10 +407,11 @@
     "sale": "c5",
     "entra": "c6"
    },
-   "porque": "ejemplo → razón 1"
+   "porque": "ejemplo → razón 1",
+   "tramo": 6
   },
   {
-   "t": 17.0,
+   "t": 16.625,
    "tipo": "empuje",
    "sale": [
     "pl-r1"
@@ -415,10 +423,11 @@
     "sale": "c6",
     "entra": "c7"
    },
-   "porque": "razón 1 → razón 2"
+   "porque": "razón 1 → razón 2",
+   "tramo": 7
   },
   {
-   "t": 19.75,
+   "t": 19.541666666667,
    "tipo": "empuje",
    "sale": [
     "pl-r2"
@@ -430,10 +439,11 @@
     "sale": "c7",
     "entra": "c8"
    },
-   "porque": "razón 2 → razón 3"
+   "porque": "razón 2 → razón 3",
+   "tramo": 8
   },
   {
-   "t": 22.5,
+   "t": 22.166666666667,
    "tipo": "empuje",
    "sale": [
     "pl-r3"
@@ -445,13 +455,14 @@
     "sale": "c8",
     "entra": "c9"
    },
-   "porque": "razón 3 → lección + cierre (foto K4·5)"
+   "porque": "razón 3 → lección + cierre (foto K4·5)",
+   "tramo": 9
   }
  ],
  "rotulo": {
   "texto": "Lucía Antelo · personaje IA de Onia",
   "a": 0,
-  "b": 3.0,
+  "b": 3,
   "top": 720
  },
  "tarjetas": [
@@ -460,9 +471,9 @@
    "tramo": "t1",
    "texto": "¿Cómo sé que",
    "acento": "sigue siendo ella?",
-   "acento_t": 0.9,
-   "a": 0.0,
-   "b": 3.291666666667,
+   "acento_t": 0.765,
+   "a": 0,
+   "b": 3.416666666667,
    "escena": "gancho",
    "dato": "g"
   },
@@ -471,9 +482,9 @@
    "tramo": "t2",
    "texto": "Ocho fotos",
    "acento": "oficiales suyas.",
-   "acento_t": 4.091667,
-   "a": 3.291666666667,
-   "b": 5.208333333333,
+   "acento_t": 4.064,
+   "a": 3.416666666667,
+   "b": 5.333333333333,
    "escena": "paso 1"
   },
   {
@@ -481,9 +492,9 @@
    "tramo": "t3",
    "texto": "Un número,",
    "acento": "de 0 a 1.",
-   "acento_t": 7.408333,
-   "a": 5.208333333333,
-   "b": 8.791666666667,
+   "acento_t": 7.469,
+   "a": 5.333333333333,
+   "b": 8.333333333333,
    "escena": "paso 2"
   },
   {
@@ -491,9 +502,9 @@
    "tramo": "t4",
    "texto": "Piso, 0,70.",
    "acento": "Lo elegí yo.",
-   "acento_t": 10.491667,
-   "a": 8.791666666667,
-   "b": 11.25,
+   "acento_t": 9.804,
+   "a": 8.333333333333,
+   "b": 10.75,
    "escena": "paso 2"
   },
   {
@@ -501,9 +512,9 @@
    "tramo": "t5",
    "texto": "Bajo el piso:",
    "acento": "otra persona.",
-   "acento_t": 13.45,
-   "a": 11.25,
-   "b": 14.0,
+   "acento_t": 12.632,
+   "a": 10.75,
+   "b": 13.625,
    "color": "bad",
    "escena": "ejemplo B café",
    "dato": "e3"
@@ -513,19 +524,19 @@
    "tramo": "t6",
    "texto": "Cara chica:",
    "acento": "lo reviso a ojo.",
-   "acento_t": 16.5,
-   "a": 14.0,
-   "b": 17.0,
+   "acento_t": 15.449,
+   "a": 13.625,
+   "b": 16.625,
    "escena": "razón 1"
   },
   {
    "id": "c7",
    "tramo": "t7",
-   "texto": "Mismo clip:",
+   "texto": "Esa variación",
    "acento": "cabe en ±0,03.",
-   "acento_t": 19.1,
-   "a": 17.0,
-   "b": 19.75,
+   "acento_t": 18.154,
+   "a": 16.625,
+   "b": 19.541666666667,
    "escena": "razón 2"
   },
   {
@@ -533,9 +544,9 @@
    "tramo": "t8",
    "texto": "El número no ve",
    "acento": "letreros inventados.",
-   "acento_t": 21.25,
-   "a": 19.75,
-   "b": 22.5,
+   "acento_t": 20.718,
+   "a": 19.541666666667,
+   "b": 22.166666666667,
    "escena": "razón 3"
   },
   {
@@ -543,9 +554,9 @@
    "tramo": "t9",
    "texto": "Mirá la",
    "acento": "imagen entera.",
-   "acento_t": 23.5,
-   "a": 22.5,
-   "b": 24.416666666667,
+   "acento_t": 23.167,
+   "a": 22.166666666667,
+   "b": 24.208333333333,
    "escena": "lección"
   },
   {
@@ -553,9 +564,9 @@
    "tramo": "t10",
    "texto": "Seguime:\n",
    "acento": "cada semana, una prueba.",
-   "acento_t": 26.316667,
-   "a": 24.416666666667,
-   "b": 26.833333333333,
+   "acento_t": 26.108,
+   "a": 24.208333333333,
+   "b": 26.625,
    "acento_dur": 0.35,
    "escena": "cierre"
   }
@@ -595,7 +606,7 @@
    "estado": "ok",
    "pill": "Seedream 4.5 · parecido",
    "t": 0.95,
-   "fin": 3.0,
+   "fin": 3,
    "letra": null
   }
  },
@@ -606,10 +617,10 @@
    "x0": 70,
    "y": 420,
    "y2": 660,
-   "fila2_t": 3.741667,
+   "fila2_t": 3.867,
    "escalon": 0.1
   },
-  "aro_t": 4.491667
+  "aro_t": 4.367
  },
  "p2": {
   "fila": {
@@ -619,21 +630,21 @@
    "y": 400
   },
   "flecha": {
-   "t": 5.658333,
+   "t": 5.733,
    "x": 540,
    "y1": 530,
    "y2": 680
   },
   "escala": {
    "y": 860,
-   "dibuja_t": 6.208333,
+   "dibuja_t": 6.283,
    "dura": 0.5,
-   "ejes_t": 6.908333,
-   "cursor_t": 7.608333,
+   "ejes_t": 6.883,
+   "cursor_t": 7.183,
    "cursor_dura": 0.9,
-   "uno_t": 9.341667,
-   "marca_t": 9.491667,
-   "marca_label_y": 750
+   "uno_t": 8.933,
+   "marca_t": 9.283,
+   "marca_label_y": 700
   }
  },
  "ejemplos": [
@@ -647,9 +658,9 @@
    "valor": 0.35,
    "estado": "bajo",
    "pill": "Kling O1 Image · parecido",
-   "box_t": 11.55,
-   "t": 11.35,
-   "fin": 13.8
+   "box_t": 11.05,
+   "t": 10.85,
+   "fin": 13.35
   }
  ],
  "r1": {
@@ -666,12 +677,12 @@
    "h": 340,
    "region": 130
   },
-  "box_t": 14.4,
-  "tag_t": 14.8,
-  "lupa_t": 15.2,
+  "box_t": 14.025,
+  "tag_t": 14.425,
+  "lupa_t": 14.825,
   "nota": {
    "texto": "Bajo 200 px, el medidor avisa.",
-   "y": 1010
+   "y": 1050
   },
   "tool": {
    "herr": "m5",
@@ -692,21 +703,22 @@
    0.9
   ],
   "d1": {
-   "t": 17.3
+   "t": 16.925
   },
   "d2": {
-   "t": 17.75
+   "t": 17.375
   },
   "banda": {
    "mas_menos": 0.03,
-   "t": 18.3
+   "t": 17.925
   },
   "zoom": {
    "texto": "Zoom: 0,70 a 0,90"
   },
   "tool": {
    "herr": "m6",
-   "y": 470
+   "y": 470,
+   "sufijo": " · mismo clip"
   },
   "y_banda_label": 600,
   "y_banda_linea": 660,
@@ -723,12 +735,12 @@
    "h": 680
   },
   "aro": {
-   "x": -6,
+   "x": 4,
    "y": 34,
-   "w": 232,
+   "w": 224,
    "h": 102,
-   "t": 20.05,
-   "ping_t": 21.7
+   "t": 19.842,
+   "ping_t": 21.248
   },
   "llamada": {
    "texto": "Lo difuminé:\nlo inventó el motor.",
@@ -741,7 +753,7 @@
    "herr": "m4",
    "y": 1100
   },
-  "pill_num_t": 20.75,
+  "pill_num_t": 20.442,
   "clave": "m4",
   "muestra": 4
  },
@@ -821,5 +833,164 @@
    "que": "El pie es nuevo (el del guion aprobado habla de un video de 57 s): mismo texto de G5 + «Una imagen con otra cara queda bajo el piso: otra persona.» y «el medidor avisa y la reviso a ojo». Lo comprueba build.mjs contra pantalla y voz.",
    "revertir": "pie.txt"
   }
- ]
+ ],
+ "rel": {
+  "gancho.caja_t": [
+   1,
+   0.85
+  ],
+  "gancho.caja_fin": [
+   1,
+   2.65
+  ],
+  "gancho.dato.t": [
+   1,
+   0.95
+  ],
+  "gancho.dato.fin": [
+   1,
+   3
+  ],
+  "p1.refs.fila2_t": [
+   2,
+   0.45
+  ],
+  "p1.aro_t": [
+   2,
+   0.95
+  ],
+  "p2.flecha.t": [
+   3,
+   0.4
+  ],
+  "p2.escala.dibuja_t": [
+   3,
+   0.95
+  ],
+  "p2.escala.ejes_t": [
+   3,
+   1.55
+  ],
+  "p2.escala.cursor_t": [
+   3,
+   1.85
+  ],
+  "p2.escala.uno_t": [
+   4,
+   0.6
+  ],
+  "p2.escala.marca_t": [
+   4,
+   0.95
+  ],
+  "ejemplos.0.t": [
+   5,
+   0.1
+  ],
+  "ejemplos.0.box_t": [
+   5,
+   0.3
+  ],
+  "ejemplos.0.fin": [
+   5,
+   2.6
+  ],
+  "r1.box_t": [
+   6,
+   0.4
+  ],
+  "r1.tag_t": [
+   6,
+   0.8
+  ],
+  "r1.lupa_t": [
+   6,
+   1.2
+  ],
+  "r2.d1.t": [
+   7,
+   0.3
+  ],
+  "r2.d2.t": [
+   7,
+   0.75
+  ],
+  "r2.banda.t": [
+   7,
+   1.3
+  ],
+  "r3.aro.t": [
+   8,
+   0.3
+  ],
+  "r3.pill_num_t": [
+   8,
+   0.9
+  ],
+  "r3.aro.ping_t": [
+   8,
+   {
+    "ancla": "inventados"
+   }
+  ],
+  "tarjetas.0.acento_t": [
+   1,
+   {
+    "ancla": "sigue siendo"
+   }
+  ],
+  "tarjetas.1.acento_t": [
+   2,
+   {
+    "ancla": "oficiales"
+   }
+  ],
+  "tarjetas.2.acento_t": [
+   3,
+   {
+    "ancla": "de 0 a 1",
+    "dt": -0.1
+   }
+  ],
+  "tarjetas.3.acento_t": [
+   4,
+   {
+    "ancla": "lo elegí"
+   }
+  ],
+  "tarjetas.4.acento_t": [
+   5,
+   {
+    "ancla": "otra persona"
+   }
+  ],
+  "tarjetas.5.acento_t": [
+   6,
+   {
+    "ancla": "la reviso"
+   }
+  ],
+  "tarjetas.6.acento_t": [
+   7,
+   {
+    "ancla": "cabe en"
+   }
+  ],
+  "tarjetas.7.acento_t": [
+   8,
+   {
+    "ancla": "letreros"
+   }
+  ],
+  "tarjetas.8.acento_t": [
+   9,
+   {
+    "ancla": "imagen"
+   }
+  ],
+  "tarjetas.9.acento_t": [
+   10,
+   1.9
+  ]
+ }
 }

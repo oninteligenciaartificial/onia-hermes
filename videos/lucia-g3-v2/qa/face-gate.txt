@@ -1,0 +1,8 @@
+Control de cara de Lucía (SCRFD/insightface, .claude/skills/lucia/scripts/face-gate.sh): NO se corrió en esta nube.
+Causa: la máquina no tiene numpy, cv2, onnxruntime ni insightface, y face-gate.sh los instala por pip y baja ~280 MB de GitHub; CLAUDE.md pide aprobación antes de instalar y
+un subagente no puede pedirla. No se instaló nada.
+Qué hay en su lugar (qa/psnr-cara-clips.txt): PSNR y SSIM del RECORTE DE LA CARA del final contra la fuente llevada al mismo tamaño (K4 cara abajo, K1 cara arriba), en los
+instantes de los clips usados. Eso prueba que el escalado x1,5 y el H.264 no deforman la cara (PSNR 43-45 dB, SSIM 0,985-0,987 en 7 de 8 cuadros; 32,6 dB y 0,972 en el cuadro 120
+porque el resplandor del recuadro «origen» entra en el borde del recorte). NO mide parecido de identidad: las caras son las mismas fotos y clips de G3 v1, al mismo encuadre, y G3 v1
+midió 0,717-0,830 contra la fuente con SCRFD (videos/lucia-g3/qa/face-gate.txt, todos ≥ 0,70). Si la madre quiere el número de identidad de v2, se corre en una máquina con el
+venv del face-gate:  bash .claude/skills/lucia/scripts/face-gate.sh out/g3-v2-final-1080x1920.mp4@1,10,17,21,25,27 ...
