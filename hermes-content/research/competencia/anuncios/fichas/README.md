@@ -7,8 +7,8 @@ Una ficha por anunciante, generada con `.claude/skills/onia-ventas-pauta/scripts
 | [Doctocliq](doctocliq.md) | 30 | 15 | 85 d | completa |
 | [CitaPro](citapro.md) | 16 | 5 | 86 d | completa |
 | [Dt.Dental Software Odontológico](dtdental.md) | 33 | 6 | 102 d | completa |
-| [AgendaPro](agendapro.md) | 80 | 25 | 247 d | parcial |
-| [Dentalink](dentalink.md) | 57 | 3 | 58 d | parcial |
+| [AgendaPro](agendapro.md) | 81 | 25 | 247 d | parcial |
+| [Dentalink](dentalink.md) | 69 | 3 | 58 d | parcial |
 | [Calu](calu.md) | 5 | 1 | 43 d | completa |
 | [Reservo](reservo.md) | 5 | 5 | 53 d | completa |
 | [Huli México](huli.md) | 16 | 0 | 23 d | completa |

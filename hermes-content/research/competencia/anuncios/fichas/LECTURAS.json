@@ -23,42 +23,42 @@
   "dtdental": {
     "nombre": "Dt.Dental Software Odontológico",
     "que_vende": "Software odontológico de Colombia con el ángulo de la norma: Resolución 1888, 3100, RIPS, interoperabilidad; hoy «25 % de descuento». Cobra el anuncio en COP. (observado)",
-    "formato": "Videos de una persona a cámara estilo selfie (53 s, voz natural, subtítulos, sin producción); 13 de 33 anuncios no traen titular (el texto va en el cuerpo, que el conector no trae). (observado, capturas del 1-2 oct)",
+    "formato": "Videos de una persona a cámara estilo selfie: el de 53 s es un solo id (`1064012876297472`) y otros videos de la página duran 64-75 s (`FORMATOS-QUE-SOSTIENEN.md`); 13 de 33 anuncios no traen titular (el texto va en el cuerpo, que el conector no trae). (observado, capturas del 1-2 oct)",
     "oferta_cta": "Link a su Instagram o «Más información»: ni demo ni precio. El descuento es nuevo (2 d). (observado)",
     "patron": "La norma con fecha como urgencia («El plazo de la 1888 ya venció», 100 d). 6 de 33 pasan de 30 d, los más viejos de 99-102 d. (observado)",
     "copiar": "El **formato** selfie de bajo costo (F1) para A1-S; no el tema.",
     "no_copiar": "La norma (no hay obligación boliviana verificada y el SIAT está apagado, catálogo §7) y «hasta ChatGPT lo respalda».",
-    "notas": "Lista completa. Los ids capturados el 1-3 oct siguen activos."
+    "notas": "Lista completa (la consulta por página dio 31 activos estimados y se vieron 33). Los ids capturados el 1-3 oct siguen activos."
   },
   "agendapro": {
     "nombre": "AgendaPro",
     "que_vende": "Agenda y gestión para negocios de servicios de varios rubros (clínicas, estética, kine, capilar, barbería, spa, gimnasio); escribe un titular por rubro. Mezcla voseo, tuteo y usted. Cobra el anuncio en USD. (observado)",
-    "formato": "No observable: el conector no trae el formato y las capturas del 1-3 oct no incluyen AgendaPro. Titulares unidos con « | » (hasta 4) en las piezas de 143 y 247 d: varias tarjetas o textos (inferencia). Dos anuncios de catálogo dinámico ({{product.name}}) de 247 y 134 d.",
-    "oferta_cta": "«Agenda tu demostración gratis» ×5 (33-64 d) y «Prueba AgendaPro gratis»; en octubre pasa a la IA («La IA atiende tu WhatsApp», «Sofía trabaja por ti», «Reservas 24/7 sin contestar mensajes»). (observado)",
+    "formato": "No observable: el conector no trae el formato y las capturas del 1-3 oct no incluyen AgendaPro. Titulares unidos con « | » (hasta 6 en el de 247 d) en las piezas de 143 y 247 d: varias tarjetas o textos (inferencia). Dos anuncios de catálogo dinámico ({{product.name}}) de 247 y 134 d.",
+    "oferta_cta": "«Agenda tu demostración gratis» ×5 (33-64 d) y «Prueba AgendaPro gratis» (19 d); en octubre pasa a la IA («La IA atiende tu WhatsApp», «Sofía trabaja por ti», «Reservas 24/7 sin contestar mensajes»). Los titulares son observados; el botón no es observable con el conector.",
     "patron": "Un titular por rubro y por dolor: inasistencias («Menos inasistencias en tu clínica» 65 d, «90% menos inasistencias» 65 d), papel («Ficha clínica digital» 65 d, «Chau carpetas»), control («Toda su clínica en un lugar»). (observado)",
     "copiar": "**Un pack por rubro = un copy por rubro** (Onia se vende por rubro); la demostración como oferta.",
-    "no_copiar": "Las cifras de reducción (90 %, 82 %); «Sofía» y la IA que atiende o ordena (catálogo §8).",
-    "notas": "Lista **parcial**: 313 activos, 80 vistos (tope de 50 por consulta, más nuevos primero). Es el de mayor antigüedad visible (247 d) pero esos son catálogo dinámico: no compararlo con los demás por antigüedad."
+    "no_copiar": "Las cifras («90% menos inasistencias», «hasta 82% más»); «Sofía» y la IA que atiende o ordena (catálogo §8).",
+    "notas": "Lista **parcial**: 313 activos, 81 vistos (tope de 50 por consulta, más nuevos primero). Es el de mayor antigüedad visible (247 d) pero esos son catálogo dinámico: no compararlo con los demás por antigüedad."
   },
   "dentalink": {
     "nombre": "Dentalink",
     "que_vende": "Software dental con presencia en México, Argentina, Colombia y Chile; **es el único con pauta que le llega a Santa Cruz** (ADQ §2.6.1). Cobra el anuncio en USD. (observado)",
-    "formato": "Video de 38 s con presentador y pantalla (UGC) en dos versiones, la 2.ª con titular «Controla tu clínica dental fácil» y el texto «Unifica agenda, ficha clínica y cobros en un solo lugar. Deja el caos de las herramientas sueltas»; catálogo dinámico; 4 anuncios que la Biblioteca pública todavía no mostraba el 1-oct. (observado)",
-    "oferta_cta": "«Llena el formulario y conoce más», «Agenda tu demo», «Chatea con nosotros» y «Precio único mensual» (el único B2B con precio en el titular; 7-12 d). (observado)",
-    "patron": "Una versión por país; en octubre IA 24/7 («Dentalink IA: Gestión 24/7», «Agenda con IA 24/7»), POS y cumplimiento («Cumple la 1888», «Evita glosas y sanciones»). El más viejo visible: 58 d, sin titular. (observado)",
-    "copiar": "El mensaje «unifica agenda, ficha y cobros en un lugar; fuera las herramientas sueltas» (es lo que Onia sí hace); la idea de un precio único mensual.",
+    "formato": "Video de 38 s con presentador y pantalla (UGC) en dos versiones, la 2.ª con titular «Controla tu clínica dental fácil» y el texto «Unifica agenda, ficha clínica y cobros en un solo lugar. Deja el caos de las herramientas sueltas»; catálogo dinámico: el 8-oct los que más duraban eran 3 anuncios de catálogo de 323-326 d (`DENTALINK_TEARDOWN.md`), que hoy no están entre los vistos; 4 anuncios que la Biblioteca pública todavía no mostraba el 1-oct. (observado)",
+    "oferta_cta": "«Llena el formulario y conoce más», «Agenda tu demo» y «Get Offer» (capturas del 1-oct) llevan a formulario o a la web; **«Chatea con nosotros» sale en 6 anuncios de 17-18 d** (no se sabe si el botón lleva a WhatsApp o a Messenger: inferencia). «Precio único mensual» es el único **titular** B2B con precio (7-12 d). (observado)",
+    "patron": "Titulares por país: «Conoce Dentalink - Argentina», «el Software Dental líder en México», «General - Social - CO», «Chile POS»; en octubre IA 24/7 («Dentalink IA: Gestión 24/7», «Agenda con IA 24/7», «Agenda citas 24/7 con IA»), POS («POS a $0 costo de arriendo») y cumplimiento («¡Cumple la 1888 fácil y seguro!», «Evita glosas y sanciones»). El más viejo visible: 58 d, sin titular. (observado)",
+    "copiar": "El mensaje «unifica agenda, ficha y cobros en un lugar; fuera las herramientas sueltas» (es lo que Onia sí hace); un titular por rubro (Onia ya se vende por rubro). El precio en el titular no se copia (regla R3 de la skill §8.3).",
     "no_copiar": "«Software dental líder en México» (autobombo, sin respaldo), IA 24/7, normas y POS.",
-    "notas": "Lista **parcial**: 92-106 activos, 57 vistos. Competidor directo en Santa Cruz: su oferta es un formulario, no WhatsApp."
+    "notas": "Lista **parcial**: 92-106 activos según las consultas del 10-oct (186 el 8-oct en `DENTALINK_TEARDOWN.md`: el recuento cambia mucho de un día a otro); 69 vistos. Competidor directo en Santa Cruz."
   },
   "calu": {
     "nombre": "Calu",
-    "que_vende": "Agenda para consultorios de Argentina y Uruguay. Cobra el anuncio en ARS. (observado)",
+    "que_vende": "Agenda de turnos, ficha del paciente y recordatorios por WhatsApp para consultorios de Argentina (empresa Chedoc SRL, `CALU_FICHA.md`). Cobra el anuncio en ARS. (observado)",
     "formato": "No observable en esta tanda.",
-    "oferta_cta": "«Probá Calu gratis · Chatea con nosotros» (el botón lleva al chat; 8-oct). (observado)",
-    "patron": "La pregunta del papel «¿Seguís acumulando fichas y papeles…?» (43 d). **El 3-oct tenía 15 anuncios y el más viejo de 94 d** («Conocé Calu en 2 minutos», «Probá Calu Gratis» de 53 d); **hoy tiene 5 y el más viejo de 43 d: sus anuncios de prueba murieron.** (observado)",
+    "oferta_cta": "«Probá Calu gratis · Chatea con nosotros» (8-oct). El botón «Chatea con nosotros» lleva a un chat (inferencia: no se sabe a cuál). (titulares: observado)",
+    "patron": "La pregunta del papel «¿Seguís acumulando fichas y papeles…?» (43 d). El 3-oct tenía 15 anuncios y el más viejo de 94 d («Conocé Calu en 2 minutos», «Probá Calu Gratis» de 53 d); hoy tiene 5 y el más viejo de 43 d: **esos anuncios dejaron de aparecer** (inferencia: pausados o terminados; ADQ §2.6 no da el id de página, así que podría ser otra página, igual que en Reservo). (observado + inferencia)",
     "copiar": "La pregunta del dolor concreto del papel (N2).",
     "no_copiar": "—",
-    "notas": "Lista completa. **Contraejemplo** a «prueba gratis = dura» (regla R3 de la skill §8.3)."
+    "notas": "Lista completa de la página. **Contraejemplo** posible a «prueba gratis = dura» (regla R3 de la skill §8.3), con esa salvedad."
   },
   "reservo": {
     "nombre": "Reservo",
@@ -182,6 +182,6 @@
     "patron": "—",
     "copiar": "—",
     "no_copiar": "El precio en el anuncio (decisión de la pauta, no de esta evidencia).",
-    "notas": "Solo capturas del 1-oct; no está en el corte del 10-oct. Es el único con un precio visible."
+    "notas": "Solo capturas del 1-oct; no está en el corte del 10-oct. Es el único con un precio visible **en la pieza** (el de Dentalink está en un titular)."
   }
 }

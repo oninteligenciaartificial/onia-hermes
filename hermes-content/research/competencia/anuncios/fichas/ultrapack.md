@@ -18,6 +18,6 @@
 
 ## Límites
 
-- Solo capturas del 1-oct; no está en el corte del 10-oct. Es el único con un precio visible.
+- Solo capturas del 1-oct; no está en el corte del 10-oct. Es el único con un precio visible **en la pieza** (el de Dentalink está en un titular).
 - El conector no trae formato, texto principal, botón, público ni gasto; lo marcado «(observado)» sale de los titulares o de las capturas del 1-3 oct.
 - Se regenera con `node .claude/skills/onia-ventas-pauta/scripts/biblioteca-fichas.mjs` sobre un JSON nuevo (re-medición del 24-oct).

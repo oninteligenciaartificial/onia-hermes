@@ -5,7 +5,7 @@
 | | |
 |---|---|
 | Páginas | Dt.Dental Software Odontologico (`644396635996094`) |
-| Anuncios vistos | 33 de 31 activos estimados · lista **completa** |
+| Anuncios vistos | 33 (una consulta dio 31 activos estimados: la cifra no es exacta) · lista **completa** |
 | Más viejo | 102 d |
 | Con más de 30 d | 6 |
 | Titulares distintos | 18 |
@@ -14,7 +14,7 @@
 ## Qué vende y cómo lo muestra
 
 - **Qué vende:** Software odontológico de Colombia con el ángulo de la norma: Resolución 1888, 3100, RIPS, interoperabilidad; hoy «25 % de descuento». Cobra el anuncio en COP. (observado)
-- **Formato:** Videos de una persona a cámara estilo selfie (53 s, voz natural, subtítulos, sin producción); 13 de 33 anuncios no traen titular (el texto va en el cuerpo, que el conector no trae). (observado, capturas del 1-2 oct)
+- **Formato:** Videos de una persona a cámara estilo selfie: el de 53 s es un solo id (`1064012876297472`) y otros videos de la página duran 64-75 s (`FORMATOS-QUE-SOSTIENEN.md`); 13 de 33 anuncios no traen titular (el texto va en el cuerpo, que el conector no trae). (observado, capturas del 1-2 oct)
 - **Oferta y botón:** Link a su Instagram o «Más información»: ni demo ni precio. El descuento es nuevo (2 d). (observado)
 - **Patrón:** La norma con fecha como urgencia («El plazo de la 1888 ya venció», 100 d). 6 de 33 pasan de 30 d, los más viejos de 99-102 d. (observado)
 
@@ -46,6 +46,6 @@
 
 ## Límites
 
-- Lista completa. Los ids capturados el 1-3 oct siguen activos.
+- Lista completa (la consulta por página dio 31 activos estimados y se vieron 33). Los ids capturados el 1-3 oct siguen activos.
 - El conector no trae formato, texto principal, botón, público ni gasto; lo marcado «(observado)» sale de los titulares o de las capturas del 1-3 oct.
 - Se regenera con `node .claude/skills/onia-ventas-pauta/scripts/biblioteca-fichas.mjs` sobre un JSON nuevo (re-medición del 24-oct).

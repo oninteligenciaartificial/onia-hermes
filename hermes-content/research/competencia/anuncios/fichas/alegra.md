@@ -5,7 +5,7 @@
 | | |
 |---|---|
 | Páginas | Alegra - Contabilidad Inteligente (`266934513428113`) |
-| Anuncios vistos | 1 de ? activos estimados · lista **PARCIAL** (tope de 50, más nuevos primero) |
+| Anuncios vistos | 1 (la Biblioteca no dio el total de activos) · lista **PARCIAL** (tope de 50, más nuevos primero) |
 | Más viejo | 18 d |
 | Con más de 30 d | 0 |
 | Titulares distintos | 1 |

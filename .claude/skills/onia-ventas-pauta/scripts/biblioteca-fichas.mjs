@@ -53,7 +53,10 @@ function fichaDe(slug) {
     out.push("| | |");
     out.push("|---|---|");
     out.push(`| Páginas | ${paginas.map(([n, s]) => `${n} (\`${s.page_id}\`)`).join(" · ")} |`);
-    out.push(`| Anuncios vistos | ${ads.length} de ${paginas.map(([, s]) => s.activos_estimados_por_la_biblioteca ?? "?").join(" + ")} activos estimados · lista ${completa ? "**completa**" : "**PARCIAL** (tope de 50, más nuevos primero)"} |`);
+    const est = paginas.map(([, s]) => s.activos_estimados_por_la_biblioteca);
+    const sumEst = est.every((e) => e != null) ? est.reduce((x, y) => x + y, 0) : null;
+    const textoVistos = sumEst == null ? `${ads.length} (la Biblioteca no dio el total de activos)` : ads.length > sumEst ? `${ads.length} (una consulta dio ${sumEst} activos estimados: la cifra no es exacta)` : `${ads.length} de ${sumEst} activos estimados`;
+    out.push(`| Anuncios vistos | ${textoVistos} · lista ${completa ? "**completa**" : "**PARCIAL** (tope de 50, más nuevos primero)"} |`);
     out.push(`| Más viejo | ${Math.max(...ads.map((a) => a.dias))} d |`);
     out.push(`| Con más de 30 d | ${largos.length} |`);
     out.push(`| Titulares distintos | ${new Set(ads.map((a) => primero(a.titulo))).size} |`);
@@ -117,7 +120,7 @@ for (const slug of ORDEN) {
 
 // Bolivia: clínicas con anuncios de más de 30 días (sin páginas personales de profesionales ni ruido)
 const RUIDO = /century 21|gooddental|medilink|global medical|fundepi|colegio de odont|academia|formación|cursos|posgrado/i;
-const PERSONAL = /^(dr\.?|dra\.?|odont\.?)\s/i;
+const PERSONAL = /(^|\s)(dra?\.?|odont\.?)\s/i;
 const bo = d.bolivia_rubro_mas_de_30_dias;
 const porAnunciante = new Map();
 let personales = 0, ruido = 0;

@@ -5,7 +5,7 @@
 | | |
 |---|---|
 | Páginas | Reservo Software (`1006037402599174`) · Reservo (`1397618817156161`) |
-| Anuncios vistos | 5 de ? + ? activos estimados · lista **completa** |
+| Anuncios vistos | 5 (la Biblioteca no dio el total de activos) · lista **completa** |
 | Más viejo | 53 d |
 | Con más de 30 d | 5 |
 | Titulares distintos | 4 |

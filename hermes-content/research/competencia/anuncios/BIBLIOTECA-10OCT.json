@@ -24,7 +24,7 @@
    "Bolivia (countries=BO): odontología, clínica dental Santa Cruz, ortodoncia Santa Cruz, dental Santa Cruz de la Sierra, dentista, implantes dentales, blanqueamiento dental, carillas, brackets, odontólogos Santa Cruz, valoración dental"
   ],
   "totales": {
-   "software_vistos": 258,
+   "software_vistos": 271,
    "software_mas_de_30_dias": 62,
    "bolivia_rubro_vistos": 417,
    "bolivia_rubro_mas_de_30_dias": 41
@@ -39,7 +39,7 @@
   "AgendaPro": {
    "page_id": 1429581593936821,
    "activos_estimados_por_la_biblioteca": 313,
-   "vistos": 80,
+   "vistos": 81,
    "lista_completa": false,
    "mas_de_30_dias": 25,
    "mas_viejo_dias": 247,
@@ -242,6 +242,14 @@
      "dias": 26,
      "moneda": "USD",
      "url": "https://www.facebook.com/ads/library/?id=1428495559201032"
+    },
+    {
+     "id": "1549847106414957",
+     "titulo": "Prueba AgendaPro gratis",
+     "dias": 26,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1549847106414957",
+     "a_mano": true
     },
     {
      "id": "1834061651287198",
@@ -628,7 +636,7 @@
   "Dentalink": {
    "page_id": 106612849382553,
    "activos_estimados_por_la_biblioteca": 92,
-   "vistos": 57,
+   "vistos": 69,
    "lista_completa": false,
    "mas_de_30_dias": 3,
    "mas_viejo_dias": 58,
@@ -655,6 +663,54 @@
      "dias": 32,
      "moneda": "USD",
      "url": "https://www.facebook.com/ads/library/?id=1643660183853979",
+     "a_mano": true
+    },
+    {
+     "id": "939451042552615",
+     "titulo": "Agenda con IA 24/7 hoy",
+     "dias": 26,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=939451042552615",
+     "a_mano": true
+    },
+    {
+     "id": "2298442914238254",
+     "titulo": "Chatea con nosotros",
+     "dias": 19,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=2298442914238254",
+     "a_mano": true
+    },
+    {
+     "id": "1556210609080943",
+     "titulo": "Chatea con nosotros",
+     "dias": 19,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1556210609080943",
+     "a_mano": true
+    },
+    {
+     "id": "4378462225620940",
+     "titulo": "Chatea con nosotros",
+     "dias": 19,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=4378462225620940",
+     "a_mano": true
+    },
+    {
+     "id": "2631852683990600",
+     "titulo": "Chatea con nosotros",
+     "dias": 19,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=2631852683990600",
+     "a_mano": true
+    },
+    {
+     "id": "28471489659168605",
+     "titulo": "Chatea con nosotros",
+     "dias": 19,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=28471489659168605",
      "a_mano": true
     },
     {
@@ -750,6 +806,14 @@
      "url": "https://www.facebook.com/ads/library/?id=1082957234593106"
     },
     {
+     "id": "1465952738715039",
+     "titulo": "Chatea con nosotros",
+     "dias": 11,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1465952738715039",
+     "a_mano": true
+    },
+    {
      "id": "1621659346363555",
      "titulo": "Simula sonrisas con IA ✨",
      "dias": 10,
@@ -776,6 +840,14 @@
      "dias": 10,
      "moneda": "USD",
      "url": "https://www.facebook.com/ads/library/?id=1811597226623604"
+    },
+    {
+     "id": "1581244453740671",
+     "titulo": "Chile POS",
+     "dias": 8,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1581244453740671",
+     "a_mano": true
     },
     {
      "id": "1497425202217517",
@@ -975,6 +1047,14 @@
      "url": "https://www.facebook.com/ads/library/?id=1456553873236114"
     },
     {
+     "id": "2047136226000636",
+     "titulo": "Evita glosas y sanciones",
+     "dias": 4,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=2047136226000636",
+     "a_mano": true
+    },
+    {
      "id": "2587920288339751",
      "titulo": "IA para Odontólogos",
      "dias": 3,
@@ -1024,6 +1104,14 @@
      "url": "https://www.facebook.com/ads/library/?id=1841352450376154"
     },
     {
+     "id": "1704884981159791",
+     "titulo": "General - Social - CO",
+     "dias": 3,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1704884981159791",
+     "a_mano": true
+    },
+    {
      "id": "980028627743242",
      "titulo": "¡30% DCTO Cyber Extendido! ⌛",
      "dias": 1,
@@ -1038,8 +1126,25 @@
      "moneda": "USD",
      "url": "https://www.facebook.com/ads/library/?id=2066080000779785",
      "a_mano": true
+    },
+    {
+     "id": "1045020145181190",
+     "titulo": "Agenda con IA 24/7 🤖",
+     "dias": 1,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1045020145181190",
+     "a_mano": true
+    },
+    {
+     "id": "2587756811736052",
+     "titulo": "Agenda citas 24/7 con IA",
+     "dias": 1,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=2587756811736052",
+     "a_mano": true
     }
-   ]
+   ],
+   "nota": "El 8-oct `DENTALINK_TEARDOWN.md` contó 186 activos (todos los 50 más nuevos de 5-8 oct) y 3 anuncios de catálogo dinámico de 323-326 d; el 10-oct las consultas dieron 92-106 y esos 3 no están entre los vistos. El recuento cambia mucho de un día a otro."
   },
   "Dt.Dental Software Odontologico": {
    "page_id": 644396635996094,
@@ -5277,8 +5382,8 @@
  ],
  "volumen_sin_detalle": {
   "Jelou Latam (page 102068831276740)": "238 activos; se vieron 30, todos «¡Agenda una llamada!» de menos de 2 días: no hay antigüedad que medir",
-  "AgendaPro": "313 activos; se vieron 80 (tope 50 por consulta, más nuevos primero)",
-  "Dentalink": "92-106 activos según la consulta; se vieron 57",
+  "AgendaPro": "313 activos; se vieron 81 (tope 50 por consulta, más nuevos primero)",
+  "Dentalink": "92-106 activos según la consulta; se vieron 69",
   "Medilink Bolivia SRL (page 421787564639894)": "124 activos de equipos e insumos médicos («COTIZAR», «CALIDAD GARANTIZADA», sets de infusión): NO es software clínico"
  }
 }

@@ -5,7 +5,7 @@
 | | |
 |---|---|
 | Páginas | DoctorPro (`102952942166627`) |
-| Anuncios vistos | 7 de ? activos estimados · lista **completa** |
+| Anuncios vistos | 7 (la Biblioteca no dio el total de activos) · lista **completa** |
 | Más viejo | 3 d |
 | Con más de 30 d | 0 |
 | Titulares distintos | 3 |

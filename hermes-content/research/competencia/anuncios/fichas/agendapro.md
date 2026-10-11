@@ -5,23 +5,23 @@
 | | |
 |---|---|
 | Páginas | AgendaPro (`1429581593936821`) |
-| Anuncios vistos | 80 de 313 activos estimados · lista **PARCIAL** (tope de 50, más nuevos primero) |
+| Anuncios vistos | 81 de 313 activos estimados · lista **PARCIAL** (tope de 50, más nuevos primero) |
 | Más viejo | 247 d |
 | Con más de 30 d | 25 |
-| Titulares distintos | 67 |
+| Titulares distintos | 68 |
 | Moneda del anuncio | USD |
 
 ## Qué vende y cómo lo muestra
 
 - **Qué vende:** Agenda y gestión para negocios de servicios de varios rubros (clínicas, estética, kine, capilar, barbería, spa, gimnasio); escribe un titular por rubro. Mezcla voseo, tuteo y usted. Cobra el anuncio en USD. (observado)
-- **Formato:** No observable: el conector no trae el formato y las capturas del 1-3 oct no incluyen AgendaPro. Titulares unidos con « | » (hasta 4) en las piezas de 143 y 247 d: varias tarjetas o textos (inferencia). Dos anuncios de catálogo dinámico ({{product.name}}) de 247 y 134 d.
-- **Oferta y botón:** «Agenda tu demostración gratis» ×5 (33-64 d) y «Prueba AgendaPro gratis»; en octubre pasa a la IA («La IA atiende tu WhatsApp», «Sofía trabaja por ti», «Reservas 24/7 sin contestar mensajes»). (observado)
+- **Formato:** No observable: el conector no trae el formato y las capturas del 1-3 oct no incluyen AgendaPro. Titulares unidos con « | » (hasta 6 en el de 247 d) en las piezas de 143 y 247 d: varias tarjetas o textos (inferencia). Dos anuncios de catálogo dinámico ({{product.name}}) de 247 y 134 d.
+- **Oferta y botón:** «Agenda tu demostración gratis» ×5 (33-64 d) y «Prueba AgendaPro gratis» (19 d); en octubre pasa a la IA («La IA atiende tu WhatsApp», «Sofía trabaja por ti», «Reservas 24/7 sin contestar mensajes»). Los titulares son observados; el botón no es observable con el conector.
 - **Patrón:** Un titular por rubro y por dolor: inasistencias («Menos inasistencias en tu clínica» 65 d, «90% menos inasistencias» 65 d), papel («Ficha clínica digital» 65 d, «Chau carpetas»), control («Toda su clínica en un lugar»). (observado)
 
 ## Qué copiar y qué no (catálogo §7 y §8)
 
 - **Copiar:** **Un pack por rubro = un copy por rubro** (Onia se vende por rubro); la demostración como oferta.
-- **No copiar:** Las cifras de reducción (90 %, 82 %); «Sofía» y la IA que atiende o ordena (catálogo §8).
+- **No copiar:** Las cifras («90% menos inasistencias», «hasta 82% más»); «Sofía» y la IA que atiende o ordena (catálogo §8).
 
 ## Anuncios que pasan de 30 días
 
@@ -64,6 +64,6 @@
 
 ## Límites
 
-- Lista **parcial**: 313 activos, 80 vistos (tope de 50 por consulta, más nuevos primero). Es el de mayor antigüedad visible (247 d) pero esos son catálogo dinámico: no compararlo con los demás por antigüedad.
+- Lista **parcial**: 313 activos, 81 vistos (tope de 50 por consulta, más nuevos primero). Es el de mayor antigüedad visible (247 d) pero esos son catálogo dinámico: no compararlo con los demás por antigüedad.
 - El conector no trae formato, texto principal, botón, público ni gasto; lo marcado «(observado)» sale de los titulares o de las capturas del 1-3 oct.
 - Se regenera con `node .claude/skills/onia-ventas-pauta/scripts/biblioteca-fichas.mjs` sobre un JSON nuevo (re-medición del 24-oct).

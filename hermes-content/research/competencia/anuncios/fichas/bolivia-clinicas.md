@@ -2,7 +2,7 @@
 
 > **Es una señal, no una lista de contacto.** Quien paga anuncios hace más de 30 días probablemente recibe mensajes de pacientes (inferencia: la Biblioteca no dice a dónde lleva el botón); **no prueba que tenga el problema de confirmar citas.** **Contactar a cualquiera requiere el OK escrito de Sergio Urcullo**; no se contactó a nadie. Lista y cruce con los prospectos de agosto: `ONIA_PROSPECTOS_DENTAL_SCZ.md` §5 y `ONIA_ADQUISICION_Y_PAUTA.md` §3.
 
-41 anuncios de 24 anunciantes; se omiten 4 anuncios de páginas personales de profesionales y 7 de ruido (inmobiliaria, ofertas de empleo, equipos médicos, cursos). 22 no traen titular (el texto va en la imagen o el cuerpo, que el conector no trae).
+41 anuncios de 24 anunciantes; se omiten 5 anuncios de páginas personales de profesionales y 7 de ruido (inmobiliaria, ofertas de empleo, equipos médicos, cursos). 22 no traen titular (el texto va en la imagen o el cuerpo, que el conector no trae).
 
 | Clínica | Anuncios | Días | Titulares |
 |---|---|---|---|
@@ -19,7 +19,6 @@
 | Cosmetic Dental and Face Center | 1 | 55 d | «Blanqueamiento con sistema de 3 luces» |
 | Clinica Dental ROCHA | 1 | 46 d | «Agenda tu cita» |
 | Sonríe a La Vida | 6 | 40-46 d | — |
-| MUN Odontopediatria by Dra. Tamara Llave | 1 | 44 d | «Mas Informacion» |
 | MUN Clínica Odontología Especializada | 1 | 43 d | «Chatea con nosotros» |
 | Dentessa Odontologia | 3 | 37-38 d | «Chatea con nosotros» |
 | Happy Dent | 1 | 31 d | «Happy Dent» |

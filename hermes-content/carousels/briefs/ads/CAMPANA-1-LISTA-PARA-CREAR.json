@@ -180,7 +180,7 @@
       "guarda": "ad_set_id",
       "a_mano_en_el_administrador": [
         "«Llegar a más personas…» APAGADO (Meta lo marca por defecto al elegir una ciudad)",
-        "Advantage+ encendido: la edad 25+ queda como sugerencia, que es lo que pide §5.2",
+        "Advantage+ encendido: 25+ es la edad mínima (control: nadie la sobrepasa); el resto de la segmentación son sugerencias, que es lo que pide §5.2",
         "excluir registrados solo si la lista ya existe; no se crea para esto",
         "ubicaciones automáticas"
       ]

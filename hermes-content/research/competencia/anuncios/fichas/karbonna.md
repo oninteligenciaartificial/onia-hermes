@@ -5,7 +5,7 @@
 | | |
 |---|---|
 | Páginas | Karbonna (`117666710068820`) |
-| Anuncios vistos | 4 de ? activos estimados · lista **completa** |
+| Anuncios vistos | 4 (la Biblioteca no dio el total de activos) · lista **completa** |
 | Más viejo | 17 d |
 | Con más de 30 d | 0 |
 | Titulares distintos | 1 |

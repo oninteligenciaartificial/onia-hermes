@@ -13,10 +13,10 @@
 
 ## Qué vende y cómo lo muestra
 
-- **Qué vende:** Agenda para consultorios de Argentina y Uruguay. Cobra el anuncio en ARS. (observado)
+- **Qué vende:** Agenda de turnos, ficha del paciente y recordatorios por WhatsApp para consultorios de Argentina (empresa Chedoc SRL, `CALU_FICHA.md`). Cobra el anuncio en ARS. (observado)
 - **Formato:** No observable en esta tanda.
-- **Oferta y botón:** «Probá Calu gratis · Chatea con nosotros» (el botón lleva al chat; 8-oct). (observado)
-- **Patrón:** La pregunta del papel «¿Seguís acumulando fichas y papeles…?» (43 d). **El 3-oct tenía 15 anuncios y el más viejo de 94 d** («Conocé Calu en 2 minutos», «Probá Calu Gratis» de 53 d); **hoy tiene 5 y el más viejo de 43 d: sus anuncios de prueba murieron.** (observado)
+- **Oferta y botón:** «Probá Calu gratis · Chatea con nosotros» (8-oct). El botón «Chatea con nosotros» lleva a un chat (inferencia: no se sabe a cuál). (titulares: observado)
+- **Patrón:** La pregunta del papel «¿Seguís acumulando fichas y papeles…?» (43 d). El 3-oct tenía 15 anuncios y el más viejo de 94 d («Conocé Calu en 2 minutos», «Probá Calu Gratis» de 53 d); hoy tiene 5 y el más viejo de 43 d: **esos anuncios dejaron de aparecer** (inferencia: pausados o terminados; ADQ §2.6 no da el id de página, así que podría ser otra página, igual que en Reservo). (observado + inferencia)
 
 ## Qué copiar y qué no (catálogo §7 y §8)
 
@@ -39,6 +39,6 @@
 
 ## Límites
 
-- Lista completa. **Contraejemplo** a «prueba gratis = dura» (regla R3 de la skill §8.3).
+- Lista completa de la página. **Contraejemplo** posible a «prueba gratis = dura» (regla R3 de la skill §8.3), con esa salvedad.
 - El conector no trae formato, texto principal, botón, público ni gasto; lo marcado «(observado)» sale de los titulares o de las capturas del 1-3 oct.
 - Se regenera con `node .claude/skills/onia-ventas-pauta/scripts/biblioteca-fichas.mjs` sobre un JSON nuevo (re-medición del 24-oct).

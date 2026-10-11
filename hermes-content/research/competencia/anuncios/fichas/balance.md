@@ -5,7 +5,7 @@
 | | |
 |---|---|
 | Páginas | Balance Aesthetic Software (`104573792590545`) |
-| Anuncios vistos | 1 de ? activos estimados · lista **completa** |
+| Anuncios vistos | 1 (la Biblioteca no dio el total de activos) · lista **completa** |
 | Más viejo | 38 d |
 | Con más de 30 d | 1 |
 | Titulares distintos | 1 |

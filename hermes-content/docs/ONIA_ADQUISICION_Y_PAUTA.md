@@ -289,12 +289,12 @@ Lectura: **a un dueño de clínica de Santa Cruz solo le llega pauta de software
 
 ### 2.6.2 Estudio del 10-oct con el conector (Sergio Urcullo: «que mire ads library y mire qué anuncios funcionan»)
 
-**Datos:** `research/competencia/anuncios/BIBLIOTECA-10OCT.json` (258 anuncios activos de 15 páginas de software para clínicas y negocios, 62 con más de 30 días; incluye Alegra, contable, y Sunnu, sin clasificar; y 417 de clínicas con alcance en Bolivia, 41 con más de 30 días de 24 anunciantes). **Cifras reproducibles:** `node .claude/skills/onia-ventas-pauta/scripts/biblioteca-estadisticas.mjs`. **Una ficha por anunciante:** `research/competencia/anuncios/fichas/README.md`. **Ficha de las 12 dimensiones:** `references/video-intake/2026-10-10-biblioteca-anuncios-software-clinicas.md`. **Reglas con su caso:** skill `onia-ventas-pauta` §8.3. Un revisor independiente recalculó todo el 10-oct y corrigió 8 cifras y 3 conclusiones; lo de abajo ya las lleva. **La antigüedad no es rendimiento** y los porcentajes salen solo de los anunciantes con lista completa (119 anuncios, 33 con más de 30 d): son un **indicio**, no una prueba.
+**Datos:** `research/competencia/anuncios/BIBLIOTECA-10OCT.json` (271 anuncios activos de 15 páginas de software para clínicas y negocios, 62 con más de 30 días; incluye Alegra, contable, y Sunnu, sin clasificar; y 417 de clínicas con alcance en Bolivia, 41 con más de 30 días de 24 anunciantes). **Cifras reproducibles:** `node .claude/skills/onia-ventas-pauta/scripts/biblioteca-estadisticas.mjs`. **Una ficha por anunciante:** `research/competencia/anuncios/fichas/README.md`. **Ficha de las 12 dimensiones:** `references/video-intake/2026-10-10-biblioteca-anuncios-software-clinicas.md`. **Reglas con su caso:** skill `onia-ventas-pauta` §8.3. Un revisor independiente recalculó todo el 10-oct y corrigió 8 cifras y 3 conclusiones; lo de abajo ya las lleva. **La antigüedad no es rendimiento** y los porcentajes salen solo de los anunciantes con lista completa (119 anuncios, 33 con más de 30 d): son un **indicio**, no una prueba.
 
 | Patrón | Evidencia (días al 10-oct) | Peso | Qué hace Onia |
 |---|---|---|---|
 | **Control / agenda / orden** | 12 de los 33 que duran (36 %) contra 7 de 86 nuevos (8 %): «Todos ven lo mismo. Tú tienes el control.» 37-47 d ×4, «Cabinas llenas, agenda bajo control» 73-86 d ×3 | **12 anuncios = 5 titulares de 2 anunciantes** (Doctocliq, CitaPro): un patrón de dos, no doce. Las clases se armaron mirando a los ganadores | **N1** «Todos sus doctores, una sola agenda» |
-| **Demostración o prueba en el titular** | 4 de 33 (12 %) contra 3 de 86 (3 %), **los 4 de Doctocliq** («Prueba Doctocliq ahora/hoy» 45-85 d); AgendaPro «Agenda tu demostración gratis» ×5 (4 de ellos de 59-64 d; lista parcial) | **Flojo** (p ≈ 0,09 contando cada copia como independiente) y con un contraejemplo: **Calu perdió sus anuncios de prueba** («Conocé Calu en 2 minutos» 94 d, «Probá Calu Gratis» 53 d el 3-oct; hoy 5 anuncios y el más viejo 43 d) | Titular de Meta «Pida su demostración gratis» (27 caracteres) en A1 v6, A2 v3, N1 y N2; N3 prueba la prueba de 14 días |
+| **Demostración o prueba en el titular** | 4 de 33 (12 %) contra 3 de 86 (3 %), **los 4 de Doctocliq** («Prueba Doctocliq ahora/hoy» 45-85 d); AgendaPro «Agenda tu demostración gratis» ×5 (4 de ellos de 59-64 d; lista parcial) | **Flojo** (p ≈ 0,09 contando cada copia como independiente) y con un contraejemplo: **Calu ya no tiene activos los de prueba del 3-oct** («Conocé Calu en 2 minutos» 94 d, «Probá Calu Gratis» 53 d el 3-oct; hoy 5 anuncios y el más viejo 43 d) | Titular de Meta «Pida su demostración gratis» (27 caracteres) en A1 v6, A2 v3, N1 y N2; N3 prueba la prueba de 14 días |
 | **Inasistencias y cancelaciones** | Es el dolor que **más anunciantes** usan (AgendaPro «Menos inasistencias en tu clínica» 65 d; Doctocliq «Dejá de perder citas» 57 d y «Evita cancelaciones…» 27 d; Dentalink; CitaPro) y Doctocliq sostuvo 78 d un video con «un sillón vacío te cuesta dinero» (§2.6) | **Mide uso, no duración:** solo 1 de los 33 que duran lo lleva en el titular | **A1** (precedente: ese video). Sin cifras de reducción: AgendaPro «90 % menos inasistencias» dura 65 d, pero Onia tiene 0 clientes y el detector las rechaza |
 | **El papel y la ficha** | Calu «¿Seguís acumulando fichas y papeles…?» 43 d; AgendaPro «Ficha clínica digital» 65 d (parcial) | Flojo: 2 de 33 | **N2** «¿Sigue guardando las fichas en papel?» |
 | **Un concepto, muchas copias** | Doctocliq 30 anuncios = 14 titulares; CitaPro 16 = 9; y los grandes tienen cientos activos (AgendaPro 313, Jelou 238, Dentalink 92-106) | Observado | Plan §5.11: 3 copias de A1 y corte el día 3/7/14. Con US$ 56 no se replica el volumen |
@@ -378,7 +378,7 @@ documentada; el detalle, con cada fuente, en `research/ONIA_META_ADS_PLAYBOOK_20
   cambio de precios de Meta del 1-oct-2026. **Ayuda oficial (11-oct):** vale para cualquier categoría de mensaje
   mientras el cliente escriba desde un Android o un iPhone; **el anuncio en sí no es gratis**. Pasadas las 72 h,
   el seguimiento con plantilla es de pago: los seguimientos de los leads **nuevos** de la pauta conviene mandarlos
-  dentro de esas 72 h (los 7 leads de agosto de `sales-kit/SEGUIMIENTO-LEADS.md` ya la pasaron).
+  dentro de esas 72 h (los 7 leads de agosto de `sales-kit/SEGUIMIENTO-LEADS.md` ya la pasaron). **Ojo:** esa ayuda es de la plataforma de WhatsApp Business (API) y no tiene fecha; §5.5 anotó que desde el 1-oct Meta cobra los mensajes de servicio: **no se pudo reconciliar**; se mira en WhatsApp Manager → Insights antes de contar con «gratis».
 
 ### 5.2 Público: el filtro son la pieza y el bot
 
@@ -515,13 +515,13 @@ Detalle, fuentes y casos en la skill `onia-ventas-pauta` §8.4. Lo que mueve dec
 
 | Dato oficial | Qué significa acá |
 |---|---|
-| **«Conversaciones iniciadas»** = personas que escribieron por primera vez o tras 7 días sin hablar, atribuidas al anuncio (en WhatsApp, solo las que salen de un clic) | Es el «resultado» que mide la campaña: no cuenta a quien ya era contacto. **Cota superior de conversaciones**; el código del texto precargado puede dar menos |
+| **«Conversaciones iniciadas»** = cuentas que escribieron por primera vez **o** tras 7 días sin actividad, atribuidas al anuncio (en WhatsApp, solo las que salen de un clic); Meta la marca **«en desarrollo»** | Es el «resultado» que mide la campaña. **No es un conteo exacto de leads:** quien vuelve a hacer clic antes de 7 días no suma en Meta pero sí aparece en Chatwoot con código; el código puede perderse y Meta puede contar a alguien que Chatwoot no. Se leen **los dos** y se anota la diferencia |
 | **El mensaje precargado lo puede editar o borrar quien escribe** | El código `(D1)`/`(D2)`/`(D3)` se puede perder: «sin código» no es «sin anuncio». Se compara el total de Meta con los leads con código |
 | **Aprendizaje limitado** = conjunto que no llega a ~50 eventos en la semana después de la última edición significativa | Con US$ 4/día (§5.3) **se queda en «aprendizaje limitado» por diseño**: los costos por conversación son ruidosos, no definitivos. Lo que Meta recomienda (juntar conjuntos, audiencia amplia, evento frecuente) ya es el plan: 1 conjunto, Advantage+, «conversaciones» |
-| **Presupuesto total con fecha de fin** («no pasar de un monto total»); el diario puede gastar hasta 175 % de un día y 7 × el diario por semana | El presupuesto de campaña total de la JSON es el correcto para un techo duro (Bs 750); los cortes de día 3/7/14 miran lo **acumulado**, no el gasto de un día |
+| **Presupuesto total con fecha de fin:** Meta lo describe como útil si no se quiere pasar de un monto total, con un ritmo diario **menos restringido**; el diario puede gastar hasta 175 % de un día y 7 × el diario por semana | El **techo es US$ 56** (el total de la campaña: Bs 637 a 11,37 y Bs 840 a 15, `CAMPANA-1-LISTA-PARA-CREAR.json` `regla_del_tipo_de_cambio`). **El total fija el monto, no el ritmo**: puede concentrar gasto al inicio. **Nada apaga solo en Bs 750**: ese tope se cuida a mano. Los cortes de día 3/7/14 miran lo **acumulado**, no el gasto de un día |
 | **Revisión:** casi siempre < 24 h; se repite al cambiar creativo, segmentación u optimización (no al cambiar presupuesto, puja o fechas) | Crear con inicio programado y ver «Activo» **antes** del día 1; un cambio de creativo cuesta otra revisión |
 | **Prueba A/B oficial:** misma partida a cada versión, una variable, no apagar y prender a mano | La prueba 1 (3 copias en un conjunto) **no es una prueba A/B**: Meta reparte según lo que rinde. Sirve para ver «¿trae dueños?»; el veredicto «qué formato gana» exigiría A/B con presupuesto parejo (no alcanza con US$ 56) |
-| **Biblioteca:** solo anuncios activos; los comerciales **no se archivan** al detenerse y solo se ve la fecha de inicio | Por eso `INACTIVE` da 0 y la muerte de un anuncio solo se mide volviendo a consultar los mismos ids (§2.6.2) |
+| **Biblioteca:** solo anuncios activos; los comerciales **no se archivan** al detenerse y solo se ve la fecha de inicio | Explicación probable (**inferencia**: el artículo no habla de `INACTIVE`) de que dé 0; la muerte de un anuncio solo se mide volviendo a consultar los mismos ids (§2.6.2) |
 
 ### 5.7 Cortar o seguir
 
@@ -540,12 +540,12 @@ Detalle, fuentes y casos en la skill `onia-ventas-pauta` §8.4. Lo que mueve dec
   es una **edición significativa** cualquier cambio de segmentación, de creativo o del evento de optimización,
   **agregar un anuncio nuevo al conjunto** y pausarlo 7 días o más; reinicia el aprendizaje y **vuelve a revisión**
   (casi siempre en menos de 24 h). El presupuesto «puede o no» serlo según la magnitud: Meta **no da un umbral**; el
-  «no más de 20 %» es una regla propia de prudencia, no una cifra de Meta. **Pausar un anuncio no está en la lista.**
+  «no más de 20 %» es una regla propia de prudencia, no una cifra de Meta. **Pausar un anuncio no está en la lista** (**inferencia**: Meta no lo confirma; se comprueba mirando la columna «Última edición significativa» de Ads Manager después de pausar).
   Por eso el corte del día 3 («se cambia la pieza») se hace **pausando la copia que no trae, no cambiándola**: la pieza
-  nueva espera a la tanda siguiente.
+  nueva espera a la tanda siguiente. Con ~US$ 12 gastados el día 3 el conjunto sigue en aprendizaje: el corte del día 3 vale para lo que no trae **nada**, no para comparar piezas.
 - **Techo total que no se pasa: Bs 1.400** (Meta 750 + auditorías, comunidad y eventos 650). Al llegar, se apaga todo.
 - **Seguir** quiere decir una segunda tanda igual, **pagada solo con plata de un cliente que ya pagó**, nunca con la
-  reserva. Se escala (+20–30 % cada 3–4 días) solo con el costo por demo en tope dos semanas seguidas y lugar en la
+  reserva. Se escala en pasos chicos (regla propia: +20–30 % cada 3–4 días; Meta no da umbral y avisa que un cambio grande de presupuesto puede reiniciar el aprendizaje) solo con el costo por demo en tope dos semanas seguidas y lugar en la
   agenda de Sergio Urcullo: **cuando las demos superan su capacidad semanal, no se escala; el techo son horas, no pauta**.
 - Se mide cada día **a mano, en una planilla**: conversaciones; cuántas son de un dueño o administrador de clínica; demos
   agendadas; costo por conversación; costo por demo; CTR; frecuencia.
@@ -780,7 +780,7 @@ variable con estadística (§5.3).
 | Demos agendadas y costo por demo | `/llamada` agendadas desde el chat | Corte del día 14 (§5.7) |
 | Frecuencia | Administrador | Si sube sin conversaciones, la pieza se gastó |
 
-**Reglas de corte:** las de §5.7, sin cambios (día 3, día 7, día 14; no se toca la segmentación; no se sube más de 20 %).
+**Reglas de corte:** las de §5.7, sin cambios (día 3, día 7, día 14; no se toca la segmentación ni el creativo, no se agregan anuncios y el presupuesto no se sube más de 20 %: regla propia, Meta no da umbral).
 
 **Lo que la frena y quién la destraba:** las 9 filas del go/no-go de §5.10, todas en ❌ o sin medir el 8-oct, más estas:
 
