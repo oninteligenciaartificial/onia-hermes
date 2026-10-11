@@ -314,6 +314,12 @@ Estos dieron diagnosticos falsos con evidencia que parecia buena:
   `auth-v1-all` (`/auth/v1/`) lleva `key-auth` + `acl` (admin, anon). Las abiertas son `verify`, `callback`,
   `authorize`, `jwks` y `sso`, y esas no sirven de control. Y exigir `role: anon` en el payload del JWT: con la
   `service_role` la tabla devuelve filas reales.
+- **La nube no es UN visitante** (11-oct, prueba de S2). La salida de una sesión de la nube rota entre varias IPs de una
+  misma /24: en 6 pedidos a `api.ipify.org` salieron 4 IPs distintas. Con 31 pedidos desde la nube, el límite de 30/min nunca
+  saltó, y eso parecía un limitador roto. Para probar «dos visitantes no comparten cubo», el visitante fijo es el VPS
+  (`ssh onia-vps curl …`, entra por Cloudflare porque el dominio resuelve a Cloudflare) y la nube es el segundo. Método
+  medido, sin tocar la base: `GET /api/booking/doctors` sin `orgSlug` pasa por `publicApiLimiter` y responde 400. El script
+  está en la cola de Plataforma (S2).
 
 ---
 
