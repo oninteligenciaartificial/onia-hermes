@@ -372,6 +372,25 @@ antes de que lleguen a Sergio Urcullo.
   corrige «Geminis CLI» y «Sonet», pero sigue oyendo mal «apagó» («pagó»), «descargate» y «skills» («Ains»): el transcript siempre se
   corrige a mano antes de armar subtítulos. El mapeo de un bruto a su código se hace por lo que dice, no por el tamaño.
 
+- **Borrador de N06 (11-oct), Santiago sobre el corte PROPUESTO, antes del «ok cortes»: se arma con UN comando y se rehace en ~2 min.**
+  `videos/marca-personal/2026-10-11/n06-antigravity/borrador/rehacer.sh [cutplan] [bruto] [carpeta]` (con `RECAPTURAR=1` vuelve a sacar las
+  capturas del día; el README trae el mapa bloque → escenas para cuando se agrega o saca un bloque). Se corre con **`--sin-aire`**: la regla 15
+  (aire muerto ≤ 0,3 s) manda sobre las pausas de 0,34-0,52 s que el molde abre por defecto. Medido por mí sobre el render: `silencedetect -35 dB d=0.3`
+  → 0 silencios (a d=0,2 salen 4 pausas de 0,20-0,23 s), −13,2 LUFS, TP −1,6, LRA 2,2 (la receta pide 2,3 o más), 45,5 s. Trampas pagadas armándolo:
+  (1) **`santiago.py` revienta con OpenCV 5.0** (ya no existe `cv2.CascadeClassifier` ni los Haar). Con la nube en OpenCV 5, `santiago-cv5.py` (en
+  esa carpeta) lo corre con `runpy` y pone un detector de la misma interfaz hecho con YuNet (ojos desde los landmarks; el modelo ya está en el repo).
+  El arreglo de fondo es `FaceDetectorYN` en `analizar_bruto()` con Haar como alternativa donde exista, o fijar `opencv<5`. (2) **`capturar.mjs`:** `ancla`
+  toma la primera coincidencia visible y en los docs de Antigravity el índice «On this page» repite el título: anclar a un párrafo ÚNICO; y
+  `capturas.json` se escribe solo al final, así que un error repite las nueve capturas (28 s). (3) **Para que un cambio de escena tape un micro-corte, la frase
+  disparadora tiene que ser la palabra DESPUÉS del corte**: si el corte cae dentro de una palabra de Whisper, `corte:true` no lo encuentra; con 5 cambios
+  de escena extra y 3 golpes de zoom bajaron los cortes «a la vista» de 9 a 3. (4) Whisper small corre los bordes de palabra hasta 0,4 s y deja palabras de
+  0,14 s: se ajustaron a los silencios del cutplan (17 bordes), pero no es alineación forzada. (5) En títulos con acento la coma va DENTRO: `*Gratis,* Pro`
+  (si no, «Gratis , Pro»); la barra de URL del marco corta URLs largas (poné solo el dominio); el sello rotado choca con un título de 1 línea (va
+  debajo de la captura); en cara completa el texto sobre la pared clara (y≈200) pierde contraste, y≈370 anda; los marcos de captura con `pad` 8 tapan letras
+  vecinas en texto corrido (`pad` 2). (6) El marco de navegador del molde trae tres puntos de semáforo (`#FF5F57`, santiago.py:303) y el subtítulo activo
+  es amarillo `#FDC82F`, no verde: cambiar cualquiera pide tocar `santiago.py` (decisión de la madre). (7) `Broken pipe` en el log del render es el
+  decodificador del bruto cerrado al final: inofensivo. (8) Una noticia se contrasta con la fuente más nueva: el blog de Google del 19-may-2026 respalda
+  «Pro, Ultra y gratis, 18 de junio» y el cartel de geminicli.com dice «Unpaid tier and Google One users» sin contradecirlo; en pantalla va lo que dice la página.
 - **El bruto puede venir ya editado** (el de N03 traía 5 tomas pegadas). Los saltos se detectan con picos aislados de
   diferencia entre cuadros (>5× la mediana y >2,5× sus vecinos) y se tratan como cortes. Si no, el control dice
   «ningún corte a la vista» y es falso.
