@@ -295,7 +295,7 @@ carril puede hacer solo. Q1 espera `aplicar` (ver «Bloqueado»).
   ni vos y usted mezclados en un mismo flujo. **Hecho:** barrido con captura de cada caso y los arreglos en
   «Hallazgos para otros».
 
-- [ ] **L1 El chequeo de la web contra el producto, como script (Codex Luna, 11-oct, madre DESARROLLO-INFRA).** Q7 y Q8
+- [x] **L1 El chequeo de la web contra el producto, como script (Codex Luna, 11-oct, madre DESARROLLO-INFRA).** Q7 y Q8
   costaron ~40 min a mano. Contrato: `hermes-content/docs/handoff/codex-tareas/hermes-L1-web-vs-producto.md`. Lo lanza la
   madre. **Hecho:** su prueba en verde y el script reproduciendo la §3 y la §3.1 de `ONIA_PROMESA_VS_PRODUCTO.md`; después
   se corre contra la web en vivo y se compara con lo escrito a mano. La madre lo corre en la rama
@@ -313,6 +313,9 @@ carril puede hacer solo. Q1 espera `aplicar` (ver «Bloqueado»).
   - La prueba no corre en el CI (ni en `package.json` ni en el workflow).
   Contrato de arreglos: `handoff/codex-tareas/hermes-L1b-web-vs-producto-arreglos.md`. **No lo copio a #194** (lo agrandaría y no es Q2 ni Q5):
   `782dd348` es un solo commit; la madre lo pone sobre `main` cuando #194 entre, junto con L1b.
+  **Cerrado el 11-oct 10:00 UTC (`modelos: ninguno (lo corrí yo)` · `codex: hermes-L1b y L1c`).** Los tres huecos de arriba los cerraron L1b (verde falso, `--base-web` con tope de tiempo, topes desde `plan-catalogo.ts`, prueba en el CI) y L1c (HTML real). **Corrida en vivo, con el HTML que sirve `onia.com.bo` ahora** (`--base-web https://onia.com.bo`)
+  **y el código de `onia-platform` `master` `fd72cd55`** (los tres archivos de `lib/` sacados con `git show`): exit 0, 0 diferencias de precio, los cuatro topes «coincide» (300/2/200 · 800/4/400 · 1500/5/800 · sin tope), 0 textos de obra y 7 promesas «sigue»; `registro-nombre` queda informativa («no medible sin navegador»): la medí aparte en E11 y el paso 2 de `/register` sigue con «Nombre de tu clínica».
+  Igual que mis Q7 y Q8 a mano. Entra a `main` con #194.
 - [x] **L1b Arreglos del chequeo web-vs-producto (Codex Luna).** Contrato `handoff/codex-tareas/hermes-L1b-web-vs-producto-arreglos.md`; commit
   `6f64e094` en `codex/hermes-qa-web-vs-producto`. **Revisado el 11-oct ~07:05 UTC** (`modelos: ninguno (409 líneas, las leí y corrí yo)` · `codex: hermes-L1c`),
   en un directorio aparte con el código REAL de `onia-platform` `master`: la prueba da **13/13**; sin `--platform` sale 2 con «NO MEDIDO: falta --platform»;
