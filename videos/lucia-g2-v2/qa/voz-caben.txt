@@ -25,4 +25,8 @@ Total: 14 líneas, 72 palabras, 402 caracteres con espacios (415 con los saltos 
 
 Costuras contra la v2.0 (re-corte mudo del 11-oct, tramos a 3,6 palabras/s): inicio de cada tramo, antes → ahora.
 T1 0.125 → 0.125 · T2 2.042 → 1.708 · T3 3.417 → 3.750 · T4 5.333 → 5.875 · T5 6.708 → 6.917 · T6 8.083 → 8.458 · T7 10.542 → 11.000 · T8 11.917 → 12.708 · T9 13.292 → 14.042 · T10 15.750 → 16.667 · T11 17.125 → 18.250 · T12 19.583 → 20.708 · T13 21.500 → 22.833 · T14 23.708 → 25.000
-Duración: 26,500 s → 27.791666666666668 s
+Duración: 26,500 s → 27.792 s
+
+Contra las ventanas de caracteres de la revisión 1 (H1; calculadas para los tramos de la v2.0 con L1 y L2 intercambiadas: no pisan y dejan ≤ 0,25 s a 17 c/s):
+L1 22 car 19–23 dentro · L2 30 car 28–32 dentro · L3 32 car 28–32 dentro · L4 14 car 19–23 FUERA · L5 22 car 19–23 dentro · L6 39 car 37–41 dentro · L7 25 car 19–23 FUERA · L8 19 car 19–23 dentro · L9 41 car 37–41 dentro · L10 23 car 19–23 dentro · L11 37 car 37–41 dentro · L12 32 car 28–32 dentro · L13 33 car 33–37 dentro · L14 33 car ≤ 47 dentro
+Las costuras se movieron igual (arriba): H6 pide alargar tarjetas (el gancho solo necesita +0,33 s para que c1 y c2 alcancen su lectura), así que los tramos se derivan de las líneas (caracteres/17 + hueco) y no de una tabla fija; con voz real se derivan de las duraciones medidas.

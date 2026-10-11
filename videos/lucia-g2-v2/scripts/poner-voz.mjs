@@ -61,7 +61,7 @@ filas.forEach(({ t, d }, i) => {
 if (medir) {
   const j = Object.fromEntries(filas.map(({ t, d }) => [`t${String(t.n).padStart(2, '0')}`, +d.toFixed(3)]));
   fs.writeFileSync(path.join(P, 'duraciones.json'), JSON.stringify(j, null, 1) + '\n');
-  console.log(`✔ duraciones.json escrito (${filas.length} pistas). Siguiente: node scripts/retemporizar.mjs && node scripts/build.mjs, controles del README, render y mux en silencio; recién después la mezcla.`);
+  console.log(`✔ duraciones.json escrito (${filas.length} pistas). Siguiente: node scripts/build.mjs (re-deriva los tramos de estas duraciones), controles del README, render y mux en silencio; recién después la mezcla.`);
   process.exit(0);
 }
 

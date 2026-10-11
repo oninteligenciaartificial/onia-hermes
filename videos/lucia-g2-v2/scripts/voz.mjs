@@ -85,11 +85,17 @@ export function tablaCaben(c, V, originales = null) {
     out.push('');
     out.push('Costuras contra la v2.0 (re-corte mudo del 11-oct, tramos a 3,6 palabras/s): inicio de cada tramo, antes → ahora.');
     out.push(c.tramos.map((t, k) => `T${t.i} ${originales[k].toFixed(3)} → ${t.t.toFixed(3)}`).join(' · '));
-    out.push(`Duración: 26,500 s → ${(c.tramos.at(-1).sf + c.tramos.at(-1).tf) / FPS} s`);
+    out.push(`Duración: 26,500 s → ${((c.tramos.at(-1).sf + c.tramos.at(-1).tf) / FPS).toFixed(3)} s`);
+    out.push('');
+    out.push('Contra las ventanas de caracteres de la revisión 1 (H1; calculadas para los tramos de la v2.0 con L1 y L2 intercambiadas: no pisan y dejan ≤ 0,25 s a 17 c/s):');
+    out.push(c.tramos.map((t, k) => { const w = VENTANAS_REVISION_1[k]; const ok = w && t.caracteres >= w[0] && t.caracteres <= w[1]; return `L${t.i} ${t.caracteres} car ${w ? `${w[0]}–${w[1]}` : '≤ 47'} ${ok || (!w && t.caracteres <= 47) ? 'dentro' : 'FUERA'}`; }).join(' · '));
+    out.push('Las costuras se movieron igual (arriba): H6 pide alargar tarjetas (el gancho solo necesita +0,33 s para que c1 y c2 alcancen su lectura), así que los tramos se derivan de las líneas (caracteres/17 + hueco) y no de una tabla fija; con voz real se derivan de las duraciones medidas.');
   }
   return out.join('\n');
 }
 
+// ventanas de caracteres de la revisión 1 (H1), tramos de la v2.0 con L1 y L2 intercambiadas por H2; la L14 (CTA) solo tiene tope: ≤ 47
+export const VENTANAS_REVISION_1 = [[19, 23], [28, 32], [28, 32], [19, 23], [19, 23], [37, 41], [19, 23], [19, 23], [37, 41], [19, 23], [37, 41], [28, 32], [33, 37], null];
 export const ORIGINALES_V2_0 = [0.125, 2.042, 3.417, 5.333, 6.708, 8.083, 10.542, 11.917, 13.292, 15.75, 17.125, 19.583, 21.5, 23.708];
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

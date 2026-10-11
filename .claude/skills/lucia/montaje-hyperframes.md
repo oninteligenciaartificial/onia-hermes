@@ -211,5 +211,12 @@ cd videos && npx -y hyperframes@0.8.142 init lucia-gN --non-interactive --exampl
   leyó la ruta, no la máquina. Se corren sobre una COPIA de la carpeta, porque algunos escriben en `qa/`.
 - **Nombres contra el catálogo (`models_explore`, gratis, 11-oct):** Seedream 4.5, Kling O1 Image, Nano Banana 2.1, Seedream 5.0 Pro, GPT Image 2.5 y Seedance 2.0 Mini coinciden; «FLUX 3» se lista «FLUX 3 Image»; **«Kling O3» se lista «Kling 3.0 Omni» y
   «Cinematic Studio 3.0» «Cinema Studio Video 3.0»** (decisión de la madre pendiente en G2 y G5).
+- **Una propuesta de texto del revisor se verifica contra la ventana antes de adoptarla** (G3 v2): sus recortes de L1 y L8 (30 car) dejaban un hueco de 0,44 s, por encima del tope de 0,30 s. El editor las rechazó con la cuenta
+  y dejó «Mirá: tres errores que casi publico.» y «Y tres: una mano le tapa a la otra.». Una línea corta no es una línea que cabe: tiene que llenar su ventana.
+- **Medir la identidad en TODOS los cuadros en reposo de un clip, no solo en una muestra** (G3 v2): la muestra de 14 cuadros dio «todo ≥ 0,70» y los 229 cuadros dieron 11 entre 0,680 y 0,699 (caras de 173 a 179 px, dentro del ruido
+  de ±0,03; la fuente ya baja en esos mismos cuadros). Alargar un clip para alargar el CTA suma cuadros con peor identidad (K1: de 5 a 7 cuadros bajo el piso). El «aprobado» de una etiqueta se refiere solo a lo que mide (la foto), no al clip.
+- **`media_inicio` automático** (`escenas.k1.media_inicio: "auto"`) toma los cuadros del clip desde el final de su ventana: al cambiar una ventana cambia qué cuadros del clip se ven. Re-medir cara y manos después.
+- **`silencedetect` alarga las pausas ~0,04 s** respecto de la ventana: con costuras fijas de 6 cuadros y tonos sintéticos salieron 8 pausas de 0,30-0,33 s (3 por 10 s; la regla tolera 1). No se cierra sin voz real: costuras de 5 cuadros o pistas adelantadas 3-4 cuadros.
+- **El nombre de una herramienta va en el pie, no en el video, cuando el error es un límite de verificación y no una falla de la herramienta** (G3 v2, decisión de la madre): el build valida cada atribución contra `PROCEDENCIA.jsonl` y no atribuye lo que el repo no registra (la agenda 1422fa94 no se nombra).
 - **El editor no se auto-aprueba.** En cada pieza el revisor halló lo que el editor no vio (título después del cuadro 0, pie falso, «misma foto», voz que no cabe) y la madre repite la verificación (ArcFace, gates en copia, cuadros mirados, SHA por
   un verificador haiku) antes de escribir «LISTA PARA MOSTRAR». Un «todo exit 0» del editor no se acepta sin repetirlo.

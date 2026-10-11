@@ -11,7 +11,7 @@ nube no tiene cliente `ssh` y la decisión de la madre (8-oct) es que la llave v
 | 4 | G4 «Seis motores de imagen, una cara: ¿cuál la conserva?» (**guion APROBADO por la madre el 10-oct**; sale solo con «mostrada, publicá G4») | `g4-final-1080x1920.mp4` | 59,75 s | `../lucia-g4/pie.txt` | `../lucia-g4/qa/g4-preview-360p.mp4` |
 | 5 | G5 «Cómo mido si una cara es la de Lucía (y cuándo no creerle al número)» (**guion APROBADO por la madre el 10-oct**; sale solo con «mostrada, publicá G5»; guion: `hermes-content/docs/cola/lucia-diario/guiones/G5-como-se-mide-una-cara.md`) | `g5-final-1080x1920.mp4` | 57,5 s | `../lucia-g5/pie.txt` | `../lucia-g5/qa/g5-preview-360p.mp4` |
 
-> ⚠️ **No publicar las v1 de G2, G4 y G5** (llevan «Motor 1 a 6» / «Imagen A a F»; D-N1 del 11-oct pide los nombres reales). Las reemplazan las v2 mudas de ≤ 30 s en
+> ⚠️ **No publicar las v1 de G2, G3, G4 y G5.** Las de G2, G4 y G5 llevan «Motor 1 a 6» / «Imagen A a F» (D-N1 del 11-oct pide los nombres reales); la de G3 (58 s) queda reemplazada por su v2 (27,9 s, regla 15 de aire muerto). Las reemplazan las v2 mudas de ≤ 30 s en
 > `../lucia-gN-v2/` (estado y SHA en la sección «Re-cortes v2» más abajo; G3 también tiene v2, recortada por la regla 15 de aire muerto, no por nombres).
 > G1 v2 (con voz Marcela, hecha por la madre) llega aparte: falta su SHA.
 
@@ -41,8 +41,10 @@ La voz (Marcela) se mezcla después y **cambia el SHA**: hay que repetir el QA d
 |---|---|---:|---|---|
 | G5 v2 «Cómo mido si una cara es la de Lucía» | `g5-v2-final-1080x1920.mp4` | 26,625 s | `030e8f65aabc0fddda83f234acebb410b951b7b81c3dc9c2657410f5ec399b3f` | **LISTA PARA MOSTRAR** (11-oct): revisión 1 aplicada, cara medida con ArcFace sobre este master (diferencia final↔fuente ≤ 0,009), cuadros mirados, SHA/specs/pie/cifras contados por verificador haiku y gates de lectura re-corridos por la madre (0 de 639 cuadros sin tarjeta, ventanas y frases prohibidas exit 0); pie en `../lucia-g5-v2/pie.txt` |
 | G2 v2 | — | 26,5 s | — | editada; revisión independiente en curso |
-| G3 v2 | — | — | — | revisión independiente en curso |
+| G3 v2 «Tres errores que casi publico» | `g3-v2-final-1080x1920.mp4` | 27,917 s | `ac032dc76b832c006f1b0d97693270a7c3ec923faa9d1c25d848e346c165193b` | **LISTA PARA MOSTRAR** (11-oct): revisión 1 aplicada (10 hallazgos), cara medida con ArcFace por el editor y repetida por la madre en 8 cuadros (coinciden al milésimo), gates de lectura re-corridos por la madre (0 de 670 cuadros sin tarjeta, ventanas, frases prohibidas exit 0), cuadros mirados; pie en `../lucia-g3-v2/pie.txt` |
 | G4 v2 «Seis motores de imagen, una cara» | `g4-v2-final-1080x1920.mp4` | 28,042 s | `13cdd1d2f5f0ab2eef1fb0ffd065007d47bf5946a2bb15a5bd24c435142d2a43` | **LISTA PARA MOSTRAR** (11-oct): revisión 1 aplicada (10 hallazgos), cara medida con ArcFace sobre este master (diferencia final↔fuente ≤ 0,012), gates de lectura re-corridos por la madre (hueco-tarjetas, ventanas 35/35, frases prohibidas exit 0), cuadros mirados; pie en `../lucia-g4-v2/pie.txt` |
+
+Pendiente en G3 v2 (decisiones de la madre): **(1)** la identidad de la cara en los clips K1 y K4 baja de 0,70 en 11 de 229 cuadros en reposo (mínimo 0,680, caras de 173 a 179 px: poco confiables y dentro del ruido de ±0,03); el «aprobado» de la etiqueta es solo el de la foto descartada (0,835) y el video no dice nada de los clips. **(2)** Con tonos sintéticos, `silencedetect` mide 8 pausas de 0,30 a 0,33 s (3 por cada 10 s; la regla de G5 tolera 1): la mitad de audio de la regla 15 no se cierra hasta tener voz real; opciones, costuras de 5 cuadros o adelantar cada pista 3-4 cuadros. **(3)** El pie nombra Higgsfield, Seedream 4.5 y Kling 3.0 std; el video no nombra ninguna herramienta.
 
 Pendiente en G4 v2: la lámina dice «Una toma cada uno» y poco después Kling O1 Image y Seedream 4.5 aparecen con una segunda toma (0,35 y 0,83 en el café); el pie lo aclara («Una toma por motor en la primera escena…»), la pantalla no. Decisión de la madre.
 
