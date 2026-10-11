@@ -30,7 +30,7 @@
    ]
   },
   "fecha": "2026-10-11",
-  "hora_utc": "08:40-08:42"
+  "hora_utc": "08:46-08:48"
  },
  "dep-auditoria": {
   "url": "https://platform.claude.com/docs/en/about-claude/model-deprecations",
@@ -49,36 +49,30 @@
     102,
     38
    ],
-   "broken down by API key and model": [
+   "down by API key and model": [
     123,
-    328,
-    688,
-    82
+    372,
+    372,
+    38
    ]
   },
   "fecha": "2026-10-11",
-  "hora_utc": "08:40-08:42"
+  "hora_utc": "08:46-08:48"
  },
  "dep-plataformas": {
   "url": "https://platform.claude.com/docs/en/about-claude/model-deprecations",
   "w": 920,
   "h": 520,
   "frases": {
-   "Amazon Bedrock and Google Cloud": [
-    48,
-    116,
-    780,
-    82
-   ],
-   "set their own retirement schedules": [
+   "Bedrock and Google Cloud": [
     48,
     160,
-    726,
-    82
+    372,
+    38
    ]
   },
   "fecha": "2026-10-11",
-  "hora_utc": "08:40-08:42"
+  "hora_utc": "08:46-08:48"
  },
  "mig-comando": {
   "url": "https://platform.claude.com/docs/en/models/sonnet-5-5/migration-guide",
@@ -105,18 +99,18 @@
    ]
   },
   "fecha": "2026-10-11",
-  "hora_utc": "08:40-08:42"
+  "hora_utc": "08:46-08:48"
  },
  "mig-cinco": {
   "url": "https://platform.claude.com/docs/en/models/sonnet-5-5/migration-guide",
   "w": 920,
   "h": 680,
   "frases": {
-   "five settings that return a 400 error": [
-    48,
+   "five settings that return a 400": [
+    376,
     190,
-    740,
-    82
+    412,
+    38
    ],
    "sampling parameters": [
     376,
@@ -124,11 +118,11 @@
     290,
     38
    ],
-   "assistant prefill": [
+   "prefill": [
     48,
-    234,
-    756,
-    82
+    278,
+    80,
+    38
    ],
    "forced tool choice": [
     140,
@@ -138,7 +132,7 @@
    ]
   },
   "fecha": "2026-10-11",
-  "hora_utc": "08:40-08:42"
+  "hora_utc": "08:46-08:48"
  },
  "mig-pensar": {
   "url": "https://platform.claude.com/docs/en/models/sonnet-5-5/migration-guide",
@@ -153,7 +147,7 @@
    ]
   },
   "fecha": "2026-10-11",
-  "hora_utc": "08:40-08:42"
+  "hora_utc": "08:46-08:48"
  },
  "precio-45": {
   "url": "https://platform.claude.com/docs/en/about-claude/pricing",
@@ -168,7 +162,7 @@
    ]
   },
   "fecha": "2026-10-11",
-  "hora_utc": "08:40-08:42"
+  "hora_utc": "08:46-08:48"
  },
  "precio-55": {
   "url": "https://platform.claude.com/docs/en/about-claude/pricing",
@@ -183,7 +177,7 @@
    ]
   },
   "fecha": "2026-10-11",
-  "hora_utc": "08:40-08:42"
+  "hora_utc": "08:46-08:48"
  },
  "precio-tokens": {
   "url": "https://platform.claude.com/docs/en/about-claude/pricing",
@@ -198,6 +192,6 @@
    ]
   },
   "fecha": "2026-10-11",
-  "hora_utc": "08:40-08:42"
+  "hora_utc": "08:46-08:48"
  }
 }
