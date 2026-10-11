@@ -221,3 +221,18 @@ test("el renderer pone «Pantalla de Onia · datos de ejemplo» en CADA lugar do
   assert.ok(/if \(!flotando\) cuerpo \+= .{0,200}datos de ejemplo/.test(fuente), "la tarjeta centrada lleva su leyenda");
   assert.ok(/function htmlEstatico[\s\S]*<div class="rot"[^>]*>Pantalla de Onia · datos de ejemplo/.test(fuente), "la imagen 1:1 lleva su leyenda");
 });
+
+test("LISTA PARA MOSTRAR v2: dice que no se creó nada ni se gastó, nombra las 5 piezas con su referencia y deja a la que espera fuera", () => {
+  const lista = leer(`${DIR}/LISTA-PARA-MOSTRAR-V2.md`);
+  const plano = lista.replace(/\s+/g, " ");
+  assert.match(lista, /^# LISTA PARA MOSTRAR: prueba 1 v2$/m);
+  assert.match(plano, /No se creó nada en Meta, no se gastó nada, no se contactó a nadie/);
+  assert.match(plano, /sigue \*\*sin aprobar\*\*/);
+  for (const { b } of piezas) {
+    assert.ok(lista.includes(`**${b.id}**`), `${b.id}: falta en la tabla`);
+    assert.ok(lista.includes(b.referencia.id), `${b.id}: la tabla no nombra la referencia ${b.referencia.id}`);
+    assert.ok(lista.includes(`${b.id}-hoja.md`), `${b.id}: falta el enlace a su hoja`);
+    if (/^espera/.test(b.estado)) assert.match(plano, new RegExp(`\\*\\*${b.id}\\*\\*[^|]*\\|[^|]*\\|[^|]*\\|[^|]*\\|[^|]*\\|[^|]*ESPERA`), `${b.id}: la tabla no dice que espera`);
+  }
+  assert.ok(existsSync(aRuta(`${DIR}/PARA-GRABAR.txt`)), "falta PARA-GRABAR.txt");
+});
