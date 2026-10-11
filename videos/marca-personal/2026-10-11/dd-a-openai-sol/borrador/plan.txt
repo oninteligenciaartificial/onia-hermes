@@ -1,0 +1,104 @@
+correr-santiago: OpenCV 5.0.0 sin CascadeClassifier → parche con YuNet (santiago.py intacto)
+escenas: 13 · bloques de subtítulo: 72 · duración 58.42 s
+    0.00  split  corte    gancho-precios  (7 elementos)
+    6.09  split  fundido  lanzamiento  (7 elementos)
+   11.83  full   sube     lo-que-cobran  (5 elementos)
+   17.03  split  baja     segun-openai  (5 elementos)
+   19.68  full   sube     probalo  (3 elementos)
+   22.85  lamina corte    recomiendo  (6 elementos)
+   27.36  split  corte    tarifa  (6 elementos)
+   33.29  split  fundido  cache-precio  (7 elementos)
+   36.93  lamina corte    cuenta-1  (3 elementos)
+   41.27  pip    fundido  cuenta-2  (6 elementos)
+   46.78  split  corte    confirmar  (7 elementos)
+   54.10  full   sube     cta-cara  (2 elementos)
+   56.25  split  baja     cta  (1 elementos)
+
+— control contra la receta —
+  duración 58.42 s (receta 65-120 con persona; antes 58.42)
+  reparto: split 57 % · full 18 % · pip 9 % · lamina 15 % (pip = persona reducida)
+  tramo sin cara más largo: 4.5 s (referentes ≤10; Sonnet ≤1,25)
+  cambios de layout: 10 (1.71 por 10 s; receta 0,75-2,1)
+  ojos: split 67.5 % · cara completa [46.0] % (Sonnet 67,1 / 49,2; QA 46-47) · paso split→cara [413, 413] px (318-600)
+  escala por toma: 0.0s ×1.080 · 32.7s ×1.080 · 45.8s ×1.073 · 60.4s ×1.087 · 70.7s ×1.076
+  cortes y saltos: 22; a la vista (sin cambio de panel/layout/punch): ['2.84(corte)', '3.47(corte)', '8.92(corte)', '14.41(corte)', '31.91(corte)', '35.90(corte)', '49.69(corte)', '52.56(corte)']; en la ventana reducida: ['42.53(corte)', '43.33(corte)', '44.57(corte)', '45.86(corte)']
+  algo cambia cada 2.3 s de media (máx 4.6; receta 3-5)
+  elementos gráficos nuevos: 43 (7.4 por 10 s; receta ≈6-9)
+  acentos de zoom: 2 (golpe, golpe); receta 1-3
+  pausas según Whisper (orientativo: sus finales de palabra se corren hasta 0,4 s): 16 de 0,18-0,5 s · 0 de 0,5-0,6 · más de 0,6: ninguna
+  aire: +0.00 s en 0 uniones (0 sobre el silencio del corte, el resto estirado) · recortes []
+  pausas reales (habla del bruto en la salida nueva): 0 de 0,18-0,5 s · 0 de 0,5-0,6 · más de 0,6: ninguna (receta 16-33, ≤0,6)
+  palabras/s: 3.15 sobre la duración (método QA) · 3.16 sobre el habla (receta 2,65-3,2)
+  primera palabra 0.12 s · primer subtítulo 0.12 s (≤0,3) · cola tras la última palabra 0.12 s (0,3-0,65)
+  prueba en pantalla a 0.00 s (≤0,9)
+
+— aire —
+
+— disparos —
+    0.00  gancho-precios:captura precios
+    0.00  gancho-precios:credito developers.openai.com/api/docs/pricing · Standa
+    0.00  gancho-precios:texto Sol cobra *2 dólares*
+por millón de tokens
+    0.66  gancho-precios:logo logo-openai.png
+    1.42  gancho-precios:marca «sol-entrada»
+    4.63  gancho-precios:marca «astra-entrada»
+    6.09  lanzamiento:captura changelog-sol
+    6.09  lanzamiento:credito developers.openai.com/api/docs/changelog · 11 oct 
+    6.09  lanzamiento:texto GPT-6.1 *Sol*
+    9.86  lanzamiento:marca «Sep 29»
+   10.48  lanzamiento:marca «Released GPT-6.1 Sol»
+   10.48  lanzamiento:sello 29 SEP
+   11.83  lo-que-cobran:texto Los dos cobran
+   13.35  lo-que-cobran:texto lo que *entra*
+   13.99  lo-que-cobran:texto y lo que *sale*
+   14.51  lo-que-cobran:pildora Sol cobra 2
+   15.95  lo-que-cobran:pildora Astra cobra 10
+   17.03  segun-openai:captura modelo-sol
+   17.03  segun-openai:credito developers.openai.com/api/docs/models · 11 oct 20
+   17.24  segun-openai:texto Según OpenAI,
+*se acerca a Astra*
+   18.74  segun-openai:marca «Near-Astra performance for com»
+   19.68  probalo:texto Si tu bot usa *Astra,*
+   20.70  probalo:texto yo lo probaría con *Sol*
+   21.86  probalo:texto antes de cambiarlo
+   22.85  recomiendo:texto Pero para
+   23.31  recomiendo:fila Investigación científica
+   24.75  recomiendo:fila Programación
+   25.39  recomiendo:texto te sigo recomendando
+   26.07  recomiendo:texto *Astra*
+   27.36  tarifa:texto Hay una tarifa
+*mucho más económica*
+   29.74  tarifa:caja La caché
+   29.74  zoom golpe
+   30.08  tarifa:flecha 
+   30.94  tarifa:caja Lo que va igual
+al principio
+   31.72  tarifa:pildora como tu lista de precios
+   33.29  cache-precio:captura changelog-sol
+   33.29  cache-precio:texto Si sale de la *caché*
+   34.09  cache-precio:texto *10 centavos* el millón
+   34.59  cache-precio:marca «$0.10 cached input»
+   36.02  cache-precio:marca «$2 input»
+   36.02  cache-precio:sello 20 VECES MENOS
+   36.02  zoom golpe
+   36.93  cuenta-1:texto La
+*cuenta*
+   37.81  cuenta-1:fila 2.000 tokens por mensaje
+   41.27  cuenta-2:fila 2.000 tokens por mensaje
+   41.27  cuenta-2:fila Por mil mensajes
+   41.27  cuenta-2:texto La
+*cuenta*
+   43.45  cuenta-2:fila A 2 dólares el millón
+   44.69  cuenta-2:fila Con caché
+   46.78  confirmar:credito pendiente: confirmar con el audio si dijo «con Astra
+   46.78  confirmar:pildora [CONFIRMAR 01:01–01:09]
+   48.33  confirmar:texto 100 mil mensajes
+al mes
+   50.50  confirmar:caja Sol sin caché
+400 dólares
+   51.44  confirmar:flecha 
+   52.85  confirmar:caja Sol con caché
+*20 dólares*
+   54.10  cta-cara:texto Si querés que lo probemos
+   55.40  cta-cara:texto en *tu negocio*
+   56.25  cta:tarjeta 

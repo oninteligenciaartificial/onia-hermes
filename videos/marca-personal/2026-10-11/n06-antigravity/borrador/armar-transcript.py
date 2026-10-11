@@ -104,10 +104,11 @@ def reemplazar(words, clave: str, valor: str):
 
 
 def unir(viejas, nuevos, punt_final):
-    """viejas: palabras con tiempo; nuevos: textos. Reparte los tiempos conservando orden y monotonía."""
-    if [norm(v["word"]) for v in viejas] == [norm(n) for n in nuevos]:
-        res = [dict(v, word=n) for v, n in zip(viejas, nuevos)]
-    elif len(viejas) == len(nuevos):
+    """viejas: palabras con tiempo; nuevos: textos. Reparte los tiempos conservando orden y monotonía.
+    Si hay menos palabras nuevas que viejas, las viejas que sobran le prestan su tiempo a la palabra que sigue
+    (su inicio se adelanta): así el subtítulo no queda clavado en una palabra durante una pausa."""
+    absorber = []  # (índice en res de la palabra que sigue, inicio de lo que sobró, fin de lo que sobró)
+    if len(viejas) == len(nuevos):
         res = [dict(v, word=n) for v, n in zip(viejas, nuevos)]
     else:
         res = []
@@ -116,7 +117,7 @@ def unir(viejas, nuevos, punt_final):
             if op == "equal":
                 res += [dict(viejas[i1 + k], word=nuevos[j1 + k]) for k in range(i2 - i1)]
             elif op == "delete":
-                continue
+                absorber.append((len(res), viejas[i1]["start"], viejas[i2 - 1]["end"]))
             elif op == "insert":
                 ref = res[-1] if res else viejas[0]
                 t = ref["end"]
@@ -124,19 +125,23 @@ def unir(viejas, nuevos, punt_final):
             else:
                 grupo = viejas[i1:i2]
                 nn = nuevos[j1:j2]
-                t0, t1 = grupo[0]["start"], grupo[-1]["end"]
-                if len(nn) <= len(grupo):  # fusionar: cada nuevo toma un tramo contiguo de viejas
-                    cortes = [round(k * len(grupo) / len(nn)) for k in range(len(nn) + 1)]
-                    for k, n in enumerate(nn):
-                        g = grupo[cortes[k]:cortes[k + 1]]
-                        res.append(dict(g[0], word=n, start=g[0]["start"], end=g[-1]["end"]))
+                if len(nn) <= len(grupo):  # las primeras viejas dan su tiempo; las que sobran se absorben en la que sigue
+                    res += [dict(grupo[k], word=n) for k, n in enumerate(nn)]
+                    if len(grupo) > len(nn):
+                        absorber.append((len(res), grupo[len(nn)]["start"], grupo[-1]["end"]))
                 else:  # repartir por largo de letras
+                    t0, t1 = grupo[0]["start"], grupo[-1]["end"]
                     pesos = [max(1, len(n)) for n in nn]
                     tot, t = sum(pesos), t0
                     for n, p in zip(nn, pesos):
                         d = (t1 - t0) * p / tot
                         res.append(dict(grupo[0], word=n, start=round(t, 3), end=round(t + d, 3)))
                         t += d
+    for idx, st, en in absorber:
+        if idx < len(res):
+            res[idx] = dict(res[idx], start=min(res[idx]["start"], st))
+        else:
+            res[-1] = dict(res[-1], end=max(res[-1]["end"], en))
     if punt_final and not re.search(r"[.,;:?!]$", res[-1]["word"]):
         res[-1] = dict(res[-1], word=res[-1]["word"] + punt_final)
     return res

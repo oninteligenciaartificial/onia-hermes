@@ -206,7 +206,7 @@
      "ancho": 984,
      "pos": [
       48,
-      370
+      420
      ],
      "anim": "corte",
      "url": "geminicli.com",
@@ -228,8 +228,7 @@
     "corte": true
    },
    "etiqueta": [
-    "GEMINI CLI",
-    "NO ERA TU EQUIPO"
+    "GEMINI CLI"
    ],
    "elementos": [
     {
@@ -292,7 +291,7 @@
       48,
       250
      ],
-     "url": "developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli",
+     "url": "developers.googleblog.com",
      "marcas": [
       {
        "frase": "June 18, 2026",
@@ -306,8 +305,8 @@
      "tam": 54,
      "rot": -8,
      "pos": [
-      700,
-      120
+      650,
+      700
      ],
      "en": "junio"
     }
@@ -347,7 +346,7 @@
       "centro",
       490
      ],
-     "url": "developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli",
+     "url": "developers.googleblog.com",
      "anim": "corte"
     }
    ]
@@ -367,7 +366,7 @@
    "elementos": [
     {
      "tipo": "texto",
-     "texto": "*Gratis*, Pro o Ultra",
+     "texto": "*Gratis,* Pro o Ultra",
      "tam": 88,
      "pos": [
       48,
@@ -389,7 +388,7 @@
       48,
       250
      ],
-     "url": "developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli",
+     "url": "developers.googleblog.com",
      "anim": "corte",
      "marcas": [
       {
@@ -419,7 +418,7 @@
      "alinear": "centro",
      "pos": [
       "centro",
-      200
+      370
      ],
      "en": {
       "frase": "y los que lo",
@@ -804,21 +803,21 @@
      "src": "ag-migracion-skills",
      "recorte": [
       0,
-      700,
+      300,
       1120,
-      300
+      400
      ],
-     "ancho": 984,
+     "ancho": 900,
      "pos": [
-      48,
-      230
+      "centro",
+      215
      ],
      "url": "antigravity.google/docs/cli/gcli-migration",
      "anim": "corte",
      "marcas": [
       {
-       "frase": "Action required",
-       "en": "tenés que mover"
+       "frase": "Workspace project path",
+       "en": "skill local"
       }
      ]
     },
@@ -827,22 +826,22 @@
      "src": "ag-migracion-skills",
      "recorte": [
       0,
-      500,
+      700,
       1120,
-      200
+      300
      ],
      "marco": false,
-     "ancho": 984,
+     "ancho": 900,
      "pos": [
-      48,
-      590
+      "centro",
+      615
      ],
      "anim": "fundido",
-     "en": "skill local",
+     "en": "tenés que mover",
      "marcas": [
       {
-       "frase": "Workspace project path",
-       "en": "skill local"
+       "frase": "Action required",
+       "en": "tenés que mover"
       }
      ]
     },
@@ -887,11 +886,11 @@
      "titulo": ".gemini/skills/",
      "sub": "Gemini CLI",
      "ancho": 780,
-     "alto": 200,
+     "alto": 220,
      "tam": 56,
      "pos": [
       "centro",
-      720
+      640
      ],
      "anim": "corte"
     },
@@ -902,7 +901,7 @@
      "grosor": 8,
      "pos": [
       "centro",
-      940
+      890
      ],
      "en": "arrastras"
     },
@@ -912,11 +911,11 @@
      "sub": "Antigravity CLI",
      "estilo": "verde",
      "ancho": 780,
-     "alto": 200,
+     "alto": 220,
      "tam": 56,
      "pos": [
       "centro",
-      1100
+      1050
      ],
      "en": "su nueva carpeta"
     },
@@ -925,7 +924,7 @@
      "texto": "Fuente: antigravity.google/docs/cli/gcli-migration",
      "pos": [
       48,
-      1400
+      1380
      ]
     }
    ]
@@ -948,10 +947,10 @@
     {
      "tipo": "tarjeta",
      "ancho": 880,
-     "alto": 420,
+     "alto": 330,
      "pos": [
       "centro",
-      70
+      190
      ],
      "anim": "corte",
      "lineas": [
@@ -1002,10 +1001,10 @@
     {
      "tipo": "tarjeta",
      "ancho": 880,
-     "alto": 330,
+     "alto": 300,
      "pos": [
       "centro",
-      110
+      200
      ],
      "anim": "corte",
      "lineas": [
@@ -1029,7 +1028,7 @@
      "alto": 130,
      "pos": [
       "centro",
-      520
+      540
      ],
      "anim": "corte"
     }
