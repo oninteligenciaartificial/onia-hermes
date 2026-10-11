@@ -523,24 +523,50 @@ except (OSError, ValueError) as e:
 def primero(j, *claves):
     return next((j[k] for k in claves if j.get(k) not in (None, '', [], {})), '')
 
+def visible(valor):
+    return valor[:80] if isinstance(valor, str) else '(estructura)'
+
+total = 0
 for j in jobs:
     if not isinstance(j, dict):
         continue
-    nombre = primero(j, 'name', 'title', 'id', '_clave') or '(sin nombre)'
+    nombre = primero(j, 'name', 'title', 'id', '_clave')
+    if nombre == '':
+        nombre = '(sin nombre)'
     horario = primero(j, 'schedule_display', 'schedule', 'cron', 'expr')
-    modelo = j.get('model') or '(el del gateway)'
+    modelo = j.get('model')
+    if modelo in (None, ''):
+        modelo = '(el del gateway)'
     habilitado = 'sí' if j.get('enabled') is True else 'no' if j.get('enabled') is False else '?'
-    print('%s | cada %s | modelo %s | habilitado: %s' % (nombre, horario, modelo, habilitado))
+    print('%s | cada %s | modelo %s | habilitado: %s' % (visible(nombre), visible(horario), visible(modelo), habilitado))
+    total += 1
+if not total:
+    print('(el archivo no trae trabajos)')
 PY
 echo "--- B. Trabajos del crontab con script instalado"
 python3 - <<'PY'
 import re, shlex, subprocess
 try:
-    cron = subprocess.run(['crontab', '-l'], capture_output=True, text=True, check=False).stdout
-except OSError as e:
-    print('no pude leer crontab: %s' % type(e).__name__)
+    resultado = subprocess.run(['crontab', '-l'], capture_output=True, text=True, check=False)
+    cron = resultado.stdout if resultado.returncode == 0 else ''
+except OSError:
     cron = ''
+if not cron.strip():
+    print('(crontab ilegible o vacío)')
 base = '/root/bin/'
+
+def indice_script(palabras):
+    return next((i for i, s in enumerate(palabras) if re.fullmatch(re.escape(base) + r'[A-Za-z0-9._-]+', s)), None)
+
+def asignaciones(palabras):
+    valores = {}
+    for palabra in palabras:
+        m = re.fullmatch(r'([A-Za-z_][A-Za-z0-9_]*)=(.*)', palabra)
+        if m:
+            valores[m.group(1)] = m.group(2)
+    return valores
+
+total = 0
 for linea in cron.splitlines():
     linea = linea.strip()
     if not linea or linea.startswith('#') or re.match(r'^[A-Za-z_][A-Za-z0-9_]*=', linea):
@@ -553,9 +579,26 @@ for linea in cron.splitlines():
         palabras = shlex.split(comando)
     except ValueError:
         continue
-    indice = next((i for i, s in enumerate(palabras) if re.fullmatch(re.escape(base) + r'[A-Za-z0-9._-]+', s)), None)
+    indice = indice_script(palabras)
     if indice is None:
         continue
+    overrides = asignaciones(palabras[:indice])
+    etiqueta = ''
+    # aplicar envuelve el comando entero en una palabra: leer el script del latido ocultaría su modelo.
+    if palabras[indice] == base + 'onia-latido.sh':
+        nombre = palabras[indice + 1] if len(palabras) > indice + 1 else ''
+        etiqueta = (nombre if re.fullmatch(r'[A-Za-z0-9._-]+', nombre) else '(sin nombre)') + ' → '
+        try:
+            palabras = shlex.split(palabras[indice + 3])
+        except (IndexError, ValueError):
+            palabras = []
+        indice = indice_script(palabras)
+        if indice is None:
+            print('%s(no pude leer el comando) | cada %s' % (etiqueta, horario))
+            total += 1
+            continue
+        # El override del comando interior tiene prioridad sobre el que precede al latido.
+        overrides.update(asignaciones(palabras[:indice]))
     script = palabras[indice]
     modelo = 'sin modelo declarado'
     try:
@@ -567,19 +610,17 @@ for linea in cron.splitlines():
         declaracion = next((m for m in re.finditer(r'\$\{([A-Za-z_][A-Za-z0-9_]*):-([^}\n]+)\}', texto)
                             if 'MODEL' in m.group(1)), None)
         # Solo asignaciones anteriores al script: un argumento posterior no es un override de cron.
-        asignaciones = {}
-        for palabra in palabras[:indice]:
-            m = re.fullmatch(r'([A-Za-z_][A-Za-z0-9_]*)=(.*)', palabra)
-            if m:
-                asignaciones[m.group(1)] = m.group(2)
         if declaracion:
-            modelo = asignaciones.get(declaracion.group(1), declaracion.group(2)) or 'sin modelo declarado'
+            modelo = overrides.get(declaracion.group(1), declaracion.group(2)) or 'sin modelo declarado'
         else:
-            modelo = next((v for k, v in asignaciones.items() if 'MODEL' in k and v), modelo)
+            modelo = next((v for k, v in overrides.items() if 'MODEL' in k and v), modelo)
         # No expandir referencias o sustituciones que podrían traer secretos: solo nombres literales.
         if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9._:/+-]*', modelo):
             modelo = 'sin modelo declarado'
-    print('%s | cada %s | modelo %s' % (script, horario, modelo))
+    print('%s%s | cada %s | modelo %s' % (etiqueta, script, horario, modelo))
+    total += 1
+if not total:
+    print('(el crontab no trae trabajos con un script de /root/bin)')
 PY
 echo "--- C. Lo que NO se puede medir desde acá"
 echo "sesión de la nube de Hermes-Jarvis: modelo no medible desde el VPS (lo lee la madre en la consola de la sesión)"
