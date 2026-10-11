@@ -4,8 +4,20 @@ brillo: RECHAZADO correctamente
 cara 139: RECHAZADO correctamente
 cara 347: RECHAZADO correctamente
 todas las caras <200: RECHAZADO correctamente
+H1: «Seedance parte de 139 px» como única mención de tamaño (pantalla): RECHAZADO correctamente
+H1: «Seedance parte de 139 px» como única mención de tamaño (pie): RECHAZADO correctamente
+H1: etiqueta sin «del clip original»: RECHAZADO correctamente
+H3: titular afirmativo: RECHAZADO correctamente
+H6: brillo con decimal en pantalla: RECHAZADO correctamente
 cifra pantalla: RECHAZADO correctamente
 cifra pie: RECHAZADO correctamente
 declaración IA pie: RECHAZADO correctamente
-cifra voz: RECHAZADO correctamente
+aviso de fotos recibidas: borrado de la pantalla: RECHAZADO correctamente
+aviso de fotos recibidas: efecto distinto en pantalla: RECHAZADO correctamente
+aviso de fotos recibidas: borrado del pie: RECHAZADO correctamente
+aviso de fotos recibidas: efecto distinto en el pie: RECHAZADO correctamente
+H5: letrero inventado ausente del pie: RECHAZADO correctamente
+H5: scrim del letrero ausente: RECHAZADO correctamente
+H4: la voz habla decimales: RECHAZADO correctamente
+H4: L3 vuelve a cruzar el corte («Kling 3.0 std»): RECHAZADO correctamente
 EXIT 0

@@ -1,6 +1,6 @@
 {
-  "titulo": "G2 v2 · ¿Quién pierde la cara? Seis clips con la misma orden (re-corte mudo, sin aire muerto, listo para voz; revisión 1 aplicada el 11-oct)",
-  "version": "v2.1 (11-oct-2026, revisión 1): re-corte de G2 con la regla de aire muerto. D-N1: se nombran las herramientas con su nombre real (uso propio, no recomendación pagada). Todos los tiempos salen de guion-voz.txt (scripts/voz.mjs: tramos a 17 CARACTERES por segundo, no a palabras; huecos de 6 cuadros); un tiempo escrito como «T6+0.8» es el inicio del tramo 6 más 0,8 s, «T7-6f» = 6 cuadros antes del inicio del tramo 7, «FIN» = el final del video. 0 créditos: mismos clips y la misma foto de G2.",
+  "titulo": "G2 v2 · ¿Quién pierde la cara? Seis clips con la misma orden (re-corte mudo, sin aire muerto, listo para voz; revisión 1 aplicada el 11-oct; v2.2: fotos recibidas dichas en pantalla y en el pie)",
+  "version": "v2.2 (11-oct-2026, tarde): v2.1 + hallazgo de las fotos recibidas (fuga_refs: etiqueta en la lección para Kling O3 y advertencia en el pie; los números no cambian). v2.1 (11-oct-2026, revisión 1): re-corte de G2 con la regla de aire muerto. D-N1: se nombran las herramientas con su nombre real (uso propio, no recomendación pagada). Todos los tiempos salen de guion-voz.txt (scripts/voz.mjs: tramos a 17 CARACTERES por segundo, no a palabras; huecos de 6 cuadros); un tiempo escrito como «T6+0.8» es el inicio del tramo 6 más 0,8 s, «T7-6f» = 6 cuadros antes del inicio del tramo 7, «FIN» = el final del video. 0 créditos: mismos clips y la misma foto de G2.",
   "guion": "hermes-content/docs/cola/lucia-diario/guiones/G2-la-misma-foto-seis-clips.md",
   "voz": {
     "archivo": "guion-voz.txt",
@@ -536,7 +536,44 @@
       "t": "T11+1.8",
       "texto": "Final = segundo 5,9, que no se ve entero.",
       "y": 1070
+    },
+    "fuga": {
+      "motor": "m5",
+      "t": "T11+1.4",
+      "x": 272,
+      "dy": -14,
+      "nota": "Hallazgo del 11-oct (fuga_refs): Kling O3 es el único clip con fotos recibidas que sale en pantalla. La etiqueta va en la fila de su barra, al lado del nombre; el texto sale de fuga_refs (de_las_8) y de refs.total, nunca escrito a mano."
     }
+  },
+  "fuga_refs": {
+    "fuente": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/medicion-sin-refs-entrada-20261011.txt",
+    "nota": "Hallazgo posterior (sesión Lucía, 11-oct): el parecido se puntúa contra el centroide de las 8 fotos oficiales y dos de los seis clips RECIBIERON fotos de esas 8 como referencia de entrada (verificado con job_display, 0 cr). Medido sin esas fotos y descontado el efecto de medir contra menos fotos (R2, R4 y R8 puntúan bajo en todos los clips), el exceso atribuible a la fuga es ≈ 0,026 y ≈ 0,012, dentro del ruido de ±0,03. Por eso NO cambian los números de la pantalla (siguen los de PROCEDENCIA l.97); se DICE: etiqueta en pantalla (solo Kling O3, que es el que sale) y advertencia en el pie (los dos). build.mjs valida cada cifra contra la fuente.",
+    "clips": [
+      {
+        "id": "m4",
+        "nombre": "Seedance 2.0 Mini + referencias",
+        "etiqueta_medicion": "Seedance Mini + refs (dd2d7c91)",
+        "clave": "seedance_2_0_mini_start_mas_3_refs_dd2d7c91-ea3a-46a8-a29d-3861143dfe9e",
+        "imagenes": 3,
+        "de_las_8": 2,
+        "exceso": 0.026,
+        "en_pantalla": false
+      },
+      {
+        "id": "m5",
+        "nombre": "Kling O3",
+        "etiqueta_medicion": "Kling O3 5 refs (948a89d3)",
+        "clave": "kling_o3_image_reference_5_refs_948a89d3-c5c5-4e32-92f0-db624edc825b",
+        "imagenes": 5,
+        "de_las_8": 4,
+        "exceso": 0.012,
+        "cara_px": [
+          89,
+          168
+        ],
+        "en_pantalla": true
+      }
+    ]
   },
   "omitidos": [
     {

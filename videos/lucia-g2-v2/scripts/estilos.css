@@ -92,3 +92,6 @@ body{font-family:"DM Sans",sans-serif;-webkit-font-smoothing:antialiased;text-re
 
 /* revisión 1 (H2): la pastilla del RESULTADO del gancho es más grande que las pastillas de dato (es el número que tiene que verse antes de los 3 s) */
 .tag-g{font-size:46px;padding:16px 34px;gap:18px}
+
+/* hallazgo 11-oct: etiqueta «recibió 4 de las 8 fotos de puntaje» en la fila de Kling O3 de la lección (34 px, el mínimo; más baja que .tag-d para no tocar el anillo de la barra, que empieza en y=872) */
+.tag-f{font-size:34px;padding:5px 22px;gap:12px;background:#0C0F15}   /* fondo opaco: la marca de «mi piso» (línea verde de la placa) pasa DETRÁS de la etiqueta y no se ve a través del texto */

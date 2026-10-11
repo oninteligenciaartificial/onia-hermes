@@ -9,10 +9,15 @@
 .titular{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;line-height:1.12;letter-spacing:-.01em}
 .nota{font-family:"DM Sans",sans-serif;font-weight:500;line-height:1.1}
 .dato{font-family:"DM Sans",sans-serif;font-weight:500}
-#comparacion{position:absolute;left:0;top:300px;width:1080px;height:400px}
+#comparacion{position:absolute;left:0;top:300px;width:1080px}
 .fila{position:relative;top:0;margin-bottom:12px;font-size:40px;line-height:1.08}.fila div{margin-bottom:2px}.barra{height:8px;width:850px;background:#3c484b}.barra i{display:block;height:100%;background:#83d5be}.barra.cara i{background:#ffbc94}
 .fila .numeros{font-family:"Spline Sans Mono",monospace;font-size:42px;line-height:1.2}
+/* La flecha en la mono sale diminuta: va en DM Sans y un poco mayor (H2, cosmético). La escala de cada pareja de barras va debajo, con el color de su barra (H7). */
+.fila .fl{font-family:"DM Sans",sans-serif;font-weight:500;font-size:1.18em;line-height:1}
+.fila .escala{font-family:"DM Sans",sans-serif;font-weight:500;font-size:34px;line-height:1.1;color:#a9bcbf;margin-top:4px}.escala b{font-weight:500}.escala .v{color:#83d5be}.escala .n{color:#ffbc94}
+/* H5: scrim que tapa el letrero inventado de la torre (esquina superior izquierda de m4); sin interacción, viaja con #overlay-m4 */
+#scrim-m4{position:absolute;pointer-events:none}
 #cta{border-color:#ffbc94}
 
-/* Estado inicial: la opacidad oculta de la pastilla del dato y del CTA vive en CSS (cuadro 0 sin la pastilla un cuadro antes de su entrada a 1,5 s). El desplazamiento de #m4/#overlay-m4/#placa NO va en CSS (lint gsap_css_transform_conflict): lo fija timeline.js con fromTo al inicio. */
-#dato-m1,#cta{opacity:0}
+/* Estado inicial: la opacidad oculta de la pastilla del dato, del aviso, de las tres notas de la placa y del CTA vive en CSS (cuadro 0 sin la pastilla un cuadro antes de su entrada a 1,5 s). El desplazamiento de #m4/#overlay-m4/#placa NO va en CSS (lint gsap_css_transform_conflict): lo fija timeline.js con fromTo al inicio. */
+#dato-m1,#cta,#aviso-refs,#limite-cara,#toma,#brillo{opacity:0}

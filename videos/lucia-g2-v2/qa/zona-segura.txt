@@ -1,5 +1,5 @@
-muestras: 223 instantes (cada 3 cuadros), 1355 cajas de texto medidas
-tamaños de texto en el DOM (px: cuántos elementos): {"36":12,"38":24,"40":8,"44":1,"46":5,"66":25}
+muestras: 223 instantes (cada 3 cuadros), 1398 cajas de texto medidas
+tamaños de texto en el DOM (px: cuántos elementos): {"34":1,"36":12,"38":24,"40":8,"44":1,"46":5,"66":25}
   ok  lección: marca 0,70                      medido 716.0  esperado 716.0
   ok  lección: barra Kling 3.0 std 0.72 (ancho) medido 634.0  esperado 633.6
   ok  lección: barra Kling 3.0 std (borde izquierdo = 0) medido 100.0  esperado 100.0

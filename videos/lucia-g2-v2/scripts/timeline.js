@@ -75,6 +75,8 @@ for (const c of PLAN.tarjetas) {
     }
   }
   enter('#l-nota', L.nota_t, { x: 60 });
+  // hallazgo 11-oct: la etiqueta «recibió 4 de las 8 fotos de puntaje» entra junto a la fila de Kling O3, justo después del anillo, y se queda hasta el empuje de salida de la placa
+  if (L.fuga_t != null) enter('#l-fuga', L.fuga_t, { x: 60 });
 }
 
 // ── Motores: dato en dos pastillas («0 s: …» y «5,9 s: …» con la flecha) y, donde hay respaldo, un sello. Lo que cuelga de una tarjeta que sale en un

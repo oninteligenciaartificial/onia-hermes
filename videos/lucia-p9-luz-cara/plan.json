@@ -1,6 +1,7 @@
 {
-  "pieza": "P9 · La cara o la escena",
+  "pieza": "P9 · ¿La cara o la escena?",
   "plantilla": "videos/lucia-g5-v2",
+  "revision": "qa/revision-1.md (11-oct-2026): H1..H11 aplicados en esta versión (v2)",
   "lienzo": {
     "w": 1080,
     "h": 1920,
@@ -14,9 +15,15 @@
   },
   "voz": {
     "archivo": "guion-voz.txt",
-    "max_caracteres": 305,
-    "ultimo_tramo_cuadros": 73,
-    "lectura_min_cuadros": {}
+    "max_caracteres": 381,
+    "ultimo_tramo_cuadros": 64,
+    "lectura_min_cuadros": {},
+    "cortes": {
+      "lineas_clip_1": [1, 2, 3],
+      "termina_antes_de": 5.9,
+      "linea_clip_2": 4,
+      "empieza_desde": 6.0
+    }
   },
   "clips": [
     {
@@ -77,90 +84,49 @@
   ],
   "textos": {
     "rotulo": "Lucía Antelo · personaje IA de Onia",
-    "titulo": "La cara o la escena.",
-    "m1": "Kling 3.0 std · brillo −1,0 · parecido 0,79 → 0,72",
+    "titulo": "¿La cara o la escena?",
+    "m1": "Kling 3.0 std · brillo −1 · parecido 0,79 → 0,72",
     "m4": "Seedance 2.0 Mini + referencias · brillo −34 · parecido 0,71 → 0,80",
-    "reencuadre": "Cara: 139 → 347 px · reencuadra",
-    "toma": "Una toma cada uno: es una prueba, no una regla.",
-    "brillo": "El brillo es el promedio del cuadro entero: mezcla luz y encuadre.",
-    "limite_cara": "El parecido es indicativo: bajo 200 px la cara es poco confiable (Seedance parte de 139 px). Ruido de ±0,03.",
+    "reencuadre": "Cara: 139 → 347 px del clip original · reencuadra",
+    "aviso_refs": "Seedance recibió 2 de las 8 fotos de puntaje: efecto estimado ≈ 0,03.",
+    "toma": "Una toma cada uno: prueba, no regla.",
+    "brillo": "Brillo: cuadro entero, mezcla luz y encuadre.",
+    "limite_cara": "Parecido indicativo. Bajo 200 px la cara es poco confiable: Kling, todo el clip; Seedance, el inicio. Ruido ±0,03.",
     "cta": "Seguime: cada semana, una prueba."
   },
-  "decision_provisional": {
-    "original": "Las caras de estos clips (720p) miden menos de 200 px: el parecido es indicativo",
-    "constante": "textos.limite_cara",
-    "confirmar": true
+  "scrim_m4": {
+    "motivo": "H5: letrero inventado en la torre (esquina superior izquierda, 7–11,5 s); sin tocar la cara ni la zona del PSNR (y 400–700)",
+    "caja": [0, 0, 440, 290],
+    "centro": [60, 75],
+    "radios": [360, 215]
+  },
+  "layout": {
+    "comentario": "y de cada bloque (px del lienzo 1080x1920); huecos verticales iguales; medido en el DOM por qa/medir-dom",
+    "dato_m4": 1090,
+    "reencuadre": 1230,
+    "aviso_refs": 1324,
+    "limite": 823,
+    "toma": 1032,
+    "brillo": 1144,
+    "cta": 1256
   },
   "eventos": [
-    {
-      "t": 0,
-      "selector": "#titulo",
-      "que": "gancho"
-    },
-    {
-      "t": 1.5,
-      "selector": "#dato-m1",
-      "que": "resultado Kling"
-    },
-    {
-      "t": 3.2,
-      "selector": "#dato-m1",
-      "que": "acento parecido Kling"
-    },
-    {
-      "t": 4.9,
-      "selector": "#dato-m1",
-      "que": "acento brillo Kling"
-    },
-    {
-      "t": 6,
-      "selector": "#dato-m4",
-      "que": "resultado Seedance"
-    },
-    {
-      "t": 7.7,
-      "selector": "#reencuadre",
-      "que": "acento reencuadre"
-    },
-    {
-      "t": 9.4,
-      "selector": "#dato-m4",
-      "que": "acento parecido Seedance"
-    },
-    {
-      "t": 11.1,
-      "selector": "#reencuadre",
-      "que": "acento reencuadre final"
-    },
-    {
-      "t": 11.791666666666666,
-      "selector": "#comparacion",
-      "que": "comparación de las dos tomas"
-    },
-    {
-      "t": 13.5,
-      "selector": "#toma",
-      "que": "acento prueba no regla"
-    },
-    {
-      "t": 15.2,
-      "selector": "#brillo",
-      "que": "acento límite brillo"
-    },
-    {
-      "t": 16.9,
-      "selector": "#limite-cara",
-      "que": "acento límite cara"
-    },
-    {
-      "t": 17.5,
-      "selector": "#cta",
-      "que": "CTA"
-    },
-    {
-      "t": 19.1,
-      "selector": "#cta",
-      "que": "acento una prueba semanal"
-    }
+    { "t": 0, "selector": "#titulo", "que": "gancho" },
+    { "t": 1.5, "selector": "#dato-m1", "que": "resultado Kling", "entrada": true, "fade": 0.18 },
+    { "t": 3.2, "selector": "#dato-m1", "que": "acento parecido Kling" },
+    { "t": 4.9, "selector": "#dato-m1", "que": "acento brillo Kling" },
+    { "t": 6, "selector": "#dato-m4", "que": "resultado Seedance" },
+    { "t": 6.5, "selector": "#aviso-refs", "que": "aviso: fotos recibidas por Seedance", "entrada": true },
+    { "t": 7.7, "selector": "#reencuadre", "que": "acento reencuadre" },
+    { "t": 9.4, "selector": "#dato-m4", "que": "acento parecido Seedance" },
+    { "t": 11.1, "selector": "#reencuadre", "que": "acento reencuadre final" },
+    { "t": 11.791666666666666, "selector": "#comparacion", "que": "comparación de las dos tomas" },
+    { "t": 11.85, "selector": "#limite-cara", "que": "entra límite de cara", "entrada": true },
+    { "t": 12.35, "selector": "#toma", "que": "entra una toma, prueba no regla", "entrada": true, "voz": 5 },
+    { "t": 13.5, "selector": "#limite-cara", "que": "acento límite cara" },
+    { "t": 14.65, "selector": "#brillo", "que": "entra límite del brillo", "entrada": true, "voz": 6 },
+    { "t": 16, "selector": "#toma", "que": "acento prueba no regla" },
+    { "t": 17.4, "selector": "#cta", "que": "CTA", "entrada": true, "fade": 0.08, "voz": 7 },
+    { "t": 19.1, "selector": "#cta", "que": "acento una prueba semanal" }
   ]
 }

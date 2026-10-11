@@ -20,7 +20,7 @@ const rg = p.regla; for (let i = 0; i < p.refs.muestra.length; i++) add(rg.refs.
 add(rg.refs.etiqueta_t, 'etiqueta refs'); add(rg.escala.a, 'escala'); add(rg.escala.ejes_t, 'ejes'); add(rg.escala.uno_t, '«1» se enciende'); add(rg.escala.marca_t, 'marca 0,70');
 const l = p.leccion; add(l.marca_t, 'lección marca'); add(l.titulo.t, 'lección título');
 l.orden.forEach((id, i) => add(l.barra.t0 + i * l.barra.escalon, 'lección barra ' + id));
-add(l.resalte_t, 'lección anillo'); for (const c of l.cambios) add(c.t, 'lección rótulo ' + c.motor); add(l.nota.t, 'lección nota');
+add(l.resalte_t, 'lección anillo'); for (const c of l.cambios) add(c.t, 'lección rótulo ' + c.motor); add(l.nota.t, 'lección nota'); if (l.fuga) add(l.fuga.t, 'lección etiqueta de fotos recibidas');
 for (const m of p.motores) { add(m.tag_a, m.id + ' dato A'); add(m.tag_b, m.id + ' dato B'); if (m.sello) add(m.sello.t, m.id + ' sello'); }
 for (const c of p.costuras) add(c.t - PUSH, 'costura (empuje)');
 const ts = [0, ...[...ev.keys()].sort((a, b) => a - b), DUR];

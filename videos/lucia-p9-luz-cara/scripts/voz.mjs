@@ -67,9 +67,9 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
     console.log(`${String(t.n).padStart(3)}   ${String(t.palabras).padStart(5)}   ${String(t.chars).padStart(5)}  ${t.voz_s.toFixed(3)}  ${t.fuente.padEnd(8)} ${t.a.toFixed(3).padStart(7)} ${t.b.toFixed(3).padStart(7)}  ${(t.b - t.a).toFixed(3)}  ${t.hueco.toFixed(3)}${nota}${ok ? '' : ' ✖'}`);
   }
   const huecos = c.tramos.filter((t) => !t.ultimo).map((t) => t.hueco);
-  console.log(`total: ${c.lineas.length} líneas, ${c.tramos.reduce((s, t) => s + t.palabras, 0)} palabras, ${c.chars} caracteres con espacios (con un salto entre líneas; cupo ${CUPO}), ${c.cuadros} cuadros = ${(c.cuadros / FPS).toFixed(3)} s`);
+  console.log(`total: ${c.lineas.length} líneas, ${c.tramos.reduce((s, t) => s + t.palabras, 0)} palabras, ${c.chars} caracteres con espacios (con un salto entre líneas; cupo ${plan.voz.max_caracteres}), ${c.cuadros} cuadros = ${(c.cuadros / FPS).toFixed(3)} s`);
   console.log(`huecos entre líneas: ${Math.min(...huecos).toFixed(3)} a ${Math.max(...huecos).toFixed(3)} s (objetivo ≤ ${GAP_OBJ}, tope ${GAP_MAX}); cola del CTA: ${c.tramos.at(-1).hueco.toFixed(3)} s`);
-  if (c.chars > CUPO) { console.error(`✖ ${c.chars} caracteres: pasa el cupo de ${CUPO}`); mal++; }
+  if (c.chars > plan.voz.max_caracteres) { console.error(`✖ ${c.chars} caracteres: pasa el cupo de ${plan.voz.max_caracteres}`); mal++; }
   if (c.cuadros !== plan.lienzo.cuadros) { console.error(`✖ el cronograma da ${c.cuadros} cuadros y plan.json dice ${plan.lienzo.cuadros} (correr scripts/retemporizar.mjs)`); mal++; }
   process.exit(mal ? 1 : 0);
 }

@@ -1,0 +1,12 @@
+Cronograma de voz ESTIMADO (17 car/s; no hay voz): 311 caracteres con saltos (cupo 381), 7 líneas, 480 cuadros = 20.000 s
+L1-L3 terminan a 5.848 s (corte a Seedance 5,75-6,0 s; tope 5.9); L4 empieza a 6.083 s (desde 6)
+línea  caract   voz_ini   voz_fin  tramo_fin  hueco  pantalla que coincide
+  L1      21     0.000     1.235      1.458  0.22  —
+  L2      24     1.458     2.870      3.083  0.21  —
+  L3      47     3.083     5.848      6.083  0.24  —
+  L4      96     6.083    11.730     11.958  0.23  —
+  L5      36    11.958    14.076     14.292  0.22  #toma entra a 12.35 s (+0.39 s sobre el inicio de la línea)
+  L6      48    14.292    17.115     17.333  0.22  #brillo entra a 14.65 s (+0.36 s sobre el inicio de la línea)
+  L7      33    17.333    19.275     20.000  0.73  #cta entra a 17.4 s (+0.07 s sobre el inicio de la línea)
+Las entradas de L5, L6 y L7 se re-miden cuando haya voz real (duraciones.json) y se corrigen en plan.json → eventos.
+EXIT 0

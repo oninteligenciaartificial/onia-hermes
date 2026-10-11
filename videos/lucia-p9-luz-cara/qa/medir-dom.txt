@@ -1,2 +1,2 @@
-1680 cajas / 480 cuadros; 0 fallos. Margen mínimo mentón-texto 59 px; dato 1.5833333333333333s; CTA 2.4166666666666665s. Caras heredadas G2; detección nueva PENDIENTE.
+1718 cajas / 480 cuadros; 0 fallos. Margen mínimo mentón-texto 59 px; dato 1.625s; CTA 2.5416666666666665s. Caras heredadas G2; detección nueva PENDIENTE.
 EXIT 0

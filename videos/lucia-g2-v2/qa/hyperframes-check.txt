@@ -81,10 +81,9 @@ Motion
   ◇ 0 errors, 0 warnings
 
 Contrast
-  ◇ 40/40 text checks pass WCAG AA
+  ◇ 41/41 text checks pass WCAG AA
 
 Snapshots
   ◇ disabled
 
 ◇  Check passed
-exit=0

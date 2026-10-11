@@ -11,17 +11,17 @@ export function staticSamples(){
  // Ejecuta EL timeline entregado con GSAP real sobre objetos numéricos.
  // No mide tipografía ni sustituye medir-dom: solo geometría horizontal, opacidad y eventos.
  const exports={};vm.runInNewContext(fs.readFileSync(path.join(P,'assets-fijos/vendor/gsap.min.js'),'utf8'),{exports,module:{exports},setTimeout,clearTimeout,Date,console});const gsap=exports.gsap;
- const states={},target=id=>states[id]??={x:0,opacity:1,borderLeftColor:'#83d5be'};
+ const states={},target=id=>states[id]??={x:0,y:0,opacity:1,borderLeftColor:'#83d5be',backgroundColor:'#11191b'};
  const original=gsap.timeline({paused:true}),resolve=s=>typeof s==='string'?s.split(',').map(id=>target(id.trim().replace(/^#/,''))):s;
  const facade={};for(const method of ['set','to','fromTo'])facade[method]=(...args)=>{args[0]=resolve(args[0]);original[method](...args);return facade};
  const window={__timelines:{}};vm.runInNewContext(fs.readFileSync(path.join(P,'scripts/timeline.js'),'utf8'),{gsap:{timeline:()=>facade},PLAN:plan,window});
  const html=fs.readFileSync(path.join(P,'index.html'),'utf8');
  const plain=s=>s.replace(/<[^>]*>/g,' ').replaceAll('&amp;','&').replaceAll('&lt;','<').replaceAll('&gt;','>').replace(/\s+/g,' ').trim();
  const defs=[];for(const m of html.matchAll(/<div id="([^"]+)" class="texto ([^"]*)" style="top:(\d+)px;font-size:(\d+)px">([\s\S]*?)<\/div>/g)){
-  const id=m[1],clip=['rotulo','titulo','dato-m1'].includes(id)?'overlay-m1':['dato-m4','reencuadre'].includes(id)?'overlay-m4':'placa';
+  const id=m[1],clip=['rotulo','titulo','dato-m1'].includes(id)?'overlay-m1':['dato-m4','reencuadre','aviso-refs'].includes(id)?'overlay-m4':'placa';
   defs.push({id,text:plain(m[5]),y:+m[3],size:+m[4],card:m[2].includes('card'),clip});
  }
- for(const c of plan.clips){const m=html.match(new RegExp(`<div class="fila texto" id="fila-${c.id}">([\\s\\S]*?)</div></div>`));check(m,'Fila ausente '+c.id);defs.push({id:'fila-'+c.id,text:plain(m[1]),y:300,size:40,card:false,clip:'placa'});}
+ for(const c of plan.clips){const m=html.match(new RegExp(`<div class="fila texto card" id="fila-${c.id}">([\\s\\S]*?)</div></div>`));check(m,'Fila ausente '+c.id);defs.push({id:'fila-'+c.id,text:plain(m[1]),y:300,size:40,card:true,clip:'placa'});}
  const windows={};for(const m of html.matchAll(/<(?:div|video) id="([^"]+)"[^>]*data-start="([\d.]+)"[^>]*data-duration="([\d.]+)"/g))windows[m[1]]={a:+m[2],b:+m[2]+ +m[3]};
  const active=(id,t)=>{const w=windows[id];check(w,'Ventana HTML ausente '+id);return t>=w.a-1e-6&&t<w.b-1e-6};
  const rows=[];for(let f=0;f<480;f++){original.time(f/24,false);const boxes=defs.filter(d=>active(d.clip,f/24)).map(d=>{const st=target(d.id),parent=target(d.clip);return {...d,x:80+parent.x+(st.x||0),w:920,h:0,opacity:st.opacity,border:st.borderLeftColor};}).filter(b=>b.opacity>=.05&&b.x<1080&&b.x+b.w>0);rows.push({f,t:f/24,boxes});}

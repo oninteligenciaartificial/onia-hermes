@@ -1,16 +1,20 @@
+MODO ESTÁTICO: timeline GSAP real sobre objetos. No mide DOM/tipografía/render.
 0.000: gancho
 1.500: resultado Kling
 3.200: acento parecido Kling
 4.900: acento brillo Kling
 6.000: resultado Seedance
+6.500: aviso: fotos recibidas por Seedance
 7.700: acento reencuadre
 9.400: acento parecido Seedance
 11.100: acento reencuadre final
 11.792: comparación de las dos tomas
-13.500: acento prueba no regla
-15.200: acento límite brillo
-16.900: acento límite cara
-17.500: CTA
+11.850: entra límite de cara
+12.350: entra una toma, prueba no regla
+13.500: acento límite cara
+14.650: entra límite del brillo
+16.000: acento prueba no regla
+17.400: CTA
 19.100: acento una prueba semanal
-14 eventos, hueco máximo 1.708 s
+17 eventos, hueco máximo 1.700 s
 EXIT 0

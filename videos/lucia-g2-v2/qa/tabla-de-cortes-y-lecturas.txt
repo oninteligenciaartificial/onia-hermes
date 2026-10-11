@@ -56,6 +56,7 @@ Lecturas de rótulo, datos, sellos y placas (≥ 0,35 s/palabra + 0,3, ya descon
   l-tit    lección: título                       8 pal  18.40–24.75  6.17 s (pide 3.10)  
   l-mkl    lección: «mi piso»                    3 pal  18.35–24.75  6.22 s (pide 1.35)  
   l-nota   lección: nota del final               8 pal  20.05–24.75  4.52 s (pide 3.10)  
+  l-fuga   lección: fotos recibidas (Kling O3)   8 pal  19.65–24.75  4.92 s (pide 3.10)  
   l-t1     lección: nombre Kling 3.0 std         3 pal  18.60–24.75  5.97 s (pide 1.35)  
   l-l1     lección: rótulo Kling 3.0 std         2 pal  18.92–21.61  2.51 s (pide 1.00)  
   l-m1     lección: rótulo Kling 3.0 std (cambia)  3 pal  21.63–24.75  2.94 s (pide 1.35)  
@@ -69,4 +70,7 @@ Datos (de PROCEDENCIA.jsonl):
   Kling 3.0 std: 7.5 cr · 0 s 0,79 → 5,9 s 0,72  (muestras 0.791 0.793 0.762 0.734 0.761 0.708 0.721)
   Seedance 2.0 Mini: 6 cr · 0 s 0,69 → 5,9 s 0,64  (muestras 0.691 0.657 0.677 0.634 0.615 0.634 0.644)
   Kling O3: 6 cr · 0 s 0,80 → 5,9 s 0,82  (muestras 0.798 0.783 0.785 0.814 0.815 0.81 0.824)
+Fotos recibidas como entrada (plan.fuga_refs ← medición del 11-oct; cada cifra validada contra la fuente):
+  Seedance 2.0 Mini + referencias: 3 imágenes, 2 entre las 8 · exceso ≈ 0,026 (ruido ±0,03) · no sale en pantalla: solo el pie
+  Kling O3: 5 imágenes, 4 entre las 8 · exceso ≈ 0,012 (ruido ±0,03) · cara 89-168 px · SALE en pantalla: etiqueta «recibió 4 de las 8 fotos de puntaje» desde 19.65 s
 ok: index.html (30 KB), plan.resuelto.json

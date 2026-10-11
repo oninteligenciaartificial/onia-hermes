@@ -1,4 +1,4 @@
-eventos visuales: 52 en 27.791666 s (más el cuadro 0 y el final)
+eventos visuales: 53 en 27.791666 s (más el cuadro 0 y el final)
 mayores huecos entre eventos:
   11.95 → 13.79 s: 1.84 s   (m3 sello → c7, costura (empuje))
   26.00 → 27.79 s: 1.79 s   (c12 acento → fin)
@@ -8,5 +8,5 @@ mayores huecos entre eventos:
   24.75 → 26.00 s: 1.25 s   (c12, costura (empuje) → c12 acento)
   6.97 → 8.21 s: 1.24 s   (marca 0,70 → c5, costura (empuje))
   22.67 → 23.73 s: 1.07 s   (c11 → c11 acento)
-eventos por 10 s (ventana deslizante): mínimo 11 (en 7.0-17.0 s), máximo 26, promedio 18.7
+eventos por 10 s (ventana deslizante): mínimo 11 (en 7.0-17.0 s), máximo 26, promedio 19.1
 ✔ hueco máximo 1.84 s (≤ 2.0 s)

@@ -1,2 +1,3 @@
-Mayor tramo DOM quieto fuera de lectura/clip: 0.000 s (tope 0,3); sin exención: 1.708 s. Clips: movimiento fuente asumido, píxeles PENDIENTE.
+MODO ESTÁTICO: timeline GSAP real sobre objetos. No mide DOM/tipografía/render.
+Mayor tramo del timeline quieto fuera de lectura/clip: 0.000 s (tope 0,3); sin exención: 1.500 s. Clips: movimiento fuente asumido, píxeles PENDIENTE.
 EXIT 0

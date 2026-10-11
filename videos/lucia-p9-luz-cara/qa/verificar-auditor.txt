@@ -1,3 +1,2 @@
-Reporte acumulativo: cuatro fallos independientes conservados; EXIT 0
- nota superior/lateral f440). No es una medición DOM real.
+Regresión pura: cuatro fallos conservados (CTA inferior en f440/f441; nota superior/lateral f440). No es una medición DOM real.
 EXIT 0
