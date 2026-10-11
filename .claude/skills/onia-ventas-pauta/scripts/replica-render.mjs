@@ -63,8 +63,10 @@ body{font-family:Archivo,sans-serif;-webkit-font-smoothing:antialiased;font-stre
 .card img{display:block;width:100%;height:auto}
 .rot{position:absolute;font-size:30px;letter-spacing:.09em;text-transform:uppercase;color:var(--suave);font-weight:600}
 .sub{position:absolute;left:0;right:0;text-align:center;padding:0 70px;font-weight:800;color:#fff;line-height:1.16;letter-spacing:-.01em;text-shadow:0 3px 14px rgba(0,0,0,.55)}
+.sub.gigante{font-size:190px;line-height:1;text-transform:uppercase;font-weight:900;color:#FBF751;letter-spacing:-.02em}
 .sub em{font-style:normal;background:var(--chip);color:var(--chip-t);padding:0 .22em;border-radius:.2em;text-shadow:none;box-decoration-break:clone;-webkit-box-decoration-break:clone}
-.cintilla{position:absolute;left:64px;background:var(--tinta);color:#fff;border-radius:16px;padding:22px 34px 22px 40px;border-left:10px solid var(--senal)}
+.cintilla{position:absolute;left:0;background:var(--tinta);color:#fff;border-radius:0 18px 18px 0;padding:22px 40px 22px 56px;border-left:14px solid var(--senal)}
+.logofijo{position:absolute;right:48px;height:54px;width:auto}
 .cintilla b{display:block;font-size:58px;font-weight:800;letter-spacing:-.01em}
 .cintilla span{display:block;font-size:38px;color:var(--suave);margin-top:4px}
 .standin{position:absolute;inset:0;background:radial-gradient(120% 85% at 50% 28%,#92A099 0%,#5D6A64 62%,#46524C 100%)}
@@ -120,8 +122,9 @@ function htmlCuadro(b, c, W, H) {
     const lineas = (c.tarjeta?.lineas || []).map((l) => `<div class="fit tl" style="color:${fg}">${marcar(l).replace(/<em>/g, `<em style="font-style:normal;color:${k === 'verde' ? '#0C110F' : 'var(--senal)'}">`)}</div>`).join('');
     cuerpo += `<div class="abs" style="inset:0;background:${bg}"></div>
       <div class="abs" style="left:0;right:0;top:${hist ? 270 : 60}px;bottom:${hist ? 250 : 60}px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:${t === 'cierre' ? 44 : 30}px;text-align:center">
-        ${t === 'cierre' ? `<img src="${url(logo)}" style="height:${k === 'hoja' ? 170 : 200}px;width:auto">` : ''}
+        ${t === 'cierre' && !c.tarjeta?.logo_abajo ? `<img src="${url(logo)}" style="height:${k === 'hoja' ? 170 : 200}px;width:auto">` : ''}
         ${lineas}
+        ${t === 'tarjeta' && c.tarjeta?.logo || c.tarjeta?.logo_abajo ? `<img src="${url(logo)}" style="height:${hist ? 150 : 130}px;width:auto;margin-top:6px">` : ''}
         ${c.tarjeta?.boton ? `<span class="btn" style="font-size:40px;padding:26px 52px;margin-top:20px">${wa()}${esc(c.tarjeta.boton)}</span>` : ''}
       </div>`;
   }
@@ -137,8 +140,9 @@ function htmlCuadro(b, c, W, H) {
   }
   if (c.subtitulo) {
     const y = c.sub_y != null ? c.sub_y : t === 'pantalla' ? Math.round(H * 0.72) : t === 'persona' ? Math.round(H * (c.pantalla ? 0.5 : 0.62)) : Math.round(H * 0.5);
-    cuerpo += `<div class="sub" style="font-size:${subPx}px;top:${y}px">${marcar(c.subtitulo)}</div>`;
+    cuerpo += `<div class="sub${c.estilo_subtitulo === 'gigante' ? ' gigante' : ''}" style="${c.estilo_subtitulo === 'gigante' ? '' : `font-size:${subPx}px;`}top:${y}px">${marcar(c.subtitulo)}</div>`;
   }
+  if (c.logo_fijo) cuerpo += `<img class="logofijo" src="${url(t === 'persona' || t === 'pantalla' ? LOGO_TINTA : LOGO_CLARO)}" style="top:${hist ? 290 : 50}px">`;
   if (c.cintilla) {
     cuerpo += `<div class="cintilla" style="top:${Math.round(H * (hist ? 0.76 : 0.74))}px"><b>${esc(c.cintilla.nombre)}</b><span>${esc(c.cintilla.rol)}</span></div>`;
   }
