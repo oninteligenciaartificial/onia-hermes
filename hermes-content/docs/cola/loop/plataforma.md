@@ -28,7 +28,7 @@ Orden: lo que destraba cobrar primero. Cada PR: **leer la revisión de Hermes** 
   - Ningún otro archivo lee `cf-connecting-ip`, `x-forwarded-for` ni `x-real-ip`.
   - El cambio en `lib/audit.ts` saca la vuelta a `x-real-ip`, que también se puede inventar, y queda en el espíritu del contrato.
   - Sobre la cadena de 7 PRs, S2 entra sin conflicto: `tsc` 0 y 219/219 en `lib/http`, los limitadores, la auditoría, el login, la reserva, la caja y los cobros.
-  - Hermes E14: el código está bien y hay un **HIGH condicional**: no se publica sin medir qué par ve Traefik. **Medido por Plataforma a las 08:05, solo lectura y sin imprimir IPs:**
+  - Hermes E14: el código está bien y hay un **HIGH condicional**: no se publica sin medir qué par ve Traefik. **Medido por Plataforma entre las 07:52 y las 07:58, solo lectura y sin imprimir IPs:**
     1. `docker service inspect easypanel-traefik` da `PublishMode: host` en 80 y 443, y no hay `daemon.json`.
     2. En 3 muestras de `/proc/<pid de Traefik>/net/tcp*` (unos 70 s), los pares del 443 son IPs públicas: de Cloudflare y alguna directa. Ninguna privada (172.x/10.x) ni del propio VPS.
     3. Traefik corre sin argumentos, con `FORWARDEDHEADERS_INSECURE=true`, y no tiene `proxyProtocol` ni `fastProxy` (ni en el entorno ni en `/etc/easypanel/traefik`).
