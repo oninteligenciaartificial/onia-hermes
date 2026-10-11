@@ -106,8 +106,8 @@ Cada fila es una prueba chica, con su video. Los costos son cotizaciones en vivo
   profesional de salud, ni producto de Onia, ni cifra inventada, ni cara o voz de Sergio Urcullo · motores como «Motor 1 a 6» e «Imagen A a F» hasta resolver D-N1 (abajo).
 - **Regla de edición con voz (11-oct):** voz Marcela (ElevenLabs) · **pausa máxima 0,25 s entre frases**, sin acelerar la voz (se aprietan las pausas) · 3,2-4,1 palabras por segundo · −14 LUFS ·
   sin cama de música · título de 3-7 palabras con la promesa en el cuadro 0 · CTA en los últimos 2,4-5,5 s. Es la receta Erik de `edicion-referentes`; **G1 v2 (20 s) es el modelo**.
-- **Cupo de voz:** G1 v2 usó 381 caracteres para 20 s, o sea **≈ 19 caracteres por segundo hablado**. Un reel de 25 s ≈ 475; uno corto de 18 s ≈ 340. Una semana ≈ 815 caracteres,
-  y con retomas (×1,3) ≈ 1.060. **Hasta el 13-oct solo hay 381**; el cupo renovado hay que confirmarlo (lo sabe la madre).
+- **Cupo de voz:** G1 v2 usó **320 caracteres** para unos 19 s hablados, o sea **≈ 17 caracteres por segundo** (corregido por la madre el 11-oct; antes decía 381, que es lo que *queda* hasta el 13-oct 01:17 UTC). Un reel de 25 s ≈ 425;
+  uno corto de 18 s ≈ 305. Una semana ≈ 730 caracteres, y con retomas (×1,3) ≈ 950. **Hasta el 13-oct solo quedan 381**; el cupo renovado hay que confirmarlo (lo sabe la madre).
 - **Decisión abierta D-N1 (Sergio Urcullo):** ¿se nombran las herramientas como uso propio, no como recomendación pagada, o siguen «Motor 1 a 6»? La estructura funciona con las dos. Nombrarlas hace que
   quien mira pueda repetir la prueba; no nombrarlas la vuelve menos útil para «enseñar cosas de IA». Hasta que decida, no se nombran.
 - **Voz Marcela:** tiene acento colombiano (D4). Si Sergio Urcullo lo aprobó sabiendo eso, sigue; es el riesgo de que una cruceña suene colombiana.
@@ -118,15 +118,15 @@ La semana 1 (S1) empieza el día en que salga G1; hoy no hay fecha porque falta 
 
 | # | Semana · día | Pieza | Formato | Qué enseña y con qué número | Gancho (propuesta) | Créditos | Voz | Qué falta |
 |---|---|---|---|---|---|---:|---:|---|
-| 1 | S1 · Lun | **G1 v2** «Este video no fue grabado» | Reel 20 s | Cómo se hace un video: orden, foto y clip, **8,5 cr** | «Este video no fue grabado.» | 0 | 381 (hecha) | La armó la madre; falta su SHA. Sergio Urcullo dijo «publicá G1». **Bloqueada por el token** |
+| 1 | S1 · Lun | **G1 v2** «Este video no fue grabado» | Reel 20 s | Cómo se hace un video: orden, foto y clip, **8,5 cr** | «Este video no fue grabado.» | 0 | 320 (hecha) | La armó la madre; falta su SHA. Sergio Urcullo dijo «publicá G1». **Bloqueada por el token** |
 | 2 | S1 · Mié | **L01** «Hola, soy Lucía. No existo.» | Carrusel, se fija | Quién es y qué hace: una prueba por semana | — | 0 | — | Nada: lista |
-| 3 | S1 · Vie | **G3 v2** «Tres errores que atrapé» | Reel ≤ 30 s | Tres errores reales: letrero inventado, letra que no dice nada, mano que tapa a la otra | «Casi publico esto.» | 0 | ≈ 480 | Guion de voz, voz, retemporizar (pausa ≤ 0,25 s), render, revisión, SHA |
-| 4 | S2 · Lun | **G2 v2** «La misma foto, seis clips» | Reel ≤ 30 s | 6 motores de video: **6 a 20 cr**, parecido final **0,64 a 0,82** | «¿Quién pierde la cara?» | 0 | ≈ 480 | Lo mismo que G3 |
+| 3 | S1 · Vie | **G3 v2** «Tres errores que atrapé» | Reel ≤ 30 s | Tres errores reales: letrero inventado, letra que no dice nada, mano que tapa a la otra | «Casi publico esto.» | 0 | ≤ 450 | Re-corte mudo en curso (11-oct); falta voz, revisión y SHA |
+| 4 | S2 · Lun | **G2 v2** «La misma foto, seis clips» | Reel ≤ 30 s | 6 motores de video: **6 a 20 cr**, parecido final **0,64 a 0,82** | «¿Quién pierde la cara?» | 0 | ≤ 450 | Lo mismo que G3 |
 | 5 | S2 · Mié | **C1** «Un video sin grabar, en 3 pasos» | Carrusel | G1 para guardar, con la orden real | — | 0 | — | Nada: lista |
-| 6 | S2 · Vie | **G5 v2** «¿Cómo sé que sigue siendo ella?» | Reel ≤ 30 s | El control de cara: piso 0,70 (lo elegí yo), ruido ±0,03, bajo 200 px se mira a ojo | «¿Cómo sé que sigue siendo ella?» | 0 | ≈ 480 | Lo mismo que G3 |
-| 7 | S3 · Lun | **G4 v2** «Seis motores de imagen, una cara» | Reel ≤ 30 s | 6 motores de imagen: **0,5 a 3 cr**, parecido **0,66 a 0,81**; pagar más no mejoró | «¿Cuál conserva su cara?» | 0 | ≈ 480 | Lo mismo que G3 |
+| 6 | S2 · Vie | **G5 v2** «¿Cómo sé que sigue siendo ella?» | Reel ≤ 30 s | El control de cara: piso 0,70 (lo elegí yo), ruido ±0,03, bajo 200 px se mira a ojo | «¿Cómo sé que sigue siendo ella?» | 0 | ≤ 450 | Lo mismo que G3 |
+| 7 | S3 · Lun | **G4 v2** «Seis motores de imagen, una cara» | Reel ≤ 30 s | 6 motores de imagen: **0,5 a 3 cr**, parecido **0,66 a 0,81**; pagar más no mejoró | «¿Cuál conserva su cara?» | 0 | ≤ 450 | Lo mismo que G3 |
 | 8 | S3 · Mié | **C2** «Seis motores de imagen» | Carrusel | G4 para guardar | — | 0 | — | Nada: lista |
-| 9 | S3 · Vie | **NUEVA** «La luz cambia cuando la cara se sostiene» | Reel corto 18 s | Medido el 11-oct con los 6 clips ya pagados: el clip atado a la foto mantiene la luz (Motor 1: luma −1,0) y pierde la cara (parecido 0,79 a 0,72); el que mejor la sostiene con referencias (Motor 4: 0,71 a 0,80) oscurece la imagen (luma −34) y reencuadra | «La cara o la escena.» | 0 | ≈ 340 | Guion, voz, montaje. Datos: `v4/prueba-motores-20261008/medicion-luz-movimiento-20261011.txt` |
+| 9 | S3 · Vie | **NUEVA** «La luz cambia cuando la cara se sostiene» | Reel corto 18 s | Medido el 11-oct con los 6 clips ya pagados: el clip atado a la foto mantiene la luz (Motor 1: luma −1,0) y pierde la cara (parecido 0,79 a 0,72); el que mejor la sostiene con referencias (Motor 4: 0,71 a 0,80) oscurece la imagen (luma −34) y reencuadra | «La cara o la escena.» | 0 | ≈ 305 | Guion, voz, montaje. Datos: `v4/prueba-motores-20261008/medicion-luz-movimiento-20261011.txt` |
 
 **Qué falta producir, en orden:**
 
@@ -134,7 +134,7 @@ La semana 1 (S1) empieza el día en que salga G1; hoy no hay fecha porque falta 
    desde Meta). **Recomiendo B:** A corre contra el vencimiento (estimado entre el 13 y el 18-oct, sin medir; si ya venció, A falla y hay que hacer B igual), pide instalar una imagen en el VPS
    y obliga a tocar la base de Postiz, que ya publicó posts viejos sin OK una vez. B no depende de nada viejo y da 60 días. Pasos en la cola.
 2. **Cuatro versiones con voz: G3, G2, G5 y G4** (las que hoy son mudas de 56 a 59 s). Por pieza: guion de voz de ≤ 30 s, voz, retemporizar `plan.json` a la voz con pausa ≤ 0,25 s, render (3 a 4 min),
-   preview 360p, revisión independiente y SHA nuevo en `videos/lucia-entrega/README.md`. **0 créditos.** En total ≈ 1.900 caracteres de voz: **no caben en los 381 de antes del 13-oct.**
+   preview 360p, revisión independiente y SHA nuevo en `videos/lucia-entrega/README.md`. **0 créditos.** En total ≤ 1.800 caracteres de voz: **no caben en los 381 que quedan antes del 13-oct.**
 3. **La pieza 9** (luz): guion, voz y montaje. Los datos ya están medidos (honesto: son promedios del cuadro entero, mezclan luz con lo que entra al plano; miden «cuánto cambia la imagen»).
 4. **De la semana 4 en adelante, una prueba nueva por semana** (tema B, C y D de la rotación): **P1** fondo en positivo (3 cr, lote chico) · **P2** referencias con cámara fija (6 cr, video) · **P3** MiniMax H3 (12 cr, video) ·
    **L2** voz y labios · **L3** Motion Control (17 cr; Sergio Urcullo graba 10 s). Los de video piden su sí escrito en esta sesión; **P3 no cabe en el tope de octubre** (quedan 11 de 150).

@@ -398,8 +398,8 @@ Fuente: `research/competencia/LUCIA_COMPETENCIA_20261005.md`.
 
 - **Una prueba por semana saca tres piezas:** lunes reel «La prueba» (20-30 s, voz) · miércoles carrusel «Para guardar» · viernes reel corto «El error de la semana» (15-20 s, voz). 19:00 La Paz.
   Lo caro se paga una vez (la prueba); el carrusel y el error salen de ella a 0 créditos. Rotación de 4 semanas: imagen, video, medir, otras herramientas.
-- **Cupo de voz = caracteres, no créditos.** Caso G1 v2 (la armó la madre): 381 caracteres para 20 s, o sea ≈ 19 caracteres por segundo hablado. Antes de escribir un guion con voz se cuenta:
-  25 s ≈ 475 caracteres, 18 s ≈ 340. El cupo hasta el 13-oct era 381.
+- **Cupo de voz = caracteres, no créditos.** Caso G1 v2 (la armó la madre): **320 caracteres** para unos 19 s hablados, o sea ≈ 17 caracteres por segundo (la primera versión de esta nota decía 381, que era lo que *quedaba*; la corrigió la madre el 11-oct). Antes de
+  escribir un guion con voz se cuenta: 25 s ≈ 425 caracteres, 18 s ≈ 305. Hasta el 13-oct 01:17 UTC quedaban 381.
 - **Edición con voz (receta Erik de `edicion-referentes`, más estricta):** pausa máxima 0,25 s entre frases; no se acelera la voz, se aprietan las pausas; 3,2-4,1 palabras por segundo; −14 LUFS; sin cama;
   título de 3-7 palabras con la promesa en el cuadro 0; CTA en los últimos 2,4-5,5 s. Las piezas mudas de 56-59 s (G2 a G5) no se doblan: se re-cortan a ≤ 30 s y se vuelven a renderizar.
 - **Luz y movimiento se miden a 0 créditos con clips ya pagados:** `scripts/luz_movimiento.py clip.mp4…` (ffmpeg `signalstats`). Primera medición, 11-oct, en los 6 clips de G2
