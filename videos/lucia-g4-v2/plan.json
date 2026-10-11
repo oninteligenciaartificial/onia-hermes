@@ -11,12 +11,31 @@
  },
  "voz": {
   "archivo": "guion-voz.txt",
-  "palabras_por_s": 3.6,
+  "car_por_s": 17,
+  "car_por_s_sensibilidad": [
+   16,
+   18
+  ],
   "hueco": 0.25,
-  "inicio": 0.1,
+  "desfase_max": 0.15,
+  "inicios": [
+   0.1,
+   2.02,
+   4.77,
+   6.41,
+   8.34,
+   10.37,
+   13.06,
+   15.17,
+   17.67,
+   20.25,
+   23.025,
+   25.625
+  ],
   "max_caracteres": 450,
   "cta_min_s": 2.4,
-  "cta_max_s": 5.5
+  "cta_max_s": 5.5,
+  "nota": "12-oct (revisión 1, H1): tramos por CARACTERES a 17 c/s (PLAN §4-bis: G1 v2 = 320 car en ~19 s), no por palabras. Cada línea arranca en su costura (o hasta 0,15 s después: la imagen llega y la voz entra); las líneas sin costura arrancan donde dice `inicios`. Con voz real hay que DERIVAR los inicios de las duraciones medidas (poner-voz.mjs, pendiente: necesita el cupo de voz y el sí de Sergio Urcullo) y re-renderizar si una costura se mueve."
  },
  "aire": {
   "max_quieto_s": 0.3,
@@ -368,8 +387,8 @@
    "id": "c1",
    "texto": "¿Cuál conserva",
    "acento": "su cara?",
-   "acento_t": 1.2,
-   "a": 0.1,
+   "acento_t": 1.5,
+   "a": 0,
    "b": 2.041667,
    "escena": "gancho"
   },
@@ -432,8 +451,8 @@
   },
   {
    "id": "c8",
-   "texto": "Escena 2:",
-   "acento": "Kling perdió la cara.",
+   "texto": "Kling O1 Image\n",
+   "acento": "perdió la cara.",
    "acento_t": 24.3,
    "a": 22.875,
    "b": 25.625,
@@ -479,6 +498,12 @@
     "e",
     "f"
    ]
+  },
+  "dato": {
+   "img": "a",
+   "a": 0.66,
+   "fin": 2.041667,
+   "nota": "H4 (revisión 1), opción B: pastilla «parecido 0,81» sobre la foto del gancho (la misma foto de Seedream 4.5 que mide 0,806), dentro de la pila de la tarjeta c1; sale con ella. Entra a 0,66 s y no a ~1,2 s porque build.mjs y ventanas.mjs piden 0,35 s por palabra + 0,3 s (= 1,0 s para 2 palabras) de pastilla ya entrada y aún no saliendo: 0,66 + 0,18 de entrada + 1,02 s de lectura = 1,86 s = salida de c1."
   }
  },
  "regla": {

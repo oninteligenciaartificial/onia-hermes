@@ -18,6 +18,7 @@ export function listaEventos(p) {
   for (const c of p.tarjetas) { if (!viaja.has(c.id)) add(c.a, c.id); if (c.acento_t) add(c.acento_t, c.id + ' acento'); }
   add(p.rotulo.b, 'rótulo IA sale');
   const g = p.gancho.miniaturas; g.ids.forEach((id, i) => add(g.a + i * g.escalon, 'miniatura ' + id.toUpperCase()));
+  add(p.gancho.dato.a, 'gancho dato 0,81');
   const rg = p.regla; for (let i = rg.refs.estaticas; i < p.refs.recortes.length; i++) add(rg.refs.a + (i - rg.refs.estaticas) * rg.refs.escalon, 'ref ' + (i + 1));
   add(rg.escala.a, 'escala'); add(rg.escala.ax_t, 'ejes'); add(rg.escala.uno_t, '«1» se enciende'); add(rg.escala.marca_t, 'marca 0,70');
   for (const m of p.imagenes.filter((x) => x.tarjeta)) {

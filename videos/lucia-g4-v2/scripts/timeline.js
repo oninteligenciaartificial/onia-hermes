@@ -32,16 +32,19 @@ leave('#rotulo', PLAN.rotulo.b + E_OUT, { x: -60 });
 // ── tarjetas narrativas
 const FIN = PLAN.DUR - 1e-6;
 for (const c of PLAN.tarjetas) {
-  if (!c.en_empuje_entra) enter('#' + c.id, c.a);
+  if (!c.en_empuje_entra && !c.desde_cero) enter('#' + c.id, c.a);      // desde_cero (a = 0, H3): la tarjeta YA está en el cuadro 0, sin entrada (igual que G5 v2 y que el rótulo)
   if (c.b < FIN && !c.en_empuje_sale) leave('#' + c.id, c.b);
   // acento tardío: la segunda mitad de la frase se enciende cuando la voz la dice (evento visual real, sin texto nuevo)
   if (c.acento_t) tl.to('#' + c.id + ' b.late', { color: ACC, duration: 0.2, ease: 'none' }, c.acento_t);
 }
 
-// ── gancho (2-4,75 s): las seis miniaturas (A a F) entran de a una desde la derecha y viajan con la foto en el primer empuje
+// ── gancho: la pastilla «parecido 0,81» (0,66-2,04 s) y, de 2,1 a 4,75 s, las seis miniaturas (A a F) que entran de a una desde la derecha y viajan con la foto en el primer empuje
 {
   const G = PLAN.gancho;
   G.ids.forEach((id, i) => enter('#th-' + id, G.a + i * G.esc, { x: 60, d: 0.28 }));
+  // H4 (revisión 1): el resultado en pantalla antes de los 3 s — «parecido 0,81» sobre la foto del gancho (Seedream 4.5, la misma foto), encima de la tarjeta c1; sale con ella
+  enter('#dA-hk', G.dato.a, { x: 60 });
+  leave('#dA-hk', G.dato.fin, { x: -60 });
 }
 
 // ── regla: la primera fila de referencias llega con la placa y la segunda entra de a una, la escala 0-1 se dibuja y la marca de 0,70 cae con «el piso» de la voz

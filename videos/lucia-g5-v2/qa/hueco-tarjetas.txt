@@ -1,2 +1,2 @@
-cuadros sin tarjeta narrativa visible: 0 de 644
+cuadros sin tarjeta narrativa visible: 0 de 639
 ✔ en cada cambio de tarjeta hay siempre una tarjeta visible (≥ 5 % de opacidad)

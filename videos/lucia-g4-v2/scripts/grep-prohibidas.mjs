@@ -35,19 +35,25 @@ const PROHIBIDAS = [
   // D-N1: nada que suene a «el mejor» o a recomendación general (la frase «no es una recomendación pagada» del pie es la única excepción, ver más abajo)
   'el mejor', 'la mejor', 'los mejores', 'las mejores', 'mejor motor', 'mejor opción', 'recomiendo', 'recomendamos', 'te recomiend', 'usá este', 'usen este',
 ];
+// Revisión 1 (12-oct, H8): SOLO EN EL PIE se pueden nombrar «Higgsfield» (la plataforma de los créditos; D-N1 lo nombra) y «ArcFace» (el medidor: quien mira puede repetir la prueba; igual que G5 v2).
+// En pantalla y en la voz siguen prohibidos (la voz «ahorra caracteres y evita que suene a veredicto de la herramienta»). scrfd, buffalo e insightface siguen prohibidos en todos lados.
+const SOLO_EN_PIE = ['higgsfield', 'arcface'];
 let hits = 0;
 for (const [donde, txt] of [['pantalla', enPantalla], ['pie', pie], ['voz', voz]]) {
   const low = txt.toLowerCase();
-  for (const f of PROHIBIDAS) if (low.includes(f.toLowerCase())) { console.log(`✖ ${donde}: «${f}»`); hits++; }
+  for (const f of PROHIBIDAS) { if (donde === 'pie' && SOLO_EN_PIE.includes(f)) continue; if (low.includes(f.toLowerCase())) { console.log(`✖ ${donde}: «${f}»`); hits++; } }
 }
 console.log(`texto en pantalla (${enPantalla.split(' ').length} tokens): ${enPantalla}`);
 console.log(`pie (${pie.trim().split(/\s+/).length} palabras); voz (${voz.trim().split(/\s+/).length} palabras)`);
 // frases OBLIGATORIAS en pantalla (exactas) y retiradas
-const OBLIGATORIAS = ['Seedream 4.5', 'Seedream 5.0 Pro', 'FLUX 3', 'Kling O1 Image', 'Nano Banana 2.1', 'GPT Image 2.5', 'Lucía Antelo · personaje IA de Onia', '¿Cuál conserva su cara?', 'Seguime: cada semana, una prueba.', 'Pagar más no mejoró el parecido.', 'Escena 2: Kling perdió la cara.', 'Una toma cada uno: es una prueba, no una regla.', 'Entre 0,66 y 0,70 la diferencia es ruido (±0,03).', 'mi piso · 0,70'];
+const OBLIGATORIAS = ['Seedream 4.5', 'Seedream 5.0 Pro', 'FLUX 3', 'Kling O1 Image', 'Nano Banana 2.1', 'GPT Image 2.5', 'Lucía Antelo · personaje IA de Onia', '¿Cuál conserva su cara?', 'Seguime: cada semana, una prueba.', 'Pagar más no mejoró el parecido.', 'Kling O1 Image perdió la cara.', 'Una toma cada uno: es una prueba, no una regla.', 'Entre 0,66 y 0,70 la diferencia es ruido (±0,03).', 'mi piso · 0,70'];
 for (const f of OBLIGATORIAS) { const ok = enPantalla.replace(/ +/g, ' ').includes(f); console.log(`  ${ok ? 'ok ' : '✖  '} obligatoria en pantalla: «${f}»`); if (!ok) hits++; }
 for (const f of ['El café', 'café:', 'Motor ']) if (enPantalla.includes(f)) { console.log(`✖ pantalla: frase retirada «${f}»`); hits++; }
 for (const [donde, txt] of [['pantalla', enPantalla], ['pie', pie], ['voz', voz]]) if (/\bImagen [A-F]\b/.test(txt)) { console.log(`✖ ${donde}: queda una «Imagen A-F»: desde D-N1 los motores van con su nombre`); hits++; }
 if (!pie.includes('Nombro lo que uso; no es una recomendación pagada.')) { console.log('✖ pie: falta «Nombro lo que uso; no es una recomendación pagada.»'); hits++; } else console.log('  ok  el pie trae «Nombro lo que uso; no es una recomendación pagada.»');
+for (const x of ['créditos de Higgsfield', 'ArcFace', 'ocho fotos oficiales', 'Una toma por motor en la primera escena']) { const ok = pie.toLowerCase().includes(x.toLowerCase()); console.log(`  ${ok ? 'ok ' : '✖  '} el pie dice «${x}»`); if (!ok) hits++; }
+if (/Una toma cada uno/.test(pie)) { console.log('✖ pie: «Una toma cada uno» como frase general (Seedream 4.5 y Kling O1 Image se repitieron)'); hits++; } else console.log('  ok  el pie no dice «Una toma cada uno» como frase general');
+const hashtags = pie.match(/#[\p{L}\d_]+/gu) || []; console.log(`  ${hashtags.length === 4 ? 'ok ' : '✖  '} el pie trae ${hashtags.length} hashtags: ${hashtags.join(' ')}`); if (hashtags.length !== 4) hits++;
 if (!/^personaje hecho con ia/i.test(pie.trim())) { console.log('✖ pie: no abre con «personaje hecho con IA»'); hits++; } else console.log('  ok  el pie abre con «personaje hecho con IA»');
 if (hits) { console.error(`✖ ${hits} coincidencia(s)`); process.exit(1); }
 console.log('✔ ninguna frase prohibida ni marca de terceros en pantalla ni en el pie');

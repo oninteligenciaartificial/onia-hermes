@@ -7,6 +7,7 @@
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
+import { tramosDeVoz } from './voz-lib.mjs';
 import { fileURLToPath } from 'node:url';
 
 const P = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -92,29 +93,26 @@ const tj = Object.fromEntries(plan.tarjetas.map((c) => [c.id, c]));
 const img = Object.fromEntries(plan.imagenes.map((m) => [m.id, m]));
 const near = (a, b, tol = 1e-4) => Math.abs(a - b) <= tol;
 
-// 1a) la voz: guion-voz.txt = UNA línea por tramo, ≤ 450 caracteres (con espacios y saltos), cada tramo dura palabras / 3,6 s, huecos de 0,25 s. NO se genera audio.
+// 1a) la voz (revisión 1, H1): guion-voz.txt = UNA línea por tramo, ≤ 450 caracteres (con saltos). Cada línea dura CARACTERES ÷ 17 (plan.voz.car_por_s; PLAN §4-bis) y arranca donde dice
+//     plan.voz.inicios: en su costura (o hasta `desfase_max` después). Pausa entre líneas entre 0 y 0,25 s a 17 car/s; a 16 y 18 car/s solo se avisa (son estimaciones). NO se genera audio.
 const vozTxt = fs.readFileSync(path.join(P, plan.voz.archivo), 'utf8').replace(/\n$/, '');
-const lineas = vozTxt.split('\n');
 const nCar = [...vozTxt].length;
 if (nCar > plan.voz.max_caracteres) errores.push(`guion-voz.txt: ${nCar} caracteres (máx ${plan.voz.max_caracteres}, contando los saltos de línea)`);
+const { lineas, tramos } = tramosDeVoz(plan, vozTxt, DUR);
 if (lineas.some((l) => !l.trim())) errores.push('guion-voz.txt: hay una línea vacía');
-const tramos = [];
-{
-  let t = plan.voz.inicio;
-  lineas.forEach((l, i) => {
-    const n = nw(l), d = n / plan.voz.palabras_por_s;
-    tramos.push({ i: i + 1, texto: l, palabras: n, caracteres: [...l].length, ini: t, fin: t + d });
-    t += d + plan.voz.hueco;
-  });
+if (plan.voz.inicios.length !== lineas.length) errores.push(`plan.voz.inicios tiene ${plan.voz.inicios.length} tiempos y guion-voz.txt ${lineas.length} líneas`);
+const avisosVoz = [];
+for (const s of tramos) {
+  if (s.i > 1 && s.ini <= tramos[s.i - 2].ini) errores.push(`voz: la línea ${s.i} no arranca después de la ${s.i - 1}`);
+  if (s.costura != null && (s.desfase < -0.5 * FR - 1e-6 || s.desfase > plan.voz.desfase_max + 1e-6)) errores.push(`voz: la línea ${s.i} arranca a ${s.ini.toFixed(3)} s y su costura cae en ${s.costura.toFixed(3)} s (desfase ${s.desfase.toFixed(3)} s; entre −½ cuadro y +${plan.voz.desfase_max} s)`);
+  if (s.i < tramos.length && s.hueco < -1e-9) errores.push(`voz: la línea ${s.i} (${s.car} car = ${s.dur.toFixed(2)} s a ${plan.voz.car_por_s} car/s) se pisa ${(-s.hueco).toFixed(2)} s con la ${s.i + 1}`);
+  if (s.i < tramos.length && s.hueco > plan.voz.hueco + 1e-9) errores.push(`voz: pausa de ${s.hueco.toFixed(2)} s tras la línea ${s.i} (máx ${plan.voz.hueco} s a ${plan.voz.car_por_s} car/s)`);
+  if (s.i < tramos.length) for (const [r, h] of [[plan.voz.car_por_s_sensibilidad[0], s.hueco_lo], [plan.voz.car_por_s_sensibilidad[1], s.hueco_hi]]) {
+    if (h < -1e-9) avisosVoz.push(`línea ${s.i} a ${r} car/s: solape de ${(-h).toFixed(2)} s`); else if (h > plan.voz.hueco + 1e-9) avisosVoz.push(`línea ${s.i} a ${r} car/s: pausa de ${h.toFixed(2)} s`);
+  }
 }
-const hMax = Math.max(...tramos.slice(1).map((s, i) => s.ini - tramos[i].fin));
-if (hMax > plan.voz.hueco + 1e-9) errores.push(`huecos de voz de ${hMax.toFixed(3)} s (máx ${plan.voz.hueco})`);
-// cada costura cae en el inicio del tramo que dice el plan (a ± medio cuadro); el video dura lo que la voz + una cola corta
-for (const c of plan.costuras) {
-  const s = tramos[c.seg - 1];
-  if (!s) { errores.push(`costura ${c.t}: el tramo ${c.seg} no existe`); continue; }
-  if (Math.abs(s.ini * FPS - c.t * FPS) > 0.5 + 1e-6) errores.push(`costura ${c.t}: el tramo ${c.seg} de la voz empieza en ${s.ini.toFixed(3)} s (${(s.ini * FPS).toFixed(2)} cuadros) y la costura en el cuadro ${(c.t * FPS).toFixed(2)}`);
-}
+const hMax = Math.max(...tramos.slice(0, -1).map((s) => s.hueco));
+// el video dura lo que la voz + una cola corta; el CTA (último tramo) se lee entero
 const colaCTA = DUR - plan.costuras.at(-1).t;
 if (colaCTA < plan.voz.cta_min_s - 1e-6 || colaCTA > plan.voz.cta_max_s + 1e-6) errores.push(`el cierre dura ${colaCTA.toFixed(3)} s y el CTA tiene que estar entre ${plan.voz.cta_min_s} y ${plan.voz.cta_max_s} s`);
 if (DUR < 26 - 1e-9 || DUR > 30 + 1e-9) errores.push(`el video dura ${DUR.toFixed(3)} s (tiene que estar entre 26 y 30 s)`);
@@ -189,6 +187,13 @@ let proc = null;
       if (m.estado === 'justo' && !m.pastilla) errores.push(`${m.id}: cae justo en el piso y no lo dice`);
     }
     for (const f of plan.l2.fotos.lista) { const d = proc[f.clave]; if (d && r2(d.id) !== f.valor) errores.push(`foto ${f.foto}: ${f.valor} y PROCEDENCIA dice ${d.id}`); }
+    {
+      // H4 (revisión 1): el resultado en pantalla antes de los 3 s = pastilla «parecido 0,81» sobre la foto del gancho. Es la foto de Seedream 4.5 (K1), así que lleva SU número, el de PROCEDENCIA.
+      const g = plan.gancho.dato, m = img[g.img];
+      if (!m || plan.medios.find((x) => x.id === 'f-gancho').foto !== g.img) errores.push(`gancho.dato: la pastilla es de la imagen «${g.img}» y la foto del gancho es otra`);
+      else if (r2(proc[g.img].id) !== m.valor) errores.push(`gancho.dato: ${m.valor} y PROCEDENCIA dice ${proc[g.img].id}`);
+      if (g.a >= 3) errores.push('gancho.dato: el número tiene que verse antes de los 3,0 s');
+    }
     if (!errores.length) {
       // lo que el video AFIRMA, contra los datos (si una afirmación falla, el build se corta)
       const raw = (k) => proc[k].id;
@@ -196,14 +201,19 @@ let proc = null;
       const masCaro = plan.imagenes.reduce((a, b) => (b.cr > a.cr ? b : a)), masBarato = plan.imagenes.reduce((a, b) => (b.cr < a.cr ? b : a));
       ok(masCaro.letra === 'E' && raw('e') < raw('a') && raw('e') < raw('b'), `«Pagar más no mejoró el parecido»: el más caro (${masCaro.nombre}, ${masCaro.cr} cr, ${raw('e')}) queda bajo el de 1 cr (${raw('a')}) y el de 0,5 cr (${raw('b')})`);
       ok(plan.imagenes.filter((m) => m.cr > 1).every((m) => m._raw < raw('a')), `ninguno de los que cuestan más que Seedream 4.5 (1 cr) mejora su parecido (${raw('a')})`);
-      ok(raw('a') >= SC.piso, `«Seedream, con un crédito, la sostiene»: Seedream 4.5 (1 cr) da ${raw('a')} (≥ ${SC.piso})`);
+      ok(raw('a') >= SC.piso, `«Seedream, 1 crédito: la sostiene»: Seedream 4.5 (1 cr) da ${raw('a')} (≥ ${SC.piso})`);
       ok(raw('d') >= SC.piso && raw('d') < 0.71, `«Seedream Pro… justo en el piso»: Seedream 5.0 Pro (2,5 cr) da ${raw('d')} (entre ${SC.piso} y 0,71)`);
       ok(raw('e') < SC.piso, `«FLUX, el más caro, bajo el piso»: FLUX 3 (3 cr, el más caro) da ${raw('e')} (< ${SC.piso})`);
       ok(raw('f') < SC.piso && r2(raw('f')) === plan.l1.ruido.desde && r2(raw('d')) === plan.l1.ruido.hasta && raw('e') > raw('f') && raw('e') < raw('d'), `franja de ruido 0,66-0,70: GPT Image 2.5 ${raw('f')} · FLUX 3 ${raw('e')} · Seedream 5.0 Pro ${raw('d')} caen adentro (la franja va de ${plan.l1.ruido.desde} a ${plan.l1.ruido.hasta})`);
       ok(masBarato.letra === 'B', `Kling O1 Image es el más barato (${masBarato.cr} cr)`);
-      ok(raw('a_cafe2') >= SC.piso && raw('b_cafe2') < SC.piso, `«Escena 2: Kling perdió la cara»: en la escena 2 Seedream 4.5 da ${raw('a_cafe2')} y Kling O1 Image ${raw('b_cafe2')}`);
+      ok(raw('a_cafe2') >= SC.piso && raw('b_cafe2') < SC.piso, `«Kling O1 Image perdió la cara»: en el café Seedream 4.5 da ${raw('a_cafe2')} y Kling O1 Image ${raw('b_cafe2')}`);
       ok(plan.l2.fotos.lista.map((f) => f.valor).join() === '0.83,0.35', 'las fotos de la escena 2: Seedream 4.5 0,83 contra Kling O1 Image 0,35');
       ok(plan.imagenes.length === 6 && new Set(plan.imagenes.map((m) => m.id)).size === 6, 'seis motores distintos con su nombre real');
+      // H2 (12-oct): lo que el PIE afirma de Kling O1 Image y de las repeticiones (el contrapeso de «perdió la cara»)
+      ok(r2(raw('b')) === 0.79 && r2(raw('b_cafe2')) === 0.35 && r2(raw('b_cafe3')) === 0.83, `pie: Kling O1 Image dio ${raw('b_cafe2')} en el café y ${raw('b')} y ${raw('b_cafe3')} en las otras dos escenas (0,35 · 0,79 · 0,83)`);
+      ok(r2(raw('a_cafe2')) === 0.83 && r2(raw('a_cafe3')) === 0.84, `Seedream 4.5 en las otras dos escenas: ${raw('a_cafe2')} y ${raw('a_cafe3')}`);
+      const reps = {}; for (const k of Object.keys(v)) { const slug = Object.values(SLUG).find((x) => k.startsWith(x === 'kling' ? 'kling_omni_image' : x)); if (slug) reps[slug] = (reps[slug] || 0) + 1; }
+      ok(Object.entries(reps).every(([k, n]) => (k === 'seedream_4_5' || k === 'kling' ? n === 3 : n === 1)), `«una toma por motor en la primera escena; Seedream 4.5 y Kling O1 Image se repitieron en otras dos»: tomas por motor en PROCEDENCIA ${JSON.stringify(reps)}`);
     }
   }
 }
@@ -224,7 +234,7 @@ const textoCarta = (id) => `${tj[id].texto.replace(/\n$/, '')} ${tj[id].acento |
   if (plan.rotulo.a !== 0 || !near(plan.rotulo.b, 3.0)) errores.push(`el rótulo tiene que ir del cuadro 0 a los 3,0 s (va de ${plan.rotulo.a} a ${plan.rotulo.b})`);
   exacto('CTA', textoCarta('c9'), 'Seguime: cada semana, una prueba.');
   exacto('lección', textoCarta('c7'), 'Pagar más no mejoró el parecido.');
-  exacto('escena 2', textoCarta('c8'), 'Escena 2: Kling perdió la cara.');
+  exacto('Kling', textoCarta('c8'), 'Kling O1 Image perdió la cara.');   // H5 (12-oct): el nombre completo, 6 palabras, sin «escena 2» (que no tenía escena 1)
   exacto('gancho', textoCarta('c1'), '¿Cuál conserva su cara?');
   exacto('nota 1', plan.l1.nota1.texto, 'Una toma cada uno: es una prueba, no una regla.');
   exacto('nota 2', plan.l1.nota2.texto, 'Entre 0,66 y 0,70 la diferencia es ruido (±0,03).');
@@ -236,18 +246,25 @@ const textoCarta = (id) => `${tj[id].texto.replace(/\n$/, '')} ${tj[id].acento |
   if (/Imagen [A-F]\b/.test(todas)) errores.push('queda una «Imagen A-F» en el plan: desde D-N1 los motores van con su nombre');
 }
 
-// 1d) pie.txt: abre con «personaje hecho con IA», lleva la nota de honestidad y no afirma nada que el video no diga
+// 1d) pie.txt (H2/H8, 12-oct): abre con «personaje hecho con IA», lleva la nota de honestidad y no afirma nada que el video no diga ni que PROCEDENCIA no respalde
 {
   const pp = path.join(P, 'pie.txt');
   if (!fs.existsSync(pp)) errores.push('falta pie.txt');
   else {
     const pie = fs.readFileSync(pp, 'utf8').trim();
     if (!/^personaje hecho con ia\b/i.test(pie)) errores.push('pie.txt tiene que abrir con «personaje hecho con IA»');
-    if (!pie.includes(plan.l1.nota1.texto)) errores.push('pie.txt tiene que traer la nota «Una toma cada uno: es una prueba, no una regla.»');
+    // «Una toma cada uno» NO puede quedar como frase general en el pie: Seedream 4.5 y Kling O1 Image se repitieron (H2). En pantalla la nota sigue igual (aprobada el 10-oct).
+    if (pie.includes('Una toma cada uno')) errores.push('pie.txt dice «Una toma cada uno» como frase general: Seedream 4.5 y Kling O1 Image se repitieron; tiene que decir «Una toma por motor en la primera escena…»');
+    if (!pie.includes('Una toma por motor en la primera escena')) errores.push('pie.txt tiene que aclarar «Una toma por motor en la primera escena» (y cuáles se repitieron)');
+    if (!pie.includes('Es una prueba, no una regla.')) errores.push('pie.txt tiene que decir «Es una prueba, no una regla.» (el límite de la nota 1)');
     if (!/pagar más no mejoró el parecido/i.test(pie)) errores.push('pie.txt tiene que decir «pagar más no mejoró el parecido» (igual que el video)');
     if (!pie.includes('Cada semana hago una prueba. Seguime.')) errores.push('pie.txt tiene que cerrar con el CTA («Cada semana hago una prueba. Seguime.»)');
     if (!pie.includes('Nombro lo que uso; no es una recomendación pagada.')) errores.push('pie.txt tiene que decir «Nombro lo que uso; no es una recomendación pagada.» (D-N1)');
     for (const n of Object.values(NOMBRES)) if (!pie.includes(n)) errores.push(`pie.txt no nombra a «${n}»`);
+    // H8: de qué plataforma son los créditos y con qué se mide (quien mira puede repetir la prueba: D-N1)
+    for (const x of ['Higgsfield', 'créditos de Higgsfield', 'ArcFace', 'ocho fotos oficiales', '±0,03', '0,70', 'perdió la cara']) if (!pie.toLowerCase().includes(x.toLowerCase())) errores.push(`pie.txt tiene que decir «${x}»`);
+    // el contrapeso de Kling: las otras dos escenas
+    if (!/Kling O1 Image dio 0,35 y perdió la cara/.test(pie) || !/0,79 y 0,83/.test(pie)) errores.push('pie.txt: «perdió la cara» de Kling O1 Image tiene que llevar su contrapeso (0,35 en el café; 0,79 y 0,83 en las otras dos escenas)');
     if (/\b(el|la|lo|los|las|es) mejor(es)?\b|recomiend|imagen [a-f]\b/i.test(pie)) errores.push('pie.txt suena a «el mejor» o a recomendación, o dice «Imagen A-F»');
     for (const x of ['tres escenas', 'una de tres']) if (pie.includes(x)) errores.push(`pie.txt dice «${x}», que el video v2 ya no muestra tal cual`);
     const pantalla = JSON.stringify(plan.tarjetas) + JSON.stringify(plan.imagenes) + JSON.stringify(plan.l1) + JSON.stringify(plan.l2);
@@ -266,6 +283,7 @@ const lecturas = [];
   const rg = plan.regla, es = rg.escala, l1 = plan.l1, l2 = plan.l2;
   const fin = (id) => med[id].b - 0.18;                                // la placa o la foto viaja: legible hasta que el empuje la saca (≥ 95 % adentro hasta T − 0,18 s)
   L('rótulo de IA', plan.rotulo.texto, plan.rotulo.a, plan.rotulo.b);
+  { const g = plan.gancho.dato; L('gancho dato', `parecido ${fm(img[g.img].valor)}`, g.a + E_IN, g.fin - E_OUT); }   // H4: sale con c1
   for (const m of conEscena) {
     L(`${m.letra} dato`, `parecido ${fm(m.valor)}`, m.tag_t + E_IN, fin(`f-${m.id}`));
     if (m.sello) L(`${m.letra} sello`, m.sello.texto, m.sello.t + 3 * FR, fin(`f-${m.id}`));
@@ -381,6 +399,11 @@ for (const c of plan.tarjetas) {
   const t = c.texto.endsWith('\n') ? esc(c.texto.slice(0, -1)) + '<br>' : esc(nb(c.texto)) + (c.acento ? ' ' : '');
   const acento = c.acento ? `<b${c.acento_t ? ' class="late"' : ''}>${esc(nb(c.acento))}</b>` : '';
   let extras = '';
+  if (c.id === 'c1') {
+    // H4 (revisión 1), opción B: «parecido 0,81» sobre la foto del gancho, justo encima de la tarjeta; sale con ella
+    const m = img[plan.gancho.dato.img];
+    extras += `<div class="drow" id="d-hk"><span class="tag tag-d dg${cls(m)}" id="dA-hk"><i></i>parecido <b>${fm(m.valor)}</b></span></div>`;
+  }
   if (c.imagen) {
     const m = img[c.imagen];
     if (m.sello) extras += `<div class="sello" id="s-${m.id}">${esc(m.sello.texto)}</div>`;
@@ -406,9 +429,9 @@ const PLAN_JS = {
   W, H, FR, PUSH, PEASE: plan.empuje.ease, E_IN, E_OUT, costuras, ACC, DUR,
   zoom: plan.zoom.fin,
   fotos: fotosPlan,
-  tarjetas: plan.tarjetas.map(({ id, entra, b, acento_t }) => ({ id, a: +entra, b, acento_t: acento_t || null, en_empuje_entra: viajaEntra.has(id), en_empuje_sale: viajaSale.has(id) })),
+  tarjetas: plan.tarjetas.map(({ id, a, entra, b, acento_t }) => ({ id, a: +entra, b, desde_cero: a === 0, acento_t: acento_t || null, en_empuje_entra: viajaEntra.has(id), en_empuje_sale: viajaSale.has(id) })),
   rotulo: plan.rotulo,
-  gancho: { a: plan.gancho.miniaturas.a, esc: plan.gancho.miniaturas.escalon, ids: plan.gancho.miniaturas.ids },
+  gancho: { a: plan.gancho.miniaturas.a, esc: plan.gancho.miniaturas.escalon, ids: plan.gancho.miniaturas.ids, dato: { a: plan.gancho.dato.a, fin: plan.gancho.dato.fin } },
   regla: { refs: { a: plan.regla.refs.a, esc: plan.regla.refs.escalon, n: plan.refs.recortes.length, est: plan.regla.refs.estaticas }, escala: plan.regla.escala },
   imagenes: conEscena.map((m) => ({ id: m.id, a: m.tag_t, sello: m.sello || null, pastilla: m.pastilla || null, enfasis: m.enfasis || [] })),
   l1: { nota2_t: plan.l1.nota2.t, ruido_t: plan.l1.ruido.t, filas: plan.l1.filas.map((f, i) => ({ n: i + 1, t: f.t })), pulsos: plan.l1.pulsos.map((p) => ({ n: idxFila[p.img], t: p.t })) },
@@ -441,9 +464,10 @@ ${tlJs}
 fs.writeFileSync(path.join(P, 'index.html'), out);
 
 // ───────────────────────── 3) tablas ─────────────────────────
-console.log(`Cronograma de la voz (guion-voz.txt: ${nCar} caracteres con saltos, ${tramos.reduce((a, s) => a + s.palabras, 0)} palabras, ${plan.voz.palabras_por_s} palabras por segundo, huecos de ${plan.voz.hueco} s; NO se genera audio):`);
-for (const s of tramos) console.log(`  ${String(s.i).padStart(2)}  ${s.ini.toFixed(3).padStart(7)} – ${s.fin.toFixed(3).padEnd(7)} ${String(s.palabras).padStart(2)} pal ${String(s.caracteres).padStart(2)} car  ${s.texto}`);
-console.log(`  el video dura ${DUR.toFixed(3)} s (${NF} cuadros); la voz termina en ${tramos.at(-1).fin.toFixed(3)} s; el CTA está ${colaCTA.toFixed(3)} s`);
+console.log(`Cronograma de la voz (guion-voz.txt: ${nCar} caracteres con saltos, ${tramos.reduce((a, s) => a + s.palabras, 0)} palabras; tramos por CARACTERES a ${plan.voz.car_por_s} car/s, sensibilidad ${plan.voz.car_por_s_sensibilidad.join('/')}; pausa máx ${plan.voz.hueco} s; NO se genera audio):`);
+for (const s of tramos) console.log(`  ${String(s.i).padStart(2)}  ${s.ini.toFixed(3).padStart(7)} – ${s.fin.toFixed(3).padEnd(7)} ${String(s.palabras).padStart(2)} pal ${String(s.car).padStart(2)} car  pausa→sig ${s.hueco.toFixed(2).padStart(5)} (${s.hueco_lo.toFixed(2)} / ${s.hueco_hi.toFixed(2)})${s.costura != null ? `  costura ${s.costura.toFixed(3)} (+${s.desfase.toFixed(3)})` : ''}  ${s.texto}`);
+console.log(`  el video dura ${DUR.toFixed(3)} s (${NF} cuadros); la voz termina en ${tramos.at(-1).fin.toFixed(3)} s (cola ${colaVoz.toFixed(2)} s); el CTA está ${colaCTA.toFixed(3)} s; pausa máxima a ${plan.voz.car_por_s} car/s: ${hMax.toFixed(2)} s`);
+if (avisosVoz.length) console.log(`  avisos (sensibilidad ±1 car/s; no frenan): ${avisosVoz.join(' · ')}`);
 console.log('Tabla de cortes (t en s):');
 for (const m of plan.medios) console.log(`  ${m.a.toFixed(3).padStart(7)} – ${m.b.toFixed(3).padEnd(7)} ${m.id.padEnd(9)} ${m.tipo.padEnd(5)} ${m.capa}`);
 console.log('Costuras (empuje rígido de 6 cuadros):');

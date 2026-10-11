@@ -1,17 +1,16 @@
 tarjeta   pal  legible (s)       dura   pide   sobra
-    c1        4  0.21–2.00    1.79   1.70   0.09  «¿Cuál conserva su cara?»
+    c1        4  0.00–2.00    2.00   1.70   0.30  «¿Cuál conserva su cara?»
     c2        6  2.08–4.63    2.54   2.40   0.14  «Misma orden. Seis motores de imagen.»
     c3        6  5.58–8.21    2.63   2.40   0.23  «Contra 8 fotos suyas. Piso: 0,70.»
     c4        4  8.25–10.13    1.88   1.70   0.18  «Seedream 4.5 · 1 crédito»
     c5        5  10.17–12.88    2.71   2.05   0.66  (sobra > 0,3 s: cubierto por otros cambios/textos, ver aire.mjs)  «Seedream 5.0 Pro · 2,5 créditos»
     c6        4  12.92–15.04    2.13   1.70   0.43  (sobra > 0,3 s: cubierto por otros cambios/textos, ver aire.mjs)  «FLUX 3 · 3 créditos»
     c7        6  15.08–17.71    2.63   2.40   0.23  «Pagar más no mejoró el parecido.»
-    c8        6  22.79–25.50    2.71   2.40   0.31  (sobra > 0,3 s: cubierto por otros cambios/textos, ver aire.mjs)  «Escena 2: Kling perdió la cara.»
+    c8        6  22.79–25.50    2.71   2.40   0.31  (sobra > 0,3 s: cubierto por otros cambios/textos, ver aire.mjs)  «Kling O1 Image perdió la cara.»
     c9        5  25.54–28.04    2.50   2.05   0.45  (sobra > 0,3 s: cubierto por otros cambios/textos, ver aire.mjs)  «Seguime: cada semana, una prueba.»
     l1-nota1 10  15.08–22.75    7.67   3.80   3.87  (sobra > 0,3 s: cubierto por otros cambios/textos, ver aire.mjs)  «Una toma cada uno: es una prueba, no una regla.»
     l1-nota2  9  19.08–22.75    3.67   3.45   0.22  «Entre 0,66 y 0,70 la diferencia es ruido (±0,03).»
-cuadros sin tarjeta ni nota legible: 36 de 673
-  cuadros 0–4 (0.000–0.208 s, 0.21 s)
+cuadros sin tarjeta ni nota legible: 31 de 673
   cuadros 48–49 (2.000–2.083 s, 0.08 s)
   cuadros 111–133 (4.625–5.583 s, 0.96 s)
   cuadros 197–197 (8.208–8.250 s, 0.04 s)

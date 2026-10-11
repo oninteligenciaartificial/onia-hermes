@@ -137,6 +137,7 @@ const fm = (v) => v.toFixed(2).replace('.', ',');
   const tr = plan.regla.escala.marca_t + 0.6;
   const mk4 = await medida(tr, '#sc-mk'); datos.push(['regla marca 0,70', mk4.cx, X(SC.piso)]);
   for (const [i, f] of plan.l2.fotos.lista.entries()) { const r = await medida((f.cap_t ?? plan.l2.fotos.lista.at(-1).cap_t) + 0.6, `#l2-cap${i + 1} .cv`); if (r.txt !== fm(f.valor)) falla(0, `L2 foto ${f.letra}: dice «${r.txt}» y el dato es ${fm(f.valor)}`); }
+  { const g = plan.gancho.dato, r = await medida(g.a + 0.6, '#dA-hk b'); if (r.txt !== fm(img[g.img].valor)) falla(0, `gancho: la pastilla dice «${r.txt}» y el dato es ${fm(img[g.img].valor)}`); }
   for (const m of plan.imagenes.filter((x) => x.tarjeta)) { const r = await medida(m.tag_t + 0.6, `#dA-${m.id} b`); if (r.txt !== fm(m.valor)) falla(0, `Imagen ${m.letra}: el dato en pantalla dice «${r.txt}» y es ${fm(m.valor)}`); }
   // los rótulos de fila de la lección (nombres largos) no cruzan la marca de 0,70 ni se pisan con el valor de la fila de arriba
   {

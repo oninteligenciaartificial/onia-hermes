@@ -107,7 +107,8 @@ body{font-family:"DM Sans",sans-serif;-webkit-font-smoothing:antialiased;text-re
 /* la nota del ruido (lección 1): texto principal, 44 px, blanco pleno (H3+H7) */
 .note{font-family:"DM Sans",sans-serif;font-weight:500;font-size:44px;line-height:1.2;color:#F6F8FB;text-align:center;text-wrap:balance;max-width:940px}
 /* franja entre 0,66 y 0,70 sobre la escala de la lección 1 */
-.ruido{position:absolute;background:rgba(246,248,251,.15);border-left:2px solid rgba(246,248,251,.45);border-right:2px solid rgba(246,248,251,.45)}
+/* H7 (revisión 1): coral suave, el color de «bajo el piso», para que la franja se vea a 390 px de ancho (13 px de franja); la geometría 0,66-0,70 no cambia */
+.ruido{position:absolute;background:rgba(255,122,102,.36);border-left:3px solid rgba(255,122,102,.85);border-right:3px solid rgba(255,122,102,.85)}
 /* lección 2: tabla de A y B en tres escenas */
 .thd{position:absolute;text-align:center;font-family:"DM Sans",sans-serif;font-weight:500;font-size:38px;line-height:1.2;color:rgba(246,248,251,.92);white-space:nowrap}
 .rl2{position:absolute;font-family:"DM Sans",sans-serif;font-weight:500;font-size:40px;line-height:1.2;color:#F6F8FB;white-space:nowrap}

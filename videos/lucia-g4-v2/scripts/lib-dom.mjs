@@ -24,7 +24,7 @@ export async function abrir() {
 // ids de TODO texto con tiempo de lectura (las tarjetas, las notas, el rótulo, los datos, sellos, pastillas, etiquetas y pies). `tarjetas` = solo las narrativas y las dos notas.
 export function idsDeTexto() {
   const tarjetas = [...plan.tarjetas.map((c) => c.id), 'l1-nota1', 'l1-nota2'];
-  const otros = ['rotulo', 'sc-mkl', 'sc-ax1', 'l1-mkl'];
+  const otros = ['rotulo', 'dA-hk', 'sc-mkl', 'sc-ax1', 'l1-mkl'];     // dA-hk = la pastilla «parecido 0,81» del gancho (H4)
   for (const m of plan.imagenes.filter((x) => x.tarjeta)) { otros.push('dA-' + m.id); if (m.sello) otros.push('s-' + m.id); if (m.pastilla) otros.push('p-' + m.id); }
   for (let i = 1; i <= plan.l1.filas.length; i++) otros.push('l1-t' + i, 'l1-v' + i);
   for (let i = 1; i <= plan.l2.fotos.lista.length; i++) otros.push('l2-cap' + i);

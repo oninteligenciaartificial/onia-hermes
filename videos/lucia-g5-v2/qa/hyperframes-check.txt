@@ -74,17 +74,25 @@ Runtime
   ◇ 0 errors, 0 warnings
 
 Layout
-  ℹ t=22.361s canvas_overflow #c9 > div:nth-of-type(1) > div:nth-of-type(2) inside #root overflowed right 324.46px "Mirá la" — Text extends outside the composition canvas.
+  ℹ t=22.188s canvas_overflow #r3-call inside #root overflowed left 580px "Lo difuminé:lo inventó el motor." — Text extends outside the composition canvas.
         Fix: Move the text inward, reduce its size, or mark intentional off-canvas animation with data-layout-allow-overflow.
-  ℹ t=22.361s canvas_overflow #c9 > div:nth-of-type(1) > div:nth-of-type(2) > b:nth-of-type(1) inside #root overflowed right 762.96px "imagen entera." — Text extends outside the composition canvas.
+  ℹ t=22.188s canvas_overflow #r3-num inside #root overflowed left 692.39px "parecido" — Text extends outside the composition canvas.
         Fix: Move the text inward, reduce its size, or mark intentional off-canvas animation with data-layout-allow-overflow.
-  0 error(s), 0 warning(s), 2 info(s)
+  ℹ t=22.188s canvas_overflow #r3-num > b:nth-of-type(1) inside #root overflowed left 511.91px "0,80" — Text extends outside the composition canvas.
+        Fix: Move the text inward, reduce its size, or mark intentional off-canvas animation with data-layout-allow-overflow.
+  ℹ t=22.188s canvas_overflow #tool-r3 inside #root overflowed left 831.97px "Seedance 2.0 Mini + referencias" — Text extends outside the composition canvas.
+        Fix: Move the text inward, reduce its size, or mark intentional off-canvas animation with data-layout-allow-overflow.
+  ℹ t=22.188s canvas_overflow #c8 > div:nth-of-type(1) > div:nth-of-type(2) inside #root overflowed left 935px "El número no ve" — Text extends outside the composition canvas.
+        Fix: Move the text inward, reduce its size, or mark intentional off-canvas animation with data-layout-allow-overflow.
+  ℹ t=22.188s canvas_overflow #c8 > div:nth-of-type(1) > div:nth-of-type(2) > b:nth-of-type(1) inside #root overflowed left 935px "letreros inventados." — Text extends outside the composition canvas.
+        Fix: Move the text inward, reduce its size, or mark intentional off-canvas animation with data-layout-allow-overflow.
+  0 error(s), 0 warning(s), 6 info(s)
 
 Motion
   ◇ 0 errors, 0 warnings
 
 Contrast
-  ◇ 25/25 text checks pass WCAG AA
+  ◇ 24/24 text checks pass WCAG AA
 
 Snapshots
   ◇ disabled

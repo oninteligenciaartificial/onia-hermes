@@ -32,6 +32,20 @@ ec4c450f3e0c4f682b675b65ef913a2e1e0400d31b29c35aa948119bf702f997  g4-final-1080x
 - G5 (3ra pasada, 9-oct: «cabe en ±0,03», «el medidor avisa: lo reviso a ojo», «lo inventó el motor») también está recodificado a 6 Mbps máx., crf 18 (37,8 → 13,1 MB; master SHA-256 `133346a5fbec4ebfe2f523ca2a4598ee0d9cd6f232d2ee654a4d85ba7564aaea`; PSNR 50,6 dB de promedio (53,0 dB promediando los cuadros), 43,97 dB en el peor cuadro).
 - Todos son 1080×1920, H.264 + AAC (silencioso: D4, sin voz ni música), 24 fps.
 
+## Re-cortes v2 (mudos, ≤ 30 s, nombres reales D-N1, regla 15) — estado y SHA
+
+Reemplazan a las v1 de G2, G4 y G5. **Mudas, 0 créditos.** Nada sale sin «mostrada, publicá <pieza>» de la madre; el pie de cada una es nuevo y también pasa por ella.
+La voz (Marcela) se mezcla después y **cambia el SHA**: hay que repetir el QA de audio (−14 LUFS, pico verdadero, `silencedetect`).
+
+| Pieza | Archivo | Duración | SHA-256 | Estado |
+|---|---|---:|---|---|
+| G5 v2 «Cómo mido si una cara es la de Lucía» | `g5-v2-final-1080x1920.mp4` | 26,625 s | `030e8f65aabc0fddda83f234acebb410b951b7b81c3dc9c2657410f5ec399b3f` | **LISTA PARA MOSTRAR** (11-oct): revisión 1 aplicada, cara medida con ArcFace sobre este master (diferencia final↔fuente ≤ 0,009), cuadros mirados; pie en `../lucia-g5-v2/pie.txt` |
+| G2 v2 | — | 26,5 s | — | editada; revisión independiente en curso |
+| G3 v2 | — | — | — | revisión independiente en curso |
+| G4 v2 | — | 28,04 s | — | revisada (aprobado con cambios); arreglos en curso |
+
+Pendiente en G5 v2: el 0,35 de Kling O1 Image se muestra sin su contrapeso (0,79 y 0,83) dentro del video: solo lo dice el pie (la pastilla del café ya está en su tope de palabras). Decisión de la madre.
+
 ## Orden y ritmo (plan v5 §5: hasta 3 piezas por semana, 19:00 La Paz)
 
 | Semana | Pieza | Por qué en ese orden |

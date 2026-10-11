@@ -1,6 +1,6 @@
-muestras: 225 instantes (cada 3 cuadros), 1399 cajas de texto medidas
+muestras: 225 instantes (cada 3 cuadros), 1412 cajas de texto medidas
 margen mínimo entre el mentón y el texto que queda debajo: 60 px (t=3.125 s, rotulo/tag: texto desde y=720, mentón y=660; la regla pide ≥ 40)
-tamaños de texto en el DOM (px: cuántos elementos): {"38":18,"40":9,"44":3,"48":2,"64":3,"66":18}
+tamaños de texto en el DOM (px: cuántos elementos): {"38":19,"40":9,"44":3,"48":2,"64":4,"66":18}
   ok  rótulos de fila de la lección: el más largo («Seedream 5.0 Pro · 2,5 créditos», 40 px) termina en x=628; la marca de 0,70 está en x=713 (holgura 82 px)
   ok  nota 1                                   44 px (mínimo 44)
   ok  nota 2                                   44 px (mínimo 44)
