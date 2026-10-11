@@ -71,6 +71,7 @@ Leyenda de dueño: `H` Haiku · `S` Sonnet · `O` Opus · `CxSol` / `CxAstra` Co
 - [ ] D5 Marca: layout `inventario` + cierre «buscá PALABRA en Avisos» en `carousel_pack_referentes.js` + test, y los 2 carruseles del brief DePPPp5FgMh (18 y 21-oct). Pedido 20:20 UTC. Hecho = SHA + láminas mirada.
 - [x] D6 (v4, 20:25 UTC) SU: «mergeá vos» → #187 `d6a276ad`, #188 `e3c3d564`, platform #145 `d8ca5a32` (sale 21:50 UTC: MIRAR /book). Codex: junction `~/.agents/skills` → repo (30 skills), corrido por SU. SIN: SU presentó (reloj 13-oct cerrado por él).
 - [ ] D7 Regla nueva de SU (20:25 UTC): MOSTRAR antes de subir o hacer (memoria `feedback-mostrar-antes-de-publicar`). Avisado a Marca y Lucía. Lucía G1 mostrado (video + 8 cuadros en el tablero), espera su OK. Pendiente: ¿mostrar y esperar OK, o solo mostrar?
+- [x] D8 PUBLICADO 21:55 UTC `release-d8ca5a32` (#145 logo /book + #114 factura): /book y /login MIRADOS en el navegador 01:18 UTC (capturas en madre-capturas). Factura (#114) solo se ve con login: queda para Plat/QA. Título de /login en «tu» → pedido a Plat.
 
 ## I. Olvidos de la auditoría (research/2026-10-10-auditoria-madre-v3.md §c) — dueño y estado
 - [ ] I1 La rama de la madre (`claude/onia-sesion-madre-9313fb`, 10+ commits) NO está en main: el integrador `onia-cola` está
