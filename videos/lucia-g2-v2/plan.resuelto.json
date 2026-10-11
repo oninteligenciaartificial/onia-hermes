@@ -173,7 +173,7 @@
    "media_inicio": 2.25,
    "a": 24.75,
    "b": 27.791666,
-   "capa": "cierre: el clip K1 (el de Kling 3.0 std) del cuadro 54 (2,25 s) al 126 (5,25 s), con Lucía mirando a cámara; 3 cuadros medidos (qa/face-gate.txt: n606, n630 y n660): final 0,706 a 0,742, fuente 0,708 a 0,751; ninguno bajo 0,70"
+   "capa": "cierre: el clip K1 (el de Kling 3.0 std) del cuadro 54 (2,25 s) al 126 (5,25 s), con Lucía mirando a cámara; 4 cuadros medidos (qa/face-gate.txt: n606, n630, n660 y n665): final 0,693 a 0,749, fuente 0,708 a 0,751; el más bajo, 0,693, queda bajo 0,70"
   }
  ],
  "costuras": [

@@ -1,25 +1,28 @@
 Control de cara (ArcFace buffalo_l, SCRFD det_10g; scripts/face_identity_qa.py) contra las 8 referencias oficiales de videos/lucia-g4-v2/assets/refs-orig/ (locales, sin red; nada instalado).
-Master: out/g2-v2-final-1080x1920.mp4 (v2.3, 11-oct noche: aviso en el gancho, sobre el clip de Kling O3 y en la lección; c9 y L9/L11 matizadas; los clips y la foto no cambian). «Fuente» = el mismo cuadro del clip original (assets/*.mp4) o la foto K1 (assets/k1.jpg). Puntaje = coseno contra el centroide de las 8 referencias. Gate del repo: 0,70.
-Caras < 200 px: poco confiables (regla del propio gate); las cifras son orientativas.
+Master: out/g2-v2-final-1080x1920.mp4 (v2.4, 11-oct noche, última pasada: aviso del gancho «Clip 0,82: recibió 4 fotos de comparación» bajo las miniaturas, «con que se compara», pie y README corregidos; los clips y la foto no cambian). «Fuente» = el mismo cuadro del clip original (assets/*.mp4) o la foto K1 (assets/k1.jpg). Puntaje = coseno contra el centroide de las 8 referencias. Gate del repo: 0,70.
+Caras < 200 px: poco confiables (regla del propio gate); las cifras son orientativas. Los px de la columna de la FUENTE son los del clip original (720p); los del FINAL, los del lienzo de 1080 (×1,5): en el lienzo la cara de Seedance 2.0 Mini llega a 201-255 px.
 
 cuadro del final                               final   px   fuente   px    dif
-gancho K1 n24 (zoom)                           0.798  180   0.806  237  0.008
-gancho K1 n60 (zoom)                           0.808  183   0.806  237  0.002
-gancho K1 n80 (zoom)                           0.791  186   0.806  237  0.015
-Kling 3.0 std n209 (c12)                       0.794  180   0.797  120  0.003
-Kling 3.0 std n227 (c30)                       0.795  179   0.799  119  0.004
-Kling 3.0 std n247 (c50)                       0.744  180   0.762  120  0.018
+gancho K1 n10 (zoom)                           0.799  180   0.806  237  0.007
+gancho K1 n24 (zoom)                           0.801  180   0.806  237  0.005
+gancho K1 n60 (zoom)                           0.809  183   0.806  237  0.003
+gancho K1 n80 (zoom)                           0.795  186   0.806  237  0.011
+Kling 3.0 std n209 (c12)                       0.797  180   0.797  120  0.000
+Kling 3.0 std n227 (c30)                       0.787  178   0.799  119  0.012
+Kling 3.0 std n247 (c50)                       0.752  180   0.762  120  0.010
 Seedance 2.0 Mini n272 (c14)                   0.671  201   0.674  134  0.003  <- bajo 0,70 en la fuente y en el final
 Seedance 2.0 Mini n294 (c36)                   0.673  239   0.671  160  0.002  <- bajo 0,70 en la fuente y en el final
 Seedance 2.0 Mini n316 (c58)                   0.632  255   0.629  170  0.003  <- bajo 0,70 en la fuente y en el final
-Kling O3 n345 (c14)                            0.780  144   0.784   95  0.004
-Kling O3 n381 (c50)                            0.788  172   0.790  115  0.002
-Kling O3 n415 (c84)                            0.805  200   0.801  133  0.004
-cierre K1 n606 (c12+54)                        0.742  178   0.750  118  0.008
-cierre K1 n630 (c36+54)                        0.738  173   0.751  115  0.013
-cierre K1 n660 (c66+54)                        0.706  172   0.708  115  0.002
+Kling O3 n345 (c14)                            0.781  143   0.784   95  0.003
+Kling O3 n381 (c50)                            0.795  171   0.790  115  0.005
+Kling O3 n415 (c84)                            0.806  199   0.801  133  0.005
+Kling O3 n425 (c94)                            0.798  209   0.801  139  0.003
+cierre K1 n606 (c12+54)                        0.745  178   0.750  118  0.005
+cierre K1 n630 (c36+54)                        0.749  173   0.751  115  0.002
+cierre K1 n660 (c66+54)                        0.693  172   0.708  115  0.015
+cierre K1 n665 (c71+54)                        0.700  174   0.712  115  0.012
 
-Diferencia máxima final↔fuente: 0.018 en 15 cuadros (límite 0,02)
+Diferencia máxima final↔fuente: 0.015 en 18 cuadros (límite 0,02)
 
-Lectura (coincide con la v2.2): Seedance 2.0 Mini queda bajo 0,70 en la fuente y en el final; Kling O3 se mantiene ≥ 0,70; Kling 3.0 std baja; el cierre K1 queda entre 0,706 y 0,742 en el final. La mayor diferencia (0,018, Kling 3.0 std cuadro 247) está en el tramo de 8,5 a 10,4 s, donde el render nuevo difiere del anterior en 52 dB de PSNR (el render no es bit a bit reproducible; v2.2: 0,012 en ese mismo cuadro): ruido de la medida, no un cambio del clip.
+Lectura (v2.4; el render no es bit a bit reproducible: la v2.3 dio 0,018 como máximo y esta pasada 0,015): Seedance 2.0 Mini queda bajo 0,70 en la fuente y en el final (0,632 a 0,673); Kling O3 se mantiene ≥ 0,70 (0,781 a 0,806 en el final); Kling 3.0 std baja de 0,797 a 0,752. El cierre K1 queda entre 0,693 y 0,749 en el final (la fuente, 0,708 a 0,751): los dos últimos cuadros medidos del cierre (n660 y n665) dan 0,693 y 0,700 contra 0,708 y 0,712 de la fuente, o sea QUE EL CIERRE BAJA DEL PISO por ruido de render en el cuadro 660 (la v2.3 dio 0,706 en ese cuadro); no hay cifra sobre el cierre en pantalla ni en el pie. La mayor diferencia (0,015) es ese cuadro 660.
 Este control mide el escalado y el H.264 contra la fuente, no la fuga de fotos de entrada; esa está en hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/medicion-sin-refs-entrada-20261011.txt (sección «PRUEBA ESTRICTA»): ningún clip es independiente de las 8 fotos (K1 se hizo con R1, R3, R6 y R7); contra solo R2, R4, R5 y R8 los seis clips bajan entre 0,03 y 0,09 y el orden por valor final no cambia.
