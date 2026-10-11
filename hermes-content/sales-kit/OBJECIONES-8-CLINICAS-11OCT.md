@@ -69,7 +69,7 @@
 
 **Hoy (solo lo que está en ✅):**
 
-> Onia no emite la factura fiscal: esa la sigue emitiendo como lo hace ahora.
+> Onia no emite la factura fiscal de sus cobros a pacientes: esa la sigue emitiendo como lo hace ahora.
 >
 > *Si insiste:* Si para usted es imprescindible que el mismo sistema la emita, no le calza y prefiero decírselo ahora.
 
@@ -85,22 +85,24 @@
 
 **Hoy (solo lo que está en ✅):**
 
-> Quedan en un servidor privado administrado por Onia, que hoy está en Estados Unidos. Los datos son suyos: no se venden ni se usan para entrenar modelos de IA. Algunas funciones usan proveedores externos, como OpenAI y Cloudflare, y todo está en la política de privacidad, en onia.com.bo/privacidad.
+> Quedan en un servidor privado administrado por Onia, que hoy está en Estados Unidos. Los datos son suyos: no se venden ni se usan para entrenar modelos de IA. El tráfico pasa por Cloudflare y algunas funciones usan proveedores externos, como OpenAI; todo está en la política de privacidad, en onia.com.bo/privacidad.
 >
-> *Si insiste:* Viajan cifrados (HTTPS). El cifrado del disco en reposo y las certificaciones como ISO 27001 no los afirmamos porque hoy no los tenemos: prefiero decírselo.
+> *Si insiste:* La conexión entre su navegador y la plataforma va cifrada (HTTPS). El cifrado del disco en reposo y las certificaciones como ISO 27001 no los afirmamos porque hoy no los tenemos: prefiero decírselo.
 
 **Se agrega recién cuando aislamiento por clínica en producción (RLS: las migraciones no lo traen, skill onia-db; verificarlo en vivo) · copias de seguridad diarias: hoy están solo en el disco del VPS y la restauración nunca se probó (ONIA_PLAN_1.0_Y_CAJA.md punto 4, «A medias»):**
 
 > Cada clínica ve solo lo suyo y hay copias de seguridad diarias.
 
-- **Se puede decir:** ✅ se puede decir hoy. Sale de la política de privacidad publicada (no hay fila en el doc de promesas): servidor privado de Onia, hoy en Estados Unidos (política de privacidad §4); proveedores externos como OpenAI y Cloudflare (política §5). Filas de `ONIA_PROMESA_VS_PRODUCTO.md`: L-02 ✅ visto. Catálogo: Política de privacidad (web-factory/apps/onia-platform/src/content/legal/privacidad.md) §4 dónde viven, §7 seguridad, §8 retención.
+- **Se puede decir:** ✅ se puede decir hoy. Sale de la política de privacidad publicada (no hay fila en el doc de promesas): servidor privado de Onia, hoy en Estados Unidos (política de privacidad §4); Cloudflare por donde pasa el tráfico y proveedores externos como OpenAI (política §5). Filas de `ONIA_PROMESA_VS_PRODUCTO.md`: L-02 ✅ visto. Catálogo: Política de privacidad (web-factory/apps/onia-platform/src/content/legal/privacidad.md) §4 dónde viven, §7 seguridad, §8 retención.
 - **Cómo se usa:** Es la verdad de la política, incluida la parte incómoda (Estados Unidos, proveedores externos, sin cifrado de disco ni certificaciones). «Cada clínica ve solo lo suyo» y «copias de seguridad diarias» NO se dicen hasta verificarlos en producción: están en «después».
 - **No se dice:** «servidores en Bolivia»; «100 % seguro» o «certificado»; «cifrado total»; «copias de seguridad diarias» (hoy solo en el disco del VPS, restauración sin probar); que la IA no ve nada o que «nada sale del servidor» (la política lista a OpenAI, Cloudflare y Telegram).
 
 
 ## Verificación
 
-_Pendiente: detector de promesas de la web y revisor `haiku` independiente._
+- **Detector de promesas de la web:** 0 promesas en las 5 respuestas (con los 3 casos de precio), sus preguntas de vuelta, «si insiste» y «después» (lo exige scripts/objeciones-8-clinicas.test.mjs).
+- **Revisor independiente (`haiku`, 11-oct):** primera pasada: 4 problemas de fondo y 2 observaciones. Las respuestas decían cosas sin ✅ (mostrarlo sin cuenta demo, «cada cobro registrado con su saldo» E-01, «cada mañana a quién escribirle» G-04), «hoy» abría una factura SIAT futura, y la de datos afirmaba «copias de seguridad diarias» (hoy solo en el disco del VPS, restauración sin probar; ONIA_PLAN_1.0_Y_CAJA.md punto 4) y omitía a los proveedores externos. → Cada respuesta se partió en «hoy» (solo filas ✅ o la política publicada) y «después» (cuando sus filas pasen a ✅); se sacó «hoy» de la de factura y «migración» de la de sistema. Segunda pasada sobre las versiones de hoy: 4 de 5 OK; la de datos decía «algunas funciones usan … Cloudflare», y Cloudflare es la red por donde pasa todo el tráfico → se corrigió; además se acotó «la factura fiscal de sus cobros a pacientes» (el pie de la web dice «EMITE FACTURA» por la factura de la suscripción, E-15 🟡) y «HTTPS» quedó como «entre su navegador y la plataforma». **Sin cerrar:** el revisor leyó documentos y código, no el producto en vivo; la tarjeta de Completo en /precios sigue describiéndolo con el agente de WhatsApp (K-13 ❌; es de Plataforma); no se verificó un override `SUBSCRIPTION_PRICE_*` en producción.
+- **Pruebas automáticas** (`scripts/objeciones-8-clinicas.test.mjs`): precios y planes iguales a los de `onia-platform`; de usted; cortas; sin SIAT como promesa, sin duración de llamada, sin «ejemplo».
 
 
 ## 2. Qué depende de quién
