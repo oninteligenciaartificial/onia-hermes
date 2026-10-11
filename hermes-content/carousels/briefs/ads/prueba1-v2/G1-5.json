@@ -76,7 +76,8 @@
      "EL MENSAJE"
     ],
     "fondo": "verde",
-    "logo": true
+    "logo": true,
+    "pie": "Pida su demostración *gratis*"
    },
    "voz": "Pida su demostración gratis.",
    "zona_de_la_referencia": "R5 cuadro final: corte seco a tarjeta de color plano con 2-3 líneas grandes en mayúsculas y el logo. Sin botón dentro del video."
@@ -144,6 +145,11 @@
    "filas": [
     "L-04"
    ]
+  },
+  {
+   "frase": "Escribirle a cada paciente se come la hora más tranquila de la mañana (texto principal)",
+   "fuente": "Hecho del negocio del dueño; no es función de Onia ni promete un resultado.",
+   "filas": []
   }
  ],
  "no_dice": [

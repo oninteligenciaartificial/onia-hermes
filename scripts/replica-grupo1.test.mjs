@@ -189,3 +189,13 @@ test("están renderizados: los cuadros de cada video (o la imagen) y la hoja «r
     assert.ok(existsSync(aRuta(`${DIR}/${b.id}-hoja.md`)), `${b.id}: falta su hoja escrita (${b.id}-hoja.md)`);
   }
 });
+
+test("el renderer pone «Pantalla de Onia · datos de ejemplo» en CADA lugar donde muestra nombres de pacientes (rojo del verificador, 11-oct)", () => {
+  // El 11-oct el verificador (haiku) marcó 4 rojos: una tarjeta con «Martín Arteaga Rojas» sin leyenda se lee como un cliente real.
+  const fuente = leer(".claude/skills/onia-ventas-pauta/scripts/replica-render.mjs");
+  const leyendas = fuente.match(/Pantalla de Onia · datos de ejemplo/g) ?? [];
+  assert.ok(leyendas.length >= 3, `la leyenda aparece ${leyendas.length} veces; hacen falta 3: tarjeta flotante, tarjeta centrada y la imagen`);
+  assert.ok(/if \(flotando\) \{[\s\S]{0,400}datos de ejemplo/.test(fuente), "la tarjeta flotante lleva su leyenda");
+  assert.ok(/if \(!flotando\) cuerpo \+= .{0,200}datos de ejemplo/.test(fuente), "la tarjeta centrada lleva su leyenda");
+  assert.ok(/<div class="rot" style="left:64px;top:924px[^>]*>Pantalla de Onia · datos de ejemplo/.test(fuente), "la imagen 1:1 lleva su leyenda");
+});

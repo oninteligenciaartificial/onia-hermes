@@ -128,6 +128,7 @@ function htmlCuadro(b, c, W, H) {
         ${t === 'cierre' && !c.tarjeta?.logo_abajo ? `<img src="${url(logo)}" style="height:${k === 'hoja' ? 170 : 200}px;width:auto">` : ''}
         ${lineas}
         ${t === 'tarjeta' && c.tarjeta?.logo || c.tarjeta?.logo_abajo ? `<img src="${url(logo)}" style="height:${hist ? 150 : 130}px;width:auto;margin-top:6px">` : ''}
+        ${c.tarjeta?.pie ? `<div style="font-size:54px;font-weight:700;color:${fg};margin-top:14px;letter-spacing:-.01em">${marcar(c.tarjeta.pie)}</div>` : ''}
         ${c.tarjeta?.boton ? `<span class="btn" style="font-size:40px;padding:26px 52px;margin-top:20px">${wa()}${esc(c.tarjeta.boton)}</span>` : ''}
       </div>`;
   }
@@ -139,6 +140,10 @@ function htmlCuadro(b, c, W, H) {
     const top0 = flotando ? Math.round(H * (c.pantalla.y ?? (hist ? 0.6 : 0.62))) : Math.round(H * 0.3);
     const marco = flotando ? 'transform:rotate(-2deg);left:' + Math.round((W - ancho - 44) / 2 + 18) + 'px;' : 'left:' + Math.round((W - ancho - 44) / 2) + 'px;';
     cuerpo += filas.map((id, i) => fila(id, ancho, `${marco}top:${top0 + i * 190}px`)).join('');
+    if (flotando) {
+      const alto = Math.round((ancho * FILAS[filas[filas.length - 1]].h) / FILAS[filas[filas.length - 1]].w) + 40;
+      cuerpo += `<div class="rot" style="left:0;right:0;text-align:center;top:${top0 + (filas.length - 1) * 190 + alto + 14}px;font-size:28px">Pantalla de Onia · datos de ejemplo</div>`;
+    }
     if (!flotando) cuerpo += `<div class="rot" style="left:${Math.round((W - ancho - 44) / 2)}px;top:${top0 - 62}px">Pantalla de Onia · datos de ejemplo</div>`;
   }
   if (c.subtitulo) {
@@ -165,7 +170,8 @@ function htmlEstatico(b) {
   <img class="abs" src="${url(PERSONA.src)}" style="width:650px;height:${Math.round((650 * PERSONA.h) / PERSONA.w)}px;right:-18px;bottom:0">
   ${filas[1] ? fila(filas[1], 560, 'left:64px;top:614px;transform:rotate(-1.5deg)') : ''}
   ${fila(filas[0], 930, 'left:44px;top:756px')}
-  <div class="abs" style="left:64px;top:938px"><span class="btn" style="font-size:42px;padding:26px 50px">${wa()}${esc(e.boton || 'Escríbanos por WhatsApp')}</span></div>`;
+  <div class="rot" style="left:64px;top:924px;font-size:26px">Pantalla de Onia · datos de ejemplo</div>
+  <div class="abs" style="left:64px;top:968px"><span class="btn" style="font-size:42px;padding:26px 50px">${wa()}${esc(e.boton || 'Escríbanos por WhatsApp')}</span></div>`;
 }
 
 const pagina = (W, H, cuerpo, fondo) => `<!doctype html><html><head><meta charset="utf-8"><style>${CSS}
