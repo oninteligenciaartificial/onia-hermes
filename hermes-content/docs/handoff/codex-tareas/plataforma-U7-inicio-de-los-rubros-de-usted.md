@@ -1,4 +1,4 @@
-estado: pendiente
+estado: en curso (Codex Sol, lanzada por la madre el 11-oct antes de las 09:31 UTC)
 modelo: gpt-6.1-sol
 carril: plataforma
 origen: E10 y E16 de Hermes (11-oct): el Inicio de comercio e importadora sigue de vos. Escrita el 11-oct por Plataforma (session_01HhnFgkeF6nLGvjrfjt1o2C). Va después de #152, que dejó de usted el Inicio de los rubros con agenda y trae el gate por pantalla.

@@ -1,4 +1,4 @@
-estado: pendiente
+estado: en curso (Codex Astra, lanzada por la madre el 11-oct antes de las 09:31 UTC)
 modelo: gpt-6-astra (seguridad)
 carril: plataforma
 origen: nota de Codex en U4 (#148: «el registro ya revelaba si un correo existe») y pedido de la madre del 11-oct. Escrita el 11-oct por Plataforma (session_01HhnFgkeF6nLGvjrfjt1o2C). Líneas medidas en la rama de #152 con U4 adentro; en `master` cambian solo los textos.
