@@ -1,13 +1,13 @@
-Cronograma de voz ESTIMADO (17 car/s; no hay voz): 219 caracteres con saltos (cupo 381; ≈ 255 caben en 15 s), 8 líneas, 360 cuadros = 15.000 s
-CTA (L8) empieza a 12.167 s: 2.833 s de exposición (mínimo 2,4); cola sin voz 0.892 s (el único hueco ≥ 0,3 s)
+Cronograma de voz ESTIMADO (17 car/s; no hay voz): 223 caracteres con saltos (cupo 381; ≈ 255 caben en 15 s), 8 líneas, 360 cuadros = 15.000 s
+CTA (L8) empieza a 12.375 s: 2.625 s de exposición (mínimo 2,4); cola sin voz 0.684 s (el único hueco ≥ 0,3 s)
 línea  caract   voz_ini   voz_fin  tramo_fin  hueco  pantalla que coincide
   L1      25     0.000     1.471      1.708  0.24  —
   L2      14     1.708     2.532      2.750  0.22  —
-  L3      20     2.750     3.926      4.167  0.24  #cap-r3 entra a 3 s (+0.25 s sobre el inicio de la línea)
-  L4      27     4.167     5.755      6.000  0.25  #tile2 entra a 4.125 s (+-0.04 s sobre el inicio de la línea)
-  L5      28     6.000     7.647      7.875  0.23  #beat-a entra a 6.041666666666667 s (+0.04 s sobre el inicio de la línea)
-  L6      33     7.875     9.816     10.042  0.23  #beat-b entra a 8.125 s (+0.25 s sobre el inicio de la línea)
-  L7      32    10.042    11.924     12.167  0.24  #beat-c entra a 10.208333333333334 s (+0.17 s sobre el inicio de la línea)
-  L8      33    12.167    14.108     15.000  0.89  #cta entra a 12.375 s (+0.21 s sobre el inicio de la línea)
+  L3      19     2.750     3.868      4.083  0.22  #cap-r3 entra a 2.75 s (+0.00 s sobre el inicio de la línea)
+  L4      27     4.083     5.672      5.917  0.25  #tile2 entra a 4.041666666666667 s (+-0.04 s sobre el inicio de la línea)
+  L5      28     5.917     7.564      7.792  0.23  #beat-a entra a 5.875 s (+-0.04 s sobre el inicio de la línea)
+  L6      38     7.792    10.027     10.250  0.22  #beat-b entra a 7.875 s (+0.08 s sobre el inicio de la línea)
+  L7      32    10.250    12.132     12.375  0.24  #beat-c entra a 10.291666666666666 s (+0.04 s sobre el inicio de la línea)
+  L8      33    12.375    14.316     15.000  0.68  #cta entra a 12.458333333333334 s (+0.08 s sobre el inicio de la línea)
 Las entradas de L3 a L8 se re-miden cuando haya voz real (duraciones.json) y se corrigen en plan.json → eventos.
 EXIT 0

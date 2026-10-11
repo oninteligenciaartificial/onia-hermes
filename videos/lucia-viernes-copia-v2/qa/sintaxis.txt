@@ -27,3 +27,4 @@ ok correr-gates.sh
 ok recortes-arcface.sh
 ok caras-fotos.py
 ok cara-visible.py
+EXIT 0

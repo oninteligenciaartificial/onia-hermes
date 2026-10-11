@@ -6,16 +6,16 @@ negatives_max: 0.224
 
 | Imagen | Parecido (centroid) | Cara (px) | Veredicto |
 | --- | --- | --- | --- |
-| viernes-copia-final-1080x1920_t0.png | 0.829 | 480 | OK |
-| viernes-copia-final-1080x1920_t1.5.png | 0.829 | 480 | OK |
-| viernes-copia-final-1080x1920_t3.5.png | 0.832 | 262 | OK |
-| viernes-copia-final-1080x1920_t5.5.png | 0.817 | 264 | OK |
-| viernes-copia-final-1080x1920_t7.png | 0.817 | 264 | OK |
-| viernes-copia-final-1080x1920_t9.5.png | 0.830 | 479 | OK |
+| viernes-copia-final-1080x1920_t0.png | 0.826 | 472 | OK |
+| viernes-copia-final-1080x1920_t1.5.png | 0.825 | 472 | OK |
+| viernes-copia-final-1080x1920_t3.5.png | 0.833 | 262 | OK |
+| viernes-copia-final-1080x1920_t5.5.png | 0.828 | 263 | OK |
+| viernes-copia-final-1080x1920_t7.png | 0.828 | 263 | OK |
+| viernes-copia-final-1080x1920_t9.5.png | 0.833 | 478 | OK |
 | viernes-copia-final-1080x1920_t11.5.png | 0.829 | 479 | OK |
 | viernes-copia-final-1080x1920_t14.png | 0.829 | 479 | OK |
-| master-b2-k4-f84.png | 0.824 | 237 | OK |
-| master-b2-r3-f84.png | 0.831 | 265 | OK |
+| master-b2-k4-f84.png | 0.818 | 237 | OK |
+| master-b2-r3-f84.png | 0.826 | 265 | OK |
 
 ### Referencias (informativas; centroid leave-one-out)
 

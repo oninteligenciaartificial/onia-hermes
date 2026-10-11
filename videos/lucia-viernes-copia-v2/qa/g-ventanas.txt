@@ -1,11 +1,11 @@
-rotulo: 2.875 s / mínimo 2.400 s; 0.000–2.875
-titulo: 2.875 s / mínimo 1.700 s; 0.000–2.875
-dato: 2.292 s / mínimo 2.050 s; 0.583–2.875
-cap-k4: 3.125 s / mínimo 2.400 s; 2.875–6.000
-cap-r3: 2.917 s / mínimo 2.050 s; 3.083–6.000
-tile2: 1.792 s / mínimo 1.700 s; 4.208–6.000
-beat-a: 1.875 s / mínimo 1.700 s; 6.125–8.000
-beat-b: 2.167 s / mínimo 2.050 s; 8.042–10.208
-beat-c: 2.083 s / mínimo 2.050 s; 10.292–12.375
-cta: 2.583 s / mínimo 2.400 s; 12.417–15.000
-Beats en orden estricto: beat-a 1.88 s (pide 1.70) · beat-b 2.17 s (pide 2.05) · beat-c 2.08 s (pide 2.05) · cta 2.58 s (pide 2.40); suman 8.20 s pedidos contra 8.88 s desde la entrada del beat A (19 palabras en 4 beats, máximo 6 por beat)
+rotulo: 2.625 s / mínimo 2.400 s; 0.000–2.625
+titulo: 2.625 s / mínimo 1.700 s; 0.000–2.625
+dato: 2.208 s / mínimo 2.050 s; 0.417–2.625
+cap-k4: 3.208 s / mínimo 2.400 s; 2.625–5.833
+cap-r3: 3.000 s / mínimo 2.400 s; 2.833–5.833
+tile2: 1.708 s / mínimo 1.700 s; 4.125–5.833
+beat-a: 1.792 s / mínimo 1.700 s; 5.958–7.750
+beat-b: 2.500 s / mínimo 2.400 s; 7.792–10.292
+beat-c: 2.083 s / mínimo 2.050 s; 10.375–12.458
+cta: 2.500 s / mínimo 2.400 s; 12.500–15.000
+Beats en orden estricto: beat-a 1.79 s (pide 1.70) · beat-b 2.50 s (pide 2.40) · beat-c 2.08 s (pide 2.05) · cta 2.50 s (pide 2.40); suman 8.55 s pedidos contra 9.04 s desde la entrada del beat A (20 palabras en 4 beats, máximo 6 por beat)

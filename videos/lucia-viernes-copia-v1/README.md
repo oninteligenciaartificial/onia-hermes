@@ -3,7 +3,7 @@
 Reel corto del viernes (PLAN.md §4-bis), MUDO, 1080×1920, 24 fps, **360 cuadros / 15,0 s**, con HyperFrames. **0 créditos**, solo material que ya existía: la imagen «café con teclado» de Kling O1 Image (K4, `img-omni-image-k4cafe-dad464de.png`, 1536×2720) y la foto de entrada R3 (`R3_casi_frontal.png`, 1792×2400). La compuso y la renderizó la sesión Lucía (editor, contenedor Linux) el 11-oct-2026 partiendo de la estructura de `videos/lucia-p9-luz-cara` (build que valida cifras contra las fuentes, gates, mutaciones) y de las fotos fijas de G4 v2. **v1.1 = la v1 con la revisión 1 aplicada en un solo ciclo** (`qa/revision-1.md`, 1 ALTA · 2 MEDIA · 5 BAJA; ver «Revisión 1: qué se hizo»). Sin Git, voz, publicación, instalaciones ni descargas. Fuera de esta carpeta no se tocó nada.
 
 <!-- ESTADO -->
-**LISTA PARA MOSTRAR (11-oct, v1.1 + pie de la revisión 2).** Master SHA `5862aa44…5930` (mudo, 15,0 s, 0 cr), 19 gates en exit 0, 95 mutaciones rechazadas, revisor independiente (sonnet): 0 ALTA; verificador mecánico (haiku): 18 de 19 PASS, el FAIL fue un artefacto del encargo («piso 0,70» aparece 3 veces en `index.html`, pero solo una es la marca visible). Falta, antes de publicar: el orden respecto de G4 y C2 (M4) y «mostrada, publicá el viernes». Sigue MUDO; la voz no existe (cronograma de 223 caracteres, ver «Voz futura»). El master v1 (`ae3a3d42…0cabd`) queda solo como evidencia en `renders/master-v1-ae3a3d42.mp4`: **no publicarlo**.
+**SUPERADA POR LA v2 (`videos/lucia-viernes-copia-v2/`, 11-oct): no publicar este master (SHA `5862aa44…5930`).** La madre marketing decidió simplificar la placa de 6 a 15 s (una idea por pantalla, letra ≥ 48 px, la cara a la vista, datos al pie). Este README queda como historia de la v1.1.
 <!-- FIN ESTADO -->
 
 ## Master

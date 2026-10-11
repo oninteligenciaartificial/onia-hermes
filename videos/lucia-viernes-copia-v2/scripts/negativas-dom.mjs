@@ -5,10 +5,11 @@ const idx=path.join(P,'index.html'),bueno=fs.readFileSync(idx,'utf8'),md5=s=>cry
 const casos=[
  ['una BARRA del gráfico en la pantalla (la marca del piso 0,70 dentro del beat B)','layout-dom',h=>h.replace('<b class="num">0,56–0,73</b>','<b class="num">0,56–0,73</b><i class="piso" style="left:70%"></i>')],
  ['«Promedio de las 4» como texto de un beat','grep-prohibidas',h=>h.replace('Con esa foto:','Promedio de las 4:')],
- ['la banda gris de las fotos oficiales en el DOM','layout-dom',h=>h.replace('<span class="lb">Con las otras 7:</span>','<span class="lb">Con las otras 7:</span><i class="banda"></i>')],
+ ['la banda gris de las fotos oficiales en el DOM','layout-dom',h=>h.replace('<span class="lb">Con sus otras 7 fotos:</span>','<span class="lb">Con sus otras 7 fotos:</span><i class="banda"></i>')],
  ['la etiqueta del beat A a 40 px (< 48)','medir-dom',h=>h.replace('</style>','#beat-a .lb{font-size:40px!important}</style>')],
  ['un texto de la escena 2 a 36 px (< 40 absoluto)','layout-dom',h=>h.replace('</style>','#tile2{font-size:36px!important}</style>')],
  ['DOS IDEAS a la vez (el beat C siempre visible sobre el B)','medir-dom',h=>h.replace('</style>','#beat-c{opacity:1!important}</style>')],
+ ['el rótulo de IA a 47 px (TODO texto visible ≥ 48 px, sin excepción)','layout-dom',h=>h.replace('</style>','#rotulo{font-size:47px!important}</style>')],
  ['sin la cara de la escena 3 (la foto oculta: fondo negro de 8 a 15 s)','layout-dom',h=>h.replace('</style>','#foto-s3{display:none!important}</style>')],
  ['sin la cara de la escena 1 (la foto oculta)','layout-dom',h=>h.replace('</style>','#foto-s1{display:none!important}</style>')]];
 const lines=['Pruebas negativas del DOM (v2): cada alteración de index.html tiene que hacer fallar su gate (exit ≠ 0); después se restaura el index.html y se comprueba el md5.',`md5 del index.html bueno: ${md5(bueno)}`];

@@ -1,17 +1,17 @@
 Medida DOM (Chromium real, fuentes de marca locales) de cada tile en reposo: top, alto, borde inferior y ancho de cada línea (interior 866 px).
 
-rotulo     (s1 t=2.5s, opacidad 1.00) x   80 w  920  y    1176 →  1248.4  alto   72.4  líneas [644]
-titulo     (s1 t=2.5s, opacidad 1.00) x   80 w  920  y    1272 →  1369.9  alto   97.9  líneas [657]
-dato       (s1 t=2.5s, opacidad 1.00) x   80 w  920  y    1394 →  1470.8  alto   76.8  líneas [612]
+rotulo     (s1 t=2s, opacidad 1.00) x   80 w  920  y    1172 →  1248.8  alto   76.8  líneas [702]
+titulo     (s1 t=2s, opacidad 1.00) x   80 w  920  y    1273 →  1370.9  alto   97.9  líneas [657]
+dato       (s1 t=2s, opacidad 1.00) x   80 w  920  y    1395 →  1471.8  alto   76.8  líneas [612]
 cap-k4     (s2 t=4s, opacidad 1.00) x   80 w  440  y    1194 →    1324  alto    130  líneas [295,294]
-cap-r3     (s2 t=4s, opacidad 1.00) x  560 w  440  y    1194 →    1324  alto    130  líneas [223,240]
+cap-r3     (s2 t=4s, opacidad 1.00) x  560 w  440  y    1194 →    1324  alto    130  líneas [266,346]
 tile2      (s2 t=5.5s, opacidad 1.00) x   80 w  920  y    1344 →  1425.2  alto   81.2  líneas [591]
 beat-a     (s2 t=7s, opacidad 1.00) x   80 w  920  y    1194 →  1395.6  alto  201.6  líneas [314,203]
 cta        (s3 t=14s, opacidad 1.00) x   80 w  920  y    1194 →  1365.8  alto  171.8  líneas [694,351]
-beat-b     (s3 t=9.5s, opacidad 1.00) x   80 w  920  y    1194 →  1395.6  alto  201.6  líneas [360,444]
+beat-b     (s3 t=9.5s, opacidad 1.00) x   80 w  920  y    1194 →  1395.6  alto  201.6  líneas [509,444]
 beat-c     (s3 t=11.5s, opacidad 1.00) x   80 w  920  y    1194 →  1363.3  alto  169.3  líneas [309,592]
 
-Borde inferior máximo: 1470.8 (tope 1490) · borde superior mínimo: 1176.0 (mínimo 292)
+Borde inferior máximo: 1471.8 (tope 1490) · borde superior mínimo: 1172.0 (mínimo 292)
 Foto foto-s1 a 1 s: 1080×1920 px, visible
 Foto foto-k4 a 5 s: 540×956 px, visible
 Foto foto-r3 a 5 s: 642×860 px, visible
@@ -19,26 +19,26 @@ Foto foto-s3 a 9 s: 1080×1920 px, visible
 Elementos de gráfico en el DOM: 0 (deben ser 0)
 Casilla de los beats: y 1194 · 1194 · 1194 · 1194 (iguales)
 Líneas de beat-a: 314 / 203 px
-Líneas de beat-b: 360 / 444 px
+Líneas de beat-b: 509 / 444 px
 Líneas de beat-c: 309 / 592 px
 Líneas de cta: 694 / 351 px
-Líneas de cap-r3: 223 / 240 px
-Huecos de s1: rótulo→título 23.6 · título→dato 24.1 · s2: rótulos→tile2 20.0
+Líneas de cap-r3: 266 / 346 px
+Huecos de s1: rótulo→título 24.2 · título→dato 24.1 · s2: rótulos→tile2 20.0
 Tamaños de letra a 1080 px de ancho (cada nodo de texto medido en el DOM; el mínimo absoluto es 40 px, general 44 px y 48 px en los textos grandes: letra de beats ≥ 56 px).
 
 texto | nodo (tamaño · fuente) | contenido | mínimo exigido
 ---|---|---|---
-rotulo | 44 px · DM Sans | Lucía Antelo · personaje IA de Onia | 44
+rotulo | 48 px · DM Sans | Lucía Antelo · personaje IA de Onia | 48
 titulo | 66 px · Bricolage Grotesque | Casi publico este 0,83. | 48
-dato | 48 px · DM Sans | Kling O1 Image · parecido 0,83 | 44
+dato | 48 px · DM Sans | Kling O1 Image · parecido 0,83 | 48
 cap-k4 | 48 px · DM Sans | Kling O1 Image una sola toma. | 48
-cap-r3 | 48 px · DM Sans | Mirá la foto que recibió. | 48
+cap-r3 | 48 px · DM Sans | Mirá una foto suya que recibió. | 48
 tile2 | 52 px · DM Sans | Misma pose, ventana, taza. | 48
 beat-a | 56 px · DM Sans | Con esa foto: | 48
 beat-a | 112 px · Bricolage Grotesque | 0,93 | 48
 cta | 66 px · Bricolage Grotesque | Seguime: cada semana, una prueba. | 48
-beat-b | 56 px · DM Sans | Con las otras 7: | 48
+beat-b | 56 px · DM Sans | Con sus otras 7 fotos: | 48
 beat-b | 112 px · Bricolage Grotesque | 0,56–0,73 | 48
 beat-c | 64 px · Bricolage Grotesque | Casi copia: no prueba identidad. | 48
 
-Letra más chica de toda la pieza: 44 px.
+Letra más chica de toda la pieza: 48 px.

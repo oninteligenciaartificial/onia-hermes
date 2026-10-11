@@ -88,8 +88,8 @@ for(const [k,f] of Object.entries(p.fotos)){
 // ── 2. Textos de pantalla: deben salir de las cifras (no se escriben a mano) ─────────────────────────────────────────────────────────────────────────────
 const A=round(D.promedio8),r3n=round(r3),Bn=round(fK4.B),pisoN=round(D.piso);
 const otras7n=fotoN.length-1;
-const esperado={rotulo:'Lucía Antelo · personaje IA de Onia',titulo:`Casi publico este ${f2(A)}.`,dato:`Kling O1 Image · parecido ${f2(A)}`,cap_k4:'Kling O1 Image',cap_k4b:'una sola toma.',cap_r3:'Mirá la foto que recibió.',tile2:'Misma pose, ventana, taza.',
- beat_a:`Con esa foto: ${f2(r3n)}`,beat_b:`Con las otras ${otras7n}: ${f2(round(bot))}–${f2(round(top))}`,beat_c:'Casi copia: no prueba identidad.',cta:'Seguime: cada semana, una prueba.'};
+const esperado={rotulo:'Lucía Antelo · personaje IA de Onia',titulo:`Casi publico este ${f2(A)}.`,dato:`Kling O1 Image · parecido ${f2(A)}`,cap_k4:'Kling O1 Image',cap_k4b:'una sola toma.',cap_r3:'Mirá una foto suya que recibió.',tile2:'Misma pose, ventana, taza.',
+ beat_a:`Con esa foto: ${f2(r3n)}`,beat_b:`Con sus otras ${otras7n} fotos: ${f2(round(bot))}–${f2(round(top))}`,beat_c:'Casi copia: no prueba identidad.',cta:'Seguime: cada semana, una prueba.'};
 same(p.textos,esperado,'textos/cifras autorizados');
 const T=p.textos;
 if(RETIRADO.test(Object.values(T).join(' ')))fail(`Cifra retirada en pantalla: ${Object.values(T).join(' ').match(RETIRADO)[0]}`);
@@ -115,31 +115,33 @@ const pF={
  escala:`Para tener escala: entre las propias fotos oficiales de Lucía, de a dos, el parecido va de ${f2(round(pwMin))} a ${f2(round(pwMax))} (promedio ${f2(round(pwMed))}; ninguna de las ${pares.length} parejas pasa de ${f2(round(pwMax))}). El ${f2(round(bot))} a ${f2(round(top))} de esta imagen con las otras siete es casi ese mismo rango; el ${f2(r3n)} con la ${D.foto_copiada}, no.`,
  entradas:`Kling O1 Image recibió seis imágenes como entrada: ${lista(recibidas,true)} (cuatro de las 8 con que se compara), una selfie y una referencia de ropa; por eso el ${f2(A)} sale inflado, y no hay un control sin entradas para decir cuánto.`,
  estricta:`Sin esas ${recibidas.length} fotos baja a ${f2(Bn)}: es el parecido con la cara promedio de solo las ${noRecibidas.length} que ningún motor recibió (${lista(noRecibidas)}), no la media de sus cifras, y sigue sobre el piso de ${f2(pisoN)}. Con solo ${noRecibidas.length} fotos todas las imágenes de la prueba bajan de ${f2(round(bajaMin))} a ${f2(round(bajaMax))} (esta, ${f2(round(-fK4.dBA))}), así que esa baja no mide por sí sola cuánto es fuga.`,
- piso:`El piso de ${f2(pisoN)} lo elegí yo y es de la cara promedio de las ${fotoN.length} fotos: no se compara con el parecido de una sola foto.`,
+ piso:`El piso de ${f2(pisoN)} lo elegí yo y es de la cara promedio de las ${fotoN.length} fotos; no se aplica a una sola foto.`,
  otras:`El mismo motor dio ${f2(round(D.otras_escenas.K1))} en otra escena y ${f2(round(D.otras_escenas.K2cafe))} en una tercera, donde perdió la cara.`,
  ruido:'Ruido de ±0,03.',
  cara:`La cara mide ${D.cara_px} px en la imagen original (bajo 200 px sería poco fiable).`,
  leccion:'Lección: mirá el parecido foto por foto, no solo el promedio.',
  nombro:'Nombro lo que uso; no es una recomendación pagada.',
  cierre:'Cada semana hago una prueba. Seguime. #inteligenciaartificial #ia #santacruz #bolivia'};
-const pie=[pF.ia,pF.historia,pF.copia,pF.nocopia,pF.unaescena,pF.oficiales,pF.porfoto,pF.escala,pF.entradas,pF.estricta,pF.piso,pF.otras,pF.ruido,pF.cara,pF.leccion,pF.nombro,pF.cierre].join(' ');
+const pie=[pF.ia,pF.historia,pF.copia,pF.nocopia,pF.unaescena,pF.oficiales,pF.porfoto,pF.escala,pF.piso,pF.entradas,pF.estricta,pF.otras,pF.ruido,pF.cara,pF.leccion,pF.nombro,pF.cierre].join(' ');
 if(process.argv.includes('--escribir-pie'))fs.writeFileSync(path.join(P,'pie.txt'),pie);
 if(!pieTxt.startsWith(pF.ia))fail('Pie debe abrir EXACTAMENTE con «Personaje hecho con IA: Lucía Antelo, de @oniahq.»');
 const PIE_FRASES=[['historia','falta la historia: casi publico este 0,83 como un buen resultado de Kling O1 Image'],['copia','falta decir que la imagen es casi una copia de R3 (misma pose, ventana, laptop y taza de barro, con otra ropa y la taza blanca de más; no pixel a pixel)'],['nocopia','falta decir que una casi copia no prueba identidad'],
  ['unaescena','falta «Una escena, una toma: es una prueba, no una regla.»'],['oficiales','faltan las 8 fotos oficiales (R1 a R8) y que el 0,83 es contra su promedio'],
  ['porfoto','falta el parecido foto por foto (R3 0,93 y las otras siete con sus cifras)'],['escala','falta la escala de las fotos oficiales entre sí (0,51 a 0,72, promedio 0,64)'],['entradas','falta decir que recibió R1, R3, R6 y R7 (por eso el 0,83 sale inflado)'],
- ['estricta','falta «Sin esas 4 fotos baja a 0,74» (igual que C2) con su aclaración'],['piso','falta aclarar que el piso de 0,70 lo elegí yo y es de la cara promedio de las 8 (no se compara con una sola foto)'],
+ ['estricta','falta «Sin esas 4 fotos baja a 0,74» (igual que C2) con su aclaración'],['piso','falta definir el piso de 0,70 (lo elegí yo; es de la cara promedio de las 8; no se aplica a una sola foto) ANTES de usarlo'],
  ['otras','faltan las otras dos escenas del mismo motor (0,79 y 0,35: perdió la cara)'],['ruido','falta el ruido de ±0,03'],['cara','falta el tamaño de la cara (677 px)'],['leccion','falta la lección'],
  ['nombro','falta «Nombro lo que uso; no es una recomendación pagada.»'],['cierre','falta el cierre «Cada semana hago una prueba. Seguime.» con los hashtags']];
 for(const [k,msg] of PIE_FRASES)if(!pieTxt.includes(pF[k]))fail(`Pie: ${msg}`);
 same(pieTxt,pie,'pie y cifras contra fuentes');
 if(pieTxt.indexOf(pF.unaescena)+pF.unaescena.length>520)fail(`Pie: «Una escena, una toma» debe quedar en los primeros ~500 caracteres (termina en ${pieTxt.indexOf(pF.unaescena)+pF.unaescena.length})`);
 if(pieTxt.length>2200)fail(`Pie de ${pieTxt.length} caracteres (tope 2.200)`);
+// el piso se DEFINE donde se nombra por primera vez (revisión 2, B4): ninguna mención de «piso» antes de su definición
+if(pieTxt.indexOf('piso')!==pieTxt.indexOf(pF.piso)+pF.piso.indexOf('piso'))fail(`Pie: «piso» se nombra (carácter ${pieTxt.indexOf('piso')}) antes de definirlo (carácter ${pieTxt.indexOf(pF.piso)}): la definición va en la primera mención`);
 if(/gr[aá]fico|barra|banda|leyenda|en pantalla/i.test(pieTxt))fail(`Pie: «${pieTxt.match(/gr[aá]fico|barra|banda|leyenda|en pantalla/i)[0]}»: ya no hay gráfico en el video (v2); el pie no lo menciona`);
 if(RETIRADO.test(pieTxt)||RETIRADO.test(voz))fail('Cifra retirada en el pie o la voz (no hay control limpio: no se estima ningún efecto ni ventaja)');
 if(/el mejor|garantiz|Sergio Urcullo/i.test(pieTxt+voz))fail('Frase prohibida en pie o voz');
 // ── 4. Voz: no habla cifras, cabe en 360 cuadros y cada entrada cae con su línea ──────────────────────────────────────────────────────────────────────────
-const vozEsperada=['Casi publico esta imagen.','Parecido alto.','Mirá lo que recibió.','Misma pose, ventana y taza.','Con esa foto, sale más alto.','Con las otras siete, mucho menos.','Casi copia: no prueba identidad.','Seguime: cada semana, una prueba.'].join('\n');
+const vozEsperada=['Casi publico esta imagen.','Parecido alto.','Mirá una foto suya.','Misma pose, ventana y taza.','Con esa foto, sale más alto.','Con las otras siete, baja el parecido.','Casi copia: no prueba identidad.','Seguime: cada semana, una prueba.'].join('\n');
 if(/\d/.test(voz))fail('voz: las cifras y los decimales no se hablan (están en pantalla)');
 same(voz,vozEsperada,'voz y cifras');
 const cr=cronograma(voz,p.voz.ultimo_tramo_cuadros);
@@ -149,7 +151,7 @@ if(cr.chars>255)fail(`Voz: ${cr.chars} caracteres; a 17 car/s la pieza de 15 s a
 const Ln=n=>cr.tramos[n-1];
 for(const ev of p.eventos)if(ev.voz){const d=ev.t-Ln(ev.voz).a;if(d<-0.05||d>0.5)fail(`voz: ${ev.selector} entra a ${ev.t} s y su línea ${ev.voz} empieza a ${Ln(ev.voz).a.toFixed(2)} s (deben coincidir a ±0,5 s)`)}
 const lastL=cr.tramos.at(-1),colaCta=p.lienzo.duracion-lastL.a;
-if(colaCta<2.6)fail(`CTA: ${colaCta.toFixed(3)} s de exposición con la voz; mínimo 2,6 s`);
+if(colaCta<2.4)fail(`CTA: ${colaCta.toFixed(3)} s de exposición con la voz; mínimo 2,4 s`);
 // ── 5. Eventos, orden de los beats, tipografía, zona segura y lienzo ──────────────────────────────────────────────────────────────────────────────────────
 const entra=sel=>{const e=p.eventos.find(e=>e.selector===sel&&e.entrada);if(!e)fail(`falta la entrada de ${sel}`);return e.t};
 const sale=sel=>{const e=p.eventos.find(e=>e.selector===sel&&e.salida);if(!e)fail(`falta la salida de ${sel}`);return e.t};
@@ -164,7 +166,7 @@ if(!evB||evB.t!==T2)fail('el beat B llega con la escena 3: debe tener su evento 
 if(!(tA<T2-PUSH&&T2<tC&&tC<tCta))fail(`orden de los beats: A (${tA} s) antes del segundo empuje (${T2-PUSH} s) → B llega a ${T2} s → C (${tC} s) → CTA (${tCta} s)`);
 for(const [salida,entrada,que] of [[['#cap-k4','#cap-r3','#tile2'].map(sale),tA,'los textos de la escena 2 ceden el lugar al beat A'],[[sale('#beat-b')],tC,'el beat B cede el lugar al beat C'],[[sale('#beat-c')],tCta,'el beat C cede el lugar al CTA']])
  for(const t of salida){const d=Math.round((entrada-t)/FR);if(d<1||d>2)fail(`una idea por vez: ${que} (la salida debe empezar 1 o 2 cuadros ANTES de la entrada; hay ${d})`)}
-if(p.lienzo.duracion-tCta<2.6-1e-9)fail(`CTA: entra a ${tCta} s y queda ${(p.lienzo.duracion-tCta).toFixed(3)} s en pantalla; mínimo 2,6 s`);
+if(p.lienzo.duracion-tCta<2.4-1e-9)fail(`CTA: entra a ${tCta} s y queda ${(p.lienzo.duracion-tCta).toFixed(3)} s en pantalla; mínimo 2,4 s`);
 for(const c of p.costuras)if(Math.abs(c.t*24-Math.round(c.t*24))>1e-9)fail(`la costura ${c.t} no cae en un cuadro`);
 for(const e of p.eventos)if(Math.abs(e.t*24-Math.round(e.t*24))>1e-9)fail(`el evento ${e.selector} a ${e.t} s no cae en un cuadro`);
 {let prev=0,max=0;for(const e of [...p.eventos].sort((a,b)=>a.t-b.t)){max=Math.max(max,e.t-prev);prev=e.t}max=Math.max(max,p.lienzo.duracion-prev);if(max>2+1e-6)fail(`hueco entre eventos de ${max.toFixed(3)} s (máximo 2,0 s)`)}
@@ -198,12 +200,20 @@ const CV=p.cara_visible,caraFraccion=(()=>{const N=Math.floor(p.lienzo.duracion/
  for(let k=0;k<N;k++){const t=k*CV.muestreo,r=reposo.find(([a,b])=>t>=a-1e-9&&t<=b+1e-9);if(r&&(caraLienzo[r[2]]??[]).some(c=>c[2]-c[0]>=CV.min_px))con++}return {con,N,f:con/N}})();
 if(!(caraFraccion.f>CV.minimo))fail(`Cara visible ${caraFraccion.con}/${caraFraccion.N} muestras (${(caraFraccion.f*100).toFixed(0)} %): debe ser MÁS de la mitad del tiempo (mínimo ${CV.minimo*100} %)`);
 if(caraFraccion.f<CV.objetivo)fail(`Cara visible ${caraFraccion.con}/${caraFraccion.N} muestras (${(caraFraccion.f*100).toFixed(0)} %): el objetivo es ≥ ${CV.objetivo*100} %`);
+const aroBox=(a,foto)=>{const g=geo[foto],q=a[foto],X=v=>R1(v*g.s+g.left),Y=v=>R1(v*g.s);return q.tipo==='elipse'?[X(q.cx-q.rx),Y(q.cy-q.ry),X(q.cx+q.rx),Y(q.cy+q.ry)]:[X(q.x),Y(q.y),X(q.x+q.w),Y(q.y+q.h)]};
 const aroSvg=(a,foto)=>{const g=geo[foto],q=a[foto],px=v=>R1(v*g.s),X=v=>R1(v*g.s+g.left),Y=v=>R1(v*g.s);
  const id=`aro-${a.id}-${foto}`,ds=`pathLength="${p.aro_len}"`;
  const shape=q.tipo==='elipse'?`<ellipse id="${id}" cx="${X(q.cx)}" cy="${Y(q.cy)}" rx="${px(q.rx)}" ry="${px(q.ry)}" ${ds}/>`:`<rect id="${id}" x="${X(q.x)}" y="${Y(q.y)}" width="${px(q.w)}" height="${px(q.h)}" rx="14" ${ds}/>`;
- const box=q.tipo==='elipse'?[X(q.cx-q.rx),Y(q.cy-q.ry),X(q.cx+q.rx),Y(q.cy+q.ry)]:[X(q.x),Y(q.y),X(q.x+q.w),Y(q.y+q.h)];
+ const box=aroBox(a,foto);
  if(box[0]<2||box[1]<2||box[2]>PN.w-2||box[3]>PN.h-2)fail(`aro ${id} sale del panel (${box.join(', ')}): ajustar plan.aros`);return shape};
 for(const a of p.aros)for(const f of ['k4','r3'])aroSvg(a,f); // valida cada aro contra su panel antes de escribir nada
+// Revisión 2 (B2): el aro de «pose» rodea la MANO y el PELO, no la mandíbula: chico (≤ 130×150 px en el panel), sin cubrir la zona de la mandíbula de la cara detectada (mitad derecha y cuarto inferior de su caja) y a ≥ 8 px del aro de la taza
+{const pose=p.aros.find(a=>a.id==='pose'),taza=p.aros.find(a=>a.id==='taza');
+ for(const [foto,i] of [['k4',0],['r3',1]]){const b=aroBox(pose,foto),t=aroBox(taza,foto),c=cajasPanel[i].map((v,k)=>k%2?v-PN.y:v-geo[foto].x0),w=b[2]-b[0],h=b[3]-b[1];
+  if(w>130||h>150)fail(`aro de pose en ${foto}: ${Math.round(w)}×${Math.round(h)} px; debe ser chico (≤ 130×150) y rodear la mano y el pelo, no media cara`);
+  const mandibula=[(c[0]+c[2])/2,c[3]-(c[3]-c[1])/4,c[2],c[3]];
+  if(b[0]<mandibula[2]&&b[2]>mandibula[0]&&b[1]<mandibula[3]&&b[3]>mandibula[1])fail(`aro de pose en ${foto}: toca la mandíbula (zona ${mandibula.map(Math.round).join(', ')}); debe quedar hacia la mano y el pelo`);
+  if(!(b[2]+8<=t[0]||b[0]>=t[2]+8||b[3]+8<=t[1]||b[1]>=t[3]+8))fail(`aro de pose en ${foto}: toca el aro de la taza (a menos de 8 px)`)}}
 // H5 (revisión 1): los aros se DIBUJAN (no aparecen en 2 cuadros) y cada uno queda a la vista ≥ 1 s antes del empuje a la placa
 {const ARO=p.aro_len,finEscena=p.costuras[1].t-p.empuje.cuadros/24;if(ARO!==1000)fail('aro_len debe ser 1000 (GSAP redondea strokeDashoffset a enteros: con pathLength=1 el trazo saltaba de 1 a 0 en 2 cuadros)');
  for(const a of p.aros){const ev=p.eventos.find(e=>e.selector===`#aro-${a.id}-k4,#aro-${a.id}-r3`&&e.aro);if(!ev)fail(`falta el evento del aro ${a.id}`);

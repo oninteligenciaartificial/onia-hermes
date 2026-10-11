@@ -1,6 +1,6 @@
 // Auditoría pura: acumula todos los fallos; no abre navegador ni detiene el primer cuadro.
-// v2: además del borde/lateral/solape de v1.1, exige (a) letra mínima por texto medida NODO por NODO (≥ 44 px en general, ≥ 48 px en los textos grandes, nunca < 40),
-// (b) UNA sola idea a ≥ 50 % de opacidad por cuadro fuera de los empujes (plan.grupos), (c) el rótulo de IA en el cuadro 0 a ≥ 44 px.
+// v2: además del borde/lateral/solape de v1.1, exige (a) letra mínima por texto medida NODO por NODO (v2 pasada 2: TODO texto visible ≥ 48 px, sin excepción; el rótulo de IA también),
+// (b) UNA sola idea a ≥ 50 % de opacidad por cuadro fuera de los empujes (plan.grupos), (c) el rótulo de IA en el cuadro 0 a ≥ 48 px.
 export function auditarDom(rows,reads,faces,plan){
  const fallos=[];let count=0,min=Infinity;
  const add=(ok,rule,id,row,value,limit)=>{if(!ok)fallos.push({regla:rule,id,cuadro:row?.f??null,tiempo:row?.t??null,valor:value,limite:limit});};

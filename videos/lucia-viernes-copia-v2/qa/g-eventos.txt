@@ -1,26 +1,26 @@
 0.000: gancho: el error en el cuadro 0
-0.500: primer número antes de 3 s
+0.333: primer número antes de 3 s
 1.750: acento del parecido
-3.000: entra la foto que recibió (empuje de 6 cuadros)
-3.000: entra «mirá la foto que recibió»
-3.875: acento de la foto recibida
-4.125: entra «misma pose, ventana, taza»
-4.125: aro: cabeza apoyada en la mano (se dibuja en 0,6 s)
-4.500: aro: marco de la ventana (se dibuja en 0,6 s)
-4.875: aro: taza junto a la laptop (se dibuja en 0,6 s)
-4.875: acento del texto de las coincidencias
-5.958: sale el rótulo de K4 (cede el lugar al beat A)
-5.958: sale «mirá la foto que recibió»
-5.958: sale «misma pose, ventana, taza»
-6.042: BEAT A: «con esa foto: 0,93» sobre las dos caras
-6.792: acento del 0,93
-8.125: entra K4 a pantalla completa (empuje de 6 cuadros)
-8.125: BEAT B: «con las otras 7: 0,56–0,73» llega con la foto
-9.000: acento del rango
-10.167: sale el beat B
-10.208: BEAT C: «casi copia: no prueba identidad»
+2.750: entra la foto que recibió (empuje de 6 cuadros)
+2.750: entra «mirá una foto suya que recibió»
+3.625: acento de la foto recibida
+4.042: entra «misma pose, ventana, taza»
+4.042: aro: la mano y el pelo (se dibuja en 0,6 s)
+4.417: aro: marco de la ventana (se dibuja en 0,6 s)
+4.792: aro: taza junto a la laptop (se dibuja en 0,6 s)
+4.792: acento del texto de las coincidencias
+5.792: sale el rótulo de K4 (cede el lugar al beat A)
+5.792: sale «mirá una foto suya que recibió»
+5.792: sale «misma pose, ventana, taza»
+5.875: BEAT A: «con esa foto: 0,93» sobre las dos caras
+6.625: acento del 0,93
+7.875: entra K4 a pantalla completa (empuje de 6 cuadros)
+7.875: BEAT B: «con sus otras 7 fotos: 0,56–0,73» llega con la foto
+8.750: acento del rango
+10.250: sale el beat B
+10.292: BEAT C: «casi copia: no prueba identidad»
 11.250: acento de la conclusión
-12.333: sale el beat C
-12.375: CTA
-13.750: acento una prueba semanal
-25 eventos, hueco máximo 1.375 s
+12.417: sale el beat C
+12.458: CTA
+13.833: acento una prueba semanal
+25 eventos, hueco máximo 1.500 s

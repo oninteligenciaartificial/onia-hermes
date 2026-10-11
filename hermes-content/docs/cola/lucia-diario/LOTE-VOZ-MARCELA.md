@@ -14,7 +14,7 @@
 
 | Pieza | Líneas | Caracteres | ≈ Segundos hablados | ¿Cabe en 381? | Recorte para caber |
 |---|---:|---:|---:|---|---|
-| **Reel viernes** «Casi publico este 0,83» (`videos/lucia-viernes-copia-v1/`, v1.1; sale el vie 16-oct) | 8 | **223** (sin saltos finales) | 13,1 | **Sí, sobran 158** (alcanza una retoma completa) | — (la línea «Mirá la foto que recibió.» y el CTA se retemporizan con `scripts/voz.mjs` y `retemporizar.mjs`; antes de generar, L5 «mucho más alto» se cambia a «más alto», B6 de su revisión) |
+| **Reel viernes** «Casi publico este 0,83» (`videos/lucia-viernes-copia-v2/`, v2 simplificada; sale el vie 16-oct) | 8 | **223** (python `len`, líneas separadas por 1 salto, sin salto final) | 13,1 | **Sí, sobran 158** (alcanza una retoma completa) | — (guion final de v2: «Casi publico esta imagen. / Parecido alto. / Mirá una foto suya. / Misma pose, ventana y taza. / Con esa foto, sale más alto. / Con las otras siete, baja el parecido. / Casi copia: no prueba identidad. / Seguime: cada semana, una prueba.»; sin dígitos; el cronograma se retemporiza con `scripts/voz.mjs` y `retemporizar.mjs` y cada línea ya está calzada con su beat a ±0,5 s; cambiar una línea obliga a recontar y re-correr los gates) |
 | **P9** «¿La cara o la escena?» (`videos/lucia-p9-luz-cara/`, v3.1) | 7 | **311** (305 sin saltos) | 18,3 | **Sí, sobran 70** | — (guion final: sin decimales hablados; L4 de 96 car no admite retoma; el cronograma tiene 0,05 s de margen y pide ≥ 16,85 car/s) |
 | **G3 v2** «Tres errores que casi publico» | 12 | 412 | 24,2 | No (faltan 31) | −8 % (31+ car) |
 | **G2 v2** «Misma orden, seis clips» | 14 | 415 | 24,4 | No (faltan 34) | −9 % |

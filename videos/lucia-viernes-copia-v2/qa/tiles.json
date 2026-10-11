@@ -2,8 +2,8 @@
  {
   "id": "rotulo",
   "text": "Lucía Antelo · personaje IA de Onia",
-  "y": 1176,
-  "size": 44,
+  "y": 1172,
+  "size": 48,
   "card": false,
   "clip": "s1",
   "x": 80,
@@ -12,7 +12,7 @@
  {
   "id": "titulo",
   "text": "Casi publico este 0,83.",
-  "y": 1272,
+  "y": 1273,
   "size": 66,
   "card": true,
   "clip": "s1",
@@ -22,7 +22,7 @@
  {
   "id": "dato",
   "text": "Kling O1 Image · parecido 0,83",
-  "y": 1394,
+  "y": 1395,
   "size": 48,
   "card": true,
   "clip": "s1",
@@ -41,7 +41,7 @@
  },
  {
   "id": "cap-r3",
-  "text": "Mirá la foto que recibió.",
+  "text": "Mirá una foto suya que recibió.",
   "y": 1194,
   "size": 48,
   "card": true,
@@ -81,7 +81,7 @@
  },
  {
   "id": "beat-b",
-  "text": "Con las otras 7: 0,56–0,73",
+  "text": "Con sus otras 7 fotos: 0,56–0,73",
   "y": 1194,
   "size": 56,
   "card": true,

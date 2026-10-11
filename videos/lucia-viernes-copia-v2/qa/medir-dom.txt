@@ -1,2 +1,2 @@
-581 cajas / 360 cuadros; 0 fallos. Margen mínimo mentón-texto 373 px; dato 0.583 s; CTA 2.583 s. Caras: SCRFD sobre las dos fotos (qa/caras-fotos.json).
+573 cajas / 360 cuadros; 0 fallos. Margen mínimo mentón-texto 369 px; dato 0.417 s; CTA 2.500 s. Caras: SCRFD sobre las dos fotos (qa/caras-fotos.json).
 EXIT 0

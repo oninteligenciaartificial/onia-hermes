@@ -160,18 +160,18 @@
   "viernes-copia-final-1080x1920_t0.png": {
    "group": "tests",
    "faces": 1,
-   "det_score": 0.729,
-   "face_px": 480,
+   "det_score": 0.727,
+   "face_px": 472,
    "img": "1080x1920",
-   "flip_self": 0.943
+   "flip_self": 0.935
   },
   "viernes-copia-final-1080x1920_t1.5.png": {
    "group": "tests",
    "faces": 1,
-   "det_score": 0.729,
-   "face_px": 480,
+   "det_score": 0.728,
+   "face_px": 472,
    "img": "1080x1920",
-   "flip_self": 0.942
+   "flip_self": 0.936
   },
   "viernes-copia-final-1080x1920_t3.5.png": {
    "group": "tests",
@@ -179,31 +179,31 @@
    "det_score": 0.817,
    "face_px": 262,
    "img": "1080x1920",
-   "flip_self": 0.934
+   "flip_self": 0.932
   },
   "viernes-copia-final-1080x1920_t5.5.png": {
    "group": "tests",
    "faces": 2,
-   "det_score": 0.816,
-   "face_px": 264,
+   "det_score": 0.825,
+   "face_px": 263,
    "img": "1080x1920",
-   "flip_self": 0.931
+   "flip_self": 0.937
   },
   "viernes-copia-final-1080x1920_t7.png": {
    "group": "tests",
    "faces": 2,
-   "det_score": 0.816,
-   "face_px": 264,
+   "det_score": 0.825,
+   "face_px": 263,
    "img": "1080x1920",
-   "flip_self": 0.931
+   "flip_self": 0.938
   },
   "viernes-copia-final-1080x1920_t9.5.png": {
    "group": "tests",
    "faces": 1,
-   "det_score": 0.728,
-   "face_px": 479,
+   "det_score": 0.731,
+   "face_px": 478,
    "img": "1080x1920",
-   "flip_self": 0.941
+   "flip_self": 0.94
   },
   "viernes-copia-final-1080x1920_t11.5.png": {
    "group": "tests",
@@ -211,7 +211,7 @@
    "det_score": 0.728,
    "face_px": 479,
    "img": "1080x1920",
-   "flip_self": 0.94
+   "flip_self": 0.941
   },
   "viernes-copia-final-1080x1920_t14.png": {
    "group": "tests",
@@ -224,10 +224,10 @@
   "master-b2-k4-f84.png": {
    "group": "tests",
    "faces": 1,
-   "det_score": 0.856,
+   "det_score": 0.857,
    "face_px": 237,
    "img": "540x860",
-   "flip_self": 0.937
+   "flip_self": 0.938
   },
   "master-b2-r3-f84.png": {
    "group": "tests",
@@ -235,7 +235,7 @@
    "det_score": 0.877,
    "face_px": 265,
    "img": "540x860",
-   "flip_self": 0.935
+   "flip_self": 0.934
   },
   "N1_casting_C01": {
    "group": "negatives",
@@ -312,45 +312,45 @@
    "max_ref": 0.67
   },
   "viernes-copia-final-1080x1920_t0.png": {
-   "centroid": 0.829,
-   "mean_ref": 0.687,
-   "min_ref": 0.578,
-   "max_ref": 0.924
+   "centroid": 0.826,
+   "mean_ref": 0.684,
+   "min_ref": 0.57,
+   "max_ref": 0.939
   },
   "viernes-copia-final-1080x1920_t1.5.png": {
-   "centroid": 0.829,
-   "mean_ref": 0.687,
-   "min_ref": 0.575,
-   "max_ref": 0.924
+   "centroid": 0.825,
+   "mean_ref": 0.684,
+   "min_ref": 0.57,
+   "max_ref": 0.938
   },
   "viernes-copia-final-1080x1920_t3.5.png": {
-   "centroid": 0.832,
-   "mean_ref": 0.689,
-   "min_ref": 0.553,
-   "max_ref": 0.958
+   "centroid": 0.833,
+   "mean_ref": 0.69,
+   "min_ref": 0.556,
+   "max_ref": 0.959
   },
   "viernes-copia-final-1080x1920_t5.5.png": {
-   "centroid": 0.817,
-   "mean_ref": 0.677,
-   "min_ref": 0.53,
-   "max_ref": 0.956
+   "centroid": 0.828,
+   "mean_ref": 0.686,
+   "min_ref": 0.545,
+   "max_ref": 0.964
   },
   "viernes-copia-final-1080x1920_t7.png": {
-   "centroid": 0.817,
-   "mean_ref": 0.677,
-   "min_ref": 0.531,
-   "max_ref": 0.955
+   "centroid": 0.828,
+   "mean_ref": 0.686,
+   "min_ref": 0.545,
+   "max_ref": 0.964
   },
   "viernes-copia-final-1080x1920_t9.5.png": {
-   "centroid": 0.83,
-   "mean_ref": 0.687,
-   "min_ref": 0.576,
-   "max_ref": 0.924
+   "centroid": 0.833,
+   "mean_ref": 0.69,
+   "min_ref": 0.578,
+   "max_ref": 0.926
   },
   "viernes-copia-final-1080x1920_t11.5.png": {
    "centroid": 0.829,
    "mean_ref": 0.687,
-   "min_ref": 0.575,
+   "min_ref": 0.574,
    "max_ref": 0.922
   },
   "viernes-copia-final-1080x1920_t14.png": {
@@ -360,16 +360,16 @@
    "max_ref": 0.922
   },
   "master-b2-k4-f84.png": {
-   "centroid": 0.824,
-   "mean_ref": 0.683,
-   "min_ref": 0.57,
-   "max_ref": 0.924
+   "centroid": 0.818,
+   "mean_ref": 0.678,
+   "min_ref": 0.567,
+   "max_ref": 0.92
   },
   "master-b2-r3-f84.png": {
-   "centroid": 0.831,
-   "mean_ref": 0.689,
-   "min_ref": 0.548,
-   "max_ref": 0.954
+   "centroid": 0.826,
+   "mean_ref": 0.684,
+   "min_ref": 0.543,
+   "max_ref": 0.956
   },
   "N1_casting_C01": {
    "centroid": 0.187,

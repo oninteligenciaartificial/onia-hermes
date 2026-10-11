@@ -1,1 +1,1 @@
-360 cuadros; planos 0; quietud fuera de lectura 0.167 s (diferencia media <0,35; termina en 14.958 s).
+360 cuadros; planos 0; quietud fuera de lectura 0.083 s (diferencia media <0,35; termina en 10.250 s).
