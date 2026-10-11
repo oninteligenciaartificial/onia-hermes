@@ -12,7 +12,7 @@ const raiz = fileURLToPath(new URL("../../../../", import.meta.url));
 export const MENSAJES_RUTA = "hermes-content/sales-kit/PRIMER-MENSAJE-8-CLINICAS-11OCT.json";
 export const SALIDA_RUTA = "hermes-content/sales-kit/PRIMER-MENSAJE-8-CLINICAS-11OCT.md";
 const PROMESAS_RUTA = "hermes-content/docs/ONIA_PROMESA_VS_PRODUCTO.md";
-export const FILAS_DE_LAS_QUE_DEPENDE = ["B-01", "C-01", "E-01", "G-01", "G-04", "G-06"];
+export const FILAS_DE_LAS_QUE_DEPENDE = ["B-01", "B-02", "C-01", "E-01", "G-01", "G-04", "G-06"];
 
 const leer = (ruta) => readFileSync(new URL(ruta, `file://${raiz}`), "utf8");
 const fechaLaPaz = (epoch) => new Date((epoch - 4 * 3600) * 1000).toISOString().slice(0, 10);
@@ -44,7 +44,7 @@ export function render() {
 - **Dato de su pauta** (Biblioteca, \`page_id\` ${c.page_id}, leído el 11-oct): ${n} ${n === 1 ? "anuncio activo" : "anuncios activos"} en ${p.moneda}, el más viejo del ${fechaLaPaz(p.starts[0])}. ${esc(c.hecho)}.
 - **Canal propuesto:** ${esc(c.canal.principal)}. Fuente: ${esc(c.canal.fuente)}. Alternativa: ${esc(c.canal.alternativa)}. **Lo envía Sergio Urcullo desde su WhatsApp**, no desde el número del bot (fuera de las 24 h no sale texto libre).
 - **Pregunta de calificación:** ${c.pregunta === "P1" ? "1" : "2"} de \`ONIA_CLIENTE_IDEAL.md\` §9 — ${esc(q)}
-- **Condición de salida:** ${esc(c.salida)}.
+- **Condición de salida:** ${esc(c.salida)}.${c.opcional ? `\n- **Línea opcional**, solo si se confirma hoy desde la PC (no está en el mensaje porque no sale de la Biblioteca): «${esc(c.opcional)}».` : ""}
 
 ${c.mensaje
   .split("\n")
@@ -70,10 +70,10 @@ Los 8 mensajes dicen lo mismo del producto: agenda, ficha del paciente y cobros,
 | Fila | Qué se dice | Estado hoy |
 |---|---|---|
 ${estados
-  .map(([id, e]) => `| ${id} | ${{ "B-01": "agenda del día con paciente, hora y profesional", "C-01": "ficha del paciente", "E-01": "cobros con saldo", "G-01": "nada sale sin que usted lo apruebe", "G-04": "cada mañana le deja anotado a quién escribirle", "G-06": "quién tiene cita mañana y no confirmó" }[id]} | ${e} |`)
+  .map(([id, e]) => `| ${id} | ${{ "B-01": "agenda del día con paciente, hora y profesional", "B-02": "cada cita muestra si está confirmada o sin confirmar", "C-01": "ficha del paciente", "E-01": "cobros con saldo", "G-01": "nada sale sin que usted lo apruebe", "G-04": "cada mañana le deja anotado a quién escribirle", "G-06": "quién tiene cita mañana y no confirmó" }[id]} | ${e} |`)
   .join("\n")}
 
-**${abierta ? "Compuerta abierta: no enviar." : "Compuerta cerrada: las seis filas están en ✅."}** ${abierta ? "Con la cuenta demo de Plataforma (12-oct) se verifican y esta tabla se actualiza sola al regenerar. Además, para mostrar «cómo se ve» hace falta esa cuenta demo con datos (L-05); el mensaje no promete una duración (L-04) ni una «clínica de ejemplo»." : ""}
+**${abierta ? "Compuerta abierta: no enviar." : "Compuerta cerrada: las seis filas están en ✅."}** ${abierta ? "Con la cuenta demo de Plataforma (12-oct) se verifican y esta tabla se actualiza sola al regenerar. **Tensión entre documentos:** \`ONIA_ADQUISICION_Y_PAUTA.md\` §7 dice que producción no «confirma citas desde el panel» hasta publicar la 1.0, y estos mensajes hablan de «quién tiene cita mañana y no confirmó» (G-06, que descansa en B-02): hasta verlo en producción, no se envía. Además, para mostrar «cómo se ve» hace falta esa cuenta demo con datos (L-05); el mensaje no promete una duración (L-04) ni una «clínica de ejemplo»." : ""}
 
 ## 2. Antes de enviar cada uno (unos 3 minutos por clínica, desde la PC)
 

@@ -14,13 +14,14 @@ Los 8 mensajes dicen lo mismo del producto: agenda, ficha del paciente y cobros,
 | Fila | Qué se dice | Estado hoy |
 |---|---|---|
 | B-01 | agenda del día con paciente, hora y profesional | ⬜ sin verificar: falta la cuenta |
+| B-02 | cada cita muestra si está confirmada o sin confirmar | ⬜ sin verificar: falta la cuenta |
 | C-01 | ficha del paciente | ⬜ sin verificar: falta la cuenta |
 | E-01 | cobros con saldo | ⬜ sin verificar: falta la cuenta |
 | G-01 | nada sale sin que usted lo apruebe | ⬜ sin verificar: falta la cuenta |
 | G-04 | cada mañana le deja anotado a quién escribirle | ⬜ sin verificar: corre solo, falta el log del VPS |
 | G-06 | quién tiene cita mañana y no confirmó | ⬜ sin verificar: falta la cuenta |
 
-**Compuerta abierta: no enviar.** Con la cuenta demo de Plataforma (12-oct) se verifican y esta tabla se actualiza sola al regenerar. Además, para mostrar «cómo se ve» hace falta esa cuenta demo con datos (L-05); el mensaje no promete una duración (L-04) ni una «clínica de ejemplo».
+**Compuerta abierta: no enviar.** Con la cuenta demo de Plataforma (12-oct) se verifican y esta tabla se actualiza sola al regenerar. **Tensión entre documentos:** `ONIA_ADQUISICION_Y_PAUTA.md` §7 dice que producción no «confirma citas desde el panel» hasta publicar la 1.0, y estos mensajes hablan de «quién tiene cita mañana y no confirmó» (G-06, que descansa en B-02): hasta verlo en producción, no se envía. Además, para mostrar «cómo se ve» hace falta esa cuenta demo con datos (L-05); el mensaje no promete una duración (L-04) ni una «clínica de ejemplo».
 
 ## 2. Antes de enviar cada uno (unos 3 minutos por clínica, desde la PC)
 
@@ -33,16 +34,17 @@ Los 8 mensajes dicen lo mismo del producto: agenda, ficha del paciente y cobros,
 
 ### 1. Clínica Dental Hurtado · candidata
 
-- **Dato de su pauta** (Biblioteca, `page_id` 284462084761388, leído el 11-oct): 6 anuncios activos en BOB, el más viejo del 2026-04-13. 6 anuncios activos en Facebook, el más viejo del 13-abr; la valoración sin costo se reserva por WhatsApp (post del 14-sep, leído el 8-oct).
+- **Dato de su pauta** (Biblioteca, `page_id` 284462084761388, leído el 11-oct): 6 anuncios activos en BOB, el más viejo del 2026-04-13. 6 anuncios activos, el más viejo del 13-abr.
 - **Canal propuesto:** WhatsApp de reservas 77349396. Fuente: ONIA_PROSPECTOS_DENTAL_SCZ.md §6.9 #2 (post del 14-sep). Alternativa: llamada al mismo número. **Lo envía Sergio Urcullo desde su WhatsApp**, no desde el número del bot (fuera de las 24 h no sale texto libre).
 - **Pregunta de calificación:** 1 de `ONIA_CLIENTE_IDEAL.md` §9 — ¿Cuántos odontólogos atienden hoy en la clínica?
 - **Condición de salida:** si pasa de 6 profesionales, sale (laboratorio propio y centro radiológico: riesgo de pasar).
+- **Línea opcional**, solo si se confirma hoy desde la PC (no está en el mensaje porque no sale de la Biblioteca): «y que la valoración sin costo se reserva por WhatsApp (post del 14-sep, leído el 8-oct: confirmarlo hoy en su Facebook antes de agregarlo)».
 
 > Buen día, soy Sergio Urcullo, de Onia, aquí en Santa Cruz. Este mensaje es para el dueño o la dueña de la Clínica Dental Hurtado.
 >
-> Vi que tienen anuncios activos en Facebook desde abril, y que la valoración sin costo se reserva por WhatsApp.
+> Vi que tienen anuncios activos desde abril.
 >
-> Cuando las citas se arman por chat, el paciente de mañana que no confirmó suele quedar sin que nadie le escriba.
+> Cuando una clínica pauta para traer pacientes nuevos, el paciente de mañana que no confirmó suele quedar sin que nadie le escriba.
 >
 > Onia es un sistema de gestión para clínicas dentales: agenda, ficha del paciente y cobros. Cada mañana le deja anotado a quién escribirle, por ejemplo quién tiene cita mañana y no confirmó, con el mensaje listo; nada sale sin que usted lo apruebe.
 >
@@ -50,16 +52,17 @@ Los 8 mensajes dicen lo mismo del producto: agenda, ficha del paciente y cobros,
 
 ### 2. COYR DENT · candidata
 
-- **Dato de su pauta** (Biblioteca, `page_id` 2042184532678966, leído el 11-oct): 4 anuncios activos en USD, el más viejo del 2026-08-21. 4 anuncios activos (USD), el más viejo del 21-ago; ofrece ortodoncia con planes de pago (post del 17-sep, leído el 8-oct).
+- **Dato de su pauta** (Biblioteca, `page_id` 2042184532678966, leído el 11-oct): 4 anuncios activos en USD, el más viejo del 2026-08-21. 4 anuncios activos (USD), el más viejo del 21-ago.
 - **Canal propuesto:** WhatsApp 78597900. Fuente: ONIA_PROSPECTOS_DENTAL_SCZ.md §6.9 #6 (post del 17-sep, «agenda con nuestro especialista»). Alternativa: otra línea 62217290. **Lo envía Sergio Urcullo desde su WhatsApp**, no desde el número del bot (fuera de las 24 h no sale texto libre).
 - **Pregunta de calificación:** 1 de `ONIA_CLIENTE_IDEAL.md` §9 — ¿Cuántos odontólogos atienden hoy en la clínica?
 - **Condición de salida:** riesgo alto de ser un solo profesional («nuestro especialista», en singular): si atiende uno solo, sale.
+- **Línea opcional**, solo si se confirma hoy desde la PC (no está en el mensaje porque no sale de la Biblioteca): «y que ofrecen ortodoncia con planes de pago (post del 17-sep, leído el 8-oct: confirmarlo hoy antes de agregarlo)».
 
 > Buen día, soy Sergio Urcullo, de Onia, aquí en Santa Cruz. Este mensaje es para el dueño o la dueña de COYR DENT.
 >
-> Vi que tienen anuncios activos desde agosto, y que ofrecen ortodoncia con planes de pago.
+> Vi que tienen anuncios activos desde agosto.
 >
-> En un tratamiento de meses, cada control que el paciente cancela y no vuelve a agendar es una cuota que se atrasa.
+> Cuando una clínica pauta para traer pacientes nuevos, el paciente de mañana que no confirmó suele quedar sin que nadie le escriba.
 >
 > Onia es un sistema de gestión para clínicas dentales: agenda, ficha del paciente y cobros. Cada mañana le deja anotado a quién escribirle, por ejemplo quién tiene cita mañana y no confirmó, con el mensaje listo; nada sale sin que usted lo apruebe.
 >
@@ -67,16 +70,17 @@ Los 8 mensajes dicen lo mismo del producto: agenda, ficha del paciente y cobros,
 
 ### 3. Clarident Plus · candidata
 
-- **Dato de su pauta** (Biblioteca, `page_id` 339088019578381, leído el 11-oct): 3 anuncios activos en BOB, el más viejo del 2026-10-07. 3 anuncios activos, el más viejo del 7-oct; sus promociones se agendan por WhatsApp (posts del 14-sep, leídos el 8-oct).
+- **Dato de su pauta** (Biblioteca, `page_id` 339088019578381, leído el 11-oct): 3 anuncios activos en BOB, el más viejo del 2026-10-07. 3 anuncios activos, el más viejo del 7-oct.
 - **Canal propuesto:** WhatsApp 70846705. Fuente: ONIA_PROSPECTOS_DENTAL_SCZ.md §6.9 #1 (posts del 14-sep, «agenda por wa.me/70846705»). Alternativa: segunda línea 76363029. **Lo envía Sergio Urcullo desde su WhatsApp**, no desde el número del bot (fuera de las 24 h no sale texto libre).
 - **Pregunta de calificación:** 2 de `ONIA_CLIENTE_IDEAL.md` §9 — ¿Quién agenda las citas que llegan por ese chat?
 - **Condición de salida:** mirar desde la PC si la página «Clarident Duo» es otra sede: si lo es, sale por multi-sede.
+- **Línea opcional**, solo si se confirma hoy desde la PC (no está en el mensaje porque no sale de la Biblioteca): «y que sus promociones se agendan por WhatsApp (posts del 14-sep, leídos el 8-oct: confirmarlo hoy antes de agregarlo)».
 
 > Buen día, soy Sergio Urcullo, de Onia, aquí en Santa Cruz. Este mensaje es para el dueño o la dueña de Clarident Plus.
 >
-> Vi que desde el 7 de octubre tienen anuncios nuevos, y que sus promociones se agendan por WhatsApp.
+> Vi que desde el 7 de octubre tienen anuncios nuevos.
 >
-> Con promociones y cupos por chat, el paciente de mañana que no confirmó suele quedar sin que nadie le escriba.
+> Cuando una clínica pauta para traer pacientes nuevos, el paciente de mañana que no confirmó suele quedar sin que nadie le escriba.
 >
 > Onia es un sistema de gestión para clínicas dentales: agenda, ficha del paciente y cobros. Cada mañana le deja anotado a quién escribirle, por ejemplo quién tiene cita mañana y no confirmó, con el mensaje listo; nada sale sin que usted lo apruebe.
 >
@@ -152,16 +156,16 @@ Los 8 mensajes dicen lo mismo del producto: agenda, ficha del paciente y cobros,
 
 ### 8. Clínica Dental ROCHA · **condicional: no se envía hasta confirmar**
 
-- **Dato de su pauta** (Biblioteca, `page_id` 113481741822891, leído el 11-oct): 2 anuncios activos en BOB, el más viejo del 2026-08-25. 2 anuncios activos «Agenda tu cita», desde el 25-ago.
+- **Dato de su pauta** (Biblioteca, `page_id` 113481741822891, leído el 11-oct): 2 anuncios activos en BOB, el más viejo del 2026-08-25. 2 anuncios activos, ambos «Agenda tu cita», del 25-ago.
 - **Canal propuesto:** WhatsApp +591 72102945 (fragmento de buscador, sin confirmar). Fuente: ONIA_PROSPECTOS_DENTAL_SCZ.md §6.6, reserva (fragmento). Alternativa: el botón del propio anuncio, se ve al abrirlo desde la PC. **Lo envía Sergio Urcullo desde su WhatsApp**, no desde el número del bot (fuera de las 24 h no sale texto libre).
 - **Pregunta de calificación:** 2 de `ONIA_CLIENTE_IDEAL.md` §9 — ¿Quién agenda las citas que llegan por ese chat?
 - **Condición de salida:** tamaño sin dato; ¿es la misma que «Consultorio Dental Rocha» (169289006270602)? Si es un consultorio de una persona, sale. NO se envía hasta confirmarlo desde la PC.
 
 > Buen día, soy Sergio Urcullo, de Onia, aquí en Santa Cruz. Este mensaje es para el dueño o la dueña de la Clínica Dental ROCHA.
 >
-> Vi su anuncio «Agenda tu cita», activo desde fines de agosto.
+> Vi sus anuncios «Agenda tu cita», activos desde fines de agosto.
 >
-> Cuando las citas se piden por chat, el paciente de mañana que no confirmó suele quedar sin que nadie le escriba.
+> Con anuncios que traen citas nuevas, el paciente de mañana que no confirmó suele quedar sin que nadie le escriba.
 >
 > Onia es un sistema de gestión para clínicas dentales: agenda, ficha del paciente y cobros. Cada mañana le deja anotado a quién escribirle, por ejemplo quién tiene cita mañana y no confirmó, con el mensaje listo; nada sale sin que usted lo apruebe.
 >

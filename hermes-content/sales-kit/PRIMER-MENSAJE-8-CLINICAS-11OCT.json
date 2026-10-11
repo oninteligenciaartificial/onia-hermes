@@ -13,7 +13,7 @@
       "page_id": "284462084761388",
       "nombre": "Clínica Dental Hurtado",
       "estado": "Candidata",
-      "hecho": "6 anuncios activos en Facebook, el más viejo del 13-abr; la valoración sin costo se reserva por WhatsApp (post del 14-sep, leído el 8-oct)",
+      "hecho": "6 anuncios activos, el más viejo del 13-abr",
       "canal": {
         "principal": "WhatsApp de reservas 77349396",
         "fuente": "ONIA_PROSPECTOS_DENTAL_SCZ.md §6.9 #2 (post del 14-sep)",
@@ -21,13 +21,14 @@
       },
       "pregunta": "P1",
       "salida": "si pasa de 6 profesionales, sale (laboratorio propio y centro radiológico: riesgo de pasar)",
-      "mensaje": "Buen día, soy Sergio Urcullo, de Onia, aquí en Santa Cruz. Este mensaje es para el dueño o la dueña de la Clínica Dental Hurtado.\nVi que tienen anuncios activos en Facebook desde abril, y que la valoración sin costo se reserva por WhatsApp.\nCuando las citas se arman por chat, el paciente de mañana que no confirmó suele quedar sin que nadie le escriba.\nOnia es un sistema de gestión para clínicas dentales: agenda, ficha del paciente y cobros. Cada mañana le deja anotado a quién escribirle, por ejemplo quién tiene cita mañana y no confirmó, con el mensaje listo; nada sale sin que usted lo apruebe.\nPara mostrarle algo que le sirva: ¿Cuántos odontólogos atienden hoy en la clínica? Si le interesa, le muestro cómo se ve."
+      "mensaje": "Buen día, soy Sergio Urcullo, de Onia, aquí en Santa Cruz. Este mensaje es para el dueño o la dueña de la Clínica Dental Hurtado.\nVi que tienen anuncios activos desde abril.\nCuando una clínica pauta para traer pacientes nuevos, el paciente de mañana que no confirmó suele quedar sin que nadie le escriba.\nOnia es un sistema de gestión para clínicas dentales: agenda, ficha del paciente y cobros. Cada mañana le deja anotado a quién escribirle, por ejemplo quién tiene cita mañana y no confirmó, con el mensaje listo; nada sale sin que usted lo apruebe.\nPara mostrarle algo que le sirva: ¿Cuántos odontólogos atienden hoy en la clínica? Si le interesa, le muestro cómo se ve.",
+      "opcional": "y que la valoración sin costo se reserva por WhatsApp (post del 14-sep, leído el 8-oct: confirmarlo hoy en su Facebook antes de agregarlo)"
     },
     {
       "page_id": "2042184532678966",
       "nombre": "COYR DENT",
       "estado": "Candidata",
-      "hecho": "4 anuncios activos (USD), el más viejo del 21-ago; ofrece ortodoncia con planes de pago (post del 17-sep, leído el 8-oct)",
+      "hecho": "4 anuncios activos (USD), el más viejo del 21-ago",
       "canal": {
         "principal": "WhatsApp 78597900",
         "fuente": "ONIA_PROSPECTOS_DENTAL_SCZ.md §6.9 #6 (post del 17-sep, «agenda con nuestro especialista»)",
@@ -35,13 +36,14 @@
       },
       "pregunta": "P1",
       "salida": "riesgo alto de ser un solo profesional («nuestro especialista», en singular): si atiende uno solo, sale",
-      "mensaje": "Buen día, soy Sergio Urcullo, de Onia, aquí en Santa Cruz. Este mensaje es para el dueño o la dueña de COYR DENT.\nVi que tienen anuncios activos desde agosto, y que ofrecen ortodoncia con planes de pago.\nEn un tratamiento de meses, cada control que el paciente cancela y no vuelve a agendar es una cuota que se atrasa.\nOnia es un sistema de gestión para clínicas dentales: agenda, ficha del paciente y cobros. Cada mañana le deja anotado a quién escribirle, por ejemplo quién tiene cita mañana y no confirmó, con el mensaje listo; nada sale sin que usted lo apruebe.\nPara mostrarle algo que le sirva: ¿Cuántos odontólogos atienden hoy en la clínica? Si le interesa, le muestro cómo se ve."
+      "mensaje": "Buen día, soy Sergio Urcullo, de Onia, aquí en Santa Cruz. Este mensaje es para el dueño o la dueña de COYR DENT.\nVi que tienen anuncios activos desde agosto.\nCuando una clínica pauta para traer pacientes nuevos, el paciente de mañana que no confirmó suele quedar sin que nadie le escriba.\nOnia es un sistema de gestión para clínicas dentales: agenda, ficha del paciente y cobros. Cada mañana le deja anotado a quién escribirle, por ejemplo quién tiene cita mañana y no confirmó, con el mensaje listo; nada sale sin que usted lo apruebe.\nPara mostrarle algo que le sirva: ¿Cuántos odontólogos atienden hoy en la clínica? Si le interesa, le muestro cómo se ve.",
+      "opcional": "y que ofrecen ortodoncia con planes de pago (post del 17-sep, leído el 8-oct: confirmarlo hoy antes de agregarlo)"
     },
     {
       "page_id": "339088019578381",
       "nombre": "Clarident Plus",
       "estado": "Candidata",
-      "hecho": "3 anuncios activos, el más viejo del 7-oct; sus promociones se agendan por WhatsApp (posts del 14-sep, leídos el 8-oct)",
+      "hecho": "3 anuncios activos, el más viejo del 7-oct",
       "canal": {
         "principal": "WhatsApp 70846705",
         "fuente": "ONIA_PROSPECTOS_DENTAL_SCZ.md §6.9 #1 (posts del 14-sep, «agenda por wa.me/70846705»)",
@@ -49,7 +51,8 @@
       },
       "pregunta": "P2",
       "salida": "mirar desde la PC si la página «Clarident Duo» es otra sede: si lo es, sale por multi-sede",
-      "mensaje": "Buen día, soy Sergio Urcullo, de Onia, aquí en Santa Cruz. Este mensaje es para el dueño o la dueña de Clarident Plus.\nVi que desde el 7 de octubre tienen anuncios nuevos, y que sus promociones se agendan por WhatsApp.\nCon promociones y cupos por chat, el paciente de mañana que no confirmó suele quedar sin que nadie le escriba.\nOnia es un sistema de gestión para clínicas dentales: agenda, ficha del paciente y cobros. Cada mañana le deja anotado a quién escribirle, por ejemplo quién tiene cita mañana y no confirmó, con el mensaje listo; nada sale sin que usted lo apruebe.\nPara mostrarle algo que le sirva: ¿Quién agenda las citas que llegan por ese chat? Si le interesa, le muestro cómo se ve."
+      "mensaje": "Buen día, soy Sergio Urcullo, de Onia, aquí en Santa Cruz. Este mensaje es para el dueño o la dueña de Clarident Plus.\nVi que desde el 7 de octubre tienen anuncios nuevos.\nCuando una clínica pauta para traer pacientes nuevos, el paciente de mañana que no confirmó suele quedar sin que nadie le escriba.\nOnia es un sistema de gestión para clínicas dentales: agenda, ficha del paciente y cobros. Cada mañana le deja anotado a quién escribirle, por ejemplo quién tiene cita mañana y no confirmó, con el mensaje listo; nada sale sin que usted lo apruebe.\nPara mostrarle algo que le sirva: ¿Quién agenda las citas que llegan por ese chat? Si le interesa, le muestro cómo se ve.",
+      "opcional": "y que sus promociones se agendan por WhatsApp (posts del 14-sep, leídos el 8-oct: confirmarlo hoy antes de agregarlo)"
     },
     {
       "page_id": "1099790733394902",
@@ -111,7 +114,7 @@
       "page_id": "113481741822891",
       "nombre": "Clínica Dental ROCHA",
       "estado": "Condicional",
-      "hecho": "2 anuncios activos «Agenda tu cita», desde el 25-ago",
+      "hecho": "2 anuncios activos, ambos «Agenda tu cita», del 25-ago",
       "canal": {
         "principal": "WhatsApp +591 72102945 (fragmento de buscador, sin confirmar)",
         "fuente": "ONIA_PROSPECTOS_DENTAL_SCZ.md §6.6, reserva (fragmento)",
@@ -119,7 +122,7 @@
       },
       "pregunta": "P2",
       "salida": "tamaño sin dato; ¿es la misma que «Consultorio Dental Rocha» (169289006270602)? Si es un consultorio de una persona, sale. NO se envía hasta confirmarlo desde la PC",
-      "mensaje": "Buen día, soy Sergio Urcullo, de Onia, aquí en Santa Cruz. Este mensaje es para el dueño o la dueña de la Clínica Dental ROCHA.\nVi su anuncio «Agenda tu cita», activo desde fines de agosto.\nCuando las citas se piden por chat, el paciente de mañana que no confirmó suele quedar sin que nadie le escriba.\nOnia es un sistema de gestión para clínicas dentales: agenda, ficha del paciente y cobros. Cada mañana le deja anotado a quién escribirle, por ejemplo quién tiene cita mañana y no confirmó, con el mensaje listo; nada sale sin que usted lo apruebe.\nPara mostrarle algo que le sirva: ¿Quién agenda esas citas? Si le interesa, le muestro cómo se ve."
+      "mensaje": "Buen día, soy Sergio Urcullo, de Onia, aquí en Santa Cruz. Este mensaje es para el dueño o la dueña de la Clínica Dental ROCHA.\nVi sus anuncios «Agenda tu cita», activos desde fines de agosto.\nCon anuncios que traen citas nuevas, el paciente de mañana que no confirmó suele quedar sin que nadie le escriba.\nOnia es un sistema de gestión para clínicas dentales: agenda, ficha del paciente y cobros. Cada mañana le deja anotado a quién escribirle, por ejemplo quién tiene cita mañana y no confirmó, con el mensaje listo; nada sale sin que usted lo apruebe.\nPara mostrarle algo que le sirva: ¿Quién agenda esas citas? Si le interesa, le muestro cómo se ve."
     }
   ]
 }

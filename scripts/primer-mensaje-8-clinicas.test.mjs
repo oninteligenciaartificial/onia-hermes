@@ -60,6 +60,17 @@ test("cada dato de su pauta es el de la Biblioteca: cuántos anuncios, desde qu�
   }
 });
 
+test("el mensaje solo afirma lo que sale de la Biblioteca de hoy; lo que viene de posts viejos va en la «línea opcional»", () => {
+  for (const c of datos.clinicas) {
+    assert.ok(!/WhatsApp|planes de pago|promociones|cupos|valoración sin costo|cuota|Facebook|Instagram/i.test(c.mensaje.replace(/«[^»]+»/g, "")), `${c.nombre}: el mensaje afirma algo que no sale de la Biblioteca de hoy`);
+    const titulos = [...c.mensaje.matchAll(/«([^»]+)»/g)].map((m) => m[1]);
+    const anuncios = pagina.get(c.page_id).starts.length;
+    if (/\bsu anuncio\b/.test(c.mensaje)) assert.equal(anuncios, 1, `${c.nombre}: dice «su anuncio» y tiene ${anuncios}`);
+    void titulos;
+  }
+  assert.ok(datos.clinicas.filter((c) => c.opcional).length >= 3, "las líneas que vienen de posts viejos quedan registradas como opcionales");
+});
+
 test("de usted, firmado por Sergio Urcullo, dirigido al dueño y con UNA sola pregunta de calificación", () => {
   for (const c of datos.clinicas) {
     assert.match(c.mensaje, /^Buen día, soy Sergio Urcullo, de Onia, aquí en Santa Cruz\. Este mensaje es para el dueño o la dueña de /, c.nombre);
