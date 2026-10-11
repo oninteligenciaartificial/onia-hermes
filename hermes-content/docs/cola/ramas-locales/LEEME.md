@@ -17,6 +17,19 @@ git fetch <ruta>/hermes-ramas-locales-20261009.bundle 'refs/heads/*:refs/heads/*
 
 `git bundle verify <archivo>` dice si falta alguna base.
 
+## Lista para subir (11-oct, 01:30 UTC) — `plataforma-titulos-usted-20261011.bundle`
+
+Pedido de la madre v4: la pestaña de `/login` decía «…que maneja tu negocio…». Rama `titulos-usted` (`b0e021f2`),
+**un commit sobre `master` `d8ca5a32`**: título por defecto, descripciones para buscadores y para compartir, y el portal
+de requerimientos pasan a usted; un gate nuevo (`__tests__/titulos-publicos-de-usted.test.ts`, falla con el texto viejo)
+caza también el tuteo, que el trinquete de voseo no veía. tsc 0 y suite completa 10.060 en verde. Son textos: no espera
+a nadie.
+
+```bash
+git fetch <ruta>/plataforma-titulos-usted-20261011.bundle titulos-usted:titulos-usted
+git push origin titulos-usted:fix/titulos-de-usted     # y PR contra master; con CI verde se mergea
+```
+
 ## Listas para subir (10-oct, ~20:30 UTC) — `plataforma-listas-20261010.bundle`
 
 Armadas y probadas en la nube sobre `master` `922a0da9`: tsc 0 y suite completa en verde, 0 rojos, en las cinco. Cada una es
