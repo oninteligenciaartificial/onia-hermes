@@ -220,3 +220,17 @@ cd videos && npx -y hyperframes@0.8.142 init lucia-gN --non-interactive --exampl
 - **El nombre de una herramienta va en el pie, no en el video, cuando el error es un límite de verificación y no una falla de la herramienta** (G3 v2, decisión de la madre): el build valida cada atribución contra `PROCEDENCIA.jsonl` y no atribuye lo que el repo no registra (la agenda 1422fa94 no se nombra).
 - **El editor no se auto-aprueba.** En cada pieza el revisor halló lo que el editor no vio (título después del cuadro 0, pie falso, «misma foto», voz que no cabe) y la madre repite la verificación (ArcFace, gates en copia, cuadros mirados, SHA por
   un verificador haiku) antes de escribir «LISTA PARA MOSTRAR». Un «todo exit 0» del editor no se acepta sin repetirlo.
+
+## 12. Lo que sumó la pieza 9 y los re-cortes (11-oct): Codex compone, la nube renderiza
+
+- **Reparto que funcionó con la pieza 9:** Codex Sol escribe la composición y los gates estáticos desde un contrato (`codex-tareas/lucia-p9-luz-cara.md`) y deja `build.mjs --borrador` con el clip PROXY; el render, ArcFace y la
+  hoja de contacto viven en la nube porque necesitan el clip completo, Chromium y el venv. `master-ready.mjs` rechaza un borrador, `build.mjs` sin flag falla si falta el clip original: lo que faltaba (m4, 720p) estaba en
+  `v4/prueba-motores-20261008/` del contenedor aunque git lo ignore (`*.mp4`). **Antes de decir «falta el clip», buscarlo con `find`.**
+- **GSAP: `tl.set(x, 0)` no se aplica si el primer `time(0)` llega sobre un timeline recién creado** (medido en Chromium): el cuadro 0 muestra lo que entra después. Ponerlo en CSS con `transform` choca con
+  `hyperframes check` (`gsap_css_transform_conflict`, exit 1). Lo que pasa los dos: **`tl.fromTo(…)` en t=0 para el transform y en CSS solo `opacity`**.
+- **`data-start` y `data-media-start` a 3 decimales hacen que el clip llegue 1-2 cuadros tarde** (G3 v2). El build usa 6 decimales y adelanta 0,4 ms el inicio de cada elemento; comprobar con PSNR contra la fuente en el cuadro prometido (43-45 dB).
+- **Los píxeles de cara de `PROCEDENCIA` son del clip fuente de 720p; en el lienzo de 1080×1920 valen ×1,5** (139 → 347 px son 209 → 520 px en pantalla). Una nota de límite («bajo 200 px la cara es poco confiable») tiene que decir de
+  QUÉ clip habla: en la pieza 9 la cara de Kling mide ~120 px en todo su clip (172-181 px en el lienzo) y la de Seedance parte de 139 px, así que la nota que nombraba solo a Seedance dejaba creer que el 0,72 de Kling era sólido.
+- **El verificador `haiku` hace lo que se le pide, literalmente:** marcó FALLA una cifra cuya fuente es derivada (±0,03 sale de seis medidas del mismo clip en G5, no está escrita en PROCEDENCIA), un `check` histórico anterior al arreglo
+  y un `revision-1.md` que todavía no existía. Su tabla se lee con criterio; no se corrige el video por un FALLA de alcance. Pedirle siempre «de dónde sale cada cifra», no solo «¿está?».
+- **Render en Chromium completo cae en modo screenshot** (no expone `HeadlessExperimental`): 1 min 10 s para 20 s de video; PSNR de clips 37-39 dB y ArcFace master↔fuente ≤ 0,017, o sea sin degradar la cara.
