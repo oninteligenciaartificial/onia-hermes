@@ -61,9 +61,11 @@ export function render() {
       const resp = o.respuesta;
       return `### ${i + 1}. «${o.objecion}»
 
-> ${resp}${o.pregunta_de_vuelta ? `\n>\n> *Pregunta de vuelta:* ${o.pregunta_de_vuelta}` : ""}${o.si_insiste ? `\n>\n> *Si insiste:* ${o.si_insiste}` : ""}
+**Hoy (solo lo que está en ✅):**
 
-- **Se puede decir:** ${peor(o.filas, o.sin_fila)}.${o.sin_fila.length ? ` Sin fila en el doc de promesas: ${o.sin_fila.map(esc).join("; ")}.` : ""} Filas de \`ONIA_PROMESA_VS_PRODUCTO.md\`: ${o.filas.map((f) => `${f} ${estado(f).split(":")[0]}`).join(" · ")}. Catálogo: ${esc(o.catalogo)}.
+> ${resp}${o.pregunta_de_vuelta ? `\n>\n> *Pregunta de vuelta:* ${o.pregunta_de_vuelta}` : ""}${o.si_insiste ? `\n>\n> *Si insiste:* ${o.si_insiste}` : ""}
+${o.despues ? `\n**Se agrega recién cuando ${[...o.despues_filas.map((f) => `${f} (${estado(f).split(":")[0]})`), ...o.despues_sin_fila].join(" · ")}:**\n\n> ${o.despues}\n` : ""}
+- **Se puede decir:** ${peor(o.filas, o.sin_fila)}.${o.sin_fila.length ? ` Sin fila en el doc de promesas: ${o.sin_fila.map(esc).join("; ")}.` : ""}${o.de_la_politica.length ? ` Sale de la política de privacidad publicada (no hay fila en el doc de promesas): ${o.de_la_politica.map(esc).join("; ")}.` : ""} Filas de \`ONIA_PROMESA_VS_PRODUCTO.md\`: ${o.filas.map((f) => `${f} ${estado(f).split(":")[0]}`).join(" · ")}. Catálogo: ${esc(o.catalogo)}.
 - **Cómo se usa:** ${esc(o.como_se_usa)}
 - **No se dice:** ${o.no_se_dice.map(esc).join("; ")}.
 ${o.id === "precio" ? `\n**Qué se pone en los marcadores** (precios leídos de \`onia-platform\` \`lib/subscription-plans.ts\`, nombres de \`lib/pricing.ts\`, usuarios de \`lib/plan-catalogo.ts\`):\n\n| Si dice… | {{N}} | {{PLAN}} | {{PRECIO}} (Bs/mes) | Tope de usuarios del plan |\n|---|---|---|---|---|\n${casos.map((c) => `| ${c.personas} personas | ${c.n} | ${c.plan} | ${bs(c.precio)} | ${c.usuarios < 0 ? "sin tope" : c.usuarios} |`).join("\n")}\n\n⚠️ **Crece = 4 usuarios** está en el código publicado; el catálogo anota que el release de producción pudo traer 3: antes de cotizar Crece para 4 personas, mirar \`onia.com.bo/precios\` ese día.\n` : ""}`;

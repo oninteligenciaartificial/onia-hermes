@@ -15,7 +15,7 @@ const leer = (ruta) => readFileSync(new URL(`../${ruta}`, import.meta.url), "utf
 const datos = JSON.parse(leer(OBJECIONES_RUTA));
 const codigo = planesDelCodigo();
 const promesas = leer("hermes-content/docs/ONIA_PROMESA_VS_PRODUCTO.md");
-const textos = (o) => [o.respuesta, o.pregunta_de_vuelta, o.si_insiste].filter(Boolean);
+const textos = (o) => [o.respuesta, o.pregunta_de_vuelta, o.si_insiste, o.despues].filter(Boolean);
 const rellenados = (o) => (o.id === "precio" ? casosDePrecio(datos, codigo).flatMap((c) => textos(o).map((t) => conCaso(t, c))) : textos(o));
 
 test("el .md versionado es lo que genera el script", () => {
@@ -66,7 +66,7 @@ test("cero promesas del detector de la web en cada respuesta", () => {
 
 test("la factura SIAT no se promete ni se nombra como futura, y no hay obra a la vista", () => {
   const factura = datos.objeciones.find((o) => o.id === "factura");
-  assert.match(factura.respuesta, /Hoy Onia no emite la factura fiscal/);
+  assert.match(factura.respuesta, /Onia no emite la factura fiscal/);
   for (const o of datos.objeciones) {
     for (const t of rellenados(o)) {
       assert.ok(!/SIAT|electr[oó]nica|\bRND\b|certificaci[oó]n|\bSIN\b/.test(t) || /certificaciones como ISO 27001 no los afirmamos/.test(t), `${o.id}: nombra el SIAT o una certificación`);
@@ -88,8 +88,8 @@ test("sin minutos de llamada, «clínica de ejemplo», IA que atiende ni prueba 
 test("cada fila citada existe en el doc de promesas, y la compuerta se lee de ahí (no se escribe a mano)", () => {
   const md = render();
   for (const o of datos.objeciones) {
-    assert.ok(o.filas.length > 0 && o.no_se_dice.length > 0 && o.como_se_usa && o.catalogo, `${o.id}: incompleta`);
-    for (const f of o.filas) assert.ok(/^(✅|🟡|❌|🚫|⬜)/u.test(estadoDeFila(promesas, f)), `${o.id}: la fila ${f} no existe o no tiene estado`);
+    assert.ok(o.filas.length + o.despues_filas.length > 0 && o.no_se_dice.length > 0 && o.como_se_usa && o.catalogo, `${o.id}: incompleta`);
+    for (const f of [...o.filas, ...o.despues_filas]) assert.ok(/^(✅|🟡|❌|🚫|⬜)/u.test(estadoDeFila(promesas, f)), `${o.id}: la fila ${f} no existe o no tiene estado`);
   }
   // Una respuesta que descansa en una fila sin ✅ no puede figurar como «se puede decir hoy».
   const resumen = md.split("## 0.")[1].split("## 1.")[0].split("\n").filter((l) => /^\| \d \|/.test(l));
@@ -97,6 +97,21 @@ test("cada fila citada existe en el doc de promesas, y la compuerta se lee de ah
     const todasVerdes = o.filas.every((f) => estadoDeFila(promesas, f).startsWith("✅")) && o.sin_fila.length === 0;
     assert.equal(/✅ se puede decir hoy/.test(resumen[i]), todasVerdes, `${o.id}: el resumen no coincide con el estado de sus filas`);
   }
+});
+
+test("lo que se dice HOY descansa solo en filas ✅; lo demás está en «después» y sigue sin estar en ✅", () => {
+  for (const o of datos.objeciones) {
+    for (const f of o.filas) assert.ok(estadoDeFila(promesas, f).startsWith("✅"), `${o.id}: la versión de hoy se apoya en ${f} y no está en ✅ (${estadoDeFila(promesas, f)}): pasarla a «después»`);
+    assert.equal(o.sin_fila.length, 0, `${o.id}: la versión de hoy afirma algo sin fila ni política`);
+    if (o.despues) {
+      const pendientes = o.despues_filas.filter((f) => !estadoDeFila(promesas, f).startsWith("✅"));
+      assert.ok(pendientes.length + o.despues_sin_fila.length > 0, `${o.id}: todo lo de «después» ya está en ✅: moverlo a la respuesta de hoy`);
+    } else assert.equal(o.despues_filas.length + o.despues_sin_fila.length, 0, `${o.id}: tiene filas de «después» pero ningún texto`);
+  }
+  const datosO = datos.objeciones.find((o) => o.id === "datos");
+  assert.ok(!/copias de seguridad|ve solo lo suyo/i.test(datosO.respuesta), "datos: «copias diarias» y «ve solo lo suyo» no se dicen hasta verificarlos en producción");
+  assert.match(datosO.respuesta, /OpenAI/);
+  assert.ok(!/\bhoy no\b|hoy Onia no/i.test(datos.objeciones.find((o) => o.id === "factura").respuesta), "factura: sin «hoy» (abre una factura futura)");
 });
 
 test("el borrador dice que no se envió nada y trae el título pedido", () => {
