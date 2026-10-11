@@ -1,0 +1,173 @@
+{
+ "gem-aviso": {
+  "url": "https://geminicli.com/",
+  "w": 1120,
+  "h": 260,
+  "frases": {
+   "Gemini CLI was replaced by Antigravity CLI": [
+    483,
+    22,
+    580,
+    36
+   ],
+   "June 18th, 2026": [
+    232,
+    71,
+    208,
+    36
+   ]
+  }
+ },
+ "blog-plazo": {
+  "url": "https://developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli",
+  "w": 1120,
+  "h": 660,
+  "frases": {
+   "June 18, 2026": [
+    107,
+    192,
+    203,
+    40
+   ],
+   "Google AI Pro and Ultra": [
+    662,
+    244,
+    347,
+    40
+   ],
+   "free of charge": [
+    373,
+    296,
+    211,
+    40
+   ]
+  }
+ },
+ "blog-titulo": {
+  "url": "https://developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli",
+  "w": 1120,
+  "h": 1240,
+  "frases": {
+   "MAY 19, 2026": [
+    56,
+    400,
+    174,
+    36
+   ]
+  }
+ },
+ "ag-inicio": {
+  "url": "https://antigravity.google/",
+  "w": 1120,
+  "h": 900,
+  "frases": {
+   "Download on Desktop": [
+    352,
+    613,
+    348,
+    42
+   ],
+   "Available on macOS, Windows, Linux, and Googlebook": [
+    352,
+    658,
+    482,
+    71
+   ]
+  }
+ },
+ "ag-precio": {
+  "url": "https://antigravity.google/pricing",
+  "w": 1120,
+  "h": 800,
+  "frases": {
+   "For Individuals": [
+    80,
+    140,
+    358,
+    70
+   ],
+   "$0/month": [
+    80,
+    217,
+    172,
+    50
+   ],
+   "Experience Antigravity without a subscription plan": [
+    584,
+    49,
+    450,
+    80
+   ]
+  }
+ },
+ "ag-instalar-unix": {
+  "url": "https://antigravity.google/docs/cli/install/",
+  "w": 1120,
+  "h": 400,
+  "frases": {
+   "curl -fsSL https://antigravity.google/cli/install.sh | bash": [
+    66,
+    278,
+    927,
+    74
+   ]
+  }
+ },
+ "ag-instalar-win": {
+  "url": "https://antigravity.google/docs/cli/install/",
+  "w": 1120,
+  "h": 300,
+  "frases": {
+   "irm https://antigravity.google/cli/install.ps1 | iex": [
+    66,
+    198,
+    877,
+    32
+   ]
+  }
+ },
+ "ag-migracion-inicio": {
+  "url": "https://antigravity.google/docs/cli/gcli-migration/",
+  "w": 1120,
+  "h": 660,
+  "frases": {
+   "Select the extensions and global configurations you want to convert": [
+    112,
+    368,
+    764,
+    96
+   ],
+   "choose which assets to migrate": [
+    32,
+    216,
+    1032,
+    96
+   ]
+  }
+ },
+ "ag-migracion-skills": {
+  "url": "https://antigravity.google/docs/cli/gcli-migration/",
+  "w": 1120,
+  "h": 1000,
+  "frases": {
+   "Workspace project path": [
+    58,
+    533,
+    164,
+    129
+   ],
+   ".agents/skills/": [
+    605,
+    543,
+    201,
+    26
+   ],
+   "Action required": [
+    76,
+    823,
+    222,
+    36
+   ]
+  }
+ }
+}

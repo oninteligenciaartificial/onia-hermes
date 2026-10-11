@@ -212,7 +212,7 @@ body{margin:0;font-family:'DM Sans',system-ui,sans-serif}
 .word.multi{letter-spacing:-.025em;margin-right:0;text-transform:none;line-height:1.02}
 .wl{display:block;width:max-content;margin:0 auto}
 /* sin logos: solo nombres, centrados y envueltos en filas parejas */
-.c-logos:has(.solo-nombres){gap:112px}
+.c-logos:has(.solo-nombres){gap:124px}
 .logo-row.solo-nombres{gap:40px 54px;max-width:100%}
 .solo-nombres .logo figcaption{font-size:46px;line-height:1.1;white-space:nowrap}
 .solo-nombres + .under{font-size:56px;max-width:none}

@@ -149,6 +149,42 @@ test('referentes inventario: 5, 3 y 2 filas en la MISMA grilla; sin tarjetas ni 
   // el título es opcional y, si está, se dibuja
   assert.ok(referentesHtml({ layout: 'inventario', headline: 'Hola', items: [fila(1)] }, 1, 3, 'sergio', {}).includes('class="inv-t"'));
 });
+test('referentes logos: UNA palabra conserva su marcado de siempre, sin script ni línea nueva (10-oct)', () => {
+  // Los 10 briefs viejos con `logos` llevan una palabra («Claude», «Worktree»…) y su aspecto no puede cambiar:
+  // se comparó pixel a pixel antes/después (74 láminas, 0 diferencias). Acá se fija el marcado, no el CSS: la hoja
+  // de estilos también contiene `word multi`, `wl` y `solo-nombres`, así que buscar la clase suelta daría falsos positivos.
+  const logo = 'hermes-content/references/brand-logos/git-color.svg';
+  const una = referentesHtml({ layout: 'logos', headline: 'Worktree', logos: [{ file: logo, label: 'git' }], body: 'b' }, 2, 8, 'sergio', {});
+  assert.ok(una.includes('<h1 class="word">Worktree</h1>'), 'el h1 histórico, sin span ni clase multi');
+  assert.ok(!una.includes('<span class="wl">') && !una.includes('class="word multi"'));
+  assert.ok(!una.includes('<script>'), 'sin ajuste por medición: el camino de una palabra no se toca');
+  assert.ok(una.includes('<div class="logo-row">') && una.includes('class="logo-img"') && una.includes('<figcaption>git</figcaption>'));
+});
+test('referentes logos: VARIAS palabras van una por línea, sin asteriscos, y el navegador las mide con 84 px de margen (10-oct)', () => {
+  // P2 «7 herramientas. / 4 son gratis.»: antes «HERRAMIENTAS.» sola medía ~1.600 px contra ~912 útiles y se cortaba.
+  const dos = referentesHtml({ layout: 'logos', headline: '7 herramientas.\n4 son gratis.', logos: [{ label: 'n8n' }] }, 0, 10, 'sergio', { theme: 'verde' });
+  assert.ok(dos.includes('<h1 class="word multi"><span class="wl">7 herramientas.</span><span class="wl">4 son gratis.</span></h1>'), 'dos líneas');
+  assert.ok(dos.includes('<script>') && dos.includes('document.fonts.ready') && dos.includes('2*84'), 'mide con la fuente cargada y 84 px por lado');
+  assert.ok(dos.includes("querySelector('.c-logos .word')") && dos.includes('f-=3'), 'achica de a 3 px, como cierreHtml');
+  // el título no pasa por emph(): un asterisco no se vuelve énfasis (el spec pide el título sin asteriscos)
+  const ast = referentesHtml({ layout: 'logos', headline: 'A *b* c', logos: [] }, 0, 1, 'sergio', {});
+  assert.ok(ast.includes('<span class="wl">A *b* c</span>') && !ast.includes('<span class="g">b</span>'));
+  // varias palabras sin `\n` quedan en UNA línea medida; el HTML se escapa
+  const una = referentesHtml({ layout: 'logos', headline: 'Dos <palabras>', logos: [] }, 0, 1, 'sergio', {});
+  assert.strictEqual(una.split('<span class="wl">').length - 1, 1);
+  assert.ok(una.includes('Dos &lt;palabras&gt;'));
+});
+test('referentes logos: sin `file` en ninguna marca van solo con su nombre; con un `file`, la fila de siempre (10-oct)', () => {
+  const marcas = ['Claude Code · pago', 'Codex · pago', 'Higgsfield · pago', 'HyperFrames', 'Buffer', 'n8n', 'faster-whisper'].map((label) => ({ label }));
+  const solo = referentesHtml({ layout: 'logos', headline: '7 herramientas.\n4 son gratis.', logos: marcas }, 0, 10, 'sergio', {});
+  assert.ok(solo.includes('<div class="logo-row solo-nombres">'));
+  assert.ok(!solo.includes('<img class="logo-img"'), 'sin tejas de logo');
+  assert.strictEqual(solo.split('<figure class="logo">').length - 1, 7);
+  for (const m of marcas) assert.ok(solo.includes(`<figcaption>${m.label}</figcaption>`), m.label);
+  const mixta = referentesHtml({ layout: 'logos', headline: 'Tres palabras acá', logos: [{ label: 'a' }, { file: 'hermes-content/references/brand-logos/git-color.svg', label: 'b' }] }, 0, 1, 'sergio', {});
+  assert.ok(mixta.includes('<div class="logo-row">') && !mixta.includes('solo-nombres"'), 'un solo file basta para no ser «solo nombres»');
+  assert.ok(referentesHtml({ layout: 'logos', headline: 'X', logos: [] }, 0, 1, 'sergio', {}).includes('<div class="logo-row"></div>'), 'sin marcas no hay modo solo-nombres');
+});
 test('community-editorial usa la cuenta elegida y CTA directo para pauta', () => {
   const html = communityEditorialHtml({
     role: 'cta',
