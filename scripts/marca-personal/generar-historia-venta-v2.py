@@ -53,9 +53,9 @@ FOTO_SLOTS = {
             fondo="oscuro liso", texto="mirando a cámara, serio y cercano"),
     2: dict(toma="B", forma="franja", w=936, h=520, pos="50% 38%",
             fondo="claro liso", texto="ceja arriba, gesto de «no»"),
-    3: dict(toma="C", forma="circulo", w=260, h=260, pos="50% 35%",
-            fondo="cualquiera (se recorta a círculo)", texto="sonrisa leve, mirando a cámara"),
-    4: dict(toma="C", forma="circulo", w=260, h=260, pos="50% 35%",
+    3: dict(toma="C", forma="circulo", w=260, h=260, pos="50% 40%",
+            fondo="cualquiera (se recorta a círculo)", texto="primer plano, sonrisa leve, mirando a cámara"),
+    4: dict(toma="C", forma="circulo", w=260, h=260, pos="50% 40%",
             fondo="cualquiera (se recorta a círculo)", texto="la misma toma C"),
 }
 
@@ -87,6 +87,7 @@ html,body{width:1080px;height:1920px;overflow:hidden}
 /* 1 · gancho */
 .s1 .h1{font-size:116px;line-height:.98}
 .s1 .chat{margin:auto 0}
+.s1 .ejemplo{margin:0 0 22px 14px;font-family:'DM Mono','OMono',monospace;font-size:34px;font-weight:500;letter-spacing:.08em;color:var(--soft)}
 .s1 .burbuja{display:inline-block;max-width:820px;background:var(--card);color:#fff;border-radius:52px 52px 52px 14px;
   padding:48px 60px;font-size:84px;font-weight:500;line-height:1.08;letter-spacing:-.01em}
 .s1 .visto{margin:26px 0 0 14px;font-family:'DM Mono','OMono',monospace;font-size:40px;font-weight:500;letter-spacing:.04em;color:var(--soft)}
@@ -136,17 +137,18 @@ html,body{width:1080px;height:1920px;overflow:hidden}
 .foto-win.slot{border-style:dashed;display:flex;align-items:center;justify-content:center;text-align:center;
   font-family:'DM Mono','OMono',monospace;font-size:38px;font-weight:500;line-height:1.25;color:var(--soft);
   background:repeating-linear-gradient(45deg,rgba(128,128,128,.10) 0 18px,rgba(128,128,128,.22) 18px 36px)}
-.foto-win.slot.circ{font-size:30px}
+.foto-win.slot.circ{font-size:23px;line-height:1.2}
 .con-foto.s1 .h1{font-size:96px}
 .con-foto.s1 .burbuja{font-size:62px;padding:34px 48px;max-width:760px}
 .con-foto.s1 .visto{font-size:36px;margin-top:18px}
-.con-foto.s1 .chat{margin:56px 0 0}
+.con-foto.s1 .chat{margin:44px 0 0}
+.con-foto.s1 .ejemplo{font-size:34px;margin-bottom:16px}
 .con-foto .foto-win.franja{margin-top:auto}
 .con-foto.s2 .lead{font-size:52px}
 .con-foto.s2 .mito{font-size:56px;padding:22px 38px;margin-top:22px}
 .con-foto.s2 .verdad{font-size:92px;margin-top:44px}
 .con-foto.s3 .h1{font-size:112px}
-.con-foto.s4 .tarjeta{margin-top:0}
+.con-foto.s4 .tarjeta{margin-top:32px}
 """
 
 ARROW_SIGUE = '<svg viewBox="0 0 90 30"><path d="M3 18 C 25 8, 50 26, 80 14 M68 5 L82 14 L70 24"/></svg>'
@@ -177,7 +179,8 @@ def cuerpo_1(con, v):
     sigue = "" if con else f'<div class="sigue" data-rol="secundario">seguí {ARROW_SIGUE}</div>'
     return ('<div class="cuerpo pleno">'
             '<h1 class="h1 disp" data-rol="principal">¿Dónde perdés clientes por <span class="g">responder tarde</span>?</h1>'
-            '<div class="chat"><div class="burbuja" data-rol="principal">Hola, ¿cuánto cuesta?</div>'
+            '<div class="chat"><div class="ejemplo" data-rol="secundario">UN CLIENTE TE ESCRIBE</div>'
+            '<div class="burbuja" data-rol="principal">Hola, ¿cuánto cuesta?</div>'
             '<div class="visto" data-rol="secundario">visto · sin respuesta</div></div>'
             f'{vent}</div>{sigue}')
 
@@ -325,7 +328,8 @@ const { chromium } = require('playwright');
 const fs = require('fs');
 (async () => {
   const jobs = JSON.parse(fs.readFileSync(process.argv[2], 'utf8'));
-  const browser = await chromium.launch();
+  // sin antialias LCD: deja flecos naranjas/azules en el texto chico (medido el 11-oct: 400-1000 px «terracota» falsos)
+  const browser = await chromium.launch({ args: ['--disable-lcd-text', '--font-render-hinting=none'] });
   const res = [];
   for (const j of jobs) {
     const ctx = await browser.newContext({ viewport: { width: j.vw, height: j.vh }, deviceScaleFactor: j.dsf || 1 });
@@ -388,6 +392,14 @@ def render(jobs, tmp):
 
 # ---------- verificación por píxeles ----------
 
+def pixeles_rojo_terracota(png):
+    """Cuenta píxeles rojos/naranjas/terracota (tono 330°-40°, saturación y brillo apreciables). Esta marca no los usa."""
+    import numpy as np
+    from PIL import Image
+    h, s_, v = (np.asarray(Image.open(png).convert("RGB").convert("HSV")).astype(int)[..., k] for k in range(3))
+    return int((((h <= 28) | (h >= 235)) & (s_ >= 90) & (v >= 60)).sum())
+
+
 def extension_contenido(png, fondo):
     import numpy as np
     from PIL import Image
@@ -398,9 +410,11 @@ def extension_contenido(png, fondo):
 
 
 def main():
+    global OUT
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--foto", action="append", default=[], metavar="N=RUTA",
                     help="foto opcional de la lámina N (1-4); crea con-foto/historia-0N.png")
+    ap.add_argument("--out", default=str(OUT), help="carpeta de salida (por defecto la de la v2)")
     args = ap.parse_args()
     fotos = {}
     for kv in args.foto:
@@ -409,9 +423,10 @@ def main():
             raise SystemExit(f"--foto {kv!r}: usá N=ruta con N entre 1 y 4 y un archivo existente")
         fotos[int(n)] = ruta
 
+    OUT = Path(args.out).resolve()
     OUT.mkdir(parents=True, exist_ok=True)
-    for sub in ("390", "con-foto"):
-        (OUT / sub).mkdir(exist_ok=True)
+    for carpeta in ("390",) + (("con-foto",) if fotos else ()):
+        (OUT / carpeta).mkdir(exist_ok=True)
     tmp = Path(tempfile.mkdtemp(prefix="historia-venta-v2-"))
     try:
         # 1) las 4 finales (sin foto) + medición de texto + variantes de ventana vacía y con foto
@@ -438,7 +453,7 @@ def main():
         jobs.append(dict(html=str(tmp / "chequeo.html"), out=str(OUT / "CHEQUEO-banda-segura.png"), vw=4 * 322 + 26, vh=round(H * 300 / W) + 60))
         slots = [tmp / f"slot-{h['n']}.png" for h in HISTORIAS]
         (tmp / "slots.html").write_text(html_slots(slots), encoding="utf-8")
-        jobs.append(dict(html=str(tmp / "slots.html"), out=str(OUT / "FOTO-SLOTS.png"), vw=4 * 322 + 26, vh=round(H * 300 / W) + 120))
+        jobs.append(dict(html=str(tmp / "slots.html"), out=str(OUT / "FOTO-SLOTS.png"), vw=4 * 322 + 26, vh=round(H * 300 / W) + 170))
         render(jobs, tmp)
 
         # 3) informe: tamaños a 390 px + banda segura por píxeles
@@ -449,6 +464,7 @@ def main():
             for t in r["textos"]:
                 por_rol.setdefault(t["rol"], []).append(t)
             fila = dict(historia=p.name, fuentes=r["fuentes"])
+            fila["titular_px_390"] = round(max(t["px"] for t in por_rol["principal"]) * ESCALA_390, 1)
             for rol, umbral in (("principal", UMBRAL_PRINCIPAL), ("secundario", UMBRAL_SECUNDARIO)):
                 if rol in por_rol:
                     m = min(por_rol[rol], key=lambda t: t["px"])
@@ -459,6 +475,7 @@ def main():
             lim = LIMITE_ABAJO_4 if h["n"] == 4 else LIMITE_ABAJO
             fila["pixeles"] = dict(y_min=y0, y_max=y1, x_min=x0, x_max=x1, limite_abajo=lim,
                                    arriba_ok=y0 >= SAFE_TOP, abajo_ok=y1 <= lim, margen_lateral_ok=(x0 >= 60 and W - 1 - x1 >= 60))
+            fila["pixeles"]["rojo_terracota_px"] = pixeles_rojo_terracota(p)
             if h["n"] == 4:
                 fila["pixeles"]["pixeles_en_tercio_inferior"] = sucio_abajo
             informe.append(fila)

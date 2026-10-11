@@ -249,6 +249,19 @@ Lo que sigue (render, banda segura, trampas del headless) **sigue valiendo** com
   instalada y sin Geist Mono (cae a otra mono): igual de legible, no pixel-idéntico a la PC.
   Ojo: Instagram dio 429 a la API de historias de la PC el 9-oct (la madre, 9-oct): las capturas de historias de referentes
   esperan a que Sergio Urcullo las mire a mano en Chrome.
+- **Historias v2 (11-oct): `scripts/marca-personal/generar-historia-venta-v2.py` → `carousels/out/historias-venta-asesoria-v2/`.**
+  Pack `referentes` (#10C26B, Bricolage + DM Sans/Mono + Caveat), una prueba visual DISTINTA por historia (burbuja de cliente
+  sin respuesta · creencias tachadas · tarjeta de 5 preguntas · tarjeta de acción con el tercio de abajo libre), versión SIN foto
+  terminada y ventanas de foto declaradas (`FOTO-SLOTS.png`; círculo de 260 px: primer plano con la cara al 60-65 %).
+  Aprendido armándola (subagente sonnet, 11-oct): (1) **Playwright con `NODE_PATH=/opt/node-tools/node_modules`** captura 1080x1920
+  exacto y 390x844@2x sin el truco de 2100 + crop ni el mínimo de 500 px de la nota de arriba; (2) **`--disable-lcd-text`** en
+  Chromium Linux: sin eso el texto mono chico sale con flecos naranjas/azules que un detector de «terracota» confunde con color;
+  (3) Bricolage del repo llega a peso 700 y DM Sans del repo solo a 400-500: los 600-800 salen de fuentes del sistema (confirmalo con
+  CDP `CSS.getPlatformFontsForNode`); (4) el tamaño a 390 px se mide recorriendo los nodos de texto con `data-rol` (font-size × 390/1080)
+  y la banda segura con fondo plano se verifica por píxeles; (5) el recuadro-guía del sticker va SOLO en la copia de chequeo
+  (bandas azules, zona ámbar: nada de rojo). Medido: texto principal ≥ 18,1 px y secundario ≥ 12,3 px a 390 de ancho.
+  **Crítica de la v1 (la que ya salió el 10-oct):** las 4 eran el mismo afiche, la «prueba» era texto en un recuadro, la 4 imprimía
+  el recuadro «LINK ACÁ ↓» en la PNG final, usaba #00C661 y Archivo (fuera del pack) y afirmaba «5 min» y «10 seg» sin fuente.
 
 ## Receta de carrusel «Inventario continuo» (referencia DePPPp5FgMh, 10-oct-2026)
 

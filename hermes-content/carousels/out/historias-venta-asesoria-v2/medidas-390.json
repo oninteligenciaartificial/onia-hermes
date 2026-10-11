@@ -15,6 +15,7 @@
     "Caveat SemiBold [sistema]"
    ]
   },
+  "titular_px_390": 41.9,
   "principal": {
    "min_px_390": 30.3,
    "texto": "Hola, ¿cuánto cuesta?",
@@ -32,11 +33,12 @@
    "y_min": 269,
    "y_max": 1431,
    "x_min": 72,
-   "x_max": 1005,
+   "x_max": 1004,
    "limite_abajo": 1498,
    "arriba_ok": true,
    "abajo_ok": true,
-   "margen_lateral_ok": true
+   "margen_lateral_ok": true,
+   "rojo_terracota_px": 0
   }
  },
  {
@@ -55,6 +57,7 @@
     "Bricolage Grotesque [repo]"
    ]
   },
+  "titular_px_390": 53.4,
   "principal": {
    "min_px_390": 21.7,
    "texto": "Todos creen que automatizar es:",
@@ -72,11 +75,12 @@
    "y_min": 269,
    "y_max": 1431,
    "x_min": 68,
-   "x_max": 1005,
+   "x_max": 1004,
    "limite_abajo": 1498,
    "arriba_ok": true,
    "abajo_ok": true,
-   "margen_lateral_ok": true
+   "margen_lateral_ok": true,
+   "rojo_terracota_px": 0
   }
  },
  {
@@ -98,6 +102,7 @@
     "DM Sans [sistema]"
    ]
   },
+  "titular_px_390": 46.2,
   "principal": {
    "min_px_390": 18.8,
    "texto": "¿Qué repito más de 3 veces?",
@@ -119,7 +124,8 @@
    "limite_abajo": 1498,
    "arriba_ok": true,
    "abajo_ok": true,
-   "margen_lateral_ok": true
+   "margen_lateral_ok": true,
+   "rojo_terracota_px": 0
   }
  },
  {
@@ -138,6 +144,7 @@
     "Caveat [sistema]"
    ]
   },
+  "titular_px_390": 46.2,
   "principal": {
    "min_px_390": 18.1,
    "texto": "qué automatizar primero",
@@ -160,6 +167,7 @@
    "arriba_ok": true,
    "abajo_ok": true,
    "margen_lateral_ok": true,
+   "rojo_terracota_px": 0,
    "pixeles_en_tercio_inferior": 0
   }
  }
