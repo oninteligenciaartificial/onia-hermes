@@ -1,7 +1,7 @@
 {
   "title": "Tics de webs con IA (inventario continuo, pack referentes) — BORRADOR: faltan [X][Y][X2][Y2] y la captura C1",
-  "estado": "BORRADOR. NO publicar: la portada espera la captura C1 de CC-02 y la lámina 4 los números [X][Y][X2][Y2] de la medición del jue 15. Sale mié 21-oct 16:00 (La Paz) con el video CC-02; el aviso DISEÑO tiene que estar pegado antes de las 12:30. Receta: .claude/skills/diseno-contenido-onia/SKILL.md «Inventario continuo». Brief de la madre: hermes-content/carousels/briefs/BRIEF-RECETA-DePPPp5FgMh.md",
-  "caption": "Buscá DISEÑO en Avisos de la comunidad. Link en mi perfil.\n\nLe pedí a Claude la misma landing dos veces, para un negocio de ejemplo: sin skill de diseño y con Impeccable (de Paul Bakaus, impeccable.style).\n\n1 corrida, negocio de ejemplo, [fecha]. Detector de Impeccable: [X] → [Y]. A ciegas, con los 5 primeros: [X2] → [Y2]. Los 3 últimos no los medí.\n\nLa skill saca tics. No la vuelve humana.",
+  "estado": "BORRADOR. NO publicar: la portada espera la captura C1 de CC-02 y la lámina 4 los números [X][Y][X2][Y2] de la medición del jue 15. Sale mié 21-oct 16:00 (La Paz) con el video CC-02; el aviso DISEÑO tiene que estar pegado antes de las 12:30. Receta: .claude/skills/diseno-contenido-onia/SKILL.md «Inventario continuo». Brief de la madre: hermes-content/carousels/briefs/BRIEF-RECETA-DePPPp5FgMh.md Si la medición no muestra menos tics con la skill ([Y] < [X] y [Y2] < [X2]), «La skill saca tics» no vale: el carrusel no sale.",
+  "caption": "Buscá DISEÑO en Avisos · link en mi perfil.\n\nLe pedí a Claude la misma landing dos veces, para un negocio de ejemplo: sin skill de diseño y con Impeccable (de Paul Bakaus, impeccable.style).\n\n1 corrida, negocio de ejemplo, [fecha]. Detector de Impeccable: [X] → [Y]. A ciegas, con los 5 primeros: [X2] → [Y2]. Los 3 últimos no los medí.\n\nLa skill saca tics. No la vuelve humana.",
   "hashtags": [
     "#claudecode",
     "#claude",
@@ -17,7 +17,7 @@
       "theme": "blanco",
       "badge": "[X] tics",
       "headline": "*Tics* de webs con IA",
-      "alt_text": "Portada: «Tics de webs con IA». Pendiente: captura C1 de la web A (negocio de ejemplo, con «EJEMPLO» en la esquina)."
+      "alt_text": "Portada: «Tics de webs con IA»."
     },
     {
       "number": 2,
@@ -27,7 +27,7 @@
       "items": [
         {
           "label": "Hero genérico",
-          "text": "Titular centrado y degradé."
+          "text": "Titular centrado, degradé y botón."
         },
         {
           "label": "Tarjetas clonadas",
@@ -35,7 +35,7 @@
         },
         {
           "label": "Gris y acento",
-          "text": "Un solo color decorativo."
+          "text": "Gris sobre blanco, un solo acento."
         },
         {
           "label": "Letra por defecto",
@@ -85,7 +85,7 @@
         },
         {
           "label": "A ciegas",
-          "text": "[X2] contra [Y2] tics."
+          "text": "[X2] contra [Y2] en los 5 primeros."
         },
         {
           "n": "",
@@ -93,7 +93,7 @@
           "text": "Pedido, webs y lista."
         }
       ],
-      "alt_text": "Remate: el resultado del detector, el conteo a ciegas y el recurso DISEÑO. Pendiente: números de la medición."
+      "alt_text": "Remate: el resultado del detector, el conteo a ciegas de los 5 primeros tics y el recurso DISEÑO."
     },
     {
       "number": 5,
@@ -103,7 +103,7 @@
       "pre": "Buscá",
       "keyword": "DISEÑO",
       "body": "en Avisos · link en mi perfil",
-      "alt_text": "Cierre: «Buscá DISEÑO en Avisos · link en mi perfil». Con el fotograma de Sergio Urcullo (B/N) cuando exista; hoy solo texto."
+      "alt_text": "Cierre: «Buscá DISEÑO en Avisos · link en mi perfil»."
     }
   ]
 }
