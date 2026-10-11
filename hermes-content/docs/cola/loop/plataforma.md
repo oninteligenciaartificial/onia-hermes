@@ -58,6 +58,12 @@ Orden: lo que destraba cobrar primero. Cada PR: **leer la revisión de Hermes** 
     - el merge de #160.
     Su árbol es el de la tanda probada (`7e1d3b9d`: `tsc` 0, 11.215/0), así que no se volvió a correr. #159 se mergea solo después de #160.
   - **Riesgo:** quedan en cola el CI de master `a94afbd3` (run 38146815544) y el de #159 (38146948157). Si el runner toma primero el de master, #159 termina hacia las 15:29 y cae en la ventana. Le pedí a la madre que cancele el 38146815544: es redundante, porque después de #159 corre el CI de master con la tanda entera.
+  - **14:44:10: #160 MERGEADO** (`10925057`), con CI verde sobre `e2a92375` (14:21:40-14:43:47) y Hermes E27 OK. Ese push reemplazó el CI de master de `a94afbd3` por el de `10925057` (run 38148387535), que compite con el de #159 (38146948157). Pedido a la madre: cancelar el 38148387535. Si el runner toma primero el de master, #159 se mergea después de las 16:10 y sale a las 18:50.
+  - **Punto 9 de F136c:** commit `bc7f2b15` en `claude/optimistic-ride-1sp5fe`, empujado a las 14:38:54 sin abrir PR, porque un PR dispara el CI y le quita el runner a la publicación. El PR se abre después de las 16:10.
+    - Lo hizo un subagente sonnet.
+    - 9 pruebas nuevas: 7 rojas antes y verdes después.
+    - `tsc` 0, eslint 0 y suite completa 10.929/0.
+    - Revisión: code-reviewer haiku en curso.
 - [x] **Publicación de las 12:50: `release-0b25e289` en producción desde las 12:54:28 UTC** (el contenedor `onia-platform` arrancó con esa imagen; el publicador anotó «plataforma: PUBLICADO» a las 08:50 de La Paz). Entraron #155 F136b (`a91708ca`), #152 de usted con U3, U4 y U5 (`7de363cb`), #151 P-02 (`1db726a7`, solo scripts) y #156 M1 (`0b25e289`). **MIRADO a las 13:16 UTC con cuentas QA**, con fotos a 1440 y 390 leídas una por una (`scratchpad/mirar-usted`, `mirar-caja2`, `mirar-costeo`):
   - **El login** le habla de usted y sugiere «nombre@ejemplo.bo».
   - **En el panel**, el menú dice «Su clínica» o «Su empresa» y ya no aparece «TU CLÍNICA». El Inicio (Primeros pasos), la agenda, Pendientes, /agents («Acá verá…») y los cobros están de usted.
