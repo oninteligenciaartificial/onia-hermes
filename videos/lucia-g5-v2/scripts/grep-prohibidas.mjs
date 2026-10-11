@@ -14,6 +14,7 @@ await pg.goto(pathToFileURL(path.join(P, 'index.html')).href);
 const enPantalla = await pg.evaluate(() => document.getElementById('root').textContent.replace(/\s+/g, ' ').trim());
 await b.close();
 const pie = fs.readFileSync(path.join(P, 'pie.txt'), 'utf8');
+const voz = fs.readFileSync(path.join(P, 'guion-voz.txt'), 'utf8');       // G5 v2: la voz que se generará después también se revisa
 const PROHIBIDAS = [
   // editor-videos § Reels de Lucía (decisión 3-oct: nunca se identifica con el rubro de salud)
   'hoy soy odontóloga', 'soy doctora', 'como odontóloga', 'mis pacientes', 'mi consultorio', 'mi estudio', 'me pasó con un paciente',
@@ -34,11 +35,12 @@ const PROHIBIDAS = [
   'banana', 'nano ', 'seedream', 'imagen 4', 'imagen 3', 'dall', 'stable diffusion', 'ideogram', 'recraft', 'leonardo', 'firefly', 'adobe', 'google', 'openai', 'anthropic', 'iphone', 'apple', 'samsung', 'pixel', 'grok', 'qwen', 'hunyuan', 'wan ', 'pika', 'luma', 'minimax', 'hailuo', 'vidu', 'marketing studio',
 ];
 let hits = 0;
-for (const [donde, txt] of [['pantalla', enPantalla], ['pie', pie]]) {
+for (const [donde, txt] of [['pantalla', enPantalla], ['pie', pie], ['voz', voz]]) {
   const low = txt.toLowerCase();
   for (const f of PROHIBIDAS) if (low.includes(f.toLowerCase())) { console.log(`✖ ${donde}: «${f}»`); hits++; }
 }
 console.log(`texto en pantalla (${enPantalla.split(' ').length} tokens): ${enPantalla}`);
 console.log(`pie (${pie.trim().split(/\s+/).length} palabras)`);
+console.log(`voz (${voz.trim().split(/\s+/).length} palabras): ${voz.trim().replace(/\n/g, ' / ')}`);
 if (hits) { console.error(`✖ ${hits} coincidencia(s)`); process.exit(1); }
-console.log('✔ ninguna frase prohibida ni marca de terceros en pantalla ni en el pie');
+console.log('✔ ninguna frase prohibida ni marca de terceros en pantalla, pie ni voz');

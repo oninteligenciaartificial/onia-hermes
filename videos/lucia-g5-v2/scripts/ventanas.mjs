@@ -11,7 +11,7 @@ const require = createRequire('/opt/node-tools/package.json');
 const { chromium } = require('playwright');
 const P = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const plan = JSON.parse(fs.readFileSync(path.join(P, 'plan.json'), 'utf8'));
-const FPS = plan.lienzo.fps, N = plan.lienzo.duracion * FPS;
+const FPS = plan.lienzo.fps, N = plan.lienzo.cuadros;
 const b = await chromium.launch({ executablePath: process.env.PRODUCER_HEADLESS_SHELL_PATH || '/opt/pw-browsers/chromium/chrome', args: ['--no-sandbox'] }).catch(async () => chromium.launch({ args: ['--no-sandbox'] }));
 const pg = await b.newPage({ viewport: { width: 1080, height: 1920 } });
 await pg.goto(pathToFileURL(path.join(P, 'index.html')).href);

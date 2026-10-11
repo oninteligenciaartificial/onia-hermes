@@ -10,7 +10,7 @@ Uso:  python3 scripts/psnr-clips.py out/g2-final-1080x1920.mp4 > qa/psnr-clips.t
 import json, os, re, subprocess, sys, tempfile
 P = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 ROOT = os.path.abspath(os.path.join(P, '..', '..'))
-plan = json.load(open(os.path.join(P, 'plan.json')))
+plan = json.load(open(os.path.join(P, 'plan.resuelto.json')))
 final = sys.argv[1]
 med = {m['id']: m for m in plan['medios']}
 CROP = 'crop=1080:750:0:250'
@@ -29,19 +29,19 @@ def psnr(a, b):
     m = re.search(r'average:([0-9.]+|inf)', r.stderr)
     return float(m.group(1)) if m else float('nan')
 
-# (id, clip fuente, cuadro n del clip) — tres cuadros por motor, lejos de los empujes
+# (id, clip fuente, cuadro n del clip) — tres cuadros por clip, lejos de los empujes (los 6 primeros cuadros de cada medio viajan en el empuje de entrada)
 casos = []
-for k in ['m1', 'm2', 'm3', 'm4', 'm5', 'm6']:
-    for n in ([30, 60, 90] if k != 'm6' else [12, 30, 48]):      # 2da pasada: el Motor 6 se ve de 0 a 59 (2,5 s)
+for k, ns in (('m1', [12, 30, 50]), ('m3', [14, 36, 58]), ('m5', [14, 50, 84])):
+    for n in ns:
         casos.append((k, k, n))
-for n in [20, 50, 80]:
-    casos.append(('k1', 'm1', n))               # el cierre arranca en el cuadro 48 del clip (H7): n es el cuadro del cierre, la fuente es n + 48
+for n in [12, 36, 66]:
+    casos.append(('k1', 'm1', n))               # el cierre arranca en el cuadro 66 del clip (media_inicio 2,75 s): n es el cuadro del cierre, la fuente es n + 66
 print('PSNR del final contra la fuente (franja y 250-1000, fuente llevada a 1080x1920 con lanczos). Pico esperado en el cuadro n.')
 print(f"{'medio':6} {'cuadro n':>8} {'t_final':>8}   " + '   '.join(f'n{d:+d}' for d in range(-2, 3)) + '    pico   ΔRGB(media)')
 malos = 0
 for mid, src, n in casos:
     a = med[mid]['a']
-    off = int(round(med[mid].get('media_inicio', 0) * 24))          # offset del clip fuente (cierre K1: 48 cuadros)
+    off = int(round(med[mid].get('media_inicio', 0) * 24))          # offset del clip fuente (cierre K1: 66 cuadros)
     F = round((a + n / 24) * 24)
     fin = os.path.join(tmp, f'fin_{mid}_{n}.png')
     frame(final, F, fin, False)

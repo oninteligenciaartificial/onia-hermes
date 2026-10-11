@@ -1,0 +1,12 @@
+PSNR del final contra la fuente (franja y 0-700). Pico esperado: la foto del plan, con el zoom del plan.
+escena      t_final   zoom         a       f  cafe_b       k   mejor     zoom pico   ok
+f-gancho      1.000  1.012      39.9    10.0     9.3    11.4   a        +0.00      ok
+f-gancho      2.000  1.024      39.6    10.0     9.2    11.3   a        +0.00      ok
+f-gancho      2.792  1.034      39.5     9.9     9.1    11.3   a        +0.00      ok
+f-e3         11.833  1.011      11.9    13.0    41.0    13.9   cafe_b   +0.00      ok
+f-e3         12.500  1.020      11.9    13.0    41.1    13.9   cafe_b   +0.00      ok
+f-e3         13.167  1.029      11.8    13.0    41.1    13.9   cafe_b   +0.00      ok
+f-cierre     23.083  1.007      10.2    11.6    10.7    40.8   k        +0.00      ok
+f-cierre     24.542  1.020      10.2    11.6    10.7    40.7   k        +0.00      ok
+f-cierre     26.000  1.033      10.1    11.6    10.7    40.7   k        +0.00      ok
+✔ cada escena muestra la foto del plan, con el empuje lento del plan

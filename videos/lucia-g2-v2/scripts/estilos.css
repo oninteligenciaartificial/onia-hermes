@@ -79,3 +79,8 @@ body{font-family:"DM Sans",sans-serif;-webkit-font-smoothing:antialiased;text-re
 
 /* H5: línea de aclaración bajo la leyenda de la lección 1 (sin pastilla; 36 px) */
 .sub{font-family:"DM Sans",sans-serif;font-weight:500;font-size:36px;line-height:1.2;color:rgba(246,248,251,.82);white-space:nowrap}
+
+/* v2: rótulo de IA a 40 px (marca) y contenedor de la foto con empuje lento (el contenedor viaja en el empuje rígido; la <img> hace el zoom) */
+.tag.r{font-size:40px;padding:14px 30px}
+.ph{overflow:hidden;background:#0A0C11}
+.ph img{display:block;width:1080px;height:1920px;object-fit:cover}

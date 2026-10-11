@@ -1,0 +1,92 @@
+◆  Checking lucia-g5-v2
+[hyperframes] browserGpuMode probe → software (WebGL unavailable)
+
+Lint
+  ⚠ duplicate_media_discovery_risk: Detected 2 matching img entries with the same source/start/duration.
+    /home/user/onia-hermes/videos/lucia-g5-v2/index.html [data-composition-id] t=0s
+    Fix: Avoid duplicated media nodes that can be discovered twice during compilation.
+  ⚠ timeline_track_too_dense: Track 3 has 5 timed elements in this HTML file. Smaller sub-compositions keep timelines easier to read, iterate on, and diff.
+    /home/user/onia-hermes/videos/lucia-g5-v2/index.html [data-composition-id] t=0s
+    Fix: Move coherent scene groups into separate .html files under compositions/ and mount them from the parent with data-composition-src so the timeline stays easier to inspect, revise, and validate.
+  ⚠ timeline_track_too_dense: Track 4 has 5 timed elements in this HTML file. Smaller sub-compositions keep timelines easier to read, iterate on, and diff.
+    /home/user/onia-hermes/videos/lucia-g5-v2/index.html [data-composition-id] t=0s
+    Fix: Move coherent scene groups into separate .html files under compositions/ and mount them from the parent with data-composition-src so the timeline stays easier to inspect, revise, and validate.
+  ⚠ nested_structure_needs_subcomposition: <div id="f-gancho"> is a timeline element that contains nested <img id="f-gancho-i">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-g5-v2/index.html #f-gancho t=0s
+    Fix: Move <div id="f-gancho"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="f-e3"> is a timeline element that contains nested <img id="f-e3-i">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-g5-v2/index.html #f-e3 t=0s
+    Fix: Move <div id="f-e3"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="f-cierre"> is a timeline element that contains nested <img id="f-cierre-i">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-g5-v2/index.html #f-cierre t=0s
+    Fix: Move <div id="f-cierre"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="cc-rotulo"> is a timeline element that contains nested <div id="rotulo">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-g5-v2/index.html #cc-rotulo t=0s
+    Fix: Move <div id="cc-rotulo"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="pl-p1"> is a timeline element that contains nested <div id="rf1">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-g5-v2/index.html #pl-p1 t=0s
+    Fix: Move <div id="pl-p1"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="pl-p2"> is a timeline element that contains nested <div id="q1">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-g5-v2/index.html #pl-p2 t=0s
+    Fix: Move <div id="pl-p2"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="pl-r1"> is a timeline element that contains nested <div id="r1-win">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-g5-v2/index.html #pl-r1 t=0s
+    Fix: Move <div id="pl-r1"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="pl-r2"> is a timeline element that contains nested <div id="r2-band">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-g5-v2/index.html #pl-r2 t=0s
+    Fix: Move <div id="pl-r2"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="pl-r3"> is a timeline element that contains nested <div id="r3-win">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-g5-v2/index.html #pl-r3 t=0s
+    Fix: Move <div id="pl-r3"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="cc-c1"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-g5-v2/index.html #cc-c1 t=0s
+    Fix: Move <div id="cc-c1"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="cc-c2"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-g5-v2/index.html #cc-c2 t=0s
+    Fix: Move <div id="cc-c2"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="cc-c3"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-g5-v2/index.html #cc-c3 t=0s
+    Fix: Move <div id="cc-c3"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="cc-c4"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-g5-v2/index.html #cc-c4 t=0s
+    Fix: Move <div id="cc-c4"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="cc-c5"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-g5-v2/index.html #cc-c5 t=0s
+    Fix: Move <div id="cc-c5"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="cc-c6"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-g5-v2/index.html #cc-c6 t=0s
+    Fix: Move <div id="cc-c6"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="cc-c7"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-g5-v2/index.html #cc-c7 t=0s
+    Fix: Move <div id="cc-c7"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="cc-c8"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-g5-v2/index.html #cc-c8 t=0s
+    Fix: Move <div id="cc-c8"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="cc-c9"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-g5-v2/index.html #cc-c9 t=0s
+    Fix: Move <div id="cc-c9"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="cc-c10"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-g5-v2/index.html #cc-c10 t=0s
+    Fix: Move <div id="cc-c10"> and its contents into a sub-composition file and mount it with data-composition-src.
+  0 error(s), 22 warning(s), 0 info(s)
+
+Runtime
+  ◇ 0 errors, 0 warnings
+
+Layout
+  ℹ t=22.361s canvas_overflow #c9 > div:nth-of-type(1) > div:nth-of-type(2) inside #root overflowed right 324.46px "Mirá la" — Text extends outside the composition canvas.
+        Fix: Move the text inward, reduce its size, or mark intentional off-canvas animation with data-layout-allow-overflow.
+  ℹ t=22.361s canvas_overflow #c9 > div:nth-of-type(1) > div:nth-of-type(2) > b:nth-of-type(1) inside #root overflowed right 762.96px "imagen entera." — Text extends outside the composition canvas.
+        Fix: Move the text inward, reduce its size, or mark intentional off-canvas animation with data-layout-allow-overflow.
+  0 error(s), 0 warning(s), 2 info(s)
+
+Motion
+  ◇ 0 errors, 0 warnings
+
+Contrast
+  ◇ 24/24 text checks pass WCAG AA
+
+Snapshots
+  ◇ disabled
+
+◇  Check passed

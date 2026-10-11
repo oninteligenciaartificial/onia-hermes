@@ -1,0 +1,7 @@
+empuje 3.167→3.417 s  foto → pl-regla   (borde der. saliente | borde izq. entrante)  ant:1080|1080  0:1080|1080  1:1073|1073  2:973|973  3:540|540  4:107|107  5:7|7  6:0|0  des:0|0
+empuje 7.833→8.083 s  pl-regla → m1   (borde der. saliente | borde izq. entrante)  ant:1080|1080  0:1080|1080  1:1073|1073  2:973|973  3:540|540  4:107|107  5:7|7  6:0|0  des:0|0
+empuje 10.292→10.542 s  m1 → m3   (borde der. saliente | borde izq. entrante)  ant:1080|1080  0:1080|1080  1:1073|1073  2:973|973  3:540|540  4:107|107  5:7|7  6:0|0  des:0|0
+empuje 13.042→13.292 s  m3 → m5   (borde der. saliente | borde izq. entrante)  ant:1080|1080  0:1080|1080  1:1073|1073  2:973|973  3:540|540  4:107|107  5:7|7  6:0|0  des:0|0
+empuje 16.875→17.125 s  m5 → pl-l   (borde der. saliente | borde izq. entrante)  ant:1080|1080  0:1080|1080  1:1073|1073  2:973|973  3:540|540  4:107|107  5:7|7  6:0|0  des:0|0
+empuje 23.458→23.708 s  pl-l → k1   (borde der. saliente | borde izq. entrante)  ant:1080|1080  0:1080|1080  1:1073|1073  2:973|973  3:540|540  4:107|107  5:7|7  6:0|0  des:0|0
+✔ 6 empujes rígidos de 6 cuadros: borde con borde, sin tiras de fondo, en reposo antes y después

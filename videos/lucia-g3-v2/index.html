@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1080, height=1920">
+<title>Lucía · G3 v2</title>
+<script src="assets/vendor/gsap.min.js"></script>
+<style>
+@font-face{font-family:"Bricolage Grotesque";src:url(assets/fonts/BricolageGrotesque-var-latin.woff2) format("woff2");font-weight:500 700;font-style:normal;font-display:block}
+@font-face{font-family:"DM Sans";src:url(assets/fonts/DMSans-var-latin.woff2) format("woff2");font-weight:400 500;font-style:normal;font-display:block}
+@font-face{font-family:"Spline Sans Mono";src:url(assets/fonts/SplineSansMono-var-latin.woff2) format("woff2");font-weight:400 500;font-style:normal;font-display:block}
+:root{--acc:#10C26B;--ink:#0A0C11;--ink2:#15181F;--txt:#F6F8FB;--mut:rgba(246,248,251,.62);--hair:rgba(255,255,255,.12)}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#0A0C11}
+body{font-family:"DM Sans",sans-serif;-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision;font-variant-ligatures:none}
+#root{position:relative;width:1080px;height:1920px;overflow:hidden;background:#0A0C11}
+/* el fondo va en un hijo a sangre completa: el productor puede perder el background del propio root */
+#ground{position:absolute;left:0;top:0;width:1080px;height:1920px;background:linear-gradient(180deg,#10141B 0%,#0A0C11 100%);z-index:0}
+
+/* ── escenas de foto (v2): el contenedor .scn viaja en el empuje; .zoom hace el empuje lento 1,00 → 1,03 y lleva el aro, el marco y los recuadros de origen ── */
+.scn{position:absolute;left:0;top:0;width:1080px;height:1920px;overflow:hidden}
+.zoom{position:absolute;left:0;top:0;width:1080px;height:1920px;transform-origin:50% 50%}
+.full{position:absolute;left:0;top:0;width:1080px;height:1920px;object-fit:cover;display:block}
+
+/* ── contenedores de tarjeta: un clip por tarjeta, a lienzo completo; el ancla fija dónde cae ── */
+.cc{position:absolute;left:0;top:0;width:1080px;height:1920px;display:flex;justify-content:center;pointer-events:none;z-index:10}
+.cc-bot{align-items:flex-end;padding-bottom:calc(1920px - var(--b))}
+.cc-top{align-items:flex-start;padding-top:var(--t)}
+.cw{position:relative;width:max-content;max-width:920px}
+/* sombra de la tarjeta: dos capas con filter:blur (el box-shadow grande de Chromium deja costuras por mosaicos de 256 px) */
+.sh{position:absolute;display:block}
+.sh1{left:24px;right:24px;top:70px;bottom:-22px;border-radius:10px;background:rgba(0,0,0,.62);filter:blur(48px)}
+.sh2{left:0;right:0;top:10px;bottom:-10px;border-radius:34px;background:rgba(0,0,0,.32);filter:blur(13px)}
+.card{position:relative;width:100%;background:linear-gradient(158deg,var(--ink2) 0%,var(--ink) 62%);border:1px solid var(--hair);border-radius:35px;padding:41px 53px 45px 64px;overflow:hidden}
+.card-num{display:flex;align-items:center;gap:26px;padding-left:52px}
+.rail{position:absolute;left:0;top:0;bottom:0;width:12px;background:linear-gradient(180deg,var(--acc),#0a7a43)}
+.t{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:66px;line-height:1.12;letter-spacing:-.01em;color:var(--txt);text-wrap:balance}
+.t b{color:var(--acc);font-weight:700}
+.t b.late{color:var(--txt)}
+.num{flex:none;width:72px;height:72px;border-radius:50%;background:var(--acc);color:#04210F;font:700 44px/72px "Bricolage Grotesque",sans-serif;text-align:center}
+
+/* ── rótulo de IA y etiquetas de dato (pastilla) ── */
+.tag{display:inline-flex;align-items:center;gap:16px;padding:14px 28px;border-radius:999px;background:rgba(10,12,17,.80);border:1px solid rgba(255,255,255,.16);box-shadow:0 14px 36px rgba(0,0,0,.38);font-family:"DM Sans",sans-serif;font-weight:500;color:#F6F8FB;font-size:34px;letter-spacing:.01em;white-space:nowrap}
+.tag i{width:15px;height:15px;border-radius:50%;background:var(--acc);box-shadow:0 0 18px var(--acc)}
+.tag-lg{font-size:40px;padding:16px 32px}
+/* leyenda dentro del recorte del letrero: declara que el difuminado es de edición */
+.cap{position:absolute;left:12px;bottom:12px;padding:4px 18px 6px;border-radius:999px;background:rgba(10,12,17,.84);border:1px solid rgba(255,255,255,.2);font-family:"DM Sans",sans-serif;font-weight:500;font-size:36px;line-height:1.25;color:#F6F8FB;white-space:nowrap}
+
+/* ── marco de la cara: cuatro esquinas ── */
+.cor{position:absolute;width:56px;height:56px;border:0 solid var(--acc);filter:drop-shadow(0 0 8px rgba(16,194,107,.5))}
+.cor.tl{left:0;top:0;border-left-width:6px;border-top-width:6px;border-top-left-radius:10px}
+.cor.tr{right:0;top:0;border-right-width:6px;border-top-width:6px;border-top-right-radius:10px}
+.cor.bl{left:0;bottom:0;border-left-width:6px;border-bottom-width:6px;border-bottom-left-radius:10px}
+.cor.br{right:0;bottom:0;border-right-width:6px;border-bottom-width:6px;border-bottom-right-radius:10px}
+
+/* ── aro sobre el letrero inventado (S1) ── */
+#aro{position:absolute;border:6px solid var(--acc);border-radius:50%;box-shadow:0 0 22px rgba(16,194,107,.55),0 0 0 2px rgba(0,0,0,.22)}
+
+/* ── recortes ampliados de la agenda (S5): borde verde = «esto es lo que se amplía», con su recuadro de origen en la foto ── */
+.ins{position:absolute;border-radius:22px;overflow:hidden;border:5px solid var(--acc);background:#0A0C11;box-shadow:0 30px 70px -20px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.14)}
+.ins img{display:block;width:100%;height:100%;object-fit:cover}
+.org{position:absolute;border:4px solid var(--acc);border-radius:14px;box-shadow:0 0 24px rgba(16,194,107,.5)}
+
+/* ── contador «cuadro N» sobre el clip K4 (S6): una tira de 145 números que avanza de a un cuadro (steps) ── */
+.tag-ctr{font-size:40px;padding:12px 30px 12px 28px;gap:14px}
+.ctrwin{display:inline-block;width:70px;height:48px;overflow:hidden;position:relative;vertical-align:middle;font-family:"Spline Sans Mono",monospace;font-weight:500;font-size:40px}
+.ctrstrip{display:block;position:absolute;left:0;top:0;width:100%}
+.ctrstrip em{display:block;font-style:normal;height:48px;line-height:48px;text-align:right}
+#ctr .tag{transition:none}
+
+/* ── placa de evidencia: visor con el cuadro 120 ampliado (v2: sin los cuadros 72 y 104) ── */
+#visor{position:absolute;border-radius:26px;overflow:hidden;border:4px solid rgba(255,255,255,.2);background:#0A0C11;box-shadow:0 30px 70px -20px rgba(0,0,0,.6)}
+#visor img{display:block;width:100%;height:100%;object-fit:cover}
+.vn{position:absolute;left:18px;top:16px;padding:6px 18px;border-radius:999px;background:rgba(10,12,17,.78);font-family:"Spline Sans Mono",monospace;font-weight:500;font-size:38px;color:#F6F8FB}
+#sello{position:absolute;padding:10px 26px 12px;border-radius:14px;background:var(--acc);color:#04210F;font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:52px;line-height:1.1;letter-spacing:-.01em;white-space:nowrap;box-shadow:0 14px 34px rgba(0,0,0,.45)}
+
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="27.458" data-width="1080" data-height="1920" data-fps="24">
+<div id="ground"></div>
+<div id="desc" class="clip scn" data-start="0" data-duration="7.417" data-track-index="1" style="z-index:1"><div class="zoom" id="z-desc" data-layout-allow-overflow><img class="full" src="assets/descartada.jpg" alt="" data-layout-allow-overflow><div id="aro" style="left:725px;top:46px;width:250px;height:124px"></div><div id="marco" style="position:absolute;left:470px;top:574px;width:236px;height:298px"><i class="cor tl"></i><i class="cor tr"></i><i class="cor bl"></i><i class="cor br"></i></div></div></div>
+<div id="buena" class="clip scn" data-start="7.167" data-duration="2.458" data-track-index="1" style="z-index:2"><div class="zoom" id="z-buena" data-layout-allow-overflow><img class="full" src="assets/buena.jpg" alt="" data-layout-allow-overflow></div></div>
+<div id="agenda" class="clip scn" data-start="9.375" data-duration="6.542" data-track-index="1" style="z-index:1"><div class="zoom" id="z-agenda" data-layout-allow-overflow><img class="full" src="assets/agenda.jpg" alt="" data-layout-allow-overflow><div class="org" id="org1" style="left:15px;top:968px;width:450px;height:255px"></div><div class="org" id="org2" style="left:380px;top:260px;width:177px;height:240px"></div></div></div>
+<video id="k4" src="assets/k4.mp4" data-start="15.667" data-duration="4.917" data-media-start="0.583" data-track-index="6" muted playsinline preload="auto" style="position:absolute;left:0;top:0;width:1080px;height:1920px;object-fit:cover;z-index:1;"></video>
+<video id="k1" src="assets/k1.mp4" data-start="22.542" data-duration="4.917" data-media-start="0.833" data-track-index="7" muted playsinline preload="auto" style="position:absolute;left:0;top:0;width:1080px;height:1920px;object-fit:cover;z-index:1;"></video>
+<div id="cc-rotulo" class="clip cc cc-top" data-start="0" data-duration="3.25" data-track-index="10" style="--t:905px"><div class="cw" id="rotulo"><span class="tag tag-lg"><i></i>Lucía Antelo · personaje IA de Onia</span></div></div>
+<div id="cc-e_orden" class="clip cc cc-top" data-start="2.567" data-duration="2.1" data-track-index="11" style="--t:1010px"><div class="cw" id="e_orden"><span class="tag tag-lg"><i></i>Orden: «no signs anywhere»</span></div></div>
+<div id="cc-e_cara" class="clip cc cc-top" data-start="4.65" data-duration="2.35" data-track-index="12" style="--t:1010px"><div class="cw" id="e_cara"><span class="tag tag-lg"><i></i>Cara: 0,835 · aprobada</span></div></div>
+<div id="cc-e_nueva" class="clip cc cc-top" data-start="7.317" data-duration="2.058" data-track-index="13" style="--t:600px"><div class="cw" id="e_nueva"><span class="tag tag-lg"><i></i>Foto nueva</span></div></div>
+<div id="cc-insL" class="clip" data-start="1.917" data-duration="2.25" data-track-index="14" style="position:absolute;left:0;top:0;width:1080px;height:1920px;z-index:8"><div class="ins" id="insL" style="left:480px;top:300px;width:500px;height:222px"><img src="assets/letrero-inset.jpg" alt=""><span class="cap" id="capL">Difuminado al editar</span></div></div>
+<div id="cc-c1" class="clip cc cc-bot" style="--b:1455px" data-start="0" data-duration="2.458" data-track-index="3"><div class="cw" id="c1"><i class="sh sh1"></i><i class="sh sh2"></i><div class="card"><div class="rail"></div><div class="t">Tres errores que <b>casi publico.</b></div></div></div></div>
+<div id="cc-c2" class="clip cc cc-bot" style="--b:1455px" data-start="2.417" data-duration="2.25" data-track-index="4"><div class="cw" id="c2"><i class="sh sh1"></i><i class="sh sh2"></i><div class="card card-num"><div class="rail"></div><span class="num">1</span><div class="t">Letrero que <b class="late">no pedí.</b></div></div></div></div>
+<div id="cc-c3" class="clip cc cc-bot" style="--b:1455px" data-start="4.625" data-duration="2.792" data-track-index="3"><div class="cw" id="c3"><i class="sh sh1"></i><i class="sh sh2"></i><div class="card"><div class="rail"></div><div class="t">La cara pasó. <b class="late">El fondo, no.</b></div></div></div></div>
+<div id="cc-c4" class="clip cc cc-top" style="--t:300px" data-start="7.167" data-duration="2.458" data-track-index="4"><div class="cw" id="c4"><i class="sh sh1"></i><i class="sh sh2"></i><div class="card"><div class="rail"></div><div class="t">Mirar también <b class="late">el fondo.</b></div></div></div></div>
+<div id="cc-c5" class="clip cc cc-bot" style="--b:1455px" data-start="9.375" data-duration="2.708" data-track-index="3"><div class="cw" id="c5"><i class="sh sh1"></i><i class="sh sh2"></i><div class="card card-num"><div class="rail"></div><span class="num">2</span><div class="t">Letra que <b class="late">parece escrita.</b></div></div></div></div>
+<div id="cc-c6" class="clip cc cc-bot" style="--b:1455px" data-start="12.042" data-duration="1.416" data-track-index="4"><div class="cw" id="c6"><i class="sh sh1"></i><i class="sh sh2"></i><div class="card"><div class="rail"></div><div class="t">Sin <b class="late">mensaje.</b></div></div></div></div>
+<div id="cc-c7" class="clip cc cc-bot" style="--b:1455px" data-start="13.417" data-duration="2.5" data-track-index="3"><div class="cw" id="c7"><i class="sh sh1"></i><i class="sh sh2"></i><div class="card"><div class="rail"></div><div class="t">No se lee, <b class="late">no sirve.</b></div></div></div></div>
+<div id="cc-c8" class="clip cc cc-top" style="--t:290px" data-start="15.667" data-duration="2.708" data-track-index="4"><div class="cw" id="c8"><i class="sh sh1"></i><i class="sh sh2"></i><div class="card card-num"><div class="rail"></div><span class="num">3</span><div class="t">Una mano <b class="late">tapa la otra.</b></div></div></div></div>
+<div id="cc-c9" class="clip cc cc-top" style="--t:290px" data-start="18.333" data-duration="2.25" data-track-index="3"><div class="cw" id="c9"><i class="sh sh1"></i><i class="sh sh2"></i><div class="card"><div class="rail"></div><div class="t">Si cruza, <b class="late">no cuento.</b></div></div></div></div>
+<div id="cc-c10" class="clip cc cc-top" style="--t:290px" data-start="20.333" data-duration="2.459" data-track-index="4"><div class="cw" id="c10"><i class="sh sh1"></i><i class="sh sh2"></i><div class="card"><div class="rail"></div><div class="t">Cuadro 120: <b>cinco dedos.</b></div></div></div></div>
+<div id="cc-c11" class="clip cc cc-bot" style="--b:1455px" data-start="22.542" data-duration="2.416" data-track-index="3"><div class="cw" id="c11"><i class="sh sh1"></i><i class="sh sh2"></i><div class="card"><div class="rail"></div><div class="t">Reviso cuadro <b class="late">a cuadro.</b></div></div></div></div>
+<div id="cc-c12" class="clip cc cc-bot" style="--b:1455px" data-start="24.917" data-duration="2.541" data-track-index="4"><div class="cw" id="c12"><i class="sh sh1"></i><i class="sh sh2"></i><div class="card"><div class="rail"></div><div class="t">Seguime: cada semana, <b class="late">una prueba.</b></div></div></div></div>
+<div id="cc-ins1" class="clip" data-start="9.958" data-duration="2.208" data-track-index="15" style="position:absolute;left:0;top:0;width:1080px;height:1920px;z-index:8"><div class="ins" id="ins1" style="left:90px;top:320px;width:900px;height:510px"><img src="assets/ag-inset1.jpg" alt=""></div></div>
+<div id="cc-ins2" class="clip" data-start="12.417" data-duration="3.083" data-track-index="16" style="position:absolute;left:0;top:0;width:1080px;height:1920px;z-index:8"><div class="ins" id="ins2" style="left:580px;top:330px;width:420px;height:569px"><img src="assets/ag-inset2.jpg" alt=""></div></div>
+<div id="cc-ctr" class="clip cc cc-top" data-start="15.917" data-duration="4.667" data-track-index="17" style="--t:600px"><div class="cw" id="ctr"><span class="tag tag-ctr"><i></i>cuadro <span class="ctrwin"><span class="ctrstrip" id="ctrstrip" data-layout-allow-overflow><em>0</em><em>1</em><em>2</em><em>3</em><em>4</em><em>5</em><em>6</em><em>7</em><em>8</em><em>9</em><em>10</em><em>11</em><em>12</em><em>13</em><em>14</em><em>15</em><em>16</em><em>17</em><em>18</em><em>19</em><em>20</em><em>21</em><em>22</em><em>23</em><em>24</em><em>25</em><em>26</em><em>27</em><em>28</em><em>29</em><em>30</em><em>31</em><em>32</em><em>33</em><em>34</em><em>35</em><em>36</em><em>37</em><em>38</em><em>39</em><em>40</em><em>41</em><em>42</em><em>43</em><em>44</em><em>45</em><em>46</em><em>47</em><em>48</em><em>49</em><em>50</em><em>51</em><em>52</em><em>53</em><em>54</em><em>55</em><em>56</em><em>57</em><em>58</em><em>59</em><em>60</em><em>61</em><em>62</em><em>63</em><em>64</em><em>65</em><em>66</em><em>67</em><em>68</em><em>69</em><em>70</em><em>71</em><em>72</em><em>73</em><em>74</em><em>75</em><em>76</em><em>77</em><em>78</em><em>79</em><em>80</em><em>81</em><em>82</em><em>83</em><em>84</em><em>85</em><em>86</em><em>87</em><em>88</em><em>89</em><em>90</em><em>91</em><em>92</em><em>93</em><em>94</em><em>95</em><em>96</em><em>97</em><em>98</em><em>99</em><em>100</em><em>101</em><em>102</em><em>103</em><em>104</em><em>105</em><em>106</em><em>107</em><em>108</em><em>109</em><em>110</em><em>111</em><em>112</em><em>113</em><em>114</em><em>115</em><em>116</em><em>117</em><em>118</em><em>119</em><em>120</em><em>121</em><em>122</em><em>123</em><em>124</em><em>125</em><em>126</em><em>127</em><em>128</em><em>129</em><em>130</em><em>131</em><em>132</em><em>133</em><em>134</em><em>135</em><em>136</em><em>137</em><em>138</em><em>139</em><em>140</em><em>141</em><em>142</em><em>143</em><em>144</em></span></span></span></div></div>
+<div id="cc-k4" class="clip" data-start="15.917" data-duration="4.667" data-track-index="18" style="position:absolute;left:0;top:0;width:1080px;height:1920px;z-index:8"><div class="org" id="origen" style="left:45px;top:1425px;width:570px;height:480px"></div></div>
+<div id="placa" class="clip" data-start="20.333" data-duration="2.458" data-track-index="19" style="position:absolute;left:0;top:0;width:1080px;height:1920px;z-index:4"><div id="visor" style="left:100px;top:600px;width:880px;height:741px"><img src="assets/k4cuadros/c120.png" alt=""><span class="vn">cuadro 120</span></div><div id="sello" style="right:110px;top:1289px">5 dedos</div></div>
+</div>
+<script>
+window.__timelines = window.__timelines || {};
+const PLAN = {"W":1080,"H":1920,"FR":0.041666666666666664,"PUSH":0.25,"PEASE":"power3.inOut","E_IN":0.18,"E_OUT":0.18,"empujes":[{"t":7.416666666666666,"sale":["desc","c3"],"entra":["buena","c4"]},{"t":9.625,"sale":["buena","c4"],"entra":["agenda","c5"]},{"t":15.916666666666666,"sale":["agenda","c7"],"entra":["k4","c8"]},{"t":20.583333333333332,"sale":["k4","cc-k4","cc-ctr","c9"],"entra":["placa","c10"]},{"t":22.791666666666664,"sale":["placa","c10"],"entra":["k1","c11"]}],"tarjetas":[{"id":"c1","a":0,"b":2.458333333333333,"sin_salida":false,"sin_entrada":true,"acento_t":null,"en_empuje_entra":false,"en_empuje_sale":false},{"id":"c2","a":2.417,"b":4.666666666666666,"sin_salida":false,"sin_entrada":false,"acento_t":3.625,"en_empuje_entra":false,"en_empuje_sale":false},{"id":"c3","a":4.625,"b":7.416666666666666,"sin_salida":false,"sin_entrada":false,"acento_t":5.916666666666666,"en_empuje_entra":false,"en_empuje_sale":true},{"id":"c4","a":7.167,"b":9.625,"sin_salida":false,"sin_entrada":false,"acento_t":8.5,"en_empuje_entra":true,"en_empuje_sale":true},{"id":"c5","a":9.375,"b":12.083333333333332,"sin_salida":false,"sin_entrada":false,"acento_t":10.875,"en_empuje_entra":true,"en_empuje_sale":false},{"id":"c6","a":12.042,"b":13.458333333333332,"sin_salida":false,"sin_entrada":false,"acento_t":12.875,"en_empuje_entra":false,"en_empuje_sale":false},{"id":"c7","a":13.417,"b":15.916666666666666,"sin_salida":false,"sin_entrada":false,"acento_t":14.875,"en_empuje_entra":false,"en_empuje_sale":true},{"id":"c8","a":15.667,"b":18.375,"sin_salida":false,"sin_entrada":false,"acento_t":17.583333333333332,"en_empuje_entra":true,"en_empuje_sale":false},{"id":"c9","a":18.333,"b":20.583333333333332,"sin_salida":false,"sin_entrada":false,"acento_t":18.958333333333332,"en_empuje_entra":false,"en_empuje_sale":true},{"id":"c10","a":20.333,"b":22.791666666666664,"sin_salida":false,"sin_entrada":false,"acento_t":null,"en_empuje_entra":true,"en_empuje_sale":true},{"id":"c11","a":22.542,"b":24.958333333333332,"sin_salida":false,"sin_entrada":false,"acento_t":23.791666666666664,"en_empuje_entra":true,"en_empuje_sale":false},{"id":"c12","a":24.917,"b":27.458333333333332,"sin_salida":true,"sin_entrada":false,"acento_t":26.375,"en_empuje_entra":false,"en_empuje_sale":false}],"rotulo":{"texto":"Lucía Antelo · personaje IA de Onia","a":0,"b":3.25,"top":905},"etiquetas":[{"id":"e_orden","texto":"Orden: «no signs anywhere»","a":2.6666666666666665,"b":4.666666666666666,"top":1010,"fuente":"v4/PROCEDENCIA.jsonl línea 95: «No screens visible, no text, no logos, no signs anywhere.»","n_palabras":4},{"id":"e_cara","texto":"Cara: 0,835 · aprobada","a":4.75,"b":7,"top":1010,"fuente":"v4/PROCEDENCIA.jsonl línea 93: K4_1_descartada id 0,835 (piso del repo 0,70)","n_palabras":3},{"id":"e_nueva","texto":"Foto nueva","a":7.416666666666666,"b":9.375,"top":600,"fuente":"foto nueva K4·1 eddca486 (línea 93), sin letrero","n_palabras":2}],"aro":{"a":1.5,"centro":[850,108],"ancho":250,"alto":124},"insL":{"activo":true,"a":1.9166666666666665,"b":4.166666666666666,"x":480,"y":300,"w":500,"h":222,"recorte_nativo":[935,62,400,178],"caption":"Difuminado al editar"},"marco":{"caja":[470,574,706,872],"a":4.916666666666666,"b":6.916666666666666},"ag":{"ins1":{"x":90,"y":320,"w":900,"h":510,"a":9.958333333333332,"b":12.166666666666666},"ins2":{"x":580,"y":330,"w":420,"h":569,"a":12.416666666666666,"b":15.5,"activo":true}},"ctr":{"top":600,"a":15.916666666666666,"b":20.583333333333332,"cuadros_clip":145,"k0":14,"t_clip":15.666666666666666,"t120":20.083333333333332,"origen_cuadros":6},"placa":{"sello_t":21.083333333333332,"a":20.333333333333332,"b":22.791666666666664},"zooms":[{"id":"desc","a":0,"b":7.416666666666666,"z":1.03},{"id":"buena","a":7.166666666666666,"b":9.625,"z":1.03},{"id":"agenda","a":9.375,"b":15.916666666666666,"z":1.03}]};
+// Timeline único (pausado, determinista). Doctrina de movimiento (motion-doctrine + cut-the-curve), igual que G1/G3:
+//  · LA CORRIENTE es hacia la izquierda: todo entra desde la derecha y sale por la izquierda.
+//  · TARJETAS: entrada y salida con la misma duración (0,18 s), la misma distancia (80 px) y eases espejados (power3.out / power3.in); la siguiente
+//    arranca 1 cuadro ANTES de que la anterior termine de salir (nunca más de 1 cuadro sin tarjeta). La primera (el gancho) ya está en el cuadro 0.
+//  · COSTURAS DE PANTALLA COMPLETA: empuje rígido de 6 cuadros a la izquierda dentro del hueco de 6 cuadros entre dos líneas de voz; lo que sale y lo
+//    que entra comparten curva y duración y están pegados borde con borde. Las tarjetas VIAJAN con el empuje (−W saliente, +W entrante).
+//  · SIN AIRE MUERTO (v2): un evento visual como mucho cada 2,0 s (tarjeta, acento, etiqueta, recorte, aro, marco, sello, empuje) y las fotos fijas llevan un
+//    empuje lento 1,00 → 1,03 (el aro, el marco y los recuadros de origen están dentro del contenedor que hace el zoom y siguen a la foto).
+//  · un solo sello fuerte: «5 dedos» sobre el cuadro 120 en la placa (130 % → 100 % en 3 cuadros, −5°) con golpe de zoom +3 % durante 5 cuadros.
+const tl = gsap.timeline({ paused: true });
+const { E_IN, E_OUT, FR, PUSH, PEASE, W } = PLAN;
+const ACC = getComputedStyle(document.documentElement).getPropertyValue('--acc').trim() || '#10C26B';
+const IN_X = 80, OUT_X = -80;
+const enter = (sel, a, o = {}) => tl.fromTo(sel, { x: o.x ?? IN_X, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: o.d ?? E_IN, ease: 'power3.out' }, a);
+const leave = (sel, b, o = {}) => tl.to(sel, { x: o.x ?? OUT_X, autoAlpha: 0, duration: o.d ?? E_OUT, ease: 'power3.in' }, b - (o.d ?? E_OUT));
+
+// ── EMPUJE rígido (costura de pantalla completa): los que salen van de 0 a −W y los que entran de +W a 0, con la misma curva
+const empuje = (T, sale, entra) => {
+  const t0 = T - PUSH, S = sale.map((i) => '#' + i).join(','), E = entra.map((i) => '#' + i).join(',');
+  if (S) tl.fromTo(S, { x: 0 }, { x: -W, duration: PUSH, ease: PEASE, immediateRender: false }, t0);
+  if (E) tl.fromTo(E, { x: W }, { x: 0, duration: PUSH, ease: PEASE }, t0);
+};
+for (const c of PLAN.empujes) empuje(c.t, c.sale, c.entra);
+
+// ── empuje lento de las fotos fijas (1,00 → 1,03 con origen en el centro): nunca hay un cuadro idéntico al anterior
+for (const z of PLAN.zooms) tl.fromTo('#z-' + z.id, { scale: 1 }, { scale: z.z, duration: z.b - z.a, ease: 'none' }, z.a);
+
+// ── rótulo de IA: ya está en pantalla en el cuadro 0 (sin entrada); se mantiene los 3 s completos y sale por la izquierda entre 3,0 y 3,25 s
+leave('#rotulo', PLAN.rotulo.b, { x: -60, d: 0.25 });
+
+// ── tarjetas narrativas
+for (const c of PLAN.tarjetas) {
+  if (!c.en_empuje_entra && !c.sin_entrada) enter('#' + c.id, c.a);
+  if (!c.sin_salida && !c.en_empuje_sale) leave('#' + c.id, c.b);
+  // acento tardío: la segunda mitad de la frase se enciende a mitad de tarjeta (evento visual real, sin texto nuevo)
+  if (c.acento_t) tl.to('#' + c.id + ' b.late', { color: ACC, duration: 0.2, ease: 'none' }, c.acento_t);
+}
+
+// ── etiquetas de dato (entran desde la derecha, salen por la izquierda)
+for (const d of PLAN.etiquetas) { enter('#' + d.id, d.a, { x: 60 }); leave('#' + d.id, d.b, { x: -60 }); }
+
+// ── gancho: aro verde sobre el letrero (1,5 s) y, 0,4 s después, el recorte ampliado (ya difuminado) con su leyenda. El aro está dentro del zoom de la foto.
+{
+  const A = PLAN.aro;
+  tl.fromTo('#aro', { scale: 1.4, autoAlpha: 0, transformOrigin: '50% 50%' }, { scale: 1, autoAlpha: 1, duration: 0.3, ease: 'power4.out' }, A.a);
+  if (PLAN.insL) { enter('#insL', PLAN.insL.a, { x: 70 }); leave('#insL', PLAN.insL.b, { x: -70 }); }
+}
+// ── error 1: la cara pasó el control: marco de esquinas (se cierra), sale antes del empuje
+{
+  const m = PLAN.marco;
+  tl.fromTo('#marco', { scale: 1.2, autoAlpha: 0, transformOrigin: '50% 50%' }, { scale: 1, autoAlpha: 1, duration: 0.3, ease: 'power4.out' }, m.a);
+  leave('#marco', m.b, { x: -60 });
+}
+
+// ── error 2: recortes ampliados de la agenda: recuadro verde en la foto (dentro del zoom) + recorte. Entran desde la derecha y salen por la izquierda.
+for (const [n, ins] of [[1, PLAN.ag.ins1], [2, PLAN.ag.ins2]]) {
+  if (!ins) continue;
+  tl.fromTo('#org' + n, { scale: 1.08, autoAlpha: 0, transformOrigin: '50% 50%' }, { scale: 1, autoAlpha: 1, duration: 0.25, ease: 'power3.out' }, ins.a);
+  enter('#ins' + n, ins.a + 0.1, { x: 70 });
+  leave('#ins' + n, ins.b, { x: -70 });
+  tl.to('#org' + n, { autoAlpha: 0, duration: 0.18, ease: 'power3.in' }, ins.b - 0.18);
+}
+
+// ── error 3: clip K4 a 1x. El contador avanza UN número por cuadro (tira de 145 números, ease steps): el cuadro n del clip cae en t_clip + (n − k0)/24.
+//    En el cuadro 120 (t120) la pastilla se enciende y el recuadro «origen» marca de dónde sale el recorte de la placa, SOLO 6 cuadros (120-125);
+//    después viaja con el empuje de salida hacia la placa (los cuadros 126-131 del clip pasan dentro del empuje).
+{
+  const k = PLAN.ctr, N = k.cuadros_clip, last = Math.round((k.b - k.t_clip) / FR) + k.k0 - 1;   // último cuadro del clip que se ve
+  enter('#ctr', k.a + 0.05, { d: 0.18 });
+  // steps(S) da S+1 escalones iguales: (last − k0 + 1) cuadros = steps(last − k0). Arranca 1/4 de cuadro ANTES del cuadro k0 para que cada instante
+  // t_clip + j/24 caiga en el MEDIO de su escalón (justo en el borde, un error de coma flotante lo corre un número).
+  tl.fromTo('#ctrstrip', { y: -k.k0 * 48 }, { y: -last * 48, duration: (last - k.k0 + 1) * FR, ease: 'steps(' + (last - k.k0) + ')' }, k.t_clip - 0.25 * FR);
+  const t0 = k.t120, t1 = k.t120 + k.origen_cuadros * FR;
+  tl.set('#ctr .tag', { backgroundColor: ACC, color: '#04210F' }, t0 - 0.5 * FR);
+  tl.set('#ctr .tag', { backgroundColor: 'rgba(10,12,17,.80)', color: '#F6F8FB' }, t1 - 0.5 * FR);
+  tl.set('#origen', { autoAlpha: 0, immediateRender: true }, 0);
+  tl.set('#origen', { autoAlpha: 1 }, t0 - 0.5 * FR);
+  tl.fromTo('#origen', { scale: 1.06, transformOrigin: '50% 50%' }, { scale: 1, duration: 2 * FR, ease: 'power3.out' }, t0);
+  tl.set('#origen', { autoAlpha: 0 }, t1 - 0.5 * FR);
+}
+
+// ── placa de evidencia (llega con el empuje de T10 y sale con el de T11). El sello cae sobre el cuadro 120.
+{
+  const TS = PLAN.placa.sello_t;
+  tl.set('#sello', { autoAlpha: 0, immediateRender: true }, 0);
+  tl.fromTo('#sello', { scale: 1.3, rotation: -5, autoAlpha: 0, transformOrigin: '50% 50%' }, { scale: 1, rotation: -5, autoAlpha: 1, duration: 3 * FR, ease: 'power4.out' }, TS);
+  tl.fromTo('#visor', { scale: 1, transformOrigin: '50% 50%' }, { scale: 1.03, duration: 2 * FR, ease: 'power2.out' }, TS);
+  tl.to('#visor', { scale: 1, duration: 3 * FR, ease: 'power2.inOut' }, TS + 2 * FR);
+  tl.to('#visor', { borderColor: ACC, duration: 0.2, ease: 'none' }, TS);
+  // el cuadro ampliado respira: empuje lento 1,00 → 1,05 dentro del visor (overflow:hidden) durante toda la placa
+  tl.fromTo('#visor img', { scale: 1, transformOrigin: '50% 50%' }, { scale: 1.05, duration: PLAN.placa.b - PLAN.placa.a, ease: 'none' }, PLAN.placa.a);
+}
+
+window.__timelines['main'] = tl;
+
+</script>
+</body>
+</html>

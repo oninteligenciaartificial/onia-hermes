@@ -2,7 +2,7 @@
 # H3/H8: cuadros PLANOS (vacíos) y saltos de luma entre cuadros consecutivos (destellos) de un render. Imprime también la luma/desviación de los
 # cuadros de cada costura. Uso (necesita numpy + cv2: el venv del control de cara sirve):
 #   $FACE_GATE_HOME/venv/bin/python scripts/vacios.py out/g2-final-1080x1920.mp4 > qa/vacios-y-saltos.txt
-# G2: imprime la luma/desviación de los cuadros de cada costura (los 11 empujes de plan.json, de T-6 a T+3 cuadros).
+# G2 v2: imprime la luma/desviación de los cuadros de cada costura (los 6 empujes de plan.resuelto.json, de T-6 a T+3 cuadros).
 import sys, json, os, numpy as np, cv2
 v=sys.argv[1]
 cap=cv2.VideoCapture(v); n=int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
@@ -21,9 +21,9 @@ d=np.abs(np.diff(L))
 top=np.argsort(-d)[:12]
 print('mayores saltos de luma entre cuadros consecutivos (cuadro i -> i+1, t, luma_i, luma_i+1):')
 for i in sorted(top): print('  %d->%d  t=%.3f  %.1f -> %.1f  (Δ=%.1f)'%(i,i+1,(i+1)/24,L[i],L[i+1],d[i]))
-plan=json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','plan.json')))
+plan=json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','plan.resuelto.json')))
 # saltos de luma FUERA de los empujes (los empujes pasan de una foto clara a una placa oscura: ahí el salto es esperable)
-plan0=json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','plan.json')))
+plan0=json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','plan.resuelto.json')))
 en_empuje=set()
 for c in plan0['costuras']:
     if c['tipo']=='empuje':

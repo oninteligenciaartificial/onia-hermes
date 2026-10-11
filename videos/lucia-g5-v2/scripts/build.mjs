@@ -1,18 +1,21 @@
 #!/usr/bin/env node
-// Lucía · G5 «Cómo mido si una cara es la de Lucía (y cuándo no creerle al número)» (57,5 s, 1080x1920, 24 fps) — montaje con HyperFrames (1ra pasada, 9-oct-2026).
-// Lee plan.json (capas, tiempos, datos) → valida reglas de texto, costuras Y LOS NÚMEROS / AFIRMACIONES contra v4/PROCEDENCIA.jsonl → escribe index.html
-// (DOM estático + un único timeline GSAP) y los manifiestos que leen los controles (qa/elementos-texto.json, qa/eventos-plan.json, qa/datos-plan.json).
-// 0 créditos: tres fotos y el cierre ya pagados el 8-oct, dos cuadros de clips crudos de G2 (versionados en assets-fijos/), 8 referencias oficiales.
-// Sin clips: fotos fijas con empuje lento, cuadros fijos y placas. Método y trampas: .claude/skills/lucia/montaje-hyperframes.md. Plantilla: videos/lucia-g4/.
+// Lucía · G5 v2 «Cómo mido si una cara es la de Lucía (y cuándo no creerle al número)» (26,8 s, 1080x1920, 24 fps) — re-corte de G5 con HyperFrames (11-oct-2026).
+// Lee plan.json (capas, tiempos, datos) y guion-voz.txt (los TRAMOS: una línea de voz = un tramo) → valida reglas de texto, costuras, el CRONOGRAMA DE VOZ
+// (palabras / 3,6 + hueco ≤ 0,25 s, ≤ 450 caracteres) Y LOS NÚMEROS / AFIRMACIONES contra v4/PROCEDENCIA.jsonl → escribe index.html
+// (DOM estático + un único timeline GSAP) y los manifiestos que leen los controles (qa/elementos-texto.json, qa/eventos-plan.json, qa/datos-plan.json, qa/lectura-plan.json).
+// 0 créditos: tres fotos y el cierre ya pagados el 8-oct, dos cuadros de clips crudos de G2 (versionados en assets-fijos/), 8 referencias oficiales. SIN VOZ: el audio es silencio.
+// Sin clips: fotos fijas con empuje lento, cuadros fijos y placas. Método y trampas: .claude/skills/lucia/montaje-hyperframes.md. Plantilla: videos/lucia-g5/ (57,5 s).
 // Uso:  node scripts/build.mjs   (copia el material, valida e imprime la tabla de cortes; si falla una regla o una afirmación, se corta y no escribe index.html)
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { cronograma, CUPO, GAP_MAX } from './voz.mjs';
 
 const P = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const plan = JSON.parse(fs.readFileSync(path.join(P, 'plan.json'), 'utf8'));
-const { w: W, h: H, fps: FPS, duracion: DUR } = plan.lienzo;
+const { w: W, h: H, fps: FPS } = plan.lienzo;
+const DUR = plan.lienzo.cuadros / plan.lienzo.fps;                      // exacto: un número entero de cuadros
 const ACC = plan.acento, BAD = plan.alerta;
 const Z = plan.zona_segura;
 const FR = 1 / FPS;
@@ -88,13 +91,43 @@ for (const c of plan.tarjetas) {
 }
 const med = Object.fromEntries(plan.medios.map((m) => [m.id, m]));
 const tj = Object.fromEntries(plan.tarjetas.map((c) => [c.id, c]));
-if (med['f-cierre'].b !== DUR) errores.push(`el cierre termina en ${med['f-cierre'].b} y el video dura ${DUR}`);
-if (Math.abs(DUR * FPS - Math.round(DUR * FPS)) > 1e-9) errores.push('la duración no es un número entero de cuadros');
+if (Math.abs(med['f-cierre'].b - DUR) > 1e-6) errores.push(`el cierre termina en ${med['f-cierre'].b} y el video dura ${DUR}`);
+if (DUR < 26 - 1e-9 || DUR > 30 + 1e-9) errores.push(`la duración (${DUR.toFixed(3)} s) está fuera de 26-30 s`);
 // cadena de tarjetas: contiguas (b de una = a de la siguiente)
 for (const cad of plan.cadenas_de_tarjetas) for (let i = 1; i < cad.length; i++) {
   if (Math.abs(tj[cad[i]].a - tj[cad[i - 1]].b) > 1e-9) errores.push(`${cad[i - 1]}→${cad[i]}: no son contiguas (${tj[cad[i - 1]].b} vs ${tj[cad[i]].a})`);
 }
 if (plan.cadenas_de_tarjetas[0].length !== plan.tarjetas.length) errores.push('la cadena de tarjetas no incluye a todas');
+// ── CRONOGRAMA DE VOZ: cada línea de guion-voz.txt es un tramo; el plan (tarjetas y tramos) tiene que seguirlos al cuadro ──
+const vozTxt = fs.readFileSync(path.join(P, 'guion-voz.txt'), 'utf8');
+const crono = cronograma(vozTxt, plan.voz.ultimo_tramo_cuadros);
+const voces = crono.tramos;
+{
+  if (crono.chars > CUPO) errores.push(`guion-voz.txt: ${crono.chars} caracteres (con un salto entre líneas): pasa el cupo de ${CUPO}`);
+  if (crono.cuadros !== plan.lienzo.cuadros) errores.push(`guion-voz.txt da ${crono.cuadros} cuadros y plan.lienzo.cuadros dice ${plan.lienzo.cuadros}`);
+  if (voces.length !== plan.tramos.length || voces.length !== plan.tarjetas.length) errores.push(`hay ${voces.length} líneas de voz, ${plan.tramos.length} tramos y ${plan.tarjetas.length} tarjetas: tienen que ser las mismas`);
+  voces.forEach((v, i) => {
+    const tr = plan.tramos[i], c = plan.tarjetas[i];
+    if (!tr || !c) return;
+    if (Math.abs(tr.a - v.a) > 1e-6 || Math.abs(tr.b - v.b) > 1e-6) errores.push(`tramo ${v.n}: el plan dice ${tr.a}-${tr.b} y la línea de voz da ${v.a.toFixed(4)}-${v.b.toFixed(4)} (${v.palabras} palabras / 3,6 + hueco)`);
+    if (Math.abs(c.a - v.a) > 1e-6 || Math.abs(c.b - v.b) > 1e-6 || c.tramo !== tr.id) errores.push(`tarjeta ${c.id}: no coincide con el tramo ${v.n} (${v.a.toFixed(4)}-${v.b.toFixed(4)})`);
+    if (!v.ultimo && v.hueco > GAP_MAX + 1e-9) errores.push(`tramo ${v.n}: hueco de ${v.hueco.toFixed(3)} s entre líneas (máx ${GAP_MAX})`);
+    v.tarjeta = c.id;
+  });
+  if (/\d[.,]\d/.test(vozTxt)) errores.push('guion-voz.txt: hay un decimal; la voz no lleva cifras con coma (se cuentan palabras habladas, no «0,70»)');
+  // lo que la voz dice y lo que la pantalla dice es lo mismo (las cifras van en pantalla; la voz las nombra sin decimales)
+  const dice = (n, re) => { if (!re.test(voces[n - 1]?.linea || '')) errores.push(`la línea de voz ${n} no dice lo que su tarjeta (${re})`); };
+  dice(1, /^¿Cómo sé que sigue siendo ella\?/); dice(4, /piso lo elegí yo/); dice(5, /otra persona/); dice(6, /a ojo/); dice(6, /medidor avisa/); dice(7, /clip varía/); dice(8, /letreros inventados/); dice(9, /imagen entera/);
+  if (voces.at(-1)?.linea !== 'Seguime: cada semana, una prueba.') errores.push('la última línea de voz tiene que ser el CTA exacto «Seguime: cada semana, una prueba.»');
+}
+// el CTA exacto, en los últimos 2,4 a 5,5 s (regla de marca)
+{
+  const cta = plan.tarjetas.at(-1), t = `${cta.texto.replace(/\n/g, ' ')} ${cta.acento}`.replace(/\s+/g, ' ').trim();
+  if (t !== 'Seguime: cada semana, una prueba.') errores.push(`CTA: «${t}» no es el texto exacto`);
+  const vis = DUR - cta.a;
+  if (vis < 2.4 - 1e-9 || vis > 5.5 + 1e-9) errores.push(`CTA: se ve ${vis.toFixed(3)} s y la regla pide 2,4 a 5,5 s`);
+  if (plan.rotulo.a !== 0 || plan.rotulo.b < 3.0 - 1e-9) errores.push('el rótulo de IA tiene que verse desde el cuadro 0 hasta los 3,0 s');
+}
 // costuras: el medio entrante arranca en T−6 cuadros; el saliente termina exactamente en T (son fotos y placas: no hay clips)
 for (const c of plan.costuras) if (c.tipo === 'empuje') {
   for (const id of c.entra) if (med[id] && Math.abs(med[id].a - (c.t - PUSH)) > 1e-6) errores.push(`costura ${c.t}: «${id}» debe empezar en ${(c.t - PUSH).toFixed(3)} y empieza en ${med[id].a}`);
@@ -137,15 +170,14 @@ if (proc && vid && lab && !errores.length) {
   const raw = (k) => proc[k].id;
   const ok = (cond, texto) => { claim.push(`${cond ? 'ok ' : '✖  '} ${texto}`); if (!cond) errores.push(`afirmación falsa: ${texto}`); };
   const piso = SC.piso;
-  // números de las tres fotos de ejemplo
+  // números de la foto del gancho (A) y del ejemplo (B del café)
   for (const d of Object.values(dato)) {
     if (r2(raw(d.clave)) !== d.valor) errores.push(`${d.id}: parecido ${d.valor} y PROCEDENCIA dice ${raw(d.clave)} → ${r2(raw(d.clave))}`);
     const est = raw(d.clave) >= piso ? 'ok' : 'bajo';
     if (est !== d.estado) errores.push(`${d.id}: estado «${d.estado}» y ${raw(d.clave)} es «${est}» (piso ${piso})`);
   }
-  ok(raw('a') >= piso, `«0,81: es ella.»: la imagen A mide ${raw('a')} (≥ ${fm(piso)}, sobre el piso)`);
-  ok(raw('f') < piso && raw('f') > raw('b_cafe'), `«0,66: bajo el piso.»: la imagen F mide ${raw('f')} en el PNG original (bajo el piso ${fm(piso)}; y más que la del café, ${raw('b_cafe')}). Sobre el cuadro con zoom mide 0,678-0,683 y la fuente a ese zoom 0,690-0,697 (qa/face-gate-final.txt): «bajo el piso» vale para el original medido, que es el que va en pantalla`);
-  ok(raw('b_cafe') < piso && /otra persona/.test(proc.b_cafe.nota || ''), `«0,35: otra persona.»: la imagen B del café mide ${raw('b_cafe')} y PROCEDENCIA dice «${proc.b_cafe.nota}»`);
+  ok(raw('a') >= piso && r2(raw('a')) === 0.81, `gancho «parecido 0,81»: la imagen A mide ${raw('a')} (≥ ${fm(piso)}, sobre el piso). La pantalla no dice «es ella»: solo muestra el número que el programa le dio`);
+  ok(raw('b_cafe') < piso && /otra persona/.test(proc.b_cafe.nota || '') && /otra persona/.test(`${tj.c5.texto} ${tj.c5.acento}`) && /bajo el piso/i.test(tj.c5.texto), `«Bajo el piso: otra persona.» (parecido 0,35): la imagen B del café mide ${raw('b_cafe')} (< ${fm(piso)}) y PROCEDENCIA dice «${proc.b_cafe.nota}»`);
   ok(SC.piso === 0.7, `«Piso, 0,70. Lo elegí yo.»: el piso del plan es ${SC.piso} (el gate del repo: 0,70, una decisión)`);
   ok(refNames.length === 8 && plan.refs.recortes.length === 8, `«Ocho fotos oficiales»: el manifiesto trae ${refNames.length} referencias y el plan ${plan.refs.recortes.length} recortes`);
   // razón 1: cara chica
@@ -156,39 +188,31 @@ if (proc && vid && lab && !errores.length) {
   p.d1.valor = r2(mn); p.d2.valor = r2(mx); p.d1.raw = mn; p.d2.raw = mx; p.banda.centro = prom;
   const difMax = Math.max(...lab.id.map((x, i) => Math.abs(x - lab.fuente_mismo_instante[i])));
   ok(mn === 0.771 && mx === 0.799 && m6.length === 6, `razón 2: las 6 medidas del MISMO clip (Motor 6, PROCEDENCIA línea 97) son ${m6.join(' · ')}: mínimo ${mn} → ${fm(r2(mn))}, máximo ${mx} → ${fm(r2(mx))} (rango ${(mx - mn).toFixed(3)})`);
-  const c14 = tj.c14, c14b = tj.c14b, txt14 = `${c14.texto} ${c14.acento}`;
-  ok(txt14.includes(fm(p.d1.valor)) && txt14.includes(fm(p.d2.valor)) && /cabe en ±0,03/.test(c14b.acento) && p.banda.mas_menos === 0.03, `«Mismo clip: de ${fm(p.d1.valor)} a ${fm(p.d2.valor)}.» → «Esa variación cabe en ±0,03.»: las cifras de la tarjeta son las del dato`);
+  const c7 = tj.c7;
+  ok(/^Mismo clip/.test(c7.texto) && /cabe en ±0,03/.test(c7.acento) && p.banda.mas_menos === 0.03, `«Mismo clip: cabe en ±0,03.»: las dos puntas (${fm(p.d1.valor)} y ${fm(p.d2.valor)}) van rotuladas sobre la escala ampliada y su valor lo comprueba medir-dom en el DOM (qa/datos-plan.json)`);
   ok(m6.every((x) => Math.abs(x - prom) <= p.banda.mas_menos + 1e-9), `las 6 medidas del clip caen dentro de ±${p.banda.mas_menos} de su promedio (${prom.toFixed(3)}): la banda dibujada las contiene a todas (la mayor separación al promedio es ${Math.max(...m6.map((x) => Math.abs(x - prom))).toFixed(3)})`);
   ok(difMax <= 0.03 + 1e-9, `±0,03 como tamaño del ruido: entre un clip y su remapeo de labios (misma cara, mismos instantes) la mayor diferencia medida es ${difMax.toFixed(3)} (sync_so, PROCEDENCIA línea 97), y el rango del clip del Motor 6 es ${(mx - mn).toFixed(3)}. Es un tamaño aproximado del ruido, NO un intervalo de confianza`);
-  plan.lec.filas[1].texto = `Mismo clip: ${mn.toFixed(3).replace('.', ',')}-${mx.toFixed(3).replace('.', ',')}`;
   // razón 3: letreros
   const m4 = vid.m4, t4 = [0, 1, 2, 3, 4, 5, 5.9];
-  ok(/letrero/.test(m4.nota || '') && plan.frames.m4.t_clip === t4[plan.r3.muestra] && r2(m4.id[plan.r3.muestra]) === 0.8 && m4.id[plan.r3.muestra] >= piso, `«No ve letreros inventados.»: PROCEDENCIA dice del Motor 4 «${m4.nota}» y su medida a ${t4[plan.r3.muestra]} s (el cuadro mostrado) es ${m4.id[plan.r3.muestra]} → ${fm(r2(m4.id[plan.r3.muestra]))}, sobre el piso: el número aprueba un clip con letrero inventado`);
+  ok(/letreros inventados/.test(`${tj.c8.texto} ${tj.c8.acento}`) && /letrero/.test(m4.nota || '') && plan.frames.m4.t_clip === t4[plan.r3.muestra] && r2(m4.id[plan.r3.muestra]) === 0.8 && m4.id[plan.r3.muestra] >= piso, `«El número no ve letreros inventados.»: PROCEDENCIA dice del Motor 4 «${m4.nota}» y su medida a ${t4[plan.r3.muestra]} s (el cuadro mostrado) es ${m4.id[plan.r3.muestra]} → ${fm(r2(m4.id[plan.r3.muestra]))}, sobre el piso: el número aprueba un clip con letrero inventado`);
   ok(plan.frames.m4.cuadro === Math.round(plan.frames.m4.t_clip * FPS), `el cuadro 96 del clip es t = ${plan.frames.m4.t_clip} s a 24 fps`);
   ok(plan.frames.m5.cuadro === 0 && r2(vid.m5.id[0]) === 0.8, `el cuadro 0 del Motor 5 es la primera muestra de PROCEDENCIA (${vid.m5.id[0]})`);
 }
-// pie: pie.txt se genera desde el bloque «Pie» del guion del repo (G5-como-se-mide-una-cara.md, ya corregido: 2da pasada del 9-oct)
-const pieDe = (file) => {
-  const g0 = fs.readFileSync(file, 'utf8');
-  const g = g0.slice(g0.indexOf('\n## Pie'));              // el pie es el bloque «…» de la sección «## Pie» (hay otros «…» antes)
-  const mm = g.match(/\*«([\s\S]+?)»\*\s*`([^`]+)`/);
-  return mm ? `${mm[1].replace(/\s+/g, ' ').trim()} ${mm[2].trim()}` : null;
-};
+// pie: pie.txt se ESCRIBE a mano (el pie del guion aprobado de G5 habla de un video de 57 s; este es de 26,8 s) y el build lo comprueba contra la pantalla, la voz y las frases retiradas
+const RETIRADAS = ['baja sola', 'poco confiable', 'orden de magnitud', 'se parece poco', 'es ruido', 'no es fiable', 'lo inventó la ia'];
+const pie = fs.readFileSync(path.join(P, 'pie.txt'), 'utf8').replace(/\s+/g, ' ').trim();
 {
-  const po = pieDe(path.join(R, plan.guion));
-  if (!po) errores.push('no se encontró el pie en el guion del repo');
-  else {
-    const pp = path.join(P, 'pie.txt');
-    if (!fs.existsSync(pp) || fs.readFileSync(pp, 'utf8') !== po) fs.writeFileSync(pp, po);
-    claim.push('ok  pie.txt idéntico al del guion del repo (se regenera desde ahí)');
-    const RETIRADAS = ['baja sola', 'poco confiable', 'orden de magnitud', 'se parece poco', 'es ruido', 'no es fiable', 'lo inventó la ia'];
-    const pantalla = [plan.rotulo.texto, ...plan.tarjetas.map((c) => `${c.texto} ${c.acento || ''}`), plan.r1.nota.texto, plan.r2.zoom.texto, plan.r3.llamada.texto, plan.r3.nota.texto, ...plan.lec.filas.map((f) => f.texto)].join(' \n ').replace(/\s+/g, ' ').toLowerCase();
-    for (const f of RETIRADAS) {
-      if (po.toLowerCase().includes(f)) errores.push(`el pie repite una frase retirada: «${f}»`);
-      if (pantalla.includes(f)) errores.push(`la pantalla repite una frase retirada: «${f}»`);
-    }
-    claim.push(`ok  ninguna frase retirada (${RETIRADAS.join(' / ')}) en pantalla ni en el pie`);
+  const lp = pie.toLowerCase();
+  if (!pie.startsWith('Lucía Antelo es un personaje hecho con IA')) errores.push('el pie tiene que abrir con «Lucía Antelo es un personaje hecho con IA…»');
+  for (const f of ['ocho fotos oficiales', '0,70', 'que elegí yo', 'bajo el piso', 'otra persona', 'a ojo', '0,77', '0,80', 'cabe en ±0,03', 'letreros inventados', 'imagen entera', 'cada semana hago una prueba', 'seguime']) if (!lp.includes(f)) errores.push(`el pie no dice «${f}», que el video sí dice`);
+  const pantalla = [plan.rotulo.texto, ...plan.tarjetas.map((c) => `${c.texto} ${c.acento || ''}`), plan.r1.nota.texto, plan.r2.zoom.texto, plan.r3.llamada.texto].join(' \n ').replace(/\s+/g, ' ').toLowerCase();
+  for (const f of RETIRADAS) {
+    if (lp.includes(f)) errores.push(`el pie repite una frase retirada: «${f}»`);
+    if (pantalla.includes(f)) errores.push(`la pantalla repite una frase retirada: «${f}»`);
+    if (vozTxt.toLowerCase().includes(f)) errores.push(`la voz repite una frase retirada: «${f}»`);
   }
+  claim.push('ok  pie.txt abre con «personaje hecho con IA», dice lo que el video dice (ocho fotos oficiales, piso 0,70, café 0,35, cara chica, 0,77-0,80 cabe en ±0,03, letreros inventados, imagen entera, CTA) y no repite ninguna frase retirada');
+  claim.push(`ok  ninguna frase retirada (${RETIRADAS.join(' / ')}) en pantalla, voz ni pie`);
 }
 // tags y sellos dentro de la vida de su tarjeta y antes del empuje de salida
 for (const d of Object.values(dato)) {
@@ -208,18 +232,17 @@ const lecturas = [];
   const p2 = plan.p2, es = p2.escala;
   L('sc-ax0', 'p2 «0»', '0', es.ejes_t + 0.25, fin('pl-p2'));
   L('sc-ax1', 'p2 «idéntica · 1»', 'idéntica · 1', es.uno_t + 0.25, fin('pl-p2'));
-  L('sc-mkl', 'p2 «mi piso»', `mi piso · ${fm(SC.piso)}`, es.marca_t + 0.05 + E_IN, fin('pl-p2'));
+  L('sc-mkl', 'p2 «piso»', `piso · ${fm(SC.piso)}`, es.marca_t + 0.05 + E_IN, fin('pl-p2'));
   for (const e of plan.ejemplos) L(`dA-${e.id}`, `ejemplo ${e.letra} dato`, `${e.pill} ${fm(e.valor)}`, e.t + E_IN, e.fin - 0.1);
-  const r1 = plan.r1; L('r1-tag', 'r1 «89 px»', `${caras.frames.fr_m5.cara_px_nativa} px`, r1.tag_t + 0.25, fin('pl-r1')); L('r1-nota', 'r1 nota', r1.nota.texto, r1.nota.t + E_IN, fin('pl-r1'));
+  const r1 = plan.r1; L('r1-tag', 'r1 «89 px»', `${caras.frames.fr_m5.cara_px_nativa} px`, r1.tag_t + 0.25, fin('pl-r1')); L('r1-nota', 'r1 nota (ya está al llegar)', r1.nota.texto, llega('pl-r1'), fin('pl-r1'));
   const r = plan.r2;
-  L('r2-mkl', 'r2 «mi piso»', `mi piso · ${fm(SC.piso)}`, llega('pl-r2'), fin('pl-r2'));
+  L('r2-mkl', 'r2 «piso»', `piso · ${fm(SC.piso)}`, llega('pl-r2'), fin('pl-r2'));
   L('r2-zoom', 'r2 «Zoom»', r.zoom.texto, llega('pl-r2'), fin('pl-r2'));
   r.marcas.forEach((m, i) => L(`r2-m${i + 1}`, `r2 marca ${fm(m)}`, fm(m), llega('pl-r2'), fin('pl-r2')));
   L('r2-v1', 'r2 valor 1', fm(r.d1.valor), r.d1.t + 0.25, fin('pl-r2')); L('r2-v2', 'r2 valor 2', fm(r.d2.valor), r.d2.t + 0.25, fin('pl-r2'));
   L('r2-bl', 'r2 banda', `±${fm(r.banda.mas_menos)}`, r.banda.t + 0.3, fin('pl-r2'));
   const r3 = plan.r3;
-  L('r3-call', 'r3 «Lo difuminé»', r3.llamada.texto.replace('\n', ' '), r3.llamada.t + E_IN, fin('pl-r3')); L('r3-num', 'r3 número', `parecido ${fm(r2(vid.m4.id[r3.muestra]))}`, r3.pill_num_t + E_IN, fin('pl-r3')); L('r3-nota', 'r3 nota', r3.nota.texto, r3.nota.t + E_IN, fin('pl-r3'));
-  plan.lec.filas.forEach((f, i) => L(`le-t${i + 1}`, `lección ${i + 1}`, f.texto, f.t + 0.25, fin('pl-lec')));
+  L('r3-call', 'r3 «Lo difuminé» (ya está al llegar)', r3.llamada.texto.replace('\n', ' '), llega('pl-r3'), fin('pl-r3')); L('r3-num', 'r3 número', `parecido ${fm(r2(vid.m4.id[r3.muestra]))}`, r3.pill_num_t + E_IN, fin('pl-r3'));
   for (const x of lecturas) if (x.dur < x.min - 1e-9) errores.push(`lectura «${x.que}» (${x.n} palabras): ${x.dur.toFixed(2)} s y pide ${x.min.toFixed(2)} s`);
 }
 if (errores.length) { console.error('✖ reglas:\n  ' + errores.join('\n  ')); process.exit(1); }
@@ -238,8 +261,8 @@ const PAD = 16;                                                       // margen 
 // fotos: contenedor .clip a lienzo completo con overflow:hidden (el empuje rígido anima el contenedor; el empuje lento anima la <img> y la caja de cara)
 const fotosPlan = [];
 const cajas = [];                                                     // cajas de cara (para el timeline y los controles)
-const boxDe = { 'f-gancho': { k: 'gancho', estado: 'ok', t: plan.gancho.caja_t } };
-for (const e of plan.ejemplos) boxDe[e.medio] = { k: e.id, estado: e.estado, t: e.box_t };
+const boxDe = { 'f-gancho': { k: 'gancho', estado: 'ok', t: plan.gancho.caja_t, fin: plan.gancho.caja_fin } };
+for (const e of plan.ejemplos) boxDe[e.medio] = { k: e.id, estado: e.estado, t: e.box_t, fin: e.box_fin };
 for (const m of plan.medios) if (m.tipo === 'foto') {
   const f = plan.fotos[m.foto], c = caras.fotos[m.foto].caja, ox = Math.round((c[0] + c[2]) / 2), oy = Math.round((c[1] + c[3]) / 2);
   fotosPlan.push({ id: m.id, a: m.a, b: m.b, ox, oy, foto: m.foto });
@@ -248,7 +271,7 @@ for (const m of plan.medios) if (m.tipo === 'foto') {
   if (bx) {
     const l = c[0] - PAD, t = c[1] - PAD - 8, w_ = c[2] - c[0] + 2 * PAD, h_ = c[3] - c[1] + 2 * PAD + 8;
     box = `<div class="fz" id="${m.id}-bz" style="left:${l}px;top:${t}px;width:${w_}px;height:${h_}px"><div class="fbox${bx.estado === 'bajo' ? ' bad' : ''}" id="${m.id}-box"></div></div>`;
-    cajas.push({ id: `${m.id}-box`, zid: `${m.id}-bz`, medio: m.id, t: bx.t, ox: ox - l, oy: oy - t });
+    cajas.push({ id: `${m.id}-box`, zid: `${m.id}-bz`, medio: m.id, t: bx.t, fin: bx.fin ?? null, ox: ox - l, oy: oy - t });
   }
   html += `<div id="${m.id}" class="clip ph" data-start="${f2(m.a)}" data-duration="${f2(m.b - m.a)}" data-track-index="${m.track}" style="z-index:1"><img id="${m.id}-i" src="${f.src}" data-layout-allow-overflow alt="">${box}</div>\n`;
 }
@@ -267,7 +290,7 @@ for (const m of plan.medios) if (m.tipo === 'foto') {
   html += FULLDIV('pl-p1', med['pl-p1'].a, med['pl-p1'].b, 4, h, 'pl');
 }
 
-// ── paso 2: las 8 referencias en fila → flecha → la escala 0-1 con «idéntica · 1» y la marca «mi piso · 0,70» ──
+// ── paso 2: las 8 referencias en fila → flecha → la escala 0-1 (un cursor la recorre de 0 a 1 mientras la voz dice «de 0 a 1») con «idéntica · 1» y la marca «piso · 0,70» ──
 {
   const q = plan.p2.fila, es = plan.p2.escala, y = es.y, fl = plan.p2.flecha;
   let h = '';
@@ -275,10 +298,12 @@ for (const m of plan.medios) if (m.tipo === 'foto') {
   h += `<svg class="ab" id="p2-flecha" style="left:${fl.x - 40}px;top:${fl.y1}px" width="80" height="${fl.y2 - fl.y1}" viewBox="0 0 80 ${fl.y2 - fl.y1}"><line x1="40" y1="0" x2="40" y2="${fl.y2 - fl.y1 - 6}" stroke="#F6F8FB" stroke-opacity=".85" stroke-width="6" stroke-linecap="round"/><path d="M14 ${fl.y2 - fl.y1 - 34} L40 ${fl.y2 - fl.y1 - 6} L66 ${fl.y2 - fl.y1 - 34}" fill="none" stroke="#F6F8FB" stroke-opacity=".85" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
   h += `<div class="trk" id="sc-trk" style="left:${SC.x0}px;top:${y}px;width:${SC.x1 - SC.x0}px"><div class="zona" id="sc-zona" style="left:${X(SC.piso) - SC.x0}px;right:0"></div></div>`;
   h += `<div class="mkv" id="sc-mk" style="left:${X(SC.piso)}px;top:${y - 62}px;height:96px"></div>`;
-  h += cent(X(SC.piso), es.marca_label_y, `<span class="tag tag-d" id="sc-mkl"><i></i>mi piso · <b>${fm(SC.piso)}</b></span>`, 560);
+  h += `<div class="dot s" id="sc-cur" style="left:${X(0)}px;top:${y + 13}px"></div>`;
+  h += cent(X(SC.piso), es.marca_label_y, `<span class="tag tag-d" id="sc-mkl"><i></i>piso · <b>${fm(SC.piso)}</b></span>`, 560);
   h += `<div class="ax" id="sc-ax0" style="left:${SC.x0}px;top:${y + 50}px">0</div>`;
   h += `<div class="ax r" id="sc-ax1" style="left:${SC.x1 - 420}px;width:420px;top:${y + 50}px">idéntica · 1</div>`;
   html += FULLDIV('pl-p2', med['pl-p2'].a, med['pl-p2'].b, 4, h, 'pl');
+  plan.p2._cur = { x0: X(0), x1: X(1) };
 }
 
 // ── razón 1: cuadro del clip crudo con la cara de 89 px, su caja y su lupa ──
@@ -300,7 +325,7 @@ const datos = [];                                                     // lo que 
   plan.r1._geom = { L, T, BW, BH, s, bgx, bgy };
 }
 
-// ── razón 2: escala AMPLIADA «Zoom: 0,70 a 0,90» con la marca «mi piso · 0,70», las dos puntas de un MISMO clip (Motor 6: mínimo y máximo de sus 6 medidas) y la banda de ±0,03 alrededor de su promedio ──
+// ── razón 2: escala AMPLIADA «Zoom: 0,70 a 0,90» con la marca «piso · 0,70», las dos puntas de un MISMO clip (Motor 6: mínimo y máximo de sus 6 medidas) y la banda de ±0,03 alrededor de su promedio ──
 {
   const r = plan.r2, y = r.eje.y, b = r.banda, x1 = X2(b.centro - b.mas_menos), x2 = X2(b.centro + b.mas_menos), xp = X2(SC.piso);
   let h = `<div class="ruido" id="r2-band" style="left:${x1}px;top:${r.y_banda_linea + 16}px;width:${x2 - x1}px;height:${y + 30 - (r.y_banda_linea + 16)}px"></div>`;
@@ -308,7 +333,7 @@ const datos = [];                                                     // lo que 
   r.marcas.forEach((m, i) => { h += `<div class="tkm" style="left:${X2(m) - 2}px;top:${y + 13}px"></div><div class="ax c" id="r2-m${i + 1}" style="left:${X2(m) - 70}px;width:140px;top:${r.y_marcas}px">${fm(m)}</div>`; });
   // el piso (0,70) está en el extremo izquierdo de la escala ampliada: la misma marca y la misma etiqueta que la escala de 0 a 1
   h += `<div class="mkv" id="r2-mk" style="left:${xp}px;top:${y - 33}px;height:${r.y_inferior - 4 - (y - 33)}px"></div>`;
-  h += `<div class="ab" style="left:${xp - 40}px;top:${r.y_inferior}px"><span class="tag tag-d" id="r2-mkl"><i></i>mi piso · <b>${fm(SC.piso)}</b></span></div>`;
+  h += `<div class="ab" style="left:${xp - 40}px;top:${r.y_inferior}px"><span class="tag tag-d" id="r2-mkl"><i></i>piso · <b>${fm(SC.piso)}</b></span></div>`;
   h += `<div class="ab" style="left:560px;width:440px;top:${r.y_inferior + 12}px;text-align:right"><span class="cap2" id="r2-zoom">${esc(r.zoom.texto)}</span></div>`;
   h += `<div class="brk" id="r2-brk" style="left:${x1}px;top:${r.y_banda_linea}px;width:${x2 - x1}px"></div>`;
   h += cent((x1 + x2) / 2, r.y_banda_label, `<span class="note g" id="r2-bl">±${fm(b.mas_menos)}</span>`, 300);
@@ -325,6 +350,7 @@ const datos = [];                                                     // lo que 
     { que: 'r2 marca del piso (x = 0,70)', sel: '#r2-mk', t: tl_, m: 'cx', esp: X2(SC.piso) },
   );
   r.marcas.forEach((m, i) => datos.push({ que: `r2 marca ${fm(m)} (centro)`, sel: `#r2-m${i + 1}`, t: tl_, m: 'cx', esp: X2(m), tol: 2 }));
+  { const es = plan.p2.escala; datos.push({ que: 'p2 cursor en 0 (sale de x = 0)', sel: '#sc-cur', t: es.cursor_t, m: 'cx', esp: X(0) }, { que: 'p2 cursor llega a 1 (x = 1)', sel: '#sc-cur', t: es.uno_t, m: 'cx', esp: X(1) }); }
   datos.push({ que: `r2 valor ${fm(r.d1.valor)}`, sel: '#r2-v1', t: r.d1.t + 0.6, txt: fm(r.d1.valor) }, { que: `r2 valor ${fm(r.d2.valor)}`, sel: '#r2-v2', t: r.d2.t + 0.6, txt: fm(r.d2.valor) });
 }
 
@@ -335,32 +361,8 @@ const datos = [];                                                     // lo que 
   h += `<div class="aro" id="r3-aro" style="left:${w_.x + a.x}px;top:${w_.y + a.y}px;width:${a.w}px;height:${a.h}px;border-radius:34px"></div>`;
   h += `<div class="call" id="r3-call" style="left:${c.x}px;top:${c.y}px">${esc(c.texto).replace('\n', '<br>')}</div>`;
   h += cent(540, r3.pills_y, `<span class="tag tag-d dg" id="r3-num"><i></i>parecido <b>${fm(num)}</b></span>`, 980);
-  h += cent(540, r3.nota.y, `<span class="note" id="r3-nota">${esc(r3.nota.texto)}</span>`, 940);
   html += FULLDIV('pl-r3', med['pl-r3'].a, med['pl-r3'].b, 4, h, 'pl');
   datos.push({ que: 'r3 número en pantalla', sel: '#r3-num b', t: r3.pill_num_t + 0.6, txt: fm(num) });
-}
-
-// ── lección: las tres razones juntas (miniatura + nombre), la caja «imagen entera» las rodea al final ──
-{
-  const L = plan.lec, lp = plan.r1.lupa, f5 = caras.frames.fr_m5, a = plan.r3.aro, d = L.lado, reg = lp.region;
-  const [bx1, by1, bx2, by2] = f5.caja, cx = (bx1 + bx2) / 2, cy = (by1 + by2) / 2, s = d / reg;
-  let h = '';
-  // fila 1: la cara de 89 px ampliada
-  h += `<div class="thumb" id="le-i1" style="left:${L.x}px;top:${L.y0}px;width:${d}px;height:${d}px;background-image:url(${plan.frames.m5.src});background-size:${Math.round(plan.r1.win.w * s)}px ${Math.round(plan.r1.win.h * s)}px;background-position:${-Math.round((cx - reg / 2) * s)}px ${-Math.round((cy - reg / 2) * s)}px"></div>`;
-  // fila 2: la escala ampliada con las dos puntas del clip y la banda (mini)
-  const rr = plan.r2, mx = (v) => Math.round(18 + (d - 36) * (v - E2.desde) / (E2.hasta - E2.desde)), my = 150, mb = rr.banda;
-  h += `<div class="thumb" id="le-i2" style="left:${L.x}px;top:${L.y0 + L.paso}px;width:${d}px;height:${d}px">` +
-    `<div class="ruido" style="left:${mx(mb.centro - mb.mas_menos)}px;top:${my - 62}px;width:${mx(mb.centro + mb.mas_menos) - mx(mb.centro - mb.mas_menos)}px;height:124px"></div>` +
-    `<div class="trk" style="left:18px;top:${my - 7}px;width:${d - 36}px;height:14px"><div class="zona" style="left:0;right:0"></div></div>` +
-    `<div class="dot f" style="left:${mx(rr.d1.raw)}px;top:${my}px;width:24px;height:24px;margin-left:-12px;margin-top:-12px"></div><div class="dot f" style="left:${mx(rr.d2.raw)}px;top:${my}px;width:24px;height:24px;margin-left:-12px;margin-top:-12px"></div></div>`;
-  // fila 3: lo difuminado con su aro (la región de la miniatura no se sale de la imagen: si no, queda una franja negra)
-  const reg3 = 230, s3 = d / reg3, bw3 = Math.round(plan.r3.win.w * s3), bh3 = Math.round(plan.r3.win.h * s3);
-  const rx = Math.max(0, a.x + a.w / 2 - reg3 / 2), ry = Math.max(0, a.y + a.h / 2 - reg3 / 2);
-  h += `<div class="thumb" id="le-i3" style="left:${L.x}px;top:${L.y0 + 2 * L.paso}px;width:${d}px;height:${d}px;background-image:url(${plan.frames.m4.src});background-size:${bw3}px ${bh3}px;background-position:${-Math.round(rx * s3)}px ${-Math.round(ry * s3)}px">` +
-    `<div class="aro" style="left:6px;top:${Math.round((a.y - ry) * s3)}px;width:${d - 22}px;height:${Math.round(a.h * s3)}px;border-width:5px;border-radius:26px"></div></div>`;
-  L.filas.forEach((f, i) => { h += `<div class="rowt" id="le-t${i + 1}" style="left:${L.x + d + 40}px;top:${L.y0 + i * L.paso + Math.round((d - 58) / 2)}px">${esc(f.texto)}</div>`; });
-  h += `<div class="anillo" id="le-ring" style="left:50px;top:${L.y0 - 28}px;width:950px;height:${2 * L.paso + d + 56}px"></div>`;
-  html += FULLDIV('pl-lec', med['pl-lec'].a, med['pl-lec'].b, 4, h, 'pl');
 }
 
 // ── tarjetas narrativas (+ pila de dato en las que lo llevan). La entrada arranca 1 cuadro ANTES de que termine la anterior, salvo en los empujes (viajan) ──
@@ -393,22 +395,21 @@ const PLAN_JS = {
   W, H, FR, PUSH, PEASE: plan.empuje.ease, E_IN, E_OUT, costuras, ACC, DUR,
   zoom: plan.zoom.fin,
   fotos: fotosPlan, cajas,
-  tarjetas: plan.tarjetas.map(({ id, entra, b, acento_t }) => ({ id, a: +entra, b, acento_t: acento_t || null, en_empuje_entra: viajaEntra.has(id), en_empuje_sale: viajaSale.has(id) })),
+  tarjetas: plan.tarjetas.map(({ id, a, entra, b, acento_t, acento_dur }) => ({ id, a: +entra, b, desde_cero: a === 0, acento_t: acento_t || null, acento_dur: acento_dur || 0.2, en_empuje_entra: viajaEntra.has(id), en_empuje_sale: viajaSale.has(id) })),
   rotulo: plan.rotulo,
   datos: Object.values(dato).map((m) => ({ id: m.id, a: m.t, fin: m.fin })),
   p1: { fila2: plan.p1.refs.fila2_t, esc: plan.p1.refs.escalon, aro_t: plan.p1.aro_t },
-  p2: { flecha_t: plan.p2.flecha.t, ...plan.p2.escala },
-  r1: { box_t: plan.r1.box_t, tag_t: plan.r1.tag_t, lupa_t: plan.r1.lupa_t, nota_t: plan.r1.nota.t },
+  p2: { flecha_t: plan.p2.flecha.t, ...plan.p2.escala, cursor_dx: X(1) - X(0) },
+  r1: { box_t: plan.r1.box_t, tag_t: plan.r1.tag_t, lupa_t: plan.r1.lupa_t },
   r2: { d1: plan.r2.d1.t, d2: plan.r2.d2.t, banda: plan.r2.banda.t },
-  r3: { aro: plan.r3.aro.t, call: plan.r3.llamada.t, num: plan.r3.pill_num_t, nota: plan.r3.nota.t },
-  lec: { filas: plan.lec.filas.map((f, i) => ({ n: i + 1, t: f.t })), anillo_t: plan.lec.anillo_t },
+  r3: { aro: plan.r3.aro.t, ping: plan.r3.aro.ping_t, num: plan.r3.pill_num_t },
 };
 const out = `<!doctype html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=${W}, height=${H}">
-<title>Lucía · G5</title>
+<title>Lucía · G5 v2</title>
 <script src="assets/vendor/gsap.min.js"></script>
 <style>
 ${css}
@@ -429,25 +430,28 @@ ${tlJs}
 fs.writeFileSync(path.join(P, 'index.html'), out);
 
 // ───────────────────────── 3) manifiestos para los controles (qa/) ─────────────────────────
-// eventos visuales (para scripts/eventos.mjs)
+// eventos visuales (para scripts/eventos.mjs y scripts/aire.mjs): TODO lo que cambia en pantalla además del empuje lento de las fotos
 const ev = [];
 const ev_ = (t, que) => ev.push({ t: +(+t).toFixed(3), que });
 for (const c of plan.tarjetas) { ev_(c.a, c.id); if (c.acento_t) ev_(c.acento_t, c.id + ' acento'); }
-ev_(plan.rotulo.b, 'rótulo IA sale'); ev_(plan.gancho.caja_t, 'gancho caja de cara'); ev_(plan.gancho.dato.t, 'gancho dato'); ev_(plan.gancho.dato.fin, 'gancho dato sale');
+ev_(plan.rotulo.b, 'rótulo IA sale'); ev_(plan.gancho.caja_t, 'gancho caja de cara'); if (plan.gancho.caja_fin) ev_(plan.gancho.caja_fin - 0.2, 'gancho caja sale'); ev_(plan.gancho.dato.t, 'gancho dato'); ev_(plan.gancho.dato.fin, 'gancho dato sale');
 plan.refs.recortes.slice(4).forEach((m, i) => ev_(plan.p1.refs.fila2_t + i * plan.p1.refs.escalon, 'p1 ref ' + (i + 5))); ev_(plan.p1.aro_t, 'p1 aro de las 8');
-const es = plan.p2.escala; ev_(plan.p2.flecha.t, 'p2 flecha'); ev_(es.dibuja_t, 'p2 escala'); ev_(es.ejes_t, 'p2 ejes'); ev_(es.uno_t, 'p2 «1»'); ev_(es.marca_t, 'p2 marca 0,70');
+const es = plan.p2.escala; ev_(plan.p2.flecha.t, 'p2 flecha'); ev_(es.dibuja_t, 'p2 escala'); ev_(es.ejes_t, 'p2 ejes'); ev_(es.cursor_t, 'p2 cursor sale de 0'); ev_(es.cursor_t + es.cursor_dura, 'p2 cursor llega a 1'); ev_(es.uno_t, 'p2 «1» se enciende'); ev_(es.marca_t, 'p2 marca 0,70');
 for (const e of plan.ejemplos) { ev_(e.box_t, e.id + ' caja'); ev_(e.t, e.id + ' dato'); ev_(e.fin, e.id + ' dato sale'); }
-const q1 = plan.r1; ev_(q1.box_t, 'r1 caja'); ev_(q1.tag_t, 'r1 «89 px»'); ev_(q1.lupa_t, 'r1 lupa'); ev_(q1.nota.t, 'r1 nota');
+const q1 = plan.r1; ev_(q1.box_t, 'r1 caja'); ev_(q1.tag_t, 'r1 «89 px»'); ev_(q1.lupa_t, 'r1 lupa');
 const q2 = plan.r2; ev_(q2.d1.t, 'r2 punta baja'); ev_(q2.d2.t, 'r2 punta alta'); ev_(q2.banda.t, 'r2 banda');
-const q3 = plan.r3; ev_(q3.aro.t, 'r3 aro'); ev_(q3.llamada.t, 'r3 «Lo difuminé»'); ev_(q3.pill_num_t, 'r3 número'); ev_(q3.nota.t, 'r3 nota');
-plan.lec.filas.forEach((f, i) => ev_(f.t, 'lección fila ' + (i + 1))); ev_(plan.lec.anillo_t, 'lección caja');
+const q3 = plan.r3; ev_(q3.aro.t, 'r3 aro'); ev_(q3.aro.ping_t, 'r3 aro marca «este lo difuminé»'); ev_(q3.pill_num_t, 'r3 número');
 for (const c of plan.costuras) ev_(c.t, 'costura');
 fs.mkdirSync(path.join(P, 'qa'), { recursive: true });
 fs.writeFileSync(path.join(P, 'qa/eventos-plan.json'), JSON.stringify(ev, null, 1));
 fs.writeFileSync(path.join(P, 'qa/elementos-texto.json'), JSON.stringify(lecturas.map(({ id, que, texto, n, a, b, min }) => ({ id, que, texto, n, a, b, min })), null, 1));
 fs.writeFileSync(path.join(P, 'qa/datos-plan.json'), JSON.stringify(datos, null, 1));
+fs.writeFileSync(path.join(P, 'qa/tramos-voz.json'), JSON.stringify(voces.map(({ n, linea, palabras, chars, voz_s, a, b, hueco, ultimo, tarjeta }) => ({ n, linea, palabras, chars, voz_s: +voz_s.toFixed(3), a: +a.toFixed(4), b: +b.toFixed(4), dura: +(b - a).toFixed(4), hueco: +hueco.toFixed(3), ultimo, tarjeta })), null, 1));
 
 // ───────────────────────── 4) tabla de cortes ─────────────────────────
+console.log('Tramos de voz (guion-voz.txt: palabras / 3,6 + hueco ≤ 0,25 s; ≤ ' + CUPO + ' caracteres):');
+for (const v of voces) console.log(`  t${String(v.n).padEnd(2)} ${v.a.toFixed(3).padStart(7)} – ${v.b.toFixed(3).padEnd(7)} ${String(v.palabras).padStart(2)} pal ${String(v.chars).padStart(2)} car  voz ${v.voz_s.toFixed(2)} s  hueco ${v.hueco.toFixed(3)} s  ${v.tarjeta}  «${v.linea}»${v.ultimo ? '  (CTA: la tarjeta se lee ' + (v.b - v.a).toFixed(2) + ' s, la voz dura ' + v.voz_s.toFixed(2) + ' s)' : ''}`);
+console.log(`  total: ${voces.reduce((s_, v) => s_ + v.palabras, 0)} palabras, ${crono.chars} caracteres con saltos de línea (${vozTxt.replace(/\n/g, '').length} sin ellos), ${DUR.toFixed(3)} s`);
 console.log('Tabla de cortes (t en s):');
 for (const m of plan.medios) console.log(`  ${m.a.toFixed(3).padStart(7)} – ${m.b.toFixed(3).padEnd(7)} ${m.id.padEnd(9)} ${m.tipo.padEnd(5)} ${m.capa}`);
 console.log('Costuras (empuje rígido de 6 cuadros):');

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // H8: cuadros SIN tarjeta narrativa visible. Lleva el timeline a cada cuadro (24 fps) y mira la opacidad real de cada tarjeta (#c1…#c15).
 // Un cuadro cuenta como «con tarjeta» si alguna tiene opacidad ≥ 0,05 (visibility visible) Y está a la vista (3ra pasada: ≥ 25 % de su caja dentro del lienzo).
-// Se esperan huecos SOLO donde no hay tarjeta por diseño: el arranque (el gancho entra a 0,1 s).
+// G5 v2: la primera tarjeta (el gancho) ya está en pantalla en el cuadro 0, así que NO se espera ningún hueco (ni el arranque).
 // Uso: node scripts/hueco-tarjetas.mjs    (sale con 1 si aparece un hueco fuera de esas dos excepciones)
 import { createRequire } from 'node:module';
 import path from 'node:path';
@@ -11,7 +11,7 @@ const require = createRequire('/opt/node-tools/package.json');
 const { chromium } = require('playwright');
 const P = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const plan = JSON.parse(fs.readFileSync(path.join(P, 'plan.json'), 'utf8'));
-const FPS = plan.lienzo.fps, N = plan.lienzo.duracion * FPS;
+const FPS = plan.lienzo.fps, N = plan.lienzo.cuadros;
 const b = await chromium.launch({ executablePath: process.env.PRODUCER_HEADLESS_SHELL_PATH || '/opt/pw-browsers/chromium/chrome', args: ['--no-sandbox'] }).catch(async () => chromium.launch({ args: ['--no-sandbox'] }));
 const pg = await b.newPage({ viewport: { width: 1080, height: 1920 } });
 await pg.goto(pathToFileURL(path.join(P, 'index.html')).href);
@@ -40,9 +40,9 @@ const huecos = await pg.evaluate(([ids, N, FPS]) => {
 await b.close();
 const grupos = [];
 for (const f of huecos) { const g = grupos[grupos.length - 1]; if (g && f === g.at(-1) + 1) g.push(f); else grupos.push([f]); }
-const permitido = (g) => g[0] === 0;   // solo el arranque: el gancho entra a 0,1 s
+const permitido = () => false;   // G5 v2: ni el arranque: el gancho está visible desde el cuadro 0
 console.log(`cuadros sin tarjeta narrativa visible: ${huecos.length} de ${N}`);
-for (const g of grupos) console.log(`  cuadros ${g[0]}–${g.at(-1)} (${(g[0] / FPS).toFixed(3)}–${((g.at(-1) + 1) / FPS).toFixed(3)} s, ${g.length} cuadro(s)) ${permitido(g) ? 'por diseño (arranque)' : '✖ HUECO'}`);
+for (const g of grupos) console.log(`  cuadros ${g[0]}–${g.at(-1)} (${(g[0] / FPS).toFixed(3)}–${((g.at(-1) + 1) / FPS).toFixed(3)} s, ${g.length} cuadro(s)) ✖ HUECO`);
 const malos = grupos.filter((g) => !permitido(g));
 if (malos.length) { console.error(`✖ ${malos.length} hueco(s) de tarjeta`); process.exit(1); }
 console.log('✔ en cada cambio de tarjeta hay siempre una tarjeta visible (≥ 5 % de opacidad)');

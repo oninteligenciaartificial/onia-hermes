@@ -1,0 +1,942 @@
+{
+ "titulo": "G2 v2 · La misma foto, seis clips: ¿quién pierde la cara? (re-corte de 26 s, sin aire muerto, listo para voz)",
+ "version": "v2 (11-oct-2026): re-corte de G2 con la regla de aire muerto. Todos los tiempos salen de guion-voz.txt (tramos a 3,6 palabras/s, huecos de 6 cuadros); un tiempo escrito como «T6+0.8» es el inicio del tramo 6 más 0,8 s, «T7-6f» = 6 cuadros antes del inicio del tramo 7, «FIN» = el final del video. 0 créditos: mismos clips y la misma foto de G2.",
+ "guion": "hermes-content/docs/cola/lucia-diario/guiones/G2-la-misma-foto-seis-clips.md",
+ "voz": {
+  "archivo": "guion-voz.txt",
+  "palabras_por_s": 3.6,
+  "inicio_cuadros": 3,
+  "hueco_cuadros": 6,
+  "max_caracteres": 450,
+  "min_palabras_por_linea": 3,
+  "cta_ventana_cuadros": 67
+ },
+ "lienzo": {
+  "w": 1080,
+  "h": 1920,
+  "fps": 24,
+  "duracion": 26.5
+ },
+ "acento": "#10C26B",
+ "alerta": "#FF7A66",
+ "zona_segura": {
+  "texto_hasta_y": 1490,
+  "derecha_libre_px": 80,
+  "derecha_libre_desde_y": 1000,
+  "arriba_minimo_y": 280,
+  "margen_bajo_menton": 40,
+  "texto_min_px": 34,
+  "tarjeta_bottom_y": 1470
+ },
+ "caras": {
+  "nota": "SCRFD det_10g (scripts/face_identity_qa.py) vía scripts/medir-caras.py: caja cada 2 cuadros en el lienzo de 1080x1920 (clips de 720 px llevados x1,5). Mentón = borde de abajo de la caja. Datos completos: qa/caras-por-clip.json",
+  "foto_k1": {
+   "caja": [
+    445,
+    453,
+    623,
+    657
+   ],
+   "menton": 657,
+   "texto_desde_y": 697
+  }
+ },
+ "empuje": {
+  "cuadros": 6,
+  "ease": "power3.inOut",
+  "nota": "Costura de pantalla completa: empuje rígido de 6 cuadros hacia la izquierda, ventana [T-6 cuadros, T] (T = inicio del tramo de voz que sigue; el empuje cae en el hueco de 0,25 s entre líneas). El medio entrante arranca en T-6 cuadros y el saliente termina en T. Las tarjetas y lo que cuelga de ellas viajan con el empuje."
+ },
+ "refs": {
+  "manifest": "hermes-content/references/modelos/lucia/v4/qa/manifest-escenas-seedream-20260930.json",
+  "total": 8,
+  "muestra": [
+   {
+    "id": "ref1",
+    "fuente": "R1_frontal_canon",
+    "recorte": [
+     0,
+     100,
+     768
+    ]
+   },
+   {
+    "id": "ref2",
+    "fuente": "R3_casi_frontal",
+    "recorte": [
+     75,
+     0,
+     1717
+    ]
+   },
+   {
+    "id": "ref3",
+    "fuente": "R4_casi_perfil",
+    "recorte": [
+     218,
+     208,
+     1183
+    ]
+   },
+   {
+    "id": "ref4",
+    "fuente": "R5_34_izq",
+    "recorte": [
+     61,
+     65,
+     727
+    ]
+   },
+   {
+    "id": "ref5",
+    "fuente": "R8_anchor_902eeebb",
+    "recorte": [
+     0,
+     109,
+     896
+    ]
+   }
+  ]
+ },
+ "escala": {
+  "x0": 100,
+  "x1": 980,
+  "piso": 0.7
+ },
+ "medios": [
+  {
+   "id": "foto",
+   "tipo": "foto",
+   "src": "assets/k1.jpg",
+   "a": 0,
+   "b": 3.4166666666666665,
+   "zoom": 1.05,
+   "ox": 534,
+   "oy": 555,
+   "capa": "foto K1 a pantalla completa con empuje lento 1,00 → 1,05 hacia la cara (nunca queda un cuadro idéntico); sale en el empuje de T3 junto con las miniaturas"
+  },
+  {
+   "id": "pl-regla",
+   "tipo": "placa",
+   "a": 3.1666666666666665,
+   "b": 8.083333333333334,
+   "capa": "placa de la regla: 5 de las 8 referencias, escala 0-1 y la marca en 0,70"
+  },
+  {
+   "id": "m1",
+   "tipo": "clip",
+   "src": "assets/m1.mp4",
+   "media_inicio": 0,
+   "a": 7.833333333333334,
+   "b": 10.541666666666666,
+   "capa": "Motor 1, cuadros 0-64 (2,7 s a 1×); el cuadro 0 es la foto K1"
+  },
+  {
+   "id": "m3",
+   "tipo": "clip",
+   "src": "assets/m3.mp4",
+   "media_inicio": 0,
+   "a": 10.291666666666666,
+   "b": 13.291666666666666,
+   "capa": "Motor 3, cuadros 0-71 (3,0 s a 1×)"
+  },
+  {
+   "id": "m5",
+   "tipo": "clip",
+   "src": "assets/m5.mp4",
+   "media_inicio": 0,
+   "a": 13.041666666666666,
+   "b": 17.125,
+   "capa": "Motor 5, cuadros 0-97 (4,1 s a 1×)"
+  },
+  {
+   "id": "pl-l",
+   "tipo": "placa",
+   "a": 16.875,
+   "b": 23.708333333333332,
+   "capa": "lección: los finales de los Motores 5, 1 y 3 sobre la escala"
+  },
+  {
+   "id": "k1",
+   "tipo": "clip",
+   "src": "assets/m1.mp4",
+   "media_inicio": 2.75,
+   "a": 23.458333333333332,
+   "b": 26.5,
+   "capa": "cierre: el clip K1 (el del Motor 1) desde el cuadro 66 (2,75 s), con Lucía mirando a cámara"
+  }
+ ],
+ "costuras": [
+  {
+   "t": 3.4166666666666665,
+   "tipo": "empuje",
+   "sale": [
+    "foto",
+    "thumbs"
+   ],
+   "entra": [
+    "pl-regla"
+   ],
+   "tarjetas": {
+    "sale": "c2",
+    "entra": "c3"
+   },
+   "porque": "foto + miniaturas → placa de la regla"
+  },
+  {
+   "t": 8.083333333333334,
+   "tipo": "empuje",
+   "sale": [
+    "pl-regla"
+   ],
+   "entra": [
+    "m1"
+   ],
+   "tarjetas": {
+    "sale": "c4",
+    "entra": "c5"
+   },
+   "porque": "placa → Motor 1 (el clip arranca en T-6 cuadros)"
+  },
+  {
+   "t": 10.541666666666666,
+   "tipo": "empuje",
+   "sale": [
+    "m1"
+   ],
+   "entra": [
+    "m3"
+   ],
+   "tarjetas": {
+    "sale": "c5",
+    "entra": "c6"
+   },
+   "porque": "Motor 1 → Motor 3"
+  },
+  {
+   "t": 13.291666666666666,
+   "tipo": "empuje",
+   "sale": [
+    "m3"
+   ],
+   "entra": [
+    "m5"
+   ],
+   "tarjetas": {
+    "sale": "c6",
+    "entra": "c7"
+   },
+   "porque": "Motor 3 → Motor 5"
+  },
+  {
+   "t": 17.125,
+   "tipo": "empuje",
+   "sale": [
+    "m5"
+   ],
+   "entra": [
+    "pl-l"
+   ],
+   "tarjetas": {
+    "sale": "c8",
+    "entra": "c9"
+   },
+   "porque": "Motor 5 → lección"
+  },
+  {
+   "t": 23.708333333333332,
+   "tipo": "empuje",
+   "sale": [
+    "pl-l"
+   ],
+   "entra": [
+    "k1"
+   ],
+   "tarjetas": {
+    "sale": "c11",
+    "entra": "c12"
+   },
+   "porque": "lección → cierre K1"
+  }
+ ],
+ "rotulo": {
+  "texto": "Lucía Antelo · personaje IA de Onia",
+  "a": 0,
+  "b": 3,
+  "top": 720,
+  "px": 40
+ },
+ "tarjetas": [
+  {
+   "id": "c1",
+   "texto": "Misma foto.",
+   "acento": "Seis clips.",
+   "acento_t": 0.95,
+   "a": 0,
+   "b": 1.7083333333333333,
+   "escena": "gancho",
+   "n_palabras": 4,
+   "min_s": 1.7,
+   "entra": 0
+  },
+  {
+   "id": "c2",
+   "texto": "¿Quién pierde",
+   "acento": "la cara?",
+   "acento_t": 2.45,
+   "a": 1.7083333333333333,
+   "b": 3.4166666666666665,
+   "escena": "gancho",
+   "n_palabras": 4,
+   "min_s": 1.7,
+   "entra": 1.666667
+  },
+  {
+   "id": "c3",
+   "texto": "Se mide contra",
+   "acento": "8 fotos suyas.",
+   "acento_t": 4.616666666666666,
+   "a": 3.4166666666666665,
+   "b": 6.708333333333333,
+   "escena": "regla",
+   "n_palabras": 6,
+   "min_s": 2.4,
+   "entra": 3.166667
+  },
+  {
+   "id": "c4",
+   "texto": "Mi piso:",
+   "acento": "0,70.",
+   "a": 6.708333333333333,
+   "b": 8.083333333333334,
+   "escena": "regla",
+   "n_palabras": 3,
+   "min_s": 1.35,
+   "entra": 6.666667
+  },
+  {
+   "id": "c5",
+   "texto": "Motor 1 ·",
+   "acento": "7,5 créditos",
+   "a": 8.083333333333334,
+   "b": 10.541666666666666,
+   "escena": "m1",
+   "motor": "m1",
+   "n_palabras": 4,
+   "min_s": 1.7,
+   "entra": 7.833333
+  },
+  {
+   "id": "c6",
+   "texto": "Motor 3 ·",
+   "acento": "6 créditos",
+   "a": 10.541666666666666,
+   "b": 13.291666666666666,
+   "escena": "m3",
+   "motor": "m3",
+   "n_palabras": 4,
+   "min_s": 1.7,
+   "entra": 10.291667
+  },
+  {
+   "id": "c7",
+   "texto": "Motor 5 · 6 créditos\n",
+   "acento": "solo referencias",
+   "a": 13.291666666666666,
+   "b": 15.75,
+   "escena": "m5",
+   "motor": "m5",
+   "n_palabras": 6,
+   "min_s": 2.4,
+   "entra": 13.041667
+  },
+  {
+   "id": "c8",
+   "texto": "Inventó",
+   "acento": "el cuarto.",
+   "a": 15.75,
+   "b": 17.125,
+   "escena": "m5",
+   "n_palabras": 3,
+   "min_s": 1.35,
+   "entra": 15.708333
+  },
+  {
+   "id": "c9",
+   "texto": "Con referencias,",
+   "acento": "la cara se sostiene.",
+   "acento_t": 18.325,
+   "a": 17.125,
+   "b": 19.583333333333332,
+   "escena": "lección",
+   "n_palabras": 6,
+   "min_s": 2.4,
+   "entra": 16.875
+  },
+  {
+   "id": "c10",
+   "texto": "Pero inventa",
+   "acento": "la escena.",
+   "acento_t": 20.383333333333333,
+   "a": 19.583333333333332,
+   "b": 21.5,
+   "escena": "lección",
+   "n_palabras": 4,
+   "min_s": 1.7,
+   "entra": 19.541667
+  },
+  {
+   "id": "c11",
+   "texto": "Una toma:",
+   "acento": "es una prueba.",
+   "acento_t": 22.4,
+   "a": 21.5,
+   "b": 23.708333333333332,
+   "escena": "lección",
+   "n_palabras": 5,
+   "min_s": 2.05,
+   "entra": 21.458333
+  },
+  {
+   "id": "c12",
+   "texto": "Seguime:",
+   "acento": "cada semana, una prueba.",
+   "acento_t": 24.708333333333332,
+   "a": 23.708333333333332,
+   "b": 26.5,
+   "escena": "cierre",
+   "n_palabras": 5,
+   "min_s": 2.05,
+   "entra": 23.458333
+  }
+ ],
+ "cadenas_de_tarjetas": [
+  [
+   "c1",
+   "c2",
+   "c3",
+   "c4",
+   "c5",
+   "c6",
+   "c7",
+   "c8",
+   "c9",
+   "c10",
+   "c11",
+   "c12"
+  ]
+ ],
+ "cta": {
+  "texto": "Seguime: cada semana, una prueba.",
+  "min_s": 2.4,
+  "max_s": 5.5
+ },
+ "gancho": {
+  "miniaturas": {
+   "a": 0.75,
+   "escalon": 0.12,
+   "w": 136,
+   "h": 242,
+   "gap": 16,
+   "x0": 92,
+   "y": 960,
+   "cuadro": 90
+  }
+ },
+ "regla": {
+  "refs": {
+   "a": 3.7166666666666663,
+   "escalon": 0.15,
+   "lado": 160,
+   "gap": 24,
+   "x0": 92,
+   "y": 470,
+   "etiqueta_t": 4.366666666666666,
+   "etiqueta_y": 652
+  },
+  "escala": {
+   "a": 5.333333333333333,
+   "d": 0.5,
+   "y": 967,
+   "ejes_t": 5.783333333333333,
+   "uno_t": 6.233333333333333,
+   "marca_t": 6.758333333333333
+  }
+ },
+ "motores": [
+  {
+   "id": "m1",
+   "n": 1,
+   "cr": 7.5,
+   "clave": "kling3_0_std_control_e470ef4f",
+   "ini": 0.79,
+   "fin": 0.72,
+   "t_fin": 5.9,
+   "tag_a": 8.183333333333334,
+   "tag_b": 8.733333333333334,
+   "sello": null,
+   "_valores": [
+    0.791,
+    0.793,
+    0.762,
+    0.734,
+    0.761,
+    0.708,
+    0.721
+   ]
+  },
+  {
+   "id": "m3",
+   "n": 3,
+   "cr": 6,
+   "clave": "seedance_2_0_mini_a7f79a01-4193-4135-9ba2-082378a2609d",
+   "ini": 0.69,
+   "fin": 0.64,
+   "t_fin": 5.9,
+   "tag_a": 10.641666666666666,
+   "tag_b": 11.141666666666666,
+   "sello": {
+    "texto": "bajo el piso",
+    "t": 11.491666666666665
+   },
+   "_valores": [
+    0.691,
+    0.657,
+    0.677,
+    0.634,
+    0.615,
+    0.634,
+    0.644
+   ]
+  },
+  {
+   "id": "m5",
+   "n": 5,
+   "cr": 6,
+   "clave": "kling_o3_image_reference_5_refs_948a89d3-c5c5-4e32-92f0-db624edc825b",
+   "ini": 0.8,
+   "fin": 0.82,
+   "t_fin": 5.9,
+   "tag_a": 13.391666666666666,
+   "tag_b": 13.991666666666665,
+   "sello": null,
+   "_valores": [
+    0.798,
+    0.783,
+    0.785,
+    0.814,
+    0.815,
+    0.81,
+    0.824
+   ]
+  }
+ ],
+ "leccion": {
+  "titulo": {
+   "texto": "Parecido al final: 3 de los 6 clips",
+   "t": 17.275,
+   "y": 300
+  },
+  "marca_t": 17.175,
+  "marca_label_y": 392,
+  "orden": [
+   "m5",
+   "m1",
+   "m3"
+  ],
+  "barra": {
+   "y0": 490,
+   "paso": 150,
+   "alto": 88,
+   "t0": 17.475,
+   "escalon": 0.3,
+   "d": 0.5
+  },
+  "descriptor": {
+   "m5": "referencias",
+   "m1": "foto sola",
+   "m3": "foto sola"
+  },
+  "resalte_t": 18.375,
+  "resalte_motores": [
+   "m5"
+  ],
+  "cambios": [
+   {
+    "motor": "m5",
+    "t": 19.78333333333333,
+    "texto": "inventó el cuarto"
+   },
+   {
+    "motor": "m1",
+    "t": 20.133333333333333,
+    "texto": "mantiene el cuarto"
+   },
+   {
+    "motor": "m3",
+    "t": 20.48333333333333,
+    "texto": "cambió el plano"
+   }
+  ],
+  "nota": {
+   "t": 18.925,
+   "texto": "Final = segundo 5,9, que no se ve entero.",
+   "y": 1010
+  }
+ },
+ "quitado_de_g2": [
+  {
+   "que": "Motor 2 (el «pro» de 1080p) y Motor 4 (foto + 3 referencias, letrero inventado)",
+   "porque": "el contraste esencial cabe en 3 motores; con ellos el video no baja de 40 s. Se quita con ellos la pastilla «1080p» y el aro del letrero."
+  },
+  {
+   "que": "Motor 6: placa del precio («5 créditos por segundo», «4×»)",
+   "porque": "no cabe en 450 caracteres de voz ni en 30 s; el precio de cada motor sigue en su tarjeta."
+  },
+  {
+   "que": "Lección 1 (placa con tres arranques y tres finales) y barras de seis motores",
+   "porque": "se reemplazan por una sola placa de tres barras (los finales de los Motores 5, 1 y 3)."
+  },
+  {
+   "que": "Segmentos de 5 s por clip",
+   "porque": "cada clip se ve de 2,7 a 4,1 s a 1×, recortado a los primeros cuadros, donde está la prueba."
+  }
+ ],
+ "tramos": [
+  {
+   "i": 1,
+   "texto": "Misma foto, misma orden, seis clips.",
+   "palabras": 6,
+   "caracteres": 36,
+   "sf": 3,
+   "df": 40,
+   "t": 0.125,
+   "e": 1.7916666666666667,
+   "w": 2.0416666666666665
+  },
+  {
+   "i": 2,
+   "texto": "¿Quién pierde la cara?",
+   "palabras": 4,
+   "caracteres": 22,
+   "sf": 49,
+   "df": 27,
+   "t": 2.0416666666666665,
+   "e": 3.1666666666666665,
+   "w": 3.4166666666666665
+  },
+  {
+   "i": 3,
+   "texto": "Se mide contra ocho fotos suyas.",
+   "palabras": 6,
+   "caracteres": 32,
+   "sf": 82,
+   "df": 40,
+   "t": 3.4166666666666665,
+   "e": 5.083333333333333,
+   "w": 5.333333333333333
+  },
+  {
+   "i": 4,
+   "texto": "De cero a uno.",
+   "palabras": 4,
+   "caracteres": 14,
+   "sf": 128,
+   "df": 27,
+   "t": 5.333333333333333,
+   "e": 6.458333333333333,
+   "w": 6.708333333333333
+  },
+  {
+   "i": 5,
+   "texto": "Mi piso: cero setenta.",
+   "palabras": 4,
+   "caracteres": 22,
+   "sf": 161,
+   "df": 27,
+   "t": 6.708333333333333,
+   "e": 7.833333333333333,
+   "w": 8.083333333333334
+  },
+  {
+   "i": 6,
+   "texto": "Motor uno, atado a la foto: pierde parecido.",
+   "palabras": 8,
+   "caracteres": 44,
+   "sf": 194,
+   "df": 53,
+   "t": 8.083333333333334,
+   "e": 10.291666666666666,
+   "w": 10.541666666666666
+  },
+  {
+   "i": 7,
+   "texto": "Motor tres, también atado.",
+   "palabras": 4,
+   "caracteres": 26,
+   "sf": 253,
+   "df": 27,
+   "t": 10.541666666666666,
+   "e": 11.666666666666666,
+   "w": 11.916666666666666
+  },
+  {
+   "i": 8,
+   "texto": "Queda bajo el piso.",
+   "palabras": 4,
+   "caracteres": 19,
+   "sf": 286,
+   "df": 27,
+   "t": 11.916666666666666,
+   "e": 13.041666666666666,
+   "w": 13.291666666666666
+  },
+  {
+   "i": 9,
+   "texto": "Motor cinco, solo con referencias: sostiene la cara.",
+   "palabras": 8,
+   "caracteres": 52,
+   "sf": 319,
+   "df": 53,
+   "t": 13.291666666666666,
+   "e": 15.5,
+   "w": 15.75
+  },
+  {
+   "i": 10,
+   "texto": "Pero inventó el cuarto.",
+   "palabras": 4,
+   "caracteres": 23,
+   "sf": 378,
+   "df": 27,
+   "t": 15.75,
+   "e": 16.875,
+   "w": 17.125
+  },
+  {
+   "i": 11,
+   "texto": "Con fotos de referencia, la cara se sostiene.",
+   "palabras": 8,
+   "caracteres": 45,
+   "sf": 411,
+   "df": 53,
+   "t": 17.125,
+   "e": 19.333333333333332,
+   "w": 19.583333333333332
+  },
+  {
+   "i": 12,
+   "texto": "Pero el motor inventa la escena.",
+   "palabras": 6,
+   "caracteres": 32,
+   "sf": 470,
+   "df": 40,
+   "t": 19.583333333333332,
+   "e": 21.25,
+   "w": 21.5
+  },
+  {
+   "i": 13,
+   "texto": "Una toma cada uno: es una prueba.",
+   "palabras": 7,
+   "caracteres": 33,
+   "sf": 516,
+   "df": 47,
+   "t": 21.5,
+   "e": 23.458333333333332,
+   "w": 23.708333333333332
+  },
+  {
+   "i": 14,
+   "texto": "Seguime: cada semana, una prueba.",
+   "palabras": 5,
+   "caracteres": 33,
+   "sf": 569,
+   "df": 33,
+   "t": 23.708333333333332,
+   "e": 25.083333333333332,
+   "w": 26.5
+  }
+ ],
+ "lecturas": [
+  {
+   "id": "rotulo",
+   "que": "rótulo de IA",
+   "texto": "Lucía Antelo · personaje IA de Onia",
+   "n": 6,
+   "a": 0,
+   "b": 3,
+   "dur": 2.82,
+   "min": 2.4
+  },
+  {
+   "id": "dA-m1",
+   "que": "m1 dato A",
+   "texto": "parecido 0 s: 0,79",
+   "n": 4,
+   "a": 8.183333,
+   "b": 10.291667,
+   "dur": 1.928333,
+   "min": 1.7
+  },
+  {
+   "id": "dB-m1",
+   "que": "m1 dato B",
+   "texto": "5,9 s: 0,72",
+   "n": 3,
+   "a": 8.733333,
+   "b": 10.291667,
+   "dur": 1.378333,
+   "min": 1.35
+  },
+  {
+   "id": "dA-m3",
+   "que": "m3 dato A",
+   "texto": "parecido 0 s: 0,69",
+   "n": 4,
+   "a": 10.641667,
+   "b": 13.041667,
+   "dur": 2.22,
+   "min": 1.7
+  },
+  {
+   "id": "dB-m3",
+   "que": "m3 dato B",
+   "texto": "5,9 s: 0,64",
+   "n": 3,
+   "a": 11.141667,
+   "b": 13.041667,
+   "dur": 1.72,
+   "min": 1.35
+  },
+  {
+   "id": "s-m3",
+   "que": "m3 sello",
+   "texto": "bajo el piso",
+   "n": 3,
+   "a": 11.491667,
+   "b": 13.041667,
+   "dur": 1.37,
+   "min": 1.35
+  },
+  {
+   "id": "dA-m5",
+   "que": "m5 dato A",
+   "texto": "parecido 0 s: 0,80",
+   "n": 4,
+   "a": 13.391667,
+   "b": 15.57,
+   "dur": 1.998333,
+   "min": 1.7
+  },
+  {
+   "id": "dB-m5",
+   "que": "m5 dato B",
+   "texto": "5,9 s: 0,82",
+   "n": 3,
+   "a": 13.991667,
+   "b": 15.57,
+   "dur": 1.398333,
+   "min": 1.35
+  },
+  {
+   "id": "rf-l",
+   "que": "regla: etiqueta de las referencias",
+   "texto": "5 de las 8 fotos de referencia",
+   "n": 7,
+   "a": 4.366667,
+   "b": 7.833333,
+   "dur": 3.286667,
+   "min": 2.75
+  },
+  {
+   "id": "l-tit",
+   "que": "lección: título",
+   "texto": "Parecido al final: 3 de los 6 clips",
+   "n": 8,
+   "a": 17.275,
+   "b": 23.458333,
+   "dur": 6.003333,
+   "min": 3.1
+  },
+  {
+   "id": "l-mkl",
+   "que": "lección: «mi piso»",
+   "texto": "mi piso · 0,70",
+   "n": 3,
+   "a": 17.225,
+   "b": 23.458333,
+   "dur": 6.053333,
+   "min": 1.35
+  },
+  {
+   "id": "l-nota",
+   "que": "lección: nota del final",
+   "texto": "Final = segundo 5,9, que no se ve entero.",
+   "n": 8,
+   "a": 18.925,
+   "b": 23.458333,
+   "dur": 4.353333,
+   "min": 3.1
+  },
+  {
+   "id": "l-l1",
+   "que": "lección: rótulo Motor 5",
+   "texto": "Motor 5 · referencias",
+   "n": 3,
+   "a": 17.795,
+   "b": 19.783333,
+   "dur": 1.808333,
+   "min": 1.35
+  },
+  {
+   "id": "l-m1",
+   "que": "lección: rótulo Motor 5 (cambia)",
+   "texto": "Motor 5 · inventó el cuarto",
+   "n": 5,
+   "a": 19.803333,
+   "b": 23.458333,
+   "dur": 3.475,
+   "min": 2.05
+  },
+  {
+   "id": "l-l2",
+   "que": "lección: rótulo Motor 1",
+   "texto": "Motor 1 · foto sola",
+   "n": 4,
+   "a": 18.095,
+   "b": 20.133333,
+   "dur": 1.858333,
+   "min": 1.7
+  },
+  {
+   "id": "l-m2",
+   "que": "lección: rótulo Motor 1 (cambia)",
+   "texto": "Motor 1 · mantiene el cuarto",
+   "n": 5,
+   "a": 20.153333,
+   "b": 23.458333,
+   "dur": 3.125,
+   "min": 2.05
+  },
+  {
+   "id": "l-l3",
+   "que": "lección: rótulo Motor 3",
+   "texto": "Motor 3 · foto sola",
+   "n": 4,
+   "a": 18.395,
+   "b": 20.483333,
+   "dur": 1.908333,
+   "min": 1.7
+  },
+  {
+   "id": "l-m3",
+   "que": "lección: rótulo Motor 3 (cambia)",
+   "texto": "Motor 3 · cambió el plano",
+   "n": 5,
+   "a": 20.503333,
+   "b": 23.458333,
+   "dur": 2.775,
+   "min": 2.05
+  }
+ ]
+}

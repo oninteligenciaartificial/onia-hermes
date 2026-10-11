@@ -1,0 +1,23 @@
+cuadros: 644  (diferencia de luma entre cuadros: mínima 0.0000, mediana 0.125, máxima 105.42; quieto = < 0.02)
+
+SIN descontar la lectura de tarjetas: 28 tramos quietos; los mayores:
+  15.458–16.542 s (26 cuadros iguales = 1.083 s) en c6
+  9.792–10.542 s (18 cuadros iguales = 0.750 s) en c4
+  20.250–20.792 s (13 cuadros iguales = 0.542 s) en c8
+  5.208–5.708 s (12 cuadros iguales = 0.500 s) en c3
+  6.458–6.958 s (12 cuadros iguales = 0.500 s) en c3
+  3.292–3.750 s (11 cuadros iguales = 0.458 s) en c1
+
+DESCONTANDO la lectura de tarjetas: 9 tramos; los mayores:
+  16.292–16.542 s (6 cuadros iguales = 0.250 s) en c6
+  22.042–22.292 s (6 cuadros iguales = 0.250 s) en c8
+  8.458–8.667 s (5 cuadros iguales = 0.208 s) en c3
+  19.333–19.542 s (5 cuadros iguales = 0.208 s) en c7
+  10.875–11.042 s (4 cuadros iguales = 0.167 s) en c4
+  18.958–19.125 s (4 cuadros iguales = 0.167 s) en c7
+
+MAYOR TRAMO QUIETO en los píxeles, fuera de una lectura: 0.250 s (límite 0.3 s)
+MAYOR TRAMO QUIETO en los píxeles, contando las lecturas: 1.083 s
+  f-gancho  empuje lento: diferencia media 0.716 (mín 0.600) entre cuadros, de 0.50 a 2.79 s
+  f-e3      empuje lento: diferencia media 0.567 (mín 0.397) entre cuadros, de 11.50 a 13.50 s
+  f-cierre  empuje lento: diferencia media 0.574 (mín 0.332) entre cuadros, de 22.75 a 26.29 s

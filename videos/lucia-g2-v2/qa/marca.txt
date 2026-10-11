@@ -1,0 +1,6 @@
+  ok  rótulo «Lucía Antelo · personaje IA de Onia» a 40 px: legible del cuadro 0 al 70 (2.958 s) y fuera desde los 3,0 s
+  ok  promesa «Misma foto. Seis clips.» legible en el cuadro 0
+  ok  las 6 miniaturas están a la vista desde 1.500 s (antes de los 3 s)
+  ok  CTA exacto «Seguime: cada semana, una prueba.» legible desde 23.625 s hasta el último cuadro: 2.875 s (2,4-5,5 s)
+  ok  todos los motores se nombran «Motor N»
+✔ reglas de marca

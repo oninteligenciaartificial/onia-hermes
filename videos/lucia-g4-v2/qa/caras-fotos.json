@@ -1,0 +1,214 @@
+{
+ "nota": "SCRFD det_10g; caja en lienzo 1080x1920 (object-fit:cover centrado); mentón = borde de abajo de la caja",
+ "fotos": {
+  "a": {
+   "archivo": "assets/ph-a.jpg",
+   "ancho": 1440,
+   "alto": 2560,
+   "escala_a_lienzo": 0.75,
+   "caja": [
+    445,
+    453,
+    623,
+    657
+   ],
+   "score": 0.898,
+   "cara_px_nativa": 237,
+   "caras_detectadas": 1
+  },
+  "b": {
+   "archivo": "assets/ph-b.jpg",
+   "ancho": 1080,
+   "alto": 1912,
+   "escala_a_lienzo": 1.0042,
+   "caja": [
+    436,
+    553,
+    672,
+    836
+   ],
+   "score": 0.871,
+   "cara_px_nativa": 235,
+   "caras_detectadas": 1
+  },
+  "c": {
+   "archivo": "assets/ph-c.jpg",
+   "ancho": 1080,
+   "alto": 1936,
+   "escala_a_lienzo": 1.0,
+   "caja": [
+    447,
+    467,
+    690,
+    776
+   ],
+   "score": 0.838,
+   "cara_px_nativa": 242,
+   "caras_detectadas": 1
+  },
+  "d": {
+   "archivo": "assets/ph-d.jpg",
+   "ancho": 1080,
+   "alto": 1912,
+   "escala_a_lienzo": 1.0042,
+   "caja": [
+    458,
+    402,
+    639,
+    628
+   ],
+   "score": 0.917,
+   "cara_px_nativa": 181,
+   "caras_detectadas": 1
+  },
+  "e": {
+   "archivo": "assets/ph-e.jpg",
+   "ancho": 1080,
+   "alto": 1924,
+   "escala_a_lienzo": 1.0,
+   "caja": [
+    395,
+    460,
+    651,
+    747
+   ],
+   "score": 0.774,
+   "cara_px_nativa": 255,
+   "caras_detectadas": 1
+  },
+  "f": {
+   "archivo": "assets/ph-f.jpg",
+   "ancho": 1080,
+   "alto": 1910,
+   "escala_a_lienzo": 1.0052,
+   "caja": [
+    413,
+    312,
+    711,
+    667
+   ],
+   "score": 0.879,
+   "cara_px_nativa": 297,
+   "caras_detectadas": 1
+  },
+  "cafe_a": {
+   "archivo": "assets/cafe-a.jpg",
+   "ancho": 1440,
+   "alto": 2560,
+   "escala_a_lienzo": 0.75,
+   "caja": [
+    449,
+    642,
+    618,
+    857
+   ],
+   "score": 0.891,
+   "cara_px_nativa": 226,
+   "caras_detectadas": 1
+  },
+  "cafe_b": {
+   "archivo": "assets/cafe-b.jpg",
+   "ancho": 1080,
+   "alto": 1912,
+   "escala_a_lienzo": 1.0042,
+   "caja": [
+    336,
+    257,
+    625,
+    647
+   ],
+   "score": 0.837,
+   "cara_px_nativa": 288,
+   "caras_detectadas": 1
+  },
+  "k": {
+   "archivo": "assets/ph-k.jpg",
+   "ancho": 1440,
+   "alto": 2560,
+   "escala_a_lienzo": 0.75,
+   "caja": [
+    616,
+    734,
+    816,
+    991
+   ],
+   "score": 0.912,
+   "cara_px_nativa": 266,
+   "caras_detectadas": 1
+  }
+ },
+ "refs": {
+  "ref1": {
+   "fuente": "R1_frontal_canon.jpg",
+   "cara_px": 440,
+   "recorte": [
+    0,
+    100,
+    768
+   ]
+  },
+  "ref2": {
+   "fuente": "R2_34_medio.jpg",
+   "cara_px": 196,
+   "recorte": [
+    172,
+    157,
+    522
+   ]
+  },
+  "ref3": {
+   "fuente": "R3_casi_frontal.png",
+   "cara_px": 744,
+   "recorte": [
+    75,
+    0,
+    1717
+   ]
+  },
+  "ref4": {
+   "fuente": "R4_casi_perfil.png",
+   "cara_px": 444,
+   "recorte": [
+    218,
+    208,
+    1183
+   ]
+  },
+  "ref5": {
+   "fuente": "R5_34_izq.png",
+   "cara_px": 317,
+   "recorte": [
+    61,
+    65,
+    727
+   ]
+  },
+  "ref6": {
+   "fuente": "R6_34_der.png",
+   "cara_px": 206,
+   "recorte": [
+    380,
+    198,
+    515
+   ]
+  },
+  "ref7": {
+   "fuente": "R7_frontal_2752.png",
+   "cara_px": 614,
+   "recorte": [
+    0,
+    8,
+    1536
+   ]
+  },
+  "ref8": {
+   "fuente": "R8_anchor_902eeebb.png",
+   "cara_px": 572,
+   "recorte": [
+    0,
+    109,
+    896
+   ]
+  }
+ }
+}

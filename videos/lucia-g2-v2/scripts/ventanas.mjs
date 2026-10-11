@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// 2da pasada (H1/H2/H8): ventana REAL en que cada texto no-tarjeta se puede leer, medida en el DOM cuadro a cuadro (24 fps), no desde plan.json.
+// v2 (regla 15): ventana REAL en que cada texto no-tarjeta se puede leer, medida en el DOM cuadro a cuadro (24 fps), no desde plan.json.
 // «Legible» = opacidad efectiva ≥ 0,9 y ≥ 95 % de su caja dentro del lienzo (en un empuje la caja se sale: ahí no cuenta). Compara con 0,35 s/palabra + 0,3.
 // Complementa a build.mjs (que valida los tiempos del plan): este script ve lo que de verdad hace el timeline (entradas, empujes, salidas).
 // Uso: node scripts/ventanas.mjs   (sale con 1 si alguna ventana no alcanza)
@@ -10,20 +10,15 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const require = createRequire('/opt/node-tools/package.json');
 const { chromium } = require('playwright');
 const P = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const plan = JSON.parse(fs.readFileSync(path.join(P, 'plan.json'), 'utf8'));
+const plan = JSON.parse(fs.readFileSync(path.join(P, 'plan.resuelto.json'), 'utf8'));
 const FPS = plan.lienzo.fps, N = plan.lienzo.duracion * FPS;
 const b = await chromium.launch({ executablePath: process.env.PRODUCER_HEADLESS_SHELL_PATH || '/opt/pw-browsers/chromium/chrome', args: ['--no-sandbox'] }).catch(async () => chromium.launch({ args: ['--no-sandbox'] }));
 const pg = await b.newPage({ viewport: { width: 1080, height: 1920 } });
 await pg.goto(pathToFileURL(path.join(P, 'index.html')).href);
 await pg.evaluate(() => document.fonts.ready);
 await pg.waitForTimeout(400);
-// [id, texto, palabras]
-const items = [
-  ['q-p6', 'Motor 6: 5 créditos por segundo', 6], ['q-p1', 'Motor 1: 1,25 créditos por segundo', 6], ['q-sello', '4× el precio por segundo', 5],
-  ['q-num', '0,77 cierre del clip (3,9 s)', 6], ['s-m4', 'inventó un letrero', 3], ['s-m3', 'bajo el piso', 3], ['s-m5', 'inventó el cuarto', 3],
-  ['dA-m6', 'parecido 0 s: 0,79', 4], ['dB-m4', '5,9 s: 0,80', 3], ['p-m2', 'Este clip: 1080p, los otros 720p', 6],
-  ['l1-nota', 'Final: cierre del clip, que no se ve entero.', 8], ['l2-nota', 'nota de la lección 2 (línea 2: 11 palabras)', 11],
-];
+// [id, texto, palabras]: todo texto que NO es tarjeta (rótulo, datos, sellos, etiquetas y placas); la lista sale de plan.resuelto.json → lecturas (build.mjs)
+const items = plan.lecturas.map((x) => [x.id, x.texto, x.n]);
 const res = await pg.evaluate(([items, N, FPS]) => {
   const tl = window.__timelines.main; tl.pause();
   const out = Object.fromEntries(items.map((i) => [i[0], []]));

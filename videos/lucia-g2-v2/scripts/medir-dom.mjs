@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// QA geométrico G2: abre index.html en Chromium, lleva el timeline a cada 0,125 s (3 cuadros) y mide la caja de TODO texto visible.
+// QA geométrico G2 v2: abre index.html en Chromium, lleva el timeline a cada 0,125 s (3 cuadros) y mide la caja de TODO texto visible.
 // Reglas (CLAUDE.md / editor-videos §Reels de Lucía): texto entre mentón+40 y y=1490; nada en los 80 px de la derecha bajo y=1000; nada sobre y=280
 // (UI de Instagram arriba); NINGÚN texto baja de 34 px; dos textos nunca se pisan; y los DATOS de las placas están donde dice el número
 // (punto, barra y marca a 100 + 880 × valor).
@@ -13,7 +13,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const require = createRequire('/opt/node-tools/package.json');
 const { chromium } = require('playwright');
 const P = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const plan = JSON.parse(fs.readFileSync(path.join(P, 'plan.json'), 'utf8'));
+const plan = JSON.parse(fs.readFileSync(path.join(P, 'plan.resuelto.json'), 'utf8'));
 const caras = JSON.parse(fs.readFileSync(path.join(P, 'qa/caras-por-clip.json'), 'utf8'));
 const Z = plan.zona_segura, FPS = plan.lienzo.fps, PUSH = plan.empuje.cuadros / FPS;
 const SC = plan.escala, X = (v) => SC.x0 + v * (SC.x1 - SC.x0);
@@ -22,22 +22,22 @@ const med = Object.fromEntries(plan.medios.map((m) => [m.id, m]));
 const empujes = plan.costuras.filter((c) => c.tipo === 'empuje').map((c) => [c.t - PUSH - 1e-6, c.t + 1e-6]);
 const enEmpuje = (t) => empujes.some(([a, b]) => t >= a && t <= b);
 
-// mentón (+40) del medio con cara que está en reposo a t; null si hay una placa o un empuje
+// mentón (+40) del medio con cara que está en reposo a t; null si hay una placa o un empuje.
+// La foto del gancho hace un empuje lento (zoom 1,00 → 1,05 con origen en la cara): el mentón baja con él.
 const mentonEn = (t) => {
   if (enEmpuje(t)) return null;
   const d = (id, datos) => {
     const m = med[id];
     if (t < m.a || t >= m.b) return null;
-    const f = (t - m.a) * FPS + (m.media_inicio || 0) * FPS;     // el cierre K1 arranca en el segundo 2,0 del clip (H7)
+    const f = (t - m.a) * FPS + (m.media_inicio || 0) * FPS;     // el cierre K1 arranca en el cuadro 66 del clip (media_inicio 2,75 s)
     const filas = datos.filter((r) => r[1] && Math.abs(r[0] - f) <= 2.5);
     return filas.length ? Math.max(...filas.map((r) => r[1][3])) : null;
   };
-  if (t < med.foto.b) return caras.foto_k1.caja[3];
-  for (const k of ['m1', 'm2', 'm3', 'm4', 'm5', 'm6']) { const v = d(k, caras.clips[k].filas); if (v != null) return v; }
-  const v = d('k1', caras.clips.m1.filas);       // el cierre es el mismo clip del Motor 1
-  return v;
+  if (t < med.foto.b) { const F = med.foto, z = 1 + (F.zoom - 1) * Math.max(0, Math.min(1, (t - F.a) / (F.b - F.a))); return F.oy + (caras.foto_k1.caja[3] - F.oy) * z; }
+  for (const k of ['m1', 'm3', 'm5']) { const v = d(k, caras.clips[k].filas); if (v != null) return v; }
+  return d('k1', caras.clips.m1.filas);       // el cierre es el mismo clip del Motor 1
 };
-const placaEn = (t) => ['pl-regla', 'pl-l1', 'pl-m6', 'pl-l2'].some((id) => t >= med[id].a + PUSH && t < med[id].b - PUSH + 1e-6);
+const placaEn = (t) => ['pl-regla', 'pl-l'].some((id) => t >= med[id].a + PUSH && t < med[id].b - PUSH + 1e-6);
 
 const b = await chromium.launch({ executablePath: process.env.PRODUCER_HEADLESS_SHELL_PATH || '/opt/pw-browsers/chromium/chrome', args: ['--no-sandbox'] }).catch(async () => chromium.launch({ args: ['--no-sandbox'] }));
 const pg = await b.newPage({ viewport: { width: 1080, height: 1920 } });
@@ -117,25 +117,16 @@ const tamanos = await pg.evaluate(() => {
 console.log('tamaños de texto en el DOM (px: cuántos elementos):', JSON.stringify(tamanos));
 for (const c of chicos) falla(0, `texto menor a ${Z.texto_min_px} px: ${c}`);
 
-// los DATOS están donde dice el número: punto, barra y marca a 100 + 880 × valor (±1,5 px)
+// los DATOS están donde dice el número: barra y marca a 100 + 880 × valor (±1,5 px)
 const datos = [];
 const medida = async (t, sel) => pg.evaluate(([t, sel]) => { const tl = window.__timelines.main; tl.pause(); tl.time(t); const e = document.querySelector(sel); const q = e.getBoundingClientRect(); return { cx: q.left + q.width / 2, x1: q.left, x2: q.right, w: q.width }; }, [t, sel]);
 const cerca = (n, esperado, tol = 1.5) => Math.abs(n - esperado) <= tol;
 {
-  const t1 = plan.l1.filas.at(-1).t + 1.5;                       // todas las filas ya se movieron
-  const mk = await medida(t1, '#l1-mk'); datos.push(['L1 marca 0,70', mk.cx, X(SC.piso)]);
-  for (const [i, f] of plan.l1.filas.entries()) {
-    const m = mot[f.motor], s = await medida(t1, `#l1-s${i + 1}`), e = await medida(t1, `#l1-f${i + 1}`);
-    datos.push([`L1 Motor ${m.n} arranque ${m.ini}`, s.cx, X(m.ini)], [`L1 Motor ${m.n} final ${m.fin}`, e.cx, X(m.fin)]);
-  }
-  const t2 = plan.l2.barra.t0 + 6 * plan.l2.barra.escalon + 1.0;
-  const mk2 = await medida(t2, '#l2-mk'); datos.push(['L2 marca 0,70', mk2.cx, X(SC.piso)]);
-  for (const [i, id] of plan.l2.orden.entries()) { const m = mot[id], r = await medida(t2, `#l2-b${i + 1}`); datos.push([`L2 barra Motor ${m.n} ${m.fin} (ancho)`, r.w, m.fin * (SC.x1 - SC.x0), 1.5]); datos.push([`L2 barra Motor ${m.n} (borde izquierdo = 0)`, r.x1, SC.x0]); }
-  const tq = plan.m6plate.punto_t + 0.6;
-  const mk3 = await medida(tq, '#q-mk'); datos.push(['Motor 6 marca 0,70', mk3.cx, X(SC.piso)]);
-  const dq = await medida(tq, '#q-dot'); datos.push([`Motor 6 punto ${mot.m6.fin}`, dq.cx, X(mot.m6.fin)]);
+  const Ls = plan.leccion, t2 = Ls.barra.t0 + Ls.orden.length * Ls.barra.escalon + 1.0;
+  const mk2 = await medida(t2, '#l-mk'); datos.push(['lección: marca 0,70', mk2.cx, X(SC.piso)]);
+  for (const [i, id] of Ls.orden.entries()) { const m = mot[id], r = await medida(t2, `#l-b${i + 1}`); datos.push([`lección: barra Motor ${m.n} ${m.fin} (ancho)`, r.w, m.fin * (SC.x1 - SC.x0), 1.5]); datos.push([`lección: barra Motor ${m.n} (borde izquierdo = 0)`, r.x1, SC.x0]); }
   const tr = plan.regla.escala.marca_t + 0.6;
-  const mk4 = await medida(tr, '#sc-mk'); datos.push(['regla marca 0,70', mk4.cx, X(SC.piso)]);
+  const mk4 = await medida(tr, '#sc-mk'); datos.push(['regla: marca 0,70', mk4.cx, X(SC.piso)]);
 }
 for (const [que, got, esp, tol] of datos) {
   const ok = cerca(got, esp, tol || 1.5);
@@ -143,16 +134,6 @@ for (const [que, got, esp, tol] of datos) {
   if (!ok) falla(0, `dato fuera de lugar: ${que} (${got.toFixed(1)} vs ${esp.toFixed(1)})`);
 }
 
-// el aro sigue al letrero: su centro en cada punto medido
-{
-  const A = plan.aro_m4;
-  for (const p of A.puntos) {
-    const r = await medida(p.t + 1e-3, '#aro');
-    const ok = cerca(r.cx, p.cx, 2) && true;
-    console.log(`  ${ok ? 'ok ' : '✖  '} aro t=${p.t}: centro x ${r.cx.toFixed(1)} (esperado ${p.cx})`);
-    if (!ok) falla(p.t, 'aro fuera del punto');
-  }
-}
 await b.close();
 if (malos.length) console.log('✖ incumplimientos:\n  ' + malos.join('\n  ') + (fallos > malos.length ? `\n  … ${fallos} en total` : ''));
 if (fallos) { console.error(`✖ ${fallos} incumplimiento(s)`); process.exit(1); }

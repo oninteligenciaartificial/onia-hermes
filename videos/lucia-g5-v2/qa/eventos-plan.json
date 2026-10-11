@@ -1,0 +1,226 @@
+[
+ {
+  "t": 0,
+  "que": "c1"
+ },
+ {
+  "t": 0.9,
+  "que": "c1 acento"
+ },
+ {
+  "t": 3.292,
+  "que": "c2"
+ },
+ {
+  "t": 4.092,
+  "que": "c2 acento"
+ },
+ {
+  "t": 5.208,
+  "que": "c3"
+ },
+ {
+  "t": 7.408,
+  "que": "c3 acento"
+ },
+ {
+  "t": 8.792,
+  "que": "c4"
+ },
+ {
+  "t": 10.492,
+  "que": "c4 acento"
+ },
+ {
+  "t": 11.25,
+  "que": "c5"
+ },
+ {
+  "t": 13.15,
+  "que": "c5 acento"
+ },
+ {
+  "t": 14,
+  "que": "c6"
+ },
+ {
+  "t": 16.5,
+  "que": "c6 acento"
+ },
+ {
+  "t": 17,
+  "que": "c7"
+ },
+ {
+  "t": 19.1,
+  "que": "c7 acento"
+ },
+ {
+  "t": 19.75,
+  "que": "c8"
+ },
+ {
+  "t": 21.25,
+  "que": "c8 acento"
+ },
+ {
+  "t": 22.5,
+  "que": "c9"
+ },
+ {
+  "t": 23.5,
+  "que": "c9 acento"
+ },
+ {
+  "t": 24.417,
+  "que": "c10"
+ },
+ {
+  "t": 26.317,
+  "que": "c10 acento"
+ },
+ {
+  "t": 3,
+  "que": "rótulo IA sale"
+ },
+ {
+  "t": 1.3,
+  "que": "gancho caja de cara"
+ },
+ {
+  "t": 2.45,
+  "que": "gancho caja sale"
+ },
+ {
+  "t": 1.45,
+  "que": "gancho dato"
+ },
+ {
+  "t": 2.8,
+  "que": "gancho dato sale"
+ },
+ {
+  "t": 3.742,
+  "que": "p1 ref 5"
+ },
+ {
+  "t": 3.842,
+  "que": "p1 ref 6"
+ },
+ {
+  "t": 3.942,
+  "que": "p1 ref 7"
+ },
+ {
+  "t": 4.042,
+  "que": "p1 ref 8"
+ },
+ {
+  "t": 4.492,
+  "que": "p1 aro de las 8"
+ },
+ {
+  "t": 5.658,
+  "que": "p2 flecha"
+ },
+ {
+  "t": 6.208,
+  "que": "p2 escala"
+ },
+ {
+  "t": 6.908,
+  "que": "p2 ejes"
+ },
+ {
+  "t": 7.608,
+  "que": "p2 cursor sale de 0"
+ },
+ {
+  "t": 8.508,
+  "que": "p2 cursor llega a 1"
+ },
+ {
+  "t": 9.342,
+  "que": "p2 «1» se enciende"
+ },
+ {
+  "t": 9.492,
+  "que": "p2 marca 0,70"
+ },
+ {
+  "t": 11.55,
+  "que": "e3 caja"
+ },
+ {
+  "t": 11.65,
+  "que": "e3 dato"
+ },
+ {
+  "t": 13.7,
+  "que": "e3 dato sale"
+ },
+ {
+  "t": 14.4,
+  "que": "r1 caja"
+ },
+ {
+  "t": 14.8,
+  "que": "r1 «89 px»"
+ },
+ {
+  "t": 15.2,
+  "que": "r1 lupa"
+ },
+ {
+  "t": 17.3,
+  "que": "r2 punta baja"
+ },
+ {
+  "t": 17.75,
+  "que": "r2 punta alta"
+ },
+ {
+  "t": 18.3,
+  "que": "r2 banda"
+ },
+ {
+  "t": 20.05,
+  "que": "r3 aro"
+ },
+ {
+  "t": 21.7,
+  "que": "r3 aro marca «este lo difuminé»"
+ },
+ {
+  "t": 20.75,
+  "que": "r3 número"
+ },
+ {
+  "t": 3.292,
+  "que": "costura"
+ },
+ {
+  "t": 5.208,
+  "que": "costura"
+ },
+ {
+  "t": 11.25,
+  "que": "costura"
+ },
+ {
+  "t": 14,
+  "que": "costura"
+ },
+ {
+  "t": 17,
+  "que": "costura"
+ },
+ {
+  "t": 19.75,
+  "que": "costura"
+ },
+ {
+  "t": 22.5,
+  "que": "costura"
+ }
+]

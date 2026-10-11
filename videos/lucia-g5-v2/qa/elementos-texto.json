@@ -1,0 +1,173 @@
+[
+ {
+  "id": "rotulo",
+  "que": "rótulo de IA",
+  "texto": "Lucía Antelo · personaje IA de Onia",
+  "n": 6,
+  "a": 0,
+  "b": 3,
+  "min": 2.3999999999999995
+ },
+ {
+  "id": "dA-g",
+  "que": "gancho dato",
+  "texto": "parecido 0,81",
+  "n": 2,
+  "a": 1.63,
+  "b": 2.6999999999999997,
+  "min": 1
+ },
+ {
+  "id": "sc-ax0",
+  "que": "p2 «0»",
+  "texto": "0",
+  "n": 1,
+  "a": 7.158333,
+  "b": 11,
+  "min": 0.6499999999999999
+ },
+ {
+  "id": "sc-ax1",
+  "que": "p2 «idéntica · 1»",
+  "texto": "idéntica · 1",
+  "n": 2,
+  "a": 9.591667,
+  "b": 11,
+  "min": 1
+ },
+ {
+  "id": "sc-mkl",
+  "que": "p2 «piso»",
+  "texto": "piso · 0,70",
+  "n": 2,
+  "a": 9.721667,
+  "b": 11,
+  "min": 1
+ },
+ {
+  "id": "dA-e3",
+  "que": "ejemplo B dato",
+  "texto": "Imagen B · parecido 0,35",
+  "n": 4,
+  "a": 11.83,
+  "b": 13.6,
+  "min": 1.7
+ },
+ {
+  "id": "r1-tag",
+  "que": "r1 «89 px»",
+  "texto": "89 px",
+  "n": 2,
+  "a": 15.05,
+  "b": 16.75,
+  "min": 1
+ },
+ {
+  "id": "r1-nota",
+  "que": "r1 nota (ya está al llegar)",
+  "texto": "Bajo 200 px, el medidor avisa.",
+  "n": 6,
+  "a": 13.95,
+  "b": 16.75,
+  "min": 2.3999999999999995
+ },
+ {
+  "id": "r2-mkl",
+  "que": "r2 «piso»",
+  "texto": "piso · 0,70",
+  "n": 2,
+  "a": 16.95,
+  "b": 19.5,
+  "min": 1
+ },
+ {
+  "id": "r2-zoom",
+  "que": "r2 «Zoom»",
+  "texto": "Zoom: 0,70 a 0,90",
+  "n": 4,
+  "a": 16.95,
+  "b": 19.5,
+  "min": 1.7
+ },
+ {
+  "id": "r2-m1",
+  "que": "r2 marca 0,75",
+  "texto": "0,75",
+  "n": 1,
+  "a": 16.95,
+  "b": 19.5,
+  "min": 0.6499999999999999
+ },
+ {
+  "id": "r2-m2",
+  "que": "r2 marca 0,80",
+  "texto": "0,80",
+  "n": 1,
+  "a": 16.95,
+  "b": 19.5,
+  "min": 0.6499999999999999
+ },
+ {
+  "id": "r2-m3",
+  "que": "r2 marca 0,85",
+  "texto": "0,85",
+  "n": 1,
+  "a": 16.95,
+  "b": 19.5,
+  "min": 0.6499999999999999
+ },
+ {
+  "id": "r2-m4",
+  "que": "r2 marca 0,90",
+  "texto": "0,90",
+  "n": 1,
+  "a": 16.95,
+  "b": 19.5,
+  "min": 0.6499999999999999
+ },
+ {
+  "id": "r2-v1",
+  "que": "r2 valor 1",
+  "texto": "0,77",
+  "n": 1,
+  "a": 17.55,
+  "b": 19.5,
+  "min": 0.6499999999999999
+ },
+ {
+  "id": "r2-v2",
+  "que": "r2 valor 2",
+  "texto": "0,80",
+  "n": 1,
+  "a": 18,
+  "b": 19.5,
+  "min": 0.6499999999999999
+ },
+ {
+  "id": "r2-bl",
+  "que": "r2 banda",
+  "texto": "±0,03",
+  "n": 1,
+  "a": 18.6,
+  "b": 19.5,
+  "min": 0.6499999999999999
+ },
+ {
+  "id": "r3-call",
+  "que": "r3 «Lo difuminé» (ya está al llegar)",
+  "texto": "Lo difuminé: lo inventó el motor.",
+  "n": 6,
+  "a": 19.7,
+  "b": 22.25,
+  "min": 2.3999999999999995
+ },
+ {
+  "id": "r3-num",
+  "que": "r3 número",
+  "texto": "parecido 0,80",
+  "n": 2,
+  "a": 20.93,
+  "b": 22.25,
+  "min": 1
+ }
+]

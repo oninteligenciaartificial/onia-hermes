@@ -1,0 +1,32 @@
+== ffprobe (flujos) ==
+index=0
+codec_name=h264
+profile=High
+codec_type=video
+width=1080
+height=1920
+pix_fmt=yuv420p
+color_space=bt709
+color_transfer=bt709
+color_primaries=bt709
+r_frame_rate=24/1
+duration=26.833333
+bit_rate=4879835
+nb_frames=644
+index=1
+codec_name=aac
+profile=LC
+codec_type=audio
+sample_rate=48000
+channels=2
+r_frame_rate=0/0
+duration=26.833000
+bit_rate=2275
+nb_frames=1259
+== formato ==
+duration=26.833333
+size=16390380
+bit_rate=4886572
+== volumen del audio (debe ser silencio) ==
+[Parsed_volumedetect_0 @ 0x558fa08cd7c0] mean_volume: -91.0 dB
+[Parsed_volumedetect_0 @ 0x558fa08cd7c0] max_volume: -91.0 dB

@@ -1,0 +1,21 @@
+video: g3-v2-final-1080x1920.mp4  659 cuadros  27.458 s
+cuadros quietos (< 0,02 % de píxeles cambiados > 3 niveles y dif. media < 0,05): 0; idénticos al anterior (dif. 0): 0
+los 5 cuadros con MENOS cambio respecto del anterior: 276 (11.50 s: 0.008 % de píxeles > 3 niveles, dif. media 0.089); 254 (10.58 s: 0.013 % de píxeles > 3 niveles, dif. media 0.084); 366 (15.25 s: 0.019 % de píxeles > 3 niveles, dif. media 0.112); 158 (6.58 s: 0.022 % de píxeles > 3 niveles, dif. media 0.166); 5 (0.21 s: 0.022 % de píxeles > 3 niveles, dif. media 0.164)
+mayor tramo quieto TOTAL: 0.000 s   [ninguno]
+mayor tramo idéntico (dif. exactamente 0): 0.000 s   [ninguno]
+mayor tramo quieto SIN tarjeta en lectura: 0.000 s   [ninguno]
+eventos visuales por 10 s: 14.93 (41 en 27.5 s); hueco máximo entre eventos: 1.616 s; tramo quieto de diseño (sin empuje lento ni clips): 0.25 s
+✔ ningún tramo de más de 0,3 s con la pantalla quieta y sin una tarjeta en lectura
+
+SENSIBILIDAD al umbral (mismo video, mismas tarjetas en lectura; tramo = cuadros consecutivos):
+pct<0.05    total        0.042 s en 0.08
+pct<0.05    sin tarjeta  0.042 s en 2.21
+pct<0.1     total        0.042 s en 0.08
+pct<0.1     sin tarjeta  0.042 s en 2.21
+pct<0.2     total        0.042 s en 0.08
+pct<0.2     sin tarjeta  0.042 s en 2.21
+media<0.15  total        1.250 s en 21.33
+media<0.15  sin tarjeta  0.292 s en 22.29
+media<0.3   total        1.750 s en 13.63
+media<0.3   sin tarjeta  0.292 s en 22.29
+BASE G3 v1 (mismo método, videos/lucia-g3/out/g3-final-1080x1920.mp4, 58 s): mayor tramo quieto TOTAL 2,167 s (27,04→29,21 s); mayor tramo quieto SIN tarjeta en lectura 1,917 s (12,46→14,38 s); mayor tramo idéntico (dif. 0) 1,667 s; 903 de 1391 cuadros quietos.
