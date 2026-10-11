@@ -350,6 +350,12 @@ Fuente: `research/competencia/LUCIA_COMPETENCIA_20261005.md`.
   0,831; la misma foto reducida a 60 px baja de forma pequeña y consistente, −0,004 a −0,010 en 5 de 6 fotos, y F oscila ±0,02 (`videos/lucia-g5/qa/cara-chica-*.txt`). Lo falso es
   que sea apreciable. Se dice «lo reviso a ojo» (la regla < 200 px del gate), nunca «baja». Las medidas 0,79 y 0,77 difieren 0,02, no 0,03, y el mejor ancla del ruido es el
   MISMO clip del Motor 6, que oscila 0,771-0,799. Todo número o tendencia que un guion afirme se mide con el control propio (0 cr) antes de renderizar.
+- **11-oct · el parecido NO es independiente de lo que el motor recibió** (revisión de P9 y G2 v2; lo cerró un `job_display`, 0 cr). El parecido se puntúa contra 8 fotos oficiales (R1..R8). La foto de arranque K1 (4afffb96) se generó
+  con R1, R3, R6 y R7 como entrada; Seedance 2.0 Mini + referencias recibió además R1 y R3, y Kling O3 (sin K1) R1, R3, R6 y R7. Todos los clips con K1 descienden de esas cuatro fotos: **no hay control limpio**. Mi primer cálculo
+  («exceso ≈ 0,03, dentro del ruido») usó los clips con K1 como control y estaba mal planteado; el revisor lo cazó. Lo sostenible: la **prueba estricta**, parecido contra SOLO las fotos que nadie recibió (R2, R4, R5, R8): los seis clips
+  bajan 0,03-0,09 pero el orden por valor final no cambia (`v4/prueba-motores-20261008/medicion-sin-refs-entrada-20261011.txt`, script `scripts/parecido_sin_refs.py`). **Regla:** antes de dar un parecido como «sostiene la cara»,
+  mirar con `job_display` qué imágenes recibió el job (y de dónde salió su foto de arranque) y decir en pantalla y pie cuáles de las 8 vio; una generación nueva de prueba debería reservar fotos de puntaje que NO entren como referencia.
+  Se pagó en tres revisiones: P9 («Seedance parte de 139 px» dejaba a Kling como sólido), G2 v2 («los otros cuatro, ninguna») y G5 v2.
 - **2/3-oct:** Seedream escribe como texto «sheet» y «hex #…»; inventa letreros en las torres; los lotes de más de 5
   dan 429. Están en `higgsfield-generate`.
 
