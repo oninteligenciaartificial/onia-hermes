@@ -327,11 +327,12 @@ La misma Biblioteca muestra a **~20 clínicas dentales y ~10 de estética** de S
 para conseguir pacientes, varias con clic a WhatsApp (*Chatea con nosotros* sale en 33 de los 417 anuncios
 vistos el 10-oct; el conector solo muestra el botón cuando coincide con el titular, §2.6.2). La lista, con la página de cada una y el cruce con los 20 prospectos de agosto, está en
 `ONIA_PROSPECTOS_DENTAL_SCZ.md` §5.
-**Lista de HOY (11-oct, solo lectura, nadie contactado):** `research/competencia/anuncios/CLINICAS-SCZ-CON-PAUTA-11OCT.md`: ~57 clínicas
-o páginas dentales con pauta activa, con su recuento por `page_ids`, desde cuándo, qué promete cada titular y un «encaje visible».
-**Dice lo que la Biblioteca no puede decir:** no da ubicación (solo el nombre de la página con «Santa Cruz» vale como confirmación) ni
-contesta las 5 preguntas de `ONIA_CLIENTE_IDEAL.md` §9. 6 de las páginas del 30-sep (entre ellas la hipótesis «DS» y el #1 San Pedro) ya
-no tienen anuncios activos.
+**Lista de HOY (11-oct, solo lectura, nadie contactado):** `research/competencia/anuncios/CLINICAS-SCZ-CON-PAUTA-11OCT.md`: 62 clínicas
+o páginas dentales con pauta activa, con su recuento por `page_ids`, desde cuándo y qué promete cada titular. **El orden sale de los veredictos
+que ya estaban en `ONIA_PROSPECTOS_DENTAL_SCZ.md` §6, no de cuántos anuncios o sedes tiene cada una**: 6 candidatas, 32 a verificar y 6 fuera
+(cadena, multi-sede u otra ciudad). La Biblioteca no da ubicación ni contesta las 5 preguntas de `ONIA_CLIENTE_IDEAL.md` §9. 6 de las páginas
+del 30-sep (entre ellas la hipótesis «DS» y el #1 San Pedro) ya no tienen anuncios activos. Borradores de primer mensaje, sin enviar:
+`sales-kit/PRIMER-MENSAJE-8-CLINICAS-11OCT.md`.
 
 **Por qué es la mejor señal que tiene Onia:**
 

@@ -52,21 +52,22 @@ function agrupar(paginas) {
   return filas;
 }
 
-function senal(f) {
-  const n = f.starts.length;
-  if (f.senal_override) return [f.senal_override, f.razon_override];
-  if (f.tipo === "personal") return ["No", "un profesional con marca propia: no es el tamaño de 2-6 profesionales"];
-  if (f.tipo === "curso") return ["No", "pauta de cursos, no de pacientes"];
-  if (f.tipo === "otro") return ["Baja", "no está claro quién es ni si es clínica"];
-  if (f.sedes > 1) return ["Alta", `${f.sedes} páginas o sedes con ${n} anuncios: más de un lugar de atención`];
-  if (n >= 8 && f.tipo === "consultorio") return ["Media", `«consultorio» en el nombre: probable 1-2 profesionales, aunque gasta de forma sostenida (${n} anuncios)`];
-  if (n >= 8) return ["Alta", `${n} anuncios activos: gasta de forma sostenida`];
-  if (n >= 3 || f.whatsapp) return ["Media", f.whatsapp && n < 3 ? "botón de chat o de cita, pocos anuncios" : `${n} anuncios${f.whatsapp ? " con botón de chat" : ""}`];
-  return ["Baja", `${n} ${n === 1 ? "anuncio" : "anuncios"} y sin botón visible`];
+// Veredicto con la evidencia que YA estaba en el repo (ONIA_PROSPECTOS_DENTAL_SCZ.md §6.2, §6.5-§6.9). Nunca se puntúa por cantidad de
+// anuncios ni por sedes: varias sedes o una cadena SACAN a la clínica (el cliente ideal es de 2 a 6 profesionales, ONIA_CLIENTE_IDEAL.md).
+// Error del 11-oct: la primera versión de esta lista puntuó «Alta» a las multi-sede (Cortez, Ortobom, MUN, Boquita, Imagina) y a Europea
+// (Cochabamba), todas ya descartadas con evidencia en esos docs. Antes de ordenar, se lee lo que ya se verificó.
+function clasificar(f) {
+  const e = f.previo_estado;
+  if (e === "SALE") return ["Fuera", f.previo_texto];
+  if (e === "SIGUE") return ["Candidata", f.previo_texto];
+  if (e === "ESPERA") return ["A verificar", f.previo_texto];
+  if (f.tipo === "otro") return ["A verificar", "no está claro quién es ni si es clínica"];
+  return ["A verificar", "no estaba en las listas previas: ciudad y tamaño sin verificar"];
 }
-const ORDEN = { Alta: 0, Media: 1, Baja: 2, No: 3 };
+const ORDEN = { Candidata: 0, "A verificar": 1, Fuera: 2 };
 
 function evidenciaCiudad(f, consultas) {
+  if (f.ciudad === "verificada") return "Santa Cruz verificada en los docs previos (directorio o web)";
   if (f.ciudad === "nombre") return "Santa Cruz en el nombre de la página (o su zona)";
   const q = (f.consultas || []).filter((c) => c !== "Q4").map((c) => `«${consultas[c]}»`);
   if (q.length) return `salió con ${q.join(", ")} (indicio, no prueba)`;
@@ -82,54 +83,62 @@ export function render() {
   const { meta, excluidas } = datos;
   const corte = meta.corte_epoch;
   const filas = agrupar(datos.paginas);
-  const sc = filas.filter((f) => ["nombre", "busqueda"].includes(f.ciudad) && f.tipo !== "personal");
-  const sinCiudad = filas.filter((f) => f.ciudad === "sin" && f.tipo !== "personal");
+  const dentales = filas.filter((f) => f.tipo !== "personal");
   const personales = filas.filter((f) => f.tipo === "personal");
   const fila = (f) => {
-    const [s, razon] = senal(f);
+    const [v, razon] = clasificar(f);
     const mas = f.starts[0];
     const nuevo = f.starts[f.starts.length - 1];
-    return { f, s, razon, mas, nuevo, d: dias(corte, mas), dn: dias(corte, nuevo) };
+    return { f, v, razon, mas, nuevo, d: dias(corte, mas), dn: dias(corte, nuevo) };
   };
-  const conSenal = sc.map(fila).sort((a, b) => ORDEN[a.s] - ORDEN[b.s] || b.f.starts.length - a.f.starts.length);
-  const cuenta = (s) => conSenal.filter((x) => x.s === s).length;
-  const linea = ({ f, s, razon, mas, d, nuevo, dn }) =>
-    `| **${esc(f.nombre)}** | ${f.page_id} | ${evidenciaCiudad(f, meta.consultas_por_texto)} | ${f.starts.length}${f.completo ? "" : "+"} | ${fechaLaPaz(mas)} (${d} d) · el último, hace ${dn} d | ${promete(f)} | ${f.whatsapp ? "sí" : "no se ve"} | ${f.moneda} | ${DEL_30_SEP.get(f.ids[0]) ?? "no estaba"} | **${s}**: ${razon}${f.nota ? `. ${esc(f.nota)}` : ""} |`;
-  const cab = "| Clínica | page_id | Ciudad: indicio | Anuncios activos | Desde (el más viejo) | Qué promete (titulares) | Botón de chat | Moneda | En la lista del 30-sep | Encaje visible |\n|---|---|---|---|---|---|---|---|---|---|";
+  const todas = dentales.map(fila);
+  const conIndicio = todas.filter((x) => ["verificada", "nombre", "busqueda"].includes(x.f.ciudad));
+  const candidatas = conIndicio.filter((x) => x.v === "Candidata").sort((a, b) => b.f.starts.length - a.f.starts.length);
+  const aVerificar = conIndicio.filter((x) => x.v === "A verificar").sort((a, b) => b.f.starts.length - a.f.starts.length);
+  const fuera = conIndicio.filter((x) => x.v === "Fuera").sort((a, b) => b.f.starts.length - a.f.starts.length);
+  const sinCiudad = todas.filter((x) => x.f.ciudad === "sin").sort((a, b) => b.f.starts.length - a.f.starts.length);
+  const linea = ({ f, v, razon, mas, d, dn }) =>
+    `| **${esc(f.nombre)}** | ${f.page_id} | ${evidenciaCiudad(f, meta.consultas_por_texto)} | ${f.starts.length}${f.completo ? "" : "+"} | ${fechaLaPaz(mas)} (${d} d) · el último, hace ${dn} d | ${promete(f)} | ${f.whatsapp ? "sí" : "no se ve"} | ${f.moneda} | **${v}**: ${esc(razon)}${f.nota ? `. ${esc(f.nota)}` : ""} |`;
+  const cab = "| Clínica | page_id | Ciudad: evidencia | Anuncios activos | Desde (el más viejo) | Qué promete (titulares) | Botón de chat | Moneda | Lo que ya se sabía (docs del 30-sep al 8-oct) |\n|---|---|---|---|---|---|---|---|---|";
   const tabla = (xs) => [cab, ...xs.map(linea)].join("\n");
-  const total = (xs) => xs.reduce((a, x) => a + x.f.starts.length, 0);
+  const anuncios = (xs) => xs.reduce((a, x) => a + x.f.starts.length, 0);
 
   return `# Clínicas dentales con pauta HOY en la Biblioteca de Meta · lista para Sergio Urcullo
 
 > **11-oct-2026, 12:40 UTC (08:40 La Paz) · Ventas y pauta · encargo de la MADRE MARKETING («la señal más barata», ADQ §3).** Solo lectura con el conector \`Meta_ads\` (\`ads_library_search\`, estado ACTIVE, sin gasto). **Nadie fue contactado, no se creó nada en Meta.** Datos: \`CLINICAS-SCZ-CON-PAUTA-11OCT.json\`; este archivo lo genera \`.claude/skills/onia-ventas-pauta/scripts/clinicas-scz-lista.mjs\` y no se edita a mano.
+> **Corregida el 11-oct a las 13:30 UTC.** La primera versión puntuó «Alta» a las clínicas con varias sedes o muchos anuncios y recomendó empezar por Ortobom y Cortez: **seis de esas ocho ya estaban descartadas con evidencia** en \`ONIA_PROSPECTOS_DENTAL_SCZ.md\` §6.2, §6.6, §6.7 y §6.9 (multi-sede, cadena, otra ciudad) y yo no leí esos veredictos antes de ordenar. Ahora el orden sale de esos veredictos: **ya no hay «Alta»**.
 > **Contactar a cualquiera de estas clínicas requiere el OK escrito de Sergio Urcullo sobre el mensaje y el canal exactos** (\`ONIA_ADQUISICION_Y_PAUTA.md\` §3, subagente \`onia-crm-prospeccion\`) y el mensaje **no promete el Recall de tratamiento a medias** (§5.4).
 
 ## 0. Lo que esta lista NO puede decir (leer antes de usarla)
 
-- **La Biblioteca no da ubicación.** Se buscó por texto («Santa Cruz» en el texto del anuncio) con alcance Bolivia: sale gente de La Paz, Cochabamba y hasta Perú. **«Ciudad: indicio» no es confirmación**; solo vale como confirmación el nombre de la página con «Santa Cruz» (o su zona). Cualquier contacto empieza por confirmar ciudad.
-- **No contesta ninguna de las 5 preguntas** de \`ONIA_CLIENTE_IDEAL.md\` §9 (profesionales, quién agenda, cómo llevan la agenda, tratamientos a medias, NIT). El **«Encaje visible»** es solo una pista barata (cuántos anuncios, cuántas sedes, si hay botón de chat) y **no califica a nadie**: califica la conversación.
-- **«Anuncios activos» = copias activas en la Biblioteca**, no campañas: una clínica puede tener 10 copias de una sola idea. **«Desde» = el anuncio activo más viejo**, no desde cuándo pauta la página (una reactivación reinicia la fecha). Lo que el anuncio **promete** es solo su titular: el conector no trae el texto ni la imagen (el 10-oct, 22 de 41 anuncios no traían titular).
+- **La Biblioteca no da ubicación.** Se buscó por texto («Santa Cruz» en el texto del anuncio) con alcance Bolivia: sale gente de La Paz, Cochabamba y hasta Perú. **«Ciudad: indicio» no es confirmación**; solo valen como confirmación el nombre de la página con «Santa Cruz» o la verificación de los docs previos (directorio o web propia).
+- **No contesta ninguna de las 5 preguntas** de \`ONIA_CLIENTE_IDEAL.md\` §9 (profesionales, quién agenda, cómo llevan la agenda, tratamientos a medias, NIT). **Cantidad de anuncios y de sedes no miden el encaje**: una cadena o una red de sedes pasa de los 2-6 profesionales y **sale**.
+- **No es exhaustiva.** Sale de 5 consultas por texto (los 50 anuncios más nuevos de cada una) y de recuentos por \`page_ids\`; 5 páginas de la pasada del 8-oct no habían salido y se sumaron por \`page_id\`. Puede faltar alguna.
+- **«Anuncios activos» = copias activas en la Biblioteca**, no campañas. **«Desde» = el anuncio activo más viejo**, no desde cuándo pauta la página (una reactivación reinicia la fecha). Lo que el anuncio **promete** es solo su titular: el conector no trae el texto ni la imagen.
 - **«Botón de chat»** es el titular «Chatea con nosotros», «NUESTRO WHATSAPP», «Agenda tu cita» o similar: puede llevar a WhatsApp o a Messenger (la Biblioteca no distingue).
-- Las consultas por texto devuelven los 50 anuncios más nuevos: las páginas de las tablas 1 y 2 se recontaron **por \`page_ids\`** (conteo entero, el \`+\` marca las que no); las de la tabla 3 salen de una sola consulta y pueden tener más.
 
 ## 1. Resumen
 
-- **${filas.filter((f) => f.tipo !== "personal").length} clínicas o páginas dentales con pauta activa hoy** (las hermanas cuentan como una) (${filas.reduce((a, f) => a + (f.tipo === "personal" ? 0 : f.starts.length), 0)} anuncios), más ${personales.length} profesionales con página propia.
-- **${sc.length} con Santa Cruz en el nombre o en la búsqueda** (${total(conSenal)} anuncios): encaje visible **Alta ${cuenta("Alta")}** · Media ${cuenta("Media")} · Baja ${cuenta("Baja")} · No ${cuenta("No")}.
-- **Con «Santa Cruz» en el NOMBRE** (la única confirmación que da la Biblioteca): ${sc.filter((f) => f.ciudad === "nombre").map((f) => f.nombre.replace(/ \(.*$/, "")).join(", ")}.
-- Del 30-sep, **${SIN_ADS_HOY.length} páginas de la lista ya no tienen anuncios activos** (tabla 4), entre ellas la hipótesis «DS».
+- **${dentales.length} clínicas o páginas dentales con pauta activa hoy** (las hermanas cuentan como una), más ${personales.length} profesionales con página propia.
+- De las ${conIndicio.length} con indicio de Santa Cruz: **${candidatas.length} candidatas** (la verificación previa dice SIGUE y pautan hoy), **${aVerificar.length} a verificar** y **${fuera.length} fuera** por evidencia previa (${anuncios(fuera)} anuncios que no cambian eso).
+- **Candidatas:** ${candidatas.map((x) => x.f.nombre).join(", ")}. Todas con una condición de tamaño: si pasan de 6 profesionales, o son uno solo, salen.
+- Del 30-sep, **${SIN_ADS_HOY.length} páginas de la lista ya no tienen anuncios activos** (tabla 5), entre ellas la hipótesis «DS». También sin anuncios hoy: San Pablo, Henners, Dentessa y Gooddental kids (del 8-oct).
 
-## 2. Con indicio de Santa Cruz, por encaje visible
+## 2. Candidatas: la verificación previa dice SIGUE y pautan hoy
 
-${tabla(conSenal)}
+${tabla(candidatas)}
 
-## 3. Dentales en Bolivia con ciudad SIN indicio (incompleto: sale de una sola consulta de 50 de ${meta.totales_de_la_consulta.Q4})
+## 3. A verificar (ciudad y tamaño, desde la PC)
 
-> «Blanqueamiento dental» no lleva ciudad: estas páginas pueden ser de cualquier ciudad de Bolivia. Sirven para saber **quién más pauta**, no para elegir a quién escribir.
+${tabla(aVerificar)}
 
-${tabla(sinCiudad.map(fila).sort((a, b) => b.f.starts.length - a.f.starts.length))}
+## 4. Fuera por evidencia previa, aunque pautan hoy
 
-## 4. Estaban en la lista del 30-sep y hoy NO tienen anuncios activos
+> Esta tabla existe para que nadie las vuelva a contar como señal. La cantidad de anuncios es la que muestra la Biblioteca; no cambia el veredicto.
+
+${tabla(fuera)}
+
+## 5. Estaban en la lista del 30-sep y hoy NO tienen anuncios activos
 
 | Página | page_id | Nota |
 |---|---|---|
@@ -137,36 +146,42 @@ ${SIN_ADS_HOY.map(([n, id, nota]) => `| ${n} | ${id} | ${nota} |`).join("\n")}
 
 «Sin anuncios activos hoy» no dice que cerraron ni que no inviertan: puede ser una pausa o un cambio de página.
 
-## 5. Profesionales con página propia (un profesional: no es el tamaño de 2-6)
+## 6. Dentales en Bolivia con ciudad SIN indicio (incompleto: sale de una sola consulta de 50 de ${meta.totales_de_la_consulta.Q4})
+
+> «Blanqueamiento dental» no lleva ciudad: estas páginas pueden ser de cualquier ciudad de Bolivia. Sirven para saber **quién más pauta**, no para elegir a quién escribir.
+
+${tabla(sinCiudad)}
+
+## 7. Profesionales con página propia (un profesional: no es el tamaño de 2-6)
 
 ${personales.map((f) => `${esc(f.nombre)} (${f.page_id}, ${f.starts.length}${f.completo ? "" : "+"} ${f.starts.length === 1 ? "anuncio" : "anuncios"})`).join(" · ")}.
 
-## 6. Fuera de la lista, y por qué
+## 8. Fuera de la lista, y por qué
 
 | Página | page_id | Motivo |
 |---|---|---|
 ${excluidas.map((e) => `| ${esc(e.nombre)} | ${e.page_id} | ${esc(e.motivo)} |`).join("\n")}
 
-## 7. Las 5 preguntas: qué se sabe y qué falta
+## 9. Las 5 preguntas: qué se sabe y qué falta
 
 | Pregunta (\`ONIA_CLIENTE_IDEAL.md\` §9) | La Biblioteca dice | Cómo se contesta |
 |---|---|---|
-| 1. ¿Cuántos profesionales atienden? (2-6 es el punto dulce) | Solo pistas: varias sedes, varios anuncios | Preguntarla; **es la primera** |
+| 1. ¿Cuántos profesionales atienden? (2-6 es el punto dulce) | Solo pistas: varias sedes (que **sacan**), varios anuncios | Preguntarla; **es la primera** |
 | 2. ¿Quién agenda las citas? (con recepción, el dolor existe) | Nada. «Agenda tu cita» / «Chatea con nosotros» indican que alguien contesta el chat | Preguntarla; **es la segunda** |
 | 3. ¿Cómo llevan la agenda y las fichas? | Nada | En la llamada |
 | 4. ¿Cuántos pacientes tienen un tratamiento empezado y no volvieron? (**la que vende**) | Nada | En la llamada; si no lo saben, ya dijeron el problema |
 | 5. ¿Facturan con NIT? | Nada | En la llamada |
 
-## 8. Qué sigue, y quién decide
+## 10. Qué sigue, y quién decide
 
 | Qué | Quién |
 |---|---|
-| Elegir a cuáles contactar (propuesta: empezar por las de encaje **Alta** con «Santa Cruz» en el nombre y confirmar ciudad y tamaño antes de cualquier oferta) | Sergio Urcullo |
-| Aprobar el mensaje y el canal exactos de cada contacto | Sergio Urcullo (\`onia-crm-prospeccion\` redacta, no envía) |
-| Cruzar con los 7 leads de agosto y los 20 prospectos (\`SEGUIMIENTO-LEADS.md\`, \`ONIA_PROSPECTOS_DENTAL_SCZ.md\` §6) | Ventas y pauta, con el OK de Sergio Urcullo para contactar |
+| Elegir a cuáles contactar entre las **${candidatas.length} candidatas** y aprobar el mensaje y el canal exactos de cada una (borrador: \`sales-kit/PRIMER-MENSAJE-8-CLINICAS-11OCT.md\`) | Sergio Urcullo |
+| Resolver desde la PC las filas «A verificar» (ciudad, tamaño, número que abre WhatsApp); **Sonríe a La Vida**: cruzar con el lead «consultorio dental sonrisa feliz» antes de escribirle | La madre en la PC |
+| Decidir si acepta 2 sedes en la misma ciudad (MUN, Boquita Sana): hoy están fuera | Sergio Urcullo |
 | Repetir esta lista cada semana con la tanda de competencia (la lista del 30-sep ya perdió ${SIN_ADS_HOY.length} páginas) | Ventas y pauta |
 
-**Recomendación de este análisis:** son **${cuenta("Alta")} clínicas de encaje Alta** (más de un lugar de atención o gasto sostenido), de las que **${sc.filter((f) => f.ciudad === "nombre" && senal(f)[0] === "Alta").length} traen «Santa Cruz» en el nombre**. Ningún dato de esta lista justifica escribirle a las ${sc.length} páginas: con 5 conversaciones buenas alcanza (ADQ §4). Escribir a todas es la forma más rápida de quemar la lista.
+**Recomendación de este análisis:** escribir, con el OK de Sergio Urcullo, solo a las **candidatas**, y empezar por las que ya pautan con chat y **tienen Santa Cruz verificada**; el tamaño es la primera pregunta de la conversación. Ningún dato de esta lista justifica escribirle a las ${conIndicio.length} páginas: con 5 conversaciones buenas alcanza (ADQ §4).
 `;
 }
 

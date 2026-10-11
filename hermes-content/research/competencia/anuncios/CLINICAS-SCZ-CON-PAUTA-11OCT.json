@@ -93,6 +93,20 @@
      "572588712615373",
      "108942198437850"
     ]
+   },
+   {
+    "total": 17,
+    "ids": [
+     "1099790733394902",
+     "108378080581477",
+     "105982241767033",
+     "733017286850915",
+     "107148972331561",
+     "105318748337327",
+     "1086969651158915",
+     "867483409790142",
+     "437878689605332"
+    ]
    }
   ],
   "totales_de_la_consulta": {
@@ -103,7 +117,7 @@
    "Q5": 21
   },
   "nota": "Q1 a Q5 devuelven los 50 más NUEVOS: lo más viejo de cada página sale solo con page_ids",
-  "consultas_por_page_ids_nota": "7 consultas por page_ids, ACTIVE, límite 50: en cada una el total que da la Biblioteca (estimated_total_count) es igual a los anuncios transcriptos de esas páginas (lo exige scripts/clinicas-scz-lista.test.mjs). Más 5 consultas por texto = 12 consultas."
+  "consultas_por_page_ids_nota": "8 consultas por page_ids, ACTIVE, límite 50: en cada una el total que da la Biblioteca (estimated_total_count) es igual a los anuncios transcriptos de esas páginas (lo exige scripts/clinicas-scz-lista.test.mjs). Más 5 consultas por texto = 13 consultas. San Pablo (108378080581477), Henners (733017286850915), Dentessa (107148972331561) y Gooddental kids (1086969651158915) NO tienen anuncios activos hoy (estaban en §6.9 del 8-oct)."
  },
  "paginas": [
   {
@@ -152,7 +166,9 @@
     "Q1",
     "Q2",
     "Q5"
-   ]
+   ],
+   "previo_estado": "SALE",
+   "previo_texto": "cadena: 4 sucursales y +12.000 pacientes declarados; un WhatsApp por sucursal (§6.2)"
   },
   {
    "page_id": "255332044891977",
@@ -182,7 +198,9 @@
    "consultas": [
     "Q1",
     "Q3"
-   ]
+   ],
+   "previo_estado": "ESPERA",
+   "previo_texto": "nombre parecido al lead «consultorio dental sonrisa feliz» (28-ago, ya pidió acceso): si es la misma, va por ONIA_LEADS_ESPERANDO y no se le escribe dos veces (§6.2); ciudad y tamaño sin verificar"
   },
   {
    "page_id": "447192008650376",
@@ -246,7 +264,9 @@
     "Q1",
     "Q2",
     "Q5"
-   ]
+   ],
+   "previo_estado": "SALE",
+   "previo_texto": "Cochabamba según el directorio (§6.9, 8-oct)"
   },
   {
    "page_id": "890615774144480",
@@ -283,9 +303,7 @@
    "whatsapp": false,
    "consultas": [
     "Q1"
-   ],
-   "senal_override": "Media",
-   "razon_override": "9 de sus 15 anuncios son cursos o formación para odontólogos; solo 6 son de pacientes"
+   ]
   },
   {
    "page_id": "284462084761388",
@@ -300,7 +318,7 @@
     1791314190
    ],
    "titulos": [],
-   "ciudad": "busqueda",
+   "ciudad": "verificada",
    "tipo": "clinica",
    "completo": true,
    "nota": "",
@@ -308,7 +326,9 @@
    "consultas": [
     "Q1",
     "Q5"
-   ]
+   ],
+   "previo_estado": "SIGUE",
+   "previo_texto": "Santa Cruz confirmado; si pasa de 6 profesionales, sale (§6.9 #2)"
   },
   {
    "page_id": "380639486016768",
@@ -333,7 +353,9 @@
     "Q1",
     "Q2",
     "Q5"
-   ]
+   ],
+   "previo_estado": "SALE",
+   "previo_texto": "2 sedes en Santa Cruz (Av. Prefecto Rivas y Sucursal Udabol); vuelve solo si Sergio Urcullo acepta 2 sedes (§6.9, 8-oct)"
   },
   {
    "page_id": "100226682495467",
@@ -358,7 +380,9 @@
     "Q1",
     "Q2",
     "Q5"
-   ]
+   ],
+   "previo_estado": "SALE",
+   "previo_texto": "segunda sede de Boquita Sana (§6.9)"
   },
   {
    "page_id": "1297857270066603",
@@ -433,7 +457,9 @@
    "consultas": [
     "Q2",
     "Q3"
-   ]
+   ],
+   "previo_estado": "SALE",
+   "previo_texto": "red de varias sedes: páginas «Santa Cruz» y «Mutualista» (§6.9, 8-oct)"
   },
   {
    "page_id": "110177058793289",
@@ -460,7 +486,9 @@
    "consultas": [
     "Q2",
     "Q3"
-   ]
+   ],
+   "previo_estado": "SALE",
+   "previo_texto": "red de varias sedes (§6.9)"
   },
   {
    "page_id": "103698302731501",
@@ -481,7 +509,9 @@
    "consultas": [
     "Q2",
     "Q3"
-   ]
+   ],
+   "previo_estado": "ESPERA",
+   "previo_texto": "ciudad por mirar desde la PC (§6.9, 8-oct)"
   },
   {
    "page_id": "111017921072549",
@@ -501,8 +531,8 @@
     "Q1",
     "Q5"
    ],
-   "senal_override": "Alta",
-   "razon_override": "dos ciudades (página de La Paz) y «+15 años» según el prospecto #9 del 30-sep: la Biblioteca solo muestra 2 anuncios hoy; verificar si pasa de 6 profesionales"
+   "previo_estado": "SALE",
+   "previo_texto": "multi-sede: una página por ciudad, «Sucursales en La Paz y Santa Cruz» (§6.6, 1-oct)"
   },
   {
    "page_id": "554435031080616",
@@ -538,7 +568,9 @@
    "completo": true,
    "nota": "",
    "whatsapp": false,
-   "consultas": []
+   "consultas": [],
+   "previo_estado": "ESPERA",
+   "previo_texto": "Santa Cruz en el nombre, tamaño sin dato; hay otra página «Natural Smile Dra. Carrazana»: ¿segunda sede? (§6.6, reserva)"
   },
   {
    "page_id": "631408986884357",
@@ -593,7 +625,7 @@
     1791493030
    ],
    "titulos": [],
-   "ciudad": "busqueda",
+   "ciudad": "verificada",
    "tipo": "clinica",
    "completo": true,
    "nota": "",
@@ -601,7 +633,9 @@
    "consultas": [
     "Q1",
     "Q2"
-   ]
+   ],
+   "previo_estado": "SIGUE",
+   "previo_texto": "Santa Cruz confirmado; riesgo alto de ser un solo profesional: si lo es, sale (§6.9 #6)"
   },
   {
    "page_id": "339088019578381",
@@ -613,14 +647,16 @@
     1791441825
    ],
    "titulos": [],
-   "ciudad": "busqueda",
+   "ciudad": "verificada",
    "tipo": "clinica",
    "completo": true,
    "nota": "",
    "whatsapp": false,
    "consultas": [
     "Q1"
-   ]
+   ],
+   "previo_estado": "SIGUE",
+   "previo_texto": "Santa Cruz confirmado; mirar si «Clarident Duo» es otra sede: si lo es, sale (§6.9 #1)"
   },
   {
    "page_id": "113481741822891",
@@ -640,7 +676,9 @@
    "whatsapp": true,
    "consultas": [
     "Q2"
-   ]
+   ],
+   "previo_estado": "ESPERA",
+   "previo_texto": "Santa Cruz por su página «ClinicaDentalRochaSantaCruz» (fragmento), tamaño sin dato; ¿es la misma que Consultorio Dental Rocha? (§6.6, reserva)"
   },
   {
    "page_id": "572588712615373",
@@ -661,7 +699,9 @@
    "whatsapp": true,
    "consultas": [
     "Q3"
-   ]
+   ],
+   "previo_estado": "SALE",
+   "previo_texto": "2 sucursales en Santa Cruz, Zona Norte y Zona Sur; vuelve solo si Sergio Urcullo acepta 2 sedes (§6.7, 2-oct)"
   },
   {
    "page_id": "108942198437850",
@@ -683,7 +723,9 @@
    "consultas": [
     "Q3",
     "Q5"
-   ]
+   ],
+   "previo_estado": "SALE",
+   "previo_texto": "página de MUN (2 sucursales); vuelve solo si Sergio Urcullo acepta 2 sedes (§6.7)"
   },
   {
    "page_id": "511897128678646",
@@ -706,8 +748,8 @@
    "consultas": [
     "Q2"
    ],
-   "senal_override": "Media",
-   "razon_override": "nombre de marca de un especialista (inferencia): puede ser un solo profesional, aunque tiene 2 páginas y 11 anuncios"
+   "previo_estado": "ESPERA",
+   "previo_texto": "dos páginas pueden ser dos sedes (§6.9, 8-oct)"
   },
   {
    "page_id": "102844034875276",
@@ -728,7 +770,9 @@
    "whatsapp": false,
    "consultas": [
     "Q2"
-   ]
+   ],
+   "previo_estado": "ESPERA",
+   "previo_texto": "dos páginas pueden ser dos sedes (§6.9, 8-oct)"
   },
   {
    "page_id": "589482644245798",
@@ -802,7 +846,9 @@
    "completo": true,
    "nota": "",
    "whatsapp": false,
-   "consultas": []
+   "consultas": [],
+   "previo_estado": "ESPERA",
+   "previo_texto": "«consultorio» sugiere una sola persona; ciudad sin dato (§6.6)"
   },
   {
    "page_id": "697014900382758",
@@ -833,7 +879,7 @@
     "Recupera tu sonrisa",
     "Tu sonrisa blanca desde Bs 300"
    ],
-   "ciudad": "busqueda",
+   "ciudad": "verificada",
    "tipo": "clinica",
    "completo": true,
    "nota": "",
@@ -841,7 +887,9 @@
    "consultas": [
     "Q1",
     "Q4"
-   ]
+   ],
+   "previo_estado": "SIGUE",
+   "previo_texto": "Santa Cruz confirmado (Av. Japón 3593); si es un solo doctor, sale (§6.5-6.6)"
   },
   {
    "page_id": "608572659242258",
@@ -1573,6 +1621,115 @@
    "nota": "",
    "whatsapp": false,
    "consultas": []
+  },
+  {
+   "page_id": "1099790733394902",
+   "nombre": "Smile Dental",
+   "moneda": "BOB",
+   "starts": [
+    1791384299,
+    1791384633,
+    1791475826
+   ],
+   "titulos": [
+    "Chatea con nosotros"
+   ],
+   "ciudad": "verificada",
+   "tipo": "clinica",
+   "completo": true,
+   "nota": "Santa Cruz por el directorio (§6.9 #3); no salió en las consultas por texto de hoy",
+   "whatsapp": true,
+   "consultas": [],
+   "previo_estado": "SIGUE",
+   "previo_texto": "Santa Cruz confirmado; preguntar el tamaño (§6.9 #3)"
+  },
+  {
+   "page_id": "105982241767033",
+   "nombre": "Clínica Dental Innova Kids",
+   "moneda": "BOB",
+   "starts": [
+    1770145248,
+    1780500323,
+    1784661098
+   ],
+   "titulos": [
+    "Agenda tu cita ahora",
+    "Clínica Dental Innova Kids",
+    "Cuidado dental para niños en Santa Cruz"
+   ],
+   "ciudad": "verificada",
+   "tipo": "clinica",
+   "completo": true,
+   "nota": "Solo odontopediatría",
+   "whatsapp": true,
+   "consultas": [],
+   "previo_estado": "SIGUE",
+   "previo_texto": "Santa Cruz confirmado; solo odontopediatría, la cita la confirma el padre o la madre (§6.9 #5)"
+  },
+  {
+   "page_id": "105318748337327",
+   "nombre": "Clinica Dental Ramos",
+   "moneda": "BOB",
+   "starts": [
+    1791227231,
+    1791228790,
+    1791568284,
+    1791577780,
+    1791585282
+   ],
+   "titulos": [],
+   "ciudad": "busqueda",
+   "tipo": "clinica",
+   "completo": true,
+   "nota": "EN ESPERA el 8-oct: ciudad por mirar desde la PC",
+   "whatsapp": false,
+   "consultas": [],
+   "previo_estado": "ESPERA",
+   "previo_texto": "ciudad por mirar desde la PC (§6.9, 8-oct)"
+  },
+  {
+   "page_id": "437878689605332",
+   "nombre": "Epica Centro Odontológico",
+   "moneda": "BOB",
+   "starts": [
+    1791398252
+   ],
+   "titulos": [],
+   "ciudad": "busqueda",
+   "tipo": "clinica",
+   "completo": true,
+   "nota": "EN ESPERA el 8-oct: ciudad por mirar desde la PC",
+   "whatsapp": false,
+   "consultas": [],
+   "previo_estado": "ESPERA",
+   "previo_texto": "ciudad por mirar desde la PC (§6.9, 8-oct)"
+  },
+  {
+   "page_id": "867483409790142",
+   "nombre": "Cosmetic Dental and Face Center",
+   "moneda": "BOB",
+   "starts": [
+    1786936269,
+    1788816313,
+    1788816786,
+    1788816951,
+    1791062956
+   ],
+   "titulos": [
+    "Carillas con un resultado natural",
+    "Valoración capilar profesional",
+    "Agenda tu valoración capilar hoy",
+    "Agenda tu valoración capilar",
+    "Blanqueamiento con sistema de 3 luces"
+   ],
+   "ciudad": "busqueda",
+   "tipo": "otro",
+   "completo": true,
+   "nota": "Mezcla dental con valoración capilar; EN ESPERA el 8-oct",
+   "whatsapp": false,
+   "consultas": [],
+   "previo_estado": "ESPERA",
+   "previo_texto": "mezcla dental con capilar; ciudad por mirar desde la PC (§6.9, 8-oct)"
   }
  ],
  "excluidas": [

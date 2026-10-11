@@ -20,7 +20,7 @@ test("el .md versionado es lo que genera el script (si cambia el JSON, hay que r
 
 test("los anuncios transcriptos de cada consulta por page_ids suman el total que dio la Biblioteca", () => {
   const consultas = datos.meta.consultas_por_page_ids;
-  assert.equal(consultas.length, 7);
+  assert.equal(consultas.length, 8);
   for (const c of consultas) {
     const suma = datos.paginas.filter((p) => c.ids.includes(p.page_id)).reduce((a, p) => a + p.starts.length, 0);
     assert.equal(suma, c.total, `consulta de ${c.ids.slice(0, 2).join(",")}…: suman ${suma}, la Biblioteca dio ${c.total}`);
@@ -49,17 +49,31 @@ test("la lista dice lo que no puede decir y no manda contactar sin el OK de Serg
   assert.match(md, /OK escrito de Sergio Urcullo/);
   assert.match(md, /La Biblioteca no da ubicación/);
   assert.match(md, /No contesta ninguna de las 5 preguntas/);
-  assert.match(md, /no califica a nadie/);
+  assert.match(md, /Cantidad de anuncios y de sedes no miden el encaje/);
   assert.ok(!/Santa Cruz confirmada|ciudad confirmada/i.test(md), "no afirma ciudad confirmada");
   assert.ok(!/contactar (a )?(ya|ahora|hoy)\b/i.test(md), "no manda contactar ya");
   assert.ok(!/\b(Seguro|garantizad[oa]|califican? seguro)\b/i.test(md), "no promete calificación");
 });
 
-test("el resumen cuenta lo mismo que las tablas (clínicas con indicio de Santa Cruz, encaje Alta)", () => {
+test("el resumen cuenta lo mismo que las tablas (candidatas, a verificar, fuera) y ya no hay «Alta»", () => {
   const md = render();
-  const tabla = md.split("## 2.")[1].split("## 3.")[0];
-  const filas = tabla.split("\n").filter((l) => l.startsWith("| **") && !l.startsWith("| **Clínica |"));
-  const alta = filas.filter((l) => /\*\*Alta\*\*:/.test(l)).length;
-  assert.match(md, new RegExp(`${filas.length} con Santa Cruz en el nombre o en la búsqueda`));
-  assert.match(md, new RegExp(`encaje visible \\*\\*Alta ${alta}\\*\\*`));
+  const filasDe = (desde, hasta) => md.split(desde)[1].split(hasta)[0].split("\n").filter((l) => l.startsWith("| **") && !l.startsWith("| **Clínica |"));
+  const cand = filasDe("## 2.", "## 3.");
+  const ver = filasDe("## 3.", "## 4.");
+  const fuera = filasDe("## 4.", "## 5.");
+  assert.match(md, new RegExp(`\\*\\*${cand.length} candidatas\\*\\*`));
+  assert.match(md, new RegExp(`\\*\\*${ver.length} a verificar\\*\\*`));
+  assert.match(md, new RegExp(`\\*\\*${fuera.length} fuera\\*\\*`));
+  assert.ok(!/\*\*Alta\*\*|encaje visible/i.test(md), "ya no se puntúa por cantidad de anuncios o sedes");
+});
+
+test("ninguna clínica que la verificación previa SACÓ (multi-sede, cadena, otra ciudad) figura como candidata", () => {
+  const md = render();
+  const candidatas = md.split("## 2.")[1].split("## 3.")[0];
+  const fuera = md.split("## 4.")[1].split("## 5.")[0];
+  for (const nombre of ["Cortez", "Ortobom", "Boquita Sana", "MUN", "Imagina", "Europea"]) {
+    assert.ok(!candidatas.includes(nombre), `${nombre} no puede ser candidata: la verificación previa la sacó`);
+    assert.ok(fuera.includes(nombre), `${nombre} debe figurar en «Fuera por evidencia previa»`);
+  }
+  for (const p of datos.paginas.filter((x) => x.previo_estado === "SALE")) assert.ok(p.previo_texto && p.previo_texto.length > 20, `${p.nombre}: el veredicto SALE necesita su razón y su fuente`);
 });
