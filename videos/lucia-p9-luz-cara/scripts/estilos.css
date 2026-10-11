@@ -17,9 +17,10 @@
 .fila .escala{font-family:"Spline Sans Mono",monospace;font-weight:500;font-size:34px;line-height:1.1;color:#a9bcbf;margin-top:4px}.escala b{font-weight:500}.escala .v{color:#83d5be}.escala .n{color:#ffbc94}
 /* H5: scrim que tapa el letrero inventado de la torre (esquina superior izquierda de m4); sin interacción, viaja con #overlay-m4 */
 #scrim-m4{position:absolute;pointer-events:none}
-#cta{border-color:#ffbc94}
+/* H6 (revisión 3): el CTA se parte parejo («Seguime: cada semana, / una prueba.»), sin «prueba.» huérfana en la segunda línea */
+#cta{border-color:#ffbc94;text-wrap:balance}
 /* H1 (revisión 2): la fila de Seedance marca su 0,80 con un asterisco naranja y su nota (pie de la placa) descansa en el mismo naranja */
-/* La pastilla del aviso (11 palabras, 2 líneas) no deja «mide.» huérfana en la segunda línea */
+/* La pastilla del aviso (11 palabras, 2 líneas) no deja «compara.» huérfana en la segunda línea */
 #aviso-refs{text-wrap:balance}
 .ast{color:#ffbc94;font-weight:500}.fila .ast{margin-left:2px}#nota-ast{border-left-color:#ffbc94}
 
