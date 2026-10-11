@@ -171,6 +171,9 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
   cuenta y verifica, Sonnet sintetiza, Opus decide lo riesgoso) y código cerrado a Codex; en cada ronda lee el
   transcript de cada sesión de la nube y le manda UNA línea con su próxima tarea. Codex no hace git; la madre commitea
   con la suite completa en verde. Tabla de modelos: skill `onia-sesion-madre`.
+  **Vale para TODAS las sesiones, no solo la madre** (Sergio Urcullo, 11-oct-2026): cada sesión de la nube lanza sus
+  subagentes con `model` por rol y pide Codex por contrato en `hermes-content/docs/handoff/codex-tareas/<id>.md`.
+  Su equipo: `hermes-content/docs/ONIA_EQUIPOS_POR_SESION.md`. Prueba: `docs/cola/loop/README.md` (marca de modelos en cada `[x]`).
 
 ## Sesión MADRE local + carriles en la nube (REGLA)
 

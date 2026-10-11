@@ -661,6 +661,11 @@ de cada ficha. Cinco subagentes en paralelo, uno por grupo, y después un verifi
   escasez **solo por capacidad real** (cupos, horas de Sergio Urcullo), nunca cuenta regresiva.
 - **Lo que no se copia:** «la gran mentira», culpar a otros, «solo hoy» sin motivo (fórmula Benson, `pnUQsUA1LRs`);
   los motivos inventados de urgencia de Hormozi; promesas de ingreso (Gadzhi); testimonios y cifras de alumnos.
+- **Checklist del gancho (portado de `anunciante-supremo/plantillas/hooks.md`, 11-oct):** el texto en pantalla
+  responde **de qué va** (el sujeto: «Clínica dental», «Agenda») y **qué gano** (dolor o resultado), en ≤ 2 líneas de
+  ~22 caracteres, sin punto final ni conectores, con **un solo** énfasis (el número o la palabra fuerte). Los 3 ganchos
+  (texto, voz, imagen) van **alineados**: tapando uno se adivinan los otros dos, sin repetir el mismo texto. Las 2-4
+  frases después del gancho confirman la promesa y traen la prueba (la pantalla real), no al final.
 - **De usted** en Onia, producto y anuncios (§1, actualizado 9-oct); **de vos** en la marca
   personal. La pauta de Onia **no** usa el estilo de la marca personal (§4, rechazo v2).
 
@@ -700,6 +705,12 @@ Reglas de edición de la pauta: las 11 de COMUNICACION §4 (subtítulos Archivo 
 - **Corte:** día 3, día 7 y día 14 de `ONIA_ADQUISICION_Y_PAUTA.md` §5.7. No se toca la segmentación ni se sube más de
   20 % el presupuesto durante la prueba.
 - **Con US$ 56 no hay estadística:** la prueba dice si el filtro trae dueños, no cuál pieza gana (`ONIA_ADQUISICION_Y_PAUTA.md` §5.3).
+- **Renovación de anuncios (Franco, clase del grupo 10-oct):** réplica de la competencia con 8+ días → mismos ángulos en
+  formatos nuevos → variaciones chicas de gancho/título → ángulos nuevos con los formatos que ya rinden, y se repite.
+  En Onia vale **el orden, como secuencia de tandas cada 2-4 semanas** (la prueba 1 ya es su paso 2: un concepto, tres
+  formatos), y **una variante mueve un solo eje**; oferta, precio y garantía no se tocan entre variantes. **No vale su
+  ritmo de un grupo por día** ni sus umbrales (CPC, CTR 1,8 %, ROAS 2): son de infoproductos con píxel de compra y
+  US$ 7/día por conjunto. Detalle: `hermes-content/docs/research/2026-10-10-clases-del-grupo-checkout-pauta-cobro.md`.
 
 ### 9.7 Skills de afuera: qué sirve y qué no (8-oct)
 
@@ -712,7 +723,11 @@ Reglas de edición de la pauta: las 11 de COMUNICACION §4 (subtítulos Archivo 
   y `open` de YouTube, así que **no se instala tal cual**; se copia solo el cuerpo, con OK de Sergio Urcullo.
 - **No se instala:** MCP de Meta de terceros (`pipeboard-co/meta-ads-mcp` y otros; el conector oficial ya está),
   `AKCodez/higgsfield-claude-skills` (Playwright sobre la web de Higgsfield, prohibido), `goose-skills` (MCP remoto
-  con login de Google), `OpenMontage` (AGPL, muchas claves).
+  con login de Google), `OpenMontage` (AGPL, muchas claves), **`anunciante-supremo`** (zip del grupo, 11-oct: todo
+  sale de APIMART, plataforma paga nueva; Remotion, jubilado acá; lo que hace ya lo cubren `editor-videos`, HyperFrames
+  y Higgsfield). De ella se portó el checklist del gancho (§9.3) y la **escalera de variantes**: con el principal
+  aprobado, de la misma tanda salen versión corta, otro orden de escenas, solo voz + pantallas, y un gancho nuevo
+  rehaciendo solo la escena 1. Primero uno que funcione, después las variantes.
 
 ### 9.8 Trampas e intentos fallidos
 

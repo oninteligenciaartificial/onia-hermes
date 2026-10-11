@@ -12,6 +12,17 @@ autorizado y la madre; nunca anulan un «no toques Git». Si faltan herramientas
 permisos, registrar el bloqueo y continuar lo autorizado; no afirmar un loop activo
 después de cerrar el runtime.
 
+**Modelos y Codex en TODAS las sesiones (Sergio Urcullo, 11-oct: *«que sigan cumpliendo todas las sesiones las reglas
+de los llms y de hablar con codex»*).** Tu equipo, sus modelos y cómo se pide Codex están en tu sección de
+`hermes-content/docs/ONIA_EQUIPOS_POR_SESION.md`; léela al arrancar y en cada latido.
+- Todo subagente lleva `model` por rol: **Haiku** cuenta y verifica · **Sonnet** sintetiza y analiza · **Opus** solo
+  lo riesgoso (producción, plata, seguridad). Sin `model` no se lanza.
+- Código cerrado, fichas, auditorías y síntesis verificables → **Codex**: contrato en
+  `hermes-content/docs/handoff/codex-tareas/<id>.md` (META, PRUEBA DE HECHO, REGLA DE PARADA, archivos, modelo) y lo
+  lanza la madre. La nube no lanza Codex ni hace su git.
+- Al marcar `[x]`, anotá al lado `modelos: haiku/sonnet/opus` y `codex:<id>` si lo hubo. Es lo que cuenta el verificador
+  de la ronda: una tarea sin esa marca se da por no cumplida en esta regla.
+
 **Cómo corre el loop (cada sesión, al arrancar):** `/loop` sin intervalo, con el prompt
 «Trabajá tu cola `hermes-content/docs/cola/loop/<carril>.md`». En cada vuelta:
 1. `git pull`. Tomá la PRIMERA tarea sin marcar.

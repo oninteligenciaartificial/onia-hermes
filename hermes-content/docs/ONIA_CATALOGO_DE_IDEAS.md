@@ -502,3 +502,12 @@ venta pueda leer su conocimiento de la base como cualquier cliente.
 
 **Estado:** 🟡 anotado, no construido. El punto 1 toca el motor del bot y su suite de 503
 tests; no es trabajo de una vuelta y no se empieza sin decidir el punto 3 primero.
+
+## 15. Del evento del grupo (10-oct-2026) — anotadas, NO perseguidas
+
+Origen: clases del grupo y masterclass FLUNA (`docs/research/2026-10-10-clases-del-grupo-checkout-pauta-cobro.md`).
+
+| Idea | Qué es | Por qué podría servir | Qué la frena |
+|---|---|---|---|
+| Anuncio «objeto que habla» | La agenda de papel (o el cuaderno de citas) «confiesa» los pacientes que se le escaparon; la pantalla de Onia responde con la lista real | En FLUNA corrió con ROAS 4,53; personifica el dolor sin fabricar testimonios y muestra producto real | Lo que diga el objeto tiene que tener fila en ✅ (`ONIA_PROMESA_VS_PRODUCTO.md`); va en una tanda después de la prueba 1, nunca antes |
+| Pasarela QR alternativa (la de Guilherme) | QR por pedido con confirmación automática y cobro recurrente con recordatorio | Plan B del QR dinámico del BCP (auditoría de pago, punto 2) | Falta el nombre real y el contacto; comisión, factura y webhook sin verificar |

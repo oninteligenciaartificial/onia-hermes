@@ -8,7 +8,8 @@
 >
 > **Qué va en cada doc:**
 > - `ONIA_EQUIPO_DE_AGENTES.md`: el plan del equipo (roles, modelos, ciclo de una tarea). Leer su §Crítica.
-> - `ONIA_EQUIPOS_POR_SESION.md`: el equipo de cada sesión. Lo escribe A1 y **todavía no existe**.
+> - `ONIA_EQUIPOS_POR_SESION.md`: el equipo de cada sesión (existe desde el 10-oct, `73399e87`; la cola en loop lo
+>   hace leer en cada latido desde el 11-oct).
 > - `cola/loop/madre.md`: el libro único de puntos (qué está abierto, quién lo tiene, con qué prueba).
 > - Este doc: el mapa. La tabla de loops de §3 reemplaza a la §F de madre.md.
 > - Evidencia de hoy: `research/2026-10-10-auditoria-equipo-de-agentes.md`. La auditoría A4
