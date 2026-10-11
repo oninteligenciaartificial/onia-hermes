@@ -1,7 +1,7 @@
 ---
 id: hermes-C4
 carril: hermes
-estado: pendiente   # pendiente | lanzada | PR | hecha | bloqueada
+estado: hecha   # pendiente | lanzada | PR | hecha | bloqueada
 modelo: gpt-6-luna  # mecánico: una sección nueva que solo lee, con su prueba
 repo: onia-hermes
 rama: codex/hermes-c4-qa-release
@@ -9,7 +9,7 @@ base: main          # con #194 ya mergeado; si no, base: claude/adoring-ramanuja
 pr:
 escrita: 2026-10-11 por Hermes-Jarvis (nube)
 actualizada: 2026-10-11 por Hermes-Jarvis (nube)
-nota: Se lanza con #194 ya en la base (`diagnostico.sh` trae hasta la sección 16 y `qa-release.sh` existe). Sin esto, la primera corrida de `qa-release` en el VPS no se ve desde el diagnóstico diario.
+nota: commit 11d05aa2 (PR #197); revisado y juntado a #194 el 11-oct con un arreglo (redactar antes de cortar)
 ---
 # C4 · El diagnóstico diario muestra lo que dejó `onia-qa-release`
 
