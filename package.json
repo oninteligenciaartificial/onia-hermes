@@ -175,6 +175,7 @@
     "test:tandas-v1": "node --test scripts/loops/tandas-v1.test.mjs",
     "test:pedidos": "node --test scripts/loops/pedido-claude.test.mjs scripts/loops/pedido-respuesta.test.mjs scripts/loops/pedido-rama.test.mjs",
     "test:jarvis-aplicar": "node --test scripts/loops/hermes-jarvis-aplicar.test.mjs",
+    "test:web-vs-producto": "node --test .claude/skills/onia-hermes-jarvis/scripts/web-vs-producto.test.mjs",
     "test:qa-release": "node --test scripts/loops/qa-release.test.mjs",
     "test:herramientas-desplegadas": "node --test scripts/herramientas-desplegadas.test.mjs",
     "test:ramas-varadas": "node scripts/ramas_varadas.mjs --self-check",
