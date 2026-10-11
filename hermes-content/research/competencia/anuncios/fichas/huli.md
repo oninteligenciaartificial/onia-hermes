@@ -5,7 +5,7 @@
 | | |
 |---|---|
 | Páginas | Huli México (`104582215305359`) |
-| Anuncios vistos | 16 de 20 activos estimados · lista **completa** |
+| Anuncios vistos | 16 de 20 activos estimados · lista **completa** · **el 11-oct la Biblioteca devolvió más (ver `../TANDA-11OCT.md` §2): esta lista NO es completa** |
 | Más viejo | 23 d |
 | Con más de 30 d | 0 |
 | Titulares distintos | 7 |

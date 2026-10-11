@@ -5,7 +5,7 @@
 | | |
 |---|---|
 | Páginas | Karbonna (`117666710068820`) |
-| Anuncios vistos | 4 (la Biblioteca no dio el total de activos) · lista **completa** |
+| Anuncios vistos | 4 (la Biblioteca no dio el total de activos) · lista **completa** · **el 11-oct la Biblioteca devolvió más (ver `../TANDA-11OCT.md` §2): esta lista NO es completa** |
 | Más viejo | 17 d |
 | Con más de 30 d | 0 |
 | Titulares distintos | 1 |

@@ -9,11 +9,11 @@ Una ficha por anunciante, generada con `.claude/skills/onia-ventas-pauta/scripts
 | [Dt.Dental Software Odontológico](dtdental.md) | 33 | 6 | 102 d | completa |
 | [AgendaPro](agendapro.md) | 81 | 25 | 247 d | parcial |
 | [Dentalink](dentalink.md) | 69 | 3 | 58 d | parcial |
-| [Calu](calu.md) | 5 | 1 | 43 d | completa |
-| [Reservo](reservo.md) | 5 | 5 | 53 d | completa |
-| [Huli México](huli.md) | 16 | 0 | 23 d | completa |
-| [Karbonna](karbonna.md) | 4 | 0 | 17 d | completa |
-| [DoctorPro](doctorpro.md) | 7 | 0 | 3 d | completa |
+| [Calu](calu.md) | 5 | 1 | 43 d | **incompleta** (11-oct) |
+| [Reservo](reservo.md) | 5 | 5 | 53 d | **incompleta** (11-oct) |
+| [Huli México](huli.md) | 16 | 0 | 23 d | **incompleta** (11-oct) |
+| [Karbonna](karbonna.md) | 4 | 0 | 17 d | **incompleta** (11-oct) |
+| [DoctorPro](doctorpro.md) | 7 | 0 | 3 d | **incompleta** (11-oct) |
 | [Wa7pro](wa7pro.md) | 2 | 0 | 6 d | completa |
 | [Balance Aesthetic Software](balance.md) | 1 | 1 | 38 d | completa |
 | [Alegra - Contabilidad Inteligente](alegra.md) | 1 | 0 | 18 d | parcial |

@@ -5,7 +5,7 @@
 | | |
 |---|---|
 | Páginas | Calu (`292222707822649`) |
-| Anuncios vistos | 5 de 5 activos estimados · lista **completa** |
+| Anuncios vistos | 5 de 5 activos estimados · lista **completa** · **el 11-oct la Biblioteca devolvió más (ver `../TANDA-11OCT.md` §2): esta lista NO es completa** |
 | Más viejo | 43 d |
 | Con más de 30 d | 1 |
 | Titulares distintos | 4 |
@@ -16,7 +16,7 @@
 - **Qué vende:** Agenda de turnos, ficha del paciente y recordatorios por WhatsApp para consultorios de Argentina (empresa Chedoc SRL, `CALU_FICHA.md`). Cobra el anuncio en ARS. (observado)
 - **Formato:** No observable en esta tanda.
 - **Oferta y botón:** «Probá Calu gratis · Chatea con nosotros» (8-oct). El botón «Chatea con nosotros» lleva a un chat (inferencia: no se sabe a cuál). (titulares: observado)
-- **Patrón:** La pregunta del papel «¿Seguís acumulando fichas y papeles…?» (43 d). El 3-oct tenía 15 anuncios y el más viejo de 94 d («Conocé Calu en 2 minutos», «Probá Calu Gratis» de 53 d); hoy tiene 5 y el más viejo de 43 d: **esos anuncios dejaron de aparecer** (inferencia: pausados o terminados; ADQ §2.6 no da el id de página, así que podría ser otra página, igual que en Reservo). (observado + inferencia)
+- **Patrón:** La pregunta del papel «¿Seguís acumulando fichas y papeles…?» (43 d). El 3-oct tenía 15 anuncios y el más viejo de 94 d («Conocé Calu en 2 minutos», «Probá Calu Gratis» de 53 d); el corte del 10-oct trajo 5 y el más viejo de 43 d, pero **el 11-oct Calu devolvió 13 anuncios** y esos mismos de prueba siguen («Probá Calu Gratis» `1020546507258888`, 61 d; `4123186177973035`, 37 d; «Conocé Calu en 2 minutos» `2054036308538572`): **la inferencia «dejaron de aparecer» era un artefacto del corte y se retira** (`TANDA-11OCT.md` §2). (observado el 11-oct)
 
 ## Qué copiar y qué no (catálogo §7 y §8)
 

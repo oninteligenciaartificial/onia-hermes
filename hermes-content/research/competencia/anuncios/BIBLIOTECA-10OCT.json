@@ -33,7 +33,14 @@
   "no_sirve": [
    "ad_active_status=INACTIVE devolvió 0 anuncios para Calu (10-oct): este conector no permite medir cuándo murió un anuncio; la muerte se mide volviendo a consultar los mismos ids (ver re-medición del 24-oct)"
   ],
-  "a_mano": "los anuncios con «a_mano»: true se transcribieron a mano desde las consultas del 10-oct (los demás salen del volcado de las consultas); el sesgo es hacia los más viejos de AgendaPro y Dentalink, por eso solo las listas completas entran en los porcentajes"
+  "a_mano": "los anuncios con «a_mano»: true se transcribieron a mano desde las consultas del 10-oct (los demás salen del volcado de las consultas); el sesgo es hacia los más viejos de AgendaPro y Dentalink, por eso solo las listas completas entran en los porcentajes",
+  "re_medicion_11oct": {
+   "fecha": "2026-10-11",
+   "que": "Mismas consultas (page_ids, ACTIVE, sin countries) un día después del corte. Detalle y tabla en TANDA-11OCT.md.",
+   "hallazgo": "El corte del 10-oct NO es una lista completa para varios anunciantes pequeños: 36 de las 65 filas del tope de la lista de hoy no estaban en este JSON y solo 6 se crearon después del corte. Calu 5 → 13, Reservo 5 → 58, Huli 20 → 77, DoctorPro 7 → 56. Doctocliq (30 → 30), CitaPro (16 → 16), Dt.Dental (31 → 31) y Wa7pro (2 → 2) coinciden.",
+   "uso": "Los campos lista_completa de Calu, Reservo, Huli, DoctorPro y Karbonna NO se confían. Los porcentajes y totales de arriba (271, 62, 417, 41) son un piso. No se recalcularon: se re-mide completo entre semana (TANDA-11OCT.md §4).",
+   "causa": "desconocida: puede ser un fallo del conector ese día, pausas de fin de semana (el 10-oct era sábado) o retraso de la Biblioteca"
+  }
  },
  "software": {
   "AgendaPro": {
@@ -631,7 +638,11 @@
      "moneda": "USD",
      "url": "https://www.facebook.com/ads/library/?id=1438784064868485"
     }
-   ]
+   ],
+   "re_medicion_11oct": {
+    "estimado_10oct": 313,
+    "estimado_11oct": 315
+   }
   },
   "Dentalink": {
    "page_id": 106612849382553,
@@ -1144,7 +1155,12 @@
      "a_mano": true
     }
    ],
-   "nota": "El 8-oct `DENTALINK_TEARDOWN.md` contó 186 activos (todos los 50 más nuevos de 5-8 oct) y 3 anuncios de catálogo dinámico de 323-326 d; el 10-oct las consultas dieron 92-106 y esos 3 no están entre los vistos. El recuento cambia mucho de un día a otro."
+   "nota": "El 8-oct `DENTALINK_TEARDOWN.md` contó 186 activos (todos los 50 más nuevos de 5-8 oct) y 3 anuncios de catálogo dinámico de 323-326 d; el 10-oct las consultas dieron 92-106 y esos 3 no están entre los vistos. El recuento cambia mucho de un día a otro.",
+   "re_medicion_11oct": {
+    "estimado_10oct": "92 (186 el 8-oct)",
+    "estimado_11oct": 190,
+    "nota": "el 92 del corte parece un subconteo"
+   }
   },
   "Dt.Dental Software Odontologico": {
    "page_id": 644396635996094,
@@ -1385,7 +1401,11 @@
      "moneda": "COP",
      "url": "https://www.facebook.com/ads/library/?id=998469383282557"
     }
-   ]
+   ],
+   "re_medicion_11oct": {
+    "estimado_10oct": 31,
+    "estimado_11oct": 31
+   }
   },
   "Doctocliq": {
    "page_id": 122294408384514,
@@ -1605,7 +1625,11 @@
      "moneda": "MXN",
      "url": "https://www.facebook.com/ads/library/?id=2036561733698742"
     }
-   ]
+   ],
+   "re_medicion_11oct": {
+    "estimado_10oct": 30,
+    "estimado_11oct": 30
+   }
   },
   "CitaPro": {
    "page_id": 117313424662542,
@@ -1727,7 +1751,11 @@
      "moneda": "USD",
      "url": "https://www.facebook.com/ads/library/?id=1424419416564823"
     }
-   ]
+   ],
+   "re_medicion_11oct": {
+    "estimado_10oct": 16,
+    "estimado_11oct": 16
+   }
   },
   "Huli México": {
    "page_id": 104582215305359,
@@ -1850,7 +1878,12 @@
      "url": "https://www.facebook.com/ads/library/?id=1428419835924019"
     }
    ],
-   "nota": "activos_estimados 20 vino de una búsqueda por texto: 4 de esos 20 eran de otras páginas; los 16 de la página Huli México están todos"
+   "nota": "activos_estimados 20 vino de una búsqueda por texto: 4 de esos 20 eran de otras páginas; los 16 de la página Huli México están todos",
+   "re_medicion_11oct": {
+    "estimado_10oct": 20,
+    "estimado_11oct": 77,
+    "lista_incompleta": true
+   }
   },
   "Calu": {
    "page_id": 292222707822649,
@@ -1895,7 +1928,12 @@
      "moneda": "ARS",
      "url": "https://www.facebook.com/ads/library/?id=1623218186013966"
     }
-   ]
+   ],
+   "re_medicion_11oct": {
+    "estimado_10oct": 5,
+    "estimado_11oct": 13,
+    "lista_incompleta": true
+   }
   },
   "Reservo Software": {
    "page_id": 1006037402599174,
@@ -1933,7 +1971,12 @@
      "moneda": "CLP",
      "url": "https://www.facebook.com/ads/library/?id=27227967266876051"
     }
-   ]
+   ],
+   "re_medicion_11oct": {
+    "estimado_10oct": "4 vistos",
+    "estimado_11oct": "incluido en los 58 de «Reservo»",
+    "lista_incompleta": true
+   }
   },
   "Reservo": {
    "page_id": 1397618817156161,
@@ -1950,7 +1993,13 @@
      "moneda": "CLP",
      "url": "https://www.facebook.com/ads/library/?id=2131200374413642"
     }
-   ]
+   ],
+   "re_medicion_11oct": {
+    "estimado_10oct": "1 + 4 vistos (2 páginas)",
+    "estimado_11oct": 58,
+    "nota": "las dos páginas juntas",
+    "lista_incompleta": true
+   }
   },
   "Karbonna": {
    "page_id": 117666710068820,
@@ -1988,7 +2037,12 @@
      "moneda": "BRL",
      "url": "https://www.facebook.com/ads/library/?id=1584817782733717"
     }
-   ]
+   ],
+   "re_medicion_11oct": {
+    "estimado_10oct": "4 vistos",
+    "estimado_11oct": "8 o más (se pidieron 20 entre 3 páginas)",
+    "lista_incompleta": true
+   }
   },
   "DoctorPro": {
    "page_id": 102952942166627,
@@ -2047,7 +2101,12 @@
      "moneda": "MXN",
      "url": "https://www.facebook.com/ads/library/?id=1684158860004331"
     }
-   ]
+   ],
+   "re_medicion_11oct": {
+    "estimado_10oct": "7 vistos",
+    "estimado_11oct": 56,
+    "lista_incompleta": true
+   }
   },
   "Wa7pro": {
    "page_id": 1346974258489921,
@@ -2073,7 +2132,11 @@
      "url": "https://www.facebook.com/ads/library/?id=1539624518188924",
      "a_mano": true
     }
-   ]
+   ],
+   "re_medicion_11oct": {
+    "estimado_10oct": 2,
+    "estimado_11oct": "2 o más"
+   }
   },
   "Balance Aesthetic Software": {
    "page_id": 104573792590545,

@@ -58,7 +58,8 @@ function fichaDe(slug) {
     const est = paginas.map(([, s]) => s.activos_estimados_por_la_biblioteca);
     const sumEst = est.every((e) => e != null) ? est.reduce((x, y) => x + y, 0) : null;
     const textoVistos = sumEst == null ? `${ads.length} (la Biblioteca no dio el total de activos)` : ads.length > sumEst ? `${ads.length} (una consulta dio ${sumEst} activos estimados: la cifra no es exacta)` : `${ads.length} de ${sumEst} activos estimados`;
-    out.push(`| Anuncios vistos | ${textoVistos} · lista ${completa ? "**completa**" : "**PARCIAL** (tope de 50, más nuevos primero)"} |`);
+    const incompleta11 = paginas.some(([, s]) => s.re_medicion_11oct?.lista_incompleta);
+    out.push(`| Anuncios vistos | ${textoVistos} · lista ${completa ? "**completa**" : "**PARCIAL** (tope de 50, más nuevos primero)"}${incompleta11 ? " · **el 11-oct la Biblioteca devolvió más (ver `../TANDA-11OCT.md` §2): esta lista NO es completa**" : ""} |`);
     out.push(`| Más viejo | ${Math.max(...ads.map((a) => a.dias))} d |`);
     out.push(`| Con más de 30 d | ${largos.length} |`);
     out.push(`| Titulares distintos | ${new Set(ads.map((a) => primero(a.titulo))).size} |`);
@@ -129,7 +130,7 @@ for (const slug of ORDEN) {
   writeFileSync(path.join(salida, `${slug}.md`), fichaDe(slug));
   const paginas = MAPA[slug].map((n) => d.software[n]).filter(Boolean);
   const ads = paginas.flatMap((s) => s.anuncios);
-  indice.push({ slug, nombre: lect[slug].nombre, vistos: ads.length, largos: ads.filter((a) => a.dias > 30).length, viejo: ads.length ? Math.max(...ads.map((a) => a.dias)) : null, completa: paginas.length ? paginas.every((s) => s.lista_completa) : null, sin: !ads.length });
+  indice.push({ slug, nombre: lect[slug].nombre, vistos: ads.length, largos: ads.filter((a) => a.dias > 30).length, viejo: ads.length ? Math.max(...ads.map((a) => a.dias)) : null, completa: paginas.length ? paginas.every((s) => s.lista_completa) && !paginas.some((s) => s.re_medicion_11oct?.lista_incompleta) : null, incompleta11: paginas.some((s) => s.re_medicion_11oct?.lista_incompleta), sin: !ads.length });
 }
 
 // Bolivia: clínicas con anuncios de más de 30 días (sin páginas personales de profesionales ni ruido)
@@ -167,7 +168,7 @@ ix.push("Una ficha por anunciante, generada con `.claude/skills/onia-ventas-paut
 ix.push("");
 ix.push("| Anunciante | Vistos | Con más de 30 d | Más viejo | Lista |");
 ix.push("|---|---|---|---|---|");
-for (const f of indice) ix.push(`| [${f.nombre}](${f.slug}.md) | ${f.sin ? "—" : f.vistos} | ${f.sin ? "—" : f.largos} | ${f.viejo ? f.viejo + " d" : "—"} | ${f.sin ? "sin datos del corte" : f.completa ? "completa" : "parcial"} |`);
+for (const f of indice) ix.push(`| [${f.nombre}](${f.slug}.md) | ${f.sin ? "—" : f.vistos} | ${f.sin ? "—" : f.largos} | ${f.viejo ? f.viejo + " d" : "—"} | ${f.sin ? "sin datos del corte" : f.incompleta11 ? "**incompleta** (11-oct)" : f.completa ? "completa" : "parcial"} |`);
 ix.push("");
 ix.push("Además: [clínicas bolivianas con anuncios de más de 30 días](bolivia-clinicas.md) (señal, no lista de contacto).");
 ix.push("");
