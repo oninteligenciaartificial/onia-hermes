@@ -1,0 +1,4 @@
+BricolageGrotesque-var-latin.woff2: copia identica, SHA256 77ead11b21511f4b4f5cd77fd5c36bfa96bdb2b2bda89bc2f85954992e17afbb
+DMSans-var-latin.woff2: copia identica, SHA256 3a4d56eeaed51cba469428f6c78e59d4865fe169d2e81776f86d6b7ca74fadee
+SplineSansMono-var-latin.woff2: copia identica, SHA256 a8ec780b2e2d4fea848afda9e8e8ddb2f27e9175df971796698adf0a9d5e6381
+EXIT 0

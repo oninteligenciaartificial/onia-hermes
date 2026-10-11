@@ -1,0 +1,13 @@
+file:///C:/dev/proyectos/onia-hermes-codex-lucia-p9/videos/lucia-p9-luz-cara/scripts/build.mjs:12
+const fail=s=>{throw Error(s)};
+                     ^
+
+Error: FALTA m4 completo: C:\dev\proyectos\onia-hermes-codex-lucia-p9\hermes-content\references\modelos\lucia\v4\prueba-motores-20261008\seedance-mini-refs-dd2d7c91.mp4. No apto para master. Use --borrador explícito SOLO para gates estáticos (proxy 360p).
+    at fail (file:///C:/dev/proyectos/onia-hermes-codex-lucia-p9/videos/lucia-p9-luz-cara/scripts/build.mjs:12:22)
+    at file:///C:/dev/proyectos/onia-hermes-codex-lucia-p9/videos/lucia-p9-luz-cara/scripts/build.mjs:46:48
+    at ModuleJob.run (node:internal/modules/esm/module_job:413:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:660:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.13.0
+EXIT 1

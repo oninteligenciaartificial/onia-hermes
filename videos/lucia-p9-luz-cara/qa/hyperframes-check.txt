@@ -1,0 +1,4 @@
+hyperframes check: NO EJECUTADO (11-oct, madre, PC).
+npx --offline --yes hyperframes@0.8.142 check -> exit 1: npm ENOTCACHED (falta @hono/node-server en la cache; 0.8.142 no esta cacheado).
+npx --offline --yes hyperframes@0.8.143 check -> exit 1: mismo ENOTCACHED.
+No se uso red ni se instalo nada. Pendiente: la sesion Lucia en la nube corre 'npx --offline --yes hyperframes@0.8.142 check > qa/hyperframes-check.txt'.

@@ -1,0 +1,21 @@
+# Gates corridos por la madre en la PC (11-oct), Windows, Node 24, Chromium local de Playwright; sin render, sin red. Exit esperado 1 en build-sin-flag y master-ready.
+0  node scripts/build.mjs --borrador
+0  node scripts/build.mjs --borrador
+0  idempotencia md5 0bc4ba745a09b3afb4b5f3d579b7040a
+1  node scripts/build.mjs
+1  node scripts/master-ready.mjs
+0  node scripts/voz.mjs
+0  node scripts/retemporizar.mjs
+0  node scripts/ventanas.mjs --estatico
+0  node scripts/hueco-tarjetas.mjs --estatico
+0  node scripts/eventos.mjs --estatico
+0  node scripts/aire.mjs --estatico
+0  node scripts/costuras.mjs --estatico
+0  node scripts/ventanas.mjs
+0  node scripts/hueco-tarjetas.mjs
+0  node scripts/eventos.mjs
+0  node scripts/aire.mjs
+0  node scripts/costuras.mjs
+0  node scripts/medir-dom.mjs
+0  node scripts/grep-prohibidas.mjs
+0  node scripts/validar-mutaciones.mjs

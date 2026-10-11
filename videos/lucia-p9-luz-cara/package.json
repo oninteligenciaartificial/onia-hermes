@@ -1,0 +1,10 @@
+{
+  "name": "lucia-p9-luz-cara",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "borrador": "node scripts/build.mjs --borrador",
+    "check": "npx --offline --yes hyperframes@0.8.142 check"
+  }
+}

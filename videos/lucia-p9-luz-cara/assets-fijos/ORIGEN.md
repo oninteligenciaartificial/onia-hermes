@@ -1,0 +1,1 @@
+GSAP y fr-m4.jpg copiados de G5 v2 (solo lectura). fr-m4.jpg es el cuadro m4 a 4,0 s, 720×1280, conservado como referencia; NO sustituye el clip y no aparece en pantalla. No se copiaron fotos/refs ajenas a esta pieza.
