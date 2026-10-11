@@ -1,7 +1,8 @@
 # Handoff — carril `hermes-jarvis` (Hermes, el Telegram y el calendario de Sergio Urcullo)
 
 > **ESTADO 11-oct, 07:30 UTC — qué está en vuelo y quién lo mueve** (sesión `session_01SQ7cvuDX5w5jDHk5VdhAEo`, rama `claude/adoring-ramanujan-7sjzwv`, PR #194).
-> - **Producción (medido 06:58 UTC):** corre `onia-platform` `master` `a7d8c1ed` (#136 y #146). Huella: el `buildId` que Next pone en el HTML de `/login` (`\"b\":\"<id>\"`; `D5DzLXxrhp8Sx1o0cQhQs` a las 08:20 UTC; cambia con cada build) y el SHA-1 de `/manifest.json` y `/sw.js` contra
+> - **Producción, 11-oct 09:58 UTC (E11):** build nuevo tras la publicación de las 09:50, `buildId` `FTdbJ5YopG9Ll4v0Yivrq`; `/login`, `/book` y `/register` bien (capturas `despues-0950-*` en `docs/research/qa-publicacion/2026-10-11/`). **El paso 2 de `/register` sigue con «Nombre de tu clínica»** (#148 no está en `master`; Q9b abierto). Lo de #147 que está detrás del login (caja «1.500», borrado con caras) sigue sin medir desde la nube.
+> - **Producción antes de esa publicación (medido 06:58 UTC):** corre `onia-platform` `master` `a7d8c1ed` (#136 y #146). Huella: el `buildId` que Next pone en el HTML de `/login` (`\"b\":\"<id>\"`; `D5DzLXxrhp8Sx1o0cQhQs` a las 08:20 UTC; cambia con cada build) y el SHA-1 de `/manifest.json` y `/sw.js` contra
 >   `git show <commit>:public/...` (el nombre de `webpack-<hash>.js` NO sirve: no cambió). `/login` y `/book` bien, de usted. **#136 trae sus dos HIGH sin arreglar** (caja: «1.500» → Bs 1,50; borrar un paciente borra
 >   las caras del odontograma): los arregla onia-platform **#147 (F136)**, que revisé sin HIGH; tiene que estar mergeado antes de las 09:20 UTC para entrar en la publicación de las 09:50.
 > - **Pendiente de merge por la madre, en orden:** #194 (Q2 + Q5 + docs de este carril) → #196 (C1 y C2 pasan sus pruebas; C3b aceptado; su base es mi rama) → L1, L1b y L1c
