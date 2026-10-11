@@ -321,3 +321,32 @@ test("LISTA PARA MOSTRAR: exige las mismas filas que la spec (las del texto del 
   assert.match(listaPlano, /No es una prueba A\/B/, "la lista dice que no es A/B");
   assert.ok(!/así la prueba mide el formato/.test(listaPlano), "con US$ 56 no se mide un formato");
 });
+
+// ── Lo que ve el lead después del clic (11-oct): prueba1-v2/BOT-RESPUESTAS-D7-D11.md ─────────────────────────────────
+// El anuncio promete poco a propósito; si la respuesta del bot promete lo que el catálogo no deja, el lead lo lee en el primer mensaje.
+const textoDe = (r) => r.replies.map((x) => String(x.text ?? x.body ?? "")).join("\n");
+const turno = (estado, texto) => step(estado, { text: texto, receivedAt: new Date(T0).toISOString() }, { config: PRODUCCION });
+
+test("lo que ve el lead tras D7, D8, D9, D10 y D11: M0_PERSONA y R_CAMPANA iguales, dice que es un bot y no promete lo prohibido", () => {
+  const codigos = ["D7", "D8", "D9", "D10", "D11"];
+  const respuestas = codigos.map((c) => turno(createState({ channel: "chatwoot", contactRef: `lead-${c}` }), `Hola, vi el anuncio de Onia (${c}). Tengo una clínica dental.`));
+  for (const [i, r] of respuestas.entries()) {
+    assert.deepEqual(r.replies.map((x) => x.templateKey), ["M0_PERSONA", "R_CAMPANA"], `${codigos[i]}: dos mensajes, la presentación y la respuesta de la campaña`);
+    assert.equal(r.nextState.pieceKey, `anuncio-${codigos[i]}`, `${codigos[i]}: el lead nace con su origen`);
+    assert.deepEqual(promesasEn(textoDe(r)), [], `${codigos[i]}: la respuesta del bot no promete nada que el catálogo prohíba`);
+  }
+  assert.match(textoDe(respuestas[0]), /Sí, un bot/, "D2: se declara bot");
+  assert.equal(new Set(respuestas.map(textoDe)).size, 1, "el código solo etiqueta el origen: la respuesta es la misma para los cinco");
+  assert.match(textoDe(respuestas[0]), /por acá no damos turnos/, "el paciente que escribe por error recibe la salida cortés");
+});
+
+test("el paciente que toca «Busco atención dental» sale con cortesía y sin turno, y el precio solo se dice si preguntan", () => {
+  const abierto = turno(createState({ channel: "chatwoot", contactRef: "lead-paciente" }), "Hola, vi el anuncio de Onia (D10). Tengo una clínica dental.");
+  const paciente = turno(abierto.nextState, "Busco atención dental");
+  assert.deepEqual(paciente.replies.map((x) => x.templateKey), ["M1_PACIENTE"]);
+  assert.match(textoDe(paciente), /por acá no le puedo dar un turno/);
+  assert.deepEqual(promesasEn(textoDe(paciente)), []);
+  assert.ok(!/Bs\s?\d/.test(textoDe(abierto)), "la primera respuesta no trae precios: el anuncio tampoco");
+  const precio = turno(abierto.nextState, "¿Cuánto cuesta?");
+  assert.match(textoDe(precio), /Bs 320/, "si preguntan, dice los planes públicos");
+});
