@@ -306,11 +306,93 @@ carril puede hacer solo. Q1 espera `aplicar` (ver «Bloqueado»).
     a ningún modelo. La sesión de la nube queda «no medible desde acá». La madre lo revisa fuerte (corre como root).
   - Los cinco contratos de este carril (con L1 y Q9b) llevan ya la cabecera de `codex-tareas/README.md`. **Hecho:**
     cada prueba en verde en la rama de Codex tras el merge de #194. modelos: ninguno (los escribe este carril).
-- [ ] **E5 Revisar los PRs abiertos de onia-platform** (latido del 11-oct, paso 2): #124 (términos aceptados: migración y
-  RLS, que su propio cuerpo pide revisar), #113 (C13, gracia de 7 días y dejar de renovar: plata y permisos, dos lentes) y
-  #140 (el widget de chat público, que integra #131 y #137). Cuatro lentes sonnet, cada HIGH verificado por haiku; sin
-  mergear ni comentar en GitHub. **Hecho:** veredicto por PR con severidad y archivo:línea en esta cola. En curso desde las
-  06:05 UTC. Quedan sin mirar: #132 (K1), #70 (docs de septiembre) y, en este repo, #195, #143 y #40 (docs).
+- [x] **E5 Revisar los PRs abiertos de onia-platform** (latido del 11-oct, paso 2; 06:05-06:30 UTC; heads `2ee1dcfe` #124,
+  `a8def40f` #113, `f981cd4a` #140, contra `master` `d8ca5a32`). Cuatro lentes, y cada HIGH verificado. Nada se mergeó ni se
+  comentó en GitHub. modelos: sonnet ×4 (revisión), haiku ×1 (verificación de #140). codex: ninguno.
+
+  | PR | Veredicto | HIGH |
+  |---|---|---|
+  | #140 widget de chat público (W1-W1e) | **CAMBIOS: no publicar todavía** | 2, uno verificado en el código y otro con indicio medido |
+  | #113 C13 gracia de 7 días y dejar de renovar | CAMBIOS | 0 (6 MEDIUM) |
+  | #124 aceptación de términos en el alta | CAMBIOS | 0 (4 MEDIUM) |
+
+  **#140 (widget público).** Rutas, respuestas, HMAC, Redis cerrado y el script del widget están bien (lista cerrada,
+  segmentos validados, solo se devuelven `source_id`/`id`/mensajes públicos, `textContent`, sin cookies, todo de usted).
+  Lo que no cierra es la infraestructura, que el propio PR ya dice que falta:
+  - HIGH (verificado): los topes por IP no valen nada. `lib/http/client-ip.ts:12-13` da `cf-connecting-ip` tal cual,
+    sin comprobar que el pedido vino de Cloudflare (`:23-25` solo corrige el caso IPv6). La clave se usa en
+    `app/api/chat-publico/[...ruta]/route.ts:85` y `:105-106`, y el origen se alcanza sin Cloudflare
+    (`app/api/auth/register/route.ts:219`). Los topes por organización (`:124`, `:126`, `:130`) siguen valiendo, pero una
+    sola máquina los agota: con el id de la organización del snippet, 30 altas de contacto dejan sin chat a esa
+    clínica una hora. `route.test.ts:44,69` prueba con IP rotativa. Arreglo: aceptar el encabezado solo si el pedido
+    prueba venir de Cloudflare (Traefik que lo borre salvo desde sus rangos, o un encabezado secreto), y un tope por
+    organización antes de las consultas.
+  - HIGH (indicio medido, no prueba): la API cliente de Chatwoot sigue alcanzable en el host del chat. Un GET a
+    `chat.onia.com.bo/public/api/v1/inboxes/<inexistente>/contacts/x` dio 404 en JSON de la aplicación
+    (`{"status":404,"error":"Not Found"}`), no el texto de Traefik: llega a Chatwoot. Si es así, un visitante con un
+    `source_id` escribe directo y cada tope del PR queda de adorno. Comprobar con el POST que describe el PR y bloquear
+    `/public/api/` en Traefik.
+  - MEDIUM: dos IPs reales agotan los 600/h de la organización y cada mensaje aceptado llega al bot (gasto de OpenAI)
+    (`route.ts:124-126`, `:156`); el descuento del cupo se salta si el cliente corta el pedido (`:147-156`).
+  - MEDIUM (verificado parcial): `inboxPublico` no comprueba que la bandeja sea de esa organización
+    (`lib/chatbot/inbox-publico.ts:8-13`, sin `orgDelInbox`; `schema.prisma:1237` sin `@unique`). Solo hace falta si dos
+    organizaciones ya tienen la misma bandeja cargada; desde afuera no se puede provocar.
+  - MEDIUM: el filtro de notas privadas descansa en un contrato de Chatwoot 4.12.1 que nadie midió (fixtures
+    reconstruidos; tests «escritos, no ejecutados»). No hay camino de fuga, pero si `after` es exclusivo cada
+    conversación pierde su primer mensaje.
+  - Al mergear: cualquier organización con el add-on podría encender el canal; ponerlo detrás de una variable apagada.
+  - Merge con `master`: limpio (`merge-tree` sin conflictos). #131 y #137 quedan absorbidos por este PR.
+
+  **#113 (C13).** El endpoint es correcto: `requireAdmin` + `config.write` (solo el rol «dueño»), organización solo de la
+  sesión, cuerpo de Zod sin asignación masiva, ruta fuera de las públicas y bloqueada en solo lectura, el cron conserva su
+  secreto, el correo escapa HTML, y todas las puertas de acceso usan el corte nuevo. Lo que falta:
+  - MEDIUM: la guarda de «baja ya vigente» solo existe para `renovar: true` (`app/api/organization/renovacion/route.ts:38-46`).
+    Con `renovar: false`, una baja ya efectiva se reescribe a una fecha futura si el operador alargó `planEnd`
+    (`admin/clinics/route.ts:242-244`): la cuenta vuelve a escribir gratis hasta esa fecha. Hoy solo la frena
+    `proxy.ts:292`, que falla abierto si cae la base. Arreglo: 409 si hay baja vigente, sea cual sea `renovar`.
+  - MEDIUM: una baja se pierde frente a una aprobación concurrente (`route.ts:51` compara y escribe sin el candado
+    `subscription-plan:<org>`; `activation.ts:201` escribe sin comparar): la ruta responde 200 con auditoría y la
+    activación la sobrescribe con `planCanceledAt: null`. Repetir `renovar:false` audita dos veces.
+  - MEDIUM: un plan semanal pagado en gracia nace vencido (`plan-state.ts:185-193`: base = `max(planEnd, ahora-7d)`): sale
+    «Su plan venció… le quedan 7 días» recién pagado y el cron manda el aviso de vencido horas después. Los tests lo fijan
+    como esperado. Pedido a Sergio Urcullo: decidir la gracia del plan semanal.
+  - MEDIUM: el aviso de vencimiento sale una sola vez (`renewal-reminders.ts:37,87`); no hay aviso el día 6 ni al cortar,
+    y `VENCIDO_MAX_DIAS=7` es un literal aparte de `PAID_GRACE_DAYS`. El corte cae a la hora de la aprobación, pero el
+    correo dice «hasta el 8 de noviembre» (`plan-state.ts:88-94`, `email.ts`).
+  - MEDIUM (decisión de Sergio Urcullo): renovar fuera de la gracia cuenta desde `hoy - 7 días` y no «desde hoy» como pide
+    C13: pagar el día 30 da 24 días más, no 31 (≈ Bs 208 en Profesional mensual). La descripción del PR dice lo
+    contrario.
+  - MEDIUM: pruebas débiles. El bloque «C13c» pasa también en `master` y `activation.test.ts:512` es circular. El CAS
+    está simulado y no hay prueba de ruta contra activación.
+  - La descripción del PR está desactualizada: lista voseo («Tu plan venció: renovalo», «seguís») que el código ya no
+    tiene (un grep sobre las líneas añadidas dio 0), y «fuera de la gracia cuenta desde hoy». Reescribirla antes de que
+    Sergio Urcullo apruebe sobre texto viejo.
+  - Merge con `master`: un solo conflicto, `lib/subscription/activation.test.ts` (los dos agregan un `describe` al final:
+    «C15b reserva de factura» y «C13c»). Se resuelve dejando los dos. Sin reversiones silenciosas en código.
+  - Sin barrer: `docs/ONIA_V1_COBRO_RENOVACION_2026-09-27.md:13`, `docs/ONIA_V1_OFERTA_PUBLICA_2026-09-22.md:164-166`,
+    y en la web `faq-datos.ts:62` y `terminos.md` §3.4 (esperan el OK de Sergio Urcullo).
+  - Ya está de usted: `voseo-ratchet.linea-base.json` solo baja (PlanClient 14→0).
+
+  **#124 (términos aceptados).** Los tipos coinciden con las tablas (`id`, `organizationId`, `profileId` son TEXT), la
+  migración coincide con `schema.prisma`, todo va calificado con `public.`, y la RLS sigue el patrón del repo (`ENABLE` +
+  `REVOKE ALL` a `PUBLIC`, `anon` y `authenticated`; el repo no usa `FORCE`). Las dos altas (correo y Google) convergen en
+  `provisionOrganization`, con el insert dentro de su `$transaction` (`provisioning.ts:299-308`). Lo que conviene cerrar
+  **antes** de aplicarla, porque después cuesta otra migración:
+  - MEDIUM: el cascade desde `profiles` borra la evidencia (`migration.sql:23,27`, `ON DELETE CASCADE`): si un segundo
+    ADMIN quita al que se registró (`lib/auth.ts:240`, `team/[id]/route.ts:82`), la fila desaparece con la organización
+    viva. Arreglo: `profileId` nullable con `SET NULL` y una copia del correo.
+  - MEDIUM: `@unique profileId` (`migration.sql:15`) no deja registrar una versión nueva de los términos sin otra
+    migración: `@@unique([profileId, version])`.
+  - MEDIUM: la IP sale de `clientIp()` sin `isIP` ni tope de largo (`app/api/auth/register/route.ts:354`) y la guarda como
+    evidencia legal; es el encabezado que el propio repo considera falsificable. Arreglo: `isIP(ip) ? ip : null`, máximo 45.
+  - MEDIUM: el encabezado de la migración dice solo «APLICAR MANUALMENTE» (`migration.sql:1`): si el código sale antes
+    que la tabla, cada alta da 500 y borra el usuario de Auth. Las migraciones anteriores dicen «APLICAR ANTES DEL SWAP».
+  - LOW: el sello `20261008000000` ordena antes de `20261009110000_subscription_invoice_validation`, ya en `master`
+    (el deploy es manual y no rompe, pero `migrate deploy` ve el orden fuera de secuencia); `x-real-ip` se pierde respecto de
+    `getRequestMeta`; los tests no prueban el rollback ni el 500; la política de privacidad no dice que guarda la IP.
+  - Merge con `master`: sin conflicto.
+
+  Sin mirar todavía: #132 (K1, respuesta al recordatorio), #70 (documentación de septiembre) y, en este repo, #195, #143 y #40.
 - [ ] **E4 Volver a mirar #136 cuando entren sus arreglos.** Los dos HIGH de E3 y el comando de las migraciones. **Hecho:**
   cada HIGH cerrado con su prueba, leído en el código de la cabeza nueva.
 
