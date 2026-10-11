@@ -1,6 +1,6 @@
 {
- "titulo": "G2 v2 · ¿Quién pierde la cara? Seis clips con la misma orden (re-corte mudo, sin aire muerto, listo para voz; revisión 1 aplicada el 11-oct; v2.3: fotos recibidas dichas en el gancho, en el clip de Kling O3, en la lección y en el pie; revisión 2 aplicada)",
- "version": "v2.3 (11-oct-2026, noche): v2.2 + revisión 2 (qa/revision-2.md) con los hechos nuevos de la sesión Lucía: la foto de arranque K1 se hizo con R1, R3, R6 y R7, así que ningún clip es independiente de las 8 fotos; se retira la estimación de exceso; el aviso va en el gancho, sobre el clip de Kling O3, en la lección y al principio del pie; la prueba estricta (solo R2, R4, R5 y R8) sale de la medición. Los números de la pantalla no cambian. v2.2 (11-oct, tarde): v2.1 + hallazgo de las fotos recibidas. v2.1 (11-oct-2026, revisión 1): re-corte de G2 con la regla de aire muerto. D-N1: se nombran las herramientas con su nombre real (uso propio, no recomendación pagada). Todos los tiempos salen de guion-voz.txt (scripts/voz.mjs: tramos a 17 CARACTERES por segundo, no a palabras; huecos de 6 cuadros); un tiempo escrito como «T6+0.8» es el inicio del tramo 6 más 0,8 s, «T7-6f» = 6 cuadros antes del inicio del tramo 7, «FIN» = el final del video. 0 créditos: mismos clips y la misma foto de G2.",
+ "titulo": "G2 v2 · ¿Quién pierde la cara? Seis clips con la misma orden (re-corte mudo, sin aire muerto, listo para voz; revisión 1 aplicada el 11-oct; v2.3: fotos recibidas dichas en el gancho, en el clip de Kling O3, en la lección y en el pie; revisión 2 aplicada; v2.4: revisión 3 aplicada, aviso del gancho con el clip como sujeto)",
+ "version": "v2.4 (11-oct-2026, noche, última pasada): v2.3 + revisión 3 (qa/revision-3.md: 0 ALTA · 1 MEDIA · 4 BAJA) y las 4 correcciones del verificador mecánico: aviso del gancho «Clip 0,82: recibió 4 fotos de comparación» (el clip es el sujeto; entra a 0,5 s con la pastilla; va bajo las miniaturas, que vuelven a y = 960, y ya no tapa teléfono ni manos); «fotos con que se compara» en pantalla, pie y README; pie con las tres salvedades de la medición, sin ids R1…R8, un solo sentido de «partir de», en pasado, con «en el clip original (720p)» y los segundos visibles contados en el video terminado; cierre K1 con lo medido. v2.3 (11-oct-2026, noche): v2.2 + revisión 2 (qa/revision-2.md) con los hechos nuevos de la sesión Lucía: la foto de arranque K1 se hizo con R1, R3, R6 y R7, así que ningún clip es independiente de las 8 fotos; se retira la estimación de exceso; el aviso va en el gancho, sobre el clip de Kling O3, en la lección y al principio del pie; la prueba estricta (solo R2, R4, R5 y R8) sale de la medición. Los números de la pantalla no cambian. v2.2 (11-oct, tarde): v2.1 + hallazgo de las fotos recibidas. v2.1 (11-oct-2026, revisión 1): re-corte de G2 con la regla de aire muerto. D-N1: se nombran las herramientas con su nombre real (uso propio, no recomendación pagada). Todos los tiempos salen de guion-voz.txt (scripts/voz.mjs: tramos a 17 CARACTERES por segundo, no a palabras; huecos de 6 cuadros); un tiempo escrito como «T6+0.8» es el inicio del tramo 6 más 0,8 s, «T7-6f» = 6 cuadros antes del inicio del tramo 7, «FIN» = el final del video. 0 créditos: mismos clips y la misma foto de G2.",
  "guion": "hermes-content/docs/cola/lucia-diario/guiones/G2-la-misma-foto-seis-clips.md",
  "voz": {
   "archivo": "guion-voz.txt",
@@ -139,7 +139,7 @@
    "media_inicio": 0,
    "a": 8.208333333333334,
    "b": 11,
-   "capa": "Kling 3.0 std (clip 1), cuadros 0-64 (2,7 s a 1×); el cuadro 0 es la foto K1"
+   "capa": "Kling 3.0 std (clip 1): del cuadro 0 al 66 del clip, a 1×; 66 cuadros visibles = 2,75 s (el cuadro 0 cae fuera del lienzo, al arrancar el empuje de entrada: qa/cuadros-visibles.txt); el cuadro 0 es la foto K1"
   },
   {
    "id": "m3",
@@ -148,7 +148,7 @@
    "media_inicio": 0,
    "a": 10.75,
    "b": 14.041666666666666,
-   "capa": "Seedance 2.0 Mini (clip 3), cuadros 0-71 (3,0 s a 1×)"
+   "capa": "Seedance 2.0 Mini (clip 3): del cuadro 0 al 78 del clip, a 1×; 78 cuadros visibles = 3,25 s (qa/cuadros-visibles.txt)"
   },
   {
    "id": "m5",
@@ -157,7 +157,7 @@
    "media_inicio": 0,
    "a": 13.791666666666666,
    "b": 18.25,
-   "capa": "Kling O3 (clip 5), cuadros 0-97 (4,1 s a 1×); v2.3: con el aviso «recibió 4 de las 8 fotos con que se mide» encima del «5,9 s: 0,82» (viaja con el clip)"
+   "capa": "Kling O3 (clip 5): del cuadro 0 al 106 del clip, a 1×; 106 cuadros visibles = 4,42 s (qa/cuadros-visibles.txt); con el aviso «recibió 4 de las 8 fotos con que se compara» encima del «5,9 s: 0,82» (viaja con el clip)"
   },
   {
    "id": "pl-l",
@@ -173,7 +173,7 @@
    "media_inicio": 2.25,
    "a": 24.75,
    "b": 27.791666,
-   "capa": "cierre: el clip K1 (el de Kling 3.0 std) del cuadro 54 (2,25 s) al 126 (5,25 s), con Lucía mirando a cámara; parecido medido cada 6 cuadros: 0,71-0,76, ninguno bajo 0,70"
+   "capa": "cierre: el clip K1 (el de Kling 3.0 std) del cuadro 54 (2,25 s) al 126 (5,25 s), con Lucía mirando a cámara; 3 cuadros medidos (qa/face-gate.txt: n606, n630 y n660): final 0,706 a 0,742, fuente 0,708 a 0,751; ninguno bajo 0,70"
   }
  ],
  "costuras": [
@@ -451,11 +451,11 @@
    "h": 242,
    "gap": 16,
    "x0": 92,
-   "y": 1012,
+   "y": 960,
    "cuadro": 90
   },
   "pastilla": {
-   "t": 0.85,
+   "t": 0.5,
    "y": 838,
    "etiqueta": "parecido final:",
    "valor": "0,64 a 0,82",
@@ -466,8 +466,9 @@
   },
   "fuga": {
    "motor": "m5",
-   "t": 0.85,
-   "nota": "v2.3 (revisión 2, H2): el 0,82 de la pastilla es el de Kling O3, que recibió 4 de las 8 fotos con que se mide. El aviso va en una pastilla pequeña pegada al número (abajo, alineada a su borde derecho), 6 palabras como máximo (la ventana del gancho es 2,67 s) y entra con la pastilla. Las miniaturas bajaron de y = 960 a 1012 para dejarle lugar."
+   "t": 0.5,
+   "y": 1216,
+   "nota": "v2.4 (revisión 3, H1): el aviso del 0,82 (Kling O3, que recibió 4 de las 8 fotos con que se compara) tiene al CLIP de sujeto y nombra el número: «Clip 0,82: recibió 4 fotos de comparación» (7 palabras: la ventana del gancho con la entrada a 0,5 s es de 3,0 s en el DOM y pide 2,75). Entra a 0,5 s junto con la pastilla del resultado (v2.3: 0,85 s) y va CENTRADO bajo las seis miniaturas (y = 1216-1271, entre ellas y la tarjeta c1), no bajo la pastilla: así no tapa teléfono ni manos (las miniaturas vuelven a y = 960, como en la v2.2). Pega con el 0,82 por el texto, no por la posición."
   }
  },
  "regla": {
@@ -553,7 +554,7 @@
    "fuga_escena": {
     "y": 1068,
     "x2": 973,
-    "nota": "v2.3 (revisión 2, H2): la misma etiqueta de la lección sobre el clip de Kling O3, pegada encima del «5,9 s: 0,82» (alineada a su borde derecho, x = 973). Entra y sale con el empuje del clip (el contenedor viaja con él), así que se lee de T9 a T11-6f (3,96 s) y siempre que el 0,82 está en pantalla."
+    "nota": "v2.3 (revisión 2, H2) y v2.4: la misma etiqueta de la lección («recibió 4 de las 8 fotos con que se compara»; v2.3 «con que se mide») sobre el clip de Kling O3, pegada encima del «5,9 s: 0,82» (alineada a su borde derecho, x = 973). Entra y sale con el empuje del clip (el contenedor viaja con él), así que se lee de T9 a T11-6f (3,96 s) y siempre que el 0,82 está en pantalla."
    },
    "_valores": [
     0.798,
@@ -624,7 +625,7 @@
    "t": 19.65,
    "x": 272,
    "dy": -14,
-   "nota": "Hallazgo del 11-oct (fuga_refs): Kling O3 es el único clip con fotos recibidas que sale en pantalla. La etiqueta va en la fila de su barra, al lado del nombre; el texto sale de fuga_refs (recibio) y de refs.total, nunca escrito a mano. v2.3: dice «con que se mide» (no «de puntaje») y sube de 34 a 36 px."
+   "nota": "Hallazgo del 11-oct (fuga_refs): Kling O3 es el único clip con fotos recibidas que sale en pantalla. La etiqueta va en la fila de su barra, al lado del nombre; el texto sale de fuga_refs (recibio) y de refs.total, nunca escrito a mano. v2.3: dice «con que se mide» (no «de puntaje») y sube de 34 a 36 px. v2.4: dice «con que se compara» (más concreto)."
   }
  },
  "fuga_refs": {
@@ -766,7 +767,7 @@
   },
   {
    "que": "Segmentos de 5 s por clip",
-   "porque": "cada clip se ve de 2,7 a 4,1 s a 1×, recortado a los primeros cuadros, donde está la prueba."
+   "porque": "cada clip se ve de 2,75 a 4,42 s visibles a 1× (cuadros del video terminado con alguna parte del clip a la vista ÷ 24; qa/cuadros-visibles.txt), recortado a los primeros cuadros, donde está la prueba."
   }
  ],
  "tramos": [
@@ -1053,9 +1054,9 @@
    "que": "gancho: resultado de los seis",
    "texto": "parecido final: 0,64 a 0,82",
    "n": 5,
-   "a": 0.85,
+   "a": 0.5,
    "b": 3.5,
-   "dur": 2.47,
+   "dur": 2.82,
    "min": 2.05
   },
   {
@@ -1171,32 +1172,32 @@
   {
    "id": "l-fuga",
    "que": "lección: fotos recibidas (Kling O3)",
-   "texto": "recibió 4 de las 8 fotos con que se mide",
-   "n": 10,
+   "texto": "recibió 4 de 8 fotos con que se compara",
+   "n": 9,
    "a": 19.65,
    "b": 24.75,
    "dur": 4.92,
-   "min": 3.8
+   "min": 3.45
   },
   {
    "id": "fg-gancho",
-   "que": "gancho: aviso junto al 0,82",
-   "texto": "0,82 recibió 4 de 8 fotos",
-   "n": 6,
-   "a": 0.85,
+   "que": "gancho: aviso del clip del 0,82",
+   "texto": "Clip 0,82: recibió 4 fotos de comparación",
+   "n": 7,
+   "a": 0.5,
    "b": 3.5,
-   "dur": 2.47,
-   "min": 2.4
+   "dur": 2.82,
+   "min": 2.75
   },
   {
    "id": "fg-m5",
    "que": "Kling O3: aviso sobre el clip",
-   "texto": "recibió 4 de las 8 fotos con que se mide",
-   "n": 10,
+   "texto": "recibió 4 de 8 fotos con que se compara",
+   "n": 9,
    "a": 13.861667,
    "b": 18,
    "dur": 3.958333,
-   "min": 3.8
+   "min": 3.45
   },
   {
    "id": "l-t1",
@@ -1288,5 +1289,19 @@
    "dur": 3.641667,
    "min": 1.35
   }
- ]
+ ],
+ "visibles": {
+  "cuadros": [
+   66,
+   78,
+   106
+  ],
+  "segundos": [
+   2.75,
+   3.25,
+   4.416666666666667
+  ],
+  "lo": "2,8",
+  "hi": "4,4"
+ }
 }

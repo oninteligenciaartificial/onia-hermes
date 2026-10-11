@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 // Prueba NEGATIVA de scripts/build.mjs (la compuerta de reglas y de cifras de G2 v2): ejecuta el build con las lecturas interceptadas (plan.json, pie.txt, guion-voz.txt y la propia
 // MEDICIÓN mutados en memoria; las escrituras no hacen nada; ningún archivo del repo cambia) y exige que CADA mutación se rechace POR EL MOTIVO ESPERADO. Además corre el build SIN mutar y exige que pase.
+// v2.4 (revisión 3 + 4 correcciones del verificador): las mutaciones del pie siguen el pie nuevo (sin ids R1…R8, tres salvedades, en pasado, 720p, segundos visibles) y hay UNA POR CADA corrección del verificador
+// (720p · máximo de px · cierre K1 · segundos visibles) más las del aviso del gancho (clip de sujeto, entrada a 0,5 s, bajo las miniaturas).
 // v2.3 (revisión 2, H7): la prueba ya no solo comprueba que una cadena ESTÁ en el pie; comprueba que lo que el pie y el plan dicen es VERDAD contra el archivo de la medición
 // (hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/medicion-sin-refs-entrada-20261011.txt): se falsea el pie, se falsea el plan y se falsea el propio archivo, y el build tiene que
 // notar la diferencia. Mutaciones pedidas: borrar el hecho de que K1 se hizo con R1, R3, R6 y R7; cambiar «el orden de los finales no cambia» por lo contrario; restituir «dentro del ruido».
@@ -24,30 +26,30 @@ const quitar = (re) => (s) => { const t = s.replace(re, ''); if (t === s) throw 
 const cambiar = (a, b) => (s) => { if (!s.includes(a)) throw new Error(`la mutación no cambió nada («${a}»)`); return s.replace(a, b); };
 // cambia solo dentro de la PRUEBA ESTRICTA de la medición (las tablas de arriba repiten algunas filas)
 const enEstricta = (a, b) => (s) => { const i = s.indexOf('== PRUEBA ESTRICTA'); const h = s.slice(i); if (i < 0 || !h.includes(a)) throw new Error(`la mutación no cambió nada («${a}»)`); return s.slice(0, i) + h.replace(a, b); };
-const AVISO = 'Aviso: los 6 clips parten de 4 de las 8 fotos con que se mide (abajo). ';
+const AVISO = 'Aviso: los 6 clips parten de 4 de las 8 fotos con que se compara (abajo). ';
 const casos = [
   // ── el pie: lo que dice sobre la medición tiene que ser lo que dice el ARCHIVO ──
-  ['pie: borrar TODO el párrafo «Sobre la medición»', () => {}, { 'pie.txt': quitar(/Sobre la medición:[\s\S]*?poco confiable\. /) }, /falta decir de dónde salió la foto de arranque/],
-  ['pie: borrar el hecho de que la foto de arranque (K1) se hizo con R1, R3, R6 y R7', () => {}, { 'pie.txt': cambiar('la foto de arranque se hizo con 4 de esas 8 fotos (R1, R3, R6 y R7), así que ningún clip es independiente. ', '') }, /falta decir de dónde salió la foto de arranque/],
-  ['pie: K1 «se hizo con R1, R3 y R6» (la medición dice R1, R3, R6 y R7)', () => {}, { 'pie.txt': cambiar('(R1, R3, R6 y R7), así que ningún clip', '(R1, R3 y R6), así que ningún clip') }, /falta decir de dónde salió la foto de arranque/],
+  ['pie: borrar las frases sobre la foto de arranque y lo que recibió cada clip', () => {}, { 'pie.txt': quitar(/La foto de arranque se hizo con[\s\S]*?Kling O3, 4\. /) }, /falta decir de dónde salió la foto de arranque/],
+  ['pie: borrar el hecho de que la foto de arranque (K1) se hizo con R1, R3, R6 y R7', () => {}, { 'pie.txt': cambiar('La foto de arranque se hizo con 4 de las 8, así que ningún clip es independiente. ', '') }, /falta decir de dónde salió la foto de arranque/],
+  ['pie: K1 «se hizo con 3 de las 8» (la medición dice 4: R1, R3, R6 y R7)', () => {}, { 'pie.txt': cambiar('La foto de arranque se hizo con 4 de las 8', 'La foto de arranque se hizo con 3 de las 8') }, /falta decir de dónde salió la foto de arranque/],
   ['pie: «el orden de los finales no cambia» → «el orden de los finales cambia» (lo contrario)', () => {}, { 'pie.txt': cambiar('el orden de los finales no cambia', 'el orden de los finales cambia') }, /la medición estricta .* no dice lo que dice el archivo/],
   ['pie: restituir «dentro del ruido» (frase retirada)', () => {}, { 'pie.txt': cambiar('0,79 a 0,77: casi igual', '0,79 a 0,77: dentro del ruido') }, /«dentro del ruido» es una frase RETIRADA/],
-  ['pie: restituir «exceso atribuible ≈ 0,012, dentro del ruido de ±0,03» (frase retirada)', () => {}, { 'pie.txt': cambiar('En Kling O3 la cara mide solo', 'El exceso atribuible es ≈ 0,012, dentro del ruido de ±0,03. En Kling O3 la cara mide solo') }, /«exceso» es una frase RETIRADA/],
+  ['pie: restituir «exceso atribuible ≈ 0,012, dentro del ruido de ±0,03» (frase retirada)', () => {}, { 'pie.txt': cambiar('Esa caída no mide la fuga', 'El exceso atribuible es ≈ 0,012, dentro del ruido de ±0,03. Esa caída no mide la fuga') }, /«exceso» es una frase RETIRADA/],
   ['pie: el aviso del principio fuera', () => {}, { 'pie.txt': cambiar(AVISO, '') }, /falta el aviso del principio/],
-  ['pie: el aviso pasa al final (fuera de los primeros 125 caracteres)', () => {}, { 'pie.txt': (s) => { if (!s.includes(AVISO)) throw new Error('la mutación no cambió nada'); return s.replace(AVISO, '').replace('Cada semana hago una prueba.', AVISO + 'Cada semana hago una prueba.'); } }, /el aviso empieza en el carácter/],
+  ['pie: el aviso pasa al final (fuera de los primeros 125 caracteres)', () => {}, { 'pie.txt': (s) => { if (!s.includes(AVISO)) throw new Error('la mutación no cambió nada'); return s.replace(AVISO, '').replace('Seguime.', AVISO + 'Seguime.'); } }, /el aviso empieza en el carácter/],
   ['pie: la apertura se alarga y empuja el aviso pasados los 125 caracteres', () => {}, { 'pie.txt': cambiar('Lucía Antelo, por @oniahq.', 'Lucía Antelo, personaje de Onia, por @oniahq.') }, /el aviso (empieza|termina) en el carácter/],
   ['pie: «los 6 clips parten de 4 de las 8» → «de 2 de las 8» (la medición dice 4)', () => {}, { 'pie.txt': cambiar('parten de 4 de las 8 fotos', 'parten de 2 de las 8 fotos') }, /falta el aviso del principio/],
-  ['pie: Kling O3 «recibió R1 y R3» (la medición dice R1, R3, R6 y R7)', () => {}, { 'pie.txt': cambiar('y Kling O3, R1, R3, R6 y R7.', 'y Kling O3, R1 y R3.') }, /falta decir qué recibió cada uno de los dos clips/],
-  ['pie: Seedance + referencias «recibió R1, R3 y R6» (la medición dice R1 y R3)', () => {}, { 'pie.txt': cambiar('recibió R1 y R3 como entrada', 'recibió R1, R3 y R6 como entrada') }, /falta decir qué recibió cada uno de los dos clips/],
+  ['pie: Kling O3 «recibió 2 de las 8» (la medición dice 4: R1, R3, R6 y R7)', () => {}, { 'pie.txt': cambiar('y Kling O3, 4.', 'y Kling O3, 2.') }, /falta decir qué recibió cada uno de los dos clips/],
+  ['pie: Seedance + referencias «recibió 3 de las 8» (la medición dice 2: R1 y R3)', () => {}, { 'pie.txt': cambiar('referencias recibió 2 de las 8', 'referencias recibió 3 de las 8') }, /falta decir qué recibió cada uno de los dos clips/],
   ['pie: final de Kling O3 con las 4 fotos 0,79 (la medición dice 0,749 → 0,75)', () => {}, { 'pie.txt': cambiar('Kling O3 0,75, Seedance', 'Kling O3 0,79, Seedance') }, /no dice lo que dice el archivo de la medición/],
   ['pie: «bajan entre 0,03 y 0,05» (la medición dice 0,03 y 0,09)', () => {}, { 'pie.txt': cambiar('entre 0,03 y 0,09', 'entre 0,03 y 0,05') }, /no dice lo que dice el archivo de la medición/],
   ['pie: orden de los finales intercambiado (Kling 3.0 std antes que Kling 3.0 pro)', () => {}, { 'pie.txt': cambiar('Kling 3.0 pro 0,68, Kling 3.0 std 0,67', 'Kling 3.0 std 0,67, Kling 3.0 pro 0,68') }, /no dice lo que dice el archivo de la medición/],
-  ['pie: las fotos que nadie recibió «R2, R4, R5 y R7» (la medición dice R8)', () => {}, { 'pie.txt': cambiar('(R2, R4, R5 y R8)', '(R2, R4, R5 y R7)') }, /no dice lo que dice el archivo de la medición/],
-  ['pie: sin el tamaño de cara de Kling O3 (89 a 168 px)', () => {}, { 'pie.txt': cambiar('En Kling O3 la cara mide solo 89 a 168 px en el clip: poco confiable. ', 'En Kling O3 la cara es chica: poco confiable. ') }, /falta el tamaño de cara de Kling O3/],
+  ['pie: «las 3 fotos que nadie recibió» (la medición dice 4: R2, R4, R5 y R8)', () => {}, { 'pie.txt': cambiar('Con solo las 4 fotos que nadie recibió', 'Con solo las 3 fotos que nadie recibió') }, /no dice lo que dice el archivo de la medición/],
+  ['pie: sin el tamaño de cara de Kling O3 (89 a 168 px)', () => {}, { 'pie.txt': cambiar('(en Kling O3, 89 a 168 px: poco confiable)', '(en Kling O3, la cara es chica)') }, /falta el tamaño de cara de Kling O3/],
   ['pie: tamaño de cara «89 a 170 px» (la medición dice 89 a 168)', () => {}, { 'pie.txt': cambiar('89 a 168 px', '89 a 170 px') }, /el tamaño de cara «89 a 170 px» no sale de la medición/],
-  ['pie: sin «las caras de los tres clips del video miden menos de 200 px»', () => {}, { 'pie.txt': cambiar('las caras de los tres clips del video miden menos de 200 px, así que', 'las caras son chicas, así que') }, /debe decir «las caras de los tres clips del video miden menos de 200 px»/],
-  ['pie: sin «poco confiable»', () => {}, { 'pie.txt': cambiar(': poco confiable.', '.') }, /no dice «poco confiable»/],
-  ['pie: pasa de 2.200 caracteres', () => {}, { 'pie.txt': cambiar('Cada semana hago una prueba.', 'Cada semana hago una prueba. ' + 'x'.repeat(100)) }, /tope de Instagram 2\.200/],
+  ['pie: sin «las caras de los tres clips del video miden menos de 200 px»', () => {}, { 'pie.txt': cambiar('en el clip original (720p) las caras de los tres clips del video miden menos de 200 px', 'las caras son chicas') }, /debe decir «en el clip original \(720p\) las caras de los tres clips del video miden menos de 200 px»/],
+  ['pie: sin «poco confiable»', () => {}, { 'pie.txt': cambiar(': poco confiable)', ')') }, /no dice «poco confiable»/],
+  ['pie: pasa de 2.200 caracteres', () => {}, { 'pie.txt': cambiar('Seguime.', 'Seguime. ' + 'x'.repeat(100)) }, /tope de Instagram 2\.200/],
   // ── el resto de las reglas del pie ──
   ['pie: ya no abre con «Personaje hecho con IA»', () => {}, { 'pie.txt': cambiar('Personaje hecho con IA', 'Personaje digital') }, /debe abrir con «Personaje hecho con IA»/],
   ['pie: sin el aviso «Nombro lo que uso…» (D-N1)', () => {}, { 'pie.txt': quitar(/Nombro lo que uso; no es una recomendación pagada\. /) }, /falta el aviso/],
@@ -60,7 +62,7 @@ const casos = [
   ['pantalla: la etiqueta de la lección llega sin ventana de lectura (T14-6f)', (p) => { p.leccion.fuga.t = 'T14-6f'; }, null, /lectura «lección: fotos recibidas \(Kling O3\)»/],
   ['pantalla: la etiqueta de la lección llega con ventana corta (T13+1.5: 0,24 s, pide 3,8)', (p) => { p.leccion.fuga.t = 'T13+1.5'; }, null, /lectura «lección: fotos recibidas \(Kling O3\)»/],
   ['pantalla: quitar el aviso del gancho (el 0,82 de la pastilla sin aviso)', (p) => { delete p.gancho.fuga; }, null, /el gancho no lleva su aviso/],
-  ['pantalla: el aviso del gancho llega con ventana corta (3,0 s)', (p) => { p.gancho.fuga.t = 3.0; }, null, /lectura «gancho: aviso junto al 0,82»/],
+  ['pantalla: el aviso del gancho llega con ventana corta (3,0 s)', (p) => { p.gancho.fuga.t = 3.0; }, null, /lectura «gancho: aviso del clip del 0,82»/],
   ['pantalla: quitar el aviso del clip de Kling O3 (plan.motores.m5.fuga_escena)', (p) => { delete p.motores[2].fuga_escena; }, null, /su clip no lleva el aviso/],
   ['pantalla: el clip de Kling O3 termina antes (T10) y el aviso se queda sin ventana de lectura', (p) => { p.medios.find((m) => m.id === 'm5').b = 'T10'; }, null, /lectura «Kling O3: aviso sobre el clip»/],
   // ── el PLAN contra la medición (plan ≠ archivo corta el build) ──
@@ -84,6 +86,28 @@ const casos = [
   ['medición: «¿Cambia el orden por valor final? SI» (el plan y el pie dicen que no cambia)', () => {}, { [MEDICION]: cambiar('¿Cambia el orden por valor final? NO', '¿Cambia el orden por valor final? SI') }, /la línea «¿Cambia el orden por valor final\?» de la medición/],
   ['medición: Kling O3 recibió directo R1, R3 y R6 (cabecera de la prueba estricta)', () => {}, { [MEDICION]: cambiar('Kling O3 (sin K1) recibió R1, R3, R6 y R7 directo', 'Kling O3 (sin K1) recibió R1, R3 y R6 directo') }, /fuga_refs m5: la cabecera de la prueba estricta dice que recibió directo R1, R3, R6/],
   ['medición: sin la sección «PRUEBA ESTRICTA»', () => {}, { [MEDICION]: cambiar('== PRUEBA ESTRICTA', '== OTRA COSA') }, /la medición no trae la sección «== PRUEBA ESTRICTA/],
+  // ── v2.4 · revisión 3: H1 (aviso del gancho con el clip de sujeto), H2 (tres salvedades), H3 (ids y «partir de»), H5 (pasado) y «con que se compara» ──
+  ['gancho: el aviso entra a 0,85 s con la pastilla (como la v2.3): 7 palabras piden 2,75 s y la ventana da 2,47', (p) => { p.gancho.fuga.t = 0.85; p.gancho.pastilla.t = 0.85; }, null, /lectura «gancho: aviso del clip del 0,82»/],
+  ['gancho: el aviso entra a 0,6 s y la pastilla a 0,5 s (el aviso y el número tienen que entrar juntos)', (p) => { p.gancho.fuga.t = 0.6; }, null, /deben entrar juntos/],
+  ['gancho: el aviso vuelve a y = 945 (bajo la pastilla, sobre las miniaturas: tapaba teléfono y manos)', (p) => { p.gancho.fuga.y = 945; }, null, /queda sobre las miniaturas/],
+  ['pie: salvedad (a) fuera («bajan todos, incluso los que no recibieron fotos directas»)', () => {}, { 'pie.txt': cambiar('Esa caída no mide la fuga (bajan todos, incluso los que no recibieron fotos directas); ', '') }, /faltan las tres salvedades/],
+  ['pie: salvedad (b) falseada («4 de los 6 quedan bajo 0,70»; la medición da 3)', () => {}, { 'pie.txt': cambiar('3 de los 6 quedan bajo 0,70', '4 de los 6 quedan bajo 0,70') }, /faltan las tres salvedades/],
+  ['pie: salvedad (b) sin «se compara entre clips, no con el piso»', () => {}, { 'pie.txt': cambiar(' (se compara entre clips, no con el piso)', '') }, /faltan las tres salvedades/],
+  ['pie: salvedad (c) falseada («4 de las 5 diferencias entre vecinos»; la medición da 3)', () => {}, { 'pie.txt': cambiar('y 3 de las 5 diferencias', 'y 4 de las 5 diferencias') }, /faltan las tres salvedades/],
+  ['medición: la diferencia B* entre Kling 3.0 pro y Kling 3.0 std pasa de +0,009 a +0,039 (el pie dice 3 de 5 dentro de ±0,03)', () => {}, { [MEDICION]: enEstricta('A +0.018  B* +0.009', 'A +0.018  B* +0.039') }, /diferencias entre vecinos dentro de ±0,03 en las tablas y 2 en el bloque/],
+  ['pie: vuelven los ids «(R1 a R8)» (H3: no le dicen nada a un espectador)', () => {}, { 'pie.txt': cambiar('contra 8 fotos oficiales suyas.', 'contra 8 fotos oficiales suyas (R1 a R8).') }, /ids «R1, R8» sin definir \(H3\)/],
+  ['pie: vuelve «cinco partieron de la misma foto» («partir de» con dos sentidos)', () => {}, { 'pie.txt': cambiar('cinco salieron de la misma foto', 'cinco partieron de la misma foto') }, /«parten de» \/ «partieron de» aparece 2 veces/],
+  ['pie: vuelve «sostiene la cara» en presente (H5)', () => {}, { 'pie.txt': cambiar('aguantó la cara', 'sostiene la cara') }, /«sostiene la cara» en presente \(H5\)/],
+  ['pie: vuelve «pierde parecido» en presente (H5)', () => {}, { 'pie.txt': cambiar('perdió parecido', 'pierde parecido') }, /«pierde parecido» en presente \(H5\)/],
+  ['pie: vuelve «con que se mide» (la palabra pasó a «se compara»)', () => {}, { 'pie.txt': cambiar('fotos con que se compara (abajo)', 'fotos con que se mide (abajo)') }, /«con que se mide» es una frase RETIRADA/],
+  // ── v2.4 · las 4 correcciones del verificador mecánico (una mutación por corrección, dos donde hay un archivo y un documento) ──
+  ['verificador 1 (720p): el pie dice «las caras de los tres clips del video miden menos de 200 px» sin «en el clip original (720p)»', () => {}, { 'pie.txt': cambiar('en el clip original (720p) las caras', 'las caras') }, /debe decir «en el clip original \(720p\) las caras de los tres clips del video miden menos de 200 px»/],
+  ['verificador 2 (máximo de px): una cara de Seedance 2.0 Mini mide 201 px en qa/caras-por-clip.json (el pie dice «menos de 200 px»)', () => {}, { 'qa/caras-por-clip.json': (t) => { const j = JSON.parse(t); j.clips.m3.filas.find((r) => r[1])[3] = 201; return JSON.stringify(j); } }, /llegan a 201 px en qa\/caras-por-clip\.json/],
+  ['verificador 2 (máximo de px): el README vuelve a decir «máximo 179 px» (qa/caras-por-clip.json da 180)', () => {}, { 'README.md': cambiar('máximo 180 px', 'máximo 179 px') }, /README\.md: dice «máximo 179 px» y qa\/caras-por-clip\.json da 180/],
+  ['verificador 3 (cierre K1): plan.medios.k1.capa vuelve a decir «parecido medido cada 6 cuadros: 0,71-0,76» (esa serie no existe)', (p) => { p.medios.find((m) => m.id === 'k1').capa = 'cierre: el clip K1; parecido medido cada 6 cuadros: 0,71-0,76, ninguno bajo 0,70'; }, null, /plan\.medios\.k1\.capa: «parecido medido cada 6 cuadros»/],
+  ['verificador 3 (cierre K1): qa/face-gate.txt trae un cuadro del cierre en 0,694 y la anotación sigue diciendo «ninguno bajo 0,70»', () => {}, { 'qa/face-gate.txt': (t) => { const u = t.replace(/^(cierre K1 n\d+ [^\n]*?\s)(0\.\d{3})(\s+\d+\s+0\.\d{3}\s+\d+\s+0\.\d{3})$/m, '$10.694$3'); if (u === t) throw new Error('la mutación no cambió nada (cierre K1)'); return u; } }, /plan\.medios\.k1\.capa: debe decir/],
+  ['verificador 4 (segundos visibles): el pie vuelve a decir «2,8 a 4,5 s» (la tabla de cortes, b − a) y no «2,8 a 4,4 s» (cuadros visibles ÷ 24)', () => {}, { 'pie.txt': cambiar('se ven los primeros 2,8 a 4,4 s', 'se ven los primeros 2,8 a 4,5 s') }, /debe decir «se ven los primeros 2,8 a 4,4 s de cada clip»/],
+  ['verificador 4 (segundos visibles): qa/cuadros-visibles.txt cuenta 107 cuadros visibles de Kling O3 en el master y el plan da 106', () => {}, { 'qa/cuadros-visibles.txt': cambiar('m5: 106 cuadros visibles', 'm5: 107 cuadros visibles') }, /qa\/cuadros-visibles\.txt: m5 tiene 107 cuadros visibles en el master y el plan da 106/],
   // ── reglas que ya existían (el build sigue cortando) ──
   ['cifra: final de Kling 3.0 std 0,73 contra PROCEDENCIA', (p) => { p.motores[0].fin = 0.73; }, null, /final 0\.73 y PROCEDENCIA dice/],
   ['créditos: Kling O3 7 contra PROCEDENCIA', (p) => { p.motores[2].cr = 7; }, null, /7 créditos y PROCEDENCIA dice 6/],

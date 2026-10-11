@@ -1,4 +1,4 @@
-// P9 v3 (revisión 2, 11-oct-2026): plan → fuentes → validación → HTML determinista; sin red.
+// P9 v3.1 (revisión 3, 11-oct-2026): plan → fuentes → validación → HTML determinista; sin red.
 import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -65,6 +65,9 @@ const fotosK1=[...mK1[2].matchAll(/R\d/g)].map(m=>m[0]);
 const mDir=SE.match(/Seedance\+refs recibió además (R\d) y (R\d) directo/);
 if(!mDir||mDir.slice(1).join()!==recList.join())fail(`medición sin refs: Seedance debe haber recibido directo exactamente ${recList.join(' y ')}`);
 if(fotosE.length!==Number(mEs[1])||new Set([...fotosE,...fotosK1]).size!==tot||fotosE.some(r=>fotosK1.includes(r)))fail('medición sin refs: las fotos de K1 y las que nadie recibió deben sumar las 8 oficiales sin repetirse');
+// Revisión 3 (H5): el centroide de las 4 fotos puntúa más bajo que el de las 8 en TODOS los clips medidos (B* − A < 0 en los 41 puntos de los 6 clips), por eso el 0,72 final de Kling con las 8 fotos no es el 0,72 inicial con las 4.
+const nClips=(SE.match(/\n== /g)??[]).length,dBA=[...SE.matchAll(/^\s+[\d.]+\s+\d+\s+\d\.\d{3}\s+\d\.\d{3}\s+[+-]\d\.\d{3}\s+\d\.\d{3}\s+([+-]\d\.\d{3})\s/gm)].map(m=>+m[1]);
+if(nClips!==6||dBA.length!==41||!dBA.every(d=>d<0))fail(`medición sin refs: el centroide de las 4 fotos debe puntuar más bajo en los 6 clips (${nClips} clips, ${dBA.length} puntos, máximo B*−A ${Math.max(...dBA)})`);
 const estr=n=>{const i=SE.indexOf('\n== '+n+'\n');if(i<0)fail(`medición sin refs (prueba estricta): falta «${n}»`);const j=SE.indexOf('\n== ',i+3);
  const r=[...SE.slice(i,j<0?SE.length:j).matchAll(/^\s+([\d.]+)\s+(\d+)\s+(\d\.\d{3})\s+(\d\.\d{3})\s+[+-]\d\.\d{3}\s+(\d\.\d{3})\s+[+-]\d\.\d{3}\s/gm)].map(m=>({t:+m[1],px:+m[2],A:+m[3],B:+m[5]}));
  if(r.length!==7)fail(`medición sin refs (prueba estricta): ${n} debe traer 7 puntos`);return [r[0],r.at(-1)]};
@@ -73,40 +76,60 @@ same([round(eK0.A),round(eK1.A)],k.parecido,'prueba estricta: A de Kling contra 
 const estK=[round(eK0.B),round(eK1.B)],estS=[round(eS0.B),round(eS1.B)];
 same({fotos:p.prueba_estricta?.fotos,arranque_k1:p.prueba_estricta?.arranque_k1,directas_seedance:p.prueba_estricta?.directas_seedance,kling:p.prueba_estricta?.kling,seedance:p.prueba_estricta?.seedance},{fotos:fotosE,arranque_k1:fotosK1,directas_seedance:recList,kling:estK,seedance:estS},'prueba estricta del plan');
 if(!(estK[1]<estK[0]&&k.parecido[1]<k.parecido[0]&&estS[1]>estS[0]&&s.parecido[1]>s.parecido[0]))fail('prueba estricta: el sentido de alguna toma cambió; el pie no puede decir «el sentido no cambia»');
+// H5 (revisión 3): el pie aclara que el 0,72 de «0,79 a 0,72» (8 fotos) y el 0,72 de «0,72 a 0,67» (4 fotos) son números distintos; solo tiene sentido mientras coincidan
+if(round(k.parecido[1])!==round(estK[0]))fail(`H5: el 0,72 final con las 8 fotos (${k.parecido[1]}) ya no coincide con el 0,72 inicial con las 4 (${estK[0]}): reescribir la aclaración del pie`);
 // Hecho 4: la cifra de «efecto/ventaja» está retirada de TODA superficie (pantalla, pie, voz)
 const pieTxt=read('pie.txt'),voz=read('guion-voz.txt');
 for(const [donde,t] of [['pantalla',Object.values(p.textos).join(' ')],['pie',pieTxt],['voz',voz]])if(RETIRADO.test(t))fail(`Cifra retirada en ${donde}: no hay control limpio, no se estima ningún efecto ni ventaja (${t.match(RETIRADO)[0]})`);
-const esperado={rotulo:'Lucía Antelo · personaje IA de Onia',titulo:'¿La cara o la escena?',m1:'Kling 3.0 std · brillo −1 · parecido 0,79 → 0,72',m4:'Seedance 2.0 Mini + referencias · brillo −34 · parecido 0,71 → 0,80',reencuadre:`Cara: ${s.cara_px[0]} → ${s.cara_px[1]} px del clip original · reencuadra`,aviso_refs:`Seedance recibió ${rec} de las ${tot} fotos con que se mide.`,nota_refs:`* Seedance recibió ${rec} de las ${tot} fotos con que se mide.`,toma:'Una toma cada uno: prueba, no regla.',brillo:'Brillo: cuadro entero, mezcla luz y encuadre.',limite_cara:'Bajo 200 px (clip original) la cara es poco confiable: Kling, todo el clip; Seedance, el inicio. Ruido ±0,03.',cta:'Seguime: cada semana, una prueba.'};
+const esperado={rotulo:'Lucía Antelo · personaje IA de Onia',titulo:'¿La cara o la escena?',m1:'Kling 3.0 std · brillo −1 · parecido 0,79 → 0,72',m4:'Seedance 2.0 Mini + referencias · brillo −34 · parecido 0,71 → 0,80',reencuadre:`Cara: ${s.cara_px[0]} → ${s.cara_px[1]} px del clip original · reencuadra`,aviso_refs:`Seedance recibió ${rec} de las ${tot} fotos con que se compara.`,nota_refs:`* Seedance recibió ${rec} de las ${tot} fotos con que se compara.`,toma:'Una toma cada uno: prueba, no regla.',brillo:'Brillo: cuadro entero, mezcla luz y encuadre.',limite_cara:'Cara bajo 200 px (clip original): poco confiable. Kling siempre; Seedance al inicio. Ruido ±0,03.',cta:'Seguime: cada semana, una prueba.'};
 same(p.textos,esperado,'textos/cifras autorizados');
 if(!p.textos.m1.includes('brillo '+minus(k.delta))||!p.textos.m4.includes('brillo '+minus(s.delta)))fail('Las pastillas deben llevar el delta de brillo en entero');
-if(!/Kling, todo el clip.*Seedance, el inicio/.test(p.textos.limite_cara))fail('Límite de cara: Kling debe nombrarse (todo el clip) junto con Seedance (el inicio)');
-// H1 (revisión 2): el 0,80 de Seedance lleva su asterisco en la fila de la placa y la nota del asterisco entra en la placa (junto con «fotos con que se mide»)
+if(!/Kling siempre.*Seedance al inicio/.test(p.textos.limite_cara))fail('Límite de cara: Kling debe nombrarse (siempre = todo el clip) junto con Seedance (al inicio)');
+// H1 (revisión 3): el límite de cara se comprimió de 19 a 15 palabras; sigue diciendo «clip original» y «Ruido ±0,03», y no puede volver a crecer
+if(!p.textos.limite_cara.includes('(clip original)')||!p.textos.limite_cara.includes('Ruido ±0,03'))fail('H1 rev.3: el límite de cara debe conservar «(clip original)» y «Ruido ±0,03»');
+if(wc(p.textos.limite_cara)>16)fail(`H1 rev.3: límite de cara de ${wc(p.textos.limite_cara)} palabras (máximo 16)`);
+// H3 (revisión 3): «fotos con que se compara», nunca «con que se mide» en pantalla (el parecido se COMPARA con las fotos)
+if(/con que se mide/.test(Object.values(p.textos).join(' ')))fail('H3 rev.3: «fotos con que se mide» ya no se usa en pantalla: «fotos con que se compara»');
+// H1 (revisión 2): el 0,80 de Seedance lleva su asterisco en la fila de la placa y la nota del asterisco entra en la placa (junto con «fotos con que se compara»)
 if(s.asterisco!==true||k.asterisco)fail('H1: solo la fila de Seedance lleva el asterisco (0,80*) y su nota en la placa');
-if(wc(p.textos.aviso_refs)>13)fail('Aviso de fotos recibidas: máximo 13 palabras (4,85 s de lectura en una ventana de 5,04 s)');
-const TOPE_PLACA=44; // v2: 34; pedido ≈ 36; v3: 44 = límite 19 + toma 7 + nota del asterisco 11 + brillo 7 (duda 3 del README). La exigencia real son las ventanas por texto (ventanas.mjs).
+if(wc(p.textos.aviso_refs)>13)fail('Aviso de fotos recibidas: máximo 13 palabras (4,85 s de lectura en una ventana de 5,5 s)');
+const TOPE_PLACA=40; // v2: 34; pedido ≈ 36; v3: 44; v3.1: 40 = límite 15 + toma 7 + nota del asterisco 11 + brillo 7 (H1 rev.3). La exigencia real son las ventanas por texto (ventanas.mjs).
 const nuevas=wc(p.textos.limite_cara)+wc(p.textos.toma)+wc(p.textos.nota_refs)+wc(p.textos.brillo);
 if(nuevas>TOPE_PLACA)fail(`Lectura nueva de la placa: ${nuevas} palabras (tope ${TOPE_PLACA})`);
-// H6 (revisión 2): orden de entrada en la placa toma → límite de cara → nota del asterisco → brillo → CTA, y la pila vertical sigue el mismo orden
-const entra=sel=>{const e=p.eventos.find(e=>e.selector===sel&&e.entrada);if(!e)fail(`H6: falta la entrada de ${sel}`);return e.t};
-const orden=['#toma','#limite-cara','#nota-ast','#brillo','#cta'].map(entra);
-if(orden.some((t,i)=>i&&t<=orden[i-1]))fail(`H6: orden de entrada de la placa: toma → límite de cara → nota del asterisco → brillo → CTA (llegó ${orden.join(' → ')})`);
-const ys=['toma','limite','nota_refs','brillo','cta'].map(n=>p.layout[n]);
-if(ys.some((y,i)=>i&&y<=ys[i-1]))fail('H6: la pila vertical de la placa debe seguir el orden de entrada');
+// H2 (revisión 3): orden de entrada en la placa nota del asterisco (con la fila) → toma → límite de cara → brillo → CTA, y la pila vertical sigue el mismo orden
+const entra=sel=>{const e=p.eventos.find(e=>e.selector===sel&&e.entrada);if(!e)fail(`H2: falta la entrada de ${sel}`);return e.t};
+const orden=['#nota-ast','#toma','#limite-cara','#brillo','#cta'].map(entra);
+if(orden.some((t,i)=>i&&t<=orden[i-1]))fail(`H2: orden de entrada de la placa: nota del asterisco → toma → límite de cara → brillo → CTA (llegó ${orden.join(' → ')})`);
+const ys=['nota_refs','toma','limite','brillo','cta'].map(n=>p.layout[n]);
+if(ys.some((y,i)=>i&&y<=ys[i-1]))fail('H2: la pila vertical de la placa debe seguir el orden de entrada');
+// H2 (revisión 3): el 0,80* no queda sin su nota (la nota entra con la fila, ≤ 0,2 s tras el fin del empuje) ni el 0,80 de la pastilla sin su aviso (el aviso entra con el dato, ≤ 0,2 s tras el fin del empuje a Seedance)
+const tFila=p.costuras[1].t,tNota=entra('#nota-ast'),tM4=p.costuras[0].t,tAviso=entra('#aviso-refs');
+if(tNota<tFila-1e-6||tNota-tFila>0.2)fail(`H2 rev.3: la nota del asterisco entra a ${tNota} s y la fila a ${tFila.toFixed(3)} s (deben coincidir, hasta 0,2 s después)`);
+if(tAviso<tM4-1e-6||tAviso-tM4>0.2)fail(`H2 rev.3: el aviso de la pastilla entra a ${tAviso} s y el dato de Seedance a ${tM4} s (el 0,80 no puede quedar más de 0,2 s sin aviso)`);
+if(!/#cta\{[^}]*text-wrap:\s*balance/.test(read('scripts/estilos.css')))fail('H6 rev.3: #cta debe llevar text-wrap: balance (sin «prueba.» huérfana)');
 if(!p.scrim_m4||!Array.isArray(p.scrim_m4.caja)||!Array.isArray(p.scrim_m4.centro)||!Array.isArray(p.scrim_m4.radios))fail('H5: falta el scrim que tapa el letrero inventado de la torre (plan.scrim_m4)');
 if(!pieTxt.startsWith('Personaje hecho con IA'))fail('Pie debe abrir con Personaje hecho con IA');
 const pieFrases={
  kling:`la cara de ${k.nombre} queda bajo 200 px todo el clip; la de Seedance 2.0 Mini, solo al inicio (pasa de ${s.cara_px[0]} a ${s.cara_px[1]} px porque el encuadre se acerca)`,
- directas:`Seedance 2.0 Mini + referencias recibió como entrada ${rec} de las ${tot} fotos con que se mide el parecido (${lista(recList,true)}).`,
+ oficiales:`ArcFace contra las ${tot} fotos oficiales de Lucía, R1 a R${tot}, de 0 a 1`,
+ cuentas8:`Esos números (${f2(k.parecido[0])} a ${f2(k.parecido[1])} y ${f2(s.parecido[0])} a ${f2(s.parecido[1])}) se calcularon con las ${tot} fotos.`,
+ directas:`Seedance 2.0 Mini + referencias recibió como entrada ${rec} de las ${tot} fotos con que se compara el parecido (${lista(recList,true)}).`,
  k1:`Ambas tomas parten de la misma foto de arranque, que se hizo con ${fotosK1.length} de esas ${tot} (${lista(fotosK1)}), así que ninguna es independiente.`,
  estricta:`Midiendo solo con las ${fotosE.length} fotos que nadie recibió (${lista(fotosE)}), ${k.nombre} baja de ${f2(estK[0])} a ${f2(estK[1])} y Seedance sube de ${f2(estS[0])} a ${f2(estS[1])}: el sentido no cambia.`,
+ escala:`Con solo ${fotosE.length} fotos el parecido sale más bajo que con las ${tot} en los seis clips que medí (estos dos y otros cuatro); por eso el ${f2(k.parecido[1])} de «${f2(k.parecido[0])} a ${f2(k.parecido[1])}» (con las ${tot}) no es el ${f2(estK[0])} de «${f2(estK[0])} a ${f2(estK[1])}» (con las ${fotosE.length}).`,
  letrero:'Seedance 2.0 Mini inventó un letrero en la torre (de 7 a 11,5 s): no existe.'};
 if(!pieTxt.includes(pieFrases.kling))fail('Pie y límite de cara: Kling debe nombrarse bajo 200 px todo el clip (Seedance no puede ser el único con tamaño de cara)');
-if(!pieTxt.includes(pieFrases.directas))fail('Pie: falta decir que Seedance recibió como entrada 2 de las 8 fotos con que se mide (R1 y R3)');
+if(!pieTxt.includes(pieFrases.oficiales))fail('Pie: falta definir las 8 fotos oficiales de Lucía, R1 a R8 (H5 rev.3)');
+if(!pieTxt.includes(pieFrases.cuentas8))fail('Pie: falta aclarar que 0,79 a 0,72 y 0,71 a 0,80 se calcularon con las 8 fotos (H5 rev.3)');
+if(!pieTxt.includes(pieFrases.directas))fail('Pie: falta decir que Seedance recibió como entrada 2 de las 8 fotos con que se compara (R1 y R3)');
 if(!pieTxt.includes(pieFrases.k1))fail('Pie: falta el hecho de la foto de arranque (K1): ambas tomas parten de ella y se hizo con 4 de las 8 fotos');
 if(!pieTxt.includes(pieFrases.estricta))fail('Pie: falta la prueba estricta (solo las 4 fotos que nadie recibió) con sus cifras y «el sentido no cambia»');
+if(!pieTxt.includes(pieFrases.escala))fail('Pie: falta aclarar que el centroide de 4 fotos puntúa más bajo en los seis clips (el 0,72 de las 8 fotos no es el 0,72 de las 4; H5 rev.3)');
 if(!pieTxt.includes(pieFrases.letrero))fail('Pie: falta decir que el letrero de la torre es inventado');
+if(/con que se mide/.test(pieTxt))fail('H3 rev.3: «fotos con que se mide» ya no se usa en el pie: «fotos con que se compara»');
+if(pieTxt.length>2200)fail(`Pie de ${pieTxt.length} caracteres (tope 2.200)`);
 const dif=[k,s].map(c=>f2(Math.abs(c.parecido[1]-c.parecido[0])));
-const pie=`Personaje hecho con IA: Lucía Antelo, de @oniahq. Hice dos clips con la misma foto y la misma orden en Higgsfield y medí dos cosas en cada uno: cuánto cambia el brillo del cuadro (de 0 a 255) y cuánto se parece la cara a la de ella (ArcFace contra ocho fotos oficiales, de 0 a 1). ${k.nombre} (${f(k.creditos)} créditos): el brillo casi no cambia (${minus(k.delta)}) y la cara baja de ${f2(k.parecido[0])} a ${f2(k.parecido[1])}. Seedance 2.0 Mini con referencias (${f(s.creditos)} créditos): la cara sube de ${f2(s.parecido[0])} a ${f2(s.parecido[1])}, pero el brillo baja ${-s.delta} puntos y el encuadre cambia. ${pieFrases.directas} ${pieFrases.k1} ${pieFrases.estricta} ${pieFrases.letrero} Lo difuminé en el video. Una toma cada uno: es una prueba, no una regla. El brillo es el promedio del cuadro entero y mezcla luz con lo que entra al plano; el parecido es indicativo: bajo 200 px la cara es poco confiable. En el clip original (720p), ${pieFrases.kling}. El ruido es de ±0,03: las dos diferencias (${dif[0]} y ${dif[1]}) lo superan, pero son una toma cada una. Nombro lo que uso; no es una recomendación pagada. Cada semana hago una prueba. Seguime. #inteligenciaartificial #ia #santacruz #bolivia`;
+const pie=`Personaje hecho con IA: Lucía Antelo, de @oniahq. Hice dos clips con la misma foto y la misma orden en Higgsfield y medí dos cosas en cada uno: cuánto cambia el brillo del cuadro (de 0 a 255) y cuánto se parece la cara a la de ella (${pieFrases.oficiales}). ${k.nombre} (${f(k.creditos)} créditos): el brillo casi no cambia (${minus(k.delta)}) y la cara baja de ${f2(k.parecido[0])} a ${f2(k.parecido[1])}. Seedance 2.0 Mini con referencias (${f(s.creditos)} créditos): la cara sube de ${f2(s.parecido[0])} a ${f2(s.parecido[1])}, pero el brillo baja ${-s.delta} puntos y el encuadre cambia. ${pieFrases.cuentas8} ${pieFrases.directas} ${pieFrases.k1} ${pieFrases.estricta} ${pieFrases.escala} ${pieFrases.letrero} Lo difuminé en el video. Una toma cada uno: es una prueba, no una regla. El brillo es el promedio del cuadro entero y mezcla luz con lo que entra al plano; el parecido es indicativo: bajo 200 px la cara es poco confiable. En el clip original (720p), ${pieFrases.kling}. El ruido es de ±0,03: las dos diferencias con las ${tot} fotos (${dif[0]} y ${dif[1]}) lo superan, pero son una toma cada una. Nombro lo que uso; no es una recomendación pagada. Cada semana hago una prueba. Seguime. #inteligenciaartificial #ia #santacruz #bolivia`;
 same(pieTxt,pie,'pie y cifras contra fuentes');
 const all=Object.values(p.textos).join(' ')+' '+pie+' '+voz;
 if(/(?:las|todas las|ambas) caras.{0,65}(?:menos de|<|bajo)\s*200/i.test(all))fail('Prohibido afirmar que TODAS las caras son <200 px');
@@ -149,11 +172,14 @@ const mask=`radial-gradient(ellipse ${rx}px ${ry}px at ${cx-sx}px ${cy-sy}px,#00
 // Desenfoque (backdrop-filter) con máscara radial: el letrero queda como mancha borrosa y oscura, sin borde duro; viaja con #overlay-m4
 const scrim=`<div id="scrim-m4" style="left:${sx}px;top:${sy}px;width:${sw}px;height:${sh}px;-webkit-backdrop-filter:blur(${sc.desenfoque_px}px) brightness(${sc.brillo});backdrop-filter:blur(${sc.desenfoque_px}px) brightness(${sc.brillo});-webkit-mask-image:${mask};mask-image:${mask}"></div>`;
 // Nota del asterisco (H1 rev. 2): pie de la placa, con el asterisco naranja del 0,80; se escribe en su sitio de la pila, 38 px para que quepa en una línea
-const notaAst=`<div id="nota-ast" class="texto nota" style="top:${L.nota_refs}px;font-size:${L.nota_refs_px}px">${ast} ${e(p.textos.nota_refs.replace(/^\* /,''))}</div>`;
+const notaAst=`<div id="nota-ast" class="texto nota" style="top:${L.nota_refs}px;font-size:${L.nota_refs_px}px">${ast} ${e(p.textos.nota_refs.replace(/^\* /,'')).replace(/de las (\d+)/,'<span class="nb">de las $1</span>')}</div>`;
+// H6 (revisión 3): con text-wrap: balance el CTA solo se parte «Seguime: cada / semana, una prueba.»; «cada semana,» no se corta, así que el corte queda después de «semana,» (el texto no cambia)
+const cta=txt('cta',p.textos.cta,L.cta,66,'card titular').replace('cada semana,','<span class="nb">cada semana,</span>');
+if(!cta.includes('class="nb"'))fail('H6 rev.3: el CTA debe contener «cada semana,» para el corte balanceado');
 const html=`<!doctype html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=1080, height=1920"><title>Lucía P9</title><style>${read('scripts/estilos.css')}</style></head><body>
 <div id="root" data-composition-id="main" data-start="0" data-duration="20" data-width="1080" data-height="1920" data-fps="24">
 ${video(k,'m1.mp4')}${video(s,draft?'m4-proxy.mp4':'m4-full.mp4')}
-<div id="placa" class="clip escena" data-start="11.541666" data-duration="8.458334" data-track-index="2"><div id="comparacion">${rowHTML(k)}${rowHTML(s)}</div>${txt('toma',p.textos.toma,L.toma,44,'nota')}${txt('limite-cara',p.textos.limite_cara,L.limite,44,'nota')}${notaAst}${txt('brillo',p.textos.brillo,L.brillo,44,'nota')}${txt('cta',p.textos.cta,L.cta,66,'card titular')}</div>
+<div id="placa" class="clip escena" data-start="11.541666" data-duration="8.458334" data-track-index="2"><div id="comparacion">${rowHTML(k)}${rowHTML(s)}</div>${txt('toma',p.textos.toma,L.toma,44,'nota')}${txt('limite-cara',p.textos.limite_cara,L.limite,L.limite_px,'nota')}${notaAst}${txt('brillo',p.textos.brillo,L.brillo,44,'nota')}${cta}</div>
 <div id="overlay-m1" class="clip escena transparente" data-start="0" data-duration="6" data-track-index="3">${txt('rotulo',p.textos.rotulo,300,40)}${txt('titulo',p.textos.titulo,760,66,'card titular')}${txt('dato-m1',p.textos.m1,1030,42,'card dato')}</div>
 <div id="overlay-m4" class="clip escena transparente" data-start="5.75" data-duration="6.041667" data-track-index="4">${scrim}${txt('dato-m4',p.textos.m4,L.dato_m4,42,'card dato')}${txt('reencuadre',p.textos.reencuadre,L.reencuadre,42,'dato')}${txt('aviso-refs',p.textos.aviso_refs,L.aviso_refs,42,'card dato')}</div>
 </div><script src="assets-fijos/vendor/gsap.min.js"></script><script>window.PLAN=${JSON.stringify({...p,draft})};window.__timelines=window.__timelines||{};${read('scripts/timeline.js')}</script></body></html>\n`;

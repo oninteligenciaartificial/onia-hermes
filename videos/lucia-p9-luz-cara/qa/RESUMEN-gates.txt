@@ -1,9 +1,9 @@
-# Gates del MASTER P9 v3 (revisión 2 aplicada), corridos por la sesion Lucia (editor), 11-oct-2026, contenedor Linux (Node 22.22, Chromium /opt/pw-browsers/chromium, ffmpeg del sistema, hyperframes@0.8.142 por npx --prefer-offline -y: ya estaba en la cache, no se descargo nada), 0 creditos, sin voz, sin publicar.
-# Orden de corrida. Exit code a la izquierda. index.html md5 fbd743d2380c2c4381c93b7d655611dc en todos los gates posteriores al ultimo build.
-# El v3 se renderizó una sola vez (1 min 31,5 s de pared); el preview 360p real se miró antes. SHA v2: 4e0593bacc572c7afd94f44e604c767a5f364ab7c1caf51aea6d76748ca46429; SHA v1: 969ac27d219bec9ea9ba013aee0c55c8d055c2dff463ddc940abf14a4075282e.
+# Gates del MASTER P9 v3.1 (revision 3 aplicada, 11-oct-2026), corridos por la sesion Lucia (editor), contenedor Linux (Node 22.22, Chromium /opt/pw-browsers/chromium, ffmpeg del sistema, hyperframes@0.8.142 por npx --prefer-offline -y: ya estaba en la cache, no se descargo nada), 0 creditos, sin voz, sin publicar, sin Git.
+# Orden de corrida. Exit code a la izquierda. index.html md5 e4120deb41c47626da17379fb85c22af en todos los gates posteriores al ultimo build.
+# El v3.1 se renderizo una sola vez (1 min 15,1 s de pared); el preview 360p real se miro antes (4 hojas de 10 cuadros a 2 fps). SHA v3: 48e2912bff8648f31a005e5ba4c7ea3c3dc15876f32f5daf25433c844023586b; v2: 4e0593bacc572c7afd94f44e604c767a5f364ab7c1caf51aea6d76748ca46429; v1: 969ac27d219bec9ea9ba013aee0c55c8d055c2dff463ddc940abf14a4075282e.
 0  node scripts/build.mjs (SIN --borrador)
 0  node scripts/build.mjs (2.ª vez)
-0  idempotencia: mismo md5 fbd743d2380c2c4381c93b7d655611dc
+0  idempotencia: mismo md5 e4120deb41c47626da17379fb85c22af
 0  node scripts/master-ready.mjs
 0  node scripts/voz.mjs
 0  node scripts/retemporizar.mjs
@@ -14,33 +14,33 @@
 0  node scripts/costuras.mjs --estatico
 0  node scripts/ventanas.mjs (DOM real)
 0  node scripts/hueco-tarjetas.mjs (DOM real)
-0  node scripts/eventos.mjs (DOM real)
+0  node scripts/eventos.mjs (DOM real: 20 eventos, hueco maximo 1,700 s)
 0  node scripts/aire.mjs (DOM real)
 0  node scripts/costuras.mjs (DOM real)
-0  node scripts/medir-dom.mjs (DOM real)
-0  node scripts/layout-dom.mjs (DOM real; nuevo en la v3)
+0  node scripts/medir-dom.mjs (DOM real: 1921 cajas, 0 fallos)
+0  node scripts/layout-dom.mjs (DOM real; mide lineas por palabra; sin lineas huerfanas; borde inferior 1455,8)
 0  node scripts/grep-prohibidas.mjs
-0  node scripts/validar-mutaciones.mjs (41 alteraciones rechazadas)
+0  node scripts/validar-mutaciones.mjs (56 alteraciones rechazadas)
 0  node scripts/verificar-auditor.mjs
 0  node /home/user/onia-hermes/scripts/lucia-prohibidas.mjs pie.txt guion-voz.txt (0 coincidencias)
 0  node /home/user/onia-hermes/scripts/lucia-prohibidas.mjs <textos de pantalla de plan.json> (0 coincidencias)
 0  npx --prefer-offline -y hyperframes@0.8.142 check
 0  hyperframes check: 0 errores, 3 avisos nested_structure_needs_subcomposition (no frenan, como G5), layout 0 problemas en 9 muestras, runtime 0/0, motion 0/0, contraste 44/44 AA (qa/hyperframes-check.txt)
-0  node scripts/borrador-360.mjs + hyperframes render --quality draft -f 24 -> qa/p9-preview-360p.mp4 (360x640, 24 fps, 480 cuadros, 20,000 s; 85 s de pared)  [preview MIRADO antes del master: hoja a 2 fps completa]
-0  hyperframes render --quality high -f 24 -o renders/final-raw.mp4  (1 min 31,5 s; captura por pantallazo, Chromium completo, sin GPU)
+0  node scripts/borrador-360.mjs + hyperframes render --quality draft -f 24 -> qa/p9-preview-360p.mp4 (360x640, 24 fps, 480 cuadros, 20,000 s; 39 s de pared)  [preview MIRADO antes del master: 4 hojas de 10 cuadros a 2 fps]
+0  hyperframes render --quality high -f 24 -o renders/final-raw.mp4  (1 min 15,1 s; captura por pantallazo, Chromium completo, sin GPU)
 0  ffmpeg mux AAC silencioso
-0  sha256sum -c qa/sha-master.txt  48e2912bff8648f31a005e5ba4c7ea3c3dc15876f32f5daf25433c844023586b
+0  sha256sum -c qa/sha-master.txt  49b40ea55dc67f784ae479964d50c8cc3119cff0be557c32b0ee37f0b92a9e04
 0  ffprobe specs-final.json
 0  volumedetect
 0  pixeles.mjs psnr-clips
 0  pixeles.mjs vacios
 0  pixeles.mjs aire
-0  contacto-2fps.jpg (40 cuadros, mirada completa)
-0  zona segura en pixeles (placa 300-1453)
-0  face-gate.sh ArcFace master vs fuente (8 pares, 24 cuadros): max escalada 0.014, nativa 0.017
-0  node --check de los 20 scripts (qa/sintaxis.txt) y UTF-8 de los 71 textos (qa/utf8.txt)
-# volumedetect: mean -91,0 dB, max -91,0 dB (silencio); ffprobe: H.264 High yuv420p 1080x1920 24 fps 480 cuadros 20,000 s; AAC LC 48 kHz estereo 20,000 s; 21.090.489 bytes
-# pixeles.mjs psnr-clips: minimo 37,05 dB (m1 38,82/38,90/38,88; m4 38,32/37,53/37,05; umbral 35); vacios: 480 cuadros, 0 planos; aire (pixeles): quietud fuera de lectura 0,125 s (tope 0,3)
-# ArcFace master vs fuente escalada: diferencia maxima 0,014 (<= 0,02); vs fuente nativa 720p: 0,017 (qa/arcface-final.txt)
-# zona segura (pixeles del master): placa y 300-1453 (regla 292-1490), x 80-999; las pastillas sobre video, 300-1440 en el DOM (qa/layout-dom.txt; medir-dom: 1865 cajas, 0 fallos)
-# SHA-256 del master: 48e2912bff8648f31a005e5ba4c7ea3c3dc15876f32f5daf25433c844023586b
+0  contacto-2fps.jpg (40 cuadros; 4 hojas de 10 miradas completas) + cuadros a resolucion completa 0, 144, 146, 150, 200, 288, 327, 360, 408, 418-421, 440, 479 mirados
+0  zona segura en pixeles (placa 300-1455, x 80-999; 50 cuadros)
+0  face-gate.sh ArcFace master vs fuente (8 pares, 24 cuadros): max escalada 0.015, nativa 0.017
+0  node --check de los 20 scripts (qa/sintaxis.txt) y UTF-8 de los 70 textos (qa/utf8.txt)
+# volumedetect: mean -91,0 dB, max -91,0 dB (silencio); ffprobe: H.264 High yuv420p 1080x1920 24 fps 480 cuadros 20,000 s; AAC LC 48 kHz estereo 20,000 s; 21.165.521 bytes
+# pixeles.mjs psnr-clips: minimo 37,08 dB (m1 38,82/38,90/38,88; m4 38,37/37,53/37,08; umbral 35); vacios: 480 cuadros, 0 planos; aire (pixeles): quietud fuera de lectura 0,125 s (tope 0,3)
+# ArcFace master vs fuente escalada: diferencia maxima 0,015 (<= 0,02); vs fuente nativa 720p: 0,017 (qa/arcface-final.txt)
+# zona segura (pixeles del master): placa y 300-1455 (regla 292-1490), x 80-999; las pastillas sobre video, 300-1440 en el DOM (qa/layout-dom.txt; medir-dom: 1921 cajas, 0 fallos)
+# SHA-256 del master: 49b40ea55dc67f784ae479964d50c8cc3119cff0be557c32b0ee37f0b92a9e04

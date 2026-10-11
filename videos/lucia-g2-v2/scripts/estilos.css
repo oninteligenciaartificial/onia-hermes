@@ -93,9 +93,7 @@ body{font-family:"DM Sans",sans-serif;-webkit-font-smoothing:antialiased;text-re
 /* revisión 1 (H2): la pastilla del RESULTADO del gancho es más grande que las pastillas de dato (es el número que tiene que verse antes de los 3 s) */
 .tag-g{font-size:46px;padding:16px 34px;gap:18px}
 
-/* hallazgo 11-oct y revisión 2: etiqueta «recibió 4 de las 8 fotos con que se mide» (lección, clip de Kling O3) y su versión corta junto al 0,82 del gancho. 36 px (v2.2: 34): a 390 px de ancho
+/* hallazgo 11-oct y revisión 2: etiqueta «recibió 4 de las 8 fotos con que se compara» (lección, clip de Kling O3; v2.4: «se compara», v2.3 «se mide») y su versión corta del gancho («Clip 0,82: recibió 4 fotos de comparación», centrada bajo las miniaturas). 36 px (v2.2: 34): a 390 px de ancho
    quedan ≈ 13 px; más grande no entra en la fila de la lección (x = 272 hasta 1000). Fondo opaco: la marca de «mi piso» (línea verde de la placa) pasa DETRÁS de la etiqueta y no se ve a través del texto. */
 .tag-f{font-size:36px;padding:5px 22px;gap:12px;background:#0C0F15}
 .tag-f b{font-weight:500}
-/* gancho: pila «pastilla del resultado + aviso»: el aviso queda debajo, alineado al borde derecho de la pastilla (donde está el 0,82); la pila se centra igual que la pastilla sola */
-.pila-g{display:inline-flex;flex-direction:column;align-items:flex-end;gap:10px}

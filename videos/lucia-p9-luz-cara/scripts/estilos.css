@@ -19,9 +19,12 @@
 #scrim-m4{position:absolute;pointer-events:none}
 /* H6 (revisión 3): el CTA se parte parejo («Seguime: cada semana, / una prueba.»), sin «prueba.» huérfana en la segunda línea */
 #cta{border-color:#ffbc94;text-wrap:balance}
+.nb{white-space:nowrap}
 /* H1 (revisión 2): la fila de Seedance marca su 0,80 con un asterisco naranja y su nota (pie de la placa) descansa en el mismo naranja */
 /* La pastilla del aviso (11 palabras, 2 líneas) no deja «compara.» huérfana en la segunda línea */
 #aviso-refs{text-wrap:balance}
+/* H1 (revisión 3): el límite de cara (15 palabras, 42 px) y la nota del asterisco (11 palabras, 44 px) ocupan 2 líneas parejas, sin línea huérfana */
+#limite-cara,#nota-ast{text-wrap:balance}
 .ast{color:#ffbc94;font-weight:500}.fila .ast{margin-left:2px}#nota-ast{border-left-color:#ffbc94}
 
 /* Estado inicial: la opacidad oculta de la pastilla del dato, del aviso, de las cuatro notas de la placa y del CTA vive en CSS (cuadro 0 sin la pastilla un cuadro antes de su entrada a 1,5 s). El desplazamiento de #m4/#overlay-m4/#placa NO va en CSS (lint gsap_css_transform_conflict): lo fija timeline.js con fromTo al inicio. */

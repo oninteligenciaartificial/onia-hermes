@@ -118,11 +118,12 @@
     "reencuadre": 1230,
     "aviso_refs": 1324,
     "nota_refs": 807,
-    "nota_refs_px": 38,
-    "toma": 897,
-    "limite": 993,
-    "brillo": 1138,
-    "cta": 1234
+    "nota_refs_px": 44,
+    "limite_px": 42,
+    "toma": 952,
+    "limite": 1048,
+    "brillo": 1188,
+    "cta": 1284
   },
   "eventos": [
     { "t": 0, "selector": "#titulo", "que": "gancho" },
@@ -139,6 +140,8 @@
     { "t": 11.791666666666666, "selector": "#fila-m4", "que": "acento fila Seedance (marca del asterisco)" },
     { "t": 11.96, "selector": "#toma", "que": "entra una toma, prueba no regla", "entrada": true, "voz": 5 },
     { "t": 12.5, "selector": "#limite-cara", "que": "entra límite de cara (clip original)", "entrada": true },
+    { "t": 13.6, "selector": "#nota-ast", "que": "acento nota del asterisco (vuelve a señalar el 0,80*)" },
+    { "t": 13.6, "selector": "#fila-m4", "que": "acento fila Seedance (marca del asterisco)" },
     { "t": 14.65, "selector": "#brillo", "que": "entra límite del brillo", "entrada": true, "voz": 6 },
     { "t": 16, "selector": "#toma", "que": "acento prueba no regla" },
     { "t": 17.4, "selector": "#cta", "que": "CTA", "entrada": true, "fade": 0.08, "voz": 7 },

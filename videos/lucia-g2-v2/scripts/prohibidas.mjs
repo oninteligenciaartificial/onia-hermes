@@ -38,7 +38,8 @@ export const buscarProhibidasPie = (txt) => {
 // v2.3 (revisión 2, H1): la v2.2 estimaba un «exceso atribuible» de la fuga restando unos controles que descienden de las MISMAS fotos (K1 se hizo con R1, R3, R6 y R7), así que esa
 // estimación no se sostiene y se RETIRÓ. Ni la pantalla, ni la voz, ni el pie vuelven a hablar de «exceso», de «atribuible» ni de «dentro del ruido» (la medición estricta con las 4 fotos
 // que nadie recibió no resta nada: solo dice cuánto baja cada clip y si el orden cambia).
-export const RETIRADAS = ['dentro del ruido', 'exceso', 'atribuible', 'descontad'];
+// v2.4 (revisión 3): «fotos con que se mide» pasó a «fotos con que se compara» (más concreto); ningún «con que se mide» suelto en pantalla, voz ni pie.
+export const RETIRADAS = ['dentro del ruido', 'exceso', 'atribuible', 'descontad', 'con que se mide'];
 export const buscarRetiradas = (txt) => {
   const low = String(txt).toLowerCase();
   return RETIRADAS.filter((f) => low.includes(f));

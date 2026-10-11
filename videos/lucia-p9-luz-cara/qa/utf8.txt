@@ -1,1 +1,1 @@
-txt utf8 ok 71 nul []
+txt utf8 ok 70 nul []

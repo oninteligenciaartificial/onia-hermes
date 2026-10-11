@@ -13,8 +13,8 @@ medir-dom.mjs: EXIT 0
 pixeles.mjs: EXIT 0
 qa-dom.mjs: EXIT 0
 retemporizar.mjs: EXIT 0
+timeline.js: EXIT 0
 validar-mutaciones.mjs: EXIT 0
 ventanas.mjs: EXIT 0
 verificar-auditor.mjs: EXIT 0
 voz.mjs: EXIT 0
-timeline.js: EXIT 0
