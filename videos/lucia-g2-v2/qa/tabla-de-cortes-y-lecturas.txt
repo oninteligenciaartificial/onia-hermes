@@ -17,11 +17,11 @@ Duración: 27.792 s (667 cuadros)
 Medios:
     0.000 –   3.750 foto      foto  foto K1 a pantalla completa con empuje lento 1,00 → 1,05 hacia la cara (nunca queda un cuadro idéntico); sale en el empuje de T3 junto con las miniaturas
     3.500 –   8.458 pl-regla  placa placa de la regla: 5 de las 8 fotos suyas, escala 0-1 y la marca en 0,70
-    8.208 –  11.000 m1        clip  Kling 3.0 std (clip 1), cuadros 0-64 (2,7 s a 1×); el cuadro 0 es la foto K1
-   10.750 –  14.042 m3        clip  Seedance 2.0 Mini (clip 3), cuadros 0-71 (3,0 s a 1×)
-   13.792 –  18.250 m5        clip  Kling O3 (clip 5), cuadros 0-97 (4,1 s a 1×); v2.3: con el aviso «recibió 4 de las 8 fotos con que se mide» encima del «5,9 s: 0,82» (viaja con el clip)
+    8.208 –  11.000 m1        clip  Kling 3.0 std (clip 1): del cuadro 0 al 66 del clip, a 1×; 66 cuadros visibles = 2,75 s (el cuadro 0 cae fuera del lienzo, al arrancar el empuje de entrada: qa/cuadros-visibles.txt); el cuadro 0 es la foto K1
+   10.750 –  14.042 m3        clip  Seedance 2.0 Mini (clip 3): del cuadro 0 al 78 del clip, a 1×; 78 cuadros visibles = 3,25 s (qa/cuadros-visibles.txt)
+   13.792 –  18.250 m5        clip  Kling O3 (clip 5): del cuadro 0 al 106 del clip, a 1×; 106 cuadros visibles = 4,42 s (qa/cuadros-visibles.txt); con el aviso «recibió 4 de las 8 fotos con que se compara» encima del «5,9 s: 0,82» (viaja con el clip)
    18.000 –  25.000 pl-l      placa lección: los finales de Kling 3.0 std, Seedance 2.0 Mini y Kling O3 sobre la escala
-   24.750 –  27.792 k1        clip  cierre: el clip K1 (el de Kling 3.0 std) del cuadro 54 (2,25 s) al 126 (5,25 s), con Lucía mirando a cámara; parecido medido cada 6 cuadros: 0,71-0,76, ninguno bajo 0,70
+   24.750 –  27.792 k1        clip  cierre: el clip K1 (el de Kling 3.0 std) del cuadro 54 (2,25 s) al 126 (5,25 s), con Lucía mirando a cámara; 4 cuadros medidos (qa/face-gate.txt: n606, n630, n660 y n665): final 0,693 a 0,749, fuente 0,708 a 0,751; el más bajo, 0,693, queda bajo 0,70
 Costuras (empuje rígido de 6 cuadros, caen en el hueco de la voz):
     3.500 →   3.750  sale foto,thumbs → entra pl-regla
     8.208 →   8.458  sale pl-regla → entra m1
@@ -44,7 +44,7 @@ Tarjetas:
    25.000 –  27.792 c12 5 pal (mín 2.05 s, dura 2.79) «Seguime: cada semana, una prueba.» [entra con el empuje]
 Lecturas de rótulo, datos, sellos y placas (≥ 0,35 s/palabra + 0,3, ya descontada la entrada):
   rotulo   rótulo de IA                          6 pal  0.00–3.00  2.82 s (pide 2.40)  
-  pastilla gancho: resultado de los seis         5 pal  0.85–3.50  2.47 s (pide 2.05)  
+  pastilla gancho: resultado de los seis         5 pal  0.50–3.50  2.82 s (pide 2.05)  
   dA-m1    Kling 3.0 std dato A                  4 pal  8.56–10.75  2.01 s (pide 1.70)  
   dB-m1    Kling 3.0 std dato B                  3 pal  9.11–10.75  1.46 s (pide 1.35)  ← justo
   dA-m3    Seedance 2.0 Mini dato A              4 pal  11.10–13.79  2.51 s (pide 1.70)  
@@ -56,9 +56,9 @@ Lecturas de rótulo, datos, sellos y placas (≥ 0,35 s/palabra + 0,3, ya descon
   l-tit    lección: título                       8 pal  18.40–24.75  6.17 s (pide 3.10)  
   l-mkl    lección: «mi piso»                    3 pal  18.35–24.75  6.22 s (pide 1.35)  
   l-nota   lección: nota del final               8 pal  20.05–24.75  4.52 s (pide 3.10)  
-  l-fuga   lección: fotos recibidas (Kling O3)  10 pal  19.65–24.75  4.92 s (pide 3.80)  
-  fg-gancho gancho: aviso junto al 0,82           6 pal  0.85–3.50  2.47 s (pide 2.40)  ← justo
-  fg-m5    Kling O3: aviso sobre el clip        10 pal  13.86–18.00  3.96 s (pide 3.80)  ← justo
+  l-fuga   lección: fotos recibidas (Kling O3)   9 pal  19.65–24.75  4.92 s (pide 3.45)  
+  fg-gancho gancho: aviso del clip del 0,82       7 pal  0.50–3.50  2.82 s (pide 2.75)  ← justo
+  fg-m5    Kling O3: aviso sobre el clip         9 pal  13.86–18.00  3.96 s (pide 3.45)  
   l-t1     lección: nombre Kling 3.0 std         3 pal  18.60–24.75  5.97 s (pide 1.35)  
   l-l1     lección: rótulo Kling 3.0 std         2 pal  18.92–21.61  2.51 s (pide 1.00)  
   l-m1     lección: rótulo Kling 3.0 std (cambia)  3 pal  21.63–24.75  2.94 s (pide 1.35)  
@@ -68,13 +68,14 @@ Lecturas de rótulo, datos, sellos y placas (≥ 0,35 s/palabra + 0,3, ya descon
   l-t3     lección: nombre Kling O3              2 pal  19.20–24.75  5.37 s (pide 1.00)  
   l-l3     lección: rótulo Kling O3              1 pal  19.52–20.91  1.21 s (pide 0.65)  
   l-m3     lección: rótulo Kling O3 (cambia)     3 pal  20.93–24.75  3.64 s (pide 1.35)  
+Cuadros visibles de cada clip (alguna parte del clip a la vista; cuenta (b − a) × 24 − 1): m1 66 = 2.75 s · m3 78 = 3.25 s · m5 106 = 4.42 s (el pie dice «2,8 a 4,4 s»)
 Datos (de PROCEDENCIA.jsonl):
   Kling 3.0 std: 7.5 cr · 0 s 0,79 → 5,9 s 0,72  (muestras 0.791 0.793 0.762 0.734 0.761 0.708 0.721)
   Seedance 2.0 Mini: 6 cr · 0 s 0,69 → 5,9 s 0,64  (muestras 0.691 0.657 0.677 0.634 0.615 0.634 0.644)
   Kling O3: 6 cr · 0 s 0,80 → 5,9 s 0,82  (muestras 0.798 0.783 0.785 0.814 0.815 0.81 0.824)
 Fotos recibidas como entrada (plan.fuga_refs ← medición del 11-oct; cada cifra validada contra la fuente):
   Seedance 2.0 Mini + referencias: 3 imágenes de entrada (más la foto de arranque), 2 entre las 8 (R1 y R3) · no sale en pantalla: solo el pie
-  Kling O3: 5 imágenes de entrada (sin foto de arranque), 4 entre las 8 (R1, R3, R6 y R7) · cara 89-168 px · SALE en pantalla: aviso en el gancho «0,82 recibió 4 de 8 fotos», sobre su clip y en la lección «recibió 4 de las 8 fotos con que se mide»
+  Kling O3: 5 imágenes de entrada (sin foto de arranque), 4 entre las 8 (R1, R3, R6 y R7) · cara 89-168 px · SALE en pantalla: aviso en el gancho «Clip 0,82: recibió 4 fotos de comparación», sobre su clip y en la lección «recibió 4 de 8 fotos con que se compara»
   K1 (4afffb96, la foto de arranque de cinco clips) se hizo con R1, R3, R6 y R7: ningún clip es independiente de esas 4 fotos
   prueba estricta (solo R2, R4, R5 y R8): los seis clips bajan entre 0,03 y 0,09; el orden por valor final NO cambia; sobre el piso 0,70: 5 de 6 con las 8 fotos y 3 de 6 con las 4
 ok: index.html (31 KB), plan.resuelto.json
