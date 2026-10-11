@@ -37,12 +37,12 @@ Estados: **lista** = renderizada y mirada · **falta editar** = el bruto está e
 | Guion | Qué hay que tener listo | Si no está |
 |---|---|---|
 | SI-01 | Una rutina creada el día anterior y lo que dejó | Se corta «Yo armé una ayer…» |
-| SI-02 | OpenClaw en una compu aparte y el OK de Sergio Urcullo para instalarlo | Se corta «La prueba: pedile que abra un archivo…» |
+| SI-02 | OpenClaw en una compu aparte y el OK de Sergio Urcullo para instalarlo | Se cortan las tres líneas desde «La prueba: pedile que abra un archivo…» |
 | SI-03 | Ponytail instalado y el mismo pedido con y sin él, con el conteo de líneas | Se graba sin la prueba y se dice «lo probé así» solo si se probó |
-| SI-05 | [X] del panel de gasto (LiteLLM) y los «nueve días» recontados en el log | **No se graba** |
+| SI-05 | [X] del panel de gasto (LiteLLM) | **No se graba** |
 | SI-06 | [A] y [B] de la misma respuesta con y sin caveman | Gancho de reserva y se corta «Mi prueba…» |
 | SI-07 | [T] de una corrida real de barra goal | Se corta «Yo se la di…» |
 | SI-08 | El clip de 3 s hecho con HyperFrames, antes de grabar | No se graba |
 | SI-09 | Confirmar que /deep-research aparece en tu versión | — |
 | SI-10 | [N] de una corrida real que revisa guiones | Se corta «Yo lo uso para revisar…» |
-| SI-11 | Que claude-mem conteste en una charla nueva | Se corta la prueba |
+| SI-11 | Que claude-mem conteste en una charla nueva y archify corrido con un código tuyo | Se corta la prueba de claude-mem |

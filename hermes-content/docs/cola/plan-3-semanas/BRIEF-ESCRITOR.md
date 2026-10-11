@@ -44,3 +44,16 @@ APRENDER A CONSTRUIR o APRENDER A VENDER con IA. Voseo natural ("mirá", "probá
 - Secretos: IPs, tokens, IDs de cuenta, correos, nombres de clientes o prospectos.
 - Copiar frases o historias personales de los referentes.
 - Repetir el mismo ejemplo en dos piezas de la misma semana.
+
+## Trampas ya pagadas (revisión de SI-01..SI-11, 11-oct-2026)
+
+Un crítico y un verificador independientes leyeron los once guiones y devolvieron 6 rojos de promesa y 20 de claridad. Se repiten, así que se chequean antes de pasar un guion:
+
+- **Voseo también en negativo:** «no comprés», «no pongás», «no pegués», «le digás». «No compres» es de tú.
+- **La cifra que se dice es la de «Datos y fuentes», no un redondeo:** «la mitad de código» para −53 % fue rojo; se dice «cincuenta y tres por ciento».
+- **Todo término se define en voz, no solo en un chip de pantalla:** «repo», «agentes», «modelo», «placas», «avatares» sonaban a jerga. Se cambian por la cosa («otra IA, más chica», «carteles animados»).
+- **Un pronombre suelto no se entiende solo al oído:** «salvo que lo encerrés» → «salvo que las metás en una caja cerrada».
+- **Si el gancho promete algo, el cuerpo lo muestra:** «órdenes escondidas» sin una orden de ejemplo es promesa sin entrega.
+- **Una idea por video:** SI-05 tenía cuatro (qué es, costo, caída de nueve días, dónde instalar); se sacó la caída.
+- **Un nombre propio solo si está en la fuente leída:** «Jarred Sumner» no estaba en «Datos y fuentes»; se sacó.
+- **El teleprompter se deriva de GRABAR-NUEVOS: se edita en los dos** y se comprueba que el texto dicho sea idéntico. Una analogía que se cierra con otra distinta al gancho («yo escribo, él anima» tras «lo escribió Claude») contradice el gancho.
