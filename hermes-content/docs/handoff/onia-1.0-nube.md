@@ -78,7 +78,21 @@ la dirección de Sergio Urcullo.
 | Qué | Dónde | Cómo se retoma |
 |---|---|---|
 | **Las 5 pantallas** (bandeja v3, app sin internet, agenda del día, odontograma, caja) | **Mergeado** `282ae3ab` (11-oct 05:46 UTC) junto con #146 `a7d8c1ed`; el árbol de master es idéntico al probado con 10.505 en verde. #118, #119, #110, #127, #129 y #130 quedaron mergeados solos; #135 cerrado como incluido | Sale a las 06:50 UTC: mirar sin login (release, `/offline.html`, `sw.js`, `manifest.json`, el webhook que pasa de 404 a 401, logs) y con login la madre. **Entró con 2 HIGH** de la revisión E3 de Hermes (caja: «1.500» = Bs 1,50, sin confirmar ni reabrir; borrar un paciente borra sus caras): el arreglo es F136 (Codex Astra, de la madre), PR después de las 07:10, mergear antes de las 09:20. La línea de Sergio Urcullo se leyó en el transcript (04:41:42 UTC, después hubo dos clear) |
-| **Cadena del 11-oct (7 PRs)** | onia-platform: #147 F136 `4bd9da9c` → #153 U3 `d60b0b09` → #148 U4 `a024292d` → #149 U5 `5475d1e7` → **#152 C1-C6 (mío)** `claude/optimistic-ride-1sp5fe` `d8c486f5` → #151 P-02 `05dd4ecc`. #150 P-01 `52d77b0d` frenado por un HIGH de Hermes (P-01b). Probada junta en `/home/user/wt-cadena`: tsc 0, 10.647/0; el árbol que tiene que dar #152 después de juntar master es `16bddf7f^{tree}` | Hermes: #147 OK sin HIGH (E4), #151 OK con LOW (E9). Cada uno se mergea con su CI verde y en ese orden; lo de antes de las 09:20 UTC sale a las 09:50 y lo demás a las 12:50. **#152:** después de U3, U4 y U5, juntar `origin/master` en `/home/user/wt-mezcla` (rama local `usted-vsl-final`), resolver `__tests__/voseo-ratchet.linea-base.json` con `scratchpad/linea-base-cadena.json` (total 414), comparar el árbol con `16bddf7f^{tree}`, empujar a `claude/optimistic-ride-1sp5fe` y esperar su CI. El runner toma los jobs sin orden y cancelar da 403 |
+| **Cadena del 11-oct (estado a las 11:20 UTC)** | onia-platform, ya mergeados:
+  - #147 F136 (08:17, `fd72cd55`, en producción desde 09:54);
+  - #155 F136b (10:41:55, `a91708ca`);
+  - **#152 usted-todo (11:03:07, `7de363cb`)**, que cerró #153, #148 y #149;
+  - #151 P-02 (11:05:44, `1db726a7`).
+  Salen con el publicador de las 12:50.
+  Abiertos:
+  - **#156 M1** (`826a16a3`, rebaseado por la madre), con Hermes E19 OK;
+  - **#157** (mío, `a226183e`, restos de la revisión de #152), cuyo CI canceló la madre para que #156 llegue a las 12:20;
+  - #150 P-01 + P-01b, con Hermes E9b OK, a la espera de CI;
+  - #154 S2, con el HIGH condicional de Hermes E14 | Pendientes:
+  - #156 se mergea con CI verde **antes de las 12:20** (chequeo `trig_01FiqHpCupux5P4EdbMc4JtY` a las 12:07); si no llega, después de las 13:10.
+  - #157 y #150: relanzar el CI después de las 13:10. Cancelar o relanzar da 403 desde la nube: lo hace la madre.
+  - #154: falta la re-revisión de Hermes con la medición de Traefik y mirar Pseudo-IPv4 en Cloudflare (Sergio Urcullo). Después se corre `scratchpad/s2-cubos.sh`.
+  - La madre sube S3, U7 y V1 a las 13:12 y lanza M1b (`codex-tareas/plataforma-M1b-…`) cuando entre #156. |
 | Arreglo de versión de #124 | `plataforma-listas-20261010.bundle`, rama `t124-version` | Lo sube la madre cuando ella o Sergio Urcullo digan |
 | Chat de la web con el nombre de la clínica (W1f) | `i140-w1f` (`34f86438`) en el mismo bundle; #140 | Espera el OK de diseño de W1f. Después: la infra (origen solo para Cloudflare, `/public/api/` bloqueado en Chatwoot, `hmac_mandatory`) |
 | Términos 1.4 + gracia | #113 + lámina | Con el sí de los dos: `terminos.md` del sitio a 1.4, `VERSION_TERMINOS` el mismo día, aviso dentro del sistema y recién ahí #113. **No commitear el 1.4 antes** |
@@ -132,12 +146,18 @@ la dirección de Sergio Urcullo.
 ## 8. Próximos pasos (en orden)
 
 0. **#136 y #146:** hechos, en producción desde las 06:57 UTC (`release-a7d8c1ed`), mirados sin login.
-0a. **La cadena del 11-oct** (§4): #147 **mergeado a las 08:17 UTC** (`fd72cd55`, sale a las 09:50; mirarlo cerca de las 10:00). Después #153 → #148 → #149 →
-    #152 (mío; la línea base del trinquete = base + deltas) → #151. #150 espera P-01b.
-0c. **Contratos nuevos, `pendiente`, los lanza la madre:** F136b (caja de otro día, motivo al reabrir, borrar cobro de
-    día cerrado), P-01b (la prueba anon de B22 sin verde falso) y S2 (IP solo desde Cloudflare). F136c y M1 (una sola
-    lectura de montos) se escriben cuando entre F136b.
-1a. **Después de publicar la cadena:** mirar sin login `/login`, `/register` y `/onboarding` (U4, U5). Con login, la madre: `/agents`, el Inicio y C1-C6. **U6** (correos y avisos del plan) espera a #113.
+0a. **La cadena del 11-oct** (§4): #147, #155, #152 (con U3, U4 y U5) y #151 están mergeados y salen a las 12:50. Falta #156 antes
+    de las 12:20, y después de las 13:10 #157 y #150. **Mezclar varios PRs:** primero se prueba la mezcla con `git merge-tree` y la suite
+    completa, que en la nube tarda ~150 s. Solo se rebasea si da conflicto o rojo (skill `equipo-de-agentes` §8).
+0c. **Contratos Codex:**
+    - F136b, P-01b, M1, S3 y U7: hechos o en curso.
+    - **M1b** (`codex-tareas/plataforma-M1b-cantidades-sin-doble-lectura.md`, Astra, `pendiente`): la madre lo lanza cuando entre #156.
+    - F136c (fondo inicial, quitar egreso y el 404 de `INVOICE_NOT_FOUND`): sin escribir todavía.
+1a. **Después de la publicación de las 12:50** (mirar desde ~13:05):
+    - con la cuenta QA `+qak3dental` (onboarding completo), correr `scratchpad/mirar-usted/mirar-usted.js` en el VPS: Inicio, agenda,
+      Pendientes, /agents, pacientes, cobros y login, a 1440 y 390, buscando «TU CLÍNICA» y formas de vos; después, leer las fotos;
+    - mirar la caja de otro día (#155) y, si #156 entró, un formulario de comercio con «1.500».
+    - **U6** (correos y avisos del plan) espera a #113.
 2. **Demo del lunes** (pedido de la madre v4): el plan está en `docs/cola/demo-venta-refresco.md` (11-oct): `reset=2`
    entre 04 y 11 UTC de lun a jue, tarjetas a las 11:00 UTC, capturas de la madre a 390 y 1440. Correrlo pide el sí de
    Sergio Urcullo en esta sesión.
