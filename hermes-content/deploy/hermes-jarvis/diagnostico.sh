@@ -644,7 +644,7 @@ else
   else qa_emitir "release visto: nunca"; fi
   if [ -f "$ESTADO_QA/roto" ]; then
     IFS=' ' read -r roto_sha roto_epoch roto_motivos < "$ESTADO_QA/roto"
-    if [[ "$roto_epoch" =~ ^[0-9]+$ ]]; then roto_desde=$(qa_hora "$roto_epoch"); qa_emitir "veredicto: ROTO desde $roto_desde — $(printf '%s' "$roto_motivos" | cut -c 1-160 | redactar)"; else qa_emitir "veredicto: ROTO desde ? — $(printf '%s' "$roto_motivos" | cut -c 1-160 | redactar)"; fi
+    if [[ "$roto_epoch" =~ ^[0-9]+$ ]]; then roto_desde=$(qa_hora "$roto_epoch"); qa_emitir "veredicto: ROTO desde $roto_desde — $(printf '%s' "$roto_motivos" | redactar | cut -c 1-160)"; else qa_emitir "veredicto: ROTO desde ? — $(printf '%s' "$roto_motivos" | redactar | cut -c 1-160)"; fi
   fi
   if [ -f "$ESTADO_QA/sin-medir" ]; then qa_emitir "veredicto: SIN MEDIR (el instrumento no pudo medir)"; elif [ ! -f "$ESTADO_QA/roto" ]; then qa_emitir "veredicto: sano"; fi
   ventana="?"; if [ -f "$ESTADO_QA/ventana" ]; then w=$(head -n 1 "$ESTADO_QA/ventana" 2>/dev/null); [[ "$w" =~ ^[0-9]+$ ]] && ventana=$(qa_hora "$w"); fi
@@ -660,7 +660,7 @@ else
   if [ -d "$capturas" ]; then cantidad=$(ls -1 "$capturas"/*.png 2>/dev/null | wc -l); cantidad=$((cantidad + 0)); nueva=$(ls -t "$capturas"/*.png 2>/dev/null | head -n 1); [ -n "$nueva" ] && edad_captura=$(qa_edad "$nueva"); fi
   qa_emitir "capturas: $cantidad archivo(s) .png; la más nueva hace $edad_captura min"
   qa_emitir "--- últimas 15 líneas de $LOG_QA"
-  if [ -f "$LOG_QA" ]; then tail -n 15 "$LOG_QA" | cut -c 1-200 | redactar; else qa_emitir "(no existe: qa-release todavía no escribió)"; fi
+  if [ -f "$LOG_QA" ]; then tail -n 15 "$LOG_QA" | redactar | cut -c 1-200; else qa_emitir "(no existe: qa-release todavía no escribió)"; fi
 fi
 sec "fin"
 echo "diagnóstico terminado $(date -u +%FT%TZ) — no se modificó nada"

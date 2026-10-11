@@ -28,7 +28,7 @@ function hashes(raiz) {
   recorrer(raiz);
   return salida;
 }
-function correr({ estado, log, texto = seccion } = {}) {
+function correr({ estado, log, texto = seccion, sed = redactar } = {}) {
   const tmp = mkdtempSync(join(tmpdir(), "diag-qa-release-"));
   try {
     const dirEstado = estado ?? join(tmp, "estado");
@@ -44,7 +44,7 @@ function correr({ estado, log, texto = seccion } = {}) {
     const antes = existsSync(dirEstado) ? hashes(dirEstado) : null;
     const local = texto.replaceAll("/var/lib/onia-qa-release", dirEstado).replaceAll("/var/log/onia-qa-release.log", rutaLog);
     const comun = readFileSync(join(RAIZ, "hermes-content/deploy/hermes-jarvis/comun.sh"), "utf8").replaceAll("\r\n", "\n");
-    const script = `REDACTAR_SED='${redactar}'\n${comun}\n${local}`;
+    const script = `REDACTAR_SED='${sed}'\n${comun}\n${local}`;
     const r = spawnSync("bash", ["-s"], { input: script, env: { ...process.env, PATH: `${dobles}:${process.env.PATH}` }, encoding: "utf8" });
     assert.equal(r.status, 0, r.error?.message || r.stdout + r.stderr);
     assert.equal(existsSync(marcador), false, "la sección ejecutó un comando prohibido");
@@ -71,8 +71,23 @@ test("roto: hora UTC, corte de 160 caracteres y redacción", () => {
   try {
     const estado = crearEstado(tmp); const epoch = 1791700000; const motivo = `SECRETO-DE-PRUEBA ${"x".repeat(400)}`; guardar(estado, "roto", `abc1234 ${epoch} ${motivo}\n`);
     const out = correr({ estado }); const linea = out.split("\n").find((l) => l.includes("veredicto: ROTO"));
-    assert.ok(linea); assert.ok(linea.includes(`ROTO desde ${epochHora(epoch)}`), linea); assert.ok(linea.endsWith("*** " + "x".repeat(142)), linea); assert.doesNotMatch(out, /SECRETO-DE-PRUEBA/);
+    assert.ok(linea); assert.ok(linea.includes(`ROTO desde ${epochHora(epoch)}`), linea); assert.ok(linea.endsWith("*** " + "x".repeat(156)), linea); assert.doesNotMatch(out, /SECRETO-DE-PRUEBA/);
     assert.throws(() => assert.doesNotMatch(correr({ estado, texto: seccion.replaceAll("redactar", "cat") }), /SECRETO-DE-PRUEBA/));
+  } finally { rmSync(tmp, { recursive: true, force: true }); }
+});
+test("un secreto de largo fijo en el límite del corte no se escapa a medias (se redacta antes de cortar)", () => {
+  // Revisión del 11-oct: con «cut | redactar» los primeros 20 de 40 hexadecimales quedaban a la vista, porque el
+  // corte los partía y la redacción de largo fijo ya no los reconocía.
+  const tmp = mkdtempSync(join(tmpdir(), "estado-qa-"));
+  try {
+    const estado = crearEstado(tmp); const secreto = "0123456789abcdef0123456789abcdef01234567"; const sed = "s/[0-9a-f]{40}/***/g";
+    guardar(estado, "roto", `abc1234 1791700000 ${"y".repeat(140)}${secreto}\n`);
+    const log = join(tmp, "qa.log"); writeFileSync(log, `${"x".repeat(180)}${secreto}\n`);
+    const out = correr({ estado, log, sed });
+    assert.doesNotMatch(out, /0123456789abcdef0123/); assert.match(out, /\*\*\*/);
+    // y sin el arreglo (cortar primero) se escaparía: la prueba lo comprueba.
+    const sinArreglo = seccion.replaceAll("| redactar | cut -c 1-160", "| cut -c 1-160 | redactar").replaceAll("| redactar | cut -c 1-200", "| cut -c 1-200 | redactar");
+    assert.throws(() => assert.doesNotMatch(correr({ estado, log, sed, texto: sinArreglo }), /0123456789abcdef0123/));
   } finally { rmSync(tmp, { recursive: true, force: true }); }
 });
 test("sin medir aparece solo o después de ROTO", () => {
