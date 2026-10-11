@@ -39,9 +39,9 @@ description: "Invocar para CUALQUIER trabajo del carril Lucía (Lucía Antelo, l
 - **Qué se pausó (no se borró):** la puerta de demo, la cuenta demo, las capturas de Pendientes y el trato de usted. El
   guion de producto quedó en `guiones/G-producto-1-recordatorio-de-cita.md`. Vuelve solo si Sergio Urcullo lo pide.
 - **Trato:** voseo cruceño, que es su canon.
-- **Sin marcas de terceros** en pantalla ni en el pie (modelos, plataformas, competidores): se dice «imagen», «video»,
-  «Motor 1». Así la pieza queda dentro de lo que `CLAUDE.md` § «Qué se publica sin preguntar» deja publicar sin el OK
-  pieza por pieza. Con una marca, o con una función del producto, pasa por Sergio Urcullo.
+- **Las herramientas SÍ se nombran desde el 11-oct** (Sergio Urcullo, D-N1): como uso propio, con el pie «Nombro lo que uso; no es una recomendación pagada.»; sin logos ni capturas de terceros ni «el mejor».
+  (Antes valía «imagen», «video», «Motor 1», para que la pieza quedara dentro de lo que `CLAUDE.md` § «Qué se publica sin preguntar» deja publicar sin el OK
+  pieza por pieza. Con una función del producto, o con la cara o voz de un tercero, pasa por Sergio Urcullo.)
 - **Cada prueba de Higgsfield deja dos cosas:** un video y un aprendizaje escrito acá (caso, costo, fecha).
 - **Currículo** (cotizaciones en vivo del 8-oct; el detalle y los costos están en `PLAN.md` §3):
 
@@ -391,7 +391,7 @@ Fuente: `research/competencia/LUCIA_COMPETENCIA_20261005.md`.
   elegir hoy, la guía: es la única con costo marginal cero y la única que ya tiene el contenido hecho (G1 a G5, C1, C2).
 - **Antes de vender cualquier cosa:** (a) leer los términos comerciales de Higgsfield; (b) `CLAUDE.md` dice que **no se abre una línea nueva** y que el influencer no pasa el test de tres
   preguntas: lo decide Sergio Urcullo con la cuenta delante, no esta sesión; (c) etiqueta IA siempre y cero promesas de resultado; (d) nada con `@lu.antelo` ni con caras de personas reales;
-  (e) sin voz hasta resolver D4: Marcela tiene acento colombiano.
+  (e) la voz Marcela queda con su acento colombiano (D4 decidida por Sergio Urcullo el 11-oct).
 - **La puerta de medición no existe:** `onia.com.bo/llamada` da 404 (medido el 11-oct). Cualquier métrica «demos con `src=lucia-*`» necesita otra puerta primero.
 
 ## 11. Estructura semanal y edición con voz (11-oct) — el detalle vive en `PLAN.md` §4-bis y §5

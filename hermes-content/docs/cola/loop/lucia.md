@@ -6,7 +6,10 @@
 > cambió G1 ni el orden de entrega**: son propuestas, no piezas hechas. Nada está en «LISTA PARA MOSTRAR» porque no hay nada nuevo que mostrar.
 > **Estructura de contenido (pedido de la madre v4, 11-oct): LISTA PARA MOSTRAR.** Semana fija (lun reel «La prueba», mié carrusel, vie reel «El error»), las 9 próximas piezas y lo que falta
 > producir: `PLAN.md` §4-bis y §5. Recomiendo la opción B (token nuevo desde Meta) para `ig-lucia.env`. Nada se produce ni se publica hasta su «mostrada, publicá <pieza>».
-> **G1 con voz:** la madre le pone la voz Marcela (ElevenLabs, aprobado por Sergio Urcullo) y avisará el SHA del archivo; entonces actualizo la tabla de entrega. Ojo: mi nota D4 dice que Marcela tiene acento colombiano.
+> **Decisiones de Sergio Urcullo, 11-oct ~04:05 UTC (vía la madre v4): D-N1 = SÍ se nombran las herramientas** (uso propio, no recomendación pagada) y **D4 = la voz Marcela queda con su acento**.
+> Hecho: guiones G2, G4, G5 y C2 con los nombres reales (C2 re-renderizada y mirada), `PLAN.md` y skill al día. En curso: los cuatro re-cortes v2 (regla 15) ya con los nombres. **LISTA PARA MOSTRAR** cuando
+> terminen y pasen revisión independiente. Sin gasto nuevo: voz y generación paga siguen pidiendo su sí escrito en esta sesión.
+> **G1 con voz:** la madre le pone la voz Marcela (ElevenLabs, aprobado por Sergio Urcullo) y avisará el SHA del archivo; entonces actualizo la tabla de entrega. D4 la decidió Sergio Urcullo el 11-oct: Marcela queda con su acento.
 
 - [~] ~~G1 con la captura real de Pendientes de la demo~~ — **reemplazada por la premisa v5** (Sergio Urcullo, 8-oct: *«Lucía no
   es necesario que muestres el producto… grabar y aprender a usar Higgsfield es tu tarea»*). G1 salió sin producto:

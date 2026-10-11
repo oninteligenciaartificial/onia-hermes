@@ -42,8 +42,8 @@ escrito en la skill `lucia`, con el caso, el costo y la fecha.
   cada pieza por API, rótulo «Lucía Antelo · personaje IA de Onia» desde el cuadro 0 y el pie.
 - **Nunca profesional de salud.** El ambo es vestuario. No consejo clínico ni legal, no testimonio, no clienta, no
   «agenda llena», no resultados, no dice que estuvo en un lugar o evento real. No toca política.
-- **Sin marcas de terceros** (modelos, plataformas, competidores) en pantalla ni en el pie, salvo el OK de Sergio Urcullo.
-  Se dice «imagen», «video», «Motor 1».
+- **Las herramientas SÍ se nombran, como uso propio y no como recomendación pagada** (Sergio Urcullo, D-N1, 11-oct ~04:05 UTC; antes valía «Motor 1»). El pie suma
+  «Nombro lo que uso; no es una recomendación pagada.» Siguen prohibidos los logos y las capturas de interfaces de terceros, y toda frase que suene a «el mejor» o a recomendación general.
 - **Sin voz** hasta resolver D4. Ninguna voz de ElevenLabs se publica sin licencia comercial confirmada. Sin música sin
   licencia: la pone Sergio Urcullo.
 - **Nombre con apellido** siempre.
@@ -88,7 +88,7 @@ Cada fila es una prueba chica, con su video. Los costos son cotizaciones en vivo
 
 ## 4-bis. Estructura semanal fija (11-oct)
 
-> **APROBADA por Sergio Urcullo el 11-oct ~03:55 UTC (vía la madre v4).** Siguen pendientes de él: D-N1, el acento de Marcela y el token de Instagram (B). Dirección de Sergio Urcullo, 11-oct: *«arma su estructura de contenido y enseña cosas de IA»*, sobre
+> **APROBADA por Sergio Urcullo el 11-oct ~03:55 UTC (vía la madre v4).** **D-N1 y D4 decididas el 11-oct ~04:05 UTC** (abajo). Sigue pendiente el token de Instagram (recomendé B). Dirección de Sergio Urcullo, 11-oct: *«arma su estructura de contenido y enseña cosas de IA»*, sobre
 > *«Lucía sigue aprendiendo Higgsfield para venderlo y ser una modelo AI independiente»*. **Una prueba por semana saca tres piezas:** lo que cuesta
 > se paga una vez y lo demás sale de la misma prueba a 0 créditos. Hasta 3 piezas por semana, **19:00 La Paz (23:00 UTC)**.
 
@@ -103,14 +103,15 @@ Cada fila es una prueba chica, con su video. Los costos son cotizaciones en vivo
 - **Historia: extra, no cuenta entre las 3.** La lámina 1 del carrusel en 1080×1920 el mismo miércoles, solo foto (la API no admite stickers). Se suma cuando haya seguidores a quienes
   avisarles: una historia solo la ven los seguidores, y hoy la cuenta no tiene ninguno. El reel es el único formato que llega a quien no la sigue.
 - **Reglas de toda pieza (no cambian):** rótulo «Lucía Antelo · personaje IA de Onia» desde el cuadro 0, a 40 px · etiqueta de IA por API · el pie abre con «personaje hecho con IA» · ni
-  profesional de salud, ni producto de Onia, ni cifra inventada, ni cara o voz de Sergio Urcullo · motores como «Motor 1 a 6» e «Imagen A a F» hasta resolver D-N1 (abajo).
+  profesional de salud, ni producto de Onia, ni cifra inventada, ni cara o voz de Sergio Urcullo · **las herramientas se nombran con su nombre real** (D-N1) y el pie suma «Nombro lo que uso; no es una recomendación pagada.»
 - **Regla de edición con voz (11-oct):** voz Marcela (ElevenLabs) · **pausa máxima 0,25 s entre frases**, sin acelerar la voz (se aprietan las pausas) · 3,2-4,1 palabras por segundo · −14 LUFS ·
   sin cama de música · título de 3-7 palabras con la promesa en el cuadro 0 · CTA en los últimos 2,4-5,5 s. Es la receta Erik de `edicion-referentes`; **G1 v2 (20 s) es el modelo**.
 - **Cupo de voz:** G1 v2 usó **320 caracteres** para unos 19 s hablados, o sea **≈ 17 caracteres por segundo** (corregido por la madre el 11-oct; antes decía 381, que es lo que *queda* hasta el 13-oct 01:17 UTC). Un reel de 25 s ≈ 425;
   uno corto de 18 s ≈ 305. Una semana ≈ 730 caracteres, y con retomas (×1,3) ≈ 950. **Hasta el 13-oct solo quedan 381**; el cupo renovado hay que confirmarlo (lo sabe la madre).
-- **Decisión abierta D-N1 (Sergio Urcullo):** ¿se nombran las herramientas como uso propio, no como recomendación pagada, o siguen «Motor 1 a 6»? La estructura funciona con las dos. Nombrarlas hace que
-  quien mira pueda repetir la prueba; no nombrarlas la vuelve menos útil para «enseñar cosas de IA». Hasta que decida, no se nombran.
-- **Voz Marcela:** tiene acento colombiano (D4). Si Sergio Urcullo lo aprobó sabiendo eso, sigue; es el riesgo de que una cruceña suene colombiana.
+- **Decididas por Sergio Urcullo el 11-oct ~04:05 UTC (vía la madre v4):** **D-N1 = SÍ**, se nombran las herramientas (Higgsfield, Kling y las demás) como uso propio y no como recomendación pagada;
+  **D4 = la voz Marcela queda, con su acento colombiano.** Cambió también el «Motor 1 a 6» / «Imagen A a F» de los guiones de G2, G4, G5, C2 y la pieza 9. Nombres: **video** Kling 3.0 std · Kling 3.0 pro ·
+  Seedance 2.0 Mini · Seedance 2.0 Mini + referencias · Kling O3 · Cinematic Studio 3.0; **imagen** Seedream 4.5 · Kling O1 Image (el nombre con que Higgsfield lo lista; el guion decía «Kling Omni Image») ·
+  Nano Banana 2.1 · Seedream 5.0 Pro · FLUX 3 · GPT Image 2.5. Quien mira puede repetir la prueba.
 
 ## 5. Las próximas 6 piezas, y las que siguen (todas las listas entran primero)
 
@@ -126,7 +127,7 @@ La semana 1 (S1) empieza el día en que salga G1; hoy no hay fecha porque falta 
 | 6 | S2 · Vie | **G5 v2** «¿Cómo sé que sigue siendo ella?» | Reel ≤ 30 s | El control de cara: piso 0,70 (lo elegí yo), ruido ±0,03, bajo 200 px se mira a ojo | «¿Cómo sé que sigue siendo ella?» | 0 | ≤ 450 | Lo mismo que G3 |
 | 7 | S3 · Lun | **G4 v2** «Seis motores de imagen, una cara» | Reel ≤ 30 s | 6 motores de imagen: **0,5 a 3 cr**, parecido **0,66 a 0,81**; pagar más no mejoró | «¿Cuál conserva su cara?» | 0 | ≤ 450 | Lo mismo que G3 |
 | 8 | S3 · Mié | **C2** «Seis motores de imagen» | Carrusel | G4 para guardar | — | 0 | — | Nada: lista |
-| 9 | S3 · Vie | **NUEVA** «La luz cambia cuando la cara se sostiene» | Reel corto 18 s | Medido el 11-oct con los 6 clips ya pagados: el clip atado a la foto mantiene la luz (Motor 1: luma −1,0) y pierde la cara (parecido 0,79 a 0,72); el que mejor la sostiene con referencias (Motor 4: 0,71 a 0,80) oscurece la imagen (luma −34) y reencuadra | «La cara o la escena.» | 0 | ≈ 305 | Guion, voz, montaje. Datos: `v4/prueba-motores-20261008/medicion-luz-movimiento-20261011.txt` |
+| 9 | S3 · Vie | **NUEVA** «La luz cambia cuando la cara se sostiene» | Reel corto 18 s | Medido el 11-oct con los 6 clips ya pagados: el clip atado a la foto mantiene la luz (Kling 3.0 std: luma −1,0) y pierde la cara (parecido 0,79 a 0,72); el que mejor la sostiene con referencias (Seedance 2.0 Mini con referencias: 0,71 a 0,80) oscurece la imagen (luma −34) y reencuadra | «La cara o la escena.» | 0 | ≈ 305 | Guion, voz, montaje. Datos: `v4/prueba-motores-20261008/medicion-luz-movimiento-20261011.txt` |
 
 **Qué falta producir, en orden:**
 
@@ -138,7 +139,7 @@ La semana 1 (S1) empieza el día en que salga G1; hoy no hay fecha porque falta 
 3. **La pieza 9** (luz): guion, voz y montaje. Los datos ya están medidos (honesto: son promedios del cuadro entero, mezclan luz con lo que entra al plano; miden «cuánto cambia la imagen»).
 4. **De la semana 4 en adelante, una prueba nueva por semana** (tema B, C y D de la rotación): **P1** fondo en positivo (3 cr, lote chico) · **P2** referencias con cámara fija (6 cr, video) · **P3** MiniMax H3 (12 cr, video) ·
    **L2** voz y labios · **L3** Motion Control (17 cr; Sergio Urcullo graba 10 s). Los de video piden su sí escrito en esta sesión; **P3 no cabe en el tope de octubre** (quedan 11 de 150).
-5. **D-N1** (nombrar las herramientas) y el **cupo de voz renovado**.
+5. **El cupo de voz renovado** (cifra que confirma la madre). D-N1 y D4 ya están decididas.
 
 - **Qué se mide por pieza:** guardados y envíos (señal de que enseñó algo), seguidores nuevos y que la cuenta siga «apta
   para recomendaciones». No hay umbral de conversaciones.

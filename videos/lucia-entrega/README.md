@@ -83,7 +83,7 @@ Después: abrir el permalink, confirmar «Información de IA» y que `is_ai_gene
 
 ## Qué NO tocan estas piezas (por eso salen sin el OK pieza por pieza)
 
-Ninguna muestra ni promete una función de Onia, ninguna nombra marcas de terceros (los motores de video van como «Motor 1 a 6» y los de imagen como «Imagen A a F»), no
+Ninguna muestra ni promete una función de Onia, las piezas v1 de G2, G4 y G5 (mudas, de 56 a 59 s) llevan «Motor 1 a 6» e «Imagen A a F»; desde D-N1 (11-oct) las herramientas se nombran, y esas piezas las reemplazan las v2 de ≤ 30 s (`../lucia-gN-v2/`) con los nombres reales. C2 ya está re-renderizada con los nombres, no
 hay voz, no hay testimonio, no hay cliente. Greps contra la lista de frases prohibidas en `../lucia-gN/qa/grep-prohibidas.txt`
 y control de cara en `../lucia-gN/qa/face-gate.txt`.
 

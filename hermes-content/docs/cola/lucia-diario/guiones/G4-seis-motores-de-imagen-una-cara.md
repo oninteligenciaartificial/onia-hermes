@@ -1,5 +1,6 @@
 # G4 · «Seis motores de imagen, una cara: ¿cuál la conserva?» — guion para validar (9-oct-2026)
 
+> **D-N1 (Sergio Urcullo, 11-oct):** las herramientas SÍ se nombran, como uso propio y no como recomendación pagada. Los rótulos «Motor N» e «Imagen X» de este guion se reemplazaron por los nombres reales; el pie suma «Nombro lo que uso; no es una recomendación pagada.» Este guion es la **v1 (58 s)**: la v2 de ≤ 30 s vive en `videos/lucia-g4-v2/`.
 > **Estado: PARA VALIDAR por la madre antes del render final.** Se monta igual (0 créditos, cómputo local) para que ella mire el
 > preview 360p junto con el guion. No se publica sin su aviso.
 > **2da pasada (9-oct):** aplica la revisión independiente (`videos/lucia-g4/qa/revision-1.md`, H1-H7): fotos C y E limpias, el gancho abre con la
@@ -9,7 +10,7 @@
 > - **Regla de estructura (Sergio Urcullo, 8-oct):** gancho en 3 s · desarrollo con valor · cierre con CTA · 30-60 s · deja algo aprendido.
 > - **Costo: 0 cr más.** Las 7 fotos nuevas se pagaron el 8-oct (11,75 cr del lote de aprendizaje, dentro del tope de 97 cr que fijó la
 >   sesión) y las tres de Seedream 4.5 ya existían del kit. Registro: `v4/PROCEDENCIA.jsonl` línea 97.
-> - No muestra ni promete ninguna función de Onia. Sin marcas de terceros: los motores van como «Imagen A a F».
+> - No muestra ni promete ninguna función de Onia. Las herramientas se nombran como uso propio (D-N1).
 > - **Nombre corregido:** el 8-oct se dijo «7 motores de imagen» por error; fueron **6 motores** y 7 fotos nuevas (Kling Omni Image se
 >   repitió en 3 escenas).
 
@@ -26,7 +27,7 @@ celular» (K1), con el mismo prompt y las mismas 6 imágenes de referencia en ca
 
 ## Evidencia (medida el 8-oct con `scripts/face-gate.sh`, 8 referencias oficiales; piso 0,70; una toma por motor salvo A y B)
 
-| Imagen | Motor (no se nombra en pantalla) | Créditos | Parecido | Archivo |
+| Imagen | Motor (se nombra en pantalla desde D-N1) | Créditos | Parecido | Archivo |
 |---|---|---:|---:|---|
 | A | Seedream 4.5 (el método diario) | 1 | 0,81 | `v4/kit/k1-1-recepcion-celular-4afffb96.jpg` |
 | B | Kling Omni Image | 0,5 | 0,79 | `v4/prueba-motores-20261008/fotos/img-kling-omni-image-c3706d45.jpg` |
@@ -51,7 +52,7 @@ celular» (K1), con el mismo prompt y las mismas 6 imágenes de referencia en ca
   El pie y la placa de la lección 1 lo dicen: *«Una toma cada uno: es una prueba, no una regla.»* (en pantalla a 44 px, y debajo: *«Entre 0,66 y 0,70 la diferencia es ruido (±0,03).»*:
   medido sobre el cuadro con zoom, F da 0,685-0,697 y D 0,69-0,70; el ruido es el del método).
 - 0,70 no es una frontera objetiva: D (0,702) «cumple por poco» y no se anuncia como aprobado.
-- Los nombres de motores no van en pantalla ni en el pie. Se hablan de «Imagen A a F»; la correspondencia está en esta tabla y en el README del proyecto.
+- Los nombres de los motores SÍ van en pantalla y en el pie (D-N1, 11-oct), como uso propio y sin logos.
 
 ## Estructura (59,75 s, 24 fps)
 
@@ -60,14 +61,14 @@ celular» (K1), con el mismo prompt y las mismas 6 imágenes de referencia en ca
 | 0,1 – 3 | **GANCHO** | Foto A a pantalla completa; rótulo «Lucía Antelo · personaje IA de Onia» **de 0 a 3 s, 40 px** | «¿Cuál conserva su cara?» |
 | 3 – 6 | Gancho | La misma foto; entran las 6 miniaturas A-F en una fila | «Misma orden.» → «Seis motores de imagen.» |
 | 6 – 12 | **REGLA** | Las 8 fotos de referencia (todas) y la escala de 0 a 1 con la marca en 0,70 | «Se mide contra 8 fotos suyas.» → «Idéntica es 1. Piso, 0,70.» |
-| 12 – 17 | Imagen A | Foto A a pantalla completa | «Imagen A · 1 crédito» · dato «parecido 0,81» |
-| 17 – 22 | Imagen B | Foto B | «Imagen B · 0,5 créditos» · dato «parecido 0,79» |
-| 22 – 27 | Imagen C | Foto C (limpia) | «Imagen C · 2 créditos» · dato «parecido 0,74» |
-| 27 – 32 | Imagen D | Foto D | «Imagen D · 2,5 créditos» · dato «parecido 0,70» · «justo en el piso» |
-| 32 – 37 | Imagen E | Foto E (limpia) | «Imagen E · 3 créditos» · dato «parecido 0,69» · sello «bajo el piso» |
-| 37 – 42 | Imagen F | Foto F | «Imagen F · 2,75 créditos» · dato «parecido 0,66» · sello «bajo el piso» |
+| 12 – 17 | Seedream 4.5 | Foto A a pantalla completa | «Seedream 4.5 · 1 crédito» · dato «parecido 0,81» |
+| 17 – 22 | Kling O1 Image | Foto B | «Kling O1 Image · 0,5 créditos» · dato «parecido 0,79» |
+| 22 – 27 | Nano Banana 2.1 | Foto C (limpia) | «Nano Banana 2.1 · 2 créditos» · dato «parecido 0,74» |
+| 27 – 32 | Seedream 5.0 Pro | Foto D | «Seedream 5.0 Pro · 2,5 créditos» · dato «parecido 0,70» · «justo en el piso» |
+| 32 – 37 | FLUX 3 | Foto E (limpia) | «FLUX 3 · 3 créditos» · dato «parecido 0,69» · sello «bajo el piso» |
+| 37 – 42 | GPT Image 2.5 | Foto F | «GPT Image 2.5 · 2,75 créditos» · dato «parecido 0,66» · sello «bajo el piso» |
 | 42 – 49,75 | **Lección 1** | Placa con las 6 ordenadas por precio sobre la escala, y la franja de 0,66 a 0,70 | «Pagar más no mejora el parecido.» · nota a 44 px «Una toma cada uno: es una prueba, no una regla.» → (a los 45,6 s) «Entre 0,66 y 0,70 la diferencia es ruido (±0,03).» |
-| 49,75 – 57,25 | **Lección 2** | Tabla **A (0,81 · 0,83 · 0,84)** y **B (0,79 · 0,35 · 0,83)** en tres escenas, y la foto B del café junto a la A del café | «Imagen A: la sostuvo en tres.» → «Una foto sola no mide.» → «El café: B perdió la cara.» (el guion decía «B perdió la cara en el café.»: 7 palabras) |
+| 49,75 – 57,25 | **Lección 2** | Tabla **A (0,81 · 0,83 · 0,84)** y **B (0,79 · 0,35 · 0,83)** en tres escenas, y la foto B del café junto a la A del café | «Seedream 4.5: la sostuvo en tres.» → «Una foto sola no mide.» → «El café: B perdió la cara.» (el guion decía «B perdió la cara en el café.»: 7 palabras) |
 | 57,25 – 59,75 | **CIERRE** | Foto K4·5 (`v4/kit/k4-5-senala-342c0ab5.jpg`): Lucía mira a cámara y sonríe; ya pagada, sin clips (face-gate 0,832) | «Seguime: cada semana, una prueba.» |
 
 - **Duraciones:** 59,75 s: pasa de 30 y no de 60 (la nota de 19 palabras de la lección 1 y la fila de A en la lección 2 pidieron tiempo; el cierre pasó de 4 a 2,5 s). Las fotos van a pantalla completa con un empuje de 6 cuadros entre una y otra (el método de G2/G3).
@@ -88,8 +89,8 @@ Seguime.»* `#inteligenciaartificial #ia #santacruz #bolivia`
 - **IA declarada:** rótulo desde el cuadro 0 hasta los 3 s, a 40 px, con apellido, y el pie. Etiqueta «Información de IA» por API.
 - **No la pone en el puesto:** el ambo es vestuario y ninguna frase habla de profesión (las fotos A-F la muestran en ambo en una recepción: no se dice dónde está). **Tampoco la imagen:** nada del rubro a la vista (en C se tapó el consultorio dental del fondo).
 - **Sin promesas ni resultados, sin testimonios, sin clientes.** Las únicas cifras son medidas (créditos cobrados y parecido).
-- **Sin producto y sin marcas de terceros** en pantalla ni en el pie, **ni logos incidentales de las fotos** (se difuminaron los de C y E).
-- **Foto B del café** (cara perdida): es una imagen de IA que no se parece a Lucía; se rotula «Imagen B · café · 0,35», no se la hace pasar por ella.
+- **Sin producto, sin logos ni capturas de interfaces de terceros** (las herramientas se nombran como uso propio, D-N1), **ni logos incidentales de las fotos** (se difuminaron los de C y E).
+- **Foto B del café** (cara perdida): es una imagen de IA que no se parece a Lucía; se rotula «Kling O1 Image · café · 0,35», no se la hace pasar por ella.
 - **Antes de renderizar:** `grep` del guion y del pie contra la lista de `editor-videos` § «Reels de Lucía» (`scripts/grep-prohibidas.mjs`), y el QA
   de `montaje-hyperframes.md` §4.
 - **Publicación:** como no muestra ni promete una función del producto ni nombra a terceros, pasa por el control de calidad y se publica

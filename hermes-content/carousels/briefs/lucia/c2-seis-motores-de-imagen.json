@@ -1,6 +1,6 @@
 {
   "title": "Seis motores de imagen, una cara",
-  "caption": "Lucía Antelo es un personaje hecho con IA por @oniahq. Probé la misma orden y las mismas fotos de referencia en seis motores de imagen y medí cuánto se parece cada cara a la suya.\n\nCon 1 crédito, el que ya uso la sostuvo en tres escenas. Pagar más no la mejoró, y el más barato la perdió en una de tres.\n\nUna toma cada uno: es una prueba, no una regla. Guardalo para cuando elijas el tuyo. Cada semana hago una prueba. Seguime.",
+  "caption": "Lucía Antelo es un personaje hecho con IA por @oniahq. Probé la misma orden y las mismas fotos de referencia en seis motores de imagen (Seedream 4.5, Kling O1 Image, Nano Banana 2.1, Seedream 5.0 Pro, FLUX 3 y GPT Image 2.5) y medí cuánto se parece cada cara a la suya.\n\nCon 1 crédito, Seedream 4.5, el que ya uso, la sostuvo en tres escenas. Pagar más no la mejoró, y el más barato la perdió en una de tres.\n\nUna toma cada uno: es una prueba, no una regla. Nombro lo que uso; no es una recomendación pagada. Guardalo para cuando elijas el tuyo. Cada semana hago una prueba. Seguime.",
   "hashtags": [
     "#inteligenciaartificial",
     "#ia",
@@ -25,8 +25,8 @@
     {
       "number": 2,
       "role": "point",
-      "pill": "Imagen A",
-      "headline": "La que ya uso: *0,81*",
+      "pill": "La que ya uso",
+      "headline": "Seedream 4.5: *0,81*",
       "body": "1 crédito. Se mide contra 8 fotos suyas (idéntica es 1, mi piso es 0,70). En tres escenas dio 0,81 · 0,83 · 0,84.",
       "callout": "",
       "save_worthy": true,
@@ -37,9 +37,9 @@
     {
       "number": 3,
       "role": "point",
-      "pill": "C · D · E · F",
+      "pill": "Los otros cuatro",
       "headline": "Pagar más *no ayudó*",
-      "body": "C, 2 créditos: 0,74. D, 2,5: 0,70. E, 3: 0,69. F, 2,75: 0,66. Las dos últimas quedaron bajo mi piso.",
+      "body": "Nano Banana 2.1, 2 créditos: 0,74. Seedream 5.0 Pro, 2,5: 0,70. FLUX 3, 3: 0,69. GPT Image 2.5, 2,75: 0,66. Las dos últimas, bajo mi piso.",
       "callout": "",
       "save_worthy": true,
       "visual_prompt": "Foto E",
@@ -49,7 +49,7 @@
     {
       "number": 4,
       "role": "point",
-      "pill": "Imagen B · café",
+      "pill": "Kling O1 Image · café",
       "headline": "El más barato *la perdió*",
       "body": "0,5 créditos: 0,79 · 0,35 · 0,83. En el café salió otra persona: esa imagen no es Lucía.",
       "callout": "",
