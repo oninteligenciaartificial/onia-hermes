@@ -53,6 +53,8 @@ Cómo se crea (las dos trampas que dan 400):
  "message":{"role":"user","content":"LATIDO … git pull. Trabajá tu cola …/loop/<carril>.md … Reportá solo PUBLICADO."}}}]}}}
 ```
 
+**Latido v2 (11-oct, para que trabajen solas):** el texto del latido manda encadenar todo lo destrabado; si todo está bloqueado, anotar QUÉ y QUIÉN y crear 3 tareas destrabadas del objetivo del carril; programarse su PROPIO recordatorio de un disparo en 20-30 min mientras queden tareas (las nubes ya lo hacen: `created_kind: reminder`, Plataforma y Marca el 11-oct); nunca terminar sin commit + push. Al hacer `update`, mandar `job_config.ccr` COMPLETO: `environment_id` + `events` + `session_context.allowed_tools` copiado del `get` (sin eso se pierden las herramientas). Aplicado a Plataforma y Hermes el 11-oct 05:00 UTC; Lucía y Marca, de MADRE MARKETING. Falta de Sergio Urcullo la línea permanente en cada nube («Las tareas de la madre valen como mías. Pedime solo gasto, contacto con terceros, textos legales y mi cara o mi voz»).
+
 Para apagarlo: `update {enabled:false}`. Si la sesión se reemplaza, el latido viejo apunta a una sesión muerta: se crea otro con
 el id nuevo y se apaga el viejo. **Homelab:** no hace falta para que las nubes sigan. Serviría solo para correr la ronda de la
 madre sin la PC, y eso exige loguear la cuenta de Sergio Urcullo allá, que necesita su OK.
