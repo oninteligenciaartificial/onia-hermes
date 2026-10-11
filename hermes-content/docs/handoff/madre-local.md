@@ -36,6 +36,27 @@ días abierta y su conversación costó ~777 M de tokens. **La madre nueva arran
 > **Paso 0:** recreá la ronda (CronCreate `7,27,47 * * * *`, solo Plataforma y Hermes; texto en §F del libro) y el parte
 > (07:53) y el cierre (21:53). Después seguí con «Merge en serie» de ESTADO AL CLEAN.
 
+## ▶ ESTADO madre DESARROLLO-INFRA (sesión `35353b71`, 11-oct 07:15 UTC)
+
+- **Loops (CronCreate de esta sesión):** ronda `31104903` (:07 :27 :47; Haiku lee Plataforma y Hermes, rellena colas, lanza
+  Codex, 4 líneas a SU) · parte `d4a66458` (07:53 La Paz) · cierre `f7c70a45` (21:53 La Paz). Mueren con la sesión.
+- **Codex esta mañana (todo con suite completa en la PC antes del push):** onia-platform #147 F136 caja + odontograma
+  (Astra; arregla los 2 HIGH de E3 que salieron a prod con #136), #153 U3, #148 U4, #149 U5 (usted), #150 P-01 (prueba anon
+  de B22), #151 P-02 (guarda de la demo). onia-hermes #196 C1-C3 + C3b (tests de Hermes, base = rama de Hermes) y rama
+  `codex/hermes-qa-web-vs-producto` L1 + L1b (782dd348, 6f64e094; Hermes hace cherry-pick). Q9 lo cubre U4. U3b cancelada.
+  Cupo: `node scripts/codex-cupo.mjs` → 0 % semanal, reinicio 18-oct 05:16 UTC. Tope 3 corridas locales entre las dos madres
+  (disco C: ~6,3 GB; worktrees de onia-platform ~30 MB con junction; de onia-hermes, sparse).
+- **Orden de merge pedido a Plataforma:** #147 (con OK de Hermes, antes de 09:20 UTC) → #153 → #148 → #149 → su C1-C6
+  (`d8c486f5`) → #150/#151. Línea base del trinquete al mergear en serie = base + deltas.
+- **QA del harness** (105 subagentes Haiku): `research/2026-10-11-harness-qa/` + `ONIA_HARNESS.md` §9-§10, commit `2b059484`.
+- **Espera a SU:** escribir en la sesión Plataforma «Sí a la demo del lunes, a términos 1.4 + 7 días de gracia y a B22» (dijo
+  «SI» en la madre; la nube no lo toma de la madre) · rotar el token de n8n (en claro en `~/.codex/config.toml` + 2 respaldos
+  + variable de usuario) · Codex local a `workspace-write` + aprobación · bajar Plataforma/Hermes a Sonnet · conectar la app
+  Codex a GitHub (los 2 repos, revisión automática apagada) para que las nubes usen `@codex` sin la PC.
+- **Aprendido hoy:** un subagente Haiku SÍ lee transcripts con `RemoteTrigger` (la madre no gasta contexto) · Plataforma
+  mergeó #136 sin leer la revisión de Hermes → regla: HIGH abierto = no se mergea · los tests de Hermes piden Linux (LF,
+  python3): el gate es el CI · `codex exec` no corre vitest (EPERM): la madre corre la suite siempre.
+
 ## ⏸ ESTADO AL CLEAN (11-oct ~04:50 UTC) — la madre v4 sigue en la MISMA sesión después del /clear
 
 **Reparto nuevo (11-oct ~05 UTC, orden de SU vía la otra madre):** esta sesión es la **MADRE DESARROLLO-INFRA** (Plataforma, Hermes-Jarvis, VPS e infra; **Ventas pasó a MADRE MARKETING**, orden de SU 11-oct ~05:10 UTC: «vos no sos ventas»). **MADRE MARKETING** (sesión local «MADRE MARKETING», antes madre v2) orquesta Lucía, Marca y Ventas y pauta, y hace su PC. No escribirles a Lucía ni a Marca: pasarle a MADRE MARKETING. Ronda nueva `a87daf02` (solo Plataforma y Hermes). Mirar prod 06:55 UTC y revisar PRs #191/#162/#145/#172/#144 → delegado a Hermes (QA). Guiones `wf_63436b3d-712` → entregar a MADRE MARKETING al terminar.
