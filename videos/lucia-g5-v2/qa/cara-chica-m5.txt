@@ -1,0 +1,31 @@
+Motor 5 de G2 (kling_o3_image_reference_5_refs_948a89d3): un cuadro cada 6 (0,25 s) del clip CRUDO de 720x1280. cara = ancho de la caja SCRFD (px nativos); parecido = ArcFace contra las 8 referencias.
+PROCEDENCIA línea 97 del mismo clip (7 muestras a 0,1,2,3,4,5,5,9 s): 0,798 0,783 0,785 0,814 0,815 0,81 0,824
+
+cuadro   t(s)   cara_px   parecido
+    0    0.00       89   0.798
+    6    0.25       92   0.799
+   12    0.50       95   0.762
+   18    0.75       98   0.793
+   24    1.00      100   0.783
+   30    1.25      103   0.781
+   36    1.50      106   0.786
+   42    1.75      108   0.792
+   48    2.00      110   0.785
+   54    2.25      117   0.790
+   60    2.50      123   0.779
+   66    2.75      125   0.789
+   72    3.00      132   0.814
+   78    3.25      130   0.807
+   84    3.50      133   0.801
+   90    3.75      136   0.819
+   96    4.00      139   0.815
+  102    4.25      144   0.819
+  108    4.50      148   0.819
+  114    4.75      154   0.813
+  120    5.00      159   0.810
+  126    5.25      162   0.814
+  132    5.50      166   0.807
+  138    5.75      168   0.829
+  144    6.00      169   0.831
+
+LECTURA: la cara crece de 89 a 169 px y el número va de 0,798 a 0,831 (sube 0,033); en ningún momento baja del piso. «Cara chica: baja sola» NO se sostiene con este clip.
