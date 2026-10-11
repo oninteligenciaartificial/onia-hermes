@@ -59,7 +59,7 @@ Leyenda de dueño: `H` Haiku · `S` Sonnet · `O` Opus · `CxSol` / `CxAstra` Co
 - [ ] C4 Acá: Lucía G1 + renovar token de IG (vence 13-18 oct). El ensayo en el VPS lo frenó el control de permisos.
 - [ ] C5 Acá: paridad nube = PC (16 skills + 2 agentes + reglas de memoria a CLAUDE.md/AGENTS.md). Frenado por permisos.
 - [ ] C6 Acá: ¿CI como gate en vez de la suite de la PC? (más PRs en paralelo).
-- [ ] C9 Lucía G1 con voz Marcela (ElevenLabs en pago por uso, 453 caracteres hasta el 13-oct 01:17 UTC): SU elige «ponele la voz» o «esperá al 13» (20:40 UTC).
+- [ ] C9 Lucía G1 con voz Marcela: HECHO 01:45 UTC (`.madre-ver/lucia-g1-voz.mp4`, 320 caracteres enviados, quedan 381; -14 LUFS; Whisper confirma texto). Mostrado a SU; espera «publicá G1 de Lucía». Dirección SU: Lucía = modelo IA independiente (avisado a su sesión).
 - [ ] C7 Gasto: bucket R2 (punto 4) · tarjeta en ONIA Ads + US$56 · el SIAT (CAFC, reloj 4-nov) · OK al REVOKE del B22.
 - [ ] C8 Punto 1: aprobar en `/admin/payments` el pago de prueba de «ZZ QA Pago» (la madre lo prepara con Chrome).
 
