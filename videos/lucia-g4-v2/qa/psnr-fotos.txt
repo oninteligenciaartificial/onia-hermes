@@ -1,3 +1,4 @@
 PSNR del final contra la fuente (franja y 0-900). Pico esperado: la foto del plan, con el zoom del plan. Caja de cara: PSNR solo de la cara.
 escena      t_final   zoom         a       b       c       d       e       f  cafe_a  cafe_b       k   mejor     zoom pico   caja-cara   ok
 f-gancho      3.417  1.029      35.2    11.9    11.6    11.4    12.3     9.6    10.7     8.9     9.9   a        +0.00        36.5 dB   ok
+f-gancho      4.000  1.034      36.1    11.9    11.5    11.4    12.3     9.6    10.7     8.9     9.9   a        +0.00        36.3 dB   ok
