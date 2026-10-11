@@ -40,7 +40,16 @@
   medido con grep). Falta que la madre lo relance. modelos: sonnet-5-5 (esta sesión); `codex:lucia-qa2` pendiente de relanzar.
 - [~] Pieza 9 «La cara o la escena»: borrador de Codex (`codex:lucia-p9`, rama `codex/lucia-p9-1011` @ 50bf3bac) fusionado; m4 completo hallado en el contenedor; texto del límite de cara decidido (el provisional);
   build sin flag + render + gates en curso (editor sonnet). Luego revisor sonnet + verificador haiku y «LISTA PARA MOSTRAR: pieza 9».
-- [ ] Revisión independiente (sonnet) y verificador (haiku) de P9 cuando Codex devuelva el diff.
+- [x] **Orden de la madre marketing (11-oct): Lucía orquesta edición y posteos de punta a punta** (la madre verifica, le pasa a Sergio Urcullo lo que aprueba y hace lo de la PC). Creados:
+  `hermes-content/docs/cola/lucia-diario/ORDEN-DE-POSTEO-LUCIA.md` (calendario único: día · hora La Paz · pieza · red · estado, desde lun 12-oct hasta la pieza 9 del 30-oct, reglas de atraso y comandos exactos
+  de ensayo/agendado: esta nube NO tiene `ssh`, los corre la madre) y `LOTE-VOZ-MARCELA.md` (caracteres contra el cupo de 381: P9 304 cabe; G3 412, G2 415, G5 418, G4 444 no; propuesta Lote 1 = G3 recortada a ≤ 375 si el cupo se pierde el 13-oct 01:17 UTC).
+  modelos: escritos por esta sesión (sonnet-5-5). Gates `lucia-prohibidas.mjs` y `lucia-qa-tabla.mjs` antes de cada LISTA (skill `lucia` §12).
+- [~] **Pieza 9 → LISTA PARA MOSTRAR.** Master 969ac27d… (20 s, mudo) renderizado con el m4 completo; verificador `haiku` (SHA, specs, pie, `lucia-prohibidas` 0): sin defectos reales
+  (la «cifra no encontrada» ±0,03 sale del G5 v2: Cinematic Studio 3.0, seis medidas de 0,771 a 0,799 en PROCEDENCIA l.97; que el pie no repita el CTA es el estilo de todos los pies). **Falta:** revisor `sonnet` (corre) → corregir la nota del límite de cara (Kling ~120 px y Seedance 139 px, ambos bajo 200 px) → re-render → commit «LISTA PARA MOSTRAR: pieza 9». modelos: editor sonnet · revisor sonnet · verificador haiku · `codex:lucia-p9`.
+- [ ] **Voz Marcela: aprobar el Lote 1** (`LOTE-VOZ-MARCELA.md`). Espera: cifra del cupo renovado + el sí escrito de la madre. Sin eso no se genera.
+- [ ] **G1 v2 + token de IG:** la madre pone el token con Sergio Urcullo y me manda el SHA de G1 v2; entonces actualizo `videos/lucia-entrega/README.md` y la fila 1 del calendario. Publicar solo con «mostrada, publicá G1 v2».
+- [ ] **Próxima prueba (semana 4 en adelante):** P1 fondo en positivo (3 cr, lote chico) · P2 referencias con cámara fija (6 cr, video) · L2/L3. Cotizo y espero el sí; P3 no cabe en el tope de octubre (11 de 150).
+
 - [~] ~~G1 con la captura real de Pendientes de la demo~~ — **reemplazada por la premisa v5** (Sergio Urcullo, 8-oct: *«Lucía no
   es necesario que muestres el producto… grabar y aprender a usar Higgsfield es tu tarea»*). G1 salió sin producto:
   `videos/lucia-g1/` (`e35bb77d1`, `ec26f3bb6`). La captura de Pendientes queda para Marca, no para Lucía.
