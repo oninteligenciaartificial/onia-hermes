@@ -47,7 +47,7 @@ la dirección de Sergio Urcullo.
 | 3 | Datos clínicos no salen | En producción (#139, canal privado). Faltan «En vivo» con login, el SQL del B22 (con su OK) y el contenedor `onia-platform-qa` (lo decide él) |
 | 4 | Respaldo afuera con restauración probada | **Bloqueado:** falta el bucket R2 de Sergio Urcullo. El `restoreVerified:false` del diario local es a propósito |
 | 5 | Agenda por profesional y confirmar en 1 toque | El toque ya está en producción (#128). La agenda por profesional (#118) **sale con #136** |
-| 6 | Odontograma de 5 caras y «ver todo» en la ficha | El odontograma (#119) **sale con #136**. «Ver todo» no aparece en el código de `/patients`: revisar qué falta |
+| 6 | Odontograma de 5 caras y «ver todo» en la ficha | El odontograma (#119) **sale con #136**. «Ver todo» ya está en producción desde el 6-oct (`970bdb1e`): el enlace se llama «Ver historia completa» y abre `/patients/[id]/records`, paginada. Por eso no lo encontraba buscando «ver todo». Falta mirarlo con login. Lo que queda: la lista de citas de la ficha corta en 10 (1.1, no traba) |
 | 7 | Presupuesto por fases y tratamientos ya empezados | En producción (`1f09936a` P2 y el paso 0 del 8-oct) |
 | 8 | Caja diaria | **Sale con #136** (`i110-v3`) |
 | 9 | Demo que propone pacientes | Los agentes corren. Falta refrescarla: el lunes 12-oct entre 07 y 11 UTC, con las capturas C1-C7 (§7) |
@@ -125,7 +125,7 @@ la dirección de Sergio Urcullo.
 2. **Demo del lunes** (pedido de la madre v4): el plan está en `docs/cola/demo-venta-refresco.md` (11-oct): `reset=2`
    entre 04 y 11 UTC de lun a jue, tarjetas a las 11:00 UTC, capturas de la madre a 390 y 1440. Correrlo pide el sí de
    Sergio Urcullo en esta sesión.
-3. Punto 6: averiguar qué es «ver todo» en la ficha (brecha:60) y si falta.
+3. Punto 6: «ver todo» resuelto (es «Ver historia completa», en producción desde el 6-oct). Queda mirarlo con login (madre).
 4. Lo que destraben sus respuestas (§7), en el orden del corte (`ONIA_1.0_CORTE.md`).
 5. 1.1 de identidad: los textos de tú del panel («No se envía nada hasta que lo apruebes») y las 594 formas de vos.
    Hacerlo después de los merges de hoy, para no chocar con las ramas.
