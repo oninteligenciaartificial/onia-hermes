@@ -22,7 +22,7 @@ días abierta y su conversación costó ~777 M de tokens. **La madre nueva arran
 > Sergio Urcullo** (captura o video real en el tablero + SendUserFile) y sale con su OK. Máx 2 frentes propios; respuestas
 > de 3 bloques; relevo antes de ~150 k tokens de contexto; no pushear a onia-platform de :20 a :10 en horas de publicación.
 
-## ▶ ARRANQUE madre DESARROLLO-INFRA (texto para pegar, 11-oct ~05:10 UTC)
+## ▶ ARRANQUE madre DESARROLLO-INFRA (texto para pegar, 11-oct; vale para el relevo de las ~07:45 UTC: leer además «ESTADO madre DESARROLLO-INFRA» de abajo y seguir la ronda)
 
 > Sos la MADRE DESARROLLO-INFRA de Onia, en la PC de Sergio Urcullo. Llamalo «Sergio Urcullo». Tus nubes: **Plataforma y
 > Hermes-Jarvis (QA)**, más VPS e infra. Lucía, Marca y Ventas son de la sesión local **MADRE MARKETING**: no les escribas;
@@ -36,7 +36,7 @@ días abierta y su conversación costó ~777 M de tokens. **La madre nueva arran
 > **Paso 0:** recreá la ronda (CronCreate `7,27,47 * * * *`, solo Plataforma y Hermes; texto en §F del libro) y el parte
 > (07:53) y el cierre (21:53). Después seguí con «Merge en serie» de ESTADO AL CLEAN.
 
-## ▶ ESTADO madre DESARROLLO-INFRA (sesión `35353b71`, 11-oct 07:15 UTC)
+## ▶ ESTADO madre DESARROLLO-INFRA (sesión `35353b71`, 11-oct 07:45 UTC) — TOCA RELEVO (contexto ~150 k)
 
 - **Loops (CronCreate de esta sesión):** ronda `31104903` (:07 :27 :47; Haiku lee Plataforma y Hermes, rellena colas, lanza
   Codex, 4 líneas a SU) · parte `d4a66458` (07:53 La Paz) · cierre `f7c70a45` (21:53 La Paz). Mueren con la sesión.
@@ -46,6 +46,10 @@ días abierta y su conversación costó ~777 M de tokens. **La madre nueva arran
   `codex/hermes-qa-web-vs-producto` L1 + L1b (782dd348, 6f64e094; Hermes hace cherry-pick). Q9 lo cubre U4. U3b cancelada.
   Cupo: `node scripts/codex-cupo.mjs` → 0 % semanal, reinicio 18-oct 05:16 UTC. Tope 3 corridas locales entre las dos madres
   (disco C: ~6,3 GB; worktrees de onia-platform ~30 MB con junction; de onia-hermes, sparse).
+- **07:15-07:45:** #150 + P-01b (dcc3090f, frenado por Hermes hasta correr symlinks en Linux) · #154 S2 IP solo desde
+  Cloudflare (Astra, 10.517/0, espera revisión de seguridad) · #155 F136b apilado sobre #147 (reabrir 7 días con motivo, 409 al
+  borrar pagos de día cerrado; 10.550/0) · Hermes dio OK a #147 (E4) · L1c corriendo en Codex Luna en
+  C:/dev/proyectos/onia-hermes-codex-l1 rama codex/hermes-l1c-html-real (al terminar: node --test, commit, push, avisar a Hermes).
 - **Orden de merge pedido a Plataforma:** #147 (con OK de Hermes, antes de 09:20 UTC) → #153 → #148 → #149 → su C1-C6
   (`d8c486f5`) → #150/#151. Línea base del trinquete al mergear en serie = base + deltas.
 - **QA del harness** (105 subagentes Haiku): `research/2026-10-11-harness-qa/` + `ONIA_HARNESS.md` §9-§10, commit `2b059484`.
