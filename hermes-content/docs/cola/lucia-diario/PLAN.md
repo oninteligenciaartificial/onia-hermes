@@ -88,7 +88,7 @@ Cada fila es una prueba chica, con su video. Los costos son cotizaciones en vivo
 
 ## 4-bis. Estructura semanal fija (11-oct)
 
-> **LISTA PARA MOSTRAR: estructura Lucía.** Dirección de Sergio Urcullo, 11-oct: *«arma su estructura de contenido y enseña cosas de IA»*, sobre
+> **APROBADA por Sergio Urcullo el 11-oct ~03:55 UTC (vía la madre v4).** Siguen pendientes de él: D-N1, el acento de Marcela y el token de Instagram (B). Dirección de Sergio Urcullo, 11-oct: *«arma su estructura de contenido y enseña cosas de IA»*, sobre
 > *«Lucía sigue aprendiendo Higgsfield para venderlo y ser una modelo AI independiente»*. **Una prueba por semana saca tres piezas:** lo que cuesta
 > se paga una vez y lo demás sale de la misma prueba a 0 créditos. Hasta 3 piezas por semana, **19:00 La Paz (23:00 UTC)**.
 
