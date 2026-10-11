@@ -60,6 +60,7 @@ Leyenda de dueño: `H` Haiku · `S` Sonnet · `O` Opus · `CxSol` / `CxAstra` Co
 - [ ] C5 Acá: paridad nube = PC (16 skills + 2 agentes + reglas de memoria a CLAUDE.md/AGENTS.md). Frenado por permisos.
 - [ ] C6 Acá: ¿CI como gate en vez de la suite de la PC? (más PRs en paralelo).
 - [ ] C9 Lucía G1 con voz Marcela: HECHO 01:45 UTC (`.madre-ver/lucia-g1-voz.mp4`, 320 caracteres enviados, quedan 381; -14 LUFS; Whisper confirma texto). Mostrado a SU; espera «publicá G1 de Lucía». Dirección SU: Lucía = modelo IA independiente (avisado a su sesión).
+  **11-oct ~04 UTC:** v2 de 20 s sin silencios (`.madre-ver/lucia-g1-v2.mp4`, receta Erik) → SU: «publicá G1 de Lucía». BLOQUEO: no existe `/root/.config/onia-publicar/ig-lucia.env`; el token viejo solo está en el volumen de Postiz (PG17; `postgres:17-alpine` no está en el VPS, bajarla pide su sí). SU elige A (bajar la imagen y sacar el token sin verlo) o B (token nuevo en developers.facebook.com, pegado en el VPS). Estructura de contenido de Lucía encargada a su sesión.
 - [ ] C7 Gasto: bucket R2 (punto 4) · tarjeta en ONIA Ads + US$56 · el SIAT (CAFC, reloj 4-nov) · OK al REVOKE del B22.
 - [ ] C8 Punto 1: aprobar en `/admin/payments` el pago de prueba de «ZZ QA Pago» (la madre lo prepara con Chrome).
 
