@@ -1,0 +1,524 @@
+{
+  "video": "/tmp/claude-0/-home-user-onia-hermes/0fd2553b-524b-53fe-9e97-5c1ac80566e6/scratchpad/brutos/C_3941A129.mp4",
+  "modo": "audio",
+  "noise": "-35dB",
+  "minSil": 0.3,
+  "pad": 0.12,
+  "origDur": 104.37,
+  "finalDur": 90.74,
+  "silences": [
+    {
+      "start": 0,
+      "end": 0.862268
+    },
+    {
+      "start": 5.20959,
+      "end": 5.59454
+    },
+    {
+      "start": 6.17628,
+      "end": 6.64837
+    },
+    {
+      "start": 9.46236,
+      "end": 9.79304
+    },
+    {
+      "start": 11.9802,
+      "end": 12.3289
+    },
+    {
+      "start": 13.8795,
+      "end": 14.3023
+    },
+    {
+      "start": 15.5617,
+      "end": 16.0392
+    },
+    {
+      "start": 17.9402,
+      "end": 18.3526
+    },
+    {
+      "start": 21.4746,
+      "end": 21.8559
+    },
+    {
+      "start": 23.528,
+      "end": 23.8946
+    },
+    {
+      "start": 24.0378,
+      "end": 24.4202
+    },
+    {
+      "start": 26.5821,
+      "end": 26.9141
+    },
+    {
+      "start": 27.2121,
+      "end": 27.5797
+    },
+    {
+      "start": 28.2811,
+      "end": 28.6702
+    },
+    {
+      "start": 31.8978,
+      "end": 32.5208
+    },
+    {
+      "start": 33.3561,
+      "end": 33.7763
+    },
+    {
+      "start": 37.1027,
+      "end": 37.5345
+    },
+    {
+      "start": 39.2727,
+      "end": 39.687
+    },
+    {
+      "start": 43.3094,
+      "end": 43.6702
+    },
+    {
+      "start": 44.1877,
+      "end": 46.5382
+    },
+    {
+      "start": 46.9909,
+      "end": 47.5332
+    },
+    {
+      "start": 48.5837,
+      "end": 49.3354
+    },
+    {
+      "start": 52.2632,
+      "end": 52.6783
+    },
+    {
+      "start": 54.8346,
+      "end": 55.1681
+    },
+    {
+      "start": 55.7319,
+      "end": 56.1825
+    },
+    {
+      "start": 57.9982,
+      "end": 58.4503
+    },
+    {
+      "start": 62.8675,
+      "end": 63.2146
+    },
+    {
+      "start": 64.94,
+      "end": 65.3779
+    },
+    {
+      "start": 65.8152,
+      "end": 66.306
+    },
+    {
+      "start": 68.6052,
+      "end": 69.0654
+    },
+    {
+      "start": 69.7309,
+      "end": 70.1627
+    },
+    {
+      "start": 72.684,
+      "end": 73.2334
+    },
+    {
+      "start": 76.7342,
+      "end": 77.0944
+    },
+    {
+      "start": 78.0899,
+      "end": 78.5708
+    },
+    {
+      "start": 78.9738,
+      "end": 79.3127
+    },
+    {
+      "start": 81.5878,
+      "end": 81.987
+    },
+    {
+      "start": 83.5512,
+      "end": 85.7352
+    },
+    {
+      "start": 87.7305,
+      "end": 88.2065
+    },
+    {
+      "start": 91.0596,
+      "end": 91.4135
+    },
+    {
+      "start": 92.9751,
+      "end": 93.3989
+    },
+    {
+      "start": 96.4445,
+      "end": 96.9908
+    },
+    {
+      "start": 99.2701,
+      "end": 99.7064
+    },
+    {
+      "start": 102.858,
+      "end": 104.372
+    }
+  ],
+  "keep": [
+    {
+      "start": 0.74,
+      "end": 5.33
+    },
+    {
+      "start": 5.47,
+      "end": 6.3
+    },
+    {
+      "start": 6.53,
+      "end": 9.58
+    },
+    {
+      "start": 9.67,
+      "end": 12.1
+    },
+    {
+      "start": 12.21,
+      "end": 14
+    },
+    {
+      "start": 14.18,
+      "end": 15.68
+    },
+    {
+      "start": 15.92,
+      "end": 18.06
+    },
+    {
+      "start": 18.23,
+      "end": 21.59
+    },
+    {
+      "start": 21.74,
+      "end": 23.65
+    },
+    {
+      "start": 23.77,
+      "end": 24.16
+    },
+    {
+      "start": 24.3,
+      "end": 26.7
+    },
+    {
+      "start": 26.79,
+      "end": 27.33
+    },
+    {
+      "start": 27.46,
+      "end": 28.4
+    },
+    {
+      "start": 28.55,
+      "end": 32.02
+    },
+    {
+      "start": 32.4,
+      "end": 33.48
+    },
+    {
+      "start": 33.66,
+      "end": 37.22
+    },
+    {
+      "start": 37.41,
+      "end": 39.39
+    },
+    {
+      "start": 39.57,
+      "end": 43.43
+    },
+    {
+      "start": 43.55,
+      "end": 44.31
+    },
+    {
+      "start": 46.42,
+      "end": 47.11
+    },
+    {
+      "start": 47.41,
+      "end": 48.7
+    },
+    {
+      "start": 49.22,
+      "end": 52.38
+    },
+    {
+      "start": 52.56,
+      "end": 54.95
+    },
+    {
+      "start": 55.05,
+      "end": 55.85
+    },
+    {
+      "start": 56.06,
+      "end": 58.12
+    },
+    {
+      "start": 58.33,
+      "end": 62.99
+    },
+    {
+      "start": 63.09,
+      "end": 65.06
+    },
+    {
+      "start": 65.26,
+      "end": 65.94
+    },
+    {
+      "start": 66.19,
+      "end": 68.73
+    },
+    {
+      "start": 68.95,
+      "end": 69.85
+    },
+    {
+      "start": 70.04,
+      "end": 72.8
+    },
+    {
+      "start": 73.11,
+      "end": 76.85
+    },
+    {
+      "start": 76.97,
+      "end": 78.21
+    },
+    {
+      "start": 78.45,
+      "end": 79.09
+    },
+    {
+      "start": 79.19,
+      "end": 81.71
+    },
+    {
+      "start": 81.87,
+      "end": 83.67
+    },
+    {
+      "start": 85.62,
+      "end": 87.85
+    },
+    {
+      "start": 88.09,
+      "end": 91.18
+    },
+    {
+      "start": 91.29,
+      "end": 93.1
+    },
+    {
+      "start": 93.28,
+      "end": 96.56
+    },
+    {
+      "start": 96.87,
+      "end": 99.39
+    },
+    {
+      "start": 99.59,
+      "end": 102.98
+    }
+  ],
+  "ffmpeg": "ffmpeg -y -i \"/tmp/claude-0/-home-user-onia-hermes/0fd2553b-524b-53fe-9e97-5c1ac80566e6/scratchpad/brutos/C_3941A129.mp4\" -vf \"select='between(t,0.74,5.33)+between(t,5.47,6.3)+between(t,6.53,9.58)+between(t,9.67,12.1)+between(t,12.21,14)+between(t,14.18,15.68)+between(t,15.92,18.06)+between(t,18.23,21.59)+between(t,21.74,23.65)+between(t,23.77,24.16)+between(t,24.3,26.7)+between(t,26.79,27.33)+between(t,27.46,28.4)+between(t,28.55,32.02)+between(t,32.4,33.48)+between(t,33.66,37.22)+between(t,37.41,39.39)+between(t,39.57,43.43)+between(t,43.55,44.31)+between(t,46.42,47.11)+between(t,47.41,48.7)+between(t,49.22,52.38)+between(t,52.56,54.95)+between(t,55.05,55.85)+between(t,56.06,58.12)+between(t,58.33,62.99)+between(t,63.09,65.06)+between(t,65.26,65.94)+between(t,66.19,68.73)+between(t,68.95,69.85)+between(t,70.04,72.8)+between(t,73.11,76.85)+between(t,76.97,78.21)+between(t,78.45,79.09)+between(t,79.19,81.71)+between(t,81.87,83.67)+between(t,85.62,87.85)+between(t,88.09,91.18)+between(t,91.29,93.1)+between(t,93.28,96.56)+between(t,96.87,99.39)+between(t,99.59,102.98)',setpts=N/FRAME_RATE/TB\" -af \"aselect='between(t,0.74,5.33)+between(t,5.47,6.3)+between(t,6.53,9.58)+between(t,9.67,12.1)+between(t,12.21,14)+between(t,14.18,15.68)+between(t,15.92,18.06)+between(t,18.23,21.59)+between(t,21.74,23.65)+between(t,23.77,24.16)+between(t,24.3,26.7)+between(t,26.79,27.33)+between(t,27.46,28.4)+between(t,28.55,32.02)+between(t,32.4,33.48)+between(t,33.66,37.22)+between(t,37.41,39.39)+between(t,39.57,43.43)+between(t,43.55,44.31)+between(t,46.42,47.11)+between(t,47.41,48.7)+between(t,49.22,52.38)+between(t,52.56,54.95)+between(t,55.05,55.85)+between(t,56.06,58.12)+between(t,58.33,62.99)+between(t,63.09,65.06)+between(t,65.26,65.94)+between(t,66.19,68.73)+between(t,68.95,69.85)+between(t,70.04,72.8)+between(t,73.11,76.85)+between(t,76.97,78.21)+between(t,78.45,79.09)+between(t,79.19,81.71)+between(t,81.87,83.67)+between(t,85.62,87.85)+between(t,88.09,91.18)+between(t,91.29,93.1)+between(t,93.28,96.56)+between(t,96.87,99.39)+between(t,99.59,102.98)',asetpts=N/SR/TB\" \"renders/cut.mp4\"",
+  "rows": [
+    {
+      "i": 0,
+      "start": 0,
+      "end": 6.08,
+      "text": "Hay algo en WhatsApp que se llama la ventana de 24 horas. Si tenés un chat bot de WhatsApp",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 1,
+      "start": 6.08,
+      "end": 11.48,
+      "text": "y querés que envíe mensajes después de las 24 horas de iniciar una conversación con tus",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 2,
+      "start": 11.48,
+      "end": 17.06,
+      "text": "clientes, tenés que hacerlo mediante plantillas. Y cómo funciona todo esto? Cuando un cliente",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 3,
+      "start": 17.06,
+      "end": 22.04,
+      "text": "te envió un mensaje, el bot le responde de la manera que vos le hayas enseñado. Si, por",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 4,
+      "start": 22.04,
+      "end": 28.28,
+      "text": "ejemplo, tu clínica se llama Clínica Vental de Sergio, por ejemplo, ahí vos le colocaste.",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 5,
+      "start": 28.28,
+      "end": 34.26,
+      "text": "tenemos estos horarios, tenemos estos doctores, tenemos estos tratamientos y demás, después de",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 6,
+      "start": 34.26,
+      "end": 39.2,
+      "text": "las 24 horas que pasaron de iniciada la conversación ya no puede ser respondido de esa manera,",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 7,
+      "start": 39.58,
+      "end": 44.22,
+      "text": "solo puede ser respondido mediante plantillas de meta verificadas y probadas.",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 8,
+      "start": 45.88,
+      "end": 52.16,
+      "text": "Por ejemplo, una plantilla sería un mensaje directamente con todos los horarios que tengan,",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 9,
+      "start": 52.48,
+      "end": 57.94,
+      "text": "pero no un mensaje con todos los horarios que tienen disponibles en ese momento,",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 10,
+      "start": 57.94,
+      "end": 64.36,
+      "text": "porque la plantilla es fija y no puede estar cambiándose con variables porque si no meta te las",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 11,
+      "start": 64.36,
+      "end": 70.78,
+      "text": "rechazaría, entonces dentro de las primeras 24 horas puedes reescribirle libremente pero luego",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 12,
+      "start": 70.78,
+      "end": 75.68,
+      "text": "con el agente conversacional de whatsapp después de las 24 horas es sólo mediante plantillas",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 13,
+      "start": 75.68,
+      "end": 81.56,
+      "text": "fijas que por ejemplo sería el horario sin personalización de corario estaría disponible",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 14,
+      "start": 81.56,
+      "end": 83.56,
+      "text": "ese es el único problema que exista.",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 15,
+      "start": 85.36,
+      "end": 87.6,
+      "text": "Entonces la solución que te daría sería",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 16,
+      "start": 87.6,
+      "end": 91,
+      "text": "intentar cerrar la venta dentro de las 24 horas",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 17,
+      "start": 91,
+      "end": 92.94,
+      "text": "y que después de las 24 horas",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 18,
+      "start": 92.94,
+      "end": 96.5,
+      "text": "sea mediante plantillas de seguimiento o de remarketing",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 19,
+      "start": 96.5,
+      "end": 99.22,
+      "text": "y si querés seguir aprendiendo sobre inteligencia artificial",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 20,
+      "start": 99.22,
+      "end": 102.9,
+      "text": "seguime y uníte a mi comunidad que está en el link de mi perfil.",
+      "keep": true,
+      "reason": "contenido"
+    }
+  ]
+}
