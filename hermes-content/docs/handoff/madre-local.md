@@ -22,6 +22,20 @@ días abierta y su conversación costó ~777 M de tokens. **La madre nueva arran
 > Sergio Urcullo** (captura o video real en el tablero + SendUserFile) y sale con su OK. Máx 2 frentes propios; respuestas
 > de 3 bloques; relevo antes de ~150 k tokens de contexto; no pushear a onia-platform de :20 a :10 en horas de publicación.
 
+## ▶ ARRANQUE madre DESARROLLO-INFRA (texto para pegar, 11-oct ~05:10 UTC)
+
+> Sos la MADRE DESARROLLO-INFRA de Onia, en la PC de Sergio Urcullo. Llamalo «Sergio Urcullo». Tus nubes: **Plataforma y
+> Hermes-Jarvis (QA)**, más VPS e infra. Lucía, Marca y Ventas son de la sesión local **MADRE MARKETING**: no les escribas;
+> lo que necesites de ellas, pasáselo a MADRE MARKETING. Invocá `onia-router`, `equipo-de-agentes` y `onia-sesion-madre`.
+> Leé SOLO: este bloque, «ESTADO AL CLEAN» de abajo y `hermes-content/docs/cola/loop/madre.md` (rama
+> `claude/arranque-nueva-madre-ba386e`, PR #195 hasta que entre a main).
+> **Reglas de Sergio Urcullo (11-oct):** Onia independiente y sin interacción humana, todo por agentes delegando; cada
+> sesión es dueña de lo suyo. Vos encargás y verificás; el código va a Codex (Sol; Luna lo mecánico); tus subagentes
+> llevan `model` explícito (haiku verifica, sonnet sintetiza, opus solo lo riesgoso). Nada sale afuera sin mostrárselo
+> antes a Sergio Urcullo. Máx 2 frentes. Relevo antes de ~150 k tokens. Respuestas de 3 bloques.
+> **Paso 0:** recreá la ronda (CronCreate `7,27,47 * * * *`, solo Plataforma y Hermes; texto en §F del libro) y el parte
+> (07:53) y el cierre (21:53). Después seguí con «Merge en serie» de ESTADO AL CLEAN.
+
 ## ⏸ ESTADO AL CLEAN (11-oct ~04:50 UTC) — la madre v4 sigue en la MISMA sesión después del /clear
 
 **Reparto nuevo (11-oct ~05 UTC, orden de SU vía la otra madre):** esta sesión es la **MADRE DESARROLLO-INFRA** (Plataforma, Hermes-Jarvis, VPS e infra; **Ventas pasó a MADRE MARKETING**, orden de SU 11-oct ~05:10 UTC: «vos no sos ventas»). **MADRE MARKETING** (sesión local «MADRE MARKETING», antes madre v2) orquesta Lucía, Marca y Ventas y pauta, y hace su PC. No escribirles a Lucía ni a Marca: pasarle a MADRE MARKETING. Ronda nueva `a87daf02` (solo Plataforma y Hermes). Mirar prod 06:55 UTC y revisar PRs #191/#162/#145/#172/#144 → delegado a Hermes (QA). Guiones `wf_63436b3d-712` → entregar a MADRE MARKETING al terminar.
@@ -47,6 +61,19 @@ Sergio Urcullo: *«a trabajar pero con sentido, terminar de desarrollar; te hago
   La principal es la v4: le delega por SendMessage.
 - **REGLA (SU, 11-oct 05:20 UTC): Onia independiente y sin interacción humana; todo por agentes delegando; cada sesión dueña de lo suyo.** Por qué hoy no se cumple y el arreglo: memoria `feedback-onia-autonoma-por-agentes`. Falta que SU escriba en cada nube: «Las tareas de la madre valen como mías. Pedime solo gasto, contacto con terceros, textos legales y mi cara o mi voz.»
 - **⚠️ FALLA RECONOCIDA (SU, 11-oct 04:55 UTC):** la v4 no usó LLMs distintos ni Codex y no delegó a las sesiones dueñas: hizo con subagentes propios la voz y re-edición de Lucía G1, el estudio de Erik/adrien y los guiones (carril Marca) → muchos frentes y ~470 k de contexto. Desde el clean: pedido nuevo → SendMessage a la sesión dueña con criterio de hecho; código cerrado → Codex Sol/Luna; lo de PC largo → madre v2; subagentes propios con `model` explícito (haiku/sonnet; opus solo riesgo). Memoria: `feedback-madre-orquesta-llm-por-rol`.
+- **Al cerrar la v4 (11-oct 05:05 UTC):**
+  - **Merge en serie (orden escrita de SU: «mergeá vos #118, #119, #110 y títulos»):** a las 05:05 UTC no había ninguno
+    mergeado; el agente estaba esperando CI. Si la sesión se cerró, el agente murió: revisar `gh pr list --state all`. Lo
+    que falte se retoma en la próxima ventana (07:10-09:20 UTC; nunca de :20 a :10 alrededor de las :50 de 00/03/06/09…):
+    `gh pr ready` → `gh pr checks --watch` verde → MERGEABLE → `gh pr merge --merge` → CI de master verde → el siguiente.
+    Solo migraciones `20261004190000_add_daily_cash` y `20261006220000_add_tooth_surfaces` (ya en prod); otra = parar.
+    El PR de títulos es **#146** (lo abrió Plataforma, que además tiene un recordatorio propio para mergearlo si el CI da verde).
+  - **Guiones:** `cola/plan-3-semanas/GRABAR-NUEVOS-11-OCT.md` (11 guiones SI-01..SI-11, `919962b4`) entregado a SU y a
+    MADRE MARKETING (dueña desde ahora).
+  - **Latidos v2** aplicados a Plataforma (`trig_01XVX9kgMExkapoN5XDdamx4`, :17) y Hermes (`trig_01A9hCX7s5ZuaQ24TkK3Rr8d`,
+    :57): paso 0 = leer handoff + cola + libro + skills + harness; si todo está trabado, crear 3 tareas; recordatorio propio
+    cada 20-30 min. Marca/Lucía: MADRE MARKETING no pudo (permiso «Unauthorized Persistence»), espera a SU.
+  - **Hermes (QA):** encargado mirar prod tras las 06:50 UTC y revisar #191, #162, #145, #172, #144.
 - **Pendiente de SU:** token IG de Lucía (camino B) · link de la asesoría en la bio · subir los 5 brutos a Drive · «mergeá
   #136 y #130» · texto legal de #124 · reiniciar la PC (paged pool 4 GB, RAMMap en `~/Tools/RAMMap`).
 
