@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-// Lucía · G2 v2 «La misma foto, seis clips: ¿quién pierde la cara?» (26,5 s, 1080x1920, 24 fps) — re-corte de G2 (58 s, muda) con la regla de aire muerto.
+// Lucía · G2 v2.1 «¿Quién pierde la cara? Seis clips con la misma orden» (≈ 27,8 s, 1080x1920, 24 fps) — re-corte de G2 (58 s, muda) con la regla de aire muerto y la revisión 1 aplicada.
 // Lee guion-voz.txt (UNA línea por tramo; cada tramo dura caracteres/17 s + hueco, scripts/voz.mjs; con duraciones.json manda la voz REAL) y plan.json (tiempos anclados a los tramos: «T6+0.8»)
 // → resuelve todos los tiempos → valida reglas de texto, de voz, de CTA y LOS NÚMEROS contra v4/PROCEDENCIA.jsonl → escribe index.html y plan.resuelto.json.
-// 0 créditos: mismos clips y misma foto de G2. Método y trampas: .claude/skills/lucia/montaje-hyperframes.md. Plantilla: videos/lucia-g2/.
+// 0 créditos: mismos clips y misma foto de G2 (cinco de los seis clips parten de la foto K1; Kling O3 solo recibió referencias). Método y trampas: .claude/skills/lucia/montaje-hyperframes.md. Plantilla: videos/lucia-g2/.
 // Uso:  node scripts/build.mjs   (copia el material si falta, valida e imprime la tabla de cortes)
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';

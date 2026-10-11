@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // H8: cuadros SIN tarjeta narrativa visible. Lleva el timeline a cada cuadro (24 fps) y mira la opacidad real de cada tarjeta (#c1…#c12).
 // Un cuadro cuenta como «con tarjeta» si alguna tiene opacidad ≥ 0,05 (visibility visible) Y está a la vista (3ra pasada: ≥ 25 % de su caja dentro del lienzo).
-// v2: NO se espera ningún hueco: la tarjeta de la promesa («Misma foto. Seis clips.») ya está en pantalla en el cuadro 0.
+// v2: NO se espera ningún hueco: el título («¿Quién pierde la cara?») ya está en pantalla en el cuadro 0.
 // Uso: node scripts/hueco-tarjetas.mjs    (sale con 1 si aparece un hueco fuera de esas dos excepciones)
 import { createRequire } from 'node:module';
 import path from 'node:path';

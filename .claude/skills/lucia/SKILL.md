@@ -97,7 +97,7 @@ description: "Invocar para CUALQUIER trabajo del carril Lucía (Lucía Antelo, l
     photoshoot (K1 0,704 contra el photoshoot): **se mide siempre contra las 8 oficiales**, no contra otro juego.
   - Higgsfield `sandbox_exec` no hace falta (y el control de permisos lo rechazó).
 - **Mapa de TODAS las funciones de Higgsfield, con costos y cara:** `higgsfield-mapa.md` (en esta carpeta). Lo que más pesa:
-  1. **`start_image` ata la escena solo en Kling std/pro y la cara decae** (0,79 → 0,72 en 6 s; Seedance mini y Cinema 3.0 con `start_image` también reencuadran y cambian el fondo); **las referencias de cara la sostienen pero la
+  1. **`start_image` ata la escena solo en Kling std/pro y la cara decae** (0,79 → 0,72 en 6 s; Seedance mini y Cinema 3.0 con `start_image` también reencuadran y cambian el fondo). **No es regla general «la foto sola pierde la cara»** (corregido 11-oct, revisión de G2 v2): Cinema Studio 3.0 con foto sola (20 cr) dio 0,785 → 0,771, dentro del ruido de ±0,03, aunque baja el brillo 13 puntos; pagar más sí sostuvo la cara en ese caso, a 20 cr; **las referencias de cara la sostienen pero la
      escena la inventa el motor** (Kling Omni, 5 refs, sin `start_image`: 0,80 → 0,82, a 6 cr, el más barato). Seedance mini con
      `start_image` + 3 refs sube de 0,69 a 0,80 al mismo precio, pero reencuadra e **inventa letreros**.
   2. Kling pro no mejora el movimiento de std (solo la nitidez, a 1080p nativo): no vale +1,5 cr si se publica a 720p.
@@ -107,7 +107,7 @@ description: "Invocar para CUALQUIER trabajo del carril Lucía (Lucía Antelo, l
      (dif ≤ 0,03) y trae el audio: 3,6 cr por segundo de origen (21,75 por 6,04 s), el clip base aparte.
   5. Una cotización de `get_cost` es el cobro exacto (leer `credits_exact`), salvo `sync_so` que no se cotiza. Máximo 3 trabajos
      simultáneos. `jobs_wait` acepta `jobs:[{index,job_id}]`; `job_display` por id mira el estado sin gastar.
-  6. Música y efectos sueltos **no** salen del MCP. La voz: Higgsfield no trae acento cruceño ni licencia (D4 sigue abierta).
+  6. Música y efectos sueltos **no** salen del MCP. La voz: Higgsfield no trae acento cruceño ni licencia. **D4 resuelta el 11-oct: la voz Marcela (ElevenLabs) queda, con su acento colombiano** (`PLAN.md` §4-bis; `cola/loop/madre.md:75`); las piezas salen mudas y la voz se mezcla después, con el sí de la madre.
 - **Montaje con HyperFrames — `montaje-hyperframes.md`** (en esta carpeta): comandos, estructura del proyecto, técnicas (empuje
   rígido, morph, tarjetas en HTML), controles numéricos y trampas. Caso G1: tres pasadas con revisor independiente.
 - **Pruebas guardadas:** `hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/` (hojas, proxies 360p, README) y
