@@ -11,6 +11,19 @@ nube no tiene cliente `ssh` y la decisión de la madre (8-oct) es que la llave v
 | 4 | G4 «Seis motores de imagen, una cara: ¿cuál la conserva?» (**guion APROBADO por la madre el 10-oct**; sale solo con «mostrada, publicá G4») | `g4-final-1080x1920.mp4` | 59,75 s | `../lucia-g4/pie.txt` | `../lucia-g4/qa/g4-preview-360p.mp4` |
 | 5 | G5 «Cómo mido si una cara es la de Lucía (y cuándo no creerle al número)» (**guion APROBADO por la madre el 10-oct**; sale solo con «mostrada, publicá G5»; guion: `hermes-content/docs/cola/lucia-diario/guiones/G5-como-se-mide-una-cara.md`) | `g5-final-1080x1920.mp4` | 57,5 s | `../lucia-g5/pie.txt` | `../lucia-g5/qa/g5-preview-360p.mp4` |
 
+> **Tabla viejo contra nuevo (11-oct, `medicion-sin-refs-entrada-20261011.txt`; 0 cr).** A = contra las 8 fotos (lo publicado); B = contra solo las fotos que el motor NO recibió. El B−A crudo no es la fuga: las fotos R2, R4 y R8 puntúan bajo en todos los clips,
+> así que el número que cuenta es el exceso sobre los controles sin entradas.
+>
+> | Clip (fotos recibidas) | A inicio → fin | B inicio → fin | B−A (media) | Exceso por fuga (tras control) | Cara |
+> |---|---|---|---:|---:|---|
+> | Seedance 2.0 Mini + refs (R1, R3) | 0,707 → 0,801 | 0,679 → 0,761 | −0,042 | **−0,026** | 139 → 347 px |
+> | Kling O3 (R1, R3, R6, R7) | 0,798 → 0,824 | 0,753 → 0,749 | −0,068 | **−0,012** | 89 → 168 px (poco confiable) |
+> | Kling 3.0 std (control, ninguna) | 0,791 → 0,721 | igual | 0 | — | 115–120 px |
+> | Cinematic Studio 3.0 (control) | 0,785 → 0,771 | igual | 0 | — | 117–238 px |
+>
+> Los dos excesos quedan dentro de ±0,03: la fuga existe (el coseno a R1 y R3 de Seedance supera en +0,126 al de las otras seis) pero se diluye en el centroide de 8. `lucia-qa-tabla.mjs` no se usó: lee el JSON del face-gate y esta medición sale de
+> `.claude/skills/lucia/scripts/parecido_sin_refs.py`, que tiene su propio formato.
+
 > 🛑 **RETENCIÓN de G2 v2 (y revisión de G5 v2 y la pieza 9) — hallazgo del 11-oct, ~07:00 UTC, medido con `job_display` (0 cr).** El parecido se puntúa contra 8 fotos oficiales, y dos clips
 > RECIBIERON fotos de esas 8 como referencia de entrada: **Seedance 2.0 Mini + referencias** (R1 y R3 de 3 referencias; la tercera es la selfie «look ancla») y **Kling O3** (R1, R3, R6 y R7 de 5; la quinta es la selfie).
 > Sus parecidos finales (0,80 y 0,82), que en G2 son «los mejores», están favorecidos; los clips sin referencias (Kling 3.0 std/pro, Seedance sin refs, Cinematic Studio) no. El medidor está calculando el parecido
