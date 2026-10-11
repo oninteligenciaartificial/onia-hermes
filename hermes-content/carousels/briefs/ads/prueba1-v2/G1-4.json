@@ -16,7 +16,7 @@
    "Paciente que no llega",
    "sillón que se paga *igual*"
   ],
-  "voz": "Venga o no el paciente, usted igual paga la hora.",
+  "voz": "Venga o no el paciente, usted paga la hora.",
   "imagen": "Sergio Urcullo en una oficina luminosa, plano medio, mirando a cámara, ropa de oficina; cintilla «Sergio Urcullo · Onia» abajo a la izquierda, logo onia | dental arriba a la derecha y el gancho en dos líneas blancas con la palabra igual en un chip de color.",
   "alineacion": "El texto nombra el paciente que no llega y el sillón que se paga; la voz dice que el dueño paga la hora igual; la imagen es una persona con nombre en la cintilla. Tapando una se adivina el resto, sin repetir la frase.",
   "alternativa": [
@@ -42,9 +42,11 @@
    },
    "pantalla": null,
    "tarjeta": null,
-   "voz": "Venga o no el paciente, usted igual paga la hora.",
+   "voz": "Venga o no el paciente, usted paga la hora.",
    "zona_de_la_referencia": "Referencia 895549733230235-2.png: el doctor a cámara en su clínica, plano medio, cintilla de nombre abajo a la izquierda, logo arriba a la derecha y subtítulo de dos líneas en blanco con la palabra clave en un chip de color.",
-   "logo_fijo": true
+   "logo_fijo": true,
+   "persona_y": -170,
+   "sub_y": 1150
   },
   {
    "id": "c1",
@@ -57,13 +59,13 @@
    "pantalla": {
     "fila": "cita-manana",
     "dispositivo": "tablet",
-    "y": 0.64
+    "y": 0.7
    },
    "tarjeta": null,
    "voz": "Aquí, en Pendientes, le deja anotado quién no confirmó. Con el mensaje listo.",
    "zona_de_la_referencia": "R4 cuadro medio: plano más cerrado, a cámara, la tablet entra por abajo a la derecha. La pantalla va grande y legible, no ~6 % del cuadro como en la referencia (ahí es ilegible).",
    "logo_fijo": true,
-   "sub_y": 1045,
+   "sub_y": 1140,
    "persona_y": -170
   },
   {
@@ -90,7 +92,7 @@
   {
    "tramo": "0-3 s",
    "toma": "Sergio a cámara en la oficina, plano medio, cintilla abajo a la izquierda",
-   "voz": "Venga o no el paciente, usted igual paga la hora.",
+   "voz": "Venga o no el paciente, usted paga la hora.",
    "en_pantalla": "Subtítulo de dos líneas: Paciente que no llega / sillón que se paga *igual*; cintilla Sergio Urcullo · Onia; logo onia arriba a la derecha"
   },
   {
@@ -200,6 +202,7 @@
   "Tener una tablet a mano (si no hay, el celular) y sostenerla a la altura del pecho, inclinada hacia cámara, durante las frases de Pendientes; la pantalla real se pone en edición, ampliada.",
   "Decir el texto de corrido, de usted, y luego grabar tres veces la última frase (la invitación).",
   "Entregar la toma sin música; la tarjeta de cierre con el logo la arma la edición.",
+  "En el gancho, gesto neutro o serio (nada de sonrisa mientras se dice el dolor); sonreír recién en la invitación del final.",
   "Ropa lisa y sin logos ni marcas a la vista (el polo de la maqueta lleva un logo ajeno)."
  ],
  "ficha": "R4",
@@ -244,5 +247,6 @@
  "modelado": {
   "se_queda": "Una persona con nombre en una cintilla pegada al borde, el logo fijo arriba a la derecha, subtítulos de dos líneas con palabra clave en chip, el producto en la segunda mitad y un cierre limpio con el logo.",
   "cambia": "Quién habla (no es un cliente ni un odontólogo: es Sergio Urcullo, sin cargo), el dolor sin cifra, el mecanismo (Pendientes), el nombre, los colores y el cierre (sin «+3500 doctores»)."
- }
+ },
+ "estado": "sale: sus filas (G-04, G-06, B-02, G-01, B-01, C-02, D-01, E-01) son las que el go/no-go ya exige"
 }

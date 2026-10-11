@@ -91,9 +91,37 @@ function hoja(b) {
   return L.join('\n');
 }
 
+// PARA-GRABAR.txt: solo lo que Sergio Urcullo dice (teleprompter, de usted, una frase por renglón, con su duración) y, para la foto, su lista.
+function grabar(piezas) {
+  const L = ['PARA GRABAR · prueba 1 v2 · 11-oct-2026', 'Todo de usted. Una frase por renglón. Entre corchetes, el tramo y los segundos que tiene. Sin música.', 'Nadie se contacta ni se sube nada con esto: es solo para que Sergio Urcullo grabe.', ''];
+  for (const b of piezas) {
+    L.push('='.repeat(64));
+    L.push(`${b.id} · ${b.pieza} · ${b.formato.relacion}${b.formato.duracion_s ? ` · ${b.formato.duracion_s} s` : ''} · código ${b.precargado.match(/\(([A-Z]\d+)\)/)[1]}`);
+    if (/^espera/.test(b.estado ?? '')) L.push(`(ESPERA: ${b.estado.replace(/^espera: /, '')}. Se graba igual para tenerla lista.)`);
+    L.push('='.repeat(64));
+    if (b.foto) {
+      L.push('ES UNA FOTO, NO UN VIDEO. No hay nada que decir.');
+      for (const [k, t] of [['plano', 'Plano'], ['expresion', 'Expresión'], ['en_la_mano', 'En la mano'], ['fondo', 'Fondo'], ['ropa', 'Ropa'], ['cantidad', 'Cuántas'], ['entrega', 'Entrega']]) L.push(`${t}: ${b.foto[k]}`);
+    } else {
+      for (const p of b.guion) {
+        const frases = p.voz.split(/(?<=[.?!])\s+/).filter(Boolean);
+        L.push(`[${p.tramo}]`);
+        for (const f of frases) L.push(f);
+        L.push('');
+      }
+    }
+    L.push('');
+  }
+  return L.join('\n');
+}
+
+const piezas = [];
 for (const f of fs.readdirSync(DIR).filter((x) => /^G1-\d+\.json$/.test(x)).sort()) {
   const b = JSON.parse(fs.readFileSync(path.join(DIR, f), 'utf8'));
+  piezas.push(b);
   const out = path.join(DIR, `${b.id}-hoja.md`);
   fs.writeFileSync(out, hoja(b));
   console.log(path.relative(REPO, out));
 }
+fs.writeFileSync(path.join(DIR, 'PARA-GRABAR.txt'), grabar(piezas));
+console.log(path.relative(REPO, path.join(DIR, 'PARA-GRABAR.txt')));

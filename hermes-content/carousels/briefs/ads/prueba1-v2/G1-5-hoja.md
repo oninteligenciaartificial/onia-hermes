@@ -30,7 +30,7 @@
 | Tramo | Toma | Se dice | En pantalla |
 |---|---|---|---|
 | 0-3 s | Sergio sentado, quieto, mirando a cámara, celular en la mano a la altura del pecho, gesto serio | ¿Y si no vienen todos los de mañana? | Gancho en dos líneas: Su agenda de mañana / ¿y si no *vienen*? |
-| 3-7 s | Sergio levanta el celular; la fila cita-manana de Pendientes, ampliada, debajo del mentón, con la leyenda «Pantalla de Onia · datos de ejemplo» | Cada mañana Onia le deja anotado a quién escribirle, con el mensaje listo. Usted aprueba cada mensaje. | Usted *aprueba* (subtítulo) + fila real |
+| 3-7 s | Sergio levanta el celular; la fila cita-manana de Pendientes, ampliada, debajo del mentón, con la leyenda «Pantalla de Onia · datos de ejemplo» | Onia le deja el mensaje listo. Usted lo aprueba. | Usted *aprueba* (subtítulo) + fila real |
 | 7-10 s | Corte seco a tarjeta verde plana: «EL MENSAJE / LISTO / CON» y el logo; abajo, una línea con el llamado | Pida su demostración gratis. | EL MENSAJE / LISTO / CON + logo onia + «Pida su demostración *gratis*» |
 
 ## El anuncio en Meta
@@ -56,8 +56,8 @@ Escríbanos por WhatsApp y pida su demostración gratis.
 
 | Frase | Fuente y estado | Filas que tienen que estar en ✅ |
 |---|---|---|
-| Onia le deja anotado a quién escribirle, cada mañana | CAT §8 frase 3 · ⬜ sin verificar: corre solo, falta el log del VPS | G-04, G-05, G-06 |
-| El mensaje listo, con Onia (tarjeta final) | CAT §8 frase 3 (son reglas fijas) · ⬜ sin verificar: falta la cuenta demo | G-05, G-06 |
+| Onia le deja anotado a quién escribirle, cada mañana | CAT §8 frase 3 · ⬜ sin verificar: corre solo, falta el log del VPS | G-04, G-06 |
+| El mensaje listo, con Onia (tarjeta final) | CAT §8 frase 3 (son reglas fijas) · ⬜ sin verificar: falta la cuenta demo | G-06 |
 | Usted aprueba el mensaje; ninguno sale sin su OK | CAT §8 frase 3 · ⬜ sin verificar: falta la cuenta demo. Ojo: el recordatorio de cita por correo (B-03) sale solo; en la tarjeta la frase se acota a «el mensaje» (el de Pendientes) y no dice «nada» a secas | G-01 |
 | Onia es un sistema de gestión para clínicas dentales | CAT §4 · ⬜ sin verificar: falta la cuenta demo | B-01, C-02, D-01, E-01 |
 | Pida su demostración gratis | CTA fija del brief · 🟡 verificada solo en parte: la duración de la llamada no se dice porque la web y los mensajes no coinciden | L-04 |
@@ -78,9 +78,9 @@ Escríbanos por WhatsApp y pida su demostración gratis.
 
 ## Lo que graba o fotografía Sergio Urcullo
 
-- Grabar en vertical o en 4:5, sentado y quieto frente a una pared lisa o una ventana, mirando a cámara con el celular en la mano a la altura del pecho y expresión serena.
-- Grabar cinco veces la primera frase (Onia le deja anotado a quién escribirle), con ritmo pausado: es lo único que lleva su cara en los 10 s.
-- Grabar tres veces la frase del segundo tramo, primero mirando el celular y al final a cámara.
+- Grabar en vertical o en 4:5, sentado y quieto frente a una pared lisa o una ventana, mirando a cámara con el celular en la mano a la altura del pecho y gesto serio (no sonreír).
+- Grabar cinco veces la primera frase (¿Y si no vienen todos los de mañana?), con ritmo pausado: es lo único que lleva su cara en los 10 s.
+- Grabar tres veces la frase del segundo tramo (Onia le deja el mensaje listo. Usted lo aprueba.), primero mirando el celular y al final a cámara; son 9 palabras para 4 s.
 - Si hay otra pared o ventana disponible, grabar una toma extra con otro fondo (la referencia cambia de fondo a mitad).
 - La tarjeta final y el logo los pone la edición.
 - Ropa lisa y sin logos ni marcas a la vista (el polo de la maqueta lleva un logo ajeno).

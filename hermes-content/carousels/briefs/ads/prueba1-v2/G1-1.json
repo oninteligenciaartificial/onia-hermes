@@ -22,7 +22,7 @@
    "Pacientes de mañana",
    "sin *confirmar*"
   ],
-  "voz": "¿Sabe si vendrán todos los de mañana?",
+  "voz": "Clínica dental: ¿vendrán todos los de mañana?",
   "imagen": "Sergio Urcullo sentado en un banco o escalón al aire libre, plano medio-largo, mirando a cámara con el celular en la mano apoyada en la rodilla; el gancho va en un chip sobre las rodillas.",
   "alineacion": "La voz pregunta si vendrán todos los de mañana, el chip dice «Pacientes de mañana / sin confirmar» y la imagen es Sergio sentado, quieto, con el celular en la rodilla: tapando cualquiera de las tres se adivinan las otras dos sin repetir la frase.",
   "alternativa": [
@@ -45,10 +45,10 @@
    "cintilla": null,
    "pantalla": null,
    "tarjeta": null,
-   "voz": "¿Sabe si vendrán todos los de mañana?",
+   "voz": "Clínica dental: ¿vendrán todos los de mañana?",
    "zona_de_la_referencia": "Referencia 1064012876297472.png (primer cuadro): persona sentada al aire libre, plano medio-largo, sin producción; el subtítulo va en un chip sobre las rodillas (tercio inferior del cuadro).",
-   "sub_y": 1330,
-   "estilo_subtitulo": "color"
+   "sub_y": 1150,
+   "persona_y": -170
   },
   {
    "id": "c1",
@@ -61,13 +61,12 @@
    "pantalla": {
     "fila": "cita-manana",
     "dispositivo": "celular",
-    "y": 0.64
+    "y": 0.7
    },
    "tarjeta": null,
    "voz": "Onia revisa su agenda cada mañana. Le deja anotado quién tiene cita mañana y no confirmó. Y el mensaje, listo.",
    "zona_de_la_referencia": "Referencia 1064012876297472-2.png: la misma toma sentada con el chip subido a la altura de la cabeza (en la referencia el chip cambia de lugar en cada frase); aquí Sergio sostiene el celular y la fila de Pendientes, ampliada, ocupa casi todo el ancho debajo del chip.",
-   "sub_y": 1045,
-   "estilo_subtitulo": "color",
+   "sub_y": 1140,
    "persona_y": -170
   },
   {
@@ -82,10 +81,9 @@
    "tarjeta": null,
    "voz": "Escríbanos por WhatsApp y pida su demostración gratis.",
    "zona_de_la_referencia": "Referencia 1064012876297472-4.png: el chip del cierre queda en el centro del torso con la persona entera de fondo; en la referencia lleva su marca, aquí la invitación única.",
-   "marca_grande": true,
-   "sub_y": 1480,
-   "marca_y": 0.64,
-   "estilo_subtitulo": "color"
+   "sub_y": 1150,
+   "persona_y": -170,
+   "logo_fijo": true
   }
  ],
  "estatico": null,
@@ -93,7 +91,7 @@
   {
    "tramo": "0-3 s",
    "toma": "Selfie sentado, plano medio-largo, celular en la mano apoyada en la rodilla",
-   "voz": "¿Sabe si vendrán todos los de mañana?",
+   "voz": "Clínica dental: ¿vendrán todos los de mañana?",
    "en_pantalla": "Gancho en chip, tercio inferior: Citas de mañana / sin *confirmar*"
   },
   {
@@ -191,6 +189,7 @@
   "Decir el texto de corrido, de usted y con voz natural: una toma completa de 25 a 30 s y tres tomas extra de la última frase (la invitación).",
   "Tener el celular en la mano apoyada en la rodilla durante toda la toma y levantarlo en las frases de Pendientes; la pantalla de Onia se pone en edición, no hace falta mostrarla.",
   "Probar 10 s de audio antes para comprobar que no hay ruido de calle.",
+  "En el gancho, gesto neutro o serio (nada de sonrisa mientras se dice el dolor); sonreír recién en la invitación del final.",
   "Ropa lisa y sin logos ni marcas a la vista (el polo de la maqueta lleva un logo ajeno)."
  ],
  "ficha": "R1",
@@ -204,7 +203,7 @@
   [
    "Subtítulo",
    "4-5 palabras por línea, violeta con contorno blanco; cambia de altura (33 % → 69-75 % → 47-57 %).",
-   "Verde de Onia con contorno blanco (como el violeta de R1, sin chip); también cambia de altura (69 % → 53 % → 79 %)."
+   "Chip amarillo del «Pendiente» de la app (texto oscuro sobre fondo claro) con UNA palabra; queda en 59-60 % del alto y no más abajo: en Reels el tercio inferior lo tapan el texto del anuncio y el botón."
   ],
   [
    "Producto",
@@ -214,7 +213,7 @@
   [
    "Marca / cierre",
    "«dt.dental» enorme (47-57 %) dentro del último subtítulo; sin tarjeta final.",
-   "«onia» enorme sobre el torso + «Pida su demostración gratis»; sin tarjeta final."
+   "`onia` chico fijo arriba a la derecha + «Pida su demostración gratis». **Cambia:** el nombre enorme caería en la zona que tapa Reels."
   ],
   [
    "CTA",
@@ -229,6 +228,7 @@
  ],
  "modelado": {
   "se_queda": "Una persona sentada hablándole a cámara sin producción, subtítulos grandes que cambian de altura y el nombre de la marca grande al final.",
-  "cambia": "El tema (una norma colombiana de reporte: Onia no tiene una obligación que anunciar) por el dolor de la clínica dental; el mecanismo (Pendientes); el nombre y los colores (marca de la web, no violeta). Suma la pantalla real, que la referencia no tiene. Los subtítulos de R1 son de color de marca con contorno claro y SIN chip: acá van en el verde de Onia con contorno blanco."
- }
+  "cambia": "El tema (una norma colombiana de reporte: Onia no tiene una obligación que anunciar) por el dolor de la clínica dental; el mecanismo (Pendientes); el nombre y los colores (marca de la web, no violeta). Suma la pantalla real, que la referencia no tiene. Los subtítulos de R1 son violeta con contorno claro y sin chip; acá van en el chip amarillo de la app (el verde con contorno blanco se veía barato junto a la referencia)."
+ },
+ "estado": "sale: sus filas (G-04, G-06, B-02, G-01, B-01, C-02, D-01, E-01) son las que el go/no-go ya exige"
 }

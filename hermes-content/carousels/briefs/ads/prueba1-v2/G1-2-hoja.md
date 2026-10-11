@@ -11,10 +11,10 @@
 
 | Zona | Referencia (lo que se ve en su captura) | Nuestra |
 |---|---|---|
-| **Inicio** | Presentadora a la derecha, cortada por el borde, señalando a cámara; palabra gigante amarilla («TIENES») a 29-34 % del alto. | Sergio a la derecha; el énfasis del gancho, «AVISO», en amarillo gigante a ~27 % (el gancho sigue en 2 líneas). |
+| **Inicio** | Presentadora a la derecha, cortada por el borde, señalando a cámara; palabra gigante amarilla («TIENES») a 29-34 % del alto. | Sergio a la derecha; «no vuelve» entero en amarillo gigante a ~25 % del alto (el gancho sigue en 2 líneas). |
 | **Medio** | Corte seco a tarjeta azul con patrón; texto chico que se escribe solo. | Tarjeta verde de Onia, lisa (no se inventa una trama), con 2 líneas **más grandes** que la referencia para que se lean a 390 px. |
 | **Final** | Presentadora más cerca, subtítulo CTA ámbar sin chip a 61-63 %; sin tarjeta final ni logo. | Sergio más cerca, subtítulo CTA con chip a ~65 %; sin tarjeta final. |
-| **Póster** | Mockup de celular con avisos apilados. | La pantalla REAL de Pendientes (dos filas); sin avisos inventados. |
+| **Póster** | Mockup de celular con avisos apilados. | UNA fila REAL de Pendientes; sin avisos inventados. |
 | **Forma del copy** | «El secreto de… No es X, no es Y… Es Z.» (la fórmula que CitaPro repite en sus 3 anuncios). | Dos preguntas y un giro, con otras palabras: «¿Se enojaron? ¿Se fueron a otra clínica? A veces, nadie les escribió.» No usa «El secreto», ni «No es…», ni «simplemente» (la palabra de su tarjeta). |
 | **Largo** | 62 s. | 33 s. |
 
@@ -87,11 +87,12 @@ Escríbanos por WhatsApp y pida su demostración gratis.
 
 ## Lo que graba o fotografía Sergio Urcullo
 
-- Grabar en vertical, de medio cuerpo, con fondo liso o de oficina y luz de ventana, ropa de calle sencilla, mirando a cámara.
+- Grabar en vertical, de medio cuerpo, con fondo liso o de oficina y luz de ventana, ropa de calle sencilla, mirando a cámara y señalando a cámara en la primera frase (como la presentadora de la referencia).
 - Decir el texto de corrido dos veces, de usted y con pausas cortas entre frases, para que la edición pueda poner la tarjeta palabra por palabra en el medio.
-- Grabar aparte la primera frase (Hay pacientes que hace meses no vuelven) en una toma limpia: se usa sobre la pantalla, sin su cara.
+- La primera frase (Hay pacientes que hace meses no vuelven) va CON su cara: él en el cuadro, señalando; la pantalla de Onia entra recién a los 19 s.
 - Grabar la última frase (la invitación) tres veces, mirando a cámara y sonriendo al terminar.
 - No hace falta grabar la pantalla de Onia: se compone en edición.
+- En el gancho, gesto neutro o serio (nada de sonrisa mientras se dice el dolor); sonreír recién en la invitación del final.
 - Ropa lisa y sin logos ni marcas a la vista (el polo de la maqueta lleva un logo ajeno).
 
 ## Límites de esta maqueta

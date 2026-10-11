@@ -170,6 +170,28 @@ test("lo que la pieza dice está atado a filas de ONIA_PROMESA_VS_PRODUCTO.md y 
   }
 });
 
+test("solo las piezas que ESPERAN pueden atarse a G-05 (⬜ hoy): la prueba 1 usa las filas que el go/no-go ya exige", () => {
+  const EXIGIDAS = new Set(["B-01", "B-02", "C-02", "D-01", "E-01", "G-01", "G-04", "G-06", "L-04"]);
+  for (const { b } of piezas) {
+    assert.ok(/^(sale|espera)/.test(b.estado ?? ""), `${b.id}: falta el estado (sale / espera)`);
+    const filas = new Set(b.promesas.flatMap((p) => p.filas ?? []));
+    if (/^espera/.test(b.estado)) assert.ok(filas.has("G-05"), `${b.id}: espera por G-05 y no la cita`);
+    else for (const f of filas) assert.ok(EXIGIDAS.has(f), `${b.id}: sale en la prueba 1 pero depende de ${f}, que el go/no-go no exige (¿G-05 sin verificar?)`);
+  }
+});
+
+test("lo que Sergio Urcullo dice entra en su tramo: ≤ 3,3 palabras por segundo (G1-5 tenía 17 palabras en 4 s)", () => {
+  for (const { b } of piezas) {
+    for (const p of b.guion ?? []) {
+      const m = p.tramo.match(/^(\d+)-(\d+) s$/);
+      assert.ok(m, `${b.id}: tramo «${p.tramo}» sin formato «a-b s»`);
+      const seg = Number(m[2]) - Number(m[1]);
+      const palabras = p.voz.trim().split(/\s+/).length;
+      assert.ok(palabras <= seg * 3.3, `${b.id} ${p.tramo}: ${palabras} palabras en ${seg} s (${(palabras / seg).toFixed(1)} por segundo; el tope es 3,3)`);
+    }
+  }
+});
+
 test("la persona es Sergio Urcullo con su nombre, nunca un odontólogo ni un cliente; la pantalla es una de las dos filas reales", () => {
   for (const { b } of piezas) {
     for (const c of b.cuadros ?? []) {

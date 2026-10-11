@@ -17,14 +17,14 @@
    "no *confirmó*?"
   ],
   "voz": null,
-  "imagen": "Cuadrado 1:1: titular en la columna izquierda; a la derecha Sergio Urcullo de medio cuerpo con el celular en la mano; cruzando la costura, UNA tarjeta real de Pendientes con «Cita de mañana a las 10:00 sin confirmar», con la leyenda «datos de ejemplo»; el botón abajo a la izquierda.",
+  "imagen": "Cuadrado 1:1: titular en la columna izquierda; a la derecha Sergio Urcullo de medio cuerpo mirando el celular que tiene en la mano, preocupado, sin sonreír; cruzando la costura, UNA tarjeta real de Pendientes con «Cita de mañana a las 10:00 sin confirmar», con la leyenda «datos de ejemplo»; el botón abajo a la izquierda.",
   "alineacion": "El titular pregunta quién de mañana no confirmó y la tarjeta real contesta con un caso («Cita de mañana a las 10:00 sin confirmar»); Sergio con el celular muestra de dónde sale. Sin voz: la imagen sola se lee en un segundo.",
   "alternativa": [
    "Su lista de la mañana",
    "ya está *hecha*"
   ]
  },
- "texto_principal": "Para dueños y dueñas de clínicas dentales de Santa Cruz.\nSi nadie se acuerda de escribirle a un paciente, esa hora igual se paga: sillón, equipo y alquiler.\nOnia es un sistema de gestión para clínicas dentales: en Pendientes, cada mañana le deja anotado quién tiene cita mañana y quién hace meses no vuelve, con el mensaje listo.\nNingún mensaje de Pendientes sale sin que usted lo apruebe.\nEscríbanos por WhatsApp y pida su demostración gratis.",
+ "texto_principal": "Para dueños y dueñas de clínicas dentales de Santa Cruz.\nSi nadie se acuerda de escribirle a un paciente, esa hora igual se paga: sillón, equipo y alquiler.\nOnia es un sistema de gestión para clínicas dentales: en Pendientes, cada mañana le deja anotado quién tiene cita mañana y no confirmó, con el mensaje listo.\nNingún mensaje de Pendientes sale sin que usted lo apruebe.\nEscríbanos por WhatsApp y pida su demostración gratis.",
  "titular": "Pida su demostración gratis",
  "boton": "Enviar mensaje de WhatsApp",
  "precargado": "Hola, vi el anuncio de Onia (D9). Tengo una clínica dental.",
@@ -37,9 +37,7 @@
   "enfasis": "anotado",
   "bajada": [
    "Onia le deja la lista",
-   "con el mensaje listo.",
-   "Usted aprueba",
-   "cada mensaje."
+   "con el mensaje listo."
   ],
   "boton": "Escríbanos por WhatsApp",
   "filas": [
@@ -53,7 +51,6 @@
    "fuente": "CAT §8 frase 3 · ⬜ sin verificar: corre solo, falta el log del VPS",
    "filas": [
     "G-04",
-    "G-05",
     "G-06"
    ]
   },
@@ -61,7 +58,6 @@
    "frase": "Le deja el mensaje listo",
    "fuente": "CAT §8 frase 3 (son reglas fijas) · ⬜ sin verificar: falta la cuenta demo",
    "filas": [
-    "G-05",
     "G-06"
    ]
   },
@@ -78,13 +74,6 @@
    "filas": [
     "G-06",
     "B-02"
-   ]
-  },
-  {
-   "frase": "Tarjeta 2: quien hace meses no vuelve (fila vuelve)",
-   "fuente": "Recorte real de Pendientes, captura del candidato del 30-sep · ⬜ sin verificar: falta la cuenta demo",
-   "filas": [
-    "G-05"
    ]
   },
   {
@@ -123,8 +112,8 @@
   "No muestra el texto del mensaje al paciente ni el botón de envío de la pantalla."
  ],
  "para_sergio": [
-  "Fotografiar de medio cuerpo, a la derecha del encuadre, con luz de ventana y fondo claro y liso, mirando el celular que sostiene con las dos manos con gesto serio (no sonriendo a cámara); dejar libre la mitad izquierda de la foto.",
-  "Sacar diez fotos: cinco mirando al celular y cinco mirando a cámara con gesto serio; en todas, ropa de calle lisa, sin bata y sin logos.",
+  "Fotografiar de medio cuerpo, a la derecha del encuadre, con luz de ventana y fondo claro y liso, MIRANDO EL CELULAR que sostiene con las dos manos, con gesto preocupado y NADA de sonrisa; dejar libre la mitad izquierda de la foto.",
+  "Sacar diez fotos: seis mirando el celular, preocupado, y cuatro mirando a cámara con gesto serio; en todas, ropa de calle lisa, sin bata y sin logos (la imagen es fija: un logo en el polo se publica).",
   "Dejar la pantalla del celular apagada o en negro: la tarjeta con la lista se compone aparte.",
   "Entregar las fotos en vertical y en horizontal, sin filtros ni retoques y en la mejor resolución."
  ],
@@ -143,8 +132,8 @@
   ],
   [
    "Persona",
-   "Mujer agobiada a la derecha, cortada por el borde, mira el celular (≈ la mitad del cuadro).",
-   "Sergio a la derecha, cortado por el borde, ≈ 2/3 de la altura. **Maqueta:** mira a cámara y sonríe; la foto real lo muestra serio, mirando el celular."
+   "Mujer agobiada a la derecha, cortada por el borde, mira el celular con la mano en la sien (≈ la mitad del cuadro).",
+   "Sergio a la derecha, cortado por el borde, ≈ 2/3 de la altura. **Toma real:** mirando el celular, preocupado, nada de sonrisa (la expresión de R3). **Maqueta:** mira a cámara y sonríe, porque es su foto de perfil."
   ],
   [
    "Burbujas",
@@ -164,6 +153,16 @@
  ],
  "modelado": {
   "se_queda": "Dos columnas con el texto a la izquierda y la persona a la derecha cortada por el borde, las tarjetas flotando en la costura, y el botón abajo a la izquierda.",
-  "cambia": "El dolor (WhatsApp saturado → quién de mañana no confirmó), lo que flota (una fila real de la lista, no chats), el nombre, los colores y el titular a 2 líneas. Sin «IA», sin «sin intervención humana», sin «piloto automático». La cara de agobio de R3 NO se copia: Sergio no hace de dueño agobiado."
+  "cambia": "El dolor (WhatsApp saturado → quién de mañana no confirmó), lo que flota (una fila real de la lista, no chats), el nombre, los colores y el titular a 2 líneas. Sin «IA», sin «sin intervención humana», sin «piloto automático». La expresión de R3 (preocupación mirando el celular) SÍ se copia; Sergio no dice ser cliente: el lockup `onia | dental` y la leyenda de la pantalla lo identifican."
+ },
+ "estado": "sale: sus filas (G-04, G-06, B-02, G-01, B-01, C-02, D-01, E-01) son las que el go/no-go ya exige",
+ "foto": {
+  "plano": "Medio cuerpo (de la cintura para arriba), él en el tercio derecho del encuadre; la mitad izquierda queda libre para el titular.",
+  "expresion": "Preocupado, mirando el celular. Nada de sonrisa. (La referencia muestra el dolor en la cara; la maqueta sonríe porque es su foto de perfil.)",
+  "en_la_mano": "El celular, con las dos manos, a la altura del pecho, con la pantalla apagada o en negro (la tarjeta de Pendientes se compone aparte).",
+  "fondo": "Claro y liso (pared blanca o gris muy claro), luz de ventana; sin objetos ni carteles detrás.",
+  "ropa": "De calle, lisa, sin bata y SIN logos ni marcas a la vista (es una imagen fija: un logo en el polo se publica).",
+  "cantidad": "Diez fotos: seis mirando el celular, preocupado, y cuatro mirando a cámara con gesto serio.",
+  "entrega": "En vertical y en horizontal, sin filtros ni retoques y en la mejor resolución."
  }
 }

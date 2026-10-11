@@ -12,9 +12,9 @@
 | Zona | Referencia (lo que se ve en su captura) | Nuestra |
 |---|---|---|
 | **Persona** | Joven de pelo largo sentada afuera, plano entero (cabeza a pies), cara en el tercio superior (17-75 % del alto), cámara fija, mira a cámara y gesticula. | Sergio Urcullo sentado, ropa de calle, misma toma fija. **Maqueta:** busto recortado; la toma real es plano medio-largo. |
-| **Subtítulo** | 4-5 palabras por línea, violeta con contorno blanco; cambia de altura (33 % → 69-75 % → 47-57 %). | Verde de Onia con contorno blanco (como el violeta de R1, sin chip); también cambia de altura (69 % → 53 % → 79 %). |
+| **Subtítulo** | 4-5 palabras por línea, violeta con contorno blanco; cambia de altura (33 % → 69-75 % → 47-57 %). | Chip amarillo del «Pendiente» de la app (texto oscuro sobre fondo claro) con UNA palabra; queda en 59-60 % del alto y no más abajo: en Reels el tercio inferior lo tapan el texto del anuncio y el botón. |
 | **Producto** | Ni logo ni pantalla en ningún momento visto. | **Cambia a propósito:** la fila real de Pendientes en el medio (regla «producto visible o no sale»). |
-| **Marca / cierre** | «dt.dental» enorme (47-57 %) dentro del último subtítulo; sin tarjeta final. | «onia» enorme sobre el torso + «Pida su demostración gratis»; sin tarjeta final. |
+| **Marca / cierre** | «dt.dental» enorme (47-57 %) dentro del último subtítulo; sin tarjeta final. | `onia` chico fijo arriba a la derecha + «Pida su demostración gratis». **Cambia:** el nombre enorme caería en la zona que tapa Reels. |
 | **CTA** | Botón de la tarjeta «Ir al perfil de Instagram». | Botón de Meta «Enviar mensaje de WhatsApp». Ninguna referencia va a WhatsApp: es hipótesis de Onia (ADQ §5.10). |
 | **Largo** | 53 s. | 28 s. |
 
@@ -22,7 +22,7 @@
 
 - **Texto en pantalla:** «Pacientes de mañana / sin confirmar» (2 líneas de 19 y 13 caracteres, sin punto final, un énfasis).
 - **Se ve (cuadro 0):** Sergio Urcullo sentado en un banco o escalón al aire libre, plano medio-largo, mirando a cámara con el celular en la mano apoyada en la rodilla; el gancho va en un chip sobre las rodillas.
-- **Se dice:** «¿Sabe si vendrán todos los de mañana?»
+- **Se dice:** «Clínica dental: ¿vendrán todos los de mañana?»
 - **Alinean sin repetirse:** La voz pregunta si vendrán todos los de mañana, el chip dice «Pacientes de mañana / sin confirmar» y la imagen es Sergio sentado, quieto, con el celular en la rodilla: tapando cualquiera de las tres se adivinan las otras dos sin repetir la frase.
 - **Alternativa:** «Mañana hay citas / en duda»
 
@@ -30,7 +30,7 @@
 
 | Tramo | Toma | Se dice | En pantalla |
 |---|---|---|---|
-| 0-3 s | Selfie sentado, plano medio-largo, celular en la mano apoyada en la rodilla | ¿Sabe si vendrán todos los de mañana? | Gancho en chip, tercio inferior: Citas de mañana / sin *confirmar* |
+| 0-3 s | Selfie sentado, plano medio-largo, celular en la mano apoyada en la rodilla | Clínica dental: ¿vendrán todos los de mañana? | Gancho en chip, tercio inferior: Citas de mañana / sin *confirmar* |
 | 3-9 s | Misma toma; el chip sube a la altura de la cabeza | Soy Sergio Urcullo, de Onia. Esto es lo que le deja cada mañana. | Subtítulo en chip: Soy Sergio Urcullo, de *Onia* |
 | 9-18 s | Sergio levanta el celular; la fila de Pendientes ampliada ocupa casi todo el ancho | Onia revisa su agenda cada mañana. Le deja anotado quién tiene cita mañana y no confirmó. Y el mensaje, listo. | Fila cita-manana legible a 390 px de ancho (texto ampliado, nunca el mensaje ni el botón de envío) con la leyenda «Pantalla de Onia · datos de ejemplo»; subtítulo: Quién tiene cita mañana y *no confirmó* |
 | 18-23 s | Vuelve la selfie; el chip va al centro | Usted aprueba cada mensaje. | Subtítulo en chip: Usted lo *aprueba* |
@@ -53,7 +53,7 @@ Escríbanos por WhatsApp y pida su demostración gratis.
 ## Modelar, no clonar
 
 - **Se queda:** Una persona sentada hablándole a cámara sin producción, subtítulos grandes que cambian de altura y el nombre de la marca grande al final.
-- **Cambia:** El tema (una norma colombiana de reporte: Onia no tiene una obligación que anunciar) por el dolor de la clínica dental; el mecanismo (Pendientes); el nombre y los colores (marca de la web, no violeta). Suma la pantalla real, que la referencia no tiene. Los subtítulos de R1 son de color de marca con contorno claro y SIN chip: acá van en el verde de Onia con contorno blanco.
+- **Cambia:** El tema (una norma colombiana de reporte: Onia no tiene una obligación que anunciar) por el dolor de la clínica dental; el mecanismo (Pendientes); el nombre y los colores (marca de la web, no violeta). Suma la pantalla real, que la referencia no tiene. Los subtítulos de R1 son violeta con contorno claro y sin chip; acá van en el chip amarillo de la app (el verde con contorno blanco se veía barato junto a la referencia).
 
 ## Promesas: cada frase atada a su fila
 
@@ -86,6 +86,7 @@ Escríbanos por WhatsApp y pida su demostración gratis.
 - Decir el texto de corrido, de usted y con voz natural: una toma completa de 25 a 30 s y tres tomas extra de la última frase (la invitación).
 - Tener el celular en la mano apoyada en la rodilla durante toda la toma y levantarlo en las frases de Pendientes; la pantalla de Onia se pone en edición, no hace falta mostrarla.
 - Probar 10 s de audio antes para comprobar que no hay ruido de calle.
+- En el gancho, gesto neutro o serio (nada de sonrisa mientras se dice el dolor); sonreír recién en la invitación del final.
 - Ropa lisa y sin logos ni marcas a la vista (el polo de la maqueta lleva un logo ajeno).
 
 ## Límites de esta maqueta

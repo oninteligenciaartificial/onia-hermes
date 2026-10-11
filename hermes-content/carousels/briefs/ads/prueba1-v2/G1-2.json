@@ -14,7 +14,7 @@
  "gancho": {
   "texto": [
    "Paciente que hace meses",
-   "no *vuelve*"
+   "*no vuelve*"
   ],
   "voz": "Hay pacientes que hace meses no vuelven.",
   "imagen": "Sergio Urcullo a la derecha del cuadro, de frente, señalando a cámara; en el tercio superior, el gancho de 2 líneas con la palabra «VUELVE» gigante en amarillo.",
@@ -35,12 +35,12 @@
    "rol": "inicio",
    "toma": "persona",
    "persona": "derecha",
-   "subtitulo": "Paciente que hace meses\nno *vuelve*",
+   "subtitulo": "Paciente que hace meses\n*no vuelve*",
    "cintilla": null,
    "pantalla": null,
    "tarjeta": null,
    "voz": "Hay pacientes que hace meses no vuelven.",
-   "zona_de_la_referencia": "R2 cuadro inicio: presentadora a la derecha, cortada por el borde, señalando a cámara; palabra gigante amarilla («TIENES») a 29-34 % del alto. Acá el énfasis del gancho, «VUELVE», es la palabra gigante.",
+   "zona_de_la_referencia": "R2 cuadro inicio: presentadora a la derecha, cortada por el borde, señalando a cámara; palabra gigante amarilla («TIENES») a 29-34 % del alto. Acá la frase «no vuelve» entera, en el mismo tamaño y color.",
    "estilo_subtitulo": "gancho-gigante",
    "sub_y": 330,
    "persona_y": 230
@@ -76,7 +76,8 @@
    "tarjeta": null,
    "voz": "Escríbanos por WhatsApp y pida su demostración gratis.",
    "zona_de_la_referencia": "R2 cuadro final: presentadora más cerca, subtítulo CTA sin chip a ~62 % del alto, sin tarjeta final ni logo.",
-   "sub_y": 1250
+   "sub_y": 1150,
+   "persona_y": -170
   },
   {
    "id": "c3",
@@ -88,16 +89,15 @@
    "cintilla": null,
    "pantalla": {
     "fila": [
-     "vuelve",
-     "cita-manana"
+     "vuelve"
     ],
     "dispositivo": "celular",
-    "y": 0.33
+    "y": 0.36
    },
    "tarjeta": null,
    "voz": "Cada mañana revisa su agenda. Le deja anotado quién hace meses no vuelve, con el mensaje listo.",
-   "zona_de_la_referencia": "R2 póster de la tarjeta: mockup de celular con las avisos apilados. Acá es la pantalla REAL de Pendientes (dos filas), sin avisos inventados.",
-   "sub_y": 1180
+   "zona_de_la_referencia": "R2 póster de la tarjeta: mockup de celular con avisos apilados. Acá, UNA fila real de Pendientes (la de «Última visita hace 7 meses»), grande y con su leyenda.",
+   "sub_y": 960
   }
  ],
  "estatico": null,
@@ -221,11 +221,12 @@
   "No muestra el texto del mensaje al paciente ni el botón de envío de la pantalla."
  ],
  "para_sergio": [
-  "Grabar en vertical, de medio cuerpo, con fondo liso o de oficina y luz de ventana, ropa de calle sencilla, mirando a cámara.",
+  "Grabar en vertical, de medio cuerpo, con fondo liso o de oficina y luz de ventana, ropa de calle sencilla, mirando a cámara y señalando a cámara en la primera frase (como la presentadora de la referencia).",
   "Decir el texto de corrido dos veces, de usted y con pausas cortas entre frases, para que la edición pueda poner la tarjeta palabra por palabra en el medio.",
-  "Grabar aparte la primera frase (Hay pacientes que hace meses no vuelven) en una toma limpia: se usa sobre la pantalla, sin su cara.",
+  "La primera frase (Hay pacientes que hace meses no vuelven) va CON su cara: él en el cuadro, señalando; la pantalla de Onia entra recién a los 19 s.",
   "Grabar la última frase (la invitación) tres veces, mirando a cámara y sonriendo al terminar.",
   "No hace falta grabar la pantalla de Onia: se compone en edición.",
+  "En el gancho, gesto neutro o serio (nada de sonrisa mientras se dice el dolor); sonreír recién en la invitación del final.",
   "Ropa lisa y sin logos ni marcas a la vista (el polo de la maqueta lleva un logo ajeno)."
  ],
  "ficha": "R2",
@@ -234,7 +235,7 @@
   [
    "Inicio",
    "Presentadora a la derecha, cortada por el borde, señalando a cámara; palabra gigante amarilla («TIENES») a 29-34 % del alto.",
-   "Sergio a la derecha; el énfasis del gancho, «AVISO», en amarillo gigante a ~27 % (el gancho sigue en 2 líneas)."
+   "Sergio a la derecha; «no vuelve» entero en amarillo gigante a ~25 % del alto (el gancho sigue en 2 líneas)."
   ],
   [
    "Medio",
@@ -249,7 +250,7 @@
   [
    "Póster",
    "Mockup de celular con avisos apilados.",
-   "La pantalla REAL de Pendientes (dos filas); sin avisos inventados."
+   "UNA fila REAL de Pendientes; sin avisos inventados."
   ],
   [
    "Forma del copy",
@@ -265,5 +266,6 @@
  "modelado": {
   "se_queda": "La alternancia presentadora → tarjeta de color de marca → presentadora más cerca; una palabra gigante en el tercio superior; cierre hablado sin tarjeta final.",
   "cambia": "La idea (leads que se enfrían → pacientes que dejan de venir sin que nadie les escriba), el mecanismo (Pendientes, no un asistente que responde WhatsApp), el nombre, los colores y el largo. Sin IA, sin «24/7», sin «sin intervención humana»."
- }
+ },
+ "estado": "espera: la fila G-05 (Vuelve a citar) está ⬜ sin verificar; no entra a la prueba 1 hasta que pase a ✅ con la cuenta demo"
 }

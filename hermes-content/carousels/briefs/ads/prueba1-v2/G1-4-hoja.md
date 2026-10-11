@@ -23,7 +23,7 @@
 
 - **Texto en pantalla:** «Paciente que no llega / sillón que se paga igual» (2 líneas de 21 y 24 caracteres, sin punto final, un énfasis).
 - **Se ve (cuadro 0):** Sergio Urcullo en una oficina luminosa, plano medio, mirando a cámara, ropa de oficina; cintilla «Sergio Urcullo · Onia» abajo a la izquierda, logo onia | dental arriba a la derecha y el gancho en dos líneas blancas con la palabra igual en un chip de color.
-- **Se dice:** «Venga o no el paciente, usted igual paga la hora.»
+- **Se dice:** «Venga o no el paciente, usted paga la hora.»
 - **Alinean sin repetirse:** El texto nombra el paciente que no llega y el sillón que se paga; la voz dice que el dueño paga la hora igual; la imagen es una persona con nombre en la cintilla. Tapando una se adivina el resto, sin repetir la frase.
 - **Alternativa:** «Una hora sin paciente / se paga igual»
 
@@ -31,7 +31,7 @@
 
 | Tramo | Toma | Se dice | En pantalla |
 |---|---|---|---|
-| 0-3 s | Sergio a cámara en la oficina, plano medio, cintilla abajo a la izquierda | Venga o no el paciente, usted igual paga la hora. | Subtítulo de dos líneas: Paciente que no llega / sillón que se paga *igual*; cintilla Sergio Urcullo · Onia; logo onia arriba a la derecha |
+| 0-3 s | Sergio a cámara en la oficina, plano medio, cintilla abajo a la izquierda | Venga o no el paciente, usted paga la hora. | Subtítulo de dos líneas: Paciente que no llega / sillón que se paga *igual*; cintilla Sergio Urcullo · Onia; logo onia arriba a la derecha |
 | 3-9 s | Misma toma | Soy Sergio Urcullo, de Onia. Es un sistema de gestión para clínicas dentales. | Subtítulo: Soy Sergio Urcullo, de *Onia* |
 | 9-14 s | Sergio levanta la tablet hacia cámara | Cada mañana, Onia revisa su agenda. | Subtítulo: Cada mañana revisa su *agenda* |
 | 14-21 s | La tablet con la fila de Pendientes se amplía a casi cuadro completo; Sergio arriba | Aquí, en Pendientes, le deja anotado quién no confirmó. Con el mensaje listo. | Fila cita-manana legible a 390 px de ancho (nunca el mensaje ni el botón de envío) con la leyenda «Pantalla de Onia · datos de ejemplo»; subtítulo: Le deja anotado quién *no confirmó* |
@@ -90,6 +90,7 @@ Escríbanos por WhatsApp y pida su demostración gratis.
 - Tener una tablet a mano (si no hay, el celular) y sostenerla a la altura del pecho, inclinada hacia cámara, durante las frases de Pendientes; la pantalla real se pone en edición, ampliada.
 - Decir el texto de corrido, de usted, y luego grabar tres veces la última frase (la invitación).
 - Entregar la toma sin música; la tarjeta de cierre con el logo la arma la edición.
+- En el gancho, gesto neutro o serio (nada de sonrisa mientras se dice el dolor); sonreír recién en la invitación del final.
 - Ropa lisa y sin logos ni marcas a la vista (el polo de la maqueta lleva un logo ajeno).
 
 ## Límites de esta maqueta

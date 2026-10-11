@@ -61,13 +61,13 @@ body{font-family:Archivo,sans-serif;-webkit-font-smoothing:antialiased;font-stre
 .fit{white-space:nowrap;display:inline-block}
 .card{position:absolute;background:#FCFDFC;border-radius:26px;padding:20px 22px;box-shadow:0 18px 46px rgba(12,17,15,.22),0 2px 6px rgba(12,17,15,.12)}
 .card img{display:block;width:100%;height:auto}
-.rot{position:absolute;font-size:30px;letter-spacing:.09em;text-transform:uppercase;color:var(--suave);font-weight:600}
+.rot{position:absolute;font-size:34px;letter-spacing:.08em;text-transform:uppercase;color:#E3E8E5;font-weight:700;text-shadow:0 2px 8px rgba(0,0,0,.55)}
 .sub{white-space:pre-line;position:absolute;left:0;right:0;text-align:center;padding:0 70px;font-weight:800;color:#fff;line-height:1.16;letter-spacing:-.01em;text-shadow:0 3px 14px rgba(0,0,0,.55)}
 .sub.color{color:#027650;-webkit-text-stroke:7px #fff;paint-order:stroke fill;text-shadow:none;font-weight:900;letter-spacing:.012em;word-spacing:.1em}
 .sub.color em{background:none;color:#027650;padding:0}
 .sub.gg{line-height:1.05}
 .sub.gg .l1{display:block}
-.sub.gg em{display:inline-block;background:none;color:#FBF751;font-size:170px;font-weight:900;text-transform:uppercase;letter-spacing:-.02em;line-height:1;padding:0;text-shadow:0 4px 22px rgba(0,0,0,.5)}
+.sub.gg em{display:inline-block;background:none;color:#FBF751;font-size:138px;font-weight:900;text-transform:uppercase;letter-spacing:-.02em;line-height:1;padding:0;text-shadow:0 4px 22px rgba(0,0,0,.5)}
 .sub.gigante{font-size:190px;line-height:1;text-transform:uppercase;font-weight:900;color:#FBF751;letter-spacing:-.02em}
 .sub em{font-style:normal;background:var(--chip);color:var(--chip-t);padding:0 .22em;border-radius:.2em;text-shadow:none;box-decoration-break:clone;-webkit-box-decoration-break:clone}
 .cintilla{position:absolute;left:0;background:var(--tinta);color:#fff;border-radius:0 18px 18px 0;padding:22px 40px 22px 56px;border-left:14px solid var(--senal)}
@@ -102,9 +102,10 @@ function fila(id, ancho, estilo = '') {
 const FONDOS = { tinta: ['#0C110F', '#ECEFED', LOGO_TINTA], hoja: ['#F4F6F4', '#0C110F', LOGO_CLARO], verde: ['#027650', '#FFFFFF', LOGO_BLANCO] };
 
 function persona(W, H, pos, dy = 0) {
-  const ancho = H >= 1900 ? 1400 : H >= 1300 ? 1120 : 900;
-  const alto = Math.round((ancho * PERSONA.h) / PERSONA.w);
+  let ancho = H >= 1900 ? 1400 : H >= 1300 ? 1120 : 900;
   const top = (H >= 1900 ? 400 : H >= 1300 ? 320 : 230) + dy;
+  ancho = Math.max(ancho, Math.ceil(((H - top + 24) * PERSONA.w) / PERSONA.h)); // llega siempre al borde de abajo
+  const alto = Math.round((ancho * PERSONA.h) / PERSONA.w);
   const left = Math.round((W - ancho) / 2) + (pos === 'derecha' ? 250 : 0);
   return `<img class="persona" src="${url(PERSONA.src)}" style="width:${ancho}px;height:${alto}px;left:${left}px;top:${top}px">`;
 }
@@ -144,11 +145,11 @@ function htmlCuadro(b, c, W, H) {
     let y = top0;
     for (const id of filas) {
       const w = Math.round(FILAS[id].w * k), alto = Math.round(FILAS[id].h * k) + 40;
-      const left = Math.round((W - w - 44) / 2) + (flotando ? 18 : 0);
-      cuerpo += fila(id, w, `left:${left}px;top:${y}px${flotando ? ';transform:rotate(-2deg)' : ''}`);
+      const left = Math.round((W - w - 44) / 2);
+      cuerpo += fila(id, w, `left:${left}px;top:${y}px`);
       y += alto + 24;
     }
-    if (flotando) cuerpo += `<div class="rot" style="left:0;right:0;text-align:center;top:${y - 8}px;font-size:28px">Pantalla de Onia · datos de ejemplo</div>`;
+    if (flotando) cuerpo += `<div class="rot" style="left:0;right:0;text-align:center;top:${y - 6}px;font-size:34px">Pantalla de Onia · datos de ejemplo</div>`;
     if (!flotando) cuerpo += `<div class="rot" style="left:${Math.round((W - 940 - 44) / 2)}px;top:${top0 - 62}px">Pantalla de Onia · datos de ejemplo</div>`;
   }
   if (c.subtitulo) {
@@ -168,7 +169,7 @@ function htmlEstatico(b) {
   // fila real de Pendientes, grande, cruzando la costura (la crítica del 11-oct: con dos filas la segunda no se leía).
   const e = b.estatico;
   const fila0 = (e.filas || ['cita-manana'])[0];
-  const tit = e.titular.map((l) => `<div class="fit tit" data-max="545">${marcar(l).replace(/<em>/g, '<em class="v">')}</div>`).join('');
+  const tit = e.titular.map((l) => `<div class="fit tit" data-max="560">${marcar(l).replace(/<em>/g, '<em class="v">')}</div>`).join('');
   const baj = (e.bajada || []).map((l) => `<p>${esc(l)}</p>`).join('');
   const ancho = 880, alto = Math.round((ancho * FILAS[fila0].h) / FILAS[fila0].w) + 40;
   const top = 742;
@@ -176,9 +177,9 @@ function htmlEstatico(b) {
   <img class="abs" src="${url(LOGO_CLARO)}" style="left:64px;top:50px;height:50px;width:auto">
   <img class="abs" src="${url(PERSONA.src)}" style="width:820px;height:${Math.round((820 * PERSONA.h) / PERSONA.w)}px;right:-36px;top:256px">
   <div class="abs" style="left:64px;top:130px;display:flex;flex-direction:column;line-height:1.03;letter-spacing:-.025em;font-weight:800;color:#0C110F">${tit}</div>
-  <div class="abs baj" style="left:64px;top:372px;width:520px;font-size:42px;line-height:1.25;color:#2C3430;font-weight:500">${baj}</div>
+  <div class="abs baj" style="left:64px;top:372px;width:520px;font-size:40px;line-height:1.26;color:#2C3430;font-weight:500">${baj}</div>
   ${fila(fila0, ancho, `left:36px;top:${top}px`)}
-  <div class="rot" style="left:56px;top:${top + alto + 6}px;font-size:25px;color:#2C3430;background:rgba(244,246,244,.94);padding:3px 12px;border-radius:8px">Pantalla de Onia · datos de ejemplo</div>
+  <div class="rot" style="left:56px;top:${top + alto + 6}px;font-size:25px;text-shadow:none;color:#2C3430;background:rgba(244,246,244,.94);padding:3px 12px;border-radius:8px">Pantalla de Onia · datos de ejemplo</div>
   <div class="abs" style="left:64px;top:984px"><span class="btn" style="font-size:40px;padding:20px 44px">${wa()}${esc(e.boton || 'Escríbanos por WhatsApp')}</span></div>`;
 }
 

@@ -57,7 +57,7 @@
     "y": 0.78
    },
    "tarjeta": null,
-   "voz": "Cada mañana Onia le deja anotado a quién escribirle, con el mensaje listo. Usted aprueba cada mensaje.",
+   "voz": "Onia le deja el mensaje listo. Usted lo aprueba.",
    "zona_de_la_referencia": "Referencia 1952892278698712-3.png: la misma persona sentada, otro fondo, mismo plano; aquí Sergio sostiene el celular y la fila de Pendientes ampliada ocupa el tercio central del cuadro, con él detrás.",
    "sub_y": 880,
    "persona_y": -100
@@ -96,7 +96,7 @@
   {
    "tramo": "3-7 s",
    "toma": "Sergio levanta el celular; la fila cita-manana de Pendientes, ampliada, debajo del mentón, con la leyenda «Pantalla de Onia · datos de ejemplo»",
-   "voz": "Cada mañana Onia le deja anotado a quién escribirle, con el mensaje listo. Usted aprueba cada mensaje.",
+   "voz": "Onia le deja el mensaje listo. Usted lo aprueba.",
    "en_pantalla": "Usted *aprueba* (subtítulo) + fila real"
   },
   {
@@ -112,7 +112,6 @@
    "fuente": "CAT §8 frase 3 · ⬜ sin verificar: corre solo, falta el log del VPS",
    "filas": [
     "G-04",
-    "G-05",
     "G-06"
    ]
   },
@@ -120,7 +119,6 @@
    "frase": "El mensaje listo, con Onia (tarjeta final)",
    "fuente": "CAT §8 frase 3 (son reglas fijas) · ⬜ sin verificar: falta la cuenta demo",
    "filas": [
-    "G-05",
     "G-06"
    ]
   },
@@ -167,9 +165,9 @@
   "No muestra el texto del mensaje al paciente ni el botón de envío de la pantalla."
  ],
  "para_sergio": [
-  "Grabar en vertical o en 4:5, sentado y quieto frente a una pared lisa o una ventana, mirando a cámara con el celular en la mano a la altura del pecho y expresión serena.",
-  "Grabar cinco veces la primera frase (Onia le deja anotado a quién escribirle), con ritmo pausado: es lo único que lleva su cara en los 10 s.",
-  "Grabar tres veces la frase del segundo tramo, primero mirando el celular y al final a cámara.",
+  "Grabar en vertical o en 4:5, sentado y quieto frente a una pared lisa o una ventana, mirando a cámara con el celular en la mano a la altura del pecho y gesto serio (no sonreír).",
+  "Grabar cinco veces la primera frase (¿Y si no vienen todos los de mañana?), con ritmo pausado: es lo único que lleva su cara en los 10 s.",
+  "Grabar tres veces la frase del segundo tramo (Onia le deja el mensaje listo. Usted lo aprueba.), primero mirando el celular y al final a cámara; son 9 palabras para 4 s.",
   "Si hay otra pared o ventana disponible, grabar una toma extra con otro fondo (la referencia cambia de fondo a mitad).",
   "La tarjeta final y el logo los pone la edición.",
   "Ropa lisa y sin logos ni marcas a la vista (el polo de la maqueta lleva un logo ajeno)."
@@ -206,5 +204,6 @@
  "modelado": {
   "se_queda": "Diez segundos, una persona quieta mirando a cámara, una sola idea y un corte seco a una tarjeta de color plano con el logo.",
   "cambia": "La idea (de la cancelación como resultado a un mecanismo: «el mensaje ya está listo y usted lo aprueba»), el nombre, los colores y la persona (Sergio, no una doctora generada)."
- }
+ },
+ "estado": "sale: sus filas (G-04, G-06, B-02, G-01, B-01, C-02, D-01, E-01) son las que el go/no-go ya exige"
 }
