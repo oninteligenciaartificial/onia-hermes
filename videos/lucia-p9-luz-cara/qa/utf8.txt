@@ -1,1 +1,1 @@
-33 archivos TXT validos UTF-8, sin NUL. EXIT 0
+txt utf8 ok 31 nul []

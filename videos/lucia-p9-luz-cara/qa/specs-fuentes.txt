@@ -1,4 +1,9 @@
-ffprobe -v error -select_streams v:0 -show_entries stream=width,height,avg_frame_rate,nb_frames,duration -of json [fuente]
-m1 kit/k1-clip-mira-camara-e470ef4f.mp4: 720x1280, 24/1 fps, 145 cuadros, 6.041667 s. EXIT 0
-m4 proxy proxies/seedance-mini-refs-dd2d7c91-360p.mp4: 360x640, 24/1 fps, 145 cuadros, 6.041667 s. EXIT 0
-Esto verifica entradas, NO specs de un master. m4 completo sigue ausente.
+ffprobe de las fuentes COMPLETAS usadas por el master (11-oct, sesion Lucia; sin proxy):
+../../hermes-content/references/modelos/lucia/v4/kit/k1-clip-mira-camara-e470ef4f.mp4: h264,720,1280,24/1,6.041667,145
+../../hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/seedance-mini-refs-dd2d7c91.mp4: h264,720,1280,24/1,6.041667,145
+assets/m1.mp4: h264,720,1280,24/1,6.041667,145
+assets/m4-full.mp4: h264,720,1280,24/1,6.041667,145
+b190e87950d953bc925671d8a557d5479f6cae55d51efeaa9923eedd65a28091  ../../hermes-content/references/modelos/lucia/v4/kit/k1-clip-mira-camara-e470ef4f.mp4
+b190e87950d953bc925671d8a557d5479f6cae55d51efeaa9923eedd65a28091  assets/m1.mp4
+346173dada1d32fd63010d122f6bcdc5fc4538105bd07f6def9c120a67b4fa74  ../../hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/seedance-mini-refs-dd2d7c91.mp4
+346173dada1d32fd63010d122f6bcdc5fc4538105bd07f6def9c120a67b4fa74  assets/m4-full.mp4

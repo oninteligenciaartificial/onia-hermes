@@ -1,0 +1,5 @@
+out/p9-final-1080x1920.mp4
+SHA-256 969ac27d219bec9ea9ba013aee0c55c8d055c2dff463ddc940abf14a4075282e
+video: h264 High, yuv420p, 1080x1920, 24/1 fps, 480 cuadros, 20,000 s
+audio: aac LC, 48000 Hz, estereo, 20,000 s, volumedetect mean -91,0 dB / max -91,0 dB (silencio)
+contenedor: mov,mp4 (faststart), 21.309.350 bytes, 8,52 Mb/s

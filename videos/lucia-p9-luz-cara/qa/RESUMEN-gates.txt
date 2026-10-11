@@ -1,21 +1,30 @@
-# Gates corridos por la madre en la PC (11-oct), Windows, Node 24, Chromium local de Playwright; sin render, sin red. Exit esperado 1 en build-sin-flag y master-ready.
-0  node scripts/build.mjs --borrador
-0  node scripts/build.mjs --borrador
-0  idempotencia md5 0bc4ba745a09b3afb4b5f3d579b7040a
-1  node scripts/build.mjs
-1  node scripts/master-ready.mjs
+# Gates del MASTER P9, corridos por la sesion Lucia (editor), 11-oct-2026, contenedor Linux (Node 22.22, Chromium /opt/pw-browsers/chromium, ffmpeg del sistema, hyperframes@0.8.142 por npx -y), 0 creditos, sin voz, sin publicar.
+# Orden de corrida. Exit code a la izquierda. index.html md5 0cb8fb6c71c5a6453dc52c3aabb7eb71 en todos los gates posteriores al arreglo del lint.
+0  node scripts/build.mjs                         (SIN --borrador; usa assets/m4-full.mp4; 304 caracteres de voz, 480 cuadros)
+0  node scripts/build.mjs  (2.a vez)              idempotencia: mismo md5 (qa/idempotencia.txt)
+0  node scripts/master-ready.mjs
 0  node scripts/voz.mjs
 0  node scripts/retemporizar.mjs
-0  node scripts/ventanas.mjs --estatico
-0  node scripts/hueco-tarjetas.mjs --estatico
-0  node scripts/eventos.mjs --estatico
-0  node scripts/aire.mjs --estatico
-0  node scripts/costuras.mjs --estatico
-0  node scripts/ventanas.mjs
-0  node scripts/hueco-tarjetas.mjs
-0  node scripts/eventos.mjs
-0  node scripts/aire.mjs
-0  node scripts/costuras.mjs
-0  node scripts/medir-dom.mjs
-0  node scripts/grep-prohibidas.mjs
-0  node scripts/validar-mutaciones.mjs
+0  node scripts/ventanas.mjs                      (DOM real; 11 textos, todos con su tiempo; CTA 2,417 s)
+0  node scripts/hueco-tarjetas.mjs                0 cuadros sin tarjeta de 480
+0  node scripts/eventos.mjs                       14 eventos, hueco maximo 1,708 s
+0  node scripts/aire.mjs                          quieto fuera de lectura 0,000 s (DOM); sin exencion 1,708 s
+0  node scripts/costuras.mjs                      2 costuras de 6 cuadros, separacion 0,000 px
+0  node scripts/medir-dom.mjs                     1680 cajas / 480 cuadros, 0 fallos, margen menton-texto 59 px
+0  node scripts/grep-prohibidas.mjs               0 coincidencias
+0  node scripts/validar-mutaciones.mjs            10 alteraciones rechazadas
+0  node scripts/verificar-auditor.mjs
+0  ventanas/hueco-tarjetas/eventos/aire/costuras con --estatico (5 gates; reconfirmados tras el arreglo del timeline)
+1  npx -y hyperframes@0.8.142 check  (1.a corrida, ANTES del arreglo): error gsap_css_transform_conflict por el translateX(1080px) en CSS (la correccion de la madre del cuadro 0). Se arreglo la FUENTE (timeline.js + estilos.css), no el umbral.
+0  npx -y hyperframes@0.8.142 check  (tras el arreglo): 0 errores, 3 avisos nested_structure_needs_subcomposition (no frenan), layout 0 problemas en 9 muestras, runtime 0/0, motion 0/0, contraste 26/26 AA  (qa/hyperframes-check.txt)
+0  node scripts/borrador-360.mjs + hyperframes render --quality draft -f 24  -> qa/p9-preview-360p.mp4 (360x640, 24 fps, 480 cuadros, 20,000 s)  [preview MIRADO antes del master]
+0  hyperframes render --quality high -f 24 -o renders/final-raw.mp4  (1 min 10,7 s)
+0  ffmpeg mux AAC silencioso -> out/p9-final-1080x1920.mp4
+0  sha256sum -c qa/sha-master.txt   SHA-256 969ac27d219bec9ea9ba013aee0c55c8d055c2dff463ddc940abf14a4075282e
+0  ffprobe: H.264 High yuv420p 1080x1920, 24 fps, 480 cuadros, 20,000 s; AAC LC 48 kHz estereo 20,000 s (qa/specs-final.json)
+0  volumedetect: mean -91,0 dB, max -91,0 dB (qa/aac-silencio.txt)
+0  node scripts/pixeles.mjs psnr-clips            PSNR minimo 37,07 dB (6 cuadros, >= 35)
+0  node scripts/pixeles.mjs vacios                480 cuadros, 0 planos, quietud fuera de lectura 0,083 s
+0  node scripts/pixeles.mjs aire                  mismo resultado: 0,083 s (tope 0,3)
+0  face-gate.sh (ArcFace) master vs fuente        diferencia maxima 0,017 (<= 0,02)  (qa/arcface-final.txt)
+0  zona segura en pixeles del master              contenido de 300 a 1455 px (qa/zona-segura-pixeles.txt)
