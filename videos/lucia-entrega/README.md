@@ -39,7 +39,7 @@ La voz (Marcela) se mezcla después y **cambia el SHA**: hay que repetir el QA d
 
 | Pieza | Archivo | Duración | SHA-256 | Estado |
 |---|---|---:|---|---|
-| G5 v2 «Cómo mido si una cara es la de Lucía» | `g5-v2-final-1080x1920.mp4` | 26,625 s | `030e8f65aabc0fddda83f234acebb410b951b7b81c3dc9c2657410f5ec399b3f` | **LISTA PARA MOSTRAR** (11-oct): revisión 1 aplicada, cara medida con ArcFace sobre este master (diferencia final↔fuente ≤ 0,009), cuadros mirados; pie en `../lucia-g5-v2/pie.txt` |
+| G5 v2 «Cómo mido si una cara es la de Lucía» | `g5-v2-final-1080x1920.mp4` | 26,625 s | `030e8f65aabc0fddda83f234acebb410b951b7b81c3dc9c2657410f5ec399b3f` | **LISTA PARA MOSTRAR** (11-oct): revisión 1 aplicada, cara medida con ArcFace sobre este master (diferencia final↔fuente ≤ 0,009), cuadros mirados, SHA/specs/pie/cifras contados por verificador haiku y gates de lectura re-corridos por la madre (0 de 639 cuadros sin tarjeta, ventanas y frases prohibidas exit 0); pie en `../lucia-g5-v2/pie.txt` |
 | G2 v2 | — | 26,5 s | — | editada; revisión independiente en curso |
 | G3 v2 | — | — | — | revisión independiente en curso |
 | G4 v2 | — | 28,04 s | — | revisada (aprobado con cambios); arreglos en curso |
