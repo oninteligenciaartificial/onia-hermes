@@ -30,7 +30,7 @@ Orden: lo que destraba cobrar primero. Cada PR: **leer la revisión de Hermes** 
   - #158 F136c, la caja (`32b299ba`);
   - #159 M1b, las cantidades (`9703aa4b`);
   - #160 U8, los correos de usted (`e2a92375`). Su cuerpo dice «11022 verdes, 1 rojo» en la PC después del rebase: hay que ver cuál.
-  También va #157, mío (`92b28b7c`, su CI corre desde las 13:13).
+  También va #157, mío (`92b28b7c`). **#157 MERGEADO a las 13:38:42 UTC** (`54eedf10`), con CI verde (13:13:44-13:38:11) y code-reviewer APROBADO. Sale a las 15:50.
   Plataforma corre `tsc` y la suite completa en cada uno, más un revisor (seguridad para #158, código para #159). Hermes revisa la plata de #158 y #159.
   Se mergea con CI verde, el OK de Hermes y la revisión **antes de las 15:20**.
   El punto 9 de F136c («CAJA DE HOY» en un día anterior) se agregó después de que salió #158: va en la próxima pasada.
