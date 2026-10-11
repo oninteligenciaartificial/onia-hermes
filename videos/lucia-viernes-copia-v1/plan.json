@@ -68,6 +68,13 @@
     "otras_escenas": {
       "K1": 0.794,
       "K2cafe": 0.35
+    },
+    "pares_oficiales": {
+      "fuente": "videos/lucia-p9-luz-cara/qa/face-gate-v31.json → refs_internal (pairwise_min, pairwise_mean y el máximo fuera de la diagonal de matrix; 28 parejas entre las 8 fotos oficiales)",
+      "n": 28,
+      "min": 0.509,
+      "max": 0.719,
+      "media": 0.642
     }
   },
   "textos": {
@@ -75,11 +82,13 @@
     "titulo": "Casi publico este 0,83.",
     "dato": "Kling O1 Image · parecido 0,83",
     "cap_k4": "Kling O1 Image",
+    "cap_k4b": "una sola toma.",
     "cap_r3": "Mirá la foto que recibió.",
     "tile2": "Misma pose, ventana, taza.",
     "fila_a": "Con esa foto: 0,93",
     "fila_b": "Con las otras siete: 0,56 a 0,73",
-    "fila_c": "Con las 4 que no recibió: 0,74",
+    "fila_c": "Promedio de las 4 que no recibió: 0,74",
+    "leyenda_oficiales": "Fotos oficiales entre sí: 0,51 a 0,72",
     "escala_0": "0",
     "escala_piso": "piso 0,70",
     "escala_1": "1",
@@ -114,15 +123,16 @@
       },
       "r3": {
         "tipo": "elipse",
-        "cx": 830,
-        "cy": 1500,
-        "rx": 270,
-        "ry": 440
-      }
+        "cx": 850,
+        "cy": 1340,
+        "rx": 235,
+        "ry": 270
+      },
+      "dibujo": 0.6
     },
     {
       "id": "ventana",
-      "t": 5.25,
+      "t": 4.875,
       "que": "marco de la ventana",
       "k4": {
         "tipo": "rect",
@@ -137,11 +147,12 @@
         "y": 40,
         "w": 140,
         "h": 960
-      }
+      },
+      "dibujo": 0.6
     },
     {
       "id": "taza",
-      "t": 6.0,
+      "t": 5.25,
       "que": "taza de barro junto a la laptop",
       "k4": {
         "tipo": "rect",
@@ -156,7 +167,8 @@
         "y": 1395,
         "w": 300,
         "h": 260
-      }
+      },
+      "dibujo": 0.6
     }
   ],
   "escenas": [
@@ -195,12 +207,12 @@
     "dato": 1404,
     "cap": 1270,
     "tile2": 1406,
-    "fila_a": 380,
-    "fila_b": 579,
-    "fila_c": 734,
-    "nota_copia": 928,
-    "leccion": 1047,
-    "cta": 1218,
+    "fila_a": 360,
+    "fila_b": 559,
+    "fila_c": 884,
+    "nota_copia": 765,
+    "leccion": 1083,
+    "cta": 1245,
     "cap_px": 42,
     "fila_px": 48,
     "nota_px": 50,
@@ -254,14 +266,16 @@
     {
       "t": 4.5,
       "selector": "#aro-pose-k4,#aro-pose-r3",
-      "que": "aro: cabeza apoyada en la mano",
-      "aro": true
+      "que": "aro: cabeza apoyada en la mano (se dibuja en 0,6 s)",
+      "aro": true,
+      "dur": 0.6
     },
     {
-      "t": 5.25,
+      "t": 4.875,
       "selector": "#aro-ventana-k4,#aro-ventana-r3",
-      "que": "aro: marco de la ventana",
-      "aro": true
+      "que": "aro: marco de la ventana (se dibuja en 0,6 s)",
+      "aro": true,
+      "dur": 0.6
     },
     {
       "t": 5.25,
@@ -269,10 +283,11 @@
       "que": "acento del texto de las coincidencias"
     },
     {
-      "t": 6,
+      "t": 5.25,
       "selector": "#aro-taza-k4,#aro-taza-r3",
-      "que": "aro: taza junto a la laptop",
-      "aro": true
+      "que": "aro: taza junto a la laptop (se dibuja en 0,6 s)",
+      "aro": true,
+      "dur": 0.6
     },
     {
       "t": 6.625,
@@ -335,5 +350,9 @@
       "selector": "#cta",
       "que": "acento una prueba semanal"
     }
-  ]
+  ],
+  "piso_en": [
+    "fila-c"
+  ],
+  "aro_len": 1000
 }

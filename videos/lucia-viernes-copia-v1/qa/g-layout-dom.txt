@@ -3,25 +3,28 @@ Medida DOM (Chromium real, fuentes de marca locales) de cada tile: top, alto, bo
 rotulo      (s1 t=2.5s) x   80 w  920  y    1190 →    1258  alto     68  líneas [585]
 titulo      (s1 t=2.5s) x   80 w  920  y    1282 →  1379.9  alto   97.9  líneas [657]
 dato        (s1 t=2.5s) x   80 w  920  y    1404 →  1474.2  alto   70.2  líneas [536]
-cap-k4      (s2 t=6s) x   80 w  440  y    1270 →    1387  alto    117  líneas [258]
+cap-k4      (s2 t=6s) x   80 w  440  y    1270 →    1387  alto    117  líneas [258,258]
 cap-r3      (s2 t=6s) x  560 w  440  y    1270 →    1387  alto    117  líneas [195,210]
 tile2       (s2 t=6s) x   80 w  920  y    1406 →  1478.4  alto   72.4  líneas [500]
-fila-a      (placa t=14s) x   80 w  920  y     380 →   538.8  alto  158.8  líneas [394,866]
-fila-b      (placa t=14s) x   80 w  920  y     579 →   693.8  alto  114.8  líneas [708]
-fila-c      (placa t=14s) x   80 w  920  y     734 →   848.8  alto  114.8  líneas [625]
-nota-copia  (placa t=14s) x   80 w  920  y     928 →    1007  alto     79  líneas [688]
-leccion     (placa t=14s) x   80 w  920  y    1047 →  1138.2  alto   91.2  líneas [800]
-cta         (placa t=14s) x   80 w  920  y    1218 →  1389.8  alto  171.8  líneas [694,351]
+fila-a      (placa t=14s) x   80 w  920  y     360 →   518.8  alto  158.8  líneas [394]
+fila-b      (placa t=14s) x   80 w  920  y     559 →   725.4  alto  166.4  líneas [708]
+fila-c      (placa t=14s) x   80 w  920  y     884 →  1042.8  alto  158.8  líneas [803]
+nota-copia  (placa t=14s) x   80 w  920  y     765 →     844  alto     79  líneas [688]
+leccion     (placa t=14s) x   80 w  920  y    1083 →  1174.2  alto   91.2  líneas [800]
+cta         (placa t=14s) x   80 w  920  y    1245 →  1416.8  alto  171.8  líneas [694,351]
 
 Huecos de s1: rótulo→título 24.0 · título→dato 24.1
 Huecos de s2: cap→tile2 19.0
-Huecos de la placa: A→B 40.2 · B→C 40.2 · C→casi copia 79.2 · casi copia→lección 40.0 · lección→CTA 79.8
-Borde inferior máximo: 1478.4 (tope 1490) · borde superior mínimo: 380.0 (mínimo 292)
+Huecos de la placa: A→B 40.2 · B→casi copia 39.6 · casi copia→C 40.0 · C→lección 40.2 · lección→CTA 70.8
+Borde inferior máximo: 1478.4 (tope 1490) · borde superior mínimo: 360.0 (mínimo 292)
+Líneas de cap-k4: 258 / 258 px
 Líneas de cap-r3: 195 / 210 px
-Líneas de fila-a: 394 / 866 px
 Líneas de cta: 694 / 351 px
+Etiqueta de fila-a: 394 px
+Etiqueta de fila-b: 708 px · leyenda 584 px
+Etiqueta de fila-c: 803 px
 Barra a: izq 0.0000 ancho 0.9270 (datos 0.000 / 0.927)
-Barra b: izq 0.5630 ancho 0.1700 (datos 0.563 / 0.170)
+Barra b: izq 0.5090 ancho 0.2100 (datos 0.509 / 0.210)
 Barra c: izq 0.0000 ancho 0.7430 (datos 0.000 / 0.743)
 Punto R1: x 0.6860 (dato 0.686)
 Punto R2: x 0.6190 (dato 0.619)
@@ -30,4 +33,5 @@ Punto R5: x 0.7240 (dato 0.724)
 Punto R6: x 0.6590 (dato 0.659)
 Punto R7: x 0.7330 (dato 0.733)
 Punto R8: x 0.5990 (dato 0.599)
-Marca del piso: 3 marcas en 0.7
+Marca del piso: 1 marca (fila-c) en 0.7; ninguna sobre las filas por foto
+Banda de las fotos oficiales entre sí: 0.509 a 0.719 (promedio 0.642); puntos de K4 con las otras siete: 0.563 a 0.733

@@ -29,12 +29,15 @@ export async function run(gate){
   const evs=plan.eventos;let max=0,prev=0;
   for(const ev of evs){check(ev.t-prev<=2+1e-6,`Hueco de eventos >2 s antes de ${ev.que}`);max=Math.max(max,ev.t-prev);prev=ev.t;
    const sig=async t=>page.evaluate(({t,sel})=>{window.__timelines.main.time(t,false);const out=[];for(const e of document.querySelectorAll(sel)){let o=1,n=e;while(n&&n!==document.body){const s=getComputedStyle(n);o*=+s.opacity;if(s.display==='none'||s.visibility==='hidden')o=0;n=n.parentElement}
-     const q=e.getBoundingClientRect(),cs=getComputedStyle(e);const fill=e.querySelector('.fill,.rango');out.push({o:Math.round(o*100)/100,r:[q.left,q.top,q.width,q.height].map(v=>Math.round(v*2)/2),b:cs.borderLeftColor,g:cs.backgroundColor,d:cs.strokeDashoffset,w:fill?Math.round(fill.getBoundingClientRect().width):0})}return out},{t,sel:ev.selector});
+     const q=e.getBoundingClientRect(),cs=getComputedStyle(e);const fill=e.querySelector('.fill,.banda');out.push({o:Math.round(o*100)/100,r:[q.left,q.top,q.width,q.height].map(v=>Math.round(v*2)/2),b:cs.borderLeftColor,g:cs.backgroundColor,d:cs.strokeDashoffset,w:fill?Math.round(fill.getBoundingClientRect().width):0})}return out},{t,sel:ev.selector});
    if(ev.t===0){const s0=await sig(0);check(s0.length&&s0.every(s=>s.o>=.9&&s.r[0]>=0&&s.r[0]<1080),`Evento de gancho no visible en el cuadro 0: ${ev.que}`);lines.push(`${ev.t.toFixed(3)}: ${ev.que}`);continue}
    const t0=ev.empuje?ev.t-.25:ev.t-1/24,a=await sig(t0),b=await sig(ev.t+.12);check(a.length&&b.length,`Evento sin elemento: ${ev.selector}`);
    check(JSON.stringify(a)!==JSON.stringify(b),`Evento sin cambio visible ${ev.que}`);
    if(ev.entrada)check(a.every(s=>s.o<.5)&&b.every(s=>s.o>=.5),`Entrada que no se ve entrar: ${ev.que}`);
-   if(ev.aro)check(a.every(s=>parseFloat(s.d)>=.99)&&b.every(s=>parseFloat(s.d)<1),`Aro que no se dibuja: ${ev.que}`);
+   if(ev.aro){const LN=plan.aro_len;check(a.every(s=>parseFloat(s.d)>=.99*LN)&&b.every(s=>parseFloat(s.d)<LN),`Aro que no se dibuja: ${ev.que}`);
+    // H5: el aro se TRAZA a lo largo de su duración (no aparece en 2 cuadros): a la mitad del dibujo el offset está entre 5 % y 95 % del trazo
+    const m=await sig(ev.t+ev.dur/2);check(m.every(s=>parseFloat(s.d)>.05*LN&&parseFloat(s.d)<.95*LN),`Aro que no se ve trazar a mitad del dibujo: ${ev.que}`);
+    const z=await sig(ev.t+ev.dur+1/24);check(z.every(s=>parseFloat(s.d)<=0.5),`Aro que no termina de dibujarse: ${ev.que}`)}
    lines.push(`${ev.t.toFixed(3)}: ${ev.que}`)}
   max=Math.max(max,T-prev);check(T-prev<=2,'Cola sin evento');lines.push(`${evs.length} eventos, hueco máximo ${max.toFixed(3)} s`);
  }else if(gate==='aire'){

@@ -15,12 +15,12 @@
 .panel{position:absolute;overflow:hidden;background:#11191b}
 .panel img{position:absolute;display:block;max-width:none}
 .aro{position:absolute;left:0;top:0;pointer-events:none;overflow:visible;filter:drop-shadow(0 0 3px rgba(17,25,27,.95))}
-.aro *{/* butt y no round: con un trazo de longitud cero (aro aún sin dibujar) el remate redondo dejaba un punto naranja en el cuadro 72 */fill:none;stroke:#ffbc94;stroke-width:7;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:0}
+.aro *{/* butt y no round: con un trazo de longitud cero (aro aún sin dibujar) el remate redondo dejaba un punto naranja en el cuadro 72. pathLength=1000 (no 1): GSAP redondea strokeDashoffset a enteros y con 1 el aro saltaba de oculto a completo en 2 cuadros */fill:none;stroke:#ffbc94;stroke-width:7;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:1000 1000;stroke-dashoffset:0}
 #divisor{position:absolute;background:#11191b}
 .cap{display:flex;align-items:center}
 #cap-r3{border-left-color:#ffbc94;text-wrap:balance}
 
-/* Placa del gráfico: una escala 0 a 1 en tres filas (con esa foto · las otras siete · las 4 que no recibió) y el piso 0,70 como referencia. */
+/* Placa del gráfico: una escala 0 a 1 en tres filas (con esa foto · las otras siete · promedio de las 4 que no recibió). El piso 0,70 es del promedio: solo va en la fila del promedio de las 4 (revisión 1, H1). */
 .fila{font-size:44px}
 .fila .et{line-height:1.1;margin-bottom:12px}
 .fila .n{font-family:"Spline Sans Mono",monospace;font-weight:500}
@@ -28,9 +28,11 @@
 .pista{position:relative;height:26px;background:#3c484b;border-radius:13px}
 .pista .fill{position:absolute;left:0;top:0;height:100%;width:0%;background:#83d5be;border-radius:13px}
 .fila.a .pista .fill{background:#ffbc94}
-.pista .rango{position:absolute;top:9px;height:8px;width:0%;background:#4f7a72;border-radius:4px}
-.pista .pt{position:absolute;top:5px;width:16px;height:16px;margin-left:-8px;border-radius:50%;background:#83d5be;border:2px solid #11191b}
+.pista .banda{position:absolute;top:0;height:100%;width:0%;background:#68797c;border-radius:13px}
+.pista .pt{position:absolute;top:3px;width:20px;height:20px;margin-left:-10px;border-radius:50%;background:#83d5be;border:2px solid #11191b}
 .pista .piso{position:absolute;top:-7px;width:4px;height:40px;margin-left:-2px;background:#fff;opacity:.92;border-radius:2px}
+.leyenda{display:flex;align-items:center;margin-top:12px;font-family:"DM Sans",sans-serif;font-weight:500;font-size:36px;line-height:1.1;color:#a9bcbf;white-space:nowrap}
+.leyenda .sw{display:inline-block;flex:none;width:44px;height:16px;margin-right:14px;border-radius:8px;background:#68797c}
 .escala{position:relative;height:38px;margin-top:6px;font-family:"Spline Sans Mono",monospace;font-weight:500;font-size:34px;color:#a9bcbf}
 .escala span{position:absolute;top:0;line-height:1.1;white-space:nowrap}
 .escala .e0{left:0}.escala .e1{right:0}.escala .ep{width:240px;text-align:center;color:#fff}

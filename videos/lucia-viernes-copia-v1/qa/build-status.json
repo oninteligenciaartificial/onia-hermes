@@ -9,12 +9,19 @@
     "r3": {
       "archivo": "assets/r3.png",
       "sha256": "0dc08193977ee2a1a0b7a6564df83f6b45cdb8c8f2495afc693d5c5d050bf756"
+    },
+    "escala_oficiales": {
+      "archivo": "videos/lucia-p9-luz-cara/qa/face-gate-v31.json",
+      "sha256": "a0ce006e6f1ed121a5f162b7d4c5d74de872146a89d4c615534c0403e98303f2",
+      "pairwise_min": 0.509,
+      "pairwise_mean": 0.642,
+      "max_fuera_diagonal": 0.719
     }
   },
   "voz": {
     "lineas": [
       "Casi publico esta imagen.",
-      "Parecía Lucía.",
+      "Parecido alto.",
       "Mirá la foto que recibió.",
       "Misma pose, ventana y taza.",
       "Con esa foto, mucho más alto.",
@@ -41,7 +48,7 @@
       },
       {
         "n": 2,
-        "linea": "Parecía Lucía.",
+        "linea": "Parecido alto.",
         "palabras": 2,
         "chars": 14,
         "voz_s": 0.8235294117647058,

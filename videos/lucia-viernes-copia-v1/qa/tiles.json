@@ -31,7 +31,7 @@
  },
  {
   "id": "cap-k4",
-  "text": "Kling O1 Image",
+  "text": "Kling O1 Image una sola toma.",
   "y": 1270,
   "size": 42,
   "card": true,
@@ -61,8 +61,8 @@
  },
  {
   "id": "fila-a",
-  "text": "Con esa foto: 0,93 0 piso 0,70 1",
-  "y": 380,
+  "text": "Con esa foto: 0,93 0 1",
+  "y": 360,
   "size": 48,
   "card": true,
   "clip": "placa",
@@ -71,8 +71,8 @@
  },
  {
   "id": "fila-b",
-  "text": "Con las otras siete: 0,56 a 0,73",
-  "y": 579,
+  "text": "Con las otras siete: 0,56 a 0,73 Fotos oficiales entre sí: 0,51 a 0,72",
+  "y": 559,
   "size": 48,
   "card": true,
   "clip": "placa",
@@ -81,8 +81,8 @@
  },
  {
   "id": "fila-c",
-  "text": "Con las 4 que no recibió: 0,74",
-  "y": 734,
+  "text": "Promedio de las 4 que no recibió: 0,74 piso 0,70",
+  "y": 884,
   "size": 48,
   "card": true,
   "clip": "placa",
@@ -92,7 +92,7 @@
  {
   "id": "nota-copia",
   "text": "Casi copia: no prueba identidad.",
-  "y": 928,
+  "y": 765,
   "size": 50,
   "card": true,
   "clip": "placa",
@@ -102,7 +102,7 @@
  {
   "id": "leccion",
   "text": "Mirá el parecido foto por foto.",
-  "y": 1047,
+  "y": 1083,
   "size": 60,
   "card": true,
   "clip": "placa",
@@ -112,7 +112,7 @@
  {
   "id": "cta",
   "text": "Seguime: cada semana, una prueba.",
-  "y": 1218,
+  "y": 1245,
   "size": 66,
   "card": true,
   "clip": "placa",

@@ -29,7 +29,7 @@ Motion
   ◇ 0 errors, 0 warnings
 
 Contrast
-  ◇ 29/29 text checks pass WCAG AA
+  ◇ 30/30 text checks pass WCAG AA
 
 Snapshots
   ◇ disabled

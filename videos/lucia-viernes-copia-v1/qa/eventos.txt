@@ -5,10 +5,10 @@
 3.000: entra «mirá la foto que recibió»
 3.875: acento de la foto recibida
 4.500: entra «misma pose, ventana, taza»
-4.500: aro: cabeza apoyada en la mano
-5.250: aro: marco de la ventana
+4.500: aro: cabeza apoyada en la mano (se dibuja en 0,6 s)
+4.875: aro: marco de la ventana (se dibuja en 0,6 s)
 5.250: acento del texto de las coincidencias
-6.000: aro: taza junto a la laptop
+5.250: aro: taza junto a la laptop (se dibuja en 0,6 s)
 6.625: entra el gráfico (empuje de 6 cuadros)
 6.625: barra con esa foto crece a 0,93
 7.500: entra la fila de las otras siete, con sus siete puntos
