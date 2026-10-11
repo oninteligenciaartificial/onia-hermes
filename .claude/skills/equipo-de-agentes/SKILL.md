@@ -75,6 +75,10 @@ madre sin la PC, y eso exige loguear la cuenta de Sergio Urcullo allá, que nece
 2. `node_modules`: junction a `C:\dev\proyectos\onia-platform-v1-integracion-20260927\node_modules` (la de
    `onia-platform` está vacía).
 3. El prompt lleva la NOTA DE LA MADRE (carpeta, rama, «no hagas git», «PARA LA MADRE:» al final) + el texto de la tarea.
+   Un carril que escribe el contrato lo arma desde el ÚLTIMO contrato de la madre (hoy
+   `plataforma-F136-caja-y-odontograma.md`, en su rama), no de memoria. El 11-oct, el contrato S2 de Plataforma le
+   pedía a Codex rama propia, commit y PR: tres cosas que Codex no puede hacer desde el 9-oct. Se corrigió antes
+   de lanzarlo.
 4. `bash scripts/codex-tarea.sh <prompt> <carpeta> <modelo> medium`, en background y desde el worktree correcto. Para `resume`,
    hacer `cd` a la carpeta antes: toma el cwd.
 5. Gate de la madre, siempre: `git checkout -- '*.snap'` → `npx vitest run` COMPLETO (JSON) → si hay rojos, ver si son

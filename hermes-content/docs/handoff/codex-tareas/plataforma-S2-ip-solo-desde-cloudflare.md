@@ -4,18 +4,16 @@ carril: plataforma
 estado: pendiente
 modelo: gpt-6-astra
 repo: onia-platform
-rama: codex/s2-ip-solo-desde-cloudflare
 base: master
 pr:
 escrita: 2026-10-11 por Plataforma (session_01HhnFgkeF6nLGvjrfjt1o2C)
-actualizada: 2026-10-11 por Plataforma (session_01HhnFgkeF6nLGvjrfjt1o2C)
+actualizada: 2026-10-11 por Plataforma (session_01HhnFgkeF6nLGvjrfjt1o2C): Codex no hace git (regla del 9-oct), la madre commitea
 nota: seguridad (Astra). HIGH de Hermes E5 sobre #140, que vale para toda la plataforma; medido en el VPS el 11-oct
 ---
 # S2 · La IP del cliente sale de `cf-connecting-ip` solo cuando el pedido viene de Cloudflare
 
-Sos Codex. Trabajás SOLO en un clon de `onia-platform`, en la rama `codex/s2-ip-solo-desde-cloudflare`, creada desde
-`origin/master`; anotá el SHA base en el resumen.
-- Primero `git branch --show-current`: tiene que decir esa rama. Si `git status` trae cambios, seguí desde ahí.
+Sos Codex. Carpeta `C:/dev/proyectos/onia-platform-codex-s2`. La madre la prepara desde `origin/master` y te pasa el SHA
+base. No hagas git: la madre revisa, corre la suite completa, commitea y abre el PR.
 - Sin red, sin npm install y sin producción. Nadie contesta preguntas: decidí con este documento y el código.
 
 ## META
@@ -72,13 +70,11 @@ se normaliza antes de comprobarla.
 - Si después de dos intentos `tsc` o la suite siguen en rojo por algo fuera de esta lista, pará y anotalo.
 
 ## Entrega
-Un commit conventional en castellano, que explique el porqué. Resumen final con:
-- el SHA base y el del commit;
+Sección «PARA LA MADRE:» con:
+- el SHA base;
 - los tests que se pusieron rojos con el código viejo;
 - los números de `tsc`, eslint y vitest;
 - cada llamador revisado.
-
-Draft PR contra `master`.
 
 **Antes de publicar (Plataforma):** con el release nuevo, un pedido normal por Cloudflare tiene que seguir dando IPs
 distintas por visitante. Si todos los visitantes caen en el mismo balde, es que el último salto no era Cloudflare: se

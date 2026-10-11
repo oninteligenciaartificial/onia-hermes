@@ -307,6 +307,13 @@ Estos dieron diagnosticos falsos con evidencia que parecia buena:
   `cf-cache-status`: `HIT` explica el 200, `BYPASS` dice la verdad.
 - **El login NO prueba la base**: entra por Supabase Auth via HTTPS, no por Prisma.
 - La base de produccion es la **self-hosted del VPS** (`supabase-db`, schema `public`), no la nube.
+- **Un 401 de `/rest/v1/` NO prueba un REVOKE** (11-oct, Hermes E9 sobre P-01): Kong pone `key-auth` delante de
+  PostgREST, asi que una clave anon vencida, rotada o mal copiada tambien da 401, y la prueba pasa sin medir.
+  Control positivo con la MISMA clave antes de leer la tabla: `GET /auth/v1/settings` da 200 solo si Kong la
+  acepta. Medido en el `kong.yml` de produccion (`/opt/onia-supabase/supabase/docker/volumes/api/kong.yml`):
+  `auth-v1-all` (`/auth/v1/`) lleva `key-auth` + `acl` (admin, anon). Las abiertas son `verify`, `callback`,
+  `authorize`, `jwks` y `sso`, y esas no sirven de control. Y exigir `role: anon` en el payload del JWT: con la
+  `service_role` la tabla devuelve filas reales.
 
 ---
 

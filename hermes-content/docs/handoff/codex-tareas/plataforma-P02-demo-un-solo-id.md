@@ -1,12 +1,12 @@
 ---
 id: plataforma-P02
 carril: plataforma
-estado: pendiente
+estado: hecha (onia-platform #151, `codex/p02-demo-un-solo-id` 05dd4ecc). Hermes E9: OK con notas LOW; se mergea después de #152
 modelo: gpt-6.1-sol
 repo: onia-platform
 rama: codex/p02-demo-un-solo-id
 base: master
-pr:
+pr: oninteligenciaartificial/onia-platform#151
 escrita: 2026-10-11 por Plataforma (session_01HhnFgkeF6nLGvjrfjt1o2C)
 actualizada: 2026-10-11 por Plataforma (session_01HhnFgkeF6nLGvjrfjt1o2C)
 nota:

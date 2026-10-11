@@ -1,12 +1,12 @@
 ---
 id: plataforma-P01
 carril: plataforma
-estado: pendiente
+estado: hecha (onia-platform #150, `codex/p01-b22-anon` 52d77b0d). Hermes E9: HIGH (symlink: sale con 0 sin medir) → se arregla en P-01b sobre la misma rama; no se mergea antes
 modelo: gpt-6.1-sol
 repo: onia-platform
 rama: codex/p01-b22-anon
 base: master
-pr:
+pr: oninteligenciaartificial/onia-platform#150
 escrita: 2026-10-11 por Plataforma (session_01HhnFgkeF6nLGvjrfjt1o2C)
 actualizada: 2026-10-11 por Plataforma (session_01HhnFgkeF6nLGvjrfjt1o2C)
 nota:
