@@ -39,6 +39,13 @@ M1 dejó una sola lectura para los montos en bolivianos y en dólares. Quedan ci
      - «Escribí la cantidad, por ejemplo 12.» y «Contá el motivo: queda en el historial.» (`formulario-producto.ts:137` y `:139`);
      - «registrala al contado» y «Elegí un …» (`VentaForm.tsx:85`, `:93` y `:145`).
 
+**Medido en producción (11-oct 13:16 UTC, `release-0b25e289`, cuenta QA «ZZ QA K3 Importadora», sin enviar nada):**
+- en el costeo, «3.000» de cantidad sin producto elegido muestra «Se registrarán 3», y el costo unitario de la línea sale Bs 6.124,80
+  (USD 880,00) en vez de 6,12;
+- «1.200» de peso muestra «Se registrarán 1,2 kg»;
+- debajo de «Aplicar al catálogo (0)» se lee a la vez «Elegí el producto del catálogo…» (vos) y «Elija el producto del catálogo…» (usted).
+Captura: `scratchpad` de Plataforma, `mirar-costeo/mirar-costeo-1440.png`.
+
 ## Qué hacer
 1. **`leerCantidad` aplica la regla de las dos lecturas.** Hay tres grupos de unidades, en constantes con nombre:
    - **Enteras.** Las de hoy más `bolsa`, `paquete`, `par`, `docena`, `botella`, `saco`, `frasco`, `lata`, `sobre`, `juego` y `kit`, con

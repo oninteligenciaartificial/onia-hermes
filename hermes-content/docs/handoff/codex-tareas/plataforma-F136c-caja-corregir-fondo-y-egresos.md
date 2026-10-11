@@ -54,6 +54,9 @@ Desde F136b se puede reabrir un día de hasta siete días atrás, pero reabrirlo
    transacción, como ya hace el cierre (`caja-diaria/route.ts:100`).
 7. **El aviso de cierre dice la verdad:** «Se cerrará la caja con Bs X. Para reabrirla hace falta el permiso de aprobar pagos.», o una
    frase equivalente, de usted.
+9. **Un día anterior no dice «hoy».** Medido en producción el 11-oct (13:16 UTC, `release-0b25e289`), con la caja del sábado 10 elegida en
+   «Día de caja»: la tarjeta dice «CAJA DE HOY» y el panel de cobros, «Todavía no hay cobros hoy». Para una fecha que no es hoy, que
+   diga «Caja del día» y «Ese día no hubo cobros», y que no ofrezca abrir la caja de un día pasado, que la API no permite.
 8. **Las acciones de auditoría nuevas van en la unión `AuditAction`** (`lib/audit.ts`): `DAILY_CASH_EXPENSE_VOIDED` y lo que
    agregues. El HIGH de Hermes E15 en #155 fue justo eso: las pruebas pasaban porque mockean `logAudit` y `tsc` fallaba.
 
