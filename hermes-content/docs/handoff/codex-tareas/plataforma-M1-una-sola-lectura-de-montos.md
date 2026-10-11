@@ -1,4 +1,4 @@
-estado: pendiente
+estado: hecha (PR #156, cabeza `4dd41d1c`; Hermes E19 OK; se mergea con CI verde). Los LOW siguen en M1b.
 modelo: gpt-6-astra (plata)
 carril: plataforma
 origen: MEDIUM de producto de la revisión E4 de Hermes sobre #147 (onia-hermes `claude/adoring-ramanujan-7sjzwv` 687266e5, docs/cola/loop/hermes-jarvis.md §E4). Escrita el 11-oct por Plataforma (session_01HhnFgkeF6nLGvjrfjt1o2C); líneas medidas en `master` `fd72cd55`.
