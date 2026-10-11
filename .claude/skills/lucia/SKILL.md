@@ -409,3 +409,16 @@ Fuente: `research/competencia/LUCIA_COMPETENCIA_20261005.md`.
   pero oscurece (luma −33,7) y tiene el mayor cambio de color (V +8,4). **Límite:** son promedios del cuadro entero; mezclan la luz con lo que entra al plano cuando el motor reencuadra. No es luz aislada.
 - **Dilema cara o escena, ahora con dos números:** lo que mantiene la escena pierde la cara y lo que mantiene la cara cambia la escena. Es el hilo de la pieza 9 de `PLAN.md` §5.
 
+
+## 12. Gates antes de «LISTA PARA MOSTRAR» (11-oct) — dos scripts de Codex, ya integrados
+
+Una pieza nueva no se marca «LISTA PARA MOSTRAR» sin pasar, además de los gates de su propia carpeta (`medir-dom`, ventanas, hueco-tarjetas, eventos, aire, costuras, `grep-prohibidas`), estos dos del repo:
+
+- **`node scripts/lucia-prohibidas.mjs <pie.txt> <guion-voz.txt> …`** (`codex:lucia-qa2`, 12/12 tests). Una sola lista con fuente (LUCIA.md §0, `LUCIA_COMO_SE_USA` §6 y «La venta nunca exhibe obra»): «soy odontóloga», «soy doctora», «mis pacientes», «mi consultorio», «mi estudio»,
+  «testimonio», «agenda llena», «muy pronto», «en construcción», «beta», «próximamente», con variantes de mayúsculas, tildes, espacios y plurales. **Con argumentos sale 1 si hay UNA coincidencia, 2 si falta el archivo; sin argumentos
+  recorre `cola/lucia-diario/` y es informativo (sale 0)**: ahí las 13 coincidencias de hoy (11 «testimonio», 2 «agenda llena») son la regla citada, no uso. Solo lee `.md` y `.txt` y saltea lo de más de 2 MB: **no mira el JSON de un carrusel**,
+  hay que pasarle el `caption` copiado a un `.txt`. Es de texto: no reemplaza el `grep-prohibidas` de cada pieza (ese suma «el mejor», «recomiendo» y los nombres de herramienta permitidos).
+  Decisiones de Codex (11-oct): suma plurales («agendas llenas», «mis estudios»); un falso positivo posible es «mis estudios» dicho en otro sentido, por eso el gate se corre sobre pie y voz, no sobre notas.
+- **`node scripts/lucia-qa-tabla.mjs <face-gate.json>`** (`codex:lucia-qa1`, 10/10 tests): tabla de identidad desde el JSON del face-gate; sale 1 si algo queda bajo el piso 0,70 y marca «cara < 200 px: poco confiable».
+  Los píxeles salen enteros hacia abajo (199,9 → 199). Primera corrida real, `videos/lucia-g5-v2/qa/arcface-madre-11oct.json`: 6 bajo el piso (el café de Kling O1 Image, 0,354-0,360) y gancho de 181-186 px; `leave_one_out_min` 0,698.
+- Antes de marcar la pieza: revisor independiente `sonnet` (escribe `qa/revision-1.md`) y verificador `haiku` (SHA, specs, pie y cifras contra PROCEDENCIA). Modelo explícito en cada `Agent`.

@@ -34,6 +34,7 @@
 - [x] `lucia-qa1` (tabla de identidad ArcFace) — integrada el 11-oct: `scripts/lucia-qa-tabla.mjs` + test, rama `codex/lucia-qa1-1011` @ ad0d74f1 fusionada. Decidí mostrar los píxeles de cara
   **enteros hacia abajo** (199,9 → 199, sigue avisando «< 200 px»); +1 test, 10/10 en verde; sobre `videos/lucia-g5-v2/qa/arcface-madre-11oct.json` sale 1 como se esperaba (6 bajo el piso, f-e3 0,354-0,360;
   gancho 181-186 px «poco confiable»; leave_one_out_min 0,698). modelos: contrato escrito por esta sesión (sonnet-5-5), ejecución Codex Sol, `codex:lucia-qa1`.
+- [x] `lucia-qa2` **integrada** (11-oct, rama `codex/lucia-qa2-1011` @ 3a63237a fusionada; 12/12; sin argumentos 13 coincidencias en 11 archivos = regla citada; pies de G1, G2–G5 v2 y borrador P9 → 0 coincidencias, exit 0). Gate sumado a la skill `lucia` §12. modelos: contrato sonnet-5-5 (esta sesión), ejecución Codex Luna, `codex:lucia-qa2`.
 - [x] `lucia-qa2` v2 (frases prohibidas) — la parada de Codex era correcta: LUCIA.md §0 línea 20 prohíbe «agenda llena» y la tabla no la traía. Contrato corregido en
   `hermes-content/docs/handoff/codex-tareas/lucia-qa2-frases-prohibidas.md` (fila nueva con su fuente, caso de test 9, regla de espacios repetidos, esperado de la corrida por defecto: 13 líneas en 11 archivos,
   medido con grep). Falta que la madre lo relance. modelos: sonnet-5-5 (esta sesión); `codex:lucia-qa2` pendiente de relanzar.
