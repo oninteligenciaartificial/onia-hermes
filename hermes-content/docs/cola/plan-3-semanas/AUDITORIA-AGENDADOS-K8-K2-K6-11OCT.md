@@ -7,8 +7,8 @@ Pedido de la MADRE MARKETING el 11-oct: pasarle a los tres carruseles que siguen
 | Día (La Paz) | Agendado hoy en el VPS | Corregido, listo para mostrar | Falla encontrada | Qué cambió |
 |---|---|---|---|---|
 | mar 13 · 16:00 | K8 v3 «Recuperar vs reconstruir» (PROMPT) | **K8 v4** · `hermes-content/carousels/out/sergio-k8v4-recuperar-vs-reconstruir-20261011/` | Ningún dato falso. Dos precisiones y el cierre | Cierre «Buscá PROMPT»; caption: «el modelo (si no está rotulado)»; bloque 7 «Técnica: cámara y luz» (igual al recurso) |
-| jue 15 · 16:00 | K2 v3 «Tu primera skill» (SKILL) | **K2 v4** · `hermes-content/carousels/out/sergio-k2v4-primera-skill-20261011/` | **Una afirmación sin respaldo**: «Si es vaga, no la usa nunca» (lámina 3) | Lámina 3 según la doc; cierre «Buscá SKILL» |
-| vie 16 · 16:00 | K6 v2 «Las 2 listas del bot» (PROMESA) | **K6 v3** · `hermes-content/carousels/out/sergio-k6v3-confirmado-por-confirmar-20261011/` | **Una omisión** (el nombre de la lista en la prueba) y **una frase que se contradice con la prueba** (lámina 6) | Caption aclara «NO confirmado» vs «Por confirmar»; lámina 6 sin causalidad; cierre «Buscá PROMESA» |
+| jue 15 · 16:00 | K2 v3 «Tu primera skill» (SKILL) | **K2 v4** · `hermes-content/carousels/out/sergio-k2v4-primera-skill-20261011/` | **Tres afirmaciones sin respaldo**: «Si es vaga, no la usa nunca» (lámina 3), «escribí /skills: tiene que aparecer» (láminas 2 y 6) y «el video está en mi comunidad» (caption y cierre) | Lámina 3 según la doc; la prueba pasa a «escribí / y su nombre»; el cierre habla del **link** del video; cierre «Buscá SKILL» |
+| vie 16 · 16:00 | K6 v2 «Las 2 listas del bot» (PROMESA) | **K6 v3** · `hermes-content/carousels/out/sergio-k6v3-confirmado-por-confirmar-20261011/` | **Una omisión** (el nombre de la lista en la prueba), **dos frases que sobredicen** (láminas 6 y 7) y **un cierre que prometía de más** | Caption aclara «NO confirmado» vs «Por confirmar»; lámina 6 sin causalidad; lámina 7 acotada a stock, plazo y precio; cierre «Buscá PROMESA» |
 
 Los briefs corregidos están en `hermes-content/carousels/briefs/marca-personal/` (`sergio-k8v4-…-20261011.json`, `sergio-k2v4-…-20261011.json`, `sergio-k6v3-…-20261011.json`). Las imágenes y el resto de las láminas son las mismas que las agendadas: no hubo gasto. (Las imágenes de arcilla son del estilo retirado el 8-oct; rehacerlas en `fotobn` cuesta créditos y es decisión de Sergio Urcullo, ver `lote-14-imagenes.json`.)
 
@@ -32,11 +32,11 @@ Los briefs corregidos están en `hermes-content/carousels/briefs/marca-personal/
 | Va en `.claude/skills/<nombre>/SKILL.md` | https://code.claude.com/docs/en/skills (leída el 11-oct): «`.claude/skills/<skill-name>/SKILL.md`», «Every skill needs a `SKILL.md` file» | ✓ («en mayúsculas» describe cómo se escribe el nombre; la doc no dice si distingue mayúsculas) |
 | `name` y `description` entre dos líneas `---` | Misma página: `name` («Defaults to the directory name») y `description` («Claude uses this to decide when to apply the skill») | ✓ — son lo recomendado, no obligatorios: «All fields are optional. Only `description` is recommended» |
 | «Claude la lee para decidir si usar tu skill. **Si es vaga, no la usa nunca.**» | La doc dice que `description` sirve para decidir cuándo aplicarla; **no dice que una vaga «nunca» se use** | ✗ **sin respaldo** → «Claude la lee para decidir cuándo usar tu skill. Decile qué hace y cuándo usarla.» |
-| La prueba: escribí `/skills` | La doc: «Run `/skills` in your session» (lo describe junto a las skills sincronizadas de claude.ai) y `name` aparece en el menú `/` | ✓ por la doc. Sin correrlo en una sesión con una skill de proyecto: **medición pendiente (PC)** |
+| La prueba: «escribí `/skills`: tu skill tiene que aparecer» | La doc menciona `/skills` solo junto a las skills sincronizadas de claude.ai; **no la documenta como prueba de que cargó una skill de proyecto**. Sí documenta: `name` = «Command name shown in the `/` menu», y probar pidiendo algo que coincida con la `description` o invocándola con `/nombre` | ✗ **sin respaldo** (lo marcó el verificador) → «escribí `/` y su nombre: tiene que aparecer en el menú». **El guion D01-A y el aviso SKILL todavía dicen `/skills`**: medición pendiente en la PC o cambiar el guion |
 | `onia-continuidad`, nació el 31 de agosto | Commit `ac8ffe513`, 2026-08-31, «feat(skill): onia-continuidad» | ✓ |
 | La description empieza «Invocar al ARRANCAR cualquier sesión de ONIA…» | `.claude/skills/onia-continuidad/SKILL.md`, `description` | ✓ literal |
 | Seis cosas planificadas, cuatro ya hechas o decididas (4/6) | Misma skill, «Por qué existe»: «Planifiqué 6 features. 4 no existían — ya estaban hechos o ya estaban decididos» | ✓ — era una de las **cuatro** fallas medidas ese día; «de ahí nació» queda como en el guion D01-A aprobado |
-| Cierre: el video para armar tu primera skill | El aviso SKILL existe (`AVISOS-COMUNIDAD-8-16-OCT.md` l.518) y entrega el video 02 (`https://sergiourcullo.vercel.app/claude-code`, YouTube `oXaqV-HDufA`). Medido hoy: la página responde 200 y el oEmbed de YouTube responde 200 con el título «Cómo instalar CLAUDE CODE desde cero (+ tu primera skill)» | ✓ — el video **no es privado**; el oEmbed no distingue público de no listado, así que lo que el aviso deja a Sergio Urcullo («confirmar que ese video es público») sigue en pie |
+| Cierre: **el link** del video para armar tu primera skill (antes: «el video … está en mi comunidad») | El aviso SKILL existe (`AVISOS-COMUNIDAD-8-16-OCT.md` l.518) y entrega el video 02 (`https://sergiourcullo.vercel.app/claude-code`, YouTube `oXaqV-HDufA`). Medido hoy: la página responde 200 y el oEmbed de YouTube responde 200 con el título «Cómo instalar CLAUDE CODE desde cero (+ tu primera skill)» | ✓ — **el video vive en la página; la comunidad lleva el link** (`AVISOS-COMUNIDAD-8-16-OCT.md` l.527-528) y el caption decía que el video «está en mi comunidad» ✗ → corregido. El video **no es privado**; el oEmbed no distingue público de no listado, así que lo que el aviso deja a Sergio Urcullo («confirmar que ese video es público») sigue en pie |
 
 ## K6 · PROMESA · Las dos listas del bot
 
@@ -49,7 +49,7 @@ Los briefs corregidos están en `hermes-content/carousels/briefs/marca-personal/
 | «Ninguna de las dos versiones prometió» | Misma sección: «Ninguna prometió. La segunda usó el dato confirmado» | ✓ |
 | La plantilla (regla + «Confirmado» + «Por confirmar») | Misma sección, «La plantilla para tu bot» | ✓ — **pero en la prueba la segunda lista se llamó «NO confirmado»**, no «Por confirmar»; el caption no lo decía → agregado |
 | Lámina 6: «Si la confirma sin tenerla escrita, **le faltan las dos listas**» | La propia prueba: **sin listas tampoco prometió** (1 corrida) | ✗ insinuaba una causa que la prueba no mostró → «escribile las dos listas y probá de nuevo» |
-| Lámina 7: «La lección no es que la IA inventa: lo que no escribiste en sus listas, no lo puede saber» | Lectura mía de la prueba | consejo, no dato |
+| Lámina 7: «lo que no escribiste en sus listas, no lo puede saber» | Lectura mía; la prueba (una corrida por caso, un modelo) no mide el alcance general | ✗ **sobredicho** (lo marcó el verificador) → «tu stock, tu plazo y tu precio, si no los escribiste en sus listas, no los sabe» |
 | Cierre: «las dos respuestas y la plantilla» | `AVISOS-POR-DIA.md` 5-3: las respuestas están **recortadas con `[…]`** y las completas no están en el repo | ✗ el cierre prometía de más → «La prueba y la plantilla», igual que el aviso PROMESA (`AVISOS-COMUNIDAD-8-16-OCT.md` l.253). La flecha de la lámina 7 también decía «las dos respuestas» → «la prueba» |
 
 ## Los tres cierres
@@ -65,13 +65,14 @@ Los timers se llaman `pub-car-<fecha>` (no se tocaron):
 | Timer | Pieza | Reemplazar | Antes de |
 |---|---|---|---|
 | `pub-car-20261013` | K8 v3 → **K8 v4** | `slide-08.png`, `caption.txt` (y `slide-06.png`: bloque 7) | mar 13 · 16:00 La Paz (20:00 UTC) |
-| `pub-car-20261015` | K2 v3 → **K2 v4** | `slide-03.png`, `slide-08.png`, `caption.txt` | jue 15 · 16:00 La Paz |
-| `pub-car-20261016` | K6 v2 → **K6 v3** | `slide-06.png`, `slide-07.png`, `slide-08.png`, `caption.txt` | vie 16 · 16:00 La Paz |
+| `pub-car-20261015` | K2 v3 → **K2 v4** | `slide-02.png`, `slide-03.png`, `slide-06.png`, `slide-08.png`, `caption.txt` | jue 15 · 16:00 La Paz |
+| `pub-car-20261016` | K6 v2 → **K6 v3** | `slide-06.png`, `slide-07.png`, `slide-08.png`, `caption.txt` (la lámina 7 cambió de texto y de flecha) | vie 16 · 16:00 La Paz |
 
-Las demás láminas son idénticas a las agendadas. Si se prefiere no reemplazar nada, la alternativa mínima es la misma de K4/K7: cambiar solo el cierre y la frase de K2 lámina 3.
+Las demás láminas son idénticas a las agendadas. Si se prefiere no reemplazar nada, la alternativa mínima es la misma de K4/K7: cambiar solo los cierres, la frase de K2 lámina 3 y la prueba `/skills` de K2.
 
 ## Verificación
 
-- Validador del calendario: ver la salida pegada en el mensaje a la madre (VERDE; el único aviso es ANTIGRAVITY, que sigue en borrador).
-- Contact sheets de los tres renders, miradas el 11-oct (`_contactsheet.png` en cada carpeta `out/`).
-- Segunda revisión independiente (subagente haiku, solo lectura) de todos los datos de arriba: resultado al final.
+- Validador del calendario: **VERDE · 0 errores · 1 aviso** (ANTIGRAVITY, en borrador), `node scripts/marca-personal/validar-calendario.js`, exit 0.
+- Contact sheets de los tres renders, miradas el 11-oct (`_contactsheet.png` en cada carpeta `out/`); K2 y K6 se volvieron a renderizar y mirar después de la segunda revisión.
+- **Segunda revisión independiente** (subagente haiku, solo lectura, con la doc oficial leída entera): K8 sin hallazgos; encontró tres en lo que yo había dado por bueno: (1) K2 «el video está en mi comunidad» (falso: la comunidad lleva el link), (2) K2 `/skills` como prueba (la doc no lo documenta así), (3) K6 lámina 7 (sobredicha). Los tres aceptados y corregidos en esta versión. Las demás afirmaciones salieron VERIFICADAS con archivo y línea; sin «Comentá» ni promesa de DM en caption, láminas ni alt_text.
+- **Sin medir:** que el recurso de PROMPT y PROMESA esté pegado en la comunidad (se verificó el texto en `AVISOS-POR-DIA.md`, no la comunidad en vivo); `/skills` en una sesión real con una skill de proyecto.

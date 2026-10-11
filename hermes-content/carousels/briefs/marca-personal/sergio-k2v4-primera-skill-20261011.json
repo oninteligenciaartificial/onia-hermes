@@ -1,6 +1,6 @@
 {
   "title": "Tu primera skill de Claude Code en 5 pasos (v4: cierre «Buscá SKILL en Avisos», description sin «nunca»)",
-  "caption": "Una skill es un archivo que le enseña a Claude Code a hacer algo, y lo usa solo cuando hace falta.\n\nVa en .claude/skills/<nombre>/SKILL.md y arranca así:\n\n---\nname: mi-skill\ndescription: Usar cuando <la situación en la que aplica>.\n---\n\nDebajo, las instrucciones, como se las explicarías a alguien nuevo.\n\nLa mía, onia-continuidad, nació el 31 de agosto: en una sola sesión mi agente planificó seis cosas y cuatro ya estaban hechas o decididas. Ahora se invoca al arrancar y obliga a leer lo que ya sabemos antes de decidir.\n\n¿Por dónde empezar? Elegí algo que le explicás a Claude una y otra vez: esa es tu primera skill.\n\nFuente: code.claude.com/docs/en/skills\n\nEl video para instalar Claude Code y armar tu primera skill está en mi comunidad.\n\nBuscá SKILL en Avisos de la comunidad. Link en mi perfil.",
+  "caption": "Una skill es un archivo que le enseña a Claude Code a hacer algo, y lo usa solo cuando hace falta.\n\nVa en .claude/skills/<nombre>/SKILL.md y arranca así:\n\n---\nname: mi-skill\ndescription: Usar cuando <la situación en la que aplica>.\n---\n\nDebajo, las instrucciones, como se las explicarías a alguien nuevo.\n\nLa mía, onia-continuidad, nació el 31 de agosto: en una sola sesión mi agente planificó seis cosas y cuatro ya estaban hechas o decididas. Ahora se invoca al arrancar y obliga a leer lo que ya sabemos antes de decidir.\n\n¿Por dónde empezar? Elegí algo que le explicás a Claude una y otra vez: esa es tu primera skill.\n\nFuente: code.claude.com/docs/en/skills\n\nEn mi comunidad está el link del video para instalar Claude Code y armar tu primera skill.\n\nBuscá SKILL en Avisos de la comunidad. Link en mi perfil.",
   "hashtags": [
     "#claudecode",
     "#claude",
@@ -48,7 +48,7 @@
         },
         {
           "label": "La prueba",
-          "text": "escribí /skills: tiene que aparecer"
+          "text": "escribí / y su nombre: tiene que aparecer"
         }
       ],
       "next": "el que decide",
@@ -104,7 +104,7 @@
       "layout": "ensayo",
       "theme": "blanco",
       "headline": "¿Cargó? *Comprobalo*",
-      "body": "Escribí /skills: tu skill tiene que aparecer.\n\nDespués pedile algo que coincida con la description, y fijate si la usa.\n\nSi no la usa, reescribí la description: decí cuándo usarla, con las palabras que usarías al pedírselo.",
+      "body": "Escribí / y el nombre de tu skill: tiene que aparecer en el menú.\n\nDespués pedile algo que coincida con la description, y fijate si la usa.\n\nSi no la usa, reescribí la description: decí cuándo usarla, con las palabras que usarías al pedírselo.",
       "alt_text": "Cómo comprobar que la skill cargó",
       "next": "la primera"
     },
@@ -124,7 +124,7 @@
       "layout": "cierre",
       "theme": "negro",
       "keyword": "SKILL",
-      "kicker": "El video para armar tu primera skill.",
+      "kicker": "El link del video para armar tu primera skill.",
       "body": "en Avisos de la comunidad · link en mi perfil.",
       "alt_text": "Buscá SKILL en Avisos de la comunidad"
     }
