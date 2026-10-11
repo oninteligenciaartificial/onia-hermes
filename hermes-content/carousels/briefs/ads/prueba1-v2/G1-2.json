@@ -1,0 +1,256 @@
+{
+ "id": "G1-2",
+ "pieza": "Dos descartes y un giro: pacientes que se van sin aviso",
+ "referencia": {
+  "anunciante": "CitaPro",
+  "id": "1880949689530541",
+  "dias": 86,
+  "formato": "video 62 s 9:16"
+ },
+ "formato": {
+  "relacion": "9:16",
+  "duracion_s": 33
+ },
+ "gancho": {
+  "texto": [
+   "Pacientes que se van",
+   "sin *aviso*"
+  ],
+  "voz": "Hay pacientes que hace meses no vuelven.",
+  "imagen": "Pantalla de celular a cuadro completo con la fila de Pendientes de quien hace meses no vuelve (fila vuelve), ampliada y legible, sobre fondo oscuro; el gancho va arriba; todavía sin Sergio.",
+  "alineacion": "La fila a cuadro completo muestra a alguien que hace meses no viene, el texto lo llama paciente que se va sin aviso y la voz dice que hace meses no vuelve: los tres señalan al mismo paciente con palabras distintas.",
+  "alternativa": [
+   "Quien hace meses",
+   "no *vuelve*"
+  ]
+ },
+ "texto_principal": "Para dueños y dueñas de clínicas dentales de Santa Cruz.\nUn paciente que deja de venir no avisa, y su hora en la agenda queda sin dueño sin que nadie lo note.\nOnia es un sistema de gestión para clínicas dentales: en Pendientes, cada mañana le deja anotado quién hace meses no vuelve, con el mensaje listo.\nNada sale sin que usted lo apruebe.\nEscríbanos por WhatsApp y pida su demostración gratis.",
+ "titular": "Pida su demostración gratis",
+ "boton": "Enviar mensaje de WhatsApp",
+ "precargado": "Hola, vi el anuncio de Onia (D8). Tengo una clínica dental.",
+ "cuadros": [
+  {
+   "id": "c0",
+   "tramo": "0-3 s",
+   "rol": "inicio",
+   "toma": "persona",
+   "persona": "derecha",
+   "subtitulo": "Pacientes que se van\nsin *aviso*",
+   "cintilla": null,
+   "pantalla": null,
+   "tarjeta": null,
+   "voz": "Hay pacientes que hace meses no vuelven.",
+   "zona_de_la_referencia": "R2 cuadro inicio: presentadora a la derecha, cortada por el borde, señalando a cámara; palabra gigante amarilla en el tercio superior (29-34 % del alto). Acá el énfasis del gancho hace de palabra gigante.",
+   "estilo_subtitulo": "gancho-gigante",
+   "sub_y": 330,
+   "persona_y": 230
+  },
+  {
+   "id": "c1",
+   "tramo": "9-14 s",
+   "rol": "medio",
+   "toma": "tarjeta",
+   "persona": "ninguna",
+   "subtitulo": null,
+   "cintilla": null,
+   "pantalla": null,
+   "tarjeta": {
+    "lineas": [
+     "A veces,",
+     "*nadie* les escribió"
+    ],
+    "fondo": "verde"
+   },
+   "voz": "A veces, simplemente, nadie les escribió.",
+   "zona_de_la_referencia": "R2 cuadro medio: corte a tarjeta de color de marca a pantalla completa con texto mínimo. Ahí era azul con un patrón; acá, el verde de Onia lisa (sin patrón: no se inventa una trama)."
+  },
+  {
+   "id": "c2",
+   "tramo": "29-34 s",
+   "rol": "cierre",
+   "toma": "persona",
+   "persona": "centro",
+   "subtitulo": "Pida su demostración *gratis*",
+   "cintilla": null,
+   "pantalla": null,
+   "tarjeta": null,
+   "voz": "Escríbanos por WhatsApp y pida su demostración gratis.",
+   "zona_de_la_referencia": "R2 cuadro final: presentadora más cerca, subtítulo CTA sin chip a ~62 % del alto, sin tarjeta final ni logo.",
+   "sub_y": 1250
+  },
+  {
+   "id": "c3",
+   "tramo": "19-25 s",
+   "rol": "póster",
+   "toma": "pantalla",
+   "persona": "ninguna",
+   "subtitulo": "Quién hace meses *no vuelve*",
+   "cintilla": null,
+   "pantalla": {
+    "fila": [
+     "vuelve",
+     "cita-manana"
+    ],
+    "dispositivo": "celular"
+   },
+   "tarjeta": null,
+   "voz": "Cada mañana revisa su agenda. Le deja anotado quién hace meses no vuelve, con el mensaje listo.",
+   "zona_de_la_referencia": "R2 póster de la tarjeta: mockup de celular con las avisos apilados. Acá es la pantalla REAL de Pendientes (dos filas), sin avisos inventados."
+  }
+ ],
+ "estatico": null,
+ "guion": [
+  {
+   "tramo": "0-3 s",
+   "toma": "Pantalla de celular a cuadro completo con la fila vuelve de Pendientes",
+   "voz": "Hay pacientes que hace meses no vuelven.",
+   "en_pantalla": "Gancho arriba: Pacientes que se van / sin *aviso*; fila vuelve legible a 390 px de ancho (nunca el mensaje ni el botón de envío) con la leyenda «Pantalla de Onia · datos de ejemplo»"
+  },
+  {
+   "tramo": "3-9 s",
+   "toma": "Sergio a cámara, plano medio, fondo liso con luz de ventana; subtítulos grandes con una palabra resaltada por frase",
+   "voz": "No siempre se enojaron. No siempre se fueron a otra clínica.",
+   "en_pantalla": "Subtítulos: No siempre se *enojaron* / No siempre se fueron a otra *clínica*"
+  },
+  {
+   "tramo": "9-14 s",
+   "toma": "Tarjeta de pantalla completa, color plano de la marca; el texto aparece palabra por palabra",
+   "voz": "A veces, simplemente, nadie les escribió.",
+   "en_pantalla": "A veces, / nadie les escribió (énfasis: nadie)"
+  },
+  {
+   "tramo": "14-19 s",
+   "toma": "Vuelve Sergio a cámara",
+   "voz": "Soy Sergio Urcullo. Onia es un sistema de gestión para clínicas dentales.",
+   "en_pantalla": "Subtítulo: Soy Sergio Urcullo, de *Onia*"
+  },
+  {
+   "tramo": "19-25 s",
+   "toma": "Pantalla de celular a cuadro completo, fila vuelve ampliada",
+   "voz": "Cada mañana revisa su agenda. Le deja anotado quién hace meses no vuelve, con el mensaje listo.",
+   "en_pantalla": "Fila vuelve legible a 390 px de ancho + subtítulo: Quién hace meses *no vuelve*"
+  },
+  {
+   "tramo": "25-29 s",
+   "toma": "Sergio a cámara",
+   "voz": "Usted lo aprueba. Nada sale sin su OK.",
+   "en_pantalla": "Subtítulo: Usted lo *aprueba*"
+  },
+  {
+   "tramo": "29-34 s",
+   "toma": "Sergio a cámara, cierra sonriendo",
+   "voz": "Escríbanos por WhatsApp y pida su demostración gratis.",
+   "en_pantalla": "Subtítulo pequeño: Pida su demostración *gratis*"
+  }
+ ],
+ "promesas": [
+  {
+   "frase": "Cada mañana Onia revisa su agenda",
+   "fuente": "CAT §8 frase 3 · ⬜ sin verificar: corre solo, falta el log del VPS",
+   "filas": [
+    "G-04"
+   ]
+  },
+  {
+   "frase": "Le deja anotado quién hace meses no vuelve",
+   "fuente": "CAT §8 frase 3 (son reglas fijas) · ⬜ sin verificar: falta la cuenta demo",
+   "filas": [
+    "G-05"
+   ]
+  },
+  {
+   "frase": "Con el mensaje listo",
+   "fuente": "CAT §8 frase 3 · ⬜ sin verificar: falta la cuenta demo",
+   "filas": [
+    "G-05"
+   ]
+  },
+  {
+   "frase": "Usted lo aprueba; nada sale sin su OK",
+   "fuente": "CAT §8 frase 3 · ⬜ sin verificar: falta la cuenta demo. Ojo: el recordatorio de cita por correo (B-03) sale solo; la frase queda pegada al mensaje de Pendientes y no se amplía",
+   "filas": [
+    "G-01"
+   ]
+  },
+  {
+   "frase": "Onia es un sistema de gestión para clínicas dentales",
+   "fuente": "CAT §4 · ⬜ sin verificar: falta la cuenta demo",
+   "filas": [
+    "B-01",
+    "C-02",
+    "D-01",
+    "E-01"
+   ]
+  },
+  {
+   "frase": "A veces nadie les escribió (diagnóstico del problema, no promesa del producto)",
+   "fuente": "Texto del descarte; no depende de ninguna función de Onia. Se dice «a veces» y «no siempre» a propósito: no se afirma por qué se van los pacientes",
+   "filas": []
+  },
+  {
+   "frase": "Pida su demostración gratis",
+   "fuente": "CTA fija del brief · 🟡 verificada solo en parte: la duración de la llamada no se dice porque la web y los mensajes no coinciden",
+   "filas": [
+    "L-04"
+   ]
+  }
+ ],
+ "no_dice": [
+  "No promete ningún resultado, cifra ni porcentaje.",
+  "No dice que Onia haga volver a nadie: solo deja anotado a quién escribirle.",
+  "No afirma por qué se van los pacientes: usa «no siempre» y «a veces».",
+  "No nombra montos, planes ni ofertas económicas.",
+  "No cuenta casos de uso ni dice quién usa Onia.",
+  "No dice que el mensaje salga solo: queda listo y lo aprueba usted.",
+  "No presenta la herramienta como algo más que reglas claras.",
+  "No nombra temas fiscales ni avisos al paciente por otros canales.",
+  "No dice cuánto dura la llamada de demostración.",
+  "No nombra otras empresas ni copia ninguna frase de la referencia; solo toma su forma (dos descartes y un giro).",
+  "No muestra el texto del mensaje al paciente ni el botón de envío de la pantalla."
+ ],
+ "para_sergio": [
+  "Grabar en vertical, de medio cuerpo, con fondo liso o de oficina y luz de ventana, ropa de calle sencilla, mirando a cámara.",
+  "Decir el texto de corrido dos veces, de usted y con pausas cortas entre frases, para que la edición pueda poner la tarjeta palabra por palabra en el medio.",
+  "Grabar aparte la primera frase (Hay pacientes que hace meses no vuelven) en una toma limpia: se usa sobre la pantalla, sin su cara.",
+  "Grabar la última frase (la invitación) tres veces, mirando a cámara y sonriendo al terminar.",
+  "No hace falta grabar la pantalla de Onia: se compone en edición."
+ ],
+ "ficha": "R2",
+ "apoyo": null,
+ "zonas": [
+  [
+   "Inicio",
+   "Presentadora a la derecha, cortada por el borde, señalando a cámara; palabra gigante amarilla («TIENES») a 29-34 % del alto.",
+   "Sergio a la derecha; el énfasis del gancho, «AVISO», en amarillo gigante a ~27 % (el gancho sigue en 2 líneas)."
+  ],
+  [
+   "Medio",
+   "Corte seco a tarjeta azul con patrón; texto chico que se escribe solo.",
+   "Tarjeta verde de Onia, lisa (no se inventa una trama), con 2 líneas **más grandes** que la referencia para que se lean a 390 px."
+  ],
+  [
+   "Final",
+   "Presentadora más cerca, subtítulo CTA ámbar sin chip a 61-63 %; sin tarjeta final ni logo.",
+   "Sergio más cerca, subtítulo CTA con chip a ~65 %; sin tarjeta final."
+  ],
+  [
+   "Póster",
+   "Mockup de celular con avisos apilados.",
+   "La pantalla REAL de Pendientes (dos filas); sin avisos inventados."
+  ],
+  [
+   "Forma del copy",
+   "«El secreto de… No es X, no es Y… Es Z.»",
+   "Dos descartes y un giro **con otras palabras**: «No siempre se enojaron / No siempre se fueron a otra clínica / A veces, nadie les escribió». No usa «El secreto» ni sus descartes."
+  ],
+  [
+   "Largo",
+   "62 s.",
+   "33 s."
+  ]
+ ],
+ "modelado": {
+  "se_queda": "La alternancia presentadora → tarjeta de color de marca → presentadora más cerca; una palabra gigante en el tercio superior; cierre hablado sin tarjeta final.",
+  "cambia": "La idea (leads que se enfrían → pacientes que dejan de venir sin que nadie les escriba), el mecanismo (Pendientes, no un asistente que responde WhatsApp), el nombre, los colores y el largo. Sin IA, sin «24/7», sin «sin intervención humana»."
+ }
+}

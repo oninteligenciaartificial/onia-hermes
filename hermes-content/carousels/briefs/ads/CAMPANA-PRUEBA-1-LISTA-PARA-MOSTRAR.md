@@ -4,6 +4,7 @@
 > **El presupuesto (US$ 56 · 14 días · tope Bs 750) está SIN aprobar:** lo aprueba Sergio Urcullo por escrito, en la sesión que crea y enciende.
 > Qué está listo y qué no, en una línea: **dos de los tres creativos están renderizados y mirados; el tercero (el selfie) lo graba Sergio Urcullo. La campaña está especificada paso a paso. El go/no-go del 13-oct sigue en NO-GO: 0 de 9 filas en ✅.**
 > Fuentes: `CAMPANA-1-LISTA-PARA-CREAR.json` (spec ejecutable), `ONIA_ADQUISICION_Y_PAUTA.md` §5.7, §5.10, §5.11, `research/competencia/anuncios/{CAPTURAS-HECHAS.md,fichas/}`, `ONIA_CATALOGO_DE_VENTA.md` §4, §7, §8, `ONIA_PROMESA_VS_PRODUCTO.md`.
+> **⚠️ 11-oct, noche: el §1 (los 3 creativos A1-E, A1-V, A1-S) lo REEMPLAZA la prueba 1 v2.** Sergio Urcullo vio A1-E y dijo «ese ad está horrible, mejoralos»: era una losa de texto sin persona. Los 5 creativos nuevos copian, zona por zona, los anuncios que más días llevan al aire y están en `prueba1-v2/LISTA-PARA-MOSTRAR-V2.md`. Lo demás de esta lista (público, presupuesto, cortes, go/no-go, día del sí) sigue vigente; `CAMPANA-1-LISTA-PARA-CREAR.json` sigue describiendo A1 hasta que Sergio Urcullo elija cuáles de las 5 entran.
 
 ---
 

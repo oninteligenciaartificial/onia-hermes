@@ -1,0 +1,164 @@
+{
+ "id": "G1-3",
+ "pieza": "Imagen 1:1: a quién escribirle hoy, ya anotado",
+ "referencia": {
+  "anunciante": "CitaPro",
+  "id": "2253602242100999",
+  "dias": 66,
+  "formato": "imagen 1:1"
+ },
+ "formato": {
+  "relacion": "1:1",
+  "duracion_s": null
+ },
+ "gancho": {
+  "texto": [
+   "A quién escribirle hoy",
+   "ya está *anotado*"
+  ],
+  "voz": null,
+  "imagen": "Cuadrado 1:1: titular grande arriba a la izquierda; a la derecha Sergio Urcullo de medio cuerpo mirando con calma el celular que sostiene; entre ambos, dos tarjetas reales flotando (filas cita-manana y vuelve de Pendientes, solo el encabezado, sin el mensaje ni el botón de envío) con la leyenda «Pantalla de Onia · datos de ejemplo»; lockup onia | dental pequeño y el botón abajo a la izquierda.",
+  "alineacion": "El titular promete la lista ya hecha, las dos tarjetas la muestran con dos motivos distintos (una cita de mañana, alguien que hace meses no vuelve) y Sergio con el celular la lleva a la mano: cada parte aporta algo nuevo y ninguna repite al titular.",
+  "alternativa": [
+   "Su lista de la mañana",
+   "ya está *hecha*"
+  ]
+ },
+ "texto_principal": "Para dueños y dueñas de clínicas dentales de Santa Cruz.\nSi nadie se acuerda de escribirle a un paciente, esa hora igual se paga: sillón, equipo y alquiler.\nOnia es un sistema de gestión para clínicas dentales: en Pendientes, cada mañana le deja anotado quién tiene cita mañana y quién hace meses no vuelve, con el mensaje listo.\nUsted lo aprueba: nada sale sin su OK.\nEscríbanos por WhatsApp y pida su demostración gratis.",
+ "titular": "Pida su demostración gratis",
+ "boton": "Enviar mensaje de WhatsApp",
+ "precargado": "Hola, vi el anuncio de Onia (D9). Tengo una clínica dental.",
+ "cuadros": [],
+ "estatico": {
+  "titular": [
+   "A quién escribirle hoy",
+   "ya está *anotado*"
+  ],
+  "enfasis": "anotado",
+  "bajada": [
+   "Onia revisa su agenda cada mañana.",
+   "Le deja el mensaje listo.",
+   "Nada sale sin su OK."
+  ],
+  "boton": "Escríbanos por WhatsApp",
+  "filas": [
+   "cita-manana",
+   "vuelve"
+  ]
+ },
+ "guion": null,
+ "promesas": [
+  {
+   "frase": "A quién escribirle hoy ya está anotado / Onia revisa su agenda cada mañana",
+   "fuente": "CAT §8 frase 3 · ⬜ sin verificar: corre solo, falta el log del VPS",
+   "filas": [
+    "G-04",
+    "G-05",
+    "G-06"
+   ]
+  },
+  {
+   "frase": "Le deja el mensaje listo",
+   "fuente": "CAT §8 frase 3 (son reglas fijas) · ⬜ sin verificar: falta la cuenta demo",
+   "filas": [
+    "G-05",
+    "G-06"
+   ]
+  },
+  {
+   "frase": "Nada sale sin su OK",
+   "fuente": "CAT §8 frase 3 · ⬜ sin verificar: falta la cuenta demo. Ojo: el recordatorio de cita por correo (B-03) sale solo; la frase queda pegada al mensaje de Pendientes y no se amplía",
+   "filas": [
+    "G-01"
+   ]
+  },
+  {
+   "frase": "Tarjeta 1: cita de mañana sin confirmar (fila cita-manana)",
+   "fuente": "Recorte real de Pendientes, captura del candidato del 30-sep · ⬜ sin verificar: falta la cuenta demo",
+   "filas": [
+    "G-06",
+    "B-02"
+   ]
+  },
+  {
+   "frase": "Tarjeta 2: quien hace meses no vuelve (fila vuelve)",
+   "fuente": "Recorte real de Pendientes, captura del candidato del 30-sep · ⬜ sin verificar: falta la cuenta demo",
+   "filas": [
+    "G-05"
+   ]
+  },
+  {
+   "frase": "Onia es un sistema de gestión para clínicas dentales",
+   "fuente": "CAT §4 · ⬜ sin verificar: falta la cuenta demo",
+   "filas": [
+    "B-01",
+    "C-02",
+    "D-01",
+    "E-01"
+   ]
+  },
+  {
+   "frase": "Pida su demostración gratis",
+   "fuente": "CTA fija del brief · 🟡 verificada solo en parte: la duración de la llamada no se dice porque la web y los mensajes no coinciden",
+   "filas": [
+    "L-04"
+   ]
+  }
+ ],
+ "no_dice": [
+  "No promete ningún resultado, cifra ni porcentaje.",
+  "No inventa mensajes de chat ni burbujas: las dos tarjetas son filas reales de Pendientes.",
+  "No nombra montos, planes ni ofertas económicas.",
+  "No cuenta casos de uso ni dice quién usa Onia.",
+  "No dice que el mensaje salga solo: queda listo y lo aprueba usted.",
+  "No presenta la herramienta como algo más que reglas claras.",
+  "No nombra temas fiscales ni avisos al paciente por otros canales.",
+  "No dice cuánto dura la llamada de demostración.",
+  "No nombra otras empresas ni copia frases de la referencia.",
+  "No muestra el texto del mensaje al paciente ni el botón de envío de la pantalla."
+ ],
+ "para_sergio": [
+  "Fotografiar de medio cuerpo, a la derecha del encuadre, con luz de ventana y fondo claro y liso, mirando con calma el celular que sostiene con las dos manos; dejar libre la mitad izquierda de la foto.",
+  "Sacar diez fotos: cinco mirando al celular y cinco mirando a cámara con media sonrisa; en todas, ropa de calle sencilla, sin bata.",
+  "Dejar la pantalla del celular apagada o en negro: las dos tarjetas con la lista se componen aparte.",
+  "Entregar las fotos en vertical y en horizontal, sin filtros ni retoques y en la mejor resolución."
+ ],
+ "ficha": "R3",
+ "apoyo": "AgendaPro `3652876658196882` (64 d, 11-oct) repite la misma imagen: foto de profesional + burbujas de chat + «Agenda una demostración GRATIS». Dos anunciantes con el mismo formato.",
+ "zonas": [
+  [
+   "Titular",
+   "3 líneas, tercio superior izquierdo (15-39 %), navy y un azul más claro en «poco orden.».",
+   "2 líneas a todo el ancho arriba (checklist del gancho), la 2.ª con el énfasis en verde de Onia."
+  ],
+  [
+   "Bajada",
+   "Tres bloques de tamaño decreciente (25 %, 25 %, 16 % del ancho).",
+   "Tres líneas del mismo tamaño (41 px, ≈ 15 px a 390) para que se lean."
+  ],
+  [
+   "Persona",
+   "Mujer agobiada a la derecha, cortada por el borde, mira el celular.",
+   "Sergio a la derecha, cortado por el borde. **Maqueta:** mira a cámara; la foto real lo muestra mirando el celular (ver «Para Sergio»)."
+  ],
+  [
+   "Burbujas",
+   "6 burbujas de chat de WhatsApp en la costura, textos de ellos.",
+   "2 tarjetas **reales** de Pendientes, ampliadas; ninguna burbuja inventada."
+  ],
+  [
+   "Botón",
+   "Dibujado a 80-86 % abajo a la izquierda, «AGENDA UNA DEMO».",
+   "Botón verde abajo a la izquierda, «Escríbanos por WhatsApp» (el único llamado)."
+  ],
+  [
+   "Marca",
+   "Sin logo dentro del creativo.",
+   "Lockup `onia | dental` chico arriba a la izquierda."
+  ]
+ ],
+ "modelado": {
+  "se_queda": "Dos columnas con el texto a la izquierda y la persona a la derecha cortada por el borde, las tarjetas flotando en la costura, y el botón abajo a la izquierda.",
+  "cambia": "El dolor (WhatsApp saturado → a quién escribirle hoy), lo que flota (filas reales de la lista, no chats), el nombre, los colores, y el titular pasa a 2 líneas. Sin «IA», sin «sin intervención humana», sin «piloto automático»."
+ }
+}

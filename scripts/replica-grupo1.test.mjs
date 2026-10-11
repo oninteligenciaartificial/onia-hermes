@@ -47,22 +47,24 @@ function textosDeCopia(b) {
   return t.filter(Boolean).map(sinAsteriscos);
 }
 
-const NO_VOSEO_NI_TUTEO = /\b(vos|tú|tu|tus|tuyo|tuya|tuyos|tuyas|contigo|usás|sos|eres|estás|tienes|tenés|puedes|podés|quieres|querés|necesitas|necesitás|sabes|sabés|confirmás|confirmas|aprobás|apruebas|apruebes|escribinos|escríbenos|pedí|mirá|fijate|probá|decime|contanos|cuéntanos)\b/gi;
-const TERMINA_EN_AS_ES_IS = /\b[a-záéíóúñ]+(ás|és|ís)\b/gi;
+// \b de JavaScript no entiende las vocales con tilde («botón» contiene «bot»; «mirá» no cierra): límites Unicode.
+const P = (alternativas, banderas = "iu") => new RegExp(`(?<![\\p{L}\\p{N}_])(?:${alternativas})(?![\\p{L}\\p{N}_])`, banderas);
+const NO_VOSEO_NI_TUTEO = P("vos|tú|tu|tus|tuyo|tuya|tuyos|tuyas|contigo|usás|sos|eres|estás|tienes|tenés|puedes|podés|quieres|querés|necesitas|necesitás|sabes|sabés|confirmás|confirmas|aprobás|apruebas|apruebes|escribinos|escríbenos|pedí|mirá|fijate|probá|decime|contanos|cuéntanos", "giu");
+const TERMINA_EN_AS_ES_IS = /(?<![\p{L}])\p{L}+(ás|és|ís)(?![\p{L}])/giu;
 const PERMITIDAS_ACENTUADAS = new Set(["más", "además", "atrás", "detrás", "demás", "quizás", "jamás", "también", "después", "interés", "través", "país", "adiós", "inglés", "francés", "mes", "revés"]);
 const PROHIBIDO = [
-  [/(US\$|\bUSD\b|\bBs\b\.?\s?\d|\bbolivianos?\b|\$\s?\d|\bprecio|\bdescuento|\bcuesta\b|\bcobra\b)/i, "precio o plata"],
+  [new RegExp("(US\\$|(?<![\\p{L}])USD(?![\\p{L}])|(?<![\\p{L}])Bs(?![\\p{L}])\\.?\\s?\\d|(?<![\\p{L}])bolivianos?(?![\\p{L}])|\\$\\s?\\d|(?<![\\p{L}])precio|(?<![\\p{L}])descuento|(?<![\\p{L}])cuesta(?![\\p{L}])|(?<![\\p{L}])cobra(?![\\p{L}]))", "iu"), "precio o plata"],
   [/\d\s?%/, "porcentaje"],
-  [/\bminutos?\b/i, "minutos de la llamada (L-04: el bot dice 30 y la agenda 20)"],
+  [P("minutos?"), "minutos de la llamada (L-04: el bot dice 30 y la agenda 20)"],
   [/(doctocliq|citapro|agendapro|dentalink|dt\.?\s?dental|reservo|medilink|calendico|medizona|nativecode|clinera|huli|calu\b|fluker|jelou|dapta|lety)/i, "nombra a un competidor"],
-  [/(\bIA\b|inteligencia artificial)/, "«IA» (la frase 3 del catálogo §8 es sin IA)"],
-  [/(con un toque|tratamiento a medias|\bSIAT\b|factura electr|clínica de ejemplo|muy pronto|próximamente|\bbeta\b|solo hoy|cuenta regresiva)/i, "frase que el catálogo §7 prohíbe o que exhibe obra"],
+  [/((?<![\p{L}])IA(?![\p{L}])|inteligencia artificial)/u, "«IA» (la frase 3 del catálogo §8 es sin IA)"],
+  [/(con un toque|tratamiento a medias|(?<![\p{L}])SIAT(?![\p{L}])|factura electr|clínica de ejemplo|muy pronto|próximamente|(?<![\p{L}])beta(?![\p{L}])|solo hoy|cuenta regresiva)/iu, "frase que el catálogo §7 prohíbe o que exhibe obra"],
   [/(recupera|devuelve|reduce|disminuye|aumenta|más pacientes|menos ausencias|menos inasistencias|ahorra)/i, "promesa de resultado"],
-  [/\b(bot|chatbot|asistente virtual|asistente de ia|agente de whatsapp|lo envía|se envía solo|automáticamente por whatsapp)\b/i, "WhatsApp que atiende o envía solo (J-*, G-03)"],
+  [P("bot|chatbot|asistente virtual|asistente de ia|agente de whatsapp|lo envía|se envía solo|automáticamente por whatsapp"), "WhatsApp que atiende o envía solo (J-*, G-03)"],
   [/(nuestros clientes|clínicas que ya|ya usan|\+\s?\d{3,}|miles de|cientos de|testimonio)/i, "cliente, testimonio o cifra de clientes (hay 0 clientes pagando)"],
-  [/\b(Dr|Dra|doctor|doctora|odontólog[oa])\b\.?\s+[A-ZÁÉÍÓÚ]/, "un odontólogo con nombre (no se inventa a nadie)"],
+  [/(?<![\p{L}])(Dr|Dra|doctor|doctora|odontólog[oa])(?![\p{L}])\.?\s+[A-ZÁÉÍÓÚ]/u, "un odontólogo con nombre (no se inventa a nadie)"],
 ];
-const DIGITOS_OK = /(\d{1,2}:\d{2}|14 días|6 meses)/g;
+const DIGITOS_OK = /(\d{1,2}:\d{2}|14 días|6 meses|390 px)/g; // «390 px» sale de la dirección de la toma («legible a 390 px»), no de lo que ve el cliente
 
 test("son de 4 a 6 piezas, con id G1-n único, y cada una copia UNA referencia", () => {
   assert.ok(piezas.length >= 4 && piezas.length <= 6, `hay ${piezas.length} piezas; el encargo pide de 4 a 6`);
@@ -159,7 +161,8 @@ test("lo que la pieza dice está atado a filas de ONIA_PROMESA_VS_PRODUCTO.md y 
   for (const { b } of piezas) {
     assert.ok(b.promesas?.length >= 1, `${b.id}: sin tabla de promesas`);
     for (const p of b.promesas) {
-      assert.match(p.fuente, /^(CAT|PRO|CLAUDE)/, `${b.id}: la frase «${p.frase}» no cita el catálogo`);
+      if ((p.filas ?? []).length) assert.match(p.fuente, /^(CAT|PRO|CTA|Recorte)/, `${b.id}: la frase «${p.frase}» no cita el catálogo`);
+      else assert.match(p.fuente, /no depende|no es función|no promete/i, `${b.id}: «${p.frase}» sin fila debe decir por qué no es una función de Onia`);
       for (const f of p.filas ?? []) assert.ok(filas.has(f), `${b.id}: la fila ${f} no existe`);
     }
     assert.ok(b.no_dice?.length >= 3, `${b.id}: falta la lista de lo que NO dice`);

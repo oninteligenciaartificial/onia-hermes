@@ -62,7 +62,10 @@ body{font-family:Archivo,sans-serif;-webkit-font-smoothing:antialiased;font-stre
 .card{position:absolute;background:#FCFDFC;border-radius:26px;padding:20px 22px;box-shadow:0 18px 46px rgba(12,17,15,.22),0 2px 6px rgba(12,17,15,.12)}
 .card img{display:block;width:100%;height:auto}
 .rot{position:absolute;font-size:30px;letter-spacing:.09em;text-transform:uppercase;color:var(--suave);font-weight:600}
-.sub{position:absolute;left:0;right:0;text-align:center;padding:0 70px;font-weight:800;color:#fff;line-height:1.16;letter-spacing:-.01em;text-shadow:0 3px 14px rgba(0,0,0,.55)}
+.sub{white-space:pre-line;position:absolute;left:0;right:0;text-align:center;padding:0 70px;font-weight:800;color:#fff;line-height:1.16;letter-spacing:-.01em;text-shadow:0 3px 14px rgba(0,0,0,.55)}
+.sub.gg{line-height:1.05}
+.sub.gg .l1{display:block}
+.sub.gg em{display:inline-block;background:none;color:#FBF751;font-size:170px;font-weight:900;text-transform:uppercase;letter-spacing:-.02em;line-height:1;padding:0;text-shadow:0 4px 22px rgba(0,0,0,.5)}
 .sub.gigante{font-size:190px;line-height:1;text-transform:uppercase;font-weight:900;color:#FBF751;letter-spacing:-.02em}
 .sub em{font-style:normal;background:var(--chip);color:var(--chip-t);padding:0 .22em;border-radius:.2em;text-shadow:none;box-decoration-break:clone;-webkit-box-decoration-break:clone}
 .cintilla{position:absolute;left:0;background:var(--tinta);color:#fff;border-radius:0 18px 18px 0;padding:22px 40px 22px 56px;border-left:14px solid var(--senal)}
@@ -96,11 +99,11 @@ function fila(id, ancho, estilo = '') {
 // Fondo de una tarjeta o del cierre: tinta, hoja o verde.
 const FONDOS = { tinta: ['#0C110F', '#ECEFED', LOGO_TINTA], hoja: ['#F4F6F4', '#0C110F', LOGO_CLARO], verde: ['#027650', '#FFFFFF', LOGO_BLANCO] };
 
-function persona(W, H, pos) {
+function persona(W, H, pos, dy = 0) {
   const ancho = H >= 1900 ? 1400 : H >= 1300 ? 1120 : 900;
   const alto = Math.round((ancho * PERSONA.h) / PERSONA.w);
-  const top = H >= 1900 ? 400 : H >= 1300 ? 320 : 230;
-  const left = pos === 'derecha' ? W - ancho + 160 : Math.round((W - ancho) / 2);
+  const top = (H >= 1900 ? 400 : H >= 1300 ? 320 : 230) + dy;
+  const left = Math.round((W - ancho) / 2) + (pos === 'derecha' ? 250 : 0);
   return `<img class="persona" src="${url(PERSONA.src)}" style="width:${ancho}px;height:${alto}px;left:${left}px;top:${top}px">`;
 }
 
@@ -112,14 +115,14 @@ function htmlCuadro(b, c, W, H) {
   let fondo = '#0C110F';
   if (t === 'persona') {
     cuerpo += `<div class="standin"></div>`;
-    if (c.persona !== 'ninguna') cuerpo += persona(W, H, c.persona);
+    if (c.persona !== 'ninguna') cuerpo += persona(W, H, c.persona, c.persona_y || 0);
   } else if (t === 'pantalla') {
     cuerpo += `<div class="abs" style="inset:0;background:#0C110F"></div>`;
   } else if (t === 'tarjeta' || t === 'cierre') {
     const k = c.tarjeta?.fondo || (t === 'cierre' ? 'hoja' : 'tinta');
     const [bg, fg, logo] = FONDOS[k];
     fondo = bg;
-    const lineas = (c.tarjeta?.lineas || []).map((l) => `<div class="fit tl" style="color:${fg}">${marcar(l).replace(/<em>/g, `<em style="font-style:normal;color:${k === 'verde' ? '#0C110F' : 'var(--senal)'}">`)}</div>`).join('');
+    const lineas = (c.tarjeta?.lineas || []).map((l) => `<div class="fit tl" style="color:${fg}">${marcar(l).replace(/<em>/g, `<em style="font-style:normal;color:${k === 'verde' ? '#FEF9C2' : 'var(--senal)'}">`)}</div>`).join('');
     cuerpo += `<div class="abs" style="inset:0;background:${bg}"></div>
       <div class="abs" style="left:0;right:0;top:${hist ? 270 : 60}px;bottom:${hist ? 250 : 60}px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:${t === 'cierre' ? 44 : 30}px;text-align:center">
         ${t === 'cierre' && !c.tarjeta?.logo_abajo ? `<img src="${url(logo)}" style="height:${k === 'hoja' ? 170 : 200}px;width:auto">` : ''}
@@ -133,15 +136,16 @@ function htmlCuadro(b, c, W, H) {
   if (filas.length) {
     const flotando = t === 'persona';
     const ancho = flotando ? 880 : 940;
-    const top0 = flotando ? Math.round(H * (hist ? 0.6 : 0.62)) : Math.round(H * 0.3);
+    const top0 = flotando ? Math.round(H * (c.pantalla.y ?? (hist ? 0.6 : 0.62))) : Math.round(H * 0.3);
     const marco = flotando ? 'transform:rotate(-2deg);left:' + Math.round((W - ancho - 44) / 2 + 18) + 'px;' : 'left:' + Math.round((W - ancho - 44) / 2) + 'px;';
     cuerpo += filas.map((id, i) => fila(id, ancho, `${marco}top:${top0 + i * 190}px`)).join('');
     if (!flotando) cuerpo += `<div class="rot" style="left:${Math.round((W - ancho - 44) / 2)}px;top:${top0 - 62}px">Pantalla de Onia · datos de ejemplo</div>`;
   }
   if (c.subtitulo) {
-    const y = c.sub_y != null ? c.sub_y : t === 'pantalla' ? Math.round(H * 0.72) : t === 'persona' ? Math.round(H * (c.pantalla ? 0.5 : 0.62)) : Math.round(H * 0.5);
-    cuerpo += `<div class="sub${c.estilo_subtitulo === 'gigante' ? ' gigante' : ''}" style="${c.estilo_subtitulo === 'gigante' ? '' : `font-size:${subPx}px;`}top:${y}px">${marcar(c.subtitulo)}</div>`;
+    const y = c.sub_y != null ? c.sub_y : t === 'pantalla' ? Math.round(H * 0.72) : t === 'persona' ? Math.round(H * (c.pantalla ? 0.5 : 0.66)) : Math.round(H * 0.5);
+    cuerpo += `<div class="sub${c.estilo_subtitulo === 'gigante' ? ' gigante' : ''}${c.estilo_subtitulo === 'gancho-gigante' ? ' gg' : ''}" style="${c.estilo_subtitulo === 'gigante' ? '' : `font-size:${subPx}px;`}top:${y}px">${marcar(c.subtitulo)}</div>`;
   }
+  if (c.marca_grande) cuerpo += `<img class="abs" src="${url(LOGO_TINTA)}" style="left:${Math.round((W - 620) / 2)}px;top:${Math.round(H * (c.marca_y ?? 0.455))}px;width:620px;height:auto;filter:drop-shadow(0 4px 18px rgba(0,0,0,.45))">`;
   if (c.logo_fijo) cuerpo += `<img class="logofijo" src="${url(t === 'persona' || t === 'pantalla' ? LOGO_TINTA : LOGO_CLARO)}" style="top:${hist ? 290 : 50}px">`;
   if (c.cintilla) {
     cuerpo += `<div class="cintilla" style="top:${Math.round(H * (hist ? 0.76 : 0.74))}px"><b>${esc(c.cintilla.nombre)}</b><span>${esc(c.cintilla.rol)}</span></div>`;
@@ -159,8 +163,8 @@ function htmlEstatico(b) {
   <div class="abs" style="left:64px;top:128px;display:flex;flex-direction:column;line-height:1.02;letter-spacing:-.025em;font-weight:800;color:#0C110F">${tit}</div>
   <div class="abs baj" style="left:64px;top:392px;width:470px;font-size:41px;line-height:1.24;color:#2C3430;font-weight:500">${baj}</div>
   <img class="abs" src="${url(PERSONA.src)}" style="width:650px;height:${Math.round((650 * PERSONA.h) / PERSONA.w)}px;right:-18px;bottom:0">
-  ${filas[1] ? fila(filas[1], 560, 'left:64px;top:560px;transform:rotate(-1.5deg)') : ''}
-  ${fila(filas[0], 930, 'left:44px;top:700px')}
+  ${filas[1] ? fila(filas[1], 560, 'left:64px;top:614px;transform:rotate(-1.5deg)') : ''}
+  ${fila(filas[0], 930, 'left:44px;top:756px')}
   <div class="abs" style="left:64px;top:938px"><span class="btn" style="font-size:42px;padding:26px 50px">${wa()}${esc(e.boton || 'Escríbanos por WhatsApp')}</span></div>`;
 }
 
@@ -207,8 +211,11 @@ function htmlHoja(b, refs, nuestras, rel) {
   const vid = !b.estatico;
   const ancho = vid ? 390 : 560;
   const rot = ['inicio', 'medio', 'cierre'];
-  const cell = (src, cap, sub) => `<figure><img src="${url(src)}" style="width:${ancho}px;height:auto;display:block;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,.25)"><figcaption><b>${esc(cap)}</b>${sub ? `<br>${esc(sub)}` : ''}</figcaption></figure>`;
-  const fila1 = refs.map((s, i) => cell(s, vid ? rot[i] : 'creativo', '')).join('');
+  const pngW = (f) => { const bb = fs.readFileSync(f); return [bb.readUInt32BE(16), bb.readUInt32BE(20)]; };
+  const rec = r.recorte;
+  const cell = (src, cap, sub, recortar) => recortar && rec ? (() => { const [rx, ry, rw, rh] = rec; const [iw, ih] = pngW(abs(src)); const k = ancho / rw;
+    return `<figure><div style="width:${ancho}px;height:${Math.round(rh * k)}px;overflow:hidden;position:relative;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,.25)"><img src="${url(src)}" style="position:absolute;width:${Math.round(iw * k)}px;height:${Math.round(ih * k)}px;left:${-Math.round(rx * k)}px;top:${-Math.round(ry * k)}px"></div><figcaption><b>${esc(cap)}</b>${sub ? `<br>${esc(sub)}` : ''}</figcaption></figure>`; })() : `<figure><img src="${url(src)}" style="width:${ancho}px;height:auto;display:block;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,.25)"><figcaption><b>${esc(cap)}</b>${sub ? `<br>${esc(sub)}` : ''}</figcaption></figure>`;
+  const fila1 = refs.map((s, i) => cell(s, vid ? (rot[i] || 'tarjeta entera (trae el póster)') : 'creativo', '', vid && i < 3)).join('');
   const fila2 = nuestras.map((n, i) => cell(n.src, n.cap, n.sub)).join('');
   return `<div style="padding:34px 40px 30px;background:#F4F6F4;width:max-content;min-width:1360px">
   <div style="display:flex;align-items:baseline;gap:20px"><div style="font-size:54px;font-weight:800;letter-spacing:-.02em">${esc(b.id)}</div>
@@ -255,6 +262,7 @@ async function main() {
   if (o.hoja) {
     const dir = `${ANUNCIOS}/${b.referencia.anunciante.toLowerCase().replace(/[^a-z]/g, '')}`;
     const refs = (b.estatico ? ['-2'] : ['-2', '-3', '-4']).map((x) => `${dir}/${b.referencia.id}${x}.png`);
+    if (!b.estatico && b.cuadros.length > 3) refs.push(`${dir}/${b.referencia.id}.png`); // el póster vive en la tarjeta entera
     const p = await br.newPage({ viewport: { width: 1360, height: 800 }, deviceScaleFactor: 1 });
     const file = path.join(o.out, '_hoja.html');
     fs.writeFileSync(file, `<!doctype html><html><head><meta charset="utf-8"><style>${HOJA_CSS}</style></head><body>${htmlHoja(b, refs, nuestras)}</body></html>`);
