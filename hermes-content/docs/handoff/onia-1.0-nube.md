@@ -116,6 +116,8 @@ la dirección de Sergio Urcullo.
   módulo. Para «pantalla entera» hay que seguir los imports.
 - Demo: `reset=2` para grabar (con `reset=1` quedan tarjetas viejas); los agentes no se pueden correr para una sola cuenta.
 
+- **Horas escritas a ojo (11-oct, 4 veces en una mañana):** en la cola se anotaron revisiones «a las 07:45», «07:48», «08:05» y «08:27» cuando el reloj marcaba 07:38, 07:43, 07:59 y 08:24. Siempre adelantadas: se escribe la hora que se calcula para cuando termine, no la de ahora. Antes de escribir una hora, `date -u` en el mismo comando.
+
 ## 7. Qué depende de Sergio Urcullo
 
 1. **Términos 1.4 y 7 días de gracia:** sí o no, con el OK de Leslie Mercado Moreno (titular).
