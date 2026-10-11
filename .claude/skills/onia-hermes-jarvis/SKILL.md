@@ -235,6 +235,24 @@ CLI de Hermes.
   show origin/<rama>:<ruta>` y `git archive … | tar -x` en `/tmp`: nunca `checkout` en el árbol del carril. La
   verificación cambia veredictos: el «cursor CAFC repite números» de #145 bajó a MEDIUM porque el runner falla cerrado
   sin conciliación. Y dos lentes del mismo PR (#162) se contradijeron sobre si el silencio dispara; el repro lo decidió.
+- **Mirar páginas públicas con un solo script** (11-oct): `hermes-content/docs/research/qa-publicacion/2026-10-11/mirar-publico.mjs
+  <carpeta> <etiqueta> <ruta>...`, con `BASE=https://onia.com.bo` para la web (por omisión, la app). Por ruta y ancho
+  (390 y 1440) saca estado, tiempo, título de la pestaña, descripción, tarjeta al compartir, huella del build, ligaduras de
+  íconos dibujadas como texto, desborde horizontal, textos de obra, voseo o tuteo visible y los precios en Bs. Corre con
+  `NODE_EXTRA_CA_CERTS=/root/.ccr/ca-bundle.crt`. Para un asistente de pasos (el alta) se hace clic en la tarjeta del
+  paso 1 y se mira el paso 2 **sin escribir ni enviar nada**: `/register` no se tocó más que eso. Trampas: `getByText`
+  del rubro agarra primero un texto oculto del pie («Clínicas dentales · Comercios…»): hay que pedir el `button` por nombre;
+  y el nombre del PNG puede pisar una captura vieja de otro script si comparten etiqueta.
+- **Una revisión con lentes se verifica DESPUÉS, y baja severidades** (11-oct, E3, #136): de 5 HIGH que dieron cuatro
+  lentes sonnet, el haiku verificador confirmó 2, bajó 2 a MEDIUM (una carrera de milisegundos que no pierde plata, un
+  reenvío que el cupo de 10 por hora acota) y dejó 1 como compuerta que solo mide la madre en el VPS. Además corrigió dos
+  citas de línea que no existían (un archivo de 89 líneas citado en la 147) y desmintió una frase («el CI lo atraparía»:
+  el test deriva solo relaciones sin `onDelete`, y un `Cascade` le es invisible). Dos lentes que llegan a lo mismo por
+  caminos distintos (el «1.500» de la caja lo vieron la A y la D) es la mejor señal de que es real: igual se corre el
+  `node -e` con la función copiada, que dio 1,5.
+- **El texto legal también se mide en la web** (11-oct): `/terminos` y `/privacidad` están de vos como el resto de
+  `onia.com.bo`. Las palabras «borrador» y «beta» que el barrido marca ahí son de la IA que propone borradores, no
+  de obra: un barrido de obra sin leer la línea da falsos positivos en esas dos páginas.
 - **`git show … | grep -q` con `pipefail` miente en archivos grandes** (10-oct). `grep -q` sale al primer
   acierto, `git` recibe SIGPIPE y el pipeline da error: una cola de más de 64 KB con tareas se leía «sin
   tareas». Usar `grep -c … >/dev/null` (lee todo) o leer a una variable primero.

@@ -72,8 +72,13 @@ carril puede hacer solo. Q1 espera `aplicar` (ver «Bloqueado»).
   - [x] Antes (04:53 UTC): /login a 390 y 1440 se ve bien. Íconos como glifos (ninguna ligadura como texto), todo
     de usted, sin obra. Huella del build: `webpack-2a706587264c6b91.js`. Capturas y script en
     `hermes-content/docs/research/qa-publicacion/2026-10-11/`. modelos: ninguno (script propio).
-  - [ ] Después (desde las 06:57, con el latido): la huella nueva confirma desde afuera que cambió el build, y /login
-    a 390 y 1440 otra vez.
+  - [x] Antes también de /book (05:10 UTC): 200, «Reservas en línea | Onia», todo de usted, íconos como glifos, sin
+    desborde a 390. El script ahora es `mirar-publico.mjs` (cualquier ruta pública; `BASE=` para otro dominio).
+  - [ ] Después (desde las 06:57 UTC, con el latido): `NODE_EXTRA_CA_CERTS=/root/.ccr/ca-bundle.crt node
+    hermes-content/docs/research/qa-publicacion/2026-10-11/mirar-publico.mjs <carpeta> despues-0650 /login /book`.
+    Qué comparar con el «antes»: `build` distinto de `webpack-2a706587264c6b91.js` (si es igual, no se publicó);
+    el título de /login debe decir «…que maneja su negocio…» solo si onia-platform#146 entró en esa publicación; el
+    resto sin cambio (sin ligaduras como texto, sin obra, sin desborde).
   - **Bloqueado para este carril: las pantallas con sesión y «la imagen en el VPS».** `onia-mirar.js` lee la clave
     service role con `docker exec` en el VPS, y la sesión de la nube no entra por SSH (rol, §3). El MCP de GitHub no
     despacha workflows (403), así que tampoco puedo pedirle el `docker inspect` al diagnóstico. Lo hace la madre desde la
@@ -165,23 +170,147 @@ carril puede hacer solo. Q1 espera `aplicar` (ver «Bloqueado»).
     `_urls.tsv`. `face-gate.sh` hace `pip install` sin versión fija y baja ~280 MB (insightface es de uso no comercial).
   - Peso: +193,6 MB (3 % del repo).
 
-- [ ] **Q7 La web promete hoy lo que el catálogo deja (11-oct, madre v4).** Volver a mirar la §3 de
+- [x] **E3 Revisión de #136 y #146, y relectura de #162, #191 y #172** (11-oct, 05:00-05:50 UTC; heads 1fd14770,
+  b0e021f2, 5d5a11ce sin cambios, f84f9c8f, 00106d76). Nada se mergeó ni se comentó en GitHub. #136: 4 lentes sonnet
+  (caja y pagos · backend de la bandeja · PWA, proxy y odontograma · UI y textos); cada HIGH lo verificó un haiku que
+  cita líneas. #146, #191 y #172 los leí yo. modelos: sonnet ×4, haiku ×5. codex: ninguno.
+
+  | PR | Veredicto | HIGH verificados |
+  |---|---|---|
+  | onia-platform #136 (5 pantallas) | **CAMBIOS** | 2 (+ 1 compuerta que no se puede medir desde la nube) |
+  | onia-platform #146 (títulos de usted) | APROBAR | 0 (3 LOW) |
+  | onia-hermes #162 (bot) | **BLOQUEAR**, igual que en E2 | 3 (la cabeza no cambió: `5d5a11ce`) |
+  | onia-hermes #191 (Ventas) | CAMBIOS, sin HIGH | 0 |
+  | onia-hermes #172 (Marca) | CAMBIOS, sin HIGH | 0 |
+
+  **#136 (CAMBIOS).** Seguridad entre organizaciones, webhook, SSE, service worker, proxy y XSS: sin hallazgo grave.
+  La firma HMAC va con `timingSafeEqual` y falla cerrada; el service worker no guarda nada autenticado; las 26 páginas
+  `/dev` dan 404 en producción; ningún texto de mensaje llega a HTML.
+  - HIGH (verificado): **en la caja diaria, escribir «1.500» cierra la caja con Bs 1,50 y no hay vuelta.**
+    `CajaDiariaClient.tsx:40-44` (`parseMoney`): «1.500» → 1,5; «1,500» → 1,5; «1.500,50» → NaN y el botón queda
+    apagado sin decir por qué (corrido con node). El esquema acepta 1,5 (`caja-diaria/route.ts:35`:
+    `min(0).multipleOf(0.01)`). El botón no pide confirmación (`CajaDiariaClient.tsx:704-707`, `:726`) y no existe
+    reabrir (`caja-diaria/route.ts:39` solo admite open, correctOpeningFund, expense, close; segundo cierre: 409 en
+    `:316`). Quien cierra con el rol de caja no ve el esperado (`:152` lo pone en null sin `approvals.decide`;
+    `lib/onia-core/roles.ts:37`), así que no nota el error. Desde el cierre, `POST /api/payments` del día responde
+    409 (`payments/route.ts:73`, `:172-173`): los cobros manuales de hoy se frenan hasta la medianoche. Los webhooks
+    de PagosNet y Circle siguen grabando (por eso «cobros manuales», no «todos»).
+    Arreglo: leer el monto en formato es-BO (el punto de miles se quita si le siguen 3 dígitos; la coma es decimal) o
+    rechazar «1.500» ambiguo; mostrar bajo el campo el monto leído; paso de confirmación «Se cerrará con Bs X. No se
+    puede reabrir»; `disabledReason` en los tres botones (`:359`, `:643`, `:726`); y una acción `reopen` solo para
+    `approvals.decide`, con auditoría.
+  - HIGH (verificado): **borrar un paciente borra sus caras del odontograma sin avisar.** `schema.prisma:938`
+    (`ToothSurfaceRecord`, `onDelete: Cascade`) y la migración `20261006220000…/migration.sql:21`. El borrado
+    se frena con `lib/platform/borrado-bloqueado.ts:126-131`, que lista `toothRecord` y otros con `expediente: true`
+    (RM 0090/2008 art. 31) pero no las caras. `/api/teeth/surfaces` crea una cara sin `ToothRecord`
+    (`teeth/surfaces/route.ts:52-53`, `:65`; el editor también, `odontogram-editor.ts:33-35`). Un ADMIN que borra
+    un paciente que solo tiene caras (`patients/[id]/route.ts:164-178`) las pierde en cascada. El CI **no** lo
+    atrapa: el test deriva solo relaciones sin cascada (`borrado-bloqueado.test.ts:73-74`, `continue` si hay
+    `onDelete:`) y su lista `EXPEDIENTE` (`:119-125`) es manual. Arreglo: sumar `toothSurfaceRecord.patientId` con
+    `expediente: true` y que el test derive también los hijos con cascada.
+  - **Compuerta que no se mide desde la nube:** el PR trae dos migraciones (`20261004190000_add_daily_cash`,
+    `20261006220000_add_tooth_surfaces`) que `master` no tiene. Su descripción dice que se aplicaron el 10-oct, con
+    respaldo, y que están en `_prisma_migrations`; el CHANGELOG del PR todavía dice «NO merge sin migración previa».
+    Si no estuvieran, la publicación de master las pide: sin `payments.userId` falla toda lectura de pagos y sin
+    `tooth_surface_records` cae el odontograma. Lo mide la madre en el VPS, solo lectura:
+    `docker exec supabase-db psql -U postgres -c "select migration_name, finished_at from _prisma_migrations where
+    migration_name in ('20261004190000_add_daily_cash','20261006220000_add_tooth_surfaces')"`.
+  - MEDIUM (verificado, bajaron de HIGH):
+    - Cobro y cierre se cruzan: `payments/route.ts:69-75` lee `closedAt` sin lock y el cierre bloquea la fila con
+      `FOR UPDATE` (`caja-diaria/route.ts:314`) y lee los cobros sin ver el que no se commiteó (`:319`). La ventana es de
+      milisegundos y no pierde plata: deja un cobro en efectivo en un día cerrado y un sobrante falso. Arreglo: `FOR SHARE`
+      sobre la fila de la caja en payments, antes de leer `closedAt`.
+    - `DELETE /api/payments/[id]` (`[id]/route.ts:21-37`) borra cualquier pago de un día cerrado, sin chequear la caja
+      y sin auditoría (el archivo no importa `lib/audit`); el `GET` recalcula el efectivo con los pagos vivos
+      (`caja-diaria/route.ts:131-154`) y el descuadre del dueño deja de coincidir con el cierre guardado. Los
+      webhooks (`pagosnet:118`, `circle:116`) crean pagos «OTRO» en día cerrado: no tocan el efectivo.
+    - Reenvío de plantilla paga: si la red se corta después de que el servidor envió, o un 502 de Traefik llega sin JSON,
+      el botón queda libre (`InboxClient.tsx:380-392`; solo `:383` activa `plantillaIncierta`) y un segundo clic manda
+      la misma plantilla (`PlantillasBandeja.tsx:161`, `:197`). `NuevaConversacion.tsx:52-55` ya marca «incierto» ante
+      cualquier fallo sin respuesta; falta lo mismo aquí. El tope es 10 por hora por persona
+      (`envio-pagado.ts:33`) y la plantilla la paga el cliente en su propia cuenta de Meta.
+    - Backend de la bandeja: el aviso en vivo no invalida el cache de 30 s, así que el detalle vuelve viejo
+      (`webhooks/chatwoot/eventos/route.ts:65-68`, `conversation-ownership-cache.ts:12-15`); «en vivo» se declara por
+      tener la variable de entorno y no porque lleguen eventos, así que un secreto viejo deja todas las bandejas a 60 s
+      y sin aviso (`bandeja/eventos/route.ts:33-34`, `InboxClient.tsx:340`); un inbox reclamado por dos organizaciones
+      sigue abierto a las dos (`bandeja/eventos/route.ts:32`, `bandeja/[id]/route.ts:63-77`).
+    - Textos: errores en inglés (`Failed to fetch`, `Load failed`) en la bandeja y la caja
+      (`InboxClient.tsx:392`, `PlantillasBandeja.tsx:113-119`, `CajaDiariaClient.tsx:62-99`); cartel rojo que no se
+      borra al recuperarse (`InboxClient.tsx:287`, `:700`, `:727`); Enter envía una plantilla paga sin confirmar
+      (`PlantillasBandeja.tsx:159-164`); la fecha de un cobro la escribe el usuario y define el día de la caja
+      (`payments/route.ts:20,65`); solo se puede cerrar la caja de HOY (`caja-diaria/route.ts:230`).
+  - LOW: la baja de la suscripción push no ocurre al cerrar sesión, y en una PC compartida de recepción el siguiente
+    usuario ve las alertas de cita del anterior (`Sidebar.tsx:137-145`, `lib/push.ts:26-60`; preexistente). Versión del
+    service worker a mano (`sw.js:5`, `:38-43`). `PLATFORM_LAYER` apagado dejaría `/api/teeth` sin guard de rubro
+    (`teeth/route.ts:26`, `:68`; producción lo tiene en «1»). Avatar roto con nombres que empiezan con emoji
+    (`PropuestaCard.tsx:62-68`). El script `chatwoot-webhook-eventos.mjs:16-18` no valida que la URL sea https.
+  - Dos citas de línea de las lentes no existían (`teeth/surfaces/route.ts` tiene 89 líneas, no 147; `NuevaConversacion.tsx`
+    tiene 132): los verificadores las corrigieron arriba. Una lente afirmó que «el CI lo atraparía» y era falso.
+
+  **#146 (APROBAR).** Solo textos, sin lógica ni migración; CI en verde; se mergea limpio con #136 (probado con
+  `git merge-tree`). Tres LOW:
+  - `public/manifest.json:4` sigue diciendo «…que maneja tu negocio» y es lo que lee el cuadro de instalación de la app. El
+    gate no lo mira (`titulos-publicos-de-usted.test.ts:12` solo lista `layout.tsx` y el portal). #136 reescribe ese
+    archivo y deja la línea igual.
+  - `titulos-publicos-de-usted.test.ts:14`: la expresión usa `\b` de JavaScript, que no reconoce la tilde, así que «tú
+    decides» no se detecta (probado). Con lookarounds de letras, como el trinquete de voseo, y sumando `tú` queda cerrado.
+  - Las otras páginas con título propio (`book/layout.tsx`, `presupuesto/[token]/page.tsx`, `checkout/page.tsx`) hoy ya son
+    de usted pero no están bajo el gate.
+
+  **#191 y #172 (solo seguridad y datos; el contenido es de la madre de Marketing).** Sin secretos en lo agregado de
+  ninguno (barrido de patrones). En #191, los números largos que parecen teléfonos son ids de la Biblioteca de
+  anuncios; el único teléfono es el del bot, que es público (`+591 75414930`). Los scripts nuevos de #191
+  (`anuncio-render.js`, `biblioteca-*.mjs`) no leen rutas externas. **En #172 el hallazgo de E2 sigue vivo:** los dos
+  commits nuevos solo tocan JSON, PNG y un `.md`; `captura-editor.py` sigue sin guarda: `:49` (`b['archivo']`), `:69`
+  (`arch`), `:83` y `:86` (`{ruta:…}`, `{n:…}`) leen cualquier ruta del JSON de la lámina, `.env` incluido, y la
+  pintan en una imagen que se publica.
+
+- [x] **Q7 La web promete hoy lo que el catálogo deja (11-oct, madre v4).** Volver a mirar la §3 de
   `ONIA_PROMESA_VS_PRODUCTO.md` (lo que `onia.com.bo` prometía el 8-oct y el catálogo no deja) contra la web de hoy,
   renderizada y con captura de cada frase. **Hecho:** la §3 al día, con fecha, captura por fila en
   `hermes-content/docs/research/promesas-web/` y lo que sigue mal en «Hallazgos para otros» con su dueño. Solo lectura:
   páginas públicas.
-- [ ] **Q8 Los precios de la web contra los que cobra la plataforma.** `/precios`, `/` y `/chatbot` contra
+  - **Hecho (11-oct, 05:20-05:45 UTC):** §3 de `ONIA_PROMESA_VS_PRODUCTO.md` al día, con una columna «11-oct» y la
+    captura de cada fila en `hermes-content/docs/research/promesas-web/2026-10-11/`. 8 de 9 filas siguen igual; cambió
+    `/register` paso 1 (ya es de usted). Filas nuevas: la web de vos contra el alta de usted, el `manifest.json` y la
+    pestaña de /login. Script: `research/qa-publicacion/2026-10-11/mirar-publico.mjs`.
+- [x] **Q8 Los precios de la web contra los que cobra la plataforma.** `/precios`, `/` y `/chatbot` contra
   `onia-platform/lib/subscription-plans.ts` (`DEFAULT_PLAN_AMOUNTS`) y `lib/pricing.ts` de `master`. CLAUDE.md: dos
   precios vivos del mismo plan es el fallo del 15-ago. **Hecho:** tabla web/código por plan y ciclo, con captura, y
   cada diferencia en «Hallazgos para otros».
-- [ ] **Q9 La venta no exhibe obra.** Todas las páginas públicas de `onia.com.bo` y `/login` y `/register` de la app, a
+  - **Hecho (11-oct):** §3.1 del mismo doc. Cero diferencias: los 5 planes por ciclo (mensual, anual, semanal), los 4
+    add-ons y los topes de fichas, usuarios y recordatorios coinciden con `subscription-plans.ts`, `pricing.ts` y
+    `plan-catalogo.ts` de `master` `d8ca5a32`. No se pudo comparar `/checkout` (pide sesión): lo hace Q5.
+- [x] **Q9 La venta no exhibe obra.** Todas las páginas públicas de `onia.com.bo` y `/login` y `/register` de la app, a
   390 y 1440 px: ni «muy pronto», «beta», «próximamente» o «en construcción» (CLAUDE.md, «La venta nunca exhibe obra»),
   ni vos y usted mezclados en un mismo flujo. **Hecho:** barrido con captura de cada caso y los arreglos en
   «Hallazgos para otros».
 
+- [ ] **L1 El chequeo de la web contra el producto, como script (Codex Luna, 11-oct, madre DESARROLLO-INFRA).** Q7 y Q8
+  costaron ~40 min a mano. Contrato: `hermes-content/docs/handoff/codex-tareas/hermes-L1-web-vs-producto.md`. Lo lanza la
+  madre. **Hecho:** su prueba en verde y el script reproduciendo la §3 y la §3.1 de `ONIA_PROMESA_VS_PRODUCTO.md`; después
+  se corre contra la web en vivo y se compara con lo escrito a mano.
+- [ ] **Q9b El alta de usted.** Contrato `handoff/codex-tareas/Q9-alta-de-usted.md` (3 líneas de `SignupForm.tsx`). Lo lanza la
+  madre. **Hecho:** la prueba nueva en verde, y después de publicar, el paso 2 de `/register` sin «tu» (`mirar-publico.mjs`
+  más el clic en «Clínica dental»).
+- [ ] **E4 Volver a mirar #136 cuando entren sus arreglos.** Los dos HIGH de E3 y el comando de las migraciones. **Hecho:**
+  cada HIGH cerrado con su prueba, leído en el código de la cabeza nueva.
+
 ## Hallazgos para otros
 
 (Lo que este carril encuentra y le toca a otro dueño. La madre lo reparte en su ronda.)
+
+- **Sergio Urcullo (decisión)** · La web `onia.com.bo` está de vos/tú de punta a punta («Creá tu cuenta», «tu negocio») y el
+  clic lleva al alta de la app, que ya es de usted. Es un solo flujo con dos tratos. `CLAUDE.md` deja esa decisión a él.
+  `/terminos` y `/privacidad` también: los textos legales van por Leslie Mercado Moreno.
+- **Plataforma** · `SignupForm.tsx:630`, `:362` y `:403` usan `voc.negocio` («tu clínica») en vez de `voc.negocioSu`. Contrato
+  Codex listo: `handoff/codex-tareas/Q9-alta-de-usted.md`.
+- **Plataforma** · onia-platform#136: los dos HIGH de E3 (cierre de caja con «1.500» y caras del odontograma sin bloqueo de
+  borrado) van antes del merge, y la madre mide las dos migraciones en el VPS (comando en E3).
+- **Plataforma** · onia-platform#146: una línea más, `public/manifest.json:4`, y el gate con lookarounds para «tú».
+- **Madre** · `ONIA_CATALOGO_DE_VENTA.md` no cambia desde el 2-oct: §5 sigue diciendo que el agente «entiende fotos y audios»
+  y §8 que no se puede decir; la web sigue prometiendo el agente de WhatsApp y el «tratamiento a medias» (3 veces en `/rubros`).
+- **Madre** · Los mensajes de §6.9 de `ONIA_PROSPECTOS_DENTAL_SCZ.md` ofrecen una demo de 20 minutos y `/contacto` dice 30.
 
 - **Madre** · `cola/loop/madre.md` §G tiene días de la semana mal: «lun 13-oct» es martes en 2026, y «jue 16-oct»
   es viernes. El resumen ya no los repite (usa la fecha), pero la tabla los muestra así a quien la lea.
@@ -216,6 +345,12 @@ carril puede hacer solo. Q1 espera `aplicar` (ver «Bloqueado»).
 
 ## Hecho antes del 10-oct
 
+  - **Hecho (11-oct):** barrido de las 14 páginas de `onia.com.bo` y de `/login`, `/register` y `/book`, a 390 y 1440
+    (`research/promesas-web/2026-10-11/barrido-*.json`). Cero «muy pronto», «beta», «próximamente» o «en
+    construcción»; las «borrador» de `/privacidad` y `/terminos` son los borradores de la IA. Sin desborde a 390 ni
+    ligaduras como texto en ninguna. **Lo que sí falla es el trato:** la web habla de vos o de tú y el alta, de usted
+    (decide Sergio Urcullo, ver «Hallazgos para otros»); y el paso 2 del alta dice «Nombre de tu clínica». Ese arreglo
+    va a Codex: `hermes-content/docs/handoff/codex-tareas/Q9-alta-de-usted.md`.
 - [x] P2 de #173: el aviso de rechazo se reintenta si Telegram falla (test fallo → recuperación → segunda corrida) — `31aebd95`, en `main` con el #173
 - [x] Runbook de `aplicar` (#174) listo para que la madre lo corra desde la PC — `fecb4813` (§8 de `TELEGRAM_COMMAND_CENTER.md`)
 - [x] Formato corto (Pasó · Necesito · Sigue) en lo que Hermes le manda: regla en el SOUL y en el resumen/cierre (`jarvis-resumen.sh`). Inerte hasta `aplicar` — `fa7702ef`

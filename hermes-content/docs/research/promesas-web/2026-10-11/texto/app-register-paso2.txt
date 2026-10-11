@@ -1,0 +1,47 @@
+14 días gratis
+✓
+Su rubro
+2
+Su cuenta
+Cree su cuenta
+
+Solo lo esencial. El resto lo carga el sistema.
+
+dentistry
+Clínica dental
+edit
+Cambiar rubro
+Su nombre
+Correo electrónico
+Contraseña
+visibility
+Nombre de tu clínica
+¿Cómo nos conoció? (opcional)
+Elegir
+Google
+Facebook / Instagram
+WhatsApp
+Recomendación
+YouTube
+Otro
+expand_more
+Quiero recibir novedades y tips de Onia. Puedo darme de baja cuando quiera.
+Crear mi cuenta · 14 días gratis
+
+Al crear su cuenta acepta los términos y condiciones y la política de privacidad (versión 1.2).
+
+¿Ya tiene cuenta? Inicie sesión
+
+CAMPOS:
+INPUT:sitioWeb
+LABEL:Su nombre
+INPUT:Dr. Juan Pérez
+LABEL:Correo electrónico
+INPUT:doctor@clinica.bo
+LABEL:Contraseña
+INPUT:Mínimo 8 caracteres
+LABEL:Nombre de tu clínica
+INPUT:Clínica Dental Sonrisa
+LABEL:¿Cómo nos conoció? (opcional)
+LABEL:Quiero recibir novedades y tips de Onia. Puedo darme de baja cuando quiera
+INPUT:
