@@ -20,4 +20,4 @@ cierre K1 (clip de Kling 3.0 std, +54) (final cuadro 630 = clip 36+54)  0.740  1
 cierre K1 (clip de Kling 3.0 std, +54) (final cuadro 660 = clip 66+54)  0.699  173    0.708  115    0.009
 
 Diferencia máxima final↔fuente: 0.012 en 15 cuadros (límite 0,02): el escalado ×1,5 y el H.264 no deforman la cara.
-Lectura (coincide con la v2.0 y con la revisión 1): Seedance 2.0 Mini queda bajo 0,70 en la fuente y en el final; Kling O3 se mantiene ≥ 0,70; Kling 3.0 std baja; el cierre K1 queda entre 0,70 y 0,76.
+Lectura (coincide con la v2.0 y con la revisión 1): Seedance 2.0 Mini queda bajo 0,70 en la fuente y en el final; Kling O3 se mantiene ≥ 0,70; Kling 3.0 std baja; el cierre K1 queda entre 0,699 y 0,76 (CORREGIDO 11-oct por la madre: el último cuadro, el 660, da 0,699, 0,001 bajo el piso; la fuente da 0,708, dentro del ruido; el texto anterior decía «entre 0,70 y 0,76»).
