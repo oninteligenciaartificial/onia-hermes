@@ -1,0 +1,1630 @@
+{
+ "meta": {
+  "fecha": "2026-10-11",
+  "corte_utc": "2026-10-11T12:40Z",
+  "corte_epoch": 1791722414,
+  "fuente": "Biblioteca de anuncios de Meta, conector Meta_ads (ads_library_search), ACTIVE, sin gasto, nadie contactado",
+  "consultas_por_texto": {
+   "Q1": "clínica dental Santa Cruz",
+   "Q2": "ortodoncia Santa Cruz",
+   "Q3": "odontología Santa Cruz de la Sierra",
+   "Q4": "blanqueamiento dental",
+   "Q5": "dentista Santa Cruz"
+  },
+  "consultas_por_page_ids": [
+   {
+    "total": 9,
+    "ids": [
+     "662533600624550",
+     "169289006270602",
+     "110445244840996",
+     "100193878311097",
+     "920721404450647",
+     "756968257500768",
+     "109306495537111",
+     "697014900382758",
+     "787098867820512",
+     "625324393996576",
+     "1008202805702373"
+    ]
+   },
+   {
+    "total": 26,
+    "ids": [
+     "890615774144480",
+     "113111194494738",
+     "950490698330677",
+     "111017921072549",
+     "1015671418298509",
+     "2042184532678966"
+    ]
+   },
+   {
+    "total": 32,
+    "ids": [
+     "339088019578381",
+     "106274010711823",
+     "913517105184132",
+     "284462084761388",
+     "101512028641874",
+     "380639486016768",
+     "100226682495467",
+     "1951772081778585"
+    ]
+   },
+   {
+    "total": 47,
+    "ids": [
+     "447192008650376",
+     "1709119185977006",
+     "758264870991469",
+     "255332044891977",
+     "608572659242258",
+     "631408986884357",
+     "554435031080616",
+     "1297857270066603"
+    ]
+   },
+   {
+    "total": 33,
+    "ids": [
+     "103822665275137",
+     "110177058793289",
+     "413881708472622",
+     "105650449163721",
+     "110773264549760",
+     "511897128678646",
+     "102844034875276",
+     "103698302731501"
+    ]
+   },
+   {
+    "total": 27,
+    "ids": [
+     "817088911667589"
+    ]
+   },
+   {
+    "total": 12,
+    "ids": [
+     "589482644245798",
+     "908015955728944",
+     "113481741822891",
+     "572588712615373",
+     "108942198437850"
+    ]
+   }
+  ],
+  "totales_de_la_consulta": {
+   "Q1": 79,
+   "Q2": 43,
+   "Q3": 24,
+   "Q4": 92,
+   "Q5": 21
+  },
+  "nota": "Q1 a Q5 devuelven los 50 más NUEVOS: lo más viejo de cada página sale solo con page_ids",
+  "consultas_por_page_ids_nota": "7 consultas por page_ids, ACTIVE, límite 50: en cada una el total que da la Biblioteca (estimated_total_count) es igual a los anuncios transcriptos de esas páginas (lo exige scripts/clinicas-scz-lista.test.mjs). Más 5 consultas por texto = 12 consultas."
+ },
+ "paginas": [
+  {
+   "page_id": "817088911667589",
+   "nombre": "Clínica Dental Imagina",
+   "moneda": "USD",
+   "starts": [
+    1782923107,
+    1783040980,
+    1783713084,
+    1784781933,
+    1784782010,
+    1784782037,
+    1784903965,
+    1785187393,
+    1785967774,
+    1785991795,
+    1786301671,
+    1789056031,
+    1789058584,
+    1789584662,
+    1790957616,
+    1790958122,
+    1790958979,
+    1790959149,
+    1790960247,
+    1791035219,
+    1791035969,
+    1791036040,
+    1791036117,
+    1791050486,
+    1791092923,
+    1791255876,
+    1791396886
+   ],
+   "titulos": [
+    "Chatea con nosotros",
+    "¡ Aprovecha AHORA!"
+   ],
+   "ciudad": "busqueda",
+   "tipo": "clinica",
+   "completo": true,
+   "nota": "",
+   "whatsapp": true,
+   "consultas": [
+    "Q1",
+    "Q2",
+    "Q5"
+   ]
+  },
+  {
+   "page_id": "255332044891977",
+   "nombre": "Sonríe a La Vida",
+   "moneda": "BOB",
+   "starts": [
+    1787674524,
+    1787677631,
+    1787677670,
+    1787678322,
+    1787926616,
+    1787930517,
+    1788219938,
+    1789771010,
+    1789771014,
+    1789776862,
+    1789777615,
+    1790112612,
+    1790123274
+   ],
+   "titulos": [],
+   "ciudad": "busqueda",
+   "tipo": "clinica",
+   "completo": true,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": [
+    "Q1",
+    "Q3"
+   ]
+  },
+  {
+   "page_id": "447192008650376",
+   "nombre": "Clínica Dental ODES",
+   "moneda": "USD",
+   "starts": [
+    1784423881,
+    1784424506,
+    1784424809,
+    1784427994,
+    1784428429,
+    1784428506,
+    1784428888,
+    1786383490,
+    1786384251,
+    1787494136,
+    1790701934,
+    1790713282
+   ],
+   "titulos": [
+    "¡Di adiós a las caries!",
+    "¿Le tienes miedo al dentista?",
+    "¿Te duele la muela?"
+   ],
+   "ciudad": "busqueda",
+   "tipo": "clinica",
+   "completo": true,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": [
+    "Q1",
+    "Q2",
+    "Q5"
+   ]
+  },
+  {
+   "page_id": "1951772081778585",
+   "nombre": "Clínica Dental Europea",
+   "moneda": "BOB",
+   "starts": [
+    1790771540,
+    1790773167,
+    1790773672,
+    1790773711,
+    1790783391,
+    1790784434,
+    1790797492,
+    1790808508,
+    1791174039,
+    1791178825
+   ],
+   "titulos": [
+    "30% DE DESCUENTO EN MUELAS DEL JUICIO + VALORACIÓN 100% GRATUITA"
+   ],
+   "ciudad": "busqueda",
+   "tipo": "clinica",
+   "completo": true,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": [
+    "Q1",
+    "Q2",
+    "Q5"
+   ]
+  },
+  {
+   "page_id": "890615774144480",
+   "nombre": "Clinica Platinum",
+   "moneda": "BOB",
+   "starts": [
+    1790268644,
+    1791001181,
+    1791122556,
+    1791596418,
+    1791649889,
+    1791649906,
+    1791649952,
+    1791650420,
+    1791650751,
+    1791650883,
+    1791650930,
+    1791651744,
+    1791652095,
+    1791656755,
+    1791657397
+   ],
+   "titulos": [
+    "Curso de Bruxismo y DTM",
+    "Tratamiento Pink Glow",
+    "Evaluación periodontal en Platinum",
+    "El sangrado de encías no es normal",
+    "Aprende del especialista que forma especialistas"
+   ],
+   "ciudad": "busqueda",
+   "tipo": "clinica",
+   "completo": true,
+   "nota": "La mayoría de sus anuncios son un CURSO para odontólogos, no captación de pacientes",
+   "whatsapp": false,
+   "consultas": [
+    "Q1"
+   ],
+   "senal_override": "Media",
+   "razon_override": "9 de sus 15 anuncios son cursos o formación para odontólogos; solo 6 son de pacientes"
+  },
+  {
+   "page_id": "284462084761388",
+   "nombre": "Clínica Dental Hurtado",
+   "moneda": "BOB",
+   "starts": [
+    1776106955,
+    1776180785,
+    1777326595,
+    1783127680,
+    1788638558,
+    1791314190
+   ],
+   "titulos": [],
+   "ciudad": "busqueda",
+   "tipo": "clinica",
+   "completo": true,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": [
+    "Q1",
+    "Q5"
+   ]
+  },
+  {
+   "page_id": "380639486016768",
+   "nombre": "Clínica Dentofacial Boquita Sana",
+   "moneda": "BOB",
+   "starts": [
+    1790968541,
+    1790972355,
+    1790972744,
+    1790974039,
+    1790987684
+   ],
+   "titulos": [
+    "📣Estamos buscando pacientes!"
+   ],
+   "ciudad": "busqueda",
+   "tipo": "clinica",
+   "completo": true,
+   "nota": "Misma campaña que la sucursal Udabol (página 100226682495467)",
+   "whatsapp": false,
+   "consultas": [
+    "Q1",
+    "Q2",
+    "Q5"
+   ]
+  },
+  {
+   "page_id": "100226682495467",
+   "nombre": "Centro Odontológico Boquita Sana, Sucursal Udabol",
+   "moneda": "BOB",
+   "starts": [
+    1790973806,
+    1790975492,
+    1790975596,
+    1790977292,
+    1790979918
+   ],
+   "titulos": [
+    "📣Estamos buscando pacientes!"
+   ],
+   "ciudad": "busqueda",
+   "tipo": "clinica",
+   "completo": true,
+   "nota": "Segunda página de Boquita Sana: dos sedes",
+   "whatsapp": false,
+   "consultas": [
+    "Q1",
+    "Q2",
+    "Q5"
+   ]
+  },
+  {
+   "page_id": "1297857270066603",
+   "nombre": "Yari-Dent Consultorio Odontológico",
+   "moneda": "BOB",
+   "starts": [
+    1790841009,
+    1790841542,
+    1790841591,
+    1790841728,
+    1790842820,
+    1790910869,
+    1791068051,
+    1791068636,
+    1791078624
+   ],
+   "titulos": [],
+   "ciudad": "busqueda",
+   "tipo": "consultorio",
+   "completo": true,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": [
+    "Q2",
+    "Q4",
+    "Q5"
+   ]
+  },
+  {
+   "page_id": "1709119185977006",
+   "nombre": "Clínica Dental \"Sarita\"",
+   "moneda": "BOB",
+   "starts": [
+    1789402626,
+    1790088415,
+    1790612097,
+    1791389863,
+    1791479958
+   ],
+   "titulos": [],
+   "ciudad": "busqueda",
+   "tipo": "clinica",
+   "completo": true,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": [
+    "Q1",
+    "Q2"
+   ]
+  },
+  {
+   "page_id": "103822665275137",
+   "nombre": "Ortobom Odontología Santa Cruz de la Sierra",
+   "moneda": "USD",
+   "starts": [
+    1791378856,
+    1791379045,
+    1791379341,
+    1791379347,
+    1791379383,
+    1791379419
+   ],
+   "titulos": [
+    "NUESTRO WHATSAPP👉",
+    "Chatea con nosotros"
+   ],
+   "ciudad": "nombre",
+   "tipo": "clinica",
+   "completo": true,
+   "nota": "Hermana de Ortobom Mutualista (otra sucursal)",
+   "whatsapp": true,
+   "consultas": [
+    "Q2",
+    "Q3"
+   ]
+  },
+  {
+   "page_id": "110177058793289",
+   "nombre": "Ortobom Odontología Mutualista",
+   "moneda": "USD",
+   "starts": [
+    1789567076,
+    1789570648,
+    1790612068,
+    1790612244,
+    1790613465,
+    1790787154,
+    1790869370
+   ],
+   "titulos": [
+    "BRACKETS sin pagar una fortuna👉",
+    "NUESTRO WHATSAPP👉"
+   ],
+   "ciudad": "nombre",
+   "tipo": "clinica",
+   "completo": true,
+   "nota": "«Mutualista» es una zona de Santa Cruz de la Sierra (inferencia por el nombre)",
+   "whatsapp": true,
+   "consultas": [
+    "Q2",
+    "Q3"
+   ]
+  },
+  {
+   "page_id": "103698302731501",
+   "nombre": "Centro Médico Odontológico BAires",
+   "moneda": "BOB",
+   "starts": [
+    1769129429,
+    1775073380,
+    1788993045,
+    1789488878
+   ],
+   "titulos": [],
+   "ciudad": "busqueda",
+   "tipo": "clinica",
+   "completo": true,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": [
+    "Q2",
+    "Q3"
+   ]
+  },
+  {
+   "page_id": "111017921072549",
+   "nombre": "Clínica Dental Cortez Santa Cruz Bolivia",
+   "moneda": "BOB",
+   "starts": [
+    1791556943,
+    1791558239
+   ],
+   "titulos": [],
+   "ciudad": "nombre",
+   "tipo": "clinica",
+   "completo": true,
+   "nota": "Tiene otra página para La Paz (101343895932574). El 30-sep llevaba 6+ anuncios; hoy 2",
+   "whatsapp": false,
+   "consultas": [
+    "Q1",
+    "Q5"
+   ],
+   "senal_override": "Alta",
+   "razon_override": "dos ciudades (página de La Paz) y «+15 años» según el prospecto #9 del 30-sep: la Biblioteca solo muestra 2 anuncios hoy; verificar si pasa de 6 profesionales"
+  },
+  {
+   "page_id": "554435031080616",
+   "nombre": "Unidental Santa Cruz",
+   "moneda": "BOB",
+   "starts": [
+    1791563926
+   ],
+   "titulos": [],
+   "ciudad": "nombre",
+   "tipo": "clinica",
+   "completo": true,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": [
+    "Q2"
+   ]
+  },
+  {
+   "page_id": "100193878311097",
+   "nombre": "Natural Smile Santa Cruz",
+   "moneda": "BOB",
+   "starts": [
+    1786035115,
+    1787266122,
+    1787977594
+   ],
+   "titulos": [
+    "Natural Smile Santa Cruz"
+   ],
+   "ciudad": "nombre",
+   "tipo": "clinica",
+   "completo": true,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": []
+  },
+  {
+   "page_id": "631408986884357",
+   "nombre": "SOI Servicios Odontológicos Integrales",
+   "moneda": "USD",
+   "starts": [
+    1791609831,
+    1791610138,
+    1791610345,
+    1791610401
+   ],
+   "titulos": [
+    "Agende su cita",
+    "Chatea con nosotros"
+   ],
+   "ciudad": "busqueda",
+   "tipo": "clinica",
+   "completo": true,
+   "nota": "",
+   "whatsapp": true,
+   "consultas": [
+    "Q2"
+   ]
+  },
+  {
+   "page_id": "1015671418298509",
+   "nombre": "Clinica Dental Center",
+   "moneda": "USD",
+   "starts": [
+    1786472787,
+    1791496309,
+    1791496950
+   ],
+   "titulos": [],
+   "ciudad": "busqueda",
+   "tipo": "clinica",
+   "completo": true,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": [
+    "Q1"
+   ]
+  },
+  {
+   "page_id": "2042184532678966",
+   "nombre": "COYR DENT",
+   "moneda": "USD",
+   "starts": [
+    1787346561,
+    1789500188,
+    1789663823,
+    1791493030
+   ],
+   "titulos": [],
+   "ciudad": "busqueda",
+   "tipo": "clinica",
+   "completo": true,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": [
+    "Q1",
+    "Q2"
+   ]
+  },
+  {
+   "page_id": "339088019578381",
+   "nombre": "Clinica clarident plus",
+   "moneda": "BOB",
+   "starts": [
+    1791392186,
+    1791392733,
+    1791441825
+   ],
+   "titulos": [],
+   "ciudad": "busqueda",
+   "tipo": "clinica",
+   "completo": true,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": [
+    "Q1"
+   ]
+  },
+  {
+   "page_id": "113481741822891",
+   "nombre": "Clinica Dental ROCHA",
+   "moneda": "BOB",
+   "starts": [
+    1787658665,
+    1787666385
+   ],
+   "titulos": [
+    "Agenda tu cita"
+   ],
+   "ciudad": "busqueda",
+   "tipo": "clinica",
+   "completo": true,
+   "nota": "",
+   "whatsapp": true,
+   "consultas": [
+    "Q2"
+   ]
+  },
+  {
+   "page_id": "572588712615373",
+   "nombre": "MUN Clínica Odontología Especializada",
+   "moneda": "BOB",
+   "starts": [
+    1787707955,
+    1787954699
+   ],
+   "titulos": [
+    "Chatea con nosotros",
+    "RESERVA TU CUPO"
+   ],
+   "ciudad": "busqueda",
+   "tipo": "clinica",
+   "completo": true,
+   "nota": "Hermana: MUN Odontopediatría (108942198437850)",
+   "whatsapp": true,
+   "consultas": [
+    "Q3"
+   ]
+  },
+  {
+   "page_id": "108942198437850",
+   "nombre": "MUN Odontopediatría by Dra. Tamara Llave",
+   "moneda": "BOB",
+   "starts": [
+    1772827334,
+    1787880845,
+    1789072927
+   ],
+   "titulos": [
+    "Mas informacion"
+   ],
+   "ciudad": "busqueda",
+   "tipo": "clinica",
+   "completo": true,
+   "nota": "Página de la odontopediatra de MUN: se cuenta junto con MUN Clínica",
+   "whatsapp": false,
+   "consultas": [
+    "Q3",
+    "Q5"
+   ]
+  },
+  {
+   "page_id": "511897128678646",
+   "nombre": "Odontología Avanzada Doctormaxilofacial",
+   "moneda": "BOB",
+   "starts": [
+    1789591545,
+    1789591732,
+    1789592124,
+    1789597471,
+    1789600779,
+    1789605711
+   ],
+   "titulos": [],
+   "ciudad": "busqueda",
+   "tipo": "clinica",
+   "completo": true,
+   "nota": "Hermana: Doctormaxilofacial (102844034875276)",
+   "whatsapp": false,
+   "consultas": [
+    "Q2"
+   ],
+   "senal_override": "Media",
+   "razon_override": "nombre de marca de un especialista (inferencia): puede ser un solo profesional, aunque tiene 2 páginas y 11 anuncios"
+  },
+  {
+   "page_id": "102844034875276",
+   "nombre": "Doctormaxilofacial",
+   "moneda": "BOB",
+   "starts": [
+    1789182333,
+    1789183590,
+    1789183922,
+    1789184914,
+    1789186122
+   ],
+   "titulos": [],
+   "ciudad": "busqueda",
+   "tipo": "clinica",
+   "completo": true,
+   "nota": "Hermana: Odontología Avanzada Doctormaxilofacial",
+   "whatsapp": false,
+   "consultas": [
+    "Q2"
+   ]
+  },
+  {
+   "page_id": "589482644245798",
+   "nombre": "Clínica Odontológica Beautiful",
+   "moneda": "BOB",
+   "starts": [
+    1773706056,
+    1773832146,
+    1775163391,
+    1780953688
+   ],
+   "titulos": [],
+   "ciudad": "busqueda",
+   "tipo": "clinica",
+   "completo": true,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": [
+    "Q3",
+    "Q5"
+   ]
+  },
+  {
+   "page_id": "1008202805702373",
+   "nombre": "Dra. Mishel Rodriguez",
+   "moneda": "BOB",
+   "starts": [
+    1791472718
+   ],
+   "titulos": [],
+   "ciudad": "busqueda",
+   "tipo": "personal",
+   "completo": true,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": [
+    "Q5"
+   ]
+  },
+  {
+   "page_id": "756968257500768",
+   "nombre": "Odontología Integral Digital",
+   "moneda": "BOB",
+   "starts": [
+    1776832111,
+    1776990623,
+    1785957564
+   ],
+   "titulos": [],
+   "ciudad": "busqueda",
+   "tipo": "clinica",
+   "completo": true,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": [
+    "Q5"
+   ]
+  },
+  {
+   "page_id": "169289006270602",
+   "nombre": "Consultorio Dental Rocha",
+   "moneda": "BOB",
+   "starts": [
+    1783954527
+   ],
+   "titulos": [
+    "¡Tu nueva sonrisa comienza aquí"
+   ],
+   "ciudad": "busqueda",
+   "tipo": "consultorio",
+   "completo": true,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": []
+  },
+  {
+   "page_id": "697014900382758",
+   "nombre": "Clinica Dental KOREA",
+   "moneda": "BOB",
+   "starts": [
+    1786120819
+   ],
+   "titulos": [
+    "726-29818"
+   ],
+   "ciudad": "busqueda",
+   "tipo": "clinica",
+   "completo": true,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": []
+  },
+  {
+   "page_id": "758264870991469",
+   "nombre": "Clínica Dental Ezequiel - Spadental",
+   "moneda": "BOB",
+   "starts": [
+    1786219929,
+    1789952668
+   ],
+   "titulos": [
+    "Recupera tu sonrisa",
+    "Tu sonrisa blanca desde Bs 300"
+   ],
+   "ciudad": "busqueda",
+   "tipo": "clinica",
+   "completo": true,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": [
+    "Q1",
+    "Q4"
+   ]
+  },
+  {
+   "page_id": "608572659242258",
+   "nombre": "Happy Dent",
+   "moneda": "BOB",
+   "starts": [
+    1789001028
+   ],
+   "titulos": [
+    "Happy Dent | Ortodoncia en Happy Dent | Renová tu sonrisa ✨"
+   ],
+   "ciudad": "busqueda",
+   "tipo": "clinica",
+   "completo": true,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": [
+    "Q1",
+    "Q2"
+   ]
+  },
+  {
+   "page_id": "101512028641874",
+   "nombre": "Clínica Dental Dulce Sonrisa",
+   "moneda": "BOB",
+   "starts": [
+    1791047930
+   ],
+   "titulos": [],
+   "ciudad": "busqueda",
+   "tipo": "clinica",
+   "completo": true,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": [
+    "Q1",
+    "Q5"
+   ]
+  },
+  {
+   "page_id": "106274010711823",
+   "nombre": "Implantes Dentales",
+   "moneda": "BOB",
+   "starts": [
+    1791355725
+   ],
+   "titulos": [],
+   "ciudad": "busqueda",
+   "tipo": "otro",
+   "completo": true,
+   "nota": "Página genérica de implantes; no se sabe quién es",
+   "whatsapp": false,
+   "consultas": [
+    "Q1",
+    "Q2"
+   ]
+  },
+  {
+   "page_id": "913517105184132",
+   "nombre": "Fresh Denture",
+   "moneda": "BOB",
+   "starts": [
+    1791334115
+   ],
+   "titulos": [],
+   "ciudad": "busqueda",
+   "tipo": "otro",
+   "completo": true,
+   "nota": "Nombre de prótesis/laboratorio; no es claro que sea clínica",
+   "whatsapp": false,
+   "consultas": [
+    "Q1"
+   ]
+  },
+  {
+   "page_id": "413881708472622",
+   "nombre": "Odonto Click",
+   "moneda": "BOB",
+   "starts": [
+    1789660033
+   ],
+   "titulos": [],
+   "ciudad": "busqueda",
+   "tipo": "otro",
+   "completo": true,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": [
+    "Q2"
+   ]
+  },
+  {
+   "page_id": "105650449163721",
+   "nombre": "Casa dental sc",
+   "moneda": "BOB",
+   "starts": [
+    1786367781,
+    1789659438
+   ],
+   "titulos": [],
+   "ciudad": "nombre",
+   "tipo": "clinica",
+   "completo": true,
+   "nota": "«sc» en el nombre: probablemente Santa Cruz (inferencia)",
+   "whatsapp": false,
+   "consultas": [
+    "Q2"
+   ]
+  },
+  {
+   "page_id": "110773264549760",
+   "nombre": "Dental Top",
+   "moneda": "BOB",
+   "starts": [
+    1785858486,
+    1789658735
+   ],
+   "titulos": [],
+   "ciudad": "busqueda",
+   "tipo": "clinica",
+   "completo": true,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": [
+    "Q2"
+   ]
+  },
+  {
+   "page_id": "113111194494738",
+   "nombre": "Estudio_oral",
+   "moneda": "USD",
+   "starts": [
+    1791641982
+   ],
+   "titulos": [
+    "Semana Invisalign 12 al 16 de Octubre"
+   ],
+   "ciudad": "busqueda",
+   "tipo": "clinica",
+   "completo": true,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": [
+    "Q1",
+    "Q2"
+   ]
+  },
+  {
+   "page_id": "950490698330677",
+   "nombre": "Oral Group Clínica Dental",
+   "moneda": "USD",
+   "starts": [
+    1791566075
+   ],
+   "titulos": [],
+   "ciudad": "busqueda",
+   "tipo": "clinica",
+   "completo": true,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": [
+    "Q1"
+   ]
+  },
+  {
+   "page_id": "908015955728944",
+   "nombre": "Clínica Fundepi",
+   "moneda": "USD",
+   "starts": [
+    1769145198
+   ],
+   "titulos": [
+    "{{product.name}}"
+   ],
+   "ciudad": "busqueda",
+   "tipo": "otro",
+   "completo": true,
+   "nota": "Estética (plantilla de catálogo sin rellenar)",
+   "whatsapp": false,
+   "consultas": [
+    "Q2"
+   ]
+  },
+  {
+   "page_id": "922767334264415",
+   "nombre": "Odontología & Armonización Orofacial",
+   "moneda": "USD",
+   "starts": [
+    1789682019,
+    1789684359,
+    1789697590,
+    1790038845,
+    1791136692,
+    1791136873,
+    1791139803,
+    1791499886
+   ],
+   "titulos": [],
+   "ciudad": "busqueda",
+   "tipo": "otro",
+   "completo": false,
+   "nota": "Estética orofacial; se vieron 8 en una consulta de 50: puede haber más",
+   "whatsapp": false,
+   "consultas": [
+    "Q3"
+   ]
+  },
+  {
+   "page_id": "110444090446243",
+   "nombre": "Clínica Dental Integral Ustaris",
+   "moneda": "BOB",
+   "starts": [
+    1791526798,
+    1791527035,
+    1791561365,
+    1791610984
+   ],
+   "titulos": [
+    "Reserva tu cita AQUI"
+   ],
+   "ciudad": "sin",
+   "tipo": "clinica",
+   "completo": false,
+   "nota": "",
+   "whatsapp": true,
+   "consultas": [
+    "Q4"
+   ]
+  },
+  {
+   "page_id": "718627938215118",
+   "nombre": "Endodent Centro Odontológico",
+   "moneda": "BOB",
+   "starts": [
+    1791513407,
+    1791515524
+   ],
+   "titulos": [
+    "Quiero agendar una cita"
+   ],
+   "ciudad": "sin",
+   "tipo": "clinica",
+   "completo": false,
+   "nota": "",
+   "whatsapp": true,
+   "consultas": [
+    "Q4"
+   ]
+  },
+  {
+   "page_id": "104353664290431",
+   "nombre": "SKY Dental Center Plus",
+   "moneda": "BOB",
+   "starts": [
+    1791350153
+   ],
+   "titulos": [
+    "Agenda cita Ya!"
+   ],
+   "ciudad": "sin",
+   "tipo": "clinica",
+   "completo": false,
+   "nota": "",
+   "whatsapp": true,
+   "consultas": [
+    "Q4"
+   ]
+  },
+  {
+   "page_id": "918559771552554",
+   "nombre": "Clinica Dental Stildent",
+   "moneda": "BOB",
+   "starts": [
+    1790975595,
+    1790982882
+   ],
+   "titulos": [],
+   "ciudad": "sin",
+   "tipo": "clinica",
+   "completo": false,
+   "nota": "El 30-sep se listó «Stildent Santa Cruz» (110445244840996), otra página: sin ads activos hoy",
+   "whatsapp": false,
+   "consultas": [
+    "Q4"
+   ]
+  },
+  {
+   "page_id": "102510038459495",
+   "nombre": "Dental Health suc. Suárez Arana",
+   "moneda": "BOB",
+   "starts": [
+    1790864539
+   ],
+   "titulos": [],
+   "ciudad": "sin",
+   "tipo": "clinica",
+   "completo": false,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": [
+    "Q4"
+   ]
+  },
+  {
+   "page_id": "416106969199277",
+   "nombre": "Másqsonrisas Santa Cruz / Bolivia",
+   "moneda": "BOB",
+   "starts": [
+    1791654450
+   ],
+   "titulos": [],
+   "ciudad": "nombre",
+   "tipo": "clinica",
+   "completo": false,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": [
+    "Q5"
+   ]
+  },
+  {
+   "page_id": "103586632489948",
+   "nombre": "Consultorio dental Syriadent",
+   "moneda": "BOB",
+   "starts": [
+    1783407728
+   ],
+   "titulos": [
+    "Agenda tu cita"
+   ],
+   "ciudad": "busqueda",
+   "tipo": "consultorio",
+   "completo": false,
+   "nota": "",
+   "whatsapp": true,
+   "consultas": [
+    "Q5"
+   ]
+  },
+  {
+   "page_id": "198922956648057",
+   "nombre": "Clinica Dentalkt",
+   "moneda": "BOB",
+   "starts": [
+    1791713205
+   ],
+   "titulos": [],
+   "ciudad": "sin",
+   "tipo": "clinica",
+   "completo": false,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": [
+    "Q4"
+   ]
+  },
+  {
+   "page_id": "100202315033963",
+   "nombre": "Odontología Integral",
+   "moneda": "BOB",
+   "starts": [
+    1791617717
+   ],
+   "titulos": [],
+   "ciudad": "sin",
+   "tipo": "clinica",
+   "completo": false,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": [
+    "Q4"
+   ]
+  },
+  {
+   "page_id": "2244847179114224",
+   "nombre": "Reino Dental SAN PEDRO",
+   "moneda": "BOB",
+   "starts": [
+    1791601898
+   ],
+   "titulos": [],
+   "ciudad": "sin",
+   "tipo": "clinica",
+   "completo": false,
+   "nota": "No es la página «Clínica Dental San Pedro» del 30-sep (662533600624550), que hoy no tiene ads activos",
+   "whatsapp": false,
+   "consultas": [
+    "Q4"
+   ]
+  },
+  {
+   "page_id": "674864382374715",
+   "nombre": "OdontoNicky GDLR",
+   "moneda": "BOB",
+   "starts": [
+    1791577409
+   ],
+   "titulos": [],
+   "ciudad": "sin",
+   "tipo": "clinica",
+   "completo": false,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": [
+    "Q4"
+   ]
+  },
+  {
+   "page_id": "122403477628402",
+   "nombre": "Consultorio Dental \"Divino Niño\"",
+   "moneda": "BOB",
+   "starts": [
+    1791567183
+   ],
+   "titulos": [],
+   "ciudad": "sin",
+   "tipo": "consultorio",
+   "completo": false,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": [
+    "Q4"
+   ]
+  },
+  {
+   "page_id": "168031719724129",
+   "nombre": "Pardo Dental",
+   "moneda": "BOB",
+   "starts": [
+    1791565976
+   ],
+   "titulos": [],
+   "ciudad": "sin",
+   "tipo": "clinica",
+   "completo": false,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": [
+    "Q4"
+   ]
+  },
+  {
+   "page_id": "105853962262188",
+   "nombre": "Clinica Dental OralVid",
+   "moneda": "BOB",
+   "starts": [
+    1791567539
+   ],
+   "titulos": [],
+   "ciudad": "sin",
+   "tipo": "clinica",
+   "completo": false,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": [
+    "Q4"
+   ]
+  },
+  {
+   "page_id": "283513188181711",
+   "nombre": "DentalYS",
+   "moneda": "BOB",
+   "starts": [
+    1791559424
+   ],
+   "titulos": [],
+   "ciudad": "sin",
+   "tipo": "clinica",
+   "completo": false,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": [
+    "Q4"
+   ]
+  },
+  {
+   "page_id": "152609645522464",
+   "nombre": "Dental Care A&S",
+   "moneda": "BOB",
+   "starts": [
+    1791472406
+   ],
+   "titulos": [],
+   "ciudad": "sin",
+   "tipo": "clinica",
+   "completo": false,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": [
+    "Q4"
+   ]
+  },
+  {
+   "page_id": "125441410658875",
+   "nombre": "Dentall Bolivia",
+   "moneda": "USD",
+   "starts": [
+    1791233391
+   ],
+   "titulos": [],
+   "ciudad": "sin",
+   "tipo": "clinica",
+   "completo": false,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": [
+    "Q4"
+   ]
+  },
+  {
+   "page_id": "561641773702831",
+   "nombre": "Salud Bucal",
+   "moneda": "BOB",
+   "starts": [
+    1791042489
+   ],
+   "titulos": [
+    "Salud Bucal"
+   ],
+   "ciudad": "sin",
+   "tipo": "clinica",
+   "completo": false,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": [
+    "Q4"
+   ]
+  },
+  {
+   "page_id": "243569185515020",
+   "nombre": "Dental Cast",
+   "moneda": "BOB",
+   "starts": [
+    1790734069
+   ],
+   "titulos": [
+    "Cuidado dental integral 🦷"
+   ],
+   "ciudad": "sin",
+   "tipo": "clinica",
+   "completo": false,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": [
+    "Q4"
+   ]
+  },
+  {
+   "page_id": "1286396557890207",
+   "nombre": "RASS Dental Care - Centro Odontológico",
+   "moneda": "BOB",
+   "starts": [
+    1790722460
+   ],
+   "titulos": [],
+   "ciudad": "sin",
+   "tipo": "clinica",
+   "completo": false,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": [
+    "Q4"
+   ]
+  },
+  {
+   "page_id": "1732856310310270",
+   "nombre": "Dr. Abner Valdivia",
+   "moneda": "BOB",
+   "starts": [
+    1780152461,
+    1787744437,
+    1790436556
+   ],
+   "titulos": [],
+   "ciudad": "sin",
+   "tipo": "personal",
+   "completo": false,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": []
+  },
+  {
+   "page_id": "1156462164210198",
+   "nombre": "Dra. Jessica Zelaya",
+   "moneda": "BOB",
+   "starts": [
+    1791241564
+   ],
+   "titulos": [],
+   "ciudad": "sin",
+   "tipo": "personal",
+   "completo": false,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": []
+  },
+  {
+   "page_id": "1217079781480419",
+   "nombre": "Dra. Micaela Aliaga Rejas",
+   "moneda": "BOB",
+   "starts": [
+    1789507506
+   ],
+   "titulos": [],
+   "ciudad": "sin",
+   "tipo": "personal",
+   "completo": false,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": []
+  },
+  {
+   "page_id": "1013090891892178",
+   "nombre": "Dra. Lourdes Robles (rehabilitación oral y estética)",
+   "moneda": "BOB",
+   "starts": [
+    1791418326,
+    1791662705
+   ],
+   "titulos": [],
+   "ciudad": "sin",
+   "tipo": "personal",
+   "completo": false,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": []
+  },
+  {
+   "page_id": "311234288750022",
+   "nombre": "Dra. Andrea Romero",
+   "moneda": "BOB",
+   "starts": [
+    1791576350
+   ],
+   "titulos": [],
+   "ciudad": "sin",
+   "tipo": "personal",
+   "completo": false,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": []
+  },
+  {
+   "page_id": "106356259092152",
+   "nombre": "Dra. Ashley Viscarra G.",
+   "moneda": "USD",
+   "starts": [
+    1791539764
+   ],
+   "titulos": [],
+   "ciudad": "sin",
+   "tipo": "personal",
+   "completo": false,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": []
+  },
+  {
+   "page_id": "1149093801631362",
+   "nombre": "Dra. Yessenia Galvez Saucedo",
+   "moneda": "BOB",
+   "starts": [
+    1791487027
+   ],
+   "titulos": [],
+   "ciudad": "sin",
+   "tipo": "personal",
+   "completo": false,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": []
+  },
+  {
+   "page_id": "652000974666300",
+   "nombre": "Dra. Nayra Suyo Rivera",
+   "moneda": "BOB",
+   "starts": [
+    1791481920
+   ],
+   "titulos": [],
+   "ciudad": "sin",
+   "tipo": "personal",
+   "completo": false,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": []
+  },
+  {
+   "page_id": "790074584719525",
+   "nombre": "Kimberly Crespo Odontología Estética",
+   "moneda": "BOB",
+   "starts": [
+    1791474081
+   ],
+   "titulos": [],
+   "ciudad": "sin",
+   "tipo": "personal",
+   "completo": false,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": []
+  },
+  {
+   "page_id": "106862378310296",
+   "nombre": "Dra. Pasapera",
+   "moneda": "BOB",
+   "starts": [
+    1791209035
+   ],
+   "titulos": [],
+   "ciudad": "sin",
+   "tipo": "personal",
+   "completo": false,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": []
+  },
+  {
+   "page_id": "480913058448332",
+   "nombre": "Dra. Montemayor",
+   "moneda": "BOB",
+   "starts": [
+    1790716837
+   ],
+   "titulos": [],
+   "ciudad": "sin",
+   "tipo": "personal",
+   "completo": false,
+   "nota": "",
+   "whatsapp": false,
+   "consultas": []
+  }
+ ],
+ "excluidas": [
+  {
+   "nombre": "Clinica Dental Cortez La Paz Bolivia",
+   "page_id": "101343895932574",
+   "motivo": "La Paz (la hermana de Cortez Santa Cruz)"
+  },
+  {
+   "nombre": "Cuid-Arte Clínica dental Sopocahi",
+   "page_id": "298595199992821",
+   "motivo": "Sopocahi es un barrio de La Paz"
+  },
+  {
+   "nombre": "CARIZ Odontología Cochabamba",
+   "page_id": "597627036774607",
+   "motivo": "Cochabamba"
+  },
+  {
+   "nombre": "OdontoAte",
+   "page_id": "195609023638171",
+   "motivo": "Moneda PEN (soles): cuenta peruana; 17+ anuncios vistos"
+  },
+  {
+   "nombre": "Clínica TELLO",
+   "page_id": "1133570930064492",
+   "motivo": "Moneda PEN: probable cuenta peruana; ciudad no verificada"
+  },
+  {
+   "nombre": "Cursos de Mejoramiento Profesional – Clínica Dental Zeballos / Clínica Zeballos – Curso",
+   "page_id": "130188780175449 · 1750205808334798",
+   "motivo": "Pauta de CURSOS para odontólogos, no de pacientes"
+  },
+  {
+   "nombre": "OsteoCompas Bolivia · CEPAC Centro de Capacitación · Dra Laura Pardoux (entrenamiento) · Enfocate Santa Cruz",
+   "page_id": "105637481563258 · 110271241861054 · 1133988523344618 · 117785944539143",
+   "motivo": "Capacitación o escuelas, no clínicas"
+  },
+  {
+   "nombre": "Ultra Pack Dentista · Artebiss-publicidad · Xio - Creativa",
+   "page_id": "116497988215732 · 484312588107139 · 121083415255396",
+   "motivo": "Agencias o artes para dentistas (por el nombre): son competencia de Onia en pauta, no clientes (apunte aparte)"
+  },
+  {
+   "nombre": "Servicios Médicos AYVI SRL Central Cochabamba · Pasta dental Bolivia · Blanceresem.MB06 · Formatos digitales · habloportugues_ · María Fernanda Roca · Reality 3D",
+   "page_id": "varios",
+   "motivo": "Ruido de la búsqueda (otra ciudad, producto, otro país u otro rubro)"
+  },
+  {
+   "nombre": "Arge Nathali ToMi",
+   "page_id": "988484651012477",
+   "motivo": "Sin identificar: un anuncio «30% de descuento!» que salió con «blanqueamiento dental»; no es claro que sea una clínica"
+  }
+ ]
+}
