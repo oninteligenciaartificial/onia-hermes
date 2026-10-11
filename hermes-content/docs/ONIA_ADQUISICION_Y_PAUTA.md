@@ -289,7 +289,7 @@ Lectura: **a un dueño de clínica de Santa Cruz solo le llega pauta de software
 
 ### 2.6.2 Estudio del 10-oct con el conector (Sergio Urcullo: «que mire ads library y mire qué anuncios funcionan»)
 
-**Datos:** `research/competencia/anuncios/BIBLIOTECA-10OCT.json` (258 anuncios activos de 15 páginas de software para clínicas y negocios, 62 con más de 30 días; incluye Alegra, contable, y Sunnu, sin clasificar; y 417 de clínicas con alcance en Bolivia, 41 con más de 30 días de 24 anunciantes). **Cifras reproducibles:** `node .claude/skills/onia-ventas-pauta/scripts/biblioteca-estadisticas.mjs`. **Ficha de las 12 dimensiones:** `references/video-intake/2026-10-10-biblioteca-anuncios-software-clinicas.md`. **Reglas con su caso:** skill `onia-ventas-pauta` §8.3. Un revisor independiente recalculó todo el 10-oct y corrigió 8 cifras y 3 conclusiones; lo de abajo ya las lleva. **La antigüedad no es rendimiento** y los porcentajes salen solo de los anunciantes con lista completa (119 anuncios, 33 con más de 30 d): son un **indicio**, no una prueba.
+**Datos:** `research/competencia/anuncios/BIBLIOTECA-10OCT.json` (258 anuncios activos de 15 páginas de software para clínicas y negocios, 62 con más de 30 días; incluye Alegra, contable, y Sunnu, sin clasificar; y 417 de clínicas con alcance en Bolivia, 41 con más de 30 días de 24 anunciantes). **Cifras reproducibles:** `node .claude/skills/onia-ventas-pauta/scripts/biblioteca-estadisticas.mjs`. **Una ficha por anunciante:** `research/competencia/anuncios/fichas/README.md`. **Ficha de las 12 dimensiones:** `references/video-intake/2026-10-10-biblioteca-anuncios-software-clinicas.md`. **Reglas con su caso:** skill `onia-ventas-pauta` §8.3. Un revisor independiente recalculó todo el 10-oct y corrigió 8 cifras y 3 conclusiones; lo de abajo ya las lleva. **La antigüedad no es rendimiento** y los porcentajes salen solo de los anunciantes con lista completa (119 anuncios, 33 con más de 30 d): son un **indicio**, no una prueba.
 
 | Patrón | Evidencia (días al 10-oct) | Peso | Qué hace Onia |
 |---|---|---|---|
@@ -375,7 +375,10 @@ documentada; el detalle, con cada fuente, en `research/ONIA_META_ADS_PLAYBOOK_20
   `app.onia.com.bo/register` (medido en el código de `(sitio)/` en `main`). **La 1.0 sin publicar ya lo
   resuelve** (bloqueo 7); la web entra como destino cuando se publique y el píxel se vea en «Probar eventos».
 - La ventana gratis de 72 h que abre un anuncio de clic a WhatsApp **sigue sin cobrar el envío** después del
-  cambio de precios de Meta del 1-oct-2026.
+  cambio de precios de Meta del 1-oct-2026. **Ayuda oficial (11-oct):** vale para cualquier categoría de mensaje
+  mientras el cliente escriba desde un Android o un iPhone; **el anuncio en sí no es gratis**. Pasadas las 72 h,
+  el seguimiento con plantilla es de pago: los seguimientos de los leads **nuevos** de la pauta conviene mandarlos
+  dentro de esas 72 h (los 7 leads de agosto de `sales-kit/SEGUIMIENTO-LEADS.md` ya la pasaron).
 
 ### 5.2 Público: el filtro son la pieza y el bot
 
@@ -506,6 +509,20 @@ En dólares **depende del tipo de cambio al que el banco le cobre la tarjeta a l
 tipo de cambio real el techo es la mitad de lo que parece**: hay que conocer ese número antes de la prueba.
 Los supuestos del embudo están en `research/ONIA_META_ADS_PLAYBOOK_20260930.md` §4.6.
 
+### 5.6.1 Lo que dice Meta (ayuda oficial, leída por el conector el 11-oct) y cómo cambia la lectura de los resultados
+
+Detalle, fuentes y casos en la skill `onia-ventas-pauta` §8.4. Lo que mueve decisiones de esta campaña:
+
+| Dato oficial | Qué significa acá |
+|---|---|
+| **«Conversaciones iniciadas»** = personas que escribieron por primera vez o tras 7 días sin hablar, atribuidas al anuncio (en WhatsApp, solo las que salen de un clic) | Es el «resultado» que mide la campaña: no cuenta a quien ya era contacto. **Cota superior de conversaciones**; el código del texto precargado puede dar menos |
+| **El mensaje precargado lo puede editar o borrar quien escribe** | El código `(D1)`/`(D2)`/`(D3)` se puede perder: «sin código» no es «sin anuncio». Se compara el total de Meta con los leads con código |
+| **Aprendizaje limitado** = conjunto que no llega a ~50 eventos en la semana después de la última edición significativa | Con US$ 4/día (§5.3) **se queda en «aprendizaje limitado» por diseño**: los costos por conversación son ruidosos, no definitivos. Lo que Meta recomienda (juntar conjuntos, audiencia amplia, evento frecuente) ya es el plan: 1 conjunto, Advantage+, «conversaciones» |
+| **Presupuesto total con fecha de fin** («no pasar de un monto total»); el diario puede gastar hasta 175 % de un día y 7 × el diario por semana | El presupuesto de campaña total de la JSON es el correcto para un techo duro (Bs 750); los cortes de día 3/7/14 miran lo **acumulado**, no el gasto de un día |
+| **Revisión:** casi siempre < 24 h; se repite al cambiar creativo, segmentación u optimización (no al cambiar presupuesto, puja o fechas) | Crear con inicio programado y ver «Activo» **antes** del día 1; un cambio de creativo cuesta otra revisión |
+| **Prueba A/B oficial:** misma partida a cada versión, una variable, no apagar y prender a mano | La prueba 1 (3 copias en un conjunto) **no es una prueba A/B**: Meta reparte según lo que rinde. Sirve para ver «¿trae dueños?»; el veredicto «qué formato gana» exigiría A/B con presupuesto parejo (no alcanza con US$ 56) |
+| **Biblioteca:** solo anuncios activos; los comerciales **no se archivan** al detenerse y solo se ve la fecha de inicio | Por eso `INACTIVE` da 0 y la muerte de un anuncio solo se mide volviendo a consultar los mismos ids (§2.6.2) |
+
 ### 5.7 Cortar o seguir
 
 > Alineado el 8-oct con `ONIA_PLAN_1.0_Y_CAJA.md` §3 (3-oct), que es la fuente de los límites. Los números salen del
@@ -515,11 +532,17 @@ Los supuestos del embudo están en `research/ONIA_META_ADS_PLAYBOOK_20260930.md`
 
 | Momento | CORTAR si… | SEGUIR si… |
 |---|---|---|
-| Día 3 | 0 conversaciones, o CTR < 0,8 % → se cambia la pieza | hay conversaciones |
+| Día 3 | 0 conversaciones, o CTR < 0,8 % → **se pausa la copia que no trae** (cambiarla es una edición significativa) | hay conversaciones |
 | Día 7 | costo por conversación > Bs 40, o 0 conversaciones de dueños de clínica | ≤ Bs 40 y al menos 1 calificada |
 | Día 14 | 0 demos, o costo por demo > Bs 390 | costo por demo ≤ Bs 390 |
 
-- **Durante la prueba no se toca la segmentación ni se sube el presupuesto más de 20 %**: reinicia el aprendizaje.
+- **Durante la prueba no se toca la segmentación ni el creativo, y no se agregan anuncios.** Ayuda oficial (11-oct):
+  es una **edición significativa** cualquier cambio de segmentación, de creativo o del evento de optimización,
+  **agregar un anuncio nuevo al conjunto** y pausarlo 7 días o más; reinicia el aprendizaje y **vuelve a revisión**
+  (casi siempre en menos de 24 h). El presupuesto «puede o no» serlo según la magnitud: Meta **no da un umbral**; el
+  «no más de 20 %» es una regla propia de prudencia, no una cifra de Meta. **Pausar un anuncio no está en la lista.**
+  Por eso el corte del día 3 («se cambia la pieza») se hace **pausando la copia que no trae, no cambiándola**: la pieza
+  nueva espera a la tanda siguiente.
 - **Techo total que no se pasa: Bs 1.400** (Meta 750 + auditorías, comunidad y eventos 650). Al llegar, se apaga todo.
 - **Seguir** quiere decir una segunda tanda igual, **pagada solo con plata de un cliente que ya pagó**, nunca con la
   reserva. Se escala (+20–30 % cada 3–4 días) solo con el costo por demo en tope dos semanas seguidas y lugar en la

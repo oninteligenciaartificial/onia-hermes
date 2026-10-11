@@ -1,0 +1,187 @@
+{
+  "_nota": "Lecturas escritas a mano (10-oct-2026) para biblioteca-fichas.mjs. Cada campo dice si es observado (capturas del 1-3 oct o titulares del conector) o inferencia. No son resultados: la edad de un anuncio no es rendimiento. Se conservan al regenerar las fichas con otro corte del JSON.",
+  "doctocliq": {
+    "nombre": "Doctocliq",
+    "que_vende": "Software de gestión para consultorios de doctores y doctoras en general (dental y estética entre ellos): agenda, ficha, recordatorios por WhatsApp y campañas. Cobra el anuncio en MXN; la landing de las capturas es doctocliq.com/ecuador. (observado)",
+    "formato": "Videos de 10 a 66 s (capturas del 1-2 oct): 10 s con una frase y hechos con IA; 26-30 s con una historia generada con IA y pantallas reales; 31-66 s con un testimonio de un doctor real. **El mismo video de 10 s corre bajo dos titulares** («Evita cancelaciones de última hora» y «Prueba Doctocliq ahora»): prueban titulares sobre un creativo. (observado)",
+    "oferta_cta": "«Prueba Doctocliq ahora/hoy», «Pruébalo gratis», «Crea tu cuenta GRATIS»: cuenta gratis, no demo. Botón «Ver detalles». (observado)",
+    "patron": "Un guion de dolor (la cita cancelada, la asistente que falta, «un paciente más») y un remate de control. 30 anuncios con 14 titulares; 15 pasan de 30 d. Concentra el patrón «control» del estudio (9 de 12 anuncios). (observado)",
+    "copiar": "Un concepto en copias; el dolor del sillón vacío dicho llano (precedente de A1); el titular como oferta.",
+    "no_copiar": "«+4000 doctores» y los testimonios (Onia tiene 0 clientes); «confirmaciones automáticas por WhatsApp» (no está vivo, catálogo §7); un presentador de IA hecho pasar por doctor (CLAUDE.md: el UGC de IA es un presentador original, nunca un testimonio).",
+    "notas": "Lista completa (se vio todo lo activo)."
+  },
+  "citapro": {
+    "nombre": "CitaPro",
+    "que_vende": "Agenda con asistente de IA por WhatsApp para centros estéticos y de salud; el anuncio pide una demo con un asesor. Cobra el anuncio en USD. (observado)",
+    "formato": "Video de 62 s con presentadora en una cabina estética y mucho efecto gráfico; imágenes con titular de dolor, burbujas de WhatsApp y un botón («Muchos mensajes, poco orden»); el texto principal repite «El secreto de… No es X, no es Y. Es Z». (observado, capturas del 1-2 oct)",
+    "oferta_cta": "«Más información» con pedido de demo, «Agenda tu demo ahora»: demostración con un asesor. (observado)",
+    "patron": "16 anuncios con 9 titulares; «✨ Cabinas llenas, agenda bajo control» ×3 (73-86 d) es el concepto que dura; emojis en el titular. 5 de 16 pasan de 30 d. (observado)",
+    "copiar": "La estructura «El secreto de… No es X, no es Y. Es Z» para el selfie (A1-S / F3 de `FORMATOS-QUE-SOSTIENEN.md`); la demo como CTA.",
+    "no_copiar": "«Un asistente con IA que agenda las 24 horas» y «pide reseñas en Google Maps» (catálogo §8); «+500 centros» (cifra propia sin fuente).",
+    "notas": "Lista completa."
+  },
+  "dtdental": {
+    "nombre": "Dt.Dental Software Odontológico",
+    "que_vende": "Software odontológico de Colombia con el ángulo de la norma: Resolución 1888, 3100, RIPS, interoperabilidad; hoy «25 % de descuento». Cobra el anuncio en COP. (observado)",
+    "formato": "Videos de una persona a cámara estilo selfie (53 s, voz natural, subtítulos, sin producción); 13 de 33 anuncios no traen titular (el texto va en el cuerpo, que el conector no trae). (observado, capturas del 1-2 oct)",
+    "oferta_cta": "Link a su Instagram o «Más información»: ni demo ni precio. El descuento es nuevo (2 d). (observado)",
+    "patron": "La norma con fecha como urgencia («El plazo de la 1888 ya venció», 100 d). 6 de 33 pasan de 30 d, los más viejos de 99-102 d. (observado)",
+    "copiar": "El **formato** selfie de bajo costo (F1) para A1-S; no el tema.",
+    "no_copiar": "La norma (no hay obligación boliviana verificada y el SIAT está apagado, catálogo §7) y «hasta ChatGPT lo respalda».",
+    "notas": "Lista completa. Los ids capturados el 1-3 oct siguen activos."
+  },
+  "agendapro": {
+    "nombre": "AgendaPro",
+    "que_vende": "Agenda y gestión para negocios de servicios de varios rubros (clínicas, estética, kine, capilar, barbería, spa, gimnasio); escribe un titular por rubro. Mezcla voseo, tuteo y usted. Cobra el anuncio en USD. (observado)",
+    "formato": "No observable: el conector no trae el formato y las capturas del 1-3 oct no incluyen AgendaPro. Titulares unidos con « | » (hasta 4) en las piezas de 143 y 247 d: varias tarjetas o textos (inferencia). Dos anuncios de catálogo dinámico ({{product.name}}) de 247 y 134 d.",
+    "oferta_cta": "«Agenda tu demostración gratis» ×5 (33-64 d) y «Prueba AgendaPro gratis»; en octubre pasa a la IA («La IA atiende tu WhatsApp», «Sofía trabaja por ti», «Reservas 24/7 sin contestar mensajes»). (observado)",
+    "patron": "Un titular por rubro y por dolor: inasistencias («Menos inasistencias en tu clínica» 65 d, «90% menos inasistencias» 65 d), papel («Ficha clínica digital» 65 d, «Chau carpetas»), control («Toda su clínica en un lugar»). (observado)",
+    "copiar": "**Un pack por rubro = un copy por rubro** (Onia se vende por rubro); la demostración como oferta.",
+    "no_copiar": "Las cifras de reducción (90 %, 82 %); «Sofía» y la IA que atiende o ordena (catálogo §8).",
+    "notas": "Lista **parcial**: 313 activos, 80 vistos (tope de 50 por consulta, más nuevos primero). Es el de mayor antigüedad visible (247 d) pero esos son catálogo dinámico: no compararlo con los demás por antigüedad."
+  },
+  "dentalink": {
+    "nombre": "Dentalink",
+    "que_vende": "Software dental con presencia en México, Argentina, Colombia y Chile; **es el único con pauta que le llega a Santa Cruz** (ADQ §2.6.1). Cobra el anuncio en USD. (observado)",
+    "formato": "Video de 38 s con presentador y pantalla (UGC) en dos versiones, la 2.ª con titular «Controla tu clínica dental fácil» y el texto «Unifica agenda, ficha clínica y cobros en un solo lugar. Deja el caos de las herramientas sueltas»; catálogo dinámico; 4 anuncios que la Biblioteca pública todavía no mostraba el 1-oct. (observado)",
+    "oferta_cta": "«Llena el formulario y conoce más», «Agenda tu demo», «Chatea con nosotros» y «Precio único mensual» (el único B2B con precio en el titular; 7-12 d). (observado)",
+    "patron": "Una versión por país; en octubre IA 24/7 («Dentalink IA: Gestión 24/7», «Agenda con IA 24/7»), POS y cumplimiento («Cumple la 1888», «Evita glosas y sanciones»). El más viejo visible: 58 d, sin titular. (observado)",
+    "copiar": "El mensaje «unifica agenda, ficha y cobros en un lugar; fuera las herramientas sueltas» (es lo que Onia sí hace); la idea de un precio único mensual.",
+    "no_copiar": "«Software dental líder en México» (autobombo, sin respaldo), IA 24/7, normas y POS.",
+    "notas": "Lista **parcial**: 92-106 activos, 57 vistos. Competidor directo en Santa Cruz: su oferta es un formulario, no WhatsApp."
+  },
+  "calu": {
+    "nombre": "Calu",
+    "que_vende": "Agenda para consultorios de Argentina y Uruguay. Cobra el anuncio en ARS. (observado)",
+    "formato": "No observable en esta tanda.",
+    "oferta_cta": "«Probá Calu gratis · Chatea con nosotros» (el botón lleva al chat; 8-oct). (observado)",
+    "patron": "La pregunta del papel «¿Seguís acumulando fichas y papeles…?» (43 d). **El 3-oct tenía 15 anuncios y el más viejo de 94 d** («Conocé Calu en 2 minutos», «Probá Calu Gratis» de 53 d); **hoy tiene 5 y el más viejo de 43 d: sus anuncios de prueba murieron.** (observado)",
+    "copiar": "La pregunta del dolor concreto del papel (N2).",
+    "no_copiar": "—",
+    "notas": "Lista completa. **Contraejemplo** a «prueba gratis = dura» (regla R3 de la skill §8.3)."
+  },
+  "reservo": {
+    "nombre": "Reservo",
+    "que_vende": "Software médico de México (dos páginas: Reservo Software y Reservo) con el ángulo de estar en regla: «Cumple con las normativas legales», «ECE en regla con COFEPRIS», «Software médico certificado en México», «Tu consulta médica respaldada». Cobra el anuncio en CLP (inferencia: agencia o filial chilena). (observado)",
+    "formato": "No observable en esta tanda.",
+    "oferta_cta": "No observable (solo titulares).",
+    "patron": "Los 5 anuncios activos pasan de 30 d (47-53 d). El 3-oct eran 31 con el más viejo en 199 d (puede ser otra página). Es el mismo patrón de norma que Dt.Dental. (observado)",
+    "copiar": "—",
+    "no_copiar": "Norma y certificación: Onia no las tiene.",
+    "notas": "Lista completa."
+  },
+  "huli": {
+    "nombre": "Huli México",
+    "que_vende": "HuliPractice, software de consultorio de México; usa contenido de ayuda como anuncio (resumen de la NOM 024 y la NOM 004, consentimientos informados). Cobra el anuncio en MXN. (observado)",
+    "formato": "No observable en esta tanda.",
+    "oferta_cta": "«Ingresar o crear una cuenta». (observado)",
+    "patron": "«5 años usando HuliPractice» en 7 copias lanzadas en tandas (18-sep, 1-oct, 7-oct); ningún anuncio pasa de 23 d. ADQ §2.6 contó ~140 activos el 3-oct y hoy la página Huli México tiene 16: este conector no explica la diferencia. (observado)",
+    "copiar": "Un concepto en copias; el contenido de ayuda (un paso del sistema).",
+    "no_copiar": "«N años usando»: Onia no tiene años ni clientes.",
+    "notas": "Lista completa de la página. Ningún anuncio pasa de 30 d."
+  },
+  "karbonna": {
+    "nombre": "Karbonna",
+    "que_vende": "Rubro no confirmado (apareció en la búsqueda «agenda de citas pacientes clínica»).",
+    "formato": "No observable.",
+    "oferta_cta": "No observable: los 4 anuncios no traen titular.",
+    "patron": "4 anuncios, un solo creativo, 17 d: nada que concluir.",
+    "copiar": "—",
+    "no_copiar": "—",
+    "notas": "Lista completa."
+  },
+  "doctorpro": {
+    "nombre": "DoctorPro",
+    "que_vende": "Software de consultorio. (observado)",
+    "formato": "No observable.",
+    "oferta_cta": "No observable.",
+    "patron": "Lanzamiento nuevo (7 anuncios de 3 d): «Tu consultorio. Más organizado. Más eficiente.» ×4, «Administra tu consultorio.» ×2.",
+    "copiar": "—",
+    "no_copiar": "—",
+    "notas": "Lista completa. Sin antigüedad que medir."
+  },
+  "wa7pro": {
+    "nombre": "Wa7pro",
+    "que_vende": "Agenda, WhatsApp con IA y CRM en una pantalla. Cobra el anuncio en USD. (observado)",
+    "formato": "No observable.",
+    "oferta_cta": "No observable.",
+    "patron": "Lanzamiento nuevo (2 anuncios de 3-6 d): «Su WhatsApp con IA, agenda y CRM en una pantalla» (en 3.ª persona, de usted) y «Agendó solo a las 21:14».",
+    "copiar": "—",
+    "no_copiar": "La IA que agenda sola (catálogo §8).",
+    "notas": "Lista completa. Sin antigüedad que medir."
+  },
+  "balance": {
+    "nombre": "Balance Aesthetic Software",
+    "que_vende": "Software para centros médicos y estéticos y salones de belleza de Perú. Cobra el anuncio en PEN. (observado)",
+    "formato": "No observable.",
+    "oferta_cta": "No observable.",
+    "patron": "1 anuncio de 38 d con titular de marca («Centros Médicos. Centros Estéticos. Salones de Belleza…»).",
+    "copiar": "—",
+    "no_copiar": "—",
+    "notas": "Lista completa (1 anuncio)."
+  },
+  "alegra": {
+    "nombre": "Alegra - Contabilidad Inteligente",
+    "que_vende": "Contabilidad y facturación en la nube (Colombia, COP): no es software de clínica. Entra por pedido de la madre (negocios en general). (observado)",
+    "formato": "No observable.",
+    "oferta_cta": "No observable.",
+    "patron": "«Factura con tu voz: la IA lo hace por ti» ×3 (18 d), el único del conjunto con una función de IA concreta en el titular.",
+    "copiar": "—",
+    "no_copiar": "La IA (catálogo §8) y la factura electrónica (SIAT apagado, catálogo §7).",
+    "notas": "Se vio 1 de 6 anuncios estimados por una búsqueda de texto."
+  },
+  "jelou": {
+    "nombre": "Jelou Latam",
+    "que_vende": "Plataforma de agentes conversacionales en LatAm. (observado)",
+    "formato": "No observable.",
+    "oferta_cta": "«¡Agenda una llamada!» (observado).",
+    "patron": "238 activos; se vieron 30, todos «¡Agenda una llamada!» de menos de 2 d: **no hay antigüedad que medir**; el dato es el **volumen de pruebas**.",
+    "copiar": "—",
+    "no_copiar": "—",
+    "notas": "Fuera de las estadísticas del JSON (solo `volumen_sin_detalle`)."
+  },
+  "medizona": {
+    "nombre": "Medizona Especialistas",
+    "sin_datos_10oct": true,
+    "que_vende": "Plataforma de agenda y confirmaciones para profesionales de la salud. (observado, captura del 1-oct)",
+    "formato": "Video de 30 s generado con IA: un médico frustrado con su agenda de papel, la app en el celular y el paciente contento (captura 1-oct, id 1626779772573913).",
+    "oferta_cta": "«Deja de confirmar citas una por una»; botón «Más información» con formulario.",
+    "patron": "Al 1-oct llevaba 4 h al aire con impresiones bajas: sin antigüedad que medir.",
+    "copiar": "—",
+    "no_copiar": "Confirmaciones automáticas (catálogo §7).",
+    "notas": "Solo capturas del 1-oct; no está en el corte del 10-oct."
+  },
+  "nativecode": {
+    "nombre": "NativeCode",
+    "sin_datos_10oct": true,
+    "que_vende": "Recordatorios automáticos por WhatsApp para consultorios. (observado, capturas del 1-oct)",
+    "formato": "Imágenes con titular de dolor: «Reduce las inasistencias de tus pacientes» y «Evita horas vacías en tu agenda» (ids 1401049335530050 y 1788651168932693).",
+    "oferta_cta": "**Botón «Enviar mensaje de WhatsApp»**: un software para clínicas que sí manda al chat (los demás van a demo o cuenta gratis).",
+    "patron": "Al 1-oct llevaban 9 h al aire con impresiones bajas: sin antigüedad que medir.",
+    "copiar": "El clic a WhatsApp como destino de un software de clínicas (hipótesis de la prueba 1).",
+    "no_copiar": "Recordatorios automáticos por WhatsApp (catálogo §7).",
+    "notas": "Solo capturas del 1-oct; no está en el corte del 10-oct."
+  },
+  "calendico": {
+    "nombre": "Calendico",
+    "sin_datos_10oct": true,
+    "que_vende": "Gestión de citas por WhatsApp para negocios con turnos. (observado, captura del 1-oct)",
+    "formato": "Video de 19 s con una persona (UGC) y la pantalla real del flujo de reserva; cierra una mujer en cámara con «Obtené ya tu prueba gratuita» (id 1335618932975260).",
+    "oferta_cta": "«¡Pruébalo gratis!»; botón «Ver detalles».",
+    "patron": "—",
+    "copiar": "La pantalla real del flujo de reserva dentro del video.",
+    "no_copiar": "—",
+    "notas": "Solo captura del 1-oct; no está en el corte del 10-oct."
+  },
+  "ultrapack": {
+    "nombre": "Ultra Pack Dentista",
+    "sin_datos_10oct": true,
+    "que_vende": "Plantillas de Canva y videos editables para dentistas, y su propio software «Agenda en Día» (precio visible: desde US$ 5,90 al mes). (observado, capturas del 1-oct)",
+    "formato": "Video de 19 s con primeros planos de implantes («Canva Dentista +1000 publicaciones») e imagen «El sistema que tu clínica dental necesita» (ids 1578803363704927 y 1418092519699070).",
+    "oferta_cta": "«Descargar» y «Más información».",
+    "patron": "—",
+    "copiar": "—",
+    "no_copiar": "El precio en el anuncio (decisión de la pauta, no de esta evidencia).",
+    "notas": "Solo capturas del 1-oct; no está en el corte del 10-oct. Es el único con un precio visible."
+  }
+}

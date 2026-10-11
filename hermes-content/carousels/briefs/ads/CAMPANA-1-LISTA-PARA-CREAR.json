@@ -498,7 +498,7 @@
         "0 conversaciones",
         "CTR < 0,8 %"
       ],
-      "accion": "se cambia la pieza, no la segmentación",
+      "accion": "se PAUSA la copia que no trae (ads_update_entity, status PAUSED); no se cambia la pieza ni la segmentación ni se agrega otra: cambiar creativo o segmentación y agregar un anuncio son ediciones significativas (reinician el aprendizaje y abren otra revisión de ~24 h, ayuda oficial de Meta, 11-oct); la pieza nueva espera a la tanda siguiente",
       "seguir_si": "hay conversaciones"
     },
     "dia_7": {
@@ -524,7 +524,7 @@
       }
     },
     "siempre": [
-      "no se toca la segmentación ni se sube el presupuesto más de 20 % durante la prueba (reinicia el aprendizaje)",
+      "no se toca la segmentación ni el creativo y no se agregan anuncios durante la prueba (ediciones significativas: reinician el aprendizaje y abren otra revisión); el presupuesto «puede o no» serlo según la magnitud y Meta no da umbral: el «20 %» es prudencia propia",
       "techo total Bs 1.400: al llegar se apaga todo",
       "si el cobro acumulado llega a Bs 750 antes del día 14, se apaga ese día",
       "seguir = una segunda tanda igual, pagada solo con plata de un cliente que ya pagó, nunca con la reserva"
