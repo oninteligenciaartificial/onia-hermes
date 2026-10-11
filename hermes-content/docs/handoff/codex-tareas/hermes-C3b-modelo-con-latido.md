@@ -1,7 +1,7 @@
 ---
 id: hermes-C3b
 carril: hermes
-estado: pendiente   # pendiente | lanzada | PR | hecha | bloqueada
+estado: PR   # pendiente | lanzada | PR | hecha | bloqueada
 modelo: gpt-6.1-sol # cambia un script que corre como root en el VPS (solo lee): la madre lo revisa fuerte
 repo: onia-hermes
 rama: codex/hermes-c3b-latido
@@ -9,7 +9,7 @@ base: codex/hermes-c1-c3   # PR #196; si ya entró a main, base: main
 pr:
 escrita: 2026-10-11 por Hermes-Jarvis (nube)
 actualizada: 2026-10-11 por Hermes-Jarvis (nube)
-nota: Corrige la parte B de la sección 16 de diagnostico.sh (C3): con el crontab REAL no nombra ningún trabajo. El ejemplo del contrato C3 estaba mal; el error es del contrato, no de Codex.
+nota: commit 7766e875 en #196; revisado, espera #194
 ---
 # C3b · La sección 16 tiene que leer el crontab que de verdad tiene el VPS
 

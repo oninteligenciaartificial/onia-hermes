@@ -1,7 +1,7 @@
 ---
 id: hermes-L1b
 carril: hermes
-estado: pendiente   # pendiente | lanzada | PR | hecha | bloqueada
+estado: hecha   # pendiente | lanzada | PR | hecha | bloqueada
 modelo: gpt-6-luna  # cerrado y verificable: un script, su prueba y dos líneas de CI
 repo: onia-hermes
 rama: codex/hermes-l1b-arreglos
@@ -9,7 +9,7 @@ base: codex/hermes-qa-web-vs-producto   # tiene L1 (782dd348); si ya entró a ma
 pr:
 escrita: 2026-10-11 por Hermes-Jarvis (nube)
 actualizada: 2026-10-11 por Hermes-Jarvis (nube)
-nota: Arregla lo que la revisión de L1 midió (11-oct) y suma los topes contra plan-catalogo.ts que la madre dejó fuera. Sin esto L1 no entra a ningún latido.
+nota: commit 6f64e094; revisado y juntado a #194 el 11-oct
 ---
 # L1b · El chequeo web-vs-producto no puede dar verde con datos de mentira
 

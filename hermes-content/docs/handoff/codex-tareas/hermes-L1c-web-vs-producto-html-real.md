@@ -1,7 +1,7 @@
 ---
 id: hermes-L1c
 carril: hermes
-estado: pendiente   # pendiente | lanzada | PR | hecha | bloqueada
+estado: hecha   # pendiente | lanzada | PR | hecha | bloqueada
 modelo: gpt-6-luna  # cerrado y verificable: un script, su prueba y fixtures de texto
 repo: onia-hermes
 rama: codex/hermes-l1c-html-real
@@ -9,7 +9,7 @@ base: codex/hermes-qa-web-vs-producto   # tiene L1 (782dd348) y L1b (6f64e094)
 pr:
 escrita: 2026-10-11 por Hermes-Jarvis (nube)
 actualizada: 2026-10-11 por Hermes-Jarvis (nube)
-nota: Cierra lo que L1b no puede: el modo --base-web con el HTML REAL de onia.com.bo. Mismo error de método que C3: el ejemplo de la prueba de L1b era HTML inventado.
+nota: commit fded1ff0; revisado y juntado a #194 el 11-oct (con acentos y BOM arreglados)
 ---
 # L1c · `--base-web` tiene que leer las páginas que de verdad sirve onia.com.bo
 
