@@ -45,7 +45,7 @@ Se cuenta solo dentro de los mismos nodos que el primero (cadenas, texto JSX y f
 **No** cuentes nunca: `está`, `esta`, `usted`, `su`, `sus`, `le`, `te` (demasiado ambiguos), ni nada dentro de una palabra más larga (`tuvo`, `intuición`, `atún`, `estudio`, `vasto`, `evasión`, `ti` suelto).
 
 ### Línea base
-Generala **corriendo el propio contador sobre el árbol actual** (un script de una vez, `scripts/voseo-segunda-persona-linea-base.mjs`, que escribe el JSON ordenado igual que el primero; después de generarla, lo dejás en el repo: lo usa la madre para actualizarla hacia abajo cuando un PR pase textos a usted). No edites la línea base a mano.
+Generala **corriendo el propio contador sobre el árbol actual** (un script de una vez, `scripts/voseo-segunda-persona-linea-base.mjs`, que escribe el JSON ordenado igual que el primero; después de generarla, lo dejás en el repo: lo usa la madre para actualizarla hacia abajo cuando un PR pase textos a usted). No edites la línea base a mano. **Orden de las claves (medido el 11-oct, E29):** «ordenado igual que el primero» es el orden de `localeCompare(b, "en")` de `contarArchivos` (`__tests__/voseo-ratchet.ts:55`), no el ASCII de `Object.keys().sort()`; el script debe reutilizar esa misma función para ordenar. Si el segundo gate entra mientras otro PR regenera la primera línea base, un orden distinto vuelve a hacerlos chocar.
 
 ## PRUEBA DE HECHO
 1. `npx vitest run __tests__/voseo-ratchet-segunda-persona.test.ts` en verde (si el entorno no corre vitest, decilo y corré las funciones con `node --experimental-strip-types` como sustituto, anotando la salida). La suite completa del repo sigue como estaba: **no cambia ningún otro archivo de prueba ni la línea base del primer gate**.
