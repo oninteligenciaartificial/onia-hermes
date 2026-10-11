@@ -257,13 +257,13 @@ El diagnóstico no cambia nada en el VPS.
 
 | Sección | Bien si dice |
 |---|---|
-| 0 | «✅ resumen, lector de calendario, aduana, vigía de aprobaciones, guardia y pedidos: al día» (desde el 9-oct exige el resumen en tres bloques: PASÓ · NECESITO · SIGUE) |
+| 0 | «✅ resumen, lector de calendario, aduana, vigía de aprobaciones, guardia, pedidos y latido: al día» (desde el 9-oct exige el resumen en tres bloques: PASÓ · NECESITO · SIGUE; desde el 10-oct, `onia-latido.sh` en `/root/bin`) |
 | 1 | «✅ /root/backups/hermes-jarvis-…» |
 | 1b | nada con ❌ (si falta la llave, el VPS no llega a GitHub o n8n no responde, aborta acá sin tocar nada) |
 | 5 y 5b | 5: conectado al calendario; 5b: «✅ probado en su calendario: crear → mover → cancelar (la prueba ya no está)» |
 | Fase A | «✅ requisitos en verde: recién ahora se toca lo que le llega» |
 | 1c | «✅ …/rollback.sh» |
-| 2 | «✅ instalado: A → B líneas activas» (el 1-oct se esperaba 45 → 48) |
+| 2 | «✅ instalado: A → B líneas activas» (el 1-oct se esperaba 45 → 48). Desde el 10-oct cada línea nueva arranca con `/root/bin/onia-latido.sh <nombre> <cada>` y el comando entre comillas simples: escribe en `/var/lib/onia-latido/` |
 | 3 y 4 | los 3 trabajos de Hermes pausados y los 12 flujos de n8n apagados, sin ❌ |
 | 5c | la skill de calendario, la regla del calendario y la del formato en el SOUL: «✅ regla del formato agregada al SOUL de Hermes» o «· su SOUL ya tenía la regla del formato» |
 | 5d | «✅ llave de la rutina guardada en /root/.config/onia/pedidos.env (600)» y «✅ la respuesta vuelve sola: …». Si dice «pedidos a Claude APAGADOS: falta la llave», el secreto no llegó |

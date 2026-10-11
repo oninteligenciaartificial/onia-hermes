@@ -22,6 +22,8 @@ retirados antes de la limpieza y, dentro de `.claude/agents/`, el harness los vo
 ## Generalistas (globales, `~/.claude/agents/`)
 
 Los que se usan de verdad: `general-purpose`, `Explore`, `code-reviewer`, `security-reviewer`.
+`code-reviewer` y `security-reviewer` viven también en este repo (`.claude/agents/`, copia idéntica de la global)
+para que la nube los vea (10-oct-2026). Si se edita uno, se edita en los dos sitios.
 
 ## Reglas de delegación (de AGENTS.md)
 1. Data-first antes de preguntar. 2. Autonomía operativa antes de delegar al

@@ -35,7 +35,7 @@ afuera sin aprobación** — la autonomía termina en tu canal.
 
 | Qué | Cuándo | Qué lleva |
 |---|---|---|
-| ☀️ **Resumen de la mañana** | **06:30** La Paz | agenda del día · prospectos esperando · qué sale hoy (el calendario de publicación vigente; sin él, los guiones del plan) · decisiones (máx. 5, con `ok <id>`) · lo que pasó de noche · UNA línea de salud del sistema |
+| ☀️ **Resumen de la mañana** | **06:30** La Paz | agenda del día · prospectos esperando · qué sale hoy (el calendario de publicación vigente; sin él, los guiones del plan) · decisiones (máx. 5, con `ok <id>`) · lo que pasó de noche · UNA línea de salud del sistema · los relojes que vencen en 72 h o menos (tabla §G de `cola/loop/madre.md`; los suyos en NECESITO, vencidos en 🔴) · las colas de `cola/loop/` sin commit hace más de 24 h · los trabajos del cron mudos o con error (`/var/lib/onia-latido/`) |
 | 🌙 **Cierre del día** | **21:30** La Paz | qué se hizo hoy, en castellano llano · qué salió publicado hoy, con su link (`/root/publicar/publicado.jsonl`) · sus bloques de ONIA del día, numerados, con «¿se hicieron?» · qué sigue esperando · mañana |
 | 🔔 **Interrupción** | al momento, **solo** entre 06:30 y 22:00 y **fuera de sus bloques** | una de las cuatro de abajo, y nada más |
 
