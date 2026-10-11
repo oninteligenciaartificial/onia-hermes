@@ -1,4 +1,4 @@
-﻿import fs from 'node:fs/promises';
+import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -277,7 +277,7 @@ export function auditar({ pages = {}, platform, noMedidoInicial = [], registroSo
   const noMedido = [...noMedidoInicial];
   for (const [pagina, ancla] of Object.entries(ANCLAS)) {
     if (pages[pagina] !== undefined && !ancla.test(pages[pagina])) {
-      noMedido.push(errorMedicion(`${pagina}: falta frase ancla; conversi?n no confirmada`));
+      noMedido.push(errorMedicion(`${pagina}: falta frase ancla; conversión no confirmada`));
       delete pages[pagina];
     }
   }
@@ -430,7 +430,7 @@ function imprimir(data, json) {
   if (json) { console.log(JSON.stringify(data, null, 2)); return; }
   console.log('PRECIOS');
   console.log(data.diferenciasPrecio.length ? data.diferenciasPrecio.join('\n') : data.resumen.pendientesBloqueantes ? 'precios no medidos por completo' : '0 diferencias de precio');
-  for (const top of data.topes) console.log(`Tope ${top.plan}: web ${top.web ?? '?'}, c?digo ${top.codigo ?? '?'} ? ${top.estado}`);
+  for (const top of data.topes) console.log(`Tope ${top.plan}: web ${top.web ?? '—'}, código ${top.codigo ?? '—'} → ${top.estado}`);
   console.log('\nOBRA');
   console.log(data.obra.length ? data.obra.map((x) => `${x.archivo}:${x.linea}: ${x.texto}`).join('\n') : data.resumen.pendientesBloqueantes ? 'obra medida en las páginas disponibles' : '0 textos de obra');
   console.log('\nPROMESAS');

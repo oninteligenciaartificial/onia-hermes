@@ -221,7 +221,7 @@ test('htmlATexto quita script y style, separa bloques y decodifica entidades', (
 });
 
 
-test('el HTML real del sitio da la misma auditor?a que el texto guardado', async () => {
+test('el HTML real del sitio da la misma auditoría que el texto guardado', async () => {
   const local = await loadExample();
   const expected = auditar(local);
   await withServer(await responderHtml(), async (baseWeb) => {
@@ -249,7 +249,7 @@ test('mutar HTML real detecta precio y frase ausente sin confundirla con página
   const chatbotOriginal = await fs.readFile(path.join(htmlDir, 'chatbot.html'), 'utf8');
   const phrase = 'responde las <em>24 horas</em>';
   assert.ok(chatbotOriginal.toLowerCase().includes(phrase));
-  await withServer(await responderHtml({ reemplazos: { [phrase]: 'responde durante el d?a' } }), async (baseWeb) => {
+  await withServer(await responderHtml({ reemplazos: { [phrase]: 'responde durante el día' } }), async (baseWeb) => {
     const result = await ejecutar(['--base-web', baseWeb, '--platform', fixtureRoot]);
     assert.equal(result.codigoSalida, 0);
     assert.equal(result.promesas.find((item) => item.id === 'whatsapp-24h').estado, 'no está');
