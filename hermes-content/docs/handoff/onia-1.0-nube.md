@@ -130,7 +130,7 @@ la dirección de Sergio Urcullo.
 ## 8. Próximos pasos (en orden)
 
 0. **#136 y #146:** hechos, en producción desde las 06:57 UTC (`release-a7d8c1ed`), mirados sin login.
-0a. **La cadena del 11-oct** (§4): #147 primero, con su CI verde, antes de las 09:20 UTC. Después #153 → #148 → #149 →
+0a. **La cadena del 11-oct** (§4): #147 **mergeado a las 08:17 UTC** (`fd72cd55`, sale a las 09:50; mirarlo cerca de las 10:00). Después #153 → #148 → #149 →
     #152 (mío; la línea base del trinquete = base + deltas) → #151. #150 espera P-01b.
 0c. **Contratos nuevos, `pendiente`, los lanza la madre:** F136b (caja de otro día, motivo al reabrir, borrar cobro de
     día cerrado), P-01b (la prueba anon de B22 sin verde falso) y S2 (IP solo desde Cloudflare). F136c y M1 (una sola
