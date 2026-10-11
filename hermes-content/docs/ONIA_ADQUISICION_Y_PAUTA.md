@@ -549,6 +549,11 @@ Detalle, fuentes y casos en la skill `onia-ventas-pauta` §8.4. Lo que mueve dec
   agenda de Sergio Urcullo: **cuando las demos superan su capacidad semanal, no se escala; el techo son horas, no pauta**.
 - Se mide cada día **a mano, en una planilla**: conversaciones; cuántas son de un dueño o administrador de clínica; demos
   agendadas; costo por conversación; costo por demo; CTR; frecuencia.
+  **La planilla está lista (11-oct):** `carousels/briefs/ads/prueba1-v2/PLANILLA-PRUEBA-1.xlsx` (una fila por anuncio y por día;
+  los cortes del día 3, 7 y 14 y los frenos de Bs 750 y Bs 1.400 son fórmulas; los números salen de la spec, no escritos a
+  mano). Se regenera con `.claude/skills/onia-ventas-pauta/scripts/planilla-prueba1.mjs` y la vigila
+  `scripts/planilla-prueba1.test.mjs`. **No se abrió en Excel ni Calc** (el entorno de la nube no trae Calc): las fórmulas se
+  probaron con un intérprete mínimo; el primer uso real es abrirla y comprobar que Cortes dice «SIN DATOS».
 
 ### 5.8 La especificación, lista para crear en PAUSA
 
