@@ -41,7 +41,7 @@ Texto principal (la primera línea es el filtro):
 Para dueños y dueñas de clínicas dentales de Santa Cruz.
 Escribirle a cada paciente, uno por uno, se come la hora más tranquila de la mañana, y esa hora se paga igual.
 Onia es un sistema de gestión para clínicas dentales: en Pendientes, cada mañana le deja anotado a quién escribirle, con el mensaje listo.
-Usted aprueba cada mensaje: ninguno sale sin su OK.
+Ningún mensaje de Pendientes sale sin que usted lo apruebe.
 Escríbanos por WhatsApp y pida su demostración gratis.
 ```
 
