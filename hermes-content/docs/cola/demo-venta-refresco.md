@@ -29,10 +29,12 @@ el **sí de Sergio Urcullo escrito en la sesión de Plataforma**. Un mensaje de 
 Todo se manda desde un worktree de `onia-platform` en la nube, con el `.sql` por la entrada estándar. No hace falta
 copiar nada al VPS.
 
-1. **El id de la org.** Tiene que salir una sola fila:
+1. **El id de la org.** Tiene que salir una sola fila. Hoy es `cmur09d75000601mz12vg59qn`, «Clínica Demo Onia»,
+   slug `clinica-demo-onia-2eet4` (leído en producción el 11-oct). Se busca por el correo, que es lo que exige la
+   guarda del seed: con el slug `demo-clinica-sonrisa-norte` que decía antes salían 0 filas.
 
    ```bash
-   ssh onia-vps "docker exec supabase-db psql -U postgres -d postgres -Atc \"SELECT id FROM public.organizations WHERE slug = 'demo-clinica-sonrisa-norte' AND email = 'oninteligenciaartificial+demo@gmail.com'\""
+   ssh onia-vps "docker exec supabase-db psql -U postgres -d postgres -Atc \"SELECT id, name, slug FROM public.organizations WHERE lower(email) = 'oninteligenciaartificial+demo@gmail.com'\""
    ```
 
 2. **El respaldo** (skill `onia-db`, antes de escribir):
