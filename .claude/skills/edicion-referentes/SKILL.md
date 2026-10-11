@@ -411,6 +411,23 @@ antes de que lleguen a Sergio Urcullo.
   el detector entra en la clave del caché del análisis). Comprobado sin rodeo sobre el bruto de N06: el `--plan` sale **idéntico** (ojos, escala por toma, cortes a la
   vista, aire, palabras/s) al hecho con el rodeo `santiago-cv5.py`, y tarda 29 s. Los dos rodeos de las carpetas `borrador/` de N06 y DD-A ya no hacen falta (siguen
   funcionando: no parchean nada si Haar existe). Con OpenCV 4.x el camino es el de siempre.
+- **Borrador de N07 (11-oct), Santiago sobre el corte propuesto: `videos/marca-personal/2026-10-11/n07-haiku-55/borrador/rehacer.sh` (`RECAPTURAR=1`, `BRUTO=`, `S=`).**
+  Medido por mí sobre el render de 81,7 s: `silencedetect -35 dB d=0.3` → 0 silencios (a d=0,2 salen 11 = los empalmes de 0,24 s), −13,0 LUFS, LRA 2,6, TP −1,6; el
+  `--plan` da 22 escenas, 14 cambios de layout, 8,7 elementos por 10 s y 2,90 palabras/s; 10 de 29 cortes quedan «a la vista» (dx ≤ 9,5 px, dy ≤ 27 px). No cumple la
+  receta en cola (0,19 s contra 0,3-0,65) ni tiene remate; el CTA dura 2,4 s. `santiago.py` corrió directo con OpenCV 5, sin rodeo (el primer `--plan` tardó 126 s en esta
+  máquina, no 30). Verificación contra las páginas oficiales de Anthropic (capturadas el 11-oct): precios de Haiku 5.5 ($0,10 / $0,50 hasta 100 mil tokens, ×5 por encima) y
+  de Haiku 4.5 ($1 / $5), «Released October 7, 2026», «approximately 30% more tokens» y los tokens de pensamiento facturados como salida: todo cuadra; la cuenta
+  US$3,00 → US$0,30 → US$0,39 («casi 8 veces») cuadra con dos supuestos que ninguna página respalda (2.000 de entrada y 200 de salida por mensaje, y el +30 % también en
+  la salida). Lo nuevo: (1) **una 2.ª pasada de Whisper (beam 5) más el guion de la pieza resolvió «Ser más bots» = «Si armás bots» y «termó» = «te armó»**: la tabla de
+  cortes proponía otra lectura; el guion de GRABAR sirve de pista aunque la pieza no lo siga. (2) En `armar-transcript.py`, cuando un arreglo cambia la CANTIDAD de palabras
+  hay que repartir el tiempo de todo el tramo viejo; si no, la palabra siguiente arranca antes en el karaoke; los pedazos «5» + «.5» se pegan antes de aplicar arreglos.
+  (3) `platform.claude.com` tiene la cabecera «Pricing» **sticky**: `capturar-anthropic.mjs` (copia de la de OpenAI) la pasa a `static`; `code.claude.com/model-config`
+  cae a y≈46.500 px (más allá de un viewport de 15.000): fullPage + clip. (4) **Un `frase` cambiado en una captura que ya existe se salta** (queda la clave vieja en
+  `capturas.json`) y `santiago.py` falla con `KeyError`: borrar esa entrada o `--forzar`. (5) La página de «extended thinking» pinta el código en línea en rojo: se recortó
+  para que no entre (el único rojo permitido es el punto del marco del molde). (6) `medir-salto-cara.py` (YuNet sobre el render, con referencia sin corte) y partir las
+  escenas de panel en el corte bajaron los «a la vista» de 13 a 10. (7) Doc nueva (11-oct): en Claude Code NO se puede apagar el pensamiento en Haiku 5.5 (en la API sí, con
+  effort ≤ high), pide Claude Code ≥ 2.1.293, y Haiku 4.5 es «legacy» (retiro no antes del 15-oct-2026): el video dice «apagalo» y 15 s después manda a probarlo en la terminal,
+  donde no se puede: lo decide Sergio Urcullo.
 - **El bruto puede venir ya editado** (el de N03 traía 5 tomas pegadas). Los saltos se detectan con picos aislados de
   diferencia entre cuadros (>5× la mediana y >2,5× sus vecinos) y se tratan como cortes. Si no, el control dice
   «ningún corte a la vista» y es falso.

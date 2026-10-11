@@ -62,6 +62,10 @@ echo "== 5/6 medición del audio final -> medicion.txt (regla 15: 0 silencios de
   echo "ebur128 (resumen):"
   ffmpeg -nostats -i "$S/video.mp4" -vn -af ebur128=peak=true -f null - 2>&1 | awk '/Summary:/{r=1} r' | grep -E "^\s+(I:|LRA:|LRA low:|LRA high:|Peak:)" || true
 } | tee "$AQUI/medicion.txt"
+{
+  echo "salto de cara en los empalmes del render final (medir-salto-cara.py, YuNet sobre cuadros −2/+1):"
+  python3 -I "$AQUI/medir-salto-cara.py" "$S/video.mp4" "$PIEZA/cutplan.json" "$AQUI/plan.txt" 2>&1 | grep -v "WARN" || true
+} | tee -a "$AQUI/medicion.txt"
 N=$(grep -m1 "^silencios contados (-35 dB, d=0,3):" "$AQUI/medicion.txt" | awk -F': ' '{print $2}')
 [ "$N" = "0" ] || echo "AVISO: la regla 15 NO se cumple ($N silencios >= 0,3 s); ver medicion.txt" >&2
 

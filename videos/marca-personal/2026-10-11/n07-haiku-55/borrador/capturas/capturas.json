@@ -2,7 +2,7 @@
  "haiku-spec": {
   "url": "https://platform.claude.com/docs/en/models/haiku-5-5/overview",
   "fecha": "2026-10-11",
-  "fecha_hora": "2026-10-11T08:28:47.950Z",
+  "fecha_hora": "2026-10-11T08:45:55.182Z",
   "w": 1120,
   "h": 320,
   "frases": {
@@ -23,7 +23,7 @@
  "haiku-precios": {
   "url": "https://platform.claude.com/docs/en/models/haiku-5-5/overview",
   "fecha": "2026-10-11",
-  "fecha_hora": "2026-10-11T08:29:00.435Z",
+  "fecha_hora": "2026-10-11T08:46:04.194Z",
   "w": 1120,
   "h": 480,
   "frases": {
@@ -50,7 +50,7 @@
  "haiku-liberado": {
   "url": "https://platform.claude.com/docs/en/models/haiku-5-5/overview",
   "fecha": "2026-10-11",
-  "fecha_hora": "2026-10-11T08:29:08.889Z",
+  "fecha_hora": "2026-10-11T08:46:13.458Z",
   "w": 1120,
   "h": 400,
   "frases": {
@@ -65,7 +65,7 @@
  "haiku-30": {
   "url": "https://platform.claude.com/docs/en/models/haiku-5-5/overview",
   "fecha": "2026-10-11",
-  "fecha_hora": "2026-10-11T08:29:17.659Z",
+  "fecha_hora": "2026-10-11T08:46:22.370Z",
   "w": 1120,
   "h": 400,
   "frases": {
@@ -80,7 +80,7 @@
  "haiku-uso": {
   "url": "https://platform.claude.com/docs/en/models/haiku-5-5/overview",
   "fecha": "2026-10-11",
-  "fecha_hora": "2026-10-11T08:29:25.956Z",
+  "fecha_hora": "2026-10-11T08:46:31.558Z",
   "w": 1120,
   "h": 300,
   "frases": {
@@ -95,7 +95,7 @@
  "haiku45-spec": {
   "url": "https://platform.claude.com/docs/en/models/haiku-4-5/overview",
   "fecha": "2026-10-11",
-  "fecha_hora": "2026-10-11T08:29:34.456Z",
+  "fecha_hora": "2026-10-11T08:46:40.864Z",
   "w": 1120,
   "h": 320,
   "frases": {
@@ -116,7 +116,7 @@
  "precio-larga": {
   "url": "https://platform.claude.com/docs/en/about-claude/pricing",
   "fecha": "2026-10-11",
-  "fecha_hora": "2026-10-11T08:29:43.539Z",
+  "fecha_hora": "2026-10-11T08:46:51.206Z",
   "w": 1120,
   "h": 300,
   "frases": {
@@ -131,7 +131,7 @@
  "pensamiento-salida": {
   "url": "https://platform.claude.com/docs/en/build-with-claude/thinking",
   "fecha": "2026-10-11",
-  "fecha_hora": "2026-10-11T08:29:53.159Z",
+  "fecha_hora": "2026-10-11T08:47:01.365Z",
   "w": 1120,
   "h": 300,
   "frases": {
@@ -146,7 +146,7 @@
  "pensamiento-apagar": {
   "url": "https://platform.claude.com/docs/en/build-with-claude/thinking",
   "fecha": "2026-10-11",
-  "fecha_hora": "2026-10-11T08:30:02.826Z",
+  "fecha_hora": "2026-10-11T08:47:13.195Z",
   "w": 1120,
   "h": 260,
   "frases": {
@@ -161,7 +161,7 @@
  "terminal": {
   "url": "https://code.claude.com/docs/en/model-config",
   "fecha": "2026-10-11",
-  "fecha_hora": "2026-10-11T08:38:11.917Z",
+  "fecha_hora": "2026-10-11T08:47:19.490Z",
   "w": 1120,
   "h": 400,
   "frases": {
