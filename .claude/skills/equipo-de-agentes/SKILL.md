@@ -143,6 +143,13 @@ sección decía «incluido el diseño»; él lo sacó al confirmar la regla.
 - Git Bash convierte `'/dir/'` en una ruta de Windows: usar `MSYS_NO_PATHCONV=1` para el sparse.
 - La nube no puede pushear ramas nuevas a onia-platform: deja bundles y la madre los sube.
 - Disco: `df -h /c` antes de bajar videos. Codex falla con menos de 1 GiB libre.
+- **Una rama no se mueve desde otro worktree** (11-oct, Plataforma). En `wt-restos3` se rehízo `claude/optimistic-ride-1sp5fe` con
+  `git checkout -B … origin/master`, y la misma rama seguía sacada en `/home/user/onia-platform`. La rama se movió debajo de ese
+  checkout: su índice quedó con el árbol viejo (`5102535c`), y `git status` mostró decenas de archivos «modificados» y en stage.
+  El hook Stop pidió «commit and push». **Ese commit habría revertido la rama entera.** Diagnóstico: `git write-tree` igual al árbol
+  del commit viejo, sin cambios fuera del stage ni archivos sin seguimiento, es decir, un fantasma. Arreglo: `git checkout --detach
+  <commit viejo>` en ese checkout, sin commit. Regla: antes de `checkout -B`, mirar `git worktree list`. Si la rama está sacada en
+  otro lado, primero se desacopla allá.
 - **Antes de rebasear un PR porque entró otro, probar la mezcla** (11-oct, #152 y #156). La madre iba a rebasear #156 (M1) sobre
   `master` después de #152, por la línea base del trinquete, que tocan los dos. Plataforma probó la mezcla triple en la nube:
   `master` `a91708ca` + #152 + #156. Resultado: sin conflictos, la línea base se combinó sola (claves distintas), `tsc` 0 y la
