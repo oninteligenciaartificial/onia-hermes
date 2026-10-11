@@ -4,6 +4,8 @@
 > publica ni se genera —tampoco en lote chico— sin que la madre se lo muestre antes y escriba **«mostrada, publicá <pieza>»**. Esto restringe,
 > no autoriza. Estado: **G1 ya mostrada** (`g1-final-1080x1920.mp4`, SHA 5903cd9c…) y **espera su OK**. Mi revisión «¿vende Onia Platform?» **no
 > cambió G1 ni el orden de entrega**: son propuestas, no piezas hechas. Nada está en «LISTA PARA MOSTRAR» porque no hay nada nuevo que mostrar.
+> **Estructura de contenido (pedido de la madre v4, 11-oct): LISTA PARA MOSTRAR.** Semana fija (lun reel «La prueba», mié carrusel, vie reel «El error»), las 9 próximas piezas y lo que falta
+> producir: `PLAN.md` §4-bis y §5. Recomiendo la opción B (token nuevo desde Meta) para `ig-lucia.env`. Nada se produce ni se publica hasta su «mostrada, publicá <pieza>».
 > **G1 con voz:** la madre le pone la voz Marcela (ElevenLabs, aprobado por Sergio Urcullo) y avisará el SHA del archivo; entonces actualizo la tabla de entrega. Ojo: mi nota D4 dice que Marcela tiene acento colombiano.
 
 - [~] ~~G1 con la captura real de Pendientes de la demo~~ — **reemplazada por la premisa v5** (Sergio Urcullo, 8-oct: *«Lucía no

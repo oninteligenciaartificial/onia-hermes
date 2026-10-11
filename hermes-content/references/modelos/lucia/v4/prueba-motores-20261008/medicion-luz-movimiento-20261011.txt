@@ -1,0 +1,9 @@
+# Luz y movimiento de los 6 clips de G2 (misma foto K1, misma orden). 11-oct-2026, 0 cr, ffmpeg signalstats.
+# m1 Kling std · m2 Kling pro (1080p) · m3 Seedance mini · m4 Seedance mini + 3 refs · m5 Kling O3 5 refs · m6 Cinema Studio 3.0
+# Límite: promedios del cuadro entero; mezclan luz con lo que entra al plano. Ver .claude/skills/lucia/scripts/luz_movimiento.py
+m1.mp4: 720x1280 145 cuadros | luma ini 156.0 fin 155.1 (Δ-1.0) | U ini 127.6 fin 128.6 | V ini 130.1 fin 129.7 | mov medio 0.99 máx 3.03
+m2.mp4: 1080x1920 145 cuadros | luma ini 156.1 fin 155.7 (Δ-0.4) | U ini 127.5 fin 127.2 | V ini 130.2 fin 130.7 | mov medio 1.04 máx 1.94
+m3.mp4: 720x1280 145 cuadros | luma ini 144.8 fin 132.6 (Δ-12.2) | U ini 128.1 fin 127.5 | V ini 130.2 fin 132.4 | mov medio 3.62 máx 7.29
+m4.mp4: 720x1280 145 cuadros | luma ini 145.5 fin 111.8 (Δ-33.7) | U ini 127.7 fin 122.7 | V ini 130.8 fin 139.2 | mov medio 4.09 máx 7.46
+m5.mp4: 720x1280 145 cuadros | luma ini 138.4 fin 140.5 (Δ+2.1) | U ini 123.8 fin 122.1 | V ini 130.7 fin 138.9 | mov medio 2.39 máx 3.65
+m6.mp4: 720x1280 97 cuadros | luma ini 149.5 fin 136.1 (Δ-13.4) | U ini 128.0 fin 124.5 | V ini 130.0 fin 137.8 | mov medio 4.83 máx 7.17

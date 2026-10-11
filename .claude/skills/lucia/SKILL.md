@@ -393,3 +393,17 @@ Fuente: `research/competencia/LUCIA_COMPETENCIA_20261005.md`.
   preguntas: lo decide Sergio Urcullo con la cuenta delante, no esta sesión; (c) etiqueta IA siempre y cero promesas de resultado; (d) nada con `@lu.antelo` ni con caras de personas reales;
   (e) sin voz hasta resolver D4: Marcela tiene acento colombiano.
 - **La puerta de medición no existe:** `onia.com.bo/llamada` da 404 (medido el 11-oct). Cualquier métrica «demos con `src=lucia-*`» necesita otra puerta primero.
+
+## 11. Estructura semanal y edición con voz (11-oct) — el detalle vive en `PLAN.md` §4-bis y §5
+
+- **Una prueba por semana saca tres piezas:** lunes reel «La prueba» (20-30 s, voz) · miércoles carrusel «Para guardar» · viernes reel corto «El error de la semana» (15-20 s, voz). 19:00 La Paz.
+  Lo caro se paga una vez (la prueba); el carrusel y el error salen de ella a 0 créditos. Rotación de 4 semanas: imagen, video, medir, otras herramientas.
+- **Cupo de voz = caracteres, no créditos.** Caso G1 v2 (la armó la madre): 381 caracteres para 20 s, o sea ≈ 19 caracteres por segundo hablado. Antes de escribir un guion con voz se cuenta:
+  25 s ≈ 475 caracteres, 18 s ≈ 340. El cupo hasta el 13-oct era 381.
+- **Edición con voz (receta Erik de `edicion-referentes`, más estricta):** pausa máxima 0,25 s entre frases; no se acelera la voz, se aprietan las pausas; 3,2-4,1 palabras por segundo; −14 LUFS; sin cama;
+  título de 3-7 palabras con la promesa en el cuadro 0; CTA en los últimos 2,4-5,5 s. Las piezas mudas de 56-59 s (G2 a G5) no se doblan: se re-cortan a ≤ 30 s y se vuelven a renderizar.
+- **Luz y movimiento se miden a 0 créditos con clips ya pagados:** `scripts/luz_movimiento.py clip.mp4…` (ffmpeg `signalstats`). Primera medición, 11-oct, en los 6 clips de G2
+  (`v4/prueba-motores-20261008/medicion-luz-movimiento-20261011.txt`): el clip atado a la foto mantiene la luz (Kling std: luma −1,0; pro: −0,4) y pierde la cara; Seedance mini con 3 referencias sostiene la cara (0,71 → 0,80)
+  pero oscurece (luma −33,7) y tiene el mayor cambio de color (V +8,4). **Límite:** son promedios del cuadro entero; mezclan la luz con lo que entra al plano cuando el motor reencuadra. No es luz aislada.
+- **Dilema cara o escena, ahora con dos números:** lo que mantiene la escena pierde la cara y lo que mantiene la cara cambia la escena. Es el hilo de la pieza 9 de `PLAN.md` §5.
+
