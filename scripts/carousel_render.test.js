@@ -118,6 +118,26 @@ test('referentes cierre: «Buscá» por defecto; `pre` y `kicker` cambian el ver
   const nuevo = referentesHtml({ layout: 'cierre', pre: 'Buscá', kicker: 'La IA también necesita *límites*.', keyword: 'ARCHIVOS', body: 'en Avisos · link en mi perfil' }, 0, 1, 'sergio', {});
   assert.ok(nuevo.includes('<p class="pre">Buscá</p>') && nuevo.includes('class="kick"') && !nuevo.includes('Comentá'));
 });
+test('referentes ensayo: grande y fit ancho son opt-in; sin ellos el marcado no cambia (P2, 11-oct)', () => {
+  const base = referentesHtml({ layout: 'ensayo', headline: 'Hola', body: 'Texto.' }, 1, 3, 'sergio', {});
+  assert.ok(base.includes('class="c-ensayo"') && !base.includes('c-ensayo grande'), 'sin grande, la clase no cambia');
+  assert.ok(!base.includes('getComputedStyle(h)'), 'sin fit no hay script de ajuste');
+  const grande = referentesHtml({ layout: 'ensayo', grande: true, headline: 'Hola', body: 'Texto.' }, 1, 3, 'sergio', {});
+  assert.ok(grande.includes('class="c-ensayo grande"'));
+  const ancho = referentesHtml({ layout: 'ensayo', fit: 'ancho', headline: '*HERRAMIENTAS*' }, 9, 10, 'sergio', {});
+  assert.ok(ancho.includes('clientWidth-2*84') && ancho.includes('f+=4'), 'el título crece hasta el margen de 84 px');
+  assert.ok(!referentesHtml({ layout: 'ensayo', fit: 'ancho' }, 9, 10, 'sergio', {}).includes('getComputedStyle(h)'), 'sin título no hay nada que medir');
+});
+test('referentes captura: logo opcional delante del título, sin él igual que antes (P2, 11-oct)', () => {
+  const fs = require('fs');
+  const path = require('path');
+  const dir = path.join(__dirname, '..', 'hermes-content/references/brand-claude');
+  const logo = 'hermes-content/references/brand-claude/' + fs.readdirSync(dir).find((f) => /\.(png|svg)$/.test(f));
+  const con = referentesHtml({ layout: 'captura', headline: 'Claude Code', logo }, 1, 3, 'sergio', {});
+  assert.ok(/<h2 class="t"><img class="title-logo"/.test(con), 'el logo va dentro del título, antes del texto');
+  const sin = referentesHtml({ layout: 'captura', headline: 'Claude Code' }, 1, 3, 'sergio', {});
+  assert.ok(sin.includes('<h2 class="t">Claude Code</h2>') && !/<img class="title-logo"/.test(sin));
+});
 test('referentes inventario: 5, 3 y 2 filas en la MISMA grilla; sin tarjetas ni título; números continuos (10-oct)', () => {
   const fila = (n) => ({ label: `Nombre ${n}`, text: `Línea ${n}.` });
   const topes = (html) => [...html.matchAll(/class="inv-row" style="top:([\d.]+)%"/g)].map((m) => Number(m[1]));

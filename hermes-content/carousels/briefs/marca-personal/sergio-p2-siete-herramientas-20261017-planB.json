@@ -1,138 +1,142 @@
 {
- "title": "7 herramientas. 4 son gratis. (P2, plan B de la lámina 6)",
- "caption": "Buscá HERRAMIENTAS en Avisos de la comunidad. Link en mi perfil.\n\nAsí lo uso en mi empresa:\n• Claude Code: plan pago de Claude\n• Codex: tiene nivel gratis con límites; yo uso el plan Pro de ChatGPT (100 USD por mes)\n• Higgsfield: de pago\n• HyperFrames: gratis (Apache-2.0)\n• Buffer: plan gratis, 3 canales y 10 posts agendados por canal\n• n8n: edición Community autoalojada, sin licencia paga\n• faster-whisper: gratis (MIT)\n\nEl servidor lo pago aparte: es el mismo donde corre mi producto.\n\nFuentes, leídas el 8 de octubre de 2026: code.claude.com/docs/en/overview · learn.chatgpt.com/docs/pricing · github.com/heygen-com/hyperframes · buffer.com/pricing · docs.n8n.io/hosting · github.com/SYSTRAN/faster-whisper",
- "hashtags": [
-  "#claudecode",
-  "#codex",
-  "#ia",
-  "#programacion",
-  "#bolivia"
- ],
- "serie": "Herramientas",
- "image_style": "captura",
- "fuentes": {
-  "verificacion": "8-oct-2026; re-verificar el 17-oct (ver README de la carpeta de salida)",
-  "spec": "hermes-content/docs/cola/plan-3-semanas/GRABAR-10-16-OCT.md §P2",
-  "aviso": "hermes-content/docs/cola/plan-3-semanas/AVISOS-COMUNIDAD-8-16-OCT.md §HERRAMIENTAS",
-  "lamina_4_cuadro": "Cuadro de intro.html a 1920x1080 (el tamaño de su CSS) en t=1,2 s, vía window.__timelines.intro; ver hacer-capturas.py"
- },
- "slides": [
-  {
-   "number": 1,
-   "layout": "logos",
-   "theme": "verde",
-   "headline": "7 herramientas.\n4 son gratis.",
-   "logos": [
+  "title": "7 herramientas. 4 son gratis. (P2, plan B de la lámina 6)",
+  "caption": "Buscá HERRAMIENTAS en Avisos de la comunidad. Link en mi perfil.\n\nAsí lo uso en mi empresa:\n• Claude Code: plan pago de Claude\n• Codex: tiene nivel gratis con límites; yo uso el plan Pro de ChatGPT (100 USD por mes)\n• Higgsfield: de pago\n• HyperFrames: gratis (Apache-2.0)\n• Buffer: plan gratis, 3 canales y 10 posts agendados por canal\n• n8n: edición Community autoalojada, sin licencia paga\n• faster-whisper: gratis (MIT)\n\nEl servidor lo pago aparte: es el mismo donde corre mi producto.\n\nFuentes, leídas el 8 de octubre de 2026: code.claude.com/docs/en/overview · learn.chatgpt.com/docs/pricing · github.com/heygen-com/hyperframes · buffer.com/pricing · docs.n8n.io/hosting · github.com/SYSTRAN/faster-whisper",
+  "hashtags": [
+    "#claudecode",
+    "#codex",
+    "#ia",
+    "#programacion",
+    "#bolivia"
+  ],
+  "serie": "Herramientas",
+  "image_style": "captura",
+  "fuentes": {
+    "verificacion": "8-oct-2026; re-verificar el 17-oct (ver README de la carpeta de salida)",
+    "spec": "hermes-content/docs/cola/plan-3-semanas/GRABAR-10-16-OCT.md §P2",
+    "aviso": "hermes-content/docs/cola/plan-3-semanas/AVISOS-COMUNIDAD-8-16-OCT.md §HERRAMIENTAS",
+    "lamina_4_cuadro": "Cuadro de intro.html a 1920x1080 (el tamaño de su CSS) en t=1,2 s, vía window.__timelines.intro; ver hacer-capturas.py"
+  },
+  "slides": [
     {
-     "label": "Claude Code · pago"
+      "number": 1,
+      "layout": "logos",
+      "theme": "verde",
+      "headline": "7 herramientas.\n4 son gratis.",
+      "logos": [
+        {
+          "label": "Claude Code · pago"
+        },
+        {
+          "label": "Codex · pago"
+        },
+        {
+          "label": "Higgsfield · pago"
+        },
+        {
+          "label": "HyperFrames"
+        },
+        {
+          "label": "Buffer"
+        },
+        {
+          "label": "n8n"
+        },
+        {
+          "label": "faster-whisper"
+        }
+      ],
+      "body": "3 cocinan. 4 son ollas.",
+      "next": "Deslizá",
+      "alt_text": "Portada: «7 herramientas. 4 son gratis.» y los nombres de las 7: Claude Code, Codex y Higgsfield (pago); HyperFrames, Buffer, n8n y faster-whisper."
     },
     {
-     "label": "Codex · pago"
+      "number": 2,
+      "layout": "captura",
+      "theme": "blanco",
+      "headline": "Claude Code *reparte el trabajo*",
+      "image": "hermes-content/carousels/briefs/assets/p2-herramientas/PENDIENTE-02-sesiones.png",
+      "body": "Un Claude jefe le pasa tareas a otros 5.",
+      "next": "",
+      "alt_text": "Lista de las sesiones de Claude Code por nombre de carril.",
+      "logo": "hermes-content/references/brand-claude/claude--light.png"
     },
     {
-     "label": "Higgsfield · pago"
+      "number": 3,
+      "layout": "captura",
+      "theme": "blanco",
+      "headline": "Codex: *hace los encargos*",
+      "image": "hermes-content/carousels/briefs/assets/p2-herramientas/PENDIENTE-03-codex-tarea.png",
+      "body": "Claude le dice qué hacer, cómo probarlo y cuándo parar. Plan Pro de ChatGPT: 100 USD/mes. · chatgpt.com/pricing",
+      "next": "",
+      "alt_text": "Terminal con una tarea de codex-tarea.sh y sus 3 líneas: META, PRUEBA DE HECHO y REGLA DE PARADA.",
+      "logo": "hermes-content/references/brand-logos/openai.svg"
     },
     {
-     "label": "HyperFrames"
+      "number": 4,
+      "layout": "captura",
+      "theme": "blanco",
+      "headline": "¿Videos con código? *HyperFrames*",
+      "image": "hermes-content/carousels/briefs/assets/p2-herramientas/04-hyperframes-intro-20261011.png",
+      "body": "Describo el video y sale de un archivo HTML. Gratis.",
+      "next": "",
+      "alt_text": "A la izquierda, líneas reales del archivo intro.html; a la derecha, un cuadro de esa composición con el título HYPERFRAMES."
     },
     {
-     "label": "Buffer"
+      "number": 5,
+      "layout": "captura",
+      "theme": "blanco",
+      "headline": "Buffer: *publica por mí*",
+      "image": "hermes-content/carousels/briefs/assets/p2-herramientas/PENDIENTE-05-buffer-cola.png",
+      "body": "Un comando lo sube a TikTok, LinkedIn y YouTube Shorts. Plan gratis. · buffer.com/pricing",
+      "next": "",
+      "alt_text": "Cola de Buffer con los 3 canales y posts agendados."
     },
     {
-     "label": "n8n"
+      "number": 6,
+      "layout": "captura",
+      "theme": "blanco",
+      "headline": "n8n: *corre en mi servidor*",
+      "image": "hermes-content/carousels/briefs/assets/p2-herramientas/PENDIENTE-06B-n8n-inicio.png",
+      "body": "Mis automatizaciones, sin pagar licencia.",
+      "next": "",
+      "alt_text": "Pantalla de inicio de n8n sin nombres de workflows."
     },
     {
-     "label": "faster-whisper"
+      "number": 7,
+      "layout": "captura",
+      "theme": "blanco",
+      "headline": "faster-whisper *transcribe mis videos*",
+      "image": "hermes-content/carousels/briefs/assets/p2-herramientas/07-whisper-palabras-20261011.png",
+      "body": "Cada palabra con su segundo: así se cortan los silencios. Gratis.",
+      "next": "",
+      "alt_text": "Dos columnas de palabras con el segundo en que empieza cada una, salida real de faster-whisper."
+    },
+    {
+      "number": 8,
+      "layout": "captura",
+      "theme": "blanco",
+      "headline": "Higgsfield: *cocina mis fotos*",
+      "image": "hermes-content/carousels/briefs/assets/p2-herramientas/08-foto-fotobn-lote-s32-20261008.jpg",
+      "body": "Blanco y negro, un solo objeto verde. Plan anual. · mi cuenta",
+      "next": "",
+      "alt_text": "Foto en blanco y negro de dos bandejas: una llena de sobres grises y otra con un solo sobre verde."
+    },
+    {
+      "number": 9,
+      "layout": "ensayo",
+      "theme": "blanco",
+      "headline": "Regla *del cocinero*",
+      "body": "Pagale sueldo al que cocina.\n\nLas ollas, buscalas gratis.",
+      "next": "",
+      "grande": true
+    },
+    {
+      "number": 10,
+      "layout": "ensayo",
+      "theme": "negro",
+      "headline": "*HERRAMIENTAS▌*",
+      "cta": "Buscá HERRAMIENTAS en Avisos de la comunidad. Link en mi perfil.",
+      "fit": "ancho"
     }
-   ],
-   "body": "3 cocinan. 4 son ollas.",
-   "next": "Deslizá",
-   "alt_text": "Portada: «7 herramientas. 4 son gratis.» y los nombres de las 7: Claude Code, Codex y Higgsfield (pago); HyperFrames, Buffer, n8n y faster-whisper."
-  },
-  {
-   "number": 2,
-   "layout": "captura",
-   "theme": "blanco",
-   "headline": "Claude Code *reparte el trabajo*",
-   "image": "hermes-content/carousels/briefs/assets/p2-herramientas/PENDIENTE-02-sesiones.png",
-   "body": "Un Claude jefe le pasa tareas a otros 5.",
-   "next": "",
-   "alt_text": "Lista de las sesiones de Claude Code por nombre de carril."
-  },
-  {
-   "number": 3,
-   "layout": "captura",
-   "theme": "blanco",
-   "headline": "Codex: *hace los encargos*",
-   "image": "hermes-content/carousels/briefs/assets/p2-herramientas/PENDIENTE-03-codex-tarea.png",
-   "body": "Claude le dice qué hacer, cómo probarlo y cuándo parar. Plan Pro de ChatGPT: 100 USD/mes. · chatgpt.com/pricing",
-   "next": "",
-   "alt_text": "Terminal con una tarea de codex-tarea.sh y sus 3 líneas: META, PRUEBA DE HECHO y REGLA DE PARADA."
-  },
-  {
-   "number": 4,
-   "layout": "captura",
-   "theme": "blanco",
-   "headline": "¿Videos con código? *HyperFrames*",
-   "image": "hermes-content/carousels/briefs/assets/p2-herramientas/04-hyperframes-intro-20261011.png",
-   "body": "Describo el video y sale de un archivo HTML. Gratis.",
-   "next": "",
-   "alt_text": "A la izquierda, líneas reales del archivo intro.html; a la derecha, un cuadro de esa composición con el título HYPERFRAMES."
-  },
-  {
-   "number": 5,
-   "layout": "captura",
-   "theme": "blanco",
-   "headline": "Buffer: *publica por mí*",
-   "image": "hermes-content/carousels/briefs/assets/p2-herramientas/PENDIENTE-05-buffer-cola.png",
-   "body": "Un comando lo sube a TikTok, LinkedIn y YouTube Shorts. Plan gratis. · buffer.com/pricing",
-   "next": "",
-   "alt_text": "Cola de Buffer con los 3 canales y posts agendados."
-  },
-  {
-   "number": 6,
-   "layout": "captura",
-   "theme": "blanco",
-   "headline": "n8n: *corre en mi servidor*",
-   "image": "hermes-content/carousels/briefs/assets/p2-herramientas/PENDIENTE-06B-n8n-inicio.png",
-   "body": "Mis automatizaciones, sin pagar licencia.",
-   "next": "",
-   "alt_text": "Pantalla de inicio de n8n sin nombres de workflows."
-  },
-  {
-   "number": 7,
-   "layout": "captura",
-   "theme": "blanco",
-   "headline": "faster-whisper *transcribe mis videos*",
-   "image": "hermes-content/carousels/briefs/assets/p2-herramientas/07-whisper-palabras-20261011.png",
-   "body": "Cada palabra con su segundo: así se cortan los silencios. Gratis.",
-   "next": "",
-   "alt_text": "Dos columnas de palabras con el segundo en que empieza cada una, salida real de faster-whisper."
-  },
-  {
-   "number": 8,
-   "layout": "captura",
-   "theme": "blanco",
-   "headline": "Higgsfield: *cocina mis fotos*",
-   "image": "hermes-content/carousels/briefs/assets/p2-herramientas/08-foto-fotobn-lote-s32-20261008.jpg",
-   "body": "Blanco y negro, un solo objeto verde. Plan anual. · mi cuenta",
-   "next": "",
-   "alt_text": "Foto en blanco y negro de dos bandejas: una llena de sobres grises y otra con un solo sobre verde."
-  },
-  {
-   "number": 9,
-   "layout": "ensayo",
-   "theme": "blanco",
-   "headline": "Regla *del cocinero*",
-   "body": "Pagale sueldo al que cocina.\n\nLas ollas, buscalas gratis.",
-   "next": ""
-  },
-  {
-   "number": 10,
-   "layout": "ensayo",
-   "theme": "negro",
-   "headline": "*HERRAMIENTAS▌*",
-   "cta": "Buscá HERRAMIENTAS en Avisos de la comunidad. Link en mi perfil."
-  }
- ]
+  ]
 }

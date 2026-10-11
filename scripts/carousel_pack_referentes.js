@@ -66,8 +66,23 @@ function crear({ esc, emph, ACCOUNTS, BRAND, getFmt }) {
     return `<div class="c-analogia">${blocks.map((b) => `<section><h2>${emph(b.text || '')}</h2>${img(b.image, 'obj')}</section>`).join('')}${s.body ? `<p class="caption">${emph(s.body)}</p>` : ''}</div>`;
   }
 
+  // `ensayo` fija el título en 104 px: una lámina de dos frases queda con ~75 % de aire (P2 láminas 9 y 10, 11-oct).
+  // Dos perillas opcionales, que sin ellas no cambian nada (el marcado de los briefs viejos es el mismo):
+  //   grande: true   título a 150 px y cuerpo a 74 px (frase corta que ES la lámina)
+  //   fit: 'ancho'   el navegador MIDE el título con la fuente cargada y lo agranda de a 4 px hasta el margen de la lámina
+  //                  (84 px por lado, el mismo de `cierreHtml`); pensado para UNA palabra (la del CTA), en una línea.
+  //                  Se mide el ancho del TEXTO (`width:max-content`): el h2 es un ítem flex que se estira al ancho de la
+  //                  lámina, y medir ese ancho daba siempre 912 px (el margen) sin agrandar nada (11-oct)
   function ensayoHtml(s) {
-    return `<div class="c-ensayo">${s.headline ? `<h2>${emph(s.headline)}</h2>` : ''}${paras(s.body)}</div>`;
+    const ancho = s.fit === 'ancho' && s.headline;
+    const fit = ancho
+      ? `<script>document.fonts.ready.then(function(){var h=document.querySelector('.c-ensayo h2');if(!h)return;`
+        + `var max=document.documentElement.clientWidth-2*84,f=parseFloat(getComputedStyle(h).fontSize);`
+        + `h.style.whiteSpace='nowrap';h.style.width='max-content';h.style.alignSelf='flex-start';`
+        + `while(h.getBoundingClientRect().width<max&&f<340){f+=4;h.style.fontSize=f+'px';}`
+        + `while(h.getBoundingClientRect().width>max&&f>60){f-=1;h.style.fontSize=f+'px';}});</script>`
+      : '';
+    return `<div class="c-ensayo${s.grande ? ' grande' : ''}">${s.headline ? `<h2>${emph(s.headline)}</h2>` : ''}${paras(s.body)}</div>${fit}`;
   }
 
   function ilustradoHtml(s) {
@@ -121,8 +136,10 @@ function crear({ esc, emph, ACCOUNTS, BRAND, getFmt }) {
   }
 
   // Carlos Domínguez: la prueba es la pantalla real (captura, comando, prompt), no un dibujo.
+  // `logo` (opcional, como en `ilustrado`): la marca oficial va delante del título, a .8em de alto (P2 láminas 2 y 3).
   function capturaHtml(s) {
-    return `<div class="c-captura">${s.headline ? `<h2 class="t">${emph(s.headline)}</h2>` : ''}<figure class="shot">${img(s.image, 'shot-img')}</figure>${s.body ? `<p class="caption">${emph(s.body)}</p>` : ''}</div>`;
+    const logo = s.logo ? img(s.logo, 'title-logo') : '';
+    return `<div class="c-captura">${s.headline ? `<h2 class="t">${logo}${emph(s.headline)}</h2>` : ''}<figure class="shot">${img(s.image, 'shot-img')}</figure>${s.body ? `<p class="caption">${emph(s.body)}</p>` : ''}</div>`;
   }
 
   // Los 8 referentes cierran igual: una palabra para comentar y qué recibís.
@@ -226,6 +243,9 @@ body{margin:0;font-family:'DM Sans',system-ui,sans-serif}
 .c-ensayo{display:flex;flex-direction:column;gap:36px;max-width:920px}
 .c-ensayo h2{font-family:'Bricolage',sans-serif;font-weight:800;font-size:104px;line-height:1;letter-spacing:-3px;margin-bottom:6px}
 .c-ensayo p{font-weight:600;font-size:56px;line-height:1.18;letter-spacing:-.5px}
+.c-ensayo.grande{gap:48px;max-width:960px}
+.c-ensayo.grande h2{font-size:150px;line-height:.98;letter-spacing:-4px}
+.c-ensayo.grande p{font-size:74px}
 /* ilustrado */
 .c-ilustrado{flex:1;display:flex;flex-direction:column;min-height:0}
 .c-ilustrado .t{display:flex;flex-wrap:wrap;align-items:center;column-gap:.25em}

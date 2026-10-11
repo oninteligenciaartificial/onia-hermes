@@ -1,0 +1,14 @@
+Buscá HERRAMIENTAS en Avisos de la comunidad. Link en mi perfil.
+
+Así lo uso en mi empresa:
+• Claude Code: plan pago de Claude
+• Codex: tiene nivel gratis con límites; yo uso el plan Pro de ChatGPT (100 USD por mes)
+• Higgsfield: de pago
+• HyperFrames: gratis (Apache-2.0)
+• Buffer: plan gratis, 3 canales y 10 posts agendados por canal
+• n8n: edición Community autoalojada, sin licencia paga
+• faster-whisper: gratis (MIT)
+
+El servidor lo pago aparte: es el mismo donde corre mi producto.
+
+Fuentes, leídas el 8 de octubre de 2026: code.claude.com/docs/en/overview · learn.chatgpt.com/docs/pricing · github.com/heygen-com/hyperframes · buffer.com/pricing · docs.n8n.io/hosting · github.com/SYSTRAN/faster-whisper
