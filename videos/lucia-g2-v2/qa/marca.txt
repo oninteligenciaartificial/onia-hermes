@@ -1,6 +1,6 @@
   ok  rótulo «Lucía Antelo · personaje IA de Onia» a 40 px: legible del cuadro 0 al 70 (2.958 s) y fuera desde los 3,0 s
   ok  título «¿Quién pierde la cara?» (4 palabras) legible en el cuadro 0
-  ok  pastilla «parecido final: 0,64 a 0,82» legible de 0.958 a 3.625 s (el resultado en pantalla antes de los 3 s)
+  ok  pastilla «parecido final: 0,64 a 0,82» legible de 0.583 a 3.625 s (el resultado en pantalla antes de los 3 s)
   ok  las 6 miniaturas están a la vista desde 1.500 s (antes de los 3 s)
   ok  CTA exacto «Seguime: cada semana, una prueba.» legible desde 24.917 s hasta el último cuadro: 2.875 s (2,4-5,5 s)
   ok  las herramientas se nombran Kling 3.0 std, Seedance 2.0 Mini y Kling O3 (ningún «Motor N»)
