@@ -1,0 +1,75 @@
+{
+  "capturas": [
+    {
+      "id": "precios-tabla",
+      "url": "https://platform.claude.com/docs/en/about-claude/pricing",
+      "ancla": "Model pricing",
+      "margen": 14,
+      "ancho_css": 760,
+      "alto_css": 612,
+      "esquema": "dark",
+      "celdas": {
+        "fable-fila": {
+          "fila": "Claude Fable 5.1",
+          "col": 0,
+          "prefijo": true
+        },
+        "fable-entrada": {
+          "fila": "Claude Fable 5.1",
+          "col": 1,
+          "prefijo": true
+        },
+        "fable-salida": {
+          "fila": "Claude Fable 5.1",
+          "col": 2,
+          "prefijo": true
+        },
+        "opus-fila": {
+          "fila": "Claude Opus 5.5",
+          "col": 0,
+          "prefijo": true
+        },
+        "opus-entrada": {
+          "fila": "Claude Opus 5.5",
+          "col": 1,
+          "prefijo": true
+        },
+        "opus-salida": {
+          "fila": "Claude Opus 5.5",
+          "col": 2,
+          "prefijo": true
+        },
+        "sonnet-fila": {
+          "fila": "Claude Sonnet 5.5",
+          "col": 0,
+          "prefijo": true
+        },
+        "sonnet-entrada": {
+          "fila": "Claude Sonnet 5.5",
+          "col": 1,
+          "prefijo": true
+        },
+        "sonnet-salida": {
+          "fila": "Claude Sonnet 5.5",
+          "col": 2,
+          "prefijo": true
+        },
+        "haiku-fila": {
+          "fila": "Claude Haiku 5.5",
+          "col": 0,
+          "prefijo": true
+        },
+        "haiku-entrada": {
+          "fila": "Claude Haiku 5.5",
+          "col": 1,
+          "prefijo": true
+        },
+        "haiku-salida": {
+          "fila": "Claude Haiku 5.5",
+          "col": 2,
+          "prefijo": true
+        }
+      }
+    }
+  ]
+}

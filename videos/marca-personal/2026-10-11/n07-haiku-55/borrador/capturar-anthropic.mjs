@@ -10,7 +10,7 @@
 //
 // Uso:  node capturar-anthropic.mjs <storyboard.json> <carpeta-assets> [--forzar]
 // Lee del storyboard "capturas" (igual que capturar.mjs) y suma:
-//   "celdas": { "<nombre>": { "fila": "gpt-6.1-sol", "col": 1 } }   // rectángulo del texto de una celda de tabla (fila visible
+//   "celdas": { "<nombre>": { "fila": "gpt-6.1-sol", "col": 1, "prefijo": false } }  // prefijo:true = el 1.er <td> solo tiene que EMPEZAR por `fila` (P1, 11-oct)   // rectángulo del texto de una celda de tabla (fila visible
 //                                                                       cuyo 1.er <td> dice `fila`; col 0 = la fila misma)
 //   "logos_svg": [ { "id", "svg", "alto", "tile": true } ]           // tile: logo oscuro sobre cuadrado blanco redondeado
 //                                                                       (brand-logos/README: el logo va en su tile blanco)
@@ -80,11 +80,12 @@ const buscar = (page, frase, desdeY = -1) =>
   }, [frase, desdeY]);
 
 // rectángulo del texto de la celda `col` de la primera fila VISIBLE cuyo primer <td> dice `fila`
-const celda = (page, fila, col) =>
-  page.evaluate(([fila, col]) => {
+const celda = (page, fila, col, prefijo = false) =>
+  page.evaluate(([fila, col, prefijo]) => {
     for (const tr of document.querySelectorAll("tr")) {
       const tds = [...tr.children];
-      if (!tds.length || tds[0].textContent.trim() !== fila) continue;
+      // `prefijo`: el 1.er <td> trae también una descripción («Claude Fable 5.1 For demanding reasoning…»): alcanza con que EMPIECE por `fila`
+      if (!tds.length || (prefijo ? !tds[0].textContent.trim().startsWith(fila) : tds[0].textContent.trim() !== fila)) continue;
       const r0 = tds[0].getBoundingClientRect();
       if (r0.width < 1 || r0.height < 1) continue; // fila de otra pestaña (Batch, Flex…), oculta
       const td = tds[col];
@@ -103,7 +104,7 @@ const celda = (page, fila, col) =>
       return [x0, y0 + window.scrollY, x1 - x0, y1 - y0];
     }
     return null;
-  }, [fila, col]);
+  }, [fila, col, prefijo]);
 
 for (const c of sb.capturas || []) {
   const png = join(outDir, `${c.id}.png`);
@@ -152,7 +153,7 @@ for (const c of sb.capturas || []) {
     frases[f] = [x * 2, (y - y0) * 2, w * 2, h * 2].map((v) => Math.round(v));
   }
   for (const [nombre, d] of Object.entries(c.celdas || {})) {
-    const rf = await celda(page, d.fila, d.col);
+    const rf = await celda(page, d.fila, d.col, !!d.prefijo);
     if (!rf) { console.error(`capturar-anthropic: celda «${nombre}» (${d.fila}, col ${d.col}) no aparece en ${c.id}`); process.exit(5); }
     const [x, y, w, h] = rf;
     if (y < y0 || y + h > y0 + alto) { console.error(`capturar-anthropic: celda «${nombre}» fuera del recorte de ${c.id}`); process.exit(5); }
