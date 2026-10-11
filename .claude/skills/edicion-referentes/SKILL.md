@@ -428,6 +428,21 @@ antes de que lleguen a Sergio Urcullo.
   escenas de panel en el corte bajaron los «a la vista» de 13 a 10. (7) Doc nueva (11-oct): en Claude Code NO se puede apagar el pensamiento en Haiku 5.5 (en la API sí, con
   effort ≤ high), pide Claude Code ≥ 2.1.293, y Haiku 4.5 es «legacy» (retiro no antes del 15-oct-2026): el video dice «apagalo» y 15 s después manda a probarlo en la terminal,
   donde no se puede: lo decide Sergio Urcullo.
+- **Borrador de N02 (11-oct), Santiago sobre el corte propuesto: `videos/marca-personal/2026-10-11/n02-sonnet-45/borrador/rehacer.sh` (`BRUTO`, `S`, `CUTPLAN`, `RECAPTURAR=1`).**
+  Medido por mí sobre el render de 111,3 s: `silencedetect -35 dB d=0.3` → 0 silencios (a d=0,2 salen 18 = empalmes y pausas de 0,2-0,3 s), −13,2 LUFS, LRA 2,0 (receta
+  2,3-3,4: corto), TP −1,3; 11 cambios de layout (0,99 por 10 s), 6,1 elementos nuevos por 10 s, 0 s sin cara; salto de cara en 37 empalmes dentro de escena ≤ 16 px; render de
+  256-305 s y primer análisis del bruto de 156 s en 113 s. No cumple la receta en cola (0,17 s) y le falta remate y despedida (hace falta una toma nueva). Verificado contra
+  `platform.claude.com` el 11-oct: retiro 30-nov, aviso del 30-sep, reemplazo `claude-sonnet-5-5`, de US$3 a US$2, +30 % de tokens, los 5 ajustes con error 400 (los tres que
+  nombra están entre ellos) y `/claude-api migrate`; la cuenta del 13 % cuadra (2 × 1,3 = 2,6 contra 3 = −13,3 %) y no incluye el pensamiento, que se cobra como salida (él lo
+  avisa con «puede»). Sin respaldo en página: n8n y su infraestructura (no se verifica desde la nube); y la página dice que Export baja un CSV, él dice «una pantalla».
+  Lo nuevo: (1) para capturar una celda de tabla usá la FILA como `ancla` y buscá «$3 / MTok» desde ahí; (2) **una marca sobre una frase que cruza dos renglones dibuja el
+  bloque de los dos**: marcá tramos de un renglón; bajar `ancho_css` a 460 agranda el texto ×1,27 pero hay que revisar las marcas; (3) Whisper parte «4»+«.5,» y «30»+«%»:
+  hay que pegarlos antes de aplicar arreglos; (4) un `credito` sin `en` sale ANTES que su captura; (5) `desde:{t}` no se pega a ningún corte; (6) la sintaxis `frase#2` solo
+  anda en la forma de texto, en diccionario es `"n": 2` (leído en el código, no probado fallando); (7) `medir-saltos.py` mide el salto de cara sobre el render (YuNet);
+  (8) **no apliques un arreglo `[?]` que inserta palabras sin oír**: en 1,3 s de voz continua con 7 núcleos silábicos, dos pasadas de Whisper coincidían en «Para que se vea el
+  resultado uno», y el `[?] Uno` propuesto no cabía; (9) un tramo de 2,4 s sin transcripción puede ser un arranque en falso del cierre (la 2.ª pasada oyó «La lista» y el bruto
+  tiene un salto de toma a los 144,4 s): se recomienda cortarlo y queda sin subtítulo hasta que alguien lo oiga; (10) «Quedan 46 días» solo vale el jueves 15-oct (hoy, 11-oct,
+  quedan 50): va solo en subtítulos, sin tarjeta con número.
 - **El bruto puede venir ya editado** (el de N03 traía 5 tomas pegadas). Los saltos se detectan con picos aislados de
   diferencia entre cuadros (>5× la mediana y >2,5× sus vecinos) y se tratan como cortes. Si no, el control dice
   «ningún corte a la vista» y es falso.
