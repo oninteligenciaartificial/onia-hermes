@@ -1,0 +1,51 @@
+  audio: I=-14.1 LUFS  LRA=2.1 LU  pico=-2.4 dBTP  fin=74.17s  huecos rellenos con room tone: 0 (0.00 s)
+  pausas: el nivel más bajo dentro de una pausa de ≥0,2 s es -48.9 dBFS (piso -40)
+tiempo de palabras: transcript+rms · umbrales {'piso': -55.5, 'voz': -27.0, 'umbral': -35.0, 'umbral_alta': -13.5}
+recorte: quita 16.57 s en 1 tramos (tabla en /tmp/claude-0/-home-user-onia-hermes/0fd2553b-524b-53fe-9e97-5c1ac80566e6/scratchpad/D07/borrador/work-erik-sin-repetido/tabla-cortes.md)
+duración: 74.17 s · cortes que se ven: 38 (5.1 cada 10 s; 5 jump cuts de ritmo; meta 4-4,5)
+  plano de cámara más largo: 3.28 s; de más de 3.3 s: ninguno
+  planos-flash de cámara (< 0,8 s): [(21.6, 0.39), (24.39, 0.54), (48.11, 0.8), (57.6, 0.25)]
+     0-10 s: 5 cortes
+    10-20 s: 6 cortes
+    20-30 s: 7 cortes
+    30-40 s: 4 cortes
+    40-50 s: 5 cortes
+    50-60 s: 5 cortes
+    60-70 s: 4 cortes
+    70-80 s: 2 cortes
+  silencio real más largo (RMS): 0.29 s · hueco más largo entre palabras: 0.54 s después de «ejemplo,»
+  tarjeta «TU CHATBOT / WHATSAPP» 3.72-10.90s (7.2 s) y=150-476 (frente desde y=860)
+  tarjeta «CÓMO FUNCIONA / VENTANA ABIERTA» 14.50-19.69s (5.2 s) y=150-476 (frente desde y=834)
+  tarjeta «LO QUE LE ENSEÑASTE / TU CLÍNICA» 25.73-30.42s (4.7 s) y=150-476 (frente desde y=831)
+  tarjeta «EJEMPLO / PLANTILLA» 41.28-45.72s (4.4 s) y=150-476 (frente desde y=831)
+  tarjeta «DESPUÉS DE LAS 24 HORAS / PLANTILLAS» 66.07-69.67s (3.6 s) y=150-476 (frente desde y=847)
+  subtítulos T: glifos entre y 1350 y 1501 (78.2 %, tope 80 %)
+  anclas (palabra → inicio real · Whisper · pieza):
+    «llama»: 1.26 (?) · whisper 1.26 · entra 1.26 (+0.000)
+    «tenés»: 3.58 (?) · whisper 3.58 · entra 3.58 (+0.000)
+    «ventana»: 1.84 (transcript+rms) · whisper 1.92 · entra 1.91 (+0.067)
+    «plantillas de meta»: 37.99 (?) · whisper 37.99 · entra 37.99 (+0.000)
+    «solo puede ser»: 36.05 (transcript+rms) · whisper 36.08 · entra 36.12 (+0.067)
+    «verificadas»: 38.93 (?) · whisper 38.93 · entra 39.00 (+0.067)
+    «chatbot»: 3.98 (?) · whisper 3.98 · entra 4.05 (+0.067)
+    «24 horas de iniciar»: 7.53 (?) · whisper 7.53 · entra 7.60 (+0.067)
+    «cliente»: 14.76 (transcript+rms) · whisper 14.85 · entra 14.83 (+0.067)
+    «responde»: 17.14 (?) · whisper 17.14 · entra 17.21 (+0.067)
+    «tenemos estos horarios»: 25.99 (transcript+rms) · whisper 25.75 · entra 26.06 (+0.067)
+    «tenemos estos doctores»: 27.32 (?) · whisper 27.32 · entra 27.39 (+0.067)
+    «tenemos estos tratamientos»: 28.54 (?) · whisper 28.54 · entra 28.61 (+0.067)
+    «plantilla»: 41.54 (?) · whisper 41.54 · entra 41.61 (+0.067)
+    «todos los horarios que tengan»: 44.12 (?) · whisper 44.12 · entra 44.19 (+0.067)
+    «seguimiento»: 66.34 (?) · whisper 66.34 · entra 66.40 (+0.067)
+    «remarketing»: 67.54 (?) · whisper 67.54 · entra 67.60 (+0.067)
+    «inteligencia artificial»: 69.67 (transcript+rms) · whisper 69.65 · entra 69.67 (+0.000)
+    «mediante»: 11.61 (?) · whisper 11.61 · entra 11.68 (+0.067)
+    «24 horas que pasaron»: 31.20 (transcript+rms) · whisper 31.12 · entra 31.27 (+0.067)
+    «ya no puede»: 33.80 (?) · whisper 33.80 · entra 33.80 (+0.000)
+    «cerrar la venta»: 60.45 (transcript+rms) · whisper 60.41 · entra 60.52 (+0.067)
+    «y que después»: 62.99 (?) · whisper 62.99 · entra 62.99 (+0.000)
+    «seguime»: 70.61 (?) · whisper 70.61 · entra 70.61 (+0.000)
+    «link»: 73.15 (?) · whisper 73.15 · entra 73.21 (+0.067)
+  cortes del cutplan aprobado sin cambio de apoyo en ese cuadro: [4.59, 10.9, 21.6, 21.99, 24.39, 25.87, 29.34, 30.42, 39.82, 40.58, 42.56, 48.11, 50.97, 60.08, 64.98, 68.26]
+listo: /tmp/claude-0/-home-user-onia-hermes/0fd2553b-524b-53fe-9e97-5c1ac80566e6/scratchpad/D07/borrador/video-sin-repetido.mp4  I=-14.1 LUFS  LRA=2.1  pico=-2.2 dBTP
+hojas: /tmp/claude-0/-home-user-onia-hermes/0fd2553b-524b-53fe-9e97-5c1ac80566e6/scratchpad/D07/borrador/sheets-sin-repetido

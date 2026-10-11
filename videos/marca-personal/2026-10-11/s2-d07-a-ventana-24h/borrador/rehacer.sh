@@ -22,7 +22,7 @@ SCRATCH=/tmp/claude-0/-home-user-onia-hermes/0fd2553b-524b-53fe-9e97-5c1ac80566e
 CUTPLAN="${CUTPLAN:-$PIEZA/cutplan.json}"
 BRUTO="${BRUTO:-$SCRATCH/brutos/C_3941A129.mp4}"
 S="${S:-$SCRATCH/D07/borrador}"
-CUADROS_S="${CUADROS_S:-0.4 2.8 17.5 39.6 44.0 90.3}"   # segundos de la SALIDA para los cuadros clave del repo
+CUADROS_S="${CUADROS_S:-0.4 2.8 17.5 39.6 45.0 90.3}"   # segundos de la SALIDA para los cuadros clave del repo
 ERIK="$REPO/.claude/skills/edicion-referentes/scripts/erik"
 QV="${QUITAR_VARIABLES:-0}"; QR="${QUITAR_REPETIDO:-0}"
 
@@ -79,13 +79,15 @@ echo "== 5/6 medición sobre el audio final -> medicion$SUF.txt"
   echo "silencios >= 0,2 s (informativo): $(ffmpeg -hide_banner -nostats -i "$VIDEO" -vn -af silencedetect=noise=-35dB:d=0.2 -f null - 2>&1 | grep -c silence_start || true)"
   echo "ebur128 (LUFS integrado, LRA, true peak; Erik pide -14 LUFS, TP <= -1,5):"
   ffmpeg -hide_banner -nostats -i "$VIDEO" -vn -af ebur128=peak=true -f null - 2>&1 | sed -n '/Summary:/,$p' | grep -E "I:|LRA:|Peak:" | head -4
+  echo "salto de la cara en los empalmes SIN cambio de apoyo (YuNet sobre el render):"
+  python3 -I "$AQUI/medir-saltos.py" --video "$VIDEO" --cutplan "$AQUI/cutplan-erik$SUF.json" --informe "$AQUI/informe-erik$SUF.txt"
   echo "ritmo (del informe de erik_edit.py):"
   grep -E "duración:|plano de cámara|planos-flash|tarjeta «|subtítulos T|sin cambio de apoyo" "$AQUI/informe-erik$SUF.txt" | cut -c1-230
 } | tee "$AQUI/medicion$SUF.txt"
 
 echo "== 6/6 360p liviano + cuadros"
-ffmpeg -v error -y -i "$VIDEO" -vf scale=360:-2 -c:v libx264 -crf 30 -preset medium -c:a aac -b:a 64k -movflags +faststart \
-  "$AQUI/BORRADOR-no-es-master-360p$SUF.mp4"
+if [ -z "$SUF" ]; then P360="$AQUI/BORRADOR-no-es-master-360p.mp4"; else P360="$S/BORRADOR-no-es-master-360p$SUF.mp4"; fi   # las variantes no ensucian el repo
+ffmpeg -v error -y -i "$VIDEO" -vf scale=360:-2 -c:v libx264 -crf 30 -preset medium -c:a aac -b:a 64k -movflags +faststart "$P360"
 if [ -z "$SUF" ]; then
   rm -f "$AQUI"/cuadros/t*.jpg
   for t in $CUADROS_S; do
@@ -93,4 +95,4 @@ if [ -z "$SUF" ]; then
   done
 fi
 echo "tiempos: render $((TE - TR)) s · total $(( $(date +%s) - T0 )) s"
-echo "LISTO (borrador, no es master) -> $AQUI/BORRADOR-no-es-master-360p$SUF.mp4 · render completo en $VIDEO"
+echo "LISTO (borrador, no es master) -> $P360 · render completo en $VIDEO"

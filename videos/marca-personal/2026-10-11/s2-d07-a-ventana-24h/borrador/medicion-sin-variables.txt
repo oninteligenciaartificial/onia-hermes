@@ -1,0 +1,27 @@
+# Medición del render final-sin-variables (2026-10-11 09:58 UTC)
+duración: 86.087000 s
+REGLA 15 · silencedetect noise=-35dB d=0.3 (debe dar 0 silencios):
+  (ninguno)
+silencios >= 0,3 s: 0
+silencios >= 0,2 s (informativo): 0
+ebur128 (LUFS integrado, LRA, true peak; Erik pide -14 LUFS, TP <= -1,5):
+    I:         -14.1 LUFS
+    LRA:         2.2 LU
+    Peak:       -2.2 dBFS
+salto de la cara en los empalmes SIN cambio de apoyo (YuNet sobre el render):
+empalmes sin cambio de apoyo: 24 · medidos 22 · sin cara detectada 2
+salto de ojos x máx 37 px, mediana 9.1 · y máx 20 px, mediana 5.4 (px de 1080; incluye el movimiento natural de 2 cuadros)
+los 5 mayores: 56.17 s (dx 37, dy 5) · 53.63 s (dx 24, dy 17) · 63.57 s (dx 21, dy 9) · 48.11 s (dx 10, dy 20) · 80.18 s (dx 17, dy 12)
+ritmo (del informe de erik_edit.py):
+duración: 86.09 s · cortes que se ven: 45 (5.2 cada 10 s; 5 jump cuts de ritmo; meta 4-4,5)
+  plano de cámara más largo: 3.28 s; de más de 3.3 s: ninguno
+  planos-flash de cámara (< 0,8 s): [(21.6, 0.39), (24.39, 0.54), (48.11, 0.8), (52.99, 0.64), (64.81, 0.64)]
+  tarjeta «TU CHATBOT / WHATSAPP» 3.72-10.90s (7.2 s) y=150-476 (frente desde y=860)
+  tarjeta «CÓMO FUNCIONA / VENTANA ABIERTA» 14.50-19.69s (5.2 s) y=150-476 (frente desde y=834)
+  tarjeta «LO QUE LE ENSEÑASTE / TU CLÍNICA» 25.73-30.42s (4.7 s) y=150-476 (frente desde y=831)
+  tarjeta «EJEMPLO / PLANTILLA» 41.28-45.72s (4.4 s) y=150-476 (frente desde y=831)
+  tarjeta «PRIMERAS 24 HORAS / LIBRE» 55.07-58.19s (3.1 s) y=150-476 (frente desde y=858)
+  tarjeta «DESPUÉS DE 24 HORAS / SOLO PLANTILLAS» 61.63-67.82s (6.2 s) y=150-476 (frente desde y=831)
+  tarjeta «DESPUÉS DE LAS 24 HORAS / PLANTILLAS» 77.99-81.59s (3.6 s) y=150-476 (frente desde y=846)
+  subtítulos T: glifos entre y 1350 y 1501 (78.2 %, tope 80 %)
+  cortes del cutplan aprobado sin cambio de apoyo en ese cuadro: [4.59, 10.9, 21.6, 21.99, 24.39, 25.87, 29.34, 30.42, 39.82, 40.58, 42.56, 48.11, 50.97, 53.63, 56.17, 57.07, 59.83, 63.57, 64.81, 65.45, 67.97, 72.0, 76.9, 80.18]

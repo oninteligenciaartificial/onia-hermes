@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""armar-transcript.py — transcript de Whisper (tiempo del BRUTO) -> segments-cut.json (tiempo de SALIDA del cutplan).
+"""armar-transcript.py (copia de N02, con limpiar_marca arreglado) — transcript de Whisper (tiempo del BRUTO) -> segments-cut.json (tiempo de SALIDA del cutplan).
 
 Pasos (todo determinista, sin red, sin modelos):
   1. toma las palabras de segments[].words[] ({w,s,e} del bruto);
@@ -33,8 +33,11 @@ def norm(s: str) -> str:
 
 
 def limpiar_marca(tok: str) -> str:
-    """Quita [?] y [¿ ... ?] del texto de un reemplazo (no llegan a los subtítulos)."""
-    return re.sub(r"[\[\]¿?]", "", tok).strip()
+    """Quita [?] y [¿ ... ?] del texto de un reemplazo (no llegan a los subtítulos). Un ¿ o ? SUELTO (sin corchetes)
+    es puntuación real y se conserva: en D07 el arreglo «¿Y cómo funciona todo esto?» perdía el ¿ con la versión de N02."""
+    if "[" in tok or "]" in tok:
+        return re.sub(r"[\[\]¿?]", "", tok).strip()
+    return tok.strip()
 
 
 def cargar_palabras(path: Path):

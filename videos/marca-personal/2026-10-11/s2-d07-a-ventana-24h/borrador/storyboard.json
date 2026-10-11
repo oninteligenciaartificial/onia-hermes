@@ -1,6 +1,6 @@
 {
   "titulo": "S2-D07-A · La ventana de 24 horas de WhatsApp y las plantillas de Meta (molde Erik, BORRADOR sobre el corte propuesto)",
-  "nota": "Todo texto en pantalla sale de lo que Sergio Urcullo dijo o de la documentación oficial de Meta capturada el 11-oct-2026 (capturas/indice.md). Cada pieza se ancla a la palabra que la nombra (frases únicas del transcript: si cambia el corte, se lee «— anclas —» del informe). `fuera_si` = el evento se descarta cuando esa opción de corte está activa (porque sus palabras se van). `corte_opcional` NO se aplica por defecto: rehacer.sh lo activa con QUITAR_VARIABLES=1 / QUITAR_REPETIDO=1 (o copiá su contenido a corte.quitar).",
+  "nota": "Todo texto en pantalla sale de lo que Sergio Urcullo dijo o de la documentación oficial de Meta capturada el 11-oct-2026 (capturas/indice.md). Cada pieza se ancla a la palabra que la nombra (frases únicas del transcript: si cambia el corte, se lee «— anclas —» del informe). `fuera_si` = el evento se descarta cuando esa opción de corte está activa (porque sus palabras se van); `solo_si` = el evento solo existe cuando alguna de esas opciones está activa (zooms que tapan el empalme del corte opcional). `corte_opcional` NO se aplica por defecto: rehacer.sh lo activa con QUITAR_VARIABLES=1 / QUITAR_REPETIDO=1 (o copiá su contenido a corte.quitar).",
   "paleta": "onia",
   "assets": [
     "capturas/servicio",
@@ -255,8 +255,7 @@
       "marca": {
         "en": {
           "palabra": "solo puede ser"
-        },
-        "pastilla": "SOLO PLANTILLAS APROBADAS"
+        }
       }
     },
     {
@@ -379,10 +378,35 @@
     },
     {
       "tipo": "zoom",
+      "solo_si": [
+        "variables"
+      ],
+      "en": {
+        "corte": 27
+      },
+      "escala": 1.12,
+      "nota": "tapa el empalme de QUITAR_VARIABLES (sin esto la cara salta ~99 px): el corte 27 del cutplan aprobado cae dentro de lo quitado y se lleva al empalme"
+    },
+    {
+      "tipo": "zoom",
+      "solo_si": [
+        "repetido"
+      ],
+      "en": {
+        "corte": 28
+      },
+      "escala": 1.12,
+      "nota": "tapa el empalme de QUITAR_REPETIDO y reemplaza al zoom de «solución» (corte 36), que caería 0,25 s después del empalme"
+    },
+    {
+      "tipo": "zoom",
       "en": {
         "corte": 36
       },
-      "escala": 1.12
+      "escala": 1.12,
+      "fuera_si": [
+        "repetido"
+      ]
     },
     {
       "tipo": "sello",
@@ -407,7 +431,7 @@
       "rotulo": "DESPUÉS DE LAS 24 HORAS",
       "rotulo_der": "PLANTILLAS",
       "hasta": {
-        "palabra": "seguime"
+        "palabra": "inteligencia artificial"
       },
       "contenido": {
         "tipo": "lista",

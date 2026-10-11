@@ -2,7 +2,7 @@
 """variantes.py — deriva el storyboard de render a partir de storyboard.json.
 
   - assets -> rutas absolutas (el storyboard de render vive fuera del repo, en $S);
-  - quita los eventos con `fuera_si` cuando esa opción de corte está activa;
+  - quita los eventos con `fuera_si` cuando esa opción de corte está activa, y deja los `solo_si` solo cuando alguna lo está;
   - copia a corte.quitar los cortes opcionales activos (variables / repetido).
 Sin opciones el resultado es el storyboard tal cual (nada opcional se aplica por defecto).
 Uso: python3 variantes.py --storyboard storyboard.json --out $S/storyboard-render.json [--variables] [--repetido]
@@ -23,9 +23,11 @@ sb = json.loads(src.read_text())
 activas = [k for k, v in (("variables", a.variables), ("repetido", a.repetido)) if v]
 sb["assets"] = [str((src.parent / x).resolve()) for x in sb.get("assets", [])]
 antes = len(sb["eventos"])
-sb["eventos"] = [e for e in sb["eventos"] if not (set(e.get("fuera_si", [])) & set(activas))]
+sb["eventos"] = [e for e in sb["eventos"]
+                 if not (set(e.get("fuera_si", [])) & set(activas)) and (not e.get("solo_si") or set(e["solo_si"]) & set(activas))]
 for e in sb["eventos"]:
     e.pop("fuera_si", None)
+    e.pop("solo_si", None)
 quitar = list(sb["corte"].get("quitar", []))
 for k in activas:
     quitar += sb.get("corte_opcional", {}).get(k, [])

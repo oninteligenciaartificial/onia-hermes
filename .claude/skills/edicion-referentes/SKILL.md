@@ -443,6 +443,24 @@ antes de que lleguen a Sergio Urcullo.
   resultado uno», y el `[?] Uno` propuesto no cabía; (9) un tramo de 2,4 s sin transcripción puede ser un arranque en falso del cierre (la 2.ª pasada oyó «La lista» y el bruto
   tiene un salto de toma a los 144,4 s): se recomienda cortarlo y queda sin subtítulo hasta que alguien lo oiga; (10) «Quedan 46 días» solo vale el jueves 15-oct (hoy, 11-oct,
   quedan 50): va solo en subtítulos, sin tarjeta con número.
+- **Borrador de S2-D07-A (11-oct), molde ERIK sobre el corte propuesto: `videos/marca-personal/2026-10-11/s2-d07-a-ventana-24h/borrador/rehacer.sh`** (variables `BRUTO`,
+  `S`, `CUTPLAN`, `RECAPTURAR=1`, `QUITAR_VARIABLES=1`, `QUITAR_REPETIDO=1`, `SOLO_CUADROS=`). Medido por mí sobre el render de 90,7 s: 0 decodificaciones con error, `silencedetect
+  -35 dB d=0.3` → 0 silencios (también a d=0,2), −14,1 LUFS (Erik pide −14), LRA 2,2, TP −2,2; 47 cortes que se ven (5,2 cada 10 s), plano más largo 3,28 s, subtítulos hasta el 78,2 %
+  del alto. `erik_edit.py` corrió directo con OpenCV 5 (NO usa Haar: usa YuNet) y con `--sin-vosk` (Vosk no está instalado: 23 de 30 anclas usan el tiempo de Whisper tal cual y
+  las piezas pueden entrar 0,1-0,3 s corridas; no se midió contra el audio). La receta Erik aprieta los huecos a 0,25 s: coherente con la regla 15 y la tabla derivada sale vacía.
+  Variantes con render completo y 0 silencios: sin la frase de las variables 86,1 s · sin el tramo repetido 74,2 s · las dos 69,6 s (con las dos queda un empalme de ~110 px a los
+  53,24 s). Lo nuevo: (1) **`developers.facebook.com`**: las clases son hashes, los párrafos son `<div>` y las cabeceras son fixed/sticky: anclar al elemento más profundo, ocultar lo
+  fixed y usar un spec y una carpeta de assets POR URL (`capturas.json` se sobreescribe por URL); los docs se mudaron a `/documentation/business-messaging/whatsapp/` (las URL
+  `/docs/whatsapp/` redirigen); `capturar-meta.mjs` es la copia que anda. (2) **Lanzar dos renders sobre la misma carpeta se pisan**: el MP4 salió con miles de «Invalid NAL unit»
+  (un `( … ) &` más un segundo render); se repitió limpio y solo, y desde entonces se verifica con `ffmpeg -v error -i f.mp4 -f null -` (debe dar 0 líneas). (3) Las notas de los
+  nodos de `flujo` se recortan fuera de la tarjeta (caja 120: ≤ 16 caracteres). (4) **Un evento que empieza unos cuadros después de un corte del cutplan crea un plano-flash:
+  anclar con `{corte: k}`**; un corte k que cae dentro de lo quitado se lleva al empalme y uno que cae después queda corrido 0,25 s (sirve para tapar el empalme con un zoom).
+  (5) Con encuadre selfie (ojos 52 %, mentón 63 %, medido con YuNet) el molde baja las tarjetas a la banda de arriba (y 150-476): es el respaldo documentado, porque el pecho
+  (51-75 %) taparía la boca. (6) Una 2.ª pasada de Whisper con vocabulario se sesga hacia las palabras del prompt. (7) El `armar-transcript.py` heredado de N02 borraba el «¿» al
+  aplicar arreglos: corregido en la copia de esta carpeta. (8) La pastilla de las láminas G tapaba texto de la captura: queda solo el contorno verde. (9) **Discrepancia de
+  contenido, NO resuelta (la decide Sergio Urcullo):** él dice (bruto 00:57-01:04) que una plantilla «no puede estar cambiándose con variables porque si no Meta te las rechazaría»;
+  la página de Meta («Template fundamentals», actualizada el 21-may-2026) dice que las plantillas SÍ llevan variables (`{{1}}` o nombradas): ninguna tarjeta, sello ni lámina
+  lo repite y los subtítulos muestran lo que dijo. Matiz: el reloj de 24 h corre desde el último mensaje del CLIENTE y se reinicia; él dice «desde que se inicia la conversación».
 - **El bruto puede venir ya editado** (el de N03 traía 5 tomas pegadas). Los saltos se detectan con picos aislados de
   diferencia entre cuadros (>5× la mediana y >2,5× sus vecinos) y se tratan como cortes. Si no, el control dice
   «ningún corte a la vista» y es falso.
