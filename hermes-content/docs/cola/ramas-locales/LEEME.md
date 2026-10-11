@@ -17,6 +17,19 @@ git fetch <ruta>/hermes-ramas-locales-20261009.bundle 'refs/heads/*:refs/heads/*
 
 `git bundle verify <archivo>` dice si falta alguna base.
 
+## LISTA PARA SUBIR (11-oct, 09:16 UTC) — `plataforma-152-restos-20261011.bundle`
+
+Rama `usted-todo` (`113539eb`): es #152 con U3 (#153), U4 (#148) y U5 (#149) adentro, sobre `master` `fd72cd55` (con #147).
+Suma los restos de usted que encontró Hermes (E16 y E10): la agenda, Pendientes, el Inicio, `/agents` y el registro. La línea
+base del trinquete está resuelta como base más deltas (total 399). `tsc` 0 y suite completa 10.655 en verde, 0 rojos.
+Es **fast-forward** sobre `claude/optimistic-ride-1sp5fe` (`d8c486f5`): se sube sin force. Plataforma la empuja a las
+10:10 UTC; si esta sesión murió antes, la sube quien la retome:
+
+```bash
+git fetch <ruta>/plataforma-152-restos-20261011.bundle usted-todo:usted-todo
+git push origin usted-todo:claude/optimistic-ride-1sp5fe     # actualiza #152; con CI verde y la pasada de Hermes, se mergea
+```
+
 ## Lista para subir (11-oct, 01:30 UTC) — `plataforma-titulos-usted-20261011.bundle`
 
 Pedido de la madre v4: la pestaña de `/login` decía «…que maneja tu negocio…». Rama `titulos-usted` (`b0e021f2`),
