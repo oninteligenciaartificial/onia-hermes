@@ -13,7 +13,7 @@ Orden: lo que destraba cobrar primero. Cada PR: integrar con master, suite compl
 - [ ] #118 agenda del día, #119 odontograma y #110 caja diaria (migraciones ya aplicadas): esperan el OK de diseño y el v3 dentro de cada PR.
 - [ ] #132 K1 (respuesta al recordatorio)
 - [ ] Refrescar la demo dental en prod (`scripts/demo-venta/seed-demo.sql`) y sacar las capturas C1-C7 del VSL
-- [ ] Mirar con login lo publicado el 8-oct (#128): agenda «Hoy» con WhatsApp, «sin confirmar», tarjeta del chatbot
+- [ ] Mirar con login lo publicado el 8-oct (#128): agenda «Hoy» con WhatsApp, «sin confirmar», tarjeta del chatbot; y el punto 11 (reprogramar, días cerrados en `/book`, aviso de reserva online)
 - [ ] SQL del B22 (REVOKE a anon) aplicado y medido (no entró en el sí del 10-oct)
 
 ## Bloqueado (solo Sergio Urcullo)
