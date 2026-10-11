@@ -36,7 +36,7 @@ Orden: lo que destraba cobrar primero. Cada PR: **leer la revisión de Hermes** 
     4. El código de Traefik v3.6.7 (`pkg/proxy/httputil/proxy.go:30-32`) arma `httputil.ReverseProxy{Director: …}`. Con Director, Go junta las líneas previas de XFF en una sola y agrega el par al final.
     5. `app.onia.com.bo` resuelve a 2 IPs de Cloudflare.
     Conclusión: el último valor de XFF es el par real; el riesgo de que todos compartan un cubo no existe con esta topología. Queda para la madre ver si Pseudo IPv4 está activo en Cloudflare: el código maneja los dos casos.
-  - **Prueba de dos visitantes, lista y medida antes de publicar (08:27 UTC):**
+  - **Prueba de dos visitantes, lista y medida antes de publicar (08:23 UTC):**
     - A = el VPS hace 31 `GET /api/booking/doctors` sin `orgSlug` (400, sin base) por Cloudflare. B = la nube hace 1.
     - Con el código de hoy da A 29×400 y 2×429, B 400 y A otra vez 429: «CUBOS SEPARADOS». El método distingue.
     - La nube no sirve como visitante fijo: su salida rota entre IPs de una /24.
