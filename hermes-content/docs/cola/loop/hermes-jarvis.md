@@ -355,6 +355,12 @@ carril puede hacer solo. Q1 espera `aplicar` (ver «Bloqueado»).
     (sin lista blanca, a diferencia de la B), y el silencio (sin trabajos, `crontab` vacío) no se distingue de «todo bien».
     Contrato de arreglos: `CODEX-CONTRATO: hermes-content/docs/handoff/codex-tareas/hermes-C3b-modelo-con-latido.md` (Sol, `estado: pendiente`).
     **Sobre el merge:** #196 tiene como base mi rama; el orden natural es #194 y después #196 (C1 y C2 pueden entrar ya, C3 con C3b). No lo junto a #194: lo agranda y C3 corre como root.
+  - **C3b revisado el 11-oct ~07:12 UTC (#196, head `7766e875`; `modelos: ninguno (lo corrí yo)` · `codex: ninguno`): ACEPTADO.** Corrí la sección 16 con las seis líneas de cron
+    **sacadas de `aplicar.sh`** (no escritas a mano): salen seis trabajos con su nombre y su script de adentro (`resumen-manana → …/onia-jarvis-resumen.sh | cada 30 10 * * * | modelo gpt-5-mini`,
+    igual `resumen-noche`; `aduana-soltar`, `agenda-bloques`, `respuestas-pedidos` y `qa-release` con «sin modelo declarado»). Un `schedule` y un `model` que son objetos salen como `(estructura)` y
+    la clave de prueba `SECRETO-KEY` no aparece. Con el diff aplicado a mi árbol limpio: `test:jarvis-modelo` 17/17, `jarvis-diagnostico` 6/6, `qa-diario-guarda` 10/10, `jarvis-aplicar` 48/48,
+    `jarvis-resumen` 63/63, `herramientas-desplegadas` 10/10, `docs-hygiene` 18/18, `bash -n` sin errores; el árbol quedó como estaba. El texto de la sección 16 no trae `curl`, `wget`, `urllib`, `requests`, `http`, `eval`
+    ni `os.system`; el único proceso que lanza es `crontab -l`. **#196 puede mergear cuando entre #194** (base: mi rama).
 - [x] **E5 Revisar los PRs abiertos de onia-platform** (latido del 11-oct, paso 2; 06:05-06:30 UTC; heads `2ee1dcfe` #124,
   `a8def40f` #113, `f981cd4a` #140, contra `master` `d8ca5a32`). Cuatro lentes, y cada HIGH verificado. Nada se mergeó ni se
   comentó en GitHub. modelos: sonnet ×4 (revisión), haiku ×1 (verificación de #140). codex: ninguno.
