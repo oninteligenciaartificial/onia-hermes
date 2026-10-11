@@ -1,15 +1,15 @@
-eventos visuales: 48 en 26.833 s (más el cuadro 0 y el final)
+eventos visuales: 47 en 26.833 s (más el cuadro 0 y el final)
 mayores huecos entre eventos:
+  11.55 → 13.45 s: 1.90 s   (e3 caja → c5 acento)
   24.42 → 26.32 s: 1.90 s   (c10 → c10 acento)
-  11.65 → 13.15 s: 1.50 s   (e3 dato → c5 acento)
+  0.95 → 2.45 s: 1.50 s   (gancho dato → gancho caja sale)
   15.20 → 16.50 s: 1.30 s   (r1 lupa → c6 acento)
-  1.45 → 2.45 s: 1.00 s   (gancho dato → gancho caja sale)
   9.49 → 10.49 s: 1.00 s   (p2 marca 0,70 → c4 acento)
   22.50 → 23.50 s: 1.00 s   (c9, costura → c9 acento)
   23.50 → 24.42 s: 0.92 s   (c9 acento → c10)
-  0.00 → 0.90 s: 0.90 s   (cuadro 0 → c1 acento)
-   0-10.0 s: 23 eventos (23.0 por 10 s)
+  7.61 → 8.51 s: 0.90 s   (p2 cursor sale de 0 → p2 cursor llega a 1)
+   0-10.0 s: 22 eventos (22.0 por 10 s)
   10-20.0 s: 17 eventos (17.0 por 10 s)
   20-26.8 s: 8 eventos (11.7 por 10 s)
-eventos por 10 s (todo el video): 17.9
+eventos por 10 s (todo el video): 17.5
 ✔ hueco máximo entre eventos 1.90 s (≤ 2.0 s)

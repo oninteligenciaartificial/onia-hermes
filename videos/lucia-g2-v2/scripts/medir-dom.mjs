@@ -124,7 +124,7 @@ const cerca = (n, esperado, tol = 1.5) => Math.abs(n - esperado) <= tol;
 {
   const Ls = plan.leccion, t2 = Ls.barra.t0 + Ls.orden.length * Ls.barra.escalon + 1.0;
   const mk2 = await medida(t2, '#l-mk'); datos.push(['lección: marca 0,70', mk2.cx, X(SC.piso)]);
-  for (const [i, id] of Ls.orden.entries()) { const m = mot[id], r = await medida(t2, `#l-b${i + 1}`); datos.push([`lección: barra Motor ${m.n} ${m.fin} (ancho)`, r.w, m.fin * (SC.x1 - SC.x0), 1.5]); datos.push([`lección: barra Motor ${m.n} (borde izquierdo = 0)`, r.x1, SC.x0]); }
+  for (const [i, id] of Ls.orden.entries()) { const m = mot[id], r = await medida(t2, `#l-b${i + 1}`); datos.push([`lección: barra ${m.nombre} ${m.fin} (ancho)`, r.w, m.fin * (SC.x1 - SC.x0), 1.5]); datos.push([`lección: barra ${m.nombre} (borde izquierdo = 0)`, r.x1, SC.x0]); }
   const tr = plan.regla.escala.marca_t + 0.6;
   const mk4 = await medida(tr, '#sc-mk'); datos.push(['regla: marca 0,70', mk4.cx, X(SC.piso)]);
 }

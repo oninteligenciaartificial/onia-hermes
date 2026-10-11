@@ -11,10 +11,13 @@ ventana legible medida en el DOM (opacidad ≥ 0,9 y ≥ 95 % dentro del lienzo)
   ok  l-tit     8 pal  17.38–23.58 s  6.21 s (pide 3.10)  «Parecido al final: 3 de los 6 clips»
   ok  l-mkl     3 pal  17.33–23.63 s  6.29 s (pide 1.35)  «mi piso · 0,70»
   ok  l-nota    8 pal  19.04–23.58 s  4.54 s (pide 3.10)  «Final = segundo 5,9, que no se ve entero.»
-  ok  l-l1      3 pal  17.04–19.83 s  2.79 s (pide 1.35)  «Motor 5 · referencias»
-  ok  l-m1      5 pal  20.00–23.58 s  3.58 s (pide 2.05)  «Motor 5 · inventó el cuarto»
-  ok  l-l2      4 pal  17.04–20.17 s  3.13 s (pide 1.70)  «Motor 1 · foto sola»
-  ok  l-m2      5 pal  20.33–23.58 s  3.25 s (pide 2.05)  «Motor 1 · mantiene el cuarto»
-  ok  l-l3      4 pal  17.04–20.50 s  3.46 s (pide 1.70)  «Motor 3 · foto sola»
-  ok  l-m3      5 pal  20.71–23.58 s  2.88 s (pide 2.05)  «Motor 3 · cambió el plano»
+  ok  l-t1      3 pal  17.63–23.58 s  5.96 s (pide 1.35)  «Kling 3.0 std»
+  ok  l-l1      2 pal  17.04–20.50 s  3.46 s (pide 1.00)  «foto sola»
+  ok  l-m1      3 pal  20.71–23.58 s  2.88 s (pide 1.35)  «mantiene el cuarto»
+  ok  l-t2      3 pal  17.92–23.58 s  5.67 s (pide 1.35)  «Seedance 2.0 Mini»
+  ok  l-l2      2 pal  17.04–20.17 s  3.13 s (pide 1.00)  «foto sola»
+  ok  l-m2      3 pal  20.33–23.58 s  3.25 s (pide 1.35)  «cambió el plano»
+  ok  l-t3      2 pal  18.21–23.58 s  5.38 s (pide 1.00)  «Kling O3»
+  ok  l-l3      1 pal  17.04–19.83 s  2.79 s (pide 0.65)  «referencias»
+  ok  l-m3      3 pal  20.00–23.58 s  3.58 s (pide 1.35)  «inventó el cuarto»
 ✔ todas las ventanas medidas alcanzan la regla de lectura

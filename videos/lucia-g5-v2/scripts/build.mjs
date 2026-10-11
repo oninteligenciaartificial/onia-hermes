@@ -164,12 +164,21 @@ const caras = JSON.parse(fs.readFileSync(path.join(P, 'qa/caras-fotos.json'), 'u
 for (const k of Object.keys(plan.fotos)) if (!caras.fotos[k] || !caras.fotos[k].caja) errores.push(`sin caja de cara para la foto «${k}» (correr scripts/medir-caras.py)`);
 for (const k of ['fr_m5', 'fr_m4']) if (!caras.frames?.[k]) errores.push(`sin caja de cara para el cuadro «${k}» (correr scripts/medir-caras.py)`);
 const dato = {};                                       // dato por id: gancho.dato y cada ejemplo
-dato[plan.gancho.dato.id] = { ...plan.gancho.dato, pill: 'parecido' };
+dato[plan.gancho.dato.id] = { ...plan.gancho.dato };           // la pastilla ya trae el nombre de la herramienta (D-N1)
 for (const e of plan.ejemplos) dato[e.id] = e;
 if (proc && vid && lab && !errores.length) {
   const raw = (k) => proc[k].id;
   const ok = (cond, texto) => { claim.push(`${cond ? 'ok ' : '✖  '} ${texto}`); if (!cond) errores.push(`afirmación falsa: ${texto}`); };
   const piso = SC.piso;
+  // D-N1 (11-oct-2026): las herramientas se NOMBRAN. El nombre que va en pantalla tiene que corresponder a la clave de PROCEDENCIA del archivo que se muestra
+  const Hn = plan.herramientas;
+  for (const [k, re] of Object.entries(Hn.claves)) {
+    const clave = { a: plan.claves_procedencia.a, f: null, cafe_b: plan.claves_procedencia.b_cafe, m4: plan.claves_video.m4, m5: plan.claves_video.m5, m6: plan.claves_video.m6 }[k];
+    if (clave && !new RegExp(re).test(clave)) errores.push(`herramienta «${Hn[k]}» (${k}): la clave de PROCEDENCIA «${clave}» no corresponde a /${re}/`);
+  }
+  if (!plan.gancho.dato.pill.startsWith(Hn.a) || !plan.ejemplos[0].pill.startsWith(Hn.cafe_b)) errores.push('las pastillas del gancho y del café tienen que empezar con el nombre de su herramienta (plan.herramientas)');
+  for (const [k, h] of [['r1', 'm5'], ['r2', 'm6'], ['r3', 'm4']]) if (plan[k].tool.herr !== h) errores.push(`${k}: la etiqueta tiene que nombrar ${Hn[h]} (${h})`);
+  claim.push(`ok  herramientas nombradas (D-N1): gancho «${Hn.a}», café «${Hn.cafe_b}», razón 1 «${Hn.m5}», razón 2 «${Hn.m6}», razón 3 «${Hn.m4}»; cada nombre corresponde a la clave de PROCEDENCIA del archivo que se ve`);
   // números de la foto del gancho (A) y del ejemplo (B del café)
   for (const d of Object.values(dato)) {
     if (r2(raw(d.clave)) !== d.valor) errores.push(`${d.id}: parecido ${d.valor} y PROCEDENCIA dice ${raw(d.clave)} → ${r2(raw(d.clave))}`);
@@ -199,18 +208,27 @@ if (proc && vid && lab && !errores.length) {
   ok(plan.frames.m5.cuadro === 0 && r2(vid.m5.id[0]) === 0.8, `el cuadro 0 del Motor 5 es la primera muestra de PROCEDENCIA (${vid.m5.id[0]})`);
 }
 // pie: pie.txt se ESCRIBE a mano (el pie del guion aprobado de G5 habla de un video de 57 s; este es de 26,8 s) y el build lo comprueba contra la pantalla, la voz y las frases retiradas
+const SUENA_A_RECOMENDACION = ['el mejor', 'la mejor', 'los mejores', 'lo mejor', 'recomend', 'te conviene', 'usá este', 'usa este', 'mejor que', 'ganó', 'gana ', 'ganador'];   // D-N1: se nombra lo que se usa, nunca «el mejor» ni una recomendación
 const RETIRADAS = ['baja sola', 'poco confiable', 'orden de magnitud', 'se parece poco', 'es ruido', 'no es fiable', 'lo inventó la ia'];
 const pie = fs.readFileSync(path.join(P, 'pie.txt'), 'utf8').replace(/\s+/g, ' ').trim();
 {
   const lp = pie.toLowerCase();
   if (!pie.startsWith('Lucía Antelo es un personaje hecho con IA')) errores.push('el pie tiene que abrir con «Lucía Antelo es un personaje hecho con IA…»');
-  for (const f of ['ocho fotos oficiales', '0,70', 'que elegí yo', 'bajo el piso', 'otra persona', 'a ojo', '0,77', '0,80', 'cabe en ±0,03', 'letreros inventados', 'imagen entera', 'cada semana hago una prueba', 'seguime']) if (!lp.includes(f)) errores.push(`el pie no dice «${f}», que el video sí dice`);
+  for (const f of ['ocho fotos oficiales', '0,70', 'que elegí yo', 'bajo el piso', 'otra persona', 'a ojo', '0,77', '0,80', 'cabe en ±0,03', 'letreros inventados', 'imagen entera', 'cada semana hago una prueba', 'seguime', 'seedream 4.5', 'kling o1 image', 'kling o3', 'cinematic studio 3.0', 'seedance 2.0 mini + referencias']) if (!lp.includes(f)) errores.push(`el pie no dice «${f}», que el video sí dice`);
   const pantalla = [plan.rotulo.texto, ...plan.tarjetas.map((c) => `${c.texto} ${c.acento || ''}`), plan.r1.nota.texto, plan.r2.zoom.texto, plan.r3.llamada.texto].join(' \n ').replace(/\s+/g, ' ').toLowerCase();
   for (const f of RETIRADAS) {
     if (lp.includes(f)) errores.push(`el pie repite una frase retirada: «${f}»`);
     if (pantalla.includes(f)) errores.push(`la pantalla repite una frase retirada: «${f}»`);
     if (vozTxt.toLowerCase().includes(f)) errores.push(`la voz repite una frase retirada: «${f}»`);
   }
+  const pant2 = [plan.rotulo.texto, ...plan.tarjetas.map((c) => `${c.texto} ${c.acento || ''}`), plan.r1.nota.texto, plan.r2.zoom.texto, plan.r3.llamada.texto, ...Object.values(plan.herramientas).filter((x) => typeof x === 'string' && !x.startsWith('D-N1')), plan.gancho.dato.pill, plan.ejemplos[0].pill].join(' ').toLowerCase();
+  for (const f of SUENA_A_RECOMENDACION) {
+    if (pant2.includes(f)) errores.push(`la pantalla suena a recomendación o a «el mejor»: «${f}»`);
+    if (vozTxt.toLowerCase().includes(f)) errores.push(`la voz suena a recomendación o a «el mejor»: «${f}»`);
+    if (f !== 'recomend' && lp.includes(f)) errores.push(`el pie suena a recomendación o a «el mejor»: «${f}»`);
+  }
+  if (!/nombro lo que uso; no es una recomendación pagada\./.test(lp)) errores.push('el pie tiene que decir «Nombro lo que uso; no es una recomendación pagada.» (D-N1)');
+  claim.push('ok  nada suena a «el mejor» ni a recomendación en pantalla ni en la voz; el pie dice «Nombro lo que uso; no es una recomendación pagada.»');
   claim.push('ok  pie.txt abre con «personaje hecho con IA», dice lo que el video dice (ocho fotos oficiales, piso 0,70, café 0,35, cara chica, 0,77-0,80 cabe en ±0,03, letreros inventados, imagen entera, CTA) y no repite ninguna frase retirada');
   claim.push(`ok  ninguna frase retirada (${RETIRADAS.join(' / ')}) en pantalla, voz ni pie`);
 }
@@ -234,15 +252,16 @@ const lecturas = [];
   L('sc-ax1', 'p2 «idéntica · 1»', 'idéntica · 1', es.uno_t + 0.25, fin('pl-p2'));
   L('sc-mkl', 'p2 «piso»', `piso · ${fm(SC.piso)}`, es.marca_t + 0.05 + E_IN, fin('pl-p2'));
   for (const e of plan.ejemplos) L(`dA-${e.id}`, `ejemplo ${e.letra} dato`, `${e.pill} ${fm(e.valor)}`, e.t + E_IN, e.fin - 0.1);
-  const r1 = plan.r1; L('r1-tag', 'r1 «89 px»', `${caras.frames.fr_m5.cara_px_nativa} px`, r1.tag_t + 0.25, fin('pl-r1')); L('r1-nota', 'r1 nota (ya está al llegar)', r1.nota.texto, llega('pl-r1'), fin('pl-r1'));
+  const r1 = plan.r1; L('r1-tag', 'r1 «89 px»', `${caras.frames.fr_m5.cara_px_nativa} px`, r1.tag_t + 0.25, fin('pl-r1')); L('r1-nota', 'r1 nota (ya está al llegar)', r1.nota.texto, llega('pl-r1'), fin('pl-r1')); L('tool-r1', 'r1 herramienta (ya está al llegar)', plan.herramientas[r1.tool.herr], llega('pl-r1'), fin('pl-r1'));
   const r = plan.r2;
   L('r2-mkl', 'r2 «piso»', `piso · ${fm(SC.piso)}`, llega('pl-r2'), fin('pl-r2'));
   L('r2-zoom', 'r2 «Zoom»', r.zoom.texto, llega('pl-r2'), fin('pl-r2'));
+  L('tool-r2', 'r2 herramienta (ya está al llegar)', plan.herramientas[r.tool.herr], llega('pl-r2'), fin('pl-r2'));
   r.marcas.forEach((m, i) => L(`r2-m${i + 1}`, `r2 marca ${fm(m)}`, fm(m), llega('pl-r2'), fin('pl-r2')));
   L('r2-v1', 'r2 valor 1', fm(r.d1.valor), r.d1.t + 0.25, fin('pl-r2')); L('r2-v2', 'r2 valor 2', fm(r.d2.valor), r.d2.t + 0.25, fin('pl-r2'));
   L('r2-bl', 'r2 banda', `±${fm(r.banda.mas_menos)}`, r.banda.t + 0.3, fin('pl-r2'));
   const r3 = plan.r3;
-  L('r3-call', 'r3 «Lo difuminé» (ya está al llegar)', r3.llamada.texto.replace('\n', ' '), llega('pl-r3'), fin('pl-r3')); L('r3-num', 'r3 número', `parecido ${fm(r2(vid.m4.id[r3.muestra]))}`, r3.pill_num_t + E_IN, fin('pl-r3'));
+  L('r3-call', 'r3 «Lo difuminé» (ya está al llegar)', r3.llamada.texto.replace('\n', ' '), llega('pl-r3'), fin('pl-r3')); L('tool-r3', 'r3 herramienta (ya está al llegar)', plan.herramientas[plan.r3.tool.herr], llega('pl-r3'), fin('pl-r3')); L('r3-num', 'r3 número', `parecido ${fm(r2(vid.m4.id[r3.muestra]))}`, r3.pill_num_t + E_IN, fin('pl-r3'));
   for (const x of lecturas) if (x.dur < x.min - 1e-9) errores.push(`lectura «${x.que}» (${x.n} palabras): ${x.dur.toFixed(2)} s y pide ${x.min.toFixed(2)} s`);
 }
 if (errores.length) { console.error('✖ reglas:\n  ' + errores.join('\n  ')); process.exit(1); }
@@ -321,6 +340,7 @@ const datos = [];                                                     // lo que 
   h += `<svg class="ab" id="r1-lineas" style="left:0;top:0" width="1080" height="1000" viewBox="0 0 1080 1000"><line x1="${lx1}" y1="${ly1}" x2="${lp.x}" y2="${lp.y + lp.h / 2}" stroke="${BAD}" stroke-width="5" stroke-opacity=".9" stroke-linecap="round"/></svg>`;
   h += `<div class="lupa bad" id="r1-lupa" style="left:${lp.x}px;top:${lp.y}px;width:${lp.w}px;height:${lp.h}px;background-image:url(${plan.frames.m5.src});background-size:${bgw}px ${bgh}px;background-position:${bgx}px ${bgy}px"></div>`;
   h += cent(540, r1.nota.y, `<span class="note" id="r1-nota">${esc(r1.nota.texto)}</span>`, 940);
+  h += `<div class="ab" style="left:${r1.tool.x}px;top:${r1.tool.y}px"><span class="tag" id="tool-r1">${esc(plan.herramientas[r1.tool.herr])}</span></div>`;
   html += FULLDIV('pl-r1', med['pl-r1'].a, med['pl-r1'].b, 4, h, 'pl');
   plan.r1._geom = { L, T, BW, BH, s, bgx, bgy };
 }
@@ -335,6 +355,7 @@ const datos = [];                                                     // lo que 
   h += `<div class="mkv" id="r2-mk" style="left:${xp}px;top:${y - 33}px;height:${r.y_inferior - 4 - (y - 33)}px"></div>`;
   h += `<div class="ab" style="left:${xp - 40}px;top:${r.y_inferior}px"><span class="tag tag-d" id="r2-mkl"><i></i>piso · <b>${fm(SC.piso)}</b></span></div>`;
   h += `<div class="ab" style="left:560px;width:440px;top:${r.y_inferior + 12}px;text-align:right"><span class="cap2" id="r2-zoom">${esc(r.zoom.texto)}</span></div>`;
+  h += cent(540, r.tool.y, `<span class="tag" id="tool-r2">${esc(plan.herramientas[r.tool.herr])}</span>`, 760);
   h += `<div class="brk" id="r2-brk" style="left:${x1}px;top:${r.y_banda_linea}px;width:${x2 - x1}px"></div>`;
   h += cent((x1 + x2) / 2, r.y_banda_label, `<span class="note g" id="r2-bl">±${fm(b.mas_menos)}</span>`, 300);
   h += `<div class="dot f" id="r2-d1" style="left:${X2(r.d1.raw)}px;top:${y}px"></div><div class="dot f" id="r2-d2" style="left:${X2(r.d2.raw)}px;top:${y}px"></div>`;
@@ -361,6 +382,7 @@ const datos = [];                                                     // lo que 
   h += `<div class="aro" id="r3-aro" style="left:${w_.x + a.x}px;top:${w_.y + a.y}px;width:${a.w}px;height:${a.h}px;border-radius:34px"></div>`;
   h += `<div class="call" id="r3-call" style="left:${c.x}px;top:${c.y}px">${esc(c.texto).replace('\n', '<br>')}</div>`;
   h += cent(540, r3.pills_y, `<span class="tag tag-d dg" id="r3-num"><i></i>parecido <b>${fm(num)}</b></span>`, 980);
+  h += cent(540, r3.tool.y, `<span class="tag" id="tool-r3">${esc(plan.herramientas[r3.tool.herr])}</span>`, 940);
   html += FULLDIV('pl-r3', med['pl-r3'].a, med['pl-r3'].b, 4, h, 'pl');
   datos.push({ que: 'r3 número en pantalla', sel: '#r3-num b', t: r3.pill_num_t + 0.6, txt: fm(num) });
 }

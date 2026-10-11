@@ -74,13 +74,19 @@ Runtime
   ◇ 0 errors, 0 warnings
 
 Layout
-  ◇ 0 issues across 9 sample(s)
+  ℹ t=4.674s canvas_overflow #c2 > div:nth-of-type(1) > div:nth-of-type(2) inside #root overflowed left 788.72px "Misma orden." — Text extends outside the composition canvas.
+        Fix: Move the text inward, reduce its size, or mark intentional off-canvas animation with data-layout-allow-overflow.
+  ℹ t=4.674s canvas_overflow #c2 > div:nth-of-type(1) > div:nth-of-type(2) > b:nth-of-type(1) inside #root overflowed left 788.72px "Seis motores de imagen." — Text extends outside the composition canvas.
+        Fix: Move the text inward, reduce its size, or mark intentional off-canvas animation with data-layout-allow-overflow.
+  ℹ t=4.674s panel_out_of_canvas #th-f inside #root overflowed left 121.33px — Painted panel extends outside the composition canvas.
+        Fix: Move the panel inward, or mark intentional off-canvas animation with data-layout-allow-overflow.
+  0 error(s), 0 warning(s), 3 info(s)
 
 Motion
   ◇ 0 errors, 0 warnings
 
 Contrast
-  ◇ 29/29 text checks pass WCAG AA
+  ◇ 31/31 text checks pass WCAG AA
 
 Snapshots
   ◇ disabled

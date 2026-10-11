@@ -10,11 +10,19 @@ export const PROHIBIDAS = [
   'no sé',
   // afirmación ya verificada como FALSA en G3 (la mano NO está tapada)
   'tapada',
-  // marcas de terceros (modelos, plataformas, competidores) y nombres de motores
-  'kling', 'seedream', 'seedance', 'higgsfield', 'soul', 'nano banana', 'cinema', 'veo', 'midjourney', 'runway', 'elevenlabs', 'sora', 'gpt', 'claude', 'chatgpt', 'omni', 'flux', 'cinematic', 'start_image', 'start image', 'sync.so', 'sync_so', 'buffalo', 'insightface', 'arcface', 'scrfd', 'instagram', 'meta ', 'tiktok', 'buffer',
+  // marcas de terceros (modelos, plataformas, competidores). D-N1 (11-oct, Sergio Urcullo): se nombran SOLO Kling 3.0 std, Seedance 2.0 Mini y Kling O3 (y, en el README,
+  // Kling 3.0 pro, Seedance 2.0 Mini + referencias y Cinematic Studio 3.0) como uso propio: «kling», «seedance» y «cinematic» ya no están prohibidas; el resto sigue igual.
+  'seedream', 'higgsfield', 'soul', 'nano banana', 'cinema studio', 'veo', 'midjourney', 'runway', 'elevenlabs', 'sora', 'gpt', 'claude', 'chatgpt', 'omni', 'flux', 'start_image', 'start image', 'sync.so', 'sync_so', 'buffalo', 'insightface', 'arcface', 'scrfd', 'instagram', 'meta ', 'tiktok', 'buffer',
   // Sergio Urcullo no sale (cara ni voz) y el producto de Onia no se muestra en esta pieza
   'sergio', 'urcullo', 'onia platform', 'dentalgest', 'gestios',
 ];
+// D-N1: ninguna frase que suene a «el mejor» o a recomendación general (son una prueba, una toma, no una regla). La única mención permitida de «recomendación» es el aviso del pie.
+export const AVISO_PIE = 'Nombro lo que uso; no es una recomendación pagada.';
+export const RECOMENDACION = ['el mejor', 'la mejor', 'lo mejor', 'mejor ', 'recomend', 'te conviene', 'conviene', 'ganador', 'campeón', 'imbatible', 'el único'];
+export const buscarRecomendacion = (txt) => {
+  const low = String(txt).replace(AVISO_PIE, '').toLowerCase();
+  return RECOMENDACION.filter((f) => low.includes(f));
+};
 export const buscarProhibidas = (txt) => {
   const low = String(txt).toLowerCase();
   return PROHIBIDAS.filter((f) => low.includes(f.toLowerCase()));

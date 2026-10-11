@@ -112,3 +112,6 @@ body{font-family:"DM Sans",sans-serif;-webkit-font-smoothing:antialiased;text-re
 .thd{position:absolute;text-align:center;font-family:"DM Sans",sans-serif;font-weight:500;font-size:38px;line-height:1.2;color:rgba(246,248,251,.92);white-space:nowrap}
 .rl2{position:absolute;font-family:"DM Sans",sans-serif;font-weight:500;font-size:40px;line-height:1.2;color:#F6F8FB;white-space:nowrap}
 .chip.s .cn{top:18px;font-size:64px}
+
+/* ── D-N1 (11-oct): motores nombrados ── */
+/* rótulos de fila de la lección: los nombres son largos y no pueden cruzar la marca de 0,70 (x=716): a 40 px el más largo termina en x≈642 (medir-dom.mjs lo mide) */

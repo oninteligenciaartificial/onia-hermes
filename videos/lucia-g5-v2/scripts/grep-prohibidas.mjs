@@ -34,13 +34,23 @@ const PROHIBIDAS = [
   // G4: motores de imagen y otras marcas que podrían aparecer en un rótulo (los motores van solo como «Imagen A a F»)
   'banana', 'nano ', 'seedream', 'imagen 4', 'imagen 3', 'dall', 'stable diffusion', 'ideogram', 'recraft', 'leonardo', 'firefly', 'adobe', 'google', 'openai', 'anthropic', 'iphone', 'apple', 'samsung', 'pixel', 'grok', 'qwen', 'hunyuan', 'wan ', 'pika', 'luma', 'minimax', 'hailuo', 'vidu', 'marketing studio',
 ];
+// D-N1 (11-oct-2026, Sergio Urcullo): SOLO estas herramientas se pueden nombrar, con su nombre completo, como uso propio y no como recomendación pagada. Se quitan del texto antes de buscar
+// las prohibidas (así «kling», «seedream», «seedance», «cinematic», «gpt», «flux» o «nano banana» sueltos, y toda otra marca, siguen prohibidos).
+const PERMITIDAS = ['Seedance 2.0 Mini + referencias', 'Seedance 2.0 Mini', 'Cinematic Studio 3.0', 'Nano Banana 2.1', 'Seedream 5.0 Pro', 'Kling O1 Image', 'GPT Image 2.5', 'Kling 3.0 std', 'Kling 3.0 pro', 'Seedream 4.5', 'Kling O3', 'FLUX 3'];
+const sinPermitidas = (t) => PERMITIDAS.reduce((x, n) => x.split(new RegExp(n.replace(/[.+*?^${}()|[\]\\]/g, '\\$&'), 'gi')).join(' '), t);
+// frases que suenan a «el mejor» o a recomendación general (siguen prohibidas con los nombres permitidos)
+const MEJOR = ['el mejor', 'la mejor', 'los mejores', 'lo mejor', 'recomiend', 'recomendamos', 'te conviene', 'usá este', 'mejor que'];
 let hits = 0;
-for (const [donde, txt] of [['pantalla', enPantalla], ['pie', pie], ['voz', voz]]) {
+const nombradas = PERMITIDAS.filter((n) => [enPantalla, pie, voz].some((t) => t.toLowerCase().includes(n.toLowerCase())));
+console.log(`herramientas nombradas (permitidas por D-N1): ${nombradas.join(' / ') || 'ninguna'}`);
+for (const [donde, txt0] of [['pantalla', enPantalla], ['pie', pie], ['voz', voz]]) {
+  const txt = sinPermitidas(txt0);
   const low = txt.toLowerCase();
+  for (const f of MEJOR) if (low.includes(f) && !(donde === 'pie' && f.startsWith('recomend'))) { console.log(`✖ ${donde}: suena a «el mejor» o a recomendación: «${f}»`); hits++; }
   for (const f of PROHIBIDAS) if (low.includes(f.toLowerCase())) { console.log(`✖ ${donde}: «${f}»`); hits++; }
 }
 console.log(`texto en pantalla (${enPantalla.split(' ').length} tokens): ${enPantalla}`);
 console.log(`pie (${pie.trim().split(/\s+/).length} palabras)`);
 console.log(`voz (${voz.trim().split(/\s+/).length} palabras): ${voz.trim().replace(/\n/g, ' / ')}`);
 if (hits) { console.error(`✖ ${hits} coincidencia(s)`); process.exit(1); }
-console.log('✔ ninguna frase prohibida ni marca de terceros en pantalla, pie ni voz');
+console.log('✔ ninguna frase prohibida, ninguna marca de terceros fuera de las herramientas permitidas por D-N1, y nada que suene a «el mejor» o a recomendación, en pantalla, pie ni voz');

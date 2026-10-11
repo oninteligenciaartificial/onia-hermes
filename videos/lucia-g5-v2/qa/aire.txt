@@ -1,20 +1,20 @@
-# Aire muerto de G5 v2 (regla 15 de la madre: ningún tramo quieto > 0,3 s fuera de una tarjeta en lectura; un evento nuevo cada <= 2,0 s)
+# Aire muerto de G5 v2 (regla de la madre: ningún tramo quieto > 0,3 s fuera de una tarjeta en lectura; un evento nuevo cada <= 2,0 s)
 
-## 1. Eventos (qa/eventos-visuales.txt, scripts/eventos.mjs)
-eventos visuales: 48 en 26.833 s (más el cuadro 0 y el final)
+## 1. Eventos (scripts/eventos.mjs)
+eventos visuales: 47 en 26.833 s (más el cuadro 0 y el final)
 mayores huecos entre eventos:
+  11.55 → 13.45 s: 1.90 s   (e3 caja → c5 acento)
   24.42 → 26.32 s: 1.90 s   (c10 → c10 acento)
-  11.65 → 13.15 s: 1.50 s   (e3 dato → c5 acento)
+  0.95 → 2.45 s: 1.50 s   (gancho dato → gancho caja sale)
   15.20 → 16.50 s: 1.30 s   (r1 lupa → c6 acento)
-  1.45 → 2.45 s: 1.00 s   (gancho dato → gancho caja sale)
   9.49 → 10.49 s: 1.00 s   (p2 marca 0,70 → c4 acento)
   22.50 → 23.50 s: 1.00 s   (c9, costura → c9 acento)
   23.50 → 24.42 s: 0.92 s   (c9 acento → c10)
-  0.00 → 0.90 s: 0.90 s   (cuadro 0 → c1 acento)
-   0-10.0 s: 23 eventos (23.0 por 10 s)
+  7.61 → 8.51 s: 0.90 s   (p2 cursor sale de 0 → p2 cursor llega a 1)
+   0-10.0 s: 22 eventos (22.0 por 10 s)
   10-20.0 s: 17 eventos (17.0 por 10 s)
   20-26.8 s: 8 eventos (11.7 por 10 s)
-eventos por 10 s (todo el video): 17.9
+eventos por 10 s (todo el video): 17.5
 ✔ hueco máximo entre eventos 1.90 s (≤ 2.0 s)
 
 ## 2. Tramos quietos en el DOM, cuadro a cuadro (scripts/aire.mjs)
@@ -31,19 +31,19 @@ ventanas de lectura de las tarjetas (legible → fin de lectura = 0,35 s × pala
   c9    4 pal  22.417 → 24.117 s  (tarjeta en pantalla 22.500–24.417)
   c10   5 pal  24.458 → 26.508 s  (tarjeta en pantalla 24.417–26.833)
 
-SIN descontar la lectura de tarjetas: 39 tramos quietos; los mayores:
+SIN descontar la lectura de tarjetas: 38 tramos quietos; los mayores:
   24.542–26.333 s (43 cuadros iguales = 1.792 s)  en c10
-  11.792–13.167 s (33 cuadros iguales = 1.375 s)  en c5
+  11.792–13.458 s (40 cuadros iguales = 1.667 s)  en c5
+  1.125–2.458 s (32 cuadros iguales = 1.333 s)  en c1
   15.458–16.542 s (26 cuadros iguales = 1.083 s)  en c6
   22.500–23.542 s (25 cuadros iguales = 1.042 s)  en c9
-  0.000–0.917 s (22 cuadros iguales = 0.917 s)  en c1
-  1.625–2.458 s (20 cuadros iguales = 0.833 s)  en c1
+  0.000–0.875 s (21 cuadros iguales = 0.875 s)  en c1
 
 DESCONTANDO la lectura de tarjetas (regla de aire): 14 tramos; los mayores:
-  2.833–3.083 s (6 cuadros iguales = 0.250 s)  en c1
+  13.208–13.458 s (6 cuadros iguales = 0.250 s)  en c5
   16.292–16.542 s (6 cuadros iguales = 0.250 s)  en c6
   22.042–22.292 s (6 cuadros iguales = 0.250 s)  en c8
-  13.375–13.583 s (5 cuadros iguales = 0.208 s)  en c5
+  2.667–2.875 s (5 cuadros iguales = 0.208 s)  en c1
   19.333–19.542 s (5 cuadros iguales = 0.208 s)  en c7
   24.083–24.292 s (5 cuadros iguales = 0.208 s)  en c9
   8.500–8.667 s (4 cuadros iguales = 0.167 s)  en c3

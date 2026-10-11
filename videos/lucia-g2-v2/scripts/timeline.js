@@ -63,6 +63,7 @@ for (const c of PLAN.tarjetas) {
   tl.fromTo('#l-mk', { scaleY: 0, autoAlpha: 0, transformOrigin: '50% 0%' }, { scaleY: 1, autoAlpha: 1, duration: 0.3, ease: 'power3.out' }, L.marca_t);
   tl.fromTo('#l-ax0,#l-ax1', { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.25, ease: 'none' }, L.marca_t + 0.05);
   for (const f of L.filas) {
+    tl.fromTo('#l-t' + f.n, { x: 60, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 0.25, ease: 'power3.out' }, f.t);
     tl.fromTo('#l-b' + f.n, { width: 0 }, { width: f.w, duration: L.d, ease: 'power3.out' }, f.t);
     tl.fromTo('#l-v' + f.n, { autoAlpha: 0, x: -10 }, { autoAlpha: 1, x: 0, duration: 0.2, ease: 'power3.out' }, f.t + L.d - 0.05);
     if (f.ring) tl.fromTo('#l-q' + f.n, { autoAlpha: 0, scale: 1.05, transformOrigin: '50% 50%' }, { autoAlpha: 1, scale: 1, duration: 0.3, ease: 'power3.out' }, L.resalte_t);

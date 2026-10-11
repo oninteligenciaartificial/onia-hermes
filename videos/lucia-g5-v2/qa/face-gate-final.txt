@@ -2,33 +2,33 @@ Control de cara del FINAL (out/g5-v2-final-1080x1920.mp4) contra la FUENTE lleva
 
 piso de caras negativas (max): 0.224   gate del repo: 0,70
 archivo                                        centroide  min_ref  max_ref  cara_px  veredicto
-f-gancho_t1.00_FINAL.png                           0.792    0.525    0.714      181  OK (cara < 200 px: poco confiable)
+f-gancho_t1.00_FINAL.png                           0.794    0.549    0.723      182  OK (cara < 200 px: poco confiable)
 f-gancho_t1.00_fuente.png                          0.802    0.547    0.723      181  OK (cara < 200 px: poco confiable)
-f-gancho_t2.00_FINAL.png                           0.794    0.537    0.720      185  OK (cara < 200 px: poco confiable)
+f-gancho_t2.00_FINAL.png                           0.796    0.546    0.722      185  OK (cara < 200 px: poco confiable)
 f-gancho_t2.00_fuente.png                          0.795    0.535    0.715      183  OK (cara < 200 px: poco confiable)
-f-gancho_t2.79_FINAL.png                           0.796    0.537    0.718      184  OK (cara < 200 px: poco confiable)
+f-gancho_t2.79_FINAL.png                           0.806    0.542    0.728      185  OK (cara < 200 px: poco confiable)
 f-gancho_t2.79_fuente.png                          0.793    0.530    0.718      186  OK (cara < 200 px: poco confiable)
-f-e3_t11.83_FINAL.png                              0.360    0.218    0.454      295  BAJO: mirar
+f-e3_t11.83_FINAL.png                              0.356    0.213    0.451      294  BAJO: mirar
 f-e3_t11.83_fuente.png                             0.357    0.211    0.461      293  BAJO: mirar
-f-e3_t12.50_FINAL.png                              0.363    0.220    0.461      298  BAJO: mirar
+f-e3_t12.50_FINAL.png                              0.364    0.222    0.463      299  BAJO: mirar
 f-e3_t12.50_fuente.png                             0.354    0.206    0.462      296  BAJO: mirar
-f-e3_t13.17_FINAL.png                              0.363    0.220    0.462      301  BAJO: mirar
+f-e3_t13.17_FINAL.png                              0.367    0.225    0.460      301  BAJO: mirar
 f-e3_t13.17_fuente.png                             0.358    0.209    0.462      298  BAJO: mirar
-f-cierre_t23.08_FINAL.png                          0.833    0.546    0.784      201  OK
+f-cierre_t23.08_FINAL.png                          0.829    0.543    0.787      201  OK
 f-cierre_t23.08_fuente.png                         0.832    0.539    0.786      201  OK
-f-cierre_t24.54_FINAL.png                          0.823    0.534    0.779      205  OK
+f-cierre_t24.54_FINAL.png                          0.829    0.541    0.781      205  OK
 f-cierre_t24.54_fuente.png                         0.827    0.534    0.779      205  OK
-f-cierre_t26.00_FINAL.png                          0.826    0.542    0.781      207  OK
+f-cierre_t26.00_FINAL.png                          0.822    0.537    0.771      207  OK
 f-cierre_t26.00_fuente.png                         0.828    0.534    0.783      207  OK
 
 Diferencia final ↔ fuente (mismo zoom, sin comprimir):
-  f-gancho_t1.00           final 0.792  fuente 0.802  diferencia -0.010
-  f-gancho_t2.00           final 0.794  fuente 0.795  diferencia -0.001
-  f-gancho_t2.79           final 0.796  fuente 0.793  diferencia +0.003
-  f-e3_t11.83              final 0.360  fuente 0.357  diferencia +0.003
-  f-e3_t12.50              final 0.363  fuente 0.354  diferencia +0.009
-  f-e3_t13.17              final 0.363  fuente 0.358  diferencia +0.005
-  f-cierre_t23.08          final 0.833  fuente 0.832  diferencia +0.001
-  f-cierre_t24.54          final 0.823  fuente 0.827  diferencia -0.004
-  f-cierre_t26.00          final 0.826  fuente 0.828  diferencia -0.002
-MÁXIMA diferencia absoluta: 0.010 (9 pares) — ✔ ≤ 0,02: el escalado, el empuje lento, la caja de cara y el H.264 no deforman la cara
+  f-gancho_t1.00           final 0.794  fuente 0.802  diferencia -0.008
+  f-gancho_t2.00           final 0.796  fuente 0.795  diferencia +0.001
+  f-gancho_t2.79           final 0.806  fuente 0.793  diferencia +0.013
+  f-e3_t11.83              final 0.356  fuente 0.357  diferencia -0.001
+  f-e3_t12.50              final 0.364  fuente 0.354  diferencia +0.010
+  f-e3_t13.17              final 0.367  fuente 0.358  diferencia +0.009
+  f-cierre_t23.08          final 0.829  fuente 0.832  diferencia -0.003
+  f-cierre_t24.54          final 0.829  fuente 0.827  diferencia +0.002
+  f-cierre_t26.00          final 0.822  fuente 0.828  diferencia -0.006
+MÁXIMA diferencia absoluta: 0.013 (9 pares) — ✔ ≤ 0,02: el escalado, el empuje lento, la caja de cara y el H.264 no deforman la cara

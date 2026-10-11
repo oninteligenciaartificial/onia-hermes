@@ -1,11 +1,11 @@
-muestras: 212 instantes (cada 3 cuadros), 1121 cajas de texto medidas
-tamaños de texto en el DOM (px: cuántos elementos): {"36":12,"38":24,"40":4,"44":1,"46":3,"66":24}
+muestras: 212 instantes (cada 3 cuadros), 1258 cajas de texto medidas
+tamaños de texto en el DOM (px: cuántos elementos): {"36":12,"38":24,"40":7,"44":1,"46":3,"66":24}
   ok  lección: marca 0,70                      medido 716.0  esperado 716.0
-  ok  lección: barra Motor 5 0.82 (ancho)      medido 722.0  esperado 721.6
-  ok  lección: barra Motor 5 (borde izquierdo = 0) medido 100.0  esperado 100.0
-  ok  lección: barra Motor 1 0.72 (ancho)      medido 634.0  esperado 633.6
-  ok  lección: barra Motor 1 (borde izquierdo = 0) medido 100.0  esperado 100.0
-  ok  lección: barra Motor 3 0.64 (ancho)      medido 563.0  esperado 563.2
-  ok  lección: barra Motor 3 (borde izquierdo = 0) medido 100.0  esperado 100.0
+  ok  lección: barra Kling 3.0 std 0.72 (ancho) medido 634.0  esperado 633.6
+  ok  lección: barra Kling 3.0 std (borde izquierdo = 0) medido 100.0  esperado 100.0
+  ok  lección: barra Seedance 2.0 Mini 0.64 (ancho) medido 563.0  esperado 563.2
+  ok  lección: barra Seedance 2.0 Mini (borde izquierdo = 0) medido 100.0  esperado 100.0
+  ok  lección: barra Kling O3 0.82 (ancho)     medido 722.0  esperado 721.6
+  ok  lección: barra Kling O3 (borde izquierdo = 0) medido 100.0  esperado 100.0
   ok  regla: marca 0,70                        medido 716.0  esperado 716.0
 ✔ todo el texto dentro de la zona segura, sin pisarse, ≥ 34 px, y los datos están donde dice el número

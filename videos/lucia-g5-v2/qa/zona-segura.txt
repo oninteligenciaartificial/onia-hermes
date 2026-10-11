@@ -1,6 +1,6 @@
-muestras: 215 instantes (cada 3 cuadros), 647 cajas de texto medidas
+muestras: 215 instantes (cada 3 cuadros), 732 cajas de texto medidas
 margen mínimo entre el mentón y el texto que queda debajo: 59 px (t=3.000 s, rotulo/tag: texto desde y=720, mentón y=661; la regla pide ≥ 40)
-tamaños de texto en el DOM (px: cuántos elementos): {"38":15,"40":1,"44":2,"48":3,"64":3,"66":20}
+tamaños de texto en el DOM (px: cuántos elementos): {"34":3,"38":15,"40":1,"44":2,"48":3,"64":3,"66":20}
   ok  r2 punta baja 0,77 (0.771)               medido 412.0  esperado 412.0
   ok  r2 punta alta 0,80 (0.799)               medido 536.0  esperado 536.0
   ok  r2 banda (borde izq. = 0.754)            medido 338.0  esperado 338.0

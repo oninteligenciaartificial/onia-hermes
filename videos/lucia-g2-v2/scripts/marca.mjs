@@ -3,7 +3,7 @@
 //  · rótulo «Lucía Antelo · personaje IA de Onia» legible (opacidad ≥ 0,9, dentro del lienzo) en TODOS los cuadros de 0 a 2,8 s, a 40 px, y ya fuera desde los 3,0 s;
 //  · la promesa («Misma foto. Seis clips.») ya está en el cuadro 0 y las 6 miniaturas están a la vista antes de los 3 s;
 //  · el CTA exacto «Seguime: cada semana, una prueba.» legible desde que llega hasta el último cuadro, y dura entre 2,4 y 5,5 s;
-//  · los motores se nombran «Motor N» (cada «Motor» va seguido de un número).
+//  · D-N1 (11-oct): las herramientas se nombran con su nombre real (Kling 3.0 std, Seedance 2.0 Mini, Kling O3) y ya no queda ningún «Motor N».
 // Uso: node scripts/marca.mjs   (sale con 1 si algo incumple)
 import { createRequire } from 'node:module';
 import path from 'node:path';
@@ -67,9 +67,10 @@ if (cl !== N - 1) falla(`CTA: no es legible en el último cuadro (último legibl
 if (cta.slice(c0).some((v) => !v)) falla('CTA: hay un cuadro ilegible entre su llegada y el final');
 if (dur < 2.4 || dur > 5.5) falla(`CTA: ${dur.toFixed(3)} s en pantalla (debe ser 2,4-5,5 s)`);
 ok(`CTA exacto «${r.cta}» legible desde ${(c0 / FPS).toFixed(3)} s hasta el último cuadro: ${dur.toFixed(3)} s (2,4-5,5 s)`);
-// «Motor N»
-const sueltos = (r.html.match(/Motor(?!\s\d)/g) || []).length;
-if (sueltos) falla(`hay ${sueltos} «Motor» sin número`); else ok('todos los motores se nombran «Motor N»');
-
+// D-N1: nombres reales, ningún «Motor N»
+const quedan = (r.html.match(/Motor\s*\d/g) || []).length;
+if (quedan) falla(`quedan ${quedan} «Motor N» en pantalla (D-N1: se nombran las herramientas)`);
+for (const n of ['Kling 3.0 std', 'Seedance 2.0 Mini', 'Kling O3']) if (!r.html.includes(n)) falla(`no aparece el nombre «${n}» en pantalla`);
+if (!quedan) ok('las herramientas se nombran Kling 3.0 std, Seedance 2.0 Mini y Kling O3 (ningún «Motor N»)');
 if (malos) { console.error(`✖ ${malos} incumplimiento(s)`); process.exit(1); }
 console.log('✔ reglas de marca');

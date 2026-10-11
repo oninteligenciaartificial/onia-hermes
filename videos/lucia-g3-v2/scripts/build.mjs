@@ -251,13 +251,15 @@ if (errores.length) { console.error('✖ reglas:\n  ' + errores.join('\n  ')); p
 
 // ───────────────────────── 4) HTML ─────────────────────────
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-const f3 = (n) => rd(n, 3);
+// 6 decimales: con 3, un data-start de 15.667 (en vez de 15.666667) o un data-media-start de 0.583 (en vez de 0.583333) corría el cuadro del clip 1 cuadro cada uno (medido 11-oct: el final mostraba el cuadro n−2 de K4/K1)
+const f3 = (n) => rd(n, 6);
+const SESGO_MEDIA = 0.0004;   // el media-start cae 0,4 ms DESPUÉS del borde del cuadro: ni un redondeo hacia abajo ni uno al más cercano cambian de cuadro
 let html = '';
 let track = 10;
 const nextTrack = () => track++;
 const FULLDIV = (id, a, b, z, inner) => `<div id="${id}" class="clip" data-start="${f3(a)}" data-duration="${f3(b - a)}" data-track-index="${nextTrack()}" style="position:absolute;left:0;top:0;width:1080px;height:1920px;z-index:${z}">${inner}</div>\n`;
 const SCENE = (e, tr, z, inner) => `<div id="${e.id}" class="clip scn" data-start="${f3(e.a)}" data-duration="${f3(e.b - e.a)}" data-track-index="${tr}" style="z-index:${z}"><div class="zoom" id="z-${e.id}" data-layout-allow-overflow><img class="full" src="${e.src}" alt="" data-layout-allow-overflow>${inner}</div></div>\n`;
-const vid = (e, tr) => `<video id="${e.id}" src="${e.src}" data-start="${f3(e.a)}" data-duration="${f3(e.b - e.a)}" data-media-start="${f3(e.media_inicio * FR)}" data-track-index="${tr}" muted playsinline preload="auto" style="position:absolute;left:0;top:0;width:1080px;height:1920px;object-fit:cover;z-index:1;"></video>\n`;
+const vid = (e, tr) => `<video id="${e.id}" src="${e.src}" data-start="${f3(e.a)}" data-duration="${f3(e.b - e.a)}" data-media-start="${f3(e.media_inicio * FR + SESGO_MEDIA)}" data-track-index="${tr}" muted playsinline preload="auto" style="position:absolute;left:0;top:0;width:1080px;height:1920px;object-fit:cover;z-index:1;"></video>\n`;
 
 // fotos con empuje lento: el aro, el marco de la cara y los recuadros de origen están DENTRO del contenedor que hace el zoom (siguen a la foto)
 {
@@ -288,7 +290,7 @@ if (insL) html += FULLDIV('cc-insL', insL.a, insL.b, 8, `<div class="ins" id="in
 const viajaEntra = new Set(costuras.map((c) => c.tarjetas.entra));
 const viajaSale = new Set(costuras.map((c) => c.tarjetas.sale));
 const primeras = new Set(plan.cadenas_de_tarjetas.map((c) => c[0]));
-for (const c of tarjetas) c.entra = rd(c.a - (viajaEntra.has(c.id) ? PUSH : primeras.has(c.id) ? 0 : FR));
+for (const c of tarjetas) c.entra = rd(c.a - (viajaEntra.has(c.id) ? PUSH : primeras.has(c.id) ? 0 : FR), 6);
 for (const c of tarjetas) {
   const anch = c.top != null ? `cc-top" style="--t:${c.top}px` : `cc-bot" style="--b:${c.bottom}px`;
   const num = c.num ? `<span class="num">${esc(c.num)}</span>` : '';

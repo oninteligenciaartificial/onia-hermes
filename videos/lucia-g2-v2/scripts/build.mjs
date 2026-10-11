@@ -8,7 +8,7 @@ import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { buscarProhibidas } from './prohibidas.mjs';
+import { buscarProhibidas, buscarRecomendacion, AVISO_PIE } from './prohibidas.mjs';
 
 const P = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const plan0 = JSON.parse(fs.readFileSync(path.join(P, 'plan.json'), 'utf8'));
@@ -96,6 +96,7 @@ const tramos = [];
     const dur = Math.round(FPS * n / VZ.palabras_por_s);            // cuadros: lo que dura la línea a 3,6 palabras por segundo
     if (n < VZ.min_palabras_por_linea) errores.push(`tramo ${i + 1} «${l}»: ${n} palabras (mín ${VZ.min_palabras_por_linea}: una línea más corta no cabe en una frase natural)`);
     for (const f of buscarProhibidas(l)) errores.push(`tramo ${i + 1}: frase prohibida «${f}» en la voz`);
+    for (const f of buscarRecomendacion(l)) errores.push(`tramo ${i + 1}: «${f}» suena a recomendación (D-N1: es una prueba, una toma, no una regla)`);
     tramos.push({ i: i + 1, texto: l, palabras: n, caracteres: [...l].length, sf: s, df: dur, t: s / FPS, e: (s + dur) / FPS });
     s += dur + VZ.hueco_cuadros;
   });
@@ -211,18 +212,27 @@ const permitidos = new Set([fm(SC.piso)]);
   }
 }
 if (refNames.length !== plan.refs.total) errores.push(`el manifiesto trae ${refNames.length} referencias y la tarjeta dice ${plan.refs.total}`);
-// pie: abre con «personaje hecho con IA», dice lo mismo que el video, sin cifras que el video no muestre ni frases prohibidas
+// pie: abre con «personaje hecho con IA», dice lo mismo que el video (mismos nombres y cifras), lleva el aviso de D-N1 y no suena a recomendación
 {
   const pp = path.join(P, 'pie.txt');
   if (!fs.existsSync(pp)) errores.push('falta pie.txt');
   else {
     const pie = fs.readFileSync(pp, 'utf8').trim();
     if (!/^personaje hecho con ia/i.test(pie)) errores.push('pie.txt: debe abrir con «Personaje hecho con IA»');
+    if (!pie.includes(AVISO_PIE)) errores.push(`pie.txt: falta el aviso «${AVISO_PIE}» (D-N1)`);
     for (const f of buscarProhibidas(pie)) errores.push(`pie.txt: frase prohibida «${f}»`);
+    for (const f of buscarRecomendacion(pie)) errores.push(`pie.txt: «${f}» suena a recomendación`);
+    for (const m of plan.motores) if (!pie.includes(m.nombre)) errores.push(`pie.txt: no nombra «${m.nombre}»`);
     const decs = pie.match(/\d,\d+/g) || [];
     for (const d of decs) if (!permitidos.has(d)) errores.push(`pie.txt: la cifra ${d} no sale de los datos del video`);
     for (const f of ['seis clips', 'ocho fotos', 'una toma', 'Seguime']) if (!pie.toLowerCase().includes(f.toLowerCase()) && !pie.toLowerCase().includes(f.replace('ocho', '8').toLowerCase())) errores.push(`pie.txt: no dice «${f}»`);
   }
+}
+// los nombres de las herramientas salen de plan.motores[].nombre y las tarjetas de los motores los llevan
+for (const m of plan.motores) {
+  const c = plan.tarjetas.find((t) => t.motor === m.id);
+  if (!c || !`${c.texto} ${c.acento}`.includes(m.nombre)) errores.push(`${m.id}: la tarjeta no lleva el nombre «${m.nombre}»`);
+  if (/motor\s*\d/i.test(`${c?.texto} ${c?.acento}`)) errores.push(`${m.id}: la tarjeta todavía dice «Motor N» (D-N1)`);
 }
 // tags y sellos dentro de la vida de su tarjeta
 const mot = Object.fromEntries(plan.motores.map((m) => [m.id, m]));
@@ -240,9 +250,9 @@ const lecturas = [];
   L('rotulo', 'rótulo de IA', plan.rotulo.texto, 0, plan.rotulo.b - E_OUT + E_IN);
   for (const m of plan.motores) {
     const c = cardDe(m), fin = salidaDe(c);
-    L(`dA-${m.id}`, `${m.id} dato A`, `parecido 0 s: ${fm(m.ini)}`, m.tag_a, fin);
-    L(`dB-${m.id}`, `${m.id} dato B`, `${fm1(m.t_fin)} s: ${fm(m.fin)}`, m.tag_b, fin);
-    if (m.sello) L(`s-${m.id}`, `${m.id} sello`, m.sello.texto, m.sello.t, fin);
+    L(`dA-${m.id}`, `${m.nombre} dato A`, `parecido 0 s: ${fm(m.ini)}`, m.tag_a, fin);
+    L(`dB-${m.id}`, `${m.nombre} dato B`, `${fm1(m.t_fin)} s: ${fm(m.fin)}`, m.tag_b, fin);
+    if (m.sello) L(`s-${m.id}`, `${m.nombre} sello`, m.sello.texto, m.sello.t, fin);
   }
   const lf = med['pl-l'].b - PUSH, rf = med['pl-regla'].b - PUSH, Lc = plan.leccion;
   L('rf-l', 'regla: etiqueta de las referencias', `${plan.refs.muestra.length} de las ${plan.refs.total} fotos de referencia`, plan.regla.refs.etiqueta_t, rf);
@@ -250,9 +260,10 @@ const lecturas = [];
   L('l-mkl', 'lección: «mi piso»', `mi piso · ${fm(SC.piso)}`, Lc.marca_t + 0.05, lf);
   L('l-nota', 'lección: nota del final', Lc.nota.texto, Lc.nota.t, lf);
   Lc.orden.forEach((id, i) => {
-    const B = Lc.barra, t0 = B.t0 + i * B.escalon + B.d, ch = Lc.cambios.find((c) => c.motor === id), n = mot[id].n;
-    L(`l-l${i + 1}`, `lección: rótulo Motor ${n}`, `Motor ${n} · ${Lc.descriptor[id]}`, t0 - E_IN, ch ? ch.t : lf);
-    if (ch) L(`l-m${i + 1}`, `lección: rótulo Motor ${n} (cambia)`, `Motor ${n} · ${ch.texto}`, ch.t + 0.2 - E_IN, lf);
+    const B = Lc.barra, tb = B.t0 + i * B.escalon, t0 = tb + B.d, ch = Lc.cambios.find((c) => c.motor === id);
+    L(`l-t${i + 1}`, `lección: nombre ${mot[id].nombre}`, mot[id].nombre, tb, lf);
+    L(`l-l${i + 1}`, `lección: rótulo ${mot[id].nombre}`, Lc.descriptor[id], t0 - E_IN, ch ? ch.t : lf);
+    if (ch) L(`l-m${i + 1}`, `lección: rótulo ${mot[id].nombre} (cambia)`, ch.texto, ch.t + 0.2 - E_IN, lf);
   });
   for (const x of lecturas) if (x.dur < x.min - 1e-9) errores.push(`lectura «${x.que}» (${x.n} palabras): ${x.dur.toFixed(2)} s y pide ${x.min.toFixed(2)} s`);
 }
@@ -311,8 +322,9 @@ const lrows = Lc.orden.map((id, i) => {
   h += `<div class="mkv" id="l-mk" style="left:${X(SC.piso)}px;top:${Lc.marca_label_y + 70}px;height:${yb - (Lc.marca_label_y + 70)}px"></div>`;
   lrows.forEach((r, i) => {
     const n = i + 1;
-    h += `<div class="bar${bajo(r.m.fin) ? ' bajo' : ''}" id="l-b${n}" style="left:${SC.x0}px;top:${r.top}px;width:${r.w}px;height:${B.alto}px"><span class="lb" id="l-l${n}" data-layout-allow-overflow data-layout-allow-overlap style="width:${SC.x1 - SC.x0}px">Motor ${r.m.n} · ${Lc.descriptor[r.id]}</span>${r.ch ? `<span class="lb lb2" id="l-m${n}" data-layout-allow-overflow data-layout-allow-overlap style="width:${SC.x1 - SC.x0}px">Motor ${r.m.n} · ${esc(r.ch.texto)}</span>` : ''}</div>`;
-    h += `<div class="barv" id="l-v${n}" style="left:${SC.x0 + r.w + 14}px;top:${r.top + 22}px">${fm(r.m.fin)}</div>`;
+    h += `<div class="rt" id="l-t${n}" style="left:${SC.x0}px;top:${r.top - B.nombre_dy}px">${esc(r.m.nombre)}</div>`;
+    h += `<div class="bar${bajo(r.m.fin) ? ' bajo' : ''}" id="l-b${n}" style="left:${SC.x0}px;top:${r.top}px;width:${r.w}px;height:${B.alto}px"><span class="lb" id="l-l${n}" data-layout-allow-overflow data-layout-allow-overlap style="width:${SC.x1 - SC.x0}px">${esc(Lc.descriptor[r.id])}</span>${r.ch ? `<span class="lb lb2" id="l-m${n}" data-layout-allow-overflow data-layout-allow-overlap style="width:${SC.x1 - SC.x0}px">${esc(r.ch.texto)}</span>` : ''}</div>`;
+    h += `<div class="barv" id="l-v${n}" style="left:${SC.x0 + r.w + 14}px;top:${r.top + 16}px">${fm(r.m.fin)}</div>`;
     if (Lc.resalte_motores.includes(r.id)) h += `<div class="barring" id="l-q${n}" style="left:${SC.x0 - 8}px;top:${r.top - 8}px;width:${r.w + 16}px;height:${B.alto + 16}px"></div>`;
   });
   h += `<div class="ax" id="l-ax0" style="left:${SC.x0}px;top:${yb + 4}px">0</div><div class="ax r" id="l-ax1" style="left:${SC.x1 - 420}px;width:420px;top:${yb + 4}px">1</div>`;
@@ -398,5 +410,5 @@ for (const c of plan.tarjetas) console.log(`  ${hms(c.a)} – ${hms(c.b)} ${c.id
 console.log('Lecturas de rótulo, datos, sellos y placas (≥ 0,35 s/palabra + 0,3, ya descontada la entrada):');
 for (const x of lecturas) console.log(`  ${x.id.padEnd(8)} ${x.que.padEnd(36)} ${String(x.n).padStart(2)} pal  ${x.a.toFixed(2)}–${x.b.toFixed(2)}  ${x.dur.toFixed(2)} s (pide ${x.min.toFixed(2)})  ${x.dur - x.min < 0.2 ? '← justo' : ''}`);
 console.log('Datos (de PROCEDENCIA.jsonl):');
-for (const m of plan.motores) console.log(`  Motor ${m.n}: ${m.cr} cr · 0 s ${fm(m.ini)} → ${fm1(m.t_fin)} s ${fm(m.fin)}  (muestras ${m._valores.join(' ')})`);
+for (const m of plan.motores) console.log(`  ${m.nombre}: ${m.cr} cr · 0 s ${fm(m.ini)} → ${fm1(m.t_fin)} s ${fm(m.fin)}  (muestras ${m._valores.join(' ')})`);
 console.log(`ok: index.html (${Math.round(out.length / 1024)} KB), plan.resuelto.json`);

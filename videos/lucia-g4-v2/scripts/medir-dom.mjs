@@ -138,6 +138,18 @@ const fm = (v) => v.toFixed(2).replace('.', ',');
   const mk4 = await medida(tr, '#sc-mk'); datos.push(['regla marca 0,70', mk4.cx, X(SC.piso)]);
   for (const [i, f] of plan.l2.fotos.lista.entries()) { const r = await medida((f.cap_t ?? plan.l2.fotos.lista.at(-1).cap_t) + 0.6, `#l2-cap${i + 1} .cv`); if (r.txt !== fm(f.valor)) falla(0, `L2 foto ${f.letra}: dice «${r.txt}» y el dato es ${fm(f.valor)}`); }
   for (const m of plan.imagenes.filter((x) => x.tarjeta)) { const r = await medida(m.tag_t + 0.6, `#dA-${m.id} b`); if (r.txt !== fm(m.valor)) falla(0, `Imagen ${m.letra}: el dato en pantalla dice «${r.txt}» y es ${fm(m.valor)}`); }
+  // los rótulos de fila de la lección (nombres largos) no cruzan la marca de 0,70 ni se pisan con el valor de la fila de arriba
+  {
+    const filas = await pg.evaluate((t) => {
+      const tl = window.__timelines.main; tl.pause(); tl.time(t);
+      const out = []; for (let n = 1; n <= 6; n++) { const e = document.getElementById('l1-t' + n); const r = document.createRange(); r.selectNodeContents(e); const q = r.getBoundingClientRect(); out.push({ n, x1: q.left, x2: q.right, y1: q.top, y2: q.bottom, px: parseFloat(getComputedStyle(e).fontSize), txt: e.textContent }); }
+      const mk = document.getElementById('l1-mk').getBoundingClientRect();
+      return { out, mk: mk.left };
+    }, plan.l1.filas.at(-1).t + 1.5);
+    let peor = null;
+    for (const f of filas.out) { const holgura = filas.mk - 3 - f.x2; if (!peor || holgura < peor.h) peor = { h: holgura, ...f }; if (holgura < 6) falla(0, `rótulo de fila «${f.txt}» cruza la marca de 0,70 (termina en x=${Math.round(f.x2)}, la marca está en x=${Math.round(filas.mk)})`); }
+    console.log(`  ${peor.h >= 6 ? 'ok ' : '✖  '} rótulos de fila de la lección: el más largo («${peor.txt}», ${peor.px} px) termina en x=${Math.round(peor.x2)}; la marca de 0,70 está en x=${Math.round(filas.mk)} (holgura ${Math.round(peor.h)} px)`);
+  }
   // las notas de honestidad a 44 px y el rótulo de IA a 40 px (medido en el DOM)
   for (const [sel, min, que] of [['#l1-nota1', 44, 'nota 1'], ['#l1-nota2', 44, 'nota 2'], ['#rotulo .tag', 40, 'rótulo de IA']]) {
     const px = await pg.evaluate((s) => parseFloat(getComputedStyle(document.querySelector(s)).fontSize), sel);

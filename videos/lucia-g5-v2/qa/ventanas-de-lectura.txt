@@ -1,14 +1,16 @@
 ventana legible medida en el DOM (opacidad ≥ 0,9 y ≥ 95 % dentro del lienzo), cuadro a cuadro:
   ok  rotulo    6 pal  0.00–3.13 s  3.13 s (pide 2.40)  «Lucía Antelo · personaje IA de Onia»
-  ok  dA-g      2 pal  1.54–2.75 s  1.21 s (pide 1.00)  «parecido 0,81»
+  ok  dA-g      4 pal  1.04–2.96 s  1.92 s (pide 1.70)  «Seedream 4.5 · parecido 0,81»
   ok  sc-ax0    1 pal  7.17–11.08 s  3.92 s (pide 0.65)  «0»
   ok  sc-ax1    2 pal  7.17–11.17 s  4.00 s (pide 1.00)  «idéntica · 1»
   ok  sc-mkl    2 pal  9.63–11.17 s  1.54 s (pide 1.00)  «piso · 0,70»
-  ok  dA-e3     4 pal  11.75–13.63 s  1.88 s (pide 1.70)  «Imagen B · parecido 0,35»
+  ok  dA-e3     5 pal  11.46–13.75 s  2.29 s (pide 2.05)  «Kling O1 Image · parecido 0,35»
   ok  r1-tag    2 pal  14.92–16.88 s  1.96 s (pide 1.00)  «89 px»
   ok  r1-nota   6 pal  13.92–16.88 s  2.96 s (pide 2.40)  «Bajo 200 px, el medidor avisa.»
+  ok  tool-r1   2 pal  13.88–16.83 s  2.96 s (pide 1.00)  «Kling O3»
   ok  r2-mkl    2 pal  16.88–19.58 s  2.71 s (pide 1.00)  «piso · 0,70»
   ok  r2-zoom   4 pal  16.96–19.67 s  2.71 s (pide 1.70)  «Zoom: 0,70 a 0,90»
+  ok  tool-r2   3 pal  16.92–19.63 s  2.71 s (pide 1.35)  «Cinematic Studio 3.0»
   ok  r2-m1     1 pal  16.88–19.63 s  2.75 s (pide 0.65)  «0,75»
   ok  r2-m2     1 pal  16.92–19.63 s  2.71 s (pide 0.65)  «0,80»
   ok  r2-m3     1 pal  16.92–19.67 s  2.75 s (pide 0.65)  «0,85»
@@ -17,6 +19,7 @@ ventana legible medida en el DOM (opacidad ≥ 0,9 y ≥ 95 % dentro del lienzo)
   ok  r2-v2     1 pal  18.04–19.63 s  1.58 s (pide 0.65)  «0,80»
   ok  r2-bl     1 pal  18.67–19.63 s  0.96 s (pide 0.65)  «±0,03»
   ok  r3-call   6 pal  19.67–22.38 s  2.71 s (pide 2.40)  «Lo difuminé: lo inventó el motor.»
+  ok  tool-r3   5 pal  19.67–22.38 s  2.71 s (pide 2.05)  «Seedance 2.0 Mini + referencias»
   ok  r3-num    2 pal  20.83–22.38 s  1.54 s (pide 1.00)  «parecido 0,80»
   ok  c1        6 pal  0.00–3.17 s  3.17 s (pide 2.40)  «¿Cómo sé que sigue siendo ella?»
   ok  c2        4 pal  3.21–5.08 s  1.88 s (pide 1.70)  «Ocho fotos oficiales suyas.»

@@ -1,13 +1,13 @@
 {
- "titulo": "G4 v2 · Seis motores de imagen, una cara: ¿cuál la conserva? (re-corte de 28,33 s)",
+ "titulo": "G4 v2 · Seis motores de imagen, una cara: ¿cuál la conserva? (re-corte de 28 s, con los motores nombrados)",
  "guion": "hermes-content/docs/cola/lucia-diario/guiones/G4-seis-motores-de-imagen-una-cara.md",
- "version": "v2 (11-oct-2026): re-corte de G4 (59,75 s) a 28,33 s, sin aire muerto (regla 15 de edicion-referentes) y cronometrado para una voz que se agrega después (guion-voz.txt). Mismo método de G1-G5 (.claude/skills/lucia/montaje-hyperframes.md). 0 créditos: solo fotos ya pagadas y las 8 referencias oficiales. Sin clips: fotos fijas con empuje lento.",
+ "version": "v2 (11-oct-2026): re-corte de G4 (59,75 s) a ~28 s, sin aire muerto (regla 15 de edicion-referentes), cronometrado para una voz que se agrega después (guion-voz.txt) y, desde D-N1 (11-oct), con los motores NOMBRADOS como uso propio (no recomendación pagada). Mismo método de G1-G5 (.claude/skills/lucia/montaje-hyperframes.md). 0 créditos: solo fotos ya pagadas y las 8 referencias oficiales. Sin clips: fotos fijas con empuje lento.",
  "lienzo": {
   "w": 1080,
   "h": 1920,
   "fps": 24,
-  "frames": 693,
-  "duracion": 28.875
+  "frames": 673,
+  "duracion": 28.041667
  },
  "voz": {
   "archivo": "guion-voz.txt",
@@ -51,7 +51,79 @@
   "manifest": "hermes-content/references/modelos/lucia/v4/qa/manifest-escenas-seedream-20260930.json",
   "fijos": "assets-fijos",
   "total": 8,
-  "recortes": [ { "id": "ref1", "fuente": "R1_frontal_canon", "recorte": [ 0, 100, 768 ] }, { "id": "ref2", "fuente": "R2_34_medio", "recorte": [ 172, 157, 522 ] }, { "id": "ref3", "fuente": "R3_casi_frontal", "recorte": [ 75, 0, 1717 ] }, { "id": "ref4", "fuente": "R4_casi_perfil", "recorte": [ 218, 208, 1183 ] }, { "id": "ref5", "fuente": "R5_34_izq", "recorte": [ 61, 65, 727 ] }, { "id": "ref6", "fuente": "R6_34_der", "recorte": [ 380, 198, 515 ] }, { "id": "ref7", "fuente": "R7_frontal_2752", "recorte": [ 0, 8, 1536 ] }, { "id": "ref8", "fuente": "R8_anchor_902eeebb", "recorte": [ 0, 109, 896 ] }
+  "recortes": [
+   {
+    "id": "ref1",
+    "fuente": "R1_frontal_canon",
+    "recorte": [
+     0,
+     100,
+     768
+    ]
+   },
+   {
+    "id": "ref2",
+    "fuente": "R2_34_medio",
+    "recorte": [
+     172,
+     157,
+     522
+    ]
+   },
+   {
+    "id": "ref3",
+    "fuente": "R3_casi_frontal",
+    "recorte": [
+     75,
+     0,
+     1717
+    ]
+   },
+   {
+    "id": "ref4",
+    "fuente": "R4_casi_perfil",
+    "recorte": [
+     218,
+     208,
+     1183
+    ]
+   },
+   {
+    "id": "ref5",
+    "fuente": "R5_34_izq",
+    "recorte": [
+     61,
+     65,
+     727
+    ]
+   },
+   {
+    "id": "ref6",
+    "fuente": "R6_34_der",
+    "recorte": [
+     380,
+     198,
+     515
+    ]
+   },
+   {
+    "id": "ref7",
+    "fuente": "R7_frontal_2752",
+    "recorte": [
+     0,
+     8,
+     1536
+    ]
+   },
+   {
+    "id": "ref8",
+    "fuente": "R8_anchor_902eeebb",
+    "recorte": [
+     0,
+     109,
+     896
+    ]
+   }
   ]
  },
  "escala": {
@@ -60,57 +132,229 @@
   "piso": 0.7
  },
  "fotos": {
-  "a": { "src": "assets/ph-a.jpg", "origen": "hermes-content/references/modelos/lucia/v4/kit/k1-1-recepcion-celular-4afffb96.jpg"
+  "a": {
+   "src": "assets/ph-a.jpg",
+   "origen": "hermes-content/references/modelos/lucia/v4/kit/k1-1-recepcion-celular-4afffb96.jpg"
   },
-  "b": { "src": "assets/ph-b.jpg", "origen": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos/img-kling-omni-image-c3706d45.jpg"
+  "b": {
+   "src": "assets/ph-b.jpg",
+   "origen": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos/img-kling-omni-image-c3706d45.jpg"
   },
-  "c": { "src": "assets/ph-c.jpg", "origen": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos-limpias/img-nano-banana-2-1-a4dd1a48-limpia.jpg", "original": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos/img-nano-banana-2-1-a4dd1a48.jpg", "nota": "limpia: sillones dentales y resto del consultorio difuminados desde y=540 (x 840-1080, y 540-970) y logo de monitor (revisión 1, H1+H2; 3ra pasada: versión que difumina desde y=540)"
+  "c": {
+   "src": "assets/ph-c.jpg",
+   "origen": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos-limpias/img-nano-banana-2-1-a4dd1a48-limpia.jpg",
+   "original": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos/img-nano-banana-2-1-a4dd1a48.jpg",
+   "nota": "limpia: sillones dentales y resto del consultorio difuminados desde y=540 (x 840-1080, y 540-970) y logo de monitor (revisión 1, H1+H2; 3ra pasada: versión que difumina desde y=540)"
   },
-  "d": { "src": "assets/ph-d.jpg", "origen": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos/img-seedream-5-pro-b1abe43c.jpg"
+  "d": {
+   "src": "assets/ph-d.jpg",
+   "origen": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos/img-seedream-5-pro-b1abe43c.jpg"
   },
-  "e": { "src": "assets/ph-e.jpg", "origen": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos-limpias/img-flux-3-af9c2d0c-limpia.jpg", "original": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos/img-flux-3-af9c2d0c.jpg", "nota": "limpia: logo del respaldo del monitor difuminado (revisión 1, H2)"
+  "e": {
+   "src": "assets/ph-e.jpg",
+   "origen": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos-limpias/img-flux-3-af9c2d0c-limpia.jpg",
+   "original": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos/img-flux-3-af9c2d0c.jpg",
+   "nota": "limpia: logo del respaldo del monitor difuminado (revisión 1, H2)"
   },
-  "f": { "src": "assets/ph-f.jpg", "origen": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos/img-gpt-image-2-5-5da2fa1e.jpg"
+  "f": {
+   "src": "assets/ph-f.jpg",
+   "origen": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos/img-gpt-image-2-5-5da2fa1e.jpg"
   },
-  "cafe_a": { "src": "assets/cafe-a.jpg", "origen": "hermes-content/references/modelos/lucia/v4/kit/k2-1-cafe-mostrador-3e05cfd0.jpg"
+  "cafe_a": {
+   "src": "assets/cafe-a.jpg",
+   "origen": "hermes-content/references/modelos/lucia/v4/kit/k2-1-cafe-mostrador-3e05cfd0.jpg"
   },
-  "cafe_b": { "src": "assets/cafe-b.jpg", "origen": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos/img-omni-image-k2cafe-9f4b5172.jpg"
+  "cafe_b": {
+   "src": "assets/cafe-b.jpg",
+   "origen": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos/img-omni-image-k2cafe-9f4b5172.jpg"
   },
-  "k": { "src": "assets/ph-k.jpg", "origen": "hermes-content/references/modelos/lucia/v4/kit/k4-5-senala-342c0ab5.jpg", "nota": "cierre: Lucía mira a cámara y sonríe (K4 toma 5, ya pagada; face-gate 0,832)"
+  "k": {
+   "src": "assets/ph-k.jpg",
+   "origen": "hermes-content/references/modelos/lucia/v4/kit/k4-5-senala-342c0ab5.jpg",
+   "nota": "cierre: Lucía mira a cámara y sonríe (K4 toma 5, ya pagada; face-gate 0,832)"
   }
  },
  "medios": [
-  { "id": "f-gancho", "tipo": "foto", "foto": "a", "a": 0, "b": 4.75, "track": 20, "capa": "Foto A a pantalla completa (0-4,75 s) con empuje lento; sale en el empuje junto con las miniaturas y la tarjeta"
+  {
+   "id": "f-gancho",
+   "tipo": "foto",
+   "foto": "a",
+   "a": 0,
+   "b": 4.75,
+   "track": 20,
+   "capa": "Foto de Seedream 4.5 a pantalla completa con empuje lento; sale en el empuje junto con las miniaturas y la tarjeta"
   },
-  { "id": "pl-regla", "tipo": "placa", "a": 4.5, "b": 8.583333, "capa": "placa de la regla: las 8 referencias + escala 0-1 con la marca en 0,70 (una sola tarjeta)"
+  {
+   "id": "pl-regla",
+   "tipo": "placa",
+   "a": 4.5,
+   "b": 8.333333,
+   "capa": "placa de la regla: las 8 referencias + escala 0-1 con la marca en 0,70 (una sola tarjeta)"
   },
-  { "id": "f-a", "tipo": "foto", "foto": "a", "a": 8.333333, "b": 10.791667, "track": 21, "capa": "Imagen A (1 crédito, sostiene)"
+  {
+   "id": "f-a",
+   "tipo": "foto",
+   "foto": "a",
+   "a": 8.083333,
+   "b": 10.25,
+   "track": 21,
+   "capa": "Seedream 4.5 (1 crédito, sostiene)"
   },
-  { "id": "f-d", "tipo": "foto", "foto": "d", "a": 10.541667, "b": 13.541667, "track": 22, "capa": "Imagen D (2,5 créditos, justo en el piso)"
+  {
+   "id": "f-d",
+   "tipo": "foto",
+   "foto": "d",
+   "a": 10,
+   "b": 13,
+   "track": 22,
+   "capa": "Seedream 5.0 Pro (2,5 créditos, justo en el piso)"
   },
-  { "id": "f-e", "tipo": "foto", "foto": "e", "a": 13.291667, "b": 16, "track": 23, "capa": "Imagen E (3 créditos, bajo el piso; foto limpia)"
+  {
+   "id": "f-e",
+   "tipo": "foto",
+   "foto": "e",
+   "a": 12.75,
+   "b": 15.166667,
+   "track": 23,
+   "capa": "FLUX 3 (3 créditos, bajo el piso; foto limpia)"
   },
-  { "id": "pl-l1", "tipo": "placa", "a": 15.75, "b": 23.708333, "capa": "lección: las 6 imágenes por precio sobre la escala + las dos notas de honestidad (44 px)"
+  {
+   "id": "pl-l1",
+   "tipo": "placa",
+   "a": 14.916667,
+   "b": 22.875,
+   "capa": "lección: los 6 motores por precio sobre la escala + las dos notas de honestidad (44 px)"
   },
-  { "id": "pl-l2", "tipo": "placa", "a": 23.458333, "b": 26.458333, "capa": "escena 2: A y B del café lado a lado"
+  {
+   "id": "pl-l2",
+   "tipo": "placa",
+   "a": 22.625,
+   "b": 25.625,
+   "capa": "escena 2: Seedream 4.5 y Kling O1 Image lado a lado"
   },
-  { "id": "f-cierre", "tipo": "foto", "foto": "k", "a": 26.208333, "b": 28.875, "track": 24, "capa": "cierre: Lucía mira a cámara y sonríe (foto K4·5) con empuje lento"
+  {
+   "id": "f-cierre",
+   "tipo": "foto",
+   "foto": "k",
+   "a": 25.375,
+   "b": 28.041667,
+   "track": 24,
+   "capa": "cierre: Lucía mira a cámara y sonríe (foto K4·5) con empuje lento"
   }
  ],
  "costuras": [
-  { "t": 4.75, "seg": 3, "tipo": "empuje", "sale": [ "f-gancho", "thumbs" ], "entra": [ "pl-regla" ], "tarjetas": { "sale": "c2", "entra": null }, "porque": "foto + miniaturas → regla (la tarjeta c3 de la regla entra sola, 1 s después)"
+  {
+   "t": 4.75,
+   "seg": 3,
+   "tipo": "empuje",
+   "sale": [
+    "f-gancho",
+    "thumbs"
+   ],
+   "entra": [
+    "pl-regla"
+   ],
+   "tarjetas": {
+    "sale": "c2",
+    "entra": null
+   },
+   "porque": "foto + miniaturas → regla (la tarjeta c3 de la regla entra sola, después de las referencias)"
   },
-  { "t": 8.583333, "seg": 5, "tipo": "empuje", "sale": [ "pl-regla" ], "entra": [ "f-a" ], "tarjetas": { "sale": "c3", "entra": "c4" }, "porque": "regla → Imagen A"
+  {
+   "t": 8.333333,
+   "seg": 5,
+   "tipo": "empuje",
+   "sale": [
+    "pl-regla"
+   ],
+   "entra": [
+    "f-a"
+   ],
+   "tarjetas": {
+    "sale": "c3",
+    "entra": "c4"
+   },
+   "porque": "regla → Seedream 4.5"
   },
-  { "t": 10.791667, "seg": 6, "tipo": "empuje", "sale": [ "f-a" ], "entra": [ "f-d" ], "tarjetas": { "sale": "c4", "entra": "c5" }, "porque": "Imagen A → D"
+  {
+   "t": 10.25,
+   "seg": 6,
+   "tipo": "empuje",
+   "sale": [
+    "f-a"
+   ],
+   "entra": [
+    "f-d"
+   ],
+   "tarjetas": {
+    "sale": "c4",
+    "entra": "c5"
+   },
+   "porque": "Seedream 4.5 → Seedream 5.0 Pro"
   },
-  { "t": 13.541667, "seg": 7, "tipo": "empuje", "sale": [ "f-d" ], "entra": [ "f-e" ], "tarjetas": { "sale": "c5", "entra": "c6" }, "porque": "Imagen D → E"
+  {
+   "t": 13,
+   "seg": 7,
+   "tipo": "empuje",
+   "sale": [
+    "f-d"
+   ],
+   "entra": [
+    "f-e"
+   ],
+   "tarjetas": {
+    "sale": "c5",
+    "entra": "c6"
+   },
+   "porque": "Seedream 5.0 Pro → FLUX 3"
   },
-  { "t": 16, "seg": 8, "tipo": "empuje", "sale": [ "f-e" ], "entra": [ "pl-l1" ], "tarjetas": { "sale": "c6", "entra": "c7" }, "porque": "Imagen E → lección"
+  {
+   "t": 15.166667,
+   "seg": 8,
+   "tipo": "empuje",
+   "sale": [
+    "f-e"
+   ],
+   "entra": [
+    "pl-l1"
+   ],
+   "tarjetas": {
+    "sale": "c6",
+    "entra": "c7"
+   },
+   "porque": "FLUX 3 → lección"
   },
-  { "t": 23.708333, "seg": 11, "tipo": "empuje", "sale": [ "pl-l1" ], "entra": [ "pl-l2" ], "tarjetas": { "sale": null, "entra": "c8" }, "porque": "lección → escena 2 (la tarjeta c7 ya salió por su cuenta)"
+  {
+   "t": 22.875,
+   "seg": 11,
+   "tipo": "empuje",
+   "sale": [
+    "pl-l1"
+   ],
+   "entra": [
+    "pl-l2"
+   ],
+   "tarjetas": {
+    "sale": null,
+    "entra": "c8"
+   },
+   "porque": "lección → escena 2 (la tarjeta c7 ya salió por su cuenta)"
   },
-  { "t": 26.458333, "seg": 12, "tipo": "empuje", "sale": [ "pl-l2" ], "entra": [ "f-cierre" ], "tarjetas": { "sale": "c8", "entra": "c9" }, "porque": "escena 2 → cierre (foto K4·5)"
+  {
+   "t": 25.625,
+   "seg": 12,
+   "tipo": "empuje",
+   "sale": [
+    "pl-l2"
+   ],
+   "entra": [
+    "f-cierre"
+   ],
+   "tarjetas": {
+    "sale": "c8",
+    "entra": "c9"
+   },
+   "porque": "escena 2 → cierre (foto K4·5)"
   }
  ],
  "rotulo": {
@@ -120,41 +364,142 @@
   "top": 720
  },
  "tarjetas": [
-  { "id": "c1", "texto": "¿Cuál conserva", "acento": "su cara?", "acento_t": 1.2, "a": 0.1, "b": 2.041667, "escena": "gancho"
+  {
+   "id": "c1",
+   "texto": "¿Cuál conserva",
+   "acento": "su cara?",
+   "acento_t": 1.2,
+   "a": 0.1,
+   "b": 2.041667,
+   "escena": "gancho"
   },
-  { "id": "c2", "texto": "Misma orden.\n", "acento": "Seis motores de imagen.", "acento_t": 3.4, "a": 2.041667, "b": 4.75, "escena": "gancho"
+  {
+   "id": "c2",
+   "texto": "Misma orden.\n",
+   "acento": "Seis motores de imagen.",
+   "acento_t": 3.4,
+   "a": 2.041667,
+   "b": 4.75,
+   "escena": "gancho"
   },
-  { "id": "c3", "texto": "Contra 8 fotos suyas.\n", "acento": "Piso: 0,70.", "acento_t": 6.7, "a": 5.708333, "b": 8.583333, "escena": "regla"
+  {
+   "id": "c3",
+   "texto": "Contra 8 fotos suyas.\n",
+   "acento": "Piso: 0,70.",
+   "acento_t": 6.4,
+   "a": 5.5,
+   "b": 8.333333,
+   "escena": "regla"
   },
-  { "id": "c4", "texto": "Imagen A ·", "acento": "1 crédito", "acento_t": 9.4, "a": 8.583333, "b": 10.791667, "escena": "A", "imagen": "a"
+  {
+   "id": "c4",
+   "texto": "Seedream 4.5 ·",
+   "acento": "1 crédito",
+   "acento_t": 8.9,
+   "a": 8.333333,
+   "b": 10.25,
+   "escena": "Seedream 4.5",
+   "imagen": "a"
   },
-  { "id": "c5", "texto": "Imagen D ·", "acento": "2,5 créditos", "acento_t": 11.3, "a": 10.791667, "b": 13.541667, "escena": "D", "imagen": "d"
+  {
+   "id": "c5",
+   "texto": "Seedream 5.0 Pro ·",
+   "acento": "2,5 créditos",
+   "acento_t": 10.8,
+   "a": 10.25,
+   "b": 13,
+   "escena": "Seedream 5.0 Pro",
+   "imagen": "d"
   },
-  { "id": "c6", "texto": "Imagen E ·", "acento": "3 créditos", "acento_t": 14.1, "a": 13.541667, "b": 16, "escena": "E", "imagen": "e"
+  {
+   "id": "c6",
+   "texto": "FLUX 3 ·",
+   "acento": "3 créditos",
+   "acento_t": 13.5,
+   "a": 13,
+   "b": 15.166667,
+   "escena": "FLUX 3",
+   "imagen": "e"
   },
-  { "id": "c7", "texto": "Pagar más no", "acento": "mejoró el parecido.", "acento_t": 17.4, "a": 16, "b": 18.583333, "escena": "lección"
+  {
+   "id": "c7",
+   "texto": "Pagar más no",
+   "acento": "mejoró el parecido.",
+   "acento_t": 16.6,
+   "a": 15.166667,
+   "b": 17.75,
+   "escena": "lección"
   },
-  { "id": "c8", "texto": "Escena 2:", "acento": "B perdió la cara.", "acento_t": 25.1, "a": 23.708333, "b": 26.458333, "escena": "escena 2"
+  {
+   "id": "c8",
+   "texto": "Escena 2:",
+   "acento": "Kling perdió la cara.",
+   "acento_t": 24.3,
+   "a": 22.875,
+   "b": 25.625,
+   "escena": "escena 2"
   },
-  { "id": "c9", "texto": "Seguime:", "acento": "cada semana, una prueba.", "acento_t": 27, "a": 26.458333, "b": 28.875, "escena": "cierre"
+  {
+   "id": "c9",
+   "texto": "Seguime:",
+   "acento": "cada semana, una prueba.",
+   "acento_t": 26.2,
+   "a": 25.625,
+   "b": 28.041667,
+   "escena": "cierre"
   }
  ],
  "cadenas_de_tarjetas": [
-  [ "c1", "c2"
+  [
+   "c1",
+   "c2"
   ],
-  [ "c3"
+  [
+   "c3"
   ],
-  [ "c8", "c9"
+  [
+   "c8",
+   "c9"
   ]
  ],
  "gancho": {
-  "miniaturas": { "a": 2.1, "escalon": 0.12, "w": 136, "h": 242, "gap": 16, "x0": 92, "y": 960, "ids": [ "a", "b", "c", "d", "e", "f" ]
+  "miniaturas": {
+   "a": 2.1,
+   "escalon": 0.12,
+   "w": 136,
+   "h": 242,
+   "gap": 16,
+   "x0": 92,
+   "y": 960,
+   "ids": [
+    "a",
+    "b",
+    "c",
+    "d",
+    "e",
+    "f"
+   ]
   }
  },
  "regla": {
-  "refs": { "a": 4.75, "estaticas": 4, "escalon": 0.1, "lado": 202, "gap": 24, "x0": 100, "y": 330, "y2": 556
+  "refs": {
+   "a": 4.75,
+   "estaticas": 4,
+   "escalon": 0.1,
+   "lado": 202,
+   "gap": 24,
+   "x0": 100,
+   "y": 330,
+   "y2": 556
   },
-  "escala": { "a": 5.35, "d": 0.5, "ax_t": 5.55, "uno_t": 6.1, "marca_t": 6.75, "y": 967, "marca_label_y": 842
+  "escala": {
+   "a": 5.25,
+   "d": 0.5,
+   "ax_t": 5.45,
+   "uno_t": 5.95,
+   "marca_t": 6.35,
+   "y": 967,
+   "marca_label_y": 842
   }
  },
  "claves_procedencia": {
@@ -170,49 +515,211 @@
   "b_cafe3": "kling_omni_image_K4cafe_dad464de-75a8-45f5-b799-8d91e5a63d1d"
  },
  "imagenes": [
-  { "id": "a", "letra": "A", "cr": 1, "valor": 0.81, "estado": "ok", "tarjeta": "c4", "tag_t": 9.053, "enfasis": [ { "que": "dato", "t": 10.033, "color": true } ]
+  {
+   "id": "a",
+   "letra": "A",
+   "nombre": "Seedream 4.5",
+   "cr": 1,
+   "valor": 0.81,
+   "estado": "ok",
+   "tarjeta": "c4",
+   "tag_t": 8.683,
+   "enfasis": [
+    {
+     "que": "dato",
+     "t": 9.583,
+     "color": true
+    }
+   ]
   },
-  { "id": "b", "letra": "B", "cr": 0.5, "valor": 0.79, "estado": "ok"
+  {
+   "id": "b",
+   "letra": "B",
+   "nombre": "Kling O1 Image",
+   "cr": 0.5,
+   "valor": 0.79,
+   "estado": "ok"
   },
-  { "id": "c", "letra": "C", "cr": 2, "valor": 0.74, "estado": "ok"
+  {
+   "id": "c",
+   "letra": "C",
+   "nombre": "Nano Banana 2.1",
+   "cr": 2,
+   "valor": 0.74,
+   "estado": "ok"
   },
-  { "id": "d", "letra": "D", "cr": 2.5, "valor": 0.7, "estado": "justo", "tarjeta": "c5", "tag_t": 11.192, "pastilla": { "texto": "justo en el piso", "t": 11.442 }, "enfasis": [ { "que": "pastilla", "t": 12.342 }, { "que": "dato", "t": 12.842 } ]
+  {
+   "id": "d",
+   "letra": "D",
+   "nombre": "Seedream 5.0 Pro",
+   "cr": 2.5,
+   "valor": 0.7,
+   "estado": "justo",
+   "tarjeta": "c5",
+   "tag_t": 10.65,
+   "pastilla": {
+    "texto": "justo en el piso",
+    "t": 10.9
+   },
+   "enfasis": [
+    {
+     "que": "pastilla",
+     "t": 11.8
+    },
+    {
+     "que": "dato",
+     "t": 12.3
+    }
+   ]
   },
-  { "id": "e", "letra": "E", "cr": 3, "valor": 0.69, "estado": "bajo", "tarjeta": "c6", "tag_t": 13.942, "sello": { "texto": "bajo el piso", "t": 14.292 }, "enfasis": [ { "que": "sello", "t": 15.142 }, { "que": "dato", "t": 15.442 } ]
+  {
+   "id": "e",
+   "letra": "E",
+   "nombre": "FLUX 3",
+   "cr": 3,
+   "valor": 0.69,
+   "estado": "bajo",
+   "tarjeta": "c6",
+   "tag_t": 13.35,
+   "sello": {
+    "texto": "bajo el piso",
+    "t": 13.5
+   },
+   "enfasis": [
+    {
+     "que": "sello",
+     "t": 14.5
+    }
+   ]
   },
-  { "id": "f", "letra": "F", "cr": 2.75, "valor": 0.66, "estado": "bajo"
+  {
+   "id": "f",
+   "letra": "F",
+   "nombre": "GPT Image 2.5",
+   "cr": 2.75,
+   "valor": 0.66,
+   "estado": "bajo"
   }
  ],
  "l1": {
   "marca_label_y": 292,
-  "nota1": { "texto": "Una toma cada uno: es una prueba, no una regla.", "y": 372, "nota": "presente desde que llega la placa (viaja con el empuje): la lectura arranca en T"
+  "nota1": {
+   "texto": "Una toma cada uno: es una prueba, no una regla.",
+   "y": 372,
+   "nota": "presente desde que llega la placa (viaja con el empuje): la lectura arranca en T"
   },
-  "nota2": { "texto": "Entre 0,66 y 0,70 la diferencia es ruido (±0,03).", "t": 19.8, "y": 1100, "nota": "segundo instante: entra cuando la nota 1 ya tuvo su tiempo de lectura (10 palabras = 3,8 s)"
+  "nota2": {
+   "texto": "Entre 0,66 y 0,70 la diferencia es ruido (±0,03).",
+   "t": 18.967,
+   "y": 1100,
+   "nota": "segundo instante: entra cuando la nota 1 ya tuvo su tiempo de lectura (10 palabras = 3,8 s)"
   },
-  "ruido": { "t": 21, "desde": 0.66, "hasta": 0.7, "nota": "franja entre 0,66 y 0,70 sobre la escala (cae con «se rozan» de la voz)"
+  "ruido": {
+   "t": 20.167,
+   "desde": 0.66,
+   "hasta": 0.7,
+   "nota": "franja entre 0,66 y 0,70 sobre la escala (cae con «se rozan» de la voz)"
   },
-  "pulsos": [ { "img": "a", "t": 17.7 }, { "img": "e", "t": 18.3 }, { "img": "d", "t": 21.4 }, { "img": "e", "t": 21.7 }, { "img": "f", "t": 22 }
+  "pulsos": [
+   {
+    "img": "a",
+    "t": 16.867
+   },
+   {
+    "img": "e",
+    "t": 17.467
+   },
+   {
+    "img": "d",
+    "t": 20.567
+   },
+   {
+    "img": "e",
+    "t": 20.867
+   },
+   {
+    "img": "f",
+    "t": 21.167
+   }
   ],
-  "filas": [ { "img": "b", "y": 560, "t": 16.14 }, { "img": "a", "y": 646, "t": 16.34 }, { "img": "c", "y": 732, "t": 16.54 }, { "img": "d", "y": 818, "t": 16.74 }, { "img": "f", "y": 904, "t": 16.94 }, { "img": "e", "y": 990, "t": 17.14 }
+  "filas": [
+   {
+    "img": "b",
+    "y": 560,
+    "t": 15.307
+   },
+   {
+    "img": "a",
+    "y": 646,
+    "t": 15.507
+   },
+   {
+    "img": "c",
+    "y": 732,
+    "t": 15.707
+   },
+   {
+    "img": "d",
+    "y": 818,
+    "t": 15.907
+   },
+   {
+    "img": "f",
+    "y": 904,
+    "t": 16.107
+   },
+   {
+    "img": "e",
+    "y": 990,
+    "t": 16.307
+   }
   ],
   "ejes_y": 1036,
   "marca_top": 500,
   "marca_alto": 520
  },
  "l2": {
-  "fotos": { "y": 290, "w": 430, "h": 764, "cx": [ 305, 775 ], "cap_y": 1068, "lista": [ { "foto": "cafe_a", "letra": "A", "clave": "a_cafe2", "valor": 0.83, "t": null, "cap_t": null }, { "foto": "cafe_b", "letra": "B", "clave": "b_cafe2", "valor": 0.35, "t": 24.038, "cap_t": 24.288 } ]
+  "fotos": {
+   "y": 290,
+   "w": 430,
+   "h": 764,
+   "cx": [
+    305,
+    775
+   ],
+   "cap_y": 1068,
+   "lista": [
+    {
+     "foto": "cafe_a",
+     "letra": "A",
+     "nombre": "Seedream 4.5",
+     "clave": "a_cafe2",
+     "valor": 0.83,
+     "t": null,
+     "cap_t": null
+    },
+    {
+     "foto": "cafe_b",
+     "letra": "B",
+     "nombre": "Kling O1 Image",
+     "clave": "b_cafe2",
+     "valor": 0.35,
+     "t": 23.205,
+     "cap_t": 23.455
+    }
+   ]
   },
-  "anillo_t": 24.838
+  "anillo_t": 24.005
  },
  "cta": {
-  "pulso_t": 28.458
+  "pulso_t": 27.625
  },
  "audio": {
   "nota": "pista AAC en silencio a propósito: sin voz ni música. La voz se agrega después (guion-voz.txt, cronometrado a 3,6 palabras por segundo)."
  },
  "publicacion": {
   "portada": "cuadro a 0,6 s",
-  "pie": "pie.txt (abre con «personaje hecho con IA»; lo comprueba build.mjs)",
+  "pie": "pie.txt (abre con «personaje hecho con IA» y trae «Nombro lo que uso; no es una recomendación pagada.»; lo comprueba build.mjs)",
   "via": "ig-reel.mjs --cuenta lucia en el VPS (la madre). No se publica nada desde esta sesión"
  }
 }

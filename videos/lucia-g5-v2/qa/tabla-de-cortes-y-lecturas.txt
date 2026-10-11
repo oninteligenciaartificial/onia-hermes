@@ -11,13 +11,13 @@ Tramos de voz (guion-voz.txt: palabras / 3,6 + hueco ≤ 0,25 s; ≤ 450 caracte
   t10  24.417 – 26.833   5 pal 33 car  voz 1.39 s  hueco 1.028 s  c10  «Seguime: cada semana, una prueba.»  (CTA: la tarjeta se lee 2.42 s, la voz dura 1.39 s)
   total: 85 palabras, 439 caracteres con saltos de línea (430 sin ellos), 26.833 s
 Tabla de cortes (t en s):
-    0.000 – 3.292   f-gancho  foto  Foto A (K1) a pantalla completa con empuje lento; rótulo de IA 0-3,0 s; la caja de cara entra a 1,3 s con «parecido 0,81»; sale en el empuje
+    0.000 – 3.292   f-gancho  foto  Foto A (K1) a pantalla completa con empuje lento; rótulo de IA 0-3,0 s; la caja de cara entra a 0,85 s con «Seedream 4.5 · parecido 0,81»; sale en el empuje
     3.042 – 5.208   pl-p1     placa paso 1: las 8 referencias oficiales (4x2); la fila de arriba ya está al llegar, la de abajo entra de a una
     4.958 – 11.250  pl-p2     placa paso 2: las 8 en fila → flecha → la escala 0-1 con un cursor que va de 0 a 1 → «idéntica · 1» → cae la marca «piso · 0,70»
-   11.000 – 14.000  f-e3      foto  Imagen B del café (NO es Lucía) + caja coral + pastilla «Imagen B · parecido 0,35»
-   13.750 – 17.000  pl-r1     placa razón 1: cuadro del clip crudo con la cara de 89 px, su caja, su lupa y la nota «Bajo 200 px, el medidor avisa.» (ya está al llegar)
-   16.750 – 19.750  pl-r2     placa razón 2: escala ampliada «Zoom: 0,70 a 0,90» (ya está al llegar) con las dos puntas de un MISMO clip (0,771 → 0,77 y 0,799 → 0,80) y la banda de ±0,03 alrededor de su promedio
-   19.500 – 22.500  pl-r3     placa razón 3: cuadro del clip con el letrero inventado difuminado y «Lo difuminé: lo inventó el motor.» (ya está al llegar), aro coral sobre TODO lo difuminado y «parecido 0,80»
+   11.000 – 14.000  f-e3      foto  Imagen del café de Kling O1 Image (NO es Lucía) + caja coral + pastilla «Kling O1 Image · parecido 0,35»
+   13.750 – 17.000  pl-r1     placa razón 1: cuadro del clip crudo con la cara de 89 px, su caja, su lupa, la etiqueta «Kling O3» y la nota «Bajo 200 px, el medidor avisa.» (ya están al llegar)
+   16.750 – 19.750  pl-r2     placa razón 2: escala ampliada «Zoom: 0,70 a 0,90» y la etiqueta «Cinematic Studio 3.0» (ya están al llegar) con las dos puntas de un MISMO clip (0,771 → 0,77 y 0,799 → 0,80) y la banda de ±0,03 alrededor de su promedio
+   19.500 – 22.500  pl-r3     placa razón 3: cuadro del clip con el letrero inventado difuminado, la etiqueta «Seedance 2.0 Mini + referencias» y «Lo difuminé: lo inventó el motor.» (ya están al llegar), aro coral sobre TODO lo difuminado y «parecido 0,80»
    22.250 – 26.833  f-cierre  foto  lección + cierre: foto K4·5 (Lucía mira a cámara y sonríe) con empuje lento; tarjeta «Mirá la imagen entera.» y después el CTA
 Costuras (empuje rígido de 6 cuadros):
     3.29  empuje  sale f-gancho → entra pl-p1
@@ -40,15 +40,17 @@ Tarjetas (entra = 1 cuadro antes de a salvo en los empujes, donde viajan):
    24.42 – 26.83  c10 5 pal (mín 2.05 s) «Seguime:  cada semana, una prueba.»
 Lecturas de rótulo, datos, notas, placas (≥ 0,35 s/palabra + 0,3):
   rótulo de IA              6 pal  0.00–3.00  3.00 s  (pide 2.40)  
-  gancho dato               2 pal  1.63–2.70  1.07 s  (pide 1.00)  ← justo
+  gancho dato               2 pal  1.13–2.90  1.77 s  (pide 1.00)  
   p2 «0»                    1 pal  7.16–11.00  3.84 s  (pide 0.65)  
   p2 «idéntica · 1»         2 pal  9.59–11.00  1.41 s  (pide 1.00)  
   p2 «piso»                 2 pal  9.72–11.00  1.28 s  (pide 1.00)  
-  ejemplo B dato            4 pal  11.83–13.60  1.77 s  (pide 1.70)  ← justo
+  ejemplo B dato            5 pal  11.53–13.70  2.17 s  (pide 2.05)  ← justo
   r1 «89 px»                2 pal  15.05–16.75  1.70 s  (pide 1.00)  
   r1 nota (ya está al llegar)  6 pal  13.95–16.75  2.80 s  (pide 2.40)  
+  r1 herramienta (ya está al llegar)  2 pal  13.95–16.75  2.80 s  (pide 1.00)  
   r2 «piso»                 2 pal  16.95–19.50  2.55 s  (pide 1.00)  
   r2 «Zoom»                 4 pal  16.95–19.50  2.55 s  (pide 1.70)  
+  r2 herramienta (ya está al llegar)  3 pal  16.95–19.50  2.55 s  (pide 1.35)  
   r2 marca 0,75             1 pal  16.95–19.50  2.55 s  (pide 0.65)  
   r2 marca 0,80             1 pal  16.95–19.50  2.55 s  (pide 0.65)  
   r2 marca 0,85             1 pal  16.95–19.50  2.55 s  (pide 0.65)  
@@ -57,8 +59,10 @@ Lecturas de rótulo, datos, notas, placas (≥ 0,35 s/palabra + 0,3):
   r2 valor 2                1 pal  18.00–19.50  1.50 s  (pide 0.65)  
   r2 banda                  1 pal  18.60–19.50  0.90 s  (pide 0.65)  
   r3 «Lo difuminé» (ya está al llegar)  6 pal  19.70–22.25  2.55 s  (pide 2.40)  ← justo
+  r3 herramienta (ya está al llegar)  5 pal  19.70–22.25  2.55 s  (pide 2.05)  
   r3 número                 2 pal  20.93–22.25  1.32 s  (pide 1.00)  
 Lo que el video afirma, contra los datos:
+  ok  herramientas nombradas (D-N1): gancho «Seedream 4.5», café «Kling O1 Image», razón 1 «Kling O3», razón 2 «Cinematic Studio 3.0», razón 3 «Seedance 2.0 Mini + referencias»; cada nombre corresponde a la clave de PROCEDENCIA del archivo que se ve
   ok  gancho «parecido 0,81»: la imagen A mide 0.806 (≥ 0,70, sobre el piso). La pantalla no dice «es ella»: solo muestra el número que el programa le dio
   ok  «Bajo el piso: otra persona.» (parecido 0,35): la imagen B del café mide 0.35 (< 0,70) y PROCEDENCIA dice «perdio la cara: otra persona, estilo caricatura»
   ok  «Piso, 0,70. Lo elegí yo.»: el piso del plan es 0.7 (el gate del repo: 0,70, una decisión)
@@ -71,7 +75,8 @@ Lo que el video afirma, contra los datos:
   ok  «El número no ve letreros inventados.»: PROCEDENCIA dice del Motor 4 «reencuadra (cara de 139 a 347 px) e invento un letrero en la torre» y su medida a 4 s (el cuadro mostrado) es 0.796 → 0,80, sobre el piso: el número aprueba un clip con letrero inventado
   ok  el cuadro 96 del clip es t = 4 s a 24 fps
   ok  el cuadro 0 del Motor 5 es la primera muestra de PROCEDENCIA (0.798)
+  ok  nada suena a «el mejor» ni a recomendación en pantalla ni en la voz; el pie dice «Nombro lo que uso; no es una recomendación pagada.»
   ok  pie.txt abre con «personaje hecho con IA», dice lo que el video dice (ocho fotos oficiales, piso 0,70, café 0,35, cara chica, 0,77-0,80 cabe en ±0,03, letreros inventados, imagen entera, CTA) y no repite ninguna frase retirada
   ok  ninguna frase retirada (baja sola / poco confiable / orden de magnitud / se parece poco / es ruido / no es fiable / lo inventó la ia) en pantalla, voz ni pie
-Agregados al guion (reversibles, ver plan.json): V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14
-ok: index.html (33 KB)
+Agregados al guion (reversibles, ver plan.json): V1, V2, V3, V4, V5, V6, V7, D-N1, V8, V9, V10, V11, V12, V13, V14
+ok: index.html (34 KB)

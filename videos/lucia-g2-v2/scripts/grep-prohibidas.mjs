@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 // Grep de frases prohibidas (editor-videos § «Reels de Lucía» + plan v5 §2) sobre TODO el texto en pantalla (tarjetas, rótulo, etiquetas,
-// panel, placa, sello) y sobre el pie. Sale con 1 si algo coincide. G2 v2: la lista vive en scripts/prohibidas.mjs y se aplica también a guion-voz.txt.
+// panel, placa, sello) y sobre el pie. Sale con 1 si algo coincide. D-N1 (11-oct): se nombran Kling 3.0 std, Seedance 2.0 Mini y Kling O3; sigue prohibido todo lo demás de terceros
+// y cualquier frase que suene a «el mejor» o a recomendación (salvo el aviso del pie). G2 v2: la lista vive en scripts/prohibidas.mjs y se aplica también a guion-voz.txt.
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import fs from 'node:fs';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { PROHIBIDAS } from './prohibidas.mjs';
+import { PROHIBIDAS, buscarRecomendacion } from './prohibidas.mjs';
 const require = createRequire('/opt/node-tools/package.json');
 const { chromium } = require('playwright');
 const P = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -21,6 +22,7 @@ for (const [donde, txt] of [['pantalla', enPantalla], ['pie', pie], ['guion de v
   const low = txt.toLowerCase();
   for (const f of PROHIBIDAS) if (low.includes(f.toLowerCase())) { console.log(`✖ ${donde}: «${f}»`); hits++; }
 }
+for (const [donde, txt] of [['pantalla', enPantalla], ['pie', pie], ['guion de voz', voz]]) for (const f of buscarRecomendacion(txt)) { console.log(`✖ ${donde}: «${f}» suena a recomendación (D-N1)`); hits++; }
 console.log(`texto en pantalla (${enPantalla.split(' ').length} tokens): ${enPantalla}`);
 console.log(`pie (${pie.trim().split(/\s+/).length} palabras)`);
 console.log(`guion de voz (${voz.trim().split(/\n/).length} líneas): ${voz.trim().split(/\n/).join(' | ')}`);

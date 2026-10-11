@@ -26,10 +26,14 @@ const PROHIBIDAS = [
   'no sé',
   // afirmaciones ya verificadas como FALSAS (H1, 8-oct): en los cuadros 84 y 96 de K4 la mano NO está tapada (v4/PROCEDENCIA.jsonl línea 94)
   'tapada',
-  // marcas de terceros (modelos, plataformas, competidores): la lista de editor-videos + los motores de la prueba de G2
-  'kling', 'seedream', 'seedance', 'higgsfield', 'soul', 'nano banana', 'cinema', 'veo', 'midjourney', 'runway', 'elevenlabs', 'sora', 'gpt', 'claude', 'chatgpt', 'omni', 'flux', 'cinematic', 'start_image', 'start image', 'sync.so', 'sync_so', 'buffalo', 'insightface', 'arcface', 'scrfd', 'instagram', 'meta ', 'tiktok', 'buffer',
-  // G4: motores de imagen y otras marcas que podrían aparecer en un rótulo (los motores van solo como «Imagen A a F»)
-  'banana', 'nano ', 'seedream', 'imagen 4', 'imagen 3', 'dall', 'stable diffusion', 'ideogram', 'recraft', 'leonardo', 'firefly', 'adobe', 'google', 'openai', 'anthropic', 'iphone', 'apple', 'samsung', 'pixel', 'grok', 'qwen', 'hunyuan', 'wan ', 'pika', 'luma', 'minimax', 'hailuo', 'vidu', 'marketing studio',
+  // marcas de terceros (modelos, plataformas, competidores): la lista de editor-videos. D-N1 (11-oct-2026, Sergio Urcullo): SE NOMBRAN, como uso propio y no como recomendación pagada,
+  // SOLO los seis motores de imagen de la prueba (Seedream 4.5, Kling O1 Image, Nano Banana 2.1, Seedream 5.0 Pro, FLUX 3, GPT Image 2.5): salen de esta lista
+  // ('seedream', 'kling', 'nano banana', 'banana', 'nano ', 'flux', 'gpt'). Todo lo demás sigue prohibido (incluido el nombre viejo «Omni» y «chatgpt»).
+  'seedance', 'higgsfield', 'soul', 'cinema', 'veo', 'midjourney', 'runway', 'elevenlabs', 'sora', 'claude', 'chatgpt', 'omni', 'cinematic', 'start_image', 'start image', 'sync.so', 'sync_so', 'buffalo', 'insightface', 'arcface', 'scrfd', 'instagram', 'meta ', 'tiktok', 'buffer',
+  // otras marcas que podrían aparecer en un rótulo
+  'imagen 4', 'imagen 3', 'dall', 'stable diffusion', 'ideogram', 'recraft', 'leonardo', 'firefly', 'adobe', 'google', 'openai', 'anthropic', 'iphone', 'apple', 'samsung', 'pixel', 'grok', 'qwen', 'hunyuan', 'wan ', 'pika', 'luma', 'minimax', 'hailuo', 'vidu', 'marketing studio',
+  // D-N1: nada que suene a «el mejor» o a recomendación general (la frase «no es una recomendación pagada» del pie es la única excepción, ver más abajo)
+  'el mejor', 'la mejor', 'los mejores', 'las mejores', 'mejor motor', 'mejor opción', 'recomiendo', 'recomendamos', 'te recomiend', 'usá este', 'usen este',
 ];
 let hits = 0;
 for (const [donde, txt] of [['pantalla', enPantalla], ['pie', pie], ['voz', voz]]) {
@@ -39,9 +43,11 @@ for (const [donde, txt] of [['pantalla', enPantalla], ['pie', pie], ['voz', voz]
 console.log(`texto en pantalla (${enPantalla.split(' ').length} tokens): ${enPantalla}`);
 console.log(`pie (${pie.trim().split(/\s+/).length} palabras); voz (${voz.trim().split(/\s+/).length} palabras)`);
 // frases OBLIGATORIAS en pantalla (exactas) y retiradas
-const OBLIGATORIAS = ['Lucía Antelo · personaje IA de Onia', '¿Cuál conserva su cara?', 'Seguime: cada semana, una prueba.', 'Pagar más no mejoró el parecido.', 'Escena 2: B perdió la cara.', 'Una toma cada uno: es una prueba, no una regla.', 'Entre 0,66 y 0,70 la diferencia es ruido (±0,03).', 'Imagen A', 'Imagen D', 'Imagen E', 'mi piso · 0,70'];
+const OBLIGATORIAS = ['Seedream 4.5', 'Seedream 5.0 Pro', 'FLUX 3', 'Kling O1 Image', 'Nano Banana 2.1', 'GPT Image 2.5', 'Lucía Antelo · personaje IA de Onia', '¿Cuál conserva su cara?', 'Seguime: cada semana, una prueba.', 'Pagar más no mejoró el parecido.', 'Escena 2: Kling perdió la cara.', 'Una toma cada uno: es una prueba, no una regla.', 'Entre 0,66 y 0,70 la diferencia es ruido (±0,03).', 'mi piso · 0,70'];
 for (const f of OBLIGATORIAS) { const ok = enPantalla.replace(/ +/g, ' ').includes(f); console.log(`  ${ok ? 'ok ' : '✖  '} obligatoria en pantalla: «${f}»`); if (!ok) hits++; }
 for (const f of ['El café', 'café:', 'Motor ']) if (enPantalla.includes(f)) { console.log(`✖ pantalla: frase retirada «${f}»`); hits++; }
+for (const [donde, txt] of [['pantalla', enPantalla], ['pie', pie], ['voz', voz]]) if (/\bImagen [A-F]\b/.test(txt)) { console.log(`✖ ${donde}: queda una «Imagen A-F»: desde D-N1 los motores van con su nombre`); hits++; }
+if (!pie.includes('Nombro lo que uso; no es una recomendación pagada.')) { console.log('✖ pie: falta «Nombro lo que uso; no es una recomendación pagada.»'); hits++; } else console.log('  ok  el pie trae «Nombro lo que uso; no es una recomendación pagada.»');
 if (!/^personaje hecho con ia/i.test(pie.trim())) { console.log('✖ pie: no abre con «personaje hecho con IA»'); hits++; } else console.log('  ok  el pie abre con «personaje hecho con IA»');
 if (hits) { console.error(`✖ ${hits} coincidencia(s)`); process.exit(1); }
 console.log('✔ ninguna frase prohibida ni marca de terceros en pantalla ni en el pie');

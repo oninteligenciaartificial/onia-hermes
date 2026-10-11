@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Lucía · G4 v2 «Seis motores de imagen, una cara: ¿cuál la conserva?» (28,33 s, 1080x1920, 24 fps) — re-corte de G4 con HyperFrames (11-oct-2026).
+// Lucía · G4 v2 «Seis motores de imagen, una cara: ¿cuál la conserva?» (~28 s, 1080x1920, 24 fps; motores nombrados desde D-N1, 11-oct) — re-corte de G4 con HyperFrames (11-oct-2026).
 // Lee plan.json + guion-voz.txt → valida reglas de texto, el cronograma de la voz, costuras Y LOS NÚMEROS contra v4/PROCEDENCIA.jsonl → escribe index.html
 // (DOM estático + un único timeline GSAP). 0 créditos: fotos ya pagadas el 8-oct + 8 referencias oficiales. Sin clips: fotos fijas con empuje lento (1,00 → 1,04).
 // Método y trampas: .claude/skills/lucia/montaje-hyperframes.md. Plantilla: videos/lucia-g4/ (59,75 s).
@@ -146,16 +146,23 @@ for (const c of plan.costuras) if (c.tipo === 'empuje') {
     if (e && !near(e.a, c.t)) errores.push(`costura ${c.t}: la tarjeta «${e.id}» debe entrar en ${c.t} y entra en ${e.a}`);
   }
 }
+// D-N1 (11-oct-2026): los motores van con su NOMBRE REAL (uso propio, no recomendación pagada). El nombre de pantalla coincide con la clave de PROCEDENCIA.jsonl.
+const NOMBRES = { a: 'Seedream 4.5', b: 'Kling O1 Image', c: 'Nano Banana 2.1', d: 'Seedream 5.0 Pro', e: 'FLUX 3', f: 'GPT Image 2.5' };
+const SLUG = { a: 'seedream_4_5', b: 'kling', c: 'nano_banana_2_1', d: 'seedream_v5_pro', e: 'flux_3', f: 'gpt_image_2_5' };
+for (const m of plan.imagenes) {
+  if (m.nombre !== NOMBRES[m.id]) errores.push(`motor ${m.id}: se llama «${m.nombre}» y tiene que llamarse «${NOMBRES[m.id]}»`);
+  if (!String(plan.claves_procedencia[m.id]).startsWith(SLUG[m.id])) errores.push(`motor ${m.id}: la clave de PROCEDENCIA «${plan.claves_procedencia[m.id]}» no es de «${NOMBRES[m.id]}»`);
+}
+for (const f of plan.l2.fotos.lista) if (f.nombre !== NOMBRES[f.letra.toLowerCase()]) errores.push(`foto ${f.foto}: se llama «${f.nombre}» y tiene que llamarse «${NOMBRES[f.letra.toLowerCase()]}»`);
 // cada imagen con escena propia: su foto empieza en T−6 cuadros y termina donde termina su tarjeta; la tarjeta dice la letra y el costo de esa imagen
 const conEscena = plan.imagenes.filter((m) => m.tarjeta);
-if (conEscena.map((m) => m.letra).join() !== 'A,D,E') errores.push('las escenas de imagen son A, D y E (el contraste esencial: la que sostiene, la que cae justo en el piso, la más cara bajo el piso)');
+if (conEscena.map((m) => m.letra).join() !== 'A,D,E') errores.push('las escenas de motor son Seedream 4.5, Seedream 5.0 Pro y FLUX 3 (el contraste esencial: el que sostiene, el que cae justo en el piso, el más caro bajo el piso)');
 for (const m of conEscena) {
   const c = tj[m.tarjeta], fm_ = med[`f-${m.id}`];
   if (!c || !fm_) { errores.push(`falta la escena de la imagen ${m.id}`); continue; }
   if (c.imagen !== m.id) errores.push(`${c.id}: debería ser de la imagen ${m.id}`);
   if (!near(fm_.a, c.a - PUSH) || !near(fm_.b, c.b)) errores.push(`imagen ${m.id}: la foto (${fm_.a}-${fm_.b}) no coincide con su tarjeta (${c.a}-${c.b})`);
-  const letra = c.texto.match(/^Imagen ([A-F]) ·$/);
-  if (!letra || letra[1] !== m.letra) errores.push(`${c.id}: la tarjeta dice otra letra que la imagen ${m.id}`);
+  if (c.texto !== `${m.nombre} ·`) errores.push(`${c.id}: la tarjeta dice «${c.texto}» y tiene que decir «${m.nombre} ·»`);
   if (c.acento !== `${crs(m.cr)} ${m.cr === 1 ? 'crédito' : 'créditos'}`) errores.push(`${c.id}: «${c.acento}» no es el costo de la imagen ${m.id} (${m.cr})`);
 }
 // los números salen de PROCEDENCIA.jsonl (última línea «resultados»): parecido y créditos de cada imagen
@@ -187,16 +194,16 @@ let proc = null;
       const raw = (k) => proc[k].id;
       const ok = (cond, texto) => { claim.push(`${cond ? 'ok ' : '✖  '} ${texto}`); if (!cond) errores.push(`afirmación falsa: ${texto}`); };
       const masCaro = plan.imagenes.reduce((a, b) => (b.cr > a.cr ? b : a)), masBarato = plan.imagenes.reduce((a, b) => (b.cr < a.cr ? b : a));
-      ok(masCaro.letra === 'E' && raw('e') < raw('a') && raw('e') < raw('b'), `«Pagar más no mejoró el parecido»: la más cara (${masCaro.letra}, ${masCaro.cr} cr, ${raw('e')}) queda bajo la de 1 cr (${raw('a')}) y la de 0,5 cr (${raw('b')})`);
-      ok(plan.imagenes.filter((m) => m.cr > 1).every((m) => m._raw < raw('a')), `ninguna de las que cuestan más que A (1 cr) mejora el parecido de A (${raw('a')})`);
-      ok(raw('a') >= SC.piso, `«La A, con un crédito, la sostiene»: A (1 cr) da ${raw('a')} (≥ ${SC.piso})`);
-      ok(raw('d') >= SC.piso && raw('d') < 0.71, `«La D queda justo en el piso»: D (2,5 cr) da ${raw('d')} (entre ${SC.piso} y 0,71)`);
-      ok(raw('e') < SC.piso, `«bajo el piso»: E (3 cr) da ${raw('e')} (< ${SC.piso})`);
-      ok(raw('f') < SC.piso && r2(raw('f')) === plan.l1.ruido.desde && r2(raw('d')) === plan.l1.ruido.hasta && raw('e') > raw('f') && raw('e') < raw('d'), `franja de ruido 0,66-0,70: F ${raw('f')} · E ${raw('e')} · D ${raw('d')} caen adentro (la franja va de ${plan.l1.ruido.desde} a ${plan.l1.ruido.hasta})`);
-      ok(masBarato.letra === 'B', `B es la más barata (${masBarato.cr} cr)`);
-      ok(raw('a_cafe2') >= SC.piso && raw('b_cafe2') < SC.piso, `«Escena 2: B perdió la cara»: en la escena 2 A da ${raw('a_cafe2')} y B ${raw('b_cafe2')}`);
-      ok(plan.l2.fotos.lista.map((f) => f.valor).join() === '0.83,0.35', 'las fotos de la escena 2: A 0,83 contra B 0,35');
-      ok(plan.imagenes.length === 6 && new Set(plan.imagenes.map((m) => m.id)).size === 6, 'seis imágenes distintas (A a F)');
+      ok(masCaro.letra === 'E' && raw('e') < raw('a') && raw('e') < raw('b'), `«Pagar más no mejoró el parecido»: el más caro (${masCaro.nombre}, ${masCaro.cr} cr, ${raw('e')}) queda bajo el de 1 cr (${raw('a')}) y el de 0,5 cr (${raw('b')})`);
+      ok(plan.imagenes.filter((m) => m.cr > 1).every((m) => m._raw < raw('a')), `ninguno de los que cuestan más que Seedream 4.5 (1 cr) mejora su parecido (${raw('a')})`);
+      ok(raw('a') >= SC.piso, `«Seedream, con un crédito, la sostiene»: Seedream 4.5 (1 cr) da ${raw('a')} (≥ ${SC.piso})`);
+      ok(raw('d') >= SC.piso && raw('d') < 0.71, `«Seedream Pro… justo en el piso»: Seedream 5.0 Pro (2,5 cr) da ${raw('d')} (entre ${SC.piso} y 0,71)`);
+      ok(raw('e') < SC.piso, `«FLUX, el más caro, bajo el piso»: FLUX 3 (3 cr, el más caro) da ${raw('e')} (< ${SC.piso})`);
+      ok(raw('f') < SC.piso && r2(raw('f')) === plan.l1.ruido.desde && r2(raw('d')) === plan.l1.ruido.hasta && raw('e') > raw('f') && raw('e') < raw('d'), `franja de ruido 0,66-0,70: GPT Image 2.5 ${raw('f')} · FLUX 3 ${raw('e')} · Seedream 5.0 Pro ${raw('d')} caen adentro (la franja va de ${plan.l1.ruido.desde} a ${plan.l1.ruido.hasta})`);
+      ok(masBarato.letra === 'B', `Kling O1 Image es el más barato (${masBarato.cr} cr)`);
+      ok(raw('a_cafe2') >= SC.piso && raw('b_cafe2') < SC.piso, `«Escena 2: Kling perdió la cara»: en la escena 2 Seedream 4.5 da ${raw('a_cafe2')} y Kling O1 Image ${raw('b_cafe2')}`);
+      ok(plan.l2.fotos.lista.map((f) => f.valor).join() === '0.83,0.35', 'las fotos de la escena 2: Seedream 4.5 0,83 contra Kling O1 Image 0,35');
+      ok(plan.imagenes.length === 6 && new Set(plan.imagenes.map((m) => m.id)).size === 6, 'seis motores distintos con su nombre real');
     }
   }
 }
@@ -217,7 +224,7 @@ const textoCarta = (id) => `${tj[id].texto.replace(/\n$/, '')} ${tj[id].acento |
   if (plan.rotulo.a !== 0 || !near(plan.rotulo.b, 3.0)) errores.push(`el rótulo tiene que ir del cuadro 0 a los 3,0 s (va de ${plan.rotulo.a} a ${plan.rotulo.b})`);
   exacto('CTA', textoCarta('c9'), 'Seguime: cada semana, una prueba.');
   exacto('lección', textoCarta('c7'), 'Pagar más no mejoró el parecido.');
-  exacto('escena 2', textoCarta('c8'), 'Escena 2: B perdió la cara.');
+  exacto('escena 2', textoCarta('c8'), 'Escena 2: Kling perdió la cara.');
   exacto('gancho', textoCarta('c1'), '¿Cuál conserva su cara?');
   exacto('nota 1', plan.l1.nota1.texto, 'Una toma cada uno: es una prueba, no una regla.');
   exacto('nota 2', plan.l1.nota2.texto, 'Entre 0,66 y 0,70 la diferencia es ruido (±0,03).');
@@ -225,7 +232,8 @@ const textoCarta = (id) => `${tj[id].texto.replace(/\n$/, '')} ${tj[id].acento |
   if (!/\.note\{[^}]*font-size:44px/.test(css0)) errores.push('las notas de honestidad van a 44 px (estilos.css .note)');
   if (!/\.tag\.tag-r\{[^}]*font-size:40px/.test(css0)) errores.push('el rótulo de IA va a 40 px (estilos.css .tag.tag-r)');
   const todas = JSON.stringify(plan.tarjetas) + JSON.stringify(plan.l1) + JSON.stringify(plan.l2) + JSON.stringify(plan.rotulo);
-  for (const x of ['El café', 'café:', 'Motor ', 'Seedream', 'Kling', 'FLUX', 'Nano Banana', 'GPT']) if (todas.includes(x)) errores.push(`texto retirado o marca de terceros en el plan: «${x}»`);
+  for (const x of ['El café', 'café:', 'Motor ', 'Omni', 'Higgsfield', 'Midjourney', 'ChatGPT', 'Claude']) if (todas.includes(x)) errores.push(`texto retirado o marca no autorizada en el plan: «${x}»`);
+  if (/Imagen [A-F]\b/.test(todas)) errores.push('queda una «Imagen A-F» en el plan: desde D-N1 los motores van con su nombre');
 }
 
 // 1d) pie.txt: abre con «personaje hecho con IA», lleva la nota de honestidad y no afirma nada que el video no diga
@@ -238,6 +246,9 @@ const textoCarta = (id) => `${tj[id].texto.replace(/\n$/, '')} ${tj[id].acento |
     if (!pie.includes(plan.l1.nota1.texto)) errores.push('pie.txt tiene que traer la nota «Una toma cada uno: es una prueba, no una regla.»');
     if (!/pagar más no mejoró el parecido/i.test(pie)) errores.push('pie.txt tiene que decir «pagar más no mejoró el parecido» (igual que el video)');
     if (!pie.includes('Cada semana hago una prueba. Seguime.')) errores.push('pie.txt tiene que cerrar con el CTA («Cada semana hago una prueba. Seguime.»)');
+    if (!pie.includes('Nombro lo que uso; no es una recomendación pagada.')) errores.push('pie.txt tiene que decir «Nombro lo que uso; no es una recomendación pagada.» (D-N1)');
+    for (const n of Object.values(NOMBRES)) if (!pie.includes(n)) errores.push(`pie.txt no nombra a «${n}»`);
+    if (/\b(el|la|lo|los|las|es) mejor(es)?\b|recomiend|imagen [a-f]\b/i.test(pie)) errores.push('pie.txt suena a «el mejor» o a recomendación, o dice «Imagen A-F»');
     for (const x of ['tres escenas', 'una de tres']) if (pie.includes(x)) errores.push(`pie.txt dice «${x}», que el video v2 ya no muestra tal cual`);
     const pantalla = JSON.stringify(plan.tarjetas) + JSON.stringify(plan.imagenes) + JSON.stringify(plan.l1) + JSON.stringify(plan.l2);
     for (const num of pie.replace(/#\S+/g, '').match(/\d+(?:,\d+)?/g) || []) {
@@ -271,11 +282,11 @@ const lecturas = [];
   if (l1.nota2.t + E_IN < leg0 + need1 - 1e-9) errores.push(`l1: la nota 2 (legible a ${(l1.nota2.t + E_IN).toFixed(2)}) entra antes de que la nota 1 termine de leerse (${(leg0 + need1).toFixed(2)})`);
   for (const f of l1.filas) {
     const m = img[f.img];
-    L(`l1 fila ${m.letra}`, `Imagen ${m.letra} · ${crs(m.cr)} ${m.cr === 1 ? 'crédito' : 'créditos'}`, f.t + 0.25, fin('pl-l1'));
+    L(`l1 fila ${m.letra}`, `${m.nombre} · ${crs(m.cr)} ${m.cr === 1 ? 'crédito' : 'créditos'}`, f.t + 0.25, fin('pl-l1'));
     L(`l1 valor ${m.letra}`, fm(m.valor), f.t + 0.2 + 0.2, fin('pl-l1'));
   }
   const ru = l1.ruido; if (ru.desde !== 0.66 || ru.hasta !== 0.7) errores.push('l1.ruido: la franja es de 0,66 a 0,70 (lo que dice la nota 2)');
-  for (const [i, f] of l2.fotos.lista.entries()) L(`l2 pie foto ${f.letra}`, `Imagen ${f.letra} ${fm(f.valor)}`, f.cap_t == null ? med['pl-l2'].a + PUSH - 0.05 : f.cap_t + 0.2, fin('pl-l2'));
+  for (const [i, f] of l2.fotos.lista.entries()) L(`l2 pie foto ${f.nombre}`, `${f.nombre} ${fm(f.valor)}`, f.cap_t == null ? med['pl-l2'].a + PUSH - 0.05 : f.cap_t + 0.2, fin('pl-l2'));
   for (const x of lecturas) if (x.dur < x.min - 1e-9) errores.push(`lectura «${x.que}» (${x.n} palabras): ${x.dur.toFixed(2)} s y pide ${x.min.toFixed(2)} s`);
 }
 // qué ve la voz mientras tanto: cada tarjeta que NO es de su tramo (para el README)
@@ -308,7 +319,7 @@ for (const m of plan.medios) if (m.tipo === 'foto') {
 // gancho: 6 miniaturas de las fotos A a F (viajan con la foto en el primer empuje)
 {
   const g = plan.gancho.miniaturas;
-  const items = g.ids.map((id, i) => `<div class="th" id="th-${id}" style="left:${g.x0 + i * (g.w + g.gap)}px;top:${g.y}px;width:${g.w}px;height:${g.h}px"><img src="assets/th-${id}.jpg" alt=""><span>${img[id].letra}</span></div>`).join('');
+  const items = g.ids.map((id, i) => `<div class="th" id="th-${id}" style="left:${g.x0 + i * (g.w + g.gap)}px;top:${g.y}px;width:${g.w}px;height:${g.h}px"><img src="assets/th-${id}.jpg" alt=""></div>`).join('');
   html += FULLDIV('thumbs', g.a - 0.1, med['f-gancho'].b, 8, items);
 }
 
@@ -336,7 +347,7 @@ for (const m of plan.medios) if (m.tipo === 'foto') {
   h += `<div class="mkv" id="l1-mk" style="left:${X(SC.piso)}px;top:${L.marca_top}px;height:${L.marca_alto}px"></div>`;
   L.filas.forEach((f, i) => {
     const m = img[f.img], n = i + 1, x = X(m.valor);
-    h += `<div class="rt" id="l1-t${n}" style="left:${SC.x0}px;top:${f.y - 68}px">Imagen ${m.letra} · ${crs(m.cr)} ${m.cr === 1 ? 'crédito' : 'créditos'}</div>`;
+    h += `<div class="rt" id="l1-t${n}" style="left:${SC.x0}px;top:${f.y - 68}px">${m.nombre} · ${crs(m.cr)} ${m.cr === 1 ? 'crédito' : 'créditos'}</div>`;
     h += `<div class="rl" id="l1-r${n}" style="left:${SC.x0}px;top:${f.y - 5}px;width:${SC.x1 - SC.x0}px"></div>`;
     h += `<div class="dot f${cls(m)}" id="l1-f${n}" style="left:${x}px;top:${f.y}px"></div>`;
     h += `<div class="vl${cls(m)}" id="l1-v${n}" style="left:${x + 29}px;top:${f.y - 23}px;transform:none">${fm(m.valor)}</div>`;
@@ -352,7 +363,7 @@ for (const m of plan.medios) if (m.tipo === 'foto') {
   F.lista.forEach((f, i) => {
     const cx = F.cx[i];
     h += `<div class="cph" id="l2-ph${i + 1}" style="left:${cx - F.w / 2}px;top:${F.y}px;width:${F.w}px;height:${F.h}px"><img src="assets/cf-${f.foto}.jpg" alt=""></div>`;
-    h += cent(cx, F.cap_y, `<div class="cap" id="l2-cap${i + 1}"><span class="rt" style="position:static">Imagen ${f.letra}</span><span class="cv${f.valor < SC.piso ? ' bajo' : ''}">${fm(f.valor)}</span></div>`, 420);
+    h += cent(cx, F.cap_y, `<div class="cap" id="l2-cap${i + 1}"><span class="rt" style="position:static">${f.nombre}</span><span class="cv${f.valor < SC.piso ? ' bajo' : ''}">${fm(f.valor)}</span></div>`, 420);
   });
   const ib = F.lista.findIndex((f) => f.valor < SC.piso);
   h += `<div class="barring" id="l2-ring" style="left:${F.cx[ib] - F.w / 2 - 10}px;top:${F.y - 10}px;width:${F.w + 20}px;height:${F.h + 20}px"></div>`;
@@ -440,7 +451,7 @@ for (const c of plan.tarjetas) console.log(`  ${c.a.toFixed(3).padStart(7)} – 
 console.log('Lecturas de rótulo, datos, sellos, placas (≥ 0,35 s/palabra + 0,3):');
 for (const x of lecturas) console.log(`  ${x.que.padEnd(22)} ${String(x.n).padStart(2)} pal  ${x.a.toFixed(2)}–${x.b.toFixed(2)}  ${x.dur.toFixed(2)} s  (pide ${x.min.toFixed(2)})  ${x.dur - x.min < 0.2 ? '← justo' : ''}`);
 console.log('Datos (de PROCEDENCIA.jsonl):');
-for (const m of plan.imagenes) console.log(`  Imagen ${m.letra}: ${crs(m.cr)} cr · parecido ${fm(m.valor)} (medido ${m._raw}) · ${m.estado}${m.tarjeta ? ' · escena propia' : ''}`);
+for (const m of plan.imagenes) console.log(`  ${m.nombre}: ${crs(m.cr)} cr · parecido ${fm(m.valor)} (medido ${m._raw}) · ${m.estado}${m.tarjeta ? ' · escena propia' : ''}`);
 console.log('Lo que el video afirma, contra los datos:');
 for (const c of claim) console.log('  ' + c);
 console.log(`ok: index.html (${Math.round(out.length / 1024)} KB)`);

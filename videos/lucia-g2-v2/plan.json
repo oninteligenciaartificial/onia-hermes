@@ -1,6 +1,6 @@
 {
   "titulo": "G2 v2 · La misma foto, seis clips: ¿quién pierde la cara? (re-corte de 26 s, sin aire muerto, listo para voz)",
-  "version": "v2 (11-oct-2026): re-corte de G2 con la regla de aire muerto. Todos los tiempos salen de guion-voz.txt (tramos a 3,6 palabras/s, huecos de 6 cuadros); un tiempo escrito como «T6+0.8» es el inicio del tramo 6 más 0,8 s, «T7-6f» = 6 cuadros antes del inicio del tramo 7, «FIN» = el final del video. 0 créditos: mismos clips y la misma foto de G2.",
+  "version": "v2 (11-oct-2026): re-corte de G2 con la regla de aire muerto. D-N1 (11-oct): se nombran las herramientas con su nombre real (uso propio, no recomendación pagada). Todos los tiempos salen de guion-voz.txt (tramos a 3,6 palabras/s, huecos de 6 cuadros); un tiempo escrito como «T6+0.8» es el inicio del tramo 6 más 0,8 s, «T7-6f» = 6 cuadros antes del inicio del tramo 7, «FIN» = el final del video. 0 créditos: mismos clips y la misma foto de G2.",
   "guion": "hermes-content/docs/cola/lucia-diario/guiones/G2-la-misma-foto-seis-clips.md",
   "voz": {
     "archivo": "guion-voz.txt",
@@ -11,7 +11,11 @@
     "min_palabras_por_linea": 3,
     "cta_ventana_cuadros": 67
   },
-  "lienzo": { "w": 1080, "h": 1920, "fps": 24 },
+  "lienzo": {
+    "w": 1080,
+    "h": 1920,
+    "fps": 24
+  },
   "acento": "#10C26B",
   "alerta": "#FF7A66",
   "zona_segura": {
@@ -25,7 +29,16 @@
   },
   "caras": {
     "nota": "SCRFD det_10g (scripts/face_identity_qa.py) vía scripts/medir-caras.py: caja cada 2 cuadros en el lienzo de 1080x1920 (clips de 720 px llevados x1,5). Mentón = borde de abajo de la caja. Datos completos: qa/caras-por-clip.json",
-    "foto_k1": { "caja": [445, 453, 623, 657], "menton": 657, "texto_desde_y": 697 }
+    "foto_k1": {
+      "caja": [
+        445,
+        453,
+        623,
+        657
+      ],
+      "menton": 657,
+      "texto_desde_y": 697
+    }
   },
   "empuje": {
     "cuadros": 6,
@@ -36,76 +49,496 @@
     "manifest": "hermes-content/references/modelos/lucia/v4/qa/manifest-escenas-seedream-20260930.json",
     "total": 8,
     "muestra": [
-      { "id": "ref1", "fuente": "R1_frontal_canon", "recorte": [0, 100, 768] },
-      { "id": "ref2", "fuente": "R3_casi_frontal", "recorte": [75, 0, 1717] },
-      { "id": "ref3", "fuente": "R4_casi_perfil", "recorte": [218, 208, 1183] },
-      { "id": "ref4", "fuente": "R5_34_izq", "recorte": [61, 65, 727] },
-      { "id": "ref5", "fuente": "R8_anchor_902eeebb", "recorte": [0, 109, 896] }
+      {
+        "id": "ref1",
+        "fuente": "R1_frontal_canon",
+        "recorte": [
+          0,
+          100,
+          768
+        ]
+      },
+      {
+        "id": "ref2",
+        "fuente": "R3_casi_frontal",
+        "recorte": [
+          75,
+          0,
+          1717
+        ]
+      },
+      {
+        "id": "ref3",
+        "fuente": "R4_casi_perfil",
+        "recorte": [
+          218,
+          208,
+          1183
+        ]
+      },
+      {
+        "id": "ref4",
+        "fuente": "R5_34_izq",
+        "recorte": [
+          61,
+          65,
+          727
+        ]
+      },
+      {
+        "id": "ref5",
+        "fuente": "R8_anchor_902eeebb",
+        "recorte": [
+          0,
+          109,
+          896
+        ]
+      }
     ]
   },
-  "escala": { "x0": 100, "x1": 980, "piso": 0.7 },
+  "escala": {
+    "x0": 100,
+    "x1": 980,
+    "piso": 0.7
+  },
   "medios": [
-    { "id": "foto", "tipo": "foto", "src": "assets/k1.jpg", "a": 0, "b": "T3", "zoom": 1.05, "ox": 534, "oy": 555, "capa": "foto K1 a pantalla completa con empuje lento 1,00 → 1,05 hacia la cara (nunca queda un cuadro idéntico); sale en el empuje de T3 junto con las miniaturas" },
-    { "id": "pl-regla", "tipo": "placa", "a": "T3-6f", "b": "T6", "capa": "placa de la regla: 5 de las 8 referencias, escala 0-1 y la marca en 0,70" },
-    { "id": "m1", "tipo": "clip", "src": "assets/m1.mp4", "media_inicio": 0, "a": "T6-6f", "b": "T7", "capa": "Motor 1, cuadros 0-64 (2,7 s a 1×); el cuadro 0 es la foto K1" },
-    { "id": "m3", "tipo": "clip", "src": "assets/m3.mp4", "media_inicio": 0, "a": "T7-6f", "b": "T9", "capa": "Motor 3, cuadros 0-71 (3,0 s a 1×)" },
-    { "id": "m5", "tipo": "clip", "src": "assets/m5.mp4", "media_inicio": 0, "a": "T9-6f", "b": "T11", "capa": "Motor 5, cuadros 0-97 (4,1 s a 1×)" },
-    { "id": "pl-l", "tipo": "placa", "a": "T11-6f", "b": "T14", "capa": "lección: los finales de los Motores 5, 1 y 3 sobre la escala" },
-    { "id": "k1", "tipo": "clip", "src": "assets/m1.mp4", "media_inicio": 2.75, "a": "T14-6f", "b": "FIN", "capa": "cierre: el clip K1 (el del Motor 1) desde el cuadro 66 (2,75 s), con Lucía mirando a cámara" }
+    {
+      "id": "foto",
+      "tipo": "foto",
+      "src": "assets/k1.jpg",
+      "a": 0,
+      "b": "T3",
+      "zoom": 1.05,
+      "ox": 534,
+      "oy": 555,
+      "capa": "foto K1 a pantalla completa con empuje lento 1,00 → 1,05 hacia la cara (nunca queda un cuadro idéntico); sale en el empuje de T3 junto con las miniaturas"
+    },
+    {
+      "id": "pl-regla",
+      "tipo": "placa",
+      "a": "T3-6f",
+      "b": "T6",
+      "capa": "placa de la regla: 5 de las 8 referencias, escala 0-1 y la marca en 0,70"
+    },
+    {
+      "id": "m1",
+      "tipo": "clip",
+      "src": "assets/m1.mp4",
+      "media_inicio": 0,
+      "a": "T6-6f",
+      "b": "T7",
+      "capa": "Kling 3.0 std (clip 1), cuadros 0-64 (2,7 s a 1×); el cuadro 0 es la foto K1"
+    },
+    {
+      "id": "m3",
+      "tipo": "clip",
+      "src": "assets/m3.mp4",
+      "media_inicio": 0,
+      "a": "T7-6f",
+      "b": "T9",
+      "capa": "Seedance 2.0 Mini (clip 3), cuadros 0-71 (3,0 s a 1×)"
+    },
+    {
+      "id": "m5",
+      "tipo": "clip",
+      "src": "assets/m5.mp4",
+      "media_inicio": 0,
+      "a": "T9-6f",
+      "b": "T11",
+      "capa": "Kling O3 (clip 5), cuadros 0-97 (4,1 s a 1×)"
+    },
+    {
+      "id": "pl-l",
+      "tipo": "placa",
+      "a": "T11-6f",
+      "b": "T14",
+      "capa": "lección: los finales de Kling 3.0 std, Seedance 2.0 Mini y Kling O3 sobre la escala"
+    },
+    {
+      "id": "k1",
+      "tipo": "clip",
+      "src": "assets/m1.mp4",
+      "media_inicio": 2.75,
+      "a": "T14-6f",
+      "b": "FIN",
+      "capa": "cierre: el clip K1 (el de Kling 3.0 std) desde el cuadro 66 (2,75 s), con Lucía mirando a cámara"
+    }
   ],
   "costuras": [
-    { "t": "T3", "tipo": "empuje", "sale": ["foto", "thumbs"], "entra": ["pl-regla"], "tarjetas": { "sale": "c2", "entra": "c3" }, "porque": "foto + miniaturas → placa de la regla" },
-    { "t": "T6", "tipo": "empuje", "sale": ["pl-regla"], "entra": ["m1"], "tarjetas": { "sale": "c4", "entra": "c5" }, "porque": "placa → Motor 1 (el clip arranca en T-6 cuadros)" },
-    { "t": "T7", "tipo": "empuje", "sale": ["m1"], "entra": ["m3"], "tarjetas": { "sale": "c5", "entra": "c6" }, "porque": "Motor 1 → Motor 3" },
-    { "t": "T9", "tipo": "empuje", "sale": ["m3"], "entra": ["m5"], "tarjetas": { "sale": "c6", "entra": "c7" }, "porque": "Motor 3 → Motor 5" },
-    { "t": "T11", "tipo": "empuje", "sale": ["m5"], "entra": ["pl-l"], "tarjetas": { "sale": "c8", "entra": "c9" }, "porque": "Motor 5 → lección" },
-    { "t": "T14", "tipo": "empuje", "sale": ["pl-l"], "entra": ["k1"], "tarjetas": { "sale": "c11", "entra": "c12" }, "porque": "lección → cierre K1" }
+    {
+      "t": "T3",
+      "tipo": "empuje",
+      "sale": [
+        "foto",
+        "thumbs"
+      ],
+      "entra": [
+        "pl-regla"
+      ],
+      "tarjetas": {
+        "sale": "c2",
+        "entra": "c3"
+      },
+      "porque": "foto + miniaturas → placa de la regla"
+    },
+    {
+      "t": "T6",
+      "tipo": "empuje",
+      "sale": [
+        "pl-regla"
+      ],
+      "entra": [
+        "m1"
+      ],
+      "tarjetas": {
+        "sale": "c4",
+        "entra": "c5"
+      },
+      "porque": "placa → Kling 3.0 std (el clip arranca en T-6 cuadros)"
+    },
+    {
+      "t": "T7",
+      "tipo": "empuje",
+      "sale": [
+        "m1"
+      ],
+      "entra": [
+        "m3"
+      ],
+      "tarjetas": {
+        "sale": "c5",
+        "entra": "c6"
+      },
+      "porque": "Kling 3.0 std → Seedance 2.0 Mini"
+    },
+    {
+      "t": "T9",
+      "tipo": "empuje",
+      "sale": [
+        "m3"
+      ],
+      "entra": [
+        "m5"
+      ],
+      "tarjetas": {
+        "sale": "c6",
+        "entra": "c7"
+      },
+      "porque": "Seedance 2.0 Mini → Kling O3"
+    },
+    {
+      "t": "T11",
+      "tipo": "empuje",
+      "sale": [
+        "m5"
+      ],
+      "entra": [
+        "pl-l"
+      ],
+      "tarjetas": {
+        "sale": "c8",
+        "entra": "c9"
+      },
+      "porque": "Kling O3 → lección"
+    },
+    {
+      "t": "T14",
+      "tipo": "empuje",
+      "sale": [
+        "pl-l"
+      ],
+      "entra": [
+        "k1"
+      ],
+      "tarjetas": {
+        "sale": "c11",
+        "entra": "c12"
+      },
+      "porque": "lección → cierre K1"
+    }
   ],
-  "rotulo": { "texto": "Lucía Antelo · personaje IA de Onia", "a": 0, "b": 3.0, "top": 720, "px": 40 },
+  "rotulo": {
+    "texto": "Lucía Antelo · personaje IA de Onia",
+    "a": 0,
+    "b": 3.0,
+    "top": 720,
+    "px": 40
+  },
   "tarjetas": [
-    { "id": "c1", "texto": "Misma foto.", "acento": "Seis clips.", "acento_t": 0.95, "a": 0, "b": "T3-41f", "escena": "gancho" },
-    { "id": "c2", "texto": "¿Quién pierde", "acento": "la cara?", "acento_t": 2.45, "a": "T3-41f", "b": "T3", "escena": "gancho" },
-    { "id": "c3", "texto": "Se mide contra", "acento": "8 fotos suyas.", "acento_t": "T3+1.2", "a": "T3", "b": "T5", "escena": "regla" },
-    { "id": "c4", "texto": "Mi piso:", "acento": "0,70.", "a": "T5", "b": "T6", "escena": "regla" },
-    { "id": "c5", "texto": "Motor 1 ·", "acento": "7,5 créditos", "a": "T6", "b": "T7", "escena": "m1", "motor": "m1" },
-    { "id": "c6", "texto": "Motor 3 ·", "acento": "6 créditos", "a": "T7", "b": "T9", "escena": "m3", "motor": "m3" },
-    { "id": "c7", "texto": "Motor 5 · 6 créditos\n", "acento": "solo referencias", "a": "T9", "b": "T10", "escena": "m5", "motor": "m5" },
-    { "id": "c8", "texto": "Inventó", "acento": "el cuarto.", "a": "T10", "b": "T11", "escena": "m5" },
-    { "id": "c9", "texto": "Con referencias,", "acento": "la cara se sostiene.", "acento_t": "T11+1.2", "a": "T11", "b": "T12", "escena": "lección" },
-    { "id": "c10", "texto": "Pero inventa", "acento": "la escena.", "acento_t": "T12+0.8", "a": "T12", "b": "T13", "escena": "lección" },
-    { "id": "c11", "texto": "Una toma:", "acento": "es una prueba.", "acento_t": "T13+0.9", "a": "T13", "b": "T14", "escena": "lección" },
-    { "id": "c12", "texto": "Seguime:", "acento": "cada semana, una prueba.", "acento_t": "T14+1.0", "a": "T14", "b": "FIN", "escena": "cierre" }
+    {
+      "id": "c1",
+      "texto": "Misma foto.",
+      "acento": "Seis clips.",
+      "acento_t": 0.95,
+      "a": 0,
+      "b": "T3-41f",
+      "escena": "gancho"
+    },
+    {
+      "id": "c2",
+      "texto": "¿Quién pierde",
+      "acento": "la cara?",
+      "acento_t": 2.45,
+      "a": "T3-41f",
+      "b": "T3",
+      "escena": "gancho"
+    },
+    {
+      "id": "c3",
+      "texto": "Se mide contra",
+      "acento": "8 fotos suyas.",
+      "acento_t": "T3+1.2",
+      "a": "T3",
+      "b": "T5",
+      "escena": "regla"
+    },
+    {
+      "id": "c4",
+      "texto": "Mi piso:",
+      "acento": "0,70.",
+      "a": "T5",
+      "b": "T6",
+      "escena": "regla"
+    },
+    {
+      "id": "c5",
+      "texto": "Kling 3.0 std\n",
+      "acento": "7,5 créditos",
+      "a": "T6",
+      "b": "T7",
+      "escena": "m1",
+      "motor": "m1"
+    },
+    {
+      "id": "c6",
+      "texto": "Seedance 2.0 Mini\n",
+      "acento": "6 créditos",
+      "a": "T7",
+      "b": "T9",
+      "escena": "m3",
+      "motor": "m3"
+    },
+    {
+      "id": "c7",
+      "texto": "Kling O3 · 6 créditos\n",
+      "acento": "solo referencias",
+      "a": "T9",
+      "b": "T10",
+      "escena": "m5",
+      "motor": "m5"
+    },
+    {
+      "id": "c8",
+      "texto": "Inventó",
+      "acento": "el cuarto.",
+      "a": "T10",
+      "b": "T11",
+      "escena": "m5"
+    },
+    {
+      "id": "c9",
+      "texto": "Con referencias,",
+      "acento": "la cara se sostiene.",
+      "acento_t": "T11+1.2",
+      "a": "T11",
+      "b": "T12",
+      "escena": "lección"
+    },
+    {
+      "id": "c10",
+      "texto": "Pero inventa",
+      "acento": "la escena.",
+      "acento_t": "T12+0.8",
+      "a": "T12",
+      "b": "T13",
+      "escena": "lección"
+    },
+    {
+      "id": "c11",
+      "texto": "Una toma:",
+      "acento": "es una prueba.",
+      "acento_t": "T13+0.9",
+      "a": "T13",
+      "b": "T14",
+      "escena": "lección"
+    },
+    {
+      "id": "c12",
+      "texto": "Seguime:",
+      "acento": "cada semana, una prueba.",
+      "acento_t": "T14+1.0",
+      "a": "T14",
+      "b": "FIN",
+      "escena": "cierre"
+    }
   ],
-  "cadenas_de_tarjetas": [["c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "c9", "c10", "c11", "c12"]],
-  "cta": { "texto": "Seguime: cada semana, una prueba.", "min_s": 2.4, "max_s": 5.5 },
-  "gancho": { "miniaturas": { "a": 0.75, "escalon": 0.12, "w": 136, "h": 242, "gap": 16, "x0": 92, "y": 960, "cuadro": 90 } },
+  "cadenas_de_tarjetas": [
+    [
+      "c1",
+      "c2",
+      "c3",
+      "c4",
+      "c5",
+      "c6",
+      "c7",
+      "c8",
+      "c9",
+      "c10",
+      "c11",
+      "c12"
+    ]
+  ],
+  "cta": {
+    "texto": "Seguime: cada semana, una prueba.",
+    "min_s": 2.4,
+    "max_s": 5.5
+  },
+  "gancho": {
+    "miniaturas": {
+      "a": 0.75,
+      "escalon": 0.12,
+      "w": 136,
+      "h": 242,
+      "gap": 16,
+      "x0": 92,
+      "y": 960,
+      "cuadro": 90
+    }
+  },
   "regla": {
-    "refs": { "a": "T3+0.3", "escalon": 0.15, "lado": 160, "gap": 24, "x0": 92, "y": 470, "etiqueta_t": "T3+0.95", "etiqueta_y": 652 },
-    "escala": { "a": "T4", "d": 0.5, "y": 967, "ejes_t": "T4+0.45", "uno_t": "T4+0.9", "marca_t": "T5+0.05" }
+    "refs": {
+      "a": "T3+0.3",
+      "escalon": 0.15,
+      "lado": 160,
+      "gap": 24,
+      "x0": 92,
+      "y": 470,
+      "etiqueta_t": "T3+0.95",
+      "etiqueta_y": 652
+    },
+    "escala": {
+      "a": "T4",
+      "d": 0.5,
+      "y": 967,
+      "ejes_t": "T4+0.45",
+      "uno_t": "T4+0.9",
+      "marca_t": "T5+0.05"
+    }
   },
   "motores": [
-    { "id": "m1", "n": 1, "cr": 7.5, "clave": "kling3_0_std_control_e470ef4f", "ini": 0.79, "fin": 0.72, "t_fin": 5.9, "tag_a": "T6+0.1", "tag_b": "T6+0.65", "sello": null },
-    { "id": "m3", "n": 3, "cr": 6, "clave": "seedance_2_0_mini_a7f79a01-4193-4135-9ba2-082378a2609d", "ini": 0.69, "fin": 0.64, "t_fin": 5.9, "tag_a": "T7+0.1", "tag_b": "T7+0.6", "sello": { "texto": "bajo el piso", "t": "T7+0.95" } },
-    { "id": "m5", "n": 5, "cr": 6, "clave": "kling_o3_image_reference_5_refs_948a89d3-c5c5-4e32-92f0-db624edc825b", "ini": 0.8, "fin": 0.82, "t_fin": 5.9, "tag_a": "T9+0.1", "tag_b": "T9+0.7", "sello": null }
+    {
+      "id": "m1",
+      "n": 1,
+      "nombre": "Kling 3.0 std",
+      "cr": 7.5,
+      "clave": "kling3_0_std_control_e470ef4f",
+      "ini": 0.79,
+      "fin": 0.72,
+      "t_fin": 5.9,
+      "tag_a": "T6+0.1",
+      "tag_b": "T6+0.65",
+      "sello": null
+    },
+    {
+      "id": "m3",
+      "n": 3,
+      "nombre": "Seedance 2.0 Mini",
+      "cr": 6,
+      "clave": "seedance_2_0_mini_a7f79a01-4193-4135-9ba2-082378a2609d",
+      "ini": 0.69,
+      "fin": 0.64,
+      "t_fin": 5.9,
+      "tag_a": "T7+0.1",
+      "tag_b": "T7+0.6",
+      "sello": {
+        "texto": "bajo el piso",
+        "t": "T7+0.95"
+      }
+    },
+    {
+      "id": "m5",
+      "n": 5,
+      "nombre": "Kling O3",
+      "cr": 6,
+      "clave": "kling_o3_image_reference_5_refs_948a89d3-c5c5-4e32-92f0-db624edc825b",
+      "ini": 0.8,
+      "fin": 0.82,
+      "t_fin": 5.9,
+      "tag_a": "T9+0.1",
+      "tag_b": "T9+0.7",
+      "sello": null
+    }
   ],
   "leccion": {
-    "titulo": { "texto": "Parecido al final: 3 de los 6 clips", "t": "T11+0.15", "y": 300 },
-    "marca_t": "T11+0.05", "marca_label_y": 392,
-    "orden": ["m5", "m1", "m3"],
-    "barra": { "y0": 490, "paso": 150, "alto": 88, "t0": "T11+0.35", "escalon": 0.3, "d": 0.5 },
-    "descriptor": { "m5": "referencias", "m1": "foto sola", "m3": "foto sola" },
-    "resalte_t": "T11+1.25", "resalte_motores": ["m5"],
-    "cambios": [
-      { "motor": "m5", "t": "T12+0.2", "texto": "inventó el cuarto" },
-      { "motor": "m1", "t": "T12+0.55", "texto": "mantiene el cuarto" },
-      { "motor": "m3", "t": "T12+0.9", "texto": "cambió el plano" }
+    "titulo": {
+      "texto": "Parecido al final: 3 de los 6 clips",
+      "t": "T11+0.15",
+      "y": 300
+    },
+    "marca_t": "T11+0.05",
+    "marca_label_y": 392,
+    "orden": [
+      "m1",
+      "m3",
+      "m5"
     ],
-    "nota": { "t": "T11+1.8", "texto": "Final = segundo 5,9, que no se ve entero.", "y": 1010 }
+    "barra": {
+      "y0": 540,
+      "paso": 170,
+      "alto": 80,
+      "t0": "T11+0.35",
+      "escalon": 0.3,
+      "d": 0.5,
+      "nombre_dy": 58
+    },
+    "descriptor": {
+      "m1": "foto sola",
+      "m3": "foto sola",
+      "m5": "referencias"
+    },
+    "resalte_t": "T11+1.25",
+    "resalte_motores": [
+      "m5"
+    ],
+    "cambios": [
+      {
+        "motor": "m5",
+        "t": "T12+0.2",
+        "texto": "inventó el cuarto"
+      },
+      {
+        "motor": "m3",
+        "t": "T12+0.55",
+        "texto": "cambió el plano"
+      },
+      {
+        "motor": "m1",
+        "t": "T12+0.9",
+        "texto": "mantiene el cuarto"
+      }
+    ],
+    "nota": {
+      "t": "T11+1.8",
+      "texto": "Final = segundo 5,9, que no se ve entero.",
+      "y": 1070
+    }
   },
   "quitado_de_g2": [
-    { "que": "Motor 2 (el «pro» de 1080p) y Motor 4 (foto + 3 referencias, letrero inventado)", "porque": "el contraste esencial cabe en 3 motores; con ellos el video no baja de 40 s. Se quita con ellos la pastilla «1080p» y el aro del letrero." },
-    { "que": "Motor 6: placa del precio («5 créditos por segundo», «4×»)", "porque": "no cabe en 450 caracteres de voz ni en 30 s; el precio de cada motor sigue en su tarjeta." },
-    { "que": "Lección 1 (placa con tres arranques y tres finales) y barras de seis motores", "porque": "se reemplazan por una sola placa de tres barras (los finales de los Motores 5, 1 y 3)." },
-    { "que": "Segmentos de 5 s por clip", "porque": "cada clip se ve de 2,7 a 4,1 s a 1×, recortado a los primeros cuadros, donde está la prueba." }
+    {
+      "que": "Kling 3.0 pro (9 cr, 1080p) y Seedance 2.0 Mini + referencias (6 cr, foto de inicio + 3 referencias, letrero inventado)",
+      "porque": "el contraste esencial cabe en 3 herramientas; con las seis el video pasaba de 58 s. Con ellas se quita la pastilla «1080p» (solo se veía en Kling 3.0 pro) y el aro del letrero (solo estaba en Seedance 2.0 Mini + referencias)."
+    },
+    {
+      "que": "Cinematic Studio 3.0 (20 cr, 4 s): placa del precio («5 créditos por segundo», «4×»)",
+      "porque": "no cabe en 450 caracteres de voz ni en 30 s; el precio de cada herramienta que sí sale sigue en su tarjeta."
+    },
+    {
+      "que": "Lección 1 (placa con tres arranques y tres finales) y barras de seis herramientas",
+      "porque": "se reemplazan por una sola placa de tres barras (los finales de Kling 3.0 std, Seedance 2.0 Mini y Kling O3), en el orden en que aparecen en el video, no ordenadas por puntaje (para no sugerir un ranking ni una recomendación)."
+    },
+    {
+      "que": "Segmentos de 5 s por clip",
+      "porque": "cada clip se ve de 2,7 a 4,1 s a 1×, recortado a los primeros cuadros, donde está la prueba."
+    }
   ]
 }

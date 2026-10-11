@@ -1,6 +1,6 @@
 {
  "titulo": "G2 v2 · La misma foto, seis clips: ¿quién pierde la cara? (re-corte de 26 s, sin aire muerto, listo para voz)",
- "version": "v2 (11-oct-2026): re-corte de G2 con la regla de aire muerto. Todos los tiempos salen de guion-voz.txt (tramos a 3,6 palabras/s, huecos de 6 cuadros); un tiempo escrito como «T6+0.8» es el inicio del tramo 6 más 0,8 s, «T7-6f» = 6 cuadros antes del inicio del tramo 7, «FIN» = el final del video. 0 créditos: mismos clips y la misma foto de G2.",
+ "version": "v2 (11-oct-2026): re-corte de G2 con la regla de aire muerto. D-N1 (11-oct): se nombran las herramientas con su nombre real (uso propio, no recomendación pagada). Todos los tiempos salen de guion-voz.txt (tramos a 3,6 palabras/s, huecos de 6 cuadros); un tiempo escrito como «T6+0.8» es el inicio del tramo 6 más 0,8 s, «T7-6f» = 6 cuadros antes del inicio del tramo 7, «FIN» = el final del video. 0 créditos: mismos clips y la misma foto de G2.",
  "guion": "hermes-content/docs/cola/lucia-diario/guiones/G2-la-misma-foto-seis-clips.md",
  "voz": {
   "archivo": "guion-voz.txt",
@@ -128,7 +128,7 @@
    "media_inicio": 0,
    "a": 7.833333333333334,
    "b": 10.541666666666666,
-   "capa": "Motor 1, cuadros 0-64 (2,7 s a 1×); el cuadro 0 es la foto K1"
+   "capa": "Kling 3.0 std (clip 1), cuadros 0-64 (2,7 s a 1×); el cuadro 0 es la foto K1"
   },
   {
    "id": "m3",
@@ -137,7 +137,7 @@
    "media_inicio": 0,
    "a": 10.291666666666666,
    "b": 13.291666666666666,
-   "capa": "Motor 3, cuadros 0-71 (3,0 s a 1×)"
+   "capa": "Seedance 2.0 Mini (clip 3), cuadros 0-71 (3,0 s a 1×)"
   },
   {
    "id": "m5",
@@ -146,14 +146,14 @@
    "media_inicio": 0,
    "a": 13.041666666666666,
    "b": 17.125,
-   "capa": "Motor 5, cuadros 0-97 (4,1 s a 1×)"
+   "capa": "Kling O3 (clip 5), cuadros 0-97 (4,1 s a 1×)"
   },
   {
    "id": "pl-l",
    "tipo": "placa",
    "a": 16.875,
    "b": 23.708333333333332,
-   "capa": "lección: los finales de los Motores 5, 1 y 3 sobre la escala"
+   "capa": "lección: los finales de Kling 3.0 std, Seedance 2.0 Mini y Kling O3 sobre la escala"
   },
   {
    "id": "k1",
@@ -162,7 +162,7 @@
    "media_inicio": 2.75,
    "a": 23.458333333333332,
    "b": 26.5,
-   "capa": "cierre: el clip K1 (el del Motor 1) desde el cuadro 66 (2,75 s), con Lucía mirando a cámara"
+   "capa": "cierre: el clip K1 (el de Kling 3.0 std) desde el cuadro 66 (2,75 s), con Lucía mirando a cámara"
   }
  ],
  "costuras": [
@@ -195,7 +195,7 @@
     "sale": "c4",
     "entra": "c5"
    },
-   "porque": "placa → Motor 1 (el clip arranca en T-6 cuadros)"
+   "porque": "placa → Kling 3.0 std (el clip arranca en T-6 cuadros)"
   },
   {
    "t": 10.541666666666666,
@@ -210,7 +210,7 @@
     "sale": "c5",
     "entra": "c6"
    },
-   "porque": "Motor 1 → Motor 3"
+   "porque": "Kling 3.0 std → Seedance 2.0 Mini"
   },
   {
    "t": 13.291666666666666,
@@ -225,7 +225,7 @@
     "sale": "c6",
     "entra": "c7"
    },
-   "porque": "Motor 3 → Motor 5"
+   "porque": "Seedance 2.0 Mini → Kling O3"
   },
   {
    "t": 17.125,
@@ -240,7 +240,7 @@
     "sale": "c8",
     "entra": "c9"
    },
-   "porque": "Motor 5 → lección"
+   "porque": "Kling O3 → lección"
   },
   {
    "t": 23.708333333333332,
@@ -315,31 +315,31 @@
   },
   {
    "id": "c5",
-   "texto": "Motor 1 ·",
+   "texto": "Kling 3.0 std\n",
    "acento": "7,5 créditos",
    "a": 8.083333333333334,
    "b": 10.541666666666666,
    "escena": "m1",
    "motor": "m1",
-   "n_palabras": 4,
-   "min_s": 1.7,
+   "n_palabras": 5,
+   "min_s": 2.05,
    "entra": 7.833333
   },
   {
    "id": "c6",
-   "texto": "Motor 3 ·",
+   "texto": "Seedance 2.0 Mini\n",
    "acento": "6 créditos",
    "a": 10.541666666666666,
    "b": 13.291666666666666,
    "escena": "m3",
    "motor": "m3",
-   "n_palabras": 4,
-   "min_s": 1.7,
+   "n_palabras": 5,
+   "min_s": 2.05,
    "entra": 10.291667
   },
   {
    "id": "c7",
-   "texto": "Motor 5 · 6 créditos\n",
+   "texto": "Kling O3 · 6 créditos\n",
    "acento": "solo referencias",
    "a": 13.291666666666666,
    "b": 15.75,
@@ -466,6 +466,7 @@
   {
    "id": "m1",
    "n": 1,
+   "nombre": "Kling 3.0 std",
    "cr": 7.5,
    "clave": "kling3_0_std_control_e470ef4f",
    "ini": 0.79,
@@ -487,6 +488,7 @@
   {
    "id": "m3",
    "n": 3,
+   "nombre": "Seedance 2.0 Mini",
    "cr": 6,
    "clave": "seedance_2_0_mini_a7f79a01-4193-4135-9ba2-082378a2609d",
    "ini": 0.69,
@@ -511,6 +513,7 @@
   {
    "id": "m5",
    "n": 5,
+   "nombre": "Kling O3",
    "cr": 6,
    "clave": "kling_o3_image_reference_5_refs_948a89d3-c5c5-4e32-92f0-db624edc825b",
    "ini": 0.8,
@@ -539,22 +542,23 @@
   "marca_t": 17.175,
   "marca_label_y": 392,
   "orden": [
-   "m5",
    "m1",
-   "m3"
+   "m3",
+   "m5"
   ],
   "barra": {
-   "y0": 490,
-   "paso": 150,
-   "alto": 88,
+   "y0": 540,
+   "paso": 170,
+   "alto": 80,
    "t0": 17.475,
    "escalon": 0.3,
-   "d": 0.5
+   "d": 0.5,
+   "nombre_dy": 58
   },
   "descriptor": {
-   "m5": "referencias",
    "m1": "foto sola",
-   "m3": "foto sola"
+   "m3": "foto sola",
+   "m5": "referencias"
   },
   "resalte_t": 18.375,
   "resalte_motores": [
@@ -567,34 +571,34 @@
     "texto": "inventó el cuarto"
    },
    {
-    "motor": "m1",
+    "motor": "m3",
     "t": 20.133333333333333,
-    "texto": "mantiene el cuarto"
+    "texto": "cambió el plano"
    },
    {
-    "motor": "m3",
+    "motor": "m1",
     "t": 20.48333333333333,
-    "texto": "cambió el plano"
+    "texto": "mantiene el cuarto"
    }
   ],
   "nota": {
    "t": 18.925,
    "texto": "Final = segundo 5,9, que no se ve entero.",
-   "y": 1010
+   "y": 1070
   }
  },
  "quitado_de_g2": [
   {
-   "que": "Motor 2 (el «pro» de 1080p) y Motor 4 (foto + 3 referencias, letrero inventado)",
-   "porque": "el contraste esencial cabe en 3 motores; con ellos el video no baja de 40 s. Se quita con ellos la pastilla «1080p» y el aro del letrero."
+   "que": "Kling 3.0 pro (9 cr, 1080p) y Seedance 2.0 Mini + referencias (6 cr, foto de inicio + 3 referencias, letrero inventado)",
+   "porque": "el contraste esencial cabe en 3 herramientas; con las seis el video pasaba de 58 s. Con ellas se quita la pastilla «1080p» (solo se veía en Kling 3.0 pro) y el aro del letrero (solo estaba en Seedance 2.0 Mini + referencias)."
   },
   {
-   "que": "Motor 6: placa del precio («5 créditos por segundo», «4×»)",
-   "porque": "no cabe en 450 caracteres de voz ni en 30 s; el precio de cada motor sigue en su tarjeta."
+   "que": "Cinematic Studio 3.0 (20 cr, 4 s): placa del precio («5 créditos por segundo», «4×»)",
+   "porque": "no cabe en 450 caracteres de voz ni en 30 s; el precio de cada herramienta que sí sale sigue en su tarjeta."
   },
   {
-   "que": "Lección 1 (placa con tres arranques y tres finales) y barras de seis motores",
-   "porque": "se reemplazan por una sola placa de tres barras (los finales de los Motores 5, 1 y 3)."
+   "que": "Lección 1 (placa con tres arranques y tres finales) y barras de seis herramientas",
+   "porque": "se reemplazan por una sola placa de tres barras (los finales de Kling 3.0 std, Seedance 2.0 Mini y Kling O3), en el orden en que aparecen en el video, no ordenadas por puntaje (para no sugerir un ranking ni una recomendación)."
   },
   {
    "que": "Segmentos de 5 s por clip",
@@ -659,9 +663,9 @@
   },
   {
    "i": 6,
-   "texto": "Motor uno, atado a la foto: pierde parecido.",
+   "texto": "Kling tres, atado a la foto: pierde parecido.",
    "palabras": 8,
-   "caracteres": 44,
+   "caracteres": 45,
    "sf": 194,
    "df": 53,
    "t": 8.083333333333334,
@@ -670,9 +674,9 @@
   },
   {
    "i": 7,
-   "texto": "Motor tres, también atado.",
+   "texto": "Seedance Mini, también atado.",
    "palabras": 4,
-   "caracteres": 26,
+   "caracteres": 29,
    "sf": 253,
    "df": 27,
    "t": 10.541666666666666,
@@ -692,9 +696,9 @@
   },
   {
    "i": 9,
-   "texto": "Motor cinco, solo con referencias: sostiene la cara.",
+   "texto": "Kling O tres, solo referencias: sostiene la cara.",
    "palabras": 8,
-   "caracteres": 52,
+   "caracteres": 49,
    "sf": 319,
    "df": 53,
    "t": 13.291666666666666,
@@ -770,7 +774,7 @@
   },
   {
    "id": "dA-m1",
-   "que": "m1 dato A",
+   "que": "Kling 3.0 std dato A",
    "texto": "parecido 0 s: 0,79",
    "n": 4,
    "a": 8.183333,
@@ -780,7 +784,7 @@
   },
   {
    "id": "dB-m1",
-   "que": "m1 dato B",
+   "que": "Kling 3.0 std dato B",
    "texto": "5,9 s: 0,72",
    "n": 3,
    "a": 8.733333,
@@ -790,7 +794,7 @@
   },
   {
    "id": "dA-m3",
-   "que": "m3 dato A",
+   "que": "Seedance 2.0 Mini dato A",
    "texto": "parecido 0 s: 0,69",
    "n": 4,
    "a": 10.641667,
@@ -800,7 +804,7 @@
   },
   {
    "id": "dB-m3",
-   "que": "m3 dato B",
+   "que": "Seedance 2.0 Mini dato B",
    "texto": "5,9 s: 0,64",
    "n": 3,
    "a": 11.141667,
@@ -810,7 +814,7 @@
   },
   {
    "id": "s-m3",
-   "que": "m3 sello",
+   "que": "Seedance 2.0 Mini sello",
    "texto": "bajo el piso",
    "n": 3,
    "a": 11.491667,
@@ -820,7 +824,7 @@
   },
   {
    "id": "dA-m5",
-   "que": "m5 dato A",
+   "que": "Kling O3 dato A",
    "texto": "parecido 0 s: 0,80",
    "n": 4,
    "a": 13.391667,
@@ -830,7 +834,7 @@
   },
   {
    "id": "dB-m5",
-   "que": "m5 dato B",
+   "que": "Kling O3 dato B",
    "texto": "5,9 s: 0,82",
    "n": 3,
    "a": 13.991667,
@@ -879,64 +883,94 @@
    "min": 3.1
   },
   {
-   "id": "l-l1",
-   "que": "lección: rótulo Motor 5",
-   "texto": "Motor 5 · referencias",
+   "id": "l-t1",
+   "que": "lección: nombre Kling 3.0 std",
+   "texto": "Kling 3.0 std",
    "n": 3,
-   "a": 17.795,
-   "b": 19.783333,
-   "dur": 1.808333,
+   "a": 17.475,
+   "b": 23.458333,
+   "dur": 5.803333,
    "min": 1.35
   },
   {
-   "id": "l-m1",
-   "que": "lección: rótulo Motor 5 (cambia)",
-   "texto": "Motor 5 · inventó el cuarto",
-   "n": 5,
-   "a": 19.803333,
-   "b": 23.458333,
-   "dur": 3.475,
-   "min": 2.05
-  },
-  {
-   "id": "l-l2",
-   "que": "lección: rótulo Motor 1",
-   "texto": "Motor 1 · foto sola",
-   "n": 4,
-   "a": 18.095,
-   "b": 20.133333,
-   "dur": 1.858333,
-   "min": 1.7
-  },
-  {
-   "id": "l-m2",
-   "que": "lección: rótulo Motor 1 (cambia)",
-   "texto": "Motor 1 · mantiene el cuarto",
-   "n": 5,
-   "a": 20.153333,
-   "b": 23.458333,
-   "dur": 3.125,
-   "min": 2.05
-  },
-  {
-   "id": "l-l3",
-   "que": "lección: rótulo Motor 3",
-   "texto": "Motor 3 · foto sola",
-   "n": 4,
-   "a": 18.395,
+   "id": "l-l1",
+   "que": "lección: rótulo Kling 3.0 std",
+   "texto": "foto sola",
+   "n": 2,
+   "a": 17.795,
    "b": 20.483333,
-   "dur": 1.908333,
-   "min": 1.7
+   "dur": 2.508333,
+   "min": 1
   },
   {
-   "id": "l-m3",
-   "que": "lección: rótulo Motor 3 (cambia)",
-   "texto": "Motor 3 · cambió el plano",
-   "n": 5,
+   "id": "l-m1",
+   "que": "lección: rótulo Kling 3.0 std (cambia)",
+   "texto": "mantiene el cuarto",
+   "n": 3,
    "a": 20.503333,
    "b": 23.458333,
    "dur": 2.775,
-   "min": 2.05
+   "min": 1.35
+  },
+  {
+   "id": "l-t2",
+   "que": "lección: nombre Seedance 2.0 Mini",
+   "texto": "Seedance 2.0 Mini",
+   "n": 3,
+   "a": 17.775,
+   "b": 23.458333,
+   "dur": 5.503333,
+   "min": 1.35
+  },
+  {
+   "id": "l-l2",
+   "que": "lección: rótulo Seedance 2.0 Mini",
+   "texto": "foto sola",
+   "n": 2,
+   "a": 18.095,
+   "b": 20.133333,
+   "dur": 1.858333,
+   "min": 1
+  },
+  {
+   "id": "l-m2",
+   "que": "lección: rótulo Seedance 2.0 Mini (cambia)",
+   "texto": "cambió el plano",
+   "n": 3,
+   "a": 20.153333,
+   "b": 23.458333,
+   "dur": 3.125,
+   "min": 1.35
+  },
+  {
+   "id": "l-t3",
+   "que": "lección: nombre Kling O3",
+   "texto": "Kling O3",
+   "n": 2,
+   "a": 18.075,
+   "b": 23.458333,
+   "dur": 5.203333,
+   "min": 1
+  },
+  {
+   "id": "l-l3",
+   "que": "lección: rótulo Kling O3",
+   "texto": "referencias",
+   "n": 1,
+   "a": 18.395,
+   "b": 19.783333,
+   "dur": 1.208333,
+   "min": 0.65
+  },
+  {
+   "id": "l-m3",
+   "que": "lección: rótulo Kling O3 (cambia)",
+   "texto": "inventó el cuarto",
+   "n": 3,
+   "a": 19.803333,
+   "b": 23.458333,
+   "dur": 3.475,
+   "min": 1.35
   }
  ]
 }
