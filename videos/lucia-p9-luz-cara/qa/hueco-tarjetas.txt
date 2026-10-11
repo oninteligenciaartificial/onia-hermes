@@ -1,3 +1,2 @@
-MODO ESTÁTICO: timeline GSAP real sobre objetos. No mide DOM/tipografía/render.
 0 cuadros sin tarjeta de 480
 EXIT 0

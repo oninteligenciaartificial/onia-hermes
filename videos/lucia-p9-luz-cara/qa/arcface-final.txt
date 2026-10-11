@@ -1,20 +1,21 @@
-ArcFace (insightface buffalo_l: SCRFD det_10g + w600k_r50) del MASTER P9 contra el cuadro FUENTE, 11-oct-2026, sesion Lucia (editor), 0 creditos.
-Master: out/p9-final-1080x1920.mp4 (SHA-256 en qa/sha-master.txt). Fuente: clip decodificado y escalado a 1080x1920 bilinear (mismo escalado que psnr-clips), sin tarjetas.
+ArcFace (insightface buffalo_l: SCRFD det_10g + w600k_r50) del MASTER P9 v2 contra el cuadro FUENTE, 11-oct-2026, sesion Lucia (editor), 0 creditos.
+Master: out/p9-final-1080x1920.mp4 (SHA-256 en qa/sha-master.txt). Fuente (comparacion principal, columna «fuente»): clip decodificado y escalado a 1080x1920 bilinear (mismo escalado que psnr-clips), sin tarjetas.
+Segunda comparacion (H11 de la revision: dejar escrito con cual fuente se compara): columna «nativa» = el clip original de 720x1280 SIN escalar; «dif2» = |master - nativa|.
 Metodo: .claude/skills/lucia/scripts/face-gate.sh (centroide = coseno contra el centroide de las 8 refs oficiales; gate del repo 0,70; ruido +-0,03; caras < 200 px poco confiables).
 Cuadros: m1 = cuadro n del clip = cuadro n del master (n=12,48,84,120); m4 = cuadro n del clip = cuadro 138+n del master (n=30,66,102,130).
+El v2 agrega el desenfoque/oscurecido de la esquina superior izquierda de m4 (H5): no toca la cara; estos 8 pares prueban que sigue sin deformarla.
 piso de caras negativas (max): 0.224
 
-cuadro           master   fuente     dif  cara_px master  cara_px fuente  nota
-m1_n012           0.793    0.801   0.008             181             180  cara < 200 px: poco confiable
-m1_n048           0.742    0.759   0.017             181             180  cara < 200 px: poco confiable
-m1_n084           0.740    0.747   0.007             172             173  cara < 200 px: poco confiable
-m1_n120           0.701    0.711   0.010             172             173  cara < 200 px: poco confiable
-m4_n030           0.792    0.789   0.003             297             298  
-m4_n066           0.754    0.749   0.005             420             420  
-m4_n102           0.790    0.796   0.006             463             463  
-m4_n130           0.814    0.813   0.001             513             511  
+cuadro           master   fuente     dif  cara_px master  cara_px fuente   nativa    dif2  px nativa
+m1_n012            0.797    0.801   0.004             181             180     0.797   0.000       120
+m1_n048            0.745    0.759   0.014             181             180     0.762   0.017       120
+m1_n084            0.735    0.747   0.012             172             173     0.738   0.003       115
+m1_n120            0.709    0.711   0.002             172             173     0.708   0.001       115
+m4_n030            0.790    0.789   0.001             298             298     0.791   0.001       198
+m4_n066            0.754    0.749   0.005             420             420     0.747   0.007       280
+m4_n102            0.783    0.796   0.013             463             463     0.790   0.007       309
+m4_n130            0.814    0.813   0.001             511             511     0.812   0.002       341
 
-Diferencia maxima master <-> fuente: 0.017 (regla del repo <= 0,02): CUMPLE
-Lectura: el escalado y el H.264 del render no deforman la cara. Los puntajes siguen la misma tendencia que PROCEDENCIA l.97 (m1 baja de ~0,79 a ~0,70; m4 sube de ~0,71 a ~0,80), con cajas de cara de 172-181 px en m1 (indicativo: bajo 200 px).
-Las cifras de la pantalla y del pie (0,79 -> 0,72; 0,71 -> 0,80) son las de PROCEDENCIA l.97 (7 puntos por clip), no estas 8 muestras; estas solo comprueban que el render conserva la cara de la fuente.
-Nota: cara_px es la caja de la cara en el lienzo de 1080x1920 (el clip fuente es 720x1280 y se escala x1,5). La pantalla dice 139 -> 347 px: son px del clip fuente de 720p (PROCEDENCIA l.97), equivalen a ~209 -> ~520 px en este lienzo.
+Diferencia maxima master <-> fuente escalada: 0.014 (regla del repo <= 0,02): CUMPLE
+Diferencia maxima master <-> fuente nativa 720p: 0.017 (el revisor midio 0,020 en la v1 con la nativa; mismo orden): CUMPLE
+Lectura: el escalado, el H.264 del render y el desenfoque de la esquina no deforman la cara. Estas muestras NO son las cifras de pantalla (esas son las 7 mediciones por clip de PROCEDENCIA l.97, reproducidas en qa/cara-px-fuente.txt): solo prueban que el render conserva la cara de la fuente. Las caras de m1 (172-181 px en el lienzo) son «poco confiables» segun el propio gate.

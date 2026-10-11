@@ -35,7 +35,7 @@ RECHAZADO correctamente · pantalla: la etiqueta apunta a un clip que no sale (m
     ↳ leccion.fuga: «m4» no es un clip con fotos recibidas que salga en pantalla
 RECHAZADO correctamente · pantalla: la etiqueta llega sin ventana de lectura (T14-6f)
     ↳ lectura «lección: fotos recibidas (Kling O3)» (8 palabras): -0.18 s y pide 3.10 s
-RECHAZADO correctamente · pantalla: la etiqueta llega con ventana corta (T13+1.0 → 2,7 s, pide 3,1)
+RECHAZADO correctamente · pantalla: la etiqueta llega con ventana corta (T13+1.5: 0,24 s, pide 3,1)
     ↳ lectura «lección: fotos recibidas (Kling O3)» (8 palabras): 0.24 s y pide 3.10 s
 RECHAZADO correctamente · datos: Kling O3 «recibió 3 de las 8» (la medición dice 4)
     ↳ fuga_refs m5: 3 de las 8 y la medición dice 4 (R1, R3, R6, R7)

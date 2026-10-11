@@ -108,7 +108,9 @@ const flecha='<span class="fl">→</span>';
 // Fila de resultados: brillo y parecido en enteros / 2 decimales, una barra por medida y la escala de cada barra debajo (H6, H7)
 const rowHTML=c=>`<div class="fila texto card" id="fila-${c.id}"><div>${e(c.nombre)}</div><div class="numeros">brillo ${c.entero[0]} ${flecha} ${c.entero[1]} (${minus(c.entero[2])})</div><div class="barra"><i style="width:${c.brillo[1]/255*100}%"></i></div><div class="numeros">parecido ${f2(c.parecido[0])} ${flecha} ${f2(c.parecido[1])}</div><div class="barra cara"><i style="width:${c.parecido[1]*100}%"></i></div><div class="escala"><b class="v">brillo 0 a 255</b> · <b class="n">parecido 0 a 1</b></div></div>`;
 const sc=p.scrim_m4,[sx,sy,sw,sh]=sc.caja,[cx,cy]=sc.centro,[rx,ry]=sc.radios;
-const scrim=`<div id="scrim-m4" style="left:${sx}px;top:${sy}px;width:${sw}px;height:${sh}px;background:radial-gradient(ellipse ${rx}px ${ry}px at ${cx-sx}px ${cy-sy}px,rgba(17,25,27,.94) 0%,rgba(17,25,27,.92) 68%,rgba(17,25,27,0) 100%)"></div>`;
+const mask=`radial-gradient(ellipse ${rx}px ${ry}px at ${cx-sx}px ${cy-sy}px,#000 0%,#000 58%,transparent 100%)`;
+// Desenfoque (backdrop-filter) con máscara radial: el letrero queda como mancha borrosa y oscura, sin borde duro; viaja con #overlay-m4
+const scrim=`<div id="scrim-m4" style="left:${sx}px;top:${sy}px;width:${sw}px;height:${sh}px;-webkit-backdrop-filter:blur(${sc.desenfoque_px}px) brightness(${sc.brillo});backdrop-filter:blur(${sc.desenfoque_px}px) brightness(${sc.brillo});-webkit-mask-image:${mask};mask-image:${mask}"></div>`;
 const html=`<!doctype html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=1080, height=1920"><title>Lucía P9</title><style>${read('scripts/estilos.css')}</style></head><body>
 <div id="root" data-composition-id="main" data-start="0" data-duration="20" data-width="1080" data-height="1920" data-fps="24">
 ${video(k,'m1.mp4')}${video(s,draft?'m4-proxy.mp4':'m4-full.mp4')}

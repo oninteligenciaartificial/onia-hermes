@@ -1,37 +1,21 @@
-cuadros 480
-0 pastillas 300 857
-24 pastillas 300 857
-40 pastillas 300 1099
-72 pastillas 300 1099
-120 pastillas 300 1099
-137 pastillas 300 1099
-150 pastillas 1090 1339
-200 pastillas 1090 1339
-250 pastillas 1090 1339
-270 pastillas 1090 1339
-283 placa-nonbg 288 1213
-288 placa-nonbg 288 1213
-296 placa-nonbg 288 1213
-304 placa-nonbg 288 1213
-312 placa-nonbg 288 1213
-320 placa-nonbg 288 1213
-328 placa-nonbg 288 1213
-336 placa-nonbg 288 1213
-344 placa-nonbg 288 1213
-352 placa-nonbg 288 1213
-360 placa-nonbg 288 1213
-368 placa-nonbg 288 1213
-376 placa-nonbg 288 1213
-384 placa-nonbg 288 1213
-392 placa-nonbg 288 1213
-400 placa-nonbg 288 1213
-408 placa-nonbg 288 1215
-416 placa-nonbg 288 1215
-424 placa-nonbg 288 1455
-432 placa-nonbg 288 1455
-440 placa-nonbg 288 1455
-448 placa-nonbg 288 1455
-456 placa-nonbg 288 1455
-464 placa-nonbg 288 1455
-472 placa-nonbg 288 1454
-479 placa-nonbg 288 1454
+  0   0.00 s  pastillas  y 300-855
+ 24   1.00 s  pastillas  y 301-855
+ 40   1.67 s  pastillas  y 300-855
+ 72   3.00 s  pastillas  y 300-1099
+120   5.00 s  pastillas  y 301-855
+137   5.71 s  pastillas  y 301-1098
+150   6.25 s  pastillas  y 1232-1297
+200   8.33 s  pastillas  y 1092-1439
+250  10.42 s  pastillas  y 1090-1439
+270  11.25 s  pastillas  y 1090-1439
+283  11.79 s  placa-contenido  y 300-782
+288  12.00 s  placa-contenido  y 300-991
+300  12.50 s  placa-contenido  y 300-1103
+330  13.75 s  placa-contenido  y 300-1103
+360  15.00 s  placa-contenido  y 300-1215
+400  16.67 s  placa-contenido  y 300-1215
+415  17.29 s  placa-contenido  y 300-1215
+424  17.67 s  placa-contenido  y 300-1427
+440  18.33 s  placa-contenido  y 300-1427
+479  19.96 s  placa-contenido  y 300-1427
+mínimo y=300  máximo y=1439  (regla: contenido entre 292 y 1490)

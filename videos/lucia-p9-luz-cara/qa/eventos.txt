@@ -1,4 +1,3 @@
-MODO ESTÁTICO: timeline GSAP real sobre objetos. No mide DOM/tipografía/render.
 0.000: gancho
 1.500: resultado Kling
 3.200: acento parecido Kling

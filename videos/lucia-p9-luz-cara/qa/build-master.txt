@@ -1,1 +1,1 @@
-OK datos/pie/voz: 304 caracteres, cronograma 480/24 s; lienzo 480 cuadros/20 s. fuentes completas
+OK datos/pie/voz: 311 caracteres (cupo 381), cronograma 480/24 s; lienzo 480 cuadros/20 s; efecto sin refs ≈ 0,03; fotos recibidas 2 de 8. fuentes completas

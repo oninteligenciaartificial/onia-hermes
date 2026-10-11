@@ -8,7 +8,7 @@ Lint
   ⚠ nested_structure_needs_subcomposition: <div id="overlay-m1"> is a timeline element that contains nested <div id="rotulo">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
     /home/user/onia-hermes/videos/lucia-p9-luz-cara/index.html #overlay-m1 t=0s
     Fix: Move <div id="overlay-m1"> and its contents into a sub-composition file and mount it with data-composition-src.
-  ⚠ nested_structure_needs_subcomposition: <div id="overlay-m4"> is a timeline element that contains nested <div id="dato-m4">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+  ⚠ nested_structure_needs_subcomposition: <div id="overlay-m4"> is a timeline element that contains nested <div id="scrim-m4">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
     /home/user/onia-hermes/videos/lucia-p9-luz-cara/index.html #overlay-m4 t=0s
     Fix: Move <div id="overlay-m4"> and its contents into a sub-composition file and mount it with data-composition-src.
   0 error(s), 3 warning(s), 0 info(s)
@@ -23,7 +23,7 @@ Motion
   ◇ 0 errors, 0 warnings
 
 Contrast
-  ◇ 26/26 text checks pass WCAG AA
+  ◇ 38/38 text checks pass WCAG AA
 
 Snapshots
   ◇ disabled

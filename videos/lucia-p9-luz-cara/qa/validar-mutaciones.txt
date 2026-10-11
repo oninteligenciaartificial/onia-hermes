@@ -20,4 +20,3 @@ H5: letrero inventado ausente del pie: RECHAZADO correctamente
 H5: scrim del letrero ausente: RECHAZADO correctamente
 H4: la voz habla decimales: RECHAZADO correctamente
 H4: L3 vuelve a cruzar el corte («Kling 3.0 std»): RECHAZADO correctamente
-EXIT 0

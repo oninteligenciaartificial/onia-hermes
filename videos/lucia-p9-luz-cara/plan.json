@@ -98,7 +98,9 @@
     "motivo": "H5: letrero inventado en la torre (esquina superior izquierda, 7–11,5 s); sin tocar la cara ni la zona del PSNR (y 400–700)",
     "caja": [0, 0, 440, 290],
     "centro": [60, 75],
-    "radios": [360, 215]
+    "radios": [360, 215],
+    "desenfoque_px": 18,
+    "brillo": 0.62
   },
   "layout": {
     "comentario": "y de cada bloque (px del lienzo 1080x1920); huecos verticales iguales; medido en el DOM por qa/medir-dom",
