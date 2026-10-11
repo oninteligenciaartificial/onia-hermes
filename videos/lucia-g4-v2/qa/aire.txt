@@ -2,8 +2,8 @@ AIRE MUERTO — G4 v2 · Seis motores de imagen, una cara: ¿cuál la conserva? 
 673 cuadros a 24 fps = 28.042 s. Se mide en el DOM (cada cuadro vs el anterior); el empuje lento de las fotos no cuenta como cambio.
 
 ESTRICTA (solo tarjetas narrativas + las dos notas de honestidad cuentan como «en lectura»)
-  mayor tramo quieto: 0.208 s (5 cuadros iguales) desde 25.167 s
-  los 6 mayores: 25.17 s: 0.21 s · 0.00 s: 0.13 s · 7.96 s: 0.13 s · 12.21 s: 0.13 s · 12.63 s: 0.13 s · 14.83 s: 0.13 s
+  mayor tramo quieto: 0.208 s (5 cuadros iguales) desde 1.708 s
+  los 6 mayores: 1.71 s: 0.21 s · 25.17 s: 0.21 s · 7.96 s: 0.13 s · 12.21 s: 0.13 s · 12.63 s: 0.13 s · 14.83 s: 0.13 s
   tramos quietos de más de 0.3 s: 0
 
 COMPLETA (todo texto con tiempo de lectura: tarjetas, notas, rótulo, datos, sellos, pastillas, etiquetas, pies)
@@ -11,7 +11,7 @@ COMPLETA (todo texto con tiempo de lectura: tarjetas, notas, rótulo, datos, sel
   los 6 mayores: 25.21 s: 0.17 s · 7.96 s: 0.13 s · 18.88 s: 0.13 s · 22.50 s: 0.13 s · 9.92 s: 0.08 s · 12.67 s: 0.08 s
   tramos quietos de más de 0.3 s: 0
 
-cuadros con cambio: 331 de 673 (49 %); en lectura de tarjeta o nota: 572; en lectura de cualquier texto: 605
+cuadros con cambio: 330 de 673 (49 %); en lectura de tarjeta o nota: 572; en lectura de cualquier texto: 605
 
 EVENTOS VISUALES NUEVOS (desde plan.json, scripts/eventos.mjs): 65 en 28.04 s = 23.2 por 10 s
   por 10 s: 0-10.0 s: 25 · 10-20.0 s: 28 · 20-28.0 s: 12
