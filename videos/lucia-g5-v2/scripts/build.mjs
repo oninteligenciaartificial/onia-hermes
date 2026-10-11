@@ -474,7 +474,7 @@ const es = plan.p2.escala; ev_(plan.p2.flecha.t, 'p2 flecha'); ev_(es.dibuja_t, 
 for (const e of plan.ejemplos) { ev_(e.box_t, e.id + ' caja'); ev_(e.t, e.id + ' dato'); ev_(e.fin, e.id + ' dato sale'); }
 const q1 = plan.r1; ev_(q1.box_t, 'r1 caja'); ev_(q1.tag_t, 'r1 «89 px»'); ev_(q1.lupa_t, 'r1 lupa'); ev_(q1.lupa_ping_t, 'r1 la lupa marca «a ojo»');
 const q2 = plan.r2; ev_(q2.d1.t, 'r2 punta baja'); ev_(q2.d2.t, 'r2 punta alta'); ev_(q2.banda.t, 'r2 banda'); ev_(q2.banda_ping_t, 'r2 la banda marca «este margen»');
-const q3 = plan.r3; ev_(q3.aro.t, 'r3 aro'); ev_(q3.aro.ping_t, 'r3 aro marca «este lo difuminé»'); ev_(q3.pill_num_t, 'r3 número');
+const q3 = plan.r3; ev_(q3.aro.t, 'r3 aro'); ev_(q3.aro.ping_t, 'r3 el aro vuelve a marcar «inventados»'); ev_(q3.pill_num_t, 'r3 número');
 for (const c of plan.costuras) ev_(c.t, 'costura');
 fs.mkdirSync(path.join(P, 'qa'), { recursive: true });
 fs.writeFileSync(path.join(P, 'qa/eventos-plan.json'), JSON.stringify(ev, null, 1));

@@ -264,8 +264,8 @@ for (const m of PLAN.datos) { enter('#dA-' + m.id, m.a, { x: 60 }); leave('#dA-'
   tl.fromTo('#r2-bl', { scale: 1 }, { scale: 1.14, duration: 0.3, ease: 'power2.out', yoyo: true, repeat: 1, immediateRender: false, transformOrigin: '50% 50%' }, R.ping);
 }
 
-// ── razón 3: el aro cae sobre lo difuminado (la llamada «Lo difuminé: lo inventó el motor.» ya está en la placa al llegar), el número que el programa le dio,
-//    y el aro vuelve a marcar el letrero cuando la voz dice «este lo difuminé»
+// ── razón 3: el aro cae sobre lo difuminado (la llamada «Lo difuminé: lo inventó el motor.» ya está en la placa al llegar), el número que el medidor le dio,
+//    y el aro vuelve a marcar el letrero cuando la voz dice «inventados» (revisión 1: la línea de voz ya no dice «este lo difuminé»; lo dice la llamada)
 {
   const R = PLAN.r3;
   tl.fromTo('#r3-aro', { autoAlpha: 0, scale: 1.2, transformOrigin: '50% 50%' }, { autoAlpha: 1, scale: 1, duration: 0.3, ease: 'power3.out' }, R.aro);
