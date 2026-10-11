@@ -63,7 +63,11 @@ Orden: lo que destraba cobrar primero. Cada PR: **leer la revisión de Hermes** 
     - Lo hizo un subagente sonnet.
     - 9 pruebas nuevas: 7 rojas antes y verdes después.
     - `tsc` 0, eslint 0 y suite completa 10.929/0.
-    - Revisión: code-reviewer haiku en curso.
+    - **Revisión:** code-reviewer haiku APROBADO, sin CRITICAL, HIGH ni MEDIUM. Arreglé sus 3 LOW en `8c2e6993`, empujado a las 14:48:06: el título va sin punto, el barrido de «hoy» también mira el HTML y la skill aclara el VPS. 117/117, `tsc` 0, eslint 0.
+  - **15:07:45: #159 MERGEADO** (`1c01e05f`), con CI verde sobre `28a2c518` (14:44:29-15:07:02).
+    - El runner tomó el CI de #159 antes que el de master, así que no hizo falta cancelar nada.
+    - El árbol de `master` es `7e1d3b9d`, la tanda probada.
+    - **A las 15:50 salen #157, #158, #159 y #160.** Se mira desde ~16:00 con `scratchpad/mirar-1550/mirar-1550.js`: la caja en la org QA dental (abrir, corregir fondo, salida, anular y cerrar) y el costeo en la org QA de importadora (solo escribir en los campos).
 - [x] **Publicación de las 12:50: `release-0b25e289` en producción desde las 12:54:28 UTC** (el contenedor `onia-platform` arrancó con esa imagen; el publicador anotó «plataforma: PUBLICADO» a las 08:50 de La Paz). Entraron #155 F136b (`a91708ca`), #152 de usted con U3, U4 y U5 (`7de363cb`), #151 P-02 (`1db726a7`, solo scripts) y #156 M1 (`0b25e289`). **MIRADO a las 13:16 UTC con cuentas QA**, con fotos a 1440 y 390 leídas una por una (`scratchpad/mirar-usted`, `mirar-caja2`, `mirar-costeo`):
   - **El login** le habla de usted y sugiere «nombre@ejemplo.bo».
   - **En el panel**, el menú dice «Su clínica» o «Su empresa» y ya no aparece «TU CLÍNICA». El Inicio (Primeros pasos), la agenda, Pendientes, /agents («Acá verá…») y los cobros están de usted.
@@ -116,7 +120,7 @@ Orden: lo que destraba cobrar primero. Cada PR: **leer la revisión de Hermes** 
   - **11:19 (latido):** el runner tomó el CI de #157 a las 11:10:39, antes que el de #156 (`826a16a3`, en cola desde las 11:09:50). El CI de master de #152/#151 ya no está en la cola. Plan: #157 termina ~11:32, el CI de #156 corre ~11:32-11:54 y #156 se mergea ~11:55, con el CI de master hasta ~12:17. #157 se mergea solo con el CI de #156 ya corriendo: así su CI de master queda en cola y lo cancela el merge de #156. #150 y #154 siguen sin relanzar. #154 sigue con el HIGH condicional de Hermes E14 hasta que Hermes re-revise con la medición de Traefik y alguien mire Pseudo-IPv4 en Cloudflare.
   - **11:19: la madre canceló el CI de #157** (`38134262194`), que corría desde las 11:10:39. Cola: CI de master de #151/#152 → CI de #156 (~12:04) → merge de #156 antes de las 12:20. #157 se relanza después de las 13:10 y sale a las 15:50. La madre lanza M1b en Codex apenas entre #156. V1 (trinquete de tuteo), U7 y S3 suben a las 13:12, después de la publicación.
   - Contrato: M1, ningún formulario lee un monto ambiguo en silencio: contrato `codex-tareas/plataforma-M1-una-sola-lectura-de-montos.md`, `pendiente`, Astra (11-oct). Decisión de Plataforma: en bolivianos, `leerMonto` más el punto decimal; en dólares, sin separador de miles, porque las facturas en USD traen precios unitarios con 3 o 4 decimales. Todo campo muestra el monto leído. El costeo de importadora es 1.0 acotada; comercio es 1.1 y comparte la función. Los webhooks de cobro no se tocan.
-- [ ] **M1b = #159: empujado a las 14:22:55 (`28a2c518`)**, con CI en cola. Se mergea con CI verde, detrás de #160, antes de las 15:20 o después de las 16:10. **M1b: ninguna cantidad se lee de dos maneras y la lectura de montos llega a toda la plataforma.** Contrato `codex-tareas/plataforma-M1b-cantidades-sin-doble-lectura.md`, `pendiente`, Astra. Junta los LOW de Hermes E18 y E19 y los de Plataforma sobre `4dd41d1c`:
+- [ ] **M1b = #159: MERGEADO a las 15:07:45 (`1c01e05f`)**; sale a las 15:50. Queda mirarlo en producción (el costeo). **M1b: ninguna cantidad se lee de dos maneras y la lectura de montos llega a toda la plataforma.** Contrato `codex-tareas/plataforma-M1b-cantidades-sin-doble-lectura.md`, `pendiente`, Astra. Junta los LOW de Hermes E18 y E19 y los de Plataforma sobre `4dd41d1c`:
   - «1.500» en bolsa, paquete o unidad vacía, y «1.200» kg;
   - `aPrecio` del alta y `parsearTco` de reprecio con `Number()`;
   - el TCO sin tope y el redondeo de «1.0050»;
