@@ -14,3 +14,4 @@ lucia-prohibidas                   exit 0
 validar-mutaciones                 exit 0
 verificar-auditor                  exit 0
 negativas-dom                      exit 0
+hyperframes-check                  exit 0

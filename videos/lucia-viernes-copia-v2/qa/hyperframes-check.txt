@@ -25,7 +25,9 @@ Runtime
   ◇ 0 errors, 0 warnings
 
 Layout
-  ◇ 0 issues across 9 sample(s)
+  ℹ t=10.25s content_overlap #beat-b > b:nth-of-type(1) inside #beat-c > span:nth-of-type(1) "0,56–0,73" — Two text blocks overlap and may render unreadable.
+        Fix: Give each block its own zone, or mark intentional layering with data-layout-allow-overlap.
+  0 error(s), 0 warning(s), 1 info(s)
 
 Motion
   ◇ 0 errors, 0 warnings
