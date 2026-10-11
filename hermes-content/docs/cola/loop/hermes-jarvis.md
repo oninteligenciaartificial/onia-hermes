@@ -69,18 +69,24 @@ carril puede hacer solo. Q1 espera `aplicar` (ver «Bloqueado»).
 
 ## Encargos de la madre DESARROLLO-INFRA (11-oct, van antes que Q7-Q9)
 
-- [ ] **E1 Mirar la publicación de las 06:50 UTC** (#118, #119, #110 y los títulos de usted): confirmar la imagen nueva
+- [x] **E1 Mirar la publicación de las 06:50 UTC** (#118, #119, #110 y los títulos de usted): confirmar la imagen nueva
   y MIRAR con sesión la agenda del día, el odontograma, la caja diaria y /login, a 390 y 1440 px. No se arregla nada.
   - [x] Antes (04:53 UTC): /login a 390 y 1440 se ve bien. Íconos como glifos (ninguna ligadura como texto), todo
     de usted, sin obra. Huella del build: `webpack-2a706587264c6b91.js`. Capturas y script en
     `hermes-content/docs/research/qa-publicacion/2026-10-11/`. modelos: ninguno (script propio).
   - [x] Antes también de /book (05:10 UTC): 200, «Reservas en línea | Onia», todo de usted, íconos como glifos, sin
     desborde a 390. El script ahora es `mirar-publico.mjs` (cualquier ruta pública; `BASE=` para otro dominio).
-  - [ ] Después (desde las 06:57 UTC, con el latido): `NODE_EXTRA_CA_CERTS=/root/.ccr/ca-bundle.crt node
-    hermes-content/docs/research/qa-publicacion/2026-10-11/mirar-publico.mjs <carpeta> despues-0650 /login /book`.
-    Qué comparar con el «antes»: `build` distinto de `webpack-2a706587264c6b91.js` (si es igual, no se publicó);
-    el título de /login debe decir «…que maneja su negocio…» solo si onia-platform#146 entró en esa publicación; el
-    resto sin cambio (sin ligaduras como texto, sin obra, sin desborde).
+  - [x] **Después (06:58 UTC, latido; `modelos: ninguno (script propio)` · `codex: ninguno`).** Capturas en
+    `hermes-content/docs/research/qa-publicacion/2026-10-11/despues-0650-{login,book}-{390,1440}.png` y `despues-0650-publico.json`.
+    - **La imagen nueva está viva.** `app.onia.com.bo/manifest.json` y `/sw.js` dan el mismo SHA-1 que `onia-platform` `master` en `a7d8c1ed`
+      (`577e425e…` y `84634c4e…`) y distinto del de `282ae3ab^` (antes de #136); `Last-Modified` 06:55:58 GMT. Es decir: #136
+      (agenda del día, odontograma, caja diaria, app instalable, bandeja) y #146 (títulos de usted) están en producción desde ~06:56 UTC.
+    - **Corrección de mi propio método:** el `webpack-2a706587264c6b91.js` fue el MISMO antes y después. Esa huella NO prueba un build nuevo; la
+      skill decía que sí. Corregida en `onia-hermes-jarvis/SKILL.md` y en el encabezado de `mirar-publico.mjs`.
+    - `/login` y `/book`, a 390 y 1440 px: 200, sin desborde horizontal, íconos dibujados como glifos, sin textos de obra, sin tuteo visible, de usted.
+      El título, la tarjeta al compartir y la descripción pasaron de «tu negocio» a «su negocio» (#146). Tiempos 2,5-4,1 s. Capturas miradas una por una.
+    - LOW: el campo de correo de `/login` trae el ejemplo `tucorreo@ejemplo.bo`, que se lee como «tu correo» en una pantalla de usted.
+    - El «[SW] registration failed» de la consola es del interceptor de mi Chromium (ya anotado), no de la app.
   - **Bloqueado para este carril: las pantallas con sesión y «la imagen en el VPS».** `onia-mirar.js` lee la clave
     service role con `docker exec` en el VPS, y la sesión de la nube no entra por SSH (rol, §3). El MCP de GitHub no
     despacha workflows (403), así que tampoco puedo pedirle el `docker inspect` al diagnóstico. Lo hace la madre desde la
@@ -467,6 +473,10 @@ carril puede hacer solo. Q1 espera `aplicar` (ver «Bloqueado»).
     sesión nueva lee `CLAUDE.md`, no el handoff de la madre: publicaría sin mostrar. Hay que decidir cuál rige y editar el otro en origen.
     Misma línea: pide no pushear a onia-platform «de :20 a :10», y `equipo-de-agentes` dice «de :20 a :55»; una de las dos tiene un typo.
   - Veredicto: nada que bloquee el merge de los scripts. La contradicción de reglas sí merece resolverse antes de que lo lea otra sesión.
+- [ ] **E1b Las pantallas con sesión de la publicación de las 06:50 UTC** (agenda del día, odontograma, caja diaria): **bloqueado** para este carril.
+  Las pantallas nuevas ya están en producción (E1) y nadie las vio con login. Las destraba la madre desde la PC
+  (`node /root/onia-mirar.js oninteligenciaartificial+qapago@gmail.com /agenda`, `/caja-diaria`, `/patients/<id>/odontogram`) o Q5 (#194) cuando
+  entre y corra `aplicar` (necesita el «sí, aplicar» de Sergio Urcullo en esta sesión). **Hecho:** tres capturas a 390 y 1440 con sesión, miradas.
 - [ ] **E4 Volver a mirar #136 cuando entren sus arreglos.** Los dos HIGH de E3 y el comando de las migraciones. **Hecho:**
   cada HIGH cerrado con su prueba, leído en el código de la cabeza nueva. **Aviso de la madre DESARROLLO-INFRA (11-oct ~06:20 UTC):** a las
   07:12 UTC sale el draft PR de F136 (caja y odontograma, toca plata) y llega el pedido de revisión con **dos lentes: seguridad y dinero**.
@@ -476,6 +486,13 @@ carril puede hacer solo. Q1 espera `aplicar` (ver «Bloqueado»).
 
 (Lo que este carril encuentra y le toca a otro dueño. La madre lo reparte en su ronda.)
 
+- **Madre / Plataforma (URGENTE, plata)** · **Producción corre #136 con sus dos HIGH sin arreglar, desde ~06:56 UTC.** `master` `a7d8c1ed`:
+  `CajaDiariaClient.tsx:40-44` (`parseMoney`): «1.500» → 1,5 y «1,500» → 1,5; sin paso de confirmación ni «reabrir», y desde el cierre los cobros
+  manuales del día dan 409. Evidencia: `research/qa-publicacion/2026-10-11/caja-parsemoney-master-a7d8c1ed.txt` (corrido con node sobre la función
+  de `master`). Y `lib/platform/borrado-bloqueado.ts` sigue sin `toothSurfaceRecord`: borrar un paciente borra sus caras del odontograma.
+  #136 entró a `master` a las 05:46 UTC y E3 lo había dejado en CAMBIOS (los dos arreglos «van antes del merge»). Lo que sigue: F136 sale a las 07:12 UTC; la
+  siguiente publicación es la de las 09:50 UTC, así que F136 tiene que estar mergeado antes de las 09:20 UTC (regla de no pushear de :20 a :55) o espera a las 12:50.
+  Decide la madre si hay que apagar la ruta de la caja diaria mientras tanto; yo no pude comprobar si algún negocio la usa.
 - **Madre** · Dos reglas opuestas sobre publicar: `CLAUDE.md` (9-oct) «se sube nomás» y `handoff/madre-local.md:21` (#195, 10-oct 20:25 UTC)
   «todo lo que sale se le MUESTRA antes a Sergio Urcullo». Solo la segunda es posterior, pero solo la primera la lee cada sesión. Detalle en E7.
 - **Sergio Urcullo (decisión)** · La web `onia.com.bo` está de vos/tú de punta a punta («Creá tu cuenta», «tu negocio») y el

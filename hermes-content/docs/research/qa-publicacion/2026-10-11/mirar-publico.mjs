@@ -1,7 +1,8 @@
 // E1 (madre DESARROLLO-INFRA, 11-oct): páginas PÚBLICAS a 390 y 1440 px, sin sesión, solo lectura.
 // Uso: [BASE=https://onia.com.bo] node mirar-publico.mjs <carpeta> <etiqueta> /login /book ...   (BASE por omisión: app.onia.com.bo)
 // Por cada ruta y ancho: estado, tiempo, título de la pestaña, descripción, tarjeta al compartir (og/twitter), huella del
-// build (runtime de webpack), ligaduras de íconos dibujadas como texto, textos de obra y voseo/tuteo visibles.
+// build (runtime de webpack: NO prueba que haya un build nuevo, medido el 11-oct; la huella buena es el SHA-1 de /manifest.json y
+// /sw.js, ver la skill onia-hermes-jarvis), ligaduras de íconos dibujadas como texto, textos de obra y voseo/tuteo visibles.
 // Chromium no valida el certificado del proxy de la nube: cada pedido lo hace Node (route.fetch, con NODE_EXTRA_CA_CERTS),
 // así que la verificación TLS sigue entera.
 import { chromium } from "/opt/node22/lib/node_modules/playwright/index.mjs";

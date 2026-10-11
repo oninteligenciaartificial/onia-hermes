@@ -228,8 +228,14 @@ CLI de Hermes.
   (`ERR_CERT_AUTHORITY_INVALID`, también con `channel: "chromium"`). Funciona si cada pedido lo hace Node:
   `context.route("**/*", async r => r.fulfill({ response: await r.fetch() }))`, que usa `NODE_EXTRA_CA_CERTS`. La
   verificación TLS sigue entera; nunca `--ignore-certificate-errors`. El «[SW] registration failed» que aparece así
-  es del interceptor. La app no publica su BUILD_ID en el HTML: el nombre de `webpack-<hash>.js` cambia con cada build
-  y sirve de huella desde afuera. `app.onia.com.bo` está detrás de Cloudflare (`server: cloudflare`).
+  es del interceptor. La app no publica su BUILD_ID en el HTML. **El nombre de `webpack-<hash>.js` NO sirve de huella**
+  (corregido el 11-oct, E1: la imagen cambió, con `sw.js`, `manifest.json` y los títulos nuevos, y el nombre fue el mismo
+  `webpack-2a706587264c6b91.js` antes y después). Huella que sí funciona: el SHA-1 de `public/manifest.json` y de
+  `public/sw.js` servidos por `app.onia.com.bo`, contra `git show <commit>:public/<archivo> | sha1sum` en `onia-platform`
+  (así se supo que corría `a7d8c1ed` y no el anterior a #136), más el `Last-Modified` de esos archivos como hora aproximada
+  del checkout del build (06:55:58 GMT). Solo cambia si ese archivo cambió en el commit: elegí uno que sí. Para saber
+  QUÉ commit corre sin acceso al VPS, comparar varios archivos de `public/` contra varios commits de `master`.
+  `app.onia.com.bo` está detrás de Cloudflare (`server: cloudflare`).
 - **Revisar PRs de otros carriles (11-oct, E2):** una lente sonnet por PR (dos si toca el VPS, plata o el bot), cada
   HIGH verificado por un haiku que cita líneas y corre el repro, y nada se comenta en GitHub. Lee las ramas con `git
   show origin/<rama>:<ruta>` y `git archive … | tar -x` en `/tmp`: nunca `checkout` en el árbol del carril. La
