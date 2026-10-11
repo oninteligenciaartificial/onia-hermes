@@ -68,9 +68,13 @@ Entorno de Lucía y Marca: «onia-higgsfield» `env_01V5EeE4VtMdw7PWVaMYywsk`.
 | Contrato | Rama de la sesión | Estado (11-oct ~06 UTC) |
 |---|---|---|
 | `marca-M1` mosaico-tablero | gifted-clarke | ✅ `codex/marca-m1-1011` 86203cd2 → Marca lo integró (b251cd40); render PC mostrado |
-| `lucia-p9` pieza 9 | zealous-babbage | corriendo (subagente, worktree sparse) |
-| `lucia-qa1` / `lucia-qa2` | zealous-babbage (a458076e) | en espera de lugar |
-| `ventas-V01` / `V02` / `V03` | onia-ventas-pauta (8ce3ea54) | en espera de lugar |
+| `lucia-p9` pieza 9 | zealous-babbage | ✅ borrador `codex/lucia-p9-1011` 50bf3bac → Lucía lo integró (ef30af36); falta clip m4 y la frase de 200 px |
+| `lucia-qa1` / `lucia-qa2` | zealous-babbage | ✅ ad0d74f1 (9/9) y 3a63237a (12/12; v2 con «agenda llena» tras su regla de parada) → integrados (d4e71fef) |
+| `ventas-V01` / `V02` / `V03` | onia-ventas-pauta | ✅ V01 a4c44c59 · V02 sin cambios (ya cumplido) · V03 c24a0339 → Ventas los integra |
+
+Trampas de Codex medidas el 11-oct: en su sandbox `node --test` da `spawn EPERM` (usa `--test-isolation=none`): la
+prueba de hecho la corre el subagente afuera. El subagente puede repetir su informe final varias veces: con el
+primero alcanza; si se repite, `TaskStop`.
 
 ⚠️ Una worktree completa de onia-hermes pesa 6,4 GB / 15.261 archivos: la de marca-m1 dejó C: en 704 MB el 11-oct.
 Siempre `worktree add --no-checkout` + `sparse-checkout set --no-cone <carpetas>`; el render HyperFrames con `git archive`
