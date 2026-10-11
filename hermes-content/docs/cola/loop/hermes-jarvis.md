@@ -293,6 +293,23 @@ carril puede hacer solo. Q1 espera `aplicar` (ver «Bloqueado»).
   madre. **Hecho:** su prueba en verde y el script reproduciendo la §3 y la §3.1 de `ONIA_PROMESA_VS_PRODUCTO.md`; después
   se corre contra la web en vivo y se compara con lo escrito a mano. La madre lo corre en la rama
   `codex/hermes-qa-web-vs-producto`, que sale de esta (`claude/adoring-ramanujan-7sjzwv`), y avisa con el PR (11-oct ~06:20 UTC).
+  **Revisado el 11-oct ~06:35 UTC** (commit `782dd348`, `modelos: ninguno (226 líneas, las leí y las corrí yo)` · `codex: hermes-L1b`):
+  la prueba da 6/6 (en mi copia dio 1/6 hasta que le puse la carpeta de textos; la prueba la lee de la raíz del repo) y, contra el código REAL
+  de `onia-platform` `master`, el script da 0 diferencias de precio, 0 textos de obra, 8 promesas que siguen y 1 manual: igual que mis Q7 y Q8
+  a mano. Los seis extractores de add-ons caen hoy en el campo correcto. **Pero no está listo para un latido:**
+  - **Verde falso (medido):** sin `--platform` compara contra `fixtures/` (línea 197). Con Crece mensual 550→560 en el código: con
+    `--platform` da «web 550, código 560» y exit 1; sin la bandera da «0 diferencias de precio» y exit 0.
+  - `--base` no corre completo: `/register` en `onia.com.bo` da 404 (medido) y un solo fallo tumba las nueve páginas; `fetch` sin tope de tiempo.
+  - Los extractores toman la primera coincidencia del archivo: `setupFrom` está dos veces en `pricing.ts` (3500 y 4500) y acierta por orden.
+  - Los topes se comparan con números fijos del propio script, no con `plan-catalogo.ts` (lo que la madre ya dijo); hoy coinciden
+    (300/2/200 · 800/4/400 · 1500/5/800 · sin tope).
+  - La prueba no corre en el CI (ni en `package.json` ni en el workflow).
+  Contrato de arreglos: `handoff/codex-tareas/hermes-L1b-web-vs-producto-arreglos.md`. **No lo copio a #194** (lo agrandaría y no es Q2 ni Q5):
+  `782dd348` es un solo commit; la madre lo pone sobre `main` cuando #194 entre, junto con L1b.
+- [ ] **L1b Arreglos del chequeo web-vs-producto (Codex Luna).** Contrato `handoff/codex-tareas/hermes-L1b-web-vs-producto-arreglos.md`
+  (`estado: pendiente`). Lo lanza la madre sobre `codex/hermes-qa-web-vs-producto`. **Hecho:** sin `--platform` da NO MEDIDO (exit 2), la
+  mutación de precio da exit 1, los topes se leen de `plan-catalogo.ts`, `--base-web/--base-app` siguen ante una página caída y la prueba corre
+  en el CI. Después lo reviso yo (diff + mutaciones a mano).
 - [ ] **Q9b El alta de usted.** ~~Contrato `handoff/codex-tareas/plataforma-Q9-alta-de-usted.md`~~ **No se lanza** (aviso de la madre
   DESARROLLO-INFRA, 11-oct ~06:20 UTC): U4 (Codex, commit `a024292d`, rama `codex/usted-registro-y-entrada`) ya pasó `SignupForm.tsx`
   a `voc.negocioSu` en las tres líneas. **Lo que yo pude comprobar desde la nube:** esa rama NO está en `origin` (solo en la PC de la
