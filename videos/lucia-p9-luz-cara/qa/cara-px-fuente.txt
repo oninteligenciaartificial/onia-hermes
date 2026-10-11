@@ -1,0 +1,31 @@
+Tamaño de la cara (cara_px = ancho de la caja SCRFD) en los dos clips ORIGINALES de 720p, 7 puntos por clip. Fuente de «Kling, todo el clip; Seedance, el inicio» (pantalla y pie de P9 v2) y de «139 → 347 px del clip original».
+Corrida propia, 11-oct-2026, sesión Lucía (editor), 0 créditos: .claude/skills/lucia/scripts/face-gate.sh sobre los originales (FACE_GATE_HOME = venv ya instalado fuera del repo; cuadros con ffmpeg -ss t -i clip -frames:v 1):
+  face-gate.sh "$V4/kit/k1-clip-mira-camara-e470ef4f.mp4@0,1,2,3,4,5,5.9" "$V4/prueba-motores-20261008/seedance-mini-refs-dd2d7c91.mp4@0,1,2,3,4,5,5.9"
+Reproduce la tabla de qa/revision-1.md (H1) y las columnas cara_px/A de hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/medicion-sin-refs-entrada-20261011.txt (Kling 3.0 std control y Seedance + refs), cifra por cifra; el build las valida contra ese archivo (scripts/build.mjs).
+
+Tabla (cara_px / parecido por segundo del clip):
+  Kling 3.0 std            t(s)   0     1     2     3     4     5     5,9
+                           cara   119   118   120   116   116   115   116     → 7 de 7 puntos bajo 200 px (115-120): «todo el clip»
+                           parec. 0,791 0,793 0,762 0,734 0,761 0,708 0,721
+  Seedance 2.0 Mini + ref. cara   139   181   243   290   305   328   347     → 2 de 7 bajo 200 px (139 y 181), desde 2 s pasa de 243: «el inicio»
+                           parec. 0,707 0,762 0,754 0,726 0,796 0,777 0,801
+Unidades: píxeles del clip original de 720p. En el lienzo 1080x1920 que ve el espectador la cara mide x1,5 (Kling ~172-181 px; Seedance ~209 → ~520 px): por eso la pantalla dice «del clip original».
+Regla del gate (face-gate.sh): bajo 200 px la cara es poco confiable; ruido ±0,03.
+
+Salida cruda de face-gate.sh (14 cuadros):
+piso de caras negativas (max): 0.224   gate del repo: 0,70
+archivo                                        centroide  min_ref  max_ref  cara_px  veredicto
+k1-clip-mira-camara-e470ef4f_t0.png                0.791    0.539    0.710      119  OK (cara < 200 px: poco confiable)
+k1-clip-mira-camara-e470ef4f_t1.png                0.793    0.553    0.712      118  OK (cara < 200 px: poco confiable)
+k1-clip-mira-camara-e470ef4f_t2.png                0.762    0.533    0.706      120  OK (cara < 200 px: poco confiable)
+k1-clip-mira-camara-e470ef4f_t3.png                0.734    0.520    0.664      116  OK (cara < 200 px: poco confiable)
+k1-clip-mira-camara-e470ef4f_t4.png                0.761    0.492    0.699      116  OK (cara < 200 px: poco confiable)
+k1-clip-mira-camara-e470ef4f_t5.png                0.708    0.464    0.638      115  OK (cara < 200 px: poco confiable)
+k1-clip-mira-camara-e470ef4f_t5.9.png              0.721    0.430    0.648      116  OK (cara < 200 px: poco confiable)
+seedance-mini-refs-dd2d7c91_t0.png                 0.707    0.475    0.674      139  OK (cara < 200 px: poco confiable)
+seedance-mini-refs-dd2d7c91_t1.png                 0.762    0.546    0.728      181  OK (cara < 200 px: poco confiable)
+seedance-mini-refs-dd2d7c91_t2.png                 0.754    0.562    0.723      243  OK
+seedance-mini-refs-dd2d7c91_t3.png                 0.726    0.507    0.728      290  OK
+seedance-mini-refs-dd2d7c91_t4.png                 0.796    0.560    0.779      305  OK
+seedance-mini-refs-dd2d7c91_t5.png                 0.777    0.520    0.753      328  OK
+seedance-mini-refs-dd2d7c91_t5.9.png               0.801    0.571    0.777      347  OK
