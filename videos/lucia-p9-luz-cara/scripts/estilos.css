@@ -14,6 +14,5 @@
 .fila .numeros{font-family:"Spline Sans Mono",monospace;font-size:42px;line-height:1.2}
 #cta{border-color:#ffbc94}
 
-/* Estado inicial en CSS: GSAP no aplica los tl.set(...,0) si el primer seek es t=0 (medido 11-oct); sin esto el cuadro 0 mostraria la pastilla del dato y las capas fuera de ventana en x=0. */
-#m4,#overlay-m4,#placa{transform:translateX(1080px)}
+/* Estado inicial: la opacidad oculta de la pastilla del dato y del CTA vive en CSS (cuadro 0 sin la pastilla un cuadro antes de su entrada a 1,5 s). El desplazamiento de #m4/#overlay-m4/#placa NO va en CSS (lint gsap_css_transform_conflict): lo fija timeline.js con fromTo al inicio. */
 #dato-m1,#cta{opacity:0}

@@ -1,2 +1,1 @@
-IDEMPOTENTE: dos builds, mismo md5
-0bc4ba745a09b3afb4b5f3d579b7040a *index.html
+0cb8fb6c71c5a6453dc52c3aabb7eb71 index.html (build 2 veces, mismo md5)

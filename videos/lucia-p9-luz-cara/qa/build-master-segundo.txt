@@ -1,0 +1,1 @@
+OK datos/pie/voz: 304 caracteres, cronograma 480/24 s; lienzo 480 cuadros/20 s. fuentes completas

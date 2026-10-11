@@ -3,7 +3,7 @@
 Composición muda HyperFrames: 1080×1920, 24 fps, 480 cuadros / 20 s. Dos tomas ya pagadas; 0 créditos nuevos. Solo se creó esta carpeta. G5/G2, fuentes, cola y skills se leyeron sin modificarlos. No Git, red, instalaciones, generación de voz, publicación ni render.
 
 <!-- ESTADO -->
-**BORRADOR · NO APTO PARA MASTER. m4 usa proxy 360p; solo gates estáticos.**
+Fuentes completas presentes; falta render y QA del master.
 <!-- FIN ESTADO -->
 
 `build.mjs` falla por defecto si falta `v4/prueba-motores-20261008/seedance-mini-refs-dd2d7c91.mp4`. Solo `--borrador` admite el proxy y avisa en consola, aquí y en `qa/build-status.json`. Cuando exista el original, reconstruir SIN flag: el HTML usará `m4-full.mp4`, nunca el proxy anterior. `master-ready.mjs` rechaza un borrador antes de renderizar. Hardlinks de estos dos clips evitan duplicación en C:; fallback copia únicamente los dos archivos si el FS lo exige. No se debe editar ningún archivo de `assets/`: está enlazado a la fuente.

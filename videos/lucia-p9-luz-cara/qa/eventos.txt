@@ -14,4 +14,3 @@
 19.100: acento una prueba semanal
 14 eventos, hueco máximo 1.708 s
 EXIT 0
-EXIT 0

@@ -1,4 +1,32 @@
-hyperframes check: NO EJECUTADO (11-oct, madre, PC).
-npx --offline --yes hyperframes@0.8.142 check -> exit 1: npm ENOTCACHED (falta @hono/node-server en la cache; 0.8.142 no esta cacheado).
-npx --offline --yes hyperframes@0.8.143 check -> exit 1: mismo ENOTCACHED.
-No se uso red ni se instalo nada. Pendiente: la sesion Lucia en la nube corre 'npx --offline --yes hyperframes@0.8.142 check > qa/hyperframes-check.txt'.
+◆  Checking lucia-p9-luz-cara
+[hyperframes] browserGpuMode probe → software (WebGL unavailable)
+
+Lint
+  ⚠ nested_structure_needs_subcomposition: <div id="placa"> is a timeline element that contains nested <div id="comparacion">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-p9-luz-cara/index.html #placa t=0s
+    Fix: Move <div id="placa"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="overlay-m1"> is a timeline element that contains nested <div id="rotulo">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-p9-luz-cara/index.html #overlay-m1 t=0s
+    Fix: Move <div id="overlay-m1"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="overlay-m4"> is a timeline element that contains nested <div id="dato-m4">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-p9-luz-cara/index.html #overlay-m4 t=0s
+    Fix: Move <div id="overlay-m4"> and its contents into a sub-composition file and mount it with data-composition-src.
+  0 error(s), 3 warning(s), 0 info(s)
+
+Runtime
+  ◇ 0 errors, 0 warnings
+
+Layout
+  ◇ 0 issues across 9 sample(s)
+
+Motion
+  ◇ 0 errors, 0 warnings
+
+Contrast
+  ◇ 26/26 text checks pass WCAG AA
+
+Snapshots
+  ◇ disabled
+
+◇  Check passed
+check exit 0

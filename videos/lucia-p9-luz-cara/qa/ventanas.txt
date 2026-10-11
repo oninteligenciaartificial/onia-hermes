@@ -10,4 +10,3 @@ brillo: 8.292 s / mínimo 4.500 s; 11.708–20.000
 limite-cara: 8.292 s / mínimo 7.300 s; 11.708–20.000
 cta: 2.417 s / mínimo 2.400 s; 17.583–20.000
 EXIT 0
-EXIT 0

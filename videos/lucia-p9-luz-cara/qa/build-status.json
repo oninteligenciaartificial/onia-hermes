@@ -1,7 +1,7 @@
 {
-  "borrador": true,
-  "apto_master": false,
-  "m4": "C:\\dev\\proyectos\\onia-hermes-codex-lucia-p9\\hermes-content\\references\\modelos\\lucia\\v4\\prueba-motores-20261008\\proxies\\seedance-mini-refs-dd2d7c91-360p.mp4",
+  "borrador": false,
+  "apto_master": true,
+  "m4": "/home/user/onia-hermes/hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/seedance-mini-refs-dd2d7c91.mp4",
   "voz": {
     "lineas": [
       "La cara o la escena.",

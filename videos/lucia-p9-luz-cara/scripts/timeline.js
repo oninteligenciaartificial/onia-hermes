@@ -1,7 +1,8 @@
 // Seekable, sin callbacks ni reproducción manual: el framework controla los clips.
 const tl=gsap.timeline({paused:true}),PUSH=PLAN.empuje.cuadros/24;
-tl.set('#m4,#overlay-m4,#placa',{x:1080},0);
-tl.set('#dato-m1,#cta',{opacity:0},0);
+// Estado inicial por fromTo (immediateRender por defecto): GSAP no aplica tl.set(...,0) si el primer time(0) llega a un timeline recien creado (medido 11-oct).
+tl.fromTo('#m4,#overlay-m4,#placa',{x:1080},{x:1080,duration:0.01,ease:'none'},0);
+tl.fromTo('#dato-m1,#cta',{opacity:0},{opacity:0,duration:0.01,ease:'none'},0);
 tl.to('#dato-m1',{opacity:1,duration:0.18,ease:'power3.out'},1.5);
 for(const c of PLAN.costuras){const sale=c.sale==='m1'?'#m1,#overlay-m1':'#m4,#overlay-m4',entra=c.entra==='m4'?'#m4,#overlay-m4':'#placa';
 tl.fromTo(sale,{x:0},{x:-1080,duration:PUSH,ease:PLAN.empuje.ease,immediateRender:false},c.t-PUSH);

@@ -9,4 +9,3 @@ cifra pie: RECHAZADO correctamente
 declaración IA pie: RECHAZADO correctamente
 cifra voz: RECHAZADO correctamente
 EXIT 0
-EXIT 0

@@ -9,4 +9,3 @@ tramo palabras caract  voz(s)  fuente    a(s)    b(s)    dura   hueco
   7       5      33  1.941  estimada  16.958  20.000  3.042  1.100 (CTA: cola sin voz, se lee)
 total: 7 líneas, 55 palabras, 304 caracteres con espacios (con un salto entre líneas; cupo 305), 480 cuadros = 20.000 s
 huecos entre líneas: 0.216 a 0.240 s (objetivo ≤ 0.25, tope 0.3); cola del CTA: 1.100 s
-EXIT 0
