@@ -361,6 +361,13 @@ antes de que lleguen a Sergio Urcullo.
 
 ## Trampas ya pagadas (3-oct-2026)
 
+- **Desde la nube no se pueden bajar los brutos de Drive (11-oct-2026).** El conector de Drive devuelve el archivo en base64 por
+  el chat: 70-250 MB no caben, y no hay credencial autorizada para bajarlo con curl. Lo que sí se hace desde la nube: listar la
+  carpeta, ver tamaños y horas de subida, y **mapear cada bruto a su pieza por tamaño** (los cinco brutos del 11-oct dieron
+  ~1,18 MB/s con las duraciones del plan: 69,8 MB = N06 de 59 s … 212,8 MB = N07 de 3 min). Es mapeo probable: se confirma con
+  `ffprobe` en la PC antes de cortar. Transcribir pide además bajar un modelo de Whisper (aprobación de Sergio Urcullo según
+  «Acceso local…» de `CLAUDE.md`): el bruto se baja, se transcribe y se corta en la PC de la madre.
+
 - **El bruto puede venir ya editado** (el de N03 traía 5 tomas pegadas). Los saltos se detectan con picos aislados de
   diferencia entre cuadros (>5× la mediana y >2,5× sus vecinos) y se tratan como cortes. Si no, el control dice
   «ningún corte a la vista» y es falso.
