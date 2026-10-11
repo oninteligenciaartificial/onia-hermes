@@ -12,9 +12,9 @@ Orden: lo que destraba cobrar primero. Cada PR: integrar con master, suite compl
 - [ ] #124 términos (punto 14, migración ya aplicada) y después #113 gracia C13 (actualizar `PlanClient.estado-real` y `vencimientos` al mergear): esperan el sí de Sergio Urcullo (legal).
 - [ ] (#118, #119 y #110 van dentro de #136.)
 - [ ] #146 títulos públicos de usted (pedido de la madre v4): CI en cola; con verde, merge (textos).
-- [ ] Demo del lunes 12-oct (07-11 UTC): plan `reset=2` + lista C1-C7, pedido de la madre v4.
+- [x] Demo del lunes 12-oct (07-11 UTC): plan `reset=2` + lista C1-C7 → `cola/demo-venta-refresco.md` (11-oct). Correrlo pide el sí de Sergio Urcullo acá.
 - [ ] #132 K1 (respuesta al recordatorio)
-- [ ] Refrescar la demo dental en prod (`scripts/demo-venta/seed-demo.sql`) y sacar las capturas C1-C7 del VSL
+- [ ] Refrescar la demo dental en prod (`scripts/demo-venta/seed-demo.sql`, pasos en `cola/demo-venta-refresco.md`) y sacar las capturas C1-C7 del VSL
 - [ ] Mirar con login lo publicado el 8-oct (#128): agenda «Hoy» con WhatsApp, «sin confirmar», tarjeta del chatbot; y el punto 11 (reprogramar, días cerrados en `/book`, aviso de reserva online)
 - [ ] SQL del B22 (REVOKE a anon) aplicado y medido (no entró en el sí del 10-oct)
 

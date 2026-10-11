@@ -76,7 +76,7 @@ la dirección de Sergio Urcullo.
 | Qué | Dónde | Cómo se retoma |
 |---|---|---|
 | **Las 5 pantallas** (bandeja v3, app sin internet, agenda del día, odontograma, caja) | **#136**, cabeza `1fd14770` en `claude/optimistic-ride-1sp5fe`. Junta #136 + #118 `a8b31bfd` + #119 `a6484bca` + `i110-v3` + `master` `d8ca5a32`. Suite local 10.501 en verde, CI corriendo desde 04:46 UTC | **Sergio Urcullo escribió en esta sesión, el 11-oct ~04:40 UTC: «publica la pantalla».** Con CI verde, marcar #136 listo y mergear fuera de :20-:55; sale en el cron siguiente. #118, #119, #110 y #130 quedan mergeados con él. Después: `scripts/chatwoot-webhook-eventos.mjs` en el VPS, recrear el contenedor y mirar un WhatsApp de prueba llegar a `/inbox` en menos de 2 s. Mirar sin login (logs, públicas); con login, la madre |
-| **Títulos públicos de usted** | **#146** (`fix/titulos-de-usted`, `b0e021f2`), draft, CI en cola | Con CI verde: marcar listo y mergear (son textos, no esperan a nadie) |
+| **Títulos públicos de usted** | **#146** (`fix/titulos-de-usted`, `b0e021f2`), draft, CI en cola | Con CI verde: marcar listo y mergear (son textos, no esperan a nadie). Probado junto con #136 en un árbol mezclado (11-oct 04:54 UTC): sin conflictos, `tsc` 0 y 10.505 tests en verde |
 | Arreglo de versión de #124 | `plataforma-listas-20261010.bundle`, rama `t124-version` | Lo sube la madre cuando ella o Sergio Urcullo digan |
 | Chat de la web con el nombre de la clínica (W1f) | `i140-w1f` (`34f86438`) en el mismo bundle; #140 | Espera el OK de diseño de W1f. Después: la infra (origen solo para Cloudflare, `/public/api/` bloqueado en Chatwoot, `hmac_mandatory`) |
 | Términos 1.4 + gracia | #113 + lámina | Con el sí de los dos: `terminos.md` del sitio a 1.4, `VERSION_TERMINOS` el mismo día, aviso dentro del sistema y recién ahí #113. **No commitear el 1.4 antes** |
@@ -122,8 +122,9 @@ la dirección de Sergio Urcullo.
 
 0. **#136:** con CI verde → listo y merge (su línea ya está, ver §4) → cron → mirar. Después, la infra de la bandeja.
 1. **#146:** con CI verde → listo y merge.
-2. **Demo del lunes** (pedido de la madre v4): dejar el plan de `reset=2` y la lista de capturas C1-C7 (pantalla, datos,
-   390 y 1440) en `docs/cola/`, para correrlo apenas abra la ventana de 07 a 11 UTC con el sí de Sergio Urcullo.
+2. **Demo del lunes** (pedido de la madre v4): el plan está en `docs/cola/demo-venta-refresco.md` (11-oct): `reset=2`
+   entre 04 y 11 UTC de lun a jue, tarjetas a las 11:00 UTC, capturas de la madre a 390 y 1440. Correrlo pide el sí de
+   Sergio Urcullo en esta sesión.
 3. Punto 6: averiguar qué es «ver todo» en la ficha (brecha:60) y si falta.
 4. Lo que destraben sus respuestas (§7), en el orden del corte (`ONIA_1.0_CORTE.md`).
 5. 1.1 de identidad: los textos de tú del panel («No se envía nada hasta que lo apruebes») y las 594 formas de vos.
