@@ -1,6 +1,6 @@
 {
   "title": "78h en una tarea (inventario continuo, pack referentes)",
-  "estado": "Sale dom 18-oct 16:00 (La Paz) con el video DU-01. Antes de agendar: confirmar que el aviso CHECKLIST está pegado en Avisos; si no, la lámina 5 pasa a «Lo que probé está en mi comunidad. Link en mi perfil.» (ver nota de la cola). Cuenta de EJEMPLO (30 × 3 min), no es un dato de ningún negocio. Receta: .claude/skills/diseno-contenido-onia/SKILL.md «Inventario continuo».",
+  "estado": "Sale dom 18-oct 16:00 (La Paz) con el video DU-01. Antes de agendar: confirmar que el aviso CHECKLIST está pegado en Avisos; si no, la lámina 5 y la línea 1 del caption pasan a «Lo que probé está en mi comunidad. Link en mi perfil.» (ver nota de la cola). Cuenta de EJEMPLO (30 × 3 min), no es un dato de ningún negocio. Receta: .claude/skills/diseno-contenido-onia/SKILL.md «Inventario continuo».",
   "caption": "Buscá CHECKLIST en Avisos de la comunidad. Link en mi perfil.\n\nLa cuenta de ejemplo: contestar «¿cuánto cuesta?» 30 veces por semana, 3 minutos cada vez. Son 90 minutos por semana y 78 horas al año. Es un ejemplo, no un dato de nadie.\n\nLa tarea que aparezca en 2 o más respuestas va a la lista. De esas, primero la que más horas te come y menos daño hace si sale mal.",
   "hashtags": [
     "#automatizacion",
@@ -83,7 +83,7 @@
         {
           "n": "",
           "label": "Más horas, menos riesgo",
-          "text": "Entre las repetidas, esa primero."
+          "text": "Entre las que más aparecen, esa primero."
         },
         {
           "n": "",
@@ -91,7 +91,7 @@
           "text": "Las 5 preguntas, para tu negocio."
         }
       ],
-      "alt_text": "Remate: elegir primero la tarea con más horas y menos riesgo; el recurso es el CHECKLIST."
+      "alt_text": "Remate: elegir primero la tarea que más aparece en tus respuestas y con más horas y menos riesgo; el recurso es el CHECKLIST."
     },
     {
       "number": 5,
@@ -101,7 +101,7 @@
       "pre": "Buscá",
       "keyword": "CHECKLIST",
       "body": "en Avisos · link en mi perfil",
-      "alt_text": "Cierre: «Buscá CHECKLIST en Avisos · link en mi perfil». Con el fotograma de Sergio Urcullo (B/N) cuando exista; hoy solo texto."
+      "alt_text": "Cierre: «Buscá CHECKLIST en Avisos · link en mi perfil»."
     }
   ]
 }
