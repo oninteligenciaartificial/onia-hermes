@@ -1,0 +1,6 @@
+{
+ "Clínica Vental de Sergio": "Whisper oyó «Vental»; la 2.ª pasada (beam 5 + vocabulario) oyó «dental» con el mismo tiempo: subtítulo «Clínica Dental de Sergio»; confirmar con el audio",
+ "verificadas y probadas": "la 1.ª pasada oyó «probadas»; la 2.ª (con «aprobadas» en su vocabulario, o sea sesgada) oyó «aprobadas», que es el término de Meta; el subtítulo dice «probadas» (lo que oyó sin sesgo)",
+ "que exista": "la 1.ª pasada oyó «exista», la 2.ª «existe»; el subtítulo dice «exista»",
+ "la ventana de 24 horas": "Whisper escribe «24»; si él dijo «veinticuatro» es lo mismo"
+}

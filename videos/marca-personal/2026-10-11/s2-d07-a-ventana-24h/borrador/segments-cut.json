@@ -1,0 +1,1349 @@
+{
+ "words": [
+  {
+   "word": "Hay",
+   "start": 0.122,
+   "end": 0.24
+  },
+  {
+   "word": "algo",
+   "start": 0.24,
+   "end": 0.4
+  },
+  {
+   "word": "en",
+   "start": 0.4,
+   "end": 0.5
+  },
+  {
+   "word": "WhatsApp",
+   "start": 0.5,
+   "end": 0.82
+  },
+  {
+   "word": "que",
+   "start": 0.82,
+   "end": 1.1
+  },
+  {
+   "word": "se",
+   "start": 1.1,
+   "end": 1.26
+  },
+  {
+   "word": "llama",
+   "start": 1.26,
+   "end": 1.46
+  },
+  {
+   "word": "la",
+   "start": 1.46,
+   "end": 1.92
+  },
+  {
+   "word": "ventana",
+   "start": 1.92,
+   "end": 2.3
+  },
+  {
+   "word": "de",
+   "start": 2.3,
+   "end": 2.42
+  },
+  {
+   "word": "24",
+   "start": 2.42,
+   "end": 2.8
+  },
+  {
+   "word": "horas.",
+   "start": 2.8,
+   "end": 3.22
+  },
+  {
+   "word": "Si",
+   "start": 3.54,
+   "end": 3.58
+  },
+  {
+   "word": "tenés",
+   "start": 3.58,
+   "end": 3.84
+  },
+  {
+   "word": "un",
+   "start": 3.84,
+   "end": 3.98
+  },
+  {
+   "word": "chatbot",
+   "start": 3.98,
+   "end": 4.4
+  },
+  {
+   "word": "de",
+   "start": 4.4,
+   "end": 4.78
+  },
+  {
+   "word": "WhatsApp",
+   "start": 4.78,
+   "end": 5.2
+  },
+  {
+   "word": "y",
+   "start": 5.2,
+   "end": 5.61
+  },
+  {
+   "word": "querés",
+   "start": 5.61,
+   "end": 5.87
+  },
+  {
+   "word": "que",
+   "start": 5.87,
+   "end": 6.01
+  },
+  {
+   "word": "envíe",
+   "start": 6.01,
+   "end": 6.25
+  },
+  {
+   "word": "mensajes",
+   "start": 6.25,
+   "end": 6.71
+  },
+  {
+   "word": "después",
+   "start": 6.71,
+   "end": 7.27
+  },
+  {
+   "word": "de",
+   "start": 7.27,
+   "end": 7.43
+  },
+  {
+   "word": "las",
+   "start": 7.43,
+   "end": 7.53
+  },
+  {
+   "word": "24",
+   "start": 7.53,
+   "end": 7.87
+  },
+  {
+   "word": "horas",
+   "start": 7.87,
+   "end": 8.352
+  },
+  {
+   "word": "de",
+   "start": 8.593,
+   "end": 8.68
+  },
+  {
+   "word": "iniciar",
+   "start": 8.68,
+   "end": 9.3
+  },
+  {
+   "word": "una",
+   "start": 9.3,
+   "end": 9.44
+  },
+  {
+   "word": "conversación",
+   "start": 9.44,
+   "end": 9.96
+  },
+  {
+   "word": "con",
+   "start": 9.96,
+   "end": 10.12
+  },
+  {
+   "word": "tus",
+   "start": 10.12,
+   "end": 10.28
+  },
+  {
+   "word": "clientes,",
+   "start": 10.28,
+   "end": 10.78
+  },
+  {
+   "word": "tenés",
+   "start": 11.019,
+   "end": 11.23
+  },
+  {
+   "word": "que",
+   "start": 11.23,
+   "end": 11.31
+  },
+  {
+   "word": "hacerlo",
+   "start": 11.31,
+   "end": 11.61
+  },
+  {
+   "word": "mediante",
+   "start": 11.61,
+   "end": 12.03
+  },
+  {
+   "word": "plantillas.",
+   "start": 12.03,
+   "end": 12.55
+  },
+  {
+   "word": "Y",
+   "start": 12.812,
+   "end": 12.89
+  },
+  {
+   "word": "cómo",
+   "start": 12.89,
+   "end": 13.03
+  },
+  {
+   "word": "funciona",
+   "start": 13.03,
+   "end": 13.41
+  },
+  {
+   "word": "todo",
+   "start": 13.41,
+   "end": 13.69
+  },
+  {
+   "word": "esto?",
+   "start": 13.69,
+   "end": 14.01
+  },
+  {
+   "word": "Cuando",
+   "start": 14.309,
+   "end": 14.41
+  },
+  {
+   "word": "un",
+   "start": 14.41,
+   "end": 14.85
+  },
+  {
+   "word": "cliente",
+   "start": 14.85,
+   "end": 15.33
+  },
+  {
+   "word": "te",
+   "start": 15.33,
+   "end": 15.49
+  },
+  {
+   "word": "envió",
+   "start": 15.49,
+   "end": 15.63
+  },
+  {
+   "word": "un",
+   "start": 15.63,
+   "end": 15.75
+  },
+  {
+   "word": "mensaje,",
+   "start": 15.75,
+   "end": 16.17
+  },
+  {
+   "word": "el",
+   "start": 16.453,
+   "end": 16.56
+  },
+  {
+   "word": "bot",
+   "start": 16.56,
+   "end": 16.76
+  },
+  {
+   "word": "le",
+   "start": 16.76,
+   "end": 17.14
+  },
+  {
+   "word": "responde",
+   "start": 17.14,
+   "end": 17.7
+  },
+  {
+   "word": "de",
+   "start": 17.7,
+   "end": 17.84
+  },
+  {
+   "word": "la",
+   "start": 17.84,
+   "end": 17.94
+  },
+  {
+   "word": "manera",
+   "start": 17.94,
+   "end": 18.14
+  },
+  {
+   "word": "que",
+   "start": 18.14,
+   "end": 18.42
+  },
+  {
+   "word": "vos",
+   "start": 18.42,
+   "end": 18.64
+  },
+  {
+   "word": "le",
+   "start": 18.64,
+   "end": 19.02
+  },
+  {
+   "word": "hayas",
+   "start": 19.02,
+   "end": 19.12
+  },
+  {
+   "word": "enseñado.",
+   "start": 19.12,
+   "end": 19.575
+  },
+  {
+   "word": "Si,",
+   "start": 19.806,
+   "end": 19.846
+  },
+  {
+   "word": "por",
+   "start": 19.91,
+   "end": 19.99
+  },
+  {
+   "word": "ejemplo,",
+   "start": 19.99,
+   "end": 20.27
+  },
+  {
+   "word": "tu",
+   "start": 20.65,
+   "end": 20.73
+  },
+  {
+   "word": "clínica",
+   "start": 20.73,
+   "end": 21.09
+  },
+  {
+   "word": "se",
+   "start": 21.09,
+   "end": 21.27
+  },
+  {
+   "word": "llama",
+   "start": 21.27,
+   "end": 21.47
+  },
+  {
+   "word": "Clínica",
+   "start": 21.47,
+   "end": 22.43
+  },
+  {
+   "word": "Dental",
+   "start": 22.43,
+   "end": 22.81
+  },
+  {
+   "word": "de",
+   "start": 22.81,
+   "end": 23.27
+  },
+  {
+   "word": "Sergio,",
+   "start": 23.27,
+   "end": 23.51
+  },
+  {
+   "word": "por",
+   "start": 23.69,
+   "end": 23.73
+  },
+  {
+   "word": "ejemplo,",
+   "start": 23.73,
+   "end": 24.03
+  },
+  {
+   "word": "ahí",
+   "start": 24.54,
+   "end": 24.76
+  },
+  {
+   "word": "vos",
+   "start": 24.76,
+   "end": 25.15
+  },
+  {
+   "word": "le",
+   "start": 25.15,
+   "end": 25.23
+  },
+  {
+   "word": "colocaste.",
+   "start": 25.23,
+   "end": 25.75
+  },
+  {
+   "word": "tenemos",
+   "start": 25.75,
+   "end": 26.22
+  },
+  {
+   "word": "estos",
+   "start": 26.22,
+   "end": 26.58
+  },
+  {
+   "word": "horarios,",
+   "start": 26.58,
+   "end": 27.08
+  },
+  {
+   "word": "tenemos",
+   "start": 27.32,
+   "end": 27.52
+  },
+  {
+   "word": "estos",
+   "start": 27.52,
+   "end": 28.0
+  },
+  {
+   "word": "doctores,",
+   "start": 28.0,
+   "end": 28.46
+  },
+  {
+   "word": "tenemos",
+   "start": 28.54,
+   "end": 28.8
+  },
+  {
+   "word": "estos",
+   "start": 28.8,
+   "end": 29.18
+  },
+  {
+   "word": "tratamientos",
+   "start": 29.18,
+   "end": 29.84
+  },
+  {
+   "word": "y",
+   "start": 29.84,
+   "end": 30.08
+  },
+  {
+   "word": "demás,",
+   "start": 30.08,
+   "end": 30.28
+  },
+  {
+   "word": "después",
+   "start": 30.56,
+   "end": 30.84
+  },
+  {
+   "word": "de",
+   "start": 30.84,
+   "end": 31.02
+  },
+  {
+   "word": "las",
+   "start": 31.02,
+   "end": 31.12
+  },
+  {
+   "word": "24",
+   "start": 31.12,
+   "end": 31.48
+  },
+  {
+   "word": "horas",
+   "start": 31.48,
+   "end": 31.92
+  },
+  {
+   "word": "que",
+   "start": 31.92,
+   "end": 32.06
+  },
+  {
+   "word": "pasaron",
+   "start": 32.06,
+   "end": 32.44
+  },
+  {
+   "word": "de",
+   "start": 32.44,
+   "end": 32.6
+  },
+  {
+   "word": "iniciada",
+   "start": 32.6,
+   "end": 33.1
+  },
+  {
+   "word": "la",
+   "start": 33.1,
+   "end": 33.22
+  },
+  {
+   "word": "conversación",
+   "start": 33.22,
+   "end": 33.8
+  },
+  {
+   "word": "ya",
+   "start": 33.8,
+   "end": 34.19
+  },
+  {
+   "word": "no",
+   "start": 34.19,
+   "end": 34.31
+  },
+  {
+   "word": "puede",
+   "start": 34.31,
+   "end": 34.51
+  },
+  {
+   "word": "ser",
+   "start": 34.51,
+   "end": 34.71
+  },
+  {
+   "word": "respondido",
+   "start": 34.71,
+   "end": 35.31
+  },
+  {
+   "word": "de",
+   "start": 35.31,
+   "end": 35.43
+  },
+  {
+   "word": "esa",
+   "start": 35.43,
+   "end": 35.53
+  },
+  {
+   "word": "manera,",
+   "start": 35.53,
+   "end": 35.77
+  },
+  {
+   "word": "solo",
+   "start": 36.077,
+   "end": 36.19
+  },
+  {
+   "word": "puede",
+   "start": 36.19,
+   "end": 36.45
+  },
+  {
+   "word": "ser",
+   "start": 36.45,
+   "end": 36.65
+  },
+  {
+   "word": "respondido",
+   "start": 36.65,
+   "end": 37.61
+  },
+  {
+   "word": "mediante",
+   "start": 37.61,
+   "end": 37.99
+  },
+  {
+   "word": "plantillas",
+   "start": 37.99,
+   "end": 38.53
+  },
+  {
+   "word": "de",
+   "start": 38.53,
+   "end": 38.73
+  },
+  {
+   "word": "Meta",
+   "start": 38.73,
+   "end": 38.93
+  },
+  {
+   "word": "verificadas",
+   "start": 38.93,
+   "end": 39.65
+  },
+  {
+   "word": "y",
+   "start": 39.65,
+   "end": 40.05
+  },
+  {
+   "word": "probadas.",
+   "start": 40.05,
+   "end": 40.458
+  },
+  {
+   "word": "Por",
+   "start": 40.698,
+   "end": 40.76
+  },
+  {
+   "word": "ejemplo,",
+   "start": 40.76,
+   "end": 41.04
+  },
+  {
+   "word": "una",
+   "start": 41.393,
+   "end": 41.54
+  },
+  {
+   "word": "plantilla",
+   "start": 41.54,
+   "end": 41.96
+  },
+  {
+   "word": "sería",
+   "start": 41.96,
+   "end": 42.3
+  },
+  {
+   "word": "un",
+   "start": 42.3,
+   "end": 42.8
+  },
+  {
+   "word": "mensaje",
+   "start": 42.8,
+   "end": 43.18
+  },
+  {
+   "word": "directamente",
+   "start": 43.18,
+   "end": 43.74
+  },
+  {
+   "word": "con",
+   "start": 43.74,
+   "end": 44.12
+  },
+  {
+   "word": "todos",
+   "start": 44.12,
+   "end": 44.36
+  },
+  {
+   "word": "los",
+   "start": 44.36,
+   "end": 44.58
+  },
+  {
+   "word": "horarios",
+   "start": 44.58,
+   "end": 44.98
+  },
+  {
+   "word": "que",
+   "start": 44.98,
+   "end": 45.18
+  },
+  {
+   "word": "tengan,",
+   "start": 45.18,
+   "end": 45.5
+  },
+  {
+   "word": "pero",
+   "start": 45.838,
+   "end": 46.06
+  },
+  {
+   "word": "no",
+   "start": 46.06,
+   "end": 46.48
+  },
+  {
+   "word": "un",
+   "start": 46.48,
+   "end": 46.88
+  },
+  {
+   "word": "mensaje",
+   "start": 46.88,
+   "end": 47.34
+  },
+  {
+   "word": "con",
+   "start": 47.34,
+   "end": 47.58
+  },
+  {
+   "word": "todos",
+   "start": 47.58,
+   "end": 47.88
+  },
+  {
+   "word": "los",
+   "start": 47.88,
+   "end": 48.32
+  },
+  {
+   "word": "horarios",
+   "start": 48.32,
+   "end": 48.72
+  },
+  {
+   "word": "que",
+   "start": 48.72,
+   "end": 49.11
+  },
+  {
+   "word": "tienen",
+   "start": 49.11,
+   "end": 49.43
+  },
+  {
+   "word": "disponibles",
+   "start": 49.43,
+   "end": 50.03
+  },
+  {
+   "word": "en",
+   "start": 50.03,
+   "end": 50.25
+  },
+  {
+   "word": "ese",
+   "start": 50.25,
+   "end": 50.41
+  },
+  {
+   "word": "momento,",
+   "start": 50.41,
+   "end": 50.79
+  },
+  {
+   "word": "porque",
+   "start": 50.79,
+   "end": 51.32
+  },
+  {
+   "word": "la",
+   "start": 51.32,
+   "end": 51.74
+  },
+  {
+   "word": "plantilla",
+   "start": 51.74,
+   "end": 52.18
+  },
+  {
+   "word": "es",
+   "start": 52.18,
+   "end": 52.64
+  },
+  {
+   "word": "fija",
+   "start": 52.64,
+   "end": 53.02
+  },
+  {
+   "word": "y",
+   "start": 53.02,
+   "end": 53.26
+  },
+  {
+   "word": "no",
+   "start": 53.26,
+   "end": 53.36
+  },
+  {
+   "word": "puede",
+   "start": 53.36,
+   "end": 53.56
+  },
+  {
+   "word": "estar",
+   "start": 53.56,
+   "end": 53.78
+  },
+  {
+   "word": "cambiándose",
+   "start": 53.78,
+   "end": 54.66
+  },
+  {
+   "word": "con",
+   "start": 54.66,
+   "end": 55.0
+  },
+  {
+   "word": "variables",
+   "start": 55.0,
+   "end": 55.32
+  },
+  {
+   "word": "porque",
+   "start": 55.32,
+   "end": 55.88
+  },
+  {
+   "word": "si",
+   "start": 55.88,
+   "end": 56.04
+  },
+  {
+   "word": "no",
+   "start": 56.04,
+   "end": 56.2
+  },
+  {
+   "word": "Meta",
+   "start": 56.2,
+   "end": 56.56
+  },
+  {
+   "word": "te",
+   "start": 56.56,
+   "end": 56.76
+  },
+  {
+   "word": "las",
+   "start": 56.76,
+   "end": 56.9
+  },
+  {
+   "word": "rechazaría,",
+   "start": 56.9,
+   "end": 57.48
+  },
+  {
+   "word": "entonces",
+   "start": 57.718,
+   "end": 58.08
+  },
+  {
+   "word": "dentro",
+   "start": 58.08,
+   "end": 58.55
+  },
+  {
+   "word": "de",
+   "start": 58.55,
+   "end": 58.69
+  },
+  {
+   "word": "las",
+   "start": 58.69,
+   "end": 58.77
+  },
+  {
+   "word": "primeras",
+   "start": 58.77,
+   "end": 59.05
+  },
+  {
+   "word": "24",
+   "start": 59.05,
+   "end": 59.37
+  },
+  {
+   "word": "horas",
+   "start": 59.37,
+   "end": 59.71
+  },
+  {
+   "word": "puedes",
+   "start": 59.71,
+   "end": 59.99
+  },
+  {
+   "word": "reescribirle",
+   "start": 59.99,
+   "end": 60.695
+  },
+  {
+   "word": "libremente",
+   "start": 60.935,
+   "end": 61.51
+  },
+  {
+   "word": "pero",
+   "start": 61.51,
+   "end": 62.0
+  },
+  {
+   "word": "luego",
+   "start": 62.0,
+   "end": 62.46
+  },
+  {
+   "word": "con",
+   "start": 62.46,
+   "end": 62.72
+  },
+  {
+   "word": "el",
+   "start": 62.72,
+   "end": 62.84
+  },
+  {
+   "word": "agente",
+   "start": 62.84,
+   "end": 63.1
+  },
+  {
+   "word": "conversacional",
+   "start": 63.1,
+   "end": 63.8
+  },
+  {
+   "word": "de",
+   "start": 63.8,
+   "end": 63.98
+  },
+  {
+   "word": "whatsapp",
+   "start": 63.98,
+   "end": 64.364
+  },
+  {
+   "word": "después",
+   "start": 64.603,
+   "end": 64.81
+  },
+  {
+   "word": "de",
+   "start": 64.81,
+   "end": 64.97
+  },
+  {
+   "word": "las",
+   "start": 64.97,
+   "end": 65.03
+  },
+  {
+   "word": "24",
+   "start": 65.03,
+   "end": 65.39
+  },
+  {
+   "word": "horas",
+   "start": 65.39,
+   "end": 65.83
+  },
+  {
+   "word": "es",
+   "start": 65.83,
+   "end": 66.07
+  },
+  {
+   "word": "solo",
+   "start": 66.07,
+   "end": 66.23
+  },
+  {
+   "word": "mediante",
+   "start": 66.23,
+   "end": 66.55
+  },
+  {
+   "word": "plantillas",
+   "start": 66.55,
+   "end": 67.05
+  },
+  {
+   "word": "fijas",
+   "start": 67.05,
+   "end": 67.45
+  },
+  {
+   "word": "que",
+   "start": 67.45,
+   "end": 67.57
+  },
+  {
+   "word": "por",
+   "start": 67.57,
+   "end": 67.73
+  },
+  {
+   "word": "ejemplo",
+   "start": 67.73,
+   "end": 68.01
+  },
+  {
+   "word": "sería",
+   "start": 68.01,
+   "end": 68.55
+  },
+  {
+   "word": "el",
+   "start": 68.55,
+   "end": 68.93
+  },
+  {
+   "word": "horario",
+   "start": 68.93,
+   "end": 69.27
+  },
+  {
+   "word": "sin",
+   "start": 69.27,
+   "end": 69.81
+  },
+  {
+   "word": "personalización",
+   "start": 69.81,
+   "end": 71.01
+  },
+  {
+   "word": "de",
+   "start": 71.01,
+   "end": 71.27
+  },
+  {
+   "word": "horarios",
+   "start": 71.27,
+   "end": 71.61
+  },
+  {
+   "word": "estaría",
+   "start": 71.61,
+   "end": 71.95
+  },
+  {
+   "word": "disponible",
+   "start": 71.95,
+   "end": 72.47
+  },
+  {
+   "word": "ese",
+   "start": 72.47,
+   "end": 72.91
+  },
+  {
+   "word": "es",
+   "start": 72.91,
+   "end": 73.01
+  },
+  {
+   "word": "el",
+   "start": 73.01,
+   "end": 73.11
+  },
+  {
+   "word": "único",
+   "start": 73.11,
+   "end": 73.31
+  },
+  {
+   "word": "problema",
+   "start": 73.31,
+   "end": 73.75
+  },
+  {
+   "word": "que",
+   "start": 73.75,
+   "end": 73.95
+  },
+  {
+   "word": "exista.",
+   "start": 73.95,
+   "end": 74.301
+  },
+  {
+   "word": "Entonces",
+   "start": 74.535,
+   "end": 74.8
+  },
+  {
+   "word": "la",
+   "start": 74.8,
+   "end": 75.06
+  },
+  {
+   "word": "solución",
+   "start": 75.06,
+   "end": 75.56
+  },
+  {
+   "word": "que",
+   "start": 75.56,
+   "end": 75.66
+  },
+  {
+   "word": "te",
+   "start": 75.66,
+   "end": 75.8
+  },
+  {
+   "word": "daría",
+   "start": 75.8,
+   "end": 76.14
+  },
+  {
+   "word": "sería",
+   "start": 76.14,
+   "end": 76.4
+  },
+  {
+   "word": "intentar",
+   "start": 76.4,
+   "end": 76.98
+  },
+  {
+   "word": "cerrar",
+   "start": 76.98,
+   "end": 77.46
+  },
+  {
+   "word": "la",
+   "start": 77.46,
+   "end": 77.92
+  },
+  {
+   "word": "venta",
+   "start": 77.92,
+   "end": 78.24
+  },
+  {
+   "word": "dentro",
+   "start": 78.24,
+   "end": 78.46
+  },
+  {
+   "word": "de",
+   "start": 78.46,
+   "end": 78.62
+  },
+  {
+   "word": "las",
+   "start": 78.62,
+   "end": 78.72
+  },
+  {
+   "word": "24",
+   "start": 78.72,
+   "end": 79.1
+  },
+  {
+   "word": "horas",
+   "start": 79.1,
+   "end": 79.56
+  },
+  {
+   "word": "y",
+   "start": 79.56,
+   "end": 79.93
+  },
+  {
+   "word": "que",
+   "start": 79.93,
+   "end": 80.05
+  },
+  {
+   "word": "después",
+   "start": 80.05,
+   "end": 80.31
+  },
+  {
+   "word": "de",
+   "start": 80.31,
+   "end": 80.45
+  },
+  {
+   "word": "las",
+   "start": 80.45,
+   "end": 80.53
+  },
+  {
+   "word": "24",
+   "start": 80.53,
+   "end": 80.93
+  },
+  {
+   "word": "horas",
+   "start": 80.93,
+   "end": 81.39
+  },
+  {
+   "word": "sea",
+   "start": 81.39,
+   "end": 81.83
+  },
+  {
+   "word": "mediante",
+   "start": 81.83,
+   "end": 82.19
+  },
+  {
+   "word": "plantillas",
+   "start": 82.19,
+   "end": 82.71
+  },
+  {
+   "word": "de",
+   "start": 82.71,
+   "end": 82.91
+  },
+  {
+   "word": "seguimiento",
+   "start": 82.91,
+   "end": 83.73
+  },
+  {
+   "word": "o",
+   "start": 83.73,
+   "end": 84.05
+  },
+  {
+   "word": "de",
+   "start": 84.05,
+   "end": 84.11
+  },
+  {
+   "word": "remarketing",
+   "start": 84.11,
+   "end": 84.714
+  },
+  {
+   "word": "y",
+   "start": 84.951,
+   "end": 85.02
+  },
+  {
+   "word": "si",
+   "start": 85.02,
+   "end": 85.14
+  },
+  {
+   "word": "querés",
+   "start": 85.14,
+   "end": 85.42
+  },
+  {
+   "word": "seguir",
+   "start": 85.42,
+   "end": 85.64
+  },
+  {
+   "word": "aprendiendo",
+   "start": 85.64,
+   "end": 86.0
+  },
+  {
+   "word": "sobre",
+   "start": 86.0,
+   "end": 86.22
+  },
+  {
+   "word": "inteligencia",
+   "start": 86.22,
+   "end": 86.62
+  },
+  {
+   "word": "artificial",
+   "start": 86.62,
+   "end": 87.18
+  },
+  {
+   "word": "seguime",
+   "start": 87.18,
+   "end": 87.88
+  },
+  {
+   "word": "y",
+   "start": 87.88,
+   "end": 88.22
+  },
+  {
+   "word": "uníte",
+   "start": 88.22,
+   "end": 88.54
+  },
+  {
+   "word": "a",
+   "start": 88.54,
+   "end": 88.6
+  },
+  {
+   "word": "mi",
+   "start": 88.6,
+   "end": 88.64
+  },
+  {
+   "word": "comunidad",
+   "start": 88.64,
+   "end": 88.98
+  },
+  {
+   "word": "que",
+   "start": 88.98,
+   "end": 89.24
+  },
+  {
+   "word": "está",
+   "start": 89.24,
+   "end": 89.44
+  },
+  {
+   "word": "en",
+   "start": 89.44,
+   "end": 89.6
+  },
+  {
+   "word": "el",
+   "start": 89.6,
+   "end": 89.72
+  },
+  {
+   "word": "link",
+   "start": 89.72,
+   "end": 89.94
+  },
+  {
+   "word": "de",
+   "start": 89.94,
+   "end": 90.16
+  },
+  {
+   "word": "mi",
+   "start": 90.16,
+   "end": 90.26
+  },
+  {
+   "word": "perfil.",
+   "start": 90.26,
+   "end": 90.618
+  }
+ ]
+}
