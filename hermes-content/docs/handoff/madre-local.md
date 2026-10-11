@@ -36,7 +36,17 @@ días abierta y su conversación costó ~777 M de tokens. **La madre nueva arran
 > **Paso 0:** recreá la ronda (CronCreate `7,27,47 * * * *`, solo Plataforma y Hermes; texto en §F del libro) y el parte
 > (07:53) y el cierre (21:53). Después seguí con «Merge en serie» de ESTADO AL CLEAN.
 
-## ▶ ESTADO madre DESARROLLO-INFRA (sesión `35353b71`, 11-oct 07:45 UTC) — TOCA RELEVO (contexto ~150 k)
+## ▶ ESTADO madre DESARROLLO-INFRA (sesión `35353b71`, 11-oct 12:40 UTC) — RELEVO URGENTE (contexto ~720 k)
+
+- **Mergeado hoy en onia-platform (todo de Codex o con Codex):** #147 F136 · #148/#149/#152/#153 (usted, vía usted-todo) · #151 P-02 · #155 F136b · #156 M1. Prod: release-fd72cd55 mirado 09:54 (caja «1.500» = Bs 1.500,00 y borrado de paciente con caras = 409); 12:50 publica #151/#152/#155/#156.
+- **Listos en local, suite verde, push 13:12 UTC (cron de un disparo `d2858ab0`; si la sesión murió, hacerlo a mano):** worktrees C:/dev/proyectos/onia-platform-codex-<id>: f136c 4523b26d · m1b e687fe6e · u7 62622fa0 · u8 cc95dca9 · u9 44a5b053 · s3 a30c0528 · v1 01b88dce (AL FINAL; regenerar su línea base con scripts/voseo-segunda-persona-linea-base.mjs). Por cada uno: rebase sobre origin/master, suite completa, grep de acentos rotos (`[a-z]?[a-z]`) y BOM, push, draft PR. Revisión de Hermes: F136c/M1b dinero, S3 seguridad.
+- **Corriendo:** U10 (Codex Sol, worktree -codex-u10). **Abiertos:** #150 P-01b y #154 S2 (CI cancelado: relanzar), #157 (Plataforma).
+- **Loops vivos de esta sesión:** ronda `31104903`, parte `d4a66458`, cierre `f7c70a45` + el push de 13:12. Mueren con la sesión: la nueva madre los recrea.
+- **Codex:** 27 % semanal (reinicio 18-oct 05:16 UTC). Tope 3 corridas locales entre las dos madres; C: 5,6 GB.
+- **Espera a SU:** «sí, aplicar» para onia-hermes #194 · ¿landing con cambio de precio en knowledge.onia.json? · línea en Plataforma (demo · términos + gracia · B22) · rotar token n8n · bot: duración de la llamada (30 vs 20, lo pregunta MADRE MARKETING).
+- **Aprendido (tarde):** Codex vació un package.json (C4) y rompe acentos a veces (Hermes E12): revisar diff siempre · una nota de la madre que contradice el contrato confunde a Codex: manda el contrato · rebasear los PRs en cola cada vez que entra uno (línea base del trinquete).
+
+## ▶ ESTADO madre DESARROLLO-INFRA (historia, 11-oct 07:45 UTC) — TOCA RELEVO (contexto ~150 k)
 
 - **Loops (CronCreate de esta sesión):** ronda `31104903` (:07 :27 :47; Haiku lee Plataforma y Hermes, rellena colas, lanza
   Codex, 4 líneas a SU) · parte `d4a66458` (07:53 La Paz) · cierre `f7c70a45` (21:53 La Paz). Mueren con la sesión.
