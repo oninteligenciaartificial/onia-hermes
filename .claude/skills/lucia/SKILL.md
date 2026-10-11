@@ -356,6 +356,8 @@ Fuente: `research/competencia/LUCIA_COMPETENCIA_20261005.md`.
   bajan 0,03-0,09 pero el orden por valor final no cambia (`v4/prueba-motores-20261008/medicion-sin-refs-entrada-20261011.txt`, script `scripts/parecido_sin_refs.py`). **Regla:** antes de dar un parecido como «sostiene la cara»,
   mirar con `job_display` qué imágenes recibió el job (y de dónde salió su foto de arranque) y decir en pantalla y pie cuáles de las 8 vio; una generación nueva de prueba debería reservar fotos de puntaje que NO entren como referencia.
   Se pagó en tres revisiones: P9 («Seedance parte de 139 px» dejaba a Kling como sólido), G2 v2 («los otros cuatro, ninguna») y G5 v2.
+- **11-oct · una imagen que sale casi COPIA de una foto de entrada infla el parecido:** la «K4 café» de Kling O1 Image (0,831) es la pose, la ventana, la laptop y la taza de R3 con otra ropa: coseno 0,927 con R3 contra 0,56-0,73 con las otras siete (la de Seedream 4.5, 0,839, no: R3 0,793). Lo cazó el revisor del carrusel C2 al
+  mirar la lámina. **Regla:** antes de dar un parecido, mirar el coseno POR FOTO (`face-gate.sh` / `parecido_sin_refs_fotos.py`): una foto con >0,90 contra una sola referencia no es una prueba de identidad sino de copia. También: los jpg de 1080 px de `v4/prueba-motores-20261008/fotos/` NO reproducen PROCEDENCIA (GPT Image 2.5: 0,672 contra 0,658); los PNG originales, sí.
 - **2/3-oct:** Seedream escribe como texto «sheet» y «hex #…»; inventa letreros en las torres; los lotes de más de 5
   dan 429. Están en `higgsfield-generate`.
 

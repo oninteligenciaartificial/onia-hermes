@@ -1,0 +1,11 @@
+Personaje hecho con IA: Lucía Antelo, de @oniahq. Ojo: los números de esta prueba pueden salir inflados (explico abajo).
+
+Probé la misma orden y las mismas fotos de referencia en seis motores de imagen (Seedream 4.5, Kling O1 Image, Nano Banana 2.1, Seedream 5.0 Pro, FLUX 3 y GPT Image 2.5) y medí cuánto se parece cada cara a la de Lucía, de 0 a 1.
+
+Con 1 crédito, Seedream 4.5, el que ya uso, la sostuvo en tres escenas. Pagar más no la mejoró, y el más barato la perdió una vez de tres.
+
+Por qué pueden salir inflados: el parecido se compara con 8 fotos oficiales de Lucía y los seis motores recibieron como entrada 4 de ellas. Midiendo solo con las otras 4 fotos, todos los valores bajan entre 0,03 y 0,09 y se cruzan dos pares, dentro del ruido de ±0,03: Seedream 4.5 con Kling O1 Image (1.º y 2.º) y Seedream 5.0 Pro con FLUX 3 (4.º y 5.º). Además, en la escena del café con teclado la imagen de Kling O1 Image es casi una copia de una de esas fotos, así que su 0,83 sale inflado (sin esas 4 fotos baja a 0,74). El piso de 0,70 lo elegí yo y, bajo 200 px, la cara se mira a ojo.
+
+Por crédito: Kling O1 Image 0,5 · Seedream 4.5 1 · Nano Banana 2.1 2 · Seedream 5.0 Pro 2,5 · GPT Image 2.5 2,75 · FLUX 3 3.
+
+Una escena por motor; Seedream 4.5 y Kling O1 Image, tres: es una prueba, no una regla. Nombro lo que uso; no es una recomendación pagada. Guardalo para cuando elijas el tuyo. Cada semana hago una prueba. Seguime.

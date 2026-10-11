@@ -94,7 +94,7 @@ Pendiente en G5 v2: el 0,35 de Kling O1 Image se muestra sin su contrapeso (0,79
 | 2 · día 3 | **G2** (reel) | La prueba de los seis clips; usa lo aprendido en G1/G3 |
 | 2 · día 5 | **G4** (reel; guion aprobado el 10-oct, falta «mostrada, publicá G4») | Seis motores de imagen |
 | 2 · día 5 / 3 · día 1 | **G5** (reel; guion aprobado el 10-oct, falta «mostrada, publicá G5») | Cómo se mide una cara y cuándo no creerle al número; cierra la serie de pruebas |
-| 3 · día 1 | **C2** (carrusel) | Formato guardable de G4: `hermes-content/carousels/out/lucia-c2-seis-motores-de-imagen/`, pie en `briefs/lucia/c2-seis-motores-de-imagen.json`. Sale después de G4 |
+| 3 · día 1 | **C2** (carrusel, 6 láminas) | **LISTA PARA MOSTRAR (11-oct, v2):** `hermes-content/carousels/out/lucia-c2-seis-motores-de-imagen/` (láminas, `pie.txt`, `REVISION-1.md`, `QA-*`); incluye la lámina «Ojo con el número» y el aviso del sesgo. Sale después de G4 |
 
 El token de Instagram de Lucía vence entre el 13 y el 18-oct: **la primera pieza tiene que salir antes**, o hay que renovarlo.
 
