@@ -1,11 +1,1 @@
-MODELO de avances de glifos locales; NO es DOM ni shaping del navegador. Interior866px; kerning omitido.
-toma: 2 líneas previstas; y=720, inferior previsto=840.80px; ['Una toma cada uno: es una prueba, no', 'una regla.']
-brillo: 2 líneas previstas; y=855, inferior previsto=975.80px; ['El brillo es el promedio del cuadro', 'entero: mezcla luz y encuadre.']
-limite-cara: 3 líneas previstas; y=1040, inferior previsto=1209.20px; ['El parecido es indicativo: bajo 200 px la', 'cara es poco confiable (Seedance parte', 'de 139 px). Ruido de ±0,03.']
-cta: 2 líneas previstas; y=1280, inferior previsto=1451.84px; ['Seguime: cada semana,', 'una prueba.']
-rotulo: 1 líneas previstas; y=300, inferior previsto=368.00px; ['Lucía Antelo · personaje IA de Onia']
-titulo: 1 líneas previstas; y=760, inferior previsto=857.92px; ['La cara o la escena.']
-dato-m1: 2 líneas previstas; y=1030, inferior previsto=1146.40px; ['Kling 3.0 std · brillo −1,0 · parecido 0,79 →', '0,72']
-dato-m4: 2 líneas previstas; y=1090, inferior previsto=1206.40px; ['Seedance 2.0 Mini + referencias · brillo −34', '· parecido 0,71 → 0,80']
-reencuadre: 1 líneas previstas; y=1270, inferior previsto=1340.20px; ['Cara: 139 → 347 px · reencuadra']
-EXIT 0 (modelo; DOM PENDIENTE por la madre)
+OBSOLETO en la v2: el modelo estático (scripts/estimar-tipografia.py, requiere fontTools) no se corrió en este contenedor y no se instala nada. La medida vigente es DOM real: qa/layout-dom.txt y qa/medir-dom.txt.

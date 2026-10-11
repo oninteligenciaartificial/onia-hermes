@@ -12,9 +12,9 @@
 #comparacion{position:absolute;left:0;top:300px;width:1080px}
 .fila{position:relative;top:0;margin-bottom:12px;font-size:40px;line-height:1.08}.fila div{margin-bottom:2px}.barra{height:8px;width:850px;background:#3c484b}.barra i{display:block;height:100%;background:#83d5be}.barra.cara i{background:#ffbc94}
 .fila .numeros{font-family:"Spline Sans Mono",monospace;font-size:42px;line-height:1.2}
-/* La flecha en la mono sale diminuta: va en DM Sans y un poco mayor (H2, cosmético). La escala de cada pareja de barras va debajo, con el color de su barra (H7). */
-.fila .fl{font-family:"DM Sans",sans-serif;font-weight:500;font-size:1.18em;line-height:1}
-.fila .escala{font-family:"DM Sans",sans-serif;font-weight:500;font-size:34px;line-height:1.1;color:#a9bcbf;margin-top:4px}.escala b{font-weight:500}.escala .v{color:#83d5be}.escala .n{color:#ffbc94}
+/* La flecha de la mono sale diminuta: va como un SVG de trazo 3 px (H2, cosmético). La escala va en mono porque el 0 de DM Sans se lee como la letra O. La escala de cada pareja de barras va debajo, con el color de su barra (H7). */
+.fila .fl{display:inline-block;vertical-align:-2px;margin:0 2px}
+.fila .escala{font-family:"Spline Sans Mono",monospace;font-weight:500;font-size:34px;line-height:1.1;color:#a9bcbf;margin-top:4px}.escala b{font-weight:500}.escala .v{color:#83d5be}.escala .n{color:#ffbc94}
 /* H5: scrim que tapa el letrero inventado de la torre (esquina superior izquierda de m4); sin interacción, viaja con #overlay-m4 */
 #scrim-m4{position:absolute;pointer-events:none}
 #cta{border-color:#ffbc94}

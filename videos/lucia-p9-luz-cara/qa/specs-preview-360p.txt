@@ -1,6 +1,1 @@
-codec_name=h264
-width=360
-height=640
-r_frame_rate=24/1
-duration=20.000000
-nb_frames=480
+360,640,24/1,20.000000,480

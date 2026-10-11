@@ -4,7 +4,7 @@ import {P,plan,check,save} from './qa-dom.mjs';import {cronograma} from './voz.m
 const src=fs.readFileSync(path.join(P,'scripts/build.mjs'),'utf8').replace(/^import .*;\r?$/gm,'').replaceAll('import.meta.url',JSON.stringify(pathToFileURL(path.join(P,'scripts/build.mjs')).href));
 const PIE_KLING='En el clip original (720p), la cara de Kling 3.0 std queda bajo 200 px todo el clip; la de Seedance 2.0 Mini, solo al inicio (pasa de 139 a 347 px porque el encuadre se acerca).';
 const PIE_REFS='Seedance recibió 3 imágenes de referencia y 2 de ellas están entre las 8 fotos oficiales con que se mide el parecido; descontando eso, el efecto estimado es de ≈ 0,03 (dentro del ruido de ±0,03). Kling no recibió ninguna. ';
-const PIE_LETRERO='Seedance 2.0 Mini inventó un letrero en la torre (de 7 a 11,5 s): no existe. Lo oscurecí en el video. ';
+const PIE_LETRERO='Seedance 2.0 Mini inventó un letrero en la torre (de 7 a 11,5 s): no existe. Lo difuminé en el video. ';
 const LIMITE_VIEJO='El parecido es indicativo: bajo 200 px la cara es poco confiable (Seedance parte de 139 px). Ruido de ±0,03.';
 const cases=[
  ['parecido',p=>p.clips[0].parecido[1]=.75,null,/m1 parecido/],
