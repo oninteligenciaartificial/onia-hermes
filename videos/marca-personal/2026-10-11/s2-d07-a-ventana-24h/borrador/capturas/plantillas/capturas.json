@@ -1,0 +1,24 @@
+{
+  "url": "https://developers.facebook.com/documentation/business-messaging/whatsapp/templates/overview/",
+  "fecha": "2026-10-11",
+  "hora_utc": "09:15",
+  "http": 200,
+  "capturas": {
+    "cap-aprobadas": {
+      "archivo": "cap-aprobadas.png",
+      "ancho": 1080,
+      "alto": 606,
+      "marca": [
+        397,
+        150,
+        700,
+        191
+      ],
+      "scroll": 4717,
+      "ancla": "Templates must have a status of APPROVED before they can be sent in template messages.",
+      "marca_texto": "status of APPROVED"
+    }
+  },
+  "logos": {},
+  "url_final": "https://developers.facebook.com/documentation/business-messaging/whatsapp/templates/overview/"
+}
