@@ -1,0 +1,29 @@
+piso de caras negativas (max): 0.224   gate del repo: 0,70
+archivo                                        centroide  cara_px  veredicto
+g2-v2-final-1080x1920_t9.06667                     0.795      179  OK (cara < 200 px: poco confiable)
+g2-v2-final-1080x1920_t9.90000                     0.748      180  OK (cara < 200 px: poco confiable)
+g2-v2-final-1080x1920_t11.77500                    0.670      239  BAJO: mirar
+g2-v2-final-1080x1920_t12.69167                    0.630      255  BAJO: mirar
+g2-v2-final-1080x1920_t15.10833                    0.790      172  OK (cara < 200 px: poco confiable)
+g2-v2-final-1080x1920_t16.52500                    0.802      200  OK
+g2-v2-final-1080x1920_t24.94167                    0.740      173  OK (cara < 200 px: poco confiable)
+g2-v2-final-1080x1920_t26.19167                    0.707      173  OK (cara < 200 px: poco confiable)
+m1_t1.23333                                        0.799      119  OK (cara < 200 px: poco confiable)
+m1_t2.06667                                        0.762      120  OK (cara < 200 px: poco confiable)
+m1_t3.73333                                        0.751      115  OK (cara < 200 px: poco confiable)
+m1_t4.98333                                        0.708      115  OK (cara < 200 px: poco confiable)
+m3_t1.48333                                        0.671      160  BAJO: mirar (cara < 200 px: poco confiable)
+m3_t2.40000                                        0.629      170  BAJO: mirar (cara < 200 px: poco confiable)
+m5_t2.06667                                        0.790      115  OK (cara < 200 px: poco confiable)
+m5_t3.48333                                        0.801      133  OK (cara < 200 px: poco confiable)
+
+Instantes ALINEADOS (final ↔ fuente en el MISMO cuadro del clip; cuadro 0 de cada clip = el cuadro T−6 de su empuje; el cierre K1 arranca en el cuadro 54 del clip):
+  final  9.083 s (cuadro 218) ↔ Kling 3.0 std @ cuadro 30:  0.795 ↔ 0.799  (dif 0.004)
+  final  9.917 s (cuadro 238) ↔ Kling 3.0 std @ cuadro 50:  0.748 ↔ 0.762  (dif 0.014)
+  final 11.792 s (cuadro 283) ↔ Seedance 2.0 Mini @ cuadro 36:  0.670 ↔ 0.671  (dif 0.001)   <- bajo 0,70 en la fuente Y en el final
+  final 12.708 s (cuadro 305) ↔ Seedance 2.0 Mini @ cuadro 58:  0.630 ↔ 0.629  (dif 0.001)   <- bajo 0,70 en la fuente Y en el final
+  final 15.125 s (cuadro 363) ↔ Kling O3 @ cuadro 50:  0.790 ↔ 0.790  (dif 0.000)
+  final 16.542 s (cuadro 397) ↔ Kling O3 @ cuadro 84:  0.802 ↔ 0.801  (dif 0.001)
+  final 24.958 s (cuadro 599) ↔ cierre K1 (Kling 3.0 std, clip +54) @ cuadro 90:  0.740 ↔ 0.751  (dif 0.011)
+  final 26.208 s (cuadro 629) ↔ cierre K1 (Kling 3.0 std, clip +54) @ cuadro 120:  0.707 ↔ 0.708  (dif 0.001)
+Máxima diferencia 0.014 (≤ 0,02): el escalado ×1,5 del navegador y el H.264 no deforman la cara. Caras de 115-255 px nativos: cifras orientativas (el propio gate marca < 200 px como poco confiable).

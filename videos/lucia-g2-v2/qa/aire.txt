@@ -1,5 +1,5 @@
 cuadros: 636 (26.500 s)   «idéntico» = menos de 8 píxeles (de 129600) cambian más de 6 niveles entre cuadros consecutivos
-píxeles cambiados entre cuadros consecutivos: mínimo 0 · mediana 1480 · percentil 5 0 · transiciones idénticas: 115 de 635
+píxeles cambiados entre cuadros consecutivos: mínimo 0 · mediana 1543 · percentil 5 0 · transiciones idénticas: 115 de 635
 MAYOR TRAMO QUIETO (pantalla idéntica, con o sin tarjeta): 0.875 s (21 cuadros)
 tramos idénticos de más de 0.3 s:
    3.417– 3.750 s  0.333 s idénticos; sin tarjeta en lectura: 0.000 s  ok (tarjeta en lectura)
@@ -17,6 +17,6 @@ resumen por escena (diferencia media entre cuadros; los clips de IA son los más
   m1         7.833–10.542 s  diferencia media   8.83  píxeles cambiados: mediana   1715, mínimo     85  transiciones idénticas 0
   m3        10.292–13.292 s  diferencia media   9.78  píxeles cambiados: mediana  19095, mínimo  11011  transiciones idénticas 0
   m5        13.042–17.125 s  diferencia media   6.37  píxeles cambiados: mediana   8722, mínimo   3552  transiciones idénticas 0
-  pl-l      16.875–23.708 s  diferencia media   3.04  píxeles cambiados: mediana    196, mínimo      0  transiciones idénticas 70
-  k1        23.458–26.500 s  diferencia media   4.30  píxeles cambiados: mediana   1793, mínimo    178  transiciones idénticas 0
+  pl-l      16.875–23.708 s  diferencia media   3.05  píxeles cambiados: mediana    196, mínimo      0  transiciones idénticas 70
+  k1        23.458–26.500 s  diferencia media   4.36  píxeles cambiados: mediana   1956, mínimo     97  transiciones idénticas 0
 ✔ ningún tramo de más de 0.3 s con la pantalla idéntica y sin una tarjeta en lectura

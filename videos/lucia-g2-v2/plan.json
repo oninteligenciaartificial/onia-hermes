@@ -158,10 +158,10 @@
       "id": "k1",
       "tipo": "clip",
       "src": "assets/m1.mp4",
-      "media_inicio": 2.75,
+      "media_inicio": 2.25,
       "a": "T14-6f",
       "b": "FIN",
-      "capa": "cierre: el clip K1 (el de Kling 3.0 std) desde el cuadro 66 (2,75 s), con Lucía mirando a cámara"
+      "capa": "cierre: el clip K1 (el de Kling 3.0 std) del cuadro 54 (2,25 s) al 126 (5,25 s), con Lucía mirando a cámara; parecido medido cada 6 cuadros: 0,71-0,76, ninguno bajo 0,70"
     }
   ],
   "costuras": [
@@ -526,11 +526,11 @@
   "quitado_de_g2": [
     {
       "que": "Kling 3.0 pro (9 cr, 1080p) y Seedance 2.0 Mini + referencias (6 cr, foto de inicio + 3 referencias, letrero inventado)",
-      "porque": "el contraste esencial cabe en 3 herramientas; con las seis el video pasaba de 58 s. Con ellas se quita la pastilla «1080p» (solo se veía en Kling 3.0 pro) y el aro del letrero (solo estaba en Seedance 2.0 Mini + referencias)."
+      "porque": "el contraste esencial cabe en 3 herramientas; con tres más la voz sumaría ~580 caracteres (estimado: ~50 por herramienta), sobre el tope de 450. Con ellas se quita la pastilla «1080p» (solo se veía en Kling 3.0 pro) y el aro del letrero (solo estaba en Seedance 2.0 Mini + referencias)."
     },
     {
       "que": "Cinematic Studio 3.0 (20 cr, 4 s): placa del precio («5 créditos por segundo», «4×»)",
-      "porque": "no cabe en 450 caracteres de voz ni en 30 s; el precio de cada herramienta que sí sale sigue en su tarjeta."
+      "porque": "no cabe: +55 caracteres de voz y +3 s dejarían el guion en ~490 caracteres (tope 450); el precio de cada herramienta que sí sale sigue en su tarjeta."
     },
     {
       "que": "Lección 1 (placa con tres arranques y tres finales) y barras de seis herramientas",

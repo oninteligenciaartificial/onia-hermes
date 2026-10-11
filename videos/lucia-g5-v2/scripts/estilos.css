@@ -30,7 +30,7 @@ body{font-family:"DM Sans",sans-serif;-webkit-font-smoothing:antialiased;text-re
 .tag{display:inline-flex;align-items:center;gap:16px;padding:14px 28px;border-radius:999px;background:rgba(10,12,17,.84);border:1px solid rgba(255,255,255,.16);box-shadow:0 14px 36px rgba(0,0,0,.38);font-family:"DM Sans",sans-serif;font-weight:500;color:#F6F8FB;font-size:34px;letter-spacing:.01em;white-space:nowrap}
 .tag i{flex:none;width:15px;height:15px;border-radius:50%;background:var(--acc);box-shadow:0 0 18px var(--acc)}
 .tag.bajo i{background:var(--bad);box-shadow:0 0 18px var(--bad)}
-.tag-d{font-size:38px;padding:14px 28px}
+.tag-d{font-size:42px;padding:14px 28px}
 .tag b,.rt b{font-family:"Spline Sans Mono",monospace;font-weight:500}
 .drow{display:flex;align-items:center;gap:14px}
 
@@ -46,7 +46,7 @@ body{font-family:"DM Sans",sans-serif;-webkit-font-smoothing:antialiased;text-re
 .trk .zona{position:absolute;top:0;bottom:0;background:var(--acc);opacity:.9}
 .mkv{position:absolute;width:6px;margin-left:-3px;border-radius:3px;background:var(--acc);box-shadow:0 0 16px rgba(16,194,107,.6)}
 .mkl{position:absolute;transform:translateX(-50%)}
-.ax{position:absolute;font-family:"Spline Sans Mono",monospace;font-weight:500;font-size:38px;line-height:1.2;color:var(--mut);white-space:nowrap}
+.ax{position:absolute;font-family:"Spline Sans Mono",monospace;font-weight:500;font-size:42px;line-height:1.2;color:var(--mut);white-space:nowrap}
 .ax.r{text-align:right}
 .rt{position:absolute;font-family:"DM Sans",sans-serif;font-weight:500;font-size:40px;line-height:1.2;color:#F6F8FB;white-space:nowrap}
 .rl{position:absolute;height:10px;border-radius:5px;background:#2B303A}
@@ -125,3 +125,6 @@ body{font-family:"DM Sans",sans-serif;-webkit-font-smoothing:antialiased;text-re
 /* G5 2da pasada (3ra: «el motor»): «Lo difuminé: lo inventó el motor.» junto al aro; el nombre de las filas de la lección entra en 52 px */
 .call{position:absolute;padding:12px 24px 14px;border-radius:26px;background:rgba(10,12,17,.88);border:1px solid rgba(255,255,255,.22);border-left:8px solid var(--bad);font-family:"DM Sans",sans-serif;font-weight:500;font-size:38px;line-height:1.2;color:#F6F8FB;white-space:nowrap;box-shadow:0 14px 36px rgba(0,0,0,.38)}
 .rowt{font-size:52px}
+
+/* revisión 1 (11-oct-2026, H6): los NOMBRES de herramienta (etiquetas de placa, nombre dentro de las pastillas, marcas de la escala) a 40-44 px: son el contenido de D-N1 y en un teléfono de 390 px el 34 quedaba en ~12 px */
+.tag.tool{font-size:42px;padding:14px 30px}

@@ -21,7 +21,7 @@ Medios:
    10.292 –  13.292 m3        clip  Seedance 2.0 Mini (clip 3), cuadros 0-71 (3,0 s a 1×)
    13.042 –  17.125 m5        clip  Kling O3 (clip 5), cuadros 0-97 (4,1 s a 1×)
    16.875 –  23.708 pl-l      placa lección: los finales de Kling 3.0 std, Seedance 2.0 Mini y Kling O3 sobre la escala
-   23.458 –  26.500 k1        clip  cierre: el clip K1 (el de Kling 3.0 std) desde el cuadro 66 (2,75 s), con Lucía mirando a cámara
+   23.458 –  26.500 k1        clip  cierre: el clip K1 (el de Kling 3.0 std) del cuadro 54 (2,25 s) al 126 (5,25 s), con Lucía mirando a cámara; parecido medido cada 6 cuadros: 0,71-0,76, ninguno bajo 0,70
 Costuras (empuje rígido de 6 cuadros, caen en el hueco de la voz):
     3.167 →   3.417  sale foto,thumbs → entra pl-regla
     7.833 →   8.083  sale pl-regla → entra m1

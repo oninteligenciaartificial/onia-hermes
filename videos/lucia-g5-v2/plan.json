@@ -1,8 +1,8 @@
 {
- "titulo": "G5 v2 · Cómo mido si una cara es la de Lucía (y cuándo no creerle al número), re-cortada a 26,8 s y cronometrada para recibir voz",
+ "titulo": "G5 v2 · Cómo mido si una cara es la de Lucía (y cuándo no creerle al número), re-cortada a 26,6 s y cronometrada para recibir voz (revisión 1 aplicada)",
  "guion": "guion-voz.txt",
  "guion_aprobado": "hermes-content/docs/cola/lucia-diario/guiones/G5-como-se-mide-una-cara.md",
- "version": "v2 (11-oct-2026): re-corte de G5 con la regla de aire de la madre (pausa ≤ 0,3 s entre frases, ningún hueco quieto). Muda, lista para voz. 0 créditos.",
+ "version": "v2 (11-oct-2026) + revisión 1 (qa/revision-1.md): re-corte de G5 con la regla de aire de la madre (pausa ≤ 0,3 s entre frases, ningún hueco quieto). Muda, lista para voz. 0 créditos.",
  "lienzo": {
   "w": 1080,
   "h": 1920,
@@ -326,7 +326,7 @@
    "tipo": "placa",
    "a": 16.375,
    "b": 19.541666666667,
-   "capa": "razón 2: escala ampliada «Zoom: 0,70 a 0,90» y la etiqueta «Cinematic Studio 3.0» (ya están al llegar) con las dos puntas de un MISMO clip (0,771 → 0,77 y 0,799 → 0,80) y la banda de ±0,03 alrededor de su promedio"
+   "capa": "razón 2: escala ampliada «Zoom: 0,70 a 0,90» y la etiqueta «Cinematic Studio 3.0 · mismo clip» (ya están al llegar) con las dos puntas de un MISMO clip (0,771 → 0,77 y 0,799 → 0,80) y la banda de ±0,03 alrededor de su promedio"
   },
   {
    "id": "pl-r3",
@@ -517,7 +517,8 @@
    "b": 13.625,
    "color": "bad",
    "escena": "ejemplo B café",
-   "dato": "e3"
+   "dato": "e3",
+   "acento_dur": 0.3
   },
   {
    "id": "c6",
@@ -554,10 +555,11 @@
    "tramo": "t9",
    "texto": "Mirá la",
    "acento": "imagen entera.",
-   "acento_t": 23.167,
+   "acento_t": 23.578,
    "a": 22.166666666667,
    "b": 24.208333333333,
-   "escena": "lección"
+   "escena": "lección",
+   "acento_dur": 0.35
   },
   {
    "id": "c10",
@@ -645,7 +647,7 @@
    "cursor_t": 7.183,
    "cursor_dura": 0.9,
    "uno_t": 8.933,
-   "marca_t": 9.283,
+   "marca_t": 9.233,
    "marca_label_y": 700
   }
  },
@@ -662,7 +664,7 @@
    "pill": "Kling O1 Image · parecido",
    "box_t": 11.05,
    "t": 10.85,
-   "fin": 13.35
+   "fin": 13.2
   }
  ],
  "r1": {
@@ -690,7 +692,8 @@
    "herr": "m5",
    "x": 70,
    "y": 932
-  }
+  },
+  "lupa_ping_t": 16.037
  },
  "r2": {
   "eje": {
@@ -708,11 +711,11 @@
    "t": 16.925
   },
   "d2": {
-   "t": 17.375
+   "t": 17.449
   },
   "banda": {
    "mas_menos": 0.03,
-   "t": 17.925
+   "t": 18.154
   },
   "zoom": {
    "texto": "Zoom: 0,70 a 0,90"
@@ -727,7 +730,8 @@
   "y_valores": 680,
   "y_marcas": 790,
   "y_inferior": 870,
-  "nota_planes": "las dos puntas son el mínimo (0,771) y el máximo (0,799) de las 6 medidas del MISMO clip (Motor 6); la banda de ±0,03 va centrada en el promedio de las 6 (0,784); los valores salen de PROCEDENCIA (build.mjs)"
+  "nota_planes": "las dos puntas son el mínimo (0,771) y el máximo (0,799) de las 6 medidas del MISMO clip (Motor 6); la banda de ±0,03 va centrada en el promedio de las 6 (0,784); los valores salen de PROCEDENCIA (build.mjs)",
+  "banda_ping_t": 18.625
  },
  "r3": {
   "win": {
@@ -762,8 +766,8 @@
  "agregados_al_guion": [
   {
    "id": "V1",
-   "que": "Duración 26,8 s (G5: 57,5 s). Cada línea de guion-voz.txt es un tramo: palabras / 3,6 s + un hueco ≤ 0,25 s; las 10 tarjetas coinciden con los 10 tramos (build.mjs corta si no). El CTA dura 2,417 s (la regla de marca pide ≥ 2,4 s) y su línea 1,39 s: la cola de 1,03 s es lectura de la tarjeta, no aire.",
-   "revertir": "plan.json → lienzo, tramos, tarjetas y medios (y volver a plan.json de ../lucia-g5)"
+   "que": "Duración 26,6 s (G5: 57,5 s). Cada línea de guion-voz.txt es un tramo: caracteres / 17 por segundo (revisión 1, H1; antes palabras / 3,6) + un hueco objetivo de 0,25 s, tope 0,30 s; las 10 tarjetas coinciden con los 10 tramos (build.mjs corta si no). El CTA dura 2,417 s (la regla de marca pide ≥ 2,4 s) y su línea ~1,94 s: la cola de 0,48 s es lectura de la tarjeta, no aire.",
+   "revertir": "plan.json → lienzo, tramos, tarjetas y medios (scripts/retemporizar.mjs los recalcula desde guion-voz.txt) (y volver a plan.json de ../lucia-g5)"
   },
   {
    "id": "V2",
@@ -787,8 +791,8 @@
   },
   {
    "id": "V6",
-   "que": "«Mismo clip: de 0,77 a 0,80.» + «Esa variación cabe en ±0,03.» (6 s) pasan a UNA tarjeta, «Mismo clip: cabe en ±0,03.»; las dos puntas rotuladas 0,77 y 0,80 y la banda ±0,03 siguen sobre la escala ampliada. La voz dice «varía, pero cabe en este margen» (sin cifras con coma).",
-   "revertir": "plan.json → c7 (dos tarjetas) y tramo 7"
+   "que": "«Mismo clip: de 0,77 a 0,80.» + «Esa variación cabe en ±0,03.» (6 s) pasan a UNA tarjeta. v2 la dejó «Mismo clip: cabe en ±0,03.»; la revisión 1 (H4) devolvió el sujeto: «Esa variación cabe en ±0,03.», y el «mismo clip» pasó a la etiqueta de la placa («Cinematic Studio 3.0 · mismo clip»). Las dos puntas rotuladas 0,77 y 0,80 y la banda ±0,03 siguen sobre la escala ampliada. La voz dice «varía, pero cabe en este margen» (sin cifras con coma).",
+   "revertir": "plan.json → c7 (texto «Mismo clip:») y r2.tool.sufijo"
   },
   {
    "id": "V7",
@@ -827,13 +831,38 @@
   },
   {
    "id": "V13",
-   "que": "La voz es solo guion-voz.txt (439 caracteres con saltos de línea, 85 palabras, voseo): NO se generó audio. Las cifras con coma no se dicen (la tarjeta las muestra); «0 a 1» sí, porque el TTS lo lee «cero a uno».",
+   "que": "La voz es solo guion-voz.txt (418 caracteres con saltos de línea, 82 palabras, voseo): NO se generó audio. Las cifras con coma no se dicen (la tarjeta las muestra); «0 a 1» sí, porque el TTS lo lee «cero a uno».",
    "revertir": "guion-voz.txt"
   },
   {
    "id": "V14",
-   "que": "El pie es nuevo (el del guion aprobado habla de un video de 57 s): mismo texto de G5 + «Una imagen con otra cara queda bajo el piso: otra persona.» y «el medidor avisa y la reviso a ojo». Lo comprueba build.mjs contra pantalla y voz.",
+   "que": "El pie es nuevo (el del guion aprobado habla de un video de 57 s). Revisión 1: abre con «Personaje hecho con IA: Lucía Antelo, de @oniahq.» (H3), nombra al medidor («un medidor (ArcFace)», H9) y cambia «Son tomas sueltas, no una comparación de herramientas.» por «Una toma de cada una: es una prueba, no una regla. En otras dos escenas, Kling O1 Image dio 0,79 y 0,83.» (H2). Lo comprueba build.mjs contra pantalla, voz y PROCEDENCIA.",
    "revertir": "pie.txt"
+  },
+  {
+   "id": "R1-H1",
+   "que": "Voz: L2 «Ocho fotos oficiales de ella.», L3 «Un medidor las compara y da un número de 0 a 1.», L4 «Idéntica es uno. El piso lo elegí yo.», L8 «El número no ve los letreros inventados.» (el encargo decía sin «los»: con 36 caracteres el tramo no puede pasar de 2,42 s con hueco ≤ 0,30 s y la tarjeta c8 y la llamada de la placa (6 palabras cada una) piden 2,5 y 2,6 s; con «los» son 40 caracteres, 2,35 s de voz y un tramo de 2,625 s con hueco de 0,27 s). Tiempo de la voz en caracteres a 17/s; duraciones.json (si existe) manda; retemporizar.mjs mueve todo.",
+   "revertir": "guion-voz.txt; scripts/voz.mjs (CPS); plan.json → voz.lectura_min_cuadros"
+  },
+  {
+   "id": "R1-H4",
+   "que": "Tarjeta c7 «Esa variación cabe en ±0,03.» y etiqueta «Cinematic Studio 3.0 · mismo clip» (misma ventana de lectura).",
+   "revertir": "plan.json → c7 y r2.tool.sufijo"
+  },
+  {
+   "id": "R1-H6",
+   "que": "Nombres de herramienta (etiquetas y pastillas) y marcas de las escalas a 42 px (antes 34-38).",
+   "revertir": "scripts/estilos.css → .tag.tool, .tag-d, .ax"
+  },
+  {
+   "id": "R1-H10",
+   "que": "Aro de r3 dentro del marco del cuadro (x 4, ancho 224); marca del piso de la escala 0-1 sin tocar su pastilla (etiqueta a y 700); nota de r1 a y 1050 (la etiqueta sube a 42 px).",
+   "revertir": "plan.json → r3.aro, p2.escala.marca_label_y, r1.nota.y"
+  },
+  {
+   "id": "R1-aire",
+   "que": "Eventos nuevos con sentido para que no quede aire fuera de la lectura al cambiar los tramos: la lupa de la razón 1 vuelve a marcar en «a ojo», la banda de la razón 2 destella en «este margen»; acentos de tarjeta sincronizados con la palabra de la voz (ancla en plan.rel).",
+   "revertir": "plan.json → rel, r1.lupa_ping_t, r2.banda_ping_t; scripts/timeline.js"
   }
  ],
  "rel": {
@@ -883,7 +912,10 @@
   ],
   "p2.escala.marca_t": [
    4,
-   0.95
+   {
+    "ancla": "el piso",
+    "dt": -0.1
+   }
   ],
   "ejemplos.0.t": [
    5,
@@ -895,7 +927,7 @@
   ],
   "ejemplos.0.fin": [
    5,
-   2.6
+   2.45
   ],
   "r1.box_t": [
    6,
@@ -915,11 +947,15 @@
   ],
   "r2.d2.t": [
    7,
-   0.75
+   {
+    "ancla": "varía"
+   }
   ],
   "r2.banda.t": [
    7,
-   1.3
+   {
+    "ancla": "cabe en"
+   }
   ],
   "r3.aro.t": [
    8,
@@ -987,12 +1023,24 @@
   "tarjetas.8.acento_t": [
    9,
    {
-    "ancla": "imagen"
+    "ancla": "entera"
    }
   ],
   "tarjetas.9.acento_t": [
    10,
    1.9
+  ],
+  "r1.lupa_ping_t": [
+   6,
+   {
+    "ancla": "a ojo"
+   }
+  ],
+  "r2.banda_ping_t": [
+   7,
+   {
+    "ancla": "este margen"
+   }
   ]
  }
 }

@@ -10,7 +10,7 @@
 //    Cada evento va con la palabra que la voz dirá (guion-voz.txt) y SIEMPRE dice algo: no hay vaivén ocioso. Lo que lleva texto largo (nota de la razón 1,
 //    llamada de la razón 3, marcas de la razón 2) ya está en la placa cuando llega, para tener ventana de lectura sin esperar.
 const tl = gsap.timeline({ paused: true });
-const { E_IN, E_OUT, FR, PUSH, PEASE, W, ACC } = PLAN;
+const { E_IN, E_OUT, FR, PUSH, PEASE, W, ACC, BAD } = PLAN;
 const IN_X = 80, OUT_X = -80;
 const enter = (sel, a, o = {}) => tl.fromTo(sel, { x: o.x ?? IN_X, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: o.d ?? E_IN, ease: 'power3.out' }, a);
 const leave = (sel, b, o = {}) => tl.to(sel, { x: o.x ?? OUT_X, autoAlpha: 0, duration: o.d ?? E_OUT, ease: 'power3.in' }, b - (o.d ?? E_OUT));
@@ -41,7 +41,8 @@ for (const c of PLAN.tarjetas) {
   if (!c.en_empuje_entra && !c.desde_cero) enter('#' + c.id, c.a);
   if (c.b < FIN && !c.en_empuje_sale) leave('#' + c.id, c.b);
   // acento tardío: la segunda mitad de la frase se enciende cuando la voz la dice (evento visual real, sin texto nuevo)
-  if (c.acento_t) tl.to('#' + c.id + ' b.late', { color: ACC, duration: c.acento_dur, ease: 'none' }, c.acento_t);
+  // (revisión 1: la tarjeta que dice «otra persona» enciende su acento en CORAL, el color de lo que cae bajo el piso; en G4/G5 se encendía en verde, el color de lo que pasa)
+  if (c.acento_t) tl.to('#' + c.id + ' b.late', { color: c.bad ? BAD : ACC, duration: c.acento_dur, ease: 'none' }, c.acento_t);
 }
 
 // ── datos (pastilla «parecido 0,81» sobre la tarjeta): entran y salen antes del empuje de salida
@@ -77,6 +78,8 @@ for (const m of PLAN.datos) { enter('#dA-' + m.id, m.a, { x: 60 }); leave('#dA-'
   enter('#r1-tag', R.tag_t, { x: 50 });
   tl.fromTo('#r1-lineas', { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.25, ease: 'none' }, R.lupa_t);
   enter('#r1-lupa', R.lupa_t, { x: 70, d: 0.28 });
+  // la lupa vuelve a marcar cuando la voz dice «a ojo» (evento con sentido: lo que se reviso a ojo es esa cara)
+  tl.fromTo('#r1-lupa', { scale: 1 }, { scale: 1.06, duration: 0.16, ease: 'power2.out', yoyo: true, repeat: 1, immediateRender: false, transformOrigin: '50% 50%' }, R.ping);
 }
 
 // ── razón 2: las dos puntas del MISMO clip (0,77 y 0,80), luego la banda de ±0,03 alrededor de su promedio con su corchete
@@ -89,6 +92,9 @@ for (const m of PLAN.datos) { enter('#dA-' + m.id, m.a, { x: 60 }); leave('#dA-'
   tl.fromTo('#r2-band', { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4, ease: 'none' }, R.banda);
   tl.fromTo('#r2-brk', { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.3, ease: 'power3.out' }, R.banda);
   tl.fromTo('#r2-bl', { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.2, ease: 'none' }, R.banda + 0.15);
+  // la banda vuelve a marcar («este margen»): destello verde y la etiqueta ±0,03 late una vez
+  tl.fromTo('#r2-band', { backgroundColor: 'rgba(246,248,251,0.15)' }, { backgroundColor: 'rgba(16,194,107,0.34)', duration: 0.3, ease: 'power2.out', yoyo: true, repeat: 1, immediateRender: false }, R.ping);
+  tl.fromTo('#r2-bl', { scale: 1 }, { scale: 1.14, duration: 0.3, ease: 'power2.out', yoyo: true, repeat: 1, immediateRender: false, transformOrigin: '50% 50%' }, R.ping);
 }
 
 // ── razón 3: el aro cae sobre lo difuminado (la llamada «Lo difuminé: lo inventó el motor.» ya está en la placa al llegar), el número que el programa le dio,

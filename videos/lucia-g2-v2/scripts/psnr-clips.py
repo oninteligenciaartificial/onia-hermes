@@ -35,13 +35,13 @@ for k, ns in (('m1', [12, 30, 50]), ('m3', [14, 36, 58]), ('m5', [14, 50, 84])):
     for n in ns:
         casos.append((k, k, n))
 for n in [12, 36, 66]:
-    casos.append(('k1', 'm1', n))               # el cierre arranca en el cuadro 66 del clip (media_inicio 2,75 s): n es el cuadro del cierre, la fuente es n + 66
+    casos.append(('k1', 'm1', n))               # el cierre arranca en el cuadro 54 del clip (media_inicio 2,25 s): n es el cuadro del cierre, la fuente es n + 54
 print('PSNR del final contra la fuente (franja y 250-1000, fuente llevada a 1080x1920 con lanczos). Pico esperado en el cuadro n.')
 print(f"{'medio':6} {'cuadro n':>8} {'t_final':>8}   " + '   '.join(f'n{d:+d}' for d in range(-2, 3)) + '    pico   ΔRGB(media)')
 malos = 0
 for mid, src, n in casos:
     a = med[mid]['a']
-    off = int(round(med[mid].get('media_inicio', 0) * 24))          # offset del clip fuente (cierre K1: 66 cuadros)
+    off = int(round(med[mid].get('media_inicio', 0) * 24))          # offset del clip fuente (cierre K1: 54 cuadros)
     F = round((a + n / 24) * 24)
     fin = os.path.join(tmp, f'fin_{mid}_{n}.png')
     frame(final, F, fin, False)

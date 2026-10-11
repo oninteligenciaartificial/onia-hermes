@@ -36,7 +36,8 @@ const PROHIBIDAS = [
 ];
 // D-N1 (11-oct-2026, Sergio Urcullo): SOLO estas herramientas se pueden nombrar, con su nombre completo, como uso propio y no como recomendación pagada. Se quitan del texto antes de buscar
 // las prohibidas (así «kling», «seedream», «seedance», «cinematic», «gpt», «flux» o «nano banana» sueltos, y toda otra marca, siguen prohibidos).
-const PERMITIDAS = ['Seedance 2.0 Mini + referencias', 'Seedance 2.0 Mini', 'Cinematic Studio 3.0', 'Nano Banana 2.1', 'Seedream 5.0 Pro', 'Kling O1 Image', 'GPT Image 2.5', 'Kling 3.0 std', 'Kling 3.0 pro', 'Seedream 4.5', 'Kling O3', 'FLUX 3'];
+// Revisión 1 (11-oct, H9): «ArcFace» (el modelo abierto que mide el parecido; el guion G5 aprobado lo permite) se puede NOMBRAR en el pie; scrfd, buffalo e insightface siguen prohibidos.
+const PERMITIDAS = ['ArcFace', 'Seedance 2.0 Mini + referencias', 'Seedance 2.0 Mini', 'Cinematic Studio 3.0', 'Nano Banana 2.1', 'Seedream 5.0 Pro', 'Kling O1 Image', 'GPT Image 2.5', 'Kling 3.0 std', 'Kling 3.0 pro', 'Seedream 4.5', 'Kling O3', 'FLUX 3'];
 const sinPermitidas = (t) => PERMITIDAS.reduce((x, n) => x.split(new RegExp(n.replace(/[.+*?^${}()|[\]\\]/g, '\\$&'), 'gi')).join(' '), t);
 // frases que suenan a «el mejor» o a recomendación general (siguen prohibidas con los nombres permitidos)
 const MEJOR = ['el mejor', 'la mejor', 'los mejores', 'lo mejor', 'recomiend', 'recomendamos', 'te conviene', 'usá este', 'mejor que'];

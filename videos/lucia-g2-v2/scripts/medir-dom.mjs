@@ -29,7 +29,7 @@ const mentonEn = (t) => {
   const d = (id, datos) => {
     const m = med[id];
     if (t < m.a || t >= m.b) return null;
-    const f = (t - m.a) * FPS + (m.media_inicio || 0) * FPS;     // el cierre K1 arranca en el cuadro 66 del clip (media_inicio 2,75 s)
+    const f = (t - m.a) * FPS + (m.media_inicio || 0) * FPS;     // el cierre K1 arranca en el cuadro 54 del clip (media_inicio 2,25 s)
     const filas = datos.filter((r) => r[1] && Math.abs(r[0] - f) <= 2.5);
     return filas.length ? Math.max(...filas.map((r) => r[1][3])) : null;
   };

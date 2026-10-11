@@ -11,7 +11,7 @@ import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { CUPO, GAP_MAX, GAP_OBJ, CPS } from './voz.mjs';
+import { CUPO, GAP_MAX, GAP_OBJ, CPS, leerDuraciones } from './voz.mjs';
 import { cronogramaDelPlan, retemporizar, diferencias } from './retemporizar.mjs';
 
 const P = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -268,7 +268,7 @@ const lecturas = [];
   const r = plan.r2;
   L('r2-mkl', 'r2 «piso»', `piso · ${fm(SC.piso)}`, llega('pl-r2'), fin('pl-r2'));
   L('r2-zoom', 'r2 «Zoom»', r.zoom.texto, llega('pl-r2'), fin('pl-r2'));
-  L('tool-r2', 'r2 herramienta (ya está al llegar)', plan.herramientas[r.tool.herr], llega('pl-r2'), fin('pl-r2'));
+  L('tool-r2', 'r2 herramienta (ya está al llegar)', plan.herramientas[r.tool.herr] + (r.tool.sufijo || ''), llega('pl-r2'), fin('pl-r2'));
   r.marcas.forEach((m, i) => L(`r2-m${i + 1}`, `r2 marca ${fm(m)}`, fm(m), llega('pl-r2'), fin('pl-r2')));
   L('r2-v1', 'r2 valor 1', fm(r.d1.valor), r.d1.t + 0.25, fin('pl-r2')); L('r2-v2', 'r2 valor 2', fm(r.d2.valor), r.d2.t + 0.25, fin('pl-r2'));
   L('r2-bl', 'r2 banda', `±${fm(r.banda.mas_menos)}`, r.banda.t + 0.3, fin('pl-r2'));
@@ -352,7 +352,7 @@ const datos = [];                                                     // lo que 
   h += `<svg class="ab" id="r1-lineas" style="left:0;top:0" width="1080" height="1000" viewBox="0 0 1080 1000"><line x1="${lx1}" y1="${ly1}" x2="${lp.x}" y2="${lp.y + lp.h / 2}" stroke="${BAD}" stroke-width="5" stroke-opacity=".9" stroke-linecap="round"/></svg>`;
   h += `<div class="lupa bad" id="r1-lupa" style="left:${lp.x}px;top:${lp.y}px;width:${lp.w}px;height:${lp.h}px;background-image:url(${plan.frames.m5.src});background-size:${bgw}px ${bgh}px;background-position:${bgx}px ${bgy}px"></div>`;
   h += cent(540, r1.nota.y, `<span class="note" id="r1-nota">${esc(r1.nota.texto)}</span>`, 940);
-  h += `<div class="ab" style="left:${r1.tool.x}px;top:${r1.tool.y}px"><span class="tag" id="tool-r1">${esc(plan.herramientas[r1.tool.herr])}</span></div>`;
+  h += `<div class="ab" style="left:${r1.tool.x}px;top:${r1.tool.y}px"><span class="tag tool" id="tool-r1">${esc(plan.herramientas[r1.tool.herr])}</span></div>`;
   html += FULLDIV('pl-r1', med['pl-r1'].a, med['pl-r1'].b, 4, h, 'pl');
   plan.r1._geom = { L, T, BW, BH, s, bgx, bgy };
 }
@@ -367,7 +367,7 @@ const datos = [];                                                     // lo que 
   h += `<div class="mkv" id="r2-mk" style="left:${xp}px;top:${y - 33}px;height:${r.y_inferior - 4 - (y - 33)}px"></div>`;
   h += `<div class="ab" style="left:${xp - 40}px;top:${r.y_inferior}px"><span class="tag tag-d" id="r2-mkl"><i></i>piso · <b>${fm(SC.piso)}</b></span></div>`;
   h += `<div class="ab" style="left:560px;width:440px;top:${r.y_inferior + 12}px;text-align:right"><span class="cap2" id="r2-zoom">${esc(r.zoom.texto)}</span></div>`;
-  h += cent(540, r.tool.y, `<span class="tag" id="tool-r2">${esc(plan.herramientas[r.tool.herr])}</span>`, 760);
+  h += cent(540, r.tool.y, `<span class="tag tool" id="tool-r2">${esc(plan.herramientas[r.tool.herr] + (r.tool.sufijo || ''))}</span>`, 760);
   h += `<div class="brk" id="r2-brk" style="left:${x1}px;top:${r.y_banda_linea}px;width:${x2 - x1}px"></div>`;
   h += cent((x1 + x2) / 2, r.y_banda_label, `<span class="note g" id="r2-bl">±${fm(b.mas_menos)}</span>`, 300);
   h += `<div class="dot f" id="r2-d1" style="left:${X2(r.d1.raw)}px;top:${y}px"></div><div class="dot f" id="r2-d2" style="left:${X2(r.d2.raw)}px;top:${y}px"></div>`;
@@ -394,7 +394,7 @@ const datos = [];                                                     // lo que 
   h += `<div class="aro" id="r3-aro" style="left:${w_.x + a.x}px;top:${w_.y + a.y}px;width:${a.w}px;height:${a.h}px;border-radius:34px"></div>`;
   h += `<div class="call" id="r3-call" style="left:${c.x}px;top:${c.y}px">${esc(c.texto).replace('\n', '<br>')}</div>`;
   h += cent(540, r3.pills_y, `<span class="tag tag-d dg" id="r3-num"><i></i>parecido <b>${fm(num)}</b></span>`, 980);
-  h += cent(540, r3.tool.y, `<span class="tag" id="tool-r3">${esc(plan.herramientas[r3.tool.herr])}</span>`, 940);
+  h += cent(540, r3.tool.y, `<span class="tag tool" id="tool-r3">${esc(plan.herramientas[r3.tool.herr])}</span>`, 940);
   html += FULLDIV('pl-r3', med['pl-r3'].a, med['pl-r3'].b, 4, h, 'pl');
   datos.push({ que: 'r3 número en pantalla', sel: '#r3-num b', t: r3.pill_num_t + 0.6, txt: fm(num) });
 }
@@ -427,15 +427,15 @@ const costuras = plan.costuras.filter((c) => c.tipo === 'empuje').map((c) => ({
 }));
 const PLAN_JS = {
   W, H, FR, PUSH, PEASE: plan.empuje.ease, E_IN, E_OUT, costuras, ACC, DUR,
-  zoom: plan.zoom.fin,
+  zoom: plan.zoom.fin, BAD,
   fotos: fotosPlan, cajas,
-  tarjetas: plan.tarjetas.map(({ id, a, entra, b, acento_t, acento_dur }) => ({ id, a: +entra, b, desde_cero: a === 0, acento_t: acento_t || null, acento_dur: acento_dur || 0.2, en_empuje_entra: viajaEntra.has(id), en_empuje_sale: viajaSale.has(id) })),
+  tarjetas: plan.tarjetas.map(({ id, a, entra, b, acento_t, acento_dur, color }) => ({ id, a: +entra, b, desde_cero: a === 0, bad: color === 'bad', acento_t: acento_t || null, acento_dur: acento_dur || 0.2, en_empuje_entra: viajaEntra.has(id), en_empuje_sale: viajaSale.has(id) })),
   rotulo: plan.rotulo,
   datos: Object.values(dato).map((m) => ({ id: m.id, a: m.t, fin: m.fin })),
   p1: { fila2: plan.p1.refs.fila2_t, esc: plan.p1.refs.escalon, aro_t: plan.p1.aro_t },
   p2: { flecha_t: plan.p2.flecha.t, ...plan.p2.escala, cursor_dx: X(1) - X(0) },
-  r1: { box_t: plan.r1.box_t, tag_t: plan.r1.tag_t, lupa_t: plan.r1.lupa_t },
-  r2: { d1: plan.r2.d1.t, d2: plan.r2.d2.t, banda: plan.r2.banda.t },
+  r1: { box_t: plan.r1.box_t, tag_t: plan.r1.tag_t, lupa_t: plan.r1.lupa_t, ping: plan.r1.lupa_ping_t },
+  r2: { d1: plan.r2.d1.t, d2: plan.r2.d2.t, banda: plan.r2.banda.t, ping: plan.r2.banda_ping_t },
   r3: { aro: plan.r3.aro.t, ping: plan.r3.aro.ping_t, num: plan.r3.pill_num_t },
 };
 const out = `<!doctype html>
@@ -472,8 +472,8 @@ ev_(plan.rotulo.b, 'rótulo IA sale'); ev_(plan.gancho.caja_t, 'gancho caja de c
 plan.refs.recortes.slice(4).forEach((m, i) => ev_(plan.p1.refs.fila2_t + i * plan.p1.refs.escalon, 'p1 ref ' + (i + 5))); ev_(plan.p1.aro_t, 'p1 aro de las 8');
 const es = plan.p2.escala; ev_(plan.p2.flecha.t, 'p2 flecha'); ev_(es.dibuja_t, 'p2 escala'); ev_(es.ejes_t, 'p2 ejes'); ev_(es.cursor_t, 'p2 cursor sale de 0'); ev_(es.cursor_t + es.cursor_dura, 'p2 cursor llega a 1'); ev_(es.uno_t, 'p2 «1» se enciende'); ev_(es.marca_t, 'p2 marca 0,70');
 for (const e of plan.ejemplos) { ev_(e.box_t, e.id + ' caja'); ev_(e.t, e.id + ' dato'); ev_(e.fin, e.id + ' dato sale'); }
-const q1 = plan.r1; ev_(q1.box_t, 'r1 caja'); ev_(q1.tag_t, 'r1 «89 px»'); ev_(q1.lupa_t, 'r1 lupa');
-const q2 = plan.r2; ev_(q2.d1.t, 'r2 punta baja'); ev_(q2.d2.t, 'r2 punta alta'); ev_(q2.banda.t, 'r2 banda');
+const q1 = plan.r1; ev_(q1.box_t, 'r1 caja'); ev_(q1.tag_t, 'r1 «89 px»'); ev_(q1.lupa_t, 'r1 lupa'); ev_(q1.lupa_ping_t, 'r1 la lupa marca «a ojo»');
+const q2 = plan.r2; ev_(q2.d1.t, 'r2 punta baja'); ev_(q2.d2.t, 'r2 punta alta'); ev_(q2.banda.t, 'r2 banda'); ev_(q2.banda_ping_t, 'r2 la banda marca «este margen»');
 const q3 = plan.r3; ev_(q3.aro.t, 'r3 aro'); ev_(q3.aro.ping_t, 'r3 aro marca «este lo difuminé»'); ev_(q3.pill_num_t, 'r3 número');
 for (const c of plan.costuras) ev_(c.t, 'costura');
 fs.mkdirSync(path.join(P, 'qa'), { recursive: true });
@@ -483,7 +483,7 @@ fs.writeFileSync(path.join(P, 'qa/datos-plan.json'), JSON.stringify(datos, null,
 fs.writeFileSync(path.join(P, 'qa/tramos-voz.json'), JSON.stringify(voces.map(({ n, linea, palabras, chars, voz_s, a, b, hueco, ultimo, tarjeta }) => ({ n, linea, palabras, chars, voz_s: +voz_s.toFixed(3), a: +a.toFixed(4), b: +b.toFixed(4), dura: +(b - a).toFixed(4), hueco: +hueco.toFixed(3), ultimo, tarjeta })), null, 1));
 
 // ───────────────────────── 4) tabla de cortes ─────────────────────────
-console.log('Tramos de voz (guion-voz.txt: palabras / 3,6 + hueco ≤ 0,25 s; ≤ ' + CUPO + ' caracteres):');
+console.log(`Tramos de voz (guion-voz.txt: caracteres / ${CPS} por segundo${leerDuraciones(P) ? ' → duraciones REALES de duraciones.json' : ' (estimado: aún no hay voz)'} + hueco ≤ ${GAP_OBJ}-${GAP_MAX} s; ≤ ${CUPO} caracteres):`);
 for (const v of voces) console.log(`  t${String(v.n).padEnd(2)} ${v.a.toFixed(3).padStart(7)} – ${v.b.toFixed(3).padEnd(7)} ${String(v.palabras).padStart(2)} pal ${String(v.chars).padStart(2)} car  voz ${v.voz_s.toFixed(2)} s  hueco ${v.hueco.toFixed(3)} s  ${v.tarjeta}  «${v.linea}»${v.ultimo ? '  (CTA: la tarjeta se lee ' + (v.b - v.a).toFixed(2) + ' s, la voz dura ' + v.voz_s.toFixed(2) + ' s)' : ''}`);
 console.log(`  total: ${voces.reduce((s_, v) => s_ + v.palabras, 0)} palabras, ${crono.chars} caracteres con saltos de línea (${vozTxt.replace(/\n/g, '').length} sin ellos), ${DUR.toFixed(3)} s`);
 console.log('Tabla de cortes (t en s):');

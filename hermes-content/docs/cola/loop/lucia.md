@@ -17,8 +17,10 @@
 > en `docs/handoff/codex-tareas/`. Al marcar `[x]` anoto `modelos: …` y `codex:<id>` si hubo.
 
 - [~] Re-cortes MUDOS v2 de G3, G2, G4, G5 (≤30 s, regla 15, nombres reales D-N1) — `videos/lucia-g{3,2,4,5}-v2/`. modelos: editor sonnet (sin `model` explícito) ·
-  revisor G5 sonnet (sin `model` explícito) · arreglos G5 sonnet explícito. Estado: G5 revisado (aprobado con cambios, 11 hallazgos, arreglos en curso); G2/G3/G4 en edición.
-  **LISTA PARA MOSTRAR** al pasar cada una revisión independiente y quedar commiteada.
+  revisor G5 sonnet (sin `model` explícito) · arreglos G5 sonnet explícito · (11-oct, tarde) editor G4 y revisor G2 también sin `model` explícito (heredan sonnet-5-5); desde aquí `model: sonnet` explícito.
+  Estado 11-oct ~05:30 UTC: **G5** revisado (11 hallazgos), arreglos en curso · **G4** revisado (`videos/lucia-g4-v2/qa/revision-1.md`: aprobado con cambios, 0 ALTA · 4 MEDIA · 6 BAJA; cifras verificadas contra PROCEDENCIA l.97), editor aplicando H1-H10 (pie con «una toma cada uno» corregido, título en el cuadro 0, número antes de los 3 s; voz solo texto, medida en caracteres a ~17 car/s) ·
+  **G2** editada (26,5 s, muda, 0 cr), revisor independiente en curso · **G3** revisor independiente en curso. Pendiente al cerrar cada una: SHA final en `videos/lucia-entrega/README.md` y commit «LISTA PARA MOSTRAR: <pieza>». La «regla 15» sigue sin escribirse en `edicion-referentes/SKILL.md` (G2 y G4 la aplicaron del encargo): escribirla al cerrar.
+  **Sin voz hasta el sí de la madre:** cupo ElevenLabs 381 car hasta el 13-oct 01:17 UTC contra ~437 car del guion G4. **LISTA PARA MOSTRAR** al pasar cada una revisión independiente y quedar commiteada.
 - [~] ~~G1 con la captura real de Pendientes de la demo~~ — **reemplazada por la premisa v5** (Sergio Urcullo, 8-oct: *«Lucía no
   es necesario que muestres el producto… grabar y aprender a usar Higgsfield es tu tarea»*). G1 salió sin producto:
   `videos/lucia-g1/` (`e35bb77d1`, `ec26f3bb6`). La captura de Pendientes queda para Marca, no para Lucía.
