@@ -1,0 +1,709 @@
+{
+ "words": [
+  {
+   "word": "Si",
+   "start": 0.118,
+   "end": 0.24
+  },
+  {
+   "word": "tu",
+   "start": 0.24,
+   "end": 0.38
+  },
+  {
+   "word": "Gemini",
+   "start": 0.38,
+   "end": 0.78
+  },
+  {
+   "word": "CLI",
+   "start": 0.78,
+   "end": 1.2
+  },
+  {
+   "word": "dejó",
+   "start": 1.2,
+   "end": 1.48
+  },
+  {
+   "word": "de",
+   "start": 1.48,
+   "end": 1.56
+  },
+  {
+   "word": "contestar,",
+   "start": 1.56,
+   "end": 2.092
+  },
+  {
+   "word": "no",
+   "start": 2.331,
+   "end": 2.51
+  },
+  {
+   "word": "fue",
+   "start": 2.51,
+   "end": 2.75
+  },
+  {
+   "word": "por",
+   "start": 2.75,
+   "end": 3.13
+  },
+  {
+   "word": "tu",
+   "start": 3.13,
+   "end": 3.23
+  },
+  {
+   "word": "computadora,",
+   "start": 3.23,
+   "end": 3.85
+  },
+  {
+   "word": "simplemente",
+   "start": 4.116,
+   "end": 4.42
+  },
+  {
+   "word": "fue",
+   "start": 4.42,
+   "end": 4.82
+  },
+  {
+   "word": "que",
+   "start": 4.82,
+   "end": 4.98
+  },
+  {
+   "word": "Google",
+   "start": 4.98,
+   "end": 5.28
+  },
+  {
+   "word": "lo",
+   "start": 5.28,
+   "end": 5.66
+  },
+  {
+   "word": "apagó",
+   "start": 5.66,
+   "end": 6.04
+  },
+  {
+   "word": "el",
+   "start": 6.04,
+   "end": 6.2
+  },
+  {
+   "word": "18",
+   "start": 6.2,
+   "end": 6.42
+  },
+  {
+   "word": "de",
+   "start": 6.42,
+   "end": 6.7
+  },
+  {
+   "word": "junio",
+   "start": 6.7,
+   "end": 7.06
+  },
+  {
+   "word": "y",
+   "start": 7.06,
+   "end": 7.18
+  },
+  {
+   "word": "lo",
+   "start": 7.18,
+   "end": 7.3
+  },
+  {
+   "word": "cambió",
+   "start": 7.3,
+   "end": 7.64
+  },
+  {
+   "word": "por",
+   "start": 7.64,
+   "end": 7.8
+  },
+  {
+   "word": "Antigravity",
+   "start": 7.8,
+   "end": 8.48
+  },
+  {
+   "word": "CLI",
+   "start": 8.48,
+   "end": 9.237
+  },
+  {
+   "word": "le",
+   "start": 9.48,
+   "end": 9.55
+  },
+  {
+   "word": "pasó",
+   "start": 9.55,
+   "end": 9.89
+  },
+  {
+   "word": "a",
+   "start": 9.89,
+   "end": 10.15
+  },
+  {
+   "word": "quien",
+   "start": 10.15,
+   "end": 10.25
+  },
+  {
+   "word": "lo",
+   "start": 10.25,
+   "end": 10.35
+  },
+  {
+   "word": "usaba",
+   "start": 10.35,
+   "end": 10.61
+  },
+  {
+   "word": "gratis",
+   "start": 10.61,
+   "end": 11.15
+  },
+  {
+   "word": "o",
+   "start": 11.15,
+   "end": 11.31
+  },
+  {
+   "word": "de",
+   "start": 11.31,
+   "end": 11.43
+  },
+  {
+   "word": "pago",
+   "start": 11.43,
+   "end": 11.75
+  },
+  {
+   "word": "en",
+   "start": 11.75,
+   "end": 12.03
+  },
+  {
+   "word": "planes",
+   "start": 12.03,
+   "end": 12.21
+  },
+  {
+   "word": "Pro",
+   "start": 12.21,
+   "end": 12.59
+  },
+  {
+   "word": "o",
+   "start": 12.59,
+   "end": 12.85
+  },
+  {
+   "word": "Ultra.",
+   "start": 12.85,
+   "end": 13.158
+  },
+  {
+   "word": "Y",
+   "start": 13.399,
+   "end": 14.03
+  },
+  {
+   "word": "los",
+   "start": 14.03,
+   "end": 14.13
+  },
+  {
+   "word": "que",
+   "start": 14.13,
+   "end": 14.33
+  },
+  {
+   "word": "lo",
+   "start": 14.33,
+   "end": 14.77
+  },
+  {
+   "word": "usaban,",
+   "start": 14.77,
+   "end": 15.13
+  },
+  {
+   "word": "simplemente",
+   "start": 15.47,
+   "end": 15.61
+  },
+  {
+   "word": "descargate",
+   "start": 15.61,
+   "end": 16.23
+  },
+  {
+   "word": "la",
+   "start": 16.23,
+   "end": 16.59
+  },
+  {
+   "word": "nueva",
+   "start": 16.59,
+   "end": 16.75
+  },
+  {
+   "word": "aplicación",
+   "start": 16.75,
+   "end": 17.33
+  },
+  {
+   "word": "de",
+   "start": 17.33,
+   "end": 17.51
+  },
+  {
+   "word": "Antigravity",
+   "start": 17.51,
+   "end": 18.15
+  },
+  {
+   "word": "y",
+   "start": 18.15,
+   "end": 18.53
+  },
+  {
+   "word": "tenés",
+   "start": 18.53,
+   "end": 18.93
+  },
+  {
+   "word": "los",
+   "start": 18.93,
+   "end": 19.13
+  },
+  {
+   "word": "planes",
+   "start": 19.13,
+   "end": 19.43
+  },
+  {
+   "word": "gratuitos",
+   "start": 19.43,
+   "end": 20.41
+  },
+  {
+   "word": "o",
+   "start": 20.41,
+   "end": 20.57
+  },
+  {
+   "word": "lo",
+   "start": 20.57,
+   "end": 20.65
+  },
+  {
+   "word": "podés",
+   "start": 20.65,
+   "end": 20.79
+  },
+  {
+   "word": "usar",
+   "start": 20.79,
+   "end": 21.07
+  },
+  {
+   "word": "mediante",
+   "start": 21.07,
+   "end": 21.49
+  },
+  {
+   "word": "comando",
+   "start": 21.49,
+   "end": 21.99
+  },
+  {
+   "word": "con",
+   "start": 21.99,
+   "end": 22.43
+  },
+  {
+   "word": "estos",
+   "start": 22.43,
+   "end": 22.9
+  },
+  {
+   "word": "comandos",
+   "start": 22.9,
+   "end": 23.36
+  },
+  {
+   "word": "aquí.",
+   "start": 23.36,
+   "end": 23.58
+  },
+  {
+   "word": "Simplemente",
+   "start": 23.844,
+   "end": 24.33
+  },
+  {
+   "word": "si",
+   "start": 24.33,
+   "end": 24.51
+  },
+  {
+   "word": "lo",
+   "start": 24.51,
+   "end": 24.61
+  },
+  {
+   "word": "haces",
+   "start": 24.61,
+   "end": 24.77
+  },
+  {
+   "word": "mediante",
+   "start": 24.77,
+   "end": 25.17
+  },
+  {
+   "word": "la",
+   "start": 25.17,
+   "end": 25.57
+  },
+  {
+   "word": "terminal,",
+   "start": 25.57,
+   "end": 25.97
+  },
+  {
+   "word": "marcas",
+   "start": 26.363,
+   "end": 26.74
+  },
+  {
+   "word": "tus",
+   "start": 26.74,
+   "end": 27.06
+  },
+  {
+   "word": "extensiones",
+   "start": 27.06,
+   "end": 27.8
+  },
+  {
+   "word": "y",
+   "start": 27.8,
+   "end": 27.92
+  },
+  {
+   "word": "tu",
+   "start": 27.92,
+   "end": 28.0
+  },
+  {
+   "word": "configuración",
+   "start": 28.0,
+   "end": 28.7
+  },
+  {
+   "word": "y",
+   "start": 28.7,
+   "end": 29.06
+  },
+  {
+   "word": "marcas",
+   "start": 29.06,
+   "end": 29.42
+  },
+  {
+   "word": "qué",
+   "start": 29.42,
+   "end": 29.62
+  },
+  {
+   "word": "querés",
+   "start": 29.62,
+   "end": 29.92
+  },
+  {
+   "word": "traer",
+   "start": 29.92,
+   "end": 30.379
+  },
+  {
+   "word": "de",
+   "start": 30.616,
+   "end": 30.67
+  },
+  {
+   "word": "vuelta.",
+   "start": 30.67,
+   "end": 30.95
+  },
+  {
+   "word": "Lo",
+   "start": 31.237,
+   "end": 31.33
+  },
+  {
+   "word": "único",
+   "start": 31.33,
+   "end": 31.55
+  },
+  {
+   "word": "que",
+   "start": 31.55,
+   "end": 31.87
+  },
+  {
+   "word": "si",
+   "start": 31.87,
+   "end": 31.99
+  },
+  {
+   "word": "tenés",
+   "start": 31.99,
+   "end": 32.23
+  },
+  {
+   "word": "alguna",
+   "start": 32.23,
+   "end": 32.45
+  },
+  {
+   "word": "skill",
+   "start": 32.45,
+   "end": 32.73
+  },
+  {
+   "word": "local",
+   "start": 32.73,
+   "end": 33.35
+  },
+  {
+   "word": "instalada,",
+   "start": 33.35,
+   "end": 33.99
+  },
+  {
+   "word": "la",
+   "start": 34.19,
+   "end": 34.37
+  },
+  {
+   "word": "tenés",
+   "start": 34.37,
+   "end": 34.65
+  },
+  {
+   "word": "que",
+   "start": 34.65,
+   "end": 34.81
+  },
+  {
+   "word": "mover",
+   "start": 34.81,
+   "end": 35.07
+  },
+  {
+   "word": "vos",
+   "start": 35.07,
+   "end": 35.59
+  },
+  {
+   "word": "mismo,",
+   "start": 35.59,
+   "end": 35.89
+  },
+  {
+   "word": "entras",
+   "start": 36.15,
+   "end": 36.45
+  },
+  {
+   "word": "a",
+   "start": 36.45,
+   "end": 36.67
+  },
+  {
+   "word": "la",
+   "start": 36.67,
+   "end": 36.77
+  },
+  {
+   "word": "carpeta",
+   "start": 36.77,
+   "end": 37.29
+  },
+  {
+   "word": "de",
+   "start": 37.29,
+   "end": 37.45
+  },
+  {
+   "word": "skills",
+   "start": 37.45,
+   "end": 37.89
+  },
+  {
+   "word": "y",
+   "start": 37.89,
+   "end": 38.21
+  },
+  {
+   "word": "las",
+   "start": 38.21,
+   "end": 38.35
+  },
+  {
+   "word": "arrastras",
+   "start": 38.35,
+   "end": 38.93
+  },
+  {
+   "word": "a",
+   "start": 38.93,
+   "end": 39.27
+  },
+  {
+   "word": "su",
+   "start": 39.27,
+   "end": 39.39
+  },
+  {
+   "word": "nueva",
+   "start": 39.39,
+   "end": 39.55
+  },
+  {
+   "word": "carpeta.",
+   "start": 39.55,
+   "end": 40.018
+  },
+  {
+   "word": "Y",
+   "start": 40.14,
+   "end": 40.3
+  },
+  {
+   "word": "si",
+   "start": 40.3,
+   "end": 40.4
+  },
+  {
+   "word": "querés",
+   "start": 40.4,
+   "end": 40.64
+  },
+  {
+   "word": "ver",
+   "start": 40.64,
+   "end": 40.76
+  },
+  {
+   "word": "el",
+   "start": 40.76,
+   "end": 40.92
+  },
+  {
+   "word": "paso",
+   "start": 40.92,
+   "end": 41.12
+  },
+  {
+   "word": "a",
+   "start": 41.12,
+   "end": 41.28
+  },
+  {
+   "word": "paso",
+   "start": 41.28,
+   "end": 41.42
+  },
+  {
+   "word": "de",
+   "start": 41.42,
+   "end": 41.58
+  },
+  {
+   "word": "cómo",
+   "start": 41.58,
+   "end": 41.74
+  },
+  {
+   "word": "hacerlo",
+   "start": 41.74,
+   "end": 42.18
+  },
+  {
+   "word": "está",
+   "start": 42.18,
+   "end": 42.5
+  },
+  {
+   "word": "en",
+   "start": 42.5,
+   "end": 42.58
+  },
+  {
+   "word": "mi",
+   "start": 42.58,
+   "end": 42.66
+  },
+  {
+   "word": "comunidad",
+   "start": 42.66,
+   "end": 43.2
+  },
+  {
+   "word": "de",
+   "start": 43.2,
+   "end": 43.52
+  },
+  {
+   "word": "WhatsApp,",
+   "start": 43.52,
+   "end": 43.84
+  },
+  {
+   "word": "el",
+   "start": 44.143,
+   "end": 44.28
+  },
+  {
+   "word": "link",
+   "start": 44.28,
+   "end": 44.5
+  },
+  {
+   "word": "está",
+   "start": 44.5,
+   "end": 44.78
+  },
+  {
+   "word": "en",
+   "start": 44.78,
+   "end": 44.92
+  },
+  {
+   "word": "mi",
+   "start": 44.92,
+   "end": 45.04
+  },
+  {
+   "word": "perfil.",
+   "start": 45.04,
+   "end": 45.38
+  }
+ ]
+}

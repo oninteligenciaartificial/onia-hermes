@@ -4,7 +4,8 @@
  * demasiado texto» (pills, tarjetas, header y footer en cada lámina).
  *
  * Cada slide elige `layout`:
- *   logos      Bastian Xu: una palabra gigante espaciada + fila de logos oficiales con nombre.
+ *   logos      Bastian Xu: una palabra gigante espaciada + fila de logos oficiales con nombre. Con varias palabras en el
+ *              título (`\n` = otra línea) se achica por medición; sin `file` en las marcas, van solo con su nombre.
  *   analogia   Bastian Xu: frase corta + imagen de objetos que explica sola (1 o 2 bloques).
  *   ensayo     Bastian Xu: texto grande sobre papel, sin cajas; párrafos cortos.
  *   ilustrado  Santiago Muñoz: título con énfasis de color, ilustración dominante, pie corto,
@@ -35,9 +36,29 @@ function crear({ esc, emph, ACCOUNTS, BRAND, getFmt }) {
   const img = (p, cls) => (p ? `<img class="${cls}" src="${dataUrl(p)}" alt="">` : '');
   const paras = (t) => String(t || '').split(/\n\s*\n/).filter(Boolean).map((x) => `<p>${emph(x.trim())}</p>`).join('');
 
+  // `logos` nació para UNA palabra gigante, espaciada y en mayúsculas (Bastian Xu): ese camino NO cambia (mismo marcado,
+  // sin script) porque los briefs viejos salen igual. Con VARIAS palabras (P2 «7 herramientas. 4 son gratis.», 10-oct):
+  //   - una línea por `\n` del título (`<span class="wl">`), sin letter-spacing ni mayúsculas;
+  //   - el navegador MIDE la línea más ancha, ya con la fuente cargada, y achica la letra de a 3 px hasta que entra con el
+  //     margen de la lámina (84 px): el mismo ajuste que `cierreHtml`;
+  //   - sin ningún `file` en la fila, las marcas van solo con su nombre (clase `solo-nombres`): la fila se envuelve y se centra.
   function logosHtml(s) {
-    const row = (s.logos || []).map((l) => `<figure class="logo">${img(l.file, 'logo-img')}<figcaption>${esc(l.label || '')}</figcaption></figure>`).join('');
-    return `<div class="c-logos"><h1 class="word">${esc(s.headline || '')}</h1><div class="logo-row">${row}</div>${s.body ? `<p class="under">${emph(s.body)}</p>` : ''}</div>`;
+    const titulo = String(s.headline || '');
+    const lineas = titulo.split(/\r?\n/).map((x) => x.trim()).filter(Boolean);
+    const varias = /\S\s+\S/.test(lineas.join(' '));
+    const logos = s.logos || [];
+    const row = logos.map((l) => `<figure class="logo">${img(l.file, 'logo-img')}<figcaption>${esc(l.label || '')}</figcaption></figure>`).join('');
+    const soloNombres = logos.length > 0 && !logos.some((l) => l.file);
+    const h1 = varias
+      ? `<h1 class="word multi">${lineas.map((x) => `<span class="wl">${esc(x)}</span>`).join('')}</h1>`
+      : `<h1 class="word">${esc(titulo)}</h1>`;
+    const fit = varias
+      ? `<script>document.fonts.ready.then(function(){var h=document.querySelector('.c-logos .word');if(!h)return;`
+        + `var ls=h.querySelectorAll('.wl'),max=document.documentElement.clientWidth-2*84,f=parseFloat(getComputedStyle(h).fontSize);`
+        + `function w(){var m=0;ls.forEach(function(e){m=Math.max(m,e.getBoundingClientRect().width);});return m;}`
+        + `h.style.whiteSpace='nowrap';while(w()>max&&f>60){f-=3;h.style.fontSize=f+'px';}});</script>`
+      : '';
+    return `<div class="c-logos">${h1}<div class="logo-row${soloNombres ? ' solo-nombres' : ''}">${row}</div>${s.body ? `<p class="under">${emph(s.body)}</p>` : ''}</div>${fit}`;
   }
 
   function analogiaHtml(s) {
@@ -187,6 +208,14 @@ body{margin:0;font-family:'DM Sans',system-ui,sans-serif}
 .logo{display:flex;flex-direction:column;align-items:center;gap:14px}
 .logo-img{width:200px;height:200px;object-fit:contain;padding:36px;background:#FFFFFF;border-radius:46px;box-shadow:0 1px 0 rgba(10,15,13,.08),0 14px 30px oklch(40% 0.02 85 / .16)}
 .logo figcaption{font-family:'Instrument Serif',Georgia,serif;font-size:40px}
+/* logos con varias palabras (P2, 10-oct): sin espaciado ni mayúsculas, una línea por \n, ajustada por medición (ver logosHtml) */
+.word.multi{letter-spacing:-.025em;margin-right:0;text-transform:none;line-height:1.02}
+.wl{display:block;width:max-content;margin:0 auto}
+/* sin logos: solo nombres, centrados y envueltos en filas parejas */
+.c-logos:has(.solo-nombres){gap:112px}
+.logo-row.solo-nombres{gap:40px 54px;max-width:100%}
+.solo-nombres .logo figcaption{font-size:46px;line-height:1.1;white-space:nowrap}
+.solo-nombres + .under{font-size:56px;max-width:none}
 .under{font-size:42px;color:var(--soft);text-align:center;max-width:800px}
 /* analogia */
 .c-analogia{display:flex;flex-direction:column;justify-content:center;gap:40px}

@@ -1,0 +1,146 @@
+{
+ "titulo": "N06 · Gemini CLI se apagó, llega Antigravity (BORRADOR sobre el corte propuesto)",
+ "nota": "Borrador: sobre el corte PROPUESTO, sin el «ok cortes» de Sergio Urcullo. Textos en pantalla = lo que dijo Sergio o lo que dice la página capturada el 11-oct-2026. Capturas: geminicli.com, developers.googleblog.com (19-may-2026), antigravity.google (home, pricing, docs/cli/install, docs/cli/gcli-migration).",
+ "assets": "capturas",
+ "camara": {},
+ "capturas": [
+  {
+   "id": "gem-aviso",
+   "url": "https://geminicli.com/",
+   "ancho_css": 560,
+   "esquema": "dark",
+   "ancla": null,
+   "alto_css": 130,
+   "fijos": "abajo",
+   "frases": [
+    "Gemini CLI was replaced by Antigravity CLI",
+    "June 18th, 2026"
+   ]
+  },
+  {
+   "id": "blog-plazo",
+   "url": "https://developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli",
+   "ancho_css": 560,
+   "esquema": "light",
+   "ancla": "Important timeline for Consumers",
+   "margen": 14,
+   "alto_css": 330,
+   "fijos": "ocultar",
+   "frases": [
+    "June 18, 2026",
+    "Google AI Pro and Ultra",
+    "free of charge"
+   ]
+  },
+  {
+   "id": "blog-titulo",
+   "url": "https://developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli",
+   "ancho_css": 560,
+   "esquema": "light",
+   "ancla": "An important update:",
+   "margen": 30,
+   "alto_css": 620,
+   "fijos": "ocultar",
+   "frases": [
+    "MAY 19, 2026"
+   ]
+  },
+  {
+   "id": "ag-inicio",
+   "url": "https://antigravity.google/",
+   "ancho_css": 560,
+   "esquema": "light",
+   "ancla": null,
+   "alto_css": 450,
+   "fijos": "abajo",
+   "frases": [
+    "Download on Desktop",
+    "Available on macOS, Windows, Linux, and Googlebook"
+   ]
+  },
+  {
+   "id": "ag-precio",
+   "url": "https://antigravity.google/pricing",
+   "ancho_css": 560,
+   "esquema": "light",
+   "ancla": "For Individuals",
+   "margen": 70,
+   "alto_css": 400,
+   "fijos": "abajo",
+   "frases": [
+    "For Individuals",
+    "$0/month",
+    "Experience Antigravity without a subscription plan"
+   ]
+  },
+  {
+   "id": "ag-instalar-unix",
+   "url": "https://antigravity.google/docs/cli/install/",
+   "ancho_css": 560,
+   "esquema": "dark",
+   "ancla": "Execute the native installer script",
+   "margen": 50,
+   "alto_css": 200,
+   "fijos": "ocultar",
+   "frases": [
+    "curl -fsSL https://antigravity.google/cli/install.sh | bash"
+   ]
+  },
+  {
+   "id": "ag-instalar-win",
+   "url": "https://antigravity.google/docs/cli/install/",
+   "ancho_css": 560,
+   "esquema": "dark",
+   "ancla": "Open PowerShell and execute",
+   "margen": 10,
+   "alto_css": 150,
+   "fijos": "ocultar",
+   "frases": [
+    "irm https://antigravity.google/cli/install.ps1 | iex"
+   ]
+  },
+  {
+   "id": "ag-migracion-inicio",
+   "url": "https://antigravity.google/docs/cli/gcli-migration/",
+   "ancho_css": 560,
+   "esquema": "dark",
+   "ancla": "First-launch onboarding",
+   "margen": 14,
+   "alto_css": 330,
+   "fijos": "ocultar",
+   "frases": [
+    "Select the extensions and global configurations you want to convert",
+    "choose which assets to migrate"
+   ]
+  },
+  {
+   "id": "ag-migracion-skills",
+   "url": "https://antigravity.google/docs/cli/gcli-migration/",
+   "ancho_css": 560,
+   "esquema": "dark",
+   "ancla": "Updated skills paths",
+   "margen": 14,
+   "alto_css": 500,
+   "fijos": "ocultar",
+   "frases": [
+    "Workspace project path",
+    ".agents/skills/",
+    "Action required"
+   ]
+  }
+ ],
+ "logos_svg": [
+  {
+   "id": "logo-gemini",
+   "svg": "hermes-content/references/brand-logos/gemini-color.svg",
+   "alto": 240
+  },
+  {
+   "id": "logo-whatsapp",
+   "svg": "hermes-content/references/brand-logos/whatsapp.svg",
+   "alto": 240
+  }
+ ],
+ "zooms": [],
+ "escenas": []
+}

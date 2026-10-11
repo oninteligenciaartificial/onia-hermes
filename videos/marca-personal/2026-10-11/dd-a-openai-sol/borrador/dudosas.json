@@ -1,0 +1,23 @@
+[
+ {
+  "palabra": "sigo",
+  "bruto_s": 29.86,
+  "bruto_e": 30.14,
+  "salida_s": 25.79,
+  "whisper_oyo": "te siguió recomendando"
+ },
+ {
+  "palabra": "hago",
+  "bruto_s": 47.7,
+  "bruto_e": 47.78,
+  "salida_s": 37.09,
+  "whisper_oyo": "Tavo la cuenta"
+ },
+ {
+  "palabra": "astra",
+  "bruto_s": 64.8,
+  "bruto_e": 65.22,
+  "salida_s": 49.9,
+  "whisper_oyo": "con astra son 400"
+ }
+]

@@ -1,0 +1,12 @@
+Palabras a confirmar con el audio (segundo del BRUTO). Subtítulo = mejor lectura.
+
+bruto   6.22-  6.98 s  Whisper oyó «lo pagó»  ->  subtítulo dice «lo apagó»
+bruto  17.60- 18.22 s  Whisper oyó «descarate»  ->  subtítulo dice «descargate»
+bruto  45.76- 46.88 s  Whisper oyó «carpeta de Ains»  ->  subtítulo dice «carpeta de skills»
+bruto  15.18- 17.12 s  Whisper oyó «Sol, de los que lo usaba»  ->  subtítulo dice «Y los que lo usaban»
+bruto  29.92- 30.58 s  Whisper oyó «lo haces mediante»  ->  motivo: Whisper escribió tuteo (haces); el resto del video es voseo: puede ser «hacés»
+bruto  31.86- 33.38 s  Whisper oyó «marcas tus extensiones»  ->  motivo: Whisper escribió tuteo (marcas); puede ser «marcás»
+bruto  34.28- 35.58 s  Whisper oyó «y marcas qué querés»  ->  motivo: Whisper escribió tuteo (marcas); puede ser «marcás»
+bruto  45.10- 45.66 s  Whisper oyó «entras a»  ->  motivo: Whisper escribió tuteo (entras); puede ser «entrás»
+bruto  47.20- 47.92 s  Whisper oyó «las arrastras»  ->  motivo: Whisper escribió tuteo (arrastras); puede ser «arrastrás»
+bruto   0.00-  1.96 s  Whisper oyó «Si tu Gemini CLI»  ->  motivo: otra pasada de Whisper (sin prompt) oyó «Geminis CLI»; se lee «Gemini CLI»

@@ -1,0 +1,926 @@
+{
+ "nota": "tiempo de SALIDA del cutplan; generado por hacer-segments.py (no editar a mano)",
+ "corte_s": 58.42,
+ "words": [
+  {
+   "word": "El",
+   "start": 0.12,
+   "end": 0.22
+  },
+  {
+   "word": "modelo",
+   "start": 0.22,
+   "end": 0.4
+  },
+  {
+   "word": "nuevo",
+   "start": 0.4,
+   "end": 0.62
+  },
+  {
+   "word": "de",
+   "start": 0.62,
+   "end": 0.76
+  },
+  {
+   "word": "OpenAI",
+   "start": 0.76,
+   "end": 1.12
+  },
+  {
+   "word": "cobra",
+   "start": 1.12,
+   "end": 1.42
+  },
+  {
+   "word": "2",
+   "start": 1.42,
+   "end": 1.72
+  },
+  {
+   "word": "dólares",
+   "start": 1.72,
+   "end": 1.96
+  },
+  {
+   "word": "por",
+   "start": 1.96,
+   "end": 2.24
+  },
+  {
+   "word": "millón",
+   "start": 2.24,
+   "end": 2.64
+  },
+  {
+   "word": "de",
+   "start": 2.64,
+   "end": 3.03
+  },
+  {
+   "word": "token.",
+   "start": 3.03,
+   "end": 3.27
+  },
+  {
+   "word": "El",
+   "start": 3.49,
+   "end": 3.65
+  },
+  {
+   "word": "grande",
+   "start": 3.65,
+   "end": 3.97
+  },
+  {
+   "word": "GPT",
+   "start": 3.97,
+   "end": 4.49
+  },
+  {
+   "word": "6",
+   "start": 4.49,
+   "end": 4.63
+  },
+  {
+   "word": "Astra",
+   "start": 4.63,
+   "end": 4.93
+  },
+  {
+   "word": "cobra",
+   "start": 4.93,
+   "end": 5.35
+  },
+  {
+   "word": "10.",
+   "start": 5.35,
+   "end": 5.77
+  },
+  {
+   "word": "Este",
+   "start": 6.14,
+   "end": 6.38
+  },
+  {
+   "word": "modelo",
+   "start": 6.38,
+   "end": 6.64
+  },
+  {
+   "word": "se",
+   "start": 6.64,
+   "end": 6.9
+  },
+  {
+   "word": "llama",
+   "start": 6.9,
+   "end": 7.04
+  },
+  {
+   "word": "GPT",
+   "start": 7.04,
+   "end": 7.56
+  },
+  {
+   "word": "6.1",
+   "start": 7.56,
+   "end": 8.5
+  },
+  {
+   "word": "Sol,",
+   "start": 8.5,
+   "end": 8.78
+  },
+  {
+   "word": "lo",
+   "start": 8.92,
+   "end": 9.14
+  },
+  {
+   "word": "presentaron",
+   "start": 9.14,
+   "end": 9.64
+  },
+  {
+   "word": "el",
+   "start": 9.64,
+   "end": 9.86
+  },
+  {
+   "word": "29",
+   "start": 9.86,
+   "end": 10.26
+  },
+  {
+   "word": "de",
+   "start": 10.26,
+   "end": 10.48
+  },
+  {
+   "word": "septiembre",
+   "start": 10.48,
+   "end": 10.92
+  },
+  {
+   "word": "en",
+   "start": 10.92,
+   "end": 11.14
+  },
+  {
+   "word": "su",
+   "start": 11.14,
+   "end": 11.26
+  },
+  {
+   "word": "Dev",
+   "start": 11.26,
+   "end": 11.46
+  },
+  {
+   "word": "Day.",
+   "start": 11.46,
+   "end": 11.66
+  },
+  {
+   "word": "Los",
+   "start": 11.83,
+   "end": 12.35
+  },
+  {
+   "word": "dos",
+   "start": 12.35,
+   "end": 12.47
+  },
+  {
+   "word": "cobran",
+   "start": 12.47,
+   "end": 12.87
+  },
+  {
+   "word": "lo",
+   "start": 12.87,
+   "end": 13.19
+  },
+  {
+   "word": "que",
+   "start": 13.19,
+   "end": 13.35
+  },
+  {
+   "word": "entra",
+   "start": 13.35,
+   "end": 13.59
+  },
+  {
+   "word": "y",
+   "start": 13.59,
+   "end": 13.81
+  },
+  {
+   "word": "lo",
+   "start": 13.81,
+   "end": 13.89
+  },
+  {
+   "word": "que",
+   "start": 13.89,
+   "end": 13.99
+  },
+  {
+   "word": "sale.",
+   "start": 13.99,
+   "end": 14.23
+  },
+  {
+   "word": "Sol",
+   "start": 14.51,
+   "end": 14.79
+  },
+  {
+   "word": "cobra",
+   "start": 14.79,
+   "end": 15.27
+  },
+  {
+   "word": "2",
+   "start": 15.27,
+   "end": 15.53
+  },
+  {
+   "word": "y",
+   "start": 15.53,
+   "end": 15.95
+  },
+  {
+   "word": "Astra",
+   "start": 15.95,
+   "end": 16.15
+  },
+  {
+   "word": "cobra",
+   "start": 16.15,
+   "end": 16.45
+  },
+  {
+   "word": "10.",
+   "start": 16.45,
+   "end": 16.81
+  },
+  {
+   "word": "Y",
+   "start": 17.1,
+   "end": 17.24
+  },
+  {
+   "word": "según",
+   "start": 17.24,
+   "end": 17.38
+  },
+  {
+   "word": "OpenAI",
+   "start": 17.38,
+   "end": 18.04
+  },
+  {
+   "word": "Sol",
+   "start": 18.04,
+   "end": 18.52
+  },
+  {
+   "word": "se",
+   "start": 18.52,
+   "end": 18.74
+  },
+  {
+   "word": "acerca",
+   "start": 18.74,
+   "end": 19.0
+  },
+  {
+   "word": "Astra.",
+   "start": 19.0,
+   "end": 19.36
+  },
+  {
+   "word": "Si",
+   "start": 19.68,
+   "end": 19.8
+  },
+  {
+   "word": "tu",
+   "start": 19.8,
+   "end": 19.92
+  },
+  {
+   "word": "bot",
+   "start": 19.92,
+   "end": 20.1
+  },
+  {
+   "word": "usa",
+   "start": 20.1,
+   "end": 20.36
+  },
+  {
+   "word": "Astra",
+   "start": 20.36,
+   "end": 20.7
+  },
+  {
+   "word": "yo",
+   "start": 20.7,
+   "end": 20.96
+  },
+  {
+   "word": "lo",
+   "start": 20.96,
+   "end": 21.06
+  },
+  {
+   "word": "probaría",
+   "start": 21.06,
+   "end": 21.4
+  },
+  {
+   "word": "con",
+   "start": 21.4,
+   "end": 21.62
+  },
+  {
+   "word": "Sol",
+   "start": 21.62,
+   "end": 21.86
+  },
+  {
+   "word": "antes",
+   "start": 21.86,
+   "end": 22.16
+  },
+  {
+   "word": "de",
+   "start": 22.16,
+   "end": 22.3
+  },
+  {
+   "word": "cambiarlo.",
+   "start": 22.3,
+   "end": 22.74
+  },
+  {
+   "word": "Pero",
+   "start": 22.97,
+   "end": 23.11
+  },
+  {
+   "word": "para",
+   "start": 23.11,
+   "end": 23.31
+  },
+  {
+   "word": "investigación",
+   "start": 23.31,
+   "end": 23.71
+  },
+  {
+   "word": "científica",
+   "start": 23.71,
+   "end": 24.61
+  },
+  {
+   "word": "y",
+   "start": 24.61,
+   "end": 24.75
+  },
+  {
+   "word": "programación",
+   "start": 24.75,
+   "end": 25.39
+  },
+  {
+   "word": "te",
+   "start": 25.39,
+   "end": 25.79
+  },
+  {
+   "word": "sigo",
+   "start": 25.79,
+   "end": 26.07
+  },
+  {
+   "word": "recomendando",
+   "start": 26.07,
+   "end": 26.83
+  },
+  {
+   "word": "Astra,",
+   "start": 26.83,
+   "end": 27.23
+  },
+  {
+   "word": "pero",
+   "start": 27.48,
+   "end": 27.62
+  },
+  {
+   "word": "hay",
+   "start": 27.62,
+   "end": 27.88
+  },
+  {
+   "word": "una",
+   "start": 27.88,
+   "end": 28.0
+  },
+  {
+   "word": "tarifa",
+   "start": 28.0,
+   "end": 28.34
+  },
+  {
+   "word": "mucho",
+   "start": 28.34,
+   "end": 28.56
+  },
+  {
+   "word": "más",
+   "start": 28.56,
+   "end": 28.76
+  },
+  {
+   "word": "económica,",
+   "start": 28.76,
+   "end": 29.3
+  },
+  {
+   "word": "la",
+   "start": 29.7,
+   "end": 29.74
+  },
+  {
+   "word": "caché",
+   "start": 29.74,
+   "end": 30.08
+  },
+  {
+   "word": "es",
+   "start": 30.08,
+   "end": 30.48
+  },
+  {
+   "word": "lo",
+   "start": 30.48,
+   "end": 30.6
+  },
+  {
+   "word": "que",
+   "start": 30.6,
+   "end": 30.74
+  },
+  {
+   "word": "va",
+   "start": 30.74,
+   "end": 30.94
+  },
+  {
+   "word": "igual",
+   "start": 30.94,
+   "end": 31.16
+  },
+  {
+   "word": "al",
+   "start": 31.16,
+   "end": 31.28
+  },
+  {
+   "word": "principio",
+   "start": 31.28,
+   "end": 31.72
+  },
+  {
+   "word": "como",
+   "start": 31.72,
+   "end": 32.15
+  },
+  {
+   "word": "tu",
+   "start": 32.15,
+   "end": 32.27
+  },
+  {
+   "word": "lista",
+   "start": 32.27,
+   "end": 32.53
+  },
+  {
+   "word": "de",
+   "start": 32.53,
+   "end": 32.65
+  },
+  {
+   "word": "precios,",
+   "start": 32.65,
+   "end": 32.99
+  },
+  {
+   "word": "si",
+   "start": 33.29,
+   "end": 33.33
+  },
+  {
+   "word": "sale",
+   "start": 33.33,
+   "end": 33.49
+  },
+  {
+   "word": "de",
+   "start": 33.49,
+   "end": 33.61
+  },
+  {
+   "word": "la",
+   "start": 33.61,
+   "end": 33.71
+  },
+  {
+   "word": "caché",
+   "start": 33.71,
+   "end": 34.09
+  },
+  {
+   "word": "cuesta",
+   "start": 34.09,
+   "end": 34.59
+  },
+  {
+   "word": "10",
+   "start": 34.59,
+   "end": 34.77
+  },
+  {
+   "word": "centavos",
+   "start": 34.77,
+   "end": 35.29
+  },
+  {
+   "word": "el",
+   "start": 35.29,
+   "end": 35.45
+  },
+  {
+   "word": "millón,",
+   "start": 35.45,
+   "end": 35.79
+  },
+  {
+   "word": "20",
+   "start": 36.02,
+   "end": 36.24
+  },
+  {
+   "word": "veces",
+   "start": 36.24,
+   "end": 36.5
+  },
+  {
+   "word": "menos.",
+   "start": 36.5,
+   "end": 36.8
+  },
+  {
+   "word": "Te",
+   "start": 37.05,
+   "end": 37.09
+  },
+  {
+   "word": "hago",
+   "start": 37.09,
+   "end": 37.17
+  },
+  {
+   "word": "la",
+   "start": 37.17,
+   "end": 37.29
+  },
+  {
+   "word": "cuenta,",
+   "start": 37.29,
+   "end": 37.53
+  },
+  {
+   "word": "instrucciones",
+   "start": 37.81,
+   "end": 38.29
+  },
+  {
+   "word": "y",
+   "start": 38.29,
+   "end": 38.47
+  },
+  {
+   "word": "lista",
+   "start": 38.47,
+   "end": 38.67
+  },
+  {
+   "word": "de",
+   "start": 38.67,
+   "end": 38.79
+  },
+  {
+   "word": "precios",
+   "start": 38.79,
+   "end": 39.15
+  },
+  {
+   "word": "2.000",
+   "start": 39.15,
+   "end": 39.67
+  },
+  {
+   "word": "tokens",
+   "start": 39.67,
+   "end": 39.93
+  },
+  {
+   "word": "por",
+   "start": 39.93,
+   "end": 40.47
+  },
+  {
+   "word": "mensaje,",
+   "start": 40.47,
+   "end": 41.17
+  },
+  {
+   "word": "por",
+   "start": 41.39,
+   "end": 41.51
+  },
+  {
+   "word": "mil",
+   "start": 41.51,
+   "end": 41.85
+  },
+  {
+   "word": "mensajes",
+   "start": 41.85,
+   "end": 42.31
+  },
+  {
+   "word": "2",
+   "start": 42.31,
+   "end": 42.8
+  },
+  {
+   "word": "millones,",
+   "start": 42.8,
+   "end": 43.14
+  },
+  {
+   "word": "a",
+   "start": 43.45,
+   "end": 43.55
+  },
+  {
+   "word": "2",
+   "start": 43.55,
+   "end": 43.69
+  },
+  {
+   "word": "dólares",
+   "start": 43.69,
+   "end": 43.93
+  },
+  {
+   "word": "el",
+   "start": 43.93,
+   "end": 44.11
+  },
+  {
+   "word": "millón,",
+   "start": 44.11,
+   "end": 44.45
+  },
+  {
+   "word": "4",
+   "start": 44.69,
+   "end": 44.94
+  },
+  {
+   "word": "con",
+   "start": 44.94,
+   "end": 45.32
+  },
+  {
+   "word": "caché,",
+   "start": 45.32,
+   "end": 45.72
+  },
+  {
+   "word": "20",
+   "start": 45.89,
+   "end": 46.13
+  },
+  {
+   "word": "centavos,",
+   "start": 46.13,
+   "end": 46.66
+  },
+  {
+   "word": "o",
+   "start": 46.9,
+   "end": 46.97
+  },
+  {
+   "word": "sea",
+   "start": 46.97,
+   "end": 47.19
+  },
+  {
+   "word": "si",
+   "start": 47.19,
+   "end": 47.49
+  },
+  {
+   "word": "tu",
+   "start": 47.49,
+   "end": 47.61
+  },
+  {
+   "word": "negocio",
+   "start": 47.61,
+   "end": 47.91
+  },
+  {
+   "word": "recibe",
+   "start": 47.91,
+   "end": 48.33
+  },
+  {
+   "word": "100",
+   "start": 48.33,
+   "end": 48.53
+  },
+  {
+   "word": "mil",
+   "start": 48.53,
+   "end": 48.75
+  },
+  {
+   "word": "mensajes",
+   "start": 48.75,
+   "end": 49.15
+  },
+  {
+   "word": "al",
+   "start": 49.15,
+   "end": 49.35
+  },
+  {
+   "word": "mes",
+   "start": 49.35,
+   "end": 49.53
+  },
+  {
+   "word": "con",
+   "start": 49.53,
+   "end": 49.9
+  },
+  {
+   "word": "astra",
+   "start": 49.9,
+   "end": 50.32
+  },
+  {
+   "word": "son",
+   "start": 50.32,
+   "end": 50.5
+  },
+  {
+   "word": "400",
+   "start": 50.5,
+   "end": 50.8
+  },
+  {
+   "word": "dólares",
+   "start": 50.8,
+   "end": 51.44
+  },
+  {
+   "word": "en",
+   "start": 51.44,
+   "end": 51.68
+  },
+  {
+   "word": "cambio",
+   "start": 51.68,
+   "end": 51.84
+  },
+  {
+   "word": "que",
+   "start": 51.84,
+   "end": 51.98
+  },
+  {
+   "word": "con",
+   "start": 51.98,
+   "end": 52.2
+  },
+  {
+   "word": "sol",
+   "start": 52.2,
+   "end": 52.4
+  },
+  {
+   "word": "son",
+   "start": 52.4,
+   "end": 52.85
+  },
+  {
+   "word": "solo",
+   "start": 52.85,
+   "end": 53.13
+  },
+  {
+   "word": "20",
+   "start": 53.13,
+   "end": 53.59
+  },
+  {
+   "word": "dólares,",
+   "start": 53.59,
+   "end": 54.05
+  },
+  {
+   "word": "si",
+   "start": 54.22,
+   "end": 54.62
+  },
+  {
+   "word": "querés",
+   "start": 54.62,
+   "end": 54.88
+  },
+  {
+   "word": "que",
+   "start": 54.88,
+   "end": 54.96
+  },
+  {
+   "word": "lo",
+   "start": 54.96,
+   "end": 55.06
+  },
+  {
+   "word": "probemos",
+   "start": 55.06,
+   "end": 55.4
+  },
+  {
+   "word": "en",
+   "start": 55.4,
+   "end": 55.56
+  },
+  {
+   "word": "tu",
+   "start": 55.56,
+   "end": 55.62
+  },
+  {
+   "word": "negocio",
+   "start": 55.62,
+   "end": 56.1
+  },
+  {
+   "word": "asesoría",
+   "start": 56.1,
+   "end": 56.82
+  },
+  {
+   "word": "gratis,",
+   "start": 56.82,
+   "end": 57.26
+  },
+  {
+   "word": "link",
+   "start": 57.3,
+   "end": 57.6
+  },
+  {
+   "word": "en",
+   "start": 57.6,
+   "end": 57.86
+  },
+  {
+   "word": "mi",
+   "start": 57.86,
+   "end": 57.94
+  },
+  {
+   "word": "perfil",
+   "start": 57.94,
+   "end": 58.3
+  }
+ ]
+}
