@@ -1,5 +1,4 @@
-[ WARN:0@0.940] global net_impl_backend.cpp:345 setPreferableTarget Targets are not supported by the new graph engine for now
-bruto analizado en 113 s · saltos internos: [52.9, 119.4, 144.4]
+[ WARN:0@0.775] global net_impl_backend.cpp:345 setPreferableTarget Targets are not supported by the new graph engine for now
   ⚠ «en la consola» pide corte y no hay corte ni salto en la pausa de antes: queda en la palabra
   ⚠ «abrí claude code» pide corte y no hay corte ni salto en la pausa de antes: queda en la palabra
   ⚠ «escribí lo que» pide corte y no hay corte ni salto en la pausa de antes: queda en la palabra
@@ -21,7 +20,7 @@ escenas: 24 · bloques de subtítulo: 128 · duración 111.27 s
    51.60  split  baja     abri  (3 elementos)
    54.04  split  fundido  comando  (5 elementos)
    58.76  split  fundido  antes  (6 elementos)
-   63.39  split  fundido  precio  (5 elementos)
+   63.39  split  fundido  precio  (7 elementos)
    65.82  split  fundido  tokens  (5 elementos)
    70.44  pip    corte    cuenta  (4 elementos)
    73.80  split  corte    piensa  (6 elementos)
@@ -69,14 +68,13 @@ escenas: 24 · bloques de subtítulo: 128 · duración 111.27 s
    11.21  tres-cosas:texto Tres
 *cosas*
    13.34  tres-cosas:fila 1 · Buscarlo
-   14.13  segundo:texto *cambiarlo*
    14.13  tres-cosas:fila 2 · Cambiarlo
    14.98  tres-cosas:fila 3 · Probarlo
+   15.57  uno-buscalo:captura dep-historial
    15.57  uno-buscalo:credito Fuente: platform.claude.com/docs/en/about-claude/m
    15.57  uno-buscalo:texto Buscalo en
 *tu código*
    20.19  uno-buscalo:texto *claude-sonnet-4-5*
-   22.46  uno-buscalo:captura dep-historial
    22.46  uno-buscalo:marca «claude-sonnet-4-5-20250929»
    24.60  consola:captura dep-auditoria
    24.60  consola:credito Fuente: platform.claude.com/docs/en/about-claude/model
@@ -84,27 +82,28 @@ escenas: 24 · bloques de subtítulo: 128 · duración 111.27 s
 *Usage,* *Export*
    26.05  consola:marca «Usage page in Claude Console»
    26.54  consola:marca «Export»
-   28.50  consola:marca «broken down by API key and mod»
+   28.50  consola:marca «down by API key and model»
    29.74  n8n:texto En *n8n:*
    30.61  n8n:pildora abrí cada nodo de Anthropic
    31.46  n8n:logo logo-anthropic.png
    32.51  armaste:texto No lo armaste *vos*
    32.67  armaste:texto Preguntarle a quién
 *te lo armó*
-   37.52  mi-caso:credito Fuente: platform.claude.com/docs/en/about-claude/model
    37.52  mi-caso:texto Lo cambié al
 *nuevo modelo*
    39.78  mi-caso:captura dep-historial
+   39.78  mi-caso:credito Fuente: platform.claude.com/docs/en/about-claude/model
    41.43  mi-caso:marca «claude-sonnet-5-5»
    43.03  agentes:texto Se lo
 *cambié a*
    44.15  agentes:fila Mis agentes
    45.29  agentes:fila Mis nodos de n8n
    47.33  agentes:fila Toda mi infraestructura
-   49.15  abri:logo logo-claude.png
    50.31  segundo:texto Como segundo,
+   50.93  segundo:texto *cambiarlo*
    51.60  abri:texto Abrí *Claude Code*
 en esa carpeta
+   51.72  abri:logo logo-claude.png
    54.04  comando:captura mig-comando
    54.04  comando:credito Fuente: platform.claude.com/docs/en/models/sonnet-5-5/
    54.04  comando:texto Escribí lo
@@ -117,8 +116,10 @@ que *ves*
    60.06  antes:marca «confirm the migration scope»
    62.16  antes:marca «checklist of items to verify m»
    63.39  precio:captura precio-45
+   63.39  precio:texto De *3 dólares*
    64.53  precio:marca «$3 / MTok»
    65.03  precio:captura precio-55
+   65.03  precio:texto a *2*
    65.51  precio:marca «$2 / MTok»
    65.82  tokens:captura precio-tokens
    65.82  tokens:credito Fuente: platform.claude.com/docs/en/about-claude/pricin
@@ -147,7 +148,7 @@ antes de contestar
    88.16  prellenada:credito Fuente: platform.claude.com/docs/en/models/sonnet-5
    88.16  prellenada:texto Una respuesta
 *prellenada*
-   88.93  prellenada:marca «assistant prefill»
+   88.93  prellenada:marca «prefill»
    90.27  prellenada:texto Obligarlo a usar
 una *herramienta*
    91.81  prellenada:marca «forced tool choice»
@@ -166,7 +167,7 @@ de los 5
    98.06  ojo:credito Fuente: platform.claude.com/docs/en/about-claude/model-dep
    98.06  ojo:texto Ojo: esto vale para
 la *API de Claude*
-  100.43  ojo:marca «Amazon Bedrock and Google Clou»
+  100.43  ojo:marca «Bedrock and Google Cloud»
   102.53  ojo:sello OTRA FECHA
   105.16  cta-lista:tarjeta 
   107.86  cta-lista:sello GRATIS

@@ -10,10 +10,12 @@ bruto  50.71- 51.47 s  Whisper oyó «te aromó»  ->  subtítulo dice «te lo a
 bruto  30.11- 30.49 s  Whisper oyó «buscadlo»  ->  subtítulo dice «buscalo»
 bruto  31.13- 32.35 s  Whisper oyó «busca este texto»  ->  subtítulo dice «buscá este texto»
 bruto 150.19-150.95 s  Whisper oyó «justos es esta»  ->  subtítulo dice «ajustes está»
-bruto 153.63-155.19 s  Whisper oyó «Busca migrar en avisos»  ->  subtítulo dice «Buscá migrar en avisos»
+bruto 153.63-155.19 s  Whisper oyó «Busca migrar en avisos»  ->  subtítulo dice «Buscá migrar en Avisos»
 bruto  27.41- 29.79 s  Whisper oyó «Para que se vea el resultado uno»  ->  motivo: se deja tal cual (no se aplicó «[?] Uno»): hay 7 núcleos silábicos en 27,97-29,17 s y las dos pasadas de Whisper coinciden; parece una nota de producción leída en voz alta («para que se vea el resultado»): si lo es, el bloque 3 debe arrancar en «uno» (~29,3 s)
 bruto  46.49- 47.93 s  Whisper oyó «preguntarle a quién»  ->  motivo: ¿«preguntale»? las dos pasadas oyeron «preguntarle»; el guion dice «Preguntale a quien te lo armó»
 bruto  83.41- 84.73 s  Whisper oyó «te pregunta qué archivos»  ->  motivo: la frase queda abierta (falta, quizá, «tocar»); se muestra sin completarla
 bruto   3.48-  5.04 s  Whisper oyó «ahora viene el 30 de noviembre»  ->  motivo: las dos pasadas coinciden y el guion dice igual; solo para confirmar con el audio
 bruto 115.95-117.73 s  Whisper oyó «una temperatura cambiada»  ->  motivo: las dos pasadas coinciden; el guion dice igual
 bruto 104.83-105.91 s  Whisper oyó «recontálo con tu texto»  ->  motivo: ortografía: Whisper puso tilde; el subtítulo dice «recontalo»
+bruto  32.85- 33.55 s  Whisper oyó «cloud de guión»  ->  motivo: se quitó «de» (Whisper oyó «cloud de guión»; quizá la «e» final de «Claude»); «guion» va sin tilde (RAE 2010)
+bruto 129.17-130.15 s  Whisper oyó «contesta paso»  ->  motivo: acento: «pasó» (la 2.ª pasada de Whisper también oyó «pasó»)

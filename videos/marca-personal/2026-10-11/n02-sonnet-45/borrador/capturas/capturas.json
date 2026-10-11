@@ -30,7 +30,7 @@
    ]
   },
   "fecha": "2026-10-11",
-  "hora_utc": "08:46-08:48"
+  "hora_utc": "08:43"
  },
  "dep-auditoria": {
   "url": "https://platform.claude.com/docs/en/about-claude/model-deprecations",
@@ -57,7 +57,7 @@
    ]
   },
   "fecha": "2026-10-11",
-  "hora_utc": "08:46-08:48"
+  "hora_utc": "08:43"
  },
  "dep-plataformas": {
   "url": "https://platform.claude.com/docs/en/about-claude/model-deprecations",
@@ -72,7 +72,7 @@
    ]
   },
   "fecha": "2026-10-11",
-  "hora_utc": "08:46-08:48"
+  "hora_utc": "08:43"
  },
  "mig-comando": {
   "url": "https://platform.claude.com/docs/en/models/sonnet-5-5/migration-guide",
@@ -99,7 +99,7 @@
    ]
   },
   "fecha": "2026-10-11",
-  "hora_utc": "08:46-08:48"
+  "hora_utc": "08:43"
  },
  "mig-cinco": {
   "url": "https://platform.claude.com/docs/en/models/sonnet-5-5/migration-guide",
@@ -132,7 +132,7 @@
    ]
   },
   "fecha": "2026-10-11",
-  "hora_utc": "08:46-08:48"
+  "hora_utc": "08:43"
  },
  "mig-pensar": {
   "url": "https://platform.claude.com/docs/en/models/sonnet-5-5/migration-guide",
@@ -147,7 +147,7 @@
    ]
   },
   "fecha": "2026-10-11",
-  "hora_utc": "08:46-08:48"
+  "hora_utc": "08:43"
  },
  "precio-45": {
   "url": "https://platform.claude.com/docs/en/about-claude/pricing",
@@ -162,7 +162,7 @@
    ]
   },
   "fecha": "2026-10-11",
-  "hora_utc": "08:46-08:48"
+  "hora_utc": "08:43"
  },
  "precio-55": {
   "url": "https://platform.claude.com/docs/en/about-claude/pricing",
@@ -177,7 +177,7 @@
    ]
   },
   "fecha": "2026-10-11",
-  "hora_utc": "08:46-08:48"
+  "hora_utc": "08:43"
  },
  "precio-tokens": {
   "url": "https://platform.claude.com/docs/en/about-claude/pricing",
@@ -192,6 +192,6 @@
    ]
   },
   "fecha": "2026-10-11",
-  "hora_utc": "08:46-08:48"
+  "hora_utc": "08:43"
  }
 }

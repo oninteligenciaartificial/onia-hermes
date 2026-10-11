@@ -363,7 +363,7 @@
       340
      ],
      "fuente": "mono",
-     "en": "claude guión"
+     "en": "claude guion"
     },
     {
      "tipo": "captura",
@@ -383,7 +383,7 @@
      "marcas": [
       {
        "frase": "claude-sonnet-4-5-20250929",
-       "en": "guión 5",
+       "en": "guion 5",
        "pad": 4
       }
      ],
@@ -611,7 +611,8 @@
      "pos": [
       48,
       700
-     ]
+     ],
+     "en": "nuevo modelo"
     }
    ]
   },
@@ -913,13 +914,13 @@
      "recorte": [
       0,
       0,
-      1120,
+      880,
       72
      ],
-     "ancho": 800,
+     "ancho": 780,
      "pos": [
-      48,
-      230
+      150,
+      215
      ],
      "url": "platform.claude.com",
      "marcas": [
@@ -929,7 +930,8 @@
        "pad": 4
       }
      ],
-     "anim": "corte"
+     "anim": "corte",
+     "marco": false
     },
     {
      "tipo": "captura",
@@ -937,13 +939,13 @@
      "recorte": [
       0,
       14,
-      1120,
+      880,
       584
      ],
-     "ancho": 800,
+     "ancho": 780,
      "pos": [
-      48,
-      385
+      150,
+      300
      ],
      "url": "platform.claude.com",
      "marcas": [
@@ -987,7 +989,7 @@
       0,
       0,
       920,
-      340
+      310
      ],
      "ancho": 984,
      "pos": [
@@ -1116,8 +1118,8 @@
      "tam": 56,
      "rot": -8,
      "pos": [
-      660,
-      740
+      680,
+      775
      ],
      "en": "se cobra"
     },
@@ -1126,7 +1128,7 @@
      "texto": "Fuente: platform.claude.com/docs/en/models/sonnet-5-5/migration-guide",
      "pos": [
       48,
-      830
+      735
      ]
     }
    ]
@@ -1439,7 +1441,7 @@
      "rot": -8,
      "pos": [
       640,
-      780
+      805
      ],
      "en": "otra"
     }

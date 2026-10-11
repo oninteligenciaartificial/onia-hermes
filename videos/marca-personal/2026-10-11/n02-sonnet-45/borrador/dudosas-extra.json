@@ -4,5 +4,7 @@
  "te pregunta qué archivos": "la frase queda abierta (falta, quizá, «tocar»); se muestra sin completarla",
  "ahora viene el 30 de noviembre": "las dos pasadas coinciden y el guion dice igual; solo para confirmar con el audio",
  "una temperatura cambiada": "las dos pasadas coinciden; el guion dice igual",
- "recontálo con tu texto": "ortografía: Whisper puso tilde; el subtítulo dice «recontalo»"
+ "recontálo con tu texto": "ortografía: Whisper puso tilde; el subtítulo dice «recontalo»",
+ "cloud de guión": "se quitó «de» (Whisper oyó «cloud de guión»; quizá la «e» final de «Claude»); «guion» va sin tilde (RAE 2010)",
+ "contesta paso": "acento: «pasó» (la 2.ª pasada de Whisper también oyó «pasó»)"
 }
