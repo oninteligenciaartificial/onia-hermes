@@ -63,6 +63,19 @@ Entorno de Lucía y Marca: «onia-higgsfield» `env_01V5EeE4VtMdw7PWVaMYywsk`.
 | 8 | Voz Marcela de G2-G5 v2 (ElevenLabs) | Lucía | espera cupo y sí de Sergio Urcullo |
 | 9 | Decidir el merge de PR #144 (Lucía) y #191 (Ventas; lo revisa Hermes) | — | revisión pendiente |
 
+## Cola de Codex (lanza esta madre; máx 2 corridas locales entre las dos madres; worktree SPARSE)
+
+| Contrato | Rama de la sesión | Estado (11-oct ~06 UTC) |
+|---|---|---|
+| `marca-M1` mosaico-tablero | gifted-clarke | ✅ `codex/marca-m1-1011` 86203cd2 → Marca lo integró (b251cd40); render PC mostrado |
+| `lucia-p9` pieza 9 | zealous-babbage | corriendo (subagente, worktree sparse) |
+| `lucia-qa1` / `lucia-qa2` | zealous-babbage (a458076e) | en espera de lugar |
+| `ventas-V01` / `V02` / `V03` | onia-ventas-pauta (8ce3ea54) | en espera de lugar |
+
+⚠️ Una worktree completa de onia-hermes pesa 6,4 GB / 15.261 archivos: la de marca-m1 dejó C: en 704 MB el 11-oct.
+Siempre `worktree add --no-checkout` + `sparse-checkout set --no-cone <carpetas>`; el render HyperFrames con `git archive`
+de la carpeta del molde (sin worktree) y el CLI cacheado (`node …/_npx/<hash>/node_modules/hyperframes/bin/hyperframes.mjs`).
+
 ## Riesgos abiertos
 
 - Los finales de los re-cortes v2 de Lucía viven en `out/` del contenedor (fuera de git): si se recicla, se re-renderizan (3-4 min c/u).
