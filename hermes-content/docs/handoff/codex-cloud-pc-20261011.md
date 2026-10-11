@@ -1,8 +1,33 @@
 # Auditoría cloud ↔ PC y relevo de madres — 11-oct-2026
 
-**META:** preparar una arquitectura verificable para ONIA SaaS con madres supervisoras locales, ejecución principalmente cloud y acceso local acotado, sin retomar producción.
+**META vigente:** preparar ONIA SaaS con ejecución cloud que continúe con la PC apagada, madres supervisoras y sin retomar producción ni contratar infraestructura.
 **PRUEBA DE HECHO:** informe contrastado con referencias Git, observaciones de UI/CLI comunicadas por la madre y documentación oficial; piloto con resultados pendientes.
-**REGLA DE PARADA:** no activar sesiones, instalar, generar, publicar, desplegar, rotar secretos ni crear accesos/túneles; cualquier acceso nuevo requiere aprobación específica. La madre revisa este documento antes de commit/push.
+**REGLA DE PARADA:** fuera de los chats read-only autorizados y pruebas descritas abajo, no activar sesiones, instalar, generar, publicar, desplegar, rotar secretos ni crear accesos/túneles; cualquier acceso nuevo requiere aprobación específica. La madre revisa este documento antes de commit/push.
+
+## VIGENTE: PC APAGADA — pruebas y decisiones posteriores al piloto
+
+El requisito ahora es ejecutar sin dependencia de la laptop. **Work Cloud con acceso local se descarta para satisfacer PC apagada**; las madres locales pueden revisar cuando la PC esté disponible, pero no son dependencia de ejecución. La arquitectura anterior de worker local queda como historial para operaciones opcionales de laptop.
+
+**Recomendación:** Work Cloud ya disponible para contratos read-only y, después de verificar repo/tests, desarrollo cloud. Nueva infraestructura: **USD 0**, sujeto a cuota/capacidad de la cuenta. Codex Cloud UI no mostró entornos existentes; **Work Cloud es un producto/entorno distinto y sí ejecutó el piloto**. No inferir que ambos tienen el mismo acceso.
+
+Alternativas evaluadas, **no contratadas**: Browserbase USD 20/mes, 100 h incluidas y USD 0,12/h adicional; VM DigitalOcean compartida USD 24/mes, 4 GiB RAM, 2 CPU y 80 GiB. Precio de infraestructura no incluye otros servicios ni demuestra compatibilidad del login. Fuentes: [Browserbase](https://www.browserbase.com/pricing), [DigitalOcean Droplets](https://www.digitalocean.com/pricing/droplets), [navegador Work](https://learn.chatgpt.com/docs/browser).
+
+**Piloto cloud REAL, evidencia comunicada por la madre:**
+
+- Chat `6acbce63-abc8-83e9-8422-d849d5e15aa4`, título **ONIA · Piloto cloud sin PC**, durable `01a12c1e-48d1-7349-93ad-33210efa6025`.
+- Ejecutó Linux, host `a74001b36ed4`, ruta `/workspace/scratch/786b6dabb916`. Nonce `ONIA-CLOUD-20261011-P1`; SHA-256 `f4a072815aad9f41cf56d1377bafd22b76709e8dad9d17ef859f7a98c8092ae5`. Archivo temporal eliminado.
+- Navegador cloud por CDP abrió Higgsfield público: login visible, **NO autenticado**.
+- Conector GitHub leyó `README.md` de Hermes, blob SHA `1628a9040ad09220e1bd14ebd0ddbdad73483496`, y `package.json` de Platform, blob SHA `d737491d7ce229f3095b1cbcb44cf593c0ec4d94`.
+- Modelo real del ejecutor cloud **no observable**. Apagado físico de PC **no probado**; los comandos observados no usan Windows. Lectura del conector no prueba clone, instalación ni ejecución de tests.
+- Incidencia: el piloto devolvió URLs temporales firmadas en output de herramientas. **No reproducir valores**. Contratos siguientes deben filtrar metadata a ruta/SHA antes de devolver output.
+
+**Acceso y ejecución separados:** Higgsfield CLI local pide auth y Chrome local pide Google login; no hace falta resolverlos para el requisito PC apagada. VPS: inventario probado desde laptop con SSH estricto y BatchMode; CLI status JSON indicó plan Pro y 438,17 créditos, sin fecha de renovación. Esto **no demuestra cloud → VPS**. Generación oficial por MCP/CLI usa créditos del plan; API tiene cobro separado, no se autoriza sustituir uno por otro.
+
+**Chats nuevos read-only autorizados:** madre marketing local `01a12c1f-bef7-7252-a4b6-f8f8354dfc48`, creada con Astra medium; Desarrollo cloud `6acbcecb-4ee4-83e8-9f88-9a8514ea2152`, durable `01a12c1f-d94a-7183-aca9-50da8102502a` (client previo `local-chatgpt:f3aed11e-2adb-4e0d-9bd0-d3fa44e51521`). Modelo cloud sin control verificable. No duplicar ejecutores ni reactivar Claude desde estos IDs.
+
+**Discovery oficial Higgsfield:** catálogo devuelve `installed:false`, estado `ENABLED AVAILABLE`: disponible/sugerido para instalar y conectar, **NO instalado**. Próxima aprobación concreta: instalar/conectar el plugin oficial Higgsfield en ChatGPT para probar acceso cloud a la cuenta y créditos de su plan, **sin generación**. No ejecutado. Fuentes: [Higgsfield MCP](https://higgsfield.ai/creator-hub/help-center/integrations/what-is-higgsfield-mcp), [Higgsfield API](https://higgsfield.ai/creator-hub/help-center/integrations/what-is-the-higgsfield-api).
+
+**PENDIENTE, sin afirmar éxito:** persistencia entre turnos/reinicio; login cloud de Higgsfield y compatibilidad del flujo; acceso cloud → VPS bajo permiso independiente; clone de repos y tests en cloud; observabilidad del modelo; prueba real con laptop apagada. Sin compras, instalaciones, generaciones ni secretos trasladados.
 
 ## Decisiones y alcance
 
@@ -23,9 +48,9 @@
 - Este informe vive en `codex/cloud-pc-audit-20261011`, worktree aislado basado en PR #195. Ningún cambio al checkout principal.
 - Lecturas Git del auditor confirman documentos y commits; no confirman sesiones vivas, cuotas actuales, ejecución de timers ni producción.
 
-## Arquitectura candidata y respaldo
+## Arquitectura anterior — SUPERADA por requisito PC apagada
 
-1. **Candidata:** Work Cloud con acceso local si la cuenta/entorno lo ofrece y el piloto confirma repo y navegador autenticado. No asumir que ver una carpeta implica acceso al navegador.
+1. **Descartada para PC apagada:** Work Cloud con acceso local depende del dispositivo. Disponibilidad de acceso local no satisface el requisito vigente.
 2. **Respaldo:** ejecutores cloud con contratos autocontenidos; un worker local reutiliza el navegador autorizado y serializa su uso entre las dos madres.
 3. Las madres mantienen sus carriles. Un contrato tiene dueño, META, entradas, rutas permitidas, PRUEBA, PARADA y resultado revisable.
 4. VPS es un destino separado con alcance/permiso propios; no trasladar bóveda, cookies ni sesiones personales al servidor.
@@ -85,7 +110,9 @@ Inspección de líneas 11-23: estilo persistente, nivel full por defecto y elimi
 
 Propuesta **lite**: español claro, resumen corto con hechos, incertidumbre y siguiente acción; conservar nombres, evidencias y condiciones. No eliminar incertidumbre real. No hay prueba de calidad ni activación. Comprimir salida no demuestra ahorro de input.
 
-## Piloto preparado — NO EJECUTADO
+## Plan inicial de piloto — HISTORIAL, parcialmente superado
+
+La prueba Linux y lectura de GitHub se ejecutaron como consta en la sección vigente. Los pasos siguientes no deben interpretarse como completos; acceso autenticado, persistencia, clone/tests y cloud → VPS siguen pendientes.
 
 1. Comprobar disponibilidad en UI de la cuenta/entorno: captura de función y alcance; sin activarla.
 2. Solicitar aprobación concreta si requiere acceso nuevo, indicando origen, permisos y destino. No instalar nada durante esta auditoría.
@@ -95,4 +122,4 @@ Propuesta **lite**: español claro, resumen corto con hechos, incertidumbre y si
 6. Evaluar fallos, permisos, duplicación y latencia; registrar resultado por prueba. Sin generaciones pagadas en Higgsfield, publicaciones ni producción; lectura de cuenta permitida dentro del piloto autorizado.
 7. Elegir arquitectura después de revisar evidencias con Sergio Urcullo. Orquestador, sesiones y modelos quedan sin cambiar hasta entonces.
 
-**Cierre:** informe preparado para revisión de la madre; piloto y acceso cloud-local bloqueados por disponibilidad y aprobación específica. Sin commit/push ni otros archivos modificados por este auditor.
+**Cierre vigente:** piloto Linux y lectura GitHub ejecutados; login cloud, persistencia, clone/tests, cloud → VPS y apagado físico pendientes. Arquitectura depende de cloud, no de acceso local. Sin commit/push ni otros archivos modificados por este auditor.
