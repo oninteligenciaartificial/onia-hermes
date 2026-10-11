@@ -190,3 +190,26 @@ cd videos && npx -y hyperframes@0.8.142 init lucia-gN --non-interactive --exampl
 - **Control propio antes del guion:** reducir la misma foto hasta que la cara mida 60 px (0 cr) mostró que la afirmación del guion no se sostenía. Un número del gate medido en cuadros con zoom difiere hasta 0,04 del PNG
   original (F): en pantalla va el del original y el README dice las cuatro medidas.
 - **Una llamada o nota nueva se mide en el DOM** (`ventanas.mjs`): la de 44 px entra a 32,0 s y necesita 3,80 s; las 3 piezas tocadas se rehacen siempre que se cambia texto.
+
+## 11. Lo que sumaron los re-cortes mudos v2 de G2, G3, G4 y G5 (≤ 30 s, 11-oct: editor → revisor independiente → arreglos → verificación de la madre)
+
+- **La voz se mide en CARACTERES a ≈ 17 car/s, no en palabras** (G1 v2: 320 car ≈ 19 s). Los cuatro re-cortes calcularon sus tramos a 3,6 pal/s (≈ 20 car/s) y en los cuatro el revisor halló líneas que pisan a la
+  siguiente (G4: L5 se pasaba 0,57 s) y huecos > 0,25 s. El arreglo fue acortar el TEXTO hasta que cada línea cupiera en su ventana, sin mover tarjetas; cuando haya voz real, mandan las duraciones medidas y se retemporiza.
+  Herramientas en `videos/lucia-g5-v2/scripts/`: `voz.mjs` (tramos por caracteres), `retemporizar.mjs`, `poner-voz.mjs` (avisa de solapes y de huecos > 0,25 s; mide con `silencedetect` y `ebur128`, −14 LUFS). 100 car ≈ 6 s.
+- **Un gate que no cubre todo da falsa paz.** `ventanas.mjs` de G2 no medía las 12 tarjetas (4 quedaban 0,01 a 0,16 s cortas de su lectura). Al cerrar, contar que el gate mide TODAS.
+- **El master se renderiza SIEMPRE desde el `index.html` final** (en G2 y G3 el HTML era posterior al master). Build idempotente: dos builds, mismo md5.
+- **Toda afirmación general se contrasta con TODOS los casos medidos antes de ir a pantalla.** «Misma foto» era falso para Kling O3 (5 referencias, sin foto de inicio); «una toma cada uno» era falso (Seedream 4.5 y Kling O1 Image se repitieron);
+  «la luz cambia cuando la cara se sostiene» lo desmienten Kling O3 y Cinematic Studio (pieza 9). Con un contraejemplo, la afirmación se limita a lo que el video muestra y lleva «una toma cada uno: es una prueba, no una regla».
+- **Un fallo con nombre lleva su contrapeso** en el video o en el pie: Kling O1 Image 0,35 en el café y 0,79 y 0,83 en las otras dos escenas.
+- **Gancho (§4-bis):** título o pregunta en el cuadro 0 (`a: 0`; una tarjeta con `a: 0` no lleva entrada) y un número medido antes de los 3 s. Una pastilla de 2 palabras necesita 1,0 s entera. El `a` del plan es el FIN del empuje: la tarjeta entra
+  1 cuadro antes de que empiece (por eso `plan.json` e `index.html` difieren 0,25 s; es diseño, no error).
+- **ArcFace sí corre en la nube sin instalar nada si ya existen el venv y los modelos** (los dejó una sesión anterior en su scratchpad: `venv-face` y `face_models`; referencias locales en `videos/lucia-g4-v2/assets/refs-orig/`, ignoradas por git):
+  `FACE_QA_MODELS=<modelos> <venv>/bin/python -I scripts/face_identity_qa.py manifest.json` con un manifest `{refs locales, negatives: {}, tests}` (el manifest base trae URLs: sin red no sirve). El editor de G5 dio por imposible medirlo
+  («no hay venv») y la madre lo midió con eso: final↔fuente 0,009 (límite 0,02). Si el contenedor es nuevo, `face-gate.sh` lo instala y pide aprobación.
+- **Renders concurrentes:** con 4 núcleos y varios agentes un render murió al 74 % (carga ≈ 10). Todo render va bajo `flock /tmp/hf-render.lock npx -y hyperframes@0.8.142 render …`.
+- **Los gates DOM** (`hueco-tarjetas`, `ventanas`, `grep-prohibidas`, `medir-dom`) corren con el Chromium por defecto de Playwright aunque `/opt/pw-browsers/chromium/chrome` no exista (caen al `chromium-1194`): un verificador que dice «no hay Chromium»
+  leyó la ruta, no la máquina. Se corren sobre una COPIA de la carpeta, porque algunos escriben en `qa/`.
+- **Nombres contra el catálogo (`models_explore`, gratis, 11-oct):** Seedream 4.5, Kling O1 Image, Nano Banana 2.1, Seedream 5.0 Pro, GPT Image 2.5 y Seedance 2.0 Mini coinciden; «FLUX 3» se lista «FLUX 3 Image»; **«Kling O3» se lista «Kling 3.0 Omni» y
+  «Cinematic Studio 3.0» «Cinema Studio Video 3.0»** (decisión de la madre pendiente en G2 y G5).
+- **El editor no se auto-aprueba.** En cada pieza el revisor halló lo que el editor no vio (título después del cuadro 0, pie falso, «misma foto», voz que no cabe) y la madre repite la verificación (ArcFace, gates en copia, cuadros mirados, SHA por
+  un verificador haiku) antes de escribir «LISTA PARA MOSTRAR». Un «todo exit 0» del editor no se acepta sin repetirlo.
