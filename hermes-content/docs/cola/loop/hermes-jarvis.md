@@ -29,7 +29,7 @@ carril puede hacer solo. Q1 espera `aplicar` (ver «Bloqueado»).
   corriendo). Los canarios de caída esperan los 30 min de la interrupción 4. **Hecho:** 24 h medidas en su Telegram
   con solo el resumen, el cierre y las cuatro interrupciones, contadas por el diagnóstico programado. Los flujos de
   n8n los cambia la madre, con respaldo.
-- [ ] **Q4 El resumen de las 06:30 dice lo que nadie empuja.** Va en dos PRs, porque (c) toca el crontab de `aplicar`
+- [x] **Q4 El resumen de las 06:30 dice lo que nadie empuja.** — `9105f031` (#190) y `2ea796ea` (#192) Va en dos PRs, porque (c) toca el crontab de `aplicar`
   (root en el VPS, revisión fuerte):
   - [x] Q4a/b, solo lectura — `77d02e89` (mañana del 10-oct impresa con la tabla real: el SIN y el token de Lucía en NECESITO):
     - (a) los relojes que vencen en 72 h o menos, de `cola/loop/madre.md` §G. Un rango «13 al 18-oct» cuenta desde el
@@ -39,7 +39,7 @@ carril puede hacer solo. Q1 espera `aplicar` (ver «Bloqueado»).
 
     **Hecho:** pruebas con un `madre.md` de ejemplo (el reloj de mañana aparece, uno a 10 días no, uno vencido sale
     en rojo), más una cola parada, y una mañana impresa con la sección.
-  - [ ] Q4c: un envoltorio de latido en cada línea del crontab que pone `aplicar`, que escribe la fecha y el código de
+  - [x] Q4c: un envoltorio de latido en cada línea del crontab que pone `aplicar`, que escribe la fecha y el código de
     salida en `/var/lib/onia-latido/<nombre>`; el resumen nombra los vigías mudos. **Hecho:** una prueba con un latido
     viejo que sale como mudo.
 - [ ] **Q5 QA después de cada publicación.** Cada 15 min, un script del VPS compara el `release-<sha>` que corre
@@ -49,6 +49,10 @@ carril puede hacer solo. Q1 espera `aplicar` (ver «Bloqueado»).
   una línea en el resumen. Lo roto que no se arregla en 30 min es la interrupción 4. **Hecho:** en el VPS simulado,
   un release roto da un aviso y una ventana fallida da una línea; en vivo, la próxima publicación deja su renglón en
   el log.
+
+- [x] **Q6 (madre v4, 10-oct) La prueba de la vía viva de `loops.md` en rojo en `main`.** No era la vía: el script
+  que nombra existe y está versionado. `git ls-files` pasó de 1 MB y `execFileSync` cortaba con ENOBUFS, lo que dejaba
+  también el gate del integrador en NO MEDIDO y rompía `herramientas-del-cron`. **Hecho:** la prueba en verde y PR.
 
 ## Hallazgos para otros
 

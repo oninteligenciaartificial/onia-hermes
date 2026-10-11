@@ -107,6 +107,19 @@ export function rutasCitadas(comando) {
 }
 
 /**
+ * Lo versionado en el repo, como rutas relativas a la raiz. `maxBuffer` grande: desde el
+ * 10-oct-2026 `git ls-files` imprime mas de 1 MB (1.061.877 bytes) y el tope por defecto de
+ * execFileSync (1 MiB) lo cortaba con ENOBUFS. El gate quedaba en NO MEDIDO para siempre y la
+ * prueba de la via viva en rojo, sin que la via hubiera cambiado. Una sola funcion para el gate y
+ * su prueba: la prueba juzga lo que corre el producto, no una copia.
+ */
+export function archivosVersionados({ correr = execFileSync } = {}) {
+  return correr('git', ['ls-files'], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 })
+    .split('\n')
+    .filter(Boolean);
+}
+
+/**
  * ¿La via tiene una pieza con fuente en el repo? `archivosDelRepo` son rutas relativas
  * a la raiz. `null` = no se pudo listar: NO se juzga (tri-estado), porque confundir
  * "no pude preguntar" con "me dijeron que si" falla al lado caro.
@@ -204,9 +217,7 @@ function medirVivo() {
   // con su causa — nunca verde por omision.
   let archivosDelRepo = null;
   try {
-    archivosDelRepo = execFileSync('git', ['ls-files'], { encoding: 'utf8' })
-      .split('\n')
-      .filter(Boolean);
+    archivosDelRepo = archivosVersionados();
   } catch (e) {
     console.log(`NO MEDIDO: no pude correr 'git ls-files' (${String(e.message).split('\n')[0]})`);
     return 2;
