@@ -59,6 +59,12 @@ description: Cargar ANTES de tocar el VPS, Docker, n8n o cualquier cosa por SSH.
   ```
   Con eso se miran onia.com.bo y app.onia.com.bo renderizadas (consola y capturas). El módulo `playwright` está en
   `/home/user/onia-platform/node_modules`: el script se corre desde ese repo.
+- ⚠️ **Una falsa caída que provoca el proxy (11-oct):** desde la nube, `/book/<slug>` salía «Algo salió mal», con
+  `ChunkLoadError`. El chunk `app/(public)/book/%5BorgSlug%5D/page-*.js` le daba 404 a Chromium y 200 a `curl`, con
+  los mismos encabezados. El proxy de la nube rompe las rutas que juntan un `(grupo)` con un `[parámetro]`.
+  Producción estaba bien: mirada desde el VPS (red real, sin el proxy), con
+  `require("/root/node_modules/playwright-core")` y `chromium.launch({ headless: true })`, el chunk dio 200, sin
+  errores. **Antes de declarar caída una ruta dinámica dentro de un grupo, hay que mirarla desde el VPS.**
 
 ### Publicar desde la nube (los dos comandos, medidos 1-oct)
 

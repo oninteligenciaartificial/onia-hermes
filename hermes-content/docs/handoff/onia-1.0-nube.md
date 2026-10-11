@@ -29,6 +29,8 @@ madre informa, pero no da permisos: lo que pide el sí de Sergio Urcullo necesit
   `openssl x509 -in /root/.ccr/agent-proxy-ca.crt -pubkey -noout | openssl pkey -pubin -outform der | openssl dgst -sha256 -binary | base64`.
   Con login no se puede: las cuentas QA no tienen contraseña guardada. Mira la madre, o una sesión nueva con
   `ONIA_QA_EMAIL/PASSWORD` en el entorno, nunca por chat.
+  ⚠️ Las rutas con `(grupo)` y `[parámetro]` (ej. `/book/<slug>`) dan un falso «Algo salió mal» por el proxy de la
+  nube: se miran desde el VPS (skill `onia-infra`, 11-oct).
 - **Probar un servidor local:** `next dev --webpack` (con Turbopack falla por los symlinks).
   `/book` y otras rutas públicas andan con env falsas.
 
