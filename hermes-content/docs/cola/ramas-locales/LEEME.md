@@ -17,9 +17,9 @@ git fetch <ruta>/hermes-ramas-locales-20261009.bundle 'refs/heads/*:refs/heads/*
 
 `git bundle verify <archivo>` dice si falta alguna base.
 
-## LISTA PARA SUBIR (11-oct, 09:16 UTC) — `plataforma-152-restos-20261011.bundle`
+## SUBIDA (11-oct, 10:19 UTC) — `plataforma-152-restos-20261011.bundle`
 
-Rama `usted-todo` (`113539eb`): es #152 con U3 (#153), U4 (#148) y U5 (#149) adentro, sobre `master` `fd72cd55` (con #147).
+Rama `usted-todo` (`80f6fef1`, ya empujada a `claude/optimistic-ride-1sp5fe` el 11-oct a las 10:19 UTC): es #152 con U3 (#153), U4 (#148) y U5 (#149) adentro, sobre `master` `fd72cd55` (con #147).
 Suma los restos de usted que encontró Hermes (E16 y E10): la agenda, Pendientes, el Inicio, `/agents` y el registro. La línea
 base del trinquete está resuelta como base más deltas (total 399). `tsc` 0 y suite completa 10.655 en verde, 0 rojos.
 Es **fast-forward** sobre `claude/optimistic-ride-1sp5fe` (`d8c486f5`): se sube sin force. Plataforma la empuja a las
