@@ -350,3 +350,19 @@ test("el paciente que toca «Busco atención dental» sale con cortesía y sin t
   const precio = turno(abierto.nextState, "¿Cuánto cuesta?");
   assert.match(textoDe(precio), /Bs 320/, "si preguntan, dice los planes públicos");
 });
+
+test("sales-kit/07: las respuestas de Sergio Urcullo a un lead de pauta son de usted, sin minutos ni «clínica de ejemplo», y no prometen lo prohibido", () => {
+  const guia = leer("hermes-content/sales-kit/07-LEAD-DE-PAUTA-PRIMERAS-24H.md");
+  const citas = guia.split("\n").filter((l) => l.startsWith("> Buenas tardes"));
+  assert.equal(citas.length, 3, "las tres primeras respuestas (A, B y C) están como cita");
+  const filasDeTabla = guia.split("\n").filter((l) => l.startsWith("| «")).flatMap((l) => [...l.matchAll(/\*«([^»]+)»\*/g)].map((m) => m[1]));
+  assert.ok(filasDeTabla.length >= 5, "ancla: las respuestas a las preguntas frecuentes están en la tabla");
+  for (const t of [...citas, ...filasDeTabla]) {
+    assert.deepEqual(promesasEn(t), [], `promete algo prohibido: «${t.slice(0, 70)}…»`);
+    assert.ok(!/\b(vos|tenés|querés|podés|tu |tus |contame|escribinos|sos|cobrás)\b/i.test(t), `voseo o tuteo en «${t.slice(0, 50)}…»`);
+    assert.ok(!/\b\d+\s*minutos\b/i.test(t), `minutos de llamada sin decidir (L-04): «${t.slice(0, 50)}…»`);
+    assert.ok(!/cl[ií]nica de ejemplo|tratamientos? a medias? (que|y) (recupera|encuentra)|con un toque/i.test(t), `promete lo que el catálogo no deja: «${t.slice(0, 50)}…»`);
+  }
+  assert.match(guia, /apaga el bot/, "la guía dice dónde se contesta para que el bot se calle");
+  assert.match(leer("hermes-content/sales-kit/README.md"), /07-LEAD-DE-PAUTA-PRIMERAS-24H\.md/, "el README del kit lo lista");
+});
