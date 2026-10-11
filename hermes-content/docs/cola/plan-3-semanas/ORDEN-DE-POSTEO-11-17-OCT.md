@@ -16,30 +16,30 @@ Actualizado el 11-oct, ~07:00 UTC (03:00 La Paz), por Marca personal, que desde 
 
 ## Estados
 
-**corte listo** = tabla de cortes + preview 360p en la rama (espera el «ok cortes») · **master listo** = renderizado y mirado (espera «mostrada, publicá») · **falta editar** = bruto en Drive sin cortar · **falta grabar** = no existe el bruto · **agendada** = ya hay un timer en el servidor (no se toca).
+**corte listo** = tabla de cortes + preview 360p en la rama (espera el «ok cortes») · **borrador listo** = render sobre el corte propuesto o carrusel con capturas pendientes (se rehace con un comando) · **master listo** = renderizado y mirado (espera «mostrada, publicá») · **falta editar** = bruto en Drive sin cortar · **falta grabar** = no existe el bruto · **agendada** = ya hay un timer en el servidor (no se toca).
 
 ## Calendario
 
-| Día | Hora | Pieza | Estado | Falta para publicar |
-|---|---|---|---|---|
-| Dom 11 | 12:30 | **N06** Gemini CLI → Antigravity (45,5 s) | corte listo (`88e7cd10c`) | «ok cortes» y master **antes de las 15:30 UTC**; re-leer geminicli.com (el aviso acota a «Unpaid tier y Google One»). Si no llega, pasa a las 18:30 |
-| Dom 11 | 16:00 | Carrusel ANTIGRAVITY (N06) | agendada | **decisión de Sergio Urcullo** (la madre avisa). No se toca |
-| Dom 11 | 18:30 | **DD-A** OpenAI Sol y la caché (58,4 s) | corte listo (`63e507548`) | «ok cortes»; **escuchar 01:01–01:09** (¿dijo «con Astra» o «con Sol»? la cuenta 400 contra 20 solo cuadra con Sol); el cierre pide la asesoría y **el link en la bio todavía no está**. Si no se resuelve antes de las 21:30 UTC, **N07 ocupa este hueco** y DD-A pasa al lun 12 12:30 |
-| Lun 12 | 12:30 | **N07** Haiku 5.5 (81,7 s; salió el 7-oct, la noticia envejece) | corte listo (`4e751ae46`) | «ok cortes»; verificar contra la doc de Anthropic «5 veces más si el prompt pasa de 100 mil tokens» y «lo que piensa se cobra como salida»; aviso HAIKU existe |
-| Lun 12 | 16:00 | Carrusel PRUEBAS (K4 v2) | agendada | su aviso PRUEBAS no existe |
-| Lun 12 | 18:30 | **BA814C81** (tal cual, sin editar, todas las redes) | propuesta (nota 1) | OK de Sergio Urcullo al día y la hora; el archivo **no está compartido por enlace** |
-| Mar 13 | 12:30 | **SI-01** Claude trabaja con la compu apagada | falta grabar | rutina creada el día anterior |
-| Mar 13 | 16:00 | Carrusel PROMPT (K8 v3) | agendada | — |
-| Mar 13 | 18:30 | **SI-02** Antes de instalar OpenClaw | falta grabar | OpenClaw en una compu aparte y el OK de Sergio Urcullo |
-| Mié 14 | 12:30 | **S2-D07-A** la ventana de 24 horas (90,8 s) | corte listo (`f643bb188`) | «ok cortes»; **decisión de Sergio Urcullo sobre la frase de las variables de las plantillas** (cortarla o regrabarla; 00:57–01:04 del bruto); su cierre pide la comunidad, no la asesoría |
-| Mié 14 | 16:00 | Carrusel BRIEF (K7 v2) | agendada · floja | su aviso BRIEF no existe |
-| Mié 14 | 18:30 | **SI-03** Claude, pero vago | falta grabar | Ponytail instalado y la prueba con y sin él |
-| Jue 15 | 16:00 | Carrusel SKILL (K2 v3) | agendada | — |
-| Jue 15 | 18:30 | **N02** Sonnet 4.5 se apaga el 30-nov (111,4 s) | corte listo (`26bf1e566`) | «ok cortes»; «quedan 46 días» **solo vale este jueves**; bloque de 2,4 s sin transcripción (frase o ruido); aviso MIGRAR existe |
-| Vie 16 | 12:30 | **SI-04** Tres comandos escondidos | falta grabar | — |
-| Vie 16 | 16:00 | Carrusel PROMESA (K6 v2) | agendada | — |
-| Vie 16 | 18:30 | **SI-08** Un video que escribió Claude | falta grabar | clip de 3 s hecho con HyperFrames |
-| Sáb 17 | 16:00 | Carrusel P2 «7 herramientas. 4 son gratis.» | falta capturas y lámina 6 | OK de Sergio Urcullo a la lámina 6 |
+| Día | Hora | Pieza | Palabra | Estado | Falta para publicar |
+|---|---|---|---|---|---|
+| Dom 11 | 12:30 | **N06** Gemini CLI → Antigravity (45,5 s) | — | corte listo (`88e7cd10c`) · borrador listo (`fbad86d1c`) · `videos/marca-personal/2026-10-11/n06-antigravity/` | «ok cortes» y master **antes de las 15:30 UTC**; re-leer geminicli.com (el aviso acota a «Unpaid tier y Google One»). Si no llega, pasa a las 18:30 |
+| Dom 11 | 16:00 | Carrusel ANTIGRAVITY (N06) | ANTIGRAVITY | agendada | **decisión de Sergio Urcullo** (la madre avisa). No se toca |
+| Dom 11 | 18:30 | **DD-A** OpenAI Sol y la caché (58,4 s) | — | corte listo (`63e507548`) · `videos/marca-personal/2026-10-11/dd-a-openai-sol/` | «ok cortes»; **escuchar 01:01–01:09** (¿dijo «con Astra» o «con Sol»? la cuenta 400 contra 20 solo cuadra con Sol); el cierre pide la asesoría y **el link en la bio todavía no está**. Si no se resuelve antes de las 21:30 UTC, **N07 ocupa este hueco** y DD-A pasa al lun 12 12:30 |
+| Lun 12 | 12:30 | **N07** Haiku 5.5 (81,7 s; salió el 7-oct, la noticia envejece) | HAIKU | corte listo (`4e751ae46`) · `videos/marca-personal/2026-10-11/n07-haiku-55/` | «ok cortes»; verificar contra la doc de Anthropic «5 veces más si el prompt pasa de 100 mil tokens» y «lo que piensa se cobra como salida»; aviso HAIKU existe |
+| Lun 12 | 16:00 | Carrusel PRUEBAS (K4 v2) | PRUEBAS | agendada | su aviso PRUEBAS no existe |
+| Lun 12 | 18:30 | **BA814C81** (tal cual, sin editar, todas las redes) | — | propuesta (nota 1) | OK de Sergio Urcullo al día y la hora; el archivo **no está compartido por enlace** |
+| Mar 13 | 12:30 | **SI-01** Claude trabaja con la compu apagada | RUTINA | falta grabar | rutina creada el día anterior |
+| Mar 13 | 16:00 | Carrusel PROMPT (K8 v3) | PROMPT | agendada | — |
+| Mar 13 | 18:30 | **SI-02** Antes de instalar OpenClaw | OPENCLAW | falta grabar | OpenClaw en una compu aparte y el OK de Sergio Urcullo |
+| Mié 14 | 12:30 | **S2-D07-A** la ventana de 24 horas (90,8 s) | — | corte listo (`f643bb188`) · `videos/marca-personal/2026-10-11/s2-d07-a-ventana-24h/` | «ok cortes»; **decisión de Sergio Urcullo sobre la frase de las variables de las plantillas** (cortarla o regrabarla; 00:57–01:04 del bruto); su cierre pide la comunidad, no la asesoría |
+| Mié 14 | 16:00 | Carrusel BRIEF (K7 v2) | BRIEF | agendada · floja | su aviso BRIEF no existe |
+| Mié 14 | 18:30 | **SI-03** Claude, pero vago | VAGO | falta grabar | Ponytail instalado y la prueba con y sin él |
+| Jue 15 | 16:00 | Carrusel SKILL (K2 v3) | SKILL | agendada | — |
+| Jue 15 | 18:30 | **N02** Sonnet 4.5 se apaga el 30-nov (111,4 s) | MIGRAR | corte listo (`26bf1e566`) · `videos/marca-personal/2026-10-11/n02-sonnet-45/` | «ok cortes»; «quedan 46 días» **solo vale este jueves**; bloque de 2,4 s sin transcripción (frase o ruido); aviso MIGRAR existe |
+| Vie 16 | 12:30 | **SI-04** Tres comandos escondidos | SECRETOS | falta grabar | — |
+| Vie 16 | 16:00 | Carrusel PROMESA (K6 v2) | PROMESA | agendada | — |
+| Vie 16 | 18:30 | **SI-08** Un video que escribió Claude | HYPERFRAMES | falta grabar | clip de 3 s hecho con HyperFrames |
+| Sáb 17 | 16:00 | Carrusel P2 «7 herramientas. 4 son gratis.» | HERRAMIENTAS | borrador listo (`835cc08bd`) · `hermes-content/carousels/out/sergio-p2-siete-herramientas-20261017-borrador/` | OK de Sergio Urcullo a la lámina 6 (sin él, plan B); capturas 2, 3, 5 y 6 desde la PC; aviso HERRAMIENTAS pegado |
 
 - **Yaps:** cada video lleva su yap una hora después (13:30 / 19:30), en IG Trial, TikTok y Shorts. Se agendan con el video, cuando está mostrado. N06, DD-A y S2-D07-A terminan en el CTA y no tienen yap: si el hueco hace falta, se saca un gancho distinto del mismo bruto.
 - **Carruseles ya renderizados, esperando «mostrada, publicá»:** «78h en una tarea» (dom 18, CHECKLIST) y «Tics de webs con IA» (mié 21, DISEÑO, borrador). Detalle en `CALENDARIO-PUBLICACION-17-23-OCT.md`.
