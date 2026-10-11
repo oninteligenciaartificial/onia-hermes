@@ -150,6 +150,22 @@ lámina sale SIN título. `"next": ""` saca la flecha «seguí» (para historias
 - **Foto con fondo gris en `analogia`**: el `multiply` solo borra el blanco puro y queda un recuadro gris. Sacale el fondo
   antes o elegí otra foto.
 
+- **P2 «7 herramientas» (11-oct): tres perillas nuevas del pack, todas opt-in (los briefs viejos no cambian: 74 láminas de 10 briefs
+  comparadas píxel a píxel antes y después, 0 diferencias).** `logos` con VARIAS palabras: una línea por `\n`, sin mayúsculas ni
+  letter-spacing, ajuste por medición a 84 px, y sin `file` en las marcas va solo el nombre (`solo-nombres`). `ensayo`: `grande: true`
+  (título 150 px, cuerpo 74 px) y `fit: "ancho"` (la palabra del CTA crece hasta el margen de 84 px). `captura`: `logo` delante del
+  título (como `ilustrado`). **Trampa pagada:** el primer `fit` de `ensayo` medía el ancho del `h2` y daba siempre 912 px (el margen),
+  porque un ítem flex se estira al ancho de la lámina: no crecía ni achicaba nada y el test (que solo mira el marcado) pasaba en verde.
+  Se mide el ancho del TEXTO con `width:max-content` + `align-self:flex-start`; y el único modo de verlo era mirar el render.
+  También: (1) un detector de «rojo» por matiz da falsos positivos con el antialiasing LCD de las letras (franjas de 1 px naranja y azul);
+  medí por bloques sólidos de 5×5 px; (2) una composición HyperFrames es un `<template>`: se le quita el envoltorio y se monta en un
+  documento; `intro.html` declara 1080×1920 pero su CSS es 1920×1080, y el cuadro vertical «oficial» sale con el título cortado;
+  (3) `captura-editor.py` parte a 43 caracteres: las líneas con sangría de 8 espacios envuelven, y se compone con PIL a ~2:1 para que
+  la lámina no quede vacía; (4) un `*énfasis*` partido deja barra suelta: NBSP dentro lo mantiene entero; (5) el layout `cierre` ya no
+  escribe «Comentá» fijo (por defecto «Buscá»): la spec de P2 estaba desactualizada; (6) las láminas de remate de una frase o de CTA
+  miden ~53-73 % de «vacío» aun agrandadas: el `cierre` aprobado mide igual (~71 %), no se rellenan con texto inventado.
+  Las capturas que piden cuentas (Buffer, n8n, terminal de la PC) no se sacan desde la nube: marcador «CAPTURA PENDIENTE · PC/Chrome»
+  (nunca una UI fabricada) y un PEDIDO PC por lámina en el README de la pieza.
 **Historias (1080×1920):** mismo pack con `--format story`. Dejar libre el tercio de abajo: ahí va el sticker de
 link, que se pone a mano en Instagram. Ejemplo: `briefs/marca-personal/sergio-historias-comunidad-20261001.json`.
 
