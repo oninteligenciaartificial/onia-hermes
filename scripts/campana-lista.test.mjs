@@ -366,3 +366,49 @@ test("sales-kit/07: las respuestas de Sergio Urcullo a un lead de pauta son de u
   assert.match(guia, /apaga el bot/, "la guía dice dónde se contesta para que el bot se calle");
   assert.match(leer("hermes-content/sales-kit/README.md"), /07-LEAD-DE-PAUTA-PRIMERAS-24H\.md/, "el README del kit lo lista");
 });
+
+// ── LISTA PARA MOSTRAR: respuestas del bot prueba 1 (frase por frase) ────────────────────────────────────────────────
+// La tabla cita al bot palabra por palabra: si el bot cambia una frase y la tabla no, la lista se queda hablando de otra cosa.
+const LISTA_BOT_RUTA = "hermes-content/carousels/briefs/ads/prueba1-v2/LISTA-PARA-MOSTRAR-RESPUESTAS-DEL-BOT.md";
+const listaBot = leer(LISTA_BOT_RUTA);
+const normaliza = (t) => t.replace(/[_*]/g, "").replace(/\s+/g, " ").trim();
+const filasDeLaTabla = listaBot.split("\n").filter((l) => /^\| \d+ \| «/.test(l)).map((l) => l.split("|").map((c) => c.trim()).slice(1, -1));
+
+test("LISTA DEL BOT: título, 21 frases y un conteo por estado que es el de la tabla", () => {
+  assert.match(listaBot, /^# LISTA PARA MOSTRAR: respuestas del bot prueba 1$/m);
+  assert.equal(filasDeLaTabla.length, 21, "21 frases");
+  const cuenta = { "✅": 0, "🟡": 0, "⬜": 0, "❌": 0 };
+  for (const f of filasDeLaTabla) { assert.ok(f[3] in cuenta, `estado desconocido «${f[3]}» en la fila ${f[0]}`); cuenta[f[3]] += 1; }
+  assert.match(listaBot, new RegExp(`\\| \\*\\*${cuenta["✅"]}\\*\\* \\| \\*\\*${cuenta["🟡"]}\\*\\* \\| \\*\\*${cuenta["⬜"]}\\*\\* \\| \\*\\*${cuenta["❌"]}\\*\\* \\|`), "el conteo de arriba es el de la tabla");
+  for (const f of filasDeLaTabla.filter((x) => x[3] === "❌")) assert.match(f[2], /J-0?\d|K-1\d/, `la fila ${f[0]} en ❌ nombra su fila de PROMESA`);
+  for (const f of filasDeLaTabla.filter((x) => x[3] !== "✅" && /Quitar|Hasta leer|Sacar|Dejarla|«/.test(x[4]) === false)) assert.ok(f[4].length > 2, `la fila ${f[0]} no ✅ trae su corrección o dice que no hay de texto`);
+});
+
+test("LISTA DEL BOT: cada frase citada es la que el motor real del bot dice (ad, cuenta su clínica, paciente, Sergio, precio y SIAT)", () => {
+  // Miércoles 11:00 en La Paz: FUERA del horario de oficina (arranca a las 14:00), así sale la coletilla M7 que la fila 8 cita.
+  const fuera = (estado, texto) => step(estado, { text: texto, receivedAt: "2026-10-14T15:00:00Z" }, { config: PRODUCCION });
+  const ad = fuera(createState({ channel: "chatwoot", contactRef: "lista-bot" }), "Hola, vi el anuncio de Onia (D9). Tengo una clínica dental.");
+  const dichos = [textoDe(ad)];
+  dichos.push(textoDe(fuera(ad.nextState, "Somos 3 odontólogos y la recepcionista agenda las citas")));
+  dichos.push(textoDe(fuera(ad.nextState, "Busco atención dental")));
+  dichos.push(textoDe(fuera(ad.nextState, "Hablar con Sergio")));
+  dichos.push(textoDe(fuera(ad.nextState, "¿Cuánto cuesta?")));
+  dichos.push(textoDe(fuera(ad.nextState, "¿Emite factura electrónica del SIAT?")));
+  const todo = normaliza(dichos.join(" "));
+  for (const f of filasDeLaTabla) {
+    const frase = normaliza(f[1].replace(/^«|»$/g, ""));
+    assert.ok(todo.includes(frase), `la fila ${f[0]} cita algo que el bot ya no dice: «${frase.slice(0, 80)}…»`);
+  }
+});
+
+test("LISTA DEL BOT: los textos corregidos no prometen lo prohibido, ni el agente de WhatsApp, ni minutos, ni voseo", () => {
+  const secciones = listaBot.split("## 3. Los textos corregidos")[1].split("## 4.")[0];
+  const bloques = secciones.split("\n").filter((l) => l.startsWith(">")).map((l) => l.replace(/^>\s?/, "")).filter(Boolean);
+  assert.ok(bloques.length >= 4, "ancla: los tres textos corregidos (el de precios en dos párrafos)");
+  for (const t of bloques) {
+    assert.deepEqual(promesasEn(t), [], `promete algo prohibido: «${t.slice(0, 70)}…»`);
+    assert.ok(!/chatbot|agente de WhatsApp|Bs 390|\b\d+\s*minutos\b|SUS n[uú]meros|c[oó]mo quedar[ií]a en SU negocio|RND/i.test(t), `lo que la lista saca vuelve a aparecer: «${t.slice(0, 60)}…»`);
+    assert.ok(!/\b(vos|tenés|querés|podés|tu |tus |contame|escribinos|sos)\b/i.test(t), `voseo o tuteo en «${t.slice(0, 50)}…»`);
+  }
+  assert.ok(bloques.some((t) => /Bs 320.*Bs 1\.290/.test(t)), "el texto de precios conserva los cuatro planes");
+});

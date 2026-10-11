@@ -22,6 +22,7 @@
       "filas": [
         "B-01",
         "B-02",
+        "C-01",
         "C-02",
         "D-01",
         "E-01",
@@ -31,7 +32,7 @@
         "G-11",
         "L-05"
       ],
-      "comprobacion": "ONIA_PROMESA_VS_PRODUCTO.md: las diez en ✅ con la cuenta de prueba. Las del TEXTO de las piezas v2 (cada brief las lista): B-01 (agenda), C-02 (ficha con odontograma), D-01 (tratamientos), E-01 (cobros), B-02 (estado de confirmación), G-01 («ningún mensaje de Pendientes sale sin que usted lo apruebe»), G-04 («cada mañana») y G-06 (quién tiene cita mañana y no confirmó). G-11 y L-05 no las promete el texto: las usa la demostración de la llamada. G-05 (Vuelve a citar) solo para G1-2: ver anuncios.esperan",
+      "comprobacion": "ONIA_PROMESA_VS_PRODUCTO.md: las once en ✅ con la cuenta de prueba. Las del TEXTO de las piezas v2 (cada brief las lista): B-01 (agenda), C-01 (clientes: lo dicen las respuestas del bot, no el anuncio), C-02 (ficha con odontograma), D-01 (tratamientos), E-01 (cobros), B-02 (estado de confirmación), G-01 («ningún mensaje de Pendientes sale sin que usted lo apruebe»), G-04 («cada mañana») y G-06 (quién tiene cita mañana y no confirmó). G-11 y L-05 no las promete el texto: las usa la demostración de la llamada. G-05 (Vuelve a citar) solo para G1-2: ver anuncios.esperan",
       "estado_10oct": "⬜ sin verificar: falta la cuenta demo"
     },
     {
