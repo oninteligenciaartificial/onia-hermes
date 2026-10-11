@@ -78,6 +78,17 @@ test('3b. Los píxeles salen enteros hacia abajo: 199,9 se ve 199 y sigue avisan
   assert.match(armarTabla(json).markdown, /\| 200 \|/);
 });
 
+test('3c. El JSON real del face-gate trae un grupo negatives: se lista como informativo y no cambia el código', () => {
+  const json = fixture([0.78]);
+  json.images['neg-1'] = { group: 'negatives', faces: 1, det_score: 0.9, face_px: 250, img: [512, 512], flip_self: 0.9 };
+  json.scores['neg-1'] = { centroid: 0.2 };
+  const { markdown, codigo } = armarTabla(json);
+  assert.equal(codigo, 0);
+  assert.match(markdown, /### Negativas/);
+  assert.match(markdown, /\| neg-1 \| 0\.200 \| 250 \| negativa \(calibra el piso\) \|/);
+  assert.match(markdown, /1 tests · 0 bajo el piso · 0 sin cara/);
+});
+
 test('4. Sin scores o con error significa SIN CARA', () => {
   for (const conError of [false, true]) {
     const json = fixture();

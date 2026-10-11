@@ -14,13 +14,13 @@
 
 | Pieza | Líneas | Caracteres | ≈ Segundos hablados | ¿Cabe en 381? | Recorte para caber |
 |---|---:|---:|---:|---|---|
-| **P9** «La cara o la escena.» (`videos/lucia-p9-luz-cara/`) | 7 | **304** | 17,9 | **Sí, sobran 77** | — (el guion puede cambiar según la revisión en curso) |
+| **P9** «¿La cara o la escena?» (`videos/lucia-p9-luz-cara/`, v3.1) | 7 | **311** (305 sin saltos) | 18,3 | **Sí, sobran 70** | — (guion final: sin decimales hablados; L4 de 96 car no admite retoma; el cronograma tiene 0,05 s de margen y pide ≥ 16,85 car/s) |
 | **G3 v2** «Tres errores que casi publico» | 12 | 412 | 24,2 | No (faltan 31) | −8 % (31+ car) |
 | **G2 v2** «Misma orden, seis clips» | 14 | 415 | 24,4 | No (faltan 34) | −9 % |
 | **G5 v2** «Cómo mido si una cara es la de Lucía» | 10 | 418 | 24,6 | No (faltan 37) | −9 % |
 | **G4 v2** «Seis motores de imagen, una cara» | 12 | 444 | 26,1 | No (faltan 63) | −15 % |
 | **Total G3+G2+G5+G4** | | **1.689** | | | con retomas ×1,3 ≈ 2.200 |
-| Total con P9 | | 1.993 | | | |
+| Total con P9 | | 2.000 | | | |
 
 Conteos: `python3` sobre cada `guion-voz.txt` (líneas no vacías, `con_saltos`). Los números cambian si el revisor o la madre tocan un guion; se recuentan antes de generar.
 

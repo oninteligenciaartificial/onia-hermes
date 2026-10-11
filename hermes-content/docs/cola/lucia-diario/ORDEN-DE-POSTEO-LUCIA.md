@@ -17,7 +17,7 @@
 | 6 | Vie 23-oct · 19:00 | **G5 v2** «Cómo mido si una cara es la de Lucía» (26,6 s) | IG | `videos/lucia-entrega/g5-v2-final-1080x1920.mp4` | Lista **muda** | Voz (418 car) · decisión de la madre sobre el 0,35 de Kling O1 Image |
 | 7 | Lun 26-oct · 19:00 | **G4 v2** «Seis motores de imagen, una cara» (28,0 s) | IG | `videos/lucia-entrega/g4-v2-final-1080x1920.mp4` | Lista **muda** | Voz (444 car) |
 | 8 | Mié 28-oct · 19:00 | **C2** «Seis motores de imagen: cuánto cuesta y cuánto se parece» (carrusel) | IG | `hermes-content/carousels/out/lucia-c2-seis-motores-de-imagen/slide-01..05.png` | Lista | Después de G4 |
-| 9 | Vie 30-oct · 19:00 | **P9** «La cara o la escena.» (reel 20 s) | IG | `videos/lucia-p9-luz-cara/out/p9-final-1080x1920.mp4` (mudo) | **En revisión** (master renderizado) | Corregir la nota del límite de cara · voz (304 car) · «mostrada» |
+| 9 | Vie 30-oct · 19:00 | **P9** «¿La cara o la escena?» (reel 20 s) | IG | `videos/lucia-entrega/p9-final-1080x1920.mp4` (mudo, SHA `49b40ea5…9e04`) | **LISTA PARA MOSTRAR** muda (11-oct, v3.1) | Voz (311 car; cupo 381) · «mostrada, publicá P9» |
 | 10+ | desde Lun 2-nov | Pruebas nuevas (rotación de 4 semanas: P1, P2, P3, L2, L3) | IG | — | Sin producir | Cada una pide su sí de gasto en esta sesión (`PLAN.md` §5, punto 4) |
 
 Cada fila sale como **máximo una por día** y **hasta tres por semana**. La historia de IG es un extra que se suma cuando haya seguidores.

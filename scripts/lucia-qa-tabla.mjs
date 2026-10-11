@@ -19,12 +19,13 @@ export function armarTabla(json) {
 
   const tests = [];
   const refs = [];
+  const negativas = [];
   let bajos = 0;
   let sinCara = 0;
 
   for (const [nombre, imagen] of Object.entries(json.images)) {
-    if (!objeto(imagen) || !['tests', 'refs'].includes(imagen.group)) {
-      throw new Error(`La clave images.${nombre}.group debe ser tests o refs`);
+    if (!objeto(imagen) || !['tests', 'refs', 'negatives'].includes(imagen.group)) {
+      throw new Error(`La clave images.${nombre}.group debe ser tests, refs o negatives`);
     }
     const sinPuntaje = Object.hasOwn(imagen, 'error') || !Object.hasOwn(json.scores, nombre);
     const centroid = sinPuntaje ? undefined : json.scores[nombre]?.centroid;
@@ -37,11 +38,13 @@ export function armarTabla(json) {
     if (imagen.group === 'tests') {
       if (veredicto === 'BAJO') bajos++;
       if (veredicto === 'SIN CARA') sinCara++;
+    } else if (imagen.group === 'negatives') {
+      veredicto = sinPuntaje ? 'SIN CARA' : 'negativa (calibra el piso)';
     } else if (!sinPuntaje && centroid < PISO) {
       veredicto = 'ref bajo el piso';
     }
     const fila = `| ${celda(nombre)} | ${numero(centroid)} | ${pixeles(imagen.face_px)} | ${veredicto}${nota} |`;
-    (imagen.group === 'tests' ? tests : refs).push(fila);
+    (imagen.group === 'tests' ? tests : imagen.group === 'negatives' ? negativas : refs).push(fila);
   }
 
   const encabezado = '| Imagen | Parecido (centroid) | Cara (px) | Veredicto |';
@@ -59,6 +62,7 @@ export function armarTabla(json) {
     '',
     encabezado, separador, ...refs,
     '',
+    ...(negativas.length ? ['### Negativas (caras de otras personas que calibran el piso; informativas)', '', encabezado, separador, ...negativas, ''] : []),
     `${tests.length} tests · ${bajos} bajo el piso · ${sinCara} sin cara`,
     '',
   ].join('\n');
