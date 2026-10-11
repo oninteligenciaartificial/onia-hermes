@@ -1,3 +1,5 @@
+ACTUALIZACIÓN 11-oct (madre): el master NUEVO SÍ se midió con ArcFace — ver qa/arcface-madre-11oct.txt (diferencia final↔fuente ≤ 0,009). La nota de abajo describe el estado del editor y queda como historia.
+
 NOTA DE LA REVISIÓN 1 (11-oct-2026): este archivo es el de la versión de la mañana (master SHA-256 72860a55…97af5fa, 644 cuadros). El master nuevo (SHA-256 en qa/sha-master.txt, 639 cuadros) NO se midió con ArcFace: en este contenedor no hay venv ni modelo buffalo_l y instalarlos pide aprobación.
 Lo que cambió respecto del master medido NO toca la cara (mismas fotos, mismo empuje lento 1,00 → 1,04 con origen en la cara, mismas cajas; solo cambió cuánto dura cada escena). Evidencia de pixeles en su lugar: qa/psnr-fotos.txt (PSNR del final contra la fuente dentro de la caja de la cara: 37,1 a 38,3 dB)
 y qa/cara-vs-manana.txt (la cara del master nuevo contra la del master de esta tabla: 40,7 a 43,7 dB). Para el puntaje de ArcFace: scripts/fuente-con-zoom.py + .claude/skills/lucia/scripts/face-gate.sh donde esté el venv.

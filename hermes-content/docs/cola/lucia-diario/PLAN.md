@@ -44,7 +44,7 @@ escrito en la skill `lucia`, con el caso, el costo y la fecha.
   «agenda llena», no resultados, no dice que estuvo en un lugar o evento real. No toca política.
 - **Las herramientas SÍ se nombran, como uso propio y no como recomendación pagada** (Sergio Urcullo, D-N1, 11-oct ~04:05 UTC; antes valía «Motor 1»). El pie suma
   «Nombro lo que uso; no es una recomendación pagada.» Siguen prohibidos los logos y las capturas de interfaces de terceros, y toda frase que suene a «el mejor» o a recomendación general.
-- **Sin voz** hasta resolver D4. Ninguna voz de ElevenLabs se publica sin licencia comercial confirmada. Sin música sin
+- **Voz Marcela: D4 decidida el 11-oct** (queda, con su acento colombiano; `cola/loop/madre.md:75`). Las piezas salen mudas y la voz se mezcla después, con el sí de la madre y el cupo. Ninguna voz de ElevenLabs se publica sin licencia comercial confirmada (no verificada). Sin música sin
   licencia: la pone Sergio Urcullo.
 - **Nombre con apellido** siempre.
 - **QA completo antes de publicar:** receta de `editor-videos` § «Reels de Lucía» §12 (cuadro 0, cada entrada, último

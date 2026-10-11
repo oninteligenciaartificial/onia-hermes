@@ -13,10 +13,12 @@ description: "Invocar para CUALQUIER trabajo del carril Lucía (Lucía Antelo, l
 
 - **Es de Lucía:**
   - su identidad: `hermes-content/references/modelos/lucia/**`, con `LUCIA.md` §0 como biblia del personaje;
-  - el plan y la cola: `hermes-content/docs/cola/lucia-diario/`, donde `PLAN.md` manda;
+  - el plan y la cola: `hermes-content/docs/cola/lucia-diario/`, donde `PLAN.md` manda; el día a día y el gate de cara (`face_identity_qa.py` ≥ 0,70) están en `FLUJO.md` de esa carpeta; la cola de la sesión, en `hermes-content/docs/cola/loop/lucia.md`;
+  - los contratos de Codex del carril: `hermes-content/docs/handoff/codex-tareas/lucia-*.md` (pieza 9, tabla de identidad, frases prohibidas); la madre los lanza;
   - los videos `videos/lucia-*`;
   - el contenido orgánico de `@lucia.antelo.oficial`;
   - la política de Higgsfield: `hermes-content/docs/HIGGSFIELD_VIDEO_SYSTEM.md`.
+- **Orden S03 de la madre marketing (11-oct)** — `hermes-content/docs/research/2026-10-11-harness-qa/S03-orden-lucia.md` (rama `origin/claude/arranque-nueva-madre-ba386e`, commit `2b059484`). Lo que fija para este carril, sin copiarlo: **la sesión Lucía no maneja tokens** (el de Instagram, `ig-lucia.env`, lo pone `madre-dev` en el VPS con el sí de Sergio Urcullo); **ninguna generación de video sin `higgsfield generate cost` y sin su OK** (las imágenes de menos de ~5 cr por lote siguen la regla de `CLAUDE.md`); **mostrar antes de subir** (D7: nada se publica sin «mostrada, publicá <pieza>»); la voz **Marcela queda** (D4, `madre.md:75`).
 - **No es de Lucía:**
   - la campaña de Meta y sus piezas: Ventas y pauta. Lucía entra solo con el brief de ellos;
   - la web y la cuenta demo: Plataforma;

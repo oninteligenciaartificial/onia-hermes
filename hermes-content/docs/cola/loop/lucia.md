@@ -39,6 +39,27 @@
   SHA-256 en `videos/lucia-entrega/`; previews 360p en `videos/lucia-gN/qa/`. 0 créditos más.
 - [ ] Publicar en la cuenta de Lucía lo que pase el control de identidad — **pasa a Bloqueado** (abajo): corre en el VPS.
 
+## Orden S03 de la madre marketing (11-oct) — registro y estado
+
+Fuente: `hermes-content/docs/research/2026-10-11-harness-qa/S03-orden-lucia.md` (rama `origin/claude/arranque-nueva-madre-ba386e`, commit `2b059484`). Se escribió desde un árbol donde faltaban la skill `lucia`, `videos/lucia-entrega/` y las v2: varios pasos ya estaban hechos o cambiaron de sentido en esta rama (la de publicación, PR #144).
+
+- [x] **Paso 2 · decisiones registradas.** modelos: escrito en esta sesión (sonnet-5-5), sin subagentes.
+  - **D4 = la voz Marcela queda** (Sergio Urcullo, 11-oct, vía la madre; fuente `cola/loop/madre.md:75`). `PLAN.md` y `LUCIA.md` §0-canon decían «sin voz hasta resolver D4»: **corregidos hoy**. No se reabre salvo pedido de Sergio Urcullo.
+  - **G1 vigente = el video v2 de 20 s con voz Marcela**, aprobado por Sergio Urcullo («publicá G1 de Lucía»), en `.madre-ver/lucia-g1-v2.mp4` en la PC de la madre (según `madre.md:62-63`; no verificable desde la nube). Falta su SHA en `videos/lucia-entrega/README.md`.
+    La v1 (`g1-final-1080x1920.mp4`, 56 s, SHA `5903cd9c…`) queda de antecedente y **no es la que se publica**. La captura real de Pendientes de la demo es pieza aparte (Marca) y ya estaba reemplazada por la premisa v5.
+  - **D2, D3, D5, D6** — estado del 5-oct en `handoff/higgsfield-lucia.md:216-220`, **sin cierre de Sergio Urcullo registrado después**: D2 «reel primero» (el plan v5 aprobado el 11-oct ya empieza por un reel) · D3 «WhatsApp, todavía no» (ninguna pieza del plan v5 manda a WhatsApp) ·
+    D5 «canon de 10 datos» (`LUCIA.md` §0-canon, «PROPUESTO, SIN aprobar»; las piezas ya lo usan) · D6 «Comentá DEMO» (no aplica al plan v5: el CTA es «Seguime: cada semana, una prueba.»; un CTA de comentario→DM sin probar pide su OK, y Meta lo rechazó 2 veces). Ninguna de las cuatro bloquea G1 a G5. El pedido en una sola hoja lo hace la madre.
+- [x] **Paso 4 · G4 y G5 en la rama de publicación.** modelos: escrito en esta sesión; verificación con verificador haiku. `videos/lucia-entrega/` ya está en esta rama con los dos, pero **S03 se refiere a las v1** (SHA `ec4c450f…` y `6eed3ade…`), que **ya no se publican** (D-N1, 11-oct: llevan «Motor 1 a 6» / «Imagen A a F»).
+  Las que valen son **G4 v2** (`g4-v2-final-1080x1920.mp4`, SHA `13cdd1d2…a43`) y **G5 v2** (`g5-v2-final-1080x1920.mp4`, SHA `030e8f65…b3f`), ambas «LISTA PARA MOSTRAR». La advertencia de la 3.ª pasada de G5 v1 (sin revisión de cuadros) **ya no aplica**: G5 v2 tiene revisión independiente (`videos/lucia-g5-v2/qa/revision-1.md`)
+  y cuadros mirados por la madre, y la cara medida sobre el master final (`qa/arcface-madre-11oct.txt`, ≤ 0,009).
+- [x] **Paso 5 · skill del carril.** `.claude/skills/lucia/SKILL.md` ya existía (5-oct) y `onia-router` la lista (l.62 y l.111). Hoy sumé punteros, sin copiar contenido: `FLUJO.md`, la cola, los contratos `lucia-*` de Codex y las reglas de S03 (la sesión Lucía no maneja tokens, ningún video sin `generate cost` y su OK, mostrar antes de subir). modelos: escrito en esta sesión.
+- [x] **Pasos 6 y 7 · contratos de Codex escritos** (`hermes-content/docs/handoff/codex-tareas/`), commit «CODEX LISTO: lucia-qa1/qa2»; los lanza la madre con `gpt-6-luna` low. modelos: escritos en esta sesión (sonnet-5-5); ejecución Codex, `codex:` pendiente.
+  `lucia-qa1-tabla-identidad.md`: campo `scores.<imagen>.centroid` y umbral 0,70 fijados. **Diferencia con S03:** las referencias se listan aparte y **no cuentan para el código de salida** (`R4_casi_perfil` da 0,698 contra sus compañeras: contarla dejaría la herramienta siempre en rojo).
+  `lucia-qa2-frases-prohibidas.md`: la lista es la **unión** de LUCIA.md §0, LUCIA_COMO_SE_USA §6 y CLAUDE.md (S03 traía la mitad; §0 suma «soy doctora», «como odontóloga», «mi estudio»); el recorrido por defecto sobre `lucia-diario/` es informativo (esos documentos citan la regla) y con argumentos sale 1 si hay coincidencia.
+  También corregí el contrato de la pieza 9 a la plantilla de la madre y le agregué que Codex no puede renderizar en la PC (`EPERM`, 9-oct): la madre renderiza.
+- [ ] **Pasos 1 y 3 (token de Instagram y publicar G1):** de madre-dev, madre-marketing y Sergio Urcullo. La sesión Lucía no maneja tokens.
+- Gasto de Higgsfield, último dato medido: octubre gastado **139 de 150 cr** (`v4/PROCEDENCIA.jsonl` l.97, 8-oct) y saldo real **438,17** el 10-oct. Esta sesión no gastó nada desde entonces (no consta lo de otras sesiones). Ninguna generación de video sin `higgsfield generate cost` y su OK.
+
 ## Dirección de Sergio Urcullo · 10-oct (vía la madre): que Lucía venda Onia Platform y sea influencer
 
 > **SUPERADA por la madre v4 (~01:30 UTC del 11-oct), con las palabras de Sergio Urcullo: «Lucía sigue aprendiendo Higgsfield para venderlo y ser una modelo AI

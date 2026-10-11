@@ -1,4 +1,23 @@
+---
+id: LUCIA-P9
+carril: lucia
+estado: pendiente
+modelo: gpt-6.1-sol  # esfuerzo medium; composición HyperFrames con el método de G5 v2
+repo: onia-hermes
+rama: codex/lucia-p9  # la crea la madre al lanzar
+base: main
+pr:
+escrita: 2026-10-11 por Lucía (nube, session_01XSzFcs1k18ijqjSHGjnzD4)
+actualizada: 2026-10-11 por Lucía (nube, session_01XSzFcs1k18ijqjSHGjnzD4)
+nota: Pedido de la madre marketing el 11-oct. Render y gates que usan Chromium/ffmpeg los corre quien tenga el entorno; si Codex no puede renderizar, escribe la composición y lo dice.
+---
 # P9 · Lucía «La cara o la escena» (pieza 9: la luz cambia cuando la cara se sostiene)
+
+Sos Codex. Trabajás SOLO en esta carpeta: un worktree de `onia-hermes` que creó la madre, en la rama `codex/lucia-p9`.
+- No uses git: ni consultas, ni cambio de rama, ni commits. La madre verifica la rama y revisa el diff.
+- Si ya hay cambios en la carpeta, una corrida anterior se cortó: revisá los archivos y seguí desde ahí.
+- Nadie contesta preguntas mientras corrés. Decidí con este documento y el código; lo que no puedas decidir, anotalo en el resumen final.
+- Sin push, sin `npm install`, sin producción, sin red. NO commitees: la madre revisa el diff y commitea.
 
 Contrato pedido por la madre marketing el 11-oct. Modelo: `gpt-6.1-sol` medium. La madre lo lanza desde la PC y recibe el diff.
 **Codex no ejecuta Git** (ni consultas): la madre verifica la rama, commitea e integra. Fuente: `hermes-content/docs/cola/lucia-diario/PLAN.md` §4-bis y §5 (fila 9).
@@ -75,6 +94,9 @@ Pie (`pie.txt`, abre literal con «Personaje hecho con IA»):
    Costuras rígidas de 6 cuadros. **Regla 15:** ningún tramo quieto > 0,3 s fuera de una tarjeta en lectura; un evento visible nuevo cada ≤ 2 s.
 4. Renderizar el master (`flock /tmp/hf-render.lock npx -y hyperframes@0.8.142 render --quality high -f 24 -o renders/final-raw.mp4`), muxar audio AAC **en silencio**
    y guardar `out/p9-final-1080x1920.mp4` (`out/` y `renders/` no van a git). Preview 360p en `qa/`.
+   **Si Codex no puede renderizar** (en la PC de la madre dio `EPERM` el 9-oct; Chromium y ffmpeg pueden estar bloqueados), NO es motivo de parada: escribe la composición, corre
+   `build.mjs` y todo lo que sí pueda, y deja en el `README.md` de la carpeta el comando exacto de render y de cada gate pendiente. El render, el master y los gates que miden píxeles o
+   abren Chromium los corre entonces la madre, y dice en el resumen cuáles quedaron para ella.
 5. `README.md` de la carpeta: qué es, SHA-256 del master, cada decisión tomada con cómo revertirla, y **«Lo que no se pudo cerrar»** (sin disfrazarlo).
 
 ## ARCHIVOS QUE TOCA
@@ -83,7 +105,7 @@ Pie (`pie.txt`, abre literal con «Personaje hecho con IA»):
   `.claude/skills/**`, nada de `onia-platform`.
 
 ## PRUEBA DE HECHO
-Todo con exit 0 y el resultado pegado en `qa/`:
+Todo con exit 0 y el resultado pegado en `qa/` (los puntos que exigen render o Chromium: los corre Codex si puede; si no, la madre, según el punto 4 de «Lo que se hace»):
 - `hyperframes check`: 0 errores (los avisos de estilo se listan).
 - `eventos.mjs` + `aire.mjs`: la regla 15 con su exención de lectura y los números medidos; `ventanas.mjs`: todas las tarjetas alcanzan su tiempo de lectura;
   `hueco-tarjetas.mjs`: 0 cuadros sin tarjeta; `costuras.mjs`: costuras rígidas; `grep-prohibidas.mjs`: 0 coincidencias.

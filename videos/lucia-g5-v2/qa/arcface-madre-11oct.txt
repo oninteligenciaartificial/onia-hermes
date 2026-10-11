@@ -1,0 +1,21 @@
+Control de cara de la MADRE sobre el master FINAL (11-oct-2026), independiente del editor.
+ArcFace buffalo_l (SCRFD det_10g + w600k_r50) con el venv y los modelos ya instalados (sin instalar nada, sin red), contra las 8 referencias oficiales LOCALES
+(videos/lucia-g4-v2/assets/refs-orig/, R1..R8). Piso del repo 0,70 (FLUJO.md:28); regla del repo final↔fuente ≤ 0,02. Caras < 200 px: poco confiables (se miran a ojo).
+
+Master: out/g5-v2-final-1080x1920.mp4  SHA-256 030e8f65aabc0fddda83f234acebb410b951b7b81c3dc9c2657410f5ec399b3f
+
+Fuente = la foto original llevada al mismo zoom (scripts/fuente-con-zoom.py), sin comprimir. JSON completo: qa/arcface-madre-11oct.json
+
+instante          final   px  fuente   px      dif
+f-gancho_t1.00    0.793  182   0.802  181   -0.009
+f-gancho_t2.00    0.789  185   0.797  182   -0.008
+f-gancho_t2.79    0.800  184   0.793  185   +0.007
+f-e3_t11.33       0.357  294   0.358  293   -0.001
+f-e3_t12.08       0.358  299   0.354  296   +0.004
+f-e3_t12.79       0.358  301   0.360  298   -0.002
+f-cierre_t22.75   0.830  201   0.832  201   -0.002
+f-cierre_t24.29   0.823  205   0.827  205   -0.004
+f-cierre_t25.79   0.827  207   0.827  207   +0.000
+
+MÁXIMA diferencia final↔fuente: 0.009  (límite 0,02)  → el escalado, el empuje lento y el H.264 no deforman la cara.
+Nota: f-e3 es la imagen de Kling O1 Image que perdió la cara (NO es Lucía): queda a propósito bajo el piso (0,35).

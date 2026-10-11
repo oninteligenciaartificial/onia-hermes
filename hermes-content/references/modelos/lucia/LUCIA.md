@@ -80,7 +80,7 @@
 > 7. **Lo que le molesta del humo de la IA:** que prometan «la IA lo hace todo». Ella muestra solo lo que funciona hoy.
 > 8. **Su color:** terracota, siempre en cuadro.
 > 9. **Su música:** la del carnaval cruceño. En sus piezas solo suena música con licencia.
-> 10. **Cómo habla:** voseo cruceño, frases cortas y con humor. Sin voz hasta resolver el acento (`PLAN.md` D4).
+> 10. **Cómo habla:** voseo cruceño, frases cortas y con humor. Voz Marcela: **D4 resuelta el 11-oct** (queda, con su acento colombiano; `PLAN.md` §4-bis y `cola/loop/madre.md:75`). Las piezas salen mudas y la voz se mezcla después, con el sí de la madre.
 
 > ## 🔴 Estado vigente — 2026-09-29: Lucía v4 = la cara ORIGINAL, fijada de verdad
 >
