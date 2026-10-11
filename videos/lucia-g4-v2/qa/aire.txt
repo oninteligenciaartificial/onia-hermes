@@ -18,3 +18,10 @@ EVENTOS VISUALES NUEVOS (desde plan.json, scripts/eventos.mjs): 65 en 28.04 s = 
   mayor hueco entre eventos: 1.68 s (6.40 → 8.08 s); máximo permitido 2.0 s
   los 5 mayores huecos: 6.40→8.08: 1.68 s · 17.47→18.97: 1.50 s · 21.17→22.63: 1.46 s · 26.20→27.63: 1.43 s · 18.97→20.17: 1.20 s
   (control cruzado en el DOM: 29 ráfagas de cambios continuos; la mayor sin ningún cambio es el «mayor tramo quieto» de arriba)
+
+CONTROL EN PÍXELES del render final (solo placas: 316 cuadros; diferencia media de gris < 0.05 = cuadro igual):
+  mayor tramo de cuadros IGUALES (con lectura incluida): 1.46 s (en lectura de un texto: permitido)
+  mayor tramo quieto FUERA de toda lectura (criterio COMPLETA): 0.167 s desde 25.208 s; los de más de 0.3 s: 0
+  (en las escenas de foto hay 2 cuadros idénticos al anterior; el empuje lento mueve la imagen y el resto lo cubre el DOM)
+
+✔ regla 15: mayor tramo quieto 0.208 s (estricta) / 0.167 s (completa) ≤ 0.3 s; mayor hueco entre eventos 1.68 s ≤ 2.0 s

@@ -1,0 +1,6 @@
+piso de caras negativas (max): 0.224   gate del repo: 0,70
+archivo                                        centroide  min_ref  max_ref  cara_px  veredicto
+img-nano-banana-2-1-a4dd1a48-limpia.jpg            0.724    0.490    0.677      242  OK
+img-nano-banana-2-1-a4dd1a48.jpg                   0.737    0.494    0.685      241  OK
+img-flux-3-af9c2d0c-limpia.jpg                     0.687    0.492    0.652      255  BAJO: mirar
+img-flux-3-af9c2d0c.jpg                            0.690    0.493    0.651      255  BAJO: mirar
