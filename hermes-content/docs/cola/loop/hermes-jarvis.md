@@ -494,10 +494,36 @@ carril puede hacer solo. Q1 espera `aplicar` (ver «Bloqueado»).
   Las pantallas nuevas ya están en producción (E1) y nadie las vio con login. Las destraba la madre desde la PC
   (`node /root/onia-mirar.js oninteligenciaartificial+qapago@gmail.com /agenda`, `/caja-diaria`, `/inbox`, `/patients/<id>/odontogram`) o Q5 (#194) cuando
   entre y corra `aplicar` (necesita el «sí, aplicar» de Sergio Urcullo en esta sesión). **Hecho:** tres capturas a 390 y 1440 con sesión, miradas.
-- [ ] **E4 Volver a mirar #136 cuando entren sus arreglos.** Los dos HIGH de E3 y el comando de las migraciones. **Hecho:**
+- [x] **E4 Volver a mirar #136 cuando entren sus arreglos.** Los dos HIGH de E3 y el comando de las migraciones. **Hecho:**
   cada HIGH cerrado con su prueba, leído en el código de la cabeza nueva. **Aviso de la madre DESARROLLO-INFRA (11-oct ~06:20 UTC):** a las
   07:12 UTC sale el draft PR de F136 (caja y odontograma, toca plata) y llega el pedido de revisión con **dos lentes: seguridad y dinero**.
   Plan: un sonnet por lente sobre el diff, un haiku que verifica cada HIGH citando líneas, y los dos HIGH de E3 como lista de control.
+  **Hecho el 11-oct ~07:25 UTC (onia-platform #147 = F136, head `4bd9da9c`, base `master` `a7d8c1ed`):** `modelos: sonnet ×2 (seguridad y dinero), verificación de mis propios hallazgos: yo` · `codex: ninguno`.
+  **Veredicto: OK para mergear; ningún HIGH.** Lista de control de E3:
+  - Lectura del monto: `lib/dinero/leer-monto.ts:6-17` acepta «1.500» como 1500 y rechaza lo ambiguo (`1,500`, `1.50`, `1.5`, `1500.5`, `.5`, `1e3`, `1 500`, `Bs 1.500`); 8,3 millones de montos
+    por `leerMonto`, JSON y `multipleOf(0.01)` sin un rechazo falso (el agente usó zod v3 de `n8n-mcp-server/node_modules`; el repo declara 3.25.76).
+  - Confirmación del cierre: `CajaDiariaClient.tsx:711` exige mismo monto y nota; el botón (`:745-749`) envía el monto confirmado, no relee el texto; editar lo reinicia (`:732`, `:741`).
+  - `reopen`: `approvals.decide` en el servidor (`route.ts:224-227`), sin IDOR (la caja sale de `{organización de la sesión, hoy}`), `FOR UPDATE` (`:294`) y `updateMany` (`:298`) por organización, SQL parametrizado,
+    auditoría en la misma transacción que relanza si falla (`audit.ts:129`; `audit_logs.action` es `String`: sin migración), y reabrir libera los cobros (`payments/route.ts:73`).
+  - Caras del odontograma: `borrado-bloqueado.ts:132-138` correcto; los 7 hijos con cascada de `Patient` coinciden con lo declarado; el único `patient.delete` está detrás del helper (`patients/[id]/route.ts:178`).
+  - **MEDIUM (condición para el siguiente PR, no bloquea):** (1) `reopen` y `close` solo operan sobre **hoy** (`route.ts:233`, `:290`): si se reabre y no se vuelve a cerrar antes de las 00:00 de La Paz (04:00 UTC), la caja queda
+    abierta sin forma de cerrarla, y los cierres erróneos de días anteriores no se pueden reabrir (seguirían dando 409 en `payments/route.ts:73`). (2) Reabrir no pide motivo ni confirmación (`route.ts:39`, `CajaDiariaClient.tsx:690`); la auditoría guarda
+    quién, cuándo e IP, pero no el porqué ni los totales por método (`route.ts:324-332`). (3) Reabrir solo permite recontar: `correctOpeningFund` no tiene pantalla, no hay editar o borrar salidas, y el fondo y la salida se envían sin confirmar (`CajaDiariaClient.tsx:346`, `:640`).
+  - LOW: sin `.max` en los montos (`route.ts:19`, `:24`, `:29`, `:35`) contra `Decimal(10,2)`: más de 99.999.999,99 da un 500 genérico; `leer-monto.ts:10` acepta ceros a la izquierda y el mensaje de «12,345» dice «use coma» cuando sobran decimales; el `updateMany` de reopen no repite `closedAt: {not: null}` (lo cubre el lock);
+    `route.ts:325-326` llama `.toISOString()` sobre filas de `$queryRaw` y el test las mockea como `Date`: **pedir un smoke con base real** (`onia-mirar.js` sobre `/caja-diaria` tras publicar).
+  - **Fuera del PR, ya en producción (para Plataforma):** `DELETE app/api/payments/[id]/route.ts:37` borra cobros en efectivo de un día cerrado; los webhooks de PagosNet y Circle crean pagos sin mirar `closedAt`; el servidor sigue aceptando `close` con `countedCash: 1.5` (no puede saber que fue un error de tecleo).
+  - **MEDIUM de producto (otro dueño):** dos convenciones de monto en la misma app. Los formularios de comercio leen texto con `Number()` y su ejemplo es `815.00` (`comercio/caja/CorteForm.tsx:23` y `:58`, `fiados/AbonoForm.tsx:25`, `caja/VentaForm.tsx:124`, `PagoCompraForm.tsx:22`, `CompraForm.tsx:29`,
+    `NewProductForm.tsx:59-61`, `importadora/costeo/CosteoForm.tsx:80-82`, `lib/comercio/formulario-producto.ts:34-38`, `lib/comercio/import-productos.ts:115-137`): ahí «1.500» vale 1,5. En la caja diaria, con `leerMonto`, vale 1.500. Quien pasa de una pantalla a otra recibe dos lecturas.
+    La decisión de convención es de Sergio Urcullo; la función única ya existe.
+  - **Cuándo hay riesgo real:** el cierre erróneo necesita un negocio abierto. #136 está en producción desde ~06:56 UTC (02:56 en La Paz) y la publicación de las 09:50 UTC son las 05:50 en La Paz, antes del horario de atención. Si #147 está mergeado antes de las 09:20 UTC, lo más probable es que ningún cliente haya cerrado una caja con el error. No lo pude medir (sin acceso a la base).
+- [x] **E9 Pasada sobre #150 (P-01) y #151 (P-02) de onia-platform** (11-oct ~07:20 UTC; heads `52d77b0d` y `05dd4ecc`; `modelos: sonnet ×1` · `codex: ninguno`). Nada se mergeó ni se comentó en GitHub.
+  - **#150 CAMBIOS.** Solo lectura (dos GET con la clave anon, sin escrituras ni `child_process`), 15/15 pruebas locales. **HIGH (verificado por mí):** la guarda de la línea 76-78 (`import.meta.url === pathToFileURL(process.argv[1]).href`) falla si el script
+    se llama por un symlink: no mide nada, no imprime nada y sale con **0**, que el RUNBOOK (línea 357) define como «las dos tablas PASA». Repro: `env -i node real/b22-anon.mjs` → «NO MEDIDO», exit 3; `node enlace/b22.mjs` y `node enlace/dir/b22-anon.mjs` → silencio y exit 0.
+    En Windows puede pasar con una letra de unidad en otra mayúscula (sin verificar). Arreglo: comparar con `realpathSync` o separar el punto de entrada. MEDIUM: 401/403 da PASA sin control positivo (una clave rota o rotada también da PASA);
+    el script no exige que la clave sea `anon` (con una `service_role` y una fila da FALLA y baja una fila real). LOW: acepta `http:` y cualquier host; `select=*` en vez de `select=id`; el RUNBOOK cita `cola/loop/plataforma.md`, que no existe; el mensaje del commit dice «lista vacía = PASA» y el código dice SIN APLICAR.
+  - **#151 OK con notas LOW.** Un solo `SELECT` por `psql`, el correo pasa por una regex estricta y va como variable de `psql`, 7/7 pruebas locales, nunca imprime un id ante ambigüedad. LOW: salida vacía se informa como «no hay ninguna org» (exit 1) aunque la consulta no se haya ejecutado;
+    `ONIA_PSQL` ejecuta lo que traiga y no está documentado; un administrador puede editar el correo de su organización (`app/api/organization/route.ts:50-74`) y poner el de la demo, lo que bloquea el refresco (falla seguro).
+
 
 ## Hallazgos para otros
 
