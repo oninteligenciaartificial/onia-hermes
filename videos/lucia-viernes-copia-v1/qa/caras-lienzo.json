@@ -1,0 +1,26 @@
+{
+ "nota": "caja de la cara en el lienzo de 1080x1920 por escena: [x1,y1,x2,y2]; s1 = K4 a pantalla completa (cover), s2 = paneles K4 y R3",
+ "s1": [
+  [
+   243.7,
+   201.3,
+   722,
+   802.7
+  ]
+ ],
+ "s2": [
+  [
+   122.4,
+   470.3,
+   360.6,
+   769.8
+  ],
+  [
+   647.9,
+   472.6,
+   920.9,
+   804.1
+  ]
+ ],
+ "placa": []
+}
