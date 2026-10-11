@@ -203,6 +203,7 @@ function evaluador(libro) {
     const planos = (args) => args.flatMap((a) => (Array.isArray(a) ? a : [a]));
     const FN = {
       N: ([x]) => (typeof x === "number" ? x : typeof x === "boolean" ? Number(x) : 0),
+      ISNUMBER: ([x]) => (Array.isArray(x) ? x.map((v) => typeof v === "number") : typeof x === "number"),
       SUM: (args) => planos(args).reduce((a, x) => a + (typeof x === "number" ? x : 0), 0),
       MAX: (args) => Math.max(...planos(args).filter((x) => typeof x === "number" || typeof x === "boolean").map(Number), 0),
       SUMPRODUCT: ([a]) => (Array.isArray(a) ? a.reduce((s, x) => s + num(x), 0) : num(a)),
@@ -319,9 +320,12 @@ test("los números de la planilla son los de la spec (US$ 56, 14 días, Bs 750, 
   assert.equal(ev.celda("Parámetros", "C15"), 40);
   assert.equal(ev.celda("Parámetros", "C16"), 390);
   assert.equal(vacio.resumen.dias, spec.plata.dias);
-  // El tipo de cambio por defecto es el más duro (spec): 13,4.
-  assert.equal(ev.celda("Parámetros", "C6"), 13.4);
-  assert.match(spec.reglas_de_corte.tipo_de_cambio_para_convertir, /13,4/);
+  // El tipo de cambio real viene VACÍO; si no se carga, la planilla usa el más alto de las referencias (15), no el 13,4.
+  assert.equal(ev.celda("Parámetros", "C6"), null);
+  assert.equal(ev.celda("Parámetros", "C9"), 15);
+  assert.match(ev.celda("Parámetros", "D9"), /^ASUMIDO/);
+  assert.equal(Math.max(...Object.keys(spec.plata.equivalencia_en_bs).map((k) => Number(k.replace("a_", "").replace("_", ".")))), 15);
+  assert.match(spec.reglas_de_corte.tipo_de_cambio_para_convertir, /el más alto/);
 });
 
 test("las equivalencias de Parámetros coinciden con la spec (US$ 56 en Bs, y Bs 40 y Bs 390 en US$)", () => {
@@ -401,6 +405,7 @@ test("día 7: decide la campaña — costo por conversación ≤ Bs 40 con ≥ 1
   // Gasto acumulado a 7 días: 4 anuncios × 7 × US$ 1 = US$ 28 = Bs 375,2 a 13,4.
   const arma = (conv, duenos) =>
     planilla({
+      parametros: { tc: 13.4 },
       datos: datos(
         {
           D10: () => ({ gasto: 1, impresiones: 500, clics: 5, conversaciones: conv, duenos }),
@@ -423,6 +428,7 @@ test("día 7: el tope es Bs 40 por conversación — Bs 375,2 ÷ 9 = Bs 41,69 co
   const arma = (convTotales) => {
     // Las conversaciones totales se reparten en D10 (el resto, 0): importa el total de la campaña.
     const libro = planilla({
+      parametros: { tc: 13.4 },
       datos: datos(
         {
           D10: (d) => ({ gasto: 1, impresiones: 500, clics: 5, conversaciones: d === 1 ? convTotales : 0, duenos: d === 1 ? 1 : 0 }),
@@ -448,6 +454,7 @@ test("día 14: costo por demo ≤ Bs 390 sigue; > Bs 390 o 0 demos corta", () =>
   // 4 anuncios × 14 días × US$ 1 = US$ 56 = Bs 750,4 a 13,4.
   const arma = (demosEnD10) =>
     planilla({
+      parametros: { tc: 13.4 },
       datos: datos(
         {
           D10: (d) => ({ gasto: 1, impresiones: 500, clics: 5, conversaciones: 1, duenos: 1, demos: d === 14 ? demosEnD10 : 0 }),
@@ -508,4 +515,53 @@ test("las fórmulas solo usan funciones y nombres que el intérprete conoce (si 
     }
   }
   assert.ok(formulas > 300, `se esperaban > 300 fórmulas, hay ${formulas}`);
+});
+
+test("los formatos condicionales miran la cantidad de letras que tiene su palabra (LEFT(x,6) nunca iguala a «ESPERAR»)", () => {
+  const libro = planilla();
+  let reglas = 0;
+  for (const n of [1, 2, 3]) {
+    const xml = libro.arch.get(`xl/worksheets/sheet${n}.xml`);
+    for (const m of xml.matchAll(/LEFT\([A-Z]+\d+,(\d+)\)=&quot;([A-ZÁÉÍÓÚ]+)&quot;/g)) {
+      reglas += 1;
+      assert.equal(Number(m[1]), m[2].length, `LEFT(...,${m[1]}) contra «${m[2]}» (${m[2].length} letras) no puede ser verdadero`);
+    }
+  }
+  assert.ok(reglas >= 4, `se esperaban ≥ 4 reglas con LEFT, hay ${reglas}`);
+});
+
+test("si la campaña se apaga por el tope antes del día 14, el corte del día 14 NO espera para siempre", () => {
+  // 4 anuncios × US$ 1 por día × 13 días = US$ 52. A 15 son Bs 780 (≥ Bs 750): se apagó el día 13.
+  const trece = (tc) =>
+    planilla({
+      parametros: { tc },
+      datos: datos(
+        { D10: () => ({ gasto: 1, impresiones: 500, clics: 5, conversaciones: 1, duenos: 1, demos: 0 }), D9: () => ({ gasto: 1 }), D11: () => ({ gasto: 1 }), D7: () => ({ gasto: 1 }) },
+        13,
+      ),
+    });
+  const apagada = trece(15);
+  assert.equal(evaluador(apagada).celda("Cortes", "B3"), 14, "apagada por el tope: el día final");
+  assert.equal(veredictos(apagada, cortes.d14).campaña, "CORTAR*: 0 demos");
+  // A 13,4 los mismos US$ 52 son Bs 696,8: la campaña todavía puede estar corriendo, el corte espera.
+  const viva = trece(13.4);
+  assert.equal(evaluador(viva).celda("Cortes", "B3"), 13);
+  assert.equal(veredictos(viva, cortes.d14).campaña, "ESPERAR: faltan días");
+});
+
+test("un día cargado en 0 (sin gasto) cuenta como día cargado", () => {
+  const libro = planilla({ parametros: { tc: 13.4 }, datos: datos({ D10: (d) => ({ gasto: d === 14 ? 0 : 1, impresiones: 100, conversaciones: 1, duenos: 1, demos: 1 }) }, 14) });
+  assert.equal(evaluador(libro).celda("Cortes", "B3"), 14);
+});
+
+test("si no carga el tipo de cambio real, el freno de Bs 750 se adelanta (usa 15) en vez de dejar pasar el tope", () => {
+  const f = vacio.resumen.frenos;
+  // US$ 52 gastados: a 15 son Bs 780 (el cobro real si el banco cobra 15). Sin cargar el real, la hoja usa 15 y pide apagar.
+  const sinReal = evaluador(planilla({ datos: datos({ D10: () => ({ gasto: 13, impresiones: 100 }), D9: () => ({ gasto: 13 }), D11: () => ({ gasto: 13 }), D7: () => ({ gasto: 13 }) }, 1) }));
+  assert.equal(sinReal.celda("Cortes", `C${f + 2}`), 780);
+  assert.equal(sinReal.celda("Cortes", `C${f + 4}`), "APAGAR A MANO: llegó al tope");
+  // Con el real cargado (13,4) los mismos US$ 52 son Bs 696,8: no pide apagar.
+  const conReal = evaluador(planilla({ parametros: { tc: 13.4 }, datos: datos({ D10: () => ({ gasto: 13, impresiones: 100 }), D9: () => ({ gasto: 13 }), D11: () => ({ gasto: 13 }), D7: () => ({ gasto: 13 }) }, 1) }));
+  assert.ok(Math.abs(conReal.celda("Cortes", `C${f + 2}`) - 696.8) < 0.001);
+  assert.equal(conReal.celda("Cortes", `C${f + 4}`), "ACERCÁNDOSE (≥ 90 %)");
 });

@@ -745,7 +745,7 @@
       "seguir = una segunda tanda igual, pagada solo con plata de un cliente que ya pagó, nunca con la reserva"
     ],
     "como_se_corta": "ads_update_entity con status PAUSED sobre la campaña (no se borra: la cuenta de lo gastado queda)",
-    "tipo_de_cambio_para_convertir": "el real del extracto; si no se conoce, el más duro: 13,4"
+    "tipo_de_cambio_para_convertir": "el real del extracto; si no se conoce, el más alto de las referencias (15), que adelanta los frenos. 13,4 es el cambio al que US$ 56 son justo Bs 750, no el más duro (corregido el 11-oct al armar la planilla)"
   },
   "despues_de_crear": [
     "anotar en hermes-content/docs/handoff/mercado-y-pauta.md los ids de campaña, conjunto, creativos y anuncios",

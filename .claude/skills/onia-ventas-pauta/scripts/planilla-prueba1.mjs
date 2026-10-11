@@ -271,15 +271,20 @@ export function construirPlanilla(opciones = {}) {
   P.poner(2, 5, "Fecha de inicio de la campaña", S.fijoTxt);
   P.poner(3, 5, opciones.parametros?.inicio ?? null, S.entFecha);
   P.poner(4, 5, `${spec.fechas.inicio}. Se llena cuando exista el OK escrito de Sergio Urcullo y la campaña se encienda.`, S.fijoTxt);
-  P.poner(2, 6, "Tipo de cambio (Bs por US$)", S.fijoTxt);
-  P.poner(3, 6, opciones.parametros?.tc ?? 13.4, S.entDec);
-  P.poner(4, 6, `Se usa el real del extracto del banco; si no se conoce, el más duro: 13,4. Referencias de la spec: ${Object.keys(plata.equivalencia_en_bs).map((k) => k.replace("a_", "").replace("_", ",")).join(" · ")}.`, S.fijoTxt);
+  P.poner(2, 6, "Tipo de cambio REAL del extracto (Bs por US$)", S.fijoTxt);
+  P.poner(3, 6, opciones.parametros?.tc ?? null, S.entDec);
+  P.poner(4, 6, `El que cobra el banco en el extracto. Si queda vacío, la planilla usa el MÁS ALTO de las referencias (${Object.keys(plata.equivalencia_en_bs).map((k) => k.replace("a_", "").replace("_", ",")).join(" · ")}) y adelanta los frenos: así olvidarlo no deja pasar el tope. (Ojo: 13,4 es el cambio al que US$ 56 son justo Bs 750, no el más duro; la spec lo rotulaba así.)`, S.fijoTxt);
+  P.altos.set(6, 62);
   P.poner(2, 7, "Otros gastos del techo de Bs 1.400 (Bs)", S.fijoTxt);
   P.poner(3, 7, opciones.parametros?.otros ?? 0, S.entBs);
   P.poner(4, 7, "Auditorías, comunidad y eventos: lo que se gastó fuera de Meta. El techo de Bs 1.400 es Meta + esto (spec, ADQ §5.7).", S.fijoTxt);
   P.poner(2, 8, "Tipo de clic que cuenta como «CTR»", S.fijoTxt);
   P.poner(3, 8, null, S.entTxt);
   P.poner(4, 8, "ABIERTO: la regla dice «CTR < 0,8 %» y no aclara si es el CTR de todos los clics o el de los clics en el enlace. Anotar acá cuál muestra la columna CTR de Ads Manager y usar siempre el mismo.", S.fijoTxt);
+
+  P.poner(2, 9, "Tipo de cambio que USA la planilla", S.fijoTxt);
+  P.formula(3, 9, "IF(N(C6)>0,C6,MAX(B19:B22))", S.calcDec);
+  P.formula(4, 9, `IF(N(C6)>0,"El real que cargó.","ASUMIDO: no cargó el real; se usa el más alto de la tabla de abajo.")`, S.calcTxt);
 
   P.poner(2, 10, "Lo que NO se toca (viene de la spec)", S.enc);
   P.poner(3, 10, "Valor", S.enc);
@@ -298,7 +303,7 @@ export function construirPlanilla(opciones = {}) {
     P.poner(4, 11 + i, regla, S.fijoTxt);
   });
   nombres.INICIO = "$C$5";
-  nombres.TC = "$C$6";
+  nombres.TC = "$C$9";
   nombres.OTROS_BS = "$C$7";
   nombres.USD_TOTAL = "$C$11";
   nombres.BS_TOPE_META = "$C$12";
@@ -391,8 +396,13 @@ export function construirPlanilla(opciones = {}) {
   C.poner(1, 2, "Un corte vale solo cuando están los días completos: antes dice ESPERAR. CORTAR* = antes de pausar se descarta una falla de entrega (anuncio aprobado y con impresiones, el chat abre con el código y el bot contesta). Se pausa, no se borra ni se cambia la pieza: cambiar creativo o segmentación, o agregar un anuncio, reinicia el aprendizaje.", S.nota);
   C.mezclas.push("A2:I2");
   C.altos.set(2, 48);
-  C.poner(1, 3, "Días con datos", S.etiqueta);
-  C.formula(2, 3, `SUMPRODUCT(MAX((${rg("E")}>0)*${rg("A")}))`, S.calcEnt);
+  C.poner(1, 3, "Días cargados", S.etiqueta);
+  // Último día con gasto cargado (un 0 cuenta). Si la campaña ya se apagó por el tope (Bs 750 o US$ 56 gastados), vale el
+  // día final: se apaga ese día y los días que faltan no van a llegar (ADQ §5.7), así que el corte no puede esperar para siempre.
+  C.formula(2, 3, `IF(OR(SUM(${rg("E")})*TC>=BS_TOPE_META,SUM(${rg("E")})>=USD_TOTAL),${dias},SUMPRODUCT(MAX(ISNUMBER(${rg("E")})*${rg("A")})))`, S.calcEnt);
+  C.poner(3, 3, "Cuenta hasta el último día con gasto cargado (un 0 cuenta). Pasa solo al día 14 si el cobro ya llegó a Bs 750 o a US$ 56: la campaña se apagó.", S.nota);
+  C.mezclas.push("C3:I3");
+  C.altos.set(3, 30);
   nombres.DIAS_CON_DATOS = "$B$3";
 
   const acumulado = (colRango, codigoCelda, hasta) =>
@@ -497,7 +507,7 @@ export function construirPlanilla(opciones = {}) {
       reglas: [
         { dxf: 0, formula: `LEFT(I${sec.primera},6)="CORTAR"` },
         { dxf: 1, formula: `I${sec.primera}="SEGUIR"` },
-        { dxf: 2, formula: `OR(LEFT(I${sec.primera},6)="ESPERAR",I${sec.primera}="SIN DATOS")` },
+        { dxf: 2, formula: `OR(LEFT(I${sec.primera},7)="ESPERAR",I${sec.primera}="SIN DATOS")` },
       ],
     })),
     { rango: `C${iF + 4}`, reglas: reglasDeEstado(`C${iF + 4}`, "APAGAR") },
