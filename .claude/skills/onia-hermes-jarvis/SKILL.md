@@ -197,6 +197,33 @@ CLI de Hermes.
   corre cada línea instalada contra un `/root/bin` que anota sus argumentos: sin las comillas, la línea
   de la aduana corría `sh -c 'ONIA_AVISO_SOLTAR=1'`, salía 0 y el latido la daba por sana (revisión del
   10-oct, lo vio una revisión Opus; la prueba anterior solo miraba que hubiera latido).
+- **El QA después de cada publicación (10-oct, Q5): `scripts/loops/qa-release.sh`.** Lee el release con
+  `docker inspect --format '{{.Config.Image}}' onia-platform`, lo mismo que `deploy-vivo.mjs`. El correo de
+  QA va en una constante `readonly`: el script no acepta argumentos ni lo lee del entorno, porque
+  `onia-mirar.js` abre sesión con CUALQUIER correo usando la clave service role.
+  - **ROTO solo con evidencia de la plataforma:** la URL final, el texto de error, la pantalla vacía,
+    la lentitud, `page.*`, `fetch failed`, `generate_link` 5xx o el contenedor parado. `docker inspect` da
+    la etiqueta aunque el contenedor esté parado; lo que falla es el `docker exec` de la clave.
+  - **Todo lo demás es NO MEDIDO**, con exit 2 y una tarea del carril, nunca la interrupción 4: el
+    `generate_link` 4xx, Chromium que no arranca o que murió (`Page crashed`, `has been closed`), el DNS
+    del VPS, una salida sin `FALLO:` (SIGKILL, un `onia-mirar.js` con error de sintaxis), una salida con
+    código 0 sin `URL_FINAL=` ni `---TEXTO---` (archivo truncado) o el tope de 150 s.
+  - La primera versión mandaba cualquier salida distinta de 0 a ROTO. Así un Chromium faltante habría
+    despertado a Sergio Urcullo con «la app está rota» (revisión del 10-oct).
+  - Lo roto se vuelve a mirar una vez, 60 s después, antes de abrir la tarea: recién swapeado, Next puede
+    estar arrancando.
+  - Todo hijo corre con tope de tiempo y `8>&-`. Si un Chromium huérfano se quedaba con el candado, cada
+    corrida saltaba con exit 0 y el latido decía «sano». Ahora una corrida trabada más de 20 min sale con 75.
+  - Cada tarea guarda su id y se cierra sola cuando vuelve. Antes de confiar en el id se mira que siga
+    abierta: si alguien la cerró a mano, la próxima falla abre otra.
+  - Las ventanas del publicador se leen por su encabezado `== AAAA-MM-DD HH:MM La Paz ==` (lo escribe al
+    tomar el lock o al rendirse), en la hora que sigue a la :50 y una hora y diez después.
+    - «al dia» no cuenta como fallida, y «NO publico solo» por un monto tampoco: espera una firma.
+    - El `--dry-run` («publicaria») no cuenta.
+    - Si el bloque no tiene veredicto y el lock del publicador está tomado, se lee en la próxima corrida.
+    - Sin el log no se da la ventana por leída: exit 2 y una tarea.
+  - En las pruebas, `onia-tg.sh` del repo no tiene permiso de ejecución: se llama con un envoltorio
+    `exec bash`. Si no, `"$TG"` falla mudo y no se crea ninguna tarea.
 - **`git show … | grep -q` con `pipefail` miente en archivos grandes** (10-oct). `grep -q` sale al primer
   acierto, `git` recibe SIGPIPE y el pipeline da error: una cola de más de 64 KB con tareas se leía «sin
   tareas». Usar `grep -c … >/dev/null` (lee todo) o leer a una variable primero.

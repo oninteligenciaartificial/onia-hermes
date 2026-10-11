@@ -26,6 +26,9 @@ carril puede hacer solo. Q1 espera `aplicar` (ver «Bloqueado»).
   con su dueño. Lo mergea la madre.
   - [x] Código: el workflow y la sección 15, con pruebas. Va en un PR **para que lo mergee la madre** (lo dice el rol).
   - [ ] La primera corrida programada (10:00 UTC del día después del merge) y las cuatro respuestas.
+  - **Bloquea (11-oct): el merge de #194, que es de la madre** (el rol lo dice: agrega un workflow programado que entra al
+    VPS). No falta ningún secreto ni ningún permiso: el CI está en verde desde el 10-oct a las 21:38 UTC y no tiene
+    conflictos. Este carril pushea a una sola rama: mientras #194 no entre, todo lo que pushee va en ese PR.
 - [ ] **Q3 Fase 2 de la aduana: que nada le avise por fuera.** Pasan por `onia-tg.sh` los avisos de n8n «Vigia lead sin
   respuesta», «Chatbot: seguimiento» y «Monitor de Salud n8n», y el aviso de «Backup diario» (el respaldo sigue
   corriendo). Los canarios de caída esperan los 30 min de la interrupción 4. **Hecho:** 24 h medidas en su Telegram
@@ -51,10 +54,30 @@ carril puede hacer solo. Q1 espera `aplicar` (ver «Bloqueado»).
   una línea en el resumen. Lo roto que no se arregla en 30 min es la interrupción 4. **Hecho:** en el VPS simulado,
   un release roto da un aviso y una ventana fallida da una línea; en vivo, la próxima publicación deja su renglón en
   el log.
+  - [x] Código (va en #194 junto con Q2: la madre v4 pidió pushear el 11-oct, y otra rama no hay): `scripts/loops/qa-release.sh` (`/root/bin/onia-qa-release.sh`), su línea en `aplicar` con latido, y
+    `onia-mirar.js` a `/root/bin` por el sincronizador. 35 pruebas en el VPS simulado, con la aduana de verdad; tres revisiones (código, seguridad y la revisión de los arreglos).
+  - [ ] El diagnóstico muestra las últimas líneas de `/var/log/onia-qa-release.log`, para leer el renglón desde la
+    nube. Va después de que entre #194, que cambia `diagnostico.sh`, para no pisarlo.
+  - [ ] En vivo: después de `aplicar`, la primera corrida mira el release que corre (/dashboard y /checkout reales con
+    la cuenta de QA), y después de la próxima publicación sale el renglón «nuevo».
 
 - [x] **Q6 (madre v4, 10-oct) La prueba de la vía viva de `loops.md` en rojo en `main`.** No era la vía: el script
   que nombra existe y está versionado. `git ls-files` pasó de 1 MB y `execFileSync` cortaba con ENOBUFS, lo que dejaba
   también el gate del integrador en NO MEDIDO y rompía `herramientas-del-cron`. **Hecho:** la prueba en verde y PR.
+
+- [ ] **Q7 La web promete hoy lo que el catálogo deja (11-oct, madre v4).** Volver a mirar la §3 de
+  `ONIA_PROMESA_VS_PRODUCTO.md` (lo que `onia.com.bo` prometía el 8-oct y el catálogo no deja) contra la web de hoy,
+  renderizada y con captura de cada frase. **Hecho:** la §3 al día, con fecha, captura por fila en
+  `hermes-content/docs/research/promesas-web/` y lo que sigue mal en «Hallazgos para otros» con su dueño. Solo lectura:
+  páginas públicas.
+- [ ] **Q8 Los precios de la web contra los que cobra la plataforma.** `/precios`, `/` y `/chatbot` contra
+  `onia-platform/lib/subscription-plans.ts` (`DEFAULT_PLAN_AMOUNTS`) y `lib/pricing.ts` de `master`. CLAUDE.md: dos
+  precios vivos del mismo plan es el fallo del 15-ago. **Hecho:** tabla web/código por plan y ciclo, con captura, y
+  cada diferencia en «Hallazgos para otros».
+- [ ] **Q9 La venta no exhibe obra.** Todas las páginas públicas de `onia.com.bo` y `/login` y `/register` de la app, a
+  390 y 1440 px: ni «muy pronto», «beta», «próximamente» o «en construcción» (CLAUDE.md, «La venta nunca exhibe obra»),
+  ni vos y usted mezclados en un mismo flujo. **Hecho:** barrido con captura de cada caso y los arreglos en
+  «Hallazgos para otros».
 
 ## Hallazgos para otros
 
@@ -67,6 +90,29 @@ carril puede hacer solo. Q1 espera `aplicar` (ver «Bloqueado»).
 - **Madre / integrador** · En `main` falla `scripts/integrador_puede_mergear.test.mjs` › «la via viva de loops.md
   nombra un script que existe en el repo»: la vía de onia-platform desde casa en `cola/loops.md` no tiene script
   versionado. No está en el CI de Hermes (medido el 10-oct).
+
+- **Madre** · Q5 usa la cuenta «ZZ QA Pago» (`oninteligenciaartificial+qapago@gmail.com`, dental, ADMIN de su
+  org, creada por `/register` el 5-oct; `handoff/onia-1.0-nube.md`). El rol la deja «no verificada»: si es otra,
+  se cambia la constante `CORREO_QA` de `qa-release.sh`. Su prueba vence el 19-oct; vencida igual lee
+  /dashboard y /checkout (`proxy.ts`: «la cuenta vencida lee y exporta»). Necesita el correo confirmado para
+  el magic link: si `generate_link` falla, el QA lo dice como NO MEDIDO, no como caída.
+- **Madre** · Las ventanas de Q5 leen `/var/log/onia-publicar-solo.log` (lo leen también `deploy_sin_pedido.mjs`
+  y el cerebro), pero la foto del crontab del 19-sep tiene `50 */3 * * * /root/bin/onia-publicar-solo.sh` sin
+  `>>`. La pregunta 3 de Q2 lo contesta. Si no redirige, cada ventana dice «no puedo leer el log del publicador»
+  y hay que agregarle `>> /var/log/onia-publicar-solo.log 2>&1` a esa línea.
+
+- **Madre** · Revisión de seguridad de Q5 (10-oct), lo que ya existía y no es de este carril:
+  - `onia-mirar.js` abre sesión con cualquier correo que reciba, y desde Q5 vive en `/root/bin`. Un loop
+    de LLM con root podría pedirle una sesión de superadmin. Igual podría leer la clave con `docker exec`,
+    así que no es una barrera nueva. Se puede atar a `oninteligenciaartificial+qa…@gmail.com`, pero eso
+    rompe su uso a mano con otras cuentas: decide la madre.
+  - `onia-mirar.js` manda la clave service role a `https://app.onia.com.bo/supabase/auth/v1/admin/...`, el
+    dominio público. Si hay un proxy o CDN delante, la ve. Conviene apuntarlo a la dirección interna de
+    Kong y cerrar `/auth/v1/admin` en el proxy (Plataforma).
+  - No hay CODEOWNERS: lo que entra a `main` en `scripts/loops`, `scripts/onia-mirar.js` y
+    `hermes-content/deploy` corre como root en una hora.
+  - `poner` solo prueba la sintaxis de los `.sh`; un `.js` roto reemplaza al que anda. Para Q5 ya no es
+    falsa alarma (sale NO MEDIDO), pero un `node --check` en `poner` lo frenaría antes.
 
 ## Hecho antes del 10-oct
 

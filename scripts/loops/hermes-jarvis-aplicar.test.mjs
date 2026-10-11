@@ -30,7 +30,7 @@ function ejecutable(f, contenido) {
   chmodSync(f, 0o755);
 }
 
-function vps({ leeCalendario = true, escribeCalendario = true, conLatido = true } = {}) {
+function vps({ leeCalendario = true, escribeCalendario = true, conLatido = true, conQa = true } = {}) {
   const dir = mkdtempSync(join(tmpdir(), "jarvis-vps-"));
   const F = join(dir, "fs");
   const R = join(F, "root");
@@ -77,6 +77,11 @@ function vps({ leeCalendario = true, escribeCalendario = true, conLatido = true 
   ejecutable(join(bin, "claude-guardia.sh"), "#!/usr/bin/env bash\navisar() { :; }\n");
   // El envoltorio del latido (10-oct, Q4c): el de verdad, porque las líneas del crontab lo llaman.
   if (conLatido) ejecutable(join(bin, "onia-latido.sh"), readFileSync(join(AQUI, "latido.sh"), "utf8"));
+  // El QA después de cada publicación (10-oct, Q5) y el onia-mirar.js que abre las pantallas.
+  if (conQa) {
+    ejecutable(join(bin, "onia-qa-release.sh"), "#!/usr/bin/env bash\nexit 0\n");
+    writeFileSync(join(bin, "onia-mirar.js"), "// onia-mirar.js\n");
+  }
   ejecutable(
     join(bin, "onia-agenda.sh"),
     `#!/usr/bin/env bash
@@ -869,6 +874,14 @@ test("latido: nunca rompe el trabajo, ni con un nombre inválido ni sin dónde e
   assert.equal(correrLatido(["x", "300"]).status, 2, "sin comando no corre nada");
 });
 
+test("aplicar no toca el crontab si el QA de publicación todavía no llegó a /root/bin", () => {
+  const v = vps({ conQa: false });
+  const r = v.aplicar();
+  assert.notEqual(r.status, 0, r.stdout);
+  assert.match(r.stdout, /onia-qa-release\.sh/);
+  assert.equal(v.crontab(), v.crontabInicial, "su línea correría un archivo que nadie copió");
+});
+
 test("aplicar no toca el crontab si el latido todavía no llegó a /root/bin", () => {
   const v = vps({ conLatido: false });
   const r = v.aplicar();
@@ -882,7 +895,7 @@ test("cada línea que agrega aplicar corre dentro del latido, y corre ENTERA: su
   const nuevas = v.crontab().split("\n").filter((l) => l.endsWith(" #jarvis") && !l.startsWith("#"));
   const conLatido = nuevas.filter((l) => l.includes("/root/bin/onia-latido.sh "));
   const nombres = conLatido.map((l) => l.match(/onia-latido\.sh (\S+) (\d+) /).slice(1).join(" "));
-  assert.deepEqual(nombres, ["resumen-manana 86400", "resumen-noche 86400", "aduana-soltar 300", "agenda-bloques 1800", "respuestas-pedidos 120"]);
+  assert.deepEqual(nombres, ["resumen-manana 86400", "resumen-noche 86400", "aduana-soltar 300", "agenda-bloques 1800", "respuestas-pedidos 120", "qa-release 900"]);
   // El resumen lee exactamente esos nombres: si uno cambia acá y no allá, su latido no se mira nunca.
   const esperados = readFileSync(join(AQUI, "jarvis-resumen.sh"), "utf8").match(/^LATIDOS_ESPERADOS="([^"]+)"/m)[1];
   assert.deepEqual(esperados.split(" "), nombres.map((n) => n.split(" ")[0]));
@@ -891,7 +904,7 @@ test("cada línea que agrega aplicar corre dentro del latido, y corre ENTERA: su
   // latido decía «sano» de un trabajo que nunca corrió. Esto lo agarra.
   const tmp = mkdtempSync(join(tmpdir(), "linea-"));
   const grabador = join(tmp, "bin");
-  for (const s of ["onia-jarvis-resumen.sh", "onia-tg.sh", "onia-agenda.sh", "onia-respuestas-pedidos.sh"]) {
+  for (const s of ["onia-jarvis-resumen.sh", "onia-tg.sh", "onia-agenda.sh", "onia-respuestas-pedidos.sh", "onia-qa-release.sh"]) {
     ejecutable(join(grabador, s), `#!/usr/bin/env bash\necho "$(basename "$0") $* soltar=\${ONIA_AVISO_SOLTAR:-}" >> ${tmp}/llamadas\n`);
   }
   for (const l of conLatido) {
@@ -905,13 +918,14 @@ test("cada línea que agrega aplicar corre dentro del latido, y corre ENTERA: su
     "onia-tg.sh  soltar=1",
     "onia-agenda.sh --bloques soltar=",
     "onia-respuestas-pedidos.sh  soltar=",
+    "onia-qa-release.sh  soltar=",
   ]);
-  for (const n of ["resumen-manana", "resumen-noche", "aduana-soltar", "agenda-bloques", "respuestas-pedidos"]) {
+  for (const n of ["resumen-manana", "resumen-noche", "aduana-soltar", "agenda-bloques", "respuestas-pedidos", "qa-release"]) {
     assert.match(readFileSync(join(tmp, "lat", n), "utf8"), /^\d{10} 0 \d+\n$/, n);
   }
   // Sin el recolector copiado, «! -x ||» sale 0: no es una falla.
   rmSync(join(grabador, "onia-respuestas-pedidos.sh"));
-  const pedidos = conLatido.at(-1).replace(/ #jarvis$/, "").split(" ").slice(5).join(" ")
+  const pedidos = conLatido.find((l) => l.includes(" respuestas-pedidos ")).replace(/ #jarvis$/, "").split(" ").slice(5).join(" ")
     .replace(/\S*\/onia-latido\.sh/, LATIDO).replaceAll("/var/log/", `${tmp}/`).replace(/[^\s']*\/root\/bin\//g, `${grabador}/`);
   assert.equal(spawnSync("sh", ["-c", pedidos], { env: { ...process.env, ONIA_LATIDO_DIR: join(tmp, "lat") } }).status, 0);
   assert.match(readFileSync(join(tmp, "lat", "respuestas-pedidos"), "utf8"), /^\d{10} 0 120\n$/);
