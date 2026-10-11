@@ -11,6 +11,10 @@ nube no tiene cliente `ssh` y la decisión de la madre (8-oct) es que la llave v
 | 4 | G4 «Seis motores de imagen, una cara: ¿cuál la conserva?» (**guion APROBADO por la madre el 10-oct**; sale solo con «mostrada, publicá G4») | `g4-final-1080x1920.mp4` | 59,75 s | `../lucia-g4/pie.txt` | `../lucia-g4/qa/g4-preview-360p.mp4` |
 | 5 | G5 «Cómo mido si una cara es la de Lucía (y cuándo no creerle al número)» (**guion APROBADO por la madre el 10-oct**; sale solo con «mostrada, publicá G5»; guion: `hermes-content/docs/cola/lucia-diario/guiones/G5-como-se-mide-una-cara.md`) | `g5-final-1080x1920.mp4` | 57,5 s | `../lucia-g5/pie.txt` | `../lucia-g5/qa/g5-preview-360p.mp4` |
 
+> ⚠️ **CORRECCIÓN (11-oct, ~07:45 UTC, revisión 2 de G2 v2.2 + `job_display` de 4afffb96).** El «exceso ≈ 0,026 / 0,012, dentro del ruido» de la tabla de abajo **NO está sostenido**: la foto de arranque K1 (4afffb96, Seedream 4.5) se
+> generó con R1, R3, R6 y R7 como entrada, así que TODOS los clips con K1 descienden de esas fotos y los «controles» no son independientes (el exceso real puede ser mayor). La única base limpia son las 4 fotos que nadie recibió
+> (R2, R4, R5, R8). Se mide la **prueba estricta** contra esas 4 (sección final de `medicion-sin-refs-entrada-20261011.txt`) y los pies/etiquetas de G2 v2, G5 v2 y la pieza 9 se reescriben con esos números, sin «≈ 0,03 dentro del ruido».
+
 > **Tabla viejo contra nuevo (11-oct, `medicion-sin-refs-entrada-20261011.txt`; 0 cr).** A = contra las 8 fotos (lo publicado); B = contra solo las fotos que el motor NO recibió. El B−A crudo no es la fuga: las fotos R2, R4 y R8 puntúan bajo en todos los clips,
 > así que el número que cuenta es el exceso sobre los controles sin entradas.
 >
