@@ -51,11 +51,11 @@
 
   {"id": "lo-que-cobran", "layout": "full", "desde": {"frase": "los dos cobran", "corte": true},
    "elementos": [
-    {"tipo": "texto", "texto": "Los dos cobran", "tam": 88, "alinear": "centro", "pos": ["centro", 110], "anim": "corte"},
-    {"tipo": "texto", "texto": "lo que *entra*", "tam": 88, "alinear": "centro", "pos": ["centro", 222], "en": "entra"},
-    {"tipo": "texto", "texto": "y lo que *sale*", "tam": 88, "alinear": "centro", "pos": ["centro", 334], "en": "sale"},
-    {"tipo": "pildora", "texto": "Sol cobra 2", "icono": "check", "tam": 40, "pos": [147, 470], "en": "sol cobra"},
-    {"tipo": "pildora", "texto": "Astra cobra 10", "icono": "check", "tam": 40, "pos": [521, 470], "en": "astra cobra#2"}
+    {"tipo": "texto", "texto": "Los dos cobran", "tam": 88, "alinear": "centro", "pos": ["centro", 110], "en": {"frase": "los dos cobran", "offset": 0.3}, "hasta": {"frase": "y según", "corte": true}},
+    {"tipo": "texto", "texto": "lo que *entra*", "tam": 88, "alinear": "centro", "pos": ["centro", 222], "en": "entra", "hasta": {"frase": "y según", "corte": true}},
+    {"tipo": "texto", "texto": "y lo que *sale*", "tam": 88, "alinear": "centro", "pos": ["centro", 334], "en": "sale", "hasta": {"frase": "y según", "corte": true}},
+    {"tipo": "pildora", "texto": "Sol cobra 2", "icono": "check", "tam": 40, "pos": [147, 470], "en": "sol cobra", "hasta": {"frase": "y según", "corte": true}},
+    {"tipo": "pildora", "texto": "Astra cobra 10", "icono": "check", "tam": 40, "pos": [521, 470], "en": "astra cobra#2", "hasta": {"frase": "y según", "corte": true}}
    ]},
 
   {"id": "segun-openai", "layout": "split", "fondo": "oscuro", "desde": {"frase": "y según", "corte": true},
@@ -70,9 +70,9 @@
 
   {"id": "probalo", "layout": "full", "desde": {"frase": "si tu bot"},
    "elementos": [
-    {"tipo": "texto", "texto": "Si tu bot usa *Astra,*", "tam": 84, "alinear": "centro", "pos": ["centro", 150], "en": "si tu bot"},
-    {"tipo": "texto", "texto": "yo lo probaría con *Sol*", "tam": 84, "alinear": "centro", "pos": ["centro", 262], "en": "yo lo"},
-    {"tipo": "texto", "texto": "antes de cambiarlo", "tam": 84, "alinear": "centro", "pos": ["centro", 374], "en": "antes"}
+    {"tipo": "texto", "texto": "Si tu bot usa *Astra,*", "tam": 84, "alinear": "centro", "pos": ["centro", 150], "en": {"frase": "si tu bot", "offset": 0.3}, "hasta": {"frase": "pero para", "corte": true}},
+    {"tipo": "texto", "texto": "yo lo probaría con *Sol*", "tam": 84, "alinear": "centro", "pos": ["centro", 262], "en": "yo lo", "hasta": {"frase": "pero para", "corte": true}},
+    {"tipo": "texto", "texto": "antes de cambiarlo", "tam": 84, "alinear": "centro", "pos": ["centro", 374], "en": "antes", "hasta": {"frase": "pero para", "corte": true}}
    ]},
 
   {"id": "recomiendo", "layout": "lamina", "fondo": "papel", "desde": {"frase": "pero para", "corte": true},
@@ -137,8 +137,8 @@
 
   {"id": "cta-cara", "layout": "full", "desde": {"frase": "si querés", "corte": true},
    "elementos": [
-    {"tipo": "texto", "texto": "Si querés que lo probemos", "tam": 72, "alinear": "centro", "pos": ["centro", 150], "anim": "corte"},
-    {"tipo": "texto", "texto": "en *tu negocio*", "tam": 84, "alinear": "centro", "pos": ["centro", 250], "en": "en tu negocio"}
+    {"tipo": "texto", "texto": "Si querés que lo probemos", "tam": 72, "alinear": "centro", "pos": ["centro", 150], "en": {"frase": "si querés", "offset": 0.3}, "hasta": {"frase": "asesoría", "offset": 0.15}},
+    {"tipo": "texto", "texto": "en *tu negocio*", "tam": 84, "alinear": "centro", "pos": ["centro", 250], "en": "en tu negocio", "hasta": {"frase": "asesoría", "offset": 0.15}}
    ]},
 
   {"id": "cta", "layout": "split", "fondo": "oscuro", "desde": {"frase": "asesoría", "offset": 0.15},

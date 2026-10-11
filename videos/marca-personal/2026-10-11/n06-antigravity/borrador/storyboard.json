@@ -295,7 +295,8 @@
      "marcas": [
       {
        "frase": "June 18, 2026",
-       "en": "18"
+       "en": "18",
+       "pad": 2
       }
      ]
     },
@@ -393,11 +394,13 @@
      "marcas": [
       {
        "frase": "free of charge",
-       "en": "gratis"
+       "en": "gratis",
+       "pad": 2
       },
       {
        "frase": "Google AI Pro and Ultra",
-       "en": "pro"
+       "en": "pro",
+       "pad": 2
       }
      ]
     }

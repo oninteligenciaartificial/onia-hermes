@@ -48,7 +48,7 @@ por millón de tokens
     9.86  lanzamiento:marca «Sep 29»
    10.48  lanzamiento:marca «Released GPT-6.1 Sol»
    10.48  lanzamiento:sello 29 SEP
-   11.83  lo-que-cobran:texto Los dos cobran
+   12.13  lo-que-cobran:texto Los dos cobran
    13.35  lo-que-cobran:texto lo que *entra*
    13.99  lo-que-cobran:texto y lo que *sale*
    14.51  lo-que-cobran:pildora Sol cobra 2
@@ -58,7 +58,7 @@ por millón de tokens
    17.24  segun-openai:texto Según OpenAI,
 *se acerca a Astra*
    18.74  segun-openai:marca «Near-Astra performance for com»
-   19.68  probalo:texto Si tu bot usa *Astra,*
+   19.98  probalo:texto Si tu bot usa *Astra,*
    20.70  probalo:texto yo lo probaría con *Sol*
    21.86  probalo:texto antes de cambiarlo
    22.85  recomiendo:texto Pero para
@@ -99,6 +99,6 @@ al mes
    51.44  confirmar:flecha 
    52.85  confirmar:caja Sol con caché
 *20 dólares*
-   54.10  cta-cara:texto Si querés que lo probemos
+   54.52  cta-cara:texto Si querés que lo probemos
    55.40  cta-cara:texto en *tu negocio*
    56.25  cta:tarjeta 
