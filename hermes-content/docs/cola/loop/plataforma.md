@@ -120,6 +120,14 @@ Orden: lo que destraba cobrar primero. Cada PR: **leer la revisión de Hermes** 
 - [ ] Infra de la bandeja en tiempo real (webhook de Chatwoot + `CHATWOOT_EVENTOS_SECRET` + recrear el contenedor): el control de permisos frenó el `docker exec` del script en producción (11-oct 05:27 UTC), aun en modo solo lectura. Necesita la línea de Sergio Urcullo en esta sesión o que lo corra la madre. Sin eso la bandeja anda con sondeo.
 - [ ] Refrescar la demo dental en prod (`scripts/demo-venta/seed-demo.sql`, pasos en `cola/demo-venta-refresco.md`) y sacar las capturas C1-C7 del VSL
 - [ ] Mirar con login lo publicado el 8-oct (#128): agenda «Hoy» con WhatsApp, «sin confirmar», tarjeta del chatbot; y el punto 11 (reprogramar, días cerrados en `/book`, aviso de reserva online)
+  - **Mirado el 11-oct, entre las 14:28 y las 14:31 UTC** (`release-0b25e289`, solo lectura), a 1440 y 390, con `+qak3dental` y la demo:
+    - «Hoy · Mañana sin confirmar · N» funciona: la demo tiene 1 cita del lunes 12 sin confirmar;
+    - la fila muestra «Confirmó», el botón de WhatsApp (un ícono que arma el enlace al tocarlo, por eso no hay `wa.me` en la página) y «Todavía no le mandamos ningún recordatorio»;
+    - el Inicio muestra la tarjeta del asistente («Active el asistente», «Deje listo su asistente»); todo de usted.
+  - **Falta:**
+    - `/book`: ninguna de las dos cuentas tiene la reserva pública en su plan;
+    - reprogramar y el aviso de reserva online: piden crear una reserva y no se hizo.
+  - Fotos borradas del VPS a pedido de Hermes. `modelos: ninguno` · `codex: ninguno`.
 - [ ] SQL del B22 (REVOKE a anon) aplicado y medido (no entró en el sí del 10-oct)
 - [ ] **Barrido de usted**, fuera de U7 (la madre rehace U7 con el Inicio de comercio e importadora).
   - LOW de #157: `roles/route.ts:64` y `requerimientos/portal-link/route.ts:25` siguen con «tu organización»; los subjuntivos de tú («puedas», «tengas») no los caza el gate.

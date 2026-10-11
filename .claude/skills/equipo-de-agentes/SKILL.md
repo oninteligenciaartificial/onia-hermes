@@ -156,6 +156,13 @@ sección decía «incluido el diseño»; él lo sacó al confirmar la regla.
   suite completa 10.825/0. La suite tardó 154 s en el contenedor de la nube. Como el CI no exige la rama al día, #156 se mergea
   con el CI que ya tiene. Un rebase cancela el CI en curso (`cancel-in-progress`) y cuesta otros 22 min del único runner.
   Rebasear solo si la mezcla da conflicto o rojo. Un PR detrás de `master` se mergea: el 11-oct, #146 entró 40 s después de #136.
+- **La hora se lee, no se calcula** (11-oct, Plataforma: cinco veces en un día). La última fue en un aviso a la madre: decía
+  «14:41» y eran las 14:34. Siempre sale adelantada, porque se escribe la hora a la que uno cree que va a terminar. Toda hora de
+  una cola, un handoff o un mensaje sale de `date -u`, o de `git log --format=%cI`, en el mismo comando que la usa.
+- **Capturas de Playwright en el VPS: `chromium.launch({ args: ["--font-render-hinting=none"] })`** (11-oct). Sin esa opción,
+  el Chromium del VPS redondea el avance de cada letra a píxeles enteros. Con Instrument Sans, en 12 px el espacio baja de 2,4 a
+  2 px y la foto muestra palabras pegadas («nole mandamos»), un defecto que la letra no tiene. Medido en `/login`: espacio 2 →
+  2,4 px y «n» 7 → 7,19 px con la opción.
 - **Si dos órdenes de merge dan el mismo árbol, entra primero el que ya tiene el CI verde** (11-oct, #158 y #160). El orden
   pactado era #160 → #158, pero #158 tenía el CI verde y el de #160 seguía en cola. Se comprueba con `git merge-tree --write-tree`:
   se simulan los dos órdenes con `git commit-tree`, y dio el mismo árbol (`49741ed8`). Si el árbol final es igual, el orden no
