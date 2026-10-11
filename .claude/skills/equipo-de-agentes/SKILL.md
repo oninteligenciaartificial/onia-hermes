@@ -156,6 +156,12 @@ sección decía «incluido el diseño»; él lo sacó al confirmar la regla.
   suite completa 10.825/0. La suite tardó 154 s en el contenedor de la nube. Como el CI no exige la rama al día, #156 se mergea
   con el CI que ya tiene. Un rebase cancela el CI en curso (`cancel-in-progress`) y cuesta otros 22 min del único runner.
   Rebasear solo si la mezcla da conflicto o rojo. Un PR detrás de `master` se mergea: el 11-oct, #146 entró 40 s después de #136.
+- **Si dos órdenes de merge dan el mismo árbol, entra primero el que ya tiene el CI verde** (11-oct, #158 y #160). El orden
+  pactado era #160 → #158, pero #158 tenía el CI verde y el de #160 seguía en cola. Se comprueba con `git merge-tree --write-tree`:
+  se simulan los dos órdenes con `git commit-tree`, y dio el mismo árbol (`49741ed8`). Si el árbol final es igual, el orden no
+  cambia nada y esperar solo gasta minutos del runner.
+  Mismo método para el último PR de la tanda: si su rama ya trae `master` y el PR que falta mergear, con su árbol idéntico a la
+  mezcla probada (`git rev-parse HEAD^{tree}`), no se vuelve a correr la suite.
 - Memoria de la PC (9-oct): el commit estaba en 39,5 de 40,8 GB con solo ~13 GB en procesos. El resto era **paged pool del
   kernel en 17 GB** (normal: menos de 1 GB), una fuga de driver que solo se libera reiniciando. Medir con
   `Get-CimInstance Win32_PerfRawData_PerfOS_Memory` (`PoolPagedBytes`), no con el Administrador de tareas. Sospechoso:

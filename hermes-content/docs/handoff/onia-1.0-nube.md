@@ -146,17 +146,24 @@ la dirección de Sergio Urcullo.
 ## 8. Próximos pasos (en orden)
 
 0. **#136 y #146:** hechos, en producción desde las 06:57 UTC (`release-a7d8c1ed`), mirados sin login.
-0a. **La cadena del 11-oct** (§4): #147, #155, #152 (con U3, U4 y U5) y #151 están mergeados y salen a las 12:50. Falta #156 antes
-    de las 12:20, y después de las 13:10 #157 y #150. **Mezclar varios PRs:** primero se prueba la mezcla con `git merge-tree` y la suite
-    completa, que en la nube tarda ~150 s. Solo se rebasea si da conflicto o rojo (skill `equipo-de-agentes` §8).
+0a. **La cadena del 11-oct está en producción**: `release-0b25e289` desde las 12:54:28, mirada a las 13:16.
+    - **Tanda de las 15:50** (cola, «Tanda de las 15:50»):
+      - #157 mergeado a las 13:38:42 y #158 (F136c) a las 14:21:00 (`a94afbd3`);
+      - #160 (U8, correos de usted) se mergea con CI verde;
+      - #159 (M1b, `28a2c518`, ya lleva master y #160 adentro) va después de #160 y antes de las 15:20; si no llega, después de las 16:10.
+    - **Mezclar varios PRs:** primero se prueba la mezcla con `git merge-tree` y la suite completa, que en la nube tarda ~150 s. Solo se
+      rebasea si da conflicto o rojo (skill `equipo-de-agentes` §8). Si dos órdenes dan el mismo árbol, entra primero el que tiene el CI
+      verde.
 0c. **Contratos Codex:**
-    - F136b, P-01b, M1, S3 y U7: hechos o en curso.
-    - **M1b** (`codex-tareas/plataforma-M1b-cantidades-sin-doble-lectura.md`, Astra, `pendiente`): la madre lo lanza cuando entre #156.
-    - F136c (fondo inicial, quitar egreso y el 404 de `INVOICE_NOT_FOUND`): sin escribir todavía.
-1a. **Después de la publicación de las 12:50** (mirar desde ~13:05):
-    - con la cuenta QA `+qak3dental` (onboarding completo), correr `scratchpad/mirar-usted/mirar-usted.js` en el VPS: Inicio, agenda,
-      Pendientes, /agents, pacientes, cobros y login, a 1440 y 390, buscando «TU CLÍNICA» y formas de vos; después, leer las fotos;
-    - mirar la caja de otro día (#155) y, si #156 entró, un formulario de comercio con «1.500».
+    - F136b, P-01b, M1, M1b, F136c, S3 y U7: hechos o en curso.
+    - **M1c** (`codex-tareas/plataforma-M1c-las-ultimas-cantidades.md`, Sol): la madre lo corre en Codex, apilado sobre la rama de #159.
+    - El **punto 9 de F136c** («Caja del día» en un día anterior) lo hace Plataforma en `claude/optimistic-ride-1sp5fe` (subagente
+      sonnet). Se sube después de las 16:10.
+1a. **Después de la publicación de las 15:50** (mirar desde ~16:05):
+    - con `+qak3dental`, la caja de hoy: «Corregir fondo» y «Anular» con el permiso, y el aviso de cierre sin «administrador», sin
+      guardar nada;
+    - con `+qak3importadora`, el costeo: «3.000» sin producto y «1.200» kg se rechazan con su motivo;
+    - los correos de usted (#160) no se pueden mirar sin mandar uno: sus pruebas recorren las variantes.
     - **U6** (correos y avisos del plan) espera a #113.
 2. **Demo del lunes** (pedido de la madre v4): el plan está en `docs/cola/demo-venta-refresco.md` (11-oct): `reset=2`
    entre 04 y 11 UTC de lun a jue, tarjetas a las 11:00 UTC, capturas de la madre a 390 y 1440. Correrlo pide el sí de
