@@ -306,6 +306,11 @@ carril puede hacer solo. Q1 espera `aplicar` (ver «Bloqueado»).
     a ningún modelo. La sesión de la nube queda «no medible desde acá». La madre lo revisa fuerte (corre como root).
   - Los cinco contratos de este carril (con L1 y Q9b) llevan ya la cabecera de `codex-tareas/README.md`. **Hecho:**
     cada prueba en verde en la rama de Codex tras el merge de #194. modelos: ninguno (los escribe este carril).
+- [ ] **E5 Revisar los PRs abiertos de onia-platform** (latido del 11-oct, paso 2): #124 (términos aceptados: migración y
+  RLS, que su propio cuerpo pide revisar), #113 (C13, gracia de 7 días y dejar de renovar: plata y permisos, dos lentes) y
+  #140 (el widget de chat público, que integra #131 y #137). Cuatro lentes sonnet, cada HIGH verificado por haiku; sin
+  mergear ni comentar en GitHub. **Hecho:** veredicto por PR con severidad y archivo:línea en esta cola. En curso desde las
+  06:05 UTC. Quedan sin mirar: #132 (K1), #70 (docs de septiembre) y, en este repo, #195, #143 y #40 (docs).
 - [ ] **E4 Volver a mirar #136 cuando entren sus arreglos.** Los dos HIGH de E3 y el comando de las migraciones. **Hecho:**
   cada HIGH cerrado con su prueba, leído en el código de la cabeza nueva.
 
