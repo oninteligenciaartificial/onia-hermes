@@ -1,6 +1,6 @@
 # Orden de posteo · domingo 11 → sábado 17 de octubre (calendario único)
 
-Actualizado el 11-oct, ~09:35 UTC (05:35 La Paz; los cinco borradores de video están listos), por Marca personal, que desde hoy (orden de la MADRE MARKETING a pedido de Sergio Urcullo) lleva la edición y el posteo de punta a punta. Reglas fijas del día y qué sale en cada red: `CALENDARIO-PUBLICACION-9-16-OCT.md` (no se copian). **Nada se agenda ni se publica sin «mostrada, publicá <pieza>» de la madre.**
+Actualizado el 11-oct, ~13:15 UTC (09:15 La Paz; cinco borradores de video y los carruseles K4, K7, K8, K2 y K6 corregidos, listos para mostrar; detalle en `AUDITORIA-AGENDADOS-K8-K2-K6-11OCT.md`), por Marca personal, que desde hoy (orden de la MADRE MARKETING a pedido de Sergio Urcullo) lleva la edición y el posteo de punta a punta. Reglas fijas del día y qué sale en cada red: `CALENDARIO-PUBLICACION-9-16-OCT.md` (no se copian). **Nada se agenda ni se publica sin «mostrada, publicá <pieza>» de la madre.**
 
 **Camino de cada video:** corte listo (tabla + preview 360p) → **«ok cortes»** de Sergio Urcullo (lo pasa la madre) → master con molde, subtítulos y regla 15 → «LISTA PARA MOSTRAR: <pieza> (master)» → **«mostrada, publicá <pieza>»** → Marca agenda en el VPS (`agendar-publicacion.sh`: `ig-reel.mjs` para IG, `buffer-post.mjs` para TikTok, Shorts y LinkedIn) → «PUBLICADO: <pieza> — <link>».
 
@@ -26,18 +26,18 @@ Actualizado el 11-oct, ~09:35 UTC (05:35 La Paz; los cinco borradores de video e
 | Dom 11 | 16:00 | Carrusel ANTIGRAVITY (N06) | ANTIGRAVITY | agendada | **decisión de Sergio Urcullo** (la madre avisa). No se toca |
 | Dom 11 | 18:30 | **DD-A** OpenAI Sol y la caché (58,4 s) | — | corte listo (`63e507548`) · borrador listo (`5dfefc8f7`) · `videos/marca-personal/2026-10-11/dd-a-openai-sol/` | «ok cortes»; **escuchar 01:01–01:09** (¿dijo «con Astra» o «con Sol»? la cuenta 400 contra 20 solo cuadra con Sol); el cierre pide la asesoría y **el link en la bio todavía no está**. Si no se resuelve antes de las 21:30 UTC, **N07 ocupa este hueco** y DD-A pasa al lun 12 12:30 |
 | Lun 12 | 12:30 | **N07** Haiku 5.5 (81,7 s; salió el 7-oct, la noticia envejece) | HAIKU | corte listo (`4e751ae46`) · borrador listo (`0b55a7ff0`) · `videos/marca-personal/2026-10-11/n07-haiku-55/` | «ok cortes»; verificar contra la doc de Anthropic «5 veces más si el prompt pasa de 100 mil tokens» y «lo que piensa se cobra como salida»; aviso HAIKU existe |
-| Lun 12 | 16:00 | Carrusel PRUEBAS (K4 v2) | PRUEBAS | agendada | su aviso PRUEBAS no existe |
+| Lun 12 | 16:00 | Carrusel PRUEBAS (K4 v2) | PRUEBAS | agendada | aviso PRUEBAS hecho (`AVISOS-COMUNIDAD-PRUEBAS-BRIEF-11OCT.md`). **K4 v3** corregida (lámina 4: Chatwoot→WhatsApp; cierre «Buscá PRUEBAS») lista para mostrar en `out/sergio-k4v3-cinco-pruebas-bot-20261012/`; el VPS lo cambia la madre **antes del lun 12 16:00** |
 | Lun 12 | 18:30 | **BA814C81** (tal cual, sin editar, todas las redes) | — | propuesta (nota 1) | OK de Sergio Urcullo al día y la hora; el archivo **no está compartido por enlace** |
 | Mar 13 | 12:30 | **SI-01** Claude trabaja con la compu apagada | RUTINA | falta grabar | rutina creada el día anterior |
-| Mar 13 | 16:00 | Carrusel PROMPT (K8 v3) | PROMPT | agendada | — |
+| Mar 13 | 16:00 | Carrusel PROMPT (K8 v3) | PROMPT | agendada | **K8 v4** (cierre «Buscá PROMPT», datos contra la skill) lista para mostrar en `out/sergio-k8v4-recuperar-vs-reconstruir-20261011/`; el VPS lo cambia la madre antes del mar 13 16:00 |
 | Mar 13 | 18:30 | **SI-02** Antes de instalar OpenClaw | OPENCLAW | falta grabar | OpenClaw en una compu aparte y el OK de Sergio Urcullo |
 | Mié 14 | 12:30 | **S2-D07-A** la ventana de 24 horas (90,8 s) | — | corte listo (`f643bb188`) · borrador listo (`9fdda2023`) · `videos/marca-personal/2026-10-11/s2-d07-a-ventana-24h/` | «ok cortes»; **decisión de Sergio Urcullo sobre la frase de las variables de las plantillas** (cortarla o regrabarla; 00:57–01:04 del bruto); su cierre pide la comunidad, no la asesoría |
-| Mié 14 | 16:00 | Carrusel BRIEF (K7 v2) | BRIEF | agendada · floja | su aviso BRIEF no existe |
+| Mié 14 | 16:00 | Carrusel BRIEF (K7 v2) | BRIEF | agendada · floja | aviso BRIEF hecho (`AVISOS-COMUNIDAD-PRUEBAS-BRIEF-11OCT.md`). **K7 v3** (cierre «Buscá BRIEF») lista para mostrar en `out/sergio-k7v3-carruseles-por-codigo-20261014/`; el VPS lo cambia la madre antes del mié 14 16:00 |
 | Mié 14 | 18:30 | **SI-03** Claude, pero vago | VAGO | falta grabar | Ponytail instalado y la prueba con y sin él |
-| Jue 15 | 16:00 | Carrusel SKILL (K2 v3) | SKILL | agendada | — |
+| Jue 15 | 16:00 | Carrusel SKILL (K2 v3) | SKILL | agendada | **K2 v4** (lámina 3 sin «nunca» + cierre «Buscá SKILL») lista para mostrar en `out/sergio-k2v4-primera-skill-20261011/`; Sergio Urcullo confirma que el video 02 es público; el VPS lo cambia la madre antes del jue 15 16:00 |
 | Jue 15 | 18:30 | **N02** Sonnet 4.5 se apaga el 30-nov (111,4 s) | MIGRAR | corte listo (`26bf1e566`) · borrador listo (`90e002704`) · `videos/marca-personal/2026-10-11/n02-sonnet-45/` | «ok cortes»; «quedan 46 días» **solo vale este jueves**; bloque de 2,4 s sin transcripción (frase o ruido); aviso MIGRAR existe |
 | Vie 16 | 12:30 | **SI-04** Tres comandos escondidos | SECRETOS | falta grabar | — |
-| Vie 16 | 16:00 | Carrusel PROMESA (K6 v2) | PROMESA | agendada | — |
+| Vie 16 | 16:00 | Carrusel PROMESA (K6 v2) | PROMESA | agendada | **K6 v3** (cierre «Buscá PROMESA», lámina 6 sin causalidad, nombre de la lista aclarado) lista para mostrar en `out/sergio-k6v3-confirmado-por-confirmar-20261011/`; el VPS lo cambia la madre antes del vie 16 16:00 |
 | Vie 16 | 18:30 | **SI-08** Un video que escribió Claude | HYPERFRAMES | falta grabar | clip de 3 s hecho con HyperFrames |
 | Sáb 17 | 16:00 | Carrusel P2 «7 herramientas. 4 son gratis.» | HERRAMIENTAS | borrador listo (`835cc08bd`) · `hermes-content/carousels/out/sergio-p2-siete-herramientas-20261017-borrador/` | OK de Sergio Urcullo a la lámina 6 (sin él, plan B); capturas 2, 3, 5 y 6 desde la PC; aviso HERRAMIENTAS pegado |
 
