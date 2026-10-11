@@ -1,0 +1,9 @@
+# Medición del render final (2026-10-11 07:41 UTC) · cierre A
+duración: 58.433333 s
+silencedetect noise=-35dB d=0.3 (regla 15: 0 silencios de 0,3 s o más):
+  (ninguno)
+silencios contados: 0
+ebur128:
+    I:         -13.0 LUFS
+    LRA:         1.8 LU
+    Peak:       -1.7 dBFS
