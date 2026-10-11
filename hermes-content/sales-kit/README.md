@@ -20,6 +20,7 @@ paciente con un tratamiento a medias que no volvió a agendar.
 | `06-VSL-DENTAL.md` | el video de venta (largo de ~4 min y corto de 60 s), cada frase atada a su fila de `ONIA_PROMESA_VS_PRODUCTO.md`; no se publica hasta tener la cuenta demo |
 | `07-LEAD-DE-PAUTA-PRIMERAS-24H.md` | qué hace Sergio Urcullo con un lead que escribe primero desde un anuncio de la prueba 1 (D7-D11): el reloj de 24 h, la primera respuesta de usted según el caso, qué se contesta y qué se anota. Plan: todavía no hay anuncios creados |
 | `PRIMER-MENSAJE-8-CLINICAS-11OCT.md` | **borradores sin enviar** del primer mensaje a 6 clínicas dentales candidatas y 2 condicionales de Santa Cruz (generado desde su `.json`); la compuerta de `ONIA_PROMESA_VS_PRODUCTO.md` sigue abierta y lo envía Sergio Urcullo con mensaje y canal aprobados |
+| `OBJECIONES-8-CLINICAS-11OCT.md` | las respuestas de usted, cortas, a las 5 objeciones más probables de esas clínicas (precio, «ya tengo sistema», tiempo, factura, dónde quedan los datos), con la fila de promesas de cada una y los precios leídos de `onia-platform`; la factura SIAT no se promete. Borrador sin enviar |
 
 **Kit 1.0 (2026-09-28).** Se reescribió entero sobre lo que hace la 1.0 de onia-platform
 (candidato `ed163e26`, verificado contra el código). Lo que cambió respecto del kit de julio:
