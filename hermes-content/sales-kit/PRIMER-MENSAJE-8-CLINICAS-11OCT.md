@@ -84,7 +84,7 @@ Los 8 mensajes dicen lo mismo del producto: agenda, ficha del paciente y cobros,
 >
 > Onia es un sistema de gestión para clínicas dentales: agenda, ficha del paciente y cobros. Cada mañana le deja anotado a quién escribirle, por ejemplo quién tiene cita mañana y no confirmó, con el mensaje listo; nada sale sin que usted lo apruebe.
 >
-> Para mostrarle algo que le sirva: ¿Quién agenda las citas que llegan por ese chat? Si le interesa, le muestro cómo se ve.
+> Para mostrarle algo que le sirva: ¿Quién agenda las citas en la clínica? Si le interesa, le muestro cómo se ve.
 
 ### 4. Smile Dental · candidata
 
@@ -173,7 +173,9 @@ Los 8 mensajes dicen lo mismo del producto: agenda, ficha del paciente y cobros,
 
 ## 4. Verificación
 
-_Pendiente: detector de promesas de la web y revisor `haiku` independiente._
+- **Detector de promesas de la web** (`promesa-que-el-producto-cumple.mjs`): 0 promesas en los 8 mensajes (lo exige scripts/primer-mensaje-8-clinicas.test.mjs).
+- **Revisor independiente (`haiku`, 11-oct):** primera pasada: 4 problemas reales y 1 choque entre documentos. (1) Hurtado, COYR DENT y Clarident Plus afirmaban cosas de posts viejos (WhatsApp, planes de pago, promociones) que la Biblioteca no trae → pasaron a una «línea opcional» que se confirma hoy desde la PC. (2) La frase de COYR sobre la cuota que se atrasa rozaba el tratamiento a medias (§5.4) → se cambió. (3) ROCHA tiene dos anuncios, no uno → plural. (4) Choque entre `ONIA_ADQUISICION_Y_PAUTA.md` §7 («confirmar citas desde el panel» no lo hace producción hoy) y «quién tiene cita mañana y no confirmó» → se sumó B-02 a la compuerta y se dejó dicho. Segunda pasada sobre los 5 corregidos: OK, salvo la pregunta de Clarident Plus, que daba por hecho un chat que ya no se menciona → se cambió a «¿Quién agenda las citas en la clínica?». Los otros 3 (Smile Dental, Innova Kids, Natural Smile) salieron OK en la primera. **Lo que el revisor NO pudo cerrar:** ninguno de los 8 pasa la compuerta de `ONIA_PROMESA_VS_PRODUCTO.md` §1 (0 de las 11 promesas verificadas, sin cuenta demo): revisó documentos, no el producto en vivo.
+- **Pruebas automáticas** (`scripts/primer-mensaje-8-clinicas.test.mjs`): cada dato citado (anuncios, fechas, titulares) coincide con la Biblioteca transcripta; de usted; una sola pregunta; sin precio, minutos, «ejemplo», IA ni tratamiento a medias.
 
 ## 5. Qué depende de quién
 

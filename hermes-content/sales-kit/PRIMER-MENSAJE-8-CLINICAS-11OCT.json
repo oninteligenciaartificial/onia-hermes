@@ -6,7 +6,12 @@
       "P1": "¿Cuántos odontólogos atienden hoy en la clínica?",
       "P2": "¿Quién agenda las citas que llegan por ese chat?"
     },
-    "cierre": "Si le interesa, le muestro cómo se ve."
+    "cierre": "Si le interesa, le muestro cómo se ve.",
+    "verificacion": {
+      "fecha": "11-oct",
+      "detector": "0 promesas en los 8 mensajes (lo exige scripts/primer-mensaje-8-clinicas.test.mjs)",
+      "haiku": "primera pasada: 4 problemas reales y 1 choque entre documentos. (1) Hurtado, COYR DENT y Clarident Plus afirmaban cosas de posts viejos (WhatsApp, planes de pago, promociones) que la Biblioteca no trae → pasaron a una «línea opcional» que se confirma hoy desde la PC. (2) La frase de COYR sobre la cuota que se atrasa rozaba el tratamiento a medias (§5.4) → se cambió. (3) ROCHA tiene dos anuncios, no uno → plural. (4) Choque entre `ONIA_ADQUISICION_Y_PAUTA.md` §7 («confirmar citas desde el panel» no lo hace producción hoy) y «quién tiene cita mañana y no confirmó» → se sumó B-02 a la compuerta y se dejó dicho. Segunda pasada sobre los 5 corregidos: OK, salvo la pregunta de Clarident Plus, que daba por hecho un chat que ya no se menciona → se cambió a «¿Quién agenda las citas en la clínica?». Los otros 3 (Smile Dental, Innova Kids, Natural Smile) salieron OK en la primera. **Lo que el revisor NO pudo cerrar:** ninguno de los 8 pasa la compuerta de `ONIA_PROMESA_VS_PRODUCTO.md` §1 (0 de las 11 promesas verificadas, sin cuenta demo): revisó documentos, no el producto en vivo."
+    }
   },
   "clinicas": [
     {
@@ -51,7 +56,7 @@
       },
       "pregunta": "P2",
       "salida": "mirar desde la PC si la página «Clarident Duo» es otra sede: si lo es, sale por multi-sede",
-      "mensaje": "Buen día, soy Sergio Urcullo, de Onia, aquí en Santa Cruz. Este mensaje es para el dueño o la dueña de Clarident Plus.\nVi que desde el 7 de octubre tienen anuncios nuevos.\nCuando una clínica pauta para traer pacientes nuevos, el paciente de mañana que no confirmó suele quedar sin que nadie le escriba.\nOnia es un sistema de gestión para clínicas dentales: agenda, ficha del paciente y cobros. Cada mañana le deja anotado a quién escribirle, por ejemplo quién tiene cita mañana y no confirmó, con el mensaje listo; nada sale sin que usted lo apruebe.\nPara mostrarle algo que le sirva: ¿Quién agenda las citas que llegan por ese chat? Si le interesa, le muestro cómo se ve.",
+      "mensaje": "Buen día, soy Sergio Urcullo, de Onia, aquí en Santa Cruz. Este mensaje es para el dueño o la dueña de Clarident Plus.\nVi que desde el 7 de octubre tienen anuncios nuevos.\nCuando una clínica pauta para traer pacientes nuevos, el paciente de mañana que no confirmó suele quedar sin que nadie le escriba.\nOnia es un sistema de gestión para clínicas dentales: agenda, ficha del paciente y cobros. Cada mañana le deja anotado a quién escribirle, por ejemplo quién tiene cita mañana y no confirmó, con el mensaje listo; nada sale sin que usted lo apruebe.\nPara mostrarle algo que le sirva: ¿Quién agenda las citas en la clínica? Si le interesa, le muestro cómo se ve.",
       "opcional": "y que sus promociones se agendan por WhatsApp (posts del 14-sep, leídos el 8-oct: confirmarlo hoy antes de agregarlo)"
     },
     {
