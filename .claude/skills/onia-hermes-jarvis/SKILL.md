@@ -236,6 +236,11 @@ CLI de Hermes.
   del checkout del build (06:55:58 GMT). Solo cambia si ese archivo cambió en el commit: elegí uno que sí. Para saber
   QUÉ commit corre sin acceso al VPS, comparar varios archivos de `public/` contra varios commits de `master`.
   `app.onia.com.bo` está detrás de Cloudflare (`server: cloudflare`).
+- **El ejemplo de la prueba de un instrumento sale del sistema real, no del contrato** (11-oct, dos veces el mismo día). C3 (sección 16 del
+  diagnóstico) pasó sus 10 pruebas con líneas de crontab directas y, con el crontab que instala `aplicar.sh` (todo envuelto en `onia-latido.sh '<comando>'`),
+  nombró seis veces `onia-latido.sh` y dejó vacío el modelo del resumen. L1 (`web-vs-producto.mjs`) pasó 13 pruebas con HTML inventado y, con el HTML
+  real de `onia.com.bo`, no ubicó ni un plan. Al revisar a Codex: correr el instrumento contra el sistema real (las líneas de `aplicar.sh`, `curl` de las
+  páginas, el código de `master`) ANTES de aceptar «N de N en verde», y escribir el contrato pidiendo que la prueba **lea** esa fuente real.
 - **Revisar PRs de otros carriles (11-oct, E2):** una lente sonnet por PR (dos si toca el VPS, plata o el bot), cada
   HIGH verificado por un haiku que cita líneas y corre el repro, y nada se comenta en GitHub. Lee las ramas con `git
   show origin/<rama>:<ruta>` y `git archive … | tar -x` en `/tmp`: nunca `checkout` en el árbol del carril. La

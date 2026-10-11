@@ -313,10 +313,20 @@ carril puede hacer solo. Q1 espera `aplicar` (ver «Bloqueado»).
   - La prueba no corre en el CI (ni en `package.json` ni en el workflow).
   Contrato de arreglos: `handoff/codex-tareas/hermes-L1b-web-vs-producto-arreglos.md`. **No lo copio a #194** (lo agrandaría y no es Q2 ni Q5):
   `782dd348` es un solo commit; la madre lo pone sobre `main` cuando #194 entre, junto con L1b.
-- [ ] **L1b Arreglos del chequeo web-vs-producto (Codex Luna).** Contrato `handoff/codex-tareas/hermes-L1b-web-vs-producto-arreglos.md`
-  (`estado: pendiente`). Lo lanza la madre sobre `codex/hermes-qa-web-vs-producto`. **Hecho:** sin `--platform` da NO MEDIDO (exit 2), la
-  mutación de precio da exit 1, los topes se leen de `plan-catalogo.ts`, `--base-web/--base-app` siguen ante una página caída y la prueba corre
-  en el CI. Después lo reviso yo (diff + mutaciones a mano).
+- [x] **L1b Arreglos del chequeo web-vs-producto (Codex Luna).** Contrato `handoff/codex-tareas/hermes-L1b-web-vs-producto-arreglos.md`; commit
+  `6f64e094` en `codex/hermes-qa-web-vs-producto`. **Revisado el 11-oct ~07:05 UTC** (`modelos: ninguno (409 líneas, las leí y corrí yo)` · `codex: hermes-L1c`),
+  en un directorio aparte con el código REAL de `onia-platform` `master`: la prueba da **13/13**; sin `--platform` sale 2 con «NO MEDIDO: falta --platform»;
+  con `--platform` y los textos del 11-oct, exit 0 y los cuatro topes «coincide» (300/2/200, 800/4/400, 1500/5/800, sin tope); mutación de precio (Crece 550→560) → exit 1;
+  mutación de tope (`crece.users` 4→5) → «DIFIERE», exit 1; un `setupFrom: 9999` agregado antes de `ENTERPRISE_PLAN_PRICE` no mueve el resultado, y sin esa
+  constante da NO MEDIDO, exit 2. **Los cuatro puntos que yo había medido están cerrados.** Lo que NO funciona:
+  - **`--base-web` con las páginas reales** (las bajé con `curl`, las serví en local): exit 2, «no se pudo ubicar el plan Básico…», los topes «no medida» y
+    **`whatsapp-24h: no está`, que es falso** (la frase está). `htmlATexto` no equivale al `innerText` que usan los extractores (títulos y precios en la misma línea, espacios dobles). La prueba
+    de L1b pasaba porque su HTML era inventado: **el mismo error de método que C3, y también de mi contrato**. Falla cerrado salvo por ese «no está» falso.
+  - Menores: `--base-app` se acepta y no se usa; con exit 2 la última línea sigue diciendo «0 diferencias de precio» (la sección PRECIOS sí avisa «no medidos por completo»).
+  Contrato: `CODEX-CONTRATO: hermes-content/docs/handoff/codex-tareas/hermes-L1c-web-vs-producto-html-real.md` (Luna, `estado: pendiente`); fixtures: el HTML real de las ocho
+  páginas en `research/promesas-web/2026-10-11/html/`. **Integración:** la madre pidió cherry-pick de `782dd348` + `6f64e094` a #194; **lo hago cuando vuelva L1c, con los tres commits juntos**: así
+  no entra a #194 un modo roto, y nada consume L1 todavía, así que no se pierde tiempo. Choca con #196 (C1-C3) en `package.json` y en la lista del workflow: dos líneas, se juntan sumando los dos nombres.
+
 - [ ] **Q9b El alta de usted.** ~~Contrato `handoff/codex-tareas/plataforma-Q9-alta-de-usted.md`~~ **No se lanza** (aviso de la madre
   DESARROLLO-INFRA, 11-oct ~06:20 UTC): U4 (Codex, commit `a024292d`, rama `codex/usted-registro-y-entrada`) ya pasó `SignupForm.tsx`
   a `voc.negocioSu` en las tres líneas. **Lo que yo pude comprobar desde la nube:** esa rama NO está en `origin` (solo en la PC de la
