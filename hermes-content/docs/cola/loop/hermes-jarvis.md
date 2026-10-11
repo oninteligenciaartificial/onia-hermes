@@ -85,6 +85,7 @@ carril puede hacer solo. Q1 espera `aplicar` (ver «Bloqueado»).
       skill decía que sí. Corregida en `onia-hermes-jarvis/SKILL.md` y en el encabezado de `mirar-publico.mjs`.
     - `/login` y `/book`, a 390 y 1440 px: 200, sin desborde horizontal, íconos dibujados como glifos, sin textos de obra, sin tuteo visible, de usted.
       El título, la tarjeta al compartir y la descripción pasaron de «tu negocio» a «su negocio» (#146). Tiempos 2,5-4,1 s. Capturas miradas una por una.
+    - **Release:** no se pudo leer el tag `release-<sha>` (sin SSH al VPS). Por la huella de `public/` corre `master` `a7d8c1ed` (o uno con los mismos `manifest.json` y `sw.js`).
     - LOW: el campo de correo de `/login` trae el ejemplo `tucorreo@ejemplo.bo`, que se lee como «tu correo» en una pantalla de usted.
     - El «[SW] registration failed» de la consola es del interceptor de mi Chromium (ya anotado), no de la app.
   - **Bloqueado para este carril: las pantallas con sesión y «la imagen en el VPS».** `onia-mirar.js` lee la clave
@@ -473,9 +474,9 @@ carril puede hacer solo. Q1 espera `aplicar` (ver «Bloqueado»).
     sesión nueva lee `CLAUDE.md`, no el handoff de la madre: publicaría sin mostrar. Hay que decidir cuál rige y editar el otro en origen.
     Misma línea: pide no pushear a onia-platform «de :20 a :10», y `equipo-de-agentes` dice «de :20 a :55»; una de las dos tiene un typo.
   - Veredicto: nada que bloquee el merge de los scripts. La contradicción de reglas sí merece resolverse antes de que lo lea otra sesión.
-- [ ] **E1b Las pantallas con sesión de la publicación de las 06:50 UTC** (agenda del día, odontograma, caja diaria): **bloqueado** para este carril.
+- [ ] **E1b Las pantallas con sesión de la publicación de las 06:50 UTC** (agenda del día, odontograma, caja diaria y la bandeja `/inbox`): **bloqueado** para este carril.
   Las pantallas nuevas ya están en producción (E1) y nadie las vio con login. Las destraba la madre desde la PC
-  (`node /root/onia-mirar.js oninteligenciaartificial+qapago@gmail.com /agenda`, `/caja-diaria`, `/patients/<id>/odontogram`) o Q5 (#194) cuando
+  (`node /root/onia-mirar.js oninteligenciaartificial+qapago@gmail.com /agenda`, `/caja-diaria`, `/inbox`, `/patients/<id>/odontogram`) o Q5 (#194) cuando
   entre y corra `aplicar` (necesita el «sí, aplicar» de Sergio Urcullo en esta sesión). **Hecho:** tres capturas a 390 y 1440 con sesión, miradas.
 - [ ] **E4 Volver a mirar #136 cuando entren sus arreglos.** Los dos HIGH de E3 y el comando de las migraciones. **Hecho:**
   cada HIGH cerrado con su prueba, leído en el código de la cabeza nueva. **Aviso de la madre DESARROLLO-INFRA (11-oct ~06:20 UTC):** a las
