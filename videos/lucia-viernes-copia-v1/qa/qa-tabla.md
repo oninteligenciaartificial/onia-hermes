@@ -9,11 +9,11 @@ negatives_max: 0.224
 | viernes-copia-final-1080x1920_t0.png | 0.829 | 479 | OK |
 | viernes-copia-final-1080x1920_t1.png | 0.830 | 479 | OK |
 | viernes-copia-final-1080x1920_t2.5.png | 0.831 | 479 | OK |
-| viernes-copia-final-1080x1920_t3.5.png | 0.825 | 264 | OK |
-| viernes-copia-final-1080x1920_t4.2.png | 0.825 | 264 | OK |
-| viernes-copia-final-1080x1920_t5.5.png | 0.829 | 265 | OK |
-| master-b2-k4-f96.png | 0.835 | 237 | OK |
-| master-b2-r3-f96.png | 0.835 | 270 | OK |
+| viernes-copia-final-1080x1920_t3.5.png | 0.828 | 264 | OK |
+| viernes-copia-final-1080x1920_t4.2.png | 0.829 | 264 | OK |
+| viernes-copia-final-1080x1920_t5.5.png | 0.835 | 267 | OK |
+| master-b2-k4-f84.png | 0.839 | 237 | OK |
+| master-b2-r3-f84.png | 0.834 | 270 | OK |
 
 ### Referencias (informativas; centroid leave-one-out)
 

@@ -1,0 +1,10 @@
+piso de caras negativas (max): 0.224   gate del repo: 0,70
+archivo                                        centroide  min_ref  max_ref  cara_px  veredicto
+viernes-copia-final-1080x1920_t0.png               0.829    0.572    0.927      479  OK
+viernes-copia-final-1080x1920_t1.png               0.830    0.573    0.927      479  OK
+viernes-copia-final-1080x1920_t2.5.png             0.831    0.575    0.926      479  OK
+viernes-copia-final-1080x1920_t3.5.png             0.828    0.551    0.963      264  OK
+viernes-copia-final-1080x1920_t4.2.png             0.829    0.552    0.963      264  OK
+viernes-copia-final-1080x1920_t5.5.png             0.835    0.563    0.952      267  OK
+master-b2-k4-f84.png                               0.839    0.584    0.934      237  OK
+master-b2-r3-f84.png                               0.834    0.556    0.961      270  OK
