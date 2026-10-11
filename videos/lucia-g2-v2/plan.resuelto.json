@@ -554,7 +554,7 @@
    "fuga_escena": {
     "y": 1068,
     "x2": 973,
-    "nota": "v2.3 (revisión 2, H2) y v2.4: la misma etiqueta de la lección («recibió 4 de las 8 fotos con que se compara»; v2.3 «con que se mide») sobre el clip de Kling O3, pegada encima del «5,9 s: 0,82» (alineada a su borde derecho, x = 973). Entra y sale con el empuje del clip (el contenedor viaja con él), así que se lee de T9 a T11-6f (3,96 s) y siempre que el 0,82 está en pantalla."
+    "nota": "v2.3 (revisión 2, H2) y v2.4: la misma etiqueta de la lección («recibió 4 de 8 fotos con que se compara»; v2.3 «recibió 4 de las 8 fotos con que se mide») sobre el clip de Kling O3, pegada encima del «5,9 s: 0,82» (alineada a su borde derecho, x = 973). Entra y sale con el empuje del clip (el contenedor viaja con él), así que se lee de T9 a T11-6f (3,96 s) y siempre que el 0,82 está en pantalla."
    },
    "_valores": [
     0.798,
@@ -625,7 +625,7 @@
    "t": 19.65,
    "x": 272,
    "dy": -14,
-   "nota": "Hallazgo del 11-oct (fuga_refs): Kling O3 es el único clip con fotos recibidas que sale en pantalla. La etiqueta va en la fila de su barra, al lado del nombre; el texto sale de fuga_refs (recibio) y de refs.total, nunca escrito a mano. v2.3: dice «con que se mide» (no «de puntaje») y sube de 34 a 36 px. v2.4: dice «con que se compara» (más concreto)."
+   "nota": "Hallazgo del 11-oct (fuga_refs): Kling O3 es el único clip con fotos recibidas que sale en pantalla. La etiqueta va en la fila de su barra, al lado del nombre; el texto sale de fuga_refs (recibio) y de refs.total, nunca escrito a mano. v2.3: dice «con que se mide» (no «de puntaje») y sube de 34 a 36 px. v2.4: dice «recibió 4 de 8 fotos con que se compara» (más concreto; sin «las»: con «de las 8» llegaba a x = 1046, así termina en 994)."
   }
  },
  "fuga_refs": {

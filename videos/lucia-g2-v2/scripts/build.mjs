@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Lucía · G2 v2.4 «¿Quién pierde la cara? Seis clips con la misma orden» (≈ 27,8 s, 1080x1920, 24 fps) — re-corte de G2 (58 s, muda) con la regla de aire muerto, la revisión 1 aplicada, el hallazgo del 11-oct
-// (dos clips recibieron fotos de las 8 con que se mide) y la revisión 2 (la foto de arranque K1 se hizo con R1, R3, R6 y R7: ningún clip es independiente; aviso en el gancho, sobre el clip de Kling O3, en la lección y
+// (dos clips recibieron fotos de las 8 con que se compara) y la revisión 2 (la foto de arranque K1 se hizo con R1, R3, R6 y R7: ningún clip es independiente; aviso en el gancho, sobre el clip de Kling O3, en la lección y
 // al principio del pie; cada cifra y cada frase del pie se validan contra la medición, plan.json → fuga_refs; la resta de controles de la v2.2 se retiró: ver RETIRADAS en prohibidas.mjs).
 // v2.4 (revisión 3 + 4 correcciones del verificador): aviso del gancho con el CLIP de sujeto («Clip 0,82: recibió 4 fotos de comparación», bajo las miniaturas), «fotos con que se compara», pie con las tres salvedades de la
 // medición (todo construido desde el archivo), sin ids R1…R8, en pasado y con un solo sentido de «partir de», «en el clip original (720p)», segundos VISIBLES contados cuadro a cuadro y el cierre K1 con lo medido (qa/face-gate.txt).
@@ -242,7 +242,7 @@ const permitidosPie = new Set([fm(SC.piso), '0,03', '5,9']);      // el pie suma
     if (!res.video_misma_foto_K1_misma_orden || Object.keys(v).length !== 6) errores.push('PROCEDENCIA: no hay seis clips para la misma foto y la misma orden');
   }
 }
-// ── Hallazgo del 11-oct (sesión Lucía) y revisión 2 (v2.3): dos clips RECIBIERON fotos de las 8 con que se mide y, además, la foto de arranque K1 (de la que parten cinco clips) se hizo con R1, R3, R6 y R7:
+// ── Hallazgo del 11-oct (sesión Lucía) y revisión 2 (v2.3): dos clips RECIBIERON fotos de las 8 con que se compara y, además, la foto de arranque K1 (de la que parten cinco clips) se hizo con R1, R3, R6 y R7:
 //    ningún clip es independiente de esas cuatro. Los números de la pantalla no cambian (PROCEDENCIA l.97); se DICE: en el gancho (junto al 0,82), sobre el clip de Kling O3, en la lección y al principio del
 //    pie. Cada cifra y cada frase sale de la medición (plan.fuga_refs.fuente), no de la memoria: plan ≠ archivo corta el build y el pie tiene que decir lo que dice el archivo (HF.frases).
 //    v2.3 RETIRA la resta de controles de la v2.2 (los controles descienden de las mismas fotos): ya no se estima nada, solo se mide contra las 4 fotos que nadie recibió. ──
