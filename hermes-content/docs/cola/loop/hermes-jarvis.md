@@ -83,8 +83,87 @@ carril puede hacer solo. Q1 espera `aplicar` (ver «Bloqueado»).
     (`ERR_CERT_AUTHORITY_INVALID`). Funciona si cada pedido lo hace Node, con `context.route("**/*", r =>
     r.fulfill({ response: await r.fetch() }))` y `NODE_EXTRA_CA_CERTS`. La verificación TLS sigue entera. El
     «[SW] registration failed» que aparece así es del interceptor, no de la app.
-- [ ] **E2 Revisión de PRs sin mergear:** #191 (Ventas), #162 (bot C16c), #145 (SIAT CAFC), #172 (Marca), #144 (Lucía).
-  Una lente por PR, dos en #162 y #145; cada HIGH verificado en el código. En curso.
+- [x] **E2 Revisión de PRs sin mergear:** #191 (Ventas), #162 (bot C16c), #145 (SIAT CAFC), #172 (Marca), #144 (Lucía).
+  Una lente por PR, dos en #162 y #145, y cada HIGH verificado en el código por un segundo subagente (11-oct, 04:50-05:20
+  UTC; heads 255fced9, 5d5a11ce, 2f3db8fd, a9c11f31, 66f17096). Nada se mergeó ni se comentó en GitHub.
+  modelos: sonnet ×7 (revisión), haiku ×4 (verificación de cada HIGH). codex: ninguno.
+
+  | PR | Veredicto | HIGH verificados |
+  |---|---|---|
+  | #162 bot C16c | **BLOQUEAR** | 3 |
+  | #145 SIAT CAFC + publicador | **CAMBIOS** | 2 (+1 que bajó a MEDIUM) |
+  | #191 Ventas | CAMBIOS | 0 |
+  | #172 Marca | CAMBIOS | 0 |
+  | #144 Lucía | CAMBIOS | 0 |
+
+  **#162 (bot, BLOQUEAR).** Lo que promete no llega a producción, y arreglado a medias calla clientes.
+  - HIGH: el silencio de la bandeja huérfana nunca dispara con Chatwoot y la base conectada. `bot-engine.mjs:729` pide
+    `channel === "whatsapp"` o `channelType`, pero `chatwoot-adapter.mjs:215` manda `"chatwoot"` y `channelType` no se
+    guarda (`persistence.mjs:92-130` y `512-524`; `run-turn.mjs:278-285` no lo copia). Repro: tres turnos contestan; calla
+    solo con la base caída (`bot-engine.mjs:95`). Los tests pasan con `channel:"whatsapp"` y el store en memoria.
+  - HIGH (latente, se activa al arreglar el anterior): un 404 que no es JSON (proxy, Traefik en el swap) marca la
+    bandeja como huérfana y calla a todos los WhatsApp por los 5 min del cache (`knowledge.mjs:784`, `790-799`, `812`,
+    `905`/`945`). Arreglo: huérfana solo con el JSON `{"error":"Inbox sin organización"}` de
+    `onia-platform/app/api/chatbot-knowledge/published/route.ts:74`.
+  - HIGH: la guarda de la bandeja de ventas de Onia (`knowledge.mjs:691-694`, usada en `:787`) lee
+    `ONIA_WHATSAPP_INBOX_ID`, que no llega al bot. No la pasan ni `webhook-server.sh:294-344` ni `run-turn.sh:71-78`, y
+    `ADMINISTRAR_PARA_VENDER.md:314` dice que no está en el contenedor. No se midió el `--env-file` del VPS.
+  - MEDIUM: «siempre vende» exige `ONIA_KNOWLEDGE_URL`, vacía por defecto (`webhook-server.sh:308`). El silencio solo
+    deja `audit_logs`, sin aviso. Preexistente: con el cache frío, un 5xx o un timeout en la bandeja de un cliente
+    deja pasar el guion de venta de Onia (`knowledge.mjs:1287-1319`), una fuga hacia el cliente final.
+  - Merge limpio: `main` no tocó `vps-ops/bot` desde `d3ea768`. Tests: 257/257.
+
+  **#145 (SIAT + publicador, CAMBIOS).** Separar el publicador (3 archivos, corre como root) del resto.
+  - HIGH: el reintento nuevo del publicador se salta la guarda de precio y venta. `correr_con_reintento`
+    (`publicar-solo.sh:525-535`, llamado en `:621`) reintenta `publicar.sh` hasta 3 × 900 s, pero la guarda (`:540`
+    precio, `:585` venta) corre una sola vez. Cada reintento publica el `origin/master` de ese momento
+    (`deploy-vivo.mjs:431-433`, `publicar.sh:94`). Un cambio de `lib/pricing.ts` que entre en esos ~30 min sale sin firma.
+  - HIGH: un paquete rechazado por el SIN quema su bloque de números CAFC. Se reserva en `fase1-runner.mjs:1955` antes
+    del POST, sin devolución. Los reintentos reservan otra vez (`:1361-1375`). El README pide 15.060 números por
+    sector con un rango de 1-15100: 40 de margen.
+  - MEDIUM (era HIGH, verificado como parcial): el cursor CAFC vive solo en el checkpoint (`:1827-1838`, sin él en
+    `emptyState`, escritura no atómica en `:989-990`). Falla cerrado sin conciliación (`:1136-1144`, `:2242`). Repite
+    números solo con una copia vieja del checkpoint que tenga conciliación y no tenga cursor.
+  - MEDIUM: el cursor va por código y no por rango (`:1828`, `:779-805`) y no se ajusta a `desde`. `SIAT_PILOT_CAFC`
+    suelto como respaldo (`:814-819`). `validarInmediata` bloquea el caso por un error de red (`:1183-1189`).
+  - MEDIUM: 10 bundles de onia-platform (~364 KB cada uno, 8 de 10 no se verifican solos) y ~25,6 MB de PNG en
+    `docs/cola/`. Mejor no mergear los bundles a `main`. El parche del presupuesto público (`proxy.ts`, `token.ts`)
+    necesita `security-reviewer` en su PR de onia-platform.
+  - LOW: `publicador-reintento-build.test.mjs` no está en `package.json` (el CI no lo corre). Confirmar que el
+    teléfono 71654992 del bundle w1-integrado es de prueba.
+  - Tests: SIAT 458/458, publicador 3/3, freno de precio 29/29. Sin secretos. Merge limpio.
+
+  **#191 (Ventas, CAMBIOS, sin HIGH).** Las cifras cuadran: 271/62 y 417/41 recalculadas, y las 18 fichas se
+  regeneran idénticas. El detector de promesas da 0 y no hay voseo ni competidores en lo visible.
+  - MEDIUM: la clase «control / agenda / orden» suma 3 anuncios de Doctocliq que no son de control
+    (`biblioteca-estadisticas.mjs:27`). Son 9/3, no 12/5, aunque sigue fuerte (p = 0,0005). Huli figura
+    `lista_completa` con 16 de 20 (`BIBLIOTECA-10OCT.json:1732-1736`).
+  - MEDIUM: falta barrer en `ADQ:566` (titular viejo de A1) y en `ONIA_PLAN_1.0_Y_CAJA.md:94` (el «20 %» que §5.7
+    corrigió). N3 muestra agenda, fichas y cobros, pero solo pide A-04 y A-08 de la tabla de promesas.
+  - LOW: renders de A1/A2 con voseo y «Enviar yo mismo» (compuerta declarada en CAMPANA-1); N2 con precios en la
+    imagen. 31 nombres de profesionales en el JSON. Detalles de los scripts.
+
+  **#172 (Marca, CAMBIOS, sin HIGH).**
+  - MEDIUM: `scripts/marca-personal/captura-editor.py:56,61,92-96` pinta cualquier ruta (`.env`, `/etc/...`) en una
+    imagen que se publica. Probado con un `.env` falso. Arreglo: `realpath` + `commonpath` + `git ls-files
+    --error-unmatch`, y negar `.env*`, `*.pem` y `*.kdbx`.
+  - MEDIUM: la lámina 4 dice «44 en total» y hoy son 64. Hay PNG de un borrador con `[X]`/`[Y]` en `out/` y
+    `carousel_publish.js` no frena borradores. Quedan 2 `[CONFIRMAR…]` dentro del bloque para pegar de los avisos.
+  - LOW: «17 archivos» sigue en `CLAUDE.md:497` y `git-autosync.js:71` (son 19). Ruta absoluta en
+    `cuadro-prueba-tramo-03.html:6`.
+  - Tests: `carousel_render` 45 ok.
+
+  **#144 (Lucía, CAMBIOS, sin HIGH).** Los publicadores no retroceden (`--selftest` ok; la compuerta `--publicar` y la
+  cuenta, iguales; el token no se filtra).
+  - MEDIUM: si Instagram no confirma `is_ai_generated`, `ig-reel.mjs:~64-70` sale 0 con solo un `console.error`, y
+    Lucía puede salir sin la etiqueta IA y sin aviso. `ig-carrusel.mjs` ahora importa de `ig-reel.mjs`: copiar uno
+    solo rompe los carruseles de @sergiourcullo.
+  - MEDIUM: el gasto del 8-oct (86,5 cr; ~47 de video y 27,75 de `sync_so`, que no se pudo cotizar) se hizo con un tope
+    que puso la sesión. CLAUDE.md pide aprobar cada video. «Cada generación se cotizó» no vale para `sync_so`, y
+    16,59 cr de otra mano quedan sin atribuir. Rumbo: 0 de 8 piezas venden Onia, contra la instrucción del 10-oct.
+  - MEDIUM-LOW: `videos/lucia-entrega/` trae las v1 marcadas «NO publicar» (51 MB). LOW: el `payload=` de ElevenLabs en
+    `_urls.tsv`. `face-gate.sh` hace `pip install` sin versión fija y baja ~280 MB (insightface es de uso no comercial).
+  - Peso: +193,6 MB (3 % del repo).
 
 - [ ] **Q7 La web promete hoy lo que el catálogo deja (11-oct, madre v4).** Volver a mirar la §3 de
   `ONIA_PROMESA_VS_PRODUCTO.md` (lo que `onia.com.bo` prometía el 8-oct y el catálogo no deja) contra la web de hoy,

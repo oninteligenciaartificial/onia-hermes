@@ -224,6 +224,17 @@ CLI de Hermes.
     - Sin el log no se da la ventana por leída: exit 2 y una tarea.
   - En las pruebas, `onia-tg.sh` del repo no tiene permiso de ejecución: se llama con un envoltorio
     `exec bash`. Si no, `"$TG"` falla mudo y no se crea ninguna tarea.
+- **Mirar páginas desde la nube** (11-oct): el Chromium de Playwright rechaza el certificado del proxy de salida
+  (`ERR_CERT_AUTHORITY_INVALID`, también con `channel: "chromium"`). Funciona si cada pedido lo hace Node:
+  `context.route("**/*", async r => r.fulfill({ response: await r.fetch() }))`, que usa `NODE_EXTRA_CA_CERTS`. La
+  verificación TLS sigue entera; nunca `--ignore-certificate-errors`. El «[SW] registration failed» que aparece así
+  es del interceptor. La app no publica su BUILD_ID en el HTML: el nombre de `webpack-<hash>.js` cambia con cada build
+  y sirve de huella desde afuera. `app.onia.com.bo` está detrás de Cloudflare (`server: cloudflare`).
+- **Revisar PRs de otros carriles (11-oct, E2):** una lente sonnet por PR (dos si toca el VPS, plata o el bot), cada
+  HIGH verificado por un haiku que cita líneas y corre el repro, y nada se comenta en GitHub. Lee las ramas con `git
+  show origin/<rama>:<ruta>` y `git archive … | tar -x` en `/tmp`: nunca `checkout` en el árbol del carril. La
+  verificación cambia veredictos: el «cursor CAFC repite números» de #145 bajó a MEDIUM porque el runner falla cerrado
+  sin conciliación. Y dos lentes del mismo PR (#162) se contradijeron sobre si el silencio dispara; el repro lo decidió.
 - **`git show … | grep -q` con `pipefail` miente en archivos grandes** (10-oct). `grep -q` sale al primer
   acierto, `git` recibe SIGPIPE y el pipeline da error: una cola de más de 64 KB con tareas se leía «sin
   tareas». Usar `grep -c … >/dev/null` (lee todo) o leer a una variable primero.
