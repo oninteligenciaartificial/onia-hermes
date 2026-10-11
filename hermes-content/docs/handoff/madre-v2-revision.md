@@ -137,3 +137,15 @@ al reiniciarse la sesión: se usó lo que habían dejado en su journal y no se r
   - el costo de Meta lo di primero con «1.000 gratis» copiado de Wati, y después «sin tramo gratis» por `pricing.ts`.
     La verdad salió de mirar la página renderizada (la v1, en Chrome).
 - Método aprendido → skill `onia-sesion-madre` § «La madre v2».
+
+## 11-oct — clases del grupo + regla de modelos para todas las sesiones
+
+- **Hecho (3404b726):** análisis de las clases del 10-oct → `docs/research/2026-10-10-clases-del-grupo-checkout-pauta-cobro.md`;
+  método a `onia-ventas-pauta` §9.3/9.6/9.7; 2 ideas a `ONIA_CATALOGO_DE_IDEAS.md` §15. anunciante-supremo leído en el
+  scratchpad, NO instalado.
+- **Regla de modelos y Codex para TODAS las sesiones** (Sergio Urcullo, 11-oct): `docs/cola/loop/README.md` la exige y pide
+  la marca `modelos: …` / `codex:<id>` en cada `[x]`; CLAUDE.md la extiende. Aviso por `SendMessage` a las 5 nubes y a
+  «Arranque de nueva madre».
+- **Pendiente:** en la próxima revisión, contar por cola cuántos `[x]` nuevos llevan la marca (verificador Haiku). Una nube
+  sin marca recibe UNA línea. FAQ de pago + garantía honesta en `/checkout` y el nombre de la pasarela QR de Guilherme
+  quedan en la tabla §6 del doc de research.
