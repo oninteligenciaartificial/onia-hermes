@@ -1,4 +1,4 @@
-estado: pendiente
+estado: en curso (Codex, lanzada por la madre el 11-oct ~07:30 UTC; sobre la rama de #150)
 modelo: gpt-6.1-sol
 carril: plataforma
 origen: revisión E9 de Hermes sobre #150 = P-01 (onia-hermes `claude/adoring-ramanujan-7sjzwv` 687266e5, docs/cola/loop/hermes-jarvis.md §E9): un HIGH verificado y dos MEDIUM. Escrita el 11-oct por Plataforma (session_01HhnFgkeF6nLGvjrfjt1o2C); líneas medidas en `codex/p01-b22-anon` `52d77b0d`.

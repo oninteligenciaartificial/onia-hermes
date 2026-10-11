@@ -1,7 +1,7 @@
 ---
 id: plataforma-S2
 carril: plataforma
-estado: pendiente
+estado: en curso (Codex, lanzada por la madre el 11-oct ~07:30 UTC; PR aparte)
 modelo: gpt-6-astra
 repo: onia-platform
 base: master

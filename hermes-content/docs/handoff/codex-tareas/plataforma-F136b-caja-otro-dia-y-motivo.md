@@ -1,4 +1,4 @@
-estado: pendiente
+estado: en curso (Codex, lanzada por la madre el 11-oct ~07:30 UTC; PR aparte después de #147)
 modelo: gpt-6-astra (plata)
 carril: plataforma
 origen: revisión E4 de Hermes sobre #147 = F136 (onia-hermes `claude/adoring-ramanujan-7sjzwv` 687266e5, docs/cola/loop/hermes-jarvis.md §E4): los tres MEDIUM «condición para el siguiente PR» y el borrado de cobros de un día cerrado. Escrita el 11-oct por Plataforma (session_01HhnFgkeF6nLGvjrfjt1o2C); líneas medidas en `codex/f136-caja-odontograma` `4bd9da9c`.
