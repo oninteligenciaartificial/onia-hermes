@@ -587,7 +587,9 @@
  ],
  "claves_procedencia": {
   "a": "seedream_4_5_K1_4afffb96",
-  "b_cafe": "kling_omni_image_K2cafe_9f4b5172-f12b-4fb8-a03a-abb604380c47"
+  "b_cafe": "kling_omni_image_K2cafe_9f4b5172-f12b-4fb8-a03a-abb604380c47",
+  "kling_otra_k1": "kling_omni_image_K1_c3706d45-52c1-46a9-a7f4-0f766b6908d0",
+  "kling_otra_k4cafe": "kling_omni_image_K4cafe_dad464de-75a8-45f5-b799-8d91e5a63d1d"
  },
  "claves_video": {
   "m4": "seedance_2_0_mini_start_mas_3_refs_dd2d7c91-ea3a-46a8-a29d-3861143dfe9e",

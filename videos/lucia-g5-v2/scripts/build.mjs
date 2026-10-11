@@ -214,12 +214,19 @@ if (proc && vid && lab && !errores.length) {
 }
 // pie: pie.txt se ESCRIBE a mano (el pie del guion aprobado de G5 habla de un video de 57 s; este es de 26,8 s) y el build lo comprueba contra la pantalla, la voz y las frases retiradas
 const SUENA_A_RECOMENDACION = ['el mejor', 'la mejor', 'los mejores', 'lo mejor', 'recomend', 'te conviene', 'usá este', 'usa este', 'mejor que', 'ganó', 'gana ', 'ganador'];   // D-N1: se nombra lo que se usa, nunca «el mejor» ni una recomendación
-const RETIRADAS = ['baja sola', 'poco confiable', 'orden de magnitud', 'se parece poco', 'es ruido', 'no es fiable', 'lo inventó la ia'];
+const RETIRADAS = ['baja sola', 'poco confiable', 'orden de magnitud', 'se parece poco', 'es ruido', 'no es fiable', 'lo inventó la ia', 'son tomas sueltas', 'no una comparación', 'un programa'];   // las tres últimas: revisión 1 (H2, H5, H9)
 const pie = fs.readFileSync(path.join(P, 'pie.txt'), 'utf8').replace(/\s+/g, ' ').trim();
 {
   const lp = pie.toLowerCase();
-  if (!pie.startsWith('Lucía Antelo es un personaje hecho con IA')) errores.push('el pie tiene que abrir con «Lucía Antelo es un personaje hecho con IA…»');
-  for (const f of ['ocho fotos oficiales', '0,70', 'que elegí yo', 'bajo el piso', 'otra persona', 'a ojo', '0,77', '0,80', 'cabe en ±0,03', 'letreros inventados', 'imagen entera', 'cada semana hago una prueba', 'seguime', 'seedream 4.5', 'kling o1 image', 'kling o3', 'cinematic studio 3.0', 'seedance 2.0 mini + referencias']) if (!lp.includes(f)) errores.push(`el pie no dice «${f}», que el video sí dice`);
+  if (!pie.startsWith('Personaje hecho con IA: Lucía Antelo, de @oniahq.')) errores.push('el pie tiene que ABRIR con «Personaje hecho con IA: Lucía Antelo, de @oniahq.» (revisión 1, H3; lo comprueba startsWith, no una lectura)');
+  for (const f of ['ocho fotos oficiales', 'un medidor (arcface) que las compara', '0,70', 'que elegí yo', 'bajo el piso', 'otra persona', 'a ojo', '0,77', '0,80', 'cabe en ±0,03', 'letreros inventados', 'imagen entera', 'cada semana hago una prueba', 'seguime', 'seedream 4.5', 'kling o1 image', 'kling o3', 'cinematic studio 3.0', 'seedance 2.0 mini + referencias',
+    'una toma de cada una: es una prueba, no una regla. en otras dos escenas, kling o1 image dio 0,79 y 0,83.']) if (!lp.includes(f)) errores.push(`el pie no dice «${f}», que el video sí dice`);
+  // H2: los números de las otras dos tomas de Kling O1 Image salen de PROCEDENCIA (línea «resultados»), no de memoria
+  if (proc) {
+    const k1 = proc.kling_otra_k1?.id, k4 = proc.kling_otra_k4cafe?.id;
+    if (r2(k1) !== 0.79 || r2(k4) !== 0.83) errores.push(`el pie dice «Kling O1 Image dio 0,79 y 0,83» y PROCEDENCIA da ${k1} y ${k4}`);
+    else claim.push(`ok  pie «En otras dos escenas, Kling O1 Image dio 0,79 y 0,83»: PROCEDENCIA línea 97, kling_omni_image_K1 ${k1} → ${fm(r2(k1))} y K4cafe ${k4} → ${fm(r2(k4))} (la del café de este video, 0,35, es la tercera toma)`);
+  }
   const pantalla = [plan.rotulo.texto, ...plan.tarjetas.map((c) => `${c.texto} ${c.acento || ''}`), plan.r1.nota.texto, plan.r2.zoom.texto, plan.r3.llamada.texto].join(' \n ').replace(/\s+/g, ' ').toLowerCase();
   for (const f of RETIRADAS) {
     if (lp.includes(f)) errores.push(`el pie repite una frase retirada: «${f}»`);
@@ -234,7 +241,7 @@ const pie = fs.readFileSync(path.join(P, 'pie.txt'), 'utf8').replace(/\s+/g, ' '
   }
   if (!/nombro lo que uso; no es una recomendación pagada\./.test(lp)) errores.push('el pie tiene que decir «Nombro lo que uso; no es una recomendación pagada.» (D-N1)');
   claim.push('ok  nada suena a «el mejor» ni a recomendación en pantalla ni en la voz; el pie dice «Nombro lo que uso; no es una recomendación pagada.»');
-  claim.push('ok  pie.txt abre con «personaje hecho con IA», dice lo que el video dice (ocho fotos oficiales, piso 0,70, café 0,35, cara chica, 0,77-0,80 cabe en ±0,03, letreros inventados, imagen entera, CTA) y no repite ninguna frase retirada');
+  claim.push('ok  pie.txt ABRE con «Personaje hecho con IA: Lucía Antelo, de @oniahq.», nombra al medidor (ArcFace), dice lo que el video dice (ocho fotos oficiales, piso 0,70, café 0,35, cara chica, 0,77-0,80 cabe en ±0,03, letreros inventados, imagen entera, CTA), pone el límite de las herramientas («Una toma de cada una: es una prueba, no una regla») y no repite ninguna frase retirada');
   claim.push(`ok  ninguna frase retirada (${RETIRADAS.join(' / ')}) en pantalla, voz ni pie`);
 }
 // tags y sellos dentro de la vida de su tarjeta y antes del empuje de salida
