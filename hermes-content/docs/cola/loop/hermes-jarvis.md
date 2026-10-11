@@ -392,7 +392,28 @@ carril puede hacer solo. Q1 espera `aplicar` (ver «Bloqueado»).
     `getRequestMeta`; los tests no prueban el rollback ni el 500; la política de privacidad no dice que guarda la IP.
   - Merge con `master`: sin conflicto.
 
-  Sin mirar todavía: #132 (K1, respuesta al recordatorio), #70 (documentación de septiembre) y, en este repo, #195, #143 y #40.
+  Sin mirar todavía: #70 (documentación de septiembre) y, en este repo, #195, #143 y #40. (#132 ya está abajo, en E6.)
+- [x] **E6 Revisar #132 (K1, la respuesta al recordatorio: confirmar / cancelar / reprogramar)** (latido del 11-oct, 06:12-06:25 UTC;
+  head `0abc65d5`, base `master` `32c7e0e8`, que ya se movió: `master` va en `c94b9daa`). `modelos: ninguno (113 líneas de código, las leí yo)`
+  · `codex: ninguno`. Solo lectura, sin merge ni comentario en el PR.
+  - CI verde en ese head (Lint, Typecheck, Tests & Build; Secret scan; Supabase Preview se saltó). Hay que re-correrlo sobre el `master` de hoy antes de mergear.
+  - Lo que está bien, comprobado en el código: dos funciones puras y una que persiste; la lista de frases es cerrada y no decide por
+    subcadenas (`no confirmo`, `no quiero cancelar`, `sí pero no puedo` dan desconocido); un `buttonId` desconocido no cae al texto;
+    la organización viene del llamador y se compara en las dos funciones y en el `where`; el `updateMany` compara id, organización, estado
+    **y horario**, así que una respuesta a la hora vieja no confirma una cita que el equipo ya movió; los enum existen en `schema.prisma:1288`.
+  - **MEDIUM — «no puedo» cancela** (`interpretar-respuesta-recordatorio.ts:26`, fijado por un test). Decir «no puedo» a un recordatorio puede
+    ser «no puedo a esa hora». Cancelar libera el horario en silencio; reprogramar no escribe nada y le deja el caso a una persona. El costo
+    de equivocarse no es simétrico. Arreglo: que `no puedo` y `no puedo asistir` no cancelen (a `reprogramar`, o a desconocido para que el
+    bot pregunte «¿cancelamos o buscamos otro día?»). Es una regla de negocio: la decide Sergio Urcullo con Plataforma, no esta lane.
+  - **MEDIUM — `aplicarRespuestaRecordatorio` se salta lo que hace la cancelación de hoy.** El PATCH y el DELETE de
+    `app/api/appointments/[id]/route.ts` hacen `logAudit` (líneas 142 y 249), `avisarCambioDeCita` (164 y 247) y `publicarCita` (167 y 257).
+    K1 solo hace el `updateMany`: al conectarlo, una cancelación por WhatsApp no deja rastro en la auditoría, la recepción no se entera y la
+    agenda en vivo sigue mostrando el horario ocupado. El PR avisa que no manda notificaciones, pero no que falta la auditoría ni el evento en
+    vivo, y el backlog tampoco. El PR que lo conecte tiene que sumarlos, con un test que falle sin ellos.
+  - LOW: «ok» y 👍 confirman si el llamador no probó que la respuesta es a ESE recordatorio (el contrato lo exige, pero nada lo verifica
+    hasta que alguien lo llame). Y hoy **nadie lo llama**: `CLAUDE.md` «Construido ≠ terminado». Sin cablear no hay valor ni riesgo.
+  - Pregunta para quien lo cablee: ¿una cuenta en solo lectura (C13) puede cancelar por respuesta? El PR no lo dice.
+  - Veredicto: el código no tiene HIGH. Se puede mergear con los dos MEDIUM anotados como condición del PR que lo conecte.
 - [ ] **E4 Volver a mirar #136 cuando entren sus arreglos.** Los dos HIGH de E3 y el comando de las migraciones. **Hecho:**
   cada HIGH cerrado con su prueba, leído en el código de la cabeza nueva.
 
