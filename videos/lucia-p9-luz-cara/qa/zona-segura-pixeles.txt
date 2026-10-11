@@ -8,7 +8,7 @@
 200   8.33 s  pastillas  y 1092-1439
 250  10.42 s  pastillas  y 1090-1439
 270  11.25 s  pastillas  y 1090-1439
-283  11.79 s  placa-contenido  y 300-782
+283  11.79 s  placa-contenido  y 300-783
 288  12.00 s  placa-contenido  y 300-991
 300  12.50 s  placa-contenido  y 300-1103
 330  13.75 s  placa-contenido  y 300-1103
