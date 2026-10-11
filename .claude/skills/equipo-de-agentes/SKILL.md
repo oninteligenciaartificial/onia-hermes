@@ -97,6 +97,12 @@ Regla del 9-oct (CLAUDE.md), confirmada por Sergio Urcullo el 10-oct: **lo traba
 arreglos, textos, migraciones (con backup y rollback) e infra. Sigue con su sí: gasto, contactar clientes o terceros, el
 portal del SIAT, actos legales o firmas (los hace Leslie Mercado Moreno) y su cara o su voz en servicios externos.
 
+**Antes de mergear un PR de onia-platform, se lee la revisión de Hermes** (madre, 11-oct): `cola/loop/hermes-jarvis.md`
+§E…, en la rama de Hermes-Jarvis aunque no esté en `main`. **Un HIGH abierto = no se mergea.** Nace de #136: Plataforma
+lo mergeó a las 05:46 UTC con CI, secretos, migraciones y suite en verde, y la revisión E3 (lista desde las 05:30) traía
+2 HIGH verificados (la caja leía «1.500» como Bs 1,50; borrar un paciente borraba sus caras). Salieron a producción y el
+arreglo quedó para la publicación siguiente. El CI mide lo que tiene test; la revisión mide lo que nadie testeó.
+
 **El diseño sí pasa por él (10-oct: «ok, solo diseño se me envía a mí también»).** Pantalla nueva o rediseño: capturas
 renderizadas de celular y computadora, una imagen por pantalla, y se publica con su OK sobre esa pieza. El 9-oct esta
 sección decía «incluido el diseño»; él lo sacó al confirmar la regla.

@@ -77,8 +77,8 @@ la dirección de Sergio Urcullo.
 
 | Qué | Dónde | Cómo se retoma |
 |---|---|---|
-| **Las 5 pantallas** (bandeja v3, app sin internet, agenda del día, odontograma, caja) | **#136**, cabeza `1fd14770` en `claude/optimistic-ride-1sp5fe`. Junta #136 + #118 `a8b31bfd` + #119 `a6484bca` + `i110-v3` + `master` `d8ca5a32`. Suite local 10.501 en verde, CI corriendo desde 04:46 UTC | **Sergio Urcullo escribió en esta sesión, el 11-oct ~04:40 UTC: «publica la pantalla».** Hubo dos clear (05:09 y 05:15 UTC); la línea se verificó en el transcript de esta sesión (`list_events`, 04:41:42 UTC, `desktop_app`) y vale: él escribió «hacemos clean y seguimos». CI de `1fd14770` en verde a las 05:25 UTC. Con CI verde, marcar #136 listo y mergear fuera de :20-:55; sale en el cron siguiente. #118, #119, #110 y #130 quedan mergeados con él. Después: `scripts/chatwoot-webhook-eventos.mjs` en el VPS, recrear el contenedor y mirar un WhatsApp de prueba llegar a `/inbox` en menos de 2 s. Mirar sin login (logs, públicas); con login, la madre |
-| **Títulos públicos de usted** | **#146** (`fix/titulos-de-usted`, `b0e021f2`), draft, CI en cola | Con CI verde: marcar listo y mergear (son textos, no esperan a nadie). Probado junto con #136 en un árbol mezclado (11-oct 04:54 UTC): sin conflictos, `tsc` 0 y 10.505 tests en verde |
+| **Las 5 pantallas** (bandeja v3, app sin internet, agenda del día, odontograma, caja) | **Mergeado** `282ae3ab` (11-oct 05:46 UTC) junto con #146 `a7d8c1ed`; el árbol de master es idéntico al probado con 10.505 en verde. #118, #119, #110, #127, #129 y #130 quedaron mergeados solos; #135 cerrado como incluido | Sale a las 06:50 UTC: mirar sin login (release, `/offline.html`, `sw.js`, `manifest.json`, el webhook que pasa de 404 a 401, logs) y con login la madre. **Entró con 2 HIGH** de la revisión E3 de Hermes (caja: «1.500» = Bs 1,50, sin confirmar ni reabrir; borrar un paciente borra sus caras): el arreglo es F136 (Codex Astra, de la madre), PR después de las 07:10, mergear antes de las 09:20. La línea de Sergio Urcullo se leyó en el transcript (04:41:42 UTC, después hubo dos clear) |
+| **Pantallas del video (C1-C7) de usted** | `claude/optimistic-ride-1sp5fe` `f28e15af` (onia-platform), sin PR | Lo empezó esta sesión entre los dos clear y quedó solo en `wt-mezcla`; se subió a la rama a las 05:57 UTC para no perderlo. tsc 0, 10.503 en verde y **38 tests viejos** que afirman el vos: contrato U3b (`bloqueada` hasta que entren U3 y F136). Se pisa con U3 en `/agents`: al juntar, queda lo de U3 |
 | Arreglo de versión de #124 | `plataforma-listas-20261010.bundle`, rama `t124-version` | Lo sube la madre cuando ella o Sergio Urcullo digan |
 | Chat de la web con el nombre de la clínica (W1f) | `i140-w1f` (`34f86438`) en el mismo bundle; #140 | Espera el OK de diseño de W1f. Después: la infra (origen solo para Cloudflare, `/public/api/` bloqueado en Chatwoot, `hmac_mandatory`) |
 | Términos 1.4 + gracia | #113 + lámina | Con el sí de los dos: `terminos.md` del sitio a 1.4, `VERSION_TERMINOS` el mismo día, aviso dentro del sistema y recién ahí #113. **No commitear el 1.4 antes** |
@@ -102,6 +102,8 @@ la dirección de Sergio Urcullo.
 - **Un cron que dice «FALLO»** suele ser «hay otro build corriendo» (CI del mismo VPS), no el código: leer
   `/tmp/pub-plataforma.log` primero.
 - **`pkill -f` / `pgrep -f`** se encuentran a sí mismos y matan el propio comando (10-oct). Usar `[n]ext dev`.
+- **11-oct, error mío: mergeé #136 sin leer la revisión de Hermes** (E3, en la rama de Hermes-Jarvis desde las 05:30). Tenía 2 HIGH verificados y salieron a producción. Desde ahora, antes de mergear: `cola/loop/hermes-jarvis.md` §E… de su rama; un HIGH abierto no se mergea.
+- **«Completed (exit code 0)» de una corrida de tests no es la suite en verde** (11-oct): el WIP del usted del video tenía 38 rojos. Leer el resumen de vitest, no el código de salida del comando que lo envuelve.
 - **Cancelar runs de Actions desde la nube da 403** (11-oct): los runs de #118 y #119, que ya van dentro de #136, ocupan igual el único runner (~20 min cada CI). Se cuenta ese tiempo; no se rodea.
 - **`docker exec -i onia-platform node - < script` lo frena el control de permisos** aunque solo lea (11-oct). `psql -tAc "select …"` sí pasa.
 - **Un `&` dentro de un Bash normal** sobrevive y duplica la corrida de tests (dos vitest escribiendo el mismo log).
@@ -129,6 +131,8 @@ la dirección de Sergio Urcullo.
 
 0. **#136:** con CI verde → listo y merge (su línea ya está, ver §4) → cron → mirar. Después, la infra de la bandeja.
 1. **#146:** con CI verde → listo y merge.
+0a. **F136** (los 2 HIGH de #136): revisar el PR de la madre (después de las 07:10) con la revisión de Hermes, integrar, mergear antes de las 09:20.
+0b. **U3** (PR a las 07:12) y después **U3b**: juntar master en `claude/optimistic-ride-1sp5fe`, pasar U3b a `pendiente`.
 1a. **U4 y U5** (registro, entrada y alta guiada de usted, 1.0): los lanza la madre; al llegar el PR, revisar, integrar con master, suite completa, mergear y mirar `/login`, `/register` y `/onboarding` sin login. **U6** (correos y avisos del plan) espera a #113.
 1b. **U3** (`codex-tareas/U3-usted-agentes-e-inicio.md`, 11-oct): `/agents` y el Inicio de usted antes de las capturas. Lo lanza la madre; el mensaje al paciente y `/pending` ya son de usted (leído en el código y en las 7 tarjetas del demo).
 2. **Demo del lunes** (pedido de la madre v4): el plan está en `docs/cola/demo-venta-refresco.md` (11-oct): `reset=2`
