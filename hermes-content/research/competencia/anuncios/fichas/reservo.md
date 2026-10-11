@@ -32,6 +32,14 @@
 | ECE en regla con COFEPRIS | 1 | 50 d | `1015323991509208` |
 | Reservo Software | 1 | 47 d | `27227967266876051` |
 
+## Capturas del 11-oct
+
+Fuente: `../CAPTURAS-50D-11OCT.md`; días del corte 10-oct. La antigüedad no es rendimiento; las afirmaciones del anuncio no están verificadas.
+
+| Id | Días al aire (fuente) | Formato que se ve | Texto principal | Llamado (titular · botón) | Ruta |
+|---|---|---|---|---|---|
+| `1056628280307783` | 53 (desde 18-ago) | **Imagen**: afiche con una frase sobre la COFEPRIS y la NOM-024 («¡Estamos certificados!») y una captura de pantalla pequeña del sistema (texto de la imagen leído a baja resolución). La tarjeta dice «varias versiones» | «¿Estás seguro de que tu clínica cumple con los estándares de COFEPRIS? • Expediente electrónico bajo la NOM-024 • Agenda y control financiero en un solo lugar. Descubre cómo Reservo te ayuda a mejorar tus procesos. Déjanos tus datos para obtener información personalizada sobre cómo podemos ayudarte.» | «Cumple con las normativas legales» + «Reservo software médico para profesionales de salud. Expediente clínico certificado NOM-024, agenda, finanzas, fidelización de pacientes y más.» · botón «Learn More» (formulario de datos) | `reservo/1056628280307783-11oct.png` |
+
 ## Límites
 
 - Lista completa.

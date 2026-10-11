@@ -49,6 +49,15 @@
 | Menos administración. Más odontología. | 1 | 19 d |
 | Prueba Doctocliq ahora | 1 | 16 d |
 
+## Capturas del 11-oct
+
+Fuente: `../CAPTURAS-50D-11OCT.md`; días del corte 10-oct. La antigüedad no es rendimiento; las afirmaciones del anuncio no están verificadas.
+
+| Id | Días al aire (fuente) | Formato que se ve | Texto principal | Llamado (titular · botón) | Ruta |
+|---|---|---|---|---|---|
+| `1748838402916201` | 85 (desde 17-jul) | **Video 0:10, persona a cámara**: una doctora sentada en un consultorio (aspecto sintético, no verificado). Mismo texto y duración que `1952892278698712` de la ronda 1 | «Doctora, tu tiempo (y tu almuerzo) valen demasiado para que te cancelen a última hora. Prueba Doctocliq hoy.» | «Prueba Doctocliq ahora» (WWW.DOCTOCLIQ.COM) · botón «Ver detalles» | `doctocliq/1748838402916201-11oct.png` |
+| `1738720983808867` | 85 (desde 17-jul) | **Video 0:30, mini-historia**: un niño sentado a la mesa esperando, con un reloj de pared (escena de aspecto sintético). Mismo titular y duración que `1014591764512827` de la ronda 1 | «Tu día ya es suficientemente ocupado como para estar resolviendo todo a última hora. Con Doctocliq, tus pacientes agendan sus citas en línea y reciben recordatorios automáticos, para que puedas trabajar con más tranquilidad. Miles de doctores en Latinoamérica ya lo hacen. Ahora te toca a ti.» | «La agenda que trabaja contigo» (DOCTOCLIQ.COM/CREA-TU-CUENTA) · botón «Ver detalles» | `doctocliq/1738720983808867-11oct.png` |
+
 ## Límites
 
 - Lista completa (se vio todo lo activo).

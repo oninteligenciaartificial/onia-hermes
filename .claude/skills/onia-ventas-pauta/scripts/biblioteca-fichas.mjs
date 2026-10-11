@@ -4,13 +4,15 @@
 // Por defecto: BIBLIOTECA-10OCT.json y hermes-content/research/competencia/anuncios/fichas/.
 // Las cifras salen del JSON; el texto de LECTURAS.json se conserva al regenerar con un corte nuevo (p. ej. el del 24-oct).
 // La edad de un anuncio NO es rendimiento: lo dice cada ficha.
-import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import path from "node:path";
 
 const jsonRuta = process.argv[2] || "hermes-content/research/competencia/anuncios/BIBLIOTECA-10OCT.json";
 const salida = process.argv[3] || "hermes-content/research/competencia/anuncios/fichas";
 const d = JSON.parse(readFileSync(jsonRuta, "utf8"));
 const lect = JSON.parse(readFileSync(path.join(salida, "LECTURAS.json"), "utf8"));
+const capturasRuta = path.join(salida, "CAPTURAS-11OCT.json");
+const capturas = existsSync(capturasRuta) ? JSON.parse(readFileSync(capturasRuta, "utf8")) : {};
 const corte = d.meta.fecha;
 
 // página(s) del JSON → ficha
@@ -99,6 +101,18 @@ function fichaDe(slug) {
       }
       out.push("");
     }
+  }
+  if (capturas[slug]?.length) {
+    out.push("## Capturas del 11-oct");
+    out.push("");
+    out.push("Fuente: `../CAPTURAS-50D-11OCT.md`; días del corte 10-oct. La antigüedad no es rendimiento; las afirmaciones del anuncio no están verificadas.");
+    out.push("");
+    out.push("| Id | Días al aire (fuente) | Formato que se ve | Texto principal | Llamado (titular · botón) | Ruta |");
+    out.push("|---|---|---|---|---|---|");
+    for (const c of capturas[slug]) {
+      out.push(`| \`${c.id}\` | ${esc(c.dias ?? "no observable")} | ${esc(c.formato ?? "no observable")} | ${esc(c.texto_principal ?? "no observable")} | ${esc(c.llamado ?? "no observable")} | \`${c.ruta}\` |`);
+    }
+    out.push("");
   }
   out.push("## Límites");
   out.push("");

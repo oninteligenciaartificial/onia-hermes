@@ -62,6 +62,17 @@
 | 90% menos inasistencias | 1 | 4 d |
 | AgendaPro | 1 | 3 d |
 
+## Capturas del 11-oct
+
+Fuente: `../CAPTURAS-50D-11OCT.md`; días del corte 10-oct. La antigüedad no es rendimiento; las afirmaciones del anuncio no están verificadas.
+
+| Id | Días al aire (fuente) | Formato que se ve | Texto principal | Llamado (titular · botón) | Ruta |
+|---|---|---|---|---|---|
+| `1535822604884838` | 143 (desde 20-may) | **Video 0:25, persona a cámara**: un joven en una barbería con el celular en la mano y el texto en pantalla «Ser barbero no es vivir en el celular». 4 versiones del mismo anuncio | «📅 ¿Tu agenda te supera? ¡Sofía está para ayudarte! Con Sofía IA Recordatorios tus clientes reciben mensajes automáticos por WhatsApp para confirmar sus citas, y si cancelan, ella reagenda por ti al instante. 🤖✨» + tres viñetas: «Más profesionalidad · Menos espacios vacíos · Ahorrá horas de coordinación» + «Tu negocio más ordenado y listo para crecer.» | «Sofia Llegó» / «Tu IA para crecer» · botón «Sign Up» | `agendapro/1535822604884838-11oct.png` |
+| `1201810243016378` | 111 (desde 21-jun) | **Video 0:31, persona a cámara**: una joven con texto en pantalla sobre «una IA que salvó mi clínica de depilación» (legible en parte) | «¿Qué? ¿Una Inteligencia Artificial para clínicas de depilación láser? Lleva el historial de cada paciente, zonas tratadas y envía recordatorios por WhatsApp automáticamente. Es la IA de AgendaPro — haz click y te paso toda la info.» | «La IA que organiza tu clínica» (destino FB.ME) · botón «Más información» | `agendapro/1201810243016378-11oct.png` |
+| `3652876658196882` | 64 (desde 7-ago) | **Imagen**: foto de una profesional con uniforme morado, burbujas de chat («¿Y si dudo si AgendaPro reduce las inasistencias en mi clínica estética?») y la frase «Agenda una demostración GRATIS» | «Ya conoces AgendaPro, pero quizá nunca viste los números. Los recordatorios automáticos bajan las inasistencias de tu clínica estética sin que tengas que perseguir a nadie por WhatsApp. Te lo mostramos en una demo de 15 minutos, gratis.» | «Agenda tu demostración gratis» (etiqueta «Software Company») · botón «Reservar» | `agendapro/3652876658196882-11oct.png` |
+| `1601426334721119` | 64 (desde 7-ago) | **Video 0:34**. La Biblioteca no entrega cuadro: el primer cuadro sale negro (reintentado con más espera, igual). No se ve qué muestra. La tarjeta dice «varias versiones» | «Estás en medio de un corte y tu WhatsApp no para: turnos, cambios, cancelaciones. Si contestás, dejás al cliente de la silla. Si no contestás, perdés al de WhatsApp. La IA de AgendaPro resuelve las dos.» (hecho para barberías) | «La IA atiende tu WhatsApp» · «Hasta 90% menos inasistencias.» · botón «Learn More» | `agendapro/1601426334721119-11oct.png` |
+
 ## Límites
 
 - Lista **parcial**: 313 activos, 81 vistos (tope de 50 por consulta, más nuevos primero). Es el de mayor antigüedad visible (247 d) pero esos son catálogo dinámico: no compararlo con los demás por antigüedad.
