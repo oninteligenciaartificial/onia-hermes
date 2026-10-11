@@ -1,3 +1,5 @@
+NOTA v2 (11-oct, editor): este archivo es de la v1 (master 969ac27d). En la v2 no se movieron ni el rótulo, ni el título, ni el dato de Kling, ni el dato de Seedance (y 1090-1206): los márgenes de arriba valen igual (mínimo 58 px a 11,5 s). La etiqueta del reencuadre bajó de y 1270 a 1230 (1 línea, hasta 1300) y el aviso nuevo va en y 1324-1440, o sea 200 px o más bajo el mentón más bajo (y 1032 a 11,5 s). El desenfoque de la esquina (x 0-440, y 0-290) no toca la caja de la cara (x 335-858, y 327-1032). La separación cara-pastilla de la v2 se midió con el gate medir-dom (cajas heredadas de G2, margen mínimo mentón-texto 59 px, 0 fallos) y qa/layout-dom.txt.
+
 Deteccion NUEVA de caras sobre el MASTER (SCRFD det_10g de insightface buffalo_l, 11-oct, sesion Lucia): 24 cuadros a 2 fps (0 a 276 = 0 a 11,5 s; la placa no lleva cara). Cierra el pendiente 'caras heredadas de G2' de medir-dom.
 Pastillas (DOM del master): m1 y300-367, y760-857, y1030-1099; m4 y1090-1205, y1270-1339. Margen = hueco vertical entre la caja de la cara (sin pelo) y la pastilla mas cercana; negativo = solapan.
 
