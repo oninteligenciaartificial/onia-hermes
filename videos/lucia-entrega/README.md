@@ -11,6 +11,13 @@ nube no tiene cliente `ssh` y la decisión de la madre (8-oct) es que la llave v
 | 4 | G4 «Seis motores de imagen, una cara: ¿cuál la conserva?» (**guion APROBADO por la madre el 10-oct**; sale solo con «mostrada, publicá G4») | `g4-final-1080x1920.mp4` | 59,75 s | `../lucia-g4/pie.txt` | `../lucia-g4/qa/g4-preview-360p.mp4` |
 | 5 | G5 «Cómo mido si una cara es la de Lucía (y cuándo no creerle al número)» (**guion APROBADO por la madre el 10-oct**; sale solo con «mostrada, publicá G5»; guion: `hermes-content/docs/cola/lucia-diario/guiones/G5-como-se-mide-una-cara.md`) | `g5-final-1080x1920.mp4` | 57,5 s | `../lucia-g5/pie.txt` | `../lucia-g5/qa/g5-preview-360p.mp4` |
 
+> 🛑 **RETENCIÓN de G2 v2 (y revisión de G5 v2 y la pieza 9) — hallazgo del 11-oct, ~07:00 UTC, medido con `job_display` (0 cr).** El parecido se puntúa contra 8 fotos oficiales, y dos clips
+> RECIBIERON fotos de esas 8 como referencia de entrada: **Seedance 2.0 Mini + referencias** (R1 y R3 de 3 referencias; la tercera es la selfie «look ancla») y **Kling O3** (R1, R3, R6 y R7 de 5; la quinta es la selfie).
+> Sus parecidos finales (0,80 y 0,82), que en G2 son «los mejores», están favorecidos; los clips sin referencias (Kling 3.0 std/pro, Seedance sin refs, Cinematic Studio) no. El medidor está calculando el parecido
+> contra SOLO las fotos que cada motor no recibió (`hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/medicion-sin-refs-entrada-20261011.txt`). Hasta tenerlo y corregir pantalla y pie, **G2 v2 no se
+> muestra como «LISTA PARA MOSTRAR» sin esta advertencia**. G5 v2 usa el 0,80 de Seedance+refs solo como ejemplo del letrero inventado; se revisa. G4 compara motores de imagen que recibieron las mismas referencias
+> (comparación pareja, número absoluto inflado).
+
 > ⚠️ **No publicar las v1 de G2, G3, G4 y G5.** Las de G2, G4 y G5 llevan «Motor 1 a 6» / «Imagen A a F» (D-N1 del 11-oct pide los nombres reales); la de G3 (58 s) queda reemplazada por su v2 (27,9 s, regla 15 de aire muerto). Las reemplazan las v2 mudas de ≤ 30 s en
 > `../lucia-gN-v2/` (estado y SHA en la sección «Re-cortes v2» más abajo; G3 también tiene v2, recortada por la regla 15 de aire muerto, no por nombres).
 > G1 v2 (con voz Marcela, hecha por la madre) llega aparte: falta su SHA.
