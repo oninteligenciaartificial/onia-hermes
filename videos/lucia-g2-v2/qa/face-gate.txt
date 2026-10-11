@@ -1,29 +1,23 @@
-piso de caras negativas (max): 0.224   gate del repo: 0,70
-archivo                                        centroide  cara_px  veredicto
-g2-v2-final-1080x1920_t9.06667                     0.795      179  OK (cara < 200 px: poco confiable)
-g2-v2-final-1080x1920_t9.90000                     0.748      180  OK (cara < 200 px: poco confiable)
-g2-v2-final-1080x1920_t11.77500                    0.670      239  BAJO: mirar
-g2-v2-final-1080x1920_t12.69167                    0.630      255  BAJO: mirar
-g2-v2-final-1080x1920_t15.10833                    0.790      172  OK (cara < 200 px: poco confiable)
-g2-v2-final-1080x1920_t16.52500                    0.802      200  OK
-g2-v2-final-1080x1920_t24.94167                    0.740      173  OK (cara < 200 px: poco confiable)
-g2-v2-final-1080x1920_t26.19167                    0.707      173  OK (cara < 200 px: poco confiable)
-m1_t1.23333                                        0.799      119  OK (cara < 200 px: poco confiable)
-m1_t2.06667                                        0.762      120  OK (cara < 200 px: poco confiable)
-m1_t3.73333                                        0.751      115  OK (cara < 200 px: poco confiable)
-m1_t4.98333                                        0.708      115  OK (cara < 200 px: poco confiable)
-m3_t1.48333                                        0.671      160  BAJO: mirar (cara < 200 px: poco confiable)
-m3_t2.40000                                        0.629      170  BAJO: mirar (cara < 200 px: poco confiable)
-m5_t2.06667                                        0.790      115  OK (cara < 200 px: poco confiable)
-m5_t3.48333                                        0.801      133  OK (cara < 200 px: poco confiable)
+Control de cara (ArcFace buffalo_l, SCRFD det_10g; scripts/face_identity_qa.py) contra las 8 referencias oficiales de videos/lucia-g4-v2/assets/refs-orig/ (locales, sin red; nada instalado).
+Master: out/g2-v2-final-1080x1920.mp4 (revisión 1). «Fuente» = el mismo cuadro del clip original (assets/*.mp4) o la foto K1 (assets/k1.jpg). Puntaje = coseno contra el centroide de las 8 referencias. Gate del repo: 0,70.
+Caras < 200 px: poco confiables (regla del propio gate); las cifras son orientativas.
 
-Instantes ALINEADOS (final ↔ fuente en el MISMO cuadro del clip; cuadro 0 de cada clip = el cuadro T−6 de su empuje; el cierre K1 arranca en el cuadro 54 del clip):
-  final  9.083 s (cuadro 218) ↔ Kling 3.0 std @ cuadro 30:  0.795 ↔ 0.799  (dif 0.004)
-  final  9.917 s (cuadro 238) ↔ Kling 3.0 std @ cuadro 50:  0.748 ↔ 0.762  (dif 0.014)
-  final 11.792 s (cuadro 283) ↔ Seedance 2.0 Mini @ cuadro 36:  0.670 ↔ 0.671  (dif 0.001)   <- bajo 0,70 en la fuente Y en el final
-  final 12.708 s (cuadro 305) ↔ Seedance 2.0 Mini @ cuadro 58:  0.630 ↔ 0.629  (dif 0.001)   <- bajo 0,70 en la fuente Y en el final
-  final 15.125 s (cuadro 363) ↔ Kling O3 @ cuadro 50:  0.790 ↔ 0.790  (dif 0.000)
-  final 16.542 s (cuadro 397) ↔ Kling O3 @ cuadro 84:  0.802 ↔ 0.801  (dif 0.001)
-  final 24.958 s (cuadro 599) ↔ cierre K1 (Kling 3.0 std, clip +54) @ cuadro 90:  0.740 ↔ 0.751  (dif 0.011)
-  final 26.208 s (cuadro 629) ↔ cierre K1 (Kling 3.0 std, clip +54) @ cuadro 120:  0.707 ↔ 0.708  (dif 0.001)
-Máxima diferencia 0.014 (≤ 0,02): el escalado ×1,5 del navegador y el H.264 no deforman la cara. Caras de 115-255 px nativos: cifras orientativas (el propio gate marca < 200 px como poco confiable).
+cuadro del final                              final   px   fuente   px      dif
+gancho 1,00 s (cuadro 24, foto K1 con zoom)   0.800  180    0.806  237    0.006
+gancho 2,50 s (cuadro 60, foto K1 con zoom)   0.807  183    0.806  237    0.001
+gancho 3,00 s (cuadro 72, foto K1 con zoom)   0.795  186    0.806  237    0.011
+Kling 3.0 std (final cuadro 209 = clip 12)    0.787  180    0.797  120    0.010
+Kling 3.0 std (final cuadro 227 = clip 30)    0.796  178    0.799  119    0.003
+Kling 3.0 std (final cuadro 247 = clip 50)    0.750  180    0.762  120    0.012
+Seedance 2.0 Mini (final cuadro 272 = clip 14)  0.671  201    0.674  134    0.003  <- bajo 0,70 en la fuente y en el final
+Seedance 2.0 Mini (final cuadro 294 = clip 36)  0.673  239    0.671  160    0.002  <- bajo 0,70 en la fuente y en el final
+Seedance 2.0 Mini (final cuadro 316 = clip 58)  0.632  255    0.629  170    0.003  <- bajo 0,70 en la fuente y en el final
+Kling O3 (final cuadro 345 = clip 14)         0.789  144    0.784   95    0.005
+Kling O3 (final cuadro 381 = clip 50)         0.795  172    0.790  115    0.005
+Kling O3 (final cuadro 415 = clip 84)         0.797  200    0.801  133    0.004
+cierre K1 (clip de Kling 3.0 std, +54) (final cuadro 606 = clip 12+54)  0.744  178    0.750  118    0.006
+cierre K1 (clip de Kling 3.0 std, +54) (final cuadro 630 = clip 36+54)  0.740  173    0.751  115    0.011
+cierre K1 (clip de Kling 3.0 std, +54) (final cuadro 660 = clip 66+54)  0.699  173    0.708  115    0.009
+
+Diferencia máxima final↔fuente: 0.012 en 15 cuadros (límite 0,02): el escalado ×1,5 y el H.264 no deforman la cara.
+Lectura (coincide con la v2.0 y con la revisión 1): Seedance 2.0 Mini queda bajo 0,70 en la fuente y en el final; Kling O3 se mantiene ≥ 0,70; Kling 3.0 std baja; el cierre K1 queda entre 0,70 y 0,76.

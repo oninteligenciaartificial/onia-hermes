@@ -1,23 +1,36 @@
-ventana legible medida en el DOM (opacidad ≥ 0,9 y ≥ 95 % dentro del lienzo), cuadro a cuadro:
-  ok  rotulo    6 pal  0.00–2.96 s  2.96 s (pide 2.40)  «Lucía Antelo · personaje IA de Onia»
-  ok  dA-m1     4 pal  8.29–10.42 s  2.13 s (pide 1.70)  «parecido 0 s: 0,79»
-  ok  dB-m1     3 pal  8.83–10.46 s  1.63 s (pide 1.35)  «5,9 s: 0,72»
-  ok  dA-m3     4 pal  10.75–13.17 s  2.42 s (pide 1.70)  «parecido 0 s: 0,69»
-  ok  dB-m3     3 pal  11.25–13.21 s  1.96 s (pide 1.35)  «5,9 s: 0,64»
-  ok  s-m3      3 pal  11.54–13.17 s  1.63 s (pide 1.35)  «bajo el piso»
-  ok  dA-m5     4 pal  13.50–15.71 s  2.21 s (pide 1.70)  «parecido 0 s: 0,80»
-  ok  dB-m5     3 pal  14.08–15.71 s  1.63 s (pide 1.35)  «5,9 s: 0,82»
-  ok  rf-l      7 pal  4.46–7.96 s  3.50 s (pide 2.75)  «5 de las 8 fotos de referencia»
-  ok  l-tit     8 pal  17.38–23.58 s  6.21 s (pide 3.10)  «Parecido al final: 3 de los 6 clips»
-  ok  l-mkl     3 pal  17.33–23.63 s  6.29 s (pide 1.35)  «mi piso · 0,70»
-  ok  l-nota    8 pal  19.04–23.58 s  4.54 s (pide 3.10)  «Final = segundo 5,9, que no se ve entero.»
-  ok  l-t1      3 pal  17.63–23.58 s  5.96 s (pide 1.35)  «Kling 3.0 std»
-  ok  l-l1      2 pal  17.04–20.50 s  3.46 s (pide 1.00)  «foto sola»
-  ok  l-m1      3 pal  20.71–23.58 s  2.88 s (pide 1.35)  «mantiene el cuarto»
-  ok  l-t2      3 pal  17.92–23.58 s  5.67 s (pide 1.35)  «Seedance 2.0 Mini»
-  ok  l-l2      2 pal  17.04–20.17 s  3.13 s (pide 1.00)  «foto sola»
-  ok  l-m2      3 pal  20.33–23.58 s  3.25 s (pide 1.35)  «cambió el plano»
-  ok  l-t3      2 pal  18.21–23.58 s  5.38 s (pide 1.00)  «Kling O3»
-  ok  l-l3      1 pal  17.04–19.83 s  2.79 s (pide 0.65)  «referencias»
-  ok  l-m3      3 pal  20.00–23.58 s  3.58 s (pide 1.35)  «inventó el cuarto»
-✔ todas las ventanas medidas alcanzan la regla de lectura
+ventana legible medida en el DOM (opacidad ≥ 0,9 y ≥ 95 % dentro del lienzo), cuadro a cuadro: 12 tarjetas + 22 textos que no son tarjeta:
+  ok  c1        4 pal  0.00–1.75 s  1.75 s (pide 1.70, holgura +0.05)  «¿Quién pierde la cara?»
+  ok  c2        4 pal  1.83–3.63 s  1.79 s (pide 1.70, holgura +0.09)  «Misma orden. Seis clips.»
+  ok  c3        6 pal  3.67–6.63 s  2.96 s (pide 2.40, holgura +0.56)  «Se mide contra 8 fotos suyas.»
+  ok  c4        3 pal  6.71–8.33 s  1.63 s (pide 1.35, holgura +0.28)  «Mi piso: 0,70.»
+  ok  c5        5 pal  8.38–10.88 s  2.50 s (pide 2.05, holgura +0.45)  «Kling 3.0 std 7,5 créditos»
+  ok  c6        5 pal  10.92–13.92 s  3.00 s (pide 2.05, holgura +0.95)  «Seedance 2.0 Mini 6 créditos»
+  ok  c7        6 pal  13.96–16.50 s  2.54 s (pide 2.40, holgura +0.14)  «Kling O3 · 6 créditos solo referencias»
+  ok  c8        3 pal  16.58–18.13 s  1.54 s (pide 1.35, holgura +0.19)  «Inventó el cuarto.»
+  ok  c9        6 pal  18.17–20.67 s  2.50 s (pide 2.40, holgura +0.10)  «Con referencias, la cara se sostiene.»
+  ok  c10       4 pal  20.75–22.67 s  1.92 s (pide 1.70, holgura +0.22)  «Pero inventa la escena.»
+  ok  c11       5 pal  22.75–24.88 s  2.13 s (pide 2.05, holgura +0.08)  «Una toma: es una prueba.»
+  ok  c12       5 pal  24.92–27.79 s  2.88 s (pide 2.05, holgura +0.83)  «Seguime: cada semana, una prueba.»
+  ok  rotulo    6 pal  0.00–2.96 s  2.96 s (pide 2.40, holgura +0.56)  «Lucía Antelo · personaje IA de Onia»
+  ok  pastilla  5 pal  0.96–3.63 s  2.67 s (pide 2.05, holgura +0.62)  «parecido final: 0,64 a 0,82»
+  ok  dA-m1     4 pal  8.67–10.88 s  2.21 s (pide 1.70, holgura +0.51)  «parecido 0 s: 0,79»
+  ok  dB-m1     3 pal  9.21–10.92 s  1.71 s (pide 1.35, holgura +0.36)  «5,9 s: 0,72»
+  ok  dA-m3     4 pal  11.21–13.92 s  2.71 s (pide 1.70, holgura +1.01)  «parecido 0 s: 0,69»
+  ok  dB-m3     3 pal  11.71–13.96 s  2.25 s (pide 1.35, holgura +0.90)  «5,9 s: 0,64»
+  ok  s-m3      3 pal  12.00–13.92 s  1.92 s (pide 1.35, holgura +0.57)  «bajo el piso»
+  ok  dA-m5     4 pal  14.25–16.50 s  2.25 s (pide 1.70, holgura +0.55)  «parecido 0 s: 0,80»
+  ok  dB-m5     3 pal  14.83–16.50 s  1.67 s (pide 1.35, holgura +0.32)  «5,9 s: 0,82»
+  ok  rf-l      7 pal  4.79–8.33 s  3.54 s (pide 2.75, holgura +0.79)  «5 de las 8 fotos de referencia»
+  ok  l-tit     8 pal  18.50–24.88 s  6.38 s (pide 3.10, holgura +3.28)  «Parecido al final: 3 de los 6 clips»
+  ok  l-mkl     3 pal  18.46–24.92 s  6.46 s (pide 1.35, holgura +5.11)  «mi piso · 0,70»
+  ok  l-nota    8 pal  20.17–24.88 s  4.71 s (pide 3.10, holgura +1.61)  «Final = segundo 5,9, que no se ve entero.»
+  ok  l-t1      3 pal  18.75–24.88 s  6.13 s (pide 1.35, holgura +4.78)  «Kling 3.0 std»
+  ok  l-l1      2 pal  18.17–21.63 s  3.46 s (pide 1.00, holgura +2.46)  «foto sola»
+  ok  l-m1      3 pal  21.83–24.88 s  3.04 s (pide 1.35, holgura +1.69)  «mantiene el cuarto»
+  ok  l-t2      3 pal  19.04–24.88 s  5.83 s (pide 1.35, holgura +4.48)  «Seedance 2.0 Mini»
+  ok  l-l2      2 pal  18.17–21.29 s  3.13 s (pide 1.00, holgura +2.13)  «foto sola»
+  ok  l-m2      3 pal  21.46–24.88 s  3.42 s (pide 1.35, holgura +2.07)  «cambió el plano»
+  ok  l-t3      2 pal  19.33–24.88 s  5.54 s (pide 1.00, holgura +4.54)  «Kling O3»
+  ok  l-l3      1 pal  18.17–20.96 s  2.79 s (pide 0.65, holgura +2.14)  «referencias»
+  ok  l-m3      3 pal  21.13–24.88 s  3.75 s (pide 1.35, holgura +2.40)  «inventó el cuarto»
+✔ las 34 ventanas medidas (12 tarjetas + 22 textos) alcanzan la regla de lectura; la menor holgura es 0.050 s

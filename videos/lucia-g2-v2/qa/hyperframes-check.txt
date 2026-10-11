@@ -65,35 +65,26 @@ Runtime
   ◇ 0 errors, 0 warnings
 
 Layout
-  ℹ t=10.306, 13.25s canvas_overflow #c6 > div:nth-of-type(1) > div:nth-of-type(2) inside #root overflowed right 813.69px "Seedance 2.0 Mini" — Text extends outside the composition canvas.
+  ℹ t=10.808s canvas_overflow #c6 > div:nth-of-type(1) > div:nth-of-type(2) inside #root overflowed right 799.88px "Seedance 2.0 Mini" — Text extends outside the composition canvas.
         Fix: Move the text inward, reduce its size, or mark intentional off-canvas animation with data-layout-allow-overflow.
-  ℹ t=10.306, 13.25s canvas_overflow #c6 > div:nth-of-type(1) > div:nth-of-type(2) > b:nth-of-type(1) inside #root overflowed right 575.79px "6 créditos" — Text extends outside the composition canvas.
+  ℹ t=10.808s canvas_overflow #c6 > div:nth-of-type(1) > div:nth-of-type(2) > b:nth-of-type(1) inside #root overflowed right 561.97px "6 créditos" — Text extends outside the composition canvas.
         Fix: Move the text inward, reduce its size, or mark intentional off-canvas animation with data-layout-allow-overflow.
-  ℹ t=13.25s canvas_overflow #s-m3 inside #root overflowed left 630.23px "bajo el piso" — Text extends outside the composition canvas.
+  ℹ t=13.896s canvas_overflow #c7 > div:nth-of-type(1) > div:nth-of-type(2) inside #root overflowed right 769.55px "Kling · 6 créditos" — Text extends outside the composition canvas.
         Fix: Move the text inward, reduce its size, or mark intentional off-canvas animation with data-layout-allow-overflow.
-  ℹ t=13.25s canvas_overflow #dA-m3 inside #root overflowed left 888.33px "parecido" — Text extends outside the composition canvas.
+  ℹ t=13.896s canvas_overflow #c7 > div:nth-of-type(1) > div:nth-of-type(2) > span:nth-of-type(1) inside #root overflowed right 429.64px "O3" — Text extends outside the composition canvas.
         Fix: Move the text inward, reduce its size, or mark intentional off-canvas animation with data-layout-allow-overflow.
-  ℹ t=13.25s canvas_overflow #dA-m3 > b:nth-of-type(1) inside #root overflowed left 721.76px "0 s:" — Text extends outside the composition canvas.
+  ℹ t=13.896s canvas_overflow #c7 > div:nth-of-type(1) > div:nth-of-type(2) > b:nth-of-type(1) inside #root overflowed right 658.77px "solo referencias" — Text extends outside the composition canvas.
         Fix: Move the text inward, reduce its size, or mark intentional off-canvas animation with data-layout-allow-overflow.
-  ℹ t=13.25s canvas_overflow #dA-m3 > b:nth-of-type(2) inside #root overflowed left 613.03px "0,69" — Text extends outside the composition canvas.
-        Fix: Move the text inward, reduce its size, or mark intentional off-canvas animation with data-layout-allow-overflow.
-  ℹ t=13.25s canvas_overflow #dX-m3 inside #root overflowed left 477.3px "→" — Text extends outside the composition canvas.
-        Fix: Move the text inward, reduce its size, or mark intentional off-canvas animation with data-layout-allow-overflow.
-  ℹ t=13.25s canvas_overflow #dB-m3 > b:nth-of-type(1) inside #root overflowed left 357.3px "5,9 s:" — Text extends outside the composition canvas.
-        Fix: Move the text inward, reduce its size, or mark intentional off-canvas animation with data-layout-allow-overflow.
-  ℹ t=13.25s canvas_overflow #dB-m3 > b:nth-of-type(2) inside #root overflowed left 202.2px "0,64" — Text extends outside the composition canvas.
-        Fix: Move the text inward, reduce its size, or mark intentional off-canvas animation with data-layout-allow-overflow.
-  ℹ t=15.75s content_overlap #c7 > div:nth-of-type(1) > div:nth-of-type(2) > b:nth-of-type(1) inside #c8 > div:nth-of-type(1) > div:nth-of-type(2) "solo referencias" — Two text blocks overlap and may render unreadable.
-        Fix: Give each block its own zone, or mark intentional layering with data-layout-allow-overlap.
-  0 error(s), 0 warning(s), 10 info(s)
+  0 error(s), 0 warning(s), 5 info(s)
 
 Motion
   ◇ 0 errors, 0 warnings
 
 Contrast
-  ◇ 34/34 text checks pass WCAG AA
+  ◇ 40/40 text checks pass WCAG AA
 
 Snapshots
   ◇ disabled
 
 ◇  Check passed
+exit=0

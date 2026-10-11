@@ -1,71 +1,72 @@
-Voz (guion-voz.txt: 434 caracteres, 78 palabras; 3,6 palabras/s; huecos de 6 cuadros = 0.25 s):
-  T1    0.125 –   1.792 (6 pal, 40 cuadros) ventana hasta   2.042  «Misma foto, misma orden, seis clips.»
-  T2    2.042 –   3.167 (4 pal, 27 cuadros) ventana hasta   3.417  «¿Quién pierde la cara?»
-  T3    3.417 –   5.083 (6 pal, 40 cuadros) ventana hasta   5.333  «Se mide contra ocho fotos suyas.»
-  T4    5.333 –   6.458 (4 pal, 27 cuadros) ventana hasta   6.708  «De cero a uno.»
-  T5    6.708 –   7.833 (4 pal, 27 cuadros) ventana hasta   8.083  «Mi piso: cero setenta.»
-  T6    8.083 –  10.292 (8 pal, 53 cuadros) ventana hasta  10.542  «Kling tres, atado a la foto: pierde parecido.»
-  T7   10.542 –  11.667 (4 pal, 27 cuadros) ventana hasta  11.917  «Seedance Mini, también atado.»
-  T8   11.917 –  13.042 (4 pal, 27 cuadros) ventana hasta  13.292  «Queda bajo el piso.»
-  T9   13.292 –  15.500 (8 pal, 53 cuadros) ventana hasta  15.750  «Kling O tres, solo referencias: sostiene la cara.»
-  T10  15.750 –  16.875 (4 pal, 27 cuadros) ventana hasta  17.125  «Pero inventó el cuarto.»
-  T11  17.125 –  19.333 (8 pal, 53 cuadros) ventana hasta  19.583  «Con fotos de referencia, la cara se sostiene.»
-  T12  19.583 –  21.250 (6 pal, 40 cuadros) ventana hasta  21.500  «Pero el motor inventa la escena.»
-  T13  21.500 –  23.458 (7 pal, 47 cuadros) ventana hasta  23.708  «Una toma cada uno: es una prueba.»
-  T14  23.708 –  25.083 (5 pal, 33 cuadros) ventana hasta  26.500  «Seguime: cada semana, una prueba.»
-Duración: 26.500 s (636 cuadros)
+Voz (guion-voz.txt: 402 caracteres, 72 palabras; ESTIMADA a 17 caracteres por segundo, sin voz generada; hueco de 6 cuadros = 0.25 s antes de cada tramo; cupo de voz hoy 381):
+  T1    0.125 –   1.458 (22 car, 32 cuadros) ventana hasta   1.708 hueco a 17 c/s 0.29 (extendido por lectura)  «¿Quién pierde la cara?»
+  T2    1.708 –   3.500 (30 car, 43 cuadros) ventana hasta   3.750 hueco a 17 c/s 0.28 (extendido por lectura)  «Seis clips con la misma orden.»
+  T3    3.750 –   5.625 (32 car, 45 cuadros) ventana hasta   5.875 hueco a 17 c/s 0.24  «Se mide contra ocho fotos suyas.»
+  T4    5.875 –   6.667 (14 car, 19 cuadros) ventana hasta   6.917 hueco a 17 c/s 0.22  «De cero a uno.»
+  T5    6.917 –   8.208 (22 car, 31 cuadros) ventana hasta   8.458 hueco a 17 c/s 0.25  «Mi piso: cero setenta.»
+  T6    8.458 –  10.750 (39 car, 55 cuadros) ventana hasta  11.000 hueco a 17 c/s 0.25  «Kling tres, foto sola: pierde parecido.»
+  T7   11.000 –  12.458 (25 car, 35 cuadros) ventana hasta  12.708 hueco a 17 c/s 0.24  «Seedance Mini, foto sola.»
+  T8   12.708 –  13.792 (19 car, 26 cuadros) ventana hasta  14.042 hueco a 17 c/s 0.22  «Queda bajo el piso.»
+  T9   14.042 –  16.417 (41 car, 57 cuadros) ventana hasta  16.667 hueco a 17 c/s 0.21  «Kling O tres, solo referencias: sostiene.»
+  T10  16.667 –  18.000 (23 car, 32 cuadros) ventana hasta  18.250 hueco a 17 c/s 0.23  «Pero inventó el cuarto.»
+  T11  18.250 –  20.458 (37 car, 53 cuadros) ventana hasta  20.708 hueco a 17 c/s 0.28 (extendido por lectura)  «Con referencias, la cara se sostiene.»
+  T12  20.708 –  22.583 (32 car, 45 cuadros) ventana hasta  22.833 hueco a 17 c/s 0.24  «Pero el motor inventa la escena.»
+  T13  22.833 –  24.750 (33 car, 46 cuadros) ventana hasta  25.000 hueco a 17 c/s 0.23  «Una toma por clip: es una prueba.»
+  T14  25.000 –  26.958 (33 car, 47 cuadros) ventana hasta  27.792 hueco a 17 c/s 0.85  «Seguime: cada semana, una prueba.»
+Duración: 27.792 s (667 cuadros)
 Medios:
-    0.000 –   3.417 foto      foto  foto K1 a pantalla completa con empuje lento 1,00 → 1,05 hacia la cara (nunca queda un cuadro idéntico); sale en el empuje de T3 junto con las miniaturas
-    3.167 –   8.083 pl-regla  placa placa de la regla: 5 de las 8 referencias, escala 0-1 y la marca en 0,70
-    7.833 –  10.542 m1        clip  Kling 3.0 std (clip 1), cuadros 0-64 (2,7 s a 1×); el cuadro 0 es la foto K1
-   10.292 –  13.292 m3        clip  Seedance 2.0 Mini (clip 3), cuadros 0-71 (3,0 s a 1×)
-   13.042 –  17.125 m5        clip  Kling O3 (clip 5), cuadros 0-97 (4,1 s a 1×)
-   16.875 –  23.708 pl-l      placa lección: los finales de Kling 3.0 std, Seedance 2.0 Mini y Kling O3 sobre la escala
-   23.458 –  26.500 k1        clip  cierre: el clip K1 (el de Kling 3.0 std) del cuadro 54 (2,25 s) al 126 (5,25 s), con Lucía mirando a cámara; parecido medido cada 6 cuadros: 0,71-0,76, ninguno bajo 0,70
+    0.000 –   3.750 foto      foto  foto K1 a pantalla completa con empuje lento 1,00 → 1,05 hacia la cara (nunca queda un cuadro idéntico); sale en el empuje de T3 junto con las miniaturas
+    3.500 –   8.458 pl-regla  placa placa de la regla: 5 de las 8 referencias, escala 0-1 y la marca en 0,70
+    8.208 –  11.000 m1        clip  Kling 3.0 std (clip 1), cuadros 0-64 (2,7 s a 1×); el cuadro 0 es la foto K1
+   10.750 –  14.042 m3        clip  Seedance 2.0 Mini (clip 3), cuadros 0-71 (3,0 s a 1×)
+   13.792 –  18.250 m5        clip  Kling O3 (clip 5), cuadros 0-97 (4,1 s a 1×)
+   18.000 –  25.000 pl-l      placa lección: los finales de Kling 3.0 std, Seedance 2.0 Mini y Kling O3 sobre la escala
+   24.750 –  27.792 k1        clip  cierre: el clip K1 (el de Kling 3.0 std) del cuadro 54 (2,25 s) al 126 (5,25 s), con Lucía mirando a cámara; parecido medido cada 6 cuadros: 0,71-0,76, ninguno bajo 0,70
 Costuras (empuje rígido de 6 cuadros, caen en el hueco de la voz):
-    3.167 →   3.417  sale foto,thumbs → entra pl-regla
-    7.833 →   8.083  sale pl-regla → entra m1
-   10.292 →  10.542  sale m1 → entra m3
-   13.042 →  13.292  sale m3 → entra m5
-   16.875 →  17.125  sale m5 → entra pl-l
-   23.458 →  23.708  sale pl-l → entra k1
+    3.500 →   3.750  sale foto,thumbs → entra pl-regla
+    8.208 →   8.458  sale pl-regla → entra m1
+   10.750 →  11.000  sale m1 → entra m3
+   13.792 →  14.042  sale m3 → entra m5
+   18.000 →  18.250  sale m5 → entra pl-l
+   24.750 →  25.000  sale pl-l → entra k1
 Tarjetas:
-    0.000 –   1.708 c1  4 pal (mín 1.7 s, dura 1.71) «Misma foto. Seis clips.»
-    1.708 –   3.417 c2  4 pal (mín 1.7 s, dura 1.71) «¿Quién pierde la cara?» [sale con el empuje]
-    3.417 –   6.458 c3  6 pal (mín 2.4 s, dura 3.04) «Se mide contra 8 fotos suyas.» [entra con el empuje]
-    6.458 –   8.083 c4  3 pal (mín 1.35 s, dura 1.63) «Mi piso: 0,70.» [sale con el empuje]
-    8.083 –  10.542 c5  5 pal (mín 2.05 s, dura 2.46) «Kling 3.0 std  7,5 créditos» [entra con el empuje] [sale con el empuje]
-   10.542 –  13.292 c6  5 pal (mín 2.05 s, dura 2.75) «Seedance 2.0 Mini  6 créditos» [entra con el empuje] [sale con el empuje]
-   13.292 –  15.750 c7  6 pal (mín 2.4 s, dura 2.46) «Kling O3 · 6 créditos  solo referencias» [entra con el empuje]
-   15.750 –  17.125 c8  3 pal (mín 1.35 s, dura 1.38) «Inventó el cuarto.» [sale con el empuje]
-   17.125 –  19.583 c9  6 pal (mín 2.4 s, dura 2.46) «Con referencias, la cara se sostiene.» [entra con el empuje]
-   19.583 –  21.500 c10 4 pal (mín 1.7 s, dura 1.92) «Pero inventa la escena.»
-   21.500 –  23.708 c11 5 pal (mín 2.05 s, dura 2.21) «Una toma: es una prueba.» [sale con el empuje]
-   23.708 –  26.500 c12 5 pal (mín 2.05 s, dura 2.79) «Seguime: cada semana, una prueba.» [entra con el empuje]
+    0.000 –   1.792 c1  4 pal (mín 1.7 s, dura 1.79) «¿Quién pierde la cara?»
+    1.792 –   3.750 c2  4 pal (mín 1.7 s, dura 1.96) «Misma orden. Seis clips.» [sale con el empuje]
+    3.750 –   6.667 c3  6 pal (mín 2.4 s, dura 2.92) «Se mide contra 8 fotos suyas.» [entra con el empuje]
+    6.667 –   8.458 c4  3 pal (mín 1.35 s, dura 1.79) «Mi piso: 0,70.» [sale con el empuje]
+    8.458 –  11.000 c5  5 pal (mín 2.05 s, dura 2.54) «Kling 3.0 std  7,5 créditos» [entra con el empuje] [sale con el empuje]
+   11.000 –  14.042 c6  5 pal (mín 2.05 s, dura 3.04) «Seedance 2.0 Mini  6 créditos» [entra con el empuje] [sale con el empuje]
+   14.042 –  16.542 c7  6 pal (mín 2.4 s, dura 2.50) «Kling O3 · 6 créditos  solo referencias» [entra con el empuje]
+   16.542 –  18.250 c8  3 pal (mín 1.35 s, dura 1.71) «Inventó el cuarto.» [sale con el empuje]
+   18.250 –  20.708 c9  6 pal (mín 2.4 s, dura 2.46) «Con referencias, la cara se sostiene.» [entra con el empuje]
+   20.708 –  22.708 c10 4 pal (mín 1.7 s, dura 2.00) «Pero inventa la escena.»
+   22.708 –  25.000 c11 5 pal (mín 2.05 s, dura 2.29) «Una toma: es una prueba.» [sale con el empuje]
+   25.000 –  27.792 c12 5 pal (mín 2.05 s, dura 2.79) «Seguime: cada semana, una prueba.» [entra con el empuje]
 Lecturas de rótulo, datos, sellos y placas (≥ 0,35 s/palabra + 0,3, ya descontada la entrada):
   rotulo   rótulo de IA                          6 pal  0.00–3.00  2.82 s (pide 2.40)  
-  dA-m1    Kling 3.0 std dato A                  4 pal  8.18–10.29  1.93 s (pide 1.70)  
-  dB-m1    Kling 3.0 std dato B                  3 pal  8.73–10.29  1.38 s (pide 1.35)  ← justo
-  dA-m3    Seedance 2.0 Mini dato A              4 pal  10.64–13.04  2.22 s (pide 1.70)  
-  dB-m3    Seedance 2.0 Mini dato B              3 pal  11.14–13.04  1.72 s (pide 1.35)  
-  s-m3     Seedance 2.0 Mini sello               3 pal  11.49–13.04  1.37 s (pide 1.35)  ← justo
-  dA-m5    Kling O3 dato A                       4 pal  13.39–15.57  2.00 s (pide 1.70)  
-  dB-m5    Kling O3 dato B                       3 pal  13.99–15.57  1.40 s (pide 1.35)  ← justo
-  rf-l     regla: etiqueta de las referencias    7 pal  4.37–7.83  3.29 s (pide 2.75)  
-  l-tit    lección: título                       8 pal  17.27–23.46  6.00 s (pide 3.10)  
-  l-mkl    lección: «mi piso»                    3 pal  17.23–23.46  6.05 s (pide 1.35)  
-  l-nota   lección: nota del final               8 pal  18.93–23.46  4.35 s (pide 3.10)  
-  l-t1     lección: nombre Kling 3.0 std         3 pal  17.48–23.46  5.80 s (pide 1.35)  
-  l-l1     lección: rótulo Kling 3.0 std         2 pal  17.80–20.48  2.51 s (pide 1.00)  
-  l-m1     lección: rótulo Kling 3.0 std (cambia)  3 pal  20.50–23.46  2.77 s (pide 1.35)  
-  l-t2     lección: nombre Seedance 2.0 Mini     3 pal  17.77–23.46  5.50 s (pide 1.35)  
-  l-l2     lección: rótulo Seedance 2.0 Mini     2 pal  18.09–20.13  1.86 s (pide 1.00)  
-  l-m2     lección: rótulo Seedance 2.0 Mini (cambia)  3 pal  20.15–23.46  3.13 s (pide 1.35)  
-  l-t3     lección: nombre Kling O3              2 pal  18.07–23.46  5.20 s (pide 1.00)  
-  l-l3     lección: rótulo Kling O3              1 pal  18.39–19.78  1.21 s (pide 0.65)  
-  l-m3     lección: rótulo Kling O3 (cambia)     3 pal  19.80–23.46  3.48 s (pide 1.35)  
+  pastilla gancho: resultado de los seis         5 pal  0.85–3.50  2.47 s (pide 2.05)  
+  dA-m1    Kling 3.0 std dato A                  4 pal  8.56–10.75  2.01 s (pide 1.70)  
+  dB-m1    Kling 3.0 std dato B                  3 pal  9.11–10.75  1.46 s (pide 1.35)  ← justo
+  dA-m3    Seedance 2.0 Mini dato A              4 pal  11.10–13.79  2.51 s (pide 1.70)  
+  dB-m3    Seedance 2.0 Mini dato B              3 pal  11.60–13.79  2.01 s (pide 1.35)  
+  s-m3     Seedance 2.0 Mini sello               3 pal  11.95–13.79  1.66 s (pide 1.35)  
+  dA-m5    Kling O3 dato A                       4 pal  14.14–16.36  2.04 s (pide 1.70)  
+  dB-m5    Kling O3 dato B                       3 pal  14.74–16.36  1.44 s (pide 1.35)  ← justo
+  rf-l     regla: etiqueta de las referencias    7 pal  4.70–8.21  3.33 s (pide 2.75)  
+  l-tit    lección: título                       8 pal  18.40–24.75  6.17 s (pide 3.10)  
+  l-mkl    lección: «mi piso»                    3 pal  18.35–24.75  6.22 s (pide 1.35)  
+  l-nota   lección: nota del final               8 pal  20.05–24.75  4.52 s (pide 3.10)  
+  l-t1     lección: nombre Kling 3.0 std         3 pal  18.60–24.75  5.97 s (pide 1.35)  
+  l-l1     lección: rótulo Kling 3.0 std         2 pal  18.92–21.61  2.51 s (pide 1.00)  
+  l-m1     lección: rótulo Kling 3.0 std (cambia)  3 pal  21.63–24.75  2.94 s (pide 1.35)  
+  l-t2     lección: nombre Seedance 2.0 Mini     3 pal  18.90–24.75  5.67 s (pide 1.35)  
+  l-l2     lección: rótulo Seedance 2.0 Mini     2 pal  19.22–21.26  1.86 s (pide 1.00)  
+  l-m2     lección: rótulo Seedance 2.0 Mini (cambia)  3 pal  21.28–24.75  3.29 s (pide 1.35)  
+  l-t3     lección: nombre Kling O3              2 pal  19.20–24.75  5.37 s (pide 1.00)  
+  l-l3     lección: rótulo Kling O3              1 pal  19.52–20.91  1.21 s (pide 0.65)  
+  l-m3     lección: rótulo Kling O3 (cambia)     3 pal  20.93–24.75  3.64 s (pide 1.35)  
 Datos (de PROCEDENCIA.jsonl):
   Kling 3.0 std: 7.5 cr · 0 s 0,79 → 5,9 s 0,72  (muestras 0.791 0.793 0.762 0.734 0.761 0.708 0.721)
   Seedance 2.0 Mini: 6 cr · 0 s 0,69 → 5,9 s 0,64  (muestras 0.691 0.657 0.677 0.634 0.615 0.634 0.644)
   Kling O3: 6 cr · 0 s 0,80 → 5,9 s 0,82  (muestras 0.798 0.783 0.785 0.814 0.815 0.81 0.824)
-ok: index.html (29 KB), plan.resuelto.json
+ok: index.html (30 KB), plan.resuelto.json

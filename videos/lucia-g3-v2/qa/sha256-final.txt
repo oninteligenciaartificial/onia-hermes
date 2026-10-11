@@ -1,1 +1,4 @@
 ac032dc76b832c006f1b0d97693270a7c3ec923faa9d1c25d848e346c165193b  out/g3-v2-final-1080x1920.mp4
+index.html md5 b1ab1c395e281cc151a8270ddc72f29e sha256 9d29371c1edff4f82348a7314636d77dc61962822a2282e79f32812908787600
+plan-resuelto.json md5 086c814bfab0e81577ab0f0c6bb2f638
+master renderizado 05:37 UTC a partir de ese index.html (índice de 05:33 UTC); mismo md5 tras construir dos veces.

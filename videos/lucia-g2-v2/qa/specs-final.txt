@@ -1,29 +1,29 @@
+--- final out/g2-v2-final-1080x1920.mp4
 codec_name=h264
 width=1080
 height=1920
 color_space=bt709
 r_frame_rate=24/1
-duration=26.500000
-bit_rate=9132599
-nb_frames=636
+duration=27.791667
+bit_rate=9191753
+nb_frames=667
+nb_read_frames=667
 codec_name=aac
 sample_rate=48000
 channels=2
 r_frame_rate=0/0
-duration=26.500000
-bit_rate=2277
-nb_frames=1244
-[Parsed_volumedetect_0 @ 0x5574c261d880] mean_volume: -91.0 dB
-[Parsed_volumedetect_0 @ 0x5574c261d880] max_volume: -91.0 dB
---- preview 360p
-stream|codec_name=h264|width=360|height=640|r_frame_rate=24/1|duration=26.500000|nb_frames=636
-stream|codec_name=aac|r_frame_rate=0/0|duration=26.500000|nb_frames=1244
-36a949e89ac70d46e6ad461247a80687934efecbd5f3d999db6579af5a532f15  out/g2-v2-final-1080x1920.mp4
-ef33eee284040aadc54103abe0a6deee8ae870dd19c67d69d14a3edaccc726d6  qa/g2-v2-preview-360p.mp4
--rw-r--r-- 1 root root 1812210 Oct 11 05:02 qa/g2-v2-preview-360p.mp4
-
-out:
-total 29576
-drwxr-xr-x 2 root root     4096 Oct 11 04:36 .
-drwxr-xr-x 7 root root     4096 Oct 11 04:12 ..
--rw-r--r-- 1 root root 30274058 Oct 11 05:04 g2-v2-final-1080x1920.mp4
+duration=27.776000
+bit_rate=2279
+nb_frames=1303
+[Parsed_volumedetect_0 @ 0x556f9659c780] mean_volume: -91.0 dB
+[Parsed_volumedetect_0 @ 0x556f9659c780] max_volume: -91.0 dB
+--- preview 360p (codec,ancho,alto,fps,duración,cuadros leídos; una línea por pista)
+h264,360,640,24/1,27.791667,667
+aac,0/0,27.776000,1302
+1b12e83235124aef3ec53968f732515fd06b1b445e86249e41f3a3de60a2a49e  out/g2-v2-final-1080x1920.mp4
+5941c444d9fc9fa983d46ec9b62c7bd543e6f71af53b2503ad8b8015fa99018d  qa/g2-v2-preview-360p.mp4
+--- crudo de HyperFrames (renders/final-raw.mp4, solo video, sin pista de audio)
+e9e210511505b95092d245cb83437b0bef1ae1e6b0fb289098eb536f5922326d  renders/final-raw.mp4
+--- index.html (de donde salió el render)
+6b3a485f5741b61f0342379748d78825  index.html
+b3513faf0b701ec4f624e00076d2a286  plan.resuelto.json
