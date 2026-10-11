@@ -8,6 +8,6 @@ master-b2-r3-f84.png: master 0.831 contra fuente 0.822 dif 0.009
 master-b2-k4-f96.png: master 0.824 contra fuente 0.824 dif 0.000
 master-b2-r3-f96.png: master 0.831 contra fuente 0.822 dif 0.009
 master-b3-f210.png: master 0.830 contra fuente 0.825 dif 0.005
-master-b3-f246.png: master 0.823 contra fuente 0.825 dif 0.002
-master-b3-f330.png: master 0.827 contra fuente 0.825 dif 0.002
+master-b3-f246.png: master 0.824 contra fuente 0.825 dif 0.001
+master-b3-f330.png: master 0.829 contra fuente 0.825 dif 0.004
 12 pares; diferencia máxima 0.010 (regla <= 0,02): OK

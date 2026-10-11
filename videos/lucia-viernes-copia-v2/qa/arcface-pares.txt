@@ -5,8 +5,8 @@ master-b1-f12.png                                  0.830    0.576    0.924      
 master-b1-f36.png                                  0.829    0.575    0.924      480  OK
 master-b1-f60.png                                  0.830    0.576    0.924      480  OK
 master-b3-f210.png                                 0.830    0.576    0.924      479  OK
-master-b3-f246.png                                 0.823    0.569    0.938      471  OK
-master-b3-f330.png                                 0.827    0.576    0.922      480  OK
+master-b3-f246.png                                 0.824    0.570    0.939      471  OK
+master-b3-f330.png                                 0.829    0.574    0.922      479  OK
 fuente-b2-k4.png                                   0.824    0.576    0.924      238  OK
 fuente-b2-r3.png                                   0.822    0.539    0.957      265  OK
 master-b2-k4-f78.png                               0.825    0.571    0.923      237  OK

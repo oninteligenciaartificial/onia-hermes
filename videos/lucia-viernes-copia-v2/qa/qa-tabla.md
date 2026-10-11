@@ -12,8 +12,8 @@ negatives_max: 0.224
 | viernes-copia-final-1080x1920_t5.5.png | 0.817 | 264 | OK |
 | viernes-copia-final-1080x1920_t7.png | 0.817 | 264 | OK |
 | viernes-copia-final-1080x1920_t9.5.png | 0.830 | 479 | OK |
-| viernes-copia-final-1080x1920_t11.5.png | 0.826 | 472 | OK |
-| viernes-copia-final-1080x1920_t14.png | 0.827 | 480 | OK |
+| viernes-copia-final-1080x1920_t11.5.png | 0.829 | 479 | OK |
+| viernes-copia-final-1080x1920_t14.png | 0.829 | 479 | OK |
 | master-b2-k4-f84.png | 0.824 | 237 | OK |
 | master-b2-r3-f84.png | 0.831 | 265 | OK |
 

@@ -1,182 +1,187 @@
-# Viernes · «Casi publico este 0,83» (El error de la semana) — v1.1
+# Viernes · «Casi publico este 0,83» (El error de la semana) — v2
 
-Reel corto del viernes (PLAN.md §4-bis), MUDO, 1080×1920, 24 fps, **360 cuadros / 15,0 s**, con HyperFrames. **0 créditos**, solo material que ya existía: la imagen «café con teclado» de Kling O1 Image (K4, `img-omni-image-k4cafe-dad464de.png`, 1536×2720) y la foto de entrada R3 (`R3_casi_frontal.png`, 1792×2400). La compuso y la renderizó la sesión Lucía (editor, contenedor Linux) el 11-oct-2026 partiendo de la estructura de `videos/lucia-p9-luz-cara` (build que valida cifras contra las fuentes, gates, mutaciones) y de las fotos fijas de G4 v2. **v1.1 = la v1 con la revisión 1 aplicada en un solo ciclo** (`qa/revision-1.md`, 1 ALTA · 2 MEDIA · 5 BAJA; ver «Revisión 1: qué se hizo»). Sin Git, voz, publicación, instalaciones ni descargas. Fuera de esta carpeta no se tocó nada.
+Reel corto del viernes (PLAN.md §4-bis), MUDO, 1080×1920, 24 fps, **360 cuadros / 15,0 s**, con HyperFrames. **0 créditos**, solo material que ya existía: la imagen «café con teclado» de Kling O1 Image (K4, `img-omni-image-k4cafe-dad464de.png`, 1536×2720) y la foto de entrada R3 (`R3_casi_frontal.png`, 1792×2400). La compuso y la renderizó la sesión Lucía (editor, contenedor Linux) el 11-oct-2026 a partir de `videos/lucia-viernes-copia-v1/` (v1.1, que queda como historia: **no se tocó**). **v2 = la placa simplificada por la madre marketing**: de 6 a 15 s ya no hay una pantalla negra con 4-5 barras de letra chica, sino **una cara a la vista y UNA idea por vez en letra grande**. Sin Git, voz, publicación, instalaciones ni descargas. Fuera de esta carpeta no se tocó nada.
 
 <!-- ESTADO -->
-**LISTA PARA MOSTRAR (11-oct, v1.1 + pie de la revisión 2).** Master SHA `5862aa44…5930` (mudo, 15,0 s, 0 cr), 19 gates en exit 0, 95 mutaciones rechazadas, revisor independiente (sonnet): 0 ALTA; verificador mecánico (haiku): 18 de 19 PASS, el FAIL fue un artefacto del encargo («piso 0,70» aparece 3 veces en `index.html`, pero solo una es la marca visible). Falta, antes de publicar: el orden respecto de G4 y C2 (M4) y «mostrada, publicá el viernes». Sigue MUDO; la voz no existe (cronograma de 223 caracteres, ver «Voz futura»). El master v1 (`ae3a3d42…0cabd`) queda solo como evidencia en `renders/master-v1-ae3a3d42.mp4`: **no publicarlo**.
+**MASTER v2 RENDERIZADO, PENDIENTE DE REVISOR Y VERIFICADOR Y DE «LISTA PARA MOSTRAR: reel viernes v2».** Todos los gates en verde (exit 0). No es aprobación visual ni permiso de publicar. Sigue MUDO: la voz no existe; `guion-voz.txt` es un cronograma estimado a 17 car/s (219 caracteres, ver «Voz futura»).
 <!-- FIN ESTADO -->
+
+## Qué cambió respecto de la v1.1
+
+| | v1.1 | v2 |
+|---|---|---|
+| 6,6 a 15 s | pantalla negra con 3 barras, 7 puntos, una banda, una leyenda, la marca «piso 0,70», la lección y el CTA (46 palabras en 8,4 s, letra de 34-48 px) | **cara a la vista todo el tiempo** (K4|R3 y K4 a pantalla completa) y **un beat por vez**: «Con esa foto: 0,93» → «Con las otras 7: 0,56–0,73» → «Casi copia: no prueba identidad.» → CTA (19 palabras en 4 beats; ≤ 6 por beat) |
+| Letra | 34 px la escala, 36 la leyenda, 42-50 los textos | **mínimo 44 px en toda la pieza**; subtítulos de la escena 2, beats y CTA ≥ 48 px; etiqueta del beat 56 px y cifra 112 px (tabla abajo) |
+| Cara de Lucía visible | 6,6 s de 15 (44 %) | **30 de 30 muestras (100 %)**, medido en el master con SCRFD (nuevo gate `cara-visible`) |
+| Gráfico | barras, puntos, banda de las fotos oficiales, leyenda, marca del piso 0,70, «Promedio de las 4» | **fuera de la pantalla y fuera del pie** (el pie ya no habla de gráfico); el 0,74, la escala 0,51–0,72 (promedio 0,64), «el piso de 0,70 lo elegí yo y es de la cara promedio de las 8» y «no la media de sus cifras» **se quedan en el pie**, con cifras validadas por el build |
+| Lección | en pantalla («Mirá el parecido foto por foto.») | **solo en el pie** |
+| Escena 2 | panel de 880 px, subtítulos de 42-44 px | panel de 860 px (y 312-1172), subtítulos de 48 px y «misma pose…» de 52 px; el beat A ocupa la misma casilla que ellos cuando salen |
+| Voz | 223 caracteres | **219 caracteres** (python `len`, 8 líneas separadas por 1 salto): L3 «Mirá lo que recibió.», L5 «Con esa foto, sale más alto.», L6 «Con las otras siete, mucho menos.» (sin «mucho más alto»); sale la lección |
+| Fuente mono | Spline Sans Mono para las cifras | ya no se usa (no hay gráfico; las cifras grandes van en Bricolage 700) |
+| Gates | 92 mutaciones | **115 mutaciones**, 8 pruebas negativas del DOM, 2 de la cara visible y los gates nuevos `cara-visible`, `una idea por vez`, letra mínima por nodo y zona segura en píxeles de las 3 escenas |
 
 ## Master
 
 | Dato | Valor |
 |---|---|
 | Archivo | `out/viernes-copia-final-1080x1920.mp4` (`out/` y `renders/` no van a git) |
-| SHA-256 | `5862aa44b575fd6e8c1b27c3823e2d0f78d4707ddfdee2e5ce670bad3b195930` (`qa/sha-master.txt`) |
+| SHA-256 | `c33922226628d8db10e59cd2eb26617039e32e2496c56c793ea05f0d5987b397` (`qa/sha-master.txt`) |
 | Video | H.264 High, yuv420p, bt709, 1080×1920, 24 fps, 360 cuadros, 15,000 s |
 | Audio | AAC LC 48 kHz estéreo, SILENCIO: volumedetect mean −91,0 dB / max −91,0 dB (`qa/aac-silencio.txt`) |
-| Tamaño | 2,1 MB (2.154.272 bytes) (el contenido es casi todo estático) |
-| `index.html` | md5 `391c281b141aa26f00adfa1dab882548`, idempotente (tres builds, mismo md5; `qa/md5-index.txt`, `qa/idempotencia.txt`) |
-| Fuentes | `assets/k4.png`, `assets/k4-panel.png` (enlace al mismo archivo, para que `hyperframes check` no marque dos `<img>` iguales) y `assets/r3.png`; el build exige su SHA-256 (K4 `2a2e9401…7200`, R3 `0dc08193…f756`) y su tamaño. Los PNG originales no van a git: K4 se recupera a 0 cr con `job_display dad464de-75a8-45f5-b799-8d91e5a63d1d` → `rawUrl`, R3 está en `videos/lucia-g4-v2/assets/refs-orig/`. **Nueva fuente (v1.1):** `videos/lucia-p9-luz-cara/qa/face-gate-v31.json` (`refs_internal`: pares entre las 8 oficiales, SHA-256 `a0ce006e…03f2` en `qa/build-status.json`); el build lee su matriz y valida 0,51 / 0,72 / 0,64 antes de escribir nada |
-| Render | `hyperframes@0.8.142` (caché de npx; `--prefer-offline`), `--quality high -f 24`, ≈ 40 s de pared; captura por pantallazo (Chromium completo, sin GPU); preview 360p real ≈ 23 s |
+| Tamaño | 2,96 MB (2.957.370 bytes) |
+| `index.html` | md5 `0b0ef516089e79fdc4c7ce8098da474a`, idempotente (tres builds, mismo md5; `qa/md5-index.txt`, `qa/idempotencia.txt`) y el master se renderizó desde ese mismo HTML (`correr-gates.sh --master` lo reconstruyó después y el md5 no cambió) |
+| Fuentes | `assets/k4.png`, `assets/k4-panel.png` y `assets/k4-s3.png` (tres enlaces al mismo archivo, uno por uso, para que `hyperframes check` no marque `<img>` iguales) y `assets/r3.png`; el build exige su SHA-256 (K4 `2a2e9401…7200`, R3 `0dc08193…f756`) y su tamaño. Los PNG originales no van a git: K4 se recupera a 0 cr con `job_display dad464de-75a8-45f5-b799-8d91e5a63d1d` → `rawUrl`, R3 está en `videos/lucia-g4-v2/assets/refs-orig/`. Cifras: PROCEDENCIA l.97, `medicion-sin-refs-entrada-20261011.txt` y `videos/lucia-p9-luz-cara/qa/face-gate-v31.json` (28 parejas entre las 8 oficiales: 0,509 a 0,719, promedio 0,642) |
+| Render | `hyperframes@0.8.142` (caché de npx; `--prefer-offline`), `--quality high -f 24`, ≈ 45 s de pared; captura por pantallazo (Chromium completo, sin GPU); preview 360p real ≈ 26 s |
 
 ## La historia (nada inventado; cada cifra la valida el build contra su fuente)
 
-- **El error.** En la prueba de G4/C2 la imagen «café con teclado» de Kling O1 Image dio **parecido 0,83** con Lucía (PROCEDENCIA.jsonl l.97, `imagen_misma_escena_K1_mismas_6_refs` → `kling_omni_image_K4cafe_dad464de`, 0,5 cr). Casi se publica como buen resultado de ese motor (dentro de «0,79 · 0,35 · 0,83» de la lámina 4 de C2).
-- **Pero** esa imagen es casi una copia de una de las fotos que recibió como entrada, **R3**: misma pose (la cabeza apoyada en la mano), misma ventana, misma taza de barro junto a la laptop, con otra ropa y una segunda taza blanca al frente. Esto lo miró el editor a ojo (ver «Decisiones», 4): los aros del video marcan lo que se ve, no se midió.
-- **Foto por foto** (`medicion-sin-refs-entrada-20261011.txt`, PRUEBA ESTRICTA PARA LOS MOTORES DE IMAGEN, fila «Kling O1 Image K4»): con **R3 sola 0,927** («0,93»); con las otras siete R1 0,686 · R2 0,619 · R4 0,563 · R5 0,724 · R6 0,659 · R7 0,733 · R8 0,599 (**0,56 a 0,73**). De las **80** comparaciones por foto de las 10 imágenes de esa tabla, la de K4·R3 es la más alta; la siguiente es 0,812.
-- **La escala que faltaba (revisión 1, H1).** Entre las propias 8 fotos oficiales, de a dos (28 parejas), el parecido va de **0,509 a 0,719** (promedio **0,642**; ninguna pareja pasa de 0,72). Fuente: `videos/lucia-p9-luz-cara/qa/face-gate-v31.json` → `refs_internal.pairwise_min`, `pairwise_mean` y el máximo fuera de la diagonal de `matrix` (R5↔R6, 0,719). El 0,56 a 0,73 de K4 contra las otras siete cae en ese mismo rango (0,73 pasa 0,72 por 0,01, dentro del ruido de ±0,03): **otra foto de Lucía da lo mismo contra las demás**. El 0,93 con R3 queda muy por encima de cualquier pareja real: esa es la prueba de «casi copia».
-- **Qué recibió.** Los motores de imagen de la prueba recibieron como entrada las mismas seis imágenes: R1, R3, R6 y R7 (cuatro de las 8 con que se compara), una selfie y una referencia de ropa. Por eso el número absoluto (contra el promedio de las 8) sale inflado, y **no hay control sin entradas** para decir cuánto.
-- **Solo con las 4 fotos que nadie recibió (R2, R4, R5, R8), promedio: 0,743** («0,74»; «sin esas 4 fotos baja a 0,74», igual que el pie de C2), la cara de K4 mide 677 px (≥ 200: confiable). Con 4 fotos el promedio puntúa más bajo que con 8 en las 10 imágenes (de 0,03 a 0,09; en K4, 0,088): esa baja no mide por sí sola la fuga, y sigue sobre el piso de 0,70. El build lo valida (B* − A < 0 en las 10) y el pie lo dice.
-- **Una escena, una toma** (en pantalla desde v1.1: «una sola toma.» bajo «Kling O1 Image»; y en el pie, dentro de los primeros 500 caracteres): el mismo motor dio 0,79 (K1) y 0,35 (K2 café: perdió la cara) en otras dos escenas.
+- **El error.** En la prueba de G4/C2 la imagen «café con teclado» de Kling O1 Image dio **parecido 0,83** con Lucía (PROCEDENCIA.jsonl l.97, 0,5 cr), contra la cara promedio de las 8 fotos oficiales. Casi se publica como buen resultado de ese motor.
+- **Pero** es casi una copia de la foto de entrada **R3**: misma pose, ventana y taza de barro, otra ropa y una segunda taza blanca al frente (no es copia pixel a pixel).
+- **Foto por foto:** con R3 sola **0,93**; con las otras siete **0,56 a 0,73** (R1 0,69 · R2 0,62 · R4 0,56 · R5 0,72 · R6 0,66 · R7 0,73 · R8 0,60). De las 80 comparaciones de las 10 imágenes de la prueba, la de K4·R3 es la más alta; la siguiente, 0,81.
+- **Qué recibió:** R1, R3, R6 y R7 (cuatro de las 8), una selfie y una referencia de ropa: por eso el 0,83 sale inflado y no hay control sin entradas. **Sin esas 4 fotos baja a 0,74** (la cara promedio de las 4 que ningún motor recibió, no la media de sus cifras), y sigue sobre el piso de 0,70. Todo esto va **solo en el pie**.
+- **Escala (solo en el pie):** entre las propias fotos oficiales, de a dos, 0,51 a 0,72 (promedio 0,64; ninguna de las 28 parejas pasa de 0,72): el 0,56 a 0,73 de K4 contra las otras siete es casi ese mismo rango; el 0,93 con R3, no.
+- **Una escena, una toma** (en pantalla: «una sola toma.» bajo «Kling O1 Image»; y en el pie, antes del carácter 481): el mismo motor dio 0,79 y 0,35 (perdió la cara) en otras dos escenas.
 
-## Línea de tiempo y pantalla
+## Línea de tiempo y pantalla (24 fps)
 
-| Tiempo | Qué se ve | Texto en pantalla |
-|---|---|---|
-| 0,00–3,00 (s1) | K4 a pantalla completa, fija. Cuadro 0: rótulo y título | rótulo «Lucía Antelo · personaje IA de Onia» (40 px, y 1190) · título **«Casi publico este 0,83.»** (66 px, cuadro 0) · **0,5 s:** «Kling O1 Image · parecido 0,83» (el primer número, antes de 3 s) · acento 1,75 s |
-| 2,75–3,00 | empuje rígido de 6 cuadros | s1 sale a −1080, s2 entra de +1080 |
-| 3,00–6,625 (s2) | K4 (izquierda) y R3 (derecha) lado a lado, recortadas al mismo alto, caras visibles (238 y 270 px) | **«Kling O1 Image / una sola toma.»** (H3) · **3,0 s «Mirá la foto que recibió.»** · **4,5 s «Misma pose, ventana, taza.»** con tres aros que **se trazan en 0,6 s cada uno** y quedan a la vista hasta el empuje: pose 4,5 s (1,9 s a la vista) · ventana 4,875 s (1,5 s) · taza 5,25 s (1,1 s) |
-| 6,375–6,625 | empuje rígido de 6 cuadros | |
-| 6,625–15,0 (placa) | gráfico 0 a 1; **el piso 0,70 solo en la fila del promedio de las 4** | **6,625 s «Con esa foto: 0,93»** (barra, escala «0 · 1») · **7,5 s «Con las otras siete: 0,56 a 0,73»** (siete puntos, uno por foto, sobre una banda gris + leyenda «Fotos oficiales entre sí: 0,51 a 0,72») · **8,25 s «Casi copia: no prueba identidad.»** · **9,25 s «Promedio de las 4 que no recibió: 0,74»** (barra + marca «piso 0,70») · **10,375 s «Mirá el parecido foto por foto.»** · **12,375 s CTA «Seguime: cada semana, una prueba.»** (2,625 s) |
+| Tiempo | Escena | Qué se ve | Texto en pantalla (una sola idea por vez) |
+|---|---|---|---|
+| 0,00–3,00 | s1 | K4 a pantalla completa (cara de 480 px). Cuadro 0: rótulo y título | rótulo «Lucía Antelo · personaje IA de Onia» (44 px) · título **«Casi publico este 0,83.»** (66 px, cuadro 0) · **0,5 s:** «Kling O1 Image · parecido 0,83» (48 px; el primer número, antes de 3 s) |
+| 2,75–3,00 | empuje | rígido de 6 cuadros | |
+| 3,00–5,96 | s2 | K4 (izquierda) y R3 (derecha) lado a lado, y 540×860 cada una; caras de 237 y 265 px | «Kling O1 Image / una sola toma.» (48 px) · **3,0 s «Mirá la foto que recibió.»** (48 px) · **4,125 s «Misma pose, ventana, taza.»** (52 px) con tres aros que **se trazan en 0,6 s**: pose 4,125 · ventana 4,5 · taza 4,875 s |
+| 5,96–6,04 | s2 | los tres textos salen (fundido de 0,1 s) 2 cuadros antes de que entre el beat A | |
+| **6,04–7,75** | s2 | las mismas dos caras, aros a la vista | **BEAT A «Con esa foto: 0,93»** (etiqueta 56 px, cifra 112 px) |
+| 7,875–8,125 | empuje | rígido de 6 cuadros | |
+| **8,125–10,17** | s3 | K4 a pantalla completa (cara de 479 px) | **BEAT B «Con las otras 7: 0,56–0,73»** (56 / 112 px) |
+| **10,21–12,33** | s3 | idem | **BEAT C «Casi copia: no prueba identidad.»** (64 px, dos líneas «Casi copia: / no prueba identidad.») |
+| **12,375–15,0** | s3 | idem | **CTA «Seguime: cada semana, una prueba.»** (66 px; 2,625 s en pantalla) |
 
-La pila de la placa sigue ahora el orden de entrada (A, B, casi copia, C, lección, CTA): en la v1 «Casi copia» entraba debajo de un hueco donde después llegaba la fila de las 4. Eventos (`plan.json → eventos`): 20, hueco máximo 1,375 s. Zona segura: la pila de texto de s1 está bajo el mentón (mentón y 803, texto desde 1190, termina 1474); s2, texto de 1270 a 1478; placa, de 360 a 1417; nada sobre y 292 ni bajo 1490. Fuentes de marca locales (Bricolage Grotesque 700, DM Sans 500, Spline Sans Mono 500); el cuerpo de las filas es de 48 px, la leyenda de 36 px y la escala de 34 px (ningún texto bajo 34 px).
+Cada salida empieza 1 cuadro antes de la entrada siguiente (2 en la escena 2): nunca hay dos ideas a ≥ 50 % de opacidad a la vez ni un cuadro sin tarjeta (el gate `medir-dom` lo mide cuadro por cuadro; «una idea por vez» es regla del auditor). Los beats ocupan siempre la misma casilla (y 1194). Eventos (`plan.json → eventos`): 25, hueco máximo 1,375 s.
+
+### Tamaños de letra a 1080 px de ancho (cada nodo de texto medido en el DOM: `qa/tamanos.txt`)
+
+| Texto | Tamaño | Fuente | Mínimo exigido |
+|---|---:|---|---:|
+| Rótulo «Lucía Antelo · personaje IA de Onia» | 44 px | DM Sans | 44 (nunca < 40) |
+| Título «Casi publico este 0,83.» | 66 px | Bricolage 700 | 48 |
+| Dato «Kling O1 Image · parecido 0,83» | 48 px | DM Sans | 44 |
+| «Kling O1 Image / una sola toma.» y «Mirá la foto que recibió.» | 48 px | DM Sans | 48 |
+| «Misma pose, ventana, taza.» | 52 px | DM Sans | 48 |
+| Beat A y B: etiqueta («Con esa foto:», «Con las otras 7:») | 56 px | DM Sans | 56 |
+| Beat A y B: cifra («0,93», «0,56–0,73») | 112 px | Bricolage 700 | 100 |
+| Beat C «Casi copia: no prueba identidad.» | 64 px | Bricolage 700 | 56 |
+| CTA «Seguime: cada semana, una prueba.» | 66 px | Bricolage 700 | 56 |
+
+La letra más chica de toda la pieza es de **44 px** (el rótulo de IA y, en la v1.1, era de 34 px). A 390 px de ancho eso son ≈ 16 px; las cifras de los beats, ≈ 40 px.
+
+## Cara de Lucía visible (gate nuevo `scripts/cara-visible.mjs`)
+
+SCRFD det_10g (el detector del face-gate) sobre un cuadro exacto cada 0,5 s del master (t = 0, 0,5 … 14,5; 30 muestras), cara ≥ 200 px de ancho en el lienzo: **30 de 30 = 100,0 %** (mínimo exigido > 50 %, objetivo ≥ 85 %). Caras más grandes por escena: 480 px (s1), 262-265 px (s2, la de R3; la de K4 mide 237 px), 290 px a 8,0 s (a mitad del empuje, la cara de R3 que sale), 472-480 px (s3). `qa/cara-visible.txt` y `qa/cara-visible.json` traen las 30 muestras. El build **predice** lo mismo desde el plan (29 de 30: no cuenta las muestras a mitad de un empuje; el empuje de 8,0 s sí detectó cara) y rechaza un plan con ≤ 85 %. **Pruebas negativas:** un master estropeado con fondo negro desde 8,1 s da 17 de 30 = 56,7 % (exit 1, bajo el objetivo) y desde 3 s da 6 de 30 = 20 % (exit 1, bajo la mitad): `qa/negativas-cara-visible.txt`.
 
 ## Decisiones (y cómo revertirlas)
 
-1. **«Casi copia: no prueba identidad.» en vez de «Era copia, no identidad.»** El encargo traía lo segundo. Lo dejé así porque (a) la imagen no es una copia pixel a pixel (ropa, pelo, una segunda taza blanca con vapor al frente, encuadre), solo casi; y (b) «no era identidad» sobreafirma: sin las 4 fotos recibidas la imagen sigue en 0,74 (> 0,70) y, sin R3 y sin las otras entradas, puntúa como una foto real de ella (H1). Lo que sí se sostiene: una imagen que casi copia una foto de entrada **no prueba** que el motor conserve la identidad. Revertir = `plan.json → textos.nota_copia`, la voz (L6), `build.mjs → esperado` y la mutación; `grep-prohibidas` rechaza «era copia, no identidad». Confirmada por el revisor.
-2. **El piso 0,70 va SOLO en la fila del promedio de las 4 (v1.1, H1).** En la v1 cruzaba las tres filas y hacía leer «5 de 7 fotos no pasan»; el 0,70 es del **promedio** (mínimo de «cada oficial contra el promedio de las otras siete» = 0,698) y 23 de las 28 parejas de fotos oficiales quedan bajo 0,70. Ahora el build exige `plan.piso_en = ['fila-c']` y `layout-dom` exige una sola marca, dentro de `#fila-c` (prueba negativa en `qa/mutacion-dom-piso.txt`). En esa fila es conservadora (el promedio de 4 puntúa más bajo que el de 8 en las 10 imágenes). El pie explica que el piso es del promedio de las 8. Quitarlo del todo: borrar `piso` y `escala_piso` de `build.mjs`/`plan.json` y bajar `piso_en` a `[]` (la mutación deja de pedir `['fila-c']`).
-3. **«Promedio de las 4 que no recibió: 0,74» (H2) y, en el pie, «Sin esas 4 fotos baja a 0,74» (H4, igual que C2).** Es un promedio y se rotula como tal. El pie añade lo que no cabe en pantalla: con 4 fotos todas las imágenes bajan de 0,03 a 0,09, así que esa baja no mide por sí sola la fuga; no se estima ninguna magnitud (la misma regla que P9: nada de «efecto/ventaja ≈ 0,03», rechazado por el build y las mutaciones). El 0,83 del arranque tampoco decía «promedio»: el pie ahora dice que es contra el promedio de las 8 fotos; en pantalla no se tocó (la ventana del dato no admite una palabra más).
-4. **Pose, ventana, taza:** miradas a ojo con los aros; no se midieron. «Misma taza» es la de barro junto a la laptop (K4 suma otra, blanca, al frente, y el pie lo dice desde v1.1). La laptop también coincide (no se rotula: la voz y el texto piden tres cosas; el pie la nombra). K4 muestra a Lucía de ambo (canon: es vestuario, `LUCIA.md` §0; el rótulo dice «personaje IA» y ningún texto habla de profesión). El óvalo de pose de R3 (H5) se ajustó a la zona mano-mejilla (antes cubría antebrazo y manga).
-5. **R3 no se nombra en pantalla** («esa foto», «la foto que recibió»); el pie sí («la R3», R1 a R8).
-6. **«Una escena, una toma» en pantalla (v1.1, H3):** segunda línea «una sola toma.» del rótulo de K4 (la caja ya era de dos líneas; 0 palabras nuevas en la placa). El pie conserva «Una escena, una toma: es una prueba, no una regla.» y la sube a la primera mitad (termina en el carácter 480).
-7. **Texto de s1 bajo el mentón** (y 1190-1474), no arriba como en P9: la cara de K4 ocupa y 201-803 del lienzo y un rótulo en y 300 taparía la frente. Cubre parte de la taza blanca, no la cara.
-8. **Fotos con alto y ancho enteros** en los paneles (K4 540×956, R3 657×880: Chromium alinea al píxel de todas formas) para comparar el master contra la foto escalada pixel a pixel.
-9. **Sin modo `--estatico`** en los gates (P9 lo tenía para el contenedor de Codex): aquí todos corren en Chromium real.
-10. **Aros con `stroke-linecap: butt`:** con remate redondo un aro sin dibujar dejaba un punto naranja visible en el cuadro 72 (lo vio el editor en el primer master).
-11. **Los aros ahora SE TRAZAN (v1.1, H5).** Hallazgo propio al medirlos: en la v1 el trazo saltaba de oculto a completo en 2 cuadros porque GSAP redondea `stroke-dashoffset` a enteros y `pathLength="1"` solo tiene dos valores enteros (0 y 1). Ahora `pathLength=1000`, dibujo de 0,6 s con `power1.inOut`, escalonados 4,5 / 4,875 / 5,25 s (el orden del texto «pose, ventana, taza»). El build rechaza un aro que tarde menos de 0,5 s en dibujarse, que quede menos de 1 s a la vista antes del empuje, o con `pathLength` ≠ 1000; `gates.mjs eventos` exige que a mitad del dibujo el trazo esté entre 5 % y 95 %.
-12. **Escala de las fotos oficiales en pantalla (v1.1, H1):** la fila de las otras siete trae detrás una banda gris de 0,51 a 0,72 y la leyenda «Fotos oficiales entre sí: 0,51 a 0,72» (7 palabras). Se hizo porque cabe en las ventanas (cada texto desde su entrada: fila de las siete pide 5,2 s y tiene 7,4 s); el costo es densidad (ver H6 abajo). Revertir: quitar `leyenda_oficiales` y la banda de `build.mjs`/`estilos.css` (la banda es lo único que dibuja `pares_oficiales`).
+1. **El beat C sigue siendo «Casi copia: no prueba identidad.»** (desviación (a) de lo propuesto por la madre marketing: «Casi copia ≠ misma persona»). «≠ misma persona» afirma que la imagen NO es ella y lo medido no lo sostiene: sin las 4 fotos recibidas sigue en 0,74 (sobre el piso) y las otras siete caen en el rango de fotos reales entre sí (0,51 a 0,72). Lo sostenible es que una casi copia **no prueba** que el motor conserve la identidad. Lo fijó la sesión Lucía; el build rechaza la otra redacción y «Era copia, no identidad.». Revertir: `plan.json → textos.beat_c`, la voz (L7), `build.mjs → esperado` y las mutaciones.
+2. **«Con las otras 7: 0,56–0,73» con guion largo y no «0,56 a 0,73».** El contador de palabras del repo cuenta los numerales: «Con las otras 7: 0,56 a 0,73» son 7 palabras (> 6 por beat) y pide 2,75 s de lectura, que no caben entre el beat A y el CTA. Con el guion (el rango es una sola afirmación) son 5 palabras y 2,05 s. El build exige `etiqueta: afirmación` con un solo dato y ≤ 6 palabras por beat.
+3. **Tiempos de los beats** (los fija la lectura, 0,35 s/palabra + 0,3 s, y la voz a 17 car/s a la vez): A 6,04 s, B 8,125 s (llega con el segundo empuje), C 10,21 s, CTA 12,375 s. Con los empujes de 6 cuadros no caben tres escenas más (cada una pide ≥ 2 s): A comparte escena con las dos caras (la comparación K4|R3 que ya se veía), y B, C y el CTA comparten K4 a pantalla completa con salidas y entradas por fundido de 0,1 s que se cruzan 1-2 cuadros (marcadas `data-layout-allow-overlap`; `hyperframes check` aún lo anota como info, no como aviso). Márgenes de lectura (ventana vs. lo que pide): A 1,875/1,70 s, B 2,167/2,05 s, C 2,083/2,05 s: **ajustados** (0,03 a 0,17 s); mover un beat más de 1-2 cuadros rompe un gate.
+4. **El beat A vive sobre las dos caras (K4|R3), no sobre R3 sola:** el 0,93 es el parecido de K4 con R3, y las dos caras con los aros de pose/ventana/taza todavía a la vista lo muestran. Los aros (H5 de la v1.1) siguen: se trazan en 0,6 s y quedan ≥ 1 s a la vista antes del empuje (el último, hasta 7,875 s).
+5. **Sin «promedio», «piso», «oficiales», «leyenda» ni «gráfico» en pantalla ni en el pie:** `grep-prohibidas`, `layout-dom` (cero elementos de gráfico en el DOM) y el build lo rechazan.
+6. **Cifras grandes en Bricolage 700, no en la mono:** a 112 px la coma de la fuente mono sale separada («0 , 93», H8a de la v1.1).
+7. **El rótulo de IA solo está en la escena 1** (como en la v1.1): quien llegue a mitad ve a Lucía sin la palabra IA; cumple la regla (rótulo desde el cuadro 0, pie abierto con «Personaje hecho con IA» y etiqueta por API). Si la madre lo quiere en todo el reel hay que sumarlo como una segunda «idea» o ceder el lugar de «una sola toma».
+8. **Panel de la escena 2 de 860 px (y 312-1172):** baja 20 px y sube 58 px para que quepan los subtítulos de 48 px, «misma pose…» de 52 px y el beat A sin pasar de y 1490. Las caras siguen ≥ 200 px.
+9. **Sin modo `--estatico`** en los gates (aquí todos corren en Chromium real); **Spline Sans Mono** fuera de la composición.
 
 ## Voz futura (no se genera): cronograma estimado a 17 car/s
 
-`guion-voz.txt`: 8 líneas, **223 caracteres con saltos** (cupo de voz 381; 15 s a 17 car/s admiten ≈ 255), sin cifras habladas. Se ajustó el texto del encargo para que el cronograma cuadre (el encargo daba 267 caracteres: no cabían en 15 s con el CTA ≥ 2,4 s):
+`guion-voz.txt`: 8 líneas, **219 caracteres** (python `len`, líneas separadas por 1 carácter; cupo de voz 381, tope 255 del build, 15 s a 17 car/s admiten ≈ 255), sin cifras habladas, **una línea por beat** (v1.1: 223).
 
-| Línea | Texto | Voz (s) | Pantalla que cae con ella |
-|---|---|---|---|
-| L1 | Casi publico esta imagen. | 0,00–1,47 | título (cuadro 0) |
-| L2 | Parecido alto. | 1,71–2,53 | (acento del dato, 1,75 s) |
-| L3 | Mirá la foto que recibió. | 2,75–4,22 | empuje a R3 + «Mirá la foto que recibió.» (3,0 s, +0,25) |
-| L4 | Misma pose, ventana y taza. | 4,46–6,05 | «Misma pose, ventana, taza.» + primer aro (4,5 s, +0,04) |
-| L5 | Con esa foto, mucho más alto. | 6,29–8,00 | placa + «Con esa foto: 0,93» (6,625 s, +0,33) |
-| L6 | Casi copia: no prueba identidad. | 8,21–10,09 | «Casi copia…» (8,25 s, +0,04) |
-| L7 | Mirá el parecido foto por foto. | 10,33–12,16 | lección (10,375 s, +0,04) |
-| L8 | Seguime: cada semana, una prueba. | 12,375–14,32 | CTA (12,375 s, +0,00); cola sin voz 0,68 s (el único hueco ≥ 0,3 s) |
+| Línea | Texto | Car. | Voz (s) | Pantalla que cae con ella |
+|---|---|---:|---|---|
+| L1 | Casi publico esta imagen. | 25 | 0,00–1,47 | título (cuadro 0) |
+| L2 | Parecido alto. | 14 | 1,71–2,53 | (acento del dato, 1,75 s) |
+| L3 | Mirá lo que recibió. | 20 | 2,75–3,93 | «Mirá la foto que recibió.» (3,0 s, +0,25) |
+| L4 | Misma pose, ventana y taza. | 27 | 4,17–5,76 | «Misma pose, ventana, taza.» (4,125 s, −0,04) |
+| L5 | Con esa foto, sale más alto. | 28 | 6,00–7,65 | **beat A** (6,04 s, +0,04) |
+| L6 | Con las otras siete, mucho menos. | 33 | 7,875–9,82 | **beat B** (8,125 s, +0,25) |
+| L7 | Casi copia: no prueba identidad. | 32 | 10,04–11,92 | **beat C** (10,21 s, +0,17) |
+| L8 | Seguime: cada semana, una prueba. | 33 | 12,17–14,11 | **CTA** (12,375 s, +0,21; 2,83 s desde el inicio de la línea; cola sin voz 0,89 s) |
 
-**H7 (v1.1):** salió «Parecía Lucía.» (insinuaba un engaño que la medición no respalda: la imagen sí puntúa como ella). La madre pidió una línea neutra y verdadera sin reemplazo, pero **sin L2 la voz queda 1,3 s en silencio (de 1,7 a 3,0 s)**: `retemporizar` exige pausas ≤ 0,3 s entre líneas y L3 tiene que empezar con el empuje (±0,25 s), así que el cronograma deja de cuadrar. Quedó **«Parecido alto.»** (14 caracteres, mismo tramo exacto que la anterior: 25 cuadros, nada se mueve): describe lo que el título y el dato dicen en pantalla (0,83), no afirma identidad ni engaño. Si la madre prefiere el silencio, hay que partir L1 o mover el empuje (no se hizo). La voz sigue sin decir el contrapeso (la fila de 0,56 a 0,73 y la de 0,74 solo están en pantalla y pie): decirlo exigiría una cifra o afirmar más de lo que sostiene la medición. Ritmo: 38 palabras en 12,7 s de habla = 3,0 palabras/s (por debajo de las 3,2-4,1 de PLAN §4-bis); se re-mide con voz real.
+Cambios frente a la v1.1: L5 ya no dice «mucho más alto» (compara 0,93 con 0,83, no con algo «mucho»): «sale más alto» (una palabra más que el ejemplo de la madre, «Con esa foto, más alto.», porque con 23 caracteres el beat B llegaría 0,54 s después de su línea, > 0,5 s); L6 nueva; L3 «Mirá lo que recibió.» (20 caracteres, no 25: tiene que terminar antes de 4,17 s para que «Misma pose…» no entre antes que su línea); sale «Mirá el parecido foto por foto.» (la lección queda en el pie). Las pausas entre líneas son de 0,22 a 0,25 s; el único hueco ≥ 0,3 s es la cola tras el CTA. Con voz real: generar y medir cada pista, escribir `duraciones.json`, correr `node scripts/voz.mjs` y `node scripts/retemporizar.mjs` (fallan si una línea se sale de su entrada −0,05/+0,5 s o si el CTA queda bajo 2,6 s) y corregir `plan.json → eventos` (campo `voz`). La voz mide 3,0 palabras por segundo de habla (por debajo de las 3,2-4,1 de PLAN §4-bis): se re-mide con voz real. La pronunciación de «Kling» por la voz Marcela no se midió. Quedan 162 caracteres de cupo en el tope de 381 y 36 en el de 255.
 
-Con voz real: generar y medir cada pista, escribir `duraciones.json`, correr `node scripts/voz.mjs` y `node scripts/retemporizar.mjs` (fallan si una línea se sale de su entrada ±0,5 s o si el CTA queda bajo 2,4 s) y corregir `plan.json → eventos` (campo `voz`). La pronunciación de «Kling» por la voz Marcela no se midió. Quedan 158 caracteres de cupo para una retoma.
+## Pie (`pie.txt`)
 
-## Revisión 1: qué se hizo (`qa/revision-1.md`)
+**2.128 caracteres** (python `len`; tope 2.200; v1.1: 2.193). Abre con «Personaje hecho con IA: Lucía Antelo, de @oniahq.», conserva «Nombro lo que uso; no es una recomendación pagada.» y «Una escena, una toma: es una prueba, no una regla.» termina en el carácter 481 (primeros ~500). Sale `por eso en el gráfico lo dibujé solo junto al promedio de las 4` (el pie ya no menciona ningún gráfico; el build lo rechaza); se quedan, con cifras validadas contra las fuentes, el 0,74 («Sin esas 4 fotos baja a 0,74 … no la media de sus cifras»), la escala 0,51-0,72 (promedio 0,64; 28 parejas), «El piso de 0,70 lo elegí yo y es de la cara promedio de las 8 fotos: no se compara con el parecido de una sola foto», el ruido ±0,03, los 677 px de la cara y la lección. 29 mutaciones del pie. Flujo (montaje-hyperframes §12): `node scripts/build.mjs --escribir-pie` (la primera corrida falla a propósito: lee el `pie.txt` viejo) y luego `node scripts/build.mjs` sin flag.
 
-| Hallazgo | Estado | Qué se hizo / por qué |
-|---|---|---|
-| H1 ALTA (piso 0,70 sobre cosenos de una foto) | **Resuelto** | Marca y rótulo `piso` fuera de las filas por foto; una sola marca, en la fila del promedio de las 4 (build + `layout-dom` + 4 mutaciones + una prueba negativa del DOM). Escala que faltaba: banda y leyenda «Fotos oficiales entre sí: 0,51 a 0,72» en pantalla, y en el pie (0,51 a 0,72, promedio 0,64, ninguna de las 28 parejas pasa de 0,72). Las cifras salen de `face-gate-v31.json`, validadas por el build (3 mutaciones). Los 0,73 a 0,80 de «fotos reales contra el promedio de las 4» **no se citan**: salen de un script del revisor que no está en el repo |
-| H2 MEDIA (0,74 es un promedio) | **Resuelto** | «Promedio de las 4 que no recibió: 0,74» (una línea de 803 px de 866); puntos de 16 a 20 px. Siglas R1…R8 bajo los puntos: **no** (se pisarían: R5 y R7 están a 8 px) |
-| H3 MEDIA («una sola toma») | **Resuelto** | Segunda línea del rótulo de K4, 0 palabras nuevas en la placa; mutaciones por ausencia y por otra frase |
-| H4 BAJA (pie) | **Resuelto** | Párrafo del 0,74 igual que C2 («Sin esas 4 fotos baja a 0,74»); «Una escena, una toma» a la primera mitad (carácter 480); escala de las fotos oficiales; taza blanca al frente + otra ropa + «no es pixel a pixel»; «casi publico este 0,83 como un buen resultado» (item 4). 2.147 de 2.200 caracteres; 27 mutaciones del pie. **No** se agregó el aviso de R2 y R6 en el límite de 200 px (item 7: sus tamaños no están en una fuente que el build lea) |
-| H5 BAJA (aros) | **Resuelto** | Hallazgo propio: eran apariciones por el redondeo de GSAP; ahora se trazan en 0,6 s y quedan 1,1 a 1,9 s; óvalo de R3 en mano-mejilla (decisión 11) |
-| H6 BAJA (densidad de la placa) | **Aceptado; empeora** | Ahora 46 palabras en 8,4 s (5,5/s; la v1 tenía 38 y 4,5/s; P9 tuvo 5,4/s): la leyenda de 7 palabras, «Promedio de» y la escala «0 · 1» pagan la corrección de H1/H2. Lectura en orden estricto 18,2 s contra 8,4 s; cada ventana individual se cumple (mínimo de la fila de las siete: 5,2 s pedidos, 7,4 s disponibles). Alternativas si el revisor la quiere más liviana: quitar la leyenda (−7), o la escala «0 · 1» (−2) |
-| H7 BAJA (voz) | **Resuelto con una desviación** | «Parecía Lucía.» → «Parecido alto.» (ver «Voz futura»: sin reemplazo el cronograma no cuadra) |
-| H8 BAJA (pulido) | **Aceptado sin cambio** | (a) coma separada de la fuente mono, igual que P9; (b) «foto» por «imagen» y la marca de IA después de 3 s: queda el rótulo del cuadro 0 y el pie; (c) «identidad» es jerga: no cabe otra frase en una línea; (d) segunda mitad sin Lucía; (e) interfaz de Instagram: textos entre x 80 y 1000, no se simuló |
+## Lo que se vio (preview 360p real y master)
 
-## Revisión 2 (v1.1, revisor independiente sonnet + verificador haiku, 11-oct)
+Mirado: preview 360p real (3 hojas de 10 cuadros, uno cada 12 = cada 0,5 s, `qa/preview-360p-hoja-*.jpg`) antes del master; del master, las mismas 3 hojas a 400 px (`qa/contacto-2fps-*.jpg`, más la de los 30 en una sola, `qa/contacto-2fps.jpg`; **cuadros exactos** `select=not(mod(n,12))`: el filtro `fps=2` de ffmpeg corre hasta 5 cuadros a partir de los 10 s y mostraba el fundido de salida del beat B como si fuera «10,0 s») y a resolución completa los cuadros 0, 24, 72, 108, 144, 150, 170, 192 (a mitad del empuje), 195, 216 (beat B), 245-246 (cruce B→C), 270 (beat C), 297 (CTA), 330 y 359 en `qa/cuadros/`.
 
-Veredicto del revisor: **0 ALTA, 4 MEDIA, 9 BAJA; ninguna cifra ni frase falsa**; H1, H3, H4, H5, H7 resueltos; H2 parcial; H6 y H8 sin cambio.
-
-| Hallazgo | Estado | Qué se hizo |
-|---|---|---|
-| M1 MEDIA («Promedio de las 4: 0,74» no es la media de las cifras que se ven; 0,743 es el parecido con la cara promedio, las 4 cifras sueltas promedian 0,626) | **Resuelto en el pie** (sin re-render) | El pie dice «contra la cara promedio de las 8 fotos oficiales» y «es el parecido con la cara promedio de solo las 4 … no la media de sus cifras». Pantalla sin cambio. 2 mutaciones nuevas |
-| M2 MEDIA (el piso 0,70 sin decir que es decisión del equipo) | **Resuelto en el pie** | «El piso de 0,70 lo elegí yo y es de la cara promedio de las 8 fotos…» (igual que C2). 1 mutación nueva. En pantalla sigue «piso 0,70» |
-| M3 MEDIA (la placa no se entiende entera sin sonido; 46 palabras en 8,4 s) | **Abierto, decide la madre** | Dos salidas sin tocar H1: alargar la placa a 17-18 s (PLAN §4-bis admite 15-20 s; el tope de 15 s fue pedido de la madre) o subir la leyenda de 36 a 40 px |
-| M4 MEDIA («casi publico este 0,83» pierde sentido si sale después de G4 o C2, que ya traen el 0,83) | **Resuelto por orden de publicación** | `ORDEN-DE-POSTEO-LUCIA.md`: sale antes de G4 y de C2 |
-| B6 (voz L5 «mucho más alto» compara 0,93 con 0,83) | Abierto | Se cambia a «más alto» al generar la voz (toca el cronograma; no hay voz aún) |
-| B7 (se dice «foto» para imágenes de IA; después de 3 s no queda «IA» en pantalla) | Abierto, igual que H8b | Lo cubren el rótulo del cuadro 0, el pie y la etiqueta de IG |
-| B9 (`__pycache__` fuera de la carpeta) | No aplica | `.gitignore` ya lo ignora; no entra a git |
-| B1-B5, B8 | Aceptados | Siglas bajo los puntos (se pisarían), textos chicos legibles, aros que rozan la mandíbula, pie sin saltos de línea |
-
-El pie pasó de 2.147 a 2.193 caracteres (tope 2.200). `index.html` no cambió (md5 `391c281b…d033`, el pie no entra al render), así que el master es el mismo.
-
-## Lo que se vio (preview 360p real y master v1.1)
-
-Mirado: preview 360p real (3 hojas de 10 cuadros a 2 fps = los 30 cuadros, `qa/preview-360p-hoja-*.jpg`) antes del master; del master, las mismas 3 hojas a 400 px (`qa/contacto-2fps-*.jpg`, más la de 30 en una sola, `qa/contacto-2fps.jpg`) y a resolución completa los cuadros 0, 24, 72 (entrada de R3), 108, 126 (aro de la ventana a medio trazo), 144 (los tres aros), 160, 216, 288, 350 (el gráfico completo) y 359 (CTA), en `qa/cuadros/`.
-
-- **Cuadro 0:** K4 a pantalla completa, rótulo (40 px) y título «Casi publico este 0,83.»; el dato todavía no está (entra a 0,5 s). Cara entera y limpia.
-- **Empuje 1 (2,75–3,0 s)** y **empuje 2 (6,375–6,625 s):** sin tiras vacías ni solapes; el último cuadro de s2 muestra la placa entrando por la derecha.
-- **Escena 2:** las dos caras (238 y 270 px) a la vista, «Kling O1 Image / una sola toma.» con la misma altura que «Mirá la foto que recibió.»; los aros se ven trazar (cuadro 126: la ventana a medio dibujo, el aro de pose ya completo); el aro de pose de R3 ahora rodea mano y mejilla y roza la mandíbula, como el de K4 roza la mejilla; ningún texto toca la cara.
-- **Placa:** la barra de 0,93 crece a 0,6 s sin piso; la fila de las siete trae sus siete puntos sobre la banda de 0,51 a 0,72 (R5 y R7 sobresalen apenas por la derecha y se pisan entre sí: 8 px); «Casi copia» entra sin hueco encima; la fila de las 4 muestra la barra cruzando la marca «piso 0,70», la única marca de piso del gráfico.
-- **Defectos hallados:** ninguno en el master. Observaciones sin corregir: (a) la mitad de abajo de la placa (y > 1417) y la franja de arriba de las escenas 2 y la placa (y < 360) quedan vacías (zona de la interfaz de Instagram); (b) la coma de la fuente mono se ve separada en «0 , 93» (igual que P9); (c) los tiles tienen el fondo del color de la pantalla: solo se ven como tarjeta cuando entra el acento; (d) la leyenda de 36 px queda en ≈ 12 px en el preview de 360 px (legible, pero es el texto más chico); (e) densidad de la placa (H6).
+- **Cuadro 0:** K4 a pantalla completa con rótulo (44 px) y título; el dato entra a 0,5 s. Cara de 480 px, ningún texto la toca.
+- **Escena 2:** las dos caras (237 y 265 px), los tres aros se ven trazar (cuadro 108: la pose a medio dibujo); los tres textos salen a 5,96 s y a 6,04 s entra el beat A sin hueco.
+- **Beats:** «Con esa foto: 0,93» (cifra coral de 112 px) sobre las dos caras; el empuje de 7,875-8,125 s es rígido, sin tiras vacías; «Con las otras 7: 0,56–0,73» (cifra verde) sobre K4; el cruce B→C dura 2-3 cuadros (cuadro 245: B al 58 %, C todavía en 0; cuadro 246: C al 88 %); «Casi copia: / no prueba identidad.»; CTA en dos líneas parejas.
+- **Defectos hallados:** ninguno en el master. Observaciones sin corregir: (a) en los cuadros 143-145 (5,96-6,04 s) los textos de la escena 2 están a media opacidad y el beat A todavía no entró: 2 cuadros de transición, no un hueco (siempre hay una tarjeta); (b) las franjas y < 312 y y > 1427 de la escena 2 quedan vacías (zona de la interfaz de Instagram); (c) la escena 2 sigue siendo la única con fondo negro grande (de 1427 a 1920 y de 0 a 312), con las dos caras a la vista; (d) el rótulo de IA solo está de 0 a 3 s (decisión 7); (e) los márgenes de lectura de los beats son de 0,03 a 0,17 s (decisión 3); (f) `hyperframes check` anota como info el cruce de 2 cuadros entre los beats B y C (intencional).
 
 ## Gates y evidencia (exit codes en `qa/RESUMEN-gates.txt`; `bash scripts/correr-gates.sh [--master]`)
 
 | Gate | Exit | Resultado |
 |---|---:|---|
-| `build.mjs` SIN flag (×3) | 0 / 0 / 0 | datos y pie validados contra PROCEDENCIA l.97, la medición sin refs de entrada (10 imágenes, 80 comparaciones, B* − A < 0 en las 10) y **`face-gate-v31.json`** (28 parejas, 0,509 a 0,719, promedio 0,642); fotos con su SHA-256; voz 223 caracteres (cupo 381), 360 cuadros; pie 2.147 caracteres (tope 2.200), «Una escena, una toma» termina en 480; aros ≥ 0,5 s de trazo y ≥ 1 s a la vista; idempotente |
+| `build.mjs` SIN flag (×3 + los de `correr-gates`) | 0 | datos y pie validados contra PROCEDENCIA l.97, la medición sin refs de entrada (10 imágenes, 80 comparaciones) y `face-gate-v31.json`; textos de pantalla iguales a lo esperado (un solo dato por beat, ≤ 6 palabras, sin lenguaje de gráfico), tipografía mínima, orden de los beats y salidas 1-2 cuadros antes de cada entrada, CTA ≥ 2,6 s, aros ≥ 0,5 s de trazo y ≥ 1 s a la vista, cara visible predicha 29/30; voz 219 caracteres (cupo 381, tope 255), 360 cuadros; pie 2.128 caracteres; idempotente |
 | `master-ready.mjs` | 0 | fuentes completas, SHA de K4 y R3 |
-| `voz.mjs` / `retemporizar.mjs` | 0 / 0 | ESTIMADA a 17 car/s; pausas 0,211-0,245 s; L3 empieza con el empuje; CTA 2,625 s; tabla en `qa/alineacion-voz.txt` |
-| `ventanas.mjs` | 0 | 12 textos, cada uno con su ventana desde su propia entrada (0,35 s/palabra + 0,3 s); mínimos: tile2 1,917 s (pide 1,7), dato 2,292 s (pide 2,05), fila de las siete 7,375 s (pide 5,2), CTA 2,583 s (pide 2,4). Placa: 46 palabras en 8,4 s (5,5/s; orden estricto 18,2 s) |
+| `voz.mjs` / `retemporizar.mjs` | 0 / 0 | ESTIMADA a 17 car/s; pausas 0,218-0,245 s; L3 empieza con el empuje; cada entrada cae con su línea (−0,04 a +0,25 s); CTA 2,83 s; tabla en `qa/alineacion-voz.txt` |
+| `ventanas.mjs` | 0 | 10 textos, cada uno con su ventana de lectura (0,35 s/palabra + 0,3 s): tile2 1,792 s (pide 1,7), beat A 1,875 (1,7), beat B 2,167 (2,05), beat C 2,083 (2,05), CTA 2,583 (2,4); los beats no se pisan (19 palabras en 4 beats, 8,2 s pedidos contra 8,88 s) |
 | `hueco-tarjetas.mjs` | 0 | 0 de 360 cuadros sin tarjeta |
-| `eventos.mjs` | 0 | 20 eventos (entradas, aros que se trazan —a mitad del dibujo el trazo está entre 5 % y 95 %—, barra, empujes, acentos): cada uno cambia algo visible; hueco máximo 1,375 s |
-| `aire.mjs` | 0 | quieto fuera de lectura 0,167 s (tope 0,3) en el DOM; 0,167 s en píxeles (`qa/aire-pixeles.txt`) |
+| `eventos.mjs` | 0 | 25 eventos (entradas, **salidas**, aros que se trazan —a mitad del dibujo entre 5 % y 95 %—, empujes, acentos): cada uno cambia algo visible; hueco máximo 1,375 s |
+| `aire.mjs` | 0 | quieto fuera de lectura 0,167 s (tope 0,3) en el DOM y en píxeles (`qa/aire-pixeles.txt`) |
 | `costuras.mjs` | 0 | 2 costuras de 6 cuadros, separación 0,000 px, los tiles viajan con su escena |
-| `medir-dom.mjs` | 0 | 1.238 cajas / 360 cuadros, 0 fallos (zona segura, ≥ 34 px, sin solape, sin texto sobre la cara +40 px, rótulo a 40 px en el cuadro 0, dato antes de 3 s, CTA ≥ 2,4 s) |
-| `layout-dom.mjs` | 0 | etiquetas de fila en una línea (803 px la más larga de 866), leyenda 584 px, CTA «Seguime: cada semana, / una prueba.», borde inferior máximo 1478,4; barras, banda (0,509 + 0,210) y puntos coinciden con los datos (±0,004); **una sola marca de piso, en `fila-c`**. Prueba negativa del piso sobre una fila por foto: exit 1 (`qa/mutacion-dom-piso.txt`) |
-| `grep-prohibidas.mjs` | 0 | 0 coincidencias en pantalla, pie y voz |
-| `node /home/user/onia-hermes/scripts/lucia-prohibidas.mjs pie.txt guion-voz.txt` (y con `qa/pantalla.txt`) | 0 / 0 | 0 coincidencias |
-| `validar-mutaciones.mjs` | 0 | **92** alteraciones rechazadas por el motivo esperado (v1: 67). Nuevas o reescritas: piso 0,70 de vuelta sobre una fila por foto (4), «Promedio» ausente, «una sola toma» ausente o distinta, leyenda ausente o con otra cifra, escala oficial distinta de `face-gate-v31.json` (3 en datos y 3 en el pie), «Sin esas 4 fotos baja a 0,74» alterado, taza blanca ausente, «Una escena, una toma» en la segunda mitad, «Parecía Lucía.» de vuelta en la voz, voz sin su segunda línea, aros (corto, tarde, desordenado, `pathLength=1`, hora ≠ evento), pila de la placa fuera de orden; las escrituras del build quedan bloqueadas durante la prueba |
-| `verificar-auditor.mjs` | 0 | regresión del reporte |
-| `hyperframes check` (0.8.142) | 0 | 0 errores · 3 avisos `nested_structure_needs_subcomposition` (no frenan) · layout 0 problemas / 9 muestras · runtime 0/0 · motion 0/0 · contraste 30/30 AA |
+| `medir-dom.mjs` | 0 | 581 cajas / 360 cuadros, 0 fallos: zona segura, **letra ≥ 44 px (≥ 48 en los textos grandes, nunca < 40) medida nodo por nodo**, sin solape, **una sola idea por cuadro**, sin texto sobre la cara +40 px, rótulo ≥ 44 px en el cuadro 0, dato antes de 3 s, CTA ≥ 2,4 s |
+| `layout-dom.mjs` | 0 | tabla de tamaños (`qa/tamanos.txt`), casilla única de los beats (y 1194), etiqueta y cifra en una línea cada una, «Casi copia: / no prueba identidad.», CTA «Seguime: cada semana, / una prueba.», borde inferior máximo 1470,8, **0 elementos de gráfico en el DOM** y las tres fotos visibles |
+| `grep-prohibidas.mjs` | 0 | 0 coincidencias en pantalla, pie y voz (sin «promedio», «piso», «oficiales», «leyenda», «gráfico», «barra», «banda» en pantalla; sin gráfico en el pie) |
+| `node /home/user/onia-hermes/scripts/lucia-prohibidas.mjs pie.txt guion-voz.txt qa/pantalla.txt` | 0 | 0 coincidencias |
+| `validar-mutaciones.mjs` | 0 | **115** alteraciones rechazadas por el motivo esperado (v1.1: 92). Nuevas: un dato extra en pantalla (2), reaparecen «Promedio de las 4», «piso 0,70», la leyenda, la lección, «promedio» en el beat C o el gráfico en el plan —piso_en, barras— (7), «Casi copia ≠ misma persona» y «Era copia…», **letra bajo el mínimo** (8: etiqueta del beat a 40 y 52, beat C a 44, subtítulos a 42, «misma pose» a 44, CTA a 44, rótulo a 40 y a 36), **cara visible** (4: sin foto en las escenas 2 y 3, 0 % por tamaño), el pie vuelve a hablar del gráfico, la voz vuelve a decir «mucho más alto» o la lección o pierde una línea, orden, salidas y llegada de los beats (6: orden alterado, dos ideas a la vez, aire entre ideas, sin salida del «misma pose», sin salida del beat C, beat B 0,25 s tarde), la segunda costura corrida, CTA tarde, aros (5); las escrituras del build quedan bloqueadas durante la prueba |
+| `verificar-auditor.mjs` | 0 | regresión del reporte: 5 fallos conservados (CTA ×2, nota ×2, dos ideas a la vez) y letras de 40 px en un beat y de 36 px rechazadas |
+| `negativas-dom.mjs` | 0 | **8** alteraciones del HTML rechazadas por su gate (exit 1): una barra/marca de piso y una banda en el DOM, «Promedio de las 4» como texto, la etiqueta del beat a 40 px, un texto a 36 px, **dos ideas a la vez** (el beat C siempre visible), y la foto de la escena 3 o de la escena 1 oculta (`qa/negativas-dom.txt`) |
+| `hyperframes check` (0.8.142) | 0 | 0 errores · 3 avisos `nested_structure_needs_subcomposition` (no frenan) · layout 0 problemas / 9 muestras + 1 info (el cruce de 2 cuadros B→C, intencional) · runtime 0/0 · motion 0/0 · contraste 10/10 AA |
 | preview 360p real | 0 | `qa/viernes-preview-360p.mp4`, 360×640, 24 fps, 360 cuadros, 15,000 s; mirado antes del master |
 | render high + mux AAC | 0 / 0 | ver «Master» |
-| `pixeles.mjs psnr-fotos` | 0 | mínimo **37,18 dB** (umbral 35): K4 pantalla completa 41,34 · panel K4 39,22 · panel R3 37,18 |
+| `pixeles.mjs psnr-fotos` | 0 | mínimo **37,11 dB** (umbral 35): K4 pantalla completa escena 1 41,33 · escena 3 41,42 · panel K4 39,18 · panel R3 37,11 |
 | `pixeles.mjs vacios` / `aire` | 0 / 0 | 360 cuadros, 0 planos; quietud en píxeles 0,167 s |
-| Zona segura en píxeles | 0 | placa y 360-1417, x 80-999 (51 cuadros); escena 2: nada sobre el panel (y < 370), contenido bajo el panel hasta y 1479 (`qa/zona-segura-pixeles.txt`) |
-| ArcFace master ↔ fuente (`face-gate.sh`, 9 pares) | 0 | diferencia máxima **0,006** (regla ≤ 0,02): B1 0,831/0,830/0,831 contra 0,825 de la foto a pantalla completa; panel K4 0,839-0,840 contra 0,838; panel R3 0,834-0,836 contra 0,832 (`qa/arcface-pares.json`, `qa/arcface-final.txt`) |
-| Identidad del master (`face-gate.sh` sobre 6 instantes del master + 2 paneles, y `lucia-qa-tabla.mjs`) | 0 / 0 | 8 imágenes, 0 bajo el piso 0,70, 0 sin cara, 0 con cara < 200 px (479, 264-267, 237 y 270 px): `qa/face-gate.json`, `qa/qa-tabla.md`; `leave_one_out_min` 0,698 |
-| `node --check` (22 scripts .mjs/.js), `bash -n` (2), `py_compile` (1) y UTF-8 | 0 | `qa/sintaxis.txt`, `qa/utf8.txt` |
-
-Dato lateral (no va a pantalla): R3 medida contra el promedio de las 8 (que la incluye) da ≈ 0,83, igual que K4: la imagen puntúa como la propia foto de referencia.
+| `zona-segura-pixeles.mjs` | 0 | escena 1: texto en y 1176-1471, x 80-999 · escena 3: y 1194-1395, x 80-999 · escena 2: nada sobre el panel (y < 312) y contenido hasta y 1427; límites y 292-1490, x 80-1000 (la caja de las escenas 1 y 3 se mide por diferencia con la foto de K4 llevada al mismo encuadre) |
+| **`cara-visible.mjs`** (nuevo) | 0 | **30 de 30 muestras (100 %) con cara ≥ 200 px** (mínimo > 50 %, objetivo ≥ 85 %); negativas: 56,7 % y 20,0 % → exit 1 |
+| ArcFace master ↔ fuente (`face-gate.sh` + `arcface-pares.mjs`, 12 pares) | 0 / 0 | diferencia máxima **0,010** (regla ≤ 0,02): escena 1 0,829-0,830 contra 0,825; panel K4 0,824-0,825 contra 0,824; panel R3 0,831-0,832 contra 0,822; escena 3 0,823-0,830 contra 0,825 (`qa/arcface-pares.json`, `qa/arcface-final.txt`) |
+| Identidad del master (`face-gate.sh` sobre 8 instantes —0 · 1,5 · 3,5 · 5,5 · 7 · 9,5 · 11,5 · 14 s, uno en cada beat— y 2 paneles, y `lucia-qa-tabla.mjs`) | 0 / 0 | 10 imágenes, 0 bajo el piso 0,70, 0 sin cara, 0 con cara < 200 px (479-480, 262-265, 237 y 265 px): `qa/face-gate.json`, `qa/qa-tabla.md`; `leave_one_out_min` 0,698 |
+| `node --check` (25 scripts .mjs/.js), `bash -n` (2), `py_compile` (2) y UTF-8 | 0 | `qa/sintaxis.txt`, `qa/utf8.txt` |
 
 ## Cómo reproducir
 
-Desde `videos/lucia-viernes-copia-v1/`. `hyperframes@0.8.142` ya está en la caché de npx de este contenedor (con `--prefer-offline` no descarga nada). Todo render va bajo `flock /tmp/hf-render.lock`, como proceso hijo directo.
+Desde `videos/lucia-viernes-copia-v2/`. `hyperframes@0.8.142` ya está en la caché de npx de este contenedor (con `--prefer-offline` no descarga nada). Todo render va bajo `flock /tmp/hf-render.lock`, como proceso hijo directo.
 
 ```bash
 export PRODUCER_HEADLESS_SHELL_PATH=/opt/pw-browsers/chromium HYPERFRAMES_SKIP_SKILLS=1
 export PLAYWRIGHT_MODULE=/opt/node-tools/node_modules/playwright
 export FACE_GATE_HOME=…/lucia-face-gate     # fuera del repo (venv con onnxruntime + modelos ya existentes)
 $FACE_GATE_HOME/venv/bin/python -I scripts/caras-fotos.py > qa/caras-fotos.json    # SCRFD sobre K4 y R3
-node scripts/build.mjs                    # SIN flag; valida cifras, textos, pie y voz; copia fuentes locales y fotos; escribe index.html y qa/tiles.json (--escribir-pie reescribe pie.txt desde las cifras; hay que correr el build dos veces)
+node scripts/build.mjs --escribir-pie     # la primera corrida FALLA a propósito si cambió el pie (lee el viejo); después:
+node scripts/build.mjs                    # SIN flag; valida cifras, textos, pie y voz; escribe index.html y qa/tiles.json
 bash scripts/correr-gates.sh              # todos los gates sin master; deja qa/RESUMEN-gates.txt
 node scripts/borrador-360.mjs && (cd renders/draft360 && flock /tmp/hf-render.lock npx --prefer-offline -y hyperframes@0.8.142 render --quality draft -f 24 -o ../../qa/viernes-preview-360p.mp4)   # preview 360p REAL: mirarlo antes del master
 node scripts/master-ready.mjs && flock /tmp/hf-render.lock npx --prefer-offline -y hyperframes@0.8.142 render --quality high -f 24 -o renders/final-raw.mp4
 ffmpeg -y -i renders/final-raw.mp4 -f lavfi -t 15 -i anullsrc=r=48000:cl=stereo -map 0:v -map 1:a -c:v copy -c:a aac -b:a 128k -shortest -movflags +faststart out/viernes-copia-final-1080x1920.mp4
 sha256sum out/viernes-copia-final-1080x1920.mp4 > qa/sha-master.txt
-bash scripts/correr-gates.sh --master     # además psnr-fotos, vacios y aire sobre el master
-node scripts/zona-segura-pixeles.mjs      # zona segura medida en píxeles
-bash scripts/recortes-arcface.sh out/viernes-copia-final-1080x1920.mp4 <carpeta> && (cd ../.. && FACE_GATE_OUT=videos/lucia-viernes-copia-v1/qa/arcface-pares.json bash .claude/skills/lucia/scripts/face-gate.sh $(cat <carpeta>/args.txt))   # 9 pares master ↔ fuente
-(cd ../.. && FACE_GATE_OUT=videos/lucia-viernes-copia-v1/qa/face-gate.json bash .claude/skills/lucia/scripts/face-gate.sh 'videos/lucia-viernes-copia-v1/out/viernes-copia-final-1080x1920.mp4@0,1,2.5,3.5,4.2,5.5' <recortes de los paneles>) && node ../../scripts/lucia-qa-tabla.mjs qa/face-gate.json > qa/qa-tabla.md
+bash scripts/correr-gates.sh --master     # además psnr-fotos, vacios, aire, zona segura en píxeles y cara-visible (necesita FACE_GATE_HOME)
+bash scripts/recortes-arcface.sh out/viernes-copia-final-1080x1920.mp4 <carpeta> && (cd ../.. && FACE_GATE_OUT=videos/lucia-viernes-copia-v2/qa/arcface-pares.json bash .claude/skills/lucia/scripts/face-gate.sh $(cat <carpeta>/args.txt)) && node scripts/arcface-pares.mjs   # 12 pares master ↔ fuente
+(cd ../.. && FACE_GATE_OUT=videos/lucia-viernes-copia-v2/qa/face-gate.json bash .claude/skills/lucia/scripts/face-gate.sh 'videos/lucia-viernes-copia-v2/out/viernes-copia-final-1080x1920.mp4@0,1.5,3.5,5.5,7,9.5,11.5,14' <carpeta>/master-b2-k4-f84.png <carpeta>/master-b2-r3-f84.png) && node ../../scripts/lucia-qa-tabla.mjs qa/face-gate.json > qa/qa-tabla.md
 ```
 
-El render no es reproducible bit a bit entre máquinas (el `index.html` sí). En este contenedor, dos renders del mismo `index.html` dieron el mismo SHA en la v1.
+El render no es reproducible bit a bit entre máquinas (el `index.html` sí).
 
 ## Dudas abiertas y qué falta
 
-1. **Revisor y verificador:** hechos por la sesión Lucía el 11-oct (ver «Revisión 2»); falta que la madre decida M3 y M4 y escriba «mostrada, publicá el viernes». (Antes: los pone la madre.) Ningún resultado de este README es aprobación visual ni permiso de publicar («mostrada, publicá el viernes»). Falta copiar el master a `videos/lucia-entrega/` cuando se apruebe. La revisión 1 es de la v1: la v1.1 necesita su propia revisión (sobre todo H6, la densidad, y la leyenda de 36 px).
-2. **Voz: NO existe** (cronograma estimado; ver arriba). Cupo de voz: 223 de 381. «Parecido alto.» es una desviación del encargo (decisión H7).
-3. **Densidad de la placa:** 46 palabras en 8,4 s (5,5 palabras/s). Si el revisor la quiere más liviana, la leyenda de las fotos oficiales (7 palabras) es lo primero que sale sin tocar la corrección de H1: queda el piso solo en la fila del promedio y el contexto va en el pie.
-4. **El 0,74 puede leerse como «sin las fotos recibidas igual pasa el piso»** (es cierto) y debilitar el «casi copia». Está dicho con su aclaración en el pie; en pantalla la banda de las fotos oficiales (0,51 a 0,72) y el 0,93 con R3 por encima de cualquier pareja real sostienen el «casi copia».
-5. **Pose, ventana, taza** miradas a ojo, no medidas; la imagen no es pixel-copia (decisión 4).
-6. **Instagram:** no se simuló la interfaz; a 390 px de ancho el texto de 34-36 px (escala, leyenda) queda en ≈ 12 px y los de 42-50 px en ≈ 15-18 px.
+1. **Revisor y verificador:** los pone la madre. Ningún resultado de este README es aprobación visual ni permiso de publicar («LISTA PARA MOSTRAR: reel viernes v2»). Falta copiar el master a `videos/lucia-entrega/`.
+2. **Voz: NO existe** (cronograma estimado; ver arriba). 219 de 255 caracteres. L5 («sale más alto») y L3 («Mirá lo que recibió.») difieren de lo propuesto por tiempos, no por fondo; «mucho menos» (L6) es de la madre: 0,56 a 0,73 contra 0,93 son 0,20 a 0,37 menos, más que el ruido de ±0,03, pero el 0,73 queda cerca de las fotos reales entre sí; en el reel solo se compara con el 0,93 de la línea anterior.
+3. **Márgenes de lectura ajustados** (decisión 3): los tres beats tienen 0,03 a 0,17 s sobre lo que pide la regla de 0,35 s/palabra + 0,3 s. A velocidad real de lectura de Instagram (≈ 3 palabras/s) hay holgura: cada beat dura 1,9 a 2,2 s y tiene 4-5 palabras.
+4. **El rótulo de IA solo está de 0 a 3 s** (decisión 7); la cara está a la vista el 100 % del tiempo.
+5. **Pose, ventana, taza** miradas a ojo, no medidas; la imagen no es pixel-copia.
+6. **Instagram:** no se simuló la interfaz; todo texto está entre x 80 y 1000 y entre y 1176 y 1471 (s1), 1194 y 1427 (s2), 1194 y 1396 (s3).
 7. Los PNG originales de K4 y R3 no están en git (los ignoran sus carpetas): el build falla con un mensaje claro si faltan o si su SHA cambia.
-8. El render se hizo en modo «screenshot» (el Chromium completo no expone `HeadlessExperimental`): PSNR ≥ 37 dB y ArcFace ≤ 0,006 muestran que no degradó la imagen.
+8. El render se hizo en modo «screenshot» (el Chromium completo no expone `HeadlessExperimental`): PSNR ≥ 37 dB y ArcFace ≤ 0,010 muestran que no degradó la imagen.
 9. `qa/viernes-preview-360p.mp4` y las hojas son evidencia: no son para publicar.
-10. **C2 y este reel dicen lo mismo del 0,74** («sin esas 4 fotos baja a 0,74»), pero C2 no trae la escala de las fotos oficiales (0,51 a 0,72) ni la aclaración de que el piso es del promedio: si salen en la misma semana, conviene que C2 también la tenga (no se tocó, está fuera de esta carpeta).
+10. **C2** (carrusel del miércoles) dice lo mismo del 0,74 («sin esas 4 fotos baja a 0,74») pero no trae la escala de las fotos oficiales ni la aclaración del piso (fuera de esta carpeta, no se tocó).

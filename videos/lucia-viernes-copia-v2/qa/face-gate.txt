@@ -6,7 +6,7 @@ viernes-copia-final-1080x1920_t3.5.png             0.832    0.553    0.958      
 viernes-copia-final-1080x1920_t5.5.png             0.817    0.530    0.956      264  OK
 viernes-copia-final-1080x1920_t7.png               0.817    0.531    0.955      264  OK
 viernes-copia-final-1080x1920_t9.5.png             0.830    0.576    0.924      479  OK
-viernes-copia-final-1080x1920_t11.5.png            0.826    0.576    0.936      472  OK
-viernes-copia-final-1080x1920_t14.png              0.827    0.575    0.922      480  OK
+viernes-copia-final-1080x1920_t11.5.png            0.829    0.575    0.922      479  OK
+viernes-copia-final-1080x1920_t14.png              0.829    0.575    0.922      479  OK
 master-b2-k4-f84.png                               0.824    0.570    0.924      237  OK
 master-b2-r3-f84.png                               0.831    0.548    0.954      265  OK

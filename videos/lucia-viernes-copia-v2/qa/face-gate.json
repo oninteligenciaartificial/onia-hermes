@@ -208,18 +208,18 @@
   "viernes-copia-final-1080x1920_t11.5.png": {
    "group": "tests",
    "faces": 1,
-   "det_score": 0.729,
-   "face_px": 472,
+   "det_score": 0.728,
+   "face_px": 479,
    "img": "1080x1920",
-   "flip_self": 0.938
+   "flip_self": 0.94
   },
   "viernes-copia-final-1080x1920_t14.png": {
    "group": "tests",
    "faces": 1,
    "det_score": 0.728,
-   "face_px": 480,
+   "face_px": 479,
    "img": "1080x1920",
-   "flip_self": 0.94
+   "flip_self": 0.941
   },
   "master-b2-k4-f84.png": {
    "group": "tests",
@@ -348,14 +348,14 @@
    "max_ref": 0.924
   },
   "viernes-copia-final-1080x1920_t11.5.png": {
-   "centroid": 0.826,
-   "mean_ref": 0.684,
-   "min_ref": 0.576,
-   "max_ref": 0.936
+   "centroid": 0.829,
+   "mean_ref": 0.687,
+   "min_ref": 0.575,
+   "max_ref": 0.922
   },
   "viernes-copia-final-1080x1920_t14.png": {
-   "centroid": 0.827,
-   "mean_ref": 0.685,
+   "centroid": 0.829,
+   "mean_ref": 0.687,
    "min_ref": 0.575,
    "max_ref": 0.922
   },

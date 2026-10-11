@@ -18,3 +18,5 @@ hyperframes-check                  exit 0
 pixeles-psnr-fotos                 exit 0
 pixeles-vacios                     exit 0
 pixeles-aire                       exit 0
+zona-segura-pixeles                exit 0
+cara-visible                       exit 0

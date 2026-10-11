@@ -200,16 +200,16 @@
   "master-b3-f246.png": {
    "group": "tests",
    "faces": 1,
-   "det_score": 0.729,
+   "det_score": 0.728,
    "face_px": 471,
    "img": "1080x1920",
-   "flip_self": 0.935
+   "flip_self": 0.934
   },
   "master-b3-f330.png": {
    "group": "tests",
    "faces": 1,
    "det_score": 0.728,
-   "face_px": 480,
+   "face_px": 479,
    "img": "1080x1920",
    "flip_self": 0.94
   },
@@ -382,15 +382,15 @@
    "max_ref": 0.924
   },
   "master-b3-f246.png": {
-   "centroid": 0.823,
-   "mean_ref": 0.682,
-   "min_ref": 0.569,
-   "max_ref": 0.938
+   "centroid": 0.824,
+   "mean_ref": 0.683,
+   "min_ref": 0.57,
+   "max_ref": 0.939
   },
   "master-b3-f330.png": {
-   "centroid": 0.827,
-   "mean_ref": 0.685,
-   "min_ref": 0.576,
+   "centroid": 0.829,
+   "mean_ref": 0.687,
+   "min_ref": 0.574,
    "max_ref": 0.922
   },
   "fuente-b2-k4.png": {
