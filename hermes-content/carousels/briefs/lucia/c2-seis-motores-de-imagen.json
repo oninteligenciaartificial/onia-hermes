@@ -1,6 +1,6 @@
 {
   "title": "Seis motores de imagen, una cara",
-  "caption": "Lucía Antelo es un personaje hecho con IA por @oniahq. Probé la misma orden y las mismas fotos de referencia en seis motores de imagen (Seedream 4.5, Kling O1 Image, Nano Banana 2.1, Seedream 5.0 Pro, FLUX 3 y GPT Image 2.5) y medí cuánto se parece cada cara a la suya.\n\nCon 1 crédito, Seedream 4.5, el que ya uso, la sostuvo en tres escenas. Pagar más no la mejoró, y el más barato la perdió en una de tres.\n\nUna toma cada uno: es una prueba, no una regla. Nombro lo que uso; no es una recomendación pagada. Guardalo para cuando elijas el tuyo. Cada semana hago una prueba. Seguime.",
+  "caption": "Personaje hecho con IA: Lucía Antelo, de @oniahq. Probé la misma orden y las mismas fotos de referencia en seis motores de imagen (Seedream 4.5, Kling O1 Image, Nano Banana 2.1, Seedream 5.0 Pro, FLUX 3 y GPT Image 2.5) y medí cuánto se parece cada cara a la suya, de 0 a 1.\n\nCon 1 crédito, Seedream 4.5, el que ya uso, la sostuvo en tres escenas. Pagar más no la mejoró, y el más barato la perdió en una de tres.\n\nOjo con el número: el piso de 0,70 lo elegí yo, el ruido es de ±0,03 y los seis motores recibieron las mismas fotos de referencia, 4 de ellas entre las 8 con que se compara el parecido. Midiendo solo con las otras 4 (R2, R4, R5 y R8) los valores bajan entre 0,03 y 0,09 y el orden casi no cambia: solo se cruzan dos pares, dentro del ruido.\n\nUna escena por motor, tres para los dos primeros: es una prueba, no una regla. Nombro lo que uso; no es una recomendación pagada. Guardalo para cuando elijas el tuyo. Cada semana hago una prueba. Seguime.",
   "hashtags": [
     "#inteligenciaartificial",
     "#ia",
@@ -43,8 +43,8 @@
       "callout": "",
       "save_worthy": true,
       "visual_prompt": "Foto E",
-      "alt_text": "Imagen de prueba de Lucía en una recepción con el celular (fondo difuminado)",
-      "bg": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos-limpias/img-flux-3-af9c2d0c-limpia.jpg"
+      "alt_text": "Imagen de prueba de Lucía en una recepción con el celular",
+      "bg": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos-limpias/img-nano-banana-2-1-a4dd1a48-limpia.jpg"
     },
     {
       "number": 4,
@@ -60,10 +60,22 @@
     },
     {
       "number": 5,
+      "role": "point",
+      "pill": "Cómo leerlo",
+      "headline": "Ojo con *el número*",
+      "body": "Piso 0,70: lo elegí yo. Ruido ±0,03. Los seis motores vieron 4 de las 8 fotos con que se compara. Con solo las otras 4, se cruzan dos pares, dentro del ruido.",
+      "callout": "",
+      "save_worthy": true,
+      "visual_prompt": "Foto Kling O1 Image K4 café",
+      "alt_text": "Lucía junto a un café y una computadora, apoyada en la mano",
+      "bg": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos/img-omni-image-k4cafe-dad464de.jpg"
+    },
+    {
+      "number": 6,
       "role": "cta",
       "pill": "Seguime",
       "headline": "Una foto *no mide*",
-      "body": "Una toma por motor: es una prueba, no una regla. Cada semana, una prueba. Seguime.",
+      "body": "Una escena por motor, tres para los dos primeros: es una prueba, no una regla. Cada semana, una prueba. Seguime.",
       "callout": "",
       "save_worthy": false,
       "visual_prompt": "Foto K4 café",
