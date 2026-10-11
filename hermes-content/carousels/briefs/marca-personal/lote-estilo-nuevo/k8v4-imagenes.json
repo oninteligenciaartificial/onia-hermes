@@ -1,0 +1,36 @@
+{
+  "title": "Lote estilo nuevo (fotobn) · K8 v4 · Recuperar vs reconstruir el prompt",
+  "image_style": "fotobn",
+  "params": [
+    "--quality",
+    "medium",
+    "--resolution",
+    "2k"
+  ],
+  "slides": [
+    {
+      "number": 1,
+      "layout": "ilustrado",
+      "aspect": "4:3",
+      "image_prompt": "A magnifying glass with a black handle lying on a grey surface next to a small empty black picture frame standing upright. The magnifying glass is the green object."
+    },
+    {
+      "number": 3,
+      "layout": "ilustrado",
+      "aspect": "4:3",
+      "image_prompt": "A long strip of blank black film with small round perforations along both edges, curving in a gentle wave across a grey surface, every square frame clear and empty. One single frame is the green object."
+    },
+    {
+      "number": 4,
+      "layout": "ilustrado",
+      "aspect": "4:3",
+      "image_prompt": "A plain black jigsaw puzzle lying on a grey surface, almost complete, with one piece lifted just above its empty slot. The lifted piece is the green object."
+    },
+    {
+      "number": 7,
+      "layout": "ilustrado",
+      "aspect": "4:3",
+      "image_prompt": "Two pears standing side by side on a grey surface, almost identical, the right one slightly rounder. The right pear is the green object."
+    }
+  ]
+}

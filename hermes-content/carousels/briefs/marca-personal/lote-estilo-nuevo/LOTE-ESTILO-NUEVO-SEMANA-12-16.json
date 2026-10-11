@@ -1,0 +1,312 @@
+{
+  "total_imagenes": 16,
+  "total_cr": 16,
+  "saldo_antes": 438.17,
+  "cotizado": "2 de 16 en vivo; las otras 14 derivadas (ver md)",
+  "items": [
+    {
+      "id": "K4V3-1",
+      "carrusel": "K4 v3 · 5 pruebas del bot",
+      "publica": "lun 12 16:00 La Paz",
+      "lamina": 1,
+      "estilo": "fotobn",
+      "modelo": "gpt_image_2_5",
+      "params": [
+        "--quality",
+        "medium",
+        "--resolution",
+        "2k"
+      ],
+      "aspect": "4:3",
+      "costo_cr": 1,
+      "cotizacion": "en vivo (get_cost, credits_exact 1)",
+      "prompt_fotobn": "Five smooth round pebbles lined up in a neat row on a grey surface. The last pebble in the row is the green object.",
+      "reemplaza": "sergio-k4v2-cinco-pruebas-bot-20260929-s01-3f374e98.jpg"
+    },
+    {
+      "id": "K4V3-5",
+      "carrusel": "K4 v3 · 5 pruebas del bot",
+      "publica": "lun 12 16:00 La Paz",
+      "lamina": 5,
+      "estilo": "fotobn",
+      "modelo": "gpt_image_2_5",
+      "params": [
+        "--quality",
+        "medium",
+        "--resolution",
+        "2k"
+      ],
+      "aspect": "4:3",
+      "costo_cr": 1,
+      "cotizacion": "en vivo (get_cost, credits_exact 1)",
+      "prompt_fotobn": "A black felt magician's top hat standing upright on a grey surface, with a thin black wand lying in front of it. The satin band around the hat is the green object.",
+      "reemplaza": "sergio-k4v2-cinco-pruebas-bot-20260929-s05-b45bab76.jpg"
+    },
+    {
+      "id": "K4V3-6",
+      "carrusel": "K4 v3 · 5 pruebas del bot",
+      "publica": "lun 12 16:00 La Paz",
+      "lamina": 6,
+      "estilo": "fotobn",
+      "modelo": "gpt_image_2_5",
+      "params": [
+        "--quality",
+        "medium",
+        "--resolution",
+        "2k"
+      ],
+      "aspect": "4:3",
+      "costo_cr": 1,
+      "cotizacion": "derivada: mismo modelo, calidad, resolución y aspecto que las 2 cotizadas",
+      "prompt_fotobn": "A metal referee whistle lying on a grey surface, with its black cord looped loosely beside it. The whistle is the green object.",
+      "reemplaza": "sergio-k4v2-cinco-pruebas-bot-20260929-s06-764afdcb.jpg"
+    },
+    {
+      "id": "K8V4-1",
+      "carrusel": "K8 v4 · Recuperar vs reconstruir el prompt",
+      "publica": "mar 13 16:00 La Paz",
+      "lamina": 1,
+      "estilo": "fotobn",
+      "modelo": "gpt_image_2_5",
+      "params": [
+        "--quality",
+        "medium",
+        "--resolution",
+        "2k"
+      ],
+      "aspect": "4:3",
+      "costo_cr": 1,
+      "cotizacion": "derivada: mismo modelo, calidad, resolución y aspecto que las 2 cotizadas",
+      "prompt_fotobn": "A magnifying glass with a black handle lying on a grey surface next to a small empty black picture frame standing upright. The magnifying glass is the green object.",
+      "reemplaza": "sergio-k8v3-recuperar-vs-reconstruir-20261001-s01-ae75c072.jpg"
+    },
+    {
+      "id": "K8V4-3",
+      "carrusel": "K8 v4 · Recuperar vs reconstruir el prompt",
+      "publica": "mar 13 16:00 La Paz",
+      "lamina": 3,
+      "estilo": "fotobn",
+      "modelo": "gpt_image_2_5",
+      "params": [
+        "--quality",
+        "medium",
+        "--resolution",
+        "2k"
+      ],
+      "aspect": "4:3",
+      "costo_cr": 1,
+      "cotizacion": "derivada: mismo modelo, calidad, resolución y aspecto que las 2 cotizadas",
+      "prompt_fotobn": "A long strip of blank black film with small round perforations along both edges, curving in a gentle wave across a grey surface, every square frame clear and empty. One single frame is the green object.",
+      "reemplaza": "sergio-k8v3-recuperar-vs-reconstruir-20261001-s03-1fd716b5.jpg"
+    },
+    {
+      "id": "K8V4-4",
+      "carrusel": "K8 v4 · Recuperar vs reconstruir el prompt",
+      "publica": "mar 13 16:00 La Paz",
+      "lamina": 4,
+      "estilo": "fotobn",
+      "modelo": "gpt_image_2_5",
+      "params": [
+        "--quality",
+        "medium",
+        "--resolution",
+        "2k"
+      ],
+      "aspect": "4:3",
+      "costo_cr": 1,
+      "cotizacion": "derivada: mismo modelo, calidad, resolución y aspecto que las 2 cotizadas",
+      "prompt_fotobn": "A plain black jigsaw puzzle lying on a grey surface, almost complete, with one piece lifted just above its empty slot. The lifted piece is the green object.",
+      "reemplaza": "sergio-k8v3-recuperar-vs-reconstruir-20261001-s04-ba4b46ca.jpg"
+    },
+    {
+      "id": "K8V4-7",
+      "carrusel": "K8 v4 · Recuperar vs reconstruir el prompt",
+      "publica": "mar 13 16:00 La Paz",
+      "lamina": 7,
+      "estilo": "fotobn",
+      "modelo": "gpt_image_2_5",
+      "params": [
+        "--quality",
+        "medium",
+        "--resolution",
+        "2k"
+      ],
+      "aspect": "4:3",
+      "costo_cr": 1,
+      "cotizacion": "derivada: mismo modelo, calidad, resolución y aspecto que las 2 cotizadas",
+      "prompt_fotobn": "Two pears standing side by side on a grey surface, almost identical, the right one slightly rounder. The right pear is the green object.",
+      "reemplaza": "sergio-k8v3-recuperar-vs-reconstruir-20261001-s07-e6c79aae.jpg"
+    },
+    {
+      "id": "K7V3-1",
+      "carrusel": "K7 v3 · Carruseles por código",
+      "publica": "mié 14 16:00 La Paz",
+      "lamina": 1,
+      "estilo": "fotobn",
+      "modelo": "gpt_image_2_5",
+      "params": [
+        "--quality",
+        "medium",
+        "--resolution",
+        "2k"
+      ],
+      "aspect": "4:3",
+      "costo_cr": 1,
+      "cotizacion": "derivada: mismo modelo, calidad, resolución y aspecto que las 2 cotizadas",
+      "prompt_fotobn": "A fanned stack of plain blank rectangular ceramic tiles on a grey surface, next to a small black wooden sculpting tool. The top tile is the green object.",
+      "reemplaza": "sergio-k7v2-carruseles-por-codigo-20260929-s01-305cf3dc.jpg"
+    },
+    {
+      "id": "K7V3-2",
+      "carrusel": "K7 v3 · Carruseles por código",
+      "publica": "mié 14 16:00 La Paz",
+      "lamina": 2,
+      "estilo": "fotobn",
+      "modelo": "gpt_image_2_5",
+      "params": [
+        "--quality",
+        "medium",
+        "--resolution",
+        "2k"
+      ],
+      "aspect": "4:3",
+      "costo_cr": 1,
+      "cotizacion": "derivada: mismo modelo, calidad, resolución y aspecto que las 2 cotizadas",
+      "prompt_fotobn": "A black fountain pen lying flat on a sheet of plain white paper, its nib leaving a large uneven ink blot with a few scattered drops. The ink blot is the green object.",
+      "reemplaza": "sergio-k7v2-carruseles-por-codigo-20260929-s02-723733b4.jpg"
+    },
+    {
+      "id": "K7V3-4",
+      "carrusel": "K7 v3 · Carruseles por código",
+      "publica": "mié 14 16:00 La Paz",
+      "lamina": 4,
+      "estilo": "fotobn",
+      "modelo": "gpt_image_2_5",
+      "params": [
+        "--quality",
+        "medium",
+        "--resolution",
+        "2k"
+      ],
+      "aspect": "4:3",
+      "costo_cr": 1,
+      "cotizacion": "derivada: mismo modelo, calidad, resolución y aspecto que las 2 cotizadas",
+      "prompt_fotobn": "A black wooden painter's palette with a thumb hole, holding round blobs of white and grey paint, with a clean paintbrush resting across it. One single blob of paint is the green object.",
+      "reemplaza": "sergio-k7v2-carruseles-por-codigo-20260929-s04-a4074cda.jpg"
+    },
+    {
+      "id": "K2V4-1",
+      "carrusel": "K2 v4 · Tu primera skill",
+      "publica": "jue 15 16:00 La Paz",
+      "lamina": 1,
+      "estilo": "fotobn",
+      "modelo": "gpt_image_2_5",
+      "params": [
+        "--quality",
+        "medium",
+        "--resolution",
+        "2k"
+      ],
+      "aspect": "4:3",
+      "costo_cr": 1,
+      "cotizacion": "derivada: mismo modelo, calidad, resolución y aspecto que las 2 cotizadas",
+      "prompt_fotobn": "A single small seedling sprouting from dark soil in a plain pot on a grey surface. The seedling is the green object.",
+      "reemplaza": "sergio-k2-primera-skill-20260929-s01.jpg (foto, no arcilla)"
+    },
+    {
+      "id": "K2V4-3",
+      "carrusel": "K2 v4 · Tu primera skill",
+      "publica": "jue 15 16:00 La Paz",
+      "lamina": 3,
+      "estilo": "fotobn",
+      "modelo": "gpt_image_2_5",
+      "params": [
+        "--quality",
+        "medium",
+        "--resolution",
+        "2k"
+      ],
+      "aspect": "4:3",
+      "costo_cr": 1,
+      "cotizacion": "derivada: mismo modelo, calidad, resolución y aspecto que las 2 cotizadas",
+      "prompt_fotobn": "A single large metal key lying diagonally on a grey surface, with a small black keyring. The key is the green object.",
+      "reemplaza": "k2-img-s03-bc401bfc.jpg"
+    },
+    {
+      "id": "K2V4-7",
+      "carrusel": "K2 v4 · Tu primera skill",
+      "publica": "jue 15 16:00 La Paz",
+      "lamina": 7,
+      "estilo": "fotobn",
+      "modelo": "gpt_image_2_5",
+      "params": [
+        "--quality",
+        "medium",
+        "--resolution",
+        "2k"
+      ],
+      "aspect": "4:3",
+      "costo_cr": 1,
+      "cotizacion": "derivada: mismo modelo, calidad, resolución y aspecto que las 2 cotizadas",
+      "prompt_fotobn": "A black wooden rubber stamp with a rounded handle standing upright on a grey surface, beside a neat row of identical round ink impressions on a sheet of plain white paper. The ink impressions are the green object.",
+      "reemplaza": "sergio-k2v3-primera-skill-20261001-s07-4389d3f7.jpg"
+    },
+    {
+      "id": "K6V3-1",
+      "carrusel": "K6 v3 · Las 2 listas del bot",
+      "publica": "vie 16 16:00 La Paz",
+      "lamina": 1,
+      "estilo": "fotobn",
+      "modelo": "gpt_image_2_5",
+      "params": [
+        "--quality",
+        "medium",
+        "--resolution",
+        "2k"
+      ],
+      "aspect": "4:3",
+      "costo_cr": 1,
+      "cotizacion": "derivada: mismo modelo, calidad, resolución y aspecto que las 2 cotizadas",
+      "prompt_fotobn": "Two plain white ceramic bowls side by side on a grey surface, one filled with dark coffee beans and one empty. The empty bowl is the green object.",
+      "reemplaza": "sergio-k6v2-confirmado-por-confirmar-20260929-s01-c3bbe494.jpg (foto, no arcilla)"
+    },
+    {
+      "id": "K6V3-2",
+      "carrusel": "K6 v3 · Las 2 listas del bot",
+      "publica": "vie 16 16:00 La Paz",
+      "lamina": 2,
+      "estilo": "fotobn",
+      "modelo": "gpt_image_2_5",
+      "params": [
+        "--quality",
+        "medium",
+        "--resolution",
+        "2k"
+      ],
+      "aspect": "4:3",
+      "costo_cr": 1,
+      "cotizacion": "derivada: mismo modelo, calidad, resolución y aspecto que las 2 cotizadas",
+      "prompt_fotobn": "A clear glass crystal ball resting on a small black metal stand with short curved legs, on a grey surface. The crystal ball is the green object.",
+      "reemplaza": "sergio-k6v2-confirmado-por-confirmar-20260929-s02-39466ff6.jpg"
+    },
+    {
+      "id": "K6V3-7",
+      "carrusel": "K6 v3 · Las 2 listas del bot",
+      "publica": "vie 16 16:00 La Paz",
+      "lamina": 7,
+      "estilo": "fotobn",
+      "modelo": "gpt_image_2_5",
+      "params": [
+        "--quality",
+        "medium",
+        "--resolution",
+        "2k"
+      ],
+      "aspect": "4:3",
+      "costo_cr": 1,
+      "cotizacion": "derivada: mismo modelo, calidad, resolución y aspecto que las 2 cotizadas",
+      "prompt_fotobn": "A black funnel sitting in the neck of a short plain white bottle on a grey surface, with a few small round beads dropping into the funnel. The beads are the green object.",
+      "reemplaza": "sergio-k6v2-confirmado-por-confirmar-20260929-s07-e84146f4.jpg"
+    }
+  ]
+}

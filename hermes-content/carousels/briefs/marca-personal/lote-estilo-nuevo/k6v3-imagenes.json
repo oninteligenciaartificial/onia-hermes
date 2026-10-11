@@ -1,0 +1,30 @@
+{
+  "title": "Lote estilo nuevo (fotobn) · K6 v3 · Las 2 listas del bot",
+  "image_style": "fotobn",
+  "params": [
+    "--quality",
+    "medium",
+    "--resolution",
+    "2k"
+  ],
+  "slides": [
+    {
+      "number": 1,
+      "layout": "ilustrado",
+      "aspect": "4:3",
+      "image_prompt": "Two plain white ceramic bowls side by side on a grey surface, one filled with dark coffee beans and one empty. The empty bowl is the green object."
+    },
+    {
+      "number": 2,
+      "layout": "ilustrado",
+      "aspect": "4:3",
+      "image_prompt": "A clear glass crystal ball resting on a small black metal stand with short curved legs, on a grey surface. The crystal ball is the green object."
+    },
+    {
+      "number": 7,
+      "layout": "ilustrado",
+      "aspect": "4:3",
+      "image_prompt": "A black funnel sitting in the neck of a short plain white bottle on a grey surface, with a few small round beads dropping into the funnel. The beads are the green object."
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "title": "Lote estilo nuevo (fotobn) · K4 v3 · 5 pruebas del bot",
+  "image_style": "fotobn",
+  "params": [
+    "--quality",
+    "medium",
+    "--resolution",
+    "2k"
+  ],
+  "slides": [
+    {
+      "number": 1,
+      "layout": "ilustrado",
+      "aspect": "4:3",
+      "image_prompt": "Five smooth round pebbles lined up in a neat row on a grey surface. The last pebble in the row is the green object."
+    },
+    {
+      "number": 5,
+      "layout": "ilustrado",
+      "aspect": "4:3",
+      "image_prompt": "A black felt magician's top hat standing upright on a grey surface, with a thin black wand lying in front of it. The satin band around the hat is the green object."
+    },
+    {
+      "number": 6,
+      "layout": "ilustrado",
+      "aspect": "4:3",
+      "image_prompt": "A metal referee whistle lying on a grey surface, with its black cord looped loosely beside it. The whistle is the green object."
+    }
+  ]
+}
