@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Lucía · G3 v2 «Tres errores que casi publico» (~27 s, 1080x1920, 24 fps) — re-corte de G3 con HyperFrames 0.8.142 (11-oct-2026).
-// Lee plan.json (en CUADROS o expresiones T<n>/L<n>/END) + guion-voz.txt → calcula los tramos de voz → valida las reglas (texto, voz, aire,
+// Lee plan.json (en CUADROS o expresiones T<n>/L<n>/END) + guion-voz.txt → calcula los tramos de voz (v2.1: en CARACTERES a 17 por segundo, o con duraciones.json si hay voz real) → valida las reglas (texto, voz, aire,
 // costuras, cifras contra PROCEDENCIA.jsonl) → escribe index.html (DOM estático + un timeline GSAP) y plan-resuelto.json (en segundos, lo leen los QA).
 // 0 créditos: solo fotos y clips ya pagados (foto descartada y buena K4·1, agenda K2·2, clip K4 338b751f, clip K1 e470ef4f).
 // Método y trampas: .claude/skills/lucia/montaje-hyperframes.md. Plantilla: videos/lucia-g3/.
@@ -84,16 +84,31 @@ for (const [id, rc] of [['ag-inset1', plan.agenda.origen1.recorte_nativo], ['ag-
 }
 
 // ───────────────────────── 2) voz: tramos desde guion-voz.txt ─────────────────────────
+// v2.1 (revisión 1, H1, 11-oct): la voz se mide en CARACTERES (≈ 17 por segundo), no en palabras. Cada línea ocupa una VENTANA de plan.voz.tramos_cuadros[n-1] cuadros (valores congelados:
+// no se mueven tarjetas, empujes ni clips) y se exige que quepa (chars/cps ≤ ventana) con un hueco ≤ sobra_max_s. Si hay duraciones.json (voz REAL), manda: ventana = ceil(voz × 24) cuadros.
 const V = plan.voz;
 const vozTxt = fs.readFileSync(path.join(P, V.archivo), 'utf8');
 const lineas = vozTxt.split('\n').map((s) => s.trim()).filter(Boolean);
 const contar = (t) => t.trim().split(/\s+/).filter(Boolean).length;
+// duraciones REALES de las pistas de voz (segundos de voz útil por línea): { "t01": 3.21, … } o un arreglo de 12 números; lo escribe `node scripts/poner-voz.mjs --medir DIR`
+const durReal = (() => {
+  const f = path.join(P, 'duraciones.json');
+  if (!fs.existsSync(f)) return null;
+  const j = JSON.parse(fs.readFileSync(f, 'utf8')), o = {};
+  if (Array.isArray(j)) j.forEach((d, i) => { o[i + 1] = +d; });
+  else for (const [k, d] of Object.entries(j)) { const n = +String(k).replace(/^t/i, ''); if (Number.isInteger(n) && n > 0) o[n] = +d; }
+  return o;
+})();
+if (V.tramos_cuadros.length !== lineas.length) errores.push(`voz: plan.voz.tramos_cuadros tiene ${V.tramos_cuadros.length} valores y guion-voz.txt ${lineas.length} líneas`);
+if (durReal && lineas.some((_, i) => !(durReal[i + 1] > 0))) errores.push('voz: duraciones.json no trae las 12 pistas');
 const tramos = [];
 {
   let f = 0;
   lineas.forEach((texto, i) => {
-    const n = contar(texto), fr = Math.round((n / V.palabras_por_s) * FPS);
-    tramos.push({ i: i + 1, texto, palabras: n, chars: texto.length, a: f, b: f + fr, dur_s: rd(fr * FR) });
+    const n = i + 1, real = durReal?.[n], voz_s = real ?? texto.length / V.cps;
+    const fr = real != null ? Math.ceil(real * FPS - 1e-9) : V.tramos_cuadros[i];
+    const ult = i === lineas.length - 1;
+    tramos.push({ i: n, texto, palabras: contar(texto), chars: texto.length, a: f, b: f + fr, dur_s: rd(fr * FR), voz_s: rd(voz_s), fuente: real != null ? 'medida' : 'estimada', sobra_s: rd(fr * FR - voz_s), pausa_s: ult ? null : rd(fr * FR - voz_s + V.hueco_cuadros * FR) });
     f += fr + V.hueco_cuadros;
   });
 }
@@ -103,7 +118,10 @@ const charsTotal = lineas.join('\n').length;                       // con saltos
 if (charsTotal > V.max_caracteres) errores.push(`voz: ${charsTotal} caracteres (con saltos de línea) y el cupo es ${V.max_caracteres}`);
 if (V.hueco_cuadros * FR > V.max_hueco_s + 1e-9) errores.push(`voz: el hueco entre líneas es ${(V.hueco_cuadros * FR).toFixed(3)} s y el máximo es ${V.max_hueco_s}`);
 if (DUR < V.min_s - 1e-9 || DUR > V.max_s + 1e-9) errores.push(`duración ${DUR.toFixed(3)} s fuera de ${V.min_s}-${V.max_s} s`);
-for (const t of tramos) if (Math.abs((t.b - t.a) * FR - t.palabras / V.palabras_por_s) > 0.5 * FR + 1e-9) errores.push(`tramo ${t.i}: dura ${(t.b - t.a) * FR} s y ${t.palabras} palabras a ${V.palabras_por_s}/s dan ${(t.palabras / V.palabras_por_s).toFixed(3)} s`);
+for (const t of tramos) {
+  if (t.voz_s > t.dur_s + 1e-9) errores.push(`tramo ${t.i}: «${t.texto}» (${t.chars} car) dura ${t.voz_s.toFixed(3)} s y su ventana es ${t.dur_s.toFixed(3)} s: NO CABE (acortar la línea; máx ${Math.floor(t.dur_s * V.cps + 1e-9)} car)`);
+  if (t.dur_s - t.voz_s > V.sobra_max_s + 1e-9) errores.push(`tramo ${t.i}: «${t.texto}» (${t.chars} car) deja ${(t.dur_s - t.voz_s).toFixed(3)} s de hueco en su ventana de ${t.dur_s.toFixed(3)} s (máx ${V.sobra_max_s}; mín ${Math.ceil((t.dur_s - V.sobra_max_s) * V.cps - 1e-9)} car)`);
+}
 
 // expresiones de tiempo: cuadro entero, «T<n>» (inicio del tramo n), «L<n>» (fin de su voz), «END», con ±cuadros
 const fr = (x) => {
@@ -158,7 +176,10 @@ for (const c of tarjetas) {
   const cta = byId.c12;
   if (`${cta.texto} ${cta.acento}` !== plan.cta.texto) errores.push(`CTA: «${cta.texto} ${cta.acento}» ≠ «${plan.cta.texto}»`);
   const d = cta.b - cta.a;
-  if (d < plan.cta.min_s - 1e-9 || d > plan.cta.max_s + 1e-9) errores.push(`CTA: ${d.toFixed(3)} s en pantalla y tiene que estar entre ${plan.cta.min_s} y ${plan.cta.max_s} s`);
+  // H7 (revisión 1): la ventana del CTA se mide desde la OPACIDAD PLENA (≥ 0,9: power3.out llega a 0,9 al 43,8 % de E_IN, redondeado al cuadro), no desde el fundido
+  const tPleno = Math.ceil((cta.a - FR + 0.4377 * E_IN) * FPS - 1e-9) / FPS, dPleno = cta.b - tPleno;
+  if (dPleno < plan.cta.min_s - 1e-9 || d > plan.cta.max_s + 1e-9) errores.push(`CTA: ${dPleno.toFixed(3)} s a opacidad plena (${d.toFixed(3)} s con el fundido) y tiene que estar entre ${plan.cta.min_s} y ${plan.cta.max_s} s`);
+  cta.pleno_a = tPleno; cta.pleno_s = dPleno;
   if (cta.b_f !== ENDF) errores.push('CTA: la tarjeta tiene que llegar hasta el final del video');
 }
 // 3b) rótulo de IA: texto exacto, desde el cuadro 0 hasta ≥ 3 s, 40 px
@@ -186,12 +207,16 @@ for (const c of costuras) {
 }
 // 3e) clips: K4 a 1x entre los cuadros k0 y k0+D-1; el cuadro 120 cae T10-12 (6 cuadros de «origen» + 6 de empuje de salida)
 const k4 = escenas.k4, k1 = escenas.k1, kk = plan.k4;
-const k4F = k4.b_f - k4.a_f;
+const k4F = k4.b_f - k4.a_f, k1F = k1.b_f - k1.a_f;
+// media_inicio «auto»: K4 → el cuadro 120 cae 6 de «origen» + 6 de empuje antes de la placa; K1 → el clip entero termina 2 cuadros antes de su último cuadro (145 − cuadros − 2, máx 20)
+if (k4.media_inicio === 'auto') k4.media_inicio = kk.cuadro_foco - (k4.b_f - PUSHF - kk.origen.cuadros - k4.a_f);
+if (k1.media_inicio === 'auto') k1.media_inicio = Math.min(20, kk.cuadros_clip - k1F - 2);
+if (k4.media_inicio < 0 || k1.media_inicio < 0) errores.push(`clips: media_inicio negativo (k4 ${k4.media_inicio}, k1 ${k1.media_inicio}): la escena es más larga que el clip`);
 if (k4.media_inicio + k4F > kk.cuadros_clip) errores.push(`k4: pide los cuadros ${k4.media_inicio}-${k4.media_inicio + k4F - 1} y el clip tiene ${kk.cuadros_clip}`);
 const f120 = k4.a_f + (kk.cuadro_foco - k4.media_inicio);              // cuadro del video donde cae el cuadro 120 del clip
 if (f120 !== k4.b_f - PUSHF - kk.origen.cuadros) errores.push(`k4: el cuadro ${kk.cuadro_foco} cae en el cuadro ${f120} y tiene que caer en ${k4.b_f - PUSHF - kk.origen.cuadros} (6 de «origen» + 6 de empuje antes de la placa)`);
 if (plan.placa.cuadro !== kk.cuadro_foco) errores.push('la placa muestra un cuadro distinto del que se ve en el clip');
-if (k1.media_inicio + (k1.b_f - k1.a_f) > 145) errores.push(`k1: pide hasta el cuadro ${k1.media_inicio + (k1.b_f - k1.a_f) - 1} y el clip tiene 145`);
+if (k1.media_inicio + k1F > kk.cuadros_clip) errores.push(`k1: pide hasta el cuadro ${k1.media_inicio + k1F - 1} y el clip tiene ${kk.cuadros_clip}`);
 // 3f) recortes y zonas
 const insL = plan.letrero.inset.activo !== false ? { ...plan.letrero.inset, a: sc(plan.letrero.inset.a), b: sc(plan.letrero.inset.b) } : null;
 const aro = { ...plan.letrero.aro, a: sc(plan.letrero.aro.a) };
@@ -241,11 +266,26 @@ if (aro.a > 3.0 - 0.5) errores.push(`aro: la prueba tiene que estar en pantalla 
   // frases retiradas (afirmaciones que los cuadros desmienten)
   for (const f of ['Así no se cuentan dedos', 'tapada', 'ya se fue']) if (textos.join(' ').toLowerCase().includes(f.toLowerCase())) errores.push(`frase retirada reapareció: «${f}»`);
 }
-// 3h) pie.txt: abre con «personaje hecho con IA» y dice lo mismo que el video
+// 3h) pie.txt: abre con «personaje hecho con IA», dice lo mismo que el video, nombra las herramientas (D-N1) SOLO con procedencia escrita y dice qué mide el 0,835 (H2, H4)
 {
-  const pie = fs.readFileSync(path.join(P, 'pie.txt'), 'utf8').trim();
+  const pie = fs.readFileSync(path.join(P, 'pie.txt'), 'utf8').trim(), pl0 = pie.toLowerCase();
   if (!/^personaje hecho con ia/i.test(pie)) errores.push('pie.txt: tiene que abrir con «personaje hecho con IA»');
-  for (const k of ['letrero', 'difumin', 'letra', 'mano', 'cuadro a cuadro', 'cuento solo lo que se ve', 'Cada semana hago una prueba', 'Seguime']) if (!pie.toLowerCase().includes(k.toLowerCase())) errores.push(`pie.txt: no dice «${k}»`);
+  for (const k of ['letrero', 'difumin', 'letra', 'mano', 'cuadro a cuadro', 'cuento solo lo que se ve', 'Cada semana hago una prueba', 'Seguime',
+    'Seedream 4.5', 'Kling 3.0 std', 'Higgsfield', 'muestra chica, no una regla', 'Nombro lo que uso; no es una recomendación pagada.', 'ArcFace', 'ocho fotos oficiales', 'de 0 a 1', 'mi piso es 0,70', 'Mide la cara, no el fondo', '0,835', 'lo que yo no puedo verificar'])
+    if (!pie.toLowerCase().includes(k.toLowerCase())) errores.push(`pie.txt: no dice «${k}»`);
+  // D-N1 con la regla dura del 11-oct: solo se afirma qué herramienta hizo cada cosa si PROCEDENCIA.jsonl lo dice. Sin registro por job de la agenda (1422fa94): el pie no la nombra ni le atribuye nada.
+  if (pl0.includes('agenda')) errores.push('pie.txt: nombra la agenda y no hay procedencia escrita por job de su herramienta (el pie no se la atribuye)');
+  const prov = fs.readFileSync(path.join(V4, 'PROCEDENCIA.jsonl'), 'utf8').split('\n').filter(Boolean).map((l) => { try { return JSON.parse(l); } catch { return null; } }).filter(Boolean);
+  const gen = prov.find((o) => o.fotos && o.fotos.K4_1_descartada), lit = prov.find((o) => o.foto_K4_1_descartada);
+  if (gen && lit) {
+    if (!/seedream_v4_5/.test(lit.foto_K4_1_descartada.modelo)) errores.push('PROCEDENCIA: la foto del letrero (6708e444) ya no dice seedream_v4_5');
+    if (!/seedream_v4_5/.test(gen.metodo_fotos) || !String(gen.fotos.K4_1.job).startsWith('eddca486')) errores.push('PROCEDENCIA: la foto nueva (eddca486) ya no figura con seedream_v4_5');
+    if (!/kling3_0 std/.test(gen.metodo_clips) || !String(gen.clips.K4.job).startsWith('338b751f') || !String(gen.clips.K1.job).startsWith('e470ef4f') || !/kling3_0 std/.test(lit.clip_K1.modelo)) errores.push('PROCEDENCIA: los clips K4 (338b751f) y K1 (e470ef4f) ya no figuran con kling3_0 std');
+    const nFotos = Object.keys(gen.fotos).length;
+    if (!pie.includes(`de las ${nFotos} fotos de esa tanda`)) errores.push(`pie.txt: la tanda tiene ${nFotos} fotos en PROCEDENCIA y el pie tiene que decir «de las ${nFotos} fotos de esa tanda»`);
+    const cabe = Object.values(gen.fotos).filter((f) => /letrero inventado/.test(f.veredicto || '')).length;
+    if (cabe !== 1 || !pie.includes('una trajo un letrero')) errores.push(`pie.txt: PROCEDENCIA registra ${cabe} foto(s) con letrero inventado y el pie dice «una trajo un letrero»`);
+  }
 }
 if (errores.length) { console.error('✖ reglas:\n  ' + errores.join('\n  ')); process.exit(1); }
 

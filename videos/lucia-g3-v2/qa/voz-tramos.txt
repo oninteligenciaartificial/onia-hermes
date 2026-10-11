@@ -1,0 +1,21 @@
+Voz de G3 v2 · tabla caben/no caben (ESTIMADA a 17 caracteres por segundo: no hay voz todavía)
+lín  car  voz(s)  ventana(s)  [de → a, s]       hueco  pausa  car(mín-máx)  cabe  hueco ≤ 0,30   línea
+  1   36  2.118     2.208    [ 0.000 →  2.208]  0.091  0.341  33-37        SÍ    sí             Mirá: tres errores que casi publico.
+  2   31  1.824     1.958    [ 2.458 →  4.417]  0.135  0.385  29-33        SÍ    sí             Uno: sin letreros, y salió uno.
+  3   42  2.471     2.500    [ 4.667 →  7.167]  0.029  0.279  38-42        SÍ    sí             La cara pasó el control, pero el fondo no.
+  4   33  1.941     1.958    [ 7.417 →  9.375]  0.017  0.267  29-33        SÍ    sí             Mi regla: mirar también el fondo.
+  5   34  2.000     2.208    [ 9.625 → 11.833]  0.208  0.458  33-37        SÍ    sí             Dos: una letra que parece escrita.
+  6   17  1.000     1.125    [12.083 → 13.208]  0.125  0.375  15-19        SÍ    sí             Ahí no dice nada.
+  7   37  2.176     2.208    [13.458 → 15.667]  0.032  0.282  33-37        SÍ    sí             Si no se lee, no sirve para publicar.
+  8   35  2.059     2.208    [15.917 → 18.125]  0.150  0.400  33-37        SÍ    sí             Y tres: una mano le tapa a la otra.
+  9   32  1.882     1.958    [18.375 → 20.333]  0.076  0.326  29-33        SÍ    sí             Si cruza, no puedo contar dedos.
+ 10   30  1.765     1.958    [20.583 → 22.542]  0.194  0.444  29-33        SÍ    sí             Y yo cuento solo lo que se ve.
+ 11   41  2.412     2.500    [22.792 → 25.292]  0.088  0.338  38-42        SÍ    sí             Reviso cuadro a cuadro antes de publicar.
+ 12   33  1.941     1.958    [25.542 → 27.500]  0.017   cola   29-33        SÍ    sí             Seguime: cada semana, una prueba.
+
+caben 12 de 12; hueco ≤ 0,30 s en 12 de 12 (mayor 0.208 s, menor 0.017 s)
+caracteres: 401 sin saltos (412 con saltos; cupo del guion 450); cupo de ElevenLabs que QUEDA hasta el 13-oct 01:17 UTC: 381 → NO alcanza (20 de más; una sola toma, sin retomas)
+voz estimada: 23.59 s en 12 líneas; ventanas 24.75 s + 11 costuras de 0.25 s + cola 0.42 s = 27.917 s (pedido 26-30 s)
+margen < 0,05 s (la estimación de 17 car/s tiene ±10 %: si Marcela habla más lento estas líneas se salen hasta ~0,25 s hacia la costura, sin pisar a la siguiente): L3, L4, L7, L12
+pausa = hueco + 0,25 s de costura. Antes de la voz real es 0.267-0.458 s; con duraciones.json (build.mjs ajusta cada ventana a la voz real) baja a 0,25 s + < 1 cuadro (0,042 s).
+✔ las 12 líneas caben en su ventana con un hueco ≤ 0,30 s

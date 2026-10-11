@@ -1,1 +1,7 @@
-Personaje hecho con IA por @oniahq: Lucía Antelo. Tres errores que casi publico: un letrero que nadie pidió en el fondo de una foto (lo difuminé al editar), una letra que parece escrita pero no dice nada, y una mano que tapa a la otra y no deja contar los dedos. Reviso cuadro a cuadro antes de publicar y cuento solo lo que se ve. Cada semana hago una prueba. Seguime. #inteligenciaartificial #ia #santacruz #bolivia
+Personaje hecho con IA por @oniahq: Lucía Antelo. Tres errores que casi publico: un letrero que nadie pidió en el fondo de una foto (lo difuminé al editar), una letra que parece escrita pero no dice nada, y una mano que tapa a la otra y no deja contar los dedos.
+
+Con qué lo hice, en Higgsfield: las dos fotos de Lucía (la del letrero y la nueva) con Seedream 4.5 y los dos clips con Kling 3.0 std. Es una muestra chica, no una regla: de las 8 fotos de esa tanda de pruebas, una trajo un letrero que no pedí. Y lo de las manos no es una falla del clip: es lo que yo no puedo verificar.
+
+El 0,835 mide cuánto se parece esa cara a ocho fotos oficiales de Lucía (ArcFace, de 0 a 1; mi piso es 0,70). Mide la cara, no el fondo.
+
+Reviso cuadro a cuadro antes de publicar y cuento solo lo que se ve. Nombro lo que uso; no es una recomendación pagada. Cada semana hago una prueba. Seguime. #inteligenciaartificial #ia #santacruz #bolivia

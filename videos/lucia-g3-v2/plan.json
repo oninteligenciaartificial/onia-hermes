@@ -32,9 +32,9 @@
     "desc": { "tipo": "foto", "src": "assets/descartada.jpg", "a": "0", "b": "T4", "zoom": 1.03, "capa": "foto descartada K4·1 (letrero inventado, difuminado) a pantalla completa: gancho + error 1" },
     "buena": { "tipo": "foto", "src": "assets/buena.jpg", "a": "T4-6", "b": "T5", "zoom": 1.03, "capa": "foto nueva sin letrero (la regla 1)" },
     "agenda": { "tipo": "foto", "src": "assets/agenda.jpg", "a": "T5-6", "b": "T8", "zoom": 1.03, "capa": "foto de la agenda K2·2: error 2" },
-    "k4": { "tipo": "clip", "src": "assets/k4.mp4", "a": "T8-6", "b": "T10", "media_inicio": "auto", "capa": "clip K4 a 1x (cuadros 14 a 131 de 145): error 3; el cuadro 120 cae 12 cuadros antes de T10" },
+    "k4": { "tipo": "clip", "src": "assets/k4.mp4", "a": "T8-6", "b": "T10", "media_inicio": "auto", "capa": "clip K4 a 1x (media_inicio automático: el cuadro 120 cae 12 cuadros antes de T10): error 3" },
     "placa": { "tipo": "placa", "a": "T10-6", "b": "T11", "capa": "placa oscura con el recorte ampliado del cuadro 120 (la ceremonia de contar dedos, 1,96 s en reposo)" },
-    "k1": { "tipo": "clip", "src": "assets/k1.mp4", "a": "T11-6", "b": "END", "media_inicio": "auto", "capa": "cierre: clip K1 (hasta el cuadro 142 de 145; media_inicio automático = 145 − cuadros − 2)" }
+    "k1": { "tipo": "clip", "src": "assets/k1.mp4", "a": "T11-6", "b": "END", "media_inicio": "auto", "capa": "cierre: clip K1 (media_inicio automático = 145 − cuadros − 2, máx 20)" }
   },
   "costuras": [
     { "t": "T4", "sale": ["desc"], "entra": ["buena"], "tarjetas": { "sale": "c3", "entra": "c4" } },
@@ -66,7 +66,7 @@
     { "id": "e_nueva", "texto": "Foto nueva", "a": "T4", "b": "T5-6", "top": 600, "fuente": "foto nueva K4·1 eddca486 (línea 93), sin letrero" }
   ],
   "letrero": {
-    "nota": "El letrero «Equperarto» es texto inventado por la IA y se parece a un logo de banco: NO se muestra nítido. Se difumina en todas sus apariciones y el video lo declara en el recorte («Difuminado al editar»). Caja en px de la foto nativa 1440x2560.",
+    "nota": "El letrero «Equperarto» es texto inventado por la IA y se parece a un logo de banco: NO se muestra nítido. Se difumina en todas sus apariciones y el video lo declara en el recorte («Difuminado al editar»). Caja en px de la foto nativa 1440x2560. v2.1 (H8): sigma 9 → 44; con 9 quedaba la silueta de un logo (banda azul + arco rojo); con 44 queda una mancha gris lisa (mirada a 2x y 4x, y con contraste y saturación forzados).",
     "desenfoque": { "activo": true, "sigma": 44, "caja_nativa": [985, 68, 300, 170], "pluma": 30 },
     "aro": { "a": "T1+36", "centro": [850, 108], "ancho": 250, "alto": 124 },
     "inset": { "activo": true, "a": "T1+46", "b": "T2+41", "x": 480, "y": 300, "w": 500, "h": 222, "recorte_nativo": [935, 62, 400, 178], "caption": "Difuminado al editar" }

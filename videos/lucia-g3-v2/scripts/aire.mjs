@@ -42,6 +42,24 @@ console.log(`mayor tramo quieto TOTAL: ${(tTot[0]?.d ?? 0).toFixed(3)} s   [${fm
 console.log(`mayor tramo idéntico (dif. exactamente 0): ${(tIdent[0]?.d ?? 0).toFixed(3)} s   [${fmt(tIdent)}]`);
 console.log(`mayor tramo quieto SIN tarjeta en lectura: ${(tNoEx[0]?.d ?? 0).toFixed(3)} s   [${fmt(tNoEx)}]`);
 if (ev) console.log(`eventos visuales por 10 s: ${ev.por_10s} (${ev.eventos} en ${dur.toFixed(1)} s); hueco máximo entre eventos: ${ev.hueco_max_eventos_s.toFixed(3)} s; tramo quieto de diseño (sin empuje lento ni clips): ${ev.tramo_quieto_diseno_s} s`);
+// ── H6 (revisión 1, 11-oct): la medida ESTRICTA. «Plano casi fijo» = la diferencia media entre cuadros consecutivos queda por debajo de un umbral, en gris 108x192 (la medida del revisor).
+//    La de arriba (270x480, 0,02 % de píxeles) cuenta como movimiento el empuje lento de las fotos y del visor (1,00 → 1,03 / 1,05) y da 0,000 s; esta no lo perdona.
+//    Regla de lectura: un plano casi fijo es aire muerto SOLO si no hay una tarjeta en lectura (0,35 s por palabra + 0,3 s desde que entra en reposo); se informa el tramo total y
+//    la parte que queda fuera de esas ventanas.
+{
+  const W2 = 108, H2 = 192, SZ2 = W2 * H2;
+  const p2 = spawnSync('ffmpeg', ['-v', 'error', '-i', video, '-vf', `scale=${W2}:${H2}:flags=area,format=gray`, '-f', 'rawvideo', '-pix_fmt', 'gray', '-'], { maxBuffer: 1 << 30 });
+  if (p2.status !== 0) { console.error(String(p2.stderr)); process.exit(2); }
+  const b2 = p2.stdout, N2 = Math.floor(b2.length / SZ2), md = new Array(N2).fill(Infinity);
+  for (let i = 1; i < N2; i++) { let s = 0; const o = i * SZ2, q = (i - 1) * SZ2; for (let j = 0; j < SZ2; j++) s += Math.abs(b2[o + j] - b2[q + j]); md[i] = s / SZ2; }
+  const corridas = (pred) => { const out = []; let ini = -1; for (let f = 0; f <= N2; f++) { const q = f < N2 && pred(f); if (q && ini < 0) ini = f; if (!q && ini >= 0) { out.push({ a: ini, b: f, d: (f - ini) / FPS }); ini = -1; } } return out.sort((x, y) => y.d - x.d); };
+  const mayor = (rs) => rs.length ? `${rs[0].d.toFixed(3)} s [${(rs[0].a / FPS).toFixed(2)}→${(rs[0].b / FPS).toFixed(2)} s]` : '0,000 s';
+  console.log('PLANO CASI FIJO (gris 108x192, diferencia media entre cuadros consecutivos; el empuje lento de las fotos SÍ cuenta como casi fijo si no pasa del umbral):');
+  for (const th of [0.10, 0.15, 0.30]) {
+    const tot = corridas((f) => md[f] < th), sin = corridas((f) => md[f] < th && !excusado(f));
+    console.log(`  < ${th.toFixed(2).replace('.', ',')}: mayor tramo ${mayor(tot)}; fuera de toda tarjeta en lectura ${mayor(sin)}; otros: ${tot.slice(1, 4).map((x) => `${x.d.toFixed(2)} s en ${(x.a / FPS).toFixed(2)}`).join(', ') || 'ninguno'}`);
+  }
+}
 const peor = tNoEx[0]?.d ?? 0;
 console.log(peor <= 0.3 + 1e-9 ? '✔ ningún tramo de más de 0,3 s con la pantalla quieta y sin una tarjeta en lectura' : `✖ hay un tramo quieto sin tarjeta en lectura de ${peor.toFixed(3)} s (> 0,3 s)`);
 if (peor > 0.3 + 1e-9) process.exit(1);

@@ -89,11 +89,13 @@ Runtime
   ◇ 0 errors, 0 warnings
 
 Layout
-  ℹ t=24.962s content_overlap #c11 > div:nth-of-type(1) > div:nth-of-type(2) inside #c12 > div:nth-of-type(1) > div:nth-of-type(2) "Reviso cuadro a cuadro." — Two text blocks overlap and may render unreadable.
+  ℹ t=12.089s content_overlap #c5 > div:nth-of-type(1) > div:nth-of-type(2) > b:nth-of-type(1) inside #c6 > div:nth-of-type(1) > div:nth-of-type(2) "parece escrita." — Two text blocks overlap and may render unreadable.
         Fix: Give each block its own zone, or mark intentional layering with data-layout-allow-overlap.
-  ℹ t=24.962s content_overlap #c11 > div:nth-of-type(1) > div:nth-of-type(2) > b:nth-of-type(1) inside #c12 > div:nth-of-type(1) > div:nth-of-type(2) > b:nth-of-type(1) "a cuadro." — Two text blocks overlap and may render unreadable.
+  ℹ t=13.46s content_overlap #c6 > div:nth-of-type(1) > div:nth-of-type(2) inside #c7 > div:nth-of-type(1) > div:nth-of-type(2) "Sin mensaje." — Two text blocks overlap and may render unreadable.
         Fix: Give each block its own zone, or mark intentional layering with data-layout-allow-overlap.
-  0 error(s), 0 warning(s), 2 info(s)
+  ℹ t=13.46s content_overlap #c6 > div:nth-of-type(1) > div:nth-of-type(2) > b:nth-of-type(1) inside #c7 > div:nth-of-type(1) > div:nth-of-type(2) "mensaje." — Two text blocks overlap and may render unreadable.
+        Fix: Give each block its own zone, or mark intentional layering with data-layout-allow-overlap.
+  0 error(s), 0 warning(s), 3 info(s)
 
 Motion
   ◇ 0 errors, 0 warnings

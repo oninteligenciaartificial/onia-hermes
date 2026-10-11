@@ -42,7 +42,11 @@ La voz (Marcela) se mezcla después y **cambia el SHA**: hay que repetir el QA d
 | G5 v2 «Cómo mido si una cara es la de Lucía» | `g5-v2-final-1080x1920.mp4` | 26,625 s | `030e8f65aabc0fddda83f234acebb410b951b7b81c3dc9c2657410f5ec399b3f` | **LISTA PARA MOSTRAR** (11-oct): revisión 1 aplicada, cara medida con ArcFace sobre este master (diferencia final↔fuente ≤ 0,009), cuadros mirados, SHA/specs/pie/cifras contados por verificador haiku y gates de lectura re-corridos por la madre (0 de 639 cuadros sin tarjeta, ventanas y frases prohibidas exit 0); pie en `../lucia-g5-v2/pie.txt` |
 | G2 v2 | — | 26,5 s | — | editada; revisión independiente en curso |
 | G3 v2 | — | — | — | revisión independiente en curso |
-| G4 v2 | — | 28,04 s | — | revisada (aprobado con cambios); arreglos en curso |
+| G4 v2 «Seis motores de imagen, una cara» | `g4-v2-final-1080x1920.mp4` | 28,042 s | `13cdd1d2f5f0ab2eef1fb0ffd065007d47bf5946a2bb15a5bd24c435142d2a43` | **LISTA PARA MOSTRAR** (11-oct): revisión 1 aplicada (10 hallazgos), cara medida con ArcFace sobre este master (diferencia final↔fuente ≤ 0,012), gates de lectura re-corridos por la madre (hueco-tarjetas, ventanas 35/35, frases prohibidas exit 0), cuadros mirados; pie en `../lucia-g4-v2/pie.txt` |
+
+Pendiente en G4 v2: la lámina dice «Una toma cada uno» y poco después Kling O1 Image y Seedream 4.5 aparecen con una segunda toma (0,35 y 0,83 en el café); el pie lo aclara («Una toma por motor en la primera escena…»), la pantalla no. Decisión de la madre.
+
+**Nombres contra el catálogo de Higgsfield (`models_explore`, 11-oct, consulta gratuita).** Coinciden: Seedream 4.5, Kling O1 Image, Nano Banana 2.1, Seedream 5.0 Pro, GPT Image 2.5 y Seedance 2.0 Mini; «FLUX 3» se lista como «FLUX 3 Image». **Difieren dos nombres de video que G2 y G5 muestran en pantalla y en el pie:** «Kling O3» se lista como **Kling 3.0 Omni** y «Cinematic Studio 3.0» como **Cinema Studio Video 3.0**. «Kling 3.0 std/pro» son los niveles de «Kling v3.0». D-N1 pide el nombre con que Higgsfield lo lista: corregirlo toca `plan.json`, el pie y un re-render en G2 y G5 (G5 ya fue mostrada). Decisión de la madre.
 
 Pendiente en G5 v2: el 0,35 de Kling O1 Image se muestra sin su contrapeso (0,79 y 0,83) dentro del video: solo lo dice el pie (la pastilla del café ya está en su tope de palabras). Decisión de la madre.
 

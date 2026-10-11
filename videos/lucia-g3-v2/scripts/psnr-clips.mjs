@@ -30,7 +30,8 @@ const pruebas = [
 let fallos = 0;
 console.log('PSNR/SSIM de la cara (final vs fuente llevada a 1080x1920), cuadro del final F ↔ cuadro n de la fuente; vecinos n±1 para ver el pico');
 for (const [nom, key, src, f0, k0, ns] of pruebas) {
-  for (const n of ns) {
+  const nF = plan.escenas[key].b_f - plan.escenas[key].a_f;           // cuadros del clip que se ven: de k0 a k0 + nF − 1 (media_inicio puede ser automático)
+  for (const n of ns.filter((x) => x >= k0 + 1 && x <= k0 + nF - 2)) {
     const F = f0 + (n - k0);
     const fila = [];
     for (const dn of [-1, 0, 1]) { const m = run(F, path.join(P, src), n + dn, CROP[key], dn === 0); fila.push({ dn, ...m }); }

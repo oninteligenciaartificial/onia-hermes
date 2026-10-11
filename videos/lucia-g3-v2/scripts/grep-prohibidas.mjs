@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 // Grep de frases prohibidas (editor-videos § «Reels de Lucía» + PLAN.md §4-bis) sobre TODO el texto en pantalla (tarjetas, rótulo, etiquetas,
 // recortes, placa, sello), sobre el pie y sobre guion-voz.txt (v2: la voz también). Sale con 1 si algo coincide. «tapada» está en la lista (H1 de G3).
+// v2.1 (revisión 1, H2, D-N1 del 11-oct): el VIDEO (pantalla y voz) no nombra ninguna herramienta; el PIE sí nombra SOLO «Seedream 4.5», «Kling 3.0 std» y «Higgsfield» (con procedencia escrita:
+// build.mjs lo valida contra PROCEDENCIA.jsonl). Cualquier otra marca o modelo en el pie sigue prohibida.
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import fs from 'node:fs';
@@ -31,7 +33,9 @@ const PROHIBIDAS = [
   'kling', 'seedream', 'seedance', 'higgsfield', 'soul', 'nano banana', 'cinema studio', 'veo ', 'midjourney', 'runway', 'elevenlabs', 'sora', 'gpt', 'claude', 'chatgpt',
 ];
 let hits = 0;
-for (const [donde, txt] of [['pantalla', enPantalla], ['pie', pie], ['voz', voz]]) {
+const PERMITIDAS_EN_PIE = [/Seedream 4\.5/g, /Kling 3\.0 std/g, /Higgsfield/g];
+const sinPermitidas = (t) => PERMITIDAS_EN_PIE.reduce((s, r) => s.replace(r, ' '), t);
+for (const [donde, txt] of [['pantalla', enPantalla], ['pie', sinPermitidas(pie)], ['voz', voz]]) {
   const low = txt.toLowerCase();
   for (const f of PROHIBIDAS) if (low.includes(f.toLowerCase())) { console.log(`✖ ${donde}: «${f}»`); hits++; }
 }
@@ -39,4 +43,6 @@ console.log(`texto en pantalla (${enPantalla.split(' ').length} tokens): ${enPan
 console.log(`pie (${pie.trim().split(/\s+/).length} palabras): ${pie.trim().slice(0, 60)}…`);
 console.log(`voz (${voz.trim().split(/\s+/).length} palabras, ${voz.trim().length} caracteres con saltos)`);
 if (hits) { console.error(`✖ ${hits} coincidencia(s)`); process.exit(1); }
-console.log('✔ ninguna frase prohibida ni marca de terceros en pantalla, en el pie ni en la voz');
+const enPie = PERMITIDAS_EN_PIE.map((r) => (pie.match(r) || []).length);
+console.log(`herramientas nombradas en el pie (permitidas): Seedream 4.5 ×${enPie[0]}, Kling 3.0 std ×${enPie[1]}, Higgsfield ×${enPie[2]}; en pantalla y voz: ninguna`);
+console.log('✔ ninguna frase prohibida ni marca de terceros en pantalla ni en la voz; en el pie solo las 3 herramientas permitidas');

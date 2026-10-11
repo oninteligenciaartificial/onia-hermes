@@ -48,10 +48,13 @@ for (const sel of ids) {
   const g = grupos.sort((x, y) => y.length - x.length)[0], dur = g.length / FPS;
   const rotulo = sel === '#rotulo .tag';
   const min = rotulo ? 3.0 : n * 0.35 + 0.3;
+  const minCta = plan.cta.min_s;
   let ok = dur >= min - 1e-9;
   if (rotulo && g[0] !== 0) ok = false;
+  const cta = sel === `#${plan.tarjetas.at(-1).id} .card`;       // H7: el CTA se mide desde la opacidad plena (≥ 0,9), no desde el fundido, y tiene que durar ≥ plan.cta.min_s
+  if (cta && dur < plan.cta.min_s - 1e-9) ok = false;
   if (!ok) malos++;
-  console.log(`  ${ok ? 'ok ' : '✖  '} ${sel.padEnd(18)} ${String(n).padStart(2)} pal  ${(g[0] / FPS).toFixed(2)}–${((g.at(-1) + 1) / FPS).toFixed(2)} s  ${dur.toFixed(2)} s (pide ${min.toFixed(2)}${rotulo ? ', desde el cuadro 0' : ''})  «${txt.slice(0, 44)}»`);
+  console.log(`  ${ok ? 'ok ' : '✖  '} ${sel.padEnd(18)} ${String(n).padStart(2)} pal  ${(g[0] / FPS).toFixed(2)}–${((g.at(-1) + 1) / FPS).toFixed(2)} s  ${dur.toFixed(2)} s (pide ${min.toFixed(2)}${rotulo ? ', desde el cuadro 0' : ''}${cta ? `; CTA: pide ≥ ${minCta} s a opacidad plena` : ''})  «${txt.slice(0, 44)}»`);
 }
 if (malos) { console.error(`✖ ${malos} ventana(s) cortas`); process.exit(1); }
 console.log('✔ todas las ventanas medidas alcanzan la regla de lectura');
