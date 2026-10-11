@@ -1,0 +1,1 @@
+Fuentes completas (K4 y R3 con su SHA-256); apto para comenzar QA/render, pendiente aprobación visual.

@@ -12,8 +12,12 @@ export async function run(gate){
  if(gate==='ventanas'){
   for(const r of reads){lines.push(`${r.id}: ${r.duration.toFixed(3)} s / mínimo ${r.min.toFixed(3)} s; ${r.a.toFixed(3)}–${r.b.toFixed(3)}`);check(r.duration+1e-6>=r.min,`Lectura corta ${r.id}`)}
   check(reads.length===tiles.length,`Faltan textos: ${tiles.filter(t=>!reads.some(r=>r.id===t.id)).map(t=>t.id)}`);
-  const placa=reads.filter(r=>tiles.find(t=>t.id===r.id)?.clip==='placa'),est=placa.reduce((s,r)=>s+r.min,0),disp=T-plan.costuras[1].t;
-  lines.push(`Lectura en orden estricto de la placa: ${placa.map(r=>r.min.toFixed(2)).join(' + ')} = ${est.toFixed(1)} s contra ${disp.toFixed(1)} s disponibles (${(placa.reduce((s,r)=>s+r.text.split(/\s+/).filter(w=>/[\p{L}\p{N}]/u.test(w)).length,0)/disp).toFixed(1)} palabras/s); cada ventana individual se cumple, la voz cubre el resto`);
+  // v2: los beats se leen UNO tras otro (una idea por vez): sus ventanas no se solapan (salvo el cruce de 1-2 cuadros) y suman lo que pide la lectura
+  const ids=[...plan.beats,'cta'],bs=ids.map(id=>reads.find(r=>r.id===id));
+  for(let i=1;i<bs.length;i++)check(bs[i].a>=bs[i-1].b-2/24-1e-6,`los beats se pisan: ${bs[i-1].id} hasta ${bs[i-1].b.toFixed(3)} s y ${bs[i].id} desde ${bs[i].a.toFixed(3)} s`);
+  const est=bs.reduce((s,r)=>s+r.min,0),disp=T-bs[0].a;
+  lines.push(`Beats en orden estricto: ${bs.map(r=>`${r.id} ${r.duration.toFixed(2)} s (pide ${r.min.toFixed(2)})`).join(' · ')}; suman ${est.toFixed(2)} s pedidos contra ${disp.toFixed(2)} s desde la entrada del beat A (${bs.reduce((s,r)=>s+r.text.split(/\s+/).filter(w=>/[\p{L}\p{N}]/u.test(w)).length,0)} palabras en 4 beats, máximo 6 por beat)`);
+  for(const r of bs.slice(0,3))check(r.text.split(/\s+/).filter(w=>/[\p{L}\p{N}]/u.test(w)).length<=6,`${r.id}: más de 6 palabras`);
   save('lectura-tarjetas.json',reads);
  }else if(gate==='hueco-tarjetas'){
   const empty=rows.filter(r=>!r.boxes.some(b=>b.card&&Math.min(1080,b.x+b.w)-Math.max(0,b.x)>=b.w*.25));
@@ -29,11 +33,12 @@ export async function run(gate){
   const evs=plan.eventos;let max=0,prev=0;
   for(const ev of evs){check(ev.t-prev<=2+1e-6,`Hueco de eventos >2 s antes de ${ev.que}`);max=Math.max(max,ev.t-prev);prev=ev.t;
    const sig=async t=>page.evaluate(({t,sel})=>{window.__timelines.main.time(t,false);const out=[];for(const e of document.querySelectorAll(sel)){let o=1,n=e;while(n&&n!==document.body){const s=getComputedStyle(n);o*=+s.opacity;if(s.display==='none'||s.visibility==='hidden')o=0;n=n.parentElement}
-     const q=e.getBoundingClientRect(),cs=getComputedStyle(e);const fill=e.querySelector('.fill,.banda');out.push({o:Math.round(o*100)/100,r:[q.left,q.top,q.width,q.height].map(v=>Math.round(v*2)/2),b:cs.borderLeftColor,g:cs.backgroundColor,d:cs.strokeDashoffset,w:fill?Math.round(fill.getBoundingClientRect().width):0})}return out},{t,sel:ev.selector});
+     const q=e.getBoundingClientRect(),cs=getComputedStyle(e);const fill=null;out.push({o:Math.round(o*100)/100,r:[q.left,q.top,q.width,q.height].map(v=>Math.round(v*2)/2),b:cs.borderLeftColor,g:cs.backgroundColor,d:cs.strokeDashoffset,w:fill?Math.round(fill.getBoundingClientRect().width):0})}return out},{t,sel:ev.selector});
    if(ev.t===0){const s0=await sig(0);check(s0.length&&s0.every(s=>s.o>=.9&&s.r[0]>=0&&s.r[0]<1080),`Evento de gancho no visible en el cuadro 0: ${ev.que}`);lines.push(`${ev.t.toFixed(3)}: ${ev.que}`);continue}
    const t0=ev.empuje?ev.t-.25:ev.t-1/24,a=await sig(t0),b=await sig(ev.t+.12);check(a.length&&b.length,`Evento sin elemento: ${ev.selector}`);
    check(JSON.stringify(a)!==JSON.stringify(b),`Evento sin cambio visible ${ev.que}`);
    if(ev.entrada)check(a.every(s=>s.o<.5)&&b.every(s=>s.o>=.5),`Entrada que no se ve entrar: ${ev.que}`);
+   if(ev.salida)check(a.every(s=>s.o>=.5)&&b.every(s=>s.o<.5),`Salida que no se ve salir: ${ev.que}`);
    if(ev.aro){const LN=plan.aro_len;check(a.every(s=>parseFloat(s.d)>=.99*LN)&&b.every(s=>parseFloat(s.d)<LN),`Aro que no se dibuja: ${ev.que}`);
     // H5: el aro se TRAZA a lo largo de su duración (no aparece en 2 cuadros): a la mitad del dibujo el offset está entre 5 % y 95 % del trazo
     const m=await sig(ev.t+ev.dur/2);check(m.every(s=>parseFloat(s.d)>.05*LN&&parseFloat(s.d)<.95*LN),`Aro que no se ve trazar a mitad del dibujo: ${ev.que}`);
@@ -50,7 +55,7 @@ export async function run(gate){
   const faces=JSON.parse(fs.readFileSync(path.join(P,'qa/caras-lienzo.json'),'utf8'));
   const audit=auditarDom(rows,reads,faces,plan);
   const loaded=await page.evaluate(()=>Array.from(document.fonts,f=>({familia:f.family.replaceAll('"',''),estado:f.status})));
-  for(const family of ['Bricolage Grotesque','DM Sans','Spline Sans Mono'])if(!loaded.some(f=>f.familia===family&&f.estado==='loaded'))audit.fallos.push({regla:'fuente de marca no cargada',id:family,cuadro:null,tiempo:null,valor:loaded,limite:'fuente local loaded; sin fallback'});
+  for(const family of ['Bricolage Grotesque','DM Sans'])if(!loaded.some(f=>f.familia===family&&f.estado==='loaded'))audit.fallos.push({regla:'fuente de marca no cargada',id:family,cuadro:null,tiempo:null,valor:loaded,limite:'fuente local loaded; sin fallback'});
   save('medir-dom-fallos.json',audit);
   lines.push(`${audit.cajas} cajas / ${rows.length} cuadros; ${audit.fallos.length} fallos. Margen mínimo mentón-texto ${Math.round(audit.margen_minimo_menton)} px; dato ${audit.primer_dato.toFixed(3)} s; CTA ${audit.cta_duracion.toFixed(3)} s. Caras: SCRFD sobre las dos fotos (qa/caras-fotos.json).`);
   for(const f of audit.fallos)lines.push(`${f.regla}: id=${f.id} cuadro=${f.cuadro} tiempo=${f.tiempo} valor=${JSON.stringify(f.valor)} límite=${f.limite}`);

@@ -1,6 +1,6 @@
 // Checks exclusivos del master. No genera videos. Adaptación Node/ffmpeg de P9 a fotos fijas:
 // Los paneles se miden sin los 10 px pegados al divisor de 6 px (lo tapa); el color: el master es bt709 y la media RGB difiere ≈ 1,5 niveles de la fuente PNG (no se baja el umbral).
-//   psnr-fotos : cuadros del master contra la foto original llevada al mismo encuadre (escena 1: K4 cover a 1080x1920; escena 2: cada panel antes de que entren los aros)
+//   psnr-fotos : cuadros del master contra la foto original llevada al mismo encuadre (escenas 1 y 3: K4 cover a 1080x1920; escena 2: cada panel antes de que entren los aros)
 //   vacios     : cuadros planos (std de luma < 6) y mayores saltos de luma
 //   aire       : quietud en píxeles fuera de las ventanas de lectura
 import {execFileSync} from 'node:child_process';import fs from 'node:fs';import path from 'node:path';import {P,plan,check} from './qa-dom.mjs';
@@ -14,6 +14,7 @@ if(mode==='psnr-fotos'){
  const jobs=[
   // [nombre, cuadros del master, fuente, filtro de la fuente (lleva la foto al encuadre del lienzo), caja ROI en el lienzo]
   ['s1 K4 pantalla completa (y 300-1100)',[12,36,60],k4,`scale=-2:1920:flags=bilinear,crop=1080:1920`,[0,300,1080,800]],
+  ['s3 K4 pantalla completa (y 300-1100)',[210,246,330],k4,`scale=-2:1920:flags=bilinear,crop=1080:1920`,[0,300,1080,800]],
   ['s2 panel K4 (cara y mano, antes de los aros)',[84,90,96],k4,`scale=${PN.w}:${Math.round(plan.fotos.k4.alto*sK)}:flags=bilinear,crop=${PN.w}:${PN.h}:0:0,pad=1080:1920:0:${PN.y}:color=black`,[0,PN.y,PN.w-10,PN.h]],
   ['s2 panel R3 (cara y mano, antes de los aros)',[84,90,96],r3,`scale=${Math.round(plan.fotos.r3.ancho*sR)}:${PN.h}:flags=bilinear,crop=${PN.w}:${PN.h}:${PN.r3.ox}:0,pad=1080:1920:${PN.w}:${PN.y}:color=black`,[PN.w+10,PN.y,PN.w-10,PN.h]]];
  let minimum=Infinity;

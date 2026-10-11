@@ -1,0 +1,3 @@
+Coincidencias prohibidas: 0
+
+EXIT 0

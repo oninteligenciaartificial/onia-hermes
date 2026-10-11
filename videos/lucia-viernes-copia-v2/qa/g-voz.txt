@@ -1,0 +1,12 @@
+voz: ESTIMADA a 17 caracteres por segundo (no hay duraciones.json: no hay voz todavía)
+tramo palabras caract  voz(s)  fuente    a(s)    b(s)    dura   hueco
+  1       4      25  1.471  estimada   0.000   1.708  1.708  0.238
+  2       2      14  0.824  estimada   1.708   2.750  1.042  0.218
+  3       4      20  1.176  estimada   2.750   4.167  1.417  0.240
+  4       5      27  1.588  estimada   4.167   6.000  1.833  0.245
+  5       6      28  1.647  estimada   6.000   7.875  1.875  0.228
+  6       6      33  1.941  estimada   7.875  10.042  2.167  0.225
+  7       5      32  1.882  estimada  10.042  12.167  2.125  0.243
+  8       5      33  1.941  estimada  12.167  15.000  2.833  0.892 (CTA: cola sin voz, se lee)
+total: 8 líneas, 37 palabras, 219 caracteres con espacios (con un salto entre líneas; cupo 381), 360 cuadros = 15.000 s
+huecos entre líneas: 0.218 a 0.245 s (objetivo ≤ 0.25, tope 0.3); cola del CTA: 0.892 s

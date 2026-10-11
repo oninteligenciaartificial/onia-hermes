@@ -1,4 +1,4 @@
-// Viernes «El error de la semana» v1.1 (11-oct-2026, tras la revisión 1): plan → fuentes → validación → HTML determinista; sin red.
+// Viernes «El error de la semana» v2 (11-oct-2026): placa simplificada por la madre marketing — una idea por vez, con una cara a la vista, sin gráfico: plan → fuentes → validación → HTML determinista; sin red.
 // Dos fotos ya pagadas (K4 de Kling O1 Image y R3, la foto de entrada), 0 créditos nuevos, MUDO. Estructura y validaciones heredadas de P9 v3.1.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -87,14 +87,20 @@ for(const [k,f] of Object.entries(p.fotos)){
 }
 // ── 2. Textos de pantalla: deben salir de las cifras (no se escriben a mano) ─────────────────────────────────────────────────────────────────────────────
 const A=round(D.promedio8),r3n=round(r3),Bn=round(fK4.B),pisoN=round(D.piso);
+const otras7n=fotoN.length-1;
 const esperado={rotulo:'Lucía Antelo · personaje IA de Onia',titulo:`Casi publico este ${f2(A)}.`,dato:`Kling O1 Image · parecido ${f2(A)}`,cap_k4:'Kling O1 Image',cap_k4b:'una sola toma.',cap_r3:'Mirá la foto que recibió.',tile2:'Misma pose, ventana, taza.',
- fila_a:`Con esa foto: ${f2(r3n)}`,fila_b:`Con las otras siete: ${f2(round(bot))} a ${f2(round(top))}`,fila_c:`Promedio de las ${noRecibidas.length} que no recibió: ${f2(Bn)}`,leyenda_oficiales:`Fotos oficiales entre sí: ${f2(round(pwMin))} a ${f2(round(pwMax))}`,escala_0:'0',escala_piso:`piso ${f2(pisoN)}`,escala_1:'1',
- nota_copia:'Casi copia: no prueba identidad.',leccion:'Mirá el parecido foto por foto.',cta:'Seguime: cada semana, una prueba.'};
+ beat_a:`Con esa foto: ${f2(r3n)}`,beat_b:`Con las otras ${otras7n}: ${f2(round(bot))}–${f2(round(top))}`,beat_c:'Casi copia: no prueba identidad.',cta:'Seguime: cada semana, una prueba.'};
 same(p.textos,esperado,'textos/cifras autorizados');
 const T=p.textos;
 if(RETIRADO.test(Object.values(T).join(' ')))fail(`Cifra retirada en pantalla: ${Object.values(T).join(' ').match(RETIRADO)[0]}`);
 if(/el mejor|garantiz|Sergio Urcullo|odont[oó]loga|mis pacientes|muy pronto|pr[oó]ximamente/i.test(Object.values(T).join(' ')))fail('Frase prohibida en pantalla');
-if(!/^Casi copia: no prueba identidad\.$/.test(T.nota_copia))fail('La nota debe decir «Casi copia: no prueba identidad.» (no «era copia, no identidad»: el 0,74 sin las fotos recibidas sigue sobre el piso)');
+if(!/^Casi copia: no prueba identidad\.$/.test(T.beat_c))fail('El beat C debe decir «Casi copia: no prueba identidad.» (no «Casi copia ≠ misma persona» ni «era copia, no identidad»: afirmarían que la imagen NO es ella y lo medido no lo sostiene: sin las 4 fotos recibidas sigue en 0,74 y las otras siete caen en el rango de fotos reales entre sí)');
+// v2: no hay gráfico. El promedio de las 4, el piso 0,70, la banda de las fotos oficiales, las barras y los puntos viven SOLO en el pie.
+for(const k of ['piso_en','barras','puntos','leyenda_oficiales'])if(k in p||k in p.textos)fail(`Ya no hay gráfico: «${k}» no puede volver al plan (vive solo en el pie)`);
+if(/promedio|piso|oficiales|leyenda|gr[aá]fico|barra|banda/i.test(Object.values(T).join(' ')))fail(`Pantalla: «${Object.values(T).join(' ').match(/promedio|piso|oficiales|leyenda|gr[aá]fico|barra|banda/i)[0]}» vive solo en el pie (ya no hay gráfico)`);
+// Cada beat: una sola idea («etiqueta: afirmación»), ≤ 6 palabras con el contador del repo (numerales cuentan), y un solo dato visible
+for(const k of ['beat_a','beat_b','beat_c']){const t=T[k];if(wc(t)>6)fail(`${k}: ${wc(t)} palabras (máximo 6 por beat)`);if((t.match(/:/g)||[]).length!==1)fail(`${k}: debe tener una sola idea «etiqueta: afirmación»`)}
+if(!/^[^:]+: \d,\d\d$/.test(T.beat_a)||!/^[^:]+: \d,\d\d–\d,\d\d$/.test(T.beat_b))fail('Los beats A y B llevan un solo dato: «Con esa foto: 0,93» y «Con las otras 7: 0,56–0,73» (el rango es una sola afirmación)');
 if(wc(T.titulo)<3||wc(T.titulo)>7)fail('El título debe tener de 3 a 7 palabras');
 // ── 3. Pie: sale de las cifras, abre con la declaración de IA y se compara con pie.txt ─────────────────────────────────────────────────────────────────────
 const pieTxt=read('pie.txt'),voz=read('guion-voz.txt');
@@ -109,7 +115,7 @@ const pF={
  escala:`Para tener escala: entre las propias fotos oficiales de Lucía, de a dos, el parecido va de ${f2(round(pwMin))} a ${f2(round(pwMax))} (promedio ${f2(round(pwMed))}; ninguna de las ${pares.length} parejas pasa de ${f2(round(pwMax))}). El ${f2(round(bot))} a ${f2(round(top))} de esta imagen con las otras siete es casi ese mismo rango; el ${f2(r3n)} con la ${D.foto_copiada}, no.`,
  entradas:`Kling O1 Image recibió seis imágenes como entrada: ${lista(recibidas,true)} (cuatro de las 8 con que se compara), una selfie y una referencia de ropa; por eso el ${f2(A)} sale inflado, y no hay un control sin entradas para decir cuánto.`,
  estricta:`Sin esas ${recibidas.length} fotos baja a ${f2(Bn)}: es el parecido con la cara promedio de solo las ${noRecibidas.length} que ningún motor recibió (${lista(noRecibidas)}), no la media de sus cifras, y sigue sobre el piso de ${f2(pisoN)}. Con solo ${noRecibidas.length} fotos todas las imágenes de la prueba bajan de ${f2(round(bajaMin))} a ${f2(round(bajaMax))} (esta, ${f2(round(-fK4.dBA))}), así que esa baja no mide por sí sola cuánto es fuga.`,
- piso:`El piso de ${f2(pisoN)} lo elegí yo y es de la cara promedio de las ${fotoN.length} fotos: no se compara con el parecido de una sola foto, por eso en el gráfico lo dibujé solo junto al promedio de las ${noRecibidas.length}.`,
+ piso:`El piso de ${f2(pisoN)} lo elegí yo y es de la cara promedio de las ${fotoN.length} fotos: no se compara con el parecido de una sola foto.`,
  otras:`El mismo motor dio ${f2(round(D.otras_escenas.K1))} en otra escena y ${f2(round(D.otras_escenas.K2cafe))} en una tercera, donde perdió la cara.`,
  ruido:'Ruido de ±0,03.',
  cara:`La cara mide ${D.cara_px} px en la imagen original (bajo 200 px sería poco fiable).`,
@@ -122,17 +128,18 @@ if(!pieTxt.startsWith(pF.ia))fail('Pie debe abrir EXACTAMENTE con «Personaje he
 const PIE_FRASES=[['historia','falta la historia: casi publico este 0,83 como un buen resultado de Kling O1 Image'],['copia','falta decir que la imagen es casi una copia de R3 (misma pose, ventana, laptop y taza de barro, con otra ropa y la taza blanca de más; no pixel a pixel)'],['nocopia','falta decir que una casi copia no prueba identidad'],
  ['unaescena','falta «Una escena, una toma: es una prueba, no una regla.»'],['oficiales','faltan las 8 fotos oficiales (R1 a R8) y que el 0,83 es contra su promedio'],
  ['porfoto','falta el parecido foto por foto (R3 0,93 y las otras siete con sus cifras)'],['escala','falta la escala de las fotos oficiales entre sí (0,51 a 0,72, promedio 0,64)'],['entradas','falta decir que recibió R1, R3, R6 y R7 (por eso el 0,83 sale inflado)'],
- ['estricta','falta «Sin esas 4 fotos baja a 0,74» (igual que C2) con su aclaración'],['piso','falta aclarar que el piso de 0,70 lo elegí yo, es de la cara promedio de las 8 y que en el gráfico va solo con el promedio de las 4'],
+ ['estricta','falta «Sin esas 4 fotos baja a 0,74» (igual que C2) con su aclaración'],['piso','falta aclarar que el piso de 0,70 lo elegí yo y es de la cara promedio de las 8 (no se compara con una sola foto)'],
  ['otras','faltan las otras dos escenas del mismo motor (0,79 y 0,35: perdió la cara)'],['ruido','falta el ruido de ±0,03'],['cara','falta el tamaño de la cara (677 px)'],['leccion','falta la lección'],
  ['nombro','falta «Nombro lo que uso; no es una recomendación pagada.»'],['cierre','falta el cierre «Cada semana hago una prueba. Seguime.» con los hashtags']];
 for(const [k,msg] of PIE_FRASES)if(!pieTxt.includes(pF[k]))fail(`Pie: ${msg}`);
 same(pieTxt,pie,'pie y cifras contra fuentes');
 if(pieTxt.indexOf(pF.unaescena)+pF.unaescena.length>520)fail(`Pie: «Una escena, una toma» debe quedar en los primeros ~500 caracteres (termina en ${pieTxt.indexOf(pF.unaescena)+pF.unaescena.length})`);
 if(pieTxt.length>2200)fail(`Pie de ${pieTxt.length} caracteres (tope 2.200)`);
+if(/gr[aá]fico|barra|banda|leyenda|en pantalla/i.test(pieTxt))fail(`Pie: «${pieTxt.match(/gr[aá]fico|barra|banda|leyenda|en pantalla/i)[0]}»: ya no hay gráfico en el video (v2); el pie no lo menciona`);
 if(RETIRADO.test(pieTxt)||RETIRADO.test(voz))fail('Cifra retirada en el pie o la voz (no hay control limpio: no se estima ningún efecto ni ventaja)');
 if(/el mejor|garantiz|Sergio Urcullo/i.test(pieTxt+voz))fail('Frase prohibida en pie o voz');
 // ── 4. Voz: no habla cifras, cabe en 360 cuadros y cada entrada cae con su línea ──────────────────────────────────────────────────────────────────────────
-const vozEsperada=['Casi publico esta imagen.','Parecido alto.','Mirá la foto que recibió.','Misma pose, ventana y taza.','Con esa foto, mucho más alto.','Casi copia: no prueba identidad.','Mirá el parecido foto por foto.','Seguime: cada semana, una prueba.'].join('\n');
+const vozEsperada=['Casi publico esta imagen.','Parecido alto.','Mirá lo que recibió.','Misma pose, ventana y taza.','Con esa foto, sale más alto.','Con las otras siete, mucho menos.','Casi copia: no prueba identidad.','Seguime: cada semana, una prueba.'].join('\n');
 if(/\d/.test(voz))fail('voz: las cifras y los decimales no se hablan (están en pantalla)');
 same(voz,vozEsperada,'voz y cifras');
 const cr=cronograma(voz,p.voz.ultimo_tramo_cuadros);
@@ -142,26 +149,33 @@ if(cr.chars>255)fail(`Voz: ${cr.chars} caracteres; a 17 car/s la pieza de 15 s a
 const Ln=n=>cr.tramos[n-1];
 for(const ev of p.eventos)if(ev.voz){const d=ev.t-Ln(ev.voz).a;if(d<-0.05||d>0.5)fail(`voz: ${ev.selector} entra a ${ev.t} s y su línea ${ev.voz} empieza a ${Ln(ev.voz).a.toFixed(2)} s (deben coincidir a ±0,5 s)`)}
 const lastL=cr.tramos.at(-1),colaCta=p.lienzo.duracion-lastL.a;
-if(colaCta<2.4)fail(`CTA: ${colaCta.toFixed(3)} s de exposición; mínimo 2,4 s (idealmente 2,5)`);
-// ── 5. Eventos, orden de la placa, zona segura y lienzo ──────────────────────────────────────────────────────────────────────────────────────────────────
+if(colaCta<2.6)fail(`CTA: ${colaCta.toFixed(3)} s de exposición con la voz; mínimo 2,6 s`);
+// ── 5. Eventos, orden de los beats, tipografía, zona segura y lienzo ──────────────────────────────────────────────────────────────────────────────────────
 const entra=sel=>{const e=p.eventos.find(e=>e.selector===sel&&e.entrada);if(!e)fail(`falta la entrada de ${sel}`);return e.t};
+const sale=sel=>{const e=p.eventos.find(e=>e.selector===sel&&e.salida);if(!e)fail(`falta la salida de ${sel}`);return e.t};
 const tDato=entra('#dato'),tCta=entra('#cta');
 if(tDato>=3)fail(`El primer número («parecido 0,83») debe estar antes de 3 s (entra a ${tDato} s)`);
 if(p.lienzo.cuadros!==360||p.lienzo.fps!==24||p.empuje.cuadros!==6||p.lienzo.duracion!==15)fail('Lienzo/costuras fuera de contrato (360 cuadros, 24 fps, 15 s, empuje de 6 cuadros)');
-const ordenPlaca=['#cap-r3','#tile2'].map(entra);if(ordenPlaca.some((t,i)=>i&&t<=ordenPlaca[i-1]))fail('orden de entrada de la escena 2: «mirá la foto» → «misma pose, ventana, taza»');
-const entradasPlaca=['#fila-b','#nota-copia','#fila-c','#leccion','#cta'].map(entra);
-if(entradasPlaca.some((t,i)=>i&&t<=entradasPlaca[i-1]))fail(`orden de entrada de la placa: fila de las otras siete → casi copia → fila de las 4 → lección → CTA (llegó ${entradasPlaca.join(' → ')})`);
-const L=p.layout,ysPlaca=['fila_a','fila_b','nota_copia','fila_c','leccion','cta'].map(n=>L[n]);
-if(ysPlaca.some((y,i)=>i&&y<=ysPlaca[i-1]))fail('orden vertical de la placa: la pila debe seguir el orden de entrada (fila A, B, casi copia, fila C, lección, CTA); así no queda un hueco entre filas mientras llega la siguiente');
-// H1 (revisión 1): el piso 0,70 es del PROMEDIO; solo se dibuja junto al promedio de las 4 (fila C). Nunca sobre cosenos de una sola foto (fila A, fila B).
-same(p.piso_en,['fila-c'],'dónde va el piso 0,70 (solo en la fila del promedio de las 4; una marca de piso sobre cosenos de una sola foto hace leer «5 de 7 fotos no pasan»)');
-const cA=p.eventos.find(e=>e.selector==='#fila-a');if(!cA||cA.t!==p.costuras[1].t)fail('la fila de «con esa foto» llega con la placa (mismo instante que el empuje)');
-if(!(tCta-p.costuras[1].t>0))fail('el CTA entra después de la placa');
+const FR=1/24,PUSH=p.empuje.cuadros/24,T1=p.costuras[0].t,T2=p.costuras[1].t;
+const ordenEsc2=['#cap-r3','#tile2'].map(entra);if(ordenEsc2.some((t,i)=>i&&t<=ordenEsc2[i-1]))fail('orden de entrada de la escena 2: «mirá la foto» → «misma pose, ventana, taza»');
+// Beats (v2): A «con esa foto» (escena 2, sobre las dos caras) → B «con las otras 7» (llega con la escena 3, K4 a pantalla completa) → C «casi copia» → CTA. Un solo beat por vez.
+const tA=entra('#beat-a'),tC=entra('#beat-c'),evB=p.eventos.find(e=>e.selector==='#beat-b'&&!e.entrada&&!e.salida&&e.voz);
+if(!evB||evB.t!==T2)fail('el beat B llega con la escena 3: debe tener su evento (con voz) en el mismo instante que el segundo empuje');
+if(!(tA<T2-PUSH&&T2<tC&&tC<tCta))fail(`orden de los beats: A (${tA} s) antes del segundo empuje (${T2-PUSH} s) → B llega a ${T2} s → C (${tC} s) → CTA (${tCta} s)`);
+for(const [salida,entrada,que] of [[['#cap-k4','#cap-r3','#tile2'].map(sale),tA,'los textos de la escena 2 ceden el lugar al beat A'],[[sale('#beat-b')],tC,'el beat B cede el lugar al beat C'],[[sale('#beat-c')],tCta,'el beat C cede el lugar al CTA']])
+ for(const t of salida){const d=Math.round((entrada-t)/FR);if(d<1||d>2)fail(`una idea por vez: ${que} (la salida debe empezar 1 o 2 cuadros ANTES de la entrada; hay ${d})`)}
+if(p.lienzo.duracion-tCta<2.6-1e-9)fail(`CTA: entra a ${tCta} s y queda ${(p.lienzo.duracion-tCta).toFixed(3)} s en pantalla; mínimo 2,6 s`);
 for(const c of p.costuras)if(Math.abs(c.t*24-Math.round(c.t*24))>1e-9)fail(`la costura ${c.t} no cae en un cuadro`);
 for(const e of p.eventos)if(Math.abs(e.t*24-Math.round(e.t*24))>1e-9)fail(`el evento ${e.selector} a ${e.t} s no cae en un cuadro`);
-{let prev=0,max=0;for(const e of p.eventos){max=Math.max(max,e.t-prev);prev=e.t}max=Math.max(max,p.lienzo.duracion-prev);if(max>2+1e-6)fail(`hueco entre eventos de ${max.toFixed(3)} s (máximo 2,0 s)`)}
-same(p.escenas.map(e=>[e.id,e.a,e.b]),[['s1',0,p.costuras[0].t],['s2',p.costuras[0].t-0.25,p.costuras[1].t],['placa',p.costuras[1].t-0.25,p.lienzo.duracion]],'escenas contra costuras (cada escena arranca en T−6 cuadros y la saliente dura hasta T)');
-for(const [id,v] of Object.entries({rotulo:L.rotulo,titulo:L.titulo,dato:L.dato,cap:L.cap,tile2:L.tile2,fila_a:L.fila_a,cta:L.cta}))if(v<292||v>1490)fail(`${id}: y ${v} fuera de la zona segura 292-1490`);
+{let prev=0,max=0;for(const e of [...p.eventos].sort((a,b)=>a.t-b.t)){max=Math.max(max,e.t-prev);prev=e.t}max=Math.max(max,p.lienzo.duracion-prev);if(max>2+1e-6)fail(`hueco entre eventos de ${max.toFixed(3)} s (máximo 2,0 s)`)}
+same(p.escenas.map(e=>[e.id,e.a,e.b]),[['s1',0,T1],['s2',T1-PUSH,T2],['s3',T2-PUSH,p.lienzo.duracion]],'escenas contra costuras (cada escena arranca en T−6 cuadros y la saliente dura hasta T)');
+same(p.escenas.map(e=>e.fotos),[['k4'],['k4','r3'],['k4']],'fotos por escena (K4 a pantalla completa · K4|R3 lado a lado · K4 a pantalla completa): la cara de Lucía está a la vista en toda la pieza, no un fondo negro');
+// Tipografía (v2): nada bajo 40 px; rótulo, título y dato ≥ 44; subtítulos de la escena 2, beats y CTA ≥ 48 (la etiqueta del beat ≥ 56, que cabe)
+const L=p.layout,TY=p.tipografia;
+for(const [k,min] of Object.entries({rotulo_px:TY.general,titulo_px:TY.general,dato_px:TY.general,cap_px:TY.grandes,tile2_px:TY.grandes,beat_px:56,beat_c_px:56,cta_px:56})){
+ if(!(L[k]>=TY.absoluto))fail(`${k}: ${L[k]} px; nunca bajo ${TY.absoluto} px`);
+ if(!(L[k]>=min))fail(`${k}: ${L[k]} px; mínimo ${min} px a 1080 de ancho (texto < 48 px: no se lee en el celular)`)}
+for(const [id,v] of Object.entries({rotulo:L.rotulo,titulo:L.titulo,dato:L.dato,cap:L.cap,tile2:L.tile2,beat:L.beat,cta:L.cta}))if(v<292||v>1490)fail(`${id}: y ${v} fuera de la zona segura 292-1490`);
 if(!/#cta\{[^}]*text-wrap:\s*balance/.test(read('scripts/estilos.css')))fail('#cta debe llevar text-wrap: balance (sin «prueba.» huérfana)');
 // ── 6. Geometría: encuadre de cada foto, caras y aros llevados al lienzo ────────────────────────────────────────────────────────────────────────────────────
 const PN=p.paneles,sK=PN.w/p.fotos.k4.ancho,sR=PN.h/p.fotos.r3.alto;
@@ -174,9 +188,16 @@ const carasPath=path.join(P,'qa/caras-fotos.json');if(!fs.existsSync(carasPath))
 const caras=JSON.parse(fs.readFileSync(carasPath,'utf8')).fotos;
 if(caras.k4.cara_px!==D.cara_px)fail(`cara de K4: ${caras.k4.cara_px} px medidos ≠ ${D.cara_px} de la medición publicada`);
 const R1=n=>Math.round(n*10)/10;
-const caraLienzo={s1:[[...caras.k4.caja].map((v,i)=>R1(i%2?v*sCover-dyCover:v*sCover-dxCover))],
- s2:[caras.k4.caja.map((v,i)=>R1(i%2?v*geo.k4.s+PN.y:v*geo.k4.s+geo.k4.left+geo.k4.x0)),caras.r3.caja.map((v,i)=>R1(i%2?v*geo.r3.s+PN.y:v*geo.r3.s+geo.r3.left+geo.r3.x0))],placa:[]};
-for(const b of caraLienzo.s2){if(b[0]<0||b[2]>1080||b[1]<PN.y||b[3]>PN.y+PN.h)fail('la cara de un panel queda cortada por el encuadre')}
+const cajaCover=caras.k4.caja.map((v,i)=>R1(i%2?v*sCover-dyCover:v*sCover-dxCover));
+const cajasPanel=[caras.k4.caja.map((v,i)=>R1(i%2?v*geo.k4.s+PN.y:v*geo.k4.s+geo.k4.left+geo.k4.x0)),caras.r3.caja.map((v,i)=>R1(i%2?v*geo.r3.s+PN.y:v*geo.r3.s+geo.r3.left+geo.r3.x0))];
+const caraLienzo=Object.fromEntries(p.escenas.map(sc=>[sc.id,sc.fotos.length===0?[]:sc.fotos.length===1?[cajaCover]:cajasPanel]));
+for(const b of cajasPanel){if(b[0]<0||b[2]>1080||b[1]<PN.y||b[3]>PN.y+PN.h)fail('la cara de un panel queda cortada por el encuadre')}
+// v2: la cara de Lucía a la vista MÁS DE LA MITAD del tiempo (muestreo cada 0,5 s, cara ≥ 200 px en el lienzo; objetivo ≥ 85 %). Predicción del plan: una escena cuenta cuando está en reposo (fuera de los empujes);
+// el gate cara-visible.mjs lo MIDE después en el master con SCRFD.
+const CV=p.cara_visible,caraFraccion=(()=>{const N=Math.floor(p.lienzo.duracion/CV.muestreo+1e-9),reposo=[[0,T1-PUSH,'s1'],[T1,T2-PUSH,'s2'],[T2,p.lienzo.duracion,'s3']];let con=0;
+ for(let k=0;k<N;k++){const t=k*CV.muestreo,r=reposo.find(([a,b])=>t>=a-1e-9&&t<=b+1e-9);if(r&&(caraLienzo[r[2]]??[]).some(c=>c[2]-c[0]>=CV.min_px))con++}return {con,N,f:con/N}})();
+if(!(caraFraccion.f>CV.minimo))fail(`Cara visible ${caraFraccion.con}/${caraFraccion.N} muestras (${(caraFraccion.f*100).toFixed(0)} %): debe ser MÁS de la mitad del tiempo (mínimo ${CV.minimo*100} %)`);
+if(caraFraccion.f<CV.objetivo)fail(`Cara visible ${caraFraccion.con}/${caraFraccion.N} muestras (${(caraFraccion.f*100).toFixed(0)} %): el objetivo es ≥ ${CV.objetivo*100} %`);
 const aroSvg=(a,foto)=>{const g=geo[foto],q=a[foto],px=v=>R1(v*g.s),X=v=>R1(v*g.s+g.left),Y=v=>R1(v*g.s);
  const id=`aro-${a.id}-${foto}`,ds=`pathLength="${p.aro_len}"`;
  const shape=q.tipo==='elipse'?`<ellipse id="${id}" cx="${X(q.cx)}" cy="${Y(q.cy)}" rx="${px(q.rx)}" ry="${px(q.ry)}" ${ds}/>`:`<rect id="${id}" x="${X(q.x)}" y="${Y(q.y)}" width="${px(q.w)}" height="${px(q.h)}" rx="14" ${ds}/>`;
@@ -193,53 +214,49 @@ for(const a of p.aros)for(const f of ['k4','r3'])aroSvg(a,f); // valida cada aro
  if(p.aros.some((a,i)=>i&&a.t<=p.aros[i-1].t))fail('los aros entran en orden: pose → ventana → taza (como lo dice el texto)')}
 // ── 7. Salida: copiar fuentes locales y fotos (se ignoran en git), construir el HTML ──────────────────────────────────────────────────────────────────────────
 fs.mkdirSync(path.join(P,'assets/fonts'),{recursive:true});fs.mkdirSync(path.join(P,'qa'),{recursive:true});
-for(const name of ['BricolageGrotesque-var-latin.woff2','DMSans-var-latin.woff2','SplineSansMono-var-latin.woff2']){
+for(const name of ['BricolageGrotesque-var-latin.woff2','DMSans-var-latin.woff2']){
  const source=path.join(FONTS,name),dest=path.join(P,'assets/fonts',name);
  if(!fs.existsSync(source))fail(`Falta fuente local de marca ${source}; no se descarga.`);
  fs.copyFileSync(source,dest);
 }
-// K4 se usa dos veces (pantalla completa y panel): el segundo nombre es un enlace al mismo archivo, para que HyperFrames no marque dos <img> iguales (duplicate_media_discovery_risk)
-for(const [k,f,dest] of [['k4',p.fotos.k4,f_k4()],['k4',p.fotos.k4,'assets/k4-panel.png'],['r3',p.fotos.r3,f_r3()]]){const out=path.join(P,dest);if(!fs.existsSync(out)||sha(out)!==f.sha256){try{if(fs.existsSync(out))fs.unlinkSync(out);fs.linkSync(fotosOk[k],out)}catch{fs.copyFileSync(fotosOk[k],out)}}}
-function f_k4(){return p.fotos.k4.archivo}function f_r3(){return p.fotos.r3.archivo}
+// K4 se usa tres veces (pantalla completa de la escena 1, panel de la escena 2 y pantalla completa de la escena 3): cada uso lleva su propio nombre, enlace al mismo archivo, para que HyperFrames no marque <img> iguales (duplicate_media_discovery_risk)
+const K4S3='assets/k4-s3.png';
+for(const [k,f,dest] of [['k4',p.fotos.k4,p.fotos.k4.archivo],['k4',p.fotos.k4,'assets/k4-panel.png'],['k4',p.fotos.k4,K4S3],['r3',p.fotos.r3,p.fotos.r3.archivo]]){const out=path.join(P,dest);if(!fs.existsSync(out)||sha(out)!==f.sha256){try{if(fs.existsSync(out))fs.unlinkSync(out);fs.linkSync(fotosOk[k],out)}catch{fs.copyFileSync(fotosOk[k],out)}}}
 const e=s=>s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
 const tiles=[],ocultos=[];
 const entradas=new Set(p.eventos.filter(x=>x.entrada).map(x=>x.selector.slice(1)));
+// los textos que se CRUZAN con otro durante 2-3 cuadros al ceder el lugar (fundido de 0,1 s) se marcan: el cruce es intencional, no un solape
+const cruzan=new Set(p.eventos.filter(x=>x.salida||['#beat-a','#beat-c','#cta'].includes(x.selector)&&x.entrada).map(x=>x.selector.slice(1)));
 const tile=({id,clip,y,size,cls,html,text,x=80,w=920,extra=''})=>{tiles.push({id,text,y,size,card:cls.includes('card'),clip,x,w});const oc=entradas.has(id);if(oc)ocultos.push(id);
- return `<div id="${id}" class="texto ${cls}${oc?' oculto':''}" style="top:${y}px;${x!==80||w!==920?`left:${x}px;width:${w}px;`:''}font-size:${size}px${extra}">${html}</div>`};
+ return `<div id="${id}"${cruzan.has(id)?' data-layout-allow-overlap':''} class="texto ${cls}${oc?' oculto':''}" style="top:${y}px;${x!==80||w!==920?`left:${x}px;width:${w}px;`:''}font-size:${size}px${extra}">${html}</div>`};
 const plano=(id,clip,text,y,size,cls)=>tile({id,clip,y,size,cls,html:e(text),text});
+// Un beat de datos: UNA idea («etiqueta: afirmación») a pantalla ancha; la afirmación va al doble de la etiqueta (Bricolage). Todos ocupan la misma casilla (L.beat) debajo de la foto.
+const beat=(id,clip,txt,cls)=>{const i=txt.indexOf(': '),lb=txt.slice(0,i+1),num=txt.slice(i+2);return tile({id,clip,y:L.beat,size:L.beat_px,cls:`card beat ${cls}`,html:`<span class="lb">${e(lb)}</span><b class="num">${e(num)}</b>`,text:txt})};
+const fotoCompleta=(sc,src)=>sc.fotos.length===1?`<img id="foto-${sc.id}" class="foto-completa" src="${src}" alt="Imagen de Kling O1 Image (café con teclado)" data-layout-allow-overflow>`:'';
+const [sc1,sc2,sc3]=p.escenas;
 // Escena 1: el error en el cuadro 0 sobre la imagen a pantalla completa; la pila de texto va bajo el mentón (K4: mentón en y 803)
-const s1=plano('rotulo','s1',T.rotulo,L.rotulo,40,'')+plano('titulo','s1',T.titulo,L.titulo,66,'card titular')+plano('dato','s1',T.dato,L.dato,42,'card dato');
-// Escena 2: comparación lado a lado
+const s1=fotoCompleta(sc1,'assets/k4.png')+plano('rotulo','s1',T.rotulo,L.rotulo,L.rotulo_px,'')+plano('titulo','s1',T.titulo,L.titulo,L.titulo_px,'card titular')+plano('dato','s1',T.dato,L.dato,L.dato_px,'card dato');
+// Escena 2: comparación lado a lado (K4 | R3) con los aros, y al final el beat A sobre las dos caras
 const ca=(id,txt,x,txt2)=>tile({id,clip:'s2',y:L.cap,size:L.cap_px,cls:'card dato cap',html:txt2?`${e(txt)}<br>${e(txt2)}`:e(txt),text:txt2?`${txt} ${txt2}`:txt,x,w:440,extra:`;min-height:${Math.ceil(L.cap_px*1.1*2+24)}px`});
-const panel=(foto,src,ids)=>`<div id="panel-${foto}" class="panel" style="left:${geo[foto].x0}px;top:${PN.y}px;width:${PN.w}px;height:${PN.h}px"><img id="foto-${foto}" src="${src}" alt="${foto==='k4'?'Imagen de Kling O1 Image (café con teclado)':'R3, la foto de entrada'}" data-layout-allow-overflow style="left:${R1(geo[foto].left)}px;top:0px;width:${geo[foto].w}px;height:${geo[foto].h}px"><svg class="aro" id="aros-${foto}" width="${PN.w}" height="${PN.h}" viewBox="0 0 ${PN.w} ${PN.h}" aria-hidden="true">${p.aros.map(a=>aroSvg(a,foto)).join('')}</svg></div>`;
+const panel=(foto,src)=>`<div id="panel-${foto}" class="panel" style="left:${geo[foto].x0}px;top:${PN.y}px;width:${PN.w}px;height:${PN.h}px"><img id="foto-${foto}" src="${src}" alt="${foto==='k4'?'Imagen de Kling O1 Image (café con teclado)':'R3, la foto de entrada'}" data-layout-allow-overflow style="left:${R1(geo[foto].left)}px;top:0px;width:${geo[foto].w}px;height:${geo[foto].h}px"><svg class="aro" id="aros-${foto}" width="${PN.w}" height="${PN.h}" viewBox="0 0 ${PN.w} ${PN.h}" aria-hidden="true">${p.aros.map(a=>aroSvg(a,foto)).join('')}</svg></div>`;
 const s2=panel('k4','assets/k4-panel.png')+panel('r3','assets/r3.png')+`<div id="divisor" style="left:${PN.w-3}px;top:${PN.y}px;width:6px;height:${PN.h}px"></div>`
- +ca('cap-k4',T.cap_k4,80,T.cap_k4b)+ca('cap-r3',T.cap_r3,560)+plano('tile2','s2',T.tile2,L.tile2,44,'card nota');
-// Placa: tres filas sobre una escala 0 a 1. Revisión 1 (H1): el piso 0,70 es del PROMEDIO, así que solo se dibuja en la fila del promedio de las 4; las filas por foto no lo llevan.
-// La fila de las otras siete trae, detrás de sus siete puntos, la banda que dan entre sí las fotos oficiales (escala de referencia, de face-gate-v31.json).
-const pct=v=>`${(v*100).toFixed(1)}%`;
-const piso=`<i class="piso" style="left:${pct(D.piso)}"></i>`;
-const puntos=fotoN.filter(n=>n!==D.foto_copiada).map(n=>`<i class="pt" title="${n}" style="left:${pct(porFoto[n])}"></i>`).join('');
-const filaA=tile({id:'fila-a',clip:'placa',y:L.fila_a,size:L.fila_px,cls:'card fila a',html:`<div class="et">Con esa foto: <b class="n">${f2(r3n)}</b></div><div class="pista"><i class="fill"></i></div><div class="escala"><span class="e0">${T.escala_0}</span><span class="e1">${T.escala_1}</span></div>`,text:`${T.fila_a} ${T.escala_0} ${T.escala_1}`});
-const filaB=tile({id:'fila-b',clip:'placa',y:L.fila_b,size:L.fila_px,cls:'card fila b',html:`<div class="et">Con las otras siete: <b class="n">${f2(round(bot))} a ${f2(round(top))}</b></div><div class="pista"><i class="banda" style="left:${pct(pwMin)}"></i>${puntos}</div><div class="leyenda"><i class="sw"></i>${e(T.leyenda_oficiales)}</div>`,text:`${T.fila_b} ${T.leyenda_oficiales}`});
-const filaC=tile({id:'fila-c',clip:'placa',y:L.fila_c,size:L.fila_px,cls:'card fila c',html:`<div class="et">Promedio de las ${noRecibidas.length} que no recibió: <b class="n">${f2(Bn)}</b></div><div class="pista"><i class="fill"></i>${piso}</div><div class="escala"><span class="ep" style="left:calc(${pct(D.piso)} - 120px)">${T.escala_piso}</span></div>`,text:`${T.fila_c} ${T.escala_piso}`});
-const nota=tile({id:'nota-copia',clip:'placa',y:L.nota_copia,size:L.nota_px,cls:'card nota',html:e(T.nota_copia),text:T.nota_copia});
-const lec=tile({id:'leccion',clip:'placa',y:L.leccion,size:L.leccion_px,cls:'card titular',html:e(T.leccion),text:T.leccion});
-// El CTA no parte «cada semana,»: con text-wrap: balance queda «Seguime: cada semana, / una prueba.» (P9 H6)
-const cta=tile({id:'cta',clip:'placa',y:L.cta,size:66,cls:'card titular',html:e(T.cta).replace('cada semana,','<span class="nb">cada semana,</span>'),text:T.cta});
+ +ca('cap-k4',T.cap_k4,80,T.cap_k4b)+ca('cap-r3',T.cap_r3,560)+plano('tile2','s2',T.tile2,L.tile2,L.tile2_px,'card nota')+beat('beat-a','s2',T.beat_a,'a');
+// Escena 3: K4 a pantalla completa con el beat B (llega con la escena), el beat C y el CTA. El CTA no parte «cada semana,»: con text-wrap: balance queda «Seguime: cada semana, / una prueba.» (P9 H6)
+const cta=tile({id:'cta',clip:'s3',y:L.cta,size:L.cta_px,cls:'card titular',html:e(T.cta).replace('cada semana,','<span class="nb">cada semana,</span>'),text:T.cta});
 if(!cta.includes('class="nb"'))fail('el CTA debe contener «cada semana,» para el corte balanceado');
-const placaHtml=filaA+filaB+nota+filaC+lec+cta;
+const s3=fotoCompleta(sc3,K4S3)+beat('beat-b','s3',T.beat_b,'b')+tile({id:'beat-c',clip:'s3',y:L.beat,size:L.beat_c_px,cls:'card beat c',html:e(T.beat_c).replace('no prueba identidad.','<span class="nb">no prueba identidad.</span>'),text:T.beat_c})+cta;
+if(!s3.includes('<span class="nb">no prueba identidad.</span>'))fail('el beat C debe partirse «Casi copia: / no prueba identidad.» (no «Casi copia: no / prueba identidad.»)');
 const sc=p.escenas,win=(x)=>`data-start="${Math.floor(x.a*1e6)/1e6}" data-duration="${Math.ceil((x.b-x.a)*1e6)/1e6}"`;
-const barras=[{sel:'#fila-a .fill',t:cA.t,hasta:pct(r3),d:0.6},{sel:'#fila-b .banda',t:entra('#fila-b'),hasta:pct(pwMax-pwMin),d:0.45},{sel:'#fila-c .fill',t:entra('#fila-c'),hasta:pct(fK4.B),d:0.5}];
-const plan2={...p,ocultos,deslizan:ocultos.filter(i=>!['dato','cta'].includes(i)),aros_sel:p.aros.flatMap(a=>['k4','r3'].map(f=>`#aro-${a.id}-${f}`)).join(','),barras,puntos_sel:'#fila-b .pt',puntos_t:entra('#fila-b')+0.1};
+const plan2={...p,ocultos,deslizan:ocultos.filter(i=>!['dato','cta'].includes(i)),aros_sel:p.aros.flatMap(a=>['k4','r3'].map(f=>`#aro-${a.id}-${f}`)).join(',')};
 const html=`<!doctype html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=1080, height=1920"><title>Lucía viernes copia</title><style>${read('scripts/estilos.css')}</style></head><body>
 <div id="root" data-composition-id="main" data-start="0" data-duration="${p.lienzo.duracion}" data-width="1080" data-height="1920" data-fps="24">
-<div id="s1" class="clip escena" ${win(sc[0])} data-track-index="0"><img id="foto-s1" class="foto-completa" src="assets/k4.png" alt="Imagen de Kling O1 Image (café con teclado)" data-layout-allow-overflow>${s1}</div>
+<div id="s1" class="clip escena" ${win(sc[0])} data-track-index="0">${s1}</div>
 <div id="s2" class="clip escena" ${win(sc[1])} data-track-index="1">${s2}</div>
-<div id="placa" class="clip escena" ${win(sc[2])} data-track-index="2">${placaHtml}</div>
+<div id="s3" class="clip escena" ${win(sc[2])} data-track-index="2">${s3}</div>
 </div><script src="assets-fijos/vendor/gsap.min.js"></script><script>window.PLAN=${JSON.stringify(plan2)};window.__timelines=window.__timelines||{};${read('scripts/timeline.js')}</script></body></html>\n`;
 fs.writeFileSync(path.join(P,'index.html'),html);
 fs.writeFileSync(path.join(P,'qa/tiles.json'),JSON.stringify(tiles,null,1));
-fs.writeFileSync(path.join(P,'qa/caras-lienzo.json'),JSON.stringify({nota:'caja de la cara en el lienzo de 1080x1920 por escena: [x1,y1,x2,y2]; s1 = K4 a pantalla completa (cover), s2 = paneles K4 y R3',...caraLienzo},null,1));
+fs.writeFileSync(path.join(P,'qa/caras-lienzo.json'),JSON.stringify({nota:'caja de la cara en el lienzo de 1080x1920 por escena: [x1,y1,x2,y2]; s1 y s3 = K4 a pantalla completa (cover), s2 = paneles K4 y R3',...caraLienzo},null,1));
 fs.writeFileSync(path.join(P,'qa/build-status.json'),JSON.stringify({borrador:false,apto_master:true,fuentes:{...Object.fromEntries(Object.entries(p.fotos).map(([k,f])=>[k,{archivo:f.archivo,sha256:f.sha256}])),escala_oficiales:{archivo:path.relative(R,FG),sha256:sha(FG),pairwise_min:fgj.pairwise_min,pairwise_mean:fgj.pairwise_mean,max_fuera_diagonal:fuera}},voz:cr},null,2));
-console.log(`OK datos/pie/voz: ${cr.chars} caracteres de voz (cupo ${p.voz.max_caracteres}), cronograma ${cr.cuadros} cuadros = ${(cr.cuadros/24).toFixed(3)} s; CTA ${colaCta.toFixed(3)} s; parecido ${f2(A)} · con R3 ${f2(r3n)} · otras siete ${f2(round(bot))} a ${f2(round(top))} · sin las recibidas ${f2(Bn)} · oficiales entre sí ${f2(round(pwMin))} a ${f2(round(pwMax))} (promedio ${f2(round(pwMed))}); pie ${pieTxt.length} caracteres; 12 tiles de texto (${tiles.length})`);
+console.log(`OK datos/pie/voz: ${cr.chars} caracteres de voz (cupo ${p.voz.max_caracteres}), cronograma ${cr.cuadros} cuadros = ${(cr.cuadros/24).toFixed(3)} s; CTA ${colaCta.toFixed(3)} s; parecido ${f2(A)} · con R3 ${f2(r3n)} · otras siete ${f2(round(bot))} a ${f2(round(top))} · sin las recibidas ${f2(Bn)} · oficiales entre sí ${f2(round(pwMin))} a ${f2(round(pwMax))} (promedio ${f2(round(pwMed))}); pie ${pieTxt.length} caracteres; cara visible ${caraFraccion.con}/${caraFraccion.N} muestras (${(caraFraccion.f*100).toFixed(1)} %, predicción del plan); ${tiles.length} tiles de texto`);
 const rp=path.join(P,'README.md');if(fs.existsSync(rp)){let r=fs.readFileSync(rp,'utf8');r=r.replace(/<!-- ESTADO -->[\s\S]*?<!-- FIN ESTADO -->/,m=>!/BORRADOR/.test(m)?m:'<!-- ESTADO -->\nFuentes completas presentes; falta render y QA del master.\n<!-- FIN ESTADO -->');fs.writeFileSync(rp,r);}

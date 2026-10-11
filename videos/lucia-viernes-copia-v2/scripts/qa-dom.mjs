@@ -25,7 +25,8 @@ export async function samples(page){return page.evaluate((N)=>{
  for(const e of document.querySelectorAll('.texto')){const q=e.getBoundingClientRect();let opacity=1,n=e;while(n&&n!==document.body){const s=getComputedStyle(n);opacity*=+s.opacity;if(s.display==='none'||s.visibility==='hidden')opacity=0;n=n.parentElement;}
  const clip=e.closest('.clip'),t=f/24;if(clip&&(t<+clip.dataset.start-1e-5||t>=+clip.dataset.start + +clip.dataset.duration-1e-5))continue;
  if(opacity<.05||q.right<=0||q.left>=1080)continue;
- const cs=getComputedStyle(e);boxes.push({id:e.id,text:text(e),x:q.x,y:q.y,w:q.width,h:q.height,opacity,size:parseFloat(cs.fontSize),border:cs.borderLeftColor,clip:clip?.id,card:e.classList.contains('card')});}
+ const cs=getComputedStyle(e);let minSize=1e9;{const tw=document.createTreeWalker(e,NodeFilter.SHOW_TEXT);let nd;while(nd=tw.nextNode()){if(!/[\p{L}\p{N}]/u.test(nd.textContent))continue;minSize=Math.min(minSize,parseFloat(getComputedStyle(nd.parentElement).fontSize))}}
+ boxes.push({id:e.id,text:text(e),x:q.x,y:q.y,w:q.width,h:q.height,opacity,size:parseFloat(cs.fontSize),minSize,border:cs.borderLeftColor,clip:clip?.id,card:e.classList.contains('card')});}
  output.push({f,t:f/24,boxes});}
  return output;
  },plan.lienzo.cuadros);}

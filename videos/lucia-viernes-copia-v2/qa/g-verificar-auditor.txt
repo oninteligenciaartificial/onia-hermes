@@ -1,0 +1,1 @@
+Reporte acumulativo: cinco fallos independientes conservados; letras pequeñas rechazadas; EXIT 0

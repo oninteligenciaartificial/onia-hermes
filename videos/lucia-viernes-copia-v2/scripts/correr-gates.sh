@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Corre los gates de la pieza en orden y deja cada exit code en qa/RESUMEN-gates.txt. Uso (desde videos/lucia-viernes-copia-v2/): bash scripts/correr-gates.sh [--master]
-#   sin --master: build, master-ready, voz, retemporizar, ventanas, hueco-tarjetas, eventos, aire, costuras, medir-dom, layout-dom, grep-prohibidas, lucia-prohibidas, mutaciones, verificar-auditor, hyperframes check
-#   con --master: además los de píxeles del master (psnr-fotos, vacios, aire)
+#   sin --master: build, master-ready, voz, retemporizar, ventanas, hueco-tarjetas, eventos, aire, costuras, medir-dom, layout-dom, grep-prohibidas, lucia-prohibidas, mutaciones, verificar-auditor, negativas-dom, hyperframes check
+#   con --master: además los de píxeles del master (psnr-fotos, vacios, aire), la zona segura en píxeles y la CARA VISIBLE (cara-visible: SCRFD sobre el master; necesita FACE_GATE_HOME con el venv del face-gate)
 export PRODUCER_HEADLESS_SHELL_PATH=/opt/pw-browsers/chromium HYPERFRAMES_SKIP_SKILLS=1 PLAYWRIGHT_MODULE=/opt/node-tools/node_modules/playwright
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 R=qa/RESUMEN-gates.txt; : > "$R"; MAL=0
@@ -17,9 +17,12 @@ node -e "const p=require('./plan.json');require('fs').writeFileSync('qa/pantalla
 g lucia-prohibidas node /home/user/onia-hermes/scripts/lucia-prohibidas.mjs pie.txt guion-voz.txt qa/pantalla.txt
 g validar-mutaciones node scripts/validar-mutaciones.mjs
 g verificar-auditor node scripts/verificar-auditor.mjs
+g negativas-dom node scripts/negativas-dom.mjs
 g hyperframes-check flock /tmp/hf-render.lock npx --prefer-offline -y hyperframes@0.8.142 check
 cp qa/g-hyperframes-check.txt qa/hyperframes-check.txt
 if [ "${1:-}" = "--master" ]; then
  for m in psnr-fotos vacios aire; do g pixeles-$m node scripts/pixeles.mjs $m; done
+ g zona-segura-pixeles node scripts/zona-segura-pixeles.mjs
+ g cara-visible node scripts/cara-visible.mjs
 fi
 cat "$R"; exit $MAL

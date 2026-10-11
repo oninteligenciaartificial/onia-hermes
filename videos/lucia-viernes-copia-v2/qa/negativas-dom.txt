@@ -1,0 +1,13 @@
+Pruebas negativas del DOM (v2): cada alteración de index.html tiene que hacer fallar su gate (exit ≠ 0); después se restaura el index.html y se comprueba el md5.
+md5 del index.html bueno: 0b0ef516089e79fdc4c7ce8098da474a
+RECHAZADA · layout-dom exit 1 · una BARRA del gráfico en la pantalla (la marca del piso 0,70 dentro del beat B) · Error: El gráfico de la v1.1 volvió al DOM: piso
+RECHAZADA · grep-prohibidas exit 1 · «Promedio de las 4» como texto de un beat · Error: Prohibidas: pantalla: Promedio
+RECHAZADA · layout-dom exit 1 · la banda gris de las fotos oficiales en el DOM · Error: El gráfico de la v1.1 volvió al DOM: banda
+RECHAZADA · medir-dom exit 1 · la etiqueta del beat A a 40 px (< 48) · Error: 43 fallos DOM; lista completa en qa/medir-dom.txt y qa/medir-dom-fallos.json
+RECHAZADA · layout-dom exit 1 · un texto de la escena 2 a 36 px (< 40 absoluto) · Error: tile2: 36 px · DM Sans bajo el mínimo absoluto de 40 px
+RECHAZADA · medir-dom exit 1 · DOS IDEAS a la vez (el beat C siempre visible sobre el B) · Error: 224 fallos DOM; lista completa en qa/medir-dom.txt y qa/medir-dom-fallos.json
+RECHAZADA · layout-dom exit 1 · sin la cara de la escena 3 (la foto oculta: fondo negro de 8 a 15 s) · Error: foto-s3: la foto debe estar visible (hay una cara a la vista en toda la pieza); mide 0×0
+RECHAZADA · layout-dom exit 1 · sin la cara de la escena 1 (la foto oculta) · Error: foto-s1: la foto debe estar visible (hay una cara a la vista en toda la pieza); mide 0×0
+index.html restaurado (md5 0b0ef516089e79fdc4c7ce8098da474a) y layout-dom, medir-dom y grep-prohibidas vuelven a salir con exit 0.
+8 alteraciones rechazadas
+EXIT 0
