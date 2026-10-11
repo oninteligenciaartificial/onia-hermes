@@ -141,6 +141,26 @@ el script implementa el de septiembre y sale una versión. El sistema vigente en
 regla de «cuál molde» queda así: **panel con tarjetas propias** → Erik vigente; **captura oficial grande y cambios de
 layout** → Santiago.
 
+### Erik, 9 y 10-oct-2026 (medido el 11-oct): tres piezas nuevas
+
+Fuente: `hermes-content/references/video-intake/2026-10-11-erik-taveras-edicion.md` (3 TikToks bajados, 1080x1920;
+`scene`, OpenCV sobre el fondo, `silencedetect`, `ebur128`, hojas a 2 fps). **Candidatas:** 3 piezas de un canal que
+cambia de sistema cada 4-6 semanas (regla 14). No cambian `erik.json` ni `erik_edit.py`.
+
+| Qué | Regla (números medidos) |
+|---|---|
+| «Corte del vídeo» (E1, 10-oct, 48,3 s) | Tráiler de un largo de 8:41: chip de YouTube con **contador** (0:02 → 6:53 → 8:30 / 8:41) y **línea roja de progreso** (#FC0033) en la costura. **2 saltos de línea de tiempo** (13,33 s: 0:14→6:53; 44,17 s: 7:27→8:28) a mitad de frase, con el panel vacío 0,1-0,2 s. Cierra con la miniatura del largo + «▶ Vídeo completo en mi canal», 2,0 s sin voz. **Solo si la pieza ES un corte de un largo real** (regla 13): no se finge el contador |
+| Cámara | 0 cortes duros a umbral 0,30; plano más largo **30,84 s**. 3 zooms lentos de **×1,064-1,070, ~1,7 s** (6,47, 33,90 y 42,10 s), entrada ~0,4 s, salida ~0,3 s, sobre la cifra que se dice: variante suave de los ×1,12-1,15 de arriba |
+| Panel | Arriba 0-39 %, #0B0B0B. **~24-25 cambios en 48 s** (5,2 por 10 s); la captura de prueba dura 7 s y tiene zoom o scroll interno. Cada cifra entra con su palabra (±0,5 s): «55» a 28,4 s, «144» a 33,7 s, «24 GB» a 44,7 s |
+| Subtítulo | Minúscula y mayúscula, 3-4 palabras, ~37,5 % del alto (pegado sobre la costura). **Tres estados por palabra:** dicha blanca #F6F6F3, activa menta #60E3B3, por decir gris #C2C2C1; cuando el panel tiene a la entidad, la activa toma su color (Splash, salmón #D07D6B). En ONIA la activa es verde #10C26B y solo en el molde Erik |
+| Aire | **Regla 15.** E1 es la pieza más apretada: hueco máximo 0,30 s y 0 silencios de 0,3 s en 45,9 s de audio |
+
+**Se mira y no se copia:** E3 (POV de pantalla con la mano, 0 cortes, 8 silencios ≥0,3 s, subtítulo manuscrito, sin
+título ni CTA) y E2 como ritmo (camina, 11 huecos ≥0,3 s, 2,1 por 10 s). **Candidatos sin adoptar:** el color por
+concepto de E2 (n8n rosa, Claude Code naranja, Hermes violeta, y la palabra activa del subtítulo toma ese color) solo si
+`diseno-contenido-onia` lo permite dentro de verde, blanco y negro; y los gráficos anclados al torso (cámara siguiéndolo
+y rastreo de persona).
+
 ## Receta Rocha (@soyenriquerocha), medida el 8-oct-2026
 
 Fuente: `hermes-content/references/video-intake/2026-10-08-referente-enriquerocha.md` §4 (14 videos y 2 reels de IG
@@ -206,6 +226,24 @@ rinden 70 a 180 veces menos). Las tipografías son inferencia por captura: la fa
 
 **Prueba de uso:** la próxima pieza de recurso o showcase de la cola, una sola versión, con hojas a 2 fps del render
 medidas contra la ficha (píldora a ~54 %, titular solo en tesis, costura en degradado, cortes y capas por 10 s).
+
+**Adrien, 3 reels más (medido el 11-oct-2026).** Fuente:
+`hermes-content/references/video-intake/2026-10-11-adrien-ninet-edicion.md` (3 TikToks espejo de la misma cuenta,
+576x1024 a 720x1280, más recomprimidos que los de IG). Ahora son **7 reels de una cuenta: la receta sigue candidata.**
+- **Cortes duros por 10 s: 3,2 / 2,5 / 1,4.** El que baja a 1,4 (A3, 36 s) sostiene la cara **25,08 s sin un corte**
+  (8,6 a 33,6 s) con una tarjeta nueva cada ~2,5 s: regla 3 con número.
+- **Bloque «prueba + prompt + cara»** (A3): tarjeta blanca arriba (0-39 % del alto), barra con el prompt tecleado
+  (~39-48 %), cara abajo (~49-100 %); 10 tarjetas en 25 s; la cifra de cada una entra como contador de 0,3-0,5 s.
+- **Gancho con una cifra que corre:** de 1 a 250 000 $ en ~1,5 s (1,0 a 2,5 s) sobre lienzo gris claro #E8E8E8, con la
+  palabra clave en serif itálica («sued»). Las cifras de Adrien son sus claims: las de Onia se verifican y se citan.
+- **Reacción a un clip ajeno** (A2, 0-4,2 s; ya vista en R1: 2 de 7 reels): su cara grande, rótulo off-white «Is this
+  true?» en serif itálica a ~44-56 % del alto, el clip ajeno en una tarjeta abajo (~56-97 %). En Onia solo con permiso
+  o con un clip propio.
+- **Aire (regla 15):** su voz no pasa de 0,56 s de hueco; cuando el hueco es de 1,4-2,2 s suena una demo con una tarjeta
+  con la onda (3 veces en 65 s).
+- **CTA:** zoom de salto sobre la cara (a ojo ×1,4-1,8) con el CTA tecleado y la clave en itálica en los últimos 2,7 s
+  (A3), o tarjeta «Check the full video on YouTube» de 3,9 s con su cámara en PIP (A1). Ninguno se traslada literal: el
+  CTA de Onia es «Buscá PALABRA en Avisos».
 
 ## Receta Pablo (@pabloinpublic), para los repos de GitHub
 
@@ -283,6 +321,7 @@ Cada regla trae su caso. Lo que solo dijo Gemini no entra.
    Rocha, título en 0,0 s en 4 de 4 cuadros medidos; Erik, objeto con precio entre 0 y 1,5 s. Los 5 referentes cumplen.
 2. **Se corta todo silencio en las piezas con voz: pausa máxima 0,5 s.** Erik 0,24-0,44 s; Santiago 0,4-0,9 s; Rocha
    0,9-1,0 s de aire en 58-66 s. No se acelera la voz: se aprietan las pausas (regla de oro de `editor-videos` intacta).
+   **Desde el 11-oct el objetivo es ≤0,3 s: ver la regla 15.**
 3. **Capas, no cortes.** En la toma de cara alcanza con 0-2 cortes duros cada 10 s si entra algo nuevo cada 2-4 s.
    Caso: Rocha (0-2,1 por 10 s, hits de 87,9 mil y 466 mil) y Erik vigente (0 cortes de cámara, panel nuevo cada ~2 s).
    Se mide con `select='gt(scene,0.35)'` y muestreando el panel cada 2 s; un detector de escena no ve las capas.
@@ -320,8 +359,34 @@ Cada regla trae su caso. Lo que solo dijo Gemini no entra.
     publicados en TikTok y YouTube Shorts. El recorte se hace local (regla 1 de Higgsfield).
 14. **Copiar el método, no la plantilla.** Erik cambia de sistema visual cada 4-6 semanas (8 épocas medidas entre
     marzo y octubre) y Santiago cambió de subtítulo 3 veces en 6 meses: ninguno tiene una plantilla fija. La identidad de Sergio Urcullo (verde, blanco y negro) no rota.
+15. **Aire muerto: pausa ≤0,3 s entre frases y ningún hueco que se quede en silencio (11-oct-2026).** Origen: Sergio
+    Urcullo sobre el G1 de Lucía, «mucho espacio en silencio». Medido en 6 reels (3 de Erik del 9 y 10-oct, 3 de Adrien
+    del 6 y 7-oct); fichas `hermes-content/references/video-intake/2026-10-11-erik-taveras-edicion.md` y
+    `2026-10-11-adrien-ninet-edicion.md`.
+    - **Número:** el techo duro sigue en 0,5 s (regla 2) y **el objetivo es ≤0,3 s entre palabras de frases distintas**.
+      Lo más apretado: Erik 10-oct, hueco máximo entre palabras **0,30 s** y 0 silencios de 0,3 s con
+      `silencedetect=noise=-35dB:d=0.3` en 45,9 s de audio; Adrien 0,32 s (36 s) y 0,56 s (44 s). Lo flojo, que no se
+      copia: Erik 9-oct caminando (2,1 huecos ≥0,3 s por 10 s, máximo 0,64 s) y en POV (1,3 por 10 s, 8 silencios por
+      `silencedetect`).
+    - **Cómo se mide:** `silencedetect` (objetivo 0) **más** los huecos entre palabras del transcript con tiempos por
+      palabra (≤1 hueco de ≥0,3 s por 10 s). Whisper atrasa el final de la palabra hasta 0,4 s, así que el hueco medido
+      es una cota mínima. Si el audio tiene cama o piso por encima de -35 dB (Adrien: -32 a -34 dB), `silencedetect` no
+      ve nada y manda el transcript.
+    - **Lo que queda de hueco se llena así, en este orden:** (1) se corta, con un salto de cámara a mitad de frase
+      escondido en el instante en que el panel cambia (Erik: 2 en 46 s, con el panel vacío 0,1-0,2 s); (2) algo nuevo
+      entra cada ≤2,5 s (Erik 24-25 cambios de panel en 48 s; Adrien una tarjeta cada ~2,5 s y su cara 25 s sin un corte);
+      (3) si el hueco es una prueba con sonido (demo de voz, clip), el hueco ES la prueba: 1,4-2,2 s con una tarjeta con
+      la onda (Adrien, 3 veces en 65 s); (4) el único silencio de más de 1 s es la tarjeta final sin voz, de ≤2,5 s
+      (Erik: 2,35 s de video sin audio; la miniatura del largo ocupa los últimos ~2,0 s).
+    - **Para Lucía:** cortar cada pausa del audio a ≤0,3 s, esconder el salto bajo un cambio de panel o de capa, y no
+      dejarla quieta más de 2,5 s sin algo nuevo en pantalla. **Se prueba primero en Lucía G1 v2** (ver «Pruebas de
+      edición pendientes»).
 
 ## Pruebas de edición pendientes (9-oct-2026; no cambian las recetas medidas)
+- **11-oct: regla 15 (aire muerto) en Lucía G1 v2** (re-corte en curso por otro agente). Una sola versión; al terminar,
+  medir `silencedetect=noise=-35dB:d=0.3` (objetivo 0), los huecos entre palabras con tiempos por palabra (≤1 de
+  ≥0,3 s por 10 s, máximo 0,5 s) y hojas a 2 fps (algo nuevo cada ≤2,5 s), y anotar los números en la ficha
+  `2026-10-11-erik-taveras-edicion.md` §«Prueba de uso». No editar ese video fuera de su agente.
 - [Gemini, sin medir] Antes de probar estas reglas, medir el caso con MP4 y cuadros; detalle en «Pasada nocturna 9-oct (Gemini, 15 videos)» de las fichas.
 - 9-oct: al presentar una herramienta, probar el logo real junto al gesto, sin tapar cara; verificar si sigue la mano. Caso: https://www.tiktok.com/@soyenriquerocha/video/7694498139696418069, 1-5 s [Gemini, sin medir].
 - 9-oct: en una demo, probar un insert legible del clic/campo exacto mientras continúa la explicación; medir duración, sin SFX por defecto. Caso de plano detalle: https://www.tiktok.com/@imangadzhi/video/7693604235610492183, 13-14 s; cuenta por verificar [Gemini, sin medir].
