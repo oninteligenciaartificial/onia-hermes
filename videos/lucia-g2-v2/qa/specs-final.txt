@@ -5,7 +5,7 @@ height=1920
 color_space=bt709
 r_frame_rate=24/1
 duration=27.791667
-bit_rate=9201923
+bit_rate=9124595
 nb_frames=667
 nb_read_frames=667
 codec_name=aac
@@ -15,15 +15,15 @@ r_frame_rate=0/0
 duration=27.776000
 bit_rate=2279
 nb_frames=1303
-[Parsed_volumedetect_0 @ 0x5568711c9780] mean_volume: -91.0 dB
-[Parsed_volumedetect_0 @ 0x5568711c9780] max_volume: -91.0 dB
+nb_read_frames=1302
+[Parsed_volumedetect_0 @ 0x5643b67d6780] mean_volume: -91.0 dB
+[Parsed_volumedetect_0 @ 0x5643b67d6780] max_volume: -91.0 dB
 --- preview 360p (codec,ancho,alto,fps,duración,cuadros leídos; una línea por pista)
 h264,360,640,24/1,27.791667,667
-aac,0/0,27.776000,1302
-5be39413cd303cb38444ee76b4017c0099dbe207f4aa3a5f80661cef5db2bdbd  out/g2-v2-final-1080x1920.mp4
-e2ae6664b9f0074fe95655e74e3c525056cb6f6883bee2c8254d0cc6f4038d9e  qa/g2-v2-preview-360p.mp4
+b7f07e179bc7758740f748b865e7a24a88f197c6a104c748ea913e74d0a24229  out/g2-v2-final-1080x1920.mp4
+142c46996d5495f61209e24a8bd9aad3186a7736a4b25e3e93afb89ef954f0ab  qa/g2-v2-preview-360p.mp4
 --- crudo de HyperFrames (renders/final-raw.mp4, solo video, sin pista de audio)
-52e8f426f6dcc2a2ede24fc855d5e4609b495bd1ab68bc76446b0f936423fe3e  renders/final-raw.mp4
+0d5a2d6e1335bd17462ef8813432c709d129415eafce98c774119635eea8cc63  renders/final-raw.mp4
 --- index.html (de donde salió el render)
-0405f4388585cfc6dbe22c0f064bfbda  index.html
-c16cef6a271ea3cec16f93c5017b7dbe  plan.resuelto.json
+ca9476c5536c590e376a6d21b0cfde5b  index.html
+047227d4f062455474e87fedb0fdfe28  plan.resuelto.json

@@ -69,19 +69,21 @@ Layout
         Fix: Move the text inward, reduce its size, or mark intentional off-canvas animation with data-layout-allow-overflow.
   ℹ t=10.808s canvas_overflow #c6 > div:nth-of-type(1) > div:nth-of-type(2) > b:nth-of-type(1) inside #root overflowed right 561.97px "6 créditos" — Text extends outside the composition canvas.
         Fix: Move the text inward, reduce its size, or mark intentional off-canvas animation with data-layout-allow-overflow.
+  ℹ t=13.896s canvas_overflow #fgt-m5 inside #root overflowed right 880.02px "recibió 4 de las 8 fotos con que se mide" — Text extends outside the composition canvas.
+        Fix: Move the text inward, reduce its size, or mark intentional off-canvas animation with data-layout-allow-overflow.
   ℹ t=13.896s canvas_overflow #c7 > div:nth-of-type(1) > div:nth-of-type(2) inside #root overflowed right 769.55px "Kling · 6 créditos" — Text extends outside the composition canvas.
         Fix: Move the text inward, reduce its size, or mark intentional off-canvas animation with data-layout-allow-overflow.
   ℹ t=13.896s canvas_overflow #c7 > div:nth-of-type(1) > div:nth-of-type(2) > span:nth-of-type(1) inside #root overflowed right 429.64px "O3" — Text extends outside the composition canvas.
         Fix: Move the text inward, reduce its size, or mark intentional off-canvas animation with data-layout-allow-overflow.
   ℹ t=13.896s canvas_overflow #c7 > div:nth-of-type(1) > div:nth-of-type(2) > b:nth-of-type(1) inside #root overflowed right 658.77px "solo referencias" — Text extends outside the composition canvas.
         Fix: Move the text inward, reduce its size, or mark intentional off-canvas animation with data-layout-allow-overflow.
-  0 error(s), 0 warning(s), 5 info(s)
+  0 error(s), 0 warning(s), 6 info(s)
 
 Motion
   ◇ 0 errors, 0 warnings
 
 Contrast
-  ◇ 41/41 text checks pass WCAG AA
+  ◇ 42/42 text checks pass WCAG AA
 
 Snapshots
   ◇ disabled

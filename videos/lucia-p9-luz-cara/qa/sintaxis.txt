@@ -7,6 +7,7 @@ eventos.mjs: EXIT 0
 gates.mjs: EXIT 0
 grep-prohibidas.mjs: EXIT 0
 hueco-tarjetas.mjs: EXIT 0
+layout-dom.mjs: EXIT 0
 master-ready.mjs: EXIT 0
 medir-dom.mjs: EXIT 0
 pixeles.mjs: EXIT 0

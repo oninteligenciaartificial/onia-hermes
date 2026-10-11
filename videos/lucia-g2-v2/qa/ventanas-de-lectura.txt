@@ -1,4 +1,4 @@
-ventana legible medida en el DOM (opacidad ≥ 0,9 y ≥ 95 % dentro del lienzo), cuadro a cuadro: 12 tarjetas + 23 textos que no son tarjeta:
+ventana legible medida en el DOM (opacidad ≥ 0,9 y ≥ 95 % dentro del lienzo), cuadro a cuadro: 12 tarjetas + 25 textos que no son tarjeta:
   ok  c1        4 pal  0.00–1.75 s  1.75 s (pide 1.70, holgura +0.05)  «¿Quién pierde la cara?»
   ok  c2        4 pal  1.83–3.63 s  1.79 s (pide 1.70, holgura +0.09)  «Misma orden. Seis clips.»
   ok  c3        6 pal  3.67–6.63 s  2.96 s (pide 2.40, holgura +0.56)  «Se mide contra 8 fotos suyas.»
@@ -7,7 +7,7 @@ ventana legible medida en el DOM (opacidad ≥ 0,9 y ≥ 95 % dentro del lienzo)
   ok  c6        5 pal  10.92–13.92 s  3.00 s (pide 2.05, holgura +0.95)  «Seedance 2.0 Mini 6 créditos»
   ok  c7        6 pal  13.96–16.50 s  2.54 s (pide 2.40, holgura +0.14)  «Kling O3 · 6 créditos solo referencias»
   ok  c8        3 pal  16.58–18.13 s  1.54 s (pide 1.35, holgura +0.19)  «Inventó el cuarto.»
-  ok  c9        6 pal  18.17–20.67 s  2.50 s (pide 2.40, holgura +0.10)  «Con referencias, la cara se sostiene.»
+  ok  c9        6 pal  18.17–20.67 s  2.50 s (pide 2.40, holgura +0.10)  «Con referencias, aquí la cara aguantó.»
   ok  c10       4 pal  20.75–22.67 s  1.92 s (pide 1.70, holgura +0.22)  «Pero inventa la escena.»
   ok  c11       5 pal  22.75–24.88 s  2.13 s (pide 2.05, holgura +0.08)  «Una toma: es una prueba.»
   ok  c12       5 pal  24.92–27.79 s  2.88 s (pide 2.05, holgura +0.83)  «Seguime: cada semana, una prueba.»
@@ -20,11 +20,13 @@ ventana legible medida en el DOM (opacidad ≥ 0,9 y ≥ 95 % dentro del lienzo)
   ok  s-m3      3 pal  12.00–13.92 s  1.92 s (pide 1.35, holgura +0.57)  «bajo el piso»
   ok  dA-m5     4 pal  14.25–16.50 s  2.25 s (pide 1.70, holgura +0.55)  «parecido 0 s: 0,80»
   ok  dB-m5     3 pal  14.83–16.50 s  1.67 s (pide 1.35, holgura +0.32)  «5,9 s: 0,82»
-  ok  rf-l      7 pal  4.79–8.33 s  3.54 s (pide 2.75, holgura +0.79)  «5 de las 8 fotos de referencia»
+  ok  rf-l      6 pal  4.79–8.33 s  3.54 s (pide 2.40, holgura +1.14)  «5 de las 8 fotos suyas»
   ok  l-tit     8 pal  18.50–24.88 s  6.38 s (pide 3.10, holgura +3.28)  «Parecido al final: 3 de los 6 clips»
   ok  l-mkl     3 pal  18.46–24.92 s  6.46 s (pide 1.35, holgura +5.11)  «mi piso · 0,70»
   ok  l-nota    8 pal  20.17–24.88 s  4.71 s (pide 3.10, holgura +1.61)  «Final = segundo 5,9, que no se ve entero.»
-  ok  l-fuga    8 pal  19.75–24.88 s  5.13 s (pide 3.10, holgura +2.03)  «recibió 4 de las 8 fotos de puntaje»
+  ok  l-fuga   10 pal  19.75–24.88 s  5.13 s (pide 3.80, holgura +1.33)  «recibió 4 de las 8 fotos con que se mide»
+  ok  fg-gancho  6 pal  0.96–3.63 s  2.67 s (pide 2.40, holgura +0.27)  «0,82 recibió 4 de 8 fotos»
+  ok  fg-m5    10 pal  14.00–18.08 s  4.08 s (pide 3.80, holgura +0.28)  «recibió 4 de las 8 fotos con que se mide»
   ok  l-t1      3 pal  18.75–24.88 s  6.13 s (pide 1.35, holgura +4.78)  «Kling 3.0 std»
   ok  l-l1      2 pal  18.17–21.63 s  3.46 s (pide 1.00, holgura +2.46)  «foto sola»
   ok  l-m1      3 pal  21.83–24.88 s  3.04 s (pide 1.35, holgura +1.69)  «mantiene el cuarto»
@@ -34,4 +36,4 @@ ventana legible medida en el DOM (opacidad ≥ 0,9 y ≥ 95 % dentro del lienzo)
   ok  l-t3      2 pal  19.33–24.88 s  5.54 s (pide 1.00, holgura +4.54)  «Kling O3»
   ok  l-l3      1 pal  18.17–20.96 s  2.79 s (pide 0.65, holgura +2.14)  «referencias»
   ok  l-m3      3 pal  21.13–24.88 s  3.75 s (pide 1.35, holgura +2.40)  «inventó el cuarto»
-✔ las 35 ventanas medidas (12 tarjetas + 23 textos) alcanzan la regla de lectura; la menor holgura es 0.050 s
+✔ las 37 ventanas medidas (12 tarjetas + 25 textos) alcanzan la regla de lectura; la menor holgura es 0.050 s

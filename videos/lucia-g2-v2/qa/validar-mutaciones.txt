@@ -47,7 +47,7 @@ RECHAZADO correctamente · pie: sin el aviso «Nombro lo que uso…» (D-N1)
     ↳ pie.txt: falta el aviso «Nombro lo que uso; no es una recomendación pagada.» (D-N1)
 RECHAZADO correctamente · pie: cifra que no sale de los datos (0,72 → 0,73)
     ↳ pie.txt: falta «0,79 a 0,72» de Kling 3.0 std
-RECHAZADO correctamente · pie: cifra inventada que no sale de ningún dato (0,72 → 0,77 en el pie de Seedance 2.0 Mini)
+RECHAZADO correctamente · pie: cifra que no sale de ningún dato (0,64 → 0,66 en el pie de Seedance 2.0 Mini)
     ↳ pie.txt: la cifra 0,66 no sale de los datos del video ni de PROCEDENCIA
 RECHAZADO correctamente · pie: «Higgsfield» fuera (plataforma de los créditos)
     ↳ pie.txt: no dice la plataforma de los créditos («Higgsfield»)

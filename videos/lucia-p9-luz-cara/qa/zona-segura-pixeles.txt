@@ -1,21 +1,13 @@
-  0   0.00 s  pastillas  y 300-855
- 24   1.00 s  pastillas  y 301-855
- 40   1.67 s  pastillas  y 300-855
- 72   3.00 s  pastillas  y 300-1099
-120   5.00 s  pastillas  y 301-855
-137   5.71 s  pastillas  y 301-1098
-150   6.25 s  pastillas  y 1232-1297
-200   8.33 s  pastillas  y 1092-1439
-250  10.42 s  pastillas  y 1090-1439
-270  11.25 s  pastillas  y 1090-1439
-283  11.79 s  placa-contenido  y 300-783
-288  12.00 s  placa-contenido  y 300-991
-300  12.50 s  placa-contenido  y 300-1103
-330  13.75 s  placa-contenido  y 300-1103
-360  15.00 s  placa-contenido  y 300-1215
-400  16.67 s  placa-contenido  y 300-1215
-415  17.29 s  placa-contenido  y 300-1215
-424  17.67 s  placa-contenido  y 300-1427
-440  18.33 s  placa-contenido  y 300-1427
-479  19.96 s  placa-contenido  y 300-1427
-mínimo y=300  máximo y=1439  (regla: contenido entre 292 y 1490)
+Zona segura medida en PIXELES del master (barrido de los cuadros de la placa, 284-479 a 540x960; fondo = #11191b, umbral 10 niveles; precision +-2 px). Las pastillas sobre video se miden en el DOM (qa/layout-dom.txt, qa/medir-dom.txt: 0 fallos, y de 300 a 1440).
+284 11.83 s  placa-contenido  y 300-783  x 80-961
+288 12.00 s  placa-contenido  y 300-885  x 80-961
+300 12.50 s  placa-contenido  y 300-879  x 80-999
+330 13.75 s  placa-contenido  y 300-1161  x 80-999
+360 15.00 s  placa-contenido  y 300-1257  x 80-999
+400 16.67 s  placa-contenido  y 300-1257  x 80-999
+415 17.29 s  placa-contenido  y 300-1257  x 80-963
+424 17.67 s  placa-contenido  y 300-1453  x 80-999
+440 18.33 s  placa-contenido  y 300-1453  x 80-963
+479 19.96 s  placa-contenido  y 300-1453  x 80-963
+placa, cuadros 284-479: minimo y=300, maximo y=1453, x 80-999 (regla: contenido entre 292 y 1490; margen lateral 80 px: x 80-1000)
+EXIT 0
