@@ -1,7 +1,7 @@
 ---
 id: plataforma-U3b
 carril: plataforma
-estado: bloqueada
+estado: cancelada
 modelo: gpt-6.1-sol
 repo: onia-platform
 rama: codex/usted-pantallas-video
@@ -9,7 +9,7 @@ base: claude/optimistic-ride-1sp5fe
 pr:
 escrita: 2026-10-11 por Plataforma (session_01HhnFgkeF6nLGvjrfjt1o2C)
 actualizada: 2026-10-11 por Plataforma (session_01HhnFgkeF6nLGvjrfjt1o2C)
-nota: espera que U3 y F136 entren a master; Plataforma junta master en su rama y la pasa a pendiente
+nota: cancelada el 11-oct 06:40 UTC. Pedido de la madre DESARROLLO-INFRA: llevar a verde ya. Lo hizo Plataforma en `claude/optimistic-ride-1sp5fe`. Sacó de la rama `/agents` y los `agents-*.ts` que se ven ahí, que son de U3, y actualizó los 26 tests viejos. No se lanza a Codex
 ---
 # U3b · Las pantallas del video de venta (C1-C7) de usted: actualizar los tests que afirmaban el texto de vos
 
