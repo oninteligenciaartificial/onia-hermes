@@ -42,3 +42,11 @@ npx --offline hyperframes@0.8.65 render --quality draft --output prueba.mp4
 ```
 
 Revisar los seis tramos y los límites 2,5 / 9 / 16 / 23 / 26 s en preview antes de dar por aprobado el molde. La carpeta está lista para ese paso; no se operó git ni se publicó.
+
+## Correcciones del 11-oct
+
+- Se retiró el rótulo «PRUEBA DE EDICIÓN»; queda solo SERGIO URCULLO.
+- Las tarjetas del mosaico empiezan a los 23,05 s; duración 0,48 s y stagger 0,1 s sin cambios. Terminan a los 23,83 s, antes del caption (24,55 s) y del CTA (27,15 s).
+- CTA en dos renglones: «Asesoría gratis» / «Link en mi perfil», sin punto medio.
+
+Lint offline no validado: `npx --offline hyperframes@0.8.65 lint` falló con `ENOTCACHED`; la caché local consultada contiene 0.8.58 y 0.8.143, sin 0.8.65. No se instaló ni descargó nada. Render no validado visualmente: el navegador del sandbox no arranca (`spawn EPERM`). La madre debe renderizar en la PC y revisar el cuadro a 23,2 s para confirmar que las tarjetas ya están en pantalla. El molde sigue esperando la revisión de Sergio Urcullo; no usar en piezas ni publicar.
