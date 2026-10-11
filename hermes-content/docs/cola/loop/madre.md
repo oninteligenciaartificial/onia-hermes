@@ -150,6 +150,7 @@ chequeo de las 11:58 corrió 85 min tarde por eso). Al abrir una madre nueva se 
 
 ## E. Gestión (la madre)
 - [ ] E1 Billetera en cada ronda: % Codex (freno 80 %, refills solo al tope; reinicio 13-oct 23:57 La Paz), tokens 48 h por
+  **11-oct 02:20 UTC (v4):** Claude 463 M/24 h (Opus 72,9 %, Sonnet 22,6 %, Haiku 4,4 %); Codex 58 % semanal (reinicio 14-oct 03:57 UTC). Contexto madre v4 ≈ 390 k → relevo. `node scripts/billetera-tokens.mjs <id>`.
   modelo, sesiones paradas. Base 10-oct: 1.503 M tokens/48 h, Opus 58 %, Sonnet 41,5 %, Haiku 0,5 %.
 - [ ] E2 Handoff al día en `handoff/madre-local.md` antes de que la conversación se haga larga.
 

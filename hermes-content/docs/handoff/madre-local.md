@@ -9,7 +9,47 @@ párrafo describe el relevo del 5-oct.
 La madre saliente (`cfdce1bb…`, rama `claude/onia-sesion-madre-77f719`, worktree `infra-loops-revision-3fc7b1`) llevaba
 días abierta y su conversación costó ~777 M de tokens. **La madre nueva arranca de cero y lee solo esto.**
 
-## ▶ ARRANQUE de la madre v4 (texto para pegar, 10-oct 20 UTC)
+## ▶ ARRANQUE de la madre v5 (texto para pegar, 11-oct)
+
+> Sos la sesión MADRE de Onia, en la PC de Sergio Urcullo, y la única madre. Llamalo siempre «Sergio Urcullo».
+> Invocá `onia-router`, `equipo-de-agentes` y `onia-sesion-madre`. Leé SOLO: este bloque, el HANDOFF v4 de abajo y
+> `hermes-content/docs/cola/loop/madre.md` (el libro; versión más nueva en la rama `claude/arranque-nueva-madre-ba386e`
+> hasta que entre a main). **Tres objetivos:** (1) la 1.0 publicada y mirada, (2) una pieza por día, (3) ventas.
+> Paso 0: si la madre anterior sigue abierta, mandale «soltá tus CronCreate» y esperá su «soltó»; después recreá los 4
+> loops de la sección F del libro (CronCreate) y copiá los mods `madre-tablero` y `agentes-en-vivo` de
+> `C:/Users/PC/.claude/dev-mods/4ba4822c-…/` a la carpeta de mods de tu sesión, corrigiendo `LIBRO` y `SCRIPT` a tus rutas.
+> **Regla del 10-oct 20:25 UTC: todo lo que sale afuera (Lucía, contenido, pantallas nuevas) se le MUESTRA antes a
+> Sergio Urcullo** (captura o video real en el tablero + SendUserFile) y sale con su OK. Máx 2 frentes propios; respuestas
+> de 3 bloques; relevo antes de ~150 k tokens de contexto; no pushear a onia-platform de :20 a :10 en horas de publicación.
+
+## 🔁 HANDOFF v4 (madre `4ba4822c`, 10-oct 20:10 → 11-oct 02:20 UTC, rama `claude/arranque-nueva-madre-ba386e`)
+
+1. **Objetivo:** terminar y publicar (los 3 de arriba). **Cerrado y mirado:** #145 (logo «onia» en /book) y #114 (factura)
+   publicados 21:55 UTC (`release-d8ca5a32`, mirado en el navegador 01:18 UTC); las 6 migraciones de octubre estaban en
+   prod desde 19:21 UTC. Mergeados por orden de SU («mergeá vos»): hermes #187, #188 y platform #145.
+2. **Contenido:** Marca publicó K11 + historias 1-3 (10-oct, antes de la regla de mostrar). Lucía G1 con voz Marcela hecho
+   (`.madre-ver/lucia-g1-voz.mp4`, local, git-excluido; 320 caracteres de ElevenLabs, quedan 381 hasta el 13-oct 01:17
+   UTC; Whisper confirma el texto) y mostrado: espera «publicá G1 de Lucía». Carrusel «78h» (18-oct) mostrado: espera OK.
+3. **A medias:** decisión de SU sobre la propuesta de redes + comunidad (1 pieza + 3 historias por día; Avisos lun/mié/vie
+   con PALABRA; asesoría gratis 3/semana) · cal.com renombrar + link de la asesoría y de la comunidad en las bios (la
+   lámina 5 del 78h dice «link en mi perfil» y no está) · ¿Lucía separada de su comunidad y de Onia? · ¿mostrar y esperar
+   OK o solo mostrar? Hasta que conteste: esperar OK.
+4. **Archivos:** este handoff · `cola/loop/madre.md` (D4-D8, C9) · memoria `feedback-mostrar-antes-de-publicar` · mods en
+   `C:/Users/PC/.claude/dev-mods/4ba4822c-…/` · `C:/Users/PC/.claude/madre-capturas/`.
+5. **Intentos fallidos:** `git merge origin/main` en la rama de la madre frenado («Merge Without Review»): se lee con
+   `git show origin/main:<ruta>` · un `ls` local después de varias lecturas de prod frenado («Production Reads»): mirar prod
+   con el navegador integrado sirve para páginas públicas · los CronCreate no dispararon entre 21:09 y 01:15 UTC (la
+   sesión no estaba ociosa o la PC suspendida): la publicación de 21:50 se miró tarde · la ronda de las 01:33 empujó a Marca
+   por D5 que ya estaba hecho (mirar `--first-parent`, no solo el último commit de la rama).
+6. **Depende de Sergio Urcullo:** «publicá G1 de Lucía» · OK carrusel 78h · las 3 respuestas de redes/comunidad/Lucía ·
+   cal.com y bios · `aplicar` de Hermes (Q1) · tarjeta en ONIA Ads + US$56 (go/no-go mar 13-oct) · R2 (gasto).
+7. **Próximos pasos:** con su OK, publicar G1 (verificar antes el token de IG de Lucía, vence 13-18 oct) · lunes 12-oct
+   07-11 UTC Plataforma refresca la demo → capturas C1-C7 → destraba Ventas · Ventas: Biblioteca de Meta + campaña.
+   **Billetera 24 h (11-oct 02:20 UTC):** Claude 463 M (Opus 72,9 %, Sonnet 22,6 %, Haiku 4,4 %); Codex 58 % semanal,
+   reinicio 14-oct 03:57 UTC. **Contexto de la madre v4 ≈ 390 k: toca relevo.** Medición: `node scripts/billetera-tokens.mjs <id-de-la-madre>`
+   (suma `usage` por `message.id` en `~/.claude/projects/**/*.jsonl` de las últimas 24 h).
+
+## ▶ ARRANQUE de la madre v4 (historia; 10-oct 20 UTC)
 
 > Sos la sesión MADRE de Onia, en la PC de Sergio Urcullo, y la única madre. Llamalo siempre «Sergio Urcullo».
 > Invocá `onia-router`, `equipo-de-agentes` y `onia-sesion-madre`. Leé SOLO: este bloque, el HANDOFF v3 de abajo y
