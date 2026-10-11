@@ -811,7 +811,7 @@
   },
   {
    "id": "V9",
-   "que": "Quitada la nota «El programa solo compara caras.»; la llamada «Lo difuminé: lo inventó el motor.» ya está en la placa al llegar (ventana de 2,7 s) y el aro marca el letrero dos veces (cuando cae y cuando la voz dice «este lo difuminé»).",
+   "que": "Quitada la nota «El programa solo compara caras.»; la llamada «Lo difuminé: lo inventó el motor.» ya está en la placa al llegar (ventana de 2,6 s) y el aro marca el letrero dos veces: cuando cae y cuando la voz dice «inventados» (revisión 1: la línea de voz ya no dice «este lo difuminé»).",
    "revertir": "plan.json → r3.nota (G5) y r3.llamada.t"
   },
   {
@@ -863,6 +863,11 @@
    "id": "R1-aire",
    "que": "Eventos nuevos con sentido para que no quede aire fuera de la lectura al cambiar los tramos: la lupa de la razón 1 vuelve a marcar en «a ojo», la banda de la razón 2 destella en «este margen»; acentos de tarjeta sincronizados con la palabra de la voz (ancla en plan.rel).",
    "revertir": "plan.json → rel, r1.lupa_ping_t, r2.banda_ping_t; scripts/timeline.js"
+  },
+  {
+   "id": "R1-extra",
+   "que": "El acento de la tarjeta c5 («otra persona.») se enciende en CORAL (el color de lo que cae bajo el piso, como su caja y su pastilla), no en verde: en G4/G5 y en la v2 de la mañana el timeline lo encendía en verde, el color de lo que pasa. No lo pidió el revisor; el README ya lo documentaba como coral.",
+   "revertir": "scripts/timeline.js (color: c.bad ? BAD : ACC → ACC)"
   }
  ],
  "rel": {
