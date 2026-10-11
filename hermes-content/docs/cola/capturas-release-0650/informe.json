@@ -1,0 +1,83 @@
+{
+  "cuando": "2026-10-11T06:57:43.083Z",
+  "paginas": [
+    {
+      "ruta": "/login",
+      "vista": "390x844",
+      "status": 200,
+      "ms": 4559,
+      "titulo": "Onia | El sistema con IA que maneja su negocio en Bolivia",
+      "descripcion": "Plataforma con IA para negocios en Bolivia. Agenda, clientes, inventario, ventas listas para facturar, cobros por QR, reportes y agentes que le dejan listo cada mensaje para que usted lo apruebe — con módulos por rubro: clínicas dentales, comercio y más.",
+      "ogTitulo": "Onia | El sistema con IA que maneja su negocio en Bolivia",
+      "captura": "_login-390.png",
+      "errores": []
+    },
+    {
+      "ruta": "/login",
+      "vista": "1440x900",
+      "status": 200,
+      "ms": 4259,
+      "titulo": "Onia | El sistema con IA que maneja su negocio en Bolivia",
+      "descripcion": "Plataforma con IA para negocios en Bolivia. Agenda, clientes, inventario, ventas listas para facturar, cobros por QR, reportes y agentes que le dejan listo cada mensaje para que usted lo apruebe — con módulos por rubro: clínicas dentales, comercio y más.",
+      "ogTitulo": "Onia | El sistema con IA que maneja su negocio en Bolivia",
+      "captura": "_login-1440.png",
+      "errores": []
+    },
+    {
+      "ruta": "/register",
+      "vista": "390x844",
+      "status": 200,
+      "ms": 4198,
+      "titulo": "Onia | El sistema con IA que maneja su negocio en Bolivia",
+      "descripcion": "Plataforma con IA para negocios en Bolivia. Agenda, clientes, inventario, ventas listas para facturar, cobros por QR, reportes y agentes que le dejan listo cada mensaje para que usted lo apruebe — con módulos por rubro: clínicas dentales, comercio y más.",
+      "ogTitulo": "Onia | El sistema con IA que maneja su negocio en Bolivia",
+      "captura": "_register-390.png",
+      "errores": []
+    },
+    {
+      "ruta": "/offline.html",
+      "vista": "390x844",
+      "status": 200,
+      "ms": 3952,
+      "titulo": "Sin conexión · Onia",
+      "descripcion": null,
+      "ogTitulo": null,
+      "captura": "_offline_html-390.png",
+      "errores": []
+    }
+  ],
+  "recursos": [
+    {
+      "ruta": "/sw.js",
+      "status": 200,
+      "bytes": 3633,
+      "tipo": "application/javascript",
+      "menciona_offline": true
+    },
+    {
+      "ruta": "/manifest.json",
+      "status": 200,
+      "bytes": 1224,
+      "tipo": "application/json; charset=UTF-8",
+      "menciona_offline": false
+    },
+    {
+      "ruta": "/offline.css",
+      "status": 200,
+      "bytes": 2945,
+      "tipo": "text/css; charset=UTF-8",
+      "menciona_offline": false
+    },
+    {
+      "ruta": "/offline.js",
+      "status": 200,
+      "bytes": 483,
+      "tipo": "application/javascript; charset=UTF-8",
+      "menciona_offline": true
+    },
+    {
+      "ruta": "POST /api/webhooks/chatwoot/eventos (sin firma)",
+      "status": 503
+    }
+  ]
+}

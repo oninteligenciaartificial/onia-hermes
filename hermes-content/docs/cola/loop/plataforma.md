@@ -5,13 +5,13 @@ Orden: lo que destraba cobrar primero. Cada PR: **leer la revisión de Hermes** 
 - [x] #141 S1+S1b (IPv6 por /64): en producción desde el 9-oct 18:50 UTC (`release-c94b9daa`), mirado.
 - [x] #143 F1 (la letra dentro del sistema) y #142 U2+U2b (pago de usted): en producción desde el 10-oct 18:50 UTC (`release-21f0c7e6`), mirados a las 19:17 (el checkout con login lo mira la madre).
 - [x] #144 `/book` de usted: en producción desde el 10-oct 18:50 UTC, mirado a 390 y 1440.
-- [ ] #136 = las 5 pantallas: **mergeado** `282ae3ab` (11-oct 05:46 UTC, CI y secretos en verde; el árbol de master es idéntico al probado con 10.505 en verde). Sale a las 06:50 UTC. Falta MIRARLO sin login (release, `/offline.html`, `sw.js`, logs) y con login la madre. Entró con 2 HIGH de la revisión E3 de Hermes que no leí (caja: «1.500» = Bs 1,50 sin confirmar ni reabrir; borrar paciente borra sus caras): el arreglo es F136.
+- [x] #136 = las 5 pantallas: **en producción** desde el 11-oct a las 06:57 UTC (`release-a7d8c1ed`, healthy, 0 errores en el log). Mirado sin login: `/offline.html` propio («Sin conexión», de usted), `sw.js` nuevo con el cascarón, `offline.css`/`.js` servidos (antes devolvían HTML), `manifest.json` nuevo, el webhook de la bandeja responde 503 sin firma (antes 404: falta el secreto, falla cerrado) y `/book` sin errores desde el VPS. Con login (caja, bandeja, odontograma, agenda del día) lo mira la madre. Los 2 HIGH de Hermes van en F136. modelos: ninguno. codex: ninguno.
 - [ ] #140 widget W1-W1e + W1f (se presenta con el nombre de la clínica, bundle del 10-oct) + infra: origen solo para Cloudflare, bloquear `/public/api/` en Chatwoot y `hmac_mandatory` en los inboxes API. Espera el OK de diseño de Sergio Urcullo a W1f.
 - [x] #139 canal privado (punto 3): en producción desde el 10-oct 18:50 UTC, migración registrada a las 18:44. Falta solo MIRAR «En vivo» con login (madre).
 - [x] #114 factura (punto 15) y #145 logo de `/book`: en producción desde el 10-oct 21:55 UTC (`release-d8ca5a32`), mirados sin login (`/admin/payments` lo mira la madre).
 - [ ] #124 términos (punto 14, migración ya aplicada) y después #113 gracia C13 (actualizar `PlanClient.estado-real` y `vencimientos` al mergear): esperan el sí de Sergio Urcullo (legal).
 - [x] #118, #119, #110, #127, #129 y #130: GitHub los marcó mergeados al entrar #136 (05:46 UTC). #135 (apilado sobre #129) cerrado a mano como incluido.
-- [ ] #146 títulos públicos de usted: **mergeado** `a7d8c1ed` (05:47 UTC, Hermes: APROBAR). Sale a las 06:50 UTC con #136. Falta mirar el título de `/login`.
+- [x] #146 títulos públicos de usted: **en producción** con `release-a7d8c1ed` (06:57 UTC). Mirado: `/login` y `/register` dicen «…que maneja su negocio en Bolivia», a 390 y a 1440, sin errores. modelos: ninguno. codex: ninguno.
 - [x] Demo del lunes 12-oct (07-11 UTC): plan `reset=2` + lista C1-C7 → `cola/demo-venta-refresco.md` (11-oct). Correrlo pide el sí de Sergio Urcullo acá.
 - [ ] #132 K1 (respuesta al recordatorio): **después** según el corte (nadie lo llama hasta conectar el WhatsApp del negocio).
 - [ ] F136, los 2 HIGH de #136 (caja es-BO + confirmar y reabrir; caras como expediente): lo corre la madre en Codex Astra (`codex/f136-caja-odontograma`), PR después de las 07:10 UTC. Plataforma revisa con la revisión de Hermes, integra y mergea antes de las 09:20 para que salga a las 09:50. No se duplica.
@@ -32,4 +32,4 @@ Orden: lo que destraba cobrar primero. Cada PR: **leer la revisión de Hermes** 
 - SIAT etapa VI: el CAFC del piloto.
 
 ## Verificación de aprendizaje · 2026-10-09
-- [ ] En la próxima tarea técnica pertinente, cargar `equipo-de-agentes` y `aprender-de-todo`; usar la regla de contexto verificable de la ficha «cinco archivos antes de vibe code» y registrar sesión, fuentes canónicas, artefacto y prueba en esa ficha. No crear documentos duplicados ni abrir otro frente para demostrarlo.
+- [x] (11-oct, U3b: prueba de uso registrada en la ficha «cinco archivos») En la próxima tarea técnica pertinente, cargar `equipo-de-agentes` y `aprender-de-todo`; usar la regla de contexto verificable de la ficha «cinco archivos antes de vibe code» y registrar sesión, fuentes canónicas, artefacto y prueba en esa ficha. No crear documentos duplicados ni abrir otro frente para demostrarlo.

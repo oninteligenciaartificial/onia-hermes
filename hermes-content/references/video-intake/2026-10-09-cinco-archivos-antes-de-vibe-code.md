@@ -204,3 +204,23 @@ Ficha completa: 7/7 láminas, caption, metadatos locales, evidencia propia, siet
 Antes de producir: capturar los fragmentos indicados, con texto legible y sin datos privados. Antes de publicar: aprobar la pieza y poner el recurso ARCHIVOS en Avisos; comprobar el link del perfil. No se consultó la comunidad, así que su disponibilidad sigue sin verificar.
 
 PARA LA MADRE: tomar el mecanismo «nombre de archivo + función + prueba visible». La adaptación ya usa cinco entradas reales y el CTA de Avisos. No promete que la IA deje de fallar. Falta producción y verificar/publicar el recurso con el permiso correspondiente; no se tocó git.
+
+## Prueba de uso por sesión
+Estado: aplicado y verificado
+Sesión + fecha: Plataforma, `session_01HhnFgkeF6nLGvjrfjt1o2C`, 11-oct-2026, de 06:20 a 06:51 UTC.
+Tarea de cola: `hermes-content/docs/cola/loop/plataforma.md`, U3b: el usted de las pantallas del video, C1-C7.
+Regla usada: el contexto verificable antes del código, leído de las fuentes que ya existen:
+- `CLAUDE.md`: el usted con clientes y la ventana sin pushes;
+- la skill `onia-frontend` del producto: «Al dueño también de USTED» y «Seguir los imports»;
+- el handoff `onia-1.0-nube.md`: `f28e15af` con 38 rojos;
+- la tarea, con META, PRUEBA DE HECHO y REGLA DE PARADA: el contrato U3b y el de U3, leído para no pisar sus archivos.
+Artefacto: `onia-platform`, `claude/optimistic-ride-1sp5fe` `d8c486f5` (fast-forward de `eed467f2`).
+- 25 archivos.
+- El gate `__tests__/pantallas-del-video-de-usted.test.ts`.
+- La skill `onia-frontend`: «Lo que el trinquete no ve».
+Verificación:
+- `tsc` 0, suite completa 10.532 en verde y 0 rojos, eslint 0 sobre lo tocado.
+- El gate prueba que caza el texto del 11-oct.
+- Leer el contrato de U3 antes de codear evitó dos ramas con palabras distintas sobre los mismos archivos.
+- Revisor: el CI del PR y la revisión de Hermes, pendientes.
+Pendiente: nada de esta ficha; el PR y su revisión siguen en la cola.
