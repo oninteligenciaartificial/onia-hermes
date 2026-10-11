@@ -1,0 +1,14 @@
+{
+  "nombre": "G05-G06-verificacion",
+  "nota": "ESQUELETO para mirar las filas G-05 y G-06 (prueba1-v2/PLAN-VERIFICACION-G05-G06.md). Sin clics: no envía ni cambia nada. Los selectores son los textos que se ven en las capturas del 30-sep y hay que ajustarlos mirando la cuenta demo. Para la observación del cooldown se vuelve a correr con otra carpeta de salida DESPUÉS de que Plataforma dispare el agente una segunda vez. Las fotos traen el cursor.",
+  "vista": [1366, 900],
+  "pasos": [
+    { "ir": "/agenda" }, { "esperar": 1500 }, { "foto": "G06-agenda-manana" },
+
+    { "ir": "/agents" }, { "esperar": 1500 }, { "foto": "G05-G06-agents" },
+
+    { "ir": "/pending" }, { "esperar": 1500 },
+    { "mover": "text=Cita de mañana", "pausa": 500 }, { "esperar": 1200 }, { "foto": "G06-pending" },
+    { "mover": "text=Última visita", "pausa": 500 }, { "esperar": 1200 }, { "foto": "G05-pending" }
+  ]
+}
