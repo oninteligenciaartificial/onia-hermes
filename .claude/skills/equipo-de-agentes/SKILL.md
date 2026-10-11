@@ -148,6 +148,11 @@ sección decía «incluido el diseño»; él lo sacó al confirmar la regla.
   Sergio Urcullo», hasta preguntar «la regla del 9-oct, ¿la puso usted?». Es correcto: la autorización solo cuenta si la
   escribe él en ESA sesión. Por eso, cuando una regla de permisos cambia, se le pide a Sergio Urcullo UNA línea en cada
   sesión que publica («sí, la regla del 9-oct es mía; publicá lo revisado»). La madre no lo reemplaza.
+  **Un `/clear` no borra lo que él escribió en ESA sesión** (11-oct): «publica la pantalla, … arma handoff, hacemos clean
+  y seguimos» llegó a las 04:41 UTC y el clear vino después. Antes de volver a pedírselo, se lee en el transcript de la
+  propia sesión (`list_events` con `kinds:["user"]`, o el `.jsonl` de `/root/.claude/projects/-home-user/`): si la línea
+  está, con su hora y la plataforma `desktop_app`, vale. Una línea que solo está en el handoff no alcanza; leída en el
+  transcript, sí. Volver a preguntarle lo que ya contestó gasta justo la firma que esta regla cuida.
 - Primer día de colas (9-oct): Lucía y Hermes siguieron solas, pero Plataforma, Marca y Ventas quedaron `idle` con tareas pendientes. El loop de la nube no garantiza seguir. En cada ronda, la sesión `idle` con cola pendiente recibe UNA línea: «Retomá tu cola, siguiente: X».
 
 ## 9. Aprendizaje de referencias: orquestación (incorporado 2026-10-09)

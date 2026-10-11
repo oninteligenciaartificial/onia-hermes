@@ -77,12 +77,14 @@ la dirección de Sergio Urcullo.
 
 | Qué | Dónde | Cómo se retoma |
 |---|---|---|
-| **Las 5 pantallas** (bandeja v3, app sin internet, agenda del día, odontograma, caja) | **#136**, cabeza `1fd14770` en `claude/optimistic-ride-1sp5fe`. Junta #136 + #118 `a8b31bfd` + #119 `a6484bca` + `i110-v3` + `master` `d8ca5a32`. Suite local 10.501 en verde, CI corriendo desde 04:46 UTC | **Sergio Urcullo escribió en esta sesión, el 11-oct ~04:40 UTC: «publica la pantalla».** El clear de las ~05:00 UTC la sacó del contexto y una línea que solo queda en el handoff no es permiso: se le pidió otra vez a las 05:20 UTC. Con su línea y CI verde, marcar #136 listo y mergear fuera de :20-:55; sale en el cron siguiente. #118, #119, #110 y #130 quedan mergeados con él. Después: `scripts/chatwoot-webhook-eventos.mjs` en el VPS, recrear el contenedor y mirar un WhatsApp de prueba llegar a `/inbox` en menos de 2 s. Mirar sin login (logs, públicas); con login, la madre |
+| **Las 5 pantallas** (bandeja v3, app sin internet, agenda del día, odontograma, caja) | **#136**, cabeza `1fd14770` en `claude/optimistic-ride-1sp5fe`. Junta #136 + #118 `a8b31bfd` + #119 `a6484bca` + `i110-v3` + `master` `d8ca5a32`. Suite local 10.501 en verde, CI corriendo desde 04:46 UTC | **Sergio Urcullo escribió en esta sesión, el 11-oct ~04:40 UTC: «publica la pantalla».** Hubo dos clear (05:09 y 05:15 UTC); la línea se verificó en el transcript de esta sesión (`list_events`, 04:41:42 UTC, `desktop_app`) y vale: él escribió «hacemos clean y seguimos». CI de `1fd14770` en verde a las 05:25 UTC. Con CI verde, marcar #136 listo y mergear fuera de :20-:55; sale en el cron siguiente. #118, #119, #110 y #130 quedan mergeados con él. Después: `scripts/chatwoot-webhook-eventos.mjs` en el VPS, recrear el contenedor y mirar un WhatsApp de prueba llegar a `/inbox` en menos de 2 s. Mirar sin login (logs, públicas); con login, la madre |
 | **Títulos públicos de usted** | **#146** (`fix/titulos-de-usted`, `b0e021f2`), draft, CI en cola | Con CI verde: marcar listo y mergear (son textos, no esperan a nadie). Probado junto con #136 en un árbol mezclado (11-oct 04:54 UTC): sin conflictos, `tsc` 0 y 10.505 tests en verde |
 | Arreglo de versión de #124 | `plataforma-listas-20261010.bundle`, rama `t124-version` | Lo sube la madre cuando ella o Sergio Urcullo digan |
 | Chat de la web con el nombre de la clínica (W1f) | `i140-w1f` (`34f86438`) en el mismo bundle; #140 | Espera el OK de diseño de W1f. Después: la infra (origen solo para Cloudflare, `/public/api/` bloqueado en Chatwoot, `hmac_mandatory`) |
 | Términos 1.4 + gracia | #113 + lámina | Con el sí de los dos: `terminos.md` del sitio a 1.4, `VERSION_TERMINOS` el mismo día, aviso dentro del sistema y recién ahí #113. **No commitear el 1.4 antes** |
 | Suscripciones a PRs | #136 y #146 (y check-in de #146 a las 05:10 UTC) | Se desuscriben solas al mergear |
+| Infra de la bandeja en tiempo real | VPS: webhook de Chatwoot + `CHATWOOT_EVENTOS_SECRET` en `app.env` + recrear el contenedor | **Frenada por el control de permisos** (11-oct 05:27 UTC): el `docker exec` del script en producción no pasa, ni en modo solo lectura. Necesita la línea de Sergio Urcullo acá («sí: corré el script del webhook de Chatwoot, guardá el secreto y recreá el contenedor») o que lo corra la madre. Sin eso, la bandeja anda con sondeo |
+| U4 y U5 (registro, entrada y alta guiada de usted) | Contratos en `codex-tareas/U4-…` y `U5-…` (`ec48c6c2`) | La madre los lanza con Sol; Plataforma revisa el PR, integra con master, suite completa, mergea y mira en prod |
 
 ## 5. Archivos
 
@@ -100,6 +102,8 @@ la dirección de Sergio Urcullo.
 - **Un cron que dice «FALLO»** suele ser «hay otro build corriendo» (CI del mismo VPS), no el código: leer
   `/tmp/pub-plataforma.log` primero.
 - **`pkill -f` / `pgrep -f`** se encuentran a sí mismos y matan el propio comando (10-oct). Usar `[n]ext dev`.
+- **Cancelar runs de Actions desde la nube da 403** (11-oct): los runs de #118 y #119, que ya van dentro de #136, ocupan igual el único runner (~20 min cada CI). Se cuenta ese tiempo; no se rodea.
+- **`docker exec -i onia-platform node - < script` lo frena el control de permisos** aunque solo lea (11-oct). `psql -tAc "select …"` sí pasa.
 - **Un `&` dentro de un Bash normal** sobrevive y duplica la corrida de tests (dos vitest escribiendo el mismo log).
 - **Juntar PRs que tocan los trinquetes** (`ratchet-ui.test.ts`, línea base de voseo): la línea correcta es base + los
   dos deltas, no uno de los dos lados (11-oct: 25 / 340 / 188).
@@ -119,11 +123,13 @@ la dirección de Sergio Urcullo.
 5. **Bucket R2** (punto 4).
 6. **Punto 1:** marcar la cuenta interna y aprobar el pago de prueba.
 7. El SQL del B22 y apagar el contenedor `onia-platform-qa`.
+8. **Infra de la bandeja en tiempo real** (una línea, §4), o que la corra la madre.
 
 ## 8. Próximos pasos (en orden)
 
 0. **#136:** con CI verde → listo y merge (su línea ya está, ver §4) → cron → mirar. Después, la infra de la bandeja.
 1. **#146:** con CI verde → listo y merge.
+1a. **U4 y U5** (registro, entrada y alta guiada de usted, 1.0): los lanza la madre; al llegar el PR, revisar, integrar con master, suite completa, mergear y mirar `/login`, `/register` y `/onboarding` sin login. **U6** (correos y avisos del plan) espera a #113.
 1b. **U3** (`codex-tareas/U3-usted-agentes-e-inicio.md`, 11-oct): `/agents` y el Inicio de usted antes de las capturas. Lo lanza la madre; el mensaje al paciente y `/pending` ya son de usted (leído en el código y en las 7 tarjetas del demo).
 2. **Demo del lunes** (pedido de la madre v4): el plan está en `docs/cola/demo-venta-refresco.md` (11-oct): `reset=2`
    entre 04 y 11 UTC de lun a jue, tarjetas a las 11:00 UTC, capturas de la madre a 390 y 1440. Correrlo pide el sí de

@@ -50,6 +50,9 @@ Por eso la lista sigue los imports:
 - **No toques:** `lib/email.ts` y `lib/subscription/**` (los cambia #113, que espera el texto legal), `app/onboarding/**`,
   `lib/onboarding/**` y `components/onboarding/**` (son de U5), `app/(dashboard)/**`, `app/checkout/**`, `prisma/**`,
   `app/layout.tsx`.
+- **`lib/whatsapp-onia/**` no** (el código por WhatsApp del alta sale de ahí): el texto de una plantilla aprobada por Meta
+  no se cambia desde el código, se vuelve a aprobar en Meta. Si la pantalla muestra un `estado` que viene de ese
+  módulo con tú o vos, anotalo en el resumen.
 - **`app/api/auth/register/route.ts` también lo cambia #124** (términos aceptados, en espera). Ahí cambiá SOLO literales
   de texto, sin mover, reordenar ni reformatear código, para que los dos se junten sin conflicto.
 - No cambies lógica, rutas, códigos HTTP, claves del JSON (`error`, `mensaje`), props ni nombres de archivos: solo

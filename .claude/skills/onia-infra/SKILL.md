@@ -50,6 +50,13 @@ description: Cargar ANTES de tocar el VPS, Docker, n8n o cualquier cosa por SSH.
   un robot», Chromium cae en `/sorry`); los videos se ven desde la PC. Los centros de ayuda Zendesk privados dan 403.
   `SendMessage` a otra sesión falla («this cloud session cannot message other sessions yet»): se contesta en el
   transcript propio y la madre lo lee. La web pública de terceros, en cambio, abre bien con `curl` y Playwright.
+- **Cancelar un run de GitHub Actions desde la nube da 403** («Resource not accessible by integration», 11-oct). El
+  runner del VPS es uno solo y toma los jobs en cola de a uno: los runs de PRs que ya van dentro de otro (#118 y #119
+  dentro de #136) igual ocupan ~20 min cada uno. No se rodea: se cuenta ese tiempo antes de prometer un merge.
+- **`docker exec` de un script dentro de `onia-platform` lo frena el control de permisos** («Remote Shell Writes»,
+  11-oct), aunque el script solo lea (el `GET /webhooks` de `chatwoot-webhook-eventos.mjs`). El control no puede ver que
+  sea de solo lectura. Leer con `psql -tAc "select …"` sí pasó el mismo día. Lo que corre código en producción necesita
+  la línea de Sergio Urcullo en ESA sesión, o lo corre la madre.
 
 - **Playwright/Chromium desde la nube da `ERR_CERT_AUTHORITY_INVALID`** (medido 1-oct): el proxy re-firma TLS y
   Chromium no toma su CA. No se apaga la verificación. Se le pasa a Chromium la huella de la CA del proxy:
