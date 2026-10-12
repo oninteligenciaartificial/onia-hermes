@@ -1,0 +1,17 @@
+--- a/hermes-content/docs/cola/loop/hermes-jarvis.md
++++ b/hermes-content/docs/cola/loop/hermes-jarvis.md
+@@ -62,9 +62,11 @@
+   es viernes. El resumen ya no los repite (usa la fecha), pero la tabla los muestra así a quien la lea.
+ - **Madre** · Hasta que `madre.md` llegue a `main` (PR #187), el resumen de las 06:30 va a decir «No pude leer los
+   relojes de la madre». Con #187 mergeado, sale solo.
+-- **Madre / integrador** · En `main` falla `scripts/integrador_puede_mergear.test.mjs` › «la via viva de loops.md
+-  nombra un script que existe en el repo»: la vía de onia-platform desde casa en `cola/loops.md` no tiene script
+-  versionado. No está en el CI de Hermes (medido el 10-oct).
++- **Madre / integrador · histórico, cerrado en Q6 (10-oct).** El fallo de
++  `scripts/integrador_puede_mergear.test.mjs` › «la via viva de loops.md nombra un script que existe en el repo»
++  era `ENOBUFS` al leer más de 1 MB con `git ls-files`; el script sí existe y está versionado.
++  La cola registra Q6 cerrado con la prueba en verde. No reabrir por este hallazgo antiguo;
++  una regresión necesita un resultado nuevo. Esta revisión cloud no ejecutó esa suite.
+ 
+ ## Hecho antes del 10-oct
+ 

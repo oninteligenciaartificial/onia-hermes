@@ -1,0 +1,9 @@
+META: continuar Hermes/Jarvis bajo MADRE DESARROLLO-INFRA; cerrar una contradicción documental vigente sin operar servicios.
+PRUEBA: parche aplicado y revertido sobre fuente exacta; casillas de tareas preservadas. 3 comprobaciones PASS. No suite del repo ejecutada.
+PARADA: no checkout local autentificado; no rama/commit/push, ni workflows, VPS, Platform, autosync o secretos.
+FUENTE: hermes-content/docs/cola/loop/hermes-jarvis.md, blob 5f4ec6e9dd5c0fb7c80578f5a57226206e882572.
+CAMBIO: Hallazgos para otros decía que Q6 seguía fallando por script ausente; Q6 ya consta cerrado por ENOBUFS. Se conserva como histórico cerrado y se exige evidencia nueva para reabrir.
+VERIFICACIÓN: GitHub privado accesible por conector. PR #138 mergeado 937aef36a179e860efadabedec75e6699830a66e; #173 mergeado 75a7f3fdb791ffecf9b7391c2191f02a91596960. Código actual: HMAC en responder-pedido; ulimit durante fetch en respuestas-pedidos; variable + marca del git-dir en autosync. Es presencia estática, no prueba de seguridad integral ni ejecución viva.
+PENDIENTES: Q1 encendido y P2-P5; Q2 diagnóstico diario; Q3 aduana; Q5 QA por release. Q4 y Q6 cerrados documentalmente. Handoff del 9-oct es anterior a la cola del 10-oct. Estado del VPS no medido.
+BLOQUEO: no existe checkout onia-hermes en /workspace; /workspace tampoco es repo Git válido. GitHub lectura funciona; no hace falta pedir archivo. Madre: aplicar parche en codex/hermes-jarvis-q6-hallazgo con comprobación contra fuente actual; revisar, commitear e integrar según gates.
+MODELOS: esta sesión no expone un selector de modelo/esfuerzo; no se afirma Sol medio ni Luna. Sin delegación ni gasto nuevo.
