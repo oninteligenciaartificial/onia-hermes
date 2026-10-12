@@ -24,7 +24,8 @@
       "estado": "preparación ejecutable ya autorizada, no falta de permiso general",
       "prueba": "Vitest4.1.5 está fijado por package-lock.json v3 del producto",
       "solucion_responsable": "Platform usa checkout aislado y ref fijado; npm ci con lockfile intacto bajo autorización cloud. Registrar postinstall/codegen (prisma generate), versión de runner y exit; no añadir dependencias fuera del lockfile",
-      "bloquea": "suite TS aquí todavía no ejecutada; no bloquea core Node ni contrato"
+      "bloquea": "suite TS aquí todavía no ejecutada; no bloquea core Node ni contrato",
+      "avance_reportado": "Platform informa runner/ensayo ejecutado; ya no se trata como bloqueo de permiso. Cierre por Ventas pendiente de artefacto durable accesible, sin repetir tests."
     }
   ],
   "binding_schema_expected": {
@@ -112,7 +113,7 @@
     "vitest_locked_version": "4.1.5",
     "lockfile_version": 3,
     "command": "npm test -- lib/onia-core/modules/agents-confirmador.test.ts lib/onia-core/modules/agents-logic.test.ts lib/onia-core/modules/agents-runtime.test.ts",
-    "status": "No ejecutados aquí; preparación ya autorizada con lockfile, no instalación global ni cambio de versiones"
+    "status": "Platform reporta164regresiones+6casos+1QA y type/lintPASS; artefacto/ref no accesibles para cotejo independiente. No ejecutados aquí; no repetir sin motivo."
   },
   "trabajo_independiente_ejecutado": {
     "repo": "onia-hermes",
@@ -137,5 +138,53 @@
       "Conservar filas sin✅hasta prueba funcional",
       "Sin herramientas de mensajería entre hilos aquí: pedido en este documento/transcript; no afirmar ACK externo"
     ]
+  },
+  "actualizacion_ensayo_reportado": {
+    "fecha": "2026-10-12",
+    "repo_reportado": "onia-platform",
+    "rama_reportada": "codex/g05-g06-ensayo",
+    "sha_reportado": "d959f81f",
+    "artefacto_relativo_reportado": "docs/qa/G05_G06_ENSAYO_AISLADO.md",
+    "resultados_reportados": {
+      "regresiones": 164,
+      "casos": 6,
+      "QA_independiente": 1,
+      "type": "PASS",
+      "lint": "PASS",
+      "datos": "ficticios en memoria"
+    },
+    "estado": "REPORTADO; no cotejable todavía desde el acceso propio de Ventas",
+    "comprobaciones_propias": [
+      "GitHub fetch del SHA:404 No commit found",
+      "GitHub fetch de rama:404 No commit found",
+      "GitHub search de rama:sin resultados",
+      "git ls-remote del ref exacto:exit0 sin ref devuelto"
+    ],
+    "cotejo_con_contrato": {
+      "codigo": "Reglas G05/G06 ya corroboradas por lectura; no se modifica ese resultado",
+      "runner_y_pruebas_en_memoria": "Platform reporta ejecución y QA; falta artefacto accesible para comprobar comandos, ref completo, resultados y controles concretos. No sumar esos conteos a tests locales ni afirmar cobertura de seis casos desconocidos",
+      "UI_demo_login": "No cubierto por ensayo en memoria; acceso dominio403 y bindings dedicados siguen dependencias reales",
+      "release_y_datos_demo": "Sin prueba de release desplegada, configuración real, fixtures en demo, corrida o capturas",
+      "G05_G06_funcionales": "Siguen sin verificar; ningún cambio a✅"
+    },
+    "pedido_tecnico_a_Madre_Desarrollo": "Coordinar que Platform publique la rama/commit completo y el informe relativo ya producido, o entregue exportación durable con SHA256/bytes y logs de comandos/casos/QA. No repetir tests aprobados; no secretos; no solicitar datos repo a Sergio. Se pide evidencia existente, no nuevo ensayo.",
+    "cambio_aceptado_ahora": "Preparación Vitest sigue autorizada por lockfile; ejecución Platform pasa a reportada, no validada por Ventas. Ningún test/403 reejecutado por este delta.",
+    "limite_de_entrega": "Pedido registrado en documento/transcript para las madres; no herramienta de mensajes entre hilos ni ACK externo supuesto",
+    "evidencia_existente_requerida": {
+      "identidad": "SHA completo40caracteres del commit, rama y ruta durable del informe",
+      "runner": "comando/versión/ref/exit y resumen de164regresiones; no repetirlas para exportar logs existentes",
+      "casos": "seis IDs y sus inputs ficticios, expected, observed/assertions; no presumir qué predicados cubren",
+      "QA": "evidencia de revisión independiente y resultado",
+      "type_lint": "comandos y exit correspondientes a PASS",
+      "limites": "confirmar ensayo aislado en memoria, sin DB/login/UI; no sustituye demo"
+    },
+    "required_existing_evidence_schema": {
+      "nota": "Metadata de evidencia existente que entrega Platform; no pedir nuevas corridas para completar esta entrega",
+      "full_commit_sha": "40caracteres hex, ref remoto accesible o export con bytes/hash",
+      "test_typecheck_lint": "por comando: command, runner/version, exit, log_sha256 y conteos reales; not_applicable explícito cuando no hay conteo",
+      "six_cases": "case_id, inputs ficticios, timestamps/timezone usados o not_applicable, expected, observed/assertions; exactamente casos realmente ensayados",
+      "independent_QA": "reviewer, scope, result, findings; sin secretos ni identidad sensible",
+      "memory_only": "scope=isolated_in_memory y deployed_demo=false; no inferir UI/login/DB/producción"
+    }
   }
 }
