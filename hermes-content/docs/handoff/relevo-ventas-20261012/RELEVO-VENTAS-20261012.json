@@ -1,0 +1,677 @@
+{
+  "META": "Exportar trabajo existente, sin piezas nuevas ni publicación.",
+  "PRUEBA": "Rama Git creada desde commit completo Claude; handoff original escrito y leído; SHA256/bytes medidos para 43 archivos, seis previews con bytes no accesibles por conector.",
+  "REGLA_DE_PARADA": "Exportación verificable o bloqueo por archivo/capacidad; origen no borrado.",
+  "destination_native": "01a13171-6ac1-771e-b285-52e7284e203a",
+  "branch": "codex/relevo-ventas-20261012",
+  "source_commit": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+  "handoff_commit": "29403f754fcfbcb0638f8546dc6c210d4d95463d",
+  "CODEX": {
+    "ref": "ed3ffa04",
+    "blob": "c459d364c27e391d553a5c8f4d58729c8cd9feaa",
+    "read": true
+  },
+  "inventory": [
+    {
+      "name": "BOT-RESPUESTAS-D7-D11.md",
+      "origin": "hermes-content/carousels/briefs/ads/prueba1-v2/BOT-RESPUESTAS-D7-D11.md",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "436a36ca2bba27a1ca79c4c5737ceb21ed0dc591",
+      "bytes": 8258,
+      "sha256": "6983e075c0b5cc62360a6d8c50c5defb2fbec8e13a8fef3bdf1e03bef7c988a1",
+      "state": "reproducible desde fuente durable",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": null
+    },
+    {
+      "name": "G1-1-hoja.md",
+      "origin": "hermes-content/carousels/briefs/ads/prueba1-v2/G1-1-hoja.md",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "cbd435be562f384f8bdde20ba16b368d079bd2cd",
+      "bytes": 8873,
+      "sha256": "0e4b2ad8c12779706dc374da0887e3aa4bbf725e7938c93d0fff2aa826b2e2cc",
+      "state": "reproducible desde fuente durable",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": null
+    },
+    {
+      "name": "G1-1.json",
+      "origin": "hermes-content/carousels/briefs/ads/prueba1-v2/G1-1.json",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "07803caf362867a1075b0c3f93aff23182c4c06b",
+      "bytes": 10146,
+      "sha256": "476b330a378e6cbdc441127ee81bce1c740326fcd376ef10518f63ac79a2e6fc",
+      "state": "reproducible desde fuente durable",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": null
+    },
+    {
+      "name": "G1-2-hoja.md",
+      "origin": "hermes-content/carousels/briefs/ads/prueba1-v2/G1-2-hoja.md",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "5f06ca3fb5b22a60cdd674d0198d8d169f35b148",
+      "bytes": 9367,
+      "sha256": "967084cbba9d07eaa1806f28fa7211bcf8ee64f678fc15590c48e208e07a39fc",
+      "state": "reproducible desde fuente durable",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": null
+    },
+    {
+      "name": "G1-2.json",
+      "origin": "hermes-content/carousels/briefs/ads/prueba1-v2/G1-2.json",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "bf9d8c3d4eadbf6f110832260443641e3bf77042",
+      "bytes": 11198,
+      "sha256": "ca8047be17f1c97a9177dc4ceea47740da46e366c50240aa8a038d55fdde11cd",
+      "state": "reproducible desde fuente durable",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": null
+    },
+    {
+      "name": "G1-3-hoja.md",
+      "origin": "hermes-content/carousels/briefs/ads/prueba1-v2/G1-3-hoja.md",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "b893794b904ca8751f1c379752ac475a2dec1cbc",
+      "bytes": 7827,
+      "sha256": "2e56d05b12b5d6fea3c1bdad2f279a325ab543881db1e890fdb46fdd29d78825",
+      "state": "reproducible desde fuente durable",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": null
+    },
+    {
+      "name": "G1-3.json",
+      "origin": "hermes-content/carousels/briefs/ads/prueba1-v2/G1-3.json",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "3f76332cce5e8eff5c477fdeda82444ec2de7b06",
+      "bytes": 8093,
+      "sha256": "512822396c0ce50129245a0b79210056aed02b0822f3fe722f8c98d7dfd31776",
+      "state": "reproducible desde fuente durable",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": null
+    },
+    {
+      "name": "G1-4-hoja.md",
+      "origin": "hermes-content/carousels/briefs/ads/prueba1-v2/G1-4-hoja.md",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "3d90b36ddebe588656a8534f45f536fb97aee0e5",
+      "bytes": 9456,
+      "sha256": "dc02b69aa74f1e66c11f786d9c1d788c082d0f3cf66a10972c6a5a1575959a89",
+      "state": "reproducible desde fuente durable",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": null
+    },
+    {
+      "name": "G1-4.json",
+      "origin": "hermes-content/carousels/briefs/ads/prueba1-v2/G1-4.json",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "691e232eefa71d0ca7f16fbb8ce1f88fb5d68bd5",
+      "bytes": 10750,
+      "sha256": "a01cfe908705cd4e951eb859463e5fdee89b595bd1845fd4cfd13e0ba9ada13a",
+      "state": "reproducible desde fuente durable",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": null
+    },
+    {
+      "name": "G1-5-hoja.md",
+      "origin": "hermes-content/carousels/briefs/ads/prueba1-v2/G1-5-hoja.md",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "f8a330a9de4c9e29474954fd574ffbb09b0c4dfa",
+      "bytes": 7973,
+      "sha256": "1229b6077467e5a2672f8b1d02579ace4cfdefda8727dd73e05c120bf60145de",
+      "state": "reproducible desde fuente durable",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": null
+    },
+    {
+      "name": "G1-5.json",
+      "origin": "hermes-content/carousels/briefs/ads/prueba1-v2/G1-5.json",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "2c465cc314ffa0285b061ff790671f028f02c1ab",
+      "bytes": 8801,
+      "sha256": "b1dd330fcec2422e9f7b77c8fbac88202373fa2e2312f3d3da8f3738074a8fc9",
+      "state": "reproducible desde fuente durable",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": null
+    },
+    {
+      "name": "LISTA-PARA-MOSTRAR-RESPUESTAS-DEL-BOT.md",
+      "origin": "hermes-content/carousels/briefs/ads/prueba1-v2/LISTA-PARA-MOSTRAR-RESPUESTAS-DEL-BOT.md",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "212013db89b309d1fd21565f3822154565c463c6",
+      "bytes": 12550,
+      "sha256": "fb253c47c842ebd031b1695c724889e9587d2a37205b37cdaebe1425e8ebb187",
+      "state": "reproducible desde fuente durable",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": null
+    },
+    {
+      "name": "LISTA-PARA-MOSTRAR-V2.md",
+      "origin": "hermes-content/carousels/briefs/ads/prueba1-v2/LISTA-PARA-MOSTRAR-V2.md",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "a5b7ba5459635651f16d314628a20a14bcecd189",
+      "bytes": 9091,
+      "sha256": "ff19d5dd583d8538743eee4111e7dc5201abf1a4a126a1e12f716e35853bbd28",
+      "state": "reproducible desde fuente durable",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": null
+    },
+    {
+      "name": "PARA-GRABAR.txt",
+      "origin": "hermes-content/carousels/briefs/ads/prueba1-v2/PARA-GRABAR.txt",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "0ad6aa3e89a3242386345a91f9a4362216d5ab87",
+      "bytes": 3748,
+      "sha256": "40c3e0f77db2987f92622dbd3a2760d919b85c3dd5a5ce3f62355e811375e618",
+      "state": "reproducible desde fuente durable",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": null
+    },
+    {
+      "name": "PLAN-VERIFICACION-G05-G06.md",
+      "origin": "hermes-content/carousels/briefs/ads/prueba1-v2/PLAN-VERIFICACION-G05-G06.md",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "16bfa55f9a8dcdd108340d0836ac9c950ad8348e",
+      "bytes": 8793,
+      "sha256": "91b7966b92ff010a8a71967749b92c2b678ac180b901020874674720741045d2",
+      "state": "reproducible desde fuente durable",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": null
+    },
+    {
+      "name": "PLANILLA-PRUEBA-1.xlsx",
+      "origin": "hermes-content/carousels/briefs/ads/prueba1-v2/PLANILLA-PRUEBA-1.xlsx",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "4590cfb5fb3ebcb18a5b098c700783b6c9b57cfd",
+      "bytes": 17240,
+      "sha256": "fbb39a0b644ba0c69aa27c90bfb06b0a8f5496f671fe751cc5d55e97394918da",
+      "state": "reproducible desde fuente durable",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": null
+    },
+    {
+      "name": "ventas-V01-tabla-evidencia-codigo.md",
+      "origin": "hermes-content/docs/handoff/codex-tareas/ventas-V01-tabla-evidencia-codigo.md",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "f678b7fd9e8035bb84cf8efe69afb2faa3a0c40f",
+      "bytes": 3519,
+      "sha256": "cb6adfe53c5c3d408f8cefca77fe1e99a1a85d51f831fcfda06710b790198b1a",
+      "state": "reproducible desde fuente durable",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": null
+    },
+    {
+      "name": "ventas-V02-rutas-y-test-campana.md",
+      "origin": "hermes-content/docs/handoff/codex-tareas/ventas-V02-rutas-y-test-campana.md",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "e9f4182124a640b3f7d4861fb77ff3f0df3d24e7",
+      "bytes": 2232,
+      "sha256": "74b8251b7ec2c0ff4c472f823cce50d9f3928415c99152b8157aaea045eb0a96",
+      "state": "reproducible desde fuente durable",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": null
+    },
+    {
+      "name": "ventas-V03-fichas-competencia.md",
+      "origin": "hermes-content/docs/handoff/codex-tareas/ventas-V03-fichas-competencia.md",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "500c1c5cd1b83918fb51a31c25d0baa376e8b530",
+      "bytes": 4276,
+      "sha256": "17a33361e6814443107081efe520c55480c3e044d133db17dd6524af5ae6e2fb",
+      "state": "reproducible desde fuente durable",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": null
+    },
+    {
+      "name": "G1-1-hoja.png",
+      "origin": "hermes-content/carousels/out/ads/prueba1-v2/hojas/G1-1-hoja.png",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "8de45924bdcbe65fefa4fe24fa514fea6c3a5833",
+      "bytes": 1356833,
+      "sha256": null,
+      "state": "bloqueado: conector no entrega bytes; conservado Git",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": null
+    },
+    {
+      "name": "G1-2-hoja.png",
+      "origin": "hermes-content/carousels/out/ads/prueba1-v2/hojas/G1-2-hoja.png",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "fd87284454be17458343870a94e99876665a4ed9",
+      "bytes": 1607212,
+      "sha256": null,
+      "state": "bloqueado: conector no entrega bytes; conservado Git",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": null
+    },
+    {
+      "name": "G1-3-hoja.png",
+      "origin": "hermes-content/carousels/out/ads/prueba1-v2/hojas/G1-3-hoja.png",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "32c3919e50ffe09192ecbab1fbf42852ad2a18b5",
+      "bytes": 549902,
+      "sha256": "8aeb67b6ed68857104e53349442ee858160c0704f97da6d2fbc957eb463bca82",
+      "state": "reproducible desde fuente durable",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": {
+        "dimensions": [
+          1913,
+          1645
+        ],
+        "duration": null
+      }
+    },
+    {
+      "name": "G1-4-hoja.png",
+      "origin": "hermes-content/carousels/out/ads/prueba1-v2/hojas/G1-4-hoja.png",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "0237b8a7e6a70334c9eb5d67cc2f7c16da75e919",
+      "bytes": 1020597,
+      "sha256": "67fbfc9a6800e5796a940b76c914e77a6771e1cfe31cd35a9dc06f779cddb06d",
+      "state": "reproducible desde fuente durable",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": {
+        "dimensions": [
+          2029,
+          1862
+        ],
+        "duration": null
+      }
+    },
+    {
+      "name": "G1-5-hoja.png",
+      "origin": "hermes-content/carousels/out/ads/prueba1-v2/hojas/G1-5-hoja.png",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "3e22aa3c5e810fae9c1f24d3ca843575b53e4c24",
+      "bytes": 741495,
+      "sha256": "9d2c36fc6c905ee91f96590742276378f29152d4b8361d31666b20f3b41e581f",
+      "state": "reproducible desde fuente durable",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": {
+        "dimensions": [
+          2080,
+          1426
+        ],
+        "duration": null
+      }
+    },
+    {
+      "name": "G1-1-c0.png",
+      "origin": "hermes-content/carousels/out/ads/prueba1-v2/G1-1/G1-1-c0.png",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "2e2e03315b47168c6e0ea90aa30d1482950099a9",
+      "bytes": 1049168,
+      "sha256": null,
+      "state": "bloqueado: conector no entrega bytes; conservado Git",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": null
+    },
+    {
+      "name": "G1-1-c1.png",
+      "origin": "hermes-content/carousels/out/ads/prueba1-v2/G1-1/G1-1-c1.png",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "b5bb60e4df08b7ca86bb3cda8f6ee66bf656fed1",
+      "bytes": 1036051,
+      "sha256": "d077dab32a9d3629b2923b38a161caafa4fcdb63a304d3344a3db8da14bfade6",
+      "state": "reproducible desde fuente durable",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": {
+        "dimensions": [
+          1080,
+          1920
+        ],
+        "duration": null
+      }
+    },
+    {
+      "name": "G1-1-c2.png",
+      "origin": "hermes-content/carousels/out/ads/prueba1-v2/G1-1/G1-1-c2.png",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "73984b596d9a1d97e469cef6c9fdc8460b96c60c",
+      "bytes": 1067582,
+      "sha256": null,
+      "state": "bloqueado: conector no entrega bytes; conservado Git",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": null
+    },
+    {
+      "name": "G1-5-c0.png",
+      "origin": "hermes-content/carousels/out/ads/prueba1-v2/G1-5/G1-5-c0.png",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "801829279782b6f2ad777954ab35cb41064f0348",
+      "bytes": 716673,
+      "sha256": "9eb671d6bd507c442834f9a36fc3a9558600544493663b47eb50e52a2cd87f82",
+      "state": "reproducible desde fuente durable",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": {
+        "dimensions": [
+          1080,
+          1350
+        ],
+        "duration": null
+      }
+    },
+    {
+      "name": "G1-5-c1.png",
+      "origin": "hermes-content/carousels/out/ads/prueba1-v2/G1-5/G1-5-c1.png",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "d85bd5ca5571358c98ef5689e69c5eb0e8ff9358",
+      "bytes": 721190,
+      "sha256": "141a998073ce129f2bdd73e1a337a30d4ab4eaf24cc5d30627951abc4d489304",
+      "state": "reproducible desde fuente durable",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": {
+        "dimensions": [
+          1080,
+          1350
+        ],
+        "duration": null
+      }
+    },
+    {
+      "name": "G1-5-c2.png",
+      "origin": "hermes-content/carousels/out/ads/prueba1-v2/G1-5/G1-5-c2.png",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "097ed7c9b6e004c8a24f19a25a0b437a000a0381",
+      "bytes": 49470,
+      "sha256": "018a8aceebf2b807b0ec7e9ffde537a4f8948eaa0f1b068534192ac8235f6d22",
+      "state": "reproducible desde fuente durable",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": {
+        "dimensions": [
+          1080,
+          1350
+        ],
+        "duration": null
+      }
+    },
+    {
+      "name": "G1-3-feed.png",
+      "origin": "hermes-content/carousels/out/ads/prueba1-v2/G1-3/G1-3-feed.png",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "294bcaa178cbc00642f93286610f95454282149a",
+      "bytes": 363228,
+      "sha256": "1b07aba21ee244206d02c941cdfc085de55595485af727958a6d69dc597de5c2",
+      "state": "reproducible desde fuente durable",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": {
+        "dimensions": [
+          1080,
+          1080
+        ],
+        "duration": null
+      }
+    },
+    {
+      "name": "G1-2-c0.png",
+      "origin": "hermes-content/carousels/out/ads/prueba1-v2/G1-2/G1-2-c0.png",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "e5fb39b612053aa8a0cdf882eba6d9b6948ad59e",
+      "bytes": 1011102,
+      "sha256": "5806517b144ac2a37716429a5e8898cfbe2caa657395008f213b935b6688a71a",
+      "state": "reproducible desde fuente durable",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": {
+        "dimensions": [
+          1080,
+          1920
+        ],
+        "duration": null
+      }
+    },
+    {
+      "name": "G1-2-c1.png",
+      "origin": "hermes-content/carousels/out/ads/prueba1-v2/G1-2/G1-2-c1.png",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "f4c8dbc376a867dffd4b369e55b9b448ff627987",
+      "bytes": 35449,
+      "sha256": "b7404cd0ac6b4cb0a710cb3f8f0c85f9e48fc8aba1f3ee5cb0888bd713b66b16",
+      "state": "reproducible desde fuente durable",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": {
+        "dimensions": [
+          1080,
+          1920
+        ],
+        "duration": null
+      }
+    },
+    {
+      "name": "G1-2-c2.png",
+      "origin": "hermes-content/carousels/out/ads/prueba1-v2/G1-2/G1-2-c2.png",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "a8af60ccae33cf5647531196c2d37463c0803ee6",
+      "bytes": 1062531,
+      "sha256": null,
+      "state": "bloqueado: conector no entrega bytes; conservado Git",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": null
+    },
+    {
+      "name": "G1-2-c3.png",
+      "origin": "hermes-content/carousels/out/ads/prueba1-v2/G1-2/G1-2-c3.png",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "daab98d170392c67d3f821834ba2dc98df356f55",
+      "bytes": 92278,
+      "sha256": "ade0c85169a9bcb6b849069f1cb0dea14befedfdb011864c4e8ea14f79e20c2b",
+      "state": "reproducible desde fuente durable",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": {
+        "dimensions": [
+          1080,
+          1920
+        ],
+        "duration": null
+      }
+    },
+    {
+      "name": "G1-4-c0.png",
+      "origin": "hermes-content/carousels/out/ads/prueba1-v2/G1-4/G1-4-c0.png",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "8aaed52a676b20dde2a35db4ac3c30b70dccec04",
+      "bytes": 1059690,
+      "sha256": null,
+      "state": "bloqueado: conector no entrega bytes; conservado Git",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": null
+    },
+    {
+      "name": "G1-4-c1.png",
+      "origin": "hermes-content/carousels/out/ads/prueba1-v2/G1-4/G1-4-c1.png",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "5ae5dc3676fe35013ca048993cff0483bb5c981a",
+      "bytes": 1034614,
+      "sha256": "13e8119e33e8ba4839d0517e016db77134678febcc7831404aac0b6f8451c376",
+      "state": "reproducible desde fuente durable",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": {
+        "dimensions": [
+          1080,
+          1920
+        ],
+        "duration": null
+      }
+    },
+    {
+      "name": "G1-4-c2.png",
+      "origin": "hermes-content/carousels/out/ads/prueba1-v2/G1-4/G1-4-c2.png",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "9333641008e7c623fe2907ec6d7b7bc2b65576f8",
+      "bytes": 52289,
+      "sha256": "8f18c94cdd2a870fa63f14ac76a954bcbe90eeafdf8a98738f98015b40211d4e",
+      "state": "reproducible desde fuente durable",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": {
+        "dimensions": [
+          1080,
+          1920
+        ],
+        "duration": null
+      }
+    },
+    {
+      "name": "OBJECIONES-8-CLINICAS-11OCT.md",
+      "origin": "hermes-content/sales-kit/OBJECIONES-8-CLINICAS-11OCT.md",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "137da9ae267826342f04aeed2c4bd90dade3be7c",
+      "bytes": 10599,
+      "sha256": "280f22a17ec27bf94cece7ae939f600ebc0c794043c7ee6791aa316d7df84e49",
+      "state": "reproducible desde fuente durable",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": null
+    },
+    {
+      "name": "OBJECIONES-8-CLINICAS-11OCT.json",
+      "origin": "hermes-content/sales-kit/OBJECIONES-8-CLINICAS-11OCT.json",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "b7d9577510dba9835c3f8032eaec1141e91ef395",
+      "bytes": 9221,
+      "sha256": "b5769df4aa91051388cfdf726bd6eef1a2223acd1c517f57ca6e2ba7a1e566bd",
+      "state": "reproducible desde fuente durable",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": null
+    },
+    {
+      "name": "CAMPANA-1-LISTA-PARA-CREAR.json",
+      "origin": "hermes-content/carousels/briefs/ads/CAMPANA-1-LISTA-PARA-CREAR.json",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "b051baabf402d99d1b90b2914702a9e602830232",
+      "bytes": 46951,
+      "sha256": "6bf071c34f561c7816b77bec2c96f2875d4b2336fb84686adc64d7a0ea8a0996",
+      "state": "reproducible desde fuente durable",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": null
+    },
+    {
+      "name": "campana-lista.test.mjs",
+      "origin": "scripts/campana-lista.test.mjs",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "1d7c25914ac7017ae7f453c0d8b2dd84442b6dd4",
+      "bytes": 35121,
+      "sha256": "1f1aba9ca05f73941c11021a36ab04931bf1a7155ef859310a7afcba432b3a08",
+      "state": "reproducible desde fuente durable",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": null
+    },
+    {
+      "name": "ventas-pauta.md",
+      "origin": "hermes-content/docs/cola/loop/ventas-pauta.md",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "7b21f5ca85a348bea80d12b4d41d9357c7ec3bf7",
+      "bytes": 16011,
+      "sha256": "15db1acaefaaf6ff7e656d06961644c1855106fd46c60a2392e22e20f381ea74",
+      "state": "reproducible desde fuente durable",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": null
+    },
+    {
+      "name": "mercado-y-pauta.md",
+      "origin": "hermes-content/docs/handoff/mercado-y-pauta.md",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "472df30648c137f1473fcf075437d29867b02309",
+      "bytes": 63823,
+      "sha256": "32a266f64fa0a96722f039e86035c9d665828f43d213cbdd839161b191108d97",
+      "state": "reproducible desde fuente durable",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": null
+    },
+    {
+      "name": "ONIA_CATALOGO_DE_VENTA.md",
+      "origin": "hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "173927c3c619404ae9399e288dd3361636fd27d3",
+      "bytes": 9194,
+      "sha256": "3f1ef9ebf7c39043ed223368cd0a9bd6bbd1d0669bebc15a09bd134b3ac23a32",
+      "state": "reproducible desde fuente durable",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": null
+    },
+    {
+      "name": "SEGUIMIENTO-LEADS.md",
+      "origin": "hermes-content/sales-kit/SEGUIMIENTO-LEADS.md",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "91407f30e5912758a1643737437b66b8c9a9ba5f",
+      "bytes": 22822,
+      "sha256": "db7c0797bf0811e19447a64f7d32aba248adc37406a966e2e74b70fe04dfeef0",
+      "state": "reproducible desde fuente durable",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": null
+    },
+    {
+      "name": "PRUEBA-1-PIEZAS.md",
+      "origin": "hermes-content/carousels/briefs/ads/PRUEBA-1-PIEZAS.md",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "b3c7fcf9491f23d909b8f71b97099fde4956463d",
+      "bytes": 7828,
+      "sha256": "7a436087085b7dc192ab61c41056e9abfa3ff5e9caa18405c987473db4fcd699",
+      "state": "reproducible desde fuente durable",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": null
+    },
+    {
+      "name": "VSL-CORTO-TABLA-DE-CORTES.md",
+      "origin": "hermes-content/carousels/briefs/ads/VSL-CORTO-TABLA-DE-CORTES.md",
+      "version": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "git_blob_sha": "1d90bddf38fd7643ac1974f69f83869b5328e1fe",
+      "bytes": 6653,
+      "sha256": "cbda47b89e72f4388c9120977c4d5bafa3e9e7f524fdcf6ccf0bfb010f340fd9",
+      "state": "reproducible desde fuente durable",
+      "approval": "pendiente; LISTA PARA MOSTRAR no es aprobación",
+      "media": null
+    },
+    {
+      "name": "MADRE-MARKETING-lote-11oct.json",
+      "origin": "/workspace/scratch/1d6889353f5b/MADRE-MARKETING-lote-11oct.json",
+      "version": "Library v2",
+      "bytes": 10773,
+      "sha256": "66c8248a7871e3d5e9ae5209e6eaa069691c519bcb61b262f6cf7aaf13e72cd3",
+      "state": "transferido",
+      "approval": "handoff interno, no publicación"
+    }
+  ],
+  "scope": "Todo archivo local original del lote: uno (handoff JSON). No MP4, previews creados, proyectos nuevos ni diffs de producto locales. Fuentes Claude no se recrean: rama hereda todo el árbol de su commit.",
+  "groups_preserved": [
+    {
+      "path": "hermes-content/carousels/out/ads/",
+      "state": "reproducible desde fuente durable",
+      "commit": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "note": "Incluye A1 histórico y animatic VSL; no se reactivan. Hash SHA256 individual no medido en este lote; árbol preservado completo."
+    },
+    {
+      "path": ".claude/skills/onia-ventas-pauta/",
+      "state": "reproducible desde fuente durable",
+      "commit": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "note": "Scripts/templates/render/grabación originales heredados, sin instalar ni ejecutar."
+    }
+  ],
+  "unique_evidence": {
+    "agents": [
+      {
+        "id": "/root/analista_campanas",
+        "result": "ACK + completed; GitHub cola leído SHA 7b21f5ca85a348bea80d12b4d41d9357c7ec3bf7; ausencia herramientas Meta; campañas actuales desconocidas."
+      },
+      {
+        "id": "/root/validador_claims",
+        "result": "ACK + completed; spec v2 cuatro propuestas, lista tres, pendientes selección/G06/G05. Manifest/cola/lista tenían estado A1 obsoleto."
+      }
+    ],
+    "QA": "Documental; no suites de Claude reejecutadas. Byte hash medido mediante base64 decodificado. Seis blobs binarios no recuperables por contents ni fetch_blob; hash Git sí identificado. Handoff sin suites locales ni cambios de producción.",
+    "approvals": "No aprobación exacta pieza/version/cuenta/copy/calendario verificada. Todas piezas pendientes; autorización general no sustituye registro.",
+    "access": "Lecturas propias repo, Drive metadata, Higgsfield perfil; Meta login observado 11-oct y handoff manual solicitado; no conteo actual ni sesión transferible.",
+    "diffs_not_saved": "Ninguno; solo handoff local ya exportado. Inconsistencias de cola/lista son hallazgos, no diffs aplicados."
+  },
+  "media_not_created": {
+    "G1": "grabaciones finales no presentes según spec; duración anunciada es guion, no medida de MP4",
+    "VSL": "C1-C7 faltan; animatic histórico en fuente durable"
+  },
+  "blockers": [
+    "SHA256 seis PNG: conector Contents deja content vacío por tamaño; fetch_blob rechaza binary. Nativo puede leer Git ya preservado y medir.",
+    "Drive: seis MP4 UUID solo listados, sin asociación G1 ni hash/duración/dimensiones medidos; no se descargaron en lote. No afirmar que son medios finales.",
+    "Login Meta no se migra; nativo debe probar sus propios accesos.",
+    "Refresco demo 12-oct era fecha prevista, no prueba de completado.",
+    "Recepción por sesión nativa no accesible desde herramienta; madre hará comprobación independiente."
+  ],
+  "marca": "Fuera del lote Ventas; no rehacer referentes 7c43db59; no se exporta ni afirma hash de otro carril.",
+  "models": "Work/subagentes modelo efectivo no observable",
+  "unchanged_origin": true,
+  "drive_assets": []
+}
