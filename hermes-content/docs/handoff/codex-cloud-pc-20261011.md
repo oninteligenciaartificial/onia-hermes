@@ -4,6 +4,24 @@
 
 ## PLAN VIGENTE 12-oct — armado único y ejecución por evidencia
 
+**Precedencia última orden:** ASTRA medio para TODO código Platform. Análisis acotado Sol/Luna barato, filtro QA independiente; escalar caro si hace falta. Hasta 5 frentes útiles por lote cuando capacidad/runtime y tareas independientes permitan, sin forzar slots ni duplicar archivos. Madres solo delegan/revisan/resumen; Desarrollo-Infra no reporta operación Marketing. Al cerrar, siguiente pendiente autorizado con prueba, sin busywork/repetir cerrado/evadir permisos; no afirmar 24/7. Fuente canónica CODEX.md y referencia AGENTS.md actualizadas; sin ejecutar Claude ni copiar skills/transcripts completos.
+
+### Recuperación DELTA Claude — inventario 12-oct, sin copiar fuentes
+
+Subagente real `/root/continuity/recovery_delta`, Luna low, solo lectura en ambos repos; entregó refs/hashes/rutas y límites. No fetch en esta pasada: refs son snapshot disponible, no estado remoto vivo. Hermes main local `ac8f2d44` limpio pero +2/-236 frente a `origin/main 2cdefca7`; no usarlo como fuente única ni mergearlo. Platform checkout `claude/f2-f3-panel 7060b7c9` con cambios ajenos sin commit (`HANDOFF_CLAUDE.md`/`error.log` entre ellos): preservados/no leídos. Base Platform es `origin/master 54eedf10`, no origin/main.
+
+| Fuente delta | Recuperado/localizado con ref/hash | Falta / próxima verificación |
+|---|---|---|
+| Marca skills/cola/handoff | `origin/claude/gifted-clarke-y4vvtj 781df7d8`, +82 frente a Hermes origin/main; diseño/edición, auditorías/calendario/contratos M1-M2 | Comparar solo paths del próximo contrato; no copiar skill ni rehacer cerrados |
+| Lucía skills/guiones/QA | `origin/claude/zealous-babbage-fvtjck 3566e5d5`, +158/-4; skill `lucia`, guiones/cola/QA | Reconciliar divergencia y bytes/manifest del worker; Git localizable no es transferencia completa |
+| Ventas skills/cola/handoff | `origin/claude/onia-ventas-pauta-rmdv5j 1f72b73c`, +43; scripts/skills/contratos V01-V03 | Probar acceso worker/ref actual y demo; no inferir campañas actuales |
+| Hermes skills/cola/QA | `origin/claude/adoring-ramanujan-7sjzwv b8d548b8`, +63; Jarvis/C1-C4/L1 | QA del checkout/lote actual, no atribuir 40/23 histórico a este delta |
+| Coordinación/contratos | `origin/claude/arranque-nueva-madre-ba386e 02ff7746`, +28/-15; skills madre/cola/U8/F136 | Instrucciones Sergio prevalecen sobre routing/IDs viejos; cola codex-relevo 4-oct es incompleta |
+| Platform M1c/M1d y resto | `codex/m1c-las-ultimas-cantidades 780d4d5c` (+3), `codex/m1d-dental-sobre-m1c 07f52b32` (+4); f136c remoto `b2c6146f`, U8 `e2a92375`, U10 `e911e033`, U9 `44a5b053` | HEADs locales/snapshot no prueban PR/merge/worker; refs no añaden skills/handoff/cola. No tocar dirty ajeno |
+| Transcripts Claude metadatos | `.claude/projects` existe: Hermes 226 archivos (último 3-oct); Madre V2 worktrees 4/3 archivos (11-oct); observador 1064 (11-oct) | Solo nombres/fechas/conteos; NO transcript completo ni estado reconstruido. Observador no sustituye fuente original |
+
+Registro recuperado = fuentes localizadas con trazabilidad, no copia integral ni conocimiento leído completo. Método único `.claude/skills`; esta pasada no ejecutó Claude, abrió secretos ni migró sesiones. Próxima recuperación se limita al delta del contrato independiente autorizado.
+
 ### Auditoría actual 12-oct — cinco ejecutores nativos comprobados
 
 `list_threads` leído en este corte confirma los 5 `kind:codex`, `hostId:durable`, cwd `/workspace`; 2 madres locales. El inventario de partida “1 Codex + 4 Work” más abajo es histórico de la preparación, sustituido por esta tabla. Madre Desarrollo habló con madre Marketing y los 5 workers; despacho no equivale a cierre de sus lotes.
@@ -45,13 +63,13 @@ Madres locales: Desarrollo `01a12beb-7774-7c02-9931-12264158df83`, Marketing `01
 |---|---|---|
 | Madre Desarrollo-Infra local | Contratos/prioridades, coordinación Platform/Hermes, QA y resumen; NO implementación | Astra medio; tareas muy difíciles/riesgo escalan esfuerzo con evidencia |
 | Madre Marketing local | Contratos/prioridades Marca/Lucía/Ventas, revisión/versión aprobada, resumen; NO oficio del worker | Astra medio |
-| Platform Codex Cloud | Desarrollo del backlog vigente, diff y pruebas; no rehacer Prisma cerrado | Sol habitual, medio; Astra solo tarea muy difícil |
+| Platform Codex Cloud | Desarrollo del backlog vigente, diff y pruebas; no rehacer Prisma cerrado | Astra medio TODO código; análisis acotado Sol/Luna, QA independiente |
 | Hermes Codex Cloud | QA independiente, regresiones, contratos de infra/Jarvis sin aplicar producción | Sol medio; Astra alto riesgo/muy difícil |
 | Marca Codex Cloud | Continuar proyectos/edición/cortes, previews y publicación autorizada | Sol medio; Luna mecánica cerrada |
 | Lucía Codex Cloud | Identidad/procedencia, montajes existentes y calendario/entregas | Sol medio; Astra solo decisión muy difícil |
 | Ventas/pauta Codex Cloud | Claims/demo/manifiesto, campañas dentro de permisos y evidencia | Sol medio; Luna normalización mecánica |
 
-**Última orden de Sergio supersede “toda programación Astra”: Astra SOLO madres/tareas muy difíciles, Sol trabajo habitual, Luna mecánica.** No afirmar que cambió automáticamente un modelo ni interrumpir diffs actuales. Registrar selector/configuración y modelo no observable por separado; Work no satisface el objetivo de ejecutores Codex Cloud.
+**Última orden Sergio 12-oct: TODO código Platform ASTRA medio; análisis acotado Sol/Luna barato, QA independiente y escalación si necesaria.** Sustituye la orden intermedia de Sol para código Platform. No afirmar que cambió automáticamente un modelo ni interrumpir diffs actuales. Registrar selector/configuración y modelo no observable por separado; Work no satisface el objetivo de ejecutores Codex Cloud.
 
 **Inventario actual comunicado:** 64 skills Hermes en worktree audit frente a 43 en checkout main, Platform 6; inventario NO implica lectura completa. `list_threads`: Desarrollo/setup Hermes/4 Work idle; madre Marketing notLoaded. No trabajo producto iniciado por este plan. CLAUDE genérico dice 1 madre, bloque nuevo skill/handoff y Sergio establecen 2; prevalece Sergio. CronCreate histórico local: muere con sesión/vence 7 días; no es scheduler cloud 24/7.
 
@@ -79,7 +97,7 @@ Acceso de Work o de otro worker no acredita el sustituto. No trasladar cookies/c
 2. **Preservar antes del relevo:** recuperar ZIPs/MP4/proyectos/JSON/patch desde fuentes de Preservación; medir hashes completos, índice y decodificación. Entrega: ruta durable que el nuevo worker pueda leer, origen+versión. Gate: nueva sesión abre archivo y coincide SHA. Bloqueo: sandbox del origen no transferido; no declarar enlace sandbox como copia durable.
 3. **Preparar entornos nativos por oficio:** reutilizar Platform comprobado; evaluar Hermes draft sin publicarlo/provisionarlo fuera del alcance autorizado. Preparar contratos de Marca/Lucía/Ventas con skills/ref exactos y herramientas requeridas. Entrega: setup propuesto y prueba requerida; NO instalación automática. Gate: entornos y modelos efectivos comprobados antes de asignar trabajo.
 4. **Relevar 4 workers, uno por carril:** crear solo los sustitutos expresamente pedidos mediante madre y acceso UI; cada uno devuelve ACK de repo/ref/skills/artefactos y bloqueo. Entrega: ID real, modelo configurado, ruta/SHA recuperada, próximo contrato. Gate: recuperación+smoke pertinente independientes; conservar origen hasta que pase. No simular IDs ni subagentes.
-5. **QA y tarea vigente:** máximo 2 subagentes simultáneos cuando aporte; contratos acotados con entradas/rutas/salida/prueba/parada, QA independiente del implementador. Platform: cerrar lote en vuelo y elegir siguiente pendiente funcional tras verificar PRs; Marca: DD-A/N02 sin rehacer montajes; Lucía: viernes v2; Ventas: spec v2/claims/demo; Hermes: E31/E32. Entrega: resultado+evidencia+bloqueo+próximo. No reimplementar cerrados.
+5. **QA y tarea vigente:** hasta 5 frentes útiles por lote si runtime/capacidad permiten y tareas independientes, sin forzar slots ni archivos compartidos; contratos acotados con entradas/rutas/salida/prueba/parada, QA independiente del implementador. Platform: cerrar lote en vuelo y elegir siguiente pendiente funcional tras verificar PRs; Marca: DD-A/N02 sin rehacer montajes; Lucía: viernes v2; Ventas: spec v2/claims/demo; Hermes: E31/E32. Entrega: resultado+evidencia+bloqueo+próximo. No reimplementar cerrados.
 6. **Cerrar relevo y ordenar sidebar:** archivar cada Work SOLO tras recuperación comprobada por su sustituto y registro de resultados. Entrega: 2 madres+5 nativos identificados, archivos durables y fuentes conservadas. Gate: ningún artefacto queda únicamente en contenedor a archivar.
 7. **Rondas locales, después de validar:** propuesta de ronda cada 20 min por madre, inspección compacta por delta y sin despertar trabajo cerrado. Crear únicamente tras verificar destinatarios, exclusión de loops antiguos y autorización/configuración aplicable. Registrar ID real/primera ejecución; madres locales no coordinan con PC apagada. No afirmar ronda activa antes de esa prueba.
 8. **Scheduler cloud, fase posterior:** evaluar arquitectura única sin competir con madres/loops; validar persistencia, permisos, cuota, entrega y exclusión con scheduler previo. Prueba real de PC apagada y disparo cloud requerido antes de prometer 24/7. Sin instalación/compra/secretos en esta preparación; propuesta dot cloud NO confirmada.

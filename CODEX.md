@@ -7,10 +7,11 @@ Procedencia: adaptación de `CLAUDE.md` en commit fuente `732c479e0f6fe20e93a140
 
 - **2 madres locales:** Desarrollo-Infra y Marketing. SOLO asignan/delegan, revisan pruebas y resumen; no implementan, editan videos ni investigan por el worker.
 - **5 ejecutores Codex Cloud nativo:** Platform, Hermes/QA, Marca, Lucía y Ventas/pauta. Los cuatro Work son origen de recuperación, no sustitutos nativos; conservarlos hasta recuperación verificada. No declarar relevo completado por escribir instrucciones.
-- **Routing:** Astra para madres y tareas muy difíciles; Sol trabajo habitual; Luna mecánica cerrada. Toda programación habitual puede usar Sol; no imponer Astra a todo código. QA independiente con Sol y escalación Astra en alto riesgo. Registrar modelo configurable/observado/no observable; política no cambia modelo de Work.
+- **Routing, última orden Sergio 12-oct:** TODO código de plataforma se implementa en Astra medio. Análisis acotado Sol/Luna barato, filtro QA independiente y escalación cara cuando haga falta. Astra madres/tareas muy difíciles; Sol oficio habitual fuera de código Platform, Luna mecánica cerrada. Registrar modelo configurable/observado/no observable; política no cambia runtime automáticamente.
 - **Ejecutar hasta cierre:** un pedido de acción autoriza preparación y trabajo reversible dentro de alcance. No cerrar después de redactar plan ni pedir microconfirmaciones. Continuar implementación, validación, preservación y comparación final; cerrar solo validado o con bloqueo específico que no pueda resolverse con acceso/autorización existente. Bloqueo de un frente no suspende los demás.
 - **Autonomía y bloqueos, regla expresa de Sergio (12-oct):** si objetivo y alcance autorizados están claros, continuar sin esperar otro prompt. Revisar primero fuentes/accesos y aprobaciones existentes; continuar frentes independientes. Si falta un permiso o dato realmente necesario, pedirlo inmediatamente con pregunta concreta, indicando para qué habilita el siguiente paso y qué se comprobó; no cerrar con «falta X» pasivo. Agrupar bloqueos en una sola tanda cuando sea posible, sin retrasar un bloqueo urgente. No repetir aprobaciones ya otorgadas ni interpretar silencio como consentimiento; mantener detenido únicamente el paso dependiente hasta respuesta válida.
-- **Cada contrato:** META, PRUEBA DE HECHO, PARADA; dueño, repo/ref/SHA, rutas, entradas, salida recuperable, herramientas/modelo, test y permisos Git. Subagentes reales, máximo 2 simultáneos cuando aporte; no simular roles/IDs ni repetir cerrado. QA independiente del autor.
+- **Cada contrato:** META, PRUEBA DE HECHO, PARADA; dueño, repo/ref/SHA, rutas, entradas, salida recuperable, herramientas/modelo, test y permisos Git. Hasta 5 frentes útiles por lote si runtime/capacidad lo permite y tareas son independientes: no forzar slots ni editar mismo archivo sin coordinación. Agentes reales con ID/ACK, no roles simulados; QA independiente del autor.
+- **Continuidad útil:** al cerrar un resultado, tomar siguiente pendiente autorizado con prueba; no esperar prompt, inventar busywork, rehacer cerrado ni evadir bloqueo/permiso. No fingir 24/7. Esta madre Desarrollo-Infra no reporta operación Marketing: su madre supervisa ese carril; solo coordinar dependencias y evidencia pertinente.
 - **Skills fuente única:** `.claude/skills/<nombre>/SKILL.md`; Platform usa sus 6 skills en `onia-platform/.claude/skills/`. Leer router/equipo/skill y delta pertinente; no copiar a `.agents`, globales ni documento. Método en skill, estado en handoff, resultado en repo/artefacto verificable.
 - **Publicación marketing:** piezas YA APROBADAS pueden publicarse en cuentas/calendario acordados tras verificar versión/SHA y ausencia de duplicados, sin pedir el mismo OK. Nuevas piezas, gastos, generación nueva de cara/voz y decisiones comerciales requieren OK. Deploy/secretos/main no se infieren de esa autorización.
 - **Git:** worker ejecuta commit/push cuando el contrato lo autoriza, explicit stage y checks; madre revisa. No main, merge ni deploy en este encargo documental. No usar Stop/autosync como autorización para publicar.
@@ -122,8 +123,8 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
   **en el mismo commit**. Carril sin skill → crear UNA (`.claude/skills/<carril>/SKILL.md`) y sumarla
   a `onia-router`. El handoff es estado; la skill es el método que sobrevive al relevo.
 - **Enrutamiento de modelos y contexto:** leer
-  `hermes-content/docs/AI_MODEL_ROUTING_2026.md`, subordinado a precedencia 12-oct de este archivo: Astra madres y tareas muy difíciles; Sol
-  ejecuta trabajo habitual; Luna mecánica cerrada/verificable. QA independiente Sol, escalación Astra de alto riesgo. No bajar
+  `hermes-content/docs/AI_MODEL_ROUTING_2026.md`, subordinado a precedencia 12-oct de este archivo: Astra madres/tareas muy difíciles y TODO código Platform; Sol
+  ejecuta oficio habitual fuera de código Platform; Luna mecánica cerrada/verificable. QA independiente Sol, escalación Astra de alto riesgo. No bajar
   calidad en estrategia/identidad para ahorrar tokens ni cargar documentos largos cuando existe
   un manifest compacto.
 
@@ -187,7 +188,7 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
 - **Cuidar tokens, no releer** (Sergio Urcullo, 29-ago-2026): lo ya leído no se relee salvo que pudo cambiar; fragmentos
   (offset, grep) antes que archivos enteros; rutas absolutas en Bash; verificar con el exit code, nunca con `| tail`.
   El largo del mensaje a él ya lo fija «Simple», arriba (8-oct-2026).
-- **Modelo por rol, Sergio 12-oct:** Astra madres/tareas muy difíciles; Sol habitual; Luna mecánica. Subagentes reales con contrato/modelo observable; QA independiente. No aplicar nombres de modelos Claude al runtime Codex.
+- **Modelo por rol, última orden Sergio 12-oct:** Astra madres/tareas muy difíciles y TODO código Platform; Sol habitual fuera de código Platform/análisis acotado; Luna mecánica. Subagentes reales con contrato/modelo observable; QA independiente. No aplicar nombres de modelos Claude al runtime Codex.
 
 ## Dos madres locales + cinco carriles Codex Cloud (12-oct)
 
