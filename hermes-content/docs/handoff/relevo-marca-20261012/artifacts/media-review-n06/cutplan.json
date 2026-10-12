@@ -1,0 +1,240 @@
+{
+  "video": "/tmp/claude-0/-home-user-onia-hermes/0fd2553b-524b-53fe-9e97-5c1ac80566e6/scratchpad/brutos/A_1CCFE9FE.mp4",
+  "modo": "audio",
+  "noise": "-35dB",
+  "minSil": 0.3,
+  "pad": 0.12,
+  "origDur": 59.23,
+  "finalDur": 45.5,
+  "silences": [
+    {
+      "start": 0,
+      "end": 0.877528
+    },
+    {
+      "start": 2.85195,
+      "end": 3.18138
+    },
+    {
+      "start": 4.73032,
+      "end": 5.0558
+    },
+    {
+      "start": 10.1771,
+      "end": 10.5099
+    },
+    {
+      "start": 14.1878,
+      "end": 15.3888
+    },
+    {
+      "start": 20.1666,
+      "end": 20.6453
+    },
+    {
+      "start": 24.267,
+      "end": 24.6748
+    },
+    {
+      "start": 24.8534,
+      "end": 25.2024
+    },
+    {
+      "start": 26.0953,
+      "end": 29.2545
+    },
+    {
+      "start": 31.5305,
+      "end": 31.8829
+    },
+    {
+      "start": 32.2895,
+      "end": 32.59
+    },
+    {
+      "start": 34.3372,
+      "end": 34.656
+    },
+    {
+      "start": 36.0395,
+      "end": 36.5857
+    },
+    {
+      "start": 36.9651,
+      "end": 40.1073
+    },
+    {
+      "start": 44.7818,
+      "end": 45.1402
+    },
+    {
+      "start": 47.9303,
+      "end": 48.3527
+    },
+    {
+      "start": 49.1884,
+      "end": 52.0381
+    },
+    {
+      "start": 52.0383,
+      "end": 52.3757
+    },
+    {
+      "start": 55.3351,
+      "end": 55.7814
+    },
+    {
+      "start": 56.2233,
+      "end": 56.5631
+    },
+    {
+      "start": 57.8029,
+      "end": 59.2559
+    }
+  ],
+  "keep": [
+    {
+      "start": 0.76,
+      "end": 2.97
+    },
+    {
+      "start": 3.06,
+      "end": 4.85
+    },
+    {
+      "start": 4.94,
+      "end": 10.3
+    },
+    {
+      "start": 10.39,
+      "end": 14.31
+    },
+    {
+      "start": 15.27,
+      "end": 20.29
+    },
+    {
+      "start": 20.53,
+      "end": 24.39
+    },
+    {
+      "start": 24.55,
+      "end": 24.97
+    },
+    {
+      "start": 25.08,
+      "end": 26.22
+    },
+    {
+      "start": 29.13,
+      "end": 31.65
+    },
+    {
+      "start": 31.76,
+      "end": 32.41
+    },
+    {
+      "start": 32.47,
+      "end": 34.46
+    },
+    {
+      "start": 34.54,
+      "end": 36.16
+    },
+    {
+      "start": 36.47,
+      "end": 37.09
+    },
+    {
+      "start": 39.99,
+      "end": 44.9
+    },
+    {
+      "start": 45.02,
+      "end": 48.05
+    },
+    {
+      "start": 48.23,
+      "end": 49.31
+    },
+    {
+      "start": 52.26,
+      "end": 55.46
+    },
+    {
+      "start": 55.66,
+      "end": 56.34
+    },
+    {
+      "start": 56.44,
+      "end": 57.92
+    }
+  ],
+  "ffmpeg": "ffmpeg -y -i \"/tmp/claude-0/-home-user-onia-hermes/0fd2553b-524b-53fe-9e97-5c1ac80566e6/scratchpad/brutos/A_1CCFE9FE.mp4\" -vf \"select='between(t,0.76,2.97)+between(t,3.06,4.85)+between(t,4.94,10.3)+between(t,10.39,14.31)+between(t,15.27,20.29)+between(t,20.53,24.39)+between(t,24.55,24.97)+between(t,25.08,26.22)+between(t,29.13,31.65)+between(t,31.76,32.41)+between(t,32.47,34.46)+between(t,34.54,36.16)+between(t,36.47,37.09)+between(t,39.99,44.9)+between(t,45.02,48.05)+between(t,48.23,49.31)+between(t,52.26,55.46)+between(t,55.66,56.34)+between(t,56.44,57.92)',setpts=N/FRAME_RATE/TB\" -af \"aselect='between(t,0.76,2.97)+between(t,3.06,4.85)+between(t,4.94,10.3)+between(t,10.39,14.31)+between(t,15.27,20.29)+between(t,20.53,24.39)+between(t,24.55,24.97)+between(t,25.08,26.22)+between(t,29.13,31.65)+between(t,31.76,32.41)+between(t,32.47,34.46)+between(t,34.54,36.16)+between(t,36.47,37.09)+between(t,39.99,44.9)+between(t,45.02,48.05)+between(t,48.23,49.31)+between(t,52.26,55.46)+between(t,55.66,56.34)+between(t,56.44,57.92)',asetpts=N/SR/TB\" \"renders/cut.mp4\"",
+  "rows": [
+    {
+      "i": 0,
+      "start": 0,
+      "end": 14.22,
+      "text": "Si tu Gemini CLI dejó de contestar, no fue por tu computadora, simplemente fue que Google lo pagó el 18 de junio y lo cambió por Antigravity CLI le pasó a quien lo usaba gratis o de pago en planes Pro o Ultra.",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 1,
+      "start": 15.18,
+      "end": 26.08,
+      "text": "Sol, de los que lo usaba, simplemente descarate la nueva aplicación de Antigravity y tenés los planes gratuitos o lo puedes usar mediante comando con estos comandos aquí.",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 2,
+      "start": 29.1,
+      "end": 34.28,
+      "text": "Simplemente si lo haces mediante la terminal, marcas tus extensiones y tu configuración",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 3,
+      "start": 34.28,
+      "end": 36.92,
+      "text": "y marcas qué querés traer de vuelta.",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 4,
+      "start": 39.56,
+      "end": 45.44,
+      "text": "Lo único que si tenés alguna skill local instalada, la tenés que mover vos mismo, entras",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 5,
+      "start": 45.44,
+      "end": 49.4,
+      "text": "a la carpeta de Ains y las arrastras a su nueva carpeta.",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 6,
+      "start": 51.98,
+      "end": 56.92,
+      "text": "Y si querés ver el paso a paso de cómo hacerlo está en mi comunidad de WhatsApp, el link",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 7,
+      "start": 56.92,
+      "end": 57.8,
+      "text": "está en mi perfil.",
+      "keep": true,
+      "reason": "contenido"
+    }
+  ]
+}

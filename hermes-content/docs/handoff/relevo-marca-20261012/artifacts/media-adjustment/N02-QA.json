@@ -1,0 +1,68 @@
+{
+  "original_frames": 3339,
+  "preview_frames": 3271,
+  "expected_frames": 3271,
+  "all_retained_video_frames_identical": true,
+  "removed_frames_half_open": [
+    3087,
+    3155
+  ],
+  "removed_output_seconds": [
+    102.9,
+    105.16666666666667
+  ],
+  "removed_seconds": 2.2666666666666666,
+  "subtitle_words_overlapping_canonical_cut": 0,
+  "sha256": "c60a66dacd416b1712afab6a31604b118f8a1af4a053047b3562a5ee7d6793a1",
+  "audio_decoded_samples": {
+    "original": 5341184,
+    "preview": 5232640,
+    "reference": 5232384
+  },
+  "audio_correlations": {
+    "20": {
+      "correlation": 0.9998896306012964,
+      "lag_samples": 0,
+      "lag_ms": 0.0
+    },
+    "102.7": {
+      "correlation": 0.9999923177779879,
+      "lag_samples": 0,
+      "lag_ms": 0.0
+    },
+    "103.2": {
+      "correlation": 0.9998922956612181,
+      "lag_samples": 0,
+      "lag_ms": 0.0
+    },
+    "106": {
+      "correlation": 0.9999063207059615,
+      "lag_samples": 0,
+      "lag_ms": 0.0
+    }
+  },
+  "probe": {
+    "programs": [],
+    "streams": [
+      {
+        "codec_name": "h264",
+        "width": 360,
+        "height": 640,
+        "r_frame_rate": "30/1"
+      },
+      {
+        "codec_name": "aac",
+        "sample_rate": "48000",
+        "channels": 2,
+        "r_frame_rate": "0/0"
+      }
+    ],
+    "format": {
+      "duration": "109.033333"
+    }
+  },
+  "decode_exit": 0,
+  "silences": [],
+  "black_intervals": [],
+  "loudness": "Summary:\n\n  Integrated loudness:\n    I:         -13.2 LUFS\n    Threshold: -23.2 LUFS\n\n  Loudness range:\n    LRA:         1.8 LU\n    Threshold: -33.2 LUFS\n    LRA low:   -14.1 LUFS\n    LRA high:  -12.3 LUFS\n\n  True peak:\n    Peak:       -0.4 dBFS\n"
+}

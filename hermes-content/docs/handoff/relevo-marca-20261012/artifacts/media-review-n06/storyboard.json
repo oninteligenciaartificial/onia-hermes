@@ -1,0 +1,1041 @@
+{
+ "titulo": "N06 · Gemini CLI se apagó, llega Antigravity (BORRADOR sobre el corte propuesto)",
+ "nota": "Borrador: sobre el corte PROPUESTO, sin el «ok cortes» de Sergio Urcullo. Textos en pantalla = lo que dijo Sergio o lo que dice la página capturada el 11-oct-2026. Capturas: geminicli.com, developers.googleblog.com (19-may-2026), antigravity.google (home, pricing, docs/cli/install, docs/cli/gcli-migration).",
+ "assets": "capturas",
+ "camara": {},
+ "capturas": [
+  {
+   "id": "gem-aviso",
+   "url": "https://geminicli.com/",
+   "ancho_css": 560,
+   "esquema": "dark",
+   "ancla": null,
+   "alto_css": 130,
+   "fijos": "abajo",
+   "frases": [
+    "Gemini CLI was replaced by Antigravity CLI",
+    "June 18th, 2026"
+   ]
+  },
+  {
+   "id": "blog-plazo",
+   "url": "https://developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli",
+   "ancho_css": 560,
+   "esquema": "light",
+   "ancla": "Important timeline for Consumers",
+   "margen": 14,
+   "alto_css": 330,
+   "fijos": "ocultar",
+   "frases": [
+    "June 18, 2026",
+    "Google AI Pro and Ultra",
+    "free of charge"
+   ]
+  },
+  {
+   "id": "blog-titulo",
+   "url": "https://developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli",
+   "ancho_css": 560,
+   "esquema": "light",
+   "ancla": "An important update:",
+   "margen": 30,
+   "alto_css": 620,
+   "fijos": "ocultar",
+   "frases": [
+    "MAY 19, 2026"
+   ]
+  },
+  {
+   "id": "ag-inicio",
+   "url": "https://antigravity.google/",
+   "ancho_css": 560,
+   "esquema": "light",
+   "ancla": null,
+   "alto_css": 450,
+   "fijos": "abajo",
+   "frases": [
+    "Download on Desktop",
+    "Available on macOS, Windows, Linux, and Googlebook"
+   ]
+  },
+  {
+   "id": "ag-precio",
+   "url": "https://antigravity.google/pricing",
+   "ancho_css": 560,
+   "esquema": "light",
+   "ancla": "For Individuals",
+   "margen": 70,
+   "alto_css": 400,
+   "fijos": "abajo",
+   "frases": [
+    "For Individuals",
+    "$0/month",
+    "Experience Antigravity without a subscription plan"
+   ]
+  },
+  {
+   "id": "ag-instalar-unix",
+   "url": "https://antigravity.google/docs/cli/install/",
+   "ancho_css": 560,
+   "esquema": "dark",
+   "ancla": "Execute the native installer script",
+   "margen": 50,
+   "alto_css": 200,
+   "fijos": "ocultar",
+   "frases": [
+    "curl -fsSL https://antigravity.google/cli/install.sh | bash"
+   ]
+  },
+  {
+   "id": "ag-instalar-win",
+   "url": "https://antigravity.google/docs/cli/install/",
+   "ancho_css": 560,
+   "esquema": "dark",
+   "ancla": "Open PowerShell and execute",
+   "margen": 10,
+   "alto_css": 150,
+   "fijos": "ocultar",
+   "frases": [
+    "irm https://antigravity.google/cli/install.ps1 | iex"
+   ]
+  },
+  {
+   "id": "ag-migracion-inicio",
+   "url": "https://antigravity.google/docs/cli/gcli-migration/",
+   "ancho_css": 560,
+   "esquema": "dark",
+   "ancla": "When you execute",
+   "margen": 52,
+   "alto_css": 330,
+   "fijos": "ocultar",
+   "frases": [
+    "Select the extensions and global configurations you want to convert",
+    "choose which assets to migrate"
+   ]
+  },
+  {
+   "id": "ag-migracion-skills",
+   "url": "https://antigravity.google/docs/cli/gcli-migration/",
+   "ancho_css": 560,
+   "esquema": "dark",
+   "ancla": "While global shared skills remain",
+   "margen": 50,
+   "alto_css": 500,
+   "fijos": "ocultar",
+   "frases": [
+    "Workspace project path",
+    ".agents/skills/",
+    "Action required"
+   ]
+  }
+ ],
+ "logos_svg": [
+  {
+   "id": "logo-gemini",
+   "svg": "hermes-content/references/brand-logos/gemini-color.svg",
+   "alto": 240
+  },
+  {
+   "id": "logo-whatsapp",
+   "svg": "hermes-content/references/brand-logos/whatsapp.svg",
+   "alto": 240
+  }
+ ],
+ "zooms": [
+  {
+   "tipo": "golpe",
+   "en": "apagó"
+  },
+  {
+   "tipo": "golpe",
+   "en": "mismo"
+  },
+  {
+   "tipo": "golpe",
+   "en": {
+    "frase": "whatsapp",
+    "corte": true
+   }
+  }
+ ],
+ "escenas": [
+  {
+   "id": "gancho",
+   "layout": "split",
+   "fondo": "oscuro",
+   "desde": {
+    "t": 0
+   },
+   "etiqueta": [
+    "GEMINI CLI",
+    "AVISO OFICIAL"
+   ],
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "Tu *Gemini CLI*\ndejó de contestar",
+     "tam": 90,
+     "pos": [
+      48,
+      104
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "logo",
+     "src": "logo-gemini.png",
+     "ancho": 140,
+     "pos": [
+      880,
+      112
+     ],
+     "en": {
+      "frase": "gemini",
+      "offset": -0.1
+     }
+    },
+    {
+     "tipo": "captura",
+     "src": "gem-aviso",
+     "recorte": [
+      0,
+      0,
+      1120,
+      260
+     ],
+     "ancho": 984,
+     "pos": [
+      48,
+      420
+     ],
+     "anim": "corte",
+     "url": "geminicli.com",
+     "marcas": [
+      {
+       "frase": "Gemini CLI was replaced by Antigravity CLI",
+       "en": "dejó"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "no-fue",
+   "layout": "split",
+   "fondo": "papel",
+   "desde": {
+    "frase": "no fue por",
+    "corte": true
+   },
+   "etiqueta": [
+    "GEMINI CLI"
+   ],
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "No fue tu\n*computadora*",
+     "tam": 120,
+     "pos": [
+      48,
+      230
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "pildora",
+     "texto": "no fue tu computadora",
+     "icono": "cruz",
+     "tam": 40,
+     "pos": [
+      48,
+      640
+     ],
+     "en": "computadora"
+    }
+   ]
+  },
+  {
+   "id": "plazo",
+   "layout": "split",
+   "fondo": "oscuro",
+   "desde": {
+    "frase": "simplemente fue que",
+    "corte": true
+   },
+   "etiqueta": [
+    "GEMINI CLI",
+    "BLOG DE GOOGLE · 19 MAY 2026"
+   ],
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "Google lo *apagó*",
+     "tam": 96,
+     "pos": [
+      48,
+      104
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "captura",
+     "src": "blog-plazo",
+     "recorte": [
+      0,
+      0,
+      1120,
+      420
+     ],
+     "ancho": 984,
+     "pos": [
+      48,
+      250
+     ],
+     "url": "developers.googleblog.com",
+     "marcas": [
+      {
+       "frase": "June 18, 2026",
+       "en": "18",
+       "pad": 2
+      }
+     ]
+    },
+    {
+     "tipo": "sello",
+     "texto": "18 DE JUNIO",
+     "tam": 54,
+     "rot": -8,
+     "pos": [
+      650,
+      700
+     ],
+     "en": "junio"
+    }
+   ]
+  },
+  {
+   "id": "cambio",
+   "layout": "lamina",
+   "fondo": "oscuro",
+   "desde": "y lo cambió",
+   "etiqueta": [
+    "ANTIGRAVITY CLI",
+    "ANUNCIO OFICIAL · 19 MAY 2026"
+   ],
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "Lo cambió por\n*Antigravity CLI*",
+     "tam": 100,
+     "pos": [
+      48,
+      200
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "captura",
+     "src": "blog-titulo",
+     "recorte": [
+      0,
+      0,
+      1120,
+      1240
+     ],
+     "ancho": 820,
+     "pos": [
+      "centro",
+      490
+     ],
+     "url": "developers.googleblog.com",
+     "anim": "corte"
+    }
+   ]
+  },
+  {
+   "id": "quien",
+   "layout": "split",
+   "fondo": "oscuro",
+   "desde": {
+    "frase": "le pasó a quien",
+    "corte": true
+   },
+   "etiqueta": [
+    "GEMINI CLI",
+    "BLOG DE GOOGLE · 19 MAY 2026"
+   ],
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "*Gratis,* Pro o Ultra",
+     "tam": 88,
+     "pos": [
+      48,
+      104
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "captura",
+     "src": "blog-plazo",
+     "recorte": [
+      0,
+      0,
+      1120,
+      420
+     ],
+     "ancho": 984,
+     "pos": [
+      48,
+      250
+     ],
+     "url": "developers.googleblog.com",
+     "anim": "corte",
+     "marcas": [
+      {
+       "frase": "free of charge",
+       "en": "gratis",
+       "pad": 2
+      },
+      {
+       "frase": "Google AI Pro and Ultra",
+       "en": "pro",
+       "pad": 2
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "usaban",
+   "layout": "full",
+   "desde": {
+    "frase": "y los que lo",
+    "corte": true
+   },
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "Los que lo *usaban*",
+     "tam": 92,
+     "alinear": "centro",
+     "pos": [
+      "centro",
+      370
+     ],
+     "en": {
+      "frase": "y los que lo",
+      "offset": 0.05
+     }
+    }
+   ]
+  },
+  {
+   "id": "app",
+   "layout": "split",
+   "fondo": "oscuro",
+   "desde": "simplemente descargate",
+   "etiqueta": [
+    "ANTIGRAVITY",
+    "SITIO OFICIAL"
+   ],
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "Descargate la *app*",
+     "tam": 88,
+     "pos": [
+      48,
+      104
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "captura",
+     "src": "ag-inicio",
+     "recorte": [
+      0,
+      190,
+      1120,
+      710
+     ],
+     "ancho": 860,
+     "pos": [
+      "centro",
+      230
+     ],
+     "url": "antigravity.google",
+     "anim": "corte",
+     "marcas": [
+      {
+       "frase": "Download on Desktop",
+       "en": "aplicación"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gratis",
+   "layout": "split",
+   "fondo": "oscuro",
+   "desde": {
+    "frase": "tenés los planes",
+    "corte": true
+   },
+   "etiqueta": [
+    "ANTIGRAVITY",
+    "PRECIOS · SITIO OFICIAL"
+   ],
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "Planes *gratuitos*",
+     "tam": 88,
+     "pos": [
+      48,
+      104
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "captura",
+     "src": "ag-precio",
+     "recorte": [
+      0,
+      0,
+      1120,
+      640
+     ],
+     "ancho": 940,
+     "pos": [
+      "centro",
+      240
+     ],
+     "url": "antigravity.google/pricing",
+     "anim": "corte",
+     "marcas": [
+      {
+       "frase": "$0/month",
+       "en": "gratuitos"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "comando",
+   "layout": "split",
+   "fondo": "oscuro",
+   "desde": "lo podés usar",
+   "etiqueta": [
+    "ANTIGRAVITY CLI",
+    "INSTALACIÓN · DOCS OFICIALES"
+   ],
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "O por *comando*",
+     "tam": 80,
+     "pos": [
+      48,
+      104
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "captura",
+     "src": "ag-instalar-unix",
+     "recorte": [
+      0,
+      0,
+      1120,
+      400
+     ],
+     "ancho": 984,
+     "pos": [
+      48,
+      230
+     ],
+     "url": "antigravity.google/docs/cli/install",
+     "anim": "corte",
+     "marcas": [
+      {
+       "frase": "curl -fsSL https://antigravity.google/cli/install.sh | bash",
+       "en": "comando"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "comando-win",
+   "layout": "split",
+   "fondo": "oscuro",
+   "desde": {
+    "frase": "estos comandos",
+    "corte": true
+   },
+   "etiqueta": [
+    "ANTIGRAVITY CLI",
+    "INSTALACIÓN · DOCS OFICIALES"
+   ],
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "Con estos *comandos*",
+     "tam": 80,
+     "pos": [
+      48,
+      104
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "captura",
+     "src": "ag-instalar-unix",
+     "recorte": [
+      0,
+      0,
+      1120,
+      400
+     ],
+     "ancho": 900,
+     "pos": [
+      "centro",
+      200
+     ],
+     "url": "antigravity.google/docs/cli/install",
+     "anim": "corte",
+     "marcas": [
+      {
+       "frase": "curl -fsSL https://antigravity.google/cli/install.sh | bash",
+       "en": "estos"
+      }
+     ]
+    },
+    {
+     "tipo": "captura",
+     "src": "ag-instalar-win",
+     "recorte": [
+      0,
+      0,
+      1120,
+      300
+     ],
+     "marco": false,
+     "ancho": 900,
+     "pos": [
+      "centro",
+      600
+     ],
+     "anim": "fundido",
+     "en": "comandos",
+     "marcas": [
+      {
+       "frase": "irm https://antigravity.google/cli/install.ps1 | iex",
+       "en": "comandos"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "migrar",
+   "layout": "split",
+   "fondo": "oscuro",
+   "desde": {
+    "frase": "simplemente si lo",
+    "corte": true
+   },
+   "etiqueta": [
+    "ANTIGRAVITY CLI",
+    "MIGRACIÓN DESDE GEMINI CLI"
+   ],
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "En la *terminal*",
+     "tam": 88,
+     "pos": [
+      48,
+      104
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "captura",
+     "src": "ag-migracion-inicio",
+     "recorte": [
+      0,
+      0,
+      1120,
+      660
+     ],
+     "ancho": 940,
+     "pos": [
+      "centro",
+      240
+     ],
+     "url": "antigravity.google/docs/cli/gcli-migration",
+     "anim": "corte"
+    }
+   ]
+  },
+  {
+   "id": "migrar-extensiones",
+   "layout": "split",
+   "fondo": "oscuro",
+   "desde": {
+    "frase": "marcas tus extensiones",
+    "corte": true
+   },
+   "etiqueta": [
+    "ANTIGRAVITY CLI",
+    "MIGRACIÓN DESDE GEMINI CLI"
+   ],
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "Tus *extensiones*\ny tu *configuración*",
+     "tam": 80,
+     "pos": [
+      48,
+      104
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "captura",
+     "src": "ag-migracion-inicio",
+     "recorte": [
+      0,
+      340,
+      1120,
+      320
+     ],
+     "ancho": 984,
+     "pos": [
+      48,
+      330
+     ],
+     "url": "antigravity.google/docs/cli/gcli-migration",
+     "anim": "corte",
+     "marcas": [
+      {
+       "frase": "Select the extensions and global configurations you want to convert",
+       "en": "extensiones"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "migrar-traer",
+   "layout": "split",
+   "fondo": "oscuro",
+   "desde": {
+    "frase": "marcas qué querés",
+    "corte": true
+   },
+   "etiqueta": [
+    "ANTIGRAVITY CLI",
+    "MIGRACIÓN DESDE GEMINI CLI"
+   ],
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "Marcás qué querés\n*traer de vuelta*",
+     "tam": 80,
+     "pos": [
+      48,
+      104
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "captura",
+     "src": "ag-migracion-inicio",
+     "recorte": [
+      0,
+      100,
+      1120,
+      300
+     ],
+     "ancho": 984,
+     "pos": [
+      48,
+      330
+     ],
+     "url": "antigravity.google/docs/cli/gcli-migration",
+     "anim": "corte",
+     "marcas": [
+      {
+       "frase": "choose which assets to migrate",
+       "en": "qué querés traer"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "skills",
+   "layout": "split",
+   "fondo": "oscuro",
+   "desde": {
+    "frase": "lo único que",
+    "corte": true
+   },
+   "etiqueta": [
+    "ANTIGRAVITY CLI",
+    "MIGRACIÓN · SKILLS"
+   ],
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "Skills *locales*",
+     "tam": 88,
+     "pos": [
+      48,
+      104
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "captura",
+     "src": "ag-migracion-skills",
+     "recorte": [
+      0,
+      300,
+      1120,
+      400
+     ],
+     "ancho": 900,
+     "pos": [
+      "centro",
+      215
+     ],
+     "url": "antigravity.google/docs/cli/gcli-migration",
+     "anim": "corte",
+     "marcas": [
+      {
+       "frase": "Workspace project path",
+       "en": "skill local"
+      }
+     ]
+    },
+    {
+     "tipo": "captura",
+     "src": "ag-migracion-skills",
+     "recorte": [
+      0,
+      700,
+      1120,
+      300
+     ],
+     "marco": false,
+     "ancho": 900,
+     "pos": [
+      "centro",
+      615
+     ],
+     "anim": "fundido",
+     "en": "tenés que mover",
+     "marcas": [
+      {
+       "frase": "Action required",
+       "en": "tenés que mover"
+      }
+     ]
+    },
+    {
+     "tipo": "sello",
+     "texto": "VOS MISMO",
+     "tam": 50,
+     "rot": -8,
+     "pos": [
+      720,
+      104
+     ],
+     "en": "vos mismo"
+    }
+   ]
+  },
+  {
+   "id": "mover",
+   "layout": "lamina",
+   "fondo": "papel",
+   "desde": {
+    "frase": "entras a la carpeta",
+    "corte": true
+   },
+   "etiqueta": [
+    "SKILLS LOCALES",
+    "MOVER A MANO"
+   ],
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "Arrastralas a su\n*nueva carpeta*",
+     "tam": 96,
+     "pos": [
+      48,
+      250
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "caja",
+     "titulo": ".gemini/skills/",
+     "sub": "Gemini CLI",
+     "ancho": 780,
+     "alto": 220,
+     "tam": 56,
+     "pos": [
+      "centro",
+      640
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "flecha",
+     "largo": 120,
+     "vertical": true,
+     "grosor": 8,
+     "pos": [
+      "centro",
+      890
+     ],
+     "en": "arrastras"
+    },
+    {
+     "tipo": "caja",
+     "titulo": ".agents/skills/",
+     "sub": "Antigravity CLI",
+     "estilo": "verde",
+     "ancho": 780,
+     "alto": 220,
+     "tam": 56,
+     "pos": [
+      "centro",
+      1050
+     ],
+     "en": "su nueva carpeta"
+    },
+    {
+     "tipo": "credito",
+     "texto": "Fuente: antigravity.google/docs/cli/gcli-migration",
+     "pos": [
+      48,
+      1380
+     ]
+    }
+   ]
+  },
+  {
+   "id": "cta-cara",
+   "layout": "full",
+   "desde": {
+    "frase": "y si querés ver",
+    "corte": true
+   },
+   "elementos": []
+  },
+  {
+   "id": "cta",
+   "layout": "split",
+   "fondo": "oscuro",
+   "desde": "en mi comunidad",
+   "elementos": [
+    {
+     "tipo": "tarjeta",
+     "ancho": 880,
+     "alto": 330,
+     "pos": [
+      "centro",
+      190
+     ],
+     "anim": "corte",
+     "lineas": [
+      {
+       "texto": "El paso a paso",
+       "tam": 84,
+       "color": "blanco",
+       "aire": 6
+      },
+      {
+       "texto": "MI COMUNIDAD",
+       "tam": 100,
+       "color": "verde",
+       "aire": 22
+      },
+      {
+       "texto": "de WhatsApp",
+       "fuente": "semibold",
+       "tam": 44,
+       "color": "blanco"
+      }
+     ]
+    },
+    {
+     "tipo": "logo",
+     "src": "logo-whatsapp.png",
+     "alto": 130,
+     "pos": [
+      "centro",
+      560
+     ],
+     "en": {
+      "frase": "whatsapp",
+      "offset": -0.4
+     }
+    }
+   ]
+  },
+  {
+   "id": "cta-link",
+   "layout": "split",
+   "fondo": "oscuro",
+   "desde": {
+    "frase": "el link",
+    "corte": true
+   },
+   "elementos": [
+    {
+     "tipo": "tarjeta",
+     "ancho": 880,
+     "alto": 300,
+     "pos": [
+      "centro",
+      200
+     ],
+     "anim": "corte",
+     "lineas": [
+      {
+       "texto": "El link está en",
+       "tam": 72,
+       "color": "blanco",
+       "aire": 10
+      },
+      {
+       "texto": "MI PERFIL",
+       "tam": 110,
+       "color": "verde",
+       "aire": 0
+      }
+     ]
+    },
+    {
+     "tipo": "logo",
+     "src": "logo-whatsapp.png",
+     "alto": 130,
+     "pos": [
+      "centro",
+      540
+     ],
+     "anim": "corte"
+    }
+   ]
+  }
+ ]
+}

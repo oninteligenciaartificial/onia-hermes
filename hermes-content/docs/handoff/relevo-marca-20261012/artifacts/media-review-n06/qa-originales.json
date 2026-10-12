@@ -1,0 +1,98 @@
+{
+  "N06": {
+    "probe": {
+      "programs": [],
+      "streams": [
+        {
+          "codec_name": "h264",
+          "width": 360,
+          "height": 640,
+          "r_frame_rate": "30/1"
+        },
+        {
+          "codec_name": "aac",
+          "r_frame_rate": "0/0"
+        }
+      ],
+      "format": {
+        "duration": "45.504000"
+      }
+    },
+    "decode_exit": 0,
+    "silences": [],
+    "loudness": "Summary:\n\n  Integrated loudness:\n    I:         -13.2 LUFS\n    Threshold: -23.2 LUFS\n\n  Loudness range:\n    LRA:         2.2 LU\n    Threshold: -33.3 LUFS\n    LRA low:   -14.3 LUFS\n    LRA high:  -12.1 LUFS\n\n  True peak:\n    Peak:        0.0 dBFS\n",
+    "sha256": "d8753944a720d201c7bd141acce4236699cb159dc95e90f3f80049c77f7d8f40"
+  },
+  "N07": {
+    "probe": {
+      "programs": [],
+      "streams": [
+        {
+          "codec_name": "h264",
+          "width": 360,
+          "height": 640,
+          "r_frame_rate": "30/1"
+        },
+        {
+          "codec_name": "aac",
+          "r_frame_rate": "0/0"
+        }
+      ],
+      "format": {
+        "duration": "81.733333"
+      }
+    },
+    "decode_exit": 0,
+    "silences": [],
+    "loudness": "Summary:\n\n  Integrated loudness:\n    I:         -13.0 LUFS\n    Threshold: -23.1 LUFS\n\n  Loudness range:\n    LRA:         2.7 LU\n    Threshold: -33.1 LUFS\n    LRA low:   -14.5 LUFS\n    LRA high:  -11.8 LUFS\n\n  True peak:\n    Peak:       -0.8 dBFS\n",
+    "sha256": "f22e5caeb2d96cfe9c625d6e2a7d0dc4e3a6921890c866cee4cbad726d0a90e6"
+  },
+  "DD-A": {
+    "probe": {
+      "programs": [],
+      "streams": [
+        {
+          "codec_name": "h264",
+          "width": 360,
+          "height": 640,
+          "r_frame_rate": "30/1"
+        },
+        {
+          "codec_name": "aac",
+          "r_frame_rate": "0/0"
+        }
+      ],
+      "format": {
+        "duration": "58.433333"
+      }
+    },
+    "decode_exit": 0,
+    "silences": [],
+    "loudness": "Summary:\n\n  Integrated loudness:\n    I:         -13.0 LUFS\n    Threshold: -23.1 LUFS\n\n  Loudness range:\n    LRA:         1.8 LU\n    Threshold: -33.1 LUFS\n    LRA low:   -14.1 LUFS\n    LRA high:  -12.2 LUFS\n\n  True peak:\n    Peak:       -0.3 dBFS\n",
+    "sha256": "4582213089bbcf1c7fb4d84511ce64b7539eaf00e8f755952914a803d46af583"
+  },
+  "N02": {
+    "probe": {
+      "programs": [],
+      "streams": [
+        {
+          "codec_name": "h264",
+          "width": 360,
+          "height": 640,
+          "r_frame_rate": "30/1"
+        },
+        {
+          "codec_name": "aac",
+          "r_frame_rate": "0/0"
+        }
+      ],
+      "format": {
+        "duration": "111.300000"
+      }
+    },
+    "decode_exit": 0,
+    "silences": [],
+    "loudness": "Summary:\n\n  Integrated loudness:\n    I:         -13.2 LUFS\n    Threshold: -23.2 LUFS\n\n  Loudness range:\n    LRA:         2.0 LU\n    Threshold: -33.2 LUFS\n    LRA low:   -14.2 LUFS\n    LRA high:  -12.2 LUFS\n\n  True peak:\n    Peak:       -0.4 dBFS\n",
+    "sha256": "123c375b33f1f14985ada85d7f07537f4322a6a79dad7c406d89828b9af76389"
+  }
+}

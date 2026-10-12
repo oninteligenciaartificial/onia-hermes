@@ -1,0 +1,22 @@
+{
+  "duration": "45.600000",
+  "video": {
+    "codec": "h264",
+    "width": 360,
+    "height": 640,
+    "fps": "30/1",
+    "frames": "1366"
+  },
+  "audio": [
+    {
+      "codec": "aac",
+      "sample_rate": "48000",
+      "channels": 2
+    }
+  ],
+  "silences": [],
+  "black_intervals": [],
+  "loudness_summary": "Summary:\n\n  Integrated loudness:\n    I:         -15.4 LUFS\n    Threshold: -25.4 LUFS\n\n  Loudness range:\n    LRA:         2.2 LU\n    Threshold: -35.5 LUFS\n    LRA low:   -16.4 LUFS\n    LRA high:  -14.2 LUFS\n\n  True peak:\n    Peak:       -3.0 dBFS\n",
+  "decode_exit": 0,
+  "sha256": "41d5541d69e71b85bfe3f80268fd7d650259196656c9d2dd06309be46f41d492"
+}
