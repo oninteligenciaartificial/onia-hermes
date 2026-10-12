@@ -4,6 +4,7 @@ import type { SiteClient } from "./types";
 export type FooterOptions = {
   // Focus landing: drop social links (exits) and keep only conversion contact.
   minimal?: boolean;
+  showHours?: boolean;
 };
 
 export function renderFooter(client: SiteClient, options: FooterOptions = {}): string {
@@ -38,6 +39,8 @@ export function renderFooter(client: SiteClient, options: FooterOptions = {}): s
     client.contacto.tel && `<a href="tel:${escapeAttribute(client.contacto.tel)}">${escapeHtml(client.contacto.tel)}</a>`,
     waHref && `<a href="${escapeAttribute(waHref)}" target="_blank" rel="noreferrer">WhatsApp</a>`,
     client.contacto.direccion && `<span>${escapeHtml(client.contacto.direccion)}</span>`,
+    options.showHours && client.contacto.horario?.trim() &&
+      `<span>Horarios: ${escapeHtml(client.contacto.horario.trim()).replace(/\r?\n/g, "<br>")}</span>`,
   ]
     .filter(Boolean)
     .join("");

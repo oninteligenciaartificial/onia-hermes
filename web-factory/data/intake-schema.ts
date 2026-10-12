@@ -384,6 +384,7 @@ export function buildClientProfileFromIntake(input: unknown): ClientProfile {
       tel: intake.contact.phone,
       whatsapp: intake.contact.whatsapp,
       direccion: intake.contact.address || intake.business.location,
+      ...(intake.business.hours.trim() ? { horario: intake.business.hours.trim() } : {}),
     },
     redes: {
       ig: intake.social.instagram,
@@ -426,6 +427,10 @@ export function buildClientProfileFromIntake(input: unknown): ClientProfile {
 export function getMissingClientInputs(input: unknown): string[] {
   const intake = webFactoryIntakeSchema.parse(input);
   const missing = new Set<string>(intake.operations.missing);
+
+  if (intake.project.template === "landing-clinic" && !intake.business.hours.trim()) {
+    missing.add("horarios de atención confirmados");
+  }
 
   if (!intake.brand.logoText && !intake.brand.logoIcon && !intake.brand.logoWide) {
     missing.add("logo o marca visual");

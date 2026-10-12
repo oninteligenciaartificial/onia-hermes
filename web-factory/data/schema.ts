@@ -304,6 +304,7 @@ export const clientSchema = z.object({
       tel: z.string().default(""),
       whatsapp: z.string().default(""),
       direccion: z.string().default(""),
+      horario: z.string().trim().optional(),
     })
     .default({
       email: "",
