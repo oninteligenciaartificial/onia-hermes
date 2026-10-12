@@ -38,6 +38,8 @@
 
 ### Registro de encargos y aprendizaje — único intake 12-oct
 
+**Delta operativo comunicado por madre, 12-oct:** automation oficial heartbeat **LOCAL** «ONIA Platform — supervisión y continuidad», ID `onia-platform-supervisi-n-y-continuidad`, ACTIVE cada hora, target madre `01a12beb-7774-7c02-9931-12264158df83`. Creación confirmada por herramienta; **primera ejecución programada NO probada**. Requiere PC disponible: no es scheduler cloud ni prueba PC apagada. Contrato: snapshot compacto/cursor; si worker active no encargo nuevo, si idle tomar siguiente viable autorizado sin duplicar; sin producción. Pausar cuando sustituto cloud esté validado o todo cerrado/bloqueado. Platform cerró Cobrador PR #166, commit `b963aacc`, 27 pruebas nuevas + 13 regresiones QA reportadas; siguiente Seguidor enviado y active verificado por madre. No reabrir Cobrador. Alfred continúa enviado/escalado, respuesta especialista pendiente; Hermes conserva 18/18 offline y wake cloud no validado.
+
 META: no perder pedidos/enlaces ni rehacer cierres. PRUEBA: entradas con dueño/fecha/fuente y evidencia revisable. PARADA: permiso/dato bloqueante se pregunta concretamente, continuando lo independiente. Skill actualizada en `.claude/skills/onia-continuidad/SKILL.md`; no skill duplicada, entrenamiento ni carga cloud comprobada por este cambio.
 
 | Pedido / objetivo | Dueño / estado | Evidencia y fuente (12-oct) | Aprendizaje y siguiente acción / bloqueo |
