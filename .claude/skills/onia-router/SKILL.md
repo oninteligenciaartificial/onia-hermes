@@ -5,6 +5,26 @@ description: Invocar al INICIO de cualquier trabajo en el monorepo onia-hermes. 
 
 # ONIA Router — stack de skills por carril
 
+## Índice corto vigente por rol — Sergio Urcullo, 12-oct-2026
+
+**META:** elegir únicamente fuentes/skills necesarias para el contrato actual. **PRUEBA:** repo/ref/rutas comprobadas y entrega del dueño con QA. **PARADA:** acceso/permiso/dato bloqueante concreto, sin suspender frentes independientes ni crear cron/migrar infra.
+
+Precedencia: última orden Sergio → [CODEX](../../../CODEX.md) y [routing vigente](../../../hermes-content/docs/AI_MODEL_ROUTING_2026.md) → método de la skill. El mapa y casos Claude debajo son historia/contexto; modelos, autosync, IDs y loops anteriores NO se activan ni prevalecen. Madres **Sol 6.1 medio**, solo delegan/revisan/resumen; TODO código Platform **Astra medio**, QA Sol independiente y mecánica Luna. Modelo configurado no acredita efectivo.
+
+| Rol / contrato | Fuente única a consultar progresivamente |
+|---|---|
+| Madre / coordinación | [onia-continuidad](../onia-continuidad/SKILL.md) para intake/delta/cierre; [onia-sesion-madre](../onia-sesion-madre/SKILL.md) para contratos y coordinación, subordinada a reglas vigentes. Estado único: [handoff audit](../../../hermes-content/docs/handoff/codex-cloud-pc-20261011.md). No hacer oficio de worker. |
+| Platform / código y QA | Repo Platform: `.claude/skills/onia-backend/SKILL.md`, `onia-frontend/SKILL.md`, `onia-db/SKILL.md`, `onia-seguridad/SKILL.md`, `onia-verificacion/SKILL.md`; cargar solo las del diff/contrato. `onia-deploy/SKILL.md` únicamente si deploy autorizado. Verificar checkout/ref; path local verificado `C:/dev/proyectos/onia-platform/.claude/skills/`, no asumirlo montado en cloud. |
+| Hermes / infra y QA | [onia-infra](../onia-infra/SKILL.md), [onia-hermes-jarvis](../onia-hermes-jarvis/SKILL.md); [verification-loop](../verification-loop/SKILL.md) para harness/QA pertinente, no permiso para scheduler. [Auditoría supervisor](../../../hermes-content/docs/audits/SUPERVISOR-CLOUD-INVENTARIO-20261012.md) distingue lectura/envío y bloqueos. |
+| Diseño / UI / referencias | [aprender-de-todo](../aprender-de-todo/SKILL.md) para evidencia observado/inferencia/propuesta; [web-factory-design-research](../web-factory-design-research/SKILL.md) y [impeccable](../impeccable/SKILL.md) según objetivo. [Orbix](../../../hermes-content/research/orbix-2026-10-12/INFORME.md) es referencia revisada documental/visual parcial, no diseño/oferta implementados ni métricas verificadas. |
+
+**Lectura progresiva:** abrir primero contrato + último estado/ref/SHA; luego sección pertinente de una skill/fuente. Leer delta desde último punto revisado, ampliar solo por duda material. El «stack común toda sesión» histórico no obliga a cargar todas las skills ni historia completa. No copiar `.claude/skills` a `.agents`, reorganizar/eliminar catálogo ni afirmar instalación cloud sin lectura/ACK de esa ref.
+
+**Frentes comunicados por madre, snapshot 12-oct (no telemetría nueva):** Platform Confirmador teléfono inválido #163, Astra, tras cierre WhatsApp #164; Hermes QA recibe auditoría/harness de loops, Sol + Luna QA; Orbix amplía UI/infra observable por su dueño. Madre solo revisa QA/decide. No reabrir cerrados ni ejecutar producto desde este índice.
+
+**Automatizaciones observadas por root:** Marca local ACTIVE hourly; vieja Platform septiembre PAUSED. No cloud loop Platform probado. Son estados reportados, no autorización de reactivar/crear rondas ni promesa PC apagada/24×7.
+
+
 Punto de entrada de toda sesión en `onia-hermes`. Antes de trabajar: identificá el
 carril, cargá su stack, respetá las reglas duras. Fuente viva del mapa completo:
 `hermes-content/docs/ONIA_SKILLS_STACK_Y_SUBAGENTES.md`.
