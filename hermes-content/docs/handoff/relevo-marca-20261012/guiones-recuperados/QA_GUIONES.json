@@ -1,0 +1,294 @@
+{
+  "reviewer": "/root/qa_sol",
+  "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+  "source_files": [
+    {
+      "path": "hermes-content/docs/cola/plan-3-semanas/CALENDARIO-PUBLICACION-17-23-OCT.md",
+      "pass": true
+    },
+    {
+      "path": "hermes-content/docs/cola/plan-3-semanas/GRABAR-17-23-OCT.md",
+      "pass": true
+    },
+    {
+      "path": "hermes-content/docs/cola/plan-3-semanas/GRABAR-NUEVOS-11-OCT.md",
+      "pass": true
+    },
+    {
+      "path": "hermes-content/docs/cola/plan-3-semanas/MAPA.md",
+      "pass": true
+    },
+    {
+      "path": "hermes-content/docs/cola/plan-3-semanas/ORDEN-DE-POSTEO-11-17-OCT.md",
+      "pass": true
+    },
+    {
+      "path": "hermes-content/docs/cola/plan-3-semanas/TELEPROMPTER-SI-01-11.txt",
+      "pass": true
+    }
+  ],
+  "expected_order": [
+    "SI-01",
+    "SI-02",
+    "SI-03",
+    "SI-04",
+    "SI-05",
+    "SI-06",
+    "SI-07",
+    "SI-08",
+    "SI-09",
+    "SI-10",
+    "SI-11",
+    "N08",
+    "DU-01",
+    "DU-02",
+    "CC-01",
+    "CC-02",
+    "DU-03",
+    "CC-03"
+  ],
+  "actual_order": [
+    "SI-01",
+    "SI-02",
+    "SI-03",
+    "SI-04",
+    "SI-05",
+    "SI-06",
+    "SI-07",
+    "SI-08",
+    "SI-09",
+    "SI-10",
+    "SI-11",
+    "N08",
+    "DU-01",
+    "DU-02",
+    "CC-01",
+    "CC-02",
+    "DU-03",
+    "CC-03"
+  ],
+  "order_pass": true,
+  "scripts_count": 18,
+  "spoken_file_bytes": 18865,
+  "spoken_file_sha256": "0767d86ef030644d1083c5364eb56e5a01cf1973a70e1daf32bef87dee36a44a",
+  "scripts": [
+    {
+      "id": "SI-01",
+      "heading": "SI-01 · Claude trabaja con la compu apagada · ~60 s",
+      "source_equal": true,
+      "manifest_body_hash_matches": true,
+      "body_sha256": "94a9045c2f7322e52d34ba70bb34ca8648f5bfbd67befe310ab9606e0ea2f60b",
+      "has_technical_table": false,
+      "has_notice": false,
+      "status": "Por grabar; condiciones técnicas pendientes",
+      "body_chars": 1023,
+      "source_chars": 1023
+    },
+    {
+      "id": "SI-02",
+      "heading": "SI-02 · Antes de instalar OpenClaw · ~65 s",
+      "source_equal": true,
+      "manifest_body_hash_matches": true,
+      "body_sha256": "41cd1230fa8d86966150d1be91e6ec83e4633955d947a019421437064e08973d",
+      "has_technical_table": false,
+      "has_notice": false,
+      "status": "Por grabar; condiciones técnicas pendientes",
+      "body_chars": 1173,
+      "source_chars": 1173
+    },
+    {
+      "id": "SI-03",
+      "heading": "SI-03 · Claude, pero vago · ~60 s",
+      "source_equal": true,
+      "manifest_body_hash_matches": true,
+      "body_sha256": "d8bb707b971110c7e3cfe1aed7c7d6f5350fe0e0e2ab4dd920545725c52e2ff5",
+      "has_technical_table": false,
+      "has_notice": false,
+      "status": "Por grabar; condiciones técnicas pendientes",
+      "body_chars": 1020,
+      "source_chars": 1020
+    },
+    {
+      "id": "SI-04",
+      "heading": "SI-04 · Tres comandos escondidos de Claude Code · ~48 s",
+      "source_equal": true,
+      "manifest_body_hash_matches": true,
+      "body_sha256": "d5b7a64c058872968806154919d37a8e0eaa0a829a9b630f30e59eb0edb48463",
+      "has_technical_table": false,
+      "has_notice": false,
+      "status": "Por grabar; condiciones técnicas pendientes",
+      "body_chars": 788,
+      "source_chars": 788
+    },
+    {
+      "id": "SI-05",
+      "heading": "SI-05 · Mi Jarvis por Telegram: cuánto me cuesta · ~57 s",
+      "source_equal": true,
+      "manifest_body_hash_matches": true,
+      "body_sha256": "a88072c73a20567884a8e428239cfd3afa63ba15ce3fa34469b2fbadad78e227",
+      "has_technical_table": false,
+      "has_notice": false,
+      "status": "NO GRABAR TODAVÍA: medición pendiente",
+      "body_chars": 922,
+      "source_chars": 922
+    },
+    {
+      "id": "SI-06",
+      "heading": "SI-06 · Claude habla como cavernícola: lo medí · ~57 s",
+      "source_equal": true,
+      "manifest_body_hash_matches": true,
+      "body_sha256": "bd43fecc5c0d59c3ea1ebc87ce9604f94d3a8506aa68c0495a82180eb4e6384c",
+      "has_technical_table": false,
+      "has_notice": false,
+      "status": "NO GRABAR TODAVÍA: medición pendiente",
+      "body_chars": 969,
+      "source_chars": 969
+    },
+    {
+      "id": "SI-07",
+      "heading": "SI-07 · Dale una meta, no una tarea · ~60 s",
+      "source_equal": true,
+      "manifest_body_hash_matches": true,
+      "body_sha256": "4deb7999e6ce08001ff5ca1bc2c27bfd42d1743689be2391b3b517cccfc2807e",
+      "has_technical_table": false,
+      "has_notice": false,
+      "status": "NO GRABAR TODAVÍA: medición pendiente",
+      "body_chars": 942,
+      "source_chars": 942
+    },
+    {
+      "id": "SI-08",
+      "heading": "SI-08 · Un video que escribió Claude · ~40 s",
+      "source_equal": true,
+      "manifest_body_hash_matches": true,
+      "body_sha256": "4e68f0af9617bd82fa8c6d3b392b27e57ef8bb41af6f51f15f43fa076b7c965d",
+      "has_technical_table": false,
+      "has_notice": false,
+      "status": "Por grabar; condiciones técnicas pendientes",
+      "body_chars": 711,
+      "source_chars": 711
+    },
+    {
+      "id": "SI-09",
+      "heading": "SI-09 · La IA te da links. Abrí dos. · ~54 s",
+      "source_equal": true,
+      "manifest_body_hash_matches": true,
+      "body_sha256": "db95a1bb588d7bd54f64a2313185f758e4e53892be6ddd7a8574aaefe98eff38",
+      "has_technical_table": false,
+      "has_notice": false,
+      "status": "Por grabar; condiciones técnicas pendientes",
+      "body_chars": 886,
+      "source_chars": 886
+    },
+    {
+      "id": "SI-10",
+      "heading": "SI-10 · 750.000 líneas en 11 días · ~62 s",
+      "source_equal": true,
+      "manifest_body_hash_matches": true,
+      "body_sha256": "4f8632f52991121e82da4a8301ab16cabcfe4f20782367570ebdfb0f59434af0",
+      "has_technical_table": false,
+      "has_notice": false,
+      "status": "NO GRABAR TODAVÍA: medición pendiente",
+      "body_chars": 1054,
+      "source_chars": 1054
+    },
+    {
+      "id": "SI-11",
+      "heading": "SI-11 · Dos repos para Claude Code · ~57 s",
+      "source_equal": true,
+      "manifest_body_hash_matches": true,
+      "body_sha256": "da1a672536317fdaf050b7df8b3321fb0f9ad67e927b7a6d8e907e783c8917cd",
+      "has_technical_table": false,
+      "has_notice": false,
+      "status": "NO GRABAR TODAVÍA: medición pendiente",
+      "body_chars": 935,
+      "source_chars": 935
+    },
+    {
+      "id": "N08",
+      "heading": "N08 · Claude Code tiene mods: le pedí uno y lo escribió solo (y el riesgo)",
+      "source_equal": true,
+      "manifest_body_hash_matches": true,
+      "body_sha256": "cababce11613d4b55afd68cf839d32a4cba30ac47beb2b73fe1d9f3835018b00",
+      "has_technical_table": false,
+      "has_notice": false,
+      "status": "Por grabar; preparación/verificación previa pendiente según ficha",
+      "body_chars": 974,
+      "source_chars": 974
+    },
+    {
+      "id": "DU-01",
+      "heading": "DU-01 · Uno de cada cinco teme que la IA lo reemplace: la cuenta de tres números",
+      "source_equal": true,
+      "manifest_body_hash_matches": true,
+      "body_sha256": "ea8e522ab1d1a47da7a3f0b021007f9b84351527741c36d717a13a5f0a73b3e8",
+      "has_technical_table": false,
+      "has_notice": false,
+      "status": "Por grabar; preparación/verificación previa pendiente según ficha",
+      "body_chars": 741,
+      "source_chars": 741
+    },
+    {
+      "id": "DU-02",
+      "heading": "DU-02 · Facturación en línea: el SIN sacó la fecha, pero no te salvaste (F8)",
+      "source_equal": true,
+      "manifest_body_hash_matches": true,
+      "body_sha256": "8101cb4aa1031a7019c2356c5f9ab5d15ff0dca28c40e01880986cede94ba634",
+      "has_technical_table": false,
+      "has_notice": false,
+      "status": "Por grabar; preparación/verificación previa pendiente según ficha",
+      "body_chars": 1355,
+      "source_chars": 1355
+    },
+    {
+      "id": "CC-01",
+      "heading": "CC-01 · La misma tarea a Claude Code y a Codex: cuatro rondas",
+      "source_equal": true,
+      "manifest_body_hash_matches": true,
+      "body_sha256": "6b2c97909a13922506562bb3485f6e77c881016cd1c05fec7451122e13d48de5",
+      "has_technical_table": false,
+      "has_notice": false,
+      "status": "Por grabar; preparación/verificación previa pendiente según ficha",
+      "body_chars": 1047,
+      "source_chars": 1047
+    },
+    {
+      "id": "CC-02",
+      "heading": "CC-02 · La misma landing con y sin una skill de diseño: cuántos tics de IA saca",
+      "source_equal": true,
+      "manifest_body_hash_matches": true,
+      "body_sha256": "3b4012877ddaac8896cad6d640a3eb05eff09a593ad51ad5297e4cad7964b7af",
+      "has_technical_table": false,
+      "has_notice": false,
+      "status": "Por grabar; preparación/verificación previa pendiente según ficha",
+      "body_chars": 837,
+      "source_chars": 837
+    },
+    {
+      "id": "DU-03",
+      "heading": "DU-03 · Una tarea, una herramienta, un número: las cotizaciones de una importadora de ejemplo",
+      "source_equal": true,
+      "manifest_body_hash_matches": true,
+      "body_sha256": "dea74734c304682b25a9496e50badfd14f155112aa02dcd07875c53b29db0732",
+      "has_technical_table": false,
+      "has_notice": false,
+      "status": "Por grabar; preparación/verificación previa pendiente según ficha",
+      "body_chars": 968,
+      "source_chars": 968
+    },
+    {
+      "id": "CC-03",
+      "heading": "CC-03 · Mis agentes gastaron una semana de Codex en 32 horas, y la guarda que le puse",
+      "source_equal": true,
+      "manifest_body_hash_matches": true,
+      "body_sha256": "e013a10abf2b0be72f0b644c0841057735998e07d7b3ebaa3e9f4ab00b210f3e",
+      "has_technical_table": false,
+      "has_notice": false,
+      "status": "Por grabar; preparación/verificación previa pendiente según ficha",
+      "body_chars": 940,
+      "source_chars": 940
+    }
+  ],
+  "pending_measurements_pass": true,
+  "pass": true
+}

@@ -1,0 +1,267 @@
+{
+  "source_ref": "claude/gifted-clarke-y4vvtj",
+  "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+  "remote_verified": true,
+  "script_count": 18,
+  "files": [
+    {
+      "path": "hermes-content/docs/cola/plan-3-semanas/CALENDARIO-PUBLICACION-17-23-OCT.md",
+      "bytes": 3701,
+      "sha256": "3753542054e8046e66e1b432a60c4df7b499f8bd418417eb1b2c5c1c85b3e3b5",
+      "git_blob": "47bf749b9ea57744b29dfb3b0a4fe49e3551410f"
+    },
+    {
+      "path": "hermes-content/docs/cola/plan-3-semanas/GRABAR-17-23-OCT.md",
+      "bytes": 89677,
+      "sha256": "6605df8ef6734e3f4c7f2f6232bedb910ca99618f1ba9859fff7b9a5339c69a0",
+      "git_blob": "e088f67ec9520cf346d4077a4cbd0d6699d2e180"
+    },
+    {
+      "path": "hermes-content/docs/cola/plan-3-semanas/GRABAR-NUEVOS-11-OCT.md",
+      "bytes": 44192,
+      "sha256": "527af0c6295abd2d54a6962f1e42efcde915b01abd3a71bcf467a3849d12a0c4",
+      "git_blob": "b881ab6bae22273d925b4be4783ab639a0691feb"
+    },
+    {
+      "path": "hermes-content/docs/cola/plan-3-semanas/MAPA.md",
+      "bytes": 18599,
+      "sha256": "ca3a70323f5508d8413878e53b66cd8f39968779fa7a8d695a9f3dd2799c1bad",
+      "git_blob": "20a3cd153b400feb923201b65436155d8b7d4dee"
+    },
+    {
+      "path": "hermes-content/docs/cola/plan-3-semanas/ORDEN-DE-POSTEO-11-17-OCT.md",
+      "bytes": 9730,
+      "sha256": "cdc761d26724b9cbc9cb1bd13852e1a0252cb85bd9119550a5b1cac60c26cce7",
+      "git_blob": "de10d3449d62ca9da9889dcacc5f7a7d8baaa554"
+    },
+    {
+      "path": "hermes-content/docs/cola/plan-3-semanas/TELEPROMPTER-SI-01-11.txt",
+      "bytes": 14042,
+      "sha256": "36a0a30a78ec21be5671bba0cf1ed4565a502cabe085df2276648b754668148a",
+      "git_blob": "9f1f80e7763ca83450213c5a09f2a74f0b61002c"
+    }
+  ],
+  "scripts": [
+    {
+      "id": "SI-01",
+      "title": "Claude trabaja con la compu apagada",
+      "source": "hermes-content/docs/cola/plan-3-semanas/TELEPROMPTER-SI-01-11.txt",
+      "spoken_sha256": "94a9045c2f7322e52d34ba70bb34ca8648f5bfbd67befe310ab9606e0ea2f60b",
+      "status": "Por grabar; condiciones técnicas pendientes",
+      "notice": "⚠ Si no tenés la rutina de ayer con lo que dejó, cortá la línea «Yo armé una ayer. Hoy a las nueve dejó esto.»",
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "cta_word": "RUTINA",
+      "technical_source": "hermes-content/docs/cola/plan-3-semanas/GRABAR-NUEVOS-11-OCT.md"
+    },
+    {
+      "id": "SI-02",
+      "title": "Antes de instalar OpenClaw",
+      "source": "hermes-content/docs/cola/plan-3-semanas/TELEPROMPTER-SI-01-11.txt",
+      "spoken_sha256": "41cd1230fa8d86966150d1be91e6ec83e4633955d947a019421437064e08973d",
+      "status": "Por grabar; condiciones técnicas pendientes",
+      "notice": "⚠ Las tres líneas desde «La prueba: pedile…» hasta «…bien encerrado.» se graban solo con OpenClaw instalado en una compu aparte y el OK de Sergio Urcullo. Si no, se cortan (quedan ~58 s).",
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "cta_word": "OPENCLAW",
+      "technical_source": "hermes-content/docs/cola/plan-3-semanas/GRABAR-NUEVOS-11-OCT.md"
+    },
+    {
+      "id": "SI-03",
+      "title": "Claude, pero vago",
+      "source": "hermes-content/docs/cola/plan-3-semanas/TELEPROMPTER-SI-01-11.txt",
+      "spoken_sha256": "d8bb707b971110c7e3cfe1aed7c7d6f5350fe0e0e2ab4dd920545725c52e2ff5",
+      "status": "Por grabar; condiciones técnicas pendientes",
+      "notice": "",
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "cta_word": "VAGO",
+      "technical_source": "hermes-content/docs/cola/plan-3-semanas/GRABAR-NUEVOS-11-OCT.md"
+    },
+    {
+      "id": "SI-04",
+      "title": "Tres comandos escondidos de Claude Code",
+      "source": "hermes-content/docs/cola/plan-3-semanas/TELEPROMPTER-SI-01-11.txt",
+      "spoken_sha256": "d5b7a64c058872968806154919d37a8e0eaa0a829a9b630f30e59eb0edb48463",
+      "status": "Por grabar; condiciones técnicas pendientes",
+      "notice": "",
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "cta_word": "SECRETOS",
+      "technical_source": "hermes-content/docs/cola/plan-3-semanas/GRABAR-NUEVOS-11-OCT.md"
+    },
+    {
+      "id": "SI-05",
+      "title": "Mi Jarvis por Telegram: cuánto me cuesta",
+      "source": "hermes-content/docs/cola/plan-3-semanas/TELEPROMPTER-SI-01-11.txt",
+      "spoken_sha256": "a88072c73a20567884a8e428239cfd3afa63ba15ce3fa34469b2fbadad78e227",
+      "status": "NO GRABAR TODAVÍA: medición pendiente",
+      "notice": "⛔ NO GRABAR TODAVÍA: falta [X] = lo que gastó mi asistente en los últimos 30 días, leído en el panel de gasto (LiteLLM).",
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "cta_word": "HERMES",
+      "technical_source": "hermes-content/docs/cola/plan-3-semanas/GRABAR-NUEVOS-11-OCT.md"
+    },
+    {
+      "id": "SI-06",
+      "title": "Claude habla como cavernícola: lo medí",
+      "source": "hermes-content/docs/cola/plan-3-semanas/TELEPROMPTER-SI-01-11.txt",
+      "spoken_sha256": "bd43fecc5c0d59c3ea1ebc87ce9604f94d3a8506aa68c0495a82180eb4e6384c",
+      "status": "NO GRABAR TODAVÍA: medición pendiente",
+      "notice": "⛔ NO GRABAR TODAVÍA: falta [A] y [B] = las palabras de la MISMA respuesta, sin caveman y con caveman, contadas en tu Claude Code.",
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "cta_word": "CAVEMAN",
+      "technical_source": "hermes-content/docs/cola/plan-3-semanas/GRABAR-NUEVOS-11-OCT.md"
+    },
+    {
+      "id": "SI-07",
+      "title": "Dale una meta, no una tarea",
+      "source": "hermes-content/docs/cola/plan-3-semanas/TELEPROMPTER-SI-01-11.txt",
+      "spoken_sha256": "4deb7999e6ce08001ff5ca1bc2c27bfd42d1743689be2391b3b517cccfc2807e",
+      "status": "NO GRABAR TODAVÍA: medición pendiente",
+      "notice": "⛔ NO GRABAR TODAVÍA: falta [T] = los turnos que tardó una corrida real de barra goal con una meta tuya.",
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "cta_word": "GOAL",
+      "technical_source": "hermes-content/docs/cola/plan-3-semanas/GRABAR-NUEVOS-11-OCT.md"
+    },
+    {
+      "id": "SI-08",
+      "title": "Un video que escribió Claude",
+      "source": "hermes-content/docs/cola/plan-3-semanas/TELEPROMPTER-SI-01-11.txt",
+      "spoken_sha256": "4e68f0af9617bd82fa8c6d3b392b27e57ef8bb41af6f51f15f43fa076b7c965d",
+      "status": "Por grabar; condiciones técnicas pendientes",
+      "notice": "",
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "cta_word": "HYPERFRAMES",
+      "technical_source": "hermes-content/docs/cola/plan-3-semanas/GRABAR-NUEVOS-11-OCT.md"
+    },
+    {
+      "id": "SI-09",
+      "title": "La IA te da links. Abrí dos.",
+      "source": "hermes-content/docs/cola/plan-3-semanas/TELEPROMPTER-SI-01-11.txt",
+      "spoken_sha256": "db95a1bb588d7bd54f64a2313185f758e4e53892be6ddd7a8574aaefe98eff38",
+      "status": "Por grabar; condiciones técnicas pendientes",
+      "notice": "",
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "cta_word": "INVESTIGAR",
+      "technical_source": "hermes-content/docs/cola/plan-3-semanas/GRABAR-NUEVOS-11-OCT.md"
+    },
+    {
+      "id": "SI-10",
+      "title": "750.000 líneas en 11 días",
+      "source": "hermes-content/docs/cola/plan-3-semanas/TELEPROMPTER-SI-01-11.txt",
+      "spoken_sha256": "4f8632f52991121e82da4a8301ab16cabcfe4f20782367570ebdfb0f59434af0",
+      "status": "NO GRABAR TODAVÍA: medición pendiente",
+      "notice": "⛔ NO GRABAR TODAVÍA: falta [N] = los agentes que lanzó una corrida real tuya para revisar guiones.",
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "cta_word": "ORQUESTA",
+      "technical_source": "hermes-content/docs/cola/plan-3-semanas/GRABAR-NUEVOS-11-OCT.md"
+    },
+    {
+      "id": "SI-11",
+      "title": "Dos repos para Claude Code",
+      "source": "hermes-content/docs/cola/plan-3-semanas/TELEPROMPTER-SI-01-11.txt",
+      "spoken_sha256": "da1a672536317fdaf050b7df8b3321fb0f9ad67e927b7a6d8e907e783c8917cd",
+      "status": "NO GRABAR TODAVÍA: medición pendiente",
+      "notice": "⛔ NO GRABAR TODAVÍA: falta que claude-mem conteste en una charla nueva qué hiciste ayer (su buscador no conectó el 11-oct), y correr archify con un código tuyo.",
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "cta_word": "REPOS",
+      "technical_source": "hermes-content/docs/cola/plan-3-semanas/GRABAR-NUEVOS-11-OCT.md"
+    },
+    {
+      "id": "N08",
+      "title": "Claude Code tiene mods: le pedí uno y lo escribió solo (y el riesgo)",
+      "source": "hermes-content/docs/cola/plan-3-semanas/GRABAR-17-23-OCT.md",
+      "spoken_sha256": "cababce11613d4b55afd68cf839d32a4cba30ac47beb2b73fe1d9f3835018b00",
+      "status": "Por grabar; preparación/verificación previa pendiente según ficha",
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "unfilled_spoken_fields": [
+        "[M]"
+      ]
+    },
+    {
+      "id": "DU-01",
+      "title": "Uno de cada cinco teme que la IA lo reemplace: la cuenta de tres números",
+      "source": "hermes-content/docs/cola/plan-3-semanas/GRABAR-17-23-OCT.md",
+      "spoken_sha256": "ea8e522ab1d1a47da7a3f0b021007f9b84351527741c36d717a13a5f0a73b3e8",
+      "status": "Por grabar; preparación/verificación previa pendiente según ficha",
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "unfilled_spoken_fields": []
+    },
+    {
+      "id": "DU-02",
+      "title": "Facturación en línea: el SIN sacó la fecha, pero no te salvaste (F8)",
+      "source": "hermes-content/docs/cola/plan-3-semanas/GRABAR-17-23-OCT.md",
+      "spoken_sha256": "8101cb4aa1031a7019c2356c5f9ab5d15ff0dca28c40e01880986cede94ba634",
+      "status": "Por grabar; preparación/verificación previa pendiente según ficha",
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "unfilled_spoken_fields": []
+    },
+    {
+      "id": "CC-01",
+      "title": "La misma tarea a Claude Code y a Codex: cuatro rondas",
+      "source": "hermes-content/docs/cola/plan-3-semanas/GRABAR-17-23-OCT.md",
+      "spoken_sha256": "6b2c97909a13922506562bb3485f6e77c881016cd1c05fec7451122e13d48de5",
+      "status": "Por grabar; preparación/verificación previa pendiente según ficha",
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "unfilled_spoken_fields": [
+        "[A]",
+        "[B]",
+        "[N]",
+        "[X]",
+        "[sí]",
+        "[tA]",
+        "[tB]"
+      ]
+    },
+    {
+      "id": "CC-02",
+      "title": "La misma landing con y sin una skill de diseño: cuántos tics de IA saca",
+      "source": "hermes-content/docs/cola/plan-3-semanas/GRABAR-17-23-OCT.md",
+      "spoken_sha256": "3b4012877ddaac8896cad6d640a3eb05eff09a593ad51ad5297e4cad7964b7af",
+      "status": "Por grabar; preparación/verificación previa pendiente según ficha",
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "unfilled_spoken_fields": [
+        "[Tic 1]",
+        "[X2]",
+        "[X]",
+        "[Y2]",
+        "[Y]",
+        "[tic 2]",
+        "[tic 3]"
+      ]
+    },
+    {
+      "id": "DU-03",
+      "title": "Una tarea, una herramienta, un número: las cotizaciones de una importadora de ejemplo",
+      "source": "hermes-content/docs/cola/plan-3-semanas/GRABAR-17-23-OCT.md",
+      "spoken_sha256": "dea74734c304682b25a9496e50badfd14f155112aa02dcd07875c53b29db0732",
+      "status": "Por grabar; preparación/verificación previa pendiente según ficha",
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "unfilled_spoken_fields": [
+        "[X]",
+        "[Z]"
+      ]
+    },
+    {
+      "id": "CC-03",
+      "title": "Mis agentes gastaron una semana de Codex en 32 horas, y la guarda que le puse",
+      "source": "hermes-content/docs/cola/plan-3-semanas/GRABAR-17-23-OCT.md",
+      "spoken_sha256": "e013a10abf2b0be72f0b644c0841057735998e07d7b3ebaa3e9f4ab00b210f3e",
+      "status": "Por grabar; preparación/verificación previa pendiente según ficha",
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "unfilled_spoken_fields": []
+    }
+  ],
+  "author_agent": "/root/guiones_sol",
+  "model_configured": "gpt-6.1-sol medium inherited per harness",
+  "model_internally_observed": false,
+  "qa": {
+    "reviewer": "/root/qa_sol",
+    "report": "QA_GUIONES.json",
+    "spoken_sections_exact": 18,
+    "canonical_sources_exact": 6,
+    "status": "PASS",
+    "internal_model_observed": false
+  },
+  "spoken_file": {
+    "path": "GUIONES-HABLADOS-COMPLETOS.md",
+    "bytes": 18865,
+    "sha256": "0767d86ef030644d1083c5364eb56e5a01cf1973a70e1daf32bef87dee36a44a"
+  }
+}

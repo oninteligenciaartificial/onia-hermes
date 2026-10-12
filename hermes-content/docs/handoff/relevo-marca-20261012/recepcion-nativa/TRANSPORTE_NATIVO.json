@@ -1,0 +1,86 @@
+{
+  "objects": [
+    {
+      "relative": "Borradores-originales-Claude.zip",
+      "drive_raw_stream_access": true,
+      "provider_bytes": 7067740,
+      "local_download": true,
+      "local_bytes": 7067740,
+      "error": null
+    },
+    {
+      "relative": "N02-ajuste-privado-evidencia.zip",
+      "drive_raw_stream_access": true,
+      "provider_bytes": 53323533,
+      "local_download": false,
+      "local_bytes": null,
+      "error": "file exceeds the executor transfer limit of 32 MiB"
+    },
+    {
+      "relative": "N06-preview-privado.zip",
+      "drive_raw_stream_access": true,
+      "provider_bytes": 2294168,
+      "local_download": true,
+      "local_bytes": 2294168,
+      "error": null
+    },
+    {
+      "relative": "cloud-media-synthetic.mp4",
+      "drive_raw_stream_access": true,
+      "provider_bytes": 2326,
+      "local_download": true,
+      "local_bytes": 2326,
+      "error": null
+    },
+    {
+      "relative": "media-adjustment/DD-A-bruto-original.mp4",
+      "drive_raw_stream_access": true,
+      "provider_bytes": 92453888,
+      "local_download": false,
+      "local_bytes": null,
+      "error": "file exceeds the executor transfer limit of 32 MiB"
+    },
+    {
+      "relative": "media-adjustment/DD-A-original-61-69.wav",
+      "drive_raw_stream_access": true,
+      "provider_bytes": 256078,
+      "local_download": true,
+      "local_bytes": 256078,
+      "error": null
+    },
+    {
+      "relative": "media-adjustment/N02-preview-revisable.mp4",
+      "drive_raw_stream_access": true,
+      "provider_bytes": 6258418,
+      "local_download": true,
+      "local_bytes": 6258418,
+      "error": null
+    },
+    {
+      "relative": "media-review-n06/bruto.mp4",
+      "drive_raw_stream_access": true,
+      "provider_bytes": 69843125,
+      "local_download": false,
+      "local_bytes": null,
+      "error": "file exceeds the executor transfer limit of 32 MiB"
+    }
+  ],
+  "supported_network_permission": {
+    "sandbox_permissions": "with_additional_permissions",
+    "additional_permissions": {
+      "network": {
+        "enabled": true
+      }
+    }
+  },
+  "proxy_tls_unchanged": true,
+  "large_object_head": {
+    "host": "sdmntprbrazilsouth.oaiusercontent.com",
+    "curl_exit": 56,
+    "http_connect": 403,
+    "http_code": "000"
+  },
+  "transfer_limit_bytes": 33554432,
+  "required_chunk_max_bytes": 20971520,
+  "chunk_export_state": "ordered by Madre Marketing; not yet received"
+}

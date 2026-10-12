@@ -1,0 +1,388 @@
+{
+  "qa_agent": "/root/qa_sol",
+  "configured_model": "gpt-6.1-sol",
+  "configured_reasoning": "medium",
+  "internal_model_observed": false,
+  "source_git_files_verified": 31,
+  "summary": {
+    "rows": 59,
+    "status": {
+      "PASS": 43,
+      "BLOCKED": 16
+    },
+    "unique_content_expected": 55,
+    "duplicate_groups": [
+      {
+        "sha256": "5b01b1f362681999b27f5aba11351823109c022e0a7b676aed3144573dea5094",
+        "bytes": 259555,
+        "paths": [
+          "media-adjustment/seam-0.png",
+          "media-adjustment/seam-4.png"
+        ]
+      },
+      {
+        "sha256": "0f7cbdbaa01801bd303023465012e5a5d63b49391565840a69b9926f97579afd",
+        "bytes": 259449,
+        "paths": [
+          "media-adjustment/seam-1.png",
+          "media-adjustment/seam-5.png"
+        ]
+      },
+      {
+        "sha256": "798c3c27eca1c08dcd3c03adae9d31339a353322b2762eba0bc0d251d444287b",
+        "bytes": 261231,
+        "paths": [
+          "media-adjustment/seam-2.png",
+          "media-adjustment/seam-6.png"
+        ]
+      },
+      {
+        "sha256": "4c53e7f2401c1a21e14612ff186c05d08e266852701a7ae5d7c08eb1ace23ef7",
+        "bytes": 236370,
+        "paths": [
+          "media-adjustment/seam-3.png",
+          "media-adjustment/seam-7.png"
+        ]
+      }
+    ],
+    "unique_received_pass": 43,
+    "source_files": 31,
+    "source_pass": 31
+  },
+  "media": [
+    {
+      "relative": "cloud-media-synthetic.mp4",
+      "ffprobe_exit": 0,
+      "decode_exit": 0,
+      "decode_stderr_bytes": 0,
+      "pass": true,
+      "duration": "1.000000",
+      "streams": [
+        {
+          "codec_type": "video",
+          "codec_name": "h264",
+          "width": 320,
+          "height": 240,
+          "sample_rate": null,
+          "channels": null,
+          "duration": "1.000000",
+          "nb_frames": "25"
+        }
+      ]
+    },
+    {
+      "relative": "media-adjustment/DD-A-original-61-69.wav",
+      "ffprobe_exit": 0,
+      "decode_exit": 0,
+      "decode_stderr_bytes": 0,
+      "pass": true,
+      "duration": "8.000000",
+      "streams": [
+        {
+          "codec_type": "audio",
+          "codec_name": "pcm_s16le",
+          "width": null,
+          "height": null,
+          "sample_rate": "16000",
+          "channels": 1,
+          "duration": "8.000000",
+          "nb_frames": null
+        }
+      ]
+    },
+    {
+      "relative": "media-adjustment/N02-preview-revisable.mp4",
+      "ffprobe_exit": 0,
+      "decode_exit": 0,
+      "decode_stderr_bytes": 0,
+      "pass": true,
+      "duration": "109.033333",
+      "streams": [
+        {
+          "codec_type": "video",
+          "codec_name": "h264",
+          "width": 360,
+          "height": 640,
+          "sample_rate": null,
+          "channels": null,
+          "duration": "109.033333",
+          "nb_frames": "3271"
+        },
+        {
+          "codec_type": "audio",
+          "codec_name": "aac",
+          "width": null,
+          "height": null,
+          "sample_rate": "48000",
+          "channels": 2,
+          "duration": "109.008000",
+          "nb_frames": "5111"
+        }
+      ]
+    },
+    {
+      "relative": "media-review-n06/DD-A-borrador-original-Claude.mp4",
+      "ffprobe_exit": 0,
+      "decode_exit": 0,
+      "decode_stderr_bytes": 0,
+      "pass": true,
+      "duration": "58.433333",
+      "streams": [
+        {
+          "codec_type": "video",
+          "codec_name": "h264",
+          "width": 360,
+          "height": 640,
+          "sample_rate": null,
+          "channels": null,
+          "duration": "58.433333",
+          "nb_frames": "1753"
+        },
+        {
+          "codec_type": "audio",
+          "codec_name": "aac",
+          "width": null,
+          "height": null,
+          "sample_rate": "48000",
+          "channels": 2,
+          "duration": "58.432000",
+          "nb_frames": "2740"
+        }
+      ]
+    },
+    {
+      "relative": "media-review-n06/N02-borrador-original-Claude.mp4",
+      "ffprobe_exit": 0,
+      "decode_exit": 0,
+      "decode_stderr_bytes": 0,
+      "pass": true,
+      "duration": "111.300000",
+      "streams": [
+        {
+          "codec_type": "video",
+          "codec_name": "h264",
+          "width": 360,
+          "height": 640,
+          "sample_rate": null,
+          "channels": null,
+          "duration": "111.300000",
+          "nb_frames": "3339"
+        },
+        {
+          "codec_type": "audio",
+          "codec_name": "aac",
+          "width": null,
+          "height": null,
+          "sample_rate": "48000",
+          "channels": 2,
+          "duration": "111.274000",
+          "nb_frames": "5217"
+        }
+      ]
+    },
+    {
+      "relative": "media-review-n06/N06-borrador-original-Claude.mp4",
+      "ffprobe_exit": 0,
+      "decode_exit": 0,
+      "decode_stderr_bytes": 0,
+      "pass": true,
+      "duration": "45.504000",
+      "streams": [
+        {
+          "codec_type": "video",
+          "codec_name": "h264",
+          "width": 360,
+          "height": 640,
+          "sample_rate": null,
+          "channels": null,
+          "duration": "45.500000",
+          "nb_frames": "1365"
+        },
+        {
+          "codec_type": "audio",
+          "codec_name": "aac",
+          "width": null,
+          "height": null,
+          "sample_rate": "48000",
+          "channels": 2,
+          "duration": "45.504000",
+          "nb_frames": "2134"
+        }
+      ]
+    },
+    {
+      "relative": "media-review-n06/N06-preview-corte-propuesto.mp4",
+      "ffprobe_exit": 0,
+      "decode_exit": 0,
+      "decode_stderr_bytes": 0,
+      "pass": true,
+      "duration": "45.600000",
+      "streams": [
+        {
+          "codec_type": "video",
+          "codec_name": "h264",
+          "width": 360,
+          "height": 640,
+          "sample_rate": null,
+          "channels": null,
+          "duration": "45.533333",
+          "nb_frames": "1366"
+        },
+        {
+          "codec_type": "audio",
+          "codec_name": "aac",
+          "width": null,
+          "height": null,
+          "sample_rate": "48000",
+          "channels": 2,
+          "duration": "45.600000",
+          "nb_frames": "2135"
+        }
+      ]
+    },
+    {
+      "relative": "media-review-n06/N07-borrador-original-Claude.mp4",
+      "ffprobe_exit": 0,
+      "decode_exit": 0,
+      "decode_stderr_bytes": 0,
+      "pass": true,
+      "duration": "81.733333",
+      "streams": [
+        {
+          "codec_type": "video",
+          "codec_name": "h264",
+          "width": 360,
+          "height": 640,
+          "sample_rate": null,
+          "channels": null,
+          "duration": "81.733333",
+          "nb_frames": "2452"
+        },
+        {
+          "codec_type": "audio",
+          "codec_name": "aac",
+          "width": null,
+          "height": null,
+          "sample_rate": "48000",
+          "channels": 2,
+          "duration": "81.728000",
+          "nb_frames": "3832"
+        }
+      ]
+    }
+  ],
+  "json": [
+    {
+      "relative": "media-adjustment/N02-QA.json",
+      "pass": true,
+      "type": "dict"
+    },
+    {
+      "relative": "media-adjustment/N02-cutplan-original.json",
+      "pass": true,
+      "type": "dict"
+    },
+    {
+      "relative": "media-adjustment/N02-cutplan-propuesta.json",
+      "pass": true,
+      "type": "dict"
+    },
+    {
+      "relative": "media-adjustment/N02-segments-original.json",
+      "pass": true,
+      "type": "dict"
+    },
+    {
+      "relative": "media-adjustment/N02-segments-propuesta.json",
+      "pass": true,
+      "type": "dict"
+    },
+    {
+      "relative": "media-adjustment/N02-storyboard-original.json",
+      "pass": true,
+      "type": "dict"
+    },
+    {
+      "relative": "media-adjustment/N02-storyboard-propuesta.json",
+      "pass": true,
+      "type": "dict"
+    },
+    {
+      "relative": "media-review-n06/cutplan.json",
+      "pass": true,
+      "type": "dict"
+    },
+    {
+      "relative": "media-review-n06/loudnorm-pass1.json",
+      "pass": true,
+      "type": "dict"
+    },
+    {
+      "relative": "media-review-n06/qa-originales.json",
+      "pass": true,
+      "type": "dict"
+    },
+    {
+      "relative": "media-review-n06/qa.json",
+      "pass": true,
+      "type": "dict"
+    },
+    {
+      "relative": "media-review-n06/segments-cut.json",
+      "pass": true,
+      "type": "dict"
+    },
+    {
+      "relative": "media-review-n06/storyboard.json",
+      "pass": true,
+      "type": "dict"
+    }
+  ],
+  "scripts_syntax_only": [
+    {
+      "relative": "media-adjustment/N02-rehacer-original.sh",
+      "pass": true,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "relative": "media-adjustment/reproducir-N02-preview.sh",
+      "pass": true,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "relative": "media-review-n06/original-rehacer.sh",
+      "pass": true,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "relative": "media-review-n06/reproducir-preview.sh",
+      "pass": true,
+      "exit": 0,
+      "stderr": ""
+    }
+  ],
+  "audio_capability": {
+    "audio_input": {
+      "status": "unsupported",
+      "observed_in_same_qa_agent_prior_turn": true,
+      "exact_error": "audio content omitted because you do not support audio input",
+      "current_audio_is_distinct": "DD-A-original-61-69.wav; reception technical QA does not resolve speech"
+    },
+    "asr_installed": {
+      "whisper": false,
+      "faster_whisper": false,
+      "vosk": false,
+      "transformers": false,
+      "speech_recognition": false
+    },
+    "installation": false,
+    "paid_transcription": false,
+    "listened": false
+  },
+  "full_render_reproduction": false,
+  "face_voice_generation": false,
+  "publication": false
+}
