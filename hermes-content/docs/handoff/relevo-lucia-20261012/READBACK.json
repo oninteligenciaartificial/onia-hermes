@@ -1,0 +1,11 @@
+{
+  "export_commit": "c774bc11580ca1dd0c41a51f96efbe8db99cd1e4",
+  "manifest_git_blob": "16f2d151a34ff3425b82bfd10966b5f34d4e96e8",
+  "verified_local_artifacts": 13,
+  "proof": "13/13 artifacts: sizes and git blobs match local; manifest exact UTF8 readback verified",
+  "source_project_files": 134,
+  "source_commit": "3566e5d5208cf4a7bcf20e743469c6088944674c",
+  "native_destination": "01a13171-0fdb-72c6-9fdc-81244d7e6006",
+  "native_received": "NOT OBSERVED: coordinator transfers links; this worker cannot read native destination session",
+  "notes": "No secrets/public links/signed URLs. Original master bytes already durable Git blob reused, SHA256 pending native check. K4/R3 raw inputs not materialized. Drive rejected; all unique Work artifacts exported through Git."
+}
