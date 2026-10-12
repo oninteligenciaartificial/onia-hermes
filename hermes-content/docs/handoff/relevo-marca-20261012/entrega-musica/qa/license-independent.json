@@ -1,0 +1,48 @@
+{
+  "reviewer": "/root/qa_sol",
+  "primary_documents": [
+    {
+      "name": "README",
+      "public_source_url": "https://raw.githubusercontent.com/godotengine/godot-demo-projects/b761b4cd5718a7118f2c95eb55f181d0a5f004f1/2d/dodge_the_creeps/README.md",
+      "http_status": 200,
+      "source_bytes": 1478,
+      "source_sha256": "e4cf1694e747a1d3dc7e420c545f371fbc047bdc21acdc461830c53a2228f4c3",
+      "git_blob_sha1": "bd461bd788aaa55a0374a8497651838aa61a0f80",
+      "git_blob_matches_declared": true,
+      "local_equals_source": false,
+      "local_only_one_extra_final_lf": true,
+      "local_content_equal": true
+    },
+    {
+      "name": "legalcode",
+      "public_source_url": "https://raw.githubusercontent.com/creativecommons/creativecommons.org/7f5253347532fc0cb6cf51d78a7085d081fb4216/docroot/legalcode/by_3.0.txt",
+      "http_status": 200,
+      "source_bytes": 19467,
+      "source_sha256": "e6bc9e9c474700b708f568bac9e5a8a9bcb2b1dad53442f5ba449fcb848b8e76",
+      "git_blob_sha1": "1a16e05564d2aaa880bbe9e506a0a0226d8742cc",
+      "git_blob_matches_declared": true,
+      "local_equals_source": false,
+      "local_only_one_extra_final_lf": true,
+      "local_content_equal": true
+    }
+  ],
+  "checks": {
+    "asset_hash_and_blob_match": true,
+    "primary_documents_source_exact": true,
+    "readme_specific_asset_author_license": true,
+    "synching_is_adaptation": true,
+    "grant_all_media": true,
+    "no_noncommercial_clause": true,
+    "attribution_and_adaptation_identification": true,
+    "local_document_content_matches_primary": true
+  },
+  "pass": true,
+  "license": "CC BY3.0 Unported",
+  "usage": "Commercial video synchronization allowed by worldwide/all-media adaptation/distribution grant, conditional attribution/notices/changes retained",
+  "platform_scope": "Independent open license, not inherited from Instagram/TikTok catalog; no platform-specific contract checked",
+  "local_asset_sha256": "32680f2b2631eb9f6e2902ebbbec1b43ab82b4dbf154fdc9bfbfa17b03270504",
+  "local_asset_git_blob": "ece36402739a3cb884647df78e6ea95315cbf223",
+  "publication_authorized": false,
+  "subjective_audio_approval": false,
+  "local_document_note": "Both author files have exactly one extra final LF; semantic content matches primary. Exact primary copies saved in QA, source files unchanged."
+}

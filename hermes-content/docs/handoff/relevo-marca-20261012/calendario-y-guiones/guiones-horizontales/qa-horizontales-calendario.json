@@ -1,0 +1,323 @@
+{
+  "reviewer": "/root/qa_sol",
+  "configured_model": "gpt-6.1-sol",
+  "configured_reasoning": "medium",
+  "scope": "Only horizontal spoken scripts and calendar/brief documentation; no reception/AV/music rerun",
+  "horizontal_scripts": [
+    {
+      "id": "H-IA-01",
+      "path": "/workspace/work/onia-marca-calendario-20261012/guiones-horizontales/H-IA-01-HABLADO.md",
+      "actual_bytes": 4022,
+      "actual_sha256": "83ad9a0809323385365b964cf9a60689c79daf7dfc68dcff0d26db9ada8f8b42",
+      "manifest_hash_bytes_match": true,
+      "words": 689,
+      "manifest_words_match": true,
+      "duration_estimate_140_160_wpm": [
+        4.31,
+        4.92
+      ],
+      "publication_authorized": false,
+      "body_read_complete": true,
+      "review": "intention/explicit hypothetical or documentary explanation, no invented completed experience/resource CTA"
+    },
+    {
+      "id": "H-VIDA-01",
+      "path": "/workspace/work/onia-marca-calendario-20261012/guiones-horizontales/H-VIDA-01-HABLADO.md",
+      "actual_bytes": 3181,
+      "actual_sha256": "584abd5a5a5746872b30d46faaef1d488851928096da08b246fd7dc2cf027b0f",
+      "manifest_hash_bytes_match": true,
+      "words": 540,
+      "manifest_words_match": true,
+      "duration_estimate_140_160_wpm": [
+        3.38,
+        3.86
+      ],
+      "publication_authorized": false,
+      "body_read_complete": true,
+      "review": "intention/explicit hypothetical or documentary explanation, no invented completed experience/resource CTA"
+    }
+  ],
+  "legacy": [
+    {
+      "source_path": "hermes-content/carousels/out/yt-03-sin-vos/GUION.md",
+      "hash_bytes_match": true,
+      "ready": false,
+      "classification": "Hablado canónico recuperado, condicionado a verificación de historias/cifras vigentes",
+      "local_equals_git": true
+    },
+    {
+      "source_path": "hermes-content/carousels/out/yt-04-verificar/GUION.md",
+      "hash_bytes_match": true,
+      "ready": false,
+      "classification": "Hablado canónico recuperado, condicionado a verificación de historias/cifras vigentes",
+      "local_equals_git": true
+    },
+    {
+      "source_path": "hermes-content/carousels/out/yt-05-no-construyas/GUION.md",
+      "hash_bytes_match": true,
+      "ready": false,
+      "classification": "Hablado canónico recuperado, condicionado a verificación de historias/cifras vigentes",
+      "local_equals_git": true
+    },
+    {
+      "source_path": "hermes-content/carousels/out/yt-06-mi-empresa/GUION.md",
+      "hash_bytes_match": true,
+      "ready": false,
+      "classification": "Hablado canónico recuperado, condicionado a verificación de historias/cifras vigentes",
+      "local_equals_git": true
+    },
+    {
+      "source_path": "hermes-content/carousels/out/yt-07-hyperframes/GUION.md",
+      "hash_bytes_match": true,
+      "ready": false,
+      "classification": "Ficha/guion de producción: no hablado completo10–14min validado"
+    },
+    {
+      "source_path": "hermes-content/carousels/out/yt-08-n8n-leads/GUION.md",
+      "hash_bytes_match": true,
+      "ready": false,
+      "classification": "Ficha/guion de producción: no hablado completo10–14min validado"
+    },
+    {
+      "source_path": "hermes-content/carousels/out/yt-09-mcp-agentes-loops/GUION.md",
+      "hash_bytes_match": true,
+      "ready": false,
+      "classification": "Ficha/guion de producción: no hablado completo10–14min validado"
+    },
+    {
+      "source_path": "hermes-content/carousels/out/yt-10-opus-sonnet/GUION.md",
+      "hash_bytes_match": true,
+      "ready": false,
+      "classification": "Ficha/guion de producción: no hablado completo10–14min validado"
+    },
+    {
+      "source_path": "hermes-content/carousels/out/yt-11-claude-md-historia/GUION.md",
+      "hash_bytes_match": true,
+      "ready": false,
+      "classification": "Ficha/guion de producción: no hablado completo10–14min validado"
+    },
+    {
+      "source_path": "hermes-content/carousels/out/yt-12-claude-code-servidor/GUION.md",
+      "hash_bytes_match": true,
+      "ready": false,
+      "classification": "Ficha/guion de producción: no hablado completo10–14min validado"
+    },
+    {
+      "source_path": "hermes-content/carousels/out/yt-13-bot-no-inventa/GUION.md",
+      "hash_bytes_match": true,
+      "ready": false,
+      "classification": "Ficha/guion de producción: no hablado completo10–14min validado"
+    },
+    {
+      "source_path": "hermes-content/carousels/out/yt-14-webhook-rescate/GUION.md",
+      "hash_bytes_match": true,
+      "ready": false,
+      "classification": "Ficha/guion de producción: no hablado completo10–14min validado"
+    },
+    {
+      "source_path": "hermes-content/carousels/out/yt-15-recorrido-entero/GUION.md",
+      "hash_bytes_match": true,
+      "ready": false,
+      "classification": "Ficha/guion de producción: no hablado completo10–14min validado"
+    },
+    {
+      "source_path": "hermes-content/carousels/out/yt-16-grabo-ia-edita/GUION.md",
+      "hash_bytes_match": true,
+      "ready": false,
+      "classification": "Ficha/guion de producción: no hablado completo10–14min validado"
+    },
+    {
+      "source_path": "hermes-content/carousels/out/yt-17-generar-sin-fundirte/GUION.md",
+      "hash_bytes_match": true,
+      "ready": false,
+      "classification": "Ficha/guion de producción: no hablado completo10–14min validado"
+    },
+    {
+      "source_path": "hermes-content/carousels/out/yt-18-agentes-de-noche/GUION.md",
+      "hash_bytes_match": true,
+      "ready": false,
+      "classification": "Ficha/guion de producción: no hablado completo10–14min validado"
+    }
+  ],
+  "calendar_checks": {
+    "105_ids_unique": true,
+    "counts_14H21V63Y7C": true,
+    "seven_days_15_slots": true,
+    "all_not_approved_published": true,
+    "no_scheduling": true,
+    "no_invented_assets": true,
+    "yapp_parents_present_same_day": true,
+    "three_variants_per_original": true,
+    "all_local_sources_exist": true,
+    "all_accounts_routes_states": true,
+    "FB_X_not_operational": true,
+    "H_two_complete_twelve_briefs": true,
+    "six_SI_documentary_not_current_news": true,
+    "monthly_math_correct": true,
+    "legacy_16_not_ready": true,
+    "H_hash_words_status": true
+  },
+  "local_sources": [
+    {
+      "id": "H-VIDA-01",
+      "source": "/workspace/work/onia-marca-calendario-20261012/guiones-horizontales/H-VIDA-01-HABLADO.md",
+      "exists": true
+    },
+    {
+      "id": "SI-01",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md",
+      "exists": true
+    },
+    {
+      "id": "SI-02",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md",
+      "exists": true
+    },
+    {
+      "id": "SI-01-YA",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md",
+      "exists": true
+    },
+    {
+      "id": "SI-02-YA",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md",
+      "exists": true
+    },
+    {
+      "id": "SI-01-YB",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md",
+      "exists": true
+    },
+    {
+      "id": "SI-02-YB",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md",
+      "exists": true
+    },
+    {
+      "id": "SI-01-YC",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md",
+      "exists": true
+    },
+    {
+      "id": "SI-02-YC",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md",
+      "exists": true
+    },
+    {
+      "id": "H-IA-01",
+      "source": "/workspace/work/onia-marca-calendario-20261012/guiones-horizontales/H-IA-01-HABLADO.md",
+      "exists": true
+    },
+    {
+      "id": "SI-03",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md",
+      "exists": true
+    },
+    {
+      "id": "SI-04",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md",
+      "exists": true
+    },
+    {
+      "id": "SI-03-YA",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md",
+      "exists": true
+    },
+    {
+      "id": "SI-04-YA",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md",
+      "exists": true
+    },
+    {
+      "id": "SI-03-YB",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md",
+      "exists": true
+    },
+    {
+      "id": "SI-04-YB",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md",
+      "exists": true
+    },
+    {
+      "id": "SI-03-YC",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md",
+      "exists": true
+    },
+    {
+      "id": "SI-04-YC",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md",
+      "exists": true
+    },
+    {
+      "id": "SI-08",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md",
+      "exists": true
+    },
+    {
+      "id": "SI-09",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md",
+      "exists": true
+    },
+    {
+      "id": "SI-08-YA",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md",
+      "exists": true
+    },
+    {
+      "id": "SI-09-YA",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md",
+      "exists": true
+    },
+    {
+      "id": "SI-08-YB",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md",
+      "exists": true
+    },
+    {
+      "id": "SI-09-YB",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md",
+      "exists": true
+    },
+    {
+      "id": "SI-08-YC",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md",
+      "exists": true
+    },
+    {
+      "id": "SI-09-YC",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md",
+      "exists": true
+    }
+  ],
+  "pass_horizontal_private_proposals": true,
+  "pass_calendar_structure": true,
+  "brief_music_stale_statement": false,
+  "corrections": [],
+  "blockers": [
+    "Twelve H slots remain briefs, not complete spoken scripts",
+    "Sixty-three YAPP slots require3 self-contained useful excerpts per parent, not duplicate cosmetics",
+    "Own runtime/API publishing access not demonstrated; motherboard UI evidence labeled separately",
+    "No community resource/URL/notice publication proved; scripts do not promise these CTAs",
+    "Source estimates are word-rate ranges, not recorded performance duration"
+  ],
+  "limits": [
+    "Primary factual routine/workflow observations attributed to root; no new web research",
+    "Horizontal bodies read completely; source anecdote claims in recovered legacy remain conditional",
+    "Calendar accounts are proposed destinations, not newly verified authenticated access",
+    "Six SI are educational bases whose current applicability requires refresh; not fresh announcements"
+  ],
+  "files_for_review": [
+    "CALENDARIO_SEMANAL_PROPUESTA.md",
+    "CALENDARIO_SEMANAL_PROPUESTA.json",
+    "MALLA_MENSUAL_ANUAL_PROPUESTA.md",
+    "BRIEF_YAPPS_MUSICA_DERECHOS.md",
+    "guiones-horizontales/FUENTES-Y-CONDICIONES.md"
+  ],
+  "brief_music_correction_verified": true,
+  "brief_sha256_reviewed": "53ad6a14590e3303e232a9c4f1f5c55039f3558931d8b42ba19afe53d3531c01",
+  "corrections_resolved": [
+    "Global no-music/no-license claim removed; five existing CC BY3 private mixes distinguished from unchosen A/B/C variant tracks"
+  ],
+  "pass_documentation_for_private_review": true,
+  "publication_or_scheduling_approved": false
+}

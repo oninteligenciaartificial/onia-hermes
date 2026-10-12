@@ -523,3 +523,13 @@ agentes en paralelo). Ningún dato se había dado vuelta; lo que fallaba era lo 
   antes de grabar, en las mismas condiciones.
 - La página «linda» de la empresa puede estar vieja (business.whatsapp.com seguía diciendo 72 horas y servicio
   gratis): en pantalla va la doc de desarrolladores, con su fecha de actualización.
+
+
+## Aprendizaje de entrega y continuidad · 12-oct-2026
+
+- Antes de decir lote completo, reconciliar número de grabaciones declarado por Sergio con originales únicos y procedencia. Mostrar cuatro montajes no resolvió las seis grabaciones: una variante musical o tres yapps no cuentan como originales nuevos. Registrar candidatos y ausencias sin inferir tema por duración.
+- Conservar montaje Claude, proyecto y receta que Sergio valoró; música en copia independiente, sin rehacer cortes. Verificar identidad de video y duración contra fuente; mantener copia limpia.
+- SHA/ffprobe/decodificación/contact sheets no prueban visionado continuo ni escucha. Registrar cobertura real y pedir revisión de frase solo con preview reproducible; conservar marcador si falta evidencia.
+- Música: licencia comercial multired verificable, pista/autor/fuente/licencia/fecha/SHA y atribución/cambio registrados. Catálogo nativo de una red no implica permiso para exportarlo a otra. Variantes con voz inteligible y QA; no confundir mediciones con audición.
+- Entregar preview individual, no ZIP o sandbox como única muestra. El conector GitHub autenticado no acredita login del navegador: privado404 sin sesión no es pérdida del archivo. Acompañar guiones con texto completo o Drive privado, sin cambiar sharing; distinguir metadata/API de reproducción en navegador autorizado.
+- Matriz por original: bruto, montaje, música, limpio y tres yapps con estado/enlace reales; derivado inexistente queda pendiente. Avisar resultados en chat coordinador, sin nuevas rondas automáticas ni publicación.

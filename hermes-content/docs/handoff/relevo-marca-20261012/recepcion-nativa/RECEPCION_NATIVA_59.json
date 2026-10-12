@@ -8,47 +8,16 @@
   "summary": {
     "rows": 59,
     "status": {
-      "PASS": 43,
-      "BLOCKED": 16
+      "PASS": 59,
+      "BLOCKED": 0
     },
     "unique_content_expected": 55,
-    "duplicate_groups": [
-      {
-        "sha256": "5b01b1f362681999b27f5aba11351823109c022e0a7b676aed3144573dea5094",
-        "bytes": 259555,
-        "paths": [
-          "media-adjustment/seam-0.png",
-          "media-adjustment/seam-4.png"
-        ]
-      },
-      {
-        "sha256": "0f7cbdbaa01801bd303023465012e5a5d63b49391565840a69b9926f97579afd",
-        "bytes": 259449,
-        "paths": [
-          "media-adjustment/seam-1.png",
-          "media-adjustment/seam-5.png"
-        ]
-      },
-      {
-        "sha256": "798c3c27eca1c08dcd3c03adae9d31339a353322b2762eba0bc0d251d444287b",
-        "bytes": 261231,
-        "paths": [
-          "media-adjustment/seam-2.png",
-          "media-adjustment/seam-6.png"
-        ]
-      },
-      {
-        "sha256": "4c53e7f2401c1a21e14612ff186c05d08e266852701a7ae5d7c08eb1ace23ef7",
-        "bytes": 236370,
-        "paths": [
-          "media-adjustment/seam-3.png",
-          "media-adjustment/seam-7.png"
-        ]
-      }
-    ],
-    "unique_received_pass": 43,
+    "unique_received_pass": 55,
     "source_files": 31,
-    "source_pass": 31
+    "source_pass": 31,
+    "parts_pass": 12,
+    "containers_pass": 3,
+    "zip_members_pass": 49
   },
   "files": [
     {
@@ -65,7 +34,7 @@
       "source_git_path": null,
       "archive": null,
       "member": null,
-      "receipt_method": "google_drive_fetch raw streaming + download_file",
+      "receipt_method": "pre-existing exact match; preserved",
       "receipt_git_commit": null,
       "receipt_git_path": null,
       "blocker": null
@@ -84,9 +53,9 @@
       "source_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/HANDOFF_MARCA_CLOUD_20261011.md",
       "archive": null,
       "member": null,
-      "receipt_method": "git archive",
-      "receipt_git_commit": "1467b2d3ed4e794137311d6451165430124b30c6",
-      "receipt_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/HANDOFF_MARCA_CLOUD_20261011.md",
+      "receipt_method": "pre-existing exact match; preserved",
+      "receipt_git_commit": null,
+      "receipt_git_path": null,
       "blocker": null
     },
     {
@@ -94,19 +63,19 @@
       "expected_bytes": 53323533,
       "expected_sha256": "e29c4b151b602de862a470c13abf1771c9489f8755791150117bc3f48b920fb6",
       "destination_relative": "N02-ajuste-privado-evidencia.zip",
-      "status": "BLOCKED",
-      "actual_bytes": null,
-      "actual_sha256": null,
+      "status": "PASS",
+      "actual_bytes": 53323533,
+      "actual_sha256": "e29c4b151b602de862a470c13abf1771c9489f8755791150117bc3f48b920fb6",
       "source_type": "drive_private",
       "source_drive_id": "1dAZfGj0T2nKIgAdyXoKIVeFXyU5AeX6Z",
       "source_git_commit": null,
       "source_git_path": null,
       "archive": null,
       "member": null,
-      "receipt_method": null,
+      "receipt_method": "12 verified split parts; exact reassembly",
       "receipt_git_commit": null,
       "receipt_git_path": null,
-      "blocker": "archive or source object exceeds32MiB transfer limit; official proxy CONNECT403"
+      "blocker": null
     },
     {
       "relative": "N06-preview-privado.zip",
@@ -122,7 +91,7 @@
       "source_git_path": null,
       "archive": null,
       "member": null,
-      "receipt_method": "google_drive_fetch raw streaming + download_file",
+      "receipt_method": "pre-existing exact match; preserved",
       "receipt_git_commit": null,
       "receipt_git_path": null,
       "blocker": null
@@ -141,9 +110,9 @@
       "source_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/PROPUESTA_WORKSHOP_PREPAGO_20261011.md",
       "archive": null,
       "member": null,
-      "receipt_method": "git archive",
-      "receipt_git_commit": "1467b2d3ed4e794137311d6451165430124b30c6",
-      "receipt_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/PROPUESTA_WORKSHOP_PREPAGO_20261011.md",
+      "receipt_method": "pre-existing exact match; preserved",
+      "receipt_git_commit": null,
+      "receipt_git_path": null,
       "blocker": null
     },
     {
@@ -160,9 +129,9 @@
       "source_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/REFERENTES_MRSATIRAS_20261011.md",
       "archive": null,
       "member": null,
-      "receipt_method": "git archive",
-      "receipt_git_commit": "1467b2d3ed4e794137311d6451165430124b30c6",
-      "receipt_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/REFERENTES_MRSATIRAS_20261011.md",
+      "receipt_method": "pre-existing exact match; preserved",
+      "receipt_git_commit": null,
+      "receipt_git_path": null,
       "blocker": null
     },
     {
@@ -179,9 +148,9 @@
       "source_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/cloud-media-ready.md",
       "archive": null,
       "member": null,
-      "receipt_method": "git archive",
-      "receipt_git_commit": "1467b2d3ed4e794137311d6451165430124b30c6",
-      "receipt_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/cloud-media-ready.md",
+      "receipt_method": "pre-existing exact match; preserved",
+      "receipt_git_commit": null,
+      "receipt_git_path": null,
       "blocker": null
     },
     {
@@ -198,7 +167,7 @@
       "source_git_path": null,
       "archive": null,
       "member": null,
-      "receipt_method": "google_drive_fetch raw streaming + download_file",
+      "receipt_method": "pre-existing exact match; preserved",
       "receipt_git_commit": null,
       "receipt_git_path": null,
       "blocker": null
@@ -208,38 +177,38 @@
       "expected_bytes": 92453888,
       "expected_sha256": "8220af93f24be363a90c9fcc0fad4c1a77e4f9fb4556abe4cefaaace2f302593",
       "destination_relative": "media-adjustment/DD-A-bruto-original.mp4",
-      "status": "BLOCKED",
-      "actual_bytes": null,
-      "actual_sha256": null,
+      "status": "PASS",
+      "actual_bytes": 92453888,
+      "actual_sha256": "8220af93f24be363a90c9fcc0fad4c1a77e4f9fb4556abe4cefaaace2f302593",
       "source_type": "drive_private",
       "source_drive_id": "1xFKbMIvoStrjVPbfrg6hG742kVirTPY5",
       "source_git_commit": null,
       "source_git_path": null,
       "archive": null,
       "member": null,
-      "receipt_method": null,
+      "receipt_method": "12 verified split parts; exact reassembly",
       "receipt_git_commit": null,
       "receipt_git_path": null,
-      "blocker": "archive or source object exceeds32MiB transfer limit; official proxy CONNECT403"
+      "blocker": null
     },
     {
       "relative": "media-adjustment/DD-A-marcador-original.png",
       "expected_bytes": 230810,
       "expected_sha256": "e8b1e54b40dd90f31161056cd590a933e737533a7ecacc385616c5a79ba7065b",
       "destination_relative": "media-adjustment/DD-A-marcador-original.png",
-      "status": "BLOCKED",
-      "actual_bytes": null,
-      "actual_sha256": null,
+      "status": "PASS",
+      "actual_bytes": 230810,
+      "actual_sha256": "e8b1e54b40dd90f31161056cd590a933e737533a7ecacc385616c5a79ba7065b",
       "source_type": "drive_private_zip_member",
       "source_drive_id": "1dAZfGj0T2nKIgAdyXoKIVeFXyU5AeX6Z",
       "source_git_commit": null,
       "source_git_path": null,
       "archive": "N02-ajuste-privado-evidencia.zip",
       "member": "media-adjustment/DD-A-marcador-original.png",
-      "receipt_method": null,
+      "receipt_method": "verified ZIP member",
       "receipt_git_commit": null,
       "receipt_git_path": null,
-      "blocker": "archive or source object exceeds32MiB transfer limit; official proxy CONNECT403"
+      "blocker": null
     },
     {
       "relative": "media-adjustment/DD-A-original-61-69.wav",
@@ -255,7 +224,7 @@
       "source_git_path": null,
       "archive": null,
       "member": null,
-      "receipt_method": "google_drive_fetch raw streaming + download_file",
+      "receipt_method": "pre-existing exact match; preserved",
       "receipt_git_commit": null,
       "receipt_git_path": null,
       "blocker": null
@@ -274,9 +243,9 @@
       "source_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-adjustment/N02-QA.json",
       "archive": null,
       "member": null,
-      "receipt_method": "git archive",
-      "receipt_git_commit": "1467b2d3ed4e794137311d6451165430124b30c6",
-      "receipt_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-adjustment/N02-QA.json",
+      "receipt_method": "pre-existing exact match; preserved",
+      "receipt_git_commit": null,
+      "receipt_git_path": null,
       "blocker": null
     },
     {
@@ -293,9 +262,9 @@
       "source_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-adjustment/N02-README-original.md",
       "archive": null,
       "member": null,
-      "receipt_method": "git archive",
-      "receipt_git_commit": "1467b2d3ed4e794137311d6451165430124b30c6",
-      "receipt_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-adjustment/N02-README-original.md",
+      "receipt_method": "pre-existing exact match; preserved",
+      "receipt_git_commit": null,
+      "receipt_git_path": null,
       "blocker": null
     },
     {
@@ -303,19 +272,19 @@
       "expected_bytes": 108955,
       "expected_sha256": "c24d1e51f33fa8a5b87bc80f12c7cce0acb3ee8721413c330f033b12c9ed8956",
       "destination_relative": "media-adjustment/N02-antes-ajuste.jpg",
-      "status": "BLOCKED",
-      "actual_bytes": null,
-      "actual_sha256": null,
+      "status": "PASS",
+      "actual_bytes": 108955,
+      "actual_sha256": "c24d1e51f33fa8a5b87bc80f12c7cce0acb3ee8721413c330f033b12c9ed8956",
       "source_type": "drive_private_zip_member",
       "source_drive_id": "1dAZfGj0T2nKIgAdyXoKIVeFXyU5AeX6Z",
       "source_git_commit": null,
       "source_git_path": null,
       "archive": "N02-ajuste-privado-evidencia.zip",
       "member": "media-adjustment/N02-antes-ajuste.jpg",
-      "receipt_method": null,
+      "receipt_method": "verified ZIP member",
       "receipt_git_commit": null,
       "receipt_git_path": null,
-      "blocker": "archive or source object exceeds32MiB transfer limit; official proxy CONNECT403"
+      "blocker": null
     },
     {
       "relative": "media-adjustment/N02-cutplan-original.json",
@@ -331,9 +300,9 @@
       "source_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-adjustment/N02-cutplan-original.json",
       "archive": null,
       "member": null,
-      "receipt_method": "git archive",
-      "receipt_git_commit": "1467b2d3ed4e794137311d6451165430124b30c6",
-      "receipt_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-adjustment/N02-cutplan-original.json",
+      "receipt_method": "pre-existing exact match; preserved",
+      "receipt_git_commit": null,
+      "receipt_git_path": null,
       "blocker": null
     },
     {
@@ -350,9 +319,9 @@
       "source_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-adjustment/N02-cutplan-propuesta.json",
       "archive": null,
       "member": null,
-      "receipt_method": "git archive",
-      "receipt_git_commit": "1467b2d3ed4e794137311d6451165430124b30c6",
-      "receipt_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-adjustment/N02-cutplan-propuesta.json",
+      "receipt_method": "pre-existing exact match; preserved",
+      "receipt_git_commit": null,
+      "receipt_git_path": null,
       "blocker": null
     },
     {
@@ -360,38 +329,38 @@
       "expected_bytes": 78805,
       "expected_sha256": "9a13e29366cd6a4e2d591551b1b3ca02853cd31962d2095e3bcdfcd992596c80",
       "destination_relative": "media-adjustment/N02-despues-ajuste.jpg",
-      "status": "BLOCKED",
-      "actual_bytes": null,
-      "actual_sha256": null,
+      "status": "PASS",
+      "actual_bytes": 78805,
+      "actual_sha256": "9a13e29366cd6a4e2d591551b1b3ca02853cd31962d2095e3bcdfcd992596c80",
       "source_type": "drive_private_zip_member",
       "source_drive_id": "1dAZfGj0T2nKIgAdyXoKIVeFXyU5AeX6Z",
       "source_git_commit": null,
       "source_git_path": null,
       "archive": "N02-ajuste-privado-evidencia.zip",
       "member": "media-adjustment/N02-despues-ajuste.jpg",
-      "receipt_method": null,
+      "receipt_method": "verified ZIP member",
       "receipt_git_commit": null,
       "receipt_git_path": null,
-      "blocker": "archive or source object exceeds32MiB transfer limit; official proxy CONNECT403"
+      "blocker": null
     },
     {
       "relative": "media-adjustment/N02-empalme-comparado.jpg",
       "expected_bytes": 419134,
       "expected_sha256": "a28d91755f73f7d85e06c469669b650b84e9e7ca2c92f6adcdb81270ab649a2e",
       "destination_relative": "media-adjustment/N02-empalme-comparado.jpg",
-      "status": "BLOCKED",
-      "actual_bytes": null,
-      "actual_sha256": null,
+      "status": "PASS",
+      "actual_bytes": 419134,
+      "actual_sha256": "a28d91755f73f7d85e06c469669b650b84e9e7ca2c92f6adcdb81270ab649a2e",
       "source_type": "drive_private_zip_member",
       "source_drive_id": "1dAZfGj0T2nKIgAdyXoKIVeFXyU5AeX6Z",
       "source_git_commit": null,
       "source_git_path": null,
       "archive": "N02-ajuste-privado-evidencia.zip",
       "member": "media-adjustment/N02-empalme-comparado.jpg",
-      "receipt_method": null,
+      "receipt_method": "verified ZIP member",
       "receipt_git_commit": null,
       "receipt_git_path": null,
-      "blocker": "archive or source object exceeds32MiB transfer limit; official proxy CONNECT403"
+      "blocker": null
     },
     {
       "relative": "media-adjustment/N02-preview-revisable.mp4",
@@ -407,7 +376,7 @@
       "source_git_path": null,
       "archive": null,
       "member": null,
-      "receipt_method": "google_drive_fetch raw streaming + download_file",
+      "receipt_method": "pre-existing exact match; preserved",
       "receipt_git_commit": null,
       "receipt_git_path": null,
       "blocker": null
@@ -417,19 +386,19 @@
       "expected_bytes": 47814973,
       "expected_sha256": "c60a66dacd416b1712afab6a31604b118f8a1af4a053047b3562a5ee7d6793a1",
       "destination_relative": "media-adjustment/N02-preview-sin-arranque-falso.mp4",
-      "status": "BLOCKED",
-      "actual_bytes": null,
-      "actual_sha256": null,
+      "status": "PASS",
+      "actual_bytes": 47814973,
+      "actual_sha256": "c60a66dacd416b1712afab6a31604b118f8a1af4a053047b3562a5ee7d6793a1",
       "source_type": "drive_private_zip_member",
       "source_drive_id": "1dAZfGj0T2nKIgAdyXoKIVeFXyU5AeX6Z",
       "source_git_commit": null,
       "source_git_path": null,
       "archive": "N02-ajuste-privado-evidencia.zip",
       "member": "media-adjustment/N02-preview-sin-arranque-falso.mp4",
-      "receipt_method": null,
+      "receipt_method": "verified ZIP member",
       "receipt_git_commit": null,
       "receipt_git_path": null,
-      "blocker": "archive or source object exceeds32MiB transfer limit; official proxy CONNECT403"
+      "blocker": null
     },
     {
       "relative": "media-adjustment/N02-rehacer-original.sh",
@@ -445,9 +414,9 @@
       "source_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-adjustment/N02-rehacer-original.sh",
       "archive": null,
       "member": null,
-      "receipt_method": "git archive",
-      "receipt_git_commit": "1467b2d3ed4e794137311d6451165430124b30c6",
-      "receipt_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-adjustment/N02-rehacer-original.sh",
+      "receipt_method": "pre-existing exact match; preserved",
+      "receipt_git_commit": null,
+      "receipt_git_path": null,
       "blocker": null
     },
     {
@@ -464,9 +433,9 @@
       "source_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-adjustment/N02-segments-original.json",
       "archive": null,
       "member": null,
-      "receipt_method": "git archive",
-      "receipt_git_commit": "1467b2d3ed4e794137311d6451165430124b30c6",
-      "receipt_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-adjustment/N02-segments-original.json",
+      "receipt_method": "pre-existing exact match; preserved",
+      "receipt_git_commit": null,
+      "receipt_git_path": null,
       "blocker": null
     },
     {
@@ -483,9 +452,9 @@
       "source_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-adjustment/N02-segments-propuesta.json",
       "archive": null,
       "member": null,
-      "receipt_method": "git archive",
-      "receipt_git_commit": "1467b2d3ed4e794137311d6451165430124b30c6",
-      "receipt_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-adjustment/N02-segments-propuesta.json",
+      "receipt_method": "pre-existing exact match; preserved",
+      "receipt_git_commit": null,
+      "receipt_git_path": null,
       "blocker": null
     },
     {
@@ -502,9 +471,9 @@
       "source_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-adjustment/N02-storyboard-original.json",
       "archive": null,
       "member": null,
-      "receipt_method": "git archive",
-      "receipt_git_commit": "1467b2d3ed4e794137311d6451165430124b30c6",
-      "receipt_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-adjustment/N02-storyboard-original.json",
+      "receipt_method": "pre-existing exact match; preserved",
+      "receipt_git_commit": null,
+      "receipt_git_path": null,
       "blocker": null
     },
     {
@@ -521,9 +490,9 @@
       "source_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-adjustment/N02-storyboard-propuesta.json",
       "archive": null,
       "member": null,
-      "receipt_method": "git archive",
-      "receipt_git_commit": "1467b2d3ed4e794137311d6451165430124b30c6",
-      "receipt_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-adjustment/N02-storyboard-propuesta.json",
+      "receipt_method": "pre-existing exact match; preserved",
+      "receipt_git_commit": null,
+      "receipt_git_path": null,
       "blocker": null
     },
     {
@@ -540,9 +509,9 @@
       "source_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-adjustment/RESULTADO-N02-DD-A.md",
       "archive": null,
       "member": null,
-      "receipt_method": "git archive",
-      "receipt_git_commit": "1467b2d3ed4e794137311d6451165430124b30c6",
-      "receipt_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-adjustment/RESULTADO-N02-DD-A.md",
+      "receipt_method": "pre-existing exact match; preserved",
+      "receipt_git_commit": null,
+      "receipt_git_path": null,
       "blocker": null
     },
     {
@@ -559,9 +528,9 @@
       "source_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-adjustment/reproducir-N02-preview.sh",
       "archive": null,
       "member": null,
-      "receipt_method": "git archive",
-      "receipt_git_commit": "1467b2d3ed4e794137311d6451165430124b30c6",
-      "receipt_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-adjustment/reproducir-N02-preview.sh",
+      "receipt_method": "pre-existing exact match; preserved",
+      "receipt_git_commit": null,
+      "receipt_git_path": null,
       "blocker": null
     },
     {
@@ -569,152 +538,152 @@
       "expected_bytes": 259555,
       "expected_sha256": "5b01b1f362681999b27f5aba11351823109c022e0a7b676aed3144573dea5094",
       "destination_relative": "media-adjustment/seam-0.png",
-      "status": "BLOCKED",
-      "actual_bytes": null,
-      "actual_sha256": null,
+      "status": "PASS",
+      "actual_bytes": 259555,
+      "actual_sha256": "5b01b1f362681999b27f5aba11351823109c022e0a7b676aed3144573dea5094",
       "source_type": "drive_private_zip_member",
       "source_drive_id": "1dAZfGj0T2nKIgAdyXoKIVeFXyU5AeX6Z",
       "source_git_commit": null,
       "source_git_path": null,
       "archive": "N02-ajuste-privado-evidencia.zip",
       "member": "media-adjustment/seam-0.png",
-      "receipt_method": null,
+      "receipt_method": "verified ZIP member",
       "receipt_git_commit": null,
       "receipt_git_path": null,
-      "blocker": "archive or source object exceeds32MiB transfer limit; official proxy CONNECT403"
+      "blocker": null
     },
     {
       "relative": "media-adjustment/seam-1.png",
       "expected_bytes": 259449,
       "expected_sha256": "0f7cbdbaa01801bd303023465012e5a5d63b49391565840a69b9926f97579afd",
       "destination_relative": "media-adjustment/seam-1.png",
-      "status": "BLOCKED",
-      "actual_bytes": null,
-      "actual_sha256": null,
+      "status": "PASS",
+      "actual_bytes": 259449,
+      "actual_sha256": "0f7cbdbaa01801bd303023465012e5a5d63b49391565840a69b9926f97579afd",
       "source_type": "drive_private_zip_member",
       "source_drive_id": "1dAZfGj0T2nKIgAdyXoKIVeFXyU5AeX6Z",
       "source_git_commit": null,
       "source_git_path": null,
       "archive": "N02-ajuste-privado-evidencia.zip",
       "member": "media-adjustment/seam-1.png",
-      "receipt_method": null,
+      "receipt_method": "verified ZIP member",
       "receipt_git_commit": null,
       "receipt_git_path": null,
-      "blocker": "archive or source object exceeds32MiB transfer limit; official proxy CONNECT403"
+      "blocker": null
     },
     {
       "relative": "media-adjustment/seam-2.png",
       "expected_bytes": 261231,
       "expected_sha256": "798c3c27eca1c08dcd3c03adae9d31339a353322b2762eba0bc0d251d444287b",
       "destination_relative": "media-adjustment/seam-2.png",
-      "status": "BLOCKED",
-      "actual_bytes": null,
-      "actual_sha256": null,
+      "status": "PASS",
+      "actual_bytes": 261231,
+      "actual_sha256": "798c3c27eca1c08dcd3c03adae9d31339a353322b2762eba0bc0d251d444287b",
       "source_type": "drive_private_zip_member",
       "source_drive_id": "1dAZfGj0T2nKIgAdyXoKIVeFXyU5AeX6Z",
       "source_git_commit": null,
       "source_git_path": null,
       "archive": "N02-ajuste-privado-evidencia.zip",
       "member": "media-adjustment/seam-2.png",
-      "receipt_method": null,
+      "receipt_method": "verified ZIP member",
       "receipt_git_commit": null,
       "receipt_git_path": null,
-      "blocker": "archive or source object exceeds32MiB transfer limit; official proxy CONNECT403"
+      "blocker": null
     },
     {
       "relative": "media-adjustment/seam-3.png",
       "expected_bytes": 236370,
       "expected_sha256": "4c53e7f2401c1a21e14612ff186c05d08e266852701a7ae5d7c08eb1ace23ef7",
       "destination_relative": "media-adjustment/seam-3.png",
-      "status": "BLOCKED",
-      "actual_bytes": null,
-      "actual_sha256": null,
+      "status": "PASS",
+      "actual_bytes": 236370,
+      "actual_sha256": "4c53e7f2401c1a21e14612ff186c05d08e266852701a7ae5d7c08eb1ace23ef7",
       "source_type": "drive_private_zip_member",
       "source_drive_id": "1dAZfGj0T2nKIgAdyXoKIVeFXyU5AeX6Z",
       "source_git_commit": null,
       "source_git_path": null,
       "archive": "N02-ajuste-privado-evidencia.zip",
       "member": "media-adjustment/seam-3.png",
-      "receipt_method": null,
+      "receipt_method": "verified ZIP member",
       "receipt_git_commit": null,
       "receipt_git_path": null,
-      "blocker": "archive or source object exceeds32MiB transfer limit; official proxy CONNECT403"
+      "blocker": null
     },
     {
       "relative": "media-adjustment/seam-4.png",
       "expected_bytes": 259555,
       "expected_sha256": "5b01b1f362681999b27f5aba11351823109c022e0a7b676aed3144573dea5094",
       "destination_relative": "media-adjustment/seam-4.png",
-      "status": "BLOCKED",
-      "actual_bytes": null,
-      "actual_sha256": null,
+      "status": "PASS",
+      "actual_bytes": 259555,
+      "actual_sha256": "5b01b1f362681999b27f5aba11351823109c022e0a7b676aed3144573dea5094",
       "source_type": "drive_private_zip_member",
       "source_drive_id": "1dAZfGj0T2nKIgAdyXoKIVeFXyU5AeX6Z",
       "source_git_commit": null,
       "source_git_path": null,
       "archive": "N02-ajuste-privado-evidencia.zip",
       "member": "media-adjustment/seam-0.png",
-      "receipt_method": null,
+      "receipt_method": "verified ZIP member",
       "receipt_git_commit": null,
       "receipt_git_path": null,
-      "blocker": "archive or source object exceeds32MiB transfer limit; official proxy CONNECT403"
+      "blocker": null
     },
     {
       "relative": "media-adjustment/seam-5.png",
       "expected_bytes": 259449,
       "expected_sha256": "0f7cbdbaa01801bd303023465012e5a5d63b49391565840a69b9926f97579afd",
       "destination_relative": "media-adjustment/seam-5.png",
-      "status": "BLOCKED",
-      "actual_bytes": null,
-      "actual_sha256": null,
+      "status": "PASS",
+      "actual_bytes": 259449,
+      "actual_sha256": "0f7cbdbaa01801bd303023465012e5a5d63b49391565840a69b9926f97579afd",
       "source_type": "drive_private_zip_member",
       "source_drive_id": "1dAZfGj0T2nKIgAdyXoKIVeFXyU5AeX6Z",
       "source_git_commit": null,
       "source_git_path": null,
       "archive": "N02-ajuste-privado-evidencia.zip",
       "member": "media-adjustment/seam-1.png",
-      "receipt_method": null,
+      "receipt_method": "verified ZIP member",
       "receipt_git_commit": null,
       "receipt_git_path": null,
-      "blocker": "archive or source object exceeds32MiB transfer limit; official proxy CONNECT403"
+      "blocker": null
     },
     {
       "relative": "media-adjustment/seam-6.png",
       "expected_bytes": 261231,
       "expected_sha256": "798c3c27eca1c08dcd3c03adae9d31339a353322b2762eba0bc0d251d444287b",
       "destination_relative": "media-adjustment/seam-6.png",
-      "status": "BLOCKED",
-      "actual_bytes": null,
-      "actual_sha256": null,
+      "status": "PASS",
+      "actual_bytes": 261231,
+      "actual_sha256": "798c3c27eca1c08dcd3c03adae9d31339a353322b2762eba0bc0d251d444287b",
       "source_type": "drive_private_zip_member",
       "source_drive_id": "1dAZfGj0T2nKIgAdyXoKIVeFXyU5AeX6Z",
       "source_git_commit": null,
       "source_git_path": null,
       "archive": "N02-ajuste-privado-evidencia.zip",
       "member": "media-adjustment/seam-2.png",
-      "receipt_method": null,
+      "receipt_method": "verified ZIP member",
       "receipt_git_commit": null,
       "receipt_git_path": null,
-      "blocker": "archive or source object exceeds32MiB transfer limit; official proxy CONNECT403"
+      "blocker": null
     },
     {
       "relative": "media-adjustment/seam-7.png",
       "expected_bytes": 236370,
       "expected_sha256": "4c53e7f2401c1a21e14612ff186c05d08e266852701a7ae5d7c08eb1ace23ef7",
       "destination_relative": "media-adjustment/seam-7.png",
-      "status": "BLOCKED",
-      "actual_bytes": null,
-      "actual_sha256": null,
+      "status": "PASS",
+      "actual_bytes": 236370,
+      "actual_sha256": "4c53e7f2401c1a21e14612ff186c05d08e266852701a7ae5d7c08eb1ace23ef7",
       "source_type": "drive_private_zip_member",
       "source_drive_id": "1dAZfGj0T2nKIgAdyXoKIVeFXyU5AeX6Z",
       "source_git_commit": null,
       "source_git_path": null,
       "archive": "N02-ajuste-privado-evidencia.zip",
       "member": "media-adjustment/seam-3.png",
-      "receipt_method": null,
+      "receipt_method": "verified ZIP member",
       "receipt_git_commit": null,
       "receipt_git_path": null,
-      "blocker": "archive or source object exceeds32MiB transfer limit; official proxy CONNECT403"
+      "blocker": null
     },
     {
       "relative": "media-review-n06/DD-A-borrador-original-Claude.mp4",
@@ -730,7 +699,7 @@
       "source_git_path": null,
       "archive": "Borradores-originales-Claude.zip",
       "member": "DD-A-borrador-original-Claude.mp4",
-      "receipt_method": "ZIP member exact bytes",
+      "receipt_method": "pre-existing exact match; preserved",
       "receipt_git_commit": null,
       "receipt_git_path": null,
       "blocker": null
@@ -749,7 +718,7 @@
       "source_git_path": null,
       "archive": "Borradores-originales-Claude.zip",
       "member": "DD-A-original-contact.jpg",
-      "receipt_method": "ZIP member exact bytes",
+      "receipt_method": "pre-existing exact match; preserved",
       "receipt_git_commit": null,
       "receipt_git_path": null,
       "blocker": null
@@ -768,9 +737,9 @@
       "source_git_path": null,
       "archive": "N02-ajuste-privado-evidencia.zip",
       "member": "media-review-n06/N02-borrador-original-Claude.mp4",
-      "receipt_method": "existing independent Git preservation exact bytes, not ZIP received",
-      "receipt_git_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
-      "receipt_git_path": "videos/marca-personal/2026-10-11/n02-sonnet-45/borrador/BORRADOR-no-es-master-360p.mp4",
+      "receipt_method": "pre-existing exact match; preserved",
+      "receipt_git_commit": null,
+      "receipt_git_path": null,
       "blocker": null
     },
     {
@@ -787,7 +756,7 @@
       "source_git_path": null,
       "archive": "Borradores-originales-Claude.zip",
       "member": "N02-original-contact.jpg",
-      "receipt_method": "ZIP member exact bytes",
+      "receipt_method": "pre-existing exact match; preserved",
       "receipt_git_commit": null,
       "receipt_git_path": null,
       "blocker": null
@@ -806,7 +775,7 @@
       "source_git_path": null,
       "archive": "Borradores-originales-Claude.zip",
       "member": "N06-borrador-original-Claude.mp4",
-      "receipt_method": "ZIP member exact bytes",
+      "receipt_method": "pre-existing exact match; preserved",
       "receipt_git_commit": null,
       "receipt_git_path": null,
       "blocker": null
@@ -825,7 +794,7 @@
       "source_git_path": null,
       "archive": "Borradores-originales-Claude.zip",
       "member": "N06-original-contact.jpg",
-      "receipt_method": "ZIP member exact bytes",
+      "receipt_method": "pre-existing exact match; preserved",
       "receipt_git_commit": null,
       "receipt_git_path": null,
       "blocker": null
@@ -844,7 +813,7 @@
       "source_git_path": null,
       "archive": "N06-preview-privado.zip",
       "member": "N06/N06-preview-corte-propuesto.mp4",
-      "receipt_method": "ZIP member exact bytes",
+      "receipt_method": "pre-existing exact match; preserved",
       "receipt_git_commit": null,
       "receipt_git_path": null,
       "blocker": null
@@ -863,7 +832,7 @@
       "source_git_path": null,
       "archive": "Borradores-originales-Claude.zip",
       "member": "N07-borrador-original-Claude.mp4",
-      "receipt_method": "ZIP member exact bytes",
+      "receipt_method": "pre-existing exact match; preserved",
       "receipt_git_commit": null,
       "receipt_git_path": null,
       "blocker": null
@@ -882,7 +851,7 @@
       "source_git_path": null,
       "archive": "Borradores-originales-Claude.zip",
       "member": "N07-original-contact.jpg",
-      "receipt_method": "ZIP member exact bytes",
+      "receipt_method": "pre-existing exact match; preserved",
       "receipt_git_commit": null,
       "receipt_git_path": null,
       "blocker": null
@@ -901,9 +870,9 @@
       "source_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/ORIGINALES-CLAUDE-RECUPERADOS.md",
       "archive": null,
       "member": null,
-      "receipt_method": "git archive",
-      "receipt_git_commit": "1467b2d3ed4e794137311d6451165430124b30c6",
-      "receipt_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/ORIGINALES-CLAUDE-RECUPERADOS.md",
+      "receipt_method": "pre-existing exact match; preserved",
+      "receipt_git_commit": null,
+      "receipt_git_path": null,
       "blocker": null
     },
     {
@@ -920,9 +889,9 @@
       "source_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/REVISION-N06.md",
       "archive": null,
       "member": null,
-      "receipt_method": "git archive",
-      "receipt_git_commit": "1467b2d3ed4e794137311d6451165430124b30c6",
-      "receipt_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/REVISION-N06.md",
+      "receipt_method": "pre-existing exact match; preserved",
+      "receipt_git_commit": null,
+      "receipt_git_path": null,
       "blocker": null
     },
     {
@@ -930,19 +899,19 @@
       "expected_bytes": 69843125,
       "expected_sha256": "6e3702e1378de3432843633c2bff2f76c654acaa251b3c38b9f1f3a9acff8fb9",
       "destination_relative": "media-review-n06/bruto.mp4",
-      "status": "BLOCKED",
-      "actual_bytes": null,
-      "actual_sha256": null,
+      "status": "PASS",
+      "actual_bytes": 69843125,
+      "actual_sha256": "6e3702e1378de3432843633c2bff2f76c654acaa251b3c38b9f1f3a9acff8fb9",
       "source_type": "drive_private",
       "source_drive_id": "18WULGYFlDTEaAneWUDzxWrxYi5OZFbSY",
       "source_git_commit": null,
       "source_git_path": null,
       "archive": null,
       "member": null,
-      "receipt_method": null,
+      "receipt_method": "12 verified split parts; exact reassembly",
       "receipt_git_commit": null,
       "receipt_git_path": null,
-      "blocker": "archive or source object exceeds32MiB transfer limit; official proxy CONNECT403"
+      "blocker": null
     },
     {
       "relative": "media-review-n06/contact-sheet.jpg",
@@ -958,7 +927,7 @@
       "source_git_path": null,
       "archive": "N06-preview-privado.zip",
       "member": "N06/contact-sheet.jpg",
-      "receipt_method": "ZIP member exact bytes",
+      "receipt_method": "pre-existing exact match; preserved",
       "receipt_git_commit": null,
       "receipt_git_path": null,
       "blocker": null
@@ -977,9 +946,9 @@
       "source_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/cutplan.json",
       "archive": null,
       "member": null,
-      "receipt_method": "git archive",
-      "receipt_git_commit": "1467b2d3ed4e794137311d6451165430124b30c6",
-      "receipt_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/cutplan.json",
+      "receipt_method": "pre-existing exact match; preserved",
+      "receipt_git_commit": null,
+      "receipt_git_path": null,
       "blocker": null
     },
     {
@@ -996,9 +965,9 @@
       "source_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/loudnorm-pass1.json",
       "archive": null,
       "member": null,
-      "receipt_method": "git archive",
-      "receipt_git_commit": "1467b2d3ed4e794137311d6451165430124b30c6",
-      "receipt_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/loudnorm-pass1.json",
+      "receipt_method": "pre-existing exact match; preserved",
+      "receipt_git_commit": null,
+      "receipt_git_path": null,
       "blocker": null
     },
     {
@@ -1015,9 +984,9 @@
       "source_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/original-draft-README.md",
       "archive": null,
       "member": null,
-      "receipt_method": "git archive",
-      "receipt_git_commit": "1467b2d3ed4e794137311d6451165430124b30c6",
-      "receipt_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/original-draft-README.md",
+      "receipt_method": "pre-existing exact match; preserved",
+      "receipt_git_commit": null,
+      "receipt_git_path": null,
       "blocker": null
     },
     {
@@ -1034,9 +1003,9 @@
       "source_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/original-plan.txt",
       "archive": null,
       "member": null,
-      "receipt_method": "git archive",
-      "receipt_git_commit": "1467b2d3ed4e794137311d6451165430124b30c6",
-      "receipt_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/original-plan.txt",
+      "receipt_method": "pre-existing exact match; preserved",
+      "receipt_git_commit": null,
+      "receipt_git_path": null,
       "blocker": null
     },
     {
@@ -1053,9 +1022,9 @@
       "source_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/original-rehacer.sh",
       "archive": null,
       "member": null,
-      "receipt_method": "git archive",
-      "receipt_git_commit": "1467b2d3ed4e794137311d6451165430124b30c6",
-      "receipt_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/original-rehacer.sh",
+      "receipt_method": "pre-existing exact match; preserved",
+      "receipt_git_commit": null,
+      "receipt_git_path": null,
       "blocker": null
     },
     {
@@ -1072,9 +1041,9 @@
       "source_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/qa-originales.json",
       "archive": null,
       "member": null,
-      "receipt_method": "git archive",
-      "receipt_git_commit": "1467b2d3ed4e794137311d6451165430124b30c6",
-      "receipt_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/qa-originales.json",
+      "receipt_method": "pre-existing exact match; preserved",
+      "receipt_git_commit": null,
+      "receipt_git_path": null,
       "blocker": null
     },
     {
@@ -1091,9 +1060,9 @@
       "source_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/qa.json",
       "archive": null,
       "member": null,
-      "receipt_method": "git archive",
-      "receipt_git_commit": "1467b2d3ed4e794137311d6451165430124b30c6",
-      "receipt_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/qa.json",
+      "receipt_method": "pre-existing exact match; preserved",
+      "receipt_git_commit": null,
+      "receipt_git_path": null,
       "blocker": null
     },
     {
@@ -1110,9 +1079,9 @@
       "source_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/reproducir-preview.sh",
       "archive": null,
       "member": null,
-      "receipt_method": "git archive",
-      "receipt_git_commit": "1467b2d3ed4e794137311d6451165430124b30c6",
-      "receipt_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/reproducir-preview.sh",
+      "receipt_method": "pre-existing exact match; preserved",
+      "receipt_git_commit": null,
+      "receipt_git_path": null,
       "blocker": null
     },
     {
@@ -1129,9 +1098,9 @@
       "source_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/segments-cut.json",
       "archive": null,
       "member": null,
-      "receipt_method": "git archive",
-      "receipt_git_commit": "1467b2d3ed4e794137311d6451165430124b30c6",
-      "receipt_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/segments-cut.json",
+      "receipt_method": "pre-existing exact match; preserved",
+      "receipt_git_commit": null,
+      "receipt_git_path": null,
       "blocker": null
     },
     {
@@ -1148,9 +1117,9 @@
       "source_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/storyboard.json",
       "archive": null,
       "member": null,
-      "receipt_method": "git archive",
-      "receipt_git_commit": "1467b2d3ed4e794137311d6451165430124b30c6",
-      "receipt_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/storyboard.json",
+      "receipt_method": "pre-existing exact match; preserved",
+      "receipt_git_commit": null,
+      "receipt_git_path": null,
       "blocker": null
     },
     {
@@ -1167,12 +1136,15 @@
       "source_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/tabla-de-cortes.md",
       "archive": null,
       "member": null,
-      "receipt_method": "git archive",
-      "receipt_git_commit": "1467b2d3ed4e794137311d6451165430124b30c6",
-      "receipt_git_path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/tabla-de-cortes.md",
+      "receipt_method": "pre-existing exact match; preserved",
+      "receipt_git_commit": null,
+      "receipt_git_path": null,
       "blocker": null
     }
   ],
-  "full_reception": false,
-  "source_archived": false
+  "full_reception": true,
+  "source_archived": false,
+  "transport_delta_commit": "471f05170b64809d4505dc5c4be64f9a01bcf625",
+  "previous_partial_receipt_commit": "a3fee576fb105bdc91e26a8e9fc1dc9c3890f651",
+  "local_final_full_matrix_sha256": "85f0b26d111d5e81632fd07244b3d9903d6ab6a7d889bf9d3572ab51ca06c0b7"
 }

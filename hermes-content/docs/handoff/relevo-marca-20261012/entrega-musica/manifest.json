@@ -1,0 +1,574 @@
+{
+  "created_utc": "2026-10-12T20:19:30.089488+00:00",
+  "music_license": {
+    "selected_track": "House In a Forest Loop",
+    "author": "HorrorPen",
+    "copyright_year": 2012,
+    "license": "CC BY 3.0 Unported",
+    "license_url": "https://creativecommons.org/licenses/by/3.0/",
+    "original_source": "https://opengameart.org/content/loop-house-in-a-forest",
+    "source_repository": "godotengine/godot-demo-projects",
+    "source_commit": "b761b4cd5718a7118f2c95eb55f181d0a5f004f1",
+    "readme_path": "2d/dodge_the_creeps/README.md",
+    "readme_blob": "bd461bd788aaa55a0374a8497651838aa61a0f80",
+    "asset_path": "2d/dodge_the_creeps/art/House In a Forest Loop.ogg",
+    "asset_blob": "ece36402739a3cb884647df78e6ea95315cbf223",
+    "asset_bytes": 1430743,
+    "asset_sha256": "32680f2b2631eb9f6e2902ebbbec1b43ab82b4dbf154fdc9bfbfa17b03270504",
+    "legalcode_repository": "creativecommons/creativecommons.org",
+    "legalcode_commit": "7f5253347532fc0cb6cf51d78a7085d081fb4216",
+    "legalcode_path": "docroot/legalcode/by_3.0.txt",
+    "legalcode_blob": "1a16e05564d2aaa880bbe9e506a0a0226d8742cc",
+    "rights_verified": [
+      "1a musical synchronization is adaptation",
+      "3b create/reproduce adaptations; identify modifications",
+      "3c/d distribute/publicly perform originals/adaptations",
+      "3 worldwide royalty-free perpetual grant",
+      "3 all media/formats, no NC restriction"
+    ],
+    "platform_scope": {
+      "Instagram": "license permits commercial video sync with attribution",
+      "TikTok": "same",
+      "Facebook": "same",
+      "YouTube": "same",
+      "LinkedIn": "same",
+      "X": "same"
+    },
+    "conditions": [
+      "4a retain license/copyright notices, license URI, do not impose DRM/additional restrictions on music, no sublicensing music beyond granted rights",
+      "4b credit author,title,source,license and identify adaptation",
+      "no endorsement implication"
+    ],
+    "verified_date": "2026-10-12",
+    "cost": 0,
+    "subscription_required": false,
+    "attribution": "Music: House In a Forest Loop — HorrorPen (2012), CC BY 3.0 https://creativecommons.org/licenses/by/3.0/ . Source: https://opengameart.org/content/loop-house-in-a-forest . Adapted by ONIA: looped, trimmed, fades, volume/ducking and mixed under original voice.",
+    "audio_listened": false,
+    "source_is_declared_music_loop": true,
+    "sonic_suitability": "Provisional until Sergio actually auditions preview; no subjective listening judgment made",
+    "network": {
+      "asset_download": "raw.githubusercontent.com permitted official network per command",
+      "creativecommons_org": "HTTP403 direct legalcode; authoritative repository fallback read-only, no proxy bypass"
+    },
+    "authorization": "Sergio explicitly requested local music mixes on existing Claude montages; overrides earlier skill no-bed rule for this task only. No publishing or new voice/face generation."
+  },
+  "ffmpeg_version": "7.1.5",
+  "method": "encoded video copy; original voice temporal structure retained; only audio mixing/encoding; no speed/cuts/overlays changed",
+  "ducking": {
+    "threshold": 0.06,
+    "ratio": 3,
+    "attack_ms": 10,
+    "release_ms": 180,
+    "music_target_lufs_before_duck": -26,
+    "mix_limiter_db": -1.5
+  },
+  "subjective_audio_review": "not listened by model; real audition required",
+  "publication_authorized": false,
+  "videos": [
+    {
+      "piece": "N06",
+      "source": "/workspace/work/onia-marca-recepcion-20261012/received/media-review-n06/N06-borrador-original-Claude.mp4",
+      "source_sha256": "d8753944a720d201c7bd141acce4236699cb159dc95e90f3f80049c77f7d8f40",
+      "clean_preview": "/workspace/work/onia-marca-musica-20261012/previews/N06-SIN-MUSICA.mp4",
+      "clean_sha256": "d8753944a720d201c7bd141acce4236699cb159dc95e90f3f80049c77f7d8f40",
+      "mixed_preview": "/workspace/work/onia-marca-musica-20261012/previews/N06-CON-MUSICA-BORRADOR.mp4",
+      "mixed_bytes": 1940441,
+      "mixed_sha256": "a060d4f4c0e479c4839b9bc47acaa20692ed417f94cebbd0f8f71313e3aee642",
+      "video_packet_hash_original": "SHA256=3e2430d48a170677dcda2274eeead1f204fca544d6eafabf167a17546c743cd2",
+      "video_packet_hash_mixed": "SHA256=3e2430d48a170677dcda2274eeead1f204fca544d6eafabf167a17546c743cd2",
+      "video_exact": true,
+      "source_probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 360,
+            "height": 640,
+            "r_frame_rate": "30/1",
+            "start_time": "0.000000",
+            "duration": "45.500000",
+            "nb_frames": "1365"
+          },
+          {
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "sample_rate": "48000",
+            "channels": 2,
+            "r_frame_rate": "0/0",
+            "start_time": "0.000000",
+            "duration": "45.504000",
+            "nb_frames": "2134"
+          }
+        ],
+        "format": {
+          "duration": "45.504000",
+          "size": "1163863"
+        }
+      },
+      "mixed_probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 360,
+            "height": 640,
+            "r_frame_rate": "30/1",
+            "start_time": "0.000000",
+            "duration": "45.500000",
+            "nb_frames": "1365"
+          },
+          {
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "sample_rate": "48000",
+            "channels": 2,
+            "r_frame_rate": "0/0",
+            "start_time": "0.000000",
+            "duration": "45.504000",
+            "nb_frames": "2134"
+          }
+        ],
+        "format": {
+          "duration": "45.504000",
+          "size": "1940441"
+        }
+      },
+      "duration_delta_seconds": 0.0,
+      "voice_metrics": {
+        "summary": "Integrated loudness:\n    I:         -13.2 LUFS\n    Threshold: -23.2 LUFS\n\n  Loudness range:\n    LRA:         2.2 LU\n    Threshold: -33.3 LUFS\n    LRA low:   -14.3 LUFS\n    LRA high:  -12.1 LUFS\n\n  True peak:\n    Peak:        0.0 dBFS\n[out#0/null @ 0x56309be01080] video:0KiB audio:8532KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown\nsize=N/A time=00:00:45.50 bitrate=N/A speed= 222x",
+        "integrated_lufs": -13.2,
+        "lra_lu": 2.2,
+        "true_peak_dbfs": 0.0
+      },
+      "mixed_metrics": {
+        "summary": "Integrated loudness:\n    I:         -13.2 LUFS\n    Threshold: -23.2 LUFS\n\n  Loudness range:\n    LRA:         2.1 LU\n    Threshold: -33.3 LUFS\n    LRA low:   -14.3 LUFS\n    LRA high:  -12.2 LUFS\n\n  True peak:\n    Peak:       -1.4 dBFS\n[out#0/null @ 0x562487cee240] video:0KiB audio:8532KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown\nsize=N/A time=00:00:45.50 bitrate=N/A speed= 220x",
+        "integrated_lufs": -13.2,
+        "lra_lu": 2.1,
+        "true_peak_dbfs": -1.4
+      },
+      "music_only_ducked": "/workspace/work/onia-marca-musica-20261012/mezcla/N06-musica-ducked.m4a",
+      "music_metrics": {
+        "summary": "Integrated loudness:\n    I:         -32.7 LUFS\n    Threshold: -42.7 LUFS\n\n  Loudness range:\n    LRA:         3.4 LU\n    Threshold: -52.7 LUFS\n    LRA low:   -34.4 LUFS\n    LRA high:  -31.0 LUFS\n\n  True peak:\n    Peak:      -14.3 dBFS\n[out#0/null @ 0x55fc0dc52680] video:0KiB audio:8532KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown\nsize=N/A time=00:00:45.50 bitrate=N/A speed= 226x",
+        "integrated_lufs": -32.7,
+        "lra_lu": 3.4,
+        "true_peak_dbfs": -14.3
+      },
+      "attribution_file": "/workspace/work/onia-marca-musica-20261012/previews/N06-CREDITO-MUSICA.txt",
+      "audio_listened": false,
+      "approval": "private preview only; not master/publication",
+      "editorial_flags": [
+        "DD-A CONFIRMAR unchanged",
+        "N02 Work private adjusted source; original Claude111.3 preserved",
+        "S2 variables unchanged"
+      ]
+    },
+    {
+      "piece": "N07",
+      "source": "/workspace/work/onia-marca-recepcion-20261012/received/media-review-n06/N07-borrador-original-Claude.mp4",
+      "source_sha256": "f22e5caeb2d96cfe9c625d6e2a7d0dc4e3a6921890c866cee4cbad726d0a90e6",
+      "clean_preview": "/workspace/work/onia-marca-musica-20261012/previews/N07-SIN-MUSICA.mp4",
+      "clean_sha256": "f22e5caeb2d96cfe9c625d6e2a7d0dc4e3a6921890c866cee4cbad726d0a90e6",
+      "mixed_preview": "/workspace/work/onia-marca-musica-20261012/previews/N07-CON-MUSICA-BORRADOR.mp4",
+      "mixed_bytes": 3414814,
+      "mixed_sha256": "63f1aa5e9d3323b2aa04e66d3822f1c2a23442edb61738adb6cde0396a25e69d",
+      "video_packet_hash_original": "SHA256=1e4754990c7f4568671afc11cfad2ad0d8d36a90aefbbd7d53c943f3e87ee4a2",
+      "video_packet_hash_mixed": "SHA256=1e4754990c7f4568671afc11cfad2ad0d8d36a90aefbbd7d53c943f3e87ee4a2",
+      "video_exact": true,
+      "source_probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 360,
+            "height": 640,
+            "r_frame_rate": "30/1",
+            "start_time": "0.000000",
+            "duration": "81.733333",
+            "nb_frames": "2452"
+          },
+          {
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "sample_rate": "48000",
+            "channels": 2,
+            "r_frame_rate": "0/0",
+            "start_time": "0.000000",
+            "duration": "81.728000",
+            "nb_frames": "3832"
+          }
+        ],
+        "format": {
+          "duration": "81.733333",
+          "size": "2048970"
+        }
+      },
+      "mixed_probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 360,
+            "height": 640,
+            "r_frame_rate": "30/1",
+            "start_time": "0.000000",
+            "duration": "81.733333",
+            "nb_frames": "2452"
+          },
+          {
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "sample_rate": "48000",
+            "channels": 2,
+            "r_frame_rate": "0/0",
+            "start_time": "0.000000",
+            "duration": "81.728000",
+            "nb_frames": "3832"
+          }
+        ],
+        "format": {
+          "duration": "81.733333",
+          "size": "3414814"
+        }
+      },
+      "duration_delta_seconds": 0.0,
+      "voice_metrics": {
+        "summary": "Integrated loudness:\n    I:         -13.0 LUFS\n    Threshold: -23.1 LUFS\n\n  Loudness range:\n    LRA:         2.7 LU\n    Threshold: -33.1 LUFS\n    LRA low:   -14.5 LUFS\n    LRA high:  -11.8 LUFS\n\n  True peak:\n    Peak:       -0.8 dBFS\n[out#0/null @ 0x55a2f6f89800] video:0KiB audio:15324KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown\nsize=N/A time=00:01:21.72 bitrate=N/A speed= 232x",
+        "integrated_lufs": -13.0,
+        "lra_lu": 2.7,
+        "true_peak_dbfs": -0.8
+      },
+      "mixed_metrics": {
+        "summary": "Integrated loudness:\n    I:         -13.0 LUFS\n    Threshold: -23.0 LUFS\n\n  Loudness range:\n    LRA:         2.6 LU\n    Threshold: -33.0 LUFS\n    LRA low:   -14.4 LUFS\n    LRA high:  -11.8 LUFS\n\n  True peak:\n    Peak:       -1.1 dBFS\n[out#0/null @ 0x55a550764a40] video:0KiB audio:15324KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown\nsize=N/A time=00:01:21.72 bitrate=N/A speed= 225x",
+        "integrated_lufs": -13.0,
+        "lra_lu": 2.6,
+        "true_peak_dbfs": -1.1
+      },
+      "music_only_ducked": "/workspace/work/onia-marca-musica-20261012/mezcla/N07-musica-ducked.m4a",
+      "music_metrics": {
+        "summary": "Integrated loudness:\n    I:         -32.2 LUFS\n    Threshold: -42.2 LUFS\n\n  Loudness range:\n    LRA:         3.0 LU\n    Threshold: -52.2 LUFS\n    LRA low:   -33.7 LUFS\n    LRA high:  -30.7 LUFS\n\n  True peak:\n    Peak:      -12.4 dBFS\n[out#0/null @ 0x55f4c74224c0] video:0KiB audio:15324KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown\nsize=N/A time=00:01:21.72 bitrate=N/A speed= 265x",
+        "integrated_lufs": -32.2,
+        "lra_lu": 3.0,
+        "true_peak_dbfs": -12.4
+      },
+      "attribution_file": "/workspace/work/onia-marca-musica-20261012/previews/N07-CREDITO-MUSICA.txt",
+      "audio_listened": false,
+      "approval": "private preview only; not master/publication",
+      "editorial_flags": [
+        "DD-A CONFIRMAR unchanged",
+        "N02 Work private adjusted source; original Claude111.3 preserved",
+        "S2 variables unchanged"
+      ]
+    },
+    {
+      "piece": "DD-A",
+      "source": "/workspace/work/onia-marca-recepcion-20261012/received/media-review-n06/DD-A-borrador-original-Claude.mp4",
+      "source_sha256": "4582213089bbcf1c7fb4d84511ce64b7539eaf00e8f755952914a803d46af583",
+      "clean_preview": "/workspace/work/onia-marca-musica-20261012/previews/DD-A-SIN-MUSICA.mp4",
+      "clean_sha256": "4582213089bbcf1c7fb4d84511ce64b7539eaf00e8f755952914a803d46af583",
+      "mixed_preview": "/workspace/work/onia-marca-musica-20261012/previews/DD-A-CON-MUSICA-BORRADOR.mp4",
+      "mixed_bytes": 2404999,
+      "mixed_sha256": "52ab8ff1d2ed1accc7fa4082f74d49094b0da67303584d12084d6093fccf5895",
+      "video_packet_hash_original": "SHA256=013081b72d2443936d7a21dea7912e125420c36a44ea1aec855fb61a6e6068bb",
+      "video_packet_hash_mixed": "SHA256=013081b72d2443936d7a21dea7912e125420c36a44ea1aec855fb61a6e6068bb",
+      "video_exact": true,
+      "source_probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 360,
+            "height": 640,
+            "r_frame_rate": "30/1",
+            "start_time": "0.000000",
+            "duration": "58.433333",
+            "nb_frames": "1753"
+          },
+          {
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "sample_rate": "48000",
+            "channels": 2,
+            "r_frame_rate": "0/0",
+            "start_time": "0.000000",
+            "duration": "58.432000",
+            "nb_frames": "2740"
+          }
+        ],
+        "format": {
+          "duration": "58.433333",
+          "size": "1426827"
+        }
+      },
+      "mixed_probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 360,
+            "height": 640,
+            "r_frame_rate": "30/1",
+            "start_time": "0.000000",
+            "duration": "58.433333",
+            "nb_frames": "1753"
+          },
+          {
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "sample_rate": "48000",
+            "channels": 2,
+            "r_frame_rate": "0/0",
+            "start_time": "0.000000",
+            "duration": "58.432000",
+            "nb_frames": "2740"
+          }
+        ],
+        "format": {
+          "duration": "58.433333",
+          "size": "2404999"
+        }
+      },
+      "duration_delta_seconds": 0.0,
+      "voice_metrics": {
+        "summary": "Integrated loudness:\n    I:         -13.0 LUFS\n    Threshold: -23.1 LUFS\n\n  Loudness range:\n    LRA:         1.8 LU\n    Threshold: -33.1 LUFS\n    LRA low:   -14.1 LUFS\n    LRA high:  -12.2 LUFS\n\n  True peak:\n    Peak:       -0.3 dBFS\n[out#0/null @ 0x55cfd4787fc0] video:0KiB audio:10956KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown\nsize=N/A time=00:00:58.43 bitrate=N/A speed= 231x",
+        "integrated_lufs": -13.0,
+        "lra_lu": 1.8,
+        "true_peak_dbfs": -0.3
+      },
+      "mixed_metrics": {
+        "summary": "Integrated loudness:\n    I:         -13.0 LUFS\n    Threshold: -23.0 LUFS\n\n  Loudness range:\n    LRA:         1.8 LU\n    Threshold: -33.1 LUFS\n    LRA low:   -14.0 LUFS\n    LRA high:  -12.2 LUFS\n\n  True peak:\n    Peak:       -1.4 dBFS\n[out#0/null @ 0x56491c984280] video:0KiB audio:10956KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown\nsize=N/A time=00:00:58.43 bitrate=N/A speed= 195x",
+        "integrated_lufs": -13.0,
+        "lra_lu": 1.8,
+        "true_peak_dbfs": -1.4
+      },
+      "music_only_ducked": "/workspace/work/onia-marca-musica-20261012/mezcla/DD-A-musica-ducked.m4a",
+      "music_metrics": {
+        "summary": "Integrated loudness:\n    I:         -32.3 LUFS\n    Threshold: -42.2 LUFS\n\n  Loudness range:\n    LRA:         4.0 LU\n    Threshold: -52.2 LUFS\n    LRA low:   -34.0 LUFS\n    LRA high:  -30.1 LUFS\n\n  True peak:\n    Peak:      -13.8 dBFS\n[out#0/null @ 0x558f5281b480] video:0KiB audio:10956KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown\nsize=N/A time=00:00:58.43 bitrate=N/A speed= 254x",
+        "integrated_lufs": -32.3,
+        "lra_lu": 4.0,
+        "true_peak_dbfs": -13.8
+      },
+      "attribution_file": "/workspace/work/onia-marca-musica-20261012/previews/DD-A-CREDITO-MUSICA.txt",
+      "audio_listened": false,
+      "approval": "private preview only; not master/publication",
+      "editorial_flags": [
+        "DD-A CONFIRMAR unchanged",
+        "N02 Work private adjusted source; original Claude111.3 preserved",
+        "S2 variables unchanged"
+      ]
+    },
+    {
+      "piece": "N02-Work",
+      "source": "/workspace/work/onia-marca-recepcion-20261012/received/media-adjustment/N02-preview-revisable.mp4",
+      "source_sha256": "0d0031e88aa8c9b24b50f53a9e4581e7171bdc02b3781e064b4611fb4be4f6e5",
+      "clean_preview": "/workspace/work/onia-marca-musica-20261012/previews/N02-Work-SIN-MUSICA.mp4",
+      "clean_sha256": "0d0031e88aa8c9b24b50f53a9e4581e7171bdc02b3781e064b4611fb4be4f6e5",
+      "mixed_preview": "/workspace/work/onia-marca-musica-20261012/previews/N02-Work-CON-MUSICA-BORRADOR.mp4",
+      "mixed_bytes": 6331443,
+      "mixed_sha256": "43c58a9cf784f5c6cba57d06856b5cc53df28775b458f576408c3087f7aa335d",
+      "video_packet_hash_original": "SHA256=893550eebdefca052340e9d9d24e642694a15a6d5b6d97b959726f1b61433d4f",
+      "video_packet_hash_mixed": "SHA256=893550eebdefca052340e9d9d24e642694a15a6d5b6d97b959726f1b61433d4f",
+      "video_exact": true,
+      "source_probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 360,
+            "height": 640,
+            "r_frame_rate": "30/1",
+            "start_time": "0.000000",
+            "duration": "109.033333",
+            "nb_frames": "3271"
+          },
+          {
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "sample_rate": "48000",
+            "channels": 2,
+            "r_frame_rate": "0/0",
+            "start_time": "0.000000",
+            "duration": "109.008000",
+            "nb_frames": "5111"
+          }
+        ],
+        "format": {
+          "duration": "109.033333",
+          "size": "6258418"
+        }
+      },
+      "mixed_probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 360,
+            "height": 640,
+            "r_frame_rate": "30/1",
+            "start_time": "0.000000",
+            "duration": "109.033333",
+            "nb_frames": "3271"
+          },
+          {
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "sample_rate": "48000",
+            "channels": 2,
+            "r_frame_rate": "0/0",
+            "start_time": "0.000000",
+            "duration": "109.013000",
+            "nb_frames": "5111"
+          }
+        ],
+        "format": {
+          "duration": "109.033333",
+          "size": "6331443"
+        }
+      },
+      "duration_delta_seconds": 0.0,
+      "voice_metrics": {
+        "summary": "Integrated loudness:\n    I:         -13.2 LUFS\n    Threshold: -23.2 LUFS\n\n  Loudness range:\n    LRA:         1.8 LU\n    Threshold: -33.2 LUFS\n    LRA low:   -14.1 LUFS\n    LRA high:  -12.3 LUFS\n\n  True peak:\n    Peak:       -0.4 dBFS\n[out#0/null @ 0x5588e2f91900] video:0KiB audio:20440KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown\nsize=N/A time=00:01:49.01 bitrate=N/A speed= 226x",
+        "integrated_lufs": -13.2,
+        "lra_lu": 1.8,
+        "true_peak_dbfs": -0.4
+      },
+      "mixed_metrics": {
+        "summary": "Integrated loudness:\n    I:         -13.2 LUFS\n    Threshold: -23.2 LUFS\n\n  Loudness range:\n    LRA:         1.8 LU\n    Threshold: -33.2 LUFS\n    LRA low:   -14.1 LUFS\n    LRA high:  -12.3 LUFS\n\n  True peak:\n    Peak:       -1.3 dBFS\n[out#0/null @ 0x562fc3239cc0] video:0KiB audio:20440KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown\nsize=N/A time=00:01:49.01 bitrate=N/A speed= 245x",
+        "integrated_lufs": -13.2,
+        "lra_lu": 1.8,
+        "true_peak_dbfs": -1.3
+      },
+      "music_only_ducked": "/workspace/work/onia-marca-musica-20261012/mezcla/N02-Work-musica-ducked.m4a",
+      "music_metrics": {
+        "summary": "Integrated loudness:\n    I:         -32.2 LUFS\n    Threshold: -42.2 LUFS\n\n  Loudness range:\n    LRA:         3.4 LU\n    Threshold: -52.1 LUFS\n    LRA low:   -34.0 LUFS\n    LRA high:  -30.6 LUFS\n\n  True peak:\n    Peak:      -13.3 dBFS\n[out#0/null @ 0x55f37d315a00] video:0KiB audio:20440KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown\nsize=N/A time=00:01:49.01 bitrate=N/A speed= 228x",
+        "integrated_lufs": -32.2,
+        "lra_lu": 3.4,
+        "true_peak_dbfs": -13.3
+      },
+      "attribution_file": "/workspace/work/onia-marca-musica-20261012/previews/N02-Work-CREDITO-MUSICA.txt",
+      "audio_listened": false,
+      "approval": "private preview only; not master/publication",
+      "editorial_flags": [
+        "DD-A CONFIRMAR unchanged",
+        "N02 Work private adjusted source; original Claude111.3 preserved",
+        "S2 variables unchanged"
+      ]
+    },
+    {
+      "piece": "S2-D07-A",
+      "source": "/workspace/work/onia-marca-relevo/editorial/preservado/videos/marca-personal/2026-10-11/s2-d07-a-ventana-24h/borrador/BORRADOR-no-es-master-360p.mp4",
+      "source_sha256": "dee290632ef3db1422ee17a924d0142b664d04655bb3dc55dc1b5dcf6f7acdd6",
+      "clean_preview": "/workspace/work/onia-marca-musica-20261012/previews/S2-D07-A-SIN-MUSICA.mp4",
+      "clean_sha256": "dee290632ef3db1422ee17a924d0142b664d04655bb3dc55dc1b5dcf6f7acdd6",
+      "mixed_preview": "/workspace/work/onia-marca-musica-20261012/previews/S2-D07-A-CON-MUSICA-BORRADOR.mp4",
+      "mixed_bytes": 4090514,
+      "mixed_sha256": "d80924142098a75f63c3e7adfed2dae0a000ccdf1d35fe06b8e5af2ba81e4fd7",
+      "video_packet_hash_original": "SHA256=5d30ab15295ce0bbdaf7c9843f2fdb9655adb8c3fde496c2713170e6022e7cd1",
+      "video_packet_hash_mixed": "SHA256=5d30ab15295ce0bbdaf7c9843f2fdb9655adb8c3fde496c2713170e6022e7cd1",
+      "video_exact": true,
+      "source_probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 360,
+            "height": 640,
+            "r_frame_rate": "30/1",
+            "start_time": "0.000000",
+            "duration": "90.733333",
+            "nb_frames": "2722"
+          },
+          {
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "sample_rate": "48000",
+            "channels": 2,
+            "r_frame_rate": "0/0",
+            "start_time": "0.000000",
+            "duration": "90.752000",
+            "nb_frames": "4255"
+          }
+        ],
+        "format": {
+          "duration": "90.752000",
+          "size": "2533965"
+        }
+      },
+      "mixed_probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 360,
+            "height": 640,
+            "r_frame_rate": "30/1",
+            "start_time": "0.000000",
+            "duration": "90.733333",
+            "nb_frames": "2722"
+          },
+          {
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "sample_rate": "48000",
+            "channels": 2,
+            "r_frame_rate": "0/0",
+            "start_time": "0.000000",
+            "duration": "90.752000",
+            "nb_frames": "4255"
+          }
+        ],
+        "format": {
+          "duration": "90.752000",
+          "size": "4090514"
+        }
+      },
+      "duration_delta_seconds": 0.0,
+      "voice_metrics": {
+        "summary": "Integrated loudness:\n    I:         -14.1 LUFS\n    Threshold: -24.2 LUFS\n\n  Loudness range:\n    LRA:         2.2 LU\n    Threshold: -34.2 LUFS\n    LRA low:   -15.2 LUFS\n    LRA high:  -13.0 LUFS\n\n  True peak:\n    Peak:       -0.9 dBFS\n[out#0/null @ 0x558a9cc6ee40] video:0KiB audio:17016KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown\nsize=N/A time=00:01:30.75 bitrate=N/A speed= 215x",
+        "integrated_lufs": -14.1,
+        "lra_lu": 2.2,
+        "true_peak_dbfs": -0.9
+      },
+      "mixed_metrics": {
+        "summary": "Integrated loudness:\n    I:         -14.1 LUFS\n    Threshold: -24.1 LUFS\n\n  Loudness range:\n    LRA:         2.2 LU\n    Threshold: -34.1 LUFS\n    LRA low:   -15.1 LUFS\n    LRA high:  -13.0 LUFS\n\n  True peak:\n    Peak:       -1.4 dBFS\n[out#0/null @ 0x5574e0f762c0] video:0KiB audio:17016KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown\nsize=N/A time=00:01:30.75 bitrate=N/A speed= 231x",
+        "integrated_lufs": -14.1,
+        "lra_lu": 2.2,
+        "true_peak_dbfs": -1.4
+      },
+      "music_only_ducked": "/workspace/work/onia-marca-musica-20261012/mezcla/S2-D07-A-musica-ducked.m4a",
+      "music_metrics": {
+        "summary": "Integrated loudness:\n    I:         -32.3 LUFS\n    Threshold: -42.3 LUFS\n\n  Loudness range:\n    LRA:         2.8 LU\n    Threshold: -52.3 LUFS\n    LRA low:   -33.6 LUFS\n    LRA high:  -30.9 LUFS\n\n  True peak:\n    Peak:      -12.4 dBFS\n[out#0/null @ 0x5620763a3ac0] video:0KiB audio:17016KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown\nsize=N/A time=00:01:30.75 bitrate=N/A speed= 238x",
+        "integrated_lufs": -32.3,
+        "lra_lu": 2.8,
+        "true_peak_dbfs": -12.4
+      },
+      "attribution_file": "/workspace/work/onia-marca-musica-20261012/previews/S2-D07-A-CREDITO-MUSICA.txt",
+      "audio_listened": false,
+      "approval": "private preview only; not master/publication",
+      "editorial_flags": [
+        "DD-A CONFIRMAR unchanged",
+        "N02 Work private adjusted source; original Claude111.3 preserved",
+        "S2 variables unchanged"
+      ]
+    }
+  ]
+}

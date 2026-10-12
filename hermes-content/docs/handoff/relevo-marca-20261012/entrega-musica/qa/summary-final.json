@@ -1,0 +1,10 @@
+{
+  "reviewer": "/root/qa_sol",
+  "mixes": 5,
+  "technical_pass": true,
+  "license_pass": true,
+  "private_previews_reviewable": true,
+  "audio_listened": false,
+  "voice_intelligibility_subjectively_verified": false,
+  "publication_or_master_approved": false
+}

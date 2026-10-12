@@ -1,0 +1,175 @@
+{
+  "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+  "author": "/root/guiones_sol",
+  "model_configured": "Sol6.1medio heredado segúnharness, interno no observable",
+  "recovered_horizontal_count": 4,
+  "legacy_inventory_count": 16,
+  "legacy_ready_count": 0,
+  "recovered": [
+    {
+      "source_path": "hermes-content/carousels/out/yt-03-sin-vos/GUION.md",
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "bytes": 5455,
+      "sha256": "1c096953b3ba4702af0410606abfd8c09b65cab80509a40b7534344dfd94f93b",
+      "classification": "Hablado canónico recuperado, condicionado a verificación de historias/cifras vigentes",
+      "ready": false,
+      "local_path": "/workspace/work/onia-marca-calendario-20261012/guiones-horizontales/recuperados/yt-03-sin-vos.md"
+    },
+    {
+      "source_path": "hermes-content/carousels/out/yt-04-verificar/GUION.md",
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "bytes": 5664,
+      "sha256": "e1bea9dde01fe12a56148fb8d6a55c1f4d3a8a62363ebb6ece427c92169436bb",
+      "classification": "Hablado canónico recuperado, condicionado a verificación de historias/cifras vigentes",
+      "ready": false,
+      "local_path": "/workspace/work/onia-marca-calendario-20261012/guiones-horizontales/recuperados/yt-04-verificar.md"
+    },
+    {
+      "source_path": "hermes-content/carousels/out/yt-05-no-construyas/GUION.md",
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "bytes": 5981,
+      "sha256": "b1f7529c70b929d118528674531fc36d3968b85afdb41d070a736dd74795a333",
+      "classification": "Hablado canónico recuperado, condicionado a verificación de historias/cifras vigentes",
+      "ready": false,
+      "local_path": "/workspace/work/onia-marca-calendario-20261012/guiones-horizontales/recuperados/yt-05-no-construyas.md"
+    },
+    {
+      "source_path": "hermes-content/carousels/out/yt-06-mi-empresa/GUION.md",
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "bytes": 6411,
+      "sha256": "a371046c45a5e1d7c28c6e578f3e036b23cceea4d8463d633f6d8339df34f339",
+      "classification": "Hablado canónico recuperado, condicionado a verificación de historias/cifras vigentes",
+      "ready": false,
+      "local_path": "/workspace/work/onia-marca-calendario-20261012/guiones-horizontales/recuperados/yt-06-mi-empresa.md"
+    },
+    {
+      "source_path": "hermes-content/carousels/out/yt-07-hyperframes/GUION.md",
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "bytes": 4804,
+      "sha256": "90bcd06d2f80fb925fa49fd1119277d8ce642a13376694f9dc9823f88b425a0d",
+      "classification": "Ficha/guion de producción: no hablado completo10–14min validado",
+      "ready": false
+    },
+    {
+      "source_path": "hermes-content/carousels/out/yt-08-n8n-leads/GUION.md",
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "bytes": 4964,
+      "sha256": "57bd9333338b98685b62ae2da4cff4b88968dc81d0bb2818b627754920c6ad62",
+      "classification": "Ficha/guion de producción: no hablado completo10–14min validado",
+      "ready": false
+    },
+    {
+      "source_path": "hermes-content/carousels/out/yt-09-mcp-agentes-loops/GUION.md",
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "bytes": 4744,
+      "sha256": "10d22517daedd191c7acf8cc0a734a4828909b7f8044f43f8db2c6d3ae769967",
+      "classification": "Ficha/guion de producción: no hablado completo10–14min validado",
+      "ready": false
+    },
+    {
+      "source_path": "hermes-content/carousels/out/yt-10-opus-sonnet/GUION.md",
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "bytes": 5251,
+      "sha256": "6c936831c1ba985292bdc6ff8001a0f725af6d4881cf221ec7107f0b95b5ae33",
+      "classification": "Ficha/guion de producción: no hablado completo10–14min validado",
+      "ready": false
+    },
+    {
+      "source_path": "hermes-content/carousels/out/yt-11-claude-md-historia/GUION.md",
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "bytes": 5006,
+      "sha256": "75865422d63f9448d5598ac7f21b2e1991debaf30d3a9456cb1c69ffc3dadcd9",
+      "classification": "Ficha/guion de producción: no hablado completo10–14min validado",
+      "ready": false
+    },
+    {
+      "source_path": "hermes-content/carousels/out/yt-12-claude-code-servidor/GUION.md",
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "bytes": 4372,
+      "sha256": "066b2d766bdce3cb26c5ec89aedd4dde9191453bb73a3830e7e8a349b4576745",
+      "classification": "Ficha/guion de producción: no hablado completo10–14min validado",
+      "ready": false
+    },
+    {
+      "source_path": "hermes-content/carousels/out/yt-13-bot-no-inventa/GUION.md",
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "bytes": 4133,
+      "sha256": "8e77d5c4c5af558edc3ee09a80bf31f9bab6efe7ac062abd9fe8c8215a53ec53",
+      "classification": "Ficha/guion de producción: no hablado completo10–14min validado",
+      "ready": false
+    },
+    {
+      "source_path": "hermes-content/carousels/out/yt-14-webhook-rescate/GUION.md",
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "bytes": 4388,
+      "sha256": "69a3aa4f57efa4e177caa3fedb899010f6fd8fb81e4d02d9648b935a30642f04",
+      "classification": "Ficha/guion de producción: no hablado completo10–14min validado",
+      "ready": false
+    },
+    {
+      "source_path": "hermes-content/carousels/out/yt-15-recorrido-entero/GUION.md",
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "bytes": 4280,
+      "sha256": "3b2f17b7f9f2a76ece11d8ae3d338d3c603af44d63f5193c5d41ed8fae3009a7",
+      "classification": "Ficha/guion de producción: no hablado completo10–14min validado",
+      "ready": false
+    },
+    {
+      "source_path": "hermes-content/carousels/out/yt-16-grabo-ia-edita/GUION.md",
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "bytes": 4658,
+      "sha256": "572c949744e181aacd1f2ac8004749ed92883c82dab1bf9f983fa55e5baffa29",
+      "classification": "Ficha/guion de producción: no hablado completo10–14min validado",
+      "ready": false
+    },
+    {
+      "source_path": "hermes-content/carousels/out/yt-17-generar-sin-fundirte/GUION.md",
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "bytes": 4281,
+      "sha256": "5a745bd7d29e00bf873f48f1f491b63a274b37f4f331fece76f8ca7ff01f5984",
+      "classification": "Ficha/guion de producción: no hablado completo10–14min validado",
+      "ready": false
+    },
+    {
+      "source_path": "hermes-content/carousels/out/yt-18-agentes-de-noche/GUION.md",
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "bytes": 4832,
+      "sha256": "0f835f00a777118c528e336dab24802ebb4d5aab6d951955c6131616bb806576",
+      "classification": "Ficha/guion de producción: no hablado completo10–14min validado",
+      "ready": false
+    }
+  ],
+  "authorized_new_or_adapted": [
+    {
+      "id": "H-IA-01",
+      "type": "adaptado autorizado de SI-01+SI-09 actuales",
+      "path": "/workspace/work/onia-marca-calendario-20261012/guiones-horizontales/H-IA-01-HABLADO.md",
+      "words": 689,
+      "duration_minutes_at_140_160_wpm": [
+        4.31,
+        4.92
+      ],
+      "sha256": "83ad9a0809323385365b964cf9a60689c79daf7dfc68dcff0d26db9ada8f8b42",
+      "bytes": 4022,
+      "status": "Propuesta privada texto completo; pendiente QA independiente y revisión de Sergio Urcullo",
+      "publication_authorized": false
+    },
+    {
+      "id": "H-VIDA-01",
+      "type": "nuevo autorizado: intención de organización, sin experiencia/resultados inventados",
+      "path": "/workspace/work/onia-marca-calendario-20261012/guiones-horizontales/H-VIDA-01-HABLADO.md",
+      "words": 540,
+      "duration_minutes_at_140_160_wpm": [
+        3.38,
+        3.86
+      ],
+      "sha256": "584abd5a5a5746872b30d46faaef1d488851928096da08b246fd7dc2cf027b0f",
+      "bytes": 3181,
+      "status": "Propuesta privada texto completo; pendiente QA independiente y revisión de Sergio Urcullo",
+      "publication_authorized": false
+    }
+  ],
+  "original_vertical_sha256_unchanged": "0767d86ef030644d1083c5364eb56e5a01cf1973a70e1daf32bef87dee36a44a",
+  "qa": "pending independent",
+  "calendar_ready_horizontal_count": 0
+}

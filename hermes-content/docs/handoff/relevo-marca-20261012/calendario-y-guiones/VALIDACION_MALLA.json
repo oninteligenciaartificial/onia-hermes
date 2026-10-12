@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "counts": {
+    "H": 14,
+    "V": 21,
+    "YAPP": 63,
+    "C": 7
+  },
+  "total": 105,
+  "all_draft": true,
+  "asset_files_invented": 0,
+  "canonical_avisos_exact_section": true,
+  "H_paths_exist": true,
+  "limits": "validación documental propia; no QA factual web/música/render/runtime; QA independiente pendiente"
+}

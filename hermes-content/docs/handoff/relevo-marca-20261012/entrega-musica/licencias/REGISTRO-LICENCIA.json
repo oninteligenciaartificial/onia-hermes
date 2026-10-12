@@ -1,0 +1,52 @@
+{
+  "selected_track": "House In a Forest Loop",
+  "author": "HorrorPen",
+  "copyright_year": 2012,
+  "license": "CC BY 3.0 Unported",
+  "license_url": "https://creativecommons.org/licenses/by/3.0/",
+  "original_source": "https://opengameart.org/content/loop-house-in-a-forest",
+  "source_repository": "godotengine/godot-demo-projects",
+  "source_commit": "b761b4cd5718a7118f2c95eb55f181d0a5f004f1",
+  "readme_path": "2d/dodge_the_creeps/README.md",
+  "readme_blob": "bd461bd788aaa55a0374a8497651838aa61a0f80",
+  "asset_path": "2d/dodge_the_creeps/art/House In a Forest Loop.ogg",
+  "asset_blob": "ece36402739a3cb884647df78e6ea95315cbf223",
+  "asset_bytes": 1430743,
+  "asset_sha256": "32680f2b2631eb9f6e2902ebbbec1b43ab82b4dbf154fdc9bfbfa17b03270504",
+  "legalcode_repository": "creativecommons/creativecommons.org",
+  "legalcode_commit": "7f5253347532fc0cb6cf51d78a7085d081fb4216",
+  "legalcode_path": "docroot/legalcode/by_3.0.txt",
+  "legalcode_blob": "1a16e05564d2aaa880bbe9e506a0a0226d8742cc",
+  "rights_verified": [
+    "1a musical synchronization is adaptation",
+    "3b create/reproduce adaptations; identify modifications",
+    "3c/d distribute/publicly perform originals/adaptations",
+    "3 worldwide royalty-free perpetual grant",
+    "3 all media/formats, no NC restriction"
+  ],
+  "platform_scope": {
+    "Instagram": "license permits commercial video sync with attribution",
+    "TikTok": "same",
+    "Facebook": "same",
+    "YouTube": "same",
+    "LinkedIn": "same",
+    "X": "same"
+  },
+  "conditions": [
+    "4a retain license/copyright notices, license URI, do not impose DRM/additional restrictions on music, no sublicensing music beyond granted rights",
+    "4b credit author,title,source,license and identify adaptation",
+    "no endorsement implication"
+  ],
+  "verified_date": "2026-10-12",
+  "cost": 0,
+  "subscription_required": false,
+  "attribution": "Music: House In a Forest Loop — HorrorPen (2012), CC BY 3.0 https://creativecommons.org/licenses/by/3.0/ . Source: https://opengameart.org/content/loop-house-in-a-forest . Adapted by ONIA: looped, trimmed, fades, volume/ducking and mixed under original voice.",
+  "audio_listened": false,
+  "source_is_declared_music_loop": true,
+  "sonic_suitability": "Provisional until Sergio actually auditions preview; no subjective listening judgment made",
+  "network": {
+    "asset_download": "raw.githubusercontent.com permitted official network per command",
+    "creativecommons_org": "HTTP403 direct legalcode; authoritative repository fallback read-only, no proxy bypass"
+  },
+  "authorization": "Sergio explicitly requested local music mixes on existing Claude montages; overrides earlier skill no-bed rule for this task only. No publishing or new voice/face generation."
+}

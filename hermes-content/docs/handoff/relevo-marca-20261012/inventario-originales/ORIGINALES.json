@@ -1,0 +1,316 @@
+{
+  "updated_utc": "2026-10-12T20:30:54.918520+00:00",
+  "direct_user_statement": {
+    "previous_original_recordings": 6,
+    "editorial_quality": "Sergio said VERY GOOD; preserve existing montages",
+    "new_upload": "motivation approximately3minutes, just uploaded to Videos Onia Octubre, distinct from prior originals"
+  },
+  "counts": {
+    "reported_previous_originals": 6,
+    "confirmed_mapped_originals": 5,
+    "sixth_documented_candidate": 1,
+    "recovered_claude_montages": 5,
+    "music_previews_local": 5,
+    "clean_music_input_versions": 5,
+    "verified_yaps": 0,
+    "new_motivation_id_observed": false
+  },
+  "repo_ref_sha": {
+    "Claude": "781df7d87b53913ac9790fa1df88e53357408bc3",
+    "audit_instruction_current_local": "d48a06fceee811fcd16a9d3e8b36e16cc96e8cff",
+    "contract": "read-only recovery/matrix; direct music previews authorized; no main/publishing/spawn"
+  },
+  "previous_originals": [
+    {
+      "code": "N06",
+      "title": "Gemini CLI → Antigravity",
+      "identity_status": "confirmed source queue mapping 11-oct",
+      "raw_source": {
+        "id": "1rlbdA9zLE9SZJInPmFjd1jP3S8r8yk08",
+        "name": "1CCFE9FE-10EB-496A-AED1-94386197DECE.mp4",
+        "bytes": 69843125,
+        "created_time": "2026-10-11T04:47:06.789Z",
+        "modified_time": "2026-10-11T04:47:06.789Z",
+        "canonical_url": "https://drive.google.com/file/d/1rlbdA9zLE9SZJInPmFjd1jP3S8r8yk08/view",
+        "sha256": "6e3702e1378de3432843633c2bff2f76c654acaa251b3c38b9f1f3a9acff8fb9",
+        "sha256_authority": "source Work manifest only, not measured raw bytes in native destination",
+        "raw_local_received": false
+      },
+      "claude_montage": {
+        "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+        "preview_url": "https://github.com/oninteligenciaartificial/onia-hermes/blob/781df7d87b53913ac9790fa1df88e53357408bc3/videos/marca-personal/2026-10-11/n06-antigravity/borrador/BORRADOR-no-es-master-360p.mp4",
+        "local_path": "/workspace/work/onia-marca-relevo/editorial/preservado/videos/marca-personal/2026-10-11/n06-antigravity/borrador/BORRADOR-no-es-master-360p.mp4",
+        "bytes": 1163863,
+        "sha256": "d8753944a720d201c7bd141acce4236699cb159dc95e90f3f80049c77f7d8f40",
+        "duration": 45.504,
+        "status": "existing mounted draft recovered, not master"
+      },
+      "music_preview": {
+        "local_path": "/workspace/work/onia-marca-musica-20261012/previews/N06-CON-MUSICA-BORRADOR.mp4",
+        "sha256": "a060d4f4c0e479c4839b9bc47acaa20692ed417f94cebbd0f8f71313e3aee642",
+        "bytes": 1940441,
+        "duration": "45.504000",
+        "private_drive_id": null,
+        "private_url": null,
+        "transfer_status": "root transferring private review; do not duplicate upload",
+        "qa": "PASS technical/license, not auditory approval"
+      },
+      "clean_preview": {
+        "local_path": "/workspace/work/onia-marca-musica-20261012/previews/N06-SIN-MUSICA.mp4",
+        "sha256": "d8753944a720d201c7bd141acce4236699cb159dc95e90f3f80049c77f7d8f40",
+        "identical_to_used_source": true,
+        "source_version": "original Claude mounted draft"
+      },
+      "three_yaps": {
+        "located_count": 0,
+        "actual_urls": [],
+        "status": "no corresponding yap MP4 located or verified; do not invent derived assets"
+      }
+    },
+    {
+      "code": "DD-A",
+      "title": "OpenAI Sol y caché",
+      "identity_status": "confirmed source queue mapping 11-oct",
+      "raw_source": {
+        "id": "1rHY7WjqjRaEnfIqgdDMOXXfMhF2oZ3Ae",
+        "name": "F9630B16-57F2-465E-9289-0D0DDBE787A2.mp4",
+        "bytes": 92453888,
+        "created_time": "2026-10-11T04:50:03.826Z",
+        "modified_time": "2026-10-11T04:50:03.826Z",
+        "canonical_url": "https://drive.google.com/file/d/1rHY7WjqjRaEnfIqgdDMOXXfMhF2oZ3Ae/view",
+        "sha256": "8220af93f24be363a90c9fcc0fad4c1a77e4f9fb4556abe4cefaaace2f302593",
+        "sha256_authority": "source Work manifest only, not measured raw bytes in native destination",
+        "raw_local_received": false
+      },
+      "claude_montage": {
+        "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+        "preview_url": "https://github.com/oninteligenciaartificial/onia-hermes/blob/781df7d87b53913ac9790fa1df88e53357408bc3/videos/marca-personal/2026-10-11/dd-a-openai-sol/borrador/BORRADOR-no-es-master-360p.mp4",
+        "local_path": "/workspace/work/onia-marca-relevo/editorial/preservado/videos/marca-personal/2026-10-11/dd-a-openai-sol/borrador/BORRADOR-no-es-master-360p.mp4",
+        "bytes": 1426827,
+        "sha256": "4582213089bbcf1c7fb4d84511ce64b7539eaf00e8f755952914a803d46af583",
+        "duration": 58.433333,
+        "status": "existing mounted draft recovered, not master"
+      },
+      "music_preview": {
+        "local_path": "/workspace/work/onia-marca-musica-20261012/previews/DD-A-CON-MUSICA-BORRADOR.mp4",
+        "sha256": "52ab8ff1d2ed1accc7fa4082f74d49094b0da67303584d12084d6093fccf5895",
+        "bytes": 2404999,
+        "duration": "58.433333",
+        "private_drive_id": null,
+        "private_url": null,
+        "transfer_status": "root transferring private review; do not duplicate upload",
+        "qa": "PASS technical/license, not auditory approval"
+      },
+      "clean_preview": {
+        "local_path": "/workspace/work/onia-marca-musica-20261012/previews/DD-A-SIN-MUSICA.mp4",
+        "sha256": "4582213089bbcf1c7fb4d84511ce64b7539eaf00e8f755952914a803d46af583",
+        "identical_to_used_source": true,
+        "source_version": "original Claude mounted draft"
+      },
+      "three_yaps": {
+        "located_count": 0,
+        "actual_urls": [],
+        "status": "no corresponding yap MP4 located or verified; do not invent derived assets"
+      }
+    },
+    {
+      "code": "S2-D07-A",
+      "title": "Ventana WhatsApp 24 horas",
+      "identity_status": "confirmed source queue mapping 11-oct",
+      "raw_source": {
+        "id": "18DnUVL_i99QN6DQdc7XqO_RTEtT9T2eQ",
+        "name": "3941A129-133A-4618-BB88-7C191DC1AF3B.mp4",
+        "bytes": 122622390,
+        "created_time": "2026-10-11T04:51:21.242Z",
+        "modified_time": "2026-10-11T04:51:21.242Z",
+        "canonical_url": "https://drive.google.com/file/d/18DnUVL_i99QN6DQdc7XqO_RTEtT9T2eQ/view",
+        "sha256": null,
+        "sha256_authority": "not returned by provider; not measured locally",
+        "raw_local_received": false
+      },
+      "claude_montage": {
+        "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+        "preview_url": "https://github.com/oninteligenciaartificial/onia-hermes/blob/781df7d87b53913ac9790fa1df88e53357408bc3/videos/marca-personal/2026-10-11/s2-d07-a-ventana-24h/borrador/BORRADOR-no-es-master-360p.mp4",
+        "local_path": "/workspace/work/onia-marca-relevo/editorial/preservado/videos/marca-personal/2026-10-11/s2-d07-a-ventana-24h/borrador/BORRADOR-no-es-master-360p.mp4",
+        "bytes": 2533965,
+        "sha256": "dee290632ef3db1422ee17a924d0142b664d04655bb3dc55dc1b5dcf6f7acdd6",
+        "duration": 90.752,
+        "status": "existing mounted draft recovered, not master"
+      },
+      "music_preview": {
+        "local_path": "/workspace/work/onia-marca-musica-20261012/previews/S2-D07-A-CON-MUSICA-BORRADOR.mp4",
+        "sha256": "d80924142098a75f63c3e7adfed2dae0a000ccdf1d35fe06b8e5af2ba81e4fd7",
+        "bytes": 4090514,
+        "duration": "90.752000",
+        "private_drive_id": null,
+        "private_url": null,
+        "transfer_status": "root transferring private review; do not duplicate upload",
+        "qa": "PASS technical/license, not auditory approval"
+      },
+      "clean_preview": {
+        "local_path": "/workspace/work/onia-marca-musica-20261012/previews/S2-D07-A-SIN-MUSICA.mp4",
+        "sha256": "dee290632ef3db1422ee17a924d0142b664d04655bb3dc55dc1b5dcf6f7acdd6",
+        "identical_to_used_source": true,
+        "source_version": "original Claude mounted draft"
+      },
+      "three_yaps": {
+        "located_count": 0,
+        "actual_urls": [],
+        "status": "no corresponding yap MP4 located or verified; do not invent derived assets"
+      }
+    },
+    {
+      "code": "N02",
+      "title": "Sonnet 4.5 retiro/migración",
+      "identity_status": "confirmed source queue mapping 11-oct",
+      "raw_source": {
+        "id": "1QAAvFbQXPK64z5VmcnP2sq0iv6hsSniY",
+        "name": "EE23A577-932C-44A3-90F0-3AFEAA976AD6.mp4",
+        "bytes": 184354882,
+        "created_time": "2026-10-11T04:52:47.199Z",
+        "modified_time": "2026-10-11T04:52:47.199Z",
+        "canonical_url": "https://drive.google.com/file/d/1QAAvFbQXPK64z5VmcnP2sq0iv6hsSniY/view",
+        "sha256": null,
+        "sha256_authority": "not returned by provider; not measured locally",
+        "raw_local_received": false
+      },
+      "claude_montage": {
+        "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+        "preview_url": "https://github.com/oninteligenciaartificial/onia-hermes/blob/781df7d87b53913ac9790fa1df88e53357408bc3/videos/marca-personal/2026-10-11/n02-sonnet-45/borrador/BORRADOR-no-es-master-360p.mp4",
+        "local_path": "/workspace/work/onia-marca-relevo/editorial/preservado/videos/marca-personal/2026-10-11/n02-sonnet-45/borrador/BORRADOR-no-es-master-360p.mp4",
+        "bytes": 2665489,
+        "sha256": "123c375b33f1f14985ada85d7f07537f4322a6a79dad7c406d89828b9af76389",
+        "duration": 111.3,
+        "status": "existing mounted draft recovered, not master"
+      },
+      "music_preview": {
+        "local_path": "/workspace/work/onia-marca-musica-20261012/previews/N02-Work-CON-MUSICA-BORRADOR.mp4",
+        "sha256": "43c58a9cf784f5c6cba57d06856b5cc53df28775b458f576408c3087f7aa335d",
+        "bytes": 6331443,
+        "duration": "109.033333",
+        "private_drive_id": null,
+        "private_url": null,
+        "transfer_status": "root transferring private review; do not duplicate upload",
+        "qa": "PASS technical/license, not auditory approval"
+      },
+      "clean_preview": {
+        "local_path": "/workspace/work/onia-marca-musica-20261012/previews/N02-Work-SIN-MUSICA.mp4",
+        "sha256": "0d0031e88aa8c9b24b50f53a9e4581e7171bdc02b3781e064b4611fb4be4f6e5",
+        "identical_to_used_source": true,
+        "source_version": "N02 Work109.033333, original Claude111.300 preserved separately"
+      },
+      "three_yaps": {
+        "located_count": 0,
+        "actual_urls": [],
+        "status": "no corresponding yap MP4 located or verified; do not invent derived assets"
+      },
+      "private_adjustment": {
+        "local_path": "/workspace/work/onia-marca-recepcion-20261012/received/media-adjustment/N02-preview-revisable.mp4",
+        "preview_url": "https://drive.google.com/file/d/1dYoRH2rBK8_y2Xqyrm8C_eOaia7m43ld/view",
+        "sha256": "0d0031e88aa8c9b24b50f53a9e4581e7171bdc02b3781e064b4611fb4be4f6e5",
+        "duration": 109.033333
+      }
+    },
+    {
+      "code": "N07",
+      "title": "Haiku 5.5",
+      "identity_status": "confirmed source queue mapping 11-oct",
+      "raw_source": {
+        "id": "1stEjNjp48QMn1u8FnUVeF9opX6-3uX98",
+        "name": "15270626-ABFC-4562-9DF0-2E35CDE665DA.mp4",
+        "bytes": 212776631,
+        "created_time": "2026-10-11T05:01:31.769Z",
+        "modified_time": "2026-10-11T05:01:31.769Z",
+        "canonical_url": "https://drive.google.com/file/d/1stEjNjp48QMn1u8FnUVeF9opX6-3uX98/view",
+        "sha256": null,
+        "sha256_authority": "not returned by provider; not measured locally",
+        "raw_local_received": false
+      },
+      "claude_montage": {
+        "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+        "preview_url": "https://github.com/oninteligenciaartificial/onia-hermes/blob/781df7d87b53913ac9790fa1df88e53357408bc3/videos/marca-personal/2026-10-11/n07-haiku-55/borrador/BORRADOR-no-es-master-360p.mp4",
+        "local_path": "/workspace/work/onia-marca-relevo/editorial/preservado/videos/marca-personal/2026-10-11/n07-haiku-55/borrador/BORRADOR-no-es-master-360p.mp4",
+        "bytes": 2048970,
+        "sha256": "f22e5caeb2d96cfe9c625d6e2a7d0dc4e3a6921890c866cee4cbad726d0a90e6",
+        "duration": 81.733333,
+        "status": "existing mounted draft recovered, not master"
+      },
+      "music_preview": {
+        "local_path": "/workspace/work/onia-marca-musica-20261012/previews/N07-CON-MUSICA-BORRADOR.mp4",
+        "sha256": "63f1aa5e9d3323b2aa04e66d3822f1c2a23442edb61738adb6cde0396a25e69d",
+        "bytes": 3414814,
+        "duration": "81.733333",
+        "private_drive_id": null,
+        "private_url": null,
+        "transfer_status": "root transferring private review; do not duplicate upload",
+        "qa": "PASS technical/license, not auditory approval"
+      },
+      "clean_preview": {
+        "local_path": "/workspace/work/onia-marca-musica-20261012/previews/N07-SIN-MUSICA.mp4",
+        "sha256": "f22e5caeb2d96cfe9c625d6e2a7d0dc4e3a6921890c866cee4cbad726d0a90e6",
+        "identical_to_used_source": true,
+        "source_version": "original Claude mounted draft"
+      },
+      "three_yaps": {
+        "located_count": 0,
+        "actual_urls": [],
+        "status": "no corresponding yap MP4 located or verified; do not invent derived assets"
+      }
+    },
+    {
+      "code": "BA814C81",
+      "identity_status": "documented sixth candidate: source queue additional11-oct asset; topic/take relationship unconfirmed",
+      "raw_source": {
+        "id": "1P1KaDTfmtxbjuGqRzSWDru0HROjGg_iO",
+        "name": "BA814C81-7462-44C2-92BF-AD2C0975F8F0.mp4",
+        "bytes": 250517135,
+        "created_time": "2026-10-11T05:05:02.012Z",
+        "canonical_url": "https://drive.google.com/file/d/1P1KaDTfmtxbjuGqRzSWDru0HROjGg_iO/view",
+        "sha256": null,
+        "raw_local_received": false
+      },
+      "folder_copy": {
+        "id": "1e0ceYYrKy4mlscC-XEODRtMji1eJGeEj",
+        "created_time": "2026-10-12T19:13:23.586Z",
+        "bytes": 250517135,
+        "canonical_url": "https://drive.google.com/file/d/1e0ceYYrKy4mlscC-XEODRtMji1eJGeEj/view",
+        "same_binary_content_verified": false
+      },
+      "source_rule": "source queue/calendar says do not edit; not superseded by inference",
+      "claude_montage": null,
+      "music_preview": null,
+      "clean_preview": null,
+      "three_yaps": {
+        "located_count": 0,
+        "actual_urls": [],
+        "status": "no derived media exists in received sources"
+      },
+      "next_step": "source transport/exact identity via mother; do not assume motivation or create montage"
+    }
+  ],
+  "new_motivation": {
+    "theme": "motivation",
+    "theme_evidence": "direct Sergio statement, not inferred from duration",
+    "approx_duration_declared_seconds": 180,
+    "unique_id": null,
+    "name": null,
+    "bytes": null,
+    "created_time": null,
+    "sha256": null,
+    "status": "not yet visible in latest own listing and folder fetch, both sevenknownitems",
+    "blocking_next_step": "mother checks completed upload/current UI and returns newID, then existing file chunks20MiB with order/byte+SHA256 perchunk and original",
+    "asr": "no transcript/newlocalaudio yet; do not invent spoken content or silence cutplan"
+  },
+  "excluded_historical": {
+    "id": "1fOVS40NXa25ZBt-b_3gJkBXfCCOcs-3q",
+    "name": "A0550B92-EFE3-43E7-A7A3-065A57365A1F.mp4",
+    "created_time": "2026-10-01T21:17:45.211Z",
+    "reason": "1-oct historic, not sixth recording11-oct or newmotivation"
+  },
+  "requested_yaps": {
+    "count": 3,
+    "verified_assets": [],
+    "status": "pending actual source/link; no three nonexistent derivatives listed as complete"
+  },
+  "work_receipt": "43/59 unchanged, chunks pending; no old media removed"
+}

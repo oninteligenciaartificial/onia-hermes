@@ -1,0 +1,14 @@
+import pathlib,urllib.request,json,hashlib,concurrent.futures,re
+b=pathlib.Path('/workspace/work/onia-marca-musica-20261012');q=b/'qa';m=json.loads((b/'licencias/REGISTRO-LICENCIA.json').read_text());specs=[('README','https://raw.githubusercontent.com/'+m['source_repository']+'/'+m['source_commit']+'/'+m['readme_path'],b/'licencias/GODOT-README-fuente.md',m['readme_blob']),('legalcode','https://raw.githubusercontent.com/'+m['legalcode_repository']+'/'+m['legalcode_commit']+'/'+m['legalcode_path'],b/'licencias/CC-BY-3.0.txt',m['legalcode_blob'])]
+def H(d):return hashlib.sha256(d).hexdigest()
+def blob(d):return hashlib.sha1(b'blob '+str(len(d)).encode()+b'\0'+d).hexdigest()
+def get(s):
+ name,url,p,expected=s
+ try:
+  with urllib.request.urlopen(url,timeout=30) as r:d=r.read();status=r.status
+  return {'name':name,'public_source_url':url,'http_status':status,'source_bytes':len(d),'source_sha256':H(d),'git_blob_sha1':blob(d),'git_blob_matches_declared':blob(d)==expected,'local_equals_source':d==p.read_bytes()}
+ except Exception as e:return {'name':name,'error':str(e),'pass':False}
+with concurrent.futures.ThreadPoolExecutor(max_workers=2) as pool:docs=list(pool.map(get,specs))
+asset=(b/'assets/house-in-a-forest-loop.ogg').read_bytes();legal=(b/'licencias/CC-BY-3.0.txt').read_text();readme=(b/'licencias/GODOT-README-fuente.md').read_text()
+checks={'asset_hash_and_blob_match':H(asset)==m['asset_sha256'] and len(asset)==m['asset_bytes'] and blob(asset)==m['asset_blob'],'primary_documents_source_exact':all(d.get('http_status')==200 and d.get('git_blob_matches_declared') and d.get('local_equals_source') for d in docs),'readme_specific_asset_author_license':all(x in readme for x in ['House In a Forest Loop.ogg','2012','HorrorPen','CC-BY 3.0']),'synching_is_adaptation':'synchronization of the Work' in legal and 'Adaptation for the purpose' in legal,'grant_all_media':'all media and formats' in legal,'no_noncommercial_clause':'NonCommercial' not in legal and 'noncommercial' not in legal.lower(),'attribution_and_adaptation_identification':all(x.lower() in m['attribution'].lower() for x in ['House In a Forest Loop','HorrorPen','2012','CC BY 3.0','creativecommons.org/licenses/by/3.0/','opengameart.org','Adapted','looped','trimmed','ducking'])}
+result={'reviewer':'/root/qa_sol','primary_documents':docs,'checks':checks,'pass':all(checks.values()),'license':'CC BY3.0 Unported','usage':'Commercial video synchronization allowed by worldwide/all-media adaptation/distribution grant, conditional attribution/notices/changes retained','platform_scope':'Independent open license, not inherited from Instagram/TikTok catalog; no platform-specific contract checked','local_asset_sha256':H(asset),'local_asset_git_blob':blob(asset),'publication_authorized':False,'subjective_audio_approval':False};(q/'license-independent.json').write_text(json.dumps(result,indent=2));print(json.dumps(result))

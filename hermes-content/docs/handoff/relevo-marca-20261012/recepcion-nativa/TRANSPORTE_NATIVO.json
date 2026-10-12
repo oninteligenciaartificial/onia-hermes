@@ -6,7 +6,8 @@
       "provider_bytes": 7067740,
       "local_download": true,
       "local_bytes": 7067740,
-      "error": null
+      "error": null,
+      "final_receipt": "direct file received and measured"
     },
     {
       "relative": "N02-ajuste-privado-evidencia.zip",
@@ -14,7 +15,8 @@
       "provider_bytes": 53323533,
       "local_download": false,
       "local_bytes": null,
-      "error": "file exceeds the executor transfer limit of 32 MiB"
+      "error": "file exceeds the executor transfer limit of 32 MiB",
+      "final_receipt": "reassembled from verified parts; original direct download remains blocked32MiB"
     },
     {
       "relative": "N06-preview-privado.zip",
@@ -22,7 +24,8 @@
       "provider_bytes": 2294168,
       "local_download": true,
       "local_bytes": 2294168,
-      "error": null
+      "error": null,
+      "final_receipt": "direct file received and measured"
     },
     {
       "relative": "cloud-media-synthetic.mp4",
@@ -30,7 +33,8 @@
       "provider_bytes": 2326,
       "local_download": true,
       "local_bytes": 2326,
-      "error": null
+      "error": null,
+      "final_receipt": "direct file received and measured"
     },
     {
       "relative": "media-adjustment/DD-A-bruto-original.mp4",
@@ -38,7 +42,8 @@
       "provider_bytes": 92453888,
       "local_download": false,
       "local_bytes": null,
-      "error": "file exceeds the executor transfer limit of 32 MiB"
+      "error": "file exceeds the executor transfer limit of 32 MiB",
+      "final_receipt": "reassembled from verified parts; original direct download remains blocked32MiB"
     },
     {
       "relative": "media-adjustment/DD-A-original-61-69.wav",
@@ -46,7 +51,8 @@
       "provider_bytes": 256078,
       "local_download": true,
       "local_bytes": 256078,
-      "error": null
+      "error": null,
+      "final_receipt": "direct file received and measured"
     },
     {
       "relative": "media-adjustment/N02-preview-revisable.mp4",
@@ -54,7 +60,8 @@
       "provider_bytes": 6258418,
       "local_download": true,
       "local_bytes": 6258418,
-      "error": null
+      "error": null,
+      "final_receipt": "direct file received and measured"
     },
     {
       "relative": "media-review-n06/bruto.mp4",
@@ -62,7 +69,8 @@
       "provider_bytes": 69843125,
       "local_download": false,
       "local_bytes": null,
-      "error": "file exceeds the executor transfer limit of 32 MiB"
+      "error": "file exceeds the executor transfer limit of 32 MiB",
+      "final_receipt": "reassembled from verified parts; original direct download remains blocked32MiB"
     }
   ],
   "supported_network_permission": {
@@ -82,5 +90,7 @@
   },
   "transfer_limit_bytes": 33554432,
   "required_chunk_max_bytes": 20971520,
-  "chunk_export_state": "ordered by Madre Marketing; not yet received"
+  "chunk_export_state": "received12/12; independentSHAverified; 3originalsreassembledexactly",
+  "full_reception": true,
+  "transport_delta_commit": "471f05170b64809d4505dc5c4be64f9a01bcf625"
 }

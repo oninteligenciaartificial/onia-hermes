@@ -1,0 +1,4192 @@
+{
+  "meta": {
+    "prepared": "2026-10-12",
+    "timezone": "America/Caracas",
+    "instruction_ref": "d48a06fceee811fcd16a9d3e8b36e16cc96e8cff",
+    "source_ref": "781df7d87b53913ac9790fa1df88e53357408bc3",
+    "head_observed": "2cdefca738ed85d87f50e6dc3dc6c31a5aa698f9",
+    "schedule_approved": false,
+    "scheduled_count": 0,
+    "published_count": 0,
+    "counts": {
+      "original_V": 21,
+      "original_H": 14,
+      "original_total": 35,
+      "yapps": 63,
+      "carousels": 7,
+      "videos": 98,
+      "pieces": 105
+    },
+    "live": "evaluación separada; ningún live agendado"
+  },
+  "destinations_excluded": [
+    {
+      "platform": "Facebook",
+      "reason": "sin publicador/cuenta actuales comprobados; licencia musical requerida si se habilita"
+    },
+    {
+      "platform": "X",
+      "reason": "sin publicador/cuenta actuales comprobados; licencia musical requerida si se habilita"
+    }
+  ],
+  "pieces": [
+    {
+      "id": "H-VIDA-01",
+      "title": "Ordenar una semana sin fingir productividad",
+      "kind": "H",
+      "source": "/workspace/work/onia-marca-calendario-20261012/guiones-horizontales/H-VIDA-01-HABLADO.md",
+      "status": "GUION_HABLADO_COMPLETO; pendiente QA y revisión; no render",
+      "existing_vs_new": "nuevo planeado",
+      "recording": "batch 2026-10-13 propuesto; no confirmado",
+      "date": "2026-10-13",
+      "time_local": "08:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-13T08:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "YouTube largo",
+          "account": "Sergio Urcullo",
+          "route": "subida nativa por definir; Buffer Shorts no prueba largo",
+          "state": "cuenta observada por madre; flujo largo pendiente"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "SI-01",
+      "title": "Claude trabaja con la compu apagada",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md#SI-01",
+      "status": "BASE_HABLADA_FACTUAL_QA; por grabar; refrescar fuente",
+      "existing_vs_new": "base nueva existente, sin bruto confirmado",
+      "kind": "V",
+      "recording": "2026-10-13 07:30 revisión IA y toma breve",
+      "date": "2026-10-13",
+      "time_local": "09:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-13T09:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        },
+        {
+          "platform": "LinkedIn",
+          "account": "Sergio Urcullo Mercado",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "SI-02",
+      "title": "Antes de instalar OpenClaw",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md#SI-02",
+      "status": "BASE_HABLADA_FACTUAL_QA; por grabar; refrescar fuente",
+      "existing_vs_new": "base nueva existente, sin bruto confirmado",
+      "kind": "V",
+      "recording": "2026-10-13 07:30 revisión IA y toma breve",
+      "date": "2026-10-13",
+      "time_local": "10:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-13T10:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        },
+        {
+          "platform": "LinkedIn",
+          "account": "Sergio Urcullo Mercado",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "INF-1013",
+      "title": "Cómo elijo qué grabar esta semana",
+      "source": "brief nuevo de rutina real; sin experiencia personal afirmada",
+      "status": "BRIEF; falta guion y toma real",
+      "existing_vs_new": "nuevo planeado",
+      "kind": "V",
+      "recording": "batch propuesto 2026-10-13; aún no grabado",
+      "date": "2026-10-13",
+      "time_local": "11:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-13T11:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        },
+        {
+          "platform": "LinkedIn",
+          "account": "Sergio Urcullo Mercado",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "SI-01-YA",
+      "title": "Claude trabaja con la compu apagada · recorte A",
+      "kind": "YAPP",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md#SI-01",
+      "parent_id": "SI-01",
+      "variant": "A",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-13",
+      "time_local": "12:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-13T12:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "SI-02-YA",
+      "title": "Antes de instalar OpenClaw · recorte A",
+      "kind": "YAPP",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md#SI-02",
+      "parent_id": "SI-02",
+      "variant": "A",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-13",
+      "time_local": "13:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-13T13:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "INF-1013-YA",
+      "title": "Cómo elijo qué grabar esta semana · recorte A",
+      "kind": "YAPP",
+      "source": "brief nuevo de rutina real; sin experiencia personal afirmada",
+      "parent_id": "INF-1013",
+      "variant": "A",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-13",
+      "time_local": "14:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-13T14:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "SI-01-YB",
+      "title": "Claude trabaja con la compu apagada · recorte B",
+      "kind": "YAPP",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md#SI-01",
+      "parent_id": "SI-01",
+      "variant": "B",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-13",
+      "time_local": "15:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-13T15:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "C-1013",
+      "title": "Loop y schedule: elegir según la tarea",
+      "kind": "C",
+      "source": "hermes-content/docs/cola/plan-3-semanas/CARRUSELES-DIARIOS.md (método); brief nuevo temático",
+      "status": "BRIEF; no láminas/render aprobados",
+      "existing_vs_new": "nuevo planeado",
+      "recording": "no aplica; producir láminas después de fuente validada",
+      "date": "2026-10-13",
+      "time_local": "16:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-13T16:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia carrusel",
+          "state": "runtime no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "SI-02-YB",
+      "title": "Antes de instalar OpenClaw · recorte B",
+      "kind": "YAPP",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md#SI-02",
+      "parent_id": "SI-02",
+      "variant": "B",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-13",
+      "time_local": "16:30",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-13T16:30:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "INF-1013-YB",
+      "title": "Cómo elijo qué grabar esta semana · recorte B",
+      "kind": "YAPP",
+      "source": "brief nuevo de rutina real; sin experiencia personal afirmada",
+      "parent_id": "INF-1013",
+      "variant": "B",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-13",
+      "time_local": "17:30",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-13T17:30:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "SI-01-YC",
+      "title": "Claude trabaja con la compu apagada · recorte C",
+      "kind": "YAPP",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md#SI-01",
+      "parent_id": "SI-01",
+      "variant": "C",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-13",
+      "time_local": "18:30",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-13T18:30:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "SI-02-YC",
+      "title": "Antes de instalar OpenClaw · recorte C",
+      "kind": "YAPP",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md#SI-02",
+      "parent_id": "SI-02",
+      "variant": "C",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-13",
+      "time_local": "19:30",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-13T19:30:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "INF-1013-YC",
+      "title": "Cómo elijo qué grabar esta semana · recorte C",
+      "kind": "YAPP",
+      "source": "brief nuevo de rutina real; sin experiencia personal afirmada",
+      "parent_id": "INF-1013",
+      "variant": "C",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-13",
+      "time_local": "20:30",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-13T20:30:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "H-IA-01",
+      "title": "Dos links antes de creer un informe",
+      "kind": "H",
+      "source": "/workspace/work/onia-marca-calendario-20261012/guiones-horizontales/H-IA-01-HABLADO.md",
+      "status": "GUION_HABLADO_COMPLETO; pendiente QA y revisión; no render",
+      "existing_vs_new": "nuevo planeado",
+      "recording": "batch 2026-10-13 propuesto; refrescar UI y facts antes de publicar",
+      "date": "2026-10-13",
+      "time_local": "21:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-13T21:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "YouTube largo",
+          "account": "Sergio Urcullo",
+          "route": "subida nativa por definir; Buffer Shorts no prueba largo",
+          "state": "cuenta observada por madre; flujo largo pendiente"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "H-VIDA-02",
+      "title": "Preparar una sesión de grabación",
+      "kind": "H",
+      "source": "brief nuevo; tradición marca personal, sin biografía inventada",
+      "status": "BRIEF; no guion completo",
+      "existing_vs_new": "nuevo planeado",
+      "recording": "batch 2026-10-13 propuesto; no confirmado",
+      "date": "2026-10-14",
+      "time_local": "08:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-14T08:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "YouTube largo",
+          "account": "Sergio Urcullo",
+          "route": "subida nativa por definir; Buffer Shorts no prueba largo",
+          "state": "cuenta observada por madre; flujo largo pendiente"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "SI-03",
+      "title": "Claude, pero vago",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md#SI-03",
+      "status": "BASE_HABLADA_FACTUAL_QA; por grabar; refrescar fuente",
+      "existing_vs_new": "base nueva existente, sin bruto confirmado",
+      "kind": "V",
+      "recording": "2026-10-14 07:30 revisión IA y toma breve",
+      "date": "2026-10-14",
+      "time_local": "09:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-14T09:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        },
+        {
+          "platform": "LinkedIn",
+          "account": "Sergio Urcullo Mercado",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "SI-04",
+      "title": "Tres comandos escondidos de Claude Code",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md#SI-04",
+      "status": "BASE_HABLADA_FACTUAL_QA; por grabar; refrescar fuente",
+      "existing_vs_new": "base nueva existente, sin bruto confirmado",
+      "kind": "V",
+      "recording": "2026-10-14 07:30 revisión IA y toma breve",
+      "date": "2026-10-14",
+      "time_local": "10:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-14T10:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        },
+        {
+          "platform": "LinkedIn",
+          "account": "Sergio Urcullo Mercado",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "INF-1014",
+      "title": "Una pausa antes de instalar una herramienta",
+      "source": "brief nuevo de rutina real; sin experiencia personal afirmada",
+      "status": "BRIEF; falta guion y toma real",
+      "existing_vs_new": "nuevo planeado",
+      "kind": "V",
+      "recording": "batch propuesto 2026-10-13; aún no grabado",
+      "date": "2026-10-14",
+      "time_local": "11:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-14T11:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        },
+        {
+          "platform": "LinkedIn",
+          "account": "Sergio Urcullo Mercado",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "SI-03-YA",
+      "title": "Claude, pero vago · recorte A",
+      "kind": "YAPP",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md#SI-03",
+      "parent_id": "SI-03",
+      "variant": "A",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-14",
+      "time_local": "12:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-14T12:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "SI-04-YA",
+      "title": "Tres comandos escondidos de Claude Code · recorte A",
+      "kind": "YAPP",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md#SI-04",
+      "parent_id": "SI-04",
+      "variant": "A",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-14",
+      "time_local": "13:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-14T13:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "INF-1014-YA",
+      "title": "Una pausa antes de instalar una herramienta · recorte A",
+      "kind": "YAPP",
+      "source": "brief nuevo de rutina real; sin experiencia personal afirmada",
+      "parent_id": "INF-1014",
+      "variant": "A",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-14",
+      "time_local": "14:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-14T14:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "SI-03-YB",
+      "title": "Claude, pero vago · recorte B",
+      "kind": "YAPP",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md#SI-03",
+      "parent_id": "SI-03",
+      "variant": "B",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-14",
+      "time_local": "15:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-14T15:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "C-1014",
+      "title": "Menos código: qué comparar",
+      "kind": "C",
+      "source": "hermes-content/docs/cola/plan-3-semanas/CARRUSELES-DIARIOS.md (método); brief nuevo temático",
+      "status": "BRIEF; no láminas/render aprobados",
+      "existing_vs_new": "nuevo planeado",
+      "recording": "no aplica; producir láminas después de fuente validada",
+      "date": "2026-10-14",
+      "time_local": "16:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-14T16:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia carrusel",
+          "state": "runtime no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "SI-04-YB",
+      "title": "Tres comandos escondidos de Claude Code · recorte B",
+      "kind": "YAPP",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md#SI-04",
+      "parent_id": "SI-04",
+      "variant": "B",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-14",
+      "time_local": "16:30",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-14T16:30:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "INF-1014-YB",
+      "title": "Una pausa antes de instalar una herramienta · recorte B",
+      "kind": "YAPP",
+      "source": "brief nuevo de rutina real; sin experiencia personal afirmada",
+      "parent_id": "INF-1014",
+      "variant": "B",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-14",
+      "time_local": "17:30",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-14T17:30:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "SI-03-YC",
+      "title": "Claude, pero vago · recorte C",
+      "kind": "YAPP",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md#SI-03",
+      "parent_id": "SI-03",
+      "variant": "C",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-14",
+      "time_local": "18:30",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-14T18:30:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "SI-04-YC",
+      "title": "Tres comandos escondidos de Claude Code · recorte C",
+      "kind": "YAPP",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md#SI-04",
+      "parent_id": "SI-04",
+      "variant": "C",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-14",
+      "time_local": "19:30",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-14T19:30:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "INF-1014-YC",
+      "title": "Una pausa antes de instalar una herramienta · recorte C",
+      "kind": "YAPP",
+      "source": "brief nuevo de rutina real; sin experiencia personal afirmada",
+      "parent_id": "INF-1014",
+      "variant": "C",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-14",
+      "time_local": "20:30",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-14T20:30:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "H-IA-02",
+      "title": "Loop o schedule: dos relojes y sus límites",
+      "kind": "H",
+      "source": "brief temático; validar documentación oficial vigente",
+      "status": "BRIEF; no guion completo",
+      "existing_vs_new": "nuevo planeado",
+      "recording": "batch 2026-10-13 propuesto; refrescar UI y facts antes de publicar",
+      "date": "2026-10-14",
+      "time_local": "21:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-14T21:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "YouTube largo",
+          "account": "Sergio Urcullo",
+          "route": "subida nativa por definir; Buffer Shorts no prueba largo",
+          "state": "cuenta observada por madre; flujo largo pendiente"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "H-VIDA-03",
+      "title": "Documentar una duda antes de opinar",
+      "kind": "H",
+      "source": "brief nuevo; tradición marca personal, sin biografía inventada",
+      "status": "BRIEF; no guion completo",
+      "existing_vs_new": "nuevo planeado",
+      "recording": "batch 2026-10-13 propuesto; no confirmado",
+      "date": "2026-10-15",
+      "time_local": "08:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-15T08:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "YouTube largo",
+          "account": "Sergio Urcullo",
+          "route": "subida nativa por definir; Buffer Shorts no prueba largo",
+          "state": "cuenta observada por madre; flujo largo pendiente"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "SI-08",
+      "title": "Un video que escribió Claude",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md#SI-08",
+      "status": "BASE_HABLADA_FACTUAL_QA; por grabar; refrescar fuente",
+      "existing_vs_new": "base nueva existente, sin bruto confirmado",
+      "kind": "V",
+      "recording": "2026-10-15 07:30 revisión IA y toma breve",
+      "date": "2026-10-15",
+      "time_local": "09:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-15T09:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        },
+        {
+          "platform": "LinkedIn",
+          "account": "Sergio Urcullo Mercado",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "SI-09",
+      "title": "La IA te da links. Abrí dos.",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md#SI-09",
+      "status": "BASE_HABLADA_FACTUAL_QA; por grabar; refrescar fuente",
+      "existing_vs_new": "base nueva existente, sin bruto confirmado",
+      "kind": "V",
+      "recording": "2026-10-15 07:30 revisión IA y toma breve",
+      "date": "2026-10-15",
+      "time_local": "10:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-15T10:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        },
+        {
+          "platform": "LinkedIn",
+          "account": "Sergio Urcullo Mercado",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "INF-1015",
+      "title": "Mi checklist antes de confiar en una IA",
+      "source": "brief nuevo de rutina real; sin experiencia personal afirmada",
+      "status": "BRIEF; falta guion y toma real",
+      "existing_vs_new": "nuevo planeado",
+      "kind": "V",
+      "recording": "batch propuesto 2026-10-13; aún no grabado",
+      "date": "2026-10-15",
+      "time_local": "11:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-15T11:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        },
+        {
+          "platform": "LinkedIn",
+          "account": "Sergio Urcullo Mercado",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "SI-08-YA",
+      "title": "Un video que escribió Claude · recorte A",
+      "kind": "YAPP",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md#SI-08",
+      "parent_id": "SI-08",
+      "variant": "A",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-15",
+      "time_local": "12:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-15T12:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "SI-09-YA",
+      "title": "La IA te da links. Abrí dos. · recorte A",
+      "kind": "YAPP",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md#SI-09",
+      "parent_id": "SI-09",
+      "variant": "A",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-15",
+      "time_local": "13:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-15T13:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "INF-1015-YA",
+      "title": "Mi checklist antes de confiar en una IA · recorte A",
+      "kind": "YAPP",
+      "source": "brief nuevo de rutina real; sin experiencia personal afirmada",
+      "parent_id": "INF-1015",
+      "variant": "A",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-15",
+      "time_local": "14:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-15T14:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "SI-08-YB",
+      "title": "Un video que escribió Claude · recorte B",
+      "kind": "YAPP",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md#SI-08",
+      "parent_id": "SI-08",
+      "variant": "B",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-15",
+      "time_local": "15:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-15T15:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "C-1015",
+      "title": "Dos citas: un checklist de verificación",
+      "kind": "C",
+      "source": "hermes-content/docs/cola/plan-3-semanas/CARRUSELES-DIARIOS.md (método); brief nuevo temático",
+      "status": "BRIEF; no láminas/render aprobados",
+      "existing_vs_new": "nuevo planeado",
+      "recording": "no aplica; producir láminas después de fuente validada",
+      "date": "2026-10-15",
+      "time_local": "16:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-15T16:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia carrusel",
+          "state": "runtime no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "SI-09-YB",
+      "title": "La IA te da links. Abrí dos. · recorte B",
+      "kind": "YAPP",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md#SI-09",
+      "parent_id": "SI-09",
+      "variant": "B",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-15",
+      "time_local": "16:30",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-15T16:30:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "INF-1015-YB",
+      "title": "Mi checklist antes de confiar en una IA · recorte B",
+      "kind": "YAPP",
+      "source": "brief nuevo de rutina real; sin experiencia personal afirmada",
+      "parent_id": "INF-1015",
+      "variant": "B",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-15",
+      "time_local": "17:30",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-15T17:30:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "SI-08-YC",
+      "title": "Un video que escribió Claude · recorte C",
+      "kind": "YAPP",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md#SI-08",
+      "parent_id": "SI-08",
+      "variant": "C",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-15",
+      "time_local": "18:30",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-15T18:30:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "SI-09-YC",
+      "title": "La IA te da links. Abrí dos. · recorte C",
+      "kind": "YAPP",
+      "source": "/workspace/work/onia-marca-nuevos-20261012/guiones/SEIS_BASES_HABLADAS_FACTUALES_PROPUESTA.md#SI-09",
+      "parent_id": "SI-09",
+      "variant": "C",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-15",
+      "time_local": "19:30",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-15T19:30:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "INF-1015-YC",
+      "title": "Mi checklist antes de confiar en una IA · recorte C",
+      "kind": "YAPP",
+      "source": "brief nuevo de rutina real; sin experiencia personal afirmada",
+      "parent_id": "INF-1015",
+      "variant": "C",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-15",
+      "time_local": "20:30",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-15T20:30:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "H-IA-03",
+      "title": "Sandbox: qué comprobar antes de usar un agente",
+      "kind": "H",
+      "source": "brief temático; validar documentación oficial vigente",
+      "status": "BRIEF; no guion completo",
+      "existing_vs_new": "nuevo planeado",
+      "recording": "batch 2026-10-13 propuesto; refrescar UI y facts antes de publicar",
+      "date": "2026-10-15",
+      "time_local": "21:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-15T21:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "YouTube largo",
+          "account": "Sergio Urcullo",
+          "route": "subida nativa por definir; Buffer Shorts no prueba largo",
+          "state": "cuenta observada por madre; flujo largo pendiente"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "H-VIDA-04",
+      "title": "Qué muestro y qué mantengo privado",
+      "kind": "H",
+      "source": "brief nuevo; tradición marca personal, sin biografía inventada",
+      "status": "BRIEF; no guion completo",
+      "existing_vs_new": "nuevo planeado",
+      "recording": "batch 2026-10-13 propuesto; no confirmado",
+      "date": "2026-10-16",
+      "time_local": "08:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-16T08:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "YouTube largo",
+          "account": "Sergio Urcullo",
+          "route": "subida nativa por definir; Buffer Shorts no prueba largo",
+          "state": "cuenta observada por madre; flujo largo pendiente"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "IA-1016-1",
+      "title": "Noticia IA del 16/10: radar herramientas de desarrollo",
+      "source": "radar del día: elegir fuente oficial antes de guion",
+      "status": "POR_INVESTIGAR_Y_ESCRIBIR; no noticia futura inventada",
+      "existing_vs_new": "nuevo planeado",
+      "kind": "V",
+      "recording": "2026-10-16 07:30 revisión IA y toma breve",
+      "date": "2026-10-16",
+      "time_local": "09:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-16T09:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        },
+        {
+          "platform": "LinkedIn",
+          "account": "Sergio Urcullo Mercado",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "IA-1016-2",
+      "title": "Noticia IA del 16/10: radar uso práctico y límites",
+      "source": "radar del día: elegir fuente oficial antes de guion",
+      "status": "POR_INVESTIGAR_Y_ESCRIBIR; no noticia futura inventada",
+      "existing_vs_new": "nuevo planeado",
+      "kind": "V",
+      "recording": "2026-10-16 07:30 revisión IA y toma breve",
+      "date": "2026-10-16",
+      "time_local": "10:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-16T10:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        },
+        {
+          "platform": "LinkedIn",
+          "account": "Sergio Urcullo Mercado",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "INF-1016",
+      "title": "Cómo preparo mi espacio para grabar",
+      "source": "brief nuevo de rutina real; sin experiencia personal afirmada",
+      "status": "BRIEF; falta guion y toma real",
+      "existing_vs_new": "nuevo planeado",
+      "kind": "V",
+      "recording": "batch propuesto 2026-10-13; aún no grabado",
+      "date": "2026-10-16",
+      "time_local": "11:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-16T11:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        },
+        {
+          "platform": "LinkedIn",
+          "account": "Sergio Urcullo Mercado",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "IA-1016-1-YA",
+      "title": "Noticia IA del 16/10: radar herramientas de desarrollo · recorte A",
+      "kind": "YAPP",
+      "source": "radar del día: elegir fuente oficial antes de guion",
+      "parent_id": "IA-1016-1",
+      "variant": "A",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-16",
+      "time_local": "12:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-16T12:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "IA-1016-2-YA",
+      "title": "Noticia IA del 16/10: radar uso práctico y límites · recorte A",
+      "kind": "YAPP",
+      "source": "radar del día: elegir fuente oficial antes de guion",
+      "parent_id": "IA-1016-2",
+      "variant": "A",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-16",
+      "time_local": "13:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-16T13:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "INF-1016-YA",
+      "title": "Cómo preparo mi espacio para grabar · recorte A",
+      "kind": "YAPP",
+      "source": "brief nuevo de rutina real; sin experiencia personal afirmada",
+      "parent_id": "INF-1016",
+      "variant": "A",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-16",
+      "time_local": "14:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-16T14:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "IA-1016-1-YB",
+      "title": "Noticia IA del 16/10: radar herramientas de desarrollo · recorte B",
+      "kind": "YAPP",
+      "source": "radar del día: elegir fuente oficial antes de guion",
+      "parent_id": "IA-1016-1",
+      "variant": "B",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-16",
+      "time_local": "15:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-16T15:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "C-1016",
+      "title": "Antes de instalar un agente",
+      "kind": "C",
+      "source": "hermes-content/docs/cola/plan-3-semanas/CARRUSELES-DIARIOS.md (método); brief nuevo temático",
+      "status": "BRIEF; no láminas/render aprobados",
+      "existing_vs_new": "nuevo planeado",
+      "recording": "no aplica; producir láminas después de fuente validada",
+      "date": "2026-10-16",
+      "time_local": "16:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-16T16:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia carrusel",
+          "state": "runtime no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "IA-1016-2-YB",
+      "title": "Noticia IA del 16/10: radar uso práctico y límites · recorte B",
+      "kind": "YAPP",
+      "source": "radar del día: elegir fuente oficial antes de guion",
+      "parent_id": "IA-1016-2",
+      "variant": "B",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-16",
+      "time_local": "16:30",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-16T16:30:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "INF-1016-YB",
+      "title": "Cómo preparo mi espacio para grabar · recorte B",
+      "kind": "YAPP",
+      "source": "brief nuevo de rutina real; sin experiencia personal afirmada",
+      "parent_id": "INF-1016",
+      "variant": "B",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-16",
+      "time_local": "17:30",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-16T17:30:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "IA-1016-1-YC",
+      "title": "Noticia IA del 16/10: radar herramientas de desarrollo · recorte C",
+      "kind": "YAPP",
+      "source": "radar del día: elegir fuente oficial antes de guion",
+      "parent_id": "IA-1016-1",
+      "variant": "C",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-16",
+      "time_local": "18:30",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-16T18:30:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "IA-1016-2-YC",
+      "title": "Noticia IA del 16/10: radar uso práctico y límites · recorte C",
+      "kind": "YAPP",
+      "source": "radar del día: elegir fuente oficial antes de guion",
+      "parent_id": "IA-1016-2",
+      "variant": "C",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-16",
+      "time_local": "19:30",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-16T19:30:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "INF-1016-YC",
+      "title": "Cómo preparo mi espacio para grabar · recorte C",
+      "kind": "YAPP",
+      "source": "brief nuevo de rutina real; sin experiencia personal afirmada",
+      "parent_id": "INF-1016",
+      "variant": "C",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-16",
+      "time_local": "20:30",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-16T20:30:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "H-IA-04",
+      "title": "Menos código: diseñar una comparación justa",
+      "kind": "H",
+      "source": "brief temático; validar documentación oficial vigente",
+      "status": "BRIEF; no guion completo",
+      "existing_vs_new": "nuevo planeado",
+      "recording": "batch 2026-10-13 propuesto; refrescar UI y facts antes de publicar",
+      "date": "2026-10-16",
+      "time_local": "21:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-16T21:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "YouTube largo",
+          "account": "Sergio Urcullo",
+          "route": "subida nativa por definir; Buffer Shorts no prueba largo",
+          "state": "cuenta observada por madre; flujo largo pendiente"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "H-VIDA-05",
+      "title": "Terminar una pieza antes de abrir otra",
+      "kind": "H",
+      "source": "brief nuevo; tradición marca personal, sin biografía inventada",
+      "status": "BRIEF; no guion completo",
+      "existing_vs_new": "nuevo planeado",
+      "recording": "batch 2026-10-13 propuesto; no confirmado",
+      "date": "2026-10-17",
+      "time_local": "08:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-17T08:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "YouTube largo",
+          "account": "Sergio Urcullo",
+          "route": "subida nativa por definir; Buffer Shorts no prueba largo",
+          "state": "cuenta observada por madre; flujo largo pendiente"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "IA-1017-1",
+      "title": "Noticia IA del 17/10: radar herramientas de desarrollo",
+      "source": "radar del día: elegir fuente oficial antes de guion",
+      "status": "POR_INVESTIGAR_Y_ESCRIBIR; no noticia futura inventada",
+      "existing_vs_new": "nuevo planeado",
+      "kind": "V",
+      "recording": "2026-10-17 07:30 revisión IA y toma breve",
+      "date": "2026-10-17",
+      "time_local": "09:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-17T09:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        },
+        {
+          "platform": "LinkedIn",
+          "account": "Sergio Urcullo Mercado",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "IA-1017-2",
+      "title": "Noticia IA del 17/10: radar uso práctico y límites",
+      "source": "radar del día: elegir fuente oficial antes de guion",
+      "status": "POR_INVESTIGAR_Y_ESCRIBIR; no noticia futura inventada",
+      "existing_vs_new": "nuevo planeado",
+      "kind": "V",
+      "recording": "2026-10-17 07:30 revisión IA y toma breve",
+      "date": "2026-10-17",
+      "time_local": "10:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-17T10:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        },
+        {
+          "platform": "LinkedIn",
+          "account": "Sergio Urcullo Mercado",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "INF-1017",
+      "title": "Qué hago cuando una demo falla",
+      "source": "brief nuevo de rutina real; sin experiencia personal afirmada",
+      "status": "BRIEF; falta guion y toma real",
+      "existing_vs_new": "nuevo planeado",
+      "kind": "V",
+      "recording": "batch propuesto 2026-10-13; aún no grabado",
+      "date": "2026-10-17",
+      "time_local": "11:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-17T11:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        },
+        {
+          "platform": "LinkedIn",
+          "account": "Sergio Urcullo Mercado",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "IA-1017-1-YA",
+      "title": "Noticia IA del 17/10: radar herramientas de desarrollo · recorte A",
+      "kind": "YAPP",
+      "source": "radar del día: elegir fuente oficial antes de guion",
+      "parent_id": "IA-1017-1",
+      "variant": "A",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-17",
+      "time_local": "12:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-17T12:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "IA-1017-2-YA",
+      "title": "Noticia IA del 17/10: radar uso práctico y límites · recorte A",
+      "kind": "YAPP",
+      "source": "radar del día: elegir fuente oficial antes de guion",
+      "parent_id": "IA-1017-2",
+      "variant": "A",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-17",
+      "time_local": "13:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-17T13:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "INF-1017-YA",
+      "title": "Qué hago cuando una demo falla · recorte A",
+      "kind": "YAPP",
+      "source": "brief nuevo de rutina real; sin experiencia personal afirmada",
+      "parent_id": "INF-1017",
+      "variant": "A",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-17",
+      "time_local": "14:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-17T14:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "IA-1017-1-YB",
+      "title": "Noticia IA del 17/10: radar herramientas de desarrollo · recorte B",
+      "kind": "YAPP",
+      "source": "radar del día: elegir fuente oficial antes de guion",
+      "parent_id": "IA-1017-1",
+      "variant": "B",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-17",
+      "time_local": "15:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-17T15:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "C-1017",
+      "title": "Comandos: dónde mirar la fuente",
+      "kind": "C",
+      "source": "hermes-content/docs/cola/plan-3-semanas/CARRUSELES-DIARIOS.md (método); brief nuevo temático",
+      "status": "BRIEF; no láminas/render aprobados",
+      "existing_vs_new": "nuevo planeado",
+      "recording": "no aplica; producir láminas después de fuente validada",
+      "date": "2026-10-17",
+      "time_local": "16:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-17T16:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia carrusel",
+          "state": "runtime no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "IA-1017-2-YB",
+      "title": "Noticia IA del 17/10: radar uso práctico y límites · recorte B",
+      "kind": "YAPP",
+      "source": "radar del día: elegir fuente oficial antes de guion",
+      "parent_id": "IA-1017-2",
+      "variant": "B",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-17",
+      "time_local": "16:30",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-17T16:30:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "INF-1017-YB",
+      "title": "Qué hago cuando una demo falla · recorte B",
+      "kind": "YAPP",
+      "source": "brief nuevo de rutina real; sin experiencia personal afirmada",
+      "parent_id": "INF-1017",
+      "variant": "B",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-17",
+      "time_local": "17:30",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-17T17:30:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "IA-1017-1-YC",
+      "title": "Noticia IA del 17/10: radar herramientas de desarrollo · recorte C",
+      "kind": "YAPP",
+      "source": "radar del día: elegir fuente oficial antes de guion",
+      "parent_id": "IA-1017-1",
+      "variant": "C",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-17",
+      "time_local": "18:30",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-17T18:30:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "IA-1017-2-YC",
+      "title": "Noticia IA del 17/10: radar uso práctico y límites · recorte C",
+      "kind": "YAPP",
+      "source": "radar del día: elegir fuente oficial antes de guion",
+      "parent_id": "IA-1017-2",
+      "variant": "C",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-17",
+      "time_local": "19:30",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-17T19:30:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "INF-1017-YC",
+      "title": "Qué hago cuando una demo falla · recorte C",
+      "kind": "YAPP",
+      "source": "brief nuevo de rutina real; sin experiencia personal afirmada",
+      "parent_id": "INF-1017",
+      "variant": "C",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-17",
+      "time_local": "20:30",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-17T20:30:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "H-IA-05",
+      "title": "Cómo revisar comandos en la documentación",
+      "kind": "H",
+      "source": "brief temático; validar documentación oficial vigente",
+      "status": "BRIEF; no guion completo",
+      "existing_vs_new": "nuevo planeado",
+      "recording": "batch 2026-10-13 propuesto; refrescar UI y facts antes de publicar",
+      "date": "2026-10-17",
+      "time_local": "21:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-17T21:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "YouTube largo",
+          "account": "Sergio Urcullo",
+          "route": "subida nativa por definir; Buffer Shorts no prueba largo",
+          "state": "cuenta observada por madre; flujo largo pendiente"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "H-VIDA-06",
+      "title": "Separar descanso de trabajo pendiente",
+      "kind": "H",
+      "source": "brief nuevo; tradición marca personal, sin biografía inventada",
+      "status": "BRIEF; no guion completo",
+      "existing_vs_new": "nuevo planeado",
+      "recording": "batch 2026-10-13 propuesto; no confirmado",
+      "date": "2026-10-18",
+      "time_local": "08:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-18T08:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "YouTube largo",
+          "account": "Sergio Urcullo",
+          "route": "subida nativa por definir; Buffer Shorts no prueba largo",
+          "state": "cuenta observada por madre; flujo largo pendiente"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "IA-1018-1",
+      "title": "Noticia IA del 18/10: radar herramientas de desarrollo",
+      "source": "radar del día: elegir fuente oficial antes de guion",
+      "status": "POR_INVESTIGAR_Y_ESCRIBIR; no noticia futura inventada",
+      "existing_vs_new": "nuevo planeado",
+      "kind": "V",
+      "recording": "2026-10-18 07:30 revisión IA y toma breve",
+      "date": "2026-10-18",
+      "time_local": "09:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-18T09:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        },
+        {
+          "platform": "LinkedIn",
+          "account": "Sergio Urcullo Mercado",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "IA-1018-2",
+      "title": "Noticia IA del 18/10: radar uso práctico y límites",
+      "source": "radar del día: elegir fuente oficial antes de guion",
+      "status": "POR_INVESTIGAR_Y_ESCRIBIR; no noticia futura inventada",
+      "existing_vs_new": "nuevo planeado",
+      "kind": "V",
+      "recording": "2026-10-18 07:30 revisión IA y toma breve",
+      "date": "2026-10-18",
+      "time_local": "10:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-18T10:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        },
+        {
+          "platform": "LinkedIn",
+          "account": "Sergio Urcullo Mercado",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "INF-1018",
+      "title": "Qué aprendí preparando mis guiones",
+      "source": "brief nuevo de rutina real; sin experiencia personal afirmada",
+      "status": "BRIEF; falta guion y toma real",
+      "existing_vs_new": "nuevo planeado",
+      "kind": "V",
+      "recording": "batch propuesto 2026-10-13; aún no grabado",
+      "date": "2026-10-18",
+      "time_local": "11:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-18T11:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        },
+        {
+          "platform": "LinkedIn",
+          "account": "Sergio Urcullo Mercado",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "IA-1018-1-YA",
+      "title": "Noticia IA del 18/10: radar herramientas de desarrollo · recorte A",
+      "kind": "YAPP",
+      "source": "radar del día: elegir fuente oficial antes de guion",
+      "parent_id": "IA-1018-1",
+      "variant": "A",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-18",
+      "time_local": "12:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-18T12:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "IA-1018-2-YA",
+      "title": "Noticia IA del 18/10: radar uso práctico y límites · recorte A",
+      "kind": "YAPP",
+      "source": "radar del día: elegir fuente oficial antes de guion",
+      "parent_id": "IA-1018-2",
+      "variant": "A",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-18",
+      "time_local": "13:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-18T13:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "INF-1018-YA",
+      "title": "Qué aprendí preparando mis guiones · recorte A",
+      "kind": "YAPP",
+      "source": "brief nuevo de rutina real; sin experiencia personal afirmada",
+      "parent_id": "INF-1018",
+      "variant": "A",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-18",
+      "time_local": "14:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-18T14:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "IA-1018-1-YB",
+      "title": "Noticia IA del 18/10: radar herramientas de desarrollo · recorte B",
+      "kind": "YAPP",
+      "source": "radar del día: elegir fuente oficial antes de guion",
+      "parent_id": "IA-1018-1",
+      "variant": "B",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-18",
+      "time_local": "15:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-18T15:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "C-1018",
+      "title": "Títulos por código: pasos y límites",
+      "kind": "C",
+      "source": "hermes-content/docs/cola/plan-3-semanas/CARRUSELES-DIARIOS.md (método); brief nuevo temático",
+      "status": "BRIEF; no láminas/render aprobados",
+      "existing_vs_new": "nuevo planeado",
+      "recording": "no aplica; producir láminas después de fuente validada",
+      "date": "2026-10-18",
+      "time_local": "16:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-18T16:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia carrusel",
+          "state": "runtime no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "IA-1018-2-YB",
+      "title": "Noticia IA del 18/10: radar uso práctico y límites · recorte B",
+      "kind": "YAPP",
+      "source": "radar del día: elegir fuente oficial antes de guion",
+      "parent_id": "IA-1018-2",
+      "variant": "B",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-18",
+      "time_local": "16:30",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-18T16:30:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "INF-1018-YB",
+      "title": "Qué aprendí preparando mis guiones · recorte B",
+      "kind": "YAPP",
+      "source": "brief nuevo de rutina real; sin experiencia personal afirmada",
+      "parent_id": "INF-1018",
+      "variant": "B",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-18",
+      "time_local": "17:30",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-18T17:30:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "IA-1018-1-YC",
+      "title": "Noticia IA del 18/10: radar herramientas de desarrollo · recorte C",
+      "kind": "YAPP",
+      "source": "radar del día: elegir fuente oficial antes de guion",
+      "parent_id": "IA-1018-1",
+      "variant": "C",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-18",
+      "time_local": "18:30",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-18T18:30:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "IA-1018-2-YC",
+      "title": "Noticia IA del 18/10: radar uso práctico y límites · recorte C",
+      "kind": "YAPP",
+      "source": "radar del día: elegir fuente oficial antes de guion",
+      "parent_id": "IA-1018-2",
+      "variant": "C",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-18",
+      "time_local": "19:30",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-18T19:30:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "INF-1018-YC",
+      "title": "Qué aprendí preparando mis guiones · recorte C",
+      "kind": "YAPP",
+      "source": "brief nuevo de rutina real; sin experiencia personal afirmada",
+      "parent_id": "INF-1018",
+      "variant": "C",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-18",
+      "time_local": "20:30",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-18T20:30:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "H-IA-06",
+      "title": "HyperFrames: del título al render local",
+      "kind": "H",
+      "source": "brief temático; validar documentación oficial vigente",
+      "status": "BRIEF; no guion completo",
+      "existing_vs_new": "nuevo planeado",
+      "recording": "batch 2026-10-13 propuesto; refrescar UI y facts antes de publicar",
+      "date": "2026-10-18",
+      "time_local": "21:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-18T21:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "YouTube largo",
+          "account": "Sergio Urcullo",
+          "route": "subida nativa por definir; Buffer Shorts no prueba largo",
+          "state": "cuenta observada por madre; flujo largo pendiente"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "H-VIDA-07",
+      "title": "Revisión semanal sin inventar resultados",
+      "kind": "H",
+      "source": "brief nuevo; tradición marca personal, sin biografía inventada",
+      "status": "BRIEF; no guion completo",
+      "existing_vs_new": "nuevo planeado",
+      "recording": "batch 2026-10-13 propuesto; no confirmado",
+      "date": "2026-10-19",
+      "time_local": "08:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-19T08:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "YouTube largo",
+          "account": "Sergio Urcullo",
+          "route": "subida nativa por definir; Buffer Shorts no prueba largo",
+          "state": "cuenta observada por madre; flujo largo pendiente"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "IA-1019-1",
+      "title": "Noticia IA del 19/10: radar herramientas de desarrollo",
+      "source": "radar del día: elegir fuente oficial antes de guion",
+      "status": "POR_INVESTIGAR_Y_ESCRIBIR; no noticia futura inventada",
+      "existing_vs_new": "nuevo planeado",
+      "kind": "V",
+      "recording": "2026-10-19 07:30 revisión IA y toma breve",
+      "date": "2026-10-19",
+      "time_local": "09:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-19T09:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        },
+        {
+          "platform": "LinkedIn",
+          "account": "Sergio Urcullo Mercado",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "IA-1019-2",
+      "title": "Noticia IA del 19/10: radar uso práctico y límites",
+      "source": "radar del día: elegir fuente oficial antes de guion",
+      "status": "POR_INVESTIGAR_Y_ESCRIBIR; no noticia futura inventada",
+      "existing_vs_new": "nuevo planeado",
+      "kind": "V",
+      "recording": "2026-10-19 07:30 revisión IA y toma breve",
+      "date": "2026-10-19",
+      "time_local": "10:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-19T10:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        },
+        {
+          "platform": "LinkedIn",
+          "account": "Sergio Urcullo Mercado",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "INF-1019",
+      "title": "Qué guardo y qué descarto de esta semana",
+      "source": "brief nuevo de rutina real; sin experiencia personal afirmada",
+      "status": "BRIEF; falta guion y toma real",
+      "existing_vs_new": "nuevo planeado",
+      "kind": "V",
+      "recording": "batch propuesto 2026-10-13; aún no grabado",
+      "date": "2026-10-19",
+      "time_local": "11:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-19T11:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        },
+        {
+          "platform": "LinkedIn",
+          "account": "Sergio Urcullo Mercado",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "IA-1019-1-YA",
+      "title": "Noticia IA del 19/10: radar herramientas de desarrollo · recorte A",
+      "kind": "YAPP",
+      "source": "radar del día: elegir fuente oficial antes de guion",
+      "parent_id": "IA-1019-1",
+      "variant": "A",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-19",
+      "time_local": "12:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-19T12:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "IA-1019-2-YA",
+      "title": "Noticia IA del 19/10: radar uso práctico y límites · recorte A",
+      "kind": "YAPP",
+      "source": "radar del día: elegir fuente oficial antes de guion",
+      "parent_id": "IA-1019-2",
+      "variant": "A",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-19",
+      "time_local": "13:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-19T13:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "INF-1019-YA",
+      "title": "Qué guardo y qué descarto de esta semana · recorte A",
+      "kind": "YAPP",
+      "source": "brief nuevo de rutina real; sin experiencia personal afirmada",
+      "parent_id": "INF-1019",
+      "variant": "A",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-19",
+      "time_local": "14:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-19T14:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "IA-1019-1-YB",
+      "title": "Noticia IA del 19/10: radar herramientas de desarrollo · recorte B",
+      "kind": "YAPP",
+      "source": "radar del día: elegir fuente oficial antes de guion",
+      "parent_id": "IA-1019-1",
+      "variant": "B",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-19",
+      "time_local": "15:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-19T15:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "C-1019",
+      "title": "Checklist para elegir una automatización",
+      "kind": "C",
+      "source": "hermes-content/docs/cola/plan-3-semanas/CARRUSELES-DIARIOS.md (método); brief nuevo temático",
+      "status": "BRIEF; no láminas/render aprobados",
+      "existing_vs_new": "nuevo planeado",
+      "recording": "no aplica; producir láminas después de fuente validada",
+      "date": "2026-10-19",
+      "time_local": "16:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-19T16:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia carrusel",
+          "state": "runtime no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "IA-1019-2-YB",
+      "title": "Noticia IA del 19/10: radar uso práctico y límites · recorte B",
+      "kind": "YAPP",
+      "source": "radar del día: elegir fuente oficial antes de guion",
+      "parent_id": "IA-1019-2",
+      "variant": "B",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-19",
+      "time_local": "16:30",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-19T16:30:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "INF-1019-YB",
+      "title": "Qué guardo y qué descarto de esta semana · recorte B",
+      "kind": "YAPP",
+      "source": "brief nuevo de rutina real; sin experiencia personal afirmada",
+      "parent_id": "INF-1019",
+      "variant": "B",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-19",
+      "time_local": "17:30",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-19T17:30:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "IA-1019-1-YC",
+      "title": "Noticia IA del 19/10: radar herramientas de desarrollo · recorte C",
+      "kind": "YAPP",
+      "source": "radar del día: elegir fuente oficial antes de guion",
+      "parent_id": "IA-1019-1",
+      "variant": "C",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-19",
+      "time_local": "18:30",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-19T18:30:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "IA-1019-2-YC",
+      "title": "Noticia IA del 19/10: radar uso práctico y límites · recorte C",
+      "kind": "YAPP",
+      "source": "radar del día: elegir fuente oficial antes de guion",
+      "parent_id": "IA-1019-2",
+      "variant": "C",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-19",
+      "time_local": "19:30",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-19T19:30:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "INF-1019-YC",
+      "title": "Qué guardo y qué descarto de esta semana · recorte C",
+      "kind": "YAPP",
+      "source": "brief nuevo de rutina real; sin experiencia personal afirmada",
+      "parent_id": "INF-1019",
+      "variant": "C",
+      "status": "POR_VALIDAR_3_RECORTES; sin corte/render aprobado",
+      "existing_vs_new": "derivado nuevo planeado, no asset existente",
+      "recording": "usa toma original; hook adicional solo si necesario",
+      "gate": "Tres segmentos útiles completos y diferentes; si no existen, no llenar el slot ni triplicar el clip",
+      "date": "2026-10-19",
+      "time_local": "20:30",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-19T20:30:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "Instagram",
+          "account": "@sergiourcullo",
+          "route": "Graph API propia",
+          "state": "fuente Git; OAuth runtime no comprobado"
+        },
+        {
+          "platform": "TikTok",
+          "account": "sergiourcullom",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso de este worker no comprobado"
+        },
+        {
+          "platform": "YouTube Shorts",
+          "account": "Sergio Urcullo",
+          "route": "Buffer",
+          "state": "conectado UI madre; acceso worker no comprobado"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    },
+    {
+      "id": "H-IA-07",
+      "title": "Cómo elegir qué automatizar primero",
+      "kind": "H",
+      "source": "brief temático; validar documentación oficial vigente",
+      "status": "BRIEF; no guion completo",
+      "existing_vs_new": "nuevo planeado",
+      "recording": "batch 2026-10-13 propuesto; refrescar UI y facts antes de publicar",
+      "date": "2026-10-19",
+      "time_local": "21:00",
+      "timezone": "America/Caracas",
+      "utc_offset": "-04:00",
+      "datetime_proposed": "2026-10-19T21:00:00-04:00",
+      "slot_status": "PROPUESTA_NO_AGENDADA",
+      "destinations": [
+        {
+          "platform": "YouTube largo",
+          "account": "Sergio Urcullo",
+          "route": "subida nativa por definir; Buffer Shorts no prueba largo",
+          "state": "cuenta observada por madre; flujo largo pendiente"
+        }
+      ],
+      "approved": false,
+      "published": false,
+      "asset_path": null,
+      "asset_sha256": null
+    }
+  ]
+}

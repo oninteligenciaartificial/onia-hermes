@@ -1,0 +1,391 @@
+{
+  "reviewer": "/root/qa_sol",
+  "rows": [
+    {
+      "piece": "N06",
+      "source_sha256": "d8753944a720d201c7bd141acce4236699cb159dc95e90f3f80049c77f7d8f40",
+      "source_hash_matches_manifest": true,
+      "clean_equals_source": true,
+      "mixed_sha256": "a060d4f4c0e479c4839b9bc47acaa20692ed417f94cebbd0f8f71313e3aee642",
+      "mixed_hash_matches_manifest": true,
+      "decode_exit": 0,
+      "decode_stderr_bytes": 0,
+      "video_packet_sha_source": "SHA256=3e2430d48a170677dcda2274eeead1f204fca544d6eafabf167a17546c743cd2",
+      "video_packet_sha_mixed": "SHA256=3e2430d48a170677dcda2274eeead1f204fca544d6eafabf167a17546c743cd2",
+      "video_payload_exact": true,
+      "video_packet_timing_exact": true,
+      "video_packet_count": 1365,
+      "source_video_frames": "1365",
+      "mixed_video_frames": "1365",
+      "frame_count_equal": true,
+      "source_duration": "45.504000",
+      "mixed_duration": "45.504000",
+      "duration_equal": true,
+      "metrics": {
+        "voice": {
+          "exit": 0,
+          "lufs": -13.2,
+          "lra": 2.2,
+          "true_peak": 0.0
+        },
+        "mixed": {
+          "exit": 0,
+          "lufs": -13.2,
+          "lra": 2.1,
+          "true_peak": -1.4
+        },
+        "bed": {
+          "exit": 0,
+          "lufs": -32.7,
+          "lra": 3.4,
+          "true_peak": -14.3
+        }
+      },
+      "bed_below_voice_lu": 19.500000000000004,
+      "voice_preservation_numeric": {
+        "decoded_samples_common_mono16000": 728064,
+        "voice_gain_fit": 0.9953890229460712,
+        "bed_gain_fit": 0.9974381631868705,
+        "estimated_voice_correlation": 0.9997896895946812,
+        "fit_residual_rms_relative_voice_db": -33.79978080253052,
+        "lag_checks": [
+          {
+            "time": 5,
+            "window_s": 1,
+            "best_lag_samples_at16000": 0,
+            "max_correlation": 0.9998424761146909,
+            "zero_lag_correlation": 0.9998424761146909
+          },
+          {
+            "time": 20,
+            "window_s": 1,
+            "best_lag_samples_at16000": 0,
+            "max_correlation": 0.9999315670917773,
+            "zero_lag_correlation": 0.9999315670917773
+          },
+          {
+            "time": 40.504,
+            "window_s": 1,
+            "best_lag_samples_at16000": 0,
+            "max_correlation": 0.9998545537467762,
+            "zero_lag_correlation": 0.9998545537467762
+          }
+        ],
+        "method": "Least squares mix=voice*g0+decoded ducked bed*g1; AAC/limiter residual expected, not phonetic QA"
+      },
+      "credit_file_matches_license": true,
+      "metadata_credit_matches": true,
+      "audio_listened": false,
+      "technical_pass": true
+    },
+    {
+      "piece": "N07",
+      "source_sha256": "f22e5caeb2d96cfe9c625d6e2a7d0dc4e3a6921890c866cee4cbad726d0a90e6",
+      "source_hash_matches_manifest": true,
+      "clean_equals_source": true,
+      "mixed_sha256": "63f1aa5e9d3323b2aa04e66d3822f1c2a23442edb61738adb6cde0396a25e69d",
+      "mixed_hash_matches_manifest": true,
+      "decode_exit": 0,
+      "decode_stderr_bytes": 0,
+      "video_packet_sha_source": "SHA256=1e4754990c7f4568671afc11cfad2ad0d8d36a90aefbbd7d53c943f3e87ee4a2",
+      "video_packet_sha_mixed": "SHA256=1e4754990c7f4568671afc11cfad2ad0d8d36a90aefbbd7d53c943f3e87ee4a2",
+      "video_payload_exact": true,
+      "video_packet_timing_exact": true,
+      "video_packet_count": 2452,
+      "source_video_frames": "2452",
+      "mixed_video_frames": "2452",
+      "frame_count_equal": true,
+      "source_duration": "81.733333",
+      "mixed_duration": "81.733333",
+      "duration_equal": true,
+      "metrics": {
+        "voice": {
+          "exit": 0,
+          "lufs": -13.0,
+          "lra": 2.7,
+          "true_peak": -0.8
+        },
+        "mixed": {
+          "exit": 0,
+          "lufs": -13.0,
+          "lra": 2.6,
+          "true_peak": -1.1
+        },
+        "bed": {
+          "exit": 0,
+          "lufs": -32.2,
+          "lra": 3.0,
+          "true_peak": -12.4
+        }
+      },
+      "bed_below_voice_lu": 19.200000000000003,
+      "voice_preservation_numeric": {
+        "decoded_samples_common_mono16000": 1307648,
+        "voice_gain_fit": 0.9969642459954321,
+        "bed_gain_fit": 0.9981725927927958,
+        "estimated_voice_correlation": 0.9998716167366108,
+        "fit_residual_rms_relative_voice_db": -35.93017429500407,
+        "lag_checks": [
+          {
+            "time": 5,
+            "window_s": 1,
+            "best_lag_samples_at16000": 0,
+            "max_correlation": 0.9998907834223006,
+            "zero_lag_correlation": 0.9998907834223006
+          },
+          {
+            "time": 20,
+            "window_s": 1,
+            "best_lag_samples_at16000": 0,
+            "max_correlation": 0.9997946448462958,
+            "zero_lag_correlation": 0.9997946448462958
+          },
+          {
+            "time": 76.728,
+            "window_s": 1,
+            "best_lag_samples_at16000": 0,
+            "max_correlation": 0.9998162294997462,
+            "zero_lag_correlation": 0.9998162294997462
+          }
+        ],
+        "method": "Least squares mix=voice*g0+decoded ducked bed*g1; AAC/limiter residual expected, not phonetic QA"
+      },
+      "credit_file_matches_license": true,
+      "metadata_credit_matches": true,
+      "audio_listened": false,
+      "technical_pass": true
+    },
+    {
+      "piece": "DD-A",
+      "source_sha256": "4582213089bbcf1c7fb4d84511ce64b7539eaf00e8f755952914a803d46af583",
+      "source_hash_matches_manifest": true,
+      "clean_equals_source": true,
+      "mixed_sha256": "52ab8ff1d2ed1accc7fa4082f74d49094b0da67303584d12084d6093fccf5895",
+      "mixed_hash_matches_manifest": true,
+      "decode_exit": 0,
+      "decode_stderr_bytes": 0,
+      "video_packet_sha_source": "SHA256=013081b72d2443936d7a21dea7912e125420c36a44ea1aec855fb61a6e6068bb",
+      "video_packet_sha_mixed": "SHA256=013081b72d2443936d7a21dea7912e125420c36a44ea1aec855fb61a6e6068bb",
+      "video_payload_exact": true,
+      "video_packet_timing_exact": true,
+      "video_packet_count": 1753,
+      "source_video_frames": "1753",
+      "mixed_video_frames": "1753",
+      "frame_count_equal": true,
+      "source_duration": "58.433333",
+      "mixed_duration": "58.433333",
+      "duration_equal": true,
+      "metrics": {
+        "voice": {
+          "exit": 0,
+          "lufs": -13.0,
+          "lra": 1.8,
+          "true_peak": -0.3
+        },
+        "mixed": {
+          "exit": 0,
+          "lufs": -13.0,
+          "lra": 1.8,
+          "true_peak": -1.4
+        },
+        "bed": {
+          "exit": 0,
+          "lufs": -32.3,
+          "lra": 4.0,
+          "true_peak": -13.8
+        }
+      },
+      "bed_below_voice_lu": 19.299999999999997,
+      "voice_preservation_numeric": {
+        "decoded_samples_common_mono16000": 934912,
+        "voice_gain_fit": 0.9967690925907745,
+        "bed_gain_fit": 0.9968068133146225,
+        "estimated_voice_correlation": 0.9998334681088817,
+        "fit_residual_rms_relative_voice_db": -34.80175818709539,
+        "lag_checks": [
+          {
+            "time": 5,
+            "window_s": 1,
+            "best_lag_samples_at16000": 0,
+            "max_correlation": 0.9998599502090235,
+            "zero_lag_correlation": 0.9998599502090235
+          },
+          {
+            "time": 20,
+            "window_s": 1,
+            "best_lag_samples_at16000": 0,
+            "max_correlation": 0.9997588743516017,
+            "zero_lag_correlation": 0.9997588743516017
+          },
+          {
+            "time": 53.432,
+            "window_s": 1,
+            "best_lag_samples_at16000": 0,
+            "max_correlation": 0.9997620937642342,
+            "zero_lag_correlation": 0.9997620937642342
+          }
+        ],
+        "method": "Least squares mix=voice*g0+decoded ducked bed*g1; AAC/limiter residual expected, not phonetic QA"
+      },
+      "credit_file_matches_license": true,
+      "metadata_credit_matches": true,
+      "audio_listened": false,
+      "technical_pass": true
+    },
+    {
+      "piece": "N02-Work",
+      "source_sha256": "0d0031e88aa8c9b24b50f53a9e4581e7171bdc02b3781e064b4611fb4be4f6e5",
+      "source_hash_matches_manifest": true,
+      "clean_equals_source": true,
+      "mixed_sha256": "43c58a9cf784f5c6cba57d06856b5cc53df28775b458f576408c3087f7aa335d",
+      "mixed_hash_matches_manifest": true,
+      "decode_exit": 0,
+      "decode_stderr_bytes": 0,
+      "video_packet_sha_source": "SHA256=893550eebdefca052340e9d9d24e642694a15a6d5b6d97b959726f1b61433d4f",
+      "video_packet_sha_mixed": "SHA256=893550eebdefca052340e9d9d24e642694a15a6d5b6d97b959726f1b61433d4f",
+      "video_payload_exact": true,
+      "video_packet_timing_exact": true,
+      "video_packet_count": 3271,
+      "source_video_frames": "3271",
+      "mixed_video_frames": "3271",
+      "frame_count_equal": true,
+      "source_duration": "109.033333",
+      "mixed_duration": "109.033333",
+      "duration_equal": true,
+      "metrics": {
+        "voice": {
+          "exit": 0,
+          "lufs": -13.2,
+          "lra": 1.8,
+          "true_peak": -0.4
+        },
+        "mixed": {
+          "exit": 0,
+          "lufs": -13.2,
+          "lra": 1.8,
+          "true_peak": -1.3
+        },
+        "bed": {
+          "exit": 0,
+          "lufs": -32.2,
+          "lra": 3.4,
+          "true_peak": -13.3
+        }
+      },
+      "bed_below_voice_lu": 19.000000000000004,
+      "voice_preservation_numeric": {
+        "decoded_samples_common_mono16000": 1744213,
+        "voice_gain_fit": 0.9958605214603098,
+        "bed_gain_fit": 0.9965365007368793,
+        "estimated_voice_correlation": 0.9998339409498229,
+        "fit_residual_rms_relative_voice_db": -34.82204369177918,
+        "lag_checks": [
+          {
+            "time": 5,
+            "window_s": 1,
+            "best_lag_samples_at16000": 0,
+            "max_correlation": 0.9999138419475236,
+            "zero_lag_correlation": 0.9999138419475236
+          },
+          {
+            "time": 20,
+            "window_s": 1,
+            "best_lag_samples_at16000": 0,
+            "max_correlation": 0.9998748462368573,
+            "zero_lag_correlation": 0.9998748462368573
+          },
+          {
+            "time": 104.0133125,
+            "window_s": 1,
+            "best_lag_samples_at16000": 0,
+            "max_correlation": 0.9998983134024754,
+            "zero_lag_correlation": 0.9998983134024754
+          }
+        ],
+        "method": "Least squares mix=voice*g0+decoded ducked bed*g1; AAC/limiter residual expected, not phonetic QA"
+      },
+      "credit_file_matches_license": true,
+      "metadata_credit_matches": true,
+      "audio_listened": false,
+      "technical_pass": true
+    },
+    {
+      "piece": "S2-D07-A",
+      "source_sha256": "dee290632ef3db1422ee17a924d0142b664d04655bb3dc55dc1b5dcf6f7acdd6",
+      "source_hash_matches_manifest": true,
+      "clean_equals_source": true,
+      "mixed_sha256": "d80924142098a75f63c3e7adfed2dae0a000ccdf1d35fe06b8e5af2ba81e4fd7",
+      "mixed_hash_matches_manifest": true,
+      "decode_exit": 0,
+      "decode_stderr_bytes": 0,
+      "video_packet_sha_source": "SHA256=5d30ab15295ce0bbdaf7c9843f2fdb9655adb8c3fde496c2713170e6022e7cd1",
+      "video_packet_sha_mixed": "SHA256=5d30ab15295ce0bbdaf7c9843f2fdb9655adb8c3fde496c2713170e6022e7cd1",
+      "video_payload_exact": true,
+      "video_packet_timing_exact": true,
+      "video_packet_count": 2722,
+      "source_video_frames": "2722",
+      "mixed_video_frames": "2722",
+      "frame_count_equal": true,
+      "source_duration": "90.752000",
+      "mixed_duration": "90.752000",
+      "duration_equal": true,
+      "metrics": {
+        "voice": {
+          "exit": 0,
+          "lufs": -14.1,
+          "lra": 2.2,
+          "true_peak": -0.9
+        },
+        "mixed": {
+          "exit": 0,
+          "lufs": -14.1,
+          "lra": 2.2,
+          "true_peak": -1.4
+        },
+        "bed": {
+          "exit": 0,
+          "lufs": -32.3,
+          "lra": 2.8,
+          "true_peak": -12.4
+        }
+      },
+      "bed_below_voice_lu": 18.199999999999996,
+      "voice_preservation_numeric": {
+        "decoded_samples_common_mono16000": 1452032,
+        "voice_gain_fit": 0.9964334266188529,
+        "bed_gain_fit": 0.9973971896650488,
+        "estimated_voice_correlation": 0.9997999439434009,
+        "fit_residual_rms_relative_voice_db": -34.00776567925715,
+        "lag_checks": [
+          {
+            "time": 5,
+            "window_s": 1,
+            "best_lag_samples_at16000": 0,
+            "max_correlation": 0.9997920773521116,
+            "zero_lag_correlation": 0.9997920773521116
+          },
+          {
+            "time": 20,
+            "window_s": 1,
+            "best_lag_samples_at16000": 0,
+            "max_correlation": 0.9998514943078535,
+            "zero_lag_correlation": 0.9998514943078535
+          },
+          {
+            "time": 85.752,
+            "window_s": 1,
+            "best_lag_samples_at16000": 0,
+            "max_correlation": 0.9997916311852362,
+            "zero_lag_correlation": 0.9997916311852362
+          }
+        ],
+        "method": "Least squares mix=voice*g0+decoded ducked bed*g1; AAC/limiter residual expected, not phonetic QA"
+      },
+      "credit_file_matches_license": true,
+      "metadata_credit_matches": true,
+      "audio_listened": false,
+      "technical_pass": true
+    }
+  ],
+  "listened": false
+}

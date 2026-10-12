@@ -7,47 +7,16 @@
   "summary": {
     "rows": 59,
     "status": {
-      "PASS": 43,
-      "BLOCKED": 16
+      "PASS": 59,
+      "BLOCKED": 0
     },
     "unique_content_expected": 55,
-    "duplicate_groups": [
-      {
-        "sha256": "5b01b1f362681999b27f5aba11351823109c022e0a7b676aed3144573dea5094",
-        "bytes": 259555,
-        "paths": [
-          "media-adjustment/seam-0.png",
-          "media-adjustment/seam-4.png"
-        ]
-      },
-      {
-        "sha256": "0f7cbdbaa01801bd303023465012e5a5d63b49391565840a69b9926f97579afd",
-        "bytes": 259449,
-        "paths": [
-          "media-adjustment/seam-1.png",
-          "media-adjustment/seam-5.png"
-        ]
-      },
-      {
-        "sha256": "798c3c27eca1c08dcd3c03adae9d31339a353322b2762eba0bc0d251d444287b",
-        "bytes": 261231,
-        "paths": [
-          "media-adjustment/seam-2.png",
-          "media-adjustment/seam-6.png"
-        ]
-      },
-      {
-        "sha256": "4c53e7f2401c1a21e14612ff186c05d08e266852701a7ae5d7c08eb1ace23ef7",
-        "bytes": 236370,
-        "paths": [
-          "media-adjustment/seam-3.png",
-          "media-adjustment/seam-7.png"
-        ]
-      }
-    ],
-    "unique_received_pass": 43,
+    "unique_received_pass": 55,
     "source_files": 31,
-    "source_pass": 31
+    "source_pass": 31,
+    "parts_pass": 12,
+    "containers_pass": 3,
+    "zip_members_pass": 49
   },
   "media": [
     {
@@ -269,6 +238,96 @@
           "nb_frames": "3832"
         }
       ]
+    },
+    {
+      "relative": "media-adjustment/DD-A-bruto-original.mp4",
+      "ffprobe_exit": 0,
+      "decode_exit": 0,
+      "decode_stderr_bytes": 0,
+      "pass": true,
+      "duration": "78.466667",
+      "streams": [
+        {
+          "codec_type": "video",
+          "codec_name": "hevc",
+          "width": 1080,
+          "height": 1920,
+          "sample_rate": null,
+          "channels": null,
+          "duration": "78.466667",
+          "nb_frames": "2354"
+        },
+        {
+          "codec_type": "audio",
+          "codec_name": "aac",
+          "width": null,
+          "height": null,
+          "sample_rate": "44100",
+          "channels": 2,
+          "duration": "78.466667",
+          "nb_frames": "3382"
+        }
+      ]
+    },
+    {
+      "relative": "media-review-n06/bruto.mp4",
+      "ffprobe_exit": 0,
+      "decode_exit": 0,
+      "decode_stderr_bytes": 0,
+      "pass": true,
+      "duration": "59.233333",
+      "streams": [
+        {
+          "codec_type": "video",
+          "codec_name": "hevc",
+          "width": 1080,
+          "height": 1920,
+          "sample_rate": null,
+          "channels": null,
+          "duration": "59.233333",
+          "nb_frames": "1777"
+        },
+        {
+          "codec_type": "audio",
+          "codec_name": "aac",
+          "width": null,
+          "height": null,
+          "sample_rate": "44100",
+          "channels": 2,
+          "duration": "59.233333",
+          "nb_frames": "2554"
+        }
+      ]
+    },
+    {
+      "relative": "media-adjustment/N02-preview-sin-arranque-falso.mp4",
+      "ffprobe_exit": 0,
+      "decode_exit": 0,
+      "decode_stderr_bytes": 0,
+      "pass": true,
+      "duration": "109.033333",
+      "streams": [
+        {
+          "codec_type": "video",
+          "codec_name": "h264",
+          "width": 360,
+          "height": 640,
+          "sample_rate": null,
+          "channels": null,
+          "duration": "109.033333",
+          "nb_frames": "3271"
+        },
+        {
+          "codec_type": "audio",
+          "codec_name": "aac",
+          "width": null,
+          "height": null,
+          "sample_rate": "48000",
+          "channels": 2,
+          "duration": "109.008000",
+          "nb_frames": "5111"
+        }
+      ]
     }
   ],
   "json": [
@@ -384,5 +443,7 @@
   },
   "full_render_reproduction": false,
   "face_voice_generation": false,
-  "publication": false
+  "publication": false,
+  "parts_proof": "QA_FINAL_PARTES.json",
+  "av_conservation_proof": "QA_AV_CONSERVACION.json"
 }

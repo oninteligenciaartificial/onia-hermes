@@ -1,0 +1,117 @@
+[
+  {
+    "piece": "N06",
+    "accepted_input": "file_uri",
+    "success": true,
+    "id": "1knSoDDefrrRj83Uv--bcyYqKXrfoxF3t",
+    "title": "N06-CON-MUSICA-BORRADOR.mp4",
+    "file_name": "N06-CON-MUSICA-BORRADOR.mp4",
+    "mime_type": "video/mp4",
+    "url": "https://drive.google.com/file/d/1knSoDDefrrRj83Uv--bcyYqKXrfoxF3t/view?usp=drivesdk",
+    "parent_id": "1bYK_ahMyjIh_Ta9CHGF_1WflOiuFFRZa",
+    "structuredContent": {
+      "accepted_input": "file_uri",
+      "success": true,
+      "id": "1knSoDDefrrRj83Uv--bcyYqKXrfoxF3t",
+      "title": "N06-CON-MUSICA-BORRADOR.mp4",
+      "file_name": "N06-CON-MUSICA-BORRADOR.mp4",
+      "mime_type": "video/mp4",
+      "url": "https://drive.google.com/file/d/1knSoDDefrrRj83Uv--bcyYqKXrfoxF3t/view?usp=drivesdk",
+      "parent_id": "1bYK_ahMyjIh_Ta9CHGF_1WflOiuFFRZa"
+    },
+    "bytes_local": 1940441,
+    "sha256_local": "a060d4f4c0e479c4839b9bc47acaa20692ed417f94cebbd0f8f71313e3aee642"
+  },
+  {
+    "piece": "N07",
+    "accepted_input": "file_uri",
+    "success": true,
+    "id": "1H0DDK3En1eS-SvEGah-cI7-M5BtZIoif",
+    "title": "N07-CON-MUSICA-BORRADOR.mp4",
+    "file_name": "N07-CON-MUSICA-BORRADOR.mp4",
+    "mime_type": "video/mp4",
+    "url": "https://drive.google.com/file/d/1H0DDK3En1eS-SvEGah-cI7-M5BtZIoif/view?usp=drivesdk",
+    "parent_id": "1bYK_ahMyjIh_Ta9CHGF_1WflOiuFFRZa",
+    "structuredContent": {
+      "accepted_input": "file_uri",
+      "success": true,
+      "id": "1H0DDK3En1eS-SvEGah-cI7-M5BtZIoif",
+      "title": "N07-CON-MUSICA-BORRADOR.mp4",
+      "file_name": "N07-CON-MUSICA-BORRADOR.mp4",
+      "mime_type": "video/mp4",
+      "url": "https://drive.google.com/file/d/1H0DDK3En1eS-SvEGah-cI7-M5BtZIoif/view?usp=drivesdk",
+      "parent_id": "1bYK_ahMyjIh_Ta9CHGF_1WflOiuFFRZa"
+    },
+    "bytes_local": 3414814,
+    "sha256_local": "63f1aa5e9d3323b2aa04e66d3822f1c2a23442edb61738adb6cde0396a25e69d"
+  },
+  {
+    "piece": "DD-A",
+    "accepted_input": "file_uri",
+    "success": true,
+    "id": "1GAIgrg_CP1ARk6WnBDMGCsceTimbXeVk",
+    "title": "DD-A-CON-MUSICA-BORRADOR.mp4",
+    "file_name": "DD-A-CON-MUSICA-BORRADOR.mp4",
+    "mime_type": "video/mp4",
+    "url": "https://drive.google.com/file/d/1GAIgrg_CP1ARk6WnBDMGCsceTimbXeVk/view?usp=drivesdk",
+    "parent_id": "1bYK_ahMyjIh_Ta9CHGF_1WflOiuFFRZa",
+    "structuredContent": {
+      "accepted_input": "file_uri",
+      "success": true,
+      "id": "1GAIgrg_CP1ARk6WnBDMGCsceTimbXeVk",
+      "title": "DD-A-CON-MUSICA-BORRADOR.mp4",
+      "file_name": "DD-A-CON-MUSICA-BORRADOR.mp4",
+      "mime_type": "video/mp4",
+      "url": "https://drive.google.com/file/d/1GAIgrg_CP1ARk6WnBDMGCsceTimbXeVk/view?usp=drivesdk",
+      "parent_id": "1bYK_ahMyjIh_Ta9CHGF_1WflOiuFFRZa"
+    },
+    "bytes_local": 2404999,
+    "sha256_local": "52ab8ff1d2ed1accc7fa4082f74d49094b0da67303584d12084d6093fccf5895"
+  },
+  {
+    "piece": "N02-Work",
+    "accepted_input": "file_uri",
+    "success": true,
+    "id": "1Vkgphhx53dE_fivF2OWuJN6LC5xeUqiU",
+    "title": "N02-Work-CON-MUSICA-BORRADOR.mp4",
+    "file_name": "N02-Work-CON-MUSICA-BORRADOR.mp4",
+    "mime_type": "video/mp4",
+    "url": "https://drive.google.com/file/d/1Vkgphhx53dE_fivF2OWuJN6LC5xeUqiU/view?usp=drivesdk",
+    "parent_id": "1bYK_ahMyjIh_Ta9CHGF_1WflOiuFFRZa",
+    "structuredContent": {
+      "accepted_input": "file_uri",
+      "success": true,
+      "id": "1Vkgphhx53dE_fivF2OWuJN6LC5xeUqiU",
+      "title": "N02-Work-CON-MUSICA-BORRADOR.mp4",
+      "file_name": "N02-Work-CON-MUSICA-BORRADOR.mp4",
+      "mime_type": "video/mp4",
+      "url": "https://drive.google.com/file/d/1Vkgphhx53dE_fivF2OWuJN6LC5xeUqiU/view?usp=drivesdk",
+      "parent_id": "1bYK_ahMyjIh_Ta9CHGF_1WflOiuFFRZa"
+    },
+    "bytes_local": 6331443,
+    "sha256_local": "43c58a9cf784f5c6cba57d06856b5cc53df28775b458f576408c3087f7aa335d"
+  },
+  {
+    "piece": "S2-D07-A",
+    "accepted_input": "file_uri",
+    "success": true,
+    "id": "193pR-RlyDGY1jHt7Kb0EBusdTCjD4XZO",
+    "title": "S2-D07-A-CON-MUSICA-BORRADOR.mp4",
+    "file_name": "S2-D07-A-CON-MUSICA-BORRADOR.mp4",
+    "mime_type": "video/mp4",
+    "url": "https://drive.google.com/file/d/193pR-RlyDGY1jHt7Kb0EBusdTCjD4XZO/view?usp=drivesdk",
+    "parent_id": "1bYK_ahMyjIh_Ta9CHGF_1WflOiuFFRZa",
+    "structuredContent": {
+      "accepted_input": "file_uri",
+      "success": true,
+      "id": "193pR-RlyDGY1jHt7Kb0EBusdTCjD4XZO",
+      "title": "S2-D07-A-CON-MUSICA-BORRADOR.mp4",
+      "file_name": "S2-D07-A-CON-MUSICA-BORRADOR.mp4",
+      "mime_type": "video/mp4",
+      "url": "https://drive.google.com/file/d/193pR-RlyDGY1jHt7Kb0EBusdTCjD4XZO/view?usp=drivesdk",
+      "parent_id": "1bYK_ahMyjIh_Ta9CHGF_1WflOiuFFRZa"
+    },
+    "bytes_local": 4090514,
+    "sha256_local": "d80924142098a75f63c3e7adfed2dae0a000ccdf1d35fe06b8e5af2ba81e4fd7"
+  }
+]
