@@ -40,3 +40,13 @@ No se provisionó servicio/API paga, instalaron dependencias o modificaron produ
 ## Preservación local de esta revisión
 
 El checkout aislado administrado `supervisor-inventory-20261012` falló por `No space left on device` (operación `71358c73-6a96-4fda-b296-76dccd4c86e4`). No se reintentó ni borró información. Este archivo único se guarda en el worktree de auditoría ya existente de la madre, rama `codex/cloud-pc-audit-20261011`; no se editó main ni archivos de continuidad compartidos.
+
+## Addendum: destino bloqueado y ajuste oficial
+
+Hermes completó el diagnóstico posterior y preservó transporte/QA en `ccc8a5d111065200ea323d3e57958e3946ce9879`, misma rama privada del piloto. Observó política HTTP restringida sin regla coincidente para `chatgpt.com`; el proxy rechazó CONNECT con 403 y el destino quedó HTTP 000. El fallo sucede antes de respuesta de aplicación; autenticación y TLS del destino no fueron alcanzados en ese sondeo. No se concluye token inválido ni se solicita una credencial nueva.
+
+OpenAI Docs, [Cloud environments](https://learn.chatgpt.com/docs/environments/cloud-environments), verificado 12-oct: Settings > Codex Cloud > Environments > ONIA Hermes > menú … > Edit. En Internet access, mantener internet habilitado y el preset Package managers; añadir exclusivamente `chatgpt.com` en Additional allowed domains. Guardar y republicar el entorno. La documentación pide comprobar acceso en una tarea nueva; las existentes conservan su estado. No garantiza que el runtime vivo adopte el cambio de política. Permitir el destino no proporciona autenticación.
+
+Esta sesión solo dispone de Chrome OnIA, sin IAB ni pestaña ChatGPT autenticada; no cambió ajustes ni abrió otro login. La madre dispone del IAB donde creó ONIA Hermes y recibió estos pasos documentados. No existe herramienta de edición de entornos Codex en el inventario local de MCP. No se editaron archivos internos de política, proxies ni endpoints privados.
+
+Después del ajuste oficial, Hermes puede realizar una única consulta CLI autorizada y comparar los cinco UUID. Si su runtime conserva la política previa, debe comprobarse la adopción por la ruta oficial; no crear un sexto ejecutor sin resolver cómo preservar los existentes. La validación del scheduler sigue posterior a lectura real y continuidad de turnos. Este addendum deja el cambio preparado; no afirma ajuste aplicado ni autonomía.
