@@ -1,6 +1,6 @@
 # Calendario único: 13–19 de octubre de 2026
 
-America/Caracas (UTC−4). Todos los horarios son propuestas. 35 guiones hablados completos, siete carruseles de siete láminas, siete secuencias de tres historias y siete mensajes de comunidad. 63 planes de recorte condicionales; cero recortes nuevos renderizados. Dos noticias fechadas para el13; doce espacios futuros necesitan revalidación/sustitución. No programación externa.
+America/Caracas (UTC−4). Todos los horarios son propuestas. 35 guiones hablados completos, siete carruseles de siete láminas, siete secuencias de tres historias y siete mensajes de comunidad. 63 planes de recorte condicionales; cero recortes nuevos renderizados. Seis noticias fechadas para13–15; ocho espacios futuros necesitan revalidación/sustitución. No programación externa.
 
 ## 2026-10-13
 
@@ -32,22 +32,22 @@ America/Caracas (UTC−4). Todos los horarios son propuestas. 35 guiones hablado
 |---|---|---|---|---|
 |08:00|H-VIDA-02|H|horizontales/2026-10-14/H-VIDA-02-HABLADO.md|GUION_HABLADO_COMPLETO; QA final pendiente|
 |08:30|ST-1014-1|STORY|carruseles-historias/2026-10-14.md|TEXTO_COMPLETO; QA final pendiente|
-|09:00|SI-03|V|verticales/DIA14.md#SI-03|GUION_HABLADO_COMPLETO; QA final pendiente|
-|10:00|SI-04|V|verticales/DIA14.md#SI-04|GUION_HABLADO_COMPLETO; QA final pendiente|
+|09:00|IA-1014-1|V|verticales/DIA14.md#IA-1014-1|GUION_HABLADO_COMPLETO; QA final pendiente|
+|10:00|IA-1014-2|V|verticales/DIA14.md#IA-1014-2|GUION_HABLADO_COMPLETO; QA final pendiente|
 |11:00|INF-1014|V|verticales/DIA14.md#INF-1014|GUION_HABLADO_COMPLETO; QA final pendiente|
-|12:00|SI-03-YA|YAPP|verticales/PLANES_63.json#SI-03-YA|PLAN_CONDICIONAL; sin corte/render|
-|13:00|SI-04-YA|YAPP|verticales/PLANES_63.json#SI-04-YA|PLAN_CONDICIONAL; sin corte/render|
+|12:00|IA-1014-1-YA|YAPP|verticales/PLANES_63.json#IA-1014-1-YA|PLAN_CONDICIONAL; sin corte/render|
+|13:00|IA-1014-2-YA|YAPP|verticales/PLANES_63.json#IA-1014-2-YA|PLAN_CONDICIONAL; sin corte/render|
 |13:30|ST-1014-2|STORY|carruseles-historias/2026-10-14.md|TEXTO_COMPLETO; QA final pendiente|
 |14:00|INF-1014-YA|YAPP|verticales/PLANES_63.json#INF-1014-YA|PLAN_CONDICIONAL; sin corte/render|
-|15:00|SI-03-YB|YAPP|verticales/PLANES_63.json#SI-03-YB|PLAN_CONDICIONAL; sin corte/render|
+|15:00|IA-1014-1-YB|YAPP|verticales/PLANES_63.json#IA-1014-1-YB|PLAN_CONDICIONAL; sin corte/render|
 |16:00|C-1014|C|carruseles-historias/2026-10-14.md|TEXTO_COMPLETO; QA final pendiente|
-|16:30|SI-04-YB|YAPP|verticales/PLANES_63.json#SI-04-YB|PLAN_CONDICIONAL; sin corte/render|
+|16:30|IA-1014-2-YB|YAPP|verticales/PLANES_63.json#IA-1014-2-YB|PLAN_CONDICIONAL; sin corte/render|
 |17:30|INF-1014-YB|YAPP|verticales/PLANES_63.json#INF-1014-YB|PLAN_CONDICIONAL; sin corte/render|
-|18:30|SI-03-YC|YAPP|verticales/PLANES_63.json#SI-03-YC|PLAN_CONDICIONAL; sin corte/render|
+|18:30|IA-1014-1-YC|YAPP|verticales/PLANES_63.json#IA-1014-1-YC|PLAN_CONDICIONAL; sin corte/render|
 |18:30|ST-1014-3|STORY|carruseles-historias/2026-10-14.md|TEXTO_COMPLETO; QA final pendiente|
 |19:00|COM-1014|COMMUNITY|comunidad-workshop/MENSAJES-COMUNIDAD-13-19-OCT.md#2026-10-14|MENSAJE_COMPLETO_CON_RECURSO; QA final pendiente|
 |19:15|LIVE-ANALISIS-1014|LIVE_ANALYSIS|calendario/SISTEMA_SEMANAL_MENSUAL_Y_LIVE.md|BLOQUE_PROPUESTO_FUENTE_REPRODUCCION_PENDIENTES|
-|19:30|SI-04-YC|YAPP|verticales/PLANES_63.json#SI-04-YC|PLAN_CONDICIONAL; sin corte/render|
+|19:30|IA-1014-2-YC|YAPP|verticales/PLANES_63.json#IA-1014-2-YC|PLAN_CONDICIONAL; sin corte/render|
 |20:30|INF-1014-YC|YAPP|verticales/PLANES_63.json#INF-1014-YC|PLAN_CONDICIONAL; sin corte/render|
 |21:00|H-IA-02|H|horizontales/2026-10-14/H-IA-02-HABLADO.md|GUION_HABLADO_COMPLETO; QA final pendiente|
 ## 2026-10-15
@@ -56,22 +56,22 @@ America/Caracas (UTC−4). Todos los horarios son propuestas. 35 guiones hablado
 |---|---|---|---|---|
 |08:00|H-VIDA-03|H|horizontales/2026-10-15/H-VIDA-03-HABLADO.md|GUION_HABLADO_COMPLETO; QA final pendiente|
 |08:30|ST-1015-1|STORY|carruseles-historias/2026-10-15.md|TEXTO_COMPLETO; QA final pendiente|
-|09:00|SI-08|V|verticales/DIA15.md#SI-08|GUION_HABLADO_COMPLETO; QA final pendiente|
-|10:00|SI-09|V|verticales/DIA15.md#SI-09|GUION_HABLADO_COMPLETO; QA final pendiente|
+|09:00|IA-1015-1|V|verticales/DIA15.md#IA-1015-1|GUION_HABLADO_COMPLETO; QA final pendiente|
+|10:00|IA-1015-2|V|verticales/DIA15.md#IA-1015-2|GUION_HABLADO_COMPLETO; QA final pendiente|
 |11:00|INF-1015|V|verticales/DIA15.md#INF-1015|GUION_HABLADO_COMPLETO; QA final pendiente|
-|12:00|SI-08-YA|YAPP|verticales/PLANES_63.json#SI-08-YA|PLAN_CONDICIONAL; sin corte/render|
-|13:00|SI-09-YA|YAPP|verticales/PLANES_63.json#SI-09-YA|PLAN_CONDICIONAL; sin corte/render|
+|12:00|IA-1015-1-YA|YAPP|verticales/PLANES_63.json#IA-1015-1-YA|PLAN_CONDICIONAL; sin corte/render|
+|13:00|IA-1015-2-YA|YAPP|verticales/PLANES_63.json#IA-1015-2-YA|PLAN_CONDICIONAL; sin corte/render|
 |13:30|ST-1015-2|STORY|carruseles-historias/2026-10-15.md|TEXTO_COMPLETO; QA final pendiente|
 |14:00|INF-1015-YA|YAPP|verticales/PLANES_63.json#INF-1015-YA|PLAN_CONDICIONAL; sin corte/render|
-|15:00|SI-08-YB|YAPP|verticales/PLANES_63.json#SI-08-YB|PLAN_CONDICIONAL; sin corte/render|
+|15:00|IA-1015-1-YB|YAPP|verticales/PLANES_63.json#IA-1015-1-YB|PLAN_CONDICIONAL; sin corte/render|
 |16:00|C-1015|C|carruseles-historias/2026-10-15.md|TEXTO_COMPLETO; QA final pendiente|
-|16:30|SI-09-YB|YAPP|verticales/PLANES_63.json#SI-09-YB|PLAN_CONDICIONAL; sin corte/render|
+|16:30|IA-1015-2-YB|YAPP|verticales/PLANES_63.json#IA-1015-2-YB|PLAN_CONDICIONAL; sin corte/render|
 |17:30|INF-1015-YB|YAPP|verticales/PLANES_63.json#INF-1015-YB|PLAN_CONDICIONAL; sin corte/render|
-|18:30|SI-08-YC|YAPP|verticales/PLANES_63.json#SI-08-YC|PLAN_CONDICIONAL; sin corte/render|
+|18:30|IA-1015-1-YC|YAPP|verticales/PLANES_63.json#IA-1015-1-YC|PLAN_CONDICIONAL; sin corte/render|
 |18:30|ST-1015-3|STORY|carruseles-historias/2026-10-15.md|TEXTO_COMPLETO; QA final pendiente|
 |18:45|COM-1015|COMMUNITY|comunidad-workshop/MENSAJES-COMUNIDAD-13-19-OCT.md#2026-10-15|MENSAJE_COMPLETO_CON_RECURSO; QA final pendiente|
 |19:00|LIVE-ANALISIS-1015|LIVE_ANALYSIS|calendario/SISTEMA_SEMANAL_MENSUAL_Y_LIVE.md|BLOQUE_PROPUESTO_FUENTE_REPRODUCCION_PENDIENTES|
-|19:30|SI-09-YC|YAPP|verticales/PLANES_63.json#SI-09-YC|PLAN_CONDICIONAL; sin corte/render|
+|19:30|IA-1015-2-YC|YAPP|verticales/PLANES_63.json#IA-1015-2-YC|PLAN_CONDICIONAL; sin corte/render|
 |20:30|INF-1015-YC|YAPP|verticales/PLANES_63.json#INF-1015-YC|PLAN_CONDICIONAL; sin corte/render|
 |21:00|H-IA-03|H|horizontales/2026-10-15/H-IA-03-HABLADO.md|GUION_HABLADO_COMPLETO; QA final pendiente|
 ## 2026-10-16

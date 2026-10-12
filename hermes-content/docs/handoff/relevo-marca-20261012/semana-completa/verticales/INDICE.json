@@ -8,13 +8,13 @@
   ],
   "timezone": "America/Caracas",
   "complete_vertical_scripts": 21,
-  "ia_educational_reserve": 12,
-  "current_news_confirmed": 2,
-  "news_slots_pending": 12,
+  "ia_educational_reserve": 8,
+  "current_news_confirmed": 6,
+  "news_slots_pending": 8,
   "informals_complete": 7,
   "plans_conditional": 63,
   "rendered_derivatives": 0,
-  "qa": "pending independent after2newsdelta",
+  "qa": "pending independent4newsdelta14/15",
   "scripts": [
     {
       "id": "IA-1013-1",
@@ -108,68 +108,69 @@
       ]
     },
     {
-      "id": "SI-03",
-      "title": "Claude, pero vago",
+      "id": "IA-1014-1",
+      "title": "Anthropic actualizó su política: publicación y vigencia son distintas",
       "date": "2026-10-14",
       "time_local_proposed": "09:00",
       "timezone": "America/Caracas",
       "path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA14.md",
-      "word_count": 148,
+      "word_count": 163,
       "duration_estimate_seconds_140_160wpm": [
-        55.5,
-        63.4
+        61.1,
+        69.9
       ],
-      "spoken_sha256": "41e7c4f4af87ac62221fcf2ea32acb0969cdbe414dd1a3cc25c30f7317ed9644",
-      "type": "adaptación factual educativa SI existente",
-      "spoken_status": "COMPLETO_RESERVA_FACTUAL_PENDIENTE_QA",
-      "news_slot_status": "NOTICIA_DEL_DIA_PENDIENTE_VERIFICAR_O_SUSTITUIR",
+      "spoken_sha256": "29199ed1b47e8920bc450641d6035e80afcc7f6c15c9480a404238d01fe5fc50",
+      "type": "nuevo autorizado: noticia fechada atribuida",
+      "spoken_status": "COMPLETO_NOTICIA_FECHADA_PENDIENTE_QA",
+      "news_slot_status": "FUENTE_RECIENTE_FECHADA_CONFIRMADA_12OCT_GATE_POST_14OCT_PENDIENTE",
       "news_approved": false,
       "asset_received": false,
       "publication_authorized": false,
       "sources": [
-        "https://github.com/DietrichGebert/ponytail"
+        "https://www.anthropic.com/news/2026-usage-policy-update"
       ],
-      "source_date_context": "BenchmarkactualREADMEobservado12oct; fechadebenchmark no establecida",
-      "version_gate": "39tareas5runsOpus5.5, autor-53code/-26cost; no propio; versionespara demo pendientes",
+      "source_date_context": "Publicado2026-10-08;vigenciaFUTURA2026-11-12",
       "observed_on": "2026-10-12",
-      "actuality_gate": "Antes del post propuesto revisar fecha/hecho/versión con fuente oficial. Sin novedadreciente confirmada, conservar como reserva educativa; sustituirslotnoticia o cambiarclasificación/calendario con revisión. No llamarlo noticia del13–19 ni breaking.",
+      "source_observer": "editorial_sol ownweb; guiones_sol leyóactaHECHOS_PARA_3DIAS",
+      "version_gate": "Publicación reciente; vigencia futura, no afirmar que empezó a regir hoy. No todo requisito es nuevo. Sin interpretación legal ni demo personal.",
+      "actuality_gate": "Antesdelpost14octreabrirprimaria/versión/rollout/corrección/no retractación; no prometerverificaciónfuturarealizada ni debut14oct.",
       "planned_derivatives": [
-        "SI-03-YA",
-        "SI-03-YB",
-        "SI-03-YC"
+        "IA-1014-1-YA",
+        "IA-1014-1-YB",
+        "IA-1014-1-YC"
       ]
     },
     {
-      "id": "SI-04",
-      "title": "Tres comandos escondidos de Claude Code",
+      "id": "IA-1014-2",
+      "title": "Codex puede sugerir tu próximo mensaje, pero no enviarlo",
       "date": "2026-10-14",
       "time_local_proposed": "10:00",
       "timezone": "America/Caracas",
       "path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA14.md",
-      "word_count": 146,
+      "word_count": 163,
       "duration_estimate_seconds_140_160wpm": [
-        54.8,
-        62.6
+        61.1,
+        69.9
       ],
-      "spoken_sha256": "1b23d364dbb79caab226089a51920eb980b1a8e6c8923b6f67b0f7f54134dde1",
-      "type": "adaptación factual educativa SI existente",
-      "spoken_status": "COMPLETO_RESERVA_FACTUAL_PENDIENTE_QA",
-      "news_slot_status": "NOTICIA_DEL_DIA_PENDIENTE_VERIFICAR_O_SUSTITUIR",
+      "spoken_sha256": "2d48e921180c961b126f2854c5980a87fffc44c602d36a8a0e4fb6b6d6892dea",
+      "type": "nuevo autorizado: noticia fechada atribuida",
+      "spoken_status": "COMPLETO_NOTICIA_FECHADA_PENDIENTE_QA",
+      "news_slot_status": "FUENTE_RECIENTE_FECHADA_CONFIRMADA_12OCT_GATE_POST_14OCT_PENDIENTE",
       "news_approved": false,
       "asset_received": false,
       "publication_authorized": false,
       "sources": [
-        "https://code.claude.com/docs/en/commands",
-        "https://code.claude.com/docs/en/model-config"
+        "https://help.openai.com/en/articles/6825453-chatgpt-release-notes"
       ],
-      "source_date_context": "radio29jun–3jul2026;powerup30mar–3abr2026; ultrathinkdocactual12oct",
-      "version_gate": "Versión propia/cuenta noverificadas; no nueva instalación",
+      "source_date_context": "Publicado2026-10-09",
       "observed_on": "2026-10-12",
-      "actuality_gate": "Antes del post propuesto revisar fecha/hecho/versión con fuente oficial. Sin novedadreciente confirmada, conservar como reserva educativa; sustituirslotnoticia o cambiarclasificación/calendario con revisión. No llamarlo noticia del13–19 ni breaking.",
+      "source_observer": "editorial_sol ownweb; guiones_sol leyóactaHECHOS_PARA_3DIAS",
+      "version_gate": "Pro personal18+, appdesktopactual, hiloslocal/SSH con Astra o6.1Sol. Generar predicciones no consume límite/créditos durante beta; enviar mensajes sí sigue uso normal. No prueba en cuenta propia.",
+      "actuality_gate": "Antesdelpost14octreabrirprimaria/versión/rollout/corrección/no retractación; no prometerverificaciónfuturarealizada ni debut14oct.",
       "planned_derivatives": [
-        "SI-04-YA",
-        "SI-04-YB",
-        "SI-04-YC"
+        "IA-1014-2-YA",
+        "IA-1014-2-YB",
+        "IA-1014-2-YC"
       ]
     },
     {
@@ -198,67 +199,69 @@
       ]
     },
     {
-      "id": "SI-08",
-      "title": "Un video escrito con ayuda de Claude",
+      "id": "IA-1015-1",
+      "title": "ChatGPT cambia cómo muestra respuestas; no es un cambio de Work o Codex",
       "date": "2026-10-15",
       "time_local_proposed": "09:00",
       "timezone": "America/Caracas",
       "path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA15.md",
-      "word_count": 145,
+      "word_count": 165,
       "duration_estimate_seconds_140_160wpm": [
-        54.4,
-        62.1
+        61.9,
+        70.7
       ],
-      "spoken_sha256": "5a92fc2f99b69ab8e8504723d12f0fe5298b3fcdcbc33fe227617e6493f0b876",
-      "type": "adaptación factual educativa SI existente",
-      "spoken_status": "COMPLETO_RESERVA_FACTUAL_PENDIENTE_QA",
-      "news_slot_status": "NOTICIA_DEL_DIA_PENDIENTE_VERIFICAR_O_SUSTITUIR",
+      "spoken_sha256": "e6310b9be56368b41cb1e9fbd4cfc0d742c1fa7bf0b9dd776ab159eaf9ffe990",
+      "type": "nuevo autorizado: noticia fechada atribuida",
+      "spoken_status": "COMPLETO_NOTICIA_FECHADA_PENDIENTE_QA",
+      "news_slot_status": "FUENTE_RECIENTE_FECHADA_CONFIRMADA_12OCT_GATE_POST_15OCT_PENDIENTE",
       "news_approved": false,
       "asset_received": false,
       "publication_authorized": false,
       "sources": [
-        "https://github.com/heygen-com/hyperframes"
+        "https://help.openai.com/en/articles/6825453-chatgpt-release-notes"
       ],
-      "source_date_context": "READMErevalidado12oct;demopropiaGit histórica sin lanzamiento fechado",
-      "version_gate": "Demo12s3–6s compatible;coautoríaClaude;reviewencuadreprevio; Node22+/FFmpegCLIactual",
+      "source_date_context": "Publicado2026-10-07",
       "observed_on": "2026-10-12",
-      "actuality_gate": "Antes del post propuesto revisar fecha/hecho/versión con fuente oficial. Sin novedadreciente confirmada, conservar como reserva educativa; sustituirslotnoticia o cambiarclasificación/calendario con revisión. No llamarlo noticia del13–19 ni breaking.",
+      "source_observer": "editorial_sol ownweb; guiones_sol leyóactaHECHOS_PARA_3DIAS",
+      "version_gate": "RolloutChat porplan/admin; Instant–ExtraHigh. Pro reasoning/Astra excluyeIntelligentUI. No trasladar anuncio aWork/Codex ni afirmar disponibilidad enSergio.",
+      "actuality_gate": "Antesdelpost15octreabrirprimaria/versión/rollout/corrección/no retractación; no prometerverificaciónfuturarealizada ni debut15oct.",
       "planned_derivatives": [
-        "SI-08-YA",
-        "SI-08-YB",
-        "SI-08-YC"
+        "IA-1015-1-YA",
+        "IA-1015-1-YB",
+        "IA-1015-1-YC"
       ]
     },
     {
-      "id": "SI-09",
-      "title": "La IA te da links. Abrí dos.",
+      "id": "IA-1015-2",
+      "title": "Dar acceso a un plugin no elimina los permisos de la cuenta",
       "date": "2026-10-15",
       "time_local_proposed": "10:00",
       "timezone": "America/Caracas",
       "path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA15.md",
-      "word_count": 144,
+      "word_count": 165,
       "duration_estimate_seconds_140_160wpm": [
-        54.0,
-        61.7
+        61.9,
+        70.7
       ],
-      "spoken_sha256": "c147997e42fb0d84c98340ebcb2dff9019dda41524dd5ab2aa7f578926dd2829",
-      "type": "adaptación factual educativa SI existente",
-      "spoken_status": "COMPLETO_RESERVA_FACTUAL_PENDIENTE_QA",
-      "news_slot_status": "NOTICIA_DEL_DIA_PENDIENTE_VERIFICAR_O_SUSTITUIR",
+      "spoken_sha256": "625d2971d0690fc7c9563594715ced48a006edd447347f461d4266cf41b93055",
+      "type": "nuevo autorizado: noticia fechada atribuida",
+      "spoken_status": "COMPLETO_NOTICIA_FECHADA_PENDIENTE_QA",
+      "news_slot_status": "FUENTE_RECIENTE_FECHADA_CONFIRMADA_12OCT_GATE_POST_15OCT_PENDIENTE",
       "news_approved": false,
       "asset_received": false,
       "publication_authorized": false,
       "sources": [
-        "https://code.claude.com/docs/en/workflows"
+        "https://help.openai.com/en/articles/10128477-chatgpt-enterprise-and-edu-release-notes"
       ],
-      "source_date_context": "Docactualconsultado12oct; nofechalanzamiento nueva",
-      "version_gate": "WebSearchdisponible;ProDynamicworkflows; versión propia/informe no comprobados",
+      "source_date_context": "Publicado2026-10-08",
       "observed_on": "2026-10-12",
-      "actuality_gate": "Antes del post propuesto revisar fecha/hecho/versión con fuente oficial. Sin novedadreciente confirmada, conservar como reserva educativa; sustituirslotnoticia o cambiarclasificación/calendario con revisión. No llamarlo noticia del13–19 ni breaking.",
+      "source_observer": "editorial_sol ownweb; guiones_sol leyóactaHECHOS_PARA_3DIAS",
+      "version_gate": "RequiereEnterprise/Edu+RBAC y roladministrador. Acceso alplugin no elimina permisos delproveedor ni aprobaciones deacciones. No anunciado para todo usuarioFree/Plus; sin configuración propia.",
+      "actuality_gate": "Antesdelpost15octreabrirprimaria/versión/rollout/corrección/no retractación; no prometerverificaciónfuturarealizada ni debut15oct.",
       "planned_derivatives": [
-        "SI-09-YA",
-        "SI-09-YB",
-        "SI-09-YC"
+        "IA-1015-2-YA",
+        "IA-1015-2-YB",
+        "IA-1015-2-YC"
       ]
     },
     {
@@ -645,10 +648,14 @@
       ]
     }
   ],
-  "news_confirmation_as_of": "2026-10-12; publicación/correcciónfechadas7–12oct,gatepost13octpendiente",
-  "additional_preserved_reserves": 2,
+  "news_confirmation_as_of": "2026-10-12;6hechosdistintos7–12oct;gatepost13–15pendiente",
+  "additional_preserved_reserves": 6,
   "reserved_scripts": [
     "SI-01",
-    "SI-02"
+    "SI-02",
+    "SI-03",
+    "SI-04",
+    "SI-08",
+    "SI-09"
   ]
 }

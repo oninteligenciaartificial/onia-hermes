@@ -1,0 +1,278 @@
+[
+  {
+    "id": "SI-03-YA",
+    "parent_id": "SI-03",
+    "variant": "A",
+    "source_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA14.md",
+    "paragraph_range_1based": [
+      1,
+      2
+    ],
+    "candidate_text": "Este plugin promete que Claude escriba menos código. Se llama ponytail, un agregado para la IA que programa en tu compu.\n\nLa idea es simple: antes de construir más cosas, preguntar si hacen falta. Le pedís un botón, no una fábrica de botones.",
+    "candidate_words": 43,
+    "estimated_seconds_140_160wpm": [
+      16.1,
+      18.4
+    ],
+    "target_seconds": [
+      15,
+      35
+    ],
+    "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
+    "autonomy_verified": false,
+    "gate": "Medir audio real y comprensión aislada. Inicio sin referenciashuérfanas; argumento/cierre completos; conservarcaveats/atribuciones. Si candidato dependeotrosector o no duraobjetivo, rechazar/remontar con revisión; no3recortes garantizados ni63renders."
+  },
+  {
+    "id": "SI-03-YB",
+    "parent_id": "SI-03",
+    "variant": "B",
+    "source_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA14.md",
+    "paragraph_range_1based": [
+      3,
+      4
+    ],
+    "candidate_text": "Su autor publicó una comparación: treinta y nueve tareas, cinco corridas por tarea, con Opus cinco punto cinco. Reporta cincuenta y tres por ciento menos código y veintiséis por ciento menos costo frente al agente sin el plugin.\n\nOjo: son números del autor. No son una prueba mía ni una promesa para tu proyecto.",
+    "candidate_words": 54,
+    "estimated_seconds_140_160wpm": [
+      20.2,
+      23.1
+    ],
+    "target_seconds": [
+      15,
+      35
+    ],
+    "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
+    "autonomy_verified": false,
+    "gate": "Medir audio real y comprensión aislada. Inicio sin referenciashuérfanas; argumento/cierre completos; conservarcaveats/atribuciones. Si candidato dependeotrosector o no duraobjetivo, rechazar/remontar con revisión; no3recortes garantizados ni63renders."
+  },
+  {
+    "id": "SI-03-YC",
+    "parent_id": "SI-03",
+    "variant": "C",
+    "source_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA14.md",
+    "paragraph_range_1based": [
+      5,
+      6
+    ],
+    "candidate_text": "Mi consejo para evaluarlo: usá el mismo pedido con y sin el plugin. Primero mirá si hace lo que pediste. Después compará las líneas y el costo.\n\nMenos código puede ser mejor. Menos funciones de las que necesitabas, no. La comparación empieza por el resultado, no por el número más lindo.",
+    "candidate_words": 51,
+    "estimated_seconds_140_160wpm": [
+      19.1,
+      21.9
+    ],
+    "target_seconds": [
+      15,
+      35
+    ],
+    "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
+    "autonomy_verified": false,
+    "gate": "Medir audio real y comprensión aislada. Inicio sin referenciashuérfanas; argumento/cierre completos; conservarcaveats/atribuciones. Si candidato dependeotrosector o no duraobjetivo, rechazar/remontar con revisión; no3recortes garantizados ni63renders."
+  },
+  {
+    "id": "SI-04-YA",
+    "parent_id": "SI-04",
+    "variant": "A",
+    "source_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA14.md",
+    "paragraph_range_1based": [
+      1,
+      2
+    ],
+    "candidate_text": "Claude Code tiene una radio. Y otros comandos que vale la pena mirar antes de instalar más cosas.\n\nClaude Code es la IA que programa en tu compu. Barra radio abre Claude FM, música lo-fi para concentrarte. Está documentado: no te lo cuento como un lanzamiento de hoy.",
+    "candidate_words": 49,
+    "estimated_seconds_140_160wpm": [
+      18.4,
+      21.0
+    ],
+    "target_seconds": [
+      15,
+      35
+    ],
+    "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
+    "autonomy_verified": false,
+    "gate": "Medir audio real y comprensión aislada. Inicio sin referenciashuérfanas; argumento/cierre completos; conservarcaveats/atribuciones. Si candidato dependeotrosector o no duraobjetivo, rechazar/remontar con revisión; no3recortes garantizados ni63renders."
+  },
+  {
+    "id": "SI-04-YB",
+    "parent_id": "SI-04",
+    "variant": "B",
+    "source_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA14.md",
+    "paragraph_range_1based": [
+      3,
+      4
+    ],
+    "candidate_text": "Barra powerup abre lecciones cortas e interactivas sobre sus funciones. Si recién empezás, puede servirte para conocer lo que ya tenés.\n\nY ultrathink se escribe dentro del pedido. Le pide un razonamiento más profundo en esa respuesta, sin cambiar el nivel de esfuerzo configurado para toda la sesión.",
+    "candidate_words": 48,
+    "estimated_seconds_140_160wpm": [
+      18.0,
+      20.6
+    ],
+    "target_seconds": [
+      15,
+      35
+    ],
+    "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
+    "autonomy_verified": false,
+    "gate": "Medir audio real y comprensión aislada. Inicio sin referenciashuérfanas; argumento/cierre completos; conservarcaveats/atribuciones. Si candidato dependeotrosector o no duraobjetivo, rechazar/remontar con revisión; no3recortes garantizados ni63renders."
+  },
+  {
+    "id": "SI-04-YC",
+    "parent_id": "SI-04",
+    "variant": "C",
+    "source_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA14.md",
+    "paragraph_range_1based": [
+      5,
+      6
+    ],
+    "candidate_text": "Mi consejo: no lo pegues en todos los mensajes por costumbre. Reservá lo difícil para cuando necesitás revisar más posibilidades.\n\nAntes de grabar una demo, comprobá qué aparece en tu versión y cuenta. Que una función esté en el manual no significa que la tengas disponible en cualquier entorno.",
+    "candidate_words": 49,
+    "estimated_seconds_140_160wpm": [
+      18.4,
+      21.0
+    ],
+    "target_seconds": [
+      15,
+      35
+    ],
+    "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
+    "autonomy_verified": false,
+    "gate": "Medir audio real y comprensión aislada. Inicio sin referenciashuérfanas; argumento/cierre completos; conservarcaveats/atribuciones. Si candidato dependeotrosector o no duraobjetivo, rechazar/remontar con revisión; no3recortes garantizados ni63renders."
+  },
+  {
+    "id": "SI-08-YA",
+    "parent_id": "SI-08",
+    "variant": "A",
+    "source_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA15.md",
+    "paragraph_range_1based": [
+      1,
+      2
+    ],
+    "candidate_text": "Mirá esto. Claude ayudó a escribirlo. Es una animación hecha con HyperFrames, una herramienta de HeyGen.\n\nEn el proyecto hay HTML y animaciones: la escena se escribe como una página web y después se convierte en video. Tenemos un ejemplo existente, no hace falta inventar que apareció de la nada.",
+    "candidate_words": 50,
+    "estimated_seconds_140_160wpm": [
+      18.8,
+      21.4
+    ],
+    "target_seconds": [
+      15,
+      35
+    ],
+    "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
+    "autonomy_verified": false,
+    "gate": "Medir audio real y comprensión aislada. Inicio sin referenciashuérfanas; argumento/cierre completos; conservarcaveats/atribuciones. Si candidato dependeotrosector o no duraobjetivo, rechazar/remontar con revisión; no3recortes garantizados ni63renders."
+  },
+  {
+    "id": "SI-08-YB",
+    "parent_id": "SI-08",
+    "variant": "B",
+    "source_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA15.md",
+    "paragraph_range_1based": [
+      3,
+      4
+    ],
+    "candidate_text": "El render local es gratis. Eso no significa que cualquier servicio en la nube, música o generación adicional también lo sea.\n\nEl flujo básico tiene tres pasos: crear el proyecto, mirar una vista previa y exportarlo.",
+    "candidate_words": 36,
+    "estimated_seconds_140_160wpm": [
+      13.5,
+      15.4
+    ],
+    "target_seconds": [
+      15,
+      35
+    ],
+    "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
+    "autonomy_verified": false,
+    "gate": "Medir audio real y comprensión aislada. Inicio sin referenciashuérfanas; argumento/cierre completos; conservarcaveats/atribuciones. Si candidato dependeotrosector o no duraobjetivo, rechazar/remontar con revisión; no3recortes garantizados ni63renders."
+  },
+  {
+    "id": "SI-08-YC",
+    "parent_id": "SI-08",
+    "variant": "C",
+    "source_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA15.md",
+    "paragraph_range_1based": [
+      5,
+      6
+    ],
+    "candidate_text": "Puede trabajar con texto, imágenes y video existente. No te voy a decir que no edita grabaciones, porque también tiene herramientas para poner gráficos y subtítulos sobre ellas.\n\nMi consejo: mirá primero una versión corta. Revisá el texto, el movimiento y que se entienda en el celular. Que el proyecto abra no demuestra que el video final esté bien.",
+    "candidate_words": 59,
+    "estimated_seconds_140_160wpm": [
+      22.1,
+      25.3
+    ],
+    "target_seconds": [
+      15,
+      35
+    ],
+    "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
+    "autonomy_verified": false,
+    "gate": "Medir audio real y comprensión aislada. Inicio sin referenciashuérfanas; argumento/cierre completos; conservarcaveats/atribuciones. Si candidato dependeotrosector o no duraobjetivo, rechazar/remontar con revisión; no3recortes garantizados ni63renders."
+  },
+  {
+    "id": "SI-09-YA",
+    "parent_id": "SI-09",
+    "variant": "A",
+    "source_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA15.md",
+    "paragraph_range_1based": [
+      1,
+      2
+    ],
+    "candidate_text": "La IA te da links. ¿Alguna vez abriste uno?\n\nClaude Code tiene barra deep-research, un flujo para investigar a fondo. Puede preparar un informe con citas: enlaces que deberían mostrar de dónde salió cada dato.",
+    "candidate_words": 36,
+    "estimated_seconds_140_160wpm": [
+      13.5,
+      15.4
+    ],
+    "target_seconds": [
+      15,
+      35
+    ],
+    "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
+    "autonomy_verified": false,
+    "gate": "Medir audio real y comprensión aislada. Inicio sin referenciashuérfanas; argumento/cierre completos; conservarcaveats/atribuciones. Si candidato dependeotrosector o no duraobjetivo, rechazar/remontar con revisión; no3recortes garantizados ni63renders."
+  },
+  {
+    "id": "SI-09-YB",
+    "parent_id": "SI-09",
+    "variant": "B",
+    "source_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA15.md",
+    "paragraph_range_1based": [
+      3,
+      4
+    ],
+    "candidate_text": "Para usarlo necesita búsqueda web. En el plan Pro, los flujos se habilitan en la configuración. Antes de una demo, hay que comprobar tu versión y acceso.\n\nAhora, mi consejo: abrí dos citas. Buscá la frase o el dato, mirá la fecha y comparalo con el informe.",
+    "candidate_words": 47,
+    "estimated_seconds_140_160wpm": [
+      17.6,
+      20.1
+    ],
+    "target_seconds": [
+      15,
+      35
+    ],
+    "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
+    "autonomy_verified": false,
+    "gate": "Medir audio real y comprensión aislada. Inicio sin referenciashuérfanas; argumento/cierre completos; conservarcaveats/atribuciones. Si candidato dependeotrosector o no duraobjetivo, rechazar/remontar con revisión; no3recortes garantizados ni63renders."
+  },
+  {
+    "id": "SI-09-YC",
+    "parent_id": "SI-09",
+    "variant": "C",
+    "source_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA15.md",
+    "paragraph_range_1based": [
+      5,
+      6
+    ],
+    "candidate_text": "Si una página no existe o dice otra cosa, no uses ese dato. Pedí una fuente que lo respalde. Si las dos coinciden, comprobaste esos dos puntos; no todo el informe.\n\nEso vale con cualquier IA que te dé enlaces. Una lista de fuentes no es una revisión terminada. El link es el lugar donde empieza la comprobación, no donde termina.",
+    "candidate_words": 61,
+    "estimated_seconds_140_160wpm": [
+      22.9,
+      26.1
+    ],
+    "target_seconds": [
+      15,
+      35
+    ],
+    "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
+    "autonomy_verified": false,
+    "gate": "Medir audio real y comprensión aislada. Inicio sin referenciashuérfanas; argumento/cierre completos; conservarcaveats/atribuciones. Si candidato dependeotrosector o no duraobjetivo, rechazar/remontar con revisión; no3recortes garantizados ni63renders."
+  }
+]

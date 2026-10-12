@@ -2,36 +2,43 @@
   {
     "date": "2026-10-13",
     "file": "DIA-2026-10-13-GUIONES-HISTORIAS-CARRUSEL-COMUNIDAD.txt",
-    "bytes": 17994
+    "bytes": 18134,
+    "sha256": "d6bc499d70a8f52a799453be43a0c9bb0e1f8d3d1fd01477ef70f07d74e97d56"
   },
   {
     "date": "2026-10-14",
     "file": "DIA-2026-10-14-GUIONES-HISTORIAS-CARRUSEL-COMUNIDAD.txt",
-    "bytes": 16434
+    "bytes": 16552,
+    "sha256": "feb336d21e3fcfc1630890c8d4cce55545d8f55e0cad19dd69ccb5243a7c8d0e"
   },
   {
     "date": "2026-10-15",
     "file": "DIA-2026-10-15-GUIONES-HISTORIAS-CARRUSEL-COMUNIDAD.txt",
-    "bytes": 16028
+    "bytes": 16321,
+    "sha256": "8fb123ef97409028cc88aa79d289c9fe5d72957e09bd81661f12691e323283c0"
   },
   {
     "date": "2026-10-16",
     "file": "DIA-2026-10-16-GUIONES-HISTORIAS-CARRUSEL-COMUNIDAD.txt",
-    "bytes": 16158
+    "bytes": 16298,
+    "sha256": "85f8f9b3088750134fb7db5caa8c393230bf1829ffaba655dd485fb455f88272"
   },
   {
     "date": "2026-10-17",
     "file": "DIA-2026-10-17-GUIONES-HISTORIAS-CARRUSEL-COMUNIDAD.txt",
-    "bytes": 16317
+    "bytes": 16457,
+    "sha256": "aa81752ccd058711155a8e174e99e442411d580b578b318a1b90b8243ca5b117"
   },
   {
     "date": "2026-10-18",
     "file": "DIA-2026-10-18-GUIONES-HISTORIAS-CARRUSEL-COMUNIDAD.txt",
-    "bytes": 16056
+    "bytes": 16196,
+    "sha256": "6aae8d3764cffa20116bf0bd9ba4923a7acca85e75659efe8197f137f6b343c3"
   },
   {
     "date": "2026-10-19",
     "file": "DIA-2026-10-19-GUIONES-HISTORIAS-CARRUSEL-COMUNIDAD.txt",
-    "bytes": 16370
+    "bytes": 16510,
+    "sha256": "c35b2312e977d73570f09704da55d933916bad03c9dbd8e3016647c45c7c9d58"
   }
 ]

@@ -1,0 +1,3 @@
+No seleccionado para el paquete de QA. La fuente oficial v2.305 tiene OS/2.usWeightClass=472, aunque sus nombres indiquen SemiBold; se conserva en `not-selected/` como evidencia. No se modificó la fuente.
+
+Se elige el asset oficial estático v2.304 porque metadata 2.304, familia JetBrains Mono SemiBold, OS/2.usWeightClass=600, sin tabla fvar. La versión de la caché N06 sigue sin observarse; v2.304 es candidato de peso/familia para QA, no una afirmación de originalidad.

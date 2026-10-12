@@ -19,3 +19,7 @@ QA mezcla preview: técnico independientePASS; Madre reportó GeminiAVcompleto f
 ## Última dirección musical de Sergio
 
 «Despacio» se interpreta como volumen bajo de fondo, no ralentización de pista. Esta mezcla no cambia velocidad: cama normalizada−26LUFSantesduck, medida aproximadamente−32LUFSdespués; voz unos18–20dBporencima. Duck10msataque/180msrelease yRMSratio3 conservanvozprincipal. Madre reportóN06/N07 vozinteligible/músicano tapa. Confirmar escucha completa del nuevo master y prueba en móvil; atenuar música/SFX si distrae. No rehacer imagen ni inferir time-stretch.
+
+## Delta: cinco TTF disponibles para QA del render local
+
+Carpetafuentes contiene InterBlack900/Bold700/Regular400 oficiales estáticasbuild9221, InterSemiBold600 exactaGitbuild66647, JetBrainsMonoSemiBold600 estática oficialv2.304. TodasOFL/SHA/procedencia adjuntas. Son familia/pesos correctos pararesolverporfilepathsininstalación, no export de cachéoriginal desconocida. Se descartóv2.305porOS2=472. Mantener la composición/cutplan y revisar métricas/márgenes/glyphs en el nuevo1080 contra preview; no declarar equivalencia bitabit a fuentes deloriginal.

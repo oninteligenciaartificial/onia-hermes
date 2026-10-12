@@ -1,0 +1,57 @@
+{
+  "verified_date": "2026-10-12",
+  "timezone": "America/Caracas",
+  "observer": "editorial_sol own web reads",
+  "window": [
+    "2026-10-07",
+    "2026-10-12"
+  ],
+  "distinct_additional_facts_count": 4,
+  "total_with_prior_google8_and_anthropic9": 6,
+  "status": "factual blocks only for guiones_sol14/15; independent QA pending",
+  "facts": [
+    {
+      "id": "HECHO-03",
+      "title": "Actualización de política de Anthropic",
+      "published": "2026-10-08",
+      "effective_future": "2026-11-12",
+      "url": "https://www.anthropic.com/news/2026-usage-policy-update",
+      "fact": "Anthropic publicó una revisión de su política: campañas engañosas, aclaraciones para usos de alto riesgo y requisitos para hardware autónomo. Gran parte aclara reglas existentes.",
+      "quote": "The updated policy takes effect on November 12.",
+      "limits": "Publicación reciente; vigencia futura, no afirmar que empezó a regir hoy. No todo requisito es nuevo. Sin interpretación legal ni demo personal.",
+      "observation": "primary body already read own12Oct; reuse HECHOS_ACTUALES"
+    },
+    {
+      "id": "HECHO-04",
+      "title": "Predicciones de siguiente mensaje en Codex",
+      "published": "2026-10-09",
+      "url": "https://help.openai.com/en/articles/6825453-chatgpt-release-notes",
+      "section": "October9 / Composer predictions in Codex",
+      "fact": "Codex añade en beta sugerencias del siguiente mensaje. Tab acepta la propuesta para revisión; no la envía.",
+      "quote": "Accepting a suggestion doesn’t send it automatically.",
+      "limits": "Pro personal18+, appdesktopactual, hiloslocal/SSH con Astra o6.1Sol. Generar predicciones no consume límite/créditos durante beta; enviar mensajes sí sigue uso normal. No prueba en cuenta propia."
+    },
+    {
+      "id": "HECHO-05",
+      "title": "Intelligent UI en ChatGPT",
+      "published": "2026-10-07",
+      "url": "https://help.openai.com/en/articles/6825453-chatgpt-release-notes",
+      "section": "October7 / GPT-6 and Intelligent UI in ChatGPT",
+      "fact": "ChatGPT incorpora respuestas con texto, visuales y elementos interactivos; puede empezar a responder mientras sigue pensando.",
+      "quote": "The models powering Work and Codex aren’t changing",
+      "limits": "RolloutChat porplan/admin; Instant–ExtraHigh. Pro reasoning/Astra excluyeIntelligentUI. No trasladar anuncio aWork/Codex ni afirmar disponibilidad enSergio."
+    },
+    {
+      "id": "HECHO-06",
+      "title": "Acceso a plugins por rol en Enterprise/Edu",
+      "published": "2026-10-08",
+      "url": "https://help.openai.com/en/articles/10128477-chatgpt-enterprise-and-edu-release-notes",
+      "section": "October8 / Manage plugin access by role",
+      "fact": "Owners/admins de workspaces Enterprise y Edu con RBAC pueden configurar acceso a plugins por rol. Defaults: Available, Install o Disabled; roles personalizados pueden heredar el default.",
+      "quote": "App action settings, approval requirements, and provider authorization continue to apply.",
+      "limits": "RequiereEnterprise/Edu+RBAC y roladministrador. Acceso alplugin no elimina permisos delproveedor ni aprobaciones deacciones. No anunciado para todo usuarioFree/Plus; sin configuración propia."
+    }
+  ],
+  "batch_scope": "one bounded batch: OpenAI public release notes, Enterprise/Edu release notes, News index opened; sections traversed. Anthropic policy reused primary verification. No catalog/ref audits or future announcements.",
+  "not_duplicates": "Codex composer predictions, Chat interactive UI, enterprise plugin RBAC and usage policy are distinct changes; no launch-systemcard double count."
+}

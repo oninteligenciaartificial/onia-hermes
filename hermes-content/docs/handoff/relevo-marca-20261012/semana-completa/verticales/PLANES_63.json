@@ -138,6 +138,282 @@
     "gate": "Mediraudioreal/semánticaisalada,conservar fecha/atribución/caveat. Si fragmentodependecontexto,no publicarlocomo recorteautónomo; reconstrucciónmínimarevisable o rechazo,no3viables garantizados."
   },
   {
+    "id": "IA-1014-1-YA",
+    "parent_id": "IA-1014-1",
+    "variant": "A",
+    "source_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA14.md",
+    "paragraph_range_1based": [
+      1,
+      2
+    ],
+    "candidate_text": "Anthropic publicó una actualización de su política el ocho de octubre. Pero publicar una regla no significa que ya haya entrado en vigor.\n\nEl anuncio dice que la versión actualizada empieza a regir el doce de noviembre. Esa fecha todavía es futura al preparar este video.",
+    "candidate_words": 46,
+    "estimated_seconds_140_160wpm": [
+      17.2,
+      19.7
+    ],
+    "target_seconds": [
+      15,
+      35
+    ],
+    "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
+    "autonomy_verified": false,
+    "gate": "Mediraudioreal/semánticaisalada,conservarfecha/atribución/rollout/caveats/vigenciafutura. SincontextorechazarrecorteoreconstrucciónmínimaQA,nofingir3viables ni63renders."
+  },
+  {
+    "id": "IA-1014-1-YB",
+    "parent_id": "IA-1014-1",
+    "variant": "B",
+    "source_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA14.md",
+    "paragraph_range_1based": [
+      3,
+      4
+    ],
+    "candidate_text": "La revisión incluye campañas engañosas, aclaraciones para usos de alto riesgo y requisitos relacionados con hardware autónomo. Además, Anthropic explica que una parte importante aclara reglas que ya existían. No todo lo que aparece en el documento es una prohibición nueva.\n\nEsto es lo que comunica la empresa. No es asesoría legal ni una revisión de tu proyecto.",
+    "candidate_words": 58,
+    "estimated_seconds_140_160wpm": [
+      21.8,
+      24.9
+    ],
+    "target_seconds": [
+      15,
+      35
+    ],
+    "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
+    "autonomy_verified": false,
+    "gate": "Mediraudioreal/semánticaisalada,conservarfecha/atribución/rollout/caveats/vigenciafutura. SincontextorechazarrecorteoreconstrucciónmínimaQA,nofingir3viables ni63renders."
+  },
+  {
+    "id": "IA-1014-1-YC",
+    "parent_id": "IA-1014-1",
+    "variant": "C",
+    "source_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA14.md",
+    "paragraph_range_1based": [
+      5,
+      6
+    ],
+    "candidate_text": "Mi consejo: cuando veas un titular sobre una política, buscá dos fechas. Cuándo se anunció y desde cuándo se aplica. Después mirá qué cambió realmente, en vez de asumir que reescribieron todo.\n\nY antes de decidir sobre un uso concreto, revisá el texto que corresponde. Un resumen ayuda a ubicar el cambio. No reemplaza las condiciones completas del servicio.",
+    "candidate_words": 59,
+    "estimated_seconds_140_160wpm": [
+      22.1,
+      25.3
+    ],
+    "target_seconds": [
+      15,
+      35
+    ],
+    "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
+    "autonomy_verified": false,
+    "gate": "Mediraudioreal/semánticaisalada,conservarfecha/atribución/rollout/caveats/vigenciafutura. SincontextorechazarrecorteoreconstrucciónmínimaQA,nofingir3viables ni63renders."
+  },
+  {
+    "id": "IA-1014-2-YA",
+    "parent_id": "IA-1014-2",
+    "variant": "A",
+    "source_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA14.md",
+    "paragraph_range_1based": [
+      1,
+      2
+    ],
+    "candidate_text": "Codex puede sugerir qué escribir después. OpenAI anunció el nueve de octubre las predicciones del siguiente mensaje, en beta.\n\nLa idea es mostrar una propuesta mientras preparás el pedido. Podés aceptarla con Tab para revisarla. Aceptar la sugerencia no la envía automáticamente.",
+    "candidate_words": 42,
+    "estimated_seconds_140_160wpm": [
+      15.8,
+      18.0
+    ],
+    "target_seconds": [
+      15,
+      35
+    ],
+    "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
+    "autonomy_verified": false,
+    "gate": "Mediraudioreal/semánticaisalada,conservarfecha/atribución/rollout/caveats/vigenciafutura. SincontextorechazarrecorteoreconstrucciónmínimaQA,nofingir3viables ni63renders."
+  },
+  {
+    "id": "IA-1014-2-YB",
+    "parent_id": "IA-1014-2",
+    "variant": "B",
+    "source_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA14.md",
+    "paragraph_range_1based": [
+      3,
+      4
+    ],
+    "candidate_text": "Hay condiciones importantes: el anuncio la limita a cuentas Pro personales de mayores de dieciocho años, en la aplicación de escritorio actualizada y en determinados hilos locales o por SSH, con Astra o seis punto uno Sol. No significa que todas las cuentas ya la tengan.\n\nDurante la beta, generar esas predicciones no consume el límite o los créditos indicados por el anuncio. Enviar el mensaje sigue teniendo el uso normal. No confundas la sugerencia con una tarea gratis.",
+    "candidate_words": 79,
+    "estimated_seconds_140_160wpm": [
+      29.6,
+      33.9
+    ],
+    "target_seconds": [
+      15,
+      35
+    ],
+    "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
+    "autonomy_verified": false,
+    "gate": "Mediraudioreal/semánticaisalada,conservarfecha/atribución/rollout/caveats/vigenciafutura. SincontextorechazarrecorteoreconstrucciónmínimaQA,nofingir3viables ni63renders."
+  },
+  {
+    "id": "IA-1014-2-YC",
+    "parent_id": "IA-1014-2",
+    "variant": "C",
+    "source_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA14.md",
+    "paragraph_range_1based": [
+      5,
+      6
+    ],
+    "candidate_text": "No te muestro una prueba en mi cuenta. Te cuento el cambio documentado.\n\nMi consejo: antes de aceptar, leé el pedido entero. La sugerencia puede ayudarte a escribir, pero vos seguís decidiendo qué trabajo le estás encargando y hasta dónde puede llegar.",
+    "candidate_words": 42,
+    "estimated_seconds_140_160wpm": [
+      15.8,
+      18.0
+    ],
+    "target_seconds": [
+      15,
+      35
+    ],
+    "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
+    "autonomy_verified": false,
+    "gate": "Mediraudioreal/semánticaisalada,conservarfecha/atribución/rollout/caveats/vigenciafutura. SincontextorechazarrecorteoreconstrucciónmínimaQA,nofingir3viables ni63renders."
+  },
+  {
+    "id": "IA-1015-1-YA",
+    "parent_id": "IA-1015-1",
+    "variant": "A",
+    "source_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA15.md",
+    "paragraph_range_1based": [
+      1,
+      2
+    ],
+    "candidate_text": "OpenAI anunció el siete de octubre Intelligent UI en ChatGPT. La respuesta puede combinar texto, elementos visuales y partes interactivas, en vez de quedar como un bloque de palabras.\n\nSegún el anuncio, también puede empezar a mostrar una respuesta mientras continúa pensando. Eso cambia cómo recibís la información. No convierte cada elemento visual en un dato comprobado.",
+    "candidate_words": 57,
+    "estimated_seconds_140_160wpm": [
+      21.4,
+      24.4
+    ],
+    "target_seconds": [
+      15,
+      35
+    ],
+    "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
+    "autonomy_verified": false,
+    "gate": "Mediraudioreal/semánticaisalada,conservarfecha/atribución/rollout/caveats/vigenciafutura. SincontextorechazarrecorteoreconstrucciónmínimaQA,nofingir3viables ni63renders."
+  },
+  {
+    "id": "IA-1015-1-YB",
+    "parent_id": "IA-1015-1",
+    "variant": "B",
+    "source_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA15.md",
+    "paragraph_range_1based": [
+      3,
+      4
+    ],
+    "candidate_text": "Hay una diferencia importante: el anuncio es de ChatGPT. OpenAI aclara que los modelos que hacen funcionar Work y Codex no están cambiando con esta actualización.\n\nLa disponibilidad se despliega según el plan y los controles de la organización. Y los modos de razonamiento Pro y Astra quedan fuera de Intelligent UI según las condiciones publicadas. No te digo que ya esté habilitado en mi cuenta.",
+    "candidate_words": 66,
+    "estimated_seconds_140_160wpm": [
+      24.8,
+      28.3
+    ],
+    "target_seconds": [
+      15,
+      35
+    ],
+    "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
+    "autonomy_verified": false,
+    "gate": "Mediraudioreal/semánticaisalada,conservarfecha/atribución/rollout/caveats/vigenciafutura. SincontextorechazarrecorteoreconstrucciónmínimaQA,nofingir3viables ni63renders."
+  },
+  {
+    "id": "IA-1015-1-YC",
+    "parent_id": "IA-1015-1",
+    "variant": "C",
+    "source_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA15.md",
+    "paragraph_range_1based": [
+      5,
+      6
+    ],
+    "candidate_text": "Mi consejo: aprovechá una respuesta interactiva para explorar una idea, pero comprobá las fuentes y los números igual. Que puedas tocar un gráfico no demuestra que su información sea correcta.\n\nPrimero entendé qué cambió y en qué producto. Después decidís cómo usarlo.",
+    "candidate_words": 42,
+    "estimated_seconds_140_160wpm": [
+      15.8,
+      18.0
+    ],
+    "target_seconds": [
+      15,
+      35
+    ],
+    "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
+    "autonomy_verified": false,
+    "gate": "Mediraudioreal/semánticaisalada,conservarfecha/atribución/rollout/caveats/vigenciafutura. SincontextorechazarrecorteoreconstrucciónmínimaQA,nofingir3viables ni63renders."
+  },
+  {
+    "id": "IA-1015-2-YA",
+    "parent_id": "IA-1015-2",
+    "variant": "A",
+    "source_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA15.md",
+    "paragraph_range_1based": [
+      1,
+      2
+    ],
+    "candidate_text": "OpenAI anunció el ocho de octubre controles de acceso a plugins por rol para espacios Enterprise y Edu. Un rol es el grupo de permisos que tiene una persona dentro de la organización.\n\nCon esos controles, los dueños o administradores pueden decidir qué plugins están disponibles, cuáles se instalan y cuáles quedan deshabilitados. Los roles personalizados también pueden heredar la configuración general.",
+    "candidate_words": 62,
+    "estimated_seconds_140_160wpm": [
+      23.2,
+      26.6
+    ],
+    "target_seconds": [
+      15,
+      35
+    ],
+    "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
+    "autonomy_verified": false,
+    "gate": "Mediraudioreal/semánticaisalada,conservarfecha/atribución/rollout/caveats/vigenciafutura. SincontextorechazarrecorteoreconstrucciónmínimaQA,nofingir3viables ni63renders."
+  },
+  {
+    "id": "IA-1015-2-YB",
+    "parent_id": "IA-1015-2",
+    "variant": "B",
+    "source_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA15.md",
+    "paragraph_range_1based": [
+      3,
+      4
+    ],
+    "candidate_text": "Esto requiere esos planes y los controles de acceso por rol. No es un anuncio de que cualquier cuenta gratuita recibió un panel de administración.\n\nLa parte más importante está en el límite: siguen aplicando los permisos del proveedor, las reglas de las acciones y las aprobaciones necesarias. Tener el plugin disponible no le da permiso para hacer cualquier cosa con la cuenta conectada.",
+    "candidate_words": 64,
+    "estimated_seconds_140_160wpm": [
+      24.0,
+      27.4
+    ],
+    "target_seconds": [
+      15,
+      35
+    ],
+    "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
+    "autonomy_verified": false,
+    "gate": "Mediraudioreal/semánticaisalada,conservarfecha/atribución/rollout/caveats/vigenciafutura. SincontextorechazarrecorteoreconstrucciónmínimaQA,nofingir3viables ni63renders."
+  },
+  {
+    "id": "IA-1015-2-YC",
+    "parent_id": "IA-1015-2",
+    "variant": "C",
+    "source_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA15.md",
+    "paragraph_range_1based": [
+      5,
+      6
+    ],
+    "candidate_text": "No te muestro una configuración propia. Es una explicación del anuncio.\n\nMi consejo para un equipo: revisá quién necesita leer y quién necesita actuar. El acceso al plugin es una parte del control, no el final de la revisión.",
+    "candidate_words": 39,
+    "estimated_seconds_140_160wpm": [
+      14.6,
+      16.7
+    ],
+    "target_seconds": [
+      15,
+      35
+    ],
+    "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
+    "autonomy_verified": false,
+    "gate": "Mediraudioreal/semánticaisalada,conservarfecha/atribución/rollout/caveats/vigenciafutura. SincontextorechazarrecorteoreconstrucciónmínimaQA,nofingir3viables ni63renders."
+  },
+  {
     "id": "IA-1016-1-YA",
     "parent_id": "IA-1016-1",
     "variant": "A",
@@ -1163,282 +1439,6 @@
     "estimated_seconds_140_160wpm": [
       13.1,
       15.0
-    ],
-    "target_seconds": [
-      15,
-      35
-    ],
-    "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
-    "autonomy_verified": false,
-    "gate": "Medir audio real y comprensión aislada. Inicio sin referenciashuérfanas; argumento/cierre completos; conservarcaveats/atribuciones. Si candidato dependeotrosector o no duraobjetivo, rechazar/remontar con revisión; no3recortes garantizados ni63renders."
-  },
-  {
-    "id": "SI-03-YA",
-    "parent_id": "SI-03",
-    "variant": "A",
-    "source_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA14.md",
-    "paragraph_range_1based": [
-      1,
-      2
-    ],
-    "candidate_text": "Este plugin promete que Claude escriba menos código. Se llama ponytail, un agregado para la IA que programa en tu compu.\n\nLa idea es simple: antes de construir más cosas, preguntar si hacen falta. Le pedís un botón, no una fábrica de botones.",
-    "candidate_words": 43,
-    "estimated_seconds_140_160wpm": [
-      16.1,
-      18.4
-    ],
-    "target_seconds": [
-      15,
-      35
-    ],
-    "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
-    "autonomy_verified": false,
-    "gate": "Medir audio real y comprensión aislada. Inicio sin referenciashuérfanas; argumento/cierre completos; conservarcaveats/atribuciones. Si candidato dependeotrosector o no duraobjetivo, rechazar/remontar con revisión; no3recortes garantizados ni63renders."
-  },
-  {
-    "id": "SI-03-YB",
-    "parent_id": "SI-03",
-    "variant": "B",
-    "source_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA14.md",
-    "paragraph_range_1based": [
-      3,
-      4
-    ],
-    "candidate_text": "Su autor publicó una comparación: treinta y nueve tareas, cinco corridas por tarea, con Opus cinco punto cinco. Reporta cincuenta y tres por ciento menos código y veintiséis por ciento menos costo frente al agente sin el plugin.\n\nOjo: son números del autor. No son una prueba mía ni una promesa para tu proyecto.",
-    "candidate_words": 54,
-    "estimated_seconds_140_160wpm": [
-      20.2,
-      23.1
-    ],
-    "target_seconds": [
-      15,
-      35
-    ],
-    "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
-    "autonomy_verified": false,
-    "gate": "Medir audio real y comprensión aislada. Inicio sin referenciashuérfanas; argumento/cierre completos; conservarcaveats/atribuciones. Si candidato dependeotrosector o no duraobjetivo, rechazar/remontar con revisión; no3recortes garantizados ni63renders."
-  },
-  {
-    "id": "SI-03-YC",
-    "parent_id": "SI-03",
-    "variant": "C",
-    "source_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA14.md",
-    "paragraph_range_1based": [
-      5,
-      6
-    ],
-    "candidate_text": "Mi consejo para evaluarlo: usá el mismo pedido con y sin el plugin. Primero mirá si hace lo que pediste. Después compará las líneas y el costo.\n\nMenos código puede ser mejor. Menos funciones de las que necesitabas, no. La comparación empieza por el resultado, no por el número más lindo.",
-    "candidate_words": 51,
-    "estimated_seconds_140_160wpm": [
-      19.1,
-      21.9
-    ],
-    "target_seconds": [
-      15,
-      35
-    ],
-    "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
-    "autonomy_verified": false,
-    "gate": "Medir audio real y comprensión aislada. Inicio sin referenciashuérfanas; argumento/cierre completos; conservarcaveats/atribuciones. Si candidato dependeotrosector o no duraobjetivo, rechazar/remontar con revisión; no3recortes garantizados ni63renders."
-  },
-  {
-    "id": "SI-04-YA",
-    "parent_id": "SI-04",
-    "variant": "A",
-    "source_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA14.md",
-    "paragraph_range_1based": [
-      1,
-      2
-    ],
-    "candidate_text": "Claude Code tiene una radio. Y otros comandos que vale la pena mirar antes de instalar más cosas.\n\nClaude Code es la IA que programa en tu compu. Barra radio abre Claude FM, música lo-fi para concentrarte. Está documentado: no te lo cuento como un lanzamiento de hoy.",
-    "candidate_words": 49,
-    "estimated_seconds_140_160wpm": [
-      18.4,
-      21.0
-    ],
-    "target_seconds": [
-      15,
-      35
-    ],
-    "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
-    "autonomy_verified": false,
-    "gate": "Medir audio real y comprensión aislada. Inicio sin referenciashuérfanas; argumento/cierre completos; conservarcaveats/atribuciones. Si candidato dependeotrosector o no duraobjetivo, rechazar/remontar con revisión; no3recortes garantizados ni63renders."
-  },
-  {
-    "id": "SI-04-YB",
-    "parent_id": "SI-04",
-    "variant": "B",
-    "source_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA14.md",
-    "paragraph_range_1based": [
-      3,
-      4
-    ],
-    "candidate_text": "Barra powerup abre lecciones cortas e interactivas sobre sus funciones. Si recién empezás, puede servirte para conocer lo que ya tenés.\n\nY ultrathink se escribe dentro del pedido. Le pide un razonamiento más profundo en esa respuesta, sin cambiar el nivel de esfuerzo configurado para toda la sesión.",
-    "candidate_words": 48,
-    "estimated_seconds_140_160wpm": [
-      18.0,
-      20.6
-    ],
-    "target_seconds": [
-      15,
-      35
-    ],
-    "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
-    "autonomy_verified": false,
-    "gate": "Medir audio real y comprensión aislada. Inicio sin referenciashuérfanas; argumento/cierre completos; conservarcaveats/atribuciones. Si candidato dependeotrosector o no duraobjetivo, rechazar/remontar con revisión; no3recortes garantizados ni63renders."
-  },
-  {
-    "id": "SI-04-YC",
-    "parent_id": "SI-04",
-    "variant": "C",
-    "source_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA14.md",
-    "paragraph_range_1based": [
-      5,
-      6
-    ],
-    "candidate_text": "Mi consejo: no lo pegues en todos los mensajes por costumbre. Reservá lo difícil para cuando necesitás revisar más posibilidades.\n\nAntes de grabar una demo, comprobá qué aparece en tu versión y cuenta. Que una función esté en el manual no significa que la tengas disponible en cualquier entorno.",
-    "candidate_words": 49,
-    "estimated_seconds_140_160wpm": [
-      18.4,
-      21.0
-    ],
-    "target_seconds": [
-      15,
-      35
-    ],
-    "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
-    "autonomy_verified": false,
-    "gate": "Medir audio real y comprensión aislada. Inicio sin referenciashuérfanas; argumento/cierre completos; conservarcaveats/atribuciones. Si candidato dependeotrosector o no duraobjetivo, rechazar/remontar con revisión; no3recortes garantizados ni63renders."
-  },
-  {
-    "id": "SI-08-YA",
-    "parent_id": "SI-08",
-    "variant": "A",
-    "source_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA15.md",
-    "paragraph_range_1based": [
-      1,
-      2
-    ],
-    "candidate_text": "Mirá esto. Claude ayudó a escribirlo. Es una animación hecha con HyperFrames, una herramienta de HeyGen.\n\nEn el proyecto hay HTML y animaciones: la escena se escribe como una página web y después se convierte en video. Tenemos un ejemplo existente, no hace falta inventar que apareció de la nada.",
-    "candidate_words": 50,
-    "estimated_seconds_140_160wpm": [
-      18.8,
-      21.4
-    ],
-    "target_seconds": [
-      15,
-      35
-    ],
-    "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
-    "autonomy_verified": false,
-    "gate": "Medir audio real y comprensión aislada. Inicio sin referenciashuérfanas; argumento/cierre completos; conservarcaveats/atribuciones. Si candidato dependeotrosector o no duraobjetivo, rechazar/remontar con revisión; no3recortes garantizados ni63renders."
-  },
-  {
-    "id": "SI-08-YB",
-    "parent_id": "SI-08",
-    "variant": "B",
-    "source_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA15.md",
-    "paragraph_range_1based": [
-      3,
-      4
-    ],
-    "candidate_text": "El render local es gratis. Eso no significa que cualquier servicio en la nube, música o generación adicional también lo sea.\n\nEl flujo básico tiene tres pasos: crear el proyecto, mirar una vista previa y exportarlo.",
-    "candidate_words": 36,
-    "estimated_seconds_140_160wpm": [
-      13.5,
-      15.4
-    ],
-    "target_seconds": [
-      15,
-      35
-    ],
-    "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
-    "autonomy_verified": false,
-    "gate": "Medir audio real y comprensión aislada. Inicio sin referenciashuérfanas; argumento/cierre completos; conservarcaveats/atribuciones. Si candidato dependeotrosector o no duraobjetivo, rechazar/remontar con revisión; no3recortes garantizados ni63renders."
-  },
-  {
-    "id": "SI-08-YC",
-    "parent_id": "SI-08",
-    "variant": "C",
-    "source_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA15.md",
-    "paragraph_range_1based": [
-      5,
-      6
-    ],
-    "candidate_text": "Puede trabajar con texto, imágenes y video existente. No te voy a decir que no edita grabaciones, porque también tiene herramientas para poner gráficos y subtítulos sobre ellas.\n\nMi consejo: mirá primero una versión corta. Revisá el texto, el movimiento y que se entienda en el celular. Que el proyecto abra no demuestra que el video final esté bien.",
-    "candidate_words": 59,
-    "estimated_seconds_140_160wpm": [
-      22.1,
-      25.3
-    ],
-    "target_seconds": [
-      15,
-      35
-    ],
-    "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
-    "autonomy_verified": false,
-    "gate": "Medir audio real y comprensión aislada. Inicio sin referenciashuérfanas; argumento/cierre completos; conservarcaveats/atribuciones. Si candidato dependeotrosector o no duraobjetivo, rechazar/remontar con revisión; no3recortes garantizados ni63renders."
-  },
-  {
-    "id": "SI-09-YA",
-    "parent_id": "SI-09",
-    "variant": "A",
-    "source_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA15.md",
-    "paragraph_range_1based": [
-      1,
-      2
-    ],
-    "candidate_text": "La IA te da links. ¿Alguna vez abriste uno?\n\nClaude Code tiene barra deep-research, un flujo para investigar a fondo. Puede preparar un informe con citas: enlaces que deberían mostrar de dónde salió cada dato.",
-    "candidate_words": 36,
-    "estimated_seconds_140_160wpm": [
-      13.5,
-      15.4
-    ],
-    "target_seconds": [
-      15,
-      35
-    ],
-    "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
-    "autonomy_verified": false,
-    "gate": "Medir audio real y comprensión aislada. Inicio sin referenciashuérfanas; argumento/cierre completos; conservarcaveats/atribuciones. Si candidato dependeotrosector o no duraobjetivo, rechazar/remontar con revisión; no3recortes garantizados ni63renders."
-  },
-  {
-    "id": "SI-09-YB",
-    "parent_id": "SI-09",
-    "variant": "B",
-    "source_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA15.md",
-    "paragraph_range_1based": [
-      3,
-      4
-    ],
-    "candidate_text": "Para usarlo necesita búsqueda web. En el plan Pro, los flujos se habilitan en la configuración. Antes de una demo, hay que comprobar tu versión y acceso.\n\nAhora, mi consejo: abrí dos citas. Buscá la frase o el dato, mirá la fecha y comparalo con el informe.",
-    "candidate_words": 47,
-    "estimated_seconds_140_160wpm": [
-      17.6,
-      20.1
-    ],
-    "target_seconds": [
-      15,
-      35
-    ],
-    "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
-    "autonomy_verified": false,
-    "gate": "Medir audio real y comprensión aislada. Inicio sin referenciashuérfanas; argumento/cierre completos; conservarcaveats/atribuciones. Si candidato dependeotrosector o no duraobjetivo, rechazar/remontar con revisión; no3recortes garantizados ni63renders."
-  },
-  {
-    "id": "SI-09-YC",
-    "parent_id": "SI-09",
-    "variant": "C",
-    "source_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA15.md",
-    "paragraph_range_1based": [
-      5,
-      6
-    ],
-    "candidate_text": "Si una página no existe o dice otra cosa, no uses ese dato. Pedí una fuente que lo respalde. Si las dos coinciden, comprobaste esos dos puntos; no todo el informe.\n\nEso vale con cualquier IA que te dé enlaces. Una lista de fuentes no es una revisión terminada. El link es el lugar donde empieza la comprobación, no donde termina.",
-    "candidate_words": 61,
-    "estimated_seconds_140_160wpm": [
-      22.9,
-      26.1
     ],
     "target_seconds": [
       15,

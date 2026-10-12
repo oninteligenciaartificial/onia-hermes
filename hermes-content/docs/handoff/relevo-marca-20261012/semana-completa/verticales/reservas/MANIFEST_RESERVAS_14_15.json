@@ -1,0 +1,153 @@
+{
+  "archives": [
+    {
+      "path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/reservas/DIA14_ANTES_NOTICIAS.md",
+      "bytes": 5153,
+      "sha256": "46372179a95e962540fa296faa7be4280cb3e055d6461393c611eaf8b1febd6e"
+    },
+    {
+      "path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/reservas/DIA15_ANTES_NOTICIAS.md",
+      "bytes": 5033,
+      "sha256": "ebf61e3240588112f56916f64a0df825bc46d4f126f41c74cb87fa6d2111a6d5"
+    }
+  ],
+  "reserves": [
+    {
+      "id": "SI-03",
+      "title": "Claude, pero vago",
+      "date": "2026-10-14",
+      "time_local_proposed": "09:00",
+      "timezone": "America/Caracas",
+      "path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA14.md",
+      "word_count": 148,
+      "duration_estimate_seconds_140_160wpm": [
+        55.5,
+        63.4
+      ],
+      "spoken_sha256": "41e7c4f4af87ac62221fcf2ea32acb0969cdbe414dd1a3cc25c30f7317ed9644",
+      "type": "adaptación factual educativa SI existente",
+      "spoken_status": "COMPLETO_RESERVA_FACTUAL_PENDIENTE_QA",
+      "news_slot_status": "NOTICIA_DEL_DIA_PENDIENTE_VERIFICAR_O_SUSTITUIR",
+      "news_approved": false,
+      "asset_received": false,
+      "publication_authorized": false,
+      "sources": [
+        "https://github.com/DietrichGebert/ponytail"
+      ],
+      "source_date_context": "BenchmarkactualREADMEobservado12oct; fechadebenchmark no establecida",
+      "version_gate": "39tareas5runsOpus5.5, autor-53code/-26cost; no propio; versionespara demo pendientes",
+      "observed_on": "2026-10-12",
+      "actuality_gate": "Antes del post propuesto revisar fecha/hecho/versión con fuente oficial. Sin novedadreciente confirmada, conservar como reserva educativa; sustituirslotnoticia o cambiarclasificación/calendario con revisión. No llamarlo noticia del13–19 ni breaking.",
+      "planned_derivatives": [
+        "SI-03-YA",
+        "SI-03-YB",
+        "SI-03-YC"
+      ],
+      "archive_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/reservas/DIA14_ANTES_NOTICIAS.md",
+      "status": "RESERVA_EDUCATIVA_EXACTA_PRESERVADA_NO_PRIMARIA"
+    },
+    {
+      "id": "SI-04",
+      "title": "Tres comandos escondidos de Claude Code",
+      "date": "2026-10-14",
+      "time_local_proposed": "10:00",
+      "timezone": "America/Caracas",
+      "path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA14.md",
+      "word_count": 146,
+      "duration_estimate_seconds_140_160wpm": [
+        54.8,
+        62.6
+      ],
+      "spoken_sha256": "1b23d364dbb79caab226089a51920eb980b1a8e6c8923b6f67b0f7f54134dde1",
+      "type": "adaptación factual educativa SI existente",
+      "spoken_status": "COMPLETO_RESERVA_FACTUAL_PENDIENTE_QA",
+      "news_slot_status": "NOTICIA_DEL_DIA_PENDIENTE_VERIFICAR_O_SUSTITUIR",
+      "news_approved": false,
+      "asset_received": false,
+      "publication_authorized": false,
+      "sources": [
+        "https://code.claude.com/docs/en/commands",
+        "https://code.claude.com/docs/en/model-config"
+      ],
+      "source_date_context": "radio29jun–3jul2026;powerup30mar–3abr2026; ultrathinkdocactual12oct",
+      "version_gate": "Versión propia/cuenta noverificadas; no nueva instalación",
+      "observed_on": "2026-10-12",
+      "actuality_gate": "Antes del post propuesto revisar fecha/hecho/versión con fuente oficial. Sin novedadreciente confirmada, conservar como reserva educativa; sustituirslotnoticia o cambiarclasificación/calendario con revisión. No llamarlo noticia del13–19 ni breaking.",
+      "planned_derivatives": [
+        "SI-04-YA",
+        "SI-04-YB",
+        "SI-04-YC"
+      ],
+      "archive_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/reservas/DIA14_ANTES_NOTICIAS.md",
+      "status": "RESERVA_EDUCATIVA_EXACTA_PRESERVADA_NO_PRIMARIA"
+    },
+    {
+      "id": "SI-08",
+      "title": "Un video escrito con ayuda de Claude",
+      "date": "2026-10-15",
+      "time_local_proposed": "09:00",
+      "timezone": "America/Caracas",
+      "path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA15.md",
+      "word_count": 145,
+      "duration_estimate_seconds_140_160wpm": [
+        54.4,
+        62.1
+      ],
+      "spoken_sha256": "5a92fc2f99b69ab8e8504723d12f0fe5298b3fcdcbc33fe227617e6493f0b876",
+      "type": "adaptación factual educativa SI existente",
+      "spoken_status": "COMPLETO_RESERVA_FACTUAL_PENDIENTE_QA",
+      "news_slot_status": "NOTICIA_DEL_DIA_PENDIENTE_VERIFICAR_O_SUSTITUIR",
+      "news_approved": false,
+      "asset_received": false,
+      "publication_authorized": false,
+      "sources": [
+        "https://github.com/heygen-com/hyperframes"
+      ],
+      "source_date_context": "READMErevalidado12oct;demopropiaGit histórica sin lanzamiento fechado",
+      "version_gate": "Demo12s3–6s compatible;coautoríaClaude;reviewencuadreprevio; Node22+/FFmpegCLIactual",
+      "observed_on": "2026-10-12",
+      "actuality_gate": "Antes del post propuesto revisar fecha/hecho/versión con fuente oficial. Sin novedadreciente confirmada, conservar como reserva educativa; sustituirslotnoticia o cambiarclasificación/calendario con revisión. No llamarlo noticia del13–19 ni breaking.",
+      "planned_derivatives": [
+        "SI-08-YA",
+        "SI-08-YB",
+        "SI-08-YC"
+      ],
+      "archive_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/reservas/DIA15_ANTES_NOTICIAS.md",
+      "status": "RESERVA_EDUCATIVA_EXACTA_PRESERVADA_NO_PRIMARIA"
+    },
+    {
+      "id": "SI-09",
+      "title": "La IA te da links. Abrí dos.",
+      "date": "2026-10-15",
+      "time_local_proposed": "10:00",
+      "timezone": "America/Caracas",
+      "path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA15.md",
+      "word_count": 144,
+      "duration_estimate_seconds_140_160wpm": [
+        54.0,
+        61.7
+      ],
+      "spoken_sha256": "c147997e42fb0d84c98340ebcb2dff9019dda41524dd5ab2aa7f578926dd2829",
+      "type": "adaptación factual educativa SI existente",
+      "spoken_status": "COMPLETO_RESERVA_FACTUAL_PENDIENTE_QA",
+      "news_slot_status": "NOTICIA_DEL_DIA_PENDIENTE_VERIFICAR_O_SUSTITUIR",
+      "news_approved": false,
+      "asset_received": false,
+      "publication_authorized": false,
+      "sources": [
+        "https://code.claude.com/docs/en/workflows"
+      ],
+      "source_date_context": "Docactualconsultado12oct; nofechalanzamiento nueva",
+      "version_gate": "WebSearchdisponible;ProDynamicworkflows; versión propia/informe no comprobados",
+      "observed_on": "2026-10-12",
+      "actuality_gate": "Antes del post propuesto revisar fecha/hecho/versión con fuente oficial. Sin novedadreciente confirmada, conservar como reserva educativa; sustituirslotnoticia o cambiarclasificación/calendario con revisión. No llamarlo noticia del13–19 ni breaking.",
+      "planned_derivatives": [
+        "SI-09-YA",
+        "SI-09-YB",
+        "SI-09-YC"
+      ],
+      "archive_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/reservas/DIA15_ANTES_NOTICIAS.md",
+      "status": "RESERVA_EDUCATIVA_EXACTA_PRESERVADA_NO_PRIMARIA"
+    }
+  ]
+}

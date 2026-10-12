@@ -1,0 +1,27 @@
+{
+  "Inter-Regular.ttf": {
+    "bytes": 411608,
+    "sha256": "3946ebc81c3f1f9e137917d1062fd653f2e573804ef1ebe4fb684055f36a337f",
+    "status": "candidato oficial; familia y peso correcto; no equivalente original declarado"
+  },
+  "Inter-Bold.ttf": {
+    "bytes": 420396,
+    "sha256": "3b82f90562c52c616e602fbed46a61e45dcdf0d2c1960ad56d5faf2fbabb29c7",
+    "status": "candidato oficial; familia y peso correcto; no equivalente original declarado"
+  },
+  "Inter-SemiBold.ttf": {
+    "bytes": 339120,
+    "sha256": "0b7cee37c17db70563a0cdd0af134a92f0c125ec5fd979523d1be5e560642b32",
+    "status": "Git asset exacto, cache original N06 no observada"
+  },
+  "JetBrainsMono-SemiBold.ttf": {
+    "bytes": 277092,
+    "sha256": "1b3bfa1ed5665a4ce3f9feb68d2d4e40e70bf8b4b7d9a3edd418f321b4e166a0",
+    "status": "candidato oficial; familia y peso correcto; no equivalente original declarado"
+  },
+  "Inter-Black.ttf": {
+    "bytes": 419896,
+    "sha256": "0ce7b522bff8b14b45a1192970a83fd53a4cff231625261e65aa0b41b65e2ed0",
+    "status": "candidato oficial; familia y peso correcto; no equivalente original declarado"
+  }
+}

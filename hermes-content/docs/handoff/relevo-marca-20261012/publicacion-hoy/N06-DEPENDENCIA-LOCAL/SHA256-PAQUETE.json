@@ -1,7 +1,7 @@
 {
   "N06-DEPENDENCIA-LOCAL.md": {
-    "bytes": 2754,
-    "sha256": "da099765205f2d0c240bd492129843e614ed27e8a1c0827f8288cc7952b6a504"
+    "bytes": 3838,
+    "sha256": "0e8d2cb4039d3f6a9a360e7e00e40950f40190825a64939014c9e52f1e914652"
   },
   "cutplan-fbad86d1.json": {
     "bytes": 5448,
@@ -40,11 +40,75 @@
     "sha256": "262481e844521b326f5ecd053e59b98c8b2da78c8ee1bdbb6e8174305e54935a"
   },
   "DEPENDENCIA-N06.json": {
-    "bytes": 1522,
-    "sha256": "306b63982112748f2f3aec82468accfe14ed82e07baa48355e02a8d707ae9fc4"
+    "bytes": 1666,
+    "sha256": "5458a14942683c73ee4d3f3a25f7cc7a6b3d3515fb60e5eb5680cc5b025f00c3"
   },
   "REGISTRO-LICENCIA.json": {
     "bytes": 2753,
     "sha256": "c7b1c60ed052cdd0a20ff29866c9c57bb65178b612dfd4eff2f944058cfd3a7d"
+  },
+  "fuentes/FUENTES_QA.md": {
+    "bytes": 2440,
+    "sha256": "1cbe234f3feba2487a62c57628587eb020bc7894ef2bdef1d8484c97ab0668dd"
+  },
+  "fuentes/LICENSE-Inter-OFL.txt": {
+    "bytes": 4380,
+    "sha256": "262481e844521b326f5ecd053e59b98c8b2da78c8ee1bdbb6e8174305e54935a"
+  },
+  "fuentes/CINCO_ASSETS.json": {
+    "bytes": 1115,
+    "sha256": "39e0742c03a565342d3bbe395274e97f33183ea21f5bb23406e3f22ab6ba89cf"
+  },
+  "fuentes/LICENSE-JetBrains-OFL.txt": {
+    "bytes": 4399,
+    "sha256": "30f0c136e3c88e422d0791acd97238870f9054a9729bc34cf2ff0d4ed8cac4ad"
+  },
+  "fuentes/Inter-Regular.ttf": {
+    "bytes": 411608,
+    "sha256": "3946ebc81c3f1f9e137917d1062fd653f2e573804ef1ebe4fb684055f36a337f"
+  },
+  "fuentes/JETBRAINS-MONO-SEMIBOLD-2.305-NOT-SELECTED.txt": {
+    "bytes": 478,
+    "sha256": "0ca25ec5e049f3afa91ab9c59790df9e4cdaef5ee07d6e12a8409b32e81466a8"
+  },
+  "fuentes/README.md": {
+    "bytes": 1540,
+    "sha256": "fa902e2f2276943277646a31eefa4bf128bd8be6d350dc024d05ab60306a1a17"
+  },
+  "fuentes/Inter-Bold.ttf": {
+    "bytes": 420396,
+    "sha256": "3b82f90562c52c616e602fbed46a61e45dcdf0d2c1960ad56d5faf2fbabb29c7"
+  },
+  "fuentes/Inter-SemiBold.ttf": {
+    "bytes": 339120,
+    "sha256": "0b7cee37c17db70563a0cdd0af134a92f0c125ec5fd979523d1be5e560642b32"
+  },
+  "fuentes/ENTREGA_CANDIDATOS_NO_CACHE_ORIGINAL.md": {
+    "bytes": 1650,
+    "sha256": "985bf06160b5f3362609f964c7f2e7f7dc6daabf42a79ff9d8d374a09e414da7"
+  },
+  "fuentes/JetBrainsMono-SemiBold.ttf": {
+    "bytes": 277092,
+    "sha256": "1b3bfa1ed5665a4ce3f9feb68d2d4e40e70bf8b4b7d9a3edd418f321b4e166a0"
+  },
+  "fuentes/FUENTES_QA.json": {
+    "bytes": 11574,
+    "sha256": "dd2a0021c2f44563cdd0acda34c464f6451b37a225ea1e6f03e21a2cf3090393"
+  },
+  "fuentes/MANIFEST.json": {
+    "bytes": 9421,
+    "sha256": "fd10a9236987d43bfbe982fcea4b9fe478514b7fbc7275301a3b19e18acd0eae"
+  },
+  "fuentes/JETBRAINS-MONO-SEMIBOLD-2.211-NOT-AVAILABLE.txt": {
+    "bytes": 648,
+    "sha256": "eb48a3d226598ed6f7068d30a7920da87d4293dab9c91052cba3863fdcdc3561"
+  },
+  "fuentes/Inter-Black.ttf": {
+    "bytes": 419896,
+    "sha256": "0ce7b522bff8b14b45a1192970a83fd53a4cff231625261e65aa0b41b65e2ed0"
+  },
+  "fuentes/verify-fonts-qa.py": {
+    "bytes": 5936,
+    "sha256": "6c22b85e00e42c2ae09f378c63303258e9f5d597ae71c76c962276b05cc296bd"
   }
 }

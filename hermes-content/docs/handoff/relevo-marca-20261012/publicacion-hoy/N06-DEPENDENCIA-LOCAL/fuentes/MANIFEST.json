@@ -1,0 +1,176 @@
+{
+  "manifest_version": 1,
+  "cutoff": "2026-10-12",
+  "request": "Four missing font assets for N06: Inter Black, Inter Bold, Inter Regular, JetBrains Mono SemiBold; exact target versions Inter 4.001 and JetBrains Mono 2.211 based on local Git assets.",
+  "inter_release": {
+    "official_url": "https://github.com/rsms/inter/releases/download/v4.1/Inter-4.1.zip",
+    "archive_sha256": "9883fdd4a49d4fb66bd8177ba6625ef9a64aa45899767dde3d36aa425756b11e",
+    "archive_bytes": 33707794,
+    "license_file": "LICENSE-Inter-OFL.txt",
+    "license_sha256": "262481e844521b326f5ecd053e59b98c8b2da78c8ee1bdbb6e8174305e54935a",
+    "collection": "Inter.ttc; 36 static faces, metadata Version 4.001; build git-9221beed3; faces have no fvar table"
+  },
+  "inter_outputs": {
+    "Inter-Black.ttf": {
+      "bytes": 419896,
+      "sha256": "0ce7b522bff8b14b45a1192970a83fd53a4cff231625261e65aa0b41b65e2ed0",
+      "static_ttf": true,
+      "variable_axis_table_present": false,
+      "name_ids": {
+        "1": "Inter Black",
+        "2": "Regular",
+        "3": "4.001;git-9221beed3;RSMS;Inter-Black",
+        "4": "Inter Black",
+        "5": "Version 4.001;git-9221beed3",
+        "6": "Inter-Black"
+      },
+      "provenance": "Extracted face from official rsms/inter v4.1 release Inter.ttc (version 4.001; build git-9221beed3); TTF container emitted by FontTools; not a native standalone TTF entry in the archive."
+    },
+    "Inter-Bold.ttf": {
+      "bytes": 420396,
+      "sha256": "3b82f90562c52c616e602fbed46a61e45dcdf0d2c1960ad56d5faf2fbabb29c7",
+      "static_ttf": true,
+      "variable_axis_table_present": false,
+      "name_ids": {
+        "1": "Inter",
+        "2": "Bold",
+        "3": "4.001;git-9221beed3;RSMS;Inter-Bold",
+        "4": "Inter Bold",
+        "5": "Version 4.001;git-9221beed3",
+        "6": "Inter-Bold"
+      },
+      "provenance": "Extracted face from official rsms/inter v4.1 release Inter.ttc (version 4.001; build git-9221beed3); TTF container emitted by FontTools; not a native standalone TTF entry in the archive."
+    },
+    "Inter-Regular.ttf": {
+      "bytes": 411608,
+      "sha256": "3946ebc81c3f1f9e137917d1062fd653f2e573804ef1ebe4fb684055f36a337f",
+      "static_ttf": true,
+      "variable_axis_table_present": false,
+      "name_ids": {
+        "1": "Inter",
+        "2": "Regular",
+        "3": "4.001;git-9221beed3;RSMS;Inter-Regular",
+        "4": "Inter Regular",
+        "5": "Version 4.001;git-9221beed3",
+        "6": "Inter-Regular"
+      },
+      "provenance": "Extracted face from official rsms/inter v4.1 release Inter.ttc (version 4.001; build git-9221beed3); TTF container emitted by FontTools; not a native standalone TTF entry in the archive."
+    }
+  },
+  "inter_semibold_same_version_build_check": {
+    "existing_git_asset": {
+      "path": ".claude/skills/edicion-referentes/scripts/erik/assets-ejemplo/fuentes/Inter-SemiBold.ttf",
+      "bytes": 339120,
+      "sha256": "0b7cee37c17db70563a0cdd0af134a92f0c125ec5fd979523d1be5e560642b32",
+      "version": "4.001",
+      "build": "git-66647c0bb"
+    },
+    "same-face-extracted-from-v4.1-ttc": {
+      "version": "4.001",
+      "build": "git-9221beed3",
+      "bytes": 419660,
+      "sha256": "cd2b4c97c061266fba423c21de9c6b4a018a203c68a8aefa7d20393857fd7eda"
+    },
+    "byte_identical": false,
+    "note": "Same numeric version, different embedded build and different standalone bytes; this comparison face was not copied as a candidate output."
+  },
+  "jetbrains_mono_semibold": {
+    "status": "BLOCKED_NO_EXACT_RELEASE_ASSET",
+    "requested_version": "2.211",
+    "local_reference": {
+      "paths": [
+        ".claude/skills/edicion-referentes/scripts/erik/assets-ejemplo/fuentes/JetBrainsMono-Bold.ttf",
+        ".claude/skills/edicion-referentes/scripts/erik/assets-ejemplo/fuentes/JetBrainsMono-ExtraBold.ttf"
+      ],
+      "both_metadata_version": "2.211",
+      "files": {
+        "JetBrainsMono-Bold.ttf": {
+          "path": ".claude/skills/edicion-referentes/scripts/erik/assets-ejemplo/fuentes/JetBrainsMono-Bold.ttf",
+          "bytes": 112056,
+          "sha256": "62e8ae937a3aead18b6067df140e4f286e8edc88af6bd28d2fdee183f293c009",
+          "name_ids": {
+            "1": "JetBrains Mono",
+            "2": "Bold",
+            "3": "2.211;JB;JetBrainsMono-Bold",
+            "4": "JetBrains Mono Bold",
+            "5": "Version 2.211",
+            "6": "JetBrainsMono-Bold"
+          }
+        },
+        "JetBrainsMono-ExtraBold.ttf": {
+          "path": ".claude/skills/edicion-referentes/scripts/erik/assets-ejemplo/fuentes/JetBrainsMono-ExtraBold.ttf",
+          "bytes": 111936,
+          "sha256": "7a8ff2c87072933477afd43e945b4e5003fbac06c3cdbe5fbf9f1f9ebb075a0d",
+          "name_ids": {
+            "1": "JetBrains Mono ExtraBold",
+            "2": "Regular",
+            "3": "2.211;JB;JetBrainsMono-ExtraBold",
+            "4": "JetBrains Mono ExtraBold",
+            "5": "Version 2.211",
+            "6": "JetBrainsMono-ExtraBold"
+          }
+        }
+      }
+    },
+    "official_release_url_tested": "https://github.com/JetBrains/JetBrainsMono/releases/download/v2.211/JetBrainsMono-2.211.zip",
+    "result": "HTTP 404; no matching tag/ref. Official tags move from v2.210 (40e4dea999d21eb6d5d84f5d754e087ae332f018) to v2.221 (43e5b71ef0ca1450b5ea454766622f835aa57d95). v2.210 tree contains no JetBrainsMono-SemiBold.ttf; official source history adds SemiBold at commit dd6b1d4420409f8465e7d08c670661551789b867, version 2.240. No different version supplied as a match.",
+    "license_reference": "Official JetBrains Mono v2.304 tag OFL.txt copied as LICENSE-JetBrains-OFL.txt.",
+    "license_sha256": "30f0c136e3c88e422d0791acd97238870f9054a9729bc34cf2ff0d4ed8cac4ad",
+    "official_tag_range": {
+      "v2.210": "40e4dea999d21eb6d5d84f5d754e087ae332f018; tree has no fonts/ttf/JetBrainsMono-SemiBold.ttf",
+      "v2.221": "43e5b71ef0ca1450b5ea454766622f835aa57d95",
+      "exact_v2.211_tag_or_ref": "not advertised; official v2.211 release URL tested and returned HTTP 404"
+    },
+    "first_official_git_style_evidence": {
+      "commit": "dd6b1d4420409f8465e7d08c670661551789b867",
+      "commit_message": "2.240 - Added SemiBold weight",
+      "path": "fonts/ttf/JetBrainsMono-SemiBold.ttf",
+      "metadata": "2.240;JB;JetBrainsMono-SemiBold",
+      "bytes": 112108,
+      "sha256": "51553d8ff851db8df016c747f1d30f80da23d80ea9e1baea289a6e03fac0b557",
+      "status": "evidence only; not copied as a v2.211 match"
+    },
+    "candidate_current_official": {
+      "status": "SELECTED_QA_CANDIDATE_VERSION_UNKNOWN_FOR_N06",
+      "source_url": "https://github.com/JetBrains/JetBrainsMono/blob/cd5227bd1f61dff3bbd6c814ceaf7ffd95e947d9/fonts/ttf/JetBrainsMono-SemiBold.ttf",
+      "raw_url": "https://raw.githubusercontent.com/JetBrains/JetBrainsMono/cd5227bd1f61dff3bbd6c814ceaf7ffd95e947d9/fonts/ttf/JetBrainsMono-SemiBold.ttf",
+      "tag": "v2.304",
+      "repository_commit": "cd5227bd1f61dff3bbd6c814ceaf7ffd95e947d9",
+      "git_blob_sha": "a70e69bd21aa901f93ffa280f691cf513d13859d",
+      "output_file": "JetBrainsMono-SemiBold.ttf",
+      "bytes": 277092,
+      "sha256": "1b3bfa1ed5665a4ce3f9feb68d2d4e40e70bf8b4b7d9a3edd418f321b4e166a0",
+      "family": "JetBrains Mono SemiBold",
+      "metadata_version": "2.304",
+      "os2_usWeightClass": 600,
+      "static_ttf": true,
+      "variable_axis_table_present": false,
+      "license_file": "LICENSE-JetBrains-OFL.txt",
+      "license_sha256": "30f0c136e3c88e422d0791acd97238870f9054a9729bc34cf2ff0d4ed8cac4ad",
+      "license_git_blob_sha": "8bee4148c1d54dbf5dae6d6c117fc80414266abb",
+      "version_note": "Local JetBrains Mono Bold/ExtraBold references are 2.211. N06 cache font version is not observed. This is a family/weight candidate for local QA, not an exact-original claim."
+    },
+    "candidate_v2_305_not_selected": {
+      "status": "NOT_SELECTED_OS2_WEIGHT_MISMATCH",
+      "source_url": "https://github.com/JetBrains/JetBrainsMono/blob/19371302b95d218af43299bce79ddbddd0bc364d/fonts/ttf/JetBrainsMono-SemiBold.ttf",
+      "repository_commit": "19371302b95d218af43299bce79ddbddd0bc364d",
+      "git_blob_sha": "2bf8e48f23d8c58ad66490ec1cb3efd52c06e56f",
+      "archived_file": "not-selected/JetBrainsMono-SemiBold-v2.305-NOT-SELECTED.ttf",
+      "bytes": 273504,
+      "sha256": "12d4b18fe6e1af528e4bea69cb0997aeff22f9e52fccffcf66342dd88aa32ab8",
+      "metadata_version": "2.305",
+      "os2_usWeightClass": 472,
+      "static_ttf": true,
+      "variable_axis_table_present": false,
+      "reason": "Despite SemiBold family/name strings, OS/2 weight class is 472, not expected 600; retained unmodified as evidence, not selected."
+    }
+  },
+  "actions": {
+    "downloads_from_official_sources": true,
+    "installed_fonts": false,
+    "modified_original_or_n06_zip": false,
+    "variable_font_conversion": false,
+    "non_official_mirror": false
+  },
+  "decision": "Inter 4.001 static face candidates are supplied as extracted standalone TTFs, explicitly non-native archive entries and not byte-identical to local Inter SemiBold build. JetBrains Mono SemiBold v2.211 exact asset is unavailable from bounded official checks. Official static v2.304 SemiBold with OS/2 weight class 600 is supplied as family/weight QA candidate; the N06 cache version is unknown so original equivalence is not claimed. Official v2.305 file is retained unmodified under not-selected because OS/2 weight class is 472."
+}

@@ -1,36 +1,36 @@
 # Paquete completo · 2026-10-15
 
-America/Caracas. Textos para revisión/grabación; no publicaciones ni agenda confirmada. Los dos espacios IA del14–19 son reservas educativas: revalidar o sustituir por noticias del día antes de publicar. Los recortes son planes, no videos existentes.
+America/Caracas. Textos para revisión/grabación; no publicaciones ni agenda confirmada. Los espacios IA del 13–15 contienen seis noticias fechadas, con QA documental completado; revalidar el día de publicación. Los ocho espacios IA del 16–19 son reservas educativas: sustituir por noticias verificadas si se mantiene la cuota de actualidad. Los recortes son planes, no videos existentes.
 
 ## Tres verticales · hablado y fuentes separados
 
-# SI-08 · Un video escrito con ayuda de Claude
+# IA-1015-1 · ChatGPT cambia cómo muestra respuestas; no es un cambio de Work o Codex
 
-Mirá esto. Claude ayudó a escribirlo. Es una animación hecha con HyperFrames, una herramienta de HeyGen.
+OpenAI anunció el siete de octubre Intelligent UI en ChatGPT. La respuesta puede combinar texto, elementos visuales y partes interactivas, en vez de quedar como un bloque de palabras.
 
-En el proyecto hay HTML y animaciones: la escena se escribe como una página web y después se convierte en video. Tenemos un ejemplo existente, no hace falta inventar que apareció de la nada.
+Según el anuncio, también puede empezar a mostrar una respuesta mientras continúa pensando. Eso cambia cómo recibís la información. No convierte cada elemento visual en un dato comprobado.
 
-El render local es gratis. Eso no significa que cualquier servicio en la nube, música o generación adicional también lo sea.
+Hay una diferencia importante: el anuncio es de ChatGPT. OpenAI aclara que los modelos que hacen funcionar Work y Codex no están cambiando con esta actualización.
 
-El flujo básico tiene tres pasos: crear el proyecto, mirar una vista previa y exportarlo.
+La disponibilidad se despliega según el plan y los controles de la organización. Y los modos de razonamiento Pro y Astra quedan fuera de Intelligent UI según las condiciones publicadas. No te digo que ya esté habilitado en mi cuenta.
 
-Puede trabajar con texto, imágenes y video existente. No te voy a decir que no edita grabaciones, porque también tiene herramientas para poner gráficos y subtítulos sobre ellas.
+Mi consejo: aprovechá una respuesta interactiva para explorar una idea, pero comprobá las fuentes y los números igual. Que puedas tocar un gráfico no demuestra que su información sea correcta.
 
-Mi consejo: mirá primero una versión corta. Revisá el texto, el movimiento y que se entienda en el celular. Que el proyecto abra no demuestra que el video final esté bien.
+Primero entendé qué cambió y en qué producto. Después decidís cómo usarlo.
 
-# SI-09 · La IA te da links. Abrí dos.
+# IA-1015-2 · Dar acceso a un plugin no elimina los permisos de la cuenta
 
-La IA te da links. ¿Alguna vez abriste uno?
+OpenAI anunció el ocho de octubre controles de acceso a plugins por rol para espacios Enterprise y Edu. Un rol es el grupo de permisos que tiene una persona dentro de la organización.
 
-Claude Code tiene barra deep-research, un flujo para investigar a fondo. Puede preparar un informe con citas: enlaces que deberían mostrar de dónde salió cada dato.
+Con esos controles, los dueños o administradores pueden decidir qué plugins están disponibles, cuáles se instalan y cuáles quedan deshabilitados. Los roles personalizados también pueden heredar la configuración general.
 
-Para usarlo necesita búsqueda web. En el plan Pro, los flujos se habilitan en la configuración. Antes de una demo, hay que comprobar tu versión y acceso.
+Esto requiere esos planes y los controles de acceso por rol. No es un anuncio de que cualquier cuenta gratuita recibió un panel de administración.
 
-Ahora, mi consejo: abrí dos citas. Buscá la frase o el dato, mirá la fecha y comparalo con el informe.
+La parte más importante está en el límite: siguen aplicando los permisos del proveedor, las reglas de las acciones y las aprobaciones necesarias. Tener el plugin disponible no le da permiso para hacer cualquier cosa con la cuenta conectada.
 
-Si una página no existe o dice otra cosa, no uses ese dato. Pedí una fuente que lo respalde. Si las dos coinciden, comprobaste esos dos puntos; no todo el informe.
+No te muestro una configuración propia. Es una explicación del anuncio.
 
-Eso vale con cualquier IA que te dé enlaces. Una lista de fuentes no es una revisión terminada. El link es el lugar donde empieza la comprobación, no donde termina.
+Mi consejo para un equipo: revisá quién necesita leer y quién necesita actuar. El acceso al plugin es una parte del control, no el final de la revisión.
 
 # INF-1015 · Mi checklist antes de confiar en una IA
 
@@ -51,41 +51,39 @@ Quiero una comprobación que me ayude a decidir. Si después de leerla sigo sin 
 
 ## Fichas fuera del hablado: actualidad, fuentes y recortes
 
-Fechaobservación:2026-10-12 · timezoneAmerica/Caracas. Autor/lectorprimarias: /root/guiones_sol. Ninguna ficha ni plan siguiente se dice a cámara. No piezas/publicaciones aprobadas.
+Fechaobservaciónprimaria12oct2026por editorial_sol. Autor guiones_sol leyóacta de evidencia, no afirma estaslecturaswebpropias. Fechaeditorial15oct · America/Caracas. Nopublicación aprobada.
 
-### SI-08
+### IA-1015-1
 
-**Hablado:** completo, reservaeducativa/documental; no noticia del día confirmada. **Slotnoticioso:** pendiente verificación o sustitución.
+**Hablado:** completo; noticiafechadaQApendiente. **Publicaciónfuente:** 2026-10-07. **Observación:**12oct2026por editorial_sol.
 
-**Fecha del hecho/documento:** READMErevalidado12oct;demopropiaGit histórica sin lanzamiento fechado. **Observado:**12oct2026.
+**Primaria:** https://help.openai.com/en/articles/6825453-chatgpt-release-notes · **Sección:** October7 / GPT-6 and Intelligent UI in ChatGPT
 
-**Fuentesprimarias:** https://github.com/heygen-com/hyperframes
+**Límites/versión:** RolloutChat porplan/admin; Instant–ExtraHigh. Pro reasoning/Astra excluyeIntelligentUI. No trasladar anuncio aWork/Codex ni afirmar disponibilidad enSergio.
 
-**Versión/condición:** Demo12s3–6s compatible;coautoríaClaude;reviewencuadreprevio; Node22+/FFmpegCLIactual.
+**Gatepost15oct:** Antesdelpost15octreabrirprimaria/versión/rollout/corrección/no retractación; no prometerverificaciónfuturarealizada ni debut15oct.
 
-**Gateactualidadpara 2026-10-15:** Antes del post propuesto revisar fecha/hecho/versión con fuente oficial. Sin novedadreciente confirmada, conservar como reserva educativa; sustituirslotnoticia o cambiarclasificación/calendario con revisión. No llamarlo noticia del13–19 ni breaking.
+**Planes3:** IA-1015-1-YA, IA-1015-1-YB, IA-1015-1-YC; condicionales, autonomíaFALSE, audio/montajenomedidos.
 
-**3planes:** SI-08-YA, SI-08-YB, SI-08-YC; candidatosenPLANES_63.json. Autonomía/duración no verificadas: noassets/63renders.
+### IA-1015-2
 
-### SI-09
+**Hablado:** completo; noticiafechadaQApendiente. **Publicaciónfuente:** 2026-10-08. **Observación:**12oct2026por editorial_sol.
 
-**Hablado:** completo, reservaeducativa/documental; no noticia del día confirmada. **Slotnoticioso:** pendiente verificación o sustitución.
+**Primaria:** https://help.openai.com/en/articles/10128477-chatgpt-enterprise-and-edu-release-notes · **Sección:** October8 / Manage plugin access by role
 
-**Fecha del hecho/documento:** Docactualconsultado12oct; nofechalanzamiento nueva. **Observado:**12oct2026.
+**Límites/versión:** RequiereEnterprise/Edu+RBAC y roladministrador. Acceso alplugin no elimina permisos delproveedor ni aprobaciones deacciones. No anunciado para todo usuarioFree/Plus; sin configuración propia.
 
-**Fuentesprimarias:** https://code.claude.com/docs/en/workflows
+**Gatepost15oct:** Antesdelpost15octreabrirprimaria/versión/rollout/corrección/no retractación; no prometerverificaciónfuturarealizada ni debut15oct.
 
-**Versión/condición:** WebSearchdisponible;ProDynamicworkflows; versión propia/informe no comprobados.
-
-**Gateactualidadpara 2026-10-15:** Antes del post propuesto revisar fecha/hecho/versión con fuente oficial. Sin novedadreciente confirmada, conservar como reserva educativa; sustituirslotnoticia o cambiarclasificación/calendario con revisión. No llamarlo noticia del13–19 ni breaking.
-
-**3planes:** SI-09-YA, SI-09-YB, SI-09-YC; candidatosenPLANES_63.json. Autonomía/duración no verificadas: noassets/63renders.
+**Planes3:** IA-1015-2-YA, IA-1015-2-YB, IA-1015-2-YC; condicionales, autonomíaFALSE, audio/montajenomedidos.
 
 ### INF-1015
 
-Hablado informal completo en intención/reflexión: no relato deexperiencia cumplida, ganancia/resultadosni promesa de recurso. Fuente:planKIT-GRABACION/FLUJO-DIARIO+autorización12oct; no noticia. Título heredadoes índice; texto no afirma que yaocurrió.
+Habladointactobyteporcuerpo; intención/reflexiónnohistoriarealafirmada. PlanesINF-1015-YA/YB/YCpreservadoscondicionales.
 
-**3planes:** INF-1015-YA, INF-1015-YB, INF-1015-YC; candidatosenPLANES_63.json. Autonomía/duración no verificadas: noassets/63renders.
+### Reservas
+
+SI-08, SI-09 preservadosbyteexacten reservas/DIA15_ANTES_NOTICIAS.md. Susplanesretiradosdelconteo63primarioyguardadosaparte.
 
 
 ## Dos horizontales · hablado completo

@@ -1,0 +1,370 @@
+{
+  "reviewer": "/root/qa_sol",
+  "scope": "Mechanical font asset QA only; no installation/render/master/AV",
+  "fonts": [
+    {
+      "path": "/workspace/work/onia-marca-hoy-20261012/fuentes-oficiales-candidatas/Inter-Black.ttf",
+      "bytes": 419896,
+      "sha256": "0ce7b522bff8b14b45a1192970a83fd53a4cff231625261e65aa0b41b65e2ed0",
+      "expected_bytes": 419896,
+      "expected_sha256": "0ce7b522bff8b14b45a1192970a83fd53a4cff231625261e65aa0b41b65e2ed0",
+      "bytes_sha_match": true,
+      "sfnt_version_hex": "00010000",
+      "has_glyf": true,
+      "has_fvar": false,
+      "has_gvar": false,
+      "weight": 900,
+      "expected_weight": 900,
+      "weight_correct": true,
+      "width": 5,
+      "fsType": 0,
+      "names": {
+        "1": [
+          "Inter Black"
+        ],
+        "2": [
+          "Regular"
+        ],
+        "3": [
+          "4.001;git-9221beed3;RSMS;Inter-Black"
+        ],
+        "4": [
+          "Inter Black"
+        ],
+        "5": [
+          "Version 4.001;git-9221beed3"
+        ],
+        "6": [
+          "Inter-Black"
+        ],
+        "13": [
+          "This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: http://scripts.sil.org/OFL"
+        ],
+        "14": [
+          "http://scripts.sil.org/OFL"
+        ]
+      },
+      "candidate_not_claimed_original": true,
+      "font_loads": true
+    },
+    {
+      "path": "/workspace/work/onia-marca-hoy-20261012/fuentes-oficiales-candidatas/Inter-Bold.ttf",
+      "bytes": 420396,
+      "sha256": "3b82f90562c52c616e602fbed46a61e45dcdf0d2c1960ad56d5faf2fbabb29c7",
+      "expected_bytes": 420396,
+      "expected_sha256": "3b82f90562c52c616e602fbed46a61e45dcdf0d2c1960ad56d5faf2fbabb29c7",
+      "bytes_sha_match": true,
+      "sfnt_version_hex": "00010000",
+      "has_glyf": true,
+      "has_fvar": false,
+      "has_gvar": false,
+      "weight": 700,
+      "expected_weight": 700,
+      "weight_correct": true,
+      "width": 5,
+      "fsType": 0,
+      "names": {
+        "1": [
+          "Inter"
+        ],
+        "2": [
+          "Bold"
+        ],
+        "3": [
+          "4.001;git-9221beed3;RSMS;Inter-Bold"
+        ],
+        "4": [
+          "Inter Bold"
+        ],
+        "5": [
+          "Version 4.001;git-9221beed3"
+        ],
+        "6": [
+          "Inter-Bold"
+        ],
+        "13": [
+          "This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: http://scripts.sil.org/OFL"
+        ],
+        "14": [
+          "http://scripts.sil.org/OFL"
+        ]
+      },
+      "candidate_not_claimed_original": true,
+      "font_loads": true
+    },
+    {
+      "path": "/workspace/work/onia-marca-hoy-20261012/N06-DEPENDENCIA-LOCAL/Inter-SemiBold.ttf",
+      "bytes": 339120,
+      "sha256": "0b7cee37c17db70563a0cdd0af134a92f0c125ec5fd979523d1be5e560642b32",
+      "expected_bytes": 339120,
+      "expected_sha256": "0b7cee37c17db70563a0cdd0af134a92f0c125ec5fd979523d1be5e560642b32",
+      "bytes_sha_match": true,
+      "sfnt_version_hex": "00010000",
+      "has_glyf": true,
+      "has_fvar": false,
+      "has_gvar": false,
+      "weight": 600,
+      "expected_weight": 600,
+      "weight_correct": true,
+      "width": 5,
+      "fsType": 0,
+      "names": {
+        "1": [
+          "Inter SemiBold"
+        ],
+        "2": [
+          "Regular"
+        ],
+        "3": [
+          "4.001;RSMS;Inter-SemiBold"
+        ],
+        "4": [
+          "Inter SemiBold"
+        ],
+        "5": [
+          "Version 4.001;git-66647c0bb"
+        ],
+        "6": [
+          "Inter-SemiBold"
+        ],
+        "13": [],
+        "14": [
+          "https://openfontlicense.org"
+        ]
+      },
+      "candidate_not_claimed_original": false,
+      "font_loads": true,
+      "git_original_exact": true
+    },
+    {
+      "path": "/workspace/work/onia-marca-hoy-20261012/fuentes-oficiales-candidatas/Inter-Regular.ttf",
+      "bytes": 411608,
+      "sha256": "3946ebc81c3f1f9e137917d1062fd653f2e573804ef1ebe4fb684055f36a337f",
+      "expected_bytes": 411608,
+      "expected_sha256": "3946ebc81c3f1f9e137917d1062fd653f2e573804ef1ebe4fb684055f36a337f",
+      "bytes_sha_match": true,
+      "sfnt_version_hex": "00010000",
+      "has_glyf": true,
+      "has_fvar": false,
+      "has_gvar": false,
+      "weight": 400,
+      "expected_weight": 400,
+      "weight_correct": true,
+      "width": 5,
+      "fsType": 0,
+      "names": {
+        "1": [
+          "Inter"
+        ],
+        "2": [
+          "Regular"
+        ],
+        "3": [
+          "4.001;git-9221beed3;RSMS;Inter-Regular"
+        ],
+        "4": [
+          "Inter Regular"
+        ],
+        "5": [
+          "Version 4.001;git-9221beed3"
+        ],
+        "6": [
+          "Inter-Regular"
+        ],
+        "13": [
+          "This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: http://scripts.sil.org/OFL"
+        ],
+        "14": [
+          "http://scripts.sil.org/OFL"
+        ]
+      },
+      "candidate_not_claimed_original": true,
+      "font_loads": true
+    },
+    {
+      "path": "/workspace/work/onia-marca-hoy-20261012/fuentes-oficiales-candidatas/JetBrainsMono-SemiBold.ttf",
+      "bytes": 277092,
+      "sha256": "1b3bfa1ed5665a4ce3f9feb68d2d4e40e70bf8b4b7d9a3edd418f321b4e166a0",
+      "expected_bytes": 277092,
+      "expected_sha256": "1b3bfa1ed5665a4ce3f9feb68d2d4e40e70bf8b4b7d9a3edd418f321b4e166a0",
+      "bytes_sha_match": true,
+      "git_blob_sha1": "a70e69bd21aa901f93ffa280f691cf513d13859d",
+      "git_blob_matches": true,
+      "sfnt_version_hex": "00010000",
+      "has_glyf": true,
+      "has_fvar": false,
+      "has_gvar": false,
+      "weight": 600,
+      "expected_weight": 600,
+      "weight_correct": true,
+      "width": 5,
+      "fsType": 0,
+      "names": {
+        "1": [
+          "JetBrains Mono SemiBold"
+        ],
+        "2": [
+          "Regular"
+        ],
+        "3": [
+          "2.304;JB;JetBrainsMono-SemiBold"
+        ],
+        "4": [
+          "JetBrains Mono SemiBold"
+        ],
+        "5": [
+          "Version 2.304; ttfautohint (v1.8.4.7-5d5b)"
+        ],
+        "6": [
+          "JetBrainsMono-SemiBold"
+        ],
+        "13": [
+          "This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: https://scripts.sil.org/OFL"
+        ],
+        "14": [
+          "https://scripts.sil.org/OFL"
+        ]
+      },
+      "candidate_not_claimed_original": true,
+      "font_loads": true
+    }
+  ],
+  "official_archive": {
+    "path": "/tmp/Inter-4.1.zip",
+    "bytes": 33707794,
+    "sha256": "9883fdd4a49d4fb66bd8177ba6625ef9a64aa45899767dde3d36aa425756b11e",
+    "expected_sha_matches": true,
+    "ttc_table_matches": [
+      {
+        "candidate": "Inter-Black.ttf",
+        "postscript": "Inter-Black",
+        "metadata_version_source": "Version 4.001;git-9221beed3",
+        "same_table_keys": true,
+        "different_tables_excluding_container_checksum_head": [],
+        "all_other_tables_equal": true
+      },
+      {
+        "candidate": "Inter-Bold.ttf",
+        "postscript": "Inter-Bold",
+        "metadata_version_source": "Version 4.001;git-9221beed3",
+        "same_table_keys": true,
+        "different_tables_excluding_container_checksum_head": [],
+        "all_other_tables_equal": true
+      },
+      {
+        "candidate": "Inter-Regular.ttf",
+        "postscript": "Inter-Regular",
+        "metadata_version_source": "Version 4.001;git-9221beed3",
+        "same_table_keys": true,
+        "different_tables_excluding_container_checksum_head": [],
+        "all_other_tables_equal": true
+      }
+    ],
+    "licenses": [
+      {
+        "path": "LICENSE.txt",
+        "bytes": 4380,
+        "sha256": "262481e844521b326f5ecd053e59b98c8b2da78c8ee1bdbb6e8174305e54935a"
+      }
+    ]
+  },
+  "licenses": [
+    {
+      "file": "LICENSE-Inter-OFL.txt",
+      "bytes": 4380,
+      "sha256": "262481e844521b326f5ecd053e59b98c8b2da78c8ee1bdbb6e8174305e54935a",
+      "OFL1_1": true,
+      "bundling_embedding_distribution_clause": true,
+      "reserved_font_name_declared_in_copyright_header": false
+    },
+    {
+      "file": "LICENSE-JetBrains-OFL.txt",
+      "bytes": 4399,
+      "sha256": "30f0c136e3c88e422d0791acd97238870f9054a9729bc34cf2ff0d4ed8cac4ad",
+      "git_blob_sha1": "8bee4148c1d54dbf5dae6d6c117fc80414266abb",
+      "OFL1_1": true,
+      "bundling_embedding_distribution_clause": true,
+      "reserved_font_name_declared_in_copyright_header": false
+    }
+  ],
+  "checks": {
+    "five_TTF_hash_bytes": true,
+    "expected_weights": true,
+    "all_static_no_fvar_gvar": true,
+    "GitSemi_exact": true,
+    "Inter_release_archive_exact": true,
+    "Inter_extraction_tables_match": true,
+    "licenses_OFL": true,
+    "Inter_license_hash": true,
+    "Jet_candidate_license_hash": true,
+    "candidate_labels_clear": true,
+    "N06_cache_unknown_declared": true,
+    "Jet_font_blob_and_version": true,
+    "Jet_same_tag_license_blob": true
+  },
+  "mechanical_pass": true,
+  "manifest_metadata_warnings": [],
+  "font_build_equivalence": false,
+  "N06_original_cache_observed": false,
+  "layout_pixel_equivalence_or_master_approval": false,
+  "limits": [
+    "Inter releasev4.1 contains metadata4.001build9221, different from exact GitSemi4.001build66647",
+    "JetBrainsSemi2.304 selected official-tag candidate differs from GitBold/ExtraBold2.211; N06 cache not observed",
+    "Official tag absence2.211 bounded search inherited from author, not redone as universal proof",
+    "Fonts are candidates; local adapter must review composition/line breaks/cuts before publishing"
+  ],
+  "previous_JB_v2_305_qa_not_selected": {
+    "path": "/workspace/work/onia-marca-hoy-20261012/fuentes-oficiales-candidatas/JetBrainsMono-SemiBold.ttf",
+    "bytes": 273504,
+    "sha256": "12d4b18fe6e1af528e4bea69cb0997aeff22f9e52fccffcf66342dd88aa32ab8",
+    "expected_bytes": 273504,
+    "expected_sha256": "12d4b18fe6e1af528e4bea69cb0997aeff22f9e52fccffcf66342dd88aa32ab8",
+    "bytes_sha_match": true,
+    "sfnt_version_hex": "00010000",
+    "has_glyf": true,
+    "has_fvar": false,
+    "has_gvar": false,
+    "weight": 472,
+    "expected_weight": 600,
+    "weight_correct": false,
+    "width": 5,
+    "fsType": 0,
+    "names": {
+      "1": [
+        "JetBrains Mono SemiBold"
+      ],
+      "2": [
+        "Regular"
+      ],
+      "3": [
+        "2.305;JB;JetBrainsMono-SemiBold"
+      ],
+      "4": [
+        "JetBrains Mono SemiBold"
+      ],
+      "5": [
+        "Version 2.305; ttfautohint (v1.8.4.7-5d5b)"
+      ],
+      "6": [
+        "JetBrainsMono-SemiBold"
+      ],
+      "13": [
+        "This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: https://openfontlicense.org"
+      ],
+      "14": [
+        "https://openfontlicense.org"
+      ]
+    },
+    "candidate_not_claimed_original": true,
+    "font_loads": true
+  },
+  "manifest_metadata_warnings_resolved": [
+    {
+      "field": "jetbrains_mono_semibold.license_sha256",
+      "declared": "b2fe5e8987594e9ffd1d2ca52a2f5d73eb8335243893c5d6254b5ad69269591d",
+      "actual": "a76abf002c49097d146e86740a3105a5d00450b1592e820a1109a8c5680cd697",
+      "note": "top-level historical/license_reference hash conflicts with current license file; candidate_current_official license_sha256 matches current if belowPASS"
+    }
+  ],
+  "delta_scope": "Only selected JetBrains v2.304 TTF/license/manifest labels rechecked; other4fonts prior PASS reused"
+}

@@ -21,7 +21,7 @@ Snapshot requerido: commit completo `781df7d87b53913ac9790fa1df88e53357408bc3` (
 | `hermes-content/docs/cola/drops/2026-10-01-drops-noticias-repos.md` | `832e39f349b956ca4ccd2ccc6a8fe36bdd4c7c8a` |
 | `hermes-content/carousels/briefs/marca-personal/sergio-n06-antigravity-cli-20261002.json` | `158354a92c3ee80b98f470106343c464843a9597` |
 
-El checkout actual está en main `2cdefca738ed85d87f50e6dc3dc6c31a5aa698f9`; `GRABAR-10-16-OCT.md` conserva el blob citado. La tabla editorial de `GRABAR` en el master actual enumera como comprobados el cálculo de N07, sus condiciones y la ruta de Antigravity, con las salvedades transcritas abajo. El archivo está versionado en master con el mismo blob que el snapshot pedido; esto identifica la revisión editorial de fuente, no una revalidación independiente de documentación web hoy ni una comprobación de publicación real.
+El checkout original de este runtime está en la rama `work`, HEAD `2cdefca738ed85d87f50e6dc3dc6c31a5aa698f9`; `GRABAR-10-16-OCT.md` conserva el blob citado. La tabla editorial de `GRABAR` en el árbol fuente observado enumera como comprobados el cálculo de N07, sus condiciones y la ruta de Antigravity, con las salvedades transcritas abajo. El árbol fuente conserva el mismo blob que el snapshot pedido; esto identifica la revisión editorial de fuente, no una revalidación independiente de documentación web hoy ni una comprobación de publicación real.
 
 ## N07 — HAIKU: aviso y recurso originales de AVISOS (transcripción literal)
 

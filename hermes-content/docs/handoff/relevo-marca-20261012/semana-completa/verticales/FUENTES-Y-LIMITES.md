@@ -1,6 +1,10 @@
-# Fuentes y límites de la semana13–19oct
+# Fuentes y límites vigentes13–19oct
 
-21habladosprimarioscompletos:2noticiasrecientesfechadasGoogle8oct/Anthropic9octcorrección12oct,12IAreservaseducativasdocumentadas,7informalesintenciones/reflexiones. 2reservasSI01/02adicionalespreservadasexactas. 12slotsrequierenverificar/sustituir;2del13octtienengatepostpendiente,noticiasobservadas12oct,no lanzamiento13oct. No afirmar2noticiasrecientespordíatodasemana. Sinfuentesfuturas; what's-new leído12oct llega7–11sep,featuresanterioresno breaking. CadaDIA incluye ficha propia conURL/fechadocumento/observación/versiongatefuera hablado. FUENTES.json identifica lectura propia delautor12oct; toolresultadosen transcript.
+21habladosprimarios:6noticiasdistintas fechadas7–12oct,8reservaseducativasIA para16–19oct,7informalesintenciones/reflexiones.6SIreservasbyteexactaparte.63planescondicionales,0renders. Los9V13–15 incluyen6noticias+3informalescon fuenteobservada12oct; gatespost13–15pendientes,no verificación futura inventada. No afirmar2noticiasrecientespordíatodasemana.
+
+Hechos13:Google8oct;Anthropicacciones9octcorrección12oct.14:Anthropicpolicy8octvigencia12novFUTURA;Codexpredicciones9octbeta.15:ChatGPTIntelligentUI7oct(Work/Codexno cambian);Enterprise/EdupluginsRBAC8oct(noderogapermisosproveedor). Fuentesprimarias observadaspor editorial_sol yrecuperadasenactasJSON/MD; guiones_soladaptó,no afirma ejecutadasen cuenta propia. Sourcehashes/provenance enFUENTES_NOTICIAS_SELECCION_ADAPTADA.json yFUENTES_NOTICIAS_14_15_ADAPTADAS.json.
+
+CadaDIA fichaPROPIAfecha/URL/versión/límites/gateactualidadfuera hablado. Spokenmetadata enINDICE, fuenteporIDenFUENTES. Nuevos4scripts14/15sinexperienciasinventadas,INF14/15cuerposintactos. Reservas14/15archivoscompletosbyteexact+hashes y12planesretiradosdelconteoprimario enreservas/; SI01/02igualpreservadospreviamente. Ningúnorigenarchivado/destruido.
 
 63planes son candidatoscontiguosdeparagraphs yaescritos: autonomía NOprobada,duración estimada. Si secortecomeatribución/advertencia o comienza sin contexto, rechazarlo. No 63renders ni 3recortes automáticamenteviables. Medir audio y semántica aislada antesdeedición.
 
@@ -10,4 +14,5 @@ SI08 demo existenteGit proyecto01650746aeef81f239cdc414375cb1529fc720d8/renderff
 
 Original18guionesSHA0767d86ef030644d1083c5364eb56e5a01cf1973a70e1daf32bef87dee36a44a intacto. Las21son adaptaciones/nuevosautorizados separados, no reemplazooriginal. SinCTAque prometaavisos/recursosexistentes. Sin publicación,renders,voz,gasto,instalación,main ni merge. Revisarcuentas/versión/demo/actualidad antesdepost; textoslistos no publicaciónaprobada. QAindependiente pendiente.
 
-PolíticaAnthropic8octefectiva12novesreservaenactanoticias,no guionprimario; no afirmarvigenciaactual.
+PolíticaAnthropic publicada8oct efectiva12nov es guionprimario IA1014-1 con vigenciaFUTURA explícita, no regla ya vigente.
+

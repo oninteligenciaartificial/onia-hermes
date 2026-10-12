@@ -1,36 +1,36 @@
 # Paquete completo · 2026-10-14
 
-America/Caracas. Textos para revisión/grabación; no publicaciones ni agenda confirmada. Los dos espacios IA del14–19 son reservas educativas: revalidar o sustituir por noticias del día antes de publicar. Los recortes son planes, no videos existentes.
+America/Caracas. Textos para revisión/grabación; no publicaciones ni agenda confirmada. Los espacios IA del 13–15 contienen seis noticias fechadas, con QA documental completado; revalidar el día de publicación. Los ocho espacios IA del 16–19 son reservas educativas: sustituir por noticias verificadas si se mantiene la cuota de actualidad. Los recortes son planes, no videos existentes.
 
 ## Tres verticales · hablado y fuentes separados
 
-# SI-03 · Claude, pero vago
+# IA-1014-1 · Anthropic actualizó su política: publicación y vigencia son distintas
 
-Este plugin promete que Claude escriba menos código. Se llama ponytail, un agregado para la IA que programa en tu compu.
+Anthropic publicó una actualización de su política el ocho de octubre. Pero publicar una regla no significa que ya haya entrado en vigor.
 
-La idea es simple: antes de construir más cosas, preguntar si hacen falta. Le pedís un botón, no una fábrica de botones.
+El anuncio dice que la versión actualizada empieza a regir el doce de noviembre. Esa fecha todavía es futura al preparar este video.
 
-Su autor publicó una comparación: treinta y nueve tareas, cinco corridas por tarea, con Opus cinco punto cinco. Reporta cincuenta y tres por ciento menos código y veintiséis por ciento menos costo frente al agente sin el plugin.
+La revisión incluye campañas engañosas, aclaraciones para usos de alto riesgo y requisitos relacionados con hardware autónomo. Además, Anthropic explica que una parte importante aclara reglas que ya existían. No todo lo que aparece en el documento es una prohibición nueva.
 
-Ojo: son números del autor. No son una prueba mía ni una promesa para tu proyecto.
+Esto es lo que comunica la empresa. No es asesoría legal ni una revisión de tu proyecto.
 
-Mi consejo para evaluarlo: usá el mismo pedido con y sin el plugin. Primero mirá si hace lo que pediste. Después compará las líneas y el costo.
+Mi consejo: cuando veas un titular sobre una política, buscá dos fechas. Cuándo se anunció y desde cuándo se aplica. Después mirá qué cambió realmente, en vez de asumir que reescribieron todo.
 
-Menos código puede ser mejor. Menos funciones de las que necesitabas, no. La comparación empieza por el resultado, no por el número más lindo.
+Y antes de decidir sobre un uso concreto, revisá el texto que corresponde. Un resumen ayuda a ubicar el cambio. No reemplaza las condiciones completas del servicio.
 
-# SI-04 · Tres comandos escondidos de Claude Code
+# IA-1014-2 · Codex puede sugerir tu próximo mensaje, pero no enviarlo
 
-Claude Code tiene una radio. Y otros comandos que vale la pena mirar antes de instalar más cosas.
+Codex puede sugerir qué escribir después. OpenAI anunció el nueve de octubre las predicciones del siguiente mensaje, en beta.
 
-Claude Code es la IA que programa en tu compu. Barra radio abre Claude FM, música lo-fi para concentrarte. Está documentado: no te lo cuento como un lanzamiento de hoy.
+La idea es mostrar una propuesta mientras preparás el pedido. Podés aceptarla con Tab para revisarla. Aceptar la sugerencia no la envía automáticamente.
 
-Barra powerup abre lecciones cortas e interactivas sobre sus funciones. Si recién empezás, puede servirte para conocer lo que ya tenés.
+Hay condiciones importantes: el anuncio la limita a cuentas Pro personales de mayores de dieciocho años, en la aplicación de escritorio actualizada y en determinados hilos locales o por SSH, con Astra o seis punto uno Sol. No significa que todas las cuentas ya la tengan.
 
-Y ultrathink se escribe dentro del pedido. Le pide un razonamiento más profundo en esa respuesta, sin cambiar el nivel de esfuerzo configurado para toda la sesión.
+Durante la beta, generar esas predicciones no consume el límite o los créditos indicados por el anuncio. Enviar el mensaje sigue teniendo el uso normal. No confundas la sugerencia con una tarea gratis.
 
-Mi consejo: no lo pegues en todos los mensajes por costumbre. Reservá lo difícil para cuando necesitás revisar más posibilidades.
+No te muestro una prueba en mi cuenta. Te cuento el cambio documentado.
 
-Antes de grabar una demo, comprobá qué aparece en tu versión y cuenta. Que una función esté en el manual no significa que la tengas disponible en cualquier entorno.
+Mi consejo: antes de aceptar, leé el pedido entero. La sugerencia puede ayudarte a escribir, pero vos seguís decidiendo qué trabajo le estás encargando y hasta dónde puede llegar.
 
 # INF-1014 · Una pausa antes de instalar una herramienta
 
@@ -51,41 +51,39 @@ Me interesa aprender herramientas, sí. Pero mi trabajo no es coleccionarlas. Qu
 
 ## Fichas fuera del hablado: actualidad, fuentes y recortes
 
-Fechaobservación:2026-10-12 · timezoneAmerica/Caracas. Autor/lectorprimarias: /root/guiones_sol. Ninguna ficha ni plan siguiente se dice a cámara. No piezas/publicaciones aprobadas.
+Fechaobservaciónprimaria12oct2026por editorial_sol. Autor guiones_sol leyóacta de evidencia, no afirma estaslecturaswebpropias. Fechaeditorial14oct · America/Caracas. Nopublicación aprobada.
 
-### SI-03
+### IA-1014-1
 
-**Hablado:** completo, reservaeducativa/documental; no noticia del día confirmada. **Slotnoticioso:** pendiente verificación o sustitución.
+**Hablado:** completo; noticiafechadaQApendiente. **Publicaciónfuente:** 2026-10-08 · **VigenciaFUTURA:** 2026-11-12. **Observación:**12oct2026por editorial_sol.
 
-**Fecha del hecho/documento:** BenchmarkactualREADMEobservado12oct; fechadebenchmark no establecida. **Observado:**12oct2026.
+**Primaria:** https://www.anthropic.com/news/2026-usage-policy-update · **Sección:** fecha/cuerpodelanuncio
 
-**Fuentesprimarias:** https://github.com/DietrichGebert/ponytail
+**Límites/versión:** Publicación reciente; vigencia futura, no afirmar que empezó a regir hoy. No todo requisito es nuevo. Sin interpretación legal ni demo personal.
 
-**Versión/condición:** 39tareas5runsOpus5.5, autor-53code/-26cost; no propio; versionespara demo pendientes.
+**Gatepost14oct:** Antesdelpost14octreabrirprimaria/versión/rollout/corrección/no retractación; no prometerverificaciónfuturarealizada ni debut14oct.
 
-**Gateactualidadpara 2026-10-14:** Antes del post propuesto revisar fecha/hecho/versión con fuente oficial. Sin novedadreciente confirmada, conservar como reserva educativa; sustituirslotnoticia o cambiarclasificación/calendario con revisión. No llamarlo noticia del13–19 ni breaking.
+**Planes3:** IA-1014-1-YA, IA-1014-1-YB, IA-1014-1-YC; condicionales, autonomíaFALSE, audio/montajenomedidos.
 
-**3planes:** SI-03-YA, SI-03-YB, SI-03-YC; candidatosenPLANES_63.json. Autonomía/duración no verificadas: noassets/63renders.
+### IA-1014-2
 
-### SI-04
+**Hablado:** completo; noticiafechadaQApendiente. **Publicaciónfuente:** 2026-10-09. **Observación:**12oct2026por editorial_sol.
 
-**Hablado:** completo, reservaeducativa/documental; no noticia del día confirmada. **Slotnoticioso:** pendiente verificación o sustitución.
+**Primaria:** https://help.openai.com/en/articles/6825453-chatgpt-release-notes · **Sección:** October9 / Composer predictions in Codex
 
-**Fecha del hecho/documento:** radio29jun–3jul2026;powerup30mar–3abr2026; ultrathinkdocactual12oct. **Observado:**12oct2026.
+**Límites/versión:** Pro personal18+, appdesktopactual, hiloslocal/SSH con Astra o6.1Sol. Generar predicciones no consume límite/créditos durante beta; enviar mensajes sí sigue uso normal. No prueba en cuenta propia.
 
-**Fuentesprimarias:** https://code.claude.com/docs/en/commands · https://code.claude.com/docs/en/model-config
+**Gatepost14oct:** Antesdelpost14octreabrirprimaria/versión/rollout/corrección/no retractación; no prometerverificaciónfuturarealizada ni debut14oct.
 
-**Versión/condición:** Versión propia/cuenta noverificadas; no nueva instalación.
-
-**Gateactualidadpara 2026-10-14:** Antes del post propuesto revisar fecha/hecho/versión con fuente oficial. Sin novedadreciente confirmada, conservar como reserva educativa; sustituirslotnoticia o cambiarclasificación/calendario con revisión. No llamarlo noticia del13–19 ni breaking.
-
-**3planes:** SI-04-YA, SI-04-YB, SI-04-YC; candidatosenPLANES_63.json. Autonomía/duración no verificadas: noassets/63renders.
+**Planes3:** IA-1014-2-YA, IA-1014-2-YB, IA-1014-2-YC; condicionales, autonomíaFALSE, audio/montajenomedidos.
 
 ### INF-1014
 
-Hablado informal completo en intención/reflexión: no relato deexperiencia cumplida, ganancia/resultadosni promesa de recurso. Fuente:planKIT-GRABACION/FLUJO-DIARIO+autorización12oct; no noticia. Título heredadoes índice; texto no afirma que yaocurrió.
+Habladointactobyteporcuerpo; intención/reflexiónnohistoriarealafirmada. PlanesINF-1014-YA/YB/YCpreservadoscondicionales.
 
-**3planes:** INF-1014-YA, INF-1014-YB, INF-1014-YC; candidatosenPLANES_63.json. Autonomía/duración no verificadas: noassets/63renders.
+### Reservas
+
+SI-03, SI-04 preservadosbyteexacten reservas/DIA14_ANTES_NOTICIAS.md. Susplanesretiradosdelconteo63primarioyguardadosaparte.
 
 
 ## Dos horizontales · hablado completo

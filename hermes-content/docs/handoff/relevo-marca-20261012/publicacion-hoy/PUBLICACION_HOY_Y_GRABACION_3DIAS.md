@@ -67,7 +67,7 @@ Ventana propuesta21:30–23:00, ajustable al regreso. Material: nueve verticales
 
 - 21:30–21:40: cámara y micrófono; prueba20segundos; dos encuadres (vertical/horizontal). Misma escena si sirve; cambiar ropa/escena por bloque, sin simular días distintos.
 - 21:40–22:10: seis horizontales IA/vida de los días13–15. Una apertura, tres puntos y cierre; pausas entre tomas, repetir frases completas. Dejar señales claras para recortar después. Treinta minutos solo alcanza con pocas retomas: si se excede, extender o dividir con decisión de Sergio.
-- 22:10–22:30: seis verticales IA. Dos noticias fechadas del13 ya tienen fuentes; los cuatro del14–15 son reservas educativas y deben sustituirse/revalidarse si se mantiene la cuota de noticias. No grabar titulares futuros como hechos.
+- 22:10–22:30: seis verticales IA. Los seis guiones13–15 ya tienen noticias con fuentes fechadas7–12oct y QA documental; revalidar antes de cada publicación. No grabar titulares futuros como hechos.
 - 22:30–22:45: tres informales. Usar los guiones como guía opcional o grabar lo que realmente ocurrió hoy: un evento, un problema o una idea de motivación. No usar errores de Sergio como promoción sin permiso.
 - 22:45–23:00: apoyos reales, revisión rápida y respaldo. Si falta una captura o noticia, marcar pendiente sin fingir que se grabó.
 

@@ -1,0 +1,257 @@
+{
+  "reviewer": "/root/qa_sol",
+  "scope": "Only4news and12candidate plans inDIA14/15; prior31original reviews reused, no new primary browsing/AV/H/carousel review",
+  "checks": {
+    "4_bodies_hash_words_exact": true,
+    "4_sources_dates_fichas_consistent": true,
+    "12_plan_candidates_exact": true,
+    "plans_conditional_not_autonomy": true,
+    "no_publication_claim": true,
+    "21_primary_and63_plans_remain": true,
+    "other17_V_declared_hashes_unchanged": true,
+    "INF14_INF15_actual_unchanged": true
+  },
+  "pass": true,
+  "scripts": [
+    {
+      "id": "IA-1014-1",
+      "date": "2026-10-14",
+      "words": 163,
+      "sha256": "29199ed1b47e8920bc450641d6035e80afcc7f6c15c9480a404238d01fe5fc50",
+      "spoken_hash_words_match": true,
+      "text_complete_read": true,
+      "source_url_ficha_matches": true,
+      "before_post_gate_explicit": true,
+      "publication_authorized": false,
+      "provider_attribution_not_own_execution": true,
+      "news_slot_status": "FUENTE_RECIENTE_FECHADA_CONFIRMADA_12OCT_GATE_POST_14OCT_PENDIENTE",
+      "sources": [
+        "https://www.anthropic.com/news/2026-usage-policy-update"
+      ],
+      "source_date_context": "Publicado2026-10-08;vigenciaFUTURA2026-11-12"
+    },
+    {
+      "id": "IA-1014-2",
+      "date": "2026-10-14",
+      "words": 163,
+      "sha256": "2d48e921180c961b126f2854c5980a87fffc44c602d36a8a0e4fb6b6d6892dea",
+      "spoken_hash_words_match": true,
+      "text_complete_read": true,
+      "source_url_ficha_matches": true,
+      "before_post_gate_explicit": true,
+      "publication_authorized": false,
+      "provider_attribution_not_own_execution": true,
+      "news_slot_status": "FUENTE_RECIENTE_FECHADA_CONFIRMADA_12OCT_GATE_POST_14OCT_PENDIENTE",
+      "sources": [
+        "https://help.openai.com/en/articles/6825453-chatgpt-release-notes"
+      ],
+      "source_date_context": "Publicado2026-10-09"
+    },
+    {
+      "id": "IA-1015-1",
+      "date": "2026-10-15",
+      "words": 165,
+      "sha256": "e6310b9be56368b41cb1e9fbd4cfc0d742c1fa7bf0b9dd776ab159eaf9ffe990",
+      "spoken_hash_words_match": true,
+      "text_complete_read": true,
+      "source_url_ficha_matches": true,
+      "before_post_gate_explicit": true,
+      "publication_authorized": false,
+      "provider_attribution_not_own_execution": true,
+      "news_slot_status": "FUENTE_RECIENTE_FECHADA_CONFIRMADA_12OCT_GATE_POST_15OCT_PENDIENTE",
+      "sources": [
+        "https://help.openai.com/en/articles/6825453-chatgpt-release-notes"
+      ],
+      "source_date_context": "Publicado2026-10-07"
+    },
+    {
+      "id": "IA-1015-2",
+      "date": "2026-10-15",
+      "words": 165,
+      "sha256": "625d2971d0690fc7c9563594715ced48a006edd447347f461d4266cf41b93055",
+      "spoken_hash_words_match": true,
+      "text_complete_read": true,
+      "source_url_ficha_matches": true,
+      "before_post_gate_explicit": true,
+      "publication_authorized": false,
+      "provider_attribution_not_own_execution": true,
+      "news_slot_status": "FUENTE_RECIENTE_FECHADA_CONFIRMADA_12OCT_GATE_POST_15OCT_PENDIENTE",
+      "sources": [
+        "https://help.openai.com/en/articles/10128477-chatgpt-enterprise-and-edu-release-notes"
+      ],
+      "source_date_context": "Publicado2026-10-08"
+    }
+  ],
+  "plans": [
+    {
+      "id": "IA-1014-1-YA",
+      "parent_id": "IA-1014-1",
+      "candidate_from_exact_source": true,
+      "candidate_word_match": true,
+      "autonomy_verified": false,
+      "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
+      "estimated_duration": [
+        17.2,
+        19.7
+      ]
+    },
+    {
+      "id": "IA-1014-1-YB",
+      "parent_id": "IA-1014-1",
+      "candidate_from_exact_source": true,
+      "candidate_word_match": true,
+      "autonomy_verified": false,
+      "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
+      "estimated_duration": [
+        21.8,
+        24.9
+      ]
+    },
+    {
+      "id": "IA-1014-1-YC",
+      "parent_id": "IA-1014-1",
+      "candidate_from_exact_source": true,
+      "candidate_word_match": true,
+      "autonomy_verified": false,
+      "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
+      "estimated_duration": [
+        22.1,
+        25.3
+      ]
+    },
+    {
+      "id": "IA-1014-2-YA",
+      "parent_id": "IA-1014-2",
+      "candidate_from_exact_source": true,
+      "candidate_word_match": true,
+      "autonomy_verified": false,
+      "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
+      "estimated_duration": [
+        15.8,
+        18.0
+      ]
+    },
+    {
+      "id": "IA-1014-2-YB",
+      "parent_id": "IA-1014-2",
+      "candidate_from_exact_source": true,
+      "candidate_word_match": true,
+      "autonomy_verified": false,
+      "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
+      "estimated_duration": [
+        29.6,
+        33.9
+      ]
+    },
+    {
+      "id": "IA-1014-2-YC",
+      "parent_id": "IA-1014-2",
+      "candidate_from_exact_source": true,
+      "candidate_word_match": true,
+      "autonomy_verified": false,
+      "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
+      "estimated_duration": [
+        15.8,
+        18.0
+      ]
+    },
+    {
+      "id": "IA-1015-1-YA",
+      "parent_id": "IA-1015-1",
+      "candidate_from_exact_source": true,
+      "candidate_word_match": true,
+      "autonomy_verified": false,
+      "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
+      "estimated_duration": [
+        21.4,
+        24.4
+      ]
+    },
+    {
+      "id": "IA-1015-1-YB",
+      "parent_id": "IA-1015-1",
+      "candidate_from_exact_source": true,
+      "candidate_word_match": true,
+      "autonomy_verified": false,
+      "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
+      "estimated_duration": [
+        24.8,
+        28.3
+      ]
+    },
+    {
+      "id": "IA-1015-1-YC",
+      "parent_id": "IA-1015-1",
+      "candidate_from_exact_source": true,
+      "candidate_word_match": true,
+      "autonomy_verified": false,
+      "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
+      "estimated_duration": [
+        15.8,
+        18.0
+      ]
+    },
+    {
+      "id": "IA-1015-2-YA",
+      "parent_id": "IA-1015-2",
+      "candidate_from_exact_source": true,
+      "candidate_word_match": true,
+      "autonomy_verified": false,
+      "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
+      "estimated_duration": [
+        23.2,
+        26.6
+      ]
+    },
+    {
+      "id": "IA-1015-2-YB",
+      "parent_id": "IA-1015-2",
+      "candidate_from_exact_source": true,
+      "candidate_word_match": true,
+      "autonomy_verified": false,
+      "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
+      "estimated_duration": [
+        24.0,
+        27.4
+      ]
+    },
+    {
+      "id": "IA-1015-2-YC",
+      "parent_id": "IA-1015-2",
+      "candidate_from_exact_source": true,
+      "candidate_word_match": true,
+      "autonomy_verified": false,
+      "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
+      "estimated_duration": [
+        14.6,
+        16.7
+      ]
+    }
+  ],
+  "editorial_fact_review": [
+    "Policy8Oct announced, effective12Nov future; no legal conclusion, many rules already existed",
+    "Codex9Oct beta suggestion acceptedTab but not sent; personalPro18+desktoplocal/SSH/model limits explicit; generation credit beta not sending tasks free",
+    "IntelligentUI7Oct ChatGPT; Work/Codex models unchanged; Pro/Astra modes excluded; no own availability",
+    "Enterprise/EduRBAC8Oct owner/admin; plugin access does not override provider authorization/actions/approvals"
+  ],
+  "source_observer": "HECHOS_PARA_3DIAS.md byeditorial_sol, primary excerpts/date/limits reused; not independent live reading of reviewer",
+  "future_day_revalidation_still_pending": true,
+  "six_recent_news_total": 6,
+  "eight_IA_reserves_still_not_current_news": 8,
+  "no_personal_experience_or_external_CTA_claims": true,
+  "no_render_or_publication_approved": true,
+  "unchanged_informal_spoken_actual_check": [
+    {
+      "id": "INF-1014",
+      "actual_sha256": "1d92f52dd7228a5a81fd9400d649f7264e385ee555fb459208bd3533c46d0480",
+      "previous_qa_sha256": "1d92f52dd7228a5a81fd9400d649f7264e385ee555fb459208bd3533c46d0480",
+      "exact_unchanged": true
+    },
+    {
+      "id": "INF-1015",
+      "actual_sha256": "d2eae2f3220c1e2c3538dfc782c305fd74c81bb54efaac7b3b1899f17d82976a",
+      "previous_qa_sha256": "d2eae2f3220c1e2c3538dfc782c305fd74c81bb54efaac7b3b1899f17d82976a",
+      "exact_unchanged": true
+    }
+  ]
+}

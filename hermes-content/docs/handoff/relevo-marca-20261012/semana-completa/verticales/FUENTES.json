@@ -1,46 +1,5 @@
 [
   {
-    "id": "SI-03",
-    "urls": [
-      "https://github.com/DietrichGebert/ponytail"
-    ],
-    "observed_on": "2026-10-12",
-    "observer": "/root/guiones_sol",
-    "date_context": "BenchmarkactualREADMEobservado12oct; fechadebenchmark no establecida",
-    "version_gate": "39tareas5runsOpus5.5, autor-53code/-26cost; no propio; versionespara demo pendientes"
-  },
-  {
-    "id": "SI-04",
-    "urls": [
-      "https://code.claude.com/docs/en/commands",
-      "https://code.claude.com/docs/en/model-config"
-    ],
-    "observed_on": "2026-10-12",
-    "observer": "/root/guiones_sol",
-    "date_context": "radio29jun–3jul2026;powerup30mar–3abr2026; ultrathinkdocactual12oct",
-    "version_gate": "Versión propia/cuenta noverificadas; no nueva instalación"
-  },
-  {
-    "id": "SI-08",
-    "urls": [
-      "https://github.com/heygen-com/hyperframes"
-    ],
-    "observed_on": "2026-10-12",
-    "observer": "/root/guiones_sol",
-    "date_context": "READMErevalidado12oct;demopropiaGit histórica sin lanzamiento fechado",
-    "version_gate": "Demo12s3–6s compatible;coautoríaClaude;reviewencuadreprevio; Node22+/FFmpegCLIactual"
-  },
-  {
-    "id": "SI-09",
-    "urls": [
-      "https://code.claude.com/docs/en/workflows"
-    ],
-    "observed_on": "2026-10-12",
-    "observer": "/root/guiones_sol",
-    "date_context": "Docactualconsultado12oct; nofechalanzamiento nueva",
-    "version_gate": "WebSearchdisponible;ProDynamicworkflows; versión propia/informe no comprobados"
-  },
-  {
     "id": "IA-1016-1",
     "urls": [
       "https://code.claude.com/docs/en/skills",
@@ -141,5 +100,45 @@
     "observer": "editorial_sol ownweb, additional_alternative, seleccionado root",
     "date_context": "Publicado2026-10-09;corregido2026-10-12",
     "version_gate": "Autorreporte/noincidentepropio;corrección12oct"
+  },
+  {
+    "id": "IA-1014-1",
+    "urls": [
+      "https://www.anthropic.com/news/2026-usage-policy-update"
+    ],
+    "observed_on": "2026-10-12",
+    "observer": "editorial_sol ownweb; guiones_sol leyóactaHECHOS_PARA_3DIAS",
+    "date_context": "Publicado2026-10-08;vigenciaFUTURA2026-11-12",
+    "version_gate": "Publicación reciente; vigencia futura, no afirmar que empezó a regir hoy. No todo requisito es nuevo. Sin interpretación legal ni demo personal."
+  },
+  {
+    "id": "IA-1014-2",
+    "urls": [
+      "https://help.openai.com/en/articles/6825453-chatgpt-release-notes"
+    ],
+    "observed_on": "2026-10-12",
+    "observer": "editorial_sol ownweb; guiones_sol leyóactaHECHOS_PARA_3DIAS",
+    "date_context": "Publicado2026-10-09",
+    "version_gate": "Pro personal18+, appdesktopactual, hiloslocal/SSH con Astra o6.1Sol. Generar predicciones no consume límite/créditos durante beta; enviar mensajes sí sigue uso normal. No prueba en cuenta propia."
+  },
+  {
+    "id": "IA-1015-1",
+    "urls": [
+      "https://help.openai.com/en/articles/6825453-chatgpt-release-notes"
+    ],
+    "observed_on": "2026-10-12",
+    "observer": "editorial_sol ownweb; guiones_sol leyóactaHECHOS_PARA_3DIAS",
+    "date_context": "Publicado2026-10-07",
+    "version_gate": "RolloutChat porplan/admin; Instant–ExtraHigh. Pro reasoning/Astra excluyeIntelligentUI. No trasladar anuncio aWork/Codex ni afirmar disponibilidad enSergio."
+  },
+  {
+    "id": "IA-1015-2",
+    "urls": [
+      "https://help.openai.com/en/articles/10128477-chatgpt-enterprise-and-edu-release-notes"
+    ],
+    "observed_on": "2026-10-12",
+    "observer": "editorial_sol ownweb; guiones_sol leyóactaHECHOS_PARA_3DIAS",
+    "date_context": "Publicado2026-10-08",
+    "version_gate": "RequiereEnterprise/Edu+RBAC y roladministrador. Acceso alplugin no elimina permisos delproveedor ni aprobaciones deacciones. No anunciado para todo usuarioFree/Plus; sin configuración propia."
   }
 ]
