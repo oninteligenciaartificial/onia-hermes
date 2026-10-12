@@ -1,0 +1,102 @@
+[
+ {
+  "id": "rotulo",
+  "text": "Lucía Antelo · personaje IA de Onia",
+  "y": 1172,
+  "size": 48,
+  "card": false,
+  "clip": "s1",
+  "x": 80,
+  "w": 920
+ },
+ {
+  "id": "titulo",
+  "text": "Casi publico este 0,83.",
+  "y": 1273,
+  "size": 66,
+  "card": true,
+  "clip": "s1",
+  "x": 80,
+  "w": 920
+ },
+ {
+  "id": "dato",
+  "text": "Kling O1 Image · parecido 0,83",
+  "y": 1395,
+  "size": 48,
+  "card": true,
+  "clip": "s1",
+  "x": 80,
+  "w": 920
+ },
+ {
+  "id": "cap-k4",
+  "text": "Kling O1 Image una sola toma.",
+  "y": 1194,
+  "size": 48,
+  "card": true,
+  "clip": "s2",
+  "x": 80,
+  "w": 440
+ },
+ {
+  "id": "cap-r3",
+  "text": "Mirá una foto suya que recibió.",
+  "y": 1194,
+  "size": 48,
+  "card": true,
+  "clip": "s2",
+  "x": 560,
+  "w": 440
+ },
+ {
+  "id": "tile2",
+  "text": "Misma pose, ventana, taza.",
+  "y": 1344,
+  "size": 52,
+  "card": true,
+  "clip": "s2",
+  "x": 80,
+  "w": 920
+ },
+ {
+  "id": "beat-a",
+  "text": "Con esa foto: 0,93",
+  "y": 1194,
+  "size": 56,
+  "card": true,
+  "clip": "s2",
+  "x": 80,
+  "w": 920
+ },
+ {
+  "id": "cta",
+  "text": "Seguime: cada semana, una prueba.",
+  "y": 1194,
+  "size": 66,
+  "card": true,
+  "clip": "s3",
+  "x": 80,
+  "w": 920
+ },
+ {
+  "id": "beat-b",
+  "text": "Con sus otras 7 fotos: 0,56–0,73",
+  "y": 1194,
+  "size": 56,
+  "card": true,
+  "clip": "s3",
+  "x": 80,
+  "w": 920
+ },
+ {
+  "id": "beat-c",
+  "text": "Casi copia: no prueba identidad.",
+  "y": 1194,
+  "size": 64,
+  "card": true,
+  "clip": "s3",
+  "x": 80,
+  "w": 920
+ }
+]

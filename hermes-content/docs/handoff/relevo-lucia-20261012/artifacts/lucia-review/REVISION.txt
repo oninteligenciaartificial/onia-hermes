@@ -1,0 +1,43 @@
+META: recuperar la v2 existente del viernes y entregarla para revisión privada.
+PRUEBA: preview original accesible, procedencia/hash, specs y observación visual; copy/calendario/voz y accesos comprobados.
+PARADA: entrega revisable alcanzada; no generación, instalación, cambios de repo/producción ni publicación.
+
+Carril exclusivo Lucía Antelo; MADRE MARKETING revisa. Modelo Work no observable/configurable desde las herramientas disponibles.
+
+Procedencia
+Repo: oninteligenciaartificial/onia-hermes
+Rama: claude/zealous-babbage-fvtjck
+Fuente: videos/lucia-viernes-copia-v2/qa/viernes-preview-360p.mp4
+Git blob del preview: f1bb15f38c9c65049752d4608b68d13c8bee08f9
+SHA256 observado preview: d5078617731892da21ed3fc610a217c213f3fe9127cd58e3e677b4d1e7b39ad3
+Master canónico: videos/lucia-entrega/viernes-copia-v2-final-1080x1920.mp4
+SHA256 del master declarado por README/cola, NO verificado localmente: c4299c7b21c7b05cc41181176d8908429b9752d4422c9cc9275964dd64393aa4
+Autoría original: sesión Claude Lucía, session_01XSzFcs1k18ijqjSHGjnzD4. No se rehízo el montaje.
+Assets declarados originales: K4 de Kling O1 Image (job dad464de-75a8-45f5-b799-8d91e5a63d1d) y R3 de Lucía. No se generó ni alteró identidad.
+
+QA observado en este entorno
+ffprobe: 15.000 s, H264, 360x640, 24 fps; no pista de audio en el preview.
+Inspección: hoja original de 30 muestras del master y frames del preview en 0, 4.5, 8.5 y 14 s.
+Gancho, declaración IA inicial y CTA legibles a 360 px; caras visibles, cifras grandes, sin gráfico denso.
+Escena comparativa 2.75–5.79 s: tres grupos de texto y abundante fondo negro; la lectura sigue siendo la zona más exigente.
+Pendiente: visionado temporal completo por Sergio/madre y comprobación de interfaz real de Instagram. No afirmar QA completo por muestreo.
+La fuente declara 22 gates/132 mutaciones/30 de 30 caras y 48 px mínimos. NO reejecutados aquí.
+Master >1 MB: fetch_file devuelve contenido vacío; fetch_blob y fetch rechazan bytes no UTF8. Preview <1 MB recuperado íntegro.
+G4/G5/C1 cerrados; aprobación de guion ≠ permiso de publicar; no se tocaron.
+
+Accesos probados
+Repo: sí; get_repo y fetch_file en rama vigente; main contiene estado antiguo.
+Drive: búsqueda autorizada funciona, viernes y Lucia sin resultados; pieza no localizada, no ausencia definitiva.
+Assets: preview y hoja original sí; master solo metadatos/procedencia; fuentes K4/R3 sin materializar en este lote.
+Higgsfield: sí; workspace y proyecto c6c080a7-fbe9-4314-a5b5-e5f8ec6f59ad leídos; sandbox nuevo sin proyectos previos, higgsedit preinstalado. No gasto.
+Publicación: NO accesible; no conector Instagram/Buffer expuesto. ssh onia-vps devuelve error de resolución DNS. Cuenta @lucia.antelo.oficial proviene del repo, no verificada en canal real.
+No se trasladaron secretos, no se activaron sesiones Claude/loops, no hubo publicaciones ni nuevos créditos.
+
+Calendario y decisiones
+Propuesta pendiente: reel viernes 16-oct-2026, G3 30-oct, P9 6-nov; 19:00 La Paz / 23:00 UTC (hora de plan).
+No agendado. Confirmar esas tres fechas preservando que el viernes anteceda a G4/C2.
+Voz: NO existe. Lote 1 propuesto 223 caracteres Marcela; exige cupo vigente y sí específico; cifra 381 del repo es histórica.
+Permiso específico no encontrado: falta “mostrada, publicá el viernes” para esta v2 + su copy/calendario.
+G1v2: pendientes token IG, SHA y “mostrada, publicá G1v2”; no es bloqueo de esta entrega privada.
+Antes de publicar: comprobar registro exacto versión/cuenta/copy/fecha y que no esté ya publicada; validar resultado por permalink.
+

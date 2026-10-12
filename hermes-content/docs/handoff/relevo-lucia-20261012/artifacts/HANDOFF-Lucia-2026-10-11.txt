@@ -1,0 +1,97 @@
+HANDOFF — Lucía Antelo / MADRE MARKETING
+Cierre del lote: 2026-10-11, 21:35 UTC-4.
+Estado: recuperación y QA acotado terminados; entrega privada revisable. No migración confirmada. Codex Cloud nativo se verifica por separado.
+
+META / PRUEBA / PARADA
+META: recuperar viernes v2 existente y conservar preview, copy, procedencia y pendientes.
+PRUEBA: bytes del preview comparados contra GitHub canónico, specs y QA independiente.
+PARADA: lote entregado; no nuevas cadenas, loops, gastos, generaciones, instalaciones ni publicaciones.
+
+FUENTE CANÓNICA
+Repo privado oninteligenciaartificial/onia-hermes.
+Rama claude/zealous-babbage-fvtjck; main tenía documentación antigua y NO reemplaza esta fuente.
+https://github.com/oninteligenciaartificial/onia-hermes/blob/claude/zealous-babbage-fvtjck/hermes-content/docs/cola/loop/lucia.md
+Secciones verificadas: líneas57–60 y185–201.
+https://github.com/oninteligenciaartificial/onia-hermes/blob/claude/zealous-babbage-fvtjck/videos/lucia-viernes-copia-v2/README.md
+https://github.com/oninteligenciaartificial/onia-hermes/blob/claude/zealous-babbage-fvtjck/videos/lucia-viernes-copia-v2/pie.txt
+https://github.com/oninteligenciaartificial/onia-hermes/blob/claude/zealous-babbage-fvtjck/videos/lucia-entrega/README.md
+AGENTS.md, CLAUDE.md y skills canónicas lucia, onia-router, editor-videos, edicion-referentes, motion-doctrine, equipo-de-agentes y aprender-de-todo leídos por secciones.
+
+ARTEFACTOS CONSERVADOS
+/workspace/scratch/6dfdcd54b0f6/lucia-review/viernes-preview-360p.mp4
+SHA256 MEDIDO: d5078617731892da21ed3fc610a217c213f3fe9127cd58e3e677b4d1e7b39ad3
+Git blob MEDIDO: f1bb15f38c9c65049752d4608b68d13c8bee08f9; coincide con fetch_file canónico.
+Specs medidas: H264, 360x640, 24fps, 360 cuadros, 15.000s, 315910 bytes, sin pista audio.
+/workspace/scratch/6dfdcd54b0f6/lucia-review/contacto-2fps.jpg
+SHA256 MEDIDO: 0f896585b36468a3239057dadb3b1b6b6000bcfa89aeb05ca437b42a3941bdad
+/workspace/scratch/6dfdcd54b0f6/lucia-review/pie.txt — copy original recuperado, no reescrito.
+/workspace/scratch/6dfdcd54b0f6/lucia-review/REVISION.txt — pruebas, límites y decisiones.
+/workspace/scratch/6dfdcd54b0f6/lucia-review/qa-01.png a qa-04.png — frames extraídos para inspección.
+/workspace/scratch/6dfdcd54b0f6/Lucia-viernes-v2-revision.zip — preview, contacto, copy y REVISION.
+SHA256 MEDIDO: abd35779525d2d3abdd39246fc71985f61319c7c547e761f67ffd67fcbe88e19
+Guardado confirmado: Library /Lucia-viernes-v2-revision.zip, libfile_d0ae1088416c8191bf3415a051e59668, versión0.
+No borrar archivos .b64 intermedios ni helpers. No se borró ni archivó nada.
+
+MASTER / VERSIÓN
+Viernes v2 “Casi publico este 0,83”, ya simplificada por Claude, NO L02.
+Master canónico videos/lucia-entrega/viernes-copia-v2-final-1080x1920.mp4
+SHA256 DOCUMENTADO, NO medido localmente:
+c4299c7b21c7b05cc41181176d8908429b9752d4422c9cc9275964dd64393aa4
+Master declarado: 1080x1920,24fps,15s,mudo.
+Fetch_file de MP4 >1MB dio contenido vacío; fetch_blob/fetch rechazaron binario no UTF8.
+Recuperado el preview existente <1MB. No reconstruir ni generar otro para suplirlo.
+Origen declarado: sesión Claude Lucía session_01XSzFcs1k18ijqjSHGjnzD4.
+Assets declarados: K4 Kling O1 Image dad464de-75a8-45f5-b799-8d91e5a63d1d + R3 Lucía. No materializados en este lote.
+
+AGENTES REALES
+Herramientas: collaboration.spawn_agent, collaboration.list_agents y mensajes de resultados.
+ID canónico /root/lucia_continuidad: ACK recibido; running observado; FINAL recibido.
+Contrato solo lectura: preview/hash/specs y manifest canónico.
+Resultado: bytes coinciden con blob GitHub, SHA/specs confirmados; master sigue documental; calendario/voz/publicación pendientes.
+ID canónico /root/lucia_qa: ACK recibido; running observado; FINAL recibido.
+Contrato solo lectura: versión, QA visual, identidad/procedencia y pendientes.
+Resultado: 30 muestras +4frames vistos; gancho/CTA legibles; comparación doble exige comprobar lectura temporal/IG.
+Rostro visualmente consistente, NO certificación de identidad contra R1–R8. Hash/specs corroborados.
+Modelos Work/subagentes no observables; no se eligió ni afirmó Sol/Astra/Luna. No programación encargada.
+Ningún agente modificó, generó ni publicó.
+
+QA Y LÍMITES
+Observado: declaración IA inicial, cara visible en muestras, cifras grandes, CTA legible a360px.
+Pendiente: reproducción temporal completa por Sergio/madre e interfaz real Instagram.
+22gates/132mutaciones/ArcFace<=0.007 y letra>=48px son resultados DECLARADOS por Claude; no reejecutados aquí.
+No confundir QA muestreado con QA completo ni LISTA PARA MOSTRAR con aprobación.
+G4/G5/C1 cerrados: no reabrir. Aprobación de guion no equivale a publicar.
+
+ACCESOS DE ESTE ENTORNO
+Repo probado: get_repo/fetch_file, rama vigente.
+Drive probado: búsquedas viernes y Lucia responden sin resultados; pieza no localizada, no ausencia definitiva.
+Assets probados: preview/hoja/copy. Master bytes y fuentes K4/R3 no recuperados.
+Higgsfield probado: workspace ed5a2a8f-5a06-4087-a680-81bc592b1b4e y proyecto c6c080a7-fbe9-4314-a5b5-e5f8ec6f59ad leídos; jobs existentes. Sandbox nuevo sin proyectos previos; higgsedit preinstalado. Nada generado.
+Canal publicación no accesible: sin conector Instagram/Buffer expuesto; ssh onia-vps falló “Could not resolve hostname ... Temporary failure in name resolution”.
+Cuenta @lucia.antelo.oficial viene del repo; acceso real/perfil/token NO comprobados. No copiar secretos ni sesiones de madre.
+
+CONTRATOS Y DECISIONES PENDIENTES
+1. Revisar preview existente y cerrar QA temporal/IG; comprobar master SHA cuando sus bytes estén accesibles.
+2. Confirmar cambio propuesto: viernes16oct2026 a19:00LaPaz/23:00UTC; G3 30oct; P9 6nov. No agendado.
+3. Voz Marcela lote1:223car, no existe; requiere cupo vigente y sí específico.381car es cifra histórica.
+4. Viernesv2: no se encontró aprobación específica pieza+versión+cuenta+copy+calendario. Falta “mostrada, publicá el viernes”.
+5. Si autorización vigente verificable ya existe, no volver a pedirla: comprobar registro y ausencia de publicación; publicar solo versión aprobada; validar permalink.
+6. G1v2 fuera de este lote: tokenIG/SHA y “mostrada, publicá G1v2”.
+Presupuesto histórico11/150 no es balance ni permiso de gasto.
+Madres asignan/supervisan/revisan/resumen; worker ejecuta oficio. No nuevas cadenas/loops.
+
+CAMBIOS SIN GUARDAR / ESTADO
+Sin cambios de repo, Git, producción, calendario o cuentas; no commits pendientes creados aquí.
+ZIP existente guardado y hash revalidado. Frames QA quedan localmente; evidencia original contacto dentro del ZIP.
+Este handoff se guarda como archivo aparte. No versiones previas reemplazadas.
+No migración ejecutada ni disponibilidad CodexCloud confirmada.
+
+MARCA PERSONAL — TRANSFERENCIA FUERA DE ESTE CARRIL
+Mantener pendiente en el worker Marca, sin reiniciar ni asignar ejecución a madre: análisis de referentes compartidos por mrsatiras (contacto, NO autor), diseño de carrusel, comunidad Erik Taveras y workshop PREPAGO (analizar, no lanzar).
+Evidencia recibida por contexto de coordinación, no investigada ni descargada por Lucía:
+https://www.instagram.com/stories/eriktaveras/4005709473972822446?reel_id=10801565739&reel_owner_id=10801565739
+https://www.instagram.com/p/DeP64W6JynO/
+https://www.instagram.com/p/DeTY4y4mwCk/
+La siguiente URL en el contexto de Marca está truncada (DeWaJ8PgQ…): recuperar el mensaje íntegro en su sesión; NO inventar enlace.
+Resultados DD-A/N02 y archivos del carril Marca pertenecen a su handoff; Lucía no los duplicó ni auditó. Conservar toda evidencia que Marca ya tenga.
+
