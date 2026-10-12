@@ -9,13 +9,12 @@ Regla madre: `CLAUDE.md` §1 «Sesión MADRE local + carriles en la nube». Esta
 `hermes-content/docs/handoff/madre-local.md`. Capacidades medidas: fila 3 de
 `hermes-content/docs/ONIA_CAPACIDADES_DE_LAS_SESIONES.md`.
 
-> Corrección 2026-10-12 (Sergio Urcullo; política vigente en
-> `hermes-content/docs/AI_MODEL_ROUTING_2026.md`, «Decisión vigente 12-oct-2026»):
-> las madres usan `gpt-6.1-sol` · `medium` solo para delegar, revisar y resumir.
-> Análisis cerrado y QA independiente: Sol; mecánica verificable: `gpt-6-luna` · `low`.
-> TODO código de ONIA Platform: `gpt-6-astra` · `medium`.
-> Escalar análisis solo ante un fallo material demostrado. Las reglas de modelo
-> históricas siguientes quedan subordinadas a esta corrección.
+> Corrección 2026-10-12, modo ahorro (Sergio Urcullo; política vigente en
+> `hermes-content/docs/AI_MODEL_ROUTING_2026.md`): madres Luna low solo delegan,
+> revisan y resumen. Hermes/checks/recuperación/mecánica Luna low; código Platform
+> Sol 6.1 medium, QA focal Sol low; workers Marca/Lucía/Ventas Sol 6.1 low,
+> Luna low para mecánica. Astra requiere excepción específica de Sergio con fallo
+> demostrado o riesgo material evidenciado. Reglas de modelo siguientes son históricas.
 
 - **Hay DOS madres locales en la PC de Sergio Urcullo** (app de escritorio, carpeta `onia-hermes`; reparto del
   11-oct-2026, QA `hermes-content/docs/research/2026-10-11-harness-qa/D02`). **MADRE DESARROLLO-INFRA** ordena

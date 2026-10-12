@@ -1,14 +1,15 @@
 # Enrutamiento de modelos para ONIA/Hermes
 
-Estado: actualizado 2026-10-09 (Sol 6.1 para contratos cerrados, alineado con `equipo-de-agentes`). Aplica a Codex, subagentes y automatizaciones que permitan
-elegir modelo. La disponibilidad puede variar por producto y cuenta.
+Estado: política vigente de modo ahorro 2026-10-12; conserva decisiones previas como historial subordinado. Aplica a Codex, subagentes y automatizaciones que permitan elegir modelo. La disponibilidad puede variar por producto y cuenta.
 
-## Decisión vigente Sergio Urcullo — 12-oct-2026
+## Decisión vigente — modo ahorro, Sergio Urcullo 12-oct-2026
 
-- Madres Desarrollo-Infra y Marketing: **gpt-6.1-sol · medium**, solo delegación/revisión/resumen. Cambios aceptados por `send_message_to_thread`; efectivo no expuesto. Escalar decisiones muy difíciles a Astra con evidencia, sin convertirlo en default de toda coordinación.
-- **TODO código Platform: gpt-6-astra · medium**. Análisis cerrado Sol/Luna, QA independiente Sol; no detener diffs/lotes activos para cambiar esta política.
-- Oficio habitual no Platform: Sol 6.1 medio; extracción/mecánica verificable Luna low. Hasta cinco frentes independientes cuando necesarios y runtime permita; no llenar slots ni repetir el paquete completo de contexto.
-- Aplicar deltas/cursor, contratos consolidados y retornos acotados; reutilizar pruebas válidas para el mismo SHA. Esperar eventos/resultado, no polling vacío ni loops nuevos. Skill única `.claude/skills/onia-continuidad/SKILL.md`; trazabilidad y medición en `hermes-content/docs/handoff/codex-cloud-pc-20261011.md`. Bajar modelo no prueba reducción de tokens/cuota ni garantiza calidad: verificar contrato y escalar si falla.
+- Madres: **gpt-6-luna · low**, solo delegan, revisan evidencia y resumen. Hermes, comprobaciones, recuperación y mecánica verificable: Luna low.
+- Código Platform: **gpt-6.1-sol · medium**; QA focal independiente: **Sol low**; cambios mecánicos: **Luna low**.
+- Workers creativos existentes de Marca, Lucía y Ventas/pauta: **Sol 6.1 low**; delegar a Luna low solo la parte mecánica.
+- Astra no es predeterminado ni escalación automática. Usarlo requiere excepción específica de Sergio, sustentada en un fallo demostrado o riesgo material evidenciado.
+- Máximo 1 ejecutor y 1 revisor focal por lote de cada carril; sin fanout masivo. Pruebas proporcionales; usar deltas, no historia/diffs enteros ni repeticiones. Sin loops nuevos y sin ACK si no hay cambio.
+- Registrar configuración aceptada y modelo efectivo por separado. No afirmar ahorro medido ni cambio de cuota; esta política tampoco modifica runtime automáticamente.
 
 ## Decisión histórica — 9-oct (subordinada a la anterior)
 

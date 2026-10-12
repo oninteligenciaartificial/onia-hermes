@@ -38,6 +38,8 @@
 
 ### Registro de encargos y aprendizaje — único intake 12-oct
 
+**Routing modo ahorro, actualización 12-oct, sustituye el routing previo:** herramienta oficial aceptó 7 cambios de modelos de carril: Platform Sol 6.1 medium; Hermes y recuperación PNG Luna low; Marca, Lucía y Ventas Sol 6.1 low; madre Marketing Luna low. Dos heartbeats existentes se actualizaron conservando frecuencia. Ambas madres configuradas Luna low, aceptado por herramienta; modelo servido no expuesto. Snapshot comunicado ahora: cuota global 54% usada / 46% restante. No prueba ahorro causado ni cuota futura; Astra solo con excepción específica de Sergio ante fallo o riesgo material evidenciado.
+
 **Nueva decisión de producto, Sergio 12-oct:** [PRODUCT Hermes](../../../PRODUCT.md) y [estrategia](../ONIA_ESTRATEGIA_DE_EMPRESA.md) ahora fijan producto simple listo para usar, multirubro/escalable, lanzamiento dental y web IA/WhatsApp como capacidades de un único plan comercial integrado. Recorrido cliente contratar → mínimos → agenda/pacientes/cobros/WhatsApp; web datos/plantilla → preview → aprobación → publicación solo autorizada. Son criterios solicitados, no capacidades/precios/gratuidad/ilimitados entregados. Viejo veto web-servicio superado; complejidad técnica interna. Madre resume resultado/mejora/falta, no jerga Git por defecto. Worker Platform debe incorporar decisión en su PRODUCT sin pisar checkout compartido; coordinación solicitada a madre, decisión ya enviada por madre al worker Platform Astra, incorporación todavía no verificada. Último steering «todo en un solo plan» supera inferencia add-on/upsell; precio y cupos reales pendientes, sin ilimitados ni alterar facturación/producción.
 
 **Continuidad mientras Sergio sale, 12-oct:** madre ya avisó a Marketing, Platform y Hermes que continúen tareas vigentes y notifiquen solo entregas importantes, fallos o decisiones humanas. Marketing debe dejar videos aprobados subidos/programados tres horas antes del horario acordado, comprobando calendario/cuenta/versiones; preguntar el horario solo si realmente falta. No adelantar publicación ni afirmar subida/programación sin prueba. Estado: instrucciones enviadas por madre, entregas posteriores no verificadas aquí. No duplicar mensajes, rondas o carriles.
@@ -133,15 +135,15 @@ Madres locales: Desarrollo `01a12beb-7774-7c02-9931-12264158df83`, Marketing `01
 
 | Sesión | Responsabilidad | Modelo |
 |---|---|---|
-| Madre Desarrollo-Infra local | Contratos/prioridades, coordinación Platform/Hermes, QA y resumen; NO implementación | Sol 6.1 medio; escalar a Astra para decisión muy difícil con evidencia |
-| Madre Marketing local | Contratos/prioridades Marca/Lucía/Ventas, revisión/versión aprobada, resumen; NO oficio del worker | Sol 6.1 medio |
-| Platform Codex Cloud | Desarrollo del backlog vigente, diff y pruebas; no rehacer Prisma cerrado | Astra medio TODO código; análisis acotado Sol/Luna, QA independiente |
-| Hermes Codex Cloud | QA independiente, regresiones, contratos de infra/Jarvis sin aplicar producción | Sol medio; Astra alto riesgo/muy difícil |
-| Marca Codex Cloud | Continuar proyectos/edición/cortes, previews y publicación autorizada | Sol medio; Luna mecánica cerrada |
-| Lucía Codex Cloud | Identidad/procedencia, montajes existentes y calendario/entregas | Sol medio; Astra solo decisión muy difícil |
-| Ventas/pauta Codex Cloud | Claims/demo/manifiesto, campañas dentro de permisos y evidencia | Sol medio; Luna normalización mecánica |
+| Madre Desarrollo-Infra local | Contratos/prioridades, coordinación Platform/Hermes, QA y resumen; NO implementación | Luna low; delegar/revisar/resumir |
+| Madre Marketing local | Contratos/prioridades Marca/Lucía/Ventas, revisión/versión aprobada, resumen; NO oficio del worker | Luna low; delegar/revisar/resumir |
+| Platform Codex Cloud | Código del backlog vigente y pruebas; no rehacer Prisma cerrado | Sol 6.1 medium; QA focal Sol low; mecánica Luna low |
+| Hermes Codex Cloud | QA, regresiones, contratos de infra/Jarvis sin aplicar producción | Luna low |
+| Marca Codex Cloud | Proyectos/edición/cortes, previews y publicación autorizada | Sol 6.1 low; mecánica Luna low |
+| Lucía Codex Cloud | Identidad/procedencia, montajes existentes y calendario/entregas | Sol 6.1 low; mecánica Luna low |
+| Ventas/pauta Codex Cloud | Claims/demo/manifiesto, campañas dentro de permisos y evidencia | Sol 6.1 low; mecánica Luna low |
 
-**Última orden Sergio 12-oct: TODO código Platform ASTRA medio; análisis acotado Sol/Luna barato, QA independiente y escalación si necesaria.** Sustituye la orden intermedia de Sol para código Platform. No afirmar que cambió automáticamente un modelo ni interrumpir diffs actuales. Registrar selector/configuración y modelo no observable por separado; Work no satisface el objetivo de ejecutores Codex Cloud.
+**Routing vigente Sergio Urcullo 12-oct — modo ahorro:** el selector de modelos del cuadro sustituye la orden intermedia de Astra para código. Máx. 1 ejecutor + 1 revisor focal por lote/carril; Astra requiere excepción específica de Sergio por fallo demostrado o riesgo material evidenciado. Sin fanout masivo ni ACK si no hay cambio; pruebas proporcionales, deltas sin historia/diffs enteros ni repeticiones, sin loops nuevos. No afirmar ahorro medido, cuota futura ni modelo servido si no está expuesto. Work no satisface el objetivo de ejecutores Codex Cloud.
 
 **Inventario actual comunicado:** 64 skills Hermes en worktree audit frente a 43 en checkout main, Platform 6; inventario NO implica lectura completa. `list_threads`: Desarrollo/setup Hermes/4 Work idle; madre Marketing notLoaded. No trabajo producto iniciado por este plan. CLAUDE genérico dice 1 madre, bloque nuevo skill/handoff y Sergio establecen 2; prevalece Sergio. CronCreate histórico local: muere con sesión/vence 7 días; no es scheduler cloud 24/7.
 
