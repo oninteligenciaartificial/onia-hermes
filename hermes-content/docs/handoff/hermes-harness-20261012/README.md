@@ -102,9 +102,9 @@ no basta para operar. El artefacto aprobado sólo prueba reglas offline. Checkpo
 exclusión compartida, conexión del trigger y pruebas remotas siguen pendientes;
 no están resueltos por el O_EXCL local ni por una respuesta de soporte.
 
-La madre comunicó incidencia **ENVIADA** por Help oficial con cuenta ONIA y botón
-Escalate pulsado; confirmación pendiente. Es evidencia declarada por la madre,
-no un envío ni acuse observado por Hermes. La auditoría ae12aa63 conserva el estado
+La madre confirmó la incidencia **ENVIADA Y ESCALADA** por Help oficial con cuenta
+ONIA. La resolución del producto sigue pendiente. Es evidencia declarada por la
+madre, no un envío ni acuse observado por Hermes; no acredita reparación. La auditoría ae12aa63 conserva el estado
 histórico preparado/no enviado; no se edita ni se toma como estado posterior.
 
 | Paso pendiente / dueño | Fuente o API oficial y límite | Prerequisitos | Prueba requerida para cerrar |
@@ -126,3 +126,12 @@ el addendum QA y recibo documental posteriores identifican este delta.
 
 Hasta cerrar todos los pasos, continuar el mismo chat por web/móvil es alternativa
 oficial con disparo humano; no es supervisor autónomo ni habilita loops cloud.
+
+## Checkpoint de espera y avisos
+
+Escalación confirmada por madre; sin nuevo intento de CLI/401, wake o incidencia.
+Gates de operación cerrados. No queda preparación independiente necesaria en este
+contrato offline: esperar resolución del producto y decisión de arquitectura para
+las integraciones pendientes, sin polling ni actividad simulada. Avisar sólo ante
+capacidad nueva probada, fallo material o acción humana específica. Un heartbeat
+local no acredita operación con la PC apagada.
