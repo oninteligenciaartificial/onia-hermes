@@ -1,0 +1,76 @@
+{
+  "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+  "original_sha256": "0767d86ef030644d1083c5364eb56e5a01cf1973a70e1daf32bef87dee36a44a",
+  "status": "Propuesta editorial privada, no publicación ni prueba de grabación",
+  "adjustments": [
+    {
+      "id": "SI-01",
+      "omissions": [
+        "Yo armé una ayer. Hoy a las nueve dejó esto."
+      ],
+      "replacements": {},
+      "cta": "Ambos cierres omitidos hasta evidencia de prueba/recurso/URL en comunidad",
+      "sha256": "b4450a751220ac9b2d07057e3e3f0abdd077e3953f709cdcf6f2c8abb78ae406"
+    },
+    {
+      "id": "SI-02",
+      "omissions": [
+        "Casi cuatrocientas mil estrellas, los likes de GitHub.",
+        "Yo mi asistente lo tengo en un servidor, no en mi laptop.",
+        "La prueba: pedile que abra un archivo fuera de su caja.",
+        "Si no puede, está bien encerrado."
+      ],
+      "replacements": {
+        "Dos: sandbox, una caja cerrada; lo que rompa queda adentro.": "Dos: sandbox, una caja para limitar lo que puede tocar."
+      },
+      "cta": "Ambos cierres omitidos hasta evidencia de prueba/recurso/URL en comunidad",
+      "sha256": "60ef8b296bc3ae35c1aed6262fbc0efb22253966bfcaf07f09c28a39224d7832",
+      "reason_sandbox": "Limitación de acceso, no garantía total; Gateway permanece en host según primariaOpenClaw."
+    },
+    {
+      "id": "SI-03",
+      "omissions": [
+        "Lo tengo instalado en mi Claude Code.",
+        "No encontré otra medición."
+      ],
+      "replacements": {
+        "Ojo: lo midió el autor. No encontré otra medición.": "Ojo: lo midió el autor."
+      },
+      "cta": "Ambos cierres omitidos hasta evidencia de prueba/recurso/URL en comunidad",
+      "sha256": "05f5a564a65d8921393d398652cb10a19abc8c670eef85f4d0099799c9811c31"
+    },
+    {
+      "id": "SI-04",
+      "omissions": [],
+      "replacements": {},
+      "cta": "Ambos cierres omitidos hasta evidencia de prueba/recurso/URL en comunidad",
+      "sha256": "6b7d093b751221450435d6130f0b84ddfa36dced2dba3cc0df84186f7e21a3cc"
+    },
+    {
+      "id": "SI-08",
+      "omissions": [
+        "Este mes sumó casi doce mil estrellas, los likes de GitHub.",
+        "Ojo: no edita lo que grabaste ni crea presentadores con IA.",
+        "Los carteles de mis videos salen de acá.",
+        "Yo pido. Claude escribe. HyperFrames anima."
+      ],
+      "replacements": {
+        "Mirá esto. No lo edité. Lo escribió Claude.": "Mirá esto. Claude ayudó a escribirlo.",
+        "Es gratis y lo hizo HeyGen.": "El render local es gratis y lo hizo HeyGen."
+      },
+      "cta": "Ambos cierres omitidos hasta evidencia de prueba/recurso/URL en comunidad",
+      "sha256": "43da9d7cc2721f32f5babcf76cb80a335362814b780eb67c12b9b97d424cb993"
+    },
+    {
+      "id": "SI-09",
+      "omissions": [
+        "Yo lo uso antes de construir algo, para ver si ya existe.",
+        "Me pasó construir cosas que ya existían hechas."
+      ],
+      "replacements": {},
+      "cta": "Ambos cierres omitidos hasta evidencia de prueba/recurso/URL en comunidad",
+      "sha256": "9dec9d2cbd179c88a7bd3ff9f7972635bc25f5cec618cd19cc4c8b08e1ca8800"
+    }
+  ],
+  "proposal_sha256": "ac0dcffe8f9b905c9a2d15d8df1ec53775ece8b0d40e0631e7cacf27368ccc77"
+}

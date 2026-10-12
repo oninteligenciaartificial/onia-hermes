@@ -1,0 +1,167 @@
+{
+  "reviewer": "/root/qa_sol",
+  "scope": "Independent textual QA of six private documentary bases and explicit conditions; existing excerpts and root observations read, no repeated web research",
+  "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+  "source_original_sha256": "0767d86ef030644d1083c5364eb56e5a01cf1973a70e1daf32bef87dee36a44a",
+  "proposal_file_sha256": "ac0dcffe8f9b905c9a2d15d8df1ec53775ece8b0d40e0631e7cacf27368ccc77",
+  "proposal_file_bytes": 4453,
+  "checks": {
+    "six_expected_ids": true,
+    "six_derived_and_hashes_match": true,
+    "both_cta_omitted_all": true,
+    "conditions_remain": true,
+    "source_original_unmodified": true,
+    "SI02_absolute_removed": true,
+    "SI08_no_exclusive_authorship_or_false_footage_restriction": true,
+    "SI03_benchmark_attributed": true,
+    "SI09_not_claiming_personal_use": true
+  },
+  "rows": [
+    {
+      "id": "SI-01",
+      "derivation_match": true,
+      "body_hash_match": true,
+      "both_cta_omitted": true,
+      "body_sha256": "b4450a751220ac9b2d07057e3e3f0abdd077e3953f709cdcf6f2c8abb78ae406",
+      "factual_observer": "root (fuentes web comunicadas el12oct)",
+      "primary_urls": [
+        "https://code.claude.com/docs/en/routines",
+        "https://code.claude.com/docs/en/scheduled-tasks"
+      ],
+      "has_explicit_pending_conditions": true,
+      "pending_conditions": [
+        "Rutina creada día anterior y captura de su ejecución",
+        "Aviso RUTINA realmente pegado"
+      ],
+      "ready_unconditionally": false
+    },
+    {
+      "id": "SI-02",
+      "derivation_match": true,
+      "body_hash_match": true,
+      "both_cta_omitted": true,
+      "body_sha256": "60ef8b296bc3ae35c1aed6262fbc0efb22253966bfcaf07f09c28a39224d7832",
+      "factual_observer": "guiones_sol lectura web12oct",
+      "primary_urls": [
+        "https://docs.openclaw.ai/gateway/security/prompt-injection",
+        "https://docs.openclaw.ai/gateway/sandboxing"
+      ],
+      "has_explicit_pending_conditions": true,
+      "pending_conditions": [
+        "Evidencia asistente propio en servidor",
+        "Número actual estrellas: no verificado",
+        "Demo solo si instalación/aprobación previas demostradas",
+        "Aviso OPENCLAW pegado"
+      ],
+      "ready_unconditionally": false
+    },
+    {
+      "id": "SI-03",
+      "derivation_match": true,
+      "body_hash_match": true,
+      "both_cta_omitted": true,
+      "body_sha256": "05f5a564a65d8921393d398652cb10a19abc8c670eef85f4d0099799c9811c31",
+      "factual_observer": "root lectura web comunicada12oct",
+      "primary_urls": [
+        "https://github.com/DietrichGebert/ponytail"
+      ],
+      "has_explicit_pending_conditions": true,
+      "pending_conditions": [
+        "Instalación propia de ponytail verificable",
+        "Comparación propio mismo pedido con/sin plugin y líneas",
+        "Aviso VAGO pegado"
+      ],
+      "ready_unconditionally": false
+    },
+    {
+      "id": "SI-04",
+      "derivation_match": true,
+      "body_hash_match": true,
+      "both_cta_omitted": true,
+      "body_sha256": "6b7d093b751221450435d6130f0b84ddfa36dced2dba3cc0df84186f7e21a3cc",
+      "factual_observer": "guiones_sol lectura web12oct",
+      "primary_urls": [
+        "https://code.claude.com/docs/en/commands",
+        "https://code.claude.com/docs/en/model-config"
+      ],
+      "has_explicit_pending_conditions": true,
+      "pending_conditions": [
+        "Captura/versión propia con /radio,/powerup y ultrathink disponible",
+        "Aviso SECRETOS pegado"
+      ],
+      "ready_unconditionally": false
+    },
+    {
+      "id": "SI-08",
+      "derivation_match": true,
+      "body_hash_match": true,
+      "both_cta_omitted": true,
+      "body_sha256": "43da9d7cc2721f32f5babcf76cb80a335362814b780eb67c12b9b97d424cb993",
+      "factual_observer": "guiones_sol lectura web12oct",
+      "primary_urls": [
+        "https://github.com/heygen-com/hyperframes"
+      ],
+      "has_explicit_pending_conditions": true,
+      "pending_conditions": [
+        "Prueba que carteles de sus videos provienen de HyperFrames",
+        "Serie temporal estrellas mensuales",
+        "Aviso HYPERFRAMES pegado"
+      ],
+      "ready_unconditionally": false
+    },
+    {
+      "id": "SI-09",
+      "derivation_match": true,
+      "body_hash_match": true,
+      "both_cta_omitted": true,
+      "body_sha256": "9dec9d2cbd179c88a7bd3ff9f7972635bc25f5cec618cd19cc4c8b08e1ca8800",
+      "factual_observer": "root lectura web comunicada12oct",
+      "primary_urls": [
+        "https://code.claude.com/docs/en/workflows"
+      ],
+      "has_explicit_pending_conditions": true,
+      "pending_conditions": [
+        "Versión de Claude propia mostrando /deep-research",
+        "Informe real y2citas comprobadas",
+        "Aviso INVESTIGAR pegado"
+      ],
+      "ready_unconditionally": false
+    }
+  ],
+  "pass": true,
+  "result": "PASS private proposal; NOT six unconditionally ready pieces",
+  "corrections_resolved": [
+    "Both CTAs omitted until personal proof/resource/URL; keyword CTA also requires posted notice",
+    "SI02 sandbox promise changed to limited access; Gateway stays on host per quoted source",
+    "SI08 coauthorship documented, local render claim, existing footage permitted; no12k monthly stars claim"
+  ],
+  "source_evidence_scope": [
+    "Read author saved primary excerpts in EVIDENCIA_WEB_PROPIA.md; no claim of independent live webpage reread",
+    "Root documentary observations remain attributed to root",
+    "Benchmark figures attributed to plugin author, not independently reproduced"
+  ],
+  "SI08_existing_demo_independent": {
+    "git_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+    "path": "videos/onia-community-teaser/renders/video.mp4",
+    "local_equals_git": true,
+    "bytes": 1028778,
+    "sha256": "675ee65555f6c092ad8d8f6cba8a26b757b3f198d0243129020151344b91a206",
+    "coauthorship_commit_read": "01650746aeef81f239cdc414375cb1529fc720d8",
+    "coauthorship_trailer": "Claude Fable 5",
+    "audio_streams": 0,
+    "contact_frames_observed": 12,
+    "candidate_interval": [
+      3,
+      6
+    ],
+    "new_clip_exported": false,
+    "insertion_approved": false,
+    "exclusive_ai_authorship_proved": false
+  },
+  "limitations": [
+    "Inherited duration labels are source planning estimates, not newly timed revised takes",
+    "Demo/own version and community resource verification remain conditions",
+    "No audio listening or full-motion viewing",
+    "No publication/master/installation/generation/spend authorized by QA"
+  ]
+}
