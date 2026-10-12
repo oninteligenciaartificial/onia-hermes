@@ -37,7 +37,7 @@
 
 **Inventario actual comunicado:** 64 skills Hermes en worktree audit frente a 43 en checkout main, Platform 6; inventario NO implica lectura completa. `list_threads`: Desarrollo/setup Hermes/4 Work idle; madre Marketing notLoaded. No trabajo producto iniciado por este plan. CLAUDE genérico dice 1 madre, bloque nuevo skill/handoff y Sergio establecen 2; prevalece Sergio. CronCreate histórico local: muere con sesión/vence 7 días; no es scheduler cloud 24/7.
 
-**Estado real de partida:** 1 ejecutor Codex Cloud Platform verificado (`01a12c7e-97e2-7115-8561-0b7658008003`); 4 Work pendientes de relevo, IDs/artefactos en Preservación. Hermes setup `01a12dc0-93a3-7451-87d9-3d8d99dec036` SOLO borrador. No hay cinco ejecutores nativos comprobados ni loops nuevos activos. Madre Marketing local `01a12c1f-bef7-7252-a4b6-f8f8354dfc48`; madre Desarrollo es la sesión principal de coordinación. Identificar destinos vivos antes de enviar.
+**Estado real de partida:** 1 ejecutor Codex Cloud Platform verificado (`01a12c7e-97e2-7115-8561-0b7658008003`); 4 Work pendientes de relevo, IDs/artefactos en Preservación. Hermes setup `01a12dc0-93a3-7451-87d9-3d8d99dec036`: npm y 28 tests PASS, setup guardado; publicación aún PENDIENTE. Red a gestores de paquetes, NO acceso Meta/VPS probado. No declarar acceso total ni entorno operativo solo por este setup. No hay cinco ejecutores nativos comprobados ni loops nuevos activos. Madre Marketing local `01a12c1f-bef7-7252-a4b6-f8f8354dfc48`; madre Desarrollo es la sesión principal de coordinación. Identificar destinos vivos antes de enviar.
 
 ### Fuentes únicas y matriz de acceso
 
@@ -80,7 +80,7 @@ Acceso de Work o de otro worker no acredita el sustituto. No trasladar cookies/c
 **PRUEBA DE HECHO:** informe contrastado con referencias Git, observaciones de UI/CLI comunicadas por la madre y documentación oficial; piloto con resultados pendientes.
 **REGLA DE PARADA vigente — PRIMERO ORDENAR:** suspensión de nuevos lotes enviada a Desarrollo, madre Marketing y setup de entorno; no publicar/provisionar mientras se ordena. Preservar avances, sin nuevas cadenas. Permisos anteriores de piezas aprobadas no habilitan ignorar esta pausa. Commit/push SOLO de este registro autorizado, sin producto.
 
-## VIGENTE: PC APAGADA — pruebas y decisiones posteriores al piloto
+## HISTORIAL — VIGENTE: PC APAGADA — pruebas y decisiones posteriores al piloto
 
 El requisito ahora es ejecutar sin dependencia de la laptop. **Work Cloud con acceso local se descarta para satisfacer PC apagada**; las madres locales pueden revisar cuando la PC esté disponible, pero no son dependencia de ejecución. La arquitectura anterior de worker local queda como historial para operaciones opcionales de laptop.
 
@@ -107,7 +107,7 @@ Alternativas evaluadas, **no contratadas**: Browserbase USD 20/mes, 100 h inclui
 
 **Contrato operativo propuesto:** madres locales supervisan y entregan contratos finitos; workers cloud ejecutan lotes ya autorizados aunque la PC se apague. Una madre local **no coordina activamente mientras la laptop está apagada**: operación 24/7 con nuevas decisiones requeriría orquestador cloud, todavía pendiente. Cada lote registra estado en repo/ref/SHA y artefacto verificable; leer deltas desde el último SHA, no documentos completos. Astra medio para madres y toda programación; Sol/Luna solo apoyo mecánico cuando sean configurables. Modelo Work Cloud no observable; selector Codex muestra GPT 6.1 Sol/Ligero, sin extender esa observación a Work. Reutilizar skills canónicas sin duplicarlas. Sin migrar credenciales/sesiones; solo dependencias npm fijadas por lockfiles según aprobación, sin instalaciones globales/apt/pip.
 
-## Decisiones y alcance
+## HISTORIAL — Decisiones y alcance
 
 - ONIA es SaaS; el reparto vigente tiene MADRE MARKETING y MADRE DESARROLLO-INFRA locales.
 - Marketing supervisa Lucía, Marca personal y Ventas/pauta; Desarrollo-Infra supervisa Plataforma, Hermes/QA e infraestructura.
@@ -116,7 +116,7 @@ Alternativas evaluadas, **no contratadas**: Browserbase USD 20/mes, 100 h inclui
 - Modelos solicitados: Astra medio para madres y toda programación; Sol/Luna para apoyo mecánico. Capacidad real por cuenta, entorno y herramienta se verifica antes de asignar.
 - Claude quedó sin cuota disponible en la observación comunicada; no reactivar sus sesiones.
 
-## Evidencia observada y límites
+## HISTORIAL — Evidencia observada y límites
 
 - Madre informó UI Claude: cuota al 100 %, reinicio 15-oct 04:00 Caracas; Trusted Device bloquea acceso a madres. Es snapshot, no predicción de disponibilidad.
 - CLI comunicadas: Claude 2.1.288 y Codex 0.161.0. Esto supera los handoffs de 5-oct que todavía indican Codex 0.139 y gpt-5.5.
@@ -126,7 +126,7 @@ Alternativas evaluadas, **no contratadas**: Browserbase USD 20/mes, 100 h inclui
 - Este informe vive en `codex/cloud-pc-audit-20261011`, worktree aislado basado en PR #195. Ningún cambio al checkout principal.
 - Lecturas Git del auditor confirman documentos y commits; no confirman sesiones vivas, cuotas actuales, ejecución de timers ni producción.
 
-## Arquitectura anterior — SUPERADA por requisito PC apagada
+## HISTORIAL — Arquitectura anterior — SUPERADA por requisito PC apagada
 
 1. **Descartada para PC apagada:** Work Cloud con acceso local depende del dispositivo. Disponibilidad de acceso local no satisface el requisito vigente.
 2. **Respaldo:** ejecutores cloud con contratos autocontenidos; un worker local reutiliza el navegador autorizado y serializa su uso entre las dos madres.
@@ -143,7 +143,7 @@ Fuentes oficiales para validar capacidades, límites y configuración:
 
 La elección queda condicionada a comprobar las funciones en esta cuenta. No declarar acceso operativo a partir de esas páginas.
 
-## Continuidad reciente: fuentes por rama
+## HISTORIAL — Continuidad reciente: fuentes por rama
 
 - Desarrollo: `origin/claude/arranque-nueva-madre-ba386e`, `hermes-content/docs/handoff/madre-local.md:25-47,79-115` (11-oct, PR #195).
 - Marketing: `origin/claude/pagos-checkout-strategy-b40756`, `hermes-content/docs/handoff/madre-marketing.md:1-29,31-44,46-55,92-124` (11-oct).
@@ -172,7 +172,7 @@ La elección queda condicionada a comprobar las funciones en esta cuenta. No dec
 - **ANTIGRAVITY 20:00 UTC:** el handoff dice “sin respuesta, sale”, aunque la regla exige mostrar y OK. Estado vivo **NO VERIFICADO**. No cancelar ni publicar sin orden; señalar el riesgo a la madre.
 - La nube todavía puede rechazar autorización transmitida por otra sesión. No rodear el control; obtener autorización válida para el mecanismo concreto.
 
-## Tokens: diagnóstico acotado
+## HISTORIAL — Tokens: diagnóstico acotado
 
 Ventana aproximada comunicada: **10-oct 17:06:58 → 11-oct 17:07:19 UTC**; 421 archivos, 4.180 registros únicos, tomando el primer `usage` por `message.id`.
 
@@ -181,14 +181,14 @@ Ventana aproximada comunicada: **10-oct 17:06:58 → 11-oct 17:07:19 UTC**; 421 
 - Verificar semántica de los contadores y mensajes finales antes de estimar costos: el primer registro puede estar incompleto; cache-read puede acumular el mismo contexto reutilizado en varias llamadas.
 - Hipótesis a medir: reducir relectura completa y recordatorios repetidos mediante contratos breves, cambios desde el último SHA y verificación mecánica delegada.
 
-## Caveman: inspeccionado, no activado
+## HISTORIAL — Caveman: inspeccionado, no activado
 
 Ruta exacta: `C:/Users/PC/.claude/plugins/marketplaces/caveman/skills/caveman/SKILL.md`.
 Inspección de líneas 11-23: estilo persistente, nivel full por defecto y eliminación de hedging; líneas 54-67: claridad para riesgos/secuencias y escritura normal de código/commits/PRs.
 
 Propuesta **lite**: español claro, resumen corto con hechos, incertidumbre y siguiente acción; conservar nombres, evidencias y condiciones. No eliminar incertidumbre real. No hay prueba de calidad ni activación. Comprimir salida no demuestra ahorro de input.
 
-## Plan inicial de piloto — HISTORIAL, parcialmente superado
+## HISTORIAL — Plan inicial de piloto — HISTORIAL, parcialmente superado
 
 Linux, GitHub, conector Higgsfield, sample media y marcadores entre turnos están verificados. Del plan siguiente siguen pendientes autenticación del navegador, persistencia tras reinicio, checkout/suite de producto y cloud → VPS. El navegador no bloquea operaciones del plugin; los 8 checks aislados no sustituyen la suite.
 
@@ -200,7 +200,7 @@ Linux, GitHub, conector Higgsfield, sample media y marcadores entre turnos está
 6. Evaluar fallos, permisos, duplicación y latencia; registrar resultado por prueba. Sin generaciones pagadas en Higgsfield, publicaciones ni producción; lectura de cuenta permitida dentro del piloto autorizado.
 7. Elegir arquitectura después de revisar evidencias con Sergio Urcullo. Orquestador, sesiones y modelos quedan sin cambiar hasta entonces.
 
-## Runbook operativo cloud — media/checks aislados verificados; checkout/reinicio pendientes
+## HISTORIAL — Runbook operativo cloud — media/checks aislados verificados; checkout/reinicio pendientes
 
 **Media/cloud, resultado comunicado:** Linux host `a74001b36ed4`, cwd `/workspace/scratch/786b6dabb916`; ffmpeg/ffprobe **6.1.1**, Python **3.12.14**, Node **24.19.0**. Sin instalaciones creó MP4 azul sintético de **1 s**, H.264, **320×240**, **25 frames**, validado con ffprobe. Skills `editor-videos` y `motion-doctrine` de Hermes rama audit accesibles por conector. Evidencia `cloud-media-ready.md`, SHA-256 `e1de285b422ed9661fa86eb2d995b6d6be1336383f45b162d378c8e8c9ec820f`, nonce `ONIA-CLOUD-MEDIA-20261011-P2`. **Segundo turno confirmó SHA y nonce iguales y video de 1 s con ffprobe: persistencia ENTRE TURNOS VERIFICADA.** Persistencia tras reinicio y exportación del MP4 siguen pendientes.
 
@@ -241,7 +241,7 @@ Linux, GitHub, conector Higgsfield, sample media y marcadores entre turnos está
 
 **Organización anterior SUPERADA:** sección única y regla de 4 visibles sustituidas por corrección explícita de Sergio: **5 carriles reales bajo 2 madres**, según registro vigente siguiente. Setup `01a12c78-3409-7188-b22f-2b2e4f5f4015`, combinado `01a12c6d-eb0f-768f-a4e6-f4e54856c017` y QA Work `6acbcecb-4ee4-83e8-9f88-9a8514ea2152` permanecen archivados; no reactivarlos. Media existente se convierte en Marca, sin duplicarla.
 
-## Contrato vigente de trabajo autorizado — 2026-10-11
+## HISTORIAL — Contrato vigente de trabajo autorizado — 2026-10-11
 
 Sergio autorizó poner los workers a trabajar; cada madre supervisa, autoriza su carril y resume resultados. **Primer lote: 15 minutos o entrega de resultado/bloqueo, lo que llegue primero; sin monitor perpetuo.** Mensajes a ambos destinos enviados con éxito de herramienta; acuse e inicio de ejecución todavía POR VERIFICAR. Envío exitoso no demuestra trabajo completado.
 
@@ -249,7 +249,7 @@ Sergio autorizó poner los workers a trabajar; cada madre supervisa, autoriza su
 - **Marketing:** madre `01a12c1f-bef7-7252-a4b6-f8f8354dfc48` autorizada directamente por Sergio para mensajear/delegar a Media ChatGPT `6acbce63-abc8-83e9-8422-d849d5e15aa4`: recuperar pendientes, cortes/assets y preparar **PREVIEWS privados de material existente**. Entrega: pieza/ruta/versión, evidencia de assets, decisiones de cortes pendientes y preview revisable. Sin gasto, generación de voz/cara nueva, publicación ni master sin OK.
 Inicio confirmado por wait_threads: Desarrollo turno 01a12c87-d330-7196-af82-ee8db33d22b5 activo; Media turno 01a12c88-5a7f-7185-9df9-c5fe393ccf08 activo tras delegacion de madre Marketing. Esto confirma ejecucion iniciada, no resultados finales.
 
-## Corrección vigente Sergio: 5 carriles reales bajo 2 madres
+## HISTORIAL — Corrección vigente Sergio: 5 carriles reales bajo 2 madres
 
 Títulos asignados y nuevos chats Lucía/Ventas/Hermes confirmados activos por `list_threads`; tareas concretas enviadas a dueños. Esto prueba despacho/estado del chat, no acceso completo ni resultado.
 
@@ -267,7 +267,7 @@ Títulos asignados y nuevos chats Lucía/Ventas/Hermes confirmados activos por `
 
 **Q&A pendiente acotado:** loops cloud con PC apagada frente a ronda local cada 30 min y observabilidad del modelo Work. Routing y permiso para piezas aprobadas ya fueron definidos por Sergio en la actualización siguiente. No loops nuevos activos; conservar contratos finitos.
 
-## Decisiones finales vigentes y despacho — 2026-10-11
+## HISTORIAL — Decisiones finales vigentes y despacho — 2026-10-11
 
 - **Preferencia a largo plazo: totalmente cloud.** Dos madres/cinco carriles siguen operativos en el reparto documentado; trasladar supervisión permanente a cloud requiere arquitectura y prueba propias. Propuesta de dot cloud en evaluación por agente `cloud_architecture`, **NO confirmada**; no declarar orquestador 24/7 listo.
 - **PLATAFORMA Y TODA PROGRAMACIÓN: Astra, effort medio.** Sustituye Sol como ejecutor principal de código en recomendaciones anteriores. Sol/Luna solo apoyo mecánico según contrato. `send_message` ya aplicó `model:gpt-6-astra` a Desarrollo `01a12c7e-97e2-7115-8561-0b7658008003`; configuración enviada no prueba modelo de Work Cloud. Selector Sol citado arriba pertenece al historial de onboarding/validación.
@@ -276,7 +276,7 @@ Títulos asignados y nuevos chats Lucía/Ventas/Hermes confirmados activos por `
 - Lucía, Ventas y Hermes nuevos confirmados activos por listado; sus pruebas de acceso/resultados son independientes. No inferir acceso de uno por tool/balance de otro. No compras, secretos transferidos ni loops activos nuevos.
 - Las instrucciones históricas Sol/4 sesiones/solo read-only/publicación siempre pendiente quedan superadas por estas decisiones donde corresponda; sus pruebas y límites técnicos conservan validez con fecha y alcance.
 
-## Preservación para relevo Work → Codex Cloud nativo — 11-oct
+## HISTORIAL — Preservación para relevo Work → Codex Cloud nativo — 11-oct
 
 Orden de Sergio: sustituir los 4 workers Work por Codex Cloud nativo. **NO archivar Work hasta que el sustituto recupere y compruebe los artefactos.** `read_thread` consultado sin enviar mensajes: Lucía/Ventas/Hermes entregan salidas; Marca devuelve solo mensajes de usuario, por lo que no se confirma desde esta API su último N02 ni equipo. Rutas `/workspace/scratch` pertenecen a cada Work: no asumir que existen en Codex ni en la laptop. Los enlaces sandbox siguientes figuran en salidas de origen; exportación a repo/almacenamiento accesible por sustituto **PENDIENTE**, no inventar entrega durable.
 

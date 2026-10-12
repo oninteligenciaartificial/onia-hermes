@@ -121,8 +121,8 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
   **en el mismo commit**. Carril sin skill → crear UNA (`.claude/skills/<carril>/SKILL.md`) y sumarla
   a `onia-router`. El handoff es estado; la skill es el método que sobrevive al relevo.
 - **Enrutamiento de modelos y contexto:** leer
-  `hermes-content/docs/AI_MODEL_ROUTING_2026.md`. Astra decide lo ambiguo y de alto riesgo; Sol
-  ejecuta el trabajo cotidiano con juicio; Luna hace tareas cerradas y verificables. No bajar
+  `hermes-content/docs/AI_MODEL_ROUTING_2026.md`, subordinado a precedencia 12-oct de este archivo: Astra madres y tareas muy difíciles; Sol
+  ejecuta trabajo habitual; Luna mecánica cerrada/verificable. QA independiente Sol, escalación Astra de alto riesgo. No bajar
   calidad en estrategia/identidad para ahorrar tokens ni cargar documentos largos cuando existe
   un manifest compacto.
 

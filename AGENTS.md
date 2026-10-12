@@ -33,6 +33,8 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
 > `hermes-content/docs/handoff/codex-continuar-1.0.md`: tiene las ramas en vuelo, cómo se publica,
 > las trampas y lo que depende de Sergio Urcullo. Ojo: empujar una rama `claude/*` la publica.
 
+> **HISTÓRICO/SUPERADO — NO ACTIVO:** el bloque 8-oct siguiente conserva el método anterior; modelo de madre, launcher y prohibición push no prevalecen. CODEX.md define 2 madres, workers nativos y Git según contrato.
+>
 > **Codex = ejecutor de la madre Claude (Sergio Urcullo, 8-oct-2026).** La madre es Claude y te lanza una tarea
 > cerrada (META · PRUEBA DE HECHO · REGLA DE PARADA) con `scripts/codex-tarea.sh`. Hacés esa tarea y nada más: no
 > orquestás, no abrís sesiones ni heartbeats, no mergeás ni empujás. Trabajás en tu worktree y tu rama `codex/*`; lo
