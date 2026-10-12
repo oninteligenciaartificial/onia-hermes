@@ -1,0 +1,2548 @@
+{
+  "schema": "ONIA-MARCA-RELEVO-1",
+  "date": "2026-10-12",
+  "destination_native_id": "01a13170-b488-71d9-83f8-12663d5a0013",
+  "repository": "oninteligenciaartificial/onia-hermes",
+  "branch": "codex/relevo-marca-20261012",
+  "artifacts_commit": "e69cab29db9d47ad50ee152f0914e4b6741b912a",
+  "source_analysis_commit": "7c43db59aed02bc981375336470bd256ad5606f7",
+  "code_of_work_commit": "ed3ffa047f3bf2a99cbfd8ede5a230359932b164",
+  "code_of_work_blob": "c459d364c27e391d553a5c8f4d58729c8cd9feaa",
+  "native_read_verified": false,
+  "local_files": [
+    {
+      "name": "Borradores-originales-Claude.zip",
+      "source": "/workspace/scratch/786b6dabb916/Borradores-originales-Claude.zip",
+      "relative": "Borradores-originales-Claude.zip",
+      "bytes": 7067740,
+      "sha256": "2fcebeb2d097bcd3f3ab721bd7daadf39ba8800a7face6e2941adefa60859473",
+      "version": "snapshot bytes 2026-10-12; original Claude",
+      "approval": "Conservación autorizada. QA/análisis revisado no aprueba oferta, cobro ni publicación.",
+      "status": "transferido",
+      "destination": {
+        "type": "drive_private",
+        "id": "1Pa88JA3BSQq72bkG1FR5Vyw2RG2IXTso",
+        "url": "https://drive.google.com/file/d/1Pa88JA3BSQq72bkG1FR5Vyw2RG2IXTso/view?usp=drivesdk",
+        "folder_id": "1bYK_ahMyjIh_Ta9CHGF_1WflOiuFFRZa"
+      },
+      "verification": {
+        "bytes": 7067740,
+        "sha256": "2fcebeb2d097bcd3f3ab721bd7daadf39ba8800a7face6e2941adefa60859473",
+        "matches": true,
+        "permissions": [
+          {
+            "type": "user",
+            "role": "owner",
+            "emailAddress": null,
+            "domain": null,
+            "displayName": null,
+            "allowFileDiscovery": null
+          }
+        ]
+      }
+    },
+    {
+      "name": "HANDOFF_MARCA_CLOUD_20261011.md",
+      "source": "/workspace/scratch/786b6dabb916/HANDOFF_MARCA_CLOUD_20261011.md",
+      "relative": "HANDOFF_MARCA_CLOUD_20261011.md",
+      "bytes": 72673,
+      "sha256": "947394b702ff66ffc65f74f1bf11f9aa76bfe3753a3f64f9bad6a28ae40dbc33",
+      "version": "snapshot bytes 2026-10-12; evidencia/estado conservado",
+      "approval": "Conservación autorizada. QA/análisis revisado no aprueba oferta, cobro ni publicación.",
+      "status": "transferido",
+      "destination": {
+        "type": "git",
+        "repository": "oninteligenciaartificial/onia-hermes",
+        "commit": "e69cab29db9d47ad50ee152f0914e4b6741b912a",
+        "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/HANDOFF_MARCA_CLOUD_20261011.md",
+        "blob_sha": "3e3be529bbd5ec67cf7cbc981b74bba7d412a262"
+      },
+      "verification": {
+        "content_readback": true,
+        "git_blob_matches_measured_bytes": true
+      }
+    },
+    {
+      "name": "N02-ajuste-privado-evidencia.zip",
+      "source": "/workspace/scratch/786b6dabb916/N02-ajuste-privado-evidencia.zip",
+      "relative": "N02-ajuste-privado-evidencia.zip",
+      "bytes": 53323533,
+      "sha256": "e29c4b151b602de862a470c13abf1771c9489f8755791150117bc3f48b920fb6",
+      "version": "snapshot bytes 2026-10-12; evidencia/estado conservado",
+      "approval": "Conservación autorizada. QA/análisis revisado no aprueba oferta, cobro ni publicación.",
+      "status": "transferido",
+      "destination": {
+        "type": "drive_private",
+        "id": "1dAZfGj0T2nKIgAdyXoKIVeFXyU5AeX6Z",
+        "url": "https://drive.google.com/file/d/1dAZfGj0T2nKIgAdyXoKIVeFXyU5AeX6Z/view?usp=drivesdk",
+        "folder_id": "1bYK_ahMyjIh_Ta9CHGF_1WflOiuFFRZa"
+      },
+      "verification": {
+        "bytes": 53323533,
+        "sha256": "e29c4b151b602de862a470c13abf1771c9489f8755791150117bc3f48b920fb6",
+        "matches": true,
+        "permissions": [
+          {
+            "type": "user",
+            "role": "owner",
+            "emailAddress": null,
+            "domain": null,
+            "displayName": null,
+            "allowFileDiscovery": null
+          }
+        ]
+      }
+    },
+    {
+      "name": "N06-preview-privado.zip",
+      "source": "/workspace/scratch/786b6dabb916/N06-preview-privado.zip",
+      "relative": "N06-preview-privado.zip",
+      "bytes": 2294168,
+      "sha256": "9433ca57880c457cb1f9c3f3026ad4135c04b95cd2ffef01552e912df9874cc3",
+      "version": "snapshot bytes 2026-10-12; evidencia/estado conservado",
+      "approval": "Conservación autorizada. QA/análisis revisado no aprueba oferta, cobro ni publicación.",
+      "status": "transferido",
+      "destination": {
+        "type": "drive_private",
+        "id": "1a1Nbhqa4vpsEIf5-rVvqaaK3UxN2RmPI",
+        "url": "https://drive.google.com/file/d/1a1Nbhqa4vpsEIf5-rVvqaaK3UxN2RmPI/view?usp=drivesdk",
+        "folder_id": "1bYK_ahMyjIh_Ta9CHGF_1WflOiuFFRZa"
+      },
+      "verification": {
+        "bytes": 2294168,
+        "sha256": "9433ca57880c457cb1f9c3f3026ad4135c04b95cd2ffef01552e912df9874cc3",
+        "matches": true,
+        "permissions": [
+          {
+            "type": "user",
+            "role": "owner",
+            "emailAddress": null,
+            "domain": null,
+            "displayName": null,
+            "allowFileDiscovery": null
+          }
+        ]
+      }
+    },
+    {
+      "name": "PROPUESTA_WORKSHOP_PREPAGO_20261011.md",
+      "source": "/workspace/scratch/786b6dabb916/PROPUESTA_WORKSHOP_PREPAGO_20261011.md",
+      "relative": "PROPUESTA_WORKSHOP_PREPAGO_20261011.md",
+      "bytes": 19221,
+      "sha256": "d877904e5868101383b97737ae2dbf1fe6ce0f000c1e3edd650057f12a7e51b7",
+      "version": "snapshot bytes 2026-10-12; evidencia/estado conservado",
+      "approval": "Conservación autorizada. QA/análisis revisado no aprueba oferta, cobro ni publicación.",
+      "status": "transferido",
+      "destination": {
+        "type": "git",
+        "repository": "oninteligenciaartificial/onia-hermes",
+        "commit": "e69cab29db9d47ad50ee152f0914e4b6741b912a",
+        "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/PROPUESTA_WORKSHOP_PREPAGO_20261011.md",
+        "blob_sha": "776d8518c8336cb6346924f87f0b93d1cc654bdd"
+      },
+      "verification": {
+        "content_readback": true,
+        "git_blob_matches_measured_bytes": true
+      }
+    },
+    {
+      "name": "REFERENTES_MRSATIRAS_20261011.md",
+      "source": "/workspace/scratch/786b6dabb916/REFERENTES_MRSATIRAS_20261011.md",
+      "relative": "REFERENTES_MRSATIRAS_20261011.md",
+      "bytes": 11049,
+      "sha256": "26f3f735c02f076371436b1eb38aefd1ffc1c0615e91fded2e2afacc769b298a",
+      "version": "snapshot bytes 2026-10-12; evidencia/estado conservado",
+      "approval": "Conservación autorizada. QA/análisis revisado no aprueba oferta, cobro ni publicación.",
+      "status": "transferido",
+      "destination": {
+        "type": "git",
+        "repository": "oninteligenciaartificial/onia-hermes",
+        "commit": "e69cab29db9d47ad50ee152f0914e4b6741b912a",
+        "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/REFERENTES_MRSATIRAS_20261011.md",
+        "blob_sha": "e219d279b4e9f4e62b3154a89351d3a7a6705706"
+      },
+      "verification": {
+        "content_readback": true,
+        "git_blob_matches_measured_bytes": true
+      }
+    },
+    {
+      "name": "cloud-media-ready.md",
+      "source": "/workspace/scratch/786b6dabb916/cloud-media-ready.md",
+      "relative": "cloud-media-ready.md",
+      "bytes": 7185,
+      "sha256": "e1de285b422ed9661fa86eb2d995b6d6be1336383f45b162d378c8e8c9ec820f",
+      "version": "snapshot bytes 2026-10-12; evidencia/estado conservado",
+      "approval": "Conservación autorizada. QA/análisis revisado no aprueba oferta, cobro ni publicación.",
+      "status": "transferido",
+      "destination": {
+        "type": "git",
+        "repository": "oninteligenciaartificial/onia-hermes",
+        "commit": "e69cab29db9d47ad50ee152f0914e4b6741b912a",
+        "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/cloud-media-ready.md",
+        "blob_sha": "b6685660fbd284f7b996e6e1d48f0bce4b9e36bc"
+      },
+      "verification": {
+        "content_readback": true,
+        "git_blob_matches_measured_bytes": true
+      }
+    },
+    {
+      "name": "cloud-media-synthetic.mp4",
+      "source": "/workspace/scratch/786b6dabb916/cloud-media-synthetic.mp4",
+      "relative": "cloud-media-synthetic.mp4",
+      "bytes": 2326,
+      "sha256": "b6151c7a96b2c97761acacfb331f4bd1865ec7df8658b9484094e5996a07f6b3",
+      "version": "snapshot bytes 2026-10-12; evidencia/estado conservado",
+      "approval": "Conservación autorizada. QA/análisis revisado no aprueba oferta, cobro ni publicación.",
+      "media": {
+        "programs": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 320,
+            "height": 240,
+            "r_frame_rate": "25/1"
+          }
+        ],
+        "format": {
+          "duration": "1.000000"
+        }
+      },
+      "status": "transferido",
+      "destination": {
+        "type": "drive_private",
+        "id": "1Rf9v57h7RG4X3WDYpvUSQP1RI3jVpPef",
+        "url": "https://drive.google.com/file/d/1Rf9v57h7RG4X3WDYpvUSQP1RI3jVpPef/view?usp=drivesdk",
+        "folder_id": "1bYK_ahMyjIh_Ta9CHGF_1WflOiuFFRZa"
+      },
+      "verification": {
+        "bytes": 2326,
+        "sha256": "b6151c7a96b2c97761acacfb331f4bd1865ec7df8658b9484094e5996a07f6b3",
+        "matches": true,
+        "permissions": [
+          {
+            "type": "user",
+            "role": "owner",
+            "emailAddress": null,
+            "domain": null,
+            "displayName": null,
+            "allowFileDiscovery": null
+          }
+        ]
+      }
+    },
+    {
+      "name": "DD-A-bruto-original.mp4",
+      "source": "/workspace/scratch/786b6dabb916/media-adjustment/DD-A-bruto-original.mp4",
+      "relative": "media-adjustment/DD-A-bruto-original.mp4",
+      "bytes": 92453888,
+      "sha256": "8220af93f24be363a90c9fcc0fad4c1a77e4f9fb4556abe4cefaaace2f302593",
+      "version": "snapshot bytes 2026-10-12; original Claude",
+      "approval": "Edición/preview privado y conservación autorizados. Publicación/master: pendiente; no registro exacto pieza+SHA+cuenta+copy+calendario.",
+      "media": {
+        "programs": [],
+        "streams": [
+          {
+            "codec_name": "hevc",
+            "width": 1080,
+            "height": 1920,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_name": "aac",
+            "sample_rate": "44100",
+            "channels": 2,
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "78.466667"
+        }
+      },
+      "status": "transferido",
+      "destination": {
+        "type": "drive_private",
+        "id": "1xFKbMIvoStrjVPbfrg6hG742kVirTPY5",
+        "url": "https://drive.google.com/file/d/1xFKbMIvoStrjVPbfrg6hG742kVirTPY5/view?usp=drivesdk",
+        "folder_id": "1bYK_ahMyjIh_Ta9CHGF_1WflOiuFFRZa"
+      },
+      "verification": {
+        "bytes": 92453888,
+        "sha256": "8220af93f24be363a90c9fcc0fad4c1a77e4f9fb4556abe4cefaaace2f302593",
+        "matches": true,
+        "permissions": [
+          {
+            "type": "user",
+            "role": "owner",
+            "emailAddress": null,
+            "domain": null,
+            "displayName": null,
+            "allowFileDiscovery": null
+          }
+        ]
+      }
+    },
+    {
+      "name": "DD-A-marcador-original.png",
+      "source": "/workspace/scratch/786b6dabb916/media-adjustment/DD-A-marcador-original.png",
+      "relative": "media-adjustment/DD-A-marcador-original.png",
+      "bytes": 230810,
+      "sha256": "e8b1e54b40dd90f31161056cd590a933e737533a7ecacc385616c5a79ba7065b",
+      "version": "snapshot bytes 2026-10-12; derivado extraído del original Claude (audio/captura), sin material nuevo",
+      "approval": "Edición/preview privado y conservación autorizados. Publicación/master: pendiente; no registro exacto pieza+SHA+cuenta+copy+calendario.",
+      "media": {
+        "width": 360,
+        "height": 640,
+        "format": "PNG"
+      },
+      "status": "transferido",
+      "destination": {
+        "type": "drive_private_zip_member",
+        "id": "1dAZfGj0T2nKIgAdyXoKIVeFXyU5AeX6Z",
+        "url": "https://drive.google.com/file/d/1dAZfGj0T2nKIgAdyXoKIVeFXyU5AeX6Z/view?usp=drivesdk",
+        "archive": "N02-ajuste-privado-evidencia.zip",
+        "member": "media-adjustment/DD-A-marcador-original.png",
+        "restore_relative_path": "media-adjustment/DD-A-marcador-original.png"
+      },
+      "verification": {
+        "archive_sha256": "e29c4b151b602de862a470c13abf1771c9489f8755791150117bc3f48b920fb6",
+        "member_sha256": "e8b1e54b40dd90f31161056cd590a933e737533a7ecacc385616c5a79ba7065b",
+        "matches": true
+      }
+    },
+    {
+      "name": "DD-A-original-61-69.wav",
+      "source": "/workspace/scratch/786b6dabb916/media-adjustment/DD-A-original-61-69.wav",
+      "relative": "media-adjustment/DD-A-original-61-69.wav",
+      "bytes": 256078,
+      "sha256": "ebf5c5f9ab2f04fe8aa5520057ab08453f7c65162682ce46f02a0e866fd45aa5",
+      "version": "snapshot bytes 2026-10-12; derivado extraído del original Claude (audio/captura), sin material nuevo",
+      "approval": "Edición/preview privado y conservación autorizados. Publicación/master: pendiente; no registro exacto pieza+SHA+cuenta+copy+calendario.",
+      "media": {
+        "programs": [],
+        "streams": [
+          {
+            "codec_name": "pcm_s16le",
+            "sample_rate": "16000",
+            "channels": 1,
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "8.000000"
+        }
+      },
+      "status": "transferido",
+      "destination": {
+        "type": "drive_private",
+        "id": "1WvNLKhZeBXTDHPZW5_8IfQVV0s8pK1MF",
+        "url": "https://drive.google.com/file/d/1WvNLKhZeBXTDHPZW5_8IfQVV0s8pK1MF/view?usp=drivesdk",
+        "folder_id": "1bYK_ahMyjIh_Ta9CHGF_1WflOiuFFRZa"
+      },
+      "verification": {
+        "bytes": 256078,
+        "sha256": "ebf5c5f9ab2f04fe8aa5520057ab08453f7c65162682ce46f02a0e866fd45aa5",
+        "matches": true,
+        "permissions": [
+          {
+            "type": "user",
+            "role": "owner",
+            "emailAddress": null,
+            "domain": null,
+            "displayName": null,
+            "allowFileDiscovery": null
+          }
+        ]
+      }
+    },
+    {
+      "name": "N02-QA.json",
+      "source": "/workspace/scratch/786b6dabb916/media-adjustment/N02-QA.json",
+      "relative": "media-adjustment/N02-QA.json",
+      "bytes": 1694,
+      "sha256": "a2ab0bce60ba6372eea838d91c21596d67ed1052713db2fb75d837b024b3f26d",
+      "version": "snapshot bytes 2026-10-12; evidencia/estado conservado",
+      "approval": "Conservación autorizada. QA/análisis revisado no aprueba oferta, cobro ni publicación.",
+      "status": "transferido",
+      "destination": {
+        "type": "git",
+        "repository": "oninteligenciaartificial/onia-hermes",
+        "commit": "e69cab29db9d47ad50ee152f0914e4b6741b912a",
+        "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-adjustment/N02-QA.json",
+        "blob_sha": "06204aef360322ae02615e981f6650cf342770ba"
+      },
+      "verification": {
+        "content_readback": true,
+        "git_blob_matches_measured_bytes": true
+      }
+    },
+    {
+      "name": "N02-README-original.md",
+      "source": "/workspace/scratch/786b6dabb916/media-adjustment/N02-README-original.md",
+      "relative": "media-adjustment/N02-README-original.md",
+      "bytes": 26337,
+      "sha256": "c3a2c1a0548504e7537f70226d314c5e9dd803d3e33a4eb800c9a5f216c916e8",
+      "version": "snapshot bytes 2026-10-12; original Claude",
+      "approval": "Conservación autorizada. QA/análisis revisado no aprueba oferta, cobro ni publicación.",
+      "status": "transferido",
+      "destination": {
+        "type": "git",
+        "repository": "oninteligenciaartificial/onia-hermes",
+        "commit": "e69cab29db9d47ad50ee152f0914e4b6741b912a",
+        "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-adjustment/N02-README-original.md",
+        "blob_sha": "dd5f6a4af8c45533c74a3779f8fc83ef0e0886d3"
+      },
+      "verification": {
+        "content_readback": true,
+        "git_blob_matches_measured_bytes": true
+      }
+    },
+    {
+      "name": "N02-antes-ajuste.jpg",
+      "source": "/workspace/scratch/786b6dabb916/media-adjustment/N02-antes-ajuste.jpg",
+      "relative": "media-adjustment/N02-antes-ajuste.jpg",
+      "bytes": 108955,
+      "sha256": "c24d1e51f33fa8a5b87bc80f12c7cce0acb3ee8721413c330f033b12c9ed8956",
+      "version": "snapshot bytes 2026-10-12; evidencia/estado conservado",
+      "approval": "Edición/preview privado y conservación autorizados. Publicación/master: pendiente; no registro exacto pieza+SHA+cuenta+copy+calendario.",
+      "media": {
+        "width": 1800,
+        "height": 640,
+        "format": "JPEG"
+      },
+      "status": "transferido",
+      "destination": {
+        "type": "drive_private_zip_member",
+        "id": "1dAZfGj0T2nKIgAdyXoKIVeFXyU5AeX6Z",
+        "url": "https://drive.google.com/file/d/1dAZfGj0T2nKIgAdyXoKIVeFXyU5AeX6Z/view?usp=drivesdk",
+        "archive": "N02-ajuste-privado-evidencia.zip",
+        "member": "media-adjustment/N02-antes-ajuste.jpg",
+        "restore_relative_path": "media-adjustment/N02-antes-ajuste.jpg"
+      },
+      "verification": {
+        "archive_sha256": "e29c4b151b602de862a470c13abf1771c9489f8755791150117bc3f48b920fb6",
+        "member_sha256": "c24d1e51f33fa8a5b87bc80f12c7cce0acb3ee8721413c330f033b12c9ed8956",
+        "matches": true
+      }
+    },
+    {
+      "name": "N02-cutplan-original.json",
+      "source": "/workspace/scratch/786b6dabb916/media-adjustment/N02-cutplan-original.json",
+      "relative": "media-adjustment/N02-cutplan-original.json",
+      "bytes": 14274,
+      "sha256": "eee9ab3ecfaf0a46345c758a169b75230d7eda9452fef4e6367e5ea6e9f95cc6",
+      "version": "snapshot bytes 2026-10-12; original Claude",
+      "approval": "Conservación autorizada. QA/análisis revisado no aprueba oferta, cobro ni publicación.",
+      "status": "transferido",
+      "destination": {
+        "type": "git",
+        "repository": "oninteligenciaartificial/onia-hermes",
+        "commit": "e69cab29db9d47ad50ee152f0914e4b6741b912a",
+        "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-adjustment/N02-cutplan-original.json",
+        "blob_sha": "ca8af4a3230b5509a3966eeddc8bfcad0a51ede7"
+      },
+      "verification": {
+        "content_readback": true,
+        "git_blob_matches_measured_bytes": true
+      }
+    },
+    {
+      "name": "N02-cutplan-propuesta.json",
+      "source": "/workspace/scratch/786b6dabb916/media-adjustment/N02-cutplan-propuesta.json",
+      "relative": "media-adjustment/N02-cutplan-propuesta.json",
+      "bytes": 11856,
+      "sha256": "9faf6beebf07ab16f2502c33dbec34c0b1567e91446eb9ff36908f65d6a1a4d7",
+      "version": "snapshot bytes 2026-10-12; ajuste privado",
+      "approval": "Conservación autorizada. QA/análisis revisado no aprueba oferta, cobro ni publicación.",
+      "status": "transferido",
+      "destination": {
+        "type": "git",
+        "repository": "oninteligenciaartificial/onia-hermes",
+        "commit": "e69cab29db9d47ad50ee152f0914e4b6741b912a",
+        "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-adjustment/N02-cutplan-propuesta.json",
+        "blob_sha": "e17d59bdf302f778f57d34e81e798fdc47381d84"
+      },
+      "verification": {
+        "content_readback": true,
+        "git_blob_matches_measured_bytes": true
+      }
+    },
+    {
+      "name": "N02-despues-ajuste.jpg",
+      "source": "/workspace/scratch/786b6dabb916/media-adjustment/N02-despues-ajuste.jpg",
+      "relative": "media-adjustment/N02-despues-ajuste.jpg",
+      "bytes": 78805,
+      "sha256": "9a13e29366cd6a4e2d591551b1b3ca02853cd31962d2095e3bcdfcd992596c80",
+      "version": "snapshot bytes 2026-10-12; evidencia/estado conservado",
+      "approval": "Edición/preview privado y conservación autorizados. Publicación/master: pendiente; no registro exacto pieza+SHA+cuenta+copy+calendario.",
+      "media": {
+        "width": 1080,
+        "height": 640,
+        "format": "JPEG"
+      },
+      "status": "transferido",
+      "destination": {
+        "type": "drive_private_zip_member",
+        "id": "1dAZfGj0T2nKIgAdyXoKIVeFXyU5AeX6Z",
+        "url": "https://drive.google.com/file/d/1dAZfGj0T2nKIgAdyXoKIVeFXyU5AeX6Z/view?usp=drivesdk",
+        "archive": "N02-ajuste-privado-evidencia.zip",
+        "member": "media-adjustment/N02-despues-ajuste.jpg",
+        "restore_relative_path": "media-adjustment/N02-despues-ajuste.jpg"
+      },
+      "verification": {
+        "archive_sha256": "e29c4b151b602de862a470c13abf1771c9489f8755791150117bc3f48b920fb6",
+        "member_sha256": "9a13e29366cd6a4e2d591551b1b3ca02853cd31962d2095e3bcdfcd992596c80",
+        "matches": true
+      }
+    },
+    {
+      "name": "N02-empalme-comparado.jpg",
+      "source": "/workspace/scratch/786b6dabb916/media-adjustment/N02-empalme-comparado.jpg",
+      "relative": "media-adjustment/N02-empalme-comparado.jpg",
+      "bytes": 419134,
+      "sha256": "a28d91755f73f7d85e06c469669b650b84e9e7ca2c92f6adcdb81270ab649a2e",
+      "version": "snapshot bytes 2026-10-12; evidencia/estado conservado",
+      "approval": "Edición/preview privado y conservación autorizados. Publicación/master: pendiente; no registro exacto pieza+SHA+cuenta+copy+calendario.",
+      "media": {
+        "width": 1440,
+        "height": 1340,
+        "format": "JPEG"
+      },
+      "status": "transferido",
+      "destination": {
+        "type": "drive_private_zip_member",
+        "id": "1dAZfGj0T2nKIgAdyXoKIVeFXyU5AeX6Z",
+        "url": "https://drive.google.com/file/d/1dAZfGj0T2nKIgAdyXoKIVeFXyU5AeX6Z/view?usp=drivesdk",
+        "archive": "N02-ajuste-privado-evidencia.zip",
+        "member": "media-adjustment/N02-empalme-comparado.jpg",
+        "restore_relative_path": "media-adjustment/N02-empalme-comparado.jpg"
+      },
+      "verification": {
+        "archive_sha256": "e29c4b151b602de862a470c13abf1771c9489f8755791150117bc3f48b920fb6",
+        "member_sha256": "a28d91755f73f7d85e06c469669b650b84e9e7ca2c92f6adcdb81270ab649a2e",
+        "matches": true
+      }
+    },
+    {
+      "name": "N02-preview-revisable.mp4",
+      "source": "/workspace/scratch/786b6dabb916/media-adjustment/N02-preview-revisable.mp4",
+      "relative": "media-adjustment/N02-preview-revisable.mp4",
+      "bytes": 6258418,
+      "sha256": "0d0031e88aa8c9b24b50f53a9e4581e7171bdc02b3781e064b4611fb4be4f6e5",
+      "version": "snapshot bytes 2026-10-12; ajuste privado",
+      "approval": "Edición/preview privado y conservación autorizados. Publicación/master: pendiente; no registro exacto pieza+SHA+cuenta+copy+calendario.",
+      "media": {
+        "programs": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 360,
+            "height": 640,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_name": "aac",
+            "sample_rate": "48000",
+            "channels": 2,
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "109.033333"
+        }
+      },
+      "status": "transferido",
+      "destination": {
+        "type": "drive_private",
+        "id": "1dYoRH2rBK8_y2Xqyrm8C_eOaia7m43ld",
+        "url": "https://drive.google.com/file/d/1dYoRH2rBK8_y2Xqyrm8C_eOaia7m43ld/view?usp=drivesdk",
+        "folder_id": "1bYK_ahMyjIh_Ta9CHGF_1WflOiuFFRZa"
+      },
+      "verification": {
+        "bytes": 6258418,
+        "sha256": "0d0031e88aa8c9b24b50f53a9e4581e7171bdc02b3781e064b4611fb4be4f6e5",
+        "matches": true,
+        "permissions": [
+          {
+            "type": "user",
+            "role": "owner",
+            "emailAddress": null,
+            "domain": null,
+            "displayName": null,
+            "allowFileDiscovery": null
+          }
+        ]
+      }
+    },
+    {
+      "name": "N02-preview-sin-arranque-falso.mp4",
+      "source": "/workspace/scratch/786b6dabb916/media-adjustment/N02-preview-sin-arranque-falso.mp4",
+      "relative": "media-adjustment/N02-preview-sin-arranque-falso.mp4",
+      "bytes": 47814973,
+      "sha256": "c60a66dacd416b1712afab6a31604b118f8a1af4a053047b3562a5ee7d6793a1",
+      "version": "snapshot bytes 2026-10-12; ajuste privado",
+      "approval": "Edición/preview privado y conservación autorizados. Publicación/master: pendiente; no registro exacto pieza+SHA+cuenta+copy+calendario.",
+      "media": {
+        "programs": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 360,
+            "height": 640,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_name": "aac",
+            "sample_rate": "48000",
+            "channels": 2,
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "109.033333"
+        }
+      },
+      "status": "transferido",
+      "destination": {
+        "type": "drive_private_zip_member",
+        "id": "1dAZfGj0T2nKIgAdyXoKIVeFXyU5AeX6Z",
+        "url": "https://drive.google.com/file/d/1dAZfGj0T2nKIgAdyXoKIVeFXyU5AeX6Z/view?usp=drivesdk",
+        "archive": "N02-ajuste-privado-evidencia.zip",
+        "member": "media-adjustment/N02-preview-sin-arranque-falso.mp4",
+        "restore_relative_path": "media-adjustment/N02-preview-sin-arranque-falso.mp4"
+      },
+      "verification": {
+        "archive_sha256": "e29c4b151b602de862a470c13abf1771c9489f8755791150117bc3f48b920fb6",
+        "member_sha256": "c60a66dacd416b1712afab6a31604b118f8a1af4a053047b3562a5ee7d6793a1",
+        "matches": true
+      }
+    },
+    {
+      "name": "N02-rehacer-original.sh",
+      "source": "/workspace/scratch/786b6dabb916/media-adjustment/N02-rehacer-original.sh",
+      "relative": "media-adjustment/N02-rehacer-original.sh",
+      "bytes": 5162,
+      "sha256": "f8b31d465ff53c468959062cc27afced85b56d4d65ac041ef584a48b0422ce01",
+      "version": "snapshot bytes 2026-10-12; original Claude",
+      "approval": "Conservación autorizada. QA/análisis revisado no aprueba oferta, cobro ni publicación.",
+      "status": "transferido",
+      "destination": {
+        "type": "git",
+        "repository": "oninteligenciaartificial/onia-hermes",
+        "commit": "e69cab29db9d47ad50ee152f0914e4b6741b912a",
+        "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-adjustment/N02-rehacer-original.sh",
+        "blob_sha": "d374acd9790355c5a7bb631cc3fa20bb2af554bf"
+      },
+      "verification": {
+        "content_readback": true,
+        "git_blob_matches_measured_bytes": true
+      }
+    },
+    {
+      "name": "N02-segments-original.json",
+      "source": "/workspace/scratch/786b6dabb916/media-adjustment/N02-segments-original.json",
+      "relative": "media-adjustment/N02-segments-original.json",
+      "bytes": 20244,
+      "sha256": "596fe3ee56a18e40d5e92a74f7704c9a75249ac577a65598d90e91658d9c4389",
+      "version": "snapshot bytes 2026-10-12; original Claude",
+      "approval": "Conservación autorizada. QA/análisis revisado no aprueba oferta, cobro ni publicación.",
+      "status": "transferido",
+      "destination": {
+        "type": "git",
+        "repository": "oninteligenciaartificial/onia-hermes",
+        "commit": "e69cab29db9d47ad50ee152f0914e4b6741b912a",
+        "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-adjustment/N02-segments-original.json",
+        "blob_sha": "a654599ed5fd5b11c3258b6246c5e3b75417f5af"
+      },
+      "verification": {
+        "content_readback": true,
+        "git_blob_matches_measured_bytes": true
+      }
+    },
+    {
+      "name": "N02-segments-propuesta.json",
+      "source": "/workspace/scratch/786b6dabb916/media-adjustment/N02-segments-propuesta.json",
+      "relative": "media-adjustment/N02-segments-propuesta.json",
+      "bytes": 24413,
+      "sha256": "0cdd596655646c502a04f0472d5fba9f6bbb8e301aa3f7bc4500022e636d3542",
+      "version": "snapshot bytes 2026-10-12; ajuste privado",
+      "approval": "Conservación autorizada. QA/análisis revisado no aprueba oferta, cobro ni publicación.",
+      "status": "transferido",
+      "destination": {
+        "type": "git",
+        "repository": "oninteligenciaartificial/onia-hermes",
+        "commit": "e69cab29db9d47ad50ee152f0914e4b6741b912a",
+        "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-adjustment/N02-segments-propuesta.json",
+        "blob_sha": "27c6a451ed0ca435ff626b41b6b760151d05e7cb"
+      },
+      "verification": {
+        "content_readback": true,
+        "git_blob_matches_measured_bytes": true
+      }
+    },
+    {
+      "name": "N02-storyboard-original.json",
+      "source": "/workspace/scratch/786b6dabb916/media-adjustment/N02-storyboard-original.json",
+      "relative": "media-adjustment/N02-storyboard-original.json",
+      "bytes": 26695,
+      "sha256": "0482e639d6267ae32baa40be7abf3f822dc5d2df23d4d8b36c2d55de66d01327",
+      "version": "snapshot bytes 2026-10-12; original Claude",
+      "approval": "Conservación autorizada. QA/análisis revisado no aprueba oferta, cobro ni publicación.",
+      "status": "transferido",
+      "destination": {
+        "type": "git",
+        "repository": "oninteligenciaartificial/onia-hermes",
+        "commit": "e69cab29db9d47ad50ee152f0914e4b6741b912a",
+        "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-adjustment/N02-storyboard-original.json",
+        "blob_sha": "014aa8a1f9be5286ad5f6ed74f3a39559bf14da9"
+      },
+      "verification": {
+        "content_readback": true,
+        "git_blob_matches_measured_bytes": true
+      }
+    },
+    {
+      "name": "N02-storyboard-propuesta.json",
+      "source": "/workspace/scratch/786b6dabb916/media-adjustment/N02-storyboard-propuesta.json",
+      "relative": "media-adjustment/N02-storyboard-propuesta.json",
+      "bytes": 33816,
+      "sha256": "f2b6de65985adf21485a39eb23f56b50fa0b87de3eca82f31422ccadee04fcdb",
+      "version": "snapshot bytes 2026-10-12; ajuste privado",
+      "approval": "Conservación autorizada. QA/análisis revisado no aprueba oferta, cobro ni publicación.",
+      "status": "transferido",
+      "destination": {
+        "type": "git",
+        "repository": "oninteligenciaartificial/onia-hermes",
+        "commit": "e69cab29db9d47ad50ee152f0914e4b6741b912a",
+        "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-adjustment/N02-storyboard-propuesta.json",
+        "blob_sha": "90a1d94267a61cb39722e193576d747e1bcb5d62"
+      },
+      "verification": {
+        "content_readback": true,
+        "git_blob_matches_measured_bytes": true
+      }
+    },
+    {
+      "name": "RESULTADO-N02-DD-A.md",
+      "source": "/workspace/scratch/786b6dabb916/media-adjustment/RESULTADO-N02-DD-A.md",
+      "relative": "media-adjustment/RESULTADO-N02-DD-A.md",
+      "bytes": 6404,
+      "sha256": "531f1a5bea325fcdf3ea841992c0572404e4adb086781c5ced2abf5b5a5b25d0",
+      "version": "snapshot bytes 2026-10-12; evidencia/estado conservado",
+      "approval": "Conservación autorizada. QA/análisis revisado no aprueba oferta, cobro ni publicación.",
+      "status": "transferido",
+      "destination": {
+        "type": "git",
+        "repository": "oninteligenciaartificial/onia-hermes",
+        "commit": "e69cab29db9d47ad50ee152f0914e4b6741b912a",
+        "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-adjustment/RESULTADO-N02-DD-A.md",
+        "blob_sha": "ed9d1d16ccd277c7af058726b8f0a2dd5b734c32"
+      },
+      "verification": {
+        "content_readback": true,
+        "git_blob_matches_measured_bytes": true
+      }
+    },
+    {
+      "name": "reproducir-N02-preview.sh",
+      "source": "/workspace/scratch/786b6dabb916/media-adjustment/reproducir-N02-preview.sh",
+      "relative": "media-adjustment/reproducir-N02-preview.sh",
+      "bytes": 645,
+      "sha256": "080fcca73013cc8b2f239abeef52979875609d7736c09f1fe6b9efda82a1bb85",
+      "version": "snapshot bytes 2026-10-12; ajuste privado",
+      "approval": "Conservación autorizada. QA/análisis revisado no aprueba oferta, cobro ni publicación.",
+      "status": "transferido",
+      "destination": {
+        "type": "git",
+        "repository": "oninteligenciaartificial/onia-hermes",
+        "commit": "e69cab29db9d47ad50ee152f0914e4b6741b912a",
+        "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-adjustment/reproducir-N02-preview.sh",
+        "blob_sha": "3aee1507d8c5ce3fac89b561bf7b0808638d370e"
+      },
+      "verification": {
+        "content_readback": true,
+        "git_blob_matches_measured_bytes": true
+      }
+    },
+    {
+      "name": "seam-0.png",
+      "source": "/workspace/scratch/786b6dabb916/media-adjustment/seam-0.png",
+      "relative": "media-adjustment/seam-0.png",
+      "bytes": 259555,
+      "sha256": "5b01b1f362681999b27f5aba11351823109c022e0a7b676aed3144573dea5094",
+      "version": "snapshot bytes 2026-10-12; evidencia/estado conservado",
+      "approval": "Edición/preview privado y conservación autorizados. Publicación/master: pendiente; no registro exacto pieza+SHA+cuenta+copy+calendario.",
+      "media": {
+        "width": 360,
+        "height": 640,
+        "format": "PNG"
+      },
+      "status": "transferido",
+      "destination": {
+        "type": "drive_private_zip_member",
+        "id": "1dAZfGj0T2nKIgAdyXoKIVeFXyU5AeX6Z",
+        "url": "https://drive.google.com/file/d/1dAZfGj0T2nKIgAdyXoKIVeFXyU5AeX6Z/view?usp=drivesdk",
+        "archive": "N02-ajuste-privado-evidencia.zip",
+        "member": "media-adjustment/seam-0.png",
+        "restore_relative_path": "media-adjustment/seam-0.png"
+      },
+      "verification": {
+        "archive_sha256": "e29c4b151b602de862a470c13abf1771c9489f8755791150117bc3f48b920fb6",
+        "member_sha256": "5b01b1f362681999b27f5aba11351823109c022e0a7b676aed3144573dea5094",
+        "matches": true
+      }
+    },
+    {
+      "name": "seam-1.png",
+      "source": "/workspace/scratch/786b6dabb916/media-adjustment/seam-1.png",
+      "relative": "media-adjustment/seam-1.png",
+      "bytes": 259449,
+      "sha256": "0f7cbdbaa01801bd303023465012e5a5d63b49391565840a69b9926f97579afd",
+      "version": "snapshot bytes 2026-10-12; evidencia/estado conservado",
+      "approval": "Edición/preview privado y conservación autorizados. Publicación/master: pendiente; no registro exacto pieza+SHA+cuenta+copy+calendario.",
+      "media": {
+        "width": 360,
+        "height": 640,
+        "format": "PNG"
+      },
+      "status": "transferido",
+      "destination": {
+        "type": "drive_private_zip_member",
+        "id": "1dAZfGj0T2nKIgAdyXoKIVeFXyU5AeX6Z",
+        "url": "https://drive.google.com/file/d/1dAZfGj0T2nKIgAdyXoKIVeFXyU5AeX6Z/view?usp=drivesdk",
+        "archive": "N02-ajuste-privado-evidencia.zip",
+        "member": "media-adjustment/seam-1.png",
+        "restore_relative_path": "media-adjustment/seam-1.png"
+      },
+      "verification": {
+        "archive_sha256": "e29c4b151b602de862a470c13abf1771c9489f8755791150117bc3f48b920fb6",
+        "member_sha256": "0f7cbdbaa01801bd303023465012e5a5d63b49391565840a69b9926f97579afd",
+        "matches": true
+      }
+    },
+    {
+      "name": "seam-2.png",
+      "source": "/workspace/scratch/786b6dabb916/media-adjustment/seam-2.png",
+      "relative": "media-adjustment/seam-2.png",
+      "bytes": 261231,
+      "sha256": "798c3c27eca1c08dcd3c03adae9d31339a353322b2762eba0bc0d251d444287b",
+      "version": "snapshot bytes 2026-10-12; evidencia/estado conservado",
+      "approval": "Edición/preview privado y conservación autorizados. Publicación/master: pendiente; no registro exacto pieza+SHA+cuenta+copy+calendario.",
+      "media": {
+        "width": 360,
+        "height": 640,
+        "format": "PNG"
+      },
+      "status": "transferido",
+      "destination": {
+        "type": "drive_private_zip_member",
+        "id": "1dAZfGj0T2nKIgAdyXoKIVeFXyU5AeX6Z",
+        "url": "https://drive.google.com/file/d/1dAZfGj0T2nKIgAdyXoKIVeFXyU5AeX6Z/view?usp=drivesdk",
+        "archive": "N02-ajuste-privado-evidencia.zip",
+        "member": "media-adjustment/seam-2.png",
+        "restore_relative_path": "media-adjustment/seam-2.png"
+      },
+      "verification": {
+        "archive_sha256": "e29c4b151b602de862a470c13abf1771c9489f8755791150117bc3f48b920fb6",
+        "member_sha256": "798c3c27eca1c08dcd3c03adae9d31339a353322b2762eba0bc0d251d444287b",
+        "matches": true
+      }
+    },
+    {
+      "name": "seam-3.png",
+      "source": "/workspace/scratch/786b6dabb916/media-adjustment/seam-3.png",
+      "relative": "media-adjustment/seam-3.png",
+      "bytes": 236370,
+      "sha256": "4c53e7f2401c1a21e14612ff186c05d08e266852701a7ae5d7c08eb1ace23ef7",
+      "version": "snapshot bytes 2026-10-12; evidencia/estado conservado",
+      "approval": "Edición/preview privado y conservación autorizados. Publicación/master: pendiente; no registro exacto pieza+SHA+cuenta+copy+calendario.",
+      "media": {
+        "width": 360,
+        "height": 640,
+        "format": "PNG"
+      },
+      "status": "transferido",
+      "destination": {
+        "type": "drive_private_zip_member",
+        "id": "1dAZfGj0T2nKIgAdyXoKIVeFXyU5AeX6Z",
+        "url": "https://drive.google.com/file/d/1dAZfGj0T2nKIgAdyXoKIVeFXyU5AeX6Z/view?usp=drivesdk",
+        "archive": "N02-ajuste-privado-evidencia.zip",
+        "member": "media-adjustment/seam-3.png",
+        "restore_relative_path": "media-adjustment/seam-3.png"
+      },
+      "verification": {
+        "archive_sha256": "e29c4b151b602de862a470c13abf1771c9489f8755791150117bc3f48b920fb6",
+        "member_sha256": "4c53e7f2401c1a21e14612ff186c05d08e266852701a7ae5d7c08eb1ace23ef7",
+        "matches": true
+      }
+    },
+    {
+      "name": "seam-4.png",
+      "source": "/workspace/scratch/786b6dabb916/media-adjustment/seam-4.png",
+      "relative": "media-adjustment/seam-4.png",
+      "bytes": 259555,
+      "sha256": "5b01b1f362681999b27f5aba11351823109c022e0a7b676aed3144573dea5094",
+      "version": "snapshot bytes 2026-10-12; evidencia/estado conservado",
+      "approval": "Edición/preview privado y conservación autorizados. Publicación/master: pendiente; no registro exacto pieza+SHA+cuenta+copy+calendario.",
+      "media": {
+        "width": 360,
+        "height": 640,
+        "format": "PNG"
+      },
+      "status": "transferido",
+      "destination": {
+        "type": "drive_private_zip_member",
+        "id": "1dAZfGj0T2nKIgAdyXoKIVeFXyU5AeX6Z",
+        "url": "https://drive.google.com/file/d/1dAZfGj0T2nKIgAdyXoKIVeFXyU5AeX6Z/view?usp=drivesdk",
+        "archive": "N02-ajuste-privado-evidencia.zip",
+        "member": "media-adjustment/seam-0.png",
+        "restore_relative_path": "media-adjustment/seam-4.png"
+      },
+      "verification": {
+        "archive_sha256": "e29c4b151b602de862a470c13abf1771c9489f8755791150117bc3f48b920fb6",
+        "member_sha256": "5b01b1f362681999b27f5aba11351823109c022e0a7b676aed3144573dea5094",
+        "matches": true
+      }
+    },
+    {
+      "name": "seam-5.png",
+      "source": "/workspace/scratch/786b6dabb916/media-adjustment/seam-5.png",
+      "relative": "media-adjustment/seam-5.png",
+      "bytes": 259449,
+      "sha256": "0f7cbdbaa01801bd303023465012e5a5d63b49391565840a69b9926f97579afd",
+      "version": "snapshot bytes 2026-10-12; evidencia/estado conservado",
+      "approval": "Edición/preview privado y conservación autorizados. Publicación/master: pendiente; no registro exacto pieza+SHA+cuenta+copy+calendario.",
+      "media": {
+        "width": 360,
+        "height": 640,
+        "format": "PNG"
+      },
+      "status": "transferido",
+      "destination": {
+        "type": "drive_private_zip_member",
+        "id": "1dAZfGj0T2nKIgAdyXoKIVeFXyU5AeX6Z",
+        "url": "https://drive.google.com/file/d/1dAZfGj0T2nKIgAdyXoKIVeFXyU5AeX6Z/view?usp=drivesdk",
+        "archive": "N02-ajuste-privado-evidencia.zip",
+        "member": "media-adjustment/seam-1.png",
+        "restore_relative_path": "media-adjustment/seam-5.png"
+      },
+      "verification": {
+        "archive_sha256": "e29c4b151b602de862a470c13abf1771c9489f8755791150117bc3f48b920fb6",
+        "member_sha256": "0f7cbdbaa01801bd303023465012e5a5d63b49391565840a69b9926f97579afd",
+        "matches": true
+      }
+    },
+    {
+      "name": "seam-6.png",
+      "source": "/workspace/scratch/786b6dabb916/media-adjustment/seam-6.png",
+      "relative": "media-adjustment/seam-6.png",
+      "bytes": 261231,
+      "sha256": "798c3c27eca1c08dcd3c03adae9d31339a353322b2762eba0bc0d251d444287b",
+      "version": "snapshot bytes 2026-10-12; evidencia/estado conservado",
+      "approval": "Edición/preview privado y conservación autorizados. Publicación/master: pendiente; no registro exacto pieza+SHA+cuenta+copy+calendario.",
+      "media": {
+        "width": 360,
+        "height": 640,
+        "format": "PNG"
+      },
+      "status": "transferido",
+      "destination": {
+        "type": "drive_private_zip_member",
+        "id": "1dAZfGj0T2nKIgAdyXoKIVeFXyU5AeX6Z",
+        "url": "https://drive.google.com/file/d/1dAZfGj0T2nKIgAdyXoKIVeFXyU5AeX6Z/view?usp=drivesdk",
+        "archive": "N02-ajuste-privado-evidencia.zip",
+        "member": "media-adjustment/seam-2.png",
+        "restore_relative_path": "media-adjustment/seam-6.png"
+      },
+      "verification": {
+        "archive_sha256": "e29c4b151b602de862a470c13abf1771c9489f8755791150117bc3f48b920fb6",
+        "member_sha256": "798c3c27eca1c08dcd3c03adae9d31339a353322b2762eba0bc0d251d444287b",
+        "matches": true
+      }
+    },
+    {
+      "name": "seam-7.png",
+      "source": "/workspace/scratch/786b6dabb916/media-adjustment/seam-7.png",
+      "relative": "media-adjustment/seam-7.png",
+      "bytes": 236370,
+      "sha256": "4c53e7f2401c1a21e14612ff186c05d08e266852701a7ae5d7c08eb1ace23ef7",
+      "version": "snapshot bytes 2026-10-12; evidencia/estado conservado",
+      "approval": "Edición/preview privado y conservación autorizados. Publicación/master: pendiente; no registro exacto pieza+SHA+cuenta+copy+calendario.",
+      "media": {
+        "width": 360,
+        "height": 640,
+        "format": "PNG"
+      },
+      "status": "transferido",
+      "destination": {
+        "type": "drive_private_zip_member",
+        "id": "1dAZfGj0T2nKIgAdyXoKIVeFXyU5AeX6Z",
+        "url": "https://drive.google.com/file/d/1dAZfGj0T2nKIgAdyXoKIVeFXyU5AeX6Z/view?usp=drivesdk",
+        "archive": "N02-ajuste-privado-evidencia.zip",
+        "member": "media-adjustment/seam-3.png",
+        "restore_relative_path": "media-adjustment/seam-7.png"
+      },
+      "verification": {
+        "archive_sha256": "e29c4b151b602de862a470c13abf1771c9489f8755791150117bc3f48b920fb6",
+        "member_sha256": "4c53e7f2401c1a21e14612ff186c05d08e266852701a7ae5d7c08eb1ace23ef7",
+        "matches": true
+      }
+    },
+    {
+      "name": "DD-A-borrador-original-Claude.mp4",
+      "source": "/workspace/scratch/786b6dabb916/media-review-n06/DD-A-borrador-original-Claude.mp4",
+      "relative": "media-review-n06/DD-A-borrador-original-Claude.mp4",
+      "bytes": 1426827,
+      "sha256": "4582213089bbcf1c7fb4d84511ce64b7539eaf00e8f755952914a803d46af583",
+      "version": "snapshot bytes 2026-10-12; original Claude",
+      "approval": "Edición/preview privado y conservación autorizados. Publicación/master: pendiente; no registro exacto pieza+SHA+cuenta+copy+calendario.",
+      "media": {
+        "programs": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 360,
+            "height": 640,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_name": "aac",
+            "sample_rate": "48000",
+            "channels": 2,
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "58.433333"
+        }
+      },
+      "status": "transferido",
+      "destination": {
+        "type": "drive_private_zip_member",
+        "id": "1Pa88JA3BSQq72bkG1FR5Vyw2RG2IXTso",
+        "url": "https://drive.google.com/file/d/1Pa88JA3BSQq72bkG1FR5Vyw2RG2IXTso/view?usp=drivesdk",
+        "archive": "Borradores-originales-Claude.zip",
+        "member": "DD-A-borrador-original-Claude.mp4",
+        "restore_relative_path": "media-review-n06/DD-A-borrador-original-Claude.mp4"
+      },
+      "verification": {
+        "archive_sha256": "2fcebeb2d097bcd3f3ab721bd7daadf39ba8800a7face6e2941adefa60859473",
+        "member_sha256": "4582213089bbcf1c7fb4d84511ce64b7539eaf00e8f755952914a803d46af583",
+        "matches": true
+      }
+    },
+    {
+      "name": "DD-A-original-contact.jpg",
+      "source": "/workspace/scratch/786b6dabb916/media-review-n06/DD-A-original-contact.jpg",
+      "relative": "media-review-n06/DD-A-original-contact.jpg",
+      "bytes": 46483,
+      "sha256": "f7569d3d31c89a6e27b4c905ff37e313d3541a7850826604e811d3285d9990dc",
+      "version": "snapshot bytes 2026-10-12; original Claude",
+      "approval": "Edición/preview privado y conservación autorizados. Publicación/master: pendiente; no registro exacto pieza+SHA+cuenta+copy+calendario.",
+      "media": {
+        "width": 900,
+        "height": 960,
+        "format": "JPEG"
+      },
+      "status": "transferido",
+      "destination": {
+        "type": "drive_private_zip_member",
+        "id": "1Pa88JA3BSQq72bkG1FR5Vyw2RG2IXTso",
+        "url": "https://drive.google.com/file/d/1Pa88JA3BSQq72bkG1FR5Vyw2RG2IXTso/view?usp=drivesdk",
+        "archive": "Borradores-originales-Claude.zip",
+        "member": "DD-A-original-contact.jpg",
+        "restore_relative_path": "media-review-n06/DD-A-original-contact.jpg"
+      },
+      "verification": {
+        "archive_sha256": "2fcebeb2d097bcd3f3ab721bd7daadf39ba8800a7face6e2941adefa60859473",
+        "member_sha256": "f7569d3d31c89a6e27b4c905ff37e313d3541a7850826604e811d3285d9990dc",
+        "matches": true
+      }
+    },
+    {
+      "name": "N02-borrador-original-Claude.mp4",
+      "source": "/workspace/scratch/786b6dabb916/media-review-n06/N02-borrador-original-Claude.mp4",
+      "relative": "media-review-n06/N02-borrador-original-Claude.mp4",
+      "bytes": 2665489,
+      "sha256": "123c375b33f1f14985ada85d7f07537f4322a6a79dad7c406d89828b9af76389",
+      "version": "snapshot bytes 2026-10-12; original Claude",
+      "approval": "Edición/preview privado y conservación autorizados. Publicación/master: pendiente; no registro exacto pieza+SHA+cuenta+copy+calendario.",
+      "media": {
+        "programs": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 360,
+            "height": 640,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_name": "aac",
+            "sample_rate": "48000",
+            "channels": 2,
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "111.300000"
+        }
+      },
+      "status": "transferido",
+      "destination": {
+        "type": "drive_private_zip_member",
+        "id": "1dAZfGj0T2nKIgAdyXoKIVeFXyU5AeX6Z",
+        "url": "https://drive.google.com/file/d/1dAZfGj0T2nKIgAdyXoKIVeFXyU5AeX6Z/view?usp=drivesdk",
+        "archive": "N02-ajuste-privado-evidencia.zip",
+        "member": "media-review-n06/N02-borrador-original-Claude.mp4",
+        "restore_relative_path": "media-review-n06/N02-borrador-original-Claude.mp4"
+      },
+      "verification": {
+        "archive_sha256": "e29c4b151b602de862a470c13abf1771c9489f8755791150117bc3f48b920fb6",
+        "member_sha256": "123c375b33f1f14985ada85d7f07537f4322a6a79dad7c406d89828b9af76389",
+        "matches": true
+      }
+    },
+    {
+      "name": "N02-original-contact.jpg",
+      "source": "/workspace/scratch/786b6dabb916/media-review-n06/N02-original-contact.jpg",
+      "relative": "media-review-n06/N02-original-contact.jpg",
+      "bytes": 84590,
+      "sha256": "f3e8c5647225847a8f1f1d18861cfbffd270114f7478d9d4f9c325f4c667f240",
+      "version": "snapshot bytes 2026-10-12; original Claude",
+      "approval": "Edición/preview privado y conservación autorizados. Publicación/master: pendiente; no registro exacto pieza+SHA+cuenta+copy+calendario.",
+      "media": {
+        "width": 900,
+        "height": 960,
+        "format": "JPEG"
+      },
+      "status": "transferido",
+      "destination": {
+        "type": "drive_private_zip_member",
+        "id": "1Pa88JA3BSQq72bkG1FR5Vyw2RG2IXTso",
+        "url": "https://drive.google.com/file/d/1Pa88JA3BSQq72bkG1FR5Vyw2RG2IXTso/view?usp=drivesdk",
+        "archive": "Borradores-originales-Claude.zip",
+        "member": "N02-original-contact.jpg",
+        "restore_relative_path": "media-review-n06/N02-original-contact.jpg"
+      },
+      "verification": {
+        "archive_sha256": "2fcebeb2d097bcd3f3ab721bd7daadf39ba8800a7face6e2941adefa60859473",
+        "member_sha256": "f3e8c5647225847a8f1f1d18861cfbffd270114f7478d9d4f9c325f4c667f240",
+        "matches": true
+      }
+    },
+    {
+      "name": "N06-borrador-original-Claude.mp4",
+      "source": "/workspace/scratch/786b6dabb916/media-review-n06/N06-borrador-original-Claude.mp4",
+      "relative": "media-review-n06/N06-borrador-original-Claude.mp4",
+      "bytes": 1163863,
+      "sha256": "d8753944a720d201c7bd141acce4236699cb159dc95e90f3f80049c77f7d8f40",
+      "version": "snapshot bytes 2026-10-12; original Claude",
+      "approval": "Edición/preview privado y conservación autorizados. Publicación/master: pendiente; no registro exacto pieza+SHA+cuenta+copy+calendario.",
+      "media": {
+        "programs": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 360,
+            "height": 640,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_name": "aac",
+            "sample_rate": "48000",
+            "channels": 2,
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "45.504000"
+        }
+      },
+      "status": "transferido",
+      "destination": {
+        "type": "drive_private_zip_member",
+        "id": "1Pa88JA3BSQq72bkG1FR5Vyw2RG2IXTso",
+        "url": "https://drive.google.com/file/d/1Pa88JA3BSQq72bkG1FR5Vyw2RG2IXTso/view?usp=drivesdk",
+        "archive": "Borradores-originales-Claude.zip",
+        "member": "N06-borrador-original-Claude.mp4",
+        "restore_relative_path": "media-review-n06/N06-borrador-original-Claude.mp4"
+      },
+      "verification": {
+        "archive_sha256": "2fcebeb2d097bcd3f3ab721bd7daadf39ba8800a7face6e2941adefa60859473",
+        "member_sha256": "d8753944a720d201c7bd141acce4236699cb159dc95e90f3f80049c77f7d8f40",
+        "matches": true
+      }
+    },
+    {
+      "name": "N06-original-contact.jpg",
+      "source": "/workspace/scratch/786b6dabb916/media-review-n06/N06-original-contact.jpg",
+      "relative": "media-review-n06/N06-original-contact.jpg",
+      "bytes": 46815,
+      "sha256": "f69feebdf8049d089f5cb5f9af11c0c4871809a063e7456ff2bb0b44f80e3bac",
+      "version": "snapshot bytes 2026-10-12; original Claude",
+      "approval": "Edición/preview privado y conservación autorizados. Publicación/master: pendiente; no registro exacto pieza+SHA+cuenta+copy+calendario.",
+      "media": {
+        "width": 900,
+        "height": 960,
+        "format": "JPEG"
+      },
+      "status": "transferido",
+      "destination": {
+        "type": "drive_private_zip_member",
+        "id": "1Pa88JA3BSQq72bkG1FR5Vyw2RG2IXTso",
+        "url": "https://drive.google.com/file/d/1Pa88JA3BSQq72bkG1FR5Vyw2RG2IXTso/view?usp=drivesdk",
+        "archive": "Borradores-originales-Claude.zip",
+        "member": "N06-original-contact.jpg",
+        "restore_relative_path": "media-review-n06/N06-original-contact.jpg"
+      },
+      "verification": {
+        "archive_sha256": "2fcebeb2d097bcd3f3ab721bd7daadf39ba8800a7face6e2941adefa60859473",
+        "member_sha256": "f69feebdf8049d089f5cb5f9af11c0c4871809a063e7456ff2bb0b44f80e3bac",
+        "matches": true
+      }
+    },
+    {
+      "name": "N06-preview-corte-propuesto.mp4",
+      "source": "/workspace/scratch/786b6dabb916/media-review-n06/N06-preview-corte-propuesto.mp4",
+      "relative": "media-review-n06/N06-preview-corte-propuesto.mp4",
+      "bytes": 2290695,
+      "sha256": "41d5541d69e71b85bfe3f80268fd7d650259196656c9d2dd06309be46f41d492",
+      "version": "snapshot bytes 2026-10-12; evidencia/estado conservado",
+      "approval": "Edición/preview privado y conservación autorizados. Publicación/master: pendiente; no registro exacto pieza+SHA+cuenta+copy+calendario.",
+      "media": {
+        "programs": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 360,
+            "height": 640,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_name": "aac",
+            "sample_rate": "48000",
+            "channels": 2,
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "45.600000"
+        }
+      },
+      "status": "transferido",
+      "destination": {
+        "type": "drive_private_zip_member",
+        "id": "1a1Nbhqa4vpsEIf5-rVvqaaK3UxN2RmPI",
+        "url": "https://drive.google.com/file/d/1a1Nbhqa4vpsEIf5-rVvqaaK3UxN2RmPI/view?usp=drivesdk",
+        "archive": "N06-preview-privado.zip",
+        "member": "N06/N06-preview-corte-propuesto.mp4",
+        "restore_relative_path": "media-review-n06/N06-preview-corte-propuesto.mp4"
+      },
+      "verification": {
+        "archive_sha256": "9433ca57880c457cb1f9c3f3026ad4135c04b95cd2ffef01552e912df9874cc3",
+        "member_sha256": "41d5541d69e71b85bfe3f80268fd7d650259196656c9d2dd06309be46f41d492",
+        "matches": true
+      }
+    },
+    {
+      "name": "N07-borrador-original-Claude.mp4",
+      "source": "/workspace/scratch/786b6dabb916/media-review-n06/N07-borrador-original-Claude.mp4",
+      "relative": "media-review-n06/N07-borrador-original-Claude.mp4",
+      "bytes": 2048970,
+      "sha256": "f22e5caeb2d96cfe9c625d6e2a7d0dc4e3a6921890c866cee4cbad726d0a90e6",
+      "version": "snapshot bytes 2026-10-12; original Claude",
+      "approval": "Edición/preview privado y conservación autorizados. Publicación/master: pendiente; no registro exacto pieza+SHA+cuenta+copy+calendario.",
+      "media": {
+        "programs": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 360,
+            "height": 640,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_name": "aac",
+            "sample_rate": "48000",
+            "channels": 2,
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "81.733333"
+        }
+      },
+      "status": "transferido",
+      "destination": {
+        "type": "drive_private_zip_member",
+        "id": "1Pa88JA3BSQq72bkG1FR5Vyw2RG2IXTso",
+        "url": "https://drive.google.com/file/d/1Pa88JA3BSQq72bkG1FR5Vyw2RG2IXTso/view?usp=drivesdk",
+        "archive": "Borradores-originales-Claude.zip",
+        "member": "N07-borrador-original-Claude.mp4",
+        "restore_relative_path": "media-review-n06/N07-borrador-original-Claude.mp4"
+      },
+      "verification": {
+        "archive_sha256": "2fcebeb2d097bcd3f3ab721bd7daadf39ba8800a7face6e2941adefa60859473",
+        "member_sha256": "f22e5caeb2d96cfe9c625d6e2a7d0dc4e3a6921890c866cee4cbad726d0a90e6",
+        "matches": true
+      }
+    },
+    {
+      "name": "N07-original-contact.jpg",
+      "source": "/workspace/scratch/786b6dabb916/media-review-n06/N07-original-contact.jpg",
+      "relative": "media-review-n06/N07-original-contact.jpg",
+      "bytes": 58049,
+      "sha256": "c961848da6eaf5d4f10f3abc18592ab0591fc754ffd6210045b1724b3a8c8560",
+      "version": "snapshot bytes 2026-10-12; original Claude",
+      "approval": "Edición/preview privado y conservación autorizados. Publicación/master: pendiente; no registro exacto pieza+SHA+cuenta+copy+calendario.",
+      "media": {
+        "width": 900,
+        "height": 960,
+        "format": "JPEG"
+      },
+      "status": "transferido",
+      "destination": {
+        "type": "drive_private_zip_member",
+        "id": "1Pa88JA3BSQq72bkG1FR5Vyw2RG2IXTso",
+        "url": "https://drive.google.com/file/d/1Pa88JA3BSQq72bkG1FR5Vyw2RG2IXTso/view?usp=drivesdk",
+        "archive": "Borradores-originales-Claude.zip",
+        "member": "N07-original-contact.jpg",
+        "restore_relative_path": "media-review-n06/N07-original-contact.jpg"
+      },
+      "verification": {
+        "archive_sha256": "2fcebeb2d097bcd3f3ab721bd7daadf39ba8800a7face6e2941adefa60859473",
+        "member_sha256": "c961848da6eaf5d4f10f3abc18592ab0591fc754ffd6210045b1724b3a8c8560",
+        "matches": true
+      }
+    },
+    {
+      "name": "ORIGINALES-CLAUDE-RECUPERADOS.md",
+      "source": "/workspace/scratch/786b6dabb916/media-review-n06/ORIGINALES-CLAUDE-RECUPERADOS.md",
+      "relative": "media-review-n06/ORIGINALES-CLAUDE-RECUPERADOS.md",
+      "bytes": 2881,
+      "sha256": "f82099a69f1c2c028e9f08a5621837d1d74bec450029e0681d10a327db63ff53",
+      "version": "snapshot bytes 2026-10-12; evidencia/estado conservado",
+      "approval": "Conservación autorizada. QA/análisis revisado no aprueba oferta, cobro ni publicación.",
+      "status": "transferido",
+      "destination": {
+        "type": "git",
+        "repository": "oninteligenciaartificial/onia-hermes",
+        "commit": "e69cab29db9d47ad50ee152f0914e4b6741b912a",
+        "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/ORIGINALES-CLAUDE-RECUPERADOS.md",
+        "blob_sha": "f4aa8fce231d72df93fc67c4180733ddf1ff47a9"
+      },
+      "verification": {
+        "content_readback": true,
+        "git_blob_matches_measured_bytes": true
+      }
+    },
+    {
+      "name": "REVISION-N06.md",
+      "source": "/workspace/scratch/786b6dabb916/media-review-n06/REVISION-N06.md",
+      "relative": "media-review-n06/REVISION-N06.md",
+      "bytes": 5676,
+      "sha256": "2b8b4186656c3fc82986b4419b2663ea1612c6a949587b64fa1ddf8b5de9d297",
+      "version": "snapshot bytes 2026-10-12; evidencia/estado conservado",
+      "approval": "Conservación autorizada. QA/análisis revisado no aprueba oferta, cobro ni publicación.",
+      "status": "transferido",
+      "destination": {
+        "type": "git",
+        "repository": "oninteligenciaartificial/onia-hermes",
+        "commit": "e69cab29db9d47ad50ee152f0914e4b6741b912a",
+        "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/REVISION-N06.md",
+        "blob_sha": "37bf3f4a0e5324b44928abdcf523928b53295b1a"
+      },
+      "verification": {
+        "content_readback": true,
+        "git_blob_matches_measured_bytes": true
+      }
+    },
+    {
+      "name": "bruto.mp4",
+      "source": "/workspace/scratch/786b6dabb916/media-review-n06/bruto.mp4",
+      "relative": "media-review-n06/bruto.mp4",
+      "bytes": 69843125,
+      "sha256": "6e3702e1378de3432843633c2bff2f76c654acaa251b3c38b9f1f3a9acff8fb9",
+      "version": "snapshot bytes 2026-10-12; original Claude",
+      "approval": "Edición/preview privado y conservación autorizados. Publicación/master: pendiente; no registro exacto pieza+SHA+cuenta+copy+calendario.",
+      "media": {
+        "programs": [],
+        "streams": [
+          {
+            "codec_name": "hevc",
+            "width": 1080,
+            "height": 1920,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_name": "aac",
+            "sample_rate": "44100",
+            "channels": 2,
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "59.233333"
+        }
+      },
+      "status": "transferido",
+      "destination": {
+        "type": "drive_private",
+        "id": "18WULGYFlDTEaAneWUDzxWrxYi5OZFbSY",
+        "url": "https://drive.google.com/file/d/18WULGYFlDTEaAneWUDzxWrxYi5OZFbSY/view?usp=drivesdk",
+        "folder_id": "1bYK_ahMyjIh_Ta9CHGF_1WflOiuFFRZa"
+      },
+      "verification": {
+        "bytes": 69843125,
+        "sha256": "6e3702e1378de3432843633c2bff2f76c654acaa251b3c38b9f1f3a9acff8fb9",
+        "matches": true,
+        "permissions": [
+          {
+            "type": "user",
+            "role": "owner",
+            "emailAddress": null,
+            "domain": null,
+            "displayName": null,
+            "allowFileDiscovery": null
+          }
+        ]
+      }
+    },
+    {
+      "name": "contact-sheet.jpg",
+      "source": "/workspace/scratch/786b6dabb916/media-review-n06/contact-sheet.jpg",
+      "relative": "media-review-n06/contact-sheet.jpg",
+      "bytes": 50060,
+      "sha256": "68504862196a81f3e83e671560df76df6400345477b793fc5c8f154cf9ca2be3",
+      "version": "snapshot bytes 2026-10-12; evidencia/estado conservado",
+      "approval": "Edición/preview privado y conservación autorizados. Publicación/master: pendiente; no registro exacto pieza+SHA+cuenta+copy+calendario.",
+      "media": {
+        "width": 900,
+        "height": 640,
+        "format": "JPEG"
+      },
+      "status": "transferido",
+      "destination": {
+        "type": "drive_private_zip_member",
+        "id": "1a1Nbhqa4vpsEIf5-rVvqaaK3UxN2RmPI",
+        "url": "https://drive.google.com/file/d/1a1Nbhqa4vpsEIf5-rVvqaaK3UxN2RmPI/view?usp=drivesdk",
+        "archive": "N06-preview-privado.zip",
+        "member": "N06/contact-sheet.jpg",
+        "restore_relative_path": "media-review-n06/contact-sheet.jpg"
+      },
+      "verification": {
+        "archive_sha256": "9433ca57880c457cb1f9c3f3026ad4135c04b95cd2ffef01552e912df9874cc3",
+        "member_sha256": "68504862196a81f3e83e671560df76df6400345477b793fc5c8f154cf9ca2be3",
+        "matches": true
+      }
+    },
+    {
+      "name": "cutplan.json",
+      "source": "/workspace/scratch/786b6dabb916/media-review-n06/cutplan.json",
+      "relative": "media-review-n06/cutplan.json",
+      "bytes": 5449,
+      "sha256": "5cba1bc5a4ea2178758980bff85d728e57aabc315612409d62c39510b88c811d",
+      "version": "snapshot bytes 2026-10-12; evidencia/estado conservado",
+      "approval": "Conservación autorizada. QA/análisis revisado no aprueba oferta, cobro ni publicación.",
+      "status": "transferido",
+      "destination": {
+        "type": "git",
+        "repository": "oninteligenciaartificial/onia-hermes",
+        "commit": "e69cab29db9d47ad50ee152f0914e4b6741b912a",
+        "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/cutplan.json",
+        "blob_sha": "c8ebf9d3549d2def7ca53660269676ceb7bd3884"
+      },
+      "verification": {
+        "content_readback": true,
+        "git_blob_matches_measured_bytes": true
+      }
+    },
+    {
+      "name": "loudnorm-pass1.json",
+      "source": "/workspace/scratch/786b6dabb916/media-review-n06/loudnorm-pass1.json",
+      "relative": "media-review-n06/loudnorm-pass1.json",
+      "bytes": 263,
+      "sha256": "a1db92ab5a7d5893f0f85162fb395a6a5503f7324ae2c9457b658f8a711aee3e",
+      "version": "snapshot bytes 2026-10-12; evidencia/estado conservado",
+      "approval": "Conservación autorizada. QA/análisis revisado no aprueba oferta, cobro ni publicación.",
+      "status": "transferido",
+      "destination": {
+        "type": "git",
+        "repository": "oninteligenciaartificial/onia-hermes",
+        "commit": "e69cab29db9d47ad50ee152f0914e4b6741b912a",
+        "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/loudnorm-pass1.json",
+        "blob_sha": "920db3857c53f699ba94d4c1e866158d4f36fe02"
+      },
+      "verification": {
+        "content_readback": true,
+        "git_blob_matches_measured_bytes": true
+      }
+    },
+    {
+      "name": "original-draft-README.md",
+      "source": "/workspace/scratch/786b6dabb916/media-review-n06/original-draft-README.md",
+      "relative": "media-review-n06/original-draft-README.md",
+      "bytes": 13481,
+      "sha256": "21e63bb8a97178587f7293c51fb53474d79f642ba0bc518476f8e99ca3c7563d",
+      "version": "snapshot bytes 2026-10-12; original Claude",
+      "approval": "Conservación autorizada. QA/análisis revisado no aprueba oferta, cobro ni publicación.",
+      "status": "transferido",
+      "destination": {
+        "type": "git",
+        "repository": "oninteligenciaartificial/onia-hermes",
+        "commit": "e69cab29db9d47ad50ee152f0914e4b6741b912a",
+        "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/original-draft-README.md",
+        "blob_sha": "e49ef716d220d4dd55a2e8b03fb40f758bdfcab9"
+      },
+      "verification": {
+        "content_readback": true,
+        "git_blob_matches_measured_bytes": true
+      }
+    },
+    {
+      "name": "original-plan.txt",
+      "source": "/workspace/scratch/786b6dabb916/media-review-n06/original-plan.txt",
+      "relative": "media-review-n06/original-plan.txt",
+      "bytes": 4994,
+      "sha256": "d98bb8b6891b0c22493e04a83f85ffd7423ddfca6330d4d2bb0e520ceafab6ef",
+      "version": "snapshot bytes 2026-10-12; original Claude",
+      "approval": "Conservación autorizada. QA/análisis revisado no aprueba oferta, cobro ni publicación.",
+      "status": "transferido",
+      "destination": {
+        "type": "git",
+        "repository": "oninteligenciaartificial/onia-hermes",
+        "commit": "e69cab29db9d47ad50ee152f0914e4b6741b912a",
+        "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/original-plan.txt",
+        "blob_sha": "af1f973f73e471be021df3e6d4b0a50d012fcd5d"
+      },
+      "verification": {
+        "content_readback": true,
+        "git_blob_matches_measured_bytes": true
+      }
+    },
+    {
+      "name": "original-rehacer.sh",
+      "source": "/workspace/scratch/786b6dabb916/media-review-n06/original-rehacer.sh",
+      "relative": "media-review-n06/original-rehacer.sh",
+      "bytes": 3285,
+      "sha256": "57d6ef248ab7a4d44baef97e4f4d21a0242944fc6b4310c0baf552e5f938b10b",
+      "version": "snapshot bytes 2026-10-12; original Claude",
+      "approval": "Conservación autorizada. QA/análisis revisado no aprueba oferta, cobro ni publicación.",
+      "status": "transferido",
+      "destination": {
+        "type": "git",
+        "repository": "oninteligenciaartificial/onia-hermes",
+        "commit": "e69cab29db9d47ad50ee152f0914e4b6741b912a",
+        "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/original-rehacer.sh",
+        "blob_sha": "5f14b66c1d74386b919494295c423772f202d554"
+      },
+      "verification": {
+        "content_readback": true,
+        "git_blob_matches_measured_bytes": true
+      }
+    },
+    {
+      "name": "qa-originales.json",
+      "source": "/workspace/scratch/786b6dabb916/media-review-n06/qa-originales.json",
+      "relative": "media-review-n06/qa-originales.json",
+      "bytes": 3072,
+      "sha256": "d4fb23d8c5dfec3481a758226c0e543e0590de6d5c0a401d47ded09f6d6f017d",
+      "version": "snapshot bytes 2026-10-12; original Claude",
+      "approval": "Conservación autorizada. QA/análisis revisado no aprueba oferta, cobro ni publicación.",
+      "status": "transferido",
+      "destination": {
+        "type": "git",
+        "repository": "oninteligenciaartificial/onia-hermes",
+        "commit": "e69cab29db9d47ad50ee152f0914e4b6741b912a",
+        "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/qa-originales.json",
+        "blob_sha": "3c0f81d0b41713b5e64df41770355e13cd447179"
+      },
+      "verification": {
+        "content_readback": true,
+        "git_blob_matches_measured_bytes": true
+      }
+    },
+    {
+      "name": "qa.json",
+      "source": "/workspace/scratch/786b6dabb916/media-review-n06/qa.json",
+      "relative": "media-review-n06/qa.json",
+      "bytes": 676,
+      "sha256": "9d6c21886b2d3c32be6fc43e763047800663d8567a2f5b7fe44cc6c5f8217fc7",
+      "version": "snapshot bytes 2026-10-12; evidencia/estado conservado",
+      "approval": "Conservación autorizada. QA/análisis revisado no aprueba oferta, cobro ni publicación.",
+      "status": "transferido",
+      "destination": {
+        "type": "git",
+        "repository": "oninteligenciaartificial/onia-hermes",
+        "commit": "e69cab29db9d47ad50ee152f0914e4b6741b912a",
+        "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/qa.json",
+        "blob_sha": "9512e3c383aa760cf062b441f3d24d7e28fa0a3b"
+      },
+      "verification": {
+        "content_readback": true,
+        "git_blob_matches_measured_bytes": true
+      }
+    },
+    {
+      "name": "reproducir-preview.sh",
+      "source": "/workspace/scratch/786b6dabb916/media-review-n06/reproducir-preview.sh",
+      "relative": "media-review-n06/reproducir-preview.sh",
+      "bytes": 1318,
+      "sha256": "b4179ff72e83845b76dd4adbc4552ba57cdaed4e219810e21fd501f2bfe74bde",
+      "version": "snapshot bytes 2026-10-12; evidencia/estado conservado",
+      "approval": "Conservación autorizada. QA/análisis revisado no aprueba oferta, cobro ni publicación.",
+      "status": "transferido",
+      "destination": {
+        "type": "git",
+        "repository": "oninteligenciaartificial/onia-hermes",
+        "commit": "e69cab29db9d47ad50ee152f0914e4b6741b912a",
+        "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/reproducir-preview.sh",
+        "blob_sha": "fe280b00932f2f487731e93547dd3fa0ba278b89"
+      },
+      "verification": {
+        "content_readback": true,
+        "git_blob_matches_measured_bytes": true
+      }
+    },
+    {
+      "name": "segments-cut.json",
+      "source": "/workspace/scratch/786b6dabb916/media-review-n06/segments-cut.json",
+      "relative": "media-review-n06/segments-cut.json",
+      "bytes": 8897,
+      "sha256": "e6ca04f8b89303e16ce3a381fbecf17b0ca2b43071ef606dc7cc588391c39d9c",
+      "version": "snapshot bytes 2026-10-12; evidencia/estado conservado",
+      "approval": "Conservación autorizada. QA/análisis revisado no aprueba oferta, cobro ni publicación.",
+      "status": "transferido",
+      "destination": {
+        "type": "git",
+        "repository": "oninteligenciaartificial/onia-hermes",
+        "commit": "e69cab29db9d47ad50ee152f0914e4b6741b912a",
+        "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/segments-cut.json",
+        "blob_sha": "d5dc92bf87878235568adc87aedd6c0814771c01"
+      },
+      "verification": {
+        "content_readback": true,
+        "git_blob_matches_measured_bytes": true
+      }
+    },
+    {
+      "name": "storyboard.json",
+      "source": "/workspace/scratch/786b6dabb916/media-review-n06/storyboard.json",
+      "relative": "media-review-n06/storyboard.json",
+      "bytes": 18093,
+      "sha256": "e0b4f121c22e7d0575a274522c8f7dad5c0e1e19571808435273c6a69a71561f",
+      "version": "snapshot bytes 2026-10-12; evidencia/estado conservado",
+      "approval": "Conservación autorizada. QA/análisis revisado no aprueba oferta, cobro ni publicación.",
+      "status": "transferido",
+      "destination": {
+        "type": "git",
+        "repository": "oninteligenciaartificial/onia-hermes",
+        "commit": "e69cab29db9d47ad50ee152f0914e4b6741b912a",
+        "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/storyboard.json",
+        "blob_sha": "92141b50b40e25353c0a4c99842a533159782240"
+      },
+      "verification": {
+        "content_readback": true,
+        "git_blob_matches_measured_bytes": true
+      }
+    },
+    {
+      "name": "tabla-de-cortes.md",
+      "source": "/workspace/scratch/786b6dabb916/media-review-n06/tabla-de-cortes.md",
+      "relative": "media-review-n06/tabla-de-cortes.md",
+      "bytes": 4810,
+      "sha256": "413f4c836cc4d6b4b007c5f826c4d2e391a19c1bbbd64f556cf167e21ba22293",
+      "version": "snapshot bytes 2026-10-12; evidencia/estado conservado",
+      "approval": "Conservación autorizada. QA/análisis revisado no aprueba oferta, cobro ni publicación.",
+      "status": "transferido",
+      "destination": {
+        "type": "git",
+        "repository": "oninteligenciaartificial/onia-hermes",
+        "commit": "e69cab29db9d47ad50ee152f0914e4b6741b912a",
+        "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/tabla-de-cortes.md",
+        "blob_sha": "9b4f6b9fe543551fd597090c6b112cb94a3923f7"
+      },
+      "verification": {
+        "content_readback": true,
+        "git_blob_matches_measured_bytes": true
+      }
+    }
+  ],
+  "zip_members": [
+    {
+      "archive": "N02-ajuste-privado-evidencia.zip",
+      "member": "media-adjustment/DD-A-marcador-original.png",
+      "bytes": 230810,
+      "sha256": "e8b1e54b40dd90f31161056cd590a933e737533a7ecacc385616c5a79ba7065b"
+    },
+    {
+      "archive": "N02-ajuste-privado-evidencia.zip",
+      "member": "media-adjustment/DD-A-original-61-69.wav",
+      "bytes": 256078,
+      "sha256": "ebf5c5f9ab2f04fe8aa5520057ab08453f7c65162682ce46f02a0e866fd45aa5"
+    },
+    {
+      "archive": "N02-ajuste-privado-evidencia.zip",
+      "member": "media-adjustment/N02-QA.json",
+      "bytes": 1694,
+      "sha256": "a2ab0bce60ba6372eea838d91c21596d67ed1052713db2fb75d837b024b3f26d"
+    },
+    {
+      "archive": "N02-ajuste-privado-evidencia.zip",
+      "member": "media-adjustment/N02-README-original.md",
+      "bytes": 26337,
+      "sha256": "c3a2c1a0548504e7537f70226d314c5e9dd803d3e33a4eb800c9a5f216c916e8"
+    },
+    {
+      "archive": "N02-ajuste-privado-evidencia.zip",
+      "member": "media-adjustment/N02-antes-ajuste.jpg",
+      "bytes": 108955,
+      "sha256": "c24d1e51f33fa8a5b87bc80f12c7cce0acb3ee8721413c330f033b12c9ed8956"
+    },
+    {
+      "archive": "N02-ajuste-privado-evidencia.zip",
+      "member": "media-adjustment/N02-cutplan-original.json",
+      "bytes": 14274,
+      "sha256": "eee9ab3ecfaf0a46345c758a169b75230d7eda9452fef4e6367e5ea6e9f95cc6"
+    },
+    {
+      "archive": "N02-ajuste-privado-evidencia.zip",
+      "member": "media-adjustment/N02-cutplan-propuesta.json",
+      "bytes": 11856,
+      "sha256": "9faf6beebf07ab16f2502c33dbec34c0b1567e91446eb9ff36908f65d6a1a4d7"
+    },
+    {
+      "archive": "N02-ajuste-privado-evidencia.zip",
+      "member": "media-adjustment/N02-despues-ajuste.jpg",
+      "bytes": 78805,
+      "sha256": "9a13e29366cd6a4e2d591551b1b3ca02853cd31962d2095e3bcdfcd992596c80"
+    },
+    {
+      "archive": "N02-ajuste-privado-evidencia.zip",
+      "member": "media-adjustment/N02-empalme-comparado.jpg",
+      "bytes": 419134,
+      "sha256": "a28d91755f73f7d85e06c469669b650b84e9e7ca2c92f6adcdb81270ab649a2e"
+    },
+    {
+      "archive": "N02-ajuste-privado-evidencia.zip",
+      "member": "media-adjustment/N02-preview-sin-arranque-falso.mp4",
+      "bytes": 47814973,
+      "sha256": "c60a66dacd416b1712afab6a31604b118f8a1af4a053047b3562a5ee7d6793a1"
+    },
+    {
+      "archive": "N02-ajuste-privado-evidencia.zip",
+      "member": "media-adjustment/N02-rehacer-original.sh",
+      "bytes": 5162,
+      "sha256": "f8b31d465ff53c468959062cc27afced85b56d4d65ac041ef584a48b0422ce01"
+    },
+    {
+      "archive": "N02-ajuste-privado-evidencia.zip",
+      "member": "media-adjustment/N02-segments-original.json",
+      "bytes": 20244,
+      "sha256": "596fe3ee56a18e40d5e92a74f7704c9a75249ac577a65598d90e91658d9c4389"
+    },
+    {
+      "archive": "N02-ajuste-privado-evidencia.zip",
+      "member": "media-adjustment/N02-segments-propuesta.json",
+      "bytes": 24413,
+      "sha256": "0cdd596655646c502a04f0472d5fba9f6bbb8e301aa3f7bc4500022e636d3542"
+    },
+    {
+      "archive": "N02-ajuste-privado-evidencia.zip",
+      "member": "media-adjustment/N02-storyboard-original.json",
+      "bytes": 26695,
+      "sha256": "0482e639d6267ae32baa40be7abf3f822dc5d2df23d4d8b36c2d55de66d01327"
+    },
+    {
+      "archive": "N02-ajuste-privado-evidencia.zip",
+      "member": "media-adjustment/N02-storyboard-propuesta.json",
+      "bytes": 33816,
+      "sha256": "f2b6de65985adf21485a39eb23f56b50fa0b87de3eca82f31422ccadee04fcdb"
+    },
+    {
+      "archive": "N02-ajuste-privado-evidencia.zip",
+      "member": "media-adjustment/RESULTADO-N02-DD-A.md",
+      "bytes": 6404,
+      "sha256": "531f1a5bea325fcdf3ea841992c0572404e4adb086781c5ced2abf5b5a5b25d0"
+    },
+    {
+      "archive": "N02-ajuste-privado-evidencia.zip",
+      "member": "media-adjustment/reproducir-N02-preview.sh",
+      "bytes": 645,
+      "sha256": "080fcca73013cc8b2f239abeef52979875609d7736c09f1fe6b9efda82a1bb85"
+    },
+    {
+      "archive": "N02-ajuste-privado-evidencia.zip",
+      "member": "media-adjustment/seam-0.png",
+      "bytes": 259555,
+      "sha256": "5b01b1f362681999b27f5aba11351823109c022e0a7b676aed3144573dea5094"
+    },
+    {
+      "archive": "N02-ajuste-privado-evidencia.zip",
+      "member": "media-adjustment/seam-1.png",
+      "bytes": 259449,
+      "sha256": "0f7cbdbaa01801bd303023465012e5a5d63b49391565840a69b9926f97579afd"
+    },
+    {
+      "archive": "N02-ajuste-privado-evidencia.zip",
+      "member": "media-adjustment/seam-2.png",
+      "bytes": 261231,
+      "sha256": "798c3c27eca1c08dcd3c03adae9d31339a353322b2762eba0bc0d251d444287b"
+    },
+    {
+      "archive": "N02-ajuste-privado-evidencia.zip",
+      "member": "media-adjustment/seam-3.png",
+      "bytes": 236370,
+      "sha256": "4c53e7f2401c1a21e14612ff186c05d08e266852701a7ae5d7c08eb1ace23ef7"
+    },
+    {
+      "archive": "N02-ajuste-privado-evidencia.zip",
+      "member": "media-adjustment/seam-4.png",
+      "bytes": 259555,
+      "sha256": "5b01b1f362681999b27f5aba11351823109c022e0a7b676aed3144573dea5094"
+    },
+    {
+      "archive": "N02-ajuste-privado-evidencia.zip",
+      "member": "media-adjustment/seam-5.png",
+      "bytes": 259449,
+      "sha256": "0f7cbdbaa01801bd303023465012e5a5d63b49391565840a69b9926f97579afd"
+    },
+    {
+      "archive": "N02-ajuste-privado-evidencia.zip",
+      "member": "media-adjustment/seam-6.png",
+      "bytes": 261231,
+      "sha256": "798c3c27eca1c08dcd3c03adae9d31339a353322b2762eba0bc0d251d444287b"
+    },
+    {
+      "archive": "N02-ajuste-privado-evidencia.zip",
+      "member": "media-adjustment/seam-7.png",
+      "bytes": 236370,
+      "sha256": "4c53e7f2401c1a21e14612ff186c05d08e266852701a7ae5d7c08eb1ace23ef7"
+    },
+    {
+      "archive": "N02-ajuste-privado-evidencia.zip",
+      "member": "media-review-n06/N02-borrador-original-Claude.mp4",
+      "bytes": 2665489,
+      "sha256": "123c375b33f1f14985ada85d7f07537f4322a6a79dad7c406d89828b9af76389"
+    },
+    {
+      "archive": "N06-preview-privado.zip",
+      "member": "N06/N06-preview-corte-propuesto.mp4",
+      "bytes": 2290695,
+      "sha256": "41d5541d69e71b85bfe3f80268fd7d650259196656c9d2dd06309be46f41d492"
+    },
+    {
+      "archive": "N06-preview-privado.zip",
+      "member": "N06/REVISION-N06.md",
+      "bytes": 5676,
+      "sha256": "2b8b4186656c3fc82986b4419b2663ea1612c6a949587b64fa1ddf8b5de9d297"
+    },
+    {
+      "archive": "N06-preview-privado.zip",
+      "member": "N06/contact-sheet.jpg",
+      "bytes": 50060,
+      "sha256": "68504862196a81f3e83e671560df76df6400345477b793fc5c8f154cf9ca2be3"
+    },
+    {
+      "archive": "N06-preview-privado.zip",
+      "member": "N06/cutplan.json",
+      "bytes": 5449,
+      "sha256": "5cba1bc5a4ea2178758980bff85d728e57aabc315612409d62c39510b88c811d"
+    },
+    {
+      "archive": "N06-preview-privado.zip",
+      "member": "N06/loudnorm-pass1.json",
+      "bytes": 263,
+      "sha256": "a1db92ab5a7d5893f0f85162fb395a6a5503f7324ae2c9457b658f8a711aee3e"
+    },
+    {
+      "archive": "N06-preview-privado.zip",
+      "member": "N06/original-draft-README.md",
+      "bytes": 13481,
+      "sha256": "21e63bb8a97178587f7293c51fb53474d79f642ba0bc518476f8e99ca3c7563d"
+    },
+    {
+      "archive": "N06-preview-privado.zip",
+      "member": "N06/original-plan.txt",
+      "bytes": 4994,
+      "sha256": "d98bb8b6891b0c22493e04a83f85ffd7423ddfca6330d4d2bb0e520ceafab6ef"
+    },
+    {
+      "archive": "N06-preview-privado.zip",
+      "member": "N06/original-rehacer.sh",
+      "bytes": 3285,
+      "sha256": "57d6ef248ab7a4d44baef97e4f4d21a0242944fc6b4310c0baf552e5f938b10b"
+    },
+    {
+      "archive": "N06-preview-privado.zip",
+      "member": "N06/qa.json",
+      "bytes": 676,
+      "sha256": "9d6c21886b2d3c32be6fc43e763047800663d8567a2f5b7fe44cc6c5f8217fc7"
+    },
+    {
+      "archive": "N06-preview-privado.zip",
+      "member": "N06/reproducir-preview.sh",
+      "bytes": 1318,
+      "sha256": "b4179ff72e83845b76dd4adbc4552ba57cdaed4e219810e21fd501f2bfe74bde"
+    },
+    {
+      "archive": "N06-preview-privado.zip",
+      "member": "N06/segments-cut.json",
+      "bytes": 8897,
+      "sha256": "e6ca04f8b89303e16ce3a381fbecf17b0ca2b43071ef606dc7cc588391c39d9c"
+    },
+    {
+      "archive": "N06-preview-privado.zip",
+      "member": "N06/storyboard.json",
+      "bytes": 18093,
+      "sha256": "e0b4f121c22e7d0575a274522c8f7dad5c0e1e19571808435273c6a69a71561f"
+    },
+    {
+      "archive": "N06-preview-privado.zip",
+      "member": "N06/tabla-de-cortes.md",
+      "bytes": 4810,
+      "sha256": "413f4c836cc4d6b4b007c5f826c4d2e391a19c1bbbd64f556cf167e21ba22293"
+    },
+    {
+      "archive": "Borradores-originales-Claude.zip",
+      "member": "N06-borrador-original-Claude.mp4",
+      "bytes": 1163863,
+      "sha256": "d8753944a720d201c7bd141acce4236699cb159dc95e90f3f80049c77f7d8f40"
+    },
+    {
+      "archive": "Borradores-originales-Claude.zip",
+      "member": "N06-original-contact.jpg",
+      "bytes": 46815,
+      "sha256": "f69feebdf8049d089f5cb5f9af11c0c4871809a063e7456ff2bb0b44f80e3bac"
+    },
+    {
+      "archive": "Borradores-originales-Claude.zip",
+      "member": "N07-borrador-original-Claude.mp4",
+      "bytes": 2048970,
+      "sha256": "f22e5caeb2d96cfe9c625d6e2a7d0dc4e3a6921890c866cee4cbad726d0a90e6"
+    },
+    {
+      "archive": "Borradores-originales-Claude.zip",
+      "member": "N07-original-contact.jpg",
+      "bytes": 58049,
+      "sha256": "c961848da6eaf5d4f10f3abc18592ab0591fc754ffd6210045b1724b3a8c8560"
+    },
+    {
+      "archive": "Borradores-originales-Claude.zip",
+      "member": "DD-A-borrador-original-Claude.mp4",
+      "bytes": 1426827,
+      "sha256": "4582213089bbcf1c7fb4d84511ce64b7539eaf00e8f755952914a803d46af583"
+    },
+    {
+      "archive": "Borradores-originales-Claude.zip",
+      "member": "DD-A-original-contact.jpg",
+      "bytes": 46483,
+      "sha256": "f7569d3d31c89a6e27b4c905ff37e313d3541a7850826604e811d3285d9990dc"
+    },
+    {
+      "archive": "Borradores-originales-Claude.zip",
+      "member": "N02-borrador-original-Claude.mp4",
+      "bytes": 2665489,
+      "sha256": "123c375b33f1f14985ada85d7f07537f4322a6a79dad7c406d89828b9af76389"
+    },
+    {
+      "archive": "Borradores-originales-Claude.zip",
+      "member": "N02-original-contact.jpg",
+      "bytes": 84590,
+      "sha256": "f3e8c5647225847a8f1f1d18861cfbffd270114f7478d9d4f9c325f4c667f240"
+    },
+    {
+      "archive": "Borradores-originales-Claude.zip",
+      "member": "ORIGINALES-CLAUDE-RECUPERADOS.md",
+      "bytes": 2881,
+      "sha256": "f82099a69f1c2c028e9f08a5621837d1d74bec450029e0681d10a327db63ff53"
+    },
+    {
+      "archive": "Borradores-originales-Claude.zip",
+      "member": "qa-originales.json",
+      "bytes": 3072,
+      "sha256": "d4fb23d8c5dfec3481a758226c0e543e0590de6d5c0a401d47ded09f6d6f017d"
+    }
+  ],
+  "remote_drive_checks": [
+    {
+      "relative": "media-adjustment/DD-A-original-61-69.wav",
+      "remote": {
+        "bytes": 256078,
+        "sha256": "ebf5c5f9ab2f04fe8aa5520057ab08453f7c65162682ce46f02a0e866fd45aa5"
+      },
+      "meta": {
+        "size": "256078",
+        "permissions": [
+          {
+            "type": "user",
+            "role": "owner",
+            "emailAddress": null,
+            "domain": null,
+            "displayName": null,
+            "allowFileDiscovery": null
+          }
+        ],
+        "parent_ids": [
+          "1bYK_ahMyjIh_Ta9CHGF_1WflOiuFFRZa"
+        ]
+      }
+    },
+    {
+      "relative": "Borradores-originales-Claude.zip",
+      "status": "complete",
+      "remote": {
+        "bytes": 7067740,
+        "sha256": "2fcebeb2d097bcd3f3ab721bd7daadf39ba8800a7face6e2941adefa60859473"
+      }
+    },
+    {
+      "relative": "N02-ajuste-privado-evidencia.zip",
+      "status": "complete",
+      "remote": {
+        "bytes": 53323533,
+        "sha256": "e29c4b151b602de862a470c13abf1771c9489f8755791150117bc3f48b920fb6"
+      }
+    },
+    {
+      "relative": "N06-preview-privado.zip",
+      "status": "complete",
+      "remote": {
+        "bytes": 2294168,
+        "sha256": "9433ca57880c457cb1f9c3f3026ad4135c04b95cd2ffef01552e912df9874cc3"
+      }
+    },
+    {
+      "relative": "media-adjustment/DD-A-bruto-original.mp4",
+      "status": "complete",
+      "remote": {
+        "bytes": 92453888,
+        "sha256": "8220af93f24be363a90c9fcc0fad4c1a77e4f9fb4556abe4cefaaace2f302593"
+      }
+    },
+    {
+      "relative": "cloud-media-synthetic.mp4",
+      "remote": {
+        "bytes": 2326,
+        "sha256": "b6151c7a96b2c97761acacfb331f4bd1865ec7df8658b9484094e5996a07f6b3"
+      },
+      "meta": {
+        "size": "2326",
+        "permissions": [
+          {
+            "type": "user",
+            "role": "owner",
+            "emailAddress": null,
+            "domain": null,
+            "displayName": null,
+            "allowFileDiscovery": null
+          }
+        ],
+        "parent_ids": [
+          "1bYK_ahMyjIh_Ta9CHGF_1WflOiuFFRZa"
+        ]
+      }
+    },
+    {
+      "relative": "media-adjustment/N02-preview-revisable.mp4",
+      "status": "complete",
+      "remote": {
+        "bytes": 6258418,
+        "sha256": "0d0031e88aa8c9b24b50f53a9e4581e7171bdc02b3781e064b4611fb4be4f6e5"
+      }
+    },
+    {
+      "relative": "media-review-n06/bruto.mp4",
+      "status": "complete",
+      "remote": {
+        "bytes": 69843125,
+        "sha256": "6e3702e1378de3432843633c2bff2f76c654acaa251b3c38b9f1f3a9acff8fb9"
+      }
+    }
+  ],
+  "git_readbacks": [
+    {
+      "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-adjustment/reproducir-N02-preview.sh",
+      "blob_sha": "3aee1507d8c5ce3fac89b561bf7b0808638d370e",
+      "content_matches": true,
+      "error": false
+    },
+    {
+      "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-adjustment/N02-cutplan-original.json",
+      "blob_sha": "ca8af4a3230b5509a3966eeddc8bfcad0a51ede7",
+      "content_matches": true,
+      "error": false
+    },
+    {
+      "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-adjustment/RESULTADO-N02-DD-A.md",
+      "blob_sha": "ed9d1d16ccd277c7af058726b8f0a2dd5b734c32",
+      "content_matches": true,
+      "error": false
+    },
+    {
+      "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-adjustment/N02-README-original.md",
+      "blob_sha": "dd5f6a4af8c45533c74a3779f8fc83ef0e0886d3",
+      "content_matches": true,
+      "error": false
+    },
+    {
+      "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-adjustment/N02-QA.json",
+      "blob_sha": "06204aef360322ae02615e981f6650cf342770ba",
+      "content_matches": true,
+      "error": false
+    },
+    {
+      "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/loudnorm-pass1.json",
+      "blob_sha": "920db3857c53f699ba94d4c1e866158d4f36fe02",
+      "content_matches": true,
+      "error": false
+    },
+    {
+      "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/ORIGINALES-CLAUDE-RECUPERADOS.md",
+      "blob_sha": "f4aa8fce231d72df93fc67c4180733ddf1ff47a9",
+      "content_matches": true,
+      "error": false
+    },
+    {
+      "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/qa-originales.json",
+      "blob_sha": "3c0f81d0b41713b5e64df41770355e13cd447179",
+      "content_matches": true,
+      "error": false
+    },
+    {
+      "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/cutplan.json",
+      "blob_sha": "c8ebf9d3549d2def7ca53660269676ceb7bd3884",
+      "content_matches": true,
+      "error": false
+    },
+    {
+      "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/original-plan.txt",
+      "blob_sha": "af1f973f73e471be021df3e6d4b0a50d012fcd5d",
+      "content_matches": true,
+      "error": false
+    },
+    {
+      "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/reproducir-preview.sh",
+      "blob_sha": "fe280b00932f2f487731e93547dd3fa0ba278b89",
+      "content_matches": true,
+      "error": false
+    },
+    {
+      "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/original-rehacer.sh",
+      "blob_sha": "5f14b66c1d74386b919494295c423772f202d554",
+      "content_matches": true,
+      "error": false
+    },
+    {
+      "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/REVISION-N06.md",
+      "blob_sha": "37bf3f4a0e5324b44928abdcf523928b53295b1a",
+      "content_matches": true,
+      "error": false
+    },
+    {
+      "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-adjustment/N02-rehacer-original.sh",
+      "blob_sha": "d374acd9790355c5a7bb631cc3fa20bb2af554bf",
+      "content_matches": true,
+      "error": false
+    },
+    {
+      "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/tabla-de-cortes.md",
+      "blob_sha": "9b4f6b9fe543551fd597090c6b112cb94a3923f7",
+      "content_matches": true,
+      "error": false
+    },
+    {
+      "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-adjustment/N02-cutplan-propuesta.json",
+      "blob_sha": "e17d59bdf302f778f57d34e81e798fdc47381d84",
+      "content_matches": true,
+      "error": false
+    },
+    {
+      "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-adjustment/N02-segments-original.json",
+      "blob_sha": "a654599ed5fd5b11c3258b6246c5e3b75417f5af",
+      "content_matches": true,
+      "error": false
+    },
+    {
+      "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-adjustment/N02-storyboard-propuesta.json",
+      "blob_sha": "90a1d94267a61cb39722e193576d747e1bcb5d62",
+      "content_matches": true,
+      "error": false
+    },
+    {
+      "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/qa.json",
+      "blob_sha": "9512e3c383aa760cf062b441f3d24d7e28fa0a3b",
+      "content_matches": true,
+      "error": false
+    },
+    {
+      "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/storyboard.json",
+      "blob_sha": "92141b50b40e25353c0a4c99842a533159782240",
+      "content_matches": true,
+      "error": false
+    },
+    {
+      "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/cloud-media-ready.md",
+      "blob_sha": "b6685660fbd284f7b996e6e1d48f0bce4b9e36bc",
+      "content_matches": true,
+      "error": false
+    },
+    {
+      "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-adjustment/N02-segments-propuesta.json",
+      "blob_sha": "27c6a451ed0ca435ff626b41b6b760151d05e7cb",
+      "content_matches": true,
+      "error": false
+    },
+    {
+      "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/HANDOFF_MARCA_CLOUD_20261011.md",
+      "blob_sha": "3e3be529bbd5ec67cf7cbc981b74bba7d412a262",
+      "content_matches": true,
+      "error": false
+    },
+    {
+      "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/segments-cut.json",
+      "blob_sha": "d5dc92bf87878235568adc87aedd6c0814771c01",
+      "content_matches": true,
+      "error": false
+    },
+    {
+      "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-review-n06/original-draft-README.md",
+      "blob_sha": "e49ef716d220d4dd55a2e8b03fb40f758bdfcab9",
+      "content_matches": true,
+      "error": false
+    },
+    {
+      "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/media-adjustment/N02-storyboard-original.json",
+      "blob_sha": "014aa8a1f9be5286ad5f6ed74f3a39559bf14da9",
+      "content_matches": true,
+      "error": false
+    },
+    {
+      "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/PROPUESTA_WORKSHOP_PREPAGO_20261011.md",
+      "blob_sha": "776d8518c8336cb6346924f87f0b93d1cc654bdd",
+      "content_matches": true
+    },
+    {
+      "path": "hermes-content/docs/handoff/relevo-marca-20261012/artifacts/REFERENTES_MRSATIRAS_20261011.md",
+      "blob_sha": "e219d279b4e9f4e62b3154a89351d3a7a6705706",
+      "content_matches": true
+    }
+  ],
+  "source_projects_already_durable": [
+    {
+      "folder": "n07-haiku-55",
+      "root": [
+        {
+          "path": "videos/marca-personal/2026-10-11/n07-haiku-55/borrador",
+          "type": "dir",
+          "size": 0,
+          "git_sha": "4b25072a66187b4d8e041367114f697b8bfaeea9"
+        },
+        {
+          "path": "videos/marca-personal/2026-10-11/n07-haiku-55/costuras.jpg",
+          "type": "file",
+          "size": 784383,
+          "git_sha": "0b34a1d5aff158ceeb400c39d6de2aa84826f0a0"
+        },
+        {
+          "path": "videos/marca-personal/2026-10-11/n07-haiku-55/cutplan.json",
+          "type": "file",
+          "size": 14114,
+          "git_sha": "02103734327f84d0ed09f4488123698661d00d92"
+        },
+        {
+          "path": "videos/marca-personal/2026-10-11/n07-haiku-55/preview-360.mp4",
+          "type": "file",
+          "size": 1926265,
+          "git_sha": "d8cabe5fb287fb5d6b9c1ca09156b4f7c89528ba"
+        },
+        {
+          "path": "videos/marca-personal/2026-10-11/n07-haiku-55/tabla-de-cortes.md",
+          "type": "file",
+          "size": 6681,
+          "git_sha": "86f3f3e46a29d74af86b0b71f8784039b986d4d6"
+        },
+        {
+          "path": "videos/marca-personal/2026-10-11/n07-haiku-55/transcript-whisper-small.json",
+          "type": "file",
+          "size": 20930,
+          "git_sha": "8539580ba9931a211fee19daa1eaab4966de4040"
+        }
+      ],
+      "borrador": [
+        {
+          "path": "videos/marca-personal/2026-10-11/n07-haiku-55/borrador/BORRADOR-no-es-master-360p.mp4",
+          "type": "file",
+          "size": 2048970,
+          "git_sha": "ca7eb03257cdf06561cc4a9194ac9a596b95a7d5"
+        },
+        {
+          "path": "videos/marca-personal/2026-10-11/n07-haiku-55/borrador/README.md",
+          "type": "file",
+          "size": 23402,
+          "git_sha": "caccd3d50a919972c62efffc5a3ffdc78f9f043d"
+        },
+        {
+          "path": "videos/marca-personal/2026-10-11/n07-haiku-55/borrador/armar-transcript.py",
+          "type": "file",
+          "size": 12135,
+          "git_sha": "a8d8c932d5e0d9db1b8c0f2189eaf0010d91d874"
+        },
+        {
+          "path": "videos/marca-personal/2026-10-11/n07-haiku-55/borrador/arreglos.json",
+          "type": "file",
+          "size": 768,
+          "git_sha": "e4cf61d2e46054e636d557d063a6acf1c8f59913"
+        },
+        {
+          "path": "videos/marca-personal/2026-10-11/n07-haiku-55/borrador/capturar-anthropic.mjs",
+          "type": "file",
+          "size": 10799,
+          "git_sha": "cb87538eecd2d48e255caba66e7acc4679a108ba"
+        },
+        {
+          "path": "videos/marca-personal/2026-10-11/n07-haiku-55/borrador/capturas",
+          "type": "dir",
+          "size": 0,
+          "git_sha": "e5fa0e40424a8ed122aee88e479ca80b014b950b"
+        },
+        {
+          "path": "videos/marca-personal/2026-10-11/n07-haiku-55/borrador/cuadros",
+          "type": "dir",
+          "size": 0,
+          "git_sha": "7f42080f3c81280503d4f6b42639c7a57ff84dea"
+        },
+        {
+          "path": "videos/marca-personal/2026-10-11/n07-haiku-55/borrador/dudosas-extra.json",
+          "type": "file",
+          "size": 750,
+          "git_sha": "54856aad519e109dd8b2e55f17f4d0159831d1e3"
+        },
+        {
+          "path": "videos/marca-personal/2026-10-11/n07-haiku-55/borrador/medicion.txt",
+          "type": "file",
+          "size": 2723,
+          "git_sha": "4f77aa29cc8e1d5d59def02c63f91ea18d10d757"
+        },
+        {
+          "path": "videos/marca-personal/2026-10-11/n07-haiku-55/borrador/medir-salto-cara.py",
+          "type": "file",
+          "size": 4107,
+          "git_sha": "baca098744c9b4027af59e7f4a2dcdb0cd56e9b2"
+        },
+        {
+          "path": "videos/marca-personal/2026-10-11/n07-haiku-55/borrador/palabras-a-confirmar.txt",
+          "type": "file",
+          "size": 1908,
+          "git_sha": "5e7a4dcb12da666abfcc3aa8056daafe546b041a"
+        },
+        {
+          "path": "videos/marca-personal/2026-10-11/n07-haiku-55/borrador/plan.txt",
+          "type": "file",
+          "size": 8968,
+          "git_sha": "7aa35f45a7a05bf03bc1b738a1b7cf712f238093"
+        },
+        {
+          "path": "videos/marca-personal/2026-10-11/n07-haiku-55/borrador/rehacer.sh",
+          "type": "file",
+          "size": 5473,
+          "git_sha": "8aad714525e2f8e9fa1de79a589b876fbefecf19"
+        },
+        {
+          "path": "videos/marca-personal/2026-10-11/n07-haiku-55/borrador/segments-cut.json",
+          "type": "file",
+          "size": 15001,
+          "git_sha": "8807705aba33055424dbaacd080f06264452ff90"
+        },
+        {
+          "path": "videos/marca-personal/2026-10-11/n07-haiku-55/borrador/storyboard.json",
+          "type": "file",
+          "size": 26251,
+          "git_sha": "52bea1b1daf78b05e0f2db3a461106baf98025bd"
+        }
+      ]
+    },
+    {
+      "folder": "dd-a-openai-sol",
+      "root": [
+        {
+          "path": "videos/marca-personal/2026-10-11/dd-a-openai-sol/borrador",
+          "type": "dir",
+          "size": 0,
+          "git_sha": "2f86d6715400e68737fc08b6d3dbbd9a572ec253"
+        },
+        {
+          "path": "videos/marca-personal/2026-10-11/dd-a-openai-sol/costuras.jpg",
+          "type": "file",
+          "size": 598629,
+          "git_sha": "2c6e79d2ecb317451ab25f1b24095d89765391c8"
+        },
+        {
+          "path": "videos/marca-personal/2026-10-11/dd-a-openai-sol/cutplan.json",
+          "type": "file",
+          "size": 6861,
+          "git_sha": "c2885d097fc78eaa972a0bb7257dbd1261a2600d"
+        },
+        {
+          "path": "videos/marca-personal/2026-10-11/dd-a-openai-sol/preview-360.mp4",
+          "type": "file",
+          "size": 1405348,
+          "git_sha": "565dae336daa42d0c4d9ddafdf9e100a881f54ff"
+        },
+        {
+          "path": "videos/marca-personal/2026-10-11/dd-a-openai-sol/tabla-de-cortes.md",
+          "type": "file",
+          "size": 5348,
+          "git_sha": "39248defacc0133584da834705fc03b6e7e38733"
+        },
+        {
+          "path": "videos/marca-personal/2026-10-11/dd-a-openai-sol/transcript-whisper-small.json",
+          "type": "file",
+          "size": 8958,
+          "git_sha": "4ff97339154072d93a221bb80936a478ee5a5db6"
+        }
+      ],
+      "borrador": [
+        {
+          "path": "videos/marca-personal/2026-10-11/dd-a-openai-sol/borrador/BORRADOR-no-es-master-360p.mp4",
+          "type": "file",
+          "size": 1426827,
+          "git_sha": "610929b2a97295a1eeb8e2e531f00cccaed4d0cd"
+        },
+        {
+          "path": "videos/marca-personal/2026-10-11/dd-a-openai-sol/borrador/README.md",
+          "type": "file",
+          "size": 14646,
+          "git_sha": "5f044ede73808a966b27e3ff989e6d0f5c306a8f"
+        },
+        {
+          "path": "videos/marca-personal/2026-10-11/dd-a-openai-sol/borrador/armar-storyboard.py",
+          "type": "file",
+          "size": 1542,
+          "git_sha": "75e1f3ea56c434aafe5fd876cf4db6914a09ade2"
+        },
+        {
+          "path": "videos/marca-personal/2026-10-11/dd-a-openai-sol/borrador/arreglos.json",
+          "type": "file",
+          "size": 172,
+          "git_sha": "07c805b61c7b41896f6a81f4581b79f3963ed256"
+        },
+        {
+          "path": "videos/marca-personal/2026-10-11/dd-a-openai-sol/borrador/capturar-openai.mjs",
+          "type": "file",
+          "size": 10027,
+          "git_sha": "f349e930507186be32bf15b202533aded7d7b721"
+        },
+        {
+          "path": "videos/marca-personal/2026-10-11/dd-a-openai-sol/borrador/capturas",
+          "type": "dir",
+          "size": 0,
+          "git_sha": "2500d0d0c7895e1c5e077c709bec256e7da4b937"
+        },
+        {
+          "path": "videos/marca-personal/2026-10-11/dd-a-openai-sol/borrador/correr-santiago.py",
+          "type": "file",
+          "size": 3084,
+          "git_sha": "a7db69ade426f61af7b01ba38cd0080ca4a58033"
+        },
+        {
+          "path": "videos/marca-personal/2026-10-11/dd-a-openai-sol/borrador/cuadros",
+          "type": "dir",
+          "size": 0,
+          "git_sha": "793dccb3bd49814136e0b999ebd4a894ce1d1046"
+        },
+        {
+          "path": "videos/marca-personal/2026-10-11/dd-a-openai-sol/borrador/dudosas.json",
+          "type": "file",
+          "size": 382,
+          "git_sha": "ef97f8ab1970fc0b8a12860883388ce67b5d5277"
+        },
+        {
+          "path": "videos/marca-personal/2026-10-11/dd-a-openai-sol/borrador/hacer-segments.py",
+          "type": "file",
+          "size": 10458,
+          "git_sha": "32d875b11f0bb60d51243ed4cd26e6c00a2d76f8"
+        },
+        {
+          "path": "videos/marca-personal/2026-10-11/dd-a-openai-sol/borrador/medicion.txt",
+          "type": "file",
+          "size": 279,
+          "git_sha": "c0414faf467335cdcc237af9332c003d10bda1dc"
+        },
+        {
+          "path": "videos/marca-personal/2026-10-11/dd-a-openai-sol/borrador/plan.txt",
+          "type": "file",
+          "size": 5206,
+          "git_sha": "2034d6cafa06304a560cd3ec8c7f266d8bdc0d64"
+        },
+        {
+          "path": "videos/marca-personal/2026-10-11/dd-a-openai-sol/borrador/rehacer.sh",
+          "type": "file",
+          "size": 4523,
+          "git_sha": "5a01ddf9ffbab0c5af462feeef33ac5666e15c5d"
+        },
+        {
+          "path": "videos/marca-personal/2026-10-11/dd-a-openai-sol/borrador/segments-cut.json",
+          "type": "file",
+          "size": 11666,
+          "git_sha": "7562ac4d918fd8e20b68112904e303eeba6c9281"
+        },
+        {
+          "path": "videos/marca-personal/2026-10-11/dd-a-openai-sol/borrador/storyboard.json",
+          "type": "file",
+          "size": 12388,
+          "git_sha": "b3ced26f80e18d7b252638dcaa98010a2de2fd65"
+        }
+      ]
+    }
+  ],
+  "source_commits": [
+    {
+      "ref": "ed3ffa04",
+      "sha": "ed3ffa047f3bf2a99cbfd8ede5a230359932b164"
+    },
+    {
+      "ref": "fbad86d1",
+      "sha": "fbad86d1cf01de470c0a32107a4ec8f3e8f1d4e3"
+    },
+    {
+      "ref": "0b55a7ff",
+      "sha": "0b55a7ff0e903e16449a7daa6fafa8081e87590c"
+    },
+    {
+      "ref": "5dfefc8f",
+      "sha": "5dfefc8f7db00884f180050d8e482418fa99789a"
+    },
+    {
+      "ref": "90e00270",
+      "sha": "90e002704121fb451f7c1c4b41b4feefa355c0f5"
+    }
+  ],
+  "external_missing_bytes": [
+    "WhatsApp @IAdeGuardia MP4 y análisis nativos: C:/Users/PC/Documents/Codex/scratch/reference-20261011/; sólo análisis transmitido recibido.",
+    "Andrea y Adrien MP4/cuadros/Gemini: C:/Users/PC/Documents/Codex/scratch/ig-references-20261011/; sólo análisis transmitido recibido."
+  ],
+  "pending": [
+    "DD-A escucha/transcripción 61-69s; palabra 64.8-65.2s no comprobada.",
+    "N02 revisión del empalme a velocidad real, palabras/fecha y master 1080; no ejecutar recetas en este relevo.",
+    "N02 storyboard propuesta mantiene nota histórica B11 sin texto aunque el corte propuesto lo elimina.",
+    "Motor fuente completo/dependencias no comprobado. No garantizar exacta reproducción binaria del MP4 compatible.",
+    "Workshop: oferta/precio/fecha/cobro no aprobados.",
+    "Destino nativo debe comprobar lectura independiente y hashes."
+  ],
+  "unchanged_source": true,
+  "agents": [
+    {
+      "id": "/root/editor_marca",
+      "state": "completed",
+      "results": "Coherencia de proyecto audiovisual y mejoras del análisis implementadas; no volvió a ejecutar edición en relevo."
+    },
+    {
+      "id": "/root/qa_marca",
+      "state": "completed",
+      "results": "QA audiovisual/análisis previos; nueva QA de conservación: 59/59 hashes y bytes, 49 miembros ZIP equivalentes, sin archivos visibles omitidos; límites incorporados."
+    }
+  ],
+  "model": "Work/modelo efectivo no observable; los dos spawns previos solicitaron Astra medio; no prueba modelo ejecutado."
+}
