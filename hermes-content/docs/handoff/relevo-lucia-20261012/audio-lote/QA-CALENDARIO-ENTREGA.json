@@ -1,0 +1,80 @@
+{
+  "date": "2026-10-12",
+  "reviewer": "/root/lucia_qa",
+  "model_configured": "Sol medium",
+  "model_observed": "not observable",
+  "alta": 0,
+  "material_errors": 0,
+  "verdict": "Approved documentation and show-only delivery/calendar proposal; no publication/scheduling/voice/spending authorization",
+  "calendar": {
+    "slots": 9,
+    "start": "2026-10-19",
+    "end": "2026-11-06",
+    "weekday_pattern": [
+      0,
+      2,
+      4,
+      0,
+      2,
+      4,
+      0,
+      2,
+      4
+    ],
+    "timezone": "America/Caracas",
+    "local_time": "19:00",
+    "UTC_time": "23:00",
+    "three_per_week": true,
+    "viernes_before_G4_C2": true,
+    "G5_before_G4": true,
+    "G1v2_outside_lot": true,
+    "C1_self_contained": true,
+    "all_pending": true
+  },
+  "links": {
+    "relative_links": 12,
+    "existing_files": 12,
+    "masters": 6,
+    "previews": 6
+  },
+  "narrations": {
+    "exact_counts": [
+      223,
+      415,
+      412,
+      444,
+      418,
+      311
+    ],
+    "total": 2223,
+    "includes_spaces": true,
+    "audio_generated": false,
+    "actual_quota_license_cost_verified": false
+  },
+  "rights": {
+    "original_mathematical_base": true,
+    "SFX_local_synthesis_documented": true,
+    "no_fake_external_Pixabay_license": true
+  },
+  "CTA": {
+    "status": "proposed_unverified",
+    "head_result": "CONNECT403 policy; not404 site",
+    "no_retry": true
+  },
+  "mother_report": {
+    "documentation_inherited_native_distinct": true,
+    "not_all_app_mastered": true,
+    "Marca_recommendations_only_no_lane_edit": true
+  },
+  "not_repeated": [
+    "six full video frame comparisons",
+    "127 model audit"
+  ],
+  "remaining": [
+    "voice connector quota commercial license and price",
+    "approved version/calendar",
+    "account login ledger duplicates real IA label permalink insights",
+    "CTA destination validation",
+    "K4/R3 exact commit paths"
+  ]
+}

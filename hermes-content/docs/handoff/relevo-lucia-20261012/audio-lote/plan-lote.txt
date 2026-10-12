@@ -1,0 +1,46 @@
+# Lucía — lote de guiones y sincronización de audio
+
+- Fuente Git: `3566e5d5208cf4a7bcf20e743469c6088944674c`. Los seis guiones y planes se copiaron/extrajeron desde blobs versionados.
+- 17 caracteres/s es solo estimación mecánica de lectura, no toma de voz. La duración mostrada es la del MP4 master terminado medida con ffprobe.
+- ElevenLabs/voz actual: costo exacto no verificable (sin env ni MCP); no hubo síntesis de voz. Todos los créditos/costos históricos citados en planes no son precios actuales ni cargos de este trabajo.
+- Sin generar voz/video, ni render de audio. Los puntos SFX son referencias temporales exactas del plan; ninguna mezcla se produjo.
+
+## viernes-v2
+- Guion `videos/lucia-viernes-copia-v2/guion-voz.txt`; blob `0503231ef13f0359c01b9082450d8f0588085aba`; 226 B.
+- Guion: 8 líneas; 216 caracteres sin saltos (223 con LF internos); /17 = 12.706 s estimados únicamente.
+- Master `videos/lucia-entrega/viernes-copia-v2-final-1080x1920.mp4`: 15.000 s de video final; Git blob `76db69a4a033cf9cf9792f0d1cc57688efac061f`; 2983672 B; SHA-256 medido `c4299c7b21c7b05cc41181176d8908429b9752d4422c9cc9275964dd64393aa4`.
+- Costuras/acentos se detallan en plan-lote.json; no se generó voz. Precio de voz actual no verificable.
+
+## g2-v2
+- Guion `videos/lucia-g2-v2/guion-voz.txt`; blob `efaab64957ad9fc7b28f8853605da0bda3b24720`; 422 B.
+- Guion: 14 líneas; 402 caracteres sin saltos (415 con LF internos); /17 = 23.647 s estimados únicamente.
+- Master `videos/lucia-entrega/g2-v2-final-1080x1920.mp4`: 27.792 s de video final; Git blob `89adba1bf331b9dad918e47ec060fdfb28b436c3`; 31546976 B; SHA-256 medido `1eb22374d77ca744f2c18c946d1adb72662a76b01912a09d9e9fd56cd1a778a8`.
+- Costuras/acentos se detallan en plan-lote.json; no se generó voz. Precio de voz actual no verificable.
+
+## g3-v2
+- Guion `videos/lucia-g3-v2/guion-voz.txt`; blob `8b32714c1f641a0eac00787c343e9dddd0bf4550`; 418 B.
+- Guion: 12 líneas; 401 caracteres sin saltos (412 con LF internos); /17 = 23.588 s estimados únicamente.
+- Master `videos/lucia-entrega/g3-v2-final-1080x1920.mp4`: 27.917 s de video final; Git blob `54b713cbd7197dfba42738ccc9056ea84c261a28`; 33780322 B; SHA-256 medido `ac032dc76b832c006f1b0d97693270a7c3ec923faa9d1c25d848e346c165193b`.
+- Costuras/acentos se detallan en plan-lote.json; no se generó voz. Precio de voz actual no verificable.
+
+## g4-v2
+- Guion `videos/lucia-g4-v2/guion-voz.txt`; blob `8fafb9e88920582117097f366056960ebc8a21c9`; 454 B.
+- Guion: 12 líneas; 433 caracteres sin saltos (444 con LF internos); /17 = 25.471 s estimados únicamente.
+- Master `videos/lucia-entrega/g4-v2-final-1080x1920.mp4`: 28.042 s de video final; Git blob `5b412ad9a28cbf32e2680399dbf3e7cbc65411e4`; 27580327 B; SHA-256 medido `13cdd1d2f5f0ab2eef1fb0ffd065007d47bf5946a2bb15a5bd24c435142d2a43`.
+- Costuras/acentos se detallan en plan-lote.json; no se generó voz. Precio de voz actual no verificable.
+
+## g5-v2
+- Guion `videos/lucia-g5-v2/guion-voz.txt`; blob `8742b4879ab2467cbf12f62490d9dc96af4aaf3e`; 430 B.
+- Guion: 10 líneas; 409 caracteres sin saltos (418 con LF internos); /17 = 24.059 s estimados únicamente.
+- Master `videos/lucia-entrega/g5-v2-final-1080x1920.mp4`: 26.625 s de video final; Git blob `2f77dead5ab2838b6965bbee797d5ff9684a86e8`; 16980742 B; SHA-256 medido `030e8f65aabc0fddda83f234acebb410b951b7b81c3dc9c2657410f5ec399b3f`.
+- Costuras/acentos se detallan en plan-lote.json; no se generó voz. Precio de voz actual no verificable.
+
+## p9
+- Guion `videos/lucia-p9-luz-cara/guion-voz.txt`; blob `c26400a22342341a1d7fbceb0501e6a8e6bbff66`; 313 B.
+- Guion: 7 líneas; 305 caracteres sin saltos (311 con LF internos); /17 = 17.941 s estimados únicamente.
+- Master `videos/lucia-entrega/p9-final-1080x1920.mp4`: 20.000 s de video final; Git blob `5e76c7276d87ab40f8c34df5030e4a36636917dc`; 21165521 B; SHA-256 medido `49b40ea55dc67f784ae479964d50c8cc3119cff0be557c32b0ee37f0b92a9e04`.
+- Costuras/acentos se detallan en plan-lote.json; no se generó voz. Precio de voz actual no verificable.
+
+## Costuras y eventos posibles para SFX
+- Tabla completa en `sfx_sync_points` dentro de plan-lote.json. Cada tiempo conserva el valor del plan y su descripción; puntos de acento son sugerencias para un sonido breve bajo voz, nunca audio producido.
+- No usar como elegibles los beats externos del reel previo: en esta actividad no se adjuntó evidencia de licencia.

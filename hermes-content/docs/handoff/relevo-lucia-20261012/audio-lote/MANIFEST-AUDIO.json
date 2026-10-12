@@ -1,0 +1,256 @@
+{
+  "date": "2026-10-12",
+  "source_commit": "3566e5d5208cf4a7bcf20e743469c6088944674c",
+  "contract": "Audio derivados de6masters existentes +calendario +aplicaciónHiggsfieldparaMarcaSergio",
+  "voice_status": "SIN NARRACIÓN MARCELA;sinconector/credencial/licencia/cupoactual;2223car preparados;costemonetarioactualNO COTIZABLE",
+  "cost": 0,
+  "paid_jobs": 0,
+  "music": "Composiciónmatemática originaldeesteencargo,no muestreo tercero;SFXsintetizadosrepo",
+  "video_preservation": "streamcopy;QAindependiente bitstream yframemd5/PTS6/6 idénticos",
+  "calendar": "hermes-content/docs/cola/lucia-diario/ORDEN-DE-POSTEO-LUCIA.md,19oct→6nov19Caracas,3porsemana,solo revisión",
+  "remaining_blocks": [
+    "VozMarcela actual no accesible/cupo/licencia/coste no verificables",
+    "Destino comercialonia.com.bo:proxyCONNECT403;no inferir estado sitio",
+    "K4/R3rutas/commit no recibidos;no regenerar",
+    "CuentaIG/duplicados/no publicar"
+  ],
+  "permission": "montajeaudio ycalendario autorizados; SOLO MOSTRAR y publicaciónpendiente",
+  "files": [
+    {
+      "file": "ENTREGA.txt",
+      "bytes": 4128,
+      "sha256": "a6d4d80cccd98d6d23f287b44e78dea9ea4fbb6716167a6e897c72b5cc987b87"
+    },
+    {
+      "file": "G2-audio-medicion.txt",
+      "bytes": 1865,
+      "sha256": "1f461ecc15d83fa9d348f54b020309c7b7bdf7790945510be5b67bfedaa30e59"
+    },
+    {
+      "file": "G3-audio-medicion.txt",
+      "bytes": 1865,
+      "sha256": "039833d57f19559b4eac85a7f74bfc78651952234e285563596a5da1337ebef7"
+    },
+    {
+      "file": "G4-audio-medicion.txt",
+      "bytes": 1865,
+      "sha256": "2f8effcd248cfc6f539491d6ede03f0be2749b20f2b8c1dd26c349de1d2e13c6"
+    },
+    {
+      "file": "G5-audio-medicion.txt",
+      "bytes": 1865,
+      "sha256": "603f4085ee6e290629569e19abe64fd47c8cc4a8750b8d1b699e0a2fb5c7f025"
+    },
+    {
+      "file": "INFORME-A-MADRE-MARCA-SERGIO.txt",
+      "bytes": 7547,
+      "sha256": "89557cc95fa64898708895b93964446b62e50bd6841ebe0bc3017782e91c3658"
+    },
+    {
+      "file": "LICENCIA-Y-PROCEDENCIA.txt",
+      "bytes": 1910,
+      "sha256": "6c8e896bab9c65586c3f3b03a8d83e424d21b1a31ed0a5fc001d044f411e1946"
+    },
+    {
+      "file": "NARRACIONES-Y-COSTE.json",
+      "bytes": 5326,
+      "sha256": "cc69bee1e3ec940c7d9ad4b1ae54f57f6656748c437bee4128f116a2792c6397"
+    },
+    {
+      "file": "P9-audio-medicion.txt",
+      "bytes": 1865,
+      "sha256": "89bb16b700628baf6b45ab4a266129d110f9887c7d45e0323d757c6943b29e6c"
+    },
+    {
+      "file": "QA-AUDIO.json",
+      "bytes": 4279,
+      "sha256": "19bd097e714d4161766800de3811823fc62cce5d97cf78774c8bc52236be4d21"
+    },
+    {
+      "file": "QA-AUDIO.txt",
+      "bytes": 3787,
+      "sha256": "8e49389317dfc409e721538682b59dddebd52b92f7095290b916959c5c3628ea"
+    },
+    {
+      "file": "QA-CALENDARIO-ENTREGA.json",
+      "bytes": 1893,
+      "sha256": "ae564bc46546bac64a9008f286edd28ba09b94be520482214970a75cbd8ff5e0"
+    },
+    {
+      "file": "QA-CALENDARIO-ENTREGA.txt",
+      "bytes": 4090,
+      "sha256": "86a27179b6d0f6568fe6bab1711cead095d631f55a461176892332304ba939b4"
+    },
+    {
+      "file": "crear_base_original.py",
+      "bytes": 1939,
+      "sha256": "6f8e7a8feda6ed5f0903b8700bf61a70535e29d1867a6e18c60a843608306a41"
+    },
+    {
+      "file": "guiones/g2-v2.txt",
+      "bytes": 422,
+      "sha256": "fd40fca04ecb012f0dd61d7e82dc1e4f0f24e0fcd43d1797045c8153f3760ea8"
+    },
+    {
+      "file": "guiones/g3-v2.txt",
+      "bytes": 418,
+      "sha256": "fbfa72f3e7ff2039c0f549923d92856806498a8b5265fbb0593d82a1bc08ed46"
+    },
+    {
+      "file": "guiones/g4-v2.txt",
+      "bytes": 454,
+      "sha256": "9a4d83562e498d24eda0204fafb42372d5144f8c05e2e904e61def9374f60c86"
+    },
+    {
+      "file": "guiones/g5-v2.txt",
+      "bytes": 430,
+      "sha256": "c4274ef8c305419d30d3bb81c9adeb68e758fa0229bd3311c7bbf58e31cfa136"
+    },
+    {
+      "file": "guiones/p9.txt",
+      "bytes": 313,
+      "sha256": "068165b601b14a71474774be3ee45904591d9313c4259ee6f8806b659174318e"
+    },
+    {
+      "file": "guiones/viernes-v2.txt",
+      "bytes": 226,
+      "sha256": "b81303f1f3fa3956d7fd6d16b2645dfad820364a941f0c07b4eeda48a2920077"
+    },
+    {
+      "file": "licencias-recursos.json",
+      "bytes": 9481,
+      "sha256": "d6831ebbc57fe643c49859fa7e66b0b007562aa64a51dee465e9e8e3b031c0d9"
+    },
+    {
+      "file": "licencias-recursos.txt",
+      "bytes": 6574,
+      "sha256": "af56811c20f3834729bfb0a662d4dab2e1d4bf6661e64b617580161044329059"
+    },
+    {
+      "file": "lote-resultados.json",
+      "bytes": 7431,
+      "sha256": "ad898bb10c8d6932f4b6074be3474dd758ea7f4f935015b004f1fe5508ef4384"
+    },
+    {
+      "file": "masters/G2-musica-sfx-SIN-VOZ.mp4",
+      "bytes": 32214054,
+      "sha256": "ac46d6dcffb1cac619fb94a8a20bf1ca6c44a92b182ead2f4507511ef4e97001"
+    },
+    {
+      "file": "masters/G3-musica-sfx-SIN-VOZ.mp4",
+      "bytes": 34447860,
+      "sha256": "a000dd2d533ca859c3760aee9fbe75d2b0d61cdcf38111bc48a4de11141ec42d"
+    },
+    {
+      "file": "masters/G4-musica-sfx-SIN-VOZ.mp4",
+      "bytes": 28252910,
+      "sha256": "df4008b12662676ae74b7276b5ba40e6a7dc97ebd30ff176443cf3979a300783"
+    },
+    {
+      "file": "masters/G5-musica-sfx-SIN-VOZ.mp4",
+      "bytes": 17618818,
+      "sha256": "887fcafda104d87867ad0a504377fbe0236c2c80f2b70b199a8b942aa2409fec"
+    },
+    {
+      "file": "masters/P9-musica-sfx-SIN-VOZ.mp4",
+      "bytes": 21646143,
+      "sha256": "f9009d15681e4d55979e8bf844a74ae70bd48f019ea262879de1b628c78ee28e"
+    },
+    {
+      "file": "masters/viernes-musica-sfx-SIN-VOZ.mp4",
+      "bytes": 3343788,
+      "sha256": "947129dc5485c729ebb6609101f4727a054b8fa76aaf7f3840cc1f849c82b195"
+    },
+    {
+      "file": "montar_audio.py",
+      "bytes": 3305,
+      "sha256": "fa477aeb8e92f1b7b485594a3cea416737362e1d8264c193473fb4a2d2c52b6e"
+    },
+    {
+      "file": "plan-lote.json",
+      "bytes": 92216,
+      "sha256": "dca2d89f7197b6f1d9dbee9004e4a87ee98a378cac824514d10269bf72f0669f"
+    },
+    {
+      "file": "plan-lote.txt",
+      "bytes": 4402,
+      "sha256": "298a6d92420fb0164a21b92cedfde2fe3baa49fc8e81a355ec42cda1068aa6ff"
+    },
+    {
+      "file": "previews/G2-preview-audiovisual-360p-SIN-VOZ.mp4",
+      "bytes": 1190528,
+      "sha256": "051fdd929936d9c7f8fba8d6a2e4d2e29ba48b553ad5bc49d0ac13b5c7c4ae69"
+    },
+    {
+      "file": "previews/G3-preview-audiovisual-360p-SIN-VOZ.mp4",
+      "bytes": 1204709,
+      "sha256": "0dae5a1b45512aa01dd354f15553d720952def29c95eb8509d4f2e211c079ca7"
+    },
+    {
+      "file": "previews/G4-preview-audiovisual-360p-SIN-VOZ.mp4",
+      "bytes": 1019668,
+      "sha256": "6344ad33c69bfe775738d06d3085edc7cb0d0dec7d58646d0b2459b218f69a67"
+    },
+    {
+      "file": "previews/G5-preview-audiovisual-360p-SIN-VOZ.mp4",
+      "bytes": 876167,
+      "sha256": "66d4da3556bf01d19ec46b1280db4f449a5ed507fb8d733d2b84d6929f78322b"
+    },
+    {
+      "file": "previews/P9-preview-audiovisual-360p-SIN-VOZ.mp4",
+      "bytes": 860537,
+      "sha256": "a3782e7d1ba1aac4a9f1671ec7e551e3094ba9b99f6f759c6e5542254141cb8b"
+    },
+    {
+      "file": "previews/viernes-preview-audiovisual-360p-SIN-VOZ.mp4",
+      "bytes": 431707,
+      "sha256": "82e3307b09c9e1ec38283945fde8eb71716680a2ab5bf70bebb97008e2478e0f"
+    },
+    {
+      "file": "procedencia-base-original.json",
+      "bytes": 671,
+      "sha256": "8018a8793d9bb602007b9f00759635066203d0efb86176880b478ae3444e3a23"
+    },
+    {
+      "file": "recursos/base-instrumental-original.wav",
+      "bytes": 6912044,
+      "sha256": "43ca07a40e11bd133c441a3d7d69851e573601f66115307bbc35dfc6c54f3e9f"
+    },
+    {
+      "file": "recursos/base-original-normalizada.wav",
+      "bytes": 6912078,
+      "sha256": "1e3d997429b2f827bd558918eddd02ccdb43f9a78ee9aea6faab9b124bfd544e"
+    },
+    {
+      "file": "recursos/ping.wav",
+      "bytes": 192078,
+      "sha256": "3512d71bce98f15608f51731a2cea9f53c9e443cbc9096bfcf3639f33b508aa4"
+    },
+    {
+      "file": "recursos/pop.wav",
+      "bytes": 38478,
+      "sha256": "605e0b53d168b1f1b956ec035f376e4090a6d4905a69ef5528c283efcaf11a40"
+    },
+    {
+      "file": "recursos/swish.wav",
+      "bytes": 96078,
+      "sha256": "c776191d05097c5f3936f3c36189a0318221dfbf01a5bbce5b8e37b0515dfb04"
+    },
+    {
+      "file": "recursos/thud.wav",
+      "bytes": 105678,
+      "sha256": "69f9d6b20d8cfffdf96ac3ddaafffe8ee79cc59f03cb9e42bc681c584e7d1712"
+    },
+    {
+      "file": "recursos/whoosh.wav",
+      "bytes": 115278,
+      "sha256": "26d8524eec74590edc3d6fdc6dddfc97abda03dc7cb2542f87c2a500011d196c"
+    },
+    {
+      "file": "viernes-audio-medicion.txt",
+      "bytes": 1820,
+      "sha256": "fb45d31698966783ca8004604d558ee2978be809947696ac84d037c90cdaf0fd"
+    }
+  ],
+  "calendar_QA": "0ALTA/0material;9slots19oct→6nov/3wk19Caracas;12links reales;2223carverified;solo mostrar"
+}

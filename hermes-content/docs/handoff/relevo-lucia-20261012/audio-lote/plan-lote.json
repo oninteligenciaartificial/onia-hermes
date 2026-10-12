@@ -1,0 +1,2939 @@
+{
+  "title": "Lucía six-script audio timing batch",
+  "source_commit": "3566e5d5208cf4a7bcf20e743469c6088944674c",
+  "configured_model": "Luna low per assignment; runtime not observed; no model used for this mechanical Git/filesystem measurement",
+  "scope": "Exact script/plan extraction and canonical master measurement only; no voice generation, video generation, paid services, installation, or audio rendering.",
+  "voice_status": "Only guion-voz scripts found in the specified folders. Estimated speaking duration is chars / 17 cps per source plan convention and is not an actual voice take. The master durations below are measured finished-video durations.",
+  "bgm_status": "No audio was generated/rendered. Parent task handles original procedural instrumental.",
+  "sfx_policy": "Candidate events derive from plan costuras/accent points; use only existing locally synthesized SFX described by editor-videos README. Do not use externally licensed beat MP3s in this batch. Candidate cues are not rendered.",
+  "assets": [
+    {
+      "id": "viernes-v2",
+      "source": {
+        "script_path": "videos/lucia-viernes-copia-v2/guion-voz.txt",
+        "script_git": {
+          "git_blob_sha1": "0503231ef13f0359c01b9082450d8f0588085aba",
+          "bytes": 226
+        },
+        "plan_path": "videos/lucia-viernes-copia-v2/plan.json",
+        "plan_git": {
+          "git_blob_sha1": "94cdb65d9c57e81940bc910a59561cdb30731ce4",
+          "bytes": 9891
+        },
+        "commit": "3566e5d5208cf4a7bcf20e743469c6088944674c"
+      },
+      "script_file": "guiones/viernes-v2.txt",
+      "script_measurement": {
+        "newline_normalization": "CRLF/CR normalized to LF; a final terminal LF is excluded from these counts. Unicode code points measured in Python.",
+        "line_count": 8,
+        "characters_excluding_line_breaks": 216,
+        "characters_including_internal_LF": 223,
+        "characters_per_line": [
+          {
+            "line": 1,
+            "text": "Casi publico esta imagen.",
+            "characters": 25
+          },
+          {
+            "line": 2,
+            "text": "Parecido alto.",
+            "characters": 14
+          },
+          {
+            "line": 3,
+            "text": "Mirá una foto suya.",
+            "characters": 19
+          },
+          {
+            "line": 4,
+            "text": "Misma pose, ventana y taza.",
+            "characters": 27
+          },
+          {
+            "line": 5,
+            "text": "Con esa foto, sale más alto.",
+            "characters": 28
+          },
+          {
+            "line": 6,
+            "text": "Con las otras siete, baja el parecido.",
+            "characters": 38
+          },
+          {
+            "line": 7,
+            "text": "Casi copia: no prueba identidad.",
+            "characters": 32
+          },
+          {
+            "line": 8,
+            "text": "Seguime: cada semana, una prueba.",
+            "characters": 33
+          }
+        ],
+        "read_speed_estimate_only": {
+          "characters_per_second": 17,
+          "estimated_seconds_excluding_line_breaks": 12.706,
+          "note": "Estimate from plan convention only. Not a recorded voice-take duration."
+        }
+      },
+      "plan_timing_and_events": {
+        "lienzo": {
+          "w": 1080,
+          "h": 1920,
+          "fps": 24,
+          "cuadros": 360,
+          "duracion": 15
+        },
+        "voz": {
+          "archivo": "guion-voz.txt",
+          "max_caracteres": 381,
+          "ultimo_tramo_cuadros": 63
+        },
+        "escenas": [
+          {
+            "id": "s1",
+            "a": 0,
+            "b": 2.75,
+            "fotos": [
+              "k4"
+            ]
+          },
+          {
+            "id": "s2",
+            "a": 2.5,
+            "b": 7.875,
+            "fotos": [
+              "k4",
+              "r3"
+            ]
+          },
+          {
+            "id": "s3",
+            "a": 7.625,
+            "b": 15,
+            "fotos": [
+              "k4"
+            ]
+          }
+        ],
+        "costuras": [
+          {
+            "t": 2.75,
+            "sale": "s1",
+            "entra": "s2"
+          },
+          {
+            "t": 7.875,
+            "sale": "s2",
+            "entra": "s3"
+          }
+        ],
+        "eventos": [
+          {
+            "t": 0,
+            "selector": "#titulo",
+            "que": "gancho: el error en el cuadro 0"
+          },
+          {
+            "t": 0.3333333333333333,
+            "selector": "#dato",
+            "que": "primer número antes de 3 s",
+            "entrada": true,
+            "fade": 0.12
+          },
+          {
+            "t": 1.75,
+            "selector": "#dato",
+            "que": "acento del parecido"
+          },
+          {
+            "t": 2.75,
+            "selector": "#s2",
+            "que": "entra la foto que recibió (empuje de 6 cuadros)",
+            "empuje": true
+          },
+          {
+            "t": 2.75,
+            "selector": "#cap-r3",
+            "que": "entra «mirá una foto suya que recibió»",
+            "entrada": true,
+            "fade": 0.15,
+            "voz": 3
+          },
+          {
+            "t": 3.625,
+            "selector": "#cap-r3",
+            "que": "acento de la foto recibida"
+          },
+          {
+            "t": 4.041666666666667,
+            "selector": "#tile2",
+            "que": "entra «misma pose, ventana, taza»",
+            "entrada": true,
+            "fade": 0.15,
+            "voz": 4
+          },
+          {
+            "t": 4.041666666666667,
+            "selector": "#aro-pose-k4,#aro-pose-r3",
+            "que": "aro: la mano y el pelo (se dibuja en 0,6 s)",
+            "aro": true,
+            "dur": 0.6
+          },
+          {
+            "t": 4.416666666666667,
+            "selector": "#aro-ventana-k4,#aro-ventana-r3",
+            "que": "aro: marco de la ventana (se dibuja en 0,6 s)",
+            "aro": true,
+            "dur": 0.6
+          },
+          {
+            "t": 4.791666666666667,
+            "selector": "#aro-taza-k4,#aro-taza-r3",
+            "que": "aro: taza junto a la laptop (se dibuja en 0,6 s)",
+            "aro": true,
+            "dur": 0.6
+          },
+          {
+            "t": 4.791666666666667,
+            "selector": "#tile2",
+            "que": "acento del texto de las coincidencias"
+          },
+          {
+            "t": 5.791666666666667,
+            "selector": "#cap-k4",
+            "que": "sale el rótulo de K4 (cede el lugar al beat A)",
+            "salida": true,
+            "fade": 0.1
+          },
+          {
+            "t": 5.791666666666667,
+            "selector": "#cap-r3",
+            "que": "sale «mirá una foto suya que recibió»",
+            "salida": true,
+            "fade": 0.1
+          },
+          {
+            "t": 5.791666666666667,
+            "selector": "#tile2",
+            "que": "sale «misma pose, ventana, taza»",
+            "salida": true,
+            "fade": 0.1
+          },
+          {
+            "t": 5.875,
+            "selector": "#beat-a",
+            "que": "BEAT A: «con esa foto: 0,93» sobre las dos caras",
+            "entrada": true,
+            "fade": 0.1,
+            "voz": 5
+          },
+          {
+            "t": 6.625,
+            "selector": "#beat-a",
+            "que": "acento del 0,93"
+          },
+          {
+            "t": 7.875,
+            "selector": "#s3",
+            "que": "entra K4 a pantalla completa (empuje de 6 cuadros)",
+            "empuje": true
+          },
+          {
+            "t": 7.875,
+            "selector": "#beat-b",
+            "que": "BEAT B: «con sus otras 7 fotos: 0,56–0,73» llega con la foto",
+            "voz": 6
+          },
+          {
+            "t": 8.75,
+            "selector": "#beat-b",
+            "que": "acento del rango"
+          },
+          {
+            "t": 10.25,
+            "selector": "#beat-b",
+            "que": "sale el beat B",
+            "salida": true,
+            "fade": 0.1
+          },
+          {
+            "t": 10.291666666666666,
+            "selector": "#beat-c",
+            "que": "BEAT C: «casi copia: no prueba identidad»",
+            "entrada": true,
+            "fade": 0.1,
+            "voz": 7
+          },
+          {
+            "t": 11.25,
+            "selector": "#beat-c",
+            "que": "acento de la conclusión"
+          },
+          {
+            "t": 12.416666666666666,
+            "selector": "#beat-c",
+            "que": "sale el beat C",
+            "salida": true,
+            "fade": 0.1
+          },
+          {
+            "t": 12.458333333333334,
+            "selector": "#cta",
+            "que": "CTA",
+            "entrada": true,
+            "fade": 0.08,
+            "voz": 8
+          },
+          {
+            "t": 13.833333333333334,
+            "selector": "#cta",
+            "que": "acento una prueba semanal"
+          }
+        ]
+      },
+      "master": {
+        "path": "videos/lucia-entrega/viernes-copia-v2-final-1080x1920.mp4",
+        "git_blob_sha1": "76db69a4a033cf9cf9792f0d1cc57688efac061f",
+        "bytes": 2983672,
+        "sha256_measured": "c4299c7b21c7b05cc41181176d8908429b9752d4422c9cc9275964dd64393aa4",
+        "ffprobe_format_duration_s": 15.0,
+        "video_stream": {
+          "codec_name": "h264",
+          "width": 1080,
+          "height": 1920,
+          "r_frame_rate": "24/1"
+        },
+        "audio_streams": [
+          {
+            "codec_name": "aac",
+            "sample_rate": "48000",
+            "channels": 2,
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "master_duration_source": "Measured from exact Git blob bytes with ffprobe; this is finished video duration, not voice performance duration. AAC stream presence alone does not establish whether audible speech is present."
+      },
+      "historical_price_evidence": {
+        "credit_fields_in_plan": [
+          {
+            "field": "creditos",
+            "value": 0.5,
+            "classification": "historical plan value; not a current quote or current spend"
+          }
+        ],
+        "voiceover_or_tts_current_price": "unverifiable; no current ElevenLabs environment or provider MCP available. No new voice take exists in this task.",
+        "warning": "All included costs/credits are historical planning or evidence. Not current prices, quotes, balance deductions, or authorization."
+      }
+    },
+    {
+      "id": "g2-v2",
+      "source": {
+        "script_path": "videos/lucia-g2-v2/guion-voz.txt",
+        "script_git": {
+          "git_blob_sha1": "efaab64957ad9fc7b28f8853605da0bda3b24720",
+          "bytes": 422
+        },
+        "plan_path": "videos/lucia-g2-v2/plan.json",
+        "plan_git": {
+          "git_blob_sha1": "185d5fa9d2e22d794ec990c4e7752100d3ba446f",
+          "bytes": 21338
+        },
+        "commit": "3566e5d5208cf4a7bcf20e743469c6088944674c"
+      },
+      "script_file": "guiones/g2-v2.txt",
+      "script_measurement": {
+        "newline_normalization": "CRLF/CR normalized to LF; a final terminal LF is excluded from these counts. Unicode code points measured in Python.",
+        "line_count": 14,
+        "characters_excluding_line_breaks": 402,
+        "characters_including_internal_LF": 415,
+        "characters_per_line": [
+          {
+            "line": 1,
+            "text": "¿Quién pierde la cara?",
+            "characters": 22
+          },
+          {
+            "line": 2,
+            "text": "Seis clips con la misma orden.",
+            "characters": 30
+          },
+          {
+            "line": 3,
+            "text": "Se mide contra ocho fotos suyas.",
+            "characters": 32
+          },
+          {
+            "line": 4,
+            "text": "De cero a uno.",
+            "characters": 14
+          },
+          {
+            "line": 5,
+            "text": "Mi piso: cero setenta.",
+            "characters": 22
+          },
+          {
+            "line": 6,
+            "text": "Kling tres, foto sola: pierde parecido.",
+            "characters": 39
+          },
+          {
+            "line": 7,
+            "text": "Seedance Mini, foto sola.",
+            "characters": 25
+          },
+          {
+            "line": 8,
+            "text": "Queda bajo el piso.",
+            "characters": 19
+          },
+          {
+            "line": 9,
+            "text": "Kling O tres, solo referencias: aguantó.",
+            "characters": 40
+          },
+          {
+            "line": 10,
+            "text": "Pero inventó el cuarto.",
+            "characters": 23
+          },
+          {
+            "line": 11,
+            "text": "Con referencias, aquí la cara aguantó.",
+            "characters": 38
+          },
+          {
+            "line": 12,
+            "text": "Pero el motor inventa la escena.",
+            "characters": 32
+          },
+          {
+            "line": 13,
+            "text": "Una toma por clip: es una prueba.",
+            "characters": 33
+          },
+          {
+            "line": 14,
+            "text": "Seguime: cada semana, una prueba.",
+            "characters": 33
+          }
+        ],
+        "read_speed_estimate_only": {
+          "characters_per_second": 17,
+          "estimated_seconds_excluding_line_breaks": 23.647,
+          "note": "Estimate from plan convention only. Not a recorded voice-take duration."
+        }
+      },
+      "plan_timing_and_events": {
+        "lienzo": {
+          "w": 1080,
+          "h": 1920,
+          "fps": 24
+        },
+        "voz": {
+          "archivo": "guion-voz.txt",
+          "cps": 17,
+          "inicio_cuadros": 3,
+          "hueco_cuadros": 6,
+          "gap_objetivo": 0.25,
+          "gap_max": 0.3,
+          "max_caracteres": 450,
+          "cupo_hoy": 381,
+          "cupo_hasta": "13-oct 01:17 UTC",
+          "min_palabras_por_linea": 3,
+          "cta_ventana_cuadros": 67,
+          "lectura_min_cuadros": {
+            "1": 38,
+            "2": 49,
+            "9": 63,
+            "11": 59
+          },
+          "nota": "cps = caracteres por segundo (G1 v2: 320 caracteres ≈ 19 s ≈ 17). lectura_min_cuadros = tramos que se extienden (hueco ≤ 0,30 s) para que su tarjeta alcance el tiempo de lectura medido en el DOM. v2.3: el tramo 9 sigue en 63 cuadros (la línea pasó de 41 a 40 caracteres: «sostiene» → «aguantó») para no mover ninguna costura; el hueco queda en 0,27 s."
+        },
+        "costuras": [
+          {
+            "t": "T3",
+            "tipo": "empuje",
+            "sale": [
+              "foto",
+              "thumbs"
+            ],
+            "entra": [
+              "pl-regla"
+            ],
+            "tarjetas": {
+              "sale": "c2",
+              "entra": "c3"
+            },
+            "porque": "foto + miniaturas → placa de la regla"
+          },
+          {
+            "t": "T6",
+            "tipo": "empuje",
+            "sale": [
+              "pl-regla"
+            ],
+            "entra": [
+              "m1"
+            ],
+            "tarjetas": {
+              "sale": "c4",
+              "entra": "c5"
+            },
+            "porque": "placa → Kling 3.0 std (el clip arranca en T-6 cuadros)"
+          },
+          {
+            "t": "T7",
+            "tipo": "empuje",
+            "sale": [
+              "m1"
+            ],
+            "entra": [
+              "m3"
+            ],
+            "tarjetas": {
+              "sale": "c5",
+              "entra": "c6"
+            },
+            "porque": "Kling 3.0 std → Seedance 2.0 Mini"
+          },
+          {
+            "t": "T9",
+            "tipo": "empuje",
+            "sale": [
+              "m3"
+            ],
+            "entra": [
+              "m5",
+              "fg-m5"
+            ],
+            "tarjetas": {
+              "sale": "c6",
+              "entra": "c7"
+            },
+            "porque": "Seedance 2.0 Mini → Kling O3"
+          },
+          {
+            "t": "T11",
+            "tipo": "empuje",
+            "sale": [
+              "m5",
+              "fg-m5"
+            ],
+            "entra": [
+              "pl-l"
+            ],
+            "tarjetas": {
+              "sale": "c8",
+              "entra": "c9"
+            },
+            "porque": "Kling O3 → lección"
+          },
+          {
+            "t": "T14",
+            "tipo": "empuje",
+            "sale": [
+              "pl-l"
+            ],
+            "entra": [
+              "k1"
+            ],
+            "tarjetas": {
+              "sale": "c11",
+              "entra": "c12"
+            },
+            "porque": "lección → cierre K1"
+          }
+        ],
+        "medios": [
+          {
+            "id": "foto",
+            "tipo": "foto",
+            "src": "assets/k1.jpg",
+            "a": 0,
+            "b": "T3",
+            "zoom": 1.05,
+            "ox": 534,
+            "oy": 555,
+            "capa": "foto K1 a pantalla completa con empuje lento 1,00 → 1,05 hacia la cara (nunca queda un cuadro idéntico); sale en el empuje de T3 junto con las miniaturas"
+          },
+          {
+            "id": "pl-regla",
+            "tipo": "placa",
+            "a": "T3-6f",
+            "b": "T6",
+            "capa": "placa de la regla: 5 de las 8 fotos suyas, escala 0-1 y la marca en 0,70"
+          },
+          {
+            "id": "m1",
+            "tipo": "clip",
+            "src": "assets/m1.mp4",
+            "media_inicio": 0,
+            "a": "T6-6f",
+            "b": "T7",
+            "capa": "Kling 3.0 std (clip 1): del cuadro 0 al 66 del clip, a 1×; 66 cuadros visibles = 2,75 s (el cuadro 0 cae fuera del lienzo, al arrancar el empuje de entrada: qa/cuadros-visibles.txt); el cuadro 0 es la foto K1"
+          },
+          {
+            "id": "m3",
+            "tipo": "clip",
+            "src": "assets/m3.mp4",
+            "media_inicio": 0,
+            "a": "T7-6f",
+            "b": "T9",
+            "capa": "Seedance 2.0 Mini (clip 3): del cuadro 0 al 78 del clip, a 1×; 78 cuadros visibles = 3,25 s (qa/cuadros-visibles.txt)"
+          },
+          {
+            "id": "m5",
+            "tipo": "clip",
+            "src": "assets/m5.mp4",
+            "media_inicio": 0,
+            "a": "T9-6f",
+            "b": "T11",
+            "capa": "Kling O3 (clip 5): del cuadro 0 al 106 del clip, a 1×; 106 cuadros visibles = 4,42 s (qa/cuadros-visibles.txt); con el aviso «recibió 4 de las 8 fotos con que se compara» encima del «5,9 s: 0,82» (viaja con el clip)"
+          },
+          {
+            "id": "pl-l",
+            "tipo": "placa",
+            "a": "T11-6f",
+            "b": "T14",
+            "capa": "lección: los finales de Kling 3.0 std, Seedance 2.0 Mini y Kling O3 sobre la escala"
+          },
+          {
+            "id": "k1",
+            "tipo": "clip",
+            "src": "assets/m1.mp4",
+            "media_inicio": 2.25,
+            "a": "T14-6f",
+            "b": "FIN",
+            "capa": "cierre: el clip K1 (el de Kling 3.0 std) del cuadro 54 (2,25 s) al 126 (5,25 s), con Lucía mirando a cámara; 4 cuadros medidos (qa/face-gate.txt: n606, n630, n660 y n665): final 0,693 a 0,749, fuente 0,708 a 0,751; el más bajo, 0,693, queda bajo 0,70"
+          }
+        ],
+        "resolved_plan": {
+          "path": "videos/lucia-g2-v2/plan.resuelto.json",
+          "git_blob_sha1": "f405201cf371a07927370257a6eb6b9800e258bc",
+          "bytes": 30706,
+          "lienzo": {
+            "w": 1080,
+            "h": 1920,
+            "fps": 24,
+            "duracion": 27.791666
+          },
+          "voz": {
+            "archivo": "guion-voz.txt",
+            "cps": 17,
+            "inicio_cuadros": 3,
+            "hueco_cuadros": 6,
+            "gap_objetivo": 0.25,
+            "gap_max": 0.3,
+            "max_caracteres": 450,
+            "cupo_hoy": 381,
+            "cupo_hasta": "13-oct 01:17 UTC",
+            "min_palabras_por_linea": 3,
+            "cta_ventana_cuadros": 67,
+            "lectura_min_cuadros": {
+              "1": 38,
+              "2": 49,
+              "9": 63,
+              "11": 59
+            },
+            "nota": "cps = caracteres por segundo (G1 v2: 320 caracteres ≈ 19 s ≈ 17). lectura_min_cuadros = tramos que se extienden (hueco ≤ 0,30 s) para que su tarjeta alcance el tiempo de lectura medido en el DOM. v2.3: el tramo 9 sigue en 63 cuadros (la línea pasó de 41 a 40 caracteres: «sostiene» → «aguantó») para no mover ninguna costura; el hueco queda en 0,27 s."
+          },
+          "costuras": [
+            {
+              "t": 3.75,
+              "tipo": "empuje",
+              "sale": [
+                "foto",
+                "thumbs"
+              ],
+              "entra": [
+                "pl-regla"
+              ],
+              "tarjetas": {
+                "sale": "c2",
+                "entra": "c3"
+              },
+              "porque": "foto + miniaturas → placa de la regla"
+            },
+            {
+              "t": 8.458333333333334,
+              "tipo": "empuje",
+              "sale": [
+                "pl-regla"
+              ],
+              "entra": [
+                "m1"
+              ],
+              "tarjetas": {
+                "sale": "c4",
+                "entra": "c5"
+              },
+              "porque": "placa → Kling 3.0 std (el clip arranca en T-6 cuadros)"
+            },
+            {
+              "t": 11,
+              "tipo": "empuje",
+              "sale": [
+                "m1"
+              ],
+              "entra": [
+                "m3"
+              ],
+              "tarjetas": {
+                "sale": "c5",
+                "entra": "c6"
+              },
+              "porque": "Kling 3.0 std → Seedance 2.0 Mini"
+            },
+            {
+              "t": 14.041666666666666,
+              "tipo": "empuje",
+              "sale": [
+                "m3"
+              ],
+              "entra": [
+                "m5",
+                "fg-m5"
+              ],
+              "tarjetas": {
+                "sale": "c6",
+                "entra": "c7"
+              },
+              "porque": "Seedance 2.0 Mini → Kling O3"
+            },
+            {
+              "t": 18.25,
+              "tipo": "empuje",
+              "sale": [
+                "m5",
+                "fg-m5"
+              ],
+              "entra": [
+                "pl-l"
+              ],
+              "tarjetas": {
+                "sale": "c8",
+                "entra": "c9"
+              },
+              "porque": "Kling O3 → lección"
+            },
+            {
+              "t": 25,
+              "tipo": "empuje",
+              "sale": [
+                "pl-l"
+              ],
+              "entra": [
+                "k1"
+              ],
+              "tarjetas": {
+                "sale": "c11",
+                "entra": "c12"
+              },
+              "porque": "lección → cierre K1"
+            }
+          ],
+          "eventos": []
+        }
+      },
+      "master": {
+        "path": "videos/lucia-entrega/g2-v2-final-1080x1920.mp4",
+        "git_blob_sha1": "89adba1bf331b9dad918e47ec060fdfb28b436c3",
+        "bytes": 31546976,
+        "sha256_measured": "1eb22374d77ca744f2c18c946d1adb72662a76b01912a09d9e9fd56cd1a778a8",
+        "ffprobe_format_duration_s": 27.791667,
+        "video_stream": {
+          "codec_name": "h264",
+          "width": 1080,
+          "height": 1920,
+          "r_frame_rate": "24/1"
+        },
+        "audio_streams": [
+          {
+            "codec_name": "aac",
+            "sample_rate": "48000",
+            "channels": 2,
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "master_duration_source": "Measured from exact Git blob bytes with ffprobe; this is finished video duration, not voice performance duration. AAC stream presence alone does not establish whether audible speech is present."
+      },
+      "historical_price_evidence": {
+        "credit_fields_in_plan": [],
+        "voiceover_or_tts_current_price": "unverifiable; no current ElevenLabs environment or provider MCP available. No new voice take exists in this task.",
+        "warning": "All included costs/credits are historical planning or evidence. Not current prices, quotes, balance deductions, or authorization."
+      }
+    },
+    {
+      "id": "g3-v2",
+      "source": {
+        "script_path": "videos/lucia-g3-v2/guion-voz.txt",
+        "script_git": {
+          "git_blob_sha1": "8b32714c1f641a0eac00787c343e9dddd0bf4550",
+          "bytes": 418
+        },
+        "plan_path": "videos/lucia-g3-v2/plan.json",
+        "plan_git": {
+          "git_blob_sha1": "2796f2480b2a5f0ce48d2c66162c28a1fb1c69d9",
+          "bytes": 10339
+        },
+        "commit": "3566e5d5208cf4a7bcf20e743469c6088944674c"
+      },
+      "script_file": "guiones/g3-v2.txt",
+      "script_measurement": {
+        "newline_normalization": "CRLF/CR normalized to LF; a final terminal LF is excluded from these counts. Unicode code points measured in Python.",
+        "line_count": 12,
+        "characters_excluding_line_breaks": 401,
+        "characters_including_internal_LF": 412,
+        "characters_per_line": [
+          {
+            "line": 1,
+            "text": "Mirá: tres errores que casi publico.",
+            "characters": 36
+          },
+          {
+            "line": 2,
+            "text": "Uno: sin letreros, y salió uno.",
+            "characters": 31
+          },
+          {
+            "line": 3,
+            "text": "La cara pasó el control, pero el fondo no.",
+            "characters": 42
+          },
+          {
+            "line": 4,
+            "text": "Mi regla: mirar también el fondo.",
+            "characters": 33
+          },
+          {
+            "line": 5,
+            "text": "Dos: una letra que parece escrita.",
+            "characters": 34
+          },
+          {
+            "line": 6,
+            "text": "Ahí no dice nada.",
+            "characters": 17
+          },
+          {
+            "line": 7,
+            "text": "Si no se lee, no sirve para publicar.",
+            "characters": 37
+          },
+          {
+            "line": 8,
+            "text": "Y tres: una mano le tapa a la otra.",
+            "characters": 35
+          },
+          {
+            "line": 9,
+            "text": "Si cruza, no puedo contar dedos.",
+            "characters": 32
+          },
+          {
+            "line": 10,
+            "text": "Y yo cuento solo lo que se ve.",
+            "characters": 30
+          },
+          {
+            "line": 11,
+            "text": "Reviso cuadro a cuadro antes de publicar.",
+            "characters": 41
+          },
+          {
+            "line": 12,
+            "text": "Seguime: cada semana, una prueba.",
+            "characters": 33
+          }
+        ],
+        "read_speed_estimate_only": {
+          "characters_per_second": 17,
+          "estimated_seconds_excluding_line_breaks": 23.588,
+          "note": "Estimate from plan convention only. Not a recorded voice-take duration."
+        }
+      },
+      "plan_timing_and_events": {
+        "lienzo": {
+          "w": 1080,
+          "h": 1920,
+          "fps": 24
+        },
+        "voz": {
+          "archivo": "guion-voz.txt",
+          "cps": 17,
+          "tramos_cuadros": [
+            53,
+            47,
+            60,
+            47,
+            53,
+            27,
+            53,
+            53,
+            47,
+            47,
+            60,
+            47
+          ],
+          "hueco_cuadros": 6,
+          "cola_cuadros": 10,
+          "max_caracteres": 450,
+          "max_hueco_s": 0.25,
+          "sobra_obj_s": 0.25,
+          "sobra_max_s": 0.3,
+          "min_s": 26,
+          "max_s": 30,
+          "nota": "H1 (revisión 1, 11-oct): la voz se mide en CARACTERES (≈ 17 por segundo, G1 v2), no en palabras. Un tramo = una línea de guion-voz.txt = una VENTANA de voz de tramos_cuadros[n-1] cuadros (valores CONGELADOS = los de v2.0, para que las tarjetas, los empujes y los clips no se muevan); entre ventanas hay 6 cuadros (0,25 s), donde cae cada empuje. build.mjs exige para cada línea: chars/cps ≤ ventana (cabe) y ventana − chars/cps ≤ sobra_max_s (hueco). Si existe duraciones.json (duración REAL de cada pista, la escribe scripts/poner-voz.mjs --medir) manda sobre cps y tramos_cuadros: cada ventana = ceil(voz real × 24) cuadros, así que la pausa entre líneas queda en 0,25 s + menos de 1 cuadro. La cola de 10 cuadros (0,42 s) tras la última palabra deja que el CTA termine de leerse. Hoy NO hay audio: la pista es AAC en silencio."
+        },
+        "escenas": {
+          "desc": {
+            "tipo": "foto",
+            "src": "assets/descartada.jpg",
+            "a": "0",
+            "b": "T4",
+            "zoom": 1.03,
+            "capa": "foto descartada K4·1 (letrero inventado, difuminado) a pantalla completa: gancho + error 1"
+          },
+          "buena": {
+            "tipo": "foto",
+            "src": "assets/buena.jpg",
+            "a": "T4-6",
+            "b": "T5",
+            "zoom": 1.03,
+            "capa": "foto nueva sin letrero (la regla 1)"
+          },
+          "agenda": {
+            "tipo": "foto",
+            "src": "assets/agenda.jpg",
+            "a": "T5-6",
+            "b": "T8",
+            "zoom": 1.03,
+            "capa": "foto de la agenda K2·2: error 2"
+          },
+          "k4": {
+            "tipo": "clip",
+            "src": "assets/k4.mp4",
+            "a": "T8-6",
+            "b": "T10",
+            "media_inicio": "auto",
+            "capa": "clip K4 a 1x (media_inicio automático: el cuadro 120 cae 12 cuadros antes de T10): error 3"
+          },
+          "placa": {
+            "tipo": "placa",
+            "a": "T10-6",
+            "b": "T11",
+            "capa": "placa oscura con el recorte ampliado del cuadro 120 (la ceremonia de contar dedos, 1,96 s en reposo)"
+          },
+          "k1": {
+            "tipo": "clip",
+            "src": "assets/k1.mp4",
+            "a": "T11-6",
+            "b": "END",
+            "media_inicio": "auto",
+            "capa": "cierre: clip K1 (media_inicio automático = 145 − cuadros − 2, máx 20)"
+          }
+        },
+        "costuras": [
+          {
+            "t": "T4",
+            "sale": [
+              "desc"
+            ],
+            "entra": [
+              "buena"
+            ],
+            "tarjetas": {
+              "sale": "c3",
+              "entra": "c4"
+            }
+          },
+          {
+            "t": "T5",
+            "sale": [
+              "buena"
+            ],
+            "entra": [
+              "agenda"
+            ],
+            "tarjetas": {
+              "sale": "c4",
+              "entra": "c5"
+            }
+          },
+          {
+            "t": "T8",
+            "sale": [
+              "agenda"
+            ],
+            "entra": [
+              "k4"
+            ],
+            "tarjetas": {
+              "sale": "c7",
+              "entra": "c8"
+            }
+          },
+          {
+            "t": "T10",
+            "sale": [
+              "k4",
+              "cc-k4",
+              "cc-ctr"
+            ],
+            "entra": [
+              "placa"
+            ],
+            "tarjetas": {
+              "sale": "c9",
+              "entra": "c10"
+            }
+          },
+          {
+            "t": "T11",
+            "sale": [
+              "placa"
+            ],
+            "entra": [
+              "k1"
+            ],
+            "tarjetas": {
+              "sale": "c10",
+              "entra": "c11"
+            }
+          }
+        ],
+        "resolved_plan": {
+          "path": "videos/lucia-g3-v2/plan-resuelto.json",
+          "git_blob_sha1": "0a56f500be0bb88a5ed626b9565105635582e95b",
+          "bytes": 14778,
+          "lienzo": {
+            "w": 1080,
+            "h": 1920,
+            "fps": 24,
+            "duracion": 27.917,
+            "cuadros": 670
+          },
+          "voz": {
+            "archivo": "guion-voz.txt",
+            "cps": 17,
+            "tramos_cuadros": [
+              53,
+              47,
+              60,
+              47,
+              53,
+              27,
+              53,
+              53,
+              47,
+              47,
+              60,
+              47
+            ],
+            "hueco_cuadros": 6,
+            "cola_cuadros": 10,
+            "max_caracteres": 450,
+            "max_hueco_s": 0.25,
+            "sobra_obj_s": 0.25,
+            "sobra_max_s": 0.3,
+            "min_s": 26,
+            "max_s": 30,
+            "nota": "H1 (revisión 1, 11-oct): la voz se mide en CARACTERES (≈ 17 por segundo, G1 v2), no en palabras. Un tramo = una línea de guion-voz.txt = una VENTANA de voz de tramos_cuadros[n-1] cuadros (valores CONGELADOS = los de v2.0, para que las tarjetas, los empujes y los clips no se muevan); entre ventanas hay 6 cuadros (0,25 s), donde cae cada empuje. build.mjs exige para cada línea: chars/cps ≤ ventana (cabe) y ventana − chars/cps ≤ sobra_max_s (hueco). Si existe duraciones.json (duración REAL de cada pista, la escribe scripts/poner-voz.mjs --medir) manda sobre cps y tramos_cuadros: cada ventana = ceil(voz real × 24) cuadros, así que la pausa entre líneas queda en 0,25 s + menos de 1 cuadro. La cola de 10 cuadros (0,42 s) tras la última palabra deja que el CTA termine de leerse. Hoy NO hay audio: la pista es AAC en silencio.",
+            "caracteres": 412,
+            "tramos": [
+              {
+                "i": 1,
+                "texto": "Mirá: tres errores que casi publico.",
+                "palabras": 6,
+                "chars": 36,
+                "a": 0,
+                "b": 53,
+                "dur_s": 2.208,
+                "voz_s": 2.118,
+                "fuente": "estimada",
+                "sobra_s": 0.091,
+                "pausa_s": 0.341,
+                "a_s": 0,
+                "b_s": 2.208
+              },
+              {
+                "i": 2,
+                "texto": "Uno: sin letreros, y salió uno.",
+                "palabras": 6,
+                "chars": 31,
+                "a": 59,
+                "b": 106,
+                "dur_s": 1.958,
+                "voz_s": 1.824,
+                "fuente": "estimada",
+                "sobra_s": 0.135,
+                "pausa_s": 0.385,
+                "a_s": 2.458,
+                "b_s": 4.417
+              },
+              {
+                "i": 3,
+                "texto": "La cara pasó el control, pero el fondo no.",
+                "palabras": 9,
+                "chars": 42,
+                "a": 112,
+                "b": 172,
+                "dur_s": 2.5,
+                "voz_s": 2.471,
+                "fuente": "estimada",
+                "sobra_s": 0.029,
+                "pausa_s": 0.279,
+                "a_s": 4.667,
+                "b_s": 7.167
+              },
+              {
+                "i": 4,
+                "texto": "Mi regla: mirar también el fondo.",
+                "palabras": 6,
+                "chars": 33,
+                "a": 178,
+                "b": 225,
+                "dur_s": 1.958,
+                "voz_s": 1.941,
+                "fuente": "estimada",
+                "sobra_s": 0.017,
+                "pausa_s": 0.267,
+                "a_s": 7.417,
+                "b_s": 9.375
+              },
+              {
+                "i": 5,
+                "texto": "Dos: una letra que parece escrita.",
+                "palabras": 6,
+                "chars": 34,
+                "a": 231,
+                "b": 284,
+                "dur_s": 2.208,
+                "voz_s": 2,
+                "fuente": "estimada",
+                "sobra_s": 0.208,
+                "pausa_s": 0.458,
+                "a_s": 9.625,
+                "b_s": 11.833
+              },
+              {
+                "i": 6,
+                "texto": "Ahí no dice nada.",
+                "palabras": 4,
+                "chars": 17,
+                "a": 290,
+                "b": 317,
+                "dur_s": 1.125,
+                "voz_s": 1,
+                "fuente": "estimada",
+                "sobra_s": 0.125,
+                "pausa_s": 0.375,
+                "a_s": 12.083,
+                "b_s": 13.208
+              },
+              {
+                "i": 7,
+                "texto": "Si no se lee, no sirve para publicar.",
+                "palabras": 8,
+                "chars": 37,
+                "a": 323,
+                "b": 376,
+                "dur_s": 2.208,
+                "voz_s": 2.176,
+                "fuente": "estimada",
+                "sobra_s": 0.032,
+                "pausa_s": 0.282,
+                "a_s": 13.458,
+                "b_s": 15.667
+              },
+              {
+                "i": 8,
+                "texto": "Y tres: una mano le tapa a la otra.",
+                "palabras": 9,
+                "chars": 35,
+                "a": 382,
+                "b": 435,
+                "dur_s": 2.208,
+                "voz_s": 2.059,
+                "fuente": "estimada",
+                "sobra_s": 0.15,
+                "pausa_s": 0.4,
+                "a_s": 15.917,
+                "b_s": 18.125
+              },
+              {
+                "i": 9,
+                "texto": "Si cruza, no puedo contar dedos.",
+                "palabras": 6,
+                "chars": 32,
+                "a": 441,
+                "b": 488,
+                "dur_s": 1.958,
+                "voz_s": 1.882,
+                "fuente": "estimada",
+                "sobra_s": 0.076,
+                "pausa_s": 0.326,
+                "a_s": 18.375,
+                "b_s": 20.333
+              },
+              {
+                "i": 10,
+                "texto": "Y yo cuento solo lo que se ve.",
+                "palabras": 8,
+                "chars": 30,
+                "a": 494,
+                "b": 541,
+                "dur_s": 1.958,
+                "voz_s": 1.765,
+                "fuente": "estimada",
+                "sobra_s": 0.194,
+                "pausa_s": 0.444,
+                "a_s": 20.583,
+                "b_s": 22.542
+              },
+              {
+                "i": 11,
+                "texto": "Reviso cuadro a cuadro antes de publicar.",
+                "palabras": 7,
+                "chars": 41,
+                "a": 547,
+                "b": 607,
+                "dur_s": 2.5,
+                "voz_s": 2.412,
+                "fuente": "estimada",
+                "sobra_s": 0.088,
+                "pausa_s": 0.338,
+                "a_s": 22.792,
+                "b_s": 25.292
+              },
+              {
+                "i": 12,
+                "texto": "Seguime: cada semana, una prueba.",
+                "palabras": 5,
+                "chars": 33,
+                "a": 613,
+                "b": 660,
+                "dur_s": 1.958,
+                "voz_s": 1.941,
+                "fuente": "estimada",
+                "sobra_s": 0.017,
+                "pausa_s": null,
+                "a_s": 25.542,
+                "b_s": 27.5
+              }
+            ]
+          },
+          "costuras": [
+            {
+              "t": 7.416666666666666,
+              "sale": [
+                "desc"
+              ],
+              "entra": [
+                "buena"
+              ],
+              "tarjetas": {
+                "sale": "c3",
+                "entra": "c4"
+              },
+              "t_f": 178
+            },
+            {
+              "t": 9.625,
+              "sale": [
+                "buena"
+              ],
+              "entra": [
+                "agenda"
+              ],
+              "tarjetas": {
+                "sale": "c4",
+                "entra": "c5"
+              },
+              "t_f": 231
+            },
+            {
+              "t": 15.916666666666666,
+              "sale": [
+                "agenda"
+              ],
+              "entra": [
+                "k4"
+              ],
+              "tarjetas": {
+                "sale": "c7",
+                "entra": "c8"
+              },
+              "t_f": 382
+            },
+            {
+              "t": 20.583333333333332,
+              "sale": [
+                "k4",
+                "cc-k4",
+                "cc-ctr"
+              ],
+              "entra": [
+                "placa"
+              ],
+              "tarjetas": {
+                "sale": "c9",
+                "entra": "c10"
+              },
+              "t_f": 494
+            },
+            {
+              "t": 22.791666666666664,
+              "sale": [
+                "placa"
+              ],
+              "entra": [
+                "k1"
+              ],
+              "tarjetas": {
+                "sale": "c10",
+                "entra": "c11"
+              },
+              "t_f": 547
+            }
+          ],
+          "eventos": []
+        }
+      },
+      "master": {
+        "path": "videos/lucia-entrega/g3-v2-final-1080x1920.mp4",
+        "git_blob_sha1": "54b713cbd7197dfba42738ccc9056ea84c261a28",
+        "bytes": 33780322,
+        "sha256_measured": "ac032dc76b832c006f1b0d97693270a7c3ec923faa9d1c25d848e346c165193b",
+        "ffprobe_format_duration_s": 27.916667,
+        "video_stream": {
+          "codec_name": "h264",
+          "width": 1080,
+          "height": 1920,
+          "r_frame_rate": "24/1"
+        },
+        "audio_streams": [
+          {
+            "codec_name": "aac",
+            "sample_rate": "48000",
+            "channels": 2,
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "master_duration_source": "Measured from exact Git blob bytes with ffprobe; this is finished video duration, not voice performance duration. AAC stream presence alone does not establish whether audible speech is present."
+      },
+      "historical_price_evidence": {
+        "credit_fields_in_plan": [],
+        "voiceover_or_tts_current_price": "unverifiable; no current ElevenLabs environment or provider MCP available. No new voice take exists in this task.",
+        "warning": "All included costs/credits are historical planning or evidence. Not current prices, quotes, balance deductions, or authorization."
+      }
+    },
+    {
+      "id": "g4-v2",
+      "source": {
+        "script_path": "videos/lucia-g4-v2/guion-voz.txt",
+        "script_git": {
+          "git_blob_sha1": "8fafb9e88920582117097f366056960ebc8a21c9",
+          "bytes": 454
+        },
+        "plan_path": "videos/lucia-g4-v2/plan.json",
+        "plan_git": {
+          "git_blob_sha1": "394786f6d12c123cc3fa54660f34b29890135cdc",
+          "bytes": 16104
+        },
+        "commit": "3566e5d5208cf4a7bcf20e743469c6088944674c"
+      },
+      "script_file": "guiones/g4-v2.txt",
+      "script_measurement": {
+        "newline_normalization": "CRLF/CR normalized to LF; a final terminal LF is excluded from these counts. Unicode code points measured in Python.",
+        "line_count": 12,
+        "characters_excluding_line_breaks": 433,
+        "characters_including_internal_LF": 444,
+        "characters_per_line": [
+          {
+            "line": 1,
+            "text": "A ver, ¿cuál conserva su cara?",
+            "characters": 30
+          },
+          {
+            "line": 2,
+            "text": "Probé la misma orden en 6 motores de imagen.",
+            "characters": 44
+          },
+          {
+            "line": 3,
+            "text": "Medí contra 8 fotos suyas.",
+            "characters": 26
+          },
+          {
+            "line": 4,
+            "text": "Piso cero setenta: lo elegí yo.",
+            "characters": 31
+          },
+          {
+            "line": 5,
+            "text": "Seedream, 1 crédito: la sostiene.",
+            "characters": 33
+          },
+          {
+            "line": 6,
+            "text": "Seedream Pro, 2 y medio: justo en el piso.",
+            "characters": 42
+          },
+          {
+            "line": 7,
+            "text": "FLUX, el más caro, bajo el piso.",
+            "characters": 32
+          },
+          {
+            "line": 8,
+            "text": "Y ojo: pagar más no mejoró el parecido.",
+            "characters": 39
+          },
+          {
+            "line": 9,
+            "text": "Fue una toma cada uno: prueba, no regla.",
+            "characters": 40
+          },
+          {
+            "line": 10,
+            "text": "Si dos parecidos se rozan, eso ya es ruido.",
+            "characters": 43
+          },
+          {
+            "line": 11,
+            "text": "En otra escena, el Kling perdió la cara.",
+            "characters": 40
+          },
+          {
+            "line": 12,
+            "text": "Seguime: cada semana, una prueba.",
+            "characters": 33
+          }
+        ],
+        "read_speed_estimate_only": {
+          "characters_per_second": 17,
+          "estimated_seconds_excluding_line_breaks": 25.471,
+          "note": "Estimate from plan convention only. Not a recorded voice-take duration."
+        }
+      },
+      "plan_timing_and_events": {
+        "lienzo": {
+          "w": 1080,
+          "h": 1920,
+          "fps": 24,
+          "frames": 673,
+          "duracion": 28.041667
+        },
+        "voz": {
+          "archivo": "guion-voz.txt",
+          "car_por_s": 17,
+          "car_por_s_sensibilidad": [
+            16,
+            18
+          ],
+          "hueco": 0.25,
+          "desfase_max": 0.15,
+          "inicios": [
+            0.1,
+            2.02,
+            4.77,
+            6.41,
+            8.34,
+            10.37,
+            13.06,
+            15.17,
+            17.67,
+            20.25,
+            23.025,
+            25.625
+          ],
+          "max_caracteres": 450,
+          "cta_min_s": 2.4,
+          "cta_max_s": 5.5,
+          "nota": "12-oct (revisión 1, H1): tramos por CARACTERES a 17 c/s (PLAN §4-bis: G1 v2 = 320 car en ~19 s), no por palabras. Cada línea arranca en su costura (o hasta 0,15 s después: la imagen llega y la voz entra); las líneas sin costura arrancan donde dice `inicios`. Con voz real hay que DERIVAR los inicios de las duraciones medidas (poner-voz.mjs, pendiente: necesita el cupo de voz y el sí de Sergio Urcullo) y re-renderizar si una costura se mueve."
+        },
+        "costuras": [
+          {
+            "t": 4.75,
+            "seg": 3,
+            "tipo": "empuje",
+            "sale": [
+              "f-gancho",
+              "thumbs"
+            ],
+            "entra": [
+              "pl-regla"
+            ],
+            "tarjetas": {
+              "sale": "c2",
+              "entra": null
+            },
+            "porque": "foto + miniaturas → regla (la tarjeta c3 de la regla entra sola, después de las referencias)"
+          },
+          {
+            "t": 8.333333,
+            "seg": 5,
+            "tipo": "empuje",
+            "sale": [
+              "pl-regla"
+            ],
+            "entra": [
+              "f-a"
+            ],
+            "tarjetas": {
+              "sale": "c3",
+              "entra": "c4"
+            },
+            "porque": "regla → Seedream 4.5"
+          },
+          {
+            "t": 10.25,
+            "seg": 6,
+            "tipo": "empuje",
+            "sale": [
+              "f-a"
+            ],
+            "entra": [
+              "f-d"
+            ],
+            "tarjetas": {
+              "sale": "c4",
+              "entra": "c5"
+            },
+            "porque": "Seedream 4.5 → Seedream 5.0 Pro"
+          },
+          {
+            "t": 13,
+            "seg": 7,
+            "tipo": "empuje",
+            "sale": [
+              "f-d"
+            ],
+            "entra": [
+              "f-e"
+            ],
+            "tarjetas": {
+              "sale": "c5",
+              "entra": "c6"
+            },
+            "porque": "Seedream 5.0 Pro → FLUX 3"
+          },
+          {
+            "t": 15.166667,
+            "seg": 8,
+            "tipo": "empuje",
+            "sale": [
+              "f-e"
+            ],
+            "entra": [
+              "pl-l1"
+            ],
+            "tarjetas": {
+              "sale": "c6",
+              "entra": "c7"
+            },
+            "porque": "FLUX 3 → lección"
+          },
+          {
+            "t": 22.875,
+            "seg": 11,
+            "tipo": "empuje",
+            "sale": [
+              "pl-l1"
+            ],
+            "entra": [
+              "pl-l2"
+            ],
+            "tarjetas": {
+              "sale": null,
+              "entra": "c8"
+            },
+            "porque": "lección → escena 2 (la tarjeta c7 ya salió por su cuenta)"
+          },
+          {
+            "t": 25.625,
+            "seg": 12,
+            "tipo": "empuje",
+            "sale": [
+              "pl-l2"
+            ],
+            "entra": [
+              "f-cierre"
+            ],
+            "tarjetas": {
+              "sale": "c8",
+              "entra": "c9"
+            },
+            "porque": "escena 2 → cierre (foto K4·5)"
+          }
+        ],
+        "medios": [
+          {
+            "id": "f-gancho",
+            "tipo": "foto",
+            "foto": "a",
+            "a": 0,
+            "b": 4.75,
+            "track": 20,
+            "capa": "Foto de Seedream 4.5 a pantalla completa con empuje lento; sale en el empuje junto con las miniaturas y la tarjeta"
+          },
+          {
+            "id": "pl-regla",
+            "tipo": "placa",
+            "a": 4.5,
+            "b": 8.333333,
+            "capa": "placa de la regla: las 8 referencias + escala 0-1 con la marca en 0,70 (una sola tarjeta)"
+          },
+          {
+            "id": "f-a",
+            "tipo": "foto",
+            "foto": "a",
+            "a": 8.083333,
+            "b": 10.25,
+            "track": 21,
+            "capa": "Seedream 4.5 (1 crédito, sostiene)"
+          },
+          {
+            "id": "f-d",
+            "tipo": "foto",
+            "foto": "d",
+            "a": 10,
+            "b": 13,
+            "track": 22,
+            "capa": "Seedream 5.0 Pro (2,5 créditos, justo en el piso)"
+          },
+          {
+            "id": "f-e",
+            "tipo": "foto",
+            "foto": "e",
+            "a": 12.75,
+            "b": 15.166667,
+            "track": 23,
+            "capa": "FLUX 3 (3 créditos, bajo el piso; foto limpia)"
+          },
+          {
+            "id": "pl-l1",
+            "tipo": "placa",
+            "a": 14.916667,
+            "b": 22.875,
+            "capa": "lección: los 6 motores por precio sobre la escala + las dos notas de honestidad (44 px)"
+          },
+          {
+            "id": "pl-l2",
+            "tipo": "placa",
+            "a": 22.625,
+            "b": 25.625,
+            "capa": "escena 2: Seedream 4.5 y Kling O1 Image lado a lado"
+          },
+          {
+            "id": "f-cierre",
+            "tipo": "foto",
+            "foto": "k",
+            "a": 25.375,
+            "b": 28.041667,
+            "track": 24,
+            "capa": "cierre: Lucía mira a cámara y sonríe (foto K4·5) con empuje lento"
+          }
+        ]
+      },
+      "master": {
+        "path": "videos/lucia-entrega/g4-v2-final-1080x1920.mp4",
+        "git_blob_sha1": "5b412ad9a28cbf32e2680399dbf3e7cbc65411e4",
+        "bytes": 27580327,
+        "sha256_measured": "13cdd1d2f5f0ab2eef1fb0ffd065007d47bf5946a2bb15a5bd24c435142d2a43",
+        "ffprobe_format_duration_s": 28.042,
+        "video_stream": {
+          "codec_name": "h264",
+          "width": 1080,
+          "height": 1920,
+          "r_frame_rate": "24/1"
+        },
+        "audio_streams": [
+          {
+            "codec_name": "aac",
+            "sample_rate": "48000",
+            "channels": 2,
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "master_duration_source": "Measured from exact Git blob bytes with ffprobe; this is finished video duration, not voice performance duration. AAC stream presence alone does not establish whether audible speech is present."
+      },
+      "historical_price_evidence": {
+        "credit_fields_in_plan": [],
+        "voiceover_or_tts_current_price": "unverifiable; no current ElevenLabs environment or provider MCP available. No new voice take exists in this task.",
+        "warning": "All included costs/credits are historical planning or evidence. Not current prices, quotes, balance deductions, or authorization."
+      }
+    },
+    {
+      "id": "g5-v2",
+      "source": {
+        "script_path": "videos/lucia-g5-v2/guion-voz.txt",
+        "script_git": {
+          "git_blob_sha1": "8742b4879ab2467cbf12f62490d9dc96af4aaf3e",
+          "bytes": 430
+        },
+        "plan_path": "videos/lucia-g5-v2/plan.json",
+        "plan_git": {
+          "git_blob_sha1": "3a66a1d536190a700f850d2721e17c4701931111",
+          "bytes": 26883
+        },
+        "commit": "3566e5d5208cf4a7bcf20e743469c6088944674c"
+      },
+      "script_file": "guiones/g5-v2.txt",
+      "script_measurement": {
+        "newline_normalization": "CRLF/CR normalized to LF; a final terminal LF is excluded from these counts. Unicode code points measured in Python.",
+        "line_count": 10,
+        "characters_excluding_line_breaks": 409,
+        "characters_including_internal_LF": 418,
+        "characters_per_line": [
+          {
+            "line": 1,
+            "text": "¿Cómo sé que sigue siendo ella? Lo mido con un número.",
+            "characters": 54
+          },
+          {
+            "line": 2,
+            "text": "Ocho fotos oficiales de ella.",
+            "characters": 29
+          },
+          {
+            "line": 3,
+            "text": "Un medidor las compara y da un número de 0 a 1.",
+            "characters": 47
+          },
+          {
+            "line": 4,
+            "text": "Idéntica es uno. El piso lo elegí yo.",
+            "characters": 37
+          },
+          {
+            "line": 5,
+            "text": "La del café queda bajo el piso: otra persona.",
+            "characters": 45
+          },
+          {
+            "line": 6,
+            "text": "Cara chica: el medidor avisa y la reviso a ojo.",
+            "characters": 47
+          },
+          {
+            "line": 7,
+            "text": "El mismo clip varía, pero cabe en este margen.",
+            "characters": 46
+          },
+          {
+            "line": 8,
+            "text": "El número no ve los letreros inventados.",
+            "characters": 40
+          },
+          {
+            "line": 9,
+            "text": "Por eso, mirá la imagen entera.",
+            "characters": 31
+          },
+          {
+            "line": 10,
+            "text": "Seguime: cada semana, una prueba.",
+            "characters": 33
+          }
+        ],
+        "read_speed_estimate_only": {
+          "characters_per_second": 17,
+          "estimated_seconds_excluding_line_breaks": 24.059,
+          "note": "Estimate from plan convention only. Not a recorded voice-take duration."
+        }
+      },
+      "plan_timing_and_events": {
+        "lienzo": {
+          "w": 1080,
+          "h": 1920,
+          "fps": 24,
+          "cuadros": 639,
+          "duracion": 26.625
+        },
+        "voz": {
+          "car_por_segundo": 17,
+          "hueco_objetivo_s": 0.25,
+          "hueco_max_s": 0.3,
+          "cupo_caracteres": 450,
+          "ultimo_tramo_cuadros": 58,
+          "lectura_min_cuadros": {
+            "8": 63
+          },
+          "nota": "cada tramo = una línea de guion-voz.txt; dura (caracteres / 17 s, o la duración REAL de duraciones.json si existe) + un hueco objetivo de 0,25 s bajado al cuadro de 24 fps (tope 0,30 s si la lectura de una tarjeta o placa lo pide: lectura_min_cuadros). El último (CTA) dura 58 cuadros (2,417 s): el CTA tiene que verse ≥ 2,4 s y su línea habla ~1,94 s; el resto es el tiempo de lectura de la tarjeta, no aire. scripts/retemporizar.mjs vuelve a poner todos los tiempos de este archivo desde el cronograma de voz y la tabla «rel»."
+        },
+        "costuras": [
+          {
+            "t": 3.416666666667,
+            "tipo": "empuje",
+            "sale": [
+              "f-gancho"
+            ],
+            "entra": [
+              "pl-p1"
+            ],
+            "tarjetas": {
+              "sale": "c1",
+              "entra": "c2"
+            },
+            "porque": "foto → paso 1",
+            "tramo": 2
+          },
+          {
+            "t": 5.333333333333,
+            "tipo": "empuje",
+            "sale": [
+              "pl-p1"
+            ],
+            "entra": [
+              "pl-p2"
+            ],
+            "tarjetas": {
+              "sale": "c2",
+              "entra": "c3"
+            },
+            "porque": "paso 1 → paso 2",
+            "tramo": 3
+          },
+          {
+            "t": 10.75,
+            "tipo": "empuje",
+            "sale": [
+              "pl-p2"
+            ],
+            "entra": [
+              "f-e3"
+            ],
+            "tarjetas": {
+              "sale": "c4",
+              "entra": "c5"
+            },
+            "porque": "paso 2 → ejemplo B del café",
+            "tramo": 5
+          },
+          {
+            "t": 13.625,
+            "tipo": "empuje",
+            "sale": [
+              "f-e3"
+            ],
+            "entra": [
+              "pl-r1"
+            ],
+            "tarjetas": {
+              "sale": "c5",
+              "entra": "c6"
+            },
+            "porque": "ejemplo → razón 1",
+            "tramo": 6
+          },
+          {
+            "t": 16.625,
+            "tipo": "empuje",
+            "sale": [
+              "pl-r1"
+            ],
+            "entra": [
+              "pl-r2"
+            ],
+            "tarjetas": {
+              "sale": "c6",
+              "entra": "c7"
+            },
+            "porque": "razón 1 → razón 2",
+            "tramo": 7
+          },
+          {
+            "t": 19.541666666667,
+            "tipo": "empuje",
+            "sale": [
+              "pl-r2"
+            ],
+            "entra": [
+              "pl-r3"
+            ],
+            "tarjetas": {
+              "sale": "c7",
+              "entra": "c8"
+            },
+            "porque": "razón 2 → razón 3",
+            "tramo": 8
+          },
+          {
+            "t": 22.166666666667,
+            "tipo": "empuje",
+            "sale": [
+              "pl-r3"
+            ],
+            "entra": [
+              "f-cierre"
+            ],
+            "tarjetas": {
+              "sale": "c8",
+              "entra": "c9"
+            },
+            "porque": "razón 3 → lección + cierre (foto K4·5)",
+            "tramo": 9
+          }
+        ],
+        "medios": [
+          {
+            "id": "f-gancho",
+            "tipo": "foto",
+            "foto": "a",
+            "a": 0,
+            "b": 3.416666666667,
+            "track": 20,
+            "capa": "Foto A (K1) a pantalla completa con empuje lento; rótulo de IA 0-3,0 s; la caja de cara entra a 0,85 s con «Seedream 4.5 · parecido 0,81»; sale en el empuje"
+          },
+          {
+            "id": "pl-p1",
+            "tipo": "placa",
+            "a": 3.166666666667,
+            "b": 5.333333333333,
+            "capa": "paso 1: las 8 referencias oficiales (4x2); la fila de arriba ya está al llegar, la de abajo entra de a una"
+          },
+          {
+            "id": "pl-p2",
+            "tipo": "placa",
+            "a": 5.083333333333,
+            "b": 10.75,
+            "capa": "paso 2: las 8 en fila → flecha → la escala 0-1 con un cursor que va de 0 a 1 → «idéntica · 1» → cae la marca «piso · 0,70»"
+          },
+          {
+            "id": "f-e3",
+            "tipo": "foto",
+            "foto": "cafe_b",
+            "a": 10.5,
+            "b": 13.625,
+            "track": 23,
+            "capa": "Imagen del café de Kling O1 Image (NO es Lucía) + caja coral + pastilla «Kling O1 Image · parecido 0,35»"
+          },
+          {
+            "id": "pl-r1",
+            "tipo": "placa",
+            "a": 13.375,
+            "b": 16.625,
+            "capa": "razón 1: cuadro del clip crudo con la cara de 89 px, su caja, su lupa, la etiqueta «Kling O3» y la nota «Bajo 200 px, el medidor avisa.» (ya están al llegar)"
+          },
+          {
+            "id": "pl-r2",
+            "tipo": "placa",
+            "a": 16.375,
+            "b": 19.541666666667,
+            "capa": "razón 2: escala ampliada «Zoom: 0,70 a 0,90» y la etiqueta «Cinematic Studio 3.0 · mismo clip» (ya están al llegar) con las dos puntas de un MISMO clip (0,771 → 0,77 y 0,799 → 0,80) y la banda de ±0,03 alrededor de su promedio"
+          },
+          {
+            "id": "pl-r3",
+            "tipo": "placa",
+            "a": 19.291666666667,
+            "b": 22.166666666667,
+            "capa": "razón 3: cuadro del clip con el letrero inventado difuminado, la etiqueta «Seedance 2.0 Mini + referencias» y «Lo difuminé: lo inventó el motor.» (ya están al llegar), aro coral sobre TODO lo difuminado y «parecido 0,80»"
+          },
+          {
+            "id": "f-cierre",
+            "tipo": "foto",
+            "foto": "k",
+            "a": 21.916666666667,
+            "b": 26.625,
+            "track": 24,
+            "capa": "lección + cierre: foto K4·5 (Lucía mira a cámara y sonríe) con empuje lento; tarjeta «Mirá la imagen entera.» y después el CTA"
+          }
+        ],
+        "tramos": [
+          {
+            "id": "t1",
+            "linea": 1,
+            "a": 0,
+            "b": 3.416666666667,
+            "escena": "gancho"
+          },
+          {
+            "id": "t2",
+            "linea": 2,
+            "a": 3.416666666667,
+            "b": 5.333333333333,
+            "escena": "paso 1"
+          },
+          {
+            "id": "t3",
+            "linea": 3,
+            "a": 5.333333333333,
+            "b": 8.333333333333,
+            "escena": "paso 2"
+          },
+          {
+            "id": "t4",
+            "linea": 4,
+            "a": 8.333333333333,
+            "b": 10.75,
+            "escena": "paso 2"
+          },
+          {
+            "id": "t5",
+            "linea": 5,
+            "a": 10.75,
+            "b": 13.625,
+            "escena": "ejemplo B café"
+          },
+          {
+            "id": "t6",
+            "linea": 6,
+            "a": 13.625,
+            "b": 16.625,
+            "escena": "razón 1"
+          },
+          {
+            "id": "t7",
+            "linea": 7,
+            "a": 16.625,
+            "b": 19.541666666667,
+            "escena": "razón 2"
+          },
+          {
+            "id": "t8",
+            "linea": 8,
+            "a": 19.541666666667,
+            "b": 22.166666666667,
+            "escena": "razón 3"
+          },
+          {
+            "id": "t9",
+            "linea": 9,
+            "a": 22.166666666667,
+            "b": 24.208333333333,
+            "escena": "lección"
+          },
+          {
+            "id": "t10",
+            "linea": 10,
+            "a": 24.208333333333,
+            "b": 26.625,
+            "escena": "cierre"
+          }
+        ],
+        "rel": {
+          "gancho.caja_t": [
+            1,
+            0.85
+          ],
+          "gancho.caja_fin": [
+            1,
+            2.65
+          ],
+          "gancho.dato.t": [
+            1,
+            0.95
+          ],
+          "gancho.dato.fin": [
+            1,
+            3
+          ],
+          "p1.refs.fila2_t": [
+            2,
+            0.45
+          ],
+          "p1.aro_t": [
+            2,
+            0.95
+          ],
+          "p2.flecha.t": [
+            3,
+            0.4
+          ],
+          "p2.escala.dibuja_t": [
+            3,
+            0.95
+          ],
+          "p2.escala.ejes_t": [
+            3,
+            1.55
+          ],
+          "p2.escala.cursor_t": [
+            3,
+            1.85
+          ],
+          "p2.escala.uno_t": [
+            4,
+            0.6
+          ],
+          "p2.escala.marca_t": [
+            4,
+            {
+              "ancla": "el piso",
+              "dt": -0.1
+            }
+          ],
+          "ejemplos.0.t": [
+            5,
+            0.1
+          ],
+          "ejemplos.0.box_t": [
+            5,
+            0.3
+          ],
+          "ejemplos.0.fin": [
+            5,
+            2.45
+          ],
+          "r1.box_t": [
+            6,
+            0.4
+          ],
+          "r1.tag_t": [
+            6,
+            0.8
+          ],
+          "r1.lupa_t": [
+            6,
+            1.2
+          ],
+          "r2.d1.t": [
+            7,
+            0.3
+          ],
+          "r2.d2.t": [
+            7,
+            {
+              "ancla": "varía"
+            }
+          ],
+          "r2.banda.t": [
+            7,
+            {
+              "ancla": "cabe en"
+            }
+          ],
+          "r3.aro.t": [
+            8,
+            0.3
+          ],
+          "r3.pill_num_t": [
+            8,
+            0.9
+          ],
+          "r3.aro.ping_t": [
+            8,
+            {
+              "ancla": "inventados"
+            }
+          ],
+          "tarjetas.0.acento_t": [
+            1,
+            {
+              "ancla": "sigue siendo"
+            }
+          ],
+          "tarjetas.1.acento_t": [
+            2,
+            {
+              "ancla": "oficiales"
+            }
+          ],
+          "tarjetas.2.acento_t": [
+            3,
+            {
+              "ancla": "de 0 a 1",
+              "dt": -0.1
+            }
+          ],
+          "tarjetas.3.acento_t": [
+            4,
+            {
+              "ancla": "lo elegí"
+            }
+          ],
+          "tarjetas.4.acento_t": [
+            5,
+            {
+              "ancla": "otra persona"
+            }
+          ],
+          "tarjetas.5.acento_t": [
+            6,
+            {
+              "ancla": "la reviso"
+            }
+          ],
+          "tarjetas.6.acento_t": [
+            7,
+            {
+              "ancla": "cabe en"
+            }
+          ],
+          "tarjetas.7.acento_t": [
+            8,
+            {
+              "ancla": "letreros"
+            }
+          ],
+          "tarjetas.8.acento_t": [
+            9,
+            {
+              "ancla": "entera"
+            }
+          ],
+          "tarjetas.9.acento_t": [
+            10,
+            1.9
+          ],
+          "r1.lupa_ping_t": [
+            6,
+            {
+              "ancla": "a ojo"
+            }
+          ],
+          "r2.banda_ping_t": [
+            7,
+            {
+              "ancla": "este margen"
+            }
+          ]
+        }
+      },
+      "master": {
+        "path": "videos/lucia-entrega/g5-v2-final-1080x1920.mp4",
+        "git_blob_sha1": "2f77dead5ab2838b6965bbee797d5ff9684a86e8",
+        "bytes": 16980742,
+        "sha256_measured": "030e8f65aabc0fddda83f234acebb410b951b7b81c3dc9c2657410f5ec399b3f",
+        "ffprobe_format_duration_s": 26.625,
+        "video_stream": {
+          "codec_name": "h264",
+          "width": 1080,
+          "height": 1920,
+          "r_frame_rate": "24/1"
+        },
+        "audio_streams": [
+          {
+            "codec_name": "aac",
+            "sample_rate": "48000",
+            "channels": 2,
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "master_duration_source": "Measured from exact Git blob bytes with ffprobe; this is finished video duration, not voice performance duration. AAC stream presence alone does not establish whether audible speech is present."
+      },
+      "historical_price_evidence": {
+        "credit_fields_in_plan": [],
+        "voiceover_or_tts_current_price": "unverifiable; no current ElevenLabs environment or provider MCP available. No new voice take exists in this task.",
+        "warning": "All included costs/credits are historical planning or evidence. Not current prices, quotes, balance deductions, or authorization."
+      }
+    },
+    {
+      "id": "p9",
+      "source": {
+        "script_path": "videos/lucia-p9-luz-cara/guion-voz.txt",
+        "script_git": {
+          "git_blob_sha1": "c26400a22342341a1d7fbceb0501e6a8e6bbff66",
+          "bytes": 313
+        },
+        "plan_path": "videos/lucia-p9-luz-cara/plan.json",
+        "plan_git": {
+          "git_blob_sha1": "787543b94a360181705f307f6bbb6131cb39e4fd",
+          "bytes": 5570
+        },
+        "commit": "3566e5d5208cf4a7bcf20e743469c6088944674c"
+      },
+      "script_file": "guiones/p9.txt",
+      "script_measurement": {
+        "newline_normalization": "CRLF/CR normalized to LF; a final terminal LF is excluded from these counts. Unicode code points measured in Python.",
+        "line_count": 7,
+        "characters_excluding_line_breaks": 305,
+        "characters_including_internal_LF": 311,
+        "characters_per_line": [
+          {
+            "line": 1,
+            "text": "¿La cara o la escena?",
+            "characters": 21
+          },
+          {
+            "line": 2,
+            "text": "Misma foto, misma orden.",
+            "characters": 24
+          },
+          {
+            "line": 3,
+            "text": "Kling: brillo casi igual, la cara baja un poco.",
+            "characters": 47
+          },
+          {
+            "line": 4,
+            "text": "Seedance Mini con referencias: la cara sube, pero el encuadre se acerca y la imagen se oscurece.",
+            "characters": 96
+          },
+          {
+            "line": 5,
+            "text": "Una toma cada uno: prueba, no regla.",
+            "characters": 36
+          },
+          {
+            "line": 6,
+            "text": "Brillo del cuadro entero: mezcla luz y encuadre.",
+            "characters": 48
+          },
+          {
+            "line": 7,
+            "text": "Seguime: cada semana, una prueba.",
+            "characters": 33
+          }
+        ],
+        "read_speed_estimate_only": {
+          "characters_per_second": 17,
+          "estimated_seconds_excluding_line_breaks": 17.941,
+          "note": "Estimate from plan convention only. Not a recorded voice-take duration."
+        }
+      },
+      "plan_timing_and_events": {
+        "lienzo": {
+          "w": 1080,
+          "h": 1920,
+          "fps": 24,
+          "cuadros": 480,
+          "duracion": 20
+        },
+        "voz": {
+          "archivo": "guion-voz.txt",
+          "max_caracteres": 381,
+          "ultimo_tramo_cuadros": 64,
+          "lectura_min_cuadros": {},
+          "cortes": {
+            "lineas_clip_1": [
+              1,
+              2,
+              3
+            ],
+            "termina_antes_de": 5.9,
+            "linea_clip_2": 4,
+            "empieza_desde": 6.0
+          }
+        },
+        "clips": [
+          {
+            "id": "m1",
+            "nombre": "Kling 3.0 std",
+            "fuente": "kit/k1-clip-mira-camara-e470ef4f.mp4",
+            "a": 0,
+            "b": 6,
+            "parecido": [
+              0.79,
+              0.72
+            ],
+            "brillo": [
+              156,
+              155.1,
+              -1
+            ],
+            "creditos": 7.5
+          },
+          {
+            "id": "m4",
+            "nombre": "Seedance 2.0 Mini + referencias",
+            "fuente": "prueba-motores-20261008/seedance-mini-refs-dd2d7c91.mp4",
+            "proxy": "prueba-motores-20261008/proxies/seedance-mini-refs-dd2d7c91-360p.mp4",
+            "a": 5.75,
+            "b": 11.791666666666666,
+            "parecido": [
+              0.71,
+              0.8
+            ],
+            "brillo": [
+              145.5,
+              111.8,
+              -33.7
+            ],
+            "creditos": 6,
+            "cara_px": [
+              139,
+              347
+            ],
+            "asterisco": true
+          }
+        ],
+        "costuras": [
+          {
+            "t": 6,
+            "sale": "m1",
+            "entra": "m4"
+          },
+          {
+            "t": 11.791666666666666,
+            "sale": "m4",
+            "entra": "placa"
+          }
+        ],
+        "eventos": [
+          {
+            "t": 0,
+            "selector": "#titulo",
+            "que": "gancho"
+          },
+          {
+            "t": 1.5,
+            "selector": "#dato-m1",
+            "que": "resultado Kling",
+            "entrada": true,
+            "fade": 0.18
+          },
+          {
+            "t": 3.2,
+            "selector": "#dato-m1",
+            "que": "acento parecido Kling"
+          },
+          {
+            "t": 4.9,
+            "selector": "#dato-m1",
+            "que": "acento brillo Kling"
+          },
+          {
+            "t": 6,
+            "selector": "#dato-m4",
+            "que": "resultado Seedance"
+          },
+          {
+            "t": 6,
+            "selector": "#aviso-refs",
+            "que": "aviso: fotos recibidas por Seedance (entra con el dato: el 0,80 no queda sin aviso)",
+            "entrada": true,
+            "fade": 0.15
+          },
+          {
+            "t": 7.7,
+            "selector": "#reencuadre",
+            "que": "acento reencuadre"
+          },
+          {
+            "t": 9.4,
+            "selector": "#dato-m4",
+            "que": "acento parecido Seedance"
+          },
+          {
+            "t": 11.1,
+            "selector": "#reencuadre",
+            "que": "acento reencuadre final"
+          },
+          {
+            "t": 11.791666666666666,
+            "selector": "#comparacion",
+            "que": "comparación de las dos tomas"
+          },
+          {
+            "t": 11.791666666666666,
+            "selector": "#nota-ast",
+            "que": "entra nota del asterisco con la fila: Seedance recibió 2 de las 8 fotos",
+            "entrada": true,
+            "fade": 0.15
+          },
+          {
+            "t": 11.791666666666666,
+            "selector": "#fila-m4",
+            "que": "acento fila Seedance (marca del asterisco)"
+          },
+          {
+            "t": 11.96,
+            "selector": "#toma",
+            "que": "entra una toma, prueba no regla",
+            "entrada": true,
+            "voz": 5
+          },
+          {
+            "t": 12.5,
+            "selector": "#limite-cara",
+            "que": "entra límite de cara (clip original)",
+            "entrada": true
+          },
+          {
+            "t": 13.6,
+            "selector": "#nota-ast",
+            "que": "acento nota del asterisco (vuelve a señalar el 0,80*)"
+          },
+          {
+            "t": 13.6,
+            "selector": "#fila-m4",
+            "que": "acento fila Seedance (marca del asterisco)"
+          },
+          {
+            "t": 14.65,
+            "selector": "#brillo",
+            "que": "entra límite del brillo",
+            "entrada": true,
+            "voz": 6
+          },
+          {
+            "t": 16,
+            "selector": "#toma",
+            "que": "acento prueba no regla"
+          },
+          {
+            "t": 17.4,
+            "selector": "#cta",
+            "que": "CTA",
+            "entrada": true,
+            "fade": 0.08,
+            "voz": 7
+          },
+          {
+            "t": 19.1,
+            "selector": "#cta",
+            "que": "acento una prueba semanal"
+          }
+        ]
+      },
+      "master": {
+        "path": "videos/lucia-entrega/p9-final-1080x1920.mp4",
+        "git_blob_sha1": "5e76c7276d87ab40f8c34df5030e4a36636917dc",
+        "bytes": 21165521,
+        "sha256_measured": "49b40ea55dc67f784ae479964d50c8cc3119cff0be557c32b0ee37f0b92a9e04",
+        "ffprobe_format_duration_s": 20.0,
+        "video_stream": {
+          "codec_name": "h264",
+          "width": 1080,
+          "height": 1920,
+          "r_frame_rate": "24/1"
+        },
+        "audio_streams": [
+          {
+            "codec_name": "aac",
+            "sample_rate": "48000",
+            "channels": 2,
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "master_duration_source": "Measured from exact Git blob bytes with ffprobe; this is finished video duration, not voice performance duration. AAC stream presence alone does not establish whether audible speech is present."
+      },
+      "historical_price_evidence": {
+        "credit_fields_in_plan": [
+          {
+            "field": "creditos",
+            "value": 7.5,
+            "classification": "historical plan value; not a current quote or current spend"
+          },
+          {
+            "field": "creditos",
+            "value": 6,
+            "classification": "historical plan value; not a current quote or current spend"
+          }
+        ],
+        "voiceover_or_tts_current_price": "unverifiable; no current ElevenLabs environment or provider MCP available. No new voice take exists in this task.",
+        "warning": "All included costs/credits are historical planning or evidence. Not current prices, quotes, balance deductions, or authorization."
+      }
+    }
+  ],
+  "sfx_sync_points": [
+    {
+      "asset_id": "viernes-v2",
+      "kind": "transition_cut",
+      "time": 2.75,
+      "description": "{\"sale\": \"s1\", \"entra\": \"s2\"}",
+      "basis": "Exact plan costura; cue may align at cut, placement suggested only, not rendered."
+    },
+    {
+      "asset_id": "viernes-v2",
+      "kind": "transition_cut",
+      "time": 7.875,
+      "description": "{\"sale\": \"s2\", \"entra\": \"s3\"}",
+      "basis": "Exact plan costura; cue may align at cut, placement suggested only, not rendered."
+    },
+    {
+      "asset_id": "viernes-v2",
+      "kind": "on_screen_emphasis",
+      "time": 0.3333333333333333,
+      "description": "primer número antes de 3 s",
+      "basis": "Exact plan event. Candidate short synthesized accent only when it does not mask narration; not rendered."
+    },
+    {
+      "asset_id": "viernes-v2",
+      "kind": "on_screen_emphasis",
+      "time": 1.75,
+      "description": "acento del parecido",
+      "basis": "Exact plan event. Candidate short synthesized accent only when it does not mask narration; not rendered."
+    },
+    {
+      "asset_id": "viernes-v2",
+      "kind": "on_screen_emphasis",
+      "time": 2.75,
+      "description": "entra «mirá una foto suya que recibió»",
+      "basis": "Exact plan event. Candidate short synthesized accent only when it does not mask narration; not rendered."
+    },
+    {
+      "asset_id": "viernes-v2",
+      "kind": "on_screen_emphasis",
+      "time": 3.625,
+      "description": "acento de la foto recibida",
+      "basis": "Exact plan event. Candidate short synthesized accent only when it does not mask narration; not rendered."
+    },
+    {
+      "asset_id": "viernes-v2",
+      "kind": "on_screen_emphasis",
+      "time": 4.041666666666667,
+      "description": "entra «misma pose, ventana, taza»",
+      "basis": "Exact plan event. Candidate short synthesized accent only when it does not mask narration; not rendered."
+    },
+    {
+      "asset_id": "viernes-v2",
+      "kind": "on_screen_emphasis",
+      "time": 4.791666666666667,
+      "description": "acento del texto de las coincidencias",
+      "basis": "Exact plan event. Candidate short synthesized accent only when it does not mask narration; not rendered."
+    },
+    {
+      "asset_id": "viernes-v2",
+      "kind": "on_screen_emphasis",
+      "time": 5.875,
+      "description": "BEAT A: «con esa foto: 0,93» sobre las dos caras",
+      "basis": "Exact plan event. Candidate short synthesized accent only when it does not mask narration; not rendered."
+    },
+    {
+      "asset_id": "viernes-v2",
+      "kind": "on_screen_emphasis",
+      "time": 6.625,
+      "description": "acento del 0,93",
+      "basis": "Exact plan event. Candidate short synthesized accent only when it does not mask narration; not rendered."
+    },
+    {
+      "asset_id": "viernes-v2",
+      "kind": "on_screen_emphasis",
+      "time": 8.75,
+      "description": "acento del rango",
+      "basis": "Exact plan event. Candidate short synthesized accent only when it does not mask narration; not rendered."
+    },
+    {
+      "asset_id": "viernes-v2",
+      "kind": "on_screen_emphasis",
+      "time": 10.291666666666666,
+      "description": "BEAT C: «casi copia: no prueba identidad»",
+      "basis": "Exact plan event. Candidate short synthesized accent only when it does not mask narration; not rendered."
+    },
+    {
+      "asset_id": "viernes-v2",
+      "kind": "on_screen_emphasis",
+      "time": 11.25,
+      "description": "acento de la conclusión",
+      "basis": "Exact plan event. Candidate short synthesized accent only when it does not mask narration; not rendered."
+    },
+    {
+      "asset_id": "viernes-v2",
+      "kind": "on_screen_emphasis",
+      "time": 12.458333333333334,
+      "description": "CTA",
+      "basis": "Exact plan event. Candidate short synthesized accent only when it does not mask narration; not rendered."
+    },
+    {
+      "asset_id": "viernes-v2",
+      "kind": "on_screen_emphasis",
+      "time": 13.833333333333334,
+      "description": "acento una prueba semanal",
+      "basis": "Exact plan event. Candidate short synthesized accent only when it does not mask narration; not rendered."
+    },
+    {
+      "asset_id": "g2-v2",
+      "kind": "transition_cut",
+      "time": 3.75,
+      "description": "foto + miniaturas → placa de la regla",
+      "basis": "Exact plan costura; cue may align at cut, placement suggested only, not rendered."
+    },
+    {
+      "asset_id": "g2-v2",
+      "kind": "transition_cut",
+      "time": 8.458333333333334,
+      "description": "placa → Kling 3.0 std (el clip arranca en T-6 cuadros)",
+      "basis": "Exact plan costura; cue may align at cut, placement suggested only, not rendered."
+    },
+    {
+      "asset_id": "g2-v2",
+      "kind": "transition_cut",
+      "time": 11,
+      "description": "Kling 3.0 std → Seedance 2.0 Mini",
+      "basis": "Exact plan costura; cue may align at cut, placement suggested only, not rendered."
+    },
+    {
+      "asset_id": "g2-v2",
+      "kind": "transition_cut",
+      "time": 14.041666666666666,
+      "description": "Seedance 2.0 Mini → Kling O3",
+      "basis": "Exact plan costura; cue may align at cut, placement suggested only, not rendered."
+    },
+    {
+      "asset_id": "g2-v2",
+      "kind": "transition_cut",
+      "time": 18.25,
+      "description": "Kling O3 → lección",
+      "basis": "Exact plan costura; cue may align at cut, placement suggested only, not rendered."
+    },
+    {
+      "asset_id": "g2-v2",
+      "kind": "transition_cut",
+      "time": 25,
+      "description": "lección → cierre K1",
+      "basis": "Exact plan costura; cue may align at cut, placement suggested only, not rendered."
+    },
+    {
+      "asset_id": "g3-v2",
+      "kind": "transition_cut",
+      "time": 7.416666666666666,
+      "description": "{\"sale\": [\"desc\"], \"entra\": [\"buena\"]}",
+      "basis": "Exact plan costura; cue may align at cut, placement suggested only, not rendered."
+    },
+    {
+      "asset_id": "g3-v2",
+      "kind": "transition_cut",
+      "time": 9.625,
+      "description": "{\"sale\": [\"buena\"], \"entra\": [\"agenda\"]}",
+      "basis": "Exact plan costura; cue may align at cut, placement suggested only, not rendered."
+    },
+    {
+      "asset_id": "g3-v2",
+      "kind": "transition_cut",
+      "time": 15.916666666666666,
+      "description": "{\"sale\": [\"agenda\"], \"entra\": [\"k4\"]}",
+      "basis": "Exact plan costura; cue may align at cut, placement suggested only, not rendered."
+    },
+    {
+      "asset_id": "g3-v2",
+      "kind": "transition_cut",
+      "time": 20.583333333333332,
+      "description": "{\"sale\": [\"k4\", \"cc-k4\", \"cc-ctr\"], \"entra\": [\"placa\"]}",
+      "basis": "Exact plan costura; cue may align at cut, placement suggested only, not rendered."
+    },
+    {
+      "asset_id": "g3-v2",
+      "kind": "transition_cut",
+      "time": 22.791666666666664,
+      "description": "{\"sale\": [\"placa\"], \"entra\": [\"k1\"]}",
+      "basis": "Exact plan costura; cue may align at cut, placement suggested only, not rendered."
+    },
+    {
+      "asset_id": "g4-v2",
+      "kind": "transition_cut",
+      "time": 4.75,
+      "description": "foto + miniaturas → regla (la tarjeta c3 de la regla entra sola, después de las referencias)",
+      "basis": "Exact plan costura; cue may align at cut, placement suggested only, not rendered."
+    },
+    {
+      "asset_id": "g4-v2",
+      "kind": "transition_cut",
+      "time": 8.333333,
+      "description": "regla → Seedream 4.5",
+      "basis": "Exact plan costura; cue may align at cut, placement suggested only, not rendered."
+    },
+    {
+      "asset_id": "g4-v2",
+      "kind": "transition_cut",
+      "time": 10.25,
+      "description": "Seedream 4.5 → Seedream 5.0 Pro",
+      "basis": "Exact plan costura; cue may align at cut, placement suggested only, not rendered."
+    },
+    {
+      "asset_id": "g4-v2",
+      "kind": "transition_cut",
+      "time": 13,
+      "description": "Seedream 5.0 Pro → FLUX 3",
+      "basis": "Exact plan costura; cue may align at cut, placement suggested only, not rendered."
+    },
+    {
+      "asset_id": "g4-v2",
+      "kind": "transition_cut",
+      "time": 15.166667,
+      "description": "FLUX 3 → lección",
+      "basis": "Exact plan costura; cue may align at cut, placement suggested only, not rendered."
+    },
+    {
+      "asset_id": "g4-v2",
+      "kind": "transition_cut",
+      "time": 22.875,
+      "description": "lección → escena 2 (la tarjeta c7 ya salió por su cuenta)",
+      "basis": "Exact plan costura; cue may align at cut, placement suggested only, not rendered."
+    },
+    {
+      "asset_id": "g4-v2",
+      "kind": "transition_cut",
+      "time": 25.625,
+      "description": "escena 2 → cierre (foto K4·5)",
+      "basis": "Exact plan costura; cue may align at cut, placement suggested only, not rendered."
+    },
+    {
+      "asset_id": "g5-v2",
+      "kind": "transition_cut",
+      "time": 3.416666666667,
+      "description": "foto → paso 1",
+      "basis": "Exact plan costura; cue may align at cut, placement suggested only, not rendered."
+    },
+    {
+      "asset_id": "g5-v2",
+      "kind": "transition_cut",
+      "time": 5.333333333333,
+      "description": "paso 1 → paso 2",
+      "basis": "Exact plan costura; cue may align at cut, placement suggested only, not rendered."
+    },
+    {
+      "asset_id": "g5-v2",
+      "kind": "transition_cut",
+      "time": 10.75,
+      "description": "paso 2 → ejemplo B del café",
+      "basis": "Exact plan costura; cue may align at cut, placement suggested only, not rendered."
+    },
+    {
+      "asset_id": "g5-v2",
+      "kind": "transition_cut",
+      "time": 13.625,
+      "description": "ejemplo → razón 1",
+      "basis": "Exact plan costura; cue may align at cut, placement suggested only, not rendered."
+    },
+    {
+      "asset_id": "g5-v2",
+      "kind": "transition_cut",
+      "time": 16.625,
+      "description": "razón 1 → razón 2",
+      "basis": "Exact plan costura; cue may align at cut, placement suggested only, not rendered."
+    },
+    {
+      "asset_id": "g5-v2",
+      "kind": "transition_cut",
+      "time": 19.541666666667,
+      "description": "razón 2 → razón 3",
+      "basis": "Exact plan costura; cue may align at cut, placement suggested only, not rendered."
+    },
+    {
+      "asset_id": "g5-v2",
+      "kind": "transition_cut",
+      "time": 22.166666666667,
+      "description": "razón 3 → lección + cierre (foto K4·5)",
+      "basis": "Exact plan costura; cue may align at cut, placement suggested only, not rendered."
+    },
+    {
+      "asset_id": "p9",
+      "kind": "transition_cut",
+      "time": 6,
+      "description": "{\"sale\": \"m1\", \"entra\": \"m4\"}",
+      "basis": "Exact plan costura; cue may align at cut, placement suggested only, not rendered."
+    },
+    {
+      "asset_id": "p9",
+      "kind": "transition_cut",
+      "time": 11.791666666666666,
+      "description": "{\"sale\": \"m4\", \"entra\": \"placa\"}",
+      "basis": "Exact plan costura; cue may align at cut, placement suggested only, not rendered."
+    },
+    {
+      "asset_id": "p9",
+      "kind": "on_screen_emphasis",
+      "time": 1.5,
+      "description": "resultado Kling",
+      "basis": "Exact plan event. Candidate short synthesized accent only when it does not mask narration; not rendered."
+    },
+    {
+      "asset_id": "p9",
+      "kind": "on_screen_emphasis",
+      "time": 3.2,
+      "description": "acento parecido Kling",
+      "basis": "Exact plan event. Candidate short synthesized accent only when it does not mask narration; not rendered."
+    },
+    {
+      "asset_id": "p9",
+      "kind": "on_screen_emphasis",
+      "time": 4.9,
+      "description": "acento brillo Kling",
+      "basis": "Exact plan event. Candidate short synthesized accent only when it does not mask narration; not rendered."
+    },
+    {
+      "asset_id": "p9",
+      "kind": "on_screen_emphasis",
+      "time": 6,
+      "description": "aviso: fotos recibidas por Seedance (entra con el dato: el 0,80 no queda sin aviso)",
+      "basis": "Exact plan event. Candidate short synthesized accent only when it does not mask narration; not rendered."
+    },
+    {
+      "asset_id": "p9",
+      "kind": "on_screen_emphasis",
+      "time": 7.7,
+      "description": "acento reencuadre",
+      "basis": "Exact plan event. Candidate short synthesized accent only when it does not mask narration; not rendered."
+    },
+    {
+      "asset_id": "p9",
+      "kind": "on_screen_emphasis",
+      "time": 9.4,
+      "description": "acento parecido Seedance",
+      "basis": "Exact plan event. Candidate short synthesized accent only when it does not mask narration; not rendered."
+    },
+    {
+      "asset_id": "p9",
+      "kind": "on_screen_emphasis",
+      "time": 11.1,
+      "description": "acento reencuadre final",
+      "basis": "Exact plan event. Candidate short synthesized accent only when it does not mask narration; not rendered."
+    },
+    {
+      "asset_id": "p9",
+      "kind": "on_screen_emphasis",
+      "time": 11.791666666666666,
+      "description": "entra nota del asterisco con la fila: Seedance recibió 2 de las 8 fotos",
+      "basis": "Exact plan event. Candidate short synthesized accent only when it does not mask narration; not rendered."
+    },
+    {
+      "asset_id": "p9",
+      "kind": "on_screen_emphasis",
+      "time": 11.791666666666666,
+      "description": "acento fila Seedance (marca del asterisco)",
+      "basis": "Exact plan event. Candidate short synthesized accent only when it does not mask narration; not rendered."
+    },
+    {
+      "asset_id": "p9",
+      "kind": "on_screen_emphasis",
+      "time": 11.96,
+      "description": "entra una toma, prueba no regla",
+      "basis": "Exact plan event. Candidate short synthesized accent only when it does not mask narration; not rendered."
+    },
+    {
+      "asset_id": "p9",
+      "kind": "on_screen_emphasis",
+      "time": 12.5,
+      "description": "entra límite de cara (clip original)",
+      "basis": "Exact plan event. Candidate short synthesized accent only when it does not mask narration; not rendered."
+    },
+    {
+      "asset_id": "p9",
+      "kind": "on_screen_emphasis",
+      "time": 13.6,
+      "description": "acento nota del asterisco (vuelve a señalar el 0,80*)",
+      "basis": "Exact plan event. Candidate short synthesized accent only when it does not mask narration; not rendered."
+    },
+    {
+      "asset_id": "p9",
+      "kind": "on_screen_emphasis",
+      "time": 13.6,
+      "description": "acento fila Seedance (marca del asterisco)",
+      "basis": "Exact plan event. Candidate short synthesized accent only when it does not mask narration; not rendered."
+    },
+    {
+      "asset_id": "p9",
+      "kind": "on_screen_emphasis",
+      "time": 14.65,
+      "description": "entra límite del brillo",
+      "basis": "Exact plan event. Candidate short synthesized accent only when it does not mask narration; not rendered."
+    },
+    {
+      "asset_id": "p9",
+      "kind": "on_screen_emphasis",
+      "time": 16,
+      "description": "acento prueba no regla",
+      "basis": "Exact plan event. Candidate short synthesized accent only when it does not mask narration; not rendered."
+    },
+    {
+      "asset_id": "p9",
+      "kind": "on_screen_emphasis",
+      "time": 17.4,
+      "description": "CTA",
+      "basis": "Exact plan event. Candidate short synthesized accent only when it does not mask narration; not rendered."
+    },
+    {
+      "asset_id": "p9",
+      "kind": "on_screen_emphasis",
+      "time": 19.1,
+      "description": "acento una prueba semanal",
+      "basis": "Exact plan event. Candidate short synthesized accent only when it does not mask narration; not rendered."
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+QA final acotada de calendario y entrega — 12-oct-2026
+
+META: revisar calendario propuesto, links y documentación de narración/coste/procedencia/aprendizaje antes de entrega. PRUEBA: lectura canónica y verificación local de fechas, archivos y conteos. PARADA: SOLO MOSTRAR; sin agenda/publicación ni nuevas pruebas audiovisuales repetidas. Sol medium configurado; modelo efectivo no observable.
+
+VEREDICTO: 0 ALTA, 0 errores materiales detectados. Aprobación solo documental del paquete/calendario para revisión. No autoriza publicar, agendar, generar voz ni gastar.
+
+Calendario
+Nueve slots futuros19-oct a6-nov de2026: lunes19/26oct/2nov, miércoles21/28oct/4nov, viernes23/30oct/6nov. Tres por semana; prueba/carrusel/error respetados. America/Caracas19:00 equivale23:00UTC. Ninguna fila está agendada; todas PENDIENTE. Si no está listo19oct se mueve la secuencia completa al próximo lunes viable; no recuperar atrasos duplicando piezas.
+Viernes de copia23oct precedeG4 del2nov yC2 del4nov. G5 del26oct precedeG4; G2 precedeP9. G1v2 fuera del lote y no sustituido porv1; C1 queda explicación autosuficiente y no se afirmaG1publicado.
+
+Archivos y enlaces
+Doce enlaces relativos (seis masters+seis previews) resuelven a archivos reales en docs/handoff/relevo-lucia-20261012/audio-lote. SeisMP4 en masters y seis en previews. Los links de carruseles conservan fuenteGit3566e5, no afirman nuevas láminas ni QA nueva. No se repitió hash bitstream/framemd5 de los seis: QA-AUDIO ya acredita preservación exacta y AAC no silenciosa. «Audible» aquí es nivel técnico medido, no escucha subjetiva realizada por este agente.
+
+Narración/coste
+Recalculado len(submission_text), incluyendo espacios y puntuación: viernes223,G2415,G3412,G4444,G5418,P9311; total2223. Cada número coincide NARRACIONES-Y-COSTE.json. Son seis textos preparados para una toma, no audio generado, no consumo ya gastado y no presupuesto en dinero. Todos generation_submitted=false y actual_budget_verified=false. Marcela decidida no equivale conector/cupo/licencia comercial vigente comprobados; remanente381 histórico no se usa como actual. No se inventa precio monetario.
+
+Derechos/procedencia
+LICENCIA-Y-PROCEDENCIA distingue base matemática original por encargo, sin muestreo musical ajeno/plataforma paga, de SFX existentes sintetizadosFFmpeg. No transfiere licenciaPixabay/Freesound de manifests sin binarios a estos recursos. No se usó voz antigua para simular narración nueva. Material original de producción no cambia autorización de publicación. La pista musical no resuelve voz ni densidadP9/pausasG3.
+
+CTA y acceso
+«Conozca Onia»/onia.com.bo está claramente propuesto para revisión comercial, no integrado/verificado ni promesa de venta terminada. El resultadoHEAD fue CONNECT403 por política de conexión, no404del sitio; no prueba disponibilidad ni caída del destino. No se reintentó. Nota de ruta/llamada histórica se conserva como historia; no presentar ese dato como nueva prueba web.
+Cuenta, token,ledger,duplicados,FINISHED,etiquetaIAreal/permalink/insights permanecen pendientes de operador autorizado. Un ensayo sin --publicar sí subeMeta; no se ejecutó aquí.
+
+Informe a madre/Marca/Sergio
+Distingue documentación127modelos/63recetas/41familias de prueba heredada parcial y aplicación nativa comprobada. No afirma100%,dominio de todaUI,ejecución de127modelos ni operación autónoma de cuenta. /ai-host-video noresuelto permanece explícito.
+Recomendaciones para Marca parten de grabación/voz reales, capturas reales y claims comprobables; preservan permisos de cara/voz/gasto y no trasladan identidad/vozMarcela aSergio. El workerMarca ejecutaría su encargo; este lote no modificó su carril ni envió mensaje externo fingido.
+
+Entrega lista para mostrar como seis masters/previews con música/SFX SIN NARRACIÓN y propuesta de calendario. Ninguna brecha se cerró por escribir esta QA: voz, CTAreal,cuenta, aprobación de versión/calendario y publicación siguen abiertas. K4/R3 siguen pendientes de rutas/commit exactos, no403/reintento ni regeneración.

@@ -1,0 +1,58 @@
+# Lucía CALENDARIO — música/SFX con evidencia de licencia
+
+- Fuente: commit `3566e5d5208cf4a7bcf20e743469c6088944674c`. Inventario Git/FS, sin generación ni llamadas externas.
+- Resultado: no se encontró un BGM/música completo con licencia documentada y archivo presente para Lucía. Cinco SFX WAV completos existen; su README dice que se sintetizaron con ffmpeg, pero el repositorio no les asigna licencia expresa ni garantía multiplataforma. Por ello no los etiqueto como formalmente licenciados.
+- Los cuatro beats MP3 del reel existen, pero sin evidencia de licencia localizada; excluidos como recurso aprobado.
+- La documentación HyperFrames acredita 19 efectos Pixabay para uso comercial/no comercial sin atribución, pero los MP3 no están presentes (solo manifest/credits).
+
+## Archivos locales completos (SFX; estatus licencia no explícita)
+
+### ping.wav
+- Ruta fuente: `.claude/skills/editor-videos/assets/sfx/ping.wav`
+- Git blob SHA-1: `9fc1223fce0352c5bfa9b90cadd40d0f72cf0dba`; 192078 bytes; SHA-256 medido: `3512d71bce98f15608f51731a2cea9f53c9e443cbc9096bfcf3639f33b508aa4`
+- Archivo medido: pcm_s16le, 48000 Hz, 2 canales, 1.0 s
+- Origen: The adjacent README states these are generated locally with ffmpeg from noise/sine functions; not sourced from a sound library.
+- Licencia/comercial/multiplataforma: No separate license grant is stated for these generated WAV files in the repository. No third-party source is identified; however a specific cross-platform commercial license is not explicitly documented. No external restrictions identified in provenance; not explicitly granted as a license in repository. No platform-specific restriction documented; explicit multiplatform grant absent.
+- Atribución: No attribution source named; no separate attribution requirement documented.
+- Copia byte exacta: `recursos/ping.wav`
+
+### pop.wav
+- Ruta fuente: `.claude/skills/editor-videos/assets/sfx/pop.wav`
+- Git blob SHA-1: `8df90a3387c6f45ed9ff6f0329acfe0250932e84`; 38478 bytes; SHA-256 medido: `605e0b53d168b1f1b956ec035f376e4090a6d4905a69ef5528c283efcaf11a40`
+- Archivo medido: pcm_s16le, 48000 Hz, 2 canales, 0.2 s
+- Origen: The adjacent README states these are generated locally with ffmpeg from noise/sine functions; not sourced from a sound library.
+- Licencia/comercial/multiplataforma: No separate license grant is stated for these generated WAV files in the repository. No third-party source is identified; however a specific cross-platform commercial license is not explicitly documented. No external restrictions identified in provenance; not explicitly granted as a license in repository. No platform-specific restriction documented; explicit multiplatform grant absent.
+- Atribución: No attribution source named; no separate attribution requirement documented.
+- Copia byte exacta: `recursos/pop.wav`
+
+### swish.wav
+- Ruta fuente: `.claude/skills/editor-videos/assets/sfx/swish.wav`
+- Git blob SHA-1: `7aefd5a4d8f1351cb973a3e3d62e78a7300acd0c`; 96078 bytes; SHA-256 medido: `c776191d05097c5f3936f3c36189a0318221dfbf01a5bbce5b8e37b0515dfb04`
+- Archivo medido: pcm_s16le, 48000 Hz, 2 canales, 0.5 s
+- Origen: The adjacent README states these are generated locally with ffmpeg from noise/sine functions; not sourced from a sound library.
+- Licencia/comercial/multiplataforma: No separate license grant is stated for these generated WAV files in the repository. No third-party source is identified; however a specific cross-platform commercial license is not explicitly documented. No external restrictions identified in provenance; not explicitly granted as a license in repository. No platform-specific restriction documented; explicit multiplatform grant absent.
+- Atribución: No attribution source named; no separate attribution requirement documented.
+- Copia byte exacta: `recursos/swish.wav`
+
+### thud.wav
+- Ruta fuente: `.claude/skills/editor-videos/assets/sfx/thud.wav`
+- Git blob SHA-1: `78e6ec147762f106b3337be84ea4ba5a779db5db`; 105678 bytes; SHA-256 medido: `69f9d6b20d8cfffdf96ac3ddaafffe8ee79cc59f03cb9e42bc681c584e7d1712`
+- Archivo medido: pcm_s16le, 48000 Hz, 2 canales, 0.55 s
+- Origen: The adjacent README states these are generated locally with ffmpeg from noise/sine functions; not sourced from a sound library.
+- Licencia/comercial/multiplataforma: No separate license grant is stated for these generated WAV files in the repository. No third-party source is identified; however a specific cross-platform commercial license is not explicitly documented. No external restrictions identified in provenance; not explicitly granted as a license in repository. No platform-specific restriction documented; explicit multiplatform grant absent.
+- Atribución: No attribution source named; no separate attribution requirement documented.
+- Copia byte exacta: `recursos/thud.wav`
+
+### whoosh.wav
+- Ruta fuente: `.claude/skills/editor-videos/assets/sfx/whoosh.wav`
+- Git blob SHA-1: `3e1288a17f5fae35813546b6ec9735f981281cfd`; 115278 bytes; SHA-256 medido: `26d8524eec74590edc3d6fdc6dddfc97abda03dc7cb2542f87c2a500011d196c`
+- Archivo medido: pcm_s16le, 48000 Hz, 2 canales, 0.6 s
+- Origen: The adjacent README states these are generated locally with ffmpeg from noise/sine functions; not sourced from a sound library.
+- Licencia/comercial/multiplataforma: No separate license grant is stated for these generated WAV files in the repository. No third-party source is identified; however a specific cross-platform commercial license is not explicitly documented. No external restrictions identified in provenance; not explicitly granted as a license in repository. No platform-specific restriction documented; explicit multiplatform grant absent.
+- Atribución: No attribution source named; no separate attribution requirement documented.
+- Copia byte exacta: `recursos/whoosh.wav`
+
+## Evidencia y bloqueo
+- `.claude/skills/editor-videos/assets/sfx/README.md` explica que los WAV son síntesis local determinista (pink noise/flanger o senoidales); describe además la biblioteca HyperFrames como manifestado pero sin binarios.
+- `.claude/skills/media-use/audio/assets/sfx/CREDITS.md` atribuye la biblioteca a Pixabay e indica uso comercial y no comercial sin atribución. No implica que los WAV locales tengan esa licencia.
+- Bloqueo exacto para seleccionar música: no hay un archivo BGM presente con una licencia/procedencia aprobatoria documentada. Para SFX sintetizados: está el archivo completo, pero falta una licencia escrita que confirme expresamente uso comercial multiplataforma. No se bajó ni generó nada nuevo.

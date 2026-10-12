@@ -1,0 +1,212 @@
+[
+  {
+    "id": "viernes-v2",
+    "source_sha256": "c4299c7b21c7b05cc41181176d8908429b9752d4422c9cc9275964dd64393aa4",
+    "master_file": "viernes-musica-sfx-SIN-VOZ.mp4",
+    "master_sha256": "947129dc5485c729ebb6609101f4727a054b8fa76aaf7f3840cc1f849c82b195",
+    "master_bytes": 3343788,
+    "preview_file": "viernes-preview-audiovisual-360p-SIN-VOZ.mp4",
+    "preview_sha256": "82e3307b09c9e1ec38283945fde8eb71716680a2ab5bf70bebb97008e2478e0f",
+    "duration_video_s": 15.0,
+    "music": "baseoriginalprocedural36s",
+    "SFX": [
+      {
+        "asset": "whoosh.wav",
+        "t": 2.75,
+        "gain": 0.14,
+        "reason": "{\"sale\": \"s1\", \"entra\": \"s2\"}"
+      },
+      {
+        "asset": "whoosh.wav",
+        "t": 7.875,
+        "gain": 0.14,
+        "reason": "{\"sale\": \"s2\", \"entra\": \"s3\"}"
+      },
+      {
+        "asset": "ping.wav",
+        "t": 0.3333333333333333,
+        "gain": 0.1,
+        "reason": "entrada del primer dato según plan"
+      }
+    ],
+    "video_codec_mode": "copy;no re-render de composición/cortes",
+    "voice": "SIN NARRACIÓN;no sustituir por música",
+    "cost": 0,
+    "audio_measurement_file": "viernes-audio-medicion.txt",
+    "user_authorization": "montajeaudio/rendersderivados12oct;sin publicar"
+  },
+  {
+    "id": "g2-v2",
+    "source_sha256": "1eb22374d77ca744f2c18c946d1adb72662a76b01912a09d9e9fd56cd1a778a8",
+    "master_file": "G2-musica-sfx-SIN-VOZ.mp4",
+    "master_sha256": "ac46d6dcffb1cac619fb94a8a20bf1ca6c44a92b182ead2f4507511ef4e97001",
+    "master_bytes": 32214054,
+    "preview_file": "G2-preview-audiovisual-360p-SIN-VOZ.mp4",
+    "preview_sha256": "051fdd929936d9c7f8fba8d6a2e4d2e29ba48b553ad5bc49d0ac13b5c7c4ae69",
+    "duration_video_s": 27.791667,
+    "music": "baseoriginalprocedural36s",
+    "SFX": [
+      {
+        "asset": "whoosh.wav",
+        "t": 3.75,
+        "gain": 0.14,
+        "reason": "foto + miniaturas → placa de la regla"
+      },
+      {
+        "asset": "whoosh.wav",
+        "t": 18.25,
+        "gain": 0.14,
+        "reason": "Kling O3 → lección"
+      },
+      {
+        "asset": "whoosh.wav",
+        "t": 25,
+        "gain": 0.14,
+        "reason": "lección → cierre K1"
+      }
+    ],
+    "video_codec_mode": "copy;no re-render de composición/cortes",
+    "voice": "SIN NARRACIÓN;no sustituir por música",
+    "cost": 0,
+    "audio_measurement_file": "G2-audio-medicion.txt",
+    "user_authorization": "montajeaudio/rendersderivados12oct;sin publicar"
+  },
+  {
+    "id": "g3-v2",
+    "source_sha256": "ac032dc76b832c006f1b0d97693270a7c3ec923faa9d1c25d848e346c165193b",
+    "master_file": "G3-musica-sfx-SIN-VOZ.mp4",
+    "master_sha256": "a000dd2d533ca859c3760aee9fbe75d2b0d61cdcf38111bc48a4de11141ec42d",
+    "master_bytes": 34447860,
+    "preview_file": "G3-preview-audiovisual-360p-SIN-VOZ.mp4",
+    "preview_sha256": "0dae5a1b45512aa01dd354f15553d720952def29c95eb8509d4f2e211c079ca7",
+    "duration_video_s": 27.916667,
+    "music": "baseoriginalprocedural36s",
+    "SFX": [
+      {
+        "asset": "whoosh.wav",
+        "t": 7.416667,
+        "gain": 0.14,
+        "reason": "{\"sale\": [\"desc\"], \"entra\": [\"buena\"]}"
+      },
+      {
+        "asset": "whoosh.wav",
+        "t": 20.583333,
+        "gain": 0.14,
+        "reason": "{\"sale\": [\"k4\", \"cc-k4\", \"cc-ctr\"], \"entra\": [\"placa\"]}"
+      },
+      {
+        "asset": "whoosh.wav",
+        "t": 22.791667,
+        "gain": 0.14,
+        "reason": "{\"sale\": [\"placa\"], \"entra\": [\"k1\"]}"
+      }
+    ],
+    "video_codec_mode": "copy;no re-render de composición/cortes",
+    "voice": "SIN NARRACIÓN;no sustituir por música",
+    "cost": 0,
+    "audio_measurement_file": "G3-audio-medicion.txt",
+    "user_authorization": "montajeaudio/rendersderivados12oct;sin publicar"
+  },
+  {
+    "id": "g4-v2",
+    "source_sha256": "13cdd1d2f5f0ab2eef1fb0ffd065007d47bf5946a2bb15a5bd24c435142d2a43",
+    "master_file": "G4-musica-sfx-SIN-VOZ.mp4",
+    "master_sha256": "df4008b12662676ae74b7276b5ba40e6a7dc97ebd30ff176443cf3979a300783",
+    "master_bytes": 28252910,
+    "preview_file": "G4-preview-audiovisual-360p-SIN-VOZ.mp4",
+    "preview_sha256": "6344ad33c69bfe775738d06d3085edc7cb0d0dec7d58646d0b2459b218f69a67",
+    "duration_video_s": 28.041667,
+    "music": "baseoriginalprocedural36s",
+    "SFX": [
+      {
+        "asset": "whoosh.wav",
+        "t": 4.75,
+        "gain": 0.14,
+        "reason": "foto + miniaturas → regla (la tarjeta c3 de la regla entra sola, después de las referencias)"
+      },
+      {
+        "asset": "whoosh.wav",
+        "t": 22.875,
+        "gain": 0.14,
+        "reason": "lección → escena 2 (la tarjeta c7 ya salió por su cuenta)"
+      },
+      {
+        "asset": "whoosh.wav",
+        "t": 25.625,
+        "gain": 0.14,
+        "reason": "escena 2 → cierre (foto K4·5)"
+      }
+    ],
+    "video_codec_mode": "copy;no re-render de composición/cortes",
+    "voice": "SIN NARRACIÓN;no sustituir por música",
+    "cost": 0,
+    "audio_measurement_file": "G4-audio-medicion.txt",
+    "user_authorization": "montajeaudio/rendersderivados12oct;sin publicar"
+  },
+  {
+    "id": "g5-v2",
+    "source_sha256": "030e8f65aabc0fddda83f234acebb410b951b7b81c3dc9c2657410f5ec399b3f",
+    "master_file": "G5-musica-sfx-SIN-VOZ.mp4",
+    "master_sha256": "887fcafda104d87867ad0a504377fbe0236c2c80f2b70b199a8b942aa2409fec",
+    "master_bytes": 17618818,
+    "preview_file": "G5-preview-audiovisual-360p-SIN-VOZ.mp4",
+    "preview_sha256": "66d4da3556bf01d19ec46b1280db4f449a5ed507fb8d733d2b84d6929f78322b",
+    "duration_video_s": 26.625,
+    "music": "baseoriginalprocedural36s",
+    "SFX": [
+      {
+        "asset": "whoosh.wav",
+        "t": 3.416667,
+        "gain": 0.14,
+        "reason": "foto → paso 1"
+      },
+      {
+        "asset": "whoosh.wav",
+        "t": 19.541667,
+        "gain": 0.14,
+        "reason": "razón 2 → razón 3"
+      },
+      {
+        "asset": "whoosh.wav",
+        "t": 22.166667,
+        "gain": 0.14,
+        "reason": "razón 3 → lección + cierre (foto K4·5)"
+      }
+    ],
+    "video_codec_mode": "copy;no re-render de composición/cortes",
+    "voice": "SIN NARRACIÓN;no sustituir por música",
+    "cost": 0,
+    "audio_measurement_file": "G5-audio-medicion.txt",
+    "user_authorization": "montajeaudio/rendersderivados12oct;sin publicar"
+  },
+  {
+    "id": "p9",
+    "source_sha256": "49b40ea55dc67f784ae479964d50c8cc3119cff0be557c32b0ee37f0b92a9e04",
+    "master_file": "P9-musica-sfx-SIN-VOZ.mp4",
+    "master_sha256": "f9009d15681e4d55979e8bf844a74ae70bd48f019ea262879de1b628c78ee28e",
+    "master_bytes": 21646143,
+    "preview_file": "P9-preview-audiovisual-360p-SIN-VOZ.mp4",
+    "preview_sha256": "a3782e7d1ba1aac4a9f1671ec7e551e3094ba9b99f6f759c6e5542254141cb8b",
+    "duration_video_s": 20.0,
+    "music": "baseoriginalprocedural36s",
+    "SFX": [
+      {
+        "asset": "whoosh.wav",
+        "t": 6,
+        "gain": 0.14,
+        "reason": "{\"sale\": \"m1\", \"entra\": \"m4\"}"
+      },
+      {
+        "asset": "whoosh.wav",
+        "t": 11.791667,
+        "gain": 0.14,
+        "reason": "{\"sale\": \"m4\", \"entra\": \"placa\"}"
+      }
+    ],
+    "video_codec_mode": "copy;no re-render de composición/cortes",
+    "voice": "SIN NARRACIÓN;no sustituir por música",
+    "cost": 0,
+    "audio_measurement_file": "P9-audio-medicion.txt",
+    "user_authorization": "montajeaudio/rendersderivados12oct;sin publicar"
+  }
+]

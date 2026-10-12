@@ -1,0 +1,25 @@
+QA independiente de audio nuevo —12-oct-2026
+
+META: comprobar audio música/SFX y conservación del video de seis masters existentes. PRUEBA: hashes, bitstream hash, framemd5 completo y PCM decodificado. PARADA: informe sin nueva generación, narración, instalación, gasto ni publicación. Sol medium configurado; efectivo no observable.
+
+RESULTADO
+PASS técnico6/6: fuente y derivados coinciden con susSHA documentados; hash del bitstream de video idéntico y framemd5 idéntico cuadro por cuadro (contenido y timestamps). No se cambiaron composición,cortes,caras,textos ni duración visual. AAC presente, PCM decodificado no cero en todos. Esto confirma pista de nivel audible técnicamente; NO escuché ni certifico placer sonoro, balance percibido o sincronía musical subjetiva.
+
+MEDIDAS
+viernes-v2: 360 cuadros; 15.0 s; integrado -18.25 LUFS; true peak -7.35 dBTP; LRA 0.8. Video y todos los cuadros idénticos, AAC no silenciosa.
+g2-v2: 667 cuadros; 27.791667 s; integrado -18.11 LUFS; true peak -7.02 dBTP; LRA 0.5. Video y todos los cuadros idénticos, AAC no silenciosa.
+g3-v2: 670 cuadros; 27.916667 s; integrado -18.11 LUFS; true peak -7.02 dBTP; LRA 0.5. Video y todos los cuadros idénticos, AAC no silenciosa.
+g4-v2: 673 cuadros; 28.041667 s; integrado -18.11 LUFS; true peak -7.02 dBTP; LRA 0.5. Video y todos los cuadros idénticos, AAC no silenciosa.
+g5-v2: 639 cuadros; 26.625 s; integrado -18.11 LUFS; true peak -7.02 dBTP; LRA 0.5. Video y todos los cuadros idénticos, AAC no silenciosa.
+p9: 480 cuadros; 20.0 s; integrado -18.17 LUFS; true peak -7.02 dBTP; LRA 0.8. Video y todos los cuadros idénticos, AAC no silenciosa.
+
+Las medidas de loudness/true peak proceden de INPUT_I/INPUT_TP de los logs audio-medicion: los OUTPUT de loudnorm describen el filtro de análisis aplicado, no la pista entregada. Picos entre−7,35 y−7,02dBTP: sin indicio de clipping digital; integrado−18,25..−18,11LUFS. Nivel conservador de música sola, no objetivo probado de narración.
+
+PROCEDENCIA/DERECHOS
+Leído crear_base_original.py: suma matemática seno/pad/bajo/kick/pluck a104BPM; no lee música de terceros, no llama plataformas. WAV base36s,48kHz,estéreo y hash43ca07a40e11bd133c441a3d7d69851e573601f66115307bbc35dfc6c54f3e9f coinciden con procedencia-base-original.json. Material original del encargo; no inventar licenciaPixabay/Freesound ni autorización externa.
+Whoosh y ping existentes tienen README fuente3566e5 que declara síntesis localFFmpeg y los llama placeholders, reemplazables. Son efectos propios sintetizados según procedencia disponible, no recursos de librería externa. El inventario previo decía que no existíaBGMcompleto: es estado anterior a esta base nueva, no contradicción del resultado. No se certifica licencia formal de librería para esosWAV ni se requiere fingirla para describir origen.
+
+NARRACIÓN Y LIMITACIONES
+Los seis nombres SIN-VOZ y la lógica de montar_audio.py son correctos: se añade base/SFX, no vozMarcela. Música no sustituye narración ni cierra densidad de lecturaP9, pausasvozG3, futuras duraciones/retempo o pruebas de identidad. No existe conectorElevenLabs ni credencial/cupo/licenciaactual comprobados en esta QA; no se buscaron secretos. Derechos históricos no autorizan voz nueva.
+No repetir QAvisual cerrado: este resultado conserva exactamente sus fotogramas, con nuevosSHA de contenedor por audio. Para mostrar usar el master/preview audiovisual nuevo, aclarando música/SFX SIN NARRACIÓN. El usuario puede evaluar escucha subjetiva antes de futuros cambios.
+Calendario futuro preparado porroot paraAmerica/Caracas desde19oct tres porsemana queda pendiente mostrar; este informe no valida aprobación deversión/calendario,duplicados,etiquetaIAreal ni publicación. No se agendó ni publicó.

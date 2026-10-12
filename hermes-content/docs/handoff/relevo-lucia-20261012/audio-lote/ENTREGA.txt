@@ -1,0 +1,40 @@
+ENTREGA LUCÍA — AUDIO/CALENDARIO Y REPORTE A MADRE —12-oct-2026
+Seis versiones con música original/SFX y video intacto. TODAS SIN NARRACIÓN. No se publicó ni agendó.
+
+viernes-v2 —preview audiovisual
+https://github.com/oninteligenciaartificial/onia-hermes/blob/codex/recepcion-lucia-20261012/hermes-content/docs/handoff/relevo-lucia-20261012/audio-lote/previews/viernes-preview-audiovisual-360p-SIN-VOZ.mp4
+Master: https://github.com/oninteligenciaartificial/onia-hermes/blob/codex/recepcion-lucia-20261012/hermes-content/docs/handoff/relevo-lucia-20261012/audio-lote/masters/viernes-musica-sfx-SIN-VOZ.mp4
+SHA256master: 947129dc5485c729ebb6609101f4727a054b8fa76aaf7f3840cc1f849c82b195
+
+g2-v2 —preview audiovisual
+https://github.com/oninteligenciaartificial/onia-hermes/blob/codex/recepcion-lucia-20261012/hermes-content/docs/handoff/relevo-lucia-20261012/audio-lote/previews/G2-preview-audiovisual-360p-SIN-VOZ.mp4
+Master: https://github.com/oninteligenciaartificial/onia-hermes/blob/codex/recepcion-lucia-20261012/hermes-content/docs/handoff/relevo-lucia-20261012/audio-lote/masters/G2-musica-sfx-SIN-VOZ.mp4
+SHA256master: ac46d6dcffb1cac619fb94a8a20bf1ca6c44a92b182ead2f4507511ef4e97001
+
+g3-v2 —preview audiovisual
+https://github.com/oninteligenciaartificial/onia-hermes/blob/codex/recepcion-lucia-20261012/hermes-content/docs/handoff/relevo-lucia-20261012/audio-lote/previews/G3-preview-audiovisual-360p-SIN-VOZ.mp4
+Master: https://github.com/oninteligenciaartificial/onia-hermes/blob/codex/recepcion-lucia-20261012/hermes-content/docs/handoff/relevo-lucia-20261012/audio-lote/masters/G3-musica-sfx-SIN-VOZ.mp4
+SHA256master: a000dd2d533ca859c3760aee9fbe75d2b0d61cdcf38111bc48a4de11141ec42d
+
+g4-v2 —preview audiovisual
+https://github.com/oninteligenciaartificial/onia-hermes/blob/codex/recepcion-lucia-20261012/hermes-content/docs/handoff/relevo-lucia-20261012/audio-lote/previews/G4-preview-audiovisual-360p-SIN-VOZ.mp4
+Master: https://github.com/oninteligenciaartificial/onia-hermes/blob/codex/recepcion-lucia-20261012/hermes-content/docs/handoff/relevo-lucia-20261012/audio-lote/masters/G4-musica-sfx-SIN-VOZ.mp4
+SHA256master: df4008b12662676ae74b7276b5ba40e6a7dc97ebd30ff176443cf3979a300783
+
+g5-v2 —preview audiovisual
+https://github.com/oninteligenciaartificial/onia-hermes/blob/codex/recepcion-lucia-20261012/hermes-content/docs/handoff/relevo-lucia-20261012/audio-lote/previews/G5-preview-audiovisual-360p-SIN-VOZ.mp4
+Master: https://github.com/oninteligenciaartificial/onia-hermes/blob/codex/recepcion-lucia-20261012/hermes-content/docs/handoff/relevo-lucia-20261012/audio-lote/masters/G5-musica-sfx-SIN-VOZ.mp4
+SHA256master: 887fcafda104d87867ad0a504377fbe0236c2c80f2b70b199a8b942aa2409fec
+
+p9 —preview audiovisual
+https://github.com/oninteligenciaartificial/onia-hermes/blob/codex/recepcion-lucia-20261012/hermes-content/docs/handoff/relevo-lucia-20261012/audio-lote/previews/P9-preview-audiovisual-360p-SIN-VOZ.mp4
+Master: https://github.com/oninteligenciaartificial/onia-hermes/blob/codex/recepcion-lucia-20261012/hermes-content/docs/handoff/relevo-lucia-20261012/audio-lote/masters/P9-musica-sfx-SIN-VOZ.mp4
+SHA256master: f9009d15681e4d55979e8bf844a74ae70bd48f019ea262879de1b628c78ee28e
+
+Calendario único: https://github.com/oninteligenciaartificial/onia-hermes/blob/codex/recepcion-lucia-20261012/hermes-content/docs/cola/lucia-diario/ORDEN-DE-POSTEO-LUCIA.md
+Voz: total2223caruna toma,guionespreparados,acceso/licencia/cupo actualesno comprobados;no cotizacióninventada.
+Música deprocedenciapropia,no muestra de terceros:LICENCIA-Y-PROCEDENCIA.txt. Gasto0.
+QA técnico6/6:video/fotogramas/timestamps idénticos,audioAACaudible,LUFSaprox−18,2,TP≤−7dBTP;sin escucha subjetiva ni inteligibilidaddevoz por ausencia devoz.
+La música no cierra lecturaP9 ni pendienteseditorialesG2/G3/G4/G5/C1.
+Para madre: INFORME-A-MADRE-MARCA-SERGIO.txt describequéestádocumentado/probado ycuándoaplicarfuncionesaSergio; no100%todaapp, no trabajo invadiendocarrilMarca.
+BloqueoCTAonia.com.bo:CONNECT403 deproxy no respuestasitio;nosereintenta. CuentaIGno operativaverificada;publicaciónpendiente.

@@ -1,0 +1,14 @@
+{
+  "date": "2026-10-12",
+  "asset": "base-instrumental-original.wav",
+  "duration_s": 36,
+  "sample_rate": 48000,
+  "channels": 2,
+  "bpm": 104,
+  "source": "síntesis matemática original de este script para audio de montajes existentes, autorizada por el contrato de Sergio;sin muestras musicales ajenas",
+  "third_party_samples": false,
+  "paid_platform_calls": 0,
+  "cost": 0,
+  "sha256": "43ca07a40e11bd133c441a3d7d69851e573601f66115307bbc35dfc6c54f3e9f",
+  "rights": "Material original por encargo para ONIA;sin licencia externa ni derechos ajenos muestreados. Uso solicitado en los videos existentes. No se atribuye una licencia Pixabay/Freesound a esta base."
+}

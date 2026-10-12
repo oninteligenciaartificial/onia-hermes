@@ -1,0 +1,9 @@
+Audio del lote Lucía —12-oct-2026
+
+Base instrumental: composición/síntesis matemática original creada para este montaje por encargo autorizado de Sergio Urcullo. Fuente reproducible crear_base_original.py; tonos generados localmente, sin muestrear canciones, voces, melodías grabadas o efectos de terceros. No se utilizó una plataforma generativa de pago. La autorización de este lote cubre su integración en las piezas existentes de ONIA; no existe una licencia externa comprada ni se afirma una licencia Pixabay/Freesound para esta base. Se entrega como material original de producción para uso de ONIA en sus formatos/plataformas, sujeto a la aprobación de publicación vigente.
+
+SFX: whoosh/ping y demás WAV conservados del repo, documentados como síntesis ffmpeg en .claude/skills/editor-videos/assets/sfx/README.md del commit3566e5d. Se registran SHA/tamaño/procedencia de los archivos reutilizados en licencias-recursos.json. No son grabaciones descargadas de la librería Pixabay: esa librería solo tenía manifiestos, sin binarios. No se reutilizaron beats cuya licencia no estaba documentada.
+
+Voz: ninguna nueva. No se usó sample antiguo para fingir una narración actual. Marcela sigue decidida como voz de Lucía, pero acceso/cupo/licencia comercial vigentes de ElevenLabs no están verificados aquí. El audio instrumental no resuelve ni sustituye esa narración. No hay toma inteligible que evaluar; solo música/SFX. Texto y consumo exacto por toma en NARRACIONES-Y-COSTE.json, sin precio monetario inventado.
+
+Coste nuevo:0 llamadas pagadas,0 créditos de generación,0 compras/suscripciones/instalaciones. El audio se produjo con Python estándar y ffmpeg ya disponibles. Publicación sigue pendiente; no se distribuyó externamente ni se creó agenda. Esta declaración de procedencia no cambia los permisos de la plataforma ni autoriza versiones sin el OK correspondiente.

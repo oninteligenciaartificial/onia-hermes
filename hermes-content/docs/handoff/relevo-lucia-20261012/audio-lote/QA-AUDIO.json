@@ -1,0 +1,113 @@
+{
+  "date": "2026-10-12",
+  "reviewer": "/root/lucia_qa",
+  "model_configured": "Sol medium inherited",
+  "model_observed": "not observable",
+  "scope": "new music and SFX tracks on six existing masters; no voice generation or publication",
+  "passed_technical": true,
+  "rows": [
+    {
+      "id": "viernes-v2",
+      "source_sha256_matches_manifest": true,
+      "master_sha256_matches_manifest": true,
+      "video_bitstream_identical": true,
+      "decoded_frames_identical": true,
+      "frames": 360,
+      "video_duration_s": 15.0,
+      "audio_codec": "aac",
+      "audio_nonzero_pcm": true,
+      "audio_samples_bytes": 2883584,
+      "measured_integrated_LUFS": -18.25,
+      "measured_true_peak_dBTP": -7.35,
+      "LRA": 0.8
+    },
+    {
+      "id": "g2-v2",
+      "source_sha256_matches_manifest": true,
+      "master_sha256_matches_manifest": true,
+      "video_bitstream_identical": true,
+      "decoded_frames_identical": true,
+      "frames": 667,
+      "video_duration_s": 27.791667,
+      "audio_codec": "aac",
+      "audio_nonzero_pcm": true,
+      "audio_samples_bytes": 5337088,
+      "measured_integrated_LUFS": -18.11,
+      "measured_true_peak_dBTP": -7.02,
+      "LRA": 0.5
+    },
+    {
+      "id": "g3-v2",
+      "source_sha256_matches_manifest": true,
+      "master_sha256_matches_manifest": true,
+      "video_bitstream_identical": true,
+      "decoded_frames_identical": true,
+      "frames": 670,
+      "video_duration_s": 27.916667,
+      "audio_codec": "aac",
+      "audio_nonzero_pcm": true,
+      "audio_samples_bytes": 5345280,
+      "measured_integrated_LUFS": -18.11,
+      "measured_true_peak_dBTP": -7.02,
+      "LRA": 0.5
+    },
+    {
+      "id": "g4-v2",
+      "source_sha256_matches_manifest": true,
+      "master_sha256_matches_manifest": true,
+      "video_bitstream_identical": true,
+      "decoded_frames_identical": true,
+      "frames": 673,
+      "video_duration_s": 28.041667,
+      "audio_codec": "aac",
+      "audio_nonzero_pcm": true,
+      "audio_samples_bytes": 5373952,
+      "measured_integrated_LUFS": -18.11,
+      "measured_true_peak_dBTP": -7.02,
+      "LRA": 0.5
+    },
+    {
+      "id": "g5-v2",
+      "source_sha256_matches_manifest": true,
+      "master_sha256_matches_manifest": true,
+      "video_bitstream_identical": true,
+      "decoded_frames_identical": true,
+      "frames": 639,
+      "video_duration_s": 26.625,
+      "audio_codec": "aac",
+      "audio_nonzero_pcm": true,
+      "audio_samples_bytes": 5099520,
+      "measured_integrated_LUFS": -18.11,
+      "measured_true_peak_dBTP": -7.02,
+      "LRA": 0.5
+    },
+    {
+      "id": "p9",
+      "source_sha256_matches_manifest": true,
+      "master_sha256_matches_manifest": true,
+      "video_bitstream_identical": true,
+      "decoded_frames_identical": true,
+      "frames": 480,
+      "video_duration_s": 20.0,
+      "audio_codec": "aac",
+      "audio_nonzero_pcm": true,
+      "audio_samples_bytes": 3842048,
+      "measured_integrated_LUFS": -18.17,
+      "measured_true_peak_dBTP": -7.02,
+      "LRA": 0.8
+    }
+  ],
+  "rights": {
+    "base": "36s mathematical sine synthesis; script and measured hash agree; no third-party samples identified in script; no external license claimed",
+    "SFX": "existing whoosh/ping from source3566e5; adjacent README states ffmpeg synthesis placeholders; not external library/Pixabay assets; no formal third-party license inferred"
+  },
+  "quality_limits": [
+    "No personal listening performed; audible-level nonzero track confirmed technically, not subjective mix/pleasantness",
+    "Loudness/true peak from existing loudnorm logs INPUT fields; OUTPUT fields are hypothetical processing, not actual delivered audio",
+    "No new ArcFace or visual inspection needed: encoded video and all decoded frames identical",
+    "Music/SFX do not resolve narration, reading-time pressure, identity-score limitations or voice synchronization",
+    "Marcela narration absent; no current ElevenLabs connector/credit/license verified",
+    "Future calendar pending show/approval; no scheduling or publishing done"
+  ],
+  "verdict": "Technical audio addition and video preservation verified6/6. Suitable to show as music/SFX WITHOUT NARRATION, subject to listening by user; not narration-ready or approved to publish."
+}

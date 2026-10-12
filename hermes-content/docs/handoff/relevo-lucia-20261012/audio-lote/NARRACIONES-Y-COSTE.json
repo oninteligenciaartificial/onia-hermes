@@ -1,0 +1,68 @@
+{
+  "date": "2026-10-12",
+  "total_exact_characters_one_take": 2223,
+  "rows": [
+    {
+      "id": "viernes-v2",
+      "submission_text": "Casi publico esta imagen. Parecido alto. Mirá una foto suya. Misma pose, ventana y taza. Con esa foto, sale más alto. Con las otras siete, baja el parecido. Casi copia: no prueba identidad. Seguime: cada semana, una prueba.",
+      "exact_characters_one_take": 223,
+      "voice": "Marcela(ElevenLabs)decidida;no cambiarvoz porhomónimo deotroproveedor",
+      "actual_cost": "NO COTIZABLE:sinconector/credencial/cupo/planlicenciaactuales verificados",
+      "historical_quota": "381carhasta13oct01:17UTC(documento11oct),NO remanentevigentecomprobado",
+      "actual_budget_verified": false,
+      "generation_submitted": false
+    },
+    {
+      "id": "g2-v2",
+      "submission_text": "¿Quién pierde la cara? Seis clips con la misma orden. Se mide contra ocho fotos suyas. De cero a uno. Mi piso: cero setenta. Kling tres, foto sola: pierde parecido. Seedance Mini, foto sola. Queda bajo el piso. Kling O tres, solo referencias: aguantó. Pero inventó el cuarto. Con referencias, aquí la cara aguantó. Pero el motor inventa la escena. Una toma por clip: es una prueba. Seguime: cada semana, una prueba.",
+      "exact_characters_one_take": 415,
+      "voice": "Marcela(ElevenLabs)decidida;no cambiarvoz porhomónimo deotroproveedor",
+      "actual_cost": "NO COTIZABLE:sinconector/credencial/cupo/planlicenciaactuales verificados",
+      "historical_quota": "381carhasta13oct01:17UTC(documento11oct),NO remanentevigentecomprobado",
+      "actual_budget_verified": false,
+      "generation_submitted": false
+    },
+    {
+      "id": "g3-v2",
+      "submission_text": "Mirá: tres errores que casi publico. Uno: sin letreros, y salió uno. La cara pasó el control, pero el fondo no. Mi regla: mirar también el fondo. Dos: una letra que parece escrita. Ahí no dice nada. Si no se lee, no sirve para publicar. Y tres: una mano le tapa a la otra. Si cruza, no puedo contar dedos. Y yo cuento solo lo que se ve. Reviso cuadro a cuadro antes de publicar. Seguime: cada semana, una prueba.",
+      "exact_characters_one_take": 412,
+      "voice": "Marcela(ElevenLabs)decidida;no cambiarvoz porhomónimo deotroproveedor",
+      "actual_cost": "NO COTIZABLE:sinconector/credencial/cupo/planlicenciaactuales verificados",
+      "historical_quota": "381carhasta13oct01:17UTC(documento11oct),NO remanentevigentecomprobado",
+      "actual_budget_verified": false,
+      "generation_submitted": false
+    },
+    {
+      "id": "g4-v2",
+      "submission_text": "A ver, ¿cuál conserva su cara? Probé la misma orden en 6 motores de imagen. Medí contra 8 fotos suyas. Piso cero setenta: lo elegí yo. Seedream, 1 crédito: la sostiene. Seedream Pro, 2 y medio: justo en el piso. FLUX, el más caro, bajo el piso. Y ojo: pagar más no mejoró el parecido. Fue una toma cada uno: prueba, no regla. Si dos parecidos se rozan, eso ya es ruido. En otra escena, el Kling perdió la cara. Seguime: cada semana, una prueba.",
+      "exact_characters_one_take": 444,
+      "voice": "Marcela(ElevenLabs)decidida;no cambiarvoz porhomónimo deotroproveedor",
+      "actual_cost": "NO COTIZABLE:sinconector/credencial/cupo/planlicenciaactuales verificados",
+      "historical_quota": "381carhasta13oct01:17UTC(documento11oct),NO remanentevigentecomprobado",
+      "actual_budget_verified": false,
+      "generation_submitted": false
+    },
+    {
+      "id": "g5-v2",
+      "submission_text": "¿Cómo sé que sigue siendo ella? Lo mido con un número. Ocho fotos oficiales de ella. Un medidor las compara y da un número de 0 a 1. Idéntica es uno. El piso lo elegí yo. La del café queda bajo el piso: otra persona. Cara chica: el medidor avisa y la reviso a ojo. El mismo clip varía, pero cabe en este margen. El número no ve los letreros inventados. Por eso, mirá la imagen entera. Seguime: cada semana, una prueba.",
+      "exact_characters_one_take": 418,
+      "voice": "Marcela(ElevenLabs)decidida;no cambiarvoz porhomónimo deotroproveedor",
+      "actual_cost": "NO COTIZABLE:sinconector/credencial/cupo/planlicenciaactuales verificados",
+      "historical_quota": "381carhasta13oct01:17UTC(documento11oct),NO remanentevigentecomprobado",
+      "actual_budget_verified": false,
+      "generation_submitted": false
+    },
+    {
+      "id": "p9",
+      "submission_text": "¿La cara o la escena? Misma foto, misma orden. Kling: brillo casi igual, la cara baja un poco. Seedance Mini con referencias: la cara sube, pero el encuadre se acerca y la imagen se oscurece. Una toma cada uno: prueba, no regla. Brillo del cuadro entero: mezcla luz y encuadre. Seguime: cada semana, una prueba.",
+      "exact_characters_one_take": 311,
+      "voice": "Marcela(ElevenLabs)decidida;no cambiarvoz porhomónimo deotroproveedor",
+      "actual_cost": "NO COTIZABLE:sinconector/credencial/cupo/planlicenciaactuales verificados",
+      "historical_quota": "381carhasta13oct01:17UTC(documento11oct),NO remanentevigentecomprobado",
+      "actual_budget_verified": false,
+      "generation_submitted": false
+    }
+  ],
+  "block": "noElevenconnector niELEVENLABS_API_KEY/ELEVEN_API_KEY/ELEVENLABS_KEY;noexponerclave;recurso/puente autorizado y licencia/cupoactual debenaportarse pormadre",
+  "no_spend": true
+}

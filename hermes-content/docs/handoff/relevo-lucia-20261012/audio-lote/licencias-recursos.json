@@ -1,0 +1,143 @@
+{
+  "title": "Lucía CALENDARIO audio asset/license inventory",
+  "source_commit": "3566e5d5208cf4a7bcf20e743469c6088944674c",
+  "configured_model": "Luna low per assignment; runtime not observed; no model used for this filesystem/Git audit",
+  "scope": "Read-only inventory and exact extraction of complete local SFX. No downloads, generation, installation, paid services, or 403 calls.",
+  "inventory_findings": {
+    "usable_existing_audio_with_repo_evidence": "Five complete local synthesized SFX WAVs identified and extracted under recursos/.",
+    "licensed_music_bgm": "No complete BGM file with affirmative license evidence found in the reviewed Lucía/editor-videos/media-use paths. Existing beat1–beat4 MP3s in Lucía reel folder are present in Git, but no matching license/provenance proof identified; excluded from eligible assets.",
+    "pixabay_hyperframes_sfx": "Credits and manifest state commercial/non-commercial use without attribution under Pixabay Content License, but the manifest names 19 cues and local asset directory holds no MP3 binaries. They are not physically available for use in the source tree.",
+    "ffmpeg_synth_sfx": "Five WAVs in editor-videos are described in adjacent README as synthesized using ffmpeg formulas, not library downloads. Repository does not state a distinct license or explicit cross-platform commercial grant for them; report as technically local and provenance-described, not as formally licensed."
+  },
+  "assets": [
+    {
+      "name": "ping.wav",
+      "source_path": ".claude/skills/editor-videos/assets/sfx/ping.wav",
+      "commit": "3566e5d5208cf4a7bcf20e743469c6088944674c",
+      "git_blob_sha1": "9fc1223fce0352c5bfa9b90cadd40d0f72cf0dba",
+      "bytes": 192078,
+      "sha256_measured": "3512d71bce98f15608f51731a2cea9f53c9e443cbc9096bfcf3639f33b508aa4",
+      "format": "pcm_s16le",
+      "sample_rate_hz": 48000,
+      "channels": 2,
+      "duration_seconds": 1.0,
+      "provenance": "The adjacent README states these are generated locally with ffmpeg from noise/sine functions; not sourced from a sound library.",
+      "license_status": "No separate license grant is stated for these generated WAV files in the repository. No third-party source is identified; however a specific cross-platform commercial license is not explicitly documented.",
+      "commercial_use": "No external restrictions identified in provenance; not explicitly granted as a license in repository.",
+      "multiplatform": "No platform-specific restriction documented; explicit multiplatform grant absent.",
+      "attribution": "No attribution source named; no separate attribution requirement documented."
+    },
+    {
+      "name": "pop.wav",
+      "source_path": ".claude/skills/editor-videos/assets/sfx/pop.wav",
+      "commit": "3566e5d5208cf4a7bcf20e743469c6088944674c",
+      "git_blob_sha1": "8df90a3387c6f45ed9ff6f0329acfe0250932e84",
+      "bytes": 38478,
+      "sha256_measured": "605e0b53d168b1f1b956ec035f376e4090a6d4905a69ef5528c283efcaf11a40",
+      "format": "pcm_s16le",
+      "sample_rate_hz": 48000,
+      "channels": 2,
+      "duration_seconds": 0.2,
+      "provenance": "The adjacent README states these are generated locally with ffmpeg from noise/sine functions; not sourced from a sound library.",
+      "license_status": "No separate license grant is stated for these generated WAV files in the repository. No third-party source is identified; however a specific cross-platform commercial license is not explicitly documented.",
+      "commercial_use": "No external restrictions identified in provenance; not explicitly granted as a license in repository.",
+      "multiplatform": "No platform-specific restriction documented; explicit multiplatform grant absent.",
+      "attribution": "No attribution source named; no separate attribution requirement documented."
+    },
+    {
+      "name": "swish.wav",
+      "source_path": ".claude/skills/editor-videos/assets/sfx/swish.wav",
+      "commit": "3566e5d5208cf4a7bcf20e743469c6088944674c",
+      "git_blob_sha1": "7aefd5a4d8f1351cb973a3e3d62e78a7300acd0c",
+      "bytes": 96078,
+      "sha256_measured": "c776191d05097c5f3936f3c36189a0318221dfbf01a5bbce5b8e37b0515dfb04",
+      "format": "pcm_s16le",
+      "sample_rate_hz": 48000,
+      "channels": 2,
+      "duration_seconds": 0.5,
+      "provenance": "The adjacent README states these are generated locally with ffmpeg from noise/sine functions; not sourced from a sound library.",
+      "license_status": "No separate license grant is stated for these generated WAV files in the repository. No third-party source is identified; however a specific cross-platform commercial license is not explicitly documented.",
+      "commercial_use": "No external restrictions identified in provenance; not explicitly granted as a license in repository.",
+      "multiplatform": "No platform-specific restriction documented; explicit multiplatform grant absent.",
+      "attribution": "No attribution source named; no separate attribution requirement documented."
+    },
+    {
+      "name": "thud.wav",
+      "source_path": ".claude/skills/editor-videos/assets/sfx/thud.wav",
+      "commit": "3566e5d5208cf4a7bcf20e743469c6088944674c",
+      "git_blob_sha1": "78e6ec147762f106b3337be84ea4ba5a779db5db",
+      "bytes": 105678,
+      "sha256_measured": "69f9d6b20d8cfffdf96ac3ddaafffe8ee79cc59f03cb9e42bc681c584e7d1712",
+      "format": "pcm_s16le",
+      "sample_rate_hz": 48000,
+      "channels": 2,
+      "duration_seconds": 0.55,
+      "provenance": "The adjacent README states these are generated locally with ffmpeg from noise/sine functions; not sourced from a sound library.",
+      "license_status": "No separate license grant is stated for these generated WAV files in the repository. No third-party source is identified; however a specific cross-platform commercial license is not explicitly documented.",
+      "commercial_use": "No external restrictions identified in provenance; not explicitly granted as a license in repository.",
+      "multiplatform": "No platform-specific restriction documented; explicit multiplatform grant absent.",
+      "attribution": "No attribution source named; no separate attribution requirement documented."
+    },
+    {
+      "name": "whoosh.wav",
+      "source_path": ".claude/skills/editor-videos/assets/sfx/whoosh.wav",
+      "commit": "3566e5d5208cf4a7bcf20e743469c6088944674c",
+      "git_blob_sha1": "3e1288a17f5fae35813546b6ec9735f981281cfd",
+      "bytes": 115278,
+      "sha256_measured": "26d8524eec74590edc3d6fdc6dddfc97abda03dc7cb2542f87c2a500011d196c",
+      "format": "pcm_s16le",
+      "sample_rate_hz": 48000,
+      "channels": 2,
+      "duration_seconds": 0.6,
+      "provenance": "The adjacent README states these are generated locally with ffmpeg from noise/sine functions; not sourced from a sound library.",
+      "license_status": "No separate license grant is stated for these generated WAV files in the repository. No third-party source is identified; however a specific cross-platform commercial license is not explicitly documented.",
+      "commercial_use": "No external restrictions identified in provenance; not explicitly granted as a license in repository.",
+      "multiplatform": "No platform-specific restriction documented; explicit multiplatform grant absent.",
+      "attribution": "No attribution source named; no separate attribution requirement documented."
+    }
+  ],
+  "relevant_source_docs": [
+    {
+      "path": ".claude/skills/editor-videos/assets/sfx/README.md",
+      "git_blob_sha1": "26db90febdda2de19ecd9fcada36df66e2844cee",
+      "bytes": 3576,
+      "sha256_measured": "065e467b9e5869b176a3ae7d695f10e955a9dacfb3bc57034ec676ffe8413cf7"
+    },
+    {
+      "path": ".claude/skills/media-use/audio/assets/sfx/CREDITS.md",
+      "git_blob_sha1": "750d6e83934164d6cb38f6cc96269104dc4695b4",
+      "bytes": 1183,
+      "sha256_measured": "79590c7738b0427b10f362f76b02cfd2643158a40e1d5fd787f9ac6b33bcf4ce"
+    },
+    {
+      "path": ".claude/skills/media-use/audio/assets/sfx/manifest.json",
+      "git_blob_sha1": "7db0ad7ca58f8ebcebb813a253c47b039ef2b9ec",
+      "bytes": 3721,
+      "sha256_measured": "1b1aae06c6e25412e1d217ebf1e646a0ed36410c0fcad11acdb8f5d5e5b7dc10"
+    },
+    {
+      "path": ".claude/skills/media-use/audio/references/bgm.md",
+      "git_blob_sha1": "e4e542ed4e196c781287f7e32365edc9e24f4694",
+      "bytes": 7506,
+      "sha256_measured": "bba68e1171577574d833738927e1f1447ba974dba5690690bc23ee439c253a8e"
+    }
+  ],
+  "music_candidates_excluded": [
+    {
+      "path": "hermes-content/references/modelos/lucia/reel-lanzamiento-20260822/audio/beat1.mp3",
+      "status": "binary exists but no license or provenance document located in reviewed project paths; not marked cleared"
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/reel-lanzamiento-20260822/audio/beat2.mp3",
+      "status": "binary exists but no license or provenance document located in reviewed project paths; not marked cleared"
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/reel-lanzamiento-20260822/audio/beat3.mp3",
+      "status": "binary exists but no license or provenance document located in reviewed project paths; not marked cleared"
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/reel-lanzamiento-20260822/audio/beat4.mp3",
+      "status": "binary exists but no license or provenance document located in reviewed project paths; not marked cleared"
+    }
+  ]
+}
