@@ -1,0 +1,50 @@
+# Recepción final Lucía — hashes y validación
+
+- Commit fuente: `3566e5d5208cf4a7bcf20e743469c6088944674c`
+- Commit exportación: `e60e62b7632ddb134c9ddab747d19aea74a4e92b`
+
+## Entregas locales: 13 archivos
+- `HANDOFF-Lucia-2026-10-11.txt` — 7631 B; SHA-256 `3cf575a5a8ffbf1139ed7c080a05c852200e7e5d8bde57417722471a76785f2f`; blob `156e8b66b6df219512ff3d715301b06e6cf6eebd`; tamaño/SHA/blob manifiesto: True/True/True; commit exportación: True
+- `Lucia-viernes-v2-revision.zip` — 509863 B; SHA-256 `abd35779525d2d3abdd39246fc71985f61319c7c547e761f67ffd67fcbe88e19`; blob `7fc8633121e99516b9f9befc0714012963d5a97c`; tamaño/SHA/blob manifiesto: True/True/True; commit exportación: True
+- `lucia-review/REVISION.txt` — 3594 B; SHA-256 `3c3495d275e29e5fcb7bfc104c3f79bbaf8939a0835434a13c64710340c499b4`; blob `c35a839c72e7b14e72b46cbd4fe7046abbbc5ccc`; tamaño/SHA/blob manifiesto: True/True/True; commit exportación: True
+- `lucia-review/contacto-2fps.jpg` — 215835 B; SHA-256 `0f896585b36468a3239057dadb3b1b6b6000bcfa89aeb05ca437b42a3941bdad`; blob `581b8d97d679a676cb309fbcd3f05fd1a3388cb7`; tamaño/SHA/blob manifiesto: True/True/True; commit exportación: True
+- `lucia-review/contacto-2fps.jpg.b64` — 287780 B; SHA-256 `c2935d5924aaef73b0baa513fd0aa46deac23dc22d88ee574007ce3bf6b27806`; blob `413b9d9d9050edd22c323af7c1d9f2c03205bb63`; tamaño/SHA/blob manifiesto: True/True/True; commit exportación: True
+- `lucia-review/pie.txt` — 2141 B; SHA-256 `0df25764f8eb0ec4c7f17d883361c10b85082502e69e62d12b42d65ad55450ca`; blob `b3cdf0d10316c4091077ddd914cd2bca0030dabc`; tamaño/SHA/blob manifiesto: True/True/True; commit exportación: True
+- `lucia-review/qa-01.png` — 239757 B; SHA-256 `5d7dc42da07b77019ddeab79386056abe801df671c08d1444541d163275948ca`; blob `0ff188d7849ebe441e1f0c2a5ffa5e0e8a0e2e6d`; tamaño/SHA/blob manifiesto: True/True/True; commit exportación: True
+- `lucia-review/qa-02.png` — 205241 B; SHA-256 `b810134c8997bf96dd141baf5d4c84045406216b08e8bbfe964e43baac8e3d22`; blob `78a8a64aa68aa26330b7aacfc1dbfc843fe78a03`; tamaño/SHA/blob manifiesto: True/True/True; commit exportación: True
+- `lucia-review/qa-03.png` — 299299 B; SHA-256 `d3ac92abc95c2955be85491d2f677e95dbaaca4f3492b074cf2cb8dd3785b330`; blob `0acc2da2cd9b8ba9c2f7fc7b42ec4071518d655c`; tamaño/SHA/blob manifiesto: True/True/True; commit exportación: True
+- `lucia-review/qa-04.png` — 307139 B; SHA-256 `fb2d777200410dbeb769ef44e8cdd37e31c19db01e880f1fa556d56a8a1b26cd`; blob `a4e84dde7bcdda527f0d28e99d91b1e018634746`; tamaño/SHA/blob manifiesto: True/True/True; commit exportación: True
+- `lucia-review/viernes-preview-360p.mp4` — 315910 B; SHA-256 `d5078617731892da21ed3fc610a217c213f3fe9127cd58e3e677b4d1e7b39ad3`; blob `f1bb15f38c9c65049752d4608b68d13c8bee08f9`; tamaño/SHA/blob manifiesto: True/True/True; commit exportación: True
+- `lucia-review/viernes-preview-360p.mp4.b64` — 420000 B; SHA-256 `5c6a575ee0aef957d8d285d5f44fc25c86b4792dce28f603ecea076cb223d9bf`; blob `42fe037fa0d3c4ee3f3699a183146345137e8e4e`; tamaño/SHA/blob manifiesto: True/True/True; commit exportación: True
+- `library-helper/library_file_transfer.py` — 11085 B; SHA-256 `5c81478cd94a59d721a1677d0bd36f7cec23c18a21b48740b1c9ff94d27fb26f`; blob `2cfdc608dc4d2ce681ad355ec5d86f7f33dbcbc4`; tamaño/SHA/blob manifiesto: True/True/True; commit exportación: True
+
+## Proyecto original: 134 archivos
+- Coinciden completos con blob del commit fuente: 134/134
+- Manifiesto completo verificado: True
+
+## Master
+- 2983672 B; SHA-256 medido `c4299c7b21c7b05cc41181176d8908429b9752d4422c9cc9275964dd64393aa4`; documentado `c4299c7b21c7b05cc41181176d8908429b9752d4422c9cc9275964dd64393aa4`.
+- Git blob medido `76db69a4a033cf9cf9792f0d1cc57688efac061f` = commit fuente `76db69a4a033cf9cf9792f0d1cc57688efac061f`; byte igual: True.
+
+## ZIP revisión
+- `export/hermes-content/docs/handoff/relevo-lucia-20261012/artifacts/Lucia-viernes-v2-revision.zip` — 509863 B, SHA-256 `abd35779525d2d3abdd39246fc71985f61319c7c547e761f67ffd67fcbe88e19`, 4 miembros.
+- CRC `testzip`: None; índice válido y miembros iguales a entregas individuales: True.
+- `viernes-preview-360p.mp4` — 315910 B; CRC32 `5e32e0d3`; archivo individual idéntico: True.
+- `contacto-2fps.jpg` — 215835 B; CRC32 `8e5e3606`; archivo individual idéntico: True.
+- `REVISION.txt` — 3594 B; CRC32 `6ee123c1`; archivo individual idéntico: True.
+- `pie.txt` — 2141 B; CRC32 `66f1cf10`; archivo individual idéntico: True.
+
+## Base64 vs binarios
+- `export/hermes-content/docs/handoff/relevo-lucia-20261012/artifacts/lucia-review/contacto-2fps.jpg.b64` decodifica a 215835 B; coincide byte por byte con `export/hermes-content/docs/handoff/relevo-lucia-20261012/artifacts/lucia-review/contacto-2fps.jpg`: True; SHA-256 `0f896585b36468a3239057dadb3b1b6b6000bcfa89aeb05ca437b42a3941bdad`.
+- `export/hermes-content/docs/handoff/relevo-lucia-20261012/artifacts/lucia-review/viernes-preview-360p.mp4.b64` decodifica válidamente a 315000 B y coincide con el prefijo binario; el preview binario tiene 315910 B, así que faltan 910 B al final. ffprobe reconoce metadata/duración (15 s) del parcial, pero no es una copia completa. SHA-256 del parcial: `0240b75cc84da2819dec1370e937e7e3b1b9e007078cdcc5ffa4a359f07d49e0`.
+
+## Entradas originales faltantes
+- K4 Kling O1 Image: blob en commit fuente=None; ausente en árbol Git confirmado=False. PNG ignorado en Git y no materializado por este lote; modelo/identidad no regenerar. Fuente exacta job, recuperar con conexión autorizada del sustituto
+- R3_casi_frontal.png: blob en commit fuente=None; ausente en árbol Git confirmado=True. Original ignorado en Git/no materializado; usar entrega renderizada existente, no reconstruir cara
+
+## Multimedia (medición previa, sin render)
+- Master y preview recibidos ya fueron decodificados completamente por ffmpeg exit 0; ambos 15 s. Master 1080×1920 H.264 y AAC silenciosa: mean/max −91 dB, silencio reportado 15.018667 s. Preview 360×640 H.264, sin pista de audio.
+- Inventario previo: 136 archivos en `/workspace/work/lucia-recepcion/git`; ZIP en esa raíz: 0. No se añadieron los archivos extraídos de exportación a ese inventario.
+
+## Readback de exportación
+- Commit original de transferencia: `c774bc11580ca1dd0c41a51f96efbe8db99cd1e4`; readback documenta 13/13 local artifacts verificados. Commit de registro de readback: `e60e62b7632ddb134c9ddab747d19aea74a4e92b`. El readback declara que la recepción en destino nativo no fue observada por este worker.

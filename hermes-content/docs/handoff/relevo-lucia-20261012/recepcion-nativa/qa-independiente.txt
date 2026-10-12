@@ -1,0 +1,63 @@
+QA independiente de Lucía viernes v2 — 12-oct-2026
+
+CIERRE VIGENTE (ampliación final solicitada por la madre)
+Inspeccionados visualmente 360/360 cuadros consecutivos, n=0..359, en diez hojas de 36 imágenes, cada imagen 180x320: qa-visual/secuencia-01..10.jpg. Todas las diez hojas fueron abiertas con view_image y leídas en orden de izquierda a derecha, arriba abajo. Es inspección de fotogramas en secuencia, NO reproducción audiovisual continua. La muestra de 46 cuadros más abajo queda como primera pasada histórica, superada en cobertura temporal.
+Se amplió además n=66,142,188 a 1080x1920 (qa-visual/ampliado-01..03.png) para comprobar entrada de comparación, paso de etiquetas a cifra y salida de comparación. Se conservan las seis vistas completas y cambios ampliados de la primera pasada.
+Resultado: 0 ALTA detectadas en inspección temporal completa; sin cuadros completamente negros, pérdidas de cara de cuadro completo ni tarjetas accidentales observadas. Los empujes muestran las escenas desplazándose parcialmente durante pocos cuadros (incluyen texto saliente cortado por el borde); corresponde a transición existente, no lectura estable. En n=142 ya se observa la cifra nueva, con las etiquetas previas retiradas. No se agrega exigencia de render ni cambio creativo.
+La cara permanece visible durante la secuencia; el rótulo de IA está en la apertura, no durante toda la pieza. Texto/legibilidad de estados estables corroborados en nueve vistas a resolución completa. Esta inspección no certifica identidad ArcFace nueva ni lectura a velocidad real de usuario; faltan originales K4/R3 para comparar de nuevo.
+Audio: media-pruebas-final.txt informa decodificación completa exit0 y pista AAC mean/max -91dB, silencio 15.018667s; registro leído, no escucha personal ni medición repetida por este agente.
+
+RECEPCIÓN — VERIFICACIÓN INDEPENDIENTE NUEVA
+Leídos export/hermes-content/docs/handoff/relevo-lucia-20261012/MANIFEST.json y media-pruebas-final.txt; fuente3566e5, exportación e60e62b7632ddb134c9ddab747d19aea74a4e92b.
+Se recalcularon con Python estándar tamaño+SHA256 de los 13 artefactos locales: 13/13 coinciden con MANIFEST. Se recalcularon tamaño+Git blob SHA1 de los 134 archivos del proyecto original exportado: 134/134 coinciden. El master se midió separadamente en esta QA y coincide con su SHA256 documentado.
+Preview binario completo:315910bytes, SHA256 d5078617731892da21ed3fc610a217c213f3fe9127cd58e3e677b4d1e7b39ad3. La copia .b64 decodifica a315000bytes y coincide exactamente con el prefijo del MP4: faltan910bytes. Esta diferencia existe ya en el artefacto origen preservado y no invalida el MP4 binario íntegro; no usar ni declarar completa la copia base64. No se reparó ni reemplazó.
+Recepción verificable del lote exportado y master: completada. Los originales K4/R3 que nunca formaron parte del lote recibido siguen faltando; no impiden revisar/preservar el master existente, sí impiden certificar una nueva comparación de identidad/render reproducible. No se regeneraron.
+Conclusión vigente: recuperación y QA temporal del master existente cerradas con los límites arriba. Apto para mostrar como viernes v2 mudo; no permiso de publicar. Estado de aprobación, voz, calendario e Instagram sigue pendiente como se detalla abajo.
+
+META: revisar el master recuperado, texto y trazabilidad sin renderizar, regenerar, instalar, gastar ni publicar.
+PRUEBA: hash medido, ffprobe, cuadros extraídos del master vistos con view_image y contraste de documentación.
+PARADA: informe recuperable con cobertura y límites; aprobación, voz y calendario fuera de alcance.
+Agente: /root/lucia_qa, independiente del autor. Modelo pedido por contrato: Sol medium; no se modificó el modelo. Modelo efectivo no observable por herramienta en esta pasada.
+
+FUENTE
+Repo oninteligenciaartificial/onia-hermes.
+Fuente de piezas: claude/zealous-babbage-fvtjck @3566e5d5208cf4a7bcf20e743469c6088944674c.
+Instrucciones leídas por GitHub: codex/cloud-pc-audit-20261011 @ed3ffa047f3bf2a99cbfd8ede5a230359932b164. La madre reporta recuperación posterior de auditoría @154e1a15; este QA no le atribuye una lectura nueva.
+Manifest real: videos/lucia-entrega/README.md. La ruta hermes-content/videos/lucia-entrega/README.md devolvió 404; no implica pérdida de entrega.
+
+PRUEBAS NUEVAS REALES
+sha256sum del binario local: c4299c7b21c7b05cc41181176d8908429b9752d4422c9cc9275964dd64393aa4, coincide con manifest y qa/sha-master.txt.
+ffprobe: H.264, 1080x1920, 24/1 fps, 360 cuadros, AAC, 15.000000 s, 2983672 bytes.
+Archivo: /workspace/work/lucia-recepcion/git/videos/lucia-entrega/viernes-copia-v2-final-1080x1920.mp4.
+
+COBERTURA VISUAL
+Muestra uniforme exacta cada 12 cuadros: n=0,12,...348 (30 de 360), en qa-visual/muestra-30.jpg. Se vio toda la hoja con view_image.
+Se vieron a tamaño completo los cuadros 0,130,200,247,299,359: qa-visual/cuadro-01..06.png. Incluye inicio, comparación, cifra, cambios y último cuadro.
+Se vio además una hoja de cambios cuadro por cuadro n=246..252 y 298..305, qa-visual/transiciones.jpg.
+Total 46 cuadros únicos de 360 (12,8 %), distribuidos entre 0 y 14,958 s; 6 vistas a resolución completa. No se vio reproducción continua ni se escuchó el audio. No se afirma haber visto el 100 % del video.
+
+HALLAZGOS VISUALES
+0 ALTA en la cobertura observada; resultado apto para mostrar bajo esta cobertura, no permiso de publicar.
+El primer cuadro declara claramente «Lucía Antelo · personaje IA de Onia». El rótulo desaparece tras la apertura: ya documentado, se preserva como límite; no se afirma que esté durante todo el video.
+Cara visible en todas las muestras observadas; en la comparación ambas caras quedan descubiertas. No se identificó ocultamiento por texto. No se reejecutó ArcFace ni se certifica identidad biométrica nueva.
+Texto legible en las seis vistas completas, buen contraste con las placas oscuras; sin recortes de palabras observados. En las miniaturas también se distingue la jerarquía. No se simuló interfaz Instagram, teléfono ni velocidad de lectura humana.
+Una idea central por pantalla/beat: error 0,83; comparación de escena; 0,93 con la foto de entrada; 0,56–0,73 con las otras siete; casi copia no prueba identidad; CTA único. La escena comparativa usa etiquetas auxiliares y la frase «Misma pose, ventana, taza», que pertenecen a la misma idea.
+Cambios 246..252 y 298..305: la placa saliente pierde opacidad y la siguiente entra sin una superposición ilegible observada; breve semitransparencia de transición. Último cuadro 359 conserva CTA completo y cara visible.
+No se observan profesión médica, pacientes, consultorio, testimonio ni promesa de resultado. El ambo se ve como vestuario; el contenido explica una prueba de imagen.
+La escena de comparación deja franjas oscuras grandes arriba/abajo; decisión compositiva existente, no fallo detectado que requiera regeneración.
+
+QA TEXTUAL/DOCUMENTAL
+qa/pantalla.txt coincide con los textos observados en la muestra: declara IA, Kling O1 Image, una sola toma, comparación foto por foto y «Seguime: cada semana, una prueba».
+Pie v2 leído: 2110 caracteres sin salto final; abre declarando IA. Incluye una escena/una toma, no copia pixel por pixel, piso elegido 0,70, sesgo de entradas, prueba estricta de cuatro referencias, ruido +/-0,03, cara 677 px y no recomendación pagada. No sustituir por pie v1.1, que menciona un gráfico retirado.
+qa/RESUMEN-gates.txt guarda 22 exit 0. qa/qa-tabla.md guarda 10 tests, 0 bajo piso, caras 237..479 px, centroides 0,818..0,833. Son registros históricos leídos, no gates ni mediciones reejecutados por este QA.
+README dice verificador haiku 11/11 sobre master anterior y controles repetidos por sesión autora sobre el vigente. No certificar 11/11 independiente del SHA vigente basándose solo en ese resumen.
+
+APROBACIÓN Y CALENDARIO
+Estado documental vigente: LISTA PARA MOSTRAR, mudo. No consta «mostrada, publicá el viernes».
+Propuesta: viernes 16-oct 19:00 La Paz /23:00 UTC; G3 30-oct; P9 6-nov. Cola mantiene pendiente confirmar cambio. No tratar calendario como autorización.
+Voz de 223 caracteres solo estimada; no existe y requiere autorización/cupo antes de generar. Cualquier mezcla futura cambia SHA y requiere QA del nuevo master.
+G4/G5 v2 y C1 existen: no regenerados ni modificados en esta tarea. Validación de guiones del 10-oct menciona G4/G5 v1, superadas; no usarla como aprobación de v2.
+
+LÍMITES Y SIGUIENTE
+Verificación nueva del binario y QA visual parcial ahora completadas; sustituyen el bloqueo previo de ausencia de medios. Publicación, duplicados de cuenta, token, etiqueta is_ai_generated, acceso Work y permiso/calendario siguen sin verificarse en esta pasada.
+La madre puede mostrar el master y pie exactos verificados. No se publica ni se genera voz por inferencia de esta QA.

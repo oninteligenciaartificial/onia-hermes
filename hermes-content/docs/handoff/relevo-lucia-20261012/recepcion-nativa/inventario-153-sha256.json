@@ -1,0 +1,1221 @@
+[
+  {
+    "path": "MANIFEST.json",
+    "bytes": 103439,
+    "sha256": "4b42faadce5de5e764a525bd057e95703564a6320d660b1df3aa407b67909c72",
+    "blob_sha1": "16f2d151a34ff3425b82bfd10966b5f34d4e96e8",
+    "export_blob_match": true,
+    "parse": "JSON_OK"
+  },
+  {
+    "path": "READBACK.json",
+    "bytes": 779,
+    "sha256": "4924df43fbaf4117d29c0d344af42b992ffca5df6081e858c7e5757757a62ac7",
+    "blob_sha1": "a2eedd702913fc5abadd6d88e23cf7dbdf0e0e32",
+    "export_blob_match": true,
+    "parse": "JSON_OK"
+  },
+  {
+    "path": "artifacts/HANDOFF-Lucia-2026-10-11.txt",
+    "bytes": 7631,
+    "sha256": "3cf575a5a8ffbf1139ed7c080a05c852200e7e5d8bde57417722471a76785f2f",
+    "blob_sha1": "156e8b66b6df219512ff3d715301b06e6cf6eebd",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "artifacts/Lucia-viernes-v2-revision.zip",
+    "bytes": 509863,
+    "sha256": "abd35779525d2d3abdd39246fc71985f61319c7c547e761f67ffd67fcbe88e19",
+    "blob_sha1": "7fc8633121e99516b9f9befc0714012963d5a97c",
+    "export_blob_match": true
+  },
+  {
+    "path": "artifacts/library-helper/library_file_transfer.py",
+    "bytes": 11085,
+    "sha256": "5c81478cd94a59d721a1677d0bd36f7cec23c18a21b48740b1c9ff94d27fb26f",
+    "blob_sha1": "2cfdc608dc4d2ce681ad355ec5d86f7f33dbcbc4",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "artifacts/lucia-review/REVISION.txt",
+    "bytes": 3594,
+    "sha256": "3c3495d275e29e5fcb7bfc104c3f79bbaf8939a0835434a13c64710340c499b4",
+    "blob_sha1": "c35a839c72e7b14e72b46cbd4fe7046abbbc5ccc",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "artifacts/lucia-review/contacto-2fps.jpg",
+    "bytes": 215835,
+    "sha256": "0f896585b36468a3239057dadb3b1b6b6000bcfa89aeb05ca437b42a3941bdad",
+    "blob_sha1": "581b8d97d679a676cb309fbcd3f05fd1a3388cb7",
+    "export_blob_match": true,
+    "image_decode_exit": 0
+  },
+  {
+    "path": "artifacts/lucia-review/contacto-2fps.jpg.b64",
+    "bytes": 287780,
+    "sha256": "c2935d5924aaef73b0baa513fd0aa46deac23dc22d88ee574007ce3bf6b27806",
+    "blob_sha1": "413b9d9d9050edd22c323af7c1d9f2c03205bb63",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "artifacts/lucia-review/pie.txt",
+    "bytes": 2141,
+    "sha256": "0df25764f8eb0ec4c7f17d883361c10b85082502e69e62d12b42d65ad55450ca",
+    "blob_sha1": "b3cdf0d10316c4091077ddd914cd2bca0030dabc",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "artifacts/lucia-review/qa-01.png",
+    "bytes": 239757,
+    "sha256": "5d7dc42da07b77019ddeab79386056abe801df671c08d1444541d163275948ca",
+    "blob_sha1": "0ff188d7849ebe441e1f0c2a5ffa5e0e8a0e2e6d",
+    "export_blob_match": true,
+    "image_decode_exit": 0
+  },
+  {
+    "path": "artifacts/lucia-review/qa-02.png",
+    "bytes": 205241,
+    "sha256": "b810134c8997bf96dd141baf5d4c84045406216b08e8bbfe964e43baac8e3d22",
+    "blob_sha1": "78a8a64aa68aa26330b7aacfc1dbfc843fe78a03",
+    "export_blob_match": true,
+    "image_decode_exit": 0
+  },
+  {
+    "path": "artifacts/lucia-review/qa-03.png",
+    "bytes": 299299,
+    "sha256": "d3ac92abc95c2955be85491d2f677e95dbaaca4f3492b074cf2cb8dd3785b330",
+    "blob_sha1": "0acc2da2cd9b8ba9c2f7fc7b42ec4071518d655c",
+    "export_blob_match": true,
+    "image_decode_exit": 0
+  },
+  {
+    "path": "artifacts/lucia-review/qa-04.png",
+    "bytes": 307139,
+    "sha256": "fb2d777200410dbeb769ef44e8cdd37e31c19db01e880f1fa556d56a8a1b26cd",
+    "blob_sha1": "a4e84dde7bcdda527f0d28e99d91b1e018634746",
+    "export_blob_match": true,
+    "image_decode_exit": 0
+  },
+  {
+    "path": "artifacts/lucia-review/viernes-preview-360p.mp4",
+    "bytes": 315910,
+    "sha256": "d5078617731892da21ed3fc610a217c213f3fe9127cd58e3e677b4d1e7b39ad3",
+    "blob_sha1": "f1bb15f38c9c65049752d4608b68d13c8bee08f9",
+    "export_blob_match": true
+  },
+  {
+    "path": "artifacts/lucia-review/viernes-preview-360p.mp4.b64",
+    "bytes": 420000,
+    "sha256": "5c6a575ee0aef957d8d285d5f44fc25c86b4792dce28f603ecea076cb223d9bf",
+    "blob_sha1": "42fe037fa0d3c4ee3f3699a183146345137e8e4e",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-master/viernes-copia-v2-final-1080x1920.mp4",
+    "bytes": 2983672,
+    "sha256": "c4299c7b21c7b05cc41181176d8908429b9752d4422c9cc9275964dd64393aa4",
+    "blob_sha1": "76db69a4a033cf9cf9792f0d1cc57688efac061f",
+    "export_blob_match": true
+  },
+  {
+    "path": "original-project/.gitignore",
+    "bytes": 249,
+    "sha256": "4682ce5db64cea5e9378ef1be93a87eb30344b53c705208f5b91809fdcdb5bd4",
+    "blob_sha1": "0c41c8261efdd45d11407f615427c5adea394810",
+    "export_blob_match": true
+  },
+  {
+    "path": "original-project/README.md",
+    "bytes": 38573,
+    "sha256": "73d966e72674506e59a7138b571060ceeb49a932dce8107edbe2f9d1efa54920",
+    "blob_sha1": "bc67a6a54b95a9eec22b95b784aba510325f0bdd",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/assets-fijos/vendor/gsap.min.js",
+    "bytes": 72779,
+    "sha256": "c174bfce53a729418d57a8ad8625e7247c793a22fef8e2851e3cfa3de9cd8280",
+    "blob_sha1": "fde57af06cc445f47ca2a6fc1232ec04666346d4",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/guion-voz.txt",
+    "bytes": 226,
+    "sha256": "b81303f1f3fa3956d7fd6d16b2645dfad820364a941f0c07b4eeda48a2920077",
+    "blob_sha1": "0503231ef13f0359c01b9082450d8f0588085aba",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/hyperframes.json",
+    "bytes": 319,
+    "sha256": "64e41839ac1f4fcd97df81c05b4d66356734e2b149cfbedaedf626fbcde0c387",
+    "blob_sha1": "c8eb6935a71db89fe32d28523948f2c18e876d9f",
+    "export_blob_match": true,
+    "parse": "JSON_OK"
+  },
+  {
+    "path": "original-project/index.html",
+    "bytes": 17096,
+    "sha256": "ead44ac7db43997c96aeb7599d8ab9e9328791c0a51a64f3f8bd8931f67a8eb9",
+    "blob_sha1": "d23bb982eeef2542ac0f8bd7ab10594e4d919586",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/package.json",
+    "bytes": 198,
+    "sha256": "31014ab28a574d83331f98cd9a5f28d15a4d3bb1645d4b9f88f560758c325fda",
+    "blob_sha1": "41330f84c721dd72f4c69b5555879ac861df3377",
+    "export_blob_match": true,
+    "parse": "JSON_OK"
+  },
+  {
+    "path": "original-project/pie.txt",
+    "bytes": 2140,
+    "sha256": "2bce2da8bb3f0b5098aaee2ff26041bda1fde5814fa86eb6b4c5a25444e6b6f9",
+    "blob_sha1": "feabf97d6b2cb30184f08388fcf0304866427f13",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/plan.json",
+    "bytes": 9891,
+    "sha256": "0167bcdb1d0851e2adec723c4d2c4f031aaccbc96bdfeb920f82eb2a52df3559",
+    "blob_sha1": "94cdb65d9c57e81940bc910a59561cdb30731ce4",
+    "export_blob_match": true,
+    "parse": "JSON_OK"
+  },
+  {
+    "path": "original-project/qa/RESUMEN-gates.txt",
+    "bytes": 924,
+    "sha256": "2de35d5554fa6f9f274c076eabf843271827dc8112cd22db308beffbfc208415",
+    "blob_sha1": "241d0af89a3064d077e11191f375f57279de1ab8",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/aac-silencio.txt",
+    "bytes": 1824,
+    "sha256": "ce2ecd5b4485d5e80e71949269652843721b8c946f48a8e040702ffd2ebe93fe",
+    "blob_sha1": "cd36c8b7a2d8ea9f4057db156f8b82cf3ebf9afb",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/aire-pixeles.txt",
+    "bytes": 103,
+    "sha256": "1bdbf1dfabe2ac23fa2b15a0e110e4a5de08d7572be3512cdee08e767f7533df",
+    "blob_sha1": "9ef9604f23623dc6f25287693f2088b4c9ce7015",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/aire.txt",
+    "bytes": 207,
+    "sha256": "d2527c85ae3502aef523c9ab0cd41c2a4eac29a34358900f46a9b5616867a5ab",
+    "blob_sha1": "b0075f7b36363160fe4e9747e76c6e5138776fc9",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/alineacion-voz.txt",
+    "bytes": 1289,
+    "sha256": "9e4534eeae2566018cb6e87b6186b1a7efa7db2c8594a56a45676cc2bc70f0c3",
+    "blob_sha1": "c5075a7e29842d8d3fdbe40d6ce233a1e77efc11",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/arcface-final.txt",
+    "bytes": 820,
+    "sha256": "39ab79431000c12de42ce25e33a6993f5830357ddfb5b66a9768b20137369225",
+    "blob_sha1": "3d92e832d88acc2205c87b16d2a45e99ee86f1a7",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/arcface-pares.json",
+    "bytes": 9211,
+    "sha256": "765d23cf7189d38daa15c372878aba97ceccc379861b14df0026d32667ec5bc2",
+    "blob_sha1": "7b730d3204eeb1c0dbfd8a18be153ca4a6566407",
+    "export_blob_match": true,
+    "parse": "JSON_OK"
+  },
+  {
+    "path": "original-project/qa/arcface-pares.txt",
+    "bytes": 1474,
+    "sha256": "94e3739c26845b58cb4d3f34f7e3415572605757e2f4c8797109b77ab87a53b2",
+    "blob_sha1": "0802712e046107fe01a151d32cd7ce2d29b81923",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/build-status.json",
+    "bytes": 4157,
+    "sha256": "f80883c6f6cce4ed54c960702ddc1148c0720258650d4c61b9886b39b6e70cf1",
+    "blob_sha1": "d75aafa0a53bb1bff2431586d4cb7c5f4fe366ae",
+    "export_blob_match": true,
+    "parse": "JSON_OK"
+  },
+  {
+    "path": "original-project/qa/cara-visible.json",
+    "bytes": 10048,
+    "sha256": "452ce17ea79733b4c7cf482936dfbc2958e51b55fdb9de3783d6c7eb67e49a81",
+    "blob_sha1": "0ef4e09f20b76bcf9e49509d1d0b74393a107806",
+    "export_blob_match": true,
+    "parse": "JSON_OK"
+  },
+  {
+    "path": "original-project/qa/cara-visible.txt",
+    "bytes": 1104,
+    "sha256": "67e1b0e615157446b4266bc8b7f3d920a532055ba5860e908ab0ba1ff1ed6702",
+    "blob_sha1": "962adf6ab45e8b38c0a1d07675d16019d169894c",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/caras-fotos.json",
+    "bytes": 947,
+    "sha256": "2a3fea9fe46eac84ed884a68c1a1f312e29ccd29217f671dec543d2832c90678",
+    "blob_sha1": "08b7d53ce22113e9d34e1bca8e952db2cb591072",
+    "export_blob_match": true,
+    "parse": "JSON_OK"
+  },
+  {
+    "path": "original-project/qa/caras-lienzo.json",
+    "bytes": 368,
+    "sha256": "bb79c746dcbb06ce69b3aff736ab5ac6bdf3743e4f201087bc870eff514366b0",
+    "blob_sha1": "abe4a93e0e4cef5fb5a90d31a0d3610a6543eec1",
+    "export_blob_match": true,
+    "parse": "JSON_OK"
+  },
+  {
+    "path": "original-project/qa/contacto-2fps-1.jpg",
+    "bytes": 186965,
+    "sha256": "b6124ee7b5e48e6d83aebee214c748b2b936e3af486ed87d1f0d3cfd9b810ca9",
+    "blob_sha1": "bf328cac0a2608e4c14a8b828567a50996d3702e",
+    "export_blob_match": true,
+    "image_decode_exit": 0
+  },
+  {
+    "path": "original-project/qa/contacto-2fps-2.jpg",
+    "bytes": 202590,
+    "sha256": "fca5c008a647a2708f974c9932cad8ef8055dbf127142075f51dfb738f4008c8",
+    "blob_sha1": "06573a2f38b6561df732d65d3f0c2166987d2ea2",
+    "export_blob_match": true,
+    "image_decode_exit": 0
+  },
+  {
+    "path": "original-project/qa/contacto-2fps-3.jpg",
+    "bytes": 250389,
+    "sha256": "094ce87df8c2d91ef49d9d57c9eb0322feb692d85f4578dd3be85c3b9a78ba0b",
+    "blob_sha1": "82396873e745ae4fa5867275e432b920cda126f9",
+    "export_blob_match": true,
+    "image_decode_exit": 0
+  },
+  {
+    "path": "original-project/qa/contacto-2fps.jpg",
+    "bytes": 215835,
+    "sha256": "0f896585b36468a3239057dadb3b1b6b6000bcfa89aeb05ca437b42a3941bdad",
+    "blob_sha1": "581b8d97d679a676cb309fbcd3f05fd1a3388cb7",
+    "export_blob_match": true,
+    "image_decode_exit": 0
+  },
+  {
+    "path": "original-project/qa/costuras.txt",
+    "bytes": 254,
+    "sha256": "62f528d018562b8dd55667e253d7d3baeb6c5a5fdd2d5d94e3851fbd69c712c9",
+    "blob_sha1": "55ffae1afeb45dae2c9be37d16409b5f00a2562c",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/cuadros/f0.jpg",
+    "bytes": 218205,
+    "sha256": "df3323747b7ad762e1cedd9bf3a1fcb341f551bcf25aa5085b29fdf20bd82753",
+    "blob_sha1": "469ce2be5789619bf9e185b7046936d464ffa137",
+    "export_blob_match": true,
+    "image_decode_exit": 0
+  },
+  {
+    "path": "original-project/qa/cuadros/f100.jpg",
+    "bytes": 233826,
+    "sha256": "b962c445c81d56cdbd19fc87aaceed45e269a8ac7a108ce7c1ece980dc296c3f",
+    "blob_sha1": "522d6284e229d190ad41c8b25dad06e601c21919",
+    "export_blob_match": true,
+    "image_decode_exit": 0
+  },
+  {
+    "path": "original-project/qa/cuadros/f130.jpg",
+    "bytes": 241940,
+    "sha256": "08ea1cc6f65afb17ad72d7916e02f2cc1d714056b5a6c891646efb6be34acee1",
+    "blob_sha1": "5b52369527fe96242c678319df7b3e60773a59a5",
+    "export_blob_match": true,
+    "image_decode_exit": 0
+  },
+  {
+    "path": "original-project/qa/cuadros/f144.jpg",
+    "bytes": 218372,
+    "sha256": "73c929effe1b63378e71b2f449cc42497a305d7d5661acaf13a79bfec0de1e3e",
+    "blob_sha1": "c42d09b5e2958e7b9ccbd5fa64aa4742d9546dbd",
+    "export_blob_match": true,
+    "image_decode_exit": 0
+  },
+  {
+    "path": "original-project/qa/cuadros/f150.jpg",
+    "bytes": 218413,
+    "sha256": "ef59d3945ad63d63414814a8289842a93c6463493406cdd82dc93116e07c815f",
+    "blob_sha1": "175bd19e710964c2d53055aacce28997ea4ccf46",
+    "export_blob_match": true,
+    "image_decode_exit": 0
+  },
+  {
+    "path": "original-project/qa/cuadros/f170.jpg",
+    "bytes": 218313,
+    "sha256": "b0d08d6c5736e8cba46cd42ae272918639fa46d138d8925fe926e546fdd4ecce",
+    "blob_sha1": "fd64e0731ec4388d73abfd5e860e907cbd2f5eab",
+    "export_blob_match": true,
+    "image_decode_exit": 0
+  },
+  {
+    "path": "original-project/qa/cuadros/f186.jpg",
+    "bytes": 222399,
+    "sha256": "cbfa4d07c37eb9c5030ae5c46bf045738412bf628713d820eea617ef563389a6",
+    "blob_sha1": "8cebf8cde7eda6742991582ee25a0e2c7b8482b0",
+    "export_blob_match": true,
+    "image_decode_exit": 0
+  },
+  {
+    "path": "original-project/qa/cuadros/f192.jpg",
+    "bytes": 203281,
+    "sha256": "7b7aa2e176f643976df9abd65589a01e93ed2c294035690ee696c9cbddd45c26",
+    "blob_sha1": "a106a24cf93ceeecd6c83e5a66807402cd7980ea",
+    "export_blob_match": true,
+    "image_decode_exit": 0
+  },
+  {
+    "path": "original-project/qa/cuadros/f200.jpg",
+    "bytes": 203382,
+    "sha256": "b5a2cdf3a118dfc29062aee9f2e0d6fdc89386303401ccf22ed5497b2a4589ee",
+    "blob_sha1": "a004a92c6b3515a6eae7fcbb409a9b77ee36639d",
+    "export_blob_match": true,
+    "image_decode_exit": 0
+  },
+  {
+    "path": "original-project/qa/cuadros/f24.jpg",
+    "bytes": 229905,
+    "sha256": "97486c1b44d0c08ee62540f73cde5dc3966915ee04b060ad9107c213133729e0",
+    "blob_sha1": "348ad8ba62346f504b495c1f559a8ee8ef104deb",
+    "export_blob_match": true,
+    "image_decode_exit": 0
+  },
+  {
+    "path": "original-project/qa/cuadros/f246.jpg",
+    "bytes": 204457,
+    "sha256": "c30dfccf52fe069cf699648e28fc449b9f137a2d9bfe1aa45e15820abd518969",
+    "blob_sha1": "4cb9587fdb7c0c16bb83dc6a93d127e085c0047a",
+    "export_blob_match": true,
+    "image_decode_exit": 0
+  },
+  {
+    "path": "original-project/qa/cuadros/f247.jpg",
+    "bytes": 204733,
+    "sha256": "45bd1a98521e62d8467870b071228fa351b2e776227744c77c55a2a628207163",
+    "blob_sha1": "6055e7bf0b3caa1e2d738ee58412f831063f0445",
+    "export_blob_match": true,
+    "image_decode_exit": 0
+  },
+  {
+    "path": "original-project/qa/cuadros/f270.jpg",
+    "bytes": 206775,
+    "sha256": "e0d3dbe74b59c798e7dd6014d75d0f1522d34dd153f2a5f6a0e30cdb2ab56fdf",
+    "blob_sha1": "916dd86e331375abed5ddc45198ade4b96615f6c",
+    "export_blob_match": true,
+    "image_decode_exit": 0
+  },
+  {
+    "path": "original-project/qa/cuadros/f299.jpg",
+    "bytes": 206392,
+    "sha256": "d992164fd6fc52eded0010e66068f6a66025f7ade00f1d9c9a4c541f4826a73d",
+    "blob_sha1": "44c75629bbfb1cdec4fe79af2022352d396b8ada",
+    "export_blob_match": true,
+    "image_decode_exit": 0
+  },
+  {
+    "path": "original-project/qa/cuadros/f330.jpg",
+    "bytes": 209548,
+    "sha256": "c649c7407ee70cb3ec3e8fb8df60802f767cb9c2d87ba48b293c8ea7c7a35c3e",
+    "blob_sha1": "4daf2de16d90116ccae812fb06ff61f32e86d812",
+    "export_blob_match": true,
+    "image_decode_exit": 0
+  },
+  {
+    "path": "original-project/qa/cuadros/f359.jpg",
+    "bytes": 209556,
+    "sha256": "273f7382eaa402c1424c41dc8ae6b5b214915d691cdde66a94a69f7b1d9a69e5",
+    "blob_sha1": "4c460e87864f073e1b60a9285c3411fd2e647a35",
+    "export_blob_match": true,
+    "image_decode_exit": 0
+  },
+  {
+    "path": "original-project/qa/cuadros/f66.jpg",
+    "bytes": 204453,
+    "sha256": "0a7379da62449d88d1d0e235b8a42e6ef89b47755dc5cf575c1758b46c5fa32d",
+    "blob_sha1": "fae52a15b1b89a913ebc1ab3180b7acd24cd9d69",
+    "export_blob_match": true,
+    "image_decode_exit": 0
+  },
+  {
+    "path": "original-project/qa/cuadros/f72.jpg",
+    "bytes": 219481,
+    "sha256": "02e074ff9026274ddc73dbff2f6fac0d11e7f32ad0b7874d3321169455716dc3",
+    "blob_sha1": "993bcc972bfdb47328128bf0af1c9795c9681aea",
+    "export_blob_match": true,
+    "image_decode_exit": 0
+  },
+  {
+    "path": "original-project/qa/eventos.txt",
+    "bytes": 1088,
+    "sha256": "ec3f3395fd4c738e63b3d6de1261fa1e69d8e4c2a27822ee8352f48948eacbd0",
+    "blob_sha1": "c74c4e7b8a938b2985c39e1d641e7131e9abcf46",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/face-gate.json",
+    "bytes": 8188,
+    "sha256": "d7092985d51eb2f64b0b3077248c2c282f059172767e5225f895d3e723a7d02d",
+    "blob_sha1": "cf485dcefe59d23559f3deefc04c041976fc634c",
+    "export_blob_match": true,
+    "parse": "JSON_OK"
+  },
+  {
+    "path": "original-project/qa/face-gate.txt",
+    "bytes": 1034,
+    "sha256": "8fb8693cd49b3ab729eea2732ece62bfedd68ac29f5478fb533118627e4dc5c8",
+    "blob_sha1": "77b41d54e934a43e74c6cd868dcae5f98463ca8c",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/g-aire.txt",
+    "bytes": 200,
+    "sha256": "5e782cc6cf6bcfe149ad3336f75333ac8f562c838d2bf4dff45ebfff4c8455a8",
+    "blob_sha1": "7b55950f90dc861f2c92d5d7f287d85bcbf6c91a",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/g-build.txt",
+    "bytes": 334,
+    "sha256": "58d24059f9955a214330eb1f497a8fe0e921ece2a538a31cb6014c64662c32c0",
+    "blob_sha1": "587693883e3e2b715ce6adcb1231bc77970689ed",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/g-cara-visible.txt",
+    "bytes": 1097,
+    "sha256": "e062ba7ee1caadce2edfffefb95c207793ab904ff70cee50735e19ea99b92f35",
+    "blob_sha1": "66a99f491ecea265f2e8029cc1833ed6423717cc",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/g-costuras.txt",
+    "bytes": 247,
+    "sha256": "34acd8a4bc5d1bc1a66f81a1ab2884ea45855473d34188e6a851839d5cd2a631",
+    "blob_sha1": "11891d21e827af723655157350966d8fa2652664",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/g-eventos.txt",
+    "bytes": 1081,
+    "sha256": "ae86da8eb48ee24b602f58c43f71ba3020e0f90dc61ff157089e61c21d754496",
+    "blob_sha1": "cae5a1a8d0a60e9e728664237e053663cb5faa12",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/g-grep-prohibidas.txt",
+    "bytes": 111,
+    "sha256": "73a6f8ff84c4b154d5c82d492a3e9814d79face64f710b35f31ff500d06b61e2",
+    "blob_sha1": "b47fb0ad1e70781c703b172a31b1fcf4fa54ae96",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/g-hueco-tarjetas.txt",
+    "bytes": 29,
+    "sha256": "ea48dfca0a9afd78c5b481a4f304e419c126d7b974920a1ed55f9d725fd26857",
+    "blob_sha1": "e099bdceed6709abf1bc772d5473f3319d28fe12",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/g-hyperframes-check.txt",
+    "bytes": 3460,
+    "sha256": "808d1863254a5c0a09141112d7c41675f31faeaccbd2d920aac66d059bf7b703",
+    "blob_sha1": "fb717adf8f0e82b08779df0aa9e7e70e338fc084",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/g-layout-dom.txt",
+    "bytes": 2864,
+    "sha256": "dd0f589445842aebb17a133ab2b53c02b9d70fadf817cbb9ef30a05e6a8b3431",
+    "blob_sha1": "54b929097b5212719720f28fd3bdaab1d1ef4077",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/g-lucia-prohibidas.txt",
+    "bytes": 76,
+    "sha256": "d1cf17bc54cef4ca8d69059962d83ddd4e21339c086ea7d7d13c90988a9d42a1",
+    "blob_sha1": "a289f568fd9cc8d415ff20f7e12359a79848cf00",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/g-master-ready.txt",
+    "bytes": 104,
+    "sha256": "66d4faf4740b9923517e0e344daae80bf739d0351aec7641e58e59b2c685c9c3",
+    "blob_sha1": "084a6ecbe62815bd8497b1a1b836f8bbef4a2bee",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/g-medir-dom.txt",
+    "bytes": 155,
+    "sha256": "e5b68768269487048645f8d615add34499a66bc8a44c0574ef3f2c1ddb959a1c",
+    "blob_sha1": "f6f97d6ec69447fbc7647e3279782e7cf64449f9",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/g-negativas-dom.txt",
+    "bytes": 1854,
+    "sha256": "e0e7d2d272310e1613c856b522f1311917d2e53e1b470c3e4def4d97ce25b321",
+    "blob_sha1": "4a2dc4369f21ae1b1280986429d416362318dae5",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/g-pixeles-aire.txt",
+    "bytes": 103,
+    "sha256": "1bdbf1dfabe2ac23fa2b15a0e110e4a5de08d7572be3512cdee08e767f7533df",
+    "blob_sha1": "9ef9604f23623dc6f25287693f2088b4c9ce7015",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/g-pixeles-psnr-fotos.txt",
+    "bytes": 877,
+    "sha256": "356e130a6383732eab0b2b68d5623bfb95da6953e8eaf40bb969168ea1ded663",
+    "blob_sha1": "bd9d2767f0c58a5a654a74d10c3efa8fe23792ae",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/g-pixeles-vacios.txt",
+    "bytes": 103,
+    "sha256": "1bdbf1dfabe2ac23fa2b15a0e110e4a5de08d7572be3512cdee08e767f7533df",
+    "blob_sha1": "9ef9604f23623dc6f25287693f2088b4c9ce7015",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/g-retemporizar.txt",
+    "bytes": 1282,
+    "sha256": "3992de9abc8726df1f273bd0f0c125130533ba51e2bb4ac78801a31fa5d03bad",
+    "blob_sha1": "8c7690add0fed09ff1f2b4ca3fdfb76a478daade",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/g-validar-mutaciones.txt",
+    "bytes": 21142,
+    "sha256": "7acdad2f7841e91931806d84cf5c35a3fa48860f1881c703e842e35459b6785b",
+    "blob_sha1": "9440c1fa9619cda30bea31e5732711f836ef8c6c",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/g-ventanas.txt",
+    "bytes": 733,
+    "sha256": "56229a408ab80eca1206c4c030c9b228e64005fe525a3770e38f300e9beb0ded",
+    "blob_sha1": "7a15c955b5842487e2c5e3442e337a3b6c919e1a",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/g-verificar-auditor.txt",
+    "bytes": 98,
+    "sha256": "73cc5775e0cd6b1da697a184a8b4dd775b783ebf7fac409f8af5e84eece78124",
+    "blob_sha1": "58e2d515ff536d020df17d3ee94af0526f1e4c58",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/g-voz.txt",
+    "bytes": 935,
+    "sha256": "e583216fbd7319bc6d20486e501ba80db905d50d6fb21fc33e8dab3306987928",
+    "blob_sha1": "8b5e6d80a8011ec48a78e21a0e626ac533794259",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/g-zona-segura-pixeles.txt",
+    "bytes": 461,
+    "sha256": "fa80b345b1af69023dffe9954ef645d10700abf4290d51dd121ddf8bce032d98",
+    "blob_sha1": "cb089333f9b7981f45b6af8b9b6c0f1ed2e48db2",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/grep-prohibidas.txt",
+    "bytes": 36,
+    "sha256": "5f0db0bda1e7931cdc794c5467dd8a0348f990955e5de615214e252e0a357e52",
+    "blob_sha1": "292be2bc3607516877bf7bf109afada49a16ae17",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/hueco-tarjetas.txt",
+    "bytes": 36,
+    "sha256": "d203e538388607156418a3321fb1349d920e4936573a50296917a425eafa7817",
+    "blob_sha1": "03e59d983e47c1a5009ec42fe187559dd7e17ea9",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/hyperframes-check.txt",
+    "bytes": 3460,
+    "sha256": "808d1863254a5c0a09141112d7c41675f31faeaccbd2d920aac66d059bf7b703",
+    "blob_sha1": "fb717adf8f0e82b08779df0aa9e7e70e338fc084",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/idempotencia.txt",
+    "bytes": 32,
+    "sha256": "c1bc08f4b918a360b88aac1d6ab5e818d7a19c9ccb8ad8956226d3def17f80c5",
+    "blob_sha1": "c9158470a7b149273ec0299e207e6330017920a3",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/layout-dom.txt",
+    "bytes": 1813,
+    "sha256": "74f7bc977535e93e7e3a84e9bc5e600307c1404f215ad9ebe9c77dd85e56be3a",
+    "blob_sha1": "55772182bcf79e1e77af5037bbb81927f51f8ff0",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/lectura-tarjetas.json",
+    "bytes": 8014,
+    "sha256": "26b12388f1cd7b2fd2705a93726b6fc79ee6c55fed8ffe28e5f7acf72002215c",
+    "blob_sha1": "18836e1a9f3cc176a9184293a4c72b763c3eca41",
+    "export_blob_match": true,
+    "parse": "JSON_OK"
+  },
+  {
+    "path": "original-project/qa/md5-index.txt",
+    "bytes": 135,
+    "sha256": "51178036817176388c0c082720303e7a046fa3c06c8679debebb2b4d45983309",
+    "blob_sha1": "25d80b5c12e59ad46ea599d51dca5495666a9ac4",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/medir-dom-fallos.json",
+    "bytes": 140,
+    "sha256": "667d4a58ae6880dd364fdc4a56adcfba8c653ce43bad8991820791d56f037cf1",
+    "blob_sha1": "792785a8385cfca76d77dc048489db7552f29189",
+    "export_blob_match": true,
+    "parse": "JSON_OK"
+  },
+  {
+    "path": "original-project/qa/medir-dom.txt",
+    "bytes": 162,
+    "sha256": "b4d1b478415857126d3e80b97c552bda4753f20d0f74844534419a5413b5f7a7",
+    "blob_sha1": "106a71b4d742923393c7e05d39612a112b443753",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/negativas-cara-visible.txt",
+    "bytes": 522,
+    "sha256": "31dc3f60ffddc75b1a1d9c7b72d6222d425548c9d2e9c7cae4874110424b1f8a",
+    "blob_sha1": "27c80cda231d5153a6263e395c97f362903fd946",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/negativas-dom.txt",
+    "bytes": 1861,
+    "sha256": "ad387a47d751c62565540e50a114221961fb1d82acb26e1a56f2a55fb4fab580",
+    "blob_sha1": "8e129f6515c149bdc11237a247ab149f7345958e",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/pantalla.txt",
+    "bytes": 306,
+    "sha256": "80a5d8fbdfec6605b16bdbdbf50596e47b397cdeeac1507a2b7e42f1ba22474d",
+    "blob_sha1": "1c3c00b8dfc375de77c4ea65928fb0d8420fbc21",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/preview-360p-hoja-1.jpg",
+    "bytes": 152828,
+    "sha256": "1a432f1660463073169d429982a2d4ad00ef5c55d41beedc65e68bd77814b43b",
+    "blob_sha1": "eee05f8297c5e68282085aa686aaf48e8c1a38bc",
+    "export_blob_match": true,
+    "image_decode_exit": 0
+  },
+  {
+    "path": "original-project/qa/preview-360p-hoja-2.jpg",
+    "bytes": 162930,
+    "sha256": "07e63c391ab941763fe6bff2fef761a4aa124b55f3f864802c089db1c00f5b42",
+    "blob_sha1": "b3e49141a9496ef3abf7d64dc329d3b995a3969b",
+    "export_blob_match": true,
+    "image_decode_exit": 0
+  },
+  {
+    "path": "original-project/qa/preview-360p-hoja-3.jpg",
+    "bytes": 199704,
+    "sha256": "e4084be5c94a02093bf56b02d1e980ffc11f795e8029ac77e92ab93c7ae3babd",
+    "blob_sha1": "331bdf2b8cf2fb63edbfaf7a15a18b5f2d96cd36",
+    "export_blob_match": true,
+    "image_decode_exit": 0
+  },
+  {
+    "path": "original-project/qa/psnr-fotos.txt",
+    "bytes": 877,
+    "sha256": "356e130a6383732eab0b2b68d5623bfb95da6953e8eaf40bb969168ea1ded663",
+    "blob_sha1": "bd9d2767f0c58a5a654a74d10c3efa8fe23792ae",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/qa-tabla.md",
+    "bytes": 1638,
+    "sha256": "579fc69a5f12e760c629b09016cc009202a33c9b34295d2f3b61f793ab183b6e",
+    "blob_sha1": "28eea1b7a0414a97f6cb224fff9ce2bcdb5f428d",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/render-draft.txt",
+    "bytes": 20248,
+    "sha256": "f39790e81ebeb90dcd95d28ad54786b4cff431d98322b52e0535c55f40577236",
+    "blob_sha1": "ad995aec75b1139e9311b2467aa79756eedfde3b",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/render-final.txt",
+    "bytes": 29546,
+    "sha256": "e01bf9db725fca392e1f3b1a5177dd17a7093584b25561128b35e79d0ad31ced",
+    "blob_sha1": "d0b787459db0045983904d395696ce11937c1d1e",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/sha-master.txt",
+    "bytes": 104,
+    "sha256": "bb73f8d2ed6b01930c5e7c3ea005d73aab867de3610be8955ad0eaa83338c9fe",
+    "blob_sha1": "f5f7d8817c9882f31178e60f44dd77833e6ef82a",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/sintaxis.txt",
+    "bytes": 740,
+    "sha256": "b1e07f17854a3a776578710e3a6c36607a6ec05ce9d10882cdadd8a017c960aa",
+    "blob_sha1": "7fc79ccc7cfa4ed630b0fa744635e5e5341b37bb",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/specs-final.json",
+    "bytes": 3921,
+    "sha256": "f196150d61ec7bda5490aa539a5ff69815b2112756f49851bfe29b2faa4e6f93",
+    "blob_sha1": "afd1b563e3b0ba0b397058ae08689a1eb3587294",
+    "export_blob_match": true,
+    "parse": "JSON_OK"
+  },
+  {
+    "path": "original-project/qa/specs-resumen.txt",
+    "bytes": 86,
+    "sha256": "ac139a9251d627bce0ac00bea402a904c18d132998732363a4cff0d36f8846a2",
+    "blob_sha1": "0f4ded72e2e90fd69d849f076c331766cc205ebe",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/tam-master.txt",
+    "bytes": 8,
+    "sha256": "afa46f491a2296b3a6379d414ce292a3c53a4de92006b2bdb73554d3f937bd7b",
+    "blob_sha1": "e15361f8877125d9ef87ff2a274980e9a7f66a7d",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/tamanos.txt",
+    "bytes": 1065,
+    "sha256": "bbe6c5a5cb29bc6faa897e2b380eddd19c68de4f03b750f89d5c42385d588fb9",
+    "blob_sha1": "f02f7a7ce44de0593f445a5f6fcb96b70723defa",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/tiles.json",
+    "bytes": 1494,
+    "sha256": "4f753f8e2b399b464318c1db04a93f6d4deafc185b779e6dd539f39ba98cbe2f",
+    "blob_sha1": "c899aa688cc2504945abbcf147afa9fba5bef6e7",
+    "export_blob_match": true,
+    "parse": "JSON_OK"
+  },
+  {
+    "path": "original-project/qa/tramos-voz.json",
+    "bytes": 3246,
+    "sha256": "77d81a084382e01599c64bd093cb9e25bd85875fae35d5842fcd88bf9c497b7c",
+    "blob_sha1": "4d3dd67a4a62542825d7f96a40a892282d5856f9",
+    "export_blob_match": true,
+    "parse": "JSON_OK"
+  },
+  {
+    "path": "original-project/qa/utf8.txt",
+    "bytes": 2680,
+    "sha256": "dc223c6c3e7a65156b282d324df7744913cbd9e750d6e8629a1be5bfce794b47",
+    "blob_sha1": "538c2310ee652ec7a37dca925d62da3c0baf022b",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/vacios.txt",
+    "bytes": 103,
+    "sha256": "1bdbf1dfabe2ac23fa2b15a0e110e4a5de08d7572be3512cdee08e767f7533df",
+    "blob_sha1": "9ef9604f23623dc6f25287693f2088b4c9ce7015",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/validar-mutaciones.txt",
+    "bytes": 21149,
+    "sha256": "8c7f3f610e04d05839be5246f93fca0e884f0694a52f770c2cf74410f047eca3",
+    "blob_sha1": "11d92a0af05a92a9faf8e726d7889d008579d76f",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/ventanas.txt",
+    "bytes": 740,
+    "sha256": "b63089267a51177bf031f4e20ebf2b550a4ad61d6289a82b23851d8595a87730",
+    "blob_sha1": "7cbecc6362cf392c7e60b4d48383012fc3ec32b2",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/verificar-auditor.txt",
+    "bytes": 208,
+    "sha256": "3f42b6ca6ad93cae7edf6e4ce8152ed7a0567fa63fd354e279cef497b07f818a",
+    "blob_sha1": "ec1f3cc5fb3bdb9a3b9e5362af01450f82d67844",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/qa/viernes-preview-360p.mp4",
+    "bytes": 315910,
+    "sha256": "d5078617731892da21ed3fc610a217c213f3fe9127cd58e3e677b4d1e7b39ad3",
+    "blob_sha1": "f1bb15f38c9c65049752d4608b68d13c8bee08f9",
+    "export_blob_match": true
+  },
+  {
+    "path": "original-project/qa/zona-segura-pixeles.txt",
+    "bytes": 468,
+    "sha256": "9792e62ea8a0ba287f34169aca434519c8610124025d511398a4550218439864",
+    "blob_sha1": "d33138cf0d5126a01f94eafd03f2161d5b0e2663",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/scripts/aire.mjs",
+    "bytes": 52,
+    "sha256": "f08e6692abdb8999e06cafec96446d772cd5f9e4388c610beb58e3b9ba426608",
+    "blob_sha1": "01c0c7965767d02e3857ffe2fd6a837ad1203aa9",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/scripts/arcface-pares.mjs",
+    "bytes": 1407,
+    "sha256": "e9a778085d363d44804fea2ccc33eefe8683bd7248a54331b0267336e96af5ff",
+    "blob_sha1": "0303030c197772418fe757ce937f9122e8ef1e37",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/scripts/auditar-dom.mjs",
+    "bytes": 3307,
+    "sha256": "aaeb4cc045743188ab160a33f8090b6bea8af6b729314c641570d33b7c8cf8bd",
+    "blob_sha1": "5684bb80fc39ebeb2941cc45b9e2c11d49d91cab",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/scripts/borrador-360.mjs",
+    "bytes": 1856,
+    "sha256": "b6e3fe7da8d2531b1b0eed599850dbbf4c1f484bd35cc4aee295985b54cb1ac1",
+    "blob_sha1": "70e81d78be36f2ec36c15e848fac07ccf297e83a",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/scripts/build.mjs",
+    "bytes": 37994,
+    "sha256": "573a8dacdde107df3e922f38dd27d5ec71270fea20bc3f0b3750502b735c989c",
+    "blob_sha1": "64659df28940d0f88488c496168ebf9263e3e25d",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/scripts/captura.mjs",
+    "bytes": 601,
+    "sha256": "bb2f7bb32ee7c73da7dd95af871bdc58a4e59e141bfe7af89423a0e2b642136a",
+    "blob_sha1": "d26be897baf8d877a28ac69d8988f98c9e72a2e8",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/scripts/cara-visible.mjs",
+    "bytes": 2479,
+    "sha256": "af13e472e396cfadc2e56429cc308254a96d6a51f89155c766304e223efc5378",
+    "blob_sha1": "3901babe48f8f7dd0a7693657645972dd41ba49b",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/scripts/cara-visible.py",
+    "bytes": 2426,
+    "sha256": "eec0a9972f8e847fab4736e1594f7f562d36ebb21f53ad16b0ac1ff2b6babc0c",
+    "blob_sha1": "bbb7401360f132c15a60beafd8dc660aa986e55f",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/scripts/caras-fotos.py",
+    "bytes": 1689,
+    "sha256": "a42a05058d717e2b191cae28199e25bef1f39b87803a2b396915da5265c3c0ae",
+    "blob_sha1": "62124d6763e155714d04b42ba3156b70ec84dcdc",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/scripts/correr-gates.sh",
+    "bytes": 2135,
+    "sha256": "a780b90676e312a9ac5a5119e75b369d48f7bb4a756088a266df847a085119e0",
+    "blob_sha1": "837c39c7fc908afdf5eddc36c062bc8e4e037fef",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/scripts/costuras.mjs",
+    "bytes": 56,
+    "sha256": "3f8fa144cec9e1068e3c2b644e79b29e0d701fbd7b35796b9327b389ff146c71",
+    "blob_sha1": "1d27fb6efb2f8ea3f2b49d49b2a484d9992771d8",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/scripts/estilos.css",
+    "bytes": 3444,
+    "sha256": "dfad01027be5ec2c127e1f824a2c1d124a5cd8c20bf43440b985da59b7313905",
+    "blob_sha1": "9e3f8aa9c0db43b998c6a9ecbd217ff228ecfd35",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/scripts/eventos.mjs",
+    "bytes": 55,
+    "sha256": "e05c5dfb867de8f880266d57bed3c14ca4d5a50e761b8c79a52c77cb8ed4f3e7",
+    "blob_sha1": "b113c09c31d6e8beb40510b344ef43d4c733cecd",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/scripts/gates.mjs",
+    "bytes": 7946,
+    "sha256": "1c39f82fbf552b3e1a70411251d0ef360708054d3dd0cc2522f62b56927d1304",
+    "blob_sha1": "09c6371177de00d8d20be75c660baa2c22949208",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/scripts/grep-prohibidas.mjs",
+    "bytes": 2243,
+    "sha256": "a78898c9867e55fd41138e36a00444eb13d4b421b521b8f99c2a5e8611110ee4",
+    "blob_sha1": "a013e1400a5bf11be7acc2233025b5e401ea471a",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/scripts/hueco-tarjetas.mjs",
+    "bytes": 62,
+    "sha256": "3160f883f4f2e7d6b1794ef6f17786c56b6924e63ca2504c95d792813a288780",
+    "blob_sha1": "0528759d7164d2f0dc1e917f94553013e9899efe",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/scripts/layout-dom.mjs",
+    "bytes": 7092,
+    "sha256": "cf9d04d52dc7b862ec5c7daffce15c82f832e6aed356cc074a0a1786bbb20f09",
+    "blob_sha1": "86c0fd07429cc1c2d6e08227c45edcc22dafbdb1",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/scripts/master-ready.mjs",
+    "bytes": 946,
+    "sha256": "83c0c7d96049a83bd40d28188ad7abea0553220d6c1b2ca5b13d8bbdc7a8a65c",
+    "blob_sha1": "9d25bf5694ce5913d6a565bcfefd10bed7060af1",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/scripts/medir-dom.mjs",
+    "bytes": 57,
+    "sha256": "041713781957b4d0c44281820f2a95e75f5abba5532354cd4a6d22acdfbf66e8",
+    "blob_sha1": "63179b57d629d4e6dc5103c40955c55d834308ef",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/scripts/negativas-dom.mjs",
+    "bytes": 3656,
+    "sha256": "1c1c0fbece9c58a47d8a9f0616dd71a21421249d28bf3d09ce9df4b7d1253421",
+    "blob_sha1": "61a8afda84bf0c39b8940a91975e87d5b98832cb",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/scripts/pixeles.mjs",
+    "bytes": 4084,
+    "sha256": "d3d88faf8817b74af9cb22a8448bbfe07cf3658cb7544fed23f814653882c56b",
+    "blob_sha1": "d5a014580661f532e53ca4121f7801895eaa6d73",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/scripts/qa-dom.mjs",
+    "bytes": 3706,
+    "sha256": "652f34a1b27ca35cf0bbde0356223e48b05822c5dbb68008ead92302ab6e2995",
+    "blob_sha1": "d14fe8f840f201baf79c92917485e536c7aaca7e",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/scripts/recortes-arcface.sh",
+    "bytes": 2232,
+    "sha256": "011fc7edf1ad296041a5188fc58409bb6898fde86521c7447bd268e0296194c0",
+    "blob_sha1": "5a00ae6bf7a8ba780cc54b84c62f0728527d11db",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/scripts/retemporizar.mjs",
+    "bytes": 2772,
+    "sha256": "a01503e8a5184d129fa4ebf977a3a4f8a5f43be17caa75aace5ae4d4899e1d5f",
+    "blob_sha1": "67479782189532d5e1eeacd2ef35df5361c55694",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/scripts/timeline.js",
+    "bytes": 2719,
+    "sha256": "0a0d0dbc867fef2399a6326ac35d370e0ebd4d4d697671094ae7db76971b22d1",
+    "blob_sha1": "dc55e0f03ebb489d82b1168f2eda767fcafb684c",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/scripts/validar-mutaciones.mjs",
+    "bytes": 22355,
+    "sha256": "61027dc1474e2cadc7171453d1db0cbe606ccbed7acf5e609cf3df57e6f54801",
+    "blob_sha1": "9be0ccdec19ed913250be09b24d738867ccf947d",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/scripts/ventanas.mjs",
+    "bytes": 56,
+    "sha256": "f390c4f9db4cf213b12188f22f491987b8b1dbfb03b8d5a9d7cfb70a7f809c04",
+    "blob_sha1": "f75f8093dd8340cdfecf9f04ba5f083d8a181a9e",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/scripts/verificar-auditor.mjs",
+    "bytes": 2755,
+    "sha256": "d2f4247df15b6d67b09813455992fcb897f787d4b5741280d0660c8c53669e1d",
+    "blob_sha1": "dc0b1866b446bce1ceb275eec55c8106e717aad2",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/scripts/voz.mjs",
+    "bytes": 6301,
+    "sha256": "d0e8b59d25a1a961848cd411158cb9ab291e9fa714ec1481e35b31c30ac2482d",
+    "blob_sha1": "6ff8ce7d4179476e7ca4c64d3d8cfc118fb3b750",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "original-project/scripts/zona-segura-pixeles.mjs",
+    "bytes": 4473,
+    "sha256": "b66812750c2b7e3c6fcf314203c6798c644893c2824c989fdad309cf101557a8",
+    "blob_sha1": "486eee5d5a7731f091a270f7ca34515574824c0a",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "source-state/hermes-content/docs/cola/loop/lucia.md",
+    "bytes": 39548,
+    "sha256": "303fc876b3ef8997b31b2370f422cc32f62e91913c8bb5c0c9d8e39e47fb3196",
+    "blob_sha1": "13d59a0ef457330d4daa0672a918ae26d81a8e1f",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "source-state/hermes-content/docs/cola/lucia-diario/PLAN.md",
+    "bytes": 18623,
+    "sha256": "10d29c4189ff963a0e7013e31e79764816989152fe195951fa0a6de686ddf296",
+    "blob_sha1": "8500ac00f07c43478c8d718fdbc6418f2f060749",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  },
+  {
+    "path": "source-state/videos/lucia-entrega/README.md",
+    "bytes": 21319,
+    "sha256": "3bdff699e35b2e4cd04ecd3b1eb380bcca80f5188cdf6eb6899181c0201e294d",
+    "blob_sha1": "4f3b9c0e40a6c7ba7da071aaaed5a4704260c6ec",
+    "export_blob_match": true,
+    "parse": "UTF8_OK"
+  }
+]

@@ -1,0 +1,97 @@
+{
+  "fecha": "2026-10-12",
+  "estado": "RECEPCION_PARCIAL_VALIDADA_ORIGINALES_EXTERNOS_PENDIENTES",
+  "worker": "01a13171-0fdb-72c6-9fdc-81244d7e6006",
+  "madre": "Marketing 01a12c1f-bef7-7252-a4b6-f8f8354dfc48",
+  "source_commit": "3566e5d5208cf4a7bcf20e743469c6088944674c",
+  "export_commit": "e60e62b7632ddb134c9ddab747d19aea74a4e92b",
+  "instrucciones_vigentes": "154e1a15157ab6bc0c0a1d9b3fd883dfdab18edd",
+  "rama_acta": "codex/recepcion-lucia-20261012",
+  "prueba_acceso_propio": {
+    "git_fetch_exit": 0,
+    "mecanismo": "exec_command sandbox_permissions with_additional_permissions additional_permissions.network.enabled true",
+    "proxy_y_TLS": "preservados",
+    "sandbox_Work_heredado": false
+  },
+  "recepcion": {
+    "local_Work_verificados": 13,
+    "local_Work_esperados": 13,
+    "proyecto_canonico_verificados": 134,
+    "proyecto_canonico_esperados": 134,
+    "master_verificado": true,
+    "suplementarios_export": 5,
+    "total_archivos_export": 153,
+    "total_bytes_export": 12010888,
+    "cada_archivo": "SHA256/bytes y Git blob recalculados;153/153 contra commit export;134/134 proyecto contra fuente",
+    "inventario": "inventario-153-sha256.json"
+  },
+  "master": {
+    "ruta_origen": "videos/lucia-entrega/viernes-copia-v2-final-1080x1920.mp4",
+    "bytes": 2983672,
+    "sha256": "c4299c7b21c7b05cc41181176d8908429b9752d4422c9cc9275964dd64393aa4",
+    "specs": "1080x1920 H26424fps360cuadros15s;AAC silenciosa medida -91dB;decodificación completa exit0"
+  },
+  "preview": {
+    "bytes": 315910,
+    "sha256": "d5078617731892da21ed3fc610a217c213f3fe9127cd58e3e677b4d1e7b39ad3",
+    "specs": "360x640 H26424fps360cuadros15s sin audio;decodificación completa exit0"
+  },
+  "ZIP": {
+    "bytes": 509863,
+    "sha256": "abd35779525d2d3abdd39246fc71985f61319c7c547e761f67ffd67fcbe88e19",
+    "CRC": "PASS",
+    "miembros": 4,
+    "miembros_vs_individuales": "4/4 iguales"
+  },
+  "diferencias": [
+    {
+      "archivo": "artifacts/lucia-review/viernes-preview-360p.mp4.b64",
+      "tipo": "representacion_derivada_incompleta_ya_en_origen",
+      "bytes_decodificados": 315000,
+      "bytes_MP4": 315910,
+      "faltan_bytes": 910,
+      "perdida_artefacto_unico": false,
+      "prueba": "base64 valido y prefijo exacto;MP4 íntegro disponible solo usar binario",
+      "accion": "preservado sin reparar ni sustituir"
+    }
+  ],
+  "originales_externos_no_recibidos_Work": [
+    {
+      "nombre": "K4 PNG",
+      "sha256_plan": "2a2e940147431146041d8ace6942a35a600ed91986f3030840751f33e8127200",
+      "job": "dad464de-75a8-45f5-b799-8d91e5a63d1d",
+      "estado": "PNG ignoradoGit;no materializadoWork;Higgsfield job completed lectura OK;descarga CONNECT403",
+      "dominio": "d8j0ntlcm91z4.cloudfront.net"
+    },
+    {
+      "nombre": "R3 PNG1792x2400",
+      "sha256_plan": "0dc08193977ee2a1a0b7a6564df83f6b45cdb8c8f2495afc693d5c5d050bf756",
+      "estado": "PNG ignoradoGit;no materializadoWork;input confirmado d7d6d36a-1358-40b4-b1b3-d98c1ac15135 con URL JPG_resize no acredita PNG exacto",
+      "dominio": "d2ol7oe51mr4n9.cloudfront.net"
+    }
+  ],
+  "proyecto_apertura": "index/plan/scripts textuales recuperados y parseados según tipo;imágenes presentes decodifican;no runtimeDOM por navegador ausente y assetsK4/R3 no recibidos. Sin instalar/render.",
+  "permisos": "LISTA PARA MOSTRAR;aprobación específica viernes y calendario16oct/G3 30oct/P9 6nov pendientes;voz223car no generada. AccesoIG/duplicados/is_ai_generated no verificados. G4/G5/C1 intactos.",
+  "parada": "No archivar origen;sin nuevas piezas/identidad/voz/gasto/instalación/infra/main/merge/deploy/publicación. Madre Desarrollo decide mecanismo red o transferencia PNGexactos. No reintentarDrive rechazado por auto-review propiedad.",
+  "equipo": [
+    {
+      "id": "/root/lucia_media",
+      "modelo_configurado": "gpt-6-luna low",
+      "funcion": "bytes/hash/media/inventario"
+    },
+    {
+      "id": "/root/lucia_qa",
+      "modelo_configurado": "gpt-6.1-sol medium",
+      "funcion": "QAvisual independiente",
+      "modelo_interno_observado": false
+    }
+  ],
+  "QA_visual": {
+    "cobertura": "360/360cuadros10hojas180x320 y9vistas1080x1920",
+    "hallazgos_ALTA": 0,
+    "estado": "QA_temporal_y_recepcion_independiente_cerradas",
+    "limites": "sin reproduccion audiovisual continua ni nueva medicion ArcFace;solo muestra visual del master existente;aprobacion/IG pendientes"
+  },
+  "rondas": "solo turnos,sin loops nuevos",
+  "solicitud_red_autorizada_por_Sergio": "Pedir a Madre Desarrollo habilitar lectura dominios d8j0ntlcm91z4.cloudfront.net y d2ol7oe51mr4n9.cloudfront.net mediante mecanismo oficial;sin trasladar secretos ni instalaciones"
+}
