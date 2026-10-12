@@ -1,5 +1,9 @@
 # Hermes Agent Orchestration Order
 
+## Entrada obligatoria para Codex — 12-oct-2026
+
+Antes de ejecutar una tarea, leer [CODEX.md](CODEX.md), especialmente su bloque de precedencia vigente. Es la adaptación trazable de CLAUDE.md para Codex; no se presupone carga automática por el nombre del archivo. Sergio establece 2 madres locales supervisoras y 5 ejecutores Codex Cloud: madres delegan/revisan/resumen; workers ejecutan hasta validación o bloqueo específico, no cierran solo con plan. Astra madres/tareas muy difíciles, Sol habitual, Luna mecánica. Skills propias solo `.claude/skills/`, sin copiar. Este bloque y reglas directas actuales sustituyen instrucciones antiguas contradictorias del resto de AGENTS.md.
+
 ## Acceso local a apps, credenciales y sesiones (regla compartida)
 
 Origen: Sergio Urcullo, 2026-09-28. Evitar que Codex y Claude pidan iniciar

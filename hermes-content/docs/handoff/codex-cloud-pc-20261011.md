@@ -4,6 +4,19 @@
 
 ## PLAN VIGENTE 12-oct — armado único y ejecución por evidencia
 
+**Ejecución solicitada por Sergio:** no cerrar con plan. CODEX.md implementado desde CLAUDE.md fuente `732c479e0f6fe20e93a1401e9febde086c260091`; AGENTS.md exige lectura para carga real, manifest registra alcance aislado. Esta implementación documental no prueba los 4 sustitutos, accesos ni loops pendientes.
+
+| Comparación Claude → Codex | Conservado | Adaptación vigente / límite |
+|---|---|---|
+| Oficio, producto, seguridad y contenido | Base CLAUDE.md, casos y referencias trazables | Datos/precios/canales fechados son evidencia; revalidar antes de operar |
+| Madre/ejecutores | Contratos, handoffs, revisión y coordinación | 2 madres SOLO delegan/revisan/resumen, 5 nativos; antiguo 1 madre/ejecución PC sustituido |
+| Modelos y subagentes | Calidad por rol, QA independiente | Astra madres/difícil, Sol habitual, Luna mecánica; no heredar Opus/Haiku ni inventar observabilidad |
+| Skills/contexto | `.claude/skills/` fuente única, router/equipo/aprendizaje | Sin copias; lectura por delta; enlace AGENTS→CODEX no presupone autoload de CODEX |
+| Autonomía/cierre/Git | META/PRUEBA/PARADA, tests, preservación | Worker ejecuta hasta validado/bloqueo; no solo plan. Git según contrato, no implementación por madre ni main/deploy inferidos |
+| Publicación/acceso/loops | Aprobación, identidad, privacidad y cuentas | Aprobadas versión/cuenta/calendario sin re-OK; nuevas/gasto con OK. IDs/crons Claude históricos, no activados |
+
+**Contradicciones resueltas:** CLAUDE genérico 1 madre, madre hace PC/commit, Codex sin Git, routing Claude y permisos antiguos no prevalecen. CODEX bloque inicial fija adaptación; base conservada contiene historia claramente subordinada. No secretos ni IDs/triggers Claude copiadas como activos. Archivo existente CODEX.md/codex.md no encontrado antes de crear; no duplicado por case.
+
 **META:** ordenar 2 madres locales supervisoras y 5 ejecutores Codex Cloud nativo, recuperar backlog/artefactos Claude+Work y demostrar acceso/QA por carril antes de relevar los cuatro Work. Preparar sin microconsultas ni duplicar documentos/skills. Npm fijado por lockfiles cloud ya autorizado; herramientas nuevas requieren aprobación.
 **PRUEBA DE HECHO:** por fase, entregar contrato, ID real/modelo configurable, repo/ref/SHA, artefacto recuperable y resultado de prueba; estados explícitos: validado / preparado / bloqueado. No confundir tool visible, despacho o draft con ejecución terminada.
 **PARADA:** sin main, producto, herramientas nuevas, secretos trasladados, compras o infraestructura. No archivar Work sin prueba de recuperación. Acceso sensible ausente detiene solo su paso; no rodear controles ni asumir permisos. Conservar diffs en vuelo; no interrumpirlos para cambiar modelo.
