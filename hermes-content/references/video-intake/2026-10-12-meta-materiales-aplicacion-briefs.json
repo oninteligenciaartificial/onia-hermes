@@ -1,0 +1,190 @@
+{
+  "status": "APPLIED_DOCUMENTARY_REVIEW; no new piece/copy/media created or source brief modified",
+  "basis": "new study hook alignment+early proof+single variable method; inspected five already-existing briefs",
+  "rows": [
+    {
+      "id": "G1-1",
+      "source_relative": "hermes-content/carousels/briefs/ads/prueba1-v2/G1-1.json",
+      "source_sha256": "476b330a378e6cbdc441127ee81bce1c740326fcd376ef10518f63ac79a2e6fc",
+      "observed_scope": "brief text/script reviewed; rendered pixels and spoken takes NOT viewed in this study",
+      "audience_filter_in_primary_text": "Para dueños y dueñas de clínicas dentales de Santa Cruz.",
+      "hook_text": [
+        "Pacientes de mañana",
+        "sin *confirmar*"
+      ],
+      "hook_voice": "Clínica dental: ¿vendrán todos los de mañana?",
+      "planned_first_visual": "Sergio Urcullo sentado en un banco o escalón al aire libre, plano medio-largo, mirando a cámara con el celular en la mano apoyada en la rodilla; el gancho va en un chip sobre las rodillas.",
+      "first_scene": {
+        "tramo": "0-3 s",
+        "toma": "Selfie sentado, plano medio-largo, celular en la mano apoyada en la rodilla",
+        "voz": "Clínica dental: ¿vendrán todos los de mañana?",
+        "en_pantalla": "Gancho en chip, tercio inferior: Citas de mañana / sin *confirmar*"
+      },
+      "CTA": "Pida su demostración gratis",
+      "functional_rows_required": [
+        "B-01",
+        "B-02",
+        "C-02",
+        "D-01",
+        "E-01",
+        "G-01",
+        "G-04",
+        "G-06",
+        "L-04"
+      ],
+      "status": "BLOCKED_FOR_RELEASE; source sale is editorial selection, not approval",
+      "learning_application": {
+        "three_channel_alignment": "Text and voice share tomorrow/unconfirmed dental appointments; the planned person outdoors holding a phone alone does not establish the appointment mechanism. Verify initial ICP filter and UI evidence in actual render.",
+        "filter_frame_zero": "Primary-copy ICP filter observed; first-frame readability/render remains unverified. Do not infer screenshot/recorded voice from script descriptions.",
+        "early_proof": "Inspect actual UI proof for legibility and matching appointment/patient; old candidate screenshot is not current product evidence.",
+        "single_axis": "These five are concept/format combinations; not claimed A/B winners. Future authorized variant changes only one chosen variable."
+      }
+    },
+    {
+      "id": "G1-2",
+      "source_relative": "hermes-content/carousels/briefs/ads/prueba1-v2/G1-2.json",
+      "source_sha256": "ca8047be17f1c97a9177dc4ceea47740da46e366c50240aa8a038d55fdde11cd",
+      "observed_scope": "brief text/script reviewed; rendered pixels and spoken takes NOT viewed in this study",
+      "audience_filter_in_primary_text": "Para dueños y dueñas de clínicas dentales de Santa Cruz.",
+      "hook_text": [
+        "Paciente que hace meses",
+        "*no vuelve*"
+      ],
+      "hook_voice": "Hay pacientes que hace meses no vuelven.",
+      "planned_first_visual": "Sergio Urcullo a la derecha del cuadro, de frente, señalando a cámara; en el tercio superior, el gancho de 2 líneas con la palabra «VUELVE» gigante en amarillo.",
+      "first_scene": {
+        "tramo": "0-3 s",
+        "toma": "Sergio a la derecha del cuadro, señala a cámara; el gancho arriba con «VUELVE» gigante",
+        "voz": "Hay pacientes que hace meses no vuelven.",
+        "en_pantalla": "Paciente que hace meses / no *vuelve* (la palabra gigante, amarilla)"
+      },
+      "CTA": "Pida su demostración gratis",
+      "functional_rows_required": [
+        "B-01",
+        "C-02",
+        "D-01",
+        "E-01",
+        "G-01",
+        "G-04",
+        "G-05",
+        "L-04"
+      ],
+      "status": "BLOCKED_FOR_RELEASE; source sale is editorial selection, not approval",
+      "learning_application": {
+        "three_channel_alignment": "Text and voice share no return for months; a planned person pointing alone does not establish recall or the dental ICP. Verify G05 case and actual UI, no inferred reactivation results.",
+        "filter_frame_zero": "Primary-copy ICP filter observed; first-frame readability/render remains unverified. Do not infer screenshot/recorded voice from script descriptions.",
+        "early_proof": "Inspect actual UI proof for legibility and matching appointment/patient; old candidate screenshot is not current product evidence.",
+        "single_axis": "These five are concept/format combinations; not claimed A/B winners. Future authorized variant changes only one chosen variable."
+      }
+    },
+    {
+      "id": "G1-3",
+      "source_relative": "hermes-content/carousels/briefs/ads/prueba1-v2/G1-3.json",
+      "source_sha256": "512822396c0ce50129245a0b79210056aed02b0822f3fe722f8c98d7dfd31776",
+      "observed_scope": "brief text/script reviewed; rendered pixels and spoken takes NOT viewed in this study",
+      "audience_filter_in_primary_text": "Para dueños y dueñas de clínicas dentales de Santa Cruz.",
+      "hook_text": [
+        "¿Quién de mañana",
+        "no *confirmó*?"
+      ],
+      "hook_voice": null,
+      "planned_first_visual": "Cuadrado 1:1: titular en la columna izquierda; a la derecha Sergio Urcullo de medio cuerpo mirando el celular que tiene en la mano, preocupado, sin sonreír; cruzando la costura, UNA tarjeta real de Pendientes con «Cita de mañana a las 10:00 sin confirmar», con la leyenda «datos de ejemplo»; el botón abajo a la izquierda.",
+      "first_scene": "static",
+      "CTA": "Pida su demostración gratis",
+      "functional_rows_required": [
+        "B-01",
+        "B-02",
+        "C-02",
+        "D-01",
+        "E-01",
+        "G-01",
+        "G-04",
+        "G-06",
+        "L-04"
+      ],
+      "status": "BLOCKED_FOR_RELEASE; source sale is editorial selection, not approval",
+      "learning_application": {
+        "three_channel_alignment": "Static has no voice (not applicable). Planned Pending card matches textual question more explicitly; current functional evidence and readable render still required.",
+        "filter_frame_zero": "Primary-copy ICP filter observed; first-frame readability/render remains unverified. Do not infer screenshot/recorded voice from script descriptions.",
+        "early_proof": "Inspect actual UI proof for legibility and matching appointment/patient; old candidate screenshot is not current product evidence.",
+        "single_axis": "These five are concept/format combinations; not claimed A/B winners. Future authorized variant changes only one chosen variable."
+      }
+    },
+    {
+      "id": "G1-4",
+      "source_relative": "hermes-content/carousels/briefs/ads/prueba1-v2/G1-4.json",
+      "source_sha256": "a01cfe908705cd4e951eb859463e5fdee89b595bd1845fd4cfd13e0ba9ada13a",
+      "observed_scope": "brief text/script reviewed; rendered pixels and spoken takes NOT viewed in this study",
+      "audience_filter_in_primary_text": "Para dueños y dueñas de clínicas dentales de Santa Cruz.",
+      "hook_text": [
+        "Paciente que no llega",
+        "sillón que se paga *igual*"
+      ],
+      "hook_voice": "Venga o no el paciente, usted paga la hora.",
+      "planned_first_visual": "Sergio Urcullo en una oficina luminosa, plano medio, mirando a cámara, ropa de oficina; cintilla «Sergio Urcullo · Onia» abajo a la izquierda, logo onia | dental arriba a la derecha y el gancho en dos líneas blancas con la palabra igual en un chip de color.",
+      "first_scene": {
+        "tramo": "0-3 s",
+        "toma": "Sergio a cámara en la oficina, plano medio, cintilla abajo a la izquierda",
+        "voz": "Venga o no el paciente, usted paga la hora.",
+        "en_pantalla": "Subtítulo de dos líneas: Paciente que no llega / sillón que se paga *igual*; cintilla Sergio Urcullo · Onia; logo onia arriba a la derecha"
+      },
+      "CTA": "Pida su demostración gratis",
+      "functional_rows_required": [
+        "B-01",
+        "B-02",
+        "C-02",
+        "D-01",
+        "E-01",
+        "G-01",
+        "G-04",
+        "G-06",
+        "L-04"
+      ],
+      "status": "BLOCKED_FOR_RELEASE; source sale is editorial selection, not approval",
+      "learning_application": {
+        "three_channel_alignment": "Text and voice share cost of an unused appointment. Planned office setting/person/dental logo supplies contextual identity, not runtime product proof or revenue outcome.",
+        "filter_frame_zero": "Primary-copy ICP filter observed; first-frame readability/render remains unverified. Do not infer screenshot/recorded voice from script descriptions.",
+        "early_proof": "Inspect actual UI proof for legibility and matching appointment/patient; old candidate screenshot is not current product evidence.",
+        "single_axis": "These five are concept/format combinations; not claimed A/B winners. Future authorized variant changes only one chosen variable."
+      }
+    },
+    {
+      "id": "G1-5",
+      "source_relative": "hermes-content/carousels/briefs/ads/prueba1-v2/G1-5.json",
+      "source_sha256": "b1dd330fcec2422e9f7b77c8fbac88202373fa2e2312f3d3da8f3738074a8fc9",
+      "observed_scope": "brief text/script reviewed; rendered pixels and spoken takes NOT viewed in this study",
+      "audience_filter_in_primary_text": "Para dueños y dueñas de clínicas dentales de Santa Cruz.",
+      "hook_text": [
+        "Su agenda de mañana",
+        "¿y si no *vienen*?"
+      ],
+      "hook_voice": "¿Y si no vienen todos los de mañana?",
+      "planned_first_visual": "Sergio Urcullo sentado y quieto, mirando a cámara como en la referencia, con el celular en la mano a la altura del pecho y gesto serio; el gancho en dos líneas debajo del mentón.",
+      "first_scene": {
+        "tramo": "0-3 s",
+        "toma": "Sergio sentado, quieto, mirando a cámara, celular en la mano a la altura del pecho, gesto serio",
+        "voz": "¿Y si no vienen todos los de mañana?",
+        "en_pantalla": "Gancho en dos líneas: Su agenda de mañana / ¿y si no *vienen*?"
+      },
+      "CTA": "Pida su demostración gratis",
+      "functional_rows_required": [
+        "B-01",
+        "C-02",
+        "D-01",
+        "E-01",
+        "G-01",
+        "G-04",
+        "G-06",
+        "L-04"
+      ],
+      "status": "BLOCKED_FOR_RELEASE; source sale is editorial selection, not approval",
+      "learning_application": {
+        "three_channel_alignment": "Text and voice share tomorrow attendance doubt; person with phone does not establish the dental subject/mechanism alone. Primary copy also discusses time spent messaging, so review their coherence rather than treating them as identical pains.",
+        "filter_frame_zero": "Primary-copy ICP filter observed; first-frame readability/render remains unverified. Do not infer screenshot/recorded voice from script descriptions.",
+        "early_proof": "Inspect actual UI proof for legibility and matching appointment/patient; old candidate screenshot is not current product evidence.",
+        "single_axis": "These five are concept/format combinations; not claimed A/B winners. Future authorized variant changes only one chosen variable."
+      }
+    }
+  ],
+  "result": "All five retain functional/approval gates; G06blocks4/G05conditionsG1-2, no performance or approval inferred"
+}
