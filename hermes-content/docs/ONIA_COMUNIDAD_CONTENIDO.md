@@ -1,7 +1,7 @@
 # OnIA Community — plan de contenido y drops
 
-> Comunidad: WhatsApp (`chat.whatsapp.com/ENplPbR8GrbGsdMrGgLxzu`). Sergio publica 1
-> drop/día (texto + link, imagen simple opcional). Este archivo guarda el plan y los
+> Comunidad: WhatsApp (`chat.whatsapp.com/ENplPbR8GrbGsdMrGgLxzu`). Ritmo vigente: avisos lun/mié/vie
+> a las 19:00 (hora La Paz), según la corrección del 30-sep. Este archivo guarda el plan y los
 > drops listos para pegar. Datos que sostienen el plan: abajo, §Evidencia.
 
 ## Estado al 30-sep-2026 (captura de Sergio Urcullo) y ritmo vigente
@@ -482,3 +482,10 @@ inventa).
 - **Sin siglas sin explicar:** token, hook, worktree, commit se dicen con su significado la primera vez.
 - Los avisos de la semana del 8 al 16-oct están en `docs/cola/plan-3-semanas/AVISOS-COMUNIDAD-8-16-OCT.md`.
 
+
+
+## Análisis de referentes y workshop — 11-oct-2026 (propuesta NO aprobada)
+
+La sesión Marca personal cloud ejecutó el análisis y dos subagentes reales lo revisaron; la madre supervisa. Informe completo: [propuesta de workshop prepago](comunidad/PROPUESTA_WORKSHOP_PREPAGO_20261011.md). Evidencia, autoría y cobertura: [referentes compartidos](../references/video-intake/2026-10-11-mrsatiras-referentes-comunidad.md).
+
+El análisis conserva WhatsApp y el ritmo vigente, propone primero una prueba privada de carrusel y condiciona un workshop a demanda propia, demo reproducible, costos, soporte y términos completos. No sustituye la secuencia de pilotos, no fija precio/fecha ni autoriza cobrar/publicar. Las cifras históricas de miembros no se convierten en estado actual.

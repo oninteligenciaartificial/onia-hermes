@@ -335,3 +335,10 @@ El CLI autenticado está en el VPS: `HF_CMD="ssh -i <llave> -o BatchMode=yes roo
 
 `impeccable` (register brand; las leyes de color/tipo/layout) · `design-dna` (sacar tokens de
 una referencia nueva) · `banner-design` (piezas sueltas) · `hyperframes` (si la lámina se anima).
+
+
+## Referencias transmitidas y propuesta comercial (11-oct-2026)
+
+Al recibir análisis de otra sesión, distinguir observado por esa sesión, inspeccionado aquí, inferencia y propuesta. No atribuir al remitente la autoría ni afirmar escucha/visión propia de archivos inaccesibles. Conservar jerarquía y progresión de un carrusel sin copiar avatar, identidad o claims; priorizar prueba privada con material propio y CTA de recurso comprobado. Registrar como propuesto, no aplicado a producción, hasta tener un artefacto revisado. Si el video exige un pipeline aún no reproducido, no usar un MP4 terminado como prueba del método.
+
+Caso, cobertura y destinos: [referentes compartidos por mrsatiras](../../../hermes-content/references/video-intake/2026-10-11-mrsatiras-referentes-comunidad.md). Propuesta de comunidad/workshop: [informe](../../../hermes-content/docs/comunidad/PROPUESTA_WORKSHOP_PREPAGO_20261011.md); no aprueba oferta, cobro ni publicación.
