@@ -1,0 +1,141 @@
+{
+  "tipo": "requerimiento técnico para Platform, coordinado por Madre Desarrollo",
+  "fecha": "2026-10-12",
+  "META": "Habilitar validación demo G05/G06 dentro del contrato vigente; continuar pruebas locales independientes",
+  "PRUEBA": "Entrega de acceso dedicado por puente autorizado, evidencia de release/fixtures/corrida y observación segura; filas no cambian a funcionales por código o tests unitarios",
+  "PARADA": "Sin secretos por chat, copiar sesiones, gasto, contacto/envío, nuevas campañas/piezas, infraestructura nueva, loops, main/merge ni disparo productivo por Ventas",
+  "clasificacion": [
+    {
+      "frente": "Demo HTTP403",
+      "estado": "dependencia técnica real",
+      "sintoma": "Última lectura HEAD app/login: HTTP CONNECT403 y curl exit56, antes de autenticar. No se repite sin cambio de acceso",
+      "solucion_responsable": "Madre Desarrollo coordina destino autorizado del worker; Platform devuelve URL/origen y prueba de reachability manteniendo proxy y TLS",
+      "bloquea": "login y observación demo, no pruebas de código/locales"
+    },
+    {
+      "frente": "Bindings QA ausentes",
+      "estado": "dependencia técnica real",
+      "sintoma": "ONIA_QA_EMAIL y ONIA_QA_PASSWORD ausentes en revisión por presencia; valores no leídos",
+      "solucion_responsable": "Platform identifica una cuenta QA/demo dedicada existente; puente autorizado configura bindings del worker sin valores en artefactos/chat. No crear otra cuenta ni copiar sesiones por inferencia",
+      "bloquea": "login dedicado, no tests con datos sintéticos en memoria"
+    },
+    {
+      "frente": "Vitest/checkout local ausentes",
+      "estado": "preparación ejecutable ya autorizada, no falta de permiso general",
+      "prueba": "Vitest4.1.5 está fijado por package-lock.json v3 del producto",
+      "solucion_responsable": "Platform usa checkout aislado y ref fijado; npm ci con lockfile intacto bajo autorización cloud. Registrar postinstall/codegen (prisma generate), versión de runner y exit; no añadir dependencias fuera del lockfile",
+      "bloquea": "suite TS aquí todavía no ejecutada; no bloquea core Node ni contrato"
+    }
+  ],
+  "binding_schema_expected": {
+    "nota": "Esquema de entrega y validación, no parámetros inventados de una herramienta de configuración",
+    "consumer_repo": "onia-hermes",
+    "consumer_script": ".claude/skills/onia-ventas-pauta/scripts/grabar-captura.mjs",
+    "consumer_plan": ".claude/skills/onia-ventas-pauta/scripts/grabar-captura.g05-g06.plan.json",
+    "bindings": [
+      {
+        "name": "ONIA_QA_EMAIL",
+        "kind": "secret variable",
+        "value_type": "string",
+        "required": true,
+        "validation": "Identidad dedicada cuya palabra qa/demo/prueba/test pasa el guard del recorder; no usuario real ni superadmin",
+        "report": "state=ready/absent/error; nunca valor"
+      },
+      {
+        "name": "ONIA_QA_PASSWORD",
+        "kind": "secret variable",
+        "value_type": "string",
+        "required": true,
+        "validation": "Secreto correspondiente a la misma identidad dedicada",
+        "report": "state=ready/absent/error; nunca valor"
+      },
+      {
+        "name": "ONIA_APP_URL",
+        "kind": "non-secret variable",
+        "value_type": "absolute URL",
+        "required": false,
+        "default": "https://app.onia.com.bo",
+        "validation": "Hostname permitido por recorder; acceso remoto HTTPS autorizado. --base tiene precedencia; localhost solo para mocks",
+        "report": "origen sin credenciales ni query sensible"
+      },
+      {
+        "name": "ONIA_GRABAR_PERMITE_ENVIO",
+        "required": false,
+        "validation": "Debe permanecer ausente; este contrato no permite habilitarlo"
+      }
+    ],
+    "not_required_in_sales_worker": [
+      "CRON_SECRET"
+    ],
+    "secret_boundary": "El disparo demo lo ejecuta Platform por su método ya autorizado; no transferir secreto cron/VPS al worker de Ventas"
+  },
+  "platform_handoff_schema": {
+    "schema": "onia.demo-g05-g06.delivery.v1",
+    "required_fields": {
+      "app_origin": "HTTPS origin autorizado sin credenciales",
+      "product_repository": "onia-platform",
+      "product_ref": "commit SHA exacto del código usado",
+      "deployed_release": "identificador probado por readback/log; unknown explícito si falta",
+      "demo_scope": "confirmación de organización dedicada y datos ficticios propios; no identidad real publicada",
+      "business_timezone": "IANA timezone observado en configuración real",
+      "now_iso": "RFC3339 usado en fixtures y corrida",
+      "plan_and_roles": "plan de prueba o Crece+, rol y permisos realmente observados; agente enabled/config efectiva",
+      "binding_states": "solo nombres y estado ready/absent/error",
+      "fixture_matrix": "case_id, tipo, timestamps/estado sintéticos, expected, observed, evidencia relativa/hash; nada de contacto real",
+      "run_evidence": "método demo autorizado, run_id saneado, timestamp, status y causas not_due/cooldown/cap/dedupe; sin secretos",
+      "captures": "nombres relativos de PNG, bytes y SHA256; agenda mañana y Pendientes correlacionados",
+      "runner_evidence": "comando existente, ref/lock/runner y exit/resumen; separado de demo",
+      "review": "revisor independiente y PASS/BLOCKED con causa concreta"
+    },
+    "fixture_cases": {
+      "G05": [
+        "COMPLETADA220d sin futura positivo",
+        "COMPLETADA220d con futura PENDIENTE/CONFIRMADA negativo",
+        "179 días completos negativo /180 positivo con timestamps exactos",
+        "Sin COMPLETADA negativo para recall genérico",
+        "baja/optout/contacto dentro30d/teléfono inválido: controles separados; positivos sin esas exclusiones"
+      ],
+      "G06": [
+        "mañana PENDIENTE10:00 positivo",
+        "mañana CONFIRMADA negativo",
+        "hoy y pasado mañana PENDIENTE negativos",
+        "mañana00:30 y23:30 positivos en zona negocio",
+        "contacto dentro1día y segunda corrida inmediata: registrar cooldown/intervalo/dedupe, no enviar"
+      ]
+    },
+    "acceptance": "G05/G06 solo funcionalmente verificadas con resultados reales y controles; G04 exige log cron fechado; G01/envío fuera de este contrato. Capturas sin controles no bastan"
+  },
+  "producto_tests": {
+    "source_commit": "1c01e05ff3457692f44352de19d57768d5955bcf",
+    "package_json_blob": "d737491d7ce229f3095b1cbcb44cf593c0ec4d94",
+    "lockfile_blob": "9e3e242c541db34f65f04001d593acf38f6fae7f",
+    "vitest_locked_version": "4.1.5",
+    "lockfile_version": 3,
+    "command": "npm test -- lib/onia-core/modules/agents-confirmador.test.ts lib/onia-core/modules/agents-logic.test.ts lib/onia-core/modules/agents-runtime.test.ts",
+    "status": "No ejecutados aquí; preparación ya autorizada con lockfile, no instalación global ni cambio de versiones"
+  },
+  "trabajo_independiente_ejecutado": {
+    "repo": "onia-hermes",
+    "commit": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+    "command": "node --test --test-isolation=none --test-reporter=tap onia-core/modules/agents.logic.test.mjs",
+    "exit": 0,
+    "tests": 54,
+    "pass": 54,
+    "fail": 0,
+    "suites": 12,
+    "TAP_sha256": "83096c7ca7374f9380a975706ccb363de76523c0d9f099c8858451214d408db4",
+    "scope": "Core de referencia y reglas de aprobación/recall en memoria; no Platform TS, G06 ni demo desplegada"
+  },
+  "restantes_separados": {
+    "Platform_por_Madre_Desarrollo": [
+      "Confirmar y coordinar cambio autorizado de acceso antes de otra petición HTTP",
+      "Preparar bindings dedicados por puente y metadata de demo",
+      "Preparar suite TS con lockfile intacto y fixtures/corrida demo bajo su contrato"
+    ],
+    "Ventas": [
+      "Tras entrega ready, observar sin clic/envío y cotejar controles/capturas con QA",
+      "Conservar filas sin✅hasta prueba funcional",
+      "Sin herramientas de mensajería entre hilos aquí: pedido en este documento/transcript; no afirmar ACK externo"
+    ]
+  }
+}
