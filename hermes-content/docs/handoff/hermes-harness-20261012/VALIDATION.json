@@ -1,0 +1,40 @@
+{
+  "UTC": "2026-10-12T20:42:23.331604+00:00",
+  "scope": "offline_proposal_only",
+  "author_agent": "/root",
+  "inventory_agent": {
+    "id": "/root/harness_inventario",
+    "requested_model": "gpt-6-luna",
+    "observed_served_model": "not_observable"
+  },
+  "QA_agent": {
+    "id": "/root/qa_independiente",
+    "requested_model": "gpt-6.1-sol",
+    "observed_served_model": "not_observable"
+  },
+  "author_tests": {
+    "command": "python test_gate.py",
+    "exit": 0,
+    "pass": 18,
+    "chunk": "266764"
+  },
+  "QA_tests": {
+    "exit": 0,
+    "pass": 18,
+    "chunk": "b6c228",
+    "adversarial_exit": 0,
+    "adversarial_chunk": "8bc0bc"
+  },
+  "hashes": {
+    "INVENTORY.json": "c46bcb28a8ea2a6b0b650a8cc1510b084de1d68cad23d641907f223028d7ed42",
+    "QA.md": "e9c255b0c2b0e6f20ceb286a060bfa79206260d9b75c654ed38d7636a6ce6277",
+    "README.md": "7bd876d4b1839dcfce7c746a745ee2baf6f7372f54b3f558d2ca69a0e556c4c0",
+    "contract.json": "52f658b31c18fe0c6ee90fe4d4f5b631968fcdeef350273db836084a9fbc1bc6",
+    "gate.py": "2fd3350b7198a17ae3446a2f08b22074fb20fab4f835130b466a3aacbe9a0dff",
+    "test_gate.py": "246b21018a1b65cadccba8ac2af29c1421830d228324443bf274ca8b26f98a41"
+  },
+  "trigger_enabled": false,
+  "dispatches": 0,
+  "schedulers_created": 0,
+  "production_changes": 0
+}

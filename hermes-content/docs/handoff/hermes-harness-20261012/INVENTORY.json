@@ -1,0 +1,67 @@
+{
+  "scope": "Lectura local acotada de harness/infra/skills; repo onia-hermes en HEAD 2cdefca738ed85d87f50e6dc3dc6c31a5aa698f9 (work, origin/main).",
+  "canonical_audit": {
+    "requested_commit": "ae12aa63",
+    "requested_branch": "codex/cloud-pc-audit-20261011",
+    "remote_path": "hermes-content/docs/audits/SUPERVISOR-CLOUD-INVENTARIO-20261012.md",
+    "remote_commit": "ae12aa635dcb27cb37b09c7f3b72db35bb26b778",
+    "remote_blob": "47d345575ee856ecfae814cc4dc45ebeb74c2c35",
+    "result": "El archivo no estaba en el checkout local, pero fue recuperado desde GitHub en la referencia canónica. Evidencia remota leída: líneas 55-90. No confundir ausencia local con ausencia canónica.",
+    "CODEX.md": {
+      "local": "No existe en el checkout; se había leído CODEX_SKILL_ROUTING.md.",
+      "remote_path": "CODEX.md",
+      "remote_ref": "73693817",
+      "remote_blob": "882db64f0826145faed5d17d24a3ff6be9d3743e",
+      "evidence": "Líneas 1-35 leídas por github_fetch_file; router vigente, continuidad por evento, 2 madres locales, 5 ejecutores nativos cloud, modelo Platform Astra medio; modelo configurable/observado/no observable; triggers antiguos son evidencia histórica, no instrucciones activas."
+    }
+  },
+  "local_evidence": [
+    {
+      "path": "onia-hermes/hermes-content/docs/cola/loop/README.md",
+      "blob": "2390073e1965a247be2d30113b3d9f67dfc03e16",
+      "lines": "15-35",
+      "supports": "Cola por carril, primera tarea abierta, criterio de cierre, checkpoint [x] con SHA/link/captura, bloqueado con causa/owner/siguiente acción y continuar; sin /loop, tomar siguiente tarea en el mismo turno."
+    },
+    {
+      "path": "onia-hermes/.claude/skills/equipo-de-agentes/SKILL.md",
+      "blob": "a63c4141a058e59dae5caa35e663d9c3986b5b67",
+      "lines": "16-30, 32-58, 60-92, 107-112, 142-147",
+      "supports": "Owner madre/nube/Codex/verificador; RemoteTrigger documentados con IDs históricos; ronda y follow-up; contratos, gates, esfuerzo/modelos solicitados y cautela explícita de que modelo CLI no garantiza modelo cloud; aprobaciones sesión-locales."
+    },
+    {
+      "path": "onia-hermes/scripts/codex-tarea.sh",
+      "blob": "2d839021981b6502964d77baafc1afd1b78172e8",
+      "lines": "1-22, 28-63",
+      "supports": "Invocación cerrada/review/resume; solicita gpt-6.1-sol medium por defecto; deja resultado.md, eventos.jsonl y session_id. El script no contiene gate de cuota ni retry automático; resume requiere continuidad manual."
+    },
+    {
+      "path": "onia-hermes/hermes-content/docs/ONIA_HARNESS.md",
+      "blob": "ffe6b92a836cd21d530af8562b06c998273cf868",
+      "lines": "32-44, 50-70, 100-156, 158-209",
+      "supports": "Mapa viejo fechado 10-oct con loops, dueños y brechas; secciones 3/8 declaran como no verificados los crons VPS/casa, estado de onia-cola/web-venta, credencial, n8n y otros. Es referencia histórica, no estado actual."
+    },
+    {
+      "path": "onia-hermes/scripts/loops/README.md",
+      "blob": "489446481e05962a7868a069205e924dd491fb4b",
+      "lines": "3-37, 110-145",
+      "supports": "El runner local tandas-v1 limita a review aislado; gpt-6-luna solicitado por defecto solo si runtime lo soporta y la evidencia registra el solicitado. Para CLI/cuenta documenta discrepancia: gpt-6-luna rechazado, gpt-5.5 anunciado. No hay fallback automático. Describe flock/timeout/alertas de runner VPS, pero no prueba estado vivo."
+    },
+    {
+      "path": "onia-hermes/scripts/loops/onia-loop.sh",
+      "blob": "b7ba80b1a0d11c7567036fef128dac288a3b6a89",
+      "lines": "39-48, 255-270, 483-555",
+      "supports": "Runner VPS define límite de turnos (120; integrador 260), modelo/esfuerzo por carril, tiempo, flock y logs; detecta cuota agotada/timeout/código de salida y avisa. Solo patrón de código local; no prueba cron ni ejecución actual."
+    }
+  ],
+  "matrix": {
+    "queue_owner": "Documentado: colas /loop/<carril>.md; madre asigna y verifica; una sesión por cola. Estado de las sesiones actuales no verificable localmente.",
+    "model": "Política remota CODEX.md: Platform code Astra medium; análisis acotado Sol/Luna; madres Sol 6.1 medium; Luna para trabajo mecánico cerrado. El modelo observado por el runtime puede ser no observable. No se infiere ejecución de modelo para el canario.",
+    "status_trigger": "CODEX.md confirma que los trigger/IDs de casos anteriores son históricos, no instrucciones activas. El audit remoto dice gates: lectura de cinco IDs Alfred PASS; envío a Hermes FAIL; adopción/wakeup/supervisor autónomo NO PROBADOS. No activar recurrencia mientras falle follow-up. La auditoría no respalda trigger oficial/autónomo para el canario.",
+    "checkpoint": "Existe checkpoint de cola: [x] con SHA/link/captura; en Codex CLI, resultado/eventos/session_id. No hay evidencia local de checkpoint cloud por turno ni asociación a trigger oficial.",
+    "limits_retries_quota": "Scripts VPS ilustran tope de turnos/timeout y detección de cuota; Codex launcher no aplica budget/quota/retry automático. Resume es manual. No elevar concurrencia si no hay cupo observado.",
+    "qa": "Runbook prevé madre ejecuta gates y verificador; `review` separado y checks hash-bound en tandas-v1. No hay validación de este canario/turno; no reejecutada.",
+    "approvals": "La skill exige aprobación de Sergio dentro de cada sesión para acciones sensibles; Telegram no aprueba LLM. El estado de consentimiento de un turno concreto no se infiere del repo.",
+    "observability": "Codex local guarda resultado/eventos/id. Audit remoto reporta: Alfred list/read pudo leer cinco UUID nativos; único envío a Hermes UUID 01a13170-1c7e-7224-83c1-c5f369052039 el 2026-10-12 20:19 UTC falló NOT_FOUND / CloudThreadNotFoundError sin turnId. Lectura posterior del mismo chat encontró último turno 01a131bf-c0e5-72f3-8818-feaa088d6f24 completed, sin canario ALFRED-ONIA-20261012-A; sin ACK no se considera entrega. No se repitió envío ni inspeccionaron endpoints privados/authcache/secretos."
+  },
+  "minimal_gap": "Canario/wakeup/supervisor autónomo NO PROBADOS; la ruta de envío observada falló, y la documentación oficial consultada no especifica adopción de otros chats ni remedio CloudThreadNotFoundError. No activar recurrencia. Incidencia de soporte preparada en el audit remoto, no enviada. Continuar el mismo chat por UI oficial es alternativa soportada con disparo humano; no resuelve supervisor autónomo. No se repitieron llamadas operativas."
+}
