@@ -2,7 +2,7 @@
 
 **META vigente:** preparar ONIA SaaS con ejecución cloud que continúe con la PC apagada, madres supervisoras y sin retomar producción ni contratar infraestructura.
 **PRUEBA DE HECHO:** informe contrastado con referencias Git, observaciones de UI/CLI comunicadas por la madre y documentación oficial; piloto con resultados pendientes.
-**REGLA DE PARADA:** fuera de los chats read-only autorizados y pruebas descritas abajo, no activar sesiones, instalar, generar, publicar, desplegar, rotar secretos ni crear accesos/túneles; cualquier acceso nuevo requiere aprobación específica. La madre revisa este documento antes de commit/push.
+**REGLA DE PARADA vigente:** ejecutar los contratos autorizados de carriles; Marketing puede publicar piezas YA APROBADAS en cuentas/calendario acordados. Piezas nuevas/gasto requieren OK; no deploy, rotación de secretos, accesos/túneles nuevos ni loops por inferencia. Actualización y commit/push SOLO de este registro autorizados; sin código de producto.
 
 ## VIGENTE: PC APAGADA — pruebas y decisiones posteriores al piloto
 
@@ -23,13 +23,13 @@ Alternativas evaluadas, **no contratadas**: Browserbase USD 20/mes, 100 h inclui
 
 **Acceso y ejecución separados:** Higgsfield CLI local pide auth y Chrome local pide Google login; no hace falta resolverlos para el requisito PC apagada. VPS: inventario probado desde laptop con SSH estricto y BatchMode; CLI status JSON indicó plan Pro y 438,17 créditos, sin fecha de renovación. Esto **no demuestra cloud → VPS**. Generación oficial por MCP/CLI usa créditos del plan; API tiene cobro separado, no se autoriza sustituir uno por otro.
 
-**Chats vigentes:** madre marketing local `01a12c1f-bef7-7252-a4b6-f8f8354dfc48`, Astra medium; piloto archivado **ONIA · QA Work Cloud**, ChatGPT `6acbcecb-4ee4-83e8-9f88-9a8514ea2152`, durable `01a12c1f-d94a-7183-aca9-50da8102502a`, sin checkout y modelo no observable. Nuevo **ONIA · Desarrollo Codex Cloud**, tarea `01a12c7e-97e2-7115-8561-0b7658008003`, sección vigente **ONIA · Sesiones activas**, Sol 6.1 Medio seleccionado y comprobado en UI. No duplicar ejecutores ni reactivar Claude.
+**Chats vigentes:** madre marketing local `01a12c1f-bef7-7252-a4b6-f8f8354dfc48`, Astra medium; piloto archivado **ONIA · QA Work Cloud**, ChatGPT `6acbcecb-4ee4-83e8-9f88-9a8514ea2152`, durable `01a12c1f-d94a-7183-aca9-50da8102502a`, sin checkout y modelo no observable. Nuevo **ONIA · Desarrollo Codex Cloud**, tarea `01a12c7e-97e2-7115-8561-0b7658008003`, sección vigente **Plataforma/Infra**, ahora Astra medio enviado; Sol 6.1 Medio fue el selector comprobado durante validación. No duplicar ejecutores ni reactivar Claude.
 
 **Higgsfield, actualización vigente: conector cloud autenticado VERIFICADO.** Usuario instaló el plugin oficial; instalación/conexión ya no pendientes. Discovery anterior `installed:false / ENABLED AVAILABLE` superado. Madre y piloto cloud devolvieron plan Pro, **438,17 créditos**; `free_gens`: Genjutsu 1 (hasta 30 s, 480/720), Viral 0, AIInfluencerBuilder 5; `free_trial.unlim_available:false`. Prueba independiente: durable `01a12c1e-48d1-7349-93ad-33210efa6025`, turno `01a12c67-ddb5-71d7-8b91-7b73e1bab029`, marcador `higgsfield.balance completed`. Ejecutada sin navegador, PC ni VPS, sin generar/modificar; estado físico de PC no observable. **Navegador Higgsfield sigue NO autenticado**, pero no bloquea los flujos soportados por el plugin. Balance no valida generación ni autoriza gasto. Fuentes: [Higgsfield MCP](https://higgsfield.ai/creator-hub/help-center/integrations/what-is-higgsfield-mcp), [Higgsfield API](https://higgsfield.ai/creator-hub/help-center/integrations/what-is-the-higgsfield-api).
 
 **Estado vigente 11-oct:** entorno ONIA Platform publicado/reutilizado; Prisma RESUELTO, generate exit 0 (Client 7.8), typecheck exit 0/cero errores y 16 tests PASS, SHA `1c01e05ff3457692f44352de19d57768d5955bcf`, versionados limpios. Worker usó permiso de red por comando soportado pese a política enforced rev4: mantuvo proxy/TLS/checksums/allowlist. Evidencia `/workspace/work/onia-cloud-validation/report-resolved.md`, `continuity-resolved.json`, nonce `404085b5e8081d0682abd29e`. Build/suite completa, VPS, apagado físico, reinicio y modelo Work no probados.
 
-**Contrato operativo propuesto:** madres locales supervisan y entregan contratos finitos; workers cloud ejecutan lotes ya autorizados aunque la PC se apague. Una madre local **no coordina activamente mientras la laptop está apagada**: operación 24/7 con nuevas decisiones requeriría orquestador cloud, todavía pendiente. Cada lote registra estado en repo/ref/SHA y artefacto verificable; leer deltas desde el último SHA, no documentos completos. Astra para madres/escalamientos; Sol 6.1 para workers y Luna para mecánica cuando sean configurables. Modelo Work Cloud no observable; selector Codex muestra GPT 6.1 Sol/Ligero, sin extender esa observación a Work. Reutilizar skills canónicas sin duplicarlas. Sin migrar credenciales/sesiones; solo dependencias npm fijadas por lockfiles según aprobación, sin instalaciones globales/apt/pip.
+**Contrato operativo propuesto:** madres locales supervisan y entregan contratos finitos; workers cloud ejecutan lotes ya autorizados aunque la PC se apague. Una madre local **no coordina activamente mientras la laptop está apagada**: operación 24/7 con nuevas decisiones requeriría orquestador cloud, todavía pendiente. Cada lote registra estado en repo/ref/SHA y artefacto verificable; leer deltas desde el último SHA, no documentos completos. Astra medio para madres y toda programación; Sol/Luna solo apoyo mecánico cuando sean configurables. Modelo Work Cloud no observable; selector Codex muestra GPT 6.1 Sol/Ligero, sin extender esa observación a Work. Reutilizar skills canónicas sin duplicarlas. Sin migrar credenciales/sesiones; solo dependencias npm fijadas por lockfiles según aprobación, sin instalaciones globales/apt/pip.
 
 ## Decisiones y alcance
 
@@ -37,7 +37,7 @@ Alternativas evaluadas, **no contratadas**: Browserbase USD 20/mes, 100 h inclui
 - Marketing supervisa Lucía, Marca personal y Ventas/pauta; Desarrollo-Infra supervisa Plataforma, Hermes/QA e infraestructura.
 - Las madres definen contratos, delegan, verifican y resumen; delegan la ejecución local a un worker local.
 - Prioridad: trabajo cloud. Orquestador definitivo Claude/Codex PENDIENTE; esta auditoría no cambia el orquestador.
-- Modelos solicitados: Astra para decisiones difíciles de madres; Sol 6.1 para ejecución; Luna para mecánica. Capacidad real por cuenta, entorno y herramienta se verifica antes de asignar.
+- Modelos solicitados: Astra medio para madres y toda programación; Sol/Luna para apoyo mecánico. Capacidad real por cuenta, entorno y herramienta se verifica antes de asignar.
 - Claude quedó sin cuota disponible en la observación comunicada; no reactivar sus sesiones.
 
 ## Evidencia observada y límites
@@ -157,7 +157,7 @@ Linux, GitHub, conector Higgsfield, sample media y marcadores entre turnos está
 
 **Estado durable por lote:** contrato-ID, dueño/madre, worker/durable/turno, repo/ref/SHA inicial y final, herramientas presentes, comandos ejecutados, artefacto/ruta/SHA, resultado (validado/bloqueado) y siguiente delta. No devolver URLs firmadas ni secretos; una ruta temporal requiere exportación verificada antes de declararla entregada. Resultados de workers se incorporarán a este mismo documento sin inventarlos.
 
-**Modelos:** registrar observable, configurado y no observable por separado. Astra madres/escalamientos; Sol 6.1 ejecución y Luna mecánica donde el selector exista. Work Cloud actualmente no permite verificar el modelo; no etiquetar su salida como Sol/Astra por intención.
+**Modelos:** registrar observable, configurado y no observable por separado. Astra medio para madres/toda programación; Sol/Luna apoyo mecánico donde el selector exista. Work Cloud actualmente no permite verificar el modelo; no etiquetar su salida como Sol/Astra por intención.
 
 **Herramientas versus instalaciones:** shell Linux, conectores, ffmpeg y persistencia entre turnos probados. Work clone bloqueado por auth; native Platform checkout/npm ci/test puro 16/16 verificados. Prisma generate Client 7.8 exit 0; typecheck exit 0/cero errores; suite completa/reinicio pendientes. No pip/apt, plugin adicional, túnel ni migración de sesión/credencial. Workers completan solo el lote autorizado, sin afirmar continuidad 24/7.
 
@@ -189,4 +189,13 @@ Títulos asignados y nuevos chats Lucía/Ventas/Hermes confirmados activos por `
 
 **Acceso cloud necesario:** Sergio pide cobertura completa para las tareas; pruebas de acceso solicitadas por worker. Registrar repo/ref/lectura, checkout/tests, assets/artefactos, conectores autenticados y VPS solo si corresponde. **No declarar todo conectado** por acceso de otro worker o por tool visible. Bloqueos concretos con paso dependiente detenido, sin compras ni secretos transferidos.
 
-**Q&A pendiente:** loops cloud con PC apagada frente a ronda local cada 30 min; routing Astra/Sol/Luna frente al modelo Work no observable; política exacta de publicar piezas ya aprobadas. No crear loops nuevos ni interpretar permisos de publicación mientras se resuelven. Conservar contratos finitos y las aprobaciones específicas vigentes.
+**Q&A pendiente acotado:** loops cloud con PC apagada frente a ronda local cada 30 min y observabilidad del modelo Work. Routing y permiso para piezas aprobadas ya fueron definidos por Sergio en la actualización siguiente. No loops nuevos activos; conservar contratos finitos.
+
+## Decisiones finales vigentes y despacho — 2026-10-11
+
+- **Preferencia a largo plazo: totalmente cloud.** Dos madres/cinco carriles siguen operativos en el reparto documentado; trasladar supervisión permanente a cloud requiere arquitectura y prueba propias. Propuesta de dot cloud en evaluación por agente `cloud_architecture`, **NO confirmada**; no declarar orquestador 24/7 listo.
+- **PLATAFORMA Y TODA PROGRAMACIÓN: Astra, effort medio.** Sustituye Sol como ejecutor principal de código en recomendaciones anteriores. Sol/Luna solo apoyo mecánico según contrato. `send_message` ya aplicó `model:gpt-6-astra` a Desarrollo `01a12c7e-97e2-7115-8561-0b7658008003`; configuración enviada no prueba modelo de Work Cloud. Selector Sol citado arriba pertenece al historial de onboarding/validación.
+- **Marketing puede PUBLICAR PIEZAS YA APROBADAS**, exclusivamente en cuentas y calendario acordados; nuevas piezas y gasto con OK. Orden enviada a madre Marketing. Esto sustituye la restricción general de pedir autorización de nuevo para cada publicación ya aprobada; verificar versión/SHA aprobado antes de publicar.
+- **Ventas, avance comprobado:** worker leyó repo, recuperó las 5 objeciones y validó manifiesto. Meta navegador bloqueado por login y sin conector disponible: no declarar acceso completo ni creación/publicación de campañas. La cifra “0 campañas” del material anterior es histórica, **NO inventario actual**.
+- Lucía, Ventas y Hermes nuevos confirmados activos por listado; sus pruebas de acceso/resultados son independientes. No inferir acceso de uno por tool/balance de otro. No compras, secretos transferidos ni loops activos nuevos.
+- Las instrucciones históricas Sol/4 sesiones/solo read-only/publicación siempre pendiente quedan superadas por estas decisiones donde corresponda; sus pruebas y límites técnicos conservan validez con fecha y alcance.
