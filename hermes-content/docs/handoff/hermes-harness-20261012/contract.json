@@ -21,7 +21,16 @@
     {"name": "avisos-de-entregas-de-marca", "reported_state": "ACTIVE", "reported_cadence": "hourly", "owner": "Madre Marketing", "scope": "follow_up_only_not_a_cloud_worker_trigger", "evidence": "mother_local_inspection_declaration"},
     {"name": "onia-1-0-revisi-n-y-aprobaciones", "reported_state": "PAUSED", "scope": "legacy_September_branch_not_reactivated", "evidence": "mother_local_inspection_declaration"}
   ],
-  "approval": {"scope": "offline_audit_configuration_documentation_only", "sensitive_actions": "require_specific_existing_approval_evidence", "production": false, "new_services": false, "support_incident_sent": false},
+  "approval": {"scope": "offline_audit_configuration_documentation_only", "sensitive_actions": "require_specific_existing_approval_evidence", "production": false, "new_services": false, "support_incident_sent": true, "support_incident_evidence": "declared_by_mother_not_sent_by_Hermes_confirmation_pending"},
   "observability": {"required_after_any_future_send": ["operation_id", "worker_id", "contract_id", "input_sha", "checkpoint_step", "UTC", "quota_evidence", "dispatch_key", "receipt_turn_id", "canary_result", "exit_or_error", "QA_verdict"], "tool_success_is_start": false, "start_is_complete": false, "cloud_24_7_validated": false},
-  "single_external_block": "Product-supported follow-up of the existing Hermes native UUID must yield an identifiable turn and canary; read-five already passed but send failed. No user fix is established in the cited audit."
+  "external_followup_dependency": {"status": "support_sent_by_mother_confirmation_pending", "source": "mother_delegation_after_offline_approval_32f78538", "account_reported": "ONIA", "escalate_reported": true, "observed_by_this_worker": false, "product_followup_verified": false, "sufficient_for_operation_alone": false},
+  "operational_ready": false,
+  "implementation_pending": [
+    {"step": 1, "component": "official_followup_existing_worker", "verified": false, "requires": "official_product_resolution_and_specific_single_attempt_authorization", "acceptance": "same_worker_turn_id_and_observed_canary"},
+    {"step": 2, "component": "durable_shared_checkpoint", "verified": false, "official_backend_api": null, "requires": "architecture_review_existing_authorized_storage_identity_and_documented_API", "acceptance": "cross_runtime_restore_exact_revision_input_contract_step_and_integrity"},
+    {"step": 3, "component": "durable_shared_exclusion", "verified": false, "official_backend_api": null, "requires": "atomic_reservation_in_shared_backend_and_receipt_reconciliation", "acceptance": "concurrent_remote_producers_one_dispatch_crash_unknown_outcome_no_duplicate"},
+    {"step": 4, "component": "current_quota_scope_approvals", "verified": false, "requires": "fresh_measurement_against_existing_authorized_limits", "acceptance": "missing_evidence_holds_and_consumption_is_recorded"},
+    {"step": 5, "component": "official_remote_trigger_adapter", "verified": false, "official_scheduler_api": null, "requires": "steps_1_to_4_validated_existing_remote_scheduler_reviewed_identity_and_old_trigger_exclusion", "acceptance": "one_finite_remote_dispatch_with_receipt_turn_canary_and_cleanup"},
+    {"step": 6, "component": "remote_recovery_observability_and_autonomy", "verified": false, "requires": "shared_store_exclusion_and_single_remote_trigger_validated", "acceptance": "actual_laptop_off_restore_no_duplicate_durable_logs_limits_pause_and_cleanup"}
+  ]
 }

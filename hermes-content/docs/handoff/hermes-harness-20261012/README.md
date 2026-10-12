@@ -2,7 +2,8 @@
 
 META: ordenar colas, owners, routing y gates del supervisor, con artefacto propio y
 pruebas offline. PRUEBA: contrato JSON, matriz, casos de aceptación y QA independiente.
-PARADA: artefacto validado; un bloqueo externo concreto de follow-up del producto.
+PARADA: artefacto offline validado; separar la dependencia externa de follow-up
+de las integraciones y pruebas operativas todavía pendientes.
 No se activa un scheduler, no se envían mensajes ni se toca Platform/Confirmador.
 
 Dueño: Hermes QA. Madre: Desarrollo-Infra. Rama privada:
@@ -87,7 +88,7 @@ No es una configuración desplegada. Checkpoint/quota/approval flags de fixtures
 son entradas de simulación, no medidas de los workers reales. No se hicieron
 tests Platform, dispatches, CLI401 ni sondeos Alfred en este contrato.
 
-## Cierre y única intervención externa
+## Cierre offline y pendientes para operación
 
 Configuración documental/gates: preparado y validado offline; QA independiente
 en `QA.md`. No hay supervisor autónomo activo. Los huecos de checkpoint/exclusión
@@ -96,11 +97,32 @@ infraestructura paralela ahora. Skill stack requerido queda referenciado, sin
 copias ni modificación de skills compartidas: onia-router, onia-continuidad,
 equipo-de-agentes y onia-hermes-jarvis.
 
-Único bloqueo externo que impide pasar de contrato a operación: **la ruta oficial
-de follow-up debe continuar el Hermes existente y devolver turnId + canario**.
-La incidencia exacta ya está preparada (y no enviada) en la auditoría ae12aa63.
-Madre Desarrollo-Infra debe gestionar su revisión/envío autorizado a soporte
-Codex–dots, que confirme y corrija resolución/compatibilidad de ese destino.
-No se pide login, una instalación o permiso VPS por suposición. Hasta resolverlo,
-continuación humana por web/móvil del mismo chat es la alternativa oficial;
-no se anuncia autonomía ni se activa scheduler.
+**Corrección de cierre posterior a 32f78538:** arreglar Alfred es necesario, pero
+no basta para operar. El artefacto aprobado sólo prueba reglas offline. Checkpoint,
+exclusión compartida, conexión del trigger y pruebas remotas siguen pendientes;
+no están resueltos por el O_EXCL local ni por una respuesta de soporte.
+
+La madre comunicó incidencia **ENVIADA** por Help oficial con cuenta ONIA y botón
+Escalate pulsado; confirmación pendiente. Es evidencia declarada por la madre,
+no un envío ni acuse observado por Hermes. La auditoría ae12aa63 conserva el estado
+histórico preparado/no enviado; no se edita ni se toma como estado posterior.
+
+| Paso pendiente / dueño | Fuente o API oficial y límite | Prerequisitos | Prueba requerida para cerrar |
+|---|---|---|---|
+| 1. Follow-up al Hermes existente / producto Codex–dots, madre coordina | Release y documentación de dots enlazadas en auditoría ae12aa63. Herramienta oficial de follow-up; no endpoint REST equivalente documentado en este runtime. | Confirmación de soporte y procedimiento soportado para el UUID existente; nuevo intento específico autorizado, sin duplicarlo. | Recibo con turnId, mismo worker y canario observado. No confundir acuse de soporte con turno iniciado. |
+| 2. Checkpoint durable compartido / Hermes, revisión arquitectura | Contrato `checkpoint.required_fields` y auditoría ae12aa63. **Backend y API oficial aún no seleccionados/verificados**. Git ya preserva estos artefactos, pero no implementa estado transaccional de despacho. | Arquitectura revisada que elija almacenamiento existente autorizado, identidad, permisos y operaciones documentadas; sin nueva infraestructura ni producción por inferencia. | Otro runtime recupera exactamente repo/ref/SHA/input/contrato/paso y verifica integridad. Reconciliación de reserva/turno tras interrupción; no repetir un paso cerrado. |
+| 3. Exclusión/idempotencia compartida / Hermes, QA independiente | Especificación preparada en `contract.json`; prueba O_EXCL sólo local. **API transaccional de reserva compartida no implementada**. | Mismo backend del paso 2 con reserva atómica por worker y clave de evento; lectura de recibos y estado de reserva. | Dos productores remotos compiten: sólo uno reserva/envía; crash después del envío no ocasiona segundo turno; outcome incierto retiene reserva hasta reconciliación. |
+| 4. Cuota, alcance y aprobaciones / madre de área + ejecutor | Métodos canónicos `scripts/codex-cupo.mjs`, equipo-de-agentes y CODEX vigente; no hay saldo actual medido aquí. | Fuente vigente de cuota y límites autorizados, permiso del contrato y approvals sensibles aplicables. | Falta de cuota/evidencia produce hold; reserva no excede límite y el consumo queda registrado. Renovación comunicada no sustituye lectura actual. |
+| 5. Conectar trigger remoto existente / Hermes + arquitectura | Auditoría ae12aa63 inventaría n8n y herramientas de automatización, sin puente validado. **Scheduler/API oficial de disparo no seleccionados para este contrato**. Las dos automations locales no prueban cloud wake. | Pasos 1–4 acreditados; scheduler existente autorizado y revisado, identidad soportada, exclusión de las automatizaciones previas y destino exacto. | Único disparo remoto finito devuelve recibo, turnId y canario; registrar operación y cleanup. No crear recurrencia para probarlo. |
+| 6. Recuperación, observabilidad y autonomía / Hermes + QA | `observability.required_after_any_future_send` y recibos del piloto; documentación cloud/dots citada en ae12aa63. | Trigger único validado, checkpoint y exclusión remotos; límites y mecanismo de pausa documentados. | Prueba con equipo local realmente apagado, interrupción/restore y ausencia de duplicados. Verificar logs durables, consumo y cleanup; activar recurrencia sólo bajo contrato posterior explícito. |
+
+Preparación independiente completada: lista ordenada de implementación,
+prerequisitos y pruebas, más contrato de gates conservador. No se eligió backend
+ni API por suposición, no hay adapter remoto implementado y no se aprovisionó
+infraestructura paralela. `trigger.enabled` permanece false; `operational_ready`
+permanece false. No se repiten los 18 tests por este cambio documental: `QA.md` y
+`VALIDATION.json` son recibos del baseline 32f78538, con sus hashes originales;
+el addendum QA y recibo documental posteriores identifican este delta.
+
+Hasta cerrar todos los pasos, continuar el mismo chat por web/móvil es alternativa
+oficial con disparo humano; no es supervisor autónomo ni habilita loops cloud.
