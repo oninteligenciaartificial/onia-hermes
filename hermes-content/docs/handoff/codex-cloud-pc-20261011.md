@@ -163,7 +163,7 @@ Linux, GitHub, conector Higgsfield, sample media y marcadores entre turnos está
 
 **Cierre vigente:** Platform cloud checkout/dependencias/Prisma/typecheck/16 tests verificados, versionados limpios; media recuperó 4 originales Claude N06/N07/DD-A/N02, decodifican, empaquetados en `Borradores-originales-Claude.zip`. DD-A mantiene marcador de confirmación y N02 decisión de 2,4 s: NO nuevas versiones finales. Madre Marketing confirmó que no necesita archivos ni autorización adicional para previews; comprobará primero audio DD-A 01:01–01:09 y ajuste N02. Solo si el audio sigue ambiguo preguntará si dijo Astra o Sol. Build/suite completa, VPS, apagado físico, reinicio y modelo Work no probados. Registro documental en rama de auditoría; sin cambios en código del producto.
 
-**Organización vigente UI:** sección única **ONIA · Sesiones activas**, 4 visibles. Archivados únicamente setup `01a12c78-3409-7188-b22f-2b2e4f5f4015`, combinado `01a12c6d-eb0f-768f-a4e6-f4e54856c017` y QA Work `6acbcecb-4ee4-83e8-9f88-9a8514ea2152`; backend Desarrollo y Media activos se conservan. Fuente Claude `origin/claude/arranque-nueva-madre-ba386e:hermes-content/docs/handoff/madre-local.md:25-38`: dos madres locales delegan nube, máximo 2 frentes; mismo esquema. Mantener 4 visibles y sumar workers por necesidad, no multiplicar chats.
+**Organización anterior SUPERADA:** sección única y regla de 4 visibles sustituidas por corrección explícita de Sergio: **5 carriles reales bajo 2 madres**, según registro vigente siguiente. Setup `01a12c78-3409-7188-b22f-2b2e4f5f4015`, combinado `01a12c6d-eb0f-768f-a4e6-f4e54856c017` y QA Work `6acbcecb-4ee4-83e8-9f88-9a8514ea2152` permanecen archivados; no reactivarlos. Media existente se convierte en Marca, sin duplicarla.
 
 ## Contrato vigente de trabajo autorizado — 2026-10-11
 
@@ -172,3 +172,21 @@ Sergio autorizó poner los workers a trabajar; cada madre supervisa, autoriza su
 - **Desarrollo:** madre Desarrollo = sesión principal de esta coordinación; delegó a `01a12c7e-97e2-7115-8561-0b7658008003`, Sol 6.1 Medio, diagnóstico/arreglo de Prisma, dependencias por lockfile, tests y typecheck. Entrega: comandos/exit codes, diff y SHA/artefacto, distinción fallo de entorno/código y bloqueo concreto. Sin bypass, secretos, producción ni deploy.
 - **Marketing:** madre `01a12c1f-bef7-7252-a4b6-f8f8354dfc48` autorizada directamente por Sergio para mensajear/delegar a Media ChatGPT `6acbce63-abc8-83e9-8422-d849d5e15aa4`: recuperar pendientes, cortes/assets y preparar **PREVIEWS privados de material existente**. Entrega: pieza/ruta/versión, evidencia de assets, decisiones de cortes pendientes y preview revisable. Sin gasto, generación de voz/cara nueva, publicación ni master sin OK.
 Inicio confirmado por wait_threads: Desarrollo turno 01a12c87-d330-7196-af82-ee8db33d22b5 activo; Media turno 01a12c88-5a7f-7185-9df9-c5fe393ccf08 activo tras delegacion de madre Marketing. Esto confirma ejecucion iniciada, no resultados finales.
+
+## Corrección vigente Sergio: 5 carriles reales bajo 2 madres
+
+Títulos asignados y nuevos chats Lucía/Ventas/Hermes confirmados activos por `list_threads`; tareas concretas enviadas a dueños. Esto prueba despacho/estado del chat, no acceso completo ni resultado.
+
+| Madre | Carril y worker | Próxima tarea enviada y fuente remota |
+|---|---|---|
+| Desarrollo-Infra | Plataforma `01a12c7e-97e2-7115-8561-0b7658008003` | Barrido restante de usted, PR propio/tests; no repetir #157-160. `origin/claude/optimistic-ride-1sp5fe:hermes-content/docs/cola/loop/plataforma.md:142-149` |
+| Desarrollo-Infra | Hermes ChatGPT `6acc36d6-40fc-83e9-8b1c-0a50b7595355` | Localizar/revisar M1c+M1d con lente dinero y regresiones, evidencia propia. `origin/claude/adoring-ramanujan-7sjzwv:hermes-content/docs/cola/loop/hermes-jarvis.md:604-605`; Q1/VPS no autorizado por inferencia |
+| Marketing | Marca ChatGPT `6acbce63-abc8-83e9-8422-d849d5e15aa4` (Media reutilizada) | Cuatro originales: versiones revisables; confirmación DD-A/corte N02; masters con ok cortes y posteo según calendario/aprobación. `origin/claude/gifted-clarke-y4vvtj:hermes-content/docs/cola/loop/marca-personal.md:8-11` |
+| Marketing | Lucía ChatGPT `6acc36d4-8864-83e9-a185-6745b83ed1e6` | Recuperar/exportar reel viernes v2, preview/SHA/identidad; decisiones calendario/voz/token pendientes. `origin/claude/zealous-babbage-fvtjck:hermes-content/docs/cola/loop/lucia.md:57-60`; no repetir G4/G5 cerrados |
+| Marketing | Ventas/pauta ChatGPT `6acc36d5-6ed8-83e9-83e4-f8c414b6112b` | Delta manifiesto/test cuando Sergio elija 3 piezas; demo/capturas desbloquean render. `origin/claude/onia-ventas-pauta-rmdv5j:hermes-content/docs/cola/loop/ventas-pauta.md:3-8`; sin crear campaña/contactar |
+
+**Secciones UI vigentes:** Madres `5a199cb4-3e38-4ba6-a6a0-5d96a36d279f`; Marketing `19a55402-64e8-4be0-851f-bfb0a44f4a71`; Plataforma/Infra `5705d669-5498-4e52-9d0e-8bf0fcf0d156`. Reparto fuente: `madre-local.md:25-38` en rama arranque y `madre-marketing.md:3-6` en rama pagos-checkout; las madres supervisan/resumen, carriles ejecutan.
+
+**Acceso cloud necesario:** Sergio pide cobertura completa para las tareas; pruebas de acceso solicitadas por worker. Registrar repo/ref/lectura, checkout/tests, assets/artefactos, conectores autenticados y VPS solo si corresponde. **No declarar todo conectado** por acceso de otro worker o por tool visible. Bloqueos concretos con paso dependiente detenido, sin compras ni secretos transferidos.
+
+**Q&A pendiente:** loops cloud con PC apagada frente a ronda local cada 30 min; routing Astra/Sol/Luna frente al modelo Work no observable; política exacta de publicar piezas ya aprobadas. No crear loops nuevos ni interpretar permisos de publicación mientras se resuelven. Conservar contratos finitos y las aprobaciones específicas vigentes.
