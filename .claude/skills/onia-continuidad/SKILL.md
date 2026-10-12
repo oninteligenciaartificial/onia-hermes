@@ -1,9 +1,28 @@
 ---
 name: onia-continuidad
-description: Invocar al ARRANCAR cualquier sesión de ONIA, y otra vez cuando la sesión se hizo larga. Evita el trabajo fantasma y la pérdida de rumbo — los cuatro minutos de lectura antes de decidir, cómo corregir un doc que resultó falso, y cuándo cortar y escribir el handoff. No reemplaza a onia-router (ése dice QUÉ skill usar): éste dice QUÉ YA SABEMOS antes de actuar.
+description: Usar al inicio y cierre de encargos ONIA y cuando llegue un pedido o enlace nuevo. Recupera solo deltas, registra dueño, evidencia y siguiente acción en el handoff existente, separa aprendizaje observado de propuestas y evita perder encargos o rehacer trabajos cerrados. Complementa onia-router; no crea loops ni entrena modelos.
 ---
 
 # No perder el hilo
+
+## Intake y aprendizaje por evento — Sergio Urcullo, 12-oct-2026
+
+**META:** preservar cada pedido/enlace y llevarlo al siguiente resultado autorizado sin releer historia ni duplicar registros.
+**PRUEBA:** entrada trazable en handoff canónico, fuente/fecha y artefacto/ref/SHA cuando exista; cierre contrastado con evidencia.
+**PARADA:** falta de permiso/dato realmente necesario: pedir intervención mínima concreta inmediatamente y continuar frentes independientes. No cerrar solo porque se delegó.
+
+- Al inicio, al llegar un pedido/link y al cierre, consultar estado/delta del carril y las fuentes relevantes. No cargar conversaciones, documentos o transcripts completos ni sondear estados iguales; no crear scheduler/loop por usar esta skill.
+- Usar el handoff del carril ya existente. Para este relevo coordinado, el índice único es `hermes-content/docs/handoff/codex-cloud-pc-20261011.md`, sección «Registro de encargos y aprendizaje». Enlazar informes/colas existentes; no copiar su contenido ni crear otro ledger.
+- Cada entrada breve contiene **objetivo, dueño, estado, evidencia, aprendizaje (observado / inferencia / propuesta), siguiente acción o bloqueo, fecha y fuente**. Un link nuevo se registra antes de ampliar la investigación. Reusar la misma entrada al cambiar el estado, preservando intentos fallidos útiles.
+- Estados: recibido / asignado / en curso / entregado para revisión / validado / bloqueado. «Asignado» o tool success no significa ejecutado. Cierre revisado exige comprobar versión, alcance, resultado, prueba y permisos; si falta revisión, conservar «entregado para revisión».
+- Madre de área delega al worker existente, revisa y resume; no ejecuta su oficio ni crea otro carril. Sol 6.1 medio para madres; Astra para TODO código Platform y decisiones muy difíciles; QA Sol independiente, mecánica Luna. Registrar configuración aceptada y modelo efectivo por separado.
+- Al cerrar, continuar siguiente pendiente autorizado viable; no inventar busywork ni repetir cerrado. Si una alternativa cambia arquitectura, no adoptarla en silencio. Una petición humana debe explicar exactamente qué desbloquea; no pedir aprobación genérica ni interpretar silencio como permiso.
+- Guardar **métodos comprobados** en la skill canónica del carril cuando sean reutilizables; guardar **estado/decisiones** en su handoff. Una observación de Orbix no autoriza copiar identidad, cambiar oferta/precios ni implementar una propuesta. No afirmar que un caso enseña al modelo: es recuperación documental, no entrenamiento.
+- Antes de afirmar que la nube usa esta skill, comprobar repo/ref y lectura/ACK del worker. Un commit local o push no instala ni prueba carga cloud. Nunca registrar secretos, cookies, URLs firmadas temporales o transcripts completos.
+- Casos de aceptación y evidencia del presente cambio: las entradas Orbix, Alfred y WhatsApp del registro único. Preservar bloqueo de envío Alfred aunque su lectura pase; preservar WhatsApp cerrado sin rehacerlo; Orbix sigue sujeto a revisión/adopción explícita.
+
+Las instrucciones y mediciones anteriores de Claude que siguen son contexto histórico: comprobar runtime actual antes de repetir fetches, restauraciones, mensajería o autosync. La regla de arranque se cumple por delta cuando ya existe estado fiable; no obliga a releer fuentes enteras en cada turno.
+
 
 `onia-router` responde *"¿qué skill uso para esto?"*. Esta skill responde la pregunta de
 antes: ***"¿qué ya sabemos de esto, y sigue siendo cierto?"***

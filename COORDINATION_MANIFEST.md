@@ -2,7 +2,7 @@
 
 ## Encargo Codex documental aislado — 12-oct-2026
 
-Rama `codex/cloud-pc-audit-20261011`, worktree `C:/Users/PC/.codex/worktrees/madre-cloud-audit/onia-hermes`. Alcance propio: CODEX.md adaptado de CLAUDE.md, enlace obligatorio AGENTS.md, este registro de coordinación y comparación en `hermes-content/docs/handoff/codex-cloud-pc-20261011.md`. Sin producto/main/deploy, skills copiadas, secretos ni reactivación de sesiones. Fuente/instrucciones vigentes: Sergio 12-oct, 2 madres solo supervisan y 5 workers Codex Cloud; Astra madres/difícil, Sol habitual, Luna mecánica. Los IDs/loops del hilo antiguo no se consideran activos. Worker implementa documentación y checks; madre revisa comparación final.
+Rama `codex/cloud-pc-audit-20261011`, worktree `C:/Users/PC/.codex/worktrees/madre-cloud-audit/onia-hermes`. Alcance propio: CODEX.md adaptado de CLAUDE.md, enlace obligatorio AGENTS.md, este registro de coordinación y comparación en `hermes-content/docs/handoff/codex-cloud-pc-20261011.md`. Sin producto/main/deploy, skills copiadas, secretos ni reactivación de sesiones. Fuente/instrucciones vigentes: Sergio 12-oct, 2 madres solo supervisan y 5 workers Codex Cloud; Sol 6.1 medio madres, Astra código Platform/difícil, Sol QA/habitual, Luna mecánica. Encargo posterior: actualizar skill canónica onia-continuidad, routing y registro único de intake/aprendizaje; sin detener desarrollo ni crear loops. Los IDs/loops del hilo antiguo no se consideran activos. Worker implementa documentación y checks; madre revisa comparación final.
 
 > **Vigencia corregida 2026-10-09:** el hilo de septiembre de abajo es historial,
 > no inventario vivo ni permiso para reactivar sesiones. La madre Claude local

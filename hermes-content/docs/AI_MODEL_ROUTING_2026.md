@@ -3,7 +3,14 @@
 Estado: actualizado 2026-10-09 (Sol 6.1 para contratos cerrados, alineado con `equipo-de-agentes`). Aplica a Codex, subagentes y automatizaciones que permitan
 elegir modelo. La disponibilidad puede variar por producto y cuenta.
 
-## Decisión
+## Decisión vigente Sergio Urcullo — 12-oct-2026
+
+- Madres Desarrollo-Infra y Marketing: **gpt-6.1-sol · medium**, solo delegación/revisión/resumen. Cambios aceptados por `send_message_to_thread`; efectivo no expuesto. Escalar decisiones muy difíciles a Astra con evidencia, sin convertirlo en default de toda coordinación.
+- **TODO código Platform: gpt-6-astra · medium**. Análisis cerrado Sol/Luna, QA independiente Sol; no detener diffs/lotes activos para cambiar esta política.
+- Oficio habitual no Platform: Sol 6.1 medio; extracción/mecánica verificable Luna low. Hasta cinco frentes independientes cuando necesarios y runtime permita; no llenar slots ni repetir el paquete completo de contexto.
+- Aplicar deltas/cursor, contratos consolidados y retornos acotados; reutilizar pruebas válidas para el mismo SHA. Esperar eventos/resultado, no polling vacío ni loops nuevos. Skill única `.claude/skills/onia-continuidad/SKILL.md`; trazabilidad y medición en `hermes-content/docs/handoff/codex-cloud-pc-20261011.md`. Bajar modelo no prueba reducción de tokens/cuota ni garantiza calidad: verificar contrato y escalar si falla.
+
+## Decisión histórica — 9-oct (subordinada a la anterior)
 
 | Trabajo | Modelo y esfuerzo inicial | Motivo |
 |---|---|---|

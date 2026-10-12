@@ -4,7 +4,50 @@
 
 ## PLAN VIGENTE 12-oct — armado único y ejecución por evidencia
 
-**Precedencia última orden:** ASTRA medio para TODO código Platform. Análisis acotado Sol/Luna barato, filtro QA independiente; escalar caro si hace falta. Hasta 5 frentes útiles por lote cuando capacidad/runtime y tareas independientes permitan, sin forzar slots ni duplicar archivos. Madres solo delegan/revisan/resumen; Desarrollo-Infra no reporta operación Marketing. Al cerrar, siguiente pendiente autorizado con prueba, sin busywork/repetir cerrado/evadir permisos; no afirmar 24/7. Fuente canónica CODEX.md y referencia AGENTS.md actualizadas; sin ejecutar Claude ni copiar skills/transcripts completos.
+### Auditoría acotada de tokens — 12-oct, medición previa y decisión posterior
+
+**Muestra real:** 4 JSONL locales concretos de `C:/Users/PC/.codex/sessions/2026/10/`: madres `01a12beb-7774-7c02-9931-12264158df83` y `01a12c1f-bef7-7252-a4b6-f8f8354dfc48`, subagente documentación `01a12bee-0140-7811-9211-45ed862a67e9`, inventario Luna `01a1319c-590e-7170-b00f-f1a6f21b480d`. ~39,95 MB, 1.114 eventos token_count; no scan general de logs Claude ni workers cloud. Lectura streaming solo metadatos/usage/conteos; no exportación de mensajes/secretos. **Ventana medida:** desde 12-oct 00:00 UTC (11-oct 20:00 Caracas) hasta último recibo de cada log, ~12-oct 20:21 UTC (16:21 Caracas); los archivos de madres empiezan 11-oct 17:03/18:00 UTC.
+
+**Método:** delta entre último `total_token_usage` acumulado y último recibo anterior a medianoche; 0 descensos detectados en acumulados. NO sumar todos los acumulados ni `last_token_usage` repetidos. Cached es subconjunto de input; reasoning es subconjunto de output, no añadirlos. Desfase posible de una llamada cruzando medianoche y registros activos incompletos. No convertir tokens a dólares, consumo de cuota ni ahorro predicho.
+
+| Log / modelo en turn_context | Input delta | Cached input incluido | Input no cached (resta) | Output delta |
+|---|---:|---:|---:|---:|
+| Madre Desarrollo / Astra | 54.879.025 | 53.945.728 | 933.297 | 61.773 |
+| Madre Marketing / Astra | 41.163.327 | 40.442.752 | 720.575 | 54.511 |
+| Documentación delegado / Sol 6.1 | 20.919.869 | 20.229.632 | 690.237 | 28.840 |
+| Inventario corto / Luna | 265.978 | 247.552 | 18.426 | 1.447 |
+| **Muestra total (no cuenta entera)** | **117.228.199** | **114.865.664** | **2.362.535** | **146.571** |
+
+**Dos madres:** 96.042.352 input, 94.388.480 cached (**98,28 %**), 1.653.872 no cached, 116.284 output. Miden contexto servido/reutilizado repetidamente, no memoria única ni coste efectivo. Los modelos citados constan en turn_context local de esta muestra; no prueban el efectivo de Work ni de los cinco workers cloud.
+
+**Señales verificadas de overhead, conteos del archivo completo 11–12 oct (no delta horario):** madre Desarrollo 640 recibos y 48 `wait` + 15 `wait_agent` + 13 `sleep`; Marketing 335 recibos y 125 `wait`. Son llamadas/esperas, no prueba de loops vacíos ni de llamadas facturadas separadas. Outputs de tools totalizan ~1,27 M y ~2,65 M caracteres; máximos ~258.705 y ~521.749. Mensajes role:user tienen máximos 21.717 caracteres en ambas madres y ambos subagentes; 13/11 repeticiones exactas extra en madres, sin atribuirlas al humano (pueden ser envolturas/steering/recibos). Contratos de tool máximos 2.908/1.874 caracteres. No afirmar que se releyó la misma skill sin análisis de paths; la muestra demuestra entrada grande/reutilizada y salida de herramienta grande.
+
+**Autorreporte de madre Marketing, no telemetría cuantificada:** varias lecturas `read_thread` de turnos largos, waits interrumpidos, instrucciones acumuladas a Marca; adoptó delta/cursor/contrato consolidado, sin rondas vacías. Reporta modelo principal/tokens por turno no expuestos en su superficie; subagente `materiales_ventas` heredado sin override y `video_referencia` completado. Esto no invalida los recibos locales, pero no permite costear cada subagente o atribuir causalidad. Workers configurados Sol 6.1 medium, efectivos no observados.
+
+**Tres recortes aprobados por Sergio y aplicados al contrato/skill, sin detener desarrollo:**
+
+1. **Contexto corto de madres:** un estado por carril con contrato-ID, último SHA, entregable, gate y bloqueo; leer solo delta/cursor desde ese SHA. Cada relevo usa este estado, no conversaciones enteras. Limitar retornos de tool a campos/filas necesarios y guardar detalle en artefacto; no volcar logs enormes al contexto. Medir input/cached por lote comparable antes/después.
+2. **Una coordinación por resultado:** consolidar correcciones del mismo contrato en un mensaje; esperar evento/ACK con cursor y timeout acotado, sin sondeos repetidos sobre estado igual. Una ronda local solo si hay cambio o siguiente pendiente autorizado; no wakeups vacíos. Medir número de lecturas/esperas y tiempo hasta desbloqueo, sin cancelar trabajos activos.
+3. **Fanout proporcional:** análisis mecánico Luna, QA independiente Sol; usar hasta 5 frentes solo si independientes y necesarios, no como objetivo. Entregar SHA+veredicto/delta y reutilizar tests ya válidos para ese SHA; repetir solo por cambio/fallo/incertidumbre. Un escalamiento Astra para decisión difícil, sin duplicar en todos los agentes el paquete de contexto de la madre.
+
+**¿Bajar madres sirve?** Recomiendo **Sol 6.1 medio para coordinación rutinaria** (inventario, priorización de contratos ya definidos, seguimiento y resumen), con **Astra medio para arquitectura/decisiones ambiguas, permisos de alto riesgo y arbitraje difícil**. Luna no como madre con juicio; sí extractor mecánico. Decisión posterior de Sergio: madres Sol 6.1 medio; ambos cambios fueron aceptados por `send_message_to_thread(model=gpt-6.1-sol, thinking=medium)`. Efectivo no expuesto; medición posterior comparable y validación de calidad aún pendientes. El 98,28 % cached apunta a que controlar relectura/polls/contexto puede importar más que reducir salida; bajar modelo no reduce por sí solo tokens y no sabemos su efecto en cuota. **TODO código Platform conserva Astra por orden vigente; QA Sol, mecánica Luna.**
+
+**Cuota:** snapshot comunicado de `get_usage_limits`: 9 % usado, ventana 10.080 min, ordinaryUsageAllowed true, saldo 0. Es global de cuenta, no de sesión/modelo; NO equivale a dinero ni acredita qué causó el 9 %. No hay coeficientes de cuota/precios efectivos ni cobertura total cloud; no estimar ahorro garantizado. Fuentes de método: `hermes-content/docs/AI_MODEL_ROUTING_2026.md` (9-oct, escalamiento/contexto, subordinado a código Astra vigente) y inventario Claude del historial de este registro (conteos Agent/SendMessage/CronCreate, sin tokens por ronda). La medición precede al cambio de madres; este registro no modifica runtime, trabajo activo ni loops.
+
+**Precedencia última orden:** ASTRA medio para TODO código Platform. Análisis acotado Sol/Luna barato, filtro QA independiente; escalar caro si hace falta. Hasta 5 frentes útiles por lote cuando capacidad/runtime y tareas independientes permitan, sin forzar slots ni duplicar archivos. Madres Sol 6.1 medio solo delegan/revisan/resumen; Desarrollo-Infra no reporta operación Marketing. Al cerrar, siguiente pendiente autorizado con prueba, sin busywork/repetir cerrado/evadir permisos; no afirmar 24/7. Fuente canónica CODEX.md y referencia AGENTS.md actualizadas; sin ejecutar Claude ni copiar skills/transcripts completos.
+
+### Registro de encargos y aprendizaje — único intake 12-oct
+
+META: no perder pedidos/enlaces ni rehacer cierres. PRUEBA: entradas con dueño/fecha/fuente y evidencia revisable. PARADA: permiso/dato bloqueante se pregunta concretamente, continuando lo independiente. Skill actualizada en `.claude/skills/onia-continuidad/SKILL.md`; no skill duplicada, entrenamiento ni carga cloud comprobada por este cambio.
+
+| Pedido / objetivo | Dueño / estado | Evidencia y fuente (12-oct) | Aprendizaje y siguiente acción / bloqueo |
+|---|---|---|---|
+| Orbix: evaluar diseño y oferta para ONIA | worker orbix_analisis; entregado para revisión madre | [Informe](../../research/orbix-2026-10-12/INFORME.md), 7 capturas en misma carpeta; SHA256 informe `0c0cf2b00863e209376a1d35639fd2b586437feae84a5bf4a4e5ce4fa59f2b30`; fuente pública https://www.orbix.studio/ | Observado: jerarquía/CTA y oferta; inferencias/propuestas distinguidas en informe. No comparar ONIA como hecho ni adoptar precios/identidad. Siguiente: madre revisa adaptación propuesta; no implementación autorizada por el análisis. |
+| Hermes/Alfred: supervisor cloud de cinco workers | cloud_architecture; bloqueado envío, lectura validada | [Auditoría canónica](../audits/SUPERVISOR-CLOUD-INVENTARIO-20261012.md), addendum 20:19 UTC; lectura 5 UUID PASS, envío Hermes NOT_FOUND sin turnId/ACK | Observado: leer no acredita envío/despertar; causa interna no confirmada. Siguiente: preservar incidencia mínima para soporte/decisión madre; no recurrencia ni cambio silencioso de arquitectura. |
+| Platform/WhatsApp: enlace editor con permisos efectivos | worker Platform Astra + QA Sol; cierre #164 reportado por madre; siguiente #163 asignado | Fuente: madre Desarrollo 12-oct, PR #164 commit `dcb37f78`, 151 focales + 63 adicionales y type/lint; suite global interrumpida, no certificada. Worker `01a12c7e-97e2-7115-8561-0b7658008003` | Observado según reporte: cierre enlace sin tocar planes/canales/APIs ni producción. Siguiente: verificar contrato del Confirmador teléfono inválido en #163 y corregir solo si bug vigente independiente. No rehacer enlace cerrado; no declarar QA global. |
+| Cuenta/tokens: reducir coordinación redundante | madres Sol 6.1 medio; configuración aceptada, efecto pendiente de medición | Sección «Auditoría acotada de tokens» de este mismo handoff; 4 logs/ventana/cobertura explícitos. Fuente posterior madre: send_message_to_thread aceptó ambos cambios | Observado: input/cached/output de muestra, no cuota/costo causal. Aplicado a reglas: deltas, un contrato consolidado/evento, fanout proporcional. Siguiente: comparar lote/calidad; ningún ahorro garantizado ni efectivo de modelo afirmado. |
+
+**Prueba de uso de la skill (revisión documental, no ejecución de producto):** Orbix conserva entregado/revisión y separa observado/propuesto; Alfred conserva FAIL de envío aunque lectura PASS; WhatsApp conserva cierre comunicado y siguiente independiente sin repetir tests ya cerrados. Se comprobaron existencia de informe/auditoría y hash Orbix; estado Platform/modelos proviene del reporte de madre, no verificación independiente nueva. Cloud deberá comprobar ref/lectura de skill; push no acredita instalación.
 
 ### Recuperación DELTA Claude — inventario 12-oct, sin copiar fuentes
 
@@ -63,8 +106,8 @@ Madres locales: Desarrollo `01a12beb-7774-7c02-9931-12264158df83`, Marketing `01
 
 | Sesión | Responsabilidad | Modelo |
 |---|---|---|
-| Madre Desarrollo-Infra local | Contratos/prioridades, coordinación Platform/Hermes, QA y resumen; NO implementación | Astra medio; tareas muy difíciles/riesgo escalan esfuerzo con evidencia |
-| Madre Marketing local | Contratos/prioridades Marca/Lucía/Ventas, revisión/versión aprobada, resumen; NO oficio del worker | Astra medio |
+| Madre Desarrollo-Infra local | Contratos/prioridades, coordinación Platform/Hermes, QA y resumen; NO implementación | Sol 6.1 medio; escalar a Astra para decisión muy difícil con evidencia |
+| Madre Marketing local | Contratos/prioridades Marca/Lucía/Ventas, revisión/versión aprobada, resumen; NO oficio del worker | Sol 6.1 medio |
 | Platform Codex Cloud | Desarrollo del backlog vigente, diff y pruebas; no rehacer Prisma cerrado | Astra medio TODO código; análisis acotado Sol/Luna, QA independiente |
 | Hermes Codex Cloud | QA independiente, regresiones, contratos de infra/Jarvis sin aplicar producción | Sol medio; Astra alto riesgo/muy difícil |
 | Marca Codex Cloud | Continuar proyectos/edición/cortes, previews y publicación autorizada | Sol medio; Luna mecánica cerrada |
