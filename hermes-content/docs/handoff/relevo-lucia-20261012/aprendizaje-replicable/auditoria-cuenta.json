@@ -1,0 +1,68 @@
+{
+  "meta": "Auditar independencia y aprendizaje operacional de cuenta sin login,secretos,escritura IG,generación ni gasto",
+  "repository": "oninteligenciaartificial/onia-hermes",
+  "source_commit": "3566e5d5208cf4a7bcf20e743469c6088944674c",
+  "checkout_head": "2cdefca738ed85d87f50e6dc3dc6c31a5aa698f9",
+  "read_method": "git show SHA:path; checkout antiguo no usado como fuente vigente",
+  "model_configured": "Sol medium heredado",
+  "model_observed": "no observable",
+  "publication_scope": "SOLO MOSTRAR; publicación/calendario pendientes",
+  "rows": [
+    {
+      "dimension": "cuenta_creada",
+      "status": "historico_documental",
+      "evidence": "Skill lucia:248-253 declara cuenta Creador conectada desde 20-ago; token estuvo en Postiz 4-sep.",
+      "limit": "No acta de alta, perfil vivo, username API ni titularidad comprobados por este worker."
+    },
+    {
+      "dimension": "cuenta_configurada",
+      "status": "parcial_documental",
+      "evidence": "PLAN:162-164 propone nombre/bio sin linkventa; etiqueta perfil IA informada31-ago y nadie la miró.",
+      "limit": "Nombre,bio,avatar,tipo Creador y etiqueta actuales no verificados."
+    },
+    {
+      "dimension": "acceso_actual",
+      "status": "no_verificable_en_alcance",
+      "evidence": "Skill lucia:251-265 y PLAN:134,156: token no medido desde4-sep; traslado/renovación pendientes.",
+      "limit": "No se leyó token, VPS, login, expiración ni scope; fechas13-18 oct son estimación histórica."
+    },
+    {
+      "dimension": "operacion_cuenta",
+      "status": "no_probada_worker",
+      "evidence": "Handoff:13-18,37 y Skill:271: nada publicado/desplegado; publicadores nunca probados en vivo.",
+      "limit": "No ensayo Meta FINISHED, media ID, permalink ni publicado.jsonl inspeccionados."
+    },
+    {
+      "dimension": "medicion_audiencia",
+      "status": "plan_sin_resultados",
+      "evidence": "PLAN:144-148 guardados/envíos/seguidores/recomendable y revisión D14; Skill:401 cuenta sinposts/seguidores.",
+      "limit": "No insights ni cifras actuales obtenidos; cero histórico no es medición actual."
+    },
+    {
+      "dimension": "autonomia_contenido",
+      "status": "probada_parcial_worker",
+      "evidence": "Recepción13/13 + 134/134 y master SHA verificados; QA360/360 fotogramas; script reel selftest mock PASS.",
+      "limit": "Prueba producción/preservación/QAoffline; no autonomía publicación24 x7 ni cuenta independiente operativa."
+    },
+    {
+      "dimension": "independencia_cuenta",
+      "status": "definida_documental",
+      "evidence": "Handle propio@lucia.antelo.oficial y --cuenta lucia resuelven ig-lucia.env separado; misma app On IASocial API/VPS que Sergio.",
+      "limit": "No demuestra credenciales Propias/controladministrativo/operación autónoma; cuenta distinta y worker autónomo son ejes separados."
+    },
+    {
+      "dimension": "publicadores",
+      "status": "codigo_revisado_offline",
+      "evidence": "ig-reel CUENTAS_IA activa Lucía; ig-carrusel importaig-reel y aplica IApadre; agendar timer UTC transitorio.",
+      "limit": "No guardas de SHA/aprobación/username/dedupe en publicador; timer se pierde alreiniciar; necesita supervisión/ledger."
+    },
+    {
+      "dimension": "aprendizaje_cuenta",
+      "status": "incorporado_y_parcialmente_aplicado",
+      "evidence": "Skill:266-273 distingue parámetro IA enviado de confirmaciónreal; readback conserva registro para evitarreintento duplicado. QAoffline aplicó ese límite.",
+      "limit": "Aceptación IAreal/recuperacióntraserror no observadas fuera de Mocks."
+    }
+  ],
+  "missing_original_inputs": "K4/R3 no recibidos; no rutas de commit verificadas todavía; no afirmar403",
+  "verdict": "Cuenta separada documentada; operación/acceso/medición actual no probados. Autonomía de contenido y QAoffline parcialmente probada. No afirmar cuentaautónoma replicable operando."
+}

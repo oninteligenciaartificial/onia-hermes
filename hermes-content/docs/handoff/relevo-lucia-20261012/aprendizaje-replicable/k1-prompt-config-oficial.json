@@ -1,0 +1,54 @@
+{
+  "date": "2026-10-12",
+  "source": "Higgsfield job_display read-only",
+  "job_id": "4afffb96-acb5-43b1-913b-09d07f3cd22d",
+  "status": "completed",
+  "model": "seedream_v4_5",
+  "params": {
+    "prompt": "Vertical photo, medium shot at eye level, 50 mm lens, handheld phone feel. A young woman stands behind the reception counter of a bright dental clinic on a high floor of a glass tower in Equipetrol, Santa Cruz, Bolivia: light porcelain floor, counter of light wood with a white marble top, a large window behind her showing a tree-lined avenue, completely flat city, big cumulus clouds, soft morning daylight entering from the window. She holds a smartphone with both hands at chest height and looks down at it with a doubtful, slightly amused expression, one eyebrow raised. She wears the terracotta two-piece scrub set from the last reference image: V-neck top, short sleeves with slightly darker terracotta cuffs, one small chest pocket, matte stretch fabric with everyday creases. Small gold hoop earrings and a thin gold chain necklace. Warm medium-brown hair with a middle part, loose. No makeup. The computer monitor on the counter faces away from the camera; no readable screens, no text, no logos, no signs anywhere. Same face, skin and freckles as the first reference image. Same level of fine detail as the first reference image: individually sharp freckles, fine pores, textured irises, crisp eyelashes and flyaway hairs. Youthful face, smooth under-eyes, no deep wrinkles. Lighting is physically consistent with this scene: highlights on skin and catchlights in the eyes come only from the light sources present, never added glow. Ignore everything that is not the garment in the last reference image.",
+    "aspect_ratio": "9:16",
+    "input_images": [
+      {
+        "id": "abe2e6bd-0d39-49be-9d87-1126d4ed07b0",
+        "type": "media_input",
+        "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/abe2e6bd-0d39-49be-9d87-1126d4ed07b0.jpg"
+      },
+      {
+        "id": "a7cfb766-5755-4d76-baba-c8e81ddf50db",
+        "type": "media_input",
+        "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/a7cfb766-5755-4d76-baba-c8e81ddf50db.jpg"
+      },
+      {
+        "id": "d7d6d36a-1358-40b4-b1b3-d98c1ac15135",
+        "type": "media_input",
+        "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/d7d6d36a-1358-40b4-b1b3-d98c1ac15135_resize.jpg"
+      },
+      {
+        "id": "df491c87-089a-4ace-907a-90ebe6ac82e3",
+        "type": "media_input",
+        "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/df491c87-089a-4ace-907a-90ebe6ac82e3.png"
+      },
+      {
+        "id": "8ce2f65c-5681-41b1-bb37-83b3576c74fd",
+        "type": "media_input",
+        "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/8ce2f65c-5681-41b1-bb37-83b3576c74fd_resize.jpg"
+      },
+      {
+        "id": "688d63a7-c993-4025-865e-61a4133a2920",
+        "type": "media_input",
+        "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/688d63a7-c993-4025-865e-61a4133a2920.jpg"
+      }
+    ],
+    "batch_size": 1,
+    "quality": "basic",
+    "seed": 409508,
+    "width": 1440,
+    "height": 2560,
+    "use_unlim": false,
+    "reference_elements": []
+  },
+  "result_metadata": {
+    "has_result": true
+  },
+  "note": "Historical generation inspected now; no new generation. No current cost inferred."
+}

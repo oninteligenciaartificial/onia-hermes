@@ -1,0 +1,42 @@
+familia,formato,fecha_oficial,modelos_actuales,aprendido_documentalmente,probado,QA,brecha
+imagen_lifestyle,Retrato/lifestyle con referencias,2026-10-12,"soul_2,nano_banana_pro,seedream_v4_5",True,historico_documental,no_aprobacion_general,"Probado históricamente; métricas/documentos, sin QA nueva universal"
+imagen_comparativa,Comparación motores imagen,2026-10-12,"nano_banana_2_1,seedream_v4_5,flux_3_image,kling_omni_image,gpt_image_2_5,seedream_v5_pro",True,historico_documental,no_aprobacion_general,Probado; fallos de identidad y fuga de referencias documentados
+identidad_adapter,Soul ID/adapter entrenado,2026-10-12,"soul_2,soul_cast",True,historico_documental,no_aprobacion_general,A/B histórico; v5b duplicado costó25cr; no volver a entrenar por inferencia
+vestuario,Prenda/maniquí/continuidad vestuario,2026-10-12,seedream_v4_5,True,historico_documental,no_aprobacion_general,Prueba histórica; texto/color inventados; originalPNG aún pendiente
+builder_identidad,AI Influencer Builder/sheets,2026-10-12,soul_cast,True,no_demostrado,no_aprobacion_general,Catálogo/configuración; no prueba de nuevo personaje replicado
+casting,Casting sin referencias,2026-10-12,"soul_2,nano_banana_pro,gpt_image_2_5",True,historico_documental,no_aprobacion_general,Histórico rechazado; no valida identidad vigente
+broll_i2v,B-roll image-to-video,2026-10-12,"cinematic_studio_3_0,seedance_2_0_mini,kling3_0",True,historico_documental,no_aprobacion_general,"Pruebas una toma/modelo; deriva/reencuadre/letreros, caras<200px"
+t2v,Text-to-video,2026-10-12,"seedance_2_5,kling3_0,wan3_0",True,no_demostrado,no_aprobacion_general,Disponibilidad oficial; no QA específica Lucía
+first_last,Primer/último cuadro y continuidad,2026-10-12,"flux_3_video,kling_o3_flf,wan3_0",True,no_demostrado,no_aprobacion_general,Referencias técnicas; no prueba actual Lucía
+v2v,Video edit/extension/remix,2026-10-12,"flux_3_video_edit,seedance_2_5,kling_video_edit",True,no_demostrado,no_aprobacion_general,Catálogo; no generación/QA nueva
+motion,Motion control/recast/Genjutsu,2026-10-12,"hf_mult_motion_control,hf_mult_replace_object,kling3_0_motion_control",True,no_demostrado,no_aprobacion_general,Cotización no valida entradas; no movimiento de Lucía probado aquí
+lipsync,Labios con audio,2026-10-12,"sync_so,seedance_2_0_mini",True,historico_documental,no_aprobacion_general,Ensayo interno histórico: Mini deriva/sin audio; sync conserva fuente; no licencia/voz pública nueva
+tts,TTS/voz narrada,2026-10-12,"seed_audio,qwen_audio_tts,elevenlabs_v4,text2speech_v2",True,historico_documental,no_aprobacion_general,"Voz histórica; Marcela decidida, lote viernes223car NO generado"
+voice_change,Cambio de voz,2026-10-12,voice_change,True,no_demostrado,no_aprobacion_general,Capacidad oficial; no prueba Lucía actual
+dubbing,Doblaje/traducción/labios,2026-10-12,dubbing,True,no_demostrado,no_aprobacion_general,Capacidad oficial; no prueba Lucía actual
+audio_music,Música/SFX,2026-10-12,"sonilo_music,mirelo_text_to_audio",True,no_demostrado,no_aprobacion_general,Modelo visible no acredita elegibilidad audio suelto; restricciones herramienta/pipeline pendientes
+image_edit,Edición/outpaint imagen,2026-10-12,"flux_2_pro_outpaint,flux_kontext,outpaint",True,no_demostrado,no_aprobacion_general,Referencias/cotizaciones; no QA específica nueva
+upscale,Upscale imagen/video,2026-10-12,"topaz_image,topaz_video,bytedance_video_upscale",True,no_demostrado,no_aprobacion_general,Cotizaciones históricas; no recupera identidad por defecto
+reframe,Reencuadre video,2026-10-12,reframe,True,no_demostrado,no_aprobacion_general,Cotizado; no probar que bordes/identidad se conservan sin QA
+bg_remove,Máscaras/remove background,2026-10-12,"image_background_remover,video_background_remover,sam_3_video",True,no_demostrado,no_aprobacion_general,Catálogo; sin ensayo Lucía
+technical_post,FPS/deflicker/depth,2026-10-12,"video_deflicker,depth_anything_video,fps_boost",True,no_demostrado,no_aprobacion_general,Catálogo; sin ensayo Lucía
+3d,3D objects/multiview/rigging/retexture,2026-10-12,"image_to_3d,multi_image_to_3d,3d_rigging,meshy_v5_retexture",True,no_demostrado,no_aprobacion_general,17 modelos3D visibles; no producción/QA3D Lucía
+marketing,Marketing Studio/ads/UGC,2026-10-12,"ms_image,marketing_studio_video,marketing_studio_v2_video",True,no_demostrado,no_aprobacion_general,Capacidad oficial; riesgo voz/guion/identidad inventados; sin pieza autorizada
+ad_multiplier,Ad Multiplier/ediciones de anuncio,2026-10-12,"ad_multiplier,ad_multiplier_v2",True,no_demostrado,no_aprobacion_general,Formato disponible; no ensayo en Lucía
+presets,Recetas visuales/presets/virales,2026-10-12,higgsfield_preset,True,no_demostrado,no_aprobacion_general,63 recetas leídas; no63recetas probadas; galerías web no exhaustivas
+reel_educativo,Reel educativo montado HyperFrames,2026-10-12,,True,worker_offline,QA_temporal_worker_no_publicacion,MASTER existente recuperado y QA360/360; muestra/APTO no aprobación de publicación
+carrousel,Carrusel/feed estático,2026-10-12,,True,no_demostrado,no_aprobacion_general,L01/C1/C2 existentes documentados; no regenerados ni QA nueva en este lote
+story,Story/Trial reel,2026-10-12,,True,no_demostrado,no_aprobacion_general,Receta local histórica; no publicación/insights comprobados
+cover,Cover/thumbnail,2026-10-12,,True,no_demostrado,no_aprobacion_general,Preset reel-cover disponible; sin pieza nueva ni prueba Lucía
+analysis,Análisis de video/virality,2026-10-12,,True,no_demostrado,no_aprobacion_general,Herramienta disponible no acredita análisis propio o predicción validada
+account,Cuenta/calendario/medición,2026-10-12,,True,no_demostrado,no_aprobacion_general,Cuenta separada documental; no acceso/operación/insights/autonomía actual
+replication,Sistema replicable/contratos,2026-10-12,,True,worker_offline,ensayo_local17gates,Ensayo offline17gates; identidad nueva/cuenta/generación/publicación no probadas
+ugc_product,"UGC producto, voz fuera de cámara",2026-10-12,,True,no_demostrado_Lucia_actual,no_aprobacion_general,Validar schema/inputs/licencias/presupuesto/identidad y ejecutar ensayo autorizado por formato;variantesUGC/presentador no inferir porcapacidad modelo
+ugc_tryon,UGC try-on/vestuario,2026-10-12,,True,no_demostrado_Lucia_actual,no_aprobacion_general,Validar schema/inputs/licencias/presupuesto/identidad y ejecutar ensayo autorizado por formato;variantesUGC/presentador no inferir porcapacidad modelo
+ugc_tutorial,UGC tutorial/pasos,2026-10-12,,True,no_demostrado_Lucia_actual,no_aprobacion_general,Validar schema/inputs/licencias/presupuesto/identidad y ejecutar ensayo autorizado por formato;variantesUGC/presentador no inferir porcapacidad modelo
+ugc_unboxing,UGC unboxing,2026-10-12,,True,no_demostrado_Lucia_actual,no_aprobacion_general,Validar schema/inputs/licencias/presupuesto/identidad y ejecutar ensayo autorizado por formato;variantesUGC/presentador no inferir porcapacidad modelo
+ugc_website,UGC website/demo real,2026-10-12,,True,no_demostrado_Lucia_actual,no_aprobacion_general,Validar schema/inputs/licencias/presupuesto/identidad y ejecutar ensayo autorizado por formato;variantesUGC/presentador no inferir porcapacidad modelo
+faceless,Faceless narrado multi-escena,2026-10-12,,True,no_demostrado_Lucia_actual,no_aprobacion_general,Validar schema/inputs/licencias/presupuesto/identidad y ejecutar ensayo autorizado por formato;variantesUGC/presentador no inferir porcapacidad modelo
+ai_host,Presentador/episodio AI host,2026-10-12,,"concepto,workflowactual noresuelto",no_demostrado_Lucia_actual,no_aprobacion_general,Resolverworkflow oficialactual deepisodio/presentador antesdeproducir;sin ensayoconLucía ni continuidaddeepisodio
+photoshoot,Photoshoot/editorial multiángulo,2026-10-12,,True,no_demostrado_Lucia_actual,no_aprobacion_general,Validar schema/inputs/licencias/presupuesto/identidad y ejecutar ensayo autorizado por formato;variantesUGC/presentador no inferir porcapacidad modelo
+ugc_review,UGC review/creator visible,2026-10-12,,True,no_demostrado_Lucia_actual,no_aprobacion_general,Inputs/claims/voz/consentimiento/identidad y presupuesto antes deensayo;no vía ejecutada

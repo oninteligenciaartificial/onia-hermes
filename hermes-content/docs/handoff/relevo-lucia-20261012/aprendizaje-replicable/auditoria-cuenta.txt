@@ -1,0 +1,54 @@
+Auditoría independiente cuenta Lucía — 12-oct-2026
+
+META: auditar creada/configurada/acceso/operación/medición e independencia frente a autonomía. PRUEBA: archivos fuente SHA fijo y evidencia worker ya producida. PARADA: informe verificable sin login/tokens/VPS/IG escritura, generación,instalación ni gasto.
+
+Repo oninteligenciaartificial/onia-hermes @3566e5d5208cf4a7bcf20e743469c6088944674c. Checkout /workspace/onia-hermes es2 cdefca: se detectó obsoleto; todas las lecturas sustantivas se hicieron git show 3566e5:path. Modelo configurado Sol medium, observado no observable.
+
+CONCLUSIÓN: @lucia.antelo.oficial está documentada como cuenta separada Creador conectada históricamente a On IASocial API; eso no prueba acceso actual ni operación autónoma. Se ha probado por worker recuperación/QAoffline de contenido y selftest mock, no publicación ni resultados de cuenta. SOLO MOSTRAR sigue vigente.
+
+cuenta_creada — historico_documental
+Evidencia: Skill lucia:248-253 declara cuenta Creador conectada desde 20-ago; token estuvo en Postiz 4-sep.
+Límite: No acta de alta, perfil vivo, username API ni titularidad comprobados por este worker.
+
+cuenta_configurada — parcial_documental
+Evidencia: PLAN:162-164 propone nombre/bio sin linkventa; etiqueta perfil IA informada31-ago y nadie la miró.
+Límite: Nombre,bio,avatar,tipo Creador y etiqueta actuales no verificados.
+
+acceso_actual — no_verificable_en_alcance
+Evidencia: Skill lucia:251-265 y PLAN:134,156: token no medido desde4-sep; traslado/renovación pendientes.
+Límite: No se leyó token, VPS, login, expiración ni scope; fechas13-18 oct son estimación histórica.
+
+operacion_cuenta — no_probada_worker
+Evidencia: Handoff:13-18,37 y Skill:271: nada publicado/desplegado; publicadores nunca probados en vivo.
+Límite: No ensayo Meta FINISHED, media ID, permalink ni publicado.jsonl inspeccionados.
+
+medicion_audiencia — plan_sin_resultados
+Evidencia: PLAN:144-148 guardados/envíos/seguidores/recomendable y revisión D14; Skill:401 cuenta sinposts/seguidores.
+Límite: No insights ni cifras actuales obtenidos; cero histórico no es medición actual.
+
+autonomia_contenido — probada_parcial_worker
+Evidencia: Recepción13/13 + 134/134 y master SHA verificados; QA360/360 fotogramas; script reel selftest mock PASS.
+Límite: Prueba producción/preservación/QAoffline; no autonomía publicación24 x7 ni cuenta independiente operativa.
+
+independencia_cuenta — definida_documental
+Evidencia: Handle propio@lucia.antelo.oficial y --cuenta lucia resuelven ig-lucia.env separado; misma app On IASocial API/VPS que Sergio.
+Límite: No demuestra credenciales Propias/controladministrativo/operación autónoma; cuenta distinta y worker autónomo son ejes separados.
+
+publicadores — codigo_revisado_offline
+Evidencia: ig-reel CUENTAS_IA activa Lucía; ig-carrusel importaig-reel y aplica IApadre; agendar timer UTC transitorio.
+Límite: No guardas de SHA/aprobación/username/dedupe en publicador; timer se pierde alreiniciar; necesita supervisión/ledger.
+
+aprendizaje_cuenta — incorporado_y_parcialmente_aplicado
+Evidencia: Skill:266-273 distingue parámetro IA enviado de confirmaciónreal; readback conserva registro para evitarreintento duplicado. QAoffline aplicó ese límite.
+Límite: Aceptación IAreal/recuperacióntraserror no observadas fuera de Mocks.
+
+CONFLICTOS/DATOS FECHADOS
+FLUJO.md es propuesta v4: su cabecera remite al circuito vigente y advierte token; conserva feed diario, venta/demos, historias y métricas antiguas. No es prueba de operación ni plantillaactual. PLANv5 y skill 0-ter mandan desde el 8-oct influencer que aprende IA, no mostrar producto, guardados/envíos; LUCIA.md conserva seccionesdeventa históricas. PLAN§7 conserva «sin vozresolver D4», contradice §4-bis y LUCIA canon dato10 D4 resuelta el 11-oct: Marcela queda; resolución no autoriza nueva generación de voz. La etiqueta IA de perfil nunca mirada y la etiqueta IA del post son controles distintos.
+
+REPLICABILIDAD MÍNIMA DEL SISTEMA (sin ejecutar)
+Separar artefacto de cuenta, acceso, permiso, operación y resultados. Por persona nueva: handle/profesional + app autorizada confirmados sin secretos; canon yrefs consentidos; master/pie/hash aprobados; publicadoresjuntos versionados; selftest offline; ensayo Meta autorizado FINISHED con ID; revisión duplicadosledger/timers; permiso actual por SHA/calendario; readback IA/permalink; registro métricas por pieza en ventana definida. El código actual no impone SHA, consentimiento, permiso ni dedupe. Necesita checklist externo; no basta copiar prompt/foto.
+
+PRUEBA DE APRENDIZAJE REAL YA OBSERVADA
+QAoffline aplicó la regla «etiqueta IA enviada no es confirmación» y el límite selftest no prueba login, contrastó version SHA/visual. Cuenta real: el aprendizaje está incorporado en docs/código, pero despliegue/ensayo/IAreal/insights siguen sin prueba. No convertir un plan de autonomía en operación demostrada.
+
+K4/R3 no recibidos: no rutas commit verificadas todavía y no403. Falta permite preservar/ver master; impide nueva comparación de identidad/render reproducible. No regenerar.

@@ -1,0 +1,38 @@
+LUCÍA / HIGGSFIELD — AUDITORÍA DE APRENDIZAJE REAL Y REPLICACIÓN
+12-oct-2026 · ejecutor Lucía · madre Marketing
+
+Conclusión
+Claude dejó pruebas y aprendizaje aplicado de imágenes con referencias, vestuario, b-roll, límites de identidad, labios y montaje educativo. No dejó evidencia de dominio de todos los formatos ni de operación autónoma de @lucia.antelo.oficial. El worker nativo comprobó recuperación, integridad, QA temporal del viernes y preparación offline. Un kit reutilizable pasó un ensayo nuevo de contrato y media existente, sin crear persona/cuenta ni gastar. La publicación sigue pendiente por decisión explícita «Solo mostrar».
+
+Fuentes y alcance
+Fuente Claude:3566e5d5208cf4a7bcf20e743469c6088944674c, skills canónicas .claude/skills/lucia y Higgsfield, handoff higgsfield-lucia, PLAN/FLUJO y PROCEDENCIA. Se extrajeron97 eventos y12 tandas históricas que se solapan; se registraron58 outputs versionados con rutas/blobs/tamaños. No son12 formatos dominados. Los links de salida de la matriz se verificaron contra el árbol; una carpeta/hoja agregada acredita disponibilidad, no el resultado específico de cada job. Referencias no materializadas se indican sin inventar link.
+Fuente oficial actual: catálogo conectado Higgsfield MCP models_list completo,12-oct:127 modelos (45 imagen/57 video/8 audio/17 3D),63 recetas de get_preset_instructions, detalles de Seedream4.5/Kling3.0/Sync y declaraciones de herramientas. Modelo/receta disponible no equivale a probado ni autorizado. No se auditó toda la UI web ni se ejecutaron127 modelos/63 recetas. El kit no calcula porcentaje de dominio.
+
+Qué aprendió y dónde se aplicó
+1. Referencias explícitas frente a Element: el placeholder de Element entregaba una imagen, no las siete; el método diario quedó ancla primero, referencias de cara y ropa al final. Evidencia: eventos de método/T101–T204 y kit; no una garantía universal de identidad.
+2. Prompt de piel/luz: «unretouched» agregó líneas de edad. Las variantes de juventud/luz física modificaron el método; hay puntajes y tres escenas. La recuperación oficial del job K1 guardó prompt literal1514car, seed409508 y seis inputs, Seedream4.5, completed. No se generó un nuevo resultado para esta auditoría.
+3. Vestuario/fondo: el maniquí con palabras «sheet»/hex produjo texto y color equivocados; la prenda se describió en palabras y se miró completa. El «no logos» no evitó letreros inventados. No confundir ambo como vestuario con profesión odontóloga.
+4. Video: una toma por variante con la misma K1. Kling std0,791→0,721 y pro0,805→0,739; Seedance Mini con foto0,691→0,644, con3refs0,707→0,801 y reencuadre139→347px/letrero. Omni0,798→0,824 inventó cuarto/plano. Cinema3.0 mantuvo0,785→0,771 con más coste. Seleccionar por cara/escena/movimiento y restricciones, no por «más caro=mejor». Sin estimación de varianza y con muchas caras<200px.
+5. Fuga de referencias: K4 Kling O1 Image0,831 no demuestra identidad; casi copia R3,0,927. El conjunto de evaluación compartía cuatro entradas. La prueba estricta y la explicación foto por foto se aplicaron a G2/P9/G5 y al viernes v2. Esta es evidencia de aprendizaje aplicado, no solo regla escrita. Los nuevos masters de esas piezas ya existían; no se regeneraron en este lote.
+6. Soul: A/B histórico held-out Seedream0,838 frente Soul-v4 0,744/Soul-v5 0,803. Duplicar entrenamiento v5b costó25cr adicionales y quedó sin usar. No repetir por espera incierta ni asumir que entrenamiento supera referencias. Los términos/permiso de entrenamiento son históricos y no autorizan otra identidad.
+7. Labios: Seedance Mini con audio cae bajo piso y salió sin pista; Sync conserva la fuente aproximadamente dentro de0,03 y lleva audio, coste histórico21,75cr por6,04s fuente. No acredita voz/licencia/versión pública de hoy. Marcela acento decidido; narración223car delviernes no existe.
+8. Luz/movimiento: medición histórica signalstats del cuadro completo mezcla iluminación con reencuadre/objetos. El gran cambio luma−33,7 con Seedance+refs no es medición aislada de luz en la cara. Puntajes/umbrales/ruido se acompañan de límites.
+9. Montaje: regla de lectura/aire, una idea por beat, rótulo IA, cara visible, revisión y SHA se materializaron en viernes v2. Master15s/24fps/360cuadros recuperado, decodificado y revisado360/360 en secuencia más nueve cuadros completos. No reproducción audiovisual continua ni ArcFace nuevo. APTO PARA MOSTRAR no equivale a autorización de publicación.
+10. Costes: el lote8oct registra86,5cr reconciliados por transactions y cargos por variante.454,76 fue una resta estimada luego corregida por skill/cola, no un saldo final medido. Una cotización no valida entradas ni prueba cobro nuevo. Saldo observado12oct438,17 no establece remanente mensual aprobado. Cuota Codex renovada no es presupuesto de generación.
+
+Capacidades pendientes
+MotionControl, primer/último cuadro, extensión/v2v, mejoras/reframe/máscaras/FPS/depth, audio/doblaje, presets, Marketing/UGC/AdMultiplier y 3D tienen documentación/catálogo o cotizaciones; no QA de producción Lucía actual. La matriz registra cada familia y la brecha. Carruseles y otros masters existentes son evidencia documental con sus versiones; no se repitió QA cerrado de G4/G5/C1.
+
+Cuenta propia y autonomía
+@lucia.antelo.oficial está documentada como Creador conectada históricamente el20ago a la app propia; configuración de perfil/IA informada pero no inspeccionada. No se comprobó username/tipo/token/permisos vigentes, ensayo Meta FINISHED, mediaID/permalink, ledger, etiqueta IA real o insights. Cifras históricas cero no son inventario actual. Los scripts fuerzan IA para cuenta lucia y tienen selftest offline PASS; no contienen gate de aprobación/username/SHA/dedupe. Un ensayo sin --publicar sí sube media y crea contenedor. Timer transitorio no prueba persistencia tras reinicio. Cuenta separada no prueba autonomía operativa.
+
+Ensayo de replicación y límites
+ensayo_replicacion.py reutilizó master/pie de fuente Git, validó17 controles y dejó ensayo-fixture-resultado.json exit0:0 créditos,0 personas/cuentas/posts creados,0 llamadas externas. Se prueba la preparación local de contrato y media existente; no avatar nuevo, generación, edición DOM, publicación, métricas ni24x7. La plantilla nueva deja identidad/referencias/voz/cuenta vacías y separadas; el negativo de cruce de identidad fue rechazado. QA independiente repite el ensayo y revisa el kit antes de cierre.
+
+Dependencias preservadas
+153/153 archivos exportación medidos:13Work/134proyecto/master y5suplementos. ZIP CRC y cuatro miembros exactos. Base64 preview pierde910bytes finales; MP4315910bytes está completo y verificado, no pérdida única. K4/R3 PNG exactos nunca estuvieron en Work; origen reportó recuperación, pero rutas/commit todavía no recibidos por este worker. No reintentar403 ni regenerar. Master íntegro permanece disponible; no archivar orígenes. Mantener separado de cuenta/voz/calendario pendientes.
+
+Entregables
+MATRIZ-FORMATOS.json/.csv, MATRIZ-MODELOS-127.json; snapshots oficiales fechados; evidencia-heredada.json; auditoria-cuenta.json/.txt; KIT-REPLICABLE.txt, CONTRATO-NUEVA-IDENTIDAD.json, PLAN-BRECHAS.txt; ensayo_replicacion.py y resultado reproducible. No se copiaron skills: se enlazan las rutas fuente únicas. Sin nuevas piezas, compras, instalación, entrenamiento, secretos, infraestructura, publicación ni loops.
+
+Fuente oficial workflow:UGC tiene6perfiles(review/product/unboxing/try-on/tutorial/website);facelessyAdMultiplier instrucciones recuperadas sin ejecutar. Resolver /ai-host-video devolviónot_found;no se declara comando/episodio disponible o aprendido por esa consulta.

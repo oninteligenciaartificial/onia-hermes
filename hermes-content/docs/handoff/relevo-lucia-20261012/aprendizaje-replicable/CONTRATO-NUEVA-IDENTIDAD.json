@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "status": "PLANTILLA_NO_PERSONA_CREADA",
+  "identity_id": null,
+  "identity_owner": null,
+  "source_rights_verified": false,
+  "face_input_references": [],
+  "face_holdout_references": [],
+  "voice_id": null,
+  "voice_permission": null,
+  "account": null,
+  "account_access_verified": false,
+  "brief": {"objective": null, "audience": null, "verified_claim": null, "format": null, "CTA": null},
+  "generation": {"model": null, "prompt": null, "seed": null, "medias_with_roles": [], "duration": null, "resolution": null, "quote": null, "budget_approved": 0, "permission": null},
+  "editing": {"source_manifest": null, "timeline": null, "seam_ledger": null, "voice_word_timing": null},
+  "QA": {"author": null, "independent_reviewer": null, "master_sha256": null, "temporal_coverage": null, "identity_result": null, "limits": []},
+  "publication": {"permission": null, "version_approved": null, "calendar_confirmed": false, "duplicate_check": null, "IA_label_verified": false},
+  "metrics": {"source": null, "window": null, "saves": null, "shares": null, "new_followers": null, "recommendability": null},
+  "prohibited": ["copiar identidad/ref/SoulID/vozLucía a otra persona", "generar con presupuesto0", "publicar/agendar sin permiso", "inferir login de cuenta distinta", "crear cuenta por plantilla"]
+}

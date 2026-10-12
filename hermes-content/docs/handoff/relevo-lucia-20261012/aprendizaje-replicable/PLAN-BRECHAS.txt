@@ -1,0 +1,25 @@
+PLAN DE APRENDIZAJE POR EVIDENCIA — 12-oct-2026
+
+No existe un porcentaje de dominio válido: las41 familias se solapan, las12 tandas heredadas no representan todoslosformatos y el catálogo cambia. Una fila se cierra con input/prompt/config/coste/job/output/QA y límites, no con nombre deherramienta.
+
+Ahora, sin gasto y con recursos existentes
+A. Recuperación y preparación de fuente:153/153 export cotejados; master/preview íntegros; QA360/360; seguir addendumK4/R3 cuandoorigen entreguePNGexactos concommit. No reintentar403 ni reactivar origen.
+B. Método replicable:ensayo_fixture17 gates PASS,6acciones sensibles rechazadas y hashincorrecto rechazado; repetir conQAindependiente. Mantener nuevaidentidad vacía y separada. Hecho exige evidencia deambasejecuciones, no solo plantilla.
+C. Aprendizaje aplicado: confrontar mapa8oct con resultados posteriores: SeedanceMini+refs sostienecara y alteraescena; KlingOmni mantiene puntuación pero inventa cuarto; K4KlingO1 es casi copia. Registrar cambios de criterio de selección enmatriz y kit. No elegir «motor ganador» universal de unatomapor modelo.
+D. Cuenta: auditoría documental y selftestoffline entregados; mostrar master/pie/QA. No publicar por decisiónactual. Recopilar insights únicamente si aparece accesolector yaautorizado; no pedir clavesni transferir sesiones.
+
+Dependencias operativas sin nueva pieza
+E. Originales K4/R3 exactos y runtime navegador/face-gate yaexistente. Solo comprobar si se recibe/configura mecanismoautorizado; no instalar. Criterio: tamaños4925870/5592844 reportados pororigen deben recalcularse juntoSHA plan; reporte no prueba recepción. Identidad original y renderDOM permanecen pendientes mientras.
+F. CuentaLucía: conector/puentelectura a cuenta correcta, tipo/bio/etiqueta/username, ledger/scheduler e insights. Noinferir autorizaciones delsaldoHiggsfield o de cuentaindependiente. Infra/mecanismo lo decideMadreDesarrollo; worker no cambia infra. Criterio: evidencia viva saneada, sinsesiones/secretos; no apretarpublicar.
+
+Solo cuando haya presupuesto/coste/permiso específico
+G. P1 fondo positivo (3imágenes cotizaciónhistórica3cr): ensayoA/B pequeño con referenciasentrada/control separados; medir logos/fondo/piel/cara/escena. Pendiente cotizaciónvigente y aprobación; no ejecutado.
+H. P2 cámara fija+3refs (histórico6cr): replicar falla dereencuadre; éxito final≥0,78,cara no crece>1,3x,0letreros, másvarias tomas si presupuesto lo permite. Es hipótesis/umbral propuesto, no verdad universal. Sin permiso nuevo, no se genera.
+I. Lipsync/voz: Marcela acento decidido, pero223car para viernes no autorizados; cupo381histórico ya no actual. Requiere presupuesto/cupo/licencia/autorización y nueva versión conQA temporal/rostro/audio. No clonarotra voz.
+J. MotionControl/endframe/extensión/v2v/upscale/reframe/background/audio/3D/Marketing/presets: priorizar una capacidad útil por vez; empezar con contratos de entradas y pruebas de seguridad/continuidad sobreassetsautorizados, cotizar y esperarOK. Formular métrica deéxito porformato antes deljob. Cada salida requiere revisor independiente y protocolo deidentidad.
+K. Publicación/métricas/replicaciónpersona: expresamente pendientes. La nuevaautorización deauditoría no revoca SOLO MOSTRAR. Crear otra cuenta/persona o contratar/instalar nunca se infiere delkit.
+
+Criterio final de replicabilidad integral
+Identidad/voz/cuenta propias registradas + formatos concretos producidos yQAaprobados + costesreconciliados + aprobaciones porversión + calendario/no duplicados + lectura demétricas y persistenciaoperativa. Hoy solo la preparación/reutilización local y QA decontenido existente tienen ensayo nuevo verificable. No declarar100%, 24x7 o dominadasfunciones por listadoAPI.
+
+Fuente oficial workflow:UGC tiene6perfiles(review/product/unboxing/try-on/tutorial/website);facelessyAdMultiplier instrucciones recuperadas sin ejecutar. Resolver /ai-host-video devolviónot_found;no se declara comando/episodio disponible o aprendido por esa consulta.

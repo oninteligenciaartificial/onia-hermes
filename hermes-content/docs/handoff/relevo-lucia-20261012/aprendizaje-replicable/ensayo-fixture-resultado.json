@@ -1,0 +1,144 @@
+{
+  "date": "2026-10-12",
+  "mode": "offline_existing_fixture",
+  "source_commit": "3566e5d5208cf4a7bcf20e743469c6088944674c",
+  "contract": {
+    "mode": "reuse_existing",
+    "publish": false,
+    "schedule": false,
+    "credits": 0,
+    "identity": "lucia_v4_existing_fixture",
+    "asset_identity": "lucia_v4_existing_fixture",
+    "voice_generate": false
+  },
+  "gates": [
+    {
+      "gate": "master_SHA256",
+      "pass_": true,
+      "measured": "c4299c7b21c7b05cc41181176d8908429b9752d4422c9cc9275964dd64393aa4"
+    },
+    {
+      "gate": "master_bytes",
+      "pass_": true,
+      "measured": 2983672
+    },
+    {
+      "gate": "caption_limit_UTF16",
+      "pass_": true,
+      "measured": 2110
+    },
+    {
+      "gate": "disclosure_IA",
+      "pass_": true,
+      "measured": "Personaje hecho con IA: Lucía Antelo, de @oni"
+    },
+    {
+      "gate": "historical_claim_limit",
+      "pass_": true,
+      "measured": "una toma y ruido explícitos"
+    },
+    {
+      "gate": "format_9_16",
+      "pass_": true,
+      "measured": [
+        1080,
+        1920
+      ]
+    },
+    {
+      "gate": "duration_15s",
+      "pass_": true,
+      "measured": "15.000000"
+    },
+    {
+      "gate": "fps24_frames360",
+      "pass_": true,
+      "measured": [
+        "24/1",
+        "360"
+      ]
+    },
+    {
+      "gate": "decode_complete",
+      "pass_": true,
+      "measured": {
+        "exit": 0,
+        "stderr": ""
+      }
+    },
+    {
+      "gate": "contract_reuse_permitted",
+      "pass_": true,
+      "measured": []
+    },
+    {
+      "gate": "deny_publication_without_approval",
+      "pass_": true,
+      "measured": [
+        "SOLO MOSTRAR: publicación/agendado bloqueados"
+      ]
+    },
+    {
+      "gate": "deny_scheduling_without_approval",
+      "pass_": true,
+      "measured": [
+        "SOLO MOSTRAR: publicación/agendado bloqueados"
+      ]
+    },
+    {
+      "gate": "deny_spend_without_budget",
+      "pass_": true,
+      "measured": [
+        "Presupuesto del ensayo = 0; no se gasta"
+      ]
+    },
+    {
+      "gate": "deny_new_generation",
+      "pass_": true,
+      "measured": [
+        "Generación nueva fuera del ensayo autorizado"
+      ]
+    },
+    {
+      "gate": "deny_identity_cross_contamination",
+      "pass_": true,
+      "measured": [
+        "No asignar assets de una identidad a otra"
+      ]
+    },
+    {
+      "gate": "deny_voice_without_permission",
+      "pass_": true,
+      "measured": [
+        "Voz nueva sin autorización específica"
+      ]
+    },
+    {
+      "gate": "wrong_master_rejected",
+      "pass_": true,
+      "measured": "hash incorrecto no coincide"
+    }
+  ],
+  "passed": true,
+  "credits_spent": 0,
+  "generated_people": 0,
+  "accounts_created": 0,
+  "posts_created": 0,
+  "external_network_calls": 0,
+  "dependencies_for_project_remaster": [
+    {
+      "name": "K4_original",
+      "in_source_git": false,
+      "expected_sha256": "2a2e940147431146041d8ace6942a35a600ed91986f3030840751f33e8127200",
+      "status": "exportación exacta pendiente; no pérdida Work; no regenerar"
+    },
+    {
+      "name": "R3_original",
+      "in_source_git": false,
+      "expected_sha256": "0dc08193977ee2a1a0b7a6564df83f6b45cdb8c8f2495afc693d5c5d050bf756",
+      "status": "exportación exacta pendiente; no pérdida Work; no regenerar"
+    }
+  ],
+  "proves": "contrato/reutilización/media/permisos/separación de identidad en validación local",
+  "does_not_prove": "identidad nueva, todas las funciones de Higgsfield, generación, edición/render DOM, publicación, insights o autonomía24x7"
+}

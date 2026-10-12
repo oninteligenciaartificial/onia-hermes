@@ -1,0 +1,60 @@
+{
+  "date": "2026-10-12",
+  "reviewer": "/root/lucia_qa",
+  "model_configured": "Sol medium inherited",
+  "model_observed": "not observable",
+  "scope": "documentation and offline replication kit; no production/publication approval",
+  "source_commit": "3566e5d5208cf4a7bcf20e743469c6088944674c",
+  "new_independent_test": {
+    "command": "python ensayo_replicacion.py --repo /workspace/onia-hermes --out /workspace/work/lucia-aprendizaje/ensayo-QA-independiente.json",
+    "exit": 0,
+    "passed": true,
+    "gates": 17,
+    "same_measures_as_author": true
+  },
+  "verification": {
+    "source_files_hash_size_blob": "8/8",
+    "inherited_output_size_blob": "58/58",
+    "matrix_typed_links_in_source": "24/24",
+    "matrix_csv_rows": 41,
+    "matrix_json_rows": 41,
+    "model_matrix_count": 127,
+    "k1_literal_prompt_characters": 1514,
+    "k1_seed": 409508,
+    "k1_input_count": 6
+  },
+  "findings": [
+    {
+      "id": "M1",
+      "severity": "MEDIA",
+      "material": true,
+      "paths": [
+        "AUDITORIA-APRENDIZAJE.txt section10",
+        "evidencia-heredada.json formats_tested G2_six_video_engines_20261008 cost"
+      ],
+      "issue": "454.76 is historical arithmetic estimate, not measured balance; contrary to canonical skill section6 and queue correction. 86.5 spending is reconciled with transactions, but decline between541.26 and454.76 must not be labeled measured balance decrease.",
+      "required": "Label454.76 as superseded computed estimate; preserve86.5 as historical reconciled spending,438.17 as observed with its date; remove measured balance wording.",
+      "status": "resolved_by_author_and_readback_verified",
+      "readback": "AUDITORIA section10 and inherited/matrix G2 cost now label454.76 superseded arithmetic; balance decrease null; reconciled transactions86.5 separate."
+    },
+    {
+      "id": "B1",
+      "severity": "BAJA",
+      "material": false,
+      "path": "ensayo_replicacion.py wrong_master_rejected",
+      "issue": "Negative hash gate compares measured fixture hash with all-zero hash; demonstrates mismatch only, not ingestion/rejection of arbitrary changed master through general validation API.",
+      "required": "Keep scope explicit as fixture sanity check; no claim full generic validator."
+    }
+  ],
+  "alta_count": 0,
+  "verdict": "APPROVED for documentation/offline kit only after correction readback. 0 ALTA; no unresolved material findings. SOLO MOSTRAR remains; no new person,generation,training,account,publishing or spending authorized.",
+  "new_workflow_review": {
+    "format_rows_added": 9,
+    "only_instructions_or_tool_contracts": true,
+    "no_demostrado_Lucia_actual": true,
+    "outputs_empty": true,
+    "no_publication_QA_implied": true,
+    "ai_host_official_resolution": "NOT_FOUND; concept only; no availability or production proven",
+    "ugc_profiles": 6
+  }
+}

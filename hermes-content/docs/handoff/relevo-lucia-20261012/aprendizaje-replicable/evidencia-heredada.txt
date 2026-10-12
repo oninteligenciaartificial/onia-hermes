@@ -1,0 +1,134 @@
+CORRECCIÓN VIGENTE DE COSTE:454,76 fue resta estimada, no saldo medido;86,5cr reconciliadostransactions. Raweventos preservados enJSON;ver nota deprecedencia.
+
+# Lucía / Higgsfield — evidencia heredada
+
+- Fuente Git verificada: `3566e5d5208cf4a7bcf20e743469c6088944674c`. Auditoría documental con fecha 12-oct-2026.
+- Fuente registra 97 eventos de procedencia; modelo pedido/configurado Luna, modelo efectivo no observable.
+- Importes distinguidos como cotización, cargo medido o referencia histórica. Catálogo read-only no se presenta como salida probada.
+
+## Archivos fuente verificados
+- `.claude/skills/lucia/higgsfield-mapa.md` — 51126 B; blob `dc312687d955abf898921a4593bc2d79d9281be9`; SHA-256 `7d3d783da98da5bb62c7bb0a6eca22a9fd434aae2892e8a2fcbc641625a197b7`.
+- `.claude/skills/lucia/SKILL.md` — 44878 B; blob `ded4fddae1a50fa045bacea0cf1775d34c4371f8`; SHA-256 `459db3985b8c5f71885888877f9ad1121c9ad866cbea574b475c9b80dc7284f1`.
+- `hermes-content/docs/handoff/higgsfield-lucia.md` — 40052 B; blob `519eb0c932e6cf6b4b63596ee0b3ac4ce04fbb61`; SHA-256 `18703bd1e9b33b10fd4cdbe2f9bfe41d3312cdcbc288d4f9683320cd38df732d`.
+- `hermes-content/references/modelos/lucia/v4/PROCEDENCIA.jsonl` — 77787 B; blob `50608cf9184a52c89decbe77bdadc5bb00fcff51`; SHA-256 `0bc327aaea247c2922c4828e51b8e089a081e33422dd97e3fa899b44674d6b7d`.
+- `hermes-content/docs/cola/lucia-diario/PLAN.md` — 18623 B; blob `8500ac00f07c43478c8d718fdbc6418f2f060749`; SHA-256 `10d29c4189ff963a0e7013e31e79764816989152fe195951fa0a6de686ddf296`.
+- `hermes-content/docs/cola/lucia-diario/FLUJO.md` — 6033 B; blob `4fc8ff8ced032e04cc00ace2ac8fdee34f484931`; SHA-256 `555ada46ff367fca449c3df82c31d89d28cdee9a68f8c1d0018d38882840815e`.
+- `hermes-content/references/modelos/lucia/v4/qa/higgsfield-relevamiento-20261008.json` — 166306 B; blob `f61499c31d6a24fce45dea31a63983dd68c763a4`; SHA-256 `fa94abb286a0b1f827705a562452cfa23ed14702d34879592f6b190d658318a9`.
+- `hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/medicion-luz-movimiento-20261011.txt` — 1216 B; blob `085a003397c6242d1d5b1f01b551224b5702c25c`; SHA-256 `44b9bcdd23a3f2d6a2be8f113201e116da473f1b6f1f9b301abee1be6439a8bd`.
+
+## Formatos probados
+
+### casting_v1_C01-C12
+- Fecha/formato: see event rows; image portrait casting: Soul 2, GPT Image 2.5 Flare high, Nano Banana Pro, Soul Cast.
+- Modelos: soul_2, gpt_image_2_5, nano_banana_pro, soul_cast.
+- Costo: {"get_cost_quote_per_output_cr": {"soul_2": 0.12, "gpt_image_2_5": 2.75, "nano_banana_pro": 2, "soul_cast": 0.12}, "historical_batch_spend_cr": 23.04, "per-job debit not separately reconciled in ledger": true}
+- Configuración: ["Soul 1536x2048; GPT 1744x2336; Nano Banana 1792x2400; Soul Cast 2048x1152", "no reference inputs; prompts casting-soul.txt / casting-ref.txt"]
+- Fallos: Sergio Urcullo rejected C01-C12: agency digitals optimized flat light/plain background rather than desired Pinterest-style realism. Soul Cast params.prompt empty; output invented a different person.
+- Outputs: hermes-content/references/modelos/lucia/v4/kit/kit-fotos-hoja.jpg
+
+### casting_v2_Pinterest_C13-C26
+- Fecha/formato: see event rows; lifestyle portrait images in cafe, terrace, portrait scenes.
+- Modelos: soul_2, nano_banana_pro, gpt_image_2_5.
+- Costo: {"quoted_per_image_cr": {"soul_2": 0.12, "nano_banana_pro": 2, "gpt_image_2_5": 2.75}, "measured_batch_debit_by_scene": null}
+- Configuración: ["Soul 1152x2048; Nano Banana 1536x2752; GPT Image 2.5 about 1520x2688", "three contexts; prompt variants ending -ref.txt and -soul.txt"]
+- Fallos: No ArcFace score per image is recorded in the 97-line ledger for this batch.
+- Outputs: hermes-content/references/modelos/lucia/v4/kit/kit-fotos-hoja.jpg
+
+### face_method_T101-T204
+- Fecha/formato: see event rows; face reference method and prompt test across new scenes.
+- Modelos: Nano Banana Pro, Seedream 4.5.
+- Costo: {"quoted_per_image_cr": {"nano_banana_pro": 2, "seedream_v4_5": 1}, "identity_QA_cr": 0}
+- Configuración: ["Nano Banana Pro cafe/street/coworking/mirror-selfie; Seedream 4.5 basic 1440x2560 cafe/street", "explicit media_ids vs Element placeholder; Element placeholder injected first of seven images only"]
+- Métricas: {"ArcFace centroid of 8 official refs; candidates": [{"id": "T101", "score": 0.822, "min_ref": 0.578, "max_ref": 0.805, "face_px": 478}, {"id": "T102", "score": 0.693, "min_ref": 0.458, "max_ref": 0.689, "face_px": 244}, {"id": "T103", "score": 0.713, "min_ref": 0.503, "max_ref": 0.705, "face_px": 525}, {"id": "T104", "score": 0.7, "min_ref": 0.502, "max_ref": 0.701, "face_px": 375}, {"id": "T201", "score": 0.806, "min_ref": 0.599, "max_ref": 0.735, "face_px": 561}, {"id": "T202", "score": 0.683, "min_ref": 0.467, "max_ref": 0.661, "face_px": 280}, {"id": "T203", "score": 0.883, "min_ref": 0.623, "max_ref": 0.81, "face_px": 460}, {"id": "T204", "score": 0.836, "min_ref": 0.582, "max_ref": 0.768, "face_px": 279}]}
+- Fallos: Element placeholder uses one media asset only; explicit media_ids delivered all seven refs.
+- Outputs: hermes-content/references/modelos/lucia/v4/qa/identidad-metodos-20260929.json
+
+### fixed_scenes_prompt_light
+- Fecha/formato: see event rows; Seedream 4.5 fixed-scene images and iterative skin/light clause.
+- Modelos: Seedream 4.5.
+- Costo: {"measured_3_fixed_scenes_cr": 3, "measured_prompt_variant_scenes_cr": 3}
+- Configuración: ["9:16, seven face refs, anchor first", "iterated “unretouched pores/freckles” then youthful-face plus physically consistent-light clause; latter requested no artificial glow"]
+- Métricas: {"first_clause_scores": [0.884, 0.749, 0.766], "beauty_clause_scores": [0.845, 0.875, 0.848]}
+- Fallos: “Unretouched skin” improved pore/freckle detail but marked age lines; later clause adjusted youth and physically present light sources.
+- Outputs: hermes-content/references/modelos/lucia/v4/qa/identidad-escenas-seedream-20260930.json
+
+### Soul_ID_training_AB
+- Fecha/formato: see event rows; Soul ID trained identity adapter vs Seedream held-out scenes.
+- Modelos: Soul 2 LUCIA-v4, LUCIA-v5, LUCIA-v5b, Seedream 4.5.
+- Costo: {"v4_train": "unmeasured; historical reference 25 cr on 2026-08-23", "v5_train_measured_cr": 25, "v5b_duplicate_train_measured_cr": 25, "v5_AB_outputs_measured_cr": 0.36}
+- Configuración: ["v4 20 images; v5 and v5b 16-image set, duplicate training while first stayed queued", "A/B on park, video call, terrace, scenes outside training set"]
+- Métricas: {"dataset_v5_8_scores": [0.848, 0.777, 0.784, 0.801, 0.777, 0.858, 0.789, 0.828], "heldout_mean": {"Seedream": 0.838, "Soul-v4": 0.744, "Soul-v5": 0.803}}
+- Fallos: Training queued about nine hours. v5b duplicated the dataset after v5 wait; both cost 25 cr and v5b recorded as unused. Soul v5 held-out mean 0.803 vs Seedream 0.838.
+- Outputs: hermes-content/references/modelos/lucia/v4/qa/identidad-ab-soul-20260930.json; hermes-content/references/modelos/lucia/v4/qa/identidad-ab-soul-v5-20261001.json; hermes-content/references/modelos/lucia/v4/qa/identidad-dataset-v5-20260930.json
+
+### daily_method_and_kit
+- Fecha/formato: see event rows; Seedream lifestyle photographs from mirror anchor + official refs + wardrobe ref; Kling b-roll clips.
+- Modelos: Seedream 4.5, Kling 3.0 std.
+- Costo: {"four_lifestyle_scenes_measured_cr": 4, "kit_photo_clip_spend_measured_cr": 30.5, "breakdown_cr": {"photos": 8, "clips": 22.5}, "monthly_spend_at_record_cr": 52.5}
+- Configuración: ["Seedream 9:16; mirror anchor first, four official refs, outfit turnaround last; clause for same face/freckles and scene-consistent light", "Kling 3.0 std, sound off, 6s 9:16, start_image from approved still", "Literal K1 video prompt recorded: “She slowly lifts her eyes from the phone to the camera and gives a small knowing smile, the phone stays in her hands. Subtle handheld camera, natural morning light, no cuts.”"]
+- Métricas: {"E1_E4_scores": [0.844, 0.828, 0.828, 0.864], "kit_photos": {"K1": 0.808, "K2": 0.829, "K4_1_discarded": 0.835, "K4_1_crop": 0.81, "K4_3": 0.841, "K4_4": 0.851, "K4_5": 0.835}, "clip_identity_samples": {"K1": [0.793, 0.734, 0.68], "K2": [0.79, 0.707, 0.695], "K4": [0.81, 0.726, 0.725]}}
+- Fallos: K4 initial photo with negative “No screens visible, no text, no logos, no signs anywhere” still made a fictional tower sign; retry crop used. K4 hand review later found two frames where other finger crossed hand; count carefully frame-by-frame.
+- Outputs: hermes-content/references/modelos/lucia/v4/kit/kit-fotos-hoja.jpg; hermes-content/references/modelos/lucia/v4/kit/kit-clips-preview.mp4; hermes-content/references/modelos/lucia/v4/kit/k1-clip-mira-camara-e470ef4f.mp4; hermes-content/references/modelos/lucia/v4/kit/k2-clip-deja-cafe-83130c4a.mp4; hermes-content/references/modelos/lucia/v4/kit/k4-clip-cuenta-dedos-338b751f.mp4
+
+### broll_20260930
+- Fecha/formato: see event rows; same still/prompt b-roll comparison, 6 sec 9:16 no audio.
+- Modelos: Seedance 2.0 Mini, Kling 3.0 std, Cinema Studio Video v2.
+- Costo: {"quotes_and_charges_cr": {"Seedance Mini": 6, "Kling std": 7.5, "Cinema Studio v2": 6}, "measured_sum_cr": 19.5}
+- Configuración: ["Base P3 street at golden hour; handheld tracking", "Prompt: She walks along a sunlit street at golden hour, glances at the camera and smiles softly. Slow handheld tracking shot, shallow depth of field. Keep her face exactly as in the image."]
+- Métricas: {"face_px": "approx 170 at 720p vs still 346", "face_scores": {"Seedance": [0.681, 0.631, 0.598, 0.619, 0.636], "Kling": [0.696, 0.701, 0.618, 0.716, 0.716], "Cinema-v2": [0.738, 0.701, 0.532, 0.597, 0.57]}}
+- Fallos: Seedance stayed low; Cinema Studio v2 dropped when frontal. One Kling 0.618 sample was a blink.
+- Outputs: hermes-content/references/modelos/lucia/v4/qa/identidad-broll-20260930.json; hermes-content/references/modelos/lucia/v4/kit/kit-clips-preview.mp4
+
+### G2_six_video_engines_20261008
+- Fecha/formato: see event rows; six video variants, same K1 image and common order, clips 4-6 seconds.
+- Modelos: Kling 3.0 std, Kling 3.0 pro, Seedance 2.0 Mini, Seedance 2.0 Mini + 3 refs, Kling 3.0 Omni + 5 refs, Cinema Studio 3.0.
+- Costo: {"live_quotes_cr": [7.5, 9, 6, 6, 6, 20], "measured_new_video_spend_cr": 47, "all_media_lot_balance_decrease_cr": 86.5, "balance": "541.26 to 454.76; quote matched measured charges except sync_so"}
+- Configuración: ["Kling std: start_image, sound off; Kling pro: start_image 1080x1920; Seedance Mini: start_image, 720p; Seedance variant start_image plus 3 image_refs; Kling Omni has 5 image_refs and no start_image; Cinema 3.0 4s 720p start_image"]
+- Métricas: {"identity_scores_by_model": {"Kling std": [0.791, 0.793, 0.762, 0.734, 0.761, 0.708, 0.721], "Kling pro": [0.805, 0.8, 0.791, 0.771, 0.75, 0.748, 0.739], "Seedance Mini start": [0.691, 0.657, 0.677, 0.634, 0.615, 0.634, 0.644], "Seedance Mini + 3 refs": [0.707, 0.762, 0.754, 0.726, 0.796, 0.777, 0.801], "Kling Omni 5 refs": [0.798, 0.783, 0.785, 0.814, 0.815, 0.81, 0.824], "Cinema Studio 3.0": [0.785, 0.772, 0.787, 0.799, 0.79, 0.771]}, "light_and_motion_signalstats_file": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/medicion-luz-movimiento-20261011.txt", "light_movement": {"Kling std": {"luma_delta": -1.0, "motion_mean_max": [0.99, 3.03]}, "Kling pro": {"luma_delta": -0.4, "motion_mean_max": [1.04, 1.94]}, "Seedance mini": {"luma_delta": -12.2, "motion_mean_max": [3.62, 7.29]}, "Seedance mini +3 refs": {"luma_delta": -33.7, "V_delta": 8.4, "motion_mean_max": [4.09, 7.46]}, "Kling Omni": {"luma_delta": 2.1, "motion_mean_max": [2.39, 3.65]}, "Cinema Studio": {"luma_delta": -13.4, "motion_mean_max": [4.83, 7.17]}, "limitation": "frame-average stats mix light and reframe/object changes"}, "identity_readout": ["Kling std 0.79 to 0.72; pro 0.805 to 0.739", "Seedance refs 0.707 to 0.801; face reframed 139 to 347 px and invented sign", "Kling Omni 0.798 to 0.824; invented room/shot, face 89 to 168 px", "Cinema 3.0 0.785 to 0.771; within noted +/-0.03 noise band"]}
+- Outputs: hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/proxies/; hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/hojas/comparativo-v2.jpg
+
+### image_engine_benchmark_20261008
+- Fecha/formato: see event rows; six image engines tested from same input/config, additional outputs for Seedream and Kling Omni.
+- Modelos: Seedream 4.5, Kling Omni Image, Nano Banana 2.1, Seedream 5.0 Pro, FLUX 3 Image, GPT Image 2.5 Flare high.
+- Costo: {"price_per_image_cr": {"Seedream 4.5": 1, "Kling Omni Image": 0.5, "Nano Banana 2.1": 2, "Seedream 5.0 Pro": 2.5, "FLUX 3": 3, "GPT Image 2.5": 2.75}, "measured_spend_group_cr": 11.75}
+- Configuración: ["same K1 prompt and six refs: mirror anchor first, four face photos, outfit reference last", "prompt includes face identity/detail and physically consistent lighting; K1 exact image prompt not copied into ledger, source says retrieve through job_display"]
+- Métricas: {"scores": {"Seedream 4.5": [0.806, 0.83, 0.839], "Kling Omni Image": [0.794, 0.35, 0.831], "Nano Banana 2.1": [0.737], "Seedream 5.0 Pro": [0.702], "FLUX 3": [0.691], "GPT Image 2.5": [0.658]}}
+- Fallos: Kling Omni Image K2 output scored 0.350; judged another person/caricature. Seedream K4 had a high identity score but invented sign, so image must be viewed beyond score.
+- Outputs: hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos/; hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/hojas/comparativo-imagenes.jpg
+
+### lipsync_internal_20260930
+- Fecha/formato: see event rows; speech/lipsync with Marcela sample (internal only).
+- Modelos: MiniMax H3, Seedance 2.0 Mini, sync_so remap.
+- Costo: {"quote_and_charge_cr": {"H3": 12, "Seedance Mini": 6}, "sync_so_actual_measured_cr": 21.75, "sync_so_preflight": "unavailable; measured 3.6cr per source-second"}
+- Configuración: ["H3 6s 2K 9:16; E1 as image_reference because start_image + audio_refs returned 422", "Seedance Mini 6s 720p; K4_1 start image plus audio_refs; generate_audio false", "sync_so remap existing 6.04s Kling K4, output 5.62s"]
+- Métricas: {"arcface": {"Seedance Mini": [0.732, 0.632, 0.639, 0.623, 0.618, 0.6, 0.634], "sync_so_output": [0.806, 0.764, 0.713, 0.748, 0.751, 0.753], "same_source": [0.811, 0.757, 0.714, 0.724, 0.747, 0.768]}, "voice_audio": "MiniMax audio envelope correlation to Marcela 0.3; Seedance output no audio track; sync_so audio track present; H3 had lip/eye artifacts at 2-3s"}
+- Outputs: hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/proxies/labios-seedance-mini-328a9d66-360p.mp4; hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/proxies/labios-sync-so-eaaf369d-360p.mp4; hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/hojas/labios-seedance-mini-boca.jpg
+
+### voiceover_L08_20261001
+- Fecha/formato: see event rows; ElevenLabs Marcela voiceover + Kling footage edited with editor-videos.
+- Modelos: Kling 3.0 std sound off, ElevenLabs multilingual v2 Marcela.
+- Costo: {"Kling_clip_measured_cr": 12.5, "ElevenLabs_credits_measured": 83, "Higgsfield_edit_cr": 0}
+- Configuración: ["Kling b-roll 10s, 9:16, source V05 cafe; editor-videos clean clip, no added Higgsfield credits", "TTS not Higgsfield; no forced voice settings on used body/remate"]
+- Métricas: {"final_video": "10.25s, -14.13 LUFS, true peak -1.8 dBTP", "face_cosine_samples": [0.79, 0.759, 0.765, 0.752, 0.771], "used_ending_pitch_hz": [195, 195, 194, 189, 179]}
+- Fallos: first full take rising ending was read as question; forced voice_settings variants changed voice timbre; only remate seed 22 and body without forced settings used
+- Outputs: hermes-content/references/modelos/lucia/v4/feed/l08-cafe-src.mp4; hermes-content/references/modelos/lucia/v4/feed/l08-recordatorio-sin-mover-un-dedo.mp4
+
+### wardrobe_render_20261002
+- Fecha/formato: see event rows; Seedream outfit turnaround image, 16:9.
+- Modelos: Seedream 4.5.
+- Costo: {"actual_measured_cr_per_attempt": [1, 1]}
+- Configuración: ["failed prompt included turnaround sheet and hex #C4552F; fixed prompt uses color words/no typography/one pocket"]
+- Métricas: {"first_color": "#BD5D54 vs target #C4552F", "selected_front_back_colors": ["#C3624B", "#BE5943"]}
+- Fallos: first image wrote gibberish, wrong salmon-pink color, black trim and extra pockets; second omitted text and was selected with three visual deviations adopted.
+- Outputs: hermes-content/references/modelos/lucia/v4/vestuario/ambo-terracota-turnaround-8d138bd6.jpg; hermes-content/references/modelos/lucia/v4/vestuario/ambo-terracota-frente-8d138bd6.jpg
+
+## Outputs con blobs en árbol fuente
+- Índice de 58 recursos media/QA versionados en v4/kit, v4/feed y v4/prueba-motores-20261008, con blob y tamaño por ruta dentro del JSON.
+
+## Métricas y bloqueos
+- Identidad: ArcFace buffalo_l contra centroide de 8 referencias; gate interno 0,70; <200 px = señal de baja confianza. Puntaje no mide fondo, luz, manos, licencia o publicación.
+- Luz/movimiento: métricas signalstats de cuadros completos. Reencuadre y contenido cambiante afectan la luma/croma; no es aislamiento físico de la luz.
+- Audio: prueba interna H3 re-sintetiza audio (correlación 0,3), Seedance output no trae pista, sync_so conserva similitud facial del video fuente (delta <=0,03).
+- K4 PNG original falta/no fue materializado en Git; R3 falta en ruta original documentada. Prompt íntegro de foto K1 no está en ledger.
+- Catálogo solo cotizado/lectura: 91 filas literales en `read_only_catalog_rows`; no atribuirles generación o medición de identidad.
+- Ningún costo/config/modelo de una prueba histórica constituye autorización actual.

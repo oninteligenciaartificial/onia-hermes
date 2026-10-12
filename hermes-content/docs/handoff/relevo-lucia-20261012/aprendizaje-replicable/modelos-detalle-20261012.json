@@ -1,0 +1,297 @@
+{
+  "date": "2026-10-12",
+  "source": "Higgsfield MCP models_get read-only",
+  "details": [
+    {
+      "status": "fulfilled",
+      "value": {
+        "model_id": "seedream_v4_5",
+        "result": {
+          "id": "seedream_v4_5",
+          "name": "Seedream 4.5",
+          "provider_name": "Bytedance",
+          "description": "4K output, precise control, transformations",
+          "output_type": "image",
+          "parameters": [
+            {
+              "name": "quality",
+              "required": "optional",
+              "type": "string",
+              "description": "Output quality tier. 'basic' renders up to 4K; 'high' renders up to ~6K.",
+              "options": [
+                "basic",
+                "high"
+              ],
+              "default": "basic"
+            }
+          ],
+          "medias": [
+            {
+              "name": "medias",
+              "type": "image",
+              "roles": [
+                "image_references"
+              ]
+            }
+          ],
+          "aspect_ratios": [
+            "1:1",
+            "4:3",
+            "16:9",
+            "3:2",
+            "21:9",
+            "3:4",
+            "9:16",
+            "2:3"
+          ],
+          "tags": [
+            "4k",
+            "high-resolution",
+            "precise",
+            "transformations",
+            "editing",
+            "control",
+            "unlim"
+          ],
+          "supports_unlim": true,
+          "free_gens": [
+            {
+              "job_set_types": [
+                "ai_influencer_motion_control",
+                "ai_influencer_replace_object",
+                "hf_mult_motion_control",
+                "hf_mult_replace_object"
+              ],
+              "remaining": 1,
+              "parameters": {
+                "resolution": [
+                  "480p",
+                  "720p"
+                ]
+              },
+              "max_duration": 30
+            },
+            {
+              "job_set_types": [
+                "viral_hub_video"
+              ],
+              "remaining": 0,
+              "parameters": {
+                "resolution": [
+                  "480p",
+                  "720p"
+                ]
+              },
+              "max_duration": null
+            },
+            {
+              "job_set_types": [
+                "ai_influencer_sheet"
+              ],
+              "remaining": 5,
+              "parameters": {},
+              "max_duration": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "model_id": "kling3_0",
+        "result": {
+          "id": "kling3_0",
+          "name": "Kling v3.0",
+          "provider_name": "Kling",
+          "description": "Multi-shot, audio sync, motion transfer",
+          "output_type": "video",
+          "parameters": [
+            {
+              "name": "duration",
+              "required": "optional",
+              "type": "number",
+              "description": "Duration in seconds (3-15).",
+              "min": 3,
+              "max": 15,
+              "default": 5
+            },
+            {
+              "name": "mode",
+              "required": "optional",
+              "type": "string",
+              "description": "Generation mode: 'std' (standard), 'pro' (higher quality), or '4k' (4K resolution).",
+              "options": [
+                "std",
+                "pro",
+                "4k"
+              ],
+              "default": "std"
+            },
+            {
+              "name": "sound",
+              "required": "optional",
+              "type": "string",
+              "description": "Generate audio. Use 'off' for silent video and lower credits.",
+              "options": [
+                "on",
+                "off"
+              ],
+              "default": "on"
+            }
+          ],
+          "medias": [
+            {
+              "name": "medias",
+              "type": "image",
+              "roles": [
+                "start_image",
+                "end_image"
+              ]
+            }
+          ],
+          "aspect_ratios": [
+            "16:9",
+            "9:16",
+            "1:1"
+          ],
+          "tags": [
+            "multi-shot",
+            "audio",
+            "motion-transfer",
+            "cinematic",
+            "advanced",
+            "unlim"
+          ],
+          "supports_unlim": true,
+          "free_gens": [
+            {
+              "job_set_types": [
+                "ai_influencer_motion_control",
+                "ai_influencer_replace_object",
+                "hf_mult_motion_control",
+                "hf_mult_replace_object"
+              ],
+              "remaining": 1,
+              "parameters": {
+                "resolution": [
+                  "480p",
+                  "720p"
+                ]
+              },
+              "max_duration": 30
+            },
+            {
+              "job_set_types": [
+                "viral_hub_video"
+              ],
+              "remaining": 0,
+              "parameters": {
+                "resolution": [
+                  "480p",
+                  "720p"
+                ]
+              },
+              "max_duration": null
+            },
+            {
+              "job_set_types": [
+                "ai_influencer_sheet"
+              ],
+              "remaining": 5,
+              "parameters": {},
+              "max_duration": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "model_id": "sync_so",
+        "result": {
+          "id": "sync_so",
+          "name": "Sync Lipsync 3",
+          "provider_name": "",
+          "description": "",
+          "output_type": "video",
+          "parameters": [
+            {
+              "name": "sync_mode",
+              "required": "optional",
+              "type": "string",
+              "description": "How to reconcile a duration mismatch between the video and the audio: 'bounce' ping-pongs the video, 'loop' repeats it, 'cut_off' truncates to the shorter input, 'silence' pads the audio, 'remap' retimes the video.",
+              "options": [
+                "bounce",
+                "loop",
+                "cut_off",
+                "silence",
+                "remap"
+              ],
+              "default": "bounce"
+            },
+            {
+              "name": "folder_id",
+              "required": "optional",
+              "type": "string",
+              "description": "Optional folder to place the generated output in.",
+              "nullable": true
+            }
+          ],
+          "medias": [
+            {
+              "name": "medias",
+              "type": "image",
+              "roles": [
+                "input_video",
+                "input_audio"
+              ]
+            }
+          ],
+          "aspect_ratios": [],
+          "tags": [],
+          "free_gens": [
+            {
+              "job_set_types": [
+                "ai_influencer_motion_control",
+                "ai_influencer_replace_object",
+                "hf_mult_motion_control",
+                "hf_mult_replace_object"
+              ],
+              "remaining": 1,
+              "parameters": {
+                "resolution": [
+                  "480p",
+                  "720p"
+                ]
+              },
+              "max_duration": 30
+            },
+            {
+              "job_set_types": [
+                "viral_hub_video"
+              ],
+              "remaining": 0,
+              "parameters": {
+                "resolution": [
+                  "480p",
+                  "720p"
+                ]
+              },
+              "max_duration": null
+            },
+            {
+              "job_set_types": [
+                "ai_influencer_sheet"
+              ],
+              "remaining": 5,
+              "parameters": {},
+              "max_duration": null
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,3621 @@
+{
+  "meta": {
+    "title": "Lucía/Higgsfield inherited evidence, 12-Oct-2026",
+    "source_commit": "3566e5d5208cf4a7bcf20e743469c6088944674c",
+    "scope": "read-only extraction and Git source verification; no editorial judgment or new generation",
+    "configured_model": "gpt-6-luna (Luna) per assignment; effective runtime not observable in these repository files",
+    "ledger_lines": 97,
+    "event_type_counts": {
+      "casting": 12,
+      "decision": 2,
+      "casting-v2-pinterest": 14,
+      "note": 1,
+      "prueba-metodo-cara-original": 8,
+      "learning": 6,
+      "qa_identidad": 17,
+      "dataset_v4": 7,
+      "soul_train": 3,
+      "quote_video": 1,
+      "incidente": 2,
+      "prompt_canon": 1,
+      "look_ancla": 1,
+      "soul_prueba": 1,
+      "correccion_criterio": 1,
+      "lote_publicar": 1,
+      "video_lipsync_ronda1": 1,
+      "aprobacion_gasto": 1,
+      "dataset_v5": 1,
+      "broll_prueba": 1,
+      "ab_soul_vs_seedream": 1,
+      "veredicto": 1,
+      "ab_soul_v5": 1,
+      "reels_s1": 1,
+      "broll_l08": 1,
+      "voz_l08": 1,
+      "edicion_s1": 1,
+      "edicion_s1_resultado": 1,
+      "vestuario_maniqui": 2,
+      "kit_lucia_generacion": 1,
+      "kit_lucia_revision_manos": 1,
+      "kit_lucia_prompts_literales": 1,
+      "kit_lucia_aprendizaje_higgsfield_aprobacion": 1,
+      "kit_lucia_aprendizaje_higgsfield_resultados": 1
+    }
+  },
+  "source_files": [
+    {
+      "path": ".claude/skills/lucia/higgsfield-mapa.md",
+      "commit": "3566e5d5208cf4a7bcf20e743469c6088944674c",
+      "git_blob_sha1": "dc312687d955abf898921a4593bc2d79d9281be9",
+      "bytes": 51126,
+      "sha256_measured": "7d3d783da98da5bb62c7bb0a6eca22a9fd434aae2892e8a2fcbc641625a197b7"
+    },
+    {
+      "path": ".claude/skills/lucia/SKILL.md",
+      "commit": "3566e5d5208cf4a7bcf20e743469c6088944674c",
+      "git_blob_sha1": "ded4fddae1a50fa045bacea0cf1775d34c4371f8",
+      "bytes": 44878,
+      "sha256_measured": "459db3985b8c5f71885888877f9ad1121c9ad866cbea574b475c9b80dc7284f1"
+    },
+    {
+      "path": "hermes-content/docs/handoff/higgsfield-lucia.md",
+      "commit": "3566e5d5208cf4a7bcf20e743469c6088944674c",
+      "git_blob_sha1": "519eb0c932e6cf6b4b63596ee0b3ac4ce04fbb61",
+      "bytes": 40052,
+      "sha256_measured": "18703bd1e9b33b10fd4cdbe2f9bfe41d3312cdcbc288d4f9683320cd38df732d"
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/PROCEDENCIA.jsonl",
+      "commit": "3566e5d5208cf4a7bcf20e743469c6088944674c",
+      "git_blob_sha1": "50608cf9184a52c89decbe77bdadc5bb00fcff51",
+      "bytes": 77787,
+      "sha256_measured": "0bc327aaea247c2922c4828e51b8e089a081e33422dd97e3fa899b44674d6b7d"
+    },
+    {
+      "path": "hermes-content/docs/cola/lucia-diario/PLAN.md",
+      "commit": "3566e5d5208cf4a7bcf20e743469c6088944674c",
+      "git_blob_sha1": "8500ac00f07c43478c8d718fdbc6418f2f060749",
+      "bytes": 18623,
+      "sha256_measured": "10d29c4189ff963a0e7013e31e79764816989152fe195951fa0a6de686ddf296"
+    },
+    {
+      "path": "hermes-content/docs/cola/lucia-diario/FLUJO.md",
+      "commit": "3566e5d5208cf4a7bcf20e743469c6088944674c",
+      "git_blob_sha1": "4fc8ff8ced032e04cc00ace2ac8fdee34f484931",
+      "bytes": 6033,
+      "sha256_measured": "555ada46ff367fca449c3df82c31d89d28cdee9a68f8c1d0018d38882840815e"
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/qa/higgsfield-relevamiento-20261008.json",
+      "commit": "3566e5d5208cf4a7bcf20e743469c6088944674c",
+      "git_blob_sha1": "f61499c31d6a24fce45dea31a63983dd68c763a4",
+      "bytes": 166306,
+      "sha256_measured": "fa94abb286a0b1f827705a562452cfa23ed14702d34879592f6b190d658318a9"
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/medicion-luz-movimiento-20261011.txt",
+      "commit": "3566e5d5208cf4a7bcf20e743469c6088944674c",
+      "git_blob_sha1": "085a003397c6242d1d5b1f01b551224b5702c25c",
+      "bytes": 1216,
+      "sha256_measured": "44b9bcdd23a3f2d6a2be8f113201e116da473f1b6f1f9b301abee1be6439a8bd"
+    }
+  ],
+  "formats_tested": [
+    {
+      "id": "casting_v1_C01-C12",
+      "event_rows": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13
+      ],
+      "format": "image portrait casting: Soul 2, GPT Image 2.5 Flare high, Nano Banana Pro, Soul Cast",
+      "models": [
+        "soul_2",
+        "gpt_image_2_5",
+        "nano_banana_pro",
+        "soul_cast"
+      ],
+      "configs": [
+        "Soul 1536x2048; GPT 1744x2336; Nano Banana 1792x2400; Soul Cast 2048x1152",
+        "no reference inputs; prompts casting-soul.txt / casting-ref.txt"
+      ],
+      "prompt_files": [
+        "hermes-content/references/modelos/lucia/v4/prompts/casting-soul.txt",
+        "hermes-content/references/modelos/lucia/v4/prompts/casting-ref.txt"
+      ],
+      "job_ids": [
+        "daeef7ee-7ab6-4b6b-83ee-03dcaa206e4d",
+        "4fa8d03c-0c3c-4b61-b544-dccd116d44e1",
+        "7fe339d2-b41a-4b0b-85bd-6f84a08de404",
+        "91e78ebd-b461-467a-90c4-f7a3c041825f",
+        "baf589b1-92f7-4ef7-951c-8d6231306299",
+        "d6b4b875-83c1-46a7-b51b-81ba58ae0ccf",
+        "82beb160-93bf-4cad-aa19-54c69eb6dc13",
+        "97f4928c-4de9-4435-9587-2802be285632",
+        "7d1cf9b0-b1a5-46d1-9dd4-3b37a6278801",
+        "673dd688-5122-406f-9963-e67e6b703fbc",
+        "8d9d24b9-5ce1-43b0-8701-95e527ec67c6",
+        "044f437b-7940-4df3-9168-ec853442dc06"
+      ],
+      "cost": {
+        "get_cost_quote_per_output_cr": {
+          "soul_2": 0.12,
+          "gpt_image_2_5": 2.75,
+          "nano_banana_pro": 2,
+          "soul_cast": 0.12
+        },
+        "historical_batch_spend_cr": 23.04,
+        "per-job debit not separately reconciled in ledger": true
+      },
+      "metrics": {},
+      "outputs": [
+        "hermes-content/references/modelos/lucia/v4/kit/kit-fotos-hoja.jpg"
+      ],
+      "failures": [
+        "Sergio Urcullo rejected C01-C12: agency digitals optimized flat light/plain background rather than desired Pinterest-style realism. Soul Cast params.prompt empty; output invented a different person."
+      ]
+    },
+    {
+      "id": "casting_v2_Pinterest_C13-C26",
+      "event_rows": [
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28
+      ],
+      "format": "lifestyle portrait images in cafe, terrace, portrait scenes",
+      "models": [
+        "soul_2",
+        "nano_banana_pro",
+        "gpt_image_2_5"
+      ],
+      "configs": [
+        "Soul 1152x2048; Nano Banana 1536x2752; GPT Image 2.5 about 1520x2688",
+        "three contexts; prompt variants ending -ref.txt and -soul.txt"
+      ],
+      "prompt_files": [
+        "hermes-content/references/modelos/lucia/v4/prompts/casting-v2-s1-cafe-ref.txt",
+        "hermes-content/references/modelos/lucia/v4/prompts/casting-v2-s1-cafe-soul.txt",
+        "hermes-content/references/modelos/lucia/v4/prompts/casting-v2-s2-terraza-ref.txt",
+        "hermes-content/references/modelos/lucia/v4/prompts/casting-v2-s2-terraza-soul.txt",
+        "hermes-content/references/modelos/lucia/v4/prompts/casting-v2-s3-retrato-ref.txt",
+        "hermes-content/references/modelos/lucia/v4/prompts/casting-v2-s3-retrato-soul.txt"
+      ],
+      "cost": {
+        "quoted_per_image_cr": {
+          "soul_2": 0.12,
+          "nano_banana_pro": 2,
+          "gpt_image_2_5": 2.75
+        },
+        "measured_batch_debit_by_scene": null
+      },
+      "metrics": {},
+      "outputs": [
+        "hermes-content/references/modelos/lucia/v4/kit/kit-fotos-hoja.jpg"
+      ],
+      "failures": [
+        "No ArcFace score per image is recorded in the 97-line ledger for this batch."
+      ]
+    },
+    {
+      "id": "face_method_T101-T204",
+      "event_rows": [
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47
+      ],
+      "format": "face reference method and prompt test across new scenes",
+      "models": [
+        "Nano Banana Pro",
+        "Seedream 4.5"
+      ],
+      "configs": [
+        "Nano Banana Pro cafe/street/coworking/mirror-selfie; Seedream 4.5 basic 1440x2560 cafe/street",
+        "explicit media_ids vs Element placeholder; Element placeholder injected first of seven images only"
+      ],
+      "prompt_files": [
+        "hermes-content/references/modelos/lucia/v4/qa/manifest-metodos-20260929.json"
+      ],
+      "cost": {
+        "quoted_per_image_cr": {
+          "nano_banana_pro": 2,
+          "seedream_v4_5": 1
+        },
+        "identity_QA_cr": 0
+      },
+      "metrics": {
+        "ArcFace centroid of 8 official refs; candidates": [
+          {
+            "id": "T101",
+            "score": 0.822,
+            "min_ref": 0.578,
+            "max_ref": 0.805,
+            "face_px": 478
+          },
+          {
+            "id": "T102",
+            "score": 0.693,
+            "min_ref": 0.458,
+            "max_ref": 0.689,
+            "face_px": 244
+          },
+          {
+            "id": "T103",
+            "score": 0.713,
+            "min_ref": 0.503,
+            "max_ref": 0.705,
+            "face_px": 525
+          },
+          {
+            "id": "T104",
+            "score": 0.7,
+            "min_ref": 0.502,
+            "max_ref": 0.701,
+            "face_px": 375
+          },
+          {
+            "id": "T201",
+            "score": 0.806,
+            "min_ref": 0.599,
+            "max_ref": 0.735,
+            "face_px": 561
+          },
+          {
+            "id": "T202",
+            "score": 0.683,
+            "min_ref": 0.467,
+            "max_ref": 0.661,
+            "face_px": 280
+          },
+          {
+            "id": "T203",
+            "score": 0.883,
+            "min_ref": 0.623,
+            "max_ref": 0.81,
+            "face_px": 460
+          },
+          {
+            "id": "T204",
+            "score": 0.836,
+            "min_ref": 0.582,
+            "max_ref": 0.768,
+            "face_px": 279
+          }
+        ]
+      },
+      "outputs": [
+        "hermes-content/references/modelos/lucia/v4/qa/identidad-metodos-20260929.json"
+      ],
+      "failures": [
+        "Element placeholder uses one media asset only; explicit media_ids delivered all seven refs."
+      ]
+    },
+    {
+      "id": "fixed_scenes_prompt_light",
+      "event_rows": [
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74
+      ],
+      "format": "Seedream 4.5 fixed-scene images and iterative skin/light clause",
+      "models": [
+        "Seedream 4.5"
+      ],
+      "configs": [
+        "9:16, seven face refs, anchor first",
+        "iterated “unretouched pores/freckles” then youthful-face plus physically consistent-light clause; latter requested no artificial glow"
+      ],
+      "prompt_files": [
+        "hermes-content/references/modelos/lucia/v4/prompts/_identidad-carry-forward.txt",
+        "hermes-content/references/modelos/lucia/v4/prompts/_realismo-y-cierre.txt"
+      ],
+      "cost": {
+        "measured_3_fixed_scenes_cr": 3,
+        "measured_prompt_variant_scenes_cr": 3
+      },
+      "metrics": {
+        "first_clause_scores": [
+          0.884,
+          0.749,
+          0.766
+        ],
+        "beauty_clause_scores": [
+          0.845,
+          0.875,
+          0.848
+        ]
+      },
+      "outputs": [
+        "hermes-content/references/modelos/lucia/v4/qa/identidad-escenas-seedream-20260930.json"
+      ],
+      "failures": [
+        "“Unretouched skin” improved pore/freckle detail but marked age lines; later clause adjusted youth and physically present light sources."
+      ]
+    },
+    {
+      "id": "Soul_ID_training_AB",
+      "event_rows": [
+        64,
+        70,
+        73,
+        77,
+        78,
+        79,
+        82,
+        83,
+        84,
+        85
+      ],
+      "format": "Soul ID trained identity adapter vs Seedream held-out scenes",
+      "models": [
+        "Soul 2 LUCIA-v4",
+        "LUCIA-v5",
+        "LUCIA-v5b",
+        "Seedream 4.5"
+      ],
+      "configs": [
+        "v4 20 images; v5 and v5b 16-image set, duplicate training while first stayed queued",
+        "A/B on park, video call, terrace, scenes outside training set"
+      ],
+      "cost": {
+        "v4_train": "unmeasured; historical reference 25 cr on 2026-08-23",
+        "v5_train_measured_cr": 25,
+        "v5b_duplicate_train_measured_cr": 25,
+        "v5_AB_outputs_measured_cr": 0.36
+      },
+      "metrics": {
+        "dataset_v5_8_scores": [
+          0.848,
+          0.777,
+          0.784,
+          0.801,
+          0.777,
+          0.858,
+          0.789,
+          0.828
+        ],
+        "heldout_mean": {
+          "Seedream": 0.838,
+          "Soul-v4": 0.744,
+          "Soul-v5": 0.803
+        }
+      },
+      "outputs": [
+        "hermes-content/references/modelos/lucia/v4/qa/identidad-ab-soul-20260930.json",
+        "hermes-content/references/modelos/lucia/v4/qa/identidad-ab-soul-v5-20261001.json",
+        "hermes-content/references/modelos/lucia/v4/qa/identidad-dataset-v5-20260930.json"
+      ],
+      "failures": [
+        "Training queued about nine hours. v5b duplicated the dataset after v5 wait; both cost 25 cr and v5b recorded as unused. Soul v5 held-out mean 0.803 vs Seedream 0.838."
+      ]
+    },
+    {
+      "id": "daily_method_and_kit",
+      "event_rows": [
+        72,
+        75,
+        86,
+        87,
+        93,
+        94,
+        95
+      ],
+      "format": "Seedream lifestyle photographs from mirror anchor + official refs + wardrobe ref; Kling b-roll clips",
+      "models": [
+        "Seedream 4.5",
+        "Kling 3.0 std"
+      ],
+      "configs": [
+        "Seedream 9:16; mirror anchor first, four official refs, outfit turnaround last; clause for same face/freckles and scene-consistent light",
+        "Kling 3.0 std, sound off, 6s 9:16, start_image from approved still",
+        "Literal K1 video prompt recorded: “She slowly lifts her eyes from the phone to the camera and gives a small knowing smile, the phone stays in her hands. Subtle handheld camera, natural morning light, no cuts.”"
+      ],
+      "cost": {
+        "four_lifestyle_scenes_measured_cr": 4,
+        "kit_photo_clip_spend_measured_cr": 30.5,
+        "breakdown_cr": {
+          "photos": 8,
+          "clips": 22.5
+        },
+        "monthly_spend_at_record_cr": 52.5
+      },
+      "metrics": {
+        "E1_E4_scores": [
+          0.844,
+          0.828,
+          0.828,
+          0.864
+        ],
+        "kit_photos": {
+          "K1": 0.808,
+          "K2": 0.829,
+          "K4_1_discarded": 0.835,
+          "K4_1_crop": 0.81,
+          "K4_3": 0.841,
+          "K4_4": 0.851,
+          "K4_5": 0.835
+        },
+        "clip_identity_samples": {
+          "K1": [
+            0.793,
+            0.734,
+            0.68
+          ],
+          "K2": [
+            0.79,
+            0.707,
+            0.695
+          ],
+          "K4": [
+            0.81,
+            0.726,
+            0.725
+          ]
+        }
+      },
+      "outputs": [
+        "hermes-content/references/modelos/lucia/v4/kit/kit-fotos-hoja.jpg",
+        "hermes-content/references/modelos/lucia/v4/kit/kit-clips-preview.mp4",
+        "hermes-content/references/modelos/lucia/v4/kit/k1-clip-mira-camara-e470ef4f.mp4",
+        "hermes-content/references/modelos/lucia/v4/kit/k2-clip-deja-cafe-83130c4a.mp4",
+        "hermes-content/references/modelos/lucia/v4/kit/k4-clip-cuenta-dedos-338b751f.mp4"
+      ],
+      "failures": [
+        "K4 initial photo with negative “No screens visible, no text, no logos, no signs anywhere” still made a fictional tower sign; retry crop used. K4 hand review later found two frames where other finger crossed hand; count carefully frame-by-frame."
+      ]
+    },
+    {
+      "id": "broll_20260930",
+      "event_rows": [
+        80,
+        81
+      ],
+      "format": "same still/prompt b-roll comparison, 6 sec 9:16 no audio",
+      "models": [
+        "Seedance 2.0 Mini",
+        "Kling 3.0 std",
+        "Cinema Studio Video v2"
+      ],
+      "configs": [
+        "Base P3 street at golden hour; handheld tracking",
+        "Prompt: She walks along a sunlit street at golden hour, glances at the camera and smiles softly. Slow handheld tracking shot, shallow depth of field. Keep her face exactly as in the image."
+      ],
+      "cost": {
+        "quotes_and_charges_cr": {
+          "Seedance Mini": 6,
+          "Kling std": 7.5,
+          "Cinema Studio v2": 6
+        },
+        "measured_sum_cr": 19.5
+      },
+      "metrics": {
+        "face_px": "approx 170 at 720p vs still 346",
+        "face_scores": {
+          "Seedance": [
+            0.681,
+            0.631,
+            0.598,
+            0.619,
+            0.636
+          ],
+          "Kling": [
+            0.696,
+            0.701,
+            0.618,
+            0.716,
+            0.716
+          ],
+          "Cinema-v2": [
+            0.738,
+            0.701,
+            0.532,
+            0.597,
+            0.57
+          ]
+        }
+      },
+      "outputs": [
+        "hermes-content/references/modelos/lucia/v4/qa/identidad-broll-20260930.json",
+        "hermes-content/references/modelos/lucia/v4/kit/kit-clips-preview.mp4"
+      ],
+      "failures": [
+        "Seedance stayed low; Cinema Studio v2 dropped when frontal. One Kling 0.618 sample was a blink."
+      ]
+    },
+    {
+      "id": "G2_six_video_engines_20261008",
+      "event_rows": [
+        77,
+        80,
+        81,
+        95,
+        96,
+        97
+      ],
+      "format": "six video variants, same K1 image and common order, clips 4-6 seconds",
+      "models": [
+        "Kling 3.0 std",
+        "Kling 3.0 pro",
+        "Seedance 2.0 Mini",
+        "Seedance 2.0 Mini + 3 refs",
+        "Kling 3.0 Omni + 5 refs",
+        "Cinema Studio 3.0"
+      ],
+      "jobs": [
+        "e470ef4f-5464-478e-8b60-44c6493dc547",
+        "9f43ee3c-7a7c-4059-85ec-6facb71b81e4",
+        "a7f79a01-4193-4135-9ba2-082378a2609d",
+        "dd2d7c91-ea3a-46a8-a29d-3861143dfe9e",
+        "948a89d3-c5c5-4e32-92f0-db624edc825b",
+        "cc8fa519-f8c2-49b5-bd4d-b3a1be52c875"
+      ],
+      "configs": [
+        "Kling std: start_image, sound off; Kling pro: start_image 1080x1920; Seedance Mini: start_image, 720p; Seedance variant start_image plus 3 image_refs; Kling Omni has 5 image_refs and no start_image; Cinema 3.0 4s 720p start_image"
+      ],
+      "cost": {
+        "live_quotes_cr": [
+          7.5,
+          9,
+          6,
+          6,
+          6,
+          20
+        ],
+        "measured_new_video_spend_cr": 47,
+        "all_media_lot_balance_decrease_cr": null,
+        "balance": "454.76 fue resta estimada posteriormente corregida; saldo real438.17 medido10oct; no balance final observado454.76",
+        "spend_reconciled_transactions_cr": 86.5,
+        "balance_source_correction": "skill lucia §6/cola fuente3566e5 corrigen saldo454.76; cargos86.5 reconciliadostransactions"
+      },
+      "metrics": {
+        "identity_scores_by_model": {
+          "Kling std": [
+            0.791,
+            0.793,
+            0.762,
+            0.734,
+            0.761,
+            0.708,
+            0.721
+          ],
+          "Kling pro": [
+            0.805,
+            0.8,
+            0.791,
+            0.771,
+            0.75,
+            0.748,
+            0.739
+          ],
+          "Seedance Mini start": [
+            0.691,
+            0.657,
+            0.677,
+            0.634,
+            0.615,
+            0.634,
+            0.644
+          ],
+          "Seedance Mini + 3 refs": [
+            0.707,
+            0.762,
+            0.754,
+            0.726,
+            0.796,
+            0.777,
+            0.801
+          ],
+          "Kling Omni 5 refs": [
+            0.798,
+            0.783,
+            0.785,
+            0.814,
+            0.815,
+            0.81,
+            0.824
+          ],
+          "Cinema Studio 3.0": [
+            0.785,
+            0.772,
+            0.787,
+            0.799,
+            0.79,
+            0.771
+          ]
+        },
+        "light_and_motion_signalstats_file": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/medicion-luz-movimiento-20261011.txt",
+        "light_movement": {
+          "Kling std": {
+            "luma_delta": -1.0,
+            "motion_mean_max": [
+              0.99,
+              3.03
+            ]
+          },
+          "Kling pro": {
+            "luma_delta": -0.4,
+            "motion_mean_max": [
+              1.04,
+              1.94
+            ]
+          },
+          "Seedance mini": {
+            "luma_delta": -12.2,
+            "motion_mean_max": [
+              3.62,
+              7.29
+            ]
+          },
+          "Seedance mini +3 refs": {
+            "luma_delta": -33.7,
+            "V_delta": 8.4,
+            "motion_mean_max": [
+              4.09,
+              7.46
+            ]
+          },
+          "Kling Omni": {
+            "luma_delta": 2.1,
+            "motion_mean_max": [
+              2.39,
+              3.65
+            ]
+          },
+          "Cinema Studio": {
+            "luma_delta": -13.4,
+            "motion_mean_max": [
+              4.83,
+              7.17
+            ]
+          },
+          "limitation": "frame-average stats mix light and reframe/object changes"
+        },
+        "identity_readout": [
+          "Kling std 0.79 to 0.72; pro 0.805 to 0.739",
+          "Seedance refs 0.707 to 0.801; face reframed 139 to 347 px and invented sign",
+          "Kling Omni 0.798 to 0.824; invented room/shot, face 89 to 168 px",
+          "Cinema 3.0 0.785 to 0.771; within noted +/-0.03 noise band"
+        ]
+      },
+      "outputs": [
+        "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/proxies/",
+        "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/hojas/comparativo-v2.jpg"
+      ],
+      "limitations": [
+        "one take per model; no variance estimate",
+        "under 200px documented low confidence"
+      ]
+    },
+    {
+      "id": "image_engine_benchmark_20261008",
+      "event_rows": [
+        93,
+        97
+      ],
+      "format": "six image engines tested from same input/config, additional outputs for Seedream and Kling Omni",
+      "models": [
+        "Seedream 4.5",
+        "Kling Omni Image",
+        "Nano Banana 2.1",
+        "Seedream 5.0 Pro",
+        "FLUX 3 Image",
+        "GPT Image 2.5 Flare high"
+      ],
+      "configs": [
+        "same K1 prompt and six refs: mirror anchor first, four face photos, outfit reference last",
+        "prompt includes face identity/detail and physically consistent lighting; K1 exact image prompt not copied into ledger, source says retrieve through job_display"
+      ],
+      "cost": {
+        "price_per_image_cr": {
+          "Seedream 4.5": 1,
+          "Kling Omni Image": 0.5,
+          "Nano Banana 2.1": 2,
+          "Seedream 5.0 Pro": 2.5,
+          "FLUX 3": 3,
+          "GPT Image 2.5": 2.75
+        },
+        "measured_spend_group_cr": 11.75
+      },
+      "metrics": {
+        "scores": {
+          "Seedream 4.5": [
+            0.806,
+            0.83,
+            0.839
+          ],
+          "Kling Omni Image": [
+            0.794,
+            0.35,
+            0.831
+          ],
+          "Nano Banana 2.1": [
+            0.737
+          ],
+          "Seedream 5.0 Pro": [
+            0.702
+          ],
+          "FLUX 3": [
+            0.691
+          ],
+          "GPT Image 2.5": [
+            0.658
+          ]
+        }
+      },
+      "outputs": [
+        "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos/",
+        "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/hojas/comparativo-imagenes.jpg"
+      ],
+      "failures": [
+        "Kling Omni Image K2 output scored 0.350; judged another person/caricature. Seedream K4 had a high identity score but invented sign, so image must be viewed beyond score."
+      ]
+    },
+    {
+      "id": "lipsync_internal_20260930",
+      "event_rows": [
+        68,
+        69,
+        76,
+        97
+      ],
+      "format": "speech/lipsync with Marcela sample (internal only)",
+      "models": [
+        "MiniMax H3",
+        "Seedance 2.0 Mini",
+        "sync_so remap"
+      ],
+      "jobs": [
+        "fee69f56-074d-4c8a-89ef-5a9199bca0cd",
+        "fe1baa1d-470f-4b49-8a62-f57c9dbc9808",
+        "328a9d66-2b4e-4392-8b81-93a12551e49f",
+        "eaaf369d-7667-4698-8443-4d544fa5faa2"
+      ],
+      "configs": [
+        "H3 6s 2K 9:16; E1 as image_reference because start_image + audio_refs returned 422",
+        "Seedance Mini 6s 720p; K4_1 start image plus audio_refs; generate_audio false",
+        "sync_so remap existing 6.04s Kling K4, output 5.62s"
+      ],
+      "cost": {
+        "quote_and_charge_cr": {
+          "H3": 12,
+          "Seedance Mini": 6
+        },
+        "sync_so_actual_measured_cr": 21.75,
+        "sync_so_preflight": "unavailable; measured 3.6cr per source-second"
+      },
+      "metrics": {
+        "arcface": {
+          "Seedance Mini": [
+            0.732,
+            0.632,
+            0.639,
+            0.623,
+            0.618,
+            0.6,
+            0.634
+          ],
+          "sync_so_output": [
+            0.806,
+            0.764,
+            0.713,
+            0.748,
+            0.751,
+            0.753
+          ],
+          "same_source": [
+            0.811,
+            0.757,
+            0.714,
+            0.724,
+            0.747,
+            0.768
+          ]
+        },
+        "voice_audio": "MiniMax audio envelope correlation to Marcela 0.3; Seedance output no audio track; sync_so audio track present; H3 had lip/eye artifacts at 2-3s"
+      },
+      "outputs": [
+        "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/proxies/labios-seedance-mini-328a9d66-360p.mp4",
+        "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/proxies/labios-sync-so-eaaf369d-360p.mp4",
+        "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/hojas/labios-seedance-mini-boca.jpg"
+      ]
+    },
+    {
+      "id": "voiceover_L08_20261001",
+      "event_rows": [
+        86,
+        87,
+        88,
+        89,
+        90
+      ],
+      "format": "ElevenLabs Marcela voiceover + Kling footage edited with editor-videos",
+      "models": [
+        "Kling 3.0 std sound off",
+        "ElevenLabs multilingual v2 Marcela"
+      ],
+      "config": [
+        "Kling b-roll 10s, 9:16, source V05 cafe; editor-videos clean clip, no added Higgsfield credits",
+        "TTS not Higgsfield; no forced voice settings on used body/remate"
+      ],
+      "cost": {
+        "Kling_clip_measured_cr": 12.5,
+        "ElevenLabs_credits_measured": 83,
+        "Higgsfield_edit_cr": 0
+      },
+      "metrics": {
+        "final_video": "10.25s, -14.13 LUFS, true peak -1.8 dBTP",
+        "face_cosine_samples": [
+          0.79,
+          0.759,
+          0.765,
+          0.752,
+          0.771
+        ],
+        "used_ending_pitch_hz": [
+          195,
+          195,
+          194,
+          189,
+          179
+        ]
+      },
+      "outputs": [
+        "hermes-content/references/modelos/lucia/v4/feed/l08-cafe-src.mp4",
+        "hermes-content/references/modelos/lucia/v4/feed/l08-recordatorio-sin-mover-un-dedo.mp4"
+      ],
+      "failures": [
+        "first full take rising ending was read as question; forced voice_settings variants changed voice timbre; only remate seed 22 and body without forced settings used"
+      ]
+    },
+    {
+      "id": "wardrobe_render_20261002",
+      "event_rows": [
+        91,
+        92
+      ],
+      "format": "Seedream outfit turnaround image, 16:9",
+      "models": [
+        "Seedream 4.5"
+      ],
+      "configs": [
+        "failed prompt included turnaround sheet and hex #C4552F; fixed prompt uses color words/no typography/one pocket"
+      ],
+      "cost": {
+        "actual_measured_cr_per_attempt": [
+          1,
+          1
+        ]
+      },
+      "metrics": {
+        "first_color": "#BD5D54 vs target #C4552F",
+        "selected_front_back_colors": [
+          "#C3624B",
+          "#BE5943"
+        ]
+      },
+      "outputs": [
+        "hermes-content/references/modelos/lucia/v4/vestuario/ambo-terracota-turnaround-8d138bd6.jpg",
+        "hermes-content/references/modelos/lucia/v4/vestuario/ambo-terracota-frente-8d138bd6.jpg"
+      ],
+      "failures": [
+        "first image wrote gibberish, wrong salmon-pink color, black trim and extra pockets; second omitted text and was selected with three visual deviations adopted."
+      ]
+    }
+  ],
+  "read_only_catalog_rows": [
+    {
+      "section": "image",
+      "source_row": "| Catálogo de modelos de imagen (models_explore) | 0 cr (solo lectura). | No genera nada. Sirve para saber qué parámetro lleva las referencias de cara. image_references: Seedream 4.5 y 5, todos los Nano Banana, GPT Image 2.5, FLUX 2 y 3, Kling… | alta |"
+    },
+    {
+      "section": "image",
+      "source_row": "| Seedream 4.5 con referencias (método diario vigente) | 1 cr por foto 9:16, en basic y en high (exacto 1). | Con referencias, durante toda la foto, porque la cara se recompone desde las imágenes. Es el que mejor la sostuvo en el repo: ArcFace contra el centroide de las 8 fuentes… | alta |"
+    },
+    {
+      "section": "image",
+      "source_row": "| Nano Banana Pro con referencias o con Element | 2 cr a 2k con 5 referencias; 2 cr con el Element y sin medias; 4 cr a 4k con 1 referencia. | Con referencias o Element, durante toda la foto. En el repo quedó por debajo de Seedream: Element 0,822 café y 0,693 calle; 7 fotos 0,806 y 0,683. | media |"
+    },
+    {
+      "section": "image",
+      "source_row": "| Nano Banana 2, 2 Lite, 2.1 y Nano Banana base | Nano Banana 2 a 2k: 2 cr. Nano Banana 2 Lite a 1k: 1 cr. Nano Banana 2.1 a 2k: 2 cr. | No medido para Lucía. Se espera comportamiento de la familia Nano Banana (referencias durante toda la foto), pero no hay medición propia. | media |"
+    },
+    {
+      "section": "image",
+      "source_row": "| GPT Image 2 y GPT Image 2.5 | GPT Image 2.5 flare high 2k: 2,75 cr (igual al casting del 29-sep); low 1k: 0,25 cr. | No medido para Lucía con referencias. En el repo solo se usó sin referencias, para el casting de cara nueva (C01-C26, descartado). | media |"
+    },
+    {
+      "section": "image",
+      "source_row": "| Soul 2 con Soul ID LUCIA-v5 / LUCIA-v5b (y Soul Cinema) | 0,12 cr exactos por foto 2k 9:16 (el cotizador muestra '1' redondeado; leer credits_exact). | Entrenado, durante toda la foto. Medido: Soul v5 0,803 de media contra Seedream+ancla 0,838 y Soul v4 0,744 en escenas fuera del dataset. No alcanzó para principal; | alta |"
+    },
+    {
+      "section": "image",
+      "source_row": "| Otros modelos con referencias: FLUX 3 Image, FLUX 2, Seedream 5.0 Pro/… | FLUX 3 2k: 3 cr. Seedream 5.0 Pro 2k: 2,5 cr. Seedream 5.0 Lite: 1 cr. Kling O1 Image 2k: 0,5 cr. | No medido para Lucía en ninguno. FLUX 3 y Seedream 5 son los más parecidos a lo que ya funciona (varias referencias en un modelo de edición), pero no hay dato propio. | media |"
+    },
+    {
+      "section": "image",
+      "source_row": "| Lote de imágenes (generate_image_batch) | Es la suma de lo que cotice cada ítem por separado. El lote en sí no tiene cotización. | Igual que el modelo de cada ítem. | media |"
+    },
+    {
+      "section": "image",
+      "source_row": "| Upscale de imagen (upscale_image, bytedance) | 2 cr a 2k y 2 cr a 4k sobre la foto K1. Asumí 1440×2560 para K1 porque es el tamaño de Seedream basic 9:16; no lo medí. | No medido. El nombre 'bytedance' sugiere un escalador clásico, pero los de Topaz tienen modos generativos (creativity 1-6, face_enhancement) que pueden redibujar la cara;… | baja |"
+    },
+    {
+      "section": "image",
+      "source_row": "| Outpaint de imagen (outpaint_image) | 2 cr (cotizado de K1 a 16:9). Coincide con los 2 cr de la skill lucia para pasar de 3:4 a 9:16. | Según la descripción de la herramienta, preserva el contenido original y solo pinta los bordes nuevos, así que la cara queda intacta. No medido. | baja |"
+    },
+    {
+      "section": "image",
+      "source_row": "| Quitar fondo (remove_background) | no verificado: la herramienta no ofrece cotización. | No medido. No debería cambiar píxeles de la cara, pero el pelo suelto y ondulado de Lucía es el borde más difícil del recorte. | baja |"
+    },
+    {
+      "section": "image",
+      "source_row": "| Soul ID: listar, entrenar y ver estado (show_characters + skill higgsf… | Entrenar no tiene cotizador en el MCP: no verificado hoy. El repo midió 25 cr por saldo (30-sep, soul_2, 16 fotos) y una… | Sí, durante toda la foto, pero solo en imágenes. Para video la identidad la da la foto de partida o el Soul convertido en Element. | alta |"
+    },
+    {
+      "section": "image",
+      "source_row": "| Elements: listar, ver y crear (show_reference_elements / manage_refere… | list/get: 0 cr. Costo de create: no verificado y no tiene cotizador. | Sí, desde una referencia, pero el rendimiento depende del motor. Por MCP <<<id>>> inyecta solo la primera foto del Element; | alta |"
+    },
+    {
+      "section": "image",
+      "source_row": "| AI Influencer: opciones, presets y ajustes (ai_influencer_get_options… | 0 cr (solo lectura). | No toca nada existente: lee. Sirve para saber cómo se arma la hoja, no para fijar la cara de Lucía. | baja |"
+    },
+    {
+      "section": "image",
+      "source_row": "| AI Influencer: cotizar y generar hoja de personaje (ai_influencer_prep… | 1,125 cr por hoja con la foto K1 como identidad; 4,5 cr por 4 hojas sin imagen (1,125 c/u). | No verificado. Con imagen de identidad los grupos de identidad quedan sin fijar salvo que se elijan; no sé qué pesa más cuando hay imagen y rasgos a la vez. | baja |"
+    },
+    {
+      "section": "video",
+      "source_row": "| Kling 3.0 (std / pro / 4k) imagen a video | 6 s sin sonido: std 7,5 / pro 9 / 4k 36. std con sonido 10,5. std sin sonido: 3 s 3,75; 15 s 18,75 (1,25 cr/s). | Solo desde el cuadro 0: la foto de arranque es la única fuente de identidad. Medido en el repo: 0,70 a 0,72 contra el primer cuadro en la calle (30-sep), 0,75-0,82 en el… | alta |"
+    },
+    {
+      "section": "video",
+      "source_row": "| Elements de Lucía con <<<element_id>>> en Kling 3.0 (y Cinema 3.0, See… | Sin recargo: kling3_0 std 6 s sin sonido con <<<58bbd635...>>> en el prompt cotizó 7,5, igual que sin Element. | Parcial: el repo midió (29-sep) que <<<element_id>>> por MCP inyecta SOLO la primera foto del Element, aunque tenga 7. | media |"
+    },
+    {
+      "section": "video",
+      "source_row": "| Kling 3.0 con start_image + end_image | 6 s std sin sonido: 7,5 (igual que sin end_image). | En los dos extremos, y si el último cuadro es una foto aprobada con la cara de Lucía, el final queda anclado. | media |"
+    },
+    {
+      "section": "video",
+      "source_row": "| Kling 3.0 Omni (referencias de imagen) kling_o3_image_reference | 6 s std sin sonido: 6 (con 2, 3, 5 u 8 refs: el precio no depende de la cantidad). pro 9. std con sonido 7,5. | Es la vía con más probabilidad de sostenerla durante todo el clip porque las referencias acompañan la generación y no solo el cuadro 0. | alta |"
+    },
+    {
+      "section": "video",
+      "source_row": "| Kling 3.0 Omni Frames kling_o3_flf | 6 s std sin sonido: 6 (frente a 7,5 de kling3_0 con la misma entrada). | Solo desde el cuadro 0, igual que Kling 3.0. No se midió si su cara es mejor o peor que la del 3.0 clásico. | media |"
+    },
+    {
+      "section": "video",
+      "source_row": "| Kling 3.0 Omni Edit kling_video_edit | Sobre el clip K1 de 6 s en std: 9. | Si solo cambia ropa o fondo, los píxeles de la cara original se conservan en gran parte (inferido; no medido). Con una referencia de la cara puede reforzar. | baja |"
+    },
+    {
+      "section": "video",
+      "source_row": "| Kling 3.0 Turbo | 6 s: 720p 9; 1080p 12. No tiene opción de sonido en los parámetros. | Solo cuadro 0. Sin medición. | baja |"
+    },
+    {
+      "section": "video",
+      "source_row": "| Kling 2.6 | 5 s con sound:false: 5. La respuesta no trajo adjustments, pero con Kling 3.0 un false se había convertido en on, así qu… | Solo cuadro 0. Sin medición. | baja |"
+    },
+    {
+      "section": "video",
+      "source_row": "| Motion Control (herramienta motion_control / modelo kling3_0_motion_co… | Con K1 como imagen y el clip K1 como guía, fondo de la imagen: std 6 s 11 / std 10 s 17 / pro 6 s 17 / pro 10 s 27 / pro… | Por diseño la identidad sale de la imagen del personaje durante todo el clip y el video solo aporta movimiento: es el control más directo del gesto. Sin medición propia. | alta |"
+    },
+    {
+      "section": "video",
+      "source_row": "| Genjutsu (hf_mult_motion_control) | Con la foto K1 y el clip K1 como guía: 480p 18; 720p 42. 1080p no cotizado. | Sin medir. Misma lógica que Motion Control (identidad de las imágenes). | baja |"
+    },
+    {
+      "section": "video",
+      "source_row": "| animation_actions (catálogo de animaciones de rig 3D) | 0: es lectura. | No aplica: anima rigs 3D, no videos de Lucía. | ninguna |"
+    },
+    {
+      "section": "video",
+      "source_row": "| Seedance 2.0 Mini | 6 s 720p: 6 con generate_audio false o true (el sonido apagado no baja el precio). 4 s 720p: 4. | Con image_references acompaña toda la generación, y con start_image desde el cuadro 0. Medido (30-sep, misma orden que el Kling): 0,68 en el cuadro 0 y 0,60-0,64 en el re… | media |"
+    },
+    {
+      "section": "video",
+      "source_row": "| Seedance 2.0 (std / fast) | 6 s 720p sin audio: std 27; fast 15. | Soporta referencias de imagen en todo el clip y el Element por placeholder. Sin medición con Lucía. | baja |"
+    },
+    {
+      "section": "video",
+      "source_row": "| Seedance 2.5 omni_reference | 6 s 720p sin audio: 42. 1080p: 72. Borrador 480p 6 s: 18 (la finalización a 1080p no se cotizó). | Admite referencias durante el clip. Sin medición con Lucía. | baja |"
+    },
+    {
+      "section": "video",
+      "source_row": "| Seedance 2.5 video_extension | Extensión de 5 s sobre el clip K1: 35 (7 cr/s). | Retoma desde el último cuadro del clip y en agosto conservó plano, ropa, bolsa y luz. La identidad la hereda del tramo anterior. | media |"
+    },
+    {
+      "section": "video",
+      "source_row": "| Seedance 2.5 video_edit | Sobre el clip K1 de 6 s en 720p: 46. | En agosto devolvió el mismo plano con la camisa cambiada; reescala el video. | baja |"
+    },
+    {
+      "section": "video",
+      "source_row": "| Cinema Studio Video 3.0 | 720p: 4 s 20; 6 s 30. 1080p 4 s: 40 (el doble que 720p). 4k no cotizado. | Solo cuadro 0 (y end_image). Nunca se midió. | media |"
+    },
+    {
+      "section": "video",
+      "source_row": "| Cinema Studio Video 3.5 (id cinematic_studio_video_3_5) | 6 s 720p sin audio, prompt_language en: 30. | Acepta referencias de imagen en todo el clip. Sin medición. | baja |"
+    },
+    {
+      "section": "video",
+      "source_row": "| Cinema Studio 4.0 | 6 s 720p omni_reference sin audio: 42, igual que Seedance 2.5. | Admite referencias. Sin medición. | baja |"
+    },
+    {
+      "section": "video",
+      "source_row": "| Cinema Studio v2 y v1 | v2 std 6 s sin sonido: 6. v1 no cotizado. | Solo cuadro 0. Medido: es el que más deriva: 0,74 en el cuadro 0 y 0,53-0,60 después, sobre todo al quedar de frente. | baja |"
+    },
+    {
+      "section": "video",
+      "source_row": "| Veo 3.1 Lite | 6 s sin audio: 9; con audio: 9 (igual). 8 s con start_image + end_image: 12 (1,5 cr/s). En agosto costaba 1 cr/s. | Solo en los dos cuadros que se le dan. En agosto hizo una caminata continua con vestuario más estable que otros, pero sin medición de cara. | media |"
+    },
+    {
+      "section": "video",
+      "source_row": "| Veo 3.1 (fast, basic) y Veo 3 | Veo 3.1 fast basic 6 s: 24 (4 cr/s). Calidades high y ultra, y Veo 3, no cotizados. | Solo cuadro 0. Sin medición. | baja |"
+    },
+    {
+      "section": "video",
+      "source_row": "| Wan 2.7 | 6 s 720p: 9. No tiene parámetro de audio para apagarlo. | Solo cuadro 0 (y end_image). Sin medición. | baja |"
+    },
+    {
+      "section": "video",
+      "source_row": "| Wan 3.0 y Wan 3.0 Prime | 6 s 720p sin audio: Wan 3.0 10,5 (igual con audio) y Prime 18. Wan 3.0 a 1080p: 21. | Admite referencias de imagen en todo el clip. Sin medición. | baja |"
+    },
+    {
+      "section": "video",
+      "source_row": "| Wan 2.6 | 5 s 720p con 2 referencias: 7,5. En agosto costaba 13. | Referencias durante el clip; sin medición. | baja |"
+    },
+    {
+      "section": "video",
+      "source_row": "| Minimax Hailuo | minimax-2.3 6 s: 768 6; 1080 10. 512 es incompatible con end_image y con las variantes 2.3. | Solo cuadro 0 (y end_image). Sin medición. | baja |"
+    },
+    {
+      "section": "video",
+      "source_row": "| MiniMax H3 y H3 Max | 6 s con start_image + 1 referencia: H3 2K 12; H3 Max 768p 15. | Acepta referencias en todo el clip. Sin medición. | baja |"
+    },
+    {
+      "section": "video",
+      "source_row": "| FLUX 3 Video | 6 s 720p sin audio con start_image + 1 referencia: 33 (5,5 cr/s). | Referencias durante el clip; sin medición. | baja |"
+    },
+    {
+      "section": "video",
+      "source_row": "| Grok Video 1.5 y Grok Lite | 6 s 720p: v1.5 27; Lite 6. | v1.5 acepta referencias; Lite solo cuadro 0. Sin medición. | baja |"
+    },
+    {
+      "section": "video",
+      "source_row": "| Happy Horse Video | 6 s 720p: 15. | Solo cuadro 0. Sin medición. | baja |"
+    },
+    {
+      "section": "video",
+      "source_row": "| Gemini Omni Flash y Flash 1.1 | 6 s 720p con 2 referencias: gemini_omni 18; Flash 1.1 reference-to-video 18. | Referencias durante el clip. Sin medición. | baja |"
+    },
+    {
+      "section": "video",
+      "source_row": "| Mejorar de 720p a 1080p/2K/4K (upscale_video, bytedance_video_upscale) | Clip K1 de 6 s, 24 fps: standard 1080p 1; standard 4k 4; pro 1080p 10; pro 2k 20. | Mantiene la cara del clip original; no la recupera (a 720p mide ~120 px y el puntaje baja). Puede suavizar poros y pecas, que son el rasgo sagrado: sin medir. | media |"
+    },
+    {
+      "section": "video",
+      "source_row": "| Topaz Video / Hyperion (upscale con provider topaz) | No verificado. | No verificado. | baja |"
+    },
+    {
+      "section": "video",
+      "source_row": "| Reencuadrar (reframe) | 6 s: 480p 21; 720p 30; 1080p 57 (5 cr/s a 720p, igual que la skill). | Los píxeles originales se conservan, solo se inventan los bordes. Sin medición. | baja |"
+    },
+    {
+      "section": "audio",
+      "source_row": "| TTS Seed Audio 1.0 (voz preset o propia, clon desde audio, pista de im… | 253 caracteres (46 palabras) = 1,7 cr con voz preset Marisol. Igual con la voz propia Lucia-voz (elemento), con audio_re… | No aplica: es solo audio y la cara no entra en la cuenta. | media |"
+    },
+    {
+      "section": "audio",
+      "source_row": "| TTS Text to Speech V2 (5 motores por variante) | Para 253 caracteres: elevenlabs 0,75 · minimax 0,75 · seed_speech 0,5 · vibe_voice 0,5 · cozy_voice 0,25 cr. | No aplica: solo audio. | media |"
+    },
+    {
+      "section": "audio",
+      "source_row": "| Eleven v4 y Eleven v4 Turbo (diálogo multivoz) | 253 caracteres: elevenlabs_v4 = 1,15 cr; elevenlabs_v4_turbo = 0,75 cr. | No aplica: solo audio. | media |"
+    },
+    {
+      "section": "audio",
+      "source_row": "| TTS Qwen Audio 3.0 Flash (con instrucción de dialecto) | 0,11 cr para 253 caracteres. El más barato del grupo. | No aplica: solo audio. | baja |"
+    },
+    {
+      "section": "audio",
+      "source_row": "| Lote de audio | La suma de cada ítem. Ejemplo: 12 voces con cozy_voice (0,25 cada una) = 3 cr; con seed_audio, 12 × 1,7 = 20,4 cr. | No aplica: solo audio. | media |"
+    },
+    {
+      "section": "audio",
+      "source_row": "| Música y efectos de sonido sueltos | No cotizado: la herramienta prohíbe usarlos para audio suelto, así que no se llamaron ni para cotizar. | No aplica: solo audio. | media |"
+    },
+    {
+      "section": "audio",
+      "source_row": "| Catálogo de voces | 0 cr. | No aplica: solo audio. | alta |"
+    },
+    {
+      "section": "audio",
+      "source_row": "| Crear voz clonada | No verificado: la descripción dice que cobra un 'voice-clone credit cost' sin cifra y no existe get_cost. | No aplica: solo audio. | media |"
+    },
+    {
+      "section": "audio",
+      "source_row": "| Cambio de voz en un video | 0,1 cr/s: 10 s = 1 cr, 30 s = 3 cr. El 5-oct: 15 s = 2. | Sí, por construcción: no regenera imagen, solo audio (según la descripción de la herramienta; no probado en Lucía). La cara es la del clip base. | media |"
+    },
+    {
+      "section": "audio",
+      "source_row": "| Doblaje a otro idioma | 3 cr/s: 6 s = 18 cr; 10 s = 30 cr. | No verificado: rehace los labios sobre el video fuente, así que la cara es la del clip base pero la zona de la boca se regenera. No hay prueba en Lucía. | baja |"
+    },
+    {
+      "section": "audio",
+      "source_row": "| Sync Lipsync 3 (labios sobre un video ya hecho) | 3,6 cr/s, lineal, más el costo del clip base: 6 s = 21,6 · 10 s = 36 · 30 s = 108. | La cara viene del video de entrada y solo se regenera la boca. El 15-ago se vio a ojo: 4 formas de boca distintas, dientes normales y pecas intactas (prueba-lipsync-20260… | alta |"
+    },
+    {
+      "section": "audio",
+      "source_row": "| Seedance 2.0 Mini con audio_references (labios de un solo paso) | 10 cr por 10 s a 720p; 6 cr por 6 s; con generate_audio true también 10 (no sube ni baja). | Con start_image la cara arranca fiel (cuadro 0) y después depende del modelo. El 30-sep, a ojo: 'cara estable y fiel, boca articula natural con dientes limpios'. | alta |"
+    },
+    {
+      "section": "audio",
+      "source_row": "| Seedance 2.0 (std y fast) con audio_references | 10 s a 720p con start_image + audio_references: fast 25 cr, std 45 cr. El 5-oct, 6 s: fast 15, std 27. | Igual que Mini: depende del start_image y del modelo. No hay medición. | baja |"
+    },
+    {
+      "section": "audio",
+      "source_row": "| MiniMax H3 y H3 Max con audio_references | 10 s: minimax_h3 2K = 20 cr; minimax_h3_max 768p = 25 cr. Cobrado el 30-sep: 12 cr por 6 s en H3. | Dudosa: el 30-sep, job fee69f56-074d-4c8a-89ef-5a9199bca0cd, la boca articuló variado pero a los 2-3 s hubo labios hinchados y un ojo entrecerrado raro (deriva). | baja |"
+    },
+    {
+      "section": "audio",
+      "source_row": "| Wan 2.7, Wan 2.6 y Wan 3.0 / 3.0 Prime con audio_references | 10 s 720p con audio_references: wan2_7 = 15 · wan2_6 = 15 · wan3_0 = 17,5 · wan3_0_prime = 30 cr. | No medido. wan2_7 en el repo: 'dientes con artefacto'. | baja |"
+    },
+    {
+      "section": "audio",
+      "source_row": "| Grok Video 1.5 con audio_references | 10 s 720p = 45 cr; el 5-oct 6 s = 27. | No medido. | baja |"
+    },
+    {
+      "section": "audio",
+      "source_row": "| Modelos premium con audio_references: Seedance 2.5 omni, Cinema Studio… | 10 s 720p con start_image + audio_references: seedance_2_5 = 70 · cinema 4.0 = 70 · cinema 3.5 = 50 cr. | No medido. | baja |"
+    },
+    {
+      "section": "audio",
+      "source_row": "| Habla nativa del modelo (Kling 3.0, Kling Turbo, Veo 3.1 Lite, FLUX 3… | kling3_0 std 10 s: sound on 17,5 · sound off 12,5 (el 5-oct, 6 s sound on = 10,5). kling3_0_turbo 6 s = 9. | Con start_image la cara arranca fiel. Kling sostuvo la cara en el b-roll (0,70 → 0,72, PROCEDENCIA línea 80), pero la voz sale del modelo y no es la de Lucía. | media |"
+    },
+    {
+      "section": "audio",
+      "source_row": "| Música de la biblioteca comercial de TikTok | 0 cr (lectura). No verificado en vivo. | No aplica: solo audio. | baja |"
+    },
+    {
+      "section": "studio_apps",
+      "source_row": "| Presets Viral (87 efectos) | No cotizable. get_cost no está soportado para presets. | Solo la foto de entrada (cuadro 0). El resto lo regenera el efecto: clones, derretir, desaparecer y órbitas rehacen el rostro; los looks de estilo repintan la piel. | baja |"
+    },
+    {
+      "section": "studio_apps",
+      "source_row": "| Marketing Studio v2: plantillas de motion y product shots (649) | No cotizable por preset. Referencia del 5-oct: saas_motion 15 s = 90,5 y 10 s = 60,8. | No aplica: la imagen es un producto. La persona sale de un avatar de Higgsfield; uno propio de Lucía exigiría crear un avatar (una escritura) y no hay prueba. | ninguna |"
+    },
+    {
+      "section": "studio_apps",
+      "source_row": "| Marketing Studio Video | 12 s 720p = 60 cr; 15 s 720p = 75 cr (5 cr/s). El 5-oct: 12 s 480p = 42. | No demostrado. La cotización acepta la ancla con rol image (el 5-oct character_photo daba 'Unknown media role'), pero una cotización no valida que la use como cara. | baja |"
+    },
+    {
+      "section": "studio_apps",
+      "source_row": "| Marketing Studio Image | 2 cr a 1k, 9:16, con la ancla. Antes: 3,6 cr cobrados el 29 y 31-ago; el repo decía 4. | No demostrado. Está pensado para producto; con la foto de Lucía como referencia genérica no hay prueba de identidad. | baja |"
+    },
+    {
+      "section": "studio_apps",
+      "source_row": "| Genjutsu: transferir movimiento (hf_mult_motion_control) | Guía K1 de 6 s: 42 cr a 720p y 18 cr a 480p. Tarifa: 3, 7 y 11 cr/s a 480/720/1080p según la doc de Katana, factura roun… | Durante todo el clip y por referencia: la imagen manda el sujeto. La doc de Higgsfield dice que la imagen manda el 'look' completo (cara, pelo, ropa) y que se pierde el t… | media |"
+    },
+    {
+      "section": "studio_apps",
+      "source_row": "| Genjutsu: reemplazar sujeto (hf_mult_replace_object) | 49 cr a 720p con el clip K1 (6,04 s, factura ceil = 7 s). | Durante todo el clip, por referencia. Riesgo documentado: toma el 'look' completo de la foto (en su caso medido, todos los reemplazos vistieron el buzo de la foto). | media |"
+    },
+    {
+      "section": "studio_apps",
+      "source_row": "| Galería Genjutsu (35 presets curados + Trending/New) | No cotizable por preset. Sería la tarifa de Genjutsu por los segundos del guía del preset, que no se pueden leer. | Igual que Genjutsu: la imagen de personaje manda en todo el clip. Sin medir con Lucía. | media |"
+    },
+    {
+      "section": "studio_apps",
+      "source_row": "| Ad Multiplier (modelo ad_multiplier) | 42,29 cr a 720p para el clip K1 de 6,04 s (7 cr/s del video fuente). Cada variante se cobra aparte. | Durante todo el clip por referencia, y la imagen manda el aspecto completo (cara, pelo, ropa). Sin medir con Lucía. | media |"
+    },
+    {
+      "section": "studio_apps",
+      "source_row": "| Kling 3.0 Motion Control (comparación, fuera del grupo) | 11 cr por 6 s en std (1,83 cr/s). El 5-oct: 17 cr por 10 s. | Por referencia en todo el clip; sin medir con Lucía. | alta |"
+    },
+    {
+      "section": "studio_apps",
+      "source_row": "| Shorts Studio | 3 cr/s: 6 s = 18, 30 s = 90, 60 s = 180. | No. Re-pinta todos los cuadros hacia el estilo elegido; la piel y el rostro cambian. Sirve solo si se quiere una versión ilustrada a propósito. | baja |"
+    },
+    {
+      "section": "studio_apps",
+      "source_row": "| Ads Studio | No verificado: la cotización exige tener una marca. | No aplica: genera imágenes de producto, sin entrada de cara. | ninguna |"
+    },
+    {
+      "section": "studio_apps",
+      "source_row": "| Virality Predictor | No verificado. La herramienta no tiene get_cost y no hay modelo cotizable: generate_video con 'virality_predictor' y 'br… | No toca la imagen: solo lee el video. La cara no cambia. | media |"
+    },
+    {
+      "section": "studio_apps",
+      "source_row": "| Análisis de video (video_analysis_*) | No verificado, probablemente 0: en transactions no hay cargo junto a los análisis del 19-ago 02:46 y del 21-ago 00:33. | No toca la imagen: solo analiza. | alta |"
+    },
+    {
+      "section": "studio_apps",
+      "source_row": "| 3D Jutsu: escenas 3D alojadas (scene_builder_3d_*) | No verificado: no tienen get_cost. Referencias: Seedream 5 Pro 2k = 2,5 cr; | La escena no lleva a Lucía. La cara entra solo como referencia (1 foto en generate_angles o imágenes en Seedance 2.5); | baja |"
+    },
+    {
+      "section": "studio_apps",
+      "source_row": "| Generación 3D (generate_3d) | image_to_3d sin textura con la ancla = 20 cr. multi_image_to_3d con las 4 fuentes de cara y textura = 30 cr. | Reconstruye una cabeza 3D con el parecido que dé la malla; no sirve para video de Lucía. No hay forma de importarla a 3D Jutsu (solo catálogo). | ninguna |"
+    },
+    {
+      "section": "studio_apps",
+      "source_row": "| App Match Cut + Tracelab (Marketplace de apps) | No verificado: apps_describe no trae precio y apps_invoke no tiene cotización. | Sí, en el sentido más fuerte: no hay generación. Los píxeles de las fotos de Lucía entran y salen tal cual; facecut solo las alinea. | media |"
+    },
+    {
+      "section": "studio_apps",
+      "source_row": "| Recetas de get_preset_instructions (61: push-in, whip-pan, reel-cover,… | Sin cotizar; depende del modelo que la receta fija. | No: las recetas tratan la imagen como PRODUCTO ('preserve exact product shape') y prohíben agregar personas o manos. | ninguna |"
+    },
+    {
+      "section": "studio_apps",
+      "source_row": "| Workflow ugc-video (6 formatos) | Por etapa, cotizado: clip de 15 s en 1080p = 180 cr y en 720p = 105 cr (Seedance 2.5 omni_reference con la ancla); | Por referencia en cada tablero y cada clip (character_media_id). Con Seedance 2.0 Mini el repo midió deriva leve; Seedance 2.5 con Lucía, sin medir. | media |"
+    },
+    {
+      "section": "studio_apps",
+      "source_row": "| Workflow narration: modo presentador | Por bloque de 10 s: unos 32 cr (gemini_omni 30 + gpt_image_2 1 + voice_change 1 por 10 s). | Por referencia durante todo el bloque (la foto con fondo verde 'copiada fielmente'); el parecido de gemini_omni con Lucía no se midió. | media |"
+    },
+    {
+      "section": "studio_apps",
+      "source_row": "| Workflow katana (remake de un video de referencia) + presets Katana | Documentado por Higgsfield: un caso de 10,5 s costó 83 cr (71 usados); el original rondaba 120 cr por segundo final. | Con la imagen del sujeto como referencia en Genjutsu o en el cuadro inicial; sin medir con Lucía. | media |"
+    },
+    {
+      "section": "studio_apps",
+      "source_row": "| Workflow character-sheet | Modo A 0 cr. Modo B: 1 imagen 16:9, depende del modelo (sin cotizar). | Es texto a imagen: no usa la foto de Lucía como referencia. Sirve para dar vistas, no para fijar la cara. | baja |"
+    },
+    {
+      "section": "studio_apps",
+      "source_row": "| Workflows de edición: video-montage y video-editing (Higgsedit) | No cotizado: son pasos del sandbox, sin precio documentado. | Sí: editan píxeles ya generados, sin regenerar la cara. | baja |"
+    },
+    {
+      "section": "studio_apps",
+      "source_row": "| Workflows de apoyo: faceless-video + 22 estilos explainer, thumbnail-g… | No cotizado. | faceless-video no tiene cara. thumbnail-generation fija la identidad por referencia en imágenes (Nano Banana Pro, 4K) y es lo único aprovechable para portadas de Reels. | baja |"
+    }
+  ],
+  "outputs_in_source_tree": [
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/kit/estado-montaje.json",
+      "git_blob_sha1": "393afcfa4c86056a9624d873bb9496870f88b447",
+      "bytes": 6269
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/kit/k1-1-recepcion-celular-4afffb96.jpg",
+      "git_blob_sha1": "5e9a4c3c3ce604c30cc025fab642b8d952c4e96e",
+      "bytes": 807038
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/kit/k1-borrador-360p.mp4",
+      "git_blob_sha1": "e0233ced04c11aa18528892986f3f7ba9a36929a",
+      "bytes": 303378
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/kit/k1-borrador-contactsheet.jpg",
+      "git_blob_sha1": "01b92315d02be1afb7d2d6c33d220146fa1921fc",
+      "bytes": 164036
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/kit/k1-borrador-cutlist.json",
+      "git_blob_sha1": "758639bb4272d1f6ee3b40ad5a689155f69fd30e",
+      "bytes": 1468
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/kit/k1-clip-mira-camara-e470ef4f.mp4",
+      "git_blob_sha1": "9a5db5493ee6de0ed93b84efdeaae1e483305cee",
+      "bytes": 5586395
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/kit/k2-1-cafe-mostrador-3e05cfd0.jpg",
+      "git_blob_sha1": "fd72b199a57a67b568506ae45063040944239862",
+      "bytes": 621797
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/kit/k2-2-agenda-papel-1422fa94.jpg",
+      "git_blob_sha1": "086975a57b5e8a51b66488899a0c77faaf331973",
+      "bytes": 493845
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/kit/k2-borrador-360p.mp4",
+      "git_blob_sha1": "47c096f43cc8e5e13f4546010e2f2df58562a11c",
+      "bytes": 322114
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/kit/k2-borrador-contactsheet.jpg",
+      "git_blob_sha1": "12b9922def302e7b23fb453248c560e0a8f698af",
+      "bytes": 159100
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/kit/k2-borrador-cutlist.json",
+      "git_blob_sha1": "cdb111740418e08a4870029d6bdce8a3821da316",
+      "bytes": 1653
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/kit/k2-clip-deja-cafe-83130c4a.mp4",
+      "git_blob_sha1": "615d978789d358b61ad4b9b5adfc551e9a5ed605",
+      "bytes": 4743585
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/kit/k3-clip-coworking-07b938b2.mp4",
+      "git_blob_sha1": "7c154bf27f5e25da7bcb972130c34d56e2479f49",
+      "bytes": 5300667
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/kit/k4-1-DESCARTADA-6708e444.jpg",
+      "git_blob_sha1": "8dbeed05bde9b3e0c7ebbd1475b2c3d277b9af23",
+      "bytes": 143027
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/kit/k4-1-saluda-eddca486-recorte.jpg",
+      "git_blob_sha1": "5d5e2fa34e0c3df761677372c59a81da9099bedb",
+      "bytes": 193582
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/kit/k4-3-cafe-teclado-186c82f0.jpg",
+      "git_blob_sha1": "2038670a6aaa671f184bfe520df9b581e37c9fa4",
+      "bytes": 623491
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/kit/k4-4-cuerpo-entero-cb86ea10.jpg",
+      "git_blob_sha1": "86f6145eb59848ed12032fd5daf2fa750d219c75",
+      "bytes": 751668
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/kit/k4-5-senala-342c0ab5.jpg",
+      "git_blob_sha1": "c844b062de9d9e4fdc8925e03090f2f7c633cf91",
+      "bytes": 500443
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/kit/k4-borrador-360p.mp4",
+      "git_blob_sha1": "17fb277df856afbd283e4825c72e0a021a9631ca",
+      "bytes": 267639
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/kit/k4-borrador-contactsheet.jpg",
+      "git_blob_sha1": "8991c4b819202f95a12dc7906e2d8a5994d15bf9",
+      "bytes": 150180
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/kit/k4-borrador-cutlist.json",
+      "git_blob_sha1": "707013f90b54b0c81abfc456935968e9fed71105",
+      "bytes": 3750
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/kit/k4-clip-cuenta-dedos-338b751f.mp4",
+      "git_blob_sha1": "f916aec58ad48ca011e074d8681b84ab111334ed",
+      "bytes": 4255438
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/kit/k4-revision-manos-20261008.jpg",
+      "git_blob_sha1": "8d4321762b8a2874de7814497a1a15d6a2dc6652",
+      "bytes": 119102
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/kit/kit-clips-preview.mp4",
+      "git_blob_sha1": "bdbaa30c7fd7404593f821689baa6cf47e1bce95",
+      "bytes": 955170
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/kit/kit-fotos-hoja.jpg",
+      "git_blob_sha1": "ac52388f128567ebfd6666f58b444fb2818eab87",
+      "bytes": 344237
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/feed/anchor.jpg",
+      "git_blob_sha1": "b6604b88e559cdbfc28324a25077f4e2863c16ac",
+      "bytes": 302619
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/feed/l05-lunes-link-de-reserva.mp4",
+      "git_blob_sha1": "70f293c85f78bf8b2482aeb456e0590587cef071",
+      "bytes": 8103173
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/feed/l08-cafe-src.mp4",
+      "git_blob_sha1": "e63aaeb873e4ab94db481d919a41ef10eadf4a6f",
+      "bytes": 11230740
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/feed/l08-recordatorio-sin-mover-un-dedo.mp4",
+      "git_blob_sha1": "18994357606e90f9d563a536a1a677054277425b",
+      "bytes": 12715561
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/feed/rechazado-20261008/chiste-lucia-antelo-es-real.mp4",
+      "git_blob_sha1": "6592b20c2eb1d35d4f7b1290082fd343428fa131",
+      "bytes": 15336802
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/feed/rechazado-20261008/l02-este-video-no-fue-grabado.mp4",
+      "git_blob_sha1": "02096016fe00f345890bc3c55bff450091be06a7",
+      "bytes": 12344544
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/feed/v01.jpg",
+      "git_blob_sha1": "526d62610ddbc20076b3f1f1360a953ec15523e3",
+      "bytes": 333020
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/feed/v03.jpg",
+      "git_blob_sha1": "dfd8509c7843171bb40464193288543d2f06f93b",
+      "bytes": 401720
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/feed/v05.jpg",
+      "git_blob_sha1": "156db4e6e6e5a3e64ea9cffcaaa463f13bc246a5",
+      "bytes": 358595
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/feed/v07.jpg",
+      "git_blob_sha1": "b927c0d4a77ff54a56217fdabe6c63079723307b",
+      "bytes": 311855
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos-limpias/img-flux-3-af9c2d0c-limpia.jpg",
+      "git_blob_sha1": "053605009bf77106ee883d2e11a8127cf1fe4e0e",
+      "bytes": 185480
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos-limpias/img-nano-banana-2-1-a4dd1a48-limpia.jpg",
+      "git_blob_sha1": "3689b82ea3e55ae55cad38e3e644f85fcc69c9dd",
+      "bytes": 150556
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos/img-flux-3-af9c2d0c.jpg",
+      "git_blob_sha1": "ded50c608260d1950f0bccde810791a417bea782",
+      "bytes": 191140
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos/img-gpt-image-2-5-5da2fa1e.jpg",
+      "git_blob_sha1": "ccd8ce9ef7033264c48c2a6f62ae6cf4e3a087ff",
+      "bytes": 211005
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos/img-kling-omni-image-c3706d45.jpg",
+      "git_blob_sha1": "adf99ab2aa431b2ec6ae34a954d3ec89a55ac526",
+      "bytes": 168497
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos/img-nano-banana-2-1-a4dd1a48.jpg",
+      "git_blob_sha1": "9c2f9c3747ccac735a919c77c2d75b5e6db7bf18",
+      "bytes": 158530
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos/img-omni-image-k2cafe-9f4b5172.jpg",
+      "git_blob_sha1": "48f69d1799104ecb2c2b11c95d606d766e8af19d",
+      "bytes": 151673
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos/img-omni-image-k4cafe-dad464de.jpg",
+      "git_blob_sha1": "f8bc7415bffce4e81d2eb0c453339df28a4a5840",
+      "bytes": 152447
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos/img-seedream-5-pro-b1abe43c.jpg",
+      "git_blob_sha1": "90c85c41bf4f54c0b7022f43bc8f59a782193122",
+      "bytes": 202644
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/hojas/comparativo-cafes.jpg",
+      "git_blob_sha1": "27229914237d46cc26a0e5daeb472b968f57568d",
+      "bytes": 175504
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/hojas/comparativo-imagenes.jpg",
+      "git_blob_sha1": "10d6265bf6c0d8d73f79be108570318ce5aefd89",
+      "bytes": 227893
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/hojas/comparativo-v1.jpg",
+      "git_blob_sha1": "6f859a2fd6572278fe274eb8094051231d8c583c",
+      "bytes": 551825
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/hojas/comparativo-v2.jpg",
+      "git_blob_sha1": "6be06322c9b6f0a8ac3f2fc51ac83fd06a6c7c82",
+      "bytes": 376896
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/hojas/labios-seedance-mini-boca.jpg",
+      "git_blob_sha1": "16cddbaa9f6641350d8deab99ad63cbe07a105e7",
+      "bytes": 115993
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/medicion-luz-movimiento-20261011.txt",
+      "git_blob_sha1": "085a003397c6242d1d5b1f01b551224b5702c25c",
+      "bytes": 1216
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/medicion-sin-refs-entrada-20261011.txt",
+      "git_blob_sha1": "e32a32e85983a627aaa0fc49bc0cf45fe6e9831b",
+      "bytes": 47892
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/proxies/cinema30-cc8fa519-360p.mp4",
+      "git_blob_sha1": "91ae97d91bfa95ceacc626e0a19181d41de3aa15",
+      "bytes": 100237
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/proxies/kling-omni-948a89d3-360p.mp4",
+      "git_blob_sha1": "f7dacf8a8726c198d3900339ca92f6a65ab211cb",
+      "bytes": 83136
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/proxies/kling-pro-9f43ee3c-360p.mp4",
+      "git_blob_sha1": "5b7e9266b1ce5f57c93874d36015504221b74425",
+      "bytes": 55719
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/proxies/labios-seedance-mini-328a9d66-360p.mp4",
+      "git_blob_sha1": "dd4895aeda337380b352e55d84247237db1313eb",
+      "bytes": 92055
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/proxies/labios-sync-so-eaaf369d-360p.mp4",
+      "git_blob_sha1": "788b8a4b01cce9820cd363622bc9c16e81008dc9",
+      "bytes": 78567
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/proxies/seedance-mini-a7f79a01-360p.mp4",
+      "git_blob_sha1": "2a05e9f6dcc98bf4f39b2e16e138de5b1f7c48ad",
+      "bytes": 116411
+    },
+    {
+      "path": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/proxies/seedance-mini-refs-dd2d7c91-360p.mp4",
+      "git_blob_sha1": "fe8ae5a3e0efbd0d1b04795d34a172bf77cf23f0",
+      "bytes": 124596
+    }
+  ],
+  "metric_definitions": {
+    "identity": "ArcFace buffalo_l cosine against centroid of 8 official reference images. Team threshold 0.70. Source explicitly treats face size below 200 px as low confidence; threshold is team rule, not a general identity property.",
+    "light_movement": "ffmpeg signalstats frame averages; results combine scene content/reframe with illumination and do not isolate subject lighting or motion.",
+    "costs": "quotes are get_cost; actual debit is only called measured where a balance/transaction source says so. Historical reference prices are labeled.",
+    "voice": "Voice/audio is separate from face cosine. D4 later says Marcela with Colombian accent; no face score can validate pronunciation, license or publish approval."
+  },
+  "missing_inputs": [
+    {
+      "name": "K4 Kling O1 Image source PNG",
+      "job": "dad464de-75a8-45f5-b799-8d91e5a63d1d",
+      "status": "documented as Higgsfield PNG ignored by Git and not materialized; exact Git path not recorded",
+      "existing_derived_evidence": "image result exists in comparison directory"
+    },
+    {
+      "name": "R3_casi_frontal.png",
+      "source_path": "videos/lucia-g4-v2/assets/refs-orig/R3_casi_frontal.png",
+      "source_tree_blob": null,
+      "status": "documented source path absent from source commit; related derivative/review outputs exist"
+    },
+    {
+      "name": "Full K1 image prompt",
+      "status": "not copied literally in ledger; source points to `job_display`. K1 video prompt is preserved in event row 95."
+    }
+  ],
+  "read_only_catalog_note": "91 raw table rows are preserved from 8-Oct read-only quote/capability catalogue; those rows are estimates/capability listings, not generation tests or face validations.",
+  "provenance_events": [
+    {
+      "ts": "2026-09-29T20:25Z",
+      "phase": "casting",
+      "surface": "mcp",
+      "workspace": "ed5a2a8f-5a06-4087-a680-81bc592b1b4e",
+      "project": "c6c080a7-fbe9-4314-a5b5-e5f8ec6f59ad",
+      "reference_inputs": [],
+      "lineage": "text-only; sin referencias heredadas de la Lucia anterior",
+      "approval": "Sergio Urcullo 2026-09-29: 'tenes permitido gastar en pruebas' + 'solo las caras lo hacemos de nuevo'; lote casting cap 12 cr",
+      "candidate": "C01",
+      "job_id": "daeef7ee-7ab6-4b6b-83ee-03dcaa206e4d",
+      "model_requested": "soul_2",
+      "job_type": "text2image_soul_v2",
+      "seed": 621497,
+      "size": "1536x2048",
+      "cost_quoted_credits": 0.12,
+      "input_hash": "sha256:13d04240e2ea231e1c3ba3809921973c125416a007e0184baf4f0248e9fccea5",
+      "prompt_file": "prompts/casting-soul.txt",
+      "status": "completed",
+      "qa": "pendiente: eleccion de Sergio Urcullo + QA visual (CDN bloqueado en la nube)"
+    },
+    {
+      "ts": "2026-09-29T20:25Z",
+      "phase": "casting",
+      "surface": "mcp",
+      "workspace": "ed5a2a8f-5a06-4087-a680-81bc592b1b4e",
+      "project": "c6c080a7-fbe9-4314-a5b5-e5f8ec6f59ad",
+      "reference_inputs": [],
+      "lineage": "text-only; sin referencias heredadas de la Lucia anterior",
+      "approval": "Sergio Urcullo 2026-09-29: 'tenes permitido gastar en pruebas' + 'solo las caras lo hacemos de nuevo'; lote casting cap 12 cr",
+      "candidate": "C02",
+      "job_id": "4fa8d03c-0c3c-4b61-b544-dccd116d44e1",
+      "model_requested": "soul_2",
+      "job_type": "text2image_soul_v2",
+      "seed": 748059,
+      "size": "1536x2048",
+      "cost_quoted_credits": 0.12,
+      "input_hash": "sha256:13d04240e2ea231e1c3ba3809921973c125416a007e0184baf4f0248e9fccea5",
+      "prompt_file": "prompts/casting-soul.txt",
+      "status": "completed",
+      "qa": "pendiente: eleccion de Sergio Urcullo + QA visual (CDN bloqueado en la nube)"
+    },
+    {
+      "ts": "2026-09-29T20:25Z",
+      "phase": "casting",
+      "surface": "mcp",
+      "workspace": "ed5a2a8f-5a06-4087-a680-81bc592b1b4e",
+      "project": "c6c080a7-fbe9-4314-a5b5-e5f8ec6f59ad",
+      "reference_inputs": [],
+      "lineage": "text-only; sin referencias heredadas de la Lucia anterior",
+      "approval": "Sergio Urcullo 2026-09-29: 'tenes permitido gastar en pruebas' + 'solo las caras lo hacemos de nuevo'; lote casting cap 12 cr",
+      "candidate": "C03",
+      "job_id": "7fe339d2-b41a-4b0b-85bd-6f84a08de404",
+      "model_requested": "soul_2",
+      "job_type": "text2image_soul_v2",
+      "seed": 376959,
+      "size": "1536x2048",
+      "cost_quoted_credits": 0.12,
+      "input_hash": "sha256:13d04240e2ea231e1c3ba3809921973c125416a007e0184baf4f0248e9fccea5",
+      "prompt_file": "prompts/casting-soul.txt",
+      "status": "completed",
+      "qa": "pendiente: eleccion de Sergio Urcullo + QA visual (CDN bloqueado en la nube)"
+    },
+    {
+      "ts": "2026-09-29T20:25Z",
+      "phase": "casting",
+      "surface": "mcp",
+      "workspace": "ed5a2a8f-5a06-4087-a680-81bc592b1b4e",
+      "project": "c6c080a7-fbe9-4314-a5b5-e5f8ec6f59ad",
+      "reference_inputs": [],
+      "lineage": "text-only; sin referencias heredadas de la Lucia anterior",
+      "approval": "Sergio Urcullo 2026-09-29: 'tenes permitido gastar en pruebas' + 'solo las caras lo hacemos de nuevo'; lote casting cap 12 cr",
+      "candidate": "C04",
+      "job_id": "91e78ebd-b461-467a-90c4-f7a3c041825f",
+      "model_requested": "soul_2",
+      "job_type": "text2image_soul_v2",
+      "seed": 105585,
+      "size": "1536x2048",
+      "cost_quoted_credits": 0.12,
+      "input_hash": "sha256:13d04240e2ea231e1c3ba3809921973c125416a007e0184baf4f0248e9fccea5",
+      "prompt_file": "prompts/casting-soul.txt",
+      "status": "completed",
+      "qa": "pendiente: eleccion de Sergio Urcullo + QA visual (CDN bloqueado en la nube)"
+    },
+    {
+      "ts": "2026-09-29T20:25Z",
+      "phase": "casting",
+      "surface": "mcp",
+      "workspace": "ed5a2a8f-5a06-4087-a680-81bc592b1b4e",
+      "project": "c6c080a7-fbe9-4314-a5b5-e5f8ec6f59ad",
+      "reference_inputs": [],
+      "lineage": "text-only; sin referencias heredadas de la Lucia anterior",
+      "approval": "Sergio Urcullo 2026-09-29: 'tenes permitido gastar en pruebas' + 'solo las caras lo hacemos de nuevo'; lote casting cap 12 cr",
+      "candidate": "C05",
+      "job_id": "baf589b1-92f7-4ef7-951c-8d6231306299",
+      "model_requested": "soul_2",
+      "job_type": "text2image_soul_v2",
+      "seed": 865459,
+      "size": "1536x2048",
+      "cost_quoted_credits": 0.12,
+      "input_hash": "sha256:13d04240e2ea231e1c3ba3809921973c125416a007e0184baf4f0248e9fccea5",
+      "prompt_file": "prompts/casting-soul.txt",
+      "status": "completed",
+      "qa": "pendiente: eleccion de Sergio Urcullo + QA visual (CDN bloqueado en la nube)"
+    },
+    {
+      "ts": "2026-09-29T20:25Z",
+      "phase": "casting",
+      "surface": "mcp",
+      "workspace": "ed5a2a8f-5a06-4087-a680-81bc592b1b4e",
+      "project": "c6c080a7-fbe9-4314-a5b5-e5f8ec6f59ad",
+      "reference_inputs": [],
+      "lineage": "text-only; sin referencias heredadas de la Lucia anterior",
+      "approval": "Sergio Urcullo 2026-09-29: 'tenes permitido gastar en pruebas' + 'solo las caras lo hacemos de nuevo'; lote casting cap 12 cr",
+      "candidate": "C06",
+      "job_id": "d6b4b875-83c1-46a7-b51b-81ba58ae0ccf",
+      "model_requested": "soul_2",
+      "job_type": "text2image_soul_v2",
+      "seed": 472575,
+      "size": "1536x2048",
+      "cost_quoted_credits": 0.12,
+      "input_hash": "sha256:13d04240e2ea231e1c3ba3809921973c125416a007e0184baf4f0248e9fccea5",
+      "prompt_file": "prompts/casting-soul.txt",
+      "status": "completed",
+      "qa": "pendiente: eleccion de Sergio Urcullo + QA visual (CDN bloqueado en la nube)"
+    },
+    {
+      "ts": "2026-09-29T20:25Z",
+      "phase": "casting",
+      "surface": "mcp",
+      "workspace": "ed5a2a8f-5a06-4087-a680-81bc592b1b4e",
+      "project": "c6c080a7-fbe9-4314-a5b5-e5f8ec6f59ad",
+      "reference_inputs": [],
+      "lineage": "text-only; sin referencias heredadas de la Lucia anterior",
+      "approval": "Sergio Urcullo 2026-09-29: 'tenes permitido gastar en pruebas' + 'solo las caras lo hacemos de nuevo'; lote casting cap 12 cr",
+      "candidate": "C07",
+      "job_id": "82beb160-93bf-4cad-aa19-54c69eb6dc13",
+      "model_requested": "soul_2",
+      "job_type": "text2image_soul_v2",
+      "seed": 788822,
+      "size": "1536x2048",
+      "cost_quoted_credits": 0.12,
+      "input_hash": "sha256:13d04240e2ea231e1c3ba3809921973c125416a007e0184baf4f0248e9fccea5",
+      "prompt_file": "prompts/casting-soul.txt",
+      "status": "completed",
+      "qa": "pendiente: eleccion de Sergio Urcullo + QA visual (CDN bloqueado en la nube)"
+    },
+    {
+      "ts": "2026-09-29T20:25Z",
+      "phase": "casting",
+      "surface": "mcp",
+      "workspace": "ed5a2a8f-5a06-4087-a680-81bc592b1b4e",
+      "project": "c6c080a7-fbe9-4314-a5b5-e5f8ec6f59ad",
+      "reference_inputs": [],
+      "lineage": "text-only; sin referencias heredadas de la Lucia anterior",
+      "approval": "Sergio Urcullo 2026-09-29: 'tenes permitido gastar en pruebas' + 'solo las caras lo hacemos de nuevo'; lote casting cap 12 cr",
+      "candidate": "C08",
+      "job_id": "97f4928c-4de9-4435-9587-2802be285632",
+      "model_requested": "gpt_image_2_5",
+      "job_type": "gpt_image_2_5 (flare, high)",
+      "seed": null,
+      "size": "1744x2336",
+      "cost_quoted_credits": 2.75,
+      "input_hash": "sha256:1ae64a78e0c3ecf1b6454e9218224355c6af04f0d7bc776df049542174f50576",
+      "prompt_file": "prompts/casting-ref.txt",
+      "status": "completed",
+      "qa": "pendiente: eleccion de Sergio Urcullo + QA visual (CDN bloqueado en la nube)"
+    },
+    {
+      "ts": "2026-09-29T20:25Z",
+      "phase": "casting",
+      "surface": "mcp",
+      "workspace": "ed5a2a8f-5a06-4087-a680-81bc592b1b4e",
+      "project": "c6c080a7-fbe9-4314-a5b5-e5f8ec6f59ad",
+      "reference_inputs": [],
+      "lineage": "text-only; sin referencias heredadas de la Lucia anterior",
+      "approval": "Sergio Urcullo 2026-09-29: 'tenes permitido gastar en pruebas' + 'solo las caras lo hacemos de nuevo'; lote casting cap 12 cr",
+      "candidate": "C09",
+      "job_id": "7d1cf9b0-b1a5-46d1-9dd4-3b37a6278801",
+      "model_requested": "gpt_image_2_5",
+      "job_type": "gpt_image_2_5 (flare, high)",
+      "seed": null,
+      "size": "1744x2336",
+      "cost_quoted_credits": 2.75,
+      "input_hash": "sha256:1ae64a78e0c3ecf1b6454e9218224355c6af04f0d7bc776df049542174f50576",
+      "prompt_file": "prompts/casting-ref.txt",
+      "status": "completed",
+      "qa": "pendiente: eleccion de Sergio Urcullo + QA visual (CDN bloqueado en la nube)"
+    },
+    {
+      "ts": "2026-09-29T20:25Z",
+      "phase": "casting",
+      "surface": "mcp",
+      "workspace": "ed5a2a8f-5a06-4087-a680-81bc592b1b4e",
+      "project": "c6c080a7-fbe9-4314-a5b5-e5f8ec6f59ad",
+      "reference_inputs": [],
+      "lineage": "text-only; sin referencias heredadas de la Lucia anterior",
+      "approval": "Sergio Urcullo 2026-09-29: 'tenes permitido gastar en pruebas' + 'solo las caras lo hacemos de nuevo'; lote casting cap 12 cr",
+      "candidate": "C10",
+      "job_id": "673dd688-5122-406f-9963-e67e6b703fbc",
+      "model_requested": "nano_banana_pro",
+      "job_type": "nano_banana_2",
+      "seed": null,
+      "size": "1792x2400",
+      "cost_quoted_credits": 2.0,
+      "input_hash": "sha256:1ae64a78e0c3ecf1b6454e9218224355c6af04f0d7bc776df049542174f50576",
+      "prompt_file": "prompts/casting-ref.txt",
+      "status": "completed",
+      "qa": "pendiente: eleccion de Sergio Urcullo + QA visual (CDN bloqueado en la nube)"
+    },
+    {
+      "ts": "2026-09-29T20:25Z",
+      "phase": "casting",
+      "surface": "mcp",
+      "workspace": "ed5a2a8f-5a06-4087-a680-81bc592b1b4e",
+      "project": "c6c080a7-fbe9-4314-a5b5-e5f8ec6f59ad",
+      "reference_inputs": [],
+      "lineage": "text-only; sin referencias heredadas de la Lucia anterior",
+      "approval": "Sergio Urcullo 2026-09-29: 'tenes permitido gastar en pruebas' + 'solo las caras lo hacemos de nuevo'; lote casting cap 12 cr",
+      "candidate": "C11",
+      "job_id": "8d9d24b9-5ce1-43b0-8701-95e527ec67c6",
+      "model_requested": "nano_banana_pro",
+      "job_type": "nano_banana_2",
+      "seed": null,
+      "size": "1792x2400",
+      "cost_quoted_credits": 2.0,
+      "input_hash": "sha256:1ae64a78e0c3ecf1b6454e9218224355c6af04f0d7bc776df049542174f50576",
+      "prompt_file": "prompts/casting-ref.txt",
+      "status": "completed",
+      "qa": "pendiente: eleccion de Sergio Urcullo + QA visual (CDN bloqueado en la nube)"
+    },
+    {
+      "ts": "2026-09-29T20:25Z",
+      "phase": "casting",
+      "surface": "mcp",
+      "workspace": "ed5a2a8f-5a06-4087-a680-81bc592b1b4e",
+      "project": "c6c080a7-fbe9-4314-a5b5-e5f8ec6f59ad",
+      "reference_inputs": [],
+      "lineage": "text-only; sin referencias heredadas de la Lucia anterior",
+      "approval": "Sergio Urcullo 2026-09-29: 'tenes permitido gastar en pruebas' + 'solo las caras lo hacemos de nuevo'; lote casting cap 12 cr",
+      "candidate": "C12",
+      "job_id": "044f437b-7940-4df3-9168-ec853442dc06",
+      "model_requested": "soul_cast",
+      "job_type": "soul_cast (budget 50)",
+      "seed": 365678,
+      "size": "2048x1152",
+      "cost_quoted_credits": 0.12,
+      "input_hash": "sha256:13d04240e2ea231e1c3ba3809921973c125416a007e0184baf4f0248e9fccea5",
+      "prompt_file": "prompts/casting-soul.txt",
+      "status": "completed",
+      "qa": "DESCARTADA: soul_cast ignora el prompt (params.prompt vacio) e inventa persona propia ('Camila Quispe, empanada seller...')"
+    },
+    {
+      "type": "decision",
+      "ts": "2026-09-29T20:55Z",
+      "scope": "C01-C12",
+      "verdict": "rechazadas",
+      "by": "Sergio Urcullo",
+      "quote": "me gusta mas como era antes lucia las nuevas no las veo fancy o cutes con buen resultado, recorda que tiene que ser hermosa como modelo de pinterest y bien hecha, vamos con realismo",
+      "root_cause": "el brief de casting (digitals de agencia: cara lavada, luz plana, pared lisa, expresion neutra) optimizaba legibilidad de rasgos y anti-retoque, no belleza; la belleza se juzga en contexto",
+      "next": "casting v2 en contexto Pinterest (luz dorada, lugares reales de Santa Cruz, foto de celular), manteniendo realismo"
+    },
+    {
+      "ts": "2026-09-29T20:55Z",
+      "phase": "casting-v2-pinterest",
+      "surface": "mcp",
+      "workspace": "ed5a2a8f-5a06-4087-a680-81bc592b1b4e",
+      "project": "c6c080a7-fbe9-4314-a5b5-e5f8ec6f59ad",
+      "reference_inputs": [],
+      "lineage": "text-only; estilo tomado de las fotos que Sergio Urcullo preferia (luz dorada, foto de celular, lugares reales), sin usar ninguna imagen como referencia",
+      "approval": "cap original aprobado por Sergio Urcullo ('si esta bien'); pedido: 'hermosa como modelo de pinterest y bien hecha, vamos con realismo'",
+      "candidate": "C13",
+      "job_id": "873edf19-e031-4112-93fc-e647995e72af",
+      "model_requested": "soul_2",
+      "job_type": "text2image_soul_v2",
+      "seed": 96876,
+      "size": "1152x2048",
+      "scene": "s1-cafe",
+      "cost_quoted_credits": 0.12,
+      "input_hash": "sha256:a325589b4e7ea00621a4c3416e4ddf00709e81aa3257ef9d3dab9888fa053e20",
+      "prompt_file": "prompts/casting-v2-s1-cafe-soul.txt",
+      "status": "completed",
+      "qa": "pendiente: eleccion de Sergio Urcullo + QA visual (CDN bloqueado en la nube)"
+    },
+    {
+      "ts": "2026-09-29T20:55Z",
+      "phase": "casting-v2-pinterest",
+      "surface": "mcp",
+      "workspace": "ed5a2a8f-5a06-4087-a680-81bc592b1b4e",
+      "project": "c6c080a7-fbe9-4314-a5b5-e5f8ec6f59ad",
+      "reference_inputs": [],
+      "lineage": "text-only; estilo tomado de las fotos que Sergio Urcullo preferia (luz dorada, foto de celular, lugares reales), sin usar ninguna imagen como referencia",
+      "approval": "cap original aprobado por Sergio Urcullo ('si esta bien'); pedido: 'hermosa como modelo de pinterest y bien hecha, vamos con realismo'",
+      "candidate": "C14",
+      "job_id": "b9b10a0e-b6cb-4f8b-8772-69b07e47661f",
+      "model_requested": "soul_2",
+      "job_type": "text2image_soul_v2",
+      "seed": 417255,
+      "size": "1152x2048",
+      "scene": "s1-cafe",
+      "cost_quoted_credits": 0.12,
+      "input_hash": "sha256:a325589b4e7ea00621a4c3416e4ddf00709e81aa3257ef9d3dab9888fa053e20",
+      "prompt_file": "prompts/casting-v2-s1-cafe-soul.txt",
+      "status": "completed",
+      "qa": "pendiente: eleccion de Sergio Urcullo + QA visual (CDN bloqueado en la nube)"
+    },
+    {
+      "ts": "2026-09-29T20:55Z",
+      "phase": "casting-v2-pinterest",
+      "surface": "mcp",
+      "workspace": "ed5a2a8f-5a06-4087-a680-81bc592b1b4e",
+      "project": "c6c080a7-fbe9-4314-a5b5-e5f8ec6f59ad",
+      "reference_inputs": [],
+      "lineage": "text-only; estilo tomado de las fotos que Sergio Urcullo preferia (luz dorada, foto de celular, lugares reales), sin usar ninguna imagen como referencia",
+      "approval": "cap original aprobado por Sergio Urcullo ('si esta bien'); pedido: 'hermosa como modelo de pinterest y bien hecha, vamos con realismo'",
+      "candidate": "C15",
+      "job_id": "70ed2520-e46a-4944-b000-5ea6ecda56c2",
+      "model_requested": "soul_2",
+      "job_type": "text2image_soul_v2",
+      "seed": 543302,
+      "size": "1152x2048",
+      "scene": "s1-cafe",
+      "cost_quoted_credits": 0.12,
+      "input_hash": "sha256:a325589b4e7ea00621a4c3416e4ddf00709e81aa3257ef9d3dab9888fa053e20",
+      "prompt_file": "prompts/casting-v2-s1-cafe-soul.txt",
+      "status": "completed",
+      "qa": "pendiente: eleccion de Sergio Urcullo + QA visual (CDN bloqueado en la nube)"
+    },
+    {
+      "ts": "2026-09-29T20:55Z",
+      "phase": "casting-v2-pinterest",
+      "surface": "mcp",
+      "workspace": "ed5a2a8f-5a06-4087-a680-81bc592b1b4e",
+      "project": "c6c080a7-fbe9-4314-a5b5-e5f8ec6f59ad",
+      "reference_inputs": [],
+      "lineage": "text-only; estilo tomado de las fotos que Sergio Urcullo preferia (luz dorada, foto de celular, lugares reales), sin usar ninguna imagen como referencia",
+      "approval": "cap original aprobado por Sergio Urcullo ('si esta bien'); pedido: 'hermosa como modelo de pinterest y bien hecha, vamos con realismo'",
+      "candidate": "C16",
+      "job_id": "d133d562-7693-48b9-8011-5b7c2410e69c",
+      "model_requested": "soul_2",
+      "job_type": "text2image_soul_v2",
+      "seed": 534055,
+      "size": "1152x2048",
+      "scene": "s2-terraza",
+      "cost_quoted_credits": 0.12,
+      "input_hash": "sha256:ea47b9f84a0bd37f706f8cad7a44239cbcb98b7c5c88be3b62ac81426c41e8ac",
+      "prompt_file": "prompts/casting-v2-s2-terraza-soul.txt",
+      "status": "completed",
+      "qa": "pendiente: eleccion de Sergio Urcullo + QA visual (CDN bloqueado en la nube)"
+    },
+    {
+      "ts": "2026-09-29T20:55Z",
+      "phase": "casting-v2-pinterest",
+      "surface": "mcp",
+      "workspace": "ed5a2a8f-5a06-4087-a680-81bc592b1b4e",
+      "project": "c6c080a7-fbe9-4314-a5b5-e5f8ec6f59ad",
+      "reference_inputs": [],
+      "lineage": "text-only; estilo tomado de las fotos que Sergio Urcullo preferia (luz dorada, foto de celular, lugares reales), sin usar ninguna imagen como referencia",
+      "approval": "cap original aprobado por Sergio Urcullo ('si esta bien'); pedido: 'hermosa como modelo de pinterest y bien hecha, vamos con realismo'",
+      "candidate": "C17",
+      "job_id": "c4932629-6410-4214-acfa-633a8f920244",
+      "model_requested": "soul_2",
+      "job_type": "text2image_soul_v2",
+      "seed": 254340,
+      "size": "1152x2048",
+      "scene": "s2-terraza",
+      "cost_quoted_credits": 0.12,
+      "input_hash": "sha256:ea47b9f84a0bd37f706f8cad7a44239cbcb98b7c5c88be3b62ac81426c41e8ac",
+      "prompt_file": "prompts/casting-v2-s2-terraza-soul.txt",
+      "status": "completed",
+      "qa": "pendiente: eleccion de Sergio Urcullo + QA visual (CDN bloqueado en la nube)"
+    },
+    {
+      "ts": "2026-09-29T20:55Z",
+      "phase": "casting-v2-pinterest",
+      "surface": "mcp",
+      "workspace": "ed5a2a8f-5a06-4087-a680-81bc592b1b4e",
+      "project": "c6c080a7-fbe9-4314-a5b5-e5f8ec6f59ad",
+      "reference_inputs": [],
+      "lineage": "text-only; estilo tomado de las fotos que Sergio Urcullo preferia (luz dorada, foto de celular, lugares reales), sin usar ninguna imagen como referencia",
+      "approval": "cap original aprobado por Sergio Urcullo ('si esta bien'); pedido: 'hermosa como modelo de pinterest y bien hecha, vamos con realismo'",
+      "candidate": "C18",
+      "job_id": "a3b1a7cc-d600-4fd4-8806-c915ec1a31d6",
+      "model_requested": "soul_2",
+      "job_type": "text2image_soul_v2",
+      "seed": 988569,
+      "size": "1152x2048",
+      "scene": "s2-terraza",
+      "cost_quoted_credits": 0.12,
+      "input_hash": "sha256:ea47b9f84a0bd37f706f8cad7a44239cbcb98b7c5c88be3b62ac81426c41e8ac",
+      "prompt_file": "prompts/casting-v2-s2-terraza-soul.txt",
+      "status": "completed",
+      "qa": "pendiente: eleccion de Sergio Urcullo + QA visual (CDN bloqueado en la nube)"
+    },
+    {
+      "ts": "2026-09-29T20:55Z",
+      "phase": "casting-v2-pinterest",
+      "surface": "mcp",
+      "workspace": "ed5a2a8f-5a06-4087-a680-81bc592b1b4e",
+      "project": "c6c080a7-fbe9-4314-a5b5-e5f8ec6f59ad",
+      "reference_inputs": [],
+      "lineage": "text-only; estilo tomado de las fotos que Sergio Urcullo preferia (luz dorada, foto de celular, lugares reales), sin usar ninguna imagen como referencia",
+      "approval": "cap original aprobado por Sergio Urcullo ('si esta bien'); pedido: 'hermosa como modelo de pinterest y bien hecha, vamos con realismo'",
+      "candidate": "C19",
+      "job_id": "cd3156ea-aa7e-4b5f-985c-6209cadedaa3",
+      "model_requested": "soul_2",
+      "job_type": "text2image_soul_v2",
+      "seed": 525073,
+      "size": "1152x2048",
+      "scene": "s3-retrato",
+      "cost_quoted_credits": 0.12,
+      "input_hash": "sha256:8a23e27abb7a1e9627fa8e4b82e7af4bac92e6ba77014044f25a2a85bbb94e15",
+      "prompt_file": "prompts/casting-v2-s3-retrato-soul.txt",
+      "status": "completed",
+      "qa": "pendiente: eleccion de Sergio Urcullo + QA visual (CDN bloqueado en la nube)"
+    },
+    {
+      "ts": "2026-09-29T20:55Z",
+      "phase": "casting-v2-pinterest",
+      "surface": "mcp",
+      "workspace": "ed5a2a8f-5a06-4087-a680-81bc592b1b4e",
+      "project": "c6c080a7-fbe9-4314-a5b5-e5f8ec6f59ad",
+      "reference_inputs": [],
+      "lineage": "text-only; estilo tomado de las fotos que Sergio Urcullo preferia (luz dorada, foto de celular, lugares reales), sin usar ninguna imagen como referencia",
+      "approval": "cap original aprobado por Sergio Urcullo ('si esta bien'); pedido: 'hermosa como modelo de pinterest y bien hecha, vamos con realismo'",
+      "candidate": "C20",
+      "job_id": "7435010f-bf03-4003-bcc1-e672d845db75",
+      "model_requested": "soul_2",
+      "job_type": "text2image_soul_v2",
+      "seed": 230700,
+      "size": "1152x2048",
+      "scene": "s3-retrato",
+      "cost_quoted_credits": 0.12,
+      "input_hash": "sha256:8a23e27abb7a1e9627fa8e4b82e7af4bac92e6ba77014044f25a2a85bbb94e15",
+      "prompt_file": "prompts/casting-v2-s3-retrato-soul.txt",
+      "status": "completed",
+      "qa": "pendiente: eleccion de Sergio Urcullo + QA visual (CDN bloqueado en la nube)"
+    },
+    {
+      "ts": "2026-09-29T20:55Z",
+      "phase": "casting-v2-pinterest",
+      "surface": "mcp",
+      "workspace": "ed5a2a8f-5a06-4087-a680-81bc592b1b4e",
+      "project": "c6c080a7-fbe9-4314-a5b5-e5f8ec6f59ad",
+      "reference_inputs": [],
+      "lineage": "text-only; estilo tomado de las fotos que Sergio Urcullo preferia (luz dorada, foto de celular, lugares reales), sin usar ninguna imagen como referencia",
+      "approval": "cap original aprobado por Sergio Urcullo ('si esta bien'); pedido: 'hermosa como modelo de pinterest y bien hecha, vamos con realismo'",
+      "candidate": "C21",
+      "job_id": "45673c88-8f4b-4fba-81ef-2233b797364f",
+      "model_requested": "soul_2",
+      "job_type": "text2image_soul_v2",
+      "seed": 627915,
+      "size": "1152x2048",
+      "scene": "s3-retrato",
+      "cost_quoted_credits": 0.12,
+      "input_hash": "sha256:8a23e27abb7a1e9627fa8e4b82e7af4bac92e6ba77014044f25a2a85bbb94e15",
+      "prompt_file": "prompts/casting-v2-s3-retrato-soul.txt",
+      "status": "completed",
+      "qa": "pendiente: eleccion de Sergio Urcullo + QA visual (CDN bloqueado en la nube)"
+    },
+    {
+      "ts": "2026-09-29T20:55Z",
+      "phase": "casting-v2-pinterest",
+      "surface": "mcp",
+      "workspace": "ed5a2a8f-5a06-4087-a680-81bc592b1b4e",
+      "project": "c6c080a7-fbe9-4314-a5b5-e5f8ec6f59ad",
+      "reference_inputs": [],
+      "lineage": "text-only; estilo tomado de las fotos que Sergio Urcullo preferia (luz dorada, foto de celular, lugares reales), sin usar ninguna imagen como referencia",
+      "approval": "cap original aprobado por Sergio Urcullo ('si esta bien'); pedido: 'hermosa como modelo de pinterest y bien hecha, vamos con realismo'",
+      "candidate": "C22",
+      "job_id": "699775c8-e436-42a4-8804-f86bad41efe6",
+      "model_requested": "nano_banana_pro",
+      "job_type": "nano_banana_2",
+      "seed": null,
+      "size": "1536x2752",
+      "scene": "s1-cafe",
+      "cost_quoted_credits": 2.0,
+      "input_hash": "sha256:7ff661a315ad9aa4ca864e7d533a9f79f144df6903e7303fec2bc28bf38cd10a",
+      "prompt_file": "prompts/casting-v2-s1-cafe-ref.txt",
+      "status": "completed",
+      "qa": "pendiente: eleccion de Sergio Urcullo + QA visual (CDN bloqueado en la nube)"
+    },
+    {
+      "ts": "2026-09-29T20:55Z",
+      "phase": "casting-v2-pinterest",
+      "surface": "mcp",
+      "workspace": "ed5a2a8f-5a06-4087-a680-81bc592b1b4e",
+      "project": "c6c080a7-fbe9-4314-a5b5-e5f8ec6f59ad",
+      "reference_inputs": [],
+      "lineage": "text-only; estilo tomado de las fotos que Sergio Urcullo preferia (luz dorada, foto de celular, lugares reales), sin usar ninguna imagen como referencia",
+      "approval": "cap original aprobado por Sergio Urcullo ('si esta bien'); pedido: 'hermosa como modelo de pinterest y bien hecha, vamos con realismo'",
+      "candidate": "C23",
+      "job_id": "dff7ed84-bf9a-45b9-8c4c-6d3f32bafac7",
+      "model_requested": "nano_banana_pro",
+      "job_type": "nano_banana_2",
+      "seed": null,
+      "size": "1536x2752",
+      "scene": "s2-terraza",
+      "cost_quoted_credits": 2.0,
+      "input_hash": "sha256:a71bf23b001a1aa9eb4cf423fe681b8e5857a1d82e409f881ad5d562212ddfb4",
+      "prompt_file": "prompts/casting-v2-s2-terraza-ref.txt",
+      "status": "completed",
+      "qa": "pendiente: eleccion de Sergio Urcullo + QA visual (CDN bloqueado en la nube)"
+    },
+    {
+      "ts": "2026-09-29T20:55Z",
+      "phase": "casting-v2-pinterest",
+      "surface": "mcp",
+      "workspace": "ed5a2a8f-5a06-4087-a680-81bc592b1b4e",
+      "project": "c6c080a7-fbe9-4314-a5b5-e5f8ec6f59ad",
+      "reference_inputs": [],
+      "lineage": "text-only; estilo tomado de las fotos que Sergio Urcullo preferia (luz dorada, foto de celular, lugares reales), sin usar ninguna imagen como referencia",
+      "approval": "cap original aprobado por Sergio Urcullo ('si esta bien'); pedido: 'hermosa como modelo de pinterest y bien hecha, vamos con realismo'",
+      "candidate": "C24",
+      "job_id": "9a3ca6fb-f012-4996-910c-f1f59c197541",
+      "model_requested": "nano_banana_pro",
+      "job_type": "nano_banana_2",
+      "seed": null,
+      "size": "1536x2752",
+      "scene": "s3-retrato",
+      "cost_quoted_credits": 2.0,
+      "input_hash": "sha256:7a154893a680839b4ba59532a383babbe18b8e378d773ee60d67fb819e2d0723",
+      "prompt_file": "prompts/casting-v2-s3-retrato-ref.txt",
+      "status": "completed",
+      "qa": "pendiente: eleccion de Sergio Urcullo + QA visual (CDN bloqueado en la nube)"
+    },
+    {
+      "ts": "2026-09-29T20:55Z",
+      "phase": "casting-v2-pinterest",
+      "surface": "mcp",
+      "workspace": "ed5a2a8f-5a06-4087-a680-81bc592b1b4e",
+      "project": "c6c080a7-fbe9-4314-a5b5-e5f8ec6f59ad",
+      "reference_inputs": [],
+      "lineage": "text-only; estilo tomado de las fotos que Sergio Urcullo preferia (luz dorada, foto de celular, lugares reales), sin usar ninguna imagen como referencia",
+      "approval": "cap original aprobado por Sergio Urcullo ('si esta bien'); pedido: 'hermosa como modelo de pinterest y bien hecha, vamos con realismo'",
+      "candidate": "C25",
+      "job_id": "a45db31e-3fcd-410e-b765-c6a6dce2cbe8",
+      "model_requested": "gpt_image_2_5",
+      "job_type": "gpt_image_2_5 (flare, high)",
+      "seed": null,
+      "size": "1520x2688",
+      "scene": "s1-cafe",
+      "cost_quoted_credits": 2.75,
+      "input_hash": "sha256:7ff661a315ad9aa4ca864e7d533a9f79f144df6903e7303fec2bc28bf38cd10a",
+      "prompt_file": "prompts/casting-v2-s1-cafe-ref.txt",
+      "status": "completed",
+      "qa": "pendiente: eleccion de Sergio Urcullo + QA visual (CDN bloqueado en la nube)"
+    },
+    {
+      "ts": "2026-09-29T20:55Z",
+      "phase": "casting-v2-pinterest",
+      "surface": "mcp",
+      "workspace": "ed5a2a8f-5a06-4087-a680-81bc592b1b4e",
+      "project": "c6c080a7-fbe9-4314-a5b5-e5f8ec6f59ad",
+      "reference_inputs": [],
+      "lineage": "text-only; estilo tomado de las fotos que Sergio Urcullo preferia (luz dorada, foto de celular, lugares reales), sin usar ninguna imagen como referencia",
+      "approval": "cap original aprobado por Sergio Urcullo ('si esta bien'); pedido: 'hermosa como modelo de pinterest y bien hecha, vamos con realismo'",
+      "candidate": "C26",
+      "job_id": "eacf6ca8-c837-4390-90bd-aae8d544231a",
+      "model_requested": "gpt_image_2_5",
+      "job_type": "gpt_image_2_5 (flare, high)",
+      "seed": null,
+      "size": "1520x2688",
+      "scene": "s3-retrato",
+      "cost_quoted_credits": 2.75,
+      "input_hash": "sha256:7a154893a680839b4ba59532a383babbe18b8e378d773ee60d67fb819e2d0723",
+      "prompt_file": "prompts/casting-v2-s3-retrato-ref.txt",
+      "status": "completed",
+      "qa": "pendiente: eleccion de Sergio Urcullo + QA visual (CDN bloqueado en la nube)"
+    },
+    {
+      "type": "note",
+      "ts": "2026-09-29T20:56Z",
+      "learning": "Plan Pro de Higgsfield: maximo 4 trabajos concurrentes ('Rate limit reached: max 4 concurrent job(s) on pro (monthly) plan'). Lotes de mas de 4 rebotan parcialmente: enviar de a 4.",
+      "observation": "nano_banana_pro 9:16 2k sale en 1536x2752, el mismo tamano que las fotos canon de la Lucia anterior: ese motor es el de su estetica."
+    },
+    {
+      "surface": "mcp",
+      "workspace": "ed5a2a8f-5a06-4087-a680-81bc592b1b4e",
+      "project": "c6c080a7-fbe9-4314-a5b5-e5f8ec6f59ad",
+      "lineage": "cara ORIGINAL de Lucia (100% IA, Sergio Urcullo); referencias = medias de lucia-skin-v1 58bbd635",
+      "ts": "2026-09-29T21:25Z",
+      "phase": "prueba-metodo-cara-original",
+      "candidate": "T101",
+      "job_id": "24fd56a7-2b75-4ba2-9c2e-326022c2d615",
+      "scene": "cafe",
+      "method": "element_placeholder",
+      "refs_actually_used": 1,
+      "model": "nano_banana_pro",
+      "cost_quoted_credits": 2.0,
+      "status": "completed",
+      "qa": "pendiente: Sergio Urcullo compara metodos (la sesion no puede ver el CDN)"
+    },
+    {
+      "surface": "mcp",
+      "workspace": "ed5a2a8f-5a06-4087-a680-81bc592b1b4e",
+      "project": "c6c080a7-fbe9-4314-a5b5-e5f8ec6f59ad",
+      "lineage": "cara ORIGINAL de Lucia (100% IA, Sergio Urcullo); referencias = medias de lucia-skin-v1 58bbd635",
+      "ts": "2026-09-29T21:25Z",
+      "phase": "prueba-metodo-cara-original",
+      "candidate": "T102",
+      "job_id": "9cb99ea5-8c48-4ef5-af45-2216794cb33e",
+      "scene": "calle",
+      "method": "element_placeholder",
+      "refs_actually_used": 1,
+      "model": "nano_banana_pro",
+      "cost_quoted_credits": 2.0,
+      "status": "completed",
+      "qa": "pendiente: Sergio Urcullo compara metodos (la sesion no puede ver el CDN)"
+    },
+    {
+      "surface": "mcp",
+      "workspace": "ed5a2a8f-5a06-4087-a680-81bc592b1b4e",
+      "project": "c6c080a7-fbe9-4314-a5b5-e5f8ec6f59ad",
+      "lineage": "cara ORIGINAL de Lucia (100% IA, Sergio Urcullo); referencias = medias de lucia-skin-v1 58bbd635",
+      "ts": "2026-09-29T21:25Z",
+      "phase": "prueba-metodo-cara-original",
+      "candidate": "T103",
+      "job_id": "361da38a-78df-48c2-8b9f-6a2b7e888e56",
+      "scene": "coworking",
+      "method": "element_placeholder",
+      "refs_actually_used": 1,
+      "model": "nano_banana_pro",
+      "cost_quoted_credits": 2.0,
+      "status": "completed",
+      "qa": "pendiente: Sergio Urcullo compara metodos (la sesion no puede ver el CDN)"
+    },
+    {
+      "surface": "mcp",
+      "workspace": "ed5a2a8f-5a06-4087-a680-81bc592b1b4e",
+      "project": "c6c080a7-fbe9-4314-a5b5-e5f8ec6f59ad",
+      "lineage": "cara ORIGINAL de Lucia (100% IA, Sergio Urcullo); referencias = medias de lucia-skin-v1 58bbd635",
+      "ts": "2026-09-29T21:25Z",
+      "phase": "prueba-metodo-cara-original",
+      "candidate": "T104",
+      "job_id": "79d9c333-acdb-4594-9beb-0edc0b5d7997",
+      "scene": "selfie-espejo",
+      "method": "element_placeholder",
+      "refs_actually_used": 1,
+      "model": "nano_banana_pro",
+      "cost_quoted_credits": 2.0,
+      "status": "completed",
+      "qa": "pendiente: Sergio Urcullo compara metodos (la sesion no puede ver el CDN)"
+    },
+    {
+      "surface": "mcp",
+      "workspace": "ed5a2a8f-5a06-4087-a680-81bc592b1b4e",
+      "project": "c6c080a7-fbe9-4314-a5b5-e5f8ec6f59ad",
+      "lineage": "cara ORIGINAL de Lucia (100% IA, Sergio Urcullo); referencias = medias de lucia-skin-v1 58bbd635",
+      "ts": "2026-09-29T21:25Z",
+      "phase": "prueba-metodo-cara-original",
+      "candidate": "T201",
+      "job_id": "a67d4000-8c5b-4339-985d-2f96703205b6",
+      "scene": "cafe",
+      "method": "7_media_image_references+prompt_corto",
+      "refs_actually_used": 7,
+      "model": "nano_banana_pro",
+      "cost_quoted_credits": 2.0,
+      "status": "completed",
+      "qa": "pendiente: Sergio Urcullo compara metodos (la sesion no puede ver el CDN)"
+    },
+    {
+      "surface": "mcp",
+      "workspace": "ed5a2a8f-5a06-4087-a680-81bc592b1b4e",
+      "project": "c6c080a7-fbe9-4314-a5b5-e5f8ec6f59ad",
+      "lineage": "cara ORIGINAL de Lucia (100% IA, Sergio Urcullo); referencias = medias de lucia-skin-v1 58bbd635",
+      "ts": "2026-09-29T21:25Z",
+      "phase": "prueba-metodo-cara-original",
+      "candidate": "T202",
+      "job_id": "6cc2be06-4a35-4269-b2a3-46ff80052c1f",
+      "scene": "calle",
+      "method": "7_media_image_references+prompt_corto",
+      "refs_actually_used": 7,
+      "model": "nano_banana_pro",
+      "cost_quoted_credits": 2.0,
+      "status": "completed",
+      "qa": "pendiente: Sergio Urcullo compara metodos (la sesion no puede ver el CDN)"
+    },
+    {
+      "surface": "mcp",
+      "workspace": "ed5a2a8f-5a06-4087-a680-81bc592b1b4e",
+      "project": "c6c080a7-fbe9-4314-a5b5-e5f8ec6f59ad",
+      "lineage": "cara ORIGINAL de Lucia (100% IA, Sergio Urcullo); referencias = medias de lucia-skin-v1 58bbd635",
+      "ts": "2026-09-29T21:25Z",
+      "phase": "prueba-metodo-cara-original",
+      "candidate": "T203",
+      "job_id": "f997c56d-c251-43d7-9be6-dac11f9d41b6",
+      "scene": "cafe",
+      "method": "7_media_image_references+prompt_corto",
+      "refs_actually_used": 7,
+      "model": "seedream_v4_5 (basic, 1440x2560)",
+      "cost_quoted_credits": 1.0,
+      "status": "completed",
+      "qa": "pendiente: Sergio Urcullo compara metodos (la sesion no puede ver el CDN)"
+    },
+    {
+      "surface": "mcp",
+      "workspace": "ed5a2a8f-5a06-4087-a680-81bc592b1b4e",
+      "project": "c6c080a7-fbe9-4314-a5b5-e5f8ec6f59ad",
+      "lineage": "cara ORIGINAL de Lucia (100% IA, Sergio Urcullo); referencias = medias de lucia-skin-v1 58bbd635",
+      "ts": "2026-09-29T21:25Z",
+      "phase": "prueba-metodo-cara-original",
+      "candidate": "T204",
+      "job_id": "75e9721b-0b7b-4176-ad8c-3dfd4f7efc6d",
+      "scene": "calle",
+      "method": "7_media_image_references+prompt_corto",
+      "refs_actually_used": 7,
+      "model": "seedream_v4_5 (basic, 1440x2560)",
+      "cost_quoted_credits": 1.0,
+      "status": "completed",
+      "qa": "pendiente: Sergio Urcullo compara metodos (la sesion no puede ver el CDN)"
+    },
+    {
+      "type": "learning",
+      "ts": "2026-09-29T21:27Z",
+      "verified_from": "params.reference_elements / params.input_images de cada job",
+      "finding": "Por MCP, <<<element_id>>> inyecta SOLO la primera media del Element (lucia-skin-v1 tiene 7; el job registra 1). Pasar las media_ids en medias[] con rol image_references hace que el modelo reciba las 7 (Higgsfield redimensiona solo las grandes, sufijo _resize).",
+      "official_guides_read": ".agents/skills/higgsfield-generate/references/{prompt-engineering,media-inputs,model-catalog}.md y higgsfield-soul-id/references/photo-guide.md: prompt < ~200 tokens; con referencia describir el CAMBIO, no redescribir la cara; frasear en positivo; escena compleja con cara -> Seedream 4.5; personaje -> Nano Banana (Pro en casos dificiles); Soul: 5-20 fotos, 8-12 punto dulce en la guia del CLI, 20-80 en la web; variedad de angulo, luz, expresion y distancia; >=1024px"
+    },
+    {
+      "type": "decision",
+      "ts": "2026-09-29T21:40Z",
+      "by": "Sergio Urcullo",
+      "quote": "si",
+      "scope": "tope del objetivo v4 subido a ~100 creditos (van 37,04)"
+    },
+    {
+      "type": "qa_identidad",
+      "ts": "2026-09-29T23:56Z",
+      "candidate": "T101",
+      "job_id": "24fd56a7-2b75-4ba2-9c2e-326022c2d615",
+      "tool": "scripts/face_identity_qa.py (ArcFace buffalo_l, sandbox_exec, 0 cr)",
+      "centroid_8_fuentes": 0.822,
+      "min_ref": 0.578,
+      "max_ref": 0.805,
+      "face_px": 478,
+      "pasa_gate_0_70": true
+    },
+    {
+      "type": "qa_identidad",
+      "ts": "2026-09-29T23:56Z",
+      "candidate": "T102",
+      "job_id": "9cb99ea5-8c48-4ef5-af45-2216794cb33e",
+      "tool": "scripts/face_identity_qa.py (ArcFace buffalo_l, sandbox_exec, 0 cr)",
+      "centroid_8_fuentes": 0.693,
+      "min_ref": 0.458,
+      "max_ref": 0.689,
+      "face_px": 244,
+      "pasa_gate_0_70": false
+    },
+    {
+      "type": "qa_identidad",
+      "ts": "2026-09-29T23:56Z",
+      "candidate": "T103",
+      "job_id": "361da38a-78df-48c2-8b9f-6a2b7e888e56",
+      "tool": "scripts/face_identity_qa.py (ArcFace buffalo_l, sandbox_exec, 0 cr)",
+      "centroid_8_fuentes": 0.713,
+      "min_ref": 0.503,
+      "max_ref": 0.705,
+      "face_px": 525,
+      "pasa_gate_0_70": true
+    },
+    {
+      "type": "qa_identidad",
+      "ts": "2026-09-29T23:56Z",
+      "candidate": "T104",
+      "job_id": "79d9c333-acdb-4594-9beb-0edc0b5d7997",
+      "tool": "scripts/face_identity_qa.py (ArcFace buffalo_l, sandbox_exec, 0 cr)",
+      "centroid_8_fuentes": 0.7,
+      "min_ref": 0.502,
+      "max_ref": 0.701,
+      "face_px": 375,
+      "pasa_gate_0_70": true
+    },
+    {
+      "type": "qa_identidad",
+      "ts": "2026-09-29T23:56Z",
+      "candidate": "T201",
+      "job_id": "a67d4000-8c5b-4339-985d-2f96703205b6",
+      "tool": "scripts/face_identity_qa.py (ArcFace buffalo_l, sandbox_exec, 0 cr)",
+      "centroid_8_fuentes": 0.806,
+      "min_ref": 0.599,
+      "max_ref": 0.735,
+      "face_px": 561,
+      "pasa_gate_0_70": true
+    },
+    {
+      "type": "qa_identidad",
+      "ts": "2026-09-29T23:56Z",
+      "candidate": "T202",
+      "job_id": "6cc2be06-4a35-4269-b2a3-46ff80052c1f",
+      "tool": "scripts/face_identity_qa.py (ArcFace buffalo_l, sandbox_exec, 0 cr)",
+      "centroid_8_fuentes": 0.683,
+      "min_ref": 0.467,
+      "max_ref": 0.661,
+      "face_px": 280,
+      "pasa_gate_0_70": false
+    },
+    {
+      "type": "qa_identidad",
+      "ts": "2026-09-29T23:56Z",
+      "candidate": "T203",
+      "job_id": "f997c56d-c251-43d7-9be6-dac11f9d41b6",
+      "tool": "scripts/face_identity_qa.py (ArcFace buffalo_l, sandbox_exec, 0 cr)",
+      "centroid_8_fuentes": 0.883,
+      "min_ref": 0.623,
+      "max_ref": 0.81,
+      "face_px": 460,
+      "pasa_gate_0_70": true
+    },
+    {
+      "type": "qa_identidad",
+      "ts": "2026-09-29T23:56Z",
+      "candidate": "T204",
+      "job_id": "75e9721b-0b7b-4176-ad8c-3dfd4f7efc6d",
+      "tool": "scripts/face_identity_qa.py (ArcFace buffalo_l, sandbox_exec, 0 cr)",
+      "centroid_8_fuentes": 0.836,
+      "min_ref": 0.582,
+      "max_ref": 0.768,
+      "face_px": 279,
+      "pasa_gate_0_70": true
+    },
+    {
+      "type": "learning",
+      "ts": "2026-09-29T23:58Z",
+      "verified_from": "v4/qa/identidad-metodos-20260929.json",
+      "finding": "Por identidad (ArcFace contra el centroide de las 8 fuentes), Seedream 4.5 + 7 media_ids sostiene la cara mejor que Nano Banana Pro en las dos escenas con el mismo prompt (cafe 0.883 vs 0.806/0.822; calle 0.836 vs 0.683/0.693) y cuesta la mitad. En Nano Banana Pro, Element (1 foto) y 7 media_ids dan lo mismo. Controles: espejo 0.90-0.97, otras caras IA <= 0.224, fuentes entre si 0.70-0.82 (leave-one-out). La fuente 1714a347 tiene 2 personas de fondo: fuera del entrenamiento Soul.",
+      "limits": "2 muestras por motor; la metrica no ve belleza, piel ni realismo"
+    },
+    {
+      "type": "learning",
+      "ts": "2026-09-30T02:35Z",
+      "verified_from": "chunk PNG 'hf-job-id' de cada archivo + jobs_wait (12 completed) + v4/qa/identidad-photoshoot-20260930.json",
+      "finding": "El photoshoot de 10 angulos (references/models/lucia-surgical-shoot-20260707/) SI esta en Higgsfield: cada PNG trae su job en el metadato 'hf-job-id'. Se usa por job_id para entrenar y medir, sin subir nada. El handoff decia lo contrario. Identidad: 01 0.738, 02 0.744, 05 0.703, 06 0.758, 07 0.729, 04 0.689 (perfil). El dataset se recompone: 13 canonicas + 7 nuevas (7 cr en vez de 13).",
+      "lesson": "Antes de dar por perdido un activo, leer sus metadatos: los PNG de Higgsfield traen el job id."
+    },
+    {
+      "type": "learning",
+      "ts": "2026-09-30T03:05Z",
+      "verified_from": "curl CDN desde el entorno onia-higgsfield + transactions (MCP) + generate_image get_cost",
+      "finding": "El entorno onia-higgsfield SI ve Higgsfield: d8j0ntlcm91z4 y d2ol7oe51mr4n9 bajan con 200 (la raiz del CDN da 403 de S3, no del proxy). Cotizado en vivo: seedream_v4_5 9:16 basic con 7 image_references = 1 cr por foto, 7 cr las 7. El entrenamiento Soul no tiene preflight de costo en el MCP; la unica evidencia es la transaccion 'Soul ID' -25 cr del 2026-08-23T01:14Z (historica, no cotizacion). Saldo 533,87. Nada lanzado: se espera OK de Sergio Urcullo.",
+      "lesson": "Un 403 en la raiz de un CDN no es bloqueo de red: mirar el header server/x-cache antes de concluir."
+    },
+    {
+      "type": "dataset_v4",
+      "ts": "2026-09-30T03:05Z",
+      "id": "D03",
+      "job_id": "6d729491-b4e2-4db1-8dad-2e2569c087cb",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260930_030231_6d729491-b4e2-4db1-8dad-2e2569c087cb.png",
+      "model": "seedream_v4_5",
+      "params": {
+        "aspect_ratio": "9:16",
+        "quality": "basic"
+      },
+      "method": "7 media_ids de lucia-skin-v1 como image_references",
+      "prompt": "The same woman as in the reference images, head-and-shoulders portrait turned three-quarters to her right, laughing naturally, warm golden-hour backlight on a terrace in Santa Cruz de la Sierra, Bolivia. She wears a sand-colored linen shirt, small gold hoops and a fine gold chain. Candid iPhone photo, natural light, true-to-life color. Unretouched skin: visible pores, freckles across nose and cheeks, natural imperfections, no smoothing. Sharp focus on her face.",
+      "cost_cr": 1,
+      "approved_by": "Sergio Urcullo 2026-09-30 ('empezá ahora mismo... perfeccioná el soul')"
+    },
+    {
+      "type": "qa_identidad",
+      "ts": "2026-09-30T03:10Z",
+      "candidate": "D03",
+      "job_id": "6d729491-b4e2-4db1-8dad-2e2569c087cb",
+      "tool": "scripts/face_identity_qa.py local (0 cr)",
+      "centroid_8_fuentes": 0.748,
+      "min_ref": 0.563,
+      "max_ref": 0.66,
+      "face_px": 655,
+      "pasa_gate_0_70": true,
+      "visto": "piel con poros y pecas; manos, argollas y cadenita OK; monedas sueltas en la baranda (fondo)"
+    },
+    {
+      "type": "dataset_v4",
+      "ts": "2026-09-30T03:05Z",
+      "id": "D06",
+      "job_id": "df5f21ea-c991-42d8-9401-038075022766",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260930_030231_df5f21ea-c991-42d8-9401-038075022766.png",
+      "model": "seedream_v4_5",
+      "params": {
+        "aspect_ratio": "9:16",
+        "quality": "basic"
+      },
+      "method": "7 media_ids de lucia-skin-v1 como image_references",
+      "prompt": "The same woman as in the reference images, waist-up, facing the camera, talking mid-sentence with one hand gesturing, overcast daylight on a balcony in Santa Cruz de la Sierra, Bolivia. She wears a terracotta blouse, small gold hoops and a fine gold chain. Candid iPhone photo, natural light, true-to-life color. Unretouched skin: visible pores, freckles across nose and cheeks, natural imperfections, no smoothing. Sharp focus on her face.",
+      "cost_cr": 1,
+      "approved_by": "Sergio Urcullo 2026-09-30 ('empezá ahora mismo... perfeccioná el soul')"
+    },
+    {
+      "type": "qa_identidad",
+      "ts": "2026-09-30T03:10Z",
+      "candidate": "D06",
+      "job_id": "df5f21ea-c991-42d8-9401-038075022766",
+      "tool": "scripts/face_identity_qa.py local (0 cr)",
+      "centroid_8_fuentes": 0.893,
+      "min_ref": 0.644,
+      "max_ref": 0.838,
+      "face_px": 564,
+      "pasa_gate_0_70": true,
+      "visto": "piel con poros y pecas; manos, argollas y cadenita OK"
+    },
+    {
+      "type": "dataset_v4",
+      "ts": "2026-09-30T03:05Z",
+      "id": "D07",
+      "job_id": "f4544c63-ea85-4b9c-a42e-d19a7f37e550",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260930_030231_f4544c63-ea85-4b9c-a42e-d19a7f37e550.png",
+      "model": "seedream_v4_5",
+      "params": {
+        "aspect_ratio": "9:16",
+        "quality": "basic"
+      },
+      "method": "7 media_ids de lucia-skin-v1 como image_references",
+      "prompt": "The same woman as in the reference images, waist-up, turned three-quarters, wide smile showing her teeth, warm café interior light in Santa Cruz de la Sierra, Bolivia. She wears an oatmeal linen t-shirt, small gold hoops and a fine gold chain. Candid iPhone photo, natural light, true-to-life color. Unretouched skin: visible pores, freckles across nose and cheeks, natural imperfections, no smoothing. Sharp focus on her face.",
+      "cost_cr": 1,
+      "approved_by": "Sergio Urcullo 2026-09-30 ('empezá ahora mismo... perfeccioná el soul')"
+    },
+    {
+      "type": "qa_identidad",
+      "ts": "2026-09-30T03:10Z",
+      "candidate": "D07",
+      "job_id": "f4544c63-ea85-4b9c-a42e-d19a7f37e550",
+      "tool": "scripts/face_identity_qa.py local (0 cr)",
+      "centroid_8_fuentes": 0.85,
+      "min_ref": 0.632,
+      "max_ref": 0.778,
+      "face_px": 588,
+      "pasa_gate_0_70": true,
+      "visto": "piel con poros y pecas; manos, argollas y cadenita OK"
+    },
+    {
+      "type": "dataset_v4",
+      "ts": "2026-09-30T03:05Z",
+      "id": "D09",
+      "job_id": "d632d93c-cee1-4980-87a4-d890d969113d",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260930_030231_d632d93c-cee1-4980-87a4-d890d969113d.png",
+      "model": "seedream_v4_5",
+      "params": {
+        "aspect_ratio": "9:16",
+        "quality": "basic"
+      },
+      "method": "7 media_ids de lucia-skin-v1 como image_references",
+      "prompt": "The same woman as in the reference images, full body walking toward the camera at three-quarters, natural smile, park path at golden hour in Santa Cruz de la Sierra, Bolivia. She wears a cream linen dress and flat sandals, small gold hoops and a fine gold chain. Candid iPhone photo, natural light, true-to-life color. Unretouched skin: visible pores, freckles across nose and cheeks, natural imperfections, no smoothing. Sharp focus on her face.",
+      "cost_cr": 1,
+      "approved_by": "Sergio Urcullo 2026-09-30 ('empezá ahora mismo... perfeccioná el soul')"
+    },
+    {
+      "type": "qa_identidad",
+      "ts": "2026-09-30T03:10Z",
+      "candidate": "D09",
+      "job_id": "d632d93c-cee1-4980-87a4-d890d969113d",
+      "tool": "scripts/face_identity_qa.py local (0 cr)",
+      "centroid_8_fuentes": 0.813,
+      "min_ref": 0.57,
+      "max_ref": 0.751,
+      "face_px": 180,
+      "pasa_gate_0_70": true,
+      "visto": "piel con poros y pecas; manos, argollas y cadenita OK"
+    },
+    {
+      "type": "dataset_v4",
+      "ts": "2026-09-30T03:05Z",
+      "id": "D10",
+      "job_id": "1a0e5cdd-73d8-4ce5-9b5b-19651261e106",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260930_030359_1a0e5cdd-73d8-4ce5-9b5b-19651261e106.png",
+      "model": "seedream_v4_5",
+      "params": {
+        "aspect_ratio": "9:16",
+        "quality": "basic"
+      },
+      "method": "7 media_ids de lucia-skin-v1 como image_references",
+      "prompt": "The same woman as in the reference images, waist-up, seated at a desk with a notebook, thoughtful and serious, cool daylight in a modern office in Santa Cruz de la Sierra, Bolivia. She wears a light blue button shirt, small gold hoops and a fine gold chain. Candid iPhone photo, natural light, true-to-life color. Unretouched skin: visible pores, freckles across nose and cheeks, natural imperfections, no smoothing. Sharp focus on her face.",
+      "cost_cr": 1,
+      "approved_by": "Sergio Urcullo 2026-09-30 ('empezá ahora mismo... perfeccioná el soul')"
+    },
+    {
+      "type": "qa_identidad",
+      "ts": "2026-09-30T03:10Z",
+      "candidate": "D10",
+      "job_id": "1a0e5cdd-73d8-4ce5-9b5b-19651261e106",
+      "tool": "scripts/face_identity_qa.py local (0 cr)",
+      "centroid_8_fuentes": 0.886,
+      "min_ref": 0.628,
+      "max_ref": 0.814,
+      "face_px": 661,
+      "pasa_gate_0_70": true,
+      "visto": "piel con poros y pecas; manos, argollas y cadenita OK"
+    },
+    {
+      "type": "dataset_v4",
+      "ts": "2026-09-30T03:05Z",
+      "id": "D12",
+      "job_id": "ea94003e-f54d-459a-82d0-22f2eabd6ec4",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260930_030359_ea94003e-f54d-459a-82d0-22f2eabd6ec4.png",
+      "model": "seedream_v4_5",
+      "params": {
+        "aspect_ratio": "9:16",
+        "quality": "basic"
+      },
+      "method": "7 media_ids de lucia-skin-v1 como image_references",
+      "prompt": "The same woman as in the reference images, head-and-shoulders seen from slightly below, confident look into the camera, clear blue sky behind her, bright sun. She wears a white linen shirt, small gold hoops and a fine gold chain. Candid iPhone photo, natural light, true-to-life color. Unretouched skin: visible pores, freckles across nose and cheeks, natural imperfections, no smoothing. Sharp focus on her face.",
+      "cost_cr": 1,
+      "approved_by": "Sergio Urcullo 2026-09-30 ('empezá ahora mismo... perfeccioná el soul')"
+    },
+    {
+      "type": "qa_identidad",
+      "ts": "2026-09-30T03:10Z",
+      "candidate": "D12",
+      "job_id": "ea94003e-f54d-459a-82d0-22f2eabd6ec4",
+      "tool": "scripts/face_identity_qa.py local (0 cr)",
+      "centroid_8_fuentes": 0.847,
+      "min_ref": 0.593,
+      "max_ref": 0.78,
+      "face_px": 582,
+      "pasa_gate_0_70": true,
+      "visto": "piel con poros y pecas; manos, argollas y cadenita OK"
+    },
+    {
+      "type": "dataset_v4",
+      "ts": "2026-09-30T03:05Z",
+      "id": "D13",
+      "job_id": "a8aae977-0a3a-4fbb-bbf4-39c0734977d1",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260930_030432_a8aae977-0a3a-4fbb-bbf4-39c0734977d1.png",
+      "model": "seedream_v4_5",
+      "params": {
+        "aspect_ratio": "9:16",
+        "quality": "basic"
+      },
+      "method": "7 media_ids de lucia-skin-v1 como image_references",
+      "prompt": "The same woman as in the reference images, tight close-up of her face filling most of the frame, looking straight into the camera with a playful half-smile, warm indoor evening light from a table lamp. She wears a black fitted top, small gold hoops and a fine gold chain. Candid iPhone photo, natural light, true-to-life color. Unretouched skin: visible pores, freckles across nose and cheeks, natural imperfections, no smoothing. Sharp focus on her face.",
+      "cost_cr": 1,
+      "approved_by": "Sergio Urcullo 2026-09-30 ('empezá ahora mismo... perfeccioná el soul')"
+    },
+    {
+      "type": "qa_identidad",
+      "ts": "2026-09-30T03:10Z",
+      "candidate": "D13",
+      "job_id": "a8aae977-0a3a-4fbb-bbf4-39c0734977d1",
+      "tool": "scripts/face_identity_qa.py local (0 cr)",
+      "centroid_8_fuentes": 0.816,
+      "min_ref": 0.581,
+      "max_ref": 0.789,
+      "face_px": 1118,
+      "pasa_gate_0_70": true,
+      "visto": "piel con poros y pecas; manos, argollas y cadenita OK"
+    },
+    {
+      "type": "soul_train",
+      "ts": "2026-09-30T03:12Z",
+      "name": "LUCIA-v4",
+      "soul_id": "c4281765-c031-40ed-b430-e5fd313ef207",
+      "soul_type": "soul_2",
+      "images": 20,
+      "dataset": "6 medias lucia-skin-v1 (sin 1714a347) + photoshoot 01-07 por job_id + D03 D06 D07 D09 D10 D12 D13",
+      "cost_cr": "no medido en sesion (lectura de transacciones bloqueada por permisos); referencia historica 25 cr (Soul ID 2026-08-23)",
+      "approved_by": "Sergio Urcullo 2026-09-30"
+    },
+    {
+      "type": "learning",
+      "ts": "2026-09-30T03:12Z",
+      "finding": "Reemplazar 'real skin texture with her freckles clearly visible' por 'Unretouched skin: visible pores, freckles across nose and cheeks, natural imperfections, no smoothing' en Seedream 4.5 saco la piel plastica de T203/T204: poros y pecas visibles en las 7, y la identidad no bajo (0,748-0,893, media 0,836).",
+      "verified_from": "mirada de las 7 + face_identity_qa local"
+    },
+    {
+      "type": "qa_identidad",
+      "ts": "2026-09-30T03:20Z",
+      "candidate": "escenas fijas Seedream 4.5 + 7 media_ids",
+      "jobs": {
+        "S1": "22052686-76d5-4eba-ba25-9cd6122aba19",
+        "S2": "5fc0060e-a9ad-4c5d-93ed-ed000b5cec7e",
+        "S3": "7d4c25e8-3624-472d-8c3d-e955be07882a"
+      },
+      "cost_cr": 3,
+      "centroid": {
+        "S1_primer_plano": 0.884,
+        "S2_cafe_manos": 0.749,
+        "S3_cuerpo_entero_oficina": 0.766
+      },
+      "visto": "S3 la cara se ve algo mayor; manos OK en S2"
+    },
+    {
+      "type": "qa_identidad",
+      "ts": "2026-09-30T03:25Z",
+      "candidate": "contenido ya producido (L1 reel v7 + banco generadas-20260902 de L2)",
+      "tool": "face_identity_qa local, 0 cr",
+      "centroid": {
+        "L1_frames": [
+          0.688,
+          0.726,
+          0.621,
+          0.784,
+          0.713,
+          0.703,
+          0.786
+        ],
+        "banco_L2": [
+          0.7,
+          0.653,
+          0.686,
+          0.684,
+          0.68,
+          0.655,
+          0.654,
+          0.652,
+          0.71
+        ]
+      },
+      "lectura": "misma familia de cara, pero al borde del gate (media ~0,70) contra 0,75-0,89 del metodo v4. Mezclarlos en el feed se nota."
+    },
+    {
+      "type": "learning",
+      "ts": "2026-09-30T03:15Z",
+      "finding": "En el entorno onia-higgsfield SI se puede subir a Higgsfield: media_upload + PUT a upload.higgsfield.ai (con If-None-Match: *) dio 200 y media_confirm 'uploaded'. Subida: voz-marcela-v2-default.mp3 (5,67 s) = media d0eacead-41fd-4940-a20a-f108472feabc. El handoff lo daba por bloqueado: era del entorno Default.",
+      "also": "text2speech_v2 variant elevenlabs con el voice_id de Marcela (86V9x9hr...) da 400 'Voice not found': la voz vive en la cuenta ElevenLabs de ONIA, no en la biblioteca de Higgsfield. get_cost devuelve 0,45 igual (no valida la voz). No se cobro."
+    },
+    {
+      "type": "quote_video",
+      "ts": "2026-09-30T03:30Z",
+      "base": "still D06 df5f21ea + audio Marcela d0eacead, 6 s, 9:16",
+      "get_cost": {
+        "minimax_h3 2K": 12,
+        "seedance_2_0_mini 720p": 6,
+        "seedance_2_0 std 720p": 27,
+        "grok_video_v15 720p": 27,
+        "seedance_2_5 omni 720p": 42,
+        "sync_so": "sin preflight; ~3,6 cr/s medido el 15-ago => ~22"
+      },
+      "status": "esperando OK de Sergio Urcullo (regla: video = aprobacion especifica)"
+    },
+    {
+      "type": "incidente",
+      "ts": "2026-09-30T04:15Z",
+      "soul_id": "c4281765-c031-40ed-b430-e5fd313ef207",
+      "finding": "Soul LUCIA-v4 sigue raw_status=queued 63 min despues de lanzarlo (03:12). No se relanza sin OK de Sergio Urcullo: podria cobrarse dos veces."
+    },
+    {
+      "type": "prompt_canon",
+      "ts": "2026-09-30T11:30Z",
+      "decision": "Sergio Urcullo 2026-09-30: se queda la cara v4 (la del canon/espejo, 0,831); la del 6-ago se descarta ('parece generada de otra foto'). Pide que no se vea vieja (arrugas marcadas), ojos cafes que brillen, piel brillante y pecas marcadas.",
+      "clausula_belleza_v4": "Youthful fresh skin, smooth under-eyes, no deep wrinkles or expression lines. Bright warm brown eyes with clear catchlights. Dewy glowing skin with a natural sheen on cheekbones and nose bridge, freckles clearly visible across nose and cheeks.",
+      "reemplaza": "'Unretouched skin: visible pores, freckles..., natural imperfections, no smoothing' (marcaba arrugas y envejecia)",
+      "prueba": {
+        "modelo": "seedream_v4_5 + 7 media_ids",
+        "jobs": {
+          "S1": "b0f273ca-9f97-4fdc-9503-59267cb41a3d",
+          "S2": "872a69ad-c62c-4e77-adbc-3c9d591ff0f7",
+          "S3": "2ef4469c-9c31-416b-8faf-68d062978094"
+        },
+        "cost_cr": 3,
+        "identidad_ahora": {
+          "S1": 0.845,
+          "S2": 0.875,
+          "S3": 0.848
+        },
+        "identidad_antes": {
+          "S1": 0.884,
+          "S2": 0.749,
+          "S3": 0.766
+        },
+        "visto": "mas joven, sin surcos bajo ojos, ojos cafe con brillo, piel con glow y pecas nitidas; S2 y S3 suben de identidad"
+      }
+    },
+    {
+      "type": "look_ancla",
+      "ts": "2026-09-30T11:40Z",
+      "pedido": "Sergio Urcullo: 'Intenta ese resultado' (selfie de espejo del bano, cardigan crema)",
+      "ancla_media_id": "abe2e6bd-0d39-49be-9d87-1126d4ed07b0",
+      "metodo": "seedream_v4_5 9:16 basic; image_references = [ancla espejo PRIMERA, a7cfb766, d7d6d36a, df491c87, 8ce2f65c]; prompt con 'Same face, skin and freckles as the first reference' + clausula de belleza",
+      "jobs": {
+        "E1_cama": "49cf8ef2-7b01-4032-a219-e76683a415e7",
+        "E2_auto": "fb1111d0-242a-4cb3-9045-d526c3e2e7d7",
+        "E3_cafe": "66e25dab-af75-482d-afc4-8711caccd84a",
+        "E4_escritorio": "c24bbbaa-c022-42c3-b438-bbb2b83bcf3c"
+      },
+      "cost_cr": 4,
+      "identidad": {
+        "E1": 0.844,
+        "E2": 0.828,
+        "E3": 0.828,
+        "E4": 0.864
+      },
+      "visto": "mismo look del espejo: piel con glow, pecas densas, cachetes rosados, ojos cafe con brillo, cara joven; E2 con contraluz calido pierde algo de pecas"
+    },
+    {
+      "type": "soul_prueba",
+      "ts": "2026-09-30T12:20Z",
+      "soul_id": "c4281765-c031-40ed-b430-e5fd313ef207",
+      "estado": "ready (quedo ~9 h en cola: 03:12 -> <=12:15)",
+      "modelo": "soul_2 2k 9:16 + clausula de belleza, sin referencias",
+      "cost_cr": 0.96,
+      "jobs": {
+        "S1a": "7df299bc-3a0c-466e-950f-eb6cf7796d6e",
+        "S1b": "2dd3cf1d-7682-4e29-928e-44d7e7187346",
+        "S2a": "e3958900-d6fc-4282-aa2b-203f6d6459be",
+        "S2b": "d9e05db5-d354-4eaa-8544-002165772d4c",
+        "S3a": "214f8cf2-b27c-4faa-ad3d-65ef19555170",
+        "S3b": "8c584652-c81e-4e29-8ca1-aab27f00c4f7",
+        "espejo_a": "65ef54a7-f15e-4870-811a-5369549003a0",
+        "espejo_b": "7977abfa-8ef8-4baa-9625-d3c72a971c29"
+      },
+      "identidad": {
+        "S1": [
+          0.716,
+          0.756
+        ],
+        "S2": [
+          0.731,
+          0.748
+        ],
+        "S3": [
+          0.792,
+          0.826
+        ],
+        "espejo": [
+          0.749,
+          0.756
+        ]
+      },
+      "comparacion": "Seedream + ancla espejo + clausula: 0,828-0,875",
+      "visto": "Consistente entre repeticiones pero PEOR que Seedream+ancla: cara mas larga y mayor, piel mas bronceada/oscura, pelo tirado atras en primeros planos; el espejo no alcanza el look de la referencia. La clausula de belleza no compensa lo que aprendio del dataset.",
+      "veredicto": "Metodo diario = seedream_v4_5 + ancla espejo abe2e6bd primera + 4 refs + clausula (1 cr/imagen). Soul queda de respaldo (0,12 cr) para volumen de baja exigencia; no reentrenar salvo que Sergio Urcullo lo pida.",
+      "limitacion_higgsfield": "plan Pro: max 4 trabajos concurrentes; el 5o se rechaza en submit (no cobra)"
+    },
+    {
+      "type": "correccion_criterio",
+      "ts": "2026-09-30T12:40Z",
+      "por": "Sergio Urcullo",
+      "dijo": "el brillo lo estas anadiendo muy falso; si esta en un cuarto no va a haber esa luz; la referencia es el nivel de calidad y detalle de la imagen; el fundamento que me das no es el correcto, aunque los resultados estan siendo buenos",
+      "leccion": "Una referencia visual se lee como estandar de calidad/detalle y de coherencia fisica de la luz, no como efectos a copiar. Los resultados buenos venian de la foto ancla (detalle), no del texto de 'glow'.",
+      "clausula_nueva": "Same level of fine detail as the first reference image: individually sharp freckles, fine pores, textured irises, crisp eyelashes and flyaway hairs. Youthful face, smooth under-eyes, no deep wrinkles. Lighting is physically consistent with this scene: highlights on skin and catchlights in the eyes come only from the light sources present, never added glow.",
+      "prueba": "pendiente: se valida en el proximo lote aprobado (no se gasto para esto)"
+    },
+    {
+      "type": "lote_publicar",
+      "ts": "2026-09-30T14:10Z",
+      "aprobado": "Sergio Urcullo 'un poco de cada uno' (fotos + video); tope 25 cr",
+      "fotos": {
+        "P1_cuarto_noche_lampara": "761df099-cbe3-4f54-b636-ba5cb2fdda97",
+        "P2_coworking": "a378ea3d-1c19-4903-962a-8e7bd917846c",
+        "P3_calle_golden_hour": "b078f2ef-7769-429f-adc4-d6303cceeaec",
+        "P4_cocina_manana": "ed096c60-c1cf-4e78-b9dc-e3fad09c9868"
+      },
+      "cost_cr": 4,
+      "metodo": "seedream + ancla espejo + clausula de detalle/luz fisica (PR #54)",
+      "medido": {
+        "P1": 0.838
+      },
+      "visto": {
+        "P1": "cuarto oscuro iluminado solo por la lampara y el celular; sin glow agregado; pecas y detalle OK"
+      },
+      "pendiente": "P2-P4 enviadas; su resultado no se pudo leer: el control de permisos de la sesion bloqueo jobs_wait. El video (minimax_h3 + audio Marcela, start E1 49cf8ef2) tambien fue bloqueado y NO se envio: 0 cr."
+    },
+    {
+      "type": "video_lipsync_ronda1",
+      "ts": "2026-09-30T14:30Z",
+      "aprobado": "Sergio Urcullo 'un poco de cada uno' + 'tienes permiso'",
+      "audio": "voz-marcela-v2-default.mp3 (5,67 s) = media d0eacead-41fd-4940-a20a-f108472feabc",
+      "base": "foto E1 cama 49cf8ef2-7b01-4032-a219-e76683a415e7",
+      "minimax_h3": {
+        "job": "fee69f56-074d-4c8a-89ef-5a9199bca0cd",
+        "params": "6 s 2K 9:16; E1 como image_references (NO start_image: con audio_references MiniMax rechaza start_image, 422, sin cobro)",
+        "cost_cr_cotizado": 12,
+        "visto": "boca articula variado; a los 2-3 s labios hinchados y un ojo entrecerrado raro (deriva); trae pista de audio propia",
+        "audio_vs_marcela_corr_envolvente": 0.3,
+        "lectura": "la pista de salida NO es el mp3 de Marcela tal cual (corr 0,3): hay que escucharla"
+      },
+      "seedance_2_0_mini": {
+        "job": "fe1baa1d-470f-4b49-8a62-f57c9dbc9808",
+        "params": "6 s 720p 9:16 start_image E1 + audio_references, generate_audio false",
+        "cost_cr_cotizado": 6,
+        "visto": "cara estable y fiel, boca articula natural con dientes limpios; sale MUDO: se le monto el mp3 de Marcela encima para evaluar (seedance-con-marcela.mp4, fuera de git)",
+        "lectura": "falta que Sergio Urcullo confirme de oido si la boca cae con las silabas"
+      },
+      "learning": [
+        "minimax_h3: audio_references exige image/video reference, no start_image",
+        "Higgsfield recomienda el preset 'IN THE DARK' y no envia el job hasta pasar declined_preset_id=24bae836-2c4a-48e0-89b6-49fcc0b21612",
+        "El guard de permisos de la sesion bloqueo generaciones hasta que Sergio Urcullo dio permiso explicito en el chat"
+      ]
+    },
+    {
+      "type": "aprobacion_gasto",
+      "ts": "2026-09-30T19:41Z",
+      "por": "Sergio Urcullo",
+      "texto": "autorizo gastar hasta 75 créditos en el lote de prueba de Lucía",
+      "alcance": "8 fotos dataset v5 + Soul v5 + 6 imagenes de prueba del Soul + 4 b-roll (Seedance Mini, Kling 3.0, Cinema Studio v2, Cinema Studio 3.0 4 s). Preset viral fuera: no se puede cotizar antes."
+    },
+    {
+      "type": "dataset_v5",
+      "ts": "2026-09-30T19:44Z",
+      "modelo": "seedream_v4_5 9:16 basic + metodo_diario (ancla espejo primera + 4 refs) + clausula de detalle/luz fisica",
+      "jobs": {
+        "V01_frontal_ventana": "c8bab84f-dff0-4f13-93fd-4f64bde7189e",
+        "V02_34_nublado": "5f664922-5fb5-4c71-aa60-079f9b38e6ca",
+        "V03_34_risa_lampara": "2dbc7621-3817-4454-8c27-fe849a21dcf2",
+        "V04_perfil_sombra": "16ac5ff7-6bc4-44de-971a-f5026b654573",
+        "V05_cafe_celular": "bda93af1-95a6-41bd-8b66-8dfb8122cc2c",
+        "V06_escritorio_frontal": "b16d312e-0541-4c17-9342-5e8621e7ab1d",
+        "V07_golden_hour_sonrisa": "14531c7e-cfb6-478d-9c89-cdbaf3ed217e",
+        "V08_cocina_noche_hombro": "3f6701bd-d3ef-4ab0-9f33-bc40f4a7caa7"
+      },
+      "cost_cr": 8,
+      "identidad_centroide_8_fuentes": {
+        "V01": 0.848,
+        "V02": 0.777,
+        "V03": 0.784,
+        "V04": 0.801,
+        "V05": 0.777,
+        "V06": 0.858,
+        "V07": 0.789,
+        "V08": 0.828
+      },
+      "negativos_max": 0.224,
+      "lectura": "todas pasan el gate 0,70. Las de 3/4 y risa miden 0,78: el canon mismo mide 0,70-0,82 contra su propio centroide, asi que es la variacion normal del angulo, no deriva. Por eso entran aunque el doc decia >=0,80 (ese umbral dejaba solo frontales y un Soul sin angulos).",
+      "visto": "las 8 MIRADAS: misma cara, pecas nitidas, joven, luz coherente con cada escena (ventana, nublado, lampara, sombra, cafe, oficina, golden hour, cocina)",
+      "qa": "v4/qa/identidad-dataset-v5-20260930.json"
+    },
+    {
+      "type": "soul_train",
+      "ts": "2026-09-30T19:46Z",
+      "name": "LUCIA-v5",
+      "soul_id": "cd42c065-e18c-4176-b9ad-e2de075fe362",
+      "soul_type": "soul_2",
+      "images": 16,
+      "dataset": "V01-V08 (job_ids arriba) + ancla espejo media abe2e6bd + P1-P4 (761df099, a378ea3d, b078f2ef, ed096c60) + E1 49cf8ef2, E3 66e25dab, E4 c24bbbaa. Sin las 8 fuentes viejas (envejecian al v4).",
+      "cost_cr": 25,
+      "cost_medido": "saldo 440,93 antes -> 415,93 despues = 25,00 exactos (primera vez que el costo del Soul queda medido y no estimado)",
+      "estado": "queued al lanzar",
+      "approved_by": "Sergio Urcullo 2026-09-30 (tope 75)"
+    },
+    {
+      "type": "broll_prueba",
+      "ts": "2026-09-30T19:47Z",
+      "base": "still P3 calle golden hour b078f2ef (centroide 0,810, cara 346 px)",
+      "prompt": "She walks along a sunlit street at golden hour, glances at the camera and smiles softly. Slow handheld tracking shot, shallow depth of field. Keep her face exactly as in the image.",
+      "params_comunes": "6 s, 9:16, sin audio, declined_preset_id IN THE DARK",
+      "jobs": {
+        "seedance_2_0_mini 720p": "360e60f9-5aa0-49bb-a05d-3d1c929caabe",
+        "kling3_0 std sound off": "1d2b5631-cc50-4a17-a472-cf6bb78c1098",
+        "cinematic_studio_video_v2 std sound off": "5352f72c-9bf1-4685-8951-2cefb6c73db1"
+      },
+      "cost_cr": {
+        "seedance_mini": 6,
+        "kling3_0": 7.5,
+        "cinematic_studio_video_v2": 6
+      },
+      "identidad_frames_0.3/1.5/3.0/4.5/5.7s": {
+        "seedance_mini": [
+          0.681,
+          0.631,
+          0.598,
+          0.619,
+          0.636
+        ],
+        "kling3_0": [
+          0.696,
+          0.701,
+          0.618,
+          0.716,
+          0.716
+        ],
+        "cinematic_studio_video_v2": [
+          0.738,
+          0.701,
+          0.532,
+          0.597,
+          0.57
+        ]
+      },
+      "nota_medicion": "a 720p la cara mide ~170 px contra 346 del still: solo eso baja ~0,1. Se compara la DERIVA contra el primer frame de cada video, no el numero absoluto. El 0,618 de Kling a 3,0 s es un parpadeo (ojos cerrados).",
+      "lectura": "Kling 3.0 sostiene la cara (0,70 -> 0,72) y hace el movimiento de camara mas de cine: empieza caminando y termina en plano medio mirando a camara. Seedance Mini estable con deriva leve. Cinema Studio v2 es el que mas deriva al quedar de frente (0,74 -> 0,53-0,60).",
+      "ganador_provisorio": "kling3_0 std sound off, 7,5 cr / 6 s - falta que Sergio Urcullo lo MIRE",
+      "comparativo": "broll-comparativo.mp4 enviado a Sergio Urcullo (scratchpad de la sesion)"
+    },
+    {
+      "type": "incidente",
+      "ts": "2026-09-30T19:47Z",
+      "finding": "El control de permisos de la sesion bloqueo el envio de Cinema Studio 3.0 (4 s, 720p, 20 cr cotizados) aunque entraba en el tope de 75 aprobado. No se reintento ni se esquivo: NO se envio, 0 cr. Queda a decision de Sergio Urcullo.",
+      "gasto_del_lote_hasta_aca": "468,91 -> 415,93 = 52,98 cr (8 fotos + 3 videos 19,5 + Soul 25 = 52,5; los 0,48 de diferencia son de la bolsa compartida con otros carriles o redondeo, sin atribuir)"
+    },
+    {
+      "type": "ab_soul_vs_seedream",
+      "ts": "2026-09-30T21:43Z",
+      "aprobado": "Sergio Urcullo 'podes gastar para mostrarme la comparacion' (dentro del tope de 75 del lote)",
+      "escenas": "A parque, B videollamada, C terraza (fuera del dataset de entrenamiento; prompts en v4/prompts/ab-soul-v5.json)",
+      "jobs": {
+        "seedream": {
+          "A": "41d4dfca-8b52-4fef-ae96-524df9ba4bc1",
+          "B": "6d7b116e-a5a1-45c7-9f86-9e28abed9967",
+          "C": "9ec6fae0-1481-4afe-ba57-40577c2f2873"
+        },
+        "soul_v4": {
+          "A": "131b9851-fe00-47de-8bc1-bd66b8d3a766",
+          "B": "d734540c-cf26-478d-8d36-9d29207a70f1",
+          "C": "67354833-a1eb-4662-b5a9-9125eb805fc5"
+        }
+      },
+      "identidad": {
+        "seedream": [
+          0.805,
+          0.845,
+          0.864
+        ],
+        "soul_v4": [
+          0.689,
+          0.715,
+          0.827
+        ]
+      },
+      "cost_cr": 3.36,
+      "saldo": "415,93 -> 412,57; lote total 468,91 -> 412,57 = 56,34 de 75",
+      "visto": "Seedream: joven, natural, encuadre de foto real; en B se ve la pantalla del monitor aunque el prompt decia que no. Soul v4: cara mas larga y mayor, pelo tirante hacia atras, encuadre de retrato posado; C es el unico cerca.",
+      "pendiente": "Soul v5 sigue queued (19:46 ->): se suma a esta misma bateria cuando este ready (0,36 cr)."
+    },
+    {
+      "type": "veredicto",
+      "ts": "2026-10-01T00:00Z",
+      "por": "Sergio Urcullo",
+      "dijo": "la mejor fue el metodo actual pero el soul v4 tampoco esta mal, esta bien nomas",
+      "decision": "metodo diario sigue siendo Seedream + ancla; Soul v4 aceptable como respaldo barato (0,12 cr); Soul v5 pendiente de salir de la cola para sumarlo a la misma bateria"
+    },
+    {
+      "type": "soul_train",
+      "ts": "2026-10-01T00:20Z",
+      "name": "LUCIA-v5b",
+      "soul_id": "1fd04bfa-ddbb-4601-8a0c-1e39fd8f2d85",
+      "soul_type": "soul_2",
+      "images": 16,
+      "dataset": "identico a LUCIA-v5",
+      "motivo": "LUCIA-v5 lleva ~4,5 h en queued; Sergio Urcullo: 'intentalo otra vez, podes gastar'",
+      "cost_cr": 25,
+      "cost_medido": "412,57 -> 387,57",
+      "estado": "queued al lanzar; LUCIA-v5 sigue queued (no se puede cancelar desde el MCP)",
+      "nota": "si ambos terminan, se cobro dos veces el mismo dataset; se usa el primero que salga"
+    },
+    {
+      "type": "ab_soul_v5",
+      "ts": "2026-10-01T04:58Z",
+      "soul_id": "cd42c065-e18c-4176-b9ad-e2de075fe362",
+      "estado_soul": "ready al 04:56 UTC (~9 h en cola, igual que el v4)",
+      "jobs": {
+        "A": "4fcd54b5-2311-48a5-9af5-19dc1d0025d3",
+        "B": "b4dec708-ca86-46ed-b540-012c183db8b6",
+        "C": "eedc2ada-b29a-4b52-9b87-201237940ca2"
+      },
+      "cost_cr": 0.36,
+      "identidad": {
+        "seedream": [
+          0.805,
+          0.845,
+          0.864
+        ],
+        "soul_v4": [
+          0.689,
+          0.715,
+          0.827
+        ],
+        "soul_v5": [
+          0.773,
+          0.82,
+          0.816
+        ]
+      },
+      "medias": {
+        "seedream": 0.838,
+        "soul_v4": 0.744,
+        "soul_v5": 0.803
+      },
+      "visto": "v5 mejora claro al v4 (pecas, menos alargada) pero conserva el sesgo Soul: pelo tirante hacia atras, encuadre de retrato frontal, se ve algo mayor que Seedream.",
+      "regla": "principal si >= Seedream - 0,02: 0,803 vs 0,838 = -0,035 -> NO pasa",
+      "decision": "Seedream+ancla sigue principal; Soul v5 reemplaza al v4 como respaldo barato (0,12 cr). LUCIA-v5b (1fd04bfa) sigue en cola: ya cobrado, sin uso previsto."
+    },
+    {
+      "type": "reels_s1",
+      "ts": "2026-10-01T20:20Z",
+      "aprobado": "Sergio Urcullo 1-oct: OK a Kling 3.0 y tope 150 cr/mes; OK al carrusel L01; pide videos",
+      "L02": {
+        "base": "clip Kling 1d2b5631 (ya pagado)",
+        "edicion": "4 placas de texto PIL + ffmpeg overlay; gancho 'Este video no fue grabado' -> 'Lucía no existe. Es IA.'",
+        "archivo": "v4/feed/l02-este-video-no-fue-grabado.mp4",
+        "cost_cr": 0
+      },
+      "L05": {
+        "job": "07b938b2-b629-447e-946b-56d39496eaa4",
+        "modelo": "kling3_0 std sound off 6 s 9:16",
+        "base": "P2 coworking a378ea3d",
+        "cost_cr": 7.5,
+        "identidad_frames": [
+          0.814,
+          0.749,
+          0.759,
+          0.823,
+          0.804
+        ],
+        "visto": "sostiene la cara; primera version tapaba la cara con el texto: se bajo a y=640",
+        "archivo": "v4/feed/l05-lunes-link-de-reserva.mp4"
+      },
+      "gasto_mes_oct": 7.5
+    },
+    {
+      "type": "broll_l08",
+      "ts": "2026-10-01T20:25Z",
+      "job": "f79eb10e-a415-4768-ab62-65c8797a7880",
+      "modelo": "kling3_0 std sound off 10 s 9:16",
+      "base": "V05 cafe bda93af1",
+      "cost_cr": 12.5,
+      "archivo": "v4/feed/l08-cafe-src.mp4 (sin editar, sin voz)",
+      "pendiente": "voz ElevenLabs Marcela con el guion de abajo + placas + QA de identidad; lo hace la sucesora (ELEVENLABS_API_KEY cargada en el entorno)",
+      "guion_voz": "¿Cuántos pacientes se olvidan de su cita? El sistema les manda un correo un día antes y otro dos horas antes. Vos no movés un dedo.",
+      "gasto_mes_oct": 20.0
+    },
+    {
+      "type": "voz_l08",
+      "ts": "2026-10-01T22:30Z",
+      "motor": "ElevenLabs eleven_multilingual_v2",
+      "voz": "Marcela 86V9x9hrQds83qf7zaGn",
+      "tomas": [
+        {
+          "hist": "55tjyQs8w2k8EGJRBXZj",
+          "texto": "guion completo",
+          "settings": "stability .5 / style .4 (MAL: la regla de tts-elevenlabs.mjs pide los de la voz)",
+          "costo": 29,
+          "veredicto": "descartada: remate sube en «dedo» → 3 modelos de Whisper lo leen como pregunta"
+        },
+        {
+          "hist": "6tW7fOwExCTcif73sJyH / QMO5sVLTSTpZIkqd1F0H / 1sbVP3Z5zyqwNtOdoFAf",
+          "texto": "remate A/B/C con settings forzados",
+          "costo": 15,
+          "veredicto": "descartadas: settings forzados cambian el timbre de Marcela (regla 21-ago)"
+        },
+        {
+          "hist": "3ApPVHvOP5gyGO0fbXXT",
+          "texto": "cuerpo (2 oraciones) con next_text, SIN voice_settings",
+          "costo": 24,
+          "veredicto": "USADA → videos/lucia-l08/audio/voz-cuerpo.mp3"
+        },
+        {
+          "hist": "37K2EUMRR6W02QFozADS / NJYVFqtzw2rercXNbwnN / t40SuF9wAUIb50nPQtGb",
+          "texto": "remate seeds 11/22/33 con previous_text, SIN voice_settings",
+          "costo": 15,
+          "medida": {
+            "s11": "«dedo» 235→258→248→228→214 Hz (sube y baja: riesgo de pregunta)",
+            "s22": "195→195→194→189→179 Hz (cae: afirmación)",
+            "s33": "172→170→178→202→210 Hz (sube al final)"
+          },
+          "veredicto": "USADA s22 → videos/lucia-l08/audio/voz-remate.mp3"
+        }
+      ],
+      "costo_total_caracteres": 83,
+      "cupo_elevenlabs": "9.464 → 9.547 de 10.000 (tier payg)",
+      "creditos_higgsfield": 0
+    },
+    {
+      "type": "edicion_s1",
+      "ts": "2026-10-01T22:40Z",
+      "decision": "Sergio Urcullo: los reels se editan con el stack de editor-videos (método Santiago), no con placas PIL. L02/L05/L08 se rehacen desde los clips LIMPIOS (rawUrl de Higgsfield) en videos/lucia-lNN/; las versiones PIL de v4/feed quedan reemplazadas.",
+      "clips_limpios": {
+        "L02": "1d2b5631 → videos/lucia-l02/raw/",
+        "L05": "07b938b2 → videos/lucia-l05/raw/",
+        "L08": "f79eb10e → videos/lucia-l08/raw/ (md5 == CDN)"
+      },
+      "identidad_l08_5_cuadros": [
+        0.787,
+        0.772,
+        0.766,
+        0.757,
+        0.78
+      ],
+      "creditos_higgsfield": 0
+    },
+    {
+      "type": "edicion_s1_resultado",
+      "ts": "2026-10-02T01:45Z",
+      "metodo": "editor-videos § Reels de Lucía; un subagente por pieza + 2 verificadores + ronda de arreglo + re-verificación",
+      "L08": {
+        "final": "v4/feed/l08-recordatorio-sin-mover-un-dedo.mp4",
+        "dur_s": 10.25,
+        "lufs": -14.13,
+        "pico_dbtp": -1.8,
+        "identidad": [
+          0.79,
+          0.759,
+          0.765,
+          0.752,
+          0.771
+        ],
+        "verificacion": "aprobada por las dos lentes"
+      },
+      "L05": {
+        "final": "v4/feed/l05-lunes-link-de-reserva.mp4",
+        "dur_s": 6.042,
+        "identidad": [
+          0.786,
+          0.805,
+          0.751,
+          0.797,
+          0.813
+        ],
+        "verificacion": "aprobada tras arreglar el sello 130 %"
+      },
+      "L02": {
+        "final": "v4/feed/l02-este-video-no-fue-grabado.mp4",
+        "dur_s": 6.042,
+        "identidad": [
+          0.727,
+          0.694,
+          0.63,
+          0.716,
+          0.712
+        ],
+        "verificacion": "gate de identidad marcado por los verificadores; resuelto mirando: 0,694 perfil y 0,630 parpadeo (gate_rule los excluye)"
+      },
+      "creditos_higgsfield": 0,
+      "caracteres_elevenlabs": 0,
+      "pendiente": "OK de Sergio Urcullo; capturas reales (no hay cuenta demo); decisión de voz en L02/L05"
+    },
+    {
+      "type": "vestuario_maniqui",
+      "ts": "2026-10-02T13:34Z",
+      "pedido": "Sergio Urcullo 2-oct: 'genera el maniqui' (prenda opcion b de PLAN.md §5)",
+      "model": "seedream_v4_5",
+      "aspect_ratio": "16:9",
+      "folder_id": "c6c080a7-fbe9-4314-a5b5-e5f8ec6f59ad",
+      "job": "16c447ef-a48a-45a1-9f43-22dbc66d95e7",
+      "cost_cr": 1,
+      "archivo": "solo local (descartado, no se versiona)",
+      "veredicto": "DESCARTADO (mirado): escribio texto basura en la imagen ('Prodography Tunndaip Hex #C4522F') porque el prompt decia 'turnaround sheet' y 'hex #C4552F'; color salmon-rosado medido #BD5D54 (objetivo #C4552F); ribetes negros y bolsillos extra; arriba suelto en el frente y metido en costado/espalda"
+    },
+    {
+      "type": "vestuario_maniqui",
+      "ts": "2026-10-02T13:35Z",
+      "model": "seedream_v4_5",
+      "aspect_ratio": "16:9",
+      "folder_id": "c6c080a7-fbe9-4314-a5b5-e5f8ec6f59ad",
+      "job": "8d138bd6-edca-4c5e-a7e6-0ddeec4d320d",
+      "cost_cr": 1,
+      "prompt_cambios": "sin 'sheet' ni hex; color en palabras ('burnt orange terracotta, clay flower pot, not pink/salmon/red'); 'no typography anywhere'; 'every part the same terracotta, no contrast trim'; 'exactly one chest pocket'",
+      "archivo": "v4/vestuario/ambo-terracota-turnaround-8d138bd6.jpg",
+      "referencia_frente": "v4/vestuario/ambo-terracota-frente-8d138bd6.jpg (recorte de la vista de frente, 540x1180; es la que entra como prenda en la prueba de ropa)",
+      "color_medido": {
+        "frente_torso": "#C3624B",
+        "espalda_torso": "#BE5943"
+      },
+      "veredicto": "ELEGIDO (mirado): sin texto, terracota, un bolsillo de pecho. Difiere de la ficha en 3 detalles que se ADOPTAN como la prenda fija (no se gasta mas persiguiendo la ficha): bolsillos cargo en el pantalon, puno de manga en terracota mas oscuro, abertura en la botamanga. Ojo: en el frente la blusa queda a la cintura y en la espalda a la cadera",
+      "mes_hf": "octubre 22/150"
+    },
+    {
+      "type": "kit_lucia_generacion",
+      "ts": "2026-10-03T21:05Z",
+      "aprobado": "Sergio Urcullo 3-oct: 'tenes mi ok, podes generar pero quiero que lo veas bien y lo hagas de la mejor manera' (K1-K3 18 cr + K4 corta 11,5 cr)",
+      "folder_id": "c6c080a7-fbe9-4314-a5b5-e5f8ec6f59ad",
+      "metodo_fotos": "seedream_v4_5 9:16; image_references=[abe2e6bd ancla, a7cfb766, d7d6d36a, df491c87, 8ce2f65c, 688d63a7 (ambo frente subido)] + 'Same face...' + clausula de belleza + 'Ignore everything that is not the garment in the last reference image'",
+      "metodo_clips": "kling3_0 std, sound 'off', 6 s, 9:16, start_image = foto aprobada (cotizado 7,5 cada uno con get_cost antes de crear)",
+      "fotos": {
+        "K1_1": {
+          "job": "4afffb96-acb5-43b1-913b-09d07f3cd22d",
+          "id": 0.808,
+          "veredicto": "OK; es la prueba de ropa: el ambo coincide con el maniqui"
+        },
+        "K2_1": {
+          "job": "3e05cfd0-4bd4-442a-883a-7cab3d2ecd16",
+          "id": 0.829,
+          "veredicto": "OK"
+        },
+        "K2_2": {
+          "job": "1422fa94-6611-4a73-8e02-473f438053d4",
+          "id": null,
+          "veredicto": "OK sin persona; letra de la agenda ilegible"
+        },
+        "K4_1_descartada": {
+          "job": "6708e444-3076-40f1-b635-c8c6ae993c43",
+          "id": 0.835,
+          "veredicto": "DESCARTADA: letrero inventado 'Equperarto' en la torre del fondo"
+        },
+        "K4_1": {
+          "job": "eddca486-a598-40e9-ae94-ce3ee365491d",
+          "id": 0.81,
+          "veredicto": "OK recortada por encima del mostrador (el mostrador la atravesaba a la cintura); el recorte se subio como media e9cacf4b y es la imagen de arranque del clip K4"
+        },
+        "K4_3": {
+          "job": "186c82f0-e707-4074-9a99-eade82e76883",
+          "id": 0.841,
+          "veredicto": "OK"
+        },
+        "K4_4": {
+          "job": "cb86ea10-f365-44e3-845b-648e66bf561f",
+          "id": 0.851,
+          "veredicto": "OK; un folleto chico con letra en el borde izquierdo del mostrador: recortar al editar"
+        },
+        "K4_5": {
+          "job": "342c0ab5-1a05-4b14-b80e-690808e955c8",
+          "id": 0.835,
+          "veredicto": "OK; el monitor no muestra pantalla"
+        }
+      },
+      "clips": {
+        "K1": {
+          "job": "e470ef4f-5464-478e-8b60-44c6493dc547",
+          "start": "4afffb96",
+          "id_cuadros": [
+            0.793,
+            0.734,
+            0.68
+          ],
+          "veredicto": "OK mirado: caras de ~118 px, el 0,68 del final es por la inclinacion; es ella"
+        },
+        "K2": {
+          "job": "83130c4a-409f-4456-b673-898bf3777586",
+          "start": "3e05cfd0",
+          "id_cuadros": [
+            0.79,
+            0.707,
+            0.695
+          ],
+          "veredicto": "OK mirado: deja el cafe sin tomarlo y sonrie a camara"
+        },
+        "K4": {
+          "job": "338b751f-8f46-46cc-a4db-e064923e37ed",
+          "start": "e9cacf4b (recorte)",
+          "id_cuadros": [
+            0.81,
+            0.726,
+            0.725
+          ],
+          "veredicto": "OK: 5 dedos en los 9 cuadros revisados del conteo (0,2-5,2 s)"
+        }
+      },
+      "cost_cr": {
+        "fotos": 8,
+        "clips": 22.5,
+        "total": 30.5,
+        "aprobado": 29.5,
+        "extra": "1 cr por rehacer K4_1 (letrero), dentro del tope de la regla de parada (35)"
+      },
+      "mes_hf": "octubre 52,5/150",
+      "saldo_despues": 541.26,
+      "archivos": "v4/kit/*.jpg (fotos aprobadas), v4/kit/*.mp4 (clips), v4/kit/kit-fotos-hoja.jpg, v4/kit/kit-clips-preview.mp4; los PNG originales quedan locales (ignorados por git)",
+      "pendiente": "pantallas REALES de Onia (cuenta demo) para armar K1, K2 y K4 con editor-videos; K3 no necesita generacion"
+    },
+    {
+      "type": "kit_lucia_revision_manos",
+      "ts": "2026-10-08",
+      "clip": "338b751f (K4, kling3_0 std, 24 fps, 145 cuadros)",
+      "metodo": "cuadros extraidos con ffmpeg y recorte de la mano a resolucion completa (720x1280), mirados uno por uno; hoja en kit/k4-revision-manos-20261008.jpg (orden: cuadros 0, 60, 72, 84, 96, 104, 112, 120)",
+      "resultado": "cinco dedos contables en los cuadros 0, 60, 84, 96, 112 y 120; en 72 y 104 el dedo de la otra mano cruza la mano abierta y NO se cuenta; de 128 en adelante las manos se juntan y salen de cuadro",
+      "nota": "el conteo anterior de esta linea (0,2-5,2 s, 9 cuadros) no se rehizo cuadro a cuadro; los guiones solo afirman los cuadros listados aca",
+      "correccion_8oct_tarde": "la primera version de este registro agrupaba 72 a 104 como tapados. El revisor independiente lo marco y un recorte ampliado de 72, 84, 96 y 104 lo confirmo: 84 y 96 son contables (la otra mano queda arriba y a la derecha, sin cruzar). Un bloque de cuadros no se rotula por dos muestras de los extremos."
+    },
+    {
+      "type": "kit_lucia_prompts_literales",
+      "ts": "2026-10-08",
+      "fuente": "mcp higgsfield job_display (rawUrl y params), 0 cr",
+      "clip_K1": {
+        "job": "e470ef4f-5464-478e-8b60-44c6493dc547",
+        "modelo": "kling3_0 std, sound off, 6 s, 9:16",
+        "start_image": "4afffb96-acb5-43b1-913b-09d07f3cd22d",
+        "prompt": "She slowly lifts her eyes from the phone to the camera and gives a small knowing smile, the phone stays in her hands. Subtle handheld camera, natural morning light, no cuts."
+      },
+      "foto_K4_1_descartada": {
+        "job": "6708e444-3076-40f1-b635-c8c6ae993c43",
+        "modelo": "seedream_v4_5, seed 422318, 9:16",
+        "fragmento_del_prompt": "No screens visible, no text, no logos, no signs anywhere.",
+        "resultado": "aun asi aparecio un letrero con un nombre inventado en la torre del fondo; imagen en kit/k4-1-DESCARTADA-6708e444.jpg"
+      },
+      "saldo_higgsfield": {
+        "creditos": 541.26,
+        "medido": "2026-10-08",
+        "plan": "pro"
+      }
+    },
+    {
+      "type": "kit_lucia_aprendizaje_higgsfield_aprobacion",
+      "ts": "2026-10-08",
+      "aprobacion": "Sergio Urcullo, 8-oct (mensaje propio): «Creo que como tarea, aprendas todo lo que es Higgsfield todas sus funciones, aprendas a desarrollar todo y no perder la cara de Lucía. Tenés derecho a usar todo lo que querrás… y podés editarlo con el material que aprendimos de cómo editar video».",
+      "interpretacion_de_la_sesion": "No dio una cifra. La sesión se fija un tope de 97 créditos (150 del tope mensual de Lucía en octubre menos 52,5 ya gastados) y cotiza cada generación con get_cost antes de crearla.",
+      "saldo_antes": 541.26,
+      "tope_cr": 97,
+      "parada": "parar si el saldo baja de 444; parar una prueba si su cotización real difiere más de un 10 % de la cotizada; nada se publica",
+      "lote_V_video_misma_foto_K1_y_misma_orden": {
+        "kling3_0_pro_6s": 9,
+        "seedance_2_0_mini_720p_6s": 6,
+        "seedance_2_0_mini_start_image_mas_3_refs": 6,
+        "kling_o3_image_reference_5_refs_std_sin_sonido_6s": 6,
+        "cinematic_studio_3_0_720p_4s": 20,
+        "subtotal_cotizado_en_vivo": 47
+      },
+      "foto_K1_prompt_literal": {
+        "job": "4afffb96-acb5-43b1-913b-09d07f3cd22d",
+        "modelo": "seedream_v4_5, seed 409508, 9:16",
+        "referencias_en_orden": [
+          "abe2e6bd (ancla espejo)",
+          "a7cfb766",
+          "d7d6d36a",
+          "df491c87",
+          "8ce2f65c",
+          "688d63a7 (maniqui del ambo, ultima)"
+        ],
+        "nota": "el prompt completo se lee con job_display; no se copia aca por largo"
+      }
+    },
+    {
+      "type": "kit_lucia_aprendizaje_higgsfield_resultados",
+      "ts": "2026-10-08",
+      "saldo_antes": 541.26,
+      "saldo_despues": 454.76,
+      "gastado": 86.5,
+      "nota_costo": "cada cotizacion get_cost coincidio con el cobro; sync_so (sin cotizacion previa posible) cobro 21,75 cr por 6,04 s de clip fuente (3,6 cr/s)",
+      "tope_fijado": 97,
+      "queda_del_tope": 10.5,
+      "octubre_gastado_total": 139.0,
+      "medicion": "face-gate.sh (ArcFace buffalo_l contra 8 refs oficiales, gate 0,70); caras < 200 px poco confiables",
+      "video_misma_foto_K1_misma_orden": {
+        "kling3_0_std_control_e470ef4f": {
+          "cr": 7.5,
+          "id": [
+            0.791,
+            0.793,
+            0.762,
+            0.734,
+            0.761,
+            0.708,
+            0.721
+          ],
+          "t": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            5.9
+          ]
+        },
+        "kling3_0_pro_9f43ee3c-7a7c-4059-85ec-6facb71b81e4": {
+          "cr": 9,
+          "res": "1080x1920",
+          "id": [
+            0.805,
+            0.8,
+            0.791,
+            0.771,
+            0.75,
+            0.748,
+            0.739
+          ]
+        },
+        "seedance_2_0_mini_a7f79a01-4193-4135-9ba2-082378a2609d": {
+          "cr": 6,
+          "id": [
+            0.691,
+            0.657,
+            0.677,
+            0.634,
+            0.615,
+            0.634,
+            0.644
+          ]
+        },
+        "seedance_2_0_mini_start_mas_3_refs_dd2d7c91-ea3a-46a8-a29d-3861143dfe9e": {
+          "cr": 6,
+          "id": [
+            0.707,
+            0.762,
+            0.754,
+            0.726,
+            0.796,
+            0.777,
+            0.801
+          ],
+          "nota": "reencuadra (cara de 139 a 347 px) e invento un letrero en la torre"
+        },
+        "kling_o3_image_reference_5_refs_948a89d3-c5c5-4e32-92f0-db624edc825b": {
+          "cr": 6,
+          "id": [
+            0.798,
+            0.783,
+            0.785,
+            0.814,
+            0.815,
+            0.81,
+            0.824
+          ],
+          "nota": "sin start_image: inventa el cuarto y el plano; cara de 89 a 168 px"
+        },
+        "cinematic_studio_3_0_4s_720p_cc8fa519-f8c2-49b5-bd4d-b3a1be52c875": {
+          "cr": 20,
+          "id": [
+            0.785,
+            0.772,
+            0.787,
+            0.799,
+            0.79,
+            0.771
+          ],
+          "t": [
+            0,
+            0.8,
+            1.6,
+            2.4,
+            3.2,
+            3.85
+          ]
+        }
+      },
+      "imagen_misma_escena_K1_mismas_6_refs": {
+        "seedream_4_5_K1_4afffb96": {
+          "cr": 1,
+          "id": 0.806
+        },
+        "seedream_4_5_K2_3e05cfd0": {
+          "cr": 1,
+          "id": 0.83
+        },
+        "seedream_4_5_K4_3_186c82f0": {
+          "cr": 1,
+          "id": 0.839
+        },
+        "kling_omni_image_K1_c3706d45-52c1-46a9-a7f4-0f766b6908d0": {
+          "cr": 0.5,
+          "id": 0.794
+        },
+        "kling_omni_image_K2cafe_9f4b5172-f12b-4fb8-a03a-abb604380c47": {
+          "cr": 0.5,
+          "id": 0.35,
+          "nota": "perdio la cara: otra persona, estilo caricatura"
+        },
+        "kling_omni_image_K4cafe_dad464de-75a8-45f5-b799-8d91e5a63d1d": {
+          "cr": 0.5,
+          "id": 0.831
+        },
+        "nano_banana_2_1_a4dd1a48-88a5-4880-909a-2feb96d70a97": {
+          "cr": 2,
+          "id": 0.737
+        },
+        "gpt_image_2_5_flare_high_2k_5da2fa1e-344b-48ad-94a5-841749531a8b": {
+          "cr": 2.75,
+          "id": 0.658
+        },
+        "flux_3_image_2k_af9c2d0c-f154-4393-89a2-f28f551dfe33": {
+          "cr": 3,
+          "id": 0.691
+        },
+        "seedream_v5_pro_2k_b1abe43c-1455-47e5-b25f-436afc1a0b22": {
+          "cr": 2.5,
+          "id": 0.702
+        }
+      },
+      "labios_audio_de_prueba_d0eacead_voz_Marcela_solo_evaluacion_interna": {
+        "seedance_2_0_mini_start_K4_1_mas_audio_328a9d66-2b4e-4392-8b81-93a12551e49f": {
+          "cr": 6,
+          "id": [
+            0.732,
+            0.632,
+            0.639,
+            0.623,
+            0.618,
+            0.6,
+            0.634
+          ],
+          "audio_en_el_mp4": false,
+          "nota": "boca natural a ojo, dientes normales; cae bajo el gate; el mp4 sale sin pista de audio"
+        },
+        "sync_so_remap_sobre_K4_338b751f_eaaf369d-7667-4698-8443-4d544fa5faa2": {
+          "cr": 21.75,
+          "id": [
+            0.806,
+            0.764,
+            0.713,
+            0.748,
+            0.751,
+            0.753
+          ],
+          "fuente_mismo_instante": [
+            0.811,
+            0.757,
+            0.714,
+            0.724,
+            0.747,
+            0.768
+          ],
+          "audio_en_el_mp4": true,
+          "duracion_s": 5.62,
+          "nota": "conserva la identidad de la fuente (dif <= 0,03); mp4 sale con el audio"
+        }
+      }
+    }
+  ],
+  "cost_precedence_note": "Eventos literales conservan saldo454.76 reportado; corrección posterior skill/cola: era resta, no medición. Usar86.5cr reconciliados como gasto, no inferir caída medido541.26→454.76."
+}

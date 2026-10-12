@@ -1,0 +1,162 @@
+{
+  "date": "2026-10-12",
+  "scope": "Auditar aprendizajeClaudeHiggsfield y kitreplicable conrecursos existentes;NO producciónnueva",
+  "worker": "01a13171-0fdb-72c6-9fdc-81244d7e6006",
+  "madre": "Marketing01a12c1f-bef7-7252-a4b6-f8f8354dfc48",
+  "source_commit": "3566e5d5208cf4a7bcf20e743469c6088944674c",
+  "receipt_export_commit": "e60e62b7632ddb134c9ddab747d19aea74a4e92b",
+  "prior_receipt_and_preparation_commit": "3d396abce62c06c4a8d1e9e6b6271c006232710f",
+  "official_sources": "ConnectedHiggsfieldMCP12oct;127models complete/63recipes plus workflowinstructions;no UIexhaustiveness",
+  "model_routing": {
+    "root": "Sol6.1MEDIO configuration communicated bymother",
+    "subagents": [
+      {
+        "id": "/root/lucia_media",
+        "role": "extractionclosedmechanical",
+        "configured": "gpt-6-luna low"
+      },
+      {
+        "id": "/root/lucia_qa",
+        "role": "QAindependent/accountaudit",
+        "configured": "gpt-6.1-sol medium"
+      }
+    ],
+    "effective_internal_model": "notobserved"
+  },
+  "files": [
+    {
+      "file": "AUDITORIA-APRENDIZAJE.txt",
+      "bytes": 7783,
+      "sha256": "b3e9cd67f7261a3dfb4fd3a889b8907c09ec3fd03b90adff4304d22ce05e6a2a"
+    },
+    {
+      "file": "CONTRATO-NUEVA-IDENTIDAD.json",
+      "bytes": 1331,
+      "sha256": "476c80f0900d02a357251a76792d60ae3097582c34af2761f46fd5ea045abd37"
+    },
+    {
+      "file": "KIT-REPLICABLE.txt",
+      "bytes": 8336,
+      "sha256": "11dd8c33bb278133e82c807f8889c9e609f58cfee910bf3d621a9a07fdca5e99"
+    },
+    {
+      "file": "MATRIZ-FORMATOS.csv",
+      "bytes": 8180,
+      "sha256": "6561f93cd3230c17c74ab1fa2013a35a05cdac0c0f981ff36ccb20b6556d5943"
+    },
+    {
+      "file": "MATRIZ-FORMATOS.json",
+      "bytes": 180078,
+      "sha256": "65699dbbdd8243529e7dbca4683e7e4b7c7357659429f6b12f8614b561d031a7"
+    },
+    {
+      "file": "MATRIZ-MODELOS-127.json",
+      "bytes": 271582,
+      "sha256": "517bbda3676513b8f20b11850c060cbf5e25ff9162660d014dfc151ee7e90d95"
+    },
+    {
+      "file": "PLAN-BRECHAS.txt",
+      "bytes": 4042,
+      "sha256": "411f543ea67fd77f2a69e2232f87dd79e8e57cf231ff895c12a7f6a253087d22"
+    },
+    {
+      "file": "QA-KIT.json",
+      "bytes": 2858,
+      "sha256": "ac39971927f8cdb02c50ced58de3b2cb476d8f9ff1b2dc246299ce20d47d67b9"
+    },
+    {
+      "file": "QA-KIT.txt",
+      "bytes": 4775,
+      "sha256": "d50703ab5bd3f20c318b2736cb78f40ba5417a32e394e285cc157e8a24accd9b"
+    },
+    {
+      "file": "ai-host-fuente-oficial-20261012.json",
+      "bytes": 10971,
+      "sha256": "26672af7161a020aecc1f4f6dba8b1206cde0c2c84b06263058c8aa85c8c6ce6"
+    },
+    {
+      "file": "auditoria-cuenta.json",
+      "bytes": 3912,
+      "sha256": "1f7223067137fdddb429a35c22f3c87dbbb267512a82217709b1e049fc2d15ec"
+    },
+    {
+      "file": "auditoria-cuenta.txt",
+      "bytes": 5150,
+      "sha256": "bf08c27475594985c884c482fed47505b6767e9edec7fa8a059d21ff7e1de836"
+    },
+    {
+      "file": "catalogo-oficial-20261012.json",
+      "bytes": 268097,
+      "sha256": "98b78f78cc4046c3fb61fd8e83c9a6dd4a3c678ef12e5a5e152320f2418dfe5f"
+    },
+    {
+      "file": "ensayo-QA-independiente.json",
+      "bytes": 3562,
+      "sha256": "77a5c3a3be60ae8c9cb8cc266510417586b2f9128a6eeecb28a7781e2b7164fe"
+    },
+    {
+      "file": "ensayo-fixture-resultado.json",
+      "bytes": 3562,
+      "sha256": "77a5c3a3be60ae8c9cb8cc266510417586b2f9128a6eeecb28a7781e2b7164fe"
+    },
+    {
+      "file": "ensayo_replicacion.py",
+      "bytes": 5733,
+      "sha256": "2bef80793025bd680662ac7c7f7cf6c60cb583081d392112ad176267131c8866"
+    },
+    {
+      "file": "evidencia-heredada.json",
+      "bytes": 161339,
+      "sha256": "427d412edea3bf77e063dc8595b5d1c93b442386c92bffd3afd5d4ddc129dca9"
+    },
+    {
+      "file": "evidencia-heredada.txt",
+      "bytes": 17688,
+      "sha256": "e827ed52508e994b830ccb499a26a0a343b6c37758c7b547a1319ff47b1d9d96"
+    },
+    {
+      "file": "herramientas-oficiales-20261012.json",
+      "bytes": 279009,
+      "sha256": "0de00030cb067d79e7245772b68db4e89150be5d3cbef4d7bc7644a7201a48f1"
+    },
+    {
+      "file": "k1-prompt-config-oficial.json",
+      "bytes": 3490,
+      "sha256": "2d9d32901166853108145b32ee9209c6ef7cf073f6321316c001320905aa9c07"
+    },
+    {
+      "file": "modelos-detalle-20261012.json",
+      "bytes": 7954,
+      "sha256": "7b299778609b2847b39ceb5c21c87b1ab34cc853fa5f60688695337ae98a1b88"
+    },
+    {
+      "file": "presets-oficiales-20261012.json",
+      "bytes": 10134,
+      "sha256": "46f5d13d2b895974888a9270c0c212628327facdee3bb9ff3ffc2c7970f49290"
+    },
+    {
+      "file": "workflows-oficiales-20261012.json",
+      "bytes": 82345,
+      "sha256": "2912c226aa5cfa43c4698819bd19a6be8f3ed5a036eb9593582872f811ff8019"
+    }
+  ],
+  "proof": {
+    "fixture_author_gates": 17,
+    "fixture_independent_gates": 17,
+    "matrix_rows": 41,
+    "models_catalog": 127,
+    "recipes_catalog": 63,
+    "QA": "documentation/offlinepreparationonly0ALTA;costcorrectionresolved",
+    "external_actions": "nogeneration/publication/accountcreation/voice/training/installation/infra/loops/spend"
+  },
+  "permissions": "Sergio12oct:Solo mostrar;publicación/calendariopendientes. CuotaCodexrenewed notHiggsfieldbudget. K4/R3originalPNGexactosreportedorigin;paths/commitnotreceived,no403retry/noarchive",
+  "limitations": [
+    "allformatsnotmastered",
+    "historicalmetricsnotrecomputed",
+    "currentIGaccess/operation/insightsnotverified",
+    "newidentity/newaccount/endtoendreplicationnotexecuted",
+    "AIhostresolvernot_found",
+    "catálogoavailable notQAapproved"
+  ],
+  "how_to_review": "AUDITORIA-APRENDIZAJE.txt -> MATRIZ-FORMATOS.csv -> KIT-REPLICABLE.txt -> ensayoresults/QA;rawofficielsnapshots evidence,not copiedoperational skills"
+}

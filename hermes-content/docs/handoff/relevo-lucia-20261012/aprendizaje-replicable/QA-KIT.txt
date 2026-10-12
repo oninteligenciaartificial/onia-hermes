@@ -1,0 +1,33 @@
+ÚLTIMO READBACK:41 filas JSON/CSV confirmado. UGC review completa los seis perfiles oficiales; todos no demostrados en Lucía actual, sin outputs ni aprobación. AI host resolver NOT_FOUND queda explícito como concepto no resuelto; no disponibilidad ni dominio inferidos. Sin nuevo hallazgo material.
+
+CIERRE FINAL TRAS READBACK — 12-oct-2026
+APROBADO solo documentación y preparación offline del kit. 0 ALTA y ninguna corrección material pendiente. M1 resuelto: AUDITORIA punto10 y costes G2 de evidencia/matriz dejan454,76 como estimación superada, disminución de saldo null y86,5 separado como gasto reconciliado.
+Matriz ampliada:41/41 filas JSON/CSV, nueve subformatos nuevos con no_demostrado_Lucia_actual, no_aprobacion_general, sin eventos/outputs. workflows-oficiales contiene instrucciones leídas; fuentes de herramientas/contratos soportan disponibilidad, no ejecución ni resultados de casting/persona. No se infiere dominio, costes/login, nueva identidad o publicación.
+Ensayo independiente17/17 previo conservado, no repetido por cambio documental. Las fuentes/58outputs/24links validados antes no cambiaron con nueve filas sin outputs. ObservaciónB1 queda como límite de sanitycheck, no bloqueo. SOLO MOSTRAR sigue vigente.
+
+HISTORIAL DE REVISIÓN (M1 abajo ya RESUELTO)
+
+QA independiente final del kit — 12-oct-2026
+
+META: auditar documentación, fuentes, matrices y ensayo de preparación existente. PRUEBA: ejecución independiente y hashes/links. PARADA: dictamen del kit sin nueva generación, gasto, instalación, secretos, infraestructura ni publicación. Modelo configurado Sol medium heredado; modelo efectivo no observable.
+
+VEREDICTO
+0 ALTA. Una corrección material MEDIA antes de commit (M1 abajo). Revisión documental y ensayo terminados; aprobación limitada al kit de documentación/preparación offline una vez corregido M1. SOLO MOSTRAR sigue vigente.
+
+PRUEBAS NUEVAS
+Ejecutado ensayo_replicacion.py --repo /workspace/onia-hermes --out /workspace/work/lucia-aprendizaje/ensayo-QA-independiente.json: exit0,17/17PASS. Medidas idénticas al resultado del autor: masterSHA,2983672bytes,caption2110UTF16,1080x1920,15s,24fps360cuadros,decodificación completa. Rechazos de seis acciones sensibles y discrepancia hash. Cero generaciones, personas/cuentas/posts/gastos y llamadas externas. No se repitió la extracción/QA visual ya cerrada.
+Fuentes heredadas8/8 SHA256+tamaño+blob coinciden fuente3566e5; outputs58/58 tamaño+blob coinciden. Links tipados de MATRIZ-FORMATOS24/24 existen en commit fuente; CSV32filas coincide JSON32. Matriz modelos127entradas. Prompt K1 snapshot:1514car,seed409508,seis inputs. Snapshot oficial acredita lectura de job existente, no nuevo render ni QA del resultado por esta auditoría.
+
+HALLAZGO M1 MATERIAL MEDIA
+AUDITORIA-APRENDIZAJE.txt punto10 dice «balance histórico541,26→454,76» y evidencia-heredada.json eventoG2 cost.balance / all_media_lot_balance_decrease_cr convierte454,76 en medida. Skill lucia §6 y cola corrigen explícitamente que454,76 era resta541,26−86,5, NO saldo medido. Saldo real438,17, gastos86,5 reconciliados por transactions. Corregir:454,76=estimación aritmética histórica superada;86,5=gasto histórico reconciliado, no caída de dos saldos medidos. No usar ese remanente para autorización.
+
+OBSERVACIÓN B1 BAJA
+wrong_master_rejected compara fixture real con hashcero y no llama un validador general de archivos mutados. Adecuado como sanity check local; no afirmar rechazo genérico de cualquier entrada corrupta. El kit ya limita su ensayo al fixture existente.
+
+CRITERIOS REVISADOS
+Catálogo127/63recetas se distingue de uso, dominio, QA, coste y permisos. No se atribuye dominio general ni todaUI. Hoja casting kit-fotos-hoja.jpg es evidencia agregada; el texto no finge output específico de cadajob. Nueva plantilla mantiene identidad/refs/voz/cuenta vacías y derechos no verificados; separada de fixtureLucía. No traslada SoulID/rostro/voz a nueva persona.
+Fuentes antiguas FLUJO comercial diario/LUCIA se contextualizan frente PLANv5/skill0-ter; no reaparece producto obligatorio, profesión ni metric demos como resultado actual. Cuenta propia documental no prueba acceso u operación; selftest no valida login. Etiqueta enviada no confirma IAreal. No hay mediaID/permalink/insights nuevos.
+Marcela decidida no autoriza voz223car; calendario sigue propuesto; SOLO MOSTRAR no se revoca. K4/R3 exactos pendientes de rutas/commit; no403 ni pérdidaWork inferida. Base64preview truncado910bytes preservado sin reparar, MP4 íntegro disponible.
+
+SIGUE
+Autor corrige M1 en síntesis y evidencia estructurada, sincroniza matriz si deriva campos afectados y devuelve para readback estrecho; no rerender, regeneración ni nueva publicación requerida.
