@@ -1,0 +1,423 @@
+{
+  "tipo": "acta mínima sanitizada de recepción",
+  "fecha": "2026-10-12",
+  "commit_fuente": "9623308924c6f2f7de154a49f561a0aae3f1b6a1",
+  "resultado": "PASS conservación: 49/49 recibidos y abiertos",
+  "cotejo": {
+    "archivos": 49,
+    "sha256_originales_coincidentes": 43,
+    "blobs_git_originales_coincidentes": 48,
+    "sha256_nuevos_de_png": 6,
+    "faltantes": 0,
+    "fallos": 0,
+    "alcance": "Un JSON original del lote y 48 fuentes ya exportadas"
+  },
+  "QA": {
+    "independiente": true,
+    "resultado": "PASS",
+    "png_integridad": 19,
+    "xlsx": "ZIP/CRC/XML: 3 hojas; sin prueba de fórmulas o render",
+    "limite": "Recepción e integridad de archivos; no aprobación de contenido ni prueba funcional"
+  },
+  "artefactos": [
+    {
+      "nombre": "BOT-RESPUESTAS-D7-D11.md",
+      "bytes": 8258,
+      "sha256": "6983e075c0b5cc62360a6d8c50c5defb2fbec8e13a8fef3bdf1e03bef7c988a1",
+      "sha256_cotejado_con_origen": true,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "G1-1-hoja.md",
+      "bytes": 8873,
+      "sha256": "0e4b2ad8c12779706dc374da0887e3aa4bbf725e7938c93d0fff2aa826b2e2cc",
+      "sha256_cotejado_con_origen": true,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "G1-1.json",
+      "bytes": 10146,
+      "sha256": "476b330a378e6cbdc441127ee81bce1c740326fcd376ef10518f63ac79a2e6fc",
+      "sha256_cotejado_con_origen": true,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "G1-2-hoja.md",
+      "bytes": 9367,
+      "sha256": "967084cbba9d07eaa1806f28fa7211bcf8ee64f678fc15590c48e208e07a39fc",
+      "sha256_cotejado_con_origen": true,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "G1-2.json",
+      "bytes": 11198,
+      "sha256": "ca8047be17f1c97a9177dc4ceea47740da46e366c50240aa8a038d55fdde11cd",
+      "sha256_cotejado_con_origen": true,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "G1-3-hoja.md",
+      "bytes": 7827,
+      "sha256": "2e56d05b12b5d6fea3c1bdad2f279a325ab543881db1e890fdb46fdd29d78825",
+      "sha256_cotejado_con_origen": true,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "G1-3.json",
+      "bytes": 8093,
+      "sha256": "512822396c0ce50129245a0b79210056aed02b0822f3fe722f8c98d7dfd31776",
+      "sha256_cotejado_con_origen": true,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "G1-4-hoja.md",
+      "bytes": 9456,
+      "sha256": "dc02b69aa74f1e66c11f786d9c1d788c082d0f3cf66a10972c6a5a1575959a89",
+      "sha256_cotejado_con_origen": true,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "G1-4.json",
+      "bytes": 10750,
+      "sha256": "a01cfe908705cd4e951eb859463e5fdee89b595bd1845fd4cfd13e0ba9ada13a",
+      "sha256_cotejado_con_origen": true,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "G1-5-hoja.md",
+      "bytes": 7973,
+      "sha256": "1229b6077467e5a2672f8b1d02579ace4cfdefda8727dd73e05c120bf60145de",
+      "sha256_cotejado_con_origen": true,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "G1-5.json",
+      "bytes": 8801,
+      "sha256": "b1dd330fcec2422e9f7b77c8fbac88202373fa2e2312f3d3da8f3738074a8fc9",
+      "sha256_cotejado_con_origen": true,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "LISTA-PARA-MOSTRAR-RESPUESTAS-DEL-BOT.md",
+      "bytes": 12550,
+      "sha256": "fb253c47c842ebd031b1695c724889e9587d2a37205b37cdaebe1425e8ebb187",
+      "sha256_cotejado_con_origen": true,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "LISTA-PARA-MOSTRAR-V2.md",
+      "bytes": 9091,
+      "sha256": "ff19d5dd583d8538743eee4111e7dc5201abf1a4a126a1e12f716e35853bbd28",
+      "sha256_cotejado_con_origen": true,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "PARA-GRABAR.txt",
+      "bytes": 3748,
+      "sha256": "40c3e0f77db2987f92622dbd3a2760d919b85c3dd5a5ce3f62355e811375e618",
+      "sha256_cotejado_con_origen": true,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "PLAN-VERIFICACION-G05-G06.md",
+      "bytes": 8793,
+      "sha256": "91b7966b92ff010a8a71967749b92c2b678ac180b901020874674720741045d2",
+      "sha256_cotejado_con_origen": true,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "PLANILLA-PRUEBA-1.xlsx",
+      "bytes": 17240,
+      "sha256": "fbb39a0b644ba0c69aa27c90bfb06b0a8f5496f671fe751cc5d55e97394918da",
+      "sha256_cotejado_con_origen": true,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "ventas-V01-tabla-evidencia-codigo.md",
+      "bytes": 3519,
+      "sha256": "cb6adfe53c5c3d408f8cefca77fe1e99a1a85d51f831fcfda06710b790198b1a",
+      "sha256_cotejado_con_origen": true,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "ventas-V02-rutas-y-test-campana.md",
+      "bytes": 2232,
+      "sha256": "74b8251b7ec2c0ff4c472f823cce50d9f3928415c99152b8157aaea045eb0a96",
+      "sha256_cotejado_con_origen": true,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "ventas-V03-fichas-competencia.md",
+      "bytes": 4276,
+      "sha256": "17a33361e6814443107081efe520c55480c3e044d133db17dd6524af5ae6e2fb",
+      "sha256_cotejado_con_origen": true,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "G1-1-hoja.png",
+      "bytes": 1356833,
+      "sha256": "c2f33f8f18debed85977c760cc16e6ab905055c27d9004f9d4aded0c0d0d357d",
+      "sha256_cotejado_con_origen": false,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "G1-2-hoja.png",
+      "bytes": 1607212,
+      "sha256": "a6c3717d0eb4623b0fbe25aa0f4306f8cac1140a8b46fa55488e210114fa3519",
+      "sha256_cotejado_con_origen": false,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "G1-3-hoja.png",
+      "bytes": 549902,
+      "sha256": "8aeb67b6ed68857104e53349442ee858160c0704f97da6d2fbc957eb463bca82",
+      "sha256_cotejado_con_origen": true,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "G1-4-hoja.png",
+      "bytes": 1020597,
+      "sha256": "67fbfc9a6800e5796a940b76c914e77a6771e1cfe31cd35a9dc06f779cddb06d",
+      "sha256_cotejado_con_origen": true,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "G1-5-hoja.png",
+      "bytes": 741495,
+      "sha256": "9d2c36fc6c905ee91f96590742276378f29152d4b8361d31666b20f3b41e581f",
+      "sha256_cotejado_con_origen": true,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "G1-1-c0.png",
+      "bytes": 1049168,
+      "sha256": "8cde72ac8cd471494abefd76ccdf779e0527f46b2cc34fa93d382d23061e82d7",
+      "sha256_cotejado_con_origen": false,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "G1-1-c1.png",
+      "bytes": 1036051,
+      "sha256": "d077dab32a9d3629b2923b38a161caafa4fcdb63a304d3344a3db8da14bfade6",
+      "sha256_cotejado_con_origen": true,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "G1-1-c2.png",
+      "bytes": 1067582,
+      "sha256": "017ef356240e9d3e832569c357e664f0144ef90a63fc90723d6b7914de029730",
+      "sha256_cotejado_con_origen": false,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "G1-5-c0.png",
+      "bytes": 716673,
+      "sha256": "9eb671d6bd507c442834f9a36fc3a9558600544493663b47eb50e52a2cd87f82",
+      "sha256_cotejado_con_origen": true,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "G1-5-c1.png",
+      "bytes": 721190,
+      "sha256": "141a998073ce129f2bdd73e1a337a30d4ab4eaf24cc5d30627951abc4d489304",
+      "sha256_cotejado_con_origen": true,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "G1-5-c2.png",
+      "bytes": 49470,
+      "sha256": "018a8aceebf2b807b0ec7e9ffde537a4f8948eaa0f1b068534192ac8235f6d22",
+      "sha256_cotejado_con_origen": true,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "G1-3-feed.png",
+      "bytes": 363228,
+      "sha256": "1b07aba21ee244206d02c941cdfc085de55595485af727958a6d69dc597de5c2",
+      "sha256_cotejado_con_origen": true,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "G1-2-c0.png",
+      "bytes": 1011102,
+      "sha256": "5806517b144ac2a37716429a5e8898cfbe2caa657395008f213b935b6688a71a",
+      "sha256_cotejado_con_origen": true,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "G1-2-c1.png",
+      "bytes": 35449,
+      "sha256": "b7404cd0ac6b4cb0a710cb3f8f0c85f9e48fc8aba1f3ee5cb0888bd713b66b16",
+      "sha256_cotejado_con_origen": true,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "G1-2-c2.png",
+      "bytes": 1062531,
+      "sha256": "3cfc7e2698f733a733e45664b226d0880b7bdcb2582f4d0844c43c355aa4d3d6",
+      "sha256_cotejado_con_origen": false,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "G1-2-c3.png",
+      "bytes": 92278,
+      "sha256": "ade0c85169a9bcb6b849069f1cb0dea14befedfdb011864c4e8ea14f79e20c2b",
+      "sha256_cotejado_con_origen": true,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "G1-4-c0.png",
+      "bytes": 1059690,
+      "sha256": "1e2d87a90af26f33df5839703a34c72b54e30d0112129e6ade76918a853dc443",
+      "sha256_cotejado_con_origen": false,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "G1-4-c1.png",
+      "bytes": 1034614,
+      "sha256": "13e8119e33e8ba4839d0517e016db77134678febcc7831404aac0b6f8451c376",
+      "sha256_cotejado_con_origen": true,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "G1-4-c2.png",
+      "bytes": 52289,
+      "sha256": "8f18c94cdd2a870fa63f14ac76a954bcbe90eeafdf8a98738f98015b40211d4e",
+      "sha256_cotejado_con_origen": true,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "OBJECIONES-8-CLINICAS-11OCT.md",
+      "bytes": 10599,
+      "sha256": "280f22a17ec27bf94cece7ae939f600ebc0c794043c7ee6791aa316d7df84e49",
+      "sha256_cotejado_con_origen": true,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "OBJECIONES-8-CLINICAS-11OCT.json",
+      "bytes": 9221,
+      "sha256": "b5769df4aa91051388cfdf726bd6eef1a2223acd1c517f57ca6e2ba7a1e566bd",
+      "sha256_cotejado_con_origen": true,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "CAMPANA-1-LISTA-PARA-CREAR.json",
+      "bytes": 46951,
+      "sha256": "6bf071c34f561c7816b77bec2c96f2875d4b2336fb84686adc64d7a0ea8a0996",
+      "sha256_cotejado_con_origen": true,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "campana-lista.test.mjs",
+      "bytes": 35121,
+      "sha256": "1f1aba9ca05f73941c11021a36ab04931bf1a7155ef859310a7afcba432b3a08",
+      "sha256_cotejado_con_origen": true,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "ventas-pauta.md",
+      "bytes": 16011,
+      "sha256": "15db1acaefaaf6ff7e656d06961644c1855106fd46c60a2392e22e20f381ea74",
+      "sha256_cotejado_con_origen": true,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "mercado-y-pauta.md",
+      "bytes": 63823,
+      "sha256": "32a266f64fa0a96722f039e86035c9d665828f43d213cbdd839161b191108d97",
+      "sha256_cotejado_con_origen": true,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "ONIA_CATALOGO_DE_VENTA.md",
+      "bytes": 9194,
+      "sha256": "3f1ef9ebf7c39043ed223368cd0a9bd6bbd1d0669bebc15a09bd134b3ac23a32",
+      "sha256_cotejado_con_origen": true,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "SEGUIMIENTO-LEADS.md",
+      "bytes": 22822,
+      "sha256": "db7c0797bf0811e19447a64f7d32aba248adc37406a966e2e74b70fe04dfeef0",
+      "sha256_cotejado_con_origen": true,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "PRUEBA-1-PIEZAS.md",
+      "bytes": 7828,
+      "sha256": "7a436087085b7dc192ab61c41056e9abfa3ff5e9caa18405c987473db4fcd699",
+      "sha256_cotejado_con_origen": true,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "VSL-CORTO-TABLA-DE-CORTES.md",
+      "bytes": 6653,
+      "sha256": "cbda47b89e72f4388c9120977c4d5bafa3e9e7f524fdcf6ccf0bfb010f340fd9",
+      "sha256_cotejado_con_origen": true,
+      "blob_git_cotejado_con_origen": true,
+      "apertura": "PASS"
+    },
+    {
+      "nombre": "MADRE-MARKETING-lote-11oct.json",
+      "bytes": 10773,
+      "sha256": "66c8248a7871e3d5e9ae5209e6eaa069691c519bcb61b262f6cf7aaf13e72cd3",
+      "sha256_cotejado_con_origen": true,
+      "blob_git_cotejado_con_origen": false,
+      "apertura": "PASS"
+    }
+  ],
+  "pendientes_funcionales": [
+    "Demo funcional sin verificar",
+    "Validación de claims y aprobación de piezas pendientes",
+    "Inventario actual de campañas sin verificar",
+    "Asociación de medios externos pendiente; no constituyen creación del lote"
+  ],
+  "parada": "Sin gasto, campañas nuevas, cambios de presupuesto, contacto, publicación, main/merge ni archivo o borrado de orígenes"
+}
