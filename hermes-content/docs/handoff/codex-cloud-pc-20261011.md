@@ -2,7 +2,7 @@
 
 **META vigente:** preparar ONIA SaaS con ejecución cloud que continúe con la PC apagada, madres supervisoras y sin retomar producción ni contratar infraestructura.
 **PRUEBA DE HECHO:** informe contrastado con referencias Git, observaciones de UI/CLI comunicadas por la madre y documentación oficial; piloto con resultados pendientes.
-**REGLA DE PARADA vigente:** ejecutar los contratos autorizados de carriles; Marketing puede publicar piezas YA APROBADAS en cuentas/calendario acordados. Piezas nuevas/gasto requieren OK; no deploy, rotación de secretos, accesos/túneles nuevos ni loops por inferencia. Actualización y commit/push SOLO de este registro autorizados; sin código de producto.
+**REGLA DE PARADA vigente — PRIMERO ORDENAR:** suspensión de nuevos lotes enviada a Desarrollo, madre Marketing y setup de entorno; no publicar/provisionar mientras se ordena. Preservar avances, sin nuevas cadenas. Permisos anteriores de piezas aprobadas no habilitan ignorar esta pausa. Commit/push SOLO de este registro autorizado, sin producto.
 
 ## VIGENTE: PC APAGADA — pruebas y decisiones posteriores al piloto
 
@@ -214,3 +214,21 @@ Orden de Sergio: sustituir los 4 workers Work por Codex Cloud nativo. **NO archi
 Equipos reales comunicados: Lucía `/root/lucia_continuidad` y `/root/lucia_qa`; Ventas `/root/analista_campanas` y `/root/validador_claims`, ACK/resultados. Hermes ZIP incluye límites/resultados de 2 subagentes; IDs no extraídos. Modelos Work no observables; no heredar agentes como activos en sustitutos. Máximo 2 simultáneos donde aporten, programación Astra medio, apoyo Sol/Luna mecánico configurable.
 
 **Permisos preservados:** madres asignan/revisan/resumen, workers ejecutan. Publicar solo piezas YA aprobadas en cuentas/calendario acordados, verificando versión y evitando duplicados; nuevas piezas/gasto con OK. Este relevo no autoriza instalaciones, traslado de secretos, nuevos loops, contactos, deploy ni producción. Cada nuevo worker devuelve ACK de repo/ref/skills, artefactos recuperados con SHA y bloqueo antes de continuar; conservar Work hasta esa prueba.
+
+## ORDEN VIGENTE: ordenar antes de continuar — inventario y matriz
+
+Sergio pidió **PRIMERO ORDENAR**. Suspensión de nuevos lotes enviada a Desarrollo, madre Marketing y setup; conservar entregables sin nuevas cadenas, publicación ni provisioning. Borrador de entorno Hermes creado, ID `01a12dc0-93a3-7451-87d9-3d8d99dec036`; **no provisionar/publicar todavía**. Este estado sustituye los prompts anteriores de arranque inmediato.
+
+**Inventario Claude real comunicado:** transcript local `35353b71-e12a-46e4-834f-804cb833a7ab`, MADRE DESARROLLO-INFRA, Opus 5.5: 30 llamadas Agent, 70 SendMessage, 23 CronCreate. Madre Marketing `5a84570d-c843-4c29-9257-389aca199809`, Opus 5.5: 9 Agent, 64 SendMessage, 9 subtranscripts Sonnet 5.5, ronda cada 20 min. Son conteos de llamadas/transcripts, **no agentes simultáneos ni loops vivos**. Cuota Opus agotada en últimas rondas impide garantizar continuidad del loop; no reactivar Claude desde el inventario.
+
+| Rol | Política vigente |
+|---|---|
+| Madres | Astra: coordinación, supervisión y QA; NO implementación |
+| Platform y toda programación | Astra, effort medio |
+| Ejecución marketing, edición y ventas | Sol 6.1, effort medio; código requerido se delega a Astra |
+| Mecánica cerrada/verificable | Luna, low |
+| QA independiente | Sol; escalación Astra para alto riesgo |
+
+Es **política**, no prueba de haber cambiado modelo Work. Los cuatro Work con modelo no observable quedan candidatos a sustitución por Codex Cloud; no archivarlos hasta recuperación verificada. Único Desarrollo comprobado: Astra y subagentes reales Astra implementación/Sol QA. No asignar Astra indiscriminadamente a ventas/edición ni afirmar modelos de futuros sustitutos sin configuración/evidencia.
+
+Los prompts de relevo entregados antes que indicaban Astra para los cuatro carriles quedan corregidos: Marca/Lucía/Ventas usan Sol 6.1 medio para su oficio, Hermes QA Sol con escalación Astra, y cualquier programación Astra medio. Sin más despachos hasta concluir orden e inventario con las madres.
