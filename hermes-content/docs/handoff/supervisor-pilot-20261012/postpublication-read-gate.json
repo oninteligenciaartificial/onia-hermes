@@ -1,0 +1,27 @@
+{
+  "checked_utc": "2026-10-12T19:37:48.448144+00:00",
+  "source_config_id": "62649aa4-3f3f-42dd-b063-2475cdc094a9~cecfg_6acc3979511481988f222363b6285de6",
+  "source_config_version_id": "62649aa4-3f3f-42dd-b063-2475cdc094a9~cecfgver_6acd2a3aefe88198b1ce9a7ecc43d3d3",
+  "spec_revision": 12,
+  "observed_revision": 12,
+  "observations_current": true,
+  "network_state": "enforced",
+  "chatgpt_effective_allowed": false,
+  "policy_file_chatgpt_rules": [],
+  "cli_command": "codex cloud list --json --limit 20",
+  "cli_execution_count": 1,
+  "network_permission": "official per-command",
+  "exit_code": 1,
+  "stdout_bytes": 0,
+  "error_metadata": {
+    "list_tasks_failed": true,
+    "error_sending_request": true
+  },
+  "http_status": "not_observed",
+  "auth_state": "not_observed",
+  "returned_task_ids": [],
+  "four_exact_comparisons": "not_observable_without_response",
+  "Hermes_thread_uuid": "not_injected",
+  "read_gate": "blocked_old_effective_policy_and_transport",
+  "wake_attempted": false
+}
