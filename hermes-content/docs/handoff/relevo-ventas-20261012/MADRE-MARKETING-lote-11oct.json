@@ -1,0 +1,238 @@
+{
+  "responsable": "MADRE MARKETING",
+  "fecha_local": "2026-10-11",
+  "META": "Cerrar lote Ventas/Pauta y conservar handoff verificado sin nuevas cadenas.",
+  "PRUEBA": "5 objeciones y 5 briefs originales recuperados; spec v2 y dependencias revisadas por dos subagentes reales; accesos probados en este entorno.",
+  "REGLA_DE_PARADA": "Detener cualquier envío, creación o activación Meta, cambio presupuestario, publicación o afirmación sin fuente. La selección de creativos y gasto requieren decisión explícita; este lote solo prepara.",
+  "fuentes": [
+    {
+      "ruta": "hermes-content/sales-kit/OBJECIONES-8-CLINICAS-11OCT.md",
+      "rama": "claude/onia-ventas-pauta-rmdv5j",
+      "sha": "137da9ae267826342f04aeed2c4bd90dade3be7c",
+      "url": "https://github.com/oninteligenciaartificial/onia-hermes/blob/claude/onia-ventas-pauta-rmdv5j/hermes-content/sales-kit/OBJECIONES-8-CLINICAS-11OCT.md"
+    },
+    {
+      "ruta": "hermes-content/carousels/briefs/ads/prueba1-v2/LISTA-PARA-MOSTRAR-V2.md",
+      "rama": "claude/onia-ventas-pauta-rmdv5j",
+      "sha": "a5b7ba5459635651f16d314628a20a14bcecd189",
+      "url": "https://github.com/oninteligenciaartificial/onia-hermes/blob/claude/onia-ventas-pauta-rmdv5j/hermes-content/carousels/briefs/ads/prueba1-v2/LISTA-PARA-MOSTRAR-V2.md"
+    },
+    {
+      "ruta": "hermes-content/carousels/briefs/ads/CAMPANA-1-LISTA-PARA-CREAR.json",
+      "rama": "claude/onia-ventas-pauta-rmdv5j",
+      "sha": "b051baabf402d99d1b90b2914702a9e602830232",
+      "url": "https://github.com/oninteligenciaartificial/onia-hermes/blob/claude/onia-ventas-pauta-rmdv5j/hermes-content/carousels/briefs/ads/CAMPANA-1-LISTA-PARA-CREAR.json"
+    },
+    {
+      "ruta": "hermes-content/carousels/briefs/ads/prueba1-v2/G1-1.json",
+      "rama": "claude/onia-ventas-pauta-rmdv5j",
+      "sha": "07803caf362867a1075b0c3f93aff23182c4c06b",
+      "url": "https://github.com/oninteligenciaartificial/onia-hermes/blob/claude/onia-ventas-pauta-rmdv5j/hermes-content/carousels/briefs/ads/prueba1-v2/G1-1.json"
+    },
+    {
+      "ruta": "hermes-content/carousels/briefs/ads/prueba1-v2/G1-2.json",
+      "rama": "claude/onia-ventas-pauta-rmdv5j",
+      "sha": "bf9d8c3d4eadbf6f110832260443641e3bf77042",
+      "url": "https://github.com/oninteligenciaartificial/onia-hermes/blob/claude/onia-ventas-pauta-rmdv5j/hermes-content/carousels/briefs/ads/prueba1-v2/G1-2.json"
+    },
+    {
+      "ruta": "hermes-content/carousels/briefs/ads/prueba1-v2/G1-3.json",
+      "rama": "claude/onia-ventas-pauta-rmdv5j",
+      "sha": "3f76332cce5e8eff5c477fdeda82444ec2de7b06",
+      "url": "https://github.com/oninteligenciaartificial/onia-hermes/blob/claude/onia-ventas-pauta-rmdv5j/hermes-content/carousels/briefs/ads/prueba1-v2/G1-3.json"
+    },
+    {
+      "ruta": "hermes-content/carousels/briefs/ads/prueba1-v2/G1-4.json",
+      "rama": "claude/onia-ventas-pauta-rmdv5j",
+      "sha": "691e232eefa71d0ca7f16fbb8ce1f88fb5d68bd5",
+      "url": "https://github.com/oninteligenciaartificial/onia-hermes/blob/claude/onia-ventas-pauta-rmdv5j/hermes-content/carousels/briefs/ads/prueba1-v2/G1-4.json"
+    },
+    {
+      "ruta": "hermes-content/carousels/briefs/ads/prueba1-v2/G1-5.json",
+      "rama": "claude/onia-ventas-pauta-rmdv5j",
+      "sha": "2c465cc314ffa0285b061ff790671f028f02c1ab",
+      "url": "https://github.com/oninteligenciaartificial/onia-hermes/blob/claude/onia-ventas-pauta-rmdv5j/hermes-content/carousels/briefs/ads/prueba1-v2/G1-5.json"
+    },
+    {
+      "ruta": "scripts/campana-lista.test.mjs",
+      "rama": "claude/onia-ventas-pauta-rmdv5j",
+      "sha": "1d7c25914ac7017ae7f453c0d8b2dd84442b6dd4",
+      "url": "https://github.com/oninteligenciaartificial/onia-hermes/blob/claude/onia-ventas-pauta-rmdv5j/scripts/campana-lista.test.mjs"
+    },
+    {
+      "ruta": "hermes-content/carousels/briefs/ads/prueba1-v2/PLAN-VERIFICACION-G05-G06.md",
+      "rama": "claude/onia-ventas-pauta-rmdv5j",
+      "sha": "16bfa55f9a8dcdd108340d0836ac9c950ad8348e",
+      "url": "https://github.com/oninteligenciaartificial/onia-hermes/blob/claude/onia-ventas-pauta-rmdv5j/hermes-content/carousels/briefs/ads/prueba1-v2/PLAN-VERIFICACION-G05-G06.md"
+    }
+  ],
+  "recuperacion": {
+    "objeciones": 5,
+    "clinicas_destinatarias_previstas": 8,
+    "respuestas_rehechas": 0,
+    "advertencia": "Son 5 objeciones probables para 8 borradores; no evidencia de 8 clínicas que hayan respondido. Registro de demos §7 vacío."
+  },
+  "objeciones_existentes": [
+    "precio",
+    "sistema/cuaderno",
+    "tiempo",
+    "factura",
+    "datos"
+  ],
+  "preparacion_spec": {
+    "estado": "Spec canónica ya reescrita por Claude a 2026-10-11-v2; selección Sergio aún pendiente. No se modifica spec.",
+    "sustituye": "A1 obsoleto; spec vigente propone cuatro piezas, lista recomienda tres",
+    "candidatos": [
+      {
+        "pieza": "G1-4",
+        "codigo": "D10",
+        "formato": "video 31 s"
+      },
+      {
+        "pieza": "G1-3",
+        "codigo": "D9",
+        "formato": "imagen 1:1",
+        "pendiente": "foto nueva"
+      },
+      {
+        "pieza": "G1-5",
+        "codigo": "D11",
+        "formato": "microvideo 10 s 4:5"
+      }
+    ],
+    "reserva": {
+      "pieza": "G1-1",
+      "codigo": "D7"
+    },
+    "excluida": {
+      "pieza": "G1-2",
+      "codigo": "D8",
+      "motivo": "G-05 sin verificar"
+    },
+    "filas_comunes_a_verificar": [
+      "B-01",
+      "B-02",
+      "C-01",
+      "C-02",
+      "D-01",
+      "E-01",
+      "G-01",
+      "G-04",
+      "G-06",
+      "G-11",
+      "L-05"
+    ],
+    "regla": "No reescribir lo ya cerrado. Reconciliar número/piezas solo después de elección Sergio. G1-2 requiere G-05 antes de crear. Recaptura de 5 piezas y VSL C1-C7 pendientes de evidencia demo.",
+    "propuestos_spec": [
+      {
+        "pieza": "G1-4",
+        "codigo": "D10",
+        "formato": "video 31 s"
+      },
+      {
+        "pieza": "G1-3",
+        "codigo": "D9",
+        "formato": "imagen 1:1",
+        "pendiente": "foto nueva"
+      },
+      {
+        "pieza": "G1-5",
+        "codigo": "D11",
+        "formato": "microvideo 10 s 4:5"
+      },
+      {
+        "pieza": "G1-1",
+        "codigo": "D7",
+        "formato": "selfie 28 s"
+      }
+    ]
+  },
+  "meta": {
+    "cuenta": "1073680778314945",
+    "verificacion_actual": "BLOQUEADA",
+    "evidencia": "Navegador cloud redirigió de Ads Manager a business.facebook.com/business/loginpage; visible Log into Ads Manager. Registro de herramientas: sin Meta_ads.",
+    "ultimo_estado_documentado": {
+      "fecha": "2026-10-11",
+      "fuente": "handoff mercado-y-pauta rama Claude",
+      "campanas": 0,
+      "tarjeta": false,
+      "instagram": "sin vincular",
+      "go_no_go": "NO-GO, 0 de 9 filas; datos documentados, no revalidados en vivo"
+    }
+  },
+  "proximos_pasos_sin_aprobaciones": [
+    "Verificar Meta cuenta y campañas read-only después de login/MFA cloud coordinado; no afirmar conteos actuales antes.",
+    "Verificar evidencia demo y C1-C7; recapturar originales cuando accesibles.",
+    "Conservar objeciones y briefs cerrados; reconciliar spec/lista/cola solo tras selección Sergio."
+  ],
+  "decisiones_y_aprobaciones_separadas": [
+    "Sergio: seleccionar piezas; spec propone 4, lista recomienda 3. Grabación pendiente.",
+    "Sergio: duración 20/30 min, firma bot, responsable y plazo de respuesta, Instagram.",
+    "Gasto y contacto: fuera del lote; necesitan autorizaciones concretas posteriores."
+  ],
+  "coste_nuevo": 0,
+  "produccion_modificada": false,
+  "envios": 0,
+  "instalaciones": 0,
+  "modelos": "Modelos/effort efectivos Work y subagentes no observables; sin override ni programación.",
+  "acceso": [
+    {
+      "servicio": "GitHub",
+      "estado": "probado",
+      "evidencia": "5 briefs + spec leídos con SHA"
+    },
+    {
+      "servicio": "Drive",
+      "estado": "listado probado; bytes/assets v2 no verificados",
+      "evidencia": "Videos Onia Octubre: 6 MP4 UUID; sin asociación verificada G1-*"
+    },
+    {
+      "servicio": "Higgsfield",
+      "estado": "perfil autenticado probado",
+      "evidencia": "get_profile isError=false; sin generación"
+    },
+    {
+      "servicio": "Meta",
+      "estado": "lectura cuenta/campañas bloqueada",
+      "evidencia": "login visible, sin conector; handoff solicitado una sola vez; no cookies PC ni puente local visible"
+    }
+  ],
+  "equipo": [
+    {
+      "id": "/root/analista_campanas",
+      "rol": "Analista de campañas",
+      "herramienta": "collaboration.spawn_agent",
+      "ack": true,
+      "estado": "completed",
+      "evidencia": "GitHub cola SHA 7b21f5ca85a348bea80d12b4d41d9357c7ec3bf7; registry Meta ausente"
+    },
+    {
+      "id": "/root/validador_claims",
+      "rol": "Validador claims/manifest",
+      "herramienta": "collaboration.spawn_agent",
+      "ack": true,
+      "estado": "completed"
+    }
+  ],
+  "demo": "Refresco lunes 12-oct 07–11 UTC previsto, no completado por evidencia disponible; sin sesión QA accesible. No se ejecuta seed/cron.",
+  "handoff": {
+    "estado": "LOTE CERRADO; pendientes transferibles, no se inician",
+    "version": "handoff-final-2026-10-11",
+    "repo": "https://github.com/oninteligenciaartificial/onia-hermes",
+    "rama": "claude/onia-ventas-pauta-rmdv5j",
+    "drive": "https://drive.google.com/drive/folders/1Iks0iUsLC5wlznDF6Bbo3VYkekclV987",
+    "qa": "Revisión documental real; no suite local ejecutada (sin checkout/dependencias); gates históricos de Claude no se atribuyen a este lote.",
+    "cambios_sin_guardar": "Ningún cambio de repo o producción realizado. Manifest local actualizado y persistido; contradicciones lista/cola aún no corregidas en repo, transferibles.",
+    "contratos_pendientes": [
+      "Revisar cuenta/campañas Meta tras login/MFA cloud; pestaña 3 con handoff ya solicitado.",
+      "Evidencia de refresco demo, G-06 para cuatro piezas, G-05 solo G1-2, C1-C7 para VSL.",
+      "Selección Sergio antes de reconciliar spec/lista/cola; no repetir objeciones.",
+      "Tras datos demo y grabaciones: recaptura y render originales; sin publicación ni gasto en este contrato."
+    ],
+    "reemplazo_cloud": "Ruta Codex Cloud nativo en verificación por separado; migración/disponibilidad no confirmadas.",
+    "marca_personal": "Fuera del carril Ventas/Pauta. Referentes compartidos por mrsatiras, comunidad Erik Taveras y workshop prepago siguen pendientes en Marca; no investigados ni lanzados aquí, no reiniciar. Evidencia recibida por contexto: stories eriktaveras 4005709473972822446; posts DeP64W6JynO, DeTY4y4mwCk; tercer URL DeWaJ8PgQ truncado, no completar por inferencia. Resultado N02-preview-revisable.mp4 conservado por Marca según contexto, no inspeccionado aquí.",
+    "borrados": 0,
+    "archivados": 0,
+    "loops_creados": 0
+  }
+}
