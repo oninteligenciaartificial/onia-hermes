@@ -24,6 +24,8 @@ Registro recuperado = fuentes localizadas con trazabilidad, no copia integral ni
 
 ### Auditoría actual 12-oct — cinco ejecutores nativos comprobados
 
+**Hermes, configuración posterior:** entorno **ONIA Hermes** publicado oficialmente con `chatgpt.com` y Package Managers; captura `C:/Users/PC/.codex/visualizations/2026/10/11/01a12beb-7774-7c02-9931-12264158df83/onia-hermes-chatgpt-publicado.jpg`. Runtime antiguo NO hereda la política; una CLI falló sin IDs reales. Prueba TEMPORAL nativa `01a131a1-2db7-75d3-b9a3-62a19aebd000` activa para verificar política/5 UUID, **resultado PENDIENTE**, no sexto ejecutor permanente ni autonomía validada. Sin afirmar éxito antes del resultado. Gate de cierre añadido a CODEX existente; escribirlo no garantiza cumplirlo.
+
 `list_threads` leído en este corte confirma los 5 `kind:codex`, `hostId:durable`, cwd `/workspace`; 2 madres locales. El inventario de partida “1 Codex + 4 Work” más abajo es histórico de la preparación, sustituido por esta tabla. Madre Desarrollo habló con madre Marketing y los 5 workers; despacho no equivale a cierre de sus lotes.
 
 | Carril | Worker nativo | Resultado / pendiente comunicado |
