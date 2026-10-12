@@ -1,4 +1,67 @@
+# Armado ONIA — plan único vigente 12-oct-2026
+
+> **Este plan inicial manda.** Las secciones que siguen bajo HISTORIAL conservan pruebas/artefactos, pero sus etiquetas “vigente”, modelos y órdenes del 11-oct quedan reemplazadas cuando contradigan este plan. No hay relevo/loops completos por escribirlo.
+
+## PLAN VIGENTE 12-oct — armado único y ejecución por evidencia
+
+**META:** ordenar 2 madres locales supervisoras y 5 ejecutores Codex Cloud nativo, recuperar backlog/artefactos Claude+Work y demostrar acceso/QA por carril antes de relevar los cuatro Work. Preparar sin microconsultas ni duplicar documentos/skills. Npm fijado por lockfiles cloud ya autorizado; herramientas nuevas requieren aprobación.
+**PRUEBA DE HECHO:** por fase, entregar contrato, ID real/modelo configurable, repo/ref/SHA, artefacto recuperable y resultado de prueba; estados explícitos: validado / preparado / bloqueado. No confundir tool visible, despacho o draft con ejecución terminada.
+**PARADA:** sin main, producto, herramientas nuevas, secretos trasladados, compras o infraestructura. No archivar Work sin prueba de recuperación. Acceso sensible ausente detiene solo su paso; no rodear controles ni asumir permisos. Conservar diffs en vuelo; no interrumpirlos para cambiar modelo.
+
+### Reparto y routing que mandan desde ahora
+
+| Sesión | Responsabilidad | Modelo |
+|---|---|---|
+| Madre Desarrollo-Infra local | Contratos/prioridades, coordinación Platform/Hermes, QA y resumen; NO implementación | Astra medio; tareas muy difíciles/riesgo escalan esfuerzo con evidencia |
+| Madre Marketing local | Contratos/prioridades Marca/Lucía/Ventas, revisión/versión aprobada, resumen; NO oficio del worker | Astra medio |
+| Platform Codex Cloud | Desarrollo del backlog vigente, diff y pruebas; no rehacer Prisma cerrado | Sol habitual, medio; Astra solo tarea muy difícil |
+| Hermes Codex Cloud | QA independiente, regresiones, contratos de infra/Jarvis sin aplicar producción | Sol medio; Astra alto riesgo/muy difícil |
+| Marca Codex Cloud | Continuar proyectos/edición/cortes, previews y publicación autorizada | Sol medio; Luna mecánica cerrada |
+| Lucía Codex Cloud | Identidad/procedencia, montajes existentes y calendario/entregas | Sol medio; Astra solo decisión muy difícil |
+| Ventas/pauta Codex Cloud | Claims/demo/manifiesto, campañas dentro de permisos y evidencia | Sol medio; Luna normalización mecánica |
+
+**Última orden de Sergio supersede “toda programación Astra”: Astra SOLO madres/tareas muy difíciles, Sol trabajo habitual, Luna mecánica.** No afirmar que cambió automáticamente un modelo ni interrumpir diffs actuales. Registrar selector/configuración y modelo no observable por separado; Work no satisface el objetivo de ejecutores Codex Cloud.
+
+**Inventario actual comunicado:** 64 skills Hermes en worktree audit frente a 43 en checkout main, Platform 6; inventario NO implica lectura completa. `list_threads`: Desarrollo/setup Hermes/4 Work idle; madre Marketing notLoaded. No trabajo producto iniciado por este plan. CLAUDE genérico dice 1 madre, bloque nuevo skill/handoff y Sergio establecen 2; prevalece Sergio. CronCreate histórico local: muere con sesión/vence 7 días; no es scheduler cloud 24/7.
+
+**Estado real de partida:** 1 ejecutor Codex Cloud Platform verificado (`01a12c7e-97e2-7115-8561-0b7658008003`); 4 Work pendientes de relevo, IDs/artefactos en Preservación. Hermes setup `01a12dc0-93a3-7451-87d9-3d8d99dec036` SOLO borrador. No hay cinco ejecutores nativos comprobados ni loops nuevos activos. Madre Marketing local `01a12c1f-bef7-7252-a4b6-f8f8354dfc48`; madre Desarrollo es la sesión principal de coordinación. Identificar destinos vivos antes de enviar.
+
+### Fuentes únicas y matriz de acceso
+
+Skills propias: `.claude/skills/<nombre>/SKILL.md` en Hermes; Platform `onia-platform/.claude/skills/<nombre>/SKILL.md`. Sin copiar a `.agents`, globales ni chats. Leer router/skill pertinente y delta de cola desde último SHA; no cargar transcripts enteros. `COORDINATION_MANIFEST.md` distingue historia; `hermes-content/docs/EXECUTION_PROTOCOL.md` mantiene gates.
+
+| Carril | Acceso probado | Verificación faltante / bloqueo |
+|---|---|---|
+| Platform | Checkout SHA `1c01e05f…`; Prisma Client 7.8/typecheck exit 0; 16 tests; versionados limpios | Acceso/ref actual por lote, suite pertinente/build; VPS y apagado físico no probados |
+| Hermes | Work leyó 2 repos, ZIP de relevo y 4 reproducciones aisladas | Recuperar ZIP en nativo, head/bundle M1c+M1d; checkout/tests Hermes; VPS no habilitado |
+| Marca | Work recuperó 4 originales decodificables y ZIP | Nativo debe recuperar proyectos/N02 nuevo con SHA; DD-A/corte N02; herramientas de render/publicación por destino |
+| Lucía | Work preview viernes v2/ZIP, Higgsfield balance, identidad muestreada | SHA master/exportación/QA completa en nativo; token IG/VPS; voz y aprobación específica pendientes |
+| Ventas | Work repo/spec v2/5 briefs/objeciones, JSON lote | Assets/demo C1-C7 y selección; Meta login/MFA/sin conector, campañas actuales desconocidas |
+
+**6 grupos de skills, rutas relativas a repos y sin copias:** coordinación [onia-router](../../../.claude/skills/onia-router/SKILL.md), [onia-sesion-madre](../../../.claude/skills/onia-sesion-madre/SKILL.md), [equipo-de-agentes](../../../.claude/skills/equipo-de-agentes/SKILL.md); Platform `onia-platform/.claude/skills/onia-{frontend,backend,db,seguridad,verificacion}/SKILL.md`; infra/QA [onia-infra](../../../.claude/skills/onia-infra/SKILL.md), [onia-hermes-jarvis](../../../.claude/skills/onia-hermes-jarvis/SKILL.md); edición [editor-videos](../../../.claude/skills/editor-videos/SKILL.md), [edicion-referentes](../../../.claude/skills/edicion-referentes/SKILL.md), [ver-videos](../../../.claude/skills/ver-videos/SKILL.md); identidad/media [higgsfield-generate](../../../.claude/skills/higgsfield-generate/SKILL.md), [motion-doctrine](../../../.claude/skills/motion-doctrine/SKILL.md), [diseno-contenido-onia](../../../.claude/skills/diseno-contenido-onia/SKILL.md); ventas [onia-ventas-pauta](../../../.claude/skills/onia-ventas-pauta/SKILL.md). Leer solo grupo/camino del contrato; estos links no prueban skill disponible en cloud.
+
+Acceso de Work o de otro worker no acredita el sustituto. No trasladar cookies/credenciales; autorización nueva concreta solo cuando el paso realmente la requiera. Higgsfield balance no autoriza generación ni prueba publicación.
+
+### Fases, entregables y gates
+
+1. **Consolidar inventario (este registro):** reconciliar 2 madres/5 roles, destinos actuales y modelo; conservar los 4 Work y diffs. Entrega: tabla por carril con último SHA/contrato/artefacto/pendiente. Gate: no duplicados ni cerrados reabiertos. Bloqueo: Marca API sin últimas salidas requiere recuperar desde UI disponible.
+2. **Preservar antes del relevo:** recuperar ZIPs/MP4/proyectos/JSON/patch desde fuentes de Preservación; medir hashes completos, índice y decodificación. Entrega: ruta durable que el nuevo worker pueda leer, origen+versión. Gate: nueva sesión abre archivo y coincide SHA. Bloqueo: sandbox del origen no transferido; no declarar enlace sandbox como copia durable.
+3. **Preparar entornos nativos por oficio:** reutilizar Platform comprobado; evaluar Hermes draft sin publicarlo/provisionarlo fuera del alcance autorizado. Preparar contratos de Marca/Lucía/Ventas con skills/ref exactos y herramientas requeridas. Entrega: setup propuesto y prueba requerida; NO instalación automática. Gate: entornos y modelos efectivos comprobados antes de asignar trabajo.
+4. **Relevar 4 workers, uno por carril:** crear solo los sustitutos expresamente pedidos mediante madre y acceso UI; cada uno devuelve ACK de repo/ref/skills/artefactos y bloqueo. Entrega: ID real, modelo configurado, ruta/SHA recuperada, próximo contrato. Gate: recuperación+smoke pertinente independientes; conservar origen hasta que pase. No simular IDs ni subagentes.
+5. **QA y tarea vigente:** máximo 2 subagentes simultáneos cuando aporte; contratos acotados con entradas/rutas/salida/prueba/parada, QA independiente del implementador. Platform: cerrar lote en vuelo y elegir siguiente pendiente funcional tras verificar PRs; Marca: DD-A/N02 sin rehacer montajes; Lucía: viernes v2; Ventas: spec v2/claims/demo; Hermes: E31/E32. Entrega: resultado+evidencia+bloqueo+próximo. No reimplementar cerrados.
+6. **Cerrar relevo y ordenar sidebar:** archivar cada Work SOLO tras recuperación comprobada por su sustituto y registro de resultados. Entrega: 2 madres+5 nativos identificados, archivos durables y fuentes conservadas. Gate: ningún artefacto queda únicamente en contenedor a archivar.
+7. **Rondas locales, después de validar:** propuesta de ronda cada 20 min por madre, inspección compacta por delta y sin despertar trabajo cerrado. Crear únicamente tras verificar destinatarios, exclusión de loops antiguos y autorización/configuración aplicable. Registrar ID real/primera ejecución; madres locales no coordinan con PC apagada. No afirmar ronda activa antes de esa prueba.
+8. **Scheduler cloud, fase posterior:** evaluar arquitectura única sin competir con madres/loops; validar persistencia, permisos, cuota, entrega y exclusión con scheduler previo. Prueba real de PC apagada y disparo cloud requerido antes de prometer 24/7. Sin instalación/compra/secretos en esta preparación; propuesta dot cloud NO confirmada.
+
+**Permisos posteriores al orden, sin ampliarlos:** Marketing puede publicar versión YA APROBADA en cuentas/calendario acordados después de comprobar aprobación/SHA y ausencia de duplicados. Piezas nuevas, generaciones/gasto, nueva cara/voz y decisiones comerciales requieren OK. No confundir autorización de publicación aprobada con acceso autenticado ni con permiso de deploy/secretos. Durante preparación no ejecutar publicación.
+
+**Registro por lote:** dueño · contrato-ID · ref/SHA · herramienta/modelo observable · entregable/ruta/hash · verificación/comando/exit · bloqueo concreto · siguiente paso. Afirmar completitud solo cuando el gate pase. Este plan queda implementado documentalmente; ejecución de relevo/accesos/loops permanece preparada o bloqueada según matriz.
+
+# HISTORIAL Y EVIDENCIA — 11-oct, no instrucciones de arranque
+
 # Auditoría cloud ↔ PC y relevo de madres — 11-oct-2026
+
+> **Fuente vigente de armado: PLAN VIGENTE 12-oct al principio de este archivo.** Sustituye routing y órdenes anteriores donde contradigan el plan; conservar evidencia histórica con su alcance. Preparación documental ejecutada no implica relevo, loops o accesos completados.
 
 **META vigente:** preparar ONIA SaaS con ejecución cloud que continúe con la PC apagada, madres supervisoras y sin retomar producción ni contratar infraestructura.
 **PRUEBA DE HECHO:** informe contrastado con referencias Git, observaciones de UI/CLI comunicadas por la madre y documentación oficial; piloto con resultados pendientes.
@@ -215,7 +278,7 @@ Equipos reales comunicados: Lucía `/root/lucia_continuidad` y `/root/lucia_qa`;
 
 **Permisos preservados:** madres asignan/revisan/resumen, workers ejecutan. Publicar solo piezas YA aprobadas en cuentas/calendario acordados, verificando versión y evitando duplicados; nuevas piezas/gasto con OK. Este relevo no autoriza instalaciones, traslado de secretos, nuevos loops, contactos, deploy ni producción. Cada nuevo worker devuelve ACK de repo/ref/skills, artefactos recuperados con SHA y bloqueo antes de continuar; conservar Work hasta esa prueba.
 
-## ORDEN VIGENTE: ordenar antes de continuar — inventario y matriz
+## HISTORIAL 11-oct: ordenar antes de continuar — inventario y matriz
 
 Sergio pidió **PRIMERO ORDENAR**. Suspensión de nuevos lotes enviada a Desarrollo, madre Marketing y setup; conservar entregables sin nuevas cadenas, publicación ni provisioning. Borrador de entorno Hermes creado, ID `01a12dc0-93a3-7451-87d9-3d8d99dec036`; **no provisionar/publicar todavía**. Este estado sustituye los prompts anteriores de arranque inmediato.
 
@@ -224,7 +287,7 @@ Sergio pidió **PRIMERO ORDENAR**. Suspensión de nuevos lotes enviada a Desarro
 | Rol | Política vigente |
 |---|---|
 | Madres | Astra: coordinación, supervisión y QA; NO implementación |
-| Platform y toda programación | Astra, effort medio |
+| Platform y programación (política 12-oct) | Sol habitual medio; Astra solo tarea muy difícil |
 | Ejecución marketing, edición y ventas | Sol 6.1, effort medio; código requerido se delega a Astra |
 | Mecánica cerrada/verificable | Luna, low |
 | QA independiente | Sol; escalación Astra para alto riesgo |
