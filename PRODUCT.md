@@ -1,5 +1,16 @@
 # Product
 
+## Decisión de producto vigente — Sergio Urcullo, 12-oct-2026
+
+ONIA debe ser un producto empaquetado, muy simple y listo para usar, multirubro y escalable; el lanzamiento inicial es dental. No reducir esta aspiración a una herramienta dental aislada ni exponer decisiones técnicas al cliente. Es decisión/criterio solicitado, **no declaración de capacidades entregadas**.
+
+- Recorrido objetivo: dentista contrata → carga datos mínimos → sistema listo con agenda, pacientes, cobros y WhatsApp dentro del alcance contratado/verificado.
+- Un **único plan comercial integrado** incluye como capacidad solicitada **su propia web creada con IA**, guiada y rápida: datos + plantilla → preview → aprobación → publicación únicamente autorizada. Último steering Sergio: todo en un solo plan; reemplaza inferencia anterior de add-on/upsell/multipaquetes; el rechazo histórico a la web como servicio separado no veta esta nueva decisión. No presume gratuidad, ilimitados, precios, dominios, hosting o generación pagada aprobados.
+- Pago QR: manual existente documentado no equivale a confirmación automática API. Integración API pendiente; fuente técnica BCP `hermes-content/docs/ONIA_BCP_API_QR_INTEGRACION.md`, especificaciones históricas, sin acceso/homologación/live nuevos verificados. Revisar fuente/estado antes de pedir credenciales; no valores secretos ni promesa de entregado.
+- Modelos, prompts, infraestructura, integraciones y complejidad viven en backoffice ONIA. El cliente entiende resultado, límites, estado y siguiente paso; no tiene que configurar el stack.
+- Probar el recorrido completo y límites/permisos con evidencia antes de prometer listo para usar. Incorporar el contrato en PRODUCT del repo Platform por su worker, sin editar el checkout compartido desde este frente.
+- Madre comunica resultado para el cliente, mejora y lo que falta en español claro; PR/hash solo cuando se pidan o cuando sean necesarios para verificar. Coordina/revisa por contratos y deltas, con subagentes útiles sin cargar historia completa.
+
 ## Register
 
 brand

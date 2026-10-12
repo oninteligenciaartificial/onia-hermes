@@ -16,6 +16,12 @@
 
 ---
 
+## Decisión vigente del dueño — 12-oct-2026
+
+Prevalece [PRODUCT.md](../../PRODUCT.md), decisión Sergio: producto empaquetado simple, multirubro y escalable, lanzamiento dental; recorrido contratar → mínimos → agenda/pacientes/cobros/WhatsApp listo y probado. Web propia con IA y WhatsApp como capacidades de **un único plan comercial integrado** (datos/plantilla → preview → aprobación → publicación autorizada), con backoffice técnico interno. La clasificación histórica web = servicio/no add-on en §§0/10 es razonamiento anterior, **superado para esta nueva solicitud**; no bloquea su evaluación e integración. No autoriza precio, gratis/ilimitado, generación pagada, deploy o publicación automática; estado entregado requiere evidencia.
+
+La etapa de lanzamiento dental no congela la arquitectura multirubro. Priorizar preparación/fiabilidad del recorrido vendible, luego UI/referencias conforme al contrato. Métricas financieras/clientes de septiembre y afirmaciones de producción de este documento son históricas hasta revalidación; no usarlas como estado actual. Comunicación madre: resultado/mejora/falta para cliente, sin saturar con PR/hash salvo petición o evidencia necesaria. Referentes e intake se conservan en el handoff canónico, sin nuevos documentos duplicados.
+
 ## 0. La respuesta corta
 
 1. **ONIA no necesita financiación.** El punto de equilibrio está a **5 clientes**. Ningún
