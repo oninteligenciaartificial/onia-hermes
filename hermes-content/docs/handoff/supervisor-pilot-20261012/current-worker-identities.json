@@ -1,0 +1,48 @@
+{
+  "updated_at_utc": "2026-10-12T20:14:42.558678+00:00",
+  "record_kind": "current declared canonical identities, not live runtime snapshot",
+  "source": {
+    "repository": "oninteligenciaartificial/onia-hermes",
+    "ref": "codex/cloud-pc-audit-20261011",
+    "path": "hermes-content/docs/handoff/codex-cloud-pc-20261011.md",
+    "lines": "23-52",
+    "blob_sha": "ca95a30965b31df7dc5030114caf12dff8d8213e",
+    "provenance": "mother canonical table read via GitHub connector"
+  },
+  "workers": [
+    {
+      "lane": "Platform",
+      "declared_uuid": "01a12c7e-97e2-7115-8561-0b7658008003",
+      "live_state": "not_observed",
+      "own_runtime_thread_id_observed": false
+    },
+    {
+      "lane": "Hermes QA",
+      "declared_uuid": "01a13170-1c7e-7224-83c1-c5f369052039",
+      "live_state": "not_observed",
+      "own_runtime_thread_id_observed": false
+    },
+    {
+      "lane": "Marca",
+      "declared_uuid": "01a13170-b488-71d9-83f8-12663d5a0013",
+      "live_state": "not_observed",
+      "own_runtime_thread_id_observed": false
+    },
+    {
+      "lane": "Lucia",
+      "declared_uuid": "01a13171-0fdb-72c6-9fdc-81244d7e6006",
+      "live_state": "not_observed",
+      "own_runtime_thread_id_observed": false
+    },
+    {
+      "lane": "Ventas",
+      "declared_uuid": "01a13171-6ac1-771e-b285-52e7284e203a",
+      "live_state": "not_observed",
+      "own_runtime_thread_id_observed": false
+    }
+  ],
+  "historical_snapshots_mutated": false,
+  "read_gate": "blocked",
+  "auth_401_retried": false,
+  "backend_mapping": "not_observed"
+}
