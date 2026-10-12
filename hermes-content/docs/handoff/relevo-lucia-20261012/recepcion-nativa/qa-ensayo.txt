@@ -1,0 +1,32 @@
+QA offline — preparación de ensayo viernes v2, 12-oct-2026
+
+META: revisar la preparación del ensayo canónico sin subir a Instagram, publicar, acceder a VPS/token ni generar voz.
+PRUEBA: lectura ig-reel.mjs y selftest.txt; specs/hash/caption de la recepción ya validada; checklist operativo concreto.
+PARADA: ensayo preparado y bloqueos precisos; no llamada real a Instagram.
+
+Fuente del publicador: oninteligenciaartificial/onia-hermes @3566e5d5208cf4a7bcf20e743469c6088944674c, hermes-content/deploy/vps-ops/publicar/ig-reel.mjs; copia revisada /workspace/work/lucia-prepublicacion/ig-reel.mjs.
+El selftest guardado termina «selftest ok». Advertencias400/429 son mocks de lectura posterior a publicación; no fallos reales de cuenta. No acredita login, token, alcance, identidad de cuenta, cuota, procesamiento real ni etiqueta IA aceptada por Meta.
+
+VEREDICTO OFFLINE
+Preparación compatible con master mudo vigente: c4299c7b21c7b05cc41181176d8908429b9752d4422c9cc9275964dd64393aa4;15s;1080x1920;H.264;2.983.672bytes. Caption2110 caracteres<2200 y declara IA; pie v2 exacto de videos/lucia-viernes-copia-v2/pie.txt. No usar pie v1.1 ni preview/base64 como master.
+El script admite3..900s y<=300MB; avisa si aspecto no9:16; limita caption2200. Lucía activa is_ai_generated=true automáticamente mediante CUENTAS_IA=['lucia']. --ia adicional es explícito pero redundante.
+Sin --publicar hay subida real de un video_url temporal y creación/procesamiento de contenedor Meta; NO es ensayo offline. El script borra copia pública en finally, esperaFINISHED, no llama media_publish y declara expiración24h. Por eso no se ejecutó el comando real en este contrato.
+No hay chequeo de duplicados ni identidad username en el script. LEDGER se escribe solo después de media_publish y conserva media aunque falle readback; no aporta historial de contenedores de ensayo ni SHA. Debe revisarse aparte antes de publicación.
+El fallback que omite is_ai_generated es SOLO de lectura de la publicación, no de creación: no se interpreta como etiqueta aceptada. false/ausente produce advertencia; un exit0 posterior no acredita etiqueta correcta.
+
+CHECKLIST MÍNIMO ANTES DE ENSAYO REAL
+1. Versión: confirmar autorización concreta de mostrar/subir a Meta el master MUDO SHA c429...3aa4. La receta semanal espera voz;223 caracteres son guion estimado, vozNO existe. No mezclar/generar ni cambiar SHA sin permiso. QA visual ya completada, no repetida aquí.
+2. Cuenta: operador autorizado comprueba por acceso vigente que ig-lucia.env corresponde a @lucia.antelo.oficial, token vigente y permisos de publicación; registrar solo username/resultado/expiración, nunca valores de token.
+3. Archivo: en el VPS comparar SHA256 master+pie contra recepción; master15s1080x1920 y caption2110. Pie empieza declarando IA. Conservar fuente3566e5 y registrar ruta real en acta; no usar .b64 truncado.
+4. Publicador: versión ig-reel.mjs revisada y selftest equivalente en entorno destino, sin instalar por inferencia. Verificar que el servicio temporal de assets existe y el operador tiene acceso autorizado. No asumir disponibilidad de VPS por selftest local.
+5. Ensayo: ejecutar SOLO con --cuenta lucia --video <master-verificado> --caption <pie-v2-verificado> --ia, SIN --publicar y SIN agendador. Esperado contenedor creado «etiqueta IA», FINISHED y «NO publicado». Registrar ID contenedor, hora y stdout saneado; no tokens, no URLs firmadas. Contenedor expira24h, no reutilización prometida por este script.
+6. Si Meta rechaza creación/campoIA/video, detener y registrar error sin quitar etiqueta ni repetir indiscriminadamente. selftest400/429 no predice aceptación real.
+
+CHECKLIST ANTES DE PUBLICAR/AGENDAR (FUERA DE ESTE CONTRATO)
+7. Aprobación exacta: «mostrada, publicá el viernes» sobre versión/SHA/pie autorizados. LISTA PARA MOSTRAR no basta. Si se decide voz, nuevo masterSHA y QA correspondiente.
+8. Calendario: confirmar propuesta16-oct19:00La Paz=23:00UTC; desplazamientosG3al30-oct/P9al6-nov siguen propuestos. No agendar por solo existir fila en calendario; verificar atrasos/orden de G4/C2 que ya usan0,83.
+9. Duplicados: revisar cuenta, /root/publicar/publicado.jsonl y programación vigente por ID/media/archivo/SHA/pieza/fecha; ausencia de duplicados no fue comprobada. Si readback falla tras media_publish, buscar mediaID antes de reintentar para evitar doble post.
+10. EtiquetaIA: parámetrotrue en creación; tras publicación leer is_ai_generated=true y abrir permalink para «Información de IA». Si false/no observable, registrar condición y resolver con operador autorizado; no declarar verificado por solo texto inicial/caption/script.
+
+ESTADO
+Offline validado y preparación revisada. Ensayo Meta NO ejecutado; publicaciónNO ejecutada. Bloqueos: permiso versión muda frente a receta con voz; cuenta/login/token/permisosVPS sin comprobar; calendario/aprobación/duplicados/etiquetaIA reales pendientes. Sin cambios de código, redIG, VPS, secretos, instalación, gasto ni generación.

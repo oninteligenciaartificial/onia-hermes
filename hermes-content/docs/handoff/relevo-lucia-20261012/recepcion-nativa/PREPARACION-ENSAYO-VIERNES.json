@@ -1,0 +1,41 @@
+{
+  "META": "Preparar ensayo del viernes v2 existente siguiendo el siguiente pendiente canónico, sin crear pieza/voz ni ejecutar subida/publicación",
+  "PRUEBA": "selftest publicador source3566e5 exit0;caption2110car<2200;master15s9:16SHA exacto;QA independiente del paquete",
+  "PARADA": "No llamarIG/subircontenedor/agendar/publicar sin aprobación versión+calendario y acceso/antiduplicados verificados;no gasto/instalación/infra/loop",
+  "estado": "SOLO_MOSTRAR_PREPARACION_OFFLINE_REVISADA_NO_SUBIR_A_IG",
+  "fuente_cola": "3566e5d5208cf4a7bcf20e743469c6088944674c:hermes-content/docs/cola/loop/lucia.md",
+  "fuente_calendario": "3566e5d5208cf4a7bcf20e743469c6088944674c:hermes-content/docs/cola/lucia-diario/ORDEN-DE-POSTEO-LUCIA.md",
+  "source_publicador": "3566e5d5208cf4a7bcf20e743469c6088944674c:hermes-content/deploy/vps-ops/publicar/ig-reel.mjs",
+  "publicador_sha256": "0fb99f84f0f37be56b7ccc9c6f8835cf9c67697ef847b738050e07344c4bfe65",
+  "selftest_exit": 0,
+  "selftest_tipo": "offline asserts y llamadasmock;errores400/429esperados;sinAPIred/tokens",
+  "master_sha256": "c4299c7b21c7b05cc41181176d8908429b9752d4422c9cc9275964dd64393aa4",
+  "pie_sha256": "2bce2da8bb3f0b5098aaee2ff26041bda1fde5814fa86eb6b4c5a25444e6b6f9",
+  "caption_trim_caracteres_utf16": 2110,
+  "caption_limite": 2200,
+  "contenido": "viernes v2 mudo;AAC silenciosa/no vozMarcela;no modificar master",
+  "cuenta_documentada": "@lucia.antelo.oficial",
+  "is_ai_generated": "publicador fuerza true para --cuenta lucia;sin confirmaciónIG real",
+  "propuesta_no_confirmada": {
+    "viernes": "2026-10-16 19:00 UTC-4 /23:00UTC",
+    "G3": "2026-10-30 19:00 UTC-4",
+    "P9": "2026-11-06 19:00 UTC-4"
+  },
+  "comando_ensayo_plantilla_NO_EJECUTADO": "node /root/bin/ig-reel.mjs --cuenta lucia --video <ruta_master_exacta_verificada_en_VPS> --caption <ruta_pie_exacto_verificada_en_VPS>",
+  "efecto_ensayo": "Carga temporal pública y crea contenedorInstagram;sin --publicar no crea post,pero NO es lectura ni ensayooffline",
+  "requisitos_operativos": [
+    "Publicación y calendario siguen pendientes por respuesta explícita Solo mostrar; publicación pendiente;no solicitar de nuevo ni asumirOK",
+    "Acceso autorizado configurado a cuentaVPS/IG;sin manejartrasladartokens;ssh binario local disponible pero alias/autorización/accesoreal no comprobados",
+    "Cotejar SHA de master+pie recibidos en VPS antes del ensayo",
+    "Leer ledgerpublicado y cuentaIG actual para evitar duplicados;estadoactual desconocido",
+    "Ensayo autorizado: contenedorFINISHED;no publicar anteERROR/EXPIRED;ledger ypermalink no se pueden inferir",
+    "Solo despuésdepost autorizado comprobar is_ai_generated ypermalink;sinreintento ciego si lectura posterior falla"
+  ],
+  "independientes": [
+    "Recepción PNGexactosK4/R3 y addendum al acta cuandoorigen entreguecommit/rutas",
+    "QA offline publicador y revisión del paquete;sin modificar medios"
+  ],
+  "decision_Sergio_2026_10_12": "Solo mostrar; publicación pendiente",
+  "mostrar": "Master exacto enlazado a commit fuente;hoja contacto2fps existente mostrada en transcript;no publicación ni generación",
+  "qa_independiente": "qa-ensayo.txt"
+}

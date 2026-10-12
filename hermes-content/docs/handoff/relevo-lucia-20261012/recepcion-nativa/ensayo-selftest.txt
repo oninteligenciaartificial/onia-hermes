@@ -1,0 +1,4 @@
+⚠ no pude leer is_ai_generated de m: 429
+⚠ PUBLICADO m pero no pude leerlo: 429
+⚠ no pude leer is_ai_generated de m: 400
+selftest ok
