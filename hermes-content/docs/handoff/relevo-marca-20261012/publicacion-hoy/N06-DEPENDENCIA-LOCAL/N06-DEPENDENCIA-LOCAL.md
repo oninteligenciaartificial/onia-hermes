@@ -15,3 +15,7 @@ LicenciaCCBY3.0 y atribución completas adjuntas. Mezcla final EXACTA del previe
 Fuentes: este runtime no tiene cinco TTF resueltos comoInter/JetBrains. fc-matchInterBlack devuelveOpenAISansRegularWOFF2. No exportar ese fallback comoInter. Recuperé Inter-SemiBold.ttf ya existente enGit conSHA; faltan exactasBlack/Bold/Regular/JetBrainsMonoSemiBold y su procedencia de versión del entorno original. No instalé ni descargué nuevas fuentes ni inferí sustitución tipográfica. El adaptadorWindows debe resolver archivos originales verificables antes de certificar misma composición.
 
 QA mezcla preview: técnico independientePASS; Madre reportó GeminiAVcompleto favorableN06/N07, no audición deeste modelo. ClaimsN06alcance consumidores vsStandard/Enterprise/API yfrase skills31–39/CTA siguen gates. Ruta coordinación: Marca→MadreMarketing; Desarrollo solo dependencia técnica. No publicación desdeeste worker.
+
+## Última dirección musical de Sergio
+
+«Despacio» se interpreta como volumen bajo de fondo, no ralentización de pista. Esta mezcla no cambia velocidad: cama normalizada−26LUFSantesduck, medida aproximadamente−32LUFSdespués; voz unos18–20dBporencima. Duck10msataque/180msrelease yRMSratio3 conservanvozprincipal. Madre reportóN06/N07 vozinteligible/músicano tapa. Confirmar escucha completa del nuevo master y prueba en móvil; atenuar música/SFX si distrae. No rehacer imagen ni inferir time-stretch.

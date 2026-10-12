@@ -3,7 +3,7 @@
   "cutplan_path": "videos/marca-personal/2026-10-11/n06-antigravity/cutplan.json",
   "cutplan_sha256": "e3c04569d1f4de4f33fc0dbb124f22a0ab84dab4195316f341b152b1c5ae2231",
   "preserved_cutplan_equal": true,
-  "preview_approved_by_user_message": "Sergio valoró edición muy buena y autorizó publicar existentes que pasan QA; no equivale a cerrar hechos/CTA ni master",
+  "preview_approved_by_user_message": "Sergio valor\u00f3 edici\u00f3n muy buena y autoriz\u00f3 publicar existentes que pasan QA; no equivale a cerrar hechos/CTA ni master",
   "no_local_cut_changes": true,
   "global_no_later_delta_claimed": false,
   "render_flag": "--sin-aire",
@@ -27,5 +27,7 @@
     "InterRegular",
     "JetBrainsMonoSemiBold"
   ],
-  "fc_match_native_fallback": "OpenAI Sans Regular /usr/share/fonts/openai-sans/OpenAISans-Regular.woff2; not requested TTF and not original Inter"
+  "fc_match_native_fallback": "OpenAI Sans Regular /usr/share/fonts/openai-sans/OpenAISans-Regular.woff2; not requested TTF and not original Inter",
+  "preview_at_fbad_sha256": "d8753944a720d201c7bd141acce4236699cb159dc95e90f3f80049c77f7d8f40",
+  "preview_matches_received": true
 }

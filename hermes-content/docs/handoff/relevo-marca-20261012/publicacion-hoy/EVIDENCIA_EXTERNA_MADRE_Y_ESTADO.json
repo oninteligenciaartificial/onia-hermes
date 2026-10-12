@@ -1,0 +1,45 @@
+{
+  "observer_reported": "Madre Marketing, source_thread_id01a12c1f-bef7-7252-a4b6-f8f8354dfc48",
+  "date": "2026-10-12",
+  "source": "delegaciones recibidas en transcript; sandbox externo no heredado",
+  "AV_N06_N07": {
+    "method_reported": "Gemini audiovisual completo nativo local",
+    "voice_intelligible": true,
+    "music_does_not_mask_voice": true,
+    "audible_clipping": false,
+    "ending_truncated": false,
+    "root_listened": false,
+    "model_native_audio_supported": false,
+    "master_1080_received_by_root": false,
+    "N07_date_correction": "frame11oct, lanzamiento7oct; alerta13octretirada",
+    "N06_word_path_gate": "31–39s cotejar agents frente a .gemini/skills→.agents/skills"
+  },
+  "Buffer_UI_reported": {
+    "checked_caracas": "16:46",
+    "timezone": "America/Caracas",
+    "plan": "Free3/3",
+    "channels": [
+      "Sergio Urcullo Mercado / LinkedIn Profile",
+      "Sergio Urcullo / YouTube Channel",
+      "sergiourcullom / TikTok Account"
+    ],
+    "IG_FB_X_connected_in_buffer": false,
+    "queue_existing_error": "TikTok16:02carrusel8imágenes, attachedmedia/linksize/timeout; no reintentado",
+    "sent_history_count": 85,
+    "new_jobs_seen": 0,
+    "root_ui_or_history_accessed": false
+  },
+  "new_jobs_created_by_root": 0,
+  "new_publications_created_by_root": 0,
+  "latest_user_requirements": {
+    "music": "bajo volumen fondo/ducking, no ralentizar por inferencia",
+    "video_upload_lead_hours": 3,
+    "publish_early": false,
+    "notification_policy": "solo hechos importantes, no loops/heartbeatnuevo"
+  },
+  "today_slots": {
+    "18:00": "deadline15:00vencido, retirado",
+    "20:00": "deadline17:00vencido sinacuseobservado, retirado",
+    "22:00": "solo siacuseantes19:00y master/claims/CTA/licenciaQA completos"
+  }
+}
