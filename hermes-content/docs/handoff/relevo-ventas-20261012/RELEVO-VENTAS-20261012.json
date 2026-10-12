@@ -665,13 +665,167 @@
   },
   "blockers": [
     "SHA256 seis PNG: conector Contents deja content vacío por tamaño; fetch_blob rechaza binary. Nativo puede leer Git ya preservado y medir.",
-    "Drive: seis MP4 UUID solo listados, sin asociación G1 ni hash/duración/dimensiones medidos; no se descargaron en lote. No afirmar que son medios finales.",
     "Login Meta no se migra; nativo debe probar sus propios accesos.",
     "Refresco demo 12-oct era fecha prevista, no prueba de completado.",
-    "Recepción por sesión nativa no accesible desde herramienta; madre hará comprobación independiente."
+    "Recepción por sesión nativa no accesible desde herramienta; madre hará comprobación independiente.",
+    "Drive: MP4 existentes no asociados a creativos; no son pérdida Work. Permisos compartidos preexistentes sin alcance verificado; no se crearon enlaces públicos."
   ],
   "marca": "Fuera del lote Ventas; no rehacer referentes 7c43db59; no se exporta ni afirma hash de otro carril.",
   "models": "Work/subagentes modelo efectivo no observable",
   "unchanged_origin": true,
-  "drive_assets": []
+  "drive_assets": [
+    {
+      "id": "1stEjNjp48QMn1u8FnUVeF9opX6-3uX98",
+      "name": "15270626-ABFC-4562-9DF0-2E35CDE665DA.mp4",
+      "url": "https://drive.google.com/file/d/1stEjNjp48QMn1u8FnUVeF9opX6-3uX98/view?usp=drivesdk",
+      "bytes": 212776631,
+      "source_folder_id": "1Iks0iUsLC5wlznDF6Bbo3VYkekclV987",
+      "classification": "hallazgo externo al Work; archivo existente en Drive conectado, NO artefacto único creado por este lote",
+      "association": "No verificada con G1-*; no atribuir a prueba1-v2",
+      "verification": "list_folder autenticado respondió 12-oct-2026; bytes binarios no descargados",
+      "permissions": "No se cambiaron permisos; shared=true en metadata, alcance de compartición no inspeccionado; no afirmar privacidad exclusiva",
+      "sha256": null,
+      "duration": null,
+      "dimensions": null,
+      "state": "referencia durable existente; no pérdida de creación Work"
+    },
+    {
+      "id": "1QAAvFbQXPK64z5VmcnP2sq0iv6hsSniY",
+      "name": "EE23A577-932C-44A3-90F0-3AFEAA976AD6.mp4",
+      "url": "https://drive.google.com/file/d/1QAAvFbQXPK64z5VmcnP2sq0iv6hsSniY/view?usp=drivesdk",
+      "bytes": 184354882,
+      "source_folder_id": "1Iks0iUsLC5wlznDF6Bbo3VYkekclV987",
+      "classification": "hallazgo externo al Work; archivo existente en Drive conectado, NO artefacto único creado por este lote",
+      "association": "No verificada con G1-*; no atribuir a prueba1-v2",
+      "verification": "list_folder autenticado respondió 12-oct-2026; bytes binarios no descargados",
+      "permissions": "No se cambiaron permisos; shared=true en metadata, alcance de compartición no inspeccionado; no afirmar privacidad exclusiva",
+      "sha256": null,
+      "duration": null,
+      "dimensions": null,
+      "state": "referencia durable existente; no pérdida de creación Work"
+    },
+    {
+      "id": "18DnUVL_i99QN6DQdc7XqO_RTEtT9T2eQ",
+      "name": "3941A129-133A-4618-BB88-7C191DC1AF3B.mp4",
+      "url": "https://drive.google.com/file/d/18DnUVL_i99QN6DQdc7XqO_RTEtT9T2eQ/view?usp=drivesdk",
+      "bytes": 122622390,
+      "source_folder_id": "1Iks0iUsLC5wlznDF6Bbo3VYkekclV987",
+      "classification": "hallazgo externo al Work; archivo existente en Drive conectado, NO artefacto único creado por este lote",
+      "association": "No verificada con G1-*; no atribuir a prueba1-v2",
+      "verification": "list_folder autenticado respondió 12-oct-2026; bytes binarios no descargados",
+      "permissions": "No se cambiaron permisos; shared=true en metadata, alcance de compartición no inspeccionado; no afirmar privacidad exclusiva",
+      "sha256": null,
+      "duration": null,
+      "dimensions": null,
+      "state": "referencia durable existente; no pérdida de creación Work"
+    },
+    {
+      "id": "1rHY7WjqjRaEnfIqgdDMOXXfMhF2oZ3Ae",
+      "name": "F9630B16-57F2-465E-9289-0D0DDBE787A2.mp4",
+      "url": "https://drive.google.com/file/d/1rHY7WjqjRaEnfIqgdDMOXXfMhF2oZ3Ae/view?usp=drivesdk",
+      "bytes": 92453888,
+      "source_folder_id": "1Iks0iUsLC5wlznDF6Bbo3VYkekclV987",
+      "classification": "hallazgo externo al Work; archivo existente en Drive conectado, NO artefacto único creado por este lote",
+      "association": "No verificada con G1-*; no atribuir a prueba1-v2",
+      "verification": "list_folder autenticado respondió 12-oct-2026; bytes binarios no descargados",
+      "permissions": "No se cambiaron permisos; shared=true en metadata, alcance de compartición no inspeccionado; no afirmar privacidad exclusiva",
+      "sha256": null,
+      "duration": null,
+      "dimensions": null,
+      "state": "referencia durable existente; no pérdida de creación Work"
+    },
+    {
+      "id": "1rlbdA9zLE9SZJInPmFjd1jP3S8r8yk08",
+      "name": "1CCFE9FE-10EB-496A-AED1-94386197DECE.mp4",
+      "url": "https://drive.google.com/file/d/1rlbdA9zLE9SZJInPmFjd1jP3S8r8yk08/view?usp=drivesdk",
+      "bytes": 69843125,
+      "source_folder_id": "1Iks0iUsLC5wlznDF6Bbo3VYkekclV987",
+      "classification": "hallazgo externo al Work; archivo existente en Drive conectado, NO artefacto único creado por este lote",
+      "association": "No verificada con G1-*; no atribuir a prueba1-v2",
+      "verification": "list_folder autenticado respondió 12-oct-2026; bytes binarios no descargados",
+      "permissions": "No se cambiaron permisos; shared=true en metadata, alcance de compartición no inspeccionado; no afirmar privacidad exclusiva",
+      "sha256": null,
+      "duration": null,
+      "dimensions": null,
+      "state": "referencia durable existente; no pérdida de creación Work"
+    },
+    {
+      "id": "1fOVS40NXa25ZBt-b_3gJkBXfCCOcs-3q",
+      "name": "A0550B92-EFE3-43E7-A7A3-065A57365A1F.mp4",
+      "url": "https://drive.google.com/file/d/1fOVS40NXa25ZBt-b_3gJkBXfCCOcs-3q/view?usp=drivesdk",
+      "bytes": 78375348,
+      "source_folder_id": "1Iks0iUsLC5wlznDF6Bbo3VYkekclV987",
+      "classification": "hallazgo externo al Work; archivo existente en Drive conectado, NO artefacto único creado por este lote",
+      "association": "No verificada con G1-*; no atribuir a prueba1-v2",
+      "verification": "list_folder autenticado respondió 12-oct-2026; bytes binarios no descargados",
+      "permissions": "No se cambiaron permisos; shared=true en metadata, alcance de compartición no inspeccionado; no afirmar privacidad exclusiva",
+      "sha256": null,
+      "duration": null,
+      "dimensions": null,
+      "state": "referencia durable existente; no pérdida de creación Work"
+    }
+  ],
+  "media_clarification": "La matriz49 corresponde a fuentes Git y único handoff Work. Seis MP4 son referencias externas de Drive y NO forman parte de archivos únicos creados aquí. Error corregido: drive_assets anterior estaba vacío por selección incorrecta de estructura de respuesta.",
+  "png_blockers": [
+    {
+      "path": "hermes-content/carousels/out/ads/prueba1-v2/hojas/G1-1-hoja.png",
+      "commit": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "blob_sha": "8de45924bdcbe65fefa4fe24fa514fea6c3a5833",
+      "bytes": 1356833,
+      "url": "https://github.com/oninteligenciaartificial/onia-hermes/blob/1f72b73c128f67d21ef3cfbe1614125a84fc522f/hermes-content/carousels/out/ads/prueba1-v2/hojas/G1-1-hoja.png",
+      "sha256": null,
+      "content_failure": "contents content vacío; fetch_blob UnicodeDecodeError utf-8 binary PNG",
+      "state": "conservado Git heredado; nativo puede descargar por red oficial y medir SHA256"
+    },
+    {
+      "path": "hermes-content/carousels/out/ads/prueba1-v2/hojas/G1-2-hoja.png",
+      "commit": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "blob_sha": "fd87284454be17458343870a94e99876665a4ed9",
+      "bytes": 1607212,
+      "url": "https://github.com/oninteligenciaartificial/onia-hermes/blob/1f72b73c128f67d21ef3cfbe1614125a84fc522f/hermes-content/carousels/out/ads/prueba1-v2/hojas/G1-2-hoja.png",
+      "sha256": null,
+      "content_failure": "contents content vacío; fetch_blob UnicodeDecodeError utf-8 binary PNG",
+      "state": "conservado Git heredado; nativo puede descargar por red oficial y medir SHA256"
+    },
+    {
+      "path": "hermes-content/carousels/out/ads/prueba1-v2/G1-1/G1-1-c0.png",
+      "commit": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "blob_sha": "2e2e03315b47168c6e0ea90aa30d1482950099a9",
+      "bytes": 1049168,
+      "url": "https://github.com/oninteligenciaartificial/onia-hermes/blob/1f72b73c128f67d21ef3cfbe1614125a84fc522f/hermes-content/carousels/out/ads/prueba1-v2/G1-1/G1-1-c0.png",
+      "sha256": null,
+      "content_failure": "contents content vacío; fetch_blob UnicodeDecodeError utf-8 binary PNG",
+      "state": "conservado Git heredado; nativo puede descargar por red oficial y medir SHA256"
+    },
+    {
+      "path": "hermes-content/carousels/out/ads/prueba1-v2/G1-1/G1-1-c2.png",
+      "commit": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "blob_sha": "73984b596d9a1d97e469cef6c9fdc8460b96c60c",
+      "bytes": 1067582,
+      "url": "https://github.com/oninteligenciaartificial/onia-hermes/blob/1f72b73c128f67d21ef3cfbe1614125a84fc522f/hermes-content/carousels/out/ads/prueba1-v2/G1-1/G1-1-c2.png",
+      "sha256": null,
+      "content_failure": "contents content vacío; fetch_blob UnicodeDecodeError utf-8 binary PNG",
+      "state": "conservado Git heredado; nativo puede descargar por red oficial y medir SHA256"
+    },
+    {
+      "path": "hermes-content/carousels/out/ads/prueba1-v2/G1-2/G1-2-c2.png",
+      "commit": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "blob_sha": "a8af60ccae33cf5647531196c2d37463c0803ee6",
+      "bytes": 1062531,
+      "url": "https://github.com/oninteligenciaartificial/onia-hermes/blob/1f72b73c128f67d21ef3cfbe1614125a84fc522f/hermes-content/carousels/out/ads/prueba1-v2/G1-2/G1-2-c2.png",
+      "sha256": null,
+      "content_failure": "contents content vacío; fetch_blob UnicodeDecodeError utf-8 binary PNG",
+      "state": "conservado Git heredado; nativo puede descargar por red oficial y medir SHA256"
+    },
+    {
+      "path": "hermes-content/carousels/out/ads/prueba1-v2/G1-4/G1-4-c0.png",
+      "commit": "1f72b73c128f67d21ef3cfbe1614125a84fc522f",
+      "blob_sha": "8aaed52a676b20dde2a35db4ac3c30b70dccec04",
+      "bytes": 1059690,
+      "url": "https://github.com/oninteligenciaartificial/onia-hermes/blob/1f72b73c128f67d21ef3cfbe1614125a84fc522f/hermes-content/carousels/out/ads/prueba1-v2/G1-4/G1-4-c0.png",
+      "sha256": null,
+      "content_failure": "contents content vacío; fetch_blob UnicodeDecodeError utf-8 binary PNG",
+      "state": "conservado Git heredado; nativo puede descargar por red oficial y medir SHA256"
+    }
+  ]
 }
