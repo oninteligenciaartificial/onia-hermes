@@ -4,6 +4,24 @@
 
 ## PLAN VIGENTE 12-oct — armado único y ejecución por evidencia
 
+### Auditoría actual 12-oct — cinco ejecutores nativos comprobados
+
+`list_threads` leído en este corte confirma los 5 `kind:codex`, `hostId:durable`, cwd `/workspace`; 2 madres locales. El inventario de partida “1 Codex + 4 Work” más abajo es histórico de la preparación, sustituido por esta tabla. Madre Desarrollo habló con madre Marketing y los 5 workers; despacho no equivale a cierre de sus lotes.
+
+| Carril | Worker nativo | Resultado / pendiente comunicado |
+|---|---|---|
+| Platform | `01a12c7e-97e2-7115-8561-0b7658008003` | QA de handlers M1c, precios 3000/1500 EN CURSO; no declarar validado |
+| Hermes QA | `01a13170-1c7e-7224-83c1-c5f369052039` | 40 PASS/23 FAIL en checkout HISTÓRICO `2cdefca7`, NO resultados del lote actual; diagnóstico proxy asignado |
+| Marca | `01a13170-b488-71d9-83f8-12663d5a0013` | 275 archivos Git con hashes y 4 originales recuperados; faltan N02 de Work y escucha DD-A |
+| Lucía | `01a13171-0fdb-72c6-9fdc-81244d7e6006` | Acta JSON SHA-256 `c9885427a70c7a252573b28915012de2460d0fb2778559999ad2994f7435ba43`; NO bytes/manifiesto transferidos. 2 agentes Sol QA/Luna media |
+| Ventas/pauta | `01a13171-6ac1-771e-b285-52e7284e203a` | Manifiesto/contrato demo preparados; 2 agentes Luna manifest/Sol QA; sin acceso Meta comprobado |
+
+Madres locales: Desarrollo `01a12beb-7774-7c02-9931-12264158df83`, Marketing `01a12c1f-bef7-7252-a4b6-f8f8354dfc48`. Marketing delega transferencias y supervisa, no produce: ejecución por turnos, sin rondas automáticas activas. Work se conserva para exportación; no reactivar su oficio ni duplicar carril.
+
+**Acceso real:** GitHub conector sí; git fetch por proxy 8080 falla. No Internet/VPS irrestricto ni “todo conectado”. La lectura/acta no sustituye transferencia de bytes: cada worker verifica ruta/hash y herramientas desde su propio entorno antes de cerrar recuperación. Modelos de agentes citados son roles/configuración comunicada; no inferir modelo de Work.
+
+**Regla para enlaces/pedidos:** Sergio manda a madre de área **enlace + objetivo**; madre delega al trabajador existente, trabajador investiga/implementa y ejecuta QA, madre resume y presenta decisión. Registrar fuente/delta, no reenviar trabajo a Sergio ni abrir duplicado. Bloqueo específico de acceso detiene solo el paso dependiente.
+
 **Ejecución solicitada por Sergio:** no cerrar con plan. CODEX.md implementado desde CLAUDE.md fuente `732c479e0f6fe20e93a1401e9febde086c260091`; AGENTS.md exige lectura para carga real, manifest registra alcance aislado. Esta implementación documental no prueba los 4 sustitutos, accesos ni loops pendientes.
 
 | Comparación Claude → Codex | Conservado | Adaptación vigente / límite |
