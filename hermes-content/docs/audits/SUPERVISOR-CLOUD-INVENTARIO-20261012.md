@@ -64,3 +64,25 @@ OpenAI Docs revisada y abierta:
 - [Codex Cloud](https://learn.chatgpt.com/docs/cloud): permite continuar la conversación desde web/mobile/desktop y solicitar cambios posteriores. Es alternativa soportada sobre el mismo chat, sin duplicarlo y con PC apagada; el disparo es humano, no supervisor autónomo.
 
 **Bloqueo concreto:** incompatibilidad funcional observada entre lectura y ruta de envío de Alfred a este chat cloud existente; causa interna pendiente del producto. Ninguna fuente consultada proporciona un ajuste de usuario comprobado para corregir ese error o un procedimiento de adopción. No activar recurrencia mientras el follow-up falle. Próxima acción externa concreta, si se decide: presentar a soporte del producto la discrepancia con UTC, UUID, último turno, error y canario; sin incluir credenciales. No se envió incidencia ni se creó otra tarea. Mientras tanto, conservar los cinco workers y continuar el mismo chat por la UI oficial.
+
+## Incidencia preparada para soporte del producto — no enviada
+
+**Asunto:** Alfred puede leer un chat Codex Cloud nativo existente, pero su follow-up devuelve CloudThreadNotFoundError.
+
+**Resultado esperado:** continuar el chat existente sin crear reemplazo, con un turno identificable y confirmación del canario. La release oficial de OpenAI del 5–9 octubre anuncia follow-up de threads Codex existentes: https://learn.chatgpt.com/docs/whats-new/dots-october-9-2026.
+
+**Resultado observado:** el piloto autorizado de Alfred leyó cinco UUID existentes. A las 20:19 UTC del 12-oct-2026 realizó un único envío al Hermes `01a13170-1c7e-7224-83c1-c5f369052039`: `NOT_FOUND / CloudThreadNotFoundError`, sin `turnId`. La lectura posterior del mismo chat funciona; último turno `01a131bf-c0e5-72f3-8818-feaa088d6f24`, completed, sin `ALFRED-ONIA-20261012-A`. No se repitió el envío y no se crearon reemplazos ni loops.
+
+**Solicitud concreta al soporte/equipo Codex–dots de OpenAI:** verificar y corregir la compatibilidad o resolución de destino de la ruta de follow-up para este chat Codex Cloud nativo, explicar el ámbito soportado de lectura frente a envío y proporcionar el procedimiento oficial para continuar el mismo chat. No solicitamos acceso ampliado, bypass ni migración de secretos. La causa interna no está demostrada por el error.
+
+**Quién puede resolver:** soporte del producto o el equipo responsable de la integración Codex–dots; no una instalación local ni cambiar credenciales por suposición. No se encontró un ajuste oficial adicional comprobado que esta sesión pueda ejecutar sin duplicar tareas. La continuación directa del mismo chat desde web/móvil sigue siendo alternativa soportada con disparo humano; no resuelve supervisión autónoma. Esta incidencia queda lista para revisión; su envío requiere autorización y no se realizó.
+
+## Qué significa Hermes en este informe
+
+| Nombre | Alcance y fuente | Estado respaldado |
+|---|---|---|
+| Proyecto ONIA Hermes / carril Hermes–Jarvis | Repo de conocimiento, scripts, bot Telegram, calendario y automatizaciones; `.claude/skills/onia-hermes-jarvis/SKILL.md` y `hermes-content/docs/handoff/hermes-jarvis.md` | El handoff fechado 9-oct documenta `aplicar` pendiente para resumen/cierre. Es historia del proyecto, no healthcheck actual; no se comprobó hoy el VPS. |
+| Sesión Hermes QA · Codex Cloud | Worker nativo `01a13170-1c7e-7224-83c1-c5f369052039`; pilotos y artefactos en la rama privada `codex/supervisor-pilot-20261012` | Último turno observado completed; lectura disponible, canario Alfred no recibido. No es el bot Telegram ni un supervisor autónomo. |
+| Hermes Agent externo | Software de terceros NousResearch identificado en `hermes-content/docs/ASISTENTE_CODEX_VS_HERMES.md`; configuración propia `hermes-content/deploy/hermes-agent/SOUL.md`, destino documentado `/root/.hermes/SOUL.md` | Estado operativo actual, versión, modelo, cuotas y capacidad de despertar Codex no verificados. No se instaló, activó ni cambió en este encargo. |
+
+No se pide una aprobación genérica de VPS, una instalación o una credencial para resolver la incidencia Alfred. Continuity enlaza este archivo; Orbix y otros cambios ajenos quedan fuera del commit de esta revisión.
