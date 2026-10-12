@@ -1,0 +1,32 @@
+[
+  {
+    "path": "videos/lucia-entrega/g3-v2-final-1080x1920.mp4",
+    "bytes": 33780322,
+    "sha256": "ac032dc76b832c006f1b0d97693270a7c3ec923faa9d1c25d848e346c165193b",
+    "source_commit": "3566e5d5208cf4a7bcf20e743469c6088944674c"
+  },
+  {
+    "path": "videos/lucia-entrega/p9-final-1080x1920.mp4",
+    "bytes": 21165521,
+    "sha256": "49b40ea55dc67f784ae479964d50c8cc3119cff0be557c32b0ee37f0b92a9e04",
+    "source_commit": "3566e5d5208cf4a7bcf20e743469c6088944674c"
+  },
+  {
+    "path": "videos/lucia-g3-v2/qa/hoja-2fps-1.jpg",
+    "bytes": 936899,
+    "sha256": "df7c5682c04fb9f0a6573b60a7f641207534e2818a42e0ba6259eb33c5a0606b",
+    "source_commit": "3566e5d5208cf4a7bcf20e743469c6088944674c"
+  },
+  {
+    "path": "videos/lucia-p9-luz-cara/qa/contacto-2fps.jpg",
+    "bytes": 828167,
+    "sha256": "7879130297f757e4a9a8f8f73e1c6dcda666ec5e8fda3521da666e949b49894d",
+    "source_commit": "3566e5d5208cf4a7bcf20e743469c6088944674c"
+  },
+  {
+    "path": "hermes-content/carousels/out/lucia-c1-un-video-sin-grabar/_HOJA-CONTACTO.jpg",
+    "bytes": 262411,
+    "sha256": "6bcdfe3aedb1340aa88ee5772fef8607e41fa2b9c462c0361a02dd356088b374",
+    "source_commit": "3566e5d5208cf4a7bcf20e743469c6088944674c"
+  }
+]

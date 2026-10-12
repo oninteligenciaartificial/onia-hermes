@@ -1,0 +1,32 @@
+Revisión concreta de muestras — 12-oct-2026
+
+Alcance: mostrar y comentar material existente. Sin reeditar, reabrir producción, generar voz, gastar ni publicar. Posicionamiento vigente: Lucía Antelo es influencer IA que enseña lo que aprende usando Higgsfield; no se presenta como campaña de venta de ONIA lista.
+Fuente:3566e5d5208cf4a7bcf20e743469c6088944674c. Leídas tres hojas de contacto con visión: G3 hoja1 (19 cuadros,0..9s, con guías de QA), P9 (40 muestras a2fps,0..19,5s), C1 (cinco láminas). Se amplió un cuadro real del master P9 a17s (p9-placa-17s.png). No revisión audiovisual continua ni identidad ArcFace nueva. Viernes no se revisó otra vez: su QA360/360 queda vigente.
+
+G3 — BIEN PARA MOSTRAR; AJUSTES/DECISIONES ABIERTOS
+Bien: el gancho «Tres errores que casi publico» plantea una enseñanza concreta. En la primera escena la cara pasa el control pero el fondo inventado no: la distinción «La cara pasó. El fondo, no» se entiende. Rótulo de IA visible en la apertura; las etiquetas aclaran qué se difuminó al editar. No observé afirmación de profesión médica ni testimonio.
+La hoja mostrada es evidencia de QA, no el render para publicar: contiene timestamps y guías de cara/zona segura. Para mostrar la estética final usar el master existente, no esa hoja como representación sin aclaración.
+Abierto documental: caras originales de173–179px, bajo200px y por tanto números poco fiables;11 de229 cuadros medidos bajo0,70 (mínimo0,680). No convertir «aprobado0,835» de la foto en aprobación general del clip. La muestra de hoy no repite esa medición.
+Audio/voz: registro previo describe pausas de0,30–0,33s con tonos sintéticos; regla de audio no cerrada con voz real. La voz propuesta no existe y no debe fingirse una versión terminada narrada. No ajusté costuras ni tempos.
+Salida: mostrar lo existente con esas salvedades. Publicación/voz/calendario siguen bloqueados por la decisión SOLO MOSTRAR; no requiere regeneración ahora.
+
+P9 — DEMOSTRACIÓN ÚTIL; PLACA FINAL DEMASIADO DENSA PARA UN REEL MUDO
+Bien: la comparación visual muestra misma foto de inicio y resultados distintos de cara/escena; declara IA al inicio y cierra con un CTA. La nota de entradas compartidas y la limitación de caras pequeñas evitan presentar el parecido como certeza. No profesión ni testimonio observados.
+Ajuste concreto: desde cerca de12s la cara desaparece y entra una placa oscura de cifras, dos barras por modelo y varias notas. En el cuadro17s todas las frases son legibles a resolución completa, pero requieren leer demasiado dentro de la ventana disponible. Esa placa es adecuada como ficha pausada; en el reel mudo la enseñanza principal compite con seis líneas de límites. La hoja de contacto evidencia esa diferencia de densidad respecto del inicio.
+Opciones para una futura edición autorizada: una comparación principal por pantalla; dejar escala/ruido/cara pequeña/sesgo en el pie o una lámina guardable; conservar un límite de «una toma, no regla» en pantalla. Esto es propuesta, no cambio hecho ni permiso de editar.
+Voz:311 caracteres estimados, margen temporal0,05s y requiere al menos16,85car/s según manifest; voz real no existe. No afirmar que añadirla cerraría el problema sin medir duraciones y repetir QA del nuevo SHA.
+Salida: mostrar el master actual como prueba con placa densa pendiente; no presentarlo como reel narrado ni publicación aprobada.
+
+C1 — SECUENCIA CLARA; DOS CLAIMS Y DISCLOSURE A REVISAR
+Bien: cinco láminas enseñan foto→orden→clip→revisión, incluyen orden real y ejemplo de dedos que no se pudieron contar. CTA «Seguime» corresponde a aprendizaje semanal. No observé frase de odontóloga/pacientes/consultorio ni consejo clínico; el ambo es vestuario.
+Texto que conviene corregir antes de eventual publicación: «Primero la cara, siempre igual» promete continuidad que las pruebas propias desmienten. Propuesta: «Primero una foto de referencia. Después, revisá la cara.» No modifiqué el carrusel.
+Costes: «Una foto cuesta1cr», «6s cuesta7,5cr» y total8,5cr son receta/cotización histórica concreta; no tarifa universal de toda imagen/video. Propuesta: «En esta prueba: foto1cr y clip6s7,5cr; total8,5cr», con modelo/fecha en el pie. Revalidar precio si se pretende presentar como cotización vigente, sin generar nada.
+Declaración IA: el pie canónico empieza «Lucía Antelo es un personaje hecho con IA por@oniahq». En las cinco láminas observadas no aparece una declaración textual IA explícita, solo handle. No afirmar que el carrusel declara IA visualmente en cada lámina. Para eventual publicación, considerar rótulo de IA visible al menos en portada y exigir etiqueta real de Meta; esto no se añadió ni se verificó en cuenta.
+Salida: mostrar como carrusel existente con correcciones de wording/disclosure/precio propuestas. No regenerar C1 por esta revisión; SOLO MOSTRAR.
+
+Resumen para mostrar junto a las muestras
+Viernes v2: la pieza más simple para mostrar hoy; cara visible y una idea por pantalla, mudo.
+G3: enseña bien a revisar fondo además de cara; límites de caras pequeñas y voz pendientes.
+P9: comparación útil, cierre demasiado denso para lectura en un reel mudo.
+C1: pasos claros; «siempre igual» y precios universales requieren matiz, IA explícita vive hoy en el pie.
+Ninguna conclusión de este informe acredita campaña ONIA lista, operación autónoma de cuenta, voz nueva ni autorización de publicar.

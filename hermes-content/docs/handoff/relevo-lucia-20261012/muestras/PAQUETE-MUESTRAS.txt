@@ -1,0 +1,38 @@
+MUESTRAS REALES DE LUCÍA — 12-oct-2026
+Sí hay piezas terminadas para mostrar; la campaña de venta ONIA y la operación de la cuenta no están cerradas.
+Posicionamiento vigente: Lucía Antelo, personaje IA de Onia e influencer independiente que aprende/enseña pruebas de Higgsfield. Estas muestras construyen ese contenido. No se afirma odontóloga, clienta ni testimonio. No se reconvierten guiones a vender Platform por inferencia.
+Cuenta documentada: @lucia.antelo.oficial; acceso/operación/insights actuales no comprobados. Voz decidida Marcela con su acento; estos masters están sin narración. G1v2 convoz20s fue reportado por la madre, pero falta recibir archivo/SHA: no mostrar G1v1 como actual.
+SOLO MOSTRAR: no aprobación de publicación, calendario ni generación de voz nueva.
+
+Viernes v2 · 15 s
+https://github.com/oninteligenciaartificial/onia-hermes/blob/3566e5d5208cf4a7bcf20e743469c6088944674c/videos/lucia-entrega/viernes-copia-v2-final-1080x1920.mp4
+BIEN PARA MOSTRAR: QA nativo360/360, SHA verificado; sin voz. Publicación pendiente.
+
+G3 v2 · 27,917 s
+https://github.com/oninteligenciaartificial/onia-hermes/blob/3566e5d5208cf4a7bcf20e743469c6088944674c/videos/lucia-entrega/g3-v2-final-1080x1920.mp4
+AJUSTES: identidad en algunos cuadros pequeños <200px, pausas/audio y voz pendientes; rótulo aprobado se refiere a foto, no a pieza publicada. SHA medido coincide; revisión visual de muestras, no nuevaQA completa.
+
+P9 v3.1 · 20 s
+https://github.com/oninteligenciaartificial/onia-hermes/blob/3566e5d5208cf4a7bcf20e743469c6088944674c/videos/lucia-entrega/p9-final-1080x1920.mp4
+AJUSTES: placa final densa en mudo; narración propuesta311car no generada. SHA medido coincide; QA previa documental, muestra visual revisada.
+
+G2 v2.4 · 27,792 s
+https://github.com/oninteligenciaartificial/onia-hermes/blob/3566e5d5208cf4a7bcf20e743469c6088944674c/videos/lucia-entrega/g2-v2-final-1080x1920.mp4
+LISTA PARA REVISIÓN: nombres catálogo/nota final5,9s/voz requieren decisión; QA previo documental, no nueva revisión nativa de todo el master.
+
+G4 v2 · 28,042 s
+https://github.com/oninteligenciaartificial/onia-hermes/blob/3566e5d5208cf4a7bcf20e743469c6088944674c/videos/lucia-entrega/g4-v2-final-1080x1920.mp4
+LISTA PARA REVISIÓN: una toma cada uno frente a segundas tomas; pie lo aclara. Voz pendiente; no regenerado.
+
+G5 v2 · 26,625 s
+https://github.com/oninteligenciaartificial/onia-hermes/blob/3566e5d5208cf4a7bcf20e743469c6088944674c/videos/lucia-entrega/g5-v2-final-1080x1920.mp4
+LISTA PARA REVISIÓN: contrapeso0,35 solo en pie y nombres catálogo; voz pendiente; no regenerado.
+
+C1 carrusel existente ·5láminas
+https://github.com/oninteligenciaartificial/onia-hermes/blob/3566e5d5208cf4a7bcf20e743469c6088944674c/hermes-content/carousels/out/lucia-c1-un-video-sin-grabar/_HOJA-CONTACTO.jpg
+BIEN PARA MUESTRA de enseñanza3pasos; revisar cara siempreigual frente deriva medida y señalar costes históricos; no nuevaedición. IA declarada en pie; no rótulo explícitoIA en las5láminas vistas: considerar ajuste antes de eventualpublicación. No ajuste ejecutado.
+Láminas originales: https://github.com/oninteligenciaartificial/onia-hermes/tree/3566e5d5208cf4a7bcf20e743469c6088944674c/hermes-content/carousels/out/lucia-c1-un-video-sin-grabar
+
+Imágenes visibles ya mostradas en transcript:viernescontacto2fps,G3hojaQAprimeraParte,P9contacto,C1contacto. Se aclara que las guías amarillas deG3 son dehojaQA; se mostró además cuadro delmaster5,5s sin esas guías y placaP9delmaster15s. Los PNG nuevos aquí son extracciones de masters existentes, no reediciones.
+AuditoríaHiggsfield/kit replicable ya preservados e50ddce83: dominio total no demostrado; ensayo17gates demuestra reutilización local, no persona/cuenta/generación/publicación replicadas. K4/R3rutas exactas deorigen aún pendientes; master existente no depende de regenerarlos.
+Sin gasto, cara/voz nueva, instalaciones, nuevascuentas, publicación ni loops.
