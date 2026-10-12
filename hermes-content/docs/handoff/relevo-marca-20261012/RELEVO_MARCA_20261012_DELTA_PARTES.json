@@ -1,0 +1,488 @@
+{
+  "source_manifest_commit": "1467b2d3ed4e794137311d6451165430124b30c6",
+  "native_destination": "01a13170-b488-71d9-83f8-12663d5a0013",
+  "folder_id": "1bYK_ahMyjIh_Ta9CHGF_1WflOiuFFRZa",
+  "part_limit_bytes": 20971520,
+  "groups": [
+    {
+      "source": "/workspace/scratch/786b6dabb916/N02-ajuste-privado-evidencia.zip",
+      "relative": "N02-ajuste-privado-evidencia.zip",
+      "original_drive_id": "1dAZfGj0T2nKIgAdyXoKIVeFXyU5AeX6Z",
+      "original_bytes": 53323533,
+      "original_sha256": "e29c4b151b602de862a470c13abf1771c9489f8755791150117bc3f48b920fb6",
+      "parts": [
+        {
+          "order": 1,
+          "offset": 0,
+          "name": "N02-ajuste-privado-evidencia.zip.part001",
+          "path": "/workspace/scratch/786b6dabb916/relevo-marca-partes-20261012/N02-ajuste-privado-evidencia.zip.part001",
+          "bytes": 20971520,
+          "sha256": "9389ada23574ae0f5be6ad7179cac9e76e69cf3bf596e25a8b0716e212c08bc3",
+          "drive_id": "1AjSr8Itu-BEy2Xr0faGKbE5TNy8VAO2W",
+          "private_url": "https://drive.google.com/file/d/1AjSr8Itu-BEy2Xr0faGKbE5TNy8VAO2W/view?usp=drivesdk",
+          "remote_verification": {
+            "metadata_matches": true,
+            "bytes": 20971520,
+            "sha256": "9389ada23574ae0f5be6ad7179cac9e76e69cf3bf596e25a8b0716e212c08bc3",
+            "hash_matches": true,
+            "permissions": [
+              {
+                "type": "user",
+                "role": "owner",
+                "emailAddress": null,
+                "domain": null,
+                "displayName": null,
+                "allowFileDiscovery": null
+              }
+            ],
+            "parent_ids": [
+              "1bYK_ahMyjIh_Ta9CHGF_1WflOiuFFRZa"
+            ]
+          }
+        },
+        {
+          "order": 2,
+          "offset": 20971520,
+          "name": "N02-ajuste-privado-evidencia.zip.part002",
+          "path": "/workspace/scratch/786b6dabb916/relevo-marca-partes-20261012/N02-ajuste-privado-evidencia.zip.part002",
+          "bytes": 20971520,
+          "sha256": "102ab32f0c02ee7caa0cc35a75aaaeb22a1e563176e460caf76f57a7215d54f3",
+          "drive_id": "19xBsFNR_7cv9U6jrcJ71c5vnrdkTiH7A",
+          "private_url": "https://drive.google.com/file/d/19xBsFNR_7cv9U6jrcJ71c5vnrdkTiH7A/view?usp=drivesdk",
+          "remote_verification": {
+            "metadata_matches": true,
+            "bytes": 20971520,
+            "sha256": "102ab32f0c02ee7caa0cc35a75aaaeb22a1e563176e460caf76f57a7215d54f3",
+            "hash_matches": true,
+            "permissions": [
+              {
+                "type": "user",
+                "role": "owner",
+                "emailAddress": null,
+                "domain": null,
+                "displayName": null,
+                "allowFileDiscovery": null
+              }
+            ],
+            "parent_ids": [
+              "1bYK_ahMyjIh_Ta9CHGF_1WflOiuFFRZa"
+            ]
+          }
+        },
+        {
+          "order": 3,
+          "offset": 41943040,
+          "name": "N02-ajuste-privado-evidencia.zip.part003",
+          "path": "/workspace/scratch/786b6dabb916/relevo-marca-partes-20261012/N02-ajuste-privado-evidencia.zip.part003",
+          "bytes": 11380493,
+          "sha256": "cfe3208b2783c236756ae384ca559057573fad07768c94c41d38c51915c3882c",
+          "drive_id": "1Ss_nnFMl0-DCP1u6hOsCPxQXZ7Bpog-b",
+          "private_url": "https://drive.google.com/file/d/1Ss_nnFMl0-DCP1u6hOsCPxQXZ7Bpog-b/view?usp=drivesdk",
+          "remote_verification": {
+            "metadata_matches": true,
+            "bytes": 11380493,
+            "sha256": "cfe3208b2783c236756ae384ca559057573fad07768c94c41d38c51915c3882c",
+            "hash_matches": true,
+            "permissions": [
+              {
+                "type": "user",
+                "role": "owner",
+                "emailAddress": null,
+                "domain": null,
+                "displayName": null,
+                "allowFileDiscovery": null
+              }
+            ],
+            "parent_ids": [
+              "1bYK_ahMyjIh_Ta9CHGF_1WflOiuFFRZa"
+            ]
+          }
+        }
+      ],
+      "local_reassembly_matches": true,
+      "reassemble_order": [
+        "N02-ajuste-privado-evidencia.zip.part001",
+        "N02-ajuste-privado-evidencia.zip.part002",
+        "N02-ajuste-privado-evidencia.zip.part003"
+      ]
+    },
+    {
+      "source": "/workspace/scratch/786b6dabb916/media-adjustment/DD-A-bruto-original.mp4",
+      "relative": "media-adjustment/DD-A-bruto-original.mp4",
+      "original_drive_id": "1xFKbMIvoStrjVPbfrg6hG742kVirTPY5",
+      "original_bytes": 92453888,
+      "original_sha256": "8220af93f24be363a90c9fcc0fad4c1a77e4f9fb4556abe4cefaaace2f302593",
+      "parts": [
+        {
+          "order": 1,
+          "offset": 0,
+          "name": "media-adjustment--DD-A-bruto-original.mp4.part001",
+          "path": "/workspace/scratch/786b6dabb916/relevo-marca-partes-20261012/media-adjustment--DD-A-bruto-original.mp4.part001",
+          "bytes": 20971520,
+          "sha256": "fe49dad6ce2540c46f0f91ee4a16999c04189a35fb808f507736141a763c9657",
+          "drive_id": "1Yzr0ITPQDUdpBpdmlITTYPNDKyt3ppvf",
+          "private_url": "https://drive.google.com/file/d/1Yzr0ITPQDUdpBpdmlITTYPNDKyt3ppvf/view?usp=drivesdk",
+          "remote_verification": {
+            "metadata_matches": true,
+            "bytes": 20971520,
+            "sha256": "fe49dad6ce2540c46f0f91ee4a16999c04189a35fb808f507736141a763c9657",
+            "hash_matches": true,
+            "permissions": [
+              {
+                "type": "user",
+                "role": "owner",
+                "emailAddress": null,
+                "domain": null,
+                "displayName": null,
+                "allowFileDiscovery": null
+              }
+            ],
+            "parent_ids": [
+              "1bYK_ahMyjIh_Ta9CHGF_1WflOiuFFRZa"
+            ]
+          }
+        },
+        {
+          "order": 2,
+          "offset": 20971520,
+          "name": "media-adjustment--DD-A-bruto-original.mp4.part002",
+          "path": "/workspace/scratch/786b6dabb916/relevo-marca-partes-20261012/media-adjustment--DD-A-bruto-original.mp4.part002",
+          "bytes": 20971520,
+          "sha256": "fbad69d97102c989a9680922e8fafeca5eb7537906d7f2d0b3b8c03f4045086b",
+          "drive_id": "1JnNMcdjWprZTuzWXhA49zBEJ74u0uJm0",
+          "private_url": "https://drive.google.com/file/d/1JnNMcdjWprZTuzWXhA49zBEJ74u0uJm0/view?usp=drivesdk",
+          "remote_verification": {
+            "metadata_matches": true,
+            "bytes": 20971520,
+            "sha256": "fbad69d97102c989a9680922e8fafeca5eb7537906d7f2d0b3b8c03f4045086b",
+            "hash_matches": true,
+            "permissions": [
+              {
+                "type": "user",
+                "role": "owner",
+                "emailAddress": null,
+                "domain": null,
+                "displayName": null,
+                "allowFileDiscovery": null
+              }
+            ],
+            "parent_ids": [
+              "1bYK_ahMyjIh_Ta9CHGF_1WflOiuFFRZa"
+            ]
+          }
+        },
+        {
+          "order": 3,
+          "offset": 41943040,
+          "name": "media-adjustment--DD-A-bruto-original.mp4.part003",
+          "path": "/workspace/scratch/786b6dabb916/relevo-marca-partes-20261012/media-adjustment--DD-A-bruto-original.mp4.part003",
+          "bytes": 20971520,
+          "sha256": "3bc289c1930b73207adc828abebcb83f3fb5bb760528793df5e1458b2ce8b9c2",
+          "drive_id": "1bKCGdxKCscdUEKoiBmm2T-5NNyrghc67",
+          "private_url": "https://drive.google.com/file/d/1bKCGdxKCscdUEKoiBmm2T-5NNyrghc67/view?usp=drivesdk",
+          "remote_verification": {
+            "metadata_matches": true,
+            "bytes": 20971520,
+            "sha256": "3bc289c1930b73207adc828abebcb83f3fb5bb760528793df5e1458b2ce8b9c2",
+            "hash_matches": true,
+            "permissions": [
+              {
+                "type": "user",
+                "role": "owner",
+                "emailAddress": null,
+                "domain": null,
+                "displayName": null,
+                "allowFileDiscovery": null
+              }
+            ],
+            "parent_ids": [
+              "1bYK_ahMyjIh_Ta9CHGF_1WflOiuFFRZa"
+            ]
+          }
+        },
+        {
+          "order": 4,
+          "offset": 62914560,
+          "name": "media-adjustment--DD-A-bruto-original.mp4.part004",
+          "path": "/workspace/scratch/786b6dabb916/relevo-marca-partes-20261012/media-adjustment--DD-A-bruto-original.mp4.part004",
+          "bytes": 20971520,
+          "sha256": "06be26e2c1bae35dd96c9080d62d13afaf8ca07d74da3b37fbd0b41f6fed5d81",
+          "drive_id": "1fvCpgZNi3Y9VhDoHJCcss-PiSwfjDnmL",
+          "private_url": "https://drive.google.com/file/d/1fvCpgZNi3Y9VhDoHJCcss-PiSwfjDnmL/view?usp=drivesdk",
+          "remote_verification": {
+            "metadata_matches": true,
+            "bytes": 20971520,
+            "sha256": "06be26e2c1bae35dd96c9080d62d13afaf8ca07d74da3b37fbd0b41f6fed5d81",
+            "hash_matches": true,
+            "permissions": [
+              {
+                "type": "user",
+                "role": "owner",
+                "emailAddress": null,
+                "domain": null,
+                "displayName": null,
+                "allowFileDiscovery": null
+              }
+            ],
+            "parent_ids": [
+              "1bYK_ahMyjIh_Ta9CHGF_1WflOiuFFRZa"
+            ]
+          }
+        },
+        {
+          "order": 5,
+          "offset": 83886080,
+          "name": "media-adjustment--DD-A-bruto-original.mp4.part005",
+          "path": "/workspace/scratch/786b6dabb916/relevo-marca-partes-20261012/media-adjustment--DD-A-bruto-original.mp4.part005",
+          "bytes": 8567808,
+          "sha256": "b061a2011c30a8b4ee4f530c7153c4f5089f645c2e685dbb9aba30bf9385eba2",
+          "drive_id": "1EPsC2tBqFkxVrH66WGl300a7sb4J61Uj",
+          "private_url": "https://drive.google.com/file/d/1EPsC2tBqFkxVrH66WGl300a7sb4J61Uj/view?usp=drivesdk",
+          "remote_verification": {
+            "metadata_matches": true,
+            "bytes": 8567808,
+            "sha256": "b061a2011c30a8b4ee4f530c7153c4f5089f645c2e685dbb9aba30bf9385eba2",
+            "hash_matches": true,
+            "permissions": [
+              {
+                "type": "user",
+                "role": "owner",
+                "emailAddress": null,
+                "domain": null,
+                "displayName": null,
+                "allowFileDiscovery": null
+              }
+            ],
+            "parent_ids": [
+              "1bYK_ahMyjIh_Ta9CHGF_1WflOiuFFRZa"
+            ]
+          }
+        }
+      ],
+      "local_reassembly_matches": true,
+      "reassemble_order": [
+        "media-adjustment--DD-A-bruto-original.mp4.part001",
+        "media-adjustment--DD-A-bruto-original.mp4.part002",
+        "media-adjustment--DD-A-bruto-original.mp4.part003",
+        "media-adjustment--DD-A-bruto-original.mp4.part004",
+        "media-adjustment--DD-A-bruto-original.mp4.part005"
+      ]
+    },
+    {
+      "source": "/workspace/scratch/786b6dabb916/media-review-n06/bruto.mp4",
+      "relative": "media-review-n06/bruto.mp4",
+      "original_drive_id": "18WULGYFlDTEaAneWUDzxWrxYi5OZFbSY",
+      "original_bytes": 69843125,
+      "original_sha256": "6e3702e1378de3432843633c2bff2f76c654acaa251b3c38b9f1f3a9acff8fb9",
+      "parts": [
+        {
+          "order": 1,
+          "offset": 0,
+          "name": "media-review-n06--bruto.mp4.part001",
+          "path": "/workspace/scratch/786b6dabb916/relevo-marca-partes-20261012/media-review-n06--bruto.mp4.part001",
+          "bytes": 20971520,
+          "sha256": "64035c85764d2b5fc03a9192d0c927c97eafa448dc73b76c676aacf1ca457474",
+          "drive_id": "1sqkFQlhWD-aW8QrEFZvRtDPkx3Ho__R_",
+          "private_url": "https://drive.google.com/file/d/1sqkFQlhWD-aW8QrEFZvRtDPkx3Ho__R_/view?usp=drivesdk",
+          "remote_verification": {
+            "metadata_matches": true,
+            "bytes": 20971520,
+            "sha256": "64035c85764d2b5fc03a9192d0c927c97eafa448dc73b76c676aacf1ca457474",
+            "hash_matches": true,
+            "permissions": [
+              {
+                "type": "user",
+                "role": "owner",
+                "emailAddress": null,
+                "domain": null,
+                "displayName": null,
+                "allowFileDiscovery": null
+              }
+            ],
+            "parent_ids": [
+              "1bYK_ahMyjIh_Ta9CHGF_1WflOiuFFRZa"
+            ]
+          }
+        },
+        {
+          "order": 2,
+          "offset": 20971520,
+          "name": "media-review-n06--bruto.mp4.part002",
+          "path": "/workspace/scratch/786b6dabb916/relevo-marca-partes-20261012/media-review-n06--bruto.mp4.part002",
+          "bytes": 20971520,
+          "sha256": "894a7a394a3527534bf1fc9448099036e34c623d1198dfbc2203ab44dc6b1003",
+          "drive_id": "1LOuwqXDNonIw2-QDTYa90ZIu7VbFLQjN",
+          "private_url": "https://drive.google.com/file/d/1LOuwqXDNonIw2-QDTYa90ZIu7VbFLQjN/view?usp=drivesdk",
+          "remote_verification": {
+            "metadata_matches": true,
+            "bytes": 20971520,
+            "sha256": "894a7a394a3527534bf1fc9448099036e34c623d1198dfbc2203ab44dc6b1003",
+            "hash_matches": true,
+            "permissions": [
+              {
+                "type": "user",
+                "role": "owner",
+                "emailAddress": null,
+                "domain": null,
+                "displayName": null,
+                "allowFileDiscovery": null
+              }
+            ],
+            "parent_ids": [
+              "1bYK_ahMyjIh_Ta9CHGF_1WflOiuFFRZa"
+            ]
+          }
+        },
+        {
+          "order": 3,
+          "offset": 41943040,
+          "name": "media-review-n06--bruto.mp4.part003",
+          "path": "/workspace/scratch/786b6dabb916/relevo-marca-partes-20261012/media-review-n06--bruto.mp4.part003",
+          "bytes": 20971520,
+          "sha256": "07a66b03e8bac4e3baf6f232b77f1eabbc06b3071bca56687ac91ebea7735352",
+          "drive_id": "1LxxJ4W089K3BqCPVZO3B_HcJ7MZZesAH",
+          "private_url": "https://drive.google.com/file/d/1LxxJ4W089K3BqCPVZO3B_HcJ7MZZesAH/view?usp=drivesdk",
+          "remote_verification": {
+            "metadata_matches": true,
+            "bytes": 20971520,
+            "sha256": "07a66b03e8bac4e3baf6f232b77f1eabbc06b3071bca56687ac91ebea7735352",
+            "hash_matches": true,
+            "permissions": [
+              {
+                "type": "user",
+                "role": "owner",
+                "emailAddress": null,
+                "domain": null,
+                "displayName": null,
+                "allowFileDiscovery": null
+              }
+            ],
+            "parent_ids": [
+              "1bYK_ahMyjIh_Ta9CHGF_1WflOiuFFRZa"
+            ]
+          }
+        },
+        {
+          "order": 4,
+          "offset": 62914560,
+          "name": "media-review-n06--bruto.mp4.part004",
+          "path": "/workspace/scratch/786b6dabb916/relevo-marca-partes-20261012/media-review-n06--bruto.mp4.part004",
+          "bytes": 6928565,
+          "sha256": "5e6088fe0af1327fc832c0e3a9911c0ed573cebdeeff6a6ed2de61b7291594a2",
+          "drive_id": "1p4EPhitplEA1zYYvdoobi07TDgmFfKfG",
+          "private_url": "https://drive.google.com/file/d/1p4EPhitplEA1zYYvdoobi07TDgmFfKfG/view?usp=drivesdk",
+          "remote_verification": {
+            "metadata_matches": true,
+            "bytes": 6928565,
+            "sha256": "5e6088fe0af1327fc832c0e3a9911c0ed573cebdeeff6a6ed2de61b7291594a2",
+            "hash_matches": true,
+            "permissions": [
+              {
+                "type": "user",
+                "role": "owner",
+                "emailAddress": null,
+                "domain": null,
+                "displayName": null,
+                "allowFileDiscovery": null
+              }
+            ],
+            "parent_ids": [
+              "1bYK_ahMyjIh_Ta9CHGF_1WflOiuFFRZa"
+            ]
+          }
+        }
+      ],
+      "local_reassembly_matches": true,
+      "reassemble_order": [
+        "media-review-n06--bruto.mp4.part001",
+        "media-review-n06--bruto.mp4.part002",
+        "media-review-n06--bruto.mp4.part003",
+        "media-review-n06--bruto.mp4.part004"
+      ]
+    }
+  ],
+  "access_checks": [
+    {
+      "id": "1bYK_ahMyjIh_Ta9CHGF_1WflOiuFFRZa",
+      "size": null,
+      "permissions": [
+        {
+          "type": "user",
+          "role": "owner",
+          "emailAddress": null,
+          "domain": null,
+          "displayName": null,
+          "allowFileDiscovery": null
+        }
+      ],
+      "parents": [
+        "0AJ4msuAFN2TmUk9PVA"
+      ],
+      "error": false
+    },
+    {
+      "id": "1dAZfGj0T2nKIgAdyXoKIVeFXyU5AeX6Z",
+      "size": "53323533",
+      "permissions": [
+        {
+          "type": "user",
+          "role": "owner",
+          "emailAddress": null,
+          "domain": null,
+          "displayName": null,
+          "allowFileDiscovery": null
+        }
+      ],
+      "parents": [
+        "1bYK_ahMyjIh_Ta9CHGF_1WflOiuFFRZa"
+      ],
+      "error": false
+    },
+    {
+      "id": "1xFKbMIvoStrjVPbfrg6hG742kVirTPY5",
+      "size": "92453888",
+      "permissions": [
+        {
+          "type": "user",
+          "role": "owner",
+          "emailAddress": null,
+          "domain": null,
+          "displayName": null,
+          "allowFileDiscovery": null
+        }
+      ],
+      "parents": [
+        "1bYK_ahMyjIh_Ta9CHGF_1WflOiuFFRZa"
+      ],
+      "error": false
+    },
+    {
+      "id": "18WULGYFlDTEaAneWUDzxWrxYi5OZFbSY",
+      "size": "69843125",
+      "permissions": [
+        {
+          "type": "user",
+          "role": "owner",
+          "emailAddress": null,
+          "domain": null,
+          "displayName": null,
+          "allowFileDiscovery": null
+        }
+      ],
+      "parents": [
+        "1bYK_ahMyjIh_Ta9CHGF_1WflOiuFFRZa"
+      ],
+      "error": false
+    }
+  ],
+  "size_limit_evidence": {
+    "native_report": "Sergio transmite: destino cotejó 43/59; faltan 16 rutas por límite del conector >32MiB.",
+    "observed_here": "Los tres objetos >32MiB: metadata leída sin denegación y permisos sólo propietario; bytes completos previamente leídos y hasheados en lote de exportación. Las 12 partes nuevas leídas y hasheadas.",
+    "boundary": "No se reprodujo el error del conector nativo desde Work ni se declara login nativo. No hubo denegación de acceso/política observada; sólo se adapta tamaño de transporte autorizado."
+  },
+  "native_receipt_status": "43/59 según reporte recibido; 59/59 pendiente de cotejo independiente tras reensamblar.",
+  "preserved_previous_objects": true,
+  "previous_manifest_unchanged": true,
+  "reassembly_recipe_tested": true,
+  "reassembly_recipe_result": "Los tres archivos generados en /tmp/marca-reassembly-20261012 por la receta entregada coinciden en bytes y SHA256 completos; no se abrió ni modificó original."
+}
