@@ -1,0 +1,226 @@
+# Paquete completo · 2026-10-18
+
+America/Caracas. Textos para revisión/grabación; no publicaciones ni agenda confirmada. Los dos espacios IA del14–19 son reservas educativas: revalidar o sustituir por noticias del día antes de publicar. Los recortes son planes, no videos existentes.
+
+## Tres verticales · hablado y fuentes separados
+
+# IA-1018-1 · Un agente extra necesita una tarea distinta
+
+Pedirle a una IA que mande otra IA no mejora automáticamente el trabajo. Primero hay que saber qué parte puede hacer cada una.
+
+Claude Code tiene varias formas de trabajar en paralelo: subagentes dentro de una sesión y sesiones separadas para tareas más independientes. Su documentación compara esas opciones.
+
+Un subagente puede recibir una tarea concreta y devolver lo que encontró. Una sesión aparte puede necesitar su propio espacio de archivos y coordinación con las demás.
+
+Mi consejo: buscá trabajo que se pueda dividir sin esperar cada paso del otro. Por ejemplo, una revisión de texto y una comprobación de fuentes. Después alguien compara los resultados.
+
+Si todos editan lo mismo y nadie revisa, sumar agentes puede sumar confusión. Y las llamadas al modelo también consumen uso.
+
+No te prometo cuántos agentes deberías usar. Empezá por roles útiles, entradas claras y una prueba del resultado. Un nombre distinto no demuestra una revisión independiente.
+
+# IA-1018-2 · Un conector le da acceso, no criterio
+
+Un conector puede dejar que tu IA use herramientas de otro programa. En Claude Code, MCP es una de las formas de conectar esas capacidades.
+
+Pero conectar no significa que el acceso esté bien limitado. Tampoco significa que la IA ya sepa qué acción tiene permiso de hacer.
+
+La documentación de Anthropic explica cómo configurar servidores MCP y revisar las herramientas disponibles. También advierte que los servidores y su contenido necesitan cuidado: no se vuelven confiables solo por estar conectados.
+
+Mi consejo: mirá la lista real. ¿Puede leer? ¿Puede escribir? ¿Puede borrar o mandar un mensaje? Para una tarea de consulta, no hace falta darle todas las acciones de la cuenta.
+
+No te muestro una cuenta conectada ni un permiso ya comprobado. Es el control previo que conviene hacer.
+
+El conector es la puerta. Lo importante es saber a qué abre y quién decide qué puede pasar por ella.
+
+# INF-1018 · Qué quiero aprender al preparar un guion
+
+Preparar un guion no quiero que sea solo encontrar una frase que suene fuerte.
+
+Quiero poder explicar la idea con palabras simples. Si necesito esconderme detrás de cinco nombres técnicos, todavía me falta ordenar lo que estoy diciendo.
+
+También quiero distinguir una recomendación de un dato. Puedo decir yo recomiendo empezar chico. Otra cosa es afirmar que un programa siempre ahorra cierto porcentaje. Ahí necesito la fuente y el contexto.
+
+Para mí, el guion tiene que dejar esa diferencia visible. Qué está documentado, qué es un ejemplo y qué opino yo.
+
+No te cuento una lección que ya transformó todos mis videos. Es una forma de preparar el siguiente.
+
+Antes de grabar, quiero preguntarme si alguien que no conoce el tema entiende por qué le importa. Si la respuesta es no, prefiero aclarar la idea antes de agregar más texto.
+
+
+---
+
+## Fichas fuera del hablado: actualidad, fuentes y recortes
+
+Fechaobservación:2026-10-12 · timezoneAmerica/Caracas. Autor/lectorprimarias: /root/guiones_sol. Ninguna ficha ni plan siguiente se dice a cámara. No piezas/publicaciones aprobadas.
+
+### IA-1018-1
+
+**Hablado:** completo, reservaeducativa/documental; no noticia del día confirmada. **Slotnoticioso:** pendiente verificación o sustitución.
+
+**Fecha del hecho/documento:** Docactualconsultado12oct; lanzamiento no fechado. **Observado:**12oct2026.
+
+**Fuentesprimarias:** https://code.claude.com/docs/en/agents
+
+**Versión/condición:** Roles+carpetas+QA según método; ejecución/consumo no demostrados.
+
+**Gateactualidadpara 2026-10-18:** Antes del post propuesto revisar fecha/hecho/versión con fuente oficial. Sin novedadreciente confirmada, conservar como reserva educativa; sustituirslotnoticia o cambiarclasificación/calendario con revisión. No llamarlo noticia del13–19 ni breaking.
+
+**3planes:** IA-1018-1-YA, IA-1018-1-YB, IA-1018-1-YC; candidatosenPLANES_63.json. Autonomía/duración no verificadas: noassets/63renders.
+
+### IA-1018-2
+
+**Hablado:** completo, reservaeducativa/documental; no noticia del día confirmada. **Slotnoticioso:** pendiente verificación o sustitución.
+
+**Fecha del hecho/documento:** Docactualconsultado12oct; lanzamiento no fechado. **Observado:**12oct2026.
+
+**Fuentesprimarias:** https://code.claude.com/docs/en/mcp
+
+**Versión/condición:** Conectorvisible no pruebaauth; herramientas/permisoscuenta pendientes.
+
+**Gateactualidadpara 2026-10-18:** Antes del post propuesto revisar fecha/hecho/versión con fuente oficial. Sin novedadreciente confirmada, conservar como reserva educativa; sustituirslotnoticia o cambiarclasificación/calendario con revisión. No llamarlo noticia del13–19 ni breaking.
+
+**3planes:** IA-1018-2-YA, IA-1018-2-YB, IA-1018-2-YC; candidatosenPLANES_63.json. Autonomía/duración no verificadas: noassets/63renders.
+
+### INF-1018
+
+Hablado informal completo en intención/reflexión: no relato deexperiencia cumplida, ganancia/resultadosni promesa de recurso. Fuente:planKIT-GRABACION/FLUJO-DIARIO+autorización12oct; no noticia. Título heredadoes índice; texto no afirma que yaocurrió.
+
+**3planes:** INF-1018-YA, INF-1018-YB, INF-1018-YC; candidatosenPLANES_63.json. Autonomía/duración no verificadas: noassets/63renders.
+
+
+## Dos horizontales · hablado completo
+
+# H-IA-06 · HyperFrames: cuándo un título por código sí ayuda
+
+Si cada semana querés el mismo título animado con una frase distinta, hacerlo por código puede tener sentido. Si lo que necesitás es elegir una buena toma, un título animado no te resuelve ese problema.
+
+HyperFrames es un proyecto de HeyGen para convertir composiciones con HTML, CSS, archivos de medios y animaciones en videos. La parte interesante es que podés describir un formato y reutilizarlo con cambios. No significa que toda edición deba convertirse en programación.
+
+Para empezar, yo elegiría una pieza mínima. Un fondo, una frase y una entrada sencilla. Nada de construir el video completo en el primer intento. La prueba es que el texto se lea, el movimiento termine y la exportación conserve lo que revisaste.
+
+Supongamos un cartel que dice tres pasos para revisar una fuente. Es un ejemplo de composición, no un render que esté mostrando como si ya existiera. Definís el tamaño, cuánto dura y dónde va la frase. Después decidís qué palabra merece énfasis. Si resaltás todas, el énfasis deja de ordenar.
+
+El repositorio de HyperFrames describe un flujo para crear, previsualizar y renderizar. Renderizar es producir el archivo de video. Previsualizar es revisar la composición antes. Los comandos y requisitos se tienen que mirar en la versión que vas a usar; no copiar una captura vieja como si fuera el manual actual.
+
+El render local es parte del proyecto abierto. Eso no vuelve gratis cualquier servicio, modelo o recurso que uses alrededor. Si le pedís a otra herramienta una imagen paga, ese costo es distinto. Y si aparece música o una foto ajena, sus derechos también se revisan aparte.
+
+¿Qué miraría en el preview? Primero el texto. Que no salga cortado, que tenga contraste y que alcance el tiempo para leerlo. Después el movimiento. Que la entrada ayude a encontrar la frase y que no la haga perseguir por la pantalla.
+
+También miraría el último cuadro. A veces la animación entra muy bien y el cierre queda vacío o dura demasiado poco. Si el objetivo es un cartel legible, el tiempo quieto importa tanto como la entrada.
+
+Después revisaría el archivo exportado completo. Un preview correcto no me permite asumir que la salida quedó idéntica. Hay que mirar tamaño, duración, texto y audio si lo tiene. Y conservar la versión del proyecto que produjo ese archivo, para poder cambiar la frase sin empezar desde cero.
+
+¿Dónde lo usaría? En títulos que se repiten, listas visuales o una comparación con datos que ya comprobaste. ¿Dónde empezaría con otra cosa? En una entrevista donde la decisión principal es qué respuesta conservar. Ahí primero necesitás escuchar y editar el contenido.
+
+La base vertical de este tema sirve para presentar la herramienta. En un horizontal, lo útil es decidir si merece entrar en tu proceso y cómo revisar una pieza mínima. No hace falta prometer que reemplaza toda la edición.
+
+Probá con un cartel sencillo y una razón clara para animarlo. Si mejora la explicación y podés reproducirlo, tenés un formato útil. Si solo agrega movimiento, todavía queda decidir si ese movimiento ayuda a quien mira.
+
+
+# H-VIDA-06 · Preparar una pausa sin prometer que mañana será perfecto
+
+Quiero poder terminar un bloque de trabajo sin convertir el descanso en una lista mental de todo lo que falta.
+
+No te estoy contando una rutina perfecta que ya conseguí. Es una forma de organizar la pausa que quiero probar. La idea es dejar un punto de entrada para cuando vuelva y aceptar que no voy a resolver toda la semana antes de levantarme de la silla.
+
+Para empezar, distinguiría tres situaciones. Lo que quedó terminado. Lo que tiene un próximo paso concreto. Y lo que todavía no entiendo. Si pongo todo en pendiente, las cosas terminadas siguen pesando igual. Si pongo todo en listo, las dudas quedan escondidas.
+
+Un ejemplo simple: preparé el texto de un video, pero falta revisar una fuente. Puedo guardar el texto y anotar el enlace que necesito abrir. Eso me permite hacer la pausa sin fingir que el video ya se puede publicar. La pausa y el estado de la pieza son decisiones distintas.
+
+También quiero dejar de preparar un regreso imposible. Una lista de quince tareas para mañana puede parecer entusiasmo, pero no me dice por dónde entrar. Preferiría elegir una primera tarea corta que desbloquee algo real. Después de hacerla, vuelvo a mirar la prioridad.
+
+Eso no significa reducir todo a cinco minutos ni prometer que cualquier problema se arregla con un hábito. Hay trabajos largos, dudas difíciles y cosas que dependen de otras personas. Lo que puedo ordenar es el comienzo, no garantizar el resultado antes de volver.
+
+Si espero una respuesta, la dejo escrita. Qué pregunté, para qué la necesito y qué puedo hacer mientras tanto. No quiero revisar el chat cada rato para convencerme de que estoy trabajando. Y si esa respuesta habilita algo sensible, esperar sigue siendo esperar; no se transforma en un sí.
+
+Para la parte física del cierre, haría lo mínimo que ayude al próximo bloque. Guardar el archivo, comprobar que no quedó una grabación corriendo y dejar el equipo en un lugar seguro. No necesito rediseñar el escritorio para dar por terminado el día.
+
+Después elegiría una pausa de verdad. Comer, caminar o estar con alguien sin convertirlo automáticamente en material para grabar. Si decido registrar algo de mi vida, quiero que sea por una idea que vale la pena compartir, no porque siento que todo tiene que producir una pieza.
+
+Esta organización tampoco reemplaza escuchar cómo estoy. Si estoy cansado, un sistema de pendientes no vuelve infinita la atención. Si hay algo que requiere ayuda, escribirlo puede ayudar a pedirla; no me obliga a solucionarlo solo.
+
+Al volver, leería el punto de entrada antes de abrir todas las ventanas. ¿Sigue siendo la prioridad? ¿Llegó el dato que faltaba? ¿Cambió algo? Puedo ajustar el plan con esa información.
+
+Quiero usar el cierre para soltar el bloque, no para negar lo que queda pendiente. Una pausa puede empezar con dos frases honestas: esto quedó así y lo próximo es esto. El resto puede esperar sin que tenga que fingir una semana perfecta.
+
+
+## Carrusel y tres historias · textos completos
+
+# 18 de octubre · Dos citas abiertas valen más que veinte links cerrados
+
+Fecha editorial: 2026-10-18 · America/Caracas. Borrador para QA independiente. Autor configurado: Sol 6.1, esfuerzo medio. Base: SI-09; hechos documentales comprobados el 12-oct, sin anuncio de noticias futuras.
+
+## Carrusel · texto completo de siete láminas
+
+### 1
+**La IA te dio links. ¿Abriste alguno?**
+Una lista de citas ayuda a rastrear un dato. No demuestra por sí sola que el dato esté bien usado.
+
+### 2
+**Investigación con fuentes no elimina la revisión**
+Claude Code documenta /deep-research dentro de sus workflows. Requiere WebSearch; en Pro, Dynamic workflows debe estar habilitado. Revisá las condiciones de tu cuenta.
+
+### 3
+**Elegí dos afirmaciones para empezar**
+Una importante para tu decisión y otra tomada al azar. Buscá la cita que supuestamente sostiene cada una. Abrir dos es un primer control, no una auditoría completa.
+
+### 4
+**Leé el párrafo que sostiene el dato**
+¿La fuente dice lo mismo que el informe?
+¿Habla del mismo producto, fecha y contexto?
+¿Es una medición del autor o una promesa comercial?
+No alcanza con que el link exista.
+
+### 5
+**Una cita que falla cambia la decisión**
+Si el enlace no existe o la fuente dice otra cosa, no uses esa afirmación. Revisá las demás antes de confiar en el informe completo.
+
+### 6
+**Tu registro de comprobación**
+Afirmación: ____
+URL: ____
+Fecha de la fuente: ____
+Fragmento que la respalda: ____
+Coincide / necesita corrección: ____
+Decisión que depende del dato: ____
+
+### 7
+**Compartí la comprobación, no solo el link**
+Copiá el registro y mandá INVESTIGAR por mensaje a la comunidad con una afirmación y su fuente. No anunciamos un informe propio que todavía no fue elaborado y revisado.
+
+## Historias · texto completo de tres pantallas
+
+### Historia 1 · contexto
+Un informe puede tener muchas citas y usar mal una. Antes de decidir, elegí una afirmación importante y abrí su fuente.
+
+### Historia 2 · pregunta
+Cuando recibís links de una IA, ¿los abrís?
+Encuesta: “Casi siempre” / “Me falta ese paso”.
+Comprobá el párrafo, la fecha y el contexto; el enlace solo no basta.
+
+### Historia 3 · ejercicio y CTA
+Ejercicio: abrí dos citas y completá el registro del carrusel. Si una falla, frená el uso de ese dato y ampliá la revisión. Mandá INVESTIGAR por mensaje a la comunidad con una afirmación comprobada.
+
+## Fuentes y límites
+
+- https://code.claude.com/docs/en/workflows
+- Evidencia reutilizada: `onia-marca-nuevos-20261012/guiones/VERIFICACION_SEIS.md`, lectura primaria del 12-oct por root/guiones_sol; no se hereda como lectura web propia del autor.
+- Canon Claude: commit `781df7d87b53913ac9790fa1df88e53357408bc3`; no se alteran los originales.
+- Sin afirmación de ejecución personal, benchmark propio, recurso comunitario publicado ni render nuevo. La ficha/plantilla que nombra el CTA está completa en este documento. No publicación autorizada.
+
+
+## Comunidad · mensaje completo para copiar
+
+🔎 INVESTIGAR · comprobar una respuesta con sus fuentes
+
+En versiones/planes compatibles, Claude Code ofrece /deep-research <tu pregunta>. Devuelve un informe citado; requiere búsqueda web y puede consumir más del límite que una pregunta normal. En Pro, Dynamic workflows se activa en /config.
+
+Ejercicio: elegí una pregunta concreta. Abrí dos citas al azar y compará si la página respalda la frase del informe. Si una cita no existe o contradice la respuesta, no uses ese dato y revisá el resto.
+
+Pregunta: ¿qué tema te gustaría investigar y qué fuente primaria revisarías primero?
+
+Docs: https://code.claude.com/docs/en/workflows
+
+## Recortes y publicación
+
+Tres planes condicionales por vertical en PLANES_63.json. Cada recorte exige unidad autónoma, cambios de edición/música/colores/subtítulos/velocidad y licencia comprobada. No hay recortes nuevos renderizados. Historias y CTA que mencionan el carrusel se usan solo si ya está disponible; el recurso de comunidad está incluido en el mensaje. Horarios y canales en el calendario único, todos propuestos.

@@ -1,0 +1,53 @@
+{
+  "source_path": "/workspace/work/onia-marca-semana-completa-20261012/noticias/HECHOS_ACTUALES.json",
+  "source_sha256": "d8c36683584a23ffb867c2d11fdf965f2ed0ef925f515f8be987294df7bb652a",
+  "source_md_sha256": "0e4704fa691d3233c8bedb7f24a05a09aae162d3fc42371118bca46c835008ce",
+  "selected_for_adaptation": [
+    {
+      "id": "ACTUAL-01",
+      "company": "Google",
+      "published": "2026-10-08",
+      "date_observed_in_primary": true,
+      "url": "https://cloud.google.com/blog/products/ai-machine-learning/welcome-to-gemini-at-work-2026",
+      "claim": "Google announced Gemini agent; provider describes cloud persistent execution and Workspace integration",
+      "quote": "Work that takes hours or days keeps running after you close your laptop",
+      "limits": [
+        "provider announcement, not own execution",
+        "no universal availability or free-plan claim",
+        "no own client metrics"
+      ]
+    },
+    {
+      "id": "ALTERNATIVA-09",
+      "company": "Anthropic",
+      "published": "2026-10-09",
+      "corrected": "2026-10-12",
+      "date_observed_in_primary": true,
+      "url": "https://www.anthropic.com/news/investigating-unintended-model-actions",
+      "claim": "Provider reports unintended actions in evaluations/internal use and mitigations; minimal real-world impact attributed to provider",
+      "quote": "The cases we’ve identified to date in these categories had minimal real-world impact.",
+      "correction": "web fetch limits were not put in place to prevent SQL or command injection",
+      "limits": [
+        "self-report, not independent frequency or mitigation validation",
+        "not an incident observed in Sergio account"
+      ]
+    }
+  ],
+  "selection_authorization": "root confirmedGoogle8Oct +Anthropic9Octcorrected12Oct",
+  "reserve_future_policy": {
+    "id": "ACTUAL-02",
+    "company": "Anthropic",
+    "published": "2026-10-08",
+    "effective_future_date": "2026-11-12",
+    "date_observed_in_primary": true,
+    "url": "https://www.anthropic.com/news/2026-usage-policy-update",
+    "claim": "Anthropic published revised usage policy, mostly clarifications; deceptive campaigns section, high-risk uses and physical autonomous hardware provisions",
+    "quote": "The updated policy takes effect on November 12.",
+    "limits": [
+      "published8Oct not already effective",
+      "many requirements pre-existing",
+      "no personal demo or legal conclusion"
+    ]
+  },
+  "primary_observer": "editorial_sol own webreads,not author direct primary"
+}

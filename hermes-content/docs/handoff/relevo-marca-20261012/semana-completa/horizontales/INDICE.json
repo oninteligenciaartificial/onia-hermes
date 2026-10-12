@@ -1,0 +1,523 @@
+{
+  "author": "/root/calendario_sol",
+  "model_configured": "gpt-6.1-sol, medio por contrato; runtime interno no observable",
+  "prepared_on": "2026-10-12",
+  "timezone": "America/Caracas",
+  "dates_proposed": [
+    "2026-10-13",
+    "2026-10-19"
+  ],
+  "full_horizontal_count": 14,
+  "ia_count": 7,
+  "life_count": 7,
+  "copied_first_day_exact": true,
+  "new_adapted_count": 12,
+  "qa": "Día13 base anterior conservada; 12 nuevas pendientes QA independiente de lote",
+  "current_news_claimed": 0,
+  "assets_rendered": 0,
+  "published": 0,
+  "malla_105_changed": false,
+  "scripts": [
+    {
+      "id": "H-IA-01",
+      "date_proposed": "2026-10-13",
+      "timezone": "America/Caracas",
+      "title": "Claude con la compu apagada: qué puede hacer y qué tenés que revisar",
+      "kind": "IA",
+      "path": "/workspace/work/onia-marca-semana-completa-20261012/horizontales/2026-10-13/H-IA-01-HABLADO.md",
+      "words": 689,
+      "duration_estimate_minutes_160_140_wpm": [
+        4.31,
+        4.92
+      ],
+      "duration_measured": false,
+      "sha256": "83ad9a0809323385365b964cf9a60689c79daf7dfc68dcff0d26db9ada8f8b42",
+      "full_spoken_body": true,
+      "structure": "apertura/desarrollo/ejemplos/cierre en párrafos hablados, sin escaleta",
+      "status": "TEXTO_COMPLETO_QA_BASE_PREVIA; pendiente revisión/uso",
+      "ready_to_publish": false,
+      "recorded_asset": false,
+      "external_resource_cta": false,
+      "educational_not_future_news": true,
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "canonical_sources": [
+        "hermes-content/docs/cola/plan-3-semanas/AVISOS-COMUNIDAD-SI-11OCT.md",
+        "hermes-content/docs/cola/plan-3-semanas/GRABAR-NUEVOS-11-OCT.md"
+      ],
+      "official_sources": [
+        "https://code.claude.com/docs/en/scheduled-tasks",
+        "https://code.claude.com/docs/en/routines",
+        "https://code.claude.com/docs/en/workflows"
+      ],
+      "source_review_date": "2026-10-12",
+      "official_web_observation_by_this_author": false,
+      "source_review_scope": "lectura canónica Git y entrega de equipo; URLs primarias propuestas para QA/refresh, sin ejecución/cuenta/demos propias",
+      "adaptation": "Base aceptada anterior: condiciones loop/rutinas y control de citas; sin rutina propia. Fuente primaria leída por equipo/root, no por este autor.",
+      "before_recording": "revisar claims cambiantes, doc/version/cuenta si se muestra UI; lectura a ritmo natural; ejemplos rotulados",
+      "substitution_gate": "Si doc/función cambió antes del día propuesto, corregir texto y repetir QA o sustituir tema educativo; no llamar noticia futura ni lanzamiento actual."
+    },
+    {
+      "id": "H-VIDA-01",
+      "date_proposed": "2026-10-13",
+      "timezone": "America/Caracas",
+      "title": "Cómo quiero ordenar mis grabaciones sin llenar la semana de piezas",
+      "kind": "VIDA",
+      "path": "/workspace/work/onia-marca-semana-completa-20261012/horizontales/2026-10-13/H-VIDA-01-HABLADO.md",
+      "words": 540,
+      "duration_estimate_minutes_160_140_wpm": [
+        3.38,
+        3.86
+      ],
+      "duration_measured": false,
+      "sha256": "584abd5a5a5746872b30d46faaef1d488851928096da08b246fd7dc2cf027b0f",
+      "full_spoken_body": true,
+      "structure": "apertura/desarrollo/ejemplos/cierre en párrafos hablados, sin escaleta",
+      "status": "TEXTO_COMPLETO_QA_BASE_PREVIA; pendiente revisión/uso",
+      "ready_to_publish": false,
+      "recorded_asset": false,
+      "external_resource_cta": false,
+      "educational_not_future_news": false,
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "canonical_sources": [
+        "hermes-content/docs/cola/plan-3-semanas/KIT-GRABACION.md",
+        "hermes-content/docs/cola/plan-3-semanas/FLUJO-DIARIO.md"
+      ],
+      "official_sources": [],
+      "source_review_date": "2026-10-12",
+      "official_web_observation_by_this_author": false,
+      "source_review_scope": "lectura canónica Git y entrega de equipo; URLs primarias propuestas para QA/refresh, sin ejecución/cuenta/demos propias",
+      "adaptation": "Nuevo autorizado de intención/reflexión; método canónico, no biografía cumplida ni resultados propios.",
+      "before_recording": "revisar claims cambiantes, doc/version/cuenta si se muestra UI; lectura a ritmo natural; ejemplos rotulados",
+      "substitution_gate": "Sergio Urcullo puede adaptar intención a su voz; no convertir a pasado sin confirmar que ocurrió."
+    },
+    {
+      "id": "H-IA-02",
+      "date_proposed": "2026-10-14",
+      "timezone": "America/Caracas",
+      "title": "Antes de instalar un plugin, compará una tarea",
+      "kind": "IA",
+      "path": "/workspace/work/onia-marca-semana-completa-20261012/horizontales/2026-10-14/H-IA-02-HABLADO.md",
+      "words": 504,
+      "duration_estimate_minutes_160_140_wpm": [
+        3.15,
+        3.6
+      ],
+      "duration_measured": false,
+      "sha256": "9d7b9ba233fad25fb0f0cf72458c948b1cbadcff0d38d1ad9eba6ab348f720b0",
+      "full_spoken_body": true,
+      "structure": "apertura/desarrollo/ejemplos/cierre en párrafos hablados, sin escaleta",
+      "status": "TEXTO_COMPLETO_PENDIENTE_QA_LOTE",
+      "ready_to_publish": false,
+      "recorded_asset": false,
+      "external_resource_cta": false,
+      "educational_not_future_news": true,
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "canonical_sources": [
+        "hermes-content/carousels/out/yt-05-no-construyas/GUION.md",
+        "hermes-content/docs/cola/plan-3-semanas/AVISOS-COMUNIDAD-SI-11OCT.md"
+      ],
+      "official_sources": [
+        "https://github.com/DietrichGebert/ponytail",
+        "https://code.claude.com/docs/en/plugins"
+      ],
+      "source_review_date": "2026-10-12",
+      "official_web_observation_by_this_author": false,
+      "source_review_scope": "lectura canónica Git y entrega de equipo; URLs primarias propuestas para QA/refresh, sin ejecución/cuenta/demos propias",
+      "adaptation": "Adaptación método búsqueda/lectura/prueba; elimina números propios, instalaciones y ganadores; ponytail benchmark atribuido al autor sin porcentajes nuevos.",
+      "before_recording": "revisar claims cambiantes, doc/version/cuenta si se muestra UI; lectura a ritmo natural; ejemplos rotulados",
+      "substitution_gate": "Si doc/función cambió antes del día propuesto, corregir texto y repetir QA o sustituir tema educativo; no llamar noticia futura ni lanzamiento actual."
+    },
+    {
+      "id": "H-VIDA-02",
+      "date_proposed": "2026-10-14",
+      "timezone": "America/Caracas",
+      "title": "Cómo elegir una prioridad sin abrir diez pendientes",
+      "kind": "VIDA",
+      "path": "/workspace/work/onia-marca-semana-completa-20261012/horizontales/2026-10-14/H-VIDA-02-HABLADO.md",
+      "words": 499,
+      "duration_estimate_minutes_160_140_wpm": [
+        3.12,
+        3.56
+      ],
+      "duration_measured": false,
+      "sha256": "98f5b1df0904a38a1ff824c8c316a7a09d327a42c4a0fa0a37e7997e7a0c7ea7",
+      "full_spoken_body": true,
+      "structure": "apertura/desarrollo/ejemplos/cierre en párrafos hablados, sin escaleta",
+      "status": "TEXTO_COMPLETO_PENDIENTE_QA_LOTE",
+      "ready_to_publish": false,
+      "recorded_asset": false,
+      "external_resource_cta": false,
+      "educational_not_future_news": false,
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "canonical_sources": [
+        "hermes-content/docs/cola/plan-3-semanas/ORDEN-DE-PRODUCCION.md",
+        "hermes-content/docs/cola/plan-3-semanas/KIT-GRABACION.md"
+      ],
+      "official_sources": [],
+      "source_review_date": "2026-10-12",
+      "official_web_observation_by_this_author": false,
+      "source_review_scope": "lectura canónica Git y entrega de equipo; URLs primarias propuestas para QA/refresh, sin ejecución/cuenta/demos propias",
+      "adaptation": "Nuevo autorizado de intención/reflexión; método canónico, no biografía cumplida ni resultados propios.",
+      "before_recording": "revisar claims cambiantes, doc/version/cuenta si se muestra UI; lectura a ritmo natural; ejemplos rotulados",
+      "substitution_gate": "Sergio Urcullo puede adaptar intención a su voz; no convertir a pasado sin confirmar que ocurrió."
+    },
+    {
+      "id": "H-IA-03",
+      "date_proposed": "2026-10-15",
+      "timezone": "America/Caracas",
+      "title": "Tres pruebas distintas antes de creer que una página funciona",
+      "kind": "IA",
+      "path": "/workspace/work/onia-marca-semana-completa-20261012/horizontales/2026-10-15/H-IA-03-HABLADO.md",
+      "words": 513,
+      "duration_estimate_minutes_160_140_wpm": [
+        3.21,
+        3.66
+      ],
+      "duration_measured": false,
+      "sha256": "748fe83fba2228f865099699b417417abb7b58b6405f6232c820fb95d622dadd",
+      "full_spoken_body": true,
+      "structure": "apertura/desarrollo/ejemplos/cierre en párrafos hablados, sin escaleta",
+      "status": "TEXTO_COMPLETO_PENDIENTE_QA_LOTE",
+      "ready_to_publish": false,
+      "recorded_asset": false,
+      "external_resource_cta": false,
+      "educational_not_future_news": true,
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "canonical_sources": [
+        "hermes-content/carousels/out/yt-04-verificar/GUION.md"
+      ],
+      "official_sources": [
+        "https://playwright.dev/docs/intro",
+        "https://playwright.dev/docs/test-snapshots"
+      ],
+      "source_review_date": "2026-10-12",
+      "official_web_observation_by_this_author": false,
+      "source_review_scope": "lectura canónica Git y entrega de equipo; URLs primarias propuestas para QA/refresh, sin ejecución/cuenta/demos propias",
+      "adaptation": "Adaptación abrir/mirar/usar: elimina relato personal y doce errores; recorrido de reserva hipotético, sin promesa ONIA.",
+      "before_recording": "revisar claims cambiantes, doc/version/cuenta si se muestra UI; lectura a ritmo natural; ejemplos rotulados",
+      "substitution_gate": "Si doc/función cambió antes del día propuesto, corregir texto y repetir QA o sustituir tema educativo; no llamar noticia futura ni lanzamiento actual."
+    },
+    {
+      "id": "H-VIDA-03",
+      "date_proposed": "2026-10-15",
+      "timezone": "America/Caracas",
+      "title": "Mostrar el proceso sin mostrar toda tu vida",
+      "kind": "VIDA",
+      "path": "/workspace/work/onia-marca-semana-completa-20261012/horizontales/2026-10-15/H-VIDA-03-HABLADO.md",
+      "words": 506,
+      "duration_estimate_minutes_160_140_wpm": [
+        3.16,
+        3.61
+      ],
+      "duration_measured": false,
+      "sha256": "918bc16f178d1b00850c735fdef907347cc2bd0691ebdac16fda4fb47dc212d1",
+      "full_spoken_body": true,
+      "structure": "apertura/desarrollo/ejemplos/cierre en párrafos hablados, sin escaleta",
+      "status": "TEXTO_COMPLETO_PENDIENTE_QA_LOTE",
+      "ready_to_publish": false,
+      "recorded_asset": false,
+      "external_resource_cta": false,
+      "educational_not_future_news": false,
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "canonical_sources": [
+        "hermes-content/docs/cola/plan-3-semanas/KIT-GRABACION.md",
+        ".claude/skills/diseno-contenido-onia/SKILL.md"
+      ],
+      "official_sources": [],
+      "source_review_date": "2026-10-12",
+      "official_web_observation_by_this_author": false,
+      "source_review_scope": "lectura canónica Git y entrega de equipo; URLs primarias propuestas para QA/refresh, sin ejecución/cuenta/demos propias",
+      "adaptation": "Nuevo autorizado de intención/reflexión; método canónico, no biografía cumplida ni resultados propios.",
+      "before_recording": "revisar claims cambiantes, doc/version/cuenta si se muestra UI; lectura a ritmo natural; ejemplos rotulados",
+      "substitution_gate": "Sergio Urcullo puede adaptar intención a su voz; no convertir a pasado sin confirmar que ocurrió."
+    },
+    {
+      "id": "H-IA-04",
+      "date_proposed": "2026-10-16",
+      "timezone": "America/Caracas",
+      "title": "Una regla para la IA que se pueda comprobar",
+      "kind": "IA",
+      "path": "/workspace/work/onia-marca-semana-completa-20261012/horizontales/2026-10-16/H-IA-04-HABLADO.md",
+      "words": 500,
+      "duration_estimate_minutes_160_140_wpm": [
+        3.12,
+        3.57
+      ],
+      "duration_measured": false,
+      "sha256": "2883b4795e1e2de7942585ba283f66421f28c630faa6da87205e194d3d6de7c2",
+      "full_spoken_body": true,
+      "structure": "apertura/desarrollo/ejemplos/cierre en párrafos hablados, sin escaleta",
+      "status": "TEXTO_COMPLETO_PENDIENTE_QA_LOTE",
+      "ready_to_publish": false,
+      "recorded_asset": false,
+      "external_resource_cta": false,
+      "educational_not_future_news": true,
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "canonical_sources": [
+        "hermes-content/carousels/out/yt-11-claude-md-historia/GUION.md"
+      ],
+      "official_sources": [
+        "https://code.claude.com/docs/en/memory"
+      ],
+      "source_review_date": "2026-10-12",
+      "official_web_observation_by_this_author": false,
+      "source_review_scope": "lectura canónica Git y entrega de equipo; URLs primarias propuestas para QA/refresh, sin ejecución/cuenta/demos propias",
+      "adaptation": "Adaptación regla+motivo+prueba. Ejemplo horarios inventado y rotulado; elimina historia de cuatro precios, resultados y canario.",
+      "before_recording": "revisar claims cambiantes, doc/version/cuenta si se muestra UI; lectura a ritmo natural; ejemplos rotulados",
+      "substitution_gate": "Si doc/función cambió antes del día propuesto, corregir texto y repetir QA o sustituir tema educativo; no llamar noticia futura ni lanzamiento actual."
+    },
+    {
+      "id": "H-VIDA-04",
+      "date_proposed": "2026-10-16",
+      "timezone": "America/Caracas",
+      "title": "Pedir ayuda con una pregunta que destrabe",
+      "kind": "VIDA",
+      "path": "/workspace/work/onia-marca-semana-completa-20261012/horizontales/2026-10-16/H-VIDA-04-HABLADO.md",
+      "words": 490,
+      "duration_estimate_minutes_160_140_wpm": [
+        3.06,
+        3.5
+      ],
+      "duration_measured": false,
+      "sha256": "85b34176bc80b4b9b82e4b6e3af530d4daebdcf80aa7af71b399947da2f206b5",
+      "full_spoken_body": true,
+      "structure": "apertura/desarrollo/ejemplos/cierre en párrafos hablados, sin escaleta",
+      "status": "TEXTO_COMPLETO_PENDIENTE_QA_LOTE",
+      "ready_to_publish": false,
+      "recorded_asset": false,
+      "external_resource_cta": false,
+      "educational_not_future_news": false,
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "canonical_sources": [
+        "hermes-content/docs/cola/plan-3-semanas/KIT-GRABACION.md"
+      ],
+      "official_sources": [],
+      "source_review_date": "2026-10-12",
+      "official_web_observation_by_this_author": false,
+      "source_review_scope": "lectura canónica Git y entrega de equipo; URLs primarias propuestas para QA/refresh, sin ejecución/cuenta/demos propias",
+      "adaptation": "Nuevo autorizado de intención/reflexión; método canónico, no biografía cumplida ni resultados propios.",
+      "before_recording": "revisar claims cambiantes, doc/version/cuenta si se muestra UI; lectura a ritmo natural; ejemplos rotulados",
+      "substitution_gate": "Sergio Urcullo puede adaptar intención a su voz; no convertir a pasado sin confirmar que ocurrió."
+    },
+    {
+      "id": "H-IA-05",
+      "date_proposed": "2026-10-17",
+      "timezone": "America/Caracas",
+      "title": "La transcripción no es todavía un video bien editado",
+      "kind": "IA",
+      "path": "/workspace/work/onia-marca-semana-completa-20261012/horizontales/2026-10-17/H-IA-05-HABLADO.md",
+      "words": 493,
+      "duration_estimate_minutes_160_140_wpm": [
+        3.08,
+        3.52
+      ],
+      "duration_measured": false,
+      "sha256": "30586037488b1ed979fc1e8f55466c43d8c85aae22d7c0ca5e4c53212ca4aab8",
+      "full_spoken_body": true,
+      "structure": "apertura/desarrollo/ejemplos/cierre en párrafos hablados, sin escaleta",
+      "status": "TEXTO_COMPLETO_PENDIENTE_QA_LOTE",
+      "ready_to_publish": false,
+      "recorded_asset": false,
+      "external_resource_cta": false,
+      "educational_not_future_news": true,
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "canonical_sources": [
+        "hermes-content/carousels/out/yt-16-grabo-ia-edita/GUION.md",
+        ".claude/skills/edicion-referentes/SKILL.md"
+      ],
+      "official_sources": [
+        "https://github.com/SYSTRAN/faster-whisper",
+        "https://ffmpeg.org/documentation.html"
+      ],
+      "source_review_date": "2026-10-12",
+      "official_web_observation_by_this_author": false,
+      "source_review_scope": "lectura canónica Git y entrega de equipo; URLs primarias propuestas para QA/refresh, sin ejecución/cuenta/demos propias",
+      "adaptation": "Adaptación cadena original/transcripción/cortes/preview. Sin afirmación nadie editó ni números medidos; tiempos de palabras no tratados como exactos.",
+      "before_recording": "revisar claims cambiantes, doc/version/cuenta si se muestra UI; lectura a ritmo natural; ejemplos rotulados",
+      "substitution_gate": "Si doc/función cambió antes del día propuesto, corregir texto y repetir QA o sustituir tema educativo; no llamar noticia futura ni lanzamiento actual."
+    },
+    {
+      "id": "H-VIDA-05",
+      "date_proposed": "2026-10-17",
+      "timezone": "America/Caracas",
+      "title": "Guardar un pendiente sin cargarlo todo el día",
+      "kind": "VIDA",
+      "path": "/workspace/work/onia-marca-semana-completa-20261012/horizontales/2026-10-17/H-VIDA-05-HABLADO.md",
+      "words": 500,
+      "duration_estimate_minutes_160_140_wpm": [
+        3.12,
+        3.57
+      ],
+      "duration_measured": false,
+      "sha256": "ff4f95af2682ac5f7f19b65035c53ef377a64e5ea01c5013fad9a6855d107392",
+      "full_spoken_body": true,
+      "structure": "apertura/desarrollo/ejemplos/cierre en párrafos hablados, sin escaleta",
+      "status": "TEXTO_COMPLETO_PENDIENTE_QA_LOTE",
+      "ready_to_publish": false,
+      "recorded_asset": false,
+      "external_resource_cta": false,
+      "educational_not_future_news": false,
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "canonical_sources": [
+        "hermes-content/docs/cola/loop/marca-personal.md",
+        "hermes-content/docs/handoff/marca-personal.md"
+      ],
+      "official_sources": [],
+      "source_review_date": "2026-10-12",
+      "official_web_observation_by_this_author": false,
+      "source_review_scope": "lectura canónica Git y entrega de equipo; URLs primarias propuestas para QA/refresh, sin ejecución/cuenta/demos propias",
+      "adaptation": "Nuevo autorizado de intención/reflexión; método canónico, no biografía cumplida ni resultados propios.",
+      "before_recording": "revisar claims cambiantes, doc/version/cuenta si se muestra UI; lectura a ritmo natural; ejemplos rotulados",
+      "substitution_gate": "Sergio Urcullo puede adaptar intención a su voz; no convertir a pasado sin confirmar que ocurrió."
+    },
+    {
+      "id": "H-IA-06",
+      "date_proposed": "2026-10-18",
+      "timezone": "America/Caracas",
+      "title": "HyperFrames: cuándo un título por código sí ayuda",
+      "kind": "IA",
+      "path": "/workspace/work/onia-marca-semana-completa-20261012/horizontales/2026-10-18/H-IA-06-HABLADO.md",
+      "words": 510,
+      "duration_estimate_minutes_160_140_wpm": [
+        3.19,
+        3.64
+      ],
+      "duration_measured": false,
+      "sha256": "a3428ea7179c40582cf4ac1a6cc876a4212a1b144ffe4ca21655c552890310f1",
+      "full_spoken_body": true,
+      "structure": "apertura/desarrollo/ejemplos/cierre en párrafos hablados, sin escaleta",
+      "status": "TEXTO_COMPLETO_PENDIENTE_QA_LOTE",
+      "ready_to_publish": false,
+      "recorded_asset": false,
+      "external_resource_cta": false,
+      "educational_not_future_news": true,
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "canonical_sources": [
+        "hermes-content/carousels/out/yt-07-hyperframes/GUION.md",
+        "hermes-content/docs/cola/plan-3-semanas/AVISOS-COMUNIDAD-SI-11OCT.md"
+      ],
+      "official_sources": [
+        "https://github.com/heygen-com/hyperframes"
+      ],
+      "source_review_date": "2026-10-12",
+      "official_web_observation_by_this_author": false,
+      "source_review_scope": "lectura canónica Git y entrega de equipo; URLs primarias propuestas para QA/refresh, sin ejecución/cuenta/demos propias",
+      "adaptation": "Adaptación de ficha a hablado completo sobre selección de uso y revisión. No comandos/versiones de ficha heredados sin comprobación, no demo nueva; cartel hipotético.",
+      "before_recording": "revisar claims cambiantes, doc/version/cuenta si se muestra UI; lectura a ritmo natural; ejemplos rotulados",
+      "substitution_gate": "Si doc/función cambió antes del día propuesto, corregir texto y repetir QA o sustituir tema educativo; no llamar noticia futura ni lanzamiento actual."
+    },
+    {
+      "id": "H-VIDA-06",
+      "date_proposed": "2026-10-18",
+      "timezone": "America/Caracas",
+      "title": "Preparar una pausa sin prometer que mañana será perfecto",
+      "kind": "VIDA",
+      "path": "/workspace/work/onia-marca-semana-completa-20261012/horizontales/2026-10-18/H-VIDA-06-HABLADO.md",
+      "words": 496,
+      "duration_estimate_minutes_160_140_wpm": [
+        3.1,
+        3.54
+      ],
+      "duration_measured": false,
+      "sha256": "bf7fc97099542f34765c1a6bea6dc77e6df75dd34e88eb202115e0506ac3c738",
+      "full_spoken_body": true,
+      "structure": "apertura/desarrollo/ejemplos/cierre en párrafos hablados, sin escaleta",
+      "status": "TEXTO_COMPLETO_PENDIENTE_QA_LOTE",
+      "ready_to_publish": false,
+      "recorded_asset": false,
+      "external_resource_cta": false,
+      "educational_not_future_news": false,
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "canonical_sources": [
+        "hermes-content/docs/cola/plan-3-semanas/FLUJO-DIARIO.md"
+      ],
+      "official_sources": [],
+      "source_review_date": "2026-10-12",
+      "official_web_observation_by_this_author": false,
+      "source_review_scope": "lectura canónica Git y entrega de equipo; URLs primarias propuestas para QA/refresh, sin ejecución/cuenta/demos propias",
+      "adaptation": "Nuevo autorizado de intención/reflexión; método canónico, no biografía cumplida ni resultados propios.",
+      "before_recording": "revisar claims cambiantes, doc/version/cuenta si se muestra UI; lectura a ritmo natural; ejemplos rotulados",
+      "substitution_gate": "Sergio Urcullo puede adaptar intención a su voz; no convertir a pasado sin confirmar que ocurrió."
+    },
+    {
+      "id": "H-IA-07",
+      "date_proposed": "2026-10-19",
+      "timezone": "America/Caracas",
+      "title": "Antes de automatizar, escribí cómo se hace a mano",
+      "kind": "IA",
+      "path": "/workspace/work/onia-marca-semana-completa-20261012/horizontales/2026-10-19/H-IA-07-HABLADO.md",
+      "words": 491,
+      "duration_estimate_minutes_160_140_wpm": [
+        3.07,
+        3.51
+      ],
+      "duration_measured": false,
+      "sha256": "5759536f585b212cdce9d20e6ff52adee8aa04f6a4b77ba2c9b0e62ec0bd9175",
+      "full_spoken_body": true,
+      "structure": "apertura/desarrollo/ejemplos/cierre en párrafos hablados, sin escaleta",
+      "status": "TEXTO_COMPLETO_PENDIENTE_QA_LOTE",
+      "ready_to_publish": false,
+      "recorded_asset": false,
+      "external_resource_cta": false,
+      "educational_not_future_news": true,
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "canonical_sources": [
+        "hermes-content/carousels/out/yt-08-n8n-leads/GUION.md",
+        "hermes-content/carousels/out/yt-15-recorrido-entero/GUION.md"
+      ],
+      "official_sources": [
+        "https://docs.n8n.io/workflows/",
+        "https://docs.n8n.io/workflows/executions/"
+      ],
+      "source_review_date": "2026-10-12",
+      "official_web_observation_by_this_author": false,
+      "source_review_scope": "lectura canónica Git y entrega de equipo; URLs primarias propuestas para QA/refresh, sin ejecución/cuenta/demos propias",
+      "adaptation": "Adaptación método flujo+recorrido. Sin CRM/servicios propios/resultados; lista de pedidos hipotética y prueba con registros de ejemplo.",
+      "before_recording": "revisar claims cambiantes, doc/version/cuenta si se muestra UI; lectura a ritmo natural; ejemplos rotulados",
+      "substitution_gate": "Si doc/función cambió antes del día propuesto, corregir texto y repetir QA o sustituir tema educativo; no llamar noticia futura ni lanzamiento actual."
+    },
+    {
+      "id": "H-VIDA-07",
+      "date_proposed": "2026-10-19",
+      "timezone": "America/Caracas",
+      "title": "Revisar la semana con hechos, dudas y una decisión",
+      "kind": "VIDA",
+      "path": "/workspace/work/onia-marca-semana-completa-20261012/horizontales/2026-10-19/H-VIDA-07-HABLADO.md",
+      "words": 502,
+      "duration_estimate_minutes_160_140_wpm": [
+        3.14,
+        3.59
+      ],
+      "duration_measured": false,
+      "sha256": "2bbd48f0f539bd472649758a777ee194e183eee1e0d37a72388a426c48896fdd",
+      "full_spoken_body": true,
+      "structure": "apertura/desarrollo/ejemplos/cierre en párrafos hablados, sin escaleta",
+      "status": "TEXTO_COMPLETO_PENDIENTE_QA_LOTE",
+      "ready_to_publish": false,
+      "recorded_asset": false,
+      "external_resource_cta": false,
+      "educational_not_future_news": false,
+      "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+      "canonical_sources": [
+        "hermes-content/docs/cola/plan-3-semanas/ORDEN-DE-PRODUCCION.md",
+        "hermes-content/docs/cola/plan-3-semanas/FLUJO-DIARIO.md"
+      ],
+      "official_sources": [],
+      "source_review_date": "2026-10-12",
+      "official_web_observation_by_this_author": false,
+      "source_review_scope": "lectura canónica Git y entrega de equipo; URLs primarias propuestas para QA/refresh, sin ejecución/cuenta/demos propias",
+      "adaptation": "Nuevo autorizado de intención/reflexión; método canónico, no biografía cumplida ni resultados propios.",
+      "before_recording": "revisar claims cambiantes, doc/version/cuenta si se muestra UI; lectura a ritmo natural; ejemplos rotulados",
+      "substitution_gate": "Sergio Urcullo puede adaptar intención a su voz; no convertir a pasado sin confirmar que ocurrió."
+    }
+  ],
+  "complement_21V": {
+    "2026-10-13": "SI-01/SI-02: H-IA amplía dónde corre y cómo revisar; no repite literalmente SI. INF-1013 introduce elección; H-VIDA desarrolla set/tomas/preview.",
+    "2026-10-14": "SI-03/SI-04: H-IA desarrolla comparación justa con caso del botón y criterios, no otro top de comandos. INF-1014 instala/no instala; H-VIDA decide prioridad más amplia.",
+    "2026-10-15": "SI-08/SI-09: H-IA aplica verificación a recorrido de navegador, no repite HyperFrames/citas. INF-1015 checklist; H-VIDA trata privacidad al mostrar procesos.",
+    "2026-10-16": "IA-1016-1/2 plugin-eval/skill-doctor: H-IA trata instrucciones comprobables y ejemplo horarios. INF-1016 set; H-VIDA trata pregunta/ayuda y dependencia de permiso.",
+    "2026-10-17": "IA-1017-1/2 worktrees/rewind: H-IA trata transcripción/cutplan/preview sin repetir Git. INF-1017 demo fallida; H-VIDA registra pendientes y reentrada.",
+    "2026-10-18": "IA-1018-1/2 agentes/MCP: H-IA selecciona cuándo usar gráficos por código; no otra explicación de agentes. INF-1018 guion; H-VIDA trata pausa y límites personales.",
+    "2026-10-19": "IA-1019-1/2 skills/permisos: H-IA desarrolla definición de tarea, registros de ejemplo y ejecución de prueba; no lectura de permisos literal. INF-1019 archivos; H-VIDA revisa la semana y elige una mejora."
+  }
+}

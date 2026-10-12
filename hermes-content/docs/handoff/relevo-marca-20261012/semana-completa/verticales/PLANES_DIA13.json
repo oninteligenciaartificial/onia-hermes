@@ -1,0 +1,101 @@
+[
+  {
+    "id": "SI-01-YA",
+    "parent_id": "SI-01",
+    "topic": "Loop y sesión abierta",
+    "status": "PLAN_CONDICIONAL_NO_ASSET",
+    "duration_target_seconds": [
+      15,
+      35
+    ],
+    "gate": "Al grabar medir duración, inicio comprensible y cierre completo. Si no alcanza o depende de contexto, rechazar recorte; no repetirclip ni fingirviabilidad."
+  },
+  {
+    "id": "SI-01-YB",
+    "parent_id": "SI-01",
+    "topic": "Schedule y archivoslocales",
+    "status": "PLAN_CONDICIONAL_NO_ASSET",
+    "duration_target_seconds": [
+      15,
+      35
+    ],
+    "gate": "Al grabar medir duración, inicio comprensible y cierre completo. Si no alcanza o depende de contexto, rechazar recorte; no repetirclip ni fingirviabilidad."
+  },
+  {
+    "id": "SI-01-YC",
+    "parent_id": "SI-01",
+    "topic": "Rutina de lectura y comprobar ejecución",
+    "status": "PLAN_CONDICIONAL_NO_ASSET",
+    "duration_target_seconds": [
+      15,
+      35
+    ],
+    "gate": "Al grabar medir duración, inicio comprensible y cierre completo. Si no alcanza o depende de contexto, rechazar recorte; no repetirclip ni fingirviabilidad."
+  },
+  {
+    "id": "SI-02-YA",
+    "parent_id": "SI-02",
+    "topic": "Mensaje/enlace conórdenes",
+    "status": "PLAN_CONDICIONAL_NO_ASSET",
+    "duration_target_seconds": [
+      15,
+      35
+    ],
+    "gate": "Al grabar medir duración, inicio comprensible y cierre completo. Si no alcanza o depende de contexto, rechazar recorte; no repetirclip ni fingirviabilidad."
+  },
+  {
+    "id": "SI-02-YB",
+    "parent_id": "SI-02",
+    "topic": "Sandboxlimitación,no garantía",
+    "status": "PLAN_CONDICIONAL_NO_ASSET",
+    "duration_target_seconds": [
+      15,
+      35
+    ],
+    "gate": "Al grabar medir duración, inicio comprensible y cierre completo. Si no alcanza o depende de contexto, rechazar recorte; no repetirclip ni fingirviabilidad."
+  },
+  {
+    "id": "SI-02-YC",
+    "parent_id": "SI-02",
+    "topic": "Revisarlectura/escritura/herramientas",
+    "status": "PLAN_CONDICIONAL_NO_ASSET",
+    "duration_target_seconds": [
+      15,
+      35
+    ],
+    "gate": "Al grabar medir duración, inicio comprensible y cierre completo. Si no alcanza o depende de contexto, rechazar recorte; no repetirclip ni fingirviabilidad."
+  },
+  {
+    "id": "INF-1013-YA",
+    "parent_id": "INF-1013",
+    "topic": "Tres preguntasantesdegrabar",
+    "status": "PLAN_CONDICIONAL_NO_ASSET",
+    "duration_target_seconds": [
+      15,
+      35
+    ],
+    "gate": "Al grabar medir duración, inicio comprensible y cierre completo. Si no alcanza o depende de contexto, rechazar recorte; no repetirclip ni fingirviabilidad."
+  },
+  {
+    "id": "INF-1013-YB",
+    "parent_id": "INF-1013",
+    "topic": "Manual noesdemo personal",
+    "status": "PLAN_CONDICIONAL_NO_ASSET",
+    "duration_target_seconds": [
+      15,
+      35
+    ],
+    "gate": "Al grabar medir duración, inicio comprensible y cierre completo. Si no alcanza o depende de contexto, rechazar recorte; no repetirclip ni fingirviabilidad."
+  },
+  {
+    "id": "INF-1013-YC",
+    "parent_id": "INF-1013",
+    "topic": "Lotes ypendienteclarono listo",
+    "status": "PLAN_CONDICIONAL_NO_ASSET",
+    "duration_target_seconds": [
+      15,
+      35
+    ],
+    "gate": "Al grabar medir duración, inicio comprensible y cierre completo. Si no alcanza o depende de contexto, rechazar recorte; no repetirclip ni fingirviabilidad."
+  }
+]

@@ -1,0 +1,225 @@
+# Paquete completo · 2026-10-16
+
+America/Caracas. Textos para revisión/grabación; no publicaciones ni agenda confirmada. Los dos espacios IA del14–19 son reservas educativas: revalidar o sustituir por noticias del día antes de publicar. Los recortes son planes, no videos existentes.
+
+## Tres verticales · hablado y fuentes separados
+
+# IA-1016-1 · Un plugin también necesita examen
+
+Instalar un plugin no demuestra que Claude trabaje mejor. Anthropic tiene una herramienta para comparar eso: claude plugin eval.
+
+La función aparece en su resumen del siete al once de septiembre. Te cuento un hecho documentado, no una noticia que acaba de salir.
+
+La herramienta corre casos con el plugin y también sin él. Después compara los resultados con los criterios que definiste. Puede ayudarte a distinguir mejora real de una respuesta que solo suena distinta.
+
+Mi consejo es escribir primero qué tiene que lograr la tarea. Por ejemplo: conservar un dato, respetar un formato o pasar una prueba. Si cambiás el examen después de ver quién ganó, la comparación pierde sentido.
+
+No te muestro una corrida mía ni un ganador universal. Las pruebas pueden consumir tu uso del modelo. Antes de lanzarlas, revisá versión, alcance y costo. Un plugin se evalúa por lo que hace, no por lo bien que promete.
+
+# IA-1016-2 · La skill que nunca usás también ocupa lugar
+
+Podés tener muchas skills y no saber cuáles usa Claude. Una skill es una receta de instrucciones para el agente.
+
+Claude Code tiene barra skill-doctor para mirar cuánto espacio ocupan las skills y con qué frecuencia se invocan. Anthropic lo incluyó en su resumen del treinta y uno de agosto al cuatro de septiembre.
+
+La documentación actual pide la versión dos punto uno punto doscientos cincuenta y dos o posterior. También aclara que el reporte no cubre todas las categorías de skills y que no está disponible por cualquier conexión.
+
+Mi consejo: usá ese informe para revisar, no para borrar todo lo que aparece sin uso. Puede haber una receta que solo necesitás en una tarea poco frecuente.
+
+Primero preguntá si sigue haciendo falta. Después mirá su costo y cuándo se activa. Tener más recetas no demuestra que las tareas salgan mejor. Hay que mirar cuáles ayudan de verdad.
+
+# INF-1016 · Cómo quiero preparar mi espacio para grabar
+
+Quiero preparar el lugar antes de grabar, para no estar resolviendo la cámara mientras intento explicar una idea.
+
+El plan es dejar el teléfono fijo, mirar si el encuadre sirve y comprobar el audio con una toma breve. No quiero descubrir al terminar que el micrófono estaba rozando la ropa.
+
+También quiero separar las pantallas que necesito. Tener una lista de capturas me parece más útil que abrir ventanas a medida que hablo y mostrar sin querer una notificación.
+
+Si varias piezas usan la misma escena, quiero grabarlas juntas. Pero cada una sigue teniendo su propia idea y su propio cierre.
+
+No te enseño un estudio perfecto ni te digo que ya tengo este hábito resuelto. Es una preparación concreta que quiero hacer.
+
+Antes de sumar luces o comprar algo, prefiero revisar lo básico: se ve, se escucha y se entiende lo que estoy diciendo.
+
+
+---
+
+## Fichas fuera del hablado: actualidad, fuentes y recortes
+
+Fechaobservación:2026-10-12 · timezoneAmerica/Caracas. Autor/lectorprimarias: /root/guiones_sol. Ninguna ficha ni plan siguiente se dice a cámara. No piezas/publicaciones aprobadas.
+
+### IA-1016-1
+
+**Hablado:** completo, reservaeducativa/documental; no noticia del día confirmada. **Slotnoticioso:** pendiente verificación o sustitución.
+
+**Fecha del hecho/documento:** Resumenoficial7–11sep2026; v2.1.263–269; consulta12oct. **Observado:**12oct2026.
+
+**Fuentesprimarias:** https://code.claude.com/docs/en/skills · https://code.claude.com/docs/en/whats-new
+
+**Versión/condición:** plugin-eval soportadoen skillsdoc;corridasconsumenuso,no demo propia.
+
+**Gateactualidadpara 2026-10-16:** Antes del post propuesto revisar fecha/hecho/versión con fuente oficial. Sin novedadreciente confirmada, conservar como reserva educativa; sustituirslotnoticia o cambiarclasificación/calendario con revisión. No llamarlo noticia del13–19 ni breaking.
+
+**3planes:** IA-1016-1-YA, IA-1016-1-YB, IA-1016-1-YC; candidatosenPLANES_63.json. Autonomía/duración no verificadas: noassets/63renders.
+
+### IA-1016-2
+
+**Hablado:** completo, reservaeducativa/documental; no noticia del día confirmada. **Slotnoticioso:** pendiente verificación o sustitución.
+
+**Fecha del hecho/documento:** Resumenoficial31ago–4sep2026; consulta12oct. **Observado:**12oct2026.
+
+**Fuentesprimarias:** https://code.claude.com/docs/en/skills · https://code.claude.com/docs/en/whats-new
+
+**Versión/condición:** skill-doctor requiere>=2.1.252;limitacategorías/noRemoteControl.
+
+**Gateactualidadpara 2026-10-16:** Antes del post propuesto revisar fecha/hecho/versión con fuente oficial. Sin novedadreciente confirmada, conservar como reserva educativa; sustituirslotnoticia o cambiarclasificación/calendario con revisión. No llamarlo noticia del13–19 ni breaking.
+
+**3planes:** IA-1016-2-YA, IA-1016-2-YB, IA-1016-2-YC; candidatosenPLANES_63.json. Autonomía/duración no verificadas: noassets/63renders.
+
+### INF-1016
+
+Hablado informal completo en intención/reflexión: no relato deexperiencia cumplida, ganancia/resultadosni promesa de recurso. Fuente:planKIT-GRABACION/FLUJO-DIARIO+autorización12oct; no noticia. Título heredadoes índice; texto no afirma que yaocurrió.
+
+**3planes:** INF-1016-YA, INF-1016-YB, INF-1016-YC; candidatosenPLANES_63.json. Autonomía/duración no verificadas: noassets/63renders.
+
+
+## Dos horizontales · hablado completo
+
+# H-IA-04 · Una regla para la IA que se pueda comprobar
+
+Decirle a una IA hacelo bien suena claro hasta que tenés que decidir qué significa bien. Ahí empieza el problema.
+
+Una instrucción útil necesita decir qué hacer, con qué información y cómo revisar el resultado. Si solo tiene una intención, la IA puede llenar los huecos con algo que parece razonable y que no era lo que necesitabas.
+
+Claude Code permite guardar instrucciones de un proyecto en archivos como CLAUDE punto md. La documentación explica cómo se cargan y cómo se organizan. No es una garantía de obediencia perfecta. Es una forma de dejar criterios disponibles para el trabajo, y después comprobar si se aplicaron.
+
+Te doy un ejemplo hipotético. Una persona prepara una página con horarios de atención. En un documento aparece lunes a viernes y en otro, lunes a sábado. La instrucción no debería ser elegí el horario más conveniente. Debería decir cuál es la fuente y qué hacer si encuentra una contradicción.
+
+Una regla concreta podría ser: usá el archivo de horarios confirmado; si otro documento dice algo distinto, marcá la diferencia y no inventes una respuesta. Ahí ya tenés una acción y una condición para detener esa parte del trabajo.
+
+Podés agregar el motivo: un horario incorrecto puede hacer que alguien llegue cuando el lugar está cerrado. No hace falta inventar un caso que te haya pasado. El riesgo se puede explicar como ejemplo. Si sí ocurrió un caso real y tenés permiso para contarlo, dejalo registrado con su fecha y sin datos privados.
+
+Después viene la prueba. Preparás una copia de ejemplo con dos horarios distintos y pedís el texto de la página. Si mezcla los dos o elige uno sin advertirlo, esa ejecución no respetó la regla. Si marca la contradicción y pregunta por la fuente correcta, tenés evidencia para esa situación.
+
+Ojo con lo que esa prueba no demuestra. No confirma que todas tus instrucciones estén bien. No asegura que cualquier tarea futura salga igual. Comprobó un caso. Por eso conviene guardar el pedido, el resultado y la versión del archivo que usaste.
+
+Otra regla puede ser no publiques sin revisión. Para que no quede como una frase decorativa, definí qué cuenta como revisión: versión final identificada, destino correcto y permiso para esa acción. Un borrador escrito no equivale a una publicación autorizada.
+
+Tampoco quiero llenar el archivo de órdenes repetidas. Si una instrucción ya está en un lugar, conviene mantenerla ahí y referenciarla cuando haga falta. Dos copias que cambian por separado pueden terminar diciéndose lo contrario.
+
+Para empezar, elegí una regla que proteja un problema real de tu tarea. Escribí la acción, el motivo y la evidencia. Después probala en un ejemplo controlado. Si no se aplica, revisá si está disponible, si se entiende y si contradice otra instrucción.
+
+Una buena regla no es la más larga ni la que grita más. Es la que te permite reconocer si se cumplió. Guardar instrucciones ayuda a ordenar el trabajo. Mirar cómo se usaron es lo que te permite decidir si están sirviendo.
+
+
+# H-VIDA-04 · Pedir ayuda con una pregunta que destrabe
+
+A veces pedir ayuda no destraba nada porque la pregunta todavía contiene todo el problema mezclado.
+
+Quiero aprender a hacer preguntas que alguien pueda responder sin reconstruir todo mi día. No significa ocultar lo importante ni fingir que ya probé lo que no probé. Significa ordenar qué necesito saber y para qué me sirve la respuesta.
+
+Si digo no entiendo nada de esto, la otra persona tiene que empezar por adivinar qué es esto. Si digo estoy eligiendo entre estas dos opciones y no puedo comprobar este dato, ya tiene una entrada mucho más concreta.
+
+Pensemos en un ejemplo. Quiero grabar un video de una herramienta, pero no sé si el comando está disponible en la cuenta. La pregunta útil no es qué te parece mi contenido. Es: ¿este comando aparece en esta versión y en este plan? Con esa respuesta puedo decidir qué parte del guion se puede grabar.
+
+Antes de preguntar, revisaría lo que tengo a mano. El documento donde debería estar el dato, la fuente que lo explica o el resultado de una prueba que ya existe. Si no lo encuentro, anoto dónde busqué. No para hacer una demostración de esfuerzo, sino para evitar que me respondan con el mismo lugar que ya revisé.
+
+También quiero distinguir entre una duda y una decisión. Una duda se puede resolver con información: si abre un enlace, si existe un archivo, si un texto dice algo. Una decisión necesita elegir: qué mostrar, qué prioridad tomar, qué riesgo aceptar. No le pediría a un dato que elija por mí.
+
+Cuando necesite una decisión de otra persona, quiero llevarle algo que pueda mirar. Dos opciones concretas, qué cambia con cada una y cuál recomiendo. Si todavía no preparé las opciones, pedir un sí puede obligarla a aprobar una idea que nadie entiende del todo.
+
+Eso tampoco quiere decir que tenga que completar todo antes de pedir ayuda. Si el dato realmente bloquea el siguiente paso, conviene preguntarlo a tiempo. Puedo avanzar con lo que no depende de esa respuesta, sin inventar la parte que falta.
+
+Hay otra diferencia que quiero cuidar: una respuesta que tarda no se convierte en permiso. Si necesito autorización para mostrar información de otra persona, el silencio no me dice que sí. Esa parte espera. Mientras tanto puedo preparar el encuadre o escribir una versión que no use esa información.
+
+Para ordenar una pregunta, usaría tres frases. Quiero llegar a este resultado. Revisé estas fuentes y sigue faltando este dato. Tu respuesta me permite hacer este paso. Si sobra contexto, lo dejo disponible aparte para quien lo necesite.
+
+Y cuando llegue la respuesta, cierro la duda. Anoto qué cambió y dónde queda, en vez de dejarla flotando en un mensaje que después no encuentro.
+
+Pedir ayuda también es parte de trabajar con criterio. Quiero hacerlo cuando sirve para avanzar, con una pregunta que cuide el tiempo de la otra persona y que no convierta mis suposiciones en hechos.
+
+
+## Carrusel y tres historias · textos completos
+
+# 16 de octubre · Tres funciones que conviene ubicar en el manual
+
+Fecha editorial: 2026-10-16 · America/Caracas. Borrador para QA independiente. Autor configurado: Sol 6.1, esfuerzo medio. Base: SI-04; hechos documentales comprobados el 12-oct, sin anuncio de noticias futuras.
+
+## Carrusel · texto completo de siete láminas
+
+### 1
+**Antes de buscar un truco, abrí el manual**
+Claude Code documenta funciones para aprender, concentrarte y pedir más razonamiento. Revisá su disponibilidad en tu versión.
+
+### 2
+**Para acompañar una sesión: /radio**
+La referencia oficial de comandos incluye /radio para Claude FM. Es una función musical; no convierte una tarea mal definida en una tarea clara.
+
+### 3
+**Para aprender: /powerup**
+La documentación incluye /powerup con lecciones dentro de Claude Code. Puede ser un punto de partida para conocer la herramienta antes de delegar tareas grandes.
+
+### 4
+**Para una respuesta difícil: ultrathink**
+La documentación describe ultrathink para pedir razonamiento más profundo en un turno. No cambia el parámetro de esfuerzo de la API. Usalo con un problema concreto, no como palabra mágica.
+
+### 5
+**Elegí según lo que necesitás**
+Aprender una función: revisá las lecciones.
+Acompañar tu sesión: revisá la radio.
+Analizar una decisión difícil: formulá el problema y pedí más profundidad.
+Verificá el resultado en los tres casos.
+
+### 6
+**Ficha para comprobar disponibilidad**
+Versión de Claude Code: ____
+Función buscada: ____
+Dónde aparece en la documentación: ____
+Qué pasó al probarla: ____
+No completes la última línea con una captura ajena.
+
+### 7
+**Documentado no significa probado en tu cuenta**
+Copiá la ficha antes de decir “a mí me funciona”. Mandá SECRETOS por mensaje a la comunidad con la función que querés ubicar. No anunciamos una demo personal que todavía no existe.
+
+## Historias · texto completo de tres pantallas
+
+### Historia 1 · contexto
+Un comando puede estar en el manual y no haber sido probado en tu equipo. Separá esas dos afirmaciones antes de recomendarlo.
+
+### Historia 2 · pregunta
+¿Qué necesitás hoy?
+Encuesta: “Aprender la herramienta” / “Resolver una tarea difícil”.
+Elegí la función por el objetivo, no por lo escondida que parezca.
+
+### Historia 3 · ejercicio y CTA
+Ejercicio: anotá tu versión, una función y el enlace oficial donde aparece. Registrá qué pasó al probarla. Mandá SECRETOS por mensaje a la comunidad con esa ficha del carrusel.
+
+## Fuentes y límites
+
+- https://code.claude.com/docs/en/commands
+- https://code.claude.com/docs/en/model-config
+- Evidencia reutilizada: `onia-marca-nuevos-20261012/guiones/VERIFICACION_SEIS.md`, lectura primaria del 12-oct por root/guiones_sol; no se hereda como lectura web propia del autor.
+- Canon Claude: commit `781df7d87b53913ac9790fa1df88e53357408bc3`; no se alteran los originales.
+- Sin afirmación de ejecución personal, benchmark propio, recurso comunitario publicado ni render nuevo. La ficha/plantilla que nombra el CTA está completa en este documento. No publicación autorizada.
+
+
+## Comunidad · mensaje completo para copiar
+
+🗝️ SECRETOS · tres comandos y una pantalla
+
+• /radio: Claude FM, música lo-fi.
+• /powerup: lecciones interactivas dentro de Claude Code.
+• ultrathink: pedilo para una respuesta que necesite razonamiento más profundo; el pensamiento extendido consume uso.
+• claude agents: vista de sesiones, lo que corre, espera o terminó; está en research preview.
+
+Ejercicio: elegí una sola tarea difícil y anotá si usarías ultrathink o una explicación normal; compará el resultado y el consumo que te muestra tu cuenta.
+
+Pregunta: ¿cuál de estas opciones ya conocías o te gustaría probar?
+
+Fuentes oficiales: https://code.claude.com/docs/en/whats-new · https://code.claude.com/docs/en/model-config · https://code.claude.com/docs/en/agents
+
+## Recortes y publicación
+
+Tres planes condicionales por vertical en PLANES_63.json. Cada recorte exige unidad autónoma, cambios de edición/música/colores/subtítulos/velocidad y licencia comprobada. No hay recortes nuevos renderizados. Historias y CTA que mencionan el carrusel se usan solo si ya está disponible; el recurso de comunidad está incluido en el mensaje. Horarios y canales en el calendario único, todos propuestos.

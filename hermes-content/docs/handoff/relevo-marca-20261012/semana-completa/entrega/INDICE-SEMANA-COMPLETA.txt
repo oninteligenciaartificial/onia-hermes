@@ -1,0 +1,20 @@
+# Semana completa: 13–19 de octubre de 2026
+
+America/Caracas. QA independiente documental PASS:35 guiones hablados, siete carruseles de siete láminas, siete secuencias de tres historias y siete mensajes de comunidad.63 planes de recorte condicionales; no63videos nuevos. Cada día contiene tres verticales y dos horizontales completos.
+
+- 2026-10-13: https://drive.google.com/file/d/1ZfWf33986BOY26GEKn1E-3CTAZUsH7is/view?usp=drivesdk
+- 2026-10-14: https://drive.google.com/file/d/12sYtWU6g80Fozw-_IF1q2k8uK1IXqDSt/view?usp=drivesdk
+- 2026-10-15: https://drive.google.com/file/d/13w8oLyHYlShn1s4EnQeccbDjMLQCXuUe/view?usp=drivesdk
+- 2026-10-16: https://drive.google.com/file/d/1M2dh_qu-sgF-q3IIOD9ZHANGvDkgfU-h/view?usp=drivesdk
+- 2026-10-17: https://drive.google.com/file/d/1A_RSDdy15U6ttli8msqkf4j2QlgmW9dZ/view?usp=drivesdk
+- 2026-10-18: https://drive.google.com/file/d/1lEki_Nxjsjkb6MZkjmi4AiQqYFxZIere/view?usp=drivesdk
+- 2026-10-19: https://drive.google.com/file/d/1xZiwokZggNFWagM7vx3k7bRNAtnEEt_T/view?usp=drivesdk
+
+Dos noticias fechadas parael13. DoceespaciosIA14–19 contienen reservas educativas y necesitan revalidar/sustituir actualidad antes de publicar. Ningún video nuevo de este paquete está grabado o agendado.
+
+Hoy12oct: https://drive.google.com/file/d/1-KTRLk2m7nJlEf3Qov3CJUIjmlvbJz9E/view
+Mensajehoy/workshopsecuencia: https://drive.google.com/file/d/13c6KciIHzlKtZP8q4hQ7kS9ehHqx7RQ_/view
+RecursosCTA existentes no publicados: https://drive.google.com/file/d/1UhK7zsW_1bBzv0znTacSh2kSlWuFAyeD/view
+DependenciatécnicaN06(pista/licencia/comandoexacto+1fontGit, faltan4fuentesexactas): https://drive.google.com/file/d/1Zx6W3j2USr1SqE9rSgvxJffwPysWD-_5/view
+
+Publicación autorizada de piezas existentes solo si pasan gates. Previews musicales360no masters; nuevo render1080 enworkerlocal, no cambios de cortes.18/20h hoy noagendados ydeadline−3h vencido;22h requiere acuseantes19h. Ningúnjobcreadoporworker. Workshop:17mensajesVentasintegradossinreescribir, fuente73265f543cb5b3e9da64cd553b32ad2855d362f9; routingMarca porMadreMarketing. Precio/fecha/cobro/preflight/demo siguenpendientes; nolan zamiento comercial aprobado.

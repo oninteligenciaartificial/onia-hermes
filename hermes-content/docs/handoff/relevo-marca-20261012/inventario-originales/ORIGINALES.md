@@ -6,7 +6,7 @@ Sergio Urcullo corrigió el alcance: **seis grabaciones originales anteriores**,
 
 | Original | Drive ID fuente | Bytes | Fecha fuente UTC | Montaje existente y música |
 |---|---|---:|---|---|
-| N06 · Gemini CLI → Antigravity | `1rlbdA9zLE9SZJInPmFjd1jP3S8r8yk08` |69.843.125|11-oct 04:47:06.789|Claude 45,504 s; limpio exacto y música local con QA técnico/licencia PASS. Root transfiere preview privado. |
+| N06 · Gemini CLI → Antigravity | `1rlbdA9zLE9SZJInPmFjd1jP3S8r8yk08` |69.843.125|11-oct 04:47:06.789|Claude 45,504 s; limpio exacto y música local con QA técnico/licencia PASS. Preview privado transferido. |
 | DD-A · Sol/caché | `1rHY7WjqjRaEnfIqgdDMOXXfMhF2oZ3Ae` |92.453.888|11-oct 04:50:03.826|Claude 58,433 s; limpio/música con QA PASS. Marcador y duda fonética intactos. |
 | S2-D07-A · ventana WhatsApp | `18DnUVL_i99QN6DQdc7XqO_RTEtT9T2eQ` |122.622.390|11-oct 04:51:21.242|**Quinto montaje**, Erik 90,752 s; limpio/música con QA PASS. No es DD-A de 58 s; variables pendientes. |
 | N02 · retiro/migración Sonnet | `1QAAvFbQXPK64z5VmcnP2sq0iv6hsSniY` |184.354.882|11-oct 04:52:47.199|Claude original 111,300 s conservado; Work privado 109,033333 s recibido, usado para limpio/música con QA PASS. No reemplazar uno por otro. |
@@ -21,9 +21,9 @@ BA tiene también upload en Videos Onia Octubre: ID `1e0ceYYrKy4mlscC-XEODRtMji1
 
 ## Links, versiones y hashes
 
-`ORIGINALES.json` contiene, por pieza, URL Drive del bruto, SHA de origen si existe y su autoridad, montaje Claude con URL Git canónica y SHA256 medido, variante Work N02, paths/hashes de música y limpio. Los dos hashes de bruto N06/DD-A provienen del manifiesto **de origen Work**; los brutos todavía no llegaron al destino nativo, por lo que no se presentan como hashes medidos localmente.
+`ORIGINALES.json` contiene, por pieza, URL Drive del bruto, SHA de origen si existe y su autoridad, montaje Claude con URL Git canónica y SHA256 medido, variante Work N02, paths/hashes de música y limpio. Los dos hashes de bruto N06/DD-A provienen del manifiesto **de origen Work**; la recepción final de ambos brutos reconstruidos desde partes cotejó bytes/SHA256 exactos, con QA independiente PASS. La matriz ahora registra sus paths locales y evidencia de recepción.
 
-Cinco mezclas y cinco limpios existen localmente en `/workspace/work/onia-marca-musica-20261012/previews/`. QA independiente comprobó video, paquetes/timestamps, duración, decodificación y licencia: **5/5 PASS técnico**, sin aprobar al oído ni contenido/publicación. Las URLs nuevas de Drive quedarán registradas cuando root complete la transferencia; no se inventan links ni se duplican uploads.
+Cinco mezclas y cinco limpios existen localmente en `/workspace/work/onia-marca-musica-20261012/previews/`. QA independiente comprobó video, paquetes/timestamps, duración, decodificación y licencia: **5/5 PASS técnico**, sin aprobar al oído ni contenido/publicación. Las cinco URLs privadas e IDs reales de Drive están registrados en la matriz, desde DRIVE_PREVIEWS.json; root verificó metadata owner-only. No se duplicaron uploads.
 
 ## Los tres yaps
 
@@ -43,4 +43,18 @@ Hasta recibir el ID/bytes no existe transcripción ni audio local nuevo: no se i
 
 ## Continuidad
 
-Instrucciones audit locales vigentes: `d48a06fceee811fcd16a9d3e8b36e16cc96e8cff`; delta CODEX/AGENTS leído, hasta cinco frentes útiles si capacidad lo permite, sin simular agentes ni busywork. Este contrato no pide nuevos subagentes. Lote Work **43/59** y partes pendientes se mantienen intactos. Sin publicación, main/merge, gasto, instalación, generación de cara/voz ni modificación de los originales.
+Instrucciones audit locales vigentes: `d48a06fceee811fcd16a9d3e8b36e16cc96e8cff`; delta CODEX/AGENTS leído, hasta cinco frentes útiles si capacidad lo permite, sin simular agentes ni busywork. Este contrato no pide nuevos subagentes. Lote Work **59/59 recibido**, bytes/SHA256 exactos y QA final independiente PASS. El 43/59 se conserva como snapshot histórico, sin confundirlo con estado actual. Sin publicación, main/merge, gasto, instalación, generación de cara/voz ni modificación de los originales.
+
+## Aprendizaje operativo registrado
+
+Separar inventario de grabaciones, montajes y derivados: mostrar cuatro previews no prueba que hubiera solo cuatro grabaciones. Mantener identidad por ID y provenance; nombre/tamaño/fecha de una copia no demuestran contenido nuevo. Preservar la edición que Sergio aprobó y avanzar sobre el bruto nuevo real. La lección permanente fue integrada por root en la fuente única `.claude/skills/edicion-referentes/SKILL.md`; este acta registra su aplicación, sin duplicar otra skill.
+
+## Previews con música · Drive privado
+
+| Pieza | Preview real |
+|---|---|
+| N06 | [Abrir borrador](https://drive.google.com/file/d/1knSoDDefrrRj83Uv--bcyYqKXrfoxF3t/view?usp=drivesdk) |
+| DD-A | [Abrir borrador](https://drive.google.com/file/d/1GAIgrg_CP1ARk6WnBDMGCsceTimbXeVk/view?usp=drivesdk) |
+| S2-D07-A | [Abrir borrador](https://drive.google.com/file/d/193pR-RlyDGY1jHt7Kb0EBusdTCjD4XZO/view?usp=drivesdk) |
+| N02 | [Abrir borrador](https://drive.google.com/file/d/1Vkgphhx53dE_fivF2OWuJN6LC5xeUqiU/view?usp=drivesdk) |
+| N07 | [Abrir borrador](https://drive.google.com/file/d/1H0DDK3En1eS-SvEGah-cI7-M5BtZIoif/view?usp=drivesdk) |

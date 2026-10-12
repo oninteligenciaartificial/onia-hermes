@@ -1,0 +1,145 @@
+[
+  {
+    "id": "SI-03",
+    "urls": [
+      "https://github.com/DietrichGebert/ponytail"
+    ],
+    "observed_on": "2026-10-12",
+    "observer": "/root/guiones_sol",
+    "date_context": "BenchmarkactualREADMEobservado12oct; fechadebenchmark no establecida",
+    "version_gate": "39tareas5runsOpus5.5, autor-53code/-26cost; no propio; versionespara demo pendientes"
+  },
+  {
+    "id": "SI-04",
+    "urls": [
+      "https://code.claude.com/docs/en/commands",
+      "https://code.claude.com/docs/en/model-config"
+    ],
+    "observed_on": "2026-10-12",
+    "observer": "/root/guiones_sol",
+    "date_context": "radio29jun–3jul2026;powerup30mar–3abr2026; ultrathinkdocactual12oct",
+    "version_gate": "Versión propia/cuenta noverificadas; no nueva instalación"
+  },
+  {
+    "id": "SI-08",
+    "urls": [
+      "https://github.com/heygen-com/hyperframes"
+    ],
+    "observed_on": "2026-10-12",
+    "observer": "/root/guiones_sol",
+    "date_context": "READMErevalidado12oct;demopropiaGit histórica sin lanzamiento fechado",
+    "version_gate": "Demo12s3–6s compatible;coautoríaClaude;reviewencuadreprevio; Node22+/FFmpegCLIactual"
+  },
+  {
+    "id": "SI-09",
+    "urls": [
+      "https://code.claude.com/docs/en/workflows"
+    ],
+    "observed_on": "2026-10-12",
+    "observer": "/root/guiones_sol",
+    "date_context": "Docactualconsultado12oct; nofechalanzamiento nueva",
+    "version_gate": "WebSearchdisponible;ProDynamicworkflows; versión propia/informe no comprobados"
+  },
+  {
+    "id": "IA-1016-1",
+    "urls": [
+      "https://code.claude.com/docs/en/skills",
+      "https://code.claude.com/docs/en/whats-new"
+    ],
+    "observed_on": "2026-10-12",
+    "observer": "/root/guiones_sol",
+    "date_context": "Resumenoficial7–11sep2026; v2.1.263–269; consulta12oct",
+    "version_gate": "plugin-eval soportadoen skillsdoc;corridasconsumenuso,no demo propia"
+  },
+  {
+    "id": "IA-1016-2",
+    "urls": [
+      "https://code.claude.com/docs/en/skills",
+      "https://code.claude.com/docs/en/whats-new"
+    ],
+    "observed_on": "2026-10-12",
+    "observer": "/root/guiones_sol",
+    "date_context": "Resumenoficial31ago–4sep2026; consulta12oct",
+    "version_gate": "skill-doctor requiere>=2.1.252;limitacategorías/noRemoteControl"
+  },
+  {
+    "id": "IA-1017-1",
+    "urls": [
+      "https://code.claude.com/docs/en/worktrees"
+    ],
+    "observed_on": "2026-10-12",
+    "observer": "/root/guiones_sol",
+    "date_context": "Docactualconsultado12oct; lanzamiento no fechado",
+    "version_gate": "EntornoGit/versionlocal/demo no comprobados"
+  },
+  {
+    "id": "IA-1017-2",
+    "urls": [
+      "https://code.claude.com/docs/en/checkpointing"
+    ],
+    "observed_on": "2026-10-12",
+    "observer": "/root/guiones_sol",
+    "date_context": "Docactualconsultado12oct; lanzamiento no fechado",
+    "version_gate": "Bash/external/subagents puedenquedarfuerarewind;no backupcompleto"
+  },
+  {
+    "id": "IA-1018-1",
+    "urls": [
+      "https://code.claude.com/docs/en/agents"
+    ],
+    "observed_on": "2026-10-12",
+    "observer": "/root/guiones_sol",
+    "date_context": "Docactualconsultado12oct; lanzamiento no fechado",
+    "version_gate": "Roles+carpetas+QA según método; ejecución/consumo no demostrados"
+  },
+  {
+    "id": "IA-1018-2",
+    "urls": [
+      "https://code.claude.com/docs/en/mcp"
+    ],
+    "observed_on": "2026-10-12",
+    "observer": "/root/guiones_sol",
+    "date_context": "Docactualconsultado12oct; lanzamiento no fechado",
+    "version_gate": "Conectorvisible no pruebaauth; herramientas/permisoscuenta pendientes"
+  },
+  {
+    "id": "IA-1019-1",
+    "urls": [
+      "https://code.claude.com/docs/en/skills"
+    ],
+    "observed_on": "2026-10-12",
+    "observer": "/root/guiones_sol",
+    "date_context": "Docactualconsultado12oct; lanzamiento no fechado",
+    "version_gate": "Ejemplo receta,noejecución propia;revisarpermisosantesinstalar"
+  },
+  {
+    "id": "IA-1019-2",
+    "urls": [
+      "https://code.claude.com/docs/en/permissions"
+    ],
+    "observed_on": "2026-10-12",
+    "observer": "/root/guiones_sol",
+    "date_context": "Docactualconsultado12oct; lanzamiento no fechado",
+    "version_gate": "Modos/reglasno equivalentes;promptno restricción real;demopropia pendiente"
+  },
+  {
+    "id": "IA-1013-1",
+    "urls": [
+      "https://cloud.google.com/blog/products/ai-machine-learning/welcome-to-gemini-at-work-2026"
+    ],
+    "observed_on": "2026-10-12",
+    "observer": "editorial_sol ownweb; sourceactareadguiones_sol",
+    "date_context": "Publicación 2026-10-08",
+    "version_gate": "Anuncio proveedor,no demo propia ni disponibilidad universal"
+  },
+  {
+    "id": "IA-1013-2",
+    "urls": [
+      "https://www.anthropic.com/news/investigating-unintended-model-actions"
+    ],
+    "observed_on": "2026-10-12",
+    "observer": "editorial_sol ownweb, additional_alternative, seleccionado root",
+    "date_context": "Publicado2026-10-09;corregido2026-10-12",
+    "version_gate": "Autorreporte/noincidentepropio;corrección12oct"
+  }
+]

@@ -1,0 +1,36 @@
+{
+  "verified_date": "2026-10-12",
+  "observer": "editorial_sol own web reads",
+  "N06": {
+    "url": "https://developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli/",
+    "published": "2026-05-19",
+    "consumer_end": "2026-06-18",
+    "exceptions": [
+      "Standard/Enterprise",
+      "paid Gemini API keys",
+      "Gemini Enterprise Agent Platform API keys"
+    ],
+    "universal_shutdown_supported": false,
+    "geminicli_home_observed": "Gemini3 install page, no replacement notice returned"
+  },
+  "N07": {
+    "pricing_urls": [
+      "https://platform.claude.com/docs/en/models/haiku-5-5/overview",
+      "https://platform.claude.com/docs/en/about-claude/pricing"
+    ],
+    "released": "2026-10-07",
+    "usd_per_million_prompt_up_to100k": {
+      "input": 0.1,
+      "output": 0.5
+    },
+    "usd_per_million_prompt_above100k": {
+      "input": 0.5,
+      "output": 2.5
+    },
+    "code_config_url": "https://code.claude.com/docs/en/model-config",
+    "thinking_off_in_code_supported": false,
+    "control": "effort controls thinking depth; saved off settings no effect forHaiku5.5",
+    "thinking_doc_fetch": "legacy URL and overviewThinking link Internal Error"
+  },
+  "state": "gates reported before publishing; no account emulation or montage changes"
+}

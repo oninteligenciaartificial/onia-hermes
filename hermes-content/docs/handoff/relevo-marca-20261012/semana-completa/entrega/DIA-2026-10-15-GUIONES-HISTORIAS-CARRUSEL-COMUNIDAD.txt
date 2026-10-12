@@ -1,0 +1,226 @@
+# Paquete completo · 2026-10-15
+
+America/Caracas. Textos para revisión/grabación; no publicaciones ni agenda confirmada. Los dos espacios IA del14–19 son reservas educativas: revalidar o sustituir por noticias del día antes de publicar. Los recortes son planes, no videos existentes.
+
+## Tres verticales · hablado y fuentes separados
+
+# SI-08 · Un video escrito con ayuda de Claude
+
+Mirá esto. Claude ayudó a escribirlo. Es una animación hecha con HyperFrames, una herramienta de HeyGen.
+
+En el proyecto hay HTML y animaciones: la escena se escribe como una página web y después se convierte en video. Tenemos un ejemplo existente, no hace falta inventar que apareció de la nada.
+
+El render local es gratis. Eso no significa que cualquier servicio en la nube, música o generación adicional también lo sea.
+
+El flujo básico tiene tres pasos: crear el proyecto, mirar una vista previa y exportarlo.
+
+Puede trabajar con texto, imágenes y video existente. No te voy a decir que no edita grabaciones, porque también tiene herramientas para poner gráficos y subtítulos sobre ellas.
+
+Mi consejo: mirá primero una versión corta. Revisá el texto, el movimiento y que se entienda en el celular. Que el proyecto abra no demuestra que el video final esté bien.
+
+# SI-09 · La IA te da links. Abrí dos.
+
+La IA te da links. ¿Alguna vez abriste uno?
+
+Claude Code tiene barra deep-research, un flujo para investigar a fondo. Puede preparar un informe con citas: enlaces que deberían mostrar de dónde salió cada dato.
+
+Para usarlo necesita búsqueda web. En el plan Pro, los flujos se habilitan en la configuración. Antes de una demo, hay que comprobar tu versión y acceso.
+
+Ahora, mi consejo: abrí dos citas. Buscá la frase o el dato, mirá la fecha y comparalo con el informe.
+
+Si una página no existe o dice otra cosa, no uses ese dato. Pedí una fuente que lo respalde. Si las dos coinciden, comprobaste esos dos puntos; no todo el informe.
+
+Eso vale con cualquier IA que te dé enlaces. Una lista de fuentes no es una revisión terminada. El link es el lugar donde empieza la comprobación, no donde termina.
+
+# INF-1015 · Mi checklist antes de confiar en una IA
+
+Quiero tener una lista corta antes de aceptar el listo de una IA. No una lista enorme que después nadie mira.
+
+Primero, qué tenía que quedar hecho. Si el pedido era vago, no puedo juzgar el resultado con una regla que invento al final.
+
+Segundo, qué puedo abrir y revisar. Un archivo, una captura o una prueba que se pueda repetir. Una explicación muy segura no reemplaza eso.
+
+Tercero, qué quedó pendiente. Me sirve que diga no pude comprobar esto. Me sirve menos que esconda esa parte para que todo parezca cerrado.
+
+Ésa es la lista que quiero usar. No significa que ya revisé todas mis tareas ni que nunca se va a escapar un error.
+
+Quiero una comprobación que me ayude a decidir. Si después de leerla sigo sin saber qué cambió, todavía falta mostrar el resultado.
+
+
+---
+
+## Fichas fuera del hablado: actualidad, fuentes y recortes
+
+Fechaobservación:2026-10-12 · timezoneAmerica/Caracas. Autor/lectorprimarias: /root/guiones_sol. Ninguna ficha ni plan siguiente se dice a cámara. No piezas/publicaciones aprobadas.
+
+### SI-08
+
+**Hablado:** completo, reservaeducativa/documental; no noticia del día confirmada. **Slotnoticioso:** pendiente verificación o sustitución.
+
+**Fecha del hecho/documento:** READMErevalidado12oct;demopropiaGit histórica sin lanzamiento fechado. **Observado:**12oct2026.
+
+**Fuentesprimarias:** https://github.com/heygen-com/hyperframes
+
+**Versión/condición:** Demo12s3–6s compatible;coautoríaClaude;reviewencuadreprevio; Node22+/FFmpegCLIactual.
+
+**Gateactualidadpara 2026-10-15:** Antes del post propuesto revisar fecha/hecho/versión con fuente oficial. Sin novedadreciente confirmada, conservar como reserva educativa; sustituirslotnoticia o cambiarclasificación/calendario con revisión. No llamarlo noticia del13–19 ni breaking.
+
+**3planes:** SI-08-YA, SI-08-YB, SI-08-YC; candidatosenPLANES_63.json. Autonomía/duración no verificadas: noassets/63renders.
+
+### SI-09
+
+**Hablado:** completo, reservaeducativa/documental; no noticia del día confirmada. **Slotnoticioso:** pendiente verificación o sustitución.
+
+**Fecha del hecho/documento:** Docactualconsultado12oct; nofechalanzamiento nueva. **Observado:**12oct2026.
+
+**Fuentesprimarias:** https://code.claude.com/docs/en/workflows
+
+**Versión/condición:** WebSearchdisponible;ProDynamicworkflows; versión propia/informe no comprobados.
+
+**Gateactualidadpara 2026-10-15:** Antes del post propuesto revisar fecha/hecho/versión con fuente oficial. Sin novedadreciente confirmada, conservar como reserva educativa; sustituirslotnoticia o cambiarclasificación/calendario con revisión. No llamarlo noticia del13–19 ni breaking.
+
+**3planes:** SI-09-YA, SI-09-YB, SI-09-YC; candidatosenPLANES_63.json. Autonomía/duración no verificadas: noassets/63renders.
+
+### INF-1015
+
+Hablado informal completo en intención/reflexión: no relato deexperiencia cumplida, ganancia/resultadosni promesa de recurso. Fuente:planKIT-GRABACION/FLUJO-DIARIO+autorización12oct; no noticia. Título heredadoes índice; texto no afirma que yaocurrió.
+
+**3planes:** INF-1015-YA, INF-1015-YB, INF-1015-YC; candidatosenPLANES_63.json. Autonomía/duración no verificadas: noassets/63renders.
+
+
+## Dos horizontales · hablado completo
+
+# H-IA-03 · Tres pruebas distintas antes de creer que una página funciona
+
+Si una IA te dice que una página funciona, pedile que te explique qué comprobó. Esa pregunta cambia mucho más que pedirle otra vez que la revise.
+
+Una página puede responder sin errores y aun así mostrar un botón tapado. Puede mostrar el botón y no hacer nada cuando lo tocás. También puede guardar el dato, pero en el lugar equivocado. Son problemas distintos y necesitan pruebas distintas.
+
+Te propongo separar la revisión en tres preguntas. ¿Abre? ¿Se ve y se usa? ¿Hace lo que tenía que hacer? Si juntás todo en un único sí, después no sabés qué parte está respaldada por evidencia.
+
+Vamos con un ejemplo inventado para entenderlo: una página para reservar una mesa. Elegís fecha, hora y cantidad de personas. Al final debería aparecer una confirmación. No es una función que esté prometiendo de mi producto; es una situación sencilla para mirar el recorrido.
+
+La primera prueba es abrir la dirección correcta. Parece obvio, pero si revisás una copia vieja o un entorno de pruebas, el resultado no te dice qué está viendo la gente. Anotá qué dirección abriste y cuándo. Si la IA no tiene acceso, tiene que decirlo; no completar la revisión con una suposición.
+
+La segunda prueba es mirar el contenido. En una pantalla de teléfono y en una de computadora. ¿El texto se lee? ¿La fecha se puede elegir? ¿Hay un cartel encima del botón? Una captura sirve para revisar la apariencia. No demuestra por sí sola que la reserva se guardó.
+
+También probá el teclado cuando corresponda. Si una persona puede llegar al formulario pero no al botón, el recorrido necesita una corrección. Y mirá qué pasa cuando falta un dato: el mensaje de error tiene que ayudar a continuar, no dejarte adivinando.
+
+La tercera prueba es hacer el recorrido. Elegir una fecha de prueba, enviar y mirar la confirmación. Si el sistema guarda información, comprobar que apareció una sola vez y con los valores correctos. Eso se hace con datos de prueba y los permisos necesarios; no enviando reservas reales a desconocidos.
+
+Playwright es una herramienta que puede automatizar interacciones de navegador y sacar capturas. Sirve para convertir un recorrido repetible en una revisión. Pero tener Playwright instalado no significa que la IA ya revisó tu página. Hace falta el registro de lo que abrió, lo que tocó y lo que encontró.
+
+El resultado útil no es un párrafo que dice todo perfecto. Es una lista corta: abrió esta dirección, se vio esto, el recorrido llegó hasta acá y esto quedó sin comprobar. Si falla, una captura y el paso concreto ayudan mucho más que decir está roto.
+
+No hace falta revisar toda tu aplicación para una corrección pequeña. Elegí el recorrido que esa corrección afecta y comprobalo completo. Si cambió el botón de reserva, probar el color de la portada no responde la pregunta principal.
+
+Abrir, mirar y usar son tres cosas distintas. Cuando pedís una revisión, dejá escrito qué evidencia corresponde a cada una. Así podés confiar en lo que se comprobó y mantener visible lo que todavía necesita una prueba.
+
+
+# H-VIDA-03 · Mostrar el proceso sin mostrar toda tu vida
+
+Mostrar cómo trabajás no debería obligarte a mostrar todo lo que tenés abierto en la computadora.
+
+Quiero poder explicar una decisión, enseñar una prueba o compartir una duda sin convertir cada pantalla en una ventana a información privada. El proceso puede ser interesante por la idea que transmite. No necesita una contraseña de fondo para parecer real.
+
+Antes de grabar una pantalla, me haría tres preguntas. ¿Qué necesita ver alguien para entender esto? ¿Qué sobra? ¿Qué podría exponer a otra persona? Es una revisión sencilla, pero conviene hacerla antes de empezar a hablar.
+
+Supongamos que quiero explicar cómo ordeno un guion. Lo relevante es el título, las tomas y la lista de imágenes. No los mensajes que llegaron mientras lo escribía. Puedo cerrar las notificaciones y mostrar únicamente ese documento. El ejemplo explica lo mismo con menos ruido.
+
+Con una conversación, tendría todavía más cuidado. Que un mensaje esté en mi computadora no significa que la otra persona haya aceptado aparecer en un video. Puedo explicar el problema con un ejemplo escrito para esa explicación, diciendo que es un ejemplo. No hace falta disfrazarlo de captura real.
+
+Lo mismo pasa con resultados. Si quiero hablar de una intención, puedo decir quiero probar esto. Si tengo una prueba, puedo mostrar qué medí y hasta dónde llega. No quiero usar una imagen limpia para dar la impresión de que algo ya funciona cuando todavía lo estoy preparando.
+
+Para mí, esa diferencia hace que compartir sea más tranquilo. No tengo que inventar un antes y después espectacular para cada pieza. Puedo contar una pregunta bien elegida y el criterio con el que la estoy resolviendo. Una duda concreta también puede ayudar a quien está pasando por algo parecido.
+
+En la parte visual, prepararía una copia del documento para grabar. Le saco datos que no aportan y reviso los bordes de la ventana. Si algo debe ocultarse, prefiero evitar que entre al encuadre desde el principio. Después también hay que revisar el video completo: una notificación puede aparecer en un segundo.
+
+No alcanza con mirar el primer cuadro y pensar que todo sigue igual. Revisaría las transiciones, las pestañas que se abren y el final. Si un dato privado aparece, esa versión queda fuera hasta corregirla. No es una decisión que dependa de que el dato se vea chiquito.
+
+Y tampoco quiero que esta preparación se convierta en una excusa para no grabar nunca. Puedo elegir una pantalla pequeña, una idea clara y un ejemplo sin información sensible. La preparación tiene que facilitar la explicación, no hacerla interminable.
+
+Antes de compartir, también revisaría el nombre del archivo y lo que aparece en una búsqueda. A veces el dato que sobra está fuera del documento que querías mostrar.
+
+Compartir el proceso es elegir qué parte ayuda a otra persona. No es dejar todo a la vista. Quiero que alguien entienda lo que estoy diciendo y que las personas que aparecen alrededor de mi trabajo conserven su privacidad. Si puedo hacer las dos cosas, la pieza tiene un motivo claro para existir.
+
+
+## Carrusel y tres historias · textos completos
+
+# 15 de octubre · Menos código, misma tarea
+
+Fecha editorial: 2026-10-15 · America/Caracas. Borrador para QA independiente. Autor configurado: Sol 6.1, esfuerzo medio. Base: SI-03; hechos documentales comprobados el 12-oct, sin anuncio de noticias futuras.
+
+## Carrusel · texto completo de siete láminas
+
+### 1
+**¿Tu IA construyó lo que pediste… o una fábrica entera?**
+Una solución pequeña puede ser suficiente. La prueba es que cumpla el pedido, no que tenga menos líneas a cualquier precio.
+
+### 2
+**Una idea detrás de ponytail**
+El plugin propone frenar código innecesario en Claude Code. Su criterio invita a preguntar si cada parte hace falta antes de agregarla.
+
+### 3
+**El dato tiene dueño**
+El autor reportó 53% menos código y 26% menos costo en un benchmark de 39 tareas y cinco corridas con Opus 5.5. Son resultados del autor, no mediciones de ONIA ni una promesa para tu proyecto.
+
+### 4
+**No compares pedidos distintos**
+Escribí una tarea concreta y sus condiciones de aceptación. Usá el mismo pedido al comparar una solución con y sin el plugin. Registrá modelo, configuración y contexto para entender la diferencia.
+
+### 5
+**Contá lo que importa**
+Primero: ¿cumple todas las condiciones?
+Después: ¿cuánto código cambió?
+Finalmente: ¿qué uso o costo registró la herramienta?
+Una solución incompleta no gana por ser corta.
+
+### 6
+**Plantilla para tu comparación**
+Pedido: ____
+Debe hacer: ____
+No debe cambiar: ____
+Modelo y configuración: ____
+Resultado A / resultado B: ____
+Condición que pasó o falló: ____
+
+### 7
+**Elegí por resultado verificable**
+Quedate con la solución que cumple la tarea y podés mantener. Copiá la plantilla y mandá VAGO por mensaje a la comunidad con un pedido que quieras comparar. No hay benchmark personal anunciado.
+
+## Historias · texto completo de tres pantallas
+
+### Historia 1 · contexto
+A veces pedís un botón y recibís una arquitectura entera. Antes de celebrar que la IA escribió mucho, revisá si cada parte era necesaria.
+
+### Historia 2 · pregunta
+¿Qué preferís revisar primero?
+Encuesta: “Si funciona” / “Cuántas líneas tiene”.
+El orden propuesto: cumplimiento primero, tamaño y uso después.
+
+### Historia 3 · ejercicio y CTA
+Ejercicio: escribí un pedido con dos condiciones que se puedan comprobar. Completá la plantilla del carrusel. Mandá VAGO por mensaje a la comunidad con ese pedido; los porcentajes citados pertenecen al autor, no a nuestra prueba.
+
+## Fuentes y límites
+
+- https://github.com/DietrichGebert/ponytail
+- Evidencia reutilizada: `onia-marca-nuevos-20261012/guiones/VERIFICACION_SEIS.md`, lectura primaria del 12-oct por root/guiones_sol; no se hereda como lectura web propia del autor.
+- Canon Claude: commit `781df7d87b53913ac9790fa1df88e53357408bc3`; no se alteran los originales.
+- Sin afirmación de ejecución personal, benchmark propio, recurso comunitario publicado ni render nuevo. La ficha/plantilla que nombra el CTA está completa en este documento. No publicación autorizada.
+
+
+## Comunidad · mensaje completo para copiar
+
+🦥 VAGO · ¿menos código hace el mismo trabajo?
+
+El autor de ponytail reporta en su propio benchmark 39 tareas, cinco corridas por tarea: −53 % de código y −26 % de costo. Es su medición; no la tomes como resultado garantizado ni como prueba nuestra.
+
+Ejercicio: elegí un pedido pequeño y verificable. Guardá el resultado base; repetí el mismo pedido con la herramienta solo si decidís instalarla por tu cuenta. Compará si ambas versiones cumplen los mismos requisitos y anotá líneas/tiempo/costo. Si omite algo, no cuenta como mejora.
+
+Pregunta: ¿Claude suele escribir más de lo que pedís o te ayuda a terminar más rápido?
+
+Proyecto y README: https://github.com/DietrichGebert/ponytail
+
+## Recortes y publicación
+
+Tres planes condicionales por vertical en PLANES_63.json. Cada recorte exige unidad autónoma, cambios de edición/música/colores/subtítulos/velocidad y licencia comprobada. No hay recortes nuevos renderizados. Historias y CTA que mencionan el carrusel se usan solo si ya está disponible; el recurso de comunidad está incluido en el mensaje. Horarios y canales en el calendario único, todos propuestos.

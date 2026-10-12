@@ -1,0 +1,50 @@
+{
+  "N06-DEPENDENCIA-LOCAL.md": {
+    "bytes": 2754,
+    "sha256": "da099765205f2d0c240bd492129843e614ed27e8a1c0827f8288cc7952b6a504"
+  },
+  "cutplan-fbad86d1.json": {
+    "bytes": 5448,
+    "sha256": "e3c04569d1f4de4f33fc0dbb124f22a0ab84dab4195316f341b152b1c5ae2231"
+  },
+  "CC-BY-3.0.txt": {
+    "bytes": 19468,
+    "sha256": "129ee83be4405a5bfb8cd9084848a023c83041f786adf4c8a027d32e0bf11567"
+  },
+  "N06-command-EXACTO-PREVIEW.json": {
+    "bytes": 1802,
+    "sha256": "f2248a4ef1db396a9bed7ee92ee5db0231664c35d3dea4eee79f1e94cf5bed5c"
+  },
+  "Inter-SemiBold.ttf": {
+    "bytes": 339120,
+    "sha256": "0b7cee37c17db70563a0cdd0af134a92f0c125ec5fd979523d1be5e560642b32"
+  },
+  "house-in-a-forest-loop.ogg": {
+    "bytes": 1430743,
+    "sha256": "32680f2b2631eb9f6e2902ebbbec1b43ab82b4dbf154fdc9bfbfa17b03270504"
+  },
+  "Inter-licencia-procedencia.txt": {
+    "bytes": 455,
+    "sha256": "14f8892fd4c51dcb9272e46482cda752d61d1037fa560f24d38beed2f9048906"
+  },
+  "CREDITO-OBLIGATORIO.txt": {
+    "bytes": 511,
+    "sha256": "365c8fe5785a7698e51ef33e252db222f3c899c50fbc21b896e5c64f47eb55d8"
+  },
+  "N06-command-PORTABLE.json": {
+    "bytes": 1570,
+    "sha256": "1f2d85803a0ff313f24ef2fc47c59133c9477f83af2a40e430deef25e18be571"
+  },
+  "Inter-OFL.txt": {
+    "bytes": 4380,
+    "sha256": "262481e844521b326f5ecd053e59b98c8b2da78c8ee1bdbb6e8174305e54935a"
+  },
+  "DEPENDENCIA-N06.json": {
+    "bytes": 1522,
+    "sha256": "306b63982112748f2f3aec82468accfe14ed82e07baa48355e02a8d707ae9fc4"
+  },
+  "REGISTRO-LICENCIA.json": {
+    "bytes": 2753,
+    "sha256": "c7b1c60ed052cdd0a20ff29866c9c57bb65178b612dfd4eff2f944058cfd3a7d"
+  }
+}

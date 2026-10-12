@@ -1,0 +1,54 @@
+{
+  "scope": "structural counts and exact authored bytes, not editorial QA",
+  "files": [
+    {
+      "path": "2026-10-13.md",
+      "bytes": 3686,
+      "sha256": "3fb666eef4851e2294bda9cc4fd6953736db524e62c211adee5202818e52a685",
+      "carousel_slides": 7,
+      "story_screens": 3
+    },
+    {
+      "path": "2026-10-14.md",
+      "bytes": 3256,
+      "sha256": "a9fc55fbcb3d780dfa7ad7d4fd6cacf952b900eaef8f02fcdaef1e406fb2b464",
+      "carousel_slides": 7,
+      "story_screens": 3
+    },
+    {
+      "path": "2026-10-15.md",
+      "bytes": 3036,
+      "sha256": "9f04212d213dbdd45f83bb9ff4a24f46f5435b15c53295f8802d5bfe814c7eaa",
+      "carousel_slides": 7,
+      "story_screens": 3
+    },
+    {
+      "path": "2026-10-16.md",
+      "bytes": 3092,
+      "sha256": "8a4e388f6b261ddf81072aa2beebfb64e5b689dca6e73ed404ca1b1b2541799a",
+      "carousel_slides": 7,
+      "story_screens": 3
+    },
+    {
+      "path": "2026-10-17.md",
+      "bytes": 3418,
+      "sha256": "e5639a52e358fd4ac59b4dfe19e77889b9624188aa9968656506ad6aaf179387",
+      "carousel_slides": 7,
+      "story_screens": 3
+    },
+    {
+      "path": "2026-10-18.md",
+      "bytes": 2973,
+      "sha256": "5c0fc586de5908014f4e547b6c45c9ce6f93f53f958cf0600cb49aea306aeb50",
+      "carousel_slides": 7,
+      "story_screens": 3
+    },
+    {
+      "path": "2026-10-19.md",
+      "bytes": 3322,
+      "sha256": "dd40104d205347813c45c15391059e7495b069c07901a50867efcb8fb6cf4419",
+      "carousel_slides": 7,
+      "story_screens": 3
+    }
+  ]
+}

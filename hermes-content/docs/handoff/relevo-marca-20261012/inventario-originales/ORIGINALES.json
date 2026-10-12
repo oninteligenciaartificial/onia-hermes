@@ -1,5 +1,5 @@
 {
-  "updated_utc": "2026-10-12T20:30:54.918520+00:00",
+  "updated_utc": "2026-10-12T20:38:03.175763+00:00",
   "direct_user_statement": {
     "previous_original_recordings": 6,
     "editorial_quality": "Sergio said VERY GOOD; preserve existing montages",
@@ -33,8 +33,13 @@
         "modified_time": "2026-10-11T04:47:06.789Z",
         "canonical_url": "https://drive.google.com/file/d/1rlbdA9zLE9SZJInPmFjd1jP3S8r8yk08/view",
         "sha256": "6e3702e1378de3432843633c2bff2f76c654acaa251b3c38b9f1f3a9acff8fb9",
-        "sha256_authority": "source Work manifest only, not measured raw bytes in native destination",
-        "raw_local_received": false
+        "sha256_authority": "final reception exact bytes/SHA256 checked, independent QA PASS",
+        "raw_local_received": true,
+        "local_path": "/workspace/work/onia-marca-recepcion-20261012/received/media-review-n06/bruto.mp4",
+        "receipt": {
+          "method": "12 verified split parts; exact reassembly",
+          "source": "/workspace/work/onia-marca-recepcion-20261012/parts/restored-containers/media-review-n06/bruto.mp4"
+        }
       },
       "claude_montage": {
         "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
@@ -50,9 +55,9 @@
         "sha256": "a060d4f4c0e479c4839b9bc47acaa20692ed417f94cebbd0f8f71313e3aee642",
         "bytes": 1940441,
         "duration": "45.504000",
-        "private_drive_id": null,
-        "private_url": null,
-        "transfer_status": "root transferring private review; do not duplicate upload",
+        "private_drive_id": "1knSoDDefrrRj83Uv--bcyYqKXrfoxF3t",
+        "private_url": "https://drive.google.com/file/d/1knSoDDefrrRj83Uv--bcyYqKXrfoxF3t/view?usp=drivesdk",
+        "transfer_status": "uploaded by root; owner-only metadata verified by root",
         "qa": "PASS technical/license, not auditory approval"
       },
       "clean_preview": {
@@ -79,8 +84,13 @@
         "modified_time": "2026-10-11T04:50:03.826Z",
         "canonical_url": "https://drive.google.com/file/d/1rHY7WjqjRaEnfIqgdDMOXXfMhF2oZ3Ae/view",
         "sha256": "8220af93f24be363a90c9fcc0fad4c1a77e4f9fb4556abe4cefaaace2f302593",
-        "sha256_authority": "source Work manifest only, not measured raw bytes in native destination",
-        "raw_local_received": false
+        "sha256_authority": "final reception exact bytes/SHA256 checked, independent QA PASS",
+        "raw_local_received": true,
+        "local_path": "/workspace/work/onia-marca-recepcion-20261012/received/media-adjustment/DD-A-bruto-original.mp4",
+        "receipt": {
+          "method": "12 verified split parts; exact reassembly",
+          "source": "/workspace/work/onia-marca-recepcion-20261012/parts/restored-containers/media-adjustment/DD-A-bruto-original.mp4"
+        }
       },
       "claude_montage": {
         "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
@@ -96,9 +106,9 @@
         "sha256": "52ab8ff1d2ed1accc7fa4082f74d49094b0da67303584d12084d6093fccf5895",
         "bytes": 2404999,
         "duration": "58.433333",
-        "private_drive_id": null,
-        "private_url": null,
-        "transfer_status": "root transferring private review; do not duplicate upload",
+        "private_drive_id": "1GAIgrg_CP1ARk6WnBDMGCsceTimbXeVk",
+        "private_url": "https://drive.google.com/file/d/1GAIgrg_CP1ARk6WnBDMGCsceTimbXeVk/view?usp=drivesdk",
+        "transfer_status": "uploaded by root; owner-only metadata verified by root",
         "qa": "PASS technical/license, not auditory approval"
       },
       "clean_preview": {
@@ -142,9 +152,9 @@
         "sha256": "d80924142098a75f63c3e7adfed2dae0a000ccdf1d35fe06b8e5af2ba81e4fd7",
         "bytes": 4090514,
         "duration": "90.752000",
-        "private_drive_id": null,
-        "private_url": null,
-        "transfer_status": "root transferring private review; do not duplicate upload",
+        "private_drive_id": "193pR-RlyDGY1jHt7Kb0EBusdTCjD4XZO",
+        "private_url": "https://drive.google.com/file/d/193pR-RlyDGY1jHt7Kb0EBusdTCjD4XZO/view?usp=drivesdk",
+        "transfer_status": "uploaded by root; owner-only metadata verified by root",
         "qa": "PASS technical/license, not auditory approval"
       },
       "clean_preview": {
@@ -188,9 +198,9 @@
         "sha256": "43c58a9cf784f5c6cba57d06856b5cc53df28775b458f576408c3087f7aa335d",
         "bytes": 6331443,
         "duration": "109.033333",
-        "private_drive_id": null,
-        "private_url": null,
-        "transfer_status": "root transferring private review; do not duplicate upload",
+        "private_drive_id": "1Vkgphhx53dE_fivF2OWuJN6LC5xeUqiU",
+        "private_url": "https://drive.google.com/file/d/1Vkgphhx53dE_fivF2OWuJN6LC5xeUqiU/view?usp=drivesdk",
+        "transfer_status": "uploaded by root; owner-only metadata verified by root",
         "qa": "PASS technical/license, not auditory approval"
       },
       "clean_preview": {
@@ -240,9 +250,9 @@
         "sha256": "63f1aa5e9d3323b2aa04e66d3822f1c2a23442edb61738adb6cde0396a25e69d",
         "bytes": 3414814,
         "duration": "81.733333",
-        "private_drive_id": null,
-        "private_url": null,
-        "transfer_status": "root transferring private review; do not duplicate upload",
+        "private_drive_id": "1H0DDK3En1eS-SvEGah-cI7-M5BtZIoif",
+        "private_url": "https://drive.google.com/file/d/1H0DDK3En1eS-SvEGah-cI7-M5BtZIoif/view?usp=drivesdk",
+        "transfer_status": "uploaded by root; owner-only metadata verified by root",
         "qa": "PASS technical/license, not auditory approval"
       },
       "clean_preview": {
@@ -312,5 +322,12 @@
     "verified_assets": [],
     "status": "pending actual source/link; no three nonexistent derivatives listed as complete"
   },
-  "work_receipt": "43/59 unchanged, chunks pending; no old media removed"
+  "work_receipt": {
+    "received_matching": 59,
+    "source_count": 59,
+    "missing": [],
+    "qa": "PASS independent final parts QA",
+    "evidence": "/workspace/work/onia-marca-recepcion-20261012/qa/ACTA-QA-FINAL-PARTES.md",
+    "historical_snapshot": "43/59 was intermediate, retained as RECEPCION-43-SNAPSHOT.json"
+  }
 }

@@ -1,0 +1,31 @@
+{
+  "source_commit": "fbad86d1cf01de470c0a32107a4ec8f3e8f1d4e3",
+  "cutplan_path": "videos/marca-personal/2026-10-11/n06-antigravity/cutplan.json",
+  "cutplan_sha256": "e3c04569d1f4de4f33fc0dbb124f22a0ab84dab4195316f341b152b1c5ae2231",
+  "preserved_cutplan_equal": true,
+  "preview_approved_by_user_message": "Sergio valoró edición muy buena y autorizó publicar existentes que pasan QA; no equivale a cerrar hechos/CTA ni master",
+  "no_local_cut_changes": true,
+  "global_no_later_delta_claimed": false,
+  "render_flag": "--sin-aire",
+  "voice_source_duration": 45.504,
+  "expected_video_frames": 1365,
+  "expected_video_duration": 45.5,
+  "preview_sha256": "d8753944a720d201c7bd141acce4236699cb159dc95e90f3f80049c77f7d8f40",
+  "music_drive_id": "13yjSjS_otbwvVvOI_iWx7akmqlMx-lpi",
+  "music_bytes": 1430743,
+  "music_sha256": "32680f2b2631eb9f6e2902ebbbec1b43ab82b4dbf154fdc9bfbfa17b03270504",
+  "existing_git_font": {
+    "path": ".claude/skills/edicion-referentes/scripts/erik/assets-ejemplo/fuentes/Inter-SemiBold.ttf",
+    "sha256": "0b7cee37c17db70563a0cdd0af134a92f0c125ec5fd979523d1be5e560642b32",
+    "bytes": 339120,
+    "source_commit": "fbad86d1cf01de470c0a32107a4ec8f3e8f1d4e3",
+    "license_embedded_metadata_to_inspect": true
+  },
+  "missing_exact_fonts_native": [
+    "InterBlack",
+    "InterBold",
+    "InterRegular",
+    "JetBrainsMonoSemiBold"
+  ],
+  "fc_match_native_fallback": "OpenAI Sans Regular /usr/share/fonts/openai-sans/OpenAISans-Regular.woff2; not requested TTF and not original Inter"
+}

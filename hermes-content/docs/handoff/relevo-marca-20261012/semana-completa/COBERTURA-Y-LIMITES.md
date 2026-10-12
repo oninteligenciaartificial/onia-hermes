@@ -1,0 +1,11 @@
+# Cobertura comprobada
+
+35 guiones hablados:21 verticales(2noticiasfechadas+12reservaseducativas+7informales),14horizontales(7IA+7vida).7carruseles49láminas,7historias21pantallas,7mensajescomunidad.63planescondicionales contexto fuenteexacto; ceroautonomía/renderdeclarados.140bloquescalendario:105piezasprincipales+21historias+7comunidad+7horasanálisislive.
+
+QA independiente /root/qa_sol: PASS textual,sha/conteos/relaciones/fuentes/gates; no AVnativoni demos/productos propios. Dos anuncios/reportes primarios abiertos12oct, noticiaspara13requieren refrescarfecha; doceespaciosnoticiasfuturaspendientes/sustitución. No publicarcomo breakingviejasreservas.
+
+17mensajesVentasintegradosliteralmente, fuente73265f543cb5b3e9da64cd553b32ad2855d362f9, correcciónroutingMarketing separada. Precio/fecha/cobro/cupos/preflight/demo no aprobados. Estrategiaresultado/preflight/soporte/recursos/continuidad no implica copiarofertaErik.
+
+RecepciónWork59/59cerrada conSHAbytes yQAindependiente. Seisgrabacionesdeclaradas:5mapeadas+BA814candidata; nuevoMotivaciónsinID observado.5previewsconmúsica360preservados; no master1080disponibleaquí. LocalworkerreproduceN06conproyectooriginal,corteexactofbad--sin-aire. Dependenciapista/comandolicencia exportada; cuatro fuentesexactasno recibidas. Escucha favorableN06/N07 reportadaporQAexternaMadre; no afirmaraudiciónporroot.
+
+18/20h12octretirados porreglaacuse3horasantes;22hsolo siacuseantes19hcongatescerrados. Cerojobs/publicacionesdeeste worker. Soloavisosimportantes, sinrondasautomáticas, compras, instalaciones o cambiosinfra/main/merge.

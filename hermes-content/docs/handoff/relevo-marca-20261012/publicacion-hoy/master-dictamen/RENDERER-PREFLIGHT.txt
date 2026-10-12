@@ -1,0 +1,6 @@
+command: python preserved/.../n06-antigravity/borrador/santiago-cv5.py --help
+exit: 1
+Traceback (most recent call last):
+  File "/workspace/work/onia-marca-relevo/editorial/preservado/videos/marca-personal/2026-10-11/n06-antigravity/borrador/santiago-cv5.py", line 20, in <module>
+    import cv2
+ModuleNotFoundError: No module named 'cv2'

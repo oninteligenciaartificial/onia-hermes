@@ -1,0 +1,226 @@
+# Paquete completo · 2026-10-14
+
+America/Caracas. Textos para revisión/grabación; no publicaciones ni agenda confirmada. Los dos espacios IA del14–19 son reservas educativas: revalidar o sustituir por noticias del día antes de publicar. Los recortes son planes, no videos existentes.
+
+## Tres verticales · hablado y fuentes separados
+
+# SI-03 · Claude, pero vago
+
+Este plugin promete que Claude escriba menos código. Se llama ponytail, un agregado para la IA que programa en tu compu.
+
+La idea es simple: antes de construir más cosas, preguntar si hacen falta. Le pedís un botón, no una fábrica de botones.
+
+Su autor publicó una comparación: treinta y nueve tareas, cinco corridas por tarea, con Opus cinco punto cinco. Reporta cincuenta y tres por ciento menos código y veintiséis por ciento menos costo frente al agente sin el plugin.
+
+Ojo: son números del autor. No son una prueba mía ni una promesa para tu proyecto.
+
+Mi consejo para evaluarlo: usá el mismo pedido con y sin el plugin. Primero mirá si hace lo que pediste. Después compará las líneas y el costo.
+
+Menos código puede ser mejor. Menos funciones de las que necesitabas, no. La comparación empieza por el resultado, no por el número más lindo.
+
+# SI-04 · Tres comandos escondidos de Claude Code
+
+Claude Code tiene una radio. Y otros comandos que vale la pena mirar antes de instalar más cosas.
+
+Claude Code es la IA que programa en tu compu. Barra radio abre Claude FM, música lo-fi para concentrarte. Está documentado: no te lo cuento como un lanzamiento de hoy.
+
+Barra powerup abre lecciones cortas e interactivas sobre sus funciones. Si recién empezás, puede servirte para conocer lo que ya tenés.
+
+Y ultrathink se escribe dentro del pedido. Le pide un razonamiento más profundo en esa respuesta, sin cambiar el nivel de esfuerzo configurado para toda la sesión.
+
+Mi consejo: no lo pegues en todos los mensajes por costumbre. Reservá lo difícil para cuando necesitás revisar más posibilidades.
+
+Antes de grabar una demo, comprobá qué aparece en tu versión y cuenta. Que una función esté en el manual no significa que la tengas disponible en cualquier entorno.
+
+# INF-1014 · Una pausa antes de instalar una herramienta
+
+Antes de instalar otra herramienta, quiero hacer una pausa. ¿Qué problema concreto me resuelve?
+
+Ver un video donde alguien la usa no alcanza para contestar eso. Puede estar buenísima y aun así no hacerme falta esta semana.
+
+Quiero mirar tres cosas: para qué la necesito, qué permisos pide y cómo la voy a probar. Si no puedo explicar esas tres, prefiero anotarla y seguir con lo que ya tengo.
+
+También quiero separar probar de cambiar todo mi sistema. Una prueba pequeña, con archivos de ejemplo, no es lo mismo que darle acceso al trabajo real.
+
+No te cuento que hice ese cambio y ahorré horas. Es el criterio que quiero usar antes de sumar otra cosa.
+
+Me interesa aprender herramientas, sí. Pero mi trabajo no es coleccionarlas. Quiero terminar una tarea y entender qué parte me ayudó a hacerla.
+
+
+---
+
+## Fichas fuera del hablado: actualidad, fuentes y recortes
+
+Fechaobservación:2026-10-12 · timezoneAmerica/Caracas. Autor/lectorprimarias: /root/guiones_sol. Ninguna ficha ni plan siguiente se dice a cámara. No piezas/publicaciones aprobadas.
+
+### SI-03
+
+**Hablado:** completo, reservaeducativa/documental; no noticia del día confirmada. **Slotnoticioso:** pendiente verificación o sustitución.
+
+**Fecha del hecho/documento:** BenchmarkactualREADMEobservado12oct; fechadebenchmark no establecida. **Observado:**12oct2026.
+
+**Fuentesprimarias:** https://github.com/DietrichGebert/ponytail
+
+**Versión/condición:** 39tareas5runsOpus5.5, autor-53code/-26cost; no propio; versionespara demo pendientes.
+
+**Gateactualidadpara 2026-10-14:** Antes del post propuesto revisar fecha/hecho/versión con fuente oficial. Sin novedadreciente confirmada, conservar como reserva educativa; sustituirslotnoticia o cambiarclasificación/calendario con revisión. No llamarlo noticia del13–19 ni breaking.
+
+**3planes:** SI-03-YA, SI-03-YB, SI-03-YC; candidatosenPLANES_63.json. Autonomía/duración no verificadas: noassets/63renders.
+
+### SI-04
+
+**Hablado:** completo, reservaeducativa/documental; no noticia del día confirmada. **Slotnoticioso:** pendiente verificación o sustitución.
+
+**Fecha del hecho/documento:** radio29jun–3jul2026;powerup30mar–3abr2026; ultrathinkdocactual12oct. **Observado:**12oct2026.
+
+**Fuentesprimarias:** https://code.claude.com/docs/en/commands · https://code.claude.com/docs/en/model-config
+
+**Versión/condición:** Versión propia/cuenta noverificadas; no nueva instalación.
+
+**Gateactualidadpara 2026-10-14:** Antes del post propuesto revisar fecha/hecho/versión con fuente oficial. Sin novedadreciente confirmada, conservar como reserva educativa; sustituirslotnoticia o cambiarclasificación/calendario con revisión. No llamarlo noticia del13–19 ni breaking.
+
+**3planes:** SI-04-YA, SI-04-YB, SI-04-YC; candidatosenPLANES_63.json. Autonomía/duración no verificadas: noassets/63renders.
+
+### INF-1014
+
+Hablado informal completo en intención/reflexión: no relato deexperiencia cumplida, ganancia/resultadosni promesa de recurso. Fuente:planKIT-GRABACION/FLUJO-DIARIO+autorización12oct; no noticia. Título heredadoes índice; texto no afirma que yaocurrió.
+
+**3planes:** INF-1014-YA, INF-1014-YB, INF-1014-YC; candidatosenPLANES_63.json. Autonomía/duración no verificadas: noassets/63renders.
+
+
+## Dos horizontales · hablado completo
+
+# H-IA-02 · Antes de instalar un plugin, compará una tarea
+
+Antes de instalar cinco plugins para que tu IA trabaje mejor, hay una pregunta más útil: ¿qué problema concreto querés resolver?
+
+Un plugin es un agregado para una herramienta. Puede sumar instrucciones, funciones o conexiones. Que su presentación tenga un video espectacular no significa que mejore tu trabajo. Y si instalás varias cosas juntas, después cuesta saber cuál cambió el comportamiento.
+
+Yo empezaría con una tarea chica y una comparación. No con una lista de recomendaciones. Por ejemplo, un botón que cuente clics. Tiene que sumar uno cuando lo tocás, mostrar el número y permitir volver a cero. Eso es el pedido completo. No hace falta inventarle usuarios, pagos ni una base de datos.
+
+Primero escribí cómo vas a saber que funciona. Lo tocás tres veces y aparece tres. Reiniciás y aparece cero. Si el botón se ve bien pero no hace eso, no pasó la prueba. Si hace todo eso y además creó diez pantallas que no pediste, hay trabajo extra que también tenés que revisar.
+
+Después probás la herramienta como la tenés hoy. Guardás el resultado y el punto de partida. Para comparar un plugin, repetís el mismo pedido desde una copia equivalente del proyecto. No sobre la versión que ya resolvió el problema: eso le daría una ventaja distinta.
+
+Ponytail es un ejemplo de plugin que propone escribir menos código. Su autor publicó un benchmark con tareas y porcentajes. Es una medición del autor, no una prueba mía ni una garantía para tu proyecto. Para esta comparación ni siquiera necesitás repetir sus números. Necesitás comprobar tu propia tarea.
+
+Mirá tres cosas. Si cumple lo que pediste. Qué cambios hizo. Y cuánto trabajo te dejó para revisar. Contar líneas puede ayudar, pero una solución corta que rompió el botón no es mejor. Una solución más larga tampoco gana por el tamaño.
+
+Antes de instalar, leé el repositorio y las instrucciones del plugin. Revisá qué incorpora, qué permisos necesita y qué licencia tiene. Si conecta un servicio externo, preguntate qué información puede salir de tu computadora. No metas contraseñas o datos de clientes en una prueba porque el tutorial lo hizo así.
+
+Y elegí un lugar separado para experimentar. Si todavía no entendés lo que va a ejecutar, podés estudiar las instrucciones y dejar la instalación para después. Leer un comando no obliga a correrlo. Tener curiosidad no exige darle todas tus carpetas.
+
+Una comparación tampoco resuelve todo. Puede servir para ese botón y fallar en otra clase de trabajo. Si el plugin cambia instrucciones, revisá que no contradigan las reglas importantes de tu proyecto. Menos código no debería significar menos funciones de las que pediste.
+
+Al final dejá una decisión concreta. Lo mantengo para estas tareas, lo pruebo un poco más o lo retiro porque no resolvió el problema. Escribí el motivo. Así la próxima recomendación no te hace empezar otra vez desde cero.
+
+No hace falta encontrar el plugin perfecto antes de trabajar. Hace falta una tarea clara y una prueba justa. Primero comprobás si ayuda. Después decidís si merece quedarse.
+
+
+# H-VIDA-02 · Cómo elegir una prioridad sin abrir diez pendientes
+
+Una lista larga puede darte la sensación de que estás organizando tu día, aunque todavía no hayas decidido qué hacer primero.
+
+Quiero separar esas dos cosas: anotar y elegir. Anotar sirve para no perder una idea. Elegir significa aceptar que durante un rato las otras ideas van a esperar. Si cada nueva ocurrencia se convierte en una tarea urgente, la lista deja de ayudar.
+
+Para ordenar una mañana, empezaría por una pregunta concreta: ¿qué resultado quiero poder mostrar al terminar? No qué aplicación quiero abrir, ni cuántas horas quiero estar sentado. Qué resultado. Puede ser un guion completo, una captura legible o una decisión con su motivo.
+
+Después miro qué lo bloquea. Supongamos que quiero grabar un video sobre una herramienta. Tengo el título, pero todavía no sé si la función aparece en mi versión. En ese caso, preparar diez estilos de subtítulos no es el siguiente paso. El siguiente paso es comprobar esa función.
+
+Ése es un ejemplo para ordenar, no una historia que te esté contando como si me hubiera pasado hoy. Lo útil es la relación: una tarea puede parecer fácil y entretenida, pero no mover el resultado que elegiste.
+
+Yo dividiría la lista en tres lugares. Lo que empuja el resultado de hoy. Lo que necesita un dato o una decisión. Y lo que quiero conservar para después. No hace falta otra aplicación para hacerlo. Tres líneas en una hoja alcanzan si las puedo revisar.
+
+Una idea que pasa al tercer lugar no se pierde. Le dejo una frase con el motivo y el próximo paso. Por ejemplo: comparar dos formatos de video, después de tener una pieza completa de cada uno. Así no me obligo a investigar formatos durante una toma que ya está preparada.
+
+También quiero poner un límite a lo que llamo urgente. Una fecha cercana importa, pero no vuelve verdadero un dato sin verificar. Si algo no llega con calidad, prefiero decir qué falta y mover esa pieza antes que apurar una afirmación que después tenga que corregir.
+
+El orden tampoco tiene que ser una cárcel. Si aparece un problema real que afecta lo que estoy haciendo, puedo cambiarlo. Lo que quiero evitar es cambiarlo solo porque apareció otra herramienta o porque otra tarea tiene un resultado más vistoso.
+
+Para comprobar la prioridad, me sirve terminar esta frase: si hago esto ahora, desbloqueo esto otro. Si no puedo completarla, quizá estoy decorando el plan. Una portada puede ser necesaria. Pero antes tiene que existir el contenido que esa portada representa.
+
+Y al cerrar el bloque, no quiero medirlo por la cantidad de ventanas abiertas. Quiero mirar el resultado elegido: quedó completo, quedó con una duda concreta o cambió la prioridad por una razón que puedo explicar.
+
+Ésa es la forma en que quiero ordenar el trabajo: una lista para recordar y una decisión para avanzar. No necesito vaciar todos los pendientes en un día. Necesito que lo que haga primero tenga sentido y que lo que espere siga teniendo un lugar.
+
+
+## Carrusel y tres historias · textos completos
+
+# 14 de octubre · Antes de darle llaves a OpenClaw
+
+Fecha editorial: 2026-10-14 · America/Caracas. Borrador para QA independiente. Autor configurado: Sol 6.1, esfuerzo medio. Base: SI-02; hechos documentales comprobados el 12-oct, sin anuncio de noticias futuras.
+
+## Carrusel · texto completo de siete láminas
+
+### 1
+**Tu asistente puede leer una orden que vos nunca diste**
+Un mensaje o una página pueden contener instrucciones para la IA. Antes de conectar herramientas, definí qué puede hacer.
+
+### 2
+**El texto de afuera también puede traer instrucciones**
+OpenClaw documenta el riesgo de prompt injection: contenido externo que intenta cambiar el comportamiento del agente. Un mensaje no se vuelve confiable porque lo leyó una IA.
+
+### 3
+**El sandbox no aparece por magia**
+Su documentación indica que el sandbox es opcional y está desactivado por defecto. Revisá la configuración real; instalar un agente no demuestra que sus herramientas estén aisladas.
+
+### 4
+**Una caja no encierra toda la casa**
+El Gateway permanece en el host. Tener herramientas dentro de un sandbox no significa que todos los componentes del sistema estén en ese aislamiento.
+
+### 5
+**Revisá cada receta antes de usarla**
+Una skill contiene instrucciones para el agente. Leela: qué herramientas pide, qué archivos toca y qué acciones ejecuta. La popularidad de una receta no sustituye esa revisión.
+
+### 6
+**Tu ficha de acceso mínimo**
+Tarea permitida: ____
+Archivos necesarios: ____
+Acciones que requieren aprobación: ____
+Contenido externo que leerá: ____
+Forma de revisar el resultado: ____
+Empezá con lectura; ampliá permisos solo cuando la tarea lo requiera.
+
+### 7
+**Un rechazo no prueba seguridad completa**
+Que ignore un mensaje malicioso una vez no prueba aislamiento general. Copiá la ficha y mandá OPENCLAW por mensaje a la comunidad con la tarea y los permisos que querés revisar.
+
+## Historias · texto completo de tres pantallas
+
+### Historia 1 · contexto
+Un asistente útil puede leer mensajes, páginas y archivos. Ahí también pueden venir instrucciones que vos no escribiste. La pregunta es qué herramientas podría usar después.
+
+### Historia 2 · pregunta
+¿Qué le darías primero?
+Encuesta: “Solo lectura” / “Permiso para actuar”.
+Antes de elegir, anotá qué necesita la tarea. Un sandbox opcional debe configurarse y comprobarse.
+
+### Historia 3 · ejercicio y CTA
+Ejercicio: elegí una sola tarea y anotá los archivos necesarios y las acciones que pedirían aprobación. Mandá OPENCLAW por mensaje a la comunidad con esa ficha; está en el carrusel, sin prometer una instalación ya probada.
+
+## Fuentes y límites
+
+- https://docs.openclaw.ai/gateway/security/prompt-injection
+- https://docs.openclaw.ai/gateway/sandboxing
+- Evidencia reutilizada: `onia-marca-nuevos-20261012/guiones/VERIFICACION_SEIS.md`, lectura primaria del 12-oct por root/guiones_sol; no se hereda como lectura web propia del autor.
+- Canon Claude: commit `781df7d87b53913ac9790fa1df88e53357408bc3`; no se alteran los originales.
+- Sin afirmación de ejecución personal, benchmark propio, recurso comunitario publicado ni render nuevo. La ficha/plantilla que nombra el CTA está completa en este documento. No publicación autorizada.
+
+
+## Comunidad · mensaje completo para copiar
+
+🦞 OPENCLAW · primero, el límite de seguridad
+
+El manual de OpenClaw dice que los mensajes entrantes son datos no confiables y que las herramientas corren en el equipo anfitrión si no configurás sandbox. Por eso no se prueba en una compu con banco, contraseñas o archivos importantes.
+
+Tres reglas de conversación: 1) entorno separado; 2) sandbox comprobado antes de exponer herramientas; 3) revisar manualmente cada skill antes de instalarla. La última es recomendación, no cita textual del manual.
+
+Ejercicio (sin instalar nada): dibujá tres columnas: «qué dato entra», «qué herramienta podría actuar» y «qué persona aprueba». Marcá dónde frenarías una instrucción dudosa.
+
+Pregunta: ¿qué acción nunca dejarías que un agente haga sin aprobación humana?
+
+Manual: https://github.com/openclaw/openclaw#security · sandbox: https://docs.openclaw.ai/gateway/sandboxing
+
+## Recortes y publicación
+
+Tres planes condicionales por vertical en PLANES_63.json. Cada recorte exige unidad autónoma, cambios de edición/música/colores/subtítulos/velocidad y licencia comprobada. No hay recortes nuevos renderizados. Historias y CTA que mencionan el carrusel se usan solo si ya está disponible; el recurso de comunidad está incluido en el mensaje. Horarios y canales en el calendario único, todos propuestos.

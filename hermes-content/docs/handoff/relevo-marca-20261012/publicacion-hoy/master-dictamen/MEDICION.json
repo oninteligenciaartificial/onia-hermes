@@ -1,0 +1,621 @@
+{
+  "scope": "all MP4 in received59 and preserved275; includes raw not assumed edited master",
+  "files": [
+    {
+      "path": "/workspace/work/onia-marca-recepcion-20261012/received/cloud-media-synthetic.mp4",
+      "exit": 0,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 320,
+            "height": 240,
+            "r_frame_rate": "25/1"
+          }
+        ],
+        "format": {
+          "duration": "1.000000",
+          "size": "2326"
+        }
+      },
+      "error": ""
+    },
+    {
+      "path": "/workspace/work/onia-marca-recepcion-20261012/received/media-adjustment/DD-A-bruto-original.mp4",
+      "exit": 0,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "hevc",
+            "codec_type": "video",
+            "width": 1080,
+            "height": 1920,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "index": 1,
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "78.466667",
+          "size": "92453888"
+        }
+      },
+      "error": ""
+    },
+    {
+      "path": "/workspace/work/onia-marca-recepcion-20261012/received/media-adjustment/N02-preview-revisable.mp4",
+      "exit": 0,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 360,
+            "height": 640,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "index": 1,
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "109.033333",
+          "size": "6258418"
+        }
+      },
+      "error": ""
+    },
+    {
+      "path": "/workspace/work/onia-marca-recepcion-20261012/received/media-adjustment/N02-preview-sin-arranque-falso.mp4",
+      "exit": 0,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 360,
+            "height": 640,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "index": 1,
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "109.033333",
+          "size": "47814973"
+        }
+      },
+      "error": ""
+    },
+    {
+      "path": "/workspace/work/onia-marca-recepcion-20261012/received/media-review-n06/DD-A-borrador-original-Claude.mp4",
+      "exit": 0,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 360,
+            "height": 640,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "index": 1,
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "58.433333",
+          "size": "1426827"
+        }
+      },
+      "error": ""
+    },
+    {
+      "path": "/workspace/work/onia-marca-recepcion-20261012/received/media-review-n06/N02-borrador-original-Claude.mp4",
+      "exit": 0,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 360,
+            "height": 640,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "index": 1,
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "111.300000",
+          "size": "2665489"
+        }
+      },
+      "error": ""
+    },
+    {
+      "path": "/workspace/work/onia-marca-recepcion-20261012/received/media-review-n06/N06-borrador-original-Claude.mp4",
+      "exit": 0,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 360,
+            "height": 640,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "index": 1,
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "45.504000",
+          "size": "1163863"
+        }
+      },
+      "error": ""
+    },
+    {
+      "path": "/workspace/work/onia-marca-recepcion-20261012/received/media-review-n06/N06-preview-corte-propuesto.mp4",
+      "exit": 0,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 360,
+            "height": 640,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "index": 1,
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "45.600000",
+          "size": "2290695"
+        }
+      },
+      "error": ""
+    },
+    {
+      "path": "/workspace/work/onia-marca-recepcion-20261012/received/media-review-n06/N07-borrador-original-Claude.mp4",
+      "exit": 0,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 360,
+            "height": 640,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "index": 1,
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "81.733333",
+          "size": "2048970"
+        }
+      },
+      "error": ""
+    },
+    {
+      "path": "/workspace/work/onia-marca-recepcion-20261012/received/media-review-n06/bruto.mp4",
+      "exit": 0,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "hevc",
+            "codec_type": "video",
+            "width": 1080,
+            "height": 1920,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "index": 1,
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "59.233333",
+          "size": "69843125"
+        }
+      },
+      "error": ""
+    },
+    {
+      "path": "/workspace/work/onia-marca-relevo/editorial/preservado/.claude/skills/edicion-referentes/scripts/santiago/assets-ejemplo/clip-modos-oficial.mp4",
+      "exit": 0,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 1440,
+            "height": 264,
+            "r_frame_rate": "24/1"
+          }
+        ],
+        "format": {
+          "duration": "10.500000",
+          "size": "44395"
+        }
+      },
+      "error": ""
+    },
+    {
+      "path": "/workspace/work/onia-marca-relevo/editorial/preservado/videos/marca-personal/2026-10-11/dd-a-openai-sol/borrador/BORRADOR-no-es-master-360p.mp4",
+      "exit": 0,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 360,
+            "height": 640,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "index": 1,
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "58.433333",
+          "size": "1426827"
+        }
+      },
+      "error": ""
+    },
+    {
+      "path": "/workspace/work/onia-marca-relevo/editorial/preservado/videos/marca-personal/2026-10-11/dd-a-openai-sol/preview-360.mp4",
+      "exit": 0,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 202,
+            "height": 360,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "index": 1,
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "58.443991",
+          "size": "1405348"
+        }
+      },
+      "error": ""
+    },
+    {
+      "path": "/workspace/work/onia-marca-relevo/editorial/preservado/videos/marca-personal/2026-10-11/n02-sonnet-45/borrador/BORRADOR-no-es-master-360p.mp4",
+      "exit": 0,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 360,
+            "height": 640,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "index": 1,
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "111.300000",
+          "size": "2665489"
+        }
+      },
+      "error": ""
+    },
+    {
+      "path": "/workspace/work/onia-marca-relevo/editorial/preservado/videos/marca-personal/2026-10-11/n02-sonnet-45/preview-360.mp4",
+      "exit": 0,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 202,
+            "height": 360,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "index": 1,
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "111.400000",
+          "size": "2588352"
+        }
+      },
+      "error": ""
+    },
+    {
+      "path": "/workspace/work/onia-marca-relevo/editorial/preservado/videos/marca-personal/2026-10-11/n06-antigravity/borrador/BORRADOR-no-es-master-360p.mp4",
+      "exit": 0,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 360,
+            "height": 640,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "index": 1,
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "45.504000",
+          "size": "1163863"
+        }
+      },
+      "error": ""
+    },
+    {
+      "path": "/workspace/work/onia-marca-relevo/editorial/preservado/videos/marca-personal/2026-10-11/n06-antigravity/preview-360.mp4",
+      "exit": 0,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 202,
+            "height": 360,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "index": 1,
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "45.533333",
+          "size": "1058774"
+        }
+      },
+      "error": ""
+    },
+    {
+      "path": "/workspace/work/onia-marca-relevo/editorial/preservado/videos/marca-personal/2026-10-11/n07-haiku-55/borrador/BORRADOR-no-es-master-360p.mp4",
+      "exit": 0,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 360,
+            "height": 640,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "index": 1,
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "81.733333",
+          "size": "2048970"
+        }
+      },
+      "error": ""
+    },
+    {
+      "path": "/workspace/work/onia-marca-relevo/editorial/preservado/videos/marca-personal/2026-10-11/n07-haiku-55/preview-360.mp4",
+      "exit": 0,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 202,
+            "height": 360,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "index": 1,
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "81.900000",
+          "size": "1926265"
+        }
+      },
+      "error": ""
+    },
+    {
+      "path": "/workspace/work/onia-marca-relevo/editorial/preservado/videos/marca-personal/2026-10-11/s2-d07-a-ventana-24h/borrador/BORRADOR-no-es-master-360p.mp4",
+      "exit": 0,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 360,
+            "height": 640,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "index": 1,
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "90.752000",
+          "size": "2533965"
+        }
+      },
+      "error": ""
+    },
+    {
+      "path": "/workspace/work/onia-marca-relevo/editorial/preservado/videos/marca-personal/2026-10-11/s2-d07-a-ventana-24h/preview-360.mp4",
+      "exit": 0,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 202,
+            "height": 360,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "index": 1,
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "90.790000",
+          "size": "2130430"
+        }
+      },
+      "error": ""
+    }
+  ],
+  "python_dependencies": {
+    "cv2": false,
+    "numpy": true,
+    "PIL": true,
+    "scipy": true
+  },
+  "renderer_preflight": {
+    "exit": 1,
+    "error": "ModuleNotFoundError: No module named cv2",
+    "command": "python preserved/videos/marca-personal/2026-10-11/n06-antigravity/borrador/santiago-cv5.py --help",
+    "original_files_modified": false
+  },
+  "font_dependency_probe": {
+    "Inter Black": "fc-match returned OpenAI Sans Regular, missing requested family",
+    "Inter Bold": "fc-match returned OpenAI Sans Bold, missing requested family",
+    "requirement": "renderer archivo_fuente() rejects fallback families; must preserve original typography"
+  },
+  "available_original_yunet_model": "/workspace/onia-hermes/.claude/skills/editor-videos/assets/models/face_detection_yunet_2023mar.onnx",
+  "sha_scope_note": "original raw SHA256 validated in independent59reception; this measurement probes existing files only"
+}

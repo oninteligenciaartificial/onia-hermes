@@ -1,0 +1,243 @@
+{
+  "reviewer": "/root/qa_sol",
+  "date": "2026-10-13",
+  "status": "PASS complete private textual package; no publishing/recording approval",
+  "three_verticals": [
+    {
+      "id": "IA-1013-1",
+      "date": "2026-10-13",
+      "words": 159,
+      "sha256": "4523e9a59b4aa099becde57b547c0cbcb54f388ad93194e5aa652bd079e4fa7d",
+      "manifest_words_hash_match": true,
+      "text_complete_read": true,
+      "publication_authorized": false,
+      "news_slot_status": "FUENTE_RECIENTE_FECHADA_CONFIRMADA_12OCT_GATE_POST_13OCT_PENDIENTE",
+      "sources": [
+        "https://cloud.google.com/blog/products/ai-machine-learning/welcome-to-gemini-at-work-2026"
+      ],
+      "actuality_gate_present": true
+    },
+    {
+      "id": "IA-1013-2",
+      "date": "2026-10-13",
+      "words": 154,
+      "sha256": "a4f59296fac59e81dc0b92cc4d0b85c9b37a1fd4c46c7d97eabedf88d9a12d27",
+      "manifest_words_hash_match": true,
+      "text_complete_read": true,
+      "publication_authorized": false,
+      "news_slot_status": "FUENTE_RECIENTE_FECHADA_CONFIRMADA_12OCT_GATE_POST_13OCT_PENDIENTE",
+      "sources": [
+        "https://www.anthropic.com/news/investigating-unintended-model-actions"
+      ],
+      "actuality_gate_present": true
+    },
+    {
+      "id": "INF-1013",
+      "date": "2026-10-13",
+      "words": 142,
+      "sha256": "f97b6224cef308f6cd8c1e0df8608e38f0b593148cd971e2ba831d68e7fe7752",
+      "manifest_words_hash_match": true,
+      "text_complete_read": true,
+      "publication_authorized": false,
+      "news_slot_status": "NO_APLICA",
+      "sources": null,
+      "actuality_gate_present": true
+    }
+  ],
+  "two_horizontals": [
+    {
+      "id": "H-IA-01",
+      "words": 689,
+      "sha256": "83ad9a0809323385365b964cf9a60689c79daf7dfc68dcff0d26db9ada8f8b42",
+      "manifest_words_hash_match": true,
+      "text_complete_read": true,
+      "previous_qa_reused": true,
+      "ready_to_publish": false
+    },
+    {
+      "id": "H-VIDA-01",
+      "words": 540,
+      "sha256": "584abd5a5a5746872b30d46faaef1d488851928096da08b246fd7dc2cf027b0f",
+      "manifest_words_hash_match": true,
+      "text_complete_read": true,
+      "previous_qa_reused": true,
+      "ready_to_publish": false
+    }
+  ],
+  "nine_plans": [
+    {
+      "id": "IA-1013-1-YA",
+      "parent_id": "IA-1013-1",
+      "candidate_from_exact_source": true,
+      "candidate_word_match": true,
+      "duration_estimate": [
+        20.2,
+        23.1
+      ],
+      "target": [
+        15,
+        35
+      ],
+      "autonomy_verified": false,
+      "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER"
+    },
+    {
+      "id": "IA-1013-1-YB",
+      "parent_id": "IA-1013-1",
+      "candidate_from_exact_source": true,
+      "candidate_word_match": true,
+      "duration_estimate": [
+        21.0,
+        24.0
+      ],
+      "target": [
+        15,
+        35
+      ],
+      "autonomy_verified": false,
+      "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER"
+    },
+    {
+      "id": "IA-1013-1-YC",
+      "parent_id": "IA-1013-1",
+      "candidate_from_exact_source": true,
+      "candidate_word_match": true,
+      "duration_estimate": [
+        18.4,
+        21.0
+      ],
+      "target": [
+        15,
+        35
+      ],
+      "autonomy_verified": false,
+      "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER"
+    },
+    {
+      "id": "IA-1013-2-YA",
+      "parent_id": "IA-1013-2",
+      "candidate_from_exact_source": true,
+      "candidate_word_match": true,
+      "duration_estimate": [
+        26.6,
+        30.4
+      ],
+      "target": [
+        15,
+        35
+      ],
+      "autonomy_verified": false,
+      "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER"
+    },
+    {
+      "id": "IA-1013-2-YB",
+      "parent_id": "IA-1013-2",
+      "candidate_from_exact_source": true,
+      "candidate_word_match": true,
+      "duration_estimate": [
+        12.4,
+        14.1
+      ],
+      "target": [
+        15,
+        35
+      ],
+      "autonomy_verified": false,
+      "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER"
+    },
+    {
+      "id": "IA-1013-2-YC",
+      "parent_id": "IA-1013-2",
+      "candidate_from_exact_source": true,
+      "candidate_word_match": true,
+      "duration_estimate": [
+        18.8,
+        21.4
+      ],
+      "target": [
+        15,
+        35
+      ],
+      "autonomy_verified": false,
+      "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER"
+    },
+    {
+      "id": "INF-1013-YA",
+      "parent_id": "INF-1013",
+      "candidate_from_exact_source": true,
+      "candidate_word_match": true,
+      "duration_estimate": [
+        14.6,
+        16.7
+      ],
+      "target": [
+        15,
+        35
+      ],
+      "autonomy_verified": false,
+      "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER"
+    },
+    {
+      "id": "INF-1013-YB",
+      "parent_id": "INF-1013",
+      "candidate_from_exact_source": true,
+      "candidate_word_match": true,
+      "duration_estimate": [
+        20.2,
+        23.1
+      ],
+      "target": [
+        15,
+        35
+      ],
+      "autonomy_verified": false,
+      "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER"
+    },
+    {
+      "id": "INF-1013-YC",
+      "parent_id": "INF-1013",
+      "candidate_from_exact_source": true,
+      "candidate_word_match": true,
+      "duration_estimate": [
+        18.4,
+        21.0
+      ],
+      "target": [
+        15,
+        35
+      ],
+      "autonomy_verified": false,
+      "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER"
+    }
+  ],
+  "carousel_story": {
+    "date": "2026-10-13",
+    "sha256": "3fb666eef4851e2294bda9cc4fd6953736db524e62c211adee5202818e52a685",
+    "bytes": 3686,
+    "slides": 7,
+    "stories": 3,
+    "text_complete_read": true,
+    "primary_observer_reused_explicit": true,
+    "worksheet_included": true,
+    "external_published_resource_claim": false,
+    "story3_requires_actual_carousel_or_included_worksheet": true
+  },
+  "community_message_sha256": "4d5b2a69c29210db9fcbb0d4af29344e49264f70ee4a6d4ff520959bf3d810d8",
+  "community_message_complete_read": true,
+  "first_day_text_complete": true,
+  "source_selection": "Google8Oct announcement and Anthropic9Oct report with12Oct correction; provider attribution, no own demo",
+  "news13_ficha_source_date_match": true,
+  "educational_reserves_preserved_as_extras": true,
+  "news_before_post13_revalidation_pending": true,
+  "story_carousel_dependency": "Release story worksheetCTA only after carousel available or include worksheet inline",
+  "plans_actual_autonomy_verified": false,
+  "publications_or_jobs_created": 0,
+  "future_av_or_primary_reverification_claimed": false,
+  "reserves_preservation_independent": {
+    "snapshot_file_sha256": "54cb681f9707e5d334eff02b8fa39184ac5e9b91aa4c659ffe543efeb5b37279",
+    "snapshot_sha_matches_manifest": true,
+    "SI01_SI02_spoken_hashes_match": true,
+    "INF13_unchanged": true,
+    "source_paths_in_archived_json_are_historical_not_current": true
+  }
+}

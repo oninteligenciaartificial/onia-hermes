@@ -1,0 +1,654 @@
+{
+  "source_commit": "781df7d87b53913ac9790fa1df88e53357408bc3",
+  "author": "/root/guiones_sol",
+  "model_configured": "Sol6.1medio inherited,harness only;internal unobservable",
+  "dates": [
+    "2026-10-13",
+    "2026-10-19"
+  ],
+  "timezone": "America/Caracas",
+  "complete_vertical_scripts": 21,
+  "ia_educational_reserve": 12,
+  "current_news_confirmed": 2,
+  "news_slots_pending": 12,
+  "informals_complete": 7,
+  "plans_conditional": 63,
+  "rendered_derivatives": 0,
+  "qa": "pending independent after2newsdelta",
+  "scripts": [
+    {
+      "id": "IA-1013-1",
+      "title": "Google anunció un agente que sigue en la nube",
+      "date": "2026-10-13",
+      "time_local_proposed": "09:00",
+      "timezone": "America/Caracas",
+      "path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA13.md",
+      "word_count": 159,
+      "duration_estimate_seconds_140_160wpm": [
+        59.6,
+        68.1
+      ],
+      "spoken_sha256": "4523e9a59b4aa099becde57b547c0cbcb54f388ad93194e5aa652bd079e4fa7d",
+      "type": "nuevo autorizado: anuncio/reporte reciente atribuido",
+      "spoken_status": "COMPLETO_NOTICIA_FECHADA_PENDIENTE_QA",
+      "news_slot_status": "FUENTE_RECIENTE_FECHADA_CONFIRMADA_12OCT_GATE_POST_13OCT_PENDIENTE",
+      "news_approved": false,
+      "asset_received": false,
+      "publication_authorized": false,
+      "sources": [
+        "https://cloud.google.com/blog/products/ai-machine-learning/welcome-to-gemini-at-work-2026"
+      ],
+      "source_date_context": "Publicación 2026-10-08",
+      "observed_on": "2026-10-12",
+      "source_observer": "editorial_sol own webreads; guiones_sol leyó actaJSON/MD",
+      "version_gate": "Anuncio proveedor,no demo propia ni disponibilidad universal",
+      "actuality_gate": "Antesdelpost13oct reabrirfuenteconfirmarversión/correcciones/sinretractación; no etiquetar comolanzamiento13oct. No prometerverificación futura realizada.",
+      "planned_derivatives": [
+        "IA-1013-1-YA",
+        "IA-1013-1-YB",
+        "IA-1013-1-YC"
+      ]
+    },
+    {
+      "id": "IA-1013-2",
+      "title": "Anthropic reportó acciones no previstas de Claude",
+      "date": "2026-10-13",
+      "time_local_proposed": "10:00",
+      "timezone": "America/Caracas",
+      "path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA13.md",
+      "word_count": 154,
+      "duration_estimate_seconds_140_160wpm": [
+        57.8,
+        66.0
+      ],
+      "spoken_sha256": "a4f59296fac59e81dc0b92cc4d0b85c9b37a1fd4c46c7d97eabedf88d9a12d27",
+      "type": "nuevo autorizado: anuncio/reporte reciente atribuido",
+      "spoken_status": "COMPLETO_NOTICIA_FECHADA_PENDIENTE_QA",
+      "news_slot_status": "FUENTE_RECIENTE_FECHADA_CONFIRMADA_12OCT_GATE_POST_13OCT_PENDIENTE",
+      "news_approved": false,
+      "asset_received": false,
+      "publication_authorized": false,
+      "sources": [
+        "https://www.anthropic.com/news/investigating-unintended-model-actions"
+      ],
+      "source_date_context": "Publicado2026-10-09;corregido2026-10-12",
+      "observed_on": "2026-10-12",
+      "source_observer": "editorial_sol ownweb; fuenteactaadditional_alternative, selecciónconfirmadaroot",
+      "version_gate": "Autorreporte proveedor,nofrecuenciaindependiente ni mitigacióngarantizada; corrección12oct sobre webfetch",
+      "actuality_gate": "Antesdelpost13oct reabrirfuenteconfirmarversión/correcciones/sinretractación; no etiquetar comolanzamiento13oct. No prometerverificación futura realizada.",
+      "planned_derivatives": [
+        "IA-1013-2-YA",
+        "IA-1013-2-YB",
+        "IA-1013-2-YC"
+      ]
+    },
+    {
+      "id": "INF-1013",
+      "title": "Cómo elijo qué grabar esta semana",
+      "date": "2026-10-13",
+      "time_local_proposed": "11:00",
+      "timezone": "America/Caracas",
+      "path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA13.md",
+      "word_count": 142,
+      "duration_estimate_seconds_140_160wpm": [
+        53.2,
+        60.9
+      ],
+      "spoken_sha256": "f97b6224cef308f6cd8c1e0df8608e38f0b593148cd971e2ba831d68e7fe7752",
+      "type": "nuevo autorizado informal: intención/reflexión",
+      "spoken_status": "COMPLETO_INFORMAL_PENDIENTE_QA",
+      "news_slot_status": "NO_APLICA",
+      "news_approved": false,
+      "asset_received": false,
+      "publication_authorized": false,
+      "planned_derivatives": [
+        "INF-1013-YA",
+        "INF-1013-YB",
+        "INF-1013-YC"
+      ]
+    },
+    {
+      "id": "SI-03",
+      "title": "Claude, pero vago",
+      "date": "2026-10-14",
+      "time_local_proposed": "09:00",
+      "timezone": "America/Caracas",
+      "path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA14.md",
+      "word_count": 148,
+      "duration_estimate_seconds_140_160wpm": [
+        55.5,
+        63.4
+      ],
+      "spoken_sha256": "41e7c4f4af87ac62221fcf2ea32acb0969cdbe414dd1a3cc25c30f7317ed9644",
+      "type": "adaptación factual educativa SI existente",
+      "spoken_status": "COMPLETO_RESERVA_FACTUAL_PENDIENTE_QA",
+      "news_slot_status": "NOTICIA_DEL_DIA_PENDIENTE_VERIFICAR_O_SUSTITUIR",
+      "news_approved": false,
+      "asset_received": false,
+      "publication_authorized": false,
+      "sources": [
+        "https://github.com/DietrichGebert/ponytail"
+      ],
+      "source_date_context": "BenchmarkactualREADMEobservado12oct; fechadebenchmark no establecida",
+      "version_gate": "39tareas5runsOpus5.5, autor-53code/-26cost; no propio; versionespara demo pendientes",
+      "observed_on": "2026-10-12",
+      "actuality_gate": "Antes del post propuesto revisar fecha/hecho/versión con fuente oficial. Sin novedadreciente confirmada, conservar como reserva educativa; sustituirslotnoticia o cambiarclasificación/calendario con revisión. No llamarlo noticia del13–19 ni breaking.",
+      "planned_derivatives": [
+        "SI-03-YA",
+        "SI-03-YB",
+        "SI-03-YC"
+      ]
+    },
+    {
+      "id": "SI-04",
+      "title": "Tres comandos escondidos de Claude Code",
+      "date": "2026-10-14",
+      "time_local_proposed": "10:00",
+      "timezone": "America/Caracas",
+      "path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA14.md",
+      "word_count": 146,
+      "duration_estimate_seconds_140_160wpm": [
+        54.8,
+        62.6
+      ],
+      "spoken_sha256": "1b23d364dbb79caab226089a51920eb980b1a8e6c8923b6f67b0f7f54134dde1",
+      "type": "adaptación factual educativa SI existente",
+      "spoken_status": "COMPLETO_RESERVA_FACTUAL_PENDIENTE_QA",
+      "news_slot_status": "NOTICIA_DEL_DIA_PENDIENTE_VERIFICAR_O_SUSTITUIR",
+      "news_approved": false,
+      "asset_received": false,
+      "publication_authorized": false,
+      "sources": [
+        "https://code.claude.com/docs/en/commands",
+        "https://code.claude.com/docs/en/model-config"
+      ],
+      "source_date_context": "radio29jun–3jul2026;powerup30mar–3abr2026; ultrathinkdocactual12oct",
+      "version_gate": "Versión propia/cuenta noverificadas; no nueva instalación",
+      "observed_on": "2026-10-12",
+      "actuality_gate": "Antes del post propuesto revisar fecha/hecho/versión con fuente oficial. Sin novedadreciente confirmada, conservar como reserva educativa; sustituirslotnoticia o cambiarclasificación/calendario con revisión. No llamarlo noticia del13–19 ni breaking.",
+      "planned_derivatives": [
+        "SI-04-YA",
+        "SI-04-YB",
+        "SI-04-YC"
+      ]
+    },
+    {
+      "id": "INF-1014",
+      "title": "Una pausa antes de instalar una herramienta",
+      "date": "2026-10-14",
+      "time_local_proposed": "11:00",
+      "timezone": "America/Caracas",
+      "path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA14.md",
+      "word_count": 139,
+      "duration_estimate_seconds_140_160wpm": [
+        52.1,
+        59.6
+      ],
+      "spoken_sha256": "1d92f52dd7228a5a81fd9400d649f7264e385ee555fb459208bd3533c46d0480",
+      "type": "nuevo autorizado informal: intención/reflexión",
+      "spoken_status": "COMPLETO_INFORMAL_PENDIENTE_QA",
+      "news_slot_status": "NO_APLICA",
+      "news_approved": false,
+      "asset_received": false,
+      "publication_authorized": false,
+      "planned_derivatives": [
+        "INF-1014-YA",
+        "INF-1014-YB",
+        "INF-1014-YC"
+      ]
+    },
+    {
+      "id": "SI-08",
+      "title": "Un video escrito con ayuda de Claude",
+      "date": "2026-10-15",
+      "time_local_proposed": "09:00",
+      "timezone": "America/Caracas",
+      "path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA15.md",
+      "word_count": 145,
+      "duration_estimate_seconds_140_160wpm": [
+        54.4,
+        62.1
+      ],
+      "spoken_sha256": "5a92fc2f99b69ab8e8504723d12f0fe5298b3fcdcbc33fe227617e6493f0b876",
+      "type": "adaptación factual educativa SI existente",
+      "spoken_status": "COMPLETO_RESERVA_FACTUAL_PENDIENTE_QA",
+      "news_slot_status": "NOTICIA_DEL_DIA_PENDIENTE_VERIFICAR_O_SUSTITUIR",
+      "news_approved": false,
+      "asset_received": false,
+      "publication_authorized": false,
+      "sources": [
+        "https://github.com/heygen-com/hyperframes"
+      ],
+      "source_date_context": "READMErevalidado12oct;demopropiaGit histórica sin lanzamiento fechado",
+      "version_gate": "Demo12s3–6s compatible;coautoríaClaude;reviewencuadreprevio; Node22+/FFmpegCLIactual",
+      "observed_on": "2026-10-12",
+      "actuality_gate": "Antes del post propuesto revisar fecha/hecho/versión con fuente oficial. Sin novedadreciente confirmada, conservar como reserva educativa; sustituirslotnoticia o cambiarclasificación/calendario con revisión. No llamarlo noticia del13–19 ni breaking.",
+      "planned_derivatives": [
+        "SI-08-YA",
+        "SI-08-YB",
+        "SI-08-YC"
+      ]
+    },
+    {
+      "id": "SI-09",
+      "title": "La IA te da links. Abrí dos.",
+      "date": "2026-10-15",
+      "time_local_proposed": "10:00",
+      "timezone": "America/Caracas",
+      "path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA15.md",
+      "word_count": 144,
+      "duration_estimate_seconds_140_160wpm": [
+        54.0,
+        61.7
+      ],
+      "spoken_sha256": "c147997e42fb0d84c98340ebcb2dff9019dda41524dd5ab2aa7f578926dd2829",
+      "type": "adaptación factual educativa SI existente",
+      "spoken_status": "COMPLETO_RESERVA_FACTUAL_PENDIENTE_QA",
+      "news_slot_status": "NOTICIA_DEL_DIA_PENDIENTE_VERIFICAR_O_SUSTITUIR",
+      "news_approved": false,
+      "asset_received": false,
+      "publication_authorized": false,
+      "sources": [
+        "https://code.claude.com/docs/en/workflows"
+      ],
+      "source_date_context": "Docactualconsultado12oct; nofechalanzamiento nueva",
+      "version_gate": "WebSearchdisponible;ProDynamicworkflows; versión propia/informe no comprobados",
+      "observed_on": "2026-10-12",
+      "actuality_gate": "Antes del post propuesto revisar fecha/hecho/versión con fuente oficial. Sin novedadreciente confirmada, conservar como reserva educativa; sustituirslotnoticia o cambiarclasificación/calendario con revisión. No llamarlo noticia del13–19 ni breaking.",
+      "planned_derivatives": [
+        "SI-09-YA",
+        "SI-09-YB",
+        "SI-09-YC"
+      ]
+    },
+    {
+      "id": "INF-1015",
+      "title": "Mi checklist antes de confiar en una IA",
+      "date": "2026-10-15",
+      "time_local_proposed": "11:00",
+      "timezone": "America/Caracas",
+      "path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA15.md",
+      "word_count": 138,
+      "duration_estimate_seconds_140_160wpm": [
+        51.8,
+        59.1
+      ],
+      "spoken_sha256": "d2eae2f3220c1e2c3538dfc782c305fd74c81bb54efaac7b3b1899f17d82976a",
+      "type": "nuevo autorizado informal: intención/reflexión",
+      "spoken_status": "COMPLETO_INFORMAL_PENDIENTE_QA",
+      "news_slot_status": "NO_APLICA",
+      "news_approved": false,
+      "asset_received": false,
+      "publication_authorized": false,
+      "planned_derivatives": [
+        "INF-1015-YA",
+        "INF-1015-YB",
+        "INF-1015-YC"
+      ]
+    },
+    {
+      "id": "IA-1016-1",
+      "title": "Un plugin también necesita examen",
+      "date": "2026-10-16",
+      "time_local_proposed": "09:00",
+      "timezone": "America/Caracas",
+      "path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA16.md",
+      "word_count": 152,
+      "duration_estimate_seconds_140_160wpm": [
+        57.0,
+        65.1
+      ],
+      "spoken_sha256": "856bb00caa73e33288c96acae1dde25b8a09503ba3770e3510ce02821d7b48aa",
+      "type": "nuevo autorizado educativo",
+      "spoken_status": "COMPLETO_RESERVA_FACTUAL_PENDIENTE_QA",
+      "news_slot_status": "NOTICIA_DEL_DIA_PENDIENTE_VERIFICAR_O_SUSTITUIR",
+      "news_approved": false,
+      "asset_received": false,
+      "publication_authorized": false,
+      "sources": [
+        "https://code.claude.com/docs/en/skills",
+        "https://code.claude.com/docs/en/whats-new"
+      ],
+      "source_date_context": "Resumenoficial7–11sep2026; v2.1.263–269; consulta12oct",
+      "version_gate": "plugin-eval soportadoen skillsdoc;corridasconsumenuso,no demo propia",
+      "observed_on": "2026-10-12",
+      "actuality_gate": "Antes del post propuesto revisar fecha/hecho/versión con fuente oficial. Sin novedadreciente confirmada, conservar como reserva educativa; sustituirslotnoticia o cambiarclasificación/calendario con revisión. No llamarlo noticia del13–19 ni breaking.",
+      "planned_derivatives": [
+        "IA-1016-1-YA",
+        "IA-1016-1-YB",
+        "IA-1016-1-YC"
+      ]
+    },
+    {
+      "id": "IA-1016-2",
+      "title": "La skill que nunca usás también ocupa lugar",
+      "date": "2026-10-16",
+      "time_local_proposed": "10:00",
+      "timezone": "America/Caracas",
+      "path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA16.md",
+      "word_count": 150,
+      "duration_estimate_seconds_140_160wpm": [
+        56.2,
+        64.3
+      ],
+      "spoken_sha256": "28cc3d068a24bcde66c302b7849315f39d7ac27ef310b9f03beca3f7231bd036",
+      "type": "nuevo autorizado educativo",
+      "spoken_status": "COMPLETO_RESERVA_FACTUAL_PENDIENTE_QA",
+      "news_slot_status": "NOTICIA_DEL_DIA_PENDIENTE_VERIFICAR_O_SUSTITUIR",
+      "news_approved": false,
+      "asset_received": false,
+      "publication_authorized": false,
+      "sources": [
+        "https://code.claude.com/docs/en/skills",
+        "https://code.claude.com/docs/en/whats-new"
+      ],
+      "source_date_context": "Resumenoficial31ago–4sep2026; consulta12oct",
+      "version_gate": "skill-doctor requiere>=2.1.252;limitacategorías/noRemoteControl",
+      "observed_on": "2026-10-12",
+      "actuality_gate": "Antes del post propuesto revisar fecha/hecho/versión con fuente oficial. Sin novedadreciente confirmada, conservar como reserva educativa; sustituirslotnoticia o cambiarclasificación/calendario con revisión. No llamarlo noticia del13–19 ni breaking.",
+      "planned_derivatives": [
+        "IA-1016-2-YA",
+        "IA-1016-2-YB",
+        "IA-1016-2-YC"
+      ]
+    },
+    {
+      "id": "INF-1016",
+      "title": "Cómo quiero preparar mi espacio para grabar",
+      "date": "2026-10-16",
+      "time_local_proposed": "11:00",
+      "timezone": "America/Caracas",
+      "path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA16.md",
+      "word_count": 145,
+      "duration_estimate_seconds_140_160wpm": [
+        54.4,
+        62.1
+      ],
+      "spoken_sha256": "abb09ad8754b66fcd7a0178f0d40f7e08efee0b4d808c07df28e6b6649f916b8",
+      "type": "nuevo autorizado informal: intención/reflexión",
+      "spoken_status": "COMPLETO_INFORMAL_PENDIENTE_QA",
+      "news_slot_status": "NO_APLICA",
+      "news_approved": false,
+      "asset_received": false,
+      "publication_authorized": false,
+      "planned_derivatives": [
+        "INF-1016-YA",
+        "INF-1016-YB",
+        "INF-1016-YC"
+      ]
+    },
+    {
+      "id": "IA-1017-1",
+      "title": "Dos sesiones de IA: separá los archivos",
+      "date": "2026-10-17",
+      "time_local_proposed": "09:00",
+      "timezone": "America/Caracas",
+      "path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA17.md",
+      "word_count": 152,
+      "duration_estimate_seconds_140_160wpm": [
+        57.0,
+        65.1
+      ],
+      "spoken_sha256": "8277a20174c4487d8849a542a01f3e6d2d11285b38cefd636e07199a20ccacc6",
+      "type": "nuevo autorizado educativo",
+      "spoken_status": "COMPLETO_RESERVA_FACTUAL_PENDIENTE_QA",
+      "news_slot_status": "NOTICIA_DEL_DIA_PENDIENTE_VERIFICAR_O_SUSTITUIR",
+      "news_approved": false,
+      "asset_received": false,
+      "publication_authorized": false,
+      "sources": [
+        "https://code.claude.com/docs/en/worktrees"
+      ],
+      "source_date_context": "Docactualconsultado12oct; lanzamiento no fechado",
+      "version_gate": "EntornoGit/versionlocal/demo no comprobados",
+      "observed_on": "2026-10-12",
+      "actuality_gate": "Antes del post propuesto revisar fecha/hecho/versión con fuente oficial. Sin novedadreciente confirmada, conservar como reserva educativa; sustituirslotnoticia o cambiarclasificación/calendario con revisión. No llamarlo noticia del13–19 ni breaking.",
+      "planned_derivatives": [
+        "IA-1017-1-YA",
+        "IA-1017-1-YB",
+        "IA-1017-1-YC"
+      ]
+    },
+    {
+      "id": "IA-1017-2",
+      "title": "Rewind no es un botón que deshace todo",
+      "date": "2026-10-17",
+      "time_local_proposed": "10:00",
+      "timezone": "America/Caracas",
+      "path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA17.md",
+      "word_count": 146,
+      "duration_estimate_seconds_140_160wpm": [
+        54.8,
+        62.6
+      ],
+      "spoken_sha256": "4e94cc860945d2202e4df954f08ab85221e3f5607a2a19f3d33c9d847b09c7f3",
+      "type": "nuevo autorizado educativo",
+      "spoken_status": "COMPLETO_RESERVA_FACTUAL_PENDIENTE_QA",
+      "news_slot_status": "NOTICIA_DEL_DIA_PENDIENTE_VERIFICAR_O_SUSTITUIR",
+      "news_approved": false,
+      "asset_received": false,
+      "publication_authorized": false,
+      "sources": [
+        "https://code.claude.com/docs/en/checkpointing"
+      ],
+      "source_date_context": "Docactualconsultado12oct; lanzamiento no fechado",
+      "version_gate": "Bash/external/subagents puedenquedarfuerarewind;no backupcompleto",
+      "observed_on": "2026-10-12",
+      "actuality_gate": "Antes del post propuesto revisar fecha/hecho/versión con fuente oficial. Sin novedadreciente confirmada, conservar como reserva educativa; sustituirslotnoticia o cambiarclasificación/calendario con revisión. No llamarlo noticia del13–19 ni breaking.",
+      "planned_derivatives": [
+        "IA-1017-2-YA",
+        "IA-1017-2-YB",
+        "IA-1017-2-YC"
+      ]
+    },
+    {
+      "id": "INF-1017",
+      "title": "Qué quiero hacer cuando una demo falla",
+      "date": "2026-10-17",
+      "time_local_proposed": "11:00",
+      "timezone": "America/Caracas",
+      "path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA17.md",
+      "word_count": 142,
+      "duration_estimate_seconds_140_160wpm": [
+        53.2,
+        60.9
+      ],
+      "spoken_sha256": "7432decd09271b8b8503564d4baeb292307857f8c0bcfd6c3dd7350990f006e5",
+      "type": "nuevo autorizado informal: intención/reflexión",
+      "spoken_status": "COMPLETO_INFORMAL_PENDIENTE_QA",
+      "news_slot_status": "NO_APLICA",
+      "news_approved": false,
+      "asset_received": false,
+      "publication_authorized": false,
+      "planned_derivatives": [
+        "INF-1017-YA",
+        "INF-1017-YB",
+        "INF-1017-YC"
+      ]
+    },
+    {
+      "id": "IA-1018-1",
+      "title": "Un agente extra necesita una tarea distinta",
+      "date": "2026-10-18",
+      "time_local_proposed": "09:00",
+      "timezone": "America/Caracas",
+      "path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA18.md",
+      "word_count": 153,
+      "duration_estimate_seconds_140_160wpm": [
+        57.4,
+        65.6
+      ],
+      "spoken_sha256": "6062adc377acf1dd0ff46710ea73594328fdefd40ea3d79d88792fb8e3f2906f",
+      "type": "nuevo autorizado educativo",
+      "spoken_status": "COMPLETO_RESERVA_FACTUAL_PENDIENTE_QA",
+      "news_slot_status": "NOTICIA_DEL_DIA_PENDIENTE_VERIFICAR_O_SUSTITUIR",
+      "news_approved": false,
+      "asset_received": false,
+      "publication_authorized": false,
+      "sources": [
+        "https://code.claude.com/docs/en/agents"
+      ],
+      "source_date_context": "Docactualconsultado12oct; lanzamiento no fechado",
+      "version_gate": "Roles+carpetas+QA según método; ejecución/consumo no demostrados",
+      "observed_on": "2026-10-12",
+      "actuality_gate": "Antes del post propuesto revisar fecha/hecho/versión con fuente oficial. Sin novedadreciente confirmada, conservar como reserva educativa; sustituirslotnoticia o cambiarclasificación/calendario con revisión. No llamarlo noticia del13–19 ni breaking.",
+      "planned_derivatives": [
+        "IA-1018-1-YA",
+        "IA-1018-1-YB",
+        "IA-1018-1-YC"
+      ]
+    },
+    {
+      "id": "IA-1018-2",
+      "title": "Un conector le da acceso, no criterio",
+      "date": "2026-10-18",
+      "time_local_proposed": "10:00",
+      "timezone": "America/Caracas",
+      "path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA18.md",
+      "word_count": 149,
+      "duration_estimate_seconds_140_160wpm": [
+        55.9,
+        63.9
+      ],
+      "spoken_sha256": "a0f102ed7702f89c3d953a89f8f35044e8f2ec04b31f0b1641a549740a7cb889",
+      "type": "nuevo autorizado educativo",
+      "spoken_status": "COMPLETO_RESERVA_FACTUAL_PENDIENTE_QA",
+      "news_slot_status": "NOTICIA_DEL_DIA_PENDIENTE_VERIFICAR_O_SUSTITUIR",
+      "news_approved": false,
+      "asset_received": false,
+      "publication_authorized": false,
+      "sources": [
+        "https://code.claude.com/docs/en/mcp"
+      ],
+      "source_date_context": "Docactualconsultado12oct; lanzamiento no fechado",
+      "version_gate": "Conectorvisible no pruebaauth; herramientas/permisoscuenta pendientes",
+      "observed_on": "2026-10-12",
+      "actuality_gate": "Antes del post propuesto revisar fecha/hecho/versión con fuente oficial. Sin novedadreciente confirmada, conservar como reserva educativa; sustituirslotnoticia o cambiarclasificación/calendario con revisión. No llamarlo noticia del13–19 ni breaking.",
+      "planned_derivatives": [
+        "IA-1018-2-YA",
+        "IA-1018-2-YB",
+        "IA-1018-2-YC"
+      ]
+    },
+    {
+      "id": "INF-1018",
+      "title": "Qué quiero aprender al preparar un guion",
+      "date": "2026-10-18",
+      "time_local_proposed": "11:00",
+      "timezone": "America/Caracas",
+      "path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA18.md",
+      "word_count": 140,
+      "duration_estimate_seconds_140_160wpm": [
+        52.5,
+        60.0
+      ],
+      "spoken_sha256": "572ed573ed9b765d539ab21bfdcac191eae49bb8b47fceaba2b86f1e23876fb5",
+      "type": "nuevo autorizado informal: intención/reflexión",
+      "spoken_status": "COMPLETO_INFORMAL_PENDIENTE_QA",
+      "news_slot_status": "NO_APLICA",
+      "news_approved": false,
+      "asset_received": false,
+      "publication_authorized": false,
+      "planned_derivatives": [
+        "INF-1018-YA",
+        "INF-1018-YB",
+        "INF-1018-YC"
+      ]
+    },
+    {
+      "id": "IA-1019-1",
+      "title": "Una skill necesita una receta, no un deseo",
+      "date": "2026-10-19",
+      "time_local_proposed": "09:00",
+      "timezone": "America/Caracas",
+      "path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA19.md",
+      "word_count": 147,
+      "duration_estimate_seconds_140_160wpm": [
+        55.1,
+        63.0
+      ],
+      "spoken_sha256": "8268b7e363a46c9a428c32ec6da02365ecdb814707fd8bfb959b52152f65f02e",
+      "type": "nuevo autorizado educativo",
+      "spoken_status": "COMPLETO_RESERVA_FACTUAL_PENDIENTE_QA",
+      "news_slot_status": "NOTICIA_DEL_DIA_PENDIENTE_VERIFICAR_O_SUSTITUIR",
+      "news_approved": false,
+      "asset_received": false,
+      "publication_authorized": false,
+      "sources": [
+        "https://code.claude.com/docs/en/skills"
+      ],
+      "source_date_context": "Docactualconsultado12oct; lanzamiento no fechado",
+      "version_gate": "Ejemplo receta,noejecución propia;revisarpermisosantesinstalar",
+      "observed_on": "2026-10-12",
+      "actuality_gate": "Antes del post propuesto revisar fecha/hecho/versión con fuente oficial. Sin novedadreciente confirmada, conservar como reserva educativa; sustituirslotnoticia o cambiarclasificación/calendario con revisión. No llamarlo noticia del13–19 ni breaking.",
+      "planned_derivatives": [
+        "IA-1019-1-YA",
+        "IA-1019-1-YB",
+        "IA-1019-1-YC"
+      ]
+    },
+    {
+      "id": "IA-1019-2",
+      "title": "Menos preguntas no significa menos permisos",
+      "date": "2026-10-19",
+      "time_local_proposed": "10:00",
+      "timezone": "America/Caracas",
+      "path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA19.md",
+      "word_count": 154,
+      "duration_estimate_seconds_140_160wpm": [
+        57.8,
+        66.0
+      ],
+      "spoken_sha256": "3c554cb30627750e4097934cf5133f5e1a486ab3cdd922a82591c8c5ef557d52",
+      "type": "nuevo autorizado educativo",
+      "spoken_status": "COMPLETO_RESERVA_FACTUAL_PENDIENTE_QA",
+      "news_slot_status": "NOTICIA_DEL_DIA_PENDIENTE_VERIFICAR_O_SUSTITUIR",
+      "news_approved": false,
+      "asset_received": false,
+      "publication_authorized": false,
+      "sources": [
+        "https://code.claude.com/docs/en/permissions"
+      ],
+      "source_date_context": "Docactualconsultado12oct; lanzamiento no fechado",
+      "version_gate": "Modos/reglasno equivalentes;promptno restricción real;demopropia pendiente",
+      "observed_on": "2026-10-12",
+      "actuality_gate": "Antes del post propuesto revisar fecha/hecho/versión con fuente oficial. Sin novedadreciente confirmada, conservar como reserva educativa; sustituirslotnoticia o cambiarclasificación/calendario con revisión. No llamarlo noticia del13–19 ni breaking.",
+      "planned_derivatives": [
+        "IA-1019-2-YA",
+        "IA-1019-2-YB",
+        "IA-1019-2-YC"
+      ]
+    },
+    {
+      "id": "INF-1019",
+      "title": "Qué quiero guardar y qué descartar",
+      "date": "2026-10-19",
+      "time_local_proposed": "11:00",
+      "timezone": "America/Caracas",
+      "path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA19.md",
+      "word_count": 142,
+      "duration_estimate_seconds_140_160wpm": [
+        53.2,
+        60.9
+      ],
+      "spoken_sha256": "3477fc68b3448e83aac4227be75433ca6c0428dd3018272d61754d1635d3faf4",
+      "type": "nuevo autorizado informal: intención/reflexión",
+      "spoken_status": "COMPLETO_INFORMAL_PENDIENTE_QA",
+      "news_slot_status": "NO_APLICA",
+      "news_approved": false,
+      "asset_received": false,
+      "publication_authorized": false,
+      "planned_derivatives": [
+        "INF-1019-YA",
+        "INF-1019-YB",
+        "INF-1019-YC"
+      ]
+    }
+  ],
+  "news_confirmation_as_of": "2026-10-12; publicación/correcciónfechadas7–12oct,gatepost13octpendiente",
+  "additional_preserved_reserves": 2,
+  "reserved_scripts": [
+    "SI-01",
+    "SI-02"
+  ]
+}

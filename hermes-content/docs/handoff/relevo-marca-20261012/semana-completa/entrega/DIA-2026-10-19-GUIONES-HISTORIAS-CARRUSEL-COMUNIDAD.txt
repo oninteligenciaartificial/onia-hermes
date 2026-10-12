@@ -1,0 +1,244 @@
+# Paquete completo · 2026-10-19
+
+America/Caracas. Textos para revisión/grabación; no publicaciones ni agenda confirmada. Los dos espacios IA del14–19 son reservas educativas: revalidar o sustituir por noticias del día antes de publicar. Los recortes son planes, no videos existentes.
+
+## Tres verticales · hablado y fuentes separados
+
+# IA-1019-1 · Una skill necesita una receta, no un deseo
+
+Una skill es una receta que una IA puede cargar para hacer una tarea. En Claude Code, se escribe en un archivo llamado skill punto eme de.
+
+La documentación explica que puede incluir instrucciones y archivos de apoyo. Claude puede usarla cuando corresponde, o vos podés llamarla por su nombre.
+
+Mi consejo: escribí qué entra, qué tiene que salir y cómo se comprueba. Decir hacelo profesional no le da un criterio claro para revisar el resultado.
+
+Un ejemplo sería una receta para revisar un texto: conservar los datos, señalar afirmaciones sin fuente y separar cambios necesarios de preferencias de estilo. Es un ejemplo de pedido, no una prueba que corrí.
+
+Antes de instalar una receta ajena, leela. Si puede ejecutar comandos o usar otras herramientas, mirá también esos permisos.
+
+La receta organiza el método. Para saber si sirve, todavía necesitás comparar el resultado con lo que pediste.
+
+# IA-1019-2 · Menos preguntas no significa menos permisos
+
+Que una IA deje de preguntarte a cada rato no demuestra que esté trabajando con menos permisos.
+
+Claude Code tiene modos de permisos y reglas para permitir, preguntar o negar herramientas. La documentación explica cómo configurar esos límites. No son todos el mismo modo con un nombre distinto.
+
+Mi consejo es revisar qué tarea querés delegar. Para leer un archivo y resumirlo, el acceso necesario es distinto del que hace falta para editar, ejecutar comandos o publicar.
+
+Una instrucción como no borres nada ayuda a expresar el pedido, pero no reemplaza una restricción real de la herramienta o del entorno.
+
+Antes de dejar trabajo automático, mirá las reglas y el alcance de acceso. Si no entendés una opción, no la actives solo para sacar una ventana molesta.
+
+No te prometo cero errores ni seguridad total. El objetivo es dar el acceso que la tarea necesita y conservar una forma de revisar lo que hizo.
+
+# INF-1019 · Qué quiero guardar y qué descartar
+
+Al cerrar una semana, quiero guardar lo que me permite seguir sin empezar de cero. No todo lo que pasó merece una carpeta nueva.
+
+Quiero conservar los originales, la versión que revisé y una nota de lo que falta. Si hay dos archivos parecidos, me interesa saber cuál es el vigente y por qué.
+
+También quiero separar descartar una idea de borrar una fuente. Una idea puede no servir para esta semana. El material original puede seguir siendo necesario para revisar un corte después.
+
+No te cuento que ya limpié todo ni que mi sistema está perfecto. Es el criterio que quiero usar para cerrar el trabajo.
+
+Mi pregunta final sería sencilla: si retomo esto mañana, ¿puedo encontrar el archivo correcto y entender el siguiente paso?
+
+Si puedo, la nota sirve. Si solo dice avanzamos bastante, todavía me falta dejar algo concreto.
+
+
+---
+
+## Fichas fuera del hablado: actualidad, fuentes y recortes
+
+Fechaobservación:2026-10-12 · timezoneAmerica/Caracas. Autor/lectorprimarias: /root/guiones_sol. Ninguna ficha ni plan siguiente se dice a cámara. No piezas/publicaciones aprobadas.
+
+### IA-1019-1
+
+**Hablado:** completo, reservaeducativa/documental; no noticia del día confirmada. **Slotnoticioso:** pendiente verificación o sustitución.
+
+**Fecha del hecho/documento:** Docactualconsultado12oct; lanzamiento no fechado. **Observado:**12oct2026.
+
+**Fuentesprimarias:** https://code.claude.com/docs/en/skills
+
+**Versión/condición:** Ejemplo receta,noejecución propia;revisarpermisosantesinstalar.
+
+**Gateactualidadpara 2026-10-19:** Antes del post propuesto revisar fecha/hecho/versión con fuente oficial. Sin novedadreciente confirmada, conservar como reserva educativa; sustituirslotnoticia o cambiarclasificación/calendario con revisión. No llamarlo noticia del13–19 ni breaking.
+
+**3planes:** IA-1019-1-YA, IA-1019-1-YB, IA-1019-1-YC; candidatosenPLANES_63.json. Autonomía/duración no verificadas: noassets/63renders.
+
+### IA-1019-2
+
+**Hablado:** completo, reservaeducativa/documental; no noticia del día confirmada. **Slotnoticioso:** pendiente verificación o sustitución.
+
+**Fecha del hecho/documento:** Docactualconsultado12oct; lanzamiento no fechado. **Observado:**12oct2026.
+
+**Fuentesprimarias:** https://code.claude.com/docs/en/permissions
+
+**Versión/condición:** Modos/reglasno equivalentes;promptno restricción real;demopropia pendiente.
+
+**Gateactualidadpara 2026-10-19:** Antes del post propuesto revisar fecha/hecho/versión con fuente oficial. Sin novedadreciente confirmada, conservar como reserva educativa; sustituirslotnoticia o cambiarclasificación/calendario con revisión. No llamarlo noticia del13–19 ni breaking.
+
+**3planes:** IA-1019-2-YA, IA-1019-2-YB, IA-1019-2-YC; candidatosenPLANES_63.json. Autonomía/duración no verificadas: noassets/63renders.
+
+### INF-1019
+
+Hablado informal completo en intención/reflexión: no relato deexperiencia cumplida, ganancia/resultadosni promesa de recurso. Fuente:planKIT-GRABACION/FLUJO-DIARIO+autorización12oct; no noticia. Título heredadoes índice; texto no afirma que yaocurrió.
+
+**3planes:** INF-1019-YA, INF-1019-YB, INF-1019-YC; candidatosenPLANES_63.json. Autonomía/duración no verificadas: noassets/63renders.
+
+
+## Dos horizontales · hablado completo
+
+# H-IA-07 · Antes de automatizar, escribí cómo se hace a mano
+
+Antes de pedirle a una IA que automatice una tarea, intentá explicar cómo sabés que esa tarea quedó bien hecha.
+
+Si todavía no podés reconocer el resultado, ponerla a correr sola puede multiplicar la confusión. Automatizar repite un procedimiento. No decide por sí mismo qué procedimiento necesita tu trabajo.
+
+Yo empezaría por una tarea pequeña y frecuente. Por ejemplo, preparar una lista de pedidos pendientes a partir de una tabla. Es un ejemplo de organización, no una función que esté prometiendo de ONIA ni una automatización que ya esté mostrando como instalada.
+
+Primero escribís qué significa pendiente. ¿Falta un pago? ¿Falta entregar? ¿Tiene que estar dentro de una fecha? Si cada persona usa una definición diferente, una lista más rápida puede seguir siendo la lista equivocada.
+
+Después elegís la fuente. Un archivo o sistema confirmado, no una mezcla de copias que no sabés cuál está actualizada. Y definís qué campos necesita el resultado. En el ejemplo, identificación del pedido, estado y motivo por el que entra en la lista. No hace falta mandar datos personales si no aportan a esa revisión.
+
+Ahora hacelo a mano con unos pocos registros de prueba. Uno que debería entrar, otro que debería quedar fuera y uno al que le falta información. Esos tres casos te ayudan a descubrir qué tendría que hacer el proceso cuando no puede decidir.
+
+Con el caso incompleto, yo no le pediría que adivine. Le pediría que lo marque para revisión. Eso es una decisión del método. Que la IA escriba con confianza no significa que el dato que falta apareció.
+
+N8n es una herramienta para construir flujos que conectan pasos y servicios. Su documentación permite estudiar esas conexiones y la operación del flujo. Pero que exista una conexión no significa que tu cuenta esté autorizada o que el proceso de ejemplo ya esté funcionando.
+
+Si usás una herramienta así, prepará primero una ejecución de prueba. Revisá qué información entra, qué cambia y qué salida deja. Empezaría por leer y preparar un borrador. Enviar mensajes, cobrar o modificar información real requiere otros permisos y controles.
+
+También definí qué pasa si falla. Si no abre la fuente, que no genere una lista como si la hubiera leído. Si hay dos registros que parecen el mismo, que deje visible la duda. Y si volvés a correrlo, comprobar que no duplica una acción que ya realizó.
+
+Para decidir si sirve, medí lo mismo que hacías a mano. La lista incluye los casos correctos, deja fuera los incorrectos y muestra los incompletos. Después podés medir tiempo. Ahorrar minutos en una lista que omitió lo importante no es el resultado que buscabas.
+
+No necesitás automatizar todo el negocio para aprender algo útil. Una tarea definida, una fuente clara y unos casos de prueba te dan un comienzo mucho más concreto.
+
+Primero entendé el trabajo. Después armá una copia controlada del proceso. Cuando puedas revisar su resultado y reconocer un fallo, recién ahí decidís cuánto querés repetirlo.
+
+
+# H-VIDA-07 · Revisar la semana con hechos, dudas y una decisión
+
+Para revisar una semana no necesito que todas las piezas hayan salido. Necesito poder distinguir qué ocurrió, qué quedó pendiente y qué quiero cambiar.
+
+Quiero hacer una revisión que me ayude a empezar la próxima semana. No una ceremonia para castigarme por la lista que no terminé, ni una forma de declarar éxito con cosas que todavía están a medias.
+
+Empezaría por lo que tiene una prueba. Un texto completo, una toma guardada, una revisión hecha o una pieza publicada con su enlace. Cada cosa con su estado. Si un guion está escrito, puedo anotarlo como guion escrito. No tengo que llamarlo video terminado para que cuente.
+
+Después miraría las dudas. ¿Qué se quedó esperando una fuente? ¿Qué necesitó una nueva toma? ¿Qué corte no se entendía solo? Si varias piezas se trabaron por el mismo motivo, ahí tengo algo concreto para mejorar el proceso.
+
+Por ejemplo, si faltaron pantallas en varias grabaciones, la decisión puede ser preparar las capturas antes de cámara. Es un ejemplo de revisión, no un resultado que esté afirmando de esta semana. Lo útil es convertir un problema repetido en un cambio que pueda comprobar la próxima vez.
+
+También revisaría la carga. ¿Cuánto tiempo llevó preparar y grabar una pieza? Si no lo medí, anoto que no lo medí. No quiero elegir una cadencia enorme usando tiempos que solo imagino. Puedo empezar a registrar el próximo lote y comparar después.
+
+Con las variantes de un video, miraría si cada una aportó algo diferente. Cambiar colores o música puede hacer que se vean distintas. No asegura que las tres tengan un motivo para existir. Si dos repiten la misma idea sin nuevo valor, prefiero mantener visible ese problema.
+
+Si hubo publicaciones, el rendimiento se revisa con los datos disponibles y su fecha. No con la sensación de que una pieza gustó más. Y una muestra pequeña no tiene por qué decidir todo mi estilo. Puede darme una pregunta para el siguiente bloque.
+
+Quiero separar eso de mi vida fuera de las piezas. Una semana también tiene descanso, conversaciones y cosas que no se convierten en contenido. No hace falta ponerlas en una tabla de productividad para que tengan lugar.
+
+Para el cierre, elegiría una sola mejora. Preparar mejor una pantalla, acortar una introducción o dejar más clara la fuente. Si convierto la revisión en diez cambios simultáneos, después cuesta saber cuál ayudó.
+
+Y dejaría un primer paso para la próxima semana. Algo concreto que pueda abrir y hacer. No la frase hacerlo mejor, sino revisar este guion o preparar esta captura antes de grabar. Una decisión pequeña puede ser suficiente si responde al problema que encontré.
+
+Si una pieza cambió después de revisarla, anotaría esa diferencia. Así la próxima semana puedo encontrar la versión correcta y no confundir una prueba vieja con el resultado vigente.
+
+Ésa es la revisión que quiero: hechos sin inflarlos, dudas sin esconderlas y una mejora que pueda probar. La semana no necesita parecer perfecta. Necesita dejarme información útil para organizar la que viene.
+
+
+## Carrusel y tres historias · textos completos
+
+# 19 de octubre · Tu prueba de IA en una sola ficha
+
+Fecha editorial: 2026-10-19 · America/Caracas. Borrador para QA independiente. Autor configurado: Sol 6.1, esfuerzo medio. Base: Síntesis SI-01/02/03/04/08/09; hechos documentales comprobados el 12-oct, sin anuncio de noticias futuras.
+
+## Carrusel · texto completo de siete láminas
+
+### 1
+**Antes de decir “funciona”, completá esta ficha**
+Una función documentada, una demo y un resultado propio son evidencias distintas. Nombralas con precisión.
+
+### 2
+**Definí la tarea**
+¿Qué tiene que hacer?
+¿Con qué entrada?
+¿Qué salida esperás?
+“Que me ayude” es un inicio de conversación; todavía no es una condición de aceptación.
+
+### 3
+**Anotá versión, lugar y permisos**
+Qué herramienta y versión usás.
+Si corre local o en la nube.
+Qué archivos puede leer o modificar.
+La prueba debe poder entenderse con ese contexto.
+
+### 4
+**Separá lo que dice el manual de lo que observaste**
+Documentado: la fuente describe una función.
+Observado: registraste lo que ocurrió.
+Medido: definiste un criterio y guardaste el resultado.
+No cambies una categoría por otra al contar tu experiencia.
+
+### 5
+**Guardá una evidencia que responda a la tarea**
+Rutina: ejecución y salida.
+Código: condiciones que pasó o falló.
+Informe: afirmación y cita comprobada.
+Video: archivo real y revisión de sus cuadros.
+Una captura bonita no prueba todas esas cosas.
+
+### 6
+**La ficha completa**
+Tarea: ____
+Herramienta / versión: ____
+Entrada: ____
+Permisos: ____
+Resultado esperado: ____
+Resultado observado: ____
+Evidencia: ____
+Qué todavía no comprobé: ____
+
+### 7
+**Una prueba pequeña puede dar el próximo paso**
+Elegí una tarea y completá la ficha. Mandá PRUEBA por mensaje a la comunidad con el resultado y lo que falta comprobar. La plantilla está en este carrusel; no estamos prometiendo un recurso ya publicado afuera.
+
+## Historias · texto completo de tres pantallas
+
+### Historia 1 · contexto
+Rutinas, permisos, código, comandos, video y citas tienen un hilo común: definir qué prueba hace falta antes de llamar “resultado” a una promesa.
+
+### Historia 2 · pregunta
+¿Qué vas a comprobar primero?
+Caja de preguntas: “Escribí una tarea concreta”.
+Después anotá herramienta, entrada y salida esperada. Elegí algo que puedas revisar.
+
+### Historia 3 · ejercicio y CTA
+Ejercicio: completá la ficha del carrusel y conservá el resultado real. Incluí una línea: “Todavía no comprobé…”. Mandá PRUEBA por mensaje a la comunidad con esa ficha, sin inventar una demo ni un porcentaje.
+
+## Fuentes y límites
+
+- https://code.claude.com/docs/en/routines
+- https://docs.openclaw.ai/gateway/sandboxing
+- https://github.com/DietrichGebert/ponytail
+- https://github.com/heygen-com/hyperframes
+- https://code.claude.com/docs/en/workflows
+- Evidencia reutilizada: `onia-marca-nuevos-20261012/guiones/VERIFICACION_SEIS.md`, lectura primaria del 12-oct por root/guiones_sol; no se hereda como lectura web propia del autor.
+- Canon Claude: commit `781df7d87b53913ac9790fa1df88e53357408bc3`; no se alteran los originales.
+- Sin afirmación de ejecución personal, benchmark propio, recurso comunitario publicado ni render nuevo. La ficha/plantilla que nombra el CTA está completa en este documento. No publicación autorizada.
+
+
+## Comunidad · mensaje completo para copiar
+
+🧩 PRÁCTICA · mostrale a otra persona lo que construiste
+
+Estoy revisando una idea de práctica guiada para explicar una solución propia de IA en un video corto. Todavía no hay taller abierto, fecha, precio ni inscripción.
+
+Ejercicio: describí en una frase qué construiste; anotá qué se debería entender en 15–30 segundos; elegí un fragmento propio que puedas mostrar sin revelar datos privados; escribí qué equipo/programas ya tenés y qué te frenaría para editarlo.
+
+Pregunta: ¿te sería útil practicar ese resultado? ¿Qué parte te cuesta más: elegir el corte, poner subtítulos, hacer una tarjeta clara o repetir el render?
+
+## Recortes y publicación
+
+Tres planes condicionales por vertical en PLANES_63.json. Cada recorte exige unidad autónoma, cambios de edición/música/colores/subtítulos/velocidad y licencia comprobada. No hay recortes nuevos renderizados. Historias y CTA que mencionan el carrusel se usan solo si ya está disponible; el recurso de comunidad está incluido en el mensaje. Horarios y canales en el calendario único, todos propuestos.

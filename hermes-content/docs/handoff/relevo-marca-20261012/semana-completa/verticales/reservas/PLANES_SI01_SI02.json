@@ -1,0 +1,140 @@
+[
+  {
+    "id": "SI-01-YA",
+    "parent_id": "SI-01",
+    "variant": "A",
+    "source_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA13.md",
+    "paragraph_range_1based": [
+      1,
+      2
+    ],
+    "candidate_text": "Si tu mamá te apaga la compu a las once, Claude puede seguir en otro lugar. Pero no con cualquier comando.\n\nClaude Code es la IA que programa en tu compu. Barra loop repite un pedido mientras la sesión queda abierta. Si la cerrás, no sigue como una tarea independiente. Y ese loop vence a los siete días.",
+    "candidate_words": 58,
+    "estimated_seconds_140_160wpm": [
+      21.8,
+      24.9
+    ],
+    "target_seconds": [
+      15,
+      35
+    ],
+    "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
+    "autonomy_verified": false,
+    "gate": "Medir audio real y comprensión aislada. Inicio sin referenciashuérfanas; argumento/cierre completos; conservarcaveats/atribuciones. Si candidato dependeotrosector o no duraobjetivo, rechazar/remontar con revisión; no3recortes garantizados ni63renders."
+  },
+  {
+    "id": "SI-01-YB",
+    "parent_id": "SI-01",
+    "variant": "B",
+    "source_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA13.md",
+    "paragraph_range_1based": [
+      3,
+      4
+    ],
+    "candidate_text": "Barra schedule crea una rutina en la nube. Puede correr con tu computadora apagada, usando los proyectos y accesos que configuraste. No ve automáticamente tus archivos locales.\n\nEstá en prueba, requiere un plan pago y el intervalo mínimo es una hora.",
+    "candidate_words": 41,
+    "estimated_seconds_140_160wpm": [
+      15.4,
+      17.6
+    ],
+    "target_seconds": [
+      15,
+      35
+    ],
+    "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
+    "autonomy_verified": false,
+    "gate": "Medir audio real y comprensión aislada. Inicio sin referenciashuérfanas; argumento/cierre completos; conservarcaveats/atribuciones. Si candidato dependeotrosector o no duraobjetivo, rechazar/remontar con revisión; no3recortes garantizados ni63renders."
+  },
+  {
+    "id": "SI-01-YC",
+    "parent_id": "SI-01",
+    "variant": "C",
+    "source_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA13.md",
+    "paragraph_range_1based": [
+      5,
+      6
+    ],
+    "candidate_text": "Mi consejo: empezá con una tarea de lectura, como revisar cambios y preparar un resumen. Comprobá una ejecución antes de dejarla repetir.\n\nNo te cuento una rutina propia que ya corrí. La diferencia documentada es ésta: loop necesita la sesión abierta; schedule usa una rutina en la nube. Elegí según dónde tiene que correr tu tarea.",
+    "candidate_words": 56,
+    "estimated_seconds_140_160wpm": [
+      21.0,
+      24.0
+    ],
+    "target_seconds": [
+      15,
+      35
+    ],
+    "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
+    "autonomy_verified": false,
+    "gate": "Medir audio real y comprensión aislada. Inicio sin referenciashuérfanas; argumento/cierre completos; conservarcaveats/atribuciones. Si candidato dependeotrosector o no duraobjetivo, rechazar/remontar con revisión; no3recortes garantizados ni63renders."
+  },
+  {
+    "id": "SI-02-YA",
+    "parent_id": "SI-02",
+    "variant": "A",
+    "source_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA13.md",
+    "paragraph_range_1based": [
+      1,
+      2
+    ],
+    "candidate_text": "Un mensaje puede traer órdenes escondidas para tu IA. Antes de instalar OpenClaw, mirá qué permisos le das.\n\nSu documentación explica que el contenido de afuera puede intentar hacer que el agente ignore sus reglas. No pasa solo con desconocidos: también puede venir en un enlace o un archivo que vos le mandaste.",
+    "candidate_words": 53,
+    "estimated_seconds_140_160wpm": [
+      19.9,
+      22.7
+    ],
+    "target_seconds": [
+      15,
+      35
+    ],
+    "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
+    "autonomy_verified": false,
+    "gate": "Medir audio real y comprensión aislada. Inicio sin referenciashuérfanas; argumento/cierre completos; conservarcaveats/atribuciones. Si candidato dependeotrosector o no duraobjetivo, rechazar/remontar con revisión; no3recortes garantizados ni63renders."
+  },
+  {
+    "id": "SI-02-YB",
+    "parent_id": "SI-02",
+    "variant": "B",
+    "source_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA13.md",
+    "paragraph_range_1based": [
+      3,
+      5
+    ],
+    "candidate_text": "Tres cuidados que recomiendo.\n\nUno: separá el entorno del asistente de tus archivos personales. Tenerlo en otra computadora puede ayudar a reducir lo que alcanza, pero no resuelve todo.\n\nDos: sandbox, una caja para limitar lo que puede tocar. En OpenClaw está apagado por defecto, y el proceso principal sigue en la computadora que lo ejecuta. No es protección total.",
+    "candidate_words": 60,
+    "estimated_seconds_140_160wpm": [
+      22.5,
+      25.7
+    ],
+    "target_seconds": [
+      15,
+      35
+    ],
+    "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
+    "autonomy_verified": false,
+    "gate": "Medir audio real y comprensión aislada. Inicio sin referenciashuérfanas; argumento/cierre completos; conservarcaveats/atribuciones. Si candidato dependeotrosector o no duraobjetivo, rechazar/remontar con revisión; no3recortes garantizados ni63renders."
+  },
+  {
+    "id": "SI-02-YC",
+    "parent_id": "SI-02",
+    "variant": "C",
+    "source_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA13.md",
+    "paragraph_range_1based": [
+      6,
+      7
+    ],
+    "candidate_text": "Tres: leé las skills antes de agregarlas. Que alguien te las pase no demuestra que sean seguras.\n\nEsto es una explicación del manual, no una prueba de instalación propia. Antes de soltarle herramientas, mirá qué puede leer, escribir y ejecutar.",
+    "candidate_words": 40,
+    "estimated_seconds_140_160wpm": [
+      15.0,
+      17.1
+    ],
+    "target_seconds": [
+      15,
+      35
+    ],
+    "status": "PLAN_CONDICIONAL_NO_CORTE_NO_RENDER",
+    "autonomy_verified": false,
+    "gate": "Medir audio real y comprensión aislada. Inicio sin referenciashuérfanas; argumento/cierre completos; conservarcaveats/atribuciones. Si candidato dependeotrosector o no duraobjetivo, rechazar/remontar con revisión; no3recortes garantizados ni63renders."
+  }
+]

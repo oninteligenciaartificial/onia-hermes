@@ -1,0 +1,81 @@
+{
+  "observed_by": "editorial_sol own web tool reads",
+  "verified_date": "2026-10-12",
+  "editorial_date": "2026-10-13",
+  "timezone": "America/Caracas",
+  "requested_window": [
+    "2026-10-07",
+    "2026-10-12"
+  ],
+  "status": "factual blocks for adaptation; independent QA pending",
+  "selected": [
+    {
+      "id": "ACTUAL-01",
+      "company": "Google",
+      "published": "2026-10-08",
+      "date_observed_in_primary": true,
+      "url": "https://cloud.google.com/blog/products/ai-machine-learning/welcome-to-gemini-at-work-2026",
+      "claim": "Google announced Gemini agent; provider describes cloud persistent execution and Workspace integration",
+      "quote": "Work that takes hours or days keeps running after you close your laptop",
+      "limits": [
+        "provider announcement, not own execution",
+        "no universal availability or free-plan claim",
+        "no own client metrics"
+      ]
+    },
+    {
+      "id": "ACTUAL-02",
+      "company": "Anthropic",
+      "published": "2026-10-08",
+      "effective_future_date": "2026-11-12",
+      "date_observed_in_primary": true,
+      "url": "https://www.anthropic.com/news/2026-usage-policy-update",
+      "claim": "Anthropic published revised usage policy, mostly clarifications; deceptive campaigns section, high-risk uses and physical autonomous hardware provisions",
+      "quote": "The updated policy takes effect on November 12.",
+      "limits": [
+        "published8Oct not already effective",
+        "many requirements pre-existing",
+        "no personal demo or legal conclusion"
+      ]
+    }
+  ],
+  "whatsapp_contrast": {
+    "tiktok": "caption reported by mother, no video/audio heard",
+    "mcp_primary_url": "https://developers.facebook.com/blog/post/2026/09/15/meta-business-messaging-mcp-ai-agent/",
+    "mcp_primary_read": false,
+    "fetch_error": "429 Too Many Requests",
+    "mcp_date_in_secondary_references": "2026-09-15",
+    "fresh_window_news": false,
+    "policy_url": "https://whatsappbusiness.com/policy/",
+    "policy_primary_read": true,
+    "policy_updated_observed": "2026-09-23",
+    "constraints": [
+      "opt-in required",
+      "respect opt-out",
+      "approved templates initiate conversations and required outside24h",
+      "automation within24h permitted with clear escalation paths"
+    ],
+    "unsupported_claims": [
+      "Meta killed bots",
+      "unlimited consent",
+      "MCP cancels messaging policy or fees"
+    ]
+  },
+  "scope": "two recent dated primary sources, not exhaustive news inventory; no duplicate scripts, publication or paid work",
+  "document_sha256": "0e4704fa691d3233c8bedb7f24a05a09aae162d3fc42371118bca46c835008ce",
+  "additional_alternative": {
+    "id": "ALTERNATIVA-09",
+    "company": "Anthropic",
+    "published": "2026-10-09",
+    "corrected": "2026-10-12",
+    "date_observed_in_primary": true,
+    "url": "https://www.anthropic.com/news/investigating-unintended-model-actions",
+    "claim": "Provider reports unintended actions in evaluations/internal use and mitigations; minimal real-world impact attributed to provider",
+    "quote": "The cases we’ve identified to date in these categories had minimal real-world impact.",
+    "correction": "web fetch limits were not put in place to prevent SQL or command injection",
+    "limits": [
+      "self-report, not independent frequency or mitigation validation",
+      "not an incident observed in Sergio account"
+    ]
+  }
+}

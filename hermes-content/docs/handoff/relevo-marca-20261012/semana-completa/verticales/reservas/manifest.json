@@ -1,0 +1,76 @@
+{
+  "archive_sha256": "54cb681f9707e5d334eff02b8fa39184ac5e9b91aa4c659ffe543efeb5b37279",
+  "source": "DIA13.md before2news substitution",
+  "reserves": [
+    {
+      "id": "SI-01",
+      "title": "Claude trabaja con la compu apagada",
+      "date": "2026-10-13",
+      "time_local_proposed": "09:00",
+      "timezone": "America/Caracas",
+      "path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA13.md",
+      "word_count": 155,
+      "duration_estimate_seconds_140_160wpm": [
+        58.1,
+        66.4
+      ],
+      "spoken_sha256": "77c9ccbd12a35b415e82a4ddb753611aaa688e1143de659f5bc2bd5a5cfdc52e",
+      "type": "adaptación factual educativa SI existente",
+      "spoken_status": "COMPLETO_RESERVA_FACTUAL_PENDIENTE_QA",
+      "news_slot_status": "NOTICIA_DEL_DIA_PENDIENTE_VERIFICAR_O_SUSTITUIR",
+      "news_approved": false,
+      "asset_received": false,
+      "publication_authorized": false,
+      "sources": [
+        "https://code.claude.com/docs/en/routines",
+        "https://code.claude.com/docs/en/scheduled-tasks"
+      ],
+      "source_date_context": "Rutinas:semana13–17abr2026 en whats-new; documentación revalidada12oct; no lanzamientoactual",
+      "version_gate": "Funciónenresearchpreview;versión/cuenta/accesoreal pendiente",
+      "observed_on": "2026-10-12",
+      "actuality_gate": "Antes del post propuesto revisar fecha/hecho/versión con fuente oficial. Sin novedadreciente confirmada, conservar como reserva educativa; sustituirslotnoticia o cambiarclasificación/calendario con revisión. No llamarlo noticia del13–19 ni breaking.",
+      "planned_derivatives": [
+        "SI-01-YA",
+        "SI-01-YB",
+        "SI-01-YC"
+      ],
+      "archive_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/reservas/DIA13_ANTES_NOTICIAS.md",
+      "status": "RESERVA_EDUCATIVA_EXACTA_PRESERVADA_NO_PRIMARIA"
+    },
+    {
+      "id": "SI-02",
+      "title": "Antes de instalar OpenClaw",
+      "date": "2026-10-13",
+      "time_local_proposed": "10:00",
+      "timezone": "America/Caracas",
+      "path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/DIA13.md",
+      "word_count": 153,
+      "duration_estimate_seconds_140_160wpm": [
+        57.4,
+        65.6
+      ],
+      "spoken_sha256": "0ffe58a05321e49713b30a37dd476ee45e2124e2811995869725d0b12c84b2d6",
+      "type": "adaptación factual educativa SI existente",
+      "spoken_status": "COMPLETO_RESERVA_FACTUAL_PENDIENTE_QA",
+      "news_slot_status": "NOTICIA_DEL_DIA_PENDIENTE_VERIFICAR_O_SUSTITUIR",
+      "news_approved": false,
+      "asset_received": false,
+      "publication_authorized": false,
+      "sources": [
+        "https://docs.openclaw.ai/gateway/sandboxing",
+        "https://docs.openclaw.ai/gateway/security/prompt-injection"
+      ],
+      "source_date_context": "Documentoactualconsultado12oct; fecha de lanzamiento no establecida",
+      "version_gate": "Sandboxoffdefault; Gatewayhost; noinstalación ni garantía total",
+      "observed_on": "2026-10-12",
+      "actuality_gate": "Antes del post propuesto revisar fecha/hecho/versión con fuente oficial. Sin novedadreciente confirmada, conservar como reserva educativa; sustituirslotnoticia o cambiarclasificación/calendario con revisión. No llamarlo noticia del13–19 ni breaking.",
+      "planned_derivatives": [
+        "SI-02-YA",
+        "SI-02-YB",
+        "SI-02-YC"
+      ],
+      "archive_path": "/workspace/work/onia-marca-semana-completa-20261012/verticales/reservas/DIA13_ANTES_NOTICIAS.md",
+      "status": "RESERVA_EDUCATIVA_EXACTA_PRESERVADA_NO_PRIMARIA"
+    }
+  ]
+}

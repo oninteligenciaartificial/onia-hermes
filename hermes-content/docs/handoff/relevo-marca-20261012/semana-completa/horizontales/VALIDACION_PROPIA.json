@@ -1,0 +1,21 @@
+{
+  "status": "PASS_DOCUMENTAL",
+  "horizontal_count": 14,
+  "new_complete": 12,
+  "first_day_exact": true,
+  "words_range": [
+    490,
+    689
+  ],
+  "estimated_duration_range_minutes": [
+    3.06,
+    4.92
+  ],
+  "continuous_spoken_bodies": true,
+  "seven_ia_seven_life": true,
+  "assets": 0,
+  "published": 0,
+  "malla_changed": false,
+  "independent_QA_new_12": "PENDING_ROOT_ASSIGNMENT",
+  "official_web_revalidation_own": false
+}
