@@ -1,0 +1,35 @@
+{
+  "utc": "2026-10-12T19:11:18.545159+00:00",
+  "worker": "/root/fuentes_relevo",
+  "contract": "transport cloud list readonly",
+  "policy": {
+    "version": 1,
+    "http_type": "restricted",
+    "chatgpt_com_matching_rules": []
+  },
+  "dns": {
+    "proxy": [
+      "172.31.0.109"
+    ],
+    "chatgpt.com": "gaierror Errno-3 Temporary failure in name resolution"
+  },
+  "request": {
+    "endpoint": "https://chatgpt.com/backend-api/wham/tasks/list?limit=20&task_filter=current",
+    "proxy": "http://proxy:8080",
+    "official_command_network_permission": true,
+    "manual_credentials": false,
+    "tls_verification": true,
+    "curl_exit": 56,
+    "http_destination_status": "000",
+    "error": "CONNECT tunnel failed, response 403",
+    "headers_body_saved": false
+  },
+  "read_gate": "blocked_proxy_connect_403",
+  "auth_state": "not_observed",
+  "cleanup": {
+    "services_started": 0,
+    "schedulers_created": 0,
+    "new_tasks": 0
+  },
+  "cloud_list_rerun": false
+}
