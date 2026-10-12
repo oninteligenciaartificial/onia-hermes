@@ -33,3 +33,59 @@ Paisaje/identidad exactos, menú que tapa contenido, página excesivamente larga
 7. Maven: mockup de producto; estructura del caso validada vía texto web, no por esta captura; 07-case-maven.jpg.
 
 Capturas guardadas y abiertas para inspección en esta misma carpeta. Texto vía web contrastado con navegador. Observé cambios de badge, aparición de miniaturas y transición del hero al hacer scroll; no se validó el sistema completo de animaciones. No se hicieron mediciones de rendimiento, WCAG, teclado, compra, responsive de todas las secciones ni comprobación independiente de clientes/resultados. Informe y capturas listos para revisión por madre. Preservación Git de esta carpeta autorizada por Sergio Urcullo mediante la madre el 12-oct; sin implementación de las propuestas.
+
+## Ampliación: toda la UI como referencia, no solo el hero
+
+Sergio Urcullo aclaró que le gusta el conjunto de UI, infraestructura y diseño. El aprendizaje se amplía a arquitectura de páginas, componentes y capa técnica pública. Esto no declara toda la web auditada visualmente. Las siete capturas anteriores siguen siendo la evidencia visual; en esta ampliación CUA devolvió inventario de navegadores vacío y no permitió recuperar IAB. No se repitió el hero ni se instaló un navegador.
+
+### Tres hallazgos nuevos
+
+1. **La referencia es un sistema de páginas (observado en enlaces/texto público).** Inicio orienta; servicios explican capacidades; casos muestran trabajo; precios califica capacidad; About presenta equipo; Contact prepara la conversación. Blog y recursos añaden entrada por temas y plataformas. **Interpretación para ONIA:** definir una familia coherente de páginas y componentes, con el mismo camino a demo/contacto; no convertir cada servicio en una landing aislada con otro estilo. [About](https://www.orbix.studio/about), [casos](https://www.orbix.studio/case-studies), [blog](https://www.orbix.studio/blogs), [recursos](https://www.orbix.studio/resources).
+2. **La infraestructura observable de esta web es Webflow y recursos de animación (observado en HTML/HTTP público).** About respondió HTTP 200 con `Server: cloudflare`, atributo `data-wf-site`, CSS/JS en `cdn.prod.website-files.com`, jQuery 3.5.1, referencias GSAP 3.15.0 y Lenis 1.3.4. **Interpretación:** el impacto visual no demuestra un backend complejo. Importaciones tampoco prueban que cada librería se ejecute o sea necesaria. ONIA puede reproducir jerarquía, componentes y movimiento con su stack existente; no hay evidencia que justifique migrarlo a Webflow. [About](https://www.orbix.studio/about), metadatos en EVIDENCIA-PUBLICA.json.
+3. **La conversión usa varias capas integradas (observado en HTML/texto).** Contact recoge identidad, empresa, teléfono, presupuesto y servicio; incluye origen del lead, CTA a Cal.com y mapa Google. About incorpora Vimeo. El formulario expone marcadores Webflow y Turnstile. **Interpretación para ONIA:** formularios y agenda deben continuar el mismo recorrido y pedir solo lo útil para calificar; no asumir que una fachada bonita trae CRM, automatización, seguridad o seguimiento. No se probó envío ni protección efectiva. [Contact](https://www.orbix.studio/contact).
+
+### Mapa de páginas y cobertura
+
+| Superficie | Función y módulos comprobados | Cobertura real |
+|---|---|---|
+| `/` | Hero, prueba, CTAs, oferta de equipo, enlaces a trabajos/proceso/casos | Hero desktop/móvil y bloques 02/03 vistos; resto texto/DOM inicial |
+| `/pricing` | Proyectos/suscripción, selects dependientes, planes, comparación, FAQ | Desktop y cambio de pestaña ejecutado; cálculo/selects/envío no probados |
+| `/case-studies/maven-finance-management` | Mockup, problema, solución, proceso, resultados declarados, contacto | Mockup visto; relato leído; producto real no operado |
+| `/case-studies` | Archivo de casos con imagen, categoría, resumen y enlace a detalle | Texto público leído; grid/filtros/animación no validados visualmente |
+| `/about` | Fundador, trabajo, métricas declaradas, premios, fotos, testimonios, FAQ | Texto y HTML público; sin nueva captura ni reproducción Vimeo |
+| `/contact` | Formulario de calificación, fundador, agenda, mapa y FAQ | Texto/estructura HTML; sin rellenar, enviar ni abrir agenda |
+| `/services/ai-creative-production` | Beneficios, control humano, tipos de entregables y CTA | Texto público representativo de servicio; diseño/móvil pendientes |
+| `/blogs` | Categorías, artículos, resumen y tiempo de lectura | Índice textual; no se revisaron artículos ni se probaron categorías |
+| `/resources` | Categorías Webflow/Framer/Figma, free/premium/font, recursos | Índice textual; filtros, descarga, licencia y compra no probados |
+| Otras rutas de servicios y legales | Enlaces públicos a 12 especialidades y políticas | Solo inventariadas desde About; no auditadas por familia completa |
+
+Servicios enlazados: `ui-ux-design`, `full-stack-development`, `ai-creative-production`, `dashboard-design`, `mvp-development`, `webflow-expert-agency`, `saas-design`, `custom-illustration`, `mobile-app-development`, `motion-design`, `brand-design`, `creative-marketing`. No se infiere uniformidad visual de esas doce rutas a partir de una sola.
+
+### Componentes e interacciones: observado frente a pendiente
+
+- **Navegación:** logo/contacto superior y menú flotante inferior vistos. Árbol inicial de home mostró Services, casos, precios, About, blog, recursos, contacto y enlaces sociales. Destinos comprobados como enlaces; apertura/cierre, submenú, teclado, foco y versión móvil completa no probados.
+- **Tipografía/material:** Neue Montreal, escalas 64/32 px de h1, cápsulas, tarjetas claras, radios, sombras y miniaturas son evidencia de capturas/CSS anterior. No hay catálogo exhaustivo de tokens, espaciados, hover ni estados.
+- **Contenido repetible:** tarjetas de trabajo, testimonios, CTA a conversación, FAQ y footer aparecen en texto de varias rutas. Reutilización por template es interpretación; no se accedió al CMS ni al sistema de diseño privado.
+- **Movimiento:** se vieron cambio de badge, aparición de miniaturas, transición al scroll y porcentaje del menú. GSAP/SplitText/ScrollTrigger/ScrollSmoother/Flip/Lenis están referenciados en HTML; no equivale a prueba completa de cada efecto. Carrusel/drag/showreel solo aparecen en DOM inicial, sin interacción validada.
+- **Precios:** cambio Single Projects → Recruting probado y tarjetas vistas. Calculador muestra selects progresivos en DOM; no se eligieron opciones. No tratar estimación indexada como cotización real.
+- **Responsive representativo:** hero móvil probado a 390×844, h1 reducido y CTAs apilados; menú tapa el siguiente título. Desktop en hero/equipo/precios/Maven. Tablet, orientación, overflow de otras páginas, tablas, formularios, filtros y reducción de movimiento pendientes.
+
+### Capa pública observable y límites de infraestructura
+
+| Evidencia | Qué permite afirmar | Qué no permite afirmar |
+|---|---|---|
+| `data-wf-site`, clases `w-*`, assets website-files | Página publicada con estructura/recursos Webflow | Plan CMS, editor privado, despliegue interno, permisos |
+| `Server: cloudflare` en respuesta About | Cloudflare en capa de respuesta HTTP observable | Servidor de origen, proveedor compute, base de datos o topología |
+| CSS/JS CDN y referencia jQuery/GSAP/Lenis | Recursos que el HTML solicita/referencia | Ejecución efectiva de todos, rendimiento o necesidad |
+| Enlaces Cal.com/WhatsApp; embeds Vimeo/Google Maps | Integraciones públicas de agenda/contacto/media/mapa | Sincronización CRM, bots, n8n, webhooks o automatización real |
+| Formulario Webflow y atributo Turnstile | Marcadores de formulario y antispam en HTML | Recepción, validación servidor, protección efectiva o tratamiento de datos |
+
+No se investigó infraestructura privada. React, Next.js, Supabase, AWS o Google Cloud citados por Orbix como herramientas/servicios no prueban que sean el backend de `orbix.studio`. No se conoce autenticación, DB, API, RLS, backups, costes ni CI/CD.
+
+### Reutilización integral propuesta
+
+**Para ONIA:** un vocabulario visual común aplicado a todas las superficies (tipo grande, aire, tarjetas, mockups y CTA); familias servicio/caso/planes/contacto coherentes; estados de componentes claros; movimiento que explique recorrido y transición. Conservar benchmarks internos Bench/Garabato/HSB y resolver antes la obstrucción del menú. Es aprendizaje candidato, aún no incorporado a tokens/templates ni al producto.
+
+**No copiar:** código, assets, marca o composición exacta; toda la lista de dependencias por afinidad visual; infraestructura no comprobada; bibliotecas duplicadas de smooth scroll; amplitud del catálogo que ONIA no entrega; formularios largos sin finalidad; “Free/Premium” como licencia comercial; testimonios/porcentajes sin respaldo.
+
+**Límites del método:** HTTP directo con PowerShell permitió leer About/Contact. Una extracción posterior con Python devolvió 403 en nueve rutas y se detuvo sin retries ni evasión; esos fallos se conservaron en EVIDENCIA-PUBLICA.json. Las páginas adicionales accesibles vía web se leyeron como texto, no como validación visual. Nuevas capturas/interacciones quedaron pendientes por ausencia de navegador. La cobertura ampliada permite aprender arquitectura pública y stack visible, no certificar toda UI, accesibilidad, rendimiento, formularios o backend.
