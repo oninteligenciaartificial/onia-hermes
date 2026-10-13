@@ -73,6 +73,30 @@ class SQLitePilotTests(unittest.TestCase):
         active = next(result.claim for result in results if result.claim)
         self.assertIn(active.owner_id, ("owner-a", "owner-b"))
 
+    def test_concurrent_initializers_migrate_v1_schema_once(self):
+        migration_db = Path(self.tmp.name) / "legacy-v1.sqlite3"
+        with sqlite3.connect(migration_db) as conn:
+            conn.execute(
+                "CREATE TABLE tasks (task_id TEXT PRIMARY KEY, worker_id TEXT NOT NULL, "
+                "status TEXT NOT NULL, created_at INTEGER NOT NULL)"
+            )
+            conn.execute("PRAGMA user_version=1")
+
+        barrier = threading.Barrier(2)
+
+        def initialize():
+            barrier.wait()
+            return SQLiteQueue(migration_db)
+
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            queues = list(pool.map(lambda _: initialize(), range(2)))
+        self.assertEqual(len(queues), 2)
+        with sqlite3.connect(migration_db) as conn:
+            self.assertEqual(conn.execute("PRAGMA user_version").fetchone()[0], 2)
+            columns = {row[1] for row in conn.execute("PRAGMA table_info(tasks)")}
+        self.assertIn("ambiguous_owner_id", columns)
+        self.assertIn("ambiguous_fencing_token", columns)
+
     def test_expired_lease_fences_old_owner(self):
         first = self.queue.claim("hermes-worker", "owner-a", now=101, lease_seconds=3).claim
         second_result = self.queue.claim("hermes-worker", "owner-b", now=105, lease_seconds=10)

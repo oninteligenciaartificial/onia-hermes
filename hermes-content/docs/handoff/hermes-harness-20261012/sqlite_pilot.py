@@ -138,13 +138,12 @@ class SQLiteQueue:
     def _initialize(self) -> None:
         with self._connection() as conn:
             conn.execute("BEGIN IMMEDIATE")
-            version = conn.execute("PRAGMA user_version").fetchone()[0]
-            if version not in (0, 1, self.DB_SCHEMA_VERSION):
-                conn.rollback()
-                raise RuntimeError(f"unsupported schema version: {version}")
-            conn.executescript(
-                """
-                CREATE TABLE IF NOT EXISTS tasks (
+            try:
+                version = conn.execute("PRAGMA user_version").fetchone()[0]
+                if version not in (0, 1, self.DB_SCHEMA_VERSION):
+                    raise RuntimeError(f"unsupported schema version: {version}")
+                statements = (
+                    """CREATE TABLE IF NOT EXISTS tasks (
                     task_id TEXT PRIMARY KEY,
                     worker_id TEXT NOT NULL,
                     repo TEXT NOT NULL,
@@ -166,29 +165,34 @@ class SQLiteQueue:
                     ambiguous_fencing_token INTEGER,
                     created_at INTEGER NOT NULL,
                     updated_at INTEGER NOT NULL
-                );
-                CREATE INDEX IF NOT EXISTS tasks_worker_status
+                )""",
+                    """CREATE INDEX IF NOT EXISTS tasks_worker_status
                   ON tasks(worker_id, status, created_at, task_id);
-                CREATE TABLE IF NOT EXISTS worker_fences (
+                """,
+                    """CREATE TABLE IF NOT EXISTS worker_fences (
                     worker_id TEXT PRIMARY KEY,
                     last_token INTEGER NOT NULL CHECK(last_token >= 0)
-                );
-                CREATE TABLE IF NOT EXISTS worker_leases (
+                )""",
+                    """CREATE TABLE IF NOT EXISTS worker_leases (
                     worker_id TEXT PRIMARY KEY,
                     task_id TEXT NOT NULL UNIQUE REFERENCES tasks(task_id),
                     owner_id TEXT NOT NULL,
                     fencing_token INTEGER NOT NULL,
                     expires_at INTEGER NOT NULL
-                );
-                """
-            )
-            task_columns = {row[1] for row in conn.execute("PRAGMA table_info(tasks)")}
-            if "ambiguous_owner_id" not in task_columns:
-                conn.execute("ALTER TABLE tasks ADD COLUMN ambiguous_owner_id TEXT")
-            if "ambiguous_fencing_token" not in task_columns:
-                conn.execute("ALTER TABLE tasks ADD COLUMN ambiguous_fencing_token INTEGER")
-            conn.execute(f"PRAGMA user_version={self.DB_SCHEMA_VERSION}")
-            conn.commit()
+                )""",
+                )
+                for statement in statements:
+                    conn.execute(statement)
+                task_columns = {row[1] for row in conn.execute("PRAGMA table_info(tasks)")}
+                if "ambiguous_owner_id" not in task_columns:
+                    conn.execute("ALTER TABLE tasks ADD COLUMN ambiguous_owner_id TEXT")
+                if "ambiguous_fencing_token" not in task_columns:
+                    conn.execute("ALTER TABLE tasks ADD COLUMN ambiguous_fencing_token INTEGER")
+                conn.execute(f"PRAGMA user_version={self.DB_SCHEMA_VERSION}")
+                conn.commit()
+            except Exception:
+                conn.rollback()
+                raise
 
     def enqueue(self, spec: TaskSpec, now: int) -> None:
         for key in ("task_id", "worker_id", "repo", "ref", "contract_id"):
