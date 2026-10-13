@@ -891,3 +891,40 @@ Cada uno con su criterio de "listo". **No abrir el siguiente sin cerrar el anter
   superficie que vea un cliente.
 - **Los secretos no salen del VPS**: se leen dentro de la shell remota y nunca se imprimen.
 - **Un solo dueño a la vez** para VPS, n8n y Supabase.
+
+
+## Delta candidato 2026-10-13 · datos confirmados Platform → Web Factory offline
+
+Dueño implementador: Codex Sol `/root/web_transport_sol`; QA independiente y
+commits/PR: root. Rama `codex/web-snapshot-consumer`, apilada sobre #198
+`85f4e3b8`; export Platform #170 `51ef483fb563e76cf0ac58665ea3e4bcaf0255a3` (paquete v1, base UI `65ae1326`).
+Estado: candidato local, no integración runtime activa ni publicación.
+
+- Platform añade lectura autenticada por org/pedido/revisión exacta del snapshot
+  CONFIRMED; paquete v1 liga org, pedido, revisión, digest y recibo. Sin escritura,
+  auditoría de publicación ni metadatos cliente. GET UI previo no cambia.
+- `web-factory/data/platform-business-snapshot-contract.ts` refleja contrato v1
+  acotado; `generate/from-business-snapshot.ts` valida paquete contra contexto
+  independiente confiable (no derivado del payload). Whitelist dental/clinic y
+  slug del operador. Sustituye contacto/servicios/horarios completos, deriva
+  oferta/descripción sólo de servicios, no convierte teléfono en WhatsApp.
+- Preview usa `buildClientProfileFromIntake` + `generateSite` existentes sobre
+  raíz temporal nueva sin assets/design/seeds; output aislado por org/pedido/rev.
+  No cambia el motor aprobado ni el puente visual. Hash no autentica y binding
+  live permanece CERRADO: no receiver HTTP ni auth de servicio improvisado.
+- Pruebas nuevas: Platform export 19 PASS; consumidor 16 PASS con HTML real,
+  A/B mismo slug sin mezcla y rechazo previo a write. Typecheck Platform real y
+  Hermes focal nuevo contrato/adapter/generador/packages PASS. Vitest disponible
+  4.1.5 frente a ^4.1.8 solicitado, sin instalación ni cambios lockfile.
+- Demo cross-repo reproducible desde `web-factory`:
+  `node scripts/business-snapshot-demo.cjs --platform-root <checkout-platform> --output <directorio-demo>`.
+  Exportador real → serialización JSON → consumidor → HTML engine existente;
+  2 clínicas sintéticas y 24 rechazos antes de write. Recibos CONFIRMED sintéticos,
+  no aprobación humana auténtica. No AI/diseño aprobado/artifact approval/DB/SQL/
+  generación Prisma/red/publicación. Sólo prueba de transporte y datos offline.
+
+QA independiente Sol low: APPROVE; 35 pruebas y demo aislada verificadas.
+Candidato en `codex/web-snapshot-consumer`, apilado sobre #198, para revisión;
+exportación en #170. Activación DB/columna y binding autenticado live siguen gates
+separados con autorización operativa, pruebas integradas y revisión; este
+candidato no los habilita. No alterar catálogo, precios ni cuotas por este delta.
