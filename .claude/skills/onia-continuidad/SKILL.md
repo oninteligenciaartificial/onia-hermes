@@ -176,6 +176,16 @@ baja una cuenta servía de algo.
   un workflow todavía estaba escribiendo. Un workflow que escribe archivos tiene que dejar cada archivo completo antes
   de que termine el turno.
 
+## Radar técnico y aprendizaje de ingeniería
+
+Cuando una tarea dependa de avances recientes en ingeniería, infraestructura de agentes, modelos, herramientas o prácticas de desarrollo, incluir **X (Twitter)** y **Hugging Face** en la búsqueda inicial. Son fuentes de descubrimiento y aprendizaje, no autoridad automática:
+
+- En X, rastrear autores, hilos y referencias originales; una publicación aislada sirve como pista, no como prueba.
+- En Hugging Face, revisar model cards, repositorios, datasets y Spaces junto con licencia, fecha, mantenimiento, requisitos y evaluación disponible.
+- Confirmar lo importante con documentación oficial, código reproducible, papers o benchmarks transparentes. Separar lo observado de lo inferido y de lo propuesto; comprobar compatibilidad, seguridad, costo y mantenimiento antes de adoptarlo.
+- Registrar en la skill del carril solo el aprendizaje reutilizable, con enlace/fuente, fecha, prueba o evidencia, límites y aplicación concreta a ONIA. No guardar colecciones de enlaces ni convertir cada tendencia en trabajo.
+- El worker especializado hace la investigación y entrega una ficha breve; la madre delega, revisa la evidencia y comunica qué cambia para el producto. Si no hay impacto práctico verificable, se deja como referencia, sin abrir una tarea nueva.
+
 ## Relación con lo que ya existe
 
 | Ya existe | Para qué | Esta skill |
