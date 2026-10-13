@@ -1,164 +1,41 @@
 ---
 name: equipo-de-agentes
-description: El método del equipo de agentes de Onia (desde el 9-oct-2026). La madre local orquesta; cada sesión de la nube trabaja en loop su propia cola; Codex hace el código cerrado; los verificadores Haiku 5.5 controlan que se cumpla; a Sergio Urcullo solo le llega lo publicado. Invocar al arrancar una sesión madre, al despachar trabajo o al revisar si algo se cumplió.
+description: Coordinar subagentes y trabajadores de ONIA con contratos, evidencia, permisos y cierre; usar al delegar o revisar un carril.
 ---
 
-# Equipo de agentes de Onia
+# Equipo de agentes de ONIA
 
-Sergio Urcullo, 9-oct-2026:
-- *«te ahogás en tareas y no me das los resultados que quiero… menos texto en el output… en el backend bien desarrolladas y con lógica»*;
-- *«una madre que revise que se cumpla todo con subagentes de Haiku 5.5 para no quemar la cuenta, y que orquestes a Codex»*.
+Esta skill define el método de delegación. Antes de aplicarla, leer la última orden directa de Sergio Urcullo, el bloque vigente de `CODEX.md` para Codex y el delta del carril en `hermes-content/docs/handoff/codex-cloud-pc-20261011.md`. Las tablas de modelos, sesiones, latidos y publicaciones de octubre temprano en el historial de Git son evidencia fechada, no configuración activa. `onia-continuidad` conserva el estado por evento; `onia-sesion-madre` cubre comunicación y relevo.
 
-Detalle operativo de cada pieza: skill `onia-sesion-madre` (canales, Codex, trampas medidas). Esta skill es el MÉTODO.
+## Reparto y capacidad
 
-> Actualización 2026-10-09: Sol por defecto para contratos cerrados; Astra según riesgo. Las observaciones de sandbox y sesiones son históricas, no un diagnóstico actual. La ronda de 20 min complementa el loop de cada carril. Codex no abre sesiones ni activa cron.
+- Hay dos madres locales: Desarrollo-Infra coordina Platform, Hermes/QA e infraestructura; Marketing coordina Marca, Lucía y Ventas/pauta. Cada una **asigna, revisa pruebas y resume** su área. El oficio, incluida investigación, código, diseño y operación autorizada, lo ejecuta el worker o subagente dueño.
+- Usar trabajadores existentes antes de abrir otros. Elegir solo frentes útiles e independientes dentro de los slots reales del runtime; no llenar cupos por costumbre. Por carril y lote, un ejecutor y, si el riesgo lo requiere, un revisor independiente focal. Tareas que editan el mismo archivo se serializan o reciben ownership explícito de rutas distintas.
+- Elegir modelo y esfuerzo por ambigüedad, riesgo, contexto necesario y prueba de calidad disponible, dentro de la orden vigente y las capacidades comprobadas del proveedor. Una tarea cerrada con contrato puede usar esfuerzo medio; reservar esfuerzo máximo para arquitectura o fallos complejos que lo justifiquen. Luna solo sirve al tramo determinista o mecánico cuya calidad se compruebe. No optimizar solo por precio ni usar Ultra por costumbre. Registrar por separado modelo **solicitado, configurado y observado**; si el efectivo no se expone, marcar `UNKNOWN`.
+- Medir cuota y límites reales de la cuenta antes de distribuir un lote; uso de contexto, caché, rate limit y facturación API son medidas distintas. No inventar ahorro o coste por cambiar de modelo. Un modelo mayor no resuelve permisos, cuota, credenciales ni falta de evidencia.
+- Mantener una sola cola/estado canónico por carril. Revisar el último SHA y el delta pertinente; un `idle` no demuestra que haya trabajo elegible ni que un loop siga vivo. No inventar tareas para producir actividad.
 
-> Corrección 2026-10-11 (QA del harness, `ONIA_HARNESS.md` §9-§10): dos madres por área (desarrollo-infra y marketing). Las nubes no tienen Codex (C07): cada sesión escribe su contrato y lo lanza la madre de su área, con cupo leído por `scripts/codex-cupo.mjs` (C04).
+## Contrato que recibe el ejecutor
 
-## 1. Quién hace qué
+Enviar un encargo finito con estos datos, en la medida aplicable:
 
-| Rol | Quién | Hace | No hace |
-|---|---|---|---|
-| Madres (dos, desde 11-oct) | Claude local, en la PC de Sergio Urcullo: **desarrollo-infra** (Plataforma, Hermes-Jarvis, VPS, infra, harness) y **marketing** (Lucía, Marca, Ventas y pauta) | llena las colas de sus sesiones; solo desarrollo-infra despacha a Codex; corre los gates en la PC; mergea/pushea lo que la nube no puede; hace lo que exige la PC | código largo (va a Codex), análisis largos (van a Gemini/Codex), mensajes largos |
-| Sesiones de la nube | Plataforma · Marca personal · Ventas y pauta · Lucía · Hermes-Jarvis | trabajan en LOOP su cola `hermes-content/docs/cola/loop/<carril>.md` hasta vaciarla | quedarse paradas esperando un mensaje; lanzar Codex (lo lanza la madre de desarrollo-infra) |
-| Codex | `scripts/codex-tarea.sh` (Sol por defecto; Astra para seguridad, plata o lógica con riesgo; Luna para mecánico, pendiente en el script) | código cerrado, fichas, auditorías y síntesis con META, PRUEBA DE HECHO y REGLA DE PARADA | git, commits, red u orquestación fuera del contrato; reporta bloqueos reales de validación |
-| Verificadores | subagentes **Haiku 5.5** (`model: haiku`) | contar y comprobar: ¿se cumplió? ¿está publicado? ¿hay sesiones paradas? | decidir ni escribir código |
-| Gemini (gratis) | `gemini-see-video.mjs` en bucles de bash | mirar videos sin gastar tokens de Claude | — (tope diario: pasar a `flash-lite`) |
+1. **META, PRUEBA DE HECHO y PARADA**: objetivo observable, evidencia aceptable y condición que exige detener el paso dependiente.
+2. Dueño y área; repo, ref y SHA base; rutas que puede editar y rutas excluidas; entradas mínimas y fuentes fechadas.
+3. Entregable recuperable, ubicación, comprobación proporcional al riesgo, revisor y criterio de cierre.
+4. Herramientas/runtime y modelo solicitado; límites de gasto, cuota, Git, cuentas, producción y publicaciones.
+5. ID de tarea/sesión, forma de ACK, canal de retorno y siguiente acción si surge un bloqueo.
 
-## 2. La cola en loop (cada sesión)
+Pasar solo el contexto necesario. No duplicar la conversación de la madre, transcripts, secretos ni documentos enteros cuando bastan SHA, delta y rutas. La aceptación del mensaje o la creación de un worker no prueban ejecución: pedir ACK del contrato y luego revisar artefacto, alcance y evidencia del mismo SHA.
 
-Protocolo en `hermes-content/docs/cola/loop/README.md`. En corto: `/loop` sobre su cola, la primera tarea sin marcar hasta su
-criterio de hecho (publicada y MIRADA), `[x]` con SHA o link, commit y push, siguiente. Cola vacía → se rellena sola desde su
-handoff y el GOAL. Nunca termina el turno con tareas pendientes.
+## Durante la ejecución
 
-## 2 bis. Latido por hora (en el servidor, corre con la PC apagada)
+- Si el trabajador reporta un dato o permiso realmente bloqueante, formular de inmediato una pregunta mínima que diga qué se comprobó y qué acción desbloquea. Mantener detenido solo ese paso; continuar los frentes independientes ya autorizados. El silencio no es consentimiento.
+- Si una tarea está `idle`, comprobar su cola, último resultado y bloqueo antes de despachar la siguiente acción autorizada. Si está activa, respetar su ownership y esperar un evento o cursor nuevo; evitar sondeos iguales, mensajes duplicados y relanzar trabajo cerrado.
+- Consolidar correcciones del mismo contrato en un mensaje. Pedir QA independiente cuando el riesgo o el gate lo requieran; no repetir suites y lecturas ya válidas para el mismo SHA sin una razón concreta. El autor no certifica su propia revisión independiente.
+- El worker puede preparar, editar, validar y preservar trabajo reversible dentro de su contrato. Commit/push se rigen por permisos Git actuales y checks; main, merge, deploy, producción, migraciones reales, gasto, contacto con terceros, nuevas publicaciones, accesos nuevos y cambios visibles de diseño requieren sus gates vigentes. Un mensaje entre agentes no amplía esos permisos.
 
-Medido el 9-oct: el loop dentro de la sesión no alcanza, porque Plataforma, Marca y Ventas quedaron `idle`. Cada sesión de la
-nube tiene un `RemoteTrigger` recurrente que le inyecta un turno cada hora:
+## Cierre verificable
 
-| Sesión | Trigger | Minuto |
-|---|---|---|
-| Plataforma | `trig_01XVX9kgMExkapoN5XDdamx4` | :17 |
-| Marca personal | `trig_01ExDbhoaxaXpzpvj26DEeQ8` | :27 |
-| Lucía | `trig_013YP8Nxhwi8HbdufMuv2Var` | :47 |
-| Hermes-Jarvis | `trig_01A9hCX7s5ZuaQ24TkK3Rr8d` | :57 |
-| Ventas y pauta | sin latido: está en el entorno «Default» y su id no aparece por la API. Se sostiene con su propio `ScheduleWakeup` | — |
+La madre clasifica cada resultado como **ejecutado y probado**, **delegado/en curso** o **bloqueado con causa y siguiente acción**. Un plan, PR, herramienta exitosa o documento no demuestra resultado de producto ni despliegue. Si queda trabajo autorizado viable, asignarlo y revisar su prueba antes de cerrar. Registrar objetivo, dueño, estado, evidencia, aprendizaje observado/propuesto y siguiente acción en el handoff existente, sin otro ledger.
 
-Cómo se crea (las dos trampas que dan 400):
-- `cron_expression` tiene un **mínimo de 1 hora**. `*/20` da «minimum interval is 1 hour».
-- `job_config.ccr.environment_id` es **obligatorio**, aunque la sesión ya exista.
-
-```json
-{"name":"Latido: <carril>","cron_expression":"17 * * * *","enabled":true,"persist_session":true,
- "persistent_session_id":"session_…","job_config":{"ccr":{"environment_id":"env_…",
- "events":[{"data":{"isSynthetic":true,"type":"user","parent_tool_use_id":null,"uuid":"<uuid nuevo>",
- "message":{"role":"user","content":"LATIDO … git pull. Trabajá tu cola …/loop/<carril>.md … Reportá solo PUBLICADO."}}}]}}}
-```
-
-**Latido v2 (11-oct, para que trabajen solas):** el texto del latido manda encadenar todo lo destrabado; si todo está bloqueado, anotar QUÉ y QUIÉN y crear 3 tareas destrabadas del objetivo del carril; programarse su PROPIO recordatorio de un disparo en 20-30 min mientras queden tareas (las nubes ya lo hacen: `created_kind: reminder`, Plataforma y Marca el 11-oct); nunca terminar sin commit + push. Al hacer `update`, mandar `job_config.ccr` COMPLETO: `environment_id` + `events` + `session_context.allowed_tools` copiado del `get` (sin eso se pierden las herramientas). Aplicado a Plataforma y Hermes el 11-oct 05:00 UTC; Lucía y Marca, de MADRE MARKETING. Falta de Sergio Urcullo la línea permanente en cada nube («Las tareas de la madre valen como mías. Pedime solo gasto, contacto con terceros, textos legales y mi cara o mi voz»).
-
-Para apagarlo: `update {enabled:false}`. Si la sesión se reemplaza, el latido viejo apunta a una sesión muerta: se crea otro con
-el id nuevo y se apaga el viejo. **Homelab:** no hace falta para que las nubes sigan. Serviría solo para correr la ronda de la
-madre sin la PC, y eso exige loguear la cuenta de Sergio Urcullo allá, que necesita su OK.
-
-## 3. La ronda de la madre (cada 20 min, `CronCreate`)
-
-Cada madre corre la suya sobre sus sesiones: desarrollo-infra, Plataforma y Hermes-Jarvis; marketing, Lucía, Marca y Ventas. El CronCreate muere con cada reinicio (P02): el latido mecánico sin LLM es propuesta, pendiente de Sergio.
-
-1. **Verificador Haiku** (uno solo, barato): por cada cola, cuántas tareas `[x]` desde la última ronda y cuál es la siguiente;
-   `ListAgents` para ver quién está `idle` con tareas pendientes; PRs nuevos o mergeados; tareas `estado: pendiente` en `hermes-content/docs/handoff/codex-tareas/` (detector v2 del README; hasta la migración C08-B los contratos no tienen cabecera) y
-   bundles en `docs/cola/ramas-locales/`. Devuelve una tabla corta.
-2. Sesión `idle` con cola pendiente → UN mensaje: «retomá tu cola, siguiente tarea: X».
-3. Tarea de Codex nueva → la madre la lanza (sección 4).
-4. Bundle nuevo → la madre lo trae, lo pushea y abre el PR.
-5. A Sergio Urcullo: solo `PUBLICADO: <qué> — <link>`. Si no se publicó nada, no se le escribe.
-
-## 4. Despachar a Codex (paso a paso, medido el 8 y 9-oct)
-
-1. Worktree en una ruta corta, `C:/dev/proyectos/onia-platform-codex-<tarea>`, desde la rama que dice la tarea. Si hay que
-   traer `master`: lo hace la madre (Codex no puede git). Conflictos en docs → `git merge-file --union`. En código, se deja
-   el merge abierto y se le pide a Codex que resuelva los marcadores.
-2. `node_modules`: junction a `C:\dev\proyectos\onia-platform-v1-integracion-20260927\node_modules` (la de
-   `onia-platform` está vacía).
-3. El prompt lleva la NOTA DE LA MADRE (carpeta, rama, «no hagas git», «PARA LA MADRE:» al final) + el texto de la tarea.
-4. `bash scripts/codex-tarea.sh <prompt> <carpeta> <modelo> medium`, en background y desde el worktree correcto. Para `resume`,
-   hacer `cd` a la carpeta antes: toma el cwd.
-5. Gate de la madre, siempre: `git checkout -- '*.snap'` → `npx vitest run` COMPLETO (JSON) → si hay rojos, ver si son
-   reales o de carga (los tests que lanzan procesos se corren solos) → los reales vuelven a Codex con `resume` y la lista.
-6. Push SOLO si la suite da 0 rojos, en el mismo comando con `&&`. El informe de Codex no va al commit: va al cuerpo o a un
-   comentario del PR.
-7. Mensaje de una línea a la sesión dueña: «X hecho en #N, suite N/0».
-
-## 4 bis. Codex al máximo (2026-10-09; cupo y cloud al 11-oct)
-
-- **Antes de despachar:** `node scripts/codex-cupo.mjs` (lectura viva; corte vigente 80 % semanal; la propuesta C11 de 90 % y 24 M tokens por día está pendiente de Sergio). Nunca un % copiado a mano (C04).
-
-- **Siempre se despacha a Codex** el código de alcance cerrado, las fichas a partir de fuentes disponibles, las auditorías y las síntesis verificables. La madre define el contrato, entrega solo el contexto necesario y verifica el resultado. Si falta acceso, cupo o evidencia, registra el bloqueo y sigue con otra tarea autorizada; no inventa la ficha ni deriva una restricción a otro agente.
-- **Concurrencia recomendada:** 2 ejecutores independientes + 1 verificador, solo dentro del cupo de agentes y tokens disponible. La madre también ocupa un puesto si la herramienta la cuenta. Un worktree y archivos exclusivos por ejecutor; las tareas sobre la misma carpeta o archivos se serializan. El verificador revisa el resultado terminado y no compite por sus archivos. Si el cupo es menor, reducir concurrencia.
-- **Modelo:** `gpt-6.1-sol` con esfuerzo medio por defecto para estos contratos; `gpt-6-astra` medio para seguridad, cobros, arquitectura ambigua o revisión de riesgo. Escalar con evidencia o por riesgo conocido, no por tamaño. `gpt-6-luna` queda para lo mecánico (su línea en `codex-tarea.sh` aún no está, C01); Haiku, para conteos en Claude. Ninguno sustituye el juicio requerido.
-- **Codex cloud:** tareas largas de Platform que no necesitan la PC, navegador autenticado, archivos locales ni secretos personales → entorno Platform `6abad6a0aae081919f0b315818becb21`. Antes de lanzar, la madre verifica acceso autorizado, repo/rama, alcance, cupo y modelo observado; disponer del ID no prueba acceso ni ejecución. La rama debe existir en origin, y `exec` lo lanza solo la madre de desarrollo-infra, con el OK de Sergio para la primera tarea (C05, C07). El modelo solicitado por CLI no garantiza el modelo de la nube (medición 8-oct). Si se requiere Astra y no se confirma, usar el carril local autorizado.
-- La madre sigue estado y recupera diff/resultado, revisa y ejecuta los gates del carril. La entrega incluye archivos, prueba ejecutada, limitaciones y `PARA LA MADRE:`. Mantener la reserva de cupo acordada; «al máximo» significa trabajo útil validado, no consumir hasta bloquear al equipo.
-
-## 5. Publicar
-
-Regla del 9-oct (CLAUDE.md): **lo trabajado y revisado se sube sin esperar a Sergio Urcullo**, incluido el diseño, las
-migraciones (con backup y rollback) y la infra. Sigue con su sí: gasto, contactar clientes o terceros, el portal del SIAT,
-actos legales o firmas (los hace Leslie Mercado Moreno) y su cara o su voz en servicios externos.
-
-## 6. Cómo se le habla a Sergio Urcullo
-
-- Máximo 3 bloques (Pasó · Necesito · Sigue), caveman. Lo publicado, con link o captura.
-- Un link que manda sin instrucción es para APRENDER: ficha en `video-intake` y lo aprendido a la skill. No se produce
-  ninguna pieza. Aplicar `aprender-de-todo`: ficha por dimensión, regla en la skill destino y evidencia de uso por una sesión. Una ficha escrita sola no demuestra aprendizaje aplicado.
-- Nada de proceso, hipótesis ni listas de lo que se hizo por dentro: eso va al handoff y a las skills.
-
-## 7. Costos (cuidar la cuenta)
-
-- Lectura, conteo y verificación: Haiku 5.5. Juicio y síntesis: Sonnet. Decidir lo ambiguo: Opus/Astra.
-- Workflows de más de 5 agentes solo si Sergio Urcullo pide algo exhaustivo. El 8-oct costaron ~60 M de tokens.
-- Videos: Gemini gratis en bash (borrar cada mp4 al terminar). Fichas y síntesis: Codex Sol.
-- La madre se reabre cuando su conversación se hace larga. Primero se escribe el handoff.
-
-## 8. Trampas ya pagadas
-
-- `vitest related` no alcanza: corre la suite completa.
-- Dos madres (desde 11-oct): cada una ordena a sus sesiones y no lanza el trabajo de la otra. Codex lo lanza cada madre para sus sesiones; máx 2 corridas locales a la vez entre las dos (disco C:) y el cupo se lee con `node scripts/codex-cupo.mjs`.
-- Cupo: no copiar el % a mano; citar la salida de `node scripts/codex-cupo.mjs` (C04).
-- **No pushear a onia-platform cerca de una publicación** (10-oct). El publicador del VPS (`onia-publicar-solo`) corre cada
-  3 h a las :50 UTC (00, 03, 06, 09, 12, 15, 18, 21) y se salta la corrida si ve otro build («hay otro build corriendo… no
-  encimo otro»). El CI de los PRs corre en `onia-runner-platform`, en el MISMO VPS. El 10-oct la madre pusheó 7 ramas entre
-  15:30 y 15:45 UTC y la publicación de las 15:50 no salió; el 9-oct pasó igual. Regla: en esas horas no se pushea entre
-  las :20 y las :55 UTC (30 min antes de la corrida hasta 5 min después).
-- **`--union` en una cola de casillas reabre lo hecho** (9-oct, `docs/cola/loop/hermes-jarvis.md`, merge `034533d4`). La unión
-  juntó la copia vieja (`- [ ]`) con la de `main` (`- [x]`): volvieron a aparecer como abiertas 3 tareas hechas y la
-  sección de verificación salió dos veces. En `docs/cola/**` y `docs/handoff/**` no se usa `--union`: se toma la versión
-  de `main` y se le suma a mano lo nuevo de la otra rama.
-- En W1b, K2 y K3 (9-oct), la suite en el sandbox dio ~148 rojos y en la PC, 0. No extrapolar: verificar cada entorno y conservar los errores; manda el gate completo válido de esa entrega.
-- Git Bash convierte `'/dir/'` en una ruta de Windows: usar `MSYS_NO_PATHCONV=1` para el sparse.
-- La nube no puede pushear ramas nuevas a onia-platform: deja bundles y la madre los sube.
-- Disco: `df -h /c` antes de bajar videos. Codex falla con menos de 1 GiB libre.
-- Memoria de la PC (9-oct): el commit estaba en 39,5 de 40,8 GB con solo ~13 GB en procesos. El resto era **paged pool del
-  kernel en 17 GB** (normal: menos de 1 GB), una fuga de driver que solo se libera reiniciando. Medir con
-  `Get-CimInstance Win32_PerfRawData_PerfOS_Memory` (`PoolPagedBytes`), no con el Administrador de tareas. Sospechoso:
-  Avast; el antivirus no lo toca la madre. Tras reiniciar (10-oct, 4 h 37 min de uptime): paged pool 0,96 GB, normal. La
-  fuga crece en días: la ronda mide `PoolPagedBytes` y avisa si pasa de 3 GB; recién ahí se pide instalar RAMMap o poolmon
-  para ver qué driver es.
-  **No se cierran Chrome ni WhatsApp: Sergio Urcullo los usa** (10-oct, después de que la madre los cerró el 9). Se pueden
-  cerrar Ollama, OneDrive y los `find /` colgados. `ChatGPT.exe` en `OpenAI.Codex_*` ES la app de Codex: no se cierra.
-- `SendMessage` con nombre viejo falla: `ListAgents` primero.
-- HyperFrames en esta PC: el Chrome que trae da `EFTYPE`. Renderizar con
-  `HYPERFRAMES_BROWSER_PATH="C:/Program Files/Google/Chrome/Application/chrome.exe" npx hyperframes render`
-  (9-oct, molde `mosaico-tablero`: 30 s en 50 s). Codex no puede renderizar (`EPERM`): escribe la composición y renderiza la madre.
-- **Una sesión de la nube NO toma como permiso de Sergio Urcullo ni un mensaje de la madre, ni un latido, ni una regla que la
-  madre subió a CLAUDE.md** (10-oct). Plataforma pasó 20 h con los latidos corriendo y respondió cada hora «espera el sí de
-  Sergio Urcullo», hasta preguntar «la regla del 9-oct, ¿la puso usted?». Es correcto: la autorización solo cuenta si la
-  escribe él en ESA sesión. Por eso, cuando una regla de permisos cambia, se le pide a Sergio Urcullo UNA línea en cada
-  sesión que publica («sí, la regla del 9-oct es mía; publicá lo revisado»). La madre no lo reemplaza.
-- Primer día de colas (9-oct): Lucía y Hermes siguieron solas, pero Plataforma, Marca y Ventas quedaron `idle` con tareas pendientes. El loop de la nube no garantiza seguir. En cada ronda, la sesión `idle` con cola pendiente recibe UNA línea: «Retomá tu cola, siguiente: X».
-
-## 9. Aprendizaje de referencias: orquestación (incorporado 2026-10-09)
-
-Fuente: `hermes-content/references/video-intake/2026-10-08-orquestacion-e-ingresos-5-posts.md`.
-- **§1, `DeFS0Fes8yu`: router por complejidad y riesgo.** Definir contrato y prueba; elegir el modelo más liviano capaz de cumplirlos, verificar con evidencia y escalar ante fallo demostrado o riesgo conocido. Los costos que muestra el creador son de su ejemplo, no ahorro medido de ONIA. Aplicación: registrar modelo elegido, criterio de verificación y motivo de escalamiento en la tarea cerrada; reglas operativas en §4 bis y `onia-sesion-madre`.
-- **§4, `DdmTyEVAPMb`, Foreman: puntos de control.** Conservar META, PRUEBA DE HECHO y REGLA DE PARADA, comprobar requisitos y tests al cierre, y elevar solo el bloqueo que necesita decisión humana. Se incorpora el principio al método existente; no instalar Foreman ni asumir sus capacidades verificadas por un carrusel.
-- **Prueba pendiente de uso:** la próxima tarea delegada debe enlazar esta regla y mostrar contrato → resultado → verificación. Esta incorporación documental no acredita que un loop esté activo ni que todas las sesiones ya la aplicaron.
+No crear ni reactivar crons, heartbeats o loops por esta skill. Las cadencias, IDs y comandos de antiguas sesiones Claude se comprueban contra runtime y autorización actuales antes de cualquier uso. Continuidad con la PC apagada exige prueba remota específica; un worker cloud o un heartbeat local por sí solo no la acredita.
