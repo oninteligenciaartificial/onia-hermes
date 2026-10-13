@@ -1,6 +1,8 @@
 # Prototipo local de cola, leases y checkpoints SQLite
 
 Estado: **prototipo offline probado; no instalado ni conectado a Codex Cloud**.
+El delta de desarrollo y sus fuentes, etapas y gates están en
+[`HARNESS-DEV-20261013.md`](HARNESS-DEV-20261013.md).
 
 `sqlite_pilot.py` usa solo Python estándar y SQLite (prueba observada local con SQLite
 3.53.1; la sintaxis UPSERT requiere SQLite 3.24 o posterior, versión del VPS aún desconocida).
@@ -66,7 +68,7 @@ Desde este directorio, con Python 3 estándar ya presente:
 python3 -m unittest -v test_sqlite_pilot.py
 ```
 
-Los nueve tests cubren claims concurrentes (un owner), fencing del owner vencido, reanudación
+Los tests focales cubren claims concurrentes (un owner), fencing del owner vencido, reanudación
 desde checkpoint íntegro y bloqueo por digest inválido, rechazo de pasos de checkpoint vacíos,
 efecto ambiguo `needs_reconcile` sin segundo envío (incluido recovery tras crash/lease vencido),
 rechazo de reintento sin evidencia de quiescencia del owner/claim exacto y reintento solo tras

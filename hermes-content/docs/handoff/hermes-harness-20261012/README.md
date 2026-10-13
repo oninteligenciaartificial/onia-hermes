@@ -148,6 +148,16 @@ prueba estado local en un host; no habilita coordinación cloud ni PC-off. Ver e
 del prototipo para pruebas, costo/límites, decisión pendiente y scope exacto de una futura
 aprobación de instalación.
 
+## Delta de desarrollo — Hermes coordinador primero
+
+[`HARNESS-DEV-20261013.md`](HARNESS-DEV-20261013.md) documenta el circuito offline
+de intake, claim, checkpoint, recuperación, handoff con ACK y resultado, además del
+aviso previo a la referencia aproximada de 500k tokens y los gates cerrados de
+despacho externo. Hermes es el coordinador propuesto. Muse (Meta) y Dots
+(OpenAI) son etapas posteriores: interfaces, permiso, API soportada, privacidad,
+costo y QA se revisarán por separado; no hay integración actual ni continuidad
+API demostrada de los chats existentes. Ninguna etapa está instalada o activa.
+
 ## Checkpoint de espera y avisos
 
 Escalación confirmada por madre; sin nuevo intento de CLI/401, wake o incidencia.

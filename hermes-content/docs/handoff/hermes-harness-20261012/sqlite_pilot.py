@@ -39,9 +39,20 @@ class OfficialCodexCloudAdapter(Protocol):
 
 
 class EffectAdapter(Protocol):
-    """Local-testable boundary for one external effect; no implementation here."""
+    """Future interface; this pilot cannot accept implementations of this protocol."""
 
     def submit(self, effect_key: str, payload: Mapping[str, Any]) -> Mapping[str, Any]: ...
+
+
+class OfflineEffectFixture:
+    """Only permitted effect simulator; never performs IO outside local memory."""
+
+    def __init__(self) -> None:
+        self.calls = 0
+
+    def submit(self, effect_key: str, payload: Mapping[str, Any]) -> Mapping[str, Any]:
+        self.calls += 1
+        return {"status": "unknown", "fixture": True}
 
 
 def official_codex_cloud_adapter() -> OfficialCodexCloudAdapter:
@@ -91,6 +102,38 @@ class QuiescenceEvidence:
     manually_verified: bool
 
 
+@dataclass(frozen=True)
+class HandoffSpec:
+    successor_owner_id: str
+    objective: str
+    gates: tuple[str, ...]
+    evidence_refs: tuple[str, ...]
+    next_action: str
+    cursor: str
+    model_configured: str
+    model_observed: str
+    context_used: int | None = None
+    context_window: int | None = None
+    context_reserve: int | None = None
+
+
+@dataclass(frozen=True)
+class HandoffPacket:
+    handoff_id: str
+    digest: str
+    payload: Mapping[str, Any]
+    status: str
+
+
+@dataclass(frozen=True)
+class ExternalDispatchGate:
+    credentials_ready: bool
+    permission_ref: str | None
+    cost_cap_ref: str | None
+    adapter_verified: bool
+    runtime_approved: bool
+
+
 def _canonical(value: Mapping[str, Any]) -> str:
     return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=True)
 
@@ -105,11 +148,30 @@ def _required_text(value: Any, field: str) -> str:
     return value.strip()
 
 
+def context_rotation_decision(
+    used: int | None, window: int | None, reserve: int | None
+) -> str:
+    """Alert before the approximate 500k reference or effective window, with reserve.
+
+    Inputs must be verified active occupancy and effective window, never cumulative
+    usage or billing counts. The caller records their provenance; this fixture cannot
+    observe a live provider. An alert asks for a decision, not automatic rotation.
+    """
+    if used is None or window is None or reserve is None:
+        return "UNKNOWN"
+    if any(type(value) is not int for value in (used, window, reserve)):
+        raise ValueError("context measurements must be integers")
+    if used < 0 or window <= 0 or reserve < 0 or used > window:
+        raise ValueError("invalid active context measurements")
+    target = min(500_000, window)
+    return "alert_review" if used + reserve >= target else "continue"
+
+
 class SQLiteQueue:
     """A durable local queue with one active lease per worker and monotonic fencing."""
 
     SCHEMA_VERSION = 1
-    DB_SCHEMA_VERSION = 2
+    DB_SCHEMA_VERSION = 3
     _SHA_RE = re.compile(r"^(?:[0-9a-f]{40}|[0-9a-f]{64})$")
     _INPUT_RE = re.compile(r"^[0-9a-f]{64}$")
 
@@ -140,7 +202,7 @@ class SQLiteQueue:
             conn.execute("BEGIN IMMEDIATE")
             try:
                 version = conn.execute("PRAGMA user_version").fetchone()[0]
-                if version not in (0, 1, self.DB_SCHEMA_VERSION):
+                if version not in (0, 1, 2, self.DB_SCHEMA_VERSION):
                     raise RuntimeError(f"unsupported schema version: {version}")
                 statements = (
                     """CREATE TABLE IF NOT EXISTS tasks (
@@ -179,6 +241,32 @@ class SQLiteQueue:
                     owner_id TEXT NOT NULL,
                     fencing_token INTEGER NOT NULL,
                     expires_at INTEGER NOT NULL
+                )""",
+                    """CREATE TABLE IF NOT EXISTS handoffs (
+                    handoff_id TEXT PRIMARY KEY,
+                    task_id TEXT NOT NULL REFERENCES tasks(task_id),
+                    from_owner_id TEXT NOT NULL,
+                    from_fencing_token INTEGER NOT NULL,
+                    successor_owner_id TEXT NOT NULL,
+                    checkpoint_digest TEXT NOT NULL,
+                    payload_json TEXT NOT NULL,
+                    payload_digest TEXT NOT NULL,
+                    ack_ref TEXT,
+                    status TEXT NOT NULL CHECK(status IN
+                      ('prepared','acked','activated','archived')),
+                    created_at INTEGER NOT NULL,
+                    updated_at INTEGER NOT NULL,
+                    UNIQUE(task_id, from_fencing_token)
+                )""",
+                    """CREATE INDEX IF NOT EXISTS handoffs_task_status
+                  ON handoffs(task_id, status)""",
+                    """CREATE TABLE IF NOT EXISTS task_results (
+                    task_id TEXT PRIMARY KEY REFERENCES tasks(task_id),
+                    owner_id TEXT NOT NULL,
+                    fencing_token INTEGER NOT NULL,
+                    evidence_json TEXT NOT NULL,
+                    evidence_digest TEXT NOT NULL,
+                    closed_at INTEGER NOT NULL
                 )""",
                 )
                 for statement in statements:
@@ -219,6 +307,14 @@ class SQLiteQueue:
             raise ValueError("now and positive lease_seconds must be integer UTC epoch seconds")
         with self._connection() as conn:
             conn.execute("BEGIN IMMEDIATE")
+            handoff_pending = conn.execute(
+                "SELECT handoff_id FROM handoffs h JOIN tasks t ON t.task_id=h.task_id "
+                "WHERE t.worker_id=? AND h.status IN ('prepared','acked') LIMIT 1",
+                (worker_id,),
+            ).fetchone()
+            if handoff_pending:
+                conn.commit()
+                return ClaimResult("blocked", reason="handoff_awaiting_ack_or_activation")
             lease = conn.execute(
                 "SELECT * FROM worker_leases WHERE worker_id=?", (worker_id,)
             ).fetchone()
@@ -399,11 +495,20 @@ class SQLiteQueue:
                         "for the exact previous owner and fencing token"
                     )
             if outcome == "applied":
+                receipt = {"result": "applied_reconciled", "evidence_ref": evidence}
+                receipt_digest = _digest(receipt)
+                conn.execute(
+                    "INSERT INTO task_results(task_id,owner_id,fencing_token,evidence_json,"
+                    "evidence_digest,closed_at) VALUES(?,?,?,?,?,?)",
+                    (task_id, row["ambiguous_owner_id"] or "UNKNOWN",
+                     row["ambiguous_fencing_token"] or 0,
+                     _canonical(receipt), receipt_digest, now),
+                )
                 conn.execute(
                     "UPDATE tasks SET status='done',effect_state='applied',last_evidence=?,"
                     "ambiguous_owner_id=NULL,ambiguous_fencing_token=NULL,updated_at=? "
                     "WHERE task_id=?",
-                    (evidence, now, task_id),
+                    ("result:" + receipt_digest, now, task_id),
                 )
             else:
                 conn.execute(
@@ -415,19 +520,239 @@ class SQLiteQueue:
             conn.commit()
 
     def complete(self, claim: Claim, now: int, evidence: str) -> None:
-        evidence = _required_text(evidence, "evidence")
-        with self._connect() as conn:
+        self.complete_with_result(claim, now, "completed", evidence)
+
+    def prepare_handoff(self, claim: Claim, spec: HandoffSpec, now: int) -> HandoffPacket:
+        """Persist a compact packet and suspend the old claim before any session switch."""
+        for field in (
+            "successor_owner_id", "objective", "next_action", "cursor",
+            "model_configured", "model_observed",
+        ):
+            value = _required_text(getattr(spec, field), field)
+            if len(value) > 512:
+                raise ValueError(f"{field} exceeds compact handoff limit")
+        for field in ("gates", "evidence_refs"):
+            values = getattr(spec, field)
+            if not isinstance(values, tuple) or len(values) > 16:
+                raise ValueError(f"{field} must be a compact tuple")
+            for value in values:
+                if len(_required_text(value, field)) > 512:
+                    raise ValueError(f"{field} entry exceeds compact handoff limit")
+        context_state = context_rotation_decision(
+            spec.context_used, spec.context_window, spec.context_reserve
+        )
+        with self._connection() as conn:
             conn.execute("BEGIN IMMEDIATE")
             task = self._assert_claim(conn, claim, now)
-            if task["effect_state"] == "in_flight":
-                conn.rollback()
-                raise RuntimeError("ambiguous external effect must be reconciled before completion")
+            checkpoint = self._read_checkpoint(task)
+            if checkpoint is None or task["effect_state"] != "not_started":
+                raise RuntimeError("handoff requires an integral checkpoint and no open effect")
+            payload = {
+                "schema": 1,
+                "task_id": claim.task_id,
+                "worker_id": claim.worker_id,
+                "repo": task["repo"], "ref": task["ref"], "sha": task["sha"],
+                "contract_id": task["contract_id"], "input_sha": task["input_sha"],
+                "step": task["step"], "checkpoint": checkpoint,
+                "checkpoint_digest": task["checkpoint_digest"],
+                "from_owner_id": claim.owner_id,
+                "from_fencing_token": claim.fencing_token,
+                "successor_owner_id": spec.successor_owner_id,
+                "objective": spec.objective, "gates": spec.gates,
+                "evidence_refs": spec.evidence_refs, "next_action": spec.next_action,
+                "cursor": spec.cursor, "model_configured": spec.model_configured,
+                "model_observed": spec.model_observed,
+                "context_state": context_state,
+                "context_used": spec.context_used,
+                "context_window": spec.context_window,
+                "context_reserve": spec.context_reserve,
+                "created_at_utc_epoch": now,
+            }
+            digest = _digest(payload)
+            handoff_id = _digest([claim.task_id, claim.fencing_token, spec.successor_owner_id])
             conn.execute(
-                "UPDATE tasks SET status='done',updated_at=?,last_evidence=? WHERE task_id=?",
-                (now, evidence, task["task_id"]),
+                "INSERT INTO handoffs(handoff_id,task_id,from_owner_id,from_fencing_token,"
+                "successor_owner_id,checkpoint_digest,payload_json,payload_digest,status,"
+                "created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,'prepared',?,?)",
+                (handoff_id, claim.task_id, claim.owner_id, claim.fencing_token,
+                 spec.successor_owner_id, task["checkpoint_digest"], _canonical(payload),
+                 digest, now, now),
+            )
+            conn.commit()
+        return HandoffPacket(handoff_id, digest, payload, "prepared")
+
+    def read_handoff(self, handoff_id: str) -> HandoffPacket:
+        with self._connection() as conn:
+            row = conn.execute(
+                "SELECT * FROM handoffs WHERE handoff_id=?", (handoff_id,)
+            ).fetchone()
+            if row is None:
+                raise KeyError("handoff not found")
+            payload = json.loads(row["payload_json"])
+            if not isinstance(payload, dict) or _digest(payload) != row["payload_digest"]:
+                raise CheckpointInvalid("handoff digest mismatch")
+            return HandoffPacket(handoff_id, row["payload_digest"], payload, row["status"])
+
+    def acknowledge_handoff(
+        self, handoff_id: str, successor_owner_id: str, digest: str, sha: str,
+        ack_ref: str, now: int,
+    ) -> None:
+        """Offline ACK fixture; caller identity is not authenticated by this prototype."""
+        ack_ref = _required_text(ack_ref, "ack_ref")
+        with self._connection() as conn:
+            conn.execute("BEGIN IMMEDIATE")
+            row = conn.execute(
+                "SELECT * FROM handoffs WHERE handoff_id=?", (handoff_id,)
+            ).fetchone()
+            if row is None or row["status"] != "prepared":
+                raise RuntimeError("handoff is not awaiting ACK")
+            payload = json.loads(row["payload_json"])
+            if (
+                _digest(payload) != row["payload_digest"]
+                or digest != row["payload_digest"]
+                or sha != payload["sha"]
+                or successor_owner_id != row["successor_owner_id"]
+            ):
+                raise CheckpointInvalid("ACK does not match handoff digest, SHA or successor")
+            conn.execute(
+                "UPDATE handoffs SET status='acked',ack_ref=?,updated_at=? WHERE handoff_id=?",
+                (ack_ref, now, handoff_id),
+            )
+            conn.commit()
+
+    def activate_handoff(
+        self, handoff_id: str, successor_owner_id: str, now: int, lease_seconds: int
+    ) -> Claim:
+        """After ACK, atomically fence old claim, grant ownership and archive local state."""
+        if type(lease_seconds) is not int or lease_seconds <= 0:
+            raise ValueError("lease_seconds must be positive")
+        with self._connection() as conn:
+            conn.execute("BEGIN IMMEDIATE")
+            handoff = conn.execute(
+                "SELECT * FROM handoffs WHERE handoff_id=?", (handoff_id,)
+            ).fetchone()
+            if (
+                handoff is None or handoff["status"] != "acked"
+                or handoff["successor_owner_id"] != successor_owner_id
+            ):
+                raise RuntimeError("matching successor ACK is required")
+            task = conn.execute(
+                "SELECT * FROM tasks WHERE task_id=?", (handoff["task_id"],)
+            ).fetchone()
+            lease = conn.execute(
+                "SELECT * FROM worker_leases WHERE task_id=?", (handoff["task_id"],)
+            ).fetchone()
+            if (
+                task is None or lease is None or task["effect_state"] != "not_started"
+                or task["checkpoint_digest"] != handoff["checkpoint_digest"]
+                or lease["owner_id"] != handoff["from_owner_id"]
+                or lease["fencing_token"] != handoff["from_fencing_token"]
+            ):
+                raise RuntimeError("handoff claim or checkpoint changed; reconcile manually")
+            checkpoint = self._read_checkpoint(task)
+            fence = conn.execute(
+                "SELECT last_token FROM worker_fences WHERE worker_id=?", (task["worker_id"],)
+            ).fetchone()
+            token = fence["last_token"] + 1
+            expires_at = now + lease_seconds
+            conn.execute(
+                "UPDATE worker_fences SET last_token=? WHERE worker_id=?",
+                (token, task["worker_id"]),
+            )
+            conn.execute(
+                "UPDATE worker_leases SET owner_id=?,fencing_token=?,expires_at=? WHERE task_id=?",
+                (successor_owner_id, token, expires_at, task["task_id"]),
+            )
+            conn.execute(
+                "UPDATE handoffs SET status='archived',updated_at=? WHERE handoff_id=?",
+                (now, handoff_id),
+            )
+            conn.commit()
+            return Claim(task["task_id"], task["worker_id"], successor_owner_id,
+                         token, expires_at, checkpoint)
+
+    def archive_previous(self, handoff_id: str, successor_claim: Claim, now: int) -> None:
+        """Confirm the local archive already committed with successor ownership."""
+        with self._connection() as conn:
+            conn.execute("BEGIN IMMEDIATE")
+            self._assert_claim(conn, successor_claim, now)
+            row = conn.execute(
+                "SELECT * FROM handoffs WHERE handoff_id=?", (handoff_id,)
+            ).fetchone()
+            if (
+                row is None or row["status"] != "archived"
+                or row["task_id"] != successor_claim.task_id
+                or row["successor_owner_id"] != successor_claim.owner_id
+                or not row["ack_ref"]
+            ):
+                raise RuntimeError("successor ownership and ACK required before archive")
+            conn.commit()
+
+    def complete_with_result(
+        self, claim: Claim, now: int, result: str, evidence_ref: str
+    ) -> str:
+        """Store a minimal evidence receipt and close the task in one transaction."""
+        result = _required_text(result, "result")
+        evidence_ref = _required_text(evidence_ref, "evidence_ref")
+        receipt = {"result": result, "evidence_ref": evidence_ref}
+        digest = _digest(receipt)
+        with self._connection() as conn:
+            conn.execute("BEGIN IMMEDIATE")
+            task = self._assert_claim(conn, claim, now)
+            if task["effect_state"] != "not_started":
+                raise RuntimeError("external effect must be reconciled before completion")
+            active_handoff = conn.execute(
+                "SELECT 1 FROM handoffs WHERE task_id=? AND status='activated' LIMIT 1",
+                (claim.task_id,),
+            ).fetchone()
+            if active_handoff:
+                raise RuntimeError("archive acknowledged predecessor before completion")
+            conn.execute(
+                "INSERT INTO task_results(task_id,owner_id,fencing_token,evidence_json,"
+                "evidence_digest,closed_at) VALUES(?,?,?,?,?,?)",
+                (claim.task_id, claim.owner_id, claim.fencing_token,
+                 _canonical(receipt), digest, now),
+            )
+            conn.execute(
+                "UPDATE tasks SET status='done',last_evidence=?,updated_at=? WHERE task_id=?",
+                ("result:" + digest, now, claim.task_id),
             )
             conn.execute("DELETE FROM worker_leases WHERE worker_id=?", (claim.worker_id,))
             conn.commit()
+        return digest
+
+    def read_result(self, task_id: str) -> Mapping[str, Any] | None:
+        with self._connection() as conn:
+            row = conn.execute(
+                "SELECT * FROM task_results WHERE task_id=?", (task_id,)
+            ).fetchone()
+            if row is None:
+                return None
+            receipt = json.loads(row["evidence_json"])
+            if _digest(receipt) != row["evidence_digest"]:
+                raise CheckpointInvalid("result evidence digest mismatch")
+            return {**receipt, "owner_id": row["owner_id"],
+                    "fencing_token": row["fencing_token"], "digest": row["evidence_digest"]}
+
+    def external_dispatch_blocker(self, claim: Claim, gate: ExternalDispatchGate, now: int) -> str:
+        """Readiness check only. No real adapter is installed or invoked."""
+        with self._connection() as conn:
+            self._assert_claim(conn, claim, now)
+        if gate.credentials_ready is not True:
+            return "credentials_unavailable"
+        if not gate.permission_ref:
+            return "permission_missing"
+        if not gate.cost_cap_ref:
+            return "cost_cap_missing"
+        if gate.runtime_approved is not True:
+            return "runtime_not_approved"
+        if gate.adapter_verified is not True:
+            return "adapter_unverified"
+        return "adapter_not_implemented"
+
+    def dispatch_external(self, claim: Claim, gate: ExternalDispatchGate, now: int) -> None:
+        """Fail closed until an official new-session adapter is reviewed and installed."""
+        raise CloudAdapterUnavailable(self.external_dispatch_blocker(claim, gate, now))
 
     def _assert_claim(self, conn: sqlite3.Connection, claim: Claim, now: int) -> sqlite3.Row:
         row = conn.execute(
@@ -448,6 +773,12 @@ class SQLiteQueue:
         ).fetchone()
         if fence is None or fence["last_token"] != claim.fencing_token:
             raise LeaseLost("claim fencing token is stale")
+        handoff_pending = conn.execute(
+            "SELECT 1 FROM handoffs WHERE task_id=? AND status IN ('prepared','acked') LIMIT 1",
+            (claim.task_id,),
+        ).fetchone()
+        if handoff_pending:
+            raise LeaseLost("claim suspended for handoff")
         return row
 
     def _read_checkpoint(self, task: sqlite3.Row) -> Mapping[str, Any] | None:
@@ -507,12 +838,14 @@ def dispatch_effect_once(
     payload: Mapping[str, Any],
     now: int,
 ) -> EffectResult:
-    """Record intent before adapter call; any non-definitive return requires reconciliation."""
+    """Offline fixture only; persist intent and reconcile every non-definitive return."""
+    if type(adapter) is not OfflineEffectFixture:
+        raise CloudAdapterUnavailable("effect adapter is not the built-in offline fixture")
     effect_name = _required_text(effect_name, "effect_name")
     effect_key = queue.mark_effect_in_flight(claim, effect_name, now)
     try:
         receipt = adapter.submit(effect_key, dict(payload))
-        # A fake or future adapter receipt is deliberately not considered proof of success.
+        # A fixture receipt is deliberately not considered proof of success.
         evidence = "adapter_returned:" + _digest(dict(receipt))
     except Exception as exc:  # transport outcome may be unknown after a remote side effect
         evidence = "adapter_exception:" + type(exc).__name__
