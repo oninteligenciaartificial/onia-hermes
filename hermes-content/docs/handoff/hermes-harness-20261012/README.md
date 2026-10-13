@@ -138,6 +138,16 @@ el addendum QA y recibo documental posteriores identifican este delta.
 Hasta cerrar todos los pasos, continuar el mismo chat por web/móvil es alternativa
 oficial con disparo humano; no es supervisor autónomo ni habilita loops cloud.
 
+## Delta 2026-10-13 — prototipo de persistencia local
+
+Se añadió `SQLITE-PILOT-README.md`, `sqlite_pilot.py` y `test_sqlite_pilot.py` como
+prototipo stdlib aislado. Proporciona cola local con leases/fencing, checkpoint versionado
+y recuperación conservadora de efectos ambiguos. La interfaz oficial Codex Cloud falla
+cerrado porque no se verificó una API soportada para los chats/workers existentes. Solo
+prueba estado local en un host; no habilita coordinación cloud ni PC-off. Ver el README
+del prototipo para pruebas, costo/límites, decisión pendiente y scope exacto de una futura
+aprobación de instalación.
+
 ## Checkpoint de espera y avisos
 
 Escalación confirmada por madre; sin nuevo intento de CLI/401, wake o incidencia.
