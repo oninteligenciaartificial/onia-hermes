@@ -2,8 +2,9 @@
 
 Estado: **prototipo offline probado; no instalado ni conectado a Codex Cloud**.
 
-`sqlite_pilot.py` usa solo Python estándar y SQLite (prueba observada local con SQLite
-3.53.1; la sintaxis UPSERT requiere SQLite 3.24 o posterior, versión del VPS aún desconocida).
+`sqlite_pilot.py` usa solo Python estándar y SQLite (la validación previa en Linux reportó
+SQLite 3.53.1; la validación Windows del 2026-10-13 usó Python 3.12.10 y SQLite 3.49.1.
+La sintaxis UPSERT requiere SQLite 3.24 o posterior, versión del VPS aún desconocida).
 Una transacción `BEGIN IMMEDIATE`
 serializa los claims locales; hay una lease por worker, owner registrado y un fencing token
 monótono. Un owner viejo no puede escribir tras vencer/sustituirse su claim. La clave de cada
@@ -63,10 +64,13 @@ crear sesiones, transferir credenciales ni activar un loop.
 Desde este directorio, con Python 3 estándar ya presente:
 
 ```sh
-python3 -m unittest -v test_sqlite_pilot.py
+python -m unittest -v test_sqlite_pilot.py
 ```
 
-Los nueve tests cubren claims concurrentes (un owner), fencing del owner vencido, reanudación
+La suite focal tiene **10 tests**. El 2026-10-13 pasó completa en Windows con Python 3.12.10
+y SQLite 3.49.1 (`Ran 10 tests ... OK`). Esta es una validación local de portabilidad y cierre
+de conexiones; es independiente de la validación Linux previa, reportada con SQLite 3.53.1.
+Los tests cubren claims concurrentes (un owner), fencing del owner vencido, reanudación
 desde checkpoint íntegro y bloqueo por digest inválido, rechazo de pasos de checkpoint vacíos,
 efecto ambiguo `needs_reconcile` sin segundo envío (incluido recovery tras crash/lease vencido),
 rechazo de reintento sin evidencia de quiescencia del owner/claim exacto y reintento solo tras

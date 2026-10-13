@@ -6,6 +6,7 @@ import sqlite3
 import tempfile
 import threading
 import unittest
+from contextlib import contextmanager
 
 from sqlite_pilot import (
     CheckpointInvalid,
@@ -26,6 +27,17 @@ class FakeAdapter:
     def submit(self, effect_key, payload):
         self.calls += 1
         return {"status": "unknown", "fake": True}
+
+
+@contextmanager
+def sqlite_connection(path):
+    """Commit/rollback like sqlite3's context manager, then always close."""
+    conn = sqlite3.connect(path)
+    try:
+        with conn:
+            yield conn
+    finally:
+        conn.close()
 
 
 class SQLitePilotTests(unittest.TestCase):
@@ -75,7 +87,7 @@ class SQLitePilotTests(unittest.TestCase):
 
     def test_concurrent_initializers_migrate_v1_schema_once(self):
         migration_db = Path(self.tmp.name) / "legacy-v1.sqlite3"
-        with sqlite3.connect(migration_db) as conn:
+        with sqlite_connection(migration_db) as conn:
             conn.execute(
                 "CREATE TABLE tasks (task_id TEXT PRIMARY KEY, worker_id TEXT NOT NULL, "
                 "status TEXT NOT NULL, created_at INTEGER NOT NULL)"
@@ -91,7 +103,7 @@ class SQLitePilotTests(unittest.TestCase):
         with ThreadPoolExecutor(max_workers=2) as pool:
             queues = list(pool.map(lambda _: initialize(), range(2)))
         self.assertEqual(len(queues), 2)
-        with sqlite3.connect(migration_db) as conn:
+        with sqlite_connection(migration_db) as conn:
             self.assertEqual(conn.execute("PRAGMA user_version").fetchone()[0], 2)
             columns = {row[1] for row in conn.execute("PRAGMA table_info(tasks)")}
         self.assertIn("ambiguous_owner_id", columns)
@@ -115,7 +127,7 @@ class SQLitePilotTests(unittest.TestCase):
         self.assertEqual(resumed.status, "claimed")
         self.assertEqual(resumed.claim.checkpoint, checkpoint)
 
-        with sqlite3.connect(self.db) as conn:
+        with sqlite_connection(self.db) as conn:
             conn.execute("UPDATE tasks SET checkpoint_digest=? WHERE task_id=?", ("0" * 64, "task-1"))
         # Release the current owner by expiry, then integrity failure blocks recovery.
         blocked = SQLiteQueue(self.db).claim("hermes-worker", "owner-c", now=116, lease_seconds=10)

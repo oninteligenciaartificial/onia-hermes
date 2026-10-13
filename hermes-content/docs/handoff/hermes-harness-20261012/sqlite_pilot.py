@@ -369,7 +369,7 @@ class SQLiteQueue:
         evidence = _required_text(evidence, "evidence")
         if outcome not in ("applied", "not_applied"):
             raise ValueError("outcome must be applied or not_applied")
-        with self._connect() as conn:
+        with self._connection() as conn:
             conn.execute("BEGIN IMMEDIATE")
             row = conn.execute("SELECT * FROM tasks WHERE task_id=?", (task_id,)).fetchone()
             if row is None or row["status"] != "needs_reconcile":
@@ -416,7 +416,7 @@ class SQLiteQueue:
 
     def complete(self, claim: Claim, now: int, evidence: str) -> None:
         evidence = _required_text(evidence, "evidence")
-        with self._connect() as conn:
+        with self._connection() as conn:
             conn.execute("BEGIN IMMEDIATE")
             task = self._assert_claim(conn, claim, now)
             if task["effect_state"] == "in_flight":
