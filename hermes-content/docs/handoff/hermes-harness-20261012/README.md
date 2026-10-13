@@ -104,6 +104,10 @@ infraestructura paralela ahora. Skill stack requerido queda referenciado, sin
 copias ni modificación de skills compartidas: onia-router, onia-continuidad,
 equipo-de-agentes y onia-hermes-jarvis.
 
+La confrontación de fuentes y la mejora focal de clave por efecto se registran en
+[RESEARCH-DELTA-20261013.md](RESEARCH-DELTA-20261013.md); el helper es propuesta
+offline, sin adapter externo.
+
 **Corrección de cierre posterior a 32f78538:** arreglar Alfred es necesario, pero
 no basta para operar. El artefacto aprobado sólo prueba reglas offline. Checkpoint,
 exclusión compartida, conexión del trigger y pruebas remotas siguen pendientes;

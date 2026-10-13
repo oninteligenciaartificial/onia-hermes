@@ -1,0 +1,22 @@
+# Investigación de persistencia y deduplicación — 13-oct-2026
+
+## Evidencia primaria confrontada
+
+Se cotejaron las páginas oficiales actuales de [Hugging Face smolagents: memory](https://huggingface.co/docs/smolagents/tutorials/memory), [Temporal: Workflow Execution](https://docs.temporal.io/workflow-execution) y [LangGraph: persistence](https://docs.langchain.com/oss/python/langgraph/persistence), además del [manejo oficial de idempotencia de operaciones Temporal](https://docs.temporal.io/nexus/operations). El piloto NotebookLM citado por la madre queda como transferencia validada; no se volvió a ejecutar ni se usó su script rechazado. La recomendación de CODEX en `15a239139f6824254debc35289c80d180bd8db4f` es aplicable: citar primarias, separar observación de inferencia y no afirmar que el draft de skills PR #199 está integrado.
+
+| Hallazgo | Qué confirma la fuente | Estado en el harness y aplicabilidad |
+|---|---|---|
+| Estado durable | LangGraph distingue checkpointer por hilo de store entre hilos y advierte que `InMemorySaver` se pierde al reiniciar. Temporal registra transiciones e historial, y reanuda/reproduce desde el último evento durable. | `contract.json` exige repo/ref/SHA/input/contrato/paso y reconciliar recibos; el backend distribuido sigue `not_implemented_not_activated`. `gate.py` solo compara fixtures. La idea aplica, pero no hay backend autorizado seleccionado ni se puede demostrar restauración remota en este contrato. Git preserva los artefactos, no el estado transaccional de una entrega. |
+| Espera por eventos | Temporal modela comandos y awaitables; un workflow puede suspender hasta recibir el resultado de un evento, señal o timer, y reanudar con historial durable. | El gate offline mantiene `blocked` hasta evidencia nueva y evita sondeo/reintento automático. No hay listener ni scheduler cloud conectado. El patrón aplica al objetivo, pero implementarlo requiere servicio/identidad y trigger remoto revisados; agregar polling local no resolvería el bloqueo. |
+| Deduplicación explícita de efectos | Temporal documenta semántica de al-menos-una-vez para operaciones reintentadas y recomienda handlers idempotentes; un ID estable puede dirigir reintentos a la misma ejecución. Esto no garantiza que cualquier API externa deduplique efectos por sí sola. | El harness ya propone una clave de despacho y retener outcomes inciertos, pero no separaba el ID del envío del ID de cada efecto externo. Se añade una clave estable por efecto como precondición offline. El destino todavía debe aceptar esa clave o el operador debe reconciliar el recibo antes de repetir; no se afirma exactly-once ni se habilita un envío. |
+| Contexto de imágenes | El ejemplo de smolagents elimina imágenes de pasos con número `<= latest_step - 2` y conserva la imagen actual: retiene las dos iteraciones recientes. | Trata memoria multimodal del agente, no persistencia de coordinación ni entrega de efectos. No aplica a este harness; no se incorpora esa limpieza ni el script del piloto. |
+
+## Único cambio local y verificación
+
+La diferencia implementable sin infraestructura es dar identidad separada a cada efecto: la misma operación y efecto producen una clave estable ante reintentos; dos efectos con nombres distintos producen claves distintas; un nombre vacío falla cerrado. Esta regla evita colisiones internas del contrato y permite pasar una clave al consumidor cuando soporte idempotencia. Por sí sola no deduplica ningún sistema externo.
+
+Se prueba únicamente la nueva regla focal. No se repiten los 18 tests previamente aprobados: `test_gate.py` y los recibos del baseline quedan intactos; `gate.py` ahora contiene este helper offline. No se ejecuta el script no validado de NotebookLM, no se instalan paquetes ni se invoca Alfred, CLI, worker, scheduler o API de producción.
+
+## Cierre y bloqueo
+
+El cambio sirve a ONIA para conservar la misma identidad por efecto si se implementa una futura entrega, y para distinguir efectos en una operación con más de un paso. Estado durable compartido y espera remota por eventos siguen sin integración elegida o autorizada. La causa operativa conocida tampoco cambia: lectura Alfred validada por la auditoría previa; el único envío al chat Hermes falló `CloudThreadNotFoundError` sin `turnId`; escalación a soporte confirmada por la madre y respuesta especializada pendiente. No se reintenta. Trigger y readiness permanecen apagados.

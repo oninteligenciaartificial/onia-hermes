@@ -12,6 +12,14 @@ def dispatch_key(state):
     return hashlib.sha256(json.dumps(fields, separators=(',', ':')).encode()).hexdigest()
 
 
+def effect_idempotency_key(state, effect_name):
+    """Stable downstream deduplication key, scoped separately from dispatch."""
+    if not isinstance(effect_name, str) or not effect_name.strip():
+        raise ValueError('missing effect name')
+    payload = [dispatch_key(state), effect_name.strip()]
+    return hashlib.sha256(json.dumps(payload, separators=(',', ':')).encode()).hexdigest()
+
+
 def evaluate(state):
     """Validate a candidate; eligible never means sent, running or completed."""
     if state.get('work_status') == 'closed':
