@@ -2,6 +2,12 @@
 
 > **Este plan inicial manda.** Las secciones que siguen bajo HISTORIAL conservan pruebas/artefactos, pero sus etiquetas “vigente”, modelos y órdenes del 11-oct quedan reemplazadas cuando contradigan este plan. No hay relevo/loops completos por escribirlo.
 
+## Delta — rotación de sesiones por contexto (13-oct-2026)
+
+**Política documental solicitada; no hay automatización probada ni se ejecutó rotación.** Señal recomendada: `context_usage` verificable por runtime con su ventana efectiva; umbral `min(500000 tokens, 70% de ventana)`. 500000 es el techo solicitado únicamente con ventana efectiva confirmada ≥500000; para ventanas menores aplica 70% de la ventana. Input acumulado, cached, output y billing no sustituyen esta señal. Si no se observan ambas medidas: **UNKNOWN**, solicitar relevo manual y no prometer automatización. El handoff se hace en un punto seguro y nunca interrumpe una operación activa.
+
+Paquete compacto obligatorio: objetivo/criterio de hecho; permisos y gates; cola/estado; evidencia/artefactos y rutas; repo/ref/SHA; modelo configurado/observado; IDs de sesión/tarea/agente; cursor y hora; ownership único; siguiente acción o bloqueo. Sin clonar/forkear historiales ni transcripciones completas. La sucesora debe confirmar lectura con SHA/ref, enviar ACK ligado al objetivo y demostrar propiedad única del carril antes de archivar la anterior o mover un heartbeat existente. Las capacidades de crear/resumir/archivar sesiones y observar telemetría deben probarse en el proveedor/runtime concreto antes de depender de ellas. No trasladar secretos ni sesiones de la PC. La madre delega/revisa/resume; el worker ejecuta. Modelos vigentes: madres Luna low, Platform Sol 6.1 medium, QA Sol low, mecánica Luna low. Esto no activa loops ni demuestra capacidad operativa.
+
 ## PLAN VIGENTE 12-oct — armado único y ejecución por evidencia
 
 ### Auditoría acotada de tokens — 12-oct, medición previa y decisión posterior
