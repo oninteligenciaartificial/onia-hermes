@@ -23,6 +23,12 @@ Madre y mecánica: Luna low; código: Sol 6.1 medium; QA: Sol low; máximo un wo
 - Aplicación ONIA propuesta: contrato acotado, worker incremental, QA independiente y estado durable; guardar únicamente el caso probado, error, corrección, evidencia y cuándo reutilizarlo en la skill del carril. Aprender aquí significa mejorar instrucciones/memoria, no entrenar pesos.
 - Límites: estos experimentos Claude no demuestran ahorro ni calidad del reparto Luna/Sol; superioridad multiagente sigue abierta en el artículo. Checkpoints no prueban deduplicación externa; no ejecutar código de síntesis sin API/contrato/tests. La síntesis propone archivos Claude nuevos y última imagen única: no adoptar esos detalles; reutilizar registros ONIA y cotejar la retención HF. El cuaderno no acredita cloud con PC apagada.
 
+### Router: evidencia frente a simulación (revalidado 2026-10-12)
+
+La [ficha previa de donimas, §1](../../../hermes-content/references/video-intake/2026-10-08-orquestacion-e-ingresos-5-posts.md) fue revalidada con caption completo y un fotograma: el creador dice que las seis tareas son simuladas y que no es benchmark. Se corrigieron autor y Middle ($0,75); los costes J/M/S/G no acreditan ahorro ONIA. [Claude model-config](https://code.claude.com/docs/en/model-config) y [sub-agents](https://code.claude.com/docs/en/sub-agents) confirman modelo+effort configurables, con niveles dependientes del modelo. Esto verifica capacidad documental, no un router operativo.
+
+En la siguiente tarea pertinente ya autorizada, la madre pide al worker criterio de aceptación, modelo/effort configurado y observado si disponible, resultado QA y reintentos; tokens/coste solo si medidos. Incluir fallos y overhead del router en coste por tarea aceptada. Respetar routing vigente de Sergio Urcullo; no convertir una spec clara en garantía de low, ni escalar para eludir permisos o cuota. Estado: incorporado, aplicación y ahorro nuevos pendientes de prueba real; no abrir trabajo artificial para demostrarlo.
+
 ## Mediciones Claude históricas — subordinadas a CODEX.md y la orden vigente
 
 Todo el contenido siguiente conserva antecedentes y gates históricos; no acredita modelos, sesiones, cadencias ni capacidades actuales. Ante conflicto prevalecen CODEX.md y la última instrucción directa de Sergio. No usar la historia para ampliar permisos, mover main o saltar revisión.
