@@ -35,6 +35,17 @@ Regla madre: `CLAUDE.md` §1 «Sesión MADRE local + carriles en la nube». Esta
 
 > Corrección 2026-10-09: `equipo-de-agentes` es el método vigente; `aprender-de-todo` rige los insumos de Sergio. Sustituye la ronda antigua de 30 min, los nombres supuestos vivos y la segunda madre revisora por ronda de 20 min, verificación de sesiones y revisión de Codex. Las mediciones antiguas siguientes no prueban disponibilidad actual.
 
+## Rotación de sesiones madre/worker por contexto — 13-oct-2026
+
+Política transversal solicitada por Sergio Urcullo; su escritura no activa una rotación ni demuestra que el runtime la soporte. Prevalece sobre reglas de cadencia, modelo o archivo de sesiones que sigan en el historial de esta skill.
+
+- **Señal:** aceptar solo `context_usage` medido y la ventana efectiva reportados por el proveedor/runtime actual. Umbral recomendado: `min(500000 tokens, 70% de la ventana efectiva)`. 500000 es el techo solicitado cuando la ventana verificada es ≥500000; con una ventana menor, usar 70% de ella. Context usage no equivale a input acumulado, cached input, output ni billing. No derivar una métrica de esos contadores.
+- **Sin medición verificable:** marcar **UNKNOWN** y pedir relevo manual en el siguiente punto seguro. No afirmar automatización ni cuota/contexto restante. Al alcanzar el umbral, preparar el relevo en el próximo límite seguro del trabajo; no interrumpir/cancelar una acción activa.
+- **Paquete mínimo:** objetivo y criterio de hecho; rol/owner y permisos/aprobaciones aplicables; cola y estado; evidencia/rutas; repo/ref/SHA; modelo configurado y observado (o UNKNOWN); IDs de sesión/tarea/agentes; cursor con fuente y hora; propiedad/lease del carril; siguiente acción y bloqueo. Resumir hechos y deltas, sin clonar historiales ni volcar transcripts enteros.
+- **Transferencia con ACK:** la sucesora abre las fuentes indicadas, confirma lectura del paquete con su SHA/ref, devuelve ACK ligado al mismo objetivo y prueba que es la única dueña activa del carril. Hasta cumplir ambas condiciones, la madre/workers anteriores no se archivan y un heartbeat existente no se mueve. Después puede archivarse la anterior o cambiarse el destino de un heartbeat existente si la capacidad del proveedor está probada y el cambio está autorizado; este protocolo no crea ni activa loops.
+- **Capacidad del runtime:** antes de confiar en creación/resumen/archivo de sesión, telemetría o movimiento de heartbeat, comprobar cada función en el proveedor y runtime concretos con una prueba inocua y observable. No inferir soporte entre Codex, Claude, Work o nube; no migrar secretos ni sesiones de la PC.
+- **Límite de rol y modelos vigentes:** la madre solo delega, revisa pruebas y resume; el worker ejecuta. Madres Luna low; Platform Sol 6.1 medium; QA focal Sol low; mecánica Luna low. Registrar el modelo configurado/observado por separado; esta política no cambia runtimes ni modelos.
+
 ## Modelo operativo (8-oct, pedido de Sergio Urcullo: «sin ahogarnos, con todos los modelos, sin que yo meta mano»)
 
 Nace de 5 videos que él mandó (ficha: `references/video-intake/2026-10-08-orquestacion-e-ingresos-5-posts.md`) y de un
