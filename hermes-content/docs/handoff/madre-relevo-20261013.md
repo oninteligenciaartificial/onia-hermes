@@ -1,7 +1,7 @@
 # Relevo de madre Desarrollo-Infra — estado 2026-10-13
 
 ## META, prueba y parada
-META: preservar el estado operativo verificable para una nueva sesión madre, sin perder workers, gates ni evidencia. PRUEBA: archivo compacto, diff revisado, árbol claro y commit local de este archivo. PARADA: no archivar esta sesión, no mover/crear heartbeat, no iniciar acceso/API/cloud/worker/ejecución ni tocar `main`.
+META: transferir la coordinación a una nueva madre conservando estado. PRUEBA: handoff en Git, sucesora lee fuentes y devuelve ACK con ID, objetivo, repo/ref/SHA y próxima acción. PARADA de la sesión saliente: no archivar esta sesión ni crear/mover heartbeat; después del ACK deja de despachar. La sucesora puede ejecutar por workers el próximo QA autorizado descrito abajo; main, producción, instalaciones, gasto y accesos nuevos conservan gates.
 
 ## Relevo y autoridad
 Sesión fuente actual: `01a1352a-a8ab-77d0-9335-895a7d8083a2`. Sucesora: **PENDING**; el ACK debe confirmar objetivo, gates, repo/ref/SHA, worker activo, siguiente acción y aceptación de ownership. La madre original `01a12beb-7774-7c02-9931-12264158df83` fue desarchivada y leída; no es worker activo. No copiar historial entero ni hacer fork. La petición vigente es medir contexto, crear nueva sesión y continuar allí; **NO ARCHIVAR ESTA**. El contrato previo de archivo autorizado y heartbeat ACTIVE hacia otra sesión queda reemplazado; el historial permanece en Git.
