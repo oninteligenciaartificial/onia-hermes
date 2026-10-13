@@ -21,11 +21,18 @@ a Hermes, 12-oct 20:19 UTC (16:19 UTC-4): `NOT_FOUND / CloudThreadNotFoundError`
 turnId; lectura posterior sin canario. No se atribuye el error a UUID incorrecto,
 login, cuota ni VPS. No se repiten CLI/401 ni envío Alfred.
 
-Routing vigente: `CODEX.md` en `73693817`, blob
-`882db64f0826145faed5d17d24a3ff6be9d3743e`: madres Sol 6.1 medio, todo código
-Platform Astra medio, mecánica Luna, análisis y QA Sol. Los nombres del contrato
-son configuración solicitada; modelo servido no observable. Las aprobaciones y
-límites antiguos no se convierten en permisos nuevos.
+Routing vigente: delta de modo ahorro del handoff remoto `codex-cloud-pc-20261011.md`
+(12-oct): ambas madres Luna low; Platform Sol 6.1 medium; Hermes y mecánica Luna low;
+Marca, Lucía y Ventas Sol 6.1 low; QA focal Sol 6.1 low. Astra queda fuera del uso
+habitual. Son configuraciones aceptadas/solicitadas según el registro; modelos
+servidos no observables. Aprobaciones y límites antiguos no se convierten en permisos.
+
+Incidente de follow-up: la madre reporta que escaló al especialista; la respuesta
+del especialista sigue pendiente. La primera respuesta genérica no se aplicó y no
+cuenta como resolución. Hermes no observó directamente estos hechos y no se afirma
+que el producto esté reparado. El siguiente gate es recibir una instrucción soportada
+del especialista para el mismo chat; después se requiere autorización específica
+para un solo intento. Hasta entonces, el trigger permanece apagado.
 
 Inventario Luna: checkout histórico `2cdefca738ed85d87f50e6dc3dc6c31a5aa698f9`.
 Fuentes locales existentes: cola README blob `2390073e1965a247be2d30113b3d9f67dfc03e16`,
@@ -38,11 +45,11 @@ Estos archivos documentan métodos/historia; no demuestran loops vivos.
 
 | Carril y cola `hermes-content/docs/cola/loop/` | Worker/owner | Modelo solicitado | Estado y checkpoint existente |
 |---|---|---|---|
-| Platform `plataforma.md` | `01a12c7e-97e2-7115-8561-0b7658008003` / Desarrollo-Infra | Código Astra; análisis Sol/Luna; QA Sol | Confirmador en desarrollo comunicado; fuera de este encargo. No nuevo snapshot ni cambio de cola. |
-| Hermes `hermes-jarvis.md` | `01a13170-1c7e-7224-83c1-c5f369052039` / Desarrollo-Infra | Sol; mecánica Luna; escalación difícil Astra | Artefactos piloto en rama `codex/supervisor-pilot-20261012`; lectura Alfred validada en fuente; follow-up bloqueado. |
-| Marca `marca-personal.md` | `01a13170-b488-71d9-83f8-12663d5a0013` / Marketing | Sol; mecánica Luna | Seguimiento horario local comunicado; no trigger cloud demostrado. Checkpoint de su cola/artefactos, sin medirlos aquí. |
-| Lucía `lucia.md` | `01a13171-0fdb-72c6-9fdc-81244d7e6006` / Marketing | Sol; difícil Astra | Misma regla de cola y checkpoint; estado actual no muestreado en este contrato. |
-| Ventas `ventas-pauta.md` | `01a13171-6ac1-771e-b285-52e7284e203a` / Marketing | Sol; mecánica Luna | Misma regla de cola y checkpoint; estado actual no muestreado en este contrato. |
+| Platform `plataforma.md` | `01a12c7e-97e2-7115-8561-0b7658008003` / Desarrollo-Infra | Sol 6.1 medium; Astra fuera del uso habitual | Confirmador en desarrollo comunicado; fuera de este encargo. No nuevo snapshot ni cambio de cola. |
+| Hermes `hermes-jarvis.md` | `01a13170-1c7e-7224-83c1-c5f369052039` / Desarrollo-Infra | Luna low; comprobaciones Luna low; QA focal Sol 6.1 low; Astra fuera del uso habitual y sin escalación automática | Artefactos piloto en rama `codex/supervisor-pilot-20261012`; lectura Alfred validada en fuente; follow-up bloqueado. Modelo servido no observable. |
+| Marca `marca-personal.md` | `01a13170-b488-71d9-83f8-12663d5a0013` / Marketing | Sol 6.1 low | Seguimiento horario local comunicado; no trigger cloud demostrado. Checkpoint de su cola/artefactos, sin medirlos aquí. |
+| Lucía `lucia.md` | `01a13171-0fdb-72c6-9fdc-81244d7e6006` / Marketing | Sol 6.1 low | Misma regla de cola y checkpoint; estado actual no muestreado en este contrato. |
+| Ventas `ventas-pauta.md` | `01a13171-6ac1-771e-b285-52e7284e203a` / Marketing | Sol 6.1 low | Misma regla de cola y checkpoint; estado actual no muestreado en este contrato. |
 
 ## Matriz: existente, faltante y solución mínima
 
