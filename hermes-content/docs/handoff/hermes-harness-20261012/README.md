@@ -153,8 +153,8 @@ aprobación de instalación.
 [`HARNESS-DEV-20261013.md`](HARNESS-DEV-20261013.md) documenta el circuito offline
 de intake, claim, checkpoint, recuperación, handoff con ACK y resultado, además del
 aviso previo a la referencia aproximada de 500k tokens y los gates cerrados de
-despacho externo. Hermes es el coordinador propuesto. Muse (Meta) y Dots
-(OpenAI) son etapas posteriores: interfaces, permiso, API soportada, privacidad,
+despacho externo. Hermes es el coordinador propuesto. Muse y Dots
+son nombres de etapas posteriores con proveedor por verificar: interfaces, permiso, API soportada, privacidad,
 costo y QA se revisarán por separado; no hay integración actual ni continuidad
 API demostrada de los chats existentes. Ninguna etapa está instalada o activa.
 

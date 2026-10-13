@@ -8,6 +8,7 @@ import sqlite3
 import tempfile
 import threading
 import unittest
+from unittest.mock import patch
 
 from sqlite_pilot import (
     CheckpointInvalid,
@@ -108,6 +109,34 @@ class SQLitePilotTests(unittest.TestCase):
             queue.enqueue(self.spec, now=100)
             self.assertEqual(queue.claim("hermes-worker", "owner", 101, 10).status, "claimed")
         self.assertFalse(Path(directory).exists())
+
+    def test_sqlite_connection_closes_if_pragma_setup_fails(self):
+        connections = []
+
+        class FailingConnection(sqlite3.Connection):
+            closed_explicitly = False
+
+            def execute(self, sql, *args, **kwargs):
+                if sql == "PRAGMA foreign_keys=ON":
+                    raise sqlite3.OperationalError("simulated pragma failure")
+                return super().execute(sql, *args, **kwargs)
+
+            def close(self):
+                self.closed_explicitly = True
+                super().close()
+
+        original_connect = sqlite3.connect
+
+        def failing_connect(*args, **kwargs):
+            conn = original_connect(*args, **{**kwargs, "factory": FailingConnection})
+            connections.append(conn)
+            return conn
+
+        with patch("sqlite_pilot.sqlite3.connect", side_effect=failing_connect):
+            with self.assertRaisesRegex(sqlite3.OperationalError, "simulated pragma failure"):
+                self.queue.claim("hermes-worker", "owner", 101, 10)
+        self.assertEqual(len(connections), 1)
+        self.assertTrue(connections[0].closed_explicitly)
 
     def test_intake_recovery_handoff_ack_and_evidenced_completion(self):
         first = self.queue.claim("hermes-worker", "owner-a", now=101, lease_seconds=3).claim
@@ -302,6 +331,40 @@ class SQLitePilotTests(unittest.TestCase):
         )
         self.assertEqual(self.queue.read_result("task-1")["result"], "applied_reconciled")
         self.assertEqual(fake.calls, 1)
+
+    def test_reconciliation_closes_sqlite_handle_on_rejection_and_success(self):
+        claim = self.queue.claim("hermes-worker", "owner-a", now=101, lease_seconds=10).claim
+        dispatch_effect_once(self.queue, claim, OfflineEffectFixture(), "notify_owner", {"x": 1}, now=102)
+
+        class TrackedConnection(sqlite3.Connection):
+            closed_explicitly = False
+
+            def close(self):
+                self.closed_explicitly = True
+                super().close()
+
+        connections = []
+
+        def tracked_connect():
+            conn = sqlite3.connect(
+                self.db, timeout=10, isolation_level=None, factory=TrackedConnection
+            )
+            conn.row_factory = sqlite3.Row
+            conn.execute("PRAGMA foreign_keys=ON")
+            connections.append(conn)
+            return conn
+
+        with patch.object(self.queue, "_connect", side_effect=tracked_connect):
+            with self.assertRaisesRegex(RuntimeError, "requires manually verified quiescence"):
+                self.queue.resolve_reconciliation(
+                    "task-1", "not_applied", "offline:missing-proof", now=103
+                )
+            self.assertTrue(connections[-1].closed_explicitly)
+            self.queue.resolve_reconciliation(
+                "task-1", "applied", "offline:receipt-confirmed", now=104
+            )
+            self.assertTrue(connections[-1].closed_explicitly)
+        self.assertEqual(len(connections), 2)
 
     def test_expired_lease_fences_old_owner(self):
         first = self.queue.claim("hermes-worker", "owner-a", now=101, lease_seconds=3).claim

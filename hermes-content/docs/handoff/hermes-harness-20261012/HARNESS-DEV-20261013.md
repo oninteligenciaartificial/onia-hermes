@@ -29,7 +29,8 @@ habilita ejecución.
    `api.agents.write`, `api.responses.write`, environment key separada, revisión
    de privacidad/consentimiento, costo API y límite aprobado, más canario finito.
    El resultado se confirma con recibo y outcome, no solo aceptación de envío.
-3. **Muse (Meta) y Dots (OpenAI), futuro.** Únicamente candidatos de ejecutor:
+3. **Muse y Dots, futuro.** Nombres de candidatos de ejecutor; proveedor y API
+   aún no atribuidos por fuente oficial verificable. Contrato propuesto:
    interfaz `submit(input_hash, checkpoint, effect_key) -> receipt/outcome`,
    `observe(receipt)`, `resume(provider_session_ref)` y cancelación/pausa
    verificable. Cada uno necesita documentación oficial actual que pruebe esas
@@ -60,7 +61,7 @@ Fuentes primarias cotejadas para un futuro medidor:
 |---|---|---|
 | Codex app server | El [código upstream de Hermes, `codex_runtime.py`](https://github.com/NousResearch/hermes-agent/blob/8f817911723e3ec13e7f47fc022fdcc9e2149354/agent/codex_runtime.py) consume `token_usage_last` y `model_context_window` por turno. | Verificar en el runtime elegido que son frescos y representan contexto activo. El Codex Cloud de estos chats no expone aquí un medidor verificado. |
 | Agents API | Las guías oficiales de [sesiones](https://developers.openai.com/api/docs/guides/agents-api/sessions) describen ciclo de sesión nueva, no prueban en este piloto una pareja fiable U/ventana para alertar. | Examinar eventos/usage de una sesión autorizada y distinguir consumo por turno de ocupación activa; hasta entonces `UNKNOWN`. |
-| Claude Code | La [fuente oficial de hooks](https://github.com/anthropics/claude-code/blob/bf2323b3021c9d3db7a31e1e7d61068c3f704497/plugins/plugin-dev/skills/hook-development/SKILL.md) muestra `session_id`, `transcript_path` y evento `PreCompact`. | Esos campos no miden U/ventana; validar telemetría y comando de reanudación en CLI oficial instalada antes de automatizar. Claude CLI no está disponible en este runtime. |
+| Claude Code | La [fuente oficial de hooks](https://github.com/anthropics/claude-code/blob/bf2323b3021c9d3db7a31e1e7d61068c3f704497/plugins/plugin-dev/skills/hook-development/SKILL.md) muestra `session_id`, `transcript_path` y evento `PreCompact`; esos campos no miden U/ventana. La [status line oficial](https://code.claude.com/docs/en/statusline) sí ofrece ocupación/ventana e incluye tokens de caché en el input del último request, no un acumulado de sesión. | Verificar señal y frescura en la CLI concreta antes de automatizar. Claude CLI no está disponible en este runtime. |
 | Hermes Agent | [`context_breakdown.py`](https://github.com/NousResearch/hermes-agent/blob/8f817911723e3ec13e7f47fc022fdcc9e2149354/agent/context_breakdown.py) separa `provider_usage` de `local_estimate`/`provider_usage_plus_estimate` y afirma que throughput de vida no sustituye ocupación actual. | Admitir alerta automática solo con fuente `provider_usage`, ventana confirmada y frescura registrada; estimaciones se muestran como orientación y el gate queda `UNKNOWN`. |
 
 Para Claude Code, `prepare_claude_resume` construye un plan **sin ejecutarlo**:
@@ -87,7 +88,18 @@ Prueba de portabilidad: `_connection()` cierra explícitamente cada conexión;
 los accesos SQLite directos del test ahora usan `closing()` además de la
 transacción, porque `with sqlite3.connect(...)` por sí solo no cierra el handle.
 Una fixture elimina el directorio temporal después de operar la cola. La
-ejecución observada fue Linux/cloud; Windows aún requiere ejecución en ese SO.
+ejecución observada de la reparación fue Linux/cloud; Windows requiere repetición.
+
+Revisión Windows separada del SHA remoto `68d12e3962e2892cb853ca9df53ba0600a67aeec`:
+Python 3.12.10/SQLite 3.49.1 registró 16 PASS y 3 ERROR `WinError 32`
+al limpiar temporales en rutas de reconciliación. La causa en el código era
+`with self._connect() as conn`: el contexto de `sqlite3.Connection` confirma o
+revierte la transacción, pero **no cierra** el handle. `resolve_reconciliation`
+ahora usa `_connection()`, que cierra en `finally`; un test focal instrumenta
+el cierre tanto al rechazar como al aplicar reconciliación; otro verifica
+el cierre si falla la configuración PRAGMA antes de devolver la conexión. Esta
+reparación solo se verificó en Linux hasta que el canario Windows repita la suite
+actual de 21 casos; el resultado 16 PASS + 3 ERROR corresponde al SHA anterior.
 
 ## Snapshot de acceso y pruebas del runtime actual
 
@@ -102,11 +114,15 @@ La sesión cloud presente permite probar el harness offline, **no** un canario
 remoto de Agents API ni despertar autónomo con PC apagada.
 
 Comandos ejecutados desde este directorio: `python3 -m unittest -v
-test_sqlite_pilot.py` (19 tests PASS, incluido contexto/Claude/cleanup),
+test_sqlite_pilot.py` (21 tests PASS, incluido cierre de conexiones),
 `python3 test_gate.py` (18 casos baseline PASS) y `git diff --check`.
-El primer intento focal de 18 pruebas detectó una escritura de test sin commit
-tras corregir el cierre de conexión; se corrigió, el siguiente 18/18 pasó y
-el último delta cerró 19/19. No hay prueba en Windows ni CLI Claude real.
+El resultado Windows de 19 casos señalado arriba sigue rojo para el SHA anterior;
+no hay repetición Windows de este parche ni ejecución real de Claude CLI.
+
+El canario **offline** stdlib en directorio temporal del VPS existente es una
+prueba distinta: puede comprobar compatibilidad de SQLite, limpieza y recuperación
+sin Agents API, autenticación de modelo ni gasto API. La madre coordina esa
+repetición con el SHA publicado y la ruta autorizada; aquí no se tocó el VPS.
 
 Gate humano mínimo para un **canario real separado de sesiones nuevas**:
 aprobar arquitectura y presupuesto de Agents API self-hosted, privacidad del

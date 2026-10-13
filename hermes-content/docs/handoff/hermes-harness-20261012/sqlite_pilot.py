@@ -257,11 +257,15 @@ class SQLiteQueue:
 
     def _connect(self) -> sqlite3.Connection:
         conn = sqlite3.connect(self.database_path, timeout=10, isolation_level=None)
-        conn.row_factory = sqlite3.Row
-        conn.execute("PRAGMA foreign_keys=ON")
-        conn.execute("PRAGMA busy_timeout=10000")
-        conn.execute("PRAGMA synchronous=FULL")
-        return conn
+        try:
+            conn.row_factory = sqlite3.Row
+            conn.execute("PRAGMA foreign_keys=ON")
+            conn.execute("PRAGMA busy_timeout=10000")
+            conn.execute("PRAGMA synchronous=FULL")
+            return conn
+        except Exception:
+            conn.close()
+            raise
 
     @contextmanager
     def _connection(self):
@@ -539,7 +543,7 @@ class SQLiteQueue:
         evidence = _required_text(evidence, "evidence")
         if outcome not in ("applied", "not_applied"):
             raise ValueError("outcome must be applied or not_applied")
-        with self._connect() as conn:
+        with self._connection() as conn:
             conn.execute("BEGIN IMMEDIATE")
             row = conn.execute("SELECT * FROM tasks WHERE task_id=?", (task_id,)).fetchone()
             if row is None or row["status"] != "needs_reconcile":
