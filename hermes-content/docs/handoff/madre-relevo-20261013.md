@@ -58,6 +58,13 @@ El plan concreto está en `hermes-content/research/infra/HERMES-FUNCIONES-Y-MODE
 ## Siguiente lote QA
 El worker `/root/qa_windows_vps` tiene un lote nuevo activo, read-only, para consultar ayuda del Hermes Agent ya instalado. No repetir las 39 pruebas por entorno ni hacer inferencia. El QA Windows/VPS PASS de arriba se mantiene como evidencia del SHA `4ec92e3b0dc2dd2eda3edbe7d6cf1c4e097eb163`.
 
+## Preflight instalado Nous Hermes — delta read-only
+Preflight CLI de `E:/onia-wt/hermes-installed-preflight-20261013.md` (SHA-256 `514DC97EB11F3297913E0AE6C561B77F1645C38632D27A80EF3C5E21FCAFE0AD`): `/usr/local/bin/hermes` lanza `/usr/local/lib/hermes-agent/venv/bin/hermes`; versión v0.21.0, metadata `693641aa`, Python 3.11.16. Ayuda/parser expone `oneshot`, `model`, `toolsets`, `max-turns`, `run-budget` (segundos) y `safe-mode`; no declara `no-tools`, `max-tokens` ni `dry-run`. Esa ausencia no demuestra que otros mecanismos sean imposibles; están sin verificar. No se hizo llamada de modelo.
+
+El follow-up observó `hermes-gateway.service`, PID 511021. `/proc/<pid>/exe` y la resolución del venv CLI apuntan al mismo binario Python 3.11.16 de `.hermes-runtime`, generación `c68bd454`; no es evidencia de dos instalaciones/runtimes distintos. El build Hermes y flags del gateway siguen `UNKNOWN`; no extrapolar controles CLI→gateway. Python 3.12.3 corresponde a la ejecución stdlib del harness QA, no al runtime del modelo. `7166071fca` es inventario histórico, no build probado del gateway actual. Delta corregido: `E:/onia-wt/hermes-installed-preflight-gateway-delta-20261013.md`, SHA-256 `4885DFD6E78AC2FE92A48A762AB8D3C6C3510BF291BD53B01A588867326D3E00`.
+
+El canario Nous/LLM sigue en hold por falta de enforcement verificado en el runtime elegido, además de aprobación/costo. Canario #1 de Codex PC conserva su estado **PENDING** de aprobación; adapters, Claude auth y continuidad con PC apagada también siguen pendientes. La ayuda instalada no resuelve esos gates.
+
 ## Otros límites de evidencia
 - SSH al VPS sí quedó probado; la auditoría no prueba inferencia, runner Codex ni Cloud scheduler.
 - El núcleo offline del harness pasó 39/39 en Windows y 39/39 en VPS para el SHA `4ec92e3b0dc2dd2eda3edbe7d6cf1c4e097eb163`; esto no declara readiness operativa. Siguen pendientes LLM, adapters, scheduler remoto y continuidad con la PC apagada.
