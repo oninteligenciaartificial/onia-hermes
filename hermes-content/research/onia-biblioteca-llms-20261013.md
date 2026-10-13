@@ -34,7 +34,7 @@ Consultadas originales mediante web.open 2026-10-13. Las URLs presentes no prueb
 ## Libro 1 — contenido y aplicación
 Compaction del contexto es distinta de estado operacional; la salida del endpoint compact standalone se conserva como ventana siguiente. Cuotas: Retry-After válido; de faltar, backoff con jitter, límites de intentos/tiempo y evitar retries multiplicados. Errores billing/cuota requieren intervención.
 Anthropic sustenta recuperación por demanda y memoria de notas; no demuestra ahorro ONIA.
-Política recibida: madre/mecánica Luna low, código Sol 6.1 medium, QA Sol low, Astra sólo escalación justificada. No inferir modelo servido.
+Política recibida: madre/mecánica Luna low, código Sol 6.1 medium, QA Sol low, Astra sólo con excepción explícita de Sergio Urcullo y evidencia de fallo o riesgo; sin escalación automática. No inferir modelo servido.
 Medir entrada actual, salida, cache, latencia, calidad/costo por tarea. Tokens acumulados no son ocupación actual.
 Ejercicio pendiente: lote reproducible, modelos autorizados, QA independiente y costos observados.
 
@@ -48,7 +48,7 @@ VPS de ONIAPlatform conserva aislamiento de producto; no transferir bóveda/cook
 ## Libro 3 — contenido y aplicación
 Anthropic: inicialización, progreso incremental, notas/Git entre sesiones; compactación sola insuficiente.
 Hermes Agent NousResearch tiene memoria/skills y seguridad; no confundir agente con modelos Hermes ni con repo ONIA Hermes.
-Relevo propuesto: objetivo, dueño, estado, evidencia URL/commit, fecha, intentos/causa, aprendizaje observado versus hipótesis, next_action y aprobación específica. Contrato + resumen vigente + archivos bajo demanda.
+Política de relevo vigente: objetivo, dueño, estado, evidencia URL/commit, fecha, intentos/causa, aprendizaje observado versus hipótesis, next_action y aprobación específica. Contrato + resumen vigente + archivos bajo demanda.
 Madre delega/revisa; worker ejecuta; QA reproduce. Sesión autenticada conserva sólo alcance autorizado.
 NotebookLM sintetiza corpus; primarias/pruebas tienen prioridad. No scheduler, supervisor, verdad o memoria canónica. API Enterprise documenta gestión y pide setup/licencia; no prueba API query/chat consumer.
 Prueba pendiente: sesión nueva resuelve tarea sólo con contrato/relevo, QA compara y gate detiene acción sensible.
@@ -59,3 +59,6 @@ No instalaciones, compras, deploy, nuevas cuentas, traslado de secretos ni cambi
 
 ## Limitación local
 create_worktree operación 238db8db-4f9b-4c53-894a-3e456c270821 falló al copiar media: No space left on device. No se borró ni reparó espacio. Ficha preservada por GitHub App en rama codex/biblioteca-llms-20261013; main local dirty intacto.
+
+## QA de la síntesis NotebookLM
+Respuesta citada generada desde 13 primarias. No aprobada como autoridad: atribuye recuperación just-in-time de Hermes Agent a una cita de Anthropic y mezcla complejidad de atención O(n²) con causalidad de context rot. Conservada sólo en chat del cuaderno; no se promovió a fuente/libro. Los tres libros manuales conservan claims delimitados y propuestas identificadas. Las capacidades de ejecución cloud y autonomía no se probaron.
