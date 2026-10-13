@@ -62,3 +62,8 @@ create_worktree operación 238db8db-4f9b-4c53-894a-3e456c270821 falló al copiar
 
 ## QA de la síntesis NotebookLM
 Respuesta citada generada desde 13 primarias. No aprobada como autoridad: atribuye recuperación just-in-time de Hermes Agent a una cita de Anthropic y mezcla complejidad de atención O(n²) con causalidad de context rot. Conservada sólo en chat del cuaderno; no se promovió a fuente/libro. Los tres libros manuales conservan claims delimitados y propuestas identificadas. Las capacidades de ejecución cloud y autonomía no se probaron.
+
+## IDs observados y persistencia
+IDs leídos de controles DOM de notas (sin inventar deep links): Libro 1 f7adf3a6-a8b1-4541-ac08-35df903f8c66; Libro 2 7a3d91bb-1121-4196-a462-365ee320d902; Libro 3 d5772e33-269d-4930-b266-b580eb09007d. La app no expuso enlaces independientes de notas; abrir el cuaderno y pulsar título exacto.
+Reapertura real validó cuerpos completos de los tres libros. El Libro 2 requirió guardar cuerpo otra vez después de detectar nota vacía al reabrir; corregido y comprobado. Evitar cerrar editor inmediatamente tras fill: observar cuerpo y reabrir para prueba de persistencia.
+Capturas privadas locales en carpeta visualizations de la madre: biblioteca-libro1.jpg, biblioteca-libro2.jpg y biblioteca-libro3.jpg. No se subieron imágenes de la sesión al repo.
