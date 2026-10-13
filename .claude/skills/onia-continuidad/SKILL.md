@@ -176,6 +176,15 @@ baja una cuenta servía de algo.
   un workflow todavía estaba escribiendo. Un workflow que escribe archivos tiene que dejar cada archivo completo antes
   de que termine el turno.
 
+## NotebookLM en el circuito de investigación
+
+Usar NotebookLM como espacio de síntesis de un conjunto acotado de fuentes elegidas para una pregunta concreta; no como buscador autónomo, autoridad, memoria canónica ni agente que implemente o supervise trabajo. Primero se define META, pregunta, alcance, fecha de corte y criterio de hecho. El agente de research reúne fuentes primarias y registra por qué son pertinentes; NotebookLM ayuda a compararlas y extraer hallazgos citables; un revisor comprueba cada afirmación importante contra su fuente original y señala contradicciones, límites y vacíos; el agente del carril transforma solo lo validado en una recomendación o cambio verificable. La madre delega y revisa la ficha de salida.
+
+- Mantener un notebook por tema/objetivo, con fuentes limitadas y fechadas; no mezclar proyectos ni volcar todo el repositorio.
+- No cargar secretos, credenciales, datos personales/de pacientes, información privada de clientes ni archivos con permisos dudosos. Verificar acceso y política de la cuenta antes de subir material interno.
+- NotebookLM sirve para resumir/comparar el corpus cargado. No prueba que las fuentes sean ciertas, actuales o completas, ni que una idea sea compatible con ONIA.
+- La ficha final conserva enlaces y fecha, hallazgo, evidencia original, contradicciones/límites, aplicación concreta, prueba propuesta y estado (observado, inferido, propuesto o validado). Sin acceso disponible a NotebookLM, seguir con fuentes locales/primarias; marcarlo como no utilizado y no bloquear el trabajo.
+
 ## Radar técnico y aprendizaje de ingeniería
 
 Cuando una tarea dependa de avances recientes en ingeniería, infraestructura de agentes, modelos, herramientas o prácticas de desarrollo, incluir **X (Twitter)** y **Hugging Face** en la búsqueda inicial. Son fuentes de descubrimiento y aprendizaje, no autoridad automática:
