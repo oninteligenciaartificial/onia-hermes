@@ -13,7 +13,6 @@ import os
 from pathlib import Path
 import queue as queue_module
 import re
-import signal
 import subprocess
 import threading
 import time
@@ -160,14 +159,13 @@ def run_process(plan: Plan, approval_ref: str, executable: str) -> Mapping[str, 
         raise ExperimentBlocked("exact installed CLI binary path required")
     argv = plan.argv(executable)
     job = None
+    posix_group = None
     if os.name == "nt":
         from windows_job import launch
         process, job = launch(argv, plan.cwd)
     else:
-        process = subprocess.Popen(argv, cwd=plan.cwd, stdin=subprocess.DEVNULL,
-                                   stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                                   text=True, encoding="utf-8", errors="replace",
-                                   start_new_session=True)
+        from posix_group import launch
+        process, posix_group = launch(argv, plan.cwd)
     events: queue_module.Queue[str | None] = queue_module.Queue(maxsize=32)
 
     def read_stderr() -> None:
@@ -220,17 +218,23 @@ def run_process(plan: Plan, approval_ref: str, executable: str) -> Mapping[str, 
     except Exception:
         if job is not None:
             job.close()
+        if posix_group is not None:
+            posix_group.close()
         _kill_process_tree(process)
         raise
     finally:
         if job is not None:
             job.close()
+        if posix_group is not None:
+            posix_group.close()
         stdout_thread.join(timeout=1)
         stderr_thread.join(timeout=2)
         # stderr is intentionally neither returned nor persisted; it can contain private data.
 
 
 def _kill_process_tree(process: subprocess.Popen[str]) -> None:
+    # POSIX descendants are owned by PosixGroup, whose keeper keeps PGID live.
+    # This helper only deals with the exact root Popen handle on Windows.
     if process.poll() is not None:
         # PID may have been recycled. A surviving descendant is UNKNOWN here;
         # never direct taskkill at an exited root PID.
@@ -240,10 +244,7 @@ def _kill_process_tree(process: subprocess.Popen[str]) -> None:
         # exact root process handle, so this fallback never targets a reused PID.
         process.kill()
     else:
-        try:
-            os.killpg(process.pid, signal.SIGKILL)
-        except ProcessLookupError:
-            pass
+        process.kill()
     try:
         process.wait(timeout=2)
     except subprocess.TimeoutExpired:

@@ -20,8 +20,15 @@ from sqlite_pilot import SQLiteQueue, TaskSpec
 THREAD = "01a136d9-7153-7b52-ab7b-be24d33112cb"
 
 
-def assert_windows_process_terminated(testcase, pid: int):
+def assert_process_terminated(testcase, pid: int):
     if os.name != "nt":
+        deadline = time.monotonic() + 2
+        while time.monotonic() < deadline:
+            stat = Path(f"/proc/{pid}/stat")
+            if not stat.exists() or stat.read_text().split(") ", 1)[1][0] == "Z":
+                return
+            time.sleep(0.05)
+        testcase.fail(f"owned child {pid} remained active after cancellation")
         return
     import ctypes
     from ctypes import wintypes
@@ -138,7 +145,7 @@ class CodexCliExperimentalTests(unittest.TestCase):
             self._run_fake_script(source, timeout=1)
         self.assertLess(time.monotonic() - start, 4)
         self.assertTrue(pid_file.exists())
-        assert_windows_process_terminated(self, int(pid_file.read_text()))
+        assert_process_terminated(self, int(pid_file.read_text()))
 
     def test_root_exit_with_descendant_holding_pipe_fails_promptly(self):
         pid_file = Path(self.tmp.name) / "early-exit-child.pid"
@@ -153,7 +160,7 @@ class CodexCliExperimentalTests(unittest.TestCase):
             self._run_fake_script(source, timeout=3)
         self.assertLess(time.monotonic() - start, 2)
         self.assertTrue(pid_file.exists())
-        assert_windows_process_terminated(self, int(pid_file.read_text()))
+        assert_process_terminated(self, int(pid_file.read_text()))
 
     def test_tool_event_cancels_canary_without_terminating_unrelated_process(self):
         pid_file = Path(self.tmp.name) / "tool-child.pid"
@@ -174,7 +181,7 @@ class CodexCliExperimentalTests(unittest.TestCase):
                 self._run_fake_script(source, timeout=3)
             self.assertLess(time.monotonic() - start, 2)
             self.assertTrue(pid_file.exists())
-            assert_windows_process_terminated(self, int(pid_file.read_text()))
+            assert_process_terminated(self, int(pid_file.read_text()))
             self.assertEqual(witness.wait(timeout=2), 0)
         finally:
             if witness.poll() is None:
@@ -184,6 +191,20 @@ class CodexCliExperimentalTests(unittest.TestCase):
     def test_launch_needs_specific_reference_even_with_synthetic_plan(self):
         with self.assertRaises(ExperimentBlocked):
             run_process(self.plan, "", sys.executable)
+
+    def test_success_closes_private_group_and_own_descendant(self):
+        pid_file = Path(self.tmp.name) / "success-child.pid"
+        source = (
+            "import subprocess,sys,tempfile\n"
+            "child=subprocess.Popen([sys.executable,'-c','import time;time.sleep(30)'], "
+            "stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, cwd=tempfile.gettempdir())\n"
+            f"open({str(pid_file)!r},'w').write(str(child.pid))\n"
+            f"sys.stdout.writelines({success_lines()!r})\n"
+            "sys.stdout.flush()\n"
+        )
+        result = self._run_fake_script(source, timeout=3)
+        self.assertTrue(result["answer_exact_match"])
+        assert_process_terminated(self, int(pid_file.read_text()))
 
     def test_exited_root_pid_is_never_sent_to_taskkill(self):
         root = subprocess.Popen((sys.executable, "-c", "pass"),
