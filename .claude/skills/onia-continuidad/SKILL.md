@@ -185,6 +185,15 @@ Usar NotebookLM como espacio de síntesis de un conjunto acotado de fuentes eleg
 - NotebookLM sirve para resumir/comparar el corpus cargado. No prueba que las fuentes sean ciertas, actuales o completas, ni que una idea sea compatible con ONIA.
 - La ficha final conserva enlaces y fecha, hallazgo, evidencia original, contradicciones/límites, aplicación concreta, prueba propuesta y estado (observado, inferido, propuesto o validado). Sin acceso disponible a NotebookLM, seguir con fuentes locales/primarias; marcarlo como no utilizado y no bloquear el trabajo.
 
+### Piloto comprobado — 12-oct-2026
+
+- [ONIA · Ingeniería de agentes · Piloto](https://notebook.google.com/notebook/4976c6a9-2609-4f63-98db-514149c85f82): tres fuentes públicas realmente cargadas, una consulta sobre espera activa, duplicación y contexto.
+- Corpus primario: [Hugging Face, memoria de smolagents](https://huggingface.co/docs/smolagents/tutorials/memory), [Temporal, Workflow Execution](https://docs.temporal.io/workflow-execution) y [LangGraph, persistencia](https://docs.langchain.com/oss/python/langgraph/persistence). X no produjo publicación original verificable.
+- Cita 15 de Hugging Face abierta en el cuaderno y cotejada con el original: callbacks permiten retirar imágenes antiguas para ahorrar tokens; el ejemplo conserva las dos iteraciones recientes, no únicamente la última.
+- La síntesis llamó determinista a UUIDv7 y produjo código inválido (`.steps.observations_images`, índices `[20]`/`[21]`); no ejecutar ese código ni regenerar la clave en cada reintento.
+- Aprendizaje: comprobar síntesis contra originales y ejecutar código solo con API, contratos y tests correctos; un checkpoint no demuestra deduplicación de efectos externos.
+- Aplicación propuesta: estado duradero y reanudación por eventos, clave estable por operación y contexto multimodal acotado. El piloto valida investigación/síntesis; no integración cloud, ejecución 24h ni garantía exactly-once.
+
 ## Radar técnico y aprendizaje de ingeniería
 
 Cuando una tarea dependa de avances recientes en ingeniería, infraestructura de agentes, modelos, herramientas o prácticas de desarrollo, incluir **X (Twitter)** y **Hugging Face** en la búsqueda inicial. Son fuentes de descubrimiento y aprendizaje, no autoridad automática:
