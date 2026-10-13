@@ -11,7 +11,7 @@ y que yo solo haga comunidad, asesorías y grabe». Método: `fetch-video.mjs` +
 
 | Post | Autor | Formato |
 |---|---|---|
-| `DeFS0Fes8yu` | @doninas, «AI LEVELS · EP 01» | animación de un panel de control, sin voz |
+| `DeFS0Fes8yu` | @donimas, «AI LEVELS · EP 01» | animación de un panel de control, sin voz |
 | `DbyVzPWRpWl` | Marco Machado (@realmacomachado) | cámara frontal con capturas de pantalla |
 | `DeHP8DPsimI` | «Claude Motion Tips» | cámara frontal con cortes muy rápidos |
 | `DdmTyEVAPMb` | Replace.so | carrusel de 8 láminas |
@@ -21,9 +21,9 @@ y que yo solo haga comunidad, asesorías y grabe». Método: `fetch-video.mjs` +
 
 - **Mensaje:** la misma tanda de 6 tareas, resuelta de cuatro formas, cuesta muy distinto según cómo se reparte entre modelos.
   - **Junior:** todo con el modelo más caro y esfuerzo máximo. Unos USD 5,1 por tarea resuelta.
-  - **Middle:** el modelo se elige a mano y siempre con esfuerzo alto. Unos USD 0,66.
+  - **Middle:** el modelo se elige a mano y siempre con esfuerzo alto. USD 0,75 según caption comprobado el 12-oct.
   - **Senior:** primero el más barato, después se verifica y se sube de modelo solo si falla. Unos USD 0,45.
-  - **GOAT:** un router elige modelo y esfuerzo, y la verificación es liviana o completa según el riesgo. Unos USD 0,32: 15 veces más barato.
+  - **GOAT:** un router elige modelo y esfuerzo, y la verificación es liviana o completa según el riesgo. USD 0,32 en una simulación del creador; no demuestra ahorro real de ONIA ni es benchmark.
 - **Tema:** la plata no la ahorra el modelo barato, la ahorra **verificar y escalar solo ante una falla**. El gancho es el costo por tarea en grande desde el primer segundo.
 - **Edición:**
   - Todo es una interfaz animada (panel oscuro con cuadrícula), sin cámara ni voz.
@@ -34,6 +34,34 @@ y que yo solo haga comunidad, asesorías y grabe». Método: `fetch-video.mjs` +
 - **Qué aplicamos:**
   - **Orquestación:** el router de la madre. Arranca por el modelo más barato que pueda cumplir, verifica con algo que no opine (tests, un `grep`, mirar la pantalla) y escala con la prueba del fallo. La verificación es FUERTE solo para producción, plata, el VPS o el autosync. Va en la skill `onia-sesion-madre` y en `AI_MODEL_ROUTING_2026.md`.
   - **Contenido:** el formato «niveles con costo por tarea» enseña de verdad y se puede hacer con HyperFrames, sin que Sergio Urcullo grabe pantallas.
+
+### Revalidación del post DeFS0Fes8yu · 2026-10-12
+
+Recepción original: 8-oct; reenvío: 12-oct. Fuente: https://www.instagram.com/p/DeFS0Fes8yu/ · Autor observado: donimas. Publicación visible: 4 de octubre; caption editado. Encargo: aprendizaje de harness/ingeniería de agentes.
+META: distinguir evidencia real de simulación y preservar una regla reutilizable. PRUEBA DE HECHO: caption completo en navegador autorizado y contraste con dos documentos primarios. PARADA: no instalar, autenticar de nuevo, gastar ni extraer sesiones para ampliar cobertura.
+
+**Cobertura de ESTA revalidación:** caption íntegro mediante árbol accesible; un fotograma del estado SENIOR; duración DOM 30,533 s. Audio 0% analizado, timeline completo no revisado. La descarga del video por la herramienta documentada falló porque este navegador no soporta blob downloads. La cobertura Gemini histórica del 8-oct se conserva como antecedente y no se presenta como prueba repetida hoy.
+
+**Declarado por el creador:** seis tareas simuladas y precios reales; J $5,10, M $0,75, S $0,45, G $0,32 por tarea resuelta. Declara explícitamente que no es benchmark. No publica en el caption conjunto reproducible, tokens por tarea, pruebas ni cálculo completo: cifras sin reproducción independiente. Propone router modelo+effort, verificación y escalación ante fallo; una especificación clara puede permitir effort menor.
+
+| Dimensión | Hallazgo y evidencia | Estado / regla y límite |
+|---|---|---|
+| Patrones | Caption: escoger modelo+effort, comprobar y escalar | Propuesta compatible con routing vigente; un ejemplo simulado no prueba superioridad |
+| Colores/paleta | Frame SENIOR: fondo oscuro y acento cian | Observado aproximado; no trasladar branding al carril técnico |
+| Tipografía | Frame: título grande y etiquetas pequeñas | Observado; familia exacta no verificada |
+| Edición/montaje | Video de 30,533 s según DOM | Parcial; no extraer ritmo/cortes ni audio del frame |
+| Estilo visual | Panel con columnas y métricas | Observado; apariencia no prueba un router funcionando |
+| Estructura | Caption: comparación J/M/S/G → explicación → CTA | Observado en texto; no supone timeline audiovisual |
+| Guion/gancho | Caption inicia con recurso ROUTER y costes | Observado en texto; locución no analizada |
+| Idioma/tono | Inglés didáctico con categorías de experiencia | Observado; mantener convenciones propias de ONIA |
+| UI/UX | Panel animado de referencia | No observable como producto interactivo; no inferir usabilidad |
+| Frontend | Sin código accesible del panel | No observable; no atribuir stack |
+| Backend/arquitectura | Modelo+effort configurables en Claude Code | Verificado en docs primarias; no prueba router autónomo ni ahorro |
+| Negocio/oferta | CTA comentar ROUTER para recibir guía | Declarado; no comentar/DM ni adoptar cifras como resultados propios |
+
+**Contraste primario:** [model-config](https://code.claude.com/docs/en/model-config), Setting your model / Adjust effort level; [sub-agents](https://code.claude.com/docs/en/sub-agents), Supported frontmatter fields / Choose an effort level. Confirman controles de modelo y effort; nivel con el mismo nombre no representa presupuesto igual entre modelos y low encaja en intercambios breves revisados. Docs sugieren medium para ingeniería de alcance claro en Sonnet/Opus actuales. No verifican los dólares del post.
+
+**Aplicación específica propuesta para ONIA:** en próxima tarea técnica ya autorizada, registrar criterio de aceptación, modelo/effort configurado y observado si disponible, tokens/coste si realmente accesibles, reintentos y resultado QA; comparar coste por tarea aceptada, incluyendo router y fallos. Conservar routing decidido por Sergio Urcullo; no sustituirlo por low universal ni escalar por permiso/cuota. Registro incorporado en onia-sesion-madre; prueba nueva de uso pendiente de tarea real, sin lanzar un benchmark ni trabajo artificial.
 
 ## 2. Quiz funnel para conseguir prospectos (`DbyVzPWRpWl`)
 
