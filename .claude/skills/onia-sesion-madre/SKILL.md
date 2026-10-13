@@ -5,6 +5,28 @@ description: Invocar cuando una sesión de Onia tiene que ordenar, avisar o pedi
 
 # Sesión MADRE — ordenar a todas por mensaje
 
+## Modelo vigente de madres y aprendizaje técnico (2026-10-13)
+
+Esta skill conserva mediciones históricas de Claude; sus nombres, IDs, modelos y cadencias no acreditan el estado actual de Codex. Verificar las sesiones vivas y la automatización activa antes de actuar. El reparto vigente de Sergio Urcullo es **dos madres locales separadas por área** (Desarrollo/Plataforma e infraestructura; Marketing/contenido/ventas) y sesiones ejecutoras en Codex Cloud cuando la tarea sea compatible. Cada madre delega, revisa evidencia de su carril y entrega un resumen corto; no toma para sí el trabajo del ejecutor ni mezcla los carriles. Los límites y modelos se leen de la instrucción operativa actual y no se copian de tablas históricas de esta skill.
+
+Para aprender ingeniería, arquitectura e infraestructura de agentes, incluir X (Twitter) y Hugging Face como radar de descubrimiento. No aceptar publicaciones, modelos ni repositorios como fiables por popularidad: seguir sus fuentes primarias, revisar licencias y mantenimiento, reproducir una prueba pequeña y evaluar seguridad, costo e integración. El ejecutor deja una ficha breve con fuente, fecha, evidencia, límites y aplicación a ONIA; la madre valida que la evidencia sostenga la conclusión y que el aprendizaje se guarde en la skill del carril. Una lectura o enlace no se reporta como aprendizaje aplicado hasta que una tarea autorizada lo pruebe.
+
+### Reparto y contexto mínimo por lote (orden vigente)
+
+Madre y mecánica: Luna low; código: Sol 6.1 medium; QA: Sol low; máximo un worker y un QA por lote. Astra solo tras escalación justificada con fallo/evidencia, nunca automática. Leer CODEX.md y la última orden de Sergio antes de aplicar modelos o límites. El contrato del worker lleva meta, rutas/diff pertinentes, prueba y parada; QA recibe el diff, resultados y criterio de aceptación. La madre conserva decisiones, IDs y enlaces al resultado, sin repetir transcripts ni instrucciones extensas. Definir el presupuesto por información necesaria y ampliar solo ante una carencia concreta. Ante cuota insuficiente, preservar estado y siguiente acción, terminar el lote seguro y no abrir otros ni hacer polling vacío; respetar el gate vigente.
+
+### Caso comprobado: contexto y harness (2026-10-13)
+
+- En el [cuaderno piloto ONIA](https://notebook.google.com/notebook/4976c6a9-2609-4f63-98db-514149c85f82) se añadieron dos artículos primarios al corpus HF/Temporal/LangGraph.
+- Cita 7 del cuaderno abierta y comprobación original 1: [Context engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents), sección Context retrieval: referencias ligeras y carga just-in-time permiten traer información pertinente bajo demanda.
+- Cita 27 del cuaderno abierta y comprobación original 2: [Long-running harnesses](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents), Incremental progress/Testing: trabajar una feature a la vez, dejar progreso recuperable y verificar E2E antes de declararla completa.
+- Aplicación ONIA propuesta: contrato acotado, worker incremental, QA independiente y estado durable; guardar únicamente el caso probado, error, corrección, evidencia y cuándo reutilizarlo en la skill del carril. Aprender aquí significa mejorar instrucciones/memoria, no entrenar pesos.
+- Límites: estos experimentos Claude no demuestran ahorro ni calidad del reparto Luna/Sol; superioridad multiagente sigue abierta en el artículo. Checkpoints no prueban deduplicación externa; no ejecutar código de síntesis sin API/contrato/tests. La síntesis propone archivos Claude nuevos y última imagen única: no adoptar esos detalles; reutilizar registros ONIA y cotejar la retención HF. El cuaderno no acredita cloud con PC apagada.
+
+## Mediciones Claude históricas — subordinadas a CODEX.md y la orden vigente
+
+Todo el contenido siguiente conserva antecedentes y gates históricos; no acredita modelos, sesiones, cadencias ni capacidades actuales. Ante conflicto prevalecen CODEX.md y la última instrucción directa de Sergio. No usar la historia para ampliar permisos, mover main o saltar revisión.
+
 Regla madre: `CLAUDE.md` §1 «Sesión MADRE local + carriles en la nube». Estado y tareas abiertas de la madre:
 `hermes-content/docs/handoff/madre-local.md`. Capacidades medidas: fila 3 de
 `hermes-content/docs/ONIA_CAPACIDADES_DE_LAS_SESIONES.md`.
@@ -349,10 +371,3 @@ Se trabaja en la app de Claude; Codex corre por detrás. Codex no orquesta, no a
 ## Aprendizaje aplicado en todas las sesiones (2026-10-09)
 
 El arranque de cada sesión incluye `equipo-de-agentes` y `aprender-de-todo`, además de las skills de su oficio. Link sin instrucción = aprender, no producir. La madre comprueba fuente → ficha por dimensión → skill destino → uso por una sesión, con ruta y resultado verificable. Una mención en un arranque o una ficha guardada no acredita aplicación; registrar pendiente hasta que un trabajo autorizado la use. Sin acceso al estado de la sesión, reportar esa limitación, no afirmar que todas lo cumplen.
-
-
-## Modelo vigente de madres y aprendizaje técnico (2026-10-13)
-
-Esta skill conserva mediciones históricas de Claude; sus nombres, IDs, modelos y cadencias no acreditan el estado actual de Codex. Verificar las sesiones vivas y la automatización activa antes de actuar. El reparto vigente de Sergio Urcullo es **dos madres locales separadas por área** (Desarrollo/Plataforma e infraestructura; Marketing/contenido/ventas) y sesiones ejecutoras en Codex Cloud cuando la tarea sea compatible. Cada madre delega, revisa evidencia de su carril y entrega un resumen corto; no toma para sí el trabajo del ejecutor ni mezcla los carriles. Los límites y modelos se leen de la instrucción operativa actual y no se copian de tablas históricas de esta skill.
-
-Para aprender ingeniería, arquitectura e infraestructura de agentes, incluir X (Twitter) y Hugging Face como radar de descubrimiento. No aceptar publicaciones, modelos ni repositorios como fiables por popularidad: seguir sus fuentes primarias, revisar licencias y mantenimiento, reproducir una prueba pequeña y evaluar seguridad, costo e integración. El ejecutor deja una ficha breve con fuente, fecha, evidencia, límites y aplicación a ONIA; la madre valida que la evidencia sostenga la conclusión y que el aprendizaje se guarde en la skill del carril. Una lectura o enlace no se reporta como aprendizaje aplicado hasta que una tarea autorizada lo pruebe.
