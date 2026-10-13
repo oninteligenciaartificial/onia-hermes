@@ -1882,18 +1882,20 @@
       "name": "K4 Kling O1 Image",
       "job_id": "dad464de-75a8-45f5-b799-8d91e5a63d1d",
       "source": "Fuente original Higgsfield documentada por README original",
-      "bytes": null,
-      "sha256_measured": null,
+      "bytes": 4925870,
+      "sha256_measured": "2a2e940147431146041d8ace6942a35a600ed91986f3030840751f33e8127200",
       "status": "bloqueado",
-      "block": "PNG ignorado en Git y no materializado por este lote; modelo/identidad no regenerar. Fuente exacta job, recuperar con conexión autorizada del sustituto"
+      "block": "Recuperado exacto12-oct; exportación PNG interrumpida, entorno offline13-oct; ver original_png_recovery",
+      "origin_scope": "Dependencia externa, no pérdida del lote Work 11-oct"
     },
     {
       "name": "R3_casi_frontal.png",
       "origin_documented": "videos/lucia-g4-v2/assets/refs-orig/R3_casi_frontal.png",
-      "bytes": null,
-      "sha256_measured": null,
+      "bytes": 5592844,
+      "sha256_measured": "0dc08193977ee2a1a0b7a6564df83f6b45cdb8c8f2495afc693d5c5d050bf756",
       "status": "bloqueado",
-      "block": "Original ignorado en Git/no materializado; usar entrega renderizada existente, no reconstruir cara"
+      "block": "Recuperado exacto12-oct; exportación PNG interrumpida, entorno offline13-oct; ver original_png_recovery",
+      "origin_scope": "Dependencia externa, no pérdida del lote Work 11-oct"
     }
   ],
   "agents": [
@@ -1958,5 +1960,54 @@
       "id": "libfile_10a86eaed0608191ba46c201a3800817",
       "path": "/HANDOFF-Lucia-2026-10-11.txt"
     }
-  ]
+  ],
+  "original_png_recovery": {
+    "version": "2026-10-13 checkpoint correction",
+    "origin_scope": "Los PNG originales nunca estuvieron en el lote Work del 11-oct: eran dependencias externas de Claude; no son pérdida de artefactos de ese lote. Se descargaron exactos por fuentes autorizadas el 12-oct después del primer relevo.",
+    "files": [
+      {
+        "name": "K4-original.png",
+        "origin": "/workspace/scratch/6dfdcd54b0f6/K4-original.png",
+        "bytes": 4925870,
+        "sha256_measured": "2a2e940147431146041d8ace6942a35a600ed91986f3030840751f33e8127200",
+        "git_blob_computed": "ea3cff05404c7ca380c8766029dc115e25dffddd",
+        "width": 1536,
+        "height": 2720,
+        "source": {
+          "connector": "Higgsfield job_display rawUrl",
+          "job_id": "dad464de-75a8-45f5-b799-8d91e5a63d1d",
+          "domain": "d8j0ntlcm91z4.cloudfront.net"
+        },
+        "format": "PNG original, sin conversion ni generacion",
+        "sha256_matches_canonical_plan": true,
+        "status": "bloqueado",
+        "remote_blob_check": "GitHub fetch_blob 404 durante verificación posterior a interrupción; subida no confirmada",
+        "block": "Entorno Work offline: exec-server environment registry 409 Conflict environment_offline; bytes locales no accesibles para completar exportacion. No borrados; persistencia local actual no verificable."
+      },
+      {
+        "name": "R3-original.png",
+        "origin": "/workspace/scratch/6dfdcd54b0f6/R3-original.png",
+        "bytes": 5592844,
+        "sha256_measured": "0dc08193977ee2a1a0b7a6564df83f6b45cdb8c8f2495afc693d5c5d050bf756",
+        "git_blob_computed": "27f882a817239bb8f3effad3a6a8dae0d684d50e",
+        "width": 1792,
+        "height": 2400,
+        "source": {
+          "repo_path": "hermes-content/references/modelos/lucia/v4/qa/manifest-metodos-20260929.json",
+          "json_key": "R3_casi_frontal",
+          "source_commit": "3566e5d5208cf4a7bcf20e743469c6088944674c",
+          "media_id": "d7d6d36a-1358-40b4-b1b3-d98c1ac15135",
+          "domain": "d2ol7oe51mr4n9.cloudfront.net"
+        },
+        "format": "PNG original, sin conversion ni generacion",
+        "sha256_matches_canonical_plan": true,
+        "status": "bloqueado",
+        "remote_blob_check": "GitHub fetch_blob 404 durante verificación posterior a interrupción; subida no confirmada",
+        "block": "Entorno Work offline: exec-server environment registry 409 Conflict environment_offline; bytes locales no accesibles para completar exportacion. No borrados; persistencia local actual no verificable."
+      }
+    ],
+    "canonical_plan": "videos/lucia-viernes-copia-v2/plan.json @3566e5d5208cf4a7bcf20e743469c6088944674c",
+    "next": "Reconectar entorno de origen y subir bytes ya recuperados; alternativa de relevo nativo: recuperar PNG exactos desde las fuentes indicadas una vez habilitados dominios. No sustituir por JPG redimensionado ni regenerar. No reintentar Drive.",
+    "native_report": "Madre comunica Git y master recuperados; no comprobado personalmente desde su sesión."
+  }
 }
