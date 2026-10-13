@@ -9,9 +9,11 @@ from __future__ import annotations
 from dataclasses import dataclass
 import hashlib
 import json
+import os
 from pathlib import Path
 import re
 import sqlite3
+import stat
 from contextlib import contextmanager
 from typing import Any, Mapping, Protocol
 
@@ -112,8 +114,7 @@ class HandoffSpec:
     cursor: str
     model_configured: str
     model_observed: str
-    context_used: int | None = None
-    context_window: int | None = None
+    context_snapshot: ContextSnapshot | None = None
     context_reserve: int | None = None
 
 
@@ -132,6 +133,53 @@ class ExternalDispatchGate:
     cost_cap_ref: str | None
     adapter_verified: bool
     runtime_approved: bool
+
+
+@dataclass(frozen=True)
+class ContextSnapshot:
+    """Provider active-context reading; cumulative tokens are recorded separately."""
+
+    source: str
+    observed_at_epoch: int
+    model: str
+    active_used: int
+    effective_window: int
+    cumulative_tokens: int | None = None
+
+
+@dataclass(frozen=True)
+class ClaudeResumePlan:
+    """Offline metadata only; the argv is never executed by this module."""
+
+    session_id: str
+    transcript_path: str | None
+    resume_argv: tuple[str, ...]
+
+
+def prepare_claude_resume(
+    session_id: str, transcript_path: str | Path | None = None,
+    private_root: str | Path | None = None,
+) -> ClaudeResumePlan:
+    """Build a non-executing plan; retain transcript path only under a private root."""
+    if not isinstance(session_id, str) or not re.fullmatch(r"[A-Za-z0-9_-]{1,128}", session_id):
+        raise ValueError("invalid Claude session_id")
+    safe_path = None
+    if transcript_path is not None:
+        if os.name == "nt":
+            raise ValueError("transcript path privacy is unverified on Windows")
+        if private_root is None:
+            raise ValueError("private_root required for transcript path")
+        root = Path(private_root).resolve(strict=True)
+        path = Path(transcript_path).resolve(strict=True)
+        if not root.is_dir() or not path.is_file() or not path.is_relative_to(root):
+            raise ValueError("transcript path is outside private root")
+        if (
+            stat.S_IMODE(root.stat().st_mode) & 0o077
+            or stat.S_IMODE(path.stat().st_mode) & 0o077
+        ):
+            raise ValueError("transcript path permissions are not private")
+        safe_path = str(path)
+    return ClaudeResumePlan(session_id, safe_path, ("claude", "--resume", session_id))
 
 
 def _canonical(value: Mapping[str, Any]) -> str:
@@ -165,6 +213,32 @@ def context_rotation_decision(
         raise ValueError("invalid active context measurements")
     target = min(500_000, window)
     return "alert_review" if used + reserve >= target else "continue"
+
+
+def evaluate_context_snapshot(
+    snapshot: ContextSnapshot | None, reserve: int | None, now: int,
+    max_age_seconds: int, expected_model: str,
+) -> str:
+    """Require a fresh provider reading, named model and capacity before alerting."""
+    if snapshot is None or reserve is None:
+        return "UNKNOWN"
+    if type(now) is not int or type(max_age_seconds) is not int or max_age_seconds < 0:
+        raise ValueError("invalid context freshness policy")
+    if (
+        snapshot.source != "provider_usage"
+        or not isinstance(snapshot.model, str) or not snapshot.model.strip()
+        or snapshot.model.upper() == "UNKNOWN"
+        or not isinstance(expected_model, str)
+        or expected_model.upper() == "UNKNOWN"
+        or snapshot.model != expected_model
+        or type(snapshot.observed_at_epoch) is not int
+        or snapshot.observed_at_epoch > now
+        or now - snapshot.observed_at_epoch > max_age_seconds
+    ):
+        return "UNKNOWN"
+    return context_rotation_decision(
+        snapshot.active_used, snapshot.effective_window, reserve
+    )
 
 
 class SQLiteQueue:
@@ -538,8 +612,9 @@ class SQLiteQueue:
             for value in values:
                 if len(_required_text(value, field)) > 512:
                     raise ValueError(f"{field} entry exceeds compact handoff limit")
-        context_state = context_rotation_decision(
-            spec.context_used, spec.context_window, spec.context_reserve
+        context_state = evaluate_context_snapshot(
+            spec.context_snapshot, spec.context_reserve, now, max_age_seconds=300,
+            expected_model=spec.model_observed,
         )
         with self._connection() as conn:
             conn.execute("BEGIN IMMEDIATE")
@@ -563,8 +638,15 @@ class SQLiteQueue:
                 "cursor": spec.cursor, "model_configured": spec.model_configured,
                 "model_observed": spec.model_observed,
                 "context_state": context_state,
-                "context_used": spec.context_used,
-                "context_window": spec.context_window,
+                "context_snapshot": (
+                    {"source": spec.context_snapshot.source,
+                     "observed_at_epoch": spec.context_snapshot.observed_at_epoch,
+                     "model": spec.context_snapshot.model,
+                     "active_used": spec.context_snapshot.active_used,
+                     "effective_window": spec.context_snapshot.effective_window,
+                     "cumulative_tokens": spec.context_snapshot.cumulative_tokens}
+                    if spec.context_snapshot is not None else None
+                ),
                 "context_reserve": spec.context_reserve,
                 "created_at_utc_epoch": now,
             }

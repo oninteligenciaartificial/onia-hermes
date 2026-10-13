@@ -47,8 +47,12 @@ Con `U` ocupación activa y `R` reserva de trabajo restante, salida y handoff,
 para que Sergio decida en un punto seguro; no rota automáticamente. `R` se debe
 estimar y registrar para la tarea concreta; el valor de fixtures no es una
 política universal. Si falta `U`, ventana o reserva fiables, estado `UNKNOWN`
-y relevo humano en un checkpoint seguro. El piloto recibe estos valores como
-inputs simulados, no mide este runtime.
+y relevo humano en un checkpoint seguro. `ContextSnapshot` registra fuente,
+instante UTC epoch, modelo, ocupación activa y ventana efectiva; acumulado queda
+en otro campo y jamás dispara alerta. `evaluate_context_snapshot` exige fuente
+`provider_usage`, modelo idéntico al observado y una lectura fresca (máximo 300 segundos en la preparación
+de handoff offline). Esta vigencia es un parámetro de prueba, no un sondeo ni
+un límite universal. El piloto recibe inputs simulados; no mide este runtime.
 
 Fuentes primarias cotejadas para un futuro medidor:
 
@@ -59,12 +63,16 @@ Fuentes primarias cotejadas para un futuro medidor:
 | Claude Code | La [fuente oficial de hooks](https://github.com/anthropics/claude-code/blob/bf2323b3021c9d3db7a31e1e7d61068c3f704497/plugins/plugin-dev/skills/hook-development/SKILL.md) muestra `session_id`, `transcript_path` y evento `PreCompact`. | Esos campos no miden U/ventana; validar telemetría y comando de reanudación en CLI oficial instalada antes de automatizar. Claude CLI no está disponible en este runtime. |
 | Hermes Agent | [`context_breakdown.py`](https://github.com/NousResearch/hermes-agent/blob/8f817911723e3ec13e7f47fc022fdcc9e2149354/agent/context_breakdown.py) separa `provider_usage` de `local_estimate`/`provider_usage_plus_estimate` y afirma que throughput de vida no sustituye ocupación actual. | Admitir alerta automática solo con fuente `provider_usage`, ventana confirmada y frescura registrada; estimaciones se muestran como orientación y el gate queda `UNKNOWN`. |
 
-Para Claude Code se reserva un contrato privado de adapter: conservar
-`provider=claude_code`, `session_id`, un `transcript_path` **solo** si su ruta y
-permisos se verificaron dentro de almacenamiento privado, y un `resume_argv`
-validado contra la CLI oficial antes de ejecutarlo. No guardar transcript ni
-ruta absoluta privada en Git o handoff canónico. No se implementa ni se ejecuta
-el adapter en este lote. El artefacto canónico del relevo en repo contiene tarea,
+Para Claude Code, `prepare_claude_resume` construye un plan **sin ejecutarlo**:
+conserva `session_id`, propone argv `claude --resume <session_id>` y solo
+conserva `transcript_path` si la ruta existe dentro de un directorio privado,
+con permisos privados en POSIX; en Windows la ruta de transcript queda bloqueada
+hasta contar con validación de ACL. El test offline comprueba el plan y el rechazo
+de ruta externa. El comando y la sesión real requieren validación contra una
+CLI oficial instalada y autorización antes de usarse; esta runtime no tiene
+Claude CLI. No guardar transcript ni ruta absoluta privada en Git o handoff
+canónico. No existe adapter que invoque Claude en este lote.
+El artefacto canónico del relevo en repo contiene tarea,
 branch/ref/SHA, checkpoint y digest, evidencias, decisiones, bloqueos, siguiente
 acción y aceptación ligada al sucesor; el paquete SQLite representa este
 contrato offline. Su publicación/ACK remoto autenticado siguen pendientes.
@@ -74,3 +82,35 @@ un ejecutor remoto soportado para el circuito elegido, con identidad/scopes,
 privacidad, costo y prueba finita de recibo/resultado. Antes de activarlo también
 se debe aprobar instalación aislada y operación durable; ninguna prueba local
 acredita PC apagada. No usar Dots/Muse ni chats existentes como sustituto tácito.
+
+Prueba de portabilidad: `_connection()` cierra explícitamente cada conexión;
+los accesos SQLite directos del test ahora usan `closing()` además de la
+transacción, porque `with sqlite3.connect(...)` por sí solo no cierra el handle.
+Una fixture elimina el directorio temporal después de operar la cola. La
+ejecución observada fue Linux/cloud; Windows aún requiere ejecución en ese SO.
+
+## Snapshot de acceso y pruebas del runtime actual
+
+En el entorno cloud observado `ccarenv_b64_Y2NhcmVudl9jM2YzZjk3NTZkYmM4MTkxYTM3NTc0MDgwMTNiYTIzNQ`,
+`environment_status` informó fase `running`, observaciones actuales y política
+de red restringida/enforced. No hay capacidad, binding de secreto, variable de
+runtime ni outbound identity configurados para este entorno; la lista efectiva
+no incluye un host de Agents API. `codex-cli 0.159.2` existe y `codex cloud`
+ofrece tareas experimentales; no se llamó `cloud list`, `exec` ni endpoint.
+`claude`, `hermes` y `sqlite3` como CLIs no están en PATH; Python 3 sí.
+La sesión cloud presente permite probar el harness offline, **no** un canario
+remoto de Agents API ni despertar autónomo con PC apagada.
+
+Comandos ejecutados desde este directorio: `python3 -m unittest -v
+test_sqlite_pilot.py` (19 tests PASS, incluido contexto/Claude/cleanup),
+`python3 test_gate.py` (18 casos baseline PASS) y `git diff --check`.
+El primer intento focal de 18 pruebas detectó una escritura de test sin commit
+tras corregir el cierre de conexión; se corrigió, el siguiente 18/18 pasó y
+el último delta cerró 19/19. No hay prueba en Windows ni CLI Claude real.
+
+Gate humano mínimo para un **canario real separado de sesiones nuevas**:
+aprobar arquitectura y presupuesto de Agents API self-hosted, privacidad del
+input, scopes restringidos y entorno aislado con red/identidades oficiales
+configurados. Después se validaría una sola sesión nueva con receipt/outcome y
+cleanup, sin inferir acceso a los cinco hilos existentes. Mientras ese gate no
+exista, adapter y despacho permanecen deshabilitados.

@@ -1,6 +1,8 @@
 """Focused tests for the local SQLite prototype; no network or cloud worker calls."""
 from concurrent.futures import ThreadPoolExecutor
+from contextlib import closing
 import json
+import os
 from pathlib import Path
 import sqlite3
 import tempfile
@@ -10,6 +12,7 @@ import unittest
 from sqlite_pilot import (
     CheckpointInvalid,
     CloudAdapterUnavailable,
+    ContextSnapshot,
     ExternalDispatchGate,
     HandoffSpec,
     LeaseLost,
@@ -19,6 +22,8 @@ from sqlite_pilot import (
     TaskSpec,
     dispatch_effect_once,
     context_rotation_decision,
+    evaluate_context_snapshot,
+    prepare_claude_resume,
     official_codex_cloud_adapter,
 )
 
@@ -70,7 +75,7 @@ class SQLitePilotTests(unittest.TestCase):
 
     def test_concurrent_initializers_migrate_v1_schema_once(self):
         migration_db = Path(self.tmp.name) / "legacy-v1.sqlite3"
-        with sqlite3.connect(migration_db) as conn:
+        with closing(sqlite3.connect(migration_db)) as conn, conn:
             conn.execute(
                 "CREATE TABLE tasks (task_id TEXT PRIMARY KEY, worker_id TEXT NOT NULL, "
                 "status TEXT NOT NULL, created_at INTEGER NOT NULL)"
@@ -86,7 +91,7 @@ class SQLitePilotTests(unittest.TestCase):
         with ThreadPoolExecutor(max_workers=2) as pool:
             queues = list(pool.map(lambda _: initialize(), range(2)))
         self.assertEqual(len(queues), 2)
-        with sqlite3.connect(migration_db) as conn:
+        with closing(sqlite3.connect(migration_db)) as conn:
             self.assertEqual(conn.execute("PRAGMA user_version").fetchone()[0], 3)
             columns = {row[1] for row in conn.execute("PRAGMA table_info(tasks)")}
             handoff_table = conn.execute(
@@ -95,6 +100,14 @@ class SQLitePilotTests(unittest.TestCase):
         self.assertIn("ambiguous_owner_id", columns)
         self.assertIn("ambiguous_fencing_token", columns)
         self.assertIsNotNone(handoff_table)
+
+    def test_sqlite_handles_release_before_temporary_directory_cleanup(self):
+        with tempfile.TemporaryDirectory() as directory:
+            db = Path(directory) / "cleanup.sqlite3"
+            queue = SQLiteQueue(db)
+            queue.enqueue(self.spec, now=100)
+            self.assertEqual(queue.claim("hermes-worker", "owner", 101, 10).status, "claimed")
+        self.assertFalse(Path(directory).exists())
 
     def test_intake_recovery_handoff_ack_and_evidenced_completion(self):
         first = self.queue.claim("hermes-worker", "owner-a", now=101, lease_seconds=3).claim
@@ -179,6 +192,62 @@ class SQLitePilotTests(unittest.TestCase):
         self.assertEqual(context_rotation_decision(465000, 600000, 30000), "continue")
         self.assertEqual(context_rotation_decision(470000, 600000, 30000), "alert_review")
 
+    def test_context_snapshot_requires_fresh_provider_active_usage(self):
+        reading = ContextSnapshot(
+            source="provider_usage", observed_at_epoch=100, model="model-a",
+            active_used=470000, effective_window=600000, cumulative_tokens=900000,
+        )
+        self.assertEqual(evaluate_context_snapshot(reading, 30000, 101, 300, "model-a"), "alert_review")
+        self.assertEqual(evaluate_context_snapshot(reading, 30000, 101, 300, "model-b"), "UNKNOWN")
+        self.assertEqual(evaluate_context_snapshot(reading, 30000, 101, 300, "UNKNOWN"), "UNKNOWN")
+        unknown_model = ContextSnapshot(
+            source="provider_usage", observed_at_epoch=100, model="UNKNOWN",
+            active_used=100000, effective_window=600000,
+        )
+        self.assertEqual(evaluate_context_snapshot(unknown_model, 30000, 101, 300, "UNKNOWN"), "UNKNOWN")
+        self.assertEqual(evaluate_context_snapshot(reading, 30000, 401, 300, "model-a"), "UNKNOWN")
+        estimated = ContextSnapshot(
+            source="local_estimate", observed_at_epoch=100, model="model-a",
+            active_used=470000, effective_window=600000, cumulative_tokens=900000,
+        )
+        self.assertEqual(evaluate_context_snapshot(estimated, 30000, 101, 300, "model-a"), "UNKNOWN")
+        self.assertEqual(evaluate_context_snapshot(None, 30000, 101, 300, "model-a"), "UNKNOWN")
+
+    def test_handoff_rejects_context_from_a_different_model(self):
+        claim = self.queue.claim("hermes-worker", "owner-a", 101, 10).claim
+        self.queue.save_checkpoint(claim, self.checkpoint(step="review"), now=102)
+        spec = HandoffSpec(
+            successor_owner_id="owner-b", objective="review", gates=("offline",),
+            evidence_refs=("repo:qa",), next_action="accept", cursor="review",
+            model_configured="model-b", model_observed="model-b",
+            context_snapshot=ContextSnapshot(
+                "provider_usage", 102, "model-a", 100000, 600000, 900000,
+            ),
+            context_reserve=30000,
+        )
+        packet = self.queue.prepare_handoff(claim, spec, now=103)
+        self.assertEqual(packet.payload["context_state"], "UNKNOWN")
+
+    def test_claude_resume_plan_preserves_only_safe_private_metadata(self):
+        if os.name == "nt":
+            self.assertIsNone(prepare_claude_resume("session_abc-123").transcript_path)
+            with self.assertRaisesRegex(ValueError, "unverified on Windows"):
+                prepare_claude_resume("session_abc-123", "C:/temp/transcript.jsonl", "C:/temp")
+            return
+        private_root = Path(self.tmp.name) / "private"
+        private_root.mkdir(mode=0o700)
+        transcript = private_root / "session.jsonl"
+        transcript.write_text("fixture only", encoding="utf-8")
+        transcript.chmod(0o600)
+        plan = prepare_claude_resume("session_abc-123", transcript, private_root)
+        self.assertEqual(plan.resume_argv, ("claude", "--resume", "session_abc-123"))
+        self.assertEqual(plan.transcript_path, str(transcript.resolve()))
+        outside = Path(self.tmp.name) / "outside.jsonl"
+        outside.write_text("fixture only", encoding="utf-8")
+        with self.assertRaises(ValueError):
+            prepare_claude_resume("session_abc-123", outside, private_root)
+        self.assertIsNone(prepare_claude_resume("session_abc-123").transcript_path)
+
     def test_external_dispatch_fails_closed_for_missing_gates_and_adapter(self):
         claim = self.queue.claim("hermes-worker", "owner-a", now=101, lease_seconds=20).claim
         base = {
@@ -198,7 +267,7 @@ class SQLitePilotTests(unittest.TestCase):
                 gate = ExternalDispatchGate(**{**base, **missing})
                 with self.assertRaisesRegex(CloudAdapterUnavailable, expected):
                     self.queue.dispatch_external(claim, gate, now=102)
-        with sqlite3.connect(self.db) as conn:
+        with closing(sqlite3.connect(self.db)) as conn:
             state = conn.execute(
                 "SELECT status,effect_state FROM tasks WHERE task_id='task-1'"
             ).fetchone()
@@ -252,7 +321,7 @@ class SQLitePilotTests(unittest.TestCase):
         self.assertEqual(resumed.status, "claimed")
         self.assertEqual(resumed.claim.checkpoint, checkpoint)
 
-        with sqlite3.connect(self.db) as conn:
+        with closing(sqlite3.connect(self.db)) as conn, conn:
             conn.execute("UPDATE tasks SET checkpoint_digest=? WHERE task_id=?", ("0" * 64, "task-1"))
         # Release the current owner by expiry, then integrity failure blocks recovery.
         blocked = SQLiteQueue(self.db).claim("hermes-worker", "owner-c", now=116, lease_seconds=10)
