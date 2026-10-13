@@ -3,7 +3,7 @@
 ## Contrato y autoridad
 META: reemplazar la madre larga por una sesión limpia sin perder pedidos, fuentes, permisos ni trabajos. PRUEBA: sucesora lee este archivo y fuentes canónicas, identifica workers/bloqueos/modelos y devuelve ACK; después se mueve supervisión y se archiva anterior. PARADA: ninguna implementación por madre, ningún cierre cloud autónomo sin prueba; no repetir trabajos cerrados.
 
-Sergio Urcullo autorizó crear nueva sesión y archivar la anterior después de handoff. Madre anterior local: `01a12beb-7774-7c02-9931-12264158df83`. Sucesora: `thread01a1337d-3ae4-7081-b861-c19637fdd9e8` (Luna low). Estado de relevo: **ACK pendiente; sucesora no ha demostrado lectura ni propiedad única. Antigua no archivada**. El historial no se copia entero ni se hace fork. Este archivo es el paquete compacto de transición, no reemplaza los registros canónicos.
+Sergio Urcullo autorizó crear nueva sesión y archivar la anterior después de handoff. Madre anterior local: `01a12beb-7774-7c02-9931-12264158df83`. Sucesora: `thread01a1337d-3ae4-7081-b861-c19637fdd9e8` (Luna low). Estado de relevo: **ACK de lectura/comprensión validado** en el turno `01a1337d-3e37-7af2-bfd0-7e6b5570688f`; la sucesora leyó este paquete, CODEX.md y el delta remoto `0a036fb2d7bccf6b99d2130895f598cb069d6cee` e identificó objetivo, workers, modelos y gates de PC apagada. **Propiedad única y transferencia de heartbeat pendientes; madre anterior no archivada.** El historial no se copia entero ni se hace fork. Este archivo es el paquete compacto de transición, no reemplaza los registros canónicos.
 
 ## Objetivo de ONIA
 SaaS muy sencillo y guiado, inicialmente dentistas, arquitectura multirrubro/escalable. Agenda, pacientes, cobros, agente conversacional WhatsApp y web IA propia empaquetados; última dirección comercial: todo en un solo plan. API de pagos QR pendiente: QR manual no acredita confirmación automática. Precio, capacidades/promesas y publicación no aprobados por inferencia. Sergio vende, hace workshops/llamadas y graba; agentes desarrollan y le piden solo decisiones importantes.
@@ -50,7 +50,7 @@ Cloudflare pestaña login abierta, cuenta sin sesiónválida; pidió intervenci�
 KeePass ruta esperada no encontrada,GUI/CLIinstaladas pero proceso/puente no observable. SSHsin alias efectivo/keydefault,cloudflaredausente; no transferencia ni conexión VPS. VPS producción mantiene función, no bóveda/cookies. GoogleNotebook sesión reutilizada por navegador autorizado. Leer procedimiento seguridad-credenciales antes de nuevos accesos.
 
 ## Siguiente acción concreta
-1. ACK relevo y fuente remota; recibir resultado de subagente política session_rotation. Umbral solicitado500k contexto real, no acumulado; no simular medición ni rotación automática si API no la permite. Respetar ventana real menor.
+1. ACK de lectura/comprensión ya validado. Verificar propiedad única del carril y completar transferencia de heartbeat con cursor; conservar madre anterior sin archivar hasta que ambas estén probadas. No simular medición ni rotación automática si la API no la permite.
 2. Reasignar heartbeat con estado/cursor, verificar sucesora única y archivar anterior; NO renovar todosworkers a ciegas ni cortar lotes activos.
 3. Revisar evidencia entregada Platform y siguiente cola viable autorizada con contrato breve; independiente del harness, nobusywork.
 4. Infraworker prepara diagnóstico seguro/arquitectura corregida; falta acceso concretoCloudflare/VPS, sin serviciosprod. PruebaPCapagada solo tras gates reales.
