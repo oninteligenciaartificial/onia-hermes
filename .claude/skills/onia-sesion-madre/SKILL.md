@@ -349,3 +349,10 @@ Se trabaja en la app de Claude; Codex corre por detrás. Codex no orquesta, no a
 ## Aprendizaje aplicado en todas las sesiones (2026-10-09)
 
 El arranque de cada sesión incluye `equipo-de-agentes` y `aprender-de-todo`, además de las skills de su oficio. Link sin instrucción = aprender, no producir. La madre comprueba fuente → ficha por dimensión → skill destino → uso por una sesión, con ruta y resultado verificable. Una mención en un arranque o una ficha guardada no acredita aplicación; registrar pendiente hasta que un trabajo autorizado la use. Sin acceso al estado de la sesión, reportar esa limitación, no afirmar que todas lo cumplen.
+
+
+## Modelo vigente de madres y aprendizaje técnico (2026-10-13)
+
+Esta skill conserva mediciones históricas de Claude; sus nombres, IDs, modelos y cadencias no acreditan el estado actual de Codex. Verificar las sesiones vivas y la automatización activa antes de actuar. El reparto vigente de Sergio Urcullo es **dos madres locales separadas por área** (Desarrollo/Plataforma e infraestructura; Marketing/contenido/ventas) y sesiones ejecutoras en Codex Cloud cuando la tarea sea compatible. Cada madre delega, revisa evidencia de su carril y entrega un resumen corto; no toma para sí el trabajo del ejecutor ni mezcla los carriles. Los límites y modelos se leen de la instrucción operativa actual y no se copian de tablas históricas de esta skill.
+
+Para aprender ingeniería, arquitectura e infraestructura de agentes, incluir X (Twitter) y Hugging Face como radar de descubrimiento. No aceptar publicaciones, modelos ni repositorios como fiables por popularidad: seguir sus fuentes primarias, revisar licencias y mantenimiento, reproducir una prueba pequeña y evaluar seguridad, costo e integración. El ejecutor deja una ficha breve con fuente, fecha, evidencia, límites y aplicación a ONIA; la madre valida que la evidencia sostenga la conclusión y que el aprendizaje se guarde en la skill del carril. Una lectura o enlace no se reporta como aprendizaje aplicado hasta que una tarea autorizada lo pruebe.
