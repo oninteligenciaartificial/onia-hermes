@@ -80,6 +80,17 @@ class ClaimResult:
     reason: str | None = None
 
 
+@dataclass(frozen=True)
+class QuiescenceEvidence:
+    """Manually asserted local gate; this is not runtime or production authorization."""
+
+    previous_owner_id: str
+    previous_fencing_token: int
+    method: str
+    evidence_ref: str
+    manually_verified: bool
+
+
 def _canonical(value: Mapping[str, Any]) -> str:
     return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=True)
 
@@ -98,6 +109,7 @@ class SQLiteQueue:
     """A durable local queue with one active lease per worker and monotonic fencing."""
 
     SCHEMA_VERSION = 1
+    DB_SCHEMA_VERSION = 2
     _SHA_RE = re.compile(r"^(?:[0-9a-f]{40}|[0-9a-f]{64})$")
     _INPUT_RE = re.compile(r"^[0-9a-f]{64}$")
 
@@ -127,7 +139,7 @@ class SQLiteQueue:
         with self._connection() as conn:
             conn.execute("BEGIN IMMEDIATE")
             version = conn.execute("PRAGMA user_version").fetchone()[0]
-            if version not in (0, self.SCHEMA_VERSION):
+            if version not in (0, 1, self.DB_SCHEMA_VERSION):
                 conn.rollback()
                 raise RuntimeError(f"unsupported schema version: {version}")
             conn.executescript(
@@ -150,6 +162,8 @@ class SQLiteQueue:
                     effect_name TEXT,
                     effect_key TEXT,
                     last_evidence TEXT,
+                    ambiguous_owner_id TEXT,
+                    ambiguous_fencing_token INTEGER,
                     created_at INTEGER NOT NULL,
                     updated_at INTEGER NOT NULL
                 );
@@ -168,7 +182,12 @@ class SQLiteQueue:
                 );
                 """
             )
-            conn.execute(f"PRAGMA user_version={self.SCHEMA_VERSION}")
+            task_columns = {row[1] for row in conn.execute("PRAGMA table_info(tasks)")}
+            if "ambiguous_owner_id" not in task_columns:
+                conn.execute("ALTER TABLE tasks ADD COLUMN ambiguous_owner_id TEXT")
+            if "ambiguous_fencing_token" not in task_columns:
+                conn.execute("ALTER TABLE tasks ADD COLUMN ambiguous_fencing_token INTEGER")
+            conn.execute(f"PRAGMA user_version={self.DB_SCHEMA_VERSION}")
             conn.commit()
 
     def enqueue(self, spec: TaskSpec, now: int) -> None:
@@ -213,9 +232,10 @@ class SQLiteQueue:
                 ):
                     conn.execute(
                         "UPDATE tasks SET status='needs_reconcile',effect_state='needs_reconcile',"
-                        "last_evidence='expired lease with external outcome unresolved',updated_at=? "
+                        "last_evidence='expired lease with external outcome unresolved',"
+                        "ambiguous_owner_id=?,ambiguous_fencing_token=?,updated_at=? "
                         "WHERE task_id=?",
-                        (now, expired_task["task_id"]),
+                        (lease["owner_id"], lease["fencing_token"], now, expired_task["task_id"]),
                     )
                     conn.execute("DELETE FROM worker_leases WHERE worker_id=?", (worker_id,))
                     conn.commit()
@@ -326,14 +346,22 @@ class SQLiteQueue:
             task = self._assert_claim(conn, claim, now)
             conn.execute(
                 "UPDATE tasks SET status='needs_reconcile',effect_state='needs_reconcile',"
-                "last_evidence=?,updated_at=? WHERE task_id=?",
-                (evidence, now, task["task_id"]),
+                "last_evidence=?,ambiguous_owner_id=?,ambiguous_fencing_token=?,updated_at=? "
+                "WHERE task_id=?",
+                (evidence, claim.owner_id, claim.fencing_token, now, task["task_id"]),
             )
             conn.execute("DELETE FROM worker_leases WHERE worker_id=?", (claim.worker_id,))
             conn.commit()
 
-    def resolve_reconciliation(self, task_id: str, outcome: str, evidence: str, now: int) -> None:
-        """Explicit local/manual resolution; never invoked automatically by claim()."""
+    def resolve_reconciliation(
+        self,
+        task_id: str,
+        outcome: str,
+        evidence: str,
+        now: int,
+        quiescence: QuiescenceEvidence | None = None,
+    ) -> None:
+        """Explicit local/manual resolution; retry requires an exact prior-owner gate."""
         evidence = _required_text(evidence, "evidence")
         if outcome not in ("applied", "not_applied"):
             raise ValueError("outcome must be applied or not_applied")
@@ -343,15 +371,40 @@ class SQLiteQueue:
             if row is None or row["status"] != "needs_reconcile":
                 conn.rollback()
                 raise RuntimeError("task is not awaiting reconciliation")
+            if outcome == "not_applied":
+                allowed_methods = {
+                    "owner_terminated",
+                    "destination_fencing_verified",
+                    "destination_idempotency_verified",
+                }
+                if (
+                    quiescence is None
+                    or quiescence.manually_verified is not True
+                    or not isinstance(quiescence.method, str)
+                    or quiescence.method not in allowed_methods
+                    or not isinstance(quiescence.previous_owner_id, str)
+                    or type(quiescence.previous_fencing_token) is not int
+                    or not isinstance(quiescence.evidence_ref, str)
+                    or not quiescence.evidence_ref.strip()
+                    or quiescence.previous_owner_id != row["ambiguous_owner_id"]
+                    or quiescence.previous_fencing_token != row["ambiguous_fencing_token"]
+                ):
+                    conn.rollback()
+                    raise RuntimeError(
+                        "not_applied retry requires manually verified quiescence evidence "
+                        "for the exact previous owner and fencing token"
+                    )
             if outcome == "applied":
                 conn.execute(
-                    "UPDATE tasks SET status='done',effect_state='applied',last_evidence=?,updated_at=? "
+                    "UPDATE tasks SET status='done',effect_state='applied',last_evidence=?,"
+                    "ambiguous_owner_id=NULL,ambiguous_fencing_token=NULL,updated_at=? "
                     "WHERE task_id=?",
                     (evidence, now, task_id),
                 )
             else:
                 conn.execute(
-                    "UPDATE tasks SET status='pending',effect_state='not_started',last_evidence=?,updated_at=? "
+                    "UPDATE tasks SET status='pending',effect_state='not_started',last_evidence=?,"
+                    "ambiguous_owner_id=NULL,ambiguous_fencing_token=NULL,updated_at=? "
                     "WHERE task_id=?",
                     (evidence, now, task_id),
                 )
@@ -418,6 +471,8 @@ class SQLiteQueue:
             raise ValueError("unsupported checkpoint schema")
         if not isinstance(checkpoint["step"], (int, str)) or isinstance(checkpoint["step"], bool):
             raise ValueError("checkpoint step must be an integer or text")
+        if isinstance(checkpoint["step"], str) and not checkpoint["step"].strip():
+            raise ValueError("checkpoint step text must be non-empty")
         _required_text(checkpoint["status"], "checkpoint.status")
         if not isinstance(checkpoint["evidence"], (dict, list)):
             raise ValueError("checkpoint evidence must be an object or list")

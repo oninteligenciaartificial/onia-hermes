@@ -11,6 +11,7 @@ from sqlite_pilot import (
     CheckpointInvalid,
     CloudAdapterUnavailable,
     LeaseLost,
+    QuiescenceEvidence,
     SQLiteQueue,
     TaskSpec,
     dispatch_effect_once,
@@ -97,6 +98,13 @@ class SQLitePilotTests(unittest.TestCase):
         self.assertEqual(blocked.status, "blocked")
         self.assertEqual(blocked.reason, "checkpoint_integrity_failed")
 
+    def test_checkpoint_rejects_empty_or_whitespace_step(self):
+        claim = self.queue.claim("hermes-worker", "owner-a", now=101, lease_seconds=10).claim
+        for step in ("", "   "):
+            with self.subTest(step=repr(step)):
+                with self.assertRaisesRegex(ValueError, "step text must be non-empty"):
+                    self.queue.save_checkpoint(claim, self.checkpoint(step=step), now=102)
+
     def test_ambiguous_effect_waits_for_reconciliation_without_resend(self):
         claim = self.queue.claim("hermes-worker", "owner-a", now=101, lease_seconds=5).claim
         fake = FakeAdapter()
@@ -124,11 +132,46 @@ class SQLitePilotTests(unittest.TestCase):
         first = self.queue.claim("hermes-worker", "owner-a", now=101, lease_seconds=5).claim
         fake = FakeAdapter()
         first_result = dispatch_effect_once(self.queue, first, fake, "notify_owner", {"x": 1}, now=102)
-        self.queue.resolve_reconciliation("task-1", "not_applied", "test operator evidence", now=103)
+        with self.assertRaisesRegex(RuntimeError, "requires manually verified quiescence"):
+            self.queue.resolve_reconciliation(
+                "task-1", "not_applied", "test operator evidence", now=103
+            )
+        blocked = self.queue.claim("hermes-worker", "owner-b", now=103, lease_seconds=5)
+        self.assertEqual(blocked.status, "needs_reconcile")
+        proof = QuiescenceEvidence(
+            previous_owner_id=first.owner_id,
+            previous_fencing_token=first.fencing_token,
+            method="owner_terminated",
+            evidence_ref="offline-test:process-exit-claim-1",
+            manually_verified=True,
+        )
+        self.queue.resolve_reconciliation(
+            "task-1", "not_applied", "test operator evidence", now=103, quiescence=proof
+        )
         second = self.queue.claim("hermes-worker", "owner-b", now=104, lease_seconds=5).claim
         second_result = dispatch_effect_once(self.queue, second, fake, "notify_owner", {"x": 1}, now=105)
         self.assertNotEqual(first.fencing_token, second.fencing_token)
         self.assertEqual(first_result.effect_key, second_result.effect_key)
+
+    def test_quiescence_evidence_must_match_ambiguous_owner_and_fence(self):
+        first = self.queue.claim("hermes-worker", "owner-a", now=101, lease_seconds=5).claim
+        fake = FakeAdapter()
+        dispatch_effect_once(self.queue, first, fake, "notify_owner", {"x": 1}, now=102)
+        wrong_proof = QuiescenceEvidence(
+            previous_owner_id="different-owner",
+            previous_fencing_token=first.fencing_token,
+            method="owner_terminated",
+            evidence_ref="offline-test:some-process",
+            manually_verified=True,
+        )
+        with self.assertRaisesRegex(RuntimeError, "exact previous owner and fencing token"):
+            self.queue.resolve_reconciliation(
+                "task-1", "not_applied", "operator says not applied", now=103,
+                quiescence=wrong_proof,
+            )
+        blocked = self.queue.claim("hermes-worker", "owner-b", now=103, lease_seconds=5)
+        self.assertEqual(blocked.status, "needs_reconcile")
+        self.assertEqual(fake.calls, 1)
 
     def test_cloud_adapter_is_unavailable_without_verified_official_api(self):
         with self.assertRaises(CloudAdapterUnavailable):
