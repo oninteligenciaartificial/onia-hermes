@@ -1,25 +1,116 @@
 {
   "schema": "onia.browser-runner-diagnostic-derivative.v2",
-  "status": "offline_diagnostic_derivative_not_vps_validated",
+  "status": "complete_bundle_prepared_offline_smoke_blocked_pending_fresh_binding",
   "parent": {
     "evidence_directory": "browser-vps-authorized-result-20261014",
     "source_manifest_sha256": "eca709d70bda1576223f508ab4501111687ca0103f33bf0816e9be16dff7bf2c",
     "browser_runner_sha256": "096b6ba962aa4c4ada5cd68bc020dfe95a010086fb966b44b9aa26d7c3f45164",
     "base_image_digest": "sha256:aa81288e738725378becba5b3e06cb0f3a7f012a610e87e8d767a090ea3f740d",
-    "derived_image_id": "sha256:5b1051bc16e1214877af33b8bf453c3d9fec29479632847f534c44afba35f4f2"
+    "derived_image_id": "sha256:5b1051bc16e1214877af33b8bf453c3d9fec29479632847f534c44afba35f4f2",
+    "run_once_wrapper_sha256": "6f051e3877803a7a537f5406b9d37bde1d722ffaf73adfaa300c57c48c74744c",
+    "run_once_wrapper_parent_sha256": "6f051e3877803a7a537f5406b9d37bde1d722ffaf73adfaa300c57c48c74744c",
+    "run_once_wrapper_v2_sha256": "394a1cc74e41db792f8baa695418e1dc80a9d6e03a9eb641ca52478503128eb4"
   },
   "files": [
     {
+      "name": ".dockerignore",
+      "sha256": "4f5b9b3eb79ca31d82244958084641a5e4c0e05856bd1806d645c35fe94e3b64",
+      "size_bytes": 32
+    },
+    {
+      "name": "approval-stage.json",
+      "sha256": "35f5dc69008fb703814a3c399dcfd73710358db4dc5edd8bc270d796cda2b3a8",
+      "size_bytes": 1352
+    },
+    {
+      "name": "bind-approval.py",
+      "sha256": "c5da319d5af11c0c9e6dba874a9b5ab2c72612116b439089ecd59aa8bb54836b",
+      "size_bytes": 7772
+    },
+    {
       "name": "browser-runner.py",
-      "sha256": "efbbf5d12caf56ab20dc8c57bea50092fded494bdc9d2adc36d08a9ab968d581"
+      "sha256": "efbbf5d12caf56ab20dc8c57bea50092fded494bdc9d2adc36d08a9ab968d581",
+      "size_bytes": 30193
+    },
+    {
+      "name": "browser_probe.py",
+      "sha256": "bebf83f9f35ccd90f8a2b59cdff3806da9c44c11bc4b7e678f311b47cc491931",
+      "size_bytes": 2004
+    },
+    {
+      "name": "Dockerfile",
+      "sha256": "1c878a2f11de64ad3bd5d02255da549d465adda1f6442836c41dfcd90637c5d2",
+      "size_bytes": 649
+    },
+    {
+      "name": "install-image.sh",
+      "sha256": "043337b75715f5a52e78ff82079e2cf66cc6df73db0e3fb4ac2ee4ecf28ab03b",
+      "size_bytes": 6249
+    },
+    {
+      "name": "installation-plan.json",
+      "sha256": "7f8da675e5d77437da39cfe793cb6f622ce8a229fb6a61f14ac9ede2330d9c4d",
+      "size_bytes": 3455
+    },
+    {
+      "name": "requirements.lock",
+      "sha256": "52e857275e075417fa9e5b934f3b41d0366a55fc25187b7f40dbb3df34ed6a4e",
+      "size_bytes": 390
+    },
+    {
+      "name": "review-image-identity.sh",
+      "sha256": "b5d19694231e5d4dfaba73d55722e9b043b9b2a58c4503e52606d87e74f5665b",
+      "size_bytes": 4721
+    },
+    {
+      "name": "run-once.sh",
+      "sha256": "394a1cc74e41db792f8baa695418e1dc80a9d6e03a9eb641ca52478503128eb4",
+      "size_bytes": 2923
+    },
+    {
+      "name": "run_result.py",
+      "sha256": "a4e34564dfef4d7fde61ce690899334fa440c5115e88aeffba9eddc7804048ed",
+      "size_bytes": 3473
+    },
+    {
+      "name": "seccomp-profile-v1.62.0.json",
+      "sha256": "cc3e61cabda6bbc1e53e54d27ba4d55a9d3be829b6dd1a596f4a7b31b1cc7849",
+      "size_bytes": 12997
+    },
+    {
+      "name": "test_browser_runner_authorized.py",
+      "sha256": "348eccbfedee153749018cf092997e5f32bfa58848d7bdad9b35b45cd783e0f6",
+      "size_bytes": 8195
+    },
+    {
+      "name": "upstream-bundle-manifest.json",
+      "sha256": "f1b7b1dfa9c60330fc9d2184a2a266efbfcdfc3b4733ee0fd9dd5f372906f78b",
+      "size_bytes": 3869
+    },
+    {
+      "name": "upstream-qa-verdict.json",
+      "sha256": "422cfac1c913cc0e3f649328b036c86a452822cfbe8844d1038f07ccc14c4c11",
+      "size_bytes": 4842
     },
     {
       "name": "parent-source-manifest.json",
-      "sha256": "eca709d70bda1576223f508ab4501111687ca0103f33bf0816e9be16dff7bf2c"
+      "sha256": "eca709d70bda1576223f508ab4501111687ca0103f33bf0816e9be16dff7bf2c",
+      "size_bytes": 2291
     },
     {
       "name": "test_browser_runner_diagnostic.py",
-      "sha256": "b38d725f266f63f26e146bcf38d56f698c2a24a869f2f09a780345fec894ff37"
+      "sha256": "b38d725f266f63f26e146bcf38d56f698c2a24a869f2f09a780345fec894ff37",
+      "size_bytes": 5787
+    },
+    {
+      "name": "test_run_once_cleanup.py",
+      "sha256": "ee055af17e25e60a76ec3ae52be0ba0f795d4d88fce68eebd299f494b05b9264",
+      "size_bytes": 2579
+    },
+    {
+      "name": "diagnostic-trial-contract-20261014.md",
+      "sha256": "3361847d7559d3577e9f961ebb5f5f2ec9009b16b5424da3b2d021d8e1b9a75d",
+      "size_bytes": 6635
     }
   ],
   "behavior": {
@@ -39,5 +130,21 @@
     "preflight_only": "omitted; safe reuse would require restructuring binding and reservation flow",
     "runtime_dependencies": "Referenced frozen sibling files remain in parent evidence directory; this directory alone is not a runnable bundle",
     "diagnostics_best_effort": "Journal initialization is fail-closed before reservation; post-effect write failure suppresses success and records HOLD/needs_reconcile when possible, with no retry"
+  },
+  "bundle": {
+    "parent_manifest_entries": 16,
+    "parent_runner_replaced_by_v2": true,
+    "installed_vps_path": "UNKNOWN",
+    "bundle_transferred_to_vps": false,
+    "scope": "offline synthetic fixture only; no public navigation or Cloud claim",
+    "blockers": [
+      "temporary VPS deployment path is not established by receipts",
+      "fresh authorization binding and nonce state on VPS are unverified"
+    ],
+    "run_once_wrapper_modified_for_private_temp_cleanup": true,
+    "parent_entries_validated": 16,
+    "parent_siblings_exact_hash_count": 14,
+    "run_once_wrapper_timeout": "75s + 2s grace",
+    "run_once_wrapper_temp_cleanup": "unique private temp with EXIT cleanup trap"
   }
 }
