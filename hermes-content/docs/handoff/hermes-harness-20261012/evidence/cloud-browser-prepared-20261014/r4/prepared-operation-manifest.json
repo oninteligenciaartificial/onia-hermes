@@ -41,7 +41,7 @@
     "preparation_head": "757147c447fdae4fa0bf5c8a6f9af3acfd313a90",
     "expected_execution_head": "PENDING_POST_QA_PUBLICATION_HEAD"
   },
-  "existing_transport_checkout_head": "9d83d958f02accddf98e2ca7cb34617d165aa8e3",
+  "existing_transport_checkout_head": "2a1cc10328ea223fa73520cc3d047c00726590df",
   "existing_r3_sources": {
     "browser_check_sha256": "aac64bb8ebc82441141787838458767125b7cdb01b28d75c0bdf2b5f46201ebb",
     "supervisor_sha256": "7aa687a7c694923ed8f30f3e7172926e854f6031a809b8656dd1b17fb6940ee9"
