@@ -41,7 +41,7 @@
     "preparation_head": "757147c447fdae4fa0bf5c8a6f9af3acfd313a90",
     "expected_execution_head": "PENDING_POST_QA_PUBLICATION_HEAD"
   },
-  "existing_transport_checkout_head": "b1052ca5825e602051c6bf42e7318579899f465f",
+  "existing_transport_checkout_head": "9d83d958f02accddf98e2ca7cb34617d165aa8e3",
   "existing_r3_sources": {
     "browser_check_sha256": "aac64bb8ebc82441141787838458767125b7cdb01b28d75c0bdf2b5f46201ebb",
     "supervisor_sha256": "7aa687a7c694923ed8f30f3e7172926e854f6031a809b8656dd1b17fb6940ee9"
@@ -119,5 +119,13 @@
     "source_report_sha256": "3ab38394ba4a0e7494b0179a1526de6d5b3e87e2de40aafaae2ca877eb70eaea",
     "canonical_git_blob_sha256": "6fba965fdb4b1ad97f0715a6389afaae6efb2c451b43143d7514f8f7cb2372df",
     "normalization": "Exact copied original CRLF report; Git normalized LF, content unchanged"
+  },
+  "existing_transport_bridge_source_sha256": "53027e84fff45547affb08173bfeace35740f0816d3275e399c06823e086d940",
+  "request_event_budget": {
+    "required_fields": {
+      "max_status_events": 2,
+      "max_result_events": 1
+    },
+    "binding": "Included in new NativeWorkRequest digest and independent authority; no historical reauthorization/migration"
   }
 }
