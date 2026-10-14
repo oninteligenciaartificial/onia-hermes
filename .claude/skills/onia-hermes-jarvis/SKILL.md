@@ -105,10 +105,7 @@ description: Invocar ANTES de tocar a Hermes (el asistente de Sergio Urcullo por
    reintenta. `rollback.sh` y la marca «aplicado» se escriben al terminar la Fase A, antes de tocar
    nada: si aplicar se corta a mitad, `revertir` igual lo encuentra.
 
-**La calendarización se escribe con la credencial de la cuenta ONIA (`a3FResZHqQ32ptyt`) sobre
-`sergio.urcullo.m@gmail.com`.** Hasta el 1-oct esa credencial solo había LEÍDO su calendario; la
-escritura la prueba recién `aplicar`. Si la prueba queda a medias, el log da el id del evento
-«🧪 Prueba de Jarvis»: se borra con el conector de Google Calendar.
+**Calendario:** usar solo el puente de credenciales autorizado para la cuenta ONIA; no escribir valores de acceso ni identificadores personales en skills, logs o Git. La escritura real requiere alcance y prueba separados.
 
 Se prueba en un VPS simulado: `npm run test:jarvis-aplicar`. Esa prueba corre el `aplicar.sh` real,
 con las rutas desviadas a una carpeta temporal y dobles para crontab, la API de n8n, systemctl y el
