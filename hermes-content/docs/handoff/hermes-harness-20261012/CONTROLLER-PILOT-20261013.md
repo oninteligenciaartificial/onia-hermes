@@ -22,6 +22,17 @@ offline con subprocess mock. No se lanzó Cloud/LLM en este lote.
 PARADA: no main/merge/deploy/instalaciones; ninguna repetición de submit ante
 timeout/caída/respuesta ambigua. No equiparar task_e con UUID de chat desktop.
 
+Corrección posterior al único submit histórico `97c5f7a`: esa versión usaba
+`text=True` en Windows. Su `wire_prompt_sha256` describe UTF-8 del texto previsto,
+no bytes capturados en stdin (la capa texto puede transformar LF a CRLF).
+El recibo original y la operación permanecen intactos; la aclaración companion
+vive en `E:/onia-wt/onia-harness-native-run-20261014/wire-semantics-companion.json`.
+No repetir esa operación. El código futuro usa `input=prompt.encode('utf-8')`,
+`text=False`, decodificación UTF-8 estricta de stdout acotado y hash de stdout
+binario original. `wire_prompt_sha256` futuro corresponde a los bytes exactos
+entregados a stdin, probado con un proceso Python local inocuo que lee
+`sys.stdin.buffer`; ninguna llamada CLI/LLM/red interviene en esa prueba.
+
 `NativeReceiptBridge(queue)` usa el mismo archivo y requiere guard STOP de
 `ControllerPilot`. `reserve(claim, operation_id UUID, nonce único,
 authorization_ref, now, expected_dispatch_contract_sha)` consume la reserva y deja `needs_reconcile`, bloqueando

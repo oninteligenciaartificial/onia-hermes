@@ -18,6 +18,12 @@ from native_receipt_bridge import NativeObservation, NativeReceiptBridge
 _ID = re.compile(r"(?<![A-Za-z0-9_])task_e_[0-9a-f]{32}(?![A-Za-z0-9_])")
 
 
+def _decode_stdout(raw: bytes) -> str:
+    if not isinstance(raw, bytes) or len(raw) > 262144:
+        raise ValueError("nondefinitive bounded binary stdout")
+    return raw.decode("utf-8", errors="strict")
+
+
 @dataclass(frozen=True)
 class CloudTaskPlan:
     executable: Path
@@ -97,18 +103,22 @@ class NativeCloudCLI:
         # The public request binds its returned task to the reserved local intent.
         prompt += (f"\nONIA operation_id={operation_id}; input_sha={row['input_sha']}. "
                    "Include these identifiers and observed HEAD in your receipt.\n")
-        wire_prompt_sha256 = hashlib.sha256(prompt.encode("utf-8")).hexdigest()
+        wire_bytes = prompt.encode("utf-8")
+        wire_prompt_sha256 = hashlib.sha256(wire_bytes).hexdigest()
         try:
-            result = subprocess.run(argv, input=prompt, cwd=plan.cwd, shell=False,
-                                    capture_output=True, text=True, encoding="utf-8",
+            result = subprocess.run(argv, input=wire_bytes, cwd=plan.cwd, shell=False,
+                                    capture_output=True, text=False,
                                     timeout=plan.timeout_seconds, check=False)
         except (subprocess.TimeoutExpired, OSError):
             return {"state": "needs_reconcile", "operation_id": operation_id,
                     "remote_id": "UNKNOWN", "reason": "transport_outcome_ambiguous",
                     "wire_prompt_sha256": wire_prompt_sha256,
                     "cost": "UNKNOWN", "retry": "forbidden"}
-        stdout = result.stdout
-        ids = set(_ID.findall(stdout)) if len(stdout) <= 262144 else set()
+        try:
+            stdout = _decode_stdout(result.stdout)
+            ids = set(_ID.findall(stdout))
+        except ValueError:
+            ids = set()
         if result.returncode != 0 or len(ids) != 1:
             return {"state": "needs_reconcile", "operation_id": operation_id,
                     "remote_id": "UNKNOWN", "reason": "nondefinitive_cli_response",
@@ -116,12 +126,13 @@ class NativeCloudCLI:
                     "cost": "UNKNOWN", "retry": "forbidden"}
         remote_id = ids.pop()
         now = int(time.time())
-        evidence = "cloud_cli_stdout_sha256:" + hashlib.sha256(stdout.encode()).hexdigest()
+        evidence = "cloud_cli_stdout_sha256:" + hashlib.sha256(result.stdout).hexdigest()
         self.bridge.ingest(NativeObservation(operation_id, "cloud_cli_task", remote_id,
                            row["input_sha"], "submitted", now, evidence), now)
         return {"state": "submitted", "operation_id": operation_id,
                 "remote_id": remote_id, "cost": "UNKNOWN", "retry": "forbidden",
-                "wire_prompt_sha256": wire_prompt_sha256}
+                "wire_prompt_sha256": wire_prompt_sha256,
+                "wire_prompt_sha_semantics": "exact_utf8_stdin_bytes"}
 
     def status(self, operation_id: str, executable: Path, timeout_seconds: int = 30) -> dict:
         """Read one bounded list page; absence/READY never closes the queue."""
@@ -134,11 +145,11 @@ class NativeCloudCLI:
             raise ValueError("bounded status timeout required")
         try:
             result = subprocess.run([str(executable), "cloud", "list", "--limit", "20", "--json"],
-                                    shell=False, capture_output=True, text=True, encoding="utf-8",
+                                    shell=False, capture_output=True, text=False,
                                     timeout=timeout_seconds, check=False)
-            if result.returncode != 0 or len(result.stdout) > 262144:
+            if result.returncode != 0:
                 raise ValueError("nondefinitive status response")
-            page = json.loads(result.stdout)
+            page = json.loads(_decode_stdout(result.stdout))
             tasks = page["tasks"]
             if not isinstance(tasks, list):
                 raise ValueError("invalid task list")
@@ -156,7 +167,7 @@ class NativeCloudCLI:
             state = {"pending": "submitted", "running": "running", "ready": "unknown",
                      "failed": "failed", "cancelled": "cancelled", "unknown": "unknown"}[normalized_status]
             now = int(time.time())
-            evidence = "cloud_cli_list_sha256:" + hashlib.sha256(result.stdout.encode()).hexdigest()
+            evidence = "cloud_cli_list_sha256:" + hashlib.sha256(result.stdout).hexdigest()
             self.bridge.ingest(NativeObservation(operation_id, "cloud_cli_task", row["remote_id"],
                                row["input_sha"], state, now, evidence), now)
             return {"remote_id": row["remote_id"], "provider_status": task.get("status", "UNKNOWN"),

@@ -4,6 +4,7 @@ from dataclasses import replace
 import hashlib
 import json
 import subprocess
+import sys
 import unittest
 from unittest.mock import patch
 
@@ -35,13 +36,14 @@ class NativeTransportTests(unittest.TestCase):
     @patch("native_cloud_cli.subprocess.run")
     def test_transport_calls_exec_once_structured_and_binds_returned_id(self, run):
         self.reserve()
-        run.return_value = subprocess.CompletedProcess([], 0, "https://chatgpt.com/remote/" + REMOTE, "")
+        run.return_value = subprocess.CompletedProcess([], 0, ("https://chatgpt.com/remote/" + REMOTE).encode(), b"")
         result = self.transport.submit(OP, self.plan)
         self.assertEqual(result["remote_id"], REMOTE)
         self.assertEqual(run.call_args.args[0][-4:], ["--attempts", "1", "--branch", "codex/test"])
         self.assertFalse(run.call_args.kwargs["shell"])
-        self.assertIn(OP, run.call_args.kwargs["input"])
-        wire_prompt = run.call_args.kwargs["input"]
+        self.assertIn(OP.encode(), run.call_args.kwargs["input"])
+        self.assertFalse(run.call_args.kwargs["text"])
+        wire_prompt = run.call_args.kwargs["input"].decode("utf-8")
         checkout = json.loads(wire_prompt.split("\nONIA_CHECKOUT_CONTRACT\n", 1)[1].splitlines()[0])
         self.assertEqual(checkout, {"expected_head": self.plan.expected_remote_head,
                                     "expected_repo": "onia-hermes", "requested_ref": "codex/test"})
@@ -82,7 +84,7 @@ class NativeTransportTests(unittest.TestCase):
     def test_transport_ready_is_observation_not_success(self, run):
         self.reserve()
         self.bridge.ingest(self.observation(), 103)
-        run.return_value = subprocess.CompletedProcess([], 0, '{"tasks":[{"id":"' + REMOTE + '","status":"READY"}]}', "")
+        run.return_value = subprocess.CompletedProcess([], 0, ('{"tasks":[{"id":"' + REMOTE + '","status":"READY"}]}').encode(), b"")
         result = self.transport.status(OP, self.plan.executable)
         self.assertEqual(result["provider_status"], "READY")
         self.assertEqual(result["state"], "needs_reconcile")
@@ -91,7 +93,7 @@ class NativeTransportTests(unittest.TestCase):
     @patch("native_cloud_cli.subprocess.run")
     def test_transport_ambiguous_response_never_binds(self, run):
         self.reserve()
-        run.return_value = subprocess.CompletedProcess([], 0, "no definitive task identifier", "")
+        run.return_value = subprocess.CompletedProcess([], 0, b"no definitive task identifier", b"")
         self.assertEqual(self.transport.submit(OP, self.plan)["state"], "needs_reconcile")
         self.assertIsNone(self.bridge.read(OP)["remote_id"])
 
@@ -150,11 +152,50 @@ class NativeTransportTests(unittest.TestCase):
         self.reserve()
         self.bridge.ingest(self.observation("submitted"), 103)
         for index, (status, expected) in enumerate((("pending", "submitted"), ("running", "running"), ("ready", "unknown"))):
-            run.return_value = subprocess.CompletedProcess([], 0, '{"tasks":[{"id":"' + REMOTE + '","status":"' + status + '"}]}', "")
+            run.return_value = subprocess.CompletedProcess([], 0, ('{"tasks":[{"id":"' + REMOTE + '","status":"' + status + '"}]}').encode(), b"")
             with patch("native_cloud_cli.time.time", return_value=104 + index):
                 result = self.transport.status(OP, self.plan.executable)
             self.assertEqual(result["provider_status"], status)
             self.assertEqual(self.bridge.read(OP)["state"], expected)
-        run.return_value = subprocess.CompletedProcess([], 0, '{"tasks":[{"id":"' + REMOTE + '","status":7}]}', "")
+        run.return_value = subprocess.CompletedProcess([], 0, ('{"tasks":[{"id":"' + REMOTE + '","status":7}]}').encode(), b"")
         self.assertEqual(self.transport.status(OP, self.plan.executable)["provider_status"], "UNKNOWN")
         self.assertEqual(self.bridge.read(OP)["state"], "unknown")
+
+    def test_real_harmless_python_child_receives_exact_binary_stdin(self):
+        self.plan.public_prompt_file.write_bytes("Público\nsegunda línea\n".encode("utf-8"))
+        self.plan = replace(self.plan, prompt_sha256=hashlib.sha256(self.plan.public_prompt_file.read_bytes()).hexdigest())
+        self.reserve()
+        real_run = subprocess.run
+        observed = {}
+
+        def harmless_child(argv, **kwargs):
+            child = real_run([sys.executable, "-c",
+                              "import sys,hashlib; print(hashlib.sha256(sys.stdin.buffer.read()).hexdigest())"],
+                             input=kwargs["input"], text=kwargs["text"], shell=False,
+                             capture_output=True, timeout=5, check=True)
+            observed["received_sha256"] = child.stdout.decode("utf-8").strip()
+            observed["input"] = kwargs["input"]
+            return subprocess.CompletedProcess(argv, 0, ("https://chatgpt.com/remote/" + REMOTE).encode(), b"")
+
+        with patch("native_cloud_cli.subprocess.run", side_effect=harmless_child):
+            receipt = self.transport.submit(OP, self.plan)
+        self.assertIsInstance(observed["input"], bytes)
+        self.assertEqual(receipt["wire_prompt_sha256"], observed["received_sha256"])
+        self.assertEqual(receipt["wire_prompt_sha_semantics"], "exact_utf8_stdin_bytes")
+
+    @patch("native_cloud_cli.subprocess.run")
+    def test_invalid_utf8_stdout_retains_consumed_slot(self, run):
+        self.reserve()
+        run.return_value = subprocess.CompletedProcess([], 0, b"\xff", b"")
+        receipt = self.transport.submit(OP, self.plan)
+        self.assertEqual(receipt["state"], "needs_reconcile")
+        self.assertEqual(self.bridge.read(OP)["state"], "dispatching")
+
+    @patch("native_cloud_cli.subprocess.run")
+    def test_stdout_evidence_hashes_original_bytes_without_newline_translation(self, run):
+        self.reserve()
+        stdout = ("https://chatgpt.com/remote/" + REMOTE + "\r\n").encode()
+        run.return_value = subprocess.CompletedProcess([], 0, stdout, b"")
+        self.transport.submit(OP, self.plan)
+        evidence = self.bridge.read(OP)["observation"]["evidence_ref"]
+        self.assertEqual(evidence, "cloud_cli_stdout_sha256:" + hashlib.sha256(stdout).hexdigest())
