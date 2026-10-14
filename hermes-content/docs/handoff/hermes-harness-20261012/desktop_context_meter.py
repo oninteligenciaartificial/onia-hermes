@@ -50,10 +50,6 @@ def _file_identity(info: os.stat_result) -> tuple[int, int]:
     return (info.st_dev, info.st_ino)
 
 
-def _file_version(info: os.stat_result) -> tuple[int, int, int]:
-    return (info.st_size, info.st_mtime_ns, info.st_ctime_ns)
-
-
 def _is_reparse_or_link(info: os.stat_result) -> bool:
     return stat.S_ISLNK(info.st_mode) or bool(getattr(info, "st_file_attributes", 0) & 0x400)
 
@@ -89,7 +85,7 @@ def _validate_local_file(
 def _read_bounded_stable(
     path: Path, *, expected_identity: tuple[int, int], max_bytes: int
 ) -> tuple[bytes | None, str | None]:
-    """Read one validated file identity through one descriptor; fail closed on replacement."""
+    """Read and revalidate one bounded prefix through the same descriptor."""
     fd: int | None = None
     try:
         flags = os.O_RDONLY | getattr(os, "O_BINARY", 0)
@@ -110,10 +106,10 @@ def _read_bounded_stable(
             return None, "source_replaced_before_read"
         if before.st_size > max_bytes:
             return None, "source_too_large"
-        before_version = _file_version(before)
         chunks: list[bytes] = []
         total_read = 0
-        remaining = before.st_size
+        initial_size = before.st_size
+        remaining = initial_size
         with os.fdopen(fd, "rb", closefd=True) as stream:
             fd = None
             while remaining:
@@ -127,14 +123,51 @@ def _read_bounded_stable(
                 remaining -= len(chunk)
                 if total_read > max_bytes:
                     return None, "source_too_large"
-            after = os.fstat(stream.fileno())
-        if (
-            _is_reparse_or_link(after)
-            or not stat.S_ISREG(after.st_mode)
-            or _file_identity(after) != expected_identity
-            or _file_version(after) != before_version
-        ):
-            return None, "source_changed_during_read"
+            after_read = os.fstat(stream.fileno())
+            if (
+                _is_reparse_or_link(after_read)
+                or not stat.S_ISREG(after_read.st_mode)
+                or _file_identity(after_read) != expected_identity
+                or after_read.st_size < initial_size
+                or after_read.st_size > max_bytes
+            ):
+                return None, "source_changed_during_read"
+
+            # Appends are safe only when the exact original-size prefix remains
+            # byte-for-byte identical. Check through this descriptor, not a new
+            # pathname open, and retain no second copy of the transcript.
+            stream.seek(0)
+            prefix_digest = hashlib.sha256()
+            remaining = initial_size
+            while remaining:
+                chunk = stream.readline(min(remaining, MAX_LINE_BYTES + 1))
+                if not chunk:
+                    return None, "source_changed_during_read"
+                if len(chunk) > MAX_LINE_BYTES:
+                    return None, "line_too_large"
+                prefix_digest.update(chunk)
+                remaining -= len(chunk)
+            original_digest = hashlib.sha256()
+            for chunk in chunks:
+                original_digest.update(chunk)
+            if prefix_digest.digest() != original_digest.digest():
+                return None, "source_changed_during_read"
+            after_verify = os.fstat(stream.fileno())
+            try:
+                final_path_info = path.lstat()
+            except OSError:
+                return None, "source_changed_during_read"
+            if (
+                _is_reparse_or_link(after_verify)
+                or not stat.S_ISREG(after_verify.st_mode)
+                or _file_identity(after_verify) != expected_identity
+                or after_verify.st_size < initial_size
+                or after_verify.st_size > max_bytes
+                or _is_reparse_or_link(final_path_info)
+                or not stat.S_ISREG(final_path_info.st_mode)
+                or _file_identity(final_path_info) != expected_identity
+            ):
+                return None, "source_changed_during_read"
         return b"".join(chunks), None
     except (OSError, ValueError):
         return None, "source_unavailable"

@@ -288,6 +288,100 @@ class DesktopContextMeterTests(unittest.TestCase):
         self.assertEqual(opened_streams, 0)
         self.assertIsNone(result["sample"])
 
+    def test_append_after_initial_prefix_read_is_accepted_and_prefix_revalidated(self):
+        now = datetime.now(timezone.utc)
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            source = root / "events.jsonl"
+            appended = json.dumps(event(now, total=888)).encode("utf-8") + b"\n"
+            write_jsonl(source, rows=[event(now - timedelta(seconds=1), total=700)])
+            real_fstat = os.fstat
+            calls = 0
+
+            def append_after_read(fd):
+                nonlocal calls
+                calls += 1
+                if calls == 2:
+                    with source.open("ab") as stream:
+                        stream.write(appended)
+                return real_fstat(fd)
+
+            with patch("desktop_context_meter.os.fstat", side_effect=append_after_read):
+                result = read_context_snapshot(source, expected_session_id=SESSION, expected_window_tokens=WINDOW, now=now)
+
+        self.assertEqual(result["sample_status"], "fresh", result)
+        self.assertEqual(result["sample"]["last_token_usage"]["total_tokens"], 700)
+        self.assertIsNone(result["active_context_usage_tokens"])
+
+    def test_mutated_prefix_after_initial_read_is_rejected(self):
+        now = datetime.now(timezone.utc)
+        with tempfile.TemporaryDirectory() as temp:
+            source = Path(temp) / "events.jsonl"
+            write_jsonl(source, rows=[event(now - timedelta(seconds=1), total=700)])
+            real_fstat = os.fstat
+            calls = 0
+
+            def mutate_after_read(fd):
+                nonlocal calls
+                calls += 1
+                if calls == 2:
+                    with source.open("r+b") as stream:
+                        stream.seek(0)
+                        stream.write(b" " * 10)
+                return real_fstat(fd)
+
+            with patch("desktop_context_meter.os.fstat", side_effect=mutate_after_read):
+                result = read_context_snapshot(source, expected_session_id=SESSION, expected_window_tokens=WINDOW, now=now)
+
+        self.assertEqual(result["status"], "unknown")
+        self.assertEqual(result["reason"], "source_changed_during_read")
+
+    def test_truncation_after_initial_read_is_rejected(self):
+        now = datetime.now(timezone.utc)
+        with tempfile.TemporaryDirectory() as temp:
+            source = Path(temp) / "events.jsonl"
+            write_jsonl(source, rows=[event(now - timedelta(seconds=1), total=700)])
+            real_fstat = os.fstat
+            calls = 0
+
+            def truncate_after_read(fd):
+                nonlocal calls
+                calls += 1
+                if calls == 2:
+                    source.write_bytes(b"")
+                return real_fstat(fd)
+
+            with patch("desktop_context_meter.os.fstat", side_effect=truncate_after_read):
+                result = read_context_snapshot(source, expected_session_id=SESSION, expected_window_tokens=WINDOW, now=now)
+
+        self.assertEqual(result["status"], "unknown")
+        self.assertEqual(result["reason"], "source_changed_during_read")
+
+    def test_path_replacement_after_initial_read_is_rejected(self):
+        now = datetime.now(timezone.utc)
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            source = root / "events.jsonl"
+            replacement = root / "replacement.jsonl"
+            write_jsonl(source, rows=[event(now - timedelta(seconds=1), total=700)])
+            write_jsonl(replacement, rows=[event(now - timedelta(seconds=1), total=999)])
+            real_lstat = Path.lstat
+            source_lstat_calls = 0
+
+            def replaced_path_lstat(path):
+                nonlocal source_lstat_calls
+                if path == source:
+                    source_lstat_calls += 1
+                    if source_lstat_calls == 3:
+                        return real_lstat(replacement)
+                return real_lstat(path)
+
+            with patch.object(Path, "lstat", replaced_path_lstat):
+                result = read_context_snapshot(source, expected_session_id=SESSION, expected_window_tokens=WINDOW, now=now)
+
+        self.assertEqual(result["status"], "unknown")
+        self.assertEqual(result["reason"], "source_changed_during_read")
+
     def test_future_token_timestamp_is_rejected(self):
         now = datetime.now(timezone.utc)
         with tempfile.TemporaryDirectory() as temp:
