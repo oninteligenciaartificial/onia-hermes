@@ -1,0 +1,80 @@
+{
+  "apt_package_names_approved": [
+    "fonts-freefont-ttf",
+    "fonts-ipafont-gothic",
+    "fonts-liberation",
+    "fonts-noto-color-emoji",
+    "fonts-tlwg-loma-otf",
+    "fonts-unifont",
+    "fonts-wqy-zenhei",
+    "libasound2t64",
+    "libatk-bridge2.0-0t64",
+    "libatk1.0-0t64",
+    "libatspi2.0-0t64",
+    "libcairo2",
+    "libcups2t64",
+    "libdbus-1-3",
+    "libdrm2",
+    "libfontconfig1",
+    "libfreetype6",
+    "libgbm1",
+    "libglib2.0-0t64",
+    "libnspr4",
+    "libnss3",
+    "libpango-1.0-0",
+    "libx11-6",
+    "libxcb1",
+    "libxcomposite1",
+    "libxdamage1",
+    "libxext6",
+    "libxfixes3",
+    "libxkbcommon0",
+    "libxrandr2",
+    "xfonts-cyrillic",
+    "xfonts-scalable",
+    "xvfb"
+  ],
+  "browser": {
+    "headless_shell": false,
+    "name": "chromium",
+    "possible_support_utility": "ffmpeg1013",
+    "revision": "1248",
+    "version": "156.0.8078.4"
+  },
+  "browser_launch": false,
+  "browser_uid_required": 1000,
+  "cost_duration_storage": "UNKNOWN",
+  "create_accounts": false,
+  "downloads_and_install_approved": false,
+  "environment_id": "6abad782eba0819196ca234dc3abc327",
+  "human_approval_reference": null,
+  "new_api_billing": false,
+  "provider_saved_configuration": {
+    "cache_enabled": true,
+    "domains": [
+      "example.com",
+      "iana.org",
+      "www.iana.org"
+    ],
+    "evidence_reference": null,
+    "methods": [
+      "GET",
+      "HEAD",
+      "OPTIONS"
+    ],
+    "network_access": "limited",
+    "preset": "None",
+    "saved_at_utc": null,
+    "surface": "codex-cloud-legacy-ui"
+  },
+  "python_packages": [
+    "playwright==1.64.0",
+    "greenlet==3.5.6",
+    "pyee==13.0.1",
+    "typing-extensions==4.16.0"
+  ],
+  "recipe_sha256": "a041af91f0e51209490ecd80b5a10e2d7a78d5e668e29139f6de09135c387322",
+  "sandbox_weakening": false,
+  "schema": 1,
+  "state": "PENDING_APPROVAL"
+}
