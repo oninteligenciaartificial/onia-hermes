@@ -19,7 +19,7 @@ AUTHORIZATION_REFERENCE = 'COORDINATION_MANIFEST.md: one-shot public example.com
 # The handoff PARADA requires evidence of Chromium sandboxing and host-level
 # egress isolation. Playwright request routing is defense in depth, not proof
 # of either property. Keep dispatch closed until a reviewed preflight closes it.
-PREFLIGHT_GATE = 'BLOCKED_runtime_egress_policy_denies_contract_hosts'
+PREFLIGHT_GATE = 'BLOCKED_chromium_sandbox_unproven_and_runtime_egress_denies_contract_hosts'
 ROOT = Path(__file__).resolve().parent
 CLAIM = ROOT / '.browser-cloud-attempt.claim'
 
