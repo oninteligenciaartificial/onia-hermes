@@ -1,0 +1,68 @@
+{
+  "captured_at_utc": "2026-10-14T08:19:38Z",
+  "status": "held_inconclusive_no_retry",
+  "prior_probe": {
+    "receipt_file": "receipt-20261014T081408_405553Z.json",
+    "receipt_sha256": "1c3d9d548f5c829fd1c746a9505233ce7821cbd8db988bf9c86cb4f981341ded",
+    "captured_at_utc": "2026-10-14T08:14:11.733174Z",
+    "status": "held_or_failed",
+    "failure_class": "protocol_envelope_invalid",
+    "exit_code": 1,
+    "elapsed_seconds": 3.313,
+    "local_methods_written_flushed": ["initialize"],
+    "remote_delivery": "unknown",
+    "account_state": "not_observed",
+    "stderr_bytes_discarded": 299,
+    "raw_output_retained": false
+  },
+  "driver_source": {
+    "path": "E:/onia-wt/codex-appserver-metadata-prepared-v1-20261014/metadata_probe.py",
+    "sha256": "cc73af3091f2a5ba139fdfc8670497a439b108f1f3ebfb197f458e2f5a303e39",
+    "manifest_sha256": "1f6327aff8011760c244caa94d0e1f8c4f450704759e792eb5e2395e1d4fd711"
+  },
+  "protocol_source": {
+    "release_ref": "rust-v0.161.0",
+    "path": "codex-rs/app-server-protocol/src/rpc.rs",
+    "url": "https://github.com/openai/codex/blob/rust-v0.161.0/codex-rs/app-server-protocol/src/rpc.rs",
+    "sha256": "not_computed",
+    "finding": "Pinned source says it neither sends nor expects the jsonrpc version field; JSONRPCResponse serializes id/result only and JSONRPCError id/error only."
+  },
+  "cause_assessment": {
+    "status": "source_confirmed_protocol_mismatch",
+    "explanation": "The driver requires jsonrpc == 2.0 before classifying any message. The pinned app-server protocol omits that field. This matches the observed failure class; the exact 216-byte line was not retained, so its raw shape is not independently observed."
+  },
+  "readonly_ssh": {
+    "calls": 1,
+    "exit_code": 0,
+    "remote_timestamp_utc": "2026-10-14T08:19:24.291550Z",
+    "scope": "/tmp codex-meta-probe-* and /proc stat/cwd metadata only; no process signaling, deletion, environment, arguments, log contents, auth state, or unrelated process identifiers",
+    "time_window_utc": {
+      "start": "2026-10-14T08:13:38Z",
+      "end": "2026-10-14T08:14:45Z",
+      "remote_now_in_window": false
+    },
+    "tmp_scan": {
+      "complete": false,
+      "entries_bound": 8192,
+      "matching_prefix_dirs_in_examined_entries": 0,
+      "matching_root_owned_mode0700_in_window": 0,
+      "conclusion": "Incomplete; cannot claim matching scratch absent."
+    },
+    "proc_scan": {
+      "complete": true,
+      "numeric_entries_scanned": 368,
+      "matching_active_root_processes": 0,
+      "matching_process_groups": 0,
+      "deleted_cwd_matches": 0,
+      "cwd_scan_errors": 0,
+      "conclusion": "No currently visible matching process found within this bounded scan; this does not prove cleanup at failure time."
+    }
+  },
+  "next_fix_plan": {
+    "preserve_current_probe_source": true,
+    "protocol_parser": "Accept the pinned versionless app-server dialect; validate response id/result or id/error shape with strict integer IDs, retain notification/request allowlists, and reject unexpected keys/methods.",
+    "shutdown": "Keep terminal-frame validation, process-group keeper, bounded stdout drain, and fail-closed cleanup behavior.",
+    "retest": "Offline fixtures only before any new review or invocation."
+  },
+  "actions_after_probe": "None; no second SSH or any Codex/app-server/RPC call."
+}
