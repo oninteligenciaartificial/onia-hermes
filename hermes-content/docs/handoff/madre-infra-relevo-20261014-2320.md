@@ -24,14 +24,14 @@ Completar ONIA Hermes → Codex Cloud nativo → browser → captura Telegram co
 
 Preparar launcher/registro de `na` y binding `NativeTrustedRuntime` con cola/sink existentes; verificar transporte y autenticación de Codex Cloud sin pedir login por una ausencia parcial. Diseñar validación proporcional; pedir el grant específico antes de activar. Mantener R4 y activación pendientes hasta evidencia de transporte, autenticación y autorización.
 
-Estado vivo al último reporte: cuota global 72% usada/28% restante, snapshot ~23:15Z; sin costo atribuido ni reset. Contexto activo `UNKNOWN`; 70% no probado. Tres slots worker + Root, máximo cuatro. Luna low para mecánica con `fork none`; Luna medium para autenticación ambigua; modelo servido `UNKNOWN`.
+Estado vivo al último reporte: cuota global 72% usada/28% restante, snapshot ~23:15Z; sin costo atribuido ni reset. El informe [context-signal-handoff-20261014.md](E:/onia-wt/context-signal-handoff-20261014.md) y su JSON [context-signal-handoff-20261014.json](E:/onia-wt/context-signal-handoff-20261014.json) concluyen contexto activo `UNKNOWN`: JSONL bloqueado y semántica no confirmada; la cuota global no equivale a contexto. El 70% no está probado. Tres slots worker + Root, máximo cuatro. Luna low para mecánica con `fork none`; Luna medium para autenticación ambigua; modelo servido `UNKNOWN`.
 
 ## Relevo de sesión
 
-Sesión madre anterior: Root `01a138fa-8304-71c1-9391-3bc14314d57f`; conserva ownership hasta que exista prueba de lectura y ACK de la sesión nueva. No archivar la sesión vieja. No inventar ID ni ACK; el objetivo **no se ha transferido**.
+Sesión madre anterior: Root `01a138fa-8304-71c1-9391-3bc14314d57f`; conserva ownership hasta que exista prueba de lectura y ACK de la sesión nueva. No archivar la sesión vieja. La nueva sesión fue creada en host local: threadId `01a13cc1-12e9-79a0-97e8-4899f05a5c95`, título `MADRE INFRA · ONIA · relevo 14 oct`. La herramienta confirmó creación, no lectura. En una revisión del archivo de ACK indicado abajo no existía; no se interpreta silencio como ACK.
 
-- ID nueva: `PENDIENTE — completar tras creación verificada`.
-- ACK leído de la sesión nueva: `PENDIENTE — registrar evidencia y hora`.
+- ID nueva: `CONFIRMADA COMO CREADA` — `01a13cc1-12e9-79a0-97e8-4899f05a5c95`.
+- ACK leído de la sesión nueva: `PENDIENTE` — archivo esperado `E:/onia-wt/madre-infra-relevo-20261014-2320-ack.json`; ausente al revisar esta actualización.
 - Transferencia del goal: `PENDIENTE — no afirmar hasta validar continuidad`.
 
 Madre: delega y revisa. Usar `CODEX.md` y `.claude/skills/onia-continuidad/SKILL.md`; evitar prompts enormes y repetir búsquedas remotas. No tocar código desde este carril documental.
