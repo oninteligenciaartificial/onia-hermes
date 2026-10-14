@@ -54,7 +54,7 @@
     <div>
       <div class="eyebrow">ONIA / coordinación acotada</div>
       <h1>Panel ONIA · piloto</h1>
-      <p class="lead">Piloto supervisado de 30 minutos: tres diagnósticos de sólo lectura en chats Codex durables. Cloud creó una sesión real, pero su continuidad falló; Telegram no entregó mensajes en la ventana.</p>
+      <p class="lead">Piloto supervisado de 30 minutos: tres diagnósticos de sólo lectura en chats Codex durables. Cloud creó una sesión real y la continuidad quedó bloqueada en la ventana; la recuperación manual de cuatro fuentes llegó después. Telegram no entregó mensajes durante el piloto.</p>
     </div>
     <div class="stamp"><strong>Cierre confirmado por root</strong>14 oct 2026 · 03:48:08 UTC<br>QA vio evento 03:44:09 · 1.804 s</div>
   </header>
@@ -80,8 +80,8 @@
 
   <section class="card" aria-label="Prueba Codex Cloud">
     <span class="label">Ruta cloud nueva · fuera de los tres frentes</span>
-    <h2>Creación PASS · continuidad BLOCKED</h2>
-    <p>«ONIA · QA relevo · Codex Cloud» <code>01a13875-a024-7784-9718-7d8c60fe702a</code>, creado vía UI para ONIA Platform en <code>/workspace</code>. Ronda 1 no encontró la ref objetivo en checkout HEAD <code>1c01e05ff3457692f44352de19d57768d5955bcf</code>; ronda 2 hizo un fetch dirigido que terminó exit 128 por proxy 8080. Ref remota UNKNOWN. No prueba relevo nativo.</p>
+    <h2>Creación PASS · recuperación manual limitada PASS</h2>
+    <p>«ONIA · QA relevo · Codex Cloud» <code>01a13875-a024-7784-9718-7d8c60fe702a</code>, creado vía UI para ONIA Platform en <code>/workspace</code>. Durante el piloto, ronda 1 no encontró la ref objetivo en checkout HEAD <code>1c01e05ff3457692f44352de19d57768d5955bcf</code>; ronda 2 hizo un fetch dirigido que terminó exit 128 por proxy 8080. Después, a las 04:28:22 UTC, GitHub MCP recuperó cuatro fuentes en una ronda con cuatro fetches para la ref <code>51ef483fb563e76cf0ac58665ea3e4bcaf0255a3</code>. QA confirmó metadata/ref/blobs, con outputs truncados: no auditó contenido íntegro ni aprobó el parche de 19 reemplazos. No prueba relevo nativo ni browser cloud.</p>
     <p class="muted">Ensayo ChatGPT Work archivado y excluido. Se observaron seis agentes hijos (cuatro nuevos, dos reutilizados) y compactación de Platform; ninguna señal mide U activo ni transferencia de ownership. Después del plazo, esta sesión Cloud leyó saldo Higgsfield por MCP (438.17 créditos, sin consumo reportado); navegador UI y acceso VPS siguen sin prueba.</p>
   </section>
 
