@@ -18,10 +18,46 @@ spec.loader.exec_module(runner)
 
 
 class DiagnosticReceiptTests(unittest.TestCase):
+    def test_control_root_policy_requires_root_owner_mode_and_tmp_descendant(self):
+        check = runner.control_root_metadata_is_safe
+        self.assertTrue(check(effective_uid=0, owner_uid=0, mode=0o700,
+                              is_symlink=False, path="/tmp/onia-control-abc"))
+        for metadata in (
+            dict(effective_uid=1000, owner_uid=0, mode=0o700, is_symlink=False,
+                 path="/tmp/onia-control-abc"),
+            dict(effective_uid=0, owner_uid=1000, mode=0o700, is_symlink=False,
+                 path="/tmp/onia-control-abc"),
+            dict(effective_uid=0, owner_uid=0, mode=0o750, is_symlink=False,
+                 path="/tmp/onia-control-abc"),
+            dict(effective_uid=0, owner_uid=0, mode=0o700, is_symlink=True,
+                 path="/tmp/onia-control-abc"),
+            dict(effective_uid=0, owner_uid=0, mode=0o700, is_symlink=False,
+                 path="/var/tmp/onia-control-abc"),
+        ):
+            with self.subTest(metadata=metadata):
+                self.assertFalse(check(**metadata))
+
+    def test_runner_rejects_nonroot_or_wrong_owner_before_reservation_and_docker(self):
+        reserve_calls = []
+        docker_calls = []
+        for metadata in (
+            dict(effective_uid=1000, owner_uid=0, mode=0o700, is_symlink=False,
+                 path="/tmp/onia-control-abc"),
+            dict(effective_uid=0, owner_uid=1000, mode=0o700, is_symlink=False,
+                 path="/tmp/onia-control-abc"),
+        ):
+            with self.subTest(metadata=metadata), \
+                 mock.patch.object(runner, "validate_control_root", side_effect=RuntimeError("rejected")), \
+                 mock.patch.object(runner, "reserve_nonce", side_effect=lambda *a, **k: reserve_calls.append(1)), \
+                 mock.patch.object(runner, "_docker_call", side_effect=lambda *a, **k: docker_calls.append(1)):
+                with self.assertRaises(RuntimeError):
+                    runner.execute("unused", control_root=metadata["path"])
+        self.assertEqual(reserve_calls, [])
+        self.assertEqual(docker_calls, [])
+
     def test_receipt_is_allowlisted_and_durable_without_raw_output(self):
         with tempfile.TemporaryDirectory() as directory:
-            runner.CONTROL_ROOT = Path(directory)
-            runner._DIAGNOSTIC_CONTROL_ROOT = None
+            runner._DIAGNOSTIC_CONTROL_ROOT = Path(directory)
             runner._DIAGNOSTIC_JOURNAL_FAILED = False
             runner.diagnostic_stage("docker_run_invocation", "consumed", "needs_reconcile")
             runner.diagnostic_event("docker_run_invocation", "blocked_runtime_error", stdout_bytes=37,
@@ -40,12 +76,11 @@ class DiagnosticReceiptTests(unittest.TestCase):
         secret = "nonce-secret-marker"
         calls = []
 
-        def fail_once(_nonce):
+        def fail_once(_nonce, *, control_root):
             calls.append(1)
             raise RuntimeError(secret)
 
         with tempfile.TemporaryDirectory() as directory:
-            runner.CONTROL_ROOT = Path(directory)
             runner._DIAGNOSTIC_CONTROL_ROOT = Path(directory)
             runner._DIAGNOSTIC_STAGE = "docker_run_invocation"
             runner._DIAGNOSTIC_RESERVATION = "consumed"
@@ -53,7 +88,7 @@ class DiagnosticReceiptTests(unittest.TestCase):
             with mock.patch.object(runner, "execute", side_effect=fail_once), \
                  mock.patch.object(runner, "sys") as mocked_sys:
                 mocked_sys.stderr = tempfile.TemporaryFile(mode="w+t")
-                code = runner.main(["--execute-offline"])
+                code = runner.main(["--execute-offline", "--control-root", directory])
                 mocked_sys.stderr.seek(0)
                 stderr = mocked_sys.stderr.read()
                 mocked_sys.stderr.close()
@@ -68,8 +103,8 @@ class DiagnosticReceiptTests(unittest.TestCase):
     def test_journal_initialization_failure_precedes_reservation_and_docker(self):
         reserve_calls = []
         docker_calls = []
-        custom_control = Path(tempfile.gettempdir()) / "diagnostic-control-parameter-test"
-        with mock.patch.object(runner, "diagnostic_initialize", side_effect=OSError("private marker")), \
+        with tempfile.TemporaryDirectory() as custom_control, \
+             mock.patch.object(runner, "diagnostic_initialize", side_effect=OSError("private marker")), \
              mock.patch.object(runner, "reserve_nonce", side_effect=lambda *a, **k: reserve_calls.append(1)), \
              mock.patch.object(runner, "_docker_call", side_effect=lambda *a, **k: docker_calls.append(1)):
             with self.assertRaises(OSError):
@@ -79,14 +114,13 @@ class DiagnosticReceiptTests(unittest.TestCase):
 
     def test_journal_initialization_uses_explicit_control_root(self):
         with tempfile.TemporaryDirectory() as default_dir, tempfile.TemporaryDirectory() as explicit_dir:
-            runner.CONTROL_ROOT = Path(default_dir)
+            runner._DIAGNOSTIC_CONTROL_ROOT = Path(default_dir)
             runner.diagnostic_initialize(Path(explicit_dir))
             self.assertTrue(Path(explicit_dir, "browser-diagnostic-v2.jsonl").is_file())
             self.assertFalse(Path(default_dir, "browser-diagnostic-v2.jsonl").exists())
 
     def test_post_run_journal_failure_is_hold_and_never_retry(self):
         with tempfile.TemporaryDirectory() as directory:
-            runner.CONTROL_ROOT = Path(directory)
             runner._DIAGNOSTIC_CONTROL_ROOT = Path(directory)
             runner._DIAGNOSTIC_STAGE = "docker_run_invocation"
             runner._DIAGNOSTIC_RESERVATION = "consumed"
@@ -95,7 +129,7 @@ class DiagnosticReceiptTests(unittest.TestCase):
             with mock.patch.object(runner, "execute", side_effect=RuntimeError("private marker")) as execute_mock, \
                  mock.patch.object(runner, "sys") as mocked_sys:
                 mocked_sys.stderr = tempfile.TemporaryFile(mode="w+t")
-                self.assertEqual(runner.main(["--execute-offline"]), 2)
+                self.assertEqual(runner.main(["--execute-offline", "--control-root", directory]), 2)
                 mocked_sys.stderr.seek(0)
                 stderr = mocked_sys.stderr.read()
                 mocked_sys.stderr.close()

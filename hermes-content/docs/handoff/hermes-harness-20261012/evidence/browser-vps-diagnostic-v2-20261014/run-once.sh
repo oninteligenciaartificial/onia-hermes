@@ -13,6 +13,27 @@ trap 'exit 129' HUP
 trap 'exit 130' INT
 trap 'exit 143' TERM
 
+if [[ "$#" -ne 2 || "$1" != "--control-root" || -z "$2" ]]; then
+  echo '{"result":"blocked","reason":"explicit private control root required"}' >&2
+  exit 2
+fi
+control_root="$(python3 - "$2" <<'PY'
+import pathlib, stat, sys
+p = pathlib.Path(sys.argv[1])
+try:
+    if p.is_symlink() or not p.is_dir(): sys.exit(2)
+    resolved = p.resolve(strict=True)
+    s = resolved.stat()
+    if s.st_uid != 0 or stat.S_IMODE(s.st_mode) != 0o700: sys.exit(2)
+    print(resolved)
+except OSError:
+    sys.exit(2)
+PY
+)" || {
+  echo '{"result":"blocked","reason":"private control root validation failed"}' >&2
+  exit 2
+}
+
 if [[ "$(id -u)" != 0 || -L . || ! -d . || ! -f browser-runner.py || ! -f bind-approval.py ]]; then
   echo '{"result":"blocked","reason":"owned runtime workspace gate failed"}' >&2
   exit 2
@@ -49,7 +70,7 @@ output_tmp="$(mktemp --tmpdir=. .run-once-output.XXXXXXXXXX)"
 chmod 600 -- "$output_tmp"
 set +e
 timeout --signal=TERM --kill-after=2s 75s env -i PATH=/usr/bin:/bin HOME=/root LANG=C.UTF-8 \
-  bash -c 'ulimit -f 128; exec python3 browser-runner.py --execute-offline' \
+  bash -c 'ulimit -f 128; exec python3 browser-runner.py --execute-offline --control-root "$1"' _ "$control_root" \
   >"$output_tmp" 2>/dev/null
 rc=$?
 set -e

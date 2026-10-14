@@ -9,7 +9,7 @@ import secrets
 import stat
 import subprocess
 import sys
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 BASE_DIGEST = "sha256:aa81288e738725378becba5b3e06cb0f3a7f012a610e87e8d767a090ea3f740d"
 BASE_IMAGE = "mcr.microsoft.com/playwright/python:v1.62.0-noble@" + BASE_DIGEST
@@ -24,7 +24,6 @@ IMAGE_REVIEW_SHA256 = "2a346e2a4d3adb6eae2bc6b1f9337255855d899bbd561ed322a7de276
 TARGET_ID = "offline-synthetic"
 HARD_TIMEOUT_SECONDS = 75
 TIMEOUT_GRACE_SECONDS = 2
-CONTROL_ROOT = Path("/var/lib/onia-browser-control")
 HERE = Path(__file__).resolve().parent
 CONTRACT_NAME = "diagnostic-trial-contract-20261014.md"
 CONTRACT_START = "<!-- HERMES_DIAGNOSTIC_BINDING_START -->"
@@ -121,7 +120,34 @@ def validate_bundle(bundle_root):
 def private_owned(path):
     p = Path(path)
     st = p.lstat()
-    return not p.is_symlink() and st.st_uid == os.geteuid() and (st.st_mode & 0o077) == 0
+    return not p.is_symlink() and st.st_uid == os.geteuid() and stat.S_IMODE(st.st_mode) == 0o600
+
+
+def control_root_mode_is_private(owner_uid, mode, expected_uid):
+    return expected_uid == 0 and owner_uid == 0 and stat.S_IMODE(mode) == 0o700
+
+
+def control_root_path_is_allowed(path):
+    candidate = PurePosixPath(str(path))
+    tmp_root = PurePosixPath("/tmp")
+    return candidate.is_absolute() and candidate != tmp_root and tmp_root in candidate.parents
+
+
+def validate_control_root(path):
+    root = Path(path)
+    if root.is_symlink() or not root.is_dir():
+        raise RuntimeError("pre-existing control root missing or unsafe")
+    if os.name != "nt":
+        if effective_uid() != 0:
+            raise RuntimeError("control root validation requires effective uid 0")
+        st = root.lstat()
+        if not control_root_mode_is_private(st.st_uid, st.st_mode, 0):
+            raise RuntimeError("control root must be root-owned mode 0700")
+        canonical = root.resolve(strict=True)
+        if str(root) != str(canonical) or not control_root_path_is_allowed(canonical):
+            raise RuntimeError("control root must be canonical under /tmp")
+        return str(canonical)
+    return str(root.resolve(strict=True))
 
 
 def exclusive_private(path, content):
@@ -167,7 +193,8 @@ def validate_root_go(root, values):
         "bundle_manifest_sha256": values["bundle_manifest_sha256"],
         "runner_sha256": values["runner_sha256"], "contract_sha256": values["contract_sha256"],
         "target_id": TARGET_ID, "hard_timeout_seconds": HARD_TIMEOUT_SECONDS,
-        "timeout_grace_seconds": TIMEOUT_GRACE_SECONDS, "derived_image_id": DERIVED_IMAGE_ID}
+        "timeout_grace_seconds": TIMEOUT_GRACE_SECONDS, "derived_image_id": DERIVED_IMAGE_ID,
+        "control_root": str(root.resolve(strict=True))}
     if any(data.get(key) != value for key, value in expected.items()):
         raise RuntimeError("root GO does not match exact offline contract")
     if not isinstance(data.get("root_go_reference"), str) or not data["root_go_reference"].strip():
@@ -176,12 +203,13 @@ def validate_root_go(root, values):
 
 
 def create_binding(*, image_id, pwuser_uid, pwuser_gid, image_review_sha256,
-                   control_root=CONTROL_ROOT, bundle_root=HERE, image_inspector=inspect_image,
+                   control_root, bundle_root=HERE, image_inspector=inspect_image,
                    nonce_factory=secrets.token_hex):
     root = Path(control_root)
     bundle = Path(bundle_root)
-    if effective_uid() != 0 or root.is_symlink() or not root.is_dir() or not private_owned(root):
-        raise RuntimeError("pre-existing root-owned private control directory missing or unsafe")
+    if effective_uid() != 0:
+        raise RuntimeError("binding must run as root")
+    canonical_control_root = validate_control_root(root)
     values = validate_bundle(bundle)
     root_go_reference, root_go_sha256 = validate_root_go(root, values)
     if image_id != DERIVED_IMAGE_ID or pwuser_uid <= 0 or pwuser_gid <= 0:
@@ -220,6 +248,7 @@ def create_binding(*, image_id, pwuser_uid, pwuser_gid, image_review_sha256,
         "approval_nonce_reference": "sergio:20261014-vps-browser-offline-r1",
         "root_go_reference": root_go_reference,
         "root_go_receipt_sha256": root_go_sha256,
+        "control_root": canonical_control_root,
         "nonce_sha256": nonce_hash,
         "upstream_bundle_manifest_sha256": UPSTREAM_MANIFEST_SHA256,
         "source_manifest_sha256": values["source_manifest_sha256"],
@@ -256,9 +285,11 @@ def main(argv=None):
     parser.add_argument("--pwuser-uid", required=True, type=int)
     parser.add_argument("--pwuser-gid", required=True, type=int)
     parser.add_argument("--image-review-sha256", required=True)
+    parser.add_argument("--control-root", required=True)
     args = parser.parse_args(argv)
     result = create_binding(image_id=args.image_id, pwuser_uid=args.pwuser_uid,
-                            pwuser_gid=args.pwuser_gid, image_review_sha256=args.image_review_sha256)
+                            pwuser_gid=args.pwuser_gid, image_review_sha256=args.image_review_sha256,
+                            control_root=args.control_root)
     print(json.dumps(result, sort_keys=True, separators=(",", ":")))
     return 0
 

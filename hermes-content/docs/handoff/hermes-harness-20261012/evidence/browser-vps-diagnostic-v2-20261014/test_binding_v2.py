@@ -28,8 +28,9 @@ binder = load_module("bind_approval_v2_test", HERE / "bind-approval.py")
 runner = load_module("browser_runner_binding_v2_test", HERE / "browser-runner.py")
 
 
-def test_binding_values():
+def test_binding_values(control_root):
     values = binder.validate_bundle(HERE)
+    control_root = str(Path(control_root).resolve())
     root_go = {
         "status": "approved",
         "scope": "single_offline_synthetic_trial",
@@ -40,6 +41,7 @@ def test_binding_values():
         "hard_timeout_seconds": binder.HARD_TIMEOUT_SECONDS,
         "timeout_grace_seconds": binder.TIMEOUT_GRACE_SECONDS,
         "derived_image_id": binder.DERIVED_IMAGE_ID,
+        "control_root": control_root,
         "root_go_reference": "QA-approved-test",
     }
     root_go_bytes = json.dumps(root_go).encode("utf-8")
@@ -49,6 +51,7 @@ def test_binding_values():
         "authorization_reference": "Sergio14Oct",
         "approval_nonce_reference": "sergio:20261014-vps-browser-offline-r1",
         "root_go_reference": "QA-approved-test",
+        "control_root": control_root,
         "root_go_receipt_sha256": hashlib.sha256(root_go_bytes).hexdigest(),
         "nonce_sha256": "a" * 64,
         "upstream_bundle_manifest_sha256": binder.UPSTREAM_MANIFEST_SHA256,
@@ -88,6 +91,7 @@ class BindingTests(unittest.TestCase):
             "hard_timeout_seconds": binder.HARD_TIMEOUT_SECONDS,
             "timeout_grace_seconds": binder.TIMEOUT_GRACE_SECONDS,
             "derived_image_id": binder.DERIVED_IMAGE_ID,
+            "control_root": str(Path(root).resolve()),
             "root_go_reference": "QA-approved-test",
         }
         path = Path(root) / "root-go.json"
@@ -154,16 +158,89 @@ class BindingTests(unittest.TestCase):
             self.assertFalse((root / "approval-nonce.txt").exists())
             inspect.assert_not_called()
 
+    def test_control_root_path_mismatch_fails_before_nonce_or_image_inspection(self):
+        with tempfile.TemporaryDirectory() as directory:
+            base = Path(directory)
+            approved = base / "approved"
+            supplied = base / "supplied"
+            approved.mkdir(); supplied.mkdir()
+            self._root_go(approved)
+            (supplied / "root-go.json").write_bytes((approved / "root-go.json").read_bytes())
+            inspect = mock.Mock(side_effect=self._fake_image)
+            with mock.patch.object(binder, "effective_uid", return_value=0), \
+                 mock.patch.object(binder, "private_owned", return_value=True):
+                with self.assertRaisesRegex(RuntimeError, "root GO"):
+                    binder.create_binding(image_id=binder.DERIVED_IMAGE_ID, pwuser_uid=1001,
+                        pwuser_gid=1001, image_review_sha256=binder.IMAGE_REVIEW_SHA256,
+                        control_root=supplied, bundle_root=HERE, image_inspector=inspect,
+                        nonce_factory=lambda _size: "f" * 32)
+            self.assertFalse((supplied / "approval-nonce.txt").exists())
+            inspect.assert_not_called()
+
+    def test_control_root_mode_rejects_group_other_permissions_and_symlinks(self):
+        self.assertTrue(binder.control_root_mode_is_private(0, 0o40700, 0))
+        for mode in (0o40750, 0o40707, 0o40777):
+            with self.subTest(mode=oct(mode)):
+                self.assertFalse(binder.control_root_mode_is_private(0, mode, 0))
+        self.assertFalse(binder.control_root_mode_is_private(1000, 0o40700, 0))
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            inspect = mock.Mock(side_effect=self._fake_image)
+            with mock.patch.object(binder, "effective_uid", return_value=0), \
+                 mock.patch.object(binder, "validate_control_root", side_effect=RuntimeError("control root mode 0700 required")):
+                with self.assertRaisesRegex(RuntimeError, "mode 0700"):
+                    binder.create_binding(image_id=binder.DERIVED_IMAGE_ID, pwuser_uid=1001,
+                        pwuser_gid=1001, image_review_sha256=binder.IMAGE_REVIEW_SHA256,
+                        control_root=root, bundle_root=HERE, image_inspector=inspect)
+            self.assertFalse((root / "approval-nonce.txt").exists())
+            inspect.assert_not_called()
+
+    def test_outside_tmp_control_root_fails_before_image_inspection_or_nonce(self):
+        self.assertFalse(binder.control_root_path_is_allowed("/var/tmp/onia-control"))
+        inspect = mock.Mock(side_effect=self._fake_image)
+        nonce_factory = mock.Mock(return_value="f" * 32)
+
+        def enforce_path(path):
+            if not binder.control_root_path_is_allowed(path):
+                raise RuntimeError("control root must be canonical under /tmp")
+            return str(path)
+
+        with tempfile.TemporaryDirectory() as directory, \
+             mock.patch.object(binder, "effective_uid", return_value=0), \
+             mock.patch.object(binder, "validate_control_root", side_effect=enforce_path):
+            root = Path(directory)
+            with self.assertRaisesRegex(RuntimeError, "under /tmp"):
+                binder.create_binding(image_id=binder.DERIVED_IMAGE_ID, pwuser_uid=1001,
+                    pwuser_gid=1001, image_review_sha256=binder.IMAGE_REVIEW_SHA256,
+                    control_root="/var/tmp/onia-control", bundle_root=HERE,
+                    image_inspector=inspect, nonce_factory=nonce_factory)
+            self.assertFalse((root / "approval-nonce.txt").exists())
+        inspect.assert_not_called()
+        nonce_factory.assert_not_called()
+
+    def test_control_root_symlink_fails_before_nonce_or_image_inspection(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            inspect = mock.Mock(side_effect=self._fake_image)
+            with mock.patch.object(binder, "effective_uid", return_value=0), \
+                 mock.patch.object(Path, "is_symlink", return_value=True):
+                with self.assertRaisesRegex(RuntimeError, "missing or unsafe"):
+                    binder.create_binding(image_id=binder.DERIVED_IMAGE_ID, pwuser_uid=1001,
+                        pwuser_gid=1001, image_review_sha256=binder.IMAGE_REVIEW_SHA256,
+                        control_root=root, bundle_root=HERE, image_inspector=inspect)
+            self.assertFalse((root / "approval-nonce.txt").exists())
+            inspect.assert_not_called()
+
     def test_each_binding_mismatch_stops_before_reservation_and_docker(self):
         fields = ["runner_sha256", "contract_sha256", "target_id", "hard_timeout_seconds",
             "timeout_grace_seconds", "derived_image_id", "install_receipt_sha256",
             "image_review_report_sha256", "bundle_manifest_sha256", "source_manifest_sha256",
             "wrapper_sha256", "binder_sha256", "nonce_sha256", "root_go_reference",
-            "root_go_receipt_sha256"]
+            "root_go_receipt_sha256", "control_root"]
         for field in fields:
             with self.subTest(field=field), tempfile.TemporaryDirectory() as directory:
                 root = Path(directory)
-                binding = test_binding_values()
+                binding = test_binding_values(root)
                 self._root_go(root)
                 binding[field] = "mismatch" if not isinstance(binding[field], int) else binding[field] + 1
                 (root / "approval-binding.json").write_text(json.dumps(binding), encoding="utf-8")

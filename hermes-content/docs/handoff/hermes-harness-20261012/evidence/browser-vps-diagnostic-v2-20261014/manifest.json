@@ -9,10 +9,10 @@
     "derived_image_id": "sha256:5b1051bc16e1214877af33b8bf453c3d9fec29479632847f534c44afba35f4f2",
     "run_once_wrapper_sha256": "6f051e3877803a7a537f5406b9d37bde1d722ffaf73adfaa300c57c48c74744c",
     "run_once_wrapper_parent_sha256": "6f051e3877803a7a537f5406b9d37bde1d722ffaf73adfaa300c57c48c74744c",
-    "run_once_wrapper_v2_sha256": "394a1cc74e41db792f8baa695418e1dc80a9d6e03a9eb641ca52478503128eb4",
-    "browser_runner_v2_sha256": "a95042c57d481dd1e34f63ebfbd864d784567c64bde8baf1347ce5e20c686545",
+    "run_once_wrapper_v2_sha256": "e0994d64d247571c2a7fd0a0516db8b9857c3a69b834b442e19ab0e6de4c700e",
+    "browser_runner_v2_sha256": "3ea2162f46a2a2c3108d11082679f441fa260bc932446efc1eaa2f1147375465",
     "bind_approval_parent_sha256": "c5da319d5af11c0c9e6dba874a9b5ab2c72612116b439089ecd59aa8bb54836b",
-    "bind_approval_v2_sha256": "9db0445fffd33d7124a02e734ded03093d069c2d135a6b2c9bbf18303126d42d"
+    "bind_approval_v2_sha256": "4101d80af6343e7147d87d2b708cb63740bea7197a75a042d6e39ee496eb8bd5"
   },
   "files": [
     {
@@ -32,13 +32,13 @@
     },
     {
       "name": "bind-approval.py",
-      "sha256": "9db0445fffd33d7124a02e734ded03093d069c2d135a6b2c9bbf18303126d42d",
-      "size_bytes": 14232
+      "sha256": "4101d80af6343e7147d87d2b708cb63740bea7197a75a042d6e39ee496eb8bd5",
+      "size_bytes": 15489
     },
     {
       "name": "browser-runner.py",
-      "sha256": "a95042c57d481dd1e34f63ebfbd864d784567c64bde8baf1347ce5e20c686545",
-      "size_bytes": 34536
+      "sha256": "3ea2162f46a2a2c3108d11082679f441fa260bc932446efc1eaa2f1147375465",
+      "size_bytes": 36727
     },
     {
       "name": "browser_probe.py",
@@ -47,8 +47,8 @@
     },
     {
       "name": "diagnostic-trial-contract-20261014.md",
-      "sha256": "8e8bd9f2baeb1f59fdb58cb8393205a16d67d30e47ef7281e592d80057bb71e8",
-      "size_bytes": 7445
+      "sha256": "b2547c190dad4cc56b5452fa08d8de6ebf5e87bf031099e8f583cb69bf5200aa",
+      "size_bytes": 8118
     },
     {
       "name": "image-identity-review.json",
@@ -87,8 +87,8 @@
     },
     {
       "name": "run-once.sh",
-      "sha256": "394a1cc74e41db792f8baa695418e1dc80a9d6e03a9eb641ca52478503128eb4",
-      "size_bytes": 2923
+      "sha256": "e0994d64d247571c2a7fd0a0516db8b9857c3a69b834b442e19ab0e6de4c700e",
+      "size_bytes": 3565
     },
     {
       "name": "run_result.py",
@@ -107,8 +107,8 @@
     },
     {
       "name": "test_binding_v2.py",
-      "sha256": "b22a1b213e093b484b4c5e09b760c2f1922de66406f8729a3b6284a9d7a3974a",
-      "size_bytes": 9190
+      "sha256": "462a20c7e6d7b992d4564c938acff97e161164f0b9a83813054e9b7cf3e1ab02",
+      "size_bytes": 13950
     },
     {
       "name": "test_browser_runner_authorized.py",
@@ -117,13 +117,13 @@
     },
     {
       "name": "test_browser_runner_diagnostic.py",
-      "sha256": "b38d725f266f63f26e146bcf38d56f698c2a24a869f2f09a780345fec894ff37",
-      "size_bytes": 5787
+      "sha256": "6cd4a01105bb24b63b6591f472530b7787fe78f09e453523ad7047ce0f1d0e7d",
+      "size_bytes": 7811
     },
     {
       "name": "test_run_once_cleanup.py",
-      "sha256": "ee055af17e25e60a76ec3ae52be0ba0f795d4d88fce68eebd299f494b05b9264",
-      "size_bytes": 2579
+      "sha256": "9d7df5686d59b1b1141c7f93755bd36daad6b62360e328e07ff8fcff073da247",
+      "size_bytes": 2773
     },
     {
       "name": "upstream-bundle-manifest.json",
@@ -151,7 +151,7 @@
     ],
     "docker_lifecycle": "docker_run_invocation is recorded as one indivisible operation; Chromium launch is unobservable",
     "preflight_only": "omitted; safe reuse would require restructuring binding and reservation flow",
-    "runtime_dependencies": "All exact parent source siblings and image/install identity receipts are included; a private root-go.json remains an external control-root prerequisite.",
+    "runtime_dependencies": "All parent source siblings and image/install receipts are included; binder, runner and wrapper require the same pre-existing root-owned mode-0700 control-root under /tmp.",
     "diagnostics_best_effort": "Journal initialization is fail-closed before reservation; post-effect write failure suppresses success and records HOLD/needs_reconcile when possible, with no retry"
   },
   "bundle": {
@@ -170,9 +170,9 @@
     "run_once_wrapper_timeout": "75s + 2s grace",
     "run_once_wrapper_temp_cleanup": "unique private temp with EXIT cleanup trap",
     "parent_source_overrides_v2": {
-      "bind-approval.py": "9db0445fffd33d7124a02e734ded03093d069c2d135a6b2c9bbf18303126d42d",
-      "browser-runner.py": "a95042c57d481dd1e34f63ebfbd864d784567c64bde8baf1347ce5e20c686545",
-      "run-once.sh": "394a1cc74e41db792f8baa695418e1dc80a9d6e03a9eb641ca52478503128eb4"
+      "bind-approval.py": "4101d80af6343e7147d87d2b708cb63740bea7197a75a042d6e39ee496eb8bd5",
+      "browser-runner.py": "3ea2162f46a2a2c3108d11082679f441fa260bc932446efc1eaa2f1147375465",
+      "run-once.sh": "e0994d64d247571c2a7fd0a0516db8b9857c3a69b834b442e19ab0e6de4c700e"
     },
     "root_go_receipt_required_before_binding": true
   }

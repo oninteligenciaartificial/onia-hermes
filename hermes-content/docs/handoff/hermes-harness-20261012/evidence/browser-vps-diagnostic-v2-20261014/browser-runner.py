@@ -7,12 +7,13 @@ import os
 import re
 import selectors
 import signal
+import stat
 import subprocess
 import sys
 import tempfile
 import time
 import uuid
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from types import SimpleNamespace
 from run_result import success_summary
 
@@ -37,7 +38,6 @@ ENV = {"PATH": "/usr/bin:/bin", "HOME": "/nonexistent", "LANG": "C.UTF-8"}
 HERE = Path(__file__).resolve().parent
 PROFILE = HERE / "seccomp-profile-v1.62.0.json"
 PROBE = HERE / "browser_probe.py"
-CONTROL_ROOT = Path("/var/lib/onia-browser-control")
 OUTPUT_ROOT = Path("/tmp")
 CHILD_STDOUT_LIMIT = 65536
 DIAGNOSTIC_STAGES = {"validation", "reservation", "image_preflight", "output_setup",
@@ -54,8 +54,9 @@ _DIAGNOSTIC_CONTROL_ROOT = None
 
 
 def _diagnostic_path(control_root=None):
-    root = control_root if control_root is not None else (
-        _DIAGNOSTIC_CONTROL_ROOT if _DIAGNOSTIC_CONTROL_ROOT is not None else CONTROL_ROOT)
+    root = control_root if control_root is not None else _DIAGNOSTIC_CONTROL_ROOT
+    if root is None:
+        raise OSError("explicit private control root required")
     return Path(root) / "browser-diagnostic-v2.jsonl"
 
 
@@ -70,7 +71,7 @@ def diagnostic_initialize(control_root=None):
     fd = os.open(str(path), flags, 0o600)
     try:
         st = os.fstat(fd)
-        if os.name != "nt" and (st.st_uid != os.geteuid() or (st.st_mode & 0o077)):
+        if os.name != "nt" and (st.st_uid != os.geteuid() or stat.S_IMODE(st.st_mode) != 0o600):
             raise OSError("diagnostic journal permissions are not private")
         os.fsync(fd)
     finally:
@@ -106,7 +107,7 @@ def diagnostic_event(stage, code, *, started_at=None, stdout_bytes=0,
         try:
             if os.name != "nt":
                 st = os.fstat(fd)
-                if st.st_uid != os.geteuid() or (st.st_mode & 0o077):
+                if st.st_uid != os.geteuid() or stat.S_IMODE(st.st_mode) != 0o600:
                     return False
             payload = (json.dumps(event, sort_keys=True, separators=(",", ":")) + "\n").encode("ascii")
             view = memoryview(payload)
@@ -190,9 +191,11 @@ def load_binding(control_root):
     path = root / "approval-binding.json"
     if root.is_symlink() or not root.is_dir() or path.is_symlink() or not path.is_file():
         raise RuntimeError("private approval binding missing or unsafe")
+    canonical_control_root = str(root.resolve(strict=True))
     if os.name != "nt":
         rs, fs = root.stat(), path.stat()
-        if rs.st_uid != os.geteuid() or (rs.st_mode & 0o077) or fs.st_uid != os.geteuid() or (fs.st_mode & 0o077):
+        if (rs.st_uid != os.geteuid() or stat.S_IMODE(rs.st_mode) != 0o700 or
+                fs.st_uid != os.geteuid() or stat.S_IMODE(fs.st_mode) != 0o600):
             raise RuntimeError("approval binding permissions are not private")
     binding = json.loads(path.read_text(encoding="utf-8"))
     contract = _contract_spec()
@@ -201,7 +204,7 @@ def load_binding(control_root):
         raise RuntimeError("explicit root GO receipt missing or unsafe")
     if os.name != "nt":
         gs = root_go_path.stat()
-        if gs.st_uid != os.geteuid() or (gs.st_mode & 0o077):
+        if gs.st_uid != os.geteuid() or stat.S_IMODE(gs.st_mode) != 0o600:
             raise RuntimeError("root GO receipt permissions are not private")
     root_go_bytes = root_go_path.read_bytes()
     root_go = json.loads(root_go_bytes.decode("utf-8"))
@@ -210,6 +213,7 @@ def load_binding(control_root):
         "runner_sha256": contract["runner_sha256"],
         "contract_sha256": _sha256_file(HERE / CONTRACT_NAME),
         "root_go_receipt_sha256": root_go_sha256,
+        "control_root": canonical_control_root,
         "target_id": TARGET_ID,
         "hard_timeout_seconds": HARD_TIMEOUT_SECONDS,
         "timeout_grace_seconds": TIMEOUT_GRACE_SECONDS,
@@ -231,7 +235,8 @@ def load_binding(control_root):
         "contract_sha256": required_exact["contract_sha256"],
         "target_id": TARGET_ID, "hard_timeout_seconds": HARD_TIMEOUT_SECONDS,
         "timeout_grace_seconds": TIMEOUT_GRACE_SECONDS, "derived_image_id": EXPECTED_IMAGE_ID,
-        "root_go_reference": binding["root_go_reference"]}
+        "root_go_reference": binding["root_go_reference"],
+        "control_root": canonical_control_root}
     if any(root_go.get(key) != value for key, value in expected_root_go.items()):
         raise RuntimeError("root GO receipt does not match exact runtime binding")
     if binding.get("hard_timeout_seconds") != HARD_TIMEOUT_SECONDS or binding.get("timeout_grace_seconds") != TIMEOUT_GRACE_SECONDS:
@@ -331,11 +336,52 @@ def _safe_token(value):
     return bool(re.fullmatch(r"[a-f0-9]{32}", value or ""))
 
 
+def control_root_metadata_is_safe(*, effective_uid, owner_uid, mode, is_symlink, path):
+    """Pure policy check for the temporary root-owned control directory."""
+    if effective_uid != 0 or owner_uid != 0 or mode != 0o700 or is_symlink:
+        return False
+    candidate = PurePosixPath(str(path))
+    tmp_root = PurePosixPath("/tmp")
+    try:
+        return candidate.is_absolute() and candidate != tmp_root and tmp_root in candidate.parents
+    except (OSError, RuntimeError):
+        return False
+
+
+def validate_control_root(path):
+    """Validate direct runner invocations before journal, reservation, or Docker."""
+    if os.name == "nt":
+        # Windows is supported only for offline unit tests; production target is Linux.
+        candidate = Path(path)
+        if candidate.is_symlink() or not candidate.is_dir():
+            raise RuntimeError("control directory rejected")
+        return candidate.resolve(strict=True)
+    candidate = Path(path)
+    try:
+        st = candidate.lstat()
+        safe = control_root_metadata_is_safe(
+            effective_uid=os.geteuid(), owner_uid=st.st_uid,
+            mode=stat.S_IMODE(st.st_mode), is_symlink=stat.S_ISLNK(st.st_mode),
+            path=candidate,
+        )
+        if not safe or not stat.S_ISDIR(st.st_mode):
+            raise RuntimeError("control directory rejected")
+        resolved = candidate.resolve(strict=True)
+        if resolved != candidate:
+            raise RuntimeError("control directory path is not canonical")
+        return resolved
+    except (OSError, RuntimeError) as exc:
+        raise RuntimeError("control directory rejected") from exc
+
+
 def control_directory_is_private(path):
     if os.name == "nt":
         return True  # Host-only unit tests; runtime target is POSIX and fails closed there.
-    st = Path(path).stat()
-    return (st.st_mode & 0o077) == 0 and st.st_uid == os.geteuid()
+    st = Path(path).lstat()
+    return control_root_metadata_is_safe(
+        effective_uid=os.geteuid(), owner_uid=st.st_uid,
+        mode=stat.S_IMODE(st.st_mode), is_symlink=stat.S_ISLNK(st.st_mode), path=Path(path),
+    ) and stat.S_ISDIR(st.st_mode)
 
 
 def reserve_nonce(control_root, nonce):
@@ -495,16 +541,18 @@ def stop_owned(cid_path, proc, run_id, nonce, *, docker_call=_docker_call, killp
     return "needs_reconcile"
 
 
-def execute(nonce, *, control_root=CONTROL_ROOT, docker_call=_docker_call, popen=subprocess.Popen):
+def execute(nonce, *, control_root, docker_call=_docker_call, popen=subprocess.Popen):
     global _DIAGNOSTIC_RESERVATION, _DIAGNOSTIC_RUN_ID, _DIAGNOSTIC_RECONCILIATION
     global _DIAGNOSTIC_JOURNAL_FAILED, _DIAGNOSTIC_STAGE, _DIAGNOSTIC_STARTED, _DIAGNOSTIC_CONTROL_ROOT
-    _DIAGNOSTIC_CONTROL_ROOT = Path(control_root)
+    _DIAGNOSTIC_CONTROL_ROOT = None
     _DIAGNOSTIC_RUN_ID = uuid.uuid4().hex
     _DIAGNOSTIC_STAGE = "validation"
     _DIAGNOSTIC_STARTED = None
     _DIAGNOSTIC_RESERVATION = "unknown"
     _DIAGNOSTIC_RECONCILIATION = "not_needed"
     _DIAGNOSTIC_JOURNAL_FAILED = False
+    control_root = validate_control_root(control_root)
+    _DIAGNOSTIC_CONTROL_ROOT = control_root
     diagnostic_initialize(control_root)
     diagnostic_stage("validation", reservation_state="not_reserved")
     binding = load_binding(control_root)
@@ -513,7 +561,7 @@ def execute(nonce, *, control_root=CONTROL_ROOT, docker_call=_docker_call, popen
         raise RuntimeError("one-use nonce file missing or unsafe")
     if os.name != "nt":
         ns = nonce_path.stat()
-        if ns.st_uid != os.geteuid() or (ns.st_mode & 0o077):
+        if ns.st_uid != os.geteuid() or stat.S_IMODE(ns.st_mode) != 0o600:
             raise RuntimeError("one-use nonce permissions are not private")
     nonce = nonce_path.read_text(encoding="ascii").strip()
     if not _safe_token(nonce) or hashlib.sha256(nonce.encode("ascii")).hexdigest() != binding["nonce_sha256"]:
@@ -635,13 +683,14 @@ def main(argv_in=None):
     ap.add_argument("--execute-offline", action="store_true")
     ap.add_argument("--execute-public", action="store_true")
     ap.add_argument("--nonce", default="")
+    ap.add_argument("--control-root", required=True)
     a = ap.parse_args(argv_in)
     if a.execute_public:
         print("blocked: public mode disabled", file=sys.stderr)
         return 3
     if a.execute_offline:
         try:
-            return execute(a.nonce)
+            return execute(a.nonce, control_root=a.control_root)
         except (OSError, RuntimeError, subprocess.TimeoutExpired, json.JSONDecodeError) as exc:
             try:
                 needs_reconcile = _DIAGNOSTIC_STAGE in {"reservation", "image_preflight", "output_setup",

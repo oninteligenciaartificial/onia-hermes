@@ -14,6 +14,9 @@ class RunOnceTemporaryCleanupTests(unittest.TestCase):
         self.assertIn("umask 077", source)
         self.assertIn('mktemp --tmpdir=. .run-once-output.XXXXXXXXXX', source)
         self.assertIn("trap cleanup_output EXIT", source)
+        self.assertIn('[[ "$#" -ne 2 || "$1" != "--control-root"', source)
+        self.assertIn('--control-root "$1"', source)
+        self.assertIn('stat.S_IMODE(s.st_mode) != 0o700', source)
         self.assertIn('>"$output_tmp" 2>/dev/null', source)
         timeout_lines = [line for line in source.splitlines() if line.lstrip().startswith("timeout ")]
         self.assertEqual(len(timeout_lines), 1)
