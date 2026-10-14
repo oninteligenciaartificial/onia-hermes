@@ -714,3 +714,7 @@ Fuentes nuevas se indexan aquí una sola vez; los informes externos citados cons
 - **Siguiente acción:** conectar la fábrica y el handler nativo al launcher confiable; verificar el transporte y la autenticación Codex Cloud. Mantener la activación y R4 pendientes hasta contar con pruebas; no inferir operación real a partir del código o las fixtures.
 
 Los ocho artefactos de este delta y hashes de origen/copia saneada están en el [índice del bundle](hermes-harness-20261012/evidence/continuity-preservation-20261014/README.md). La carpeta canónica ya existía; el delta agrega el carrusel, aprendizaje primario y evidencias finales de locator/autoridad sin duplicar los informes anteriores.
+
+## Relevo para abrir sesión madre limpia
+
+El estado compacto de infraestructura, el siguiente paso y los límites de ownership están en [madre-infra-relevo-20261014-2320.md](madre-infra-relevo-20261014-2320.md). La madre actual conserva ownership hasta verificar y recibir ACK de la nueva sesión; no archivar ni declarar transferido el goal antes de eso.
