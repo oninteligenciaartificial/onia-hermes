@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "operation_id": "7251c0e2-9f66-4382-8d0b-2c7e778c83de",
+  "remote_id": "task_e_6acfdb1f64048327947c4a74eef1693b",
+  "outcome": "BLOCKED_NO_FRESH_SETUP_RECEIPT",
+  "effect_scope": "task_created_only",
+  "checkout_head_observed_by_root": "95bc8a1fe02afe8f9d762785e02d54dffd20a57c",
+  "diff_bytes": 0,
+  "report_produced": false,
+  "provider_calls_during_resolution": 0,
+  "retry": "FORBIDDEN",
+  "restore": "original_profile_restored_after_v2; see v2 restore receipt",
+  "qa": "not_yet_supplied",
+  "source_receipt": "E:/onia-wt/onia-harness-native-run-20261014/apt-inspection-prepared/final-resolution-receipt.json",
+  "source_receipt_sha256": "c4ac29822447f97322aab31fac35fa6d392d33efc5ee543878d71a8d2fd7f152"
+}
