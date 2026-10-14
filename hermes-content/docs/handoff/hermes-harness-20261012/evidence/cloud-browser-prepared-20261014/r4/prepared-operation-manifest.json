@@ -1,0 +1,123 @@
+{
+  "state": "PREPARED_PASS_LIMITED_STATIC_HOLD_FRESH_HUMAN_GRANT",
+  "owner": "/root/browser_next_recovery_plan",
+  "base_source": "E:\\onia-wt\\orquestacion-subagentes-20261013\\hermes-content\\docs\\handoff\\hermes-harness-20261012\\evidence\\cloud-browser-prepared-20261014\\legacy-browser-setup-proposal.py",
+  "base_source_sha256": "a041af91f0e51209490ecd80b5a10e2d7a78d5e668e29139f6de09135c387322",
+  "patch_source": "E:\\onia-wt\\orquestacion-subagentes-20261013\\hermes-content\\docs\\handoff\\hermes-harness-20261012\\evidence\\cloud-browser-prepared-20261014\\legacy-browser-apt-source-compatibility-proposal.patch",
+  "patch_sha256": "80b1d5f77313248a215039357b0632c05254d28b59d00b00d163d04261d95401",
+  "candidate_recipe": "setup_recipe.py",
+  "candidate_recipe_sha256": "369f5ddd83e43a102a713baa109dc38bf717107fc341d07d420a2abf67495519",
+  "static_validation": {
+    "unified_diff_contexts_exact": true,
+    "hunks": 6,
+    "ast_parse": "PASS",
+    "recipe_executed": false,
+    "tests_run": false,
+    "unified_diff_contexts_exact_note": "6 hunks refer to original compatibility derivation; later metadata-only admission/receipt delta separately reviewed in independent QA"
+  },
+  "install_scope_reference": "Parent contract: Playwright1.64 officialPyPI ChromiumMS exact33 Ubuntu libs; no expansion",
+  "candidate_manifest_is_install_authorization": false,
+  "prior_R3_submit_grant": "CONSUMED_FAILED_NO_REPLAY",
+  "next_cloud_submit": "REQUIRES_FRESH_OPERATION_SPECIFIC_GRANT_AND_NONCE",
+  "cloud_preflight": "Existing sources and keyring validation required; V2 SOURCE_UNKNOWN is not proof",
+  "provider_native_git_effects": "Bounded Cloud branch commit is allowed for recovery; metadata-only make_pr is distinguished from actual external URL; no GitHub publish permitted",
+  "effects_performed": {
+    "network": false,
+    "provider_ui": false,
+    "cloud_submit": false,
+    "install": false,
+    "browser": false,
+    "git_write": "PREPARATION_LOCAL_STAGING_AND_AUTHORIZED_BRANCH_PUBLICATION_ONLY_NOT_CLOUD_EFFECT"
+  },
+  "stop_rule": "One candidate plan prepared; no follow-up loop, replay or cloud preflight submitted",
+  "planned_operation_id": "f90f55bc-48d8-406f-a11e-05ddd2683014",
+  "planned_submit_nonce": "planned-submit-d6b5544f-84de-494b-9db1-417727a727fa",
+  "planned_browser_nonce": "planned-browser-009625eb-36ea-47cc-830c-7957aa96a4d4",
+  "identity_status": "PLANNED_ONLY_NOT_RESERVED_NOT_SIGNED_NOT_SUBMITTED",
+  "source_checkout": {
+    "repository": "onia-hermes",
+    "requested_ref": "codex/orquestacion-subagentes-20261013",
+    "provenance": "Preparation checkout observed; final immutable execution HEAD supplied externally after this commit publication",
+    "preparation_head": "757147c447fdae4fa0bf5c8a6f9af3acfd313a90",
+    "expected_execution_head": "PENDING_POST_QA_PUBLICATION_HEAD"
+  },
+  "existing_transport_checkout_head": "b1052ca5825e602051c6bf42e7318579899f465f",
+  "existing_r3_sources": {
+    "browser_check_sha256": "aac64bb8ebc82441141787838458767125b7cdb01b28d75c0bdf2b5f46201ebb",
+    "supervisor_sha256": "7aa687a7c694923ed8f30f3e7172926e854f6031a809b8656dd1b17fb6940ee9"
+  },
+  "git_scope": {
+    "allowed": "Existing Cloud work branch local commit of exact four new sanitized public JSON files only",
+    "allowlist": [
+      "hermes-content/docs/handoff/hermes-harness-20261012/evidence/cloud-browser-prepared-20261014/next-f90f55bc-48d8-406f-a11e-05ddd2683014/preflight.json",
+      "hermes-content/docs/handoff/hermes-harness-20261012/evidence/cloud-browser-prepared-20261014/next-f90f55bc-48d8-406f-a11e-05ddd2683014/execution-receipt.json",
+      "hermes-content/docs/handoff/hermes-harness-20261012/evidence/cloud-browser-prepared-20261014/next-f90f55bc-48d8-406f-a11e-05ddd2683014/supervisor-receipt.json",
+      "hermes-content/docs/handoff/hermes-harness-20261012/evidence/cloud-browser-prepared-20261014/next-f90f55bc-48d8-406f-a11e-05ddd2683014/screenshot-artifact.json"
+    ],
+    "required_file_mode": "100644",
+    "denied": [
+      "GitHub push",
+      "actual PR creation",
+      "merge",
+      "main",
+      "apply",
+      "recipe/source edits"
+    ],
+    "stage": "Explicit four-path staging only after child sanitization and size checks"
+  },
+  "native_artifact_scope": {
+    "make_pr_title_body_only": "Record native artifact metadata separately; V2 metadata without URL does not prove GitHub publication",
+    "unexpected_external_url": "HOLD capture receipt no follow-up provider calls"
+  },
+  "transport": {
+    "implementation": "ExistingNativeCloudCLI.collect_result -> cloud diff -> _parse_new_json_diff",
+    "max_submit": 1,
+    "max_status": 2,
+    "status_timeout_seconds": 30,
+    "max_collect": 1,
+    "collect_timeout_seconds": 30,
+    "max_provider_diff_bytes": 262144,
+    "selected_staged_json_budget_bytes": 196608,
+    "selected_diff_budget_bytes": 229376,
+    "jpeg_bytes_max": 92160,
+    "base64_characters_max": 122880,
+    "original_jpeg": "Private outside checkout; no binary file retrieval",
+    "recovery": "JSON text diff reconstruction then strict base64 decode + JPEG bytes/SHA/dimensions validation by root before QA",
+    "retry": "FORBIDDEN"
+  },
+  "browser_gate": {
+    "max_launches": 1,
+    "watchdog_seconds": 75,
+    "reap_grace_seconds": 2,
+    "requires": [
+      "Valid actual setup/cache receipt matching candidate",
+      "UID1000 existing account",
+      "sandbox proof",
+      "fresh separately admitted browser nonce",
+      "3 hosts GET/HEAD/OPTIONS exact"
+    ],
+    "hosts": [
+      "example.com",
+      "iana.org",
+      "www.iana.org"
+    ]
+  },
+  "admission_gap": {
+    "state": "STATIC_QA_PASS_NOT_RUNTIME_PROVED",
+    "new_grant_required": true
+  },
+  "r4_source_files": {
+    "admission.py": "9921253f9d510883c598d83a485eeb3768a27e185dbb857f58455fdad8dc2fb3",
+    "browser_check.py": "bd87c4c34307ca6ada693bb11486d1c38fc5d3ab996665a8a2e633185ff20c14",
+    "supervisor.py": "f4797c248dcfacd040f504bc0769cd6a26d7f03e539e8274c8696664d3b2461b"
+  },
+  "execution_expected_head": "PENDING_POST_QA_PUBLICATION_HEAD",
+  "setup_receipt_binding": "Actual protected root-owned cache record generated by pinned installer after success; recipe/env/op/newgrant/UTC freshness. Root verifies intent upfront only; no future setup attestation.",
+  "independent_qa": {
+    "path": "independent-qa.md",
+    "result": "PASS_LIMITED_STATIC_NOT_RUNTIME",
+    "source_report_sha256": "3ab38394ba4a0e7494b0179a1526de6d5b3e87e2de40aafaae2ca877eb70eaea",
+    "canonical_git_blob_sha256": "6fba965fdb4b1ad97f0715a6389afaae6efb2c451b43143d7514f8f7cb2372df",
+    "normalization": "Exact copied original CRLF report; Git normalized LF, content unchanged"
+  }
+}
