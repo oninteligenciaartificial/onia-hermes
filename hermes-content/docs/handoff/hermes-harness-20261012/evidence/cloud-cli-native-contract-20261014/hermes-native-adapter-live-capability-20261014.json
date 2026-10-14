@@ -1,0 +1,70 @@
+{
+  "schema": 1,
+  "captured_at_utc": "2026-10-14T21:16:01.2262189Z",
+  "scope": "VPS existing Hermes Codex source and auth presence only",
+  "ssh_readonly_commands": 5,
+  "provider_calls": 0,
+  "cli_model_calls": 0,
+  "installs": 0,
+  "gateway_state": "active verified earlier21:05:45Z; not rechecked",
+  "model_provider": {
+    "sha256": "a3d376285da5b39ae93d087fa1410e90e7a719170517ba314a068b81dfeef3e4",
+    "source": "/usr/local/lib/hermes-agent/plugins/model-providers/openai-codex/__init__.py",
+    "native_cloud_exec_literal": false
+  },
+  "transport": {
+    "purpose": "model messages/tools Responses transport; no Cloud task sender found in inspected source",
+    "sha256": "56b0251fcdfbfc4b4c175175bb9e81c50a263ed6b3fba63ef450a44c790aa7e9",
+    "source": "/usr/local/lib/hermes-agent/agent/transports/codex.py",
+    "methods": [
+      "api_mode",
+      "convert_messages",
+      "convert_tools",
+      "build_kwargs",
+      "normalize_response",
+      "validate_response",
+      "preflight_kwargs"
+    ],
+    "native_cloud_exec_literal": false
+  },
+  "auth": {
+    "codex_version": "UNKNOWN",
+    "sha256": "51468c0e3a9daaa4e467ad0009361af5221c83236668094d1db117e6f60bcc37",
+    "usable_ChatGPT_Cloud_auth": "UNKNOWN; no credential validity check or provider call",
+    "codex_cli_in_ssh_PATH": false,
+    "methods": [
+      "_read_codex_tokens",
+      "resolve_codex_runtime_credentials",
+      "_import_codex_cli_tokens",
+      "refresh_codex_oauth_pure"
+    ],
+    "source": "/usr/local/lib/hermes-agent/hermes_cli/auth_codex.py",
+    "provider_entry_shape": "No dictionary openai-codex entry observed; must not infer whole store credential absence",
+    "root_codex_auth_json_present": false,
+    "hermes_auth_store_present": true
+  },
+  "local_app_server_sources_discovered": [
+    "/usr/local/lib/hermes-agent/agent/transports/codex_app_server.py",
+    "/usr/local/lib/hermes-agent/agent/transports/codex_app_server_session.py"
+  ],
+  "app_server_methods": "NOT_INSPECTED_WITHIN_FOUR_READ_LIMIT",
+  "stale_Work_error": "CloudThreadNotFoundError historical; not reproduced",
+  "implementation_gap": "Add bounded Hermes request/result handler routing to EXISTING desktop authenticated NativeCloudCLI + NativeReceiptBridge/step_native_work via same approved SQLiteQueue, with exact external grant and STOP/dedup; do not treat model Responses/app-server as remote Cloud task transport",
+  "server_execution_blocker": "Direct VPS native Cloud execution not established: PATH CLI absent, no exact canonical alternative path located in bounded lookup; /root/.codex/auth.json absent and no target Codex OAuth entry in structurally inspected Hermes auth store. Binary elsewhere and other authorized auth mechanism UNKNOWN. No install/login request made.",
+  "runtime_edits": 0,
+  "supplemental_auth_structure": {
+    "observed_at_utc": "2026-10-14T21:18:51.035425Z",
+    "source": "/root/.hermes/auth.json",
+    "provider_collection_shape": "dict",
+    "credential_pool_shape": "dict",
+    "target_codex_entry_present": false,
+    "access_token_present": false,
+    "refresh_token_present": false,
+    "expiry": "UNKNOWN",
+    "bounded_structure_complete": true,
+    "validity": "UNKNOWN_NO_RESOLVER_REFRESH_NETWORK",
+    "binary_outside_PATH": "UNKNOWN",
+    "canonical_lookup": "No exact VPS binary path in bounded canonical handoff lookup; no guessed paths checked",
+    "global_uninstalled_claim": false
+  }
+}
