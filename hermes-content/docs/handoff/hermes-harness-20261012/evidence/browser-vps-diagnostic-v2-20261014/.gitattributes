@@ -1,0 +1,6 @@
+/browser_probe.py -text whitespace=cr-at-eol
+/diagnostic-trial-contract-20261014.md -text whitespace=cr-at-eol
+/parent-source-manifest.json -text whitespace=cr-at-eol
+/source-manifest.json -text whitespace=cr-at-eol
+/upstream-bundle-manifest.json -text whitespace=cr-at-eol
+/upstream-qa-verdict.json -text whitespace=cr-at-eol

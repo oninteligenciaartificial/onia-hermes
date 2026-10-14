@@ -21,11 +21,6 @@
       "size_bytes": 32
     },
     {
-      "name": "Dockerfile",
-      "sha256": "1c878a2f11de64ad3bd5d02255da549d465adda1f6442836c41dfcd90637c5d2",
-      "size_bytes": 649
-    },
-    {
       "name": "approval-stage.json",
       "sha256": "35f5dc69008fb703814a3c399dcfd73710358db4dc5edd8bc270d796cda2b3a8",
       "size_bytes": 1352
@@ -49,6 +44,11 @@
       "name": "diagnostic-trial-contract-20261014.md",
       "sha256": "b2547c190dad4cc56b5452fa08d8de6ebf5e87bf031099e8f583cb69bf5200aa",
       "size_bytes": 8118
+    },
+    {
+      "name": "Dockerfile",
+      "sha256": "1c878a2f11de64ad3bd5d02255da549d465adda1f6442836c41dfcd90637c5d2",
+      "size_bytes": 649
     },
     {
       "name": "image-identity-review.json",
