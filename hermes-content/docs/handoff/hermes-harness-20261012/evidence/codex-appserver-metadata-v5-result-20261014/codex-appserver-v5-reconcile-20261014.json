@@ -1,0 +1,19 @@
+{
+  "artifact": "V5 bounded cleanup reconciliation",
+  "receipt_path": "E:/onia-wt/codex-appserver-metadata-prepared-v5-20261014/receipt-20261014T092508_818891Z.json",
+  "receipt_sha256": "E25E30C36769B9FEC6F1323807CDD6F5EE53F4D70BF5E1D5EC169D64DB8156F0",
+  "captured_at_utc": "2026-10-14T09:25:13.589520Z",
+  "reconciliation_observed_at_utc": null,
+  "observation_time_note": "The original bounded read-only reconciliation output did not include a timestamp; none is inferred.",
+  "scope": "Single read-only SSH metadata query; no signals, deletes, argv, environment, or logs read.",
+  "proc_scan_complete": true,
+  "proc_entries": 358,
+  "owned_matching_cwds": 0,
+  "proc_metadata_errors": 0,
+  "tmp_scan_complete": false,
+  "tmp_scan_entry_cap": 8192,
+  "matching_owned_scratch_dirs": 0,
+  "matching_prefix_entries": 0,
+  "scratch_absence_conclusion": "unknown because /tmp scan was capped and incomplete",
+  "cleanup_conclusion": "No matching owned process was observed in the complete /proc metadata scan; scratch cleanup remains unknown. No process was signaled or deleted."
+}

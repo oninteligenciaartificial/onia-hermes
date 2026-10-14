@@ -1,0 +1,29 @@
+{
+  "status": "PASS_V6_FOCAL_SOURCE_REVIEW",
+  "reviewed_at_utc": "2026-10-14T09:29:34.276822+00:00",
+  "artifact_dir": "E:\\onia-wt\\codex-appserver-metadata-prepared-v6-20261014",
+  "source_sha256": {
+    "metadata_probe.py": "4116A584179F4F28C7E58C471403C2637EDFF2F6E30EBB49ACD3632AC7F774E0",
+    "test_metadata_probe.py": "62BD1505B521CEC77C2A29260AFBB90053634E1B2C5310CE96E3F2F74F17E9B8",
+    "review.md": "9FCD0F2D2588DEAEEECC1FD1677FD1281E69A2CF7C4A5CF368F3B64D783B5111",
+    "manifest.json": "2D2A84C5148F8685DACF3CEAB8912405C9F7352FF8975807E9E770E29D278297"
+  },
+  "official_source": "https://raw.githubusercontent.com/openai/codex/rust-v0.161.0/codex-rs/app-server-protocol/src/protocol/common.rs#L1911-L1915",
+  "checks": [
+    "Three added names are public server notification registry entries for gateway OAuth state, app list update and remote control status.",
+    "Only those three names join the V5 accepted notification set; params and emittedAtMs are discarded by validation return.",
+    "MCP startup, thread/turn and action notifications remain rejected; no new RPC request, access or control method was added.",
+    "Privacy projection, strict field/timestamp guards, process-group/EOF cleanup, bounded stdout/watchdogs and environment whitelist remain present.",
+    "Remote supervisor source compiles without execution."
+  ],
+  "author_focal_tests": {
+    "count": 3,
+    "result": "PASS reported",
+    "independently_rerun": false
+  },
+  "limits": [
+    "No V6 CLI/SSH/RPC/network/auth/model execution by QA.",
+    "V5 failure metadata_notice_class remote_control_status is a reported classification, not proof of payload or action.",
+    "Account/auth state remains UNKNOWN until complete successful read and cleanup."
+  ]
+}
