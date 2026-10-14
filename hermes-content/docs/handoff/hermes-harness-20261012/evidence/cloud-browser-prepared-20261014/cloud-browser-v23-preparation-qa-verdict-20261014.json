@@ -1,0 +1,25 @@
+{
+  "at_utc": "2026-10-14T05:16:08.1447348+00:00",
+  "verdict": "PASS limited preparation V2 routing + V3 own-child watchdog; not execution approval or browser result",
+  "source_files": {
+    "supervisor": "E:/onia-wt/cloud-browser-prepared-v23-20261014/supervisor.py",
+    "browser_check": "E:/onia-wt/cloud-browser-prepared-v23-20261014/browser_check.py"
+  },
+  "source_hashes": {
+    "supervisor": "E4349C4876E67DE646956CBBCE78ED2CC55764D34948C2A936D424608DB71910",
+    "browser_check": "0C5650791E83831D11445B26FC715A7A931016E20A7F3C3EC6E423DB550A8D6B"
+  },
+  "provenance": "Exact complete untruncated command stdout recovered from two authorized native durable turns; locally written UTF8 bytes SHA match Cloud hashes. Not reconstructed summary.",
+  "turns": [
+    "01a138c6-848f-767d-9dab-34e92f1f81bb",
+    "01a138cf-a928-721e-9bb5-f2d3e26035fc"
+  ],
+  "route_review": "HTTPS exact three public hosts, default443 no credentials. Context routes before page, fetch zero redirects/retries. Controlled allowed redirect creates a newly routed navigation; denied destination pre-fetch. Service workers blocked/WebSockets closed. Page routing is not OS egress isolation.",
+  "watchdog": "argv list/start_new_session own unreaped direct child PID=PGID; rejects own process/group and PID<=1 before killpg. Timeout kills only verified child group; wait grace2s. No name/UID kill, no env/proxy changes, child stdout/stderr DEVNULL. OS spawn/scheduler/filesystem not hard real-time; escaped helper cleanup UNKNOWN.",
+  "pin": "V3 checks exact V2 SHA before spawn; relies on frozen trusted source path, not attacker-proof atomic exec",
+  "identity": "Native session contract-provided, executing turn UNKNOWN externally; /root preparer distinct; flag no evidence of human approval",
+  "observed_tests": "Cloud output V2fourofflinePASS and V3fourfakePASS; timeout0.05 elapsed0.051411 own kill/reap. QA did not rerun or execute wrapper/browser.",
+  "eligible": "Sources locally recoverable and reviewable; parent may preserve before approval",
+  "remaining_gate": "Explicit method approval before exactly bounded browser action; runtime launch/navigation/image/receipt and independent output QA remain unobserved",
+  "no_calls": "No new Cloud prompt/model/browser/HF/Telegram, no closed suites or canonical edits"
+}
