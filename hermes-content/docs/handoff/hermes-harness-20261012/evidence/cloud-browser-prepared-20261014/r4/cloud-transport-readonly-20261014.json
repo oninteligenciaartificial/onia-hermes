@@ -1,0 +1,192 @@
+{
+  "schema": 1,
+  "observed_at_utc": "2026-10-15T00:05:00Z",
+  "scope": "provider_read_only_local_report_and_recovery_snapshot",
+  "result": "partial_blocked_for_native_submit",
+  "repos": {
+    "code": {
+      "path": "E:/onia-wt/hermes-controller-pilot-20261013",
+      "branch": "codex/hermes-controller-hardening-20261013",
+      "head": "c3203ab604fe6170649e9f03c11d266d2ca2861a",
+      "untracked": [],
+      "clean": true
+    },
+    "docs": {
+      "path": "E:/onia-wt/orquestacion-subagentes-20261013",
+      "branch": "codex/orquestacion-subagentes-20261013",
+      "head": "efd36104126f5df549ccb51c5b1e8de272bf191b",
+      "clean": false,
+      "sha_mismatch_note": "Observed base HEAD; this report and handoff/plan edits are local pending review, no commit/push"
+    }
+  },
+  "auth": {
+    "codex_app_read_access": true,
+    "durable_thread_id": "01a13170-1c7e-7224-83c1-c5f369052039",
+    "durable_host_id": "durable",
+    "durable_thread_status": "idle",
+    "browser_tab_url": "https://chatgpt.com/settings/cloud-environments/6abad782eba0819196ca234dc3abc327",
+    "browser_binding": "rejected: tab already belongs to prior mother session 01a138fa-8304-71c1-9391-3bc14314d57f",
+    "browser_authenticated_state": "READ_ACCESS_CONFIRMED_ON_SAME_CHROME",
+    "keepass_database_at_expected_path": false,
+    "cloud_submit_auth": "UNKNOWN",
+    "browser_binding_exact_rejection": "Tab 437654275 is already part of browser session 01a138fa-8304-71c1-9391-3bc14314d57f",
+    "browser_binding_scope": "Original tab claim was rejected; a new tab on the same Chrome OnIA profile opened and exposed the target environment settings without login or profile switch",
+    "browser_environment_settings_read": {
+      "environment_name": "ONIA Hermes — revisión y desarrollo",
+      "repository": "oninteligenciaartificial/onia-hermes",
+      "machine": "Universal",
+      "cache_enabled": true,
+      "setup_mode": "manual",
+      "setup_script_configured": true,
+      "network_access": "enabled",
+      "domain_mode": "custom",
+      "domains": [
+        "example.com",
+        "iana.org",
+        "www.iana.org"
+      ],
+      "http_methods": [
+        "GET",
+        "HEAD",
+        "OPTIONS"
+      ],
+      "provider_setup_executed": false,
+      "configuration_saved": false
+    },
+    "browser_authenticated_scope": "Existing Codex Cloud environment settings were readable in a newly opened tab on Chrome OnIA; no login prompt or settings save"
+  },
+  "transport": {
+    "available_read_methods": [
+      "mcp__codex_app__list_threads",
+      "mcp__codex_app__read_thread",
+      "mcp__codex_app__wait_threads"
+    ],
+    "native_codex_cloud_submit_exposed": true,
+    "submit_endpoint_or_command": "Local installed CLI help: codex cloud exec --env <ENV_ID> [QUERY], --branch, --attempts (default 1); command not executed",
+    "existing_result_read_method": "mcp__codex_app__read_thread",
+    "historical_cli_evidence": "Prior QA recorded codex cloud list --limit 10 --json returning tasks=[] cursor=null; not rerun/currently reverified",
+    "adapter_native_handler": "na not registered per handoff",
+    "status_command": "codex cloud status <TASK_ID>",
+    "collect_command": "codex cloud diff <TASK_ID> (help only); codex cloud apply writes local diff and was not used",
+    "local_cli": {
+      "path": "C:\\Users\\PC\\AppData\\Roaming\\npm\\codex.ps1",
+      "version": "codex-cli 0.161.0",
+      "login_status": "LOGGED_IN",
+      "login_status_exit_code": 0,
+      "provider_called": false
+    },
+    "durable_thread_id_is_cli_task_id": "UNKNOWN",
+    "harness_binding": {
+      "implementation": "native_cloud_cli.py NativeCloudCLI",
+      "submit": "codex cloud exec --env <ENV_ID> --attempts 1 --branch <branch>, prompt bound to operation_id and input_sha",
+      "status": "codex cloud list --limit 20 --json, match exactly one TASK_ID",
+      "collect": "codex cloud diff <TASK_ID>",
+      "cli_task_id_mapping_to_codex_app_durable_uuid": "UNKNOWN",
+      "direct_cli_status_command_documented": "codex cloud status <TASK_ID>",
+      "collect_parser": "allowlisted new regular 100644 JSON files; parse diff only; no git apply"
+    }
+  },
+  "r4": {
+    "operation_id": "f90f55bc-48d8-406f-a11e-05ddd2683014",
+    "repository": "onia-hermes",
+    "ref": "codex/orquestacion-subagentes-20261013",
+    "recipe_sha256": "369f5ddd83e43a102a713baa109dc38bf717107fc341d07d420a2abf67495519",
+    "environment_id_template": "6abad782eba0819196ca234dc3abc327",
+    "fresh_grant_required": false,
+    "nonces_status": "planned_only_not_reserved_signed_or_submitted",
+    "limits": {
+      "max_submit": 1,
+      "max_status": 2,
+      "status_timeout_seconds": 30,
+      "max_collect": 1,
+      "collect_timeout_seconds": 30,
+      "retries": "forbidden",
+      "max_provider_diff_bytes": 262144,
+      "selected_json_budget_bytes": 196608,
+      "selected_diff_budget_bytes": 229376,
+      "jpeg_max_bytes": 92160,
+      "base64_max_characters": 122880,
+      "max_browser_launches": 1,
+      "watchdog_seconds": 75,
+      "reap_grace_seconds": 2,
+      "hosts": [
+        "example.com",
+        "iana.org",
+        "www.iana.org"
+      ],
+      "methods": [
+        "GET",
+        "HEAD",
+        "OPTIONS"
+      ]
+    },
+    "authorization": {
+      "reference": "user:01a13cc1-12e9-79a0-97e8-4899f05a5c95:R4-20261014",
+      "received": "2026-10-14T23:35:00Z approximate",
+      "scope": "Only R4; max 1 submit, 2 status, 1 collect, no retries; operation/repo/ref/recipe and conditions as recorded. Human wording did not literally exclude setup; profile/setup/install HOLD was a provisional coordinator guard, not quoted human scope.",
+      "conditions": [
+        "transport available",
+        "authentication",
+        "sandbox proof"
+      ],
+      "excludes": [
+        "services",
+        "deploy",
+        "30-minute cycle"
+      ],
+      "execution_state": "received_not_executed_conditions_pending",
+      "grant_satisfied": false
+    },
+    "setup_viability": "BLOCKED pending explicit scope resolution and fresh receipts: grant R4 exists but does not separately name the Manual setup-script update/install effects; this is a provisional HOLD, not a literal human exclusion. Prior installation manifest remains PENDING_APPROVAL.",
+    "setup_review": {
+      "environment_id": "6abad782eba0819196ca234dc3abc327",
+      "affected_profile": "Codex Cloud legacy environment Manual setup/cache, not Chrome personal profile",
+      "prior_recipe_sha256": "a041af91f0e51209490ecd80b5a10e2d7a78d5e668e29139f6de09135c387322",
+      "candidate_recipe_sha256": "369f5ddd83e43a102a713baa109dc38bf717107fc341d07d420a2abf67495519",
+      "component_set_same_as_prior_plan": true,
+      "component_approval_proven": false,
+      "prior_manifest_state": "PENDING_APPROVAL; downloads_and_install_approved=false; human_approval_reference=null",
+      "prior_operation_grant": "arreglo-prueba-unica, single-operation and consumed; bound to prior recipe, not reusable",
+      "recipe_delta": "APT existing source support expands from one ubuntu.sources deb822 path to protected existing .sources/.list parsing; validates official Ubuntu origin/keyring/suites/components; isolated temporary indexes/config; fresh operation/grant/environment/recipe-linked setup receipt",
+      "recipe_changes_packages_hosts_or_accounts": false,
+      "cache_effect": "environment rebuild may invalidate/recreate cache and affect other tasks; amount/duration UNKNOWN",
+      "rollback_snapshot": "E:/onia-wt/cloud-transport-rollback-20261014/rollback-snapshot.json",
+      "setup_snapshot_sha256": "31e8f2fa4db20115066999681e136551c1e413de7c0ba746f93bc423a5ba66cf",
+      "setup_snapshot_ui_hash_verified": true,
+      "maintenance_snapshot_sha256": "6a3ea5b3f45cc9a6066d94824ccfedb8c301dd572f5a36ee3bac398d9ad2a726",
+      "rollback_plan": "restore verified saved setup and maintenance payloads plus network policy and read back; does not revert system APT packages or provider cache/rebuild; no package/cache deletion",
+      "rollback_sufficient_for_approval": false,
+      "reason": "Configuration snapshot is hash-verified/restorable; APT libraries affect container system image and package/cache rollback and provider rebuild behavior remain UNKNOWN. Human must explicitly approve setup/install effects and accept cache/no-software-rollback risk before environment mutation.",
+      "no_ui_change": true,
+      "no_install": true,
+      "snapshot_details": "Supported AX captured complete live setup text in memory (19920 bytes, no terminal LF); append one LF to match the saved canonical snapshot SHA 31e8f2fa4db20115066999681e136551c1e413de7c0ba746f93bc423a5ba66cf. Maintenance snapshot SHA 6a3ea5b3... exactly matches saved readback. Focused credential scan: 0 matches; source content not emitted. Config rollback prepared; package/cache rollback and provider rebuild behavior UNKNOWN.",
+      "secret_check": "zero matches for focused token/private-key assignment patterns; no values printed",
+      "live_setup_ax_sha256_without_terminal_lf": "7bf9992deb9dc26eaf3b2fa454affd391ae76e9d105a2c9d578d168d3c875014",
+      "live_setup_normalized_sha256_matches_snapshot": true,
+      "component_scope_clarification": "Python wheels and Chromium are isolated in /opt/onia-public-browser-1.64.0; the 33 APT libraries are system packages in the cloud container and may affect its shared image/cache.",
+      "prepared_minimal_setup_approval": "Authorize the Manual setup update for environment 6abad782eba0819196ca234dc3abc327 to recipe 369f5ddd83e43a102a713baa109dc38bf717107fc341d07d420a2abf67495519 replacing a041af91f0e51209490ecd80b5a10e2d7a78d5e668e29139f6de09135c387322, with fixed Python wheels and Chromium isolated under /opt/onia-public-browser-1.64.0 and the 33 official Ubuntu APT libraries installed as cloud-container system packages; no new repositories or navigation-policy change. A rebuild may invalidate/recreate shared cache and affect other tasks; package/cache rollback is unproven. Prior setup/config snapshot is verified and restorable. This is separate setup/install effects approval; existing R4 grant limits/conditions remain unchanged; no services, deploy, or 30-minute cycle."
+    },
+    "grant_reference": "user:01a13cc1-12e9-79a0-97e8-4899f05a5c95:R4-20261014"
+  },
+  "blocked": [
+    "R4 conditions not satisfied: target transport permission/auth and runtime sandbox must be evidenced; no submit",
+    "R4 fresh setup receipt absent; existing Manual setup is old recipe, config visible but no execution receipt",
+    "R4 grant is conditional and does not separately enumerate setup/install effects; provisional HOLD pending Root scope decision, not a literal exclusion",
+    "Configuration rollback is prepared and hash-verified; installed packages, container cache invalidation/recovery, and effects on other tasks are UNKNOWN; operational rollback not proven",
+    "Mapping between Codex App durable thread UUID and Codex Cloud CLI TASK_ID remains UNKNOWN"
+  ],
+  "protocol": {
+    "requested_name_exists": false,
+    "canonical_found": "hermes-content/docs/EXECUTION_PROTOCOL.md"
+  },
+  "files_written": [
+    "E:/onia-wt/cloud-transport-readonly-20261014.md",
+    "E:/onia-wt/cloud-transport-readonly-20261014.json",
+    "E:/onia-wt/cloud-transport-rollback-20261014/legacy-browser-setup-payload.sh",
+    "E:/onia-wt/cloud-transport-rollback-20261014/legacy-browser-maintenance-payload.sh",
+    "E:/onia-wt/cloud-transport-rollback-20261014/rollback-snapshot.json",
+    "E:/onia-wt/orquestacion-subagentes-20261013/hermes-content/docs/handoff/madre-infra-relevo-20261014-2320.md",
+    "E:/onia-wt/orquestacion-subagentes-20261013/hermes-content/docs/handoff/codex-cloud-pc-20261011.md",
+    "E:/onia-wt/orquestacion-subagentes-20261013/hermes-content/docs/handoff/hermes-harness-20261012/evidence/cloud-browser-prepared-20261014/r4/next-operation-outline.txt"
+  ]
+}
