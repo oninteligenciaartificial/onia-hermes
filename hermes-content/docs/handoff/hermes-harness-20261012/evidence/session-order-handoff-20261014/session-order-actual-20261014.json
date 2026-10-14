@@ -1,0 +1,28 @@
+{
+  "schema": "onia.session_order_actual.v1",
+  "observed_at_utc": "2026-10-14T12:00:16Z",
+  "source": "root Codex app create_sidebar_section, set_thread_title, move_thread_to_sidebar_section and list_threads verification",
+  "baseline_inventory": "session-order-handoff-20261014.json",
+  "goal_and_owner": {"old_goal_status":"blocked","old_goal_owner":"01a136be-bea1-70f1-9891-9cae7dd1d331","new_mother":"01a138fa-8304-71c1-9391-3bc14314d57f","transfer_completed":false,"pause_completed":false,"new_goal_activated":false},
+  "sections_created": [
+    {"id":"afc1b585-83d9-40fe-89d0-78c096ebda8e","name":"ONIA · Archivo pendiente"},
+    {"id":"fa6f949f-6794-4b17-95c9-0657778b9d12","name":"ONIA · Fuentes Work"}
+  ],
+  "mothers_section": {"id":"5a199cb4-3e38-4ba6-a6a0-5d96a36d279f","new_mother_title":"MADRE INFRA · ONIA · nueva · 14 oct","new_mother_id":"01a138fa-8304-71c1-9391-3bc14314d57f","marketing_mother_id":"01a12c1f-bef7-7252-a4b6-f8f8354dfc48"},
+  "old_owner_title":"RELEVO EN CURSO · ONIA Infra · origen",
+  "archive_pending_moved_not_archived": [
+    {"id":"01a1352a-a8ab-77d0-9335-895a7d8083a2","title":"ARCHIVO PENDIENTE · Infra · Orquesta anterior"},
+    {"id":"01a12beb-7774-7c02-9931-12264158df83","title":"ARCHIVO PENDIENTE · Infra · Madre anterior"},
+    {"id":"01a13910-ec21-768c-abe9-2f8250a4401b","title":"ARCHIVO PENDIENTE · QA Cloud · sesión y agentes"},
+    {"id":"01a13875-a024-7784-9718-7d8c60fe702a","title":"ARCHIVO PENDIENTE · QA Cloud · relevo"}
+  ],
+  "work_sources_moved_preserved": [
+    {"id":"6acc36d5-6ed8-83e9-83e4-f8c414b6112b","title":"FUENTE WORK · ONIA · Ventas y pauta"},
+    {"id":"6acc36d4-8864-83e9-a185-6745b83ed1e6","title":"FUENTE WORK · ONIA · Lucía","status_observed":"active"},
+    {"id":"6acbce63-abc8-83e9-8422-d849d5e15aa4","title":"FUENTE WORK · ONIA · Marca personal"},
+    {"id":"6acc36d6-40fc-83e9-8b1c-0a50b7595355","title":"FUENTE WORK · ONIA · Hermes-Jarvis"}
+  ],
+  "native_workers_preserved": {"marketing_section_id":"19a55402-64e8-4be0-851f-bfb0a44f4a71","marketing_ids":["01a13170-b488-71d9-83f8-12663d5a0013","01a13171-0fdb-72c6-9fdc-81244d7e6006","01a13171-6ac1-771e-b285-52e7284e203a"],"platform_infra_section_id":"5705d669-5498-4e52-9d0e-8bf0fcf0d156","platform_infra_ids":["01a12c7e-97e2-7115-8561-0b7658008003","01a13170-1c7e-7224-83c1-c5f369052039"]},
+  "unknown_roles_untouched": ["01a13798-f4dc-7142-bf29-036b5035102e","01a1386b-acfe-76c3-8631-3382ad50b00f","01a136e6-a82c-7185-9884-529a0979e024"],
+  "limits": "Section placement and titles are observed organization, not proof of worker activity, ownership transfer, archive, browser execution or completion of the blocked goal. App may normalize the historical mother key to client-new-thread in sidebar metadata; no new role is inferred from that key."
+}

@@ -1,0 +1,159 @@
+{
+  "schema": "onia.session_order_handoff.v1",
+  "observed_at_utc": "2026-10-14T11:56:19Z",
+  "sources": [
+    "Codex app list_threads(limit=50)",
+    "Codex app read_thread(turnLimit<=2) for 12 named or candidate chats",
+    "repo handoff HEAD 6f20a085e0cfa4c725c35544768eb68ea688625b"
+  ],
+  "authorization": {
+    "human_approved": [
+      "VPS Playwright installation from the exact offline V3 bundle",
+      "pause only the old blocked goal after handoff and activate the same objective in the new local mother"
+    ],
+    "not_done": [
+      "installation",
+      "goal pause or recreation",
+      "ownership transfer",
+      "chat renames, moves or archives"
+    ],
+    "owner_until_explicit_transfer": "01a136be-bea1-70f1-9891-9cae7dd1d331",
+    "old_goal_status_observed": "blocked"
+  },
+  "current": [
+    {
+      "id": "01a136be-bea1-70f1-9891-9cae7dd1d331",
+      "kind": "codex",
+      "host": "local",
+      "title_observed": "MADRE DESARROLLO-INFRA · ONIA · Relevo…",
+      "status_observed": "active",
+      "role": "current owner; drain and ACK transfer pending"
+    },
+    {
+      "id": "01a138fa-8304-71c1-9391-3bc14314d57f",
+      "kind": "codex",
+      "host": "local",
+      "title_observed": "MADRE DESARROLLO-INFRA · ONIA · Relevo…",
+      "status_observed": "idle",
+      "role": "new mother standby; checkpoint ACK observed, ownership not transferred"
+    },
+    {
+      "id": "01a12c1f-bef7-7252-a4b6-f8f8354dfc48",
+      "kind": "codex",
+      "host": "local",
+      "title_observed": "MADRE MARKETING · ONIA",
+      "status_observed": "notLoaded",
+      "role": "marketing mother; retain"
+    },
+    {
+      "id": "01a12c7e-97e2-7115-8561-0b7658008003",
+      "kind": "codex",
+      "host": "durable",
+      "title_observed": "ONIA Platform · Desarrollo · Codex Cloud",
+      "status_observed": "idle",
+      "role": "known native Platform worker; retain"
+    },
+    {
+      "id": "01a13170-1c7e-7224-83c1-c5f369052039",
+      "kind": "codex",
+      "host": "durable",
+      "title_observed": "ONIA · Hermes QA · Codex Cloud",
+      "status_observed": "idle",
+      "role": "known native Hermes QA worker; retain"
+    },
+    {
+      "id": "01a13170-b488-71d9-83f8-12663d5a0013",
+      "kind": "codex",
+      "host": "durable",
+      "title_observed": "ONIA · Marca personal · Codex Cloud",
+      "status_observed": "idle",
+      "role": "known native Marca worker; retain"
+    },
+    {
+      "id": "01a13171-0fdb-72c6-9fdc-81244d7e6006",
+      "kind": "codex",
+      "host": "durable",
+      "title_observed": "ONIA · Lucía · Codex Cloud",
+      "status_observed": "idle",
+      "role": "known native Lucía worker; retain"
+    },
+    {
+      "id": "01a13171-6ac1-771e-b285-52e7284e203a",
+      "kind": "codex",
+      "host": "durable",
+      "title_observed": "ONIA · Ventas y pauta · Codex Cloud",
+      "status_observed": "idle",
+      "role": "native Ventas worker; title and latest checkpoint confirmed by read_thread; retain"
+    }
+  ],
+  "archive_pending_only": [
+    {
+      "id": "01a1352a-a8ab-77d0-9335-895a7d8083a2",
+      "title_observed": "MADRE DESARROLLO-INFRA · ONIA · Orquesta…",
+      "reason": "older local mother; latest read_thread reports handoff accepted; root must verify before archiving"
+    },
+    {
+      "id": "01a12beb-7774-7c02-9931-12264158df83",
+      "title_observed": "MADRE DESARROLLO-INFRA · ONIA",
+      "reason": "older local mother; last turn interrupted; root must verify ownership before archiving"
+    },
+    {
+      "id": "01a13910-ec21-768c-abe9-2f8250a4401b",
+      "title_observed": "ONIA · QA sesión limpia y agentes · Codex Cloud",
+      "reason": "idle one-off QA proof; retain evidence and review before archiving"
+    },
+    {
+      "id": "01a13875-a024-7784-9718-7d8c60fe702a",
+      "title_observed": "ONIA · QA relevo · Codex Cloud",
+      "reason": "idle one-off QA proof; retain evidence and review before archiving"
+    }
+  ],
+  "keep_as_work_sources": [
+    {
+      "id": "6acc36d5-6ed8-83e9-83e4-f8c414b6112b",
+      "kind": "chatgpt",
+      "title_observed": "ONIA · Ventas y pauta cloud",
+      "status_observed": "idle"
+    },
+    {
+      "id": "6acc36d4-8864-83e9-a185-6745b83ed1e6",
+      "kind": "chatgpt",
+      "title_observed": "ONIA · Lucía cloud",
+      "status_observed": "active"
+    },
+    {
+      "id": "6acbce63-abc8-83e9-8422-d849d5e15aa4",
+      "kind": "chatgpt",
+      "title_observed": "ONIA · Marca personal y videos cloud",
+      "status_observed": "idle"
+    },
+    {
+      "id": "6acc36d6-40fc-83e9-8b1c-0a50b7595355",
+      "kind": "chatgpt",
+      "title_observed": "ONIA · Hermes-Jarvis cloud",
+      "status_observed": "idle"
+    }
+  ],
+  "leave_unchanged_role_unknown_or_unrelated": [
+    "01a13798-f4dc-7142-bf29-036b5035102e",
+    "01a1386b-acfe-76c3-8631-3382ad50b00f",
+    "01a136e6-a82c-7185-9884-529a0979e024"
+  ],
+  "handoff_order_proposal": [
+    "root checkpoints and stops dispatch",
+    "new mother reads exact objective, repo HEAD, evidence and gates and sends ACK",
+    "root verifies single owner and pauses old blocked goal as human authorized",
+    "new mother activates the same objective, without duplicate goals",
+    "root may then perform separately reviewed naming/section/archive actions"
+  ],
+  "safety": "No rename, move, archive, new goal, pause, message, install, cloud task or provider call performed by this inventory. No UUID-only role inference.",
+  "updated_at_utc": "2026-10-14T11:57:07Z",
+  "pending_central_panel": "Backlog only: reuse the existing ONIA panel to view goals, sessions, agents, usage and captures, and send orders or answer scoped approvals; no duplicate orchestrator, implementation or deployment now.",
+  "open_tests": [
+    "corrected offline VPS browser preparation: --rm, output UID, nonce ledger, time bound",
+    "public page capture and authorized Telegram delivery",
+    "Hermes to native Codex Cloud lifecycle binding",
+    "single-owner automatic handoff",
+    "autonomous 30-minute end-to-end run"
+  ]
+}
