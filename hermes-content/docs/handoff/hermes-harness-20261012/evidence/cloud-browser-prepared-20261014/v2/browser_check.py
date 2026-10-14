@@ -7,6 +7,7 @@ import json
 import os
 from pathlib import Path
 import signal
+import stat
 import subprocess
 import sys
 from datetime import datetime, timezone
@@ -17,8 +18,8 @@ from playwright.sync_api import sync_playwright
 ROOT = Path(__file__).resolve().parent
 TIMEOUT_MS = 20000
 ALLOWED_HOSTS = frozenset(("example.com", "iana.org", "www.iana.org"))
-SESSION_ID = "01a13170-1c7e-7224-83c1-c5f369052039"
-AUTHORIZATION_REFERENCE = "active-user-goal:01a138fa-8304-71c1-9391-3bc14314d57f"
+CONTRACT_SESSION_ID = "01a13170-1c7e-7224-83c1-c5f369052039"
+AUTHORIZATION_REFERENCE = "COORDINATION_MANIFEST.md: one-shot public example.com to IANA browser method"
 
 
 def allowed_url(url):
@@ -73,19 +74,63 @@ def utc():
     return datetime.now(timezone.utc).isoformat()
 
 
+def reserve_output(path):
+    flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL
+    flags |= getattr(os, "O_NOFOLLOW", 0)
+    fd = os.open(path, flags, 0o600)
+    os.close(fd)
+
+
+def write_receipt_once(path, receipt):
+    flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL
+    flags |= getattr(os, "O_NOFOLLOW", 0)
+    fd = os.open(path, flags, 0o600)
+    with os.fdopen(fd, "w", encoding="utf-8") as stream:
+        stream.write(json.dumps(receipt, indent=2) + "\n")
+        stream.flush()
+        os.fsync(stream.fileno())
+
+
+def validate_claim(claim_path):
+    expected_path = (ROOT.parent / "v3" / ".browser-cloud-attempt.claim").resolve()
+    claim_path = Path(claim_path)
+    if claim_path.name != ".browser-cloud-attempt.claim" or claim_path.resolve() != expected_path:
+        raise RuntimeError("Claim path is outside the contracted V3 workspace")
+    claim_stat = claim_path.lstat()
+    get_uid = getattr(os, "getuid", None)
+    if (get_uid is None or not stat.S_ISREG(claim_stat.st_mode) or claim_stat.st_uid != get_uid()
+            or (os.name == "posix" and stat.S_IMODE(claim_stat.st_mode) != 0o600)):
+        raise RuntimeError("Claim is not a private regular file owned by this runtime user")
+    claim = json.loads(claim_path.read_text(encoding="utf-8"))
+    source_sha = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+    if (claim.get("state") != "running" or claim.get("source_sha256") != source_sha
+            or claim.get("contract_session_id") != CONTRACT_SESSION_ID
+            or claim.get("authorization_reference") != AUTHORIZATION_REFERENCE):
+        raise RuntimeError("Claim does not match this one-shot browser contract")
+    return claim
+
+
 def deadline(_signum, _frame):
     raise TimeoutError("Nominal 75-second alarm fired; cleanup bound UNKNOWN")
 
 
 def main():
-    if sys.argv[1:] != ["--method-approved"]:
-        print("BLOCKED: active-goal single-attempt guard required; no browser started.", file=sys.stderr)
+    if len(sys.argv) != 4 or sys.argv[1] != "--method-approved" or sys.argv[2] != "--claim":
+        print("BLOCKED: external one-shot method-approval guard required; no browser started.", file=sys.stderr)
+        return 2
+    try:
+        claim = validate_claim(sys.argv[3])
+    except Exception as error:
+        print(json.dumps({"status": "BLOCKED_invalid_one_shot_claim",
+                          "error_type": type(error).__name__}), file=sys.stderr)
         return 2
     receipt = {
-        "started_at_utc": utc(), "agent_id": "/root",
-        "session_id": SESSION_ID, "session_id_provenance": "contract-provided",
+        "started_at_utc": utc(),
+        "contract_session_id": CONTRACT_SESSION_ID,
+        "claim_started_at_utc": claim.get("claim_started_at_utc", "UNKNOWN"),
+        "session_id": "UNKNOWN", "session_id_provenance": "external_tool_correlation_required",
         "execution_turn_id": "UNKNOWN",
-        "authorization_basis": "active user goal requests a Cloud browser action and Telegram screenshot delivery",
+        "authorization_basis": "method-specific approval recorded in COORDINATION_MANIFEST.md; exact hashes not separately approved",
         "separate_method_or_hash_approval": False,
         "authorization_reference": AUTHORIZATION_REFERENCE,
         "authorization_scope": "single bounded public navigation example.com to IANA and JPEG capture; no retry",
@@ -105,8 +150,9 @@ def main():
     signal.signal(signal.SIGALRM, deadline)
     signal.alarm(75)
     try:
-        if os.getuid() == 0:
-            raise RuntimeError("BLOCKED: root UID is unsupported for this sandboxed method")
+        get_uid = getattr(os, "getuid", None)
+        if get_uid is None or get_uid() != 1000:
+            raise RuntimeError("BLOCKED: only the contracted non-root UID 1000 is supported")
         version = subprocess.run(["/usr/bin/chromium", "--version"],
                                  capture_output=True, text=True, timeout=5, check=True)
         receipt["chromium"] = version.stdout.strip()
@@ -151,9 +197,12 @@ def main():
             final_text = page.locator("body").inner_text()
             receipt["final_text_sha256"] = hashlib.sha256(final_text.encode()).hexdigest()
             screenshot = ROOT / "iana-example-domains.jpg"
+            reserve_output(screenshot)
             page.screenshot(path=str(screenshot), type="jpeg", quality=85,
                             full_page=True, timeout=TIMEOUT_MS)
             jpeg = screenshot.read_bytes()
+            if screenshot.is_symlink() or not screenshot.is_file():
+                raise RuntimeError("Screenshot output is not a regular local file")
             receipt["screenshot"] = {"filename": screenshot.name, "bytes": len(jpeg),
                 "sha256": hashlib.sha256(jpeg).hexdigest(), "format": "JPEG",
                 "quality": 85, "post_recompression": False}
@@ -168,7 +217,7 @@ def main():
     finally:
         signal.alarm(0)
         receipt["finished_at_utc"] = utc()
-        (ROOT / "execution-receipt.json").write_text(json.dumps(receipt, indent=2) + "\n")
+        write_receipt_once(ROOT / "execution-receipt.json", receipt)
         print(json.dumps(receipt, indent=2))
     return 0 if receipt["status"] == "PASS" else 1
 
