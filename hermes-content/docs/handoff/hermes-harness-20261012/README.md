@@ -166,3 +166,30 @@ contrato offline: esperar resolución del producto y decisión de arquitectura p
 las integraciones pendientes, sin polling ni actividad simulada. Avisar sólo ante
 capacidad nueva probada, fallo material o acción humana específica. Un heartbeat
 local no acredita operación con la PC apagada.
+
+## Lector local de una muestra de contexto
+
+`desktop_context_meter.py` lee una sola ruta JSONL local suministrada de forma
+explícita, valida que `session_meta.payload.id` coincida y selecciona la última
+muestra `token_count` válida. Sólo emite timestamp, ventana y los cuatro campos
+allowlisted de `last_token_usage`; nunca copia mensajes. El lector limita tamaño,
+filas y línea, rechaza rutas no locales/reparseadas, tolera únicamente una última
+línea parcial y devuelve `unknown` si la fuente cambia durante la lectura, falta
+una muestra fresca o no coincide sesión/ventana. La identidad validada antes de
+abrir se compara con `fstat` del descriptor que luego lee; también se verifica la
+entrada de ruta sin seguir enlaces antes de leer, y el descriptor vuelve a
+validarse al terminar. Usa `O_NOFOLLOW` y `O_NONBLOCK` cuando el runtime los
+ofrece. En Windows, donde esos flags pueden no existir, el lector falla cerrado
+si la identidad abierta no coincide y rechaza entradas reparseadas observables;
+esto no es una garantía contra un proceso que modifique deliberadamente el mismo
+archivo abierto ni una afirmación de endurecimiento por ACL.
+
+Una calibración de UI puede producir `desktop_status_correlated` únicamente para
+una muestra con misma sesión, ventana y `total_tokens`, dentro de límites de
+frescura. Ese estado significa una correlación puntual; no mide U/contexto activo,
+no convierte cached input en tokens extra y no acredita telemetría Cloud. Si la
+ventana cambia o el ancla envejece, la calibración deja de ser válida. Una
+compactación sin señal de sesión/ventana no se puede detectar desde este evento;
+por eso la correlación nunca se presenta como uso de contexto activo. Ejemplo:
+`python desktop_context_meter.py --events "C:/ruta/propia/rollout.jsonl" --calibration-json "C:/ruta/propia/ui-contrast.json"`.
+Las pruebas usan JSONL sintético: `python -m unittest test_desktop_context_meter`.
