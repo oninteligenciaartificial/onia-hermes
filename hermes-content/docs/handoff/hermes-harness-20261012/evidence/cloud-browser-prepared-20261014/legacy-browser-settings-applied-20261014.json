@@ -1,0 +1,98 @@
+{
+  "schema": 1,
+  "environment_id": "6abad782eba0819196ca234dc3abc327",
+  "url": "https://chatgpt.com/settings/cloud-environments/6abad782eba0819196ca234dc3abc327",
+  "repository": "oninteligenciaartificial/onia-hermes",
+  "label": "ONIA Hermes — revisión y desarrollo",
+  "machine": "universal",
+  "browser_profile": "Chrome OnIA existing authorized session",
+  "own_tab": "437654302",
+  "approval_reference": "user:20261014-call_8e68f4ea274f44519647395ec9a62425-arreglo-prueba-unica",
+  "network_saved_readback_at_utc": "2026-10-14T18:05:55.372Z",
+  "final_readback_at_utc": "2026-10-14T18:09:45.894Z",
+  "save_submissions": {
+    "network_with_old_setup": 1,
+    "setup_with_four_public_guards": 1
+  },
+  "network": {
+    "enabled": true,
+    "preset_label": "Dominios personalizados",
+    "domains": [
+      "example.com",
+      "iana.org",
+      "www.iana.org"
+    ],
+    "readonly_methods": true,
+    "methods": [
+      "GET",
+      "HEAD",
+      "OPTIONS"
+    ],
+    "https443_enforced_by_gui": "NOT_PROVEN runner_gate_required"
+  },
+  "cache_enabled": true,
+  "setup_readback_sha256": "31e8f2fa4db20115066999681e136551c1e413de7c0ba746f93bc423a5ba66cf",
+  "recipe_sha256": "a041af91f0e51209490ecd80b5a10e2d7a78d5e668e29139f6de09135c387322",
+  "pending_manifest_sha256": "705ffb88b7569ff50cfb4ff21aaca7f8bf59d292817776b92f6560ec838ef022",
+  "maintenance_readback_sha256": "6a3ea5b3f45cc9a6066d94824ccfedb8c301dd572f5a36ee3bac398d9ad2a726",
+  "public_guard_names": [
+    "ONIA_BROWSER_SETUP_APPROVAL_REFERENCE",
+    "ONIA_BROWSER_SETUP_APPROVED_RECIPE_SHA256",
+    "ONIA_BROWSER_SETUP_APPROVED_PENDING_MANIFEST_SHA256",
+    "ONIA_BROWSER_PROVIDER_SAVED_CONFIGURATION_JSON"
+  ],
+  "guards_exact_match": true,
+  "provider_saved_configuration": {
+    "surface": "codex-cloud-legacy-ui",
+    "evidence_reference": "cua:tab437654302/network-save-readback/legacy-browser-network-saved-readback-20261014.png",
+    "saved_at_utc": "2026-10-14T18:05:55.372Z",
+    "cache_enabled": true,
+    "network_access": "limited",
+    "preset": "None",
+    "domains": [
+      "example.com",
+      "iana.org",
+      "www.iana.org"
+    ],
+    "methods": [
+      "GET",
+      "HEAD",
+      "OPTIONS"
+    ]
+  },
+  "screenshots": [
+    {
+      "path": "E:/onia-wt/legacy-browser-network-before-save-20261014.png",
+      "bytes": 125327,
+      "sha256": "138f6a40e8e3dc9a2011392b4237609d2f0f901fce1734381ebe97cf244a8abc"
+    },
+    {
+      "path": "E:/onia-wt/legacy-browser-network-saved-readback-20261014.png",
+      "bytes": 130931,
+      "sha256": "ccf483aa8015bc24e2202b5252d15b9268354f8dfc7e949496ff207d375ced5f"
+    },
+    {
+      "path": "E:/onia-wt/legacy-browser-setup-before-save-20261014.png",
+      "bytes": 146222,
+      "sha256": "3ae907cdab2ee2be495c4dc60a408e89b97fa8d7b15b95182ec06750ea2b0c1c"
+    },
+    {
+      "path": "E:/onia-wt/legacy-browser-setup-after-save-20261014.png",
+      "bytes": 126021,
+      "sha256": "2084b3b0c3fc082b74cdefcff7c82e7ec78c7c09ce637ebb6e9acb3739298d17"
+    },
+    {
+      "path": "E:/onia-wt/legacy-browser-settings-final-readback-20261014.png",
+      "bytes": 147452,
+      "sha256": "e63b1259b505d87fb37b102767da9234e2e18eafbc7b1bc4efba55d0a0cd2a0e"
+    }
+  ],
+  "no_secrets_or_cookies_read_or_changed": true,
+  "worker_installer_task_or_cloud_browser_launches": 0,
+  "provider_setup_triggered_by_save": "UNKNOWN",
+  "installation_success": "UNKNOWN",
+  "renderer_sandbox": "UNKNOWN",
+  "runtime_policy_enforcement": "UNKNOWN",
+  "new_billing_configured": false,
+  "next": "Parent retains native dispatch after QA plan/shared ledger; no r2 replay"
+}
