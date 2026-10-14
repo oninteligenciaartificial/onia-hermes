@@ -22,16 +22,17 @@ Completar ONIA Hermes → Codex Cloud nativo → browser → captura Telegram co
 
 ## Próxima ejecución
 
-Preparar launcher/registro de `na` y binding `NativeTrustedRuntime` con cola/sink existentes; verificar transporte y autenticación de Codex Cloud sin pedir login por una ausencia parcial. Diseñar validación proporcional; pedir el grant específico antes de activar. Mantener R4 y activación pendientes hasta evidencia de transporte, autenticación y autorización.
+Próxima acción confirmada por el ACK, aún no despachada: despachar wiring de launcher/registro `na`, transporte de solo lectura y QA independiente de fixtures. Verificar Codex Cloud sin pedir login por una ausencia parcial. Pedir el grant específico antes de activar; mantener R4 y activación pendientes hasta evidencia de transporte, autenticación y autorización.
 
 Estado vivo al último reporte: cuota global 72% usada/28% restante, snapshot ~23:15Z; sin costo atribuido ni reset. El informe [context-signal-handoff-20261014.md](E:/onia-wt/context-signal-handoff-20261014.md) y su JSON [context-signal-handoff-20261014.json](E:/onia-wt/context-signal-handoff-20261014.json) concluyen contexto activo `UNKNOWN`: JSONL bloqueado y semántica no confirmada; la cuota global no equivale a contexto. El 70% no está probado. Tres slots worker + Root, máximo cuatro. Luna low para mecánica con `fork none`; Luna medium para autenticación ambigua; modelo servido `UNKNOWN`.
 
 ## Relevo de sesión
 
-Sesión madre anterior: Root `01a138fa-8304-71c1-9391-3bc14314d57f`; conserva ownership hasta que exista prueba de lectura y ACK de la sesión nueva. No archivar la sesión vieja. La nueva sesión fue creada en host local: threadId `01a13cc1-12e9-79a0-97e8-4899f05a5c95`, título `MADRE INFRA · ONIA · relevo 14 oct`. La herramienta confirmó creación, no lectura. En una revisión del archivo de ACK indicado abajo no existía; no se interpreta silencio como ACK.
+Sesión madre anterior: Root `01a138fa-8304-71c1-9391-3bc14314d57f`; permanece sin archivar. La nueva sesión fue creada en host local: threadId `01a13cc1-12e9-79a0-97e8-4899f05a5c95`, título `MADRE INFRA · ONIA · relevo 14 oct`. Su ACK confirma lectura y acepta ownership único de la madre Desarrollo-Infra; el objetivo automático anterior no se transfirió por crear la sesión y sigue activo en la sesión anterior.
 
 - ID nueva: `CONFIRMADA COMO CREADA` — `01a13cc1-12e9-79a0-97e8-4899f05a5c95`.
-- ACK leído de la sesión nueva: `PENDIENTE` — archivo esperado `E:/onia-wt/madre-infra-relevo-20261014-2320-ack.json`; ausente al revisar esta actualización.
+- ACK leído: `CONFIRMADO`, UTC `2026-10-14T23:31:22.3890872Z`, fuente `E:/onia-wt/madre-infra-relevo-20261014-2320-ack.json`. La sesión reportó leer este relevo, `CODEX.md`, `AGENTS.md`, `COORDINATION_MANIFEST.md`, `.claude/skills/onia-sesion-madre/SKILL.md` y `.claude/skills/onia-continuidad/SKILL.md`; refs observadas CODE `c8e336c82bd90b534c2aa9fcca4fec89bb96663d`, DOCS `695a13127ec129dbe1842a078d478ef88714342b`.
+- Ownership aceptado: `única madre Desarrollo-Infra`; la madre previa no se archiva.
 - Transferencia del goal: `PENDIENTE — no afirmar hasta validar continuidad`.
 
 Madre: delega y revisa. Usar `CODEX.md` y `.claude/skills/onia-continuidad/SKILL.md`; evitar prompts enormes y repetir búsquedas remotas. No tocar código desde este carril documental.
