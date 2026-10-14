@@ -130,3 +130,36 @@ input, scopes restringidos y entorno aislado con red/identidades oficiales
 configurados. Después se validaría una sola sesión nueva con receipt/outcome y
 cleanup, sin inferir acceso a los cinco hilos existentes. Mientras ese gate no
 exista, adapter y despacho permanecen deshabilitados.
+
+## Metadata local acotada de la madre — preparación 14-oct
+
+`desktop_context_meter.py --token-metadata-only --events <ruta-privada-absoluta.jsonl>
+--expected-session-id <thread-id-exacto-de-esta-madre>` prepara una lectura puntual
+del scope `DESKTOP_LOCAL_ROOT`. La ruta y el thread se pasan explícitamente fuera
+de Git; no se descubren archivos ni se leen otros chats. Se valida la primera
+`session_meta`, su ID y timestamp, una línea inicial de hasta 256 KiB y una cola
+de hasta 1 MiB del mismo descriptor. Cada registro seleccionado admite hasta
+64 KiB; como máximo se examinan 8192 líneas de cola. Una fila final incompleta
+se omite. La identidad del archivo y los bytes seleccionados se revalidan;
+errores, schema no soportado, muestra mayor a 300 segundos, timestamp futuro
+mayor a 30 segundos o falta de muestra dentro de la cola devuelven `UNKNOWN`.
+
+Salida permitida: scope, estado/causa fija, timestamp UTC de `token_count`,
+`last_token_usage` (input, cached input, output y total), ventana observada,
+`last_total_to_window_percent`, su base **condicionada a `U=last.total`**, y
+`active_context_usage=UNKNOWN`. Cached input es subconjunto de input y jamás
+se suma nuevamente. No salen mensajes, credenciales, ruta, ID ni rawlogs; el
+modo tampoco guarda fuentes, consulta proveedor, lee DB/profile ni ingiere
+compactación. Conserva la semántica del modo anterior y sólo se activa con
+este flag, sin opciones de calibración, ventana esperada o ACK de compactación.
+
+La madre aportó una observación sanitizada del 14-oct a
+`2026-10-14T19:28:59.402Z`: input 135423, cached 134400, output 64, last total
+135487, ventana 475000; ratio descriptivo 28.52 % **sólo si `U=last.total`**.
+Es una muestra puntual histórica y no una lectura nueva de este probe.
+Contexto activo, costo/facturación, cuota global, consumo agregado del goal y
+contexto Cloud permanecen `UNKNOWN`. Ese ratio por sí solo no puede disparar
+70 %, relevo, turno, alerta ni creación de otra tarea. No sustituye un recibo
+Cloud ni el hito de relevo. Preparado con revisión estática; probe, imports
+productivos y tests no ejecutados en este frente. Sin stage/commit/push durante
+el freeze del canario Cloud.

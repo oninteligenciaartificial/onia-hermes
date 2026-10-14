@@ -25,6 +25,10 @@ MAX_ROWS = 250_000
 MAX_SAMPLE_AGE_SECONDS = 300
 MAX_FUTURE_SKEW_SECONDS = 30
 MAX_CALIBRATION_LAG_SECONDS = 300
+MAX_METADATA_HEADER_BYTES = 256 * 1024
+MAX_METADATA_TAIL_BYTES = 1024 * 1024
+MAX_METADATA_LINE_BYTES = 64 * 1024
+MAX_METADATA_TAIL_ROWS = 8192
 
 
 def _positive_int(value: Any) -> bool:
@@ -561,6 +565,150 @@ def read_context_snapshot(
     }
 
 
+def _token_metadata_unknown(reason: str, timestamp: datetime | None = None) -> dict[str, Any]:
+    return {
+        "scope": "DESKTOP_LOCAL_ROOT",
+        "status": "UNKNOWN",
+        "reason": reason,
+        "token_count_timestamp_utc": timestamp.isoformat().replace("+00:00", "Z") if timestamp else None,
+        "last_token_usage": None,
+        "model_context_window": None,
+        "last_total_to_window_percent": "UNKNOWN",
+        "ratio_basis": "conditional U=last_token_usage.total_tokens",
+        "active_context_usage": "UNKNOWN",
+    }
+
+
+def _read_metadata_segments(
+    path: Path, expected_identity: tuple[int, int]
+) -> tuple[bytes | None, bytes | None, str | None]:
+    """Read and recheck only the first line and a bounded tail on one descriptor."""
+    fd: int | None = None
+    try:
+        flags = os.O_RDONLY | getattr(os, "O_BINARY", 0)
+        flags |= getattr(os, "O_NOFOLLOW", 0) | getattr(os, "O_NONBLOCK", 0)
+        fd = os.open(path, flags)
+        before = os.fstat(fd)
+        entry = path.lstat()
+        if any(_is_reparse_or_link(info) or not stat.S_ISREG(info.st_mode)
+               or _file_identity(info) != expected_identity for info in (before, entry)):
+            return None, None, "source_replaced_before_read"
+        if before.st_size > MAX_SOURCE_BYTES:
+            return None, None, "source_too_large"
+        with os.fdopen(fd, "rb", closefd=True) as stream:
+            fd = None
+            header = stream.readline(min(before.st_size, MAX_METADATA_HEADER_BYTES + 1))
+            if len(header) > MAX_METADATA_HEADER_BYTES:
+                return None, None, "session_meta_line_too_large"
+            if not header.endswith(b"\n"):
+                return None, None, "session_meta_incomplete"
+            start = max(len(header), before.st_size - MAX_METADATA_TAIL_BYTES)
+            stream.seek(start)
+            tail = stream.read(before.st_size - start)
+            # Verify selected bytes through the same descriptor. Appends may occur;
+            # replacements, truncations and edits to selected bytes fail closed.
+            stream.seek(0)
+            if stream.read(len(header)) != header:
+                return None, None, "source_changed_during_read"
+            stream.seek(start)
+            if stream.read(len(tail)) != tail:
+                return None, None, "source_changed_during_read"
+            after = os.fstat(stream.fileno())
+            final_entry = path.lstat()
+            if any(_is_reparse_or_link(info) or not stat.S_ISREG(info.st_mode)
+                   or _file_identity(info) != expected_identity for info in (after, final_entry)):
+                return None, None, "source_changed_during_read"
+            if after.st_size < before.st_size or after.st_size > MAX_SOURCE_BYTES:
+                return None, None, "source_changed_during_read"
+            if len(tail) != before.st_size - start:
+                return None, None, "source_changed_during_read"
+            if start > len(header):
+                # A bounded seek may land inside a private message. Discard that
+                # first fragment before parsing any records.
+                tail = tail.partition(b"\n")[2]
+            return header, tail, None
+    except (OSError, ValueError):
+        return None, None, "source_unavailable"
+    finally:
+        if fd is not None:
+            os.close(fd)
+
+
+def read_local_token_metadata(
+    source_path: str | os.PathLike[str], *, expected_session_id: str,
+    now: datetime | None = None,
+) -> dict[str, Any]:
+    """Describe one explicit desktop root sample, without context/Cloud claims.
+
+    The caller selects its own root thread and private path; no discovery,
+    cumulative totals, calibration, compaction or controller action occurs.
+    """
+    if not isinstance(expected_session_id, str) or not expected_session_id.strip() or len(expected_session_id) > 128:
+        return _token_metadata_unknown("expected_session_invalid")
+    now_utc = now.astimezone(timezone.utc) if isinstance(now, datetime) and now.tzinfo else datetime.now(timezone.utc)
+    path, identity, error = _validate_local_file(source_path, max_bytes=MAX_SOURCE_BYTES, suffix=".jsonl")
+    if error or path is None or identity is None:
+        return _token_metadata_unknown(error or "source_unavailable")
+    header, tail, error = _read_metadata_segments(path, identity)
+    if error or header is None or tail is None:
+        return _token_metadata_unknown(error or "source_unavailable")
+    try:
+        first = json.loads(header.decode("utf-8"))
+    except (UnicodeDecodeError, ValueError, RecursionError):
+        return _token_metadata_unknown("session_meta_invalid")
+    if not isinstance(first, dict) or first.get("type") != "session_meta":
+        return _token_metadata_unknown("first_record_not_session_meta")
+    payload = first.get("payload")
+    if not isinstance(payload, dict) or payload.get("id") != expected_session_id:
+        return _token_metadata_unknown("session_mismatch")
+    session_time = _utc_datetime(first.get("timestamp"))
+    if session_time is None or _age_seconds(now_utc, session_time) < -MAX_FUTURE_SKEW_SECONDS:
+        return _token_metadata_unknown("session_meta_timestamp_invalid")
+    lines = tail.splitlines(keepends=True)
+    if len(lines) > MAX_METADATA_TAIL_ROWS:
+        return _token_metadata_unknown("too_many_tail_rows")
+    latest: dict[str, Any] | None = None
+    for index, line in reversed(list(enumerate(lines))):
+        if not line.endswith(b"\n") or not any(marker in line for marker in (b'"token_count"', b'"session_meta"')):
+            continue
+        if len(line) > MAX_METADATA_LINE_BYTES:
+            return _token_metadata_unknown("metadata_line_too_large")
+        try:
+            record = json.loads(line.decode("utf-8"))
+        except (UnicodeDecodeError, ValueError, RecursionError):
+            return _token_metadata_unknown("metadata_record_invalid")
+        if not isinstance(record, dict):
+            return _token_metadata_unknown("metadata_record_invalid")
+        if record.get("type") == "session_meta":
+            return _token_metadata_unknown("session_meta_ambiguous_in_tail")
+        payload = record.get("payload")
+        if record.get("type") == "event_msg" and isinstance(payload, dict) and payload.get("type") == "token_count" and latest is None:
+            latest = _parse_usage_event(record, index)
+            if latest is None:
+                return _token_metadata_unknown("latest_token_count_unsupported")
+    if latest is None:
+        return _token_metadata_unknown("token_count_missing_in_bounded_tail")
+    if any(latest[key] > (1 << 63) - 1 for key in ("input_tokens", "cached_input_tokens", "output_tokens", "total_tokens", "window_tokens")):
+        return _token_metadata_unknown("token_count_out_of_bounds")
+    timestamp = latest["timestamp"]
+    age = _age_seconds(now_utc, timestamp)
+    if timestamp < session_time or age < -MAX_FUTURE_SKEW_SECONDS:
+        return _token_metadata_unknown("token_count_timestamp_invalid")
+    if age > MAX_SAMPLE_AGE_SECONDS:
+        return _token_metadata_unknown("token_count_stale", timestamp)
+    return {
+        "scope": "DESKTOP_LOCAL_ROOT",
+        "status": "OBSERVED",
+        "reason": None,
+        "token_count_timestamp_utc": timestamp.isoformat().replace("+00:00", "Z"),
+        "last_token_usage": {key: latest[key] for key in ("input_tokens", "cached_input_tokens", "output_tokens", "total_tokens")},
+        "model_context_window": latest["window_tokens"],
+        "last_total_to_window_percent": round(100 * latest["total_tokens"] / latest["window_tokens"], 2),
+        "ratio_basis": "conditional U=last_token_usage.total_tokens",
+        "active_context_usage": "UNKNOWN",
+    }
+
+
 def _load_cli_calibration(path_value: str | None) -> tuple[dict[str, Any] | None, str | None]:
     if path_value is None:
         return None, None
@@ -574,7 +722,15 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--expected-session-id", help="required unless supplied by calibration JSON")
     parser.add_argument("--expected-window-tokens", type=int, help="required unless supplied by calibration JSON")
     parser.add_argument("--acknowledged-compaction-event-key", help="informational key already acknowledged by the caller")
+    parser.add_argument("--token-metadata-only", action="store_true", help="bounded metadata for the explicitly selected desktop root thread")
     args = parser.parse_args(argv)
+    if args.token_metadata_only:
+        if args.calibration_json is not None or args.acknowledged_compaction_event_key is not None or args.expected_window_tokens is not None:
+            result = _token_metadata_unknown("metadata_mode_incompatible_options")
+        else:
+            result = read_local_token_metadata(args.events, expected_session_id=args.expected_session_id)
+        print(json.dumps(result, separators=(",", ":"), ensure_ascii=True))
+        return 0
     calibration, error = _load_cli_calibration(args.calibration_json)
     if error:
         print(json.dumps(_unknown(error), separators=(",", ":")))
