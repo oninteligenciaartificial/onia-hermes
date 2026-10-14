@@ -1,0 +1,35 @@
+{
+  "scope": "local fixture-only compaction ingestion",
+  "base": "e0a80d2608e1988aa64159d10910fb5b58ac6b34",
+  "commit": "8f8acee9c9fded45dcbd39d5c4d1d6345d4fd256",
+  "author_test": {
+    "command": "python -m unittest test_desktop_context_meter test_compaction_ingest",
+    "result": "36/36 PASS",
+    "elapsed_seconds": 0.767
+  },
+  "independent_qa": {
+    "agent": "qa_windows_vps",
+    "command": "python -m unittest test_desktop_context_meter test_compaction_ingest",
+    "result": "36/36 PASS",
+    "elapsed_seconds": 0.764,
+    "diff_check": "PASS",
+    "core_blobs_unchanged": true
+  },
+  "paths": {
+    "hermes-content/docs/handoff/hermes-harness-20261012/README.md": "112820a1b1350424ad057c975fad27baba8546aff044a16d10cf53bbaee8e761",
+    "hermes-content/docs/handoff/hermes-harness-20261012/desktop_context_meter.py": "ce9611f5fcff00d898e155bc687eb2472cf8bcb4c43c813aa0c8e9f9ea8dc615",
+    "hermes-content/docs/handoff/hermes-harness-20261012/test_desktop_context_meter.py": "a98c507e60f16ba2c46e1b0d46ab488e526e1d977bf3e3520d832369c74d0518",
+    "hermes-content/docs/handoff/hermes-harness-20261012/compaction_ingest.py": "f174346c482535f996df5794844911339e001c5d9a27c55b25474bd51b55aac5",
+    "hermes-content/docs/handoff/hermes-harness-20261012/test_compaction_ingest.py": "ab89c96f3157f65a9688ed07d7d79881fa97acbcc9b606c62b9237a8368702bd"
+  },
+  "core_blobs": {
+    "sqlite_pilot": "ef80c785541bda93e26204931d12a5d96ceeda5a",
+    "controller_pilot": "6147889f713a824da3565b73dbfa033ba94d5020"
+  },
+  "caveats": [
+    "preauthorized mapper empty by default; unbound source remains HOLD",
+    "intents only; no transport, native ACK, checkpoint dispatch or session ownership claimed",
+    "fixture-only SQLite/JSONL"
+  ],
+  "commit_push": "authorized exact-five-path commit pushed to codex/hermes-controller-hardening-20261013"
+}

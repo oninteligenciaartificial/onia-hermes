@@ -1,0 +1,24 @@
+{
+  "at_utc": "2026-10-14T07:30:14.9533822+00:00",
+  "verdict": "PASS limited bounded append-prefix snapshot",
+  "base": "fa79b274ffe15ee67af91941f076c703997b5053",
+  "hashes": {
+    "README.md": "515F9C54C78BB9660DF9383907ADCA667D044051B2A8BF3EDDAFB21183A23B69",
+    "test_desktop_context_meter.py": "ACE8E163A28C63E28DFF925D3292079B38885D06838C8C8FF10CF41E118007C2",
+    "desktop_context_meter.py": "35D7E1CE46ED1942842D1D5DBB47A6A928DA9DB6D55D5A102377D148AD4C46DA"
+  },
+  "author_evidence_sha": "9FCCB6DDBE012D8F355ACEFE8115A41F7C3F8A0AC592A9D8F9F18107FA42AE3D",
+  "git_status": [
+    " M hermes-content/docs/handoff/hermes-harness-20261012/README.md",
+    " M hermes-content/docs/handoff/hermes-harness-20261012/desktop_context_meter.py",
+    " M hermes-content/docs/handoff/hermes-harness-20261012/test_desktop_context_meter.py"
+  ],
+  "diffcheck": "PASS",
+  "independent_tests": "4newonly PASS0.010s once; no24baseline",
+  "review": "OpenedFD dev/ino/regular/reparse validated; initial-size prefix read bounded, re-readsameFD SHAverified, nosecondpersistentpayload; filesize initial/final<=64MiB and no shrink; pathnonfollowingidentityfinal checked. Prefixmutation/truncation/pathreplacement failclosed; concurrentappend accepted initialsnapshotonly.",
+  "metadata": "Finalpartialprefix tolerated existingparser; exactlyonesession/meta validation retained; compactionvalidated retained onusageUNKNOWN; activeU/percent/remainingnull",
+  "limits": "Check-time doublehash is not atomic writerlock, later hostilewrites may evade; inodeversion/ACLstrength notclaimed. Events appendedafterinitialcut notincluded; stale sample mayremainUNKNOWN. Raw64MiB maxread in memory inclmessages, outputmetadata-only.",
+  "live_status": "No new ownrolloutread or live successclaimed; prior source_changed receipt remains historical; rootmay perform separateauthorizedoneshot afterfreeze",
+  "next_integration": "Same-ledger intake still proposal, not implemented or authorized bythisPASS",
+  "scope": "Readonly3diff/hashes and4syntheticcases; no sourceedit/DB/liveCLI/network/browser/providers/Claude/Gitmutations"
+}
