@@ -1,0 +1,21 @@
+{
+  "schema": "onia.pretransfer_checkpoint.v1",
+  "as_of": "2026-10-14",
+  "source": "root Codex app wait_threads and global usage snapshot; no raw account identifiers",
+  "old_owner_thread": "01a136be-bea1-70f1-9891-9cae7dd1d331",
+  "old_goal_status": "blocked",
+  "new_mother_thread": "01a138fa-8304-71c1-9391-3bc14314d57f",
+  "prepare_turn": "01a13a4e-b45b-7df1-afd1-038db8e16a97",
+  "prepare_result": "ACK_READY",
+  "prepare_completed": true,
+  "prepare_duration_seconds": 9.675,
+  "prepare_doc_head": "a6832e359c41929b8ee23c5b8501039c5346b307",
+  "prepare_status_doc_sha256": "09195749C75CC759D37F846D0F311773712CEC4B96B1283CFFDAB130BB9346BE",
+  "transfer_ack": false,
+  "old_goal_paused": false,
+  "new_goal_activated": false,
+  "global_codex_quota": {"observed_at_utc":"2026-10-14T12:09:03Z","window":"7d","used_percent":42,"remaining_percent":58,"ordinary_usage_allowed":true,"extra_credit_balance":0},
+  "active_context_usage": "UNKNOWN",
+  "task_cost": "UNKNOWN",
+  "next_gate": "New mother rereads the final browser QA and changed status SHA, then root verifies single-owner handoff before pausing only the old goal and activating the same objective. No transfer is recorded by this receipt."
+}

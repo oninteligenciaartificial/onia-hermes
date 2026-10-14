@@ -1,0 +1,21 @@
+{
+  "status": "metadata_transport_failed_before_invocation",
+  "recorded_at_utc": "2026-10-14T12:20:05Z",
+  "stage": "read_only_image_identity_review",
+  "source_manifest_sha256": "eca709d70bda1576223f508ab4501111687ca0103f33bf0816e9be16dff7bf2c",
+  "installation_receipt_sha256": "4CAF3C228525615922879F7A3C9444BF135450CB3B5E930BD6C22BE2F79779A0",
+  "reviewed_image_id": "sha256:5b1051bc16e1214877af33b8bf453c3d9fec29479632847f534c44afba35f4f2",
+  "metadata_script_sha256": "b5d19694231e5d4dfaba73d55722e9b043b9b2a58c4503e52606d87e74f5665b",
+  "metadata_script_cr_bytes": 0,
+  "failed_dispatch": "PowerShell here-string piped CRLF to ssh bash -s; final CR was appended to the script path argument",
+  "observed_error": "bash: ./review-image-identity.sh<CR>: No such file or directory",
+  "marker_v1": "image-review-attempted exists, root-owned mode 0600",
+  "review_receipt": "image-identity-review.json absent",
+  "filtered_review_label_container_count": 0,
+  "script_invoked": false,
+  "docker_create_executed": false,
+  "runtime_invocation_count": 0,
+  "browser_nonce_created_or_consumed": false,
+  "retry": false,
+  "reconcile": "no metadata container was created; no related Docker object to remove; install receipt retained"
+}

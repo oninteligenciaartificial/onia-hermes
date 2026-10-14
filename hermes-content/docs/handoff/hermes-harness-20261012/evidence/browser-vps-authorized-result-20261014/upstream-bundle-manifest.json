@@ -1,0 +1,118 @@
+{
+  "status": "prepared_v3_fake_only_no_install_or_runtime_execution",
+  "prepared_at_utc": "2026-10-14T06:32:25Z",
+  "frozen_parent_source_sha256": "0C5650791E83831D11445B26FC715A7A931016E20A7F3C3EC6E423DB550A8D6B",
+  "lock_sha256": "52e857275e075417fa9e5b934f3b41d0366a55fc25187b7f40dbb3df34ed6a4e",
+  "derived_image_id": "UNCONFIGURED_FAIL_CLOSED",
+  "public_mode_enabled": false,
+  "approval_nonce_sha256": "UNCONFIGURED",
+  "tests": {
+    "command": "python -m unittest -v test_browser_runner_guards.py",
+    "result": "9 passed",
+    "scope": "fake Docker only; Windows host; no Docker/network/Playwright/browser; POSIX ownership/fsync not exercised"
+  },
+  "static_validation": {
+    "python_ast": "PASS parse only",
+    "json": "PASS parse only"
+  },
+  "not_run": [
+    "Docker inspect/run/kill",
+    "image pull/build",
+    "package download/install",
+    "browser launch/navigation",
+    "public network",
+    "credentials or profiles"
+  ],
+  "files": [
+    {
+      "name": ".dockerignore",
+      "bytes": 33,
+      "sha256": "F6BD0EEF35E51E4995676CAB6BAB8649971FCEE500D8DAF9758F820DC4185B3E"
+    },
+    {
+      "name": "browser-runner.py",
+      "bytes": 12452,
+      "sha256": "39C89C38E35CE669A481181D734C97BBF1DC540E89232D50C45EAB0F5B26F7ED"
+    },
+    {
+      "name": "browser-v2-compatibility.json",
+      "bytes": 2062,
+      "sha256": "A11D7F6D6273BBD5E6F5580946899D88E112A20B9FC0B93D68966C3399B38290"
+    },
+    {
+      "name": "browser-vps-public-plan.json",
+      "bytes": 6700,
+      "sha256": "A565BBC32B47491765B7218C9DE811DA00478492628633887A5D3E4119DF4870"
+    },
+    {
+      "name": "browser_check.py",
+      "bytes": 7993,
+      "sha256": "0C5650791E83831D11445B26FC715A7A931016E20A7F3C3EC6E423DB550A8D6B"
+    },
+    {
+      "name": "browser_check_vps_public.py",
+      "bytes": 9195,
+      "sha256": "4153D7EF7599506C07D7F3CD434A18DDAED2A9DF54DC676C25D8DDE171609BDA"
+    },
+    {
+      "name": "browser_probe.py",
+      "bytes": 2004,
+      "sha256": "BEBF83F9F35CCD90F8A2B59CDFF3806DA9C44C11BC4B7E678F311B47CC491931"
+    },
+    {
+      "name": "container-plan.json",
+      "bytes": 4205,
+      "sha256": "9A39B14B419A1B2A2B16DFEE7CDFC827EE01CE604893351EACB9FD257E20C8A4"
+    },
+    {
+      "name": "derive_browser_v2.py",
+      "bytes": 3414,
+      "sha256": "8C8861852E2D3D2822A2FCA831261A763F38B9B70DB0F929A3DBB2495A9CD4A9"
+    },
+    {
+      "name": "Dockerfile",
+      "bytes": 649,
+      "sha256": "1C878A2F11DE64AD3BD5D02255DA549D465ADDA1F6442836C41DFCD90637C5D2"
+    },
+    {
+      "name": "public_guard_draft.py",
+      "bytes": 2012,
+      "sha256": "51C0E988EC739C3300207409F5BD9E1D6DEFB72F4AB5C9ED3E4F24A0DD69043F"
+    },
+    {
+      "name": "pypi-metadata.json",
+      "bytes": 1633,
+      "sha256": "753D3D5E27E250496414FEFD732B427413901161258C1A16E4CD8D18571F6AF7"
+    },
+    {
+      "name": "README.md",
+      "bytes": 2419,
+      "sha256": "6FC68B1167A7C9A32E284DDCF387AA9EF9E95990C199D596C83D52F6A9F67F8D"
+    },
+    {
+      "name": "requirements.lock",
+      "bytes": 390,
+      "sha256": "52E857275E075417FA9E5B934F3B41D0366A55FC25187B7F40DBB3DF34ED6A4E"
+    },
+    {
+      "name": "seccomp-metadata.json",
+      "bytes": 22761,
+      "sha256": "85D6B61C5BE67E4E838DF465A125E4EA30BAA353A5C24E0B26CE2F25F557BD5A"
+    },
+    {
+      "name": "seccomp-profile-v1.62.0.json",
+      "bytes": 12997,
+      "sha256": "CC3E61CABDA6BBC1E53E54D27BA4D55A9D3BE829B6DD1A596F4A7B31B1CC7849"
+    },
+    {
+      "name": "test-output.txt",
+      "bytes": 1618,
+      "sha256": "9C7333D5D1B1CB300C6FE46AB5A9FC55E73B4824560C4DB52CAB9D4C78EDB772"
+    },
+    {
+      "name": "test_browser_runner_guards.py",
+      "bytes": 6875,
+      "sha256": "D22C02AB31856E6BC7AF344CB82FD71CFF9124A833FD28FDACDFE774DC2AFB1D"
+    }
+  ]
+}

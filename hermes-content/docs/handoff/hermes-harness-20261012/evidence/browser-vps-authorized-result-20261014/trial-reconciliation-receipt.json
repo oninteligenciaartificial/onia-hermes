@@ -1,0 +1,22 @@
+{
+  "status": "needs_reconcile",
+  "completed_at_utc": "2026-10-14T12:27:10Z",
+  "initial_failure_receipt": "trial-needs-reconcile-receipt.json",
+  "initial_failure_receipt_sha256": "87e3bbc1e029b238edfa65bb25fb93304a35febe320721b0b54081ccc798d8f4",
+  "run_once_receipt_sha256": "03b7b9d77fa57c7c9581eea2f60ccdac41da43314ee81e0df8da9c46cb3c8bf3",
+  "retry": false,
+  "nonce": "consumed_and_reserved",
+  "exact_nonce_container_count": 0,
+  "cid_file": "absent",
+  "control_run_directory": "empty, retained for reconciliation",
+  "output_directory": "/tmp/onia-pw-offline-nhcuwm_k",
+  "output_directory_owner_mode": "1001:1001:0700",
+  "output_directory_resolved_before_removal": true,
+  "output_directory_empty_before_removal": true,
+  "output_directory_cleanup": "rmdir exact path; verified absent",
+  "unrelated_objects_touched": false,
+  "smoke_pass": false,
+  "screenshot": "absent",
+  "browser_launch_count": "UNKNOWN",
+  "underlying_runner_error": "unavailable because run-once intentionally suppressed stderr"
+}
