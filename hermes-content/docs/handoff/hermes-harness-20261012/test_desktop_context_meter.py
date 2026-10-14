@@ -36,6 +36,14 @@ def event(timestamp: datetime, *, window: int = WINDOW, total: int = 777) -> dic
     }
 
 
+def compacted(timestamp: datetime) -> dict:
+    return {
+        "type": "compacted",
+        "timestamp": timestamp.astimezone(timezone.utc).isoformat().replace("+00:00", "Z"),
+        "payload": {"opaque": "CANARY_SECRET"},
+    }
+
+
 def write_jsonl(path: Path, *, session: str = SESSION, rows: list[dict] | None = None, partial: bytes = b"") -> None:
     records = [{"type": "session_meta", "payload": {"id": session}}]
     records.extend(rows or [])
@@ -61,6 +69,69 @@ class DesktopContextMeterTests(unittest.TestCase):
             result = read_context_snapshot(source, expected_session_id=SESSION, expected_window_tokens=WINDOW, now=now)
         self.assertEqual(result["status"], "unknown")
         self.assertEqual(result["reason"], "session_mismatch")
+        self.assertIsNone(result["sample"])
+
+    def test_compaction_emits_deduplicable_metadata_without_session_or_content(self):
+        now = datetime.now(timezone.utc)
+        compacted_at = now - timedelta(seconds=1)
+        with tempfile.TemporaryDirectory() as temp:
+            source = Path(temp) / "events.jsonl"
+            write_jsonl(source, rows=[event(now), compacted(compacted_at)])
+            result = read_context_snapshot(source, expected_session_id=SESSION, expected_window_tokens=WINDOW, now=now)
+        signal = result["compaction_signal"]
+        self.assertEqual(signal["event_count"], 1)
+        self.assertEqual(signal["last_event_timestamp_utc"], compacted_at.isoformat().replace("+00:00", "Z"))
+        self.assertRegex(signal["last_event_key"], r"^[0-9a-f]{64}$")
+        self.assertTrue(signal["checkpoint_requested"])
+        self.assertNotIn(SESSION, json.dumps(result))
+        self.assertNotIn("CANARY_SECRET", json.dumps(result))
+        self.assertIsNone(result["active_context_usage_tokens"])
+
+    def test_acknowledged_compaction_key_is_idempotent(self):
+        now = datetime.now(timezone.utc)
+        with tempfile.TemporaryDirectory() as temp:
+            source = Path(temp) / "events.jsonl"
+            write_jsonl(source, rows=[event(now), compacted(now - timedelta(seconds=1))])
+            first = read_context_snapshot(source, expected_session_id=SESSION, expected_window_tokens=WINDOW, now=now)
+            second = read_context_snapshot(
+                source,
+                expected_session_id=SESSION,
+                expected_window_tokens=WINDOW,
+                acknowledged_compaction_event_key=first["compaction_signal"]["last_event_key"],
+                now=now,
+            )
+        self.assertTrue(first["compaction_signal"]["checkpoint_requested"])
+        self.assertFalse(second["compaction_signal"]["checkpoint_requested"])
+        self.assertEqual(first["compaction_signal"]["last_event_key"], second["compaction_signal"]["last_event_key"])
+
+    def test_compaction_signal_is_bound_to_the_expected_session(self):
+        now = datetime.now(timezone.utc)
+        with tempfile.TemporaryDirectory() as temp:
+            source = Path(temp) / "events.jsonl"
+            write_jsonl(source, session="foreign-session", rows=[event(now), compacted(now - timedelta(seconds=1))])
+            result = read_context_snapshot(source, expected_session_id=SESSION, expected_window_tokens=WINDOW, now=now)
+        self.assertEqual(result["status"], "unknown")
+        self.assertEqual(result["reason"], "session_mismatch")
+        self.assertIsNone(result["sample"])
+
+    def test_partial_trailing_row_does_not_hide_confirmed_compaction(self):
+        now = datetime.now(timezone.utc)
+        compacted_at = now - timedelta(seconds=1)
+        with tempfile.TemporaryDirectory() as temp:
+            source = Path(temp) / "events.jsonl"
+            write_jsonl(source, rows=[event(now), compacted(compacted_at)], partial=b'{"type":"event_msg","payload":')
+            result = read_context_snapshot(source, expected_session_id=SESSION, expected_window_tokens=WINDOW, now=now)
+        self.assertTrue(result["partial_trailing_row_ignored"])
+        self.assertEqual(result["compaction_signal"]["last_event_timestamp_utc"], compacted_at.isoformat().replace("+00:00", "Z"))
+
+    def test_future_compaction_event_fails_closed(self):
+        now = datetime.now(timezone.utc)
+        with tempfile.TemporaryDirectory() as temp:
+            source = Path(temp) / "events.jsonl"
+            write_jsonl(source, rows=[event(now), compacted(now + timedelta(seconds=31))])
+            result = read_context_snapshot(source, expected_session_id=SESSION, expected_window_tokens=WINDOW, now=now)
+        self.assertEqual(result["status"], "unknown")
+        self.assertEqual(result["reason"], "compaction_event_timestamp_in_future")
         self.assertIsNone(result["sample"])
 
     def test_stale_latest_sample_is_unknown_even_if_numbers_match(self):
@@ -225,6 +296,21 @@ class DesktopContextMeterTests(unittest.TestCase):
             result = read_context_snapshot(source, expected_session_id=SESSION, expected_window_tokens=WINDOW, now=now)
         self.assertEqual(result["status"], "unknown")
         self.assertEqual(result["reason"], "sample_timestamp_in_future")
+
+    def test_valid_compaction_signal_survives_invalid_future_token_sample(self):
+        now = datetime.now(timezone.utc)
+        compacted_at = now - timedelta(seconds=1)
+        with tempfile.TemporaryDirectory() as temp:
+            source = Path(temp) / "events.jsonl"
+            write_jsonl(source, rows=[compacted(compacted_at), event(now + timedelta(seconds=31))])
+            result = read_context_snapshot(source, expected_session_id=SESSION, expected_window_tokens=WINDOW, now=now)
+        self.assertEqual(result["status"], "unknown")
+        self.assertEqual(result["reason"], "sample_timestamp_in_future")
+        self.assertIsNone(result["active_context_usage_tokens"])
+        self.assertEqual(result["compaction_signal"]["status"], "detected")
+        self.assertEqual(result["compaction_signal"]["event_count"], 1)
+        self.assertEqual(result["compaction_signal"]["last_event_timestamp_utc"], compacted_at.isoformat().replace("+00:00", "Z"))
+        self.assertTrue(result["compaction_signal"]["checkpoint_requested"])
 
     def test_malformed_nontrailing_row_fails_closed(self):
         now = datetime.now(timezone.utc)

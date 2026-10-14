@@ -193,3 +193,14 @@ compactación sin señal de sesión/ventana no se puede detectar desde este even
 por eso la correlación nunca se presenta como uso de contexto activo. Ejemplo:
 `python desktop_context_meter.py --events "C:/ruta/propia/rollout.jsonl" --calibration-json "C:/ruta/propia/ui-contrast.json"`.
 Las pruebas usan JSONL sintético: `python -m unittest test_desktop_context_meter`.
+
+El lector reconoce además registros nativos con `type: "compacted"` en el nivel
+superior, siempre dentro del único `session_meta` validado. `compaction_signal`
+emite cantidad deduplicada, timestamp UTC del último evento y una clave SHA-256
+derivada de la sesión y el timestamp; nunca incluye el ID, el payload ni texto del
+rollout. `checkpoint_requested` queda true mientras el caller no pase esa misma
+clave con `--acknowledged-compaction-event-key` (o el argumento de función
+equivalente). Ese ACK es solo informativo y no ejecuta ni confirma un checkpoint.
+Fechas inválidas o futuras fuera de la tolerancia existente producen `unknown`;
+una línea parcial final sigue ignorándose. El evento no estima uso activo U/W ni
+altera los campos de uso, que siguen en `null`.

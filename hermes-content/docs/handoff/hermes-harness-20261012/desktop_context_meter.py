@@ -7,6 +7,7 @@ It never reads message text into the output and never writes the source transcri
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import stat
@@ -151,6 +152,7 @@ def _unknown(reason: str) -> dict[str, Any]:
         "sample_freshness": "unknown",
         "sample": None,
         "desktop_calibration": {"status": "unknown", "scope": "single_sample_only"},
+        "compaction_signal": {"status": "unknown", "event_count": 0, "last_event_timestamp_utc": None, "last_event_key": None, "checkpoint_requested": False},
         "active_context_usage_tokens": None,
         "utilization_percent": None,
         "remaining_tokens": None,
@@ -158,6 +160,26 @@ def _unknown(reason: str) -> dict[str, Any]:
     }
     result["source"] = {"kind": "explicit_local_jsonl", "path_included": False}
     return result
+
+
+def _unknown_with_compaction(reason: str, signal: dict[str, Any]) -> dict[str, Any]:
+    result = _unknown(reason)
+    result["compaction_signal"] = signal
+    return result
+
+
+def _parse_compaction_event(record: dict[str, Any], row_index: int) -> dict[str, Any] | None:
+    if record.get("type") != "compacted":
+        return None
+    timestamp = _utc_datetime(record.get("timestamp"))
+    if timestamp is None:
+        return {"invalid": True, "row_index": row_index}
+    return {"timestamp": timestamp, "row_index": row_index}
+
+
+def _compaction_event_key(session_id: str, timestamp: datetime) -> str:
+    canonical_timestamp = timestamp.astimezone(timezone.utc).isoformat().replace("+00:00", "Z")
+    return hashlib.sha256(f"{session_id}\n{canonical_timestamp}".encode("utf-8")).hexdigest()
 
 
 def _parse_usage_event(record: dict[str, Any], row_index: int) -> dict[str, Any] | None:
@@ -238,6 +260,7 @@ def read_context_snapshot(
     expected_session_id: str,
     expected_window_tokens: int,
     calibration: dict[str, Any] | None = None,
+    acknowledged_compaction_event_key: str | None = None,
     now: datetime | None = None,
 ) -> dict[str, Any]:
     """Read one local JSONL snapshot and return an allowlisted, sanitized result."""
@@ -260,6 +283,7 @@ def read_context_snapshot(
         return _unknown("too_many_rows")
     session_ids: list[str] = []
     events: list[dict[str, Any]] = []
+    compaction_events: list[dict[str, Any]] = []
     partial_trailing_ignored = False
     invalid_token_rows = 0
     for index, line in enumerate(lines):
@@ -286,19 +310,40 @@ def read_context_snapshot(
                 invalid_token_rows += 1
             else:
                 events.append(event)
+        elif record.get("type") == "compacted":
+            event = _parse_compaction_event(record, index)
+            if event is None or event.get("invalid"):
+                return _unknown("compaction_event_timestamp_invalid")
+            compaction_events.append(event)
 
     if len(session_ids) != 1:
         return _unknown("session_meta_missing_or_ambiguous")
     if session_ids[0] != expected_session_id:
         return _unknown("session_mismatch")
+    compaction_events.sort(key=lambda item: (item["timestamp"], item["row_index"]))
+    for event in compaction_events:
+        if _age_seconds(now_utc, event["timestamp"]) < -MAX_FUTURE_SKEW_SECONDS:
+            return _unknown("compaction_event_timestamp_in_future")
+    unique_compactions: dict[str, datetime] = {}
+    for event in compaction_events:
+        key = _compaction_event_key(expected_session_id, event["timestamp"])
+        unique_compactions[key] = event["timestamp"]
+    last_compaction_key = next(reversed(unique_compactions), None)
+    compaction_signal = {
+        "status": "detected" if last_compaction_key is not None else "none",
+        "event_count": len(unique_compactions),
+        "last_event_timestamp_utc": unique_compactions[last_compaction_key].isoformat().replace("+00:00", "Z") if last_compaction_key else None,
+        "last_event_key": last_compaction_key,
+        "checkpoint_requested": last_compaction_key is not None and last_compaction_key != acknowledged_compaction_event_key,
+    }
     if not events:
-        return _unknown("token_count_missing_or_invalid")
+        return _unknown_with_compaction("token_count_missing_or_invalid", compaction_signal)
 
     events.sort(key=lambda item: (item["timestamp"], item["row_index"]))
     latest = events[-1]
     age = _age_seconds(now_utc, latest["timestamp"])
     if age < -MAX_FUTURE_SKEW_SECONDS:
-        return _unknown("sample_timestamp_in_future")
+        return _unknown_with_compaction("sample_timestamp_in_future", compaction_signal)
     freshness = "fresh" if age <= MAX_SAMPLE_AGE_SECONDS else "stale"
     window_matches = latest["window_tokens"] == expected_window_tokens
     sample_status = "fresh" if freshness == "fresh" and window_matches else ("stale" if freshness == "stale" else "window_mismatch")
@@ -375,6 +420,7 @@ def read_context_snapshot(
         "invalid_token_count_rows": invalid_token_rows,
         "partial_trailing_row_ignored": partial_trailing_ignored,
         "desktop_calibration": calibration_result,
+        "compaction_signal": compaction_signal,
         "active_context_usage_tokens": None,
         "utilization_percent": None,
         "remaining_tokens": None,
@@ -394,6 +440,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--calibration-json", help="explicit desktop-status calibration JSON")
     parser.add_argument("--expected-session-id", help="required unless supplied by calibration JSON")
     parser.add_argument("--expected-window-tokens", type=int, help="required unless supplied by calibration JSON")
+    parser.add_argument("--acknowledged-compaction-event-key", help="informational key already acknowledged by the caller")
     args = parser.parse_args(argv)
     calibration, error = _load_cli_calibration(args.calibration_json)
     if error:
@@ -409,6 +456,7 @@ def main(argv: list[str] | None = None) -> int:
         expected_session_id=expected_session_id,
         expected_window_tokens=expected_window,
         calibration=calibration,
+        acknowledged_compaction_event_key=args.acknowledged_compaction_event_key,
     )
     print(json.dumps(result, separators=(",", ":"), ensure_ascii=True))
     return 0
