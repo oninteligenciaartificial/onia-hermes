@@ -1,0 +1,77 @@
+{
+  "status": "prepared_for_root_focal_review_no_post",
+  "created_utc": "2026-10-14T06:35:04.004797+00:00",
+  "model": {
+    "requested": "Luna low",
+    "observed": "UNKNOWN"
+  },
+  "frozen_source": {
+    "path": "E:\\onia-wt\\orquestacion-subagentes-20261013\\hermes-content\\docs\\handoff\\hermes-harness-20261012\\evidence\\telegram-photo-dispatcher-v3-20261014.py",
+    "sha256": "94b4470dc35f1974503ff814757a15d8f541fb0d7ab1eb3350529a05dd11c395",
+    "bytes": 29228,
+    "copy_path": "E:\\onia-wt\\tg-native-clean-subagents-photo-v4-prepared-20261014\\telegram-photo-dispatcher-v3-frozen.py"
+  },
+  "derived_source": {
+    "path": "E:\\onia-wt\\tg-native-clean-subagents-photo-v4-prepared-20261014\\telegram-photo-dispatcher-v3-photo-r1.py",
+    "sha256": "bdc85433b590aab94410394816ddc8a0a53709ba3259106a76b2c8bfe03c7291",
+    "bytes": 29430,
+    "read_only_pin": true
+  },
+  "constant_whitelist": [
+    "PHOTO_APPROVAL_REF",
+    "PHOTO_CAPTION",
+    "PHOTO_PATH",
+    "PHOTO_SHA256",
+    "PHOTO_REMOTE_LEDGER_DIR"
+  ],
+  "validation": {
+    "replacement_count_each": 1,
+    "ast_nonconstant_equivalence": true,
+    "photo_data_marker_unchanged": true,
+    "patch_path": "E:\\onia-wt\\tg-native-clean-subagents-photo-v4-prepared-20261014\\telegram-photo-dispatcher-v3-photo-r1.patch",
+    "patch_sha256": "a6a1ab8f6c9dbd4926fa0b1ad6adda96996fdebc844a66265cdf97e6798e9431"
+  },
+  "payload": {
+    "recipient_alias": "Sergio Urcullo",
+    "recipient_private_self_chat": true,
+    "bot_alias": "aalfredhq_bot",
+    "caption": "Codex Cloud: sesión nueva y 2 subagentes reales completaron la prueba. Detector de compactación validado. Falta conectar Hermes, relevo automático y navegador remoto. Claude sigue suspendido.",
+    "caption_sha256": "8bce122499086ccc72189ec541a508094f5cda7d3225dedaffdcb44c74765dfe",
+    "nonce": "sergio:20261014-native-clean-subagents-photo-r1",
+    "photo_path": "E:\\onia-wt\\tg-native-clean-subagents-photo-v4-prepared-20261014\\media\\codex-cloud-clean-subagents-20261014.jpg",
+    "photo_bytes": 172963,
+    "photo_sha256": "4BB3CE34713805802F1C84380658E0862402662CF154498ACA17952EAEA7C033",
+    "operation_hash": "2bc7b8127b253d119c7dc0b07613a3838f17253e408b8655bd88dde234bb2517",
+    "candidate_local_ledger": "E:\\onia-wt\\tg-native-clean-subagents-photo-v4-prepared-20261014\\dispatch-ledger.sqlite3"
+  },
+  "photo_source": {
+    "original_path": "E:\\onia-wt\\tg-native-clean-subagents-photo-v4-prepared-20261014\\media\\codex-cloud-clean-subagents-20261014.jpg",
+    "copied_from": "E:/onia-wt/codex-cloud-clean-subagents-20261014.jpg",
+    "sha256": "4BB3CE34713805802F1C84380658E0862402662CF154498ACA17952EAEA7C033",
+    "bytes": 172963,
+    "jpeg_signature_valid": true,
+    "source_max_bytes": 20971520
+  },
+  "transport": {
+    "mode": "unchanged SSH subprocess; source is piped to remote Python stdin; photo bytes embedded in-memory only for this send attempt",
+    "vps_staged_originals_are_not_used_by_driver": true,
+    "remote_ledger": "/tmp/onia-hermes-sergio-native-clean-subagents-photo-20261014-r1/dispatch-ledger",
+    "preflight": "already passed via two read-only GETs getMe/getChat; no ID retained",
+    "preflight_not_repeated": true
+  },
+  "replay": {
+    "candidate_local_ledger_exists_before_execution": false,
+    "candidate_remote_ledger_exists_at_preflight": false,
+    "nonce_attempted": false,
+    "send_post_count": 0
+  },
+  "safety": {
+    "no_environment_dump": true,
+    "no_credential_stdout": true,
+    "no_getUpdates": true,
+    "no_service_config_or_install_change": true,
+    "no_repository_change": true,
+    "no_test_or_provider_run": true
+  },
+  "root_review_required_before_POST": true
+}
