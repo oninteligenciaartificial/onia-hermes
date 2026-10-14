@@ -1,0 +1,49 @@
+{
+  "source": "create via official Codex UI Nube/ONIA Platform and codex_app list_threads/read_thread/wait_threads",
+  "nonce": "sergio:20261014-cloud-clean-subagents-r1",
+  "thread_id": "01a13910-ec21-768c-abe9-2f8250a4401b",
+  "kind": "codex",
+  "host_id": "durable",
+  "cwd": "/workspace",
+  "created_at": 1791958774,
+  "first_turn_id": "01a13910-fb90-7473-821a-420d13cd1fda",
+  "turn_started_at": 1791958776,
+  "turn_completed_at": 1791958848,
+  "duration_ms": 71405,
+  "turn_status": "completed",
+  "page_next_cursor": null,
+  "page_has_more": false,
+  "child_activity": [
+    {
+      "agent_thread_id": "01a13911-2450-7490-aa22-1722b4b8e01d",
+      "completed_observed": true,
+      "agent_path": "/root/mechanical",
+      "started_observed": true,
+      "configured_model_parent_report": "gpt-6-luna low"
+    },
+    {
+      "agent_thread_id": "01a13911-58bf-70a4-9e75-56fb85ad8020",
+      "completed_observed": true,
+      "agent_path": "/root/qa",
+      "started_observed": true,
+      "configured_model_parent_report": "gpt-6-sol low"
+    }
+  ],
+  "served_models": "UNKNOWN",
+  "native_active_context": "UNKNOWN",
+  "qa_source_ref": "fa79b274ffe15ee67af91941f076c703997b5053",
+  "qa_source_git_blob": "51f671ec0bc1bbcb8eda7bf94bb2fc1a470da4fe",
+  "local_git_blob_match_verified": true,
+  "image_path": "E:/onia-wt/codex-cloud-clean-subagents-20261014.jpg",
+  "image_format": "JPEG",
+  "image_bytes": 172963,
+  "image_sha256": "4BB3CE34713805802F1C84380658E0862402662CF154498ACA17952EAEA7C033",
+  "limits": [
+    "No fork or resume requested: new UI-created thread with one visible turn, not absolute context certification",
+    "Parent reports fork_turns none; subAgentActivity independently confirms actual child IDs",
+    "Not automatic context rollover or Hermes-created native chat",
+    "No cloud webpage browser navigation tested; image is PC screenshot of official native Codex result",
+    "No ownership transfer; old root remains owner and goal active",
+    "No claim 30 minute autonomous harness or physical PC-off proof"
+  ]
+}
