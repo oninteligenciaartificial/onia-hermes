@@ -1,0 +1,43 @@
+{
+  "authorization_reference": "sergio:20261014-native-browser-public-one-r2",
+  "environment_id": {
+    "provenance": "no authoritative environment_status/runtime handle exposed to executor",
+    "value": "UNKNOWN"
+  },
+  "failure_category": "PREFLIGHT_POLICY_AND_COMPONENTS",
+  "input_sha": "5b3981fec3df0dc1cce94e0c5d0de39b9ab854ae73ac994aa578296d10c0a410",
+  "jpeg": "NOT_PRODUCED",
+  "launch_count": 0,
+  "model": {
+    "configured": "Sol medium requested in task text; runtime configuration not independently exposed",
+    "observed": "UNKNOWN",
+    "requested": "Sol medium"
+  },
+  "nonce_state": "NOT_CONSUMED",
+  "operation_id": "0746fffe-c9ec-4f60-b515-911d4a7c6cf6",
+  "public_navigation": "NOT_ATTEMPTED",
+  "recorded_utc": "2026-10-14T17:08:24.763884Z",
+  "renderer_sandbox": "NOT_TESTED",
+  "repository": {
+    "checkout_equal": true,
+    "cwd": "/workspace/onia-hermes",
+    "expected_head": "5b72925bffea7400254ab051cc5550e94cf4e61e",
+    "expected_repo": "onia-hermes",
+    "observed_branch": "work",
+    "observed_head": "5b72925bffea7400254ab051cc5550e94cf4e61e",
+    "observed_repo": "onia-hermes",
+    "requested_ref": "codex/orquestacion-subagentes-20261013",
+    "resolved_workspace": "/workspace/onia-hermes"
+  },
+  "result": "BLOCKED_PRELAUNCH",
+  "retry_count": 0,
+  "schema_version": 1,
+  "source_hashes": {
+    "child": "NOT_CREATED",
+    "supervisor": "NOT_CREATED"
+  },
+  "task_id": {
+    "provenance": "no authoritative runtime/task handle exposed to executor",
+    "value": "UNKNOWN"
+  }
+}

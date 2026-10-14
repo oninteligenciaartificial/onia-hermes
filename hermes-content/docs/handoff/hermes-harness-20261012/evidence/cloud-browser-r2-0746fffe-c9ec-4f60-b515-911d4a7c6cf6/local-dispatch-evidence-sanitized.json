@@ -1,0 +1,130 @@
+{
+  "schema_version": 1,
+  "operation_id": "0746fffe-c9ec-4f60-b515-911d4a7c6cf6",
+  "parent_correlated_remote_task_id": "task_e_6acfb6b4d8988327a18bfd12a40b3957",
+  "source_review": "sanitized projection of local public-plan, submit, bootstrap, reserve, wire companion, Windows stdin probe, and QA metadata; no DB, logs, raw prompt, or nonce values copied",
+  "submit": {
+    "state": "submitted",
+    "code_sha": "97c5f7a4c3317be369a77b9b32c33cff37ea548c",
+    "plan_sha256": "5b3981fec3df0dc1cce94e0c5d0de39b9ab854ae73ac994aa578296d10c0a410",
+    "wire_prompt_sha256": "b73ecd2f0477312350bac506aef24080c8298589e6d2934c8cc71a14d6e88dd3",
+    "wire_hash_semantics": "intended UTF-8 text hash only; historical stdin bytes were not captured",
+    "started_at_utc": "2026-10-14T17:06:55.724161Z",
+    "finished_at_utc": "2026-10-14T17:07:03.714078Z",
+    "duration_seconds": 7.984,
+    "client_attempt_count": 1,
+    "retry": "forbidden",
+    "model_observed": "UNKNOWN",
+    "usage": "UNKNOWN",
+    "cost": "UNKNOWN"
+  },
+  "requested_contract": {
+    "environment_id": "6abad782eba0819196ca234dc3abc327",
+    "branch": "codex/orquestacion-subagentes-20261013",
+    "expected_remote_head": "5b72925bffea7400254ab051cc5550e94cf4e61e",
+    "model_requested": "gpt-6.1-sol",
+    "effort_requested": "medium",
+    "local_transport_timeout_seconds": 45,
+    "remote_hard_deadline": "UNKNOWN / not proven"
+  },
+  "bootstrap_and_reservation": {
+    "scope": "single_native_pilot",
+    "bootstrap_reviewed_plan_sha": "5b3981fec3df0dc1cce94e0c5d0de39b9ab854ae73ac994aa578296d10c0a410",
+    "bootstrap_receipt_sha256": "4cea31139b683472b91afbbd065f58733cc58082f708b61f1e8c45e1b86b30e4",
+    "local_reservation_snapshot": "reserved before the single submit; fencing token 1; input SHA matches plan; surface and remote ID were null at reservation time",
+    "raw_authority_and_nonce_values": "omitted"
+  },
+  "remote_result_correlation": {
+    "correlation_source": "parent submit receipt plus exact operation/input SHA/requested HEAD match",
+    "executor_task_id_attestation": "UNKNOWN",
+    "executor_environment_id_attestation": "UNKNOWN",
+    "repository": "onia-hermes",
+    "cwd": "/workspace/onia-hermes",
+    "requested_ref": "codex/orquestacion-subagentes-20261013",
+    "observed_branch": "work",
+    "expected_and_observed_head": "5b72925bffea7400254ab051cc5550e94cf4e61e",
+    "checkout_equal": true
+  },
+  "browser_preflight": {
+    "result": "BLOCKED_PRELAUNCH",
+    "runtime_uid_gid": "0:0",
+    "NoNewPrivs": "0",
+    "Seccomp": "0",
+    "unshare_diagnostic": "PASS, not a browser sandbox verdict",
+    "uid1000_switch": "NOT_EVALUATED",
+    "python_playwright": "unavailable",
+    "chromium_and_sandbox_helper": "not found in bounded /usr and /opt scan",
+    "network_policy_file": "absent; egress and host permissions UNKNOWN",
+    "browser_claim": false,
+    "browser_nonce": "NOT_CONSUMED",
+    "launch_count": 0,
+    "retry_count": 0,
+    "jpeg": "NOT_PRODUCED",
+    "supervisor": "NOT_STARTED"
+  },
+  "wire_probe": {
+    "scope": "harmless local Python stdin.buffer probe, not capture of historical Codex CLI stdin",
+    "text_mode_newline_translation": "LF became CRLF on Windows",
+    "probe_byte_equal": false,
+    "historical_actual_stdin_bytes_sha256": "UNKNOWN"
+  },
+  "qa_metadata": {
+    "verdict": "PASS limited for local transport/bootstrap review",
+    "reviewer_remote_calls": 0,
+    "original_qa_timing": "pre-recovery snapshot; historical label, not current QA state",
+    "replay_policy": "never retry; reconcile original task handle",
+    "post_recovery_review": {
+      "verdict": "PASS limited recovered Cloud JSON and local ingest correlation",
+      "method": "read-only comparison of three recovered receipt hashes/content to parent submit receipt, parent actor identity, operation ID, input SHA and expected repository HEAD; no browser/API/DB writes",
+      "parent_submit_receipt_sha256": "da4a271d64af77d72d7074135ca0f8680f0ea81a34a98f41a192af7474c935e3",
+      "parent_actor_identity": "root:01a138fa",
+      "source_sha256": {
+        "preflight.json": "f7f82f7378292809a575462063f73455d54d41249b3da3e107b1ab5f026f9afa",
+        "execution-receipt.json": "8532c5455aac3905f9e5f2ffb57e77142040d144016bf3761624ec9236bca0de",
+        "supervisor-receipt.json": "c33e13385942f24b7f4eea7255b544f1b882f9dc5b153a999c74da7b77b40468"
+      },
+      "resolution_scope": "applied SUBMIT effect only means client task created; it does not mean browser goal complete",
+      "queue_resolution_receipt": {
+        "source": "queue-resolution-receipt.json in the existing local run folder, outside Git",
+        "sha256": "79f181ecd1160d51f6b32e894595ab49f6880fa0c516a9c728e5bdae0ac608bf",
+        "resolved_at_utc": "2026-10-14T17:29:36Z",
+        "resolution": "applied",
+        "effect_resolved": "submit_task_created_only",
+        "task_status": "done",
+        "effect_state": "applied",
+        "result": "applied_reconciled",
+        "result_digest": "9490d2765c4c9e9c5e286d147100fb7db965aa487f1da91e09c5b52307fd4637",
+        "next_claim_status": "no_work",
+        "native_operations_state": "failed; unchanged",
+        "stop_guard_unchanged": true,
+        "browser_goal": "BLOCKED_PRELAUNCH",
+        "browser_nonce": "NOT_CONSUMED",
+        "browser_launch_count": 0,
+        "browser_retry_count": 0,
+        "global_goal_not_closed": true,
+        "provider_calls": 0,
+        "new_task_or_operation": false,
+        "replay": "forbidden"
+      }
+    }
+  },
+  "codex_cloud_ui_observation": {
+    "observed_by": "root via authenticated Codex Cloud UI",
+    "observed_date": "2026-10-14",
+    "ui_version_context": "earlier Codex Cloud UI version",
+    "settings_url": "https://chatgpt.com/settings/cloud-environments/6abad782eba0819196ca234dc3abc327",
+    "environment_label": "ONIA Hermes — revisión y desarrollo",
+    "environment_type": "Máquina universal",
+    "network_access_setting": "Desactivado",
+    "interpretation": "authoritative current UI configuration; not packet-level measurement or proof of executor policy enforcement",
+    "editor": "opened without mutation; edit button disabled/pressed; setup manual pnpm web factory frozen; cached configuration inspected; Save exists but was not used",
+    "proposed_change": "worker preparing minimal Tools plus three-host allowlist change; not applied; requires a genuinely new final approval"
+  },
+  "excluded_sources": [
+    "queue.sqlite3",
+    "error.log",
+    "dispatch-journal.json",
+    "wire-preview.txt",
+    "raw prompt and raw operation nonce"
+  ]
+}

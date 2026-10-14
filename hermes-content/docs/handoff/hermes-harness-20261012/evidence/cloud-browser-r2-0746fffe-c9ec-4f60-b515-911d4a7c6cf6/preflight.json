@@ -1,0 +1,102 @@
+{
+  "authorization_reference": "sergio:20261014-native-browser-public-one-r2",
+  "blocking_reasons": [
+    "required /etc/codex/network-policy.json absent; host permission/enforcement unknown",
+    "installed Python Playwright unavailable",
+    "installed Chromium executable and sandbox helper unavailable"
+  ],
+  "environment_id": {
+    "provenance": "no authoritative environment_status/runtime handle exposed to executor",
+    "value": "UNKNOWN"
+  },
+  "gates": {
+    "checkout": {
+      "provenance": "git rev-parse and repository basename",
+      "status": "PASS"
+    },
+    "child_directories": {
+      "reason": "browser child will not be launched",
+      "status": "NOT_CREATED"
+    },
+    "installed_chromium": {
+      "executable": "NOT_FOUND",
+      "status": "BLOCKED",
+      "version": "UNKNOWN"
+    },
+    "installed_playwright": {
+      "python_module_present": false,
+      "status": "BLOCKED",
+      "version": "UNKNOWN"
+    },
+    "network_policy": {
+      "enforcement": "UNKNOWN",
+      "mode": "UNKNOWN",
+      "permissions": {
+        "example.com:443": "UNKNOWN",
+        "iana.org:443": "UNKNOWN",
+        "www.iana.org:443": "UNKNOWN"
+      },
+      "policy_path": "/etc/codex/network-policy.json",
+      "policy_present": false,
+      "policy_version": "UNKNOWN",
+      "reason": "required explicit reviewed host policy is absent",
+      "status": "BLOCKED"
+    },
+    "runtime_identity": {
+      "CapEff": "00000000800405fb",
+      "NoNewPrivs": "0",
+      "Seccomp": "0",
+      "gid": 0,
+      "status": "CHECKED",
+      "uid": 0
+    },
+    "sandbox_helper": {
+      "files": [],
+      "reason": "no installed helper found in bounded /usr and /opt scan",
+      "status": "BLOCKED"
+    },
+    "uid1000_switch": {
+      "reason": "earlier mandatory network/component gates failed",
+      "status": "NOT_EVALUATED"
+    },
+    "unshare": {
+      "diagnostic": "PASS",
+      "exit_code": 0,
+      "note": "evidence only; not a browser sandbox verdict",
+      "path": "/usr/bin/unshare",
+      "status": "CHECKED"
+    }
+  },
+  "input_sha": "5b3981fec3df0dc1cce94e0c5d0de39b9ab854ae73ac994aa578296d10c0a410",
+  "launch_count": 0,
+  "model": {
+    "configured": "Sol medium requested in task text; runtime configuration not independently exposed",
+    "observed": "UNKNOWN",
+    "requested": "Sol medium"
+  },
+  "nonce": {
+    "claim_created": false,
+    "state": "NOT_CONSUMED",
+    "value": "sergio:20261014-native-browser-public-one-r2"
+  },
+  "operation_id": "0746fffe-c9ec-4f60-b515-911d4a7c6cf6",
+  "recorded_utc": "2026-10-14T17:08:24.763884Z",
+  "repository": {
+    "checkout_equal": true,
+    "cwd": "/workspace/onia-hermes",
+    "expected_head": "5b72925bffea7400254ab051cc5550e94cf4e61e",
+    "expected_repo": "onia-hermes",
+    "observed_branch": "work",
+    "observed_head": "5b72925bffea7400254ab051cc5550e94cf4e61e",
+    "observed_repo": "onia-hermes",
+    "requested_ref": "codex/orquestacion-subagentes-20261013",
+    "resolved_workspace": "/workspace/onia-hermes"
+  },
+  "result": "BLOCKED_PRELAUNCH",
+  "retry_count": 0,
+  "schema_version": 1,
+  "task_id": {
+    "provenance": "no authoritative runtime/task handle exposed to executor",
+    "value": "UNKNOWN"
+  }
+}
