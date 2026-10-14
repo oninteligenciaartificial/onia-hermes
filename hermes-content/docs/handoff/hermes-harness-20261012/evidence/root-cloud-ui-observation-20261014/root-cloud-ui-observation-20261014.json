@@ -1,0 +1,12 @@
+{
+  "source": "Root UI read-only observation",
+  "observed_at_utc": null,
+  "task_title": "ONIA · QA sesión limpia y agentes · Codex Cloud",
+  "task_url": "https://chatgpt.com/local/01a13910-ec21-768c-abe9-2f8250a4401b",
+  "header_button": "Chat en la nube",
+  "homepage_selection_seen": "Codex Nube / ONIA Platform",
+  "homepage_selection_is_target_environment_proof": false,
+  "task_creation_or_write_observed": false,
+  "backend_account_identity_match": "UNKNOWN",
+  "workspace_identity_match": "UNKNOWN"
+}

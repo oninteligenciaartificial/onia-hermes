@@ -1,0 +1,24 @@
+{
+  "date": "2026-10-14",
+  "source_tag": "rust-v0.161.0",
+  "claim": "codex cloud CLI contract reviewed; mapping to native desktop task UUIDs unproven",
+  "cli_exec": {
+    "inputs": ["query/stdin", "--env ENV_ID", "--attempts 1..4", "--branch BRANCH"],
+    "effects": "creates a cloud task; returns task URL",
+    "default_attempts": 1,
+    "qa_mode": false
+  },
+  "cli_list_json_fields": ["id", "url", "title", "status", "updated_at", "environment_id", "environment_label", "summary", "is_review", "attempt_total"],
+  "environment_resolution": "exact ID or unique case-insensitive visible label; TUI can browse environments",
+  "unobserved_cli_controls": ["model", "sandbox", "time_limit", "token_budget", "retry", "idempotency"],
+  "correlation_status": "UNKNOWN; no native task ID was matched to CLI list output",
+  "safe_next_check": "read existing native task URL/ID and environment, then exact-literal compare to CLI list in existing account; no exec or test task",
+  "live_validation": "not performed",
+  "sources": [
+    "https://github.com/openai/codex/blob/rust-v0.161.0/codex-rs/cloud-tasks/src/lib.rs",
+    "https://github.com/openai/codex/blob/rust-v0.161.0/codex-rs/cloud-tasks/src/cli.rs",
+    "https://github.com/openai/codex/blob/rust-v0.161.0/codex-rs/cloud-tasks/src/util.rs",
+    "https://github.com/openai/codex/blob/rust-v0.161.0/codex-rs/cloud-tasks-client/src/api.rs",
+    "https://github.com/openai/codex/blob/rust-v0.161.0/codex-rs/cloud-tasks/src/env_detect.rs"
+  ]
+}
