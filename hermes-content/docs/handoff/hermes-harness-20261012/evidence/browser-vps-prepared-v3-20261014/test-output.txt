@@ -1,0 +1,14 @@
+test_cidfile_is_outside_child_writable_mount (test_browser_runner_guards.BrowserRunnerGuardTests.test_cidfile_is_outside_child_writable_mount) ... ok
+test_execute_timeout_is_needs_reconcile_without_retry (test_browser_runner_guards.BrowserRunnerGuardTests.test_execute_timeout_is_needs_reconcile_without_retry) ... ok
+test_matching_immutable_image_id_and_labels_pass_inspection (test_browser_runner_guards.BrowserRunnerGuardTests.test_matching_immutable_image_id_and_labels_pass_inspection) ... ok
+test_matching_labels_only_kills_verified_container_id (test_browser_runner_guards.BrowserRunnerGuardTests.test_matching_labels_only_kills_verified_container_id) ... ok
+test_mismatched_labels_never_reach_docker_kill (test_browser_runner_guards.BrowserRunnerGuardTests.test_mismatched_labels_never_reach_docker_kill) ... ok
+test_replay_is_rejected_before_any_docker_preflight (test_browser_runner_guards.BrowserRunnerGuardTests.test_replay_is_rejected_before_any_docker_preflight) ... ok
+test_timeout_cleanup_is_unknown_and_needs_reconcile (test_browser_runner_guards.BrowserRunnerGuardTests.test_timeout_cleanup_is_unknown_and_needs_reconcile) ... ok
+test_unbound_approval_nonce_is_rejected_without_reservation (test_browser_runner_guards.BrowserRunnerGuardTests.test_unbound_approval_nonce_is_rejected_without_reservation) ... ok
+test_unconfigured_or_mismatched_image_blocks_before_launch (test_browser_runner_guards.BrowserRunnerGuardTests.test_unconfigured_or_mismatched_image_blocks_before_launch) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.035s
+
+OK

@@ -1,0 +1,117 @@
+{
+  "status": "prepared_only_not_executed_v3",
+  "candidate": "browser_check_vps_public.py",
+  "derived_from": {
+    "file": "browser_check.py",
+    "sha256": "0C5650791E83831D11445B26FC715A7A931016E20A7F3C3EC6E423DB550A8D6B"
+  },
+  "runtime": {
+    "python": "3.12 from pinned image",
+    "playwright": "1.62.0 exact package lock",
+    "chromium_executable": "pw.chromium.executable_path",
+    "validation": "resolve strict path; require regular executable beneath /ms-playwright; otherwise fail before launch",
+    "sandbox": true,
+    "headless": true,
+    "executable_path_source": "https://playwright.dev/python/docs/api/class-browsertype#browser-type-executable-path",
+    "versioned_api_source": "https://raw.githubusercontent.com/microsoft/playwright-python/v1.62.0/playwright/sync_api/_generated.py"
+  },
+  "container": {
+    "image": "mcr.microsoft.com/playwright/python:v1.62.0-noble@sha256:aa81288e738725378becba5b3e06cb0f3a7f012a610e87e8d767a090ea3f740d",
+    "derived_image": "onia/playwright-python:1.62.0-noble-lock-52e857275e07",
+    "derived_image_build": "not run",
+    "user": "pwuser",
+    "cap_drop": "ALL",
+    "no_new_privileges": true,
+    "seccomp_profile_sha256": "cc3e61cabda6bbc1e53e54d27ba4d55a9d3be829b6dd1a596f4a7b31b1cc7849",
+    "cpu": "0.50",
+    "memory": "768m",
+    "memory_swap": "768m",
+    "pids": 256,
+    "rootfs_read_only": true,
+    "shm": "128m",
+    "tmpfs": "/tmp:rw,nosuid,nodev,size=512m,mode=1777",
+    "ports": [],
+    "mounts": [
+      "single newly created isolated output directory; no profile, source tree, Docker socket, credentials or production data"
+    ],
+    "output_write_gate": "unknown until image is available: host output directory owner must match pwuser's numeric UID/GID or execution stops before browser launch; no world-writable/chown/ACL fallback prepared",
+    "watchdog_seconds": 75,
+    "cleanup_seconds": 2,
+    "cleanup_claim": "UNKNOWN/needs_reconcile; cleanup request does not prove exit",
+    "cidfile": "private host control path outside writable output mount; verify exact labels before kill",
+    "nonce_reservation": "SHA-256-bound fresh approval; durable O_EXCL + fsync before Docker inspection; replay blocked before Docker"
+  },
+  "actions": {
+    "install_and_pull": "not authorized/executed; exact source and wheel hashes are in requirements.lock and pypi-metadata.json",
+    "proposed_pull": "docker pull mcr.microsoft.com/playwright/python:v1.62.0-noble@sha256:aa81288e738725378becba5b3e06cb0f3a7f012a610e87e8d767a090ea3f740d",
+    "proposed_build": "docker build --pull=false --tag onia/playwright-python:1.62.0-noble-lock-52e857275e07 --file Dockerfile . (requires separate approval)",
+    "offline_smoke": "BLOCKED until exact derived image ID and fresh one-time approval nonce are configured and reviewed",
+    "public_navigation": "disabled in runner; requires separate verified network egress isolation and a fresh action approval"
+  },
+  "source_guards": {
+    "allowlisted_hosts": [
+      "example.com",
+      "iana.org",
+      "www.iana.org"
+    ],
+    "https_only": true,
+    "redirects": "not followed natively; only allowlisted target is rewritten as a new routed navigation",
+    "retries": 0,
+    "method_approval_flag_in_candidate": "--method-approved",
+    "public_egress_verified": false,
+    "firewall_or_dns_rebinding_protection": "unknown; network-level enforcement absent"
+  },
+  "stop_conditions": [
+    "no pull, build, package install or browser run before a specific approval",
+    "unknown/mismatched image/package/source hash",
+    "Playwright executable absent, non-regular, non-executable or outside /ms-playwright",
+    "pwuser cannot access the isolated output mount",
+    "seccomp/sandbox failure; never disable sandbox or add capabilities",
+    "any timeout or ambiguous result; no retry",
+    "public mode stays disabled until egress is verified and separately approved"
+  ],
+  "prepared_at_utc": "2026-10-14T06:32:25Z",
+  "candidate_sha256": "4153D7EF7599506C07D7F3CD434A18DDAED2A9DF54DC676C25D8DDE171609BDA",
+  "proposed_commands": {
+    "pull": "docker pull mcr.microsoft.com/playwright/python:v1.62.0-noble@sha256:aa81288e738725378becba5b3e06cb0f3a7f012a610e87e8d767a090ea3f740d",
+    "build": "docker build --pull=false --network=default --tag onia/playwright-python:1.62.0-noble-lock-52e857275e07 --file Dockerfile . (requires separate approval)",
+    "offline_smoke": "BLOCKED: no executable command until exact image ID and fresh approval nonce are reviewed"
+  },
+  "command_security": {
+    "network_for_smoke": "none",
+    "user": "pwuser",
+    "cap_drop": "ALL",
+    "no_new_privileges": true,
+    "seccomp": "official v1.62.0 profile in child container only",
+    "cpu": "0.50",
+    "memory": "768m",
+    "swap": "768m",
+    "pids": 256,
+    "read_only_rootfs": true,
+    "tmpfs": "/tmp:rw,nosuid,nodev,size=512m,mode=1777",
+    "shm": "128m",
+    "published_ports": [],
+    "mounts": "one isolated output directory only",
+    "watchdog_seconds": 75,
+    "cleanup_seconds": 2,
+    "uid_gid_output_mount": "UNKNOWN; fail before browser if inaccessible; no chmod/chown/ACL fallback",
+    "control_state": "/var/lib/onia-browser-control; pre-existing durable mode-0700 directory owned by runner UID, outside /out",
+    "nonce": "reserved once with O_EXCL + fsync before Docker preflight; never released",
+    "image_id": "exact derived image ID required; mutable tag is insufficient"
+  },
+  "limitation": "No runtime is executable until image ID and fresh nonce are bound. Public mode disabled. UID/GID, sandbox enforcement, egress, and cleanup remain unverified.",
+  "runtime_identity": {
+    "execution_host": "VPS",
+    "session_id": "UNKNOWN unless separately supplied in isolated runtime context",
+    "cloud_session_reuse": "not asserted"
+  },
+  "derived_image": {
+    "tag": "onia/playwright-python:1.62.0-noble-lock-52e857275e07",
+    "expected_image_id": "UNCONFIGURED; tag alone is mutable and never trusted"
+  },
+  "requirements_lock_sha256": "52e857275e075417fa9e5b934f3b41d0366a55fc25187b7f40dbb3df34ed6a4e",
+  "nonce_reservation": "SHA256-bound fresh approval + private mode-0700 control directory + O_EXCL and fsync before Docker preflight; replay is blocked before Docker",
+  "cid_ownership": "CID file outside /out; inspect labels for exact owner/run ID/nonce hash before any kill; mismatch means no kill",
+  "cleanup_claim": "UNKNOWN/needs_reconcile; cleanup request does not prove stopped",
+  "execution_gate": "BLOCKED until approved build yields independently reviewed immutable image ID and a fresh approval nonce is bound"
+}

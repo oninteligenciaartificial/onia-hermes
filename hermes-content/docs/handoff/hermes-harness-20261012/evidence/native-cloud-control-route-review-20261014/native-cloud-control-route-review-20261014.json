@@ -1,0 +1,63 @@
+{
+  "captured_at_utc": "2026-10-14T07:23:52.2163778Z",
+  "scope": "Comparison from official pinned source already reviewed and completed single CLI list result; no new network/auth/CLI activity.",
+  "source_release": "OpenAI Codex rust-v0.161.0",
+  "official_sources": [
+    {
+      "evidence": "Subcommand enum exposes cloud separately from resume/app-server; Cloud branch dispatches to cloud_tasks::run_main.",
+      "lines": "213-215, 1567-1578",
+      "url": "https://raw.githubusercontent.com/openai/codex/rust-v0.161.0/codex-rs/cli/src/main.rs"
+    },
+    {
+      "evidence": "Cloud CLI has distinct exec/status/list/apply/diff subcommands; list has --json/limit/cursor.",
+      "lines": "13-24, 75-90",
+      "url": "https://raw.githubusercontent.com/openai/codex/rust-v0.161.0/codex-rs/cloud-tasks/src/cli.rs"
+    },
+    {
+      "evidence": "run_list_command calls list_tasks; run_exec_command separately calls create_task; this CLI listing returned 0 tasks.",
+      "lines": "164-183, 502-545",
+      "url": "https://raw.githubusercontent.com/openai/codex/rust-v0.161.0/codex-rs/cloud-tasks/src/lib.rs"
+    },
+    {
+      "evidence": "HTTP client maps list to backend list_tasks with current scope; create_task is separate.",
+      "lines": "115-128, 148-179",
+      "url": "https://raw.githubusercontent.com/openai/codex/rust-v0.161.0/codex-rs/cloud-tasks-client/src/http.rs"
+    }
+  ],
+  "native_session_ids": "Codex desktop/cloud task UUIDs are visible/managed through Codex App evidence; reviewed CLI cloud-list contract is a distinct endpoint and returned zero. No supported external API mapping VPS process to those native UUID sessions has been demonstrated by reviewed sources.",
+  "options": [
+    {
+      "runtime": "Codex-managed cloud execution and native UI session",
+      "capability": "Native session controls/visibility in App; external VPS control API not demonstrated",
+      "name": "Native Codex App session",
+      "pc_off": "Yes, when the task is cloud-hosted",
+      "cost": "Uses Codex account allowance; current per-task cost/cap UNKNOWN"
+    },
+    {
+      "runtime": "Separate cloud-task API via codex cloud list/exec",
+      "capability": "Official list/exec semantics and task IDs; not shown to create/send into native App UUID sessions",
+      "name": "Codex Cloud Tasks CLI",
+      "pc_off": "Yes",
+      "cost": "Account allowance/cap UNKNOWN; exec creates new task and is outside this read-only probe"
+    },
+    {
+      "runtime": "Local Codex agent process exposed through app-server protocol",
+      "capability": "Runs VPS-local agent; does not thereby become a native Cloud session",
+      "name": "Codex app-server on VPS",
+      "pc_off": "Yes",
+      "cost": "Uses existing account auth/allowance; source support for current isolated deployment is not established here"
+    }
+  ],
+  "minimum_architecture_change": "Choose an explicit execution model: either let Codex App own native Cloud sessions and add no VPS session-control bridge, or run the approved VPS Codex process as its own app-server/session and label it VPS-local in Telegram/UI. If native-session creation/control from VPS is required, first obtain a documented supported public API/contract that maps authenticated external callers to native session UUIDs; none is established in these sources. Do not map cloud-task IDs to native UUIDs.",
+  "limitations": [
+    "The empty list response does not prove the native sessions are absent or in a different account.",
+    "No cloud exec, app-server start, session creation, inference, auth access, or installation was performed.",
+    "App-server source compatibility and account/budget usage remain unverified."
+  ],
+  "list_receipt": {
+    "task_count": 0,
+    "known_ids_found": [],
+    "sha256": "DF5F83BC66BF575B3FB75FFEDE7F2CBC385A9092E055674AD8619F7BF8644B",
+    "path": "E:\\onia-wt\\codex-cloud-cli-native-list-probe-20261014.json"
+  }
+}

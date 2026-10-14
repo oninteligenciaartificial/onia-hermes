@@ -1,0 +1,107 @@
+{
+  "prepared_at_utc": "2026-10-14T06:32:25Z",
+  "status": "prepared_only_not_executed",
+  "offline_nonce": "UNCONFIGURED_UNTIL_FRESH_APPROVAL",
+  "offline_nonce_consumed": false,
+  "public_nonce": null,
+  "base_image": "mcr.microsoft.com/playwright/python:v1.62.0-noble@sha256:aa81288e738725378becba5b3e06cb0f3a7f012a610e87e8d767a090ea3f740d",
+  "derived_image": "onia/playwright-python:1.62.0-noble-lock-52e857275e07",
+  "derived_image_built": false,
+  "requirements_lock_sha256": "52e857275e075417fa9e5b934f3b41d0366a55fc25187b7f40dbb3df34ed6a4e",
+  "seccomp_profile_sha256": "cc3e61cabda6bbc1e53e54d27ba4d55a9d3be829b6dd1a596f4a7b31b1cc7849",
+  "docker_flags": [
+    "--pull=never",
+    "--rm",
+    "--init",
+    "-i",
+    "--network=none",
+    "--user=pwuser",
+    "--cap-drop=ALL",
+    "--security-opt=no-new-privileges=true",
+    "--security-opt=seccomp=<profile file>",
+    "--cpus=0.50",
+    "--memory=768m",
+    "--memory-swap=768m",
+    "--pids-limit=256",
+    "--read-only",
+    "--shm-size=128m",
+    "--tmpfs=/tmp:rw,nosuid,nodev,size=512m,mode=1777",
+    "--mount type=bind,source=<fresh empty output dir>,target=/out,rw",
+    "--env=HOME=/tmp/home",
+    "--env=XDG_CONFIG_HOME=/tmp/home/.config",
+    "--env=XDG_CACHE_HOME=/tmp/home/.cache",
+    "--env=PLAYWRIGHT_BROWSERS_PATH=/ms-playwright"
+  ],
+  "limits": {
+    "cpu": "0.50",
+    "memory": "768m",
+    "swap": "768m",
+    "pids": 256,
+    "watchdog_seconds": 75,
+    "cleanup_seconds": 2
+  },
+  "mounts": {
+    "host_bind_count": 1,
+    "only": "fresh empty output directory",
+    "docker_socket": false,
+    "project": false,
+    "profile_or_auth": false
+  },
+  "offline": {
+    "network": "none",
+    "urls": 0,
+    "sandbox": true,
+    "artifact": "synthetic JPEG with UTC/hash receipt"
+  },
+  "public": {
+    "enabled": false,
+    "fresh_approval_nonce_required": true,
+    "verified_public_egress_filter_required": true,
+    "exact_host_allowlist": true,
+    "http_https_only": true,
+    "dns_rejects_non_global": true,
+    "route_every_request": true,
+    "redirects": false,
+    "retries": 0,
+    "response_status_mime_size_checked": true,
+    "limitation": "Public mode disabled; egress filter unverified."
+  },
+  "stops": [
+    "missing image => no pull",
+    "missing reviewed immutable image ID => no launch",
+    "any hash/version mismatch => stop",
+    "sandbox failure => no bypass or SYS_ADMIN",
+    "timeout/uncertain cleanup => UNKNOWN and needs_reconcile; no retry"
+  ],
+  "browser_v2": {
+    "source": "E:/onia-wt/cloud-browser-prepared-v23-20261014/browser_check.py",
+    "bundled_copy": "browser_check.py",
+    "sha256": "0C5650791E83831D11445B26FC715A7A931016E20A7F3C3EC6E423DB550A8D6B",
+    "copied_byte_identical": true,
+    "runtime_execution": "disabled",
+    "approval_flag": "--method-approved",
+    "hosts": [
+      "example.com",
+      "iana.org",
+      "www.iana.org"
+    ],
+    "note": "Separate public navigation candidate; not used by offline fixture runner.",
+    "compatibility": "DERIVATIVE_PREPARED_RUNTIME_UNVERIFIED",
+    "executable_path_in_source": "/usr/bin/chromium",
+    "pinned_image_browser_root": "/ms-playwright",
+    "derivative_file": "browser_check_vps_public.py",
+    "derivative_sha256": "4153D7EF7599506C07D7F3CD434A18DDAED2A9DF54DC676C25D8DDE171609BDA",
+    "runtime_executable_source": "pw.chromium.executable_path; canonicalized and constrained below /ms-playwright",
+    "public_egress": "BLOCKED_UNVERIFIED; public runner disabled"
+  },
+  "local_preparation": {
+    "temporary_directory_mode": "0700 fresh only",
+    "control_root": "/var/lib/onia-browser-control: must pre-exist, durable, mode 0700, owned by runner UID; outside /out",
+    "cidfile": "private control directory outside /out; docker inspect ownership labels before kill",
+    "nonce": "fresh approved nonce SHA256-bound; durable O_EXCL+fsync before Docker; no auto-release",
+    "source_or_profile_mounts": 0,
+    "browser_v2_source_mounted": false
+  },
+  "expected_derived_image_id": "UNCONFIGURED_FAIL_CLOSED",
+  "timeout_outcome": "UNKNOWN / needs_reconcile; stop request is not proof of exit"
+}

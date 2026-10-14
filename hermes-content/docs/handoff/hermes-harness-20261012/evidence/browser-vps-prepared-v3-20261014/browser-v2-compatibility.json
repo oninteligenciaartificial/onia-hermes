@@ -1,0 +1,41 @@
+{
+  "source_path": "E:/onia-wt/cloud-browser-prepared-v23-20261014/browser_check.py",
+  "source_sha256": "0C5650791E83831D11445B26FC715A7A931016E20A7F3C3EC6E423DB550A8D6B",
+  "static_facts": {
+    "absolute_chromium_path": "/usr/bin/chromium",
+    "approval_gate": "--method-approved",
+    "approved_hostnames": [
+      "example.com",
+      "iana.org",
+      "www.iana.org"
+    ],
+    "local_output_root": "script directory",
+    "timeout_seconds": 75,
+    "cleanup_bound": "UNKNOWN"
+  },
+  "official_image_facts": {
+    "tag": "v1.62.0-noble",
+    "python_version": "3.12",
+    "browsers_root": "/ms-playwright",
+    "dockerfile": "https://github.com/microsoft/playwright-python/blob/v1.62.0/utils/docker/Dockerfile.noble",
+    "dockerfile_sha_provenance": "official pinned-tag source read-only"
+  },
+  "compatibility": "BLOCKED_UNVERIFIED_EXECUTABLE_PATH",
+  "reason": "Frozen V2 hardcodes /usr/bin/chromium, while the pinned Playwright Python image Dockerfile downloads browsers under /ms-playwright and does not declare /usr/bin/chromium. Do not run this source in that image until a reviewed adapter/path-verification step is authorized; do not modify frozen source.",
+  "network_gate": "BLOCKED_PUBLIC_EGRESS_UNVERIFIED",
+  "status": "static_preparation_only_no_browser_or_network_execution",
+  "frozen_source_status": "unchanged; contains hardcoded /usr/bin/chromium",
+  "current_derivative": {
+    "file": "browser_check_vps_public.py",
+    "sha256": "52934D629B1832660F07146D09088A3BF4658D6BA914D5176A5BCFC1BFEF7C9F",
+    "runtime_api": "pw.chromium.executable_path",
+    "package_version_check": "1.62.0 exact",
+    "resolved_path_guard": "regular executable below /ms-playwright",
+    "launch_verified": false,
+    "public_egress": "BLOCKED_UNVERIFIED"
+  },
+  "runtime_execution": "disabled; derivative targets VPS and does not assert desktop Cloud session identity",
+  "session_id": "UNKNOWN",
+  "session_id_provenance": "explicit isolated runtime context only",
+  "prepared_at_utc": "2026-10-14T06:28:17Z"
+}

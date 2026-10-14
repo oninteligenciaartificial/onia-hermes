@@ -1,0 +1,44 @@
+{
+  "source_urls": [
+    "https://pypi.org/pypi/playwright/1.62.0/json",
+    "https://pypi.org/pypi/pyee/13.0.1/json",
+    "https://pypi.org/pypi/greenlet/3.5.6/json",
+    "https://pypi.org/pypi/typing-extensions/4.16.0/json"
+  ],
+  "retrieved_at_utc": "2026-10-14T06:01:33Z",
+  "binary_wheels_downloaded": false,
+  "official_python_dockerfile": "https://github.com/microsoft/playwright-python/blob/v1.62.0/utils/docker/Dockerfile.noble",
+  "python_image_note": "Official Dockerfile uses Ubuntu Noble Python 3.12 and creates pwuser.",
+  "playwright": {
+    "version": "1.62.0",
+    "requires_python": ">=3.10",
+    "requires_dist": [
+      "pyee<14,>=13",
+      "greenlet<4.0.0,>=3.1.1"
+    ],
+    "wheel": "playwright-1.62.0-py3-none-manylinux1_x86_64.whl",
+    "bytes": 47748926,
+    "sha256": "ba33bae6a13b3d9d354c751cb618af357d20fe1d57767cbcce52079bbef17ad3"
+  },
+  "pyee": {
+    "version": "13.0.1",
+    "wheel": "pyee-13.0.1-py3-none-any.whl",
+    "bytes": 15659,
+    "sha256": "af2f8fede4171ef667dfded53f96e2ed0d6e6bd7ee3bb46437f77e3b57689228"
+  },
+  "greenlet": {
+    "version": "3.5.6",
+    "wheel": "greenlet-3.5.6-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl",
+    "bytes": 621404,
+    "sha256": "975736b002ed080d124cf81a79cb7e05cb26d6b3f5c7a7b651c0fcce70353aa1"
+  },
+  "typing_extensions": {
+    "version": "4.16.0",
+    "requires_python": ">=3.9",
+    "requires_dist": [],
+    "wheel": "typing_extensions-4.16.0-py3-none-any.whl",
+    "bytes": 45571,
+    "sha256": "481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8",
+    "metadata_source": "official PyPI JSON; wheel not downloaded"
+  }
+}
