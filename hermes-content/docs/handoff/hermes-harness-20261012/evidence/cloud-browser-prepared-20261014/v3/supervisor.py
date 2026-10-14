@@ -9,7 +9,7 @@ import subprocess
 import sys
 import time
 
-V2 = Path('/workspace/work/browser-goal-preflight-20261014/v2/browser_check.py')
+V2 = Path('/workspace/work/browser-goal-preflight-20261014/active-goal-v4/v2/browser_check.py')
 V2_SHA = '9a0f5783e13acae869839367dfea0cc793d45f7a250d2e3f8f2e1550695b89ee'
 PYTHON = '/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python'
 SESSION = '01a13170-1c7e-7224-83c1-c5f369052039'
