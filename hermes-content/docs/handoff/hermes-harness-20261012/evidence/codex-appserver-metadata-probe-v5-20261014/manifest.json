@@ -1,0 +1,139 @@
+{
+  "artifact_status": "v5-prepared-only-not-executed-awaiting-review",
+  "release": "Codex CLI 0.161.0",
+  "source_ref": "https://github.com/openai/codex/tree/rust-v0.161.0",
+  "feature_override": {
+    "argument": "-c features.plugins=false",
+    "supported_by_pinned_source": true,
+    "effective_gate": "Feature::Plugins -> plugins_enabled -> plugin startup manager",
+    "limit": "other startup effects not ruled out"
+  },
+  "rpc_allowlist": [
+    "initialize",
+    "initialized",
+    "account/read params={}"
+  ],
+  "excluded": [
+    "model/list (no refresh parameter; may fetch catalog)",
+    "thread/*",
+    "turn/*",
+    "MCP",
+    "plugin",
+    "hooks",
+    "skills"
+  ],
+  "supervisor": {
+    "remote_watchdog_seconds": 45,
+    "remote_cleanup_grace_seconds": 2,
+    "local_ssh_watchdog_seconds": 49,
+    "retry_count": 0,
+    "terminal_frame_required": true,
+    "child_stop_and_scratch_cleanup_required": true,
+    "stdout_line_limit": 64,
+    "stdout_byte_limit": 2097152,
+    "stdout_per_line_limit": 262144,
+    "process_started": false,
+    "process_group_keeper": "unreaped keeper is PGID; child launched with process_group=keeper.pid; TERM ignored by keeper until final SIGKILL",
+    "group_shutdown": "signal owned PGID before reaping keeper; bounded /proc scan checks active members; scratch removed only when group closure confirmed",
+    "process_group_scan_entry_limit": 8192,
+    "rpc_observation": "rpc_methods_sent contains only methods whose local stdin write and flush returned successfully; remote delivery remains unknown"
+  },
+  "offline_validation": {
+    "command": "python -m unittest -v test_metadata_probe.MetadataProbeSafetyTests.test_v5_accepts_only_rate_limits_metadata_notification_without_exporting_payload test_metadata_probe.MetadataProbeSafetyTests.test_v5_metadata_notice_families_are_classified_but_remain_rejected test_metadata_probe.MetadataProbeSafetyTests.test_v5_unknown_private_notification_stays_unknown_and_does_not_echo",
+    "tests": 3,
+    "duration_seconds": 0.0,
+    "result": "PASS",
+    "scope": "new V5 notification allowance/diagnostic fixtures only; prior suites not rerun",
+    "probe_executed": false
+  },
+  "artifacts": {
+    "metadata_probe.py_sha256": "cf8fa1d9390e7df799249a46357a52d20033941c7ef5eb8c7bf99f157ccd53f8",
+    "test_metadata_probe.py_sha256": "1e06d50dae0f92e0cf02a62e8c4f260cc97da0fb91d496898b1204220a7f2634",
+    "review.md_sha256": "315c03c18d419cd686f5fd4bf81dbeb75ea0f0a0b3d4d852981128493d28a315"
+  },
+  "supersedes": {
+    "qa_rejections": [
+      "0e0777ac7bae79f3e5143657b7fb721f148bad4db54d90d2a777760e653bfb17",
+      "97dfc4cd43b8583eb6f2940cadbd6e50b812b6ca5e5ac5c79a6affe8cdc8490c"
+    ]
+  },
+  "no_execution": {
+    "cli": false,
+    "app_server": false,
+    "rpc": false,
+    "login": false,
+    "llm": false,
+    "tools": false
+  },
+  "privacy": "No auth contents, account identifiers, session data, raw stdout/stderr, or server error text included.",
+  "app_server_transport": {
+    "argv": "app-server (stdio default; --stdio omitted)",
+    "verified_pinned_source": "https://github.com/openai/codex/blob/rust-v0.161.0/codex-rs/cli/src/main.rs#L517-L539",
+    "notes": "Pinned source defines stdio:// default; --stdio is also supported."
+  },
+  "protocol_envelope": "Versionless Codex DTO; emittedAtMs validated per flattened notification envelope. Accepted notifications: account/updated, account/rateLimits/updated, configWarning only.",
+  "protocol_diagnostics": "On validation failure: eight known-key presence booleans including emittedAtMs, unknown-key count without names, JSON type categories, method class, expected-ID match boolean, optional exact-shape SDK semver; no values/raw payload.",
+  "source_envelope": {
+    "field": "emittedAtMs",
+    "optional": true,
+    "nullable": true,
+    "type": "exact integer i64",
+    "min": "-9223372036854775808",
+    "max": "9223372036854775807",
+    "value_persisted": false,
+    "source_common": "https://github.com/openai/codex/blob/rust-v0.161.0/codex-rs/app-server-protocol/src/protocol/common.rs#L1968-L1984",
+    "source_population": "https://github.com/openai/codex/blob/rust-v0.161.0/codex-rs/app-server/src/outgoing_message.rs#L838-L842"
+  },
+  "prior_v3_evidence": {
+    "receipt": "E:/onia-wt/codex-appserver-metadata-prepared-v3-20261014/receipt-20261014T090557_713354Z.json",
+    "receipt_sha256": "0B270C9A9FEAFC7730358F25C9E7B5006B4DFAFA9EAF18497E0532B227B54D58",
+    "reconciliation": "E:/onia-wt/codex-appserver-v3-reconcile-20261014.json",
+    "reconciliation_sha256": "88401CAFAE2403799D571215798015719E64DA9588CF18802D8F3C43182263F5",
+    "raw_notification_name": "unknown, not preserved"
+  },
+  "prior_v2_reconciliation": {
+    "path": "E:/onia-wt/codex-appserver-v2-reconcile-20261014.json",
+    "sha256": "16C786594F7DD36B7C30312750CAF87F77AB9C7B4981D04EFA23189F66394E86",
+    "captured_at_utc": "2026-10-14T08:55:22Z"
+  },
+  "prior_v4_attempt": {
+    "receipt": "E:/onia-wt/codex-appserver-metadata-prepared-v4-20261014/receipt-20261014T091439_408371Z.json",
+    "receipt_sha256": "5940CA713556FECCA70617C3CE72FE193C55FDB2851839D3B842ED71952E1FB6",
+    "status": "held_or_failed",
+    "failure_class": "unexpected_server_notification",
+    "elapsed_seconds": 2.422,
+    "exit_code": 1,
+    "local_methods_written_flush": [
+      "initialize",
+      "initialized",
+      "account/read"
+    ],
+    "remote_delivery": "unknown",
+    "account_present": "unknown",
+    "auth_state": "unknown",
+    "llm_calls": 0,
+    "tool_calls": 0,
+    "retry_count": 0,
+    "stderr_bytes_discarded": 299,
+    "stdout_lines": 3,
+    "stdout_bytes": 760,
+    "cleanup_terminal_frame": "not recorded"
+  },
+  "prior_v4_reconciliation": {
+    "path": "E:/onia-wt/codex-appserver-v4-reconcile-20261014.json",
+    "sha256": "31B6F1724A06F3E8DC1109D002D8D89197E7585C1A7F6194BA1557FD89AF5D43",
+    "proc_scan": "complete,365 entries,0 matching own cwd",
+    "tmp_scan": "incomplete cap8192,0 candidates among examined",
+    "scratch_absence": "unknown",
+    "signals": 0,
+    "deletions": 0
+  },
+  "v5_diagnostic_classes": {
+    "account/gatewayOAuth/changed": "gateway_status",
+    "app/list/updated": "app_catalog",
+    "remoteControl/status/changed": "remote_control_status",
+    "mcpServer/startupStatus/updated": "mcp_startup_status",
+    "other": "unknown",
+    "accepted": "no, diagnostics only"
+  }
+}

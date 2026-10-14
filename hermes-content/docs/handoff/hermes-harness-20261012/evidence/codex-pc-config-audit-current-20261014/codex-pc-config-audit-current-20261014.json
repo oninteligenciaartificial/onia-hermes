@@ -1,0 +1,62 @@
+{
+  "audit_date": "2026-10-14",
+  "scope": "read-only local Codex config allowlist and one wsl --status check",
+  "config": {
+    "path": "%USERPROFILE%/.codex/config.toml",
+    "parse_status": "ok",
+    "settings": {
+      "model": "gpt-6.1-sol",
+      "model_reasoning_effort": "medium",
+      "sandbox_mode": "danger-full-access",
+      "approval_policy": "never",
+      "windows.sandbox": "elevated"
+    },
+    "features_boolean": {
+      "hooks": true,
+      "js_repl": false,
+      "memories": true
+    },
+    "mcp_servers": {
+      "count": 6,
+      "names": [
+        "n8n-mcp",
+        "stitch",
+        "higgsfield",
+        "agentation",
+        "node_repl",
+        "facebook"
+      ]
+    },
+    "limits": [
+      "No auth, token, custom instruction, environment, or MCP values were read or emitted.",
+      "A configured model value does not prove which model served a particular chat.",
+      "The current task runtime permission profile is supplied by the host and is not inferred from config.toml."
+    ]
+  },
+  "wsl": {
+    "command": "wsl.exe --status",
+    "result": "success",
+    "default_distribution": "Ubuntu",
+    "default_version": 2,
+    "interpretation": "WSL2 is installed/configured. This status check does not prove a distro is currently running or that this repo is inside WSL."
+  },
+  "recommendation": "Use native Windows by default for this Windows-based Codex workflow. Use WSL2 only if a task needs Linux-native tooling, the repo/developer workflow is already in WSL2, or native sandbox implementations do not meet the need. No WSL dependency is established for cloud-hosted Codex work or a separate Linux VPS.",
+  "sources": [
+    {
+      "title": "OpenAI Docs: Windows sandbox",
+      "url": "https://learn.chatgpt.com/docs/windows/windows-sandbox",
+      "supports": "Native Windows workflows; Windows sandbox; WSL is conditional; full-access risk."
+    },
+    {
+      "title": "OpenAI Docs: WSL",
+      "url": "https://learn.chatgpt.com/docs/windows/wsl",
+      "supports": "Use WSL2 for Linux-native tools or WSL2-based repositories/workflows."
+    },
+    {
+      "title": "OpenAI Docs: Agents API architecture",
+      "url": "https://developers.openai.com/api/docs/guides/agents-api/architecture",
+      "supports": "The hosted harness can work without a user-provided compute environment."
+    }
+  ],
+  "changes": "None. No install, update, login, config modification, process termination, or repository edit."
+}

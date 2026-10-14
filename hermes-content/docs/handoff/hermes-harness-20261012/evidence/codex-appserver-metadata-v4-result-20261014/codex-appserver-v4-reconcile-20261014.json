@@ -1,0 +1,34 @@
+{
+  "artifact": "V4 post-failure owned-process metadata reconciliation",
+  "artifact_created_at_utc": "2026-10-14T09:14:58Z",
+  "v4_receipt": {
+    "path": "E:/onia-wt/codex-appserver-metadata-prepared-v4-20261014/receipt-20261014T091439_408371Z.json",
+    "sha256": "5940CA713556FECCA70617C3CE72FE193C55FDB2851839D3B842ED71952E1FB6",
+    "captured_at_utc": "2026-10-14T09:14:41.825614Z",
+    "failure_class": "unexpected_server_notification",
+    "raw_method_name": "not preserved"
+  },
+  "remote_reconciliation": {
+    "observed_after_v4_receipt": true,
+    "observed_at_utc": null,
+    "observation_time_precision": "Original tool output did not include an exact timestamp.",
+    "matching_process_start_window_utc": ["2026-10-14T09:14:09Z", "2026-10-14T09:15:12Z"],
+    "process_scan_complete": true,
+    "proc_entries": 365,
+    "matching_owned_process_cwds": 0,
+    "proc_metadata_errors": 0,
+    "tmp_scan_complete": false,
+    "tmp_scan_entry_limit": 8192,
+    "matching_owned_scratch_dirs_among_examined": 0,
+    "matching_prefix_entries": 0,
+    "scratch_absence": "unknown",
+    "signals_sent": 0,
+    "deletions": 0,
+    "argv_env_logs_read": false
+  },
+  "limitations": [
+    "Receipt protocol diagnostic says allowlisted method class unknown, params present, emittedAtMs type integer, trace absent, and zero unknown keys; it does not preserve the method or timestamp value.",
+    "No terminal cleanup frame was recorded; process reconciliation found no matching owned cwd, but bounded /tmp scan cannot confirm scratch absence.",
+    "Account/auth state and remote request delivery are unknown. No retry was made."
+  ]
+}

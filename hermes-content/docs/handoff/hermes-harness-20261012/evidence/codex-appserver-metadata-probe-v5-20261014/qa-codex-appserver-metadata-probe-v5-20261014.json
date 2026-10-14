@@ -1,0 +1,30 @@
+{
+  "status": "PASS_V5_FOCAL_SOURCE_REVIEW",
+  "reviewed_at_utc": "2026-10-14T09:21:00.157954+00:00",
+  "artifact_dir": "E:\\onia-wt\\codex-appserver-metadata-prepared-v5-20261014",
+  "source_sha256": {
+    "metadata_probe.py": "CF8FA1D9390E7DF799249A46357A52D20033941C7EF5EB8C7BF99F157CCD53F8",
+    "test_metadata_probe.py": "1E06D50DAE0F92E0CF02A62E8C4F260CC97DA0FB91D496898B1204220A7F2634",
+    "review.md": "315C03C18D419CD686F5FD4BF81DBEB75EA0F0A0B3D4D852981128493D28A315",
+    "manifest.json": "8FBD30B4FCEAB24C97C3877D590C170C628A5482DF8A472C310C094C6CAA7FEA"
+  },
+  "official_source": "https://raw.githubusercontent.com/openai/codex/rust-v0.161.0/codex-rs/app-server-protocol/src/protocol/common.rs#L1908-L1915",
+  "checks": [
+    "Pinned notification registry names account/rateLimits/updated and the four classified metadata families.",
+    "Only account/rateLimits/updated joins accepted notifications; payload is discarded and not projected.",
+    "Gateway/app/remote-control/MCP-startup notices receive fixed diagnostic labels but continue to raise unexpected_server_notification.",
+    "Unknown private method strings and payloads are not echoed; only bounded fixed categories enter protocol_diagnostics.",
+    "Outgoing RPC set remains initialize, initialized, account/read; timestamp field guard, stdout caps, watchdog, process group cleanup and private receipt retained.",
+    "Remote supervisor source compiles without execution."
+  ],
+  "author_focal_tests": {
+    "count": 3,
+    "result": "PASS reported",
+    "independently_rerun": false
+  },
+  "limits": [
+    "No V5 CLI/SSH/RPC/network/auth/model execution by QA.",
+    "V4 prior unexpected notification method identity was not captured; V5 allowance is source-grounded but not empirically linked to V4 failure.",
+    "Account/auth state and model served remain UNKNOWN until full successful read and cleanup."
+  ]
+}
