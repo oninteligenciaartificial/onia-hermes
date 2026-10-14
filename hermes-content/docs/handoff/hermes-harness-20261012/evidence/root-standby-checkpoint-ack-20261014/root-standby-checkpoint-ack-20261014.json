@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "kind": "checkpoint_ack_standby_only",
+  "source_thread_id": "01a136be-bea1-70f1-9891-9cae7dd1d331",
+  "successor_thread_id": "01a138fa-8304-71c1-9391-3bc14314d57f",
+  "host": "local",
+  "observed_turn_id": "01a139ce-5f5a-7cb0-b054-13cd777ef6ed",
+  "observed_cursor": "f7a2b63f-1c85-4a28-9a7b-8ae91dc6e5ff:3",
+  "completed_at_utc": "2026-10-14T09:46:39.000Z",
+  "duration_ms": 11284,
+  "document_commit": "4217aad83b972d62e38c98adc7580dd74088690a",
+  "document_sha256": "52494390BDF11D130C8E2DF1123FB1F1C6E7D0BD427F431976790F23E9522ABB",
+  "checkpoint_ack": "ACK_CHECKPOINT_STANDBY",
+  "acknowledged_owner": "01a136be-bea1-70f1-9891-9cae7dd1d331",
+  "ownership_transferred": false,
+  "old_goal_paused": false,
+  "new_goal_created": false,
+  "archived": false,
+  "scope": "Reported ACK of exact checkpoint; successor is idle standby, not authority or an autonomous executor."
+}
