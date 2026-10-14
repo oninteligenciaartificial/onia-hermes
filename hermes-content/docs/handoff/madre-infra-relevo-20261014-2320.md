@@ -22,7 +22,7 @@ Completar ONIA Hermes → Codex Cloud nativo → browser → captura Telegram co
 
 ## Próxima ejecución
 
-Próxima acción confirmada por el ACK, aún no despachada: despachar wiring de launcher/registro `na`, transporte de solo lectura y QA independiente de fixtures. Verificar Codex Cloud sin pedir login por una ausencia parcial. Pedir el grant específico antes de activar; mantener R4 y activación pendientes hasta evidencia de transporte, autenticación y autorización.
+Tras el ACK se lanzaron tres frentes, aún no terminados: wiring (`/root/native_wiring`, `01a13cc1-be37-7ea1-a5c6-91a8431925a1`), transporte de solo lectura (`/root/cloud_transport`, `01a13cc1-dff6-7231-81cd-30fa26015e16`) y QA independiente (`/root/qa_native`, `01a13cc2-01ef-7813-a3d9-ec81444bbe8d`). Verificar Codex Cloud sin pedir login por una ausencia parcial. Pedir el grant específico antes de activar; mantener R4 y activación pendientes hasta evidencia de transporte, autenticación y autorización.
 
 Estado vivo al último reporte: cuota global 72% usada/28% restante, snapshot ~23:15Z; sin costo atribuido ni reset. El informe [context-signal-handoff-20261014.md](E:/onia-wt/context-signal-handoff-20261014.md) y su JSON [context-signal-handoff-20261014.json](E:/onia-wt/context-signal-handoff-20261014.json) concluyen contexto activo `UNKNOWN`: JSONL bloqueado y semántica no confirmada; la cuota global no equivale a contexto. El 70% no está probado. Tres slots worker + Root, máximo cuatro. Luna low para mecánica con `fork none`; Luna medium para autenticación ambigua; modelo servido `UNKNOWN`.
 
