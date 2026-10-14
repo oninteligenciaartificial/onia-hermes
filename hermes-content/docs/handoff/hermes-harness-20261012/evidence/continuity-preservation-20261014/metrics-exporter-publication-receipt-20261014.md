@@ -1,0 +1,3 @@
+# Publication receipt — metrics exporter — 2026-10-14
+
+The copied author report `work-metrics-luna-20261014.md` (external SHA-256 `DBEBEA00EAFB3E2CCB7EBD5C7180A4D6512DBAF776E31504318119FB466FD8F7`) was captured before publication and therefore says “Se publicará”. Later author report to Root: only `readonly_metrics.py` was committed/pushed as `0fb11294ba1018e55523f122d29cc667baddfdfb` on `codex/hermes-controller-hardening-20261013`; `ls-remote` matched and code worktree was clean. Source code SHA-256 remains `45931969F759F2CAF32D90C8D07C73FDC297F449A670E4870A8A9629E99035E8`. This receipt records the later state separately; it does not rewrite the earlier report or assert merge/main/deploy.

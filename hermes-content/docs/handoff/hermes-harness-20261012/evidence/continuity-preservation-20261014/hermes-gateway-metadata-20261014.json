@@ -1,0 +1,28 @@
+{
+  "captured_at": "2026-10-14",
+  "scope": ["/usr/local/lib/hermes-agent/gateway/", "/usr/local/lib/hermes-agent/hermes_cli/"],
+  "method": "one SSH, remote Python stdin, shell=False, AST only; no imports, no logs/messages/env/private home",
+  "limits": {"candidate_count": 248, "listed_and_examined": 10, "omitted": 238, "source_bytes_examined": 150464, "max_source_bytes": 524288, "max_output_bytes": 16384},
+  "candidates": [
+    "/usr/local/lib/hermes-agent/gateway/__init__.py",
+    "/usr/local/lib/hermes-agent/gateway/agent_cache_pressure.py",
+    "/usr/local/lib/hermes-agent/gateway/authz_mixin.py",
+    "/usr/local/lib/hermes-agent/gateway/browser_control_artifacts.py",
+    "/usr/local/lib/hermes-agent/gateway/browser_control_broker.py",
+    "/usr/local/lib/hermes-agent/gateway/builtin_hooks/__init__.py",
+    "/usr/local/lib/hermes-agent/gateway/cgroup_cleanup.py",
+    "/usr/local/lib/hermes-agent/gateway/channel_directory.py",
+    "/usr/local/lib/hermes-agent/gateway/code_skew.py",
+    "/usr/local/lib/hermes-agent/gateway/config.py"
+  ],
+  "evidence": {
+    "path": "/usr/local/lib/hermes-agent/gateway/authz_mixin.py",
+    "size_bytes": 31118,
+    "sha256": "861e3381488c4f53a9e9a12bbecd1d3261e20f7b6b6f84469919c658cd6ee5d3",
+    "class": "GatewayAuthorizationMixin@203",
+    "methods": ["_authorization_adapter@215", "_adapter_group_has_sender_allowlist@318", "_own_policy_authorizes@353", "_adapter_extra_allowlist_authorizes@375", "_adapter_resolved_allowlist_ids@402", "_chat_scoped_grant@422", "_legacy_telegram_chat_grant@455", "_is_user_authorized@473", "_get_unauthorized_dm_behavior@546"],
+    "observed_calls": ["pairing_store.is_approved", "_adapter_extra_allowlist_authorizes", "_adapter_resolved_allowlist_ids", "_principal_matches_allowlist", "_legacy_telegram_chat_grant"],
+    "observed_comparison_shapes": ["source.chat_id in legacy_chat_ids", "source.chat_type in group_chat_types", "source.platform not in configured_allowed_users", "user_id membership in allowed_ids", "owner is not None"]
+  },
+  "unknowns": ["No Telegram message or approval callback handler was in the ten inspected files.", "No proof sender authorization binds NativeWorkRequest digest, operation nonce, expiry, or NativeWorkAuthorization.", "No live Telegram runtime, native queue persistence, or PC-off behavior tested."]
+}

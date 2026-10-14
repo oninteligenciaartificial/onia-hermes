@@ -1,0 +1,51 @@
+{
+  "active_context": "UNKNOWN",
+  "cost_usd": "UNKNOWN",
+  "effect_states": {
+    "applied": 4
+  },
+  "guard_stopped": false,
+  "implementation_model_configured": "gpt-6-luna low (author contract)",
+  "interpretation": "task done/applied is a queue state, not proof that the business objective was achieved",
+  "measurement_elapsed_seconds": 0.0,
+  "native_operation_count": 4,
+  "native_operation_states": {
+    "failed": 4
+  },
+  "phase_durations": "UNKNOWN: queue schema has no phase transition timestamps",
+  "receipt": {
+    "directory_fsync_successes": 96,
+    "duration_seconds": 0.605908,
+    "errors": 0,
+    "failures": 0,
+    "file_fsync_successes": 38,
+    "platform": "linux",
+    "real_provider": false,
+    "real_queue": false,
+    "skips": 1,
+    "state": "pass",
+    "tests": 17
+  },
+  "run_model": "UNKNOWN",
+  "schema_version": 3,
+  "served_model": "UNKNOWN",
+  "snapshot_ended_at_utc": "2026-10-14T22:39:01.850376Z",
+  "snapshot_started_at_utc": "2026-10-14T22:39:01.850376Z",
+  "source_tables": [
+    "controller_guard_state",
+    "handoffs",
+    "native_guard_bootstrap",
+    "native_operations",
+    "task_results",
+    "tasks",
+    "worker_fences",
+    "worker_leases"
+  ],
+  "task_count": 4,
+  "task_lifecycle_span_seconds_max": 1511,
+  "task_lifecycle_span_seconds_min": 745,
+  "task_states": {
+    "done": 4
+  },
+  "token_usage": "UNKNOWN"
+}

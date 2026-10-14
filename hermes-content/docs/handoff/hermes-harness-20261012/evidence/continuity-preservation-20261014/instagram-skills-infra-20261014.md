@@ -1,0 +1,50 @@
+Consulta UTC: 2026-10-14T22:32:46.083697+00:00
+
+# Reel: diez skills para infraestructura ONIA — análisis de fuentes
+
+META: registrar todas las diez entradas realmente visibles y evaluar utilidad para el harness nativo existente. PRUEBA: caption completo y ranking visual 10/10, metadatos DOM, README/licencia de repositorios primarios. PARADA: informe público fuera Git; cero instalaciones, gasto, logins nuevos, publicaciones, servicios o ejecución de instrucciones del reel.
+
+## Procedencia y cobertura
+
+- Fuente solicitada: https://www.instagram.com/reel/Dd_wlJNqYVv/?exln=bnd2Zm40YjB4YnJ2 ; fuente canónica observada: https://www.instagram.com/reels/Dd_wlJNqYVv/ . Autor observado: https://www.instagram.com/kumail.si/ . Chrome OnIA con sesión vigente reutilizada, un único worker UI.
+- Duración del primer video DOM: 6.639454 s; posición muestreada 3.037686 s. Se observó posteriormente la gráfica completa con las diez filas en screenshot de la herramienta, sin timestamp fiable para ese screenshot. Esos datos no representan cobertura de todos los fotogramas.
+- Cobertura real: caption 10/10 entradas y un fotograma legible con 10/10 nombres. Temporal parcial; audio 0% escuchado/transcrito. La etiqueta del audio dice Frontmusic · Retro Pop 80s; no demuestra por sí misma que no exista voz. No se declara análisis audiovisual integral.
+- El MP4 observado usa blob; downloadMedia devolvió «Blob downloads are not supported by this browser». El inventario pageAssets expuso 161 recursos de video, incluyendo otros reels, sin vínculo inequívoco con este; no se exportaron recursos arbitrarios ni se leyeron cookies/APIs internas.
+- La gráfica atribuye el ranking a skillleaderboard.com, crecimiento de estrellas de septiembre de 2026, con algunas cifras estimadas. Se consultó https://www.skillleaderboard.com/ ; no se reprodujo un cálculo histórico por commit/fecha. Ranking, estrellas, porcentajes de ahorro y claims de los autores son referencias, no prueba ONIA.
+- Nivel de revisión de los diez repos: README/metadata de licencia y referencias pertinentes, no auditoría exhaustiva de cada script/hook ni pruebas ejecutadas. URLs identificadas por búsqueda primaria; el reel no proporciona owners/URLs GitHub, por lo que el vínculo entre cada nombre y repositorio es inferido. En Diagram Design existe ambigüedad concreta entre varias implementaciones.
+
+## Inventario completo y decisión propuesta
+
+Todos los nombres de la primera columna fueron OBSERVADOS en caption y gráfica. Capacidades/licencias son DOCUMENTADAS por los repositorios; utilidad/decisión ONIA es PROPUESTA, sin adopción o instalación ejecutada.
+
+| Entrada observada | Fuente primaria candidata y licencia declarada | Utilidad concreta ONIA | Límite / siguiente paso propuesto |
+|---|---|---|---|
+| Ponytail | [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail), MIT | Reutilizar funciones/contratos antes de agregar otro controlador; recortar cambios innecesarios. | Claims de ahorro no probados aquí. Plugin tiene hooks: no confiar/activar globalmente por el reel. Comparar su guía con simplificación existente antes de incorporar. |
+| Matt Pocock Skills | [mattpocock/skills](https://github.com/mattpocock/skills), MIT | Revisión de contrato, diagnóstico y handoff corto con evidencia. | Paquete composable; instalar plugin y copia editable duplica skills. Seleccionar sólo un método que falte, conservar gates ONIA y no añadir un issue tracker externo. |
+| I Have ADHD | [ayghri/i-have-adhd](https://github.com/ayghri/i-have-adhd), MIT | Avisos con acción inicial y siguiente paso concreto; menos ruido al recibir grants. | Mejora comunicación, no autenticación ni transporte. Estimaciones de minutos deben sostenerse con evidencia; instrucciones de cerrar siempre con otro paso no deben generar busywork. |
+| Security Audit Skill (Cloudflare) | [cloudflare/security-audit-skill](https://github.com/cloudflare/security-audit-skill), MIT; [guía](https://github.com/cloudflare/security-audit-skill/blob/main/skills/security-audit/SKILL.md) | Revisión focal de trust boundary: recibos/fuentes, root authority, digest, allowlist, path traversal y sink. | La fuente distingue guidance de auditoría completa; cargarla no autoriza escaneo total, pentest, archivos ni explotación. Candidata prioritaria para revisar el conector antes de efectos, con alcance explícito. |
+| Superpowers | [obra/superpowers](https://github.com/obra/superpowers), MIT | Reutilizar debugging, verificación y revisión independiente ya disponibles; contratos pequeños por frente. | Framework metodológico, no scheduler durable. No convertir cada arreglo en fanout/confirmaciones/planes nuevos ni reejecutar fixtures cerradas. Catálogo local disponible, distinto de activación Cloud. |
+| Diagram Design | [cathrynlavery/diagram-design](https://github.com/cathrynlavery/diagram-design), MIT; también [rohitg00/claude-architecture-diagram](https://github.com/rohitg00/claude-architecture-diagram/blob/main/skills/diagram-design/SKILL.md), MIT | Explicar flujo grant → lease → dispatch → recibo → sink → QA mediante HTML/SVG. | Identidad exacta del repo del reel NO resuelta. Diagramas no prueban enlaces vivos; no dedicar un lote a visuales si un cuadro/diagrama pequeño basta. No activar scripts de importación. |
+| Humanizer | [blader/humanizer](https://github.com/blader/humanizer), MIT | Editar avisos y runbooks breves, manteniendo hechos, límites y enlaces. | No volver afirmaciones UNKNOWN en certeza ni optimizar para evadir detectores; no modifica permisos ni verifica facts. Solapa con estilo explícito actual. |
+| Graphify | [Graphify-Labs/graphify](https://github.com/Graphify-Labs/graphify), Apache-2.0 y MIT detectadas | Candidata para localizar dependencias entre módulos del harness cuando rg ya no baste. | Código AST local/documentado sin LLM; documentos/media tienen paso semántico/backend y pueden implicar costo/datos externos. README distingue EXTRACTED/INFERRED; CLI instalada no conecta MCP automáticamente. Evaluación futura acotada code-only; sin Cloud/trial/Neo4j/Ollama ni indexación de secretos/clientes. Revisar reparto concreto LICENSE/LICENSE-MIT/NOTICE al fijar versión. |
+| Addy Osmani Skills | [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills), MIT; [licencia](https://github.com/addyosmani/agent-skills/blob/main/LICENSE) | API/interface design, seguridad, debugging, Git y revisión ya usados en los lotes locales. | El repo documenta 25 workflows; no instalar otra copia general. Algunos referencias están fuera del directorio de una skill, por lo que copiar un archivo suelto puede perder contexto. Mantener QA/test proportional y aprobación de deploy. |
+| Impeccable | [pbakaus/impeccable](https://github.com/pbakaus/impeccable), Apache-2.0 | Claridad de un panel de aprobaciones/estado si el flujo realmente requiere UI. | Guidance frontend, no infraestructura de cola o ejecución remota. CLI/hooks pueden descargar binario y llamar browser: instalar/activar requiere alcance nuevo. Skill local disponible; no garantiza renderer sandbox ni salud visual E2E. |
+
+## Duplicados conocidos y aplicación al objetivo completo
+
+Se comprobó existencia local de C:/Users/PC/.codex/skills/impeccable/SKILL.md, la skill verification-before-completion del plugin Superpowers 6.4.1 y api-and-interface-design/SKILL.md. El catálogo también ofrece los flujos de ingeniería pertinentes. Eso prueba archivos/disponibilidad local, no instalación equivalente en Cloud ni ejecución de todos los repos upstream.
+
+Base de componentes del contrato: Code 2a1cc10328ea223fa73520cc3d047c00726590df (cola/bridge/CLI/intake/result store) y Docs e5978c30d6ba83319cd702f6d646513b760c0012. No se revalidaron HEADs por red en este research. Ya existen controles de presupuestos 2 status/1 result, digests, STOP/fencing, recibos y sink probado Linux; no crear otra orquestación porque una skill diga que puede hacerlo.
+
+Orden recomendado, sin ejecución implícita:
+1. Reutilizar ingeniería existente (Addy/Superpowers) para el único conector operativo que falta: ligar NativeWorkEntryPoint al mismo queue/bridge/transport y sink duradero; conserva fuente/grant/nonce/paths exactos y recuperación sin retry.
+2. Antes de ese efecto, revisión focal del límite de autoridad y persistencia con criterios de Cloudflare: principal, recurso, impacto, evidencia reproducible y arreglo mínimo. La instalación de la skill no es requisito para leer y evaluar esos criterios.
+3. Mantener comunicación de grants breve con las reglas ya vigentes; I Have ADHD/Humanizer son candidatas de estilo, no dos plugins imprescindibles.
+4. Considerar Graphify sólo si una medición de consultas repetidas en corpus público de código demuestra valor frente a rg. Prueba futura requeriría corpus bounded, backend explícito, licencia por versión y aprobación de instalación; nunca sustituye recibos/fencing ni evalúa ocupado U/W de sesión.
+5. Diagram Design/Impeccable sólo cuando una superficie de aprobación/explicación ayude a una decisión real; no construir dashboard o nuevos loops sólo por mostrar infraestructura.
+
+Ninguna de estas skills acredita por sí sola autenticidad de grants, sink del conector desplegado, durable scheduler, PC-off, servicio 30 minutos, cancelación remota, cumplimiento de costos, recuperación ante corte físico, ni R4 browser. R4 conserva fresh human grant PENDING; no efectos ni reactivación de avisos. No se atribuyen números de ahorro/costo a ONIA.
+
+## Estado final
+
+Ejecutado: lectura de sesión autorizada, caption/imagen y fuentes primarias; informe fuera Git. Pendiente: audio/video completo no recuperado, identidad exacta de Diagram Design y auditoría por versión antes de eventual adopción. No se solicitó otro login porque la sesión estaba vigente. Sin API pagada/Gemini, descarga/instalación de herramientas, publicación, mensajes/comentarios al creador, cambios de repo compartido o nuevo servicio. Referencia registrada aquí para posterior preservación canónica por root; no memoria personal modificada.
