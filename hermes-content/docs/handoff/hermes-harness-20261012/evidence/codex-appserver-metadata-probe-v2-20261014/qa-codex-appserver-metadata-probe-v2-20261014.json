@@ -1,0 +1,33 @@
+{
+  "status": "PASS_V2_SOURCE_REVIEW",
+  "reviewed_at_utc": "2026-10-14T08:28:40.274369+00:00",
+  "artifact_dir": "E:\\onia-wt\\codex-appserver-metadata-prepared-v2-20261014",
+  "source_sha256": {
+    "metadata_probe.py": "29D64FA31A261D6E9CB9E57677A1A4DBB1F4EF12A016264CB2E4FC8B37B80B5D",
+    "test_metadata_probe.py": "590E5D3AC259FAEA859CAC041F2AB925F98CE88D5B82A1416862FA66C11B36E4",
+    "review.md": "09FBC6ACDE1F09C337EBA8404621F94C8C3730828D978DDBB75639D3074AD28C",
+    "manifest.json": "7FFAE63A100E0270FC949A468C64931F8B95EB0BF540003A742E51A53721895E"
+  },
+  "official_source": "https://raw.githubusercontent.com/openai/codex/rust-v0.161.0/codex-rs/app-server-protocol/src/rpc.rs",
+  "official_source_finding": "Lines 0-1 explicitly state no jsonrpc field; lines 61-80 define versionless id+result or id+error with error code and message.",
+  "checks": [
+    "Outgoing initialize, initialized, and account/read omit jsonrpc.",
+    "Versionless response DTOs accepted; optional jsonrpc accepted only as exact 2.0.",
+    "Strict integer response IDs and top-level allowlists reject unexpected server requests, notifications, malformed envelopes and RPC errors without payload echo.",
+    "Tracker, stdout drain to frame+EOF, keeper/process-group cleanup, bounded watchdog, environment allowlist and privacy projection remain present.",
+    "Remote supervisor AST-extracted and compile-only PASS.",
+    "All four source hashes match root freeze."
+  ],
+  "author_focal_tests": {
+    "count": 5,
+    "result": "PASS reported",
+    "independently_rerun": false
+  },
+  "scope_and_limits": [
+    "No V2 CLI/app-server/RPC/SSH/network/auth execution in this QA.",
+    "V1 held receipt showed only initialize local write and protocol_envelope_invalid; no account/auth observation.",
+    "The older test fixture expecting an error object without required code is stale under the pinned DTO; no older suite rerun was requested.",
+    "SSH cleanup/state after V1 remains partly UNKNOWN: /proc scan was bounded, /tmp scan truncated, and no signals/deletes were issued.",
+    "Startup/auth routing and model served remain UNKNOWN."
+  ]
+}

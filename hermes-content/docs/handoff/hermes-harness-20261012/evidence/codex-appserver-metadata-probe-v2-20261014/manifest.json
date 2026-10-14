@@ -1,0 +1,75 @@
+{
+  "artifact_status": "prepared-only-not-executed-awaiting-independent-qa-and-root-review",
+  "release": "Codex CLI 0.161.0",
+  "source_ref": "https://github.com/openai/codex/tree/rust-v0.161.0",
+  "feature_override": {
+    "argument": "-c features.plugins=false",
+    "supported_by_pinned_source": true,
+    "effective_gate": "Feature::Plugins -> plugins_enabled -> plugin startup manager",
+    "limit": "other startup effects not ruled out"
+  },
+  "rpc_allowlist": [
+    "initialize",
+    "initialized",
+    "account/read params={}"
+  ],
+  "excluded": [
+    "model/list (no refresh parameter; may fetch catalog)",
+    "thread/*",
+    "turn/*",
+    "MCP",
+    "plugin",
+    "hooks",
+    "skills"
+  ],
+  "supervisor": {
+    "remote_watchdog_seconds": 45,
+    "remote_cleanup_grace_seconds": 2,
+    "local_ssh_watchdog_seconds": 49,
+    "retry_count": 0,
+    "terminal_frame_required": true,
+    "child_stop_and_scratch_cleanup_required": true,
+    "stdout_line_limit": 64,
+    "stdout_byte_limit": 2097152,
+    "stdout_per_line_limit": 262144,
+    "process_started": false,
+    "process_group_keeper": "unreaped keeper is PGID; child launched with process_group=keeper.pid; TERM ignored by keeper until final SIGKILL",
+    "group_shutdown": "signal owned PGID before reaping keeper; bounded /proc scan checks active members; scratch removed only when group closure confirmed",
+    "process_group_scan_entry_limit": 8192,
+    "rpc_observation": "rpc_methods_sent contains only methods whose local stdin write and flush returned successfully; remote delivery remains unknown"
+  },
+  "offline_validation": {
+    "command": "python -m unittest -v test_metadata_probe.MetadataProbeSafetyTests.test_v2_accepts_pinned_versionless_initialize_and_account_replies test_metadata_probe.MetadataProbeSafetyTests.test_v2_accepts_optional_exact_version_and_account_null test_metadata_probe.MetadataProbeSafetyTests.test_v2_rejects_invalid_versions_and_extra_envelope_fields test_metadata_probe.MetadataProbeSafetyTests.test_v2_rejects_malformed_error_and_notification_shapes_without_echo test_metadata_probe.MetadataProbeSafetyTests.test_v2_outgoing_rpc_frames_are_versionless",
+    "tests": 5,
+    "duration_seconds": 0.002,
+    "result": "PASS",
+    "scope": "new V2 protocol-envelope fixtures only; prior suites not rerun",
+    "SSH_started": false
+  },
+  "artifacts": {
+    "metadata_probe.py_sha256": "29d64fa31a261d6e9cb9e57677a1a4dbb1f4ef12a016264cb2e4fc8b37b80b5d",
+    "test_metadata_probe.py_sha256": "d1b8c9b998ff60265e6dc0ddc44ed2e444b1a9acf80a6d2ac17c2d0b896225fb",
+    "review.md_sha256": "09fbc6acde1f09c337eba8404621f94c8c3730828d978ddbb75639d3074ad28c"
+  },
+  "supersedes": {
+    "qa_rejections": [
+      "0e0777ac7bae79f3e5143657b7fb721f148bad4db54d90d2a777760e653bfb17",
+      "97dfc4cd43b8583eb6f2940cadbd6e50b812b6ca5e5ac5c79a6affe8cdc8490c"
+    ]
+  },
+  "no_execution": {
+    "cli": false,
+    "app_server": false,
+    "rpc": false,
+    "network": false,
+    "login": false,
+    "llm": false
+  },
+  "privacy": "No auth contents, account identifiers, session data, raw stdout/stderr, or server error text included.",
+  "app_server_transport": {
+    "argv": "app-server (stdio default; --stdio omitted)",
+    "verified_pinned_source": "https://github.com/openai/codex/blob/rust-v0.161.0/codex-rs/cli/src/main.rs#L517-L539",
+    "notes": "Pinned source defines stdio:// default; --stdio is also supported."
+  },
+  "protocol_envelope": "versionless Codex app-server DTO per pinned rpc.rs; optional jsonrpc accepted only when exact 2.0"
+}
