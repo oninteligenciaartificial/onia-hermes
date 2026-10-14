@@ -121,3 +121,80 @@ la evidencia original/UI; no búsqueda por coincidencia aproximada ni replay.
 Pendiente: QA independiente de esta versión y lote real autorizado dirigido por
 madre. Esto habilita Cloud tasks acotadas, no demuestra ciclo >=30min,
 autonomía PC-off, adopción/handoff de chats, navegador Cloud ni JPEG Telegram.
+
+## Tranche finita experimental posterior a 436894 — NO PROBADA
+
+META: usar una tarea Cloud finita útil con el transporte real existente, recuperar
+artefactos públicos y exigir QA antes de proponer siguiente trabajo. Ownership:
+`controller_pilot.py`, `native_cloud_cli.py`, `native_receipt_bridge.py` y este doc.
+No se ejecutaron tests, proveedores, submits ni migración de la DB live en esta
+tanda. El controlador fixture y sus gates siguen sin cambios. El código nuevo
+está pendiente de revisión independiente y de pruebas autorizadas.
+
+`step_native_work(queue, bridge, transport, event, request, plan, now, ...)`
+en el módulo existente recibe un TaskSpec real ya registrado y, para submit, su
+claim. Compara repo/ref/HEAD/input y plan exactos. `NativeWorkRequest` liga
+operación, nonce, paths JSON, predecessor y el claim de aprobación. Este último
+es sólo una afirmación del caller: sin `NativeWorkAuthority.verify` externo que
+autentique aprobación y devuelva evidencia ligada al hash del request, actor,
+scope, nonce y expiración, el paso permanece HOLD. No se implementó un proveedor
+de autenticación ni se emitió un grant nuevo. Un callback que marque la referencia
+del caller como verified sin autenticarla viola el contrato.
+
+La reserva nueva comprueba en una transacción el lease/fence, STOP, identidad,
+grant y una closure previa terminal/reconciliada. Usa native_operations. El
+constructor/status/read NO migran una DB existente. La instancia live conserva
+su schema anterior: la API nueva queda HOLD por schema ausente y autoridad externa
+sin implementación. `prepare_finite_work_schema(queue, reviewed_change_ref)` es
+una migración local explícita, pendiente de permiso humano específico y QA; sólo
+añade tres columnas cuando toda la queue está done y las closures terminales.
+La referencia es audit claim, no autenticación ni permiso inferido. El operador
+debe preservar su recibo. No se ejecutó esta migración en la presente tanda y
+no altera el recibo/bootstrap histórico. No admite un guard fixture como permiso
+real. R2 no puede reabrirse, rebindearse ni usar esta API de eventos; carece de la
+admisión de trabajo nuevo. Si cambia STOP antes de efecto, begin_dispatch mantiene
+su segunda comprobación de época. También verifica integridad/binding del grant
+persistido y expiración con reloj real justo antes de consumir el slot. Los rows
+legacy sin work authority conservan su contrato. collect_result valida paths
+antes de cualquier read al proveedor, incluso cuando se usa su API directa.
+Exclusión local single-host; el proveedor no
+expone idempotency/cancel probado ni garantía distribuida.
+
+Cada llamada trata exactamente un evento, sin scheduler, sleep ni retry. Submit
+reserva una vez y usa NativeCloudCLI; otras operaciones exigen event_id único,
+consumido antes de la llamada en la misma fila y con tope de ocho eventos por
+closure. Evento ya consumido o caída exige reconciliación; no se reejecuta.
+`status` observa el handle literal; incluso failed/cancelled del proveedor queda
+unknown en el ledger hasta QA. `result` lee una vez `cloud diff ID`: máximo
+256KiB capturados por un child local acotado, sin stderr logs; mata sólo ese child
+si excede tamaño/plazo, hasta dos segundos extra de reap y sin prometer cleanup
+de descendientes o cancelación remota. Parser admite sólo files nuevos regulares
+100644, un hunk entero por path JSON exacto autorizado, sin rename/delete/binario,
+git apply ni ejecución. Bytes son reconstruidos desde diff, no download directo
+ni prueba de identidad de Git blob: preserva stdout SHA y hashes recuperados para QA.
+
+Bundle recuperado sólo produce awaiting_independent_qa. La madre debe conservar
+el JSON del retorno como recibo; no se construye otro ledger ni persistencia paralela.
+QA exige verifier independiente externo, hash request/bundle/handle/reviewer y
+resultado declarado. Valida operación/input y checkout de cada artefacto; READY,
+exit0 o un label del worker no aprueban. Luego guarda terminal immutable y resuelve
+closure applied con goal_outcome explícito. Queue done significa submit/closure
+reconciliada, no éxito del objetivo global. Sólo propone siguiente TaskSpec pending
+si STOP está libre y no hay pendientes ambiguos; no lo encola, reclama ni despacha
+sin otra autoridad verificada. No inventa trabajo para alcanzar treinta minutos.
+
+Métricas submit: timestamps y duración monotónica local real, intento local uno;
+lectura de diff: duración/read attempt uno. Remote execution duration, tokens,
+costo, contexto activo/ventana y handoff quedan UNKNOWN si falta recibo fiable.
+Una closure nueva con checkpoint aprobado no es rotación de chat UUID. Liveness
+>=30min, follow-up/cancel/contexto U/W, autenticación externa, trabajo elegible
+y scheduler remoto siguen sin prueba; esta tanda no cierra esos objetivos.
+
+Contrato de verificación posterior, NO ejecutado ahora: con autorización usar
+queues temporales separadas de la live para verificar grant ausente/forjado,
+plan/nonce/lease/STOP/epoch, predecessor no cerrado, event duplicado/timeout,
+diff malformado/oversize/path traversal/rename/binario, bindings de artefactos,
+QA mismo worker/hash incorrecto/ausente, terminal conflict y next candidate sin
+autoridad. Fuente fixture debe conservar sus gates originales. Simular provider
+con children inocuos antes de aprobar un único trabajo real finito útil. La DB
+live se mantuvo sólo lectura/no instanciada por este código en la presente tanda.

@@ -8,6 +8,7 @@ from dataclasses import dataclass, replace
 import hashlib
 import json
 import sqlite3
+import time
 from typing import Protocol
 import uuid
 
@@ -104,6 +105,129 @@ FixtureApproval = FixtureGrant
 
 class ReadOnlyClient(Protocol):
     def run(self, goal: Goal) -> str: ...
+
+
+def step_native_work(queue, bridge, transport, event: str, request, plan, now: int,
+                     *, claim=None, authority=None, result_bundle=None, qa_verifier=None,
+                     event_id: str | None = None) -> dict:
+    """One explicit finite-work event using the existing store and native transport.
+
+    This function is separate from the unchanged fixture ControllerPilot. It has
+    no scheduler, sleep, retry, session factory or default authority/QA verifier.
+    Caller references are claims: externally authenticated authority and separate
+    QA must verify the exact contract/result before the corresponding mutation.
+    This does not enqueue work or choose a new task merely to stay active.
+    """
+    from native_receipt_bridge import NativeObservation, NativeWorkRequest
+    from native_cloud_cli import _validate_artifact_paths
+    if type(now) is not int or now < 0 or type(request) is not NativeWorkRequest:
+        raise ValueError("explicit finite-work request and epoch required")
+    if bridge.queue is not queue or transport.bridge is not bridge:
+        raise ValueError("native step must reuse one existing queue and bridge")
+    _, _, plan_sha = plan.request()
+    _validate_artifact_paths(request.result_paths)
+    if (request.plan_sha != plan_sha or request.input_sha != plan_sha
+            or request.repo != "onia-hermes" or request.ref != plan.branch
+            or request.head != plan.expected_remote_head):
+        raise ValueError("finite-work request differs from exact reviewed plan")
+    base = {"operation_id": request.operation_id, "cost": "UNKNOWN", "tokens": "UNKNOWN",
+            "remote_execution_duration_seconds": "UNKNOWN", "active_context_used": "UNKNOWN",
+            "effective_window": "UNKNOWN", "handoff_capability": "UNKNOWN"}
+    with queue._connection() as conn:
+        task = conn.execute("SELECT * FROM tasks WHERE task_id=?", (request.task_id,)).fetchone()
+        guard = conn.execute("SELECT * FROM controller_guard_state WHERE singleton=1").fetchone()
+    if task is None or guard is None:
+        return {**base, "state": "hold", "reason": "existing_task_and_guard_required"}
+    expected = {"worker_id": request.worker_id, "contract_id": request.contract_id,
+                "repo": request.repo, "ref": request.ref, "sha": request.head, "input_sha": request.input_sha}
+    if any(task[key] != value for key, value in expected.items()):
+        raise ValueError("native task identity differs from durable queue")
+    native = bridge.read(request.operation_id)
+    if event == "submit":
+        if guard["stopped"]:
+            return {**base, "state": "hold_stop", "client_attempt_count": 0}
+        if native is not None:
+            return {**base, "state": "needs_reconcile", "reason": "operation_already_exists_no_replay",
+                    "remote_id": native["remote_id"] or "UNKNOWN", "client_attempt_count": 0}
+        if claim is None or authority is None:
+            return {**base, "state": "hold", "reason": "lease_and_external_authority_required",
+                    "approval_claim_ref_is_verified": False, "client_attempt_count": 0}
+        bridge.authorize_and_reserve_work(claim, request, authority, now)
+        # begin_dispatch repeats STOP/epoch checks immediately before the effect.
+        return {**base, **transport.submit(request.operation_id, plan)}
+    if native is None or native["task_id"] != request.task_id:
+        return {**base, "state": "hold", "reason": "original_bound_operation_required"}
+    if event not in {"status", "result", "qa"}:
+        raise ValueError("native event must be submit, status, result or qa")
+    if event_id is None:
+        return {**base, "state": "hold", "reason": "unique_event_id_required", "provider_read_attempt_count": 0}
+    if not bridge.admit_work_event_once(request, event, event_id, now):
+        return {**base, "state": "needs_reconcile", "reason": "event_already_consumed_no_reexecution",
+                "provider_read_attempt_count": 0}
+    if event in ("status", "result"):
+        # STOP prevents new effects; bounded reads of already submitted work are
+        # still useful for reconciliation. Terminal evidence is never overwritten.
+        if native["state"] in {"completed", "failed", "cancelled"}:
+            return {**base, "state": "terminal_awaiting_resolution" if task["status"] != "done" else "closure_resolved",
+                    "native_state": native["state"], "remote_id": native["remote_id"], "provider_read_attempt_count": 0}
+        if event == "status":
+            started_at, started = int(time.time()), time.monotonic()
+            status = transport.status(request.operation_id, plan.executable)
+            return {**base, **status, "provider_read_attempt_count": 1,
+                    "read_started_at_epoch": started_at, "read_finished_at_epoch": int(time.time()),
+                    "read_duration_seconds": round(time.monotonic() - started, 6)}
+        return {**base, **transport.collect_result(request.operation_id, plan.executable, request.result_paths)}
+    if qa_verifier is None or not isinstance(result_bundle, dict) or result_bundle.get("state") != "awaiting_independent_qa":
+        return {**base, "state": "awaiting_independent_qa", "reason": "external_qa_and_recovered_bundle_required"}
+    if (result_bundle.get("operation_id") != request.operation_id
+            or result_bundle.get("remote_id") != native["remote_id"]
+            or result_bundle.get("input_sha") != request.input_sha
+            or set(result_bundle.get("files", {})) != set(request.result_paths)):
+        raise ValueError("QA bundle differs from bound operation and artifact allowlist")
+    for item in result_bundle["files"].values():
+        artifact = item.get("json", {})
+        if (artifact.get("operation_id") != request.operation_id or artifact.get("input_sha") != request.input_sha
+                or artifact.get("repository", {}).get("expected_head") != request.head
+                or artifact.get("repository", {}).get("observed_head") != request.head):
+            raise ValueError("recovered artifact identity/checkout mismatch; no automatic QA")
+    bundle_sha = digest(result_bundle)
+    review = qa_verifier.verify(request, result_bundle, now)
+    if (not isinstance(review, dict) or review.get("verified") is not True
+            or review.get("request_sha") != request.digest() or review.get("bundle_sha") != bundle_sha
+            or review.get("remote_id") != native["remote_id"]
+            or review.get("reviewer_id") in (None, "", request.worker_id)
+            or review.get("goal_outcome") not in {"completed", "failed"}
+            or not isinstance(review.get("authority_source"), str) or not review["authority_source"]
+            or not isinstance(review.get("evidence_ref"), str) or not review["evidence_ref"]):
+        return {**base, "state": "awaiting_independent_qa", "reason": "QA_identity_or_result_binding_unverified"}
+    # QA determines the business outcome. READY, subprocess exit 0, a JSON label
+    # or local caller reference never substitutes for this independent review.
+    result_sha = digest({path: item["sha256"] for path, item in result_bundle["files"].items()})
+    if native["state"] in {"completed", "failed", "cancelled"}:
+        if native.get("observation", {}).get("result_sha") != result_sha or native["state"] != review["goal_outcome"]:
+            raise RuntimeError("terminal evidence conflicts; no rebind or overwrite")
+    else:
+        bridge.ingest(NativeObservation(request.operation_id, "cloud_cli_task", native["remote_id"],
+                      request.input_sha, review["goal_outcome"], now, review["evidence_ref"], result_sha), now)
+    if task["status"] == "needs_reconcile":
+        queue.resolve_reconciliation(request.task_id, "applied",
+            "finite_closure:task_submission_applied;goal_outcome=" + review["goal_outcome"] +
+            ";independent_qa=" + review["evidence_ref"] + ";bundle_sha=" + bundle_sha + ";retry=forbidden", now)
+    elif task["status"] != "done":
+        raise RuntimeError("closure is not awaiting authorized resolution")
+    with queue._connection() as conn:
+        stopped = conn.execute("SELECT stopped FROM controller_guard_state WHERE singleton=1").fetchone()[0]
+        unresolved = conn.execute("SELECT task_id FROM tasks WHERE worker_id=? AND status IN ('needs_reconcile','blocked') LIMIT 1",
+                                  (request.worker_id,)).fetchone()
+        next_row = None if stopped or unresolved else conn.execute(
+            "SELECT task_id FROM tasks WHERE worker_id=? AND status='pending' ORDER BY created_at,task_id LIMIT 1",
+            (request.worker_id,)).fetchone()
+    return {**base, "state": "closure_resolved", "goal_outcome": review["goal_outcome"],
+            "queue_done_semantics": "submission_and_terminal_worker_closure_reconciled_not_global_goal_success",
+            "result_digest": queue.read_result(request.task_id)["digest"],
+            "next_candidate_task_id": next_row[0] if next_row else None,
+            "next_action": "hold_stop" if stopped else "require_external_authority_for_next_candidate",
+            "independent_qa_ref": review["evidence_ref"], "global_goal_not_closed": True}
 
 
 class SimulatedProcessCrash(BaseException):

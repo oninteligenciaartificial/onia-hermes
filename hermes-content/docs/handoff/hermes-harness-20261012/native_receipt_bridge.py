@@ -8,6 +8,8 @@ from dataclasses import dataclass, asdict
 import hashlib
 import json
 import re
+import time
+from typing import Protocol
 
 from sqlite_pilot import Claim, SQLiteQueue
 
@@ -42,6 +44,49 @@ class NativeObservation:
     result_sha: str | None = None
     model_observed: str = "UNKNOWN"
     usage_observed: str = "UNKNOWN"
+
+
+@dataclass(frozen=True)
+class NativeWorkRequest:
+    """Public finite-work contract; approval_claim_ref is ONLY a caller claim."""
+    task_id: str
+    worker_id: str
+    contract_id: str
+    repo: str
+    ref: str
+    head: str
+    input_sha: str
+    operation_id: str
+    nonce: str
+    plan_sha: str
+    approval_claim_ref: str
+    predecessor_task_id: str
+    result_paths: tuple[str, ...]
+
+    def digest(self) -> str:
+        return hashlib.sha256(json.dumps(asdict(self), sort_keys=True,
+                                         separators=(",", ":")).encode()).hexdigest()
+
+
+@dataclass(frozen=True)
+class NativeWorkAuthorization:
+    verified: bool
+    request_sha: str
+    grant_nonce: str
+    actor: str
+    authority_source: str
+    evidence_ref: str
+    expires_at: int
+    scope: str = "native_work_closure"
+
+
+class NativeWorkAuthority(Protocol):
+    """External authority implementation must authenticate approval independently.
+
+    A callback returning the request's caller claim as 'verified' violates this
+    interface. This pilot implements no human/account authentication provider.
+    """
+    def verify(self, request: NativeWorkRequest, now: int) -> NativeWorkAuthorization: ...
 
 
 class NativeReceiptBridge:
@@ -113,11 +158,47 @@ class NativeReceiptBridge:
                 observation_digest TEXT,
                 observed_at INTEGER,
                 dispatch_contract_sha TEXT,
+                work_authority_json TEXT,
+                work_authority_sha TEXT,
+                work_events_json TEXT,
                 UNIQUE(surface,remote_id)
             )""")
 
+    @staticmethod
+    def prepare_finite_work_schema(queue: SQLiteQueue, reviewed_change_ref: str) -> dict:
+        """EXPLICIT local schema change, only after specific human approval/QA.
+
+        reviewed_change_ref is an audit claim, NOT an approval authenticator.
+        The authorized operator must preserve this receipt. Status/read and the
+        constructor never upgrade an existing DB. No R2 row is reset or updated.
+        """
+        _text(reviewed_change_ref, "reviewed_change_ref")
+        additions = ("work_authority_json", "work_authority_sha", "work_events_json")
+        with queue._connection() as conn:
+            conn.execute("BEGIN IMMEDIATE")
+            columns = {row[1] for row in conn.execute("PRAGMA table_info(native_operations)")}
+            if not columns or any(column in columns for column in additions):
+                raise RuntimeError("explicit schema preparation requires unchanged legacy native schema")
+            if conn.execute("SELECT 1 FROM native_operations WHERE state NOT IN ('completed','failed','cancelled') LIMIT 1").fetchone():
+                raise RuntimeError("schema preparation requires all native closures terminal")
+            if conn.execute("SELECT 1 FROM tasks WHERE status!='done' LIMIT 1").fetchone():
+                raise RuntimeError("schema preparation requires reconciled queue and no queued work")
+            for column in additions:
+                conn.execute(f"ALTER TABLE native_operations ADD COLUMN {column} TEXT")
+            conn.commit()
+        return {"schema_change": "finite_work_columns_only", "reviewed_change_claim_ref": reviewed_change_ref,
+                "database": queue.database_path, "added_columns": list(additions),
+                "historical_rows_not_reset": True, "external_authority_implemented": False}
+
+    def _require_work_schema(self) -> None:
+        with self.queue._connection() as conn:
+            columns = {row[1] for row in conn.execute("PRAGMA table_info(native_operations)")}
+        if not {"work_authority_json", "work_authority_sha", "work_events_json"}.issubset(columns):
+            raise RuntimeError("finite-work schema absent; explicit approved migration required, never auto-upgrade")
+
     def reserve(self, claim: Claim, operation_id: str, nonce: str,
-                authorization_ref: str, now: int, expected_dispatch_contract_sha: str) -> str:
+                authorization_ref: str, now: int, expected_dispatch_contract_sha: str,
+                *, _verified_work: tuple[NativeWorkRequest, NativeWorkAuthorization] | None = None) -> str:
         """One local intent; requires existing STOP guard and an active lease.
 
         authorization_ref points to reviewed authorization; it is NOT a grant
@@ -141,27 +222,55 @@ class NativeReceiptBridge:
                 raise RuntimeError("controller stopped or guard absent")
             # The live bootstrap authorizes only the single reviewed pilot plan.
             bootstrap_exists = conn.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='native_guard_bootstrap'").fetchone()
+            if _verified_work is not None and not bootstrap_exists:
+                raise RuntimeError("finite work requires native bootstrap, never a fixture guard")
             if bootstrap_exists:
                 bootstrap = conn.execute("SELECT * FROM native_guard_bootstrap WHERE singleton=1").fetchone()
                 if (bootstrap is None
-                        or hashlib.sha256(bootstrap["receipt_json"].encode("utf-8")).hexdigest() != bootstrap["receipt_sha"]
-                        or bootstrap["reviewed_plan_sha"] != expected_dispatch_contract_sha):
+                        or hashlib.sha256(bootstrap["receipt_json"].encode("utf-8")).hexdigest() != bootstrap["receipt_sha"]):
                     raise RuntimeError("reservation differs from authorized bootstrap plan")
                 receipt = json.loads(bootstrap["receipt_json"])
                 if (receipt.get("reviewed_plan_sha") != bootstrap["reviewed_plan_sha"]
-                        or receipt.get("authority_ref") != authorization_ref
                         or receipt.get("scope") != "single_native_pilot"):
                     raise RuntimeError("bootstrap receipt/authority binding changed")
+                if _verified_work is None and (bootstrap["reviewed_plan_sha"] != expected_dispatch_contract_sha
+                                               or receipt.get("authority_ref") != authorization_ref):
+                    raise RuntimeError("new plan requires separate verified finite-work authority")
             row = self.queue._assert_claim(conn, claim, now)
             if row["effect_state"] != "not_started":
                 raise RuntimeError("effect already reserved; reconcile instead of replay")
-            conn.execute("""INSERT INTO native_operations
-                (operation_id,task_id,input_sha,nonce,authorization_ref,owner_id,
-                 fencing_token,stop_epoch,reserved_at,dispatch_contract_sha,state)
-                VALUES(?,?,?,?,?,?,?,?,?,?,'reserved')""",
-                (operation_id, row["task_id"], row["input_sha"], nonce,
-                 authorization_ref, claim.owner_id, claim.fencing_token,
-                 guard["epoch"], now, expected_dispatch_contract_sha))
+            authority_payload = authority_sha = None
+            if _verified_work is not None:
+                request, authority = _verified_work
+                if (request.operation_id != operation_id or request.nonce != nonce
+                        or request.plan_sha != expected_dispatch_contract_sha
+                        or authority.request_sha != request.digest() or authority.verified is not True
+                        or authority.expires_at <= now or authority.grant_nonce != nonce
+                        or authority.scope != "native_work_closure"):
+                    raise ValueError("finite-work grant does not bind this exact reservation")
+                expected = {"task_id": request.task_id, "worker_id": request.worker_id,
+                            "contract_id": request.contract_id, "repo": request.repo,
+                            "ref": request.ref, "sha": request.head, "input_sha": request.input_sha}
+                if any(row[key] != value for key, value in expected.items()):
+                    raise ValueError("finite-work request differs from leased TaskSpec")
+                predecessor = conn.execute("SELECT t.status,t.effect_state,n.state FROM tasks t "
+                    "JOIN native_operations n ON n.task_id=t.task_id WHERE t.task_id=?",
+                    (request.predecessor_task_id,)).fetchone()
+                if (request.predecessor_task_id == request.task_id or predecessor is None
+                        or predecessor["status"] != "done" or predecessor["effect_state"] != "applied"
+                        or predecessor["state"] not in _TERMINAL):
+                    raise RuntimeError("prior finite closure not reconciled; no next work")
+                authority_payload = json.dumps({"request": asdict(request), "authorization": asdict(authority)},
+                                               sort_keys=True, separators=(",", ":"))
+                authority_sha = hashlib.sha256(authority_payload.encode()).hexdigest()
+            values = {"operation_id": operation_id, "task_id": row["task_id"], "input_sha": row["input_sha"],
+                      "nonce": nonce, "authorization_ref": authorization_ref, "owner_id": claim.owner_id,
+                      "fencing_token": claim.fencing_token, "stop_epoch": guard["epoch"], "reserved_at": now,
+                      "dispatch_contract_sha": expected_dispatch_contract_sha, "state": "reserved"}
+            if _verified_work is not None:
+                values.update(work_authority_json=authority_payload, work_authority_sha=authority_sha)
+            conn.execute("INSERT INTO native_operations(" + ",".join(values) + ") VALUES(" +
+                         ",".join("?" for _ in values) + ")", tuple(values.values()))
             conn.execute("""UPDATE tasks SET status='needs_reconcile',
                 effect_state='needs_reconcile',effect_name='native_execution',
                 effect_key=?,last_evidence=?,ambiguous_owner_id=?,
@@ -171,6 +280,63 @@ class NativeReceiptBridge:
             conn.execute("DELETE FROM worker_leases WHERE worker_id=?", (claim.worker_id,))
             conn.commit()
         return operation_id
+
+    def authorize_and_reserve_work(self, claim: Claim, request: NativeWorkRequest,
+                                   authority: NativeWorkAuthority | None, now: int) -> str:
+        """Default HOLD; only an external verifier can admit the next finite plan.
+
+        The original single-pilot bootstrap is immutable. Additional work carries
+        its separate authority receipt in native_operations, never a guard reset.
+        Local nonce uniqueness prevents repeated invocations on this single host;
+        it is not provider idempotency or distributed exclusion.
+        """
+        _time(now)
+        if type(request) is not NativeWorkRequest or authority is None:
+            raise RuntimeError("external finite-work authority verifier required")
+        self._require_work_schema()
+        for field in (request.task_id, request.worker_id, request.contract_id, request.repo,
+                      request.ref, request.approval_claim_ref, request.predecessor_task_id):
+            _text(field, "work contract field")
+        decision = authority.verify(request, now)
+        if type(decision) is not NativeWorkAuthorization or decision.verified is not True:
+            raise RuntimeError("finite-work authority unverified; caller reference is insufficient")
+        for field in (decision.actor, decision.authority_source, decision.evidence_ref):
+            _text(field, "external authority evidence")
+        _time(decision.expires_at)
+        return self.reserve(claim, request.operation_id, request.nonce, decision.evidence_ref,
+                            now, request.plan_sha, _verified_work=(request, decision))
+
+    def admit_work_event_once(self, request: NativeWorkRequest, event: str,
+                              event_id: str, now: int) -> bool:
+        """Consume one event before read/QA; crash means no automatic re-execution.
+
+        Records stay on the same native operation, with a cap of eight events.
+        This is single-host exclusion, not a scheduler or provider idempotency.
+        """
+        _text(event_id, "event_id")
+        self._require_work_schema()
+        _time(now)
+        if event not in {"status", "result", "qa"}:
+            raise ValueError("invalid native work event")
+        with self.queue._connection() as conn:
+            conn.execute("BEGIN IMMEDIATE")
+            row = conn.execute("SELECT * FROM native_operations WHERE operation_id=?", (request.operation_id,)).fetchone()
+            if (row is None or row["work_authority_json"] is None
+                    or hashlib.sha256(row["work_authority_json"].encode()).hexdigest() != row["work_authority_sha"]
+                    or json.loads(row["work_authority_json"])["authorization"]["request_sha"] != request.digest()):
+                raise RuntimeError("event requires exact admitted finite work; historical operations remain immutable")
+            events = json.loads(row["work_events_json"] or "{}")
+            if event_id in events:
+                conn.commit()
+                return False
+            if len(events) >= 8:
+                raise RuntimeError("finite event cap reached; explicit recovery required")
+            events[event_id] = {"event": event, "request_sha": request.digest(), "started_at": now,
+                                "state": "consumed_outcome_requires_event_receipt"}
+            conn.execute("UPDATE native_operations SET work_events_json=? WHERE operation_id=?",
+                         (json.dumps(events, sort_keys=True, separators=(",", ":")), request.operation_id))
+            conn.commit()
+        return True
 
     def begin_dispatch(self, operation_id: str, dispatch_contract_sha: str) -> dict:
         """Consume the single dispatch slot BEFORE transport; no automatic retry.
@@ -191,6 +357,23 @@ class NativeReceiptBridge:
                 raise RuntimeError("dispatch plan differs from immutable reviewed reservation")
             if guard is None or guard["stopped"] or guard["epoch"] != row["stop_epoch"]:
                 raise RuntimeError("STOP invalidated dispatch reservation")
+            # Recheck new work's persisted grant at actual dispatch time. Legacy
+            # single-pilot rows without work authority preserve their semantics.
+            if "work_authority_json" in row.keys() and row["work_authority_json"] is not None:
+                payload = row["work_authority_json"]
+                if hashlib.sha256(payload.encode()).hexdigest() != row["work_authority_sha"]:
+                    raise RuntimeError("persisted work authority integrity failed")
+                proof = json.loads(payload)
+                authority = proof.get("authorization", {})
+                request = proof.get("request", {})
+                request_sha = hashlib.sha256(json.dumps(request, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+                if (authority.get("verified") is not True or authority.get("scope") != "native_work_closure"
+                        or authority.get("request_sha") != request_sha or authority.get("grant_nonce") != row["nonce"]
+                        or type(authority.get("expires_at")) is not int or authority["expires_at"] <= int(time.time())
+                        or request.get("operation_id") != operation_id
+                        or request.get("plan_sha") != dispatch_contract_sha
+                        or request.get("task_id") != row["task_id"] or request.get("input_sha") != row["input_sha"]):
+                    raise RuntimeError("finite-work authority expired or no longer binds dispatch")
             task = conn.execute("SELECT * FROM tasks WHERE task_id=?", (row["task_id"],)).fetchone()
             if task["status"] != "needs_reconcile" or task["effect_key"] != operation_id:
                 raise RuntimeError("operation no longer owns task")
