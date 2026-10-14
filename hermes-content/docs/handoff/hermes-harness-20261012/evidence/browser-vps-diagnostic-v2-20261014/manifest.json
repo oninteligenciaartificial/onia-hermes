@@ -9,7 +9,10 @@
     "derived_image_id": "sha256:5b1051bc16e1214877af33b8bf453c3d9fec29479632847f534c44afba35f4f2",
     "run_once_wrapper_sha256": "6f051e3877803a7a537f5406b9d37bde1d722ffaf73adfaa300c57c48c74744c",
     "run_once_wrapper_parent_sha256": "6f051e3877803a7a537f5406b9d37bde1d722ffaf73adfaa300c57c48c74744c",
-    "run_once_wrapper_v2_sha256": "394a1cc74e41db792f8baa695418e1dc80a9d6e03a9eb641ca52478503128eb4"
+    "run_once_wrapper_v2_sha256": "394a1cc74e41db792f8baa695418e1dc80a9d6e03a9eb641ca52478503128eb4",
+    "browser_runner_v2_sha256": "a95042c57d481dd1e34f63ebfbd864d784567c64bde8baf1347ce5e20c686545",
+    "bind_approval_parent_sha256": "c5da319d5af11c0c9e6dba874a9b5ab2c72612116b439089ecd59aa8bb54836b",
+    "bind_approval_v2_sha256": "9db0445fffd33d7124a02e734ded03093d069c2d135a6b2c9bbf18303126d42d"
   },
   "files": [
     {
@@ -18,19 +21,24 @@
       "size_bytes": 32
     },
     {
+      "name": "Dockerfile",
+      "sha256": "1c878a2f11de64ad3bd5d02255da549d465adda1f6442836c41dfcd90637c5d2",
+      "size_bytes": 649
+    },
+    {
       "name": "approval-stage.json",
       "sha256": "35f5dc69008fb703814a3c399dcfd73710358db4dc5edd8bc270d796cda2b3a8",
       "size_bytes": 1352
     },
     {
       "name": "bind-approval.py",
-      "sha256": "c5da319d5af11c0c9e6dba874a9b5ab2c72612116b439089ecd59aa8bb54836b",
-      "size_bytes": 7772
+      "sha256": "9db0445fffd33d7124a02e734ded03093d069c2d135a6b2c9bbf18303126d42d",
+      "size_bytes": 14232
     },
     {
       "name": "browser-runner.py",
-      "sha256": "efbbf5d12caf56ab20dc8c57bea50092fded494bdc9d2adc36d08a9ab968d581",
-      "size_bytes": 30193
+      "sha256": "a95042c57d481dd1e34f63ebfbd864d784567c64bde8baf1347ce5e20c686545",
+      "size_bytes": 34536
     },
     {
       "name": "browser_probe.py",
@@ -38,9 +46,14 @@
       "size_bytes": 2004
     },
     {
-      "name": "Dockerfile",
-      "sha256": "1c878a2f11de64ad3bd5d02255da549d465adda1f6442836c41dfcd90637c5d2",
-      "size_bytes": 649
+      "name": "diagnostic-trial-contract-20261014.md",
+      "sha256": "8e8bd9f2baeb1f59fdb58cb8393205a16d67d30e47ef7281e592d80057bb71e8",
+      "size_bytes": 7445
+    },
+    {
+      "name": "image-identity-review.json",
+      "sha256": "2a346e2a4d3adb6eae2bc6b1f9337255855d899bbd561ed322a7de276dac0850",
+      "size_bytes": 332
     },
     {
       "name": "install-image.sh",
@@ -48,9 +61,19 @@
       "size_bytes": 6249
     },
     {
+      "name": "install-receipt.json",
+      "sha256": "4caf3c228525615922879f7a3c9444bf135450cb3b5e930bd6c22be2f79779a0",
+      "size_bytes": 890
+    },
+    {
       "name": "installation-plan.json",
       "sha256": "7f8da675e5d77437da39cfe793cb6f622ce8a229fb6a61f14ac9ede2330d9c4d",
       "size_bytes": 3455
+    },
+    {
+      "name": "parent-source-manifest.json",
+      "sha256": "eca709d70bda1576223f508ab4501111687ca0103f33bf0816e9be16dff7bf2c",
+      "size_bytes": 2291
     },
     {
       "name": "requirements.lock",
@@ -78,24 +101,19 @@
       "size_bytes": 12997
     },
     {
+      "name": "source-manifest.json",
+      "sha256": "eca709d70bda1576223f508ab4501111687ca0103f33bf0816e9be16dff7bf2c",
+      "size_bytes": 2291
+    },
+    {
+      "name": "test_binding_v2.py",
+      "sha256": "b22a1b213e093b484b4c5e09b760c2f1922de66406f8729a3b6284a9d7a3974a",
+      "size_bytes": 9190
+    },
+    {
       "name": "test_browser_runner_authorized.py",
       "sha256": "348eccbfedee153749018cf092997e5f32bfa58848d7bdad9b35b45cd783e0f6",
       "size_bytes": 8195
-    },
-    {
-      "name": "upstream-bundle-manifest.json",
-      "sha256": "f1b7b1dfa9c60330fc9d2184a2a266efbfcdfc3b4733ee0fd9dd5f372906f78b",
-      "size_bytes": 3869
-    },
-    {
-      "name": "upstream-qa-verdict.json",
-      "sha256": "422cfac1c913cc0e3f649328b036c86a452822cfbe8844d1038f07ccc14c4c11",
-      "size_bytes": 4842
-    },
-    {
-      "name": "parent-source-manifest.json",
-      "sha256": "eca709d70bda1576223f508ab4501111687ca0103f33bf0816e9be16dff7bf2c",
-      "size_bytes": 2291
     },
     {
       "name": "test_browser_runner_diagnostic.py",
@@ -108,9 +126,14 @@
       "size_bytes": 2579
     },
     {
-      "name": "diagnostic-trial-contract-20261014.md",
-      "sha256": "3361847d7559d3577e9f961ebb5f5f2ec9009b16b5424da3b2d021d8e1b9a75d",
-      "size_bytes": 6635
+      "name": "upstream-bundle-manifest.json",
+      "sha256": "f1b7b1dfa9c60330fc9d2184a2a266efbfcdfc3b4733ee0fd9dd5f372906f78b",
+      "size_bytes": 3869
+    },
+    {
+      "name": "upstream-qa-verdict.json",
+      "sha256": "422cfac1c913cc0e3f649328b036c86a452822cfbe8844d1038f07ccc14c4c11",
+      "size_bytes": 4842
     }
   ],
   "behavior": {
@@ -128,7 +151,7 @@
     ],
     "docker_lifecycle": "docker_run_invocation is recorded as one indivisible operation; Chromium launch is unobservable",
     "preflight_only": "omitted; safe reuse would require restructuring binding and reservation flow",
-    "runtime_dependencies": "Referenced frozen sibling files remain in parent evidence directory; this directory alone is not a runnable bundle",
+    "runtime_dependencies": "All exact parent source siblings and image/install identity receipts are included; a private root-go.json remains an external control-root prerequisite.",
     "diagnostics_best_effort": "Journal initialization is fail-closed before reservation; post-effect write failure suppresses success and records HOLD/needs_reconcile when possible, with no retry"
   },
   "bundle": {
@@ -143,8 +166,14 @@
     ],
     "run_once_wrapper_modified_for_private_temp_cleanup": true,
     "parent_entries_validated": 16,
-    "parent_siblings_exact_hash_count": 14,
+    "parent_siblings_exact_hash_count": 13,
     "run_once_wrapper_timeout": "75s + 2s grace",
-    "run_once_wrapper_temp_cleanup": "unique private temp with EXIT cleanup trap"
+    "run_once_wrapper_temp_cleanup": "unique private temp with EXIT cleanup trap",
+    "parent_source_overrides_v2": {
+      "bind-approval.py": "9db0445fffd33d7124a02e734ded03093d069c2d135a6b2c9bbf18303126d42d",
+      "browser-runner.py": "a95042c57d481dd1e34f63ebfbd864d784567c64bde8baf1347ce5e20c686545",
+      "run-once.sh": "394a1cc74e41db792f8baa695418e1dc80a9d6e03a9eb641ca52478503128eb4"
+    },
+    "root_go_receipt_required_before_binding": true
   }
 }

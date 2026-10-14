@@ -1,0 +1,1 @@
+{"container_cleanup":"verified_absent","container_started":false,"image_id":"sha256:5b1051bc16e1214877af33b8bf453c3d9fec29479632847f534c44afba35f4f2","pwuser_gid":1001,"pwuser_uid":1001,"result":"image_identity_review_pass","review_id":"126001341522434181f1c3c6b747d656","source":"read-only /etc/passwd copied from exact image ID"}

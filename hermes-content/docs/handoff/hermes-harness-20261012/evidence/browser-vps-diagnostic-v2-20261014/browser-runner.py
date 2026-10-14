@@ -18,10 +18,19 @@ from run_result import success_summary
 
 BASE_DIGEST = "sha256:aa81288e738725378becba5b3e06cb0f3a7f012a610e87e8d767a090ea3f740d"
 IMAGE = "onia/playwright-python:1.62.0-noble-lock-52e857275e07"
-EXPECTED_IMAGE_ID = ""  # Must be replaced only after approved build and independent image-ID review.
+EXPECTED_IMAGE_ID = "sha256:5b1051bc16e1214877af33b8bf453c3d9fec29479632847f534c44afba35f4f2"
 LOCK_SHA256 = "52e857275e075417fa9e5b934f3b41d0366a55fc25187b7f40dbb3df34ed6a4e"
 SECCOMP_SHA256 = "cc3e61cabda6bbc1e53e54d27ba4d55a9d3be829b6dd1a596f4a7b31b1cc7849"
-PARENT_SOURCE_SHA256 = "0C5650791E83831D11445B26FC715A7A931016E20A7F3C3EC6E423DB550A8D6B"
+PARENT_SOURCE_SHA256 = "eca709d70bda1576223f508ab4501111687ca0103f33bf0816e9be16dff7bf2c"
+UPSTREAM_MANIFEST_SHA256 = "f1b7b1dfa9c60330fc9d2184a2a266efbfcdfc3b4733ee0fd9dd5f372906f78b"
+INSTALL_RECEIPT_SHA256 = "4caf3c228525615922879f7a3c9444bf135450cb3b5e930bd6c22be2f79779a0"
+IMAGE_REVIEW_SHA256 = "2a346e2a4d3adb6eae2bc6b1f9337255855d899bbd561ed322a7de276dac0850"
+TARGET_ID = "offline-synthetic"
+HARD_TIMEOUT_SECONDS = 75
+TIMEOUT_GRACE_SECONDS = 2
+CONTRACT_NAME = "diagnostic-trial-contract-20261014.md"
+CONTRACT_START = "<!-- HERMES_DIAGNOSTIC_BINDING_START -->"
+CONTRACT_END = "<!-- HERMES_DIAGNOSTIC_BINDING_END -->"
 PUBLIC_ENABLED = False
 APPROVED_NONCE_SHA256 = ""  # Empty until a fresh offline approval is explicitly bound.
 ENV = {"PATH": "/usr/bin:/bin", "HOME": "/nonexistent", "LANG": "C.UTF-8"}
@@ -151,8 +160,32 @@ def diagnostic_passed(stage, *, stdout_bytes=0):
         _DIAGNOSTIC_JOURNAL_FAILED = True
 
 
+def _sha256_file(path):
+    path = Path(path)
+    if path.is_symlink() or not path.is_file():
+        raise RuntimeError("required binding file missing or unsafe")
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def _contract_spec():
+    text = (HERE / CONTRACT_NAME).read_text(encoding="utf-8")
+    if text.count(CONTRACT_START) != 1 or text.count(CONTRACT_END) != 1:
+        raise RuntimeError("contract binding block missing or ambiguous")
+    block = text.split(CONTRACT_START, 1)[1].split(CONTRACT_END, 1)[0].strip()
+    lines = block.splitlines()
+    if len(lines) >= 3 and lines[0].startswith("```") and lines[-1].strip() == "```":
+        block = "\n".join(lines[1:-1]).strip()
+    spec = json.loads(block)
+    expected = {"runner_sha256": _sha256_file(Path(__file__).resolve()),
+        "target_id": TARGET_ID, "hard_timeout_seconds": HARD_TIMEOUT_SECONDS,
+        "timeout_grace_seconds": TIMEOUT_GRACE_SECONDS, "derived_image_id": EXPECTED_IMAGE_ID}
+    if spec != expected:
+        raise RuntimeError("contract parameters do not match exact v2 runtime")
+    return expected
+
+
 def load_binding(control_root):
-    global EXPECTED_IMAGE_ID, APPROVED_NONCE_SHA256
+    global APPROVED_NONCE_SHA256
     root = Path(control_root)
     path = root / "approval-binding.json"
     if root.is_symlink() or not root.is_dir() or path.is_symlink() or not path.is_file():
@@ -162,11 +195,52 @@ def load_binding(control_root):
         if rs.st_uid != os.geteuid() or (rs.st_mode & 0o077) or fs.st_uid != os.geteuid() or (fs.st_mode & 0o077):
             raise RuntimeError("approval binding permissions are not private")
     binding = json.loads(path.read_text(encoding="utf-8"))
+    contract = _contract_spec()
+    root_go_path = root / "root-go.json"
+    if root_go_path.is_symlink() or not root_go_path.is_file():
+        raise RuntimeError("explicit root GO receipt missing or unsafe")
+    if os.name != "nt":
+        gs = root_go_path.stat()
+        if gs.st_uid != os.geteuid() or (gs.st_mode & 0o077):
+            raise RuntimeError("root GO receipt permissions are not private")
+    root_go_bytes = root_go_path.read_bytes()
+    root_go = json.loads(root_go_bytes.decode("utf-8"))
+    root_go_sha256 = hashlib.sha256(root_go_bytes).hexdigest()
+    required_exact = {
+        "runner_sha256": contract["runner_sha256"],
+        "contract_sha256": _sha256_file(HERE / CONTRACT_NAME),
+        "root_go_receipt_sha256": root_go_sha256,
+        "target_id": TARGET_ID,
+        "hard_timeout_seconds": HARD_TIMEOUT_SECONDS,
+        "timeout_grace_seconds": TIMEOUT_GRACE_SECONDS,
+        "derived_image_id": EXPECTED_IMAGE_ID,
+        "bundle_manifest_sha256": _sha256_file(HERE / "manifest.json"),
+        "source_manifest_sha256": PARENT_SOURCE_SHA256,
+        "install_receipt_sha256": INSTALL_RECEIPT_SHA256,
+        "image_review_report_sha256": IMAGE_REVIEW_SHA256,
+        "wrapper_sha256": _sha256_file(HERE / "run-once.sh"),
+        "binder_sha256": _sha256_file(HERE / "bind-approval.py"),
+    }
+    if any(binding.get(key) != value for key, value in required_exact.items()):
+        raise RuntimeError("approval binding does not match exact runner, contract, target, timeout, or image")
+    if not isinstance(binding.get("root_go_reference"), str) or not binding["root_go_reference"].strip():
+        raise RuntimeError("root GO reference missing")
+    expected_root_go = {"status": "approved", "scope": "single_offline_synthetic_trial",
+        "bundle_manifest_sha256": required_exact["bundle_manifest_sha256"],
+        "runner_sha256": required_exact["runner_sha256"],
+        "contract_sha256": required_exact["contract_sha256"],
+        "target_id": TARGET_ID, "hard_timeout_seconds": HARD_TIMEOUT_SECONDS,
+        "timeout_grace_seconds": TIMEOUT_GRACE_SECONDS, "derived_image_id": EXPECTED_IMAGE_ID,
+        "root_go_reference": binding["root_go_reference"]}
+    if any(root_go.get(key) != value for key, value in expected_root_go.items()):
+        raise RuntimeError("root GO receipt does not match exact runtime binding")
+    if binding.get("hard_timeout_seconds") != HARD_TIMEOUT_SECONDS or binding.get("timeout_grace_seconds") != TIMEOUT_GRACE_SECONDS:
+        raise RuntimeError("runtime timeout binding mismatch")
     if binding.get("human_authorization") != "Autorizar instalación y prueba aisladas." or binding.get("authorization_reference") != "Sergio14Oct":
         raise RuntimeError("human authorization record mismatch")
     if binding.get("approval_nonce_reference") != "sergio:20261014-vps-browser-offline-r1":
         raise RuntimeError("one-use nonce reference mismatch")
-    if binding.get("upstream_bundle_manifest_sha256") != "F1B7B1DFA9C60330FC9D2184A2A266EFBFCDFC3B4733EE0FD9DD5F372906F78B":
+    if binding.get("upstream_bundle_manifest_sha256") != UPSTREAM_MANIFEST_SHA256:
         raise RuntimeError("approval is not bound to the prepared bundle")
     if binding.get("requirements_lock_sha256") != LOCK_SHA256 or binding.get("seccomp_profile_sha256") != SECCOMP_SHA256:
         raise RuntimeError("dependency or seccomp binding mismatch")
@@ -174,24 +248,25 @@ def load_binding(control_root):
         raise RuntimeError("runtime approval scope mismatch")
     if binding.get("image_review_status") != "independent_read_only_review_pass":
         raise RuntimeError("independent image review is not complete")
-    if not re.fullmatch(r"[0-9a-f]{64}", binding.get("install_receipt_sha256", "")):
-        raise RuntimeError("installation receipt binding missing")
-    if not re.fullmatch(r"[0-9a-f]{64}", binding.get("source_manifest_sha256", "")):
-        raise RuntimeError("source manifest binding missing")
     install_path = HERE / "install-receipt.json"
     manifest_path = HERE / "source-manifest.json"
-    if install_path.is_symlink() or not install_path.is_file() or hashlib.sha256(install_path.read_bytes()).hexdigest() != binding["install_receipt_sha256"]:
+    if _sha256_file(install_path) != binding["install_receipt_sha256"]:
         raise RuntimeError("installation receipt hash mismatch")
-    if manifest_path.is_symlink() or not manifest_path.is_file() or hashlib.sha256(manifest_path.read_bytes()).hexdigest() != binding["source_manifest_sha256"]:
+    if _sha256_file(manifest_path) != binding["source_manifest_sha256"]:
         raise RuntimeError("source manifest hash mismatch")
-    verify_source_manifest(manifest_path)
+    verify_source_manifest(manifest_path, binding)
+    install = json.loads(install_path.read_text(encoding="utf-8"))
+    if (install.get("status") != "built" or install.get("stage") != "image" or
+            install.get("image_id") != EXPECTED_IMAGE_ID or
+            install.get("upstream_bundle_manifest_sha256", "").lower() != UPSTREAM_MANIFEST_SHA256 or
+            install.get("source_manifest_sha256") != PARENT_SOURCE_SHA256):
+        raise RuntimeError("installation receipt does not bind exact reviewed image and source")
     image_review_path = HERE / "image-identity-review.json"
-    if image_review_path.is_symlink() or not image_review_path.is_file() or hashlib.sha256(image_review_path.read_bytes()).hexdigest() != binding.get("image_review_report_sha256"):
+    if _sha256_file(image_review_path) != binding.get("image_review_report_sha256"):
         raise RuntimeError("read-only image review receipt hash mismatch")
     review = json.loads(image_review_path.read_text(encoding="utf-8"))
-    EXPECTED_IMAGE_ID = binding.get("derived_image_id", "")
     APPROVED_NONCE_SHA256 = binding.get("nonce_sha256", "")
-    if not re.fullmatch(r"sha256:[0-9a-f]{64}", EXPECTED_IMAGE_ID) or not re.fullmatch(r"[0-9a-f]{64}", APPROVED_NONCE_SHA256):
+    if not re.fullmatch(r"[0-9a-f]{64}", APPROVED_NONCE_SHA256):
         raise RuntimeError("reviewed image ID or one-use nonce hash missing")
     for key in ("pwuser_uid", "pwuser_gid"):
         if not isinstance(binding.get(key), int) or binding[key] <= 0:
@@ -205,22 +280,26 @@ def load_binding(control_root):
     return binding
 
 
-def verify_source_manifest(manifest_path):
+def verify_source_manifest(manifest_path, binding=None):
     """Revalidate every frozen source immediately before the one-use nonce is consumed."""
     manifest_path = Path(manifest_path)
     root = manifest_path.parent.resolve(strict=True)
     data = json.loads(manifest_path.read_text(encoding="utf-8"))
-    if data.get("upstream_bundle_manifest_sha256") != "F1B7B1DFA9C60330FC9D2184A2A266EFBFCDFC3B4733EE0FD9DD5F372906F78B":
+    if str(data.get("upstream_bundle_manifest_sha256", "")).lower() != UPSTREAM_MANIFEST_SHA256:
         raise RuntimeError("source manifest upstream binding mismatch")
     files = data.get("files")
     if not isinstance(files, list) or not files:
         raise RuntimeError("source manifest file list missing")
+    overrides = ({"bind-approval.py": binding["binder_sha256"],
+        "browser-runner.py": binding["runner_sha256"], "run-once.sh": binding["wrapper_sha256"]}
+        if binding is not None else {})
     for item in files:
         name, digest = item.get("name"), item.get("sha256")
         if not isinstance(name, str) or Path(name).name != name or not re.fullmatch(r"[0-9a-f]{64}", digest or ""):
             raise RuntimeError("source manifest entry malformed")
         path = root / name
-        if path.is_symlink() or not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != digest:
+        expected = overrides.get(name, digest)
+        if path.is_symlink() or not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != expected:
             raise RuntimeError("source file changed after installation review")
 
 
@@ -437,6 +516,8 @@ def execute(nonce, *, control_root=CONTROL_ROOT, docker_call=_docker_call, popen
         if ns.st_uid != os.geteuid() or (ns.st_mode & 0o077):
             raise RuntimeError("one-use nonce permissions are not private")
     nonce = nonce_path.read_text(encoding="ascii").strip()
+    if not _safe_token(nonce) or hashlib.sha256(nonce.encode("ascii")).hexdigest() != binding["nonce_sha256"]:
+        raise RuntimeError("one-use nonce does not match approval binding")
     diagnostic_passed("validation")
     diagnostic_stage("reservation", reservation_state="unknown")
     reservation = reserve_nonce(control_root, nonce)
@@ -480,7 +561,7 @@ def execute(nonce, *, control_root=CONTROL_ROOT, docker_call=_docker_call, popen
         proc = popen(argv(out, cid_path, run_id, nonce), stdin=src, stdout=subprocess.PIPE,
                      stderr=subprocess.DEVNULL, start_new_session=True, env=ENV)
         try:
-            raw, _ = bounded_communicate(proc, timeout=75)
+            raw, _ = bounded_communicate(proc, timeout=HARD_TIMEOUT_SECONDS)
             proc.wait(timeout=0.25)
         except (subprocess.TimeoutExpired, RuntimeError) as exc:
             cleanup = stop_owned(cid_path, proc, run_id, nonce, docker_call=docker_call)
@@ -507,7 +588,7 @@ def execute(nonce, *, control_root=CONTROL_ROOT, docker_call=_docker_call, popen
     _DIAGNOSTIC_RECONCILIATION = "verified_absent"
     diagnostic_stage("capture_validation", reservation_state="consumed", reconciliation_state="verified_absent")
     shot = out / "offline-fixture.jpg"
-    if child.get("phase") != "offline-synthetic" or child.get("sandbox_enabled") is not True or child.get("network_mode") != "none":
+    if child.get("phase") != TARGET_ID or child.get("sandbox_enabled") is not True or child.get("network_mode") != "none":
         raise RuntimeError("fixture receipt mismatch; needs_reconcile")
     if shot.is_symlink() or not shot.is_file() or shot.stat().st_size < 4 or shot.stat().st_size > 2_000_000:
         raise RuntimeError("screenshot absent, unsafe, or oversized; needs_reconcile")
@@ -524,7 +605,7 @@ def execute(nonce, *, control_root=CONTROL_ROOT, docker_call=_docker_call, popen
     if _DIAGNOSTIC_JOURNAL_FAILED:
         _DIAGNOSTIC_RECONCILIATION = "needs_reconcile"
         raise RuntimeError("diagnostic journal failure after runtime effect; needs_reconcile; no retry")
-    receipt = {"status": "PASS", "captured_at_utc": child.get("captured_at_utc"), "phase": "offline-synthetic",
+    receipt = {"status": "PASS", "captured_at_utc": child.get("captured_at_utc"), "phase": TARGET_ID,
         "execution_host": "VPS", "source_parent_session_id": "UNKNOWN",
         "image_id": EXPECTED_IMAGE_ID, "base_manifest_digest": BASE_DIGEST,
         "authorization_reference": binding["authorization_reference"],
