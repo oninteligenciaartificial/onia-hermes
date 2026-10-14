@@ -1,0 +1,201 @@
+{
+  "task": "gateway-callback-luna-medium-20261014",
+  "status": "callback_identified_native_authority_unproven",
+  "ssh_connections": 5,
+  "limits": {
+    "remote_timeout_seconds": 20,
+    "max_output_bytes_per_call": 8192,
+    "max_source_bytes": 1048576,
+    "max_modules": 4
+  },
+  "capture": {
+    "call1": {
+      "exit_code": 0,
+      "remote_stdout_bytes": 7801,
+      "stderr_bytes": 0,
+      "modules": [
+        {
+          "path": "hermes_cli/main.py",
+          "sha256": "1db8c4ac4b45b4ab50761cd3101f8f129165c0fe067effbb1e7a2a5c6edc402e",
+          "bytes": 139845
+        },
+        {
+          "path": "hermes_cli/subcommands/gateway.py",
+          "sha256": "f7e57bf83e1e94ba8219ce348821b0b18b9adb642dd8bd23fd793c844fc1f7e8",
+          "bytes": 10065
+        },
+        {
+          "path": "hermes_cli/gateway.py",
+          "sha256": "fc82bbdd871031e177d21149a52b97fc02c7dc8d922b39b7c9809633f4629a10",
+          "bytes": 282507
+        }
+      ]
+    },
+    "call2": {
+      "exit_code": 0,
+      "remote_stdout_bytes": 7701,
+      "stderr_bytes": 0,
+      "modules": [
+        {
+          "path": "gateway/run.py",
+          "sha256": "79a8704da45baf702e1e9590a1b55feac9439722685705a4eb1b3f545dc134d3",
+          "bytes": 287144
+        }
+      ]
+    }
+  },
+  "total_source_bytes": 719561,
+  "dispatch": [
+    {
+      "module": "hermes_cli.main",
+      "symbol": "cmd_gateway",
+      "lines": "1736-1742",
+      "evidence": "imports gateway_command"
+    },
+    {
+      "module": "hermes_cli.main",
+      "symbol": "main",
+      "lines": "3309-3403",
+      "evidence": "active CLI dispatch candidate"
+    },
+    {
+      "module": "hermes_cli.subcommands.gateway",
+      "symbol": "build_gateway_parser",
+      "lines": "28-171"
+    },
+    {
+      "module": "hermes_cli.gateway",
+      "symbol": "gateway_command",
+      "line": null,
+      "evidence": "called by cmd_gateway; declaration line not retained in capped output"
+    },
+    {
+      "module": "hermes_cli.gateway",
+      "symbol": "start_gateway import",
+      "line": 4540,
+      "target": "gateway.run.start_gateway"
+    },
+    {
+      "module": "gateway.run",
+      "symbol": "start_gateway",
+      "lines": "5159-5317"
+    }
+  ],
+  "trust_boundary": {
+    "authorization_mixin_import_line": 2023,
+    "inbound_mixin_import_line": 2036,
+    "telegram_adapter_callback_data": "unknown",
+    "telegram_actor_binding": "unknown",
+    "operation_request_digest_nonce_expiry": "unknown",
+    "allowlist_is_operation_authority": false,
+    "pilot_binding_authorized": false
+  },
+  "scope": "Public code only; final Python file-name/content identifier scan was partial at 512 files. No callback handler identified in scanned set; no global absence claim.",
+  "call3": {
+    "exit_code": 0,
+    "remote_stdout_bytes": 652,
+    "stderr_bytes": 0,
+    "files_scanned": 512,
+    "bytes_scanned": 8550790,
+    "coverage": "partial_file_cap_historical",
+    "candidates": [
+      {
+        "path": "tools/send_message_senders.py",
+        "bytes": 34982,
+        "sha256": "86deb8fa1dd84adafeab2512587d9f0c6295f643d86688b424589d3af434f919",
+        "literals": [
+          "TelegramAdapter"
+        ],
+        "matching_symbols": []
+      },
+      {
+        "path": "scripts/generate_conformance_vectors.py",
+        "bytes": 12096,
+        "sha256": "8294afe1a10980381f711d1d60f65a327f6b29d997b47f3ad9e6cce97506c913",
+        "literals": [
+          "TelegramAdapter"
+        ],
+        "matching_symbols": []
+      }
+    ],
+    "ast_modules": []
+  },
+  "call4": {
+    "exit_code": 0,
+    "remote_stdout_bytes": 3734,
+    "stderr_bytes": 0,
+    "source": {
+      "path": "tools/send_message_senders.py",
+      "bytes": 34982,
+      "sha256": "86deb8fa1dd84adafeab2512587d9f0c6295f643d86688b424589d3af434f919"
+    },
+    "imports": [
+      {
+        "line": 130,
+        "module": "plugins.platforms.telegram.adapter",
+        "symbol": "TelegramAdapter"
+      },
+      {
+        "line": 233,
+        "module": "plugins.platforms.telegram.adapter",
+        "symbol": "TelegramAdapter"
+      }
+    ],
+    "import_guards": [
+      {
+        "line": "129-133",
+        "exception": "Exception"
+      },
+      {
+        "line": "232-236",
+        "exception": "Exception"
+      }
+    ],
+    "resolved": {
+      "public_source_path": "plugins/platforms/telegram/adapter.py",
+      "public_source_presence": "EXISTS",
+      "runtime_site_packages_path": "site-packages/plugins/platforms/telegram/adapter (ruta de generación omitida)",
+      "runtime_site_packages_presence": "MISSING"
+    },
+    "adapter_handler": "identified in later offline public snapshot; handler facts in trust_boundary_findings",
+    "active_runtime_registration": "unknown",
+    "authorization_binding": "unknown"
+  },
+  "call5": {
+    "exit_code": 0,
+    "remote_stdout_bytes": 50,
+    "stderr_bytes": 0,
+    "remote_result": "bounded_output_over_cap",
+    "remote_json_bytes": 11135,
+    "remote_printed_only_error": true,
+    "source_target": "plugins/platforms/telegram/adapter.py",
+    "max_source_bytes": 524288,
+    "max_extra_module_bytes": 131072,
+    "returned_ast_facts": "none"
+  },
+  "snapshot": {
+    "path": "offline public adapter snapshot (stored outside Git)",
+    "source_path": "plugins/platforms/telegram/adapter.py",
+    "bytes": 387611,
+    "sha256": "a50b10a713b6b40d71531ef6e133cc99285c35a860b5bf2c947e81e3968c18a6",
+    "validated": true,
+    "stored_outside_git": true
+  },
+  "trust_boundary_findings": {
+    "handler_registration": "TelegramAdapter._register_handlers:2691 -> _handle_callback_query",
+    "dispatch": "_handle_callback_query:4221-4243 -> ea: -> _handle_exec_approval_callback",
+    "actor_auth": "query.from_user.id through _callback_authorized and _is_callback_user_authorized:744-779; injected runner auth preferred, then legacy, then env allowlist fallback",
+    "pending_record": "_approval_state[approval_id] = session_key",
+    "identifier": "incremental itertools.count(1)",
+    "claim": "state.pop(approval_id) after actor allowlist gate",
+    "direct_binding_to_actor_or_request_digest": "not present in adapter source",
+    "adapter_ttl": "not present; underlying resolver wait expiry not inspected",
+    "resolver": "tools.approval.resolve_gateway_approval(session_key, choice) at 4277-4278",
+    "native_work_authority_binding": "not established"
+  },
+  "local_ast_diagnosis": {
+    "path": "offline AST diagnosis (stored outside Git)",
+    "method": "offline ast.parse, no imports/execution",
+    "output_bytes": 3736
+  }
+}

@@ -2,7 +2,7 @@
 
 ## Intake documental 14-oct — dueño y referencia
 
-La actualización única de reels de skills, post X, nueve ideas comerciales y QA/métricas vive en [el registro de intake del handoff](hermes-content/docs/handoff/codex-cloud-pc-20261011.md#intake-unico--skills-de-reels-post-x-e-ideas-comerciales--14-oct-2026) y el [bundle de evidencia indexado](hermes-content/docs/handoff/hermes-harness-20261012/evidence/continuity-preservation-20261014/README.md). Este turno solo preserva fuentes ya revisadas; Root conserva coordinación, Desarrollo-Infra el índice y Marketing/Ventas la futura evaluación comercial. No implica adopción, campaña ni gasto.
+La actualización única de reels de skills, post X, nueve ideas comerciales, QA/métricas y evidencias de callback/autoridad nativa vive en [el registro de intake del handoff](hermes-content/docs/handoff/codex-cloud-pc-20261011.md#intake-unico--skills-de-reels-post-x-e-ideas-comerciales--14-oct-2026) y el [bundle de evidencia indexado](hermes-content/docs/handoff/hermes-harness-20261012/evidence/continuity-preservation-20261014/README.md). Este turno solo preserva fuentes ya revisadas; Root conserva coordinación, Desarrollo-Infra el índice y Marketing/Ventas la futura evaluación comercial. No implica adopción, campaña ni gasto.
 
 ## Piloto de sesiones ONIA 30 minutos — ownership documental 14-oct-2026
 

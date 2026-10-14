@@ -1,0 +1,105 @@
+{
+  "task": "gateway-runtime-locator-luna-20261014",
+  "ssh_connections": 3,
+  "limits": {
+    "max_modules": 3,
+    "remote_output_cap_bytes": 10240,
+    "remote_timeout_seconds": 20,
+    "max_source_bytes": 524288
+  },
+  "call1": {
+    "exit_code": 0,
+    "stdout_bytes": 398,
+    "stderr_public": "",
+    "result": {
+      "unit": "hermes-gateway.service",
+      "systemctl_exit": 0,
+      "systemctl_stdout_bytes": 71,
+      "systemctl_stderr_public": "",
+      "entrypoint": "hermes_cli.main",
+      "entrypoint_kind": "module"
+    }
+  },
+  "call2": {
+    "exit_code": 0,
+    "stdout_bytes": 4065,
+    "stderr_public": "",
+    "result": {
+      "scope_root": "hermes-agent source root (absolute path omitted)",
+      "entrypoint": "hermes_cli.main",
+      "candidates_checked": [
+        "hermes_cli/main.py"
+      ],
+      "modules": [
+        {
+          "path": "hermes_cli/main.py",
+          "sha256": "1DB8C4AC4B45B4AB50761CD3101F8F129165C0FE067EFFBB1E7A2A5C6EDC402E",
+          "bytes": 139845,
+          "relevant_declarations": [
+            {
+              "name": "cmd_approvals",
+              "kind": "FunctionDef",
+              "line": 2080,
+              "end_line": 2087
+            }
+          ]
+        },
+        {
+          "path": "gateway/platform_registry.py",
+          "sha256": "C139553995616038AA5B2166E69F351D25E7B242D3DE52D1443AFB894D2E45C7",
+          "bytes": 20568,
+          "relevant_declarations": []
+        },
+        {
+          "path": "hermes_cli/approvals_suggest.py",
+          "sha256": "B17B3201442321654E7EEC6C3D274EE7819DE89D3F720C1BCEA8A1CB407798FA",
+          "bytes": 15599,
+          "relevant_declarations": [
+            {
+              "name": "scan_approval_history",
+              "kind": "FunctionDef",
+              "line": 147,
+              "end_line": 174
+            },
+            {
+              "name": "approvals_command",
+              "kind": "FunctionDef",
+              "line": 357,
+              "end_line": 376
+            }
+          ]
+        }
+      ],
+      "total_source_bytes": 176012,
+      "status": "static_ast_complete",
+      "modules_count": 3
+    }
+  },
+  "call3": {
+    "exit_code": 0,
+    "stdout_bytes": 48189,
+    "stderr_public": "",
+    "source_modules": [
+      {
+        "path": "hermes_cli/gateway.py",
+        "sha256": "FC82BBDD871031E177D21149A52B97FC02C7DC8D922B39B7C9809633F4629A10",
+        "bytes": 282507
+      },
+      {
+        "path": "hermes_cli/subcommands/gateway.py",
+        "sha256": "UNKNOWN_TRUNCATED_LOCAL_CAPTURE",
+        "bytes": 10065
+      }
+    ],
+    "total_source_bytes": 292572,
+    "modules_read": 2,
+    "third_module": "not_read",
+    "candidate_import": "gateway.shutdown_watchdog.get_loop_heartbeat_path",
+    "candidate_from": "probe_gateway_loop_liveness",
+    "candidate_resolved_path": null,
+    "remote_stdout_cap_bytes": 12288,
+    "remote_stdout_cap_exceeded": true,
+    "local_tool_output_truncated": true,
+    "hook_status": "UNKNOWN"
+  }
+}
