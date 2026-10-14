@@ -1,0 +1,64 @@
+{
+  "date": "2026-10-14",
+  "scope": "Official public documentation, official App Server v0.161.0 DTO, and state reported by Root; no login, SSH, operational CLI/App Server calls, remote configuration, or infrastructure changes.",
+  "meta": "Determine documented remote routes and PC-off constraints.",
+  "proof_of_fact": "Linked sources and explicit separation of documented, reported, and unobserved state.",
+  "conclusion": [
+    "Codex Cloud native is the documented Codex UI route for PC-off work; mapping to VPS or App Server IDs is not demonstrated.",
+    "With Hermes components reported as existing, VPS CLI plus Telegram is the implementable PC-off coordination route, conditional on proving service availability and effective CLI session/auth.",
+    "Desktop SSH is documented for visual control from an available macOS/Windows desktop host; this connection was not configured.",
+    "Sergio must decide which VPS route to operate and whether to configure an approved desktop SSH host or prioritize CLI plus Telegram.",
+    "Change CLI route status only after an isolated real CLI session, harmless task in a non-production copy, reconnection evidence, and observable Telegram result; record auth/cost without exposing secrets.",
+    "Change SSH route status only after an approved host is configured and an isolated visual read/edit test succeeds on a non-production copy.",
+    "Claim ID mapping or parity only with a documented contract or controlled correlation test; the thr_ example is insufficient."
+  ],
+  "routes": {
+    "codex_cloud_native": {
+      "runtime": "OpenAI-hosted workspace",
+      "pc_off": "documented",
+      "ui": "Native Codex Cloud experience",
+      "ids": "Native Cloud task UUID to App Server thread.id mapping not demonstrated",
+      "account_state": "Not checked in account"
+    },
+    "desktop_ssh_vps": {
+      "runtime": "VPS shell and filesystem through desktop-launched remote App Server over SSH",
+      "pc_off_mobile": "Requires an available macOS/Windows desktop host; a powered-off sole PC cannot originate SSH",
+      "configuration": "Not configured or tested in this review",
+      "protocol": "Docs describe JSON-RPC 2.0; v0.161.0 DTO explicitly omits jsonrpc field",
+      "ids": "No complete namespace or Cloud UUID mapping inferred from thr_ example",
+      "account_auth_model_cost": "Not observed"
+    },
+    "vps_cli_telegram_hermes": {
+      "runtime": "Reported VPS CLI and Telegram coordinator; PC-off operation depends on component availability",
+      "pc_off": "Possible conditional on VPS services being available",
+      "ui_parity": "Visual diff/review parity with desktop or Cloud not demonstrated",
+      "local_state": "Root reported CLI 0.161 and historical permission for VPS auth; active session/effective auth not observed",
+      "end_to_end_test": "Not performed in this review"
+    },
+    "agents_api_self_hosted": {
+      "status": "Separate API/sandbox route, not demonstrated as a bridge to native Cloud tasks or equivalent UI"
+    }
+  },
+  "rpc_evidence": {
+    "probes": "Reported V1 and V2 probes failed in parser",
+    "metadata": "No RPC metadata obtained",
+    "account_auth_session": "Not observed",
+    "dto": "Official rust-v0.161.0 source says it neither sends nor expects jsonrpc: 2.0; request/response DTOs omit the field",
+    "thread_ids": "thr_ is only an example; full namespace and required format not inferred",
+    "cloud_mapping": "Native Cloud UUID to App Server thread.id contract not demonstrated"
+  },
+  "reported_root_state_not_revalidated": [
+    "Five native Cloud tasks with UUIDs",
+    "Two recent real children",
+    "VPS cloud list had no known native UUID tasks",
+    "Available handoff tool in the reported session offered Local only"
+  ],
+  "sources": [
+    "https://learn.chatgpt.com/docs/remote-connections",
+    "https://learn.chatgpt.com/docs/app-server",
+    "https://github.com/openai/codex/blob/rust-v0.161.0/codex-rs/app-server-protocol/src/rpc.rs",
+    "https://learn.chatgpt.com/docs/environments/cloud-environments",
+    "https://learn.chatgpt.com/docs/pricing",
+    "https://developers.openai.com/api/docs/guides/agents-api/environments/self-hosted"
+  ]
+}

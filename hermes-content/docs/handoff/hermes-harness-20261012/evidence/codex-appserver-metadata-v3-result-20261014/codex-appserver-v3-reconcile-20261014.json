@@ -1,0 +1,31 @@
+{
+  "artifact": "V3 post-failure owned-process metadata reconciliation",
+  "artifact_created_at_utc": "2026-10-14T09:10:05Z",
+  "v3_receipt": {
+    "path": "E:/onia-wt/codex-appserver-metadata-prepared-v3-20261014/receipt-20261014T090557_713354Z.json",
+    "sha256": "0B270C9A9FEAFC7730358F25C9E7B5006B4DFAFA9EAF18497E0532B227B54D58",
+    "captured_at_utc": "2026-10-14T09:06:00.335839Z",
+    "failure_class": "protocol_notification_shape_invalid",
+    "raw_notification_key_name": "not preserved"
+  },
+  "remote_reconciliation": {
+    "observed_after_v3_receipt": true,
+    "observed_at_utc": null,
+    "observation_time_precision": "Original tool output did not include a timestamp; exact remote-query time is not recoverable from preserved output.",
+    "requested_start_window_utc": "2026-10-14T09:05:27Z",
+    "requested_end_window_utc": "2026-10-14T09:06:31Z",
+    "process_scan_complete": true,
+    "proc_entries": 363,
+    "matching_owned_process_cwds": 0,
+    "proc_metadata_errors": 0,
+    "tmp_scan_complete": false,
+    "tmp_scan_entry_limit": 8192,
+    "matching_owned_scratch_dirs_among_examined": 0,
+    "matching_prefix_entries": 0,
+    "scratch_absence": "unknown",
+    "signals_sent": 0,
+    "deletions": 0,
+    "argv_env_logs_read": false
+  },
+  "limitation": "This is distinct from the V2 reconciliation artifact captured at 2026-10-14T08:55:22Z (367 /proc entries). The V3 tool output was preserved only as counts; its exact query timestamp was not recorded."
+}
