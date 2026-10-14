@@ -1,0 +1,22 @@
+{
+  "task": "telegram-photo-single-dispatch",
+  "status": "accepted",
+  "recipient": "Sergio Urcullo",
+  "nonce": "sergio:20261014-native-clean-subagents-photo-r1",
+  "sent_at_utc": "2026-10-14T06:47:34+00:00",
+  "driver_sha256": "bdc85433b590aab94410394816ddc8a0a53709ba3259106a76b2c8bfe03c7291",
+  "caption_sha256": "8bce122499086ccc72189ec541a508094f5cda7d3225dedaffdcb44c74765dfe",
+  "photo_sha256": "4bb3ce34713805802f1c84380658e0862402662cf154498aca17952eaea7c033",
+  "photo_bytes": 172963,
+  "operation_sha256": "2bc7b8127b253d119c7dc0b07613a3838f17253e408b8655bd88dde234bb2517",
+  "message_id_sha256": "dbbcd3ff029200e0f5aa63097b6a24230f917f93ce4b32931c88a4116d9fa7b9",
+  "api_status": "accepted",
+  "exit_code": 0,
+  "attempt_count": 1,
+  "retry_count": 0,
+  "get_updates_called": false,
+  "read_receipt_or_delivery_claimed": false,
+  "server_original_bytes_rehashed": false,
+  "sanitized_stdout": "{\"status\":\"accepted\",\"recipient\":\"Sergio Urcullo\",\"message_id_sha256\":\"dbbcd3ff029200e0f5aa63097b6a24230f917f93ce4b32931c88a4116d9fa7b9\",\"sent_at_utc\":\"2026-10-14T06:47:34+00:00\",\"caption_sha256\":\"8bce122499086ccc72189ec541a508094f5cda7d3225dedaffdcb44c74765dfe\",\"photo_sha256\":\"4bb3ce34713805802f1c84380658e0862402662cf154498aca17952eaea7c033\"}",
+  "capture_utc": "2026-10-14T06:47:40.9891492Z"
+}

@@ -1,0 +1,62 @@
+{
+  "task": "telegram-photo-remote-ledger-readonly-verification",
+  "observed_utc": "2026-10-14T06:57:16.3590686Z",
+  "source": {
+    "source_file": "telegram-photo-dispatcher-v3-photo-r1.py",
+    "source_sha256": "bdc85433b590aab94410394816ddc8a0a53709ba3259106a76b2c8bfe03c7291",
+    "source_ref": "447c7a1ca70f68138f491ec05f7eb3080d9a094e",
+    "expected_remote_database": "dispatch-ledger/send.sqlite3",
+    "source_expected_table": "dispatch"
+  },
+  "remote_target": {
+    "path": "/tmp/onia-hermes-sergio-native-clean-subagents-photo-20261014-r1/dispatch-ledger/send.sqlite3",
+    "parent_kind": "directory",
+    "parent_uid": 0,
+    "parent_mode": "0700",
+    "database_kind": "regular_file",
+    "database_uid": 0,
+    "database_mode": "0600",
+    "symlink": false,
+    "opened_read_only": true
+  },
+  "row": {
+    "table": "dispatch",
+    "columns": [
+      "nonce",
+      "state",
+      "body_sha256",
+      "receipt_sha256",
+      "sent_at_utc"
+    ],
+    "nonce": "sergio:20261014-native-clean-subagents-photo-r1",
+    "state": "accepted",
+    "body_sha256": "2bc7b8127b253d119c7dc0b07613a3838f17253e408b8655bd88dde234bb2517",
+    "receipt_sha256": "36771f47ff9ffb7e76a32dc098779d5e42c99f60b0169b6c36ff3b473b77f6ac",
+    "sent_at_utc": "2026-10-14T06:47:34+00:00"
+  },
+  "local_receipt": {
+    "path": "E:\\onia-wt\\tg-native-clean-subagents-photo-v4-prepared-20261014\\dispatch-ledger.sqlite3",
+    "table": "dispatch",
+    "state": "accepted",
+    "body_sha256": "2bc7b8127b253d119c7dc0b07613a3838f17253e408b8655bd88dde234bb2517",
+    "receipt_sha256": "ea27fec862cf36678069d06c7a5b17fb5372116d3cb01c1392f183d6b8225d15",
+    "sent_at_utc": "2026-10-14T06:47:34+00:00"
+  },
+  "cross_check": {
+    "accepted_state_matches": true,
+    "nonce_matches": true,
+    "body_hash_matches": true,
+    "sent_at_matches": true,
+    "receipt_hash_matches": false,
+    "receipt_hash_note": "local and remote receipt hashes differ; both independently recorded state=accepted for same nonce/body/time",
+    "reconciliation_required": false
+  },
+  "prior_companion": {
+    "path": "E:\\onia-wt\\tg-native-clean-subagents-photo-ledger-companion-20261014.json",
+    "sha256": "f522e093d78afee597b2df75eb5b4d18602ae8f7ff4adfe66f410f3311239536",
+    "preserved_immutable": true,
+    "interpretation_superseded": "initial query targeted containing directory rather than SQLite filename confirmed in frozen source"
+  },
+  "scope": "one exact-nonce SELECT on exact DB; no API, Telegram, profile, environment, other ledger rows, or provider call",
+  "ssh_read_attempts_for_correct_path": 1
+}

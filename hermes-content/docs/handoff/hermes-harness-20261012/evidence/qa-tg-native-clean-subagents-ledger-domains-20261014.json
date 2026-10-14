@@ -1,0 +1,34 @@
+{
+  "captured_at_utc": "2026-10-14T06:59:36.254115+00:00",
+  "verdict": "PASS exact nonce hash-domain consistency",
+  "remote_metadata_receipt_sha256": "12279f93b1d6f4da1d5299e8357d04c4f4248ff17b4a3dc37cd40146c04387b3",
+  "local_receipt_sha256": "ea27fec862cf36678069d06c7a5b17fb5372116d3cb01c1392f183d6b8225d15",
+  "remote_receipt_sha256": "36771f47ff9ffb7e76a32dc098779d5e42c99f60b0169b6c36ff3b473b77f6ac",
+  "local_domain": [
+    "caption_sha256",
+    "message_id_sha256",
+    "photo_sha256",
+    "recipient",
+    "sent_at_utc",
+    "status"
+  ],
+  "remote_domain": [
+    "caption_sha256",
+    "message_id_sha256",
+    "photo_sha256",
+    "recipient",
+    "sent_at_utc"
+  ],
+  "serialization": "json.dumps(sort_keys=True), default ensure_ascii and separators; utf8 SHA256",
+  "explanation": "Remote digest excludes status; local digest includes status=accepted. Expected domain difference, not payload/receipt corruption. Same nonce/body/time/accepted.",
+  "remote_provenance": "Root/operator delegated one readonly exactnonce query of actualdispatch-ledger/send.sqlite3; not independent SSH by this QA",
+  "local_provenance": "Prior independent QA readonly exactnonce SQL observation and recomputed local hash; no DB reread now",
+  "prior_companion": {
+    "sha256": "f522e093d78afee597b2df75eb5b4d18602ae8f7ff4adfe66f410f3311239536",
+    "preserved_unchanged": true,
+    "superseded_scope": "Initial containing-directory query diagnostic, not current symlink/SQLite fault"
+  },
+  "delivery_classification": "APIaccepted; not humanread, serveroriginalJPEGbytes, autonomousHermes or browserCloudgoal proof",
+  "canonical_ready": "Sanitized actualreport35A4+remoteverification12279+QA verdict; no SQL/raw/auth",
+  "scope": "Local sanitizedmetadata/hash only; no imports/tests/API/SSH/rows/providers/Git/callbacks"
+}
