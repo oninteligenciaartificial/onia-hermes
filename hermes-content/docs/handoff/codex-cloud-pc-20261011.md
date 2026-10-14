@@ -654,3 +654,11 @@ Coordination: completed workers require followup_task; send_message does not res
 Context query20:45:07.804–08.086Z elapsed0.1974522s/query1; sample20:44:44.625 age23s input170329/cached166144 subset/output261/total170590; reported475000 => conditional35.91%, activecontextUNKNOWN.
 Context public receipt outsideGit SHA02f40690a7e74bcb98d71ca7704ce5bfddc18dabfc91bbb58b0891637f8afab7; private JSONL path omitted.
 Account quota snapshot20:44:41Z global used62%/remaining38%; no task cost attribution or reset performed.
+
+## Hermes noise pause — 2026-10-14 / actual producer evidence
+META/PRUEBA/PARADA: two exact own emitters paused, public projection [hermes-noise-pause-20261014.json](hermes-harness-20261012/evidence/hermes-noise-pause-20261014.json), source SHA01655ac5a37f6ca7d2b6807db20a4abf9260006aa4f86390dc4a13c66af74350; no new remote read or test message in preservation.
+21:05:24.907439Z native pause job94f352c07554 onia-veredicto-sergio and exact OS */15 monitor /root/bin/onia-mirar-cliente.sh; 21:05:45.320416Z producer postread jobpaused/enabledfalse, active exact cron0, matching PID0, gatewayactive, other jobs/cron lines exact unchanged.
+Evidence basis: runtime worker actual SSH/CLI producer captures and root-read public projection; private originals not root-readable and not claimed independently read by root.
+Static cause: monitor keeps stale ts while roto persists, permitting every15min notices after6h; old exact marketing text missing may produce ROTO despite HTTP200. This does not prove a current website outage.
+Future quiet interval NOT_YET_OBSERVED; photograph is user attachment, not an additional bot emitter. No generic disable, cooldown patch, unpause, new loop, R4 call or test delivery.
+R4 fresh unique human grant remains pending; source HEAD externally finalized after this documentation commit, behavior/source hashes unchanged. BCP sender decision pending, no email sent.

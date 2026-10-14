@@ -1,0 +1,55 @@
+{
+  "schema": 1,
+  "scope": "two exact own Hermes noise emitters",
+  "source_basis": "producer actual captured SSH read-only and native pause CLI stdout on 2026-10-14; no new remote read",
+  "paused_at_utc": "2026-10-14T21:05:24.907439Z",
+  "verified_at_utc": "2026-10-14T21:05:45.320416Z",
+  "job": {
+    "pause_cli_exit": 0,
+    "after_state": "paused",
+    "id": "94f352c07554",
+    "before_state": "scheduled",
+    "after_enabled": false,
+    "before_enabled": true,
+    "name": "onia-veredicto-sergio"
+  },
+  "monitor": {
+    "matching_process_count": 0,
+    "process_termination_count": 0,
+    "active_exact_cron_lines": 0,
+    "script": "/root/bin/onia-mirar-cliente.sh",
+    "paused_exact_cron_lines": 1
+  },
+  "gateway_before": "active",
+  "gateway_after": "active",
+  "other_jobs_exact_unchanged": true,
+  "other_cron_lines_exact_unchanged": true,
+  "registry_before_sha256": "082ffef9a5caa0011a05b5f7f7c53776013d2caac65351e659a1c26a18348e5d",
+  "registry_after_sha256": "0275b56b805ddf6d546a8face632ba49c8ce48a5d9736a5bdf72c1700d656f9a",
+  "crontab_before_sha256": "1620abafc4bae0b93b10ede677486ee52b22de04f6133909697a495e70367c43",
+  "crontab_after_sha256": "9108bccca62fa0c31353d2cb882daff534f16075f6cc0da42d549e5990cf353e",
+  "private_source_receipt_sha256": "6a023f27429864c356fc578e16a5dca030707614043735ddaa645c0edf8f688f",
+  "private_post_verification_sha256": "e95caa4deb58910476e7615f82857e4aba5c5b3eb9db0dc283f0b6290745d953",
+  "bot_identity": "aalfredhq_bot",
+  "own_destination_allowlisted": true,
+  "call_counts": {
+    "telegram_getMe": 1,
+    "crontab_install": 1,
+    "remote_calls_in_projection": 0,
+    "getUpdates": 0,
+    "messages": 0,
+    "ssh_total_in_original_operation": 8,
+    "gateway_restarts": 0,
+    "native_pause": 1
+  },
+  "initial_syntax_error": {
+    "effect_count": 0,
+    "correction": "local raw-string quoting; same backup bindings",
+    "phase": "remote Python parse before any statement execution"
+  },
+  "private_backups_acl": "UNCHANGED_OWNER_AND_SYSTEM_ONLY",
+  "private_sources_altered": false,
+  "future_interval_quiet": "NOT_YET_OBSERVED",
+  "photo": "USER_SCREEN_ATTACHMENT_PER_ROOT_CLARIFICATION_NOT_THIRD_BOT_JOB",
+  "global_Hermes_disabled": false
+}
