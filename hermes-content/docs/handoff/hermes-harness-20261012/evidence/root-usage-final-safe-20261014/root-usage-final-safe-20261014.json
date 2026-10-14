@@ -1,0 +1,15 @@
+{
+  "source": "Codex desktop usage limits",
+  "scope": "account_global_not_task_attributed",
+  "ordinary_usage_allowed": true,
+  "used_percent": 39,
+  "remaining_percent": 61,
+  "window_minutes": 10080,
+  "resets_at_utc": "2026-10-20T05:27:16.000Z",
+  "extra_credit_balance": "0",
+  "spend_control_reached": false,
+  "reset_credits_available": 1,
+  "reset_performed": false,
+  "task_cost_usd": null,
+  "observed_at_utc": "2026-10-14 09:34:45 UTC"
+}

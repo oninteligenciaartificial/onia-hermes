@@ -1,0 +1,37 @@
+# Estado del harness ONIA — corte 2026-10-14
+
+Fuente de este corte: rama documental `codex/orquestacion-subagentes-20261013`, base `1348fed9842df6121b62da89f2911aeb2ffeb497`; recibos enlazados abajo. **Goal incompleto:** aún no existe un ciclo Hermes → Codex Cloud nativo → navegador → captura → Telegram autónomo de 30 minutos.
+
+| Frente | Observado y límite |
+|---|---|
+| Núcleo | Harness offline `4ec92e3b…`: 39/39 en Windows y 39/39 en VPS. No prueba un servicio, scheduler ni operación real. [Handoff](madre-relevo-20261013.md). |
+| Controlador | Cola y guardas pasan fixtures; el dispatch externo sigue cerrado. No hay ejecutor Hermes integrado ni autonomía. [QA offline](hermes-harness-20261012/evidence/controller-hardening-qa-verdict-20261013.md). |
+| Contexto/relevo | Siete eventos nativos de compactación, último `09:02:49.380Z`; checkpoint requerido. `U_activo` y porcentaje siguen `UNKNOWN`; `last.input=117,238` no es contexto activo. Ingesta tipada pasó 36/36 fixtures y tiene bindings reales vacíos/HOLD. [Medidor](hermes-harness-20261012/evidence/root-handoff-context-current-20261014/root-handoff-context-current-20261014.json), [QA ingesta](hermes-harness-20261012/evidence/context-ingest-20261014/compaction-ingest-intake-qa-20261014.json). |
+| Codex Cloud nativo | Una sesión creada por UI tuvo dos hijos reales terminados en 71.405 s. No fue creada ni coordinada por Hermes; tampoco prueba transferencia automática de ownership. [Recibo](hermes-harness-20261012/evidence/native-cloud-clean-subagents-proof-20261014.json). |
+| App-server metadata | V1–V5 fallaron por contrato/forma de notificaciones; son historia diagnóstica, sin modelo ni ejecutor. **V6 PASS sólo de metadata:** una lectura de `initialize` y `account/read` terminó con respuesta terminal/EOF/exit 0 en 3.312 s; `account_present=true`, `auth_kind=chatgpt` según recibo. [Recibo V6](hermes-harness-20261012/evidence/codex-appserver-metadata-v6-result-20261014/receipt-20261014T093311_324211Z.json), [QA](hermes-harness-20261012/evidence/codex-appserver-metadata-v6-result-20261014/qa-codex-appserver-metadata-probe-v6-receipt-20261014.json). La respuesta no prueba modelo servido, grant, cuota, tokens actuales, puente a Cloud, limpieza de procesos por observación directa ni operación Hermes. |
+| Navegador | El intento Cloud falló en SUID/Crashpad, sin navegación/JPEG verificables. Sandbox VPS preparado, sin instalación ni ejecución autorizada acreditada aquí. [Preparación y QA](hermes-harness-20261012/evidence/browser-vps-prepared-v3-20261014/qa-browser-vps-prepared-v3-20261014.json). |
+| Telegram | Bot aceptó una foto `06:47:34Z` con ledger; no hay lectura humana confirmada ni captura del navegador público. Entrada de aprobaciones/botones no está integrada ni probada. [Recibo](hermes-harness-20261012/evidence/tg-native-clean-subagents-photo-execution-20261014.json). |
+| Configuración/cuota | WSL2 Ubuntu ya existe, sin cambio; defaults PC Sol 6.1 medium/full access/never/elevated no acreditan modelo servido ni permisos efectivos de otro runtime. Seis MCP configurados, accesos no probados. [Auditoría](hermes-harness-20261012/evidence/codex-pc-config-audit-current-20261014/codex-pc-config-audit-current-20261014.md). A `09:34:45Z`, cuota Codex global de 7 días: 39 % usada/61 % restante, crédito extra 0; costo y tokens por resultado `UNKNOWN`. [Snapshot](hermes-harness-20261012/evidence/root-usage-final-safe-20261014/root-usage-final-safe-20261014.json). Claude permanece suspendido temporalmente hasta revalidar cuota y auth. |
+| Carteras | Platform conserva un parche diagnóstico sin aplicar; Marca tiene preview N06 pero no master 1080 acreditado; Lucía tiene seis muestras con escucha/licencia pendientes. Son estados históricos de revisión, no entregables finales. [Handoff](madre-relevo-20261013.md). |
+| Higgsfield | Consulta de saldo MCP desde Cloud comprobada en prueba histórica; saldo actual `UNKNOWN`, cero generación probada en este circuito y ningún permiso de gasto inferido. [Piloto](piloto-sesiones-onia-30min-20261014.md). |
+
+El root `01a136be-bea1-70f1-9891-9cae7dd1d331` conserva el goal activo y ownership único. La madre local `01a138fa-8304-71c1-9391-3bc14314d57f` está en standby; no hay pausa autorizada del goal ni transferencia/ACK nuevos. El piloto previo de 30 minutos fue **supervisado** y no cuenta como autonomía.
+
+Reglas del piloto:
+
+1. Declarar **META / PRUEBA DE HECHO / REGLA DE PARADA** antes de despachar.
+2. La madre coordina y revisa; por frente, un worker y un QA independiente cuando exista trabajo verificable.
+3. Routing vigente según CODEX para nuevos despachos: madre Codex Luna low, Platform Sol 6.1 medium y QA Sol low; modelo servido `UNKNOWN`. Claude queda suspendido hasta revalidar cuota y auth.
+4. Relevo preventivo al 70 % sólo con `U_activo/W` verificados, o ante compactación nativa confirmada: checkpoint, drain, sesión nueva limpia y ACK único antes de transferir; no archivar la fuente.
+5. Limitar presupuesto, rondas y tiempo; nonce consumido, timeout o efecto ambiguo implican STOP y conciliación, sin replay ciego.
+6. Acciones locales reversibles conservan su alcance; instalación, nuevo acceso, gasto, producción, publicación, clientes y secretos requieren la aprobación aplicable.
+7. Fixture, metadata y última llamada no prueban circuito completo ni miden `U_activo`; registrar fuente, fecha, host, ref, recibo y límites.
+8. Nada llega a main sin revisión. Setup, preview o API accepted sólo cuentan por su efecto y QA dentro del alcance probado.
+
+Próximas acciones acotadas:
+
+1. Conectar un ejecutor Hermes aislado a un contrato real y conciliar un efecto, sin confundir `account/read` con ejecución. Antes de elegir arquitectura persistente, resolver con prueba la ruta Codex Cloud nativa frente a CLI/VPS; no sustituirla en silencio.
+2. Resolver el permiso exacto del sandbox navegador y probar una lectura pública con captura y recibo, respetando nonce, aislamiento y conciliación. La foto Telegram ya aceptada no sustituye esa captura.
+3. Cuando corresponda, hacer drain y checkpoint del root, resolver la pausa del goal y obtener ACK de dueña única antes de transferir. Con `U_activo=UNKNOWN`, no activar el umbral preventivo del 70 %; la compactación confirmada sí exige preparar relevo.
+
+Para aprobaciones futuras por Telegram: actor/chat autorizado, acción y versión/hash exactos, expiración y uso único; aprobar/rechazar sobre ese contrato, nunca un “OK” libre. No está integrado. Sin instalación, nuevas cuentas, gasto extra, deploy o publicación implícitos.
