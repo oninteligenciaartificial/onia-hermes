@@ -1,0 +1,423 @@
+diff --git a/hermes-content/docs/handoff/hermes-harness-20261012/evidence/cloud-browser-prepared-20261014/legacy-browser-setup-proposal.py b/hermes-content/docs/handoff/hermes-harness-20261012/evidence/cloud-browser-prepared-20261014/legacy-browser-setup-proposal.py
+--- a/hermes-content/docs/handoff/hermes-harness-20261012/evidence/cloud-browser-prepared-20261014/legacy-browser-setup-proposal.py
++++ b/hermes-content/docs/handoff/hermes-harness-20261012/evidence/cloud-browser-prepared-20261014/legacy-browser-setup-proposal.py
+@@ -11,6 +11,7 @@
+ import pwd
+ import re
+ import shutil
++import shlex
+ import subprocess
+ import sys
+ import tempfile
+@@ -51,12 +52,16 @@
+ 
+ 
+ def ubuntu_uri(value):
++    try:
++        url = urlparse(value)
++        host = url.hostname or ""
++        return (url.scheme in {"http", "https"} and (host in {"archive.ubuntu.com", "security.ubuntu.com"}
++                or re.fullmatch(r"[a-z0-9-]+\.archive\.ubuntu\.com", host))
++                and url.port in (None, 80 if url.scheme == "http" else 443)
++                and url.path in {"/ubuntu", "/ubuntu/"} and not url.username and not url.password
++                and not url.query and not url.fragment)
++    except ValueError:
++        return False
+-    url = urlparse(value)
+-    host = url.hostname or ""
+-    return (url.scheme in {"http", "https"} and (host == "archive.ubuntu.com"
+-            or host.endswith(".archive.ubuntu.com") or host == "security.ubuntu.com")
+-            and url.port in (None, 80, 443) and not url.username and not url.password
+-            and not url.query and not url.fragment)
+ 
+ 
+ def controlled_download_env():
+@@ -75,39 +80,246 @@
+     return controlled
+ 
+ 
++APT_KEYRING = "/usr/share/keyrings/ubuntu-archive-keyring.gpg"
++APT_SUITES = {"noble", "noble-updates", "noble-security", "noble-backports"}
++APT_COMPONENTS = {"main", "restricted", "universe", "multiverse"}
++
++
++def protected_existing(path, *, directory=False):
++    # Do not follow mutable/symlinked source paths or install/download a keyring.
++    for item in (path, *path.parents):
++        metadata = item.lstat()
++        if (item.is_symlink() or metadata.st_uid != 0 or metadata.st_mode & 0o022
++                or (item == path and not (item.is_dir() if directory else item.is_file()))
++                or (item != path and not item.is_dir())):
++            stop("existing APT source/keyring path is not root-owned, regular and protected")
++
++
++def source_entries(text, *, deb822):
++    if deb822:
++        for section in re.split(r"\n[ \t]*\n", text.strip("\n")):
++            fields, current = {}, None
++            for line in section.splitlines():
++                if not line.strip() or line.startswith("#"):
++                    continue
++                if line[0].isspace():
++                    if current is None:
++                        stop("unsupported deb822 continuation")
++                    fields[current] += " " + line.strip()
++                    continue
++                if ":" not in line:
++                    stop("unsupported deb822 source line")
++                key, value = line.split(":", 1)
++                key = key.lower()
++                if not re.fullmatch(r"[a-z][a-z0-9-]*", key) or key in fields:
++                    stop("ambiguous deb822 source fields")
++                fields[key], current = value.strip(), key
++            if fields:
++                yield fields
++    else:
++        for line in text.splitlines():
++            line = line.split("#", 1)[0].strip()
++            if not line:
+-def existing_ubuntu_source():
+-    source = Path("/etc/apt/sources.list.d/ubuntu.sources")
+-    if source.is_symlink() or not source.is_file():
+-        stop("supported existing Ubuntu deb822 source missing; no new repository")
+-    metadata = source.stat()
+-    if metadata.st_uid != 0 or metadata.st_mode & 0o022:
+-        stop("Ubuntu source is not root-owned and protected from other-user writes")
+-    for section in re.split(r"\n\s*\n", source.read_text().strip()):
+-        fields = {}
+-        for line in section.splitlines():
+-            if not line or line.startswith("#"):
+                 continue
++            match = re.fullmatch(r"(deb|deb-src)\s+(?:\[([^\]]*)\]\s+)?(\S+)\s+(\S+)\s+(.+)", line)
++            if match is None:
++                stop("unsupported one-line APT source")
++            kind, options, uri, suite, components = match.groups()
++            fields = {"types": kind, "uris": uri, "suites": suite, "components": components}
++            for option in (options or "").split():
++                if "=" not in option:
++                    stop("unsupported one-line APT option")
++                key, value = option.split("=", 1)
++                key = {"arch": "architectures"}.get(key, key)
++                if key in fields:
++                    stop("ambiguous one-line APT option")
++                fields[key] = value
++            yield fields
++
++
++def existing_ubuntu_sources():
++    parts = Path("/etc/apt/sources.list.d")
++    legacy = Path("/etc/apt/sources.list")
++    paths = [legacy] if legacy.exists() or legacy.is_symlink() else []
++    if parts.exists() or parts.is_symlink():
++        protected_existing(parts, directory=True)
++        paths += sorted(p for p in parts.iterdir() if p.suffix in {".list", ".sources"}
++                        and re.fullmatch(r"[a-zA-Z0-9_.-]+", p.name))
++    keyring = Path(APT_KEYRING)
++    if not keyring.exists() or keyring.is_symlink():
++        stop("existing Ubuntu archive keyring missing; no key/repository creation")
++    protected_existing(keyring)
++    records, evidence, suites = [], [], set()
++    allowed = {"types", "uris", "suites", "components", "signed-by", "architectures", "enabled"}
++    for source in paths:
++        protected_existing(source)
++        if source.stat().st_size > 65536:
++            stop("APT source file exceeds bounded inspection size")
++        raw = source.read_bytes()
++        try:
++            entries = source_entries(raw.decode("utf-8"), deb822=source.suffix == ".sources")
++            count = 0
++            for fields in entries:
++                enabled = fields.get("enabled", "yes").lower()
++                if enabled == "no":
++                    continue
++                uris = fields.get("uris", "").split()
++                if not uris:
++                    stop("active APT source has no URI")
++                # Unrelated configured repositories are never copied/used/reported.
++                archive_hosts = [urlparse(u).hostname or "" for u in uris]
++                if not any(h in {"archive.ubuntu.com", "security.ubuntu.com"}
++                           or h.endswith(".archive.ubuntu.com") for h in archive_hosts):
++                    continue
++                if fields.get("types") == "deb-src":
++                    continue  # Existing source-code indexes are not installation input.
++                requested_suites = fields.get("suites", "").split()
++                components = fields.get("components", "").split()
++                if (set(fields) - allowed or enabled != "yes" or fields.get("types") != "deb"
++                        or not all(ubuntu_uri(u) for u in uris)
++                        or not requested_suites or not set(requested_suites) <= APT_SUITES
++                        or not components or not set(components) <= APT_COMPONENTS
++                        or fields.get("architectures", "amd64") != "amd64"
++                        or fields.get("signed-by", APT_KEYRING) != APT_KEYRING
++                        or (source.suffix == ".sources" and fields.get("signed-by") != APT_KEYRING)):
++                    stop("unsupported existing Ubuntu source/trust configuration; no fallback")
++                # Same existing URI/suite/components; restrict implicit .list trust to Ubuntu's existing keyring.
++                record = ("Types: deb\nURIs: " + " ".join(uris) + "\nSuites: " + " ".join(requested_suites)
++                          + "\nComponents: " + " ".join(components) + "\nArchitectures: amd64"
++                          + "\nSigned-By: " + APT_KEYRING)
++                if record not in records:
++                    records.append(record)
++                suites.update(requested_suites)
++                count += 1
++            if count:
++                evidence.append({"path": str(source), "sha256": hashlib.sha256(raw).hexdigest(),
++                                 "selected_binary_entries": count})
++        except (UnicodeError, ValueError):
++            stop("APT source is not a supported bounded UTF-8 definition")
++    if not records:
++        stop("no supported existing official Ubuntu binary source; no new repository")
++    return "\n\n".join(records) + "\n", evidence, suites
++
++
++def require_supported_ubuntu():
++    if os.name != "posix":
++        stop("recipe supports existing Ubuntu24.04 amd64 only")
++    fields = {}
++    for line in Path("/etc/os-release").read_text().splitlines():
++        if not line.strip() or line.startswith("#"):
+-            if line[0].isspace() or ":" not in line:
+-                stop("unsupported Ubuntu source format")
+-            key, value = line.split(":", 1)
+-            if key in fields:
+-                stop("ambiguous Ubuntu source fields")
+-            fields[key] = value.strip()
+-        if fields.get("Enabled", "yes") == "no":
+             continue
++        match = re.fullmatch(r"([A-Z_][A-Z0-9_]*)=(.*)", line)
++        if match is None:
++            stop("unsupported os-release definition")
++        key, raw_value = match.groups()
++        if key in fields:
++            stop("duplicate os-release field")
++        try:
++            value = shlex.split(raw_value, posix=True)
++        except ValueError:
++            stop("unsupported os-release quoting")
++        if len(value) > 1:
++            stop("ambiguous os-release value")
++        fields[key] = value[0] if value else ""
++    if (fields.get("ID") != "ubuntu" or fields.get("VERSION_ID") != "24.04"
++            or any(fields.get(k, "noble") != "noble" for k in ("VERSION_CODENAME", "UBUNTU_CODENAME"))
++            or os.uname().machine != "x86_64"):
++        stop("recipe supports observed Ubuntu24.04 amd64 only")
++    architecture = subprocess.run(["/usr/bin/dpkg", "--print-architecture"], capture_output=True,
++                                  text=True, timeout=10, check=False)
++    if architecture.returncode or architecture.stdout.strip() != "amd64":
++        stop("existing Debian userland architecture is not amd64")
++
++
++def isolated_apt_configuration(source_text, env):
++    # Read effective config privately; apt-config dump does not invoke update/install hooks.
++    result = subprocess.run(["/usr/bin/apt-config", "dump"], env=env, capture_output=True,
++                            text=True, timeout=10, check=False)
++    if result.returncode or len(result.stdout) > 1048576:
++        stop("bounded effective APT configuration inspection failed")
++    hosts = {urlparse(u).hostname for line in source_text.splitlines() if line.startswith("URIs: ")
++             for u in line[6:].split()}
++    selected = {}
++    for line in result.stdout.splitlines():
++        prefix = re.match(r"(\S+)[ \t]+", line)
++        if prefix is None:
++            stop("unsupported effective APT configuration dump")
++        key = prefix[1].lower()
++        if (("proxy-auto-detect" in key or "proxyautodetect" in key
++             or key.endswith(("::sslcert", "::sslkey")))
++                or (key.startswith("binary::") and "::acquire::" in key)):
++            stop("unsupported dynamic proxy/client certificate/binary transport configuration")
++        match = re.fullmatch(r'acquire::(http|https)::(proxy|cainfo)(?:::(.+))?', key)
++        host_ca = re.fullmatch(r'acquire::https::([^:]+)::cainfo', key)
++        if match:
++            option, host = match[2], match[3]
++            if host is not None and host not in hosts:
++                continue
++        elif host_ca and host_ca[1] in hosts:
++            option = "cainfo"
++        else:
++            continue  # No global hooks, trust/transport bypass, method override or binary settings copied.
++        value_match = re.fullmatch(r'\S+[ \t]+"([^"\\\r\n]*)";', line)
++        if value_match is None or key in selected:
++            stop("unsupported/ambiguous existing APT proxy/CA value; values not recorded")
++        value = value_match[1]
++        if option == "cainfo" and value:
++            ca = Path(value)
++            if not ca.is_absolute() or not ca.exists():
++                stop("existing APT CA file is missing or unsupported")
++            protected_existing(ca)
++        selected[key] = value
++    # Loaded first via APT_CONFIG, so global config fragments/main/hooks never load.
++    empty = ROOT / "apt-empty"
++    lines = ['Dir::Etc::Parts "' + str(empty) + '";', 'Dir::Etc::main "/dev/null";',
++             'Dir::Etc::netrc "/dev/null";', 'Dir::Etc::netrcparts "' + str(empty) + '";',
++             'Dir::Etc::preferences "/dev/null";', 'Dir::Etc::preferencesparts "' + str(empty) + '";',
++             'Dir::Bin::Methods "/usr/lib/apt/methods";', 'Dir::Bin::dpkg "/usr/bin/dpkg";',
++             'APT::Architecture "amd64";', '#clear APT::Architectures;',
++             'APT::Architectures { "amd64"; };', 'Acquire::EnableSrvRecords "false";',
++             'Acquire::Retries "0";']
++    lines += [key + ' "' + value + '";' for key, value in sorted(selected.items())]
++    return "\n".join(lines) + "\n"
++
++
++def verify_ubuntu_releases(apt_lists, expected_suites):
++    releases = list(apt_lists.glob("*_InRelease"))
++    observed_suites = set()
++    for release in releases:
++        text = release.read_text()
++        pairs = re.findall(r"^(Origin|Label|Suite|Codename):[ \t]*(.+)$", text, re.MULTILINE)
++        fields = dict(pairs)
++        if (not text.startswith("-----BEGIN PGP SIGNED MESSAGE-----")
++                or "\n-----BEGIN PGP SIGNATURE-----" not in text
++                or len(fields) != len(pairs) or fields.get("Origin") != "Ubuntu"
++                or fields.get("Label") != "Ubuntu" or fields.get("Codename") != "noble"
++                or fields.get("Suite") not in expected_suites):
++            stop("authenticated Ubuntu Release origin/codename/suite is unsupported")
++        observed_suites.add(fields["Suite"])
++    if not releases or observed_suites != expected_suites:
++        stop("authenticated Ubuntu Release set is incomplete; no automatic retry")
+-        if (set(fields) - {"Types", "URIs", "Suites", "Components", "Signed-By", "Architectures", "Enabled"}
+-                or fields.get("Types") != "deb" or not fields.get("URIs")
+-                or not all(ubuntu_uri(u) for u in fields["URIs"].split())
+-                or not set(fields.get("Suites", "").split()) <= {"noble", "noble-updates", "noble-security", "noble-backports"}
+-                or not fields.get("Suites") or fields.get("Signed-By") != "/usr/share/keyrings/ubuntu-archive-keyring.gpg"):
+-            stop("unsupported/nonofficial Ubuntu source or trust configuration")
+-    return source
+ 
+ 
+ def main():
+     parser = argparse.ArgumentParser()
+     parser.add_argument("--apply-reviewed-manifest", type=Path)
++    parser.add_argument("--inspect-existing-apt-sources", action="store_true")
+     args = parser.parse_args()
++    if args.inspect_existing_apt_sources:
++        if args.apply_reviewed_manifest is not None:
++            stop("inspection cannot be combined with installation")
++        if os.name != "posix" or os.getuid() != 0 or sys.executable != PYTHON:
++            stop("source inspection requires existing /usr/bin/python3 as root")
++        require_supported_ubuntu()
++        source_text, source_evidence, expected_suites = existing_ubuntu_sources()
++        isolated_apt_configuration(source_text, controlled_download_env())
++        print(json.dumps({"state": "EXISTING_SOURCE_PREFLIGHT_ONLY", "writes": False, "network": False,
++                          "install": False, "browser_launched": False, "sources": source_evidence,
++                          "scoped_source_sha256": hashlib.sha256(source_text.encode()).hexdigest(),
++                          "expected_suites": sorted(expected_suites), "userland_architecture": "amd64",
++                          "apt_configuration": "PRIVATE_ISOLATION_TEMPLATE_ONLY_NOT_APPLIED",
++                          "signature_verification": "NOT_RUN"}))
++        return
+     if args.apply_reviewed_manifest is None:
+         print(json.dumps({"state": "PREPARED_NOT_APPLIED", "environment_id": ENVIRONMENT,
+                           "python_packages": PACKAGES, "cache": str(ROOT),
+@@ -131,9 +343,7 @@
+             or set(provider.get("domains", [])) != {"example.com", "iana.org", "www.iana.org"}
+             or set(provider.get("methods", [])) != {"GET", "HEAD", "OPTIONS"}):
+         stop("provider saved policy/cache proof absent or unsupported; no fake /etc policy")
++    require_supported_ubuntu()
+-    os_release = Path("/etc/os-release").read_text()
+-    if 'ID=ubuntu' not in os_release or 'VERSION_ID="24.04"' not in os_release or os.uname().machine != "x86_64":
+-        stop("recipe supports observed Ubuntu24.04 x86_64 only")
+     try:
+         account = pwd.getpwuid(1000)
+     except KeyError:
+@@ -150,47 +360,62 @@
+     if ROOT.exists() or ROOT.is_symlink():
+         stop("cache collision: verify previous state; do not overwrite/reinstall")
+     download_env = controlled_download_env()
++    source_text, source_evidence, expected_suites = existing_ubuntu_sources()
++    apt_configuration = isolated_apt_configuration(source_text, download_env)
+-    ubuntu_source = existing_ubuntu_source()
+     # Every gate above precedes writes/downloads. Cache is root-owned, UID1000-readable.
+     os.umask(0o022)
+     ROOT.mkdir(mode=0o755)
+     apt_lists = ROOT / "apt-lists"
+     (apt_lists / "partial").mkdir(parents=True, mode=0o755)
++    ubuntu_source = ROOT / "apt-existing.sources"
++    ubuntu_source.write_text(source_text)
++    (ROOT / "apt-empty").mkdir(mode=0o755)
+     apt_options = ["-o", "Dir::Etc::sourcelist=" + str(ubuntu_source), "-o", "Dir::Etc::sourceparts=-",
+                    "-o", "Dir::State::lists=" + str(apt_lists), "-o", "Dir::Cache::pkgcache=",
++                   "-o", "Dir::Cache::srcpkgcache=", "-o", "Acquire::AllowInsecureRepositories=false",
++                   "-o", "Acquire::AllowDowngradeToInsecureRepositories=false",
++                   "-o", "APT::Get::AllowUnauthenticated=false", "-o", "Acquire::Check-Date=true",
++                   "-o", "Acquire::Check-Valid-Until=true", "-o", "Acquire::https::Verify-Peer=true",
++                   "-o", "Acquire::https::Verify-Host=true", "-o", "Acquire::http::AllowRedirect=false",
++                   "-o", "Acquire::https::AllowRedirect=false"]
++    # Existing proxy credentials, if any, are ephemeral: private outside cache and cleaned on every exit.
++    with tempfile.TemporaryDirectory(prefix="onia-apt-config-") as private_apt_config:
++        apt_config = Path(private_apt_config) / "apt.conf"
++        descriptor = os.open(apt_config, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
++        with os.fdopen(descriptor, "w") as stream:
++            stream.write(apt_configuration)
++        apt_configuration = None
++        apt_env = dict(download_env, APT_CONFIG=str(apt_config))
++        # Only a scoped representation of existing approved entries; global sources/config unchanged.
++        command(["/usr/bin/apt-get", *apt_options, "update"], env=apt_env)
++        verify_ubuntu_releases(apt_lists, expected_suites)
++        apt = {}
++        for name in sorted(APT_NAMES):
++            result = subprocess.run(["/usr/bin/apt-cache", *apt_options, "policy", name], capture_output=True,
++                                    text=True, env=apt_env, timeout=10, check=True)
++            candidates = [line.strip().split(": ", 1)[1] for line in result.stdout.splitlines()
++                          if line.strip().startswith("Candidate: ")]
++            if len(candidates) != 1 or candidates[0] == "(none)":
++                stop("approved Ubuntu dependency has no candidate; do not add repositories or substitute")
++            candidate_lines = []
++            in_candidate = False
++            for line in result.stdout.splitlines():
++                words = line.strip().split()
++                if words and words[0] == "***":
++                    words = words[1:]
++                if len(words) == 2 and words[1].isdigit() and not words[0].isdigit():
++                    in_candidate = words[0] == candidates[0]
++                elif in_candidate:
++                    candidate_lines.append(line)
++            repository_uris = re.findall(r"https?://\S+", "\n".join(candidate_lines))
++            if not repository_uris or not all(ubuntu_uri(uri) for uri in repository_uris):
++                stop("candidate origin URI is missing or not official Ubuntu")
++            apt[name] = candidates[0]
++        apt_bytes = (json.dumps(apt, sort_keys=True, separators=(",", ":")) + "\n").encode()
++        (ROOT / "apt-resolved-versions.json").write_bytes(apt_bytes)
++        apt_sha = hashlib.sha256(apt_bytes).hexdigest()
++        apt_selection = [name + "=" + apt[name] for name in sorted(APT_NAMES)]
++        command(["/usr/bin/apt-get", *apt_options, "install", "-y", "--no-install-recommends", *apt_selection], env=apt_env)
+-                   "-o", "Dir::Cache::srcpkgcache="]
+-    # Scope to existing official source, with fresh lists; global sources/config unchanged.
+-    command(["apt-get", *apt_options, "update"], env=download_env)
+-    releases = list(apt_lists.glob("*_InRelease"))
+-    if not releases or any("Origin: Ubuntu\n" not in release.read_text() for release in releases):
+-        stop("authenticated Release Origin is not Ubuntu")
+-    apt = {}
+-    for name in sorted(APT_NAMES):
+-        result = subprocess.run(["apt-cache", *apt_options, "policy", name], capture_output=True,
+-                                text=True, env=download_env, timeout=10, check=True)
+-        candidates = [line.strip().split(": ", 1)[1] for line in result.stdout.splitlines()
+-                      if line.strip().startswith("Candidate: ")]
+-        if len(candidates) != 1 or candidates[0] == "(none)":
+-            stop("approved Ubuntu dependency has no candidate; do not add repositories or substitute")
+-        candidate_lines = []
+-        in_candidate = False
+-        for line in result.stdout.splitlines():
+-            words = line.strip().split()
+-            if words and words[0] == "***":
+-                words = words[1:]
+-            if len(words) == 2 and words[1].isdigit() and not words[0].isdigit():
+-                in_candidate = words[0] == candidates[0]
+-            elif in_candidate:
+-                candidate_lines.append(line)
+-        repository_uris = re.findall(r"https?://\S+", "\n".join(candidate_lines))
+-        if not repository_uris or not all(ubuntu_uri(uri) for uri in repository_uris):
+-            stop("candidate origin URI is missing or not official Ubuntu")
+-        apt[name] = candidates[0]
+-    apt_bytes = (json.dumps(apt, sort_keys=True, separators=(",", ":")) + "\n").encode()
+-    (ROOT / "apt-resolved-versions.json").write_bytes(apt_bytes)
+-    apt_sha = hashlib.sha256(apt_bytes).hexdigest()
+-    apt_selection = [name + "=" + apt[name] for name in sorted(APT_NAMES)]
+-    command(["apt-get", *apt_options, "install", "-y", "--no-install-recommends", *apt_selection], env=download_env)
+     command([PYTHON, "-m", "venv", "--copies", str(ROOT / "venv")])
+     vpython = str(ROOT / "venv/bin/python")
+     # Raw pip report stays private/ephemeral; persist only validated public fields.
+@@ -248,6 +473,8 @@
+                       "python": vpython, "PLAYWRIGHT_BROWSERS_PATH": child_env["PLAYWRIGHT_BROWSERS_PATH"],
+                       "browser_uid_required": 1000, "provider_policy_enforcement": "UNKNOWN",
+                       "apt_resolved_versions_sha256": apt_sha,
++                      "apt_existing_source_evidence": source_evidence,
++                      "apt_scoped_source_sha256": hashlib.sha256(source_text.encode()).hexdigest(),
+                       "browser_executable_sha256": binaries,
+                       "renderer_sandbox": "UNKNOWN", "cache_resume_readiness": "UNKNOWN",
+                       "next": "read-only maintenance verification then separately gated single browser operation"}))
