@@ -1,0 +1,28 @@
+{
+  "status": "PASS_INCREMENTAL_SOURCE_REVIEW",
+  "reviewed_at_utc": "2026-10-14T08:09:10.245958+00:00",
+  "artifact_dir": "E:\\onia-wt\\codex-appserver-metadata-prepared-v1-20261014",
+  "source_sha256": {
+    "metadata_probe.py": "CC73AF3091F2A5BA139FDFC8670497A439B108F1F3EBFB197F458E2F5A303E39",
+    "test_metadata_probe.py": "22FAF7FD03D7B1DF2210BDAD884AA590D70406F24745B25A8D80812DE4033E95",
+    "review.md": "A152ECA8CEECB64A0287A0F60BA10763FE5FCA10D768CB33B7856C1B44AC2209",
+    "manifest.json": "1F6327AFF8011760C244CAA94D0E1F8C4F450704759E792EB5E2395E1D4FD711"
+  },
+  "validation": {
+    "remote_source_compile_only": "PASS",
+    "author_new_tracker_test": "PASS reported; not rerun",
+    "previous_fixtures_rerun": false,
+    "ssh_cli_rpc_network": false
+  },
+  "delta_review": [
+    "rpc_methods_sent starts empty and appends only after local stdin write and flush both return successfully.",
+    "Local flush does not prove remote delivery; rpc_delivery_status is always unknown.",
+    "RPC method payloads and previous remote keeper/group cleanup logic remain unchanged by this delta.",
+    "Remote supervisor source parses and compiles without execution."
+  ],
+  "nonblocking_observation": "Runtime _drain_shutdown checks child_stopped and scratch_cleaned but omits explicit group_quiescent check; remote supervisor returns exit 123 whenever group_quiescent is false, and run_probe requires SSH exit 0 for success. Explicit local check would strengthen the contract but is not necessary for this frozen source success path.",
+  "limits": [
+    "Review is limited to tracker delta and prior group invariant source comparison; no live behavior verified.",
+    "Startup/auth routing and model served remain UNKNOWN."
+  ]
+}

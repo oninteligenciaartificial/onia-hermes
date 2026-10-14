@@ -1,0 +1,81 @@
+{
+  "artifact_status": "prepared-only-not-executed-awaiting-independent-qa-and-root-review",
+  "release": "Codex CLI 0.161.0",
+  "source_ref": "https://github.com/openai/codex/tree/rust-v0.161.0",
+  "feature_override": {
+    "argument": "-c features.plugins=false",
+    "supported_by_pinned_source": true,
+    "effective_gate": "Feature::Plugins -> plugins_enabled -> plugin startup manager",
+    "limit": "other startup effects not ruled out"
+  },
+  "rpc_allowlist": [
+    "initialize",
+    "initialized",
+    "account/read params={}"
+  ],
+  "excluded": [
+    "model/list (no refresh parameter; may fetch catalog)",
+    "thread/*",
+    "turn/*",
+    "MCP",
+    "plugin",
+    "hooks",
+    "skills"
+  ],
+  "supervisor": {
+    "remote_watchdog_seconds": 45,
+    "remote_cleanup_grace_seconds": 2,
+    "local_ssh_watchdog_seconds": 49,
+    "retry_count": 0,
+    "terminal_frame_required": true,
+    "child_stop_and_scratch_cleanup_required": true,
+    "stdout_line_limit": 64,
+    "stdout_byte_limit": 2097152,
+    "stdout_per_line_limit": 262144,
+    "process_started": false,
+    "process_group_keeper": "unreaped keeper is PGID; child launched with process_group=keeper.pid; TERM ignored by keeper until final SIGKILL",
+    "group_shutdown": "signal owned PGID before reaping keeper; bounded /proc scan checks active members; scratch removed only when group closure confirmed",
+    "process_group_scan_entry_limit": 8192,
+    "rpc_observation": "rpc_methods_sent contains only methods whose local stdin write and flush returned successfully; remote delivery remains unknown"
+  },
+  "offline_validation": {
+    "command": "python -m unittest -v test_metadata_probe.MetadataProbeSafetyTests.test_exited_leader_does_not_prove_owned_group_is_closed test_metadata_probe.MetadataProbeSafetyTests.test_terminal_nonzero_exit_never_counts_as_success test_metadata_probe.MetadataProbeSafetyTests.test_default_entrypoint_is_prepare_only_and_rpc_allowlist_has_no_turn test_metadata_probe.MetadataProbeSafetyTests.test_shutdown_requires_complete_valid_terminal_frame_and_no_trailer test_metadata_probe.MetadataProbeSafetyTests.test_runtime_drain_consumes_terminal_frame_then_eof",
+    "tests": 5,
+    "duration_seconds": 0.004,
+    "result": "PASS",
+    "scope": "focal process-group and shutdown regressions only; prior 12-test suite was not rerun after this delta",
+    "SSH_started": false,
+    "latest_delta": {
+      "command": "python -m unittest -v test_metadata_probe.MetadataProbeSafetyTests.test_method_tracker_counts_only_successful_local_flush",
+      "tests": 1,
+      "result": "PASS",
+      "duration_seconds": 0.0,
+      "scope": "method write/flush observation tracker only; no prior suites repeated"
+    }
+  },
+  "artifacts": {
+    "metadata_probe.py_sha256": "cc73af3091f2a5ba139fdfc8670497a439b108f1f3ebfb197f458e2f5a303e39",
+    "test_metadata_probe.py_sha256": "22faf7fd03d7b1df2210bdad884aa590d70406f24745b25a8d80812de4033e95",
+    "review.md_sha256": "a152eca8ceecb64a0287a0f60ba10763fe5fca10d768cb33b7856c1b44ac2209"
+  },
+  "supersedes": {
+    "qa_rejections": [
+      "0e0777ac7bae79f3e5143657b7fb721f148bad4db54d90d2a777760e653bfb17",
+      "97dfc4cd43b8583eb6f2940cadbd6e50b812b6ca5e5ac5c79a6affe8cdc8490c"
+    ]
+  },
+  "no_execution": {
+    "cli": false,
+    "app_server": false,
+    "rpc": false,
+    "network": false,
+    "login": false,
+    "llm": false
+  },
+  "privacy": "No auth contents, account identifiers, session data, raw stdout/stderr, or server error text included.",
+  "app_server_transport": {
+    "argv": "app-server (stdio default; --stdio omitted)",
+    "verified_pinned_source": "https://github.com/openai/codex/blob/rust-v0.161.0/codex-rs/cli/src/main.rs#L517-L539",
+    "notes": "Pinned source defines stdio:// default; --stdio is also supported."
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "status": "PASS_SOURCE_REVIEW_FOCAL_ONLY",
+  "reviewed_at_utc": "2026-10-14T08:04:17.907584+00:00",
+  "artifact_dir": "E:\\onia-wt\\codex-appserver-metadata-prepared-v1-20261014",
+  "source_sha256": {
+    "metadata_probe.py": "0F96FDC715D24E9045A5E3EEC66FF6EDF19CC75567099F127A8CF18AF2F5A486",
+    "test_metadata_probe.py": "E52A212785F4D0E6D59FFAFEB8D7B728E8700658438A368D9BD7DD608FE09C59",
+    "review.md": "A152ECA8CEECB64A0287A0F60BA10763FE5FCA10D768CB33B7856C1B44AC2209",
+    "manifest.json": "0373744A533803822139B1EF4503202CB06E0F1A65DB9A28536DB828BFC5E952"
+  },
+  "author_focal_tests": {
+    "reported_count": 5,
+    "reported_result": "PASS",
+    "independently_rerun": false
+  },
+  "findings": [],
+  "reviewed_controls": [
+    "An unreaped private keeper pins the PGID; Codex is placed in that group and only that owned PGID is targeted by killpg.",
+    "A leader exit alone does not prove group quiescence; /proc scan excludes only keeper and inactive zombie/exiting members, with unknown scan treated as no success.",
+    "TERM grace is 1.25 seconds followed by KILL and a 0.45 second verification window; the 45 second child wait remains, local 49 second cap remains.",
+    "Terminal success requires child exit 0, group quiescent, scratch cleaned, EOF, and SSH exit 0.",
+    "No raw stdout/stderr/account data are printed or persisted by intended receipt path.",
+    "App-server argv omits --stdio per pinned source default stated in review.md."
+  ],
+  "limits": [
+    "Source review and author-reported focal fixtures only; no live /proc, SSH, CLI, RPC, auth or network verification.",
+    "A descendant that deliberately leaves the owned process group/session is outside this containment; documented in review.md.",
+    "Pinned source claim for app-server default was accepted from review.md and not independently browsed in this pass.",
+    "Other startup/auth routing, model served and native cloud identity remain UNKNOWN."
+  ]
+}
