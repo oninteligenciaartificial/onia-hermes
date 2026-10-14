@@ -26,6 +26,7 @@
 
 import { chromium } from "playwright-core";
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
+import { planAviso, tituloAviso } from "./onia-mirar-aviso-estado.mjs";
 
 const CHROME =
   process.env.MIRAR_CHROME ??
@@ -234,20 +235,28 @@ async function main() {
 
   // Anti-ruido: avisar al CAMBIAR de estado, recordar cada 6 h si sigue roto, y
   // avisar la recuperacion. Un monitor que grita cada 15 min se ignora.
-  const previo = existsSync(ESTADO) ? JSON.parse(readFileSync(ESTADO, "utf8")) : { roto: false, ts: 0 };
+  let estadoPrevio = null;
+  if (existsSync(ESTADO)) {
+    try {
+      estadoPrevio = JSON.parse(readFileSync(ESTADO, "utf8"));
+    } catch {
+      console.error("[mirar] estado previo ilegible; historial desconocido");
+    }
+  }
   const ahora = Date.now();
-  const seisHoras = 6 * 3600 * 1000;
-  const debeAvisar =
-    forzar ||
-    (rotas.length > 0 && (!previo.roto || ahora - previo.ts > seisHoras)) ||
-    (rotas.length === 0 && previo.roto);
+  const aviso = planAviso(estadoPrevio, rotas.length > 0, ahora, forzar);
+  const { previo, debeAvisar } = aviso;
+  if (aviso.desconocido) console.error("[mirar] historial desconocido; no se infiere recuperacion");
+  let enviado = false;
 
   if (debeAvisar) {
-    const titulo = rotas.length
-      ? `🔴 <b>Onia — lo que ve el cliente esta ROTO</b> (${rotas.length}/${resultados.length})`
-      : "🟢 <b>Onia — las pantallas del cliente volvieron a estar bien</b>";
+    const titulo = tituloAviso(aviso, rotas.length, resultados.length);
     const mensaje = `${titulo}\n\n${resumen}`;
-    const enviado = await telegram(mensaje);
+    try {
+      enviado = await telegram(mensaje);
+    } catch {
+      console.error("[mirar] fallo de transporte Telegram; aviso pendiente, sin confirmar entrega");
+    }
     console.error(`[mirar] aviso a Telegram: ${enviado ? "ENVIADO" : "FALLO"}\n${mensaje}`);
   } else {
     console.error(`[mirar] sin aviso (roto=${rotas.length > 0}, previo=${previo.roto})`);
@@ -255,7 +264,7 @@ async function main() {
 
   writeFileSync(
     ESTADO,
-    JSON.stringify({ roto: rotas.length > 0, ts: rotas.length > 0 && previo.roto ? previo.ts : ahora }),
+    JSON.stringify(aviso.despues(enviado)),
   );
 
   process.exit(rotas.length ? 1 : 0);

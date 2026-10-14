@@ -417,6 +417,7 @@ poner "$RAIZ/hermes-content/deploy/vps-ops/onia-mirar-cliente.sh"         "$DEST
 # login del cliente. El -prueba.sh es su sonda a mano, y declara /root/bin en su propia
 # cabecera. Los dos aparecieron al declarar la carpeta entera en herramientas-desplegadas.
 poner "$RAIZ/hermes-content/deploy/vps-ops/onia-mirar-cliente.mjs"        "$DESTINO_BIN/onia-mirar-cliente.mjs"
+poner "$RAIZ/hermes-content/deploy/vps-ops/onia-mirar-aviso-estado.mjs"   "$DESTINO_BIN/onia-mirar-aviso-estado.mjs"
 poner "$RAIZ/hermes-content/deploy/vps-ops/onia-mirar-cliente-prueba.sh"  "$DESTINO_BIN/onia-mirar-cliente-prueba.sh"
 poner "$RAIZ/hermes-content/deploy/vps-ops/onia-rescate-mensaje-perdido.sh" "$DESTINO_BIN/onia-rescate-mensaje-perdido.sh"
 poner "$RAIZ/hermes-content/deploy/vps-ops/onia-siat-vigia.sh"            "$DESTINO_BIN/onia-siat-vigia.sh"
