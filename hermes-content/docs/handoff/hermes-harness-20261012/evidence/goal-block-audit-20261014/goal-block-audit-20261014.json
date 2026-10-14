@@ -1,0 +1,25 @@
+{
+  "schema": "onia.goal-block-audit.v1",
+  "audited_at_utc": "2026-10-14",
+  "scope": "Read-only audit of current evidence; no runtime invocation, SSH, test, grant, or external action.",
+  "goal": "Hermes to native Codex Cloud specialist creation, browser action/capture, Telegram, 30 minutes autonomous, clean context rotation at measured 70% or native compaction.",
+  "verdict": "REAL_IMPASSE_FOR_FULL_GOAL",
+  "recommended_goal_status": "blocked",
+  "basis": [
+    "Native Cloud UI creation and two children were manual; no Hermes-owned native creation or lifecycle binding is verified.",
+    "Controller enforces exact FakeReadOnlyClient/FakeSessionFactory and external dispatch stays closed; fixture success cannot run full goal.",
+    "V6 proves metadata/account read only; CLI status 404 applies to one literal target and does not establish native task absence or account equivalence.",
+    "Cloud browser attempt failed before verified navigation/capture; VPS Playwright install approval remains pending; Telegram photo is not public-browser capture.",
+    "Compaction events support fallback but measured active context is UNKNOWN; neither autonomous 30-minute cycle nor clean transfer is verified."
+  ],
+  "authorized_action_assessment": "Source/docs/fixtures, UI-manual child creation, or status probes can improve diagnosis but cannot presently execute or verify the required autonomous native Hermes cycle. No currently verified supported binding or approved browser runtime is runnable for the full goal.",
+  "threshold_assessment": "The same essential native execution/browser-binding condition persists across original turn and two automatic continuations per supplied turn history. Intermediate source/CLI correlation was meaningful investigation, not a runnable route or fulfilled goal.",
+  "unblock": "Supported, verified Hermes-to-native-Cloud submit/status/cancel/reconcile binding with real authority and bounded lifecycle; plus browser runtime authorization or another proven native capture path. Then end-to-end autonomous canary and QA.",
+  "exclusions": "Do not infer global API impossibility from 404, treat UNKNOWN usage/cost as automatic blocker, pause without explicit user request, archive owner, or count supervised pilot as goal completion.",
+  "sources": [
+    "E:/onia-wt/orquestacion-subagentes-20261013@7f4be053b8d2cb485358318243c7871e56741ce0/hermes-content/docs/handoff/estado-harness-onia-20261014.md",
+    "E:/onia-wt/orquestacion-subagentes-20261013/hermes-content/docs/handoff/hermes-harness-20261012/evidence/cloud-cli-native-contract-20261014/hermes-native-adapter-gap-20261014.md",
+    "E:/onia-wt/hermes-controller-pilot-20261013@8f8acee9c9fded45dcbd39d5c4d1d6345d4fd256/hermes-content/docs/handoff/hermes-harness-20261012/controller_pilot.py",
+    "E:/onia-wt/orquestacion-subagentes-20261013/hermes-content/docs/handoff/hermes-harness-20261012/evidence/cloud-literal-status-probe-20261014/receipt-20261014T100336_235771Z.json"
+  ]
+}

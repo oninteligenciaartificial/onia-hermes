@@ -1,0 +1,51 @@
+{
+  "schema": "onia.goal.block.decision.v1",
+  "goal_status": "blocked",
+  "status_changed_at_utc": "2026-10-14T10:27:59Z",
+  "updated_at_unix": 1791973679,
+  "status_source": "tools.update_goal",
+  "objective_text": "Completar y validar el harness operativo de ONIA para que Hermes coordine sesiones en Codex Cloud nativo, agentes especializados, navegador remoto y entregas visuales por Telegram.\n\nPrimero revisar lo ya construido e investigar la alternativa más eficaz y mantenible, priorizando menor costo por resultado y calidad comprobable. Reutilizar componentes existentes y evitar orquestadores duplicados.\n\nPrimer hito: ejecutar un ciclo autónomo de al menos 30 minutos con tareas útiles, delegación real, QA independiente, recuperación de errores, una acción verificable del navegador cloud y entrega de su captura por Telegram.\n\nReglas:\n- Madres coordinan y revisan; workers ejecutan. Usar modelos según el routing vigente y cuota disponible. Claude vuelve cuando su cuota esté verificada.\n- Medir duración, llamadas, tokens, cuota, gasto y resultados cuando existan señales fiables. Separar consumo global de consumo por tarea; marcar UNKNOWN cuando no pueda medirse.\n- Preparar relevo al 70 % de la ventana efectiva, con uso activo verificado, reserva suficiente, checkpoint compacto y ACK de dueño único. Probar la creación automática de una sesión limpia; no sustituirla por compactación.\n- Mantener límites por tarea, deduplicación, STOP y conciliación de efectos ambiguos. Evitar reintentos y sondeos sin propósito.\n- Respetar aprobaciones para instalaciones, nuevos accesos, gasto adicional, producción y publicaciones. No copiar sesiones personales.\n- Conservar decisiones, código, evidencias y reglas en el repositorio canónico.\n\nCerrar sólo con pruebas del circuito completo y un desglose breve de qué funciona, qué cuesta y qué bloqueo específico permanece. No declarar autonomía por tener documentación o pruebas simuladas.",
+  "audit_sha256": "2F264620D6E1AAF8D682AA0D831108DB16C79D93C7298DF8A2CF50E52AD50509",
+  "owner_thread_id": "01a136be-bea1-70f1-9891-9cae7dd1d331",
+  "standby_thread_id": "01a138fa-8304-71c1-9391-3bc14314d57f",
+  "standby_state": "idle; no ownership transfer",
+  "native_cloud_task_id": "01a13910-ec21-768c-abe9-2f8250a4401b",
+  "native_cloud_task_state": "idle",
+  "verified_turns": [
+    {
+      "kind": "original",
+      "id": "01a138b6-a974-79b3-9ed8-edda4ff431b9",
+      "started_at_unix": 1791952857,
+      "state": "completed"
+    },
+    {
+      "kind": "first_auto",
+      "id": "01a139d2-c8b5-7e11-a614-c40c80065724",
+      "started_at_unix": 1791971477,
+      "state": "completed"
+    },
+    {
+      "kind": "current",
+      "id": "01a139e9-78cc-7b20-a956-4c83b3f406af",
+      "started_at_unix": 1791972964,
+      "state_at_audit": "inProgress"
+    }
+  ],
+  "repeated_blockers": [
+    "Supported and authorized submit/status/cancel/reconcile binding to native Codex Cloud was not verified.",
+    "Exact approval for VPS browser installation remains pending; no equivalent verified browser path."
+  ],
+  "unblock": [
+    "Verify a supported, authorized native Cloud submit/status/cancel/reconcile route.",
+    "Obtain exact browser installation approval or use a browser route already verified within scope.",
+    "Then prove the full autonomous 30-minute cycle and clean ownership handoff with receipts."
+  ],
+  "limits": [
+    "Diagnostics did not resolve the repeated blockers.",
+    "CLI HTTP 404 is not evidence of global API impossibility or product separation.",
+    "UNKNOWN tokens and task cost are not standalone gates; native compaction remains a fallback trigger.",
+    "No goal completion or pause, new installs/access/spend, archive, or ownership transfer."
+  ],
+  "repo_doc_head": "7f4be053b8d2cb485358318243c7871e56741ce0",
+  "code_head": "8f8acee9c9fded45dcbd39d5c4d1d6345d4fd256"
+}
