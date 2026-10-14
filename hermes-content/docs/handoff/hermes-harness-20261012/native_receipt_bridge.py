@@ -62,6 +62,15 @@ class NativeWorkRequest:
     approval_claim_ref: str
     predecessor_task_id: str
     result_paths: tuple[str, ...]
+    max_status_events: int
+    max_result_events: int
+
+    def __post_init__(self):
+        # Required fields: historical requests are never grandfathered/reset.
+        for name, ceiling in (("max_status_events", 2), ("max_result_events", 1)):
+            value = getattr(self, name)
+            if type(value) is not int or not 0 <= value <= ceiling:
+                raise ValueError(f"{name} must be an integer from 0 to {ceiling}")
 
     def digest(self) -> str:
         return hashlib.sha256(json.dumps(asdict(self), sort_keys=True,
@@ -310,7 +319,8 @@ class NativeReceiptBridge:
                               event_id: str, now: int) -> bool:
         """Consume one event before read/QA; crash means no automatic re-execution.
 
-        Records stay on the same native operation, with a cap of eight events.
+        Records stay on the same native operation, with a cap of eight events
+        and request-bound status/result budgets consumed before transport calls.
         This is single-host exclusion, not a scheduler or provider idempotency.
         """
         _text(event_id, "event_id")
@@ -329,6 +339,10 @@ class NativeReceiptBridge:
             if event_id in events:
                 conn.commit()
                 return False
+            limit = {"status": request.max_status_events,
+                     "result": request.max_result_events}.get(event)
+            if limit is not None and sum(item["event"] == event for item in events.values()) >= limit:
+                raise RuntimeError(f"finite {event} event budget reached; explicit recovery required")
             if len(events) >= 8:
                 raise RuntimeError("finite event cap reached; explicit recovery required")
             events[event_id] = {"event": event, "request_sha": request.digest(), "started_at": now,
