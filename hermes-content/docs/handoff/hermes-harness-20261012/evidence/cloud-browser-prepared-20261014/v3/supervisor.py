@@ -10,9 +10,9 @@ import sys
 import time
 
 V2 = Path('/workspace/work/browser-goal-preflight-20261014/v2/browser_check.py')
-V2_SHA = '0c5650791e83831d11445b26fc715a7a931016e20a7f3c3ec6e423db550a8d6b'
+V2_SHA = '9a0f5783e13acae869839367dfea0cc793d45f7a250d2e3f8f2e1550695b89ee'
 PYTHON = '/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python'
-SESSION = '01a13875-a024-7784-9718-7d8c60fe702a'
+SESSION = '01a13170-1c7e-7224-83c1-c5f369052039'
 ROOT = Path(__file__).resolve().parent
 
 

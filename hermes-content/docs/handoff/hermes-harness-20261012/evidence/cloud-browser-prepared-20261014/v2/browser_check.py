@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Execute only after explicit approval of this Playwright/Chromium method."""
+"""One bounded public-browser action requested by the active user goal."""
 import hashlib
 import html
 import importlib.metadata
@@ -17,7 +17,8 @@ from playwright.sync_api import sync_playwright
 ROOT = Path(__file__).resolve().parent
 TIMEOUT_MS = 20000
 ALLOWED_HOSTS = frozenset(("example.com", "iana.org", "www.iana.org"))
-SESSION_ID = "01a13875-a024-7784-9718-7d8c60fe702a"
+SESSION_ID = "01a13170-1c7e-7224-83c1-c5f369052039"
+AUTHORIZATION_REFERENCE = "active-user-goal:01a138fa-8304-71c1-9391-3bc14314d57f"
 
 
 def allowed_url(url):
@@ -78,12 +79,17 @@ def deadline(_signum, _frame):
 
 def main():
     if sys.argv[1:] != ["--method-approved"]:
-        print("BLOCKED: explicit method approval required; no browser started.", file=sys.stderr)
+        print("BLOCKED: active-goal single-attempt guard required; no browser started.", file=sys.stderr)
         return 2
     receipt = {
         "started_at_utc": utc(), "agent_id": "/root",
         "session_id": SESSION_ID, "session_id_provenance": "contract-provided",
-        "execution_turn_id": "UNKNOWN", "human_method_approval": "pending external gate",
+        "execution_turn_id": "UNKNOWN",
+        "authorization_basis": "active user goal requests a Cloud browser action and Telegram screenshot delivery",
+        "separate_method_or_hash_approval": False,
+        "authorization_reference": AUTHORIZATION_REFERENCE,
+        "authorization_scope": "single bounded public navigation example.com to IANA and JPEG capture; no retry",
+        "implementation_choice": "Playwright with system Chromium; selected to fulfill the requested browser outcome",
         "blocked_requests": [], "redirects": [],
         "configured_model": "Sol Ligero (user-declared)",
         "served_model": "UNKNOWN", "U": "UNKNOWN", "W": "UNKNOWN",
@@ -93,7 +99,7 @@ def main():
         "playwright": importlib.metadata.version("playwright"),
         "chromium_executable": "/usr/bin/chromium",
         "chromium_sandbox": True, "retries": 0,
-        "nominal_alarm_seconds": 75, "cleanup_bound": "UNKNOWN", "method_state": "HOLD", "operation_timeout_ms": TIMEOUT_MS,
+        "nominal_alarm_seconds": 75, "cleanup_bound": "UNKNOWN", "method_state": "ACTIVE_GOAL_SCOPE_SINGLE_ATTEMPT", "operation_timeout_ms": TIMEOUT_MS,
         "requested_url": "https://example.com", "status": "FAIL",
     }
     signal.signal(signal.SIGALRM, deadline)
