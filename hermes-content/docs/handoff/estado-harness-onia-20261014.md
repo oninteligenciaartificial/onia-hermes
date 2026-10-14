@@ -1,5 +1,17 @@
 # Estado del harness ONIA — corte 2026-10-14
 
+## Delta de ownership y siguiente paso — 2026-10-14
+
+**Ownership único vigente:** el root anterior `01a136be-bea1-70f1-9891-9cae7dd1d331` pausó únicamente su goal (`status=paused`, recibo `updatedAt=1791981950`). La nueva sesión local `01a138fa-8304-71c1-9391-3bc14314d57f` es dueña; el goal con el mismo objetivo está `active` desde 2026-10-14. Source ACKs: `ACK_FINAL_READY` turno `01a13a6f-f8f6-7852-871c-fd7988765dde` y `ACK_QA_READY` turno `01a13a71-bd65-7df0-8d7b-8c1cd05b6df2`. Handoff comprobado contra estado anterior SHA-256 `7EE709D9315C1ED7094B9BB1F83AF51B746C80FC1F66F46B8B6ECA23505A8C0B`; QA final del navegador SHA-256 `9EA6CF1E8D2F6590E6BAA5E99A269A92085BAC88478750FB40D9316683833199`.
+
+**Prueba VPS:** instalación autorizada PASS (imagen Playwright fijada y revisión de identidad registrada); el único trial terminó `needs_reconcile` (runner exit 2, stdout vacío y stderr descartado). Causa/fase/browser launch `UNKNOWN`; sin JPEG. Nonce consumido, no replay. No atribuir modelo servido, costo por tarea, `U_activo/W` ni cuota actual: `UNKNOWN` hasta medición fiable. El snapshot de cuota 42 % usado / 58 % restante a `12:09:03Z` es histórico, no estado actual.
+
+**Siguiente trabajo autorizado:** diagnóstico saneado de fase/código de error y preflight focal Linux, sin repetir el trial ni hacer nuevo pull/build. Conciliar efectos ambiguos antes de cualquier nuevo intento; sólo con contrato revisado, nonce nuevo y evidencia auditable. Permanecen pendientes el lifecycle soportado Hermes→Codex Cloud nativo, browser público y entrega de su captura por Telegram, relevo automático de sesión limpia con dueño único y ciclo autónomo de al menos 30 minutos.
+
+**Gates:** Claude suspendido (sin CLI/auth/login ni fallback); no copiar sesiones personales. Instalaciones, accesos nuevos, gasto adicional, producción y publicaciones requieren la aprobación específica correspondiente. No archivar chats ni migrar/reactivar automations implícitamente. La evidencia QA congelada y sus recibos no se modifican.
+
+**Lectura temporal:** los párrafos y entradas posteriores conservan el corte/historial previo al relevo; cualquier frase allí que asigne ownership al root anterior o marque la transferencia pendiente queda supersedida por este delta.
+
 Fuente de este corte: rama documental `codex/orquestacion-subagentes-20261013`, base previa `a6832e359c41929b8ee23c5b8501039c5346b307`; las evidencias históricas conservan sus propias referencias. Recibos enlazados abajo. **Goal incompleto:** aún no existe un ciclo Hermes → Codex Cloud nativo → navegador → captura → Telegram autónomo de 30 minutos.
 
 **Estado actual del goal: `blocked`**, confirmado por `tools.update_goal` a `2026-10-14T10:27:59Z` (epoch `1791973679`), tras el mismo impasse en tres turnos consecutivos. Root mantiene ownership; no se pausó, completó, archivó ni transfirió. [Audit](hermes-harness-20261012/evidence/goal-block-audit-20261014/goal-block-audit-20261014.json) y [decisión](hermes-harness-20261012/evidence/goal-block-audit-20261014/decision.json). Al declararse `blocked`, faltaban el vínculo soportado/autorizado submit/status/cancel/reconcile a Codex Cloud nativo y el permiso exacto del navegador VPS. Sergio autorizó Playwright desde el bundle offline V3; imagen instalada y revisión de identidad PASS. Un único trial offline falló (`needs_reconcile`), sin JPEG ni fase exacta recuperable; el vínculo Cloud sigue sin verificar. El 404 CLI no prueba imposibilidad global; costo/tokens `UNKNOWN` no bloquean por sí solos.
