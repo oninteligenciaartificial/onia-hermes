@@ -10,7 +10,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from unittest.mock import patch
 
-from desktop_context_meter import read_context_snapshot
+from desktop_context_meter import read_compaction_receipt, read_context_snapshot
 
 
 SESSION = "fixture-session-001"
@@ -415,6 +415,45 @@ class DesktopContextMeterTests(unittest.TestCase):
             result = read_context_snapshot(source, expected_session_id=SESSION, expected_window_tokens=WINDOW, now=now)
         self.assertEqual(result["status"], "unknown")
         self.assertEqual(result["reason"], "malformed_record")
+
+    def test_typed_compaction_receipt_survives_unknown_usage_without_private_data(self):
+        now = datetime.now(timezone.utc)
+        compacted_at = now - timedelta(hours=2)
+        with tempfile.TemporaryDirectory() as temp:
+            source = Path(temp) / "events.jsonl"
+            write_jsonl(source, rows=[compacted(compacted_at)])
+            receipt = read_compaction_receipt(
+                source, expected_session_id=SESSION, binding_id="fixture-source", now=now
+            )
+            snapshot = read_context_snapshot(
+                source, expected_session_id=SESSION,
+                expected_window_tokens=WINDOW, now=now,
+            )
+        self.assertIsNotNone(receipt)
+        self.assertEqual(receipt.binding_id, "fixture-source")
+        self.assertEqual(receipt.event_timestamp_utc, compacted_at.isoformat().replace("+00:00", "Z"))
+        self.assertEqual(receipt.validation_status, "validated")
+        self.assertFalse(hasattr(receipt, "session_id"))
+        self.assertFalse(hasattr(receipt, "source_path"))
+        self.assertFalse(hasattr(receipt, "usage"))
+        self.assertIsNone(snapshot["sample"])
+        self.assertIsNone(snapshot["active_context_usage_tokens"])
+        self.assertEqual(snapshot["compaction_signal"]["status"], "detected")
+
+    def test_typed_compaction_receipt_rejects_wrong_session_and_future_event(self):
+        now = datetime.now(timezone.utc)
+        with tempfile.TemporaryDirectory() as temp:
+            source = Path(temp) / "events.jsonl"
+            write_jsonl(source, rows=[compacted(now)])
+            wrong_session = read_compaction_receipt(
+                source, expected_session_id="other-session", binding_id="fixture-source", now=now
+            )
+            write_jsonl(source, rows=[compacted(now + timedelta(seconds=31))])
+            future = read_compaction_receipt(
+                source, expected_session_id=SESSION, binding_id="fixture-source", now=now
+            )
+        self.assertIsNone(wrong_session)
+        self.assertIsNone(future)
 
 
 if __name__ == "__main__":

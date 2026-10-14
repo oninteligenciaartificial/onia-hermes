@@ -12,6 +12,7 @@ import json
 import os
 import stat
 import sys
+from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
@@ -285,6 +286,105 @@ def load_calibration(path_value: str | os.PathLike[str]) -> tuple[dict[str, Any]
 
 def _age_seconds(now: datetime, sample: datetime) -> float:
     return (now - sample).total_seconds()
+
+
+@dataclass(frozen=True, slots=True)
+class CompactionReceipt:
+    """Validated, metadata-only observation from one local JSONL source read.
+
+    This value is not a signature or an authentication token. Its consumer must
+    obtain it itself from an authorized source binding rather than accept one
+    supplied by an untrusted caller.
+    """
+
+    schema_version: int
+    binding_id: str
+    event_key: str
+    event_timestamp_utc: str
+    observed_at_utc: str
+    validation_status: str
+
+
+def read_compaction_receipt(
+    source_path: str | os.PathLike[str],
+    *,
+    expected_session_id: str,
+    binding_id: str,
+    now: datetime | None = None,
+) -> CompactionReceipt | None:
+    """Return the latest validated compaction event, independent of token usage.
+
+    Event age is intentionally unrestricted here: an old unacknowledged event
+    remains eligible for local ingestion. Future timestamps beyond the existing
+    skew bound, invalid sessions, malformed records, and unstable sources fail
+    closed. ``observed_at_utc`` timestamps this local validation for its caller's
+    short receipt-TTL check.
+    """
+    if (
+        not isinstance(expected_session_id, str)
+        or not expected_session_id.strip()
+        or len(expected_session_id) > 128
+        or not isinstance(binding_id, str)
+        or not binding_id.strip()
+        or len(binding_id) > 128
+    ):
+        return None
+    now_utc = now.astimezone(timezone.utc) if isinstance(now, datetime) and now.tzinfo else datetime.now(timezone.utc)
+    path, identity, error = _validate_local_file(
+        source_path, max_bytes=MAX_SOURCE_BYTES, suffix=".jsonl"
+    )
+    if error or path is None or identity is None:
+        return None
+    raw, error = _read_bounded_stable(
+        path, expected_identity=identity, max_bytes=MAX_SOURCE_BYTES
+    )
+    if error or raw is None:
+        return None
+    lines = raw.splitlines(keepends=True)
+    if len(lines) > MAX_ROWS:
+        return None
+
+    session_ids: list[str] = []
+    events: list[dict[str, Any]] = []
+    for index, line in enumerate(lines):
+        if not line.strip():
+            continue
+        try:
+            record = json.loads(line.decode("utf-8"))
+        except (UnicodeDecodeError, json.JSONDecodeError, RecursionError):
+            if index == len(lines) - 1 and not line.endswith((b"\n", b"\r")):
+                continue
+            return None
+        if not isinstance(record, dict):
+            return None
+        if record.get("type") == "session_meta":
+            payload = record.get("payload")
+            session_id = payload.get("id") if isinstance(payload, dict) else None
+            if not isinstance(session_id, str) or not session_id:
+                return None
+            session_ids.append(session_id)
+        elif record.get("type") == "compacted":
+            event = _parse_compaction_event(record, index)
+            if event is None or event.get("invalid"):
+                return None
+            events.append(event)
+
+    if len(session_ids) != 1 or session_ids[0] != expected_session_id or not events:
+        return None
+    events.sort(key=lambda item: (item["timestamp"], item["row_index"]))
+    latest = events[-1]
+    timestamp = latest["timestamp"]
+    if _age_seconds(now_utc, timestamp) < -MAX_FUTURE_SKEW_SECONDS:
+        return None
+    key = _compaction_event_key(expected_session_id, timestamp)
+    return CompactionReceipt(
+        schema_version=SCHEMA_VERSION,
+        binding_id=binding_id,
+        event_key=key,
+        event_timestamp_utc=timestamp.isoformat().replace("+00:00", "Z"),
+        observed_at_utc=now_utc.isoformat().replace("+00:00", "Z"),
+        validation_status="validated",
+    )
 
 
 def read_context_snapshot(

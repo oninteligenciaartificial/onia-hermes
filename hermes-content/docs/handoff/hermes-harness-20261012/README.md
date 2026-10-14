@@ -208,3 +208,27 @@ equivalente). Ese ACK es solo informativo y no ejecuta ni confirma un checkpoint
 Fechas inválidas o futuras fuera de la tolerancia existente producen `unknown`;
 una línea parcial final sigue ignorándose. El evento no estima uso activo U/W ni
 altera los campos de uso, que siguen en `null`.
+
+### Ingesta local de una señal de compactación
+
+`compaction_ingest.py` expone una sola operación local: obtiene por sí mismo una
+lectura tipada desde el JSONL autorizado por `PREAUTHORIZED_SOURCE_BINDINGS` y
+registra una intención `requested` en una tabla propia dentro de la SQLite de la
+cola. El mapper está vacío por defecto, y la API no recibe rutas, claves de evento
+ni recibos del caller. La clave deduplicada combina el binding con la clave SHA
+del evento. Un `acknowledged_event_key` opcional en el binding sólo identifica un
+baseline ya visto; no acredita un ACK nativo ni cambia owner, lease o handoff.
+
+La transacción `BEGIN IMMEDIATE` vuelve a validar lease, owner, fence, tarea en
+ejecución, efecto y guard STOP existente. Guard ausente, vacío o incierto produce
+hold. La intención no escribe el checkpoint de tarea ni altera efecto, owner,
+lease o fencing token. El límite de 300 s corresponde a la observación local
+validada; un evento válido antiguo permanece elegible tras un reinicio. Sólo se
+rechaza timestamp inválido o futuro fuera de la tolerancia existente. Uso activo
+U/W puede seguir `unknown` aunque se conserve la señal de compactación.
+
+Esto acredita sólo la ingesta durable local. No captura un artefacto de
+checkpoint, no crea ni continúa sesiones, no transfiere ownership y no llama un
+transporte. No demuestra STOP de producción ni operación con la PC apagada. El
+core `SQLiteQueue` mantiene su schema 3; la tabla de intención es del adaptador.
+Pruebas locales sintéticas: `python -m unittest test_desktop_context_meter test_compaction_ingest`.
