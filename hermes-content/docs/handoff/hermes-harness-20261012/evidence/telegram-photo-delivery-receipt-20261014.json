@@ -1,0 +1,17 @@
+{
+  "status": "accepted",
+  "recipient": "Sergio Urcullo",
+  "bot": "@aalfredhq_bot",
+  "method": "sendPhoto",
+  "sent_at_utc": "2026-10-14T04:04:56+00:00",
+  "message_id_sha256": "533f4ff07f8d5bc358bbbe3c655c0099262440baf55b1fbbecc6151a08706f1c",
+  "caption": "Codex Cloud: sesión creada; continuidad bloqueada por proxy. Captura real del piloto.",
+  "caption_sha256": "1e9e487bc3c2267f80a3b983890a0d58b45b1b2b787e97815bfdb7789ccfd1ed",
+  "photo_source_path": "E:/onia-wt/codex-cloud-piloto-real-20261014.jpg",
+  "photo_source_sha256": "06F2A26E99C606C625A2FBE9749B6CA8D044B120B29BB5E767E16DD04768F299",
+  "photo_bytes": 146168,
+  "request_source_path": "E:/onia-wt/hermes-telegram-photo-candidate-v3-20261014/dispatcher.py",
+  "request_source_sha256": "94B4470DC35F1974503FF814757A15D8F541FB0D7AB1EB3350529A05DD11C395",
+  "approval_ref": "sergio:20261014-hermes-telegram-photo-r1",
+  "stdout_sha256": "8DB10EFD27ACC5910E7D035DEFD2FC78344BEA43432E445D01A1FF5250DB4B98"
+}

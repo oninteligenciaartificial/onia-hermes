@@ -1,5 +1,9 @@
 # Hermes Coordination Manifest
 
+## Piloto de sesiones ONIA 30 minutos — ownership documental 14-oct-2026
+
+Registro y panel de lectura del piloto **supervisado** `03:14:05–03:44:05Z`, QA `03:44:09Z` (1.804 s): [contrato, recibos y permisos](hermes-content/docs/handoff/piloto-sesiones-onia-30min-20261014.md) y [panel snapshot](hermes-content/docs/handoff/panel-onia-piloto-30min-20261014.html). Dueño de estos dos artefactos y esta entrada: worker documental `/root/research_notebook_preflight`; madres Desarrollo-Infra y Marketing mantienen sus propios carriles. Tres diagnósticos primera ronda en chats **Codex** durables Platform, Marca y Lucía; seis agentes hijos observados, sin cambios adicionales antes del deadline. Nueva sesión Codex Cloud creada por UI, continuidad QA bloqueada por ref local ausente y fetch proxy 8080; ensayo ChatGPT Work archivado y excluido. Telegram: bot/chat verificados, **cero entregas en la ventana**; dos bloqueos reportados antes de POST por ledger SQL, sin traza HTTP independiente de cero POST. **Después** del piloto, la API aceptó un texto `03:51:45Z` y una foto `04:04:56Z`; recibos sanitizados en el contrato, sin lectura humana confirmada. La fuente exacta del texto no tiene backup recuperado; la foto conserva source/test V3 previos al efecto y dictamen QA. Son pruebas separadas, no acreditan Hermes autónomo, aprobación entrante ni video. No activa Hermes gateway, producto, publicaciones ni servicios.
+
 ## Ownership vigente — madre Desarrollo-Infra / Hermes QA — 2026-10-13
 
 La sucesora `01a136be-bea1-70f1-9891-9cae7dd1d331` aceptó por ACK ownership único del carril; la fuente saliente `01a1352a-a8ab-77d0-9335-895a7d8083a2` anunció que no volverá a despachar y queda **NO ARCHIVAR**. Meta: completar primero el harness coordinador offline para Hermes. Registro y evidencia operativa en `hermes-content/docs/handoff/madre-relevo-20261013.md` (sección «Delta de ownership y señal fresca de sucesora»).

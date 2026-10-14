@@ -1,0 +1,32 @@
+{
+  "artifact_type": "telegram_text_delivery_ledger_companion",
+  "schema_version": 1,
+  "operation_nonce": "sergio:20261014-hermes-telegram-pilot-one-text-r3",
+  "payload_sha256": "72ee0781f6a38db198343f54d28fe3ace1e9ca832900953371aed61027125be5",
+  "recipient_alias": "Sergio Urcullo",
+  "sent_at_utc": "2026-10-14T03:51:45+00:00",
+  "local_ledger": {
+    "path": "E:/onia-wt/hermes-telegram-dispatcher-20261013/dispatch-ledger.sqlite3",
+    "state": "accepted",
+    "receipt_sha256": "c3b1f233d1f70e9c4379b846f8a71e5331d86d11a575fa071f6a22358d5499e7"
+  },
+  "remote_ledger": {
+    "path": "/tmp/onia-hermes-sergio-pilot-telegram-send-20261014-r3/send.sqlite3",
+    "state": "accepted",
+    "receipt_sha256": "e29ee74f8577500138cd53d9666642e1d3e048af2da8249e735082dc83b71f65"
+  },
+  "earlier_operations": [
+    {
+      "nonce": "sergio:20261013-hermes-telegram-one-text",
+      "state": "blocked_before_post",
+      "payload_sha256": "00d6ce302556392147df185d0937fd3d7f164e5f58e6dc1067f5f0ab6772620f",
+      "receipt": null
+    },
+    {
+      "nonce": "sergio:20261014-hermes-telegram-pilot-one-text-r2",
+      "state": "blocked_before_post",
+      "payload_sha256": "72ee0781f6a38db198343f54d28fe3ace1e9ca832900953371aed61027125be5",
+      "receipt": null
+    }
+  ]
+}

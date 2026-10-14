@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Panel ONIA · piloto de sesiones</title>
+  <style>
+    :root { color-scheme: dark; --bg:#10151a; --panel:#1b2229; --line:#34414a; --text:#ecf2f1; --muted:#a4b3b6; --mint:#70dec5; --amber:#f3c771; --red:#f58d82; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:radial-gradient(circle at 85% -10%,#1d3a40 0,transparent 34%),var(--bg); color:var(--text); font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif; }
+    main { width:min(1140px,calc(100% - 36px)); margin:0 auto; padding:40px 0 64px; }
+    a { color:var(--mint); }
+    .eyebrow { color:var(--mint); text-transform:uppercase; letter-spacing:.14em; font-size:.72rem; font-weight:800; }
+    h1 { font-size:clamp(2rem,4vw,3.5rem); line-height:1.05; letter-spacing:-.045em; margin:.35rem 0 .6rem; }
+    h2 { font-size:1.12rem; margin:0 0 14px; }
+    p { margin:.35rem 0; }
+    .lead,.muted { color:var(--muted); }
+    .lead { max-width:72ch; }
+    .top { display:flex; justify-content:space-between; gap:22px; align-items:flex-end; flex-wrap:wrap; }
+    .stamp { border:1px solid var(--line); border-radius:12px; padding:12px 15px; color:var(--muted); background:#172025; min-width:220px; }
+    .stamp strong { display:block; color:var(--text); font-size:.9rem; }
+    .grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; margin:26px 0; }
+    .card { background:var(--panel); border:1px solid var(--line); border-radius:18px; padding:20px; min-width:0; }
+    .card.accent { border-color:#408776; background:linear-gradient(135deg,#1b302f,#1b2229 72%); }
+    .label { color:var(--muted); font-size:.76rem; text-transform:uppercase; letter-spacing:.1em; font-weight:700; }
+    .big { display:block; font-size:clamp(1.65rem,3.5vw,2.75rem); font-variant-numeric:tabular-nums; line-height:1.12; letter-spacing:-.035em; margin:9px 0 4px; }
+    .bar { height:7px; background:#0d1317; border-radius:999px; overflow:hidden; margin:17px 0 10px; }
+    .bar span { display:block; height:100%; width:100%; background:var(--mint); transform:scaleX(0); transform-origin:left; transition:transform .8s linear; }
+    .pill { display:inline-block; border-radius:999px; padding:4px 10px; font-size:.75rem; font-weight:750; letter-spacing:.03em; }
+    .pending { background:#493d2b; color:var(--amber); }
+    .unknown { background:#293b43; color:#b5d4df; }
+    .closed { background:#3b2c2b; color:var(--red); }
+    .section-head { display:flex; justify-content:space-between; gap:10px; align-items:baseline; flex-wrap:wrap; margin:33px 0 15px; }
+    .section-head h2 { margin:0; font-size:1.45rem; }
+    .lane h3 { font-size:1.45rem; margin:10px 0 6px; }
+    .lane .id { overflow-wrap:anywhere; color:var(--muted); font:12px/1.45 ui-monospace,SFMono-Regular,Consolas,monospace; }
+    .lane .task { min-height:69px; }
+    .lane ul { margin:14px 0 0; padding-left:19px; color:var(--muted); }
+    .lane li + li { margin-top:5px; }
+    .card code { overflow-wrap:anywhere; }
+    .rule-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+    .rule-grid strong { color:var(--text); }
+    details { margin-top:19px; border:1px solid var(--line); border-radius:14px; background:var(--panel); padding:16px 19px; }
+    summary { cursor:pointer; font-weight:750; }
+    details ul { padding-left:21px; color:var(--muted); }
+    footer { margin-top:28px; color:var(--muted); font-size:.84rem; }
+    @media (max-width:850px) { .grid,.rule-grid { grid-template-columns:1fr; } .lane .task { min-height:0; } }
+  </style>
+</head>
+<body>
+<main>
+  <header class="top">
+    <div>
+      <div class="eyebrow">ONIA / coordinación acotada</div>
+      <h1>Panel ONIA · piloto</h1>
+      <p class="lead">Piloto supervisado de 30 minutos: tres diagnósticos de sólo lectura en chats Codex durables. Cloud creó una sesión real, pero su continuidad falló; Telegram no entregó mensajes en la ventana.</p>
+    </div>
+    <div class="stamp"><strong>Cierre confirmado por root</strong>14 oct 2026 · 03:48:08 UTC<br>QA vio evento 03:44:09 · 1.804 s</div>
+  </header>
+
+  <section class="grid" aria-label="Plazo y estado">
+    <div class="card accent">
+      <span class="label">Tiempo restante del plazo</span>
+      <strong class="big" id="countdown" aria-live="off">30:00</strong>
+      <div class="bar" aria-hidden="true"><span id="progress"></span></div>
+      <p class="muted" id="clocknote">Reloj de este navegador; no consulta el estado de las sesiones.</p>
+    </div>
+    <div class="card">
+      <span class="label">Deadline fijo</span>
+      <strong class="big">03:44:05 UTC</strong>
+      <p class="muted">13 oct · 23:44:05 UTC−4. Máximo dos rondas por frente; cierre anticipado si falta permiso o evidencia.</p>
+    </div>
+    <div class="card">
+      <span class="label">Canal a Sergio</span>
+      <strong class="big">0 en piloto</strong>
+      <p class="muted">Bot/chat verificados. Dos bloqueos en la ventana; después, Telegram aceptó texto a las 03:51:45 UTC y foto a las 04:04:56 UTC. Ninguno cuenta en los 30 minutos ni prueba lectura humana.</p>
+    </div>
+  </section>
+
+  <section class="card" aria-label="Prueba Codex Cloud">
+    <span class="label">Ruta cloud nueva · fuera de los tres frentes</span>
+    <h2>Creación PASS · continuidad BLOCKED</h2>
+    <p>«ONIA · QA relevo · Codex Cloud» <code>01a13875-a024-7784-9718-7d8c60fe702a</code>, creado vía UI para ONIA Platform en <code>/workspace</code>. Ronda 1 no encontró la ref objetivo en checkout HEAD <code>1c01e05ff3457692f44352de19d57768d5955bcf</code>; ronda 2 hizo un fetch dirigido que terminó exit 128 por proxy 8080. Ref remota UNKNOWN. No prueba relevo nativo.</p>
+    <p class="muted">Ensayo ChatGPT Work archivado y excluido. Se observaron seis agentes hijos (cuatro nuevos, dos reutilizados) y compactación de Platform; ninguna señal mide U activo ni transferencia de ownership. Después del plazo, esta sesión Cloud leyó saldo Higgsfield por MCP (438.17 créditos, sin consumo reportado); navegador UI y acceso VPS siguen sin prueba.</p>
+  </section>
+
+  <div class="section-head"><h2>Tres chats, tres encargos</h2><span class="pill pending">Tres primeras rondas · sin cambios al deadline</span></div>
+  <section class="grid" aria-label="Frentes del piloto">
+    <article class="card lane">
+      <span class="label">Desarrollo–Infra / Platform</span>
+      <h3>Plan y trato</h3>
+      <p class="task">Seis hallazgos de consistencia; parche propuesto de 19 reemplazos en cuatro archivos, sin aplicarlo. <code>git apply --check</code> pasó y el checkout quedó limpio.</p>
+      <p class="id">Chat 01a12c7e-97e2-7115-8561-0b7658008003<br>Turno aceptado 01a13867-204c-7072-b981-eb237d556f03</p>
+      <ul><li>Ref <code>51ef483fb563e76cf0ac58665ea3e4bcaf0255a3</code>; terminó 03:21:41 UTC.</li><li>Agentes Sol 6.1 medium + Sol 6.1 low reportados; servido UNKNOWN.</li></ul>
+    </article>
+    <article class="card lane">
+      <span class="label">Marketing / Marca</span>
+      <h3>N06 y guiones</h3>
+      <p class="task">35 guiones; N06 sólo preview 360×640, 45.504 s y 1,940,441 B, hash reportado igual. Master 1080 y schedules no acreditados.</p>
+      <p class="id">Chat 01a13170-b488-71d9-83f8-12663d5a0013<br>Turno/cursor: UNKNOWN</p>
+      <ul><li>Terminó 03:17:24 UTC; ref <code>498df2a…</code>.</li><li>Agentes Luna low + Sol 6.1 low reportados; servido UNKNOWN. Sin publicación.</li></ul>
+    </article>
+    <article class="card lane">
+      <span class="label">Marketing / Lucía</span>
+      <h3>Muestras y licencia</h3>
+      <p class="task">Seis muestras música/SFX con QA anterior de metadata. No hubo escucha actual; acceso, licencia y costo de Marcela siguen UNKNOWN.</p>
+      <p class="id">Chat 01a13171-0fdb-72c6-9fdc-81244d7e6006<br>Turno/cursor: UNKNOWN</p>
+      <ul><li>Terminó 03:16:52 UTC; ref <code>3273f…</code>.</li><li>Dos agentes reportados. Licencia/QA auditiva actual pendientes; sin gasto ni publicación.</li></ul>
+    </article>
+  </section>
+
+  <div class="section-head"><h2>Quién decide y qué se puede hacer</h2><span class="pill unknown">U activo UNKNOWN</span></div>
+  <section class="rule-grid" aria-label="Autoridad y límites">
+    <div class="card"><strong>Dos madres, dueños distintos.</strong><p class="muted">Desarrollo–Infra y Marketing asignan, revisan evidencia y resumen. Cada frente usa como máximo un worker y un QA cuando hay entregable. Comunidad y Ventas quedan en coordinación de Marketing, sin abrir otro frente ni contactar cuentas.</p></div>
+    <div class="card"><strong>La prueba precede al cierre.</strong><p class="muted">Un ACK de envío no es resultado. Cada entrega debe traer fuente/ref, hallazgo, permiso, QA y siguiente paso. La cuota global Codex era 25 % usada a las 03:32 UTC; no se atribuye este consumo al piloto.</p></div>
+    <div class="card"><strong>Permisos acotados.</strong><p class="muted">Lectura y análisis con cuota Codex solicitada. Sin gasto API adicional, publicación, despliegue, edición de producto, secretos ni mensajes a terceros. Multimedia a Sergio sólo si es útil, autorizado y el canal queda verificado.</p></div>
+    <div class="card"><strong>Contexto y relevo.</strong><p class="muted">Última captura root 04:09:58 UTC: W 475,000; input de última llamada 251,815 no mide U activo, que sigue UNKNOWN. Checkpoint en punto seguro y relevo manual con ACK; sin rotación automática. Claude está suspendido mientras su cuota esté agotada; regreso sólo tras revalidar cuota y autenticación, sin fallback ni gasto automático.</p></div>
+  </section>
+
+  <details>
+    <summary>Reglas y evidencia de este panel</summary>
+    <ul>
+      <li><a href="piloto-sesiones-onia-30min-20261014.md">Contrato y recibos canónicos del piloto</a>.</li>
+      <li><a href="hermes-harness-20261012/evidence/codex-cloud-piloto-real-20261014.jpg">Captura real de Codex Cloud</a> (no representa el render de este panel).</li>
+      <li><a href="hermes-harness-20261012/evidence/telegram-text-delivery-receipt-20261014.json">Recibo Telegram de texto pospiloto</a> (aceptación API; lectura humana desconocida).</li>
+      <li><a href="hermes-harness-20261012/evidence/telegram-photo-delivery-receipt-20261014.json">Recibo Telegram de foto pospiloto</a> y <a href="hermes-harness-20261012/evidence/telegram-photo-dispatcher-v3-20261014.py">source experimental V3</a>; sin prueba de video ni autopiloto.</li>
+      <li><a href="../../../AGENTS.md">AGENTS.md</a>, <a href="../../../CODEX.md">CODEX.md</a> y <a href="../../../.claude/skills/onia-sesion-madre/SKILL.md">onia-sesion-madre</a> definen autoridad y relevo.</li>
+      <li><code>hermes-content/skills/seguridad-credenciales.md</code> está rastreado en Git, ausente en este checkout sparse. No se leen ni muestran credenciales aquí.</li>
+      <li>Un ensayo accidental en ChatGPT Work fue archivado y queda excluido: la aceptación requiere chats Codex durables, no Work.</li>
+      <li>Este HTML es un snapshot local sin peticiones de red. El contador usa la hora del navegador y no cambia estados de chats, QA ni permisos.</li>
+    </ul>
+  </details>
+
+  <footer>Cierre supervisado verificado a las 03:48:08 UTC · Fuentes: madre Desarrollo–Infra y QA. Higgsfield Cloud read-only, texto y foto Telegram aceptados después pertenecen a otro tramo. Panel local de sólo lectura; visualización renderizada aún no inspeccionada por este worker.</footer>
+</main>
+<script>
+  const start = Date.parse('2026-10-14T03:14:05Z');
+  const end = Date.parse('2026-10-14T03:44:05Z');
+  const duration = end - start;
+  const digits = n => String(n).padStart(2, '0');
+  function tick() {
+    const now = Date.now();
+    const remaining = Math.max(0, end - now);
+    const seconds = Math.ceil(remaining / 1000);
+    document.getElementById('countdown').textContent = `${digits(Math.floor(seconds / 60))}:${digits(seconds % 60)}`;
+    document.getElementById('progress').style.transform = `scaleX(${Math.max(0, Math.min(1, (now - start) / duration))})`;
+    if (remaining === 0) document.getElementById('clocknote').textContent = 'Plazo vencido según el reloj de este navegador; resultados y QA requieren actualización explícita.';
+  }
+  tick();
+  setInterval(tick, 1000);
+</script>
+</body>
+</html>

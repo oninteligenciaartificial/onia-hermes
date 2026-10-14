@@ -1,0 +1,15 @@
+{
+  "approval_ref": "sergio:20261014-hermes-telegram-photo-r1",
+  "outcome": "accepted",
+  "local_ledger_path": "E:/onia-wt/hermes-telegram-photo-candidate-v3-20261014/dispatch-ledger.sqlite3",
+  "local_state": "accepted",
+  "local_body_sha256": "5b192b59384068caf3d1486eb66a4ca91129568c39d0b42a15bf18af2e672057",
+  "local_receipt_sha256": "1247b49e384d2e36f5941bc688142364faa45e2c49033496e73479ba62885722",
+  "remote_ledger_path": "/tmp/onia-hermes-sergio-pilot-telegram-photo-20261014-r1/send.sqlite3",
+  "remote_state": "accepted",
+  "remote_body_sha256": "5b192b59384068caf3d1486eb66a4ca91129568c39d0b42a15bf18af2e672057",
+  "remote_receipt_sha256": "a54295381565404b6266915bc3a15986b1f953a822bee48758fcd6fc428d7a27",
+  "sent_at_utc": "2026-10-14T04:04:56+00:00",
+  "ledger_verification": "local and remote SQLite rows queried read-only for this nonce after accepted receipt",
+  "no_retry": true
+}

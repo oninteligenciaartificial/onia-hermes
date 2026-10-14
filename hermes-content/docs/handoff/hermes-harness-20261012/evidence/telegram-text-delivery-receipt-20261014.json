@@ -1,0 +1,17 @@
+{
+  "artifact_type": "telegram_text_delivery_receipt",
+  "schema_version": 1,
+  "result": "accepted",
+  "recipient_alias": "Sergio Urcullo",
+  "bot_alias": "aalfredhq_bot",
+  "operation_nonce": "sergio:20261014-hermes-telegram-pilot-one-text-r3",
+  "payload_text": "Piloto ONIA: 3 sesiones y 6 subagentes completaron QA. Sesión nueva Codex Cloud creada; continuidad bloqueada por proxy. Claude suspendido por cuota. Telegram: prueba de entrega; autonomía y rotación automática aún pendientes.",
+  "payload_sha256": "72ee0781f6a38db198343f54d28fe3ace1e9ca832900953371aed61027125be5",
+  "sent_at_utc": "2026-10-14T03:51:45+00:00",
+  "message_id_sha256": "f8e01d1b17e6402bd31cbdd545aa03cdc46b85a41ec92f69509aa3108f9b1255",
+  "command": "python dispatcher.py --send-once",
+  "exit_code": 0,
+  "source_sha256": "7F61AC8742832E5C8FA28C13CEEE97D785F201E8334FEBC8747C5927AAB57D8F",
+  "source_archive": "unavailable; exact source was not preserved before photo helper edits",
+  "qa_tests_sha256": "05DDDB68F852C9F91E7B9A224E461FC4F07A7680EB7FB458604B1A3A0294B3EB"
+}
