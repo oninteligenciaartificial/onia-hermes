@@ -1,0 +1,47 @@
+{
+  "artifact": "V2 failed-probe metadata reconciliation",
+  "captured_at_utc": "2026-10-14T08:55:22Z",
+  "v2_receipt": {
+    "path": "E:/onia-wt/codex-appserver-metadata-prepared-v2-20261014/receipt-20261014T083857_153856Z.json",
+    "sha256": "8873FB081CEB4016EAE2F9228660C43D443A1D360266D0784334A5B06EDE3091",
+    "failure_class": "protocol_notification_shape_invalid",
+    "auth_state": "not_observed",
+    "raw_notification_shape": "unknown; raw stdout was not preserved"
+  },
+  "pinned_source": {
+    "ref": "rust-v0.161.0",
+    "url": "https://github.com/openai/codex/blob/rust-v0.161.0/codex-rs/app-server-protocol/src/rpc.rs",
+    "notification_fields": [
+      "method",
+      "optional params"
+    ],
+    "request_trace_field": true,
+    "response_fields": [
+      "id",
+      "result"
+    ],
+    "error_fields": [
+      "id",
+      "error.code",
+      "optional error.data",
+      "error.message"
+    ],
+    "notification_trace_supported": false
+  },
+  "bounded_ssh_metadata_reconciliation": {
+    "performed_once": true,
+    "process_scan_complete": true,
+    "proc_entries": 367,
+    "matching_owned_process_cwds": 0,
+    "proc_metadata_errors": 0,
+    "tmp_scan_complete": false,
+    "tmp_scan_entry_limit": 8192,
+    "matching_owned_scratch_dirs_among_examined": 0,
+    "scratch_absence": "unknown",
+    "signals_sent": 0,
+    "deletions": 0,
+    "argv_env_logs_read": false
+  },
+  "conclusion": "Do not relax notification shape based on the trace hypothesis; source DTO does not define trace for notifications. Exact cause remains unknown without raw structure. V3 adds diagnostics only; no V1/V2 source or receipt was changed.",
+  "v3_execution": false
+}

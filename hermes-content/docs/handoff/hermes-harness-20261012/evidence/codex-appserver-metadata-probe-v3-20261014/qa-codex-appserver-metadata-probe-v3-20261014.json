@@ -1,0 +1,25 @@
+{
+  "status": "PASS_V3_DIAGNOSTIC_SOURCE_REVIEW",
+  "reviewed_at_utc": "2026-10-14T08:58:18.647622+00:00",
+  "artifact_dir": "E:\\onia-wt\\codex-appserver-metadata-prepared-v3-20261014",
+  "source_sha256": {
+    "metadata_probe.py": "2C0F40D072270B82C74BF6EDF524DEABC8788589A71462A1EE8581000B8704B2",
+    "test_metadata_probe.py": "10C52F826B37F082C6DE20269E7BE1F0FA5E6976A6F2ACC05DE1891A075A6D4B",
+    "review.md": "FEC37B6E2DBC86A6AB3E0CEE682C3368C991EBF84311303EA21CCC5EB7D3D95C",
+    "manifest.json": "BDD63D761D69AE6D0101A1B42D31973ED675CEBF596385A2A28283A16113E1CC"
+  },
+  "source_only_checks": [
+    "Five author focal privacy/shape tests reported PASS; not rerun.",
+    "Remote supervisor AST-extracted and compiled without execution.",
+    "Diagnostic captures only known-key presence, unknown-key count, coarse JSON types, allowlist class, boolean ID match, boolean version validity, fixed reason, exact semver from matching initialize response.",
+    "No raw JSON, unknown key names, method string, ID value, trace, account details, SDK suffix, or stderr enters normal receipt/print.",
+    "Notification trace remains rejected; parser/method allowlist and 3-RPC boundary unchanged.",
+    "Keeper process group, 45-second remote and 49-second local limits, stdout caps, restricted child env, private scratch, EOF/SSH success gate retained."
+  ],
+  "limits": [
+    "No V3 CLI, SSH, RPC, auth, network, model call, or login executed in QA.",
+    "V2 failure classification does not reveal raw offending notification.",
+    "Prior bounded /proc reconciliation found no matching owned cwd; /tmp scan truncated, so scratch absence remains UNKNOWN.",
+    "Account/auth state and model availability remain UNKNOWN."
+  ]
+}
