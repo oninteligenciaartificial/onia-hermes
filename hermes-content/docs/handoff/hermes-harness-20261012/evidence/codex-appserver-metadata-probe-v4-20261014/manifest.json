@@ -1,0 +1,98 @@
+{
+  "artifact_status": "prepared-only-v4-not-executed-awaiting-independent-qa-and-root-review",
+  "release": "Codex CLI 0.161.0",
+  "source_ref": "https://github.com/openai/codex/tree/rust-v0.161.0",
+  "feature_override": {
+    "argument": "-c features.plugins=false",
+    "supported_by_pinned_source": true,
+    "effective_gate": "Feature::Plugins -> plugins_enabled -> plugin startup manager",
+    "limit": "other startup effects not ruled out"
+  },
+  "rpc_allowlist": [
+    "initialize",
+    "initialized",
+    "account/read params={}"
+  ],
+  "excluded": [
+    "model/list (no refresh parameter; may fetch catalog)",
+    "thread/*",
+    "turn/*",
+    "MCP",
+    "plugin",
+    "hooks",
+    "skills"
+  ],
+  "supervisor": {
+    "remote_watchdog_seconds": 45,
+    "remote_cleanup_grace_seconds": 2,
+    "local_ssh_watchdog_seconds": 49,
+    "retry_count": 0,
+    "terminal_frame_required": true,
+    "child_stop_and_scratch_cleanup_required": true,
+    "stdout_line_limit": 64,
+    "stdout_byte_limit": 2097152,
+    "stdout_per_line_limit": 262144,
+    "process_started": false,
+    "process_group_keeper": "unreaped keeper is PGID; child launched with process_group=keeper.pid; TERM ignored by keeper until final SIGKILL",
+    "group_shutdown": "signal owned PGID before reaping keeper; bounded /proc scan checks active members; scratch removed only when group closure confirmed",
+    "process_group_scan_entry_limit": 8192,
+    "rpc_observation": "rpc_methods_sent contains only methods whose local stdin write and flush returned successfully; remote delivery remains unknown"
+  },
+  "offline_validation": {
+    "command": "python -m unittest -v test_metadata_probe.MetadataProbeSafetyTests.test_v4_accepts_optional_emitted_at_ms_i64_in_notification_envelope test_metadata_probe.MetadataProbeSafetyTests.test_v4_rejects_invalid_emitted_at_ms_type_and_i64_range test_metadata_probe.MetadataProbeSafetyTests.test_v4_trace_and_unknown_notification_fields_remain_rejected test_metadata_probe.MetadataProbeSafetyTests.test_v4_failure_diagnostics_track_timestamp_type_without_value",
+    "tests": 4,
+    "duration_seconds": 0.001,
+    "result": "PASS",
+    "scope": "V4 notification-envelope focused fixtures only; no previous suites rerun",
+    "probe_executed": false
+  },
+  "artifacts": {
+    "metadata_probe.py_sha256": "02279f613733b95038a4bd1ec87adc73c2c2019ef18f6c481980bc76d64be9d6",
+    "test_metadata_probe.py_sha256": "09ea3e172b53b48fc5027d4985be01dfaadd403e0af2438f8d6cc230aa8b85b1",
+    "review.md_sha256": "06ffaaa399dee3ebcacf0ce67602e850ff2a4d16cd4205e0b7b718f9a922dac7"
+  },
+  "supersedes": {
+    "qa_rejections": [
+      "0e0777ac7bae79f3e5143657b7fb721f148bad4db54d90d2a777760e653bfb17",
+      "97dfc4cd43b8583eb6f2940cadbd6e50b812b6ca5e5ac5c79a6affe8cdc8490c"
+    ]
+  },
+  "no_execution": {
+    "cli": false,
+    "app_server": false,
+    "rpc": false,
+    "login": false,
+    "llm": false
+  },
+  "privacy": "No auth contents, account identifiers, session data, raw stdout/stderr, or server error text included.",
+  "app_server_transport": {
+    "argv": "app-server (stdio default; --stdio omitted)",
+    "verified_pinned_source": "https://github.com/openai/codex/blob/rust-v0.161.0/codex-rs/cli/src/main.rs#L517-L539",
+    "notes": "Pinned source defines stdio:// default; --stdio is also supported."
+  },
+  "protocol_envelope": "Versionless Codex DTO; notifications additionally allow only emittedAtMs absent/null or exact signed i64 per pinned ServerNotificationEnvelope. trace remains rejected on notifications.",
+  "protocol_diagnostics": "On validation failure: eight known-key presence booleans including emittedAtMs, unknown-key count without names, JSON type categories, method class, expected-ID match boolean, optional exact-shape SDK semver; no values/raw payload.",
+  "source_envelope": {
+    "field": "emittedAtMs",
+    "optional": true,
+    "nullable": true,
+    "type": "exact integer i64",
+    "min": "-9223372036854775808",
+    "max": "9223372036854775807",
+    "value_persisted": false,
+    "source_common": "https://github.com/openai/codex/blob/rust-v0.161.0/codex-rs/app-server-protocol/src/protocol/common.rs#L1968-L1984",
+    "source_population": "https://github.com/openai/codex/blob/rust-v0.161.0/codex-rs/app-server/src/outgoing_message.rs#L838-L842"
+  },
+  "prior_v3_evidence": {
+    "receipt": "E:/onia-wt/codex-appserver-metadata-prepared-v3-20261014/receipt-20261014T090557_713354Z.json",
+    "receipt_sha256": "0B270C9A9FEAFC7730358F25C9E7B5006B4DFAFA9EAF18497E0532B227B54D58",
+    "reconciliation": "E:/onia-wt/codex-appserver-v3-reconcile-20261014.json",
+    "reconciliation_sha256": "88401CAFAE2403799D571215798015719E64DA9588CF18802D8F3C43182263F5",
+    "raw_notification_name": "unknown, not preserved"
+  },
+  "prior_v2_reconciliation": {
+    "path": "E:/onia-wt/codex-appserver-v2-reconcile-20261014.json",
+    "sha256": "16C786594F7DD36B7C30312750CAF87F77AB9C7B4981D04EFA23189F66394E86",
+    "captured_at_utc": "2026-10-14T08:55:22Z"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "status": "PASS_V4_SOURCE_TEST_REVIEW",
+  "reviewed_at_utc": "2026-10-14T09:10:57.978148+00:00",
+  "artifact_dir": "E:\\onia-wt\\codex-appserver-metadata-prepared-v4-20261014",
+  "source_test_sha256": {
+    "metadata_probe.py": "02279F613733B95038A4BD1EC87ADC73C2C2019EF18F6C481980BC76D64BE9D6",
+    "test_metadata_probe.py": "09EA3E172B53B48FC5027D4985BE01DFAADD403E0AF2438F8D6CC230AA8B85B1"
+  },
+  "official_sources": [
+    "https://raw.githubusercontent.com/openai/codex/rust-v0.161.0/codex-rs/app-server-protocol/src/protocol/common.rs#L1968-L1984",
+    "https://raw.githubusercontent.com/openai/codex/rust-v0.161.0/codex-rs/app-server/src/outgoing_message.rs#L883-L907"
+  ],
+  "findings": [
+    "ServerNotificationEnvelope flattens notification and adds optional emittedAtMs as Option<i64>; official serialization test emits this field.",
+    "V4 accepts emittedAtMs only absent, null, or exact int within signed i64 range; boolean, float, string and out-of-range values reject.",
+    "Trace and other unknown notification fields remain rejected; method allowlist and server-request rejection remain unchanged.",
+    "Timestamp value is not recorded in sanitized diagnostic or receipt; only presence and coarse type are reported.",
+    "Remote supervisor source compiles without execution."
+  ],
+  "author_focal_tests": {
+    "reported_count": 4,
+    "reported_result": "PASS",
+    "independently_rerun": false
+  },
+  "limits": [
+    "Only source and test files frozen and reviewed; review.md and manifest.json are pending root correction and not covered by this PASS.",
+    "V3 unknown top-level key count one does not empirically identify emittedAtMs.",
+    "No V4 CLI/SSH/RPC/network/auth execution; account remains UNKNOWN until complete validated read."
+  ]
+}
