@@ -1,0 +1,25 @@
+{
+  "date_utc": "2026-10-14T23:35:51Z",
+  "result": "ok",
+  "error_type": null,
+  "record_count": 2,
+  "records": [
+    {
+      "type": "turn_context",
+      "timestamp": "2026-10-14T23:30:11.635Z",
+      "model": "gpt-6.1-sol",
+      "model_context_window": null,
+      "last_token_usage": null,
+      "total_token_usage": null
+    },
+    {
+      "type": "turn_context",
+      "timestamp": "2026-10-14T23:34:18.354Z",
+      "model": "gpt-6.1-sol",
+      "model_context_window": null,
+      "last_token_usage": null,
+      "total_token_usage": null
+    }
+  ],
+  "interpretation": "Usage records are call-level/session metadata only; age is calculable from timestamps, but active-context equivalence remains UNKNOWN absent documented semantics."
+}
