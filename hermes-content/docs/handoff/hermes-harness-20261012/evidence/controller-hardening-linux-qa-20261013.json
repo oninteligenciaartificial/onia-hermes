@@ -1,0 +1,36 @@
+{
+  "timestamp": "2026-10-14T00:52:28.671139+00:00",
+  "python": "3.11.16 (main, Sep  1 2026, 14:18:37) [Clang 22.1.3 ]",
+  "source_hashes": {
+    "controller_pilot.py": "69fc9d90acbd4f0b252fdfc94b386d8035958b2a1f1fa49faf7934bcc5c462f7",
+    "test_controller_pilot.py": "6e842790f014038cd880e314256b8d8030912adfd8ec778998a469ddf90886f3",
+    "CONTROLLER-PILOT-20261013.md": "842e5347d40659484420219e17ef42ba9054cba8286682f715c34a31b4adaf5d",
+    "sqlite_pilot.py": "d742d37e2451d25bae19df32be35a60a4cbd34a85a92749f0c63b1a0537ea2b8"
+  },
+  "results": [
+    {
+      "argv": [
+        "/usr/local/lib/hermes-agent/.hermes-runtime/python/generation-1788703855-4145238-c68bd454/cpython-3.11.16-linux-x86_64-gnu/bin/python3.11",
+        "-B",
+        "-m",
+        "unittest",
+        "-v",
+        "test_controller_pilot.py"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "test_aggregate_budget_blocks_high_context_rotation_before_session (test_controller_pilot.ControllerPilotTests.test_aggregate_budget_blocks_high_context_rotation_before_session) ... ok\ntest_aggregate_budget_caps_fanout_across_portfolios (test_controller_pilot.ControllerPilotTests.test_aggregate_budget_caps_fanout_across_portfolios) ... ok\ntest_ambiguous_fake_failure_halts_without_replay (test_controller_pilot.ControllerPilotTests.test_ambiguous_fake_failure_halts_without_replay) ... ok\ntest_changed_source_identity_cannot_call_fake (test_controller_pilot.ControllerPilotTests.test_changed_source_identity_cannot_call_fake) ... ok\ntest_claim_stop_race_does_not_return_claimed_result (test_controller_pilot.ControllerPilotTests.test_claim_stop_race_does_not_return_claimed_result) ... ok\ntest_concurrent_goals_share_one_atomic_budget_reservation (test_controller_pilot.ControllerPilotTests.test_concurrent_goals_share_one_atomic_budget_reservation) ... ok\ntest_consumed_nonce_cannot_authorize_high_context_rotation_for_other_goal (test_controller_pilot.ControllerPilotTests.test_consumed_nonce_cannot_authorize_high_context_rotation_for_other_goal) ... ok\ntest_context_sample_is_owner_bound_and_consumed_once (test_controller_pilot.ControllerPilotTests.test_context_sample_is_owner_bound_and_consumed_once) ... ok\ntest_context_unknown_holds_without_fake_call (test_controller_pilot.ControllerPilotTests.test_context_unknown_holds_without_fake_call) ... ok\ntest_crash_after_fake_before_checkpoint_requires_reconciliation (test_controller_pilot.ControllerPilotTests.test_crash_after_fake_before_checkpoint_requires_reconciliation) ... ok\ntest_demo_completes_one_goal_with_rotation_and_no_replay (test_controller_pilot.ControllerPilotTests.test_demo_completes_one_goal_with_rotation_and_no_replay) ... ok\ntest_expired_owner_cannot_allocate_successor_or_run (test_controller_pilot.ControllerPilotTests.test_expired_owner_cannot_allocate_successor_or_run) ... ok\ntest_expired_wrong_scope_and_duplicate_approval_denied (test_controller_pilot.ControllerPilotTests.test_expired_wrong_scope_and_duplicate_approval_denied) ... ok\ntest_forged_approval_stage_cannot_complete_durable_running_task (test_controller_pilot.ControllerPilotTests.test_forged_approval_stage_cannot_complete_durable_running_task) ... ok\ntest_forged_wrong_result_approval_cannot_complete (test_controller_pilot.ControllerPilotTests.test_forged_wrong_result_approval_cannot_complete) ... ok\ntest_global_rotation_budget_blocks_fanout_before_successor (test_controller_pilot.ControllerPilotTests.test_global_rotation_budget_blocks_fanout_before_successor) ... ok\ntest_goal_and_client_scope_fail_before_call (test_controller_pilot.ControllerPilotTests.test_goal_and_client_scope_fail_before_call) ... ok\ntest_interruption_resumes_checkpoint_without_second_fake_call (test_controller_pilot.ControllerPilotTests.test_interruption_resumes_checkpoint_without_second_fake_call) ... ok\ntest_just_below_threshold_runs_without_rotation (test_controller_pilot.ControllerPilotTests.test_just_below_threshold_runs_without_rotation) ... ok\ntest_rotation_fences_previous_owner (test_controller_pilot.ControllerPilotTests.test_rotation_fences_previous_owner) ... ok\ntest_rotation_limit_is_finite_even_with_fresh_high_samples (test_controller_pilot.ControllerPilotTests.test_rotation_limit_is_finite_even_with_fresh_high_samples) ... ok\ntest_rotation_reserves_shared_budget_before_successor_allocation (test_controller_pilot.ControllerPilotTests.test_rotation_reserves_shared_budget_before_successor_allocation) ... ok\ntest_run_grant_binds_actor_chat_bot_channel_hash_version_and_ttl (test_controller_pilot.ControllerPilotTests.test_run_grant_binds_actor_chat_bot_channel_hash_version_and_ttl) ... ok\ntest_run_grant_nonce_cannot_be_replayed_across_goals (test_controller_pilot.ControllerPilotTests.test_run_grant_nonce_cannot_be_replayed_across_goals) ... ok\ntest_seventy_percent_threshold_includes_next_step_reserve (test_controller_pilot.ControllerPilotTests.test_seventy_percent_threshold_includes_next_step_reserve) ... ok\ntest_stale_checkpoint_cannot_replay_fake_effect (test_controller_pilot.ControllerPilotTests.test_stale_checkpoint_cannot_replay_fake_effect) ... ok\ntest_stop_before_core_claim_does_not_leave_running_task_or_lease (test_controller_pilot.ControllerPilotTests.test_stop_before_core_claim_does_not_leave_running_task_or_lease) ... ok\ntest_stop_blocks_admission_and_does_not_claim_to_cancel_inflight (test_controller_pilot.ControllerPilotTests.test_stop_blocks_admission_and_does_not_claim_to_cancel_inflight) ... ok\ntest_stop_during_fake_effect_holds_ambiguous_outcome (test_controller_pilot.ControllerPilotTests.test_stop_during_fake_effect_holds_ambiguous_outcome) ... ok\ntest_stop_nonce_is_single_use (test_controller_pilot.ControllerPilotTests.test_stop_nonce_is_single_use) ... ok\ntest_unknown_quota_cost_or_retry_capacity_holds_before_reservation (test_controller_pilot.ControllerPilotTests.test_unknown_quota_cost_or_retry_capacity_holds_before_reservation) ... ok\n\n----------------------------------------------------------------------\nRan 31 tests in 2.507s\n\nOK\n"
+    },
+    {
+      "argv": [
+        "/usr/local/lib/hermes-agent/.hermes-runtime/python/generation-1788703855-4145238-c68bd454/cpython-3.11.16-linux-x86_64-gnu/bin/python3.11",
+        "-B",
+        "controller_pilot.py"
+      ],
+      "returncode": 0,
+      "stdout": "{\"external_dispatch\": \"closed\", \"model_calls\": 1, \"next_claim\": \"no_work\", \"result_digest\": \"a4cbf1a2a34f2a6097e1eea806306ed81bea02826f74f31c87d0675afc02f867\", \"session_renewals\": 1, \"stages\": [\"running\", \"rotated\", \"qa\", \"approval\", \"held_approval\", \"done\"], \"status\": \"done\"}\n",
+      "stderr": ""
+    }
+  ],
+  "scope": "fixture-only; no providers/services/network"
+}

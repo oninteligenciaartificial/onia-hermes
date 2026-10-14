@@ -9,6 +9,17 @@ description: Invocar ANTES de tocar a Hermes (el asistente de Sergio Urcullo por
 > como autoconocimiento, sin eso investigamos y perdemos las cosas»*. Cada trampa tiene su caso y su
 > fecha. Lo que se aprenda nuevo se agrega acá, en el mismo commit que lo usa.
 
+## Controlador de objetivos: método aprendido 13-oct-2026
+
+El estado de 2026-10-13 y sus límites están en `hermes-content/docs/handoff/madre-relevo-20261013.md` y el análisis en `hermes-content/research/infra/HERMES-FUNCIONES-Y-MODELOS-20261013.md`. El piloto 6d1 probó flujo **fake** nominal; QA adversarial posterior `54336DA7…` reprodujo replay y falsificación de checkpoint/resultado, doble relevo y presupuesto ficticio sin límite agregado. El hardening preservado en `b629b1608eee9e038de2893a27dde2b150e8da2f` `69FC9D90…` corrigió esos casos en fixture y QA independiente pasó 31/31 Windows + 31/31 VPS, sin proveedor/canal real. `dispatch_external` permanece cerrado: no inferir operador Hermes/Telegram ni rotación nativa.
+
+- El checkpoint **durable** de SQLite es la autoridad: bajo `BEGIN IMMEDIATE`, comparar digest/versión guardados con la llamada del owner y validar fence/lease antes de avanzar. No confiar en un `Claim`, stage o resultado pasado por el caller sin cotejo. La muestra `U/W` debe pertenecer a owner/sesión/fence, ser fresca y consumirse una vez; `UNKNOWN` detiene la rotación automática.
+- En **esa misma base y transacción** reservar presupuesto agregado y concurrencia, marcar grant/nonce one-use, cancel/stop y efecto `in_flight` **antes** de cualquier llamada. Crash/timeout/resultado ambiguo conserva `needs_reconcile`: no replay ni liberar reserva/grant sin evidencia de conciliación. El STOP en fixture bloquea nuevos claims; durante el fake deja `needs_reconcile`, sin cancelación del proveedor. Los wrappers contienen sólo sus procesos propios en escenarios probados; el control de efectos externos sigue propuesto.
+- Para canal futuro, Telegram sólo transporta un intent: comprobar actor, chat, bot, cartera, cuenta, acción, target, versión de contrato/política, hash de payload/artefacto, emisión/TTL máximo, expiración y nonce único contra ledger. Un «OK» libre no autoriza. QA del resultado y aprobación de un efecto son decisiones distintas; si el resultado no existe todavía, su hash no puede aprobarse. Cuota/costo/capacidad/reintentos `UNKNOWN` implican HOLD antes del efecto. Fase offline usa identidades fixture, sin red/proveedor/secretos.
+- Guardar y revisar **el runner exacto antes de invocar** un modelo; después preservar recibo saneado, hashes de fuente/entrada/salida, eventos, modelo solicitado/configurado/servido si expuesto, uso, QA y estado de ledger antes de congelar. El canario Codex CLI VPS de 13-oct tuvo recibo y QA limitada, pero no conservó el driver de lanzamiento: no inventarlo ni repetir la inferencia. Un UUID de chat nativo no convierte al CLI en adapter de ese chat ni resuelve `CloudThreadNotFoundError` de otra API.
+
+**Incidente documental 13-oct, OPEN para credenciales:** una versión anterior de esta skill llevaba un literal presentado como credencial de la integración **Google Calendar** de la cuenta ONIA. Se retiró del árbol de trabajo sin mostrarlo ni probarlo; el tipo exacto (API key, OAuth, password u otro), vigencia y uso actual son `UNKNOWN`, y el historial Git no queda saneado por esta edición. El owner autorizado debe revisar **metadatos del conector de Google Calendar** sin exponer valor, identificar la credencial asociada y, si está vigente, revocarla/rotarla en el proveedor y reautorizar el conector; verificar lectura/escritura sólo bajo permiso separado. No usar el valor histórico como acceso ni replicarlo en runbooks. La retirada del texto nuevo cierra esa copia, no la exposición histórica.
+
 ## Dónde está cada cosa
 
 | Qué | Dónde |
@@ -105,10 +116,7 @@ description: Invocar ANTES de tocar a Hermes (el asistente de Sergio Urcullo por
    reintenta. `rollback.sh` y la marca «aplicado» se escriben al terminar la Fase A, antes de tocar
    nada: si aplicar se corta a mitad, `revertir` igual lo encuentra.
 
-**La calendarización se escribe con la credencial de la cuenta ONIA (`a3FResZHqQ32ptyt`) sobre
-`sergio.urcullo.m@gmail.com`.** Hasta el 1-oct esa credencial solo había LEÍDO su calendario; la
-escritura la prueba recién `aplicar`. Si la prueba queda a medias, el log da el id del evento
-«🧪 Prueba de Jarvis»: se borra con el conector de Google Calendar.
+**Calendario:** usar solo el puente de credenciales autorizado para la cuenta ONIA; no escribir valores de acceso ni identificadores personales en skills, logs o Git. La escritura real requiere alcance y prueba separados.
 
 Se prueba en un VPS simulado: `npm run test:jarvis-aplicar`. Esa prueba corre el `aplicar.sh` real,
 con las rutas desviadas a una carpeta temporal y dobles para crontab, la API de n8n, systemctl y el
