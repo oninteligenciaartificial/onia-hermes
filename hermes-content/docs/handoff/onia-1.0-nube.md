@@ -169,6 +169,6 @@ la dirección de Sergio Urcullo.
 1. Terminar #171 (§4 «15-oct»): juntar los dos seguimientos, gates, push a las :10, CI, merge fuera de la ventana y publicar.
 2. Mirar en producción: caja de un día anterior, cotización y traspaso a 390 y 1440 en importadora y comercio, el checkout.
 3. Cuando Sergio Urcullo apruebe el pago QA: mirar el plan activo, la factura por correo y el checkout en «Plan activo».
-4. Contrato M1d (Codex): el servidor exige enteros en las unidades enteras (ventas, traspasos y cotizaciones).
+4. Contratos para Codex: **M1e**, el servidor exige enteros en las unidades enteras (ventas, traspasos y cotizaciones; M1d ya es el de los montos dentales de Hermes E30), y **omitidos por teléfono visibles** (Hermes E34).
 5. #154 S2 y #150 P-01: Hermes QA está parado desde el 11-oct; sin su re-revisión, decidir con revisores propios.
 6. Lo que destraben sus respuestas (§7), en el orden del corte (`ONIA_1.0_CORTE.md`).
