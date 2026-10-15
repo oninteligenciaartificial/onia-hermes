@@ -1,0 +1,44 @@
+{
+  "written_at_utc": "2026-10-15T00:05:38Z",
+  "source_read_time_utc": "UNKNOWN",
+  "source": "mcp__codex_app__read_thread",
+  "read_parameters": {
+    "host": "local",
+    "turnLimit": 1,
+    "includeOutputs": false,
+    "maxOutputCharsPerItem": 1
+  },
+  "threadFields": [
+    "id",
+    "kind",
+    "hostId",
+    "title",
+    "preview",
+    "status",
+    "cwd",
+    "createdAt",
+    "updatedAt"
+  ],
+  "turnFields": [
+    "id",
+    "status",
+    "error",
+    "startedAt",
+    "completedAt",
+    "durationMs"
+  ],
+  "selected_timestamp": {
+    "field": "turns[0].startedAt",
+    "value": 1792021615
+  },
+  "excluded": [
+    "items",
+    "messages",
+    "texts",
+    "commands",
+    "raw MCP/API wrapper"
+  ],
+  "token_context_window_fields_present": false,
+  "active_context": "UNKNOWN",
+  "interpretation": "No token, usage, context, or window fields were present in examined thread/turn metadata; no percentage calculated. turns[0].startedAt is metadata only, not context usage."
+}
