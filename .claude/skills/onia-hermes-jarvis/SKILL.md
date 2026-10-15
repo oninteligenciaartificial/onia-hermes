@@ -252,6 +252,14 @@ CLI de Hermes.
   show origin/<rama>:<ruta>` y `git archive … | tar -x` en `/tmp`: nunca `checkout` en el árbol del carril. La
   verificación cambia veredictos: el «cursor CAFC repite números» de #145 bajó a MEDIUM porque el runner falla cerrado
   sin conciliación. Y dos lentes del mismo PR (#162) se contradijeron sobre si el silencio dispara; el repro lo decidió.
+- **PR «de usted» (copia) de más de 20 archivos: probar que es SOLO texto, no leerlo a ojo** (15-oct, #174: 68 archivos, +1.189 −211). Tres pasos, con los scripts de
+  `hermes-content/docs/research/qa-publicacion/2026-10-15/`: (1) `solo-texto.cjs <repo> <base> <cabeza> <archivos…>` normaliza cada `.ts/.tsx` con el AST de TypeScript
+  (todo texto, plantilla fija, texto JSX y comentario pasa a «§») y dice cuáles quedan idénticos: de 50 archivos, **45 idénticos** y 5 con estructura distinta, que se
+  leen a mano. (2) `literales-logicos.cjs` busca, en los idénticos, cadenas de **un solo token** que hayan cambiado (rutas, `href`, estados, códigos, palabras que espera el
+  bot): el paso 1 NO las ve porque también las reemplaza por «§»; en #174 salieron 0 de 45. Los números y las expresiones regulares sí se comparan en el paso 1. (3) Si el PR
+  toca el DETECTOR de tú/vos, `comparar-detector-tu-y-vos.mts` corre el viejo y el nuevo sobre casos escritos a mano (usted que no debe cazar, tú/vos que sí) y cuenta las
+  regresiones: el de #174 acertó 86 de 87 contra 68 del anterior, 0 regresiones. Límite: el método dice «solo texto», no «el texto es correcto»; la gramática de
+  `negocioSu` y los artículos del rubro se leen aparte. El TypeScript sale de `/opt/node22/lib/node_modules/typescript` (la nube no instala nada).
 - **Mirar páginas públicas con un solo script** (11-oct): `hermes-content/docs/research/qa-publicacion/2026-10-11/mirar-publico.mjs
   <carpeta> <etiqueta> <ruta>...`, con `BASE=https://onia.com.bo` para la web (por omisión, la app). Por ruta y ancho
   (390 y 1440) saca estado, tiempo, título de la pestaña, descripción, tarjeta al compartir, huella del build, ligaduras de
