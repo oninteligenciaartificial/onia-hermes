@@ -1,19 +1,29 @@
-"""Offline boundary tests for native_work_entrypoint; no DB/provider is used."""
+"""Offline boundary and temporary queue/sink recovery tests; no provider is used."""
 import builtins
+from dataclasses import replace
 import hashlib
 import io
 import json
 from pathlib import Path
 import tempfile
+import time
 import unittest
 from unittest.mock import patch
 
-from native_receipt_bridge import NativeWorkRequest
+from native_receipt_bridge import (
+    NativeObservation,
+    NativeReceiptBridge,
+    NativeWorkAuthorization,
+    NativeWorkRequest,
+)
+from native_result_store import FileResultSink
 from native_work_entrypoint import (
     MAX_INPUT_BYTES,
     NativeWorkRuntime,
     handle_native_event,
 )
+from controller_pilot import digest
+from sqlite_pilot import SQLiteQueue, TaskSpec
 
 
 OPERATION_ID = "12345678-1234-1234-1234-123456789abc"
@@ -103,6 +113,20 @@ class TempFileResultSink:
             "sha256": hashlib.sha256(bundle_bytes).hexdigest(),
             "bytes_written": len(bundle_bytes),
         }
+
+
+class ResultReceiptBridge:
+    def __init__(self):
+        self.receipt = None
+
+    def record_result_bundle_receipt(self, request, event_id, receipt, now):
+        self.receipt = (request.digest(), event_id, dict(receipt), now)
+        return dict(receipt)
+
+    def read_result_bundle_receipt(self, request):
+        if self.receipt is None or self.receipt[0] != request.digest():
+            return None
+        return dict(self.receipt[2])
 
 
 class NativeWorkEntrypointTests(unittest.TestCase):
@@ -202,9 +226,10 @@ class NativeWorkEntrypointTests(unittest.TestCase):
         bundle = result_output(req)
         with tempfile.TemporaryDirectory() as temp_dir:
             sink = TempFileResultSink(Path(temp_dir) / "bundle.bin")
+            bridge = ResultReceiptBridge()
             result, step = self.invoke_once(
                 raw=payload("result", req),
-                runtime_value=runtime(req, result_sink=sink),
+                runtime_value=runtime(req, result_sink=sink, bridge=bridge),
                 output=bundle,
             )
             expected = json.dumps(bundle, sort_keys=True, separators=(",", ":"),
@@ -215,6 +240,8 @@ class NativeWorkEntrypointTests(unittest.TestCase):
             self.assertEqual(sink.calls, 1)
             self.assertEqual(sink.operation_id, req.operation_id)
             self.assertEqual(sink.request_sha, req.digest())
+            self.assertEqual(bridge.receipt[0], req.digest())
+            self.assertEqual(bridge.receipt[1], "event-001")
             self.assertNotIn("files", result)
             step.assert_called_once()
 
@@ -308,6 +335,319 @@ class NativeWorkEntrypointTests(unittest.TestCase):
             self.assertEqual(result["state"], "needs_reconcile")
             self.assertEqual(result["retry"], "forbidden")
             step.assert_called_once()
+
+
+class NativeResultRecoveryTests(unittest.TestCase):
+    """Real local queue/sink checkpoint recovery; provider and browser are fakes."""
+
+    def setUp(self):
+        self.area = tempfile.TemporaryDirectory()
+        self.addCleanup(self.area.cleanup)
+        self.root = Path(self.area.name)
+        self.db_path = self.root / "queue.sqlite3"
+        self.sink_path = self.root / "results"
+        self.now = int(time.time())
+        self.request = make_request()
+        self.sink_path.mkdir()
+        self.plan = type("Plan", (), {
+            "request": lambda _self: (None, None, PLAN_SHA),
+            "branch": self.request.ref,
+            "expected_remote_head": self.request.head,
+            "executable": self.root / "codex.exe",
+        })()
+        self.bundle = result_output(self.request, files={
+            self.request.result_paths[0]: {
+                "sha256": "d" * 64,
+                "bytes": 14,
+                "json": {
+                    "operation_id": self.request.operation_id,
+                    "input_sha": self.request.input_sha,
+                    "repository": {"expected_head": self.request.head,
+                                   "observed_head": self.request.head},
+                    "result": "candidate",
+                },
+            },
+        })
+        self.queue, self.bridge = self._build_bridge()
+        self.sink = FileResultSink(self.sink_path, _fixture_dir_fsync=lambda _path: None)
+        self.transport = self.FakeTransport(self.bridge, self.bundle)
+        self.runtime = NativeWorkRuntime(
+            queue=self.queue, bridge=self.bridge, transport=self.transport,
+            request=self.request, plan=self.plan, result_sink=self.sink,
+        )
+
+    class FakeTransport:
+        def __init__(self, bridge, bundle):
+            self.bridge = bridge
+            self.bundle = bundle
+            self.collect_calls = 0
+            self.status_calls = 0
+
+        def collect_result(self, operation_id, executable, paths):
+            self.collect_calls += 1
+            return self.bundle
+
+        def status(self, *_args):
+            self.status_calls += 1
+            return {"state": "running"}
+
+    class SyntheticAuthority:
+        def __init__(self, expires_at):
+            self.expires_at = expires_at
+
+        def verify(self, request, _now):
+            return NativeWorkAuthorization(
+                True, request.digest(), request.nonce, "fixture-actor",
+                "test:synthetic-offline-authority", "test:result-recovery", self.expires_at,
+            )
+
+    def _build_bridge(self):
+        queue = SQLiteQueue(self.db_path)
+        NativeReceiptBridge.bootstrap_guard(queue, "test:result-recovery", PLAN_SHA, self.now)
+        bridge = NativeReceiptBridge(queue)
+
+        predecessor = TaskSpec(
+            self.request.predecessor_task_id, "prior-worker", self.request.repo,
+            self.request.ref, self.request.head, self.request.contract_id,
+            self.request.input_sha,
+        )
+        queue.enqueue(predecessor, self.now + 1)
+        prior_claim = queue.claim("prior-worker", "prior-owner", self.now + 2, 60).claim
+        prior_operation = "87654321-4321-4321-4321-cba987654321"
+        bridge.reserve(prior_claim, prior_operation, "prior-nonce", "test:result-recovery",
+                       self.now + 3, PLAN_SHA)
+        bridge.begin_dispatch(prior_operation, PLAN_SHA)
+        bridge.ingest(NativeObservation(
+            prior_operation, "cloud_cli_task", "task_e_" + "2" * 32,
+            self.request.input_sha, "completed", self.now + 4,
+            "fixture:prior", "e" * 64,
+        ), self.now + 4)
+        queue.resolve_reconciliation(self.request.predecessor_task_id, "applied",
+                                     "fixture:prior-qa", self.now + 5)
+
+        current = TaskSpec(
+            self.request.task_id, self.request.worker_id, self.request.repo,
+            self.request.ref, self.request.head, self.request.contract_id,
+            self.request.input_sha,
+        )
+        queue.enqueue(current, self.now + 6)
+        claim = queue.claim(self.request.worker_id, "current-owner", self.now + 7, 60).claim
+        bridge.authorize_and_reserve_work(
+            claim, self.request, self.SyntheticAuthority(self.now + 3600), self.now + 8,
+        )
+        bridge.begin_dispatch(self.request.operation_id, PLAN_SHA)
+        bridge.ingest(NativeObservation(
+            self.request.operation_id, "cloud_cli_task", "task_e_" + "3" * 32,
+            self.request.input_sha, "submitted", self.now + 9,
+            "fixture:submit",
+        ), self.now + 9)
+        return queue, bridge
+
+    def _event(self, kind, event_id, runtime=None, now=None):
+        raw = payload(kind, self.request, event_id=event_id)
+        return handle_native_event(raw, runtime or self.runtime,
+                                   self.now + 20 if now is None else now)
+
+    def _reopened_runtime(self, verifier=None, *, request=None):
+        queue = SQLiteQueue(self.db_path)
+        bridge = NativeReceiptBridge(queue)
+        sink = FileResultSink(self.sink_path, _fixture_dir_fsync=lambda _path: None)
+        transport = self.FakeTransport(bridge, self.bundle)
+        runtime = NativeWorkRuntime(
+            queue=queue, bridge=bridge, transport=transport,
+            request=request or self.request, plan=self.plan,
+            result_bundle=None, qa_verifier=verifier, result_sink=sink,
+        )
+        return runtime
+
+    def _persist_result(self):
+        result = self._event("result", "result-event-1")
+        self.assertEqual(result["state"], "awaiting_independent_qa")
+        self.assertEqual(self.transport.collect_calls, 1)
+        receipt = self.bridge.read_result_bundle_receipt(self.request)
+        self.assertEqual(receipt["sha256"], result["result_bundle_sha256"])
+        return result
+
+    def test_result_receipt_survives_reopen_and_qa_uses_exact_persisted_bytes_once(self):
+        result = self._persist_result()
+        before = self.bridge.read_result_bundle_receipt(self.request)
+
+        class OfflineVerifier:
+            def __init__(self):
+                self.calls = []
+
+            def verify(self, request, bundle, now):
+                self.calls.append((request.digest(), bundle, now))
+                return {"verified": False}
+
+        verifier = OfflineVerifier()
+        reopened = self._reopened_runtime(verifier)
+        self.assertIsNone(reopened.result_bundle)
+        first = self._event("qa", "qa-event-1", reopened)
+        second = self._event("qa", "qa-event-1", reopened)
+        self.assertEqual(first["state"], "awaiting_independent_qa")
+        self.assertEqual(second["reason"], "event_already_consumed_no_reexecution")
+        self.assertEqual(len(verifier.calls), 1)
+        self.assertEqual(verifier.calls[0][0], self.request.digest())
+        persisted_bytes = self.sink.load(
+            before["ref"], self.request.operation_id, self.request.digest(), before["sha256"])
+        self.assertEqual(verifier.calls[0][1], json.loads(persisted_bytes.decode("utf-8")))
+        self.assertEqual(reopened.transport.collect_calls, 0)
+        self.assertEqual(reopened.transport.status_calls, 0)
+        self.assertEqual(self.bridge.read_result_bundle_receipt(self.request), before)
+        self.assertNotIn("goal_outcome", first)
+        self.assertEqual(result["result_bundle_ref"], before["ref"])
+
+    def test_valid_recovered_bundle_closes_once_with_bound_review_after_restart(self):
+        result = self._persist_result()
+        receipt = self.bridge.read_result_bundle_receipt(self.request)
+
+        class BoundOfflineVerifier:
+            def __init__(self):
+                self.calls = []
+
+            def verify(self, request, bundle, now):
+                self.calls.append((request.digest(), bundle, now))
+                return {
+                    "verified": True,
+                    "request_sha": request.digest(),
+                    "bundle_sha": digest(bundle),
+                    "remote_id": bundle["remote_id"],
+                    "reviewer_id": "independent-reviewer",
+                    "goal_outcome": "completed",
+                    "authority_source": "fixture:offline-independent-review",
+                    "evidence_ref": "fixture:qa-review-1",
+                }
+
+        verifier = BoundOfflineVerifier()
+        reopened = self._reopened_runtime(verifier)
+        self.assertIsNone(reopened.result_bundle)
+        first = self._event("qa", "qa-event-valid", reopened)
+        duplicate = self._event("qa", "qa-event-valid", reopened)
+
+        persisted_bytes = self.sink.load(
+            receipt["ref"], self.request.operation_id, self.request.digest(), receipt["sha256"])
+        recovered = json.loads(persisted_bytes.decode("utf-8"))
+        expected_result_sha = digest({
+            path: item["sha256"] for path, item in recovered["files"].items()
+        })
+        self.assertEqual(result["result_bundle_sha256"], receipt["sha256"])
+        self.assertEqual(first["state"], "closure_resolved")
+        self.assertEqual(first["goal_outcome"], "completed")
+        self.assertEqual(first["result_digest"], self.queue.read_result(self.request.task_id)["digest"])
+        self.assertEqual(duplicate["reason"], "event_already_consumed_no_reexecution")
+        self.assertEqual(len(verifier.calls), 1)
+        self.assertEqual(verifier.calls[0][1], recovered)
+        native = self.bridge.read(self.request.operation_id)
+        self.assertEqual(native["state"], "completed")
+        self.assertEqual(native["observation"]["result_sha"], expected_result_sha)
+        with self.queue._connection() as conn:
+            task = conn.execute("SELECT status FROM tasks WHERE task_id=?",
+                                (self.request.task_id,)).fetchone()
+            closure = conn.execute("SELECT evidence_json FROM task_results WHERE task_id=?",
+                                   (self.request.task_id,)).fetchone()
+        self.assertEqual(task["status"], "done")
+        closure_evidence = json.loads(closure["evidence_json"])
+        closure_note = closure_evidence["evidence_ref"]
+        self.assertIn("independent_qa=fixture:qa-review-1", closure_note)
+        self.assertIn("bundle_sha=" + digest(recovered), closure_note)
+        self.assertEqual(reopened.transport.collect_calls, 0)
+        self.assertEqual(reopened.transport.status_calls, 0)
+
+    def test_missing_receipt_or_verifier_holds_before_consuming_qa(self):
+        self._persist_result()
+        with self.queue._connection() as conn:
+            row = conn.execute("SELECT work_events_json FROM native_operations WHERE operation_id=?",
+                               (self.request.operation_id,)).fetchone()
+            events = json.loads(row["work_events_json"])
+            entry = next(value for value in events.values() if value["event"] == "result")
+            entry.pop("result_bundle_receipt")
+            entry["state"] = "consumed_outcome_requires_event_receipt"
+            conn.execute("UPDATE native_operations SET work_events_json=? WHERE operation_id=?",
+                         (json.dumps(events, sort_keys=True, separators=(",", ":")),
+                          self.request.operation_id))
+        class NoOpVerifier:
+            def verify(self, *_args):
+                raise AssertionError("missing receipt must hold before QA verifier")
+
+        reopened = self._reopened_runtime(verifier=NoOpVerifier())
+        result = self._event("qa", "qa-event-missing", reopened)
+        self.assertEqual(result["code"], "result_bundle_recovery_failed")
+        with self.queue._connection() as conn:
+            events = json.loads(conn.execute(
+                "SELECT work_events_json FROM native_operations WHERE operation_id=?",
+                (self.request.operation_id,)).fetchone()[0])
+        self.assertEqual(sum(item["event"] == "qa" for item in events.values()), 0)
+
+        no_verifier = self._reopened_runtime()
+        result = self._event("qa", "qa-event-no-verifier", no_verifier)
+        self.assertEqual(result["code"], "qa_verifier_required")
+
+    def test_corrupt_sink_and_changed_request_hold_before_verifier(self):
+        self._persist_result()
+        result_file = next(self.sink_path.glob("bundle-*.json"))
+        result_file.write_bytes(b"corrupt")
+
+        class OfflineVerifier:
+            def __init__(self):
+                self.calls = 0
+
+            def verify(self, *_args):
+                self.calls += 1
+                return {"verified": False}
+
+        verifier = OfflineVerifier()
+        reopened = self._reopened_runtime(verifier)
+        result = self._event("qa", "qa-event-corrupt", reopened)
+        self.assertEqual(result["code"], "result_bundle_recovery_failed")
+        self.assertEqual(verifier.calls, 0)
+
+        altered_request = replace(self.request, nonce="different-nonce")
+        altered = self._reopened_runtime(verifier, request=altered_request)
+        result = self._event("qa", "qa-event-altered", altered)
+        self.assertEqual(result["code"], "request_mismatch")
+        self.assertEqual(verifier.calls, 0)
+        with self.queue._connection() as conn:
+            events = json.loads(conn.execute(
+                "SELECT work_events_json FROM native_operations WHERE operation_id=?",
+                (self.request.operation_id,)).fetchone()[0])
+        self.assertEqual(sum(item["event"] == "qa" for item in events.values()), 0)
+
+    def test_sink_store_without_checkpoint_never_recollects_or_recovers_by_filename(self):
+        original = self.bridge.record_result_bundle_receipt
+        self.bridge.record_result_bundle_receipt = lambda *_args: (_ for _ in ()).throw(
+            RuntimeError("fixture checkpoint interruption"))
+        result = self._event("result", "result-event-gap")
+        self.bridge.record_result_bundle_receipt = original
+        self.assertEqual(result["code"], "result_receipt_outcome_unknown")
+        self.assertEqual(self.transport.collect_calls, 1)
+        self.assertEqual(self.bridge.read_result_bundle_receipt(self.request), None)
+
+        class OfflineVerifier:
+            def __init__(self):
+                self.calls = 0
+
+            def verify(self, *_args):
+                self.calls += 1
+                return {"verified": False}
+
+        verifier = OfflineVerifier()
+        reopened = self._reopened_runtime(verifier)
+        qa = self._event("qa", "qa-event-gap", reopened)
+        self.assertEqual(qa["code"], "result_bundle_recovery_failed")
+        self.assertEqual(verifier.calls, 0)
+        retry = self._event("result", "result-event-gap", reopened)
+        self.assertEqual(retry["reason"], "event_already_consumed_no_reexecution")
+        self.assertEqual(reopened.transport.collect_calls, 0)
+
+    def test_receipt_conflict_is_immutable(self):
+        self._persist_result()
+        receipt = self.bridge.read_result_bundle_receipt(self.request)
+        altered = dict(receipt, sha256="f" * 64)
+        with self.assertRaisesRegex(RuntimeError, "receipt conflict"):
+            self.bridge.record_result_bundle_receipt(
+                self.request, "result-event-1", altered, self.now + 30)
+        self.assertEqual(self.bridge.read_result_bundle_receipt(self.request), receipt)
 
 
 if __name__ == "__main__":

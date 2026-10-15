@@ -94,12 +94,15 @@ pending challenge.
 
 The repository contains no owning Telegram gateway startup/consumer source to
 accept the pre-connect insertion. This patch is therefore a tested launcher
-seam and insertion recipe, not live host integration. The harness has no
-Telegram result-delivery or browser-capture route. Results can be persisted
-through the supplied `FileResultSink`, but notifying the operator and delivering
-or capturing the resulting artifact remain manual host responsibilities. Do not
-claim end-to-end Telegram result delivery or live recovery until that host path
-exists and is independently reviewed.
+seam and insertion recipe, not live host integration. Local recovery is now
+prepared: after the existing `result` event, the entrypoint stores the validated
+bundle through `FileResultSink` and binds `{ref, sha256, bytes_written}` to that
+event in `work_events_json`. A later `qa` event reloads only the exact bundle
+named by the durable receipt and verifies its bytes and request identity before
+calling the required external `qa_verifier`. This is not a new queue/schema or
+Cloud collection. The Telegram host remains uninstalled; there is no file
+delivery route or live activation, and this local recovery path establishes no
+live QA PASS.
 
 An ambiguous approval send is deliberately not retried. If the operator cannot
 find the message, reconcile through the trusted host procedure and create a new

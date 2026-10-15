@@ -12,7 +12,8 @@
 ## Caller Telegram nativo (2026-10-15)
 
 - Goal sigue activo; el caller local pre-connect expone `/onia_native_*` y pasó QA offline (13/13 focal; 23/23 compatibilidad). No hay integración Telegram viva.
-- Entrega de resultados y recuperación siguen pendientes; R4 queda congelado con todos los límites consumidos y causa del ERROR `UNKNOWN`.
+- Recuperación local result→QA por recibo durable `work_events_json` + `FileResultSink.load` pasó 42/42 focales y 18/18 compatibilidad QA; no equivale a QA Cloud en vivo.
+- Entrega de archivos y activación host siguen pendientes; R4 permanece congelado con límites consumidos, causa del ERROR `UNKNOWN` y sin más llamadas Cloud autorizadas aquí.
 - No emitir más llamadas Cloud en este canario. Dos lecturas diagnósticas suplementarias quedan pendientes de consentimiento específico.
 
 > **Vigencia corregida 2026-10-09:** el hilo de septiembre de abajo es historial,

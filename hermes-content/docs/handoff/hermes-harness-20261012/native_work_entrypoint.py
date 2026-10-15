@@ -223,7 +223,47 @@ def _persist_result_bundle(sink, bundle_bytes, operation_id, request_sha):
             or type(receipt.get("bytes_written")) is not int
             or receipt["bytes_written"] != len(bundle_bytes)):
         raise ValueError("unverified result sink acknowledgement")
-    return digest, ref
+    return digest, ref, receipt["bytes_written"]
+
+
+def _recover_result_bundle(runtime, request):
+    """Reload only the exact durably referenced bundle; never discover by path."""
+    receipt_reader = getattr(runtime.bridge, "read_result_bundle_receipt", None)
+    loader = getattr(runtime.result_sink, "load", None)
+    if not callable(receipt_reader) or not callable(loader):
+        raise ValueError("durable result receipt or sink loader unavailable")
+    receipt = receipt_reader(request)
+    if type(receipt) is not dict:
+        raise ValueError("durable result receipt unavailable")
+    raw = loader(receipt["ref"], request.operation_id, request.digest(), receipt["sha256"])
+    if (type(raw) is not bytes or len(raw) != receipt["bytes_written"]
+            or hashlib.sha256(raw).hexdigest() != receipt["sha256"]):
+        raise ValueError("result sink bytes differ from durable receipt")
+    try:
+        bundle = json.loads(raw.decode("utf-8", errors="strict"),
+                            object_pairs_hook=_pairs_no_duplicates,
+                            parse_constant=_reject_constant)
+    except (UnicodeError, ValueError, TypeError, RecursionError) as exc:
+        raise ValueError("persisted result bundle is invalid JSON") from exc
+    if (type(bundle) is not dict
+            or json.dumps(bundle, sort_keys=True, separators=(",", ":"),
+                           ensure_ascii=False, allow_nan=False).encode("utf-8") != raw
+            or not _valid_result_bundle(bundle, request, request.operation_id)):
+        raise ValueError("persisted result bundle does not match exact request")
+    native = runtime.bridge.read(request.operation_id)
+    if (type(native) is not dict or native.get("task_id") != request.task_id
+            or native.get("input_sha") != request.input_sha
+            or native.get("surface") != "cloud_cli_task"
+            or native.get("remote_id") != bundle.get("remote_id")):
+        raise ValueError("persisted bundle differs from native operation identity")
+    for item in bundle["files"].values():
+        artifact = item["json"]
+        if (artifact.get("operation_id") != request.operation_id
+                or artifact.get("input_sha") != request.input_sha
+                or artifact.get("repository", {}).get("expected_head") != request.head
+                or artifact.get("repository", {}).get("observed_head") != request.head):
+            raise ValueError("persisted artifact identity differs from request")
+    return bundle
 
 
 def handle_native_event(raw_input, runtime=None, now=None):
@@ -270,11 +310,25 @@ def handle_native_event(raw_input, runtime=None, now=None):
             runtime.result_sink is None or not callable(getattr(runtime.result_sink, "store", None))):
         return {"state": "hold", "code": "result_sink_required",
                 "operation_id": event["operation_id"]}
+    recovered_bundle = None
+    if event["event"] == "qa":
+        if (runtime.qa_verifier is None
+                or not callable(getattr(runtime.qa_verifier, "verify", None))):
+            return {"state": "hold", "code": "qa_verifier_required",
+                    "operation_id": event["operation_id"]}
+        try:
+            if (runtime.result_sink is None
+                    or not callable(getattr(runtime.result_sink, "load", None))):
+                raise ValueError("result sink loader unavailable")
+            recovered_bundle = _recover_result_bundle(runtime, request)
+        except Exception:
+            return _ambiguous_output(event["operation_id"], "result_bundle_recovery_failed")
     try:
         output = step_native_work(
             runtime.queue, runtime.bridge, runtime.transport, event["event"], request,
             runtime.plan, now, claim=runtime.claim, authority=runtime.authority,
-            result_bundle=runtime.result_bundle, qa_verifier=runtime.qa_verifier,
+            result_bundle=(recovered_bundle if event["event"] == "qa" else runtime.result_bundle),
+            qa_verifier=runtime.qa_verifier,
             event_id=event["event_id"],
         )
     except Exception:
@@ -292,10 +346,16 @@ def handle_native_event(raw_input, runtime=None, now=None):
                                   ensure_ascii=False, allow_nan=False).encode("utf-8")
         if len(bundle_bytes) > MAX_RESULT_BUNDLE_BYTES:
             return _ambiguous_output(event["operation_id"], "result_bundle_too_large")
-        digest, ref = _persist_result_bundle(
+        digest, ref, bytes_written = _persist_result_bundle(
             runtime.result_sink, bundle_bytes, event["operation_id"], request.digest())
     except Exception:
         return _ambiguous_output(event["operation_id"], "sink_outcome_unknown")
+    try:
+        runtime.bridge.record_result_bundle_receipt(
+            request, event["event_id"],
+            {"ref": ref, "sha256": digest, "bytes_written": bytes_written}, now)
+    except Exception:
+        return _ambiguous_output(event["operation_id"], "result_receipt_outcome_unknown")
     sanitized["result_bundle_sha256"] = digest
     sanitized["result_bundle_ref"] = ref
     return sanitized

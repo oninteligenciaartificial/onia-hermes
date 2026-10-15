@@ -87,7 +87,16 @@ class NativeIntegrationAdversarialTests(unittest.TestCase):
     def test_invalid_entrypoint_never_dispatches_and_result_persists(self):
         bundle = make_bundle(self.request)
         sink = self.sink()
-        runtime = NativeWorkRuntime(queue=object(), bridge=object(), transport=object(),
+        class ReceiptBridge:
+            def __init__(self):
+                self.saved = None
+
+            def record_result_bundle_receipt(self, request, event_id, receipt, now):
+                self.saved = (request.digest(), event_id, dict(receipt), now)
+                return receipt
+
+        bridge = ReceiptBridge()
+        runtime = NativeWorkRuntime(queue=object(), bridge=bridge, transport=object(),
                                     request=self.request, plan=object(), result_sink=sink)
         event = {"schema": 1, "event": "result", "event_id": "r1",
                  "operation_id": self.request.operation_id,
@@ -102,6 +111,7 @@ class NativeIntegrationAdversarialTests(unittest.TestCase):
             response = handle_native_event(json.dumps(event), runtime, now=101)
             step.assert_called_once()
         self.assertEqual(response["state"], "awaiting_independent_qa")
+        self.assertEqual(bridge.saved[0:2], (self.request.digest(), "r1"))
         expected = json.dumps(bundle, sort_keys=True, separators=(",", ":"),
                               ensure_ascii=False, allow_nan=False).encode()
         self.assertEqual(response["result_bundle_sha256"], hashlib.sha256(expected).hexdigest())

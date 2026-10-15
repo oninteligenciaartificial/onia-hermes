@@ -32,6 +32,46 @@ def _time(value):
         raise ValueError("timestamp must be a nonnegative integer")
 
 
+def _exact_work_authority(row, request):
+    """Return the hash-checked authority proof only for this exact durable request."""
+    from dataclasses import asdict
+
+    payload = row["work_authority_json"]
+    if (type(payload) is not str or not payload
+            or type(row["work_authority_sha"]) is not str
+            or hashlib.sha256(payload.encode()).hexdigest() != row["work_authority_sha"]):
+        return None
+    try:
+        proof = json.loads(payload)
+        expected_request = json.loads(json.dumps(asdict(request), sort_keys=True,
+                                                 separators=(",", ":")))
+    except (UnicodeError, ValueError, TypeError, RecursionError):
+        return None
+    if (type(proof) is not dict
+            or set(proof) not in ({"request", "authorization"},
+                                  {"request", "authorization", "revalidation_history"})
+            or proof.get("request") != expected_request
+            or type(proof.get("authorization")) is not dict):
+        return None
+    authorization = proof["authorization"]
+    if (authorization.get("verified") is not True
+            or authorization.get("request_sha") != request.digest()
+            or authorization.get("grant_nonce") != request.nonce
+            or authorization.get("scope") != "native_work_closure"
+            or type(authorization.get("actor")) is not str or not authorization["actor"]
+            or type(authorization.get("authority_source")) is not str
+            or not authorization["authority_source"]
+            or type(authorization.get("evidence_ref")) is not str
+            or authorization.get("evidence_ref") != row["authorization_ref"]
+            or type(authorization.get("expires_at")) is not int):
+        return None
+    if "revalidation_history" in proof and (
+            type(proof["revalidation_history"]) is not list
+            or len(proof["revalidation_history"]) > 1):
+        return None
+    return proof
+
+
 @dataclass(frozen=True)
 class NativeObservation:
     operation_id: str
@@ -460,6 +500,104 @@ class NativeReceiptBridge:
                          (json.dumps(events, sort_keys=True, separators=(",", ":")), request.operation_id))
             conn.commit()
         return True
+
+    def record_result_bundle_receipt(self, request: NativeWorkRequest, event_id: str,
+                                     receipt: dict, now: int) -> dict:
+        """Bind a persisted sink receipt to the already-consumed result event."""
+        if type(request) is not NativeWorkRequest:
+            raise TypeError("exact finite-work request required")
+        _text(event_id, "event_id")
+        _time(now)
+        if (type(receipt) is not dict or set(receipt) != {"ref", "sha256", "bytes_written"}
+                or type(receipt.get("ref")) is not str or not receipt["ref"]
+                or len(receipt["ref"]) > 128 or ".." in receipt["ref"]
+                or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._:-]{0,127}", receipt["ref"])
+                or type(receipt.get("sha256")) is not str or not _HASH.fullmatch(receipt["sha256"])
+                or type(receipt.get("bytes_written")) is not int
+                or not 0 <= receipt["bytes_written"] <= 1024 * 1024):
+            raise ValueError("invalid result sink receipt")
+        exact_receipt = {"ref": receipt["ref"], "sha256": receipt["sha256"],
+                         "bytes_written": receipt["bytes_written"]}
+        exact_request = json.loads(json.dumps(asdict(request), sort_keys=True,
+                                             separators=(",", ":")))
+        with self.queue._connection() as conn:
+            conn.execute("BEGIN IMMEDIATE")
+            row = conn.execute("SELECT * FROM native_operations WHERE operation_id=?",
+                               (request.operation_id,)).fetchone()
+            proof = _exact_work_authority(row, request) if row is not None else None
+            if (row is None or row["task_id"] != request.task_id
+                    or row["input_sha"] != request.input_sha
+                    or row["nonce"] != request.nonce
+                    or row["dispatch_contract_sha"] != request.plan_sha
+                    or proof is None):
+                raise RuntimeError("result receipt lacks exact durable operation authority")
+            if proof["request"] != exact_request:
+                raise RuntimeError("result receipt request differs from durable operation")
+            events = json.loads(row["work_events_json"] or "{}")
+            entry = events.get(event_id) if type(events) is dict else None
+            if (type(events) is not dict
+                    or sum(type(item) is dict and item.get("event") == "result"
+                           for item in events.values()) != 1
+                    or type(entry) is not dict or entry.get("event") != "result"
+                    or entry.get("request_sha") != request.digest()
+                    or entry.get("state") not in {
+                        "consumed_outcome_requires_event_receipt", "result_bundle_persisted",
+                    }):
+                raise RuntimeError("result receipt requires the consumed matching result event")
+            existing = entry.get("result_bundle_receipt")
+            if existing is not None and existing != exact_receipt:
+                raise RuntimeError("result bundle receipt conflict; no overwrite")
+            if existing is None:
+                entry["result_bundle_receipt"] = exact_receipt
+                entry["state"] = "result_bundle_persisted"
+                conn.execute("UPDATE native_operations SET work_events_json=? WHERE operation_id=?",
+                             (json.dumps(events, sort_keys=True, separators=(",", ":")),
+                              request.operation_id))
+            conn.commit()
+        return exact_receipt
+
+    def read_result_bundle_receipt(self, request: NativeWorkRequest) -> dict | None:
+        """Return the unique durable result receipt for this exact request, if any."""
+        if type(request) is not NativeWorkRequest:
+            raise TypeError("exact finite-work request required")
+        with self.queue._connection() as conn:
+            row = conn.execute("SELECT * FROM native_operations WHERE operation_id=?",
+                               (request.operation_id,)).fetchone()
+        if (row is None or row["task_id"] != request.task_id
+                or row["input_sha"] != request.input_sha
+                or row["nonce"] != request.nonce
+                or row["dispatch_contract_sha"] != request.plan_sha
+                or _exact_work_authority(row, request) is None):
+            return None
+        try:
+            events = json.loads(row["work_events_json"] or "{}")
+            if type(events) is not dict:
+                return None
+            receipts = []
+            result_event_count = 0
+            for event_id, entry in events.items():
+                if type(event_id) is str and type(entry) is dict and entry.get("event") == "result":
+                    result_event_count += 1
+                    if (entry.get("request_sha") != request.digest()
+                            or entry.get("state") != "result_bundle_persisted"
+                            or type(entry.get("result_bundle_receipt")) is not dict):
+                        return None
+                    receipts.append(entry["result_bundle_receipt"])
+            if result_event_count != 1 or len(receipts) != 1:
+                return None
+            receipt = receipts[0]
+            if (set(receipt) != {"ref", "sha256", "bytes_written"}
+                    or type(receipt.get("ref")) is not str
+                    or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._:-]{0,127}", receipt["ref"])
+                    or ".." in receipt["ref"]
+                    or type(receipt.get("sha256")) is not str
+                    or not _HASH.fullmatch(receipt["sha256"])
+                    or type(receipt.get("bytes_written")) is not int
+                    or not 0 <= receipt["bytes_written"] <= 1024 * 1024):
+                return None
+            return dict(receipt)
+        except (UnicodeError, ValueError, TypeError, RecursionError):
+            return None
 
     def begin_dispatch(self, operation_id: str, dispatch_contract_sha: str) -> dict:
         """Consume the single dispatch slot BEFORE transport; no automatic retry.
