@@ -4,6 +4,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -12,6 +13,7 @@ from types import SimpleNamespace
 
 from native_cloud_lineage import (
     AdmissionBuildError, OPERATION, ENVIRONMENT, RECIPE_SHA256, UI_RECEIPT_SHA256,
+    UI_RECEIPT_GIT_LF_SHA256,
     OPERATION_NONCE, SUBMIT_NONCE, append_intent_to_prompt, build_admission_contract,
     derive_configuration_receipt, materialize_and_admit_before_browser,
     prepare_controller_intent, write_controller_intent_once,
@@ -20,12 +22,23 @@ import native_cloud_lineage as lineage
 from native_cloud_cli import CloudTaskPlan, NativeCloudCLI
 
 DOCS = Path(r"E:\onia-wt\orquestacion-subagentes-20261013\hermes-content\docs\handoff\hermes-harness-20261012\evidence\cloud-browser-prepared-20261014\r4")
+DOCS_ROOT = Path(r"E:\onia-wt\orquestacion-subagentes-20261013")
 ADMISSION_PATH = DOCS / "admission.py"
 CHILD_PATH = DOCS / "browser_check.py"
 SUPERVISOR_PATH = DOCS / "supervisor.py"
 UI_PATH = DOCS / "r4-save-readback-receipt-20261015.json"
 OP_AUTH = "user:01a13cc1-12e9-79a0-97e8-4899f05a5c95:R4-20261014"
 SETUP_AUTH = "user:01a13cc1-12e9-79a0-97e8-4899f05a5c95:setup-R4-autonomia-20261014"
+
+
+def read_reviewed_source(path):
+    if path.is_file():
+        return path.read_bytes()
+    relative = path.relative_to(DOCS_ROOT).as_posix()
+    return subprocess.run(
+        ["git", "-C", str(DOCS_ROOT), "show", "HEAD:" + relative],
+        check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+    ).stdout
 
 
 def intent_bytes(**changes):
@@ -53,10 +66,10 @@ def setup_receipt():
 class AdmissionTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.ui = UI_PATH.read_bytes()
-        cls.admission_raw = ADMISSION_PATH.read_bytes()
-        cls.child_raw = CHILD_PATH.read_bytes()
-        cls.supervisor_raw = SUPERVISOR_PATH.read_bytes()
+        cls.ui = read_reviewed_source(UI_PATH)
+        cls.admission_raw = read_reviewed_source(ADMISSION_PATH)
+        cls.child_raw = read_reviewed_source(CHILD_PATH)
+        cls.supervisor_raw = read_reviewed_source(SUPERVISOR_PATH)
         cls.setup = setup_receipt()
         cls.admission = compile(cls.admission_raw, str(ADMISSION_PATH), "exec")
 
@@ -89,8 +102,12 @@ class AdmissionTests(unittest.TestCase):
             setup_path = root / "setup-receipt.json"
             setup_path.write_bytes(self.setup)
             setup_path.chmod(0o444)
+            admission_path = root / "admission.py"
+            admission_path.write_bytes(self.admission_raw)
+            admission_path.chmod(0o444)
             class FakePath:
                 def __init__(self, path): self.path = Path(path)
+                def __str__(self): return str(self.path)
                 def lstat(self):
                     data = self.path.lstat()
                     class Meta:
@@ -103,6 +120,8 @@ class AdmissionTests(unittest.TestCase):
             def path_factory(value):
                 if str(value) == "/opt/onia-public-browser-1.64.0/setup-receipt.json":
                     return FakePath(setup_path)
+                if str(value) == str(ADMISSION_PATH):
+                    return FakePath(admission_path)
                 return FakePath(real_path(value))
             class FixedDateTime:
                 @staticmethod
@@ -135,9 +154,13 @@ class AdmissionTests(unittest.TestCase):
         actual_setup_path = root / "actual-setup.json"
         actual_setup_path.write_bytes(self.setup if actual_setup is None else actual_setup)
         actual_setup_path.chmod(0o444)
+        actual_admission_path = root / "actual-admission.py"
+        actual_admission_path.write_bytes(self.admission_raw)
+        actual_admission_path.chmod(0o444)
         real_path = Path
         class FakePath:
             def __init__(self, path): self.path = real_path(path)
+            def __str__(self): return str(self.path)
             def lstat(self):
                 data = self.path.lstat()
                 class Meta:
@@ -145,10 +168,15 @@ class AdmissionTests(unittest.TestCase):
                     st_size = data.st_size
                     st_uid = 0
                 return Meta()
+            def is_file(self): return self.path.is_file()
+            def is_symlink(self): return self.path.is_symlink()
+            def is_absolute(self): return self.path.is_absolute()
             def read_bytes(self): return self.path.read_bytes()
         def path_factory(value):
             if str(value) == "/opt/onia-public-browser-1.64.0/setup-receipt.json":
                 return FakePath(actual_setup_path)
+            if str(value) == str(ADMISSION_PATH):
+                return FakePath(actual_admission_path)
             return FakePath(real_path(value))
         def local_write(path, contract):
             raw = json.dumps(contract, sort_keys=True, separators=(",", ":")).encode()
@@ -179,7 +207,8 @@ class AdmissionTests(unittest.TestCase):
         try:
             with patch.object(lineage, "read_root_owned_setup_receipt", reader), \
                  patch.object(lineage, "_write_contract_once", local_write), \
-                 patch("pathlib.Path", path_factory):
+                 patch("pathlib.Path", path_factory), \
+                 patch.object(lineage, "Path", path_factory):
                 result = materialize_and_admit_before_browser(
                     intent_bytes=raw, expected_intent_sha256=digest, ui_receipt=self.ui,
                     checkout_head_observed_before_uid_switch="a" * 40,
@@ -201,18 +230,43 @@ class AdmissionTests(unittest.TestCase):
         return temp, contract_path, result
 
     def test_derives_canonical_config_from_real_ui_readback_not_raw_artifact(self):
-        self.assertEqual(hashlib.sha256(self.ui).hexdigest(), UI_RECEIPT_SHA256)
+        raw_sha = hashlib.sha256(self.ui).hexdigest()
+        self.assertIn(raw_sha, (UI_RECEIPT_SHA256, UI_RECEIPT_GIT_LF_SHA256))
         derived = json.loads(derive_configuration_receipt(
             self.ui, authorization_reference=OP_AUTH,
             configuration_grant_reference=SETUP_AUTH))
         self.assertEqual(derived["approval_reference"], OP_AUTH)
         self.assertEqual(derived["source_ui_grant_reference"], SETUP_AUTH)
-        self.assertEqual(derived["source_ui_receipt_sha256"], UI_RECEIPT_SHA256)
+        self.assertEqual(derived["source_ui_receipt_sha256"], raw_sha)
+        self.assertEqual(derived["source_ui_receipt_canonical_sha256"], UI_RECEIPT_GIT_LF_SHA256)
+        expected_serialization = ("git-lf" if raw_sha == UI_RECEIPT_GIT_LF_SHA256
+                                  else "windows-crlf-canonicalized-to-git-lf")
+        self.assertEqual(derived["source_ui_receipt_serialization"], expected_serialization)
         self.assertIn("not an exact provider-side save timestamp", derived["saved_at_utc_semantics"])
         self.assertEqual(derived["provider_saved_configuration"]["saved_at_utc"], "2026-10-15T00:45:58Z")
         raw_ui = json.loads(self.ui)
         self.assertNotIn("approval_reference", raw_ui)
         self.assertNotIn("recipe_sha256", raw_ui)
+
+    def test_ui_receipt_accepts_only_the_two_proven_eol_serializations(self):
+        git_lf = self.ui.replace(b"\r\n", b"\n")
+        windows_crlf = git_lf.replace(b"\n", b"\r\n")
+        self.assertEqual(hashlib.sha256(git_lf).hexdigest(), UI_RECEIPT_GIT_LF_SHA256)
+        self.assertEqual(hashlib.sha256(windows_crlf).hexdigest(), UI_RECEIPT_SHA256)
+        for raw, representation in ((git_lf, "git-lf"),
+                                    (windows_crlf, "windows-crlf-canonicalized-to-git-lf")):
+            with self.subTest(representation=representation):
+                value = json.loads(derive_configuration_receipt(
+                    raw, authorization_reference=OP_AUTH,
+                    configuration_grant_reference=SETUP_AUTH))
+                self.assertEqual(value["source_ui_receipt_sha256"], hashlib.sha256(raw).hexdigest())
+                self.assertEqual(value["source_ui_receipt_canonical_sha256"], UI_RECEIPT_GIT_LF_SHA256)
+                self.assertEqual(value["source_ui_receipt_serialization"], representation)
+        changed = bytearray(git_lf)
+        changed[0] ^= 1
+        with self.assertRaisesRegex(AdmissionBuildError, "digest mismatch"):
+            derive_configuration_receipt(bytes(changed), authorization_reference=OP_AUTH,
+                                          configuration_grant_reference=SETUP_AUTH)
 
     def test_builder_output_passes_real_unchanged_admission(self):
         contract = self.contract()
@@ -330,6 +384,9 @@ class AdmissionTests(unittest.TestCase):
         raw, digest = intent_bytes()
         with tempfile.TemporaryDirectory() as temp:
             contract_path = Path(temp) / "private-contract.json"
+            pinned_admission_path = Path(temp) / "admission.py"
+            pinned_admission_path.write_bytes(self.admission_raw)
+            pinned_admission_path.chmod(0o444)
             with patch.object(lineage, "read_root_owned_setup_receipt",
                               side_effect=AdmissionBuildError("actual setup receipt unavailable")):
                 with self.assertRaisesRegex(AdmissionBuildError, "setup receipt unavailable"):
@@ -337,7 +394,7 @@ class AdmissionTests(unittest.TestCase):
                         intent_bytes=raw, expected_intent_sha256=digest, ui_receipt=self.ui,
                         checkout_head_observed_before_uid_switch="a" * 40,
                         child_source=self.child_raw, supervisor_source=self.supervisor_raw,
-                        admission_source=self.admission_raw, admission_path=str(ADMISSION_PATH),
+                        admission_source=self.admission_raw, admission_path=str(pinned_admission_path),
                         contract_path=str(contract_path))
             self.assertFalse(contract_path.exists())
         bad_actual = self.setup.replace(RECIPE_SHA256.encode(), b"0" * 64)

@@ -17,6 +17,7 @@ OPERATION = "f90f55bc-48d8-406f-a11e-05ddd2683014"
 ENVIRONMENT = "6abad782eba0819196ca234dc3abc327"
 RECIPE_SHA256 = "369f5ddd83e43a102a713baa109dc38bf717107fc341d07d420a2abf67495519"
 UI_RECEIPT_SHA256 = "08908c94ae0f162f79caaeffc37936920084a4c7ff408c77bd4e05bd00cb2895"
+UI_RECEIPT_GIT_LF_SHA256 = "4172ddac4af73933c68ed37a30122d262598350ab0d91aff828f16de6fb30aa0"
 CHILD_SHA256 = "bd87c4c34307ca6ada693bb11486d1c38fc5d3ab996665a8a2e633185ff20c14"
 SUPERVISOR_SHA256 = "f4797c248dcfacd040f504bc0769cd6a26d7f03e539e8274c8696664d3b2461b"
 ADMISSION_SHA256 = "9921253f9d510883c598d83a485eeb3768a27e185dbb857f58455fdad8dc2fb3"
@@ -225,9 +226,21 @@ def derive_configuration_receipt(ui_receipt: bytes, *, authorization_reference: 
     The UI artifact is source evidence, not itself an admission receipt. Its
     `saved_at_utc` value remains explicitly described as a local observation.
     """
-    if hashlib.sha256(ui_receipt).hexdigest() != UI_RECEIPT_SHA256:
+    if not isinstance(ui_receipt, bytes):
+        raise AdmissionBuildError("UI readback must be exact bytes")
+    raw_ui_sha256 = hashlib.sha256(ui_receipt).hexdigest()
+    if raw_ui_sha256 == UI_RECEIPT_SHA256:
+        canonical_ui_receipt = ui_receipt.replace(b"\r\n", b"\n")
+        serialization = "windows-crlf-canonicalized-to-git-lf"
+    elif raw_ui_sha256 == UI_RECEIPT_GIT_LF_SHA256:
+        canonical_ui_receipt = ui_receipt
+        serialization = "git-lf"
+    else:
         raise AdmissionBuildError("UI readback digest mismatch")
-    source = _json_object(ui_receipt, "UI readback")
+    canonical_ui_sha256 = hashlib.sha256(canonical_ui_receipt).hexdigest()
+    if canonical_ui_sha256 != UI_RECEIPT_GIT_LF_SHA256:
+        raise AdmissionBuildError("UI readback newline normalization mismatch")
+    source = _json_object(canonical_ui_receipt, "UI readback")
     provider = source.get("provider_saved_configuration")
     if (source.get("receipt_type") != "codex_cloud_environment_save_readback"
             or source.get("r4_operation") != OPERATION
@@ -260,7 +273,9 @@ def derive_configuration_receipt(ui_receipt: bytes, *, authorization_reference: 
         "recipe_sha256": RECIPE_SHA256,
         "approval_reference": authorization_reference,
         "source_ui_grant_reference": configuration_grant_reference,
-        "source_ui_receipt_sha256": UI_RECEIPT_SHA256,
+        "source_ui_receipt_sha256": raw_ui_sha256,
+        "source_ui_receipt_canonical_sha256": canonical_ui_sha256,
+        "source_ui_receipt_serialization": serialization,
         "source_ui_readback_exact_match": True,
         "source_ui_observed_at_utc": source.get("observed_at_utc"),
         "saved_at_utc_semantics": source["provider_saved_at_semantics"],
