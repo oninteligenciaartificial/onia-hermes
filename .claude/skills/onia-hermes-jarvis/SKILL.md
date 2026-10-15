@@ -241,6 +241,9 @@ CLI de Hermes.
   Ese archivo se regenera en CADA build, así que su `Last-Modified` es la hora del build (medido: `LIM7jeUwfaFnEKQWS22-R` → `12:54:16 GMT` en la publicación
   de las 12:50, con `master` en `e28c7e90`, #172 mergeado a las 12:02). Une el `buildId` (qué build) con su hora (cuándo); sigue sin decir qué commit, pero la hora
   más lo que `master` tenía entonces lo cierra. Hay que medir el `buildId` ANTES de la publicación para tener con qué compararlo.
+  **La imagen nueva se ve ~5 min DESPUÉS de la hora del build** (medido dos veces el 15-oct: build `12:54:16` → ya servida a las 12:58:46; build `15:54:24` → todavía la vieja a las
+  15:58:45 y la nueva a las 15:59:21). Medir a las :58 da «sin cambio» aunque la publicación haya salido: se espera hasta las :00 o más, con
+  `hermes-content/docs/research/qa-publicacion/2026-10-15/espera-build.sh <buildId viejo>` (mira cada 20 s hasta 9 min y imprime el nuevo y la hora de su manifiesto), en segundo plano.
   `app.onia.com.bo` está detrás de Cloudflare (`server: cloudflare`).
 - **El ejemplo de la prueba de un instrumento sale del sistema real, no del contrato** (11-oct, dos veces el mismo día). C3 (sección 16 del
   diagnóstico) pasó sus 10 pruebas con líneas de crontab directas y, con el crontab que instala `aplicar.sh` (todo envuelto en `onia-latido.sh '<comando>'`),
