@@ -57,7 +57,7 @@ la dirección de Sergio Urcullo.
 | 8 | Caja diaria | En producción (#136, 11-oct; #158 el 11-oct; punto 9 de F136c, la caja de un día anterior, desde el 15-oct 12:57). Mirada con login el 15-oct |
 | 9 | Demo que propone pacientes | Los agentes corren. Falta refrescarla: el lunes 12-oct entre 07 y 11 UTC, con las capturas C1-C7 (§7) |
 | 10 | «Enviar por WhatsApp» en cada cita | En producción (#128). **Mirado con login el 15-oct:** arma el texto de usted con la hora de La Paz |
-| 11 | La agenda no miente | En producción (`6f940cfc` y `7d3495e8`). Falta mirarlo con login |
+| 11 | La agenda no miente | En producción (`6f940cfc` y `7d3495e8`). **Mirado con login el 15-oct:** reprogramar vuelve la cita a «Pendiente» y un día cerrado no ofrece horarios. Falta lo de `/book` (aviso de reserva online), que pide una cuenta con la reserva pública |
 | 12 | CSV con «;» y WhatsApp de soporte | En producción (`97fe3061`) |
 | 13 | 7 días de gracia y «no renovar» | #113 construido. Espera los términos 1.4: la lámina está en `cola/capturas-terminos/` y necesita el sí de Sergio Urcullo y de Leslie Mercado Moreno |
 | 14 | Aceptación de términos guardada | #124 construido, migración aplicada. Su arreglo de versión (`t124-version`) está en un bundle. La madre lo retiene («espera texto legal»), aunque no cambia ningún texto |
