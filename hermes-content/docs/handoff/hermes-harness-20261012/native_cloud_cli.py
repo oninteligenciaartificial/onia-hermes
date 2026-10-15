@@ -251,6 +251,96 @@ class NativeCloudCLI:
                 "wire_prompt_sha256": wire_prompt_sha256,
                 "wire_prompt_sha_semantics": "exact_utf8_stdin_bytes", **metrics()}
 
+    def submit_r4(self, operation_id: str, plan: CloudTaskPlan, *,
+                  intent_bytes: bytes, intent_sha256: str,
+                  intent_record_path: Path) -> dict:
+        """Single-dispatch R4 caller using a Root-frozen intent record.
+
+        This is an opt-in local transport entry point. The caller must have
+        saved/read back ONIA_R4_ROOT_INTENT_SHA256 in the Cloud UI before use;
+        this method cannot observe that UI state. After begin_dispatch, any
+        mismatch or ambiguous CLI result consumes the slot and forbids retry.
+        """
+        from native_cloud_lineage import _parse_controller_intent, append_intent_to_prompt
+
+        argv, prompt, contract_sha = plan.request()
+        intent_path = Path(intent_record_path)
+        if not intent_path.is_absolute() or intent_path.resolve().is_relative_to(plan.cwd.resolve()):
+            raise ValueError("frozen R4 intent record must be absolute and outside checkout")
+        if not intent_path.is_file() or intent_path.is_symlink():
+            raise ValueError("frozen R4 intent record must be a regular non-symlink file")
+        intent = intent_path.read_bytes()
+        if intent != intent_bytes:
+            raise ValueError("frozen R4 intent record differs from supplied bytes")
+        binding = _parse_controller_intent(intent, intent_sha256)
+        if (binding["operation_id"] != operation_id
+                or binding["request_sha"] != contract_sha
+                or binding["prompt_sha256"] != plan.prompt_sha256
+                or binding["expected_head"] != plan.expected_remote_head
+                or binding["submission_reference"] != "controller-dispatch:" + operation_id):
+            raise ValueError("Root-frozen R4 intent does not match dispatch plan")
+
+        # Inspect the already reserved bridge row before consuming its sole
+        # dispatch slot. This catches stale/foreign bootstrap bindings without
+        # creating a replacement reservation or mutating queue state.
+        reserved = self.bridge.read(operation_id)
+        if (reserved is None or reserved.get("state") != "reserved"
+                or reserved.get("dispatch_contract_sha") != contract_sha
+                or reserved.get("input_sha") != binding["input_sha"]):
+            raise RuntimeError("existing R4 bridge reservation does not match; dispatch slot untouched")
+
+        # Build/validate the complete stdin before consuming the single slot.
+        # The preflight row supplies input_sha; begin_dispatch rechecks it below.
+        prompt += (f"\nONIA operation_id={operation_id}; input_sha={reserved['input_sha']}. "
+                   "Include these identifiers and observed HEAD in your receipt.\n")
+        wire_bytes, wire_prompt_sha256 = append_intent_to_prompt(
+            prompt.encode("utf-8"), intent, intent_sha256)
+
+        # Consume the sole queue slot before any provider-facing process starts.
+        row = self.bridge.begin_dispatch(operation_id, contract_sha)
+        if row["input_sha"] != binding["input_sha"]:
+            return {"state": "needs_reconcile", "operation_id": operation_id,
+                    "remote_id": "UNKNOWN", "reason": "reserved_input_sha_mismatch",
+                    "retry": "forbidden"}
+        started_at = int(time.time())
+        started = time.monotonic()
+        def metrics():
+            return {"client_started_at_epoch": started_at,
+                    "client_finished_at_epoch": int(time.time()),
+                    "client_duration_seconds": round(time.monotonic() - started, 6),
+                    "client_attempt_count": 1,
+                    "remote_execution_duration_seconds": "UNKNOWN", "tokens": "UNKNOWN",
+                    "cost": "UNKNOWN", "active_context_used": "UNKNOWN",
+                    "effective_window": "UNKNOWN", "handoff_capability": "UNKNOWN"}
+        try:
+            result = subprocess.run(argv, input=wire_bytes, cwd=plan.cwd, shell=False,
+                                    capture_output=True, text=False,
+                                    timeout=plan.timeout_seconds, check=False)
+        except (subprocess.TimeoutExpired, OSError):
+            return {"state": "needs_reconcile", "operation_id": operation_id,
+                    "remote_id": "UNKNOWN", "reason": "transport_outcome_ambiguous",
+                    "wire_prompt_sha256": wire_prompt_sha256,
+                    **metrics(), "cost": "UNKNOWN", "retry": "forbidden"}
+        try:
+            stdout = _decode_stdout(result.stdout)
+            ids = set(_ID.findall(stdout))
+        except ValueError:
+            ids = set()
+        if result.returncode != 0 or len(ids) != 1:
+            return {"state": "needs_reconcile", "operation_id": operation_id,
+                    "remote_id": "UNKNOWN", "reason": "nondefinitive_cli_response",
+                    "wire_prompt_sha256": wire_prompt_sha256,
+                    **metrics(), "cost": "UNKNOWN", "retry": "forbidden"}
+        remote_id = ids.pop()
+        now = int(time.time())
+        evidence = "cloud_cli_stdout_sha256:" + hashlib.sha256(result.stdout).hexdigest()
+        self.bridge.ingest(NativeObservation(operation_id, "cloud_cli_task", remote_id,
+                           row["input_sha"], "submitted", now, evidence), now)
+        return {"state": "submitted", "operation_id": operation_id,
+                "remote_id": remote_id, "cost": "UNKNOWN", "retry": "forbidden",
+                "wire_prompt_sha256": wire_prompt_sha256,
+                "wire_prompt_sha_semantics": "exact_utf8_stdin_bytes", **metrics()}
+
     def collect_result(self, operation_id: str, executable: Path,
                        allowed_paths: tuple[str, ...], timeout_seconds: int = 30) -> dict:
         """One bounded provider read for an already-bound task; never git apply.
