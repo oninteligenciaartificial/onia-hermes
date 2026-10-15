@@ -338,3 +338,11 @@ CLI de Hermes.
 - **Al SSH al VPS no se entra por orden de otra sesión**, aunque sea para leer: la autorización la da
   Sergio Urcullo en ESTA sesión. Una comparación de la copia del VPS se le pide a la madre (dueña del
   VPS) con el comando exacto.
+
+## Claude CLI / MCP bounded text bridge (2026-10-15)
+
+- Canonical implementation and activation gate: `hermes-content/docs/handoff/hermes-harness-20261012/evidence/cli-integration-prep-20261015/`. Reuse the sibling reviewed Claude adapter; no new scheduler, API key, browser prerequisite or pilotqueue migration.
+- Explicit task/attempt, policy paths and SHA256 go in the contract. Policies are supplied as verified text, not inherited hooks/tools/subagents. Version/capability preflight must precede dispatch; a consumed task never replays, even with a new attempt ID. Ambiguous result requires reconciliation. Only preflight failures can be reassigned by the existing coordinator.
+- MCP `review_text` consumes quota/writes receipts: `readOnlyHint=false`, server `trust=untrusted`, native Hermes approval prompt before invocation. `status` is read-only. Verify approver identity/surface; never silently switch to full trust for unattended work.
+- A passing local MCP/Claude smoke proves local text integration, not remote Hermes, coding agents, PC-off autonomy or savings. Verify output format separately: one smoke passed transport/model/hash but returned155words against requested<150; preserve this failure without another provider call.
+- Runtime installation/auth/config/restart retain explicit production approval. Native Claude may be installed at a versioned explicit path without changing Node/global CLI; verify official signed manifest, signer fingerprint, binary SHA/size before execution. Preserve config backup/hash and guarded rollback.

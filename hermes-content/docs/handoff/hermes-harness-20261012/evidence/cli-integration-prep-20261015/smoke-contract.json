@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "task_id": "onia-cli-mcp-smoke-20261015",
+  "attempt_id": "attempt-1",
+  "operation": "review_text",
+  "goal": "Revisar los límites probados de la integración local/remota sin ejecutar acciones",
+  "proof": "Tres puntos concretos apoyados en el contexto suministrado",
+  "stop": "Una respuesta de menos de 150 palabras. No herramientas, acciones, sesiones ni subagentes",
+  "instructions": [{"path": ".claude/skills/onia-continuidad/SKILL.md", "sha256": "5c3f6a5ecd0ee32fe7423ce36631520338e3defd1952fec4f1fb8cd2062afc8e"}],
+  "input": "ORDEN HUMANA VIGENTE: sólo revisar texto; no instalar, iniciar sesión, gastar por API, cambiar servicios ni publicar. La orden humana tiene prioridad. Evidencia antes de afirmar éxito; UNKNOWN para lo no probado. CONTEXTO: wrapper local stdlib llama Claude por suscripción, toolsnone/safe/restricted/no persistencia. MCP stdio expone review_text (write-capable) y status (read-only). Hermes VPS activo, mcp_servers=0. Claude VPS2.1.197 loggedIn=false; versión nativa2.1.288 propuesta pero no instalada. Hermes soporta trust=untrusted y approval_prompt por llamada write-capable, aún sin prueba de identidad/superficie para esta integración. Revisión local NO prueba Hermes conectado, PC-off, agentes con herramientas ni ahorro. Identifique tres requisitos antes de la activación remota; mencione la regla pertinente de continuidad suministrada. Devuelva SOLO tres puntos."
+}
