@@ -86,7 +86,7 @@ la dirección de Sergio Urcullo.
     roles y clientes de usted, `fiados.ts` con teléfono numérico);
   - `m1c-arreglos` en `/home/user/wt-m1` (cantidades: rojo antes de escribir, «unidades» en kg, validez en días, flotante del
     ticket, `ProductoPicker` de usted, plural de «servicio»).
-  **Si la sesión muere, eso se pierde** (no está en ningún remoto). Se retoma: juntar las dos ramas sobre `b9acfa13` (la línea
+  **10:12 UTC: ya está en el remoto** (`37560f53`, #171 listo, CI corriendo); antes estuvo guardado en `docs/cola/ramas-locales/plataforma-seguimiento-171-20261015.bundle`. Lo único local es `barrido-usted-2` en `wt-cadena` (PR siguiente). Se retoma: juntar las dos ramas sobre `b9acfa13` (la línea
   base del trinquete se resuelve como base + deltas), `tsc`, eslint y suite completa, fast-forward de la rama, push a las :10
   (fuera de la ventana) y merge con CI verde. Si las ramas no están, se rehacen desde el comentario de #171.
 - Después de publicar: mirar con `mirar-1250.js` (caja de un día anterior y cotización; el «antes» de producción quedó medido
