@@ -82,14 +82,14 @@ la dirección de Sergio Urcullo.
 
 ## 4. EN VUELO (lo que se pierde o se traba si nadie lo sigue)
 
-**15-oct 16:25 UTC:**
-- **Barrido de usted 4 = PR [#175](https://github.com/oninteligenciaartificial/onia-platform/pull/175)** (Equipo, Perfil y 2FA,
-  Seguridad, WhatsApp y chatbot, Facturación, correos de acceso, Mi web y el resto del panel): rama
-  `claude/optimistic-ride-1sp5fe` de onia-platform, cabeza `066e4ecf`, **en el remoto** (copia local: rama `barrido-usted-4`
-  en `/home/user/wt-barrido4`). Revisión code-reviewer cerrada (cambios menores: 2 MEDIUM, 7 LOW; la tabla está en el cuerpo
-  del PR). Suite 12.920/0, `tsc` 0, eslint 0. CI corriendo desde las 16:21. Falta: CI verde, marcarlo listo, merge antes de
-  las 18:20, sale a las 18:50 y se mira con cuentas QA (Equipo, Perfil, Seguridad, Facturación y un correo de recuperar
-  contraseña de una QA, leído en la bandeja).
+**15-oct 20:20 UTC:**
+- **#175 (barrido de usted 4) y #176 (pulido 5): PUBLICADOS** en `release-9c47a734` (18:55 UTC) y mirados con cuentas QA: las 16
+  superficies medidas quedan sin tú ni vos; los nombres accesibles de las citas y el total de costeos, vistos en producción.
+- **#177 (pulido 6): MERGEADO** a las 20:15 UTC (`3bad4242`), sale a las 21:50 y se mira a las 21:58 (recordatorio programado):
+  la orden de pagar de usted en todo el cobro, el QR de la API sin pedir comprobante, «Ver la ficha de …» y los botones de
+  recetas con medicamentos y fecha. Lo que queda va al **pulido 7** (cola de Plataforma), sin apuro.
+- **Gmail de la nube no responde** («Precondition check failed»): el correo de recuperación QA se entregó (250) pero no se pudo
+  leer en la bandeja. Hay que reconectarlo en claude.ai/customize/connectors (Sergio Urcullo).
 - **Para la madre (infra, no lo cambia un PR):** (1) los asuntos de los correos de acceso los fija el VPS en
   `GOTRUE_MAILER_SUBJECTS_*` del contenedor `supabase-auth2`, en vos; valores de usted: «Confirme su correo · Onia»,
   «Restablezca su contraseña · Onia», «Confirme el cambio de correo · Onia», «Su acceso a Onia». (2) Las plantillas de
@@ -173,8 +173,8 @@ la dirección de Sergio Urcullo.
 
 ## 8. Próximos pasos (en orden, 15-oct 16:25 UTC)
 
-1. #175 (barrido de usted 4): CI verde, listo, merge antes de las 18:20; a las 18:56 mirar Equipo, Perfil, Seguridad,
-   Facturación y un correo de recuperar contraseña de una QA, leído en la bandeja.
+1. 21:58 UTC: mirar #177 en producción (recordatorio programado) y reportar PUBLICADO.
+   Después, el pulido 7 de la cola, sin apuro.
 2. Cuando Sergio Urcullo apruebe el pago QA: mirar el plan activo, la factura por correo y el checkout en «Plan activo».
 3. Contratos para Codex escritos y `pendiente`: **M1e** (el servidor exige enteros en las unidades enteras) y **A1** (lo
    omitido por teléfono queda como descartada con motivo). Los lanza la madre.
