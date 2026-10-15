@@ -1,0 +1,151 @@
+{
+  "state": "blocked_restricted_cwd_read_no_outputs_no_retry",
+  "approved_source_commit": "5d1a2bd66ebce6c2dc478da88cbd761c55aa8683",
+  "measured_execution_start_utc": "2026-10-15T20:47:36Z",
+  "task_id": "onia-vps-development-20261015-1",
+  "source_sha256": "0b43b2b94c1c704da8e04954ae928ab579d69d87ba685759ef7997319e74b578",
+  "prompt_sha256": "181943549f3d9df8b572f986efef751febfb1213b96e9839305258257db76665",
+  "operator_script_sha256": "47921daa360ae00a062dc75a11dcb8bcdf22f1ea4008945643e965df4af3c9aa",
+  "baseline": {
+    "mem_available_kib": 11339040,
+    "cpu_count": 4,
+    "gateway": "active",
+    "config_sha256": "bf0f2ee8dc4fd4f9a8002b260df1100601d37805118e500080c9e2d8451bd5ae",
+    "base_preexisting": false,
+    "pilot_containers_preexisting": []
+  },
+  "probe": {
+    "cid": "105b7f621437f501b51bb83be410e29cf46565e44ecc8d2d360fbf8ecc68da84",
+    "started_at": "2026-10-15T20:48:09.849292578Z",
+    "finished_at": "2026-10-15T20:48:10.959109674Z",
+    "pass": true,
+    "uid": 0,
+    "version_verified": "2.1.288",
+    "loggedIn": true,
+    "authMethod": "claude.ai",
+    "apiProvider": "firstParty",
+    "subscriptionType": "max",
+    "exit_code": 0,
+    "oom_killed": false,
+    "running": false,
+    "removed": true,
+    "host_config": {
+      "memory": 1073741824,
+      "memorySwap": 1073741824,
+      "nanoCpus": 1000000000,
+      "pidsLimit": 128,
+      "capDrop": [
+        "ALL"
+      ],
+      "securityOpt": [
+        "no-new-privileges:true"
+      ],
+      "readOnlyRootfs": true,
+      "networkMode": "bridge"
+    }
+  },
+  "provider_calls": 1,
+  "raw_streams_private": true,
+  "tests_executed": false,
+  "generated_outputs": {},
+  "task_completed": false,
+  "failure_cause": "--restricted confines file tools to /work; mounted public input /input/development_job.py is outside cwd",
+  "bounded_tool_error": "/input/development_job.py is outside /work; --restricted confines the file tools to the working directory.",
+  "suggested_correction_not_executed": "Mount the same public host input readonly at /work/input, update configuration/prompt/probe/PYTHONPATH to that location; preserve restricted mode, mounts of private data and permissions. Review before any new dispatch.",
+  "provider": {
+    "cid": "6f5b1d6fdf233daf30c30473aa07821e23f0f8eb70b3132cce22288c69da2d35",
+    "started_at": "2026-10-15T20:48:54.242668379Z",
+    "finished_at": "2026-10-15T20:49:09.60132159Z",
+    "container_wall_ms": 15358.653211,
+    "exit_code": 0,
+    "oom_killed": false,
+    "running": false,
+    "removed": true,
+    "host_config": {
+      "memory": 1073741824,
+      "memorySwap": 1073741824,
+      "nanoCpus": 1000000000,
+      "pidsLimit": 128,
+      "capDrop": [
+        "ALL"
+      ],
+      "securityOpt": [
+        "no-new-privileges:true"
+      ],
+      "readOnlyRootfs": true,
+      "networkMode": "bridge"
+    },
+    "observed_model": "claude-sonnet-5-5",
+    "cli_result_subtype": "success",
+    "cli_is_error": false,
+    "cli_duration_ms": 6569,
+    "cli_duration_api_ms": 14803,
+    "cli_num_turns": 1,
+    "permission_denials_count": 0,
+    "stderr_bytes": 0,
+    "cost_estimate_usd": 0.058180300000000004,
+    "cost_basis": "CLI list-price estimate, not subscription charge or measured savings",
+    "usage": {
+      "input_tokens": 4,
+      "cache_creation_input_tokens": 620,
+      "cache_read_input_tokens": 8205,
+      "output_tokens": 577,
+      "thinking_tokens": 207,
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "model_usage": {
+      "inputTokens": 12,
+      "outputTokens": 1004,
+      "cacheReadInputTokens": 19269,
+      "cacheCreationInputTokens": 12410,
+      "thinkingTokens": 207,
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "tools": [
+      {
+        "name": "Agent",
+        "id": "toolu_01CjctRgarW8eSonSYxsPYLL",
+        "parent_tool_use_id": null,
+        "result_is_error": false
+      },
+      {
+        "name": "Read",
+        "id": "toolu_014RFUa9iRohTWnq9NgayJrF",
+        "parent_tool_use_id": "toolu_01CjctRgarW8eSonSYxsPYLL",
+        "file_path": "/input/development_job.py",
+        "result_is_error": true
+      }
+    ],
+    "termination_reason": "Parent stopped after reader failed, no source read and no output invented; no evidence turn-limit exhaustion."
+  },
+  "post_provider_resource_observation": {
+    "phase": "post_after_container_removed",
+    "mem_available_kib": 11333996,
+    "baseline_mem_available_kib": 11339040,
+    "mem_available_delta_kib": -5044,
+    "swap_total_kib": 8388600,
+    "swap_free_kib": 4232176,
+    "loadavg": [
+      1.70849609375,
+      2.40283203125,
+      2.6650390625
+    ],
+    "platform": {
+      "name": "onia-platform",
+      "image": "onia-platform:release-9c47a734",
+      "running": true,
+      "health": "healthy",
+      "oom_killed": false,
+      "restart_count": 0
+    },
+    "during_provider_stats": "UNKNOWN not captured before container removal",
+    "limits_do_not_prove_no_neighbor_impact": true
+  },
+  "measured_observation_cutoff_utc": "2026-10-15T20:50:57Z",
+  "measured_start_to_observation_cutoff_seconds": 201,
+  "timing_note": "Measured interval includes staging, probe, root review wait, provider and post-observation; not active model time or whole project duration.",
+  "latest_human_order": "Stop VPS development diversion/new packages; reuse validated Codex app plus local Claude CLI. VPS development, Orca and cloud expansions deferred.",
+  "corrected_candidate_created": false
+}
