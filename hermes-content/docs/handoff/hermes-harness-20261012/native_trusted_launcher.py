@@ -7,7 +7,8 @@ opens a queue path, starts Telegram, or submits provider work.
 
 def install_native_trusted_runtime_before_connect(
     adapter, *, queue, bridge, transport, request, plan, result_sink,
-    claim=None, result_bundle=None, qa_verifier=None, now_fn=None,
+    claim=None, result_bundle=None, qa_verifier=None,
+    result_delivery_contract=None, now_fn=None,
 ):
     """Install approval callback and explicit private event commands before connect.
 
@@ -26,7 +27,8 @@ def install_native_trusted_runtime_before_connect(
     runtime = NativeTrustedRuntime.bind(
         adapter, queue=queue, bridge=bridge, transport=transport,
         request=request, plan=plan, claim=claim, result_sink=result_sink,
-        result_bundle=result_bundle, qa_verifier=qa_verifier, now_fn=now_fn,
+        result_bundle=result_bundle, qa_verifier=qa_verifier,
+        result_delivery_contract=result_delivery_contract, now_fn=now_fn,
     )
     runtime.install()
     if (getattr(adapter, "_app", None) is not None

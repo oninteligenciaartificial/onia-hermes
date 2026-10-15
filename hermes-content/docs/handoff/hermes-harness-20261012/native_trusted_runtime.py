@@ -11,10 +11,14 @@ from __future__ import annotations
 
 import hashlib
 import importlib
+import importlib.metadata
 import json
 import re
 import time
 import asyncio
+from dataclasses import dataclass
+from io import BytesIO
+from urllib.parse import urlsplit
 
 
 _PROMPT_SECRET_MARKER = re.compile(
@@ -27,24 +31,62 @@ _NATIVE_COMMANDS = {
     "/onia_native_status": "status",
     "/onia_native_result": "result",
     "/onia_native_qa": "qa",
+    "/onia_native_deliver": "deliver",
 }
 _NATIVE_COMMAND_NAMESPACE = "/onia_native_"
+_SHA256 = re.compile(r"[0-9a-f]{64}\Z")
+
+
+@dataclass(frozen=True)
+class NativeResultDeliveryContract:
+    """Host-trusted, one-use binding for an explicit private result delivery."""
+
+    operation_id: str
+    request_sha: str
+    bundle_sha256: str
+    result_sha: str
+    actor_id: str
+    private_chat_id: str
+    stop_epoch: int
+
+    def __post_init__(self):
+        if (not isinstance(self.operation_id, str)
+                or not re.fullmatch(r"[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}",
+                                    self.operation_id)
+                or any(type(getattr(self, key)) is not str
+                       or not _SHA256.fullmatch(getattr(self, key))
+                       for key in ("request_sha", "bundle_sha256", "result_sha"))
+                or type(self.actor_id) is not str or not self.actor_id.isdigit()
+                or self.private_chat_id != self.actor_id
+                or type(self.stop_epoch) is not int or self.stop_epoch < 0):
+            raise ValueError("invalid private result delivery contract")
+
+    def as_record(self):
+        return {
+            "operation_id": self.operation_id, "request_sha": self.request_sha,
+            "bundle_sha256": self.bundle_sha256, "result_sha": self.result_sha,
+            "actor_id": self.actor_id, "private_chat_id": self.private_chat_id,
+            "stop_epoch": self.stop_epoch,
+        }
 
 
 class NativeTrustedRuntime:
     """Bind one real Telegram adapter and one existing native-work runtime."""
 
-    def __init__(self, adapter, native_runtime, authority, *, now_fn=None):
+    def __init__(self, adapter, native_runtime, authority, *,
+                 result_delivery_contract=None, now_fn=None):
         self.adapter = adapter
         self.native_runtime = native_runtime
         self.authority = authority
+        self.result_delivery_contract = result_delivery_contract
         self._now_fn = now_fn or (lambda: int(time.time()))
         self._original_callback = None
         self._original_command = None
 
     @classmethod
     def bind(cls, adapter, *, queue, bridge, transport, request, plan, result_sink,
-             claim=None, result_bundle=None, qa_verifier=None, now_fn=None):
+             claim=None, result_bundle=None, qa_verifier=None,
+             result_delivery_contract=None, now_fn=None):
         """Build a strict binding from trusted live objects; never open a DB path."""
         from native_cloud_cli import CloudTaskPlan, NativeCloudCLI
         from native_receipt_bridge import NativeReceiptBridge, NativeWorkRequest
@@ -65,6 +107,9 @@ class NativeTrustedRuntime:
             raise TypeError("existing FileResultSink instance required")
         if claim is not None and type(claim) is not Claim:
             raise TypeError("exact existing queue claim required")
+        if (result_delivery_contract is not None
+                and type(result_delivery_contract) is not NativeResultDeliveryContract):
+            raise TypeError("exact host-bound result delivery contract required")
 
         authority = TelegramNativeWorkAuthority._from_trusted_launcher(adapter)
         native_runtime = NativeWorkRuntime(
@@ -73,7 +118,8 @@ class NativeTrustedRuntime:
             result_bundle=result_bundle, qa_verifier=qa_verifier,
             result_sink=result_sink,
         )
-        return cls(adapter, native_runtime, authority, now_fn=now_fn)
+        return cls(adapter, native_runtime, authority,
+                   result_delivery_contract=result_delivery_contract, now_fn=now_fn)
 
     @property
     def queue(self):
@@ -369,6 +415,11 @@ class NativeTrustedRuntime:
                     or any(getattr(message, name, None) is not None
                            for name in ("forward_origin", "sender_chat", "via_bot"))):
                 return {"state": "hold", "code": "telegram_identity_mismatch"}
+            if (event == "deliver"
+                    and (getattr(update, "edited_message", None) is not None
+                         or getattr(message, "edit_date", None) is not None
+                         or getattr(message, "reply_to_message", None) is not None)):
+                return {"state": "hold", "code": "delivery_message_not_original_private_command"}
             if not self._explicit_actor_allowlisted(actor_id):
                 return {"state": "hold", "code": "telegram_exact_allowlist_required"}
             gate = getattr(self.adapter, "_is_callback_user_authorized", None)
@@ -386,6 +437,9 @@ class NativeTrustedRuntime:
             elif not self._persisted_actor_matches(request, actor_id):
                 return {"state": "hold", "code": "durable_work_authority_mismatch"}
             event_id = f"tgcmd:{update_id}:{event}"
+            if event == "deliver":
+                return await self._deliver_result_once(
+                    request, event_id, actor_id, chat_id, now)
             raw_input = json.dumps({
                 "schema": 1,
                 "event": event,
@@ -400,6 +454,159 @@ class NativeTrustedRuntime:
             return await asyncio.to_thread(self.handle_event, raw_input, now=now)
         except Exception:
             return {"state": "needs_reconcile", "code": "dispatch_outcome_unknown"}
+
+    async def _deliver_result_once(self, request, event_id, actor_id, chat_id, now):
+        """Send one exact QA-closed bundle to the bound private owner."""
+        contract = self.result_delivery_contract
+        if (type(contract) is not NativeResultDeliveryContract
+                or contract.operation_id != request.operation_id
+                or contract.request_sha != request.digest()
+                or contract.actor_id != actor_id
+                or contract.private_chat_id != chat_id):
+            return {"state": "hold", "code": "delivery_contract_unavailable"}
+        bot = getattr(self.adapter, "_bot", None)
+        app = getattr(self.adapter, "_app", None)
+        if (app is None or getattr(app, "running", None) is not True
+                or getattr(app, "bot", None) is not bot
+                or not callable(getattr(bot, "send_document", None))
+                or not self._single_call_document_transport_ready(bot)):
+            return {"state": "hold", "code": "delivery_transport_unverified"}
+
+        try:
+            receipt = self.native_runtime.bridge.read_result_bundle_receipt(request)
+            loader = getattr(self.native_runtime.result_sink, "load", None)
+            if (type(receipt) is not dict or not callable(loader)):
+                raise ValueError("durable result receipt unavailable")
+            raw = loader(receipt["ref"], request.operation_id,
+                         request.digest(), receipt["sha256"])
+            if (type(raw) is not bytes or len(raw) != receipt["bytes_written"]
+                    or hashlib.sha256(raw).hexdigest() != receipt["sha256"]
+                    or receipt["sha256"] != contract.bundle_sha256):
+                raise ValueError("result bundle differs from host-bound delivery contract")
+            from native_work_entrypoint import (
+                _pairs_no_duplicates, _reject_constant, _valid_result_bundle,
+            )
+            bundle = json.loads(raw.decode("utf-8", errors="strict"),
+                                object_pairs_hook=_pairs_no_duplicates,
+                                parse_constant=_reject_constant)
+            if (json.dumps(bundle, sort_keys=True, separators=(",", ":"),
+                           ensure_ascii=False, allow_nan=False).encode("utf-8") != raw
+                    or not _valid_result_bundle(bundle, request, request.operation_id)):
+                raise ValueError("result bundle content is not canonical or request-bound")
+            qa_bundle_sha = hashlib.sha256(json.dumps(
+                bundle, sort_keys=True, separators=(",", ":"),
+                ensure_ascii=True, allow_nan=False).encode("utf-8")).hexdigest()
+            native = self.native_runtime.bridge.read(request.operation_id)
+            if (type(native) is not dict or native.get("task_id") != request.task_id
+                    or native.get("surface") != "cloud_cli_task"
+                    or native.get("input_sha") != request.input_sha
+                    or native.get("state") != "completed"
+                    or native.get("remote_id") != bundle.get("remote_id")):
+                raise ValueError("result bundle differs from the completed native task")
+            for item in bundle["files"].values():
+                artifact = item["json"]
+                if (artifact.get("operation_id") != request.operation_id
+                        or artifact.get("input_sha") != request.input_sha
+                        or artifact.get("repository", {}).get("expected_head") != request.head
+                        or artifact.get("repository", {}).get("observed_head") != request.head):
+                    raise ValueError("result artifact differs from the exact reviewed request")
+            result_sha = hashlib.sha256(json.dumps(
+                {path: item["sha256"] for path, item in bundle["files"].items()},
+                sort_keys=True, separators=(",", ":"), ensure_ascii=True,
+                allow_nan=False).encode("utf-8")).hexdigest()
+            if result_sha != contract.result_sha:
+                raise ValueError("result file digest differs from host-bound contract")
+        except Exception:
+            return {"state": "hold", "code": "delivery_bundle_unverified"}
+
+        try:
+            consumed = self.native_runtime.bridge.begin_result_delivery_once(
+                request, event_id, contract.as_record(), qa_bundle_sha, now)
+        except Exception:
+            return {"state": "hold", "code": "delivery_reservation_failed"}
+        if not consumed:
+            return {"state": "needs_reconcile", "code": "delivery_attempt_already_consumed"}
+
+        try:
+            sent = await bot.send_document(
+                chat_id=contract.private_chat_id,
+                document=BytesIO(raw), filename=f"result-{request.operation_id}.json",
+            )
+            sent_chat = getattr(sent, "chat", None)
+            sent_chat_id = self._trusted_telegram_id(getattr(sent_chat, "id", None))
+            message_id = getattr(sent, "message_id", None)
+            if (str(getattr(sent_chat, "type", "")) != "private"
+                    or sent_chat_id != contract.private_chat_id
+                    or type(message_id) is not int or message_id <= 0):
+                raise RuntimeError("delivery acknowledgement did not bind exact private chat")
+            outcome = self.native_runtime.bridge.finish_result_delivery(
+                request, event_id, "ack", sent_chat_id, message_id, self._now())
+            return {"state": "ack", "code": "ok", "operation_id": request.operation_id,
+                    "message_id": outcome["ack_message_id"]}
+        except asyncio.CancelledError:
+            try:
+                self.native_runtime.bridge.finish_result_delivery(
+                    request, event_id, "maybe", None, None, self._now())
+            except Exception:
+                pass
+            raise
+        except Exception:
+            try:
+                self.native_runtime.bridge.finish_result_delivery(
+                    request, event_id, "maybe", None, None, self._now())
+            except Exception:
+                pass
+            return {"state": "maybe", "code": "delivery_outcome_ambiguous",
+                    "operation_id": request.operation_id}
+
+    @staticmethod
+    def _single_call_document_transport_ready(bot):
+        """Verify the inspected PTB/HTTPX direct transport shape; private API by design.
+
+        PTB has no public transport getter. Unknown versions/shapes, custom
+        fallback/proxy transports and retrying pools are rejected before the
+        delivery attempt is consumed. This does not prove one network POST.
+        """
+        try:
+            if (importlib.metadata.version("python-telegram-bot") != "22.8"
+                    or importlib.metadata.version("httpx") != "0.28.1"
+                    or importlib.metadata.version("httpcore") != "1.0.9"):
+                return False
+            telegram_bot = importlib.import_module("telegram._bot").Bot
+            telegram_ext_bot = importlib.import_module("telegram.ext").ExtBot
+            httpx = importlib.import_module("httpx")
+            httpcore_pool = importlib.import_module("httpcore._async.connection_pool").AsyncConnectionPool
+            httpx_request = importlib.import_module("telegram.request").HTTPXRequest
+            if (type(bot) not in (telegram_bot, telegram_ext_bot)
+                    or not isinstance(bot._request, tuple) or len(bot._request) != 2
+                    or (type(bot) is telegram_ext_bot
+                        and getattr(bot, "rate_limiter", None) is not None)):
+                return False
+            request = bot.request
+            if type(request) is not httpx_request or bot._request[1] is not request:
+                return False
+            client = request._client
+            if type(client) is not httpx.AsyncClient or client.auth is not None:
+                return False
+            base = urlsplit(str(bot.base_url))
+            if base.scheme != "https" or base.hostname != "api.telegram.org":
+                return False
+            url = httpx.URL(str(bot.base_url).rstrip("/") + "/sendDocument")
+            transport = client._transport
+            if (type(transport) is not httpx.AsyncHTTPTransport
+                    or client._transport_for_url(url) is not transport
+                    or client.follow_redirects is not False):
+                return False
+            for pattern, mounted in client._mounts.items():
+                if pattern.matches(url) and mounted not in (None, transport):
+                    return False
+            pool = transport._pool
+            if (type(pool) is not httpcore_pool or pool._retries != 0
+                    or pool._proxy is not None):
+                return False
+            return True
+        except Exception:
+            return False
 
     def _explicit_actor_allowlisted(self, actor_id):
         """Require an exact configured user allowlist; reject absent and wildcard gates."""

@@ -100,9 +100,38 @@ bundle through `FileResultSink` and binds `{ref, sha256, bytes_written}` to that
 event in `work_events_json`. A later `qa` event reloads only the exact bundle
 named by the durable receipt and verifies its bytes and request identity before
 calling the required external `qa_verifier`. This is not a new queue/schema or
-Cloud collection. The Telegram host remains uninstalled; there is no file
-delivery route or live activation, and this local recovery path establishes no
-live QA PASS.
+Cloud collection. A local `/onia_native_deliver` route is now prepared behind a
+separate opt-in host contract; without that contract it returns HOLD. It is not
+installed in the Telegram host and is not authorized or exercised live. A future
+delivery requires an explicit authenticated private command; QA approval alone
+is not send consent. The caller reloads the exact durable FileResultSink receipt,
+checks the closed task and QA result, then records the single attempt in the
+existing `work_events_json` before calling `bot.send_document` once. A verified
+private-chat/message-ID response is ACK; timeout, exception, cancellation,
+crash, or ambiguous ACK stays MAYBE permanently and cannot be retried with a
+new update ID. This promises at most one application invocation, not exactly
+one network POST or delivery.
+
+The host contract binds the raw FileResultSink bundle-byte SHA and the result
+map SHA. After loading and verifying those bytes, the runtime derives the
+canonical QA bundle digest (`controller_pilot.digest`, `ensure_ascii=True`)
+and compares it with the persisted closure. This digest is derived, not a
+contract field; for Unicode payloads such as `revisión – ONIA` it differs from
+the raw sink SHA, and neither digest substitutes for the other.
+
+Before consuming the one attempt, a fail-closed transport guard inspects the
+already-open bot and its general request path (not the getUpdates polling
+request). The supported shape is pinned to python-telegram-bot 22.8, HTTPX
+0.28.1, and HTTPcore 1.0.9, exact official Bot/ExtBot and HTTPX request/client
+types, standard effective Telegram transport, and zero pool retries; ExtBot
+must have no rate limiter. This check depends on private PTB/HTTPX internals.
+The isolated QA host did not have PTB installed; a later SDK probe ended
+inconclusively before validating the guard. The live gateway's process metadata
+reports these package versions, but its actual Bot request object/transport was
+not inspected by that probe, and no send was attempted. Any unknown/custom
+fallback transport holds before the attempt is recorded. This route is prepared
+locally, not installed or linked into the active gateway and not authorized in
+live Telegram.
 
 An ambiguous approval send is deliberately not retried. If the operator cannot
 find the message, reconcile through the trusted host procedure and create a new
@@ -155,9 +184,9 @@ process: `SQLiteQueue`, its `NativeReceiptBridge`, the bridge-bound
 `FileResultSink` rooted at an existing private POSIX directory. The adapter,
 queue, bridge, transport, claim, and sink must be retained by the same runtime;
 reopening the same database into another queue object or passing a Windows path
-does not satisfy the object-identity contract. The captured gateway has no
-verified owner for this bundle or a result-delivery route. Prompt sending must
-remain an explicit post-connect action after adapter readiness; gateway startup
+does not satisfy the object-identity contract. The active gateway has no
+verified owner for this bundle or the prepared local result-delivery route.
+Prompt sending must remain an explicit post-connect action after adapter readiness; gateway startup
 must not send or submit work automatically.
 
 The production sink requires an existing private POSIX root and working
@@ -261,7 +290,9 @@ and it adds no authority or work budget.
    status, or stop condition. Respect the task's own reviewed limits and STOP.
 5. Persist the result with the existing sink, then verify its reference and
    SHA after reopening it. Independent QA decides whether the result is accepted.
-   Telegram delivery/capture is manual because no result route is implemented.
+   Telegram delivery/capture remains manual until the local route is installed,
+   its transport shape is verified on the host, and a separate explicit private
+   delivery consent is authorized.
 
 ## Rollback and stop conditions
 

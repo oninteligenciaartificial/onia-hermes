@@ -599,6 +599,169 @@ class NativeReceiptBridge:
         except (UnicodeError, ValueError, TypeError, RecursionError):
             return None
 
+    def begin_result_delivery_once(self, request: NativeWorkRequest, event_id: str,
+                                   contract: dict, qa_bundle_sha256: str,
+                                   now: int) -> bool:
+        """Atomically consume the one private-delivery attempt before Bot I/O.
+
+        Delivery shares the existing native operation event ledger. Any durable
+        attempt, including a crash before the caller records an acknowledgement,
+        is permanent and cannot be replayed with another Telegram update ID.
+        """
+        if type(request) is not NativeWorkRequest:
+            raise TypeError("exact finite-work request required")
+        _text(event_id, "event_id")
+        _time(now)
+        required = {"operation_id", "request_sha", "bundle_sha256", "result_sha",
+                    "actor_id", "private_chat_id", "stop_epoch"}
+        if (type(contract) is not dict or set(contract) != required
+                or contract.get("operation_id") != request.operation_id
+                or contract.get("request_sha") != request.digest()
+                or any(type(contract.get(key)) is not str or not _HASH.fullmatch(contract[key])
+                       for key in ("bundle_sha256", "result_sha"))
+                or type(contract.get("actor_id")) is not str
+                or not contract["actor_id"].isdigit()
+                or contract.get("private_chat_id") != contract.get("actor_id")
+                or type(contract.get("stop_epoch")) is not int
+                or contract["stop_epoch"] < 0):
+            raise ValueError("invalid host-bound result delivery contract")
+        if type(qa_bundle_sha256) is not str or not _HASH.fullmatch(qa_bundle_sha256):
+            raise ValueError("invalid canonical QA bundle digest")
+        self._require_work_schema()
+        exact_request = json.loads(json.dumps(asdict(request), sort_keys=True,
+                                             separators=(",", ":")))
+        with self.queue._connection() as conn:
+            conn.execute("BEGIN IMMEDIATE")
+            row = conn.execute("SELECT * FROM native_operations WHERE operation_id=?",
+                               (request.operation_id,)).fetchone()
+            proof = _exact_work_authority(row, request) if row is not None else None
+            guard = conn.execute(
+                "SELECT stopped,epoch FROM controller_guard_state WHERE singleton=1"
+            ).fetchone()
+            task = conn.execute("SELECT * FROM tasks WHERE task_id=?",
+                                (request.task_id,)).fetchone()
+            task_result = conn.execute("SELECT * FROM task_results WHERE task_id=?",
+                                       (request.task_id,)).fetchone()
+            if (row is None or proof is None or proof["request"] != exact_request
+                    or row["task_id"] != request.task_id
+                    or row["input_sha"] != request.input_sha
+                    or row["nonce"] != request.nonce
+                    or row["dispatch_contract_sha"] != request.plan_sha
+                    or row["surface"] != "cloud_cli_task"
+                    or row["state"] != "completed"
+                    or row["remote_id"] is None
+                    or type(row["observation_json"]) is not str
+                    or hashlib.sha256(row["observation_json"].encode("utf-8")).hexdigest()
+                        != row["observation_digest"]):
+                raise RuntimeError("delivery requires the exact completed native operation")
+            authorization = proof["authorization"]
+            if (authorization.get("actor") != contract["actor_id"]
+                    or authorization.get("authority_source") != "telegram_callback_allowlist"):
+                raise RuntimeError("delivery contract actor differs from persisted Telegram authority")
+            observation = json.loads(row["observation_json"])
+            if (type(observation) is not dict
+                    or observation.get("operation_id") != request.operation_id
+                    or observation.get("surface") != "cloud_cli_task"
+                    or observation.get("remote_id") != row["remote_id"]
+                    or observation.get("input_sha") != request.input_sha
+                    or observation.get("state") != "completed"
+                    or observation.get("result_sha") != contract["result_sha"]):
+                raise RuntimeError("delivery QA result digest differs from terminal observation")
+            if (guard is None or guard["stopped"] or guard["epoch"] != contract["stop_epoch"]
+                    or row["stop_epoch"] != contract["stop_epoch"]):
+                raise RuntimeError("delivery blocked by STOP or changed STOP epoch")
+            if (task is None or task_result is None
+                    or task["status"] != "done" or task["effect_state"] != "applied"
+                    or task["effect_key"] != request.operation_id
+                    or task["worker_id"] != request.worker_id
+                    or task["repo"] != request.repo or task["ref"] != request.ref
+                    or task["sha"] != request.head or task["input_sha"] != request.input_sha
+                    or task["last_evidence"] != "result:" + task_result["evidence_digest"]):
+                raise RuntimeError("delivery requires the exact locally closed QA task")
+            try:
+                task_receipt = json.loads(task_result["evidence_json"])
+                closure = task_receipt.get("evidence_ref")
+                closure_digest = hashlib.sha256(json.dumps(
+                    task_receipt, sort_keys=True, separators=(",", ":"),
+                    ensure_ascii=True, allow_nan=False).encode("utf-8")).hexdigest()
+            except (UnicodeError, ValueError, TypeError, AttributeError, RecursionError):
+                raise RuntimeError("delivery task QA receipt is invalid") from None
+            expected_closure = (
+                "finite_closure:task_submission_applied;goal_outcome=completed;"
+                f"independent_qa={observation.get('evidence_ref')};"
+                f"bundle_sha={qa_bundle_sha256};retry=forbidden"
+            )
+            if (task_receipt.get("result") != "applied_reconciled"
+                    or task_result["evidence_digest"] != closure_digest
+                    or closure != expected_closure):
+                raise RuntimeError("delivery closure does not bind the exact QA and bundle")
+            events = json.loads(row["work_events_json"] or "{}")
+            if type(events) is not dict or any(type(item) is not dict for item in events.values()):
+                raise RuntimeError("delivery event ledger is invalid")
+            if any(item.get("event") == "delivery" for item in events.values()):
+                conn.commit()
+                return False
+            if event_id in events:
+                raise RuntimeError("delivery event ID conflicts with an existing event")
+            if len(events) >= 8:
+                raise RuntimeError("finite native event cap reached; delivery held")
+            events[event_id] = {
+                "event": "delivery", "request_sha": request.digest(),
+                "started_at": now, "state": "attempt_consumed_maybe",
+                "bundle_sha256": contract["bundle_sha256"],
+                "qa_bundle_sha256": qa_bundle_sha256,
+                "result_sha": contract["result_sha"],
+                "actor_id": contract["actor_id"],
+                "private_chat_id": contract["private_chat_id"],
+                "stop_epoch": contract["stop_epoch"],
+            }
+            conn.execute("UPDATE native_operations SET work_events_json=? WHERE operation_id=?",
+                         (json.dumps(events, sort_keys=True, separators=(",", ":")),
+                          request.operation_id))
+            conn.commit()
+        return True
+
+    def finish_result_delivery(self, request: NativeWorkRequest, event_id: str,
+                               state: str, chat_id: str | None, message_id: int | None,
+                               now: int) -> dict:
+        """Persist the single-call outcome; ambiguous outcomes stay MAYBE forever."""
+        if type(request) is not NativeWorkRequest or state not in {"ack", "maybe"}:
+            raise ValueError("invalid delivery outcome")
+        _text(event_id, "event_id")
+        _time(now)
+        if state == "ack":
+            if (type(chat_id) is not str or not chat_id.isdigit()
+                    or type(message_id) is not int or message_id <= 0):
+                raise ValueError("ACK requires exact private chat and positive message ID")
+        elif chat_id is not None or message_id is not None:
+            raise ValueError("ambiguous outcome cannot carry an ACK")
+        self._require_work_schema()
+        with self.queue._connection() as conn:
+            conn.execute("BEGIN IMMEDIATE")
+            row = conn.execute("SELECT * FROM native_operations WHERE operation_id=?",
+                               (request.operation_id,)).fetchone()
+            if (row is None or _exact_work_authority(row, request) is None
+                    or row["task_id"] != request.task_id):
+                raise RuntimeError("delivery outcome lacks exact durable operation authority")
+            events = json.loads(row["work_events_json"] or "{}")
+            entry = events.get(event_id) if type(events) is dict else None
+            if (type(entry) is not dict or entry.get("event") != "delivery"
+                    or entry.get("request_sha") != request.digest()
+                    or entry.get("state") != "attempt_consumed_maybe"):
+                raise RuntimeError("delivery outcome requires the unique consumed attempt")
+            if state == "ack" and chat_id != entry.get("private_chat_id"):
+                raise RuntimeError("delivery ACK chat differs from reserved private recipient")
+            entry["state"] = state
+            entry["finished_at"] = now
+            if state == "ack":
+                entry["ack_message_id"] = message_id
+            conn.execute("UPDATE native_operations SET work_events_json=? WHERE operation_id=?",
+                         (json.dumps(events, sort_keys=True, separators=(",", ":")),
+                          request.operation_id))
+            conn.commit()
+        return {"state": state, "operation_id": request.operation_id,
+                "event_id": event_id, "ack_message_id": message_id if state == "ack" else None}
+
     def begin_dispatch(self, operation_id: str, dispatch_contract_sha: str) -> dict:
         """Consume the single dispatch slot BEFORE transport; no automatic retry.
 

@@ -2,7 +2,7 @@
 
 ## R4 canary — ownership and checkpoint (2026-10-15)
 
-- Goal activo: chat madre `01a13cc1-12e9-79a0-97e8-4899f05a5c95` (creado 2026-10-15); no cerrarlo por auxiliares inactivos. **Cloud: 1/1 submit; 2/2 status; 1/1 collect.** QA offline no cuenta como prueba Cloud.
+- Objetivo all-cloud pendiente; el próximo avance real depende de las lecturas diagnósticas suplementarias y posterior activación aprobada. Chat madre `01a13cc1-12e9-79a0-97e8-4899f05a5c95`; **Cloud: 1/1 submit; 2/2 status; 1/1 collect.** QA offline no cuenta como prueba Cloud.
 - `cloud_transport` conserva la propiedad del único submit y del eventual status/collect dentro de los límites. El host-side caller/runbook pertenece al carril CODE; QA independiente revisa los cambios. No tocar DOCS congelada ni iniciar otra operación/cola.
 - El recibo de reserva `E:\onia-wt\r4-reservation-receipt-20261015.json` conserva la transición `reserved → begin_dispatch`; la lease se consume y se borra al despachar, así que no reclamarla ni reservar otra vez. El submit aceptado es `task_e_6ad045ab00c08327bb4ea958581c5c82` (recibo `E:\onia-wt\r4-submit-result-20261015.json`). Status #1 quedó `UNKNOWN`/`needs_reconcile` en `E:\onia-wt\r4-status1-result-20261015.json`. Status #2 captura `E:\onia-wt\r4-status2-directed-capture-20261015.json`: exit 1, stdout 106B SHA `a686c2321b7cd1dd1aa4cc7ff8f8fc20fd3e1c23509d1804708cbbf95f60b5fb`, stderr 0B vacío; tarjeta `[ERROR]`/`no diff`, causa interna desconocida. El rótulo no demuestra ausencia de outputs privados. DB e intent no se tocaron en este diagnóstico.
 - Checkpoint externo: intent `E:\onia-wt\r4-root-intent-20261015.json` (SHA-256 `97d523b98e495a54c3070a28212c8b62e1818aee3b2c8c34faf330b6108345b4`) y recibo de freeze `E:\onia-wt\r4-intent-freeze-receipt-20261015.json`; reserva en el recibo anterior. La autorización local original venció `2026-10-15T03:05:17Z`; Root reporta que `revalidate_reserved_root_r4(bridge, request, now)` se ejecutó una vez, auditada, para el mismo grant ya expirado, preservando la prueba antigua y renovando solo el TTL local. El intent quedó intacto. El recibo de freeze tenía `environment_pin_written=false` antes de que Browser Use reportara resolución del URL y pin/readback; el STOP/CUA URL actual no es verificable desde este host. El segundo intento con Chrome nativo falló antes de URL/AX, sin atribuir causa a Cloud.
@@ -12,8 +12,8 @@
 ## Caller Telegram nativo (2026-10-15)
 
 - Goal sigue activo; el caller local pre-connect expone `/onia_native_*` y pasó QA offline (13/13 focal; 23/23 compatibilidad). No hay integración Telegram viva.
-- Recuperación local result→QA por recibo durable `work_events_json` + `FileResultSink.load` pasó 42/42 focales y 18/18 compatibilidad QA; no equivale a QA Cloud en vivo.
-- Entrega de archivos y activación host siguen pendientes; R4 permanece congelado con límites consumidos, causa del ERROR `UNKNOWN` y sin más llamadas Cloud autorizadas aquí.
+- Caller, recuperación result→QA y entrega privada local pasaron QA offline: 13/13+23/23, 42/42+18/18 y 20/20 focal; compatibilidad final 47/47. No equivale a QA Cloud ni a integración Telegram viva.
+- Preflight `2026-10-15T04:37:21Z`: gateway activo; metadata de proceso PTB 22.8/HTTPX 0.28.1/HTTPcore 1.0.9, Codex no está en su PATH, auth.json del HOME predeterminado ausente y `CODEX_HOME` unset; ruta POSIX de cola desconocida. Caller `/onia_native_deliver` preparado localmente, aún no instalado/enlazado. Consentimiento futuro separado; SDK guard probe inconcluso (exit 2), no PASS. R4 congelado, causa ERROR `UNKNOWN`, sin más llamadas Cloud.
 - No emitir más llamadas Cloud en este canario. Dos lecturas diagnósticas suplementarias quedan pendientes de consentimiento específico.
 
 > **Vigencia corregida 2026-10-09:** el hilo de septiembre de abajo es historial,

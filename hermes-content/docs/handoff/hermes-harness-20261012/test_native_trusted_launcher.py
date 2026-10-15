@@ -1,7 +1,10 @@
 """Offline launcher and one-shot Telegram delivery checks; no network/provider."""
 import asyncio
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import replace
 import hashlib
+import importlib
+import json
 from pathlib import Path
 from types import SimpleNamespace
 import tempfile
@@ -13,7 +16,7 @@ from native_receipt_bridge import NativeReceiptBridge, NativeWorkRequest
 from native_result_store import FileResultSink
 from native_telegram_authority import TelegramNativeWorkAuthority, _FACTORY_CAPABILITY
 from native_trusted_launcher import install_native_trusted_runtime_before_connect
-from native_trusted_runtime import NativeTrustedRuntime
+from native_trusted_runtime import NativeResultDeliveryContract, NativeTrustedRuntime
 from native_receipt_bridge import NativeObservation
 from sqlite_pilot import SQLiteQueue, TaskSpec
 
@@ -74,6 +77,9 @@ class FakeBot:
         self.fail = fail
         self.chat_id = chat_id
         self.chat_type = chat_type
+        self.base_url = "https://api.telegram.org/botfixture"
+        self._request = None
+        self.document_calls = []
 
     async def send_message(self, **kwargs):
         self.calls.append(kwargs)
@@ -82,6 +88,16 @@ class FakeBot:
         return SimpleNamespace(
             chat=SimpleNamespace(id=self.chat_id, type=self.chat_type),
             message_id=91,
+        )
+
+    async def send_document(self, **kwargs):
+        document = kwargs.get("document")
+        self.document_calls.append({**kwargs, "bytes": document.getvalue()})
+        if self.fail:
+            raise TimeoutError("ambiguous fixture document send")
+        return SimpleNamespace(
+            chat=SimpleNamespace(id=self.chat_id, type=self.chat_type),
+            message_id=92,
         )
 
 
@@ -151,11 +167,12 @@ class NativeTrustedLauncherTests(unittest.TestCase):
         self.factory_patch.start()
         self.addCleanup(self.factory_patch.stop)
 
-    def install(self):
+    def install(self, result_delivery_contract=None):
         return install_native_trusted_runtime_before_connect(
             self.adapter, queue=self.queue, bridge=self.bridge,
             transport=self.transport, request=self.request, plan=self.plan,
-            claim=self.claim, result_sink=self.sink, now_fn=lambda: NOW,
+            claim=self.claim, result_sink=self.sink,
+            result_delivery_contract=result_delivery_contract, now_fn=lambda: NOW,
         )
 
     def connect_fixture(self):
@@ -512,6 +529,247 @@ class NativeTrustedLauncherTests(unittest.TestCase):
         self.assertEqual(status_calls, [])
         self.assertIn(events, (None, "{}"))
         self.assertEqual(message.replies, ["Native event: hold"])
+
+    def _prepare_delivery_state(self, runtime):
+        """Reach QA closure through the existing local event path, no provider."""
+        self._prepare_predecessor()
+        self._approve_request(runtime)
+        self.bridge.authorize_and_reserve_work(
+            self.claim, self.request, self.authority, NOW)
+        with patch("native_receipt_bridge.time.time", return_value=NOW):
+            self.bridge.begin_dispatch(OP, self.plan_sha)
+        self.bridge.ingest(NativeObservation(
+            OP, "cloud_cli_task", TASK, self.request.input_sha, "submitted",
+            NOW + 1, "fixture:submitted"), NOW + 1)
+        artifact = {
+            "operation_id": OP, "input_sha": self.request.input_sha,
+            "repository": {"expected_head": self.request.head,
+                           "observed_head": self.request.head},
+            "result": "revisión – ONIA",
+        }
+        bundle = {
+            "state": "awaiting_independent_qa", "operation_id": OP,
+            "remote_id": TASK, "input_sha": self.request.input_sha,
+            "files": {"result.json": {
+                "sha256": "d" * 64,
+                "bytes": len(json.dumps(artifact, sort_keys=True, separators=(",", ":"),
+                                 ensure_ascii=False, allow_nan=False).encode("utf-8")),
+                "json": artifact,
+            }},
+        }
+        raw = json.dumps(bundle, sort_keys=True, separators=(",", ":"),
+                         ensure_ascii=False, allow_nan=False).encode("utf-8")
+        qa_ref = "fixture:independent-qa"
+        with patch.object(self.transport, "collect_result", return_value=bundle):
+            result_output = runtime.handle_event(json.dumps({
+                "schema": 1, "event": "result", "event_id": "fixture-result-event",
+                "operation_id": OP, "request_sha": self.request.digest(),
+            }), now=NOW + 2)
+        self.assertEqual(result_output["state"], "awaiting_independent_qa")
+
+        class BoundFixtureReviewer:
+            def verify(_self, request, qa_bundle, _now):
+                from controller_pilot import digest
+                return {
+                    "verified": True, "request_sha": request.digest(),
+                    "bundle_sha": digest(qa_bundle), "remote_id": TASK,
+                    "reviewer_id": "fixture-independent-reviewer",
+                    "goal_outcome": "completed",
+                    "authority_source": "fixture:independent-review",
+                    "evidence_ref": qa_ref,
+                }
+
+        object.__setattr__(runtime.native_runtime, "qa_verifier", BoundFixtureReviewer())
+        qa_output = runtime.handle_event(json.dumps({
+            "schema": 1, "event": "qa", "event_id": "fixture-qa-event",
+            "operation_id": OP, "request_sha": self.request.digest(),
+        }), now=NOW + 3)
+        self.assertEqual(qa_output["state"], "closure_resolved")
+        receipt = self.bridge.read_result_bundle_receipt(self.request)
+        operation = self.bridge.read(OP)
+        result_sha = operation["observation"]["result_sha"]
+        contract = NativeResultDeliveryContract(
+            OP, self.request.digest(), receipt["sha256"], result_sha,
+            "42", "42", operation["stop_epoch"],
+        )
+        loaded_raw = self.sink.load(receipt["ref"], OP, self.request.digest(),
+                                    receipt["sha256"])
+        from controller_pilot import digest
+        qa_bundle_sha = digest(json.loads(loaded_raw.decode("utf-8")))
+        self.assertNotEqual(receipt["sha256"], qa_bundle_sha)
+        runtime.result_delivery_contract = contract
+        return runtime, contract, loaded_raw, qa_bundle_sha
+
+    def _invoke_delivery(self, runtime, *, update_id=9901, actor="42", chat="42"):
+        update = SimpleNamespace(
+            update_id=update_id,
+            message=FakeMessage("/onia_native_deliver", actor=actor, chat=chat),
+        )
+        self._invoke_command(update)
+        return update.message.replies[-1], update.message
+
+    def test_explicit_delivery_sends_bound_bundle_once_after_restart(self):
+        runtime = self.install()
+        runtime, _contract, raw, _qa_bundle_sha = self._prepare_delivery_state(runtime)
+        with patch.object(NativeTrustedRuntime, "_single_call_document_transport_ready",
+                          return_value=True):
+            first, first_message = self._invoke_delivery(runtime)
+            object.__setattr__(runtime.native_runtime, "bridge",
+                               NativeReceiptBridge(self.queue))
+            second, second_message = self._invoke_delivery(runtime, update_id=9902)
+        self.assertEqual(first, "Native event: ack")
+        self.assertEqual(second, "Native event: needs_reconcile")
+        self.assertEqual(first_message.replies, ["Native event: ack"])
+        self.assertEqual(second_message.replies, ["Native event: needs_reconcile"])
+        self.assertEqual(len(self.adapter._bot.document_calls), 1)
+        self.assertEqual(self.adapter._bot.document_calls[0]["bytes"], raw)
+        events = json.loads(self.bridge.read(OP)["work_events_json"])
+        delivery = [item for item in events.values() if item["event"] == "delivery"]
+        self.assertEqual(len(delivery), 1)
+        self.assertEqual(delivery[0]["state"], "ack")
+
+    def test_delivery_unknown_transport_or_missing_optin_has_zero_bot_calls(self):
+        runtime = self.install()
+        runtime, contract, _raw, _qa_bundle_sha = self._prepare_delivery_state(runtime)
+        runtime.result_delivery_contract = None
+        missing, _ = self._invoke_delivery(runtime)
+        self.assertEqual(missing, "Native event: hold")
+        self.assertEqual(self.adapter._bot.document_calls, [])
+        runtime.result_delivery_contract = contract
+        with patch.object(NativeTrustedRuntime, "_single_call_document_transport_ready",
+                          return_value=False):
+            unknown, _ = self._invoke_delivery(runtime, update_id=9902)
+        self.assertEqual(unknown, "Native event: hold")
+        self.assertEqual(self.adapter._bot.document_calls, [])
+        events = json.loads(self.bridge.read(OP)["work_events_json"])
+        self.assertFalse(any(item.get("event") == "delivery" for item in events.values()))
+
+    def test_delivery_wrong_actor_contract_and_stop_fail_before_send(self):
+        runtime = self.install()
+        runtime, contract, _raw, qa_bundle_sha = self._prepare_delivery_state(runtime)
+        with patch.object(NativeTrustedRuntime, "_single_call_document_transport_ready",
+                          return_value=True):
+            wrong_actor, _ = self._invoke_delivery(runtime, actor="99", chat="99")
+            self.assertEqual(wrong_actor, "Native event: hold")
+            runtime.result_delivery_contract = replace(contract, bundle_sha256="e" * 64)
+            bad_contract, _ = self._invoke_delivery(runtime, update_id=9902)
+            self.assertEqual(bad_contract, "Native event: hold")
+            runtime.result_delivery_contract = replace(contract, bundle_sha256=qa_bundle_sha)
+            crossed_digest, _ = self._invoke_delivery(runtime, update_id=9903)
+            self.assertEqual(crossed_digest, "Native event: hold")
+            runtime.result_delivery_contract = contract
+            runtime.result_delivery_contract = replace(contract, result_sha="f" * 64)
+            bad_qa_digest, _ = self._invoke_delivery(runtime, update_id=9904)
+            self.assertEqual(bad_qa_digest, "Native event: hold")
+            runtime.result_delivery_contract = contract
+            with self.queue._connection() as conn:
+                conn.execute("UPDATE controller_guard_state SET stopped=1,epoch=epoch+1 "
+                             "WHERE singleton=1")
+            stopped, _ = self._invoke_delivery(runtime, update_id=9905)
+        self.assertEqual(stopped, "Native event: hold")
+        self.assertEqual(self.adapter._bot.document_calls, [])
+        events = json.loads(self.bridge.read(OP)["work_events_json"])
+        self.assertFalse(any(item.get("event") == "delivery" for item in events.values()))
+
+    def test_ambiguous_delivery_is_permanently_maybe_without_retry(self):
+        runtime = self.install()
+        runtime, _contract, _raw, _qa_bundle_sha = self._prepare_delivery_state(runtime)
+        self.adapter._bot.fail = True
+        with patch.object(NativeTrustedRuntime, "_single_call_document_transport_ready",
+                          return_value=True):
+            first, _ = self._invoke_delivery(runtime)
+            second, _ = self._invoke_delivery(runtime, update_id=9902)
+        self.assertEqual(first, "Native event: maybe")
+        self.assertEqual(second, "Native event: needs_reconcile")
+        self.assertEqual(len(self.adapter._bot.document_calls), 1)
+        events = json.loads(self.bridge.read(OP)["work_events_json"])
+        delivery = [item for item in events.values() if item["event"] == "delivery"]
+        self.assertEqual(len(delivery), 1)
+        self.assertEqual(delivery[0]["state"], "maybe")
+
+    def test_concurrent_delivery_reservations_consume_one_attempt(self):
+        runtime = self.install()
+        runtime, contract, _raw, qa_bundle_sha = self._prepare_delivery_state(runtime)
+        bridge_one = NativeReceiptBridge(self.queue)
+        bridge_two = NativeReceiptBridge(self.queue)
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            outcomes = list(pool.map(
+                lambda args: args[0].begin_result_delivery_once(
+                    self.request, args[1], contract.as_record(), qa_bundle_sha, NOW + 4),
+                ((bridge_one, "concurrent-a"), (bridge_two, "concurrent-b")),
+            ))
+        self.assertEqual(sorted(outcomes), [False, True])
+        self.assertEqual(self.adapter._bot.document_calls, [])
+        events = json.loads(self.bridge.read(OP)["work_events_json"])
+        self.assertEqual(sum(item.get("event") == "delivery" for item in events.values()), 1)
+
+    def test_ack_persistence_failure_stays_maybe_and_never_retries(self):
+        runtime = self.install()
+        runtime, _contract, _raw, _qa_bundle_sha = self._prepare_delivery_state(runtime)
+        bridge = runtime.native_runtime.bridge
+        finish = bridge.finish_result_delivery
+        def fail_ack_once(*args, **kwargs):
+            if args[2] == "ack":
+                raise OSError("fixture ACK persistence loss")
+            return finish(*args, **kwargs)
+        with patch.object(NativeTrustedRuntime, "_single_call_document_transport_ready",
+                          return_value=True), \
+                patch.object(bridge, "finish_result_delivery", side_effect=fail_ack_once):
+            first, _ = self._invoke_delivery(runtime)
+            second, _ = self._invoke_delivery(runtime, update_id=9902)
+        self.assertEqual(first, "Native event: maybe")
+        self.assertEqual(second, "Native event: needs_reconcile")
+        self.assertEqual(len(self.adapter._bot.document_calls), 1)
+        events = json.loads(self.bridge.read(OP)["work_events_json"])
+        delivery = [item for item in events.values() if item["event"] == "delivery"]
+        self.assertEqual(len(delivery), 1)
+        self.assertEqual(delivery[0]["state"], "maybe")
+
+    def test_private_transport_guard_accepts_only_inspected_httpx_shape(self):
+        import httpx
+
+        client = httpx.AsyncClient(
+            trust_env=False, transport=httpx.AsyncHTTPTransport(retries=0))
+        self.addCleanup(lambda: asyncio.run(client.aclose()))
+        class ExactRequest:
+            def __init__(self, value):
+                self._client = value
+
+        class ExactBot(FakeBot):
+            @property
+            def request(self):
+                return self._request[1]
+
+        class ExactExtBot(ExactBot):
+            pass
+
+        bot = ExactExtBot()
+        bot.rate_limiter = None
+        # PTB's first request serves getUpdates; send_document uses bot.request
+        # (the second entry), so deliberately give polling an unsafe shape.
+        bot._request = (ExactRequest(object()), ExactRequest(client))
+        modules = {
+            "telegram._bot": SimpleNamespace(Bot=ExactBot),
+            "telegram.ext": SimpleNamespace(ExtBot=ExactExtBot),
+            "telegram.request": SimpleNamespace(HTTPXRequest=ExactRequest),
+        }
+        original_import = importlib.import_module
+        def import_fixture(name):
+            return modules[name] if name in modules else original_import(name)
+        versions = {"python-telegram-bot": "22.8", "httpx": "0.28.1",
+                    "httpcore": "1.0.9"}
+        with patch("native_trusted_runtime.importlib.import_module", side_effect=import_fixture), \
+                patch("native_trusted_runtime.importlib.metadata.version",
+                      side_effect=lambda name: versions[name]):
+            self.assertTrue(NativeTrustedRuntime._single_call_document_transport_ready(bot))
+        fallback = httpx.AsyncClient(
+            trust_env=False, transport=httpx.MockTransport(lambda _request: None))
+        self.addCleanup(lambda: asyncio.run(fallback.aclose()))
+        bot._request = (ExactRequest(object()), ExactRequest(fallback))
+        with patch("native_trusted_runtime.importlib.import_module", side_effect=import_fixture), \
+                patch("native_trusted_runtime.importlib.metadata.version",
+                      side_effect=lambda name: versions[name]):
+            self.assertFalse(NativeTrustedRuntime._single_call_document_transport_ready(bot))
 
 
 if __name__ == "__main__":
