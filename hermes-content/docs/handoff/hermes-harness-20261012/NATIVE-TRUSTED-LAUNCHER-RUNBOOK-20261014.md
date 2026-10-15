@@ -131,3 +131,7 @@ hook, exact live objects, late-install rejection, private-chat/message binding,
 ambiguous-send HOLD/no-resend, identity mismatch, and pre-connect-only uninstall
 with temporary fixtures. It does not install Telegram dependencies, access the
 network, call a provider, or use the operational queue.
+
+## Host-source evidence delta — 2026-10-14
+
+A bounded read of the installed public gateway source confirmed the initial pre-connect insertion seam in `GatewayStartupMixin._start_prefilter_platforms` and the adapter lifecycle wiring. The host has no verified native `FileResultSink` consumer, and its Linux gateway cannot share the current PC-local queue by object identity. The sanitized source findings, hashes, external report links, and topology gate are recorded in [native-host-source-20261014.md](evidence/native-host-source-20261014.md). No host patch or activation was applied; the existing 30-minute checklist above remains unexecuted and separately gated.
