@@ -176,8 +176,9 @@ la dirección de Sergio Urcullo.
 
 ## 8. Próximos pasos (en orden, 15-oct 22:05 UTC)
 
-1. El pulido 7 de la cola, sin apuro (nada de eso lo ve hoy un cliente salvo «Nueva receta» y los nombres para el lector de
-   pantalla).
+1. 00:58 UTC del 16-oct: mirar #178 (pulido 7, merge `dfdf7d89`) en producción (recordatorio programado) y reportar
+   PUBLICADO. El pulido 8 se construye en `/home/user/wt-pulido8` (rama local `pulido-usted-8` sobre `10a6509c`): género en
+   estética, «Gestionar» de Equipo, hover en táctil, mayúsculas y la X del medicamento. Se empuja después de las 01:10.
 2. Cuando Sergio Urcullo apruebe el pago QA: mirar el plan activo, la factura por correo y el checkout en «Plan activo».
 3. Contratos para Codex escritos y `pendiente`: **M1e** (el servidor exige enteros en las unidades enteras) y **A1** (lo
    omitido por teléfono queda como descartada con motivo). Los lanza la madre.
