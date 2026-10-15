@@ -1,0 +1,58 @@
+{
+  "schema": 1,
+  "kind": "REAL_HUMAN_SETUP_ONLY_APPROVAL_MATERIALIZATION",
+  "recorded_at_utc": "2026-10-15T14:28:55.333320+00:00",
+  "human_name": "Sergio Urcullo",
+  "literal_response": "Aprobado",
+  "source_thread_id": "01a13f7b-a156-7150-ba99-b4ff682163a1",
+  "source_reference": "user:01a13f7b-a156-7150-ba99-b4ff682163a1:2026-10-15:Aprobado:setup-only-9fc238a7",
+  "source_evidence": "Mother reports direct human reply to the concrete pending one-trial setup-only approval question; no message UUID was supplied or invented.",
+  "base_commit": "915c6f3f8547decee4630075c0b00043d0b46129",
+  "branch": "codex/hermes-controller-hardening-20261013",
+  "operation_id": "9fc238a7-aa41-433c-8681-a9bf6ec6a340",
+  "parent_operation_id": "f90f55bc-48d8-406f-a11e-05ddd2683014",
+  "scope": "SETUP_ONLY_SNAPSHOT_TRIAL",
+  "environment_id": "6abad782eba0819196ca234dc3abc327",
+  "recipe_relative_path": "../snapshot-recipe-candidate/setup_recipe.py",
+  "recipe_sha256": "27609d8506e41dcdf4190a68991bbffcdf76499cf3aecd9a57e8c097431d4b15",
+  "pending_manifest_sha256": "f023376dbadca6a8b964fb0763a7546ea087713db0aae3de172cf30f5d7bcd09",
+  "approved_manifest_sha256": "30a21d596b5592c3db5af2f15a0a56be06edd2adb560e93b5318424d34d6a86c",
+  "approved_wrapper_sha256": "21071fdd75a92e9c3644efb4bf36be8b3d16f9a7c521081bed82b4efbd849ed4",
+  "approved_wrapper_bytes": 52832,
+  "exact_manifest_changes": {
+    "downloads_and_install_approved": {
+      "before": false,
+      "after": true
+    },
+    "human_approval_reference": {
+      "before": null,
+      "after": "user:01a13f7b-a156-7150-ba99-b4ff682163a1:2026-10-15:Aprobado:setup-only-9fc238a7"
+    },
+    "operation_authorization_reference": {
+      "before": null,
+      "after": "user:01a13f7b-a156-7150-ba99-b4ff682163a1:2026-10-15:Aprobado:setup-only-9fc238a7"
+    },
+    "state": {
+      "before": "PENDING_APPROVAL",
+      "after": "APPROVED_FOR_SETUP_ONLY"
+    }
+  },
+  "candidate_pending_files_preserved": true,
+  "allowed_effects_after_QA": [
+    "One new setup-only Cloud task",
+    "Original 33 APT names from existing snapshot Ubuntu source",
+    "Original four exact Python versions and Chromium156 revision1248",
+    "Temporary approved setup wrapper and maintenance colon; restore original fields by exact hash"
+  ],
+  "prohibited_effects": [
+    "Browser launch",
+    "Agent tools",
+    "Production",
+    "Queue/DB/intent/lease mutation",
+    "Historical R4 replay",
+    "Unapproved dependency/origin/security fallback"
+  ],
+  "QA_GO_required_before_submit": true,
+  "cloud_submits": 0,
+  "installations_started": 0
+}

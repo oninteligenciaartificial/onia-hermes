@@ -1,0 +1,100 @@
+{
+  "apt_package_names_approved": [
+    "fonts-freefont-ttf",
+    "fonts-ipafont-gothic",
+    "fonts-liberation",
+    "fonts-noto-color-emoji",
+    "fonts-tlwg-loma-otf",
+    "fonts-unifont",
+    "fonts-wqy-zenhei",
+    "libasound2t64",
+    "libatk-bridge2.0-0t64",
+    "libatk1.0-0t64",
+    "libatspi2.0-0t64",
+    "libcairo2",
+    "libcups2t64",
+    "libdbus-1-3",
+    "libdrm2",
+    "libfontconfig1",
+    "libfreetype6",
+    "libgbm1",
+    "libglib2.0-0t64",
+    "libnspr4",
+    "libnss3",
+    "libpango-1.0-0",
+    "libx11-6",
+    "libxcb1",
+    "libxcomposite1",
+    "libxdamage1",
+    "libxext6",
+    "libxfixes3",
+    "libxkbcommon0",
+    "libxrandr2",
+    "xfonts-cyrillic",
+    "xfonts-scalable",
+    "xvfb"
+  ],
+  "browser": {
+    "headless_shell": false,
+    "name": "chromium",
+    "possible_support_utility": "ffmpeg1013",
+    "revision": "1248",
+    "version": "156.0.8078.4"
+  },
+  "browser_launch": false,
+  "browser_uid_required": 1000,
+  "cost_duration_storage": "UNKNOWN",
+  "create_accounts": false,
+  "downloads_and_install_approved": true,
+  "environment_id": "6abad782eba0819196ca234dc3abc327",
+  "human_approval_reference": "user:01a13f7b-a156-7150-ba99-b4ff682163a1:2026-10-15:Aprobado:setup-only-9fc238a7",
+  "new_api_billing": false,
+  "new_setup_config_gate": {
+    "actual_setup_receipt_exists": false,
+    "host_side_requirement": "after saving this wrapper, read back the exact live setup field and unchanged provider policy/cache; bind its actual SHA-256 and saved_at_utc into the R4 operation contract before submit",
+    "receipt_hash_is_external_to_wrapper_to_avoid_self_reference": true,
+    "required_before_any_R4_cloud_submit": true,
+    "setup_or_install_must_not_start_before_gate": true
+  },
+  "operation_authorization_reference": "user:01a13f7b-a156-7150-ba99-b4ff682163a1:2026-10-15:Aprobado:setup-only-9fc238a7",
+  "operation_id": "9fc238a7-aa41-433c-8681-a9bf6ec6a340",
+  "provider_saved_configuration": {
+    "cache_enabled": true,
+    "domains": [
+      "example.com",
+      "iana.org",
+      "www.iana.org"
+    ],
+    "evidence_reference": "cua:tab437654302/network-save-readback/legacy-browser-network-saved-readback-20261014.png",
+    "methods": [
+      "GET",
+      "HEAD",
+      "OPTIONS"
+    ],
+    "network_access": "limited",
+    "preset": "None",
+    "saved_at_utc": "2026-10-14T18:05:55.372Z",
+    "surface": "codex-cloud-legacy-ui"
+  },
+  "provider_saved_configuration_role": "Historical baseline only; must be revalidated and read back before any newly approved setup.",
+  "python_packages": [
+    "playwright==1.64.0",
+    "greenlet==3.5.6",
+    "pyee==13.0.1",
+    "typing-extensions==4.16.0"
+  ],
+  "recipe_sha256": "27609d8506e41dcdf4190a68991bbffcdf76499cf3aecd9a57e8c097431d4b15",
+  "sandbox_weakening": false,
+  "schema": 1,
+  "state": "APPROVED_FOR_SETUP_ONLY",
+  "operation_id_role": "New setup-only trial literal; parent R4 is lineage only. No queue/lease/native admission/browser effects.",
+  "pending_approval_scope": "Exact snapshot source selection, downloads and installation of this recipe digest and unchanged component set. Current manifest cannot authorize setup.",
+  "parent_operation_id": "f90f55bc-48d8-406f-a11e-05ddd2683014",
+  "operation_scope": "SETUP_ONLY_SNAPSHOT_TRIAL",
+  "future_activation_fields_only": [
+    "state",
+    "downloads_and_install_approved",
+    "human_approval_reference",
+    "operation_authorization_reference"
+  ]
+}

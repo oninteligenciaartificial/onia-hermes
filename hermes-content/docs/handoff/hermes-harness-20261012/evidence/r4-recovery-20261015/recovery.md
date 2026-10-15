@@ -131,4 +131,23 @@ paths. Compare every evidence Git blob byte-for-byte against its reviewed local
 file, then verify pinned recipe/manifest/wrapper digests from the remote commit.
 Do not regenerate or silently update approval hashes to hide line-ending drift.
 
+## Real human approval and one setup-only trial admission
+
+Sergio replied literally `Aprobado` in mother chat
+`01a13f7b-a156-7150-ba99-b4ff682163a1` to the concrete one-trial setup-only question.
+`snapshot-setup-approved-20261015/approval-materialization.json` records the
+reference, base commit and exact four changed manifest fields; candidate pending
+files remain unchanged. Independent QA verified those four values, exact builder
+output and shell syntax. Approved recipe SHA256 remains
+`27609d8506e41dcdf4190a68991bbffcdf76499cf3aecd9a57e8c097431d4b15`;
+approved manifest SHA256 is
+`30a21d596b5592c3db5af2f15a0a56be06edd2adb560e93b5318424d34d6a86c`;
+approved wrapper SHA256 is
+`21071fdd75a92e9c3644efb4bf36be8b3d16f9a7c521081bed82b4efbd849ed4`.
+The approval permits one new setup-only task for UUID
+`9fc238a7-aa41-433c-8681-a9bf6ec6a340`, original components and existing observed
+snapshot origin, temporary setup/maintenance changes and exact restoration.
+It does not permit agent/browser, production, queue/intents/leases, replay or
+origin/version/security fallback. No installation result exists at this checkpoint.
+
 Coordination lesson: a draft apt_trust_diagnostic.py was written immediately before mother transferred its ownership to Sol. No execution or data loss. /root/r4_recovery stopped editing on notification; /root/apt_trust_code is now sole code/wrapper/test writer, recovery retains browser and docs. Require prior writer stop ACK before future handoff to avoid simultaneous edits. Mother acknowledged dispatch timing issue.
