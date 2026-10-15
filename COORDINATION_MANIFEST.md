@@ -4,7 +4,7 @@
 
 La actualización única de reels de skills, post X, nueve ideas comerciales, QA/métricas y evidencias de callback/autoridad nativa vive en [el registro de intake del handoff](hermes-content/docs/handoff/codex-cloud-pc-20261011.md#intake-unico--skills-de-reels-post-x-e-ideas-comerciales--14-oct-2026) y el [bundle de evidencia indexado](hermes-content/docs/handoff/hermes-harness-20261012/evidence/continuity-preservation-20261014/README.md). Este turno solo preserva fuentes ya revisadas; Root conserva coordinación, Desarrollo-Infra el índice y Marketing/Ventas la futura evaluación comercial. No implica adopción, campaña ni gasto.
 
-El relevo de la nueva madre de infraestructura, solicitado para abrir una sesión limpia, está en [madre-infra-relevo-20261014-2320.md](hermes-content/docs/handoff/madre-infra-relevo-20261014-2320.md). La sesión anterior conserva ownership hasta que se comprueben la nueva sesión y su ACK.
+**Relevo de madre Desarrollo-Infra/Hermes — 14-oct:** dueña actual asignada a Root `01a13cc1-12e9-79a0-97e8-4899f05a5c95`; predecesora `01a138fa-8304-71c1-9391-3bc14314d57f`. La sucesora leyó el paquete y su ACK está verificado en `E:/onia-wt/madre-infra-relevo-20261014-2320-ack.json`; ver [handoff compacto](hermes-content/docs/handoff/madre-infra-relevo-20261014-2320.md). Root ya envió la orden de PAUSE al predecesor; la confirmación sigue **pendiente**. La transferencia no se declara completa ni se duplican despachos hasta registrar ese delta. Aplicar pausa solo a la sesión anterior del mismo carril; no archivar ni marcar su goal completo por inferencia.
 
 ## Piloto de sesiones ONIA 30 minutos — ownership documental 14-oct-2026
 
