@@ -82,12 +82,15 @@ la dirección de Sergio Urcullo.
 
 ## 4. EN VUELO (lo que se pierde o se traba si nadie lo sigue)
 
-**15-oct 20:20 UTC:**
+**15-oct 22:05 UTC:**
 - **#175 (barrido de usted 4) y #176 (pulido 5): PUBLICADOS** en `release-9c47a734` (18:55 UTC) y mirados con cuentas QA: las 16
   superficies medidas quedan sin tú ni vos; los nombres accesibles de las citas y el total de costeos, vistos en producción.
-- **#177 (pulido 6): MERGEADO** a las 20:15 UTC (`3bad4242`), sale a las 21:50 y se mira a las 21:58 (recordatorio programado):
-  la orden de pagar de usted en todo el cobro, el QR de la API sin pedir comprobante, «Ver la ficha de …» y los botones de
-  recetas con medicamentos y fecha. Lo que queda va al **pulido 7** (cola de Plataforma), sin apuro.
+- **#177 (pulido 6): PUBLICADO Y MIRADO** en `release-3bad4242` (21:55 UTC, healthy): «Ver la ficha de …» en Hoy y
+  «Imprimir/Eliminar la receta de <medicamentos> del <fecha>» leídos en producción con una cita y una receta QA (borradas). La
+  orden de pago de usted, medida en el bundle publicado (las QA no ven Mi plan). Lo que queda va al **pulido 7** (cola de
+  Plataforma), sin apuro.
+- En `/tmp` del VPS quedan restos de sondas ajenas del 17-sep y del 11-oct (`mirar-caja2*`, `mirar-costeo*`, `mirar-panel*.sh`,
+  `mirar-usted*`, ~2 MB de fotos QA y scripts sin secretos, medido con grep). No son de esta sesión: los borra su dueño o la madre.
 - **Gmail de la nube no responde** («Precondition check failed»): el correo de recuperación QA se entregó (250) pero no se pudo
   leer en la bandeja. Hay que reconectarlo en claude.ai/customize/connectors (Sergio Urcullo).
 - **Para la madre (infra, no lo cambia un PR):** (1) los asuntos de los correos de acceso los fija el VPS en
@@ -171,10 +174,10 @@ la dirección de Sergio Urcullo.
    es suya, las pantallas de «Mi web» (#168, #170).
 8. **CAFC del piloto** (SIAT etapa VI) e **infra de la bandeja en tiempo real** (una línea, §4).
 
-## 8. Próximos pasos (en orden, 15-oct 20:20 UTC)
+## 8. Próximos pasos (en orden, 15-oct 22:05 UTC)
 
-1. 21:58 UTC: mirar #177 en producción (recordatorio programado) y reportar PUBLICADO.
-   Después, el pulido 7 de la cola, sin apuro.
+1. El pulido 7 de la cola, sin apuro (nada de eso lo ve hoy un cliente salvo «Nueva receta» y los nombres para el lector de
+   pantalla).
 2. Cuando Sergio Urcullo apruebe el pago QA: mirar el plan activo, la factura por correo y el checkout en «Plan activo».
 3. Contratos para Codex escritos y `pendiente`: **M1e** (el servidor exige enteros en las unidades enteras) y **A1** (lo
    omitido por teléfono queda como descartada con motivo). Los lanza la madre.
