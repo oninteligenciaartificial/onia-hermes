@@ -1,0 +1,35 @@
+{
+  "claude_cloud_proven": false,
+  "cleanup_executed": {
+    "directories_removed": 2,
+    "files_removed": 8,
+    "method": "PowerShell literal nonrecursive removals after resolved-path and non-link inventory; recursive deletion auto-review rejected, safer exact-file removals succeeded",
+    "other_files_changed": false,
+    "resolved_paths_verified": true,
+    "scope": "Only bytecode .pyc files and empty __pycache__ in exact approved prep/browser candidate paths"
+  },
+  "cost_note": "Smoke total_cost_usd is a provider-reported metric, not independent proof of additional billing or charge",
+  "files_sha256": {
+    "README.md": "5967b5e788d0f865723a96bdb3e20a7ca9d508f5308491bbe89dcb5aa0189677",
+    "claude-live-smoke-20261015.json": "86addb5f034d8124259574ac29ef8e7479a5922274d7ed1afd5da8eabacc5493",
+    "claude-review-r4-guard-20261015.json": "7a1aa834ac1cba67595cc479b116ec76f87438b944a30d23fd628e6c0f31ae88",
+    "claude-review-r4-guard-20261015.md": "d1193855c546687740a9aa50cdd523f3a40eabcb302b8959295d05feca28251f",
+    "claude-review-r4-guard-prompt.txt": "d6e04328b9af45047642df0a04a467d0d61e617a358bb8f9d8c167368839d56a",
+    "claude_adapter.py": "4c1d40f008d3d29d15223b1435f06bd3531b021ffc691e85a3ee8512cdafbcd4",
+    "orchestration-design.md": "46f120d3ffff7af8fbdb51e1b9a7651df05ccae82f48e1c97c58b101c6959b0f",
+    "test_claude_adapter.py": "121ffe352a4b404dc5bc6de70f2802d825bf6051adb666a6d39386ae620b0dba",
+    "time-cleanup-audit.md": "df40e74379b37f3f7237bd60be614a130a7ce6d1444af6170e5bb94635d4b947"
+  },
+  "final_delta_integrated_at_utc": "2026-10-15T18:34:26.589505+00:00",
+  "hermes_remote_proven": false,
+  "integrated_at_utc": "2026-10-15T18:28:50.435600+00:00",
+  "provider_calls_during_integration": 0,
+  "qa": "Independent /root/qa_observable GO final adapter 13/13 mocked tests and browser candidate18/18; no new provider call",
+  "qa_document_delta": "Final README model/instructions/session continuity delta independently reviewed with exact SHA5967b5e7",
+  "readme_note": "README describes original isolated prep location; these exact approved bytes are now preserved canonically here",
+  "review_scope": "Claude reviewed only extracted guard/manifest; actual replay/claim behavior separately inspected by QA in full frozen cores",
+  "schema": 1,
+  "source": "E:\\onia-wt\\claude-adapter-prep-20261015",
+  "state": "QA_REVIEWED_LOCAL_DRAFT_INTEGRATED_NOT_ACTIVATED",
+  "timing": "Root user-message timestamp to audited cutoff:22m24s wall interval only; review20.016s, smoke1.583s; total CPU/LLM/project time and overall savings UNKNOWN"
+}

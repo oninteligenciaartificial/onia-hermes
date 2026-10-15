@@ -1,0 +1,3 @@
+* -text whitespace=cr-at-eol
+# Exact provider input includes its terminal blank line; retain its receipt hash.
+claude-review-r4-guard-prompt.txt whitespace=cr-at-eol,-blank-at-eof

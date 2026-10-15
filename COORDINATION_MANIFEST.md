@@ -13,6 +13,17 @@
 
 Los bloques siguientes conservan el checkpoint histórico; el bloque vigente anterior prevalece sobre sus límites y órdenes de espera.
 
+Preparación posterior revisada (15-oct): `evidence/r4-recovery-20261015/browser-diagnostic-candidate/`
+contiene instalación nueva explícita pendiente + diagnóstico público browser acotado
+(UUID4d53a71b, instalador857f90fa), guard Root independiente y cores congelados;
+QA18/18 local, sin ejecución nueva ni grant activo. El candidato de migración/cierre
+fallido E2E sólo opera copias offline; cola real/R4 siguen intactos y requieren gate
+separado. `evidence/claude-adapter-prep-20261015/` conserva adaptador Claude local
+QA13/13, smoke/revisión acotada reales, diseño y auditoría de tiempo/limpieza. Claude
+Cloud/Hermes remoto, E2E nativo y PC-off no están demostrados. Sólo bytecode propio
+regenerable fue retirado; archivos ajenos del checkout principal intactos. Propiedad
+actual de preparación CODE: `/root/apt_trust_code`; madre coordina siguiente gate.
+
 ## R4 canary — ownership and checkpoint (2026-10-15)
 
 - Objetivo all-cloud pendiente; el próximo avance real depende de las lecturas diagnósticas suplementarias y posterior activación aprobada. Chat madre `01a13cc1-12e9-79a0-97e8-4899f05a5c95`; **Cloud: 1/1 submit; 2/2 status; 1/1 collect.** QA offline no cuenta como prueba Cloud.
