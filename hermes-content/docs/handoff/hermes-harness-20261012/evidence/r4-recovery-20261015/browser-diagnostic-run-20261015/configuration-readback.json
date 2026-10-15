@@ -1,0 +1,41 @@
+{
+  "approval_reference": "user:01a13f7b-a156-7150-ba99-b4ff682163a1:2026-10-15:Autorizar esta instalaci\u00f3n y prueba de navegador:4d53a71b",
+  "environment_id": "6abad782eba0819196ca234dc3abc327",
+  "maintenance_bytes": 1,
+  "maintenance_sha256": "e7ac0786668e0ff0f02b62bd04f45ff636fd82db63b1104601c975dc005f3a67",
+  "material_cache": "UNKNOWN; settings edits invalidate cache",
+  "observed_at_utc": "2026-10-15T18:44:33.319Z",
+  "operation_id": "4d53a71b-80d9-4c53-83f1-df53f824ab7f",
+  "original_maintenance_sha256": "6a3ea5b3f45cc9a6066d94824ccfedb8c301dd572f5a36ee3bac398d9ad2a726",
+  "original_setup_sha256": "57f1f52c4898c6aad6ba494d2e010e009959fd17296089fcf223b3f7a3817a62",
+  "phase": "APPROVED_BROWSER_SETUP_SAVED_READBACK",
+  "policy_readback": {
+    "cache_enabled": "true",
+    "domains": "example.com,iana.org,www.iana.org",
+    "http_read_only": "true"
+  },
+  "provider_saved_configuration": {
+    "cache_enabled": true,
+    "domains": [
+      "example.com",
+      "iana.org",
+      "www.iana.org"
+    ],
+    "evidence_reference": "root-ui-readback:browser-diagnostic-4d53a71b:configuration-readback.json",
+    "methods": [
+      "GET",
+      "HEAD",
+      "OPTIONS"
+    ],
+    "network_access": "limited",
+    "preset": "None",
+    "saved_at_utc": "2026-10-15T18:44:33.319Z",
+    "surface": "codex-cloud-legacy-ui"
+  },
+  "provider_side_exact_save_timestamp": "UNKNOWN; saved_at is Root observation clock",
+  "schema": 1,
+  "setup_bytes": 52837,
+  "setup_sha256": "945405327df825c5fa79c185a459a043144c67abd0e5bfcbad2d7c77f257a6f0",
+  "source_head": "f54b8920afc5e531f55f6000a8e914cc079c5389",
+  "submits": 0
+}

@@ -1,5 +1,21 @@
 # R4 recovery — observed facts, 2026-10-15
 
+## Latest closure: one approved browser diagnostic, no demonstrated browser result
+
+Source f54b8920, operation4d53a71b, task
+`task_e_6ad1207987888327ac102a633061d9e7`: the final UI reports bootstrap exit1,
+but no actual runtime JSON was recovered. Two named remote files are not substituted
+with summaries or the old installation receipt. Root cause UNKNOWN; no screenshot,
+browser, queue E2E or PC-off proof. `browser-diagnostic-run-20261015/README.md`
+records exact evidence/provenance, timings, failed artifact recovery and local
+runuser hypothesis (not diagnosed cause; no browser patch/relaunch).
+
+Original scripts, public provider pin and policy were restored, saved/reopened
+and hash/string verified at19:05:25UTC; the temporary Root pin was removed.
+One submit, no retry, no queue mutation. Sergio directed no more browser trials;
+next work is Codex+Claude+Hermes CLI/MCP integration. The isolated v4 queue
+preparation is not a generic prerequisite and was not activated.
+
 - Authenticated Chrome OnIA exposes the exact R4 at `/remote/task_e_6ad045ab00c08327bb4ea958581c5c82`. The CLI still returns `/codex/tasks/…`, which previously showed a composer. Use the task link observed in UI; do not infer an account mismatch.
 - Provider UI reports environment setup failure. Exact terminal error: `BLOCKED: no supported existing official Ubuntu binary source; no new repository`. `setup_recipe.py --apply-reviewed-manifest` exits 1 before agent/browser. This is not a browser sandbox failure.
 - Frozen recipe at Git 0e01dc09 checks only archive/security Ubuntu hosts. Its final error means zero eligible records; existing source definitions are not included in the failure log. The earlier metadata-only Cloud inspection hid names and URLs, so cannot identify the rejected source.

@@ -29,3 +29,21 @@ El tramo desde esa orden hasta el corte es medible, pero no cubre el trabajo ant
 - `E:/onia-wt/claude-adapter-prep-20261015/` es preparación temporal: conservar allí por ahora el recibo de revisión real, prompt de revisión y Markdown limitado, además de deltas de adaptador hasta que el propietario decida qué integrar canónicamente. Comparar hashes antes de mover; la copia canónica inicial del adaptador precede al arreglo CP1252/metadata. El recibo temporal crudo de AppData no debe copiarse al repo.
 - Ambos `__pycache__/` de este lote son bytecode regenerable creado por pruebas locales (2 archivos en prep, 6 en candidato browser): **eliminar solo después de confirmar que no están incluidos en un commit ni son necesarios para reproducir un incidente**. No borrar otros árboles ni artefactos ajenos. Candidato browser no es duplicado inútil: fuente/congelación/manifest/installer y pruebas son un paquete pendiente distinto del setup-only anterior.
 - Búsqueda heurística por nombres/términos de secretos en Markdown/JSON de estos dos paquetes encontró menciones de política, no credenciales verificadas. Un segundo `rg -l` acotado a ambos paquetes (sin imprimir valores) no encontró patrones de clave privada ni asignaciones evidentes de `password`/`api_key`/`client_secret`. No se inspeccionaron valores secretos ni se puede garantizar ausencia total sin una revisión de staging focal antes del commit.
+
+## Limpieza final ejecutada tras preservación publicada
+
+Con autorización explícita, se verificaron individualmente los nueve archivos
+temporales de `E:/onia-wt/claude-adapter-prep-20261015/`: cada uno coincidió byte
+por byte y SHA256 con su copia canónica y con el blob del commit remoto publicado
+`f54b8920afc5e531f55f6000a8e914cc079c5389`. Ruta absoluta resuelta exacta,
+nueve archivos regulares, sin junction/symlink/subdirectorios. Se retiraron sólo
+esos nueve archivos por rutas literales y después el directorio comprobado vacío,
+sin borrado recursivo. `Test-Path` final=false. Las copias canónicas permanecen.
+La limpieza de ocho `.pyc` y sus dos directorios vacíos propios ya estaba
+registrada en `integration-receipt.json`; no se repitió ni se borró otro temporal.
+
+El primer comando con eliminación en bucle calculado fue rechazado por revisión
+automática antes de ejecutar. Se completó con inventario read-only y eliminación
+no recursiva de la lista literal exacta; no se cambió de shell ni se amplió el
+alcance. No se tocaron OAuth/AppData, otros worktrees, archivos ajenos, Cloud ni
+la cola real. No hubo nuevas pruebas ni llamadas al proveedor durante este cierre.

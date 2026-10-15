@@ -1,0 +1,13 @@
+{
+  "at_utc": "2026-10-15T18:54:38.099Z",
+  "code_blocks_exposed": 0,
+  "elapsed_since_submit_start_seconds": 249.853112,
+  "observed_phase": "Configurando entorno",
+  "operation_id": "4d53a71b-80d9-4c53-83f1-df53f824ab7f",
+  "retries": 0,
+  "schema": 1,
+  "setup_result": "UNKNOWN; controlled stdout buffered until terminal",
+  "stop_control_visible": true,
+  "submits": 1,
+  "task_id": "task_e_6ad1207987888327ac102a633061d9e7"
+}

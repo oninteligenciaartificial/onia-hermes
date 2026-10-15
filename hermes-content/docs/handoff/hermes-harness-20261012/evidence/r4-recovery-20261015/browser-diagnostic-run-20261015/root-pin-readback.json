@@ -1,0 +1,15 @@
+{
+  "at_utc": "2026-10-15T18:46:34.498Z",
+  "exact_raw_values_match": true,
+  "maintenance_sha256": "e7ac0786668e0ff0f02b62bd04f45ff636fd82db63b1104601c975dc005f3a67",
+  "method": "CUA Chrome OnIA actual settings saved, reopened Editar entorno, exact DOM value readback/hash in CUA runtime outside future Cloud task",
+  "phase": "ROOT_PIN_SAVED_READBACK",
+  "provider_pin_bytes": 324,
+  "provider_pin_sha256": "fb16417d8947e95c87816870852218e29d26de154d2a07aaa54d051cc68943fb",
+  "root_pin": "d31a2a24895319f950a56122c5b9e5e1182ac32d6570242a0054d8f2a9a5b2cf",
+  "root_pin_key": "ONIA_BROWSER_DIAGNOSTIC_ROOT_MANIFEST_SHA256",
+  "schema": 1,
+  "setup_sha256": "945405327df825c5fa79c185a459a043144c67abd0e5bfcbad2d7c77f257a6f0",
+  "source_head": "f54b8920afc5e531f55f6000a8e914cc079c5389",
+  "submits": 0
+}

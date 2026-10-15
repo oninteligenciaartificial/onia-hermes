@@ -1,0 +1,13 @@
+{
+  "at_utc": "2026-10-15T19:08:23.261271+00:00",
+  "cli_exit": 1,
+  "execution_retried": false,
+  "phase": "EXPLICIT_ATTEMPT_ONE_READ_ONLY_DIFF",
+  "raw_output_exported": false,
+  "sanitized_reason": "NO_DIFF_AVAILABLE",
+  "stderr_bytes": 100,
+  "stderr_sha256": "37c055a1fa0e8b895d039d1d17a93957092c07a4e8ad5468ffa5dc1b33a83496",
+  "stdout_bytes": 0,
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "task_id": "task_e_6ad1207987888327ac102a633061d9e7"
+}

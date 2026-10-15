@@ -1,0 +1,15 @@
+{
+  "at_utc": "2026-10-15T19:06:53.674425+00:00",
+  "cli_exit": 0,
+  "no_diff_label": true,
+  "phase": "TERMINAL_STATUS_READ_ONLY",
+  "queue_mutations": 0,
+  "raw_output_exported": false,
+  "status_error": false,
+  "status_ready": true,
+  "status_running": false,
+  "stderr_bytes": 0,
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_bytes": 112,
+  "stdout_sha256": "94fdd5ecc0812d2ba8ac1f72fd391969888a79f6b4d2f8dac722cc27bdfac608"
+}

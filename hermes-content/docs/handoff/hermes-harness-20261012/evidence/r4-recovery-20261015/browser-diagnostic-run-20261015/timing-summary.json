@@ -1,0 +1,17 @@
+{
+  "accepted_to_terminal_observation_seconds": 753.793631,
+  "accepted_utc": "2026-10-15T18:50:36.301369Z",
+  "actual_browser_duration": "UNKNOWN; no supervisor receipt",
+  "actual_setup_duration": "UNKNOWN; actual receipt bytes unavailable",
+  "agent_phase_observed_utc": "2026-10-15T19:01:33.118Z",
+  "cli_dispatch_seconds": 7.531,
+  "interpretation": "Wall intervals and observation timestamps only, not exact provider finish/start timestamps",
+  "preparation_start_utc": "2026-10-15T18:39:56Z",
+  "preparation_to_submit_seconds": 632.245888,
+  "restore_verified_utc": "2026-10-15T19:05:25.032Z",
+  "schema": 1,
+  "submit_start_utc": "2026-10-15T18:50:28.245888Z",
+  "terminal_first_observed_utc": "2026-10-15T19:03:10.095Z",
+  "terminal_observation_to_restore_seconds": 134.937,
+  "total_cpu_llm_cost_savings": "UNKNOWN"
+}

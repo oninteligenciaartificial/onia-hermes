@@ -1,0 +1,2 @@
+# Exact DOM report bytes include a terminal space; preserve the observed digest.
+ui-final-agent-report.txt -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof

@@ -1,0 +1,31 @@
+{
+  "actual_runtime_json_recovered": 0,
+  "bootstrap_exit_reported_in_ui": 1,
+  "browser_execution_proven": false,
+  "configuration_restored_verified": true,
+  "hypothesis_only": "Bootstrap runuser -u #1000 differs from installer pwd.getpwuid(1000).pw_name; not confirmed as actual failure cause; no patch applied",
+  "new_browser_trials_authorized": false,
+  "operation_id": "4d53a71b-80d9-4c53-83f1-df53f824ab7f",
+  "pc_off_proven": false,
+  "phase": "TERMINAL_RESTORED_EVIDENCE_LIMITED",
+  "phase_reported_in_ui": "ACTUAL_BROWSER_BOOTSTRAP_START",
+  "queue_changes": 0,
+  "queue_e2e_proven": false,
+  "recovery_limit": "CLI READY/no diff and explicit attempt1 NO_DIFF_AVAILABLE; web file citations/activity labels expose no contents; CLI help has no followup; web composer explicitly creates a NEW local chat; no new task/followup/replay performed",
+  "reported_runtime_paths": [
+    "hermes-content/docs/handoff/hermes-harness-20261012/evidence/r4-recovery-20261015/browser-runtime-4d53a71b/bootstrap-result.json",
+    "hermes-content/docs/handoff/hermes-harness-20261012/evidence/r4-recovery-20261015/browser-runtime-4d53a71b/setup-receipt-full.json"
+  ],
+  "restore_at_utc": "2026-10-15T19:05:25.032Z",
+  "retries": 0,
+  "root_cause": "UNKNOWN",
+  "schema": 1,
+  "screenshot_produced_proven": false,
+  "setup_operation_id": "857f90fa-12b7-4641-a326-e6bbad9f6745",
+  "source_head": "f54b8920afc5e531f55f6000a8e914cc079c5389",
+  "submits": 1,
+  "task_id": "task_e_6ad1207987888327ac102a633061d9e7",
+  "ui_report_bytes": 1076,
+  "ui_report_provenance": "Complete final agent message extracted from actual DOM; not a substitute for runtime file bytes",
+  "ui_report_sha256": "1e0d4200179712b677f172cb20c10851d4fe88d97dacaaf3c4fa174f5b1248cd"
+}

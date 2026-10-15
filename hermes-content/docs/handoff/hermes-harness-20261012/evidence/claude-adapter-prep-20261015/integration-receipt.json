@@ -18,11 +18,20 @@
     "claude_adapter.py": "4c1d40f008d3d29d15223b1435f06bd3531b021ffc691e85a3ee8512cdafbcd4",
     "orchestration-design.md": "46f120d3ffff7af8fbdb51e1b9a7651df05ccae82f48e1c97c58b101c6959b0f",
     "test_claude_adapter.py": "121ffe352a4b404dc5bc6de70f2802d825bf6051adb666a6d39386ae620b0dba",
-    "time-cleanup-audit.md": "df40e74379b37f3f7237bd60be614a130a7ce6d1444af6170e5bb94635d4b947"
+    "time-cleanup-audit.md": "c4d475cda449d11c636b2df8717cb62577b72926eb78cc8dd735bbe344375260"
   },
   "final_delta_integrated_at_utc": "2026-10-15T18:34:26.589505+00:00",
   "hermes_remote_proven": false,
   "integrated_at_utc": "2026-10-15T18:28:50.435600+00:00",
+  "post_publication_cleanup": {
+    "empty_temporary_directories_removed": 1,
+    "other_paths_touched": false,
+    "recursive_delete_used": false,
+    "temporary_files_individually_equal_published": 9,
+    "temporary_files_removed": 9,
+    "temporary_path_exists_after": false,
+    "verified_remote_commit": "f54b8920afc5e531f55f6000a8e914cc079c5389"
+  },
   "provider_calls_during_integration": 0,
   "qa": "Independent /root/qa_observable GO final adapter 13/13 mocked tests and browser candidate18/18; no new provider call",
   "qa_document_delta": "Final README model/instructions/session continuity delta independently reviewed with exact SHA5967b5e7",

@@ -1,0 +1,51 @@
+{
+  "browser_approved": true,
+  "browser_executable_sha256": "377a9fc07b495c3b8d0ab8ec1fdfd153641759f9756fea34d8dfce4de82f5025",
+  "configuration_readback_sha256": "2292df27a6312f7e7593eb2013e70253acceac98d5ccae3a781af6e0562a8558",
+  "deadline_seconds": 75,
+  "downloads_and_install_approved": true,
+  "environment_id": "6abad782eba0819196ca234dc3abc327",
+  "expected_head": "f54b8920afc5e531f55f6000a8e914cc079c5389",
+  "grace_seconds": 2,
+  "human_approval_reference": "user:01a13f7b-a156-7150-ba99-b4ff682163a1:2026-10-15:Autorizar esta instalaci\u00f3n y prueba de navegador:4d53a71b",
+  "input_sha": "006e707ba4a143b5ef07204d5cdd34c4755195c04c51291382a8de35d251af98",
+  "max_browser_launches": 1,
+  "operation_id": "4d53a71b-80d9-4c53-83f1-df53f824ab7f",
+  "operation_nonce": "browser-diagnostic-4d53a71b-80d9-4c53-83f1-df53f824ab7f",
+  "provider_saved_configuration": {
+    "cache_enabled": true,
+    "domains": [
+      "example.com",
+      "iana.org",
+      "www.iana.org"
+    ],
+    "evidence_reference": "root-ui-readback:browser-diagnostic-4d53a71b:configuration-readback.json",
+    "methods": [
+      "GET",
+      "HEAD",
+      "OPTIONS"
+    ],
+    "network_access": "limited",
+    "preset": "None",
+    "saved_at_utc": "2026-10-15T18:44:33.319Z",
+    "surface": "codex-cloud-legacy-ui"
+  },
+  "queue_effects": false,
+  "requested_ref": "codex/hermes-controller-hardening-20261013",
+  "runtime_mode": "INSTALL_PINNED",
+  "schema": 1,
+  "scope": "PUBLIC_BROWSER_DIAGNOSTIC",
+  "setup_manifest_sha256": "47217e133ce7cbe6bd8d8b5f731ce1e7b74ba6c709e7c696847beb6d46246bb1",
+  "setup_operation_id": "857f90fa-12b7-4641-a326-e6bbad9f6745",
+  "setup_recipe_sha256": "0237492e3cb76032bc64e6d4d737bd9de079997ebdf1f282da5cc313af6c430d",
+  "source_sha256": {
+    "admission.py": "79c4b69ad7067716fe57526e5aa0a82e811638942329381e036268d61f3aad07",
+    "bootstrap.py": "ce171cfeb63c5cfa75317ffcf4b95ba802f8bf3c447051f00d3e705c3e37b842",
+    "browser_check.py": "c7f46d8d6eebbafdfe9bec332ba7296959f8135857d9b2f64a5d71ef82b38289",
+    "core_browser_check.py": "aac64bb8ebc82441141787838458767125b7cdb01b28d75c0bdf2b5f46201ebb",
+    "core_supervisor.py": "7aa687a7c694923ed8f30f3e7172926e854f6031a809b8656dd1b17fb6940ee9",
+    "setup_recipe.py": "0237492e3cb76032bc64e6d4d737bd9de079997ebdf1f282da5cc313af6c430d",
+    "supervisor.py": "4f420ee1ed5eb81dde563301d48d5069d75bfe98c14f39527b77b2d99319024e"
+  },
+  "state": "APPROVED_BROWSER_DIAGNOSTIC"
+}

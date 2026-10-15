@@ -1,5 +1,15 @@
 # Hermes Coordination Manifest
 
+Último cierre 15-oct, 19:05 UTC: la única prueba de instalación y navegador aprobada desde
+fuente `f54b8920` creó task `task_e_6ad1207987888327ac102a633061d9e7`.
+La UI informó bootstrap exit 1, sin cuatro recibos de navegador ni captura; causa UNKNOWN.
+Dos JSON remotos mencionados pero no recuperados (CLI READY/no diff, UI sin contenido).
+Scripts, pin previo y política restaurados y verificados por valores/hash a las 19:05:25 UTC;
+pin Root temporal retirado. Evidencia canónica `browser-diagnostic-run-20261015/`.
+Sin nuevo ensayo, replay ni cambios de cola. Última orden de Sergio: cerrar navegador y priorizar integración
+Codex+Claude+Hermes CLI/MCP; no migración de cola como prerequisito genérico. CODE se
+entrega limpio al siguiente implementador tras commit de evidencia; madre coordina.
+
 ## VIGENTE — relevo Infra a Astra, 2026-10-15
 
 **META:** continuar investigación/corrección hasta demostrar all-cloud. **PRUEBA DE HECHO:** recibos reales de Cloud/browser/E2E, artefactos y QA independiente; documentación y tests locales no bastan. **PARADA:** bloqueo específico de acceso/cuota o permiso sensible, preservando evidencia; un plazo de 30 minutos no es criterio de éxito.

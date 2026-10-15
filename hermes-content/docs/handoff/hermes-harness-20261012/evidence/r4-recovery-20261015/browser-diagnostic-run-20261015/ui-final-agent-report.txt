@@ -1,0 +1,24 @@
+Resultado
+Operación: 4d53a71b-80d9-4c53-83f1-df53f824ab7f
+Código de salida real del bootstrap: 1
+Fase alcanzada: ACTUAL_BROWSER_BOOTSTRAP_START
+Reintentos: 0
+Efectos sobre la cola: ninguno.
+Éxito del navegador: no acreditado; no se generó el recibo del supervisor. 
+bootstrap-result.json (líneas 1-12)
+Resultados públicos existentes
+hermes-content/docs/handoff/hermes-harness-20261012/evidence/r4-recovery-20261015/browser-runtime-4d53a71b/bootstrap-result.json
+hermes-content/docs/handoff/hermes-harness-20261012/evidence/r4-recovery-20261015/browser-runtime-4d53a71b/setup-receipt-full.json
+
+No existen los otros cuatro resultados públicos previstos:
+
+preflight.json
+execution-receipt.json
+supervisor-receipt.json
+screenshot-artifact.json
+
+Validación
+
+❌ /usr/bin/python3 -I -B - <<'ONIA_APPROVED_BROWSER_DIAGNOSTIC' … ONIA_APPROVED_BROWSER_DIAGNOSTIC — el bloque autorizado terminó, pero el bootstrap interno devolvió 1; no se repitió ni se intentó reparar.
+
+No se hizo commit, push ni envío adicional, conforme a la restricción expresa de la operación.

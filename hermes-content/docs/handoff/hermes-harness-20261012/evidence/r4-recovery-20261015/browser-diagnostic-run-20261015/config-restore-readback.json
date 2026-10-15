@@ -1,0 +1,28 @@
+{
+  "at_utc": "2026-10-15T19:05:25.032Z",
+  "maintenance_bytes": 144,
+  "maintenance_sha256": "6a3ea5b3f45cc9a6066d94824ccfedb8c301dd572f5a36ee3bac398d9ad2a726",
+  "material_cache": "UNKNOWN",
+  "method": "Saved originals and previous public provider pin, removed new Root pin; reopened editor and compared exact actual DOM value strings/hash outside task",
+  "operation_id": "4d53a71b-80d9-4c53-83f1-df53f824ab7f",
+  "phase": "ORIGINAL_CONFIGURATION_RESTORED_VERIFIED",
+  "policy": {
+    "cache_enabled": "true",
+    "domains": "example.com,iana.org,www.iana.org",
+    "http_read_only": "true"
+  },
+  "policy_equal": true,
+  "provider_pin_bytes": 286,
+  "provider_pin_sha256": "22d95b16f7d2fcfca51a2df0226ac46f820a5c4795d991919678cc41f7e6359f",
+  "queue_changes": 0,
+  "raw_maintenance_equal": true,
+  "raw_provider_equal": true,
+  "raw_setup_equal": true,
+  "retries": 0,
+  "schema": 1,
+  "setup_bytes": 14832,
+  "setup_sha256": "57f1f52c4898c6aad6ba494d2e010e009959fd17296089fcf223b3f7a3817a62",
+  "submits": 1,
+  "task_id": "task_e_6ad1207987888327ac102a633061d9e7",
+  "temporary_root_pin_absent": true
+}

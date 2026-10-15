@@ -1,0 +1,23 @@
+{
+  "at_utc": "2026-10-15T18:42:36.521005+00:00",
+  "browser_operation_id": "4d53a71b-80d9-4c53-83f1-df53f824ab7f",
+  "changed_install_manifest_fields": [
+    "downloads_and_install_approved",
+    "human_approval_reference",
+    "operation_authorization_reference",
+    "state"
+  ],
+  "cloud_submits": 0,
+  "consent_provenance": "Mother /root reported direct human async approval in chat01a13f7b-a156-7150-ba99-b4ff682163a1; no message UUID invented",
+  "human_approval_reference": "user:01a13f7b-a156-7150-ba99-b4ff682163a1:2026-10-15:Autorizar esta instalaci\u00f3n y prueba de navegador:4d53a71b",
+  "human_literal": "Autorizar esta instalaci\u00f3n y prueba de navegador",
+  "install_manifest_sha256": "47217e133ce7cbe6bd8d8b5f731ce1e7b74ba6c709e7c696847beb6d46246bb1",
+  "phase": "HUMAN_APPROVAL_MATERIALIZED_INSTALLER_BEFORE_SETTINGS",
+  "queue_mutations": 0,
+  "recipe_sha256": "0237492e3cb76032bc64e6d4d737bd9de079997ebdf1f282da5cc313af6c430d",
+  "schema": 1,
+  "setup_operation_id": "857f90fa-12b7-4641-a326-e6bbad9f6745",
+  "source_head": "f54b8920afc5e531f55f6000a8e914cc079c5389",
+  "wrapper_bytes": 52837,
+  "wrapper_sha256": "945405327df825c5fa79c185a459a043144c67abd0e5bfcbad2d7c77f257a6f0"
+}

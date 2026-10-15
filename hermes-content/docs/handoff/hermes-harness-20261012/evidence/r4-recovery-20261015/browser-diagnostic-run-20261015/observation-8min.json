@@ -1,0 +1,18 @@
+{
+  "at_utc": "2026-10-15T18:58:51.154Z",
+  "code_blocks_exposed": 1,
+  "code_bytes": 741,
+  "code_sha256": "9801fd93014d96c0a47a845076b7c953ab911beac6ebd6e50feb82a8fa6c616b",
+  "contains_blocked": false,
+  "contains_installed_metadata": false,
+  "installer_timeout_seconds": 2400,
+  "observed_phase": "Configurando entorno",
+  "operation_id": "4d53a71b-80d9-4c53-83f1-df53f824ab7f",
+  "retries": 0,
+  "schema": 1,
+  "setup_result": "UNKNOWN; no controlled receipt in exposed block",
+  "setup_success_marker": false,
+  "stop_control_visible": true,
+  "submits": 1,
+  "task_id": "task_e_6ad1207987888327ac102a633061d9e7"
+}
