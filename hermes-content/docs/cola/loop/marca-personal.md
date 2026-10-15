@@ -2,6 +2,14 @@
 
 Estado al 11-oct ~07:00 UTC. **Desde hoy Marca orquesta la edición y el posteo de punta a punta** (orden de la MADRE MARKETING a pedido de Sergio Urcullo; la madre solo verifica y le pasa lo que tiene que aprobar). Nada se publica ni se agenda sin «mostrada, publicá <pieza>» de la madre (regla del 10-oct: «mostrame antes de subir»). Editor = sonnet, verificador = haiku. Lo anterior (9 y 10-oct) quedó en `handoff/marca-personal.md`, entrada «10-11 oct».
 
+## Estado al 15-oct 08:35 UTC (medido, solo lectura)
+
+**Nada desbloqueado; la cola no avanzó desde el 11-oct 15:06 UTC.** Causa medida: las dos madres (`MADRE MARKETING` y `MADRE DESARROLLO-INFRA`) están en `failed` por tope semanal («You've hit your weekly limit · resets Oct 15, 4am America/Caracas» = **15-oct 08:00 UTC**), sin actividad desde el 12-oct ~02:20 UTC; por eso no llegó ningún «ok cortes» ni «mostrada, publicá». `origin/main` no se mueve desde el 10-oct 21:18 UTC (#193); mi PR #172 sigue en borrador. Mientras tanto se acumularon 90 latidos horarios y un recordatorio, todos de esta cola: no traen decisión nueva.
+- **Vence hoy (jue 15):** el carrusel agendado en el VPS 20:00 UTC es **K2 v3** (3 afirmaciones sin respaldo, ver `AUDITORIA-AGENDADOS-K8-K2-K6-11OCT.md`); el reemplazo es **K2 v4** (`pub-car-20261015`) y lo decide la madre / Sergio Urcullo. N02 (18:30 La Paz) sigue sin «ok cortes»; su «quedan 46 días» solo vale hoy.
+- **Ya pasaron sin publicarse** N06 (dom 11), DD-A (dom 11), N07 (lun 12) y S2-D07-A (mié 14): el calendario `ORDEN-DE-POSTEO-11-17-OCT.md` hay que reordenarlo con la madre.
+- **BA814C81:** re-probado 15-oct 08:30 UTC, sigue devolviendo la página de login de Google (HTML 920 KB).
+- Recordatorio de un disparo `trig_01Ki6W2GeFwamgi6mWiZjXP8`: atendido sin novedad; **no se reprograma** (nada que revisar hasta que la madre vuelva).
+
 ## Tareas, en orden
 
 - [x] **1a · Paquete de corte de los 5 brutos del 11-oct** (transcripción, tabla de cortes, preview 360p, regla 15 = 0 silencios ≥ 0,3 s): commits `88e7cd10c` N06, `63e507548` DD-A, `4e751ae46` N07, `f643bb188` S2-D07-A, `26bf1e566` N02, en `videos/marca-personal/2026-10-11/<pieza>/`. Brutos bajados con `curl` a `drive.usercontent.google.com` y transcritos con `faster-whisper small` (instalado con el OK de Sergio Urcullo del 11-oct). modelos: haiku (verificador) + sonnet (crítico); codex: ninguno.
