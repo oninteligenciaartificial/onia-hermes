@@ -7,12 +7,29 @@ import subprocess
 import sys
 from pathlib import Path
 from types import SimpleNamespace
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 
 import claude_task as task
 
 
 class ContractTests(unittest.TestCase):
+    def test_auth_preflight_uses_exact_child_environment_and_subscription_route(self):
+        env = {"HOME": "/root", "PATH": "/usr/bin"}
+        responses = [SimpleNamespace(returncode=0, stdout=b"2.1.288 (Claude Code)"),
+                     SimpleNamespace(returncode=0, stdout=json.dumps({"loggedIn": True, "authMethod": "claude.ai", "apiProvider": "firstParty", "subscriptionType": "max"}).encode())]
+        with patch.object(task.subprocess, "run", side_effect=responses) as run:
+            result = task.preflight("/opt/claude", child_env=env)
+        self.assertTrue(result["subscription_max_verified"])
+        for call in run.call_args_list:
+            self.assertIs(call.kwargs["env"], env)
+        self.assertIn("--setting-sources", run.call_args_list[-1].args[0])
+
+    def test_auth_preflight_rejects_api_route_before_dispatch(self):
+        responses = [SimpleNamespace(returncode=0, stdout=b"2.1.288"),
+                     SimpleNamespace(returncode=0, stdout=json.dumps({"loggedIn": True, "authMethod": "apiKey", "apiProvider": "firstParty", "subscriptionType": "max"}).encode())]
+        with patch.object(task.subprocess, "run", side_effect=responses):
+            self.assertFalse(task.preflight("/opt/claude", child_env={})["ok"])
+
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)
@@ -26,14 +43,15 @@ class ContractTests(unittest.TestCase):
                          "operation": "review_text", "goal": "review", "proof": "list findings", "stop": "one response",
                          "input": "untrusted source", "instructions": [{"path": ".claude/skills/review/SKILL.md", "sha256": task.digest(self.policy.read_bytes())}]}
         self.adapter = SimpleNamespace(MODEL="observed-test-model", receipt=lambda x: x,
+                                       subscription_environment=lambda: {},
                                        run_once=Mock(return_value={"state": "ok", "error": None, "response": "checked"}))
 
     def run_task(self, **kwargs):
-        return task.execute(self.contract, self.root, self.store, adapter=self.adapter, executable="claude-test", check_cli=lambda _: {"ok": True}, **kwargs)
+        return task.execute(self.contract, self.root, self.store, adapter=self.adapter, executable="claude-test", check_cli=lambda _, **kw: {"ok": True}, **kwargs)
 
     def test_unverified_cli_blocks_before_reserve_or_provider(self):
         result = task.execute(self.contract, self.root, self.store, adapter=self.adapter, executable="old-claude", perform=True,
-                              check_cli=lambda _: {"ok": False, "error": "cli_version_unverified"})
+                              check_cli=lambda _, **kw: {"ok": False, "error": "cli_version_unverified"})
         self.assertEqual(result["state"], "preflight_blocked")
         self.assertTrue(result["fallback_eligible"])
         self.assertFalse(self.store.exists())

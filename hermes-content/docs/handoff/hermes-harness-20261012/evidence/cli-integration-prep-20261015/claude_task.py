@@ -17,7 +17,7 @@ MAX_BYTES = 32000
 ID = re.compile(r"[A-Za-z0-9][A-Za-z0-9_-]{0,79}\Z")
 ADAPTER = Path(__file__).resolve().parent.parent / "claude-adapter-prep-20261015" / "claude_adapter.py"
 VERIFIED_CLI_VERSION = "2.1.288"
-ADAPTER_SHA256 = "4c1d40f008d3d29d15223b1435f06bd3531b021ffc691e85a3ee8512cdafbcd4"
+ADAPTER_SHA256 = "759198db802272bc75950f52a7a549e6930a53498c56d521bd5f4b61a72ee1e6"
 
 
 def digest(data):
@@ -34,22 +34,32 @@ def load_adapter(path=ADAPTER):
     return module
 
 
-def preflight(executable):
+def preflight(executable, *, child_env):
     """Version-only, no model/auth call; reject capabilities not actually verified."""
     command = [executable, "--version"]
     if os.name == "nt" and Path(executable).suffix.lower() in {".cmd", ".bat"}:
         if any(char in executable for char in "&|<>^%\r\n"):
             return {"ok": False, "error": "unsafe_cli_path"}
         command = [os.environ.get("COMSPEC", "cmd.exe"), "/d", "/s", "/c", subprocess.list2cmdline(command)]
-    env = os.environ.copy()
-    env["DISABLE_AUTOUPDATER"] = "1"
     try:
         proc = subprocess.run(command, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                              env=env, shell=False, timeout=10)
+                              env=child_env, shell=False, timeout=10)
         match = re.search(rb"\b(\d+\.\d+\.\d+)\b", proc.stdout[:200])
         version = match.group(1).decode("ascii") if match else None
         valid = proc.returncode == 0 and version == VERIFIED_CLI_VERSION
-        return {"ok": valid, "error": None if valid else "cli_version_unverified", "observed_version": version}
+        if not valid:
+            return {"ok": False, "error": "cli_version_unverified", "observed_version": version}
+        auth_flags = ["--safe-mode", "--setting-sources", "", "auth", "status", "--json"]
+        auth_command = [executable, *auth_flags]
+        if os.name == "nt" and Path(executable).suffix.lower() in {".cmd", ".bat"}:
+            auth_command = [os.environ.get("COMSPEC", "cmd.exe"), "/d", "/s", "/c", subprocess.list2cmdline(auth_command)]
+        auth = subprocess.run(auth_command, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                              env=child_env, shell=False, timeout=10)
+        data = json.loads(auth.stdout)
+        subscription = (auth.returncode == 0 and data.get("loggedIn") is True and data.get("authMethod") == "claude.ai"
+                        and data.get("apiProvider") == "firstParty" and str(data.get("subscriptionType", "")).lower().startswith("max"))
+        return {"ok": subscription, "error": None if subscription else "subscription_auth_unverified", "observed_version": version,
+                "subscription_max_verified": subscription, "child_environment": "os_allowlist_no_api_overrides", "settings_sources": []}
     except Exception:
         return {"ok": False, "error": "cli_preflight_failed", "observed_version": None}
 
@@ -146,7 +156,7 @@ def execute(contract, root, store, *, adapter, executable=None, perform=False, c
     executable = executable or shutil.which("claude.cmd") or shutil.which("claude")
     if not executable:
         return {**base, "state": "preflight_blocked", "error": "cli_not_found", "fallback_eligible": True}
-    capability = check_cli(executable)
+    capability = check_cli(executable, child_env=adapter.subscription_environment())
     if not capability["ok"]:
         return {**base, "state": "preflight_blocked", "error": capability["error"], "cli_preflight": capability, "fallback_eligible": True}
     base["cli_preflight"] = capability

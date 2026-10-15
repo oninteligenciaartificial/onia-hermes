@@ -23,6 +23,15 @@ DEFAULT_TIMEOUT_SECONDS = 45
 ERROR_AUTH = re.compile(r"(?:oauth session expired|failed to authenticate|authentication failed)", re.I)
 
 
+def subscription_environment() -> dict[str, str]:
+    """Keep OS/runtime essentials, never inherit API/provider/OAuth overrides."""
+    allowed = {"PATH", "HOME", "USER", "LOGNAME", "LANG", "LC_ALL", "LC_CTYPE", "TERM", "TZ", "TEMP", "TMP", "TMPDIR",
+               "SYSTEMROOT", "WINDIR", "COMSPEC", "PATHEXT", "APPDATA", "LOCALAPPDATA", "USERPROFILE", "HOMEDRIVE", "HOMEPATH", "PROGRAMFILES", "PROGRAMFILES(X86)", "PROGRAMDATA"}
+    env = {key: value for key, value in os.environ.items() if key.upper() in allowed}
+    env["DISABLE_AUTOUPDATER"] = "1"
+    return env
+
+
 def sha256(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
 
@@ -88,7 +97,7 @@ def base_receipt(state: str, error: str | None, prompt: bytes, *, model: str = M
 def command_for(executable: str) -> list[str]:
     """Build a fixed Windows launcher argv; prompt is never placed in it."""
     flags = [
-        "-p", "--safe-mode", "--restricted", "--tools", "", "--strict-mcp-config",
+        "-p", "--safe-mode", "--restricted", "--setting-sources", "", "--tools", "", "--strict-mcp-config",
         "--permission-prompts", "none", "--no-session-persistence", "--no-chrome",
         "--model", MODEL, "--effort", "low", "--max-turns", "1", "--output-format", "json",
     ]
@@ -169,8 +178,7 @@ def run_once(
     timeout_seconds: int,
     popen: Callable[..., Any] = subprocess.Popen,
 ) -> dict[str, Any]:
-    env = os.environ.copy()
-    env["DISABLE_AUTOUPDATER"] = "1"
+    env = subscription_environment()
     started = time.monotonic()
     try:
         proc = popen(

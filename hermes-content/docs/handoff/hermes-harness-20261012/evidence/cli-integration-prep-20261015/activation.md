@@ -1,4 +1,6 @@
-# Reviewable activation scope — not executed
+# Approved activation scope and rollback
+
+Execution update2026-10-15: Sergio Urcullo approved this scope. Isolated installation, human OAuth, reviewed deployment, config merge/restart and one remote Sonnet review through installed Hermes native registry/TTY consent have completed. Independent QA GO; [current evidence and limits](README.md#remote-review-result--closure-evidence). The instructions below preserve the approved package and rollback, not an instruction to repeat installation/login/review. Runtime billing hardening was added before the remote call and reviewed separately: current adapter SHA256 `759198db802272bc75950f52a7a549e6930a53498c56d521bd5f4b61a72ee1e6`, explicit child-env allowlist and same-child-env Claude.ai/firstParty/Max auth preflight.
 
 The authorized local implementation and subscription smoke are complete. Production activation is a separate approval: download/verify the official native Claude executable, deploy the reviewed bridge, configure the existing Hermes gateway and restart it after VPS-specific Claude login succeeds. This gate does not ask Sergio Urcullo to approve ordinary local reads already authorized in this chat.
 

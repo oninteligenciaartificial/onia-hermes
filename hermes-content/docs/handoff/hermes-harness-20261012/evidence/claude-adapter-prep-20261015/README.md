@@ -1,6 +1,6 @@
 # Claude CLI adapter draft
 
-This is an isolated review draft. It does not belong to the Hermes repository or a Git worktree. It invokes only the already installed local Claude Code CLI and the current Claude.ai subscription session; it has no API-key, account-switch, cloud-agent, or credential-handling path.
+This is the canonical bounded Claude adapter in the Hermes repository. Its original isolated review draft was integrated; the sibling `../cli-integration-prep-20261015/` now supplies the task/skill/receipt contract and MCP facade. It invokes an explicitly selected installed Claude Code CLI using the approved Claude.ai subscription session; it has no account-switch or cloud-agent path.
 
 ## Contract
 
@@ -11,6 +11,7 @@ This is an isolated review draft. It does not belong to the Hermes repository or
 - The parser exposes a bounded response string plus state, generic error code, model, input/output/cache token counts, server-tool counts, duration, cost estimate, and SHA-256 digests. The cost value is the CLI estimate, not billing evidence. It discards session IDs, UUIDs, raw stderr, local exception text, and tool-denial details. The response can repeat text from the prompt, so treat it as untrusted content and pass only non-secret context. Output over 64,000 bytes is rejected.
 - `--receipt` is required with `--execute`. The adapter reserves the path with exclusive-create semantics before launching Claude, then fills in the final receipt. Existing paths fail closed before any provider call; a leftover `reserved` receipt also blocks replay after interruption.
 - Account-level extra usage must be confirmed Disabled before any `--execute` run. This wrapper neither inspects nor changes account billing settings and cannot guarantee billing behavior.
+- Billing isolation hardening2026-10-15: the child environment is an explicit OS/home/path/locale allowlist; inherited API/provider/OAuth overrides and proxies are excluded. `--setting-sources ''` disables user/project settings. The task wrapper verifies effective Claude.ai/firstParty/Max auth with the exact same child environment before reserving/dispatching. Its pinned adapter SHA256 was updated and independent QA passed14adapter +22contract/transport tests.
 
 ## Use
 

@@ -47,6 +47,14 @@ class FakeProcess:
 
 
 class AdapterTests(unittest.TestCase):
+    def test_subscription_child_environment_excludes_provider_and_api_overrides(self):
+        with patch.dict(adapter.os.environ, {"ANTHROPIC_API_KEY": "fake", "ANTHROPIC_BASE_URL": "fake", "CLAUDE_CODE_OAUTH_TOKEN": "fake", "CLAUDE_CODE_USE_BEDROCK": "1", "OPENAI_API_KEY": "fake", "HOME": "/safe-home"}, clear=False):
+            env = adapter.subscription_environment()
+        self.assertEqual(env["HOME"], "/safe-home")
+        self.assertEqual(env["DISABLE_AUTOUPDATER"], "1")
+        for key in ["ANTHROPIC_API_KEY", "ANTHROPIC_BASE_URL", "CLAUDE_CODE_OAUTH_TOKEN", "CLAUDE_CODE_USE_BEDROCK", "OPENAI_API_KEY"]:
+            self.assertNotIn(key, env)
+
     def invoke(self, proc, prompt=b"review this input"):
         def popen(command, **kwargs):
             proc.command = command
