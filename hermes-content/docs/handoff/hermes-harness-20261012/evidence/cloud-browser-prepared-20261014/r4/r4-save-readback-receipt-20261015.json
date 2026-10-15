@@ -1,0 +1,75 @@
+{
+  "receipt_type": "codex_cloud_environment_save_readback",
+  "observed_at_utc": "2026-10-15T00:46:21Z",
+  "save_time_utc": "UNKNOWN exact provider time; receipt timestamp 2026-10-15T00:45:58Z was entered from local readback capture before second Save; UI success toast confirmed by 2026-10-15T00:46:21Z",
+  "environment_id": "6abad782eba0819196ca234dc3abc327",
+  "repository": "oninteligenciaartificial/onia-hermes",
+  "browser_tab_id": "437654337",
+  "save_confirmation": "UI toast: Entorno en la nube actualizado",
+  "setup_script": {
+    "candidate_path": "r4-compressed-setup-wrapper-candidate-v3.sh",
+    "candidate_bytes": 14832,
+    "candidate_sha256": "57f1f52c4898c6aad6ba494d2e010e009959fd17296089fcf223b3f7a3817a62",
+    "ui_readback_chars": 14831,
+    "ui_readback_sha256": "5a16b44a8d53567e6b9ab42588d10b19bf5e27643a213b7bda8c126989036c12",
+    "normalization": "AX textarea omits only the final LF; candidate SHA after removal of exactly that byte equals UI readback SHA"
+  },
+  "network_policy": {
+    "cache_enabled": true,
+    "agent_internet_access": true,
+    "access_mode": "custom domains",
+    "domains": [
+      "example.com",
+      "iana.org",
+      "www.iana.org"
+    ],
+    "http_methods": [
+      "GET",
+      "HEAD",
+      "OPTIONS"
+    ],
+    "policy_unchanged_from_approved_scope": true
+  },
+  "legacy_environment_variable_names_still_present": [
+    "ONIA_BROWSER_SETUP_APPROVAL_REFERENCE",
+    "ONIA_BROWSER_SETUP_APPROVED_RECIPE_SHA256",
+    "ONIA_BROWSER_SETUP_APPROVED_PENDING_MANIFEST_SHA256"
+  ],
+  "legacy_values_are_secrets": false,
+  "setup_test_executed": false,
+  "cloud_submit_executed": false,
+  "r4_operation": "f90f55bc-48d8-406f-a11e-05ddd2683014",
+  "grant_reference": "user:01a13cc1-12e9-79a0-97e8-4899f05a5c95:setup-R4-autonomia-20261014",
+  "next_gate": "Reviewable design and QA for the one combined setup+R4 task. Pre-submit checks are complete only after contract construction and footer binding path is resolved; do not consume submit meanwhile.",
+  "admission_gate": "HOLD single submit: resolve and independently review a trusted post-setup/pre-browser contract/attestation path; no separate Test exists.",
+  "provider_saved_configuration": {
+    "surface": "codex-cloud-legacy-ui",
+    "evidence_reference": "r4-save-readback-receipt-20261015.json",
+    "saved_at_utc": "2026-10-15T00:45:58Z",
+    "cache_enabled": true,
+    "network_access": "limited",
+    "preset": "None",
+    "domains": [
+      "example.com",
+      "iana.org",
+      "www.iana.org"
+    ],
+    "methods": [
+      "GET",
+      "HEAD",
+      "OPTIONS"
+    ]
+  },
+  "provider_json_readback_exact_match": true,
+  "provider_saved_at_semantics": "Local observation timestamp placed in required saved_at_utc field; not an exact provider-side save timestamp. Second Save success toast and exact readback were observed by 2026-10-15T00:46:21Z.",
+  "cloud_setup_execution_model": "No separate Test action found; setup runs during creation of a Cloud task container. Therefore setup and R4 consume the single authorized submit if dispatched.",
+  "submit_budget": {
+    "authorized": 1,
+    "consumed": 0,
+    "remaining": 1,
+    "status_events_max": 2,
+    "collect_max": 1,
+    "retries": 0
+  },
+  "submission_gate_blocker": "admission.py requires finalized contract including actual setup receipt digest/base64 and submission reference before admission; setup receipt exists only after task creation, while native_cloud_cli.py stores task_e/footer in parent submit receipt and does not inject submission reference into running task. No trusted post-setup/pre-browser contract constructor exists in current r4/r3 files."
+}
