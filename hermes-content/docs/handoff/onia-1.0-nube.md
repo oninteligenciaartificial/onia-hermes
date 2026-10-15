@@ -2,7 +2,7 @@
 
 Sesión: `session_01HhnFgkeF6nLGvjrfjt1o2C` (5-oct en adelante; **parada del 11-oct 15:10 al 15-oct 08:20 UTC** sin que
 nadie lo notara: 90 latidos sin leer). Antes: `session_014HGgof9kHQkdLXhsZsAq6A`.
-Actualizado el 15-oct ~09:15 UTC (§2 puntos 1-2, §4 «15-oct», §7 y §8). El resto se escribió el 11-oct ~04:55 UTC, cuando Sergio Urcullo pidió handoff y «clean». La versión anterior (más detalle de cada
+Actualizado el 15-oct ~13:10 UTC (§2, §3, §4 «15-oct», §8). El resto se escribió el 11-oct ~04:55 UTC, cuando Sergio Urcullo pidió handoff y «clean». La versión anterior (más detalle de cada
 PR del 5 al 10-oct) está en `git log -p -- hermes-content/docs/handoff/onia-1.0-nube.md`.
 
 **La madre** ordena por mensaje. Hoy es la **madre v4** («Arranque de nueva madre», `bridge:session_012HK4JsZGr6j82ZYwEiVGJA`).
@@ -48,15 +48,15 @@ la dirección de Sergio Urcullo.
 | # | Punto | Estado |
 |---|---|---|
 | 1 | Cobro completo con QR | **15-oct 08:54 UTC: el lado del cliente está hecho** (pago QA `cmv9ay9px003101o36xe4c9c1`, PENDING, Básico mensual Bs 320). Falta solo Sergio Urcullo: marcar la cuenta interna y aprobarlo (§7). Antes: Antes de aprobar el pago de prueba hay que marcar «Cuenta interna de prueba verificada» en `zz-qa-pago-o4kaw` (`/admin/plans`) |
-| 2 | Checkout sin promesa falsa y titular del QR | En producción (#142, 10-oct). **Mirado con login el 15-oct:** bien y de usted, salvo «Ahorrás … al año», «Pagás por adelantado» y «activalo pagando acá», que arregla el seguimiento de #171 |
-| 3 | Datos clínicos no salen | En producción (#139, canal privado). Faltan «En vivo» con login, el SQL del B22 (con su OK) y el contenedor `onia-platform-qa` (lo decide él) |
+| 2 | Checkout sin promesa falsa y titular del QR | En producción (#142, 10-oct). **De usted en los tres ciclos desde `release-e28c7e90` (15-oct 12:57 UTC), mirado con login a las 13:00.** Mi plan (adonde manda el aviso de cuenta vencida) sale de usted con U6 a las 15:50 |
+| 3 | Datos clínicos no salen | En producción (#139, canal privado). **Mirado con login el 15-oct 12:15-12:20 UTC:** la org dueña recibe solo el `id`; otra org y la clave anónima reciben «Unauthorized» y 0 eventos. Faltan el SQL del B22 (con su OK; la prueba P-01 entra con U6) y el contenedor `onia-platform-qa` (lo decide él) |
 | 4 | Respaldo afuera con restauración probada | **Bloqueado:** falta el bucket R2 de Sergio Urcullo. El `restoreVerified:false` del diario local es a propósito |
-| 5 | Agenda por profesional y confirmar en 1 toque | El toque ya está en producción (#128). La agenda por profesional (#118) **sale con #136** |
+| 5 | Agenda por profesional y confirmar en 1 toque | En producción: #128 (toque) y #118 con #136 (11-oct). **El toque, mirado con escritura el 15-oct:** «Confirmada» en dos pantallas sin recargar |
 | 6 | Odontograma de 5 caras y «ver todo» en la ficha | El odontograma (#119) **sale con #136**. «Ver todo» ya está en producción desde el 6-oct (`970bdb1e`): el enlace se llama «Ver historia completa» y abre `/patients/[id]/records`, paginada. Por eso no lo encontraba buscando «ver todo». Falta mirarlo con login. Lo que queda: la lista de citas de la ficha corta en 10 (1.1, no traba) |
 | 7 | Presupuesto por fases y tratamientos ya empezados | En producción (`1f09936a` P2 y el paso 0 del 8-oct) |
-| 8 | Caja diaria | **Sale con #136** (`i110-v3`) |
+| 8 | Caja diaria | En producción (#136, 11-oct; #158 el 11-oct; punto 9 de F136c, la caja de un día anterior, desde el 15-oct 12:57). Mirada con login el 15-oct |
 | 9 | Demo que propone pacientes | Los agentes corren. Falta refrescarla: el lunes 12-oct entre 07 y 11 UTC, con las capturas C1-C7 (§7) |
-| 10 | «Enviar por WhatsApp» en cada cita | En producción (#128). Falta mirarlo con login |
+| 10 | «Enviar por WhatsApp» en cada cita | En producción (#128). **Mirado con login el 15-oct:** arma el texto de usted con la hora de La Paz |
 | 11 | La agenda no miente | En producción (`6f940cfc` y `7d3495e8`). Falta mirarlo con login |
 | 12 | CSV con «;» y WhatsApp de soporte | En producción (`97fe3061`) |
 | 13 | 7 días de gracia y «no renovar» | #113 construido. Espera los términos 1.4: la lámina está en `cola/capturas-terminos/` y necesita el sí de Sergio Urcullo y de Leslie Mercado Moreno |
@@ -65,6 +65,10 @@ la dirección de Sergio Urcullo.
 
 ## 3. Qué quedó EN PRODUCCIÓN (verificado)
 
+- **15-oct 12:57 UTC, `release-e28c7e90`:** #171 (punto 9 de la caja, checkout de usted, M1c y los ocho PRs de Codex del
+  12-oct) y #172 (aviso de cuenta vencida, modal y add-on del chatbot de usted). Mirado con login a las 12:58-13:00 (caja
+  de un día anterior, cotización, traspaso, checkout en tres ciclos). El banner, el 403 y el modal de una cuenta vencida se
+  pintaron en local con el CSS de producción; en vivo se miran el 17-oct, cuando venza «ZZ QA Clínica Chip».
 - **10-oct 21:55 UTC, `release-d8ca5a32`:** #114 (la factura del SIN es obligatoria al aprobar un pago real) y #145 (logo
   «onia» en `/book`). Mirado sin login: 0 errores, `/login` y `/book` bien, API 401. Rollback:
   `onia-platform-prev-y_kYtmsT-20261010-215532`.
@@ -78,19 +82,16 @@ la dirección de Sergio Urcullo.
 
 ## 4. EN VUELO (lo que se pierde o se traba si nadie lo sigue)
 
-**15-oct ~09:15 UTC:**
-- **PR #171** (`claude/optimistic-ride-1sp5fe`, cabeza `b9acfa13`, CI verde 08:42-09:08): el punto 9 de la caja y los PRs de Codex
-  #161, #162, #163, #164, #165, #166, #167 y #169 juntos. **No mergear todavía:** las revisiones encontraron defectos visibles
-  (comentario en #171). Se arreglan en dos ramas LOCALES, sin pushear, hechas por subagentes:
-  - `seguimiento-171` en `/home/user/wt-cadena` (checkout de usted, motivo del QR rechazado a la vista, `/inbox` que no se cae,
-    roles y clientes de usted, `fiados.ts` con teléfono numérico);
-  - `m1c-arreglos` en `/home/user/wt-m1` (cantidades: rojo antes de escribir, «unidades» en kg, validez en días, flotante del
-    ticket, `ProductoPicker` de usted, plural de «servicio»).
-  **10:12 UTC: ya está en el remoto** (`37560f53`, #171 listo, CI corriendo); antes estuvo guardado en `docs/cola/ramas-locales/plataforma-seguimiento-171-20261015.bundle`. Lo único local es `barrido-usted-2` en `wt-cadena` (PR siguiente). Se retoma: juntar las dos ramas sobre `b9acfa13` (la línea
-  base del trinquete se resuelve como base + deltas), `tsc`, eslint y suite completa, fast-forward de la rama, push a las :10
-  (fuera de la ventana) y merge con CI verde. Si las ramas no están, se rehacen desde el comentario de #171.
-- Después de publicar: mirar con `mirar-1250.js` (caja de un día anterior y cotización; el «antes» de producción quedó medido
-  a las 08:44) y el checkout de usted.
+**15-oct ~13:10 UTC:**
+- **U6 (Mi plan de usted) + #150 (P-01)**: rama `claude/optimistic-ride-1sp5fe` de onia-platform, cabeza `94dbf460`, **ya en
+  el remoto** (sin PR hasta las 13:10, para no arrancar un CI dentro de la ventana). Suite 11.786/0, `tsc` 0, eslint 0.
+  Revisión code-reviewer sonnet en curso. Falta: PR (cuerpo en `scratchpad/pr-u6-body.md`), CI verde, merge antes de las
+  15:20 y mirar a las 15:56. Mi plan no se ve con cuentas `zz-qa-*`: se mira con `scratchpad/render-miplan/` (arnés que
+  pinta el componente real con el CSS de producción).
+- **Barrido de usted 3** (importadora, comercio, `app/api` del cliente, mensajes del bot): rama **LOCAL** `barrido-usted-3` en
+  `/home/user/wt-barrido3`, sobre `94dbf460`, la hace un constructor sonnet. **Si la sesión muere, se pierde**: al terminar va
+  a un bundle en `docs/cola/ramas-locales/` o directo a la rama después de mergear U6. Sale a las 18:50.
+- **17-oct 13:20 UTC:** mirar en vivo el banner, el 403 y el modal con «ZZ QA Clínica Chip» (primera QA en solo lectura).
 
 | Qué | Dónde | Cómo se retoma |
 |---|---|---|
@@ -164,11 +165,15 @@ la dirección de Sergio Urcullo.
    es suya, las pantallas de «Mi web» (#168, #170).
 8. **CAFC del piloto** (SIAT etapa VI) e **infra de la bandeja en tiempo real** (una línea, §4).
 
-## 8. Próximos pasos (en orden, 15-oct)
+## 8. Próximos pasos (en orden, 15-oct 13:10 UTC)
 
-1. Terminar #171 (§4 «15-oct»): juntar los dos seguimientos, gates, push a las :10, CI, merge fuera de la ventana y publicar.
-2. Mirar en producción: caja de un día anterior, cotización y traspaso a 390 y 1440 en importadora y comercio, el checkout.
+1. U6 + #150: PR desde las 13:10, CI, la revisión, merge antes de las 15:20; a las 15:56 mirar con el arnés local y en el
+   código publicado (Mi plan no se ve con cuentas QA).
+2. Barrido de usted 3: revisar lo que entregue el constructor, PR después de mergear U6, merge antes de las 18:20 y mirar la
+   pantalla de cotizaciones de importadora a 390 y 1440.
 3. Cuando Sergio Urcullo apruebe el pago QA: mirar el plan activo, la factura por correo y el checkout en «Plan activo».
-4. Contratos para Codex: **M1e**, el servidor exige enteros en las unidades enteras (ventas, traspasos y cotizaciones; M1d ya es el de los montos dentales de Hermes E30), y **omitidos por teléfono visibles** (Hermes E34).
-5. #154 S2 y #150 P-01: Hermes QA está parado desde el 11-oct; sin su re-revisión, decidir con revisores propios.
-6. Lo que destraben sus respuestas (§7), en el orden del corte (`ONIA_1.0_CORTE.md`).
+4. Contratos para Codex escritos y `pendiente`: **M1e** (el servidor exige enteros en las unidades enteras) y **A1** (lo
+   omitido por teléfono queda como descartada con motivo). Los lanza la madre.
+5. #154 S2: Hermes QA volvió el 15-oct (E34-E36); pedirle la re-revisión con la medición de Traefik antes de mergear.
+6. 17-oct 13:20 UTC: mirar en vivo lo que ve una cuenta vencida con «ZZ QA Clínica Chip».
+7. Lo que destraben sus respuestas (§7), en el orden del corte (`ONIA_1.0_CORTE.md`).
