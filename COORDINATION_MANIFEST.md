@@ -1,6 +1,11 @@
 # Hermes Coordination Manifest
 
 ## Orden vigente — cloud ejecuta, madre ligera coordina (15-oct, última orden de Sergio)
+### Handoff — TRANSFER_PENDING (2026-10-15)
+
+- Predecesora: `01a13f7b-a156-7150-ba99-b4ff682163a1`. Nueva sesión/ID aún no asignado; no inferir ACK ni archivar.
+- Handoff canónico: `hermes-content/docs/handoff/hermes-harness-20261012/evidence/claude-development-pilot-20261015/SESSION-HANDOFF.md`.
+- La sucesora lee ese archivo y los tres documentos focales, reclama propiedad exclusiva y añade ID + `ACK_OWNERSHIP_ACTIVE`; después continúa implementación del mismo objetivo native Claude Code Cloud + Codex Cloud, sin otro plan ni sustituto local. Un ejecutor y un verificador secuenciales; rama/owner verificados.
 
 - El VPS se reserva para ONIA Platform. No mover allí coordinación Hermes, agentes de desarrollo ni un coordinador nuevo por defecto; sólo considerar un proceso Hermes concreto e indispensable tras consultar antes a Sergio y explicitar impacto/consumo sobre Platform. No reactivar el contenedor de coding fallido ni instalar otro sistema.
 - Root verificó en UI el 15-oct: Codex Settings muestra repos ONIA Hermes y ONIA Platform; Claude.ai/code muestra la sesión Hermes `01SQ7cvuDX5w5jDHk5VdhAEo` y entorno seleccionado Hermes, con label «Onia» “sin conexión” (no inferir que esté muerto). IDs de environment y URLs anteriores son referencias históricas, no prueba de runtime ni de acceso efectivo. La lista autenticada Codex Cloud devolvió 12 tareas históricas, sin distinguir Legacy/actual; última conocida READY/no diff. No se envió tarea nueva.

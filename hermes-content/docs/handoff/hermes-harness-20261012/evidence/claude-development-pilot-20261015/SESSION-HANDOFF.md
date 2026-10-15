@@ -1,0 +1,31 @@
+# Session handoff — native Claude Code Cloud + Codex Cloud orchestration
+
+Status: `TRANSFER_PENDING`. Prepared 2026-10-15 for a user-requested successor. Predecessor: `01a13f7b-a156-7150-ba99-b4ff682163a1`. Successor ID/ACK: not assigned yet. Do not archive this session.
+
+## Goal and next action
+
+Continue the same product objective: coordinate existing official Claude Code Cloud and native Codex Cloud workers through a recoverable task → implementation → verification → result path. Codex app/ChatGPT UI is not a substitute for native Codex Cloud execution. Do not reopen product strategy or propose another architecture. First read this handoff, the current manifest order, and the pilot README; then claim exclusive ownership and record the new session ID plus `ACK_OWNERSHIP_ACTIVE`. After ACK, continue implementation of the narrowest missing link between a native cloud task, its Git artifact, a small verifier, and recoverable result. Keep one executor and one reviewer at a time; reconcile ambiguous effects before retrying.
+
+## Current state, observed 15 Oct
+
+- **Claude Cloud is doing work.** Claude.ai/code shows Hermes session `01SQ7cvuDX5w5jDHk5VdhAEo`, transcript E46, commit `8369bfd4209f2535ba757daed5957ddacd15ac54` at 21:00:19Z, 17 tests, and `hermes-jarvis` workflow SUCCESS at 21:03:04Z ([job 116668628451](https://github.com/oninteligenciaartificial/onia-hermes/actions/runs/38806503272/job/116668628451)); QA routines are visible at 21:58. The selected environment is Hermes; its UI also shows label «Onia» / “sin conexión”. Do not infer that environment is dead from that label.
+- **Codex Cloud is not yet validated as an executor.** Codex Settings visibly lists ONIA Hermes and ONIA Platform repositories; ONIA Desarrollo and onia-hermes are drafts/unpublished. Authenticated `codex cloud list` exited 0 and returned 12 historical tasks, but it cannot distinguish Legacy from current. The latest known task `task_e_6ad120…` is `READY`/no diff. No new task was launched. Codex CLI `cloud list` and its `--help` read-only path exited 0; this confirms command/read capability only, not task execution. Claude Code Cloud session/routine execution is supported by the observed session evidence. Do not use the old environment URL redirect or IDs as runtime proof.
+- This UI/list evidence does not prove native Codex execution, Codex↔Claude messaging, a Git result bridge, or PC-off end-to-end operation. Claude routines already operate; do not describe all automation as absent. The Codex link and complete PC-off path remain unproven.
+
+## Boundaries and proven evidence
+
+- **Roles:** Astra handles architecture/build decisions and concrete escalations, not routine QA. A small suitable model can close documentation and bounded verification. Only the temporary mother in the desktop app handles frontend/UI/browser/local-login tasks and supervises laptop/mobile work. Never fan out new executors; max one executor plus one sequential reviewer.
+- **Git:** use one bounded contract with a single owner, branch, acceptance evidence, and result artifact. Preserve the exact diff and receipts. No autonomous deployment. If dispatch or an external effect is ambiguous, reconcile its receipt/state before any retry.
+- **VPS:** dedicated to ONIA Platform. Use it for Hermes only if a concrete indispensable process requires it and Sergio first approves after seeing the expected Platform impact/consumption. No need is established for the current objective. Do not revive the failed VPS coding container or install/reinstall systems.
+- **Historical local pilot:** Claude implementation/repair core had 31 tests: 28 pass, 3 platform-specific skips; operator glue had 3 offline passes. One real pre-effect Codex CLI fallback ran and its code findings were fixed. This proves that bounded local pilot only, not native Codex Cloud. The VPS MCP text path passed; the separate VPS coding attempt failed at a restricted read (`/input` vs `/work`), then its container paths were closed. Do not repeat it.
+- **R4/browser:** frozen after consumed submit/status/collect; no replay or blind retry. Browser Cloud/E2E and PC-off independence were not established. Keep R4 separate from this orchestration objective.
+- **Resources:** PC snapshots are historical (15 Oct, ~16:54–16:55 Caracas; free RAM 6.42–6.57 GiB, commit ~79.7%, CPU 17–39%). They are not current capacity. Context occupancy is `UNKNOWN`; do not infer it from quota/usage.
+
+## Focal files
+
+1. `COORDINATION_MANIFEST.md` — current order and ownership. Historical notes below the current section are not live session inventory.
+2. This directory’s `README.md` — routing audit and evidence limits.
+3. `hermes-content/docs/handoff/codex-relevo.md` — older Infra/Astra checkpoint; use its receipts as history only where superseded by the current order.
+4. `.claude/skills/onia-sesion-madre/SKILL.md` — mother-local/cloud-worker operating history; old session IDs are not current inventory.
+
+Do not edit the dirty unrelated primary checkout. Continue in the dedicated worktree/branch `E:/onia-wt/hermes-controller-pilot-20261013`, `codex/hermes-controller-hardening-20261013`, starting from `b613ff4b` (handoff publication will advance HEAD). This handoff does not launch a successor session or new loop, installation, browser probe, or model/test run; the requested successor must be created and ACKed by its owner.
