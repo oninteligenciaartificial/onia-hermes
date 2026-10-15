@@ -26,6 +26,72 @@ def _decode_stdout(raw: bytes) -> str:
     return raw.decode("utf-8", errors="strict")
 
 
+def _bounded_cli_capture(argv: list[str], timeout_seconds: int) -> dict:
+    """Drain both pipes under a deadline, retaining at most 256 KiB of stdout."""
+    try:
+        child = subprocess.Popen(argv, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+                                 stderr=subprocess.PIPE, shell=False)
+    except OSError:
+        return {"phase": "process_start_error", "returncode": None,
+                "stdout": b"", "stdout_bytes": "UNKNOWN", "stdout_sha256": "UNKNOWN",
+                "stderr_bytes": "UNKNOWN", "stderr_sha256": "UNKNOWN"}
+
+    done = queue_module.Queue()
+    hard_limit = 1024 * 1024
+
+    def drain(name, pipe, retain_limit):
+        retained, digest, total, overflow = bytearray(), hashlib.sha256(), 0, False
+        try:
+            while chunk := pipe.read(65536):
+                total += len(chunk)
+                if total <= hard_limit:
+                    digest.update(chunk[:hard_limit - (total - len(chunk))])
+                else:
+                    overflow = True
+                if name == "stdout" and len(retained) < retain_limit:
+                    retained.extend(chunk[:retain_limit - len(retained)])
+                if total > hard_limit:
+                    if child.poll() is None:
+                        child.kill()
+            done.put((name, bytes(retained), total if not overflow else "OVER_LIMIT",
+                      digest.hexdigest() if not overflow else "OVER_LIMIT", overflow))
+        except (OSError, ValueError):
+            done.put((name, b"", total, "UNKNOWN", True))
+
+    stdout_reader = threading.Thread(target=drain, args=("stdout", child.stdout, 262144), daemon=True)
+    stderr_reader = threading.Thread(target=drain, args=("stderr", child.stderr, 0), daemon=True)
+    stdout_reader.start()
+    stderr_reader.start()
+    try:
+        returncode = child.wait(timeout=timeout_seconds)
+        timed_out = False
+    except subprocess.TimeoutExpired:
+        timed_out = True
+        child.kill()
+        try:
+            returncode = child.wait(timeout=2)
+        except subprocess.TimeoutExpired:
+            returncode = None
+    stdout_reader.join(timeout=2)
+    stderr_reader.join(timeout=2)
+    for pipe in (child.stdout, child.stderr):
+        try:
+            pipe.close()
+        except (OSError, ValueError):
+            pass
+    streams = {}
+    while not done.empty():
+        name, retained, total, digest, overflow = done.get_nowait()
+        streams[name] = (retained, total, digest, overflow)
+    out = streams.get("stdout", (b"", "UNKNOWN", "UNKNOWN", False))
+    err = streams.get("stderr", (b"", "UNKNOWN", "UNKNOWN", False))
+    phase = ("timeout" if timed_out else "stdout_limit" if out[3] or out[1] == "UNKNOWN" or out[1] > 262144
+             else "stderr_limit" if err[3] or err[1] == "UNKNOWN" or err[1] > hard_limit else "complete")
+    return {"phase": phase, "returncode": returncode, "stdout": out[0],
+            "stdout_bytes": out[1], "stdout_sha256": out[2],
+            "stderr_bytes": err[1], "stderr_sha256": err[2]}
+
+
 def _bounded_provider_read(argv: list[str], timeout_seconds: int) -> bytes:
     """One child, <=256KiB stdout, no stderr logs; kill own child on ambiguity.
 
@@ -374,7 +440,7 @@ class NativeCloudCLI:
                     "read_duration_seconds": round(time.monotonic() - started, 6), "cost": "UNKNOWN", "tokens": "UNKNOWN"}
 
     def status(self, operation_id: str, executable: Path, timeout_seconds: int = 30) -> dict:
-        """Read one bounded list page; absence/READY never closes the queue."""
+        """Read only the bound task; an ERROR card remains unresolved evidence."""
         row = self.bridge.read(operation_id)
         if row is None or row["surface"] != "cloud_cli_task" or row["remote_id"] is None:
             raise RuntimeError("status requires bound native Cloud task; no blind resubmit")
@@ -382,35 +448,44 @@ class NativeCloudCLI:
             raise ValueError("exact installed executable required")
         if type(timeout_seconds) is not int or not 1 <= timeout_seconds <= 60:
             raise ValueError("bounded status timeout required")
-        try:
-            result = subprocess.run([str(executable), "cloud", "list", "--limit", "20", "--json"],
-                                    shell=False, capture_output=True, text=False,
-                                    timeout=timeout_seconds, check=False)
-            if result.returncode != 0:
-                raise ValueError("nondefinitive status response")
-            page = json.loads(_decode_stdout(result.stdout))
-            tasks = page["tasks"]
-            if not isinstance(tasks, list):
-                raise ValueError("invalid task list")
-            matches = [task for task in tasks if isinstance(task, dict) and task.get("id") == row["remote_id"]]
-            if len(matches) != 1:
-                raise ValueError("task absent or ambiguous in bounded list page")
-            task = matches[0]
-            # READY proves provider readiness only; independent artifact/QA later.
-            raw_status = task.get("status")
-            if not isinstance(raw_status, str):
-                raise ValueError("native status must be a string")
-            normalized_status = raw_status.lower()
-            if normalized_status not in {"pending", "running", "ready", "failed", "cancelled", "unknown"}:
-                raise ValueError("unsupported native lifecycle status")
-            state = {"pending": "submitted", "running": "running", "ready": "unknown",
-                     "failed": "unknown", "cancelled": "unknown", "unknown": "unknown"}[normalized_status]
-            now = int(time.time())
-            evidence = "cloud_cli_list_sha256:" + hashlib.sha256(result.stdout).hexdigest()
-            self.bridge.ingest(NativeObservation(operation_id, "cloud_cli_task", row["remote_id"],
-                               row["input_sha"], state, now, evidence), now)
-            return {"remote_id": row["remote_id"], "provider_status": task.get("status", "UNKNOWN"),
-                    "state": "needs_reconcile", "cost": "UNKNOWN", "retry": "forbidden"}
-        except (subprocess.TimeoutExpired, OSError, ValueError, KeyError, TypeError):
+        read = _bounded_cli_capture([str(executable), "cloud", "status", row["remote_id"]], timeout_seconds)
+        metadata = {"cli_exit_code": read["returncode"], "stdout_bytes": read["stdout_bytes"],
+                    "stdout_sha256": read["stdout_sha256"], "stderr_bytes": read["stderr_bytes"],
+                    "stderr_sha256": read["stderr_sha256"], "provider_read_attempt_count": 1}
+        if read["phase"] != "complete":
             return {"state": "needs_reconcile", "remote_id": row["remote_id"],
-                    "provider_status": "UNKNOWN", "retry": "forbidden"}
+                    "provider_status": "UNKNOWN", "retry": "forbidden",
+                    "diagnostic_phase": read["phase"], **metadata}
+        try:
+            lines = _decode_stdout(read["stdout"]).splitlines()
+        except UnicodeError:
+            return {"state": "needs_reconcile", "remote_id": row["remote_id"],
+                    "provider_status": "UNKNOWN", "retry": "forbidden",
+                    "diagnostic_phase": "status_utf8_invalid", **metadata}
+        error_card = (read["returncode"] == 1 and len(lines) == 3
+                      and lines[0] == "[ERROR] Run R4 canary using reviewed runbook"
+                      and lines[1].startswith("ONIA Hermes — revisión y desarrollo")
+                      and "•" in lines[1] and lines[2] == "no diff")
+        if not error_card:
+            phase = "cli_exit_nonzero" if read["returncode"] != 0 else "status_shape_unrecognized"
+            return {"state": "needs_reconcile", "remote_id": row["remote_id"],
+                    "provider_status": "UNKNOWN", "retry": "forbidden",
+                    "diagnostic_phase": phase, **metadata}
+        # The observed card is an error label, not a cause or proof that no
+        # private result artifacts exist. Keep queue state unresolved.
+        now = int(time.time())
+        evidence = "cloud_cli_status_sha256:" + read["stdout_sha256"]
+        try:
+            self.bridge.ingest(NativeObservation(operation_id, "cloud_cli_task", row["remote_id"],
+                               row["input_sha"], "unknown", now, evidence), now)
+        except Exception:
+            return {"remote_id": row["remote_id"], "provider_status": "ERROR",
+                    "state": "needs_reconcile", "cost": "UNKNOWN", "retry": "forbidden",
+                    "diagnostic_phase": "bridge_ingest_error", **metadata,
+                    "provider_error_labels": ["ERROR", "no diff"],
+                    "provider_error_cause": "UNKNOWN"}
+        return {"remote_id": row["remote_id"], "provider_status": "ERROR",
+                "state": "needs_reconcile", "cost": "UNKNOWN", "retry": "forbidden",
+                "diagnostic_phase": "task_error_card", **metadata,
+                "provider_error_labels": ["ERROR", "no diff"],
+                "provider_error_cause": "UNKNOWN"}

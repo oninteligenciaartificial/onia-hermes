@@ -8,9 +8,16 @@ import sys
 import unittest
 from unittest.mock import patch
 
-from native_cloud_cli import CloudTaskPlan, NativeCloudCLI
+from native_cloud_cli import CloudTaskPlan, NativeCloudCLI, _bounded_cli_capture
+from native_work_entrypoint import _safe_output
 import test_native_receipt_bridge as fixtures
 from test_native_receipt_bridge import OP, REMOTE
+
+
+def captured(returncode, stdout, stderr=b""):
+    return {"phase": "complete", "returncode": returncode, "stdout": stdout,
+            "stdout_bytes": len(stdout), "stdout_sha256": hashlib.sha256(stdout).hexdigest(),
+            "stderr_bytes": len(stderr), "stderr_sha256": hashlib.sha256(stderr).hexdigest()}
 
 
 class NativeTransportTests(unittest.TestCase):
@@ -80,14 +87,23 @@ class NativeTransportTests(unittest.TestCase):
         self.assertEqual(self.bridge.read(OP)["state"], "reserved")
         run.assert_not_called()
 
-    @patch("native_cloud_cli.subprocess.run")
+    @patch("native_cloud_cli._bounded_cli_capture")
     def test_transport_ready_is_observation_not_success(self, run):
         self.reserve()
         self.bridge.ingest(self.observation(), 103)
-        run.return_value = subprocess.CompletedProcess([], 0, ('{"tasks":[{"id":"' + REMOTE + '","status":"READY"}]}').encode(), b"")
+        stdout = ("[ERROR] Run R4 canary using reviewed runbook\n"
+                  "ONIA Hermes — revisión y desarrollo  •  16m ago\nno diff\n").encode("utf-8")
+        run.return_value = captured(1, stdout)
         result = self.transport.status(OP, self.plan.executable)
-        self.assertEqual(result["provider_status"], "READY")
+        self.assertEqual(result["provider_status"], "ERROR")
         self.assertEqual(result["state"], "needs_reconcile")
+        self.assertEqual(result["diagnostic_phase"], "task_error_card")
+        self.assertEqual(result["provider_error_cause"], "UNKNOWN")
+        self.assertEqual(result["provider_error_labels"], ["ERROR", "no diff"])
+        self.assertEqual(result["stdout_bytes"], len(stdout))
+        self.assertEqual(result["stderr_sha256"], hashlib.sha256(b"").hexdigest())
+        self.assertEqual(run.call_args.args[0][-2:], ["status", REMOTE])
+        run.assert_called_once()
         self.assertIsNone(self.queue.read_result("task"))
 
     @patch("native_cloud_cli.subprocess.run")
@@ -147,19 +163,70 @@ class NativeTransportTests(unittest.TestCase):
         self.assertIn('"expected_head":"' + "b" * 40 + '"', next_wire)
         self.assertNotEqual(first_contract, next_contract)
 
-    @patch("native_cloud_cli.subprocess.run")
-    def test_lowercase_status_schema_and_invalid_types(self, run):
+    @patch("native_cloud_cli._bounded_cli_capture")
+    def test_status_exit_error_without_observed_card_stays_unknown(self, run):
         self.reserve()
         self.bridge.ingest(self.observation("submitted"), 103)
-        for index, (status, expected) in enumerate((("pending", "submitted"), ("running", "running"), ("ready", "unknown"))):
-            run.return_value = subprocess.CompletedProcess([], 0, ('{"tasks":[{"id":"' + REMOTE + '","status":"' + status + '"}]}').encode(), b"")
-            with patch("native_cloud_cli.time.time", return_value=104 + index):
-                result = self.transport.status(OP, self.plan.executable)
-            self.assertEqual(result["provider_status"], status)
-            self.assertEqual(self.bridge.read(OP)["state"], expected)
-        run.return_value = subprocess.CompletedProcess([], 0, ('{"tasks":[{"id":"' + REMOTE + '","status":7}]}').encode(), b"")
-        self.assertEqual(self.transport.status(OP, self.plan.executable)["provider_status"], "UNKNOWN")
-        self.assertEqual(self.bridge.read(OP)["state"], "unknown")
+        run.return_value = captured(1, b"non-card error", b"opaque error")
+        result = self.transport.status(OP, self.plan.executable)
+        self.assertEqual(result["provider_status"], "UNKNOWN")
+        self.assertEqual(result["diagnostic_phase"], "cli_exit_nonzero")
+        self.assertEqual(result["stderr_bytes"], len(b"opaque error"))
+        self.assertEqual(result["stderr_sha256"], hashlib.sha256(b"opaque error").hexdigest())
+        self.assertEqual(self.bridge.read(OP)["state"], "submitted")
+        self.assertNotIn("opaque error", repr(result))
+        run.assert_called_once()
+
+    def test_entrypoint_exposes_only_observed_error_card_labels(self):
+        safe = _safe_output({
+            "state": "needs_reconcile", "remote_id": REMOTE,
+            "provider_status": "ERROR", "diagnostic_phase": "task_error_card",
+            "cli_exit_code": 1, "stdout_bytes": 106, "stdout_sha256": "a" * 64,
+            "stderr_bytes": 0, "stderr_sha256": hashlib.sha256(b"").hexdigest(),
+            "provider_read_attempt_count": 1,
+            "provider_error_labels": ["ERROR", "no diff"], "provider_error_cause": "UNKNOWN",
+            "raw_stdout": "must not escape",
+        }, OP)
+        self.assertEqual(safe["provider_status"], "error")
+        self.assertEqual(safe["provider_error_labels"], ["ERROR", "no diff"])
+        self.assertEqual(safe["provider_error_cause"], "UNKNOWN")
+        self.assertNotIn("raw_stdout", safe)
+
+    def test_bounded_capture_streams_both_pipes_and_caps_retained_stdout(self):
+        child_code = ("import sys; sys.stdout.buffer.write(b'A' * 300000); "
+                      "sys.stderr.buffer.write(b'opaque'); sys.exit(1)")
+        result = _bounded_cli_capture([sys.executable, "-c", child_code], 5)
+        expected = b"A" * 300000
+        self.assertEqual(result["phase"], "stdout_limit")
+        self.assertEqual(result["returncode"], 1)
+        self.assertEqual(len(result["stdout"]), 262144)
+        self.assertEqual(result["stdout_bytes"], len(expected))
+        self.assertEqual(result["stdout_sha256"], hashlib.sha256(expected).hexdigest())
+        self.assertEqual(result["stderr_bytes"], len(b"opaque"))
+        self.assertEqual(result["stderr_sha256"], hashlib.sha256(b"opaque").hexdigest())
+
+    def test_bounded_capture_kills_child_after_stderr_hard_limit(self):
+        child_code = "import sys; sys.stderr.buffer.write(b'E' * (2 * 1024 * 1024)); sys.stderr.flush()"
+        result = _bounded_cli_capture([sys.executable, "-c", child_code], 5)
+        self.assertEqual(result["phase"], "stderr_limit")
+        self.assertNotEqual(result["returncode"], 0)
+        self.assertEqual(result["stderr_bytes"], "OVER_LIMIT")
+        self.assertEqual(result["stderr_sha256"], "OVER_LIMIT")
+        self.assertEqual(result["stdout_bytes"], 0)
+
+    @patch("native_cloud_cli._bounded_cli_capture")
+    def test_status_error_card_ingest_failure_stays_reconcile(self, capture):
+        self.reserve()
+        self.bridge.ingest(self.observation("submitted"), 103)
+        stdout = ("[ERROR] Run R4 canary using reviewed runbook\n"
+                  "ONIA Hermes — revisión y desarrollo  •  16m ago\nno diff\n").encode("utf-8")
+        capture.return_value = captured(1, stdout)
+        with patch.object(self.bridge, "ingest", side_effect=RuntimeError("synthetic ledger failure")):
+            result = self.transport.status(OP, self.plan.executable)
+        self.assertEqual(result["diagnostic_phase"], "bridge_ingest_error")
+        self.assertEqual(result["state"], "needs_reconcile")
+        self.assertEqual(result["provider_error_cause"], "UNKNOWN")
+        capture.assert_called_once()
 
     def test_real_harmless_python_child_receives_exact_binary_stdin(self):
         self.plan.public_prompt_file.write_bytes("Público\nsegunda línea\n".encode("utf-8"))

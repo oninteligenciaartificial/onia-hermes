@@ -42,7 +42,9 @@ _OUT_FIELDS = frozenset((
     "read_finished_at_epoch", "read_duration_seconds", "cost", "tokens",
     "remote_execution_duration_seconds", "active_context_used", "effective_window",
     "handoff_capability", "result_digest", "next_candidate_task_id", "next_action",
-    "global_goal_not_closed", "provider_status", "retry",
+    "global_goal_not_closed", "provider_status", "retry", "diagnostic_phase",
+    "cli_exit_code", "stdout_bytes", "stdout_sha256", "stderr_bytes", "stderr_sha256",
+    "provider_error_labels", "provider_error_cause",
 ))
 
 
@@ -143,8 +145,26 @@ def _safe_output(step_result, operation_id):
         elif key == "native_state" and type(value) is str and value in _NATIVE_STATES:
             result[key] = value
         elif key == "provider_status" and type(value) is str and value.lower() in (
-                "pending", "running", "ready", "failed", "cancelled", "unknown"):
+                "pending", "running", "ready", "failed", "cancelled", "unknown", "error"):
             result[key] = value.lower()
+        elif key == "diagnostic_phase" and type(value) is str and value in (
+                "status_utf8_invalid", "stdout_limit", "stderr_limit", "task_error_card",
+                "status_shape_unrecognized", "cli_exit_nonzero", "bridge_ingest_error",
+                "timeout", "process_start_error"):
+            result[key] = value
+        elif key == "cli_exit_code" and (value is None or type(value) is int and -255 <= value <= 255):
+            result[key] = value
+        elif key in ("stdout_bytes", "stderr_bytes") and (
+                (type(value) is int and 0 <= value <= 1048576)
+                or value in ("UNKNOWN", "OVER_LIMIT")):
+            result[key] = value
+        elif key in ("stdout_sha256", "stderr_sha256") and (
+                value in ("UNKNOWN", "OVER_LIMIT") or type(value) is str and _SHA256.fullmatch(value)):
+            result[key] = value
+        elif key == "provider_error_labels" and value == ["ERROR", "no diff"]:
+            result[key] = value
+        elif key == "provider_error_cause" and value == "UNKNOWN":
+            result[key] = value
         elif key == "goal_outcome" and type(value) is str and value in ("completed", "failed"):
             result[key] = value
         elif key in ("client_attempt_count", "provider_read_attempt_count",
