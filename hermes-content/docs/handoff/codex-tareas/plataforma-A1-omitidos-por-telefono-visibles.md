@@ -24,6 +24,9 @@ el resumen de la corrida lo cuenta (~:2194).
    últimos 7 días. Si el teléfono se corrige, el próximo día se propone normal.
 3. Los cinco filtros usan una sola función común (hoy son cinco copias en línea).
 4. El resumen de la corrida sigue diciendo «descartadas N»; no hace falta otro contador.
+5. **Teléfono guardado como número** (LOW de la revisión del delta de #171): desde #171, `lib/comercio/fiados.ts` lee el teléfono de la
+   metadata solo si es texto, así que un `71234567` guardado como número pasa a «sin teléfono» en silencio. Aceptarlo como
+   `String(n)` cuando `Number.isSafeInteger(n)`, y si no, que cuente como descartada con el motivo de arriba.
 
 ## PRUEBA DE HECHO
 Primero en rojo con el código de `master`; anotá cuáles fallaron.
