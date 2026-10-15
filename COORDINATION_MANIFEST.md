@@ -1,5 +1,17 @@
 # Hermes Coordination Manifest
 
+## VIGENTE — relevo Infra a Astra, 2026-10-15
+
+**META:** continuar investigación/corrección hasta demostrar all-cloud. **PRUEBA DE HECHO:** recibos reales de Cloud/browser/E2E, artefactos y QA independiente; documentación y tests locales no bastan. **PARADA:** bloqueo específico de acceso/cuota o permiso sensible, preservando evidencia; un plazo de 30 minutos no es criterio de éxito.
+
+- Orden directa nueva de Sergio Urcullo: sesión nueva Astra y pruebas necesarias sin límite numérico prefijado, según fallos y QA focal, dentro de cuotas reales; no promete crédito ilimitado. Reemplaza los topes antiguos y la espera de consentimiento para las dos lecturas suplementarias. Las prohibiciones de nuevas llamadas por agotamiento del canario, abajo, son **historial superado**, no la autorización vigente. Conservar contadores y efectos R4; no resetear ni repetir a ciegas.
+- Sucesora Astra **por crear**. Madre `01a13cc1-12e9-79a0-97e8-4899f05a5c95`: solo relevo, sin ejecución paralela. Sesiones anteriores quedan en pausa operativa para no duplicar; el monitor antiguo está PAUSED, verificado por la madre mediante herramienta y automation.toml. No clonar automáticamente su heartbeat. La sucesora debe reclamar propiedad exclusiva antes de operar y registrar su ID/ACK aquí.
+- La autorización de pruebas no implica producción/deploy, pagos, secretos/transferencia de credenciales, instalaciones ni contacto con terceros. Esos gates conservan su aprobación específica.
+- CODE: `E:/onia-wt/hermes-controller-pilot-20261013`, rama `codex/hermes-controller-hardening-20261013`, base verificada `83c92c115d9f9f9abf0ff2b0bed6ce526c5f845e`. DOCS congelada: `E:/onia-wt/orquestacion-subagentes-20261013`, rama `codex/orquestacion-subagentes-20261013`, SHA `0e01dc094184ea479ea032a75be1250f8def1b48`; no editar.
+- Fuente compacta para arrancar: `hermes-content/docs/handoff/codex-relevo.md`, bloque vigente. Una sola cola: `E:/onia-wt/onia-harness-native-run-20261014/queue.sqlite3`; estado reportado `unknown`/`needs_reconcile`. No nueva cola, reset, reclamo de lease consumida ni orquestador paralelo.
+
+Los bloques siguientes conservan el checkpoint histórico; el bloque vigente anterior prevalece sobre sus límites y órdenes de espera.
+
 ## R4 canary — ownership and checkpoint (2026-10-15)
 
 - Objetivo all-cloud pendiente; el próximo avance real depende de las lecturas diagnósticas suplementarias y posterior activación aprobada. Chat madre `01a13cc1-12e9-79a0-97e8-4899f05a5c95`; **Cloud: 1/1 submit; 2/2 status; 1/1 collect.** QA offline no cuenta como prueba Cloud.

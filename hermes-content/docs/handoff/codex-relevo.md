@@ -1,5 +1,39 @@
 
-# Handoff: relevo a Codex (actualizado el 5-oct-2026, ~22:00 UTC)
+# Relevo vigente Infra → Astra — 2026-10-15
+
+**META:** resolver la causa observada y demostrar all-cloud. **PRUEBA DE HECHO:** ejecución Cloud/browser y E2E recuperable, recibos sanitizados, resultados y QA independiente, incluida evidencia real de independencia de la PC. **PARADA:** bloqueo concreto de cuota/acceso/permiso sensible; preservar lo logrado. No dar por cumplido por duración, mocks, documentación o delegación.
+
+## Autoridad y propiedad
+
+Sergio Urcullo pidió nueva sesión Astra, investigar/corregir hasta all-cloud, registrar fallos y realizar las pruebas necesarias sin límite de cantidad prefijado. Esta orden reemplaza los topes anteriores de pruebas y las dos lecturas diagnósticas pendientes de consentimiento, dentro de las cuotas disponibles. No autoriza gasto ilimitado, producción/deploy, transferencia de secretos, instalaciones ni terceros. Conservar el registro histórico; no confundir nueva autoridad con reset o replay de efectos consumidos.
+
+Sucesora por crear; primer paso: reclamar propiedad exclusiva en `COORDINATION_MANIFEST.md` y leer este checkpoint, no todo el historial. La madre anterior `01a13cc1-12e9-79a0-97e8-4899f05a5c95` solo preserva/releva; sesiones anteriores en pausa operativa, sin ejecución duplicada. La madre verificó el monitor antiguo PAUSED mediante herramienta y automation.toml; no heredarlo por clonación automática. Rutas CODE, DOCS congelada y cola única están en el manifest.
+
+## Checkpoint recuperable
+
+- R4 `f90f55bc-48d8-406f-a11e-05ddd2683014`; submit aceptado `task_e_6ad045ab00c08327bb4ea958581c5c82`; entorno `6abad782eba0819196ca234dc3abc327`, **ONIA Hermes — revisión y desarrollo**. Contadores históricos: 1 submit, 2 status, 1 collect. Status #2 CLI: `ERROR`/`no diff`, causa `UNKNOWN`. URL derivada en browser abrió solo composer; no cuatro JSON públicos, prueba browser Cloud ni PC-off. No atribuir causa a cuenta/workspace sin evidencia.
+- Recibos externos: `E:/onia-wt/r4-final-checkpoint-20261015.json`, `E:/onia-wt/r4-status2-directed-capture-20261015.json`, `E:/onia-wt/r4-result-collection-20261015.json`. Mantener cola `unknown`/`needs_reconcile`, intent y efectos consumidos; no resetear. Guardar las nuevas operaciones separadas y auditadas.
+- Caller/recuperación/entrega CODE publicados en rama; QA independiente final: 20 focal + 47 compatibilidad. Entrega local preparada, no enlazada ni probada viva. Preflight reportó gateway VPS activo y metadata PTB 22.8/HTTPX 0.28.1/HTTPcore 1.0.9; Codex ausente del PATH efectivo del gateway, `auth.json` del HOME predeterminado ausente y `CODEX_HOME` unset. No demuestra ausencia global ni estado actual permanente.
+- Evidencia canónica: `hermes-content/docs/handoff/hermes-harness-20261012/evidence/native-host-source-20261014.md`. Probe externo: `E:/onia-wt/native-host-runtime-preflight-20261015`. El SDK probe accidental con `--help` ejecutó SSH antes de revisión: exit 2, causa desconocida, sin SDK PASS. Tres runners corregidos con main guard/argparse/dry-run/`--execute` y bloqueo ante recibo previo; 15 tests independientes con mocks, cero subprocess reales, recibo original intacto. No repetir probes gastados a ciegas; preparar prueba nueva explícita bajo la autoridad vigente.
+
+## Fallos y aprendizaje que debe aplicar la sucesora
+
+1. No preservar stderr/status #1 impidió diagnosticar. Capturar error sanitizado, fase, exit code y hashes; nunca secretos.
+2. Alargar guards y pruebas locales dejó abierto el fallo Cloud real. Cada próximo paso debe cerrar una incertidumbre observada; no aparentar avance con tests repetidos.
+3. Heartbeat cada 15 minutos consultó agentes terminados durante horas sin avance. Pausar el monitor anterior y coordinar por eventos/cambios útiles.
+4. Cuota, tokens acumulados y caché no miden contexto activo: U/W = `UNKNOWN` sin evidencia directa. Relevo compacto, no transcripts completos.
+5. `--help` tuvo efectos top-level: conservar la corrección y regresiones descritas; ayuda/import/dry-run nunca deben ejecutar efectos.
+6. Errores iniciales Bot-only, índice de polling request y hash Unicode se corrigieron antes de publicar; conservar regresiones focales ya hechas. Ninguno acredita PASS vivo.
+
+## Próximo avance
+
+Tras asumir propiedad única, diagnosticar el R4 real y verificar autenticación/workspace/entorno mediante herramientas disponibles y sesiones autorizadas. Corregir la causa comprobada; consultar documentación primaria solo cuando haga falta. Definir aceptación por resultado y ejecutar Cloud/browser E2E con recibos y QA independiente sobre la misma cola. No crear otro orquestador ni usar un timeout de 30 minutos como meta. Si aparece un gate sensible, preparar el paso revisable y pedir únicamente esa aprobación.
+
+---
+
+# Historial: relevo a Codex (5-oct-2026, ~22:00 UTC)
+
+El bloque siguiente conserva la cola histórica de producto; no es el encargo operativo de esta sucesora Infra.
 
 A Claude se le acaban los tokens. **Codex (OpenAI, en la PC Windows de Sergio Urcullo) sigue con la 1.0.** Cada tarea tiene un
 prompt autocontenido en `hermes-content/docs/handoff/codex-tareas/<TAREA>.md`. Codex no ve los chats ni el `CLAUDE.md`, así que
