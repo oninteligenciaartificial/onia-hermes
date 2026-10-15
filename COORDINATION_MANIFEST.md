@@ -1,5 +1,17 @@
 # Hermes Coordination Manifest
 
+## Cierre local — desarrollo Claude con herramientas, 2026-10-15
+
+- **META:** un job local de desarrollo con Claude como implementador, un subagente de lectura y fallback pre-effect real a Codex CLI si su preflight está verificado; rootAstra revisa independientemente.
+- **PRUEBA DE HECHO:** código autoría Claude, pruebas focales y recibos observados de modelo/herramientas/subagente/fallback; no alcanza texto que diga que delegó.
+- **PARADA:** paquete local revisable o bloqueo concreto. Sin instalar, desplegar, reiniciar ni ampliar permisos VPS; sin tocar R4/queue/browser. La activación text bridge anterior terminó y no autoriza ampliar su producción.
+- **Dueño único CODE:** `/root/cli_integration`, `E:/onia-wt/hermes-controller-pilot-20261013`, rama `codex/hermes-controller-hardening-20261013`, base `df6763fb00f5e1992a4a1b2273abfe3962d68dd0`. Carpeta del piloto: `hermes-content/docs/handoff/hermes-harness-20261012/evidence/claude-development-pilot-20261015/`.
+- Operador prepara contrato/recibos y ejecuta checks; Claude implementa código. RootAstra revisa, sin otro QA Sol. Herramientas acotadas sin shell en el implementador ni MCP externo. Skills fuente/instrucciones se suministran explícitamente con hash; no se presupone herencia.
+- Referencias `equipo-de-agentes`/`aprender-de-todo` no disponibles en las rutas verificadas por root; no se inventó su carga. Protocolo real: `hermes-content/docs/EXECUTION_PROTOCOL.md`.
+- Git: commit/push explícitos a esta rama después de revisión; no main/merge/deploy. Las propuestas de método de Sergio expresan objetivo, no arquitectura obligatoria; prima su última orden.
+- **Ejecutado y revisado:** tres invocaciones padre Claude (implementación y dos reparaciones), un subagente lector real; fallback pre-effect Codex real una vez, Astra medium configurado/modelo servido UNKNOWN. Core final `0b43b2b94c1c704da8e04954ae928ab579d69d87ba685759ef7997319e74b578`, GO root Astra; 31 tests (28 PASS, 3 skips Windows) y 3 tests operativos PASS. Warp visor pasivo verificado sin duplicar proveedor. CLI canónica y recibos saneados en paquete.
+- **Gate separado:** coding/subagentes/fallback remotos requieren paquete de identidad sin credenciales productivas, límites de archivos/procesos y permisos, config/rollback y aprobación propia; no se desplegó este piloto. Sin más generaciones para este cierre. CODE queda liberado tras publicación coherente.
+
 Último cierre 15-oct, 19:05 UTC: la única prueba de instalación y navegador aprobada desde
 fuente `f54b8920` creó task `task_e_6ad1207987888327ac102a633061d9e7`.
 La UI informó bootstrap exit 1, sin cuatro recibos de navegador ni captura; causa UNKNOWN.

@@ -1,0 +1,256 @@
+{
+  "artifacts": {
+    "CLAUDE_README.md": {
+      "author": "Claude repair2 observed file tools",
+      "bytes": 3442,
+      "sha256": "490d6f6f2aaec5cc79f3ca3db0ef4c84aabb21d8ad016b94d55624948933e723"
+    },
+    "development_job.py": {
+      "author": "Claude repair2 observed file tools",
+      "bytes": 9495,
+      "sha256": "0b43b2b94c1c704da8e04954ae928ab579d69d87ba685759ef7997319e74b578"
+    },
+    "test_development_job.py": {
+      "author": "Claude repair2 observed file tools",
+      "bytes": 16307,
+      "sha256": "6542260498e5967a00265c7a594c98854b2d3e6896b16ca886925e1f77a0ae91"
+    }
+  },
+  "attempt_id": "attempt-1",
+  "configured_model": "claude-sonnet-5-5",
+  "cost_estimate_usd": 0.1099538,
+  "duration_api_ms": 29638,
+  "duration_ms": 30306,
+  "model_usage_keys": [
+    "claude-sonnet-5-5"
+  ],
+  "observed_init_model": "claude-sonnet-5-5",
+  "permission_denials_count": 0,
+  "previous_receipt": "implementation-receipt.repair1.json",
+  "prompt_bytes": 1343,
+  "prompt_sha256": "9fe4dc371598c9cf152b949ce9f9a6b36d836190bb2973ca3dcb812f52f6f005",
+  "provider_is_error": false,
+  "provider_process_exit": 0,
+  "schema_version": 1,
+  "state": "repair2_complete_pending_final_astra_review",
+  "subagent_enabled": false,
+  "supervisor": {
+    "elapsed_ms": 32015,
+    "outer_elapsed_ms": 33797,
+    "provider_exit": 0,
+    "provider_started": true,
+    "state": "process_finished",
+    "supervisor_exit": 0,
+    "supervisor_stderr_bytes": 0,
+    "windows_job_closed": true
+  },
+  "task_id": "onia-development-pilot-repair2-20261015",
+  "tests": {
+    "passed": 28,
+    "run": 31,
+    "skip_reasons": [
+      "execute bit not modelled on Windows",
+      "symlinks unavailable",
+      "symlinks unavailable"
+    ],
+    "skipped": 3
+  },
+  "tool_results": [
+    {
+      "is_error": false,
+      "tool_use_id": "toolu_014woQe5dhKi8VPgd2RzGoWA"
+    },
+    {
+      "is_error": false,
+      "tool_use_id": "toolu_0163RNiv41bzaLUW3cwurq4C"
+    },
+    {
+      "is_error": false,
+      "tool_use_id": "toolu_01JDiZUdupik7xBBwzdABidC"
+    },
+    {
+      "is_error": false,
+      "tool_use_id": "toolu_01JU8CNYVkvKHx5fwviSHk55"
+    },
+    {
+      "is_error": false,
+      "tool_use_id": "toolu_01AdxLvP4yjFnoHvaygXvZgv"
+    },
+    {
+      "is_error": false,
+      "tool_use_id": "toolu_01SxXPyVmm9Ho1jMv9ALZVQV"
+    },
+    {
+      "is_error": false,
+      "tool_use_id": "toolu_01E82ycV56vSRAm7qSQ4ZR9k"
+    },
+    {
+      "is_error": false,
+      "tool_use_id": "toolu_01V3x2DmwtRzXRueqPXk13gB"
+    },
+    {
+      "is_error": false,
+      "tool_use_id": "toolu_01CV3sPx63RUJfs8o18nKUUG"
+    },
+    {
+      "is_error": false,
+      "tool_use_id": "toolu_01Bxd2daKEabHcTbQizoKory"
+    },
+    {
+      "is_error": false,
+      "tool_use_id": "toolu_015cZq1cYZaQM887ByeeuKrm"
+    },
+    {
+      "is_error": false,
+      "tool_use_id": "toolu_01UwGXkPcaJzE7pDhsYkfd5v"
+    },
+    {
+      "is_error": false,
+      "tool_use_id": "toolu_01VfDKxohxBTwA3oBaaxW8GD"
+    },
+    {
+      "is_error": false,
+      "tool_use_id": "toolu_01AuAEhEGyrYcngzvkJ4cRq7"
+    },
+    {
+      "is_error": false,
+      "tool_use_id": "toolu_019rNqqdyKYWLtNoLpgL8gCe"
+    },
+    {
+      "is_error": false,
+      "tool_use_id": "toolu_01SbSzzPGhru1dqa3BdHcMkD"
+    }
+  ],
+  "tools_observed": [
+    {
+      "allowed_file_relative": null,
+      "id": "toolu_014woQe5dhKi8VPgd2RzGoWA",
+      "name": "Grep",
+      "parent_tool_use_id": null
+    },
+    {
+      "allowed_file_relative": "development_job.py",
+      "id": "toolu_0163RNiv41bzaLUW3cwurq4C",
+      "name": "Read",
+      "parent_tool_use_id": null
+    },
+    {
+      "allowed_file_relative": null,
+      "id": "toolu_01JDiZUdupik7xBBwzdABidC",
+      "name": "Grep",
+      "parent_tool_use_id": null
+    },
+    {
+      "allowed_file_relative": "test_development_job.py",
+      "id": "toolu_01JU8CNYVkvKHx5fwviSHk55",
+      "name": "Read",
+      "parent_tool_use_id": null
+    },
+    {
+      "allowed_file_relative": "test_development_job.py",
+      "id": "toolu_01AdxLvP4yjFnoHvaygXvZgv",
+      "name": "Read",
+      "parent_tool_use_id": null
+    },
+    {
+      "allowed_file_relative": null,
+      "id": "toolu_01SxXPyVmm9Ho1jMv9ALZVQV",
+      "name": "Grep",
+      "parent_tool_use_id": null
+    },
+    {
+      "allowed_file_relative": "development_job.py",
+      "id": "toolu_01E82ycV56vSRAm7qSQ4ZR9k",
+      "name": "Edit",
+      "parent_tool_use_id": null
+    },
+    {
+      "allowed_file_relative": "development_job.py",
+      "id": "toolu_01V3x2DmwtRzXRueqPXk13gB",
+      "name": "Edit",
+      "parent_tool_use_id": null
+    },
+    {
+      "allowed_file_relative": "development_job.py",
+      "id": "toolu_01CV3sPx63RUJfs8o18nKUUG",
+      "name": "Edit",
+      "parent_tool_use_id": null
+    },
+    {
+      "allowed_file_relative": "development_job.py",
+      "id": "toolu_01Bxd2daKEabHcTbQizoKory",
+      "name": "Edit",
+      "parent_tool_use_id": null
+    },
+    {
+      "allowed_file_relative": "development_job.py",
+      "id": "toolu_015cZq1cYZaQM887ByeeuKrm",
+      "name": "Edit",
+      "parent_tool_use_id": null
+    },
+    {
+      "allowed_file_relative": "development_job.py",
+      "id": "toolu_01UwGXkPcaJzE7pDhsYkfd5v",
+      "name": "Edit",
+      "parent_tool_use_id": null
+    },
+    {
+      "allowed_file_relative": "development_job.py",
+      "id": "toolu_01VfDKxohxBTwA3oBaaxW8GD",
+      "name": "Edit",
+      "parent_tool_use_id": null
+    },
+    {
+      "allowed_file_relative": "development_job.py",
+      "id": "toolu_01AuAEhEGyrYcngzvkJ4cRq7",
+      "name": "Edit",
+      "parent_tool_use_id": null
+    },
+    {
+      "allowed_file_relative": "test_development_job.py",
+      "id": "toolu_019rNqqdyKYWLtNoLpgL8gCe",
+      "name": "Edit",
+      "parent_tool_use_id": null
+    },
+    {
+      "allowed_file_relative": "README.md",
+      "id": "toolu_01SbSzzPGhru1dqa3BdHcMkD",
+      "name": "Edit",
+      "parent_tool_use_id": null
+    }
+  ],
+  "usage": {
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 13622,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "cache_creation_input_tokens": 13622,
+    "cache_read_input_tokens": 41129,
+    "fallback_credit": null,
+    "inference_geo": "global",
+    "input_tokens": 10,
+    "iterations": [
+      {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 3652,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 3652,
+        "cache_read_input_tokens": 14491,
+        "input_tokens": 2,
+        "output_tokens": 856,
+        "type": "message"
+      }
+    ],
+    "output_tokens": 4722,
+    "output_tokens_details": {
+      "thinking_tokens": 298
+    },
+    "server_tool_use": {
+      "web_fetch_requests": 0,
+      "web_search_requests": 0
+    },
+    "service_tier": "standard",
+    "speed": "standard"
+  }
+}

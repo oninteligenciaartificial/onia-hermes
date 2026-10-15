@@ -1,0 +1,88 @@
+{
+  "api_override_env_names": [],
+  "argv_public": [
+    "C:\\Users\\PC\\AppData\\Local\\OpenAI\\Codex\\bin\\2e5e00daee91c61d\\codex.exe",
+    "exec",
+    "--ignore-user-config",
+    "--ephemeral",
+    "--skip-git-repo-check",
+    "--sandbox",
+    "read-only",
+    "--model",
+    "gpt-6-astra",
+    "-c",
+    "model_reasoning_effort=\"medium\"",
+    "--json",
+    "-C",
+    "E:\\onia-wt\\claude-development-runtime-20261015",
+    "-"
+  ],
+  "attempt_id": "attempt-1",
+  "callback_calls": 1,
+  "configured_effort": "medium",
+  "configured_model": "gpt-6-astra",
+  "elapsed_ms": 17406,
+  "event_types": [
+    "item.completed",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "observed_model": null,
+  "preflight_auth_chatgpt": true,
+  "preflight_provider": "fallback",
+  "primary_absent": true,
+  "primary_provider_calls": 0,
+  "prompt_bytes": 9763,
+  "prompt_sha256": "2aee491564de6fc85fe0a14a29d98c1e21a161341de645f6867d8f9335b47610",
+  "provider_exit": 0,
+  "response": "- `_write_new(task_f, ...)` catches only `FileExistsError`. Disk-full or flush/fsync failures escape `run_job` and can leave a partial reservation. Subsequent calls return `consumed` although no provider ran, without reporting reconciliation. Catch other `OSError`s and report `needs_reconcile` when a reservation may exist.\n- `_sanitize_result` accepts `NaN` and infinite usage values. `json.dump` consequently writes `NaN`/`Infinity`, which are invalid standard JSON and can break receipt consumers. Reject nonfinite floats and use `allow_nan=False`.\n\n`completed` denotes artifact completion under the callback contract; it does not attest the served model. With absent `observed_model`, attestation correctly remains UNKNOWN.",
+  "response_sha256": "36a61d79ab1ae95626f68516d19ca38e765afdcef12f58ee67b7f4a4822d7c27",
+  "response_words": 90,
+  "runner_result": {
+    "attempt_id": "attempt-1",
+    "provider": "fallback",
+    "result": {
+      "model_observed": false,
+      "observed_model": null,
+      "response_sha256": "36a61d79ab1ae95626f68516d19ca38e765afdcef12f58ee67b7f4a4822d7c27",
+      "state": "ok",
+      "tools": [],
+      "usage": {
+        "cache_write_input_tokens": 0,
+        "cached_input_tokens": 12416,
+        "input_tokens": 22972,
+        "output_tokens": 316,
+        "reasoning_output_tokens": 156
+      }
+    },
+    "status": "completed"
+  },
+  "schema_version": 1,
+  "served_model_status": "UNKNOWN",
+  "source_after_sha256": {
+    "README.md": "59129d607d968b1bdad08a42a8313d0e935dece357aa5d858ab7da63fa356d9a",
+    "development_job.py": "ce61e5570d416a369b9722749c0fa8388163a0bb8267a71c359e11ca83a9833d",
+    "test_development_job.py": "f67a2115cfa706da50b9496fd2d4ff4f23fd12a740c3bf84533420c359f96220"
+  },
+  "source_before_sha256": {
+    "README.md": "59129d607d968b1bdad08a42a8313d0e935dece357aa5d858ab7da63fa356d9a",
+    "development_job.py": "ce61e5570d416a369b9722749c0fa8388163a0bb8267a71c359e11ca83a9833d",
+    "test_development_job.py": "f67a2115cfa706da50b9496fd2d4ff4f23fd12a740c3bf84533420c359f96220"
+  },
+  "source_unchanged": true,
+  "state": "completed",
+  "supervisor_exit": 0,
+  "supervisor_stderr_bytes": 0,
+  "task_id": "onia-real-fallback-20261015",
+  "tools_observed": [],
+  "turn_completed": true,
+  "usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 12416,
+    "input_tokens": 22972,
+    "output_tokens": 316,
+    "reasoning_output_tokens": 156
+  },
+  "windows_job_closed": true
+}

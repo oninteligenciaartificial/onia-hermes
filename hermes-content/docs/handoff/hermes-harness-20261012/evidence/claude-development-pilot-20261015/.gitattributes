@@ -1,0 +1,2 @@
+# Preserve observed source/receipt byte hashes across Windows checkouts.
+* -text

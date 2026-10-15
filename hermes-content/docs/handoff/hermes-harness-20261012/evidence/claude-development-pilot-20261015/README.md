@@ -1,0 +1,43 @@
+# Local development pilot — Claude implements, Astra reviews
+
+META / proof / stop and source bindings are in `contract.md`. Claude authored `development_job.py`, tests and `CLAUDE_README.md` through observed file tools. The operator only prepares contracts, runs installed CLIs/tests and publishes sanitized receipts; root Astra reviews implementation. No new installation, VPS deployment, restart, R4/browser action or production permission is covered.
+
+The first implementation used one explicit read-only `onia-reader` subagent (Sonnet5.5, Read/Grep/Glob, two turns maximum). Real stream events link parent Agent invocation to a successful child Read, then Agent completion. Configured tools are not counted as observed usage. Parent file writes/edits were observed with zero permission denials. Native built-in plugins appeared in init metadata; no user-installed plugin was observed. No claim of zero plugins or OS filesystem isolation is made. File rules are best-effort for Glob/Grep; WindowsJob controls process-tree lifetime, not filesystem access.
+
+Root Astra found persistence/dry-run/path/identifier/filename issues in the first code and required a focused Claude repair. The initial receipt is preserved separately; the current `implementation-receipt.json` reports the repair/live state. The reviewed pre-effect fallback was subsequently executed once, and its findings were repaired by Claude. Missing executable is the only eligible primary preflight failure; authentication failures and all post-dispatch ambiguity block fallback.
+
+## Visibility decision
+
+Sergio Urcullo selected the already installed **Warp** as his visible terminal. Reuse its [documented startup layout](https://docs.warp.dev/terminal/sessions/launch-configurations) and [URI handler](https://docs.warp.dev/terminal/more-features/uri-scheme) for the passive, sanitized `show_progress.py` view. It shows only this job's model/phase, tool names, approved relative filenames, subagent lineage and receipt status; no raw prompts, Read contents, secrets or private streams. It never launches Claude/Codex. This window is not a provider TTY session; it reads the current receipt phase and follows updates. The native CLI runs separately under the controlled WindowsJob supervisor. The earlier Windows Terminal viewer is left intact; another passive view does not duplicate a provider session.
+
+[WezTerm](https://wezterm.org/) remains an optional terminal alternative; Microsoft IntelligentTerminal/ACP integration remains an investigated experimental option. Neither is installed or adopted here. Reuse the existing app/terminal before adding another interface/framework.
+
+Warp verification: official `warp://tab_config/onia_claude_receipt_viewer` opened the passive viewer; Python27076 → PowerShell19808 → Warp5880, window title **ONIA | Claude actividad pasiva**, observed by the independent UI worker. Local dedicated Tab Config SHA256 `f04b2f7c2a8f80aff574c26265d7c7bf4fdaa6f73add157f45b0ccd0e74dd441`. The earlier legacy launch URI attempt did not produce a viewer child; no cause was inferred. Existing Windows Terminal viewer stayed intact. No additional Claude/Codex session was opened for the UI.
+
+## Executed proof and review
+
+- Claude initial implementation: Sonnet5.5 observed,97846ms receipt/99484ms CLI; one real Agent invocation with successful nested Read and completed result; Write/Edit produced the code. Root Astra rejected concrete persistence/path/ID/dry-run defects.
+- Claude repair1: Sonnet5.5 observed,73378ms receipt/75000ms CLI, no Agent. Root Astra GO for trusted local pilot. One real automatic Codex fallback review then found two additional defects; its findings drove the next repair.
+- Claude repair2: Sonnet5.5 observed,30306ms receipt/32015ms CLI,16file tools, no Agent and zero denials. Root Astra final core GO for SHA256 `0b43b2b94c1c704da8e04954ae928ab579d69d87ba685759ef7997319e74b578`.
+- Final core tests:31run,28passed,3skipped (Windows execute-bit semantics; two unavailable symlink privilege cases). Operator glue3offline tests passed. No model was invoked for glue validation or after the final repair.
+- Real fallback: intentionally nonexistent absolute primary path → authenticated ChatGPT Codex CLI → one callback,17406ms,exit0/turn.completed,90words,source hashes unchanged. Requested/configured Astra medium; served model UNKNOWN because observed JSON events contain no served-model identifier. Actual tools observed in that call: none. No primary model call, no post-dispatch retry. Callback ran under the existing WindowsJob and closed it. Its two real code findings were preserved and repaired, not replaced with a template response.
+
+Receipts: `implementation-receipt.initial.json`, `implementation-receipt.repair1.json`, current `implementation-receipt.json`, and `fallback-receipt.json`. Raw provider streams and prompts used operationally remain private outside Git. These are CLI invocation counts, not a guarantee of one internal provider HTTP request, billed dollars or measured savings. Usage/cache fields are observed per receipt; cost fields are CLI estimates only.
+
+## Canonical local commands
+
+`run_review_pilot.py` is a maintained operator CLI around the Claude-authored selector. It accepts trusted manual inputs and performs local nonsecret **text review**: stable Sonnet text profile as primary, Codex Astra-medium read-only review as fallback only if the primary executable is clearly absent. It is not an admission boundary for untrusted MCP jobs and does not enable full remote coding. The tool-enabled implementation/subagent run above is separately evidenced; it is not recreated by this review command.
+
+From this folder, dry-run (no model and no state directory creation):
+
+```powershell
+python -B run_review_pilot.py --workspace E:/onia-wt/claude-development-runtime-20261015 --state-root "$env:LOCALAPPDATA/ONIA/development-review-state" --prompt-file contract.md --task-id NEW_UNIQUE_TASK_ID
+```
+
+The same reviewed command with `--execute` consumes the new task; use a new explicitly authorized task ID and nonsecret bounded prompt. Existing/consumed IDs never replay. To exercise the deliberate missing-primary fallback, supply `--primary E:/onia-wt/claude-development-runtime-20261015/definitely-missing-primary.exe`; this is a test injection, not an auth/quota failure. The already executed fallback task must not be repeated. `--help` and the default dry-run were tested without a provider request; the canonical dry-run selected fallback and left its nonexistent state directory absent.
+
+`operator_supervisor.py --packet TRUSTED_REVIEWED_PACKET.json --receipt PRIVATE_UNUSED_RECEIPT.json` is dry-run by default; adding `--execute` starts exactly one reviewed installed CLI recipe under WindowsJob, with stdin input, the existing subscription-safe child environment and auth preflight. Only two explicit installed executable paths are admitted; packets remain trusted manual inputs, not a reusable VPS/MCP security boundary. It reserves/fsyncs before launch, writes a separate result, closes the job, waits for the direct parent and closes pipes. Parent wait does not attest every descendant was reaped. Launch/persist/timeout uncertainty is reconciliation, never fallback.
+
+## Next production gate — not authorized by the earlier text activation
+
+No tool-enabled code or fallback was deployed on VPS. A future approval package must choose a dedicated least-privilege development workspace/runtime without production credentials, its effective file/process boundary and subscription auth under that identity, the exact tool/subagent grants and timeout/receipt paths, then a bounded real coding task and independent review. Current permission rules/cwd are not an OS filesystem sandbox. Any Hermes MCP registration/service change needs its own config diff, backup/restart/rollback and trusted origin/approval binding. Codex CLI is absent on VPS; installing/authenticating it for remote fallback is a separate explicit choice, not a prerequisite imposed on the existing Claude text bridge. Running gateway/Telegram origin, unattended grants, remote coding/subagents and PC-off behavior remain unproven.
