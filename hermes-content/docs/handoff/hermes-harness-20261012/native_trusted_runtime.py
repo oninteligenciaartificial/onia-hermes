@@ -1,14 +1,25 @@
 """Trusted in-process wiring for the existing finite native-work harness.
 
 The caller supplies already-open queue/bridge/transport/sink objects. This
-module never creates or migrates the operational queue, sends Telegram
-messages, submits work, or starts a scheduler. Telegram approval callbacks only
-record the authenticated one-use grant; a separate explicit event is required
-to reach the native-work entrypoint.
+module never creates or migrates the operational queue or starts a scheduler.
+``send_approval_prompt`` sends one approval message only after the adapter is
+connected. Telegram approval callbacks only record the authenticated one-use
+grant; a separate explicit event is required to reach the native-work
+entrypoint and may submit through the already-bound transport.
 """
 from __future__ import annotations
 
+import hashlib
+import importlib
+import re
 import time
+
+
+_PROMPT_SECRET_MARKER = re.compile(
+    r"(?i)(?:\b(?:api[_ -]?key|access[_ -]?token|password|secret|authorization|bearer)\b\s*[:=]"
+    r"|\bsk-[A-Za-z0-9_-]{20,}\b|\b(?:ghp|github_pat)_[A-Za-z0-9_]{20,}\b"
+    r"|\b\d{6,12}:[A-Za-z0-9_-]{30,}\b|-----BEGIN (?:RSA |OPENSSH )?PRIVATE KEY-----)"
+)
 
 
 class NativeTrustedRuntime:
@@ -96,6 +107,19 @@ class NativeTrustedRuntime:
         self.adapter._handle_callback_query = dispatch
         return self
 
+    def uninstall_before_connect(self):
+        """Restore the original callback only while no PTB app captured it."""
+        if self._original_callback is None:
+            raise RuntimeError("native callback runtime is not installed")
+        if getattr(self.adapter, "_app", None) is not None:
+            raise RuntimeError("cannot uninstall after TelegramAdapter.connect()")
+        current = getattr(self.adapter, "_handle_callback_query", None)
+        if getattr(current, "_native_trusted_runtime", None) is not self:
+            raise RuntimeError("native callback wrapper ownership changed")
+        self.adapter._handle_callback_query = self._original_callback
+        self._original_callback = None
+        return self
+
     def issue_approval(self, request, *, actor_id, private_chat_id, now=None, ttl=120):
         """Prepare a callback only for the exact bound request and a live lease.
 
@@ -144,6 +168,8 @@ class NativeTrustedRuntime:
             raise RuntimeError("current queue lease required; approval held")
         if self.native_runtime.bridge.read(request.operation_id) is not None:
             raise RuntimeError("operation already exists; approval held for reconciliation")
+        if str(actor_id).strip() != str(private_chat_id).strip():
+            raise ValueError("approval actor must match the private Telegram chat")
         return self.authority.issue(
             request, actor_id=actor_id, private_chat_id=private_chat_id,
             now=now, ttl=ttl,
@@ -151,6 +177,114 @@ class NativeTrustedRuntime:
 
     def bind_sent_message(self, callback_data, message_id):
         return self.authority.bind_sent_message(callback_data, message_id)
+
+    async def send_approval_prompt(self, *, actor_id, private_chat_id, now=None, ttl=120):
+        """Send one request-bound approval to the trusted actor's private chat.
+
+        The adapter bot sends exactly once. Ambiguous delivery leaves the
+        challenge unbound and returns HOLD; callers must never retry this
+        delivery automatically. A successfully returned Telegram message is
+        checked against the requested chat before its message ID is bound.
+        """
+        now = self._now() if now is None else now
+        if type(now) is not int or now < 0:
+            return {"state": "hold", "code": "approval_context_unavailable"}
+        trusted_actor_id = str(actor_id or "").strip()
+        trusted_chat_id = str(private_chat_id or "").strip()
+        if not trusted_actor_id or trusted_actor_id != trusted_chat_id:
+            return {"state": "hold", "code": "approval_context_unavailable"}
+        if (getattr(self.adapter, "_app", None) is None
+                or getattr(self.adapter, "_bot", None) is None
+                or getattr(self.adapter._app, "running", None) is not True
+                or getattr(self.adapter._app, "bot", None) is not self.adapter._bot
+                or getattr(getattr(self.adapter, "_handle_callback_query", None),
+                            "_native_trusted_runtime", None) is not self):
+            return {"state": "hold", "code": "approval_context_unavailable"}
+
+        try:
+            button_types = importlib.import_module(type(self.adapter).__module__)
+            if type(self.adapter) is not getattr(button_types, "TelegramAdapter", None):
+                return {"state": "hold", "code": "approval_context_unavailable"}
+            button = getattr(button_types, "InlineKeyboardButton", None)
+            markup = getattr(button_types, "InlineKeyboardMarkup", None)
+            send_message = getattr(self.adapter._bot, "send_message", None)
+            if not callable(button) or not callable(markup) or not callable(send_message):
+                return {"state": "hold", "code": "approval_context_unavailable"}
+            request = self.native_runtime.request
+            plan = self.native_runtime.plan
+            _, _, reviewed_plan_sha = plan.request()
+            if (request.plan_sha != reviewed_plan_sha
+                    or request.input_sha != reviewed_plan_sha
+                    or request.repo != "onia-hermes"
+                    or request.ref != plan.branch
+                    or request.head != plan.expected_remote_head):
+                return {"state": "hold", "code": "approval_context_unavailable"}
+            public_prompt = plan.public_prompt_file.read_bytes()
+            if (len(public_prompt) > 2048
+                    or hashlib.sha256(public_prompt).hexdigest() != plan.prompt_sha256):
+                return {"state": "hold", "code": "approval_context_unavailable"}
+            prompt_text = public_prompt.decode("utf-8", errors="strict")
+            purpose_lines = [line[len("ONIA_PURPOSE:"):].strip()
+                             for line in prompt_text.splitlines()
+                             if line.startswith("ONIA_PURPOSE:")]
+            if (len(purpose_lines) != 1
+                    or not purpose_lines[0]
+                    or len(purpose_lines[0]) > 500
+                    or any(ord(char) < 32 for char in purpose_lines[0])
+                    or _PROMPT_SECRET_MARKER.search(purpose_lines[0])):
+                return {"state": "hold", "code": "approval_context_unavailable"}
+            purpose = purpose_lines[0]
+            body = (
+                "Solicitud de trabajo nativo\n"
+                "Acción: enviar una tarea Codex Cloud (un solo envío).\n"
+                f"Propósito revisado (input SHA-256 {plan.prompt_sha256}):\n{purpose}\n"
+                f"Tarea: {request.task_id}\n"
+                f"Contrato: {request.contract_id}\n"
+                f"Repositorio/ref: {request.repo} · {request.ref}\n"
+                f"HEAD esperado: {request.head}\n"
+                f"Solicitud SHA-256: {request.digest()}\n"
+                f"Input SHA-256: {request.input_sha}\n"
+                f"Operación: {request.operation_id}\n"
+                f"Resultados permitidos: {', '.join(request.result_paths)}\n"
+                f"Límites: 1 envío; hasta {request.max_status_events}/2 eventos de estado; "
+                f"hasta {request.max_result_events}/1 evento de resultado.\n"
+                f"Plan SHA-256: {request.plan_sha}\n"
+                f"Expira en {ttl} s. Autorizar registra el permiso; no envía el trabajo."
+            )
+            if len(body) > 3500:
+                return {"state": "hold", "code": "approval_context_unavailable"}
+            callbacks = self.issue_approval(
+                request, actor_id=trusted_actor_id, private_chat_id=trusted_chat_id,
+                now=now, ttl=ttl,
+            )
+        except Exception:
+            return {"state": "hold", "code": "approval_preflight_failed",
+                    "operation_id": getattr(self.native_runtime.request, "operation_id", None)}
+
+        try:
+            keyboard = markup([
+                [button("Autorizar", callback_data=callbacks["approve"]),
+                 button("Rechazar", callback_data=callbacks["deny"])],
+            ])
+            sent = await send_message(chat_id=trusted_chat_id, text=body,
+                                      reply_markup=keyboard)
+            sent_chat = getattr(sent, "chat", None)
+            sent_chat_id = getattr(sent_chat, "id", None)
+            sent_message_id = getattr(sent, "message_id", None)
+            if (str(getattr(sent_chat, "type", "")) != "private"
+                    or str(sent_chat_id).strip() != trusted_chat_id
+                    or type(sent_message_id) is not int or sent_message_id <= 0):
+                return {"state": "hold", "code": "approval_delivery_unknown",
+                        "operation_id": request.operation_id}
+            self.bind_sent_message(callbacks["approve"], sent_message_id)
+            return {"state": "awaiting_telegram_approval",
+                    "operation_id": request.operation_id,
+                    "message_id": str(sent_message_id), "expires_at": now + ttl}
+        except Exception:
+            # Sending may have succeeded remotely. Do not resend; without a
+            # verified message binding the callback cannot authorize work.
+            return {"state": "hold", "code": "approval_delivery_unknown",
+                    "operation_id": request.operation_id}
 
     async def handle_callback(self, query, *, now=None):
         """Expose the same authenticated callback path for adapter integration tests."""

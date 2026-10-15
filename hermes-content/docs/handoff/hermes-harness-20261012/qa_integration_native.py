@@ -196,9 +196,9 @@ class NativeIntegrationAdversarialTests(unittest.TestCase):
             submit.assert_not_called()
         with queue._connection() as conn:
             conn.execute("UPDATE controller_guard_state SET stopped=0,epoch=epoch+1")
-        buttons = runtime.issue_approval(request, actor_id="1", private_chat_id="2", now=109)
+        buttons = runtime.issue_approval(request, actor_id="1", private_chat_id="1", now=109)
         runtime.bind_sent_message(buttons["approve"], "3")
-        self.assertEqual(asyncio.run(runtime.handle_callback(callback(buttons["approve"]), now=109)),
+        self.assertEqual(asyncio.run(runtime.handle_callback(callback(buttons["approve"], chat="1"), now=109)),
                          "approved")
         with patch.object(transport, "submit", return_value={"state": "submitted",
                                                              "client_attempt_count": 1}) as submit:

@@ -1,0 +1,16 @@
+{
+  "result": "pass_offline_conditional",
+  "runtime_sha256": "FBD3015A859231D3B6661B6CD5AFEC3004CC2FC8BC1D6C940CAB206E79EB9AFF",
+  "launcher_sha256": "6D88D29894A558248E90765F15C001213C899DF9463E6E6E92DB2C287D3A8CAC",
+  "author_test_sha256": "9753CDC959A72ED43EDCF0657E8304AB5B130D250C929EFC1C8EFF06C9F1A3C8",
+  "runbook_sha256": "C4E1BD721CFC9D6D3E7F7E1607C3F947750473E406DF861A6FA579B6C169BA6A",
+  "qa_integration_sha256": "8553B4B8795AB5B3F515796CC88E4ADA0C8C44B4B09CAF9D6667BF83A8B0723B",
+  "command": "python -m unittest qa_launcher_sender qa_integration_native.NativeIntegrationAdversarialTests.test_wiring_routes_only_na_and_stop_holds_without_provider -v",
+  "exit_code": 0,
+  "tests_run": 2,
+  "tests_passed": 2,
+  "provider_called": false,
+  "operational_queue_touched": false,
+  "live_endpoint_installed": false,
+  "qa_launcher_sha256": "00A8CCC97BB61D5149C9CFD43BC457CBA7C4A34E5CFD2F37D07199FE269B4C60"
+}
