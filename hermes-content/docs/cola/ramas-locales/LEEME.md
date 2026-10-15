@@ -108,3 +108,17 @@ git fetch origin claude/optimistic-ride-1sp5fe   # trae b9acfa13
 git bundle verify plataforma-seguimiento-171-20261015.bundle
 git fetch plataforma-seguimiento-171-20261015.bundle claude/optimistic-ride-1sp5fe:seguimiento-171
 ```
+
+## 15-oct · `plataforma-barrido-usted-2-20261015.bundle` — LISTA PARA SUBIR
+
+El barrido de usted del aviso de solo lectura: la constante `MENSAJE_SUSCRIPCION_VENCIDA` (la manda `proxy.ts` a toda escritura de una
+cuenta en solo lectura) de usted y conservando dónde renovar, sus ~27 copias a mano en `app/api` reemplazadas por ella, el banner fijo de
+solo lectura, el modal de prueba vencida, el error de red, la venta de mostrador y el add-on del chatbot. 8 commits sobre `37560f53` (la
+cabeza de #171), hasta `c18d58c0`. `tsc` 0, eslint 0 y suite completa 11.659/0. Sale en el PR siguiente a #171 (la rama
+`claude/optimistic-ride-1sp5fe` se reinicia desde `master` cuando entre #171).
+
+```bash
+git fetch origin claude/optimistic-ride-1sp5fe   # trae 37560f53
+git bundle verify plataforma-barrido-usted-2-20261015.bundle
+git fetch plataforma-barrido-usted-2-20261015.bundle barrido-usted-2:barrido-usted-2
+```
