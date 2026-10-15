@@ -180,6 +180,20 @@ test('registro se omite en modo web y se comprueba con --texto-dir', async () =>
   assert.equal(local.promesas.find((p) => p.id === 'registro-nombre').estado, 'sigue');
 });
 
+test('registro-nombre sigue cuando el formulario pasa de usted («Nombre de su clínica»), como en producción desde el 15-oct', async () => {
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'web-vs-producto-paso2-'));
+  try {
+    await fs.cp(textoDir, dir, { recursive: true });
+    // Lo que MIRÉ en producción el 15-oct (mirar-register-paso2.mjs): el paso 2 del alta ya no dice «Nombre de tu …».
+    await fs.writeFile(path.join(dir, 'app-register-paso2.txt'), 'Cree su cuenta\nSu nombre\nCorreo electrónico\nContraseña\nNombre de su clínica\n');
+    const data = await ejecutar(['--texto-dir', dir, '--platform', fixtureRoot]);
+    assert.equal(data.promesas.find((p) => p.id === 'registro-nombre').estado, 'sigue');
+    await fs.writeFile(path.join(dir, 'app-register-paso2.txt'), 'Cree su cuenta\nSu nombre\nCorreo electrónico\n');
+    const sin = await ejecutar(['--texto-dir', dir, '--platform', fixtureRoot]);
+    assert.notEqual(sin.promesas.find((p) => p.id === 'registro-nombre').estado, 'sigue', 'sin el campo del nombre del negocio la promesa NO sigue');
+  } finally { await fs.rm(dir, { recursive: true, force: true }); }
+});
+
 test('las mutaciones L1 conservan su resultado: precio, obra y frase de promesa', async () => {
   const sample = await loadExample();
   sample.pages['precios.txt'] = sample.pages['precios.txt'].replace(/(Profesional\r?\n)890(\r?\nBs \/ mes)/, '$1' + '900' + '$2');

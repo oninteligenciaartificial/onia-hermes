@@ -255,6 +255,14 @@ CLI de Hermes.
   show origin/<rama>:<ruta>` y `git archive … | tar -x` en `/tmp`: nunca `checkout` en el árbol del carril. La
   verificación cambia veredictos: el «cursor CAFC repite números» de #145 bajó a MEDIUM porque el runner falla cerrado
   sin conciliación. Y dos lentes del mismo PR (#162) se contradijeron sobre si el silencio dispara; el repro lo decidió.
+- **Verificar las promesas de `onia.com.bo` desde la nube, sin bajar el HTML a mano** (15-oct): `NODE_USE_ENV_PROXY=1 NODE_EXTRA_CA_CERTS=/root/.ccr/ca-bundle.crt node
+  .claude/skills/onia-hermes-jarvis/scripts/web-vs-producto.mjs --base-web https://onia.com.bo --platform <carpeta con lib/pricing.ts, lib/subscription-plans.ts y
+  lib/plan-catalogo.ts>`. El `fetch` de Node no usa el proxy de la nube sin `NODE_USE_ENV_PROXY=1`. Los tres archivos de `lib/` se sacan de `master` con `git archive origin/master lib/…`
+  a una carpeta de `/tmp` (el árbol del carril no se toca). Medido el 15-oct 20:58 UTC: 0 diferencias de precio, los cuatro topes «coincide», 0 textos de obra, 7 promesas «sigue».
+  `registro-nombre` no se mide sin navegador: lo cubre `hermes-content/docs/research/qa-publicacion/2026-10-15/mirar-register-paso2.mjs <carpeta> <etiqueta>`, que elige el rubro
+  (dental y comercio), lee el paso 2 del alta y se va **sin escribir ni enviar** (crear cuentas es otra autorización). **Las anclas de este instrumento leen el copy público: cuando una
+  pantalla pasa de usted, la ancla se rompe en silencio.** El 15-oct `registro-nombre` buscaba «Nombre de tu» y producción ya dice «Nombre de su clínica»; ahora acepta «tu» o «su»
+  (prueba con mutación: sin el arreglo cae). Al pasar una pantalla a usted, buscar sus frases en `PROMESAS` y `ANCLAS` del script.
 - **PR «de usted» (copia) de más de 20 archivos: probar que es SOLO texto, no leerlo a ojo** (15-oct, #174: 68 archivos, +1.189 −211). Tres pasos, con los scripts de
   `hermes-content/docs/research/qa-publicacion/2026-10-15/`: (1) `solo-texto.cjs <repo> <base> <cabeza> <archivos…>` normaliza cada `.ts/.tsx` con el AST de TypeScript
   (todo texto, plantilla fija, texto JSX y comentario pasa a «§») y dice cuáles quedan idénticos: de 50 archivos, **45 idénticos** y 5 con estructura distinta, que se

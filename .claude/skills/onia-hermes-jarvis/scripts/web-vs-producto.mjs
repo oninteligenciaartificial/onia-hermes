@@ -30,7 +30,7 @@ export const PROMESAS = [
   { id: 'webs-desde-2000', pagina: 'servicios-webs.txt', frase: /Bs\s*2\.000/i },
   { id: 'usuarios-extra', pagina: 'precios.txt', frase: /en Crece y Profesional, las que necesites/i },
   { id: 'demo-30-min', pagina: 'contacto.txt', frase: /30 MINUTOS/i },
-  { id: 'registro-nombre', pagina: 'app-register-paso2.txt', frase: /Nombre de tu/i },
+  { id: 'registro-nombre', pagina: 'app-register-paso2.txt', frase: /Nombre de (?:tu|su)\b/i },
   { id: 'catalogo-contradictorio', pagina: 'ONIA_CATALOGO_DE_VENTA.md', manual: true },
 ];
 
