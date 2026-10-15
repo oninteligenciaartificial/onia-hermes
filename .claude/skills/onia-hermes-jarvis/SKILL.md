@@ -261,7 +261,12 @@ CLI de Hermes.
   leen a mano. (2) `literales-logicos.cjs` busca, en los idénticos, cadenas de **un solo token** que hayan cambiado (rutas, `href`, estados, códigos, palabras que espera el
   bot): el paso 1 NO las ve porque también las reemplaza por «§»; en #174 salieron 0 de 45. Los números y las expresiones regulares sí se comparan en el paso 1. (3) Si el PR
   toca el DETECTOR de tú/vos, `comparar-detector-tu-y-vos.mts` corre el viejo y el nuevo sobre casos escritos a mano (usted que no debe cazar, tú/vos que sí) y cuenta las
-  regresiones: el de #174 acertó 86 de 87 contra 68 del anterior, 0 regresiones. Límite: el método dice «solo texto», no «el texto es correcto»; la gramática de
+  regresiones: el de #174 acertó 86 de 87 contra 68 del anterior, 0 regresiones. (4) Esas 87 frases **se saturan**: en #175 dieron 86 y 86 (0 mejoras) porque lo que el PR
+  agrega son palabras que no escribí. Lo que vale es `comparar-detector-en-el-arbol.mts <carpeta>`: corre los dos detectores sobre TODO el texto real de `app`, `components` y `lib`
+  de un árbol sacado con `git archive … | tar -x -C <carpeta fuera del repo>` y lista lo que solo marca el viejo (regresión: el nuevo dejó pasar algo) y lo que solo marca el nuevo
+  (lo que corrige). #175 (15-oct): 51.859 textos de `master`, **0 que el nuevo deje pasar y 10 nuevos reales**; sobre el árbol del PR, viejo y nuevo dan lo mismo. Los hallazgos que
+  quedan en el árbol del PR se agrupan por carpeta: `admin`, `dev` y `api/admin` son voseo a Sergio Urcullo (permitido); el resto se lee a mano, y en #175 fueron 7 archivos de `lib/`,
+  todos falsos positivos o excluidos a propósito. Límite: el método dice «solo texto», no «el texto es correcto»; la gramática de
   `negocioSu` y los artículos del rubro se leen aparte. El TypeScript sale de `/opt/node22/lib/node_modules/typescript` (la nube no instala nada).
 - **Mirar páginas públicas con un solo script** (11-oct): `hermes-content/docs/research/qa-publicacion/2026-10-11/mirar-publico.mjs
   <carpeta> <etiqueta> <ruta>...`, con `BASE=https://onia.com.bo` para la web (por omisión, la app). Por ruta y ancho
