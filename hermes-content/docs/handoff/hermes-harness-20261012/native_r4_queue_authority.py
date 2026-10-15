@@ -72,3 +72,14 @@ def authorize_and_reserve_root_r4(
     return bridge.authorize_and_reserve_work(
         claim, request, RootReviewedR4Authority(), now
     )
+
+
+def revalidate_reserved_root_r4(
+    bridge: NativeReceiptBridge,
+    request: NativeWorkRequest,
+    now: int,
+) -> dict:
+    """Revalidate the same reserved R4 grant once; never create a new claim."""
+    if type(request) is not NativeWorkRequest:
+        raise ValueError("Root R4 revalidation requires the exact typed request")
+    return bridge.revalidate_reserved_work(request, RootReviewedR4Authority(), now)

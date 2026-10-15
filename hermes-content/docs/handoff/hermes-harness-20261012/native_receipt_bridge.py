@@ -315,6 +315,115 @@ class NativeReceiptBridge:
         return self.reserve(claim, request.operation_id, request.nonce, decision.evidence_ref,
                             now, request.plan_sha, _verified_work=(request, decision))
 
+    def revalidate_reserved_work(self, request: NativeWorkRequest,
+                                 authority: NativeWorkAuthority | None, now: int) -> dict:
+        """Revalidate one still-reserved finite operation without re-reserving.
+
+        This may refresh only the local authorization receipt. It cannot create
+        another task/operation, recover a consumed dispatch, or alter request
+        pins, event budgets, STOP epoch, or operation state. Callers must pass
+        the trusted authority used for this exact work contract.
+        """
+        _time(now)
+        if type(request) is not NativeWorkRequest or authority is None:
+            raise RuntimeError("typed request and trusted work authority required")
+        self._require_work_schema()
+        serialized_request = json.loads(json.dumps(asdict(request), sort_keys=True,
+                                                   separators=(",", ":")))
+        with self.queue._connection() as conn:
+            conn.execute("BEGIN IMMEDIATE")
+            row = conn.execute("SELECT * FROM native_operations WHERE operation_id=?",
+                               (request.operation_id,)).fetchone()
+            guard = conn.execute(
+                "SELECT stopped,epoch FROM controller_guard_state WHERE singleton=1"
+            ).fetchone()
+            if row is None or row["state"] != "reserved":
+                raise RuntimeError("only the exact unconsumed reserved operation can be revalidated")
+            if (row["task_id"] != request.task_id
+                    or row["input_sha"] != request.input_sha
+                    or row["nonce"] != request.nonce
+                    or row["authorization_ref"] != request.approval_claim_ref
+                    or row["dispatch_contract_sha"] != request.plan_sha):
+                raise RuntimeError("reserved operation pins differ from Root request")
+            if (row["surface"] is not None or row["remote_id"] is not None
+                    or row["observation_json"] is not None
+                    or row["observation_digest"] is not None or row["observed_at"] is not None):
+                raise RuntimeError("operation already has dispatch or remote-observation evidence")
+            if guard is None or guard["stopped"] or guard["epoch"] != row["stop_epoch"]:
+                raise RuntimeError("STOP state/epoch changed since reservation")
+            task = conn.execute("SELECT * FROM tasks WHERE task_id=?", (row["task_id"],)).fetchone()
+            if (task is None or task["status"] != "needs_reconcile"
+                    or task["effect_state"] != "needs_reconcile"
+                    or task["effect_key"] != request.operation_id
+                    or task["effect_name"] != "native_execution"
+                    or task["last_evidence"] != "native_reserved:" + request.operation_id
+                    or task["ambiguous_owner_id"] != row["owner_id"]
+                    or task["ambiguous_fencing_token"] != row["fencing_token"]
+                    or task["worker_id"] != request.worker_id
+                    or task["repo"] != request.repo or task["ref"] != request.ref
+                    or task["sha"] != request.head
+                    or task["contract_id"] != request.contract_id
+                    or task["input_sha"] != request.input_sha):
+                raise RuntimeError("reserved task identity/effect state changed")
+            events = json.loads(row["work_events_json"] or "{}")
+            if type(events) is not dict or events:
+                raise RuntimeError("status/result/QA event already consumed")
+            payload = row["work_authority_json"]
+            if (not payload or hashlib.sha256(payload.encode()).hexdigest() != row["work_authority_sha"]):
+                raise RuntimeError("persisted authority receipt integrity failed")
+            proof = json.loads(payload)
+            if (set(proof) not in ({"request", "authorization"},
+                                   {"request", "authorization", "revalidation_history"})
+                    or proof.get("request") != serialized_request):
+                raise RuntimeError("persisted request differs from exact Root-reviewed request")
+            history = proof.get("revalidation_history", [])
+            if type(history) is not list or history:
+                raise RuntimeError("one revalidation already used; explicit recovery required")
+            old_authorization = proof.get("authorization")
+            if (type(old_authorization) is not dict
+                    or type(old_authorization.get("expires_at")) is not int):
+                raise RuntimeError("persisted authorization receipt malformed")
+            if old_authorization["expires_at"] > now:
+                raise RuntimeError("reserved authorization is still valid; revalidation not consumed")
+            decision = authority.verify(request, now)
+            if type(decision) is not NativeWorkAuthorization or decision.verified is not True:
+                raise RuntimeError("Root authority did not revalidate this request")
+            if (decision.request_sha != request.digest()
+                    or decision.grant_nonce != request.nonce
+                    or decision.evidence_ref != row["authorization_ref"]
+                    or decision.scope != "native_work_closure"
+                    or decision.expires_at != now + 900
+                    or decision.expires_at <= old_authorization["expires_at"]):
+                raise RuntimeError("revalidated authority differs from bounded reserved grant")
+            expected_old = asdict(decision)
+            expected_old["expires_at"] = old_authorization.get("expires_at")
+            if old_authorization != expected_old:
+                raise RuntimeError("stored grant/actor/source/request changed; renewal denied")
+
+            updated = dict(proof)
+            updated["authorization"] = asdict(decision)
+            updated["revalidation_history"] = [{
+                "prior_authorization": old_authorization,
+                "revalidated_at": now,
+                "revalidation_time_source": "root_controller_supplied_unix_epoch",
+                "new_expires_at": decision.expires_at,
+            }]
+            updated_payload = json.dumps(updated, sort_keys=True, separators=(",", ":"))
+            updated_sha = hashlib.sha256(updated_payload.encode()).hexdigest()
+            cursor = conn.execute("""UPDATE native_operations
+                SET work_authority_json=?,work_authority_sha=?
+                WHERE operation_id=? AND state='reserved' AND work_authority_sha=?""",
+                (updated_payload, updated_sha, request.operation_id, row["work_authority_sha"]))
+            if cursor.rowcount != 1:
+                raise RuntimeError("reserved authority changed during revalidation")
+            conn.commit()
+        return {"operation_id": request.operation_id, "state": "reserved",
+                "request_sha": request.digest(), "authorization_expires_at": decision.expires_at,
+                "work_authority_sha": updated_sha,
+                "revalidated_at": now,
+                "revalidation_time_source": "root_controller_supplied_unix_epoch",
+                "revalidation_count": 1, "dispatch_count": 0}
+
     def admit_work_event_once(self, request: NativeWorkRequest, event: str,
                               event_id: str, now: int) -> bool:
         """Consume one event before read/QA; crash means no automatic re-execution.
