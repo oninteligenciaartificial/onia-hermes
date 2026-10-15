@@ -237,6 +237,10 @@ CLI de Hermes.
   (así se supo que corría `a7d8c1ed` y no el anterior a #136), más el `Last-Modified` de esos archivos como hora aproximada
   del checkout del build (06:55:58 GMT). Solo cambia si ese archivo cambió en el commit: elegí uno que sí. Para saber
   QUÉ commit corre sin acceso al VPS, comparar varios archivos de `public/` contra varios commits de `master`.
+  **La hora del build SIN depender de qué archivo cambió (15-oct):** `curl -sI https://app.onia.com.bo/_next/static/<buildId>/_buildManifest.js | grep -i last-modified`.
+  Ese archivo se regenera en CADA build, así que su `Last-Modified` es la hora del build (medido: `LIM7jeUwfaFnEKQWS22-R` → `12:54:16 GMT` en la publicación
+  de las 12:50, con `master` en `e28c7e90`, #172 mergeado a las 12:02). Une el `buildId` (qué build) con su hora (cuándo); sigue sin decir qué commit, pero la hora
+  más lo que `master` tenía entonces lo cierra. Hay que medir el `buildId` ANTES de la publicación para tener con qué compararlo.
   `app.onia.com.bo` está detrás de Cloudflare (`server: cloudflare`).
 - **El ejemplo de la prueba de un instrumento sale del sistema real, no del contrato** (11-oct, dos veces el mismo día). C3 (sección 16 del
   diagnóstico) pasó sus 10 pruebas con líneas de crontab directas y, con el crontab que instala `aplicar.sh` (todo envuelto en `onia-latido.sh '<comando>'`),
