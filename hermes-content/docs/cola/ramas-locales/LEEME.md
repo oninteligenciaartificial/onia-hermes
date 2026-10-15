@@ -17,6 +17,17 @@ git fetch <ruta>/hermes-ramas-locales-20261009.bundle 'refs/heads/*:refs/heads/*
 
 `git bundle verify <archivo>` dice si falta alguna base.
 
+## LISTA PARA SUBIR (15-oct, 13:22 UTC) — `plataforma-avisos-agenda-20261015.bundle`
+
+Rama `avisos-agenda` (`0d401442`), un commit sobre `94dbf460` (la cabeza de #173, U6). El aviso de la agenda en vivo deja
+de atribuirle al paciente lo que hizo la recepción («Se confirmó la cita de Fulano» en vez de «Fulano confirmó su cita»;
+medido en producción el 15-oct) y el aviso de la campana pasa de «Escribile» a «Escríbale». `tsc` 0, eslint 0, 283/283 en
+`lib/agenda`, la agenda y el trinquete. Va en el PR del barrido de usted 3, después de mergear #173. Si esta sesión murió:
+
+```bash
+git fetch <ruta>/plataforma-avisos-agenda-20261015.bundle avisos-agenda:avisos-agenda   # base: 94dbf460 en origin
+```
+
 ## SUBIDA (11-oct, 10:19 UTC) — `plataforma-152-restos-20261011.bundle`
 
 Rama `usted-todo` (`80f6fef1`, ya empujada a `claude/optimistic-ride-1sp5fe` el 11-oct a las 10:19 UTC): es #152 con U3 (#153), U4 (#148) y U5 (#149) adentro, sobre `master` `fd72cd55` (con #147).
