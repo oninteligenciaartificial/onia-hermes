@@ -82,15 +82,21 @@ la dirección de Sergio Urcullo.
 
 ## 4. EN VUELO (lo que se pierde o se traba si nadie lo sigue)
 
-**15-oct ~13:10 UTC:**
-- **U6 (Mi plan de usted) + #150 (P-01)**: rama `claude/optimistic-ride-1sp5fe` de onia-platform, cabeza `94dbf460`, **ya en
-  el remoto** (sin PR hasta las 13:10, para no arrancar un CI dentro de la ventana). Suite 11.786/0, `tsc` 0, eslint 0.
-  Revisión code-reviewer sonnet en curso. Falta: PR (cuerpo en `scratchpad/pr-u6-body.md`), CI verde, merge antes de las
-  15:20 y mirar a las 15:56. Mi plan no se ve con cuentas `zz-qa-*`: se mira con `scratchpad/render-miplan/` (arnés que
-  pinta el componente real con el CSS de producción).
-- **Barrido de usted 3** (importadora, comercio, `app/api` del cliente, mensajes del bot): rama **LOCAL** `barrido-usted-3` en
-  `/home/user/wt-barrido3`, sobre `94dbf460`, la hace un constructor sonnet. **Si la sesión muere, se pierde**: al terminar va
-  a un bundle en `docs/cola/ramas-locales/` o directo a la rama después de mergear U6. Sale a las 18:50.
+**15-oct 16:25 UTC:**
+- **Barrido de usted 4 = PR [#175](https://github.com/oninteligenciaartificial/onia-platform/pull/175)** (Equipo, Perfil y 2FA,
+  Seguridad, WhatsApp y chatbot, Facturación, correos de acceso, Mi web y el resto del panel): rama
+  `claude/optimistic-ride-1sp5fe` de onia-platform, cabeza `066e4ecf`, **en el remoto** (copia local: rama `barrido-usted-4`
+  en `/home/user/wt-barrido4`). Revisión code-reviewer cerrada (cambios menores: 2 MEDIUM, 7 LOW; la tabla está en el cuerpo
+  del PR). Suite 12.920/0, `tsc` 0, eslint 0. CI corriendo desde las 16:21. Falta: CI verde, marcarlo listo, merge antes de
+  las 18:20, sale a las 18:50 y se mira con cuentas QA (Equipo, Perfil, Seguridad, Facturación y un correo de recuperar
+  contraseña de una QA, leído en la bandeja).
+- **Para la madre (infra, no lo cambia un PR):** (1) los asuntos de los correos de acceso los fija el VPS en
+  `GOTRUE_MAILER_SUBJECTS_*` del contenedor `supabase-auth2`, en vos; valores de usted: «Confirme su correo · Onia»,
+  «Restablezca su contraseña · Onia», «Confirme el cambio de correo · Onia», «Su acceso a Onia». (2) Las plantillas de
+  WhatsApp ya aprobadas por Meta (bienvenida, primera cita, prueba por terminar) siguen en vos hasta editarlas en WhatsApp
+  Manager, y Meta las vuelve a revisar; el código ya las crea de usted y `asegurarPlantillasDeOnia` no pisa las existentes.
+  (3) Los flujos de n8n del VPS (cobranza, aviso de prueba, cumpleaños, seguimiento, resumen semanal, alta de WhatsApp)
+  siguen en tú; los JSON del repo son copias.
 - **17-oct 13:20 UTC:** mirar en vivo el banner, el 403 y el modal con «ZZ QA Clínica Chip» (primera QA en solo lectura).
 
 | Qué | Dónde | Cómo se retoma |
@@ -165,15 +171,19 @@ la dirección de Sergio Urcullo.
    es suya, las pantallas de «Mi web» (#168, #170).
 8. **CAFC del piloto** (SIAT etapa VI) e **infra de la bandeja en tiempo real** (una línea, §4).
 
-## 8. Próximos pasos (en orden, 15-oct 13:10 UTC)
+## 8. Próximos pasos (en orden, 15-oct 16:25 UTC)
 
-1. U6 + #150: PR desde las 13:10, CI, la revisión, merge antes de las 15:20; a las 15:56 mirar con el arnés local y en el
-   código publicado (Mi plan no se ve con cuentas QA).
-2. Barrido de usted 3: revisar lo que entregue el constructor, PR después de mergear U6, merge antes de las 18:20 y mirar la
-   pantalla de cotizaciones de importadora a 390 y 1440.
-3. Cuando Sergio Urcullo apruebe el pago QA: mirar el plan activo, la factura por correo y el checkout en «Plan activo».
-4. Contratos para Codex escritos y `pendiente`: **M1e** (el servidor exige enteros en las unidades enteras) y **A1** (lo
+1. #175 (barrido de usted 4): CI verde, listo, merge antes de las 18:20; a las 18:56 mirar Equipo, Perfil, Seguridad,
+   Facturación y un correo de recuperar contraseña de una QA, leído en la bandeja.
+2. Cuando Sergio Urcullo apruebe el pago QA: mirar el plan activo, la factura por correo y el checkout en «Plan activo».
+3. Contratos para Codex escritos y `pendiente`: **M1e** (el servidor exige enteros en las unidades enteras) y **A1** (lo
    omitido por teléfono queda como descartada con motivo). Los lanza la madre.
-5. #154 S2: Hermes QA volvió el 15-oct (E34-E36); pedirle la re-revisión con la medición de Traefik antes de mergear.
-6. 17-oct 13:20 UTC: mirar en vivo lo que ve una cuenta vencida con «ZZ QA Clínica Chip».
+4. #154 S2: Hermes QA volvió el 15-oct (E34-E36); pedirle la re-revisión con la medición de Traefik antes de mergear.
+5. 17-oct 13:20 UTC: mirar en vivo lo que ve una cuenta vencida con «ZZ QA Clínica Chip».
+6. Barrido de usted 5, sin apuro: en el código ya no queda texto de vos que lea un cliente (lo midió la revisión de #175 en
+   app, components, lib, public, data, hooks y n8n). Lo que sigue en el trinquete
+   (41) es el prompt del redactor de los agentes (`agents-plantilla.ts`, lo lee el modelo y ya le pide usted con la persona),
+   «Recibí su consulta» (primera persona), el panel del operador, `trial-del-operador.ts` y `PUBLIC_PRICING_ADDONS` (sin
+   pantalla). Lo pendiente es del detector: el tú con dos pronombres («pídeselo», «dáselo») y el voseo -arar/-erar/-irar
+   fuera de la lista («Dispará»), más `negocioSu` en el cron del drip (hoy `lib/email.ts` lo convierte a «su»).
 7. Lo que destraben sus respuestas (§7), en el orden del corte (`ONIA_1.0_CORTE.md`).
