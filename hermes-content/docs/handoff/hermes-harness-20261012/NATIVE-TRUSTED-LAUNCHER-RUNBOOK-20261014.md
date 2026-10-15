@@ -1,7 +1,9 @@
 # Native trusted launcher: wiring and activation preparation
 
-Status: local code and offline fixtures only. No Telegram endpoint, host entrypoint,
-service, provider, or production process was changed or started.
+Status: local code and offline fixtures only. The `/onia_native_*` caller is a
+local Telegram-adapter integration seam, not a connected or live Telegram
+endpoint. No Telegram endpoint, host entrypoint, service, provider, or
+production process was changed or started.
 
 ## What is wired
 
@@ -11,6 +13,24 @@ request, reviewed plan, current claim, and existing `FileResultSink`. It rejects
 an adapter whose `_app` is already populated, checks object identity through
 `NativeTrustedRuntime.bind`, installs the `na:` callback wrapper, and returns the
 runtime. It has no queue-path constructor and does not call `connect()`.
+
+The local caller exposes four no-argument commands: `/onia_native_submit`,
+`/onia_native_status`, `/onia_native_result`, and `/onia_native_qa`. It installs
+before `connect()` and wraps only the adapter's existing command/callback
+dispatchers; unrelated commands and callbacks continue through their original
+handlers. Each command requires a running adapter, a private chat where actor
+ID equals chat ID, the adapter's existing authorization gate, and an exact
+configured user allowlist with no wildcard. The command reply is only a short
+sanitized state acknowledgement; it does not send a result file or perform
+operator delivery.
+
+Submit requires the still-valid one-use request-bound approval. Status, result,
+and QA commands bind to the durable native receipt and persisted actor/request
+authority, then remain subject to the request's event caps. Restart does not
+recreate approval or authority and cannot grant a new effect. The Telegram
+caller has no setup/revalidation command and cannot invoke Root's setup
+revalidation path. These guarantees are covered only by local integration
+fixtures; no live Telegram connection or end-to-end command has been exercised.
 
 The Telegram adapter snapshot registers
 `CallbackQueryHandler(self._handle_callback_query)` while `connect()` builds its

@@ -156,6 +156,9 @@ class NativeIntegrationAdversarialTests(unittest.TestCase):
             async def _handle_callback_query(self, update, context):
                 calls.append("legacy")
 
+            async def _handle_command(self, update, context):
+                calls.append("legacy-command")
+
         adapter = Adapter()
         authority = TelegramNativeWorkAuthority(adapter, _capability=_FACTORY_CAPABILITY)
         with patch.object(TelegramNativeWorkAuthority, "_from_trusted_launcher", return_value=authority):

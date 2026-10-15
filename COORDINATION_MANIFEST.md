@@ -9,6 +9,12 @@
 - La única recolección se consumió: `E:\onia-wt\r4-result-collection-20261015.json` (SHA-256 prefijo `d7d339…`). La URL derivada abrió un composer sin job ni log; no hubo retry. No aparecieron los cuatro JSON públicos, así que ejecución/QA del browser Cloud no quedó probada. Resultado observado sigue `provider_status=ERROR`, causa interna `UNKNOWN`; no inferir que no existan artefactos privados. El hash del account ID del CLI coincide con el metadata local de Codex app; usuario/workspace de ChatGPT Browser no están verificados y el perfil de Chrome es ONIA, por lo que no atribuir el composer a una cuenta equivocada sin evidencia.
 - Cierre de límites: submit `1/1`, status `2/2`, resultado `1/1`; no quedan lecturas ni reintentos Cloud para este canario. Mantener el goal activo y reconciliar evidencia/causa fuera de más efectos de proveedor. La cola y el intent permanecen intactos.
 
+## Caller Telegram nativo (2026-10-15)
+
+- Goal sigue activo; el caller local pre-connect expone `/onia_native_*` y pasó QA offline (13/13 focal; 23/23 compatibilidad). No hay integración Telegram viva.
+- Entrega de resultados y recuperación siguen pendientes; R4 queda congelado con todos los límites consumidos y causa del ERROR `UNKNOWN`.
+- No emitir más llamadas Cloud en este canario. Dos lecturas diagnósticas suplementarias quedan pendientes de consentimiento específico.
+
 > **Vigencia corregida 2026-10-09:** el hilo de septiembre de abajo es historial,
 > no inventario vivo ni permiso para reactivar sesiones. La madre Claude local
 > sustituye a «Control» como orquestadora. Método: `equipo-de-agentes` y

@@ -11,8 +11,10 @@ from __future__ import annotations
 
 import hashlib
 import importlib
+import json
 import re
 import time
+import asyncio
 
 
 _PROMPT_SECRET_MARKER = re.compile(
@@ -20,6 +22,13 @@ _PROMPT_SECRET_MARKER = re.compile(
     r"|\bsk-[A-Za-z0-9_-]{20,}\b|\b(?:ghp|github_pat)_[A-Za-z0-9_]{20,}\b"
     r"|\b\d{6,12}:[A-Za-z0-9_-]{30,}\b|-----BEGIN (?:RSA |OPENSSH )?PRIVATE KEY-----)"
 )
+_NATIVE_COMMANDS = {
+    "/onia_native_submit": "submit",
+    "/onia_native_status": "status",
+    "/onia_native_result": "result",
+    "/onia_native_qa": "qa",
+}
+_NATIVE_COMMAND_NAMESPACE = "/onia_native_"
 
 
 class NativeTrustedRuntime:
@@ -31,6 +40,7 @@ class NativeTrustedRuntime:
         self.authority = authority
         self._now_fn = now_fn or (lambda: int(time.time()))
         self._original_callback = None
+        self._original_command = None
 
     @classmethod
     def bind(cls, adapter, *, queue, bridge, transport, request, plan, result_sink,
@@ -74,22 +84,32 @@ class NativeTrustedRuntime:
         return self.native_runtime.result_sink
 
     def install(self):
-        """Route only ``na:`` callbacks through the authenticated authority.
+        """Bind authenticated callbacks and explicit private event commands.
 
-        The adapter's existing callback method remains responsible for all
-        other callback prefixes. Install before TelegramAdapter.connect() so
-        initial and rebuilt applications register the same bound method.
+        The existing handlers remain responsible for every other callback and
+        command. The adapter registers these methods during connect, so install
+        before connect and before any application rebuild.
         """
         current = getattr(self.adapter, "_handle_callback_query", None)
         if not callable(current):
             raise TypeError("Telegram adapter callback dispatcher unavailable")
+        current_command = getattr(self.adapter, "_handle_command", None)
+        if not callable(current_command):
+            raise TypeError("Telegram adapter command dispatcher unavailable")
         if getattr(current, "_native_trusted_runtime", None) is self:
+            if (callable(current_command)
+                    and getattr(current_command, "_native_trusted_runtime", None) is not self):
+                raise RuntimeError("native command wrapper ownership changed")
             return self
         if getattr(current, "_native_trusted_runtime", None) is not None:
             raise RuntimeError("a different native callback runtime is already installed")
+        if (callable(current_command)
+                and getattr(current_command, "_native_trusted_runtime", None) is not None):
+            raise RuntimeError("a different native command runtime is already installed")
         if getattr(self.adapter, "_app", None) is not None:
             raise RuntimeError("install native callback runtime before TelegramAdapter.connect()")
         self._original_callback = current
+        self._original_command = current_command
 
         async def dispatch(update, context):
             query = getattr(update, "callback_query", None)
@@ -105,6 +125,26 @@ class NativeTrustedRuntime:
 
         dispatch._native_trusted_runtime = self
         self.adapter._handle_callback_query = dispatch
+        original_command = self._original_command
+
+        async def command_dispatch(update, context):
+            message = getattr(update, "message", None)
+            text = getattr(message, "text", None) if message is not None else None
+            first = text.split(maxsplit=1)[0] if isinstance(text, str) and text else ""
+            if not first.startswith(_NATIVE_COMMAND_NAMESPACE):
+                return await original_command(update, context)
+            event = _NATIVE_COMMANDS.get(first)
+            if event is None or text != first:
+                await self._reply_native_command(message, "hold_invalid_command")
+                return
+            result = await self._handle_authenticated_command(update, message, event)
+            state = result.get("state") if type(result) is dict else None
+            if type(state) is not str or not re.fullmatch(r"[a-z_]{1,48}", state):
+                state = "needs_reconcile"
+            await self._reply_native_command(message, state)
+
+        command_dispatch._native_trusted_runtime = self
+        self.adapter._handle_command = command_dispatch
         return self
 
     def uninstall_before_connect(self):
@@ -116,8 +156,13 @@ class NativeTrustedRuntime:
         current = getattr(self.adapter, "_handle_callback_query", None)
         if getattr(current, "_native_trusted_runtime", None) is not self:
             raise RuntimeError("native callback wrapper ownership changed")
+        current_command = getattr(self.adapter, "_handle_command", None)
+        if getattr(current_command, "_native_trusted_runtime", None) is not self:
+            raise RuntimeError("native command wrapper ownership changed")
         self.adapter._handle_callback_query = self._original_callback
+        self.adapter._handle_command = self._original_command
         self._original_callback = None
+        self._original_command = None
         return self
 
     def issue_approval(self, request, *, actor_id, private_chat_id, now=None, ttl=120):
@@ -296,6 +341,154 @@ class NativeTrustedRuntime:
 
         return handle_native_event(raw_input, self.native_runtime,
                                    now=self._now() if now is None else now)
+
+    async def _handle_authenticated_command(self, update, message, event):
+        """Build one event only from the bound request and an authenticated Update."""
+        request = self.native_runtime.request
+        now = self._now()
+        try:
+            if (getattr(self.adapter, "_app", None) is None
+                    or getattr(self.adapter._app, "running", None) is not True
+                    or getattr(self.adapter._app, "bot", None) is not getattr(self.adapter, "_bot", None)):
+                return {"state": "hold", "code": "runtime_unavailable"}
+            if not callable(getattr(self.adapter, "_should_process_message", None)):
+                return {"state": "hold", "code": "runtime_unavailable"}
+            if self.adapter._should_process_message(message, is_command=True) is not True:
+                return {"state": "hold", "code": "message_rejected"}
+            user = getattr(message, "from_user", None)
+            chat = getattr(message, "chat", None)
+            actor_id = self._trusted_telegram_id(getattr(user, "id", None))
+            chat_id = self._trusted_telegram_id(getattr(chat, "id", None))
+            update_id = getattr(update, "update_id", None)
+            if (actor_id is None or chat_id is None or actor_id != chat_id
+                    or str(getattr(chat, "type", "")) != "private"
+                    or getattr(user, "is_bot", False) is not False
+                    or type(update_id) is not int or update_id < 0
+                    or type(getattr(message, "message_id", None)) is not int
+                    or message.message_id <= 0
+                    or any(getattr(message, name, None) is not None
+                           for name in ("forward_origin", "sender_chat", "via_bot"))):
+                return {"state": "hold", "code": "telegram_identity_mismatch"}
+            if not self._explicit_actor_allowlisted(actor_id):
+                return {"state": "hold", "code": "telegram_exact_allowlist_required"}
+            gate = getattr(self.adapter, "_is_callback_user_authorized", None)
+            if not callable(gate):
+                return {"state": "hold", "code": "telegram_auth_gate_unavailable"}
+            if gate(actor_id, chat_id=chat_id, chat_type="private", thread_id=None,
+                    user_name=getattr(user, "username", None)) is not True:
+                return {"state": "hold", "code": "telegram_actor_unauthorized"}
+            if request is not self.native_runtime.request or not str(request.operation_id).strip():
+                return {"state": "hold", "code": "request_approval_mismatch"}
+            if event == "submit":
+                authorization = self.authority.verify(request, now)
+                if str(getattr(authorization, "actor", "")) != actor_id:
+                    return {"state": "hold", "code": "request_approval_mismatch"}
+            elif not self._persisted_actor_matches(request, actor_id):
+                return {"state": "hold", "code": "durable_work_authority_mismatch"}
+            event_id = f"tgcmd:{update_id}:{event}"
+            raw_input = json.dumps({
+                "schema": 1,
+                "event": event,
+                "event_id": event_id,
+                "operation_id": request.operation_id,
+                "request_sha": request.digest(),
+            }, sort_keys=True, separators=(",", ":"), allow_nan=False)
+        except Exception:
+            return {"state": "hold", "code": "authenticated_event_preflight_failed"}
+        # The native entrypoint may perform a bounded CLI action; never block PTB's async loop.
+        try:
+            return await asyncio.to_thread(self.handle_event, raw_input, now=now)
+        except Exception:
+            return {"state": "needs_reconcile", "code": "dispatch_outcome_unknown"}
+
+    def _explicit_actor_allowlisted(self, actor_id):
+        """Require an exact configured user allowlist; reject absent and wildcard gates."""
+        try:
+            module = importlib.import_module(type(self.adapter).__module__)
+            coerce = getattr(module, "_coerce_allow_set", None)
+            scoped_env = getattr(module, "_scoped_gate_env", None)
+            if not callable(coerce) or not callable(scoped_env):
+                return False
+            extra = getattr(getattr(self.adapter, "config", None), "extra", None)
+            extra = extra if isinstance(extra, dict) else {}
+            configured = []
+            if extra.get("allow_from") is not None:
+                configured.append(coerce(extra["allow_from"]))
+            env_allowlist = str(scoped_env("TELEGRAM_ALLOWED_USERS") or "").strip()
+            if env_allowlist:
+                configured.append(coerce(env_allowlist))
+            return bool(configured) and all(
+                isinstance(allowed, (set, frozenset, list, tuple))
+                and "*" not in {str(item).strip() for item in allowed}
+                and actor_id in {str(item).strip() for item in allowed}
+                for allowed in configured)
+        except Exception:
+            return False
+
+    def _persisted_actor_matches(self, request, actor_id):
+        """Bind later events to the exact durable grant, independent of TTL/restart."""
+        try:
+            from dataclasses import asdict
+            native = self.native_runtime.bridge.read(request.operation_id)
+            if (type(native) is not dict or native.get("task_id") != request.task_id
+                    or native.get("input_sha") != request.input_sha
+                    or native.get("nonce") != request.nonce
+                    or native.get("dispatch_contract_sha") != request.plan_sha
+                    or native.get("surface") != "cloud_cli_task"
+                    or native.get("state") not in {
+                        "dispatching", "submitted", "running", "unknown",
+                        "completed", "failed", "cancelled",
+                    }
+                    or type(native.get("remote_id")) is not str
+                    or not re.fullmatch(r"task_e_[0-9a-f]{32}", native["remote_id"])):
+                return False
+            payload = native.get("work_authority_json")
+            payload_sha = native.get("work_authority_sha")
+            if (type(payload) is not str or type(payload_sha) is not str
+                    or hashlib.sha256(payload.encode("utf-8")).hexdigest() != payload_sha):
+                return False
+            proof = json.loads(payload)
+            if (type(proof) is not dict
+                    or set(proof) != {"request", "authorization"}):
+                return False
+            canonical_request = json.loads(json.dumps(
+                asdict(request), sort_keys=True, separators=(",", ":")))
+            if (proof.get("request") != canonical_request
+                    or not isinstance(proof.get("authorization"), dict)):
+                return False
+            authorization = proof["authorization"]
+            if (set(authorization) != {"verified", "request_sha", "grant_nonce", "actor",
+                                       "authority_source", "evidence_ref", "expires_at", "scope"}
+                    or authorization.get("verified") is not True
+                    or authorization.get("request_sha") != request.digest()
+                    or authorization.get("grant_nonce") != request.nonce
+                    or authorization.get("scope") != "native_work_closure"
+                    or authorization.get("actor") != actor_id
+                    or authorization.get("evidence_ref") != native.get("authorization_ref")
+                    or authorization.get("authority_source") != "telegram_callback_allowlist"
+                    or type(authorization.get("expires_at")) is not int):
+                return False
+            return True
+        except Exception:
+            return False
+
+    @staticmethod
+    def _trusted_telegram_id(value):
+        if type(value) is int and value > 0:
+            return str(value)
+        if type(value) is str and 0 < len(value) <= 128 and value.isdigit():
+            return value
+        return None
+
+    @staticmethod
+    async def _reply_native_command(message, state):
+        reply = getattr(message, "reply_text", None) if message is not None else None
+        if not callable(reply):
+            return
+        try:
+            await reply(f"Native event: {state}")
+        except Exception:
+            return
 
     def _now(self):
         value = self._now_fn()

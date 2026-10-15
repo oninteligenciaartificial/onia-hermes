@@ -14,6 +14,7 @@ from native_result_store import FileResultSink
 from native_telegram_authority import TelegramNativeWorkAuthority, _FACTORY_CAPABILITY
 from native_trusted_launcher import install_native_trusted_runtime_before_connect
 from native_trusted_runtime import NativeTrustedRuntime
+from native_receipt_bridge import NativeObservation
 from sqlite_pilot import SQLiteQueue, TaskSpec
 
 
@@ -30,6 +31,8 @@ class Adapter:
         self._app = None
         self._bot = None
         self.sent = []
+        self.config = SimpleNamespace(extra={"allow_from": {"42"}})
+        self.command_allowed = True
 
     def _callback_ctx(self, query):
         return query
@@ -39,6 +42,19 @@ class Adapter:
 
     async def _handle_callback_query(self, update, context):
         return "legacy"
+
+    async def _handle_command(self, update, context):
+        return "legacy-command"
+
+    def _is_callback_user_authorized(self, user_id, **kwargs):
+        self.last_auth = (str(user_id), kwargs)
+        return self.command_allowed
+
+    def _should_process_message(self, message, *, is_command):
+        return is_command
+
+    def _log_blocked_user(self, message):
+        self.blocked = True
 
 
 class FakeButton:
@@ -67,6 +83,21 @@ class FakeBot:
             chat=SimpleNamespace(id=self.chat_id, type=self.chat_type),
             message_id=91,
         )
+
+
+class FakeMessage:
+    def __init__(self, text, *, actor="42", chat="42", chat_type="private", message_id=92):
+        self.text = text
+        self.from_user = SimpleNamespace(id=actor, is_bot=False, username="fixture")
+        self.chat = SimpleNamespace(id=chat, type=chat_type)
+        self.message_id = message_id
+        self.replies = []
+        self.forward_origin = None
+        self.sender_chat = None
+        self.via_bot = None
+
+    async def reply_text(self, text):
+        self.replies.append(text)
 
 
 class NativeTrustedLauncherTests(unittest.TestCase):
@@ -110,6 +141,8 @@ class NativeTrustedLauncherTests(unittest.TestCase):
         self.adapter_module = SimpleNamespace(
             TelegramAdapter=Adapter, InlineKeyboardButton=FakeButton,
             InlineKeyboardMarkup=FakeMarkup,
+            _coerce_allow_set=lambda value: set(value),
+            _scoped_gate_env=lambda _name: "",
         )
         self.factory_patch = patch.object(
             TelegramNativeWorkAuthority, "_from_trusted_launcher",
@@ -137,6 +170,13 @@ class NativeTrustedLauncherTests(unittest.TestCase):
         self.assertIs(runtime.result_sink, self.sink)
         self.assertIs(getattr(self.adapter._handle_callback_query,
                               "_native_trusted_runtime", None), runtime)
+        self.assertIs(getattr(self.adapter._handle_command,
+                              "_native_trusted_runtime", None), runtime)
+        with self.queue._connection() as conn:
+            self.assertEqual(conn.execute("SELECT status FROM tasks WHERE task_id=?",
+                                           (TASK,)).fetchone()["status"], "running")
+        self.assertEqual(self.authority._pending, {})
+        self.assertEqual(self.adapter.sent, [])
         late = Adapter()
         late._app = object()
         with self.assertRaisesRegex(RuntimeError, "before TelegramAdapter.connect"):
@@ -283,10 +323,195 @@ class NativeTrustedLauncherTests(unittest.TestCase):
         runtime.uninstall_before_connect()
         self.assertIsNone(getattr(self.adapter._handle_callback_query,
                                   "_native_trusted_runtime", None))
+        self.assertIsNone(getattr(self.adapter._handle_command,
+                                  "_native_trusted_runtime", None))
         runtime = self.install()
         self.connect_fixture()
         with self.assertRaisesRegex(RuntimeError, "after TelegramAdapter.connect"):
             runtime.uninstall_before_connect()
+
+    def test_launcher_fails_closed_when_command_seam_is_missing(self):
+        adapter = Adapter()
+        adapter._handle_command = None
+        original_callback = adapter._handle_callback_query
+        with self.assertRaisesRegex(TypeError, "command dispatcher unavailable"):
+            install_native_trusted_runtime_before_connect(
+                adapter, queue=self.queue, bridge=self.bridge, transport=self.transport,
+                request=self.request, plan=self.plan, result_sink=self.sink,
+            )
+        self.assertEqual(adapter._handle_callback_query, original_callback)
+
+    def _approve_request(self, runtime):
+        self.connect_fixture()
+        with patch("native_trusted_runtime.importlib.import_module",
+                   return_value=self.adapter_module):
+            sent = asyncio.run(runtime.send_approval_prompt(
+                actor_id="42", private_chat_id="42", now=NOW, ttl=30,
+            ))
+        self.assertEqual(sent["state"], "awaiting_telegram_approval")
+        data = self.adapter._bot.calls[0]["reply_markup"].inline_keyboard[0][0].callback_data
+        query = SimpleNamespace(
+            data=data, from_user=SimpleNamespace(id="42"),
+            message=SimpleNamespace(chat=SimpleNamespace(type="private"),
+                                    chat_id="42", message_id=91),
+            answer=lambda **_kwargs: asyncio.sleep(0),
+        )
+        asyncio.run(self.adapter._handle_callback_query(
+            SimpleNamespace(callback_query=query), object()))
+        self.assertEqual(self.authority.verify(self.request, NOW).actor, "42")
+
+    def _prepare_predecessor(self):
+        prior_id = self.request.predecessor_task_id
+        prior = TaskSpec(prior_id, "prior-worker", self.request.repo, self.request.ref,
+                         self.request.head, self.request.contract_id, self.request.input_sha)
+        self.queue.enqueue(prior, 99)
+        prior_claim = self.queue.claim("prior-worker", "prior-owner", 100, 60).claim
+        prior_op = "00000000-0000-0000-0000-000000000098"
+        self.bridge.reserve(prior_claim, prior_op, "prior-nonce", "test:reviewed", 101,
+                            self.request.plan_sha)
+        self.bridge.ingest(NativeObservation(prior_op, "cloud_cli_task", "task_e_" + "2" * 32,
+                                             self.request.input_sha, "completed", 102,
+                                             "fixture:prior", "c" * 64), 102)
+        self.queue.resolve_reconciliation(prior_id, "applied", "fixture:prior-qa", 103)
+
+    def _invoke_command(self, update):
+        with patch("native_trusted_runtime.importlib.import_module",
+                   return_value=self.adapter_module):
+            return asyncio.run(self.adapter._handle_command(update, object()))
+
+    def test_explicit_private_command_calls_bound_submit_once_off_loop(self):
+        runtime = self.install()
+        self._prepare_predecessor()
+        self._approve_request(runtime)
+        submits = []
+
+        def fake_submit(operation_id, plan):
+            submits.append((operation_id, plan))
+            with self.assertRaises(RuntimeError):
+                asyncio.get_running_loop()
+            return {"operation_id": operation_id, "state": "submitted",
+                    "remote_id": TASK, "client_attempt_count": 1}
+
+        update = SimpleNamespace(update_id=7001, message=FakeMessage("/onia_native_submit"))
+        with patch.object(self.transport, "submit", side_effect=fake_submit):
+            self._invoke_command(update)
+            self._invoke_command(update)
+        self.assertEqual(len(submits), 1)
+        self.assertIs(submits[0][1], self.plan)
+        self.assertEqual(update.message.replies[0], "Native event: submitted")
+        self.assertEqual(update.message.replies[1], "Native event: needs_reconcile")
+        self.assertIsNotNone(self.bridge.read(OP))
+
+    def test_command_requires_exact_private_allowlisted_approved_update(self):
+        runtime = self.install()
+        self._approve_request(runtime)
+        submits = []
+        variants = (
+            FakeMessage("/onia_native_submit", actor="99"),
+            FakeMessage("/onia_native_submit", chat="99"),
+            FakeMessage("/onia_native_submit", chat_type="group"),
+            FakeMessage("/onia_native_submit argument"),
+        )
+        self.adapter.command_allowed = False
+        variants += (FakeMessage("/onia_native_submit"),)
+        with patch.object(self.transport, "submit", side_effect=lambda *args: submits.append(args)):
+            for index, message in enumerate(variants):
+                self._invoke_command(SimpleNamespace(update_id=8000 + index, message=message))
+        self.assertEqual(submits, [])
+        self.assertIsNone(self.bridge.read(OP))
+
+    def test_explicit_command_honors_controller_stop_before_transport(self):
+        runtime = self.install()
+        self._prepare_predecessor()
+        self._approve_request(runtime)
+        with self.queue._connection() as conn:
+            conn.execute("UPDATE controller_guard_state SET stopped=1,epoch=epoch+1 WHERE singleton=1")
+        submits = []
+        message = FakeMessage("/onia_native_submit")
+        with patch.object(self.transport, "submit", side_effect=lambda *args: submits.append(args)):
+            self._invoke_command(SimpleNamespace(update_id=9001, message=message))
+        self.assertEqual(submits, [])
+        self.assertEqual(message.replies, ["Native event: hold_stop"])
+
+    def test_durable_actor_allows_bounded_status_after_ttl_and_runtime_restart(self):
+        runtime = self.install()
+        self._prepare_predecessor()
+        self._approve_request(runtime)
+        def fake_submit(operation_id, plan):
+            self.bridge.ingest(NativeObservation(
+                operation_id, "cloud_cli_task", TASK, self.request.input_sha,
+                "submitted", NOW + 1, "fixture:submit"), NOW + 1)
+            return {"operation_id": operation_id, "state": "submitted",
+                    "remote_id": TASK, "client_attempt_count": 1}
+
+        submit_message = FakeMessage("/onia_native_submit")
+        with patch.object(self.transport, "submit", side_effect=fake_submit):
+            self._invoke_command(SimpleNamespace(update_id=7100, message=submit_message))
+        self.assertEqual(submit_message.replies, ["Native event: submitted"])
+
+        # A process restart loses the in-memory grant. The persisted exact
+        # authority receipt still binds the authenticated owner for later reads.
+        runtime.authority = TelegramNativeWorkAuthority(
+            self.adapter, _capability=_FACTORY_CAPABILITY)
+        runtime._now_fn = lambda: NOW + 500
+        status_calls = []
+
+        def fake_status(operation_id, executable):
+            status_calls.append((operation_id, executable))
+            return {"state": "running", "remote_id": TASK,
+                    "provider_status": "running"}
+
+        stranger = FakeMessage("/onia_native_status", actor="99", chat="99")
+        with patch.object(self.transport, "status", side_effect=fake_status):
+            self._invoke_command(SimpleNamespace(update_id=7101, message=stranger))
+            with self.queue._connection() as conn:
+                events_before = conn.execute(
+                    "SELECT work_events_json FROM native_operations WHERE operation_id=?",
+                    (OP,)).fetchone()["work_events_json"]
+            self.assertIn(events_before, (None, "{}"))
+
+            owner_update = SimpleNamespace(
+                update_id=7102, message=FakeMessage("/onia_native_status"))
+            self._invoke_command(owner_update)
+            self._invoke_command(owner_update)
+
+        self.assertEqual(len(status_calls), 1, owner_update.message.replies)
+        self.assertEqual(status_calls[0], (OP, self.plan.executable))
+        self.assertEqual(stranger.replies, ["Native event: hold"])
+        self.assertEqual(owner_update.message.replies,
+                         ["Native event: running", "Native event: needs_reconcile"])
+
+    def test_later_event_rejects_mutated_request_against_durable_receipt(self):
+        runtime = self.install()
+        self._prepare_predecessor()
+        self._approve_request(runtime)
+
+        def fake_submit(operation_id, plan):
+            self.bridge.ingest(NativeObservation(
+                operation_id, "cloud_cli_task", TASK, self.request.input_sha,
+                "submitted", NOW + 1, "fixture:submit"), NOW + 1)
+            return {"operation_id": operation_id, "state": "submitted",
+                    "remote_id": TASK, "client_attempt_count": 1}
+
+        with patch.object(self.transport, "submit", side_effect=fake_submit):
+            self._invoke_command(SimpleNamespace(
+                update_id=7200, message=FakeMessage("/onia_native_submit")))
+        runtime.authority = TelegramNativeWorkAuthority(
+            self.adapter, _capability=_FACTORY_CAPABILITY)
+        runtime._now_fn = lambda: NOW + 500
+        changed = replace(self.request, nonce="changed-nonce")
+        object.__setattr__(runtime.native_runtime, "request", changed)
+        status_calls = []
+        with patch.object(self.transport, "status", side_effect=lambda *args: status_calls.append(args)):
+            message = FakeMessage("/onia_native_status")
+            self._invoke_command(SimpleNamespace(update_id=7201, message=message))
+        with self.queue._connection() as conn:
+            events = conn.execute(
+                "SELECT work_events_json FROM native_operations WHERE operation_id=?",
+                (OP,)).fetchone()["work_events_json"]
+        self.assertEqual(status_calls, [])
+        self.assertIn(events, (None, "{}"))
+        self.assertEqual(message.replies, ["Native event: hold"])
 
 
 if __name__ == "__main__":
