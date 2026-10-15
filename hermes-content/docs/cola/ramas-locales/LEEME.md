@@ -98,9 +98,10 @@ Ya están en `master` (por contenido) y no se guardaron: `wip/p2` (presupuesto p
 ## 15-oct · `plataforma-seguimiento-171-20261015.bundle` — LISTA PARA SUBIR
 
 Los arreglos de las revisiones de onia-platform #171 (checkout de usted, motivo del QR rechazado a la vista, `/inbox` que no
-se cae, roles y clientes de usted, `fiados.ts` con teléfono numérico): 10 commits sobre `b9acfa13` (la cabeza de #171),
-hasta `e1ce918f`. `tsc` 0, eslint 0 y suite completa 11.430/0. Plataforma los sube a `claude/optimistic-ride-1sp5fe` a las
-:10, fuera de la ventana de publicación, junto con `m1c-arreglos`.
+se cae, roles y clientes de usted, `fiados.ts` con teléfono numérico), los de M1c (cantidades, cotización, traspaso y
+venta) y las lecciones en las skills: 16 commits sobre `b9acfa13` (la cabeza de #171), hasta `37560f53`. `tsc` 0, eslint 0
+y suite completa 11.625/0 (09:28 UTC). Plataforma los sube a `claude/optimistic-ride-1sp5fe` a las 10:11, fuera de la
+ventana de publicación.
 
 ```bash
 git fetch origin claude/optimistic-ride-1sp5fe   # trae b9acfa13
