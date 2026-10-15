@@ -1,5 +1,15 @@
 # Hermes Coordination Manifest
 
+## Reserva vigente — siguiente job VPS Claude, 2026-10-15
+
+- **META:** preparar activación mínima de Claude con herramientas/subagente en VPS, reutilizando runtime y sesión existentes; revisión/fallback local Astra ya demostrado, sin imponer Codex remoto.
+- **PRUEBA DE HECHO:** paquete revisable con mounts/permisos/límites explícitos, preflight de identidad/aislamiento antes modelo, test offline; ejecución real sólo tras aprobación específica.
+- **PARADA:** paquete listo para aprobación o incompatibilidad concreta. Sin nuevos modelos, instalaciones, contenedores, restart/deploy ni cambios de producción en preparación. No R4/queue/browser/Warp/Orca.
+- **CODE exclusivo:** `/root/cli_integration`, base `e252029a8c6f068a88d267e2fcc066924ad35c67`; root Astra revisa. Máximo un proveedor concurrente, sin fanout nuevo; Claude implementará cualquier código nuevo de producto tras diseño revisado.
+- Inspección read-only: auth Claude nativo 2.1.288 `loggedIn=true`, claude.ai/firstParty/Max y overrides ausentes; gateway active/config SHA256 `bf0f2ee8dc4fd4f9a8002b260df1100601d37805118e500080c9e2d8451bd5ae`. Docker existente; imagen local candidata `onia-gh-runner:2.337.0` ID `sha256:e1f1d2b4dfcfe89d2eabdaa924621ea2ffd616e962220a790f897849aee98326`, Linux amd64, user runner. No Codex CLI/bwrap/podman; no descarga ni login solicitados.
+- Paquete de activación preparado y revisado localmente: argv/config/prompt/script operativo, JSON/hashes/bash-n/diff checks PASS; sin modelos ni contenedores. Probe/1provider/tests secuenciales con cierreCID; test requiere provider PASS/review y al menos3 casos. Gate humano específico pendiente: nuevo montaje auth0600 RO en contenedorUID0; no login/chmod/copia. Tiempo continuo de preparación UNKNOWN.
+- Las credenciales root existentes son 0600: contenedor no-root no las leería sin cambio explícito de acceso. No se copian ni se cambian permisos implícitamente; el paquete debe resolver y exponer esta frontera antes de activar.
+
 ## Cierre local — desarrollo Claude con herramientas, 2026-10-15
 
 - **META:** un job local de desarrollo con Claude como implementador, un subagente de lectura y fallback pre-effect real a Codex CLI si su preflight está verificado; rootAstra revisa independientemente.

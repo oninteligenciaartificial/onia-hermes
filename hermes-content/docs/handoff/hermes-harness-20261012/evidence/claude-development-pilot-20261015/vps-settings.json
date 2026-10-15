@@ -1,0 +1,7 @@
+{
+  "disableAllHooks": true,
+  "enabledPlugins": {},
+  "claudeMdExcludes": [
+    "**"
+  ]
+}
