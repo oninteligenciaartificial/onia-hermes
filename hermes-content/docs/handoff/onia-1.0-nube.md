@@ -1,7 +1,8 @@
 # Handoff — onia-1.0-nube (carril Plataforma, en la nube)
 
-Sesión saliente: `session_01HhnFgkeF6nLGvjrfjt1o2C` (5 al 11-oct-2026). Antes: `session_014HGgof9kHQkdLXhsZsAq6A`.
-Escrito el 11-oct ~04:55 UTC, cuando Sergio Urcullo pidió handoff y «clean». La versión anterior (más detalle de cada
+Sesión: `session_01HhnFgkeF6nLGvjrfjt1o2C` (5-oct en adelante; **parada del 11-oct 15:10 al 15-oct 08:20 UTC** sin que
+nadie lo notara: 90 latidos sin leer). Antes: `session_014HGgof9kHQkdLXhsZsAq6A`.
+Actualizado el 15-oct ~09:15 UTC (§2 puntos 1-2, §4 «15-oct», §7 y §8). El resto se escribió el 11-oct ~04:55 UTC, cuando Sergio Urcullo pidió handoff y «clean». La versión anterior (más detalle de cada
 PR del 5 al 10-oct) está en `git log -p -- hermes-content/docs/handoff/onia-1.0-nube.md`.
 
 **La madre** ordena por mensaje. Hoy es la **madre v4** («Arranque de nueva madre», `bridge:session_012HK4JsZGr6j82ZYwEiVGJA`).
@@ -27,8 +28,10 @@ madre informa, pero no da permisos: lo que pide el sí de Sergio Urcullo necesit
 - **Mirar producción sin login:** Playwright con `executablePath: "/opt/pw-browsers/chromium"` y
   `--ignore-certificate-errors-spki-list=<SPKI>`. Se calcula con
   `openssl x509 -in /root/.ccr/agent-proxy-ca.crt -pubkey -noout | openssl pkey -pubin -outform der | openssl dgst -sha256 -binary | base64`.
-  Con login no se puede: las cuentas QA no tienen contraseña guardada. Mira la madre, o una sesión nueva con
-  `ONIA_QA_EMAIL/PASSWORD` en el entorno, nunca por chat.
+  **Con login (desde el 11-oct):** un script de Playwright que corre EN el VPS pide un magic link con la clave de
+  servicio leída dentro del contenedor (nunca se imprime) y entra con la cuenta QA. Modelos en el scratchpad de la
+  sesión: `mirar-1550/mirar-1550.js`, `mirar-1250/mirar-1250.js`, `punto1/punto1-cliente.js`. Siempre
+  `--font-render-hinting=none` y las fotos se borran del VPS al terminar.
   ⚠️ Las rutas con `(grupo)` y `[parámetro]` (ej. `/book/<slug>`) dan un falso «Algo salió mal» por el proxy de la
   nube: se miran desde el VPS (skill `onia-infra`, 11-oct).
 - **Probar un servidor local:** `next dev --webpack` (con Turbopack falla por los symlinks).
@@ -44,8 +47,8 @@ la dirección de Sergio Urcullo.
 
 | # | Punto | Estado |
 |---|---|---|
-| 1 | Cobro completo con QR | Checkout de usted en producción. Falta la prueba de punta a punta: la hacen la madre y Sergio Urcullo. Antes de aprobar el pago de prueba hay que marcar «Cuenta interna de prueba verificada» en `zz-qa-pago-o4kaw` (`/admin/plans`) |
-| 2 | Checkout sin promesa falsa y titular del QR | En producción (#142, 10-oct). Falta mirarlo con login |
+| 1 | Cobro completo con QR | **15-oct 08:54 UTC: el lado del cliente está hecho** (pago QA `cmv9ay9px003101o36xe4c9c1`, PENDING, Básico mensual Bs 320). Falta solo Sergio Urcullo: marcar la cuenta interna y aprobarlo (§7). Antes: Antes de aprobar el pago de prueba hay que marcar «Cuenta interna de prueba verificada» en `zz-qa-pago-o4kaw` (`/admin/plans`) |
+| 2 | Checkout sin promesa falsa y titular del QR | En producción (#142, 10-oct). **Mirado con login el 15-oct:** bien y de usted, salvo «Ahorrás … al año», «Pagás por adelantado» y «activalo pagando acá», que arregla el seguimiento de #171 |
 | 3 | Datos clínicos no salen | En producción (#139, canal privado). Faltan «En vivo» con login, el SQL del B22 (con su OK) y el contenedor `onia-platform-qa` (lo decide él) |
 | 4 | Respaldo afuera con restauración probada | **Bloqueado:** falta el bucket R2 de Sergio Urcullo. El `restoreVerified:false` del diario local es a propósito |
 | 5 | Agenda por profesional y confirmar en 1 toque | El toque ya está en producción (#128). La agenda por profesional (#118) **sale con #136** |
@@ -74,6 +77,20 @@ la dirección de Sergio Urcullo.
 - Antes: el 9-oct #141 (IPv6 por /64) y K2/K3; el 8-oct #128. Los agentes corren todos los días a las 07:00 de La Paz.
 
 ## 4. EN VUELO (lo que se pierde o se traba si nadie lo sigue)
+
+**15-oct ~09:15 UTC:**
+- **PR #171** (`claude/optimistic-ride-1sp5fe`, cabeza `b9acfa13`, CI verde 08:42-09:08): el punto 9 de la caja y los PRs de Codex
+  #161, #162, #163, #164, #165, #166, #167 y #169 juntos. **No mergear todavía:** las revisiones encontraron defectos visibles
+  (comentario en #171). Se arreglan en dos ramas LOCALES, sin pushear, hechas por subagentes:
+  - `seguimiento-171` en `/home/user/wt-cadena` (checkout de usted, motivo del QR rechazado a la vista, `/inbox` que no se cae,
+    roles y clientes de usted, `fiados.ts` con teléfono numérico);
+  - `m1c-arreglos` en `/home/user/wt-m1` (cantidades: rojo antes de escribir, «unidades» en kg, validez en días, flotante del
+    ticket, `ProductoPicker` de usted, plural de «servicio»).
+  **Si la sesión muere, eso se pierde** (no está en ningún remoto). Se retoma: juntar las dos ramas sobre `b9acfa13` (la línea
+  base del trinquete se resuelve como base + deltas), `tsc`, eslint y suite completa, fast-forward de la rama, push a las :10
+  (fuera de la ventana) y merge con CI verde. Si las ramas no están, se rehacen desde el comentario de #171.
+- Después de publicar: mirar con `mirar-1250.js` (caja de un día anterior y cotización; el «antes» de producción quedó medido
+  a las 08:44) y el checkout de usted.
 
 | Qué | Dónde | Cómo se retoma |
 |---|---|---|
@@ -132,43 +149,26 @@ la dirección de Sergio Urcullo.
 
 - **Horas escritas a ojo (11-oct, 4 veces en una mañana):** en la cola se anotaron revisiones «a las 07:45», «07:48», «08:05» y «08:27» cuando el reloj marcaba 07:38, 07:43, 07:59 y 08:24. Siempre adelantadas: se escribe la hora que se calcula para cuando termine, no la de ahora. Antes de escribir una hora, `date -u` en el mismo comando.
 
-## 7. Qué depende de Sergio Urcullo
+## 7. Qué depende de Sergio Urcullo (15-oct)
 
-1. **Términos 1.4 y 7 días de gracia:** sí o no, con el OK de Leslie Mercado Moreno (titular).
-2. **OK de diseño de W1f** (el chat de la web con el nombre de la clínica).
-3. **Sí al refresco de la demo** el lunes 12-oct entre 07 y 11 UTC.
-4. **CAFC del piloto** (SIAT etapa VI: 180 casos; plazo del SIN 04/11).
-5. **Bucket R2** (punto 4).
-6. **Punto 1:** marcar la cuenta interna y aprobar el pago de prueba.
-7. El SQL del B22 y apagar el contenedor `onia-platform-qa`.
-8. **Infra de la bandeja en tiempo real** (una línea, §4), o que la corra la madre.
+1. **Punto 1 (vence el 16-oct):** en `/admin/plans`, marcar «Cuenta interna de prueba verificada» en ZZ QA Pago y, en
+   `/admin/payments`, aprobar el pago de Bs 320 (`cmv9ay9p…`). Después Plataforma mira el plan activo y el correo.
+2. **Punto 3 (16-oct):** OK al SQL del B22 (REVOKE a anon) y decidir si se apaga el contenedor `onia-platform-qa`.
+3. **Punto 4 (16-oct):** el bucket R2 (gasto).
+4. **Bot de ventas de usted:** el publicador lo frena desde el 3-oct porque `knowledge.onia.json` cambió de versión
+   (`03.1` → `03.2`); ningún precio cambió (medido el 15-oct, número por número). Mientras tanto el bot les habla de vos a
+   los prospectos, y la pauta arranca el 16-oct. Necesita su firma para publicarlo.
+5. **#124 términos** (no cambia el texto) y **términos 1.4 + 7 días de gracia** (#113), con el OK de Leslie Mercado Moreno.
+6. **Refresco de la demo** (lun a jue, 07-11 UTC): sí o no.
+7. **OK de diseño:** W1f (chat de la web con el nombre de la clínica) y, si la dirección del 12-oct «un solo plan integrado»
+   es suya, las pantallas de «Mi web» (#168, #170).
+8. **CAFC del piloto** (SIAT etapa VI) e **infra de la bandeja en tiempo real** (una línea, §4).
 
-## 8. Próximos pasos (en orden)
+## 8. Próximos pasos (en orden, 15-oct)
 
-0. **#136 y #146:** hechos, en producción desde las 06:57 UTC (`release-a7d8c1ed`), mirados sin login.
-0a. **La cadena del 11-oct está en producción**: `release-0b25e289` desde las 12:54:28, mirada a las 13:16.
-    - **Tanda de las 15:50** (cola, «Tanda de las 15:50»):
-      - #157 mergeado a las 13:38:42 y #158 (F136c) a las 14:21:00 (`a94afbd3`);
-      - #160 (U8, correos de usted) se mergea con CI verde;
-      - #159 (M1b, `28a2c518`, ya lleva master y #160 adentro) va después de #160 y antes de las 15:20; si no llega, después de las 16:10.
-    - **Mezclar varios PRs:** primero se prueba la mezcla con `git merge-tree` y la suite completa, que en la nube tarda ~150 s. Solo se
-      rebasea si da conflicto o rojo (skill `equipo-de-agentes` §8). Si dos órdenes dan el mismo árbol, entra primero el que tiene el CI
-      verde.
-0c. **Contratos Codex:**
-    - F136b, P-01b, M1, M1b, F136c, S3 y U7: hechos o en curso.
-    - **M1c** (`codex-tareas/plataforma-M1c-las-ultimas-cantidades.md`, Sol): la madre lo corre en Codex, apilado sobre la rama de #159.
-    - El **punto 9 de F136c** («Caja del día» en un día anterior) lo hace Plataforma en `claude/optimistic-ride-1sp5fe` (subagente
-      sonnet). Se sube después de las 16:10.
-1a. **Después de la publicación de las 15:50** (mirar desde ~16:05):
-    - con `+qak3dental`, la caja de hoy: «Corregir fondo» y «Anular» con el permiso, y el aviso de cierre sin «administrador», sin
-      guardar nada;
-    - con `+qak3importadora`, el costeo: «3.000» sin producto y «1.200» kg se rechazan con su motivo;
-    - los correos de usted (#160) no se pueden mirar sin mandar uno: sus pruebas recorren las variantes.
-    - **U6** (correos y avisos del plan) espera a #113.
-2. **Demo del lunes** (pedido de la madre v4): el plan está en `docs/cola/demo-venta-refresco.md` (11-oct): `reset=2`
-   entre 04 y 11 UTC de lun a jue, tarjetas a las 11:00 UTC, capturas de la madre a 390 y 1440. Correrlo pide el sí de
-   Sergio Urcullo en esta sesión.
-3. Punto 6: «ver todo» resuelto (es «Ver historia completa», en producción desde el 6-oct). Queda mirarlo con login (madre).
-4. Lo que destraben sus respuestas (§7), en el orden del corte (`ONIA_1.0_CORTE.md`).
-5. 1.1 de identidad: los textos de tú del panel («No se envía nada hasta que lo apruebes») y las 594 formas de vos.
-   Hacerlo después de los merges de hoy, para no chocar con las ramas.
+1. Terminar #171 (§4 «15-oct»): juntar los dos seguimientos, gates, push a las :10, CI, merge fuera de la ventana y publicar.
+2. Mirar en producción: caja de un día anterior, cotización y traspaso a 390 y 1440 en importadora y comercio, el checkout.
+3. Cuando Sergio Urcullo apruebe el pago QA: mirar el plan activo, la factura por correo y el checkout en «Plan activo».
+4. Contrato M1d (Codex): el servidor exige enteros en las unidades enteras (ventas, traspasos y cotizaciones).
+5. #154 S2 y #150 P-01: Hermes QA está parado desde el 11-oct; sin su re-revisión, decidir con revisores propios.
+6. Lo que destraben sus respuestas (§7), en el orden del corte (`ONIA_1.0_CORTE.md`).
