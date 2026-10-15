@@ -85,3 +85,13 @@ canonical queue activation, real migration, TaskSpec, intent, lease, native cons
 production/service or R4 mutation occurred. This directory preserves approval,
 preflight, saved/readback bindings, single dispatch, bounded observations, failed
 recovery metadata, exact restoration and the complete visible agent report.
+
+## Product identification correction — 2026-10-15
+
+Sergio's screenshot shows the ChatGPT UI at `/remote/task_e_6ad1207987888327ac102a633061d9e7`.
+The dispatch binary was independently matched to bundled Codex CLI `0.162.0-alpha.17.2`, SHA256 `d13914ced6c7af174d8d638db938284231227312104b06a25e9608c632a7daec`; its `cloud exec --help` identifies Codex Cloud.
+That establishes the launcher, not the served product/runtime, model or Legacy/new experience: those remain **UNKNOWN**, with no effective endpoint/product attestation preserved.
+The error was communicating the current native experience and recoverable artifact export as demonstrated without verifying them; this is not evidence that every trial was regular ChatGPT chat or Work Cloud.
+Official sources document [the CLI route](https://learn.chatgpt.com/docs/developer-commands?surface=cli), [Legacy transition](https://help.openai.com/en/articles/20001545-using-codex-cloud) and [separate Work/Codex experiences](https://help.openai.com/en/articles/20001275-chatgpt-work-and-codex); they do not classify this particular environment.
+Future reporting must separate observed UI, verified launcher and attested runtime/product; UI branding alone proves neither backend identity nor failure cause. Historical JSON stays unchanged; no new trial was run for this audit.
+The recorded preparation, acceptance-to-terminal and terminal-to-restore intervals remain 632.245888s, 753.793631s and 134.937s; no total cost or time attributable to a wrong product is established.
