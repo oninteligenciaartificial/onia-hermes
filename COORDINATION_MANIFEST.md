@@ -2,10 +2,10 @@
 
 ## Orden vigente — cloud ejecuta, madre ligera coordina (15-oct, última orden de Sergio)
 
-- El VPS es exclusivo de ONIA Platform. No alojar allí coordinación Hermes, agentes de desarrollo ni un coordinador nuevo; no reactivar el contenedor de coding fallido ni instalar otro sistema.
-- Para Hermes, los ejecutores objetivo son los entornos oficiales existentes: Claude Code web «Onia» (`env_01BLwXdgpqDS3sx4rg3r2uvg`) y Codex Cloud Hermes (`6abad782eba0819196ca234dc3abc327`). Los IDs documentan entornos; no prueban acceso ni readiness actual. La madre confirma ambos en la UI antes de despachar. Los IDs históricos de sesión indicados en notas anteriores caducaron o fueron reemplazados; no reutilizarlos como inventario vivo.
+- El VPS se reserva para ONIA Platform. No mover allí coordinación Hermes, agentes de desarrollo ni un coordinador nuevo por defecto; sólo considerar un proceso Hermes concreto e indispensable tras consultar antes a Sergio y explicitar impacto/consumo sobre Platform. No reactivar el contenedor de coding fallido ni instalar otro sistema.
+- Root verificó en UI el 15-oct: Codex Settings muestra repos ONIA Hermes y ONIA Platform; Claude.ai/code muestra la sesión Hermes `01SQ7cvuDX5w5jDHk5VdhAEo` y entorno seleccionado Hermes, con label «Onia» “sin conexión” (no inferir que esté muerto). IDs de environment y URLs anteriores son referencias históricas, no prueba de runtime ni de acceso efectivo. La lista autenticada Codex Cloud devolvió 12 tareas históricas, sin distinguir Legacy/actual; última conocida READY/no diff. No se envió tarea nueva.
 - Una madre temporal ligera en la app de laptop/móvil coordina. Flujo: tarea → contrato Git acotado con un único owner → un implementador cloud → verificador pequeño y adecuado al alcance → resultado Git con diff, evidencia y estado. No se presupone mensajería entre clouds. Un fallo concreto o ambigüedad se escala a la madre.
-- No hay deploy autónomo. Continuidad con la PC apagada / autonomía automática no está probada. No presentar este flujo objetivo como integración implementada hasta verificar en vivo el dispatch y el retorno por Git.
+- Claude ya tiene rutinas de QA observadas; esto no prueba autonomía completa. El enlace Codex↔Claude/resultado Git y continuidad PC-off de extremo a extremo siguen pendientes. No hay deploy autónomo. No presentar el flujo objetivo como integración implementada.
 - Los cierres y planes locales/VPS/cloud que siguen debajo son historia y evidencia de sus pruebas, sujetos a esta orden vigente.
 ## Registro histórico — intento VPS detenido (superado por la orden vigente arriba), 2026-10-15
 
