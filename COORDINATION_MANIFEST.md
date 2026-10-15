@@ -1,8 +1,15 @@
 # Hermes Coordination Manifest
 
-## Cierre — intento VPS detenido; retomar vía local, 2026-10-15
+## Orden vigente — cloud ejecuta, madre ligera coordina (15-oct, última orden de Sergio)
 
-- **META vigente:** última orden Sergio detiene desvío VPS/nuevos paquetes; usar Codex app + Claude CLI local ya validado. VPS desarrollo/Orca/clouds diferidos. Sólo preservar evidencia real del intento fallido, sin nuevo modelo/SSH/test/candidato.
+- El VPS es exclusivo de ONIA Platform. No alojar allí coordinación Hermes, agentes de desarrollo ni un coordinador nuevo; no reactivar el contenedor de coding fallido ni instalar otro sistema.
+- Para Hermes, los ejecutores objetivo son los entornos oficiales existentes: Claude Code web «Onia» (`env_01BLwXdgpqDS3sx4rg3r2uvg`) y Codex Cloud Hermes (`6abad782eba0819196ca234dc3abc327`). Los IDs documentan entornos; no prueban acceso ni readiness actual. La madre confirma ambos en la UI antes de despachar. Los IDs históricos de sesión indicados en notas anteriores caducaron o fueron reemplazados; no reutilizarlos como inventario vivo.
+- Una madre temporal ligera en la app de laptop/móvil coordina. Flujo: tarea → contrato Git acotado con un único owner → un implementador cloud → verificador pequeño y adecuado al alcance → resultado Git con diff, evidencia y estado. No se presupone mensajería entre clouds. Un fallo concreto o ambigüedad se escala a la madre.
+- No hay deploy autónomo. Continuidad con la PC apagada / autonomía automática no está probada. No presentar este flujo objetivo como integración implementada hasta verificar en vivo el dispatch y el retorno por Git.
+- Los cierres y planes locales/VPS/cloud que siguen debajo son historia y evidencia de sus pruebas, sujetos a esta orden vigente.
+## Registro histórico — intento VPS detenido (superado por la orden vigente arriba), 2026-10-15
+
+- **META de esa sesión, superada por la orden vigente arriba:** detener el desvío VPS/nuevos paquetes y usar Codex app + Claude CLI local ya validado. VPS desarrollo/Orca/clouds diferidos. Sólo preservar evidencia real del intento fallido, sin nuevo modelo/SSH/test/candidato.
 - **PRUEBA DE HECHO:** paquete5d1a2bd6 aprobado explícitamente por Sergio («hazlo»), incluido authmountROUID0. Ejecutar probe; root revisa evidencia antes UNA tarea Claude/reader. Tests únicamente tras revisión Astra del código generado. CID cleanup y recibos saneados.
 - **PARADA:** resultado revisable o fallo concreto; probe fail impide provider, sin replay/retries ni ampliación mounts. No installs/login/restart de servicios ni R4/queue/browser/Warp/Orca. Máximo1provider. Operador exclusivo CODE/VPS `/root/cli_integration`; root Astra coordina/revisa.
 - **CODE exclusivo:** `/root/cli_integration`, base `e252029a8c6f068a88d267e2fcc066924ad35c67`; root Astra revisa. Máximo un proveedor concurrente, sin fanout nuevo; Claude implementará cualquier código nuevo de producto tras diseño revisado.
