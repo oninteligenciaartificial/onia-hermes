@@ -1,0 +1,50 @@
+{
+  "schema": 1,
+  "kind": "INDEPENDENT_RESTORATION_REVERIFICATION",
+  "observed_at_utc": "2026-10-15T13:46:12.862Z",
+  "recorded_at_utc": "2026-10-15T13:46:45.965571+00:00",
+  "environment_id": "6abad782eba0819196ca234dc3abc327",
+  "browser": "Existing Chrome OnIA via CUA",
+  "ui_url": "https://chatgpt.com/settings/cloud-environments/6abad782eba0819196ca234dc3abc327/edit",
+  "method": "Read-only reload then exact textarea.value; SHA256 computed in tool runtime; compare to private original files hashed locally. No textarea content printed by hash operation or copied into this artifact.",
+  "fields": {
+    "setup": {
+      "original_private_path": "E:\\onia-wt\\r4-original-setup-20261015.sh",
+      "expected": {
+        "bytes": 14832,
+        "sha256": "57f1f52c4898c6aad6ba494d2e010e009959fd17296089fcf223b3f7a3817a62"
+      },
+      "observed_dom_value": {
+        "bytes": 14832,
+        "sha256": "57f1f52c4898c6aad6ba494d2e010e009959fd17296089fcf223b3f7a3817a62"
+      },
+      "exact_byte_length_and_sha256_match": true
+    },
+    "maintenance": {
+      "original_private_path": "E:\\onia-wt\\r4-original-maintenance-20261015.sh",
+      "expected": {
+        "bytes": 144,
+        "sha256": "6a3ea5b3f45cc9a6066d94824ccfedb8c301dd572f5a36ee3bac398d9ad2a726"
+      },
+      "observed_dom_value": {
+        "bytes": 144,
+        "sha256": "6a3ea5b3f45cc9a6066d94824ccfedb8c301dd572f5a36ee3bac398d9ad2a726"
+      },
+      "exact_byte_length_and_sha256_match": true
+    }
+  },
+  "restored_exactly_reverified": true,
+  "cache_enabled": true,
+  "http_read_only": true,
+  "allowed_domains": "example.com,iana.org,www.iana.org",
+  "settings_changed": false,
+  "submits": 0,
+  "installs": 0,
+  "historical_receipt_preserved": "trust-config-restore.json",
+  "historical_transcription_error": {
+    "field": "setup_sha256",
+    "recorded_in_historical_receipt": "57f1f52c4898c6aad6ba494d2e010e009959fd172f5a36ee3bac398d9ad2a726",
+    "recomputed_from_current_dom_and_private_original": "57f1f52c4898c6aad6ba494d2e010e009959fd17296089fcf223b3f7a3817a62",
+    "error": "Prior Luna restoration receipt transcribed a setup hash with the maintenance suffix. Historical receipt preserved, corrected here using independent current read-only evidence."
+  }
+}

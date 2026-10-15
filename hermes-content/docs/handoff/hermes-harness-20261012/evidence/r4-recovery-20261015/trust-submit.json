@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "event": "trust-diagnostic-submit",
+  "at_utc": "2026-10-15T13:03:50.0456420Z",
+  "task_id": "task_e_6ad0ceffce048327a2ac40888465fe00",
+  "environment": "6abad782eba0819196ca234dc3abc327",
+  "branch": "codex/orquestacion-subagentes-20261013",
+  "attempts": 1,
+  "phase": "submit_completed",
+  "cli_exit": 0,
+  "cli_stderr": "",
+  "cli_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "historical_r4_replayed": false,
+  "queue_mutations": 0,
+  "replay_policy": "never replay on timeout or uncertain outcome"
+}

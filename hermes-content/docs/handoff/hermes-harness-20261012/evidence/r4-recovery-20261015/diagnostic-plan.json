@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "event": "diagnostic-plan",
+  "environment": "6abad782eba0819196ca234dc3abc327",
+  "original_setup_sha256": "57f1f52c4898c6aad6ba494d2e010e009959fd17296089fcf223b3f7a3817a62",
+  "original_maintenance_sha256": "6a3ea5b3f45cc9a6066d94824ccfedb8c301dd572f5a36ee3bac398d9ad2a726",
+  "temporary_maintenance": ":",
+  "list_observed_at_utc": "2026-10-15T12:21:49.2186487Z",
+  "list_command": "codex cloud list --env 6abad782eba0819196ca234dc3abc327 --limit 20 --json",
+  "list_exit": 0,
+  "listed": 7,
+  "active": 0,
+  "terminal_statuses": [
+    "ready",
+    "error"
+  ],
+  "cursor": null,
+  "prior_operation": "f90f55bc-48d8-406f-a11e-05ddd2683014",
+  "queue_mutations": 0,
+  "submit_limit_for_this_diagnostic": 1,
+  "restore": "both exact original fields and readback hashes after task terminates or submit fails; no blind replay"
+}

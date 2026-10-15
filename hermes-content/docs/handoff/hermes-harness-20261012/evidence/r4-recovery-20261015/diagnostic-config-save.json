@@ -1,0 +1,7 @@
+{
+  "event": "diagnostic-config-saved-readback",
+  "at_utc": "2026-10-15T12:22:32.892Z",
+  "setup_sha256": "2238cf593644f4f1586a5a4dabf1fd9d3cb825607b45fb7a5490d89a08d6daec",
+  "maintenance_exact": ":",
+  "setup_match": true
+}

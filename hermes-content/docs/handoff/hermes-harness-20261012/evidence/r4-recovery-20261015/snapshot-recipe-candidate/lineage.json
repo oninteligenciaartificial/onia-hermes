@@ -1,0 +1,109 @@
+{
+  "schema": 1,
+  "state": "PENDING_APPROVAL_NOT_APPLIED",
+  "prepared_at_utc": "2026-10-15T13:40:28.953110+00:00",
+  "historical_source": {
+    "git_ref": "0e01dc09",
+    "recipe_git_blob_path": "hermes-content/docs/handoff/hermes-harness-20261012/evidence/cloud-browser-prepared-20261014/r4/setup_recipe.py",
+    "recipe_sha256": "369f5ddd83e43a102a713baa109dc38bf717107fc341d07d420a2abf67495519",
+    "manifest_sha256": "b5f5dd074ab252bbba27b5e02e4eaadc35d92968de2234b21c922b15106e0196",
+    "operation_id": "f90f55bc-48d8-406f-a11e-05ddd2683014",
+    "historical_approval_is_not_current_authority": true
+  },
+  "observed_diagnostic": {
+    "task_id": "task_e_6ad0ceffce048327a2ac40888465fe00",
+    "raw_probe_json_bytes": 11707,
+    "raw_probe_json_sha256": "1be880a4428df75a2095349ad719800f03273245b3d8c6eab2f8ad34493139d7",
+    "hostname": "snapshot.ubuntu.com",
+    "path": "/ubuntu/20260828T000000Z/",
+    "global_trust": "UNKNOWN",
+    "source_index_payload_linkage": "UNKNOWN",
+    "freshness": "UNKNOWN",
+    "apt_candidate_counts": {
+      "UNKNOWN": 20,
+      "NONE": 2,
+      "known_version": 11
+    }
+  },
+  "candidate_files": {
+    "setup_recipe.py": {
+      "sha256": "27609d8506e41dcdf4190a68991bbffcdf76499cf3aecd9a57e8c097431d4b15",
+      "bytes": 32430
+    },
+    "reviewed-install-manifest-candidate.json": {
+      "sha256": "f023376dbadca6a8b964fb0763a7546ea087713db0aae3de172cf30f5d7bcd09",
+      "bytes": 3362
+    },
+    "test_snapshot_recipe.py": {
+      "sha256": "94fa0e42521786f24288d06cb65f103b5f8bf2e19722cbc6c29b771b976a5e46",
+      "bytes": 6995
+    },
+    "review-and-restoration.md": {
+      "sha256": "b4b3aa1acf72a426c9cc1fe16a258d259b3050cc6e3f092cd09c631bd97b7865",
+      "bytes": 10297
+    },
+    "build_setup_trial_wrapper.py": {
+      "sha256": "bdb888b11e1b7762ab9f60535e1bea006b4af7092f50a79328e4400d38965111",
+      "bytes": 5897
+    },
+    "setup-trial-wrapper.sh": {
+      "sha256": "559c35713de54ec7f49b1a485dfb73c407a3017e3bb791c7e3c7aecff828b736",
+      "bytes": 52612
+    },
+    "test_setup_trial_wrapper.py": {
+      "sha256": "c08a884bf0db7dc8b0ea5dfc23753d8642920745356972354540bd20e78f0a6d",
+      "bytes": 4267
+    }
+  },
+  "changes": [
+    "Literal HTTPS snapshot hostname and strict real UTC timestamp path; original URI retained",
+    "Structured sanitized failure phase/unresolved approved package names; no install if any unresolved",
+    "Approval state required; candidate manifest explicitly unapproved",
+    "No dependency substitutions or trust-validation bypasses",
+    "Distinct setup-only operation UUID; parent R4 lineage only",
+    "Actual root-owned setup receipt binds exact manifest bytes SHA256",
+    "Exact embedded pending wrapper; completion marker only after real receipt validation"
+  ],
+  "execution": {
+    "setup_executed": false,
+    "cloud_submits": 0,
+    "network_requests": 0,
+    "installs": 0,
+    "git_mutations": 0,
+    "queue_modified": false,
+    "native_guard_modified": false,
+    "frozen_docs_modified": false
+  },
+  "admission_limit": {
+    "candidate_recipe_guard_operation_id": "9fc238a7-aa41-433c-8681-a9bf6ec6a340",
+    "consumer": "native_cloud_lineage.py:319-329 and 332-344",
+    "new_recipe_digest_is_compatible_with_historical_consumer": false,
+    "future_setup_diagnostic_requires": "Explicit installation approval, one distinct setup-only Cloud task and full actual receipt, original environment fields saved/restored by hash",
+    "historical_task_queue_lease_must_not_be_replayed": true
+  },
+  "verification": {
+    "command": "python -B -m unittest test_setup_trial_wrapper.py test_snapshot_recipe.py",
+    "passed": 13,
+    "failed": 0,
+    "real_setup_or_apt_executed": false,
+    "scope": "Operation/dependency/matcher regression and pending/recipe-failure/empty-receipt wrapper rejection. No simulated successful installation."
+  },
+  "consumer_plan": "POSTPONED by architecture: setup-only trial first; no consumer/authority changes. Separate E2E plan in review-and-restoration.md remains unimplemented.",
+  "trial": {
+    "operation_id": "9fc238a7-aa41-433c-8681-a9bf6ec6a340",
+    "parent_operation_id": "f90f55bc-48d8-406f-a11e-05ddd2683014",
+    "scope": "SETUP_ONLY_SNAPSHOT_TRIAL",
+    "uuid_generation_only_no_effect": true,
+    "max_future_approved_trials": 1,
+    "approval_state": "PENDING_APPROVAL",
+    "completed_marker": "ONIA_SETUP_TRIAL_COMPLETED",
+    "expected_successful_setup_ui_exit": 42,
+    "activation_changes_only_manifest_fields": [
+      "state",
+      "downloads_and_install_approved",
+      "human_approval_reference",
+      "operation_authorization_reference"
+    ],
+    "setup_receipt_binds_exact_manifest_sha256": true
+  }
+}

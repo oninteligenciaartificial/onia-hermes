@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "event": "trust-diagnostic-config-saved-readback",
+  "at_utc": "2026-10-15T13:02:35.1998104Z",
+  "environment": "6abad782eba0819196ca234dc3abc327",
+  "reopened_edit_url": "https://chatgpt.com/settings/cloud-environments/6abad782eba0819196ca234dc3abc327/edit",
+  "setup_sha256": "91ce7a61f868f05c43898e48846cf92f08fa1fbdb540d11e52a27549bb67dc18",
+  "setup_ui_length": 16753,
+  "maintenance_value": ":",
+  "maintenance_sha256": "e7ac0786668e0ff0f02b62bd04f45ff636fd82db63b1104601c975dc005f3a67",
+  "cache_enabled": true,
+  "agent_internet_enabled": true,
+  "allowed_domains": "example.com,iana.org,www.iana.org",
+  "http_read_only": true,
+  "secrets_or_variables_changed": false,
+  "field_readback": "DOM textarea.value exact SHA-256 after save, navigate away, reopen"
+}

@@ -1,0 +1,16 @@
+{
+  "event": "r4-apt-diagnostic-new-task",
+  "phase": "submit_completed",
+  "started_epoch": 1792066976.262099,
+  "environment": "6abad782eba0819196ca234dc3abc327",
+  "branch": "codex/orquestacion-subagentes-20261013",
+  "queue_modified": false,
+  "historical_r4_replayed": false,
+  "setup_sha256": "2238cf593644f4f1586a5a4dabf1fd9d3cb825607b45fb7a5490d89a08d6daec",
+  "exit_code": 0,
+  "stdout": "https://chatgpt.com/codex/tasks/task_e_6ad0c5a6abec8327a067f26b0e8445f2\n",
+  "stderr": "",
+  "stdout_sha256": "4086b63cd5edb1c773b6ad5c6cb9791d8451c85cc3426f32be666497f5b8c948",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "finished_epoch": 1792066987.1454794
+}

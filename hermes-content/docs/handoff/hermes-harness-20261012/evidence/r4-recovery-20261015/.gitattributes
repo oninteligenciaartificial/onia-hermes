@@ -1,0 +1,2 @@
+# Preserve reviewed receipt/payload bytes and their SHA256 across checkouts.
+* -text whitespace=cr-at-eol

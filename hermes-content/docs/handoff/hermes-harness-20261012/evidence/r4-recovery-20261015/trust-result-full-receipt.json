@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "kind": "COMPLETE_DIAGNOSTIC_JSON_RECOVERY",
+  "at_utc": "2026-10-15T13:21:00.233571+00:00",
+  "task_id": "task_e_6ad0ceffce048327a2ac40888465fe00",
+  "source": "Existing task setup log DOM, code element innerText via CUA Chrome OnIA; no new submit or settings changes",
+  "artifact": "trust-result-full.json",
+  "artifact_bytes": 11708,
+  "artifact_sha256": "205cd6388735c61f236226a3fdf8940bf92780a959f832ec983f37ab676941cb",
+  "raw_probe_json_bytes": 11707,
+  "raw_probe_json_sha256": "1be880a4428df75a2095349ad719800f03273245b3d8c6eab2f8ad34493139d7",
+  "raw_matches_previously_reported_digest": true,
+  "artifact_encoding": "UTF-8, exact raw JSON plus one trailing LF",
+  "canonical_json_definition": "json.dumps(parsed, sort_keys=True, separators=(comma,colon)), UTF-8 without newline",
+  "canonical_json_sha256": "20d66b5726f8d3fce190cccfc7a4e5a93b2909de8e973d300d7dee647d437caa",
+  "counts": {
+    "sources": 4,
+    "release_files": 6,
+    "packages": 33
+  },
+  "expected_marker_observed": "DIAGNOSTIC_EXPECTED_EXIT_42",
+  "expected_exit_observed": 42,
+  "previous_delivery": {
+    "summary_artifact": "trust-result.json",
+    "summary_artifact_preserved": true,
+    "summary_artifact_bytes": 1609,
+    "failure": "Prior Luna delivery saved a summary rather than the complete 11707-byte probe JSON. The expected complete recoverable artifact was therefore not delivered until this extraction."
+  },
+  "limits": "This receipt preserves observed diagnostic data. No new source-to-index linkage, freshness, payload validation, or global trust conclusion."
+}

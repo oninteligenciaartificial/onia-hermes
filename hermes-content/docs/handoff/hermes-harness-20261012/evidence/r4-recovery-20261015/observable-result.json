@@ -1,0 +1,131 @@
+{
+  "at_utc": "2026-10-15T12:44:29.543Z",
+  "task_id": "task_e_6ad0c8cad0808327a72fa0c2980d7f76",
+  "url": "https://chatgpt.com/remote/task_e_6ad0c8cad0808327a72fa0c2980d7f76",
+  "phase": "setup_diagnostic_expected_termination",
+  "expected_marker_present": true,
+  "expected_exit": 42,
+  "log_sha256": "7c6df08f80f4397880a07c9fa5ba49a6052bd37072368a8ec1827fae88297d14",
+  "result": {
+    "installs": 0,
+    "kind": "APT_SOURCE_CLASSIFICATION_READ_ONLY",
+    "network_requests": 0,
+    "schema": 1,
+    "signature_verification": "NOT_RUN",
+    "source_files": [
+      {
+        "format": "one_line",
+        "source_ordinal": 0,
+        "status": "MISSING_OR_NONREGULAR"
+      },
+      {
+        "entries": [
+          {
+            "binary": true,
+            "noble_suite": false,
+            "uris": [
+              {
+                "credentials_present": false,
+                "host": "REDACTED_OTHER_HOST",
+                "http_or_https": true,
+                "query_or_fragment_present": false,
+                "recipe_host_eligible": false,
+                "ubuntu_path": false
+              }
+            ]
+          }
+        ],
+        "format": "one_line",
+        "source_ordinal": 1,
+        "status": "CLASSIFIED"
+      },
+      {
+        "entries": [
+          {
+            "binary": true,
+            "noble_suite": true,
+            "uris": [
+              {
+                "credentials_present": false,
+                "host": "REDACTED_OTHER_HOST",
+                "http_or_https": true,
+                "query_or_fragment_present": false,
+                "recipe_host_eligible": false,
+                "ubuntu_path": false
+              }
+            ]
+          },
+          {
+            "binary": true,
+            "noble_suite": true,
+            "uris": [
+              {
+                "credentials_present": false,
+                "host": "REDACTED_OTHER_HOST",
+                "http_or_https": true,
+                "query_or_fragment_present": false,
+                "recipe_host_eligible": false,
+                "ubuntu_path": false
+              }
+            ]
+          },
+          {
+            "binary": true,
+            "noble_suite": true,
+            "uris": [
+              {
+                "credentials_present": false,
+                "host": "REDACTED_OTHER_HOST",
+                "http_or_https": true,
+                "query_or_fragment_present": false,
+                "recipe_host_eligible": false,
+                "ubuntu_path": false
+              }
+            ]
+          },
+          {
+            "binary": true,
+            "noble_suite": true,
+            "uris": [
+              {
+                "credentials_present": false,
+                "host": "REDACTED_OTHER_HOST",
+                "http_or_https": true,
+                "query_or_fragment_present": false,
+                "recipe_host_eligible": false,
+                "ubuntu_path": false
+              }
+            ]
+          }
+        ],
+        "format": "one_line",
+        "source_ordinal": 2,
+        "status": "CLASSIFIED"
+      },
+      {
+        "entries": [
+          {
+            "binary": true,
+            "noble_suite": false,
+            "uris": [
+              {
+                "credentials_present": false,
+                "host": "REDACTED_OTHER_HOST",
+                "http_or_https": true,
+                "query_or_fragment_present": false,
+                "recipe_host_eligible": false,
+                "ubuntu_path": false
+              }
+            ]
+          }
+        ],
+        "format": "one_line",
+        "source_ordinal": 3,
+        "status": "CLASSIFIED"
+      }
+    ],
+    "subprocesses": 0,
+    "unknown_hosts_and_values": "REDACTED",
+    "writes": 0
+  }
+}
