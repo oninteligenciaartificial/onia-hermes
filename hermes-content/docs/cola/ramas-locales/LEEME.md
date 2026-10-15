@@ -94,3 +94,16 @@ Ya están en `master` (por contenido) y no se guardaron: `wip/p2` (presupuesto p
 | Rama | Punta | Qué es | Estado |
 |---|---|---|---|
 | `w1f` | `2c3423ae`, sobre `aae460c4` (la punta de #140) | **W1f:** el chat de la web se presenta con el nombre del negocio (`data-nombre`) y sin la marca Onia; contesta el asistente y, si hace falta, una persona del equipo. Pedido de Sergio Urcullo del 10-oct | Paquete `plataforma-w1f-20261010.bundle`. Se sube a la rama de #140 con `git fetch <ruta>/plataforma-w1f-20261010.bundle w1f` y `git push origin FETCH_HEAD:integ/w1-w1b` (avanza sin merge). Se publica con el OK de diseño de Sergio Urcullo sobre las capturas (enviadas el 10-oct) y la infra de #140 |
+
+## 15-oct · `plataforma-seguimiento-171-20261015.bundle` — LISTA PARA SUBIR
+
+Los arreglos de las revisiones de onia-platform #171 (checkout de usted, motivo del QR rechazado a la vista, `/inbox` que no
+se cae, roles y clientes de usted, `fiados.ts` con teléfono numérico): 10 commits sobre `b9acfa13` (la cabeza de #171),
+hasta `e1ce918f`. `tsc` 0, eslint 0 y suite completa 11.430/0. Plataforma los sube a `claude/optimistic-ride-1sp5fe` a las
+:10, fuera de la ventana de publicación, junto con `m1c-arreglos`.
+
+```bash
+git fetch origin claude/optimistic-ride-1sp5fe   # trae b9acfa13
+git bundle verify plataforma-seguimiento-171-20261015.bundle
+git fetch plataforma-seguimiento-171-20261015.bundle claude/optimistic-ride-1sp5fe:seguimiento-171
+```
