@@ -171,7 +171,7 @@ la dirección de Sergio Urcullo.
    es suya, las pantallas de «Mi web» (#168, #170).
 8. **CAFC del piloto** (SIAT etapa VI) e **infra de la bandeja en tiempo real** (una línea, §4).
 
-## 8. Próximos pasos (en orden, 15-oct 16:25 UTC)
+## 8. Próximos pasos (en orden, 15-oct 20:20 UTC)
 
 1. 21:58 UTC: mirar #177 en producción (recordatorio programado) y reportar PUBLICADO.
    Después, el pulido 7 de la cola, sin apuro.
@@ -180,10 +180,6 @@ la dirección de Sergio Urcullo.
    omitido por teléfono queda como descartada con motivo). Los lanza la madre.
 4. #154 S2: Hermes QA volvió el 15-oct (E34-E36); pedirle la re-revisión con la medición de Traefik antes de mergear.
 5. 17-oct 13:20 UTC: mirar en vivo lo que ve una cuenta vencida con «ZZ QA Clínica Chip».
-6. Barrido de usted 5, sin apuro: en el código ya no queda texto de vos que lea un cliente (lo midió la revisión de #175 en
-   app, components, lib, public, data, hooks y n8n). Lo que sigue en el trinquete
-   (41) es el prompt del redactor de los agentes (`agents-plantilla.ts`, lo lee el modelo y ya le pide usted con la persona),
-   «Recibí su consulta» (primera persona), el panel del operador, `trial-del-operador.ts` y `PUBLIC_PRICING_ADDONS` (sin
-   pantalla). Lo pendiente es del detector: el tú con dos pronombres («pídeselo», «dáselo») y el voseo -arar/-erar/-irar
-   fuera de la lista («Dispará»), más `negocioSu` en el cron del drip (hoy `lib/email.ts` lo convierte a «su»).
+6. Lo que queda del usted y de la accesibilidad está en el **pulido 7** de la cola de Plataforma (sin apuro: nada de eso lo ve
+   hoy un cliente). El detector ya ve el tú y el vos con dos pronombres (#176, #177).
 7. Lo que destraben sus respuestas (§7), en el orden del corte (`ONIA_1.0_CORTE.md`).
