@@ -1,9 +1,9 @@
 # Hermes Coordination Manifest
 
 ## Orden vigente — cloud ejecuta, madre ligera coordina (15-oct, última orden de Sergio)
-### Handoff — TRANSFER_PENDING (2026-10-15)
+### Handoff — ACK_OWNERSHIP_ACTIVE (2026-10-15)
 
-- Predecesora: `01a13f7b-a156-7150-ba99-b4ff682163a1`. Nueva sesión/ID aún no asignado; no inferir ACK ni archivar.
+- Predecesora: `01a13f7b-a156-7150-ba99-b4ff682163a1`, sin despacho. Sucesora exclusiva: `01a14185-4a94-7b60-8214-bf9943c9ec8f` — `ACK_OWNERSHIP_ACTIVE`, checkpoint verificado `fccfc19443b63b05e2a043551ff11c67dff349a0`, rama `codex/hermes-controller-hardening-20261013`, worktree `E:/onia-wt/hermes-controller-pilot-20261013`. Propiedad: coordinación y paquete canónico `claude-development-pilot-20261015/`; desarrollo únicamente en ejecutores cloud verificados. Sin nuevo goal ni mensaje a predecesora.
 - Handoff canónico: `hermes-content/docs/handoff/hermes-harness-20261012/evidence/claude-development-pilot-20261015/SESSION-HANDOFF.md`.
 - La sucesora lee ese archivo y los tres documentos focales, reclama propiedad exclusiva y añade ID + `ACK_OWNERSHIP_ACTIVE`; después continúa implementación del mismo objetivo native Claude Code Cloud + Codex Cloud, sin otro plan ni sustituto local. Un ejecutor y un verificador secuenciales; rama/owner verificados.
 
