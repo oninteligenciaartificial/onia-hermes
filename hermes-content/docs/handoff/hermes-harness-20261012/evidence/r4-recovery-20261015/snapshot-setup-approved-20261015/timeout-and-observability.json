@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "at_utc": "2026-10-15T14:56:47.099597+00:00",
+  "task_id": "task_e_6ad0e692ae0083279e999732576d8c31",
+  "elapsed_since_dispatch_seconds": 801.061,
+  "last_live_UI_observation_at_utc": "2026-10-15T14:55:17.779Z",
+  "last_live_phase": "Configurando entorno / Running setup scripts",
+  "recipe_command_timeout_seconds": 600,
+  "bounded_commands": [
+    "APT update",
+    "APT install",
+    "Python venv",
+    "pip install pinned wheels",
+    "Playwright Chromium install"
+  ],
+  "apt_policy_each_timeout_seconds": 10,
+  "apt_policy_names": 33,
+  "architecture_proxy_prechecks_timeout_seconds": 10,
+  "metadata_timeout_seconds": 15,
+  "outer_recipe_timeout_seconds": 2400,
+  "outer_timeout_origin": "Starts at recipe subprocess spawn, not at Cloud submit or the first observed UI setup line",
+  "runtime_phase_observability": "UNKNOWN until recipe stdout is returned on completion/failure; wrapper captures stdout and recipe commands discard output. Do not modify current executing bytes.",
+  "manual_cancellation": false,
+  "retry": false,
+  "limits_source": [
+    "snapshot-recipe-candidate/setup_recipe.py:48-52,248-257,310-311,442-444,478-517,532-541",
+    "snapshot-recipe-candidate/build_setup_trial_wrapper.py:46-49"
+  ]
+}

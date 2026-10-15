@@ -1,0 +1,35 @@
+{
+  "schema": 1,
+  "kind": "SETUP_ONLY_TERMINAL_CONFIGURATION_RESTORATION",
+  "task_id": "task_e_6ad0e692ae0083279e999732576d8c31",
+  "operation_id": "9fc238a7-aa41-433c-8681-a9bf6ec6a340",
+  "observed_at_utc": "2026-10-15T14:58:45.160Z",
+  "method": "Original values retained in CUA memory after baseline byte hashing; fill both originals, save, navigate to detail and reopen Editar entorno; compute exact textarea.value hashes and equality in CUA runtime; recompute original private file hashes locally.",
+  "fields": {
+    "setup": {
+      "bytes": 14832,
+      "original_private_file_sha256": "57f1f52c4898c6aad6ba494d2e010e009959fd17296089fcf223b3f7a3817a62",
+      "current_DOM_value_sha256": "57f1f52c4898c6aad6ba494d2e010e009959fd17296089fcf223b3f7a3817a62",
+      "current_DOM_exact_original_equality": true,
+      "sha256_equality_checked": true
+    },
+    "maintenance": {
+      "bytes": 144,
+      "original_private_file_sha256": "6a3ea5b3f45cc9a6066d94824ccfedb8c301dd572f5a36ee3bac398d9ad2a726",
+      "current_DOM_value_sha256": "6a3ea5b3f45cc9a6066d94824ccfedb8c301dd572f5a36ee3bac398d9ad2a726",
+      "current_DOM_exact_original_equality": true,
+      "sha256_equality_checked": true
+    }
+  },
+  "restored_exactly": true,
+  "cache_enabled": true,
+  "http_read_only": true,
+  "allowed_domains": "example.com,iana.org,www.iana.org",
+  "policy_fields_unchanged": true,
+  "material_cache_preserved": "UNKNOWN; restored script fields may invalidate provider cache",
+  "package_files_rolled_back": false,
+  "installed_components_metadata_receipt_preserved": true,
+  "raw_setup_or_maintenance_scripts_exported_to_repo": false,
+  "extra_submits": 0,
+  "extra_installs": 0
+}

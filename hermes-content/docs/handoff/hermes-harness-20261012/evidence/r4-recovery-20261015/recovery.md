@@ -150,4 +150,48 @@ snapshot origin, temporary setup/maintenance changes and exact restoration.
 It does not permit agent/browser, production, queue/intents/leases, replay or
 origin/version/security fallback. No installation result exists at this checkpoint.
 
+## Approved setup-only installation: actual result and restoration
+
+The exact human-approved package was published in commit 608e445d and one new
+task was accepted: `task_e_6ad0e692ae0083279e999732576d8c31`, branch
+`codex/hermes-controller-hardening-20261013`. Preflight: ten terminal tasks,
+zero active and cursor null. Baseline DOM hashes matched original private files.
+Temporary approved wrapper SHA21071fdd75a92e9c3644efb4bf36be8b3d16f9a7c521081bed82b4efbd849ed4
+and maintenance `:` were saved/reopened and matched exact field hashes before
+the only dispatch. Policy/cache toggle and domains remained unchanged.
+
+UI terminal log exposed a complete actual `INSTALLED_METADATA_ONLY` receipt,
+`ONIA_SETUP_TRIAL_COMPLETED` and explicit exit42. The provider error label is
+expected for this deliberate observability exit, supported by receipt/marker.
+Recipe ran 14:48:37.207573 through 14:57:24.973093 UTC. The full JSON is preserved
+in `snapshot-setup-approved-20261015/setup-receipt-full.json`: raw1692 bytes SHA256
+`6e6e9f83155018302f55decbb3174f32d30427844d196471eb221cd9c2c8b2a4`, plus one LF.
+It binds new UUID9fc238a7-aa41-433c-8681-a9bf6ec6a340, parent lineage, recipe27609d…
+and approved manifest30a21d… exactly. It records four selected snapshot entries,
+APT resolved-version digest f388f2087992c0ac3343b4b9adb0a2b9da8d574ecca3833d75583a6851d2fa25
+and Chromium executable digest377a9fc07b495c3b8d0ab8ec1fdfd153641759f9756fea34d8dfce4de82f5025.
+browser_launched=false, browser_uid_required=1000. The approved wrapper checked
+that stdout JSON matched the bounded protected root-owned actual receipt before
+emitting the completion marker. No agent/browser operation ran.
+
+At14:58:45.160 UTC, original setup14832 bytes SHA57f1f52c4898c6aad6ba494d2e010e009959fd17296089fcf223b3f7a3817a62
+and maintenance144 bytes SHA6a3ea5b3f45cc9a6066d94824ccfedb8c301dd572f5a36ee3bac398d9ad2a726
+were saved back, reopened and hashed from exact DOM values. Both raw-string
+equality and comparison against independently hashed private originals passed.
+Policy/cache toggle remained unchanged. Receipts `terminal-result.json` and
+`config-restore-readback.json` preserve the result/restoration. Material provider
+cache state and readiness to resume installed files remain UNKNOWN: restoring
+fields does not prove cache retention and this run made no browser/E2E/PC-off claim.
+There was one submit, no retry, no R4 replay and no queue/DB/intent/consumer changes.
+Independent runtime QA returned GO for INSTALLED_METADATA_ONLY before the final
+evidence commit, without rerunning closed suites or widening the scope.
+
+Transfer lesson: a first compressed literal copy failed decompression before
+any field edit; a subsequent7052-character gzip/base64 bundle was transferred in
+three short chunks and verified by compressed-bundle SHA and final wrapper SHA
+before fill. No recipe/wrapper bytes were altered and the failure did not cause
+an extra submit. stdout was buffered until recipe terminal, so intermediate
+APT/pip/Chromium phase was UNKNOWN; existing timeout evidence was read only,
+not changed mid-run. No cutoff or cancellation was imposed on partial installation.
+
 Coordination lesson: a draft apt_trust_diagnostic.py was written immediately before mother transferred its ownership to Sol. No execution or data loss. /root/r4_recovery stopped editing on notification; /root/apt_trust_code is now sole code/wrapper/test writer, recovery retains browser and docs. Require prior writer stop ACK before future handoff to avoid simultaneous edits. Mother acknowledged dispatch timing issue.

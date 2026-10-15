@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "phase": "DISPATCH_STARTED_NO_REPLAY",
+  "started_at_utc": "2026-10-15T14:43:26.038137+00:00",
+  "operation_id": "9fc238a7-aa41-433c-8681-a9bf6ec6a340",
+  "environment_id": "6abad782eba0819196ca234dc3abc327",
+  "branch": "codex/hermes-controller-hardening-20261013",
+  "attempts": 1,
+  "queue_mutations": 0,
+  "historical_R4_replayed": false,
+  "config_receipt_sha256": "bedc87885f1f5ff200f238a1ff951dead79eb932d43fa09e6957ae5d3f78d9f2",
+  "prompt_sha256": "7dc07b3c96e91381425b5f0388aec2f77d70c2f66fafb2f3acffe5cd3109e0d4"
+}

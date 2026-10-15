@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "observed_at_utc": "2026-10-15T14:45:10.615Z",
+  "task_id": "task_e_6ad0e692ae0083279e999732576d8c31",
+  "phase": "PROVIDER_CONFIGURING_ENVIRONMENT",
+  "visible_status": "Configurando entorno; Esperando la salida",
+  "visible_code_blocks": 0,
+  "actual_setup_receipt": false,
+  "expected_completion_marker_seen": false,
+  "submits": 1,
+  "settings_still_temporarily_approved": true,
+  "no_retry": true
+}

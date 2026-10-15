@@ -1,0 +1,67 @@
+{
+  "schema": 1,
+  "phase": "PRE_SUBMIT_PREFLIGHT",
+  "at_utc": "2026-10-15T14:41:46.029185+00:00",
+  "environment_id": "6abad782eba0819196ca234dc3abc327",
+  "operation_id": "9fc238a7-aa41-433c-8681-a9bf6ec6a340",
+  "published_branch": "codex/hermes-controller-hardening-20261013",
+  "published_head": "608e445d8f63953855405ef69a322797ea7f2347",
+  "list_command_exit": 0,
+  "listed": 10,
+  "active": 0,
+  "cursor": null,
+  "task_states": [
+    {
+      "id": "task_e_6ad0ceffce048327a2ac40888465fe00",
+      "status": "error"
+    },
+    {
+      "id": "task_e_6ad0c8cad0808327a72fa0c2980d7f76",
+      "status": "error"
+    },
+    {
+      "id": "task_e_6ad0c5a6abec8327a067f26b0e8445f2",
+      "status": "ready"
+    },
+    {
+      "id": "task_e_6ad045ab00c08327bb4ea958581c5c82",
+      "status": "error"
+    },
+    {
+      "id": "task_e_6acfe28793cc832796935c5765238d2e",
+      "status": "ready"
+    },
+    {
+      "id": "task_e_6acfdb1f64048327947c4a74eef1693b",
+      "status": "ready"
+    },
+    {
+      "id": "task_e_6acfcf4217a48327aff20b2422166315",
+      "status": "error"
+    },
+    {
+      "id": "task_e_6acfb6b4d8988327a18bfd12a40b3957",
+      "status": "ready"
+    },
+    {
+      "id": "task_e_6acfae6a1ca48327a4022d331f4e0efe",
+      "status": "ready"
+    },
+    {
+      "id": "task_e_6acfabf62b9c8327b796306ed2d62e07",
+      "status": "ready"
+    }
+  ],
+  "baseline_dom_at_utc": "2026-10-15T14:41:18.287Z",
+  "setup_original_sha256": "57f1f52c4898c6aad6ba494d2e010e009959fd17296089fcf223b3f7a3817a62",
+  "maintenance_original_sha256": "6a3ea5b3f45cc9a6066d94824ccfedb8c301dd572f5a36ee3bac398d9ad2a726",
+  "baseline_matches_private_originals": true,
+  "cache_enabled": true,
+  "http_read_only": true,
+  "allowed_domains": "example.com,iana.org,www.iana.org",
+  "approved_wrapper_sha256": "21071fdd75a92e9c3644efb4bf36be8b3d16f9a7c521081bed82b4efbd849ed4",
+  "submits_so_far": 0,
+  "queue_changes": 0,
+  "historical_R4_replay": false,
+  "transfer_issue": "First literal compressed transfer failed decompression; final7052-char chunked transfer passed bundle and wrapper SHA before fill. No settings or Cloud effect from failed transfer."
+}
