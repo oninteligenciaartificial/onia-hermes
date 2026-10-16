@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "source": "Root verified Git commits and cloud receipts",
+  "timestamp": "2026-10-16T14:52:03Z",
+  "goal": "Hermes unattended orchestration using native Codex Cloud subscription and Claude Code Cloud, with PC off",
+  "task": "Visor contrato 10 (tests solo visor)",
+  "owner": "Root",
+  "provider": "Codex Cloud",
+  "model_configured": "GPT-6.1 Sol Ligero (UI observed by Root)",
+  "model_observed": "UNKNOWN",
+  "phase": "blocked",
+  "tests": {
+    "pass": 17,
+    "fail": 0,
+    "skip": 0
+  },
+  "links": [
+    "https://github.com/oninteligenciaartificial/onia-hermes/commit/e404a44ebf7faaed9da8b08824b18f9e90b73bd4",
+    "https://github.com/oninteligenciaartificial/onia-hermes/commit/eb99d5c2fefa6c4dd5ead11fbe45721fdc114af5"
+  ],
+  "blocker": "Unattended native Codex Cloud transport is not established, and Claude Code Cloud configuration/dispatch remain unverified. The viewer snapshot is offline and does not prove a live feed or Warp UI test.",
+  "next_action": "Wait for the user's decision on the proposed Codex CLI subscription-auth GitHub Actions alternative before changing architecture."
+}
