@@ -34,7 +34,11 @@ build/
 # Secuencias PNG del marcador de la serie: ~8 MB por render y se regeneran con
 # `node scripts/hyperframes/render.mjs --comp Scoreboard`. Son 155 dias: si se
 # suben, el repo se llena de artefactos reconstruibles.
-.hermes/video-lab/overlay/
+# Frames de video regenerables (scripts/hyperframes/render.mjs): solo se versionan briefs, jobs y split-screen-onia.
+.hermes/video-lab/*
+!.hermes/video-lab/briefs/
+!.hermes/video-lab/jobs/
+!.hermes/video-lab/split-screen-onia/
 .hermes/video-intake/
 
 # OS
