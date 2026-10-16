@@ -96,6 +96,11 @@ Tareas de QA destrabadas:
 - **Madre** · MEDIUM: `StrictHostKeyChecking=no` con root en un workflow que ahora corre por schedule (igual que `hermes-jarvis.yml:82`).
 - `onia-mirar.js` vive en el VPS, no se pudo revisar.
 
+- **Madre** · revisión del #195 (hook `subagente-con-modelo.mjs`, 16-oct, `modelos: sonnet`): sin CRITICAL ni HIGH, sin secretos. MEDIUM `:76`:
+  `esMain` compara rutas y con symlink o mayúscula de unidad en Windows no coincide, el hook sale 0 y `bloqueo` queda inactivo sin avisar
+  (usar `realpathSync` o probar el hook real por stdin). LOW `:22`: cualquier string cuenta como modelo válido. LOW `:56-72`: el self-test
+  no cubre stdin ni `esMain`; el «11 casos» está escrito a mano.
+
 ## Hecho antes del 10-oct
 
 - [x] P2 de #173: el aviso de rechazo se reintenta si Telegram falla (test fallo → recuperación → segunda corrida) — `31aebd95`, en `main` con el #173
