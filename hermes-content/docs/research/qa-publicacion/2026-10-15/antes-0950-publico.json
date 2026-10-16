@@ -1,0 +1,78 @@
+{
+  "cuando": "2026-10-16T09:02:03.076Z",
+  "rutas": {
+    "/book/clinica-sergio-p2ljs": {
+      "390": {
+        "estado": 200,
+        "ms": 8624,
+        "buildId": "ve8K9Mfuj_s_PfQwSythi",
+        "build": "webpack-c1ddd11069154276.js",
+        "archivo": "antes-0950-book-clinica-sergio-p2ljs-390.png",
+        "titulo": "Reserve su cita en Clínica Sergio",
+        "descripcion": "Elija el día y la hora que le queden bien en Clínica Sergio. Sin registro, en menos de un minuto.",
+        "ogTitulo": "Reserve su cita en Clínica Sergio",
+        "ogDescripcion": "Elija el día y la hora que le queden bien en Clínica Sergio. Sin registro, en menos de un minuto.",
+        "twTitulo": "Reserve su cita en Clínica Sergio",
+        "manifest": "/manifest.json",
+        "url": "/book/clinica-sergio-p2ljs",
+        "desbordeHorizontal": false,
+        "ligadurasComoTexto": [],
+        "precios": [],
+        "obra": [],
+        "voseoOTuteoVisible": [],
+        "errores": [],
+        "inicio": [
+          "CS",
+          "AGENDAR CITA",
+          "Clínica Sergio",
+          "call",
+          "badge",
+          "Profesional",
+          "calendar_today",
+          "Fecha",
+          "schedule",
+          "Horario",
+          "person",
+          "Datos"
+        ]
+      },
+      "1440": {
+        "estado": 200,
+        "ms": 5266,
+        "buildId": "ve8K9Mfuj_s_PfQwSythi",
+        "build": "webpack-c1ddd11069154276.js",
+        "archivo": "antes-0950-book-clinica-sergio-p2ljs-1440.png",
+        "titulo": "Reserve su cita en Clínica Sergio",
+        "descripcion": "Elija el día y la hora que le queden bien en Clínica Sergio. Sin registro, en menos de un minuto.",
+        "ogTitulo": "Reserve su cita en Clínica Sergio",
+        "ogDescripcion": "Elija el día y la hora que le queden bien en Clínica Sergio. Sin registro, en menos de un minuto.",
+        "twTitulo": "Reserve su cita en Clínica Sergio",
+        "manifest": "/manifest.json",
+        "url": "/book/clinica-sergio-p2ljs",
+        "desbordeHorizontal": false,
+        "ligadurasComoTexto": [],
+        "precios": [],
+        "obra": [],
+        "voseoOTuteoVisible": [],
+        "errores": [
+          "An unknown error occurred when fetching the script.",
+          "[SW] registration failed: SecurityError: Failed to register a ServiceWorker for scope ('https://app.onia.com.bo/') with script ('https://app.onia.com.bo/sw.js')"
+        ],
+        "inicio": [
+          "CS",
+          "AGENDAR CITA",
+          "Clínica Sergio",
+          "call",
+          "badge",
+          "Profesional",
+          "calendar_today",
+          "Fecha",
+          "schedule",
+          "Horario",
+          "person",
+          "Datos"
+        ]
+      }
+    }
+  }
+}
