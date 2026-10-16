@@ -9,7 +9,7 @@
 |---|---|
 | Nombre | «Las citas que se pierden por no confirmar: cómo ordenar su clínica cada mañana». Es un dolor del dueño, no una promesa de resultado |
 | Para quién | Dueños y dueñas de clínicas dentales de Santa Cruz (con 2-6 profesionales y recepción). Filtro dicho en los primeros 20 segundos |
-| Duración | 45 min: 25 educación · 12 demo · 5 oferta · el resto, preguntas. La venta llega tarde y corta (medido en los VSL de Hormozi y Gadzhi, skill §9.3) |
+| Duración | 45 min en total: 3 apertura · 19 educación (dolor y hábito) · 10 demo · 4 oferta · 2 cierre · 7 preguntas. La venta llega tarde y corta (medido en los VSL de Hormozi y Gadzhi, skill §9.3) |
 | Cuándo | **Jueves 22-oct, 19:00 (La Paz).** Deja 8 días para cobrar antes del 31-oct. Si la cuenta demo no está lista, pasar al martes 27-oct a las 19:00 o usar el plan B de §5 |
 | Dónde | Google Meet (Sergio Urcullo ya tiene Google; **cero herramientas nuevas, cero gasto**). Se graba solo con su OK, para el repaso de quienes no lleguen |
 | Cómo se inscriben | Escriben «Webinar» al WhatsApp de Onia o a Sergio Urcullo; él anota nombre, clínica y cuántos profesionales atienden (calificación gratis). Sin formulario nuevo |
@@ -42,14 +42,14 @@
 > Buenas noches. Soy Sergio Urcullo, de Onia, aquí en Santa Cruz. Esta charla es para dueños y dueñas de clínicas dentales con equipo y recepción. Si usted atiende solo y sin recepción, igual le sirve, pero está pensada para quien tiene gente a cargo.
 > Voy a durar 45 minutos y le prometo tres cosas: una forma de ordenar su mañana que puede usar desde mañana, sin importar si usa Onia; después le muestro cómo lo hace un sistema; y al final le digo cuánto cuesta y qué puede hacer si le interesa. Si no le sirve, se lo digo.
 
-### Bloque 1 (0:03-0:10) — el dolor, con su consecuencia
+### Bloque 1 (0:03-0:08) — el dolor, con su consecuencia
 - La cita de mañana que no se confirmó: se descubre a la hora, con la silla vacía y sin tiempo de cubrirla. El sillón vacío cuesta lo mismo que uno ocupado.
 - El paciente que canceló o faltó y nadie le volvió a escribir.
 - El saldo que nadie recuerda cobrar.
 > Esto no es un problema de su recepcionista: es un problema de que nadie tiene la lista a las 8 de la mañana. Eso se arregla con un hábito.
 (Sin cifras propias: **no hay**. Si usa un número, es una pregunta al público: «¿cuántas citas se le caen por semana?», y se anota.)
 
-### Bloque 2 (0:10-0:25) — el hábito, útil aunque no compren (se da antes de pedir)
+### Bloque 2 (0:08-0:22) — el hábito, útil aunque no compren (se da antes de pedir)
 1. **La lista de las 8:00:** cada mañana, quién tiene cita mañana y no confirmó. Se escribe a la tarde anterior, no a la hora.
 2. **La lista de los que se fueron:** quién canceló o faltó en las últimas 2 semanas y no volvió a agendar. Se les escribe una sola vez, con una oferta concreta de horario.
 3. **La lista de cobros:** quién debe y desde cuándo. Se avisa con un mensaje cortés, el mismo día de la semana.
@@ -57,7 +57,7 @@
 Tiempo de la rutina en papel o planilla: pizarra o Excel, 15-20 minutos al día. Pregunta al público: «¿hoy quién hace esto en su clínica?».
 > Si lo hace así a mano, ya mejoró. Lo que sigue es cómo hacer lo mismo sin gastar esos 20 minutos.
 
-### Bloque 3 (0:25-0:37) — demo: la misma persona de ejemplo en todas las pantallas
+### Bloque 3 (0:22-0:32) — demo: la misma persona de ejemplo en todas las pantallas
 **Requisito: cuenta demo (§1, punto 1).** Pantallas y qué se dice, en este orden:
 1. **Registro:** «Elige su rubro y queda armada con las pantallas, las palabras y los agentes de su rubro» (A-03 ⬜: se mira con la cuenta). Muestra los 5 rubros (A-02 ✅).
 2. **Agenda y paciente:** la agenda, la ficha con historia clínica y odontograma. «Esta paciente de ejemplo…» — **nunca** «clínica de ejemplo» como promesa; se dice «datos de ejemplo».
@@ -68,21 +68,21 @@ Tiempo de la rutina en papel o planilla: pizarra o Excel, 15-20 minutos al día.
 - **Frenos (G-01):** antes de hacer clic en «Aprobar» durante la demo, la cuenta lleva contactos de prueba propios: un clic puede enviar un mensaje de verdad (skill §4.4). Si hay duda, se muestra sin hacer clic.
 - Nunca se muestra el tratamiento a medias (D-03), el envío por WhatsApp (G-03 🟡), el agente de WhatsApp (J-*) ni la factura SIAT.
 
-### Bloque 4 (0:37-0:42) — la oferta (solo filas ✅)
+### Bloque 4 (0:32-0:36) — la oferta (solo filas ✅)
 > Se prueba 14 días sin tarjeta; si no le sirve, no paga nada. Sin contrato de permanencia, sin costo de implementación, precios finales en bolivianos. Su información es suya: no se vende ni se usa para entrenar IA.
-> Para una clínica con 2 a 4 personas usando el sistema, el plan Crece cuesta Bs 550 al mes. Con 5 personas, el Profesional: Bs 890. Para un consultorio chico, el Básico: Bs 320.
-> Hay una forma de pagar que conviene: el plan anual cobra 10 meses y usted usa 12. Básico anual Bs 3.200, Crece Bs 5.500, Profesional Bs 8.900. ⟦GARANTÍA: «Si en 14 días no le sirve, le devuelvo el pago completo.»⟧
+> Para una clínica con 2 a 4 personas usando el sistema, el plan Crece cuesta Bs 550 al mes. Con 5 personas, el Profesional: Bs 890. Con 6 o más personas usando el sistema (por ejemplo 5 profesionales y recepción), el Completo, que no tiene tope de usuarios: Bs 1.290. Para un consultorio chico, el Básico: Bs 320.
+> Hay una forma de pagar que conviene: el plan anual cobra 10 meses y usted usa 12. Básico anual Bs 3.200, Crece Bs 5.500, Profesional Bs 8.900, Completo Bs 12.900. ⟦GARANTÍA: «Si en 14 días no le sirve, le devuelvo el pago completo.»⟧
 > **Les tengo que ser honesto:** Onia es nueva. Usted sería de los primeros clientes y no tengo testimonios que mostrarle. Por eso le ofrezco la prueba sin tarjeta, y por eso quiero saber qué le falta. A cambio, le pido sus observaciones.
 (Esta frase es la única «prueba» que se tiene. No se improvisa otra.)
 
-### Cierre (0:42-0:45) — una sola acción, según dónde esté
+### Cierre (0:36-0:38) — una sola acción, según dónde esté
 > Hay dos formas de seguir:
 > **Primera:** si quiere verlo con los datos de su clínica, coordinamos 20 minutos de videollamada: escriba «Demo» ahora por el chat y yo le contesto hoy.
 > **Segunda:** si ya decidió, escriba «Anual» y le paso el link para pagar por QR; al subir el comprobante yo lo apruebo y el plan queda activo.
 > Nadie tiene que decidir hoy.
 (Una sola ventana de acción. Sin cuenta regresiva ni «últimos cupos»: no hay escasez real.)
 
-### Preguntas (último tramo) — respuestas ya escritas
+### Preguntas (0:38-0:45) — respuestas ya escritas
 
 | Objeción | Respuesta |
 |---|---|
