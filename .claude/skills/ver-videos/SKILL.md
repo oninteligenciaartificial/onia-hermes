@@ -242,6 +242,7 @@ reporta el host y el reel se manda a la madre en la PC (Chrome + `fetch-video.mj
 `127.0.0.1:<puerto>` para leer el cuerpo del 403 (curl lo esconde). Antes de planear una tarea de video en la nube,
 probar `curl -sS -o /dev/null -w "%{http_code}" https://www.youtube.com`: `000` + «CONNECT tunnel failed, response 403»
 = no hay ruta, ahorrar el intento.
+- **Carrusel desde la nube (2.º caso, 16-oct, `/p/DecFE1oDNd3/`):** Chromium → `ERR_TUNNEL_CONNECTION_FAILED`, `yt-dlp` → 403 del proxy, `gallery-dl` (pip, 3 s) → `ProxyError: 403 Forbidden`. Las tres herramientas chocan con el mismo host bloqueado, así que cambiar de herramienta no sirve: el carrusel lo baja la madre con `ig-carousel.mjs` y las láminas se leen con visión. Fichas de esos dos posts: pendientes hasta tener los archivos.
 - **VPS desde la nube:** sin `ssh` en el PATH y sin `ONIA_VPS_SSH_KEY_B64` en el entorno ⇒ no hay camino `onia-vps`
   (ni `transcribe.sh`). No buscar otra forma de entrar.
 - **Playwright + Chromium en la nube (medido 16-oct):** el entorno trae Chromium (`/opt/pw-browsers/chromium-1194/chrome-linux/chrome`)
