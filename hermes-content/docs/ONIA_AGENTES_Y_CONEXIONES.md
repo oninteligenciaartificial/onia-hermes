@@ -6,8 +6,8 @@
 > conectar una API de OpenAI, conectar una API de Google Drive… porque sin eso el chatbot no
 > funciona"*.
 >
-> Manda `ONIA_V1_ALCANCE.md`. Mientras diga `EN CURSO`, de este documento **solo se construye
-> lo que está en la sección «Qué entra en la 1.0»** — que es poco a propósito. El resto está
+> Manda `ONIA_1.0_CORTE.md` (antes `ONIA_V1_ALCANCE.md`). De este documento **solo se construye
+> lo que ese corte pone en la 1.0 o la 1.1** — que es poco a propósito. El resto está
 > escrito para que la decisión ya esté tomada cuando toque, no para hacerlo ahora.
 
 ---

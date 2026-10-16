@@ -44,7 +44,7 @@ rubro nuevo se enciende en vez de escribirse.
 Leé primero, en C:\\dev\\proyectos\\onia-hermes:
   1. hermes-content/docs/handoff/onia-v1-servicios.md — la sesión anterior ENTERA, con los tres
      errores que cometió y sus causas. Leé sobre todo «Intentos fallidos» y el cierre.
-  2. hermes-content/docs/ONIA_V1_ALCANCE.md — el objetivo, los precios y el orden de trabajo.
+  2. hermes-content/docs/ONIA_1.0_CORTE.md — qué se vende ya, qué va en la 1.1 y qué después.
   3. hermes-content/docs/ONIA_AGENTES_Y_CONEXIONES.md — decisiones ya cerradas sobre agentes,
      IA y conexiones. No reabrir sin dato nuevo.
 

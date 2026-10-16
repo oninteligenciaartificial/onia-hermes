@@ -81,6 +81,9 @@ Fuente interna con el detalle y las citas: `hermes-content/docs/ONIA_FACTURACION
   DS 21530 Art. 4 con los párrafos del DS 4541) y no se pasa a otro mes (RND 102100000011 Art. 25.XIV).
 - **Trampa de método:** siatinfo falla la verificación TLS (no manda el intermedio de RapidSSL) y
   WebFetch da 503. Se lee con `curl --cacert <bundle + intermedio>`; nunca apagando la verificación.
+  Receta medida el 9-oct: el intermedio sale del AIA del certificado
+  (`curl http://cacerts.rapidssl.com/RapidSSLTLSRSACAG1.crt` → `openssl x509 -inform DER` a PEM) y se
+  concatena a `/root/.ccr/ca-bundle.crt`. El texto de la nota está en `itemprop="articleBody"`.
 
 ## Obligaciones (confirmar tasa/plazo VIGENTE con fuente antes de hardcodear)
 IVA mensual · IT mensual · IUE anual · RC-IVA mensual si aplica. No asumir terminación de NIT,
@@ -102,6 +105,17 @@ régimen, ni fechas sin confirmación. Si faltan datos → responder "configurac
   Pruebas» decía 26 %, y casi seguro era el % de la **etapa VI** (150/560 = 26,8 %; 32 filas = las de VI),
   no el general del sistema (80 % el 27-sep). Antes de concluir, pedir también la captura del «Listado de
   Etapas». Por la misma razón, el «general» del informe local del runner no se compara con una lista suelta.
+- **El CAFC del piloto lo saca Sergio Urcullo** (9-oct): los motivos 5/6/7 de la etapa VI no corren sin él.
+  El SIN pide uno por documento sector y sucursal que se prueba, y el CAFC trae un **rango de números**:
+  una factura fuera de él vuelve con 1047 (1045 CAFC inválido, 1046 fecha inválida para el CAFC). Hay
+  que pedirle la mayor cantidad que permita (las filas piden 15.060 por sector) y la captura con código
+  **y rango**. La opción de producción (Manual de Facturación → Factura de Contingencia) manda a imprimir
+  talonarios reales: no sirve para pruebas. Formato de carga: README del runner.
+- **El portal cuenta las validaciones de VI/IX por sector + PdV, de cualquier motivo o tamaño** (27-sep:
+  280 paquetes de 2 XML del motivo 1 en PdV 1 llenaron la validación 70/70 con las recepciones en 0) y no
+  cuenta dos veces la misma recepción (el 2-oct cada paquete se validó dos veces y el total del 8-oct, 380,
+  solo cierra con 40 por PdV en el sector 17). Antes de concluir qué falta, leer la bitácora del VPS
+  (`/opt/onia-siat/runner-20260929/BITACORA.md`): trae el conteo fila por fila de cada tanda.
 - Mantener trazabilidad y postura fiscal legible por ONIA Center (tabla `tax_posture`).
 
 ## Estar al día

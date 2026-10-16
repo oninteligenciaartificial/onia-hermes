@@ -1,0 +1,168 @@
+From c3f00c00fd47d475a139c545b001a9db58796eb1 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Thu, 8 Oct 2026 18:42:57 +0000
+Subject: [PATCH 1/2] =?UTF-8?q?fix(dev):=20bancos=20pasan=20el=20nombre=20?=
+ =?UTF-8?q?del=20plan=20sin=20repetir=20=C2=ABPlan=C2=BB?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+La barra de estado ya antepone «Plan»; los bancos pasaban «Plan Profesional» y se leía «Plan Plan Profesional» en las capturas. Producción no cambia: pasa nombreDePlan(plan).
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01HhnFgkeF6nLGvjrfjt1o2C
+---
+ app/dev/agenda/page.tsx             | 2 +-
+ app/dev/comercio-productos/page.tsx | 2 +-
+ app/dev/ficha/page.tsx              | 2 +-
+ app/dev/pendientes/page.tsx         | 2 +-
+ app/dev/roles-operativos/page.tsx   | 2 +-
+ app/dev/shell/page.tsx              | 2 +-
+ 6 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/app/dev/agenda/page.tsx b/app/dev/agenda/page.tsx
+index 639573d1..715fb9fa 100644
+--- a/app/dev/agenda/page.tsx
++++ b/app/dev/agenda/page.tsx
+@@ -137,7 +137,7 @@ export default async function BancoDeAgenda({ searchParams }: { searchParams: Pr
+           doctorName=""
+           role="ADMIN"
+           plan="professional"
+-          planNombre="Plan Profesional"
++          planNombre="Profesional"
+           diasDePrueba={5}
+           decisionesPendientes={0}
+           navItems={navItems}
+diff --git a/app/dev/comercio-productos/page.tsx b/app/dev/comercio-productos/page.tsx
+index 1a7e5f58..155b6dc9 100644
+--- a/app/dev/comercio-productos/page.tsx
++++ b/app/dev/comercio-productos/page.tsx
+@@ -118,7 +118,7 @@ export default async function BancoComercioProductos({
+           doctorName=""
+           role="ADMIN"
+           plan="professional"
+-          planNombre="Plan Profesional"
++          planNombre="Profesional"
+           diasDePrueba={5}
+           decisionesPendientes={0}
+           navItems={navItems}
+diff --git a/app/dev/ficha/page.tsx b/app/dev/ficha/page.tsx
+index fb9304cf..66101fa2 100644
+--- a/app/dev/ficha/page.tsx
++++ b/app/dev/ficha/page.tsx
+@@ -171,7 +171,7 @@ export default async function BancoDeFicha({
+           doctorName=""
+           role={staff ? "STAFF" : "ADMIN"}
+           plan="professional"
+-          planNombre="Plan Profesional"
++          planNombre="Profesional"
+           diasDePrueba={5}
+           decisionesPendientes={0}
+           navItems={navItems}
+diff --git a/app/dev/pendientes/page.tsx b/app/dev/pendientes/page.tsx
+index 446a7589..9b256233 100644
+--- a/app/dev/pendientes/page.tsx
++++ b/app/dev/pendientes/page.tsx
+@@ -59,7 +59,7 @@ export default async function BancoDePendientes({
+           doctorName=""
+           role="ADMIN"
+           plan="professional"
+-          planNombre="Plan Profesional"
++          planNombre="Profesional"
+           diasDePrueba={5}
+           decisionesPendientes={APROBACIONES.length}
+           navItems={navItems}
+diff --git a/app/dev/roles-operativos/page.tsx b/app/dev/roles-operativos/page.tsx
+index fdbae1f4..08e49fcb 100644
+--- a/app/dev/roles-operativos/page.tsx
++++ b/app/dev/roles-operativos/page.tsx
+@@ -60,7 +60,7 @@ export default async function BancoRolesOperativos({
+           doctorName=""
+           role="ADMIN"
+           plan="professional"
+-          planNombre="Plan Profesional"
++          planNombre="Profesional"
+           diasDePrueba={5}
+           decisionesPendientes={0}
+           navItems={navItems}
+diff --git a/app/dev/shell/page.tsx b/app/dev/shell/page.tsx
+index 4c181a79..d6e2046c 100644
+--- a/app/dev/shell/page.tsx
++++ b/app/dev/shell/page.tsx
+@@ -74,7 +74,7 @@ export default async function BancoDePruebasShell({
+         // el que nunca se ve en un banco vacio. Con ?role=STAFF el item no esta
+         // y el numero no se pinta: el layout real le da 0 a quien no decide.
+         decisionesPendientes={decide ? 4 : 0}
+-        planNombre="Plan Profesional"
++        planNombre="Profesional"
+         diasDePrueba={5}
+         clinicName={nombre ?? ""}
+         doctorName=""
+-- 
+2.43.0
+
+
+From a968db91ad22423638b3e4ad089b83c880a3741a Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Thu, 8 Oct 2026 19:00:52 +0000
+Subject: [PATCH 2/2] =?UTF-8?q?feat(dev):=20escenario=20=C2=ABvarias=C2=BB?=
+ =?UTF-8?q?=20en=20el=20banco=20del=20odontograma?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Para el OK de diseño hace falta ver caries y restaurado repartidos en varias caras de más de una pieza; el banco sólo tenía una cara restaurada y una sana. Se agrega el caso ?caso=varias; los demás no cambian. Producción no cambia.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01HhnFgkeF6nLGvjrfjt1o2C
+---
+ app/dev/odontograma/BancoOdontograma.tsx | 20 ++++++++++++++++++--
+ app/dev/odontograma/page.tsx             |  2 +-
+ 2 files changed, 19 insertions(+), 3 deletions(-)
+
+diff --git a/app/dev/odontograma/BancoOdontograma.tsx b/app/dev/odontograma/BancoOdontograma.tsx
+index e2410bd5..dfa8258e 100644
+--- a/app/dev/odontograma/BancoOdontograma.tsx
++++ b/app/dev/odontograma/BancoOdontograma.tsx
+@@ -4,9 +4,25 @@ import { Odontogram } from "@/components/odontogram/Odontogram";
+ import type { GeneralRecord, SurfaceRecord } from "@/lib/dental/odontogram-editor";
+ const general: GeneralRecord[] = [{ toothNumber: 36, condition: "CARIES", notes: "Registro general previo. No indica caras." }];
+ const faces: SurfaceRecord[] = [{ toothNumber: 36, surface: "MESIAL", condition: "RESTAURADO", notes: "Nota ficticia independiente.\nSegunda línea conservada.", revision: 1 }, { toothNumber: 36, surface: "CENTRAL", condition: "SANO", notes: "Sano elegido explícitamente", revision: 1 }];
++// Escenario «varias»: caries y restaurado repartidos en varias caras de más de una pieza.
++const generalVarias: GeneralRecord[] = [
++  { toothNumber: 36, condition: "CARIES", notes: null },
++  { toothNumber: 16, condition: "RESTAURADO", notes: null },
++  { toothNumber: 25, condition: "CARIES", notes: null },
++  { toothNumber: 46, condition: "RESTAURADO", notes: null },
++];
++const carasVarias: SurfaceRecord[] = [
++  { toothNumber: 36, surface: "MESIAL", condition: "RESTAURADO", notes: "Resina colocada en el control anterior.", revision: 1 },
++  { toothNumber: 36, surface: "CENTRAL", condition: "CARIES", notes: "Caries profunda; pendiente de tratamiento.", revision: 1 },
++  { toothNumber: 36, surface: "DISTAL", condition: "CARIES", notes: null, revision: 1 },
++  { toothNumber: 36, surface: "VESTIBULAR", condition: "RESTAURADO", notes: null, revision: 1 },
++  { toothNumber: 36, surface: "LINGUAL", condition: "SANO", notes: null, revision: 1 },
++  { toothNumber: 16, surface: "CENTRAL", condition: "RESTAURADO", notes: null, revision: 1 },
++  { toothNumber: 16, surface: "MESIAL", condition: "RESTAURADO", notes: null, revision: 1 },
++];
+ export function BancoOdontograma({ caso }: { caso: string }) {
+-  const records = caso === "vacio" ? [] : caso === "ausente" ? [{ ...general[0], condition: "AUSENTE" as const }] : general;
+-  const surfaces = caso === "legado" || caso === "vacio" ? [] : faces;
++  const records = caso === "vacio" ? [] : caso === "varias" ? generalVarias : caso === "ausente" ? [{ ...general[0], condition: "AUSENTE" as const }] : general;
++  const surfaces = caso === "legado" || caso === "vacio" ? [] : caso === "varias" ? carasVarias : faces;
+   useEffect(() => {
+     // Patrón banco-admin; sólo estas rutas, restaurado al desmontar. Sin POST real.
+     const original = window.fetch;
+diff --git a/app/dev/odontograma/page.tsx b/app/dev/odontograma/page.tsx
+index ac37f7ed..cc9fd5ca 100644
+--- a/app/dev/odontograma/page.tsx
++++ b/app/dev/odontograma/page.tsx
+@@ -3,5 +3,5 @@ import { BancoOdontograma } from "./BancoOdontograma";
+ export default async function Banco({ searchParams }: { searchParams: Promise<{ caso?: string }> }) {
+   if (process.env.NODE_ENV === "production") notFound();
+   const { caso = "caras" } = await searchParams;
+-  return <main className="onia-product-theme min-h-screen bg-surface p-4 md:p-8"><div className="mx-auto max-w-5xl"><h1 className="mb-2 text-2xl font-bold">Odontograma · datos ficticios</h1><p className="mb-5 text-sm">Banco local sin red clínica. Seleccione la pieza 36; pruebe también 11, 21 y 41 para orientación.</p><nav className="mb-6 flex flex-wrap gap-3" aria-label="Escenarios">{["legado", "caras", "vacio", "ausente", "readonly", "error", "conflicto"].map(c => <a className="min-h-11 rounded-lg border border-outline-variant p-3" key={c} href={`?caso=${c}`} aria-current={caso === c ? "page" : undefined}>{c}</a>)}</nav><BancoOdontograma key={caso} caso={caso} /></div></main>;
++  return <main className="onia-product-theme min-h-screen bg-surface p-4 md:p-8"><div className="mx-auto max-w-5xl"><h1 className="mb-2 text-2xl font-bold">Odontograma · datos ficticios</h1><p className="mb-5 text-sm">Banco local sin red clínica. Seleccione la pieza 36; pruebe también 11, 21 y 41 para orientación.</p><nav className="mb-6 flex flex-wrap gap-3" aria-label="Escenarios">{["legado", "caras", "varias", "vacio", "ausente", "readonly", "error", "conflicto"].map(c => <a className="min-h-11 rounded-lg border border-outline-variant p-3" key={c} href={`?caso=${c}`} aria-current={caso === c ? "page" : undefined}>{c}</a>)}</nav><BancoOdontograma key={caso} caso={caso} /></div></main>;
+ }
+-- 
+2.43.0
+

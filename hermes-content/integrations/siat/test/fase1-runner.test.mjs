@@ -64,6 +64,9 @@ import {
   formatSinLocal,
   hashFor,
   pickMotivoSinCafc,
+  parseCafcConfig,
+  resolverCafc,
+  cafcDesdeEnv,
   tagText,
   updateStreak,
 } from "../src/fase1-runner.mjs";
@@ -637,13 +640,16 @@ describe("VI/IX: filas reales del portal y conciliacion del checkpoint", () => {
       };
       r.post = async (_service, envelope, meta) => {
         posts.push({ envelope, meta });
-        return { ok: true, parsed: { transaccion: true, codigoRecepcion: "REC" } };
+        return { ok: true, parsed: { transaccion: true, codigoRecepcion: "REC",
+          ...(meta.op.startsWith("validacion") ? { codigoEstado: 908 } : {}) } };
       };
       if (stage === "VI") await r.etapaVI();
       else await r.etapaIX();
       assert.deepEqual(lotes, [{ count: expected, sector: 17, pv: 1 }]);
-      assert.equal(posts.length, 1);
+      // 1 recepcion + su validacion inmediata (la fila de validacion ya esta llena).
+      assert.equal(posts.length, 2);
       assert.match(posts[0].envelope, new RegExp(`<cantidadFacturas>${expected}</cantidadFacturas>`));
+      assert.match(posts[1].meta.op, /^validacionRecepcion/);
       assert.equal(r.state.etapas[stage].cases[caseId], 10);
       assert.deepEqual(r.state.recepcionesLote[stage]["validacion-ds17-pv1"], ["REC"]);
     }
@@ -752,6 +758,99 @@ describe("VI/IX: filas reales del portal y conciliacion del checkpoint", () => {
       assert.equal(calls, 1, stage);
       assert.equal(r.state.etapas[stage].cases[r.caseFilter], 1);
     }
+  });
+});
+
+describe("VI/IX: cada paquete recibido se valida en el acto, aunque la fila de validacion este llena", () => {
+  // Por que: el 30-sep no sabiamos si el portal acredita la RECEPCION (901) o solo lo
+  // VALIDADO (908). Validar cada paquete apenas se recibe sirve en los dos casos y
+  // cuesta 1 SOAP de lectura por paquete.
+  const portal = JSON.parse(readFileSync(new URL("../portal-fase1-20260927.json", import.meta.url), "utf8"));
+  const CASOS = {
+    VI: { caseId: "recepcion-ds1-motivo3-pv0-menor500", valKey: "validacion-ds1-pv0", op: "validacionRecepcionPaqueteFactura" },
+    IX: { caseId: "recepcion-ds1-pv0-menor1000", valKey: "validacion-ds1-pv0", op: "validacionRecepcionMasivaFactura" },
+  };
+
+  // Runner con red simulada: `estados` es la cola de codigoEstado que devuelve cada validacion.
+  const armar = (stage, estados) => {
+    const { caseId, valKey } = CASOS[stage];
+    const r = Object.create(Runner.prototype);
+    r.state = applyPortalSnapshot(emptyState(), portal);
+    for (const [id, target] of Object.entries(LOTE_CASE_TARGETS[stage])) r.state.etapas[stage].cases[id] = target;
+    r.state.etapas[stage].cases[caseId] = 0;
+    r.state.etapas[stage].blockedCases = {};
+    r.state.catalogs.eventos = [{ codigoClasificador: 3, descripcion: "CORTE" }];
+    r.combo = { ...DEFAULT_COMBO };
+    r.caseFilter = caseId;
+    r.validacionEsperaMs = 0;
+    const logs = [];
+    r.log = (e) => logs.push(e);
+    r.checkpoint = () => {};
+    r.ensureCufd = async () => {};
+    r.eventWindowNow = () => ({ inicioMs: Date.now() - 120000, finMs: Date.now() - 1000 });
+    r.registrarEvento = async () => ({ ok: true, body: "<codigoRecepcionEventoSignificativo>EV</codigoRecepcionEventoSignificativo>" });
+    r.recepcionBase = (codigoEmision) => ({ codigoAmbiente: 2, codigoDocumentoSector: r.combo.codigoDocumentoSector,
+      codigoEmision, codigoModalidad: 2, codigoPuntoVenta: r.combo.codigoPuntoVenta,
+      codigoSistema: "SIS", codigoSucursal: 0, cufd: "CUFD", cuis: "CUIS", nit: "5371375010", tipoFacturaDocumento: 1 });
+    r.sinNow = () => "2026-10-01T00:00:00.000";
+    r.buildLote = (count) => ({ archivo: "TEST", hashArchivo: "HASH", cantidad: count });
+    const posts = [];
+    let n = 0;
+    r.post = async (_service, envelope, meta) => {
+      posts.push({ op: meta.op, codigo: envelope.match(/<codigoRecepcion>(.*?)<\/codigoRecepcion>/)?.[1] ?? null });
+      if (meta.op.startsWith("validacion")) {
+        return { ok: true, parsed: { transaccion: true, codigoEstado: estados.shift() ?? 908 } };
+      }
+      n += 1;
+      return { ok: true, parsed: { transaccion: true, codigoEstado: 901, codigoRecepcion: `REC-${n}` } };
+    };
+    const correr = (count) => (stage === "VI" ? r.etapaVI(count) : r.etapaIX(count));
+    return { r, posts, logs, correr, caseId, valKey };
+  };
+
+  for (const stage of ["VI", "IX"]) {
+    it(`${stage}: valida cada recepcion con su codigo aunque la fila de validacion ya este completa`, async () => {
+      const { r, posts, correr, caseId, valKey } = armar(stage, []);
+      const filaVal = r.state.etapas[stage].cases[valKey];
+      assert.equal(filaVal, LOTE_CASE_TARGETS[stage][valKey], "precondicion: fila de validacion llena");
+      await correr(2);
+      const ops = posts.map((p) => p.op);
+      assert.deepEqual(ops.filter((o) => o.startsWith("validacion")), [CASOS[stage].op, CASOS[stage].op]);
+      assert.deepEqual(posts.filter((p) => p.op.startsWith("validacion")).map((p) => p.codigo), ["REC-1", "REC-2"]);
+      // cada validacion va DESPUES de su recepcion, no todas al final
+      assert.ok(ops.indexOf(CASOS[stage].op) < ops.lastIndexOf(stage === "VI" ? "recepcionPaqueteFactura" : "recepcionMasivaFactura"));
+      assert.equal(r.state.etapas[stage].cases[caseId], 2);
+      assert.equal(r.state.etapas[stage].cases[valKey], filaVal, "la validacion inmediata no infla la fila de validacion");
+      assert.deepEqual(r.state.validacionesInmediatas[stage], { "REC-1": 908, "REC-2": 908 });
+    });
+  }
+
+  it("901 (pendiente) se reintenta hasta 908 sin reenviar el paquete", async () => {
+    const { r, posts, correr, caseId } = armar("VI", [901, 901, 908]);
+    await correr(1);
+    assert.equal(posts.filter((p) => p.op === "recepcionPaqueteFactura").length, 1);
+    assert.equal(posts.filter((p) => p.op === "validacionRecepcionPaqueteFactura").length, 3);
+    assert.equal(r.state.validacionesInmediatas.VI["REC-1"], 908);
+    assert.equal(r.state.etapas.VI.cases[caseId], 1);
+  });
+
+  it("si sigue en 901 tras los reintentos: el paquete cuenta, queda anotado pendiente y la corrida sigue", async () => {
+    const { r, posts, correr, caseId } = armar("VI", Array(20).fill(901));
+    await correr(1);
+    assert.equal(posts.filter((p) => p.op === "recepcionPaqueteFactura").length, 1);
+    assert.equal(r.state.validacionesInmediatas.VI["REC-1"], 901);
+    assert.equal(r.state.etapas.VI.cases[caseId], 1);
+    assert.equal(r.state.etapas.VI.blockedCases[caseId], undefined);
+  });
+
+  it("un rechazo (no 908 ni 901) cuenta ESE paquete pero bloquea el caso: no se manda otro igual", async () => {
+    const { r, posts, logs, correr, caseId } = armar("VI", [904]);
+    await correr(3);
+    assert.equal(posts.filter((p) => p.op === "recepcionPaqueteFactura").length, 1);
+    assert.equal(r.state.etapas.VI.cases[caseId], 1);
+    assert.equal(r.state.validacionesInmediatas.VI["REC-1"], 904);
+    assert.equal(r.state.etapas.VI.blockedCases[caseId]?.key, "validacion_rechazada");
+    assert.ok(logs.some((l) => l.blocked === "validacion_rechazada"));
   });
 });
 
@@ -1755,4 +1854,150 @@ describe("los wrappers historicos abortan antes de leer credenciales o enviar SO
       });
     });
   }
+});
+
+// 9-oct-2026: los 180 casos que faltan de la VI son los motivos 5/6/7, que piden
+// CAFC. El SIN da uno por documento sector y sucursal, cada uno con su RANGO de
+// numeros (1047 si una factura cae afuera). Sin red: SIN y evento simulados.
+describe("CAFC del piloto por sector y PdV, numerado dentro de su rango", () => {
+  const portal = JSON.parse(readFileSync(new URL("../portal-fase1-20260927.json", import.meta.url), "utf8"));
+  const catalogos = {
+    productos: [{ codigoProducto: 1, codigoActividad: "620100", descripcionProducto: "Software" }],
+    leyendas: [{ codigoActividad: "620100", descripcionLeyenda: "Ley 453" }],
+    unidadesMedida: [{ codigoClasificador: 58 }],
+    metodosPago: [{ codigoClasificador: 1 }],
+    tiposDocIdentidad: [{ codigoClasificador: 5, descripcion: "NIT" }],
+    eventos: [
+      { codigoClasificador: 5, descripcion: "VIRUS INFORMATICO O FALLA DE SOFTWARE" },
+      { codigoClasificador: 6, descripcion: "CAMBIO DE INFRAESTRUCTURA DE SISTEMA O FALLA DE HARDWARE" },
+      { codigoClasificador: 7, descripcion: "CORTE DE SUMINISTRO DE ENERGIA ELECTRICA" },
+    ],
+  };
+
+  /** Runner con la fila elegida a un paquete de la meta, y el SIN contestando 908. */
+  function runnerVI(caseId, cafcs) {
+    const r = Object.create(Runner.prototype);
+    r.nit = "5371375010";
+    r.cafcs = cafcs;
+    r.state = applyPortalSnapshot(emptyState(), portal);
+    r.state.numeroFactura = 7000;
+    r.state.catalogs = structuredClone(catalogos);
+    for (const pv of PUNTOS_VENTA) r.state.cufdByPv[String(pv)] = { codigo: "CUFD", codigoControl: "AB-12" };
+    r.combo = { ...DEFAULT_COMBO };
+    r.caseFilter = caseId;
+    r.validacionEsperaMs = 0;
+    r.log = () => {};
+    r.checkpoint = () => {};
+    r.ensureCufd = async () => {};
+    r.sinNow = () => "2026-10-09T12:00:00.000";
+    r.eventWindowNow = () => ({ inicioMs: Date.now() - 120000, finMs: Date.now() - 1000 });
+    r.eventos = 0;
+    r.registrarEvento = async () => {
+      r.eventos += 1;
+      return { ok: true, body: "<codigoRecepcionEventoSignificativo>EV</codigoRecepcionEventoSignificativo>" };
+    };
+    r.recepcionBase = (codigoEmision) => ({ codigoAmbiente: 2, codigoDocumentoSector: r.combo.codigoDocumentoSector,
+      codigoEmision, codigoModalidad: 2, codigoPuntoVenta: r.combo.codigoPuntoVenta,
+      codigoSistema: "SIS", codigoSucursal: 0, cufd: "CUFD", cuis: "CUIS", nit: "5371375010", tipoFacturaDocumento: 1 });
+    r.paquetes = [];
+    r.post = async (_service, envelope, meta) => {
+      if (meta.op === "recepcionPaqueteFactura") {
+        const archivo = tagText(envelope, "archivo");
+        const tar = gunzipSync(Buffer.from(archivo, "base64")).toString("utf8");
+        r.paquetes.push({
+          cafc: tagText(envelope, "cafc"),
+          numeros: [...tar.matchAll(/<numeroFactura>(\d+)<\/numeroFactura>/g)].map((m) => Number(m[1])),
+          cafcXml: [...new Set([...tar.matchAll(/<cafc>([^<]*)<\/cafc>/g)].map((m) => m[1]))],
+        });
+      }
+      return { ok: true, parsed: { transaccion: true, codigoRecepcion: `REC-${r.paquetes.length}`,
+        ...(meta.op.startsWith("validacion") ? { codigoEstado: 908 } : {}) } };
+    };
+    return r;
+  }
+
+  it("valida la lista: codigo, enteros, rango y sector/PdV sin repetir", () => {
+    assert.deepEqual(parseCafcConfig([{ sector: 1, pv: 0, cafc: " ABC123 ", desde: 1, hasta: 50 }]), [
+      { sector: 1, pv: 0, cafc: "ABC123", desde: 1, hasta: 50, reusar: false },
+    ]);
+    assert.throws(() => parseCafcConfig({ cafc: "X" }), /lista JSON/);
+    assert.throws(() => parseCafcConfig([{ sector: 1 }]), /falta el codigo/);
+    assert.throws(() => parseCafcConfig([{ cafc: "X", sector: "1" }]), /sector debe ser entero/);
+    assert.throws(() => parseCafcConfig([{ cafc: "X", desde: 10, hasta: 5 }]), /rango invalido/);
+    assert.throws(() => parseCafcConfig([{ cafc: "X", desde: 1 }]), /rango invalido/);
+    assert.throws(() => parseCafcConfig([{ cafc: "X", sector: 17 }, { cafc: "Y", sector: 17 }]), /repetido/);
+  });
+
+  it("gana la entrada mas especifica: sector+PdV, despues sector, despues la general", () => {
+    const lista = parseCafcConfig([
+      { cafc: "GENERAL" },
+      { cafc: "DS17", sector: 17 },
+      { cafc: "DS17-PV1", sector: 17, pv: 1 },
+    ]);
+    assert.equal(resolverCafc(lista, { sector: 17, pv: 1 }).cafc, "DS17-PV1");
+    assert.equal(resolverCafc(lista, { sector: 17, pv: 0 }).cafc, "DS17");
+    assert.equal(resolverCafc(lista, { sector: 1, pv: 0 }).cafc, "GENERAL");
+    assert.equal(resolverCafc(parseCafcConfig([{ cafc: "DS1", sector: 1 }]), { sector: 17, pv: 0 }), null);
+    assert.equal(resolverCafc(undefined, { sector: 1, pv: 0 }), null);
+  });
+
+  it("del ambiente lee el archivo y suma el codigo suelto de siempre", () => {
+    const archivo = JSON.stringify([{ cafc: "DS1", sector: 1, desde: 1, hasta: 100 }]);
+    const lista = cafcDesdeEnv({ SIAT_PILOT_CAFC_FILE: "/x.json", SIAT_PILOT_CAFC: "SUELTO" }, () => archivo);
+    assert.deepEqual(lista.map((e) => e.cafc), ["DS1", "SUELTO"]);
+    assert.deepEqual(cafcDesdeEnv({}), []);
+    assert.equal(cafcDesdeEnv({ SIAT_PILOT_CAFC: "SUELTO" })[0].desde, null);
+  });
+
+  it("cada paquete del motivo 5 lleva el CAFC de SU sector y numeros seguidos de su rango", async () => {
+    const caseId = "recepcion-ds17-motivo5-pv0-menor500";
+    const r = runnerVI(caseId, parseCafcConfig([
+      { cafc: "CAFC-DS1", sector: 1, desde: 1, hasta: 100 },
+      { cafc: "CAFC-DS17", sector: 17, desde: 501, hasta: 600 },
+    ]));
+    r.state.etapas.VI.cases[caseId] = 8;
+    await r.etapaVI(10);
+    assert.equal(r.state.etapas.VI.cases[caseId], 10);
+    assert.deepEqual(r.paquetes.map((p) => p.cafc), ["CAFC-DS17", "CAFC-DS17"]);
+    assert.deepEqual(r.paquetes.map((p) => p.numeros), [[501, 502], [503, 504]]);
+    assert.deepEqual(r.paquetes.map((p) => p.cafcXml), [["CAFC-DS17"], ["CAFC-DS17"]]);
+    assert.equal(r.state.numeroFactura, 7000, "el correlativo de la corrida no se toca");
+    assert.equal(r.state.cafcSiguiente["CAFC-DS17"], 505);
+  });
+
+  it("sin rango que alcance, bloquea el caso ANTES de gastar un evento", async () => {
+    const caseId = "recepcion-ds1-motivo5-pv1-igual500";
+    const r = runnerVI(caseId, parseCafcConfig([{ cafc: "CAFC-CHICO", sector: 1, desde: 1, hasta: 700 }]));
+    r.state.etapas.VI.cases[caseId] = 8;
+    await r.etapaVI(10);
+    assert.equal(r.paquetes.length, 1, "entra un paquete de 500; el segundo no");
+    assert.deepEqual(r.paquetes[0].numeros.slice(0, 2), [1, 2]);
+    assert.equal(r.eventos, 1);
+    assert.equal(r.state.etapas.VI.cases[caseId], 9);
+    assert.match(r.state.etapas.VI.blockedCases[caseId].mensaje.descripcion, /CAFC CAFC\.\.\.: rango 1-700 agotado/);
+  });
+
+  it("con reusar vuelve al inicio del rango; sin CAFC de ese sector, bloquea y lo dice", async () => {
+    const reusa = "recepcion-ds1-motivo6-pv0-menor500";
+    const r = runnerVI(reusa, parseCafcConfig([{ cafc: "CAFC-R", sector: 1, desde: 1, hasta: 3, reusar: true }]));
+    r.state.etapas.VI.cases[reusa] = 8;
+    await r.etapaVI(10);
+    assert.deepEqual(r.paquetes.map((p) => p.numeros), [[1, 2], [1, 2]]);
+
+    const falta = "recepcion-ds17-motivo7-pv0-menor500";
+    const s = runnerVI(falta, parseCafcConfig([{ cafc: "CAFC-DS1", sector: 1 }]));
+    s.state.etapas.VI.cases[falta] = 9;
+    await s.etapaVI(10);
+    assert.equal(s.eventos, 0);
+    assert.equal(s.paquetes.length, 0);
+    assert.match(s.state.etapas.VI.blockedCases[falta].mensaje.descripcion, /requiere CAFC del piloto \(sector 17, PdV 0\)/);
+  });
+
+  it("el codigo suelto sin rango sigue numerando con el correlativo", async () => {
+    const caseId = "recepcion-ds1-motivo7-pv0-menor500";
+    const r = runnerVI(caseId, parseCafcConfig([{ cafc: "SUELTO" }]));
+    r.state.etapas.VI.cases[caseId] = 9;
+    await r.etapaVI(10);
+    assert.deepEqual(r.paquetes.map((p) => [p.cafc, p.numeros]), [["SUELTO", [7001, 7002]]]);
+  });
 });

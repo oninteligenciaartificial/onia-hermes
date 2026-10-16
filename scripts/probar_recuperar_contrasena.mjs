@@ -138,7 +138,7 @@ async function main() {
     await p1.goto(`${APP}/login`, { waitUntil: "load", timeout: 30_000 });
     await p1.getByRole("button", { name: "Olvidé mi contraseña" }).click();
     await p1.waitForTimeout(300);
-    await p1.getByPlaceholder("tucorreo@ejemplo.bo").last().fill(EMAIL);
+    await p1.getByPlaceholder("nombre@ejemplo.bo").last().fill(EMAIL);
     await p1.getByRole("button", { name: /Enviar enlace/ }).click();
     await p1.waitForTimeout(2000);
     await p1.screenshot({ path: `${CAPTURAS}/extra-recuperar-01-pedido.png`, fullPage: true });

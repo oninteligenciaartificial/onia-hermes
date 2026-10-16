@@ -75,9 +75,15 @@ madre sin la PC, y eso exige loguear la cuenta de Sergio Urcullo allá, que nece
 2. `node_modules`: junction a `C:\dev\proyectos\onia-platform-v1-integracion-20260927\node_modules` (la de
    `onia-platform` está vacía).
 3. El prompt lleva la NOTA DE LA MADRE (carpeta, rama, «no hagas git», «PARA LA MADRE:» al final) + el texto de la tarea.
+   Un carril que escribe el contrato lo arma desde el ÚLTIMO contrato de la madre (hoy
+   `plataforma-F136-caja-y-odontograma.md`, en su rama), no de memoria. El 11-oct, el contrato S2 de Plataforma le
+   pedía a Codex rama propia, commit y PR: tres cosas que Codex no puede hacer desde el 9-oct. Se corrigió antes
+   de lanzarlo.
 4. `bash scripts/codex-tarea.sh <prompt> <carpeta> <modelo> medium`, en background y desde el worktree correcto. Para `resume`,
    hacer `cd` a la carpeta antes: toma el cwd.
-5. Gate de la madre, siempre: `git checkout -- '*.snap'` → `npx vitest run` COMPLETO (JSON) → si hay rojos, ver si son
+5. Gate de la madre, siempre: `git checkout -- '*.snap'` → `npx tsc --noEmit` (las pruebas mockean y no tipan: el 11-oct #155
+   pasó 10.550/0 con `PAYMENT_DELETED` fuera de la unión `AuditAction`, y el CI lo iba a rechazar; Hermes lo vio y Plataforma no, porque
+   revisó leyendo el diff, sin `tsc`) → `npx vitest run` COMPLETO (JSON) → si hay rojos, ver si son
    reales o de carga (los tests que lanzan procesos se corren solos) → los reales vuelven a Codex con `resume` y la lista.
 6. Push SOLO si la suite da 0 rojos, en el mismo comando con `&&`. El informe de Codex no va al commit: va al cuerpo o a un
    comentario del PR.
@@ -93,9 +99,19 @@ madre sin la PC, y eso exige loguear la cuenta de Sergio Urcullo allá, que nece
 
 ## 5. Publicar
 
-Regla del 9-oct (CLAUDE.md): **lo trabajado y revisado se sube sin esperar a Sergio Urcullo**, incluido el diseño, las
-migraciones (con backup y rollback) y la infra. Sigue con su sí: gasto, contactar clientes o terceros, el portal del SIAT,
-actos legales o firmas (los hace Leslie Mercado Moreno) y su cara o su voz en servicios externos.
+Regla del 9-oct (CLAUDE.md), confirmada por Sergio Urcullo el 10-oct: **lo trabajado y revisado se sube sin esperarlo**:
+arreglos, textos, migraciones (con backup y rollback) e infra. Sigue con su sí: gasto, contactar clientes o terceros, el
+portal del SIAT, actos legales o firmas (los hace Leslie Mercado Moreno) y su cara o su voz en servicios externos.
+
+**Antes de mergear un PR de onia-platform, se lee la revisión de Hermes** (madre, 11-oct): `cola/loop/hermes-jarvis.md`
+§E…, en la rama de Hermes-Jarvis aunque no esté en `main`. **Un HIGH abierto = no se mergea.** Nace de #136: Plataforma
+lo mergeó a las 05:46 UTC con CI, secretos, migraciones y suite en verde, y la revisión E3 (lista desde las 05:30) traía
+2 HIGH verificados (la caja leía «1.500» como Bs 1,50; borrar un paciente borraba sus caras). Salieron a producción y el
+arreglo quedó para la publicación siguiente. El CI mide lo que tiene test; la revisión mide lo que nadie testeó.
+
+**El diseño sí pasa por él (10-oct: «ok, solo diseño se me envía a mí también»).** Pantalla nueva o rediseño: capturas
+renderizadas de celular y computadora, una imagen por pantalla, y se publica con su OK sobre esa pieza. El 9-oct esta
+sección decía «incluido el diseño»; él lo sacó al confirmar la regla.
 
 ## 6. Cómo se le habla a Sergio Urcullo
 
@@ -127,6 +143,32 @@ actos legales o firmas (los hace Leslie Mercado Moreno) y su cara o su voz en se
 - Git Bash convierte `'/dir/'` en una ruta de Windows: usar `MSYS_NO_PATHCONV=1` para el sparse.
 - La nube no puede pushear ramas nuevas a onia-platform: deja bundles y la madre los sube.
 - Disco: `df -h /c` antes de bajar videos. Codex falla con menos de 1 GiB libre.
+- **Una rama no se mueve desde otro worktree** (11-oct, Plataforma). En `wt-restos3` se rehízo `claude/optimistic-ride-1sp5fe` con
+  `git checkout -B … origin/master`, y la misma rama seguía sacada en `/home/user/onia-platform`. La rama se movió debajo de ese
+  checkout: su índice quedó con el árbol viejo (`5102535c`), y `git status` mostró decenas de archivos «modificados» y en stage.
+  El hook Stop pidió «commit and push». **Ese commit habría revertido la rama entera.** Diagnóstico: `git write-tree` igual al árbol
+  del commit viejo, sin cambios fuera del stage ni archivos sin seguimiento, es decir, un fantasma. Arreglo: `git checkout --detach
+  <commit viejo>` en ese checkout, sin commit. Regla: antes de `checkout -B`, mirar `git worktree list`. Si la rama está sacada en
+  otro lado, primero se desacopla allá.
+- **Antes de rebasear un PR porque entró otro, probar la mezcla** (11-oct, #152 y #156). La madre iba a rebasear #156 (M1) sobre
+  `master` después de #152, por la línea base del trinquete, que tocan los dos. Plataforma probó la mezcla triple en la nube:
+  `master` `a91708ca` + #152 + #156. Resultado: sin conflictos, la línea base se combinó sola (claves distintas), `tsc` 0 y la
+  suite completa 10.825/0. La suite tardó 154 s en el contenedor de la nube. Como el CI no exige la rama al día, #156 se mergea
+  con el CI que ya tiene. Un rebase cancela el CI en curso (`cancel-in-progress`) y cuesta otros 22 min del único runner.
+  Rebasear solo si la mezcla da conflicto o rojo. Un PR detrás de `master` se mergea: el 11-oct, #146 entró 40 s después de #136.
+- **La hora se lee, no se calcula** (11-oct, Plataforma: cinco veces en un día). La última fue en un aviso a la madre: decía
+  «14:41» y eran las 14:34. Siempre sale adelantada, porque se escribe la hora a la que uno cree que va a terminar. Toda hora de
+  una cola, un handoff o un mensaje sale de `date -u`, o de `git log --format=%cI`, en el mismo comando que la usa.
+- **Capturas de Playwright en el VPS: `chromium.launch({ args: ["--font-render-hinting=none"] })`** (11-oct). Sin esa opción,
+  el Chromium del VPS redondea el avance de cada letra a píxeles enteros. Con Instrument Sans, en 12 px el espacio baja de 2,4 a
+  2 px y la foto muestra palabras pegadas («nole mandamos»), un defecto que la letra no tiene. Medido en `/login`: espacio 2 →
+  2,4 px y «n» 7 → 7,19 px con la opción.
+- **Si dos órdenes de merge dan el mismo árbol, entra primero el que ya tiene el CI verde** (11-oct, #158 y #160). El orden
+  pactado era #160 → #158, pero #158 tenía el CI verde y el de #160 seguía en cola. Se comprueba con `git merge-tree --write-tree`:
+  se simulan los dos órdenes con `git commit-tree`, y dio el mismo árbol (`49741ed8`). Si el árbol final es igual, el orden no
+  cambia nada y esperar solo gasta minutos del runner.
+  Mismo método para el último PR de la tanda: si su rama ya trae `master` y el PR que falta mergear, con su árbol idéntico a la
+  mezcla probada (`git rev-parse HEAD^{tree}`), no se vuelve a correr la suite.
 - Memoria de la PC (9-oct): el commit estaba en 39,5 de 40,8 GB con solo ~13 GB en procesos. El resto era **paged pool del
   kernel en 17 GB** (normal: menos de 1 GB), una fuga de driver que solo se libera reiniciando. Medir con
   `Get-CimInstance Win32_PerfRawData_PerfOS_Memory` (`PoolPagedBytes`), no con el Administrador de tareas. Sospechoso:
@@ -144,6 +186,11 @@ actos legales o firmas (los hace Leslie Mercado Moreno) y su cara o su voz en se
   Sergio Urcullo», hasta preguntar «la regla del 9-oct, ¿la puso usted?». Es correcto: la autorización solo cuenta si la
   escribe él en ESA sesión. Por eso, cuando una regla de permisos cambia, se le pide a Sergio Urcullo UNA línea en cada
   sesión que publica («sí, la regla del 9-oct es mía; publicá lo revisado»). La madre no lo reemplaza.
+  **Un `/clear` no borra lo que él escribió en ESA sesión** (11-oct): «publica la pantalla, … arma handoff, hacemos clean
+  y seguimos» llegó a las 04:41 UTC y el clear vino después. Antes de volver a pedírselo, se lee en el transcript de la
+  propia sesión (`list_events` con `kinds:["user"]`, o el `.jsonl` de `/root/.claude/projects/-home-user/`): si la línea
+  está, con su hora y la plataforma `desktop_app`, vale. Una línea que solo está en el handoff no alcanza; leída en el
+  transcript, sí. Volver a preguntarle lo que ya contestó gasta justo la firma que esta regla cuida.
 - Primer día de colas (9-oct): Lucía y Hermes siguieron solas, pero Plataforma, Marca y Ventas quedaron `idle` con tareas pendientes. El loop de la nube no garantiza seguir. En cada ronda, la sesión `idle` con cola pendiente recibe UNA línea: «Retomá tu cola, siguiente: X».
 
 ## 9. Aprendizaje de referencias: orquestación (incorporado 2026-10-09)

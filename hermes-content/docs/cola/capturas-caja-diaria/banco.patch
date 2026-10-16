@@ -1,0 +1,317 @@
+From a7e45f284f5a9caebcdadcfa14cdb2a4adeacdfe Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Thu, 8 Oct 2026 18:42:57 +0000
+Subject: [PATCH 1/2] =?UTF-8?q?fix(dev):=20bancos=20pasan=20el=20nombre=20?=
+ =?UTF-8?q?del=20plan=20sin=20repetir=20=C2=ABPlan=C2=BB?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+La barra de estado ya antepone «Plan»; los bancos pasaban «Plan Profesional» y se leía «Plan Plan Profesional» en las capturas. Producción no cambia: pasa nombreDePlan(plan).
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01HhnFgkeF6nLGvjrfjt1o2C
+---
+ app/dev/agenda/page.tsx             | 2 +-
+ app/dev/comercio-productos/page.tsx | 2 +-
+ app/dev/ficha/page.tsx              | 2 +-
+ app/dev/pendientes/page.tsx         | 2 +-
+ app/dev/roles-operativos/page.tsx   | 2 +-
+ app/dev/shell/page.tsx              | 2 +-
+ 6 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/app/dev/agenda/page.tsx b/app/dev/agenda/page.tsx
+index 639573d1..715fb9fa 100644
+--- a/app/dev/agenda/page.tsx
++++ b/app/dev/agenda/page.tsx
+@@ -137,7 +137,7 @@ export default async function BancoDeAgenda({ searchParams }: { searchParams: Pr
+           doctorName=""
+           role="ADMIN"
+           plan="professional"
+-          planNombre="Plan Profesional"
++          planNombre="Profesional"
+           diasDePrueba={5}
+           decisionesPendientes={0}
+           navItems={navItems}
+diff --git a/app/dev/comercio-productos/page.tsx b/app/dev/comercio-productos/page.tsx
+index 1a7e5f58..155b6dc9 100644
+--- a/app/dev/comercio-productos/page.tsx
++++ b/app/dev/comercio-productos/page.tsx
+@@ -118,7 +118,7 @@ export default async function BancoComercioProductos({
+           doctorName=""
+           role="ADMIN"
+           plan="professional"
+-          planNombre="Plan Profesional"
++          planNombre="Profesional"
+           diasDePrueba={5}
+           decisionesPendientes={0}
+           navItems={navItems}
+diff --git a/app/dev/ficha/page.tsx b/app/dev/ficha/page.tsx
+index 6faeb272..697db5db 100644
+--- a/app/dev/ficha/page.tsx
++++ b/app/dev/ficha/page.tsx
+@@ -167,7 +167,7 @@ export default async function BancoDeFicha({
+           doctorName=""
+           role={staff ? "STAFF" : "ADMIN"}
+           plan="professional"
+-          planNombre="Plan Profesional"
++          planNombre="Profesional"
+           diasDePrueba={5}
+           decisionesPendientes={0}
+           navItems={navItems}
+diff --git a/app/dev/pendientes/page.tsx b/app/dev/pendientes/page.tsx
+index 446a7589..9b256233 100644
+--- a/app/dev/pendientes/page.tsx
++++ b/app/dev/pendientes/page.tsx
+@@ -59,7 +59,7 @@ export default async function BancoDePendientes({
+           doctorName=""
+           role="ADMIN"
+           plan="professional"
+-          planNombre="Plan Profesional"
++          planNombre="Profesional"
+           diasDePrueba={5}
+           decisionesPendientes={APROBACIONES.length}
+           navItems={navItems}
+diff --git a/app/dev/roles-operativos/page.tsx b/app/dev/roles-operativos/page.tsx
+index fdbae1f4..08e49fcb 100644
+--- a/app/dev/roles-operativos/page.tsx
++++ b/app/dev/roles-operativos/page.tsx
+@@ -60,7 +60,7 @@ export default async function BancoRolesOperativos({
+           doctorName=""
+           role="ADMIN"
+           plan="professional"
+-          planNombre="Plan Profesional"
++          planNombre="Profesional"
+           diasDePrueba={5}
+           decisionesPendientes={0}
+           navItems={navItems}
+diff --git a/app/dev/shell/page.tsx b/app/dev/shell/page.tsx
+index 4c181a79..d6e2046c 100644
+--- a/app/dev/shell/page.tsx
++++ b/app/dev/shell/page.tsx
+@@ -74,7 +74,7 @@ export default async function BancoDePruebasShell({
+         // el que nunca se ve en un banco vacio. Con ?role=STAFF el item no esta
+         // y el numero no se pinta: el layout real le da 0 a quien no decide.
+         decisionesPendientes={decide ? 4 : 0}
+-        planNombre="Plan Profesional"
++        planNombre="Profesional"
+         diasDePrueba={5}
+         clinicName={nombre ?? ""}
+         doctorName=""
+-- 
+2.43.0
+
+
+From 51763ef336693fd6343827b61ffc7c90caea6309 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Thu, 8 Oct 2026 19:07:27 +0000
+Subject: [PATCH 2/2] =?UTF-8?q?feat(dev):=20banco=20de=20la=20caja=20diari?=
+ =?UTF-8?q?a=20para=20el=20OK=20de=20dise=C3=B1o?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+La caja no tenía banco: sólo se podía ver con sesión y base. /dev/caja-diaria monta el CajaDiariaClient real dentro del shell y responde /api/caja-diaria en el navegador con la misma forma y el mismo cálculo (resumenCajaDiaria): ?estado=sin-abrir|abierta|cerrada y ?rol=dueno|recepcion (recepción no recibe esperado ni descuadre, como la API). Producción no cambia.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01HhnFgkeF6nLGvjrfjt1o2C
+---
+ app/dev/caja-diaria/BancoCajaDiaria.tsx | 99 +++++++++++++++++++++++++
+ app/dev/caja-diaria/page.tsx            | 79 ++++++++++++++++++++
+ 2 files changed, 178 insertions(+)
+ create mode 100644 app/dev/caja-diaria/BancoCajaDiaria.tsx
+ create mode 100644 app/dev/caja-diaria/page.tsx
+
+diff --git a/app/dev/caja-diaria/BancoCajaDiaria.tsx b/app/dev/caja-diaria/BancoCajaDiaria.tsx
+new file mode 100644
+index 00000000..364f42b3
+--- /dev/null
++++ b/app/dev/caja-diaria/BancoCajaDiaria.tsx
+@@ -0,0 +1,99 @@
++"use client";
++
++// Banco de la caja diaria SIN base. Responde en el navegador lo que respondería
++// GET/POST /api/caja-diaria, con la misma forma y el mismo cálculo
++// (`resumenCajaDiaria`), así el componente de producción se monta SIN cambios.
++//   estado: sin-abrir | abierta | cerrada     rol: dueno | recepcion
++// El dueño ve esperado y descuadre; recepción NO (igual que la API real:
++// efectivoEsperado, descuadre y cierre llegan en null).
++// Los cambios (abrir, egreso, cerrar) viven sólo en esta pestaña.
++
++import { useEffect, useState, type ReactNode } from "react";
++
++import { resumenCajaDiaria } from "@/lib/caja-diaria";
++
++export type EstadoBanco = "sin-abrir" | "abierta" | "cerrada";
++export type RolBanco = "dueno" | "recepcion";
++
++const CAMILA = { id: "u_camila", nombre: "Camila Rojas" };
++const ANA = { id: "u_ana", nombre: "Dra. Ana Aramayo" };
++const dia = "2026-10-08";
++const a = (hora: string) => `${dia}T${hora}:00-04:00`;
++
++const COBROS = [
++  { amount: 150, method: "EFECTIVO", userId: CAMILA.id, cobradoPor: CAMILA.nombre, paidAt: a("09:10") },
++  { amount: 200, method: "QR", userId: ANA.id, cobradoPor: ANA.nombre, paidAt: a("10:25") },
++  { amount: 120, method: "TARJETA", userId: CAMILA.id, cobradoPor: CAMILA.nombre, paidAt: a("11:40") },
++  { amount: 80, method: "TRANSFERENCIA", userId: ANA.id, cobradoPor: ANA.nombre, paidAt: a("12:05") },
++];
++
++type Egreso = { id: string; amount: number; reason: string; createdByUserId: string; creadoPor: string; createdAt: string };
++type Sim = {
++  abierta: boolean;
++  cerrada: boolean;
++  fondo: number;
++  cobros: typeof COBROS;
++  egresos: Egreso[];
++  contado: number | null;
++  notas: string | null;
++};
++
++function inicial(estado: EstadoBanco): Sim {
++  if (estado === "sin-abrir") return { abierta: false, cerrada: false, fondo: 0, cobros: [], egresos: [], contado: null, notas: null };
++  const taxi: Egreso = { id: "e1", amount: 20, reason: "Taxi", createdByUserId: CAMILA.id, creadoPor: CAMILA.nombre, createdAt: a("13:00") };
++  const base: Sim = { abierta: true, cerrada: false, fondo: 100, cobros: COBROS, egresos: [taxi], contado: null, notas: null };
++  // Cerrada con descuadre de −Bs 5: esperado 230 (100 + 150 − 20), contado 225.
++  return estado === "cerrada" ? { ...base, cerrada: true, contado: 225, notas: "Falta un billete de Bs 5; se revisa mañana." } : base;
++}
++
++function leer(sim: Sim, rol: RolBanco) {
++  const ver = rol === "dueno";
++  const base = resumenCajaDiaria({
++    fondoInicial: sim.fondo,
++    cobros: sim.cobros.map((c) => ({ amount: c.amount, method: c.method, userId: c.userId })),
++    egresos: sim.egresos.map((e) => ({ amount: e.amount })),
++    efectivoContado: ver ? sim.contado : null,
++  });
++  return {
++    date: `${dia}T04:00:00.000Z`,
++    canOperate: true,
++    canViewClose: ver,
++    session: sim.abierta
++      ? { id: "banco", openingFund: sim.fondo, openedAt: a("08:30"), openedByUserId: CAMILA.id, openedBy: CAMILA.nombre, closedAt: sim.cerrada ? a("18:00") : null }
++      : null,
++    resumen: { ...base, efectivoContado: ver ? sim.contado : null, efectivoEsperado: ver ? base.efectivoEsperado : null, descuadre: ver ? base.descuadre : null },
++    cobros: sim.cobros,
++    egresos: sim.egresos,
++    cierre: sim.cerrada && ver
++      ? { closedAt: a("18:00"), closedByUserId: CAMILA.id, countedCash: sim.contado ?? 0, expectedCash: base.efectivoEsperado, cashDifference: base.descuadre ?? 0, notes: sim.notas }
++      : null,
++  };
++}
++
++export function BancoCajaDiaria({ estado, rol, children }: { estado: EstadoBanco; rol: RolBanco; children: ReactNode }) {
++  const [listo, setListo] = useState(false);
++
++  useEffect(() => {
++    // Se instala ANTES de montar la caja (ella pide los datos al montarse) y se
++    // restaura al desmontar. Sólo toca /api/caja-diaria.
++    const original = window.fetch;
++    let sim = inicial(estado);
++    window.fetch = async (input, init) => {
++      const raw = typeof input === "string" ? input : input instanceof Request ? input.url : input.href;
++      const url = new URL(raw, window.location.origin);
++      if (url.origin !== window.location.origin || url.pathname !== "/api/caja-diaria") return original(input, init);
++      if (init?.method !== "POST") return Response.json(leer(sim, rol));
++      const body = JSON.parse(String(init.body));
++      if (body.action === "open") sim = { ...sim, abierta: true, fondo: body.openingFund };
++      if (body.action === "expense") {
++        sim = { ...sim, egresos: [...sim.egresos, { id: `e${sim.egresos.length + 1}`, amount: body.amount, reason: body.reason, createdByUserId: CAMILA.id, creadoPor: CAMILA.nombre, createdAt: a("14:00") }] };
++      }
++      if (body.action === "close") sim = { ...sim, cerrada: true, contado: body.countedCash, notas: body.notes ?? null };
++      return Response.json({ ok: true });
++    };
++    setListo(true);
++    return () => { window.fetch = original; };
++  }, [estado, rol]);
++
++  return listo ? <>{children}</> : null;
++}
+diff --git a/app/dev/caja-diaria/page.tsx b/app/dev/caja-diaria/page.tsx
+new file mode 100644
+index 00000000..16f7ee06
+--- /dev/null
++++ b/app/dev/caja-diaria/page.tsx
+@@ -0,0 +1,79 @@
++// Banco de la caja diaria SIN base — SOLO en desarrollo (404 en prod).
++//
++// Monta el MISMO componente de /caja-diaria (`CajaDiariaClient`) dentro del
++// shell real, con datos de ejemplo que responde `BancoCajaDiaria` en el
++// navegador. Sirve para MIRAR la caja a 390 y 1440 sin sesión ni base.
++//
++// Uso: npm run dev -> http://localhost:3000/dev/caja-diaria
++//      ?estado=sin-abrir | abierta | cerrada     (por defecto: abierta)
++//      &rol=dueno | recepcion                    (por defecto: dueno; recepción no ve el esperado)
++//      &tema=oscuro                              (modo oscuro)
++//   abierta: fondo Bs 100, 4 cobros (efectivo, QR, tarjeta, transferencia; dos personas)
++//            y un egreso «Taxi» de Bs 20.  cerrada: descuadre de −Bs 5.
++
++import { notFound } from "next/navigation";
++
++import { CajaDiariaClient } from "@/app/(dashboard)/caja-diaria/CajaDiariaClient";
++import { LayoutShell } from "@/components/layout/LayoutShell";
++import type { NavigationItem } from "@/components/layout/navigation";
++import { ThemeProvider } from "@/components/theme/ThemeProvider";
++import { vocabularioDeTrack } from "@/lib/onboarding/vocabulario";
++import { AccountContextProvider } from "@/lib/platform/client";
++import type { AccountContextValue } from "@/lib/platform/types";
++import { getNavForPack, resolveVerticalPack } from "@/lib/platform/vertical-pack";
++import { BancoCajaDiaria, type EstadoBanco, type RolBanco } from "./BancoCajaDiaria";
++
++const ESTADOS: EstadoBanco[] = ["sin-abrir", "abierta", "cerrada"];
++
++export default async function BancoDeCajaDiaria({ searchParams }: { searchParams: Promise<{ estado?: string; rol?: string; tema?: string }> }) {
++  if (process.env.NODE_ENV === "production") notFound();
++
++  const { estado, rol, tema } = await searchParams;
++  const estadoElegido = ESTADOS.find((e) => e === estado) ?? "abierta";
++  const rolElegido: RolBanco = rol === "recepcion" ? "recepcion" : "dueno";
++  const pack = resolveVerticalPack("dentagest-clinical");
++  const account: AccountContextValue = {
++    organizationId: "dev-caja-diaria",
++    verticalTrackId: pack.trackId,
++    plan: "professional",
++    countryCode: "BO",
++    currencyCode: "BOB",
++    features: pack.includedFeatures,
++    roleKeys: pack.roleKeys,
++    baseRole: rolElegido === "dueno" ? "ADMIN" : "STAFF",
++  };
++  const navItems = getNavForPack(pack, {
++    organizationId: account.organizationId,
++    verticalTrackId: pack.trackId,
++    plan: account.plan,
++    countryCode: account.countryCode,
++    currencyCode: account.currencyCode,
++    features: new Set(pack.includedFeatures),
++    roleKeys: pack.roleKeys,
++    baseRole: account.baseRole,
++  }) as NavigationItem[];
++
++  return (
++    <ThemeProvider initialTheme={tema === "oscuro" ? "dark" : "light"}>
++      <AccountContextProvider value={account}>
++        <LayoutShell
++          esCliente={true}
++          clinicName="Clínica Aramayo"
++          doctorName={rolElegido === "dueno" ? "Dra. Ana Aramayo" : "Camila Rojas"}
++          role={account.baseRole}
++          plan="professional"
++          planNombre="Profesional"
++          diasDePrueba={5}
++          decisionesPendientes={0}
++          navItems={navItems}
++          bottomHrefs={pack.bottomNavHrefs}
++          quickActions={pack.quickActions as NavigationItem[]}
++        >
++          <BancoCajaDiaria key={`${estadoElegido}-${rolElegido}`} estado={estadoElegido} rol={rolElegido}>
++            <CajaDiariaClient vocabulario={{ negocio: vocabularioDeTrack(pack.trackId).negocio }} />
++          </BancoCajaDiaria>
++        </LayoutShell>
++      </AccountContextProvider>
++    </ThemeProvider>
++  );
++}
+-- 
+2.43.0
+

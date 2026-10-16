@@ -1,0 +1,20 @@
+[
+  {
+    "name": "disculpa_demo_20",
+    "language": "es",
+    "category": "MARKETING",
+    "components": [
+      { "type": "BODY", "text": "Hola, le escribe Sergio Urcullo, de Onia. Le debo una disculpa: pidió conocer el sistema y no le respondimos a tiempo. Si todavía le interesa, le muestro Onia funcionando en una llamada de 20 minutos, con los datos de un consultorio de ejemplo. ¿Coordinamos?" },
+      { "type": "BUTTONS", "buttons": [ { "type": "QUICK_REPLY", "text": "Sí, coordinemos" }, { "type": "QUICK_REPLY", "text": "Ahora no" } ] }
+    ]
+  },
+  {
+    "name": "disculpa_respuestas_20",
+    "language": "es",
+    "category": "MARKETING",
+    "components": [
+      { "type": "BODY", "text": "Hola, le escribe Sergio Urcullo, de Onia. Le debo una disculpa: nos hizo preguntas sobre el sistema y no le respondimos a tiempo. Prefiero contestárselas mostrándole cada respuesta en la pantalla, en una llamada de 20 minutos. ¿Coordinamos?" },
+      { "type": "BUTTONS", "buttons": [ { "type": "QUICK_REPLY", "text": "Sí, coordinemos" }, { "type": "QUICK_REPLY", "text": "Ahora no" } ] }
+    ]
+  }
+]

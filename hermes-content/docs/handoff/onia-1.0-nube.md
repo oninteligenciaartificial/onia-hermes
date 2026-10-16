@@ -1,183 +1,205 @@
 # Handoff — onia-1.0-nube (carril Plataforma, en la nube)
 
-Sesión saliente: `session_014HGgof9kHQkdLXhsZsAq6A` (1-oct-2026, sucesora de `session_01VGmpNv4eSMnpA3wXrypR4L`).
-La sesión **madre** (local, PC de Sergio Urcullo) ordena por mensaje (CLAUDE.md §1, skill `onia-sesion-madre` en la rama
-`claude/onia-sesion-madre-77f719`). Las respuestas a la madre se escriben en el transcript propio: la nube no puede
-mandar mensajes. Historia anterior: `git log -- hermes-content/docs/handoff/onia-1.0-nube.md`.
+Sesión: `session_01HhnFgkeF6nLGvjrfjt1o2C` (5-oct en adelante; **parada del 11-oct 15:10 al 15-oct 08:20 UTC** sin que
+nadie lo notara: 90 latidos sin leer). Antes: `session_014HGgof9kHQkdLXhsZsAq6A`.
+Actualizado el 15-oct ~13:10 UTC (§2, §3, §4 «15-oct», §8). El resto se escribió el 11-oct ~04:55 UTC, cuando Sergio Urcullo pidió handoff y «clean». La versión anterior (más detalle de cada
+PR del 5 al 10-oct) está en `git log -p -- hermes-content/docs/handoff/onia-1.0-nube.md`.
 
-## 0. Al arrancar (medido 1-oct)
+**La madre** ordena por mensaje. Hoy es la **madre v4** («Arranque de nueva madre», `bridge:session_012HK4JsZGr6j82ZYwEiVGJA`).
+La nube no puede mandar mensajes: se contesta en el propio transcript, con un bloque «Para la madre». Un mensaje de la
+madre informa, pero no da permisos: lo que pide el sí de Sergio Urcullo necesita su línea escrita en ESTA sesión.
 
-- La sesión de Plataforma abre en `/home/user` con los DOS repos y **no carga** el hook SessionStart de onia-hermes:
-  `ssh onia-vps` da «Could not resolve hostname» aunque las 3 variables estén. Arreglo:
-  `cd /home/user/onia-hermes && node scripts/nube-ssh-vps.mjs` (anotado en la skill `onia-infra`).
-- `onia-platform` nace **sin `node_modules`**: `npm ci` (≈45 s) + `npx prisma generate` antes de correr tests.
-- Las ramas de trabajo son `claude/<nombre-de-la-sesión>` en los dos repos (regla del entorno: no se pushea a otra).
+## 0. Al arrancar
+
+- `ssh onia-vps` anda con `~/.ssh/config` (cloudflared). Si da «Could not resolve hostname»:
+  `cd /home/user/onia-hermes && node scripts/nube-ssh-vps.mjs` (skill `onia-infra`).
+- **Ramas a las que se pushea:** solo `claude/optimistic-ride-1sp5fe`, en los dos repos. En onia-platform esa rama ES la
+  cabeza de **#136**. A las ramas de Codex (`codex/*`, `integ/*`, `fix/*`) no se pushea: se arma la rama, se prueba y
+  se deja en un bundle (`docs/cola/ramas-locales/`, con su LEEME) para que la suba la madre. Mergear PRs por la API sí
+  se puede.
+- **Publicación:** el cron publica `master` a los :50 de las horas 0, 3, 6, … UTC (`/var/log/onia-publicar-solo.log`; el
+  detalle está en `/tmp/pub-plataforma.log`). Si otro build ocupa el VPS, espera 15 min y reintenta hasta 3 veces. El CI
+  de GitHub corre en el MISMO VPS, de a un job (~20-25 min). **No pushear ni mergear a onia-platform entre :20 y :55 de
+  esas horas.** Un merge a `master` sale en el cron siguiente: lo que trae migración, solo después de aplicarla.
+- **Probar una rama:** worktree nuevo + `cp -a /home/user/wt-c15/node_modules <wt>/` (symlinks al compartido, pero
+  `@prisma/client` y `.prisma` propios) + `prisma generate` con `DATABASE_URL` falsa + `tsc --noEmit` + `vitest run`, con
+  `run_in_background`. **Nunca generar Prisma en un worktree cuyo `node_modules` sea symlink** (`wt-t2b`): pisa el cliente
+  compartido.
+- **Mirar producción sin login:** Playwright con `executablePath: "/opt/pw-browsers/chromium"` y
+  `--ignore-certificate-errors-spki-list=<SPKI>`. Se calcula con
+  `openssl x509 -in /root/.ccr/agent-proxy-ca.crt -pubkey -noout | openssl pkey -pubin -outform der | openssl dgst -sha256 -binary | base64`.
+  **Con login (desde el 11-oct):** un script de Playwright que corre EN el VPS pide un magic link con la clave de
+  servicio leída dentro del contenedor (nunca se imprime) y entra con la cuenta QA. Modelos en el scratchpad de la
+  sesión: `mirar-1550/mirar-1550.js`, `mirar-1250/mirar-1250.js`, `punto1/punto1-cliente.js`. Siempre
+  `--font-render-hinting=none` y las fotos se borran del VPS al terminar.
+  ⚠️ Las rutas con `(grupo)` y `[parámetro]` (ej. `/book/<slug>`) dan un falso «Algo salió mal» por el proxy de la
+  nube: se miran desde el VPS (skill `onia-infra`, 11-oct).
+- **Probar un servidor local:** `next dev --webpack` (con Turbopack falla por los symlinks).
+  `/book` y otras rutas públicas andan con env falsas.
 
 ## 1. Objetivo
 
-Desarrollar y publicar Onia Platform 1.0 hasta cobrar al primer cliente. Qué sale y qué falta:
-`hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md` (§6 «Lo que falta para cobrar»).
+Los 15 puntos de `docs/ONIA_PLAN_1.0_Y_CAJA.md`: del 1 al 4 al 16-oct, todos al 30-oct, cada uno MIRADO en producción.
+Qué se vende ya, qué va en la 1.1 y qué después: `docs/ONIA_1.0_CORTE.md`, escrito el 10-oct a pedido de la madre con
+la dirección de Sergio Urcullo.
 
-## 2. Qué quedó EN PRODUCCIÓN (verificado)
+## 2. Estado de los 15 puntos (11-oct 04:55 UTC)
 
-- **5-oct, release `97fe3061` (prod hoy):**
-  - punto 2 de la 1.0 (#111): checkout «factura por correo después de verificar el pago» + aclaración del titular del QR;
-  - punto 12 (#109, Codex): CSV con «;» y BOM + WhatsApp de soporte en `/help`.
-  - Verificado en el bundle; las pantallas piden login (se miran con la QA `+qapago`).
-- **4-oct, release `ed40eaaa` (#108):**
-  - P1 (tratamiento a medias en la prueba), P3 (Deuda, Mañana sin confirmar, Reprogramada) y textos a pacientes de USTED;
-  - B22: el canal de citas lleva solo `{id}` y la agenda le pide la cita a la API; GET/PATCH de la cita con `select`
-    cerrado; la reserva pública no muestra el motivo de otras citas.
-  - Verificado: bundle `payload:{id}`, usted 3 / voseo viejo 0, login a 390 y 1440 renderizado.
-  - Las 2 tablas abiertas a anon siguen en 200 hasta correr el SQL (§6).
-
-- **Regla de Sergio Urcullo (2-oct):** lo que pasa los gates se mergea y se publica SIN preguntar; solo diseño
-  nuevo y legales pasan por él (CLAUDE.md «Qué se publica sin preguntar»). No se le habla de PRs.
-- **Alcance congelado (madre, 2-oct):** solo se termina lo asignado; lo nuevo va a pendientes. Excepciones con OK de
-  Sergio Urcullo del 3-oct: el arreglo de seguridad del botón, el barrido de promesas de la web y el estudio del SIAT.
-- **Plataforma en `release-13b67dda`** (3-oct 16:21 UTC, «PUBLICADO Y VERIFICADO», rollback
-  `onia-platform-prev-u40ks7ma-20261003-162118`). Lleva, en orden:
-  - #99 Recall de tratamiento a medias (2-oct).
-  - #102 `POST /api/onia-core/demo` solo SUPERADMIN (cualquier dueño creaba orgs Profesional eternas).
-  - #106 **CRITICAL** (madre v2): el botón del recordatorio solo vale desde el inbox de WhatsApp de la org; antes un
-    anónimo del widget web cancelaba la cita de otro paciente. Rastro de uso: ninguno (solo la org interna tiene
-    inboxes; 0 citas con recordatorio por WhatsApp; 0 avisos de confirmar/cancelar desde el 1-oct). Bundle vivo sin la
-    respuesta vieja («No encontramos una cita próxima» ausente).
-  - #107 tablero interno «La operación» con números exactos: solo clientes (hoy 0 de 5 pagando, Bs 0; antes decía
-    Bs 390 del chatbot regalado de la org interna). Regla única `motivoDeCuentaDeLaCasa`
-    (`lib/platform/cuentas-que-no-son-clientes.ts`), también en `/admin/metricas`. Sergio Urcullo aprobó las capturas.
-    **Falta MIRARLO en prod con su sesión de superadmin** (la nube no tiene esa cuenta).
-- **Web `onia.com.bo`:** 3-oct, `main` `baf02e9df` + RND 38 (`f3282e8d1`, publicándose al escribir esto): titular
-  desde el HTML del servidor (sin esperar JS), promesas alineadas con el catálogo (fuera «entiende fotos», «el
-  tratamiento a medias no se pierde», «agenda por profesional», «te devuelven clientes»), y `/facturacion` +
-  `/guia-facturacion` dicen que la RND 102600000038 (30-sep) dejó sin efecto el plazo del 1-oct. Mirada en vivo a 390 y
-  1440 (antes de la RND 38): 0 de las promesas, 0 errores, 0 desbordes, `/precios` sin JS con el h1 visible.
-- **Bot de ventas:** publicado 3-oct desde `e630e103c` (37 archivos, responde) y otra vez con la RND 38 (`f3282e8d1`).
-  Ya no confirma demos que no agendó (agenda y voz apagadas por config con default seguro); suite 1639/1639.
-- **Cuenta demo de venta «Clínica Demo Onia»** (`cmur09d75000601mz12vg59qn`, `oninteligenciaartificial+demo@gmail.com`):
-  sembrada el 2-oct con OK explícito de Sergio Urcullo (backup antes: `/root/backups/pre-demo-20261002-1345/`). 25
-  pacientes, 50 citas, 28 cobros, 2 tratamientos a medias (Natalia Terceros, Marcelo Vargas). 0 canales de envío,
-  pacientes sin correo, teléfonos de ficción `+44 7700 900xxx`. Scripts y método: `onia-platform/scripts/demo-venta/` +
-  skill `onia-db`.
-- **Cuenta QA del chip «ZZ QA Clínica Chip»** (`cmuqzov3y000001mzmrcq0i2t`, `oninteligenciaartificial+qachip@gmail.com`),
-  creada por el alta real el 2-oct. La clave se dio por chat a pedido de Sergio Urcullo: tratarla como expuesta (se le
-  pidió cambiarla en /profile).
-- Producción: `ONIA_VERIFICACION_WHATSAPP=plantillas`, `ONIA_ALTA_AUTOMATICA=abierta`, `ONIA_REGISTRO_CONFIRMA_CORREO=si`.
-
-## 3. Qué quedó a medias y dónde
-
-| Qué | Dónde | Estado |
+| # | Punto | Estado |
 |---|---|---|
-| SQL del B22 (REVOKE + default privileges) | `prisma/migrations/20261003230000_revoke_anon_onia_sends/migration.sql` | Mergeado, NO aplicado. Solo con el OK textual de Sergio Urcullo. Después: GET anon a `/rest/v1/onia_whatsapp_sends` → 401 y 0 grants |
-| P2 presupuesto por fases | `hermes-content/docs/cola/capturas-presupuesto-fases/presupuesto-por-fases-p2.patch` (aplica limpio sobre `ed40eaaa`) + capturas | Espera el OK de Sergio Urcullo (diseño nuevo). Con OK: `git apply`, PR, CI, publicar |
-| Punto 1: cobro de punta a punta | QA «ZZ QA Pago» (`oninteligenciaartificial+qapago@gmail.com`, dental), creada por `/register` el 5-oct; clave solo en el scratchpad de la sesión | Falta confirmar su correo (Gmail de Onia). Después: checkout Básico con comprobante «PRUEBA», Sergio aprueba en `/admin/payments` SIN facturar, verificar plan activo. Si la sesión muere, la clave se pierde: «Recuperar acceso» |
-| Plantillas A/B de los leads de agosto | texto aprobado en el transcript del 3-oct | NO creadas (el control de permisos lo frenó desde la nube). Las crea Sergio Urcullo en WhatsApp Manager o lo pide él en la sesión. No se mandan hasta que Ventas arme el seguimiento |
-| Caja diaria (#110, Codex) | rama `codex/punto-8-caja-diaria` | Aprobada por la madre v2. Faltan las capturas: sin abrir; abierta con 4 cobros y 1 egreso; cerrada con descuadre; como dueño y como recepción. Van a `hermes-content/docs/cola/capturas-caja-diaria/`. No se publica sin OK; la migración `20261004190000` va ANTES del swap |
-| Prueba del chip, demo, SIAT | orgs «ZZ QA Clínica Chip» y «Clínica Demo Onia»; `/opt/onia-siat/runner-20260929/` | Sin cambios (§6) |
+| 1 | Cobro completo con QR | **15-oct 08:54 UTC: el lado del cliente está hecho** (pago QA `cmv9ay9px003101o36xe4c9c1`, PENDING, Básico mensual Bs 320). Falta solo Sergio Urcullo: marcar la cuenta interna y aprobarlo (§7). Antes: Antes de aprobar el pago de prueba hay que marcar «Cuenta interna de prueba verificada» en `zz-qa-pago-o4kaw` (`/admin/plans`) |
+| 2 | Checkout sin promesa falsa y titular del QR | En producción (#142, 10-oct). **De usted en los tres ciclos desde `release-e28c7e90` (15-oct 12:57 UTC), mirado con login a las 13:00.** Mi plan (adonde manda el aviso de cuenta vencida) sale de usted con U6 a las 15:50 |
+| 3 | Datos clínicos no salen | En producción (#139, canal privado). **Mirado con login el 15-oct 12:15-12:20 UTC:** la org dueña recibe solo el `id`; otra org y la clave anónima reciben «Unauthorized» y 0 eventos. Faltan el SQL del B22 (con su OK; la prueba P-01 entra con U6) y el contenedor `onia-platform-qa` (lo decide él) |
+| 4 | Respaldo afuera con restauración probada | **Bloqueado:** falta el bucket R2 de Sergio Urcullo. El `restoreVerified:false` del diario local es a propósito |
+| 5 | Agenda por profesional y confirmar en 1 toque | En producción: #128 (toque) y #118 con #136 (11-oct). **El toque, mirado con escritura el 15-oct:** «Confirmada» en dos pantallas sin recargar |
+| 6 | Odontograma de 5 caras y «ver todo» en la ficha | El odontograma (#119) **sale con #136**. «Ver todo» ya está en producción desde el 6-oct (`970bdb1e`): el enlace se llama «Ver historia completa» y abre `/patients/[id]/records`, paginada. **Mirado con login el 15-oct 13:50 UTC** en la ficha QA de «ZZ QA K3 Dental»: el enlace está en «Historial clínico» y abre «Historia completa · Consultas de la más reciente a la más antigua»; la ficha entera, de usted. Lo que queda: la lista de citas de la ficha corta en 10 (1.1, no traba) |
+| 7 | Presupuesto por fases y tratamientos ya empezados | En producción (`1f09936a` P2 y el paso 0 del 8-oct) |
+| 8 | Caja diaria | En producción (#136, 11-oct; #158 el 11-oct; punto 9 de F136c, la caja de un día anterior, desde el 15-oct 12:57). Mirada con login el 15-oct |
+| 9 | Demo que propone pacientes | Los agentes corren. Falta refrescarla: el lunes 12-oct entre 07 y 11 UTC, con las capturas C1-C7 (§7) |
+| 10 | «Enviar por WhatsApp» en cada cita | En producción (#128). **Mirado con login el 15-oct:** arma el texto de usted con la hora de La Paz |
+| 11 | La agenda no miente | En producción (`6f940cfc` y `7d3495e8`). **Mirado con login el 15-oct:** reprogramar vuelve la cita a «Pendiente» y un día cerrado no ofrece horarios. Falta lo de `/book` (aviso de reserva online), que pide una cuenta con la reserva pública |
+| 12 | CSV con «;» y WhatsApp de soporte | En producción (`97fe3061`) |
+| 13 | 7 días de gracia y «no renovar» | #113 construido. Espera los términos 1.4: la lámina está en `cola/capturas-terminos/` y necesita el sí de Sergio Urcullo y de Leslie Mercado Moreno |
+| 14 | Aceptación de términos guardada | #124 construido, migración aplicada. Su arreglo de versión (`t124-version`) está en un bundle. La madre lo retiene («espera texto legal»), aunque no cambia ningún texto |
+| 15 | Factura al aprobar el pago | En producción (#114, 10-oct 21:55) |
 
-## 4. Archivos
+## 3. Qué quedó EN PRODUCCIÓN (verificado)
 
-- Plataforma: `lib/whatsapp/respuesta-al-recordatorio.ts`, `lib/whatsapp/plantilla-recordatorio.ts`,
-  `lib/agenda/aviso-respuesta-del-paciente.ts` (aviso compartido con `/cita`), `lib/chatwoot.ts`
-  (`MARCA_ENVIO_AUTOMATICO`), `app/api/webhooks/chatwoot/route.ts`. Skill `onia-backend` actualizada.
-- Bot: `chatwoot-adapter.mjs` (`esBotonDelRecordatorio`, `takeoverTurn`), `knowledge.mjs` (`esInboxDeCliente`),
-  `webhook-server.mjs`. Skill `onia-chatbot` regla 7.
-- Web: `web-factory/apps/onia-platform/src/app/(sitio)/{precios,chatbot}/page.tsx`, `sitio.module.css`,
-  `src/content/legal/{terminos,privacidad}.md`.
-- Catálogo 1.0: `hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md`. Bitácora SIAT (VPS): `/opt/onia-siat/runner-20260929/BITACORA.md`.
+- **15-oct 12:57 UTC, `release-e28c7e90`:** #171 (punto 9 de la caja, checkout de usted, M1c y los ocho PRs de Codex del
+  12-oct) y #172 (aviso de cuenta vencida, modal y add-on del chatbot de usted). Mirado con login a las 12:58-13:00 (caja
+  de un día anterior, cotización, traspaso, checkout en tres ciclos). El banner, el 403 y el modal de una cuenta vencida se
+  pintaron en local con el CSS de producción; en vivo se miran el 17-oct, cuando venza «ZZ QA Clínica Chip».
+- **10-oct 21:55 UTC, `release-d8ca5a32`:** #114 (la factura del SIN es obligatoria al aprobar un pago real) y #145 (logo
+  «onia» en `/book`). Mirado sin login: 0 errores, `/login` y `/book` bien, API 401. Rollback:
+  `onia-platform-prev-y_kYtmsT-20261010-215532`.
+- **10-oct 18:50 UTC, `release-21f0c7e6`:** F1 (la letra servida desde el repo), #142 (pago de usted), #139 (canal privado)
+  y #144 (`/book` de usted).
+- **10-oct ~19:20 UTC, base de datos** (con el sí de Sergio Urcullo): migraciones de caja, factura (2), caras y términos.
+  Se aplicaron con respaldo (`/root/backups/pre-migracion/20261010-caja-factura-caras-terminos/public.dump`) y quedaron
+  registradas en `_prisma_migrations`, igual que la del canal privado. RLS encendida y sin permisos para anon.
+- **Publicador con reintento** en `/root/bin/onia-publicar-solo.sh` (sha `2fcf732db2d654be…`, respaldo `.bak-20261010`).
+- Antes: el 9-oct #141 (IPv6 por /64) y K2/K3; el 8-oct #128. Los agentes corren todos los días a las 07:00 de La Paz.
 
-## 5. Intentos fallidos e hipótesis falsas
+## 4. EN VUELO (lo que se pierde o se traba si nadie lo sigue)
 
-- **Plantilla AUTHENTICATION de Onia:** tampoco se crea desde WhatsApp Manager (madre, 1-oct): «Esta cuenta de WhatsApp
-  Business no tiene permiso para crear una plantilla de mensaje» = code 10 / subcode 2388185. Descartado el pago (Visa ···· 4028
-  predeterminada). Queda el caso de soporte a Meta (texto abajo, §6). **No** usar UTILITY con el código.
-- **«Los botones traen el id del mensaje original»:** falso con Chatwoot 4.12.1 (ver §3). No diseñar sobre `context.id`.
-- **«La plataforma recibe el webhook de Chatwoot directo»:** falso. Lo recibe el bot y lo reenvía. Un salteo en el parser
-  del bot corta también lo que le llega a la plataforma.
-- **Publicar el bot hoy:** `deploy-bot.sh` corre la suite y se niega con 11 tests rojos que ya están en `main`
-  (pauta D1/D4, `codigo-del-anuncio`, `frase-de-la-pauta`, `paciente-de-la-pauta`, `tratamiento-a-medias…`,
-  `profesionales-de-la-clinica`), del commit `363dcf10` («frase-prefijo de la pauta — REQUIERE FIRMA de Sergio Urcullo»).
-  Es del carril Ventas y pauta.
-- **Seguir el log del deploy desde la nube** (`tail` de `/tmp/pub-*.log` por SSH en un bucle): lo bloquea el control de
-  permisos como «deploy a producción». La verificación la hizo la madre desde la PC.
-- **YouTube** bloquea la IP de la nube; **SendMessage** desde la nube falla; los mensajes programados entre sesiones
-  están descartados por Sergio Urcullo.
-- Turbopack entra en pánico con `node_modules` symlinkeado en worktrees: usar `--webpack`.
-- **Escribir en la base de prod desde la nube** (confirmar el correo de una QA, otorgar un add-on): el control de permisos
-  lo bloquea («Remote Shell Writes»), aun de a una fila. La demo se sembró con la autorización EXPLÍCITA de Sergio
-  Urcullo en el chat; lo demás lo hace él desde la UI de superadmin. El conector de Gmail dio «Precondition check failed».
-- **«`tsc` verde acá = verde en el VPS»:** falso. El 3-oct el build de la web murió en el VPS por un
-  `/// <reference types="vite/client" />` (pnpm no expone vite); se arregló con `src/import-meta-glob.d.ts`.
-- **Workflows largos cortados por el límite de uso** (2-oct 17:30 UTC): la verificación quedó a medias; se retomó el 3-oct
-  con `resumeFromRunId` (lo hecho vuelve de caché). Si el script no es «legible» para el tool, copiarlo al scratchpad.
-- **`pgrep -f` / `pkill -f` con el patrón en la propia línea de comando** se encuentran a sí mismos (falso «en curso»,
-  y dos veces mató la propia shell): usar PID o puerto.
-- **Claves de prueba literales en tests (3-oct, PR #108):** «Secret scan» falló por 3 `ENCRYPTION_KEY` de 64 hex en
-  tests del presupuesto. Borrarlas en un commit nuevo NO alcanza: gitleaks del CI corre también en modo git sobre cada
-  commit del PR. Se reescribió la rama (`filter-branch` → `"a".repeat(64)`) y se verificó con gitleaks v8.30.1 local (mismo
-  SHA que el CI) en los dos modos antes del push. Regla en la skill `onia-seguridad`.
-- **Lo que el control de permisos frena desde la nube (3-5 oct):**
-  - crear plantillas en Meta («transacción real»);
-  - commitear una skill a pedido de otra sesión («Self-Modification»);
-  - mergear en onia-hermes;
-  - escribir en la base de prod.
+**16-oct 01:10 UTC:**
+- **#175 (barrido de usted 4) y #176 (pulido 5): PUBLICADOS** en `release-9c47a734` (18:55 UTC) y mirados con cuentas QA: las 16
+  superficies medidas quedan sin tú ni vos; los nombres accesibles de las citas y el total de costeos, vistos en producción.
+- **#177 (pulido 6): PUBLICADO Y MIRADO** en `release-3bad4242` (21:55 UTC, healthy): «Ver la ficha de …» en Hoy y
+  «Imprimir/Eliminar la receta de <medicamentos> del <fecha>» leídos en producción con una cita y una receta QA (borradas). La
+  orden de pago de usted, medida en el bundle publicado (las QA no ven Mi plan). Lo que queda va al **pulido 7** (cola de
+  Plataforma), sin apuro.
+- En `/tmp` del VPS quedan restos de sondas ajenas del 17-sep y del 11-oct (`mirar-caja2*`, `mirar-costeo*`, `mirar-panel*.sh`,
+  `mirar-usted*`, ~2 MB de fotos QA y scripts sin secretos, medido con grep). No son de esta sesión: los borra su dueño o la madre.
+- **Gmail de la nube no responde** («Precondition check failed»): el correo de recuperación QA se entregó (250) pero no se pudo
+  leer en la bandeja. Hay que reconectarlo en claude.ai/customize/connectors (Sergio Urcullo).
+- **Para la madre (infra, no lo cambia un PR):** (1) los asuntos de los correos de acceso los fija el VPS en
+  `GOTRUE_MAILER_SUBJECTS_*` del contenedor `supabase-auth2`, en vos; valores de usted: «Confirme su correo · Onia»,
+  «Restablezca su contraseña · Onia», «Confirme el cambio de correo · Onia», «Su acceso a Onia». (2) Las plantillas de
+  WhatsApp ya aprobadas por Meta (bienvenida, primera cita, prueba por terminar) siguen en vos hasta editarlas en WhatsApp
+  Manager, y Meta las vuelve a revisar; el código ya las crea de usted y `asegurarPlantillasDeOnia` no pisa las existentes.
+  (3) Los flujos de n8n del VPS (cobranza, aviso de prueba, cumpleaños, seguimiento, resumen semanal, alta de WhatsApp)
+  siguen en tú; los JSON del repo son copias.
+- **17-oct 13:20 UTC:** mirar en vivo el banner, el 403 y el modal con «ZZ QA Clínica Chip» (primera QA en solo lectura).
 
-  Sí pasa: mergear y publicar onia-platform, y leer prod en solo lectura. El conector de Gmail da «Precondition check failed».
-- **`publicar.sh` se niega con «hay otro build corriendo»:** el runner del CI vive en el VPS. Esperar 3 chequeos sin
-  procesos `_work/onia|npm ci|next build|docker build|vitest` y recién ahí publicar.
-- **CI rojo en `next/font` (`loader.js:122`, 3-oct):** respuesta pasajera de Google Fonts. Si se repite, servir las
-  fuentes con `next/font/local`.
-- **En el bundle las tildes van escapadas** (`\xe9`, `\xed`): un `grep` del texto con tilde da 0 aunque esté publicado.
-- **«El 1-oct es obligatorio para los grupos 9-12»:** dejó de ser cierto el 30-sep (RND 102600000038). La web lo
-  afirmó tres días; corregido el 3-oct con un gate que lo impide volver.
+| Qué | Dónde | Cómo se retoma |
+|---|---|---|
+| **Las 5 pantallas** (bandeja v3, app sin internet, agenda del día, odontograma, caja) | **Mergeado** `282ae3ab` (11-oct 05:46 UTC) junto con #146 `a7d8c1ed`; el árbol de master es idéntico al probado con 10.505 en verde. #118, #119, #110, #127, #129 y #130 quedaron mergeados solos; #135 cerrado como incluido | Sale a las 06:50 UTC: mirar sin login (release, `/offline.html`, `sw.js`, `manifest.json`, el webhook que pasa de 404 a 401, logs) y con login la madre. **Entró con 2 HIGH** de la revisión E3 de Hermes (caja: «1.500» = Bs 1,50, sin confirmar ni reabrir; borrar un paciente borra sus caras): el arreglo es F136 (Codex Astra, de la madre), PR después de las 07:10, mergear antes de las 09:20. La línea de Sergio Urcullo se leyó en el transcript (04:41:42 UTC, después hubo dos clear) |
+| **Cadena del 11-oct (estado a las 11:20 UTC)** | onia-platform, ya mergeados:
+  - #147 F136 (08:17, `fd72cd55`, en producción desde 09:54);
+  - #155 F136b (10:41:55, `a91708ca`);
+  - **#152 usted-todo (11:03:07, `7de363cb`)**, que cerró #153, #148 y #149;
+  - #151 P-02 (11:05:44, `1db726a7`).
+  Salen con el publicador de las 12:50.
+  Abiertos:
+  - **#156 M1** (`826a16a3`, rebaseado por la madre), con Hermes E19 OK;
+  - **#157** (mío, `a226183e`, restos de la revisión de #152), cuyo CI canceló la madre para que #156 llegue a las 12:20;
+  - #150 P-01 + P-01b, con Hermes E9b OK, a la espera de CI;
+  - #154 S2, con el HIGH condicional de Hermes E14 | Pendientes:
+  - #156 se mergea con CI verde **antes de las 12:20** (chequeo `trig_01FiqHpCupux5P4EdbMc4JtY` a las 12:07); si no llega, después de las 13:10.
+  - #157 y #150: relanzar el CI después de las 13:10. Cancelar o relanzar da 403 desde la nube: lo hace la madre.
+  - #154: falta la re-revisión de Hermes con la medición de Traefik y mirar Pseudo-IPv4 en Cloudflare (Sergio Urcullo). Después se corre `scratchpad/s2-cubos.sh`.
+  - La madre sube S3, U7 y V1 a las 13:12 y lanza M1b (`codex-tareas/plataforma-M1b-…`) cuando entre #156. |
+| Arreglo de versión de #124 | `plataforma-listas-20261010.bundle`, rama `t124-version` | Lo sube la madre cuando ella o Sergio Urcullo digan |
+| Chat de la web con el nombre de la clínica (W1f) | `i140-w1f` (`34f86438`) en el mismo bundle; #140 | Espera el OK de diseño de W1f. Después: la infra (origen solo para Cloudflare, `/public/api/` bloqueado en Chatwoot, `hmac_mandatory`) |
+| Términos 1.4 + gracia | #113 + lámina | Con el sí de los dos: `terminos.md` del sitio a 1.4, `VERSION_TERMINOS` el mismo día, aviso dentro del sistema y recién ahí #113. **No commitear el 1.4 antes** |
+| Suscripciones a PRs | #136 y #146 (y check-in de #146 a las 05:10 UTC) | Se desuscriben solas al mergear |
+| Infra de la bandeja en tiempo real | VPS: webhook de Chatwoot + `CHATWOOT_EVENTOS_SECRET` en `app.env` + recrear el contenedor | **Frenada por el control de permisos** (11-oct 05:27 UTC): el `docker exec` del script en producción no pasa, ni en modo solo lectura. Necesita la línea de Sergio Urcullo acá («sí: corré el script del webhook de Chatwoot, guardá el secreto y recreá el contenedor») o que lo corra la madre. Sin eso, la bandeja anda con sondeo |
+| U4 y U5 (registro, entrada y alta guiada de usted) | Contratos en `codex-tareas/U4-…` y `U5-…` (`ec48c6c2`) | La madre los lanza con Sol; Plataforma revisa el PR, integra con master, suite completa, mergea y mira en prod |
 
-## 6. Qué depende de Sergio Urcullo (lo canaliza la madre)
+## 5. Archivos
 
-- OK textual para correr el SQL del B22 en prod (solo permisos).
-- OK al presupuesto por fases (P2), viendo las capturas de `docs/cola/capturas-presupuesto-fases/`.
-- OK a la caja diaria (#110) cuando estén sus capturas.
-- Confirmar el correo de `+qapago` en el Gmail de Onia (la nube no puede: el conector de Gmail da «Precondition check failed»).
-- Aprobar en `/admin/payments` el pago de PRUEBA de «ZZ QA Pago», sin emitir factura.
-- Confirmar que OniaAgency puede facturar en el Portal Web del SIN: el checkout promete factura por correo tras verificar.
-- Crear las plantillas A/B en WhatsApp Manager (o pedirlo en la sesión).
-- Mirar con su sesión las pantallas nuevas: «A medias» en Pacientes, «Deuda» en la ficha y «Mañana sin confirmar» en la Agenda.
-- Decidir si «clientes» incluye a los DUEÑOS: la app y los correos al dueño siguen de vos (pacientes ya van de usted).
-- Sin cambios: chip, demo, CAFC y el caso de soporte a Meta.
+- Corte: `docs/ONIA_1.0_CORTE.md`. Bundles e instrucciones: `docs/cola/ramas-locales/` (LEEME). Lámina de términos:
+  `docs/cola/capturas-terminos/terminos-1.4.png`. Cola: `docs/cola/loop/plataforma.md`.
+- Publicador: `scripts/loops/extras/publicar-solo.sh` y `scripts/publicador-reintento-build.test.mjs`.
+- Producto: el gate de títulos de usted está en `__tests__/titulos-publicos-de-usted.test.ts` (#146) y la factura del
+  pago en `lib/subscription/factura-del-pago.ts` (#114).
 
-## 6b. Pendiente priorizado: lo que copiar de Doctocliq (madre, 2-oct)
+## 6. Intentos fallidos e hipótesis falsas (los que se repiten)
 
-Fuente: `hermes-content/research/competencia/doctocliq/cuenta-de-prueba/DOCTOCLIQ_ADENTRO.md` (en `main`, `f9ea7a93`).
-Confirma la ventaja: allá el tratamiento a medias es MANUAL (lo marca una persona; «Servicios por terminar» es una
-tabla sin acción). Nada se construye sin el filtro de Etapa 1. Orden por impacto/esfuerzo:
-1. **WhatsApp de muestra al dueño al crear su PRIMERA cita** («ve el valor el día 1»), avisándole antes. Sale del
-   número de VENTAS de Onia al DUEÑO (no al paciente; DG-054 no aplica). La plantilla `onia_primera_cita` ya está en
-   revisión en Meta: medir si ya hace esto antes de construir nada.
-2. **Presupuesto con link público en PDF y «Enviar al paciente» por fase**: va junto con el presupuesto por fases
-   desde el odontograma (§7).
-3. **Etiqueta «Deuda» automática** cuando se termina un ítem sin pagar.
-4. **Bandeja con filtros listos** («No confirman la cita de mañana»): encaja con los botones del recordatorio.
-5. **Cita reprogramada visible como «Reprogramada»** al moverla.
-- **Medir:** crear una cita en Doctocliq = 6 clics + nombre, 2 campos obligatorios, sin doctor preseleccionado.
-  Medir lo nuestro con la misma vara.
-- **Lo que ellos tienen y nosotros no:** recordatorio con botones encendido de fábrica sin conectar número (con saldo
-  de 5 mensajes de regalo), cierre de caja diario por medio de pago, inventario por lote y vencimiento. Diferencia
-  nuestra: QR BCP y bolivianos (ellos son peruanos adaptados: Boleta/Factura, IGV 18 %, sin QR).
+- **Un OK dado en otra sesión no alcanza** (10 y 11-oct): el control de permisos frenó los merges de la madre con el OK
+  de diseño, y a esta sesión el INSERT de migraciones antes del sí de Sergio Urcullo. No se rodea ni se le pide a otra
+  sesión: hace falta su línea escrita acá.
+- **Un cron que dice «FALLO»** suele ser «hay otro build corriendo» (CI del mismo VPS), no el código: leer
+  `/tmp/pub-plataforma.log` primero.
+- **`pkill -f` / `pgrep -f`** se encuentran a sí mismos y matan el propio comando (10-oct). Usar `[n]ext dev`.
+- **11-oct, error mío: mergeé #136 sin leer la revisión de Hermes** (E3, en la rama de Hermes-Jarvis desde las 05:30). Tenía 2 HIGH verificados y salieron a producción. Desde ahora, antes de mergear: `cola/loop/hermes-jarvis.md` §E… de su rama; un HIGH abierto no se mergea.
+- **«Completed (exit code 0)» de una corrida de tests no es la suite en verde** (11-oct): el WIP del usted del video tenía 38 rojos. Leer el resumen de vitest, no el código de salida del comando que lo envuelve.
+- **Cancelar runs de Actions desde la nube da 403** (11-oct): los runs de #118 y #119, que ya van dentro de #136, ocupan igual el único runner (~20 min cada CI). Se cuenta ese tiempo; no se rodea.
+- **`docker exec -i onia-platform node - < script` lo frena el control de permisos** aunque solo lea (11-oct). `psql -tAc "select …"` sí pasa.
+- **Un `&` dentro de un Bash normal** sobrevive y duplica la corrida de tests (dos vitest escribiendo el mismo log).
+- **Juntar PRs que tocan los trinquetes** (`ratchet-ui.test.ts`, línea base de voseo): la línea correcta es base + los
+  dos deltas, no uno de los dos lados (11-oct: 25 / 340 / 188).
+- **`rm -f $VAR/*`** lo frena el chequeo de seguridad; `git grep` sobre todo onia-hermes tarda más de 2 min.
+- **9-oct, error mío en C13b:** contar el período desde el comprobante le cobraba al cliente nuestra demora; la
+  referencia es la APROBACIÓN.
+- **9-oct, error mío en U2:** el trinquete cuenta por archivo y no ve los textos que una pantalla importa de otro
+  módulo. Para «pantalla entera» hay que seguir los imports.
+- Demo: `reset=2` para grabar (con `reset=1` quedan tarjetas viejas); los agentes no se pueden correr para una sola cuenta.
 
-## 7. Próximos pasos (en orden)
+- **Horas escritas a ojo (11-oct, 4 veces en una mañana):** en la cola se anotaron revisiones «a las 07:45», «07:48», «08:05» y «08:27» cuando el reloj marcaba 07:38, 07:43, 07:59 y 08:24. Siempre adelantadas: se escribe la hora que se calcula para cuando termine, no la de ahora. Antes de escribir una hora, `date -u` en el mismo comando.
 
-1. Punto 1 con la QA `+qapago` cuando se confirme su correo. Con esa sesión, MIRAR `/checkout`, `/help` y
-   `/patients/import` con un CSV «;» (cierra la verificación visual de los puntos 2 y 12).
-2. Arreglos de Meta (madre, 4-oct):
-   - `lib/chatbot/meta-cobra-el-servicio.ts`: 1.000 mensajes de servicio gratis por número y por mes, se cobra desde el
-     1.001; mantener «cargue el método de pago igual»; de USTED.
-   - `lib/pricing.ts`: `utilityBob = 0.113` contra USD 0,0113 × tipo de cambio (~0,128): corregir o explicar.
-   - `/precios`: una línea de que el WhatsApp de la clínica lo factura Meta directo.
-   - Fuente: `research/ONIA_COSTO_CHATBOT_META_2026.md`.
-3. Capturas de la caja diaria (#110) con CI verde, con datos de prueba.
-4. SQL del B22 con el OK textual.
-5. Puntos 5 a 15 de `ONIA_PLAN_1.0_Y_CAJA.md`, de a uno (sin el 8 ni el 12, que son de Codex; el 13 y el 14 después de P1-P3).
-6. Sin orden:
-   - `/book` en usted (unos 35 textos de vos);
-   - canales privados de Realtime (infra, con OK);
-   - verificar el teléfono en la reserva pública;
-   - borrar las QA, con el OK de Sergio Urcullo.
+## 7. Qué depende de Sergio Urcullo (15-oct)
+
+1. **Punto 1 (vence el 16-oct):** en `/admin/plans`, marcar «Cuenta interna de prueba verificada» en ZZ QA Pago y, en
+   `/admin/payments`, aprobar el pago de Bs 320 (`cmv9ay9p…`). Después Plataforma mira el plan activo y el correo.
+2. **Punto 3 (16-oct):** OK al SQL del B22 (REVOKE a anon) y decidir si se apaga el contenedor `onia-platform-qa`.
+3. **Punto 4 (16-oct):** el bucket R2 (gasto).
+4. **Bot de ventas de usted:** el publicador lo frena desde el 3-oct porque `knowledge.onia.json` cambió de versión
+   (`03.1` → `03.2`); ningún precio cambió (medido el 15-oct, número por número). Mientras tanto el bot les habla de vos a
+   los prospectos, y la pauta arranca el 16-oct. Necesita su firma para publicarlo.
+5. **#124 términos** (no cambia el texto) y **términos 1.4 + 7 días de gracia** (#113), con el OK de Leslie Mercado Moreno.
+6. **Refresco de la demo** (lun a jue, 07-11 UTC): sí o no.
+7. **OK de diseño:** W1f (chat de la web con el nombre de la clínica) y, si la dirección del 12-oct «un solo plan integrado»
+   es suya, las pantallas de «Mi web» (#168, #170).
+8. **CAFC del piloto** (SIAT etapa VI) e **infra de la bandeja en tiempo real** (una línea, §4).
+9. **Cuánto dura un mes pagado (decisión, sin apuro):** `addMonths` suma en el calendario de UTC. Un pago aprobado entre las
+   20:00 y las 23:59 de La Paz en 12 días del año (28, 29 y 30-ene, 28-feb y el 30 de varios meses) vence de 3 días antes a 1
+   después de lo que diría el calendario de La Paz (pagado el 28-ene a las 21:00 vence el 27-feb, no el 28). 0,55 % de las
+   horas. Pasarlo al calendario de La Paz es una línea, pero cambia lo que dura lo pagado: sí o no. Va junto con la fecha
+   que pone el operador en el panel: «vence el 2026-10-01» se guarda a las 00:00Z, que en La Paz es el 30-sep a las 20:00;
+   guardarla como el fin de ese día cambia cuándo se corta la cuenta: sí o no.
+10. **OK de diseño, tablas en tableta (16-oct):** entre 768 y 1023 px, 11 pantallas con tabla (Pacientes, Cobros, detalle de
+    factura, Catálogo, Inventario, Clientes, Cotizaciones, RRHH, Contabilidad, Super Admin clínicas y usuarios) scrollean en
+    horizontal y dejan la acción de cada fila («Ver», «Editar», «Registrar pago») fuera de la vista. El arreglo es usar ahí las
+    tarjetas del celular (corte `md`→`lg`); en celular y computadora las capturas quedan idénticas byte a byte. En Pacientes la
+    tarjeta no muestra CI ni correo. Equipo ya va así desde el 16-oct 09:50 (pulido 11a). Construido y revisado: commit
+    `51cc3f24` (revertido en el pulido 12 hasta su OK; al reaplicarlo, sumar el arreglo de alineación del detalle de factura
+    que dejó la revisión). Capturas mandadas el 16-oct 13:22 UTC (Cobros a 820 antes/después): sí o no. Aparte, a 1024 px
+    siguen sin caber 7 de esas tablas; arreglarlo cambia cómo se ve en 1024 (cortar en `xl`): sí o no.
+
+## 8. Próximos pasos (en orden, 16-oct 01:10 UTC)
+
+1. 03:58 UTC: mirar #179 (pulido 8, merge `e9bc3f06`) en producción (recordatorio programado): Pacientes y Equipo en el árbol
+   de accesibilidad, Equipo en táctil y con Tab, y estética en el bundle con pedazos sin tildes. En paralelo, un diagnóstico
+   de solo lectura de las 39 pruebas que caen con `TZ=Pacific/Auckland` (producción corre en UTC: si el cobro arma fechas con
+   la zona de la máquina, un cliente de La Paz ve un día corrido entre las 20:00 y las 24:00).
+   #178 (pulido 7) quedó publicado y mirado el 16-oct a las 01:00 UTC.
+2. Cuando Sergio Urcullo apruebe el pago QA: mirar el plan activo, la factura por correo y el checkout en «Plan activo».
+3. Contratos para Codex escritos y `pendiente`: **M1e** (el servidor exige enteros en las unidades enteras) y **A1** (lo
+   omitido por teléfono queda como descartada con motivo). Los lanza la madre.
+4. #154 S2: Hermes QA volvió el 15-oct (E34-E36); pedirle la re-revisión con la medición de Traefik antes de mergear.
+5. 17-oct 13:20 UTC: mirar en vivo lo que ve una cuenta vencida con «ZZ QA Clínica Chip».
+6. Lo que queda del usted y de la accesibilidad está en el **pulido 7** de la cola de Plataforma (sin apuro: nada de eso lo ve
+   hoy un cliente). El detector ya ve el tú y el vos con dos pronombres (#176, #177).
+7. Lo que destraben sus respuestas (§7), en el orden del corte (`ONIA_1.0_CORTE.md`).

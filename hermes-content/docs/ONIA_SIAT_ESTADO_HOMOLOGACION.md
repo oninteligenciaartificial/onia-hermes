@@ -1,12 +1,19 @@
 # SIAT — estado de la homologación del sistema
 
-> **Lectura directa del portal, 2026-09-27:** sistema **EN PRUEBAS**, **80 % general**,
-> **37 días restantes**. Ocho etapas están al 100 %; **VI 150/560** e **IX 60/160**.
-> Faltan **410 + 100 = 510 casos**, por lo que **la Fase 1 NO está completa**. El
-> checkpoint del VPS que decía 5.732/5.732 sumó respuestas SOAP bajo claves `pv0/pv1`,
-> pero no distinguió las 32 filas de VI ni las 12 de IX. El portal es el árbitro.
-> La matriz exacta y el plan de conciliación están en §4 y en el
-> [README del runner](../integrations/siat/README.md).
+> **Lectura directa del portal, 2026-10-08 19:22 (capturas de Sergio Urcullo, «Listado de Etapas» y detalle de VI):**
+> **90 % general**. Nueve etapas al 100 %, **IX ya completa (160/160)**. Falta sólo
+> **VI · paquetes: 380/560 (67 %) → 180 casos**. Plazo de pruebas: **04/11/2026** (26 días).
+> **Los 180 son todos de los motivos 5, 6 y 7** (falla de software, falla de hardware, corte de luz) y
+> necesitan el **CAFC del piloto**, que no tenemos: 12 filas de recepción × 10 (sectores 1 y 17, PdV 0 y 1)
+> más 30 validaciones por PdV del sector 17. El conteo local del 2-oct coincide fila por fila
+> (bitácora `/opt/onia-siat/runner-20260929/BITACORA.md`). **Pedido a Sergio Urcullo el 9-oct:** el CAFC del
+> piloto para compra-venta y hospitales/clínicas, casa matriz, con la mayor cantidad de facturas que permita
+> (el rango se usa para numerar: SIN 1047). El runner ya lee un CAFC por sector con su rango (ver §4).
+>
+> *Lectura anterior, 2026-09-27: 80 %, VI 150/560 e IX 60/160 (510 casos). El checkpoint del
+> VPS que decía 5.732/5.732 sumó respuestas SOAP bajo claves `pv0/pv1` sin distinguir las
+> 32 filas de VI ni las 12 de IX. El portal es el árbitro.* La matriz exacta y el plan de
+> conciliación están en §4 y en el [README del runner](../integrations/siat/README.md).
 
 > ⚡ **ACTUALIZACIÓN 2026-09-13 (sesión de control):** el **Punto de Venta 1 YA EXISTE** —
 > creado por SOAP `registroPuntoVenta` (tipo 5 · CAJEROS, `transaccion:true`, verificado con
@@ -95,6 +102,33 @@ Verificado **mirando** la Oficina Virtual el 2026-08-27, no por grep ni por memo
 | VI · paquetes | 560 | 150 | **410** |
 | IX · masiva | 160 | 60 | **100** |
 | **Total** | **5.732** | **5.222** | **510** |
+
+**Lectura del 2026-10-08:** VI **380/560** (faltan 180) · IX **160/160** · general **90 %**.
+La tabla de arriba queda como la foto del 27-sep que explica el plan.
+
+**Qué falta exactamente (9-oct, detalle de VI + bitácora):** las filas 9-14 (sector 1, motivos 5/6/7,
+`=500` en PdV 1 y `<500` en PdV 0) están en 0/10, y sus pares del sector 17 también. Las validaciones del
+sector 17 van 40/70 por PdV: suben solas cuando se validen esos paquetes. Todo lo que no pide CAFC ya
+está en el portal.
+
+**El CAFC del piloto (verificado en siatinfo el 9-oct):**
+- Nota oficial (Emisión y Envío): *«Para el ambiente de pruebas (PILOTO) deberá solicitar CAFC para los
+  documentos que esta autorizando, así como para las sucursales que probaran.»* → uno para el sector 1 y
+  otro para el 17, casa matriz (y por PdV si el formulario lo pide).
+- El CAFC autoriza un **rango de números**. Errores del catálogo: **1045** CAFC no válido para la factura,
+  **1046** fecha de emisión incorrecta para el CAFC, **1047** número de factura incorrecto para el CAFC.
+  Las filas de motivos 5-7 piden **15.060 facturas por sector**: se pide la mayor cantidad que permita.
+- En producción se pide en SIAT en línea → Sistema de Facturación → Manual de Facturación → Solicitud de
+  Autorización de Documentos Fiscales → Factura de Contingencia (guía oficial P-104, mayo 2025), y esa
+  opción manda a imprimir talonarios reales: **no usarla para las pruebas**. El menú del piloto no está
+  publicado; existe `pilotosiat.impuestos.gob.bo`. Si no aparece, se pregunta al 800 10 3444 (§7 de
+  `ONIA_FACTURACION_ESTADO_REAL.md`, pregunta 4).
+- El evento significativo no lleva CAFC (registroEventoSignificativo no tiene ese campo): va en el
+  paquete (`recepcionPaqueteFactura.cafc`) y en cada XML (`<cafc>`), que es lo que hace el runner.
+
+**Al llegar el CAFC:** cargarlo en `/opt/onia-siat/cafc-piloto.json` (formato en el README del runner,
+chmod 600), sumar `SIAT_PILOT_CAFC_FILE` al env de la corrida y lanzar UNA fila de 2 XML (PdV 0) con
+`--count` = actual + 1. Si vuelve 908, el resto con el script de tandas de la bitácora.
 
 El 80 % general del portal es su marcador de etapas (8 de 10 completas); no es
 el cociente 5.222/5.732. El desglose de VI contiene **32 filas**: dos sectores

@@ -392,7 +392,7 @@ las dos.** Que existan sueltas es el patrón que más caro sale acá, así que q
 
 | Doc | Qué define | En una línea |
 |---|---|---|
-| **`cola/plataforma-v1.md`** (carril `plataforma-v1`, 2026-09-05) | **el ALCANCE** | los **cinco rubros que ya se venden** se recorren de punta a punta sin romperse, y lo que el cliente ve nunca contradice lo que el producto hace. Veterinaria y ganadería quedan **fuera** |
+| **`ONIA_1.0_CORTE.md`** (10-oct; antes `cola/plataforma-v1.md`, 2026-09-05) | **el ALCANCE** | por capa (rubros, SIAT, agentes, cobro, identidad): qué se vende **ya**, qué sigue en desarrollo para la 1.1 y qué después. Lo que el cliente ve nunca contradice lo que el producto hace. Veterinaria y ganadería quedan **fuera** |
 | **Este doc, §11** | **el CRITERIO DE CIERRE** | un cliente lo logra **solo** y **paga el segundo mes** |
 
 **Se complementan: una dice hasta dónde llega la v1.0, la otra dice cuándo se puede declarar

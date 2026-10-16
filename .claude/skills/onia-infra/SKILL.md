@@ -50,6 +50,13 @@ description: Cargar ANTES de tocar el VPS, Docker, n8n o cualquier cosa por SSH.
   un robot», Chromium cae en `/sorry`); los videos se ven desde la PC. Los centros de ayuda Zendesk privados dan 403.
   `SendMessage` a otra sesión falla («this cloud session cannot message other sessions yet»): se contesta en el
   transcript propio y la madre lo lee. La web pública de terceros, en cambio, abre bien con `curl` y Playwright.
+- **Cancelar un run de GitHub Actions desde la nube da 403** («Resource not accessible by integration», 11-oct). El
+  runner del VPS es uno solo y toma los jobs en cola de a uno: los runs de PRs que ya van dentro de otro (#118 y #119
+  dentro de #136) igual ocupan ~20 min cada uno. No se rodea: se cuenta ese tiempo antes de prometer un merge.
+- **`docker exec` de un script dentro de `onia-platform` lo frena el control de permisos** («Remote Shell Writes»,
+  11-oct), aunque el script solo lea (el `GET /webhooks` de `chatwoot-webhook-eventos.mjs`). El control no puede ver que
+  sea de solo lectura. Leer con `psql -tAc "select …"` sí pasó el mismo día. Lo que corre código en producción necesita
+  la línea de Sergio Urcullo en ESA sesión, o lo corre la madre.
 
 - **Playwright/Chromium desde la nube da `ERR_CERT_AUTHORITY_INVALID`** (medido 1-oct): el proxy re-firma TLS y
   Chromium no toma su CA. No se apaga la verificación. Se le pasa a Chromium la huella de la CA del proxy:
@@ -59,6 +66,12 @@ description: Cargar ANTES de tocar el VPS, Docker, n8n o cualquier cosa por SSH.
   ```
   Con eso se miran onia.com.bo y app.onia.com.bo renderizadas (consola y capturas). El módulo `playwright` está en
   `/home/user/onia-platform/node_modules`: el script se corre desde ese repo.
+- ⚠️ **Una falsa caída que provoca el proxy (11-oct):** desde la nube, `/book/<slug>` salía «Algo salió mal», con
+  `ChunkLoadError`. El chunk `app/(public)/book/%5BorgSlug%5D/page-*.js` le daba 404 a Chromium y 200 a `curl`, con
+  los mismos encabezados. El proxy de la nube rompe las rutas que juntan un `(grupo)` con un `[parámetro]`.
+  Producción estaba bien: mirada desde el VPS (red real, sin el proxy), con
+  `require("/root/node_modules/playwright-core")` y `chromium.launch({ headless: true })`, el chunk dio 200, sin
+  errores. **Antes de declarar caída una ruta dinámica dentro de un grupo, hay que mirarla desde el VPS.**
 
 ### Publicar desde la nube (los dos comandos, medidos 1-oct)
 
@@ -194,6 +207,13 @@ Ese dia habia **tres causas nuestras** comiendo CPU:
    conexion no deja un build huerfano — sigue solo y se retoma leyendo el log.
 4. **Un solo dueno de infra a la vez.** Si estas desplegando, n8n y Supabase son de SOLO
    LECTURA para los demas carriles.
+5. **El CI de GitHub corre en ESTE VPS y cuenta como build.** Trampa pagada el 10-oct, 15:50 UTC: el cron dio
+   «plataforma: FALLO» sin carpeta nueva en `releases/`. El detalle no estaba en un `build.log` sino en
+   `/tmp/pub-plataforma.log`: «FATAL: hay otro build corriendo (next build / npm ci / docker build): no encimo otro».
+   Entre las 15:30 y las 15:45 se subieron 7 ramas de PR; el runner es uno, cada CI tarda 20-45 min y la cola ocupó el
+   VPS más de 2 h. Antes de un cron de publicación (minuto 50 de 00, 03, 06, 09, 12, 15, 18 y 21 UTC): nada de push ni
+   merge desde una hora antes si la cola no está vacía. Se mira con `actions_list` → `list_workflow_runs` con
+   `status: queued` e `in_progress`. Ante un «FALLO», leer primero `/tmp/pub-plataforma.log`.
 
 ---
 
@@ -287,6 +307,19 @@ Estos dieron diagnosticos falsos con evidencia que parecia buena:
   `cf-cache-status`: `HIT` explica el 200, `BYPASS` dice la verdad.
 - **El login NO prueba la base**: entra por Supabase Auth via HTTPS, no por Prisma.
 - La base de produccion es la **self-hosted del VPS** (`supabase-db`, schema `public`), no la nube.
+- **Un 401 de `/rest/v1/` NO prueba un REVOKE** (11-oct, Hermes E9 sobre P-01): Kong pone `key-auth` delante de
+  PostgREST, asi que una clave anon vencida, rotada o mal copiada tambien da 401, y la prueba pasa sin medir.
+  Control positivo con la MISMA clave antes de leer la tabla: `GET /auth/v1/settings` da 200 solo si Kong la
+  acepta. Medido en el `kong.yml` de produccion (`/opt/onia-supabase/supabase/docker/volumes/api/kong.yml`):
+  `auth-v1-all` (`/auth/v1/`) lleva `key-auth` + `acl` (admin, anon). Las abiertas son `verify`, `callback`,
+  `authorize`, `jwks` y `sso`, y esas no sirven de control. Y exigir `role: anon` en el payload del JWT: con la
+  `service_role` la tabla devuelve filas reales.
+- **La nube no es UN visitante** (11-oct, prueba de S2). La salida de una sesión de la nube rota entre varias IPs de una
+  misma /24: en 6 pedidos a `api.ipify.org` salieron 4 IPs distintas. Con 31 pedidos desde la nube, el límite de 30/min nunca
+  saltó, y eso parecía un limitador roto. Para probar «dos visitantes no comparten cubo», el visitante fijo es el VPS
+  (`ssh onia-vps curl …`, entra por Cloudflare porque el dominio resuelve a Cloudflare) y la nube es el segundo. Método
+  medido, sin tocar la base: `GET /api/booking/doctors` sin `orgSlug` pasa por `publicApiLimiter` y responde 400. El script
+  está en la cola de Plataforma (S2).
 
 ---
 

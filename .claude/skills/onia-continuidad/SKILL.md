@@ -175,6 +175,13 @@ baja una cuenta servía de algo.
 - **El auto-sync (hook Stop) también corre en la nube:** el 1-oct commiteó solo (`chore: auto-sync`) los archivos que
   un workflow todavía estaba escribiendo. Un workflow que escribe archivos tiene que dejar cada archivo completo antes
   de que termine el turno.
+- **Una tarea nueva sobre un PR no borra las anteriores** (9-oct). El 8-oct la revisión de #133/#134 dejó `K2b` y
+  `K3b` (#134 «bloqueado»: apagaba los agentes de toda cuenta dental nueva). El 9-oct, otra pasada encontró dos tests
+  rojos, escribió `K23b` y le puso «con estos arreglos quedan para mergear» sin releer las del día anterior. La madre
+  lo creyó, Codex lo hizo, y el pedido llegó como «mergeá y publicá». Se frenó a tiempo porque antes de mergear se
+  releyó el código. **Antes de escribir «listo para mergear» en una tarea o un mensaje:**
+  `ls hermes-content/docs/handoff/codex-tareas/<id>*` y comprobar en el código de la cabeza del PR que cada hallazgo
+  esté cerrado. Una suite en verde no lo prueba: los tests que faltaban eran justamente los que pedía la revisión.
 
 ## Relación con lo que ya existe
 
