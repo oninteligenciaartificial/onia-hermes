@@ -1,0 +1,65 @@
+{
+  "schema": 1,
+  "invocation_id": "native-hermes-readonly-20261016-01",
+  "task_id": "01a142e2-e207-7248-8c43-4778c245000f",
+  "host_id": "durable",
+  "requested_surface": "UI Work in Nube/ONIA Hermes",
+  "contract_state": "consumed",
+  "replay_count": 0,
+  "result": "BLOCKED",
+  "observed_at_utc": "2026-10-16T04:06:24Z",
+  "official_documentation": {
+    "url": "https://learn.chatgpt.com/docs/environments/cloud-environments",
+    "supports": [
+      "Tasks can continue on web/mobile while the PC sleeps.",
+      "Computer/browser use is currently unsupported in Cloud.",
+      "Personal local skills do not sync to Cloud."
+    ],
+    "proves_this_instance_ready": false
+  },
+  "tool_observed": {
+    "read_thread_status": "completed",
+    "read_thread_duration_ms": 59263,
+    "read_thread_error": null,
+    "environment_status_tool": "cloud_environment.environment_status",
+    "environment_status_duration_ms": 528,
+    "environment_status_result": "BLOCKED",
+    "observed_phase": "pending",
+    "connectivity": "offline",
+    "capabilities": [],
+    "thread_metadata_cwd": "/workspace",
+    "thread_metadata_cwd_is_actual_cwd_evidence": false,
+    "ui_edit_environment_result": "failed",
+    "ui_edit_environment_message": "No se ha podido iniciar la edición del entorno",
+    "settings_changed": false,
+    "chat_ui_repository": "onia-hermes",
+    "chat_ui_label": "Cambios",
+    "chat_ui_cause_or_recovery_shown": false,
+    "screenshot_attempts": 2,
+    "screenshot_timeout_seconds_each": 5,
+    "screenshot_captured": false,
+    "visual_qa_claimed": false
+  },
+  "child_reported": {
+    "shell_invoked": false,
+    "real_reads_performed": false,
+    "changes": 0,
+    "retries": 0,
+    "os": "UNKNOWN",
+    "actual_cwd": "UNKNOWN",
+    "repository": "UNKNOWN",
+    "branch": "UNKNOWN",
+    "head": "UNKNOWN",
+    "runtime": "UNKNOWN",
+    "model": "UNKNOWN"
+  },
+  "limits": [
+    "Thread metadata does not prove runtime workspace or actual cwd.",
+    "Official cloud-environment guide supports continuing tasks on web/mobile while the PC sleeps, but says computer/browser use is currently unsupported in Cloud.",
+    "Personal local skills do not sync to Cloud; the documented remote-execution goal does not prove this instance ready or provide total browser/laptop access.",
+    "The task chat showed no cause or recovery details; screenshot capture timed out twice, so no screenshot or visual QA evidence exists.",
+    "No local or VPS execution was used as a substitute.",
+    "This does not prove all-Cloud or PC-off autonomy.",
+    "Current blocker is repair or provisioning of the existing Cloud environment instance."
+  ]
+}
