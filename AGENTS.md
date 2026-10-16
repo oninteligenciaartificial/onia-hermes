@@ -31,12 +31,14 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
 
 > **Bootstrap obligatorio de Codex (16-oct-2026):** lee el `CODEX.md` completo antes de
 > actuar y aplica su bloque «Orden vigente» antes de cualquier historial fechado. Versión
-> canónica v2026-10-16; SHA-256 de esta copia: `F093E03756405AE5BA92600B69221B4D0DAA962A256E805886F674659F028034`.
+> canónica v2026-10-16; SHA-256 de esta copia: `5069BE8C0586F204898D1E8B4380D95AF2565E53F572C88BDCF17FFF339AFAB5`.
 > El hash acredita identidad del archivo, no que una sesión lo haya leído o cumplido.
-> Hermes coordina; Codex Cloud nativo por suscripción y Claude Code Cloud son los ejecutores
-> autorizados para la prioridad vigente. Mantén PC-off como criterio de aceptación. No los
-> sustituyas por ChatGPT Work/Cloud, CLI/local, VPS ni API facturada; Warp solo observa y Orca
-> queda posterior. Reutiliza controlador/cola/scripts existentes; no crees duplicados.
+> Hermes coordina; la prioridad es usar rutas oficiales Codex Cloud nativo por suscripción y
+> Claude Code Cloud, incluidas interfaces programáticas documentadas para esos servicios.
+> Prefiere que la PC esté apagada; encendida es último recurso tras comparar opciones.
+> Investigar alternativas públicamente no significa adoptarlas. No sustituyas operativamente
+> por ChatGPT Work/Cloud, VPS ni API facturada sin decisión explícita de Sergio. Warp solo
+> observa y Orca queda posterior. Reutiliza controlador/cola/scripts existentes; no dupliques.
 > Sigue el contrato de tarea y sus permisos explícitos de Git; este bootstrap no concede
 > dispatch, secretos, ejecución de proveedor, main, merge, deploy ni cambios externos.
 
