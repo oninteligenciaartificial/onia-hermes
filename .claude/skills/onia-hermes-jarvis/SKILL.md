@@ -263,6 +263,12 @@ CLI de Hermes.
   (dental y comercio), lee el paso 2 del alta y se va **sin escribir ni enviar** (crear cuentas es otra autorización). **Las anclas de este instrumento leen el copy público: cuando una
   pantalla pasa de usted, la ancla se rompe en silencio.** El 15-oct `registro-nombre` buscaba «Nombre de tu» y producción ya dice «Nombre de su clínica»; ahora acepta «tu» o «su»
   (prueba con mutación: sin el arreglo cae). Al pasar una pantalla a usted, buscar sus frases en `PROMESAS` y `ANCLAS` del script.
+- **Mirar el paso «Fecha» de la reserva pública sin reservar, y cuándo se puede distinguir de verdad** (16-oct, #181): `hermes-content/docs/research/qa-publicacion/2026-10-15/mirar-reserva-paso2.mjs <carpeta> <etiqueta> <slug>`
+  elige al profesional, lee `min` y `max` del `<input type="date">` y se va: no elige fecha ni horario, no envía nada (solo GET; lo único que no es GET son las señales `cdn-cgi/rum` de Cloudflare, que el script lista). Compara contra
+  lo esperado: `min` = hoy en La Paz y `max` = hoy + 30 días sobre el calendario. **A las 05:58 de La Paz (09:58 UTC) el día de UTC y el de La Paz coinciden, así que esa corrida confirma los valores pero NO prueba el arreglo**: el
+  defecto vivía de las 20:00 a las 24:00 de La Paz (00:00-04:00 UTC), cuando `min` salía mañana. Para probarlo hay que correr el script en esa franja (p. ej. 00:30 UTC) y ver `min` = el día de La Paz y no el de UTC. Un slug de QA
+  conocido: `clinica-sergio-p2ljs` (la org de Sergio Urcullo, de pruebas; la reserva pública es pública). **Trampa del script:** el primer texto «Profesional» de la página es el rótulo del primer paso, no la tarjeta del profesional;
+  hacer clic ahí no avanza y el script lee `fecha: null`.
 - **PR «de usted» (copia) de más de 20 archivos: probar que es SOLO texto, no leerlo a ojo** (15-oct, #174: 68 archivos, +1.189 −211). Tres pasos, con los scripts de
   `hermes-content/docs/research/qa-publicacion/2026-10-15/`: (1) `solo-texto.cjs <repo> <base> <cabeza> <archivos…>` normaliza cada `.ts/.tsx` con el AST de TypeScript
   (todo texto, plantilla fija, texto JSX y comentario pasa a «§») y dice cuáles quedan idénticos: de 50 archivos, **45 idénticos** y 5 con estructura distinta, que se
