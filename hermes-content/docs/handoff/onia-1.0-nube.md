@@ -176,7 +176,9 @@ la dirección de Sergio Urcullo.
 9. **Cuánto dura un mes pagado (decisión, sin apuro):** `addMonths` suma en el calendario de UTC. Un pago aprobado entre las
    20:00 y las 23:59 de La Paz en 12 días del año (28, 29 y 30-ene, 28-feb y el 30 de varios meses) vence de 3 días antes a 1
    después de lo que diría el calendario de La Paz (pagado el 28-ene a las 21:00 vence el 27-feb, no el 28). 0,55 % de las
-   horas. Pasarlo al calendario de La Paz es una línea, pero cambia lo que dura lo pagado: sí o no.
+   horas. Pasarlo al calendario de La Paz es una línea, pero cambia lo que dura lo pagado: sí o no. Va junto con la fecha
+   que pone el operador en el panel: «vence el 2026-10-01» se guarda a las 00:00Z, que en La Paz es el 30-sep a las 20:00;
+   guardarla como el fin de ese día cambia cuándo se corta la cuenta: sí o no.
 
 ## 8. Próximos pasos (en orden, 16-oct 01:10 UTC)
 
