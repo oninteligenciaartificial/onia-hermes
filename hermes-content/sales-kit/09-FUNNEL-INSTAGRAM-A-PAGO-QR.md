@@ -41,7 +41,7 @@ OFERTA: prueba de 14 días  ó  plan anual (10 meses por 12)         │
 | Enlace en la biografía | ✅ `sergiourcullo.vercel.app` y `/llamada` lleva a `cal.com/sergiourcullo/20min` | `ONIA_ADQUISICION_Y_PAUTA.md` §5.6 |
 | Pago por QR del BCP + comprobante + aprobación en `/admin/payments` | 🟡 construido; **cobro de punta a punta sin probar, 0 pagos reales**. Lo prueba el carril Plataforma | catálogo §3 |
 | El QR muestra un nombre de persona, no «OniaAgency» | 🟡 avisarlo antes del pago (mensaje 4.4) | catálogo §6 |
-| Devolución a 14 días del prepago | ⬜ **decide Sergio Urcullo.** Mientras tanto los textos dicen ⟦GARANTÍA⟧ y no se envían con esa marca | `07` §0 |
+| Devolución del prepago | ✅ **decidido 16-oct: no hay.** No se promete; se avisa antes del QR | `07` §0 |
 | Cuenta demo para la llamada | ⬜ la hace Plataforma. Sin ella, la llamada dice «20 minutos para ver si le sirve» y no promete «clínica de ejemplo» | `ONIA_ADQUISICION_Y_PAUTA.md` §5.6 punto 4 |
 | Comentar una palabra → mensaje automático | ❌ **no usar.** Meta rechazó 2 veces ese mecanismo. Se pide **escribir por mensaje directo**, sin automatización | CLAUDE.md, «Qué se publica sin preguntar» |
 | Anuncio pago | ❌ la cuenta publicitaria no tiene método de pago ni Instagram vinculado. Requiere OK de gasto | `ONIA_ADQUISICION_Y_PAUTA.md` §5.9 |
@@ -121,6 +121,6 @@ Sergio Urcullo dijo que sí a workshops y consultorías pagas para la caja de oc
 ## 6. Qué decide Sergio Urcullo (una hoja)
 
 1. ¿Autoriza usar los textos de 3.1 a 3.4 en sus mensajes y piezas? (sí/no)
-2. ¿Devuelve el prepago dentro de 14 días? (recomendado: sí)
+2. ~~Devolución del prepago~~ decidido: no hay. Como el cliente paga un año sin devolución, **la oferta va después de la demo o la prueba**, no en frío.
 3. ¿Se enciende el anuncio pago de US$ 56 (gasto, requiere tarjeta, Instagram vinculado y su OK)? Recomiendo **no** hasta que el funnel orgánico muestre el primer dueño de clínica.
 4. Horarios libres en `/llamada` para las próximas dos semanas.

@@ -30,11 +30,8 @@ variable de entorno puede pisarlos (`PROMESA_VS_PRODUCTO` K-01).
   Avisarlo antes («aparecerá a nombre de…»).
 - **Una factura por cobro, manual, en el Portal Web del SIN** (`docs/ONIA_PLAN_1.0_Y_CAJA.md`, punto 15). El portal del SIAT lo abre solo Sergio Urcullo.
 
-**Decisión que necesito de Sergio Urcullo (la única que cambia el texto):** ¿devuelve el prepago si en los primeros 14 días «no le sirve»?
-Hoy el producto promete «si la prueba no sirve, no se paga nada» (A-08), pero eso es de la prueba sin tarjeta, no del prepago. Mi recomendación:
-**sí, devolución completa dentro de los 14 días**, porque es la objeción número uno de pagar un año adelantado a alguien que no conoce a Onia
-(cero clientes, cero testimonios). Cuesta casi nada: es software, no horas. Mientras no la apruebe, los mensajes **no** dicen «devolvemos».
-Cuando la apruebe, se agrega la línea marcada ⟦GARANTÍA⟧.
+**Decidido por Sergio Urcullo (16-oct): el prepago anual NO se devuelve** (como dicen los Términos §3.3). No se promete devolución en ningún mensaje.
+Lo que protege al cliente es la **prueba de 14 días sin tarjeta, antes de pagar**: por eso el prepago se ofrece al terminar la demo o la prueba, y se dice claro antes de pasar el QR que el pago anual no se reembolsa. Propuesta archivada: `research/PREPAGO-POLITICA-DE-DEVOLUCION-PROPUESTA.md`.
 
 ---
 
@@ -76,7 +73,7 @@ Cómo salen (las tres cosas que cambian el resultado, de `SEGUIMIENTO-LEADS.md` 
 >
 > Prefiero contestarle mirando el sistema y no por mensaje. En 20 minutos de videollamada se lo muestro en pantalla, incluida la lista de a quién escribirle cada mañana (quién no confirmó la cita de mañana, quién canceló o faltó y no volvió a agendar, quién le debe), y le respondo sus preguntas sobre pacientes pendientes mirándolas ahí.
 >
-> Para 4 doctores y una asistente le corresponde el plan Profesional: Bs 890 al mes. Si decide quedarse, el plan anual cobra 10 meses y usted usa 12: Bs 8.900 por el año. Antes de pagar nada se prueba 14 días sin tarjeta. ⟦GARANTÍA⟧
+> Para 4 doctores y una asistente le corresponde el plan Profesional: Bs 890 al mes. Si decide quedarse, el plan anual cobra 10 meses y usted usa 12: Bs 8.900 por el año. Antes de pagar nada se prueba 14 días sin tarjeta.
 >
 > ¿Coordinamos? Elija su horario aquí: https://cal.com/sergiourcullo/20min
 
@@ -89,7 +86,7 @@ Cómo salen (las tres cosas que cambian el resultado, de `SEGUIMIENTO-LEADS.md` 
 >
 > Onia es un sistema de gestión para clínicas dentales: agenda, ficha del paciente con historia clínica y odontograma, tratamientos, cobros e inventario, todo en un lugar. Se lo muestro en una videollamada de 20 minutos para ver si le sirve.
 >
-> Si decide quedarse: el plan Básico (2 usuarios) cuesta Bs 320 al mes, o Bs 3.200 por el año completo (se cobran 10 meses y usted usa 12). Si en la clínica trabajan más de 2 personas con el sistema, le recomiendo el Crece (Bs 550 al mes, 4 usuarios). Se prueba 14 días sin tarjeta antes de pagar. ⟦GARANTÍA⟧
+> Si decide quedarse: el plan Básico (2 usuarios) cuesta Bs 320 al mes, o Bs 3.200 por el año completo (se cobran 10 meses y usted usa 12). Si en la clínica trabajan más de 2 personas con el sistema, le recomiendo el Crece (Bs 550 al mes, 4 usuarios). Se prueba 14 días sin tarjeta antes de pagar.
 >
 > ¿Coordinamos? https://cal.com/sergiourcullo/20min
 
@@ -99,7 +96,7 @@ Cómo salen (las tres cosas que cambian el resultado, de `SEGUIMIENTO-LEADS.md` 
 >
 > Onia es un sistema de gestión para centros de estética: agenda, ficha de cada clienta, tratamientos, cobros e inventario, todo en un lugar. Se lo muestro en una videollamada de 20 minutos para ver si le sirve.
 >
-> Si decide quedarse: el plan Básico (2 usuarios) cuesta Bs 320 al mes, o Bs 3.200 por el año completo (se cobran 10 meses y usted usa 12). Se prueba 14 días sin tarjeta antes de pagar. ⟦GARANTÍA⟧
+> Si decide quedarse: el plan Básico (2 usuarios) cuesta Bs 320 al mes, o Bs 3.200 por el año completo (se cobran 10 meses y usted usa 12). Se prueba 14 días sin tarjeta antes de pagar.
 >
 > ¿Coordinamos? https://cal.com/sergiourcullo/20min
 
@@ -111,7 +108,7 @@ Cómo salen (las tres cosas que cambian el resultado, de `SEGUIMIENTO-LEADS.md` 
 >
 > Onia es un sistema de gestión para consultorios y clínicas dentales: agenda, ficha del paciente con historia clínica y odontograma, tratamientos, cobros e inventario, todo en un lugar. Se lo muestro en una videollamada de 20 minutos.
 >
-> Para un consultorio con 1 o 2 personas le calza el plan Básico: Bs 320 al mes, o Bs 3.200 por el año (se cobran 10 meses y usted usa 12). Se prueba 14 días sin tarjeta antes de pagar. ⟦GARANTÍA⟧
+> Para un consultorio con 1 o 2 personas le calza el plan Básico: Bs 320 al mes, o Bs 3.200 por el año (se cobran 10 meses y usted usa 12). Se prueba 14 días sin tarjeta antes de pagar.
 >
 > ¿Coordinamos? https://cal.com/sergiourcullo/20min
 
@@ -149,7 +146,7 @@ Cómo salen (las tres cosas que cambian el resultado, de `SEGUIMIENTO-LEADS.md` 
 - **«Ahora no»** → «Entendido, gracias por decírmelo. ¿Le parece bien que le escriba en un mes? Si prefiere que no, no le escribo más.» Callar no es permiso.
 - **Silencio** → días 3, 7 y 14 de `SEGUIMIENTO-LEADS.md` §3. Contando desde el día de envío, si sale el lunes 19-oct: día 3 = 22-oct, día 7 = 26-oct, día 14 = 2-nov. Para cobrar antes del 31-oct, **el día 7 es el último toque que importa**.
 - **Pregunta de precio** → la respuesta de `SEGUIMIENTO-LEADS.md` §2 («Pregunta de precio») + «el anual cobra 10 meses».
-- **Cierre del prepago** (cuando dicen «sí, quiero el anual»): «Perfecto. Le paso el link para pagar: app.onia.com.bo/checkout (elija {plan}, anual). Paga con QR; al subir el comprobante yo lo apruebo y el plan queda activo. Aparecerá a nombre de {titular del QR}. Le mando la factura aparte.» — **Verificar antes** que el checkout anual funcione de punta a punta con una cuenta de prueba nuestra (fila K-02 está ✅ en la web, pero el cobro de punta a punta lo está cerrando el carril Plataforma, plan 1.0 punto 13 y 15).
+- **Cierre del prepago** (cuando dicen «sí, quiero el anual»): «Perfecto. Le paso el link para pagar: app.onia.com.bo/checkout (elija {plan}, anual). Paga con QR; al subir el comprobante yo lo apruebo y el plan queda activo. Aparecerá a nombre de {titular del QR}. Le aviso que el plan anual no se reembolsa; por eso conviene haber probado antes. Le mando la factura aparte.» — **Verificar antes** que el checkout anual funcione de punta a punta con una cuenta de prueba nuestra (fila K-02 está ✅ en la web, pero el cobro de punta a punta lo está cerrando el carril Plataforma, plan 1.0 punto 13 y 15).
 
 ---
 

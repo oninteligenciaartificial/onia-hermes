@@ -23,7 +23,7 @@
 |---|---|---|---|
 | 1 | **Cuenta demo con datos de ejemplo** y la misma persona en agenda y en Pendientes (L-05 ❌, plan 1.0 punto 9). Sin ella no hay demo con producto real | Plataforma | ❌ no existe. **Bloquea el §3 «Demo»** |
 | 2 | Que el pago anual por QR funcione de punta a punta, con un pago de prueba nuestro (catálogo §6, punto 1: «0 pagos registrados») | Plataforma + Sergio Urcullo | sin probar |
-| 3 | Decidir la devolución a 14 días (`07` §0, ⟦GARANTÍA⟧) | Sergio Urcullo | decisión abierta |
+| 3 | Devolución del prepago: decidido, **no se devuelve** (16-oct); se avisa antes del QR | Sergio Urcullo | ✅ decidido |
 | 4 | Unificar 20 o 30 minutos de la demo (L-04) | Sergio Urcullo | decisión abierta |
 | 5 | OK sobre el texto de la invitación y la fecha | Sergio Urcullo | pendiente |
 
@@ -71,7 +71,7 @@ Tiempo de la rutina en papel o planilla: pizarra o Excel, 15-20 minutos al día.
 ### Bloque 4 (0:32-0:36) — la oferta (solo filas ✅)
 > Se prueba 14 días sin tarjeta; si no le sirve, no paga nada. Sin contrato de permanencia, sin costo de implementación, precios finales en bolivianos. Su información es suya: no se vende ni se usa para entrenar IA.
 > Para una clínica con 2 a 4 personas usando el sistema, el plan Crece cuesta Bs 550 al mes. Con 5 personas, el Profesional: Bs 890. Con 6 o más personas usando el sistema (por ejemplo 5 profesionales y recepción), el Completo, que no tiene tope de usuarios: Bs 1.290. Para un consultorio chico, el Básico: Bs 320.
-> Hay una forma de pagar que conviene: el plan anual cobra 10 meses y usted usa 12. Básico anual Bs 3.200, Crece Bs 5.500, Profesional Bs 8.900, Completo Bs 12.900. ⟦GARANTÍA: «Si en 14 días no le sirve, le devuelvo el pago completo.»⟧
+> Hay una forma de pagar que conviene: el plan anual cobra 10 meses y usted usa 12. Básico anual Bs 3.200, Crece Bs 5.500, Profesional Bs 8.900, Completo Bs 12.900. El plan anual no se reembolsa; por eso primero se prueba 14 días sin tarjeta.
 > **Les tengo que ser honesto:** Onia es nueva. Usted sería de los primeros clientes y no tengo testimonios que mostrarle. Por eso le ofrezco la prueba sin tarjeta, y por eso quiero saber qué le falta. A cambio, le pido sus observaciones.
 (Esta frase es la única «prueba» que se tiene. No se improvisa otra.)
 
@@ -135,5 +135,5 @@ Además del webinar: ni nombrar competidores, ni resultados prometidos, ni cifra
 | Reservas online | K-12 | ✅ |
 | Los datos son suyos | L-02 | ✅ |
 | La lista de pendientes de cada mañana, con el mensaje preparado y aprobación del dueño | catálogo §8.3 | ✅ en catálogo; la pantalla se verifica con la cuenta demo |
-| Devolución a 14 días | — | ⬜ sin decisión: no se dice |
+| Devolución del prepago | — | ✅ decidido: no hay; no se promete (se avisa antes del pago) |
 | «Los primeros clientes» | — | verdad: 0 clientes pagando |
