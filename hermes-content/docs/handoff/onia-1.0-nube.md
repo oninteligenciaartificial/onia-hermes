@@ -179,6 +179,14 @@ la dirección de Sergio Urcullo.
    horas. Pasarlo al calendario de La Paz es una línea, pero cambia lo que dura lo pagado: sí o no. Va junto con la fecha
    que pone el operador en el panel: «vence el 2026-10-01» se guarda a las 00:00Z, que en La Paz es el 30-sep a las 20:00;
    guardarla como el fin de ese día cambia cuándo se corta la cuenta: sí o no.
+10. **OK de diseño, tablas en tableta (16-oct):** entre 768 y 1023 px, 11 pantallas con tabla (Pacientes, Cobros, detalle de
+    factura, Catálogo, Inventario, Clientes, Cotizaciones, RRHH, Contabilidad, Super Admin clínicas y usuarios) scrollean en
+    horizontal y dejan la acción de cada fila («Ver», «Editar», «Registrar pago») fuera de la vista. El arreglo es usar ahí las
+    tarjetas del celular (corte `md`→`lg`); en celular y computadora las capturas quedan idénticas byte a byte. En Pacientes la
+    tarjeta no muestra CI ni correo. Equipo ya va así desde el 16-oct 09:50 (pulido 11a). Construido y revisado: commit
+    `51cc3f24` (revertido en el pulido 12 hasta su OK; al reaplicarlo, sumar el arreglo de alineación del detalle de factura
+    que dejó la revisión). Capturas mandadas el 16-oct 13:22 UTC (Cobros a 820 antes/después): sí o no. Aparte, a 1024 px
+    siguen sin caber 7 de esas tablas; arreglarlo cambia cómo se ve en 1024 (cortar en `xl`): sí o no.
 
 ## 8. Próximos pasos (en orden, 16-oct 01:10 UTC)
 
