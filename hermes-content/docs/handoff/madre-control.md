@@ -57,10 +57,10 @@ rutinas de Plataforma y QA (RemoteTrigger); memoria local (`integrador-mergea-ra
 - El harness Python de Codex (rama `codex/hermes-controller-hardening-20261013`): archivado, no se mergea.
 
 ## 6. Qué depende de Sergio Urcullo
-1. ¿Apagó las rutinas de Plataforma y QA? Si no, se re-prenden.
-2. HECHO el entorno «Onia» en el proyecto; queda decidir si se abren dominios (onia.com.bo, app.onia.com.bo y los de investigación).
+1. HECHO 16-oct 22:16 UTC: Sergio Urcullo NO apagó las rutinas; se re-prendieron (Plataforma :17, QA :57 con Sonnet). Quién las apagó a las 20:54: desconocido.
+2. HECHO el entorno «Onia» en el proyecto. Sergio Urcullo dijo SÍ a abrir la red: falta hacerlo (claude.ai/code → entornos → Onia → acceso de red: agregar onia.com.bo, app.onia.com.bo y los de investigación) (onia.com.bo, app.onia.com.bo y los de investigación).
 3. HECHO: coordinador del proyecto en Sonnet 5.5.
-4. OK para instalar `yt-dlp` en el VPS (reels con la PC apagada).
+4. HECHO: `yt-dlp` instalado en el VPS (/usr/local/bin, binario oficial). Falta probarlo con reels desde un hilo con el entorno Onia.
 5. Aprobar el pago de prueba en `/admin/payments` y confirmar con Leslie la factura del SIN.
 6. Rotar el token de n8n de `~/.codex/config.toml` línea 150 (quedó expuesto en un registro local).
 7. Aprobar las reglas unificadas y la oferta de workshops (Bs 150 fundador, auditoría 1 a 1 Bs 350, sáb 24-oct).
