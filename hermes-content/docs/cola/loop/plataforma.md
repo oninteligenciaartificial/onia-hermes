@@ -5,10 +5,13 @@
 > #139, #114, #118, #119, #110, #144). `master` va por el pulido 12 (#183, 16-oct) y #184 (pulido 13) está en borrador.
 > Esta sesión de latido NO mergeó ni publicó nada: los borradores de abajo tienen 6 días y migraciones; los decide la sesión dueña.
 
-## Abierto (PRs en borrador, estado medido hoy)
-- [ ] #124 términos (punto 14): limpio contra master. Mergear y mirar el alta en prod.
+## COBRAR (orden de Sergio Urcullo, 16-oct; todo lo demás en pausa)
+- [ ] 1. #113 gracia 7 días + dejar de renovar: master mergeado (`76b61bda`), review independiente sonnet sin CRITICAL/HIGH (4 LOW; comentario corregido en `3bb11677`), suite 945/15327/0 rojos, CI verde, PR en listo. BLOQUEADO el merge: el clasificador de permisos de la sesión lo niega («Merge Without Review»). Destraba: Sergio Urcullo (mergear #113 o autorizar el merge en esta sesión). Al mergear, `onia-publicar-solo` lo publica a las 21:50 UTC; luego MIRAR con una cuenta ZZ QA.
+- [ ] 2. #124 aceptación de términos: limpio contra master, CI verde. Migración `20261008000000_add_terms_acceptances` revisada (RLS + REVOKE, aditiva): OK. NO mergear antes de aplicarla en prod (el alta la escribe en la transacción; sin tabla, el alta falla). BLOQUEADO: leer/escribir la base de prod por SSH lo niega el clasificador («Production Reads»). Destraba: Sergio Urcullo o la madre local (backup + `docker exec supabase-db psql` con `SET search_path TO public`).
+- [ ] 3. Cobro E2E con ZZ QA: depende de #113 publicado y de acceso a prod/admin. Nota del review: aprobar un pago de un cliente ahora exige reservar («Validar») y cargar N° de factura (C15b): el checkout debe decir lo mismo.
+
+## En pausa (no son del cobro) (PRs en borrador, estado medido hoy)
 - [ ] #132 K1 (respuesta al recordatorio): limpio contra master.
-- [ ] #113 gracia C13: CONFLICTO con master en 11 archivos de suscripción (plan-state, vencimientos, aviso-solo-lectura, baja-programada, PlanClient, AvisoRenovacion, voseo-ratchet, CHANGELOG). Es lógica de cobro: va con Opus y la suite completa. Rebasar, actualizar `PlanClient.estado-real` y `vencimientos`.
 - [x] #140 widget W1/W1b (rama `integ/w1-w1b`): master mergeado (4 conflictos: proxy, `listMessages` acepta número o rango, 2 docs); tests del canal web alineados con master; tsc 0, suite 943 archivos / 15360 tests / 0 rojos — `fdff71bc`. Falta CI del PR, mergear y publicar; luego bloquear `/public/api/` en Chatwoot y `hmac_mandatory` en los inboxes API (infra). modelos: sonnet.
 - [x] #154 S2 (IP solo desde Cloudflare): master mergeado en la rama, suite 938/15279/0 rojos, CI verde (Lint, Typecheck, Tests & Build, Secret scan) — `b060fade`. Falta: mergear y publicar. modelos: sonnet.
 - [ ] #168 web guiada dental: CI en rojo (1 failure). Ver la causa.
@@ -23,10 +26,8 @@
 - Lectura de esta cola: `onia-hermes/main` quedó en el 10-oct (`2cdefca`) y `docs/ONIA_1.0_CORTE.md` no existe en `main`. Destraba: la madre (traer las ramas con las colas nuevas a `main`).
 - Merge y publicación desde el latido: sin la cola vigente no se mergean borradores con migraciones. Destraba: la sesión Plataforma con la cola al día.
 
-## Próximas 3 destrabadas (para terminar la 1.0)
-- [ ] 1. (#154 y #140 hechos) Mergear master en #113 contra master y correr la suite completa (sin pushear entre :20 y :55 UTC en horas de publicación).
-- [ ] 2. Mergear #124 y #132 (limpios) con CI verde, publicar con `publicar.sh` y MIRAR en prod.
-- [ ] 3. Decidir #168 (CI rojo) y #170; después refrescar la demo y sacar C1-C7.
+## Próximas (cuando se destrabe el cobro)
+- [ ] Decidir #168 (CI rojo) y #170; después refrescar la demo y sacar C1-C7.
 
 ## Verificación de aprendizaje · 2026-10-09
 - [ ] En la próxima tarea técnica pertinente, cargar `equipo-de-agentes` y `aprender-de-todo`; usar la regla de contexto verificable de la ficha «cinco archivos antes de vibe code» y registrar sesión, fuentes canónicas, artefacto y prueba en esa ficha. No crear documentos duplicados ni abrir otro frente para demostrarlo.
