@@ -36,7 +36,7 @@ La orden completa está en `hermes-content/docs/cola/loop/hermes-jefa.md`.
 - **Entorno del proyecto (ARREGLADO 16-oct ~22:00 UTC: Sergio Urcullo puso «Onia» y el coordinador en Sonnet 5.5; los hilos nuevos ya llevan la llave):** antes los hilos corrían SIN la llave del VPS y con red cerrada (solo github.com y pypi.org);
   onia.com.bo, app.onia.com.bo, Instagram y YouTube dan 403. Hay que poner el entorno «Onia» en la configuración
   del proyecto (app de escritorio o celular) y abrir dominios en ese entorno. Decisión de seguridad de Sergio Urcullo.
-- **Reglas unificadas:** workflow `wf_66f856e3-001` escribió en el scratchpad `reglas/AGENTS.md`, `CLAUDE.md`,
+- **Reglas unificadas:** borrador listo en `E:/onia-wt/archivo-20261016/reglas/` (AGENTS.md 12 KB, CLAUDE.md 2 KB, CAMBIOS.md y REVISION.md). La revisión adversarial encontró 4 P0 a corregir ANTES de mostrar: Higgsfield/Meta Ads por conector sin cotizar, faltan «datos de producción y precios» en lo que pasa por Sergio Urcullo, `hermes-jefa.md` no puede aflojar aprobaciones, y faltan las reglas de seguridad de código. Antes decía: workflow `wf_66f856e3-001` escribió en el scratchpad `reglas/AGENTS.md`, `CLAUDE.md`,
   `CAMBIOS.md` y un revisor adversarial. Falta mostrárselo a Sergio Urcullo y publicar con su OK.
 - **Documento de cómo funciona todo:** borrador `ONIA_SISTEMA_AUTONOMO.md` en el scratchpad (257 líneas, sección 9
   corregida). Falta publicarlo en `hermes-content/docs/`.
