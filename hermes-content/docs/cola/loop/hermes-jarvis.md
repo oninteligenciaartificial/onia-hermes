@@ -54,6 +54,23 @@ carril puede hacer solo. Q1 espera `aplicar` (ver «Bloqueado»).
   que nombra existe y está versionado. `git ls-files` pasó de 1 MB y `execFileSync` cortaba con ENOBUFS, lo que dejaba
   también el gate del integrador en NO MEDIDO y rompía `herramientas-del-cron`. **Hecho:** la prueba en verde y PR.
 
+## Latido 16-oct 18:05 UTC (QA)
+
+Todo lo anterior sigue bloqueado: Q1 espera el «sí, aplicar» de Sergio Urcullo en ESTA sesión; Q2 y Q5 están en el #194
+(CI verde, `clean`, sin revisión; `main` no se movió desde el 10-oct), lo mergea la madre; Q3 depende de Q2 y de 24 h medidas.
+Tareas de QA destrabadas:
+
+- [x] **Q7 Promesas de onia.com.bo contra producción.** 16-oct 18:05 UTC, Chromium headless 1440 y 390: home 200 (4,5 s con
+  `networkidle`), `/precios` 200 (0,9 s), `app.onia.com.bo/login` 200 y `/register` 200. Precios publicados Bs 320 / 550 / 890 /
+  1.290 = escalera C de `lib/pricing.ts`; «14 días del plan Profesional, sin tarjeta» = `ONIA_CATALOGO_DE_VENTA.md` línea 46.
+  Sin «muy pronto» ni estado de obra en la home. Sin hallazgo. `modelos: opus (sin subagentes), codex: no`.
+  Pendiente de esta tarea: leer las capturas (`/tmp` de la sesión, no versionadas).
+- [ ] **Q8 Revisar PRs abiertos de onia-hermes y onia-platform.** onia-hermes: 15 abiertos (#203, #202, #201, #200, #199, #198,
+  #195, #194, #191, #172, #162, #145, #144, #143, #40); solo #194 y #195 no son borrador. onia-platform: la sesión no tiene
+  acceso (`add_repo` pendiente). Revisión con Sonnet por PR, empezando por #194.
+- [ ] **Q9 Mirar producción con login tras la publicación de las :50.** Necesita la cuenta de QA y el mecanismo local
+  de CLAUDE.md «Acceso local…»; desde esta nube no hay credencial. Lo hace Q5 en el VPS cuando se mergee #194.
+
 ## Hallazgos para otros
 
 (Lo que este carril encuentra y le toca a otro dueño. La madre lo reparte en su ronda.)
