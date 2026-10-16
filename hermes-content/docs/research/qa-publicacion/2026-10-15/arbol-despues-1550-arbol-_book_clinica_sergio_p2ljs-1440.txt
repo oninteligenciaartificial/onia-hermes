@@ -1,0 +1,15 @@
+- main:
+  - paragraph: Agendar cita
+  - heading "Clínica Sergio" [level=1]
+  - link "Llamar a Clínica Sergio":
+    - /url: tel:+591 70000000
+  - status: "Paso 1 de 4: Elija su profesional"
+  - text: Profesional Fecha Horario Datos 1
+  - heading "Elija su profesional" [level=2]
+  - group "Elija su profesional":
+    - button "Sergio Urcullo Profesional":
+      - paragraph: Sergio Urcullo
+      - paragraph: Profesional
+- contentinfo:
+  - paragraph: Reservas con Onia
+- alert

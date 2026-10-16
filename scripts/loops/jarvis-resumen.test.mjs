@@ -855,6 +855,7 @@ const SANOS = {
   "agenda-bloques": `${AHORA_LAT - 300} 0 1800\n`,
   "respuestas-pedidos": `${AHORA_LAT - 60} 0 120\n`,
   "resumen-noche": `${AHORA_LAT - 9 * 3600} 0 86400\n`,
+  "qa-release": `${AHORA_LAT - 600} 0 900\n`,
 };
 
 test("trabajos mudos o con error: el mudo, el que falló, el ilegible y el de hora futura", () => {

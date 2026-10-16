@@ -39,17 +39,55 @@ Con las tres en verde, se contacta con los mensajes de la §6.9 tal como están.
 
 ## 3. Lo que la web promete y el catálogo no deja (arreglo de texto, Plataforma)
 
-| Dónde | Qué dice la web | Por qué no se puede | Arreglo |
+> **Vuelto a mirar el 11-oct (05:20-05:45 UTC), renderizado, sin sesión:** las 14 páginas de `onia.com.bo` a 390 y 1440 px y
+> `/login` y `/register` (paso 1 y paso 2, sin enviar nada) de la app. Barrido completo con el texto de cada página:
+> `research/promesas-web/2026-10-11/barrido-onia-com-bo.json` y `barrido-app-register-login.json`. Script: `research/qa-publicacion/2026-10-11/mirar-publico.mjs`.
+> Resultado: **8 de las 9 filas siguen igual; 1 cambió** (`/register` paso 1 ya es de usted). El catálogo no se tocó desde el 2-oct.
+
+| Dónde | Qué dice la web | Por qué no se puede | Arreglo | **11-oct** |
+|---|---|---|---|---|
+| `/chatbot`, `/precios`, `/`, `/contacto` | Agente de WhatsApp que «responde las 24 horas», Bs 390/mes e incluido en Completo | Catálogo §5: ⏸, nunca se conectó el WhatsApp de un cliente | Sacarlo de la venta hasta la prueba real (catálogo §6.4), o dejarlo como «a pedido» sin promesa de funcionamiento. Lo decide Sergio Urcullo | **Sigue.** `/chatbot`: «Tu WhatsApp responde las 24 horas.»; `/`: «Tu agente conversacional responde por WhatsApp…»; `/precios`: Bs 390/mes e incluido en Completo; `/contacto` solo lo enlaza en el pie. [`chatbot-1440.png`](research/promesas-web/2026-10-11/chatbot-1440.png), [`home-1440.png`](research/promesas-web/2026-10-11/home-1440.png) |
+| `/rubros`, tarjeta Estética | «La clienta que dejó el tratamiento a medias: te queda el mensaje escrito…» | Catálogo §8 (2-oct): el detector existe pero no encuentra a nadie. El gate de la web (3-oct) sí deja decir el mecanismo, así que **las dos fuentes se contradicen**. #108 (4-oct) cargó «A medias», pero nadie lo vio encontrar a un paciente en producción | Sacar esa línea hasta que Plataforma lo vea funcionar en la cuenta demo; después, alinear el catálogo §8 y el gate | **Sigue.** Aparece tres veces en `/rubros`: dos tarjetas de Estética («…para que reserve» y «…para que vuelva a reservar») y una línea de «Al día» («Sabés qué clienta dejó el tratamiento a medias.»). [`rubros-1440.png`](research/promesas-web/2026-10-11/rubros-1440.png) |
+| `/precios`, plan Completo | Completo = Profesional + el agente de WhatsApp | Lo mismo que la primera fila | Mientras el agente esté en pausa, Completo se vende por «sin topes» | **Sigue.** «Agente conversacional de WhatsApp incluido (500 conversaciones/mes)». [`precios-1440.png`](research/promesas-web/2026-10-11/precios-1440.png) |
+| `/comparativa` | Nombra competidores y sus precios | `CLAUDE.md` (Sergio Urcullo, 3-sep): cero autobombo, nada sobre la competencia | Decidir si se baja | **Sigue.** Nombra Dentiqa, Doctocliq y Clinera.io con sus precios al 30-jul. [`comparativa-1440.png`](research/promesas-web/2026-10-11/comparativa-1440.png) |
+| `/servicios/webs` | Webs a medida desde Bs 2.000 | No es parte del producto: falla el test de tres preguntas (estrategia §10) | Decidir si se baja | **Sigue.** Bs 2.000 y 4.500 pago único, y planes de Bs 190, 390 y 690 al mes. [`servicios-webs-1440.jpg`](research/promesas-web/2026-10-11/servicios-webs-1440.jpg) |
+| `/precios` | Usuarios extra «en Crece y Profesional» | El código lo permite en todos los planes, pero lo carga un superadmin a mano | Decir «a pedido» | **Sigue.** «En Básico se pueden sumar hasta 3; en Crece y Profesional, las que necesites.» |
+| `/contacto` contra los mensajes | Demo de 30 min contra 20 min | Dos duraciones | Unificar | **Sigue.** `/contacto`: «30 MINUTOS · SIN COMPROMISO»; `ONIA_PROSPECTOS_DENTAL_SCZ.md` §6.9: «demo de 20 minutos». [`contacto-1440.png`](research/promesas-web/2026-10-11/contacto-1440.png) |
+| `/register` | Paso 1 de vos («tenés»); paso 2 de usted («Cree su cuenta»), pero con «Nombre de tu clínica» | Mezcla de vos y usted en el mismo flujo | Elegir uno (decide Sergio Urcullo: los mensajes ya van de usted) | **Cambió, queda un resto.** El paso 1 ya es de usted («¿Qué tipo de negocio tiene?», «Escríbanos»). El paso 2 sigue con «Nombre de tu clínica». Causa: `SignupForm.tsx:630` usa `voc.negocio` en vez de `voc.negocioSu` (y lo mismo en `:362` y `:403`, las pantallas de carga). Contrato Codex: `handoff/codex-tareas/Q9-alta-de-usted.md`. [`register-paso1-390.png`](research/promesas-web/2026-10-11/register-paso1-390.png), [`register-paso2-390.png`](research/promesas-web/2026-10-11/register-paso2-390.png) |
+| `ONIA_CATALOGO_DE_VENTA.md` §5 contra §8 | §5: el agente de WhatsApp «entiende fotos y audios»; §8: no se puede decir | El catálogo se contradice | Corregir el §5 | **Sigue** (línea 80 contra línea 131; el archivo no cambia desde el 2-oct) |
+
+**Filas nuevas del 11-oct**
+
+| Dónde | Qué pasa | Dueño |
+|---|---|---|
+| Las 13 páginas de `onia.com.bo` contra el alta de la app | La web habla de vos o de tú de punta a punta («Creá tu cuenta», «tu negocio», «vos aprobás») y el clic lleva a un alta de usted («Su negocio completo, en un solo sistema», «Pruebe el plan Profesional»). Es el mismo flujo con dos tratos. `CLAUDE.md`: «si la web y los anuncios pasan a usted, lo decide él». `/terminos` y `/privacidad` también están en vos, y los textos legales van por Leslie Mercado Moreno | Sergio Urcullo decide; después, web-factory |
+| `public/manifest.json:4` | La descripción de la app instalable dice «El sistema con IA que maneja tu negocio». La corrección de títulos (onia-platform#146) no lo toca, y su gate solo mira `app/layout.tsx` y el portal. #136 reescribe ese archivo y deja la línea igual | Plataforma (una línea más en #146) |
+| Pestaña de `/login` y `/register` | Hasta que se publique onia-platform#146, la pestaña dice «…que maneja tu negocio en Bolivia». Medido a las 05:18 UTC en producción, con el build `webpack-2a706587264c6b91.js` | Plataforma (ya tiene el PR) |
+
+**Lo que no sigue en la lista.** Ninguna página pública dice «muy pronto», «próximamente», «beta» ni «en construcción». Las palabras «borrador» que aparecen en `/privacidad` y `/terminos` hablan de los borradores que propone la IA, no de obra. `/login`, `/register` y `/book` tampoco.
+
+### 3.1 Los precios de la web contra los del código (11-oct)
+
+Fuentes del código: `onia-platform/lib/subscription-plans.ts` (`DEFAULT_PLAN_AMOUNTS`) y `lib/pricing.ts`, de `master` `d8ca5a32`. Web: `/precios`, `/` y `/chatbot` renderizados. **No hay ninguna diferencia.**
+
+| Plan | Mensual (web / código) | Anual (web / código) | Semanal (web / código) |
 |---|---|---|---|
-| `/chatbot`, `/precios`, `/`, `/contacto` | Agente de WhatsApp que «responde las 24 horas», Bs 390/mes e incluido en Completo | Catálogo §5: ⏸, nunca se conectó el WhatsApp de un cliente | Sacarlo de la venta hasta la prueba real (catálogo §6.4), o dejarlo como «a pedido» sin promesa de funcionamiento. Lo decide Sergio Urcullo |
-| `/rubros`, tarjeta Estética | «La clienta que dejó el tratamiento a medias: te queda el mensaje escrito…» | Catálogo §8 (2-oct): el detector existe pero no encuentra a nadie. El gate de la web (3-oct) sí deja decir el mecanismo, así que **las dos fuentes se contradicen**. #108 (4-oct) cargó «A medias», pero nadie lo vio encontrar a un paciente en producción | Sacar esa línea hasta que Plataforma lo vea funcionar en la cuenta demo; después, alinear el catálogo §8 y el gate |
-| `/precios`, plan Completo | Completo = Profesional + el agente de WhatsApp | Lo mismo que la primera fila | Mientras el agente esté en pausa, Completo se vende por «sin topes» |
-| `/comparativa` | Nombra competidores y sus precios | `CLAUDE.md` (Sergio Urcullo, 3-sep): cero autobombo, nada sobre la competencia | Decidir si se baja |
-| `/servicios/webs` | Webs a medida desde Bs 2.000 | No es parte del producto: falla el test de tres preguntas (estrategia §10) | Decidir si se baja |
-| `/precios` | Usuarios extra «en Crece y Profesional» | El código lo permite en todos los planes, pero lo carga un superadmin a mano | Decir «a pedido» |
-| `/contacto` contra los mensajes | Demo de 30 min contra 20 min | Dos duraciones | Unificar |
-| `/register` | Paso 1 de vos («tenés»); paso 2 de usted («Cree su cuenta»), pero con «Nombre de tu clínica» | Mezcla de vos y usted en el mismo flujo | Elegir uno (decide Sergio Urcullo: los mensajes ya van de usted) |
-| `ONIA_CATALOGO_DE_VENTA.md` §5 contra §8 | §5: el agente de WhatsApp «entiende fotos y audios»; §8: no se puede decir | El catálogo se contradice | Corregir el §5 |
+| Básico | 320 / 320 | 3.200 / 3.200 | 89 / 89 |
+| Crece | 550 / 550 | 5.500 / 5.500 | 145 / 145 |
+| Profesional | 890 / 890 | 8.900 / 8.900 | 229 / 229 |
+| Completo (`clinic`) | 1.290 / 1.290 | 12.900 / 12.900 | no existe / no existe |
+| Grupo (`enterprise`) | 2.900 / 2.900, implementación desde 3.500 / `setupFrom: 3500` | no se vende en línea / 29.000 | no existe |
+
+| Add-on | Web / código |
+|---|---|
+| Agente de WhatsApp | Bs 390/mes y Bs 3.900/año / `entryMonthly: 390`, `annualTotal: 3900` |
+| 200 conversaciones más | Bs 190, valen hasta fin de mes / `precio: 190` |
+| Reservas online en Básico | Bs 150/mes / `BOOKING_ADDON_PRICE.monthly: 150` |
+| Usuario extra | Bs 70/mes / `EXTRA_USER_ADDON_PRICE.monthly: 70` |
+
+Topes que la web escribe y el código confirma (`lib/plan-catalogo.ts`): Básico 300 fichas, 2 usuarios, 200 recordatorios; Crece 800 · 4 · 400; Profesional 1.500 · 5 · 800; Completo sin tope. Capturas: [`precios-1440.png`](research/promesas-web/2026-10-11/precios-1440.png), [`chatbot-1440.png`](research/promesas-web/2026-10-11/chatbot-1440.png), [`home-1440.png`](research/promesas-web/2026-10-11/home-1440.png).
+Fuera de estas dos fuentes quedan las webs a medida de `/servicios/webs` (Bs 2.000, 4.500, 190, 390, 690): no están en `subscription-plans.ts` ni en `pricing.ts`, y ya figuran arriba como «decidir si se baja».
+No se pudo comparar `/checkout` (pide sesión): lo hace Q5 (#194) cuando entre.
 
 ## 4. Cómo se verifica lo que falta
 

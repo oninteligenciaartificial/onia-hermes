@@ -386,5 +386,281 @@ else
   echo "(no existe $SOUL_VPS)"
 fi
 
+sec "15. Latidos del cron — cada línea, su log y cuándo escribió (10-oct, HERMES_ROL_QA.md Q2)"
+# Hoy un vigía mudo y uno sano se ven igual: los dos no dicen nada. Para cada línea activa del crontab
+# de root: la cadencia REAL (el hueco más largo entre dos corridas en una semana, sacado del horario),
+# el log al que escribe (>>) y cuándo lo tocó por última vez. MUDO = su log es más viejo que la penúltima
+# corrida programada (faltó a dos seguidas). «sin log» = la línea no escribe a un archivo: no se puede medir así (va con latido o se
+# mide por otro lado). Solo lee: crontab -l y la fecha de los archivos.
+crontab -l 2>/dev/null | python3 -c '
+import datetime, os, re, sys
+ahora = datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None, second=0, microsecond=0)
+NOMBRES = {"jan": 1, "feb": 2, "mar": 3, "apr": 4, "may": 5, "jun": 6, "jul": 7, "aug": 8, "sep": 9, "oct": 10,
+           "nov": 11, "dec": 12, "sun": 0, "mon": 1, "tue": 2, "wed": 3, "thu": 4, "fri": 5, "sat": 6}
+def campo(txt, lo, hi):
+    txt = re.sub(r"[a-z]{3}", lambda m: str(NOMBRES[m.group(0)]), txt.lower().replace("?", "*"))
+    vals = set()
+    for parte in txt.split(","):
+        paso = 1
+        if "/" in parte:
+            parte, p = parte.split("/", 1)
+            paso = int(p)
+        if parte == "*":
+            a, b = lo, hi
+        elif "-" in parte:
+            a, b = (int(x) for x in parte.split("-", 1))
+        else:
+            a = b = int(parte)
+        vals.update(range(a, b + 1, paso))
+    return vals
+ALIAS = {"@hourly": "0 * * * *", "@daily": "0 0 * * *", "@midnight": "0 0 * * *", "@weekly": "0 0 * * 0", "@monthly": "0 0 1 * *"}
+def corridas(horario, dias=70):
+    # Las corridas programadas de los últimos <dias>, de la más vieja a la más nueva. Se recorre por
+    # día y después por hora y minuto: 70 días cubren dos corridas de un trabajo mensual.
+    m, h, dom, mes, dow = horario.split()
+    M, H, DOM, MES = sorted(campo(m, 0, 59)), sorted(campo(h, 0, 23)), campo(dom, 1, 31), campo(mes, 1, 12)
+    DOW = {d % 7 for d in campo(dow, 0, 7)}
+    libre = dom.startswith("*") or dow.startswith("*")
+    out, d = [], (ahora - datetime.timedelta(days=dias)).date()
+    while d <= ahora.date():
+        d_ok, w_ok = d.day in DOM, ((d.weekday() + 1) % 7) in DOW
+        # Como cron: si el día del mes y el de la semana están restringidos, basta uno.
+        if d.month in MES and ((d_ok and w_ok) if libre else (d_ok or w_ok)):
+            for hh in H:
+                for mm in M:
+                    t = datetime.datetime(d.year, d.month, d.day, hh, mm)
+                    if t <= ahora:
+                        out.append(t)
+        d += datetime.timedelta(days=1)
+    return out
+def hace(s):
+    return "%d min" % (s // 60) if s < 5400 else "%d h" % (s // 3600) if s < 172800 else "%d d" % (s // 86400)
+filas = []
+for l in sys.stdin:
+    l = l.strip()
+    if not l or l.startswith("#") or re.match(r"^[A-Za-z_][A-Za-z0-9_]*=", l):
+        continue
+    if l.startswith("@"):
+        alias, _, cmd = l.partition(" ")
+        if alias not in ALIAS:
+            filas.append((3, "no medible", "—", "—", alias + " " + cmd))
+            continue
+        horario = ALIAS[alias]
+    else:
+        partes = l.split(None, 5)
+        if len(partes) < 6:
+            continue
+        horario, cmd = " ".join(partes[:5]), partes[5]
+    scripts = re.findall(r"/([A-Za-z0-9._-]+\.(?:sh|mjs|js|py))\b", cmd)
+    nombre = scripts[-1] if scripts else cmd[:40]
+    m = re.search(r"onia-latido\.sh (\S+)", cmd)
+    if m:
+        nombre = "latido:" + m.group(1)
+    try:
+        cs = corridas(horario)
+    except (ValueError, KeyError):
+        filas.append((3, "horario raro", "—", "—", nombre))
+        continue
+    huecos = [int((b - a).total_seconds()) for a, b in zip(cs, cs[1:])]
+    cada = hace(max(huecos)) if huecos else "—"
+    # El log: lo que sigue a >> o >. Una ruta armada al correr ($(date), $VAR, entre comillas) no se
+    # puede mirar desde acá: va como «sin log», nunca como MUDO (revisión del 10-oct).
+    destinos = [x for x in re.findall(r">>?\s*(\S+)", cmd) if x != "/dev/null" and not x.startswith("&")]
+    log = destinos[0] if destinos else None
+    if not log or re.search(r"[$`\"\x27(]", log) or not log.startswith("/"):
+        filas.append((2, "sin log", cada, "—", nombre))
+        continue
+    if len(cs) < 2:
+        filas.append((3, "no medible", cada, "—", "%s → %s (menos de dos corridas en 70 días)" % (nombre, log)))
+        continue
+    try:
+        mtime = os.path.getmtime(log)
+    except OSError:
+        filas.append((1, "MUDO (no hay log)", cada, "—", "%s → %s" % (nombre, log)))
+        continue
+    edad = int(datetime.datetime.now(datetime.timezone.utc).timestamp() - mtime)
+    # MUDO = el log es más viejo que la PENÚLTIMA corrida programada: faltó a dos seguidas. Sirve
+    # igual para cada 2 min, para un horario de día y para uno semanal o mensual.
+    penultima = cs[-2].replace(tzinfo=datetime.timezone.utc).timestamp()
+    estado = "MUDO" if mtime < penultima - 60 else "ok"
+    filas.append((0 if estado == "MUDO" else 4, estado, cada, "hace " + hace(edad), "%s → %s" % (nombre, log)))
+for _, estado, cada, ultimo, que in sorted(filas, key=lambda f: f[0]):
+    print("%-18s cada %-7s %-12s %s" % (estado, cada, ultimo, que))
+print("--- %d línea(s): %d MUDA(S), %d sin log, %d no medibles" % (len(filas), sum(f[1].startswith("MUDO") for f in filas),
+      sum(f[1] == "sin log" for f in filas), sum(f[1] in ("no medible", "horario raro") for f in filas)))
+' | redactar
+echo "--- latidos (/var/lib/onia-latido, los escribe onia-latido.sh):"
+if [ -d /var/lib/onia-latido ]; then
+  for f in /var/lib/onia-latido/*; do
+    [ -f "$f" ] || continue
+    printf '%s: %s (%s)\n' "${f##*/}" "$(cat "$f" 2>/dev/null)" "$(date -u -d "@$(cut -d' ' -f1 "$f" 2>/dev/null)" +%FT%TZ 2>/dev/null)"
+  done | redactar
+else
+  echo "(no existe: aplicar todavía no corrió)"
+fi
+
+sec "16. Modelo y cadencia por trabajo — lo que está escrito, sin llamar a ningún modelo (11-oct)"
+# Se leen declaraciones, nunca se ejecutan los scripts ni se resuelven variables del entorno.
+# Un modelo ausente no prueba que el trabajo no use uno; el gateway puede elegirlo por defecto.
+{
+echo "--- A. Trabajos del gateway de Hermes"
+python3 - <<'PY'
+import json
+p = '/root/.hermes/cron/jobs.json'
+try:
+    with open(p, encoding='utf-8') as f:
+        d = json.load(f)
+    jobs = d.get('jobs', d) if isinstance(d, dict) else d
+    if isinstance(jobs, dict):
+        jobs = [dict(v, _clave=k) for k, v in jobs.items() if isinstance(v, dict)]
+    if not isinstance(jobs, list):
+        raise ValueError('formato de trabajos')
+except (OSError, ValueError) as e:
+    # La clase del error alcanza; el mensaje de un parser podría contener datos del archivo.
+    print('no pude leer %s: %s' % (p, type(e).__name__))
+    raise SystemExit(0)
+
+def primero(j, *claves):
+    return next((j[k] for k in claves if j.get(k) not in (None, '', [], {})), '')
+
+def visible(valor):
+    return valor[:80] if isinstance(valor, str) else '(estructura)'
+
+total = 0
+for j in jobs:
+    if not isinstance(j, dict):
+        continue
+    nombre = primero(j, 'name', 'title', 'id', '_clave')
+    if nombre == '':
+        nombre = '(sin nombre)'
+    horario = primero(j, 'schedule_display', 'schedule', 'cron', 'expr')
+    modelo = j.get('model')
+    if modelo in (None, ''):
+        modelo = '(el del gateway)'
+    habilitado = 'sí' if j.get('enabled') is True else 'no' if j.get('enabled') is False else '?'
+    print('%s | cada %s | modelo %s | habilitado: %s' % (visible(nombre), visible(horario), visible(modelo), habilitado))
+    total += 1
+if not total:
+    print('(el archivo no trae trabajos)')
+PY
+echo "--- B. Trabajos del crontab con script instalado"
+python3 - <<'PY'
+import re, shlex, subprocess
+try:
+    resultado = subprocess.run(['crontab', '-l'], capture_output=True, text=True, check=False)
+    cron = resultado.stdout if resultado.returncode == 0 else ''
+except OSError:
+    cron = ''
+if not cron.strip():
+    print('(crontab ilegible o vacío)')
+base = '/root/bin/'
+
+def indice_script(palabras):
+    return next((i for i, s in enumerate(palabras) if re.fullmatch(re.escape(base) + r'[A-Za-z0-9._-]+', s)), None)
+
+def asignaciones(palabras):
+    valores = {}
+    for palabra in palabras:
+        m = re.fullmatch(r'([A-Za-z_][A-Za-z0-9_]*)=(.*)', palabra)
+        if m:
+            valores[m.group(1)] = m.group(2)
+    return valores
+
+total = 0
+for linea in cron.splitlines():
+    linea = linea.strip()
+    if not linea or linea.startswith('#') or re.match(r'^[A-Za-z_][A-Za-z0-9_]*=', linea):
+        continue
+    partes = linea.split(None, 1 if linea.startswith('@') else 5)
+    if len(partes) != (2 if linea.startswith('@') else 6):
+        continue
+    horario, comando = ' '.join(partes[:-1]), partes[-1]
+    try:
+        palabras = shlex.split(comando)
+    except ValueError:
+        continue
+    indice = indice_script(palabras)
+    if indice is None:
+        continue
+    overrides = asignaciones(palabras[:indice])
+    etiqueta = ''
+    # aplicar envuelve el comando entero en una palabra: leer el script del latido ocultaría su modelo.
+    if palabras[indice] == base + 'onia-latido.sh':
+        nombre = palabras[indice + 1] if len(palabras) > indice + 1 else ''
+        etiqueta = (nombre if re.fullmatch(r'[A-Za-z0-9._-]+', nombre) else '(sin nombre)') + ' → '
+        try:
+            palabras = shlex.split(palabras[indice + 3])
+        except (IndexError, ValueError):
+            palabras = []
+        indice = indice_script(palabras)
+        if indice is None:
+            print('%s(no pude leer el comando) | cada %s' % (etiqueta, horario))
+            total += 1
+            continue
+        # El override del comando interior tiene prioridad sobre el que precede al latido.
+        overrides.update(asignaciones(palabras[:indice]))
+    script = palabras[indice]
+    modelo = 'sin modelo declarado'
+    try:
+        with open(script, encoding='utf-8', errors='replace') as f:
+            texto = f.read()
+    except OSError:
+        modelo = 'no instalado'
+    else:
+        declaracion = next((m for m in re.finditer(r'\$\{([A-Za-z_][A-Za-z0-9_]*):-([^}\n]+)\}', texto)
+                            if 'MODEL' in m.group(1)), None)
+        # Solo asignaciones anteriores al script: un argumento posterior no es un override de cron.
+        if declaracion:
+            modelo = overrides.get(declaracion.group(1), declaracion.group(2)) or 'sin modelo declarado'
+        else:
+            modelo = next((v for k, v in overrides.items() if 'MODEL' in k and v), modelo)
+        # No expandir referencias o sustituciones que podrían traer secretos: solo nombres literales.
+        if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9._:/+-]*', modelo):
+            modelo = 'sin modelo declarado'
+    print('%s%s | cada %s | modelo %s' % (etiqueta, script, horario, modelo))
+    total += 1
+if not total:
+    print('(el crontab no trae trabajos con un script de /root/bin)')
+PY
+echo "--- C. Lo que NO se puede medir desde acá"
+echo "sesión de la nube de Hermes-Jarvis: modelo no medible desde el VPS (lo lee la madre en la consola de la sesión)"
+} | redactar
+
+sec "17. QA después de cada publicación — lo que dejó onia-qa-release (11-oct, Q5)"
+ESTADO_QA="/var/lib/onia-qa-release"
+LOG_QA="/var/log/onia-qa-release.log"
+# El diagnóstico diario informa lo que dejó el instrumento, sin alterar su estado.
+qa_redactar() { printf '%s\n' "$1" | redactar; }
+qa_emitir() { qa_redactar "$1"; }
+qa_edad() { local modificado ahora; modificado=$(stat -c %Y "$1" 2>/dev/null) || { printf '?'; return; }; ahora=$(date +%s); [[ "$modificado" =~ ^[0-9]+$ ]] || { printf '?'; return; }; printf '%s' "$(( (ahora - modificado) / 60 ))"; }
+qa_hora() { date -u -d "@$1" +%H:%MZ 2>/dev/null || printf '?'; }
+qa_emitir "--- estado: $ESTADO_QA"
+if [ ! -d "$ESTADO_QA" ]; then
+  qa_emitir "no existe $ESTADO_QA: qa-release todavía no corrió (¿falta aplicar?)"
+else
+  if [ -f "$ESTADO_QA/visto" ]; then
+    visto=$(head -n 1 "$ESTADO_QA/visto" 2>/dev/null)
+    if [[ "$visto" =~ ^[0-9a-f]{7,40}$ ]]; then qa_emitir "release visto: $visto (hace $(qa_edad "$ESTADO_QA/visto") min)"; else qa_emitir "release visto: (formato inesperado)"; fi
+  else qa_emitir "release visto: nunca"; fi
+  if [ -f "$ESTADO_QA/roto" ]; then
+    IFS=' ' read -r roto_sha roto_epoch roto_motivos < "$ESTADO_QA/roto"
+    if [[ "$roto_epoch" =~ ^[0-9]+$ ]]; then roto_desde=$(qa_hora "$roto_epoch"); qa_emitir "veredicto: ROTO desde $roto_desde — $(printf '%s' "$roto_motivos" | redactar | cut -c 1-160)"; else qa_emitir "veredicto: ROTO desde ? — $(printf '%s' "$roto_motivos" | redactar | cut -c 1-160)"; fi
+  fi
+  if [ -f "$ESTADO_QA/sin-medir" ]; then qa_emitir "veredicto: SIN MEDIR (el instrumento no pudo medir)"; elif [ ! -f "$ESTADO_QA/roto" ]; then qa_emitir "veredicto: sano"; fi
+  ventana="?"; if [ -f "$ESTADO_QA/ventana" ]; then w=$(head -n 1 "$ESTADO_QA/ventana" 2>/dev/null); [[ "$w" =~ ^[0-9]+$ ]] && ventana=$(qa_hora "$w"); fi
+  seguidas="?"; if [ -f "$ESTADO_QA/ventanas-seguidas" ]; then s=$(head -n 1 "$ESTADO_QA/ventanas-seguidas" 2>/dev/null); [[ "$s" =~ ^[0-9]+$ ]] && seguidas="$s"; fi
+  qa_emitir "ventanas del publicador: última leída $ventana; seguidas sin publicar: $seguidas"
+  tarea_roto="—"; tarea_medir="—"; tarea_log="—"; tarea_ventanas="—"
+  for tarea in roto medir log ventanas; do
+    archivo="$ESTADO_QA/tarea-$tarea"
+    if [ -f "$archivo" ]; then id=$(head -n 1 "$archivo" 2>/dev/null); if [[ "$id" =~ ^t_[0-9a-f]{8}$ ]]; then printf -v "tarea_$tarea" '%s' "$id"; else printf -v "tarea_$tarea" '%s' '(id inválido)'; fi; fi
+  done
+  qa_emitir "tareas abiertas: roto $tarea_roto · medir $tarea_medir · log $tarea_log · ventanas $tarea_ventanas"
+  capturas="$ESTADO_QA/capturas"; cantidad=0; edad_captura="?"
+  if [ -d "$capturas" ]; then cantidad=$(ls -1 "$capturas"/*.png 2>/dev/null | wc -l); cantidad=$((cantidad + 0)); nueva=$(ls -t "$capturas"/*.png 2>/dev/null | head -n 1); [ -n "$nueva" ] && edad_captura=$(qa_edad "$nueva"); fi
+  qa_emitir "capturas: $cantidad archivo(s) .png; la más nueva hace $edad_captura min"
+  qa_emitir "--- últimas 15 líneas de $LOG_QA"
+  if [ -f "$LOG_QA" ]; then tail -n 15 "$LOG_QA" | redactar | cut -c 1-200; else qa_emitir "(no existe: qa-release todavía no escribió)"; fi
+fi
 sec "fin"
 echo "diagnóstico terminado $(date -u +%FT%TZ) — no se modificó nada"

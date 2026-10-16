@@ -1,0 +1,26 @@
+- banner:
+  - link "Ir a onia.com.bo":
+    - /url: https://onia.com.bo
+    - img "Onia"
+  - text: 14 días gratis
+- main:
+  - list:
+    - listitem: 1 Su rubro
+    - listitem: 2 Su cuenta
+  - heading "¿Qué tipo de negocio tiene?" [level=1]
+  - paragraph: Pantallas, palabras y agentes de su rubro.
+  - button "Clínica dental Pacientes, citas, tratamientos y cobros"
+  - button "Comercio / tienda Catálogo, inventario, caja y clientes"
+  - button "Importadora / distribuidora Catálogo, cotizaciones B2B y costeo de importación"
+  - button "Estética y spa Agenda, clientas, tratamientos y caja"
+  - button "Servicios profesionales Agenda, citas, cobros y contabilidad"
+  - paragraph:
+    - text: ¿Otro rubro?
+    - link "Escríbanos":
+      - /url: https://wa.me/59175414930?text=Hola%2C%20quiero%20Onia%20para%20mi%20negocio.
+    - text: y lo vemos con usted.
+  - paragraph:
+    - text: ¿Ya tiene cuenta?
+    - link "Inicie sesión":
+      - /url: /login
+- alert

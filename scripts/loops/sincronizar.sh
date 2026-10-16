@@ -59,7 +59,9 @@ RAMA=$(git -C "$REPO" branch --show-current 2>/dev/null)
 # `hermes-content/infra` entro el 2026-09-24 para poder cablear los respaldos y los
 # crons del producto (ver el bloque de `poner` de mas abajo). Medido antes de sumarla,
 # que es lo que esta cabecera pide: el tar pasa de 5,74 MB a 5,86 MB (+112 KB, +2,0%).
-RUTAS_SYNC="scripts/loops scripts/kanban scripts/postiz_schedule.mjs scripts/cerebro hermes-content/deploy hermes-content/infra"
+# `scripts/onia-mirar.js` entró el 2026-10-10 (HERMES_ROL_QA.md Q5): el QA después de cada publicación lo
+# llama desde /root/bin; hasta entonces vivía en /root, copiado a mano. Son 72 líneas.
+RUTAS_SYNC="scripts/loops scripts/kanban scripts/postiz_schedule.mjs scripts/cerebro scripts/onia-mirar.js hermes-content/deploy hermes-content/infra"
 TARERR="/tmp/onia-sync-tar.$$.err"
 
 RAIZ="$REPO"
@@ -327,6 +329,10 @@ poner "$FUENTE/respuestas-pedidos.sh"              "$DESTINO_BIN/onia-respuestas
 # El latido de cada trabajo que agrega aplicar.sh (2026-10-10, HERMES_ROL_QA.md Q4c): todas esas líneas
 # del crontab lo llaman en esta ruta exacta, y aplicar.sh no toca el crontab hasta verlo acá.
 poner "$FUENTE/latido.sh"                          "$DESTINO_BIN/onia-latido.sh"
+# El QA después de cada publicación (2026-10-10, HERMES_ROL_QA.md Q5): su cron lo instala aplicar.sh con
+# esta ruta exacta, y abre /dashboard y /checkout con onia-mirar.js, que hasta hoy se copiaba a mano a /root.
+poner "$FUENTE/qa-release.sh"                      "$DESTINO_BIN/onia-qa-release.sh"
+poner "$RAIZ/scripts/onia-mirar.js"                "$DESTINO_BIN/onia-mirar.js"
 
 # La marca de Onia sobre Chatwoot. Cron VIVO en el VPS (`17 * * * *`) y NADIE lo copiaba:
 # la copia que ejecutaba era la de 14 lineas que defiende 3 claves, y el arreglo del
