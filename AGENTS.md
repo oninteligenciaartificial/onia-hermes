@@ -268,3 +268,5 @@ Reglas de Sergio Urcullo vigentes desde el 3-oct:
 - Nada llega a main sin revision.
 - Effort medio, sesiones cortas, sin releer documentos enteros.
 - La cola de tareas de Codex esta en `hermes-content/docs/handoff/codex-relevo.md`.
+
+Para instrucciones Codex vigentes leer CODEX.md al inicio; última orden directa de Sergio prevalece.
