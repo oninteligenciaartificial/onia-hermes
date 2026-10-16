@@ -322,3 +322,23 @@ uptime
 
 Y si es una pantalla de cliente, **abrila y MIRALA renderizada** (Playwright headless; el pane
 del navegador no compone frames en sesion no interactiva). Un 200 y un `grep` no son verificacion.
+
+---
+
+## Hilos de la nube (entorno «Onia»): acceso al VPS y capturas sin instalar nada
+
+> Caso 16-oct-2026, hilo Plataforma 1.0 para el banco: `ssh onia-vps` falló con
+> `Could not resolve hostname onia-vps` porque el entorno NO crea el alias.
+
+- El entorno trae las variables `ONIA_VPS_HOST`, `ONIA_VPS_USER` y `ONIA_VPS_SSH_KEY_B64`, pero
+  **no** `~/.ssh/config`. El alias se arma al empezar: decodificar la llave a `~/.ssh/onia_vps`
+  (600, fuera de cualquier repo), escribir un bloque `Host onia-vps` con `IdentityFile` y
+  `IdentitiesOnly yes`, y probar `ssh onia-vps true`. Nunca imprimir las variables ni la llave.
+- ⚠️ El modo automático de permisos bloquea ese paso como «lectura de producción»: pedir el sí de
+  Sergio Urcullo (o la aprobación en la ventana de permisos) ANTES, no rodear el bloqueo.
+- **Capturas sin Playwright** (no está instalado; instalarlo pide aprobación): usar
+  `/opt/pw-browsers/chromium_headless_shell-1194/chrome-linux/headless_shell --no-sandbox
+  --proxy-server="$HTTPS_PROXY" --window-size=390,1000 --virtual-time-budget=8000 --screenshot=x.png URL`.
+  El `chrome` normal con `--headless=new` NO baja de ~500 px y recorta la captura a 390 (parece un
+  desborde del producto y es un artefacto); el `headless_shell` sí respeta 390.
+- Sirve para pantallas públicas. Flujos con clic (alta paso 2, panel) necesitan Playwright o CDP.
