@@ -1,0 +1,64 @@
+{
+  "schema": 1,
+  "date": "2026-10-16",
+  "status": "implementation_partial_reviewed_published",
+  "operation_status": "BLOCKED",
+  "native_thread_id": "01a142e2-e207-7248-8c43-4778c245000f",
+  "host_id": "durable",
+  "task07": {
+    "contract": "native-hermes-artifacts-20261016-07",
+    "branch": "codex/hermes-native-thread-20261016",
+    "commit": "02a3835449f8fc59a8922997d2d45a90138cbd0c",
+    "parent": "569b5ed7f500aaf33a8171b72bb2834f403554b2",
+    "files": 6,
+    "insertions": 701,
+    "deletions": 5,
+    "focal_test_result": "65 PASS, 6 setup sink errors",
+    "scope_note": "Focal count only, not full suite; six .git sink errors remain unresolved and task08 was not rerun.",
+    "receipt": "native-thread-implementation-20261016.json"
+  },
+  "task08": {
+    "contract": "native-hermes-qa-20261016-08",
+    "commit": "0cdb8f45a33fa99d93480c345625df01bd21463d",
+    "parent": "02a3835449f8fc59a8922997d2d45a90138cbd0c",
+    "same_branch": "codex/hermes-native-thread-20261016",
+    "focal_test_result": "77 PASS",
+    "additional_methods": 12,
+    "review": "Independent Luna review confirmed 77 focal passes.",
+    "qa_facts": [
+      "Controller QA uses persisted surface and correct UUID.",
+      "Provenance is bound.",
+      "Receipt bytes and hash are verified.",
+      "Independent reviewer is recorded."
+    ],
+    "artifact_receipt": "native-thread-qa-20261016.json",
+    "repo_verification": "Root fetched and reviewed diff; five files declared in receipt match Git blob SHA256 and byte counts."
+  },
+  "sources": {
+    "task07": "Root fetch/diff and separate Git receipt",
+    "task08": "Root fetch/diff, separate Git receipt, five receipt-declared files matched Git blobs by SHA256 and bytes",
+    "independent_review": "Luna review",
+    "app_thread": "Root-provided UI/task inventory for the same native thread"
+  },
+  "blockers": [
+    "Task executor export-artifact reader is absent.",
+    "Claude Cloud authenticated dispatch is absent.",
+    "Document Control does not prove either capability.",
+    "Supported authenticated native transport is not established.",
+    "Private storage unavailable to the Cloud executor prevents the live E2E flow."
+  ],
+  "not_proven": [
+    "Authenticated real transport",
+    "Multi-provider execution",
+    "PC-off operation",
+    "End-to-end execution to artifact to independent QA to receipt"
+  ],
+  "next_verifiable_action": "Expose a supported authenticated native transport and compatible private artifact storage to the Cloud executor; then run one bounded live E2E and verify its task, artifact hashes, independent QA, receipt, and no-duplicate reconciliation.",
+  "restrictions": [
+    "No VPS or ChatGPT Work substitute.",
+    "No main, deployment, install, schema/queue/R4 expansion.",
+    "No additional provider/model run.",
+    "Task07 preliminary first-read receipt remains immutable; later results are in separate receipts."
+  ],
+  "local_code_tests_run_by_documentation_author": false
+}
