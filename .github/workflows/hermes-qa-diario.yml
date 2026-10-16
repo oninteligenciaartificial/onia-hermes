@@ -69,7 +69,13 @@ jobs:
             cat "$DIR/diagnostico.sh"
           } | ssh -i "$RUNNER_TEMP/vps_key" -o StrictHostKeyChecking=no -o BatchMode=yes \
                 -o ServerAliveInterval=30 "$VPS" 'bash -s' 2>&1 \
-            | sed -E -f "$DIR/redactar.sed"
+            | sed -E -f "$DIR/redactar.sed" | tee "$RUNNER_TEMP/diagnostico.log"
+          # El diagnóstico sale 0 aunque haya vigías mudos: el job quedaba verde con el crontab callado (revisión del
+          # 16-oct, E36). Si la línea de la sección «latidos» cuenta una o más MUDA(S), el job falla y GitHub avisa.
+          if grep -Eq -- '^--- [0-9]+ línea\(s\): [1-9][0-9]* MUDA\(S\)' "$RUNNER_TEMP/diagnostico.log"; then
+            echo "::error::hay vigías MUDOS en el crontab del VPS (ver la sección latidos)"
+            exit 1
+          fi
 
       - name: Borrar la llave
         if: always()

@@ -72,3 +72,14 @@ test("mutaciones: ausente, después de la llave, permisiva y continue-on-error",
     assert.ok(revisar(texto).length > 0, `mutación ${i + 1} sin detectar`);
   }
 });
+
+// E36 (16-oct): el diagnóstico sale 0 aunque haya vigías mudos; el job tiene que fallar si cuenta alguno.
+test("el job falla cuando el diagnóstico cuenta vigías MUDOS, y queda verde con 0", () => {
+  const paso = pasos(workflow).find((p) => p.nombre.startsWith("Ejecutar diagnostico"));
+  assert.ok(paso, "falta el paso que ejecuta el diagnóstico");
+  const m = run(paso).match(/if grep -Eq -- '([^']+)' /);
+  assert.ok(m, "falta el chequeo de MUDA(S) sobre el log");
+  const re = new RegExp(m[1].replace(/^\^/, "^"), "m");
+  assert.ok(re.test("--- 12 línea(s): 2 MUDA(S), 0 sin log, 1 no medibles\n"), "2 mudos deben fallar");
+  assert.ok(!re.test("--- 12 línea(s): 0 MUDA(S), 0 sin log, 1 no medibles\n"), "0 mudos debe quedar verde");
+});
