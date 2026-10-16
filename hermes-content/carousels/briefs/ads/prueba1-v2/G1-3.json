@@ -1,0 +1,168 @@
+{
+ "id": "G1-3",
+ "pieza": "Imagen 1:1: ¿quién de mañana no confirmó?",
+ "referencia": {
+  "anunciante": "CitaPro",
+  "id": "2253602242100999",
+  "dias": 66,
+  "formato": "imagen 1:1"
+ },
+ "formato": {
+  "relacion": "1:1",
+  "duracion_s": null
+ },
+ "gancho": {
+  "texto": [
+   "¿Quién de mañana",
+   "no *confirmó*?"
+  ],
+  "voz": null,
+  "imagen": "Cuadrado 1:1: titular en la columna izquierda; a la derecha Sergio Urcullo de medio cuerpo mirando el celular que tiene en la mano, preocupado, sin sonreír; cruzando la costura, UNA tarjeta real de Pendientes con «Cita de mañana a las 10:00 sin confirmar», con la leyenda «datos de ejemplo»; el botón abajo a la izquierda.",
+  "alineacion": "El titular pregunta quién de mañana no confirmó y la tarjeta real contesta con un caso («Cita de mañana a las 10:00 sin confirmar»); Sergio con el celular muestra de dónde sale. Sin voz: la imagen sola se lee en un segundo.",
+  "alternativa": [
+   "Su lista de la mañana",
+   "ya está *hecha*"
+  ]
+ },
+ "texto_principal": "Para dueños y dueñas de clínicas dentales de Santa Cruz.\nSi nadie se acuerda de escribirle a un paciente, esa hora igual se paga: sillón, equipo y alquiler.\nOnia es un sistema de gestión para clínicas dentales: en Pendientes, cada mañana le deja anotado quién tiene cita mañana y no confirmó, con el mensaje listo.\nNingún mensaje de Pendientes sale sin que usted lo apruebe.\nEscríbanos por WhatsApp y pida su demostración gratis.",
+ "titular": "Pida su demostración gratis",
+ "boton": "Enviar mensaje de WhatsApp",
+ "precargado": "Hola, vi el anuncio de Onia (D9). Tengo una clínica dental.",
+ "cuadros": [],
+ "estatico": {
+  "titular": [
+   "¿Quién de mañana",
+   "no *confirmó*?"
+  ],
+  "enfasis": "anotado",
+  "bajada": [
+   "Onia le deja la lista",
+   "con el mensaje listo."
+  ],
+  "boton": "Escríbanos por WhatsApp",
+  "filas": [
+   "cita-manana"
+  ]
+ },
+ "guion": null,
+ "promesas": [
+  {
+   "frase": "A quién escribirle hoy ya está anotado / Onia revisa su agenda cada mañana",
+   "fuente": "CAT §8 frase 3 · ⬜ sin verificar: corre solo, falta el log del VPS",
+   "filas": [
+    "G-04",
+    "G-06"
+   ]
+  },
+  {
+   "frase": "Le deja el mensaje listo",
+   "fuente": "CAT §8 frase 3 (son reglas fijas) · ⬜ sin verificar: falta la cuenta demo",
+   "filas": [
+    "G-06"
+   ]
+  },
+  {
+   "frase": "Usted aprueba cada mensaje (la bajada de la imagen)",
+   "fuente": "CAT §8 frase 3 · ⬜ sin verificar: falta la cuenta demo. Ojo: el recordatorio de cita por correo (B-03) sale solo; la frase queda pegada al mensaje de Pendientes y no se amplía",
+   "filas": [
+    "G-01"
+   ]
+  },
+  {
+   "frase": "Tarjeta 1: cita de mañana sin confirmar (fila cita-manana)",
+   "fuente": "Recorte real de Pendientes, captura del candidato del 30-sep · ⬜ sin verificar: falta la cuenta demo",
+   "filas": [
+    "G-06",
+    "B-02"
+   ]
+  },
+  {
+   "frase": "Onia es un sistema de gestión para clínicas dentales",
+   "fuente": "CAT §4 · ⬜ sin verificar: falta la cuenta demo",
+   "filas": [
+    "B-01",
+    "C-02",
+    "D-01",
+    "E-01"
+   ]
+  },
+  {
+   "frase": "Pida su demostración gratis",
+   "fuente": "CTA fija del brief · 🟡 verificada solo en parte: la duración de la llamada no se dice porque la web y los mensajes no coinciden",
+   "filas": [
+    "L-04"
+   ]
+  },
+  {
+   "frase": "Si nadie se acuerda de escribirle a un paciente, esa hora igual se paga (texto principal)",
+   "fuente": "Hecho del negocio del dueño; no es función de Onia ni promete un resultado.",
+   "filas": []
+  }
+ ],
+ "no_dice": [
+  "No promete ningún resultado, cifra ni porcentaje.",
+  "No inventa mensajes de chat ni burbujas: las dos tarjetas son filas reales de Pendientes.",
+  "No nombra montos, planes ni ofertas económicas.",
+  "No cuenta casos de uso ni dice quién usa Onia.",
+  "No dice que el mensaje salga solo: queda listo y lo aprueba usted.",
+  "No presenta la herramienta como algo más que reglas claras.",
+  "No nombra temas fiscales ni avisos al paciente por otros canales.",
+  "No dice cuánto dura la llamada de demostración.",
+  "No nombra otras empresas ni copia frases de la referencia.",
+  "No muestra el texto del mensaje al paciente ni el botón de envío de la pantalla."
+ ],
+ "para_sergio": [
+  "Fotografiar de medio cuerpo, a la derecha del encuadre, con luz de ventana y fondo claro y liso, MIRANDO EL CELULAR que sostiene con las dos manos, con gesto preocupado y NADA de sonrisa; dejar libre la mitad izquierda de la foto.",
+  "Sacar diez fotos: seis mirando el celular, preocupado, y cuatro mirando a cámara con gesto serio; en todas, ropa de calle lisa, sin bata y sin logos (la imagen es fija: un logo en el polo se publica).",
+  "Dejar la pantalla del celular apagada o en negro: la tarjeta con la lista se compone aparte.",
+  "Entregar las fotos en vertical y en horizontal, sin filtros ni retoques y en la mejor resolución."
+ ],
+ "ficha": "R3",
+ "apoyo": "AgendaPro `3652876658196882` (64 d, 11-oct) repite la misma imagen: foto de profesional + burbujas de chat + «Agenda una demostración GRATIS». Dos anunciantes con el mismo formato.",
+ "zonas": [
+  [
+   "Titular",
+   "3 líneas, tercio superior izquierdo (15-39 %), navy y un azul más claro en «poco orden.».",
+   "2 líneas en la columna izquierda (≤ 17 caracteres cada una), la 2.ª con el énfasis en verde de Onia. Abre con el dolor, como R3."
+  ],
+  [
+   "Bajada",
+   "Tres bloques de tamaño decreciente (25 %, 25 %, 16 % del ancho).",
+   "Tres líneas del mismo tamaño (42 px, ≈ 15 px a 390)."
+  ],
+  [
+   "Persona",
+   "Mujer agobiada a la derecha, cortada por el borde, mira el celular con la mano en la sien (≈ la mitad del cuadro).",
+   "Sergio a la derecha, cortado por el borde, ≈ 2/3 de la altura. **Toma real:** mirando el celular, preocupado, nada de sonrisa (la expresión de R3). **Maqueta:** mira a cámara y sonríe, porque es su foto de perfil."
+  ],
+  [
+   "Burbujas",
+   "6 burbujas de chat de WhatsApp en la costura, textos de ellos.",
+   "UNA tarjeta **real** de Pendientes, grande (≈ 15 px a 390), cruzando la costura; ninguna burbuja inventada."
+  ],
+  [
+   "Botón",
+   "Dibujado a 80-86 % abajo a la izquierda, «AGENDA UNA DEMO».",
+   "Botón verde abajo a la izquierda, «Escríbanos por WhatsApp» (el único llamado)."
+  ],
+  [
+   "Marca",
+   "Sin logo dentro del creativo.",
+   "Lockup `onia | dental` chico arriba a la izquierda."
+  ]
+ ],
+ "modelado": {
+  "se_queda": "Dos columnas con el texto a la izquierda y la persona a la derecha cortada por el borde, las tarjetas flotando en la costura, y el botón abajo a la izquierda.",
+  "cambia": "El dolor (WhatsApp saturado → quién de mañana no confirmó), lo que flota (una fila real de la lista, no chats), el nombre, los colores y el titular a 2 líneas. Sin «IA», sin «sin intervención humana», sin «piloto automático». La expresión de R3 (preocupación mirando el celular) SÍ se copia; Sergio no dice ser cliente: el lockup `onia | dental` y la leyenda de la pantalla lo identifican."
+ },
+ "estado": "sale: sus filas (G-04, G-06, B-02, G-01, B-01, C-02, D-01, E-01) son las que el go/no-go ya exige",
+ "foto": {
+  "plano": "Medio cuerpo (de la cintura para arriba), él en el tercio derecho del encuadre; la mitad izquierda queda libre para el titular.",
+  "expresion": "Preocupado, mirando el celular. Nada de sonrisa. (La referencia muestra el dolor en la cara; la maqueta sonríe porque es su foto de perfil.)",
+  "en_la_mano": "El celular, con las dos manos, a la altura del pecho, con la pantalla apagada o en negro (la tarjeta de Pendientes se compone aparte).",
+  "fondo": "Claro y liso (pared blanca o gris muy claro), luz de ventana; sin objetos ni carteles detrás.",
+  "ropa": "De calle, lisa, sin bata y SIN logos ni marcas a la vista (es una imagen fija: un logo en el polo se publica).",
+  "cantidad": "Diez fotos: seis mirando el celular, preocupado, y cuatro mirando a cámara con gesto serio.",
+  "entrega": "En vertical y en horizontal, sin filtros ni retoques y en la mejor resolución."
+ }
+}

@@ -287,12 +287,52 @@ Lectura: **a un dueño de clínica de Santa Cruz solo le llega pauta de software
 
 **Pedido PC (madre):** (1) Pinterest con la sesión de Sergio Urcullo: tableros de anuncios de software y de clínicas dentales, solo inspiración visual. (2) Los creativos de estos ids, que desde la nube no se ven: AgendaPro `1967791207137782` (245 d), `1535822604884838` («Sofía llegó»), `1201810243016378`; Dt.Dental `1064012876297472`; CitaPro `1099827399129529`; Wa7pro `1777808483360755`; Doctocliq `1805370580894596`.
 
+### 2.6.2 Estudio del 10-oct con el conector (Sergio Urcullo: «que mire ads library y mire qué anuncios funcionan»)
+
+**Datos:** `research/competencia/anuncios/BIBLIOTECA-10OCT.json` (271 anuncios activos de 15 páginas de software para clínicas y negocios, 62 con más de 30 días; incluye Alegra, contable, y Sunnu, sin clasificar; y 417 de clínicas con alcance en Bolivia, 41 con más de 30 días de 24 anunciantes). **Cifras reproducibles:** `node .claude/skills/onia-ventas-pauta/scripts/biblioteca-estadisticas.mjs`. **Una ficha por anunciante:** `research/competencia/anuncios/fichas/README.md`. **Ficha de las 12 dimensiones:** `references/video-intake/2026-10-10-biblioteca-anuncios-software-clinicas.md`. **Reglas con su caso:** skill `onia-ventas-pauta` §8.3. Un revisor independiente recalculó todo el 10-oct y corrigió 8 cifras y 3 conclusiones; lo de abajo ya las lleva. **La antigüedad no es rendimiento** y los porcentajes salen solo de los anunciantes con lista completa (119 anuncios, 33 con más de 30 d): son un **indicio**, no una prueba.
+
+| Patrón | Evidencia (días al 10-oct) | Peso | Qué hace Onia |
+|---|---|---|---|
+| **Control / agenda / orden** | 12 de los 33 que duran (36 %) contra 7 de 86 nuevos (8 %): «Todos ven lo mismo. Tú tienes el control.» 37-47 d ×4, «Cabinas llenas, agenda bajo control» 73-86 d ×3 | **12 anuncios = 5 titulares de 2 anunciantes** (Doctocliq, CitaPro): un patrón de dos, no doce. Las clases se armaron mirando a los ganadores | **N1** «Todos sus doctores, una sola agenda» |
+| **Demostración o prueba en el titular** | 4 de 33 (12 %) contra 3 de 86 (3 %), **los 4 de Doctocliq** («Prueba Doctocliq ahora/hoy» 45-85 d); AgendaPro «Agenda tu demostración gratis» ×5 (4 de ellos de 59-64 d; lista parcial) | **Flojo** (p ≈ 0,09 contando cada copia como independiente) y **sin contraejemplo desde el 11-oct**: el «Calu ya no tiene activos los de prueba» del 10-oct era un artefacto del corte (hoy Calu aparece con 13 anuncios y sus «Probá Calu Gratis» llevan 61 y 37 d; `research/competencia/anuncios/TANDA-11OCT.md` §2, donde además el corte del 10-oct resultó incompleto para varios anunciantes pequeños) | Titular de Meta «Pida su demostración gratis» (27 caracteres) en A1 v6, A2 v3, N1 y N2; N3 prueba la prueba de 14 días |
+| **Inasistencias y cancelaciones** | Es el dolor que **más anunciantes** usan (AgendaPro «Menos inasistencias en tu clínica» 65 d; Doctocliq «Dejá de perder citas» 57 d y «Evita cancelaciones…» 27 d; Dentalink; CitaPro) y Doctocliq sostuvo 78 d un video con «un sillón vacío te cuesta dinero» (§2.6) | **Mide uso, no duración:** solo 1 de los 33 que duran lo lleva en el titular | **A1** (precedente: ese video). Sin cifras de reducción: AgendaPro «90 % menos inasistencias» dura 65 d, pero Onia tiene 0 clientes y el detector las rechaza |
+| **El papel y la ficha** | Calu «¿Seguís acumulando fichas y papeles…?» 43 d; AgendaPro «Ficha clínica digital» 65 d (parcial) | Flojo: 2 de 33 | **N2** «¿Sigue guardando las fichas en papel?» |
+| **Un concepto, muchas copias** | Doctocliq 30 anuncios = 14 titulares; CitaPro 16 = 9; y los grandes tienen cientos activos (AgendaPro 313, Jelou 238, Dentalink 92-106) | Observado | Plan §5.11: 3 copias de A1 y corte el día 3/7/14. Con US$ 56 no se replica el volumen |
+| **El largo del titular** | Mediana 33 caracteres entre los que duran y 36 entre los nuevos; **48 % de los que duran pasan de 33** (65 % de los nuevos) | **No distingue.** No es una regla | A1 se acortó de 46 a 27 caracteres para que lleve la oferta y se lea en el feed, no porque la edad lo pida |
+
+**Lo que dura y Onia NO puede decir** (se anota como hueco): la **norma** (6 anuncios con titular de norma entre los 33: 2 de Dt.Dental, 99-100 d, y 4 de Reservo, 47-53 d; p ≈ 0,09: **no más fuerte que «control»**) y la **IA que atiende u ordena** (AgendaPro «Sofía» 143 d y «La IA que organiza tu clínica» 111 d, lista parcial). Sin obligación boliviana verificada y con el SIAT apagado (§7), y con el agente de WhatsApp sin conectar (catálogo §8).
+
+**Qué piezas, y dónde caben.** La Biblioteca **no ordena con fuerza**: lo único con peso es «control» y viene de dos anunciantes. **A1 va primero porque es el plan de la prueba 1 y está lista**, con un precedente (el video de Doctocliq), no porque la evidencia la ponga primera. Las nuevas **no cambian el plan de §5.11** (solo A1 en 3 copias con US$ 56; después, tandas **«solo con plata de un cliente que ya pagó», §5.7**):
+
+| Pieza | Tanda de §5.11 | Filas que tienen que estar en ✅ | Estado de las filas |
+|---|---|---|---|
+| A1 v6 | 1 | B-01, B-02, C-02, D-01, E-01, G-01, G-04, G-06 (texto) y G-11, L-05 (demostración) | ⬜ y L-05 ❌ (sin cuenta demo) |
+| **N1** una agenda | 2 «La clínica entera» | B-01, B-02 | ⬜ |
+| A2 v3 el saldo | 3 | E-01, E-03, G-01, G-08 | ⬜ (**sin ningún sobreviviente** que use el cobro de gancho) |
+| **N2** la ficha | 4 «La ficha» | C-01 a C-03 | ⬜ |
+| **N3** prueba de 14 días | **ninguna: contradice «no se prueban destinos» (§5.11, §5.10)** | A-04 y A-08 (ya ✅ vistos) | **Cambia el destino a `app.onia.com.bo/register` y no se mide como alta sin un evento de conversión (no verificado): la decisión es de Sergio Urcullo** junto con `canales_1_y_2` |
+
+Todas dicen «demostración gratis»: la fila L-04 está 🟡 (la web dice 30 min y los mensajes 20; **los briefs no dicen minutos**). N3 **no** dice «configuración puesta» ni «le guiamos» (A-03, A-09 y L-06 sin verificar).
+
+**Límites del método (revisión del 10-oct):** (1) las copias de un mismo anuncio no son independientes; (2) las clases de titular se definieron mirando a los ganadores y «otro» es 51 % de los nuevos; (3) AgendaPro y Dentalink son listas parciales por el tope de 50 (más nuevos primero): **sus medianas de edad no se usan**; (4) el conector **no permite medir la muerte de un anuncio**: `ad_active_status: INACTIVE` devolvió 0 para Calu; lo que sí hay es el cruce con el 3-oct: **todos los ids** de CitaPro, Doctocliq y Dt.Dental de `CAPTURAS-HECHAS.md` siguen activos (los de Dentalink no se pueden comparar: el tope de 50 oculta los viejos) y Calu pasó de 15 anuncios a 5; (5) el formato, el texto principal, el botón y el público no vienen (la descripción de la herramienta dice «ad creative text», pero las respuestas del 10-oct traen solo el titular).
+
+**Bolivia (más de 30 días):** 41 anuncios de 24 anunciantes, **22 sin titular**; ruido: una inmobiliaria, ofertas de empleo y Medilink Bolivia SRL (124 activos de **equipos e insumos médicos**, no software: no cambia que ningún proveedor boliviano de software pauta). Los que tienen titular hablan al paciente: «Cuidado dental para niños en Santa Cruz» 249 d, «Prótesis fija desde 200 bs» 184 y 121 d (los de paciente sí duran con precio; es otro público), «Blanqueamiento con sistema de 3 luces» 55 d, «Agenda tu cita» 46 d, «Chatea con nosotros» 38-43 d ×3.
+
+**Lo que el conector no trae se lo pido a la madre con Chrome** (`research/competencia/anuncios/PEDIDO-CAPTURAS.md`, sección del 10-oct). Los 5 que más duran y se capturaron el 1-2 oct **siguen activos** (Dt.Dental 102 d, CitaPro 86 d y 65 d, Doctocliq 85 d y 79 d). **Faltan 8, todos con más de 50 d:** AgendaPro `1535822604884838` («Sofía», 143 d), `1201810243016378` («La IA que organiza tu clínica», 111 d), `1601426334721119` («La IA atiende tu WhatsApp», 64 d) y `3652876658196882` («Agenda tu demostración gratis», 64 d); Doctocliq `1748838402916201` («Prueba Doctocliq ahora», 85 d) y `1738720983808867` («La agenda que trabaja contigo», 85 d); Dentalink `1614658333653742` (58 d, sin titular); Reservo `1056628280307783` (53 d).
+**Re-medir en 2 semanas (24-oct):** repetir las consultas por `page_ids` y anotar cuáles ids del JSON **desaparecieron** (con `biblioteca-estadisticas.mjs` sobre el JSON nuevo): la muerte de un anuncio dice más que su edad.
+
 ## 3. La señal más barata que existe: las clínicas que ya pagan pauta
 
 La misma Biblioteca muestra a **~20 clínicas dentales y ~10 de estética** de Santa Cruz que **hoy** pagan
-para conseguir pacientes, casi todas con clic a WhatsApp (*Chatea con nosotros*, *Agenda tu cita*, *Reserva
-tu cupo*). La lista, con la página de cada una y el cruce con los 20 prospectos de agosto, está en
+para conseguir pacientes, varias con clic a WhatsApp (*Chatea con nosotros* sale en 33 de los 417 anuncios
+vistos el 10-oct; el conector solo muestra el botón cuando coincide con el titular, §2.6.2). La lista, con la página de cada una y el cruce con los 20 prospectos de agosto, está en
 `ONIA_PROSPECTOS_DENTAL_SCZ.md` §5.
+**Lista de HOY (11-oct, solo lectura, nadie contactado):** `research/competencia/anuncios/CLINICAS-SCZ-CON-PAUTA-11OCT.md`: 62 clínicas
+o páginas dentales con pauta activa, con su recuento por `page_ids`, desde cuándo y qué promete cada titular. **El orden sale de los veredictos
+que ya estaban en `ONIA_PROSPECTOS_DENTAL_SCZ.md` §6, no de cuántos anuncios o sedes tiene cada una**: 6 candidatas, 32 a verificar y 6 fuera
+(cadena, multi-sede u otra ciudad). La Biblioteca no da ubicación ni contesta las 5 preguntas de `ONIA_CLIENTE_IDEAL.md` §9. 6 de las páginas
+del 30-sep (entre ellas la hipótesis «DS» y el #1 San Pedro) ya no tienen anuncios activos. Borradores de primer mensaje, sin enviar:
+`sales-kit/PRIMER-MENSAJE-8-CLINICAS-11OCT.md`.
 
 **Por qué es la mejor señal que tiene Onia:**
 
@@ -341,7 +381,10 @@ documentada; el detalle, con cada fuente, en `research/ONIA_META_ADS_PLAYBOOK_20
   `app.onia.com.bo/register` (medido en el código de `(sitio)/` en `main`). **La 1.0 sin publicar ya lo
   resuelve** (bloqueo 7); la web entra como destino cuando se publique y el píxel se vea en «Probar eventos».
 - La ventana gratis de 72 h que abre un anuncio de clic a WhatsApp **sigue sin cobrar el envío** después del
-  cambio de precios de Meta del 1-oct-2026.
+  cambio de precios de Meta del 1-oct-2026. **Ayuda oficial (11-oct):** vale para cualquier categoría de mensaje
+  mientras el cliente escriba desde un Android o un iPhone; **el anuncio en sí no es gratis**. Pasadas las 72 h,
+  el seguimiento con plantilla es de pago: los seguimientos de los leads **nuevos** de la pauta conviene mandarlos
+  dentro de esas 72 h (los 7 leads de agosto de `sales-kit/SEGUIMIENTO-LEADS.md` ya la pasaron). **Ojo:** esa ayuda es de la plataforma de WhatsApp Business (API) y no tiene fecha; §5.5 anotó que desde el 1-oct Meta cobra los mensajes de servicio: **no se pudo reconciliar**; se mira en WhatsApp Manager → Insights antes de contar con «gratis».
 
 ### 5.2 Público: el filtro son la pieza y el bot
 
@@ -472,6 +515,20 @@ En dólares **depende del tipo de cambio al que el banco le cobre la tarjeta a l
 tipo de cambio real el techo es la mitad de lo que parece**: hay que conocer ese número antes de la prueba.
 Los supuestos del embudo están en `research/ONIA_META_ADS_PLAYBOOK_20260930.md` §4.6.
 
+### 5.6.1 Lo que dice Meta (ayuda oficial, leída por el conector el 11-oct) y cómo cambia la lectura de los resultados
+
+Detalle, fuentes y casos en la skill `onia-ventas-pauta` §8.4. Lo que mueve decisiones de esta campaña:
+
+| Dato oficial | Qué significa acá |
+|---|---|
+| **«Conversaciones iniciadas»** = cuentas que escribieron por primera vez **o** tras 7 días sin actividad, atribuidas al anuncio (en WhatsApp, solo las que salen de un clic); Meta la marca **«en desarrollo»** | Es el «resultado» que mide la campaña. **No es un conteo exacto de leads:** quien vuelve a hacer clic antes de 7 días no suma en Meta pero sí aparece en Chatwoot con código; el código puede perderse y Meta puede contar a alguien que Chatwoot no. Se leen **los dos** y se anota la diferencia |
+| **El mensaje precargado lo puede editar o borrar quien escribe** | El código `(D1)`/`(D2)`/`(D3)` se puede perder: «sin código» no es «sin anuncio». Se compara el total de Meta con los leads con código |
+| **Aprendizaje limitado** = conjunto que no llega a ~50 eventos en la semana después de la última edición significativa | Con US$ 4/día (§5.3) **se queda en «aprendizaje limitado» por diseño**: los costos por conversación son ruidosos, no definitivos. Lo que Meta recomienda (juntar conjuntos, audiencia amplia, evento frecuente) ya es el plan: 1 conjunto, Advantage+, «conversaciones» |
+| **Presupuesto total con fecha de fin:** Meta lo describe como útil si no se quiere pasar de un monto total, con un ritmo diario **menos restringido**; el diario puede gastar hasta 175 % de un día y 7 × el diario por semana | El **techo es US$ 56** (el total de la campaña: Bs 637 a 11,37 y Bs 840 a 15, `CAMPANA-1-LISTA-PARA-CREAR.json` `regla_del_tipo_de_cambio`). **El total fija el monto, no el ritmo**: puede concentrar gasto al inicio. **Nada apaga solo en Bs 750**: ese tope se cuida a mano. Los cortes de día 3/7/14 miran lo **acumulado**, no el gasto de un día |
+| **Revisión:** casi siempre < 24 h; se repite al cambiar creativo, segmentación u optimización (no al cambiar presupuesto, puja o fechas) | Crear con inicio programado y ver «Activo» **antes** del día 1; un cambio de creativo cuesta otra revisión |
+| **Prueba A/B oficial:** misma partida a cada versión, una variable, no apagar y prender a mano | La prueba 1 (3 copias en un conjunto) **no es una prueba A/B**: Meta reparte según lo que rinde. Sirve para ver «¿trae dueños?»; el veredicto «qué formato gana» exigiría A/B con presupuesto parejo (no alcanza con US$ 56) |
+| **Biblioteca:** solo anuncios activos; los comerciales **no se archivan** al detenerse y solo se ve la fecha de inicio | Explicación probable (**inferencia**: el artículo no habla de `INACTIVE`) de que dé 0; la muerte de un anuncio solo se mide volviendo a consultar los mismos ids (§2.6.2) |
+
 ### 5.7 Cortar o seguir
 
 > Alineado el 8-oct con `ONIA_PLAN_1.0_Y_CAJA.md` §3 (3-oct), que es la fuente de los límites. Los números salen del
@@ -481,17 +538,28 @@ Los supuestos del embudo están en `research/ONIA_META_ADS_PLAYBOOK_20260930.md`
 
 | Momento | CORTAR si… | SEGUIR si… |
 |---|---|---|
-| Día 3 | 0 conversaciones, o CTR < 0,8 % → se cambia la pieza | hay conversaciones |
+| Día 3 | 0 conversaciones, o CTR < 0,8 % → **se pausa la copia que no trae** (cambiarla es una edición significativa) | hay conversaciones |
 | Día 7 | costo por conversación > Bs 40, o 0 conversaciones de dueños de clínica | ≤ Bs 40 y al menos 1 calificada |
 | Día 14 | 0 demos, o costo por demo > Bs 390 | costo por demo ≤ Bs 390 |
 
-- **Durante la prueba no se toca la segmentación ni se sube el presupuesto más de 20 %**: reinicia el aprendizaje.
+- **Durante la prueba no se toca la segmentación ni el creativo, y no se agregan anuncios.** Ayuda oficial (11-oct):
+  es una **edición significativa** cualquier cambio de segmentación, de creativo o del evento de optimización,
+  **agregar un anuncio nuevo al conjunto** y pausarlo 7 días o más; reinicia el aprendizaje y **vuelve a revisión**
+  (casi siempre en menos de 24 h). El presupuesto «puede o no» serlo según la magnitud: Meta **no da un umbral**; el
+  «no más de 20 %» es una regla propia de prudencia, no una cifra de Meta. **Pausar un anuncio no está en la lista** (**inferencia**: Meta no lo confirma; se comprueba mirando la columna «Última edición significativa» de Ads Manager después de pausar).
+  Por eso el corte del día 3 («se cambia la pieza») se hace **pausando la copia que no trae, no cambiándola**: la pieza
+  nueva espera a la tanda siguiente. Con ~US$ 12 gastados el día 3 el conjunto sigue en aprendizaje: el corte del día 3 vale para lo que no trae **nada**, no para comparar piezas.
 - **Techo total que no se pasa: Bs 1.400** (Meta 750 + auditorías, comunidad y eventos 650). Al llegar, se apaga todo.
 - **Seguir** quiere decir una segunda tanda igual, **pagada solo con plata de un cliente que ya pagó**, nunca con la
-  reserva. Se escala (+20–30 % cada 3–4 días) solo con el costo por demo en tope dos semanas seguidas y lugar en la
+  reserva. Se escala en pasos chicos (regla propia: +20–30 % cada 3–4 días; Meta no da umbral y avisa que un cambio grande de presupuesto puede reiniciar el aprendizaje) solo con el costo por demo en tope dos semanas seguidas y lugar en la
   agenda de Sergio Urcullo: **cuando las demos superan su capacidad semanal, no se escala; el techo son horas, no pauta**.
 - Se mide cada día **a mano, en una planilla**: conversaciones; cuántas son de un dueño o administrador de clínica; demos
   agendadas; costo por conversación; costo por demo; CTR; frecuencia.
+  **La planilla está lista (11-oct):** `carousels/briefs/ads/prueba1-v2/PLANILLA-PRUEBA-1.xlsx` (una fila por anuncio y por día;
+  los cortes del día 3, 7 y 14 y los frenos de Bs 750 y Bs 1.400 son fórmulas; los números salen de la spec, no escritos a
+  mano). Se regenera con `.claude/skills/onia-ventas-pauta/scripts/planilla-prueba1.mjs` y la vigila
+  `scripts/planilla-prueba1.test.mjs`. **No se abrió en Excel ni Calc** (el entorno de la nube no trae Calc): las fórmulas se
+  probaron con un intérprete mínimo; el primer uso real es abrirla y comprobar que Cortes dice «SIN DATOS».
 
 ### 5.8 La especificación, lista para crear en PAUSA
 
@@ -501,7 +569,7 @@ Los supuestos del embudo están en `research/ONIA_META_ADS_PLAYBOOK_20260930.md`
 | Página | "Onia" `1140384625819526` |
 | Campaña | `ONIA · Dental SCZ · WhatsApp · prueba 1` · Clientes potenciales · presupuesto total **USD 56** (Bs 750 de techo, §5.3) · fin a los 14 días · **PAUSED** |
 | Conjunto | WhatsApp · Maximizar conversaciones · Santa Cruz de la Sierra + radio, "llegar a más" apagado · 25+ · Advantage+ con sugerencias · excluir registrados |
-| Anuncios | **A1 y A2** (§5.10; reemplazan a D1 v3/v4) y **D4** (tabla de abajo). A1 v5 y A2 v2 se rehicieron el 8-oct mirando a la competencia (imagen 4:5, 9:16 y video de 11 s para A1) y esperan la cuenta demo (la vista de Sergio Urcullo sobre el diseño ya no rige desde el 9-oct: el carril revisa el render a 390 px). **D4 frenado** por el catálogo (el detector no encuentra a nadie). **Diseño, render y subida: sesión Ventas y pauta** (Sergio Urcullo, 30-sep; ver §0 punto 8). Marca personal no las hace. |
+| Anuncios | **A1 y A2** (§5.10; reemplazan a D1 v3/v4) y **D4** (tabla de abajo). A1 v5 y A2 v2 se rehicieron el 8-oct mirando a la competencia (y el 10-oct pasaron a v6 y v3: titular de oferta, §2.6.2) (imagen 4:5, 9:16 y video de 11 s para A1) y esperan la cuenta demo (la vista de Sergio Urcullo sobre el diseño ya no rige desde el 9-oct: el carril revisa el render a 390 px). **D4 frenado** por el catálogo (el detector no encuentra a nadie). **Diseño, render y subida: sesión Ventas y pauta** (Sergio Urcullo, 30-sep; ver §0 punto 8). Marca personal no las hace. |
 | Mensaje de bienvenida | "Para dueños/as de clínicas" + tres respuestas para tocar (§5.2) |
 
 | Anuncio | Brief (`hermes-content/carousels/briefs/ads/`) | Título | Texto precargado |
@@ -600,8 +668,8 @@ todo contacto el 8-oct («no sé si el producto ya es funcional ni si prometemos
 
 | | Anuncio | Estado el 8-oct | Tiene que estar en ✅ en `ONIA_PROMESA_VS_PRODUCTO.md` |
 |---|---|---|---|
-| **A1** | **«Las 10:00»** (v5, `carousels/briefs/ads/onia-platform-dental-meta-a1v5-las-diez.json`): «Un paciente que no confirma es un sillón vacío» + **«10:00 · Sin confirmar»** gigante + la tarjeta real con «Onia le deja el mensaje listo» y «Usted lo aprueba». Reemplaza a D1 v4 (que quedó como losa de texto: ver `research/competencia/anuncios/COMPARACION-DISENO-8OCT.md`). Texto de usted, alineado al catálogo §8.1, §8.3 y §7; el revisor de promesas da 0; **render hecho** en feed, historia y **video de 11 s** (`carousels/out/ads/onia-platform-dental-meta-a1v5-las-diez/`), mirado a 390 px junto a la competencia | **La captura es del candidato del 30-sep, no de producción: se rehace con la cuenta demo antes de subir** (y con la misma persona en la agenda y en Pendientes), **y sin el botón «Enviar yo mismo por WhatsApp» en la tarjeta** mientras G-03 esté en 🟡. Texto y kicker con el filtro «Para dueños y dueñas…» (10-oct); la imagen ya no dice minutos | B-02, G-01, G-06, G-11 y L-05 |
-| **A2** | **«El saldo que nadie cobra»** (v2, `…a2v2-el-saldo.json`): «Un cobro que nadie recuerda es plata que no entra» + **«45 días · Saldo vencido»** + la tarjeta real de cobro con «Onia le deja el mensaje listo». Mismo esquema que A1. Render de feed e historia hecho | Captura provisoria del 30-sep. **No sube hasta que E-03 esté en ✅**: la propuesta de cobro nunca se vio funcionando. La imagen muestra «Bs 250,00» de un paciente de ejemplo: no es un precio de Onia y lleva la leyenda «datos de ejemplo» | E-03, G-08, G-01 y G-11 |
+| **A1** | **«Las 10:00»** (v6 del 10-oct; v5 el 8-oct, `carousels/briefs/ads/onia-platform-dental-meta-a1v5-las-diez.json`): «Un paciente que no confirma es un sillón vacío» + **«10:00 · Sin confirmar»** gigante + la tarjeta real con «Onia le deja el mensaje listo» y «Usted lo aprueba». Reemplaza a D1 v4 (que quedó como losa de texto: ver `research/competencia/anuncios/COMPARACION-DISENO-8OCT.md`). Texto de usted, alineado al catálogo §8.1, §8.3 y §7; el revisor de promesas da 0; **render hecho** en feed, historia y **video de 11 s** (`carousels/out/ads/onia-platform-dental-meta-a1v5-las-diez/`), mirado a 390 px junto a la competencia | **La captura es del candidato del 30-sep, no de producción: se rehace con la cuenta demo antes de subir** (y con la misma persona en la agenda y en Pendientes), **y sin el botón «Enviar yo mismo por WhatsApp» en la tarjeta** mientras G-03 esté en 🟡 (**el 11-oct la imagen y los videos ya salen sin el botón**: recorte del mensaje; la captura sigue siendo la del 30-sep). Texto y kicker con el filtro «Para dueños y dueñas…» (10-oct); la imagen ya no dice minutos | **B-01, B-02, C-02, D-01, E-01, G-01, G-04 y G-06** (lo que dice el texto: agenda, ficha con odontograma, tratamientos, cobros, estado de confirmación, «nada sale sin su OK», «cada mañana») y, para la demostración de la llamada, G-11 y L-05 |
+| **A2** | **«El saldo que nadie cobra»** (v3 del 10-oct, `…a2v2-el-saldo.json`): «Un cobro que nadie recuerda es plata que no entra» + **«45 días · Saldo vencido»** + la tarjeta real de cobro con «Onia le deja el mensaje listo». Mismo esquema que A1. Render de feed e historia hecho | Captura provisoria del 30-sep. **No sube hasta que E-03 esté en ✅**: la propuesta de cobro nunca se vio funcionando. La imagen muestra «Bs 250,00» de un paciente de ejemplo: no es un precio de Onia y lleva la leyenda «datos de ejemplo» | E-03, G-08, G-01 y G-11 |
 | ~~D4~~ | Tratamiento a medias | **Congelado**: el catálogo §8 no deja decirlo | D-03 (hoy ❌) |
 
 - **Falta una pieza con persona.** Los 7 anuncios de software que sobreviven en la Biblioteca (§2.5) tienen una, y el
@@ -648,7 +716,7 @@ queda como «sin medir»). La última columna separa lo que **pasa a ✅ sin Ser
 | 4 | Número del bot vinculado a la página «Onia» | Sergio Urcullo | ⬜ el conector no lo ve | **Sí, si ya está vinculado:** la madre hace desde la PC lo que exige un panel con login (CLAUDE.md) y **lee** Business Manager → página «Onia» → WhatsApp; el número del bot es +591 75414930 (`ONIA_RUNBOOK_COEXISTENCIA_75414930.md`). Leerlo no cambia nada. Si falta, vincularlo pide el código al teléfono de él |
 | 5 | La respuesta a la pauta de usted **publicada**, y la prueba con dos mensajes desde un teléfono ajeno, mirando la respuesta | carril chatbot (publica) · quien tenga un teléfono ajeno (prueba) | La respuesta **ya está escrita y de usted** (`knowledge.onia.json` v2026-10-03.2, campaña de la frase-prefijo); sin verificar si producción la sirve. El motor lee D1, D2, D3 y D5 | **No del todo.** Es una fuente con firma humana (`publicar-solo.sh` `FIRMA_HUMANA`, §5.5): **la firma es de Sergio Urcullo**, una palabra. **Probar:** también él, 2 minutos con un teléfono que no sea el de Onia |
 | 6 | Quién contesta y en cuánto (menos de 24 h abre la ventana gratis de 72 h) y la agenda de `/llamada` con horarios | Sergio Urcullo | ❌ y **hay un choque que él debe ver**: el bot ofrece una demo de **30 min** y el VSL y el CTA dicen **20** (L-04 🟡) | **No.** Es una decisión suya. Recomendación: contesta él, el mismo día hábil y antes de 24 h; el bot atiende al instante y le avisa |
-| 7 | Tipo de cambio al que cobra el banco (se lee en el extracto): decide si Bs 750 alcanzan para 14 días | Sergio Urcullo | ❌ sin medir | **No lo mide nadie más, pero no tiene por qué bloquear:** con la regla «se apaga cuando el cobro acumulado llegue a Bs 750» (a 15 sería el día 12) la fila se cubre con una regla en vez de con un dato. **Es una regla manual: nada apaga solo en Bs 750**, alguien apaga a mano, y el techo duro es el total de US$ 56. Va dentro del OK de la fila 9 |
+| 7 | Tipo de cambio al que cobra el banco (se lee en el extracto): decide si Bs 750 alcanzan para 14 días | Sergio Urcullo | ❌ sin medir | **No lo mide nadie más, pero no tiene por qué bloquear:** con la regla «se apaga cuando el cobro acumulado llegue a Bs 750» (a 15, a mitad del día 13: Bs 750 son US$ 50) la fila se cubre con una regla en vez de con un dato. **Es una regla manual: nada apaga solo en Bs 750**, alguien apaga a mano, y el techo duro es el total de US$ 56. Va dentro del OK de la fila 9 |
 | 8 | Píxel visto en «Probar eventos» con el alta y su `utm` | Plataforma | ⏳ «ONIA Web» `1012611478191231` activo, **disparó el 9-oct 18:40 (UTC-7)**; «Probar eventos» no se ve por el conector | **Sí** (la madre o Plataforma desde la PC). **Y no bloquea esta campaña:** el clic a WhatsApp no depende del píxel (§5.1; respaldado por el esquema del conector, que para destino de mensajería solo pide `page_id`; no probado en esta cuenta). Propuesta: pasa a «no bloquea la prueba 1»; solo bloquea la web como destino |
 | 9 | OK explícito de gasto con techo: **«US$ 56, 14 días, tope Bs 750»** | Sergio Urcullo | ❌ | **No.** Escrito por él **en la sesión que crea y enciende**; el de otra sesión no vale |
 
@@ -658,6 +726,11 @@ queda como «sin medir»). La última columna separa lo que **pasa a ✅ sin Ser
 declaración de IA del creativo (no se puede cambiar después). Lo mínimo que se le pide: la tarjeta, el OK escrito, su firma en la respuesta del bot, sí o no a «contesta él en menos de 24 h», qué minutos de llamada (20 o 30), Instagram sí o no, y 2 minutos con su teléfono.
 **Hoy el veredicto es NO-GO**: 3, 5, 6 y 9 siguen en ❌ y 1 y 2 esperan a Plataforma.
 La campaña ya está lista para crearse (`carousels/briefs/ads/CAMPANA-1-LISTA-PARA-CREAR.json`) el día que esas filas estén en ✅.
+
+**11-oct (solo lectura, conector `Meta_ads`): sigue NO-GO, 0 de 9 filas en ✅.** ONIA Ads: `has_payment_method: false`, sin Instagram, 0 campañas y 0 borradores; la
+página «Onia» `1140384625819526` está disponible; el píxel «ONIA Web» disparó el 10-oct 18:21 (UTC-7). Nada de Plataforma entró a `main` desde el 10-oct, así que las filas 1 y 2
+siguen esperando la cuenta demo. Lo que se muestra a Sergio Urcullo (los 3 creativos, el público, el presupuesto, la métrica de corte y esta tabla con su dueño por fila) está
+en un solo archivo: `carousels/briefs/ads/CAMPANA-PRUEBA-1-LISTA-PARA-MOSTRAR.md`. Para encender el 16-oct, el OK escrito conviene el 14-oct: el 15 deja menos de 24 h para la revisión de Meta antes de las 00:00 de arranque.
 
 **9-oct, lo que cambió de mi lado (Ventas y pauta): ninguna fila pasó a ✅.** Las filas 1, 2, 3, 5, 6, 7 y 9 siguen igual; no hay cuenta demo ni
 `ONIA_QA_EMAIL`/`ONIA_QA_PASSWORD` en el entorno de Ventas. Lo que sí quedó listo para que, cuando entre la cuenta, recapturar A1/A2 y las C1-C7 del VSL
@@ -681,6 +754,11 @@ firmar la respuesta a la pauta, dar el OK de gasto (US$ 56 · 14 días · Bs 750
 | Campaña | `ONIA · Dental SCZ · WhatsApp · prueba 1` · Clientes potenciales · presupuesto total US$ 56 · 14 días · se crea en PAUSA (§5.8.1) |
 | Conjunto | Uno solo: `Dental SCZ · 25+ · WhatsApp` (§5.10, «Públicos») |
 | Anuncios | **Tres copias del mismo concepto, «el paciente de mañana que no confirmó»**, que cambian solo el formato: **A1-E** imagen 4:5 + historia, código `(D1)` · **A1-V** video de 11 s, `(D2)` · **A1-S** selfie de 25 s de Sergio Urcullo con la pantalla, `(D3)` (guion en `research/competencia/anuncios/COMPARACION-DISENO-8OCT.md`) |
+
+> **11-oct, noche: los anuncios de esta tabla (A1-E, A1-V, A1-S) los reemplaza la prueba 1 v2** (Sergio Urcullo vio A1-E: *«ese ad está horrible»*). Son 4 anuncios que copian, zona por zona, anuncios de la
+> competencia que duran, con Sergio Urcullo como persona y la fila real de Pendientes (G1-4, G1-3, G1-5 y G1-1, códigos D10, D9, D11 y D7); G1-2 (D8) entra solo si la fila G-05 pasa a ✅ **antes** de crear,
+> porque agregar un anuncio después es una edición significativa. Piezas y fichas: `carousels/briefs/ads/prueba1-v2/`; la campaña, `CAMPANA-1-LISTA-PARA-CREAR.json` (reescrita el 11-oct). El resto de §5.11
+> (un concepto, tandas, métricas, cortes, frenos) sigue vigente; las filas de §5.10 que se exigen son B-01, B-02, C-02, D-01, E-01, G-01, G-04 y G-06 (+ G-11 y L-05 para la demostración).
 
 - **Por qué tres copias de un concepto y no tres conceptos:** es el patrón de lo que más dura en la competencia
   (`COMUNICACION_Y_PAUTA_COMPETENCIA.md` §2: 2-5 copias por concepto), y deja una sola diferencia, **con persona o
@@ -723,7 +801,7 @@ variable con estadística (§5.3).
 | Demos agendadas y costo por demo | `/llamada` agendadas desde el chat | Corte del día 14 (§5.7) |
 | Frecuencia | Administrador | Si sube sin conversaciones, la pieza se gastó |
 
-**Reglas de corte:** las de §5.7, sin cambios (día 3, día 7, día 14; no se toca la segmentación; no se sube más de 20 %).
+**Reglas de corte:** las de §5.7, sin cambios (día 3, día 7, día 14; no se toca la segmentación ni el creativo, no se agregan anuncios y el presupuesto no se sube más de 20 %: regla propia, Meta no da umbral).
 
 **Lo que la frena y quién la destraba:** las 9 filas del go/no-go de §5.10, todas en ❌ o sin medir el 8-oct, más estas:
 

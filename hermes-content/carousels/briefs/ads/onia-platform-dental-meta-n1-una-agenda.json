@@ -1,0 +1,78 @@
+{
+  "plantilla": "bloques",
+  "id": "onia-platform-dental-meta-n1-una-agenda",
+  "title": "ONIA — N1 · Una sola agenda (10-oct; «control / agenda» = Doctocliq «Todos ven lo mismo. Tú tienes el control.» 37-47 d y CitaPro «agenda bajo control» 73-86 d: 12 anuncios, 5 titulares, 2 anunciantes; captura provisoria del 30-sep; filas B-01 y B-02 sin verificar)",
+  "headline_anuncio": "Pida su demostración gratis",
+  "cta_anuncio": "Escríbanos",
+  "caption": "Para dueños y dueñas de clínicas dentales de Santa Cruz.\n\nCon varios doctores y una recepción, lo que importa es ver el día completo de la clínica.\n\nOnia es un sistema de gestión para clínicas dentales: agenda, ficha con odontograma, tratamientos y cobros. Usted ve las citas de todos sus doctores en una sola agenda, cada una con su estado.\n\nEscríbanos por WhatsApp y pida su demostración gratis.",
+  "kicker": "Para dueños y dueñas de clínicas dentales de Santa Cruz",
+  "headline": "Todos sus doctores, *una sola agenda.*",
+  "bloques": [
+    {
+      "t": "hora",
+      "valor": "2",
+      "rotulo": "Doctores",
+      "chip": "Una agenda"
+    },
+    {
+      "t": "flecha",
+      "texto": "Cada cita, con su *estado*"
+    },
+    {
+      "t": "tile",
+      "crop": {
+        "src": "hermes-content/carousels/briefs/assets/onia-1.0-dental-ads/candidato-20260930/agenda-de-hoy.png",
+        "crop": [
+          296,
+          226,
+          1104,
+          310
+        ]
+      },
+      "width": 936,
+      "anillos": [
+        [
+          528,
+          285,
+          160,
+          16
+        ],
+        [
+          528,
+          493,
+          176,
+          16
+        ]
+      ]
+    },
+    {
+      "t": "leyenda",
+      "texto": "Pantalla de Onia · datos de ejemplo"
+    },
+    {
+      "t": "texto",
+      "texto": "Las citas de todos, en una sola pantalla."
+    }
+  ],
+  "cta": "Escríbanos por WhatsApp",
+  "nota": "Demostración gratis, en una llamada.",
+  "layout": {
+    "feed": {
+      "hora": 188,
+      "gap": 26,
+      "flecha": 42,
+      "txt": 44,
+      "ctaBottom": 44
+    },
+    "story": {
+      "headTop": 270,
+      "h1": 108,
+      "hora": 236,
+      "gap": 38,
+      "flecha": 48,
+      "txt": 48,
+      "panelTop": 60,
+      "ctaBottom": 250
+    }
+  }
+}

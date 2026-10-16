@@ -1,0 +1,65 @@
+{
+  "plantilla": "bloques",
+  "id": "onia-platform-dental-meta-n3-prueba-14-dias",
+  "title": "ONIA — N3 · Prueba de 14 días (10-oct; oferta «Prueba X ahora» de Doctocliq, un solo anunciante: indicio flojo; el texto sale de la página viva app.onia.com.bo/register del 10-oct, filas A-04 y A-08 ✅; sin «configuración puesta» ni «le guiamos» (A-03, A-09 y L-06 sin verificar); destino distinto a la campaña 1 y contra §5.10/§5.11 «no se prueban destinos»: lo decide Sergio Urcullo)",
+  "headline_anuncio": "Pruebe Onia 14 días gratis",
+  "cta_anuncio": "Registrarse",
+  "caption": "Para dueños y dueñas de clínicas dentales de Santa Cruz.\n\nOnia es un sistema de gestión para clínicas dentales: agenda, ficha con odontograma, tratamientos y cobros.\n\nPruébelo 14 días gratis, sin tarjeta, con el plan Profesional. Si no le sirve, no paga nada.",
+  "kicker": "Para dueños y dueñas de clínicas dentales de Santa Cruz",
+  "headline": "Pruebe Onia 14 días, *sin tarjeta.*",
+  "bloques": [
+    {
+      "t": "hora",
+      "valor": "14",
+      "rotulo": "Días gratis",
+      "chip": "Sin tarjeta"
+    },
+    {
+      "t": "flecha",
+      "texto": "Agenda, fichas y cobros, *en uno*"
+    },
+    {
+      "t": "tile",
+      "crop": {
+        "src": "hermes-content/carousels/briefs/assets/onia-1.0-dental-ads/candidato-20260930/agenda-de-hoy.png",
+        "crop": [
+          290,
+          190,
+          1110,
+          346
+        ]
+      },
+      "width": 936
+    },
+    {
+      "t": "leyenda",
+      "texto": "Pantalla de Onia · datos de ejemplo"
+    },
+    {
+      "t": "texto",
+      "texto": "Si no le sirve, no paga nada."
+    }
+  ],
+  "cta": "Empiece su prueba gratis",
+  "cta_icono": "ninguno",
+  "nota": "Plan Profesional por 14 días.",
+  "layout": {
+    "feed": {
+      "hora": 188,
+      "gap": 26,
+      "flecha": 42,
+      "txt": 44,
+      "ctaBottom": 44
+    },
+    "story": {
+      "headTop": 270,
+      "h1": 108,
+      "hora": 236,
+      "gap": 38,
+      "flecha": 48,
+      "txt": 48,
+      "panelTop": 60,
+      "ctaBottom": 250
+    }
+  }
+}

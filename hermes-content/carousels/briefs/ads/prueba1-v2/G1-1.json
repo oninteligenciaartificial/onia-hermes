@@ -1,0 +1,234 @@
+{
+ "id": "G1-1",
+ "pieza": "Selfie sentado: citas de mañana sin confirmar",
+ "referencia": {
+  "anunciante": "Dt.Dental",
+  "id": "1064012876297472",
+  "dias": 103,
+  "formato": "video 53 s 9:16",
+  "recorte": [
+   146,
+   0,
+   97,
+   172
+  ]
+ },
+ "formato": {
+  "relacion": "9:16",
+  "duracion_s": 28
+ },
+ "gancho": {
+  "texto": [
+   "Pacientes de mañana",
+   "sin *confirmar*"
+  ],
+  "voz": "Clínica dental: ¿vendrán todos los de mañana?",
+  "imagen": "Sergio Urcullo sentado en un banco o escalón al aire libre, plano medio-largo, mirando a cámara con el celular en la mano apoyada en la rodilla; el gancho va en un chip sobre las rodillas.",
+  "alineacion": "La voz pregunta si vendrán todos los de mañana, el chip dice «Pacientes de mañana / sin confirmar» y la imagen es Sergio sentado, quieto, con el celular en la rodilla: tapando cualquiera de las tres se adivinan las otras dos sin repetir la frase.",
+  "alternativa": [
+   "Mañana hay citas",
+   "en *duda*"
+  ]
+ },
+ "texto_principal": "Para dueños y dueñas de clínicas dentales de Santa Cruz.\nLa víspera de cada cita es una duda: ¿vendrá o no? Mientras tanto, el sillón y el equipo ya están pagados.\nOnia es un sistema de gestión para clínicas dentales: en Pendientes, cada mañana le deja anotado quién tiene cita mañana y no confirmó, con el mensaje listo.\nNingún mensaje de Pendientes sale sin que usted lo apruebe.\nEscríbanos por WhatsApp y pida su demostración gratis.",
+ "titular": "Pida su demostración gratis",
+ "boton": "Enviar mensaje de WhatsApp",
+ "precargado": "Hola, vi el anuncio de Onia (D7). Tengo una clínica dental.",
+ "cuadros": [
+  {
+   "id": "c0",
+   "tramo": "0-3 s",
+   "rol": "inicio",
+   "toma": "persona",
+   "persona": "centro",
+   "subtitulo": "Pacientes de mañana\nsin *confirmar*",
+   "cintilla": null,
+   "pantalla": null,
+   "tarjeta": null,
+   "voz": "Clínica dental: ¿vendrán todos los de mañana?",
+   "zona_de_la_referencia": "Referencia 1064012876297472.png (primer cuadro): persona sentada al aire libre, plano medio-largo, sin producción; el subtítulo va en un chip sobre las rodillas (tercio inferior del cuadro).",
+   "sub_y": 1150,
+   "persona_y": -170
+  },
+  {
+   "id": "c1",
+   "tramo": "9-18 s",
+   "rol": "medio",
+   "toma": "persona",
+   "persona": "centro",
+   "subtitulo": "Quién tiene cita mañana y *no confirmó*",
+   "cintilla": null,
+   "pantalla": {
+    "fila": "cita-manana",
+    "dispositivo": "celular",
+    "y": 0.7
+   },
+   "tarjeta": null,
+   "voz": "Onia revisa su agenda cada mañana. Le deja anotado quién tiene cita mañana y no confirmó. Y el mensaje, listo.",
+   "zona_de_la_referencia": "Referencia 1064012876297472-2.png: la misma toma sentada con el chip subido a la altura de la cabeza (en la referencia el chip cambia de lugar en cada frase); aquí Sergio sostiene el celular y la fila de Pendientes, ampliada, ocupa casi todo el ancho debajo del chip.",
+   "sub_y": 1140,
+   "persona_y": -170
+  },
+  {
+   "id": "c2",
+   "tramo": "23-28 s",
+   "rol": "cierre",
+   "toma": "persona",
+   "persona": "centro",
+   "subtitulo": "Pida su demostración *gratis*",
+   "cintilla": null,
+   "pantalla": null,
+   "tarjeta": null,
+   "voz": "Escríbanos por WhatsApp y pida su demostración gratis.",
+   "zona_de_la_referencia": "Referencia 1064012876297472-4.png: el chip del cierre queda en el centro del torso con la persona entera de fondo; en la referencia lleva su marca, aquí la invitación única.",
+   "sub_y": 1150,
+   "persona_y": -170,
+   "logo_fijo": true
+  }
+ ],
+ "estatico": null,
+ "guion": [
+  {
+   "tramo": "0-3 s",
+   "toma": "Selfie sentado, plano medio-largo, celular en la mano apoyada en la rodilla",
+   "voz": "Clínica dental: ¿vendrán todos los de mañana?",
+   "en_pantalla": "Gancho en chip, tercio inferior: Citas de mañana / sin *confirmar*"
+  },
+  {
+   "tramo": "3-9 s",
+   "toma": "Misma toma; el chip sube a la altura de la cabeza",
+   "voz": "Soy Sergio Urcullo, de Onia. Esto es lo que le deja cada mañana.",
+   "en_pantalla": "Subtítulo en chip: Soy Sergio Urcullo, de *Onia*"
+  },
+  {
+   "tramo": "9-18 s",
+   "toma": "Sergio levanta el celular; la fila de Pendientes ampliada ocupa casi todo el ancho",
+   "voz": "Onia revisa su agenda cada mañana. Le deja anotado quién tiene cita mañana y no confirmó. Y el mensaje, listo.",
+   "en_pantalla": "Fila cita-manana legible a 390 px de ancho (texto ampliado, nunca el mensaje ni el botón de envío) con la leyenda «Pantalla de Onia · datos de ejemplo»; subtítulo: Quién tiene cita mañana y *no confirmó*"
+  },
+  {
+   "tramo": "18-23 s",
+   "toma": "Vuelve la selfie; el chip va al centro",
+   "voz": "Usted aprueba cada mensaje.",
+   "en_pantalla": "Subtítulo en chip: Usted lo *aprueba*"
+  },
+  {
+   "tramo": "23-28 s",
+   "toma": "Selfie, mirando a cámara",
+   "voz": "Escríbanos por WhatsApp y pida su demostración gratis.",
+   "en_pantalla": "Chip centrado: Pida su demostración *gratis*"
+  }
+ ],
+ "promesas": [
+  {
+   "frase": "Cada mañana Onia revisa su agenda",
+   "fuente": "CAT §8 frase 3 · ⬜ sin verificar: corre solo, falta el log del VPS",
+   "filas": [
+    "G-04"
+   ]
+  },
+  {
+   "frase": "Le deja anotado quién tiene cita mañana y no confirmó",
+   "fuente": "CAT §8 frase 3 (son reglas fijas) · ⬜ sin verificar: falta la cuenta demo",
+   "filas": [
+    "G-06",
+    "B-02"
+   ]
+  },
+  {
+   "frase": "Y el mensaje, listo",
+   "fuente": "CAT §8 frase 3 · ⬜ sin verificar: falta la cuenta demo",
+   "filas": [
+    "G-06"
+   ]
+  },
+  {
+   "frase": "Usted lo aprueba; ninguno sale sin su OK",
+   "fuente": "CAT §8 frase 3 · ⬜ sin verificar: falta la cuenta demo. Ojo: el recordatorio de cita por correo (B-03) sale solo; la frase queda pegada al mensaje de Pendientes y no se amplía",
+   "filas": [
+    "G-01"
+   ]
+  },
+  {
+   "frase": "Onia es un sistema de gestión para clínicas dentales",
+   "fuente": "CAT §4 · ⬜ sin verificar: falta la cuenta demo",
+   "filas": [
+    "B-01",
+    "C-02",
+    "D-01",
+    "E-01"
+   ]
+  },
+  {
+   "frase": "Pida su demostración gratis",
+   "fuente": "CTA fija del brief · 🟡 verificada solo en parte: la duración de la llamada no se dice porque la web y los mensajes no coinciden",
+   "filas": [
+    "L-04"
+   ]
+  },
+  {
+   "frase": "El sillón y el equipo ya están pagados (texto principal)",
+   "fuente": "Hecho del negocio del dueño; no es función de Onia ni promete un resultado.",
+   "filas": []
+  }
+ ],
+ "no_dice": [
+  "No promete ningún resultado, cifra ni porcentaje.",
+  "No nombra montos, planes ni ofertas económicas.",
+  "No cuenta casos de uso ni dice quién usa Onia.",
+  "No dice que el mensaje salga solo: queda listo y lo aprueba usted.",
+  "No presenta la herramienta como algo más que reglas claras.",
+  "No nombra temas fiscales ni avisos al paciente por otros canales.",
+  "No dice cuánto dura la llamada de demostración.",
+  "No nombra otras empresas ni copia frases de la referencia (su tema, la norma de reporte, no se toca).",
+  "No muestra el texto del mensaje al paciente ni el botón de envío de la pantalla."
+ ],
+ "para_sergio": [
+  "Grabar en vertical con el celular a la altura de los ojos, sentado en un banco o escalón al aire libre, de cuerpo casi entero, con luz natural y sin música.",
+  "Vestir ropa de calle sencilla, sin bata ni uniforme: habla siempre como Sergio Urcullo, de Onia.",
+  "Decir el texto de corrido, de usted y con voz natural: una toma completa de 25 a 30 s y tres tomas extra de la última frase (la invitación).",
+  "Tener el celular en la mano apoyada en la rodilla durante toda la toma y levantarlo en las frases de Pendientes; la pantalla de Onia se pone en edición, no hace falta mostrarla.",
+  "Probar 10 s de audio antes para comprobar que no hay ruido de calle.",
+  "En el gancho, gesto neutro o serio (nada de sonrisa mientras se dice el dolor); sonreír recién en la invitación del final.",
+  "Ropa lisa y sin logos ni marcas a la vista (el polo de la maqueta lleva un logo ajeno)."
+ ],
+ "ficha": "R1",
+ "apoyo": null,
+ "zonas": [
+  [
+   "Persona",
+   "Joven de pelo largo sentada afuera, plano entero (cabeza a pies), cara en el tercio superior (17-75 % del alto), cámara fija, mira a cámara y gesticula.",
+   "Sergio Urcullo sentado, ropa de calle, misma toma fija. **Maqueta:** busto recortado; la toma real es plano medio-largo."
+  ],
+  [
+   "Subtítulo",
+   "4-5 palabras por línea, violeta con contorno blanco; cambia de altura (33 % → 69-75 % → 47-57 %).",
+   "Chip amarillo del «Pendiente» de la app (texto oscuro sobre fondo claro) con UNA palabra; queda en 59-60 % del alto y no más abajo: en Reels el tercio inferior lo tapan el texto del anuncio y el botón."
+  ],
+  [
+   "Producto",
+   "Ni logo ni pantalla en ningún momento visto.",
+   "**Cambia a propósito:** la fila real de Pendientes en el medio (regla «producto visible o no sale»)."
+  ],
+  [
+   "Marca / cierre",
+   "«dt.dental» enorme (47-57 %) dentro del último subtítulo; sin tarjeta final.",
+   "`onia` chico fijo arriba a la derecha + «Pida su demostración gratis». **Cambia:** el nombre enorme caería en la zona que tapa Reels."
+  ],
+  [
+   "CTA",
+   "Botón de la tarjeta «Ir al perfil de Instagram».",
+   "Botón de Meta «Enviar mensaje de WhatsApp». Ninguna referencia va a WhatsApp: es hipótesis de Onia (ADQ §5.10)."
+  ],
+  [
+   "Largo",
+   "53 s.",
+   "28 s."
+  ]
+ ],
+ "modelado": {
+  "se_queda": "Una persona sentada hablándole a cámara sin producción, subtítulos grandes que cambian de altura y el nombre de la marca grande al final.",
+  "cambia": "El tema (una norma colombiana de reporte: Onia no tiene una obligación que anunciar) por el dolor de la clínica dental; el mecanismo (Pendientes); el nombre y los colores (marca de la web, no violeta). Suma la pantalla real, que la referencia no tiene. Los subtítulos de R1 son violeta con contorno claro y sin chip; acá van en el chip amarillo de la app (el verde con contorno blanco se veía barato junto a la referencia)."
+ },
+ "estado": "sale: sus filas (G-04, G-06, B-02, G-01, B-01, C-02, D-01, E-01) son las que el go/no-go ya exige"
+}

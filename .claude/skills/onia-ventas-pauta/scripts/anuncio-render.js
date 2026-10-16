@@ -124,7 +124,7 @@ em{font-style:normal;color:var(--senal);font-weight:600}
 ${b.kicker ? `<p class="kicker">${esc(b.kicker)}</p>` : ''}
 ${b.headline ? `<h1>${marcar(b.headline)}</h1>` : ''}</div>
 ${b.pagina ? `<p class="pag">${esc(b.pagina)}</p>` : ''}<div class="panel">${bloques}
-${b.cta ? `<div class="cta"><span class="btn">${wa}${esc(b.cta)}</span>${b.nota ? `<span class="nota">${marcar(b.nota)}</span>` : ''}</div>` : '<div style="height:44px"></div>'}</div>
+${b.cta ? `<div class="cta"><span class="btn">${b.cta_icono === 'ninguno' ? '' : wa}${esc(b.cta)}</span>${b.nota ? `<span class="nota">${marcar(b.nota)}</span>` : ''}</div>` : '<div style="height:44px"></div>'}</div>
 </div></body></html>`;
 }
 

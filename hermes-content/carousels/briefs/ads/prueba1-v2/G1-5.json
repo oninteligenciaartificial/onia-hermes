@@ -1,0 +1,209 @@
+{
+ "id": "G1-5",
+ "pieza": "Micro de 10 s: ¿y si no vienen todos los de mañana?",
+ "referencia": {
+  "anunciante": "Doctocliq",
+  "id": "1952892278698712",
+  "dias": 80,
+  "formato": "micro-video 10 s 4:5"
+ },
+ "formato": {
+  "relacion": "4:5",
+  "duracion_s": 10
+ },
+ "gancho": {
+  "texto": [
+   "Su agenda de mañana",
+   "¿y si no *vienen*?"
+  ],
+  "voz": "¿Y si no vienen todos los de mañana?",
+  "imagen": "Sergio Urcullo sentado y quieto, mirando a cámara como en la referencia, con el celular en la mano a la altura del pecho y gesto serio; el gancho en dos líneas debajo del mentón.",
+  "alineacion": "La imagen es una persona seria y quieta mirando a cámara, la voz pregunta qué pasa si no vienen todos los de mañana y el texto nombra «su agenda de mañana»: abre con el dolor, no con la función, y no repite la frase.",
+  "alternativa": [
+   "Mañana hay citas",
+   "¿y quién *confirmó*?"
+  ]
+ },
+ "texto_principal": "Para dueños y dueñas de clínicas dentales de Santa Cruz.\nEscribirle a cada paciente, uno por uno, se come la hora más tranquila de la mañana, y esa hora se paga igual.\nOnia es un sistema de gestión para clínicas dentales: en Pendientes, cada mañana le deja anotado a quién escribirle, con el mensaje listo.\nNingún mensaje de Pendientes sale sin que usted lo apruebe.\nEscríbanos por WhatsApp y pida su demostración gratis.",
+ "titular": "Pida su demostración gratis",
+ "boton": "Enviar mensaje de WhatsApp",
+ "precargado": "Hola, vi el anuncio de Onia (D11). Tengo una clínica dental.",
+ "cuadros": [
+  {
+   "id": "c0",
+   "tramo": "0-3 s",
+   "rol": "inicio",
+   "toma": "persona",
+   "persona": "centro",
+   "subtitulo": "Su agenda de mañana\n¿y si no *vienen*?",
+   "cintilla": null,
+   "pantalla": null,
+   "tarjeta": null,
+   "voz": "¿Y si no vienen todos los de mañana?",
+   "zona_de_la_referencia": "Referencia 1952892278698712-2.png: persona sentada frente a una pared de color, mirando a cámara, manos quietas, plano medio; una sola línea de subtítulo (aquí, el gancho de dos líneas).",
+   "sub_y": 1040
+  },
+  {
+   "id": "c1",
+   "tramo": "3-7 s",
+   "rol": "medio",
+   "toma": "persona",
+   "persona": "centro",
+   "subtitulo": "Usted lo *aprueba*",
+   "cintilla": null,
+   "pantalla": {
+    "fila": "cita-manana",
+    "dispositivo": "celular",
+    "y": 0.78
+   },
+   "tarjeta": null,
+   "voz": "Onia le deja el mensaje listo. Usted lo aprueba.",
+   "zona_de_la_referencia": "Referencia 1952892278698712-3.png: la misma persona sentada, otro fondo, mismo plano; aquí Sergio sostiene el celular y la fila de Pendientes ampliada ocupa el tercio central del cuadro, con él detrás.",
+   "sub_y": 880,
+   "persona_y": -100
+  },
+  {
+   "id": "c2",
+   "tramo": "7-10 s",
+   "rol": "cierre",
+   "toma": "tarjeta",
+   "persona": "ninguna",
+   "subtitulo": null,
+   "cintilla": null,
+   "pantalla": null,
+   "tarjeta": {
+    "lineas": [
+     "EL MENSAJE",
+     "LISTO",
+     "CON"
+    ],
+    "fondo": "verde",
+    "logo": true,
+    "pie": "Pida su demostración *gratis*"
+   },
+   "voz": "Pida su demostración gratis.",
+   "zona_de_la_referencia": "R5 cuadro final: corte seco a tarjeta de color plano con 2-3 líneas grandes en mayúsculas y el logo. Sin botón dentro del video."
+  }
+ ],
+ "estatico": null,
+ "guion": [
+  {
+   "tramo": "0-3 s",
+   "toma": "Sergio sentado, quieto, mirando a cámara, celular en la mano a la altura del pecho, gesto serio",
+   "voz": "¿Y si no vienen todos los de mañana?",
+   "en_pantalla": "Gancho en dos líneas: Su agenda de mañana / ¿y si no *vienen*?"
+  },
+  {
+   "tramo": "3-7 s",
+   "toma": "Sergio levanta el celular; la fila cita-manana de Pendientes, ampliada, debajo del mentón, con la leyenda «Pantalla de Onia · datos de ejemplo»",
+   "voz": "Onia le deja el mensaje listo. Usted lo aprueba.",
+   "en_pantalla": "Usted *aprueba* (subtítulo) + fila real"
+  },
+  {
+   "tramo": "7-10 s",
+   "toma": "Corte seco a tarjeta verde plana: «EL MENSAJE / LISTO / CON» y el logo; abajo, una línea con el llamado",
+   "voz": "Pida su demostración gratis.",
+   "en_pantalla": "EL MENSAJE / LISTO / CON + logo onia + «Pida su demostración *gratis*»"
+  }
+ ],
+ "promesas": [
+  {
+   "frase": "Onia le deja anotado a quién escribirle, cada mañana",
+   "fuente": "CAT §8 frase 3 · ⬜ sin verificar: corre solo, falta el log del VPS",
+   "filas": [
+    "G-04",
+    "G-06"
+   ]
+  },
+  {
+   "frase": "El mensaje listo, con Onia (tarjeta final)",
+   "fuente": "CAT §8 frase 3 (son reglas fijas) · ⬜ sin verificar: falta la cuenta demo",
+   "filas": [
+    "G-06"
+   ]
+  },
+  {
+   "frase": "Usted aprueba el mensaje; ninguno sale sin su OK",
+   "fuente": "CAT §8 frase 3 · ⬜ sin verificar: falta la cuenta demo. Ojo: el recordatorio de cita por correo (B-03) sale solo; en la tarjeta la frase se acota a «el mensaje» (el de Pendientes) y no dice «nada» a secas",
+   "filas": [
+    "G-01"
+   ]
+  },
+  {
+   "frase": "Onia es un sistema de gestión para clínicas dentales",
+   "fuente": "CAT §4 · ⬜ sin verificar: falta la cuenta demo",
+   "filas": [
+    "B-01",
+    "C-02",
+    "D-01",
+    "E-01"
+   ]
+  },
+  {
+   "frase": "Pida su demostración gratis",
+   "fuente": "CTA fija del brief · 🟡 verificada solo en parte: la duración de la llamada no se dice porque la web y los mensajes no coinciden",
+   "filas": [
+    "L-04"
+   ]
+  },
+  {
+   "frase": "Escribirle a cada paciente se come la hora más tranquila de la mañana (texto principal)",
+   "fuente": "Hecho del negocio del dueño; no es función de Onia ni promete un resultado.",
+   "filas": []
+  }
+ ],
+ "no_dice": [
+  "No promete ningún resultado, cifra ni porcentaje.",
+  "No usa la idea de la referencia (el tiempo personal del doctor): la idea es el mensaje ya listo y la aprobación del dueño.",
+  "No nombra montos, planes ni ofertas económicas.",
+  "No cuenta casos de uso ni dice quién usa Onia.",
+  "No dice que el mensaje salga solo: queda listo y lo aprueba usted.",
+  "No presenta la herramienta como algo más que reglas claras.",
+  "No nombra temas fiscales ni avisos al paciente por otros canales.",
+  "No dice cuánto dura la llamada de demostración.",
+  "No nombra otras empresas ni copia frases de la referencia.",
+  "No muestra el texto del mensaje al paciente ni el botón de envío de la pantalla."
+ ],
+ "para_sergio": [
+  "Grabar en vertical o en 4:5, sentado y quieto frente a una pared lisa o una ventana, mirando a cámara con el celular en la mano a la altura del pecho y gesto serio (no sonreír).",
+  "Grabar cinco veces la primera frase (¿Y si no vienen todos los de mañana?), con ritmo pausado: es lo único que lleva su cara en los 10 s.",
+  "Grabar tres veces la frase del segundo tramo (Onia le deja el mensaje listo. Usted lo aprueba.), primero mirando el celular y al final a cámara; son 9 palabras para 4 s.",
+  "Si hay otra pared o ventana disponible, grabar una toma extra con otro fondo (la referencia cambia de fondo a mitad).",
+  "La tarjeta final y el logo los pone la edición.",
+  "Ropa lisa y sin logos ni marcas a la vista (el polo de la maqueta lleva un logo ajeno)."
+ ],
+ "ficha": "R5",
+ "apoyo": "Doctocliq `1748838402916201` (85 d, 11-oct) es el mismo creativo con otro id: lo repiten.",
+ "zonas": [
+  [
+   "Persona",
+   "Doctora sentada, frontal, plano americano, mira a cámara, cara en 9-36 % del alto; sin subtítulos en los cuadros vistos.",
+   "Sergio sentado, frontal, mirada a cámara. **Maqueta:** busto. **Cambia:** lleva subtítulo, porque el checklist del gancho pide el texto en pantalla."
+  ],
+  [
+   "Medio",
+   "Misma pose; el fondo cambia a consultorio.",
+   "Misma pose + la fila real de Pendientes, debajo del mentón."
+  ],
+  [
+   "Cierre",
+   "Corte seco a tarjeta celeste plana: «REDUCE / CANCELACIONES / CON» + logo blanco (4:5).",
+   "Corte seco a tarjeta verde plana: «EL MENSAJE / LISTO / CON» + logo blanco + una línea con el llamado (4:5). Misma estructura: promesa que termina en el nombre del producto."
+  ],
+  [
+   "Texto",
+   "«Doctora, tu tiempo (y tu almuerzo) valen demasiado para que te cancelen a última hora.»",
+   "Otra idea: pregunta por la agenda de mañana (el dolor) y la lista con el mensaje listo (el mecanismo). Sin almuerzo, sin «cancelen», sin resultado prometido."
+  ],
+  [
+   "Largo",
+   "10,2 s.",
+   "10 s."
+  ]
+ ],
+ "modelado": {
+  "se_queda": "Diez segundos, una persona quieta mirando a cámara, una sola idea y un corte seco a una tarjeta de color plano con el logo.",
+  "cambia": "La idea (de la cancelación como resultado a un mecanismo: «el mensaje ya está listo y usted lo aprueba»), el nombre, los colores y la persona (Sergio, no una doctora generada)."
+ },
+ "estado": "sale: sus filas (G-04, G-06, B-02, G-01, B-01, C-02, D-01, E-01) son las que el go/no-go ya exige"
+}

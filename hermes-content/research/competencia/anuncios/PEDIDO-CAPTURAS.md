@@ -66,3 +66,20 @@ Fuente de la lista: `ads_library_search` (activos, BO/PE/CL/MX/CO/AR/EC y por `p
 21:50 UTC. «Activo desde» es la fecha de inicio de entrega. Para el dolor de D4 (el tratamiento que quedó a medias)
 **ningún competidor tiene un anuncio**: las búsquedas «pacientes que no regresan» y «tratamientos sin terminar» solo
 traen ruido.
+
+## Pedido del 10-oct: 8 anuncios que duran más y que faltan (estudio de la Biblioteca)
+
+> Dirección de Sergio Urcullo (10-oct): *«que mire ads library y mire qué anuncios funcionan»*. El conector dio titular y días; **falta el formato** (video, imagen, carrusel), el texto principal, el botón y a dónde lleva. Mismo método de arriba. Los 5 que más duran y ya se capturaron el 1-2 oct **siguen activos** y no se piden de nuevo. Datos y días en `BIBLIOTECA-10OCT.json`.
+
+| # | Anunciante | id | Titular | Días al 10-oct | Por qué |
+|---|---|---|---|---|---|
+| 1 | AgendaPro | 1535822604884838 | Sofia Llegó (4 tarjetas o textos) | 143 | el asistente con nombre; la serie más larga de IA |
+| 2 | AgendaPro | 1201810243016378 | La IA que organiza tu clínica | 111 | IA que ordena; ver qué muestra |
+| 3 | AgendaPro | 3652876658196882 | Agenda tu demostración gratis | 64 | la oferta que más copias tiene (×6) |
+| 4 | AgendaPro | 1601426334721119 | La IA atiende tu WhatsApp | 64 | IA + WhatsApp, lo que Onia no puede prometer |
+| 5 | Doctocliq | 1748838402916201 | Prueba Doctocliq ahora | 85 | oferta de prueba que dura |
+| 6 | Doctocliq | 1738720983808867 | La agenda que trabaja contigo | 85 | gancho de control |
+| 7 | Dentalink | 1614658333653742 | (sin titular) | 58 | el más viejo visible de Dentalink |
+| 8 | Reservo | 1056628280307783 | Cumple con las normativas legales | 53 | la norma, para ver cómo la muestran |
+
+Si no corre, se salta y se anota «ya no corre». Guardar en `<anunciante>/<id>.png` y avisar a Ventas y pauta por mensaje.

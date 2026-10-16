@@ -1,0 +1,64 @@
+{
+  "agendapro": [
+    {
+      "id": "1535822604884838",
+      "dias": "143 (desde 20-may)",
+      "formato": "**Video 0:25, persona a cámara**: un joven en una barbería con el celular en la mano y el texto en pantalla «Ser barbero no es vivir en el celular». 4 versiones del mismo anuncio",
+      "texto_principal": "«📅 ¿Tu agenda te supera? ¡Sofía está para ayudarte! Con Sofía IA Recordatorios tus clientes reciben mensajes automáticos por WhatsApp para confirmar sus citas, y si cancelan, ella reagenda por ti al instante. 🤖✨» + tres viñetas: «Más profesionalidad · Menos espacios vacíos · Ahorrá horas de coordinación» + «Tu negocio más ordenado y listo para crecer.»",
+      "llamado": "«Sofia Llegó» / «Tu IA para crecer» · botón «Sign Up»",
+      "ruta": "agendapro/1535822604884838-11oct.png"
+    },
+    {
+      "id": "1201810243016378",
+      "dias": "111 (desde 21-jun)",
+      "formato": "**Video 0:31, persona a cámara**: una joven con texto en pantalla sobre «una IA que salvó mi clínica de depilación» (legible en parte)",
+      "texto_principal": "«¿Qué? ¿Una Inteligencia Artificial para clínicas de depilación láser? Lleva el historial de cada paciente, zonas tratadas y envía recordatorios por WhatsApp automáticamente. Es la IA de AgendaPro — haz click y te paso toda la info.»",
+      "llamado": "«La IA que organiza tu clínica» (destino FB.ME) · botón «Más información»",
+      "ruta": "agendapro/1201810243016378-11oct.png"
+    },
+    {
+      "id": "3652876658196882",
+      "dias": "64 (desde 7-ago)",
+      "formato": "**Imagen**: foto de una profesional con uniforme morado, burbujas de chat («¿Y si dudo si AgendaPro reduce las inasistencias en mi clínica estética?») y la frase «Agenda una demostración GRATIS»",
+      "texto_principal": "«Ya conoces AgendaPro, pero quizá nunca viste los números. Los recordatorios automáticos bajan las inasistencias de tu clínica estética sin que tengas que perseguir a nadie por WhatsApp. Te lo mostramos en una demo de 15 minutos, gratis.»",
+      "llamado": "«Agenda tu demostración gratis» (etiqueta «Software Company») · botón «Reservar»",
+      "ruta": "agendapro/3652876658196882-11oct.png"
+    },
+    {
+      "id": "1601426334721119",
+      "dias": "64 (desde 7-ago)",
+      "formato": "**Video 0:34**. La Biblioteca no entrega cuadro: el primer cuadro sale negro (reintentado con más espera, igual). No se ve qué muestra. La tarjeta dice «varias versiones»",
+      "texto_principal": "«Estás en medio de un corte y tu WhatsApp no para: turnos, cambios, cancelaciones. Si contestás, dejás al cliente de la silla. Si no contestás, perdés al de WhatsApp. La IA de AgendaPro resuelve las dos.» (hecho para barberías)",
+      "llamado": "«La IA atiende tu WhatsApp» · «Hasta 90% menos inasistencias.» · botón «Learn More»",
+      "ruta": "agendapro/1601426334721119-11oct.png"
+    }
+  ],
+  "doctocliq": [
+    {
+      "id": "1748838402916201",
+      "dias": "85 (desde 17-jul)",
+      "formato": "**Video 0:10, persona a cámara**: una doctora sentada en un consultorio (aspecto sintético, no verificado). Mismo texto y duración que `1952892278698712` de la ronda 1",
+      "texto_principal": "«Doctora, tu tiempo (y tu almuerzo) valen demasiado para que te cancelen a última hora. Prueba Doctocliq hoy.»",
+      "llamado": "«Prueba Doctocliq ahora» (WWW.DOCTOCLIQ.COM) · botón «Ver detalles»",
+      "ruta": "doctocliq/1748838402916201-11oct.png"
+    },
+    {
+      "id": "1738720983808867",
+      "dias": "85 (desde 17-jul)",
+      "formato": "**Video 0:30, mini-historia**: un niño sentado a la mesa esperando, con un reloj de pared (escena de aspecto sintético). Mismo titular y duración que `1014591764512827` de la ronda 1",
+      "texto_principal": "«Tu día ya es suficientemente ocupado como para estar resolviendo todo a última hora. Con Doctocliq, tus pacientes agendan sus citas en línea y reciben recordatorios automáticos, para que puedas trabajar con más tranquilidad. Miles de doctores en Latinoamérica ya lo hacen. Ahora te toca a ti.»",
+      "llamado": "«La agenda que trabaja contigo» (DOCTOCLIQ.COM/CREA-TU-CUENTA) · botón «Ver detalles»",
+      "ruta": "doctocliq/1738720983808867-11oct.png"
+    }
+  ],
+  "reservo": [
+    {
+      "id": "1056628280307783",
+      "dias": "53 (desde 18-ago)",
+      "formato": "**Imagen**: afiche con una frase sobre la COFEPRIS y la NOM-024 («¡Estamos certificados!») y una captura de pantalla pequeña del sistema (texto de la imagen leído a baja resolución). La tarjeta dice «varias versiones»",
+      "texto_principal": "«¿Estás seguro de que tu clínica cumple con los estándares de COFEPRIS? • Expediente electrónico bajo la NOM-024 • Agenda y control financiero en un solo lugar. Descubre cómo Reservo te ayuda a mejorar tus procesos. Déjanos tus datos para obtener información personalizada sobre cómo podemos ayudarte.»",
+      "llamado": "«Cumple con las normativas legales» + «Reservo software médico para profesionales de salud. Expediente clínico certificado NOM-024, agenda, finanzas, fidelización de pacientes y más.» · botón «Learn More» (formulario de datos)",
+      "ruta": "reservo/1056628280307783-11oct.png"
+    }
+  ]
+}

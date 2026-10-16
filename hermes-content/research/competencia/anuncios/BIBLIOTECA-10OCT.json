@@ -1,0 +1,5452 @@
+{
+ "meta": {
+  "fecha": "2026-10-10",
+  "fuente": "Biblioteca de anuncios de Meta, conector Meta_ads (ads_library_search), estado ACTIVE",
+  "corte_utc": "2026-10-10T22:00Z",
+  "dias": "(corte − ad_delivery_start_time) / 86400, redondeado. Es la antigüedad del anuncio, NO su rendimiento.",
+  "regla_de_Sergio_Urcullo": "más de 30 días activo = el que funciona (proxy; la Biblioteca no da gasto ni resultados de anuncios comerciales)",
+  "no_trae_el_conector": [
+   "imagen/video/carrusel (el formato)",
+   "texto principal del anuncio (solo el titular)",
+   "botón (salvo cuando coincide con el titular)",
+   "público al que apunta",
+   "gasto, alcance, resultados",
+   "si el anuncio se pausó y reactivó (ad_delivery_start_time puede ser una reactivación)"
+  ],
+  "trampas": [
+   "tope 50 por consulta y orden de más nuevo a más viejo: de los anunciantes grandes se ven los nuevos; los viejos se sacan con page_ids + search_terms distintos (AgendaPro 313 activos, Dentalink 92-106, Jelou 238)",
+   "Jelou: 30 vistos, todos «¡Agenda una llamada!» de menos de 2 días: no hay antigüedad que medir",
+   "AgendaPro y Dentalink: la lista de >30 d es completa solo para lo que salió en las consultas hechas"
+  ],
+  "consultas": [
+   "page_ids de los 15 anunciantes de software",
+   "search_terms: recordatorios de citas WhatsApp pacientes, software clínica dental, agenda de citas pacientes clínica, Kommo CRM WhatsApp, Alegra facturación electrónica, Lety chatbot WhatsApp (0), Jelou",
+   "Bolivia (countries=BO): odontología, clínica dental Santa Cruz, ortodoncia Santa Cruz, dental Santa Cruz de la Sierra, dentista, implantes dentales, blanqueamiento dental, carillas, brackets, odontólogos Santa Cruz, valoración dental"
+  ],
+  "totales": {
+   "software_vistos": 271,
+   "software_mas_de_30_dias": 62,
+   "bolivia_rubro_vistos": 417,
+   "bolivia_rubro_mas_de_30_dias": 41
+  },
+  "bolivia_umbral": "más de 30 días, igual que software",
+  "no_sirve": [
+   "ad_active_status=INACTIVE devolvió 0 anuncios para Calu (10-oct): este conector no permite medir cuándo murió un anuncio; la muerte se mide volviendo a consultar los mismos ids (ver re-medición del 24-oct)"
+  ],
+  "a_mano": "los anuncios con «a_mano»: true se transcribieron a mano desde las consultas del 10-oct (los demás salen del volcado de las consultas); el sesgo es hacia los más viejos de AgendaPro y Dentalink, por eso solo las listas completas entran en los porcentajes",
+  "re_medicion_11oct": {
+   "fecha": "2026-10-11",
+   "que": "Mismas consultas (page_ids, ACTIVE, sin countries) un día después del corte. Detalle y tabla en TANDA-11OCT.md.",
+   "hallazgo": "El corte del 10-oct NO es una lista completa para varios anunciantes pequeños: 36 de las 65 filas del tope de la lista de hoy no estaban en este JSON y solo 6 se crearon después del corte. Calu 5 → 13, Reservo 5 → 58, Huli 20 → 77, DoctorPro 7 → 56. Doctocliq (30 → 30), CitaPro (16 → 16), Dt.Dental (31 → 31) y Wa7pro (2 → 2) coinciden.",
+   "uso": "Los campos lista_completa de Calu, Reservo, Huli, DoctorPro y Karbonna NO se confían. Los porcentajes y totales de arriba (271, 62, 417, 41) son un piso. No se recalcularon: se re-mide completo entre semana (TANDA-11OCT.md §4).",
+   "causa": "desconocida: puede ser un fallo del conector ese día, pausas de fin de semana (el 10-oct era sábado) o retraso de la Biblioteca"
+  }
+ },
+ "software": {
+  "AgendaPro": {
+   "page_id": 1429581593936821,
+   "activos_estimados_por_la_biblioteca": 313,
+   "vistos": 81,
+   "lista_completa": false,
+   "mas_de_30_dias": 25,
+   "mas_viejo_dias": 247,
+   "anuncios": [
+    {
+     "id": "906748815086043",
+     "titulo": "{{product.name}}",
+     "dias": 247,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=906748815086043"
+    },
+    {
+     "id": "1967791207137782",
+     "titulo": "AgendaPro | Tenemos la solución | La inteligencia Artificial llegó | no más inasistencias | crecimiento full | Comienza hoy",
+     "dias": 247,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1967791207137782"
+    },
+    {
+     "id": "1535822604884838",
+     "titulo": "Sofia Llegó | Sofia Llegó | Sofia Llegó | Sofia Llegó",
+     "dias": 143,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1535822604884838"
+    },
+    {
+     "id": "3466067470216609",
+     "titulo": "{{product.name}}",
+     "dias": 134,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=3466067470216609"
+    },
+    {
+     "id": "1201810243016378",
+     "titulo": "La IA que organiza tu clínica",
+     "dias": 111,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1201810243016378"
+    },
+    {
+     "id": "1049927527448830",
+     "titulo": "90% menos inasistencias | 90% menos inasistencias",
+     "dias": 65,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1049927527448830"
+    },
+    {
+     "id": "1621260466240315",
+     "titulo": "La IA que llena tu barbería | La IA que llena tu barbería",
+     "dias": 65,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1621260466240315"
+    },
+    {
+     "id": "4317442781852742",
+     "titulo": "Menos inasistencias en tu clínica | Menos inasistencias en tu clínica",
+     "dias": 65,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=4317442781852742",
+     "a_mano": true
+    },
+    {
+     "id": "2057587224878072",
+     "titulo": "Transforma tu agenda hoy",
+     "dias": 65,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=2057587224878072",
+     "a_mano": true
+    },
+    {
+     "id": "1732613191123893",
+     "titulo": "Ficha clínica digital",
+     "dias": 65,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1732613191123893",
+     "a_mano": true
+    },
+    {
+     "id": "1354608690117964",
+     "titulo": "La IA que tu clínica necesita",
+     "dias": 65,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1354608690117964",
+     "a_mano": true
+    },
+    {
+     "id": "1601426334721119",
+     "titulo": "La IA atiende tu WhatsApp | La IA atiende tu WhatsApp",
+     "dias": 64,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1601426334721119"
+    },
+    {
+     "id": "2909862622680070",
+     "titulo": "La IA responde por tu clínica | La IA responde por tu clínica",
+     "dias": 64,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=2909862622680070",
+     "a_mano": true
+    },
+    {
+     "id": "3652876658196882",
+     "titulo": "Agenda tu demostración gratis",
+     "dias": 64,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=3652876658196882",
+     "a_mano": true
+    },
+    {
+     "id": "1729093184800543",
+     "titulo": "Agenda tu demostración gratis",
+     "dias": 64,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1729093184800543",
+     "a_mano": true
+    },
+    {
+     "id": "933057809095580",
+     "titulo": "Agendá tu demostración gratis",
+     "dias": 61,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=933057809095580",
+     "a_mano": true
+    },
+    {
+     "id": "1365168568479805",
+     "titulo": "Agendá tu demostración gratis",
+     "dias": 59,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1365168568479805",
+     "a_mano": true
+    },
+    {
+     "id": "1050760674605424",
+     "titulo": "Tu clínica capilar merece una agenda ordenada",
+     "dias": 40,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1050760674605424",
+     "a_mano": true
+    },
+    {
+     "id": "1757005002301371",
+     "titulo": "Que la IA ordene tu clínica",
+     "dias": 38,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1757005002301371",
+     "a_mano": true
+    },
+    {
+     "id": "2956097904725102",
+     "titulo": "Tu clínica de kine, hasta 82% más",
+     "dias": 36,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=2956097904725102",
+     "a_mano": true
+    },
+    {
+     "id": "1050972634353495",
+     "titulo": "La ficha de cada paciente, lista",
+     "dias": 36,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1050972634353495",
+     "a_mano": true
+    },
+    {
+     "id": "2139127186642600",
+     "titulo": "Agenda tu demostración gratis",
+     "dias": 33,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=2139127186642600",
+     "a_mano": true
+    },
+    {
+     "id": "1060235429713193",
+     "titulo": "Seguí cada tratamiento",
+     "dias": 32,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1060235429713193",
+     "a_mano": true
+    },
+    {
+     "id": "823870454050334",
+     "titulo": "¿Todo profesional? Menos tu agenda. Reservas online 24/7. Pruébalo gratis",
+     "dias": 32,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=823870454050334",
+     "a_mano": true
+    },
+    {
+     "id": "1813199176516239",
+     "titulo": "Todo tu centro médico en un lugar",
+     "dias": 31,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1813199176516239",
+     "a_mano": true
+    },
+    {
+     "id": "1428495559201032",
+     "titulo": "Corte o WhatsApp: ya no eliges",
+     "dias": 26,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1428495559201032"
+    },
+    {
+     "id": "1549847106414957",
+     "titulo": "Prueba AgendaPro gratis",
+     "dias": 26,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1549847106414957",
+     "a_mano": true
+    },
+    {
+     "id": "1834061651287198",
+     "titulo": "Atiende sin soltar la tijera",
+     "dias": 17,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1834061651287198"
+    },
+    {
+     "id": "1704623067308015",
+     "titulo": "Toda su clínica en un lugar",
+     "dias": 17,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1704623067308015",
+     "a_mano": true
+    },
+    {
+     "id": "3168684866854365",
+     "titulo": "La app donde maneja todo",
+     "dias": 17,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=3168684866854365",
+     "a_mano": true
+    },
+    {
+     "id": "3240852072769613",
+     "titulo": "Sofía trabaja por ti",
+     "dias": 11,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=3240852072769613"
+    },
+    {
+     "id": "1588124519531425",
+     "titulo": "Responde aunque no estés",
+     "dias": 11,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1588124519531425"
+    },
+    {
+     "id": "2490713181412352",
+     "titulo": "Ahorra IVA con el POS de AgendaPro",
+     "dias": 11,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=2490713181412352"
+    },
+    {
+     "id": "1075257495315627",
+     "titulo": "Deja de pagar IVA de más",
+     "dias": 11,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1075257495315627"
+    },
+    {
+     "id": "1594685325465676",
+     "titulo": "Quiero este POS en mi salón",
+     "dias": 11,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1594685325465676"
+    },
+    {
+     "id": "4400033750308403",
+     "titulo": "Transforma tu barbería con IA",
+     "dias": 11,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=4400033750308403"
+    },
+    {
+     "id": "3263855703825305",
+     "titulo": "Reservas 24/7 sin contestar mensajes",
+     "dias": 11,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=3263855703825305"
+    },
+    {
+     "id": "4528223560779574",
+     "titulo": "Consigue tu POS aquí",
+     "dias": 11,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=4528223560779574"
+    },
+    {
+     "id": "1887773852600527",
+     "titulo": "La agenda viral para clínicas",
+     "dias": 8,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1887773852600527"
+    },
+    {
+     "id": "1974415649918450",
+     "titulo": "7 días gratis para tu spa",
+     "dias": 8,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1974415649918450"
+    },
+    {
+     "id": "1564290901585887",
+     "titulo": "Reservas 24/7 sin contestar mensajes",
+     "dias": 8,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1564290901585887"
+    },
+    {
+     "id": "1654828209688857",
+     "titulo": "Reservas 24/7 sin contestar mensajes",
+     "dias": 8,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1654828209688857"
+    },
+    {
+     "id": "1417250513207823",
+     "titulo": "Un sistema que trabaja con vos",
+     "dias": 7,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1417250513207823"
+    },
+    {
+     "id": "1872091704150277",
+     "titulo": "Reservas y pagos en automático",
+     "dias": 6,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1872091704150277"
+    },
+    {
+     "id": "1445460837535186",
+     "titulo": "Deja de perder clientas",
+     "dias": 4,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1445460837535186"
+    },
+    {
+     "id": "1108804524976758",
+     "titulo": "Crezca sin perder el control",
+     "dias": 4,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1108804524976758"
+    },
+    {
+     "id": "1116744331005487",
+     "titulo": "90% menos inasistencias",
+     "dias": 4,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1116744331005487"
+    },
+    {
+     "id": "1658586552353759",
+     "titulo": "Así haría crecer mi salón",
+     "dias": 4,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1658586552353759"
+    },
+    {
+     "id": "1489072519699279",
+     "titulo": "Todo tu spa en un solo lugar",
+     "dias": 4,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1489072519699279"
+    },
+    {
+     "id": "4374864222826005",
+     "titulo": "Atendé, AgendaPro administra",
+     "dias": 4,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=4374864222826005"
+    },
+    {
+     "id": "1090692386690051",
+     "titulo": "Tu sitio de reservas propio",
+     "dias": 4,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1090692386690051"
+    },
+    {
+     "id": "29644493151807184",
+     "titulo": "Chau agenda caótica",
+     "dias": 4,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=29644493151807184"
+    },
+    {
+     "id": "1141284298254302",
+     "titulo": "Cambiá la forma de agendar",
+     "dias": 4,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1141284298254302"
+    },
+    {
+     "id": "1812826366804660",
+     "titulo": "La IA para tu clínica",
+     "dias": 4,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1812826366804660"
+    },
+    {
+     "id": "1441012217962959",
+     "titulo": "Tu gimnasio, en piloto automático",
+     "dias": 4,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1441012217962959"
+    },
+    {
+     "id": "1141295555141273",
+     "titulo": "Reservas 24/7, sin contestar",
+     "dias": 4,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1141295555141273"
+    },
+    {
+     "id": "1099823772455562",
+     "titulo": "Dejá de perder turnos cada día | Dejá de perder turnos cada día",
+     "dias": 4,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1099823772455562"
+    },
+    {
+     "id": "1631443821716081",
+     "titulo": "Llena tu agenda sin perseguir",
+     "dias": 4,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1631443821716081"
+    },
+    {
+     "id": "1685141773135708",
+     "titulo": "AgendaPro |  | Esto es para ti | Tus clientes no llegan a su cita? | Es la hora de cambiar",
+     "dias": 3,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1685141773135708"
+    },
+    {
+     "id": "1475001124527163",
+     "titulo": "Comienza con AgendaPro",
+     "dias": 3,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1475001124527163"
+    },
+    {
+     "id": "1127596239948167",
+     "titulo": "El mejor dúo para tu salón",
+     "dias": 3,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1127596239948167"
+    },
+    {
+     "id": "1189577676846802",
+     "titulo": "Que tus clientas reserven solas",
+     "dias": 3,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1189577676846802"
+    },
+    {
+     "id": "4777406299202841",
+     "titulo": "El caos del salón tiene solución",
+     "dias": 3,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=4777406299202841"
+    },
+    {
+     "id": "1507837391191700",
+     "titulo": "Jugala como un 10",
+     "dias": 3,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1507837391191700"
+    },
+    {
+     "id": "2854594258249233",
+     "titulo": "Llená tu agenda",
+     "dias": 3,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=2854594258249233"
+    },
+    {
+     "id": "3788078407999136",
+     "titulo": "7 días gratis para tu spa",
+     "dias": 3,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=3788078407999136"
+    },
+    {
+     "id": "1095667246347660",
+     "titulo": "",
+     "dias": 3,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1095667246347660"
+    },
+    {
+     "id": "1630713305456986",
+     "titulo": "La IA que organiza tu clínica",
+     "dias": 2,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1630713305456986"
+    },
+    {
+     "id": "1094994196576852",
+     "titulo": "Le dio orden a mi spa",
+     "dias": 2,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1094994196576852"
+    },
+    {
+     "id": "2211822206410363",
+     "titulo": "Nunca más perder el hilo",
+     "dias": 2,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=2211822206410363"
+    },
+    {
+     "id": "2698237180632741",
+     "titulo": "¿Cómo va el tratamiento?",
+     "dias": 2,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=2698237180632741"
+    },
+    {
+     "id": "3404015356467441",
+     "titulo": "Seguimiento de pacientes sin caos",
+     "dias": 2,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=3404015356467441"
+    },
+    {
+     "id": "1107173995095827",
+     "titulo": "Chau carpetas",
+     "dias": 2,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1107173995095827"
+    },
+    {
+     "id": "1468845721811683",
+     "titulo": "Hacé crecer tu clínica sin caos",
+     "dias": 2,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1468845721811683"
+    },
+    {
+     "id": "2820901334970788",
+     "titulo": "Todo tu salón en una app",
+     "dias": 2,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=2820901334970788"
+    },
+    {
+     "id": "2044484706268678",
+     "titulo": "7 días gratis para tu spa",
+     "dias": 2,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=2044484706268678"
+    },
+    {
+     "id": "1135883705766685",
+     "titulo": "Ordená tu salón en un solo lugar | Ordená tu salón en un solo lugar",
+     "dias": 2,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1135883705766685"
+    },
+    {
+     "id": "1586240475865095",
+     "titulo": "Reservas y pagos en automático",
+     "dias": 2,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1586240475865095"
+    },
+    {
+     "id": "1081244114506444",
+     "titulo": "Organizá tu clínica estética sin el caos del papel",
+     "dias": 1,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1081244114506444"
+    },
+    {
+     "id": "1453176490014535",
+     "titulo": "Ahorra IVA con el POS de AgendaPro",
+     "dias": 1,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1453176490014535"
+    },
+    {
+     "id": "1438784064868485",
+     "titulo": "La IA que agenda por ti",
+     "dias": 0,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1438784064868485"
+    }
+   ],
+   "re_medicion_11oct": {
+    "estimado_10oct": 313,
+    "estimado_11oct": 315
+   }
+  },
+  "Dentalink": {
+   "page_id": 106612849382553,
+   "activos_estimados_por_la_biblioteca": 92,
+   "vistos": 69,
+   "lista_completa": false,
+   "mas_de_30_dias": 3,
+   "mas_viejo_dias": 58,
+   "anuncios": [
+    {
+     "id": "1614658333653742",
+     "titulo": "",
+     "dias": 58,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1614658333653742",
+     "a_mano": true
+    },
+    {
+     "id": "1526110722618504",
+     "titulo": "¡Llena el formulario y conoce más!",
+     "dias": 32,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1526110722618504",
+     "a_mano": true
+    },
+    {
+     "id": "1643660183853979",
+     "titulo": "Conoce Dentalink, el Software Dental líder en México",
+     "dias": 32,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1643660183853979",
+     "a_mano": true
+    },
+    {
+     "id": "939451042552615",
+     "titulo": "Agenda con IA 24/7 hoy",
+     "dias": 26,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=939451042552615",
+     "a_mano": true
+    },
+    {
+     "id": "2298442914238254",
+     "titulo": "Chatea con nosotros",
+     "dias": 19,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=2298442914238254",
+     "a_mano": true
+    },
+    {
+     "id": "1556210609080943",
+     "titulo": "Chatea con nosotros",
+     "dias": 19,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1556210609080943",
+     "a_mano": true
+    },
+    {
+     "id": "4378462225620940",
+     "titulo": "Chatea con nosotros",
+     "dias": 19,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=4378462225620940",
+     "a_mano": true
+    },
+    {
+     "id": "2631852683990600",
+     "titulo": "Chatea con nosotros",
+     "dias": 19,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=2631852683990600",
+     "a_mano": true
+    },
+    {
+     "id": "28471489659168605",
+     "titulo": "Chatea con nosotros",
+     "dias": 19,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=28471489659168605",
+     "a_mano": true
+    },
+    {
+     "id": "28612349101765812",
+     "titulo": "¡Reagenda citas con IA!",
+     "dias": 16,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=28612349101765812"
+    },
+    {
+     "id": "893283480382477",
+     "titulo": "¡Suma IA a tu clínica dental hoy!",
+     "dias": 16,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=893283480382477"
+    },
+    {
+     "id": "1441655694549368",
+     "titulo": "El software para odontólogos",
+     "dias": 12,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1441655694549368"
+    },
+    {
+     "id": "1610801957407334",
+     "titulo": "¡Llena el formulario y conoce más!",
+     "dias": 12,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1610801957407334"
+    },
+    {
+     "id": "2304002437051317",
+     "titulo": "Precio único mensual.",
+     "dias": 12,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=2304002437051317",
+     "a_mano": true
+    },
+    {
+     "id": "1841299250068821",
+     "titulo": "Sin descuadres de caja",
+     "dias": 11,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1841299250068821"
+    },
+    {
+     "id": "1280972971772821",
+     "titulo": "Cobra rápido y seguro",
+     "dias": 11,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1280972971772821"
+    },
+    {
+     "id": "1833793297760274",
+     "titulo": "Sin descuadres de caja",
+     "dias": 11,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1833793297760274"
+    },
+    {
+     "id": "2457523321404475",
+     "titulo": "Sin descuadres de caja",
+     "dias": 11,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=2457523321404475"
+    },
+    {
+     "id": "1463415612360328",
+     "titulo": "Sin descuadres de caja",
+     "dias": 11,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1463415612360328"
+    },
+    {
+     "id": "1636923901196844",
+     "titulo": "¡Cámbiate a Dentalink IA!",
+     "dias": 11,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1636923901196844"
+    },
+    {
+     "id": "1771864697352748",
+     "titulo": "Controla tu clínica dental fácil",
+     "dias": 11,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1771864697352748"
+    },
+    {
+     "id": "1082957234593106",
+     "titulo": "Más que una simple agenda",
+     "dias": 11,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1082957234593106"
+    },
+    {
+     "id": "1465952738715039",
+     "titulo": "Chatea con nosotros",
+     "dias": 11,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1465952738715039",
+     "a_mano": true
+    },
+    {
+     "id": "1621659346363555",
+     "titulo": "Simula sonrisas con IA ✨",
+     "dias": 10,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1621659346363555"
+    },
+    {
+     "id": "1421947859901914",
+     "titulo": "Dicta y la ficha se llena",
+     "dias": 10,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1421947859901914"
+    },
+    {
+     "id": "1651448353206818",
+     "titulo": "POS a $0 costo de arriendo",
+     "dias": 10,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1651448353206818"
+    },
+    {
+     "id": "1811597226623604",
+     "titulo": "POS a $0 costo de arriendo",
+     "dias": 10,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1811597226623604"
+    },
+    {
+     "id": "1581244453740671",
+     "titulo": "Chile POS",
+     "dias": 8,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1581244453740671",
+     "a_mano": true
+    },
+    {
+     "id": "1497425202217517",
+     "titulo": "Precio único mensual.",
+     "dias": 7,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1497425202217517",
+     "a_mano": true
+    },
+    {
+     "id": "1821543192199591",
+     "titulo": "Más que una simple agenda",
+     "dias": 5,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1821543192199591"
+    },
+    {
+     "id": "1452289803485868",
+     "titulo": "-50% inasistencias en agenda",
+     "dias": 5,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1452289803485868"
+    },
+    {
+     "id": "1110343784879637",
+     "titulo": "Conoce Dentalink - Argentina",
+     "dias": 5,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1110343784879637"
+    },
+    {
+     "id": "1128872629581153",
+     "titulo": "Tu clínica puede ser más eficiente🦷🚀",
+     "dias": 5,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1128872629581153"
+    },
+    {
+     "id": "2840557112995940",
+     "titulo": "¡Cumple la 1888 fácil y seguro!",
+     "dias": 5,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=2840557112995940"
+    },
+    {
+     "id": "1464308242253754",
+     "titulo": "RIPS JSON sin errores",
+     "dias": 5,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1464308242253754"
+    },
+    {
+     "id": "2004383513543138",
+     "titulo": "Control multisucursal",
+     "dias": 5,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=2004383513543138"
+    },
+    {
+     "id": "1825400241801126",
+     "titulo": "Simplifica la gestión en tu clínica dental",
+     "dias": 5,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1825400241801126"
+    },
+    {
+     "id": "38890856267196455",
+     "titulo": "¡Multiplica el orden en tu clínica!",
+     "dias": 5,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=38890856267196455"
+    },
+    {
+     "id": "3608294012656061",
+     "titulo": "IA que sabe de Odontología 🤖",
+     "dias": 5,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=3608294012656061"
+    },
+    {
+     "id": "1618531922971065",
+     "titulo": "Cambia de software hoy 💻",
+     "dias": 5,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1618531922971065"
+    },
+    {
+     "id": "1103761862063286",
+     "titulo": "Agenda tu demo guiada 📲",
+     "dias": 5,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1103761862063286"
+    },
+    {
+     "id": "28391955183801866",
+     "titulo": "Cyber: 30% DCTO + IA 🎧",
+     "dias": 5,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=28391955183801866"
+    },
+    {
+     "id": "1430799652509515",
+     "titulo": "Cyber: 30% DCTO + IA 🎧",
+     "dias": 5,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1430799652509515"
+    },
+    {
+     "id": "1094796539707149",
+     "titulo": "Cyber: 30% DCTO + IA 🎧",
+     "dias": 5,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1094796539707149"
+    },
+    {
+     "id": "1394154599585837",
+     "titulo": "Cyber: 30% DCTO + IA 🎧",
+     "dias": 5,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1394154599585837"
+    },
+    {
+     "id": "1287118607828642",
+     "titulo": "Cyber: 30% DCTO + IA 🎧",
+     "dias": 5,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1287118607828642"
+    },
+    {
+     "id": "2154309811848043",
+     "titulo": "Gestiona tu clínica fácil",
+     "dias": 5,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=2154309811848043"
+    },
+    {
+     "id": "28910732381949162",
+     "titulo": "IA que sabe de Odontología 🤖",
+     "dias": 4,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=28910732381949162"
+    },
+    {
+     "id": "1103454432305363",
+     "titulo": "¡Llena el formulario y conoce más!",
+     "dias": 4,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1103454432305363"
+    },
+    {
+     "id": "4136520576647815",
+     "titulo": "¡Agenda tu demo ahora!",
+     "dias": 4,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=4136520576647815"
+    },
+    {
+     "id": "932431996281896",
+     "titulo": "Centraliza tu clínica dental hoy",
+     "dias": 4,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=932431996281896"
+    },
+    {
+     "id": "1849145472921080",
+     "titulo": "¡Descubre Dentalink IA!",
+     "dias": 4,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1849145472921080"
+    },
+    {
+     "id": "2627976680982693",
+     "titulo": "Gestión multisucursal fácil",
+     "dias": 4,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=2627976680982693"
+    },
+    {
+     "id": "1450269620449478",
+     "titulo": "Conoce Dentalink - Argentina",
+     "dias": 4,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1450269620449478"
+    },
+    {
+     "id": "1293772266145852",
+     "titulo": "Conoce Dentalink, el Software Dental líder en México",
+     "dias": 4,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1293772266145852"
+    },
+    {
+     "id": "1456553873236114",
+     "titulo": "Más que una simple agenda",
+     "dias": 4,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1456553873236114"
+    },
+    {
+     "id": "2047136226000636",
+     "titulo": "Evita glosas y sanciones",
+     "dias": 4,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=2047136226000636",
+     "a_mano": true
+    },
+    {
+     "id": "2587920288339751",
+     "titulo": "IA para Odontólogos",
+     "dias": 3,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=2587920288339751"
+    },
+    {
+     "id": "1113143428132404",
+     "titulo": "Atiende sin pausa 24/7",
+     "dias": 3,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1113143428132404"
+    },
+    {
+     "id": "1001700112948218",
+     "titulo": "Más control en tu clínica dental",
+     "dias": 3,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1001700112948218"
+    },
+    {
+     "id": "2171193913803332",
+     "titulo": "Agenda y recibe descuento",
+     "dias": 3,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=2171193913803332"
+    },
+    {
+     "id": "1822793052056589",
+     "titulo": "Dentalink IA: Gestión 24/7",
+     "dias": 3,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1822793052056589"
+    },
+    {
+     "id": "931717773030664",
+     "titulo": "Normas al día automáticamente",
+     "dias": 3,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=931717773030664"
+    },
+    {
+     "id": "1841352450376154",
+     "titulo": "Reduce inasistencias hoy",
+     "dias": 3,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1841352450376154"
+    },
+    {
+     "id": "1704884981159791",
+     "titulo": "General - Social - CO",
+     "dias": 3,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1704884981159791",
+     "a_mano": true
+    },
+    {
+     "id": "980028627743242",
+     "titulo": "¡30% DCTO Cyber Extendido! ⌛",
+     "dias": 1,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=980028627743242",
+     "a_mano": true
+    },
+    {
+     "id": "2066080000779785",
+     "titulo": "¡30% DCTO Cyber Extendido! ⌛",
+     "dias": 1,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=2066080000779785",
+     "a_mano": true
+    },
+    {
+     "id": "1045020145181190",
+     "titulo": "Agenda con IA 24/7 🤖",
+     "dias": 1,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1045020145181190",
+     "a_mano": true
+    },
+    {
+     "id": "2587756811736052",
+     "titulo": "Agenda citas 24/7 con IA",
+     "dias": 1,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=2587756811736052",
+     "a_mano": true
+    }
+   ],
+   "nota": "El 8-oct `DENTALINK_TEARDOWN.md` contó 186 activos (todos los 50 más nuevos de 5-8 oct) y 3 anuncios de catálogo dinámico de 323-326 d; el 10-oct las consultas dieron 92-106 y esos 3 no están entre los vistos. El recuento cambia mucho de un día a otro.",
+   "re_medicion_11oct": {
+    "estimado_10oct": "92 (186 el 8-oct)",
+    "estimado_11oct": 190,
+    "nota": "el 92 del corte parece un subconteo"
+   }
+  },
+  "Dt.Dental Software Odontologico": {
+   "page_id": 644396635996094,
+   "activos_estimados_por_la_biblioteca": 31,
+   "vistos": 33,
+   "lista_completa": true,
+   "mas_de_30_dias": 6,
+   "mas_viejo_dias": 102,
+   "anuncios": [
+    {
+     "id": "1064012876297472",
+     "titulo": "",
+     "dias": 102,
+     "moneda": "COP",
+     "url": "https://www.facebook.com/ads/library/?id=1064012876297472"
+    },
+    {
+     "id": "1348150770768354",
+     "titulo": "",
+     "dias": 102,
+     "moneda": "COP",
+     "url": "https://www.facebook.com/ads/library/?id=1348150770768354"
+    },
+    {
+     "id": "1540166734506785",
+     "titulo": "El plazo de la 1888 ya venció",
+     "dias": 100,
+     "moneda": "COP",
+     "url": "https://www.facebook.com/ads/library/?id=1540166734506785"
+    },
+    {
+     "id": "1564664081944709",
+     "titulo": "¿Cumples los 3 pasos de la 1888?",
+     "dias": 99,
+     "moneda": "COP",
+     "url": "https://www.facebook.com/ads/library/?id=1564664081944709"
+    },
+    {
+     "id": "1047754144273622",
+     "titulo": "",
+     "dias": 99,
+     "moneda": "COP",
+     "url": "https://www.facebook.com/ads/library/?id=1047754144273622"
+    },
+    {
+     "id": "2424735444718947",
+     "titulo": "",
+     "dias": 67,
+     "moneda": "COP",
+     "url": "https://www.facebook.com/ads/library/?id=2424735444718947"
+    },
+    {
+     "id": "4664852960462629",
+     "titulo": "",
+     "dias": 18,
+     "moneda": "COP",
+     "url": "https://www.facebook.com/ads/library/?id=4664852960462629"
+    },
+    {
+     "id": "1020674484348256",
+     "titulo": "",
+     "dias": 18,
+     "moneda": "COP",
+     "url": "https://www.facebook.com/ads/library/?id=1020674484348256"
+    },
+    {
+     "id": "2248541485687773",
+     "titulo": "",
+     "dias": 18,
+     "moneda": "COP",
+     "url": "https://www.facebook.com/ads/library/?id=2248541485687773"
+    },
+    {
+     "id": "880984451645410",
+     "titulo": "",
+     "dias": 18,
+     "moneda": "COP",
+     "url": "https://www.facebook.com/ads/library/?id=880984451645410"
+    },
+    {
+     "id": "4592294091016101",
+     "titulo": "",
+     "dias": 18,
+     "moneda": "COP",
+     "url": "https://www.facebook.com/ads/library/?id=4592294091016101"
+    },
+    {
+     "id": "881166568284134",
+     "titulo": "",
+     "dias": 18,
+     "moneda": "COP",
+     "url": "https://www.facebook.com/ads/library/?id=881166568284134"
+    },
+    {
+     "id": "1312666804145941",
+     "titulo": "",
+     "dias": 18,
+     "moneda": "COP",
+     "url": "https://www.facebook.com/ads/library/?id=1312666804145941"
+    },
+    {
+     "id": "1736427824098818",
+     "titulo": "",
+     "dias": 18,
+     "moneda": "COP",
+     "url": "https://www.facebook.com/ads/library/?id=1736427824098818"
+    },
+    {
+     "id": "1604983321291812",
+     "titulo": "Conoce todo lo que incluye dt.dental",
+     "dias": 17,
+     "moneda": "COP",
+     "url": "https://www.facebook.com/ads/library/?id=1604983321291812"
+    },
+    {
+     "id": "1770762207534323",
+     "titulo": "Facilita el cumplimiento de la Res. 3100",
+     "dias": 17,
+     "moneda": "COP",
+     "url": "https://www.facebook.com/ads/library/?id=1770762207534323"
+    },
+    {
+     "id": "1756570335827378",
+     "titulo": "Cambia a un software sin complicaciones",
+     "dias": 17,
+     "moneda": "COP",
+     "url": "https://www.facebook.com/ads/library/?id=1756570335827378"
+    },
+    {
+     "id": "1526975096126794",
+     "titulo": "Simplifica la gestión de tu consultorio",
+     "dias": 17,
+     "moneda": "COP",
+     "url": "https://www.facebook.com/ads/library/?id=1526975096126794"
+    },
+    {
+     "id": "1635254868237279",
+     "titulo": "Prepara tu consultorio para la Res. 1888",
+     "dias": 16,
+     "moneda": "COP",
+     "url": "https://www.facebook.com/ads/library/?id=1635254868237279"
+    },
+    {
+     "id": "1264572672527948",
+     "titulo": "Recupera tu tiempo para tus pacientes",
+     "dias": 12,
+     "moneda": "COP",
+     "url": "https://www.facebook.com/ads/library/?id=1264572672527948"
+    },
+    {
+     "id": "941693828553857",
+     "titulo": "Pon tu clínica al día, sin papeles",
+     "dias": 10,
+     "moneda": "COP",
+     "url": "https://www.facebook.com/ads/library/?id=941693828553857"
+    },
+    {
+     "id": "1753791643416670",
+     "titulo": "Elige un software hecho para odontólogos",
+     "dias": 9,
+     "moneda": "COP",
+     "url": "https://www.facebook.com/ads/library/?id=1753791643416670"
+    },
+    {
+     "id": "1396346248794258",
+     "titulo": "Prepárate hoy para la visita",
+     "dias": 9,
+     "moneda": "COP",
+     "url": "https://www.facebook.com/ads/library/?id=1396346248794258"
+    },
+    {
+     "id": "1652063159619743",
+     "titulo": "",
+     "dias": 5,
+     "moneda": "COP",
+     "url": "https://www.facebook.com/ads/library/?id=1652063159619743"
+    },
+    {
+     "id": "2019904888718898",
+     "titulo": "25% de descuento en dt. dental",
+     "dias": 2,
+     "moneda": "COP",
+     "url": "https://www.facebook.com/ads/library/?id=2019904888718898"
+    },
+    {
+     "id": "1446891587387132",
+     "titulo": "¿Tu consultorio está preparado?",
+     "dias": 2,
+     "moneda": "COP",
+     "url": "https://www.facebook.com/ads/library/?id=1446891587387132"
+    },
+    {
+     "id": "1458485852827743",
+     "titulo": "Dt.Dental Software Odontologico | ¿Tu consultorio está preparado? | Cumplir implica mucho más | Gestiona tranquilo con dt. dental",
+     "dias": 2,
+     "moneda": "COP",
+     "url": "https://www.facebook.com/ads/library/?id=1458485852827743"
+    },
+    {
+     "id": "28024453597234002",
+     "titulo": "Dt.Dental Software Odontologico | ¿Tu software está listo para interoperar? | Interoperabilidad sin complicaciones | Comienza a interoperar con dt. dental",
+     "dias": 2,
+     "moneda": "COP",
+     "url": "https://www.facebook.com/ads/library/?id=28024453597234002"
+    },
+    {
+     "id": "1444617470923305",
+     "titulo": "Dt.Dental Software Odontologico | ¿Tu software está listo para interoperar? | Interoperabilidad sin complicaciones | Comienza a interoperar con dt. dental",
+     "dias": 2,
+     "moneda": "COP",
+     "url": "https://www.facebook.com/ads/library/?id=1444617470923305"
+    },
+    {
+     "id": "1466007935458909",
+     "titulo": "Interoperabilidad fácil con dt. dental",
+     "dias": 2,
+     "moneda": "COP",
+     "url": "https://www.facebook.com/ads/library/?id=1466007935458909"
+    },
+    {
+     "id": "1101414422263158",
+     "titulo": "¿La Resolución 3100 te preocupa?",
+     "dias": 2,
+     "moneda": "COP",
+     "url": "https://www.facebook.com/ads/library/?id=1101414422263158"
+    },
+    {
+     "id": "2223017815225795",
+     "titulo": "Dt.Dental Software Odontologico | ¿Tu consultorio está preparado? | Cumplir implica mucho más | Gestiona tranquilo con dt. dental",
+     "dias": 1,
+     "moneda": "COP",
+     "url": "https://www.facebook.com/ads/library/?id=2223017815225795"
+    },
+    {
+     "id": "998469383282557",
+     "titulo": "¿Tu software está listo para interoperar?",
+     "dias": 0,
+     "moneda": "COP",
+     "url": "https://www.facebook.com/ads/library/?id=998469383282557"
+    }
+   ],
+   "re_medicion_11oct": {
+    "estimado_10oct": 31,
+    "estimado_11oct": 31
+   }
+  },
+  "Doctocliq": {
+   "page_id": 122294408384514,
+   "activos_estimados_por_la_biblioteca": 30,
+   "vistos": 30,
+   "lista_completa": true,
+   "mas_de_30_dias": 15,
+   "mas_viejo_dias": 85,
+   "anuncios": [
+    {
+     "id": "1014591764512827",
+     "titulo": "La agenda que trabaja contigo",
+     "dias": 85,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=1014591764512827"
+    },
+    {
+     "id": "1748838402916201",
+     "titulo": "Prueba Doctocliq ahora",
+     "dias": 85,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=1748838402916201"
+    },
+    {
+     "id": "1738720983808867",
+     "titulo": "La agenda que trabaja contigo",
+     "dias": 85,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=1738720983808867"
+    },
+    {
+     "id": "1952892278698712",
+     "titulo": "Prueba Doctocliq ahora",
+     "dias": 79,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=1952892278698712"
+    },
+    {
+     "id": "895549733230235",
+     "titulo": "Dejá de perder citas. Mira cómo lograrlo.",
+     "dias": 57,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=895549733230235"
+    },
+    {
+     "id": "1913624476275238",
+     "titulo": "¿Y por qué tú aún no digitalizas tu gestión?",
+     "dias": 56,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=1913624476275238"
+    },
+    {
+     "id": "1089330193788206",
+     "titulo": "El éxito no es casualidad",
+     "dias": 54,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=1089330193788206"
+    },
+    {
+     "id": "1684698082830679",
+     "titulo": "¿Tu consultorio crece o solo sobrevive?",
+     "dias": 54,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=1684698082830679"
+    },
+    {
+     "id": "1048863268115509",
+     "titulo": "Prueba Doctocliq ahora",
+     "dias": 53,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=1048863268115509"
+    },
+    {
+     "id": "1068421025910916",
+     "titulo": "Todos ven lo mismo. Tú tienes el control.",
+     "dias": 47,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=1068421025910916"
+    },
+    {
+     "id": "2933585537003558",
+     "titulo": "Todos ven lo mismo. Tú tienes el control.",
+     "dias": 46,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=2933585537003558"
+    },
+    {
+     "id": "1456602893194865",
+     "titulo": "El éxito no es casualidad",
+     "dias": 45,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=1456602893194865"
+    },
+    {
+     "id": "1065646535832597",
+     "titulo": "Prueba Doctocliq hoy",
+     "dias": 45,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=1065646535832597"
+    },
+    {
+     "id": "1361355256175770",
+     "titulo": "Todos ven lo mismo. Tú tienes el control.",
+     "dias": 37,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=1361355256175770"
+    },
+    {
+     "id": "2635282330224002",
+     "titulo": "Todos ven lo mismo. Tú tienes el control.",
+     "dias": 37,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=2635282330224002"
+    },
+    {
+     "id": "2611078469391009",
+     "titulo": "Evita cancelaciones de última hora",
+     "dias": 27,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=2611078469391009"
+    },
+    {
+     "id": "1590322022470741",
+     "titulo": "Esa paz mental es posible con Doctocliq",
+     "dias": 27,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=1590322022470741"
+    },
+    {
+     "id": "969445399512652",
+     "titulo": "¿Tu consultorio funciona sin tu asistente?",
+     "dias": 27,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=969445399512652"
+    },
+    {
+     "id": "1597313002123528",
+     "titulo": "Toda tu clínica en un solo lugar",
+     "dias": 27,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=1597313002123528"
+    },
+    {
+     "id": "1842583090243274",
+     "titulo": "¿Tu consultorio funciona sin tu asistente?",
+     "dias": 27,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=1842583090243274"
+    },
+    {
+     "id": "4471842606419076",
+     "titulo": "Controla tu consultorio con Doctocliq",
+     "dias": 19,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=4471842606419076"
+    },
+    {
+     "id": "1125881393114395",
+     "titulo": "Menos administración. Más odontología.",
+     "dias": 19,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=1125881393114395"
+    },
+    {
+     "id": "1476934190941729",
+     "titulo": "Esa paz mental es posible con Doctocliq",
+     "dias": 16,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=1476934190941729"
+    },
+    {
+     "id": "1263355362589226",
+     "titulo": "Esa paz mental es posible con Doctocliq",
+     "dias": 16,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=1263355362589226"
+    },
+    {
+     "id": "2146089226333982",
+     "titulo": "Prueba Doctocliq ahora",
+     "dias": 16,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=2146089226333982"
+    },
+    {
+     "id": "1805370580894596",
+     "titulo": "Toda tu clínica en un solo lugar",
+     "dias": 12,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=1805370580894596"
+    },
+    {
+     "id": "1061625246685169",
+     "titulo": "¿Y por qué tú aún no digitalizas tu gestión?",
+     "dias": 12,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=1061625246685169"
+    },
+    {
+     "id": "1664168788410705",
+     "titulo": "Esa paz mental es posible con Doctocliq",
+     "dias": 12,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=1664168788410705"
+    },
+    {
+     "id": "1552115046722567",
+     "titulo": "¿Tu consultorio funciona sin tu asistente?",
+     "dias": 12,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=1552115046722567"
+    },
+    {
+     "id": "2036561733698742",
+     "titulo": "Todos ven lo mismo. Tú tienes el control.",
+     "dias": 12,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=2036561733698742"
+    }
+   ],
+   "re_medicion_11oct": {
+    "estimado_10oct": 30,
+    "estimado_11oct": 30
+   }
+  },
+  "CitaPro": {
+   "page_id": 117313424662542,
+   "activos_estimados_por_la_biblioteca": 16,
+   "vistos": 16,
+   "lista_completa": true,
+   "mas_de_30_dias": 5,
+   "mas_viejo_dias": 86,
+   "anuncios": [
+    {
+     "id": "1880949689530541",
+     "titulo": "✨ Cabinas llenas, agenda bajo control",
+     "dias": 86,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1880949689530541"
+    },
+    {
+     "id": "992374430294009",
+     "titulo": "✨ Cabinas llenas, agenda bajo control",
+     "dias": 78,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=992374430294009"
+    },
+    {
+     "id": "1371570511144697",
+     "titulo": "✨ Cabinas llenas, agenda bajo control",
+     "dias": 73,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1371570511144697"
+    },
+    {
+     "id": "2253602242100999",
+     "titulo": "🤖 Tu WhatsApp en piloto automático",
+     "dias": 65,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=2253602242100999"
+    },
+    {
+     "id": "1383721673326033",
+     "titulo": "🤖 Tu WhatsApp en piloto automático",
+     "dias": 34,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1383721673326033"
+    },
+    {
+     "id": "1099827399129529",
+     "titulo": "🤖 Tu WhatsApp, ahora un asistente con IA",
+     "dias": 25,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1099827399129529"
+    },
+    {
+     "id": "1073401725052434",
+     "titulo": "📅 Más citas confirmadas, menos ausencias",
+     "dias": 25,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1073401725052434"
+    },
+    {
+     "id": "27105503132459763",
+     "titulo": "📅 Toda tu agenda en una sola pantalla",
+     "dias": 25,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=27105503132459763"
+    },
+    {
+     "id": "1081083484515155",
+     "titulo": "✨ Cabinas llenas, agenda bajo control",
+     "dias": 24,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1081083484515155"
+    },
+    {
+     "id": "4735282263420421",
+     "titulo": "🤖 Tu WhatsApp, ahora un asistente con IA",
+     "dias": 15,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=4735282263420421"
+    },
+    {
+     "id": "28850770544561895",
+     "titulo": "🤖 Tu WhatsApp, ahora un asistente con IA",
+     "dias": 11,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=28850770544561895"
+    },
+    {
+     "id": "3108059169379496",
+     "titulo": "🩺 Tu consulta ordenada cada día",
+     "dias": 9,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=3108059169379496"
+    },
+    {
+     "id": "1025663393532675",
+     "titulo": "🩺 Más consultas sin gastar más en ads",
+     "dias": 9,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1025663393532675"
+    },
+    {
+     "id": "27760405623592927",
+     "titulo": "⚡ Pautar no basta: el seguimiento convierte",
+     "dias": 9,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=27760405623592927"
+    },
+    {
+     "id": "1993529791352323",
+     "titulo": "💸 Deja de pagar herramientas sueltas",
+     "dias": 7,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1993529791352323"
+    },
+    {
+     "id": "1424419416564823",
+     "titulo": "🩺 Tu consulta ordenada cada día",
+     "dias": 4,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1424419416564823"
+    }
+   ],
+   "re_medicion_11oct": {
+    "estimado_10oct": 16,
+    "estimado_11oct": 16
+   }
+  },
+  "Huli México": {
+   "page_id": 104582215305359,
+   "activos_estimados_por_la_biblioteca": 20,
+   "vistos": 16,
+   "lista_completa": true,
+   "mas_de_30_dias": 0,
+   "mas_viejo_dias": 23,
+   "anuncios": [
+    {
+     "id": "1660520262159115",
+     "titulo": "",
+     "dias": 23,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=1660520262159115"
+    },
+    {
+     "id": "1180867221283138",
+     "titulo": "📋 Resumen de NOM 024 y NOM 004 para Salud",
+     "dias": 23,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=1180867221283138"
+    },
+    {
+     "id": "1635859874653384",
+     "titulo": "Consentimientos Informados en HuliPractice | Centro de Ayuda HuliPractice",
+     "dias": 23,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=1635859874653384"
+    },
+    {
+     "id": "2153248642238015",
+     "titulo": "",
+     "dias": 23,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=2153248642238015"
+    },
+    {
+     "id": "1091598083850858",
+     "titulo": "5 años usando HuliPractice 🤍",
+     "dias": 22,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=1091598083850858"
+    },
+    {
+     "id": "1415608410536472",
+     "titulo": "Ingresar o crear una cuenta | HuliPractice",
+     "dias": 19,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=1415608410536472"
+    },
+    {
+     "id": "1377031917748757",
+     "titulo": "Ingresar o crear una cuenta | HuliPractice",
+     "dias": 19,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=1377031917748757"
+    },
+    {
+     "id": "4461612504156415",
+     "titulo": "",
+     "dias": 19,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=4461612504156415"
+    },
+    {
+     "id": "1591756969160872",
+     "titulo": "",
+     "dias": 19,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=1591756969160872"
+    },
+    {
+     "id": "4650689195151044",
+     "titulo": "5 años usando HuliPractice 👩🏻‍⚕️🙌🏻",
+     "dias": 9,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=4650689195151044"
+    },
+    {
+     "id": "2361173007958731",
+     "titulo": "5 años usando HuliPractice 👩🏻‍⚕️🙌🏻",
+     "dias": 4,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=2361173007958731"
+    },
+    {
+     "id": "1786256086023362",
+     "titulo": "5 años usando HuliPractice 👩🏻‍⚕️🙌🏻",
+     "dias": 3,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=1786256086023362"
+    },
+    {
+     "id": "2394462894291789",
+     "titulo": "5 años usando HuliPractice 👩🏻‍⚕️🙌🏻",
+     "dias": 3,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=2394462894291789"
+    },
+    {
+     "id": "2261722661279212",
+     "titulo": "Deja de teclear, empieza a conectar.",
+     "dias": 3,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=2261722661279212"
+    },
+    {
+     "id": "4683402565214576",
+     "titulo": "5 años usando HuliPractice 👩🏻‍⚕️🙌🏻",
+     "dias": 2,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=4683402565214576"
+    },
+    {
+     "id": "1428419835924019",
+     "titulo": "5 años usando HuliPractice 👩🏻‍⚕️🙌🏻",
+     "dias": 1,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=1428419835924019"
+    }
+   ],
+   "nota": "activos_estimados 20 vino de una búsqueda por texto: 4 de esos 20 eran de otras páginas; los 16 de la página Huli México están todos",
+   "re_medicion_11oct": {
+    "estimado_10oct": 20,
+    "estimado_11oct": 77,
+    "lista_incompleta": true
+   }
+  },
+  "Calu": {
+   "page_id": 292222707822649,
+   "activos_estimados_por_la_biblioteca": 5,
+   "vistos": 5,
+   "lista_completa": true,
+   "mas_de_30_dias": 1,
+   "mas_viejo_dias": 43,
+   "anuncios": [
+    {
+     "id": "1408444331257598",
+     "titulo": "¿Seguís acumulando fichas y papeles para las historias clínicas de tus pacientes?",
+     "dias": 43,
+     "moneda": "ARS",
+     "url": "https://www.facebook.com/ads/library/?id=1408444331257598"
+    },
+    {
+     "id": "1763647724683837",
+     "titulo": "Calu |   |   |",
+     "dias": 22,
+     "moneda": "ARS",
+     "url": "https://www.facebook.com/ads/library/?id=1763647724683837"
+    },
+    {
+     "id": "2199249041013009",
+     "titulo": "Empezá el 2027 con Calu.",
+     "dias": 15,
+     "moneda": "ARS",
+     "url": "https://www.facebook.com/ads/library/?id=2199249041013009"
+    },
+    {
+     "id": "1163892422879384",
+     "titulo": "Chatea con nosotros",
+     "dias": 2,
+     "moneda": "ARS",
+     "url": "https://www.facebook.com/ads/library/?id=1163892422879384"
+    },
+    {
+     "id": "1623218186013966",
+     "titulo": "Calu | Probá Calu gratis | Chatea con nosotros | Chatea con nosotros | Chatea con nosotros",
+     "dias": 2,
+     "moneda": "ARS",
+     "url": "https://www.facebook.com/ads/library/?id=1623218186013966"
+    }
+   ],
+   "re_medicion_11oct": {
+    "estimado_10oct": 5,
+    "estimado_11oct": 13,
+    "lista_incompleta": true
+   }
+  },
+  "Reservo Software": {
+   "page_id": 1006037402599174,
+   "activos_estimados_por_la_biblioteca": null,
+   "vistos": 4,
+   "lista_completa": true,
+   "mas_de_30_dias": 4,
+   "mas_viejo_dias": 53,
+   "anuncios": [
+    {
+     "id": "2306098163539011",
+     "titulo": "Cumple con las normativas legales | Cumple con las normativas legales | Cumple con las normativas legales",
+     "dias": 53,
+     "moneda": "CLP",
+     "url": "https://www.facebook.com/ads/library/?id=2306098163539011"
+    },
+    {
+     "id": "1056628280307783",
+     "titulo": "Cumple con las normativas legales | Cumple con las normativas legales | Cumple con las normativas legales",
+     "dias": 53,
+     "moneda": "CLP",
+     "url": "https://www.facebook.com/ads/library/?id=1056628280307783"
+    },
+    {
+     "id": "1015323991509208",
+     "titulo": "ECE en regla con COFEPRIS | ECE en regla con COFEPRIS | ECE en regla con COFEPRIS | ECE en regla con COFEPRIS",
+     "dias": 50,
+     "moneda": "CLP",
+     "url": "https://www.facebook.com/ads/library/?id=1015323991509208"
+    },
+    {
+     "id": "27227967266876051",
+     "titulo": "Reservo Software | Tu consulta médica respaldada | Tu consulta médica respaldada | Tu consulta médica respaldada",
+     "dias": 47,
+     "moneda": "CLP",
+     "url": "https://www.facebook.com/ads/library/?id=27227967266876051"
+    }
+   ],
+   "re_medicion_11oct": {
+    "estimado_10oct": "4 vistos",
+    "estimado_11oct": "incluido en los 58 de «Reservo»",
+    "lista_incompleta": true
+   }
+  },
+  "Reservo": {
+   "page_id": 1397618817156161,
+   "activos_estimados_por_la_biblioteca": null,
+   "vistos": 1,
+   "lista_completa": true,
+   "mas_de_30_dias": 1,
+   "mas_viejo_dias": 53,
+   "anuncios": [
+    {
+     "id": "2131200374413642",
+     "titulo": "Software médico certificado en México",
+     "dias": 53,
+     "moneda": "CLP",
+     "url": "https://www.facebook.com/ads/library/?id=2131200374413642"
+    }
+   ],
+   "re_medicion_11oct": {
+    "estimado_10oct": "1 + 4 vistos (2 páginas)",
+    "estimado_11oct": 58,
+    "nota": "las dos páginas juntas",
+    "lista_incompleta": true
+   }
+  },
+  "Karbonna": {
+   "page_id": 117666710068820,
+   "activos_estimados_por_la_biblioteca": null,
+   "vistos": 4,
+   "lista_completa": true,
+   "mas_de_30_dias": 0,
+   "mas_viejo_dias": 17,
+   "anuncios": [
+    {
+     "id": "1405279821048934",
+     "titulo": "",
+     "dias": 17,
+     "moneda": "BRL",
+     "url": "https://www.facebook.com/ads/library/?id=1405279821048934"
+    },
+    {
+     "id": "1718521912542129",
+     "titulo": "",
+     "dias": 11,
+     "moneda": "BRL",
+     "url": "https://www.facebook.com/ads/library/?id=1718521912542129"
+    },
+    {
+     "id": "1783543592685646",
+     "titulo": "",
+     "dias": 11,
+     "moneda": "BRL",
+     "url": "https://www.facebook.com/ads/library/?id=1783543592685646"
+    },
+    {
+     "id": "1584817782733717",
+     "titulo": "",
+     "dias": 11,
+     "moneda": "BRL",
+     "url": "https://www.facebook.com/ads/library/?id=1584817782733717"
+    }
+   ],
+   "re_medicion_11oct": {
+    "estimado_10oct": "4 vistos",
+    "estimado_11oct": "8 o más (se pidieron 20 entre 3 páginas)",
+    "lista_incompleta": true
+   }
+  },
+  "DoctorPro": {
+   "page_id": 102952942166627,
+   "activos_estimados_por_la_biblioteca": null,
+   "vistos": 7,
+   "lista_completa": true,
+   "mas_de_30_dias": 0,
+   "mas_viejo_dias": 3,
+   "anuncios": [
+    {
+     "id": "1061594440029657",
+     "titulo": "Tu consultorio. Más organizado. Más eficiente.",
+     "dias": 3,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=1061594440029657"
+    },
+    {
+     "id": "1359940412630463",
+     "titulo": "Tu consultorio. Más organizado. Más eficiente.",
+     "dias": 3,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=1359940412630463"
+    },
+    {
+     "id": "1443283721056773",
+     "titulo": "Administra tus citas! y más.",
+     "dias": 3,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=1443283721056773"
+    },
+    {
+     "id": "1369581488294312",
+     "titulo": "Administra tu consultorio.",
+     "dias": 3,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=1369581488294312"
+    },
+    {
+     "id": "1124021756785648",
+     "titulo": "Tu consultorio. Más organizado. Más eficiente.",
+     "dias": 3,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=1124021756785648"
+    },
+    {
+     "id": "1654449786345683",
+     "titulo": "Tu consultorio. Más organizado. Más eficiente.",
+     "dias": 3,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=1654449786345683"
+    },
+    {
+     "id": "1684158860004331",
+     "titulo": "Administra tu consultorio.",
+     "dias": 3,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=1684158860004331"
+    }
+   ],
+   "re_medicion_11oct": {
+    "estimado_10oct": "7 vistos",
+    "estimado_11oct": 56,
+    "lista_incompleta": true
+   }
+  },
+  "Wa7pro": {
+   "page_id": 1346974258489921,
+   "activos_estimados_por_la_biblioteca": 2,
+   "vistos": 2,
+   "lista_completa": true,
+   "mas_de_30_dias": 0,
+   "mas_viejo_dias": 6,
+   "anuncios": [
+    {
+     "id": "1777808483360755",
+     "titulo": "Agendó solo a las 21:14",
+     "dias": 6,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1777808483360755",
+     "a_mano": true
+    },
+    {
+     "id": "1539624518188924",
+     "titulo": "Su WhatsApp con IA, agenda y CRM en una pantalla",
+     "dias": 3,
+     "moneda": "USD",
+     "url": "https://www.facebook.com/ads/library/?id=1539624518188924",
+     "a_mano": true
+    }
+   ],
+   "re_medicion_11oct": {
+    "estimado_10oct": 2,
+    "estimado_11oct": "2 o más"
+   }
+  },
+  "Balance Aesthetic Software": {
+   "page_id": 104573792590545,
+   "activos_estimados_por_la_biblioteca": null,
+   "vistos": 1,
+   "lista_completa": true,
+   "mas_de_30_dias": 1,
+   "mas_viejo_dias": 38,
+   "anuncios": [
+    {
+     "id": "1613702807126274",
+     "titulo": "Balance Aesthetic Software | Centros Médicos. | Centros Estéticos | Salones de Belleza | Centros de Entrenamiento. | Recordatorio Automatico",
+     "dias": 38,
+     "moneda": "PEN",
+     "url": "https://www.facebook.com/ads/library/?id=1613702807126274"
+    }
+   ]
+  },
+  "Alegra - Contabilidad Inteligente": {
+   "page_id": 266934513428113,
+   "activos_estimados_por_la_biblioteca": null,
+   "vistos": 1,
+   "lista_completa": false,
+   "mas_de_30_dias": 0,
+   "mas_viejo_dias": 18,
+   "anuncios": [
+    {
+     "id": "1856518888843778",
+     "titulo": "Factura con tu voz: la IA lo hace por ti",
+     "dias": 18,
+     "moneda": "COP",
+     "url": "https://www.facebook.com/ads/library/?id=1856518888843778",
+     "a_mano": true
+    }
+   ]
+  },
+  "Sunnu": {
+   "page_id": 224331188835633,
+   "activos_estimados_por_la_biblioteca": null,
+   "vistos": 1,
+   "lista_completa": false,
+   "mas_de_30_dias": 1,
+   "mas_viejo_dias": 78,
+   "anuncios": [
+    {
+     "id": "1863936118318421",
+     "titulo": "Lo que sí usas cada día",
+     "dias": 78,
+     "moneda": "MXN",
+     "url": "https://www.facebook.com/ads/library/?id=1863936118318421"
+    }
+   ],
+   "nota": "1 anuncio visto por «software clínica dental»; no se sabe qué vende: fuera de las estadísticas de lista completa"
+  }
+ },
+ "bolivia_rubro_mas_de_30_dias": [
+  {
+   "id": "1413635203501133",
+   "anunciante": "Clinica Fundepi",
+   "titulo": "{{product.name}}",
+   "dias": 261,
+   "moneda": "USD",
+   "url": "https://www.facebook.com/ads/library/?id=1413635203501133"
+  },
+  {
+   "id": "1449216796723735",
+   "anunciante": "Centro Medico Odontológico BAires",
+   "titulo": "",
+   "dias": 261,
+   "moneda": "BOB",
+   "url": "https://www.facebook.com/ads/library/?id=1449216796723735"
+  },
+  {
+   "id": "2163281054509971",
+   "anunciante": "Clínica Dental Innova Kids",
+   "titulo": "Cuidado dental para niños en Santa Cruz",
+   "dias": 249,
+   "moneda": "BOB",
+   "url": "https://www.facebook.com/ads/library/?id=2163281054509971"
+  },
+  {
+   "id": "820664586987377",
+   "anunciante": "Dra Mariel Garcia",
+   "titulo": "",
+   "dias": 208,
+   "moneda": "BOB",
+   "url": "https://www.facebook.com/ads/library/?id=820664586987377"
+  },
+  {
+   "id": "943834975260406",
+   "anunciante": "Clínica Odontológica Beautiful",
+   "titulo": "",
+   "dias": 208,
+   "moneda": "BOB",
+   "url": "https://www.facebook.com/ads/library/?id=943834975260406"
+  },
+  {
+   "id": "2018285798718218",
+   "anunciante": "Centro Medico Odontológico BAires",
+   "titulo": "",
+   "dias": 192,
+   "moneda": "BOB",
+   "url": "https://www.facebook.com/ads/library/?id=2018285798718218"
+  },
+  {
+   "id": "1473799910992682",
+   "anunciante": "Consultorio Dental Solidario",
+   "titulo": "Protesis fija desde 200bs",
+   "dias": 184,
+   "moneda": "BOB",
+   "url": "https://www.facebook.com/ads/library/?id=1473799910992682"
+  },
+  {
+   "id": "939188535535792",
+   "anunciante": "Clínica Dental Hurtado",
+   "titulo": "",
+   "dias": 180,
+   "moneda": "BOB",
+   "url": "https://www.facebook.com/ads/library/?id=939188535535792"
+  },
+  {
+   "id": "2006539226937171",
+   "anunciante": "Clínica Dental Hurtado",
+   "titulo": "",
+   "dias": 179,
+   "moneda": "BOB",
+   "url": "https://www.facebook.com/ads/library/?id=2006539226937171"
+  },
+  {
+   "id": "1304430085162135",
+   "anunciante": "Dr. Abner Valdivia",
+   "titulo": "👋🏻 ¡Adios Complejos!",
+   "dias": 133,
+   "moneda": "BOB",
+   "url": "https://www.facebook.com/ads/library/?id=1304430085162135"
+  },
+  {
+   "id": "1326306359672227",
+   "anunciante": "Brackets Solidario",
+   "titulo": "Protesis fija desde 200bs",
+   "dias": 121,
+   "moneda": "BOB",
+   "url": "https://www.facebook.com/ads/library/?id=1326306359672227"
+  },
+  {
+   "id": "1714744242805112",
+   "anunciante": "Dra Mariel Garcia",
+   "titulo": "",
+   "dias": 117,
+   "moneda": "BOB",
+   "url": "https://www.facebook.com/ads/library/?id=1714744242805112"
+  },
+  {
+   "id": "1596977809101542",
+   "anunciante": "Clínica Dental \"DS\"",
+   "titulo": "",
+   "dias": 110,
+   "moneda": "USD",
+   "url": "https://www.facebook.com/ads/library/?id=1596977809101542"
+  },
+  {
+   "id": "1022232073531685",
+   "anunciante": "Clínica Dental Hurtado",
+   "titulo": "",
+   "dias": 100,
+   "moneda": "BOB",
+   "url": "https://www.facebook.com/ads/library/?id=1022232073531685"
+  },
+  {
+   "id": "1334742395472820",
+   "anunciante": "Global Medical - Centro de Especialidades Médicas",
+   "titulo": "Global Medical - Centro de Especialidades Médicas",
+   "dias": 95,
+   "moneda": "BOB",
+   "url": "https://www.facebook.com/ads/library/?id=1334742395472820"
+  },
+  {
+   "id": "1773252564124093",
+   "anunciante": "OdontoAte",
+   "titulo": "",
+   "dias": 72,
+   "moneda": "PEN",
+   "url": "https://www.facebook.com/ads/library/?id=1773252564124093"
+  },
+  {
+   "id": "880275351585468",
+   "anunciante": "Clinica Dental ODES",
+   "titulo": "",
+   "dias": 61,
+   "moneda": "USD",
+   "url": "https://www.facebook.com/ads/library/?id=880275351585468"
+  },
+  {
+   "id": "1341675747948454",
+   "anunciante": "Clínica TELLO",
+   "titulo": "Clínica TELLO",
+   "dias": 60,
+   "moneda": "PEN",
+   "url": "https://www.facebook.com/ads/library/?id=1341675747948454"
+  },
+  {
+   "id": "2118239265793863",
+   "anunciante": "Cosmetic Dental and Face Center",
+   "titulo": "Blanqueamiento con sistema de 3 luces",
+   "dias": 55,
+   "moneda": "BOB",
+   "url": "https://www.facebook.com/ads/library/?id=2118239265793863"
+  },
+  {
+   "id": "2895011917501287",
+   "anunciante": "Medilink Bolivia SRL",
+   "titulo": "𝐀𝐋𝐓𝐀 𝐑𝐄𝐒𝐈𝐒𝐓𝐄𝐍𝐂𝐈𝐀 🟢",
+   "dias": 50,
+   "moneda": "USD",
+   "url": "https://www.facebook.com/ads/library/?id=2895011917501287"
+  },
+  {
+   "id": "2031657187458545",
+   "anunciante": "Clinica Dental ROCHA",
+   "titulo": "Agenda tu cita",
+   "dias": 46,
+   "moneda": "BOB",
+   "url": "https://www.facebook.com/ads/library/?id=2031657187458545"
+  },
+  {
+   "id": "2238940340230090",
+   "anunciante": "Sonríe a La Vida",
+   "titulo": "",
+   "dias": 46,
+   "moneda": "BOB",
+   "url": "https://www.facebook.com/ads/library/?id=2238940340230090"
+  },
+  {
+   "id": "1747102286632936",
+   "anunciante": "Sonríe a La Vida",
+   "titulo": "",
+   "dias": 46,
+   "moneda": "BOB",
+   "url": "https://www.facebook.com/ads/library/?id=1747102286632936"
+  },
+  {
+   "id": "1068604272537511",
+   "anunciante": "Sonríe a La Vida",
+   "titulo": "",
+   "dias": 46,
+   "moneda": "BOB",
+   "url": "https://www.facebook.com/ads/library/?id=1068604272537511"
+  },
+  {
+   "id": "1491190199436883",
+   "anunciante": "Sonríe a La Vida",
+   "titulo": "",
+   "dias": 46,
+   "moneda": "BOB",
+   "url": "https://www.facebook.com/ads/library/?id=1491190199436883"
+  },
+  {
+   "id": "1685885462496505",
+   "anunciante": "Dr. Abner Valdivia",
+   "titulo": "Dr. Abner Valdivia | Simetría perfecta | Simetría perfecta | Simetría perfecta | Simetría perfecta | Simetría perfecta",
+   "dias": 45,
+   "moneda": "BOB",
+   "url": "https://www.facebook.com/ads/library/?id=1685885462496505"
+  },
+  {
+   "id": "1076797885039023",
+   "anunciante": "MUN Odontopediatria by Dra. Tamara Llave",
+   "titulo": "Mas Informacion",
+   "dias": 44,
+   "moneda": "BOB",
+   "url": "https://www.facebook.com/ads/library/?id=1076797885039023"
+  },
+  {
+   "id": "1586919549733766",
+   "anunciante": "MUN Clínica Odontología Especializada",
+   "titulo": "Chatea con nosotros",
+   "dias": 43,
+   "moneda": "BOB",
+   "url": "https://www.facebook.com/ads/library/?id=1586919549733766"
+  },
+  {
+   "id": "1757214835585038",
+   "anunciante": "Sonríe a La Vida",
+   "titulo": "",
+   "dias": 43,
+   "moneda": "BOB",
+   "url": "https://www.facebook.com/ads/library/?id=1757214835585038"
+  },
+  {
+   "id": "1614812920077838",
+   "anunciante": "Sonríe a La Vida",
+   "titulo": "",
+   "dias": 40,
+   "moneda": "BOB",
+   "url": "https://www.facebook.com/ads/library/?id=1614812920077838"
+  },
+  {
+   "id": "1063802636581401",
+   "anunciante": "Medilink Bolivia SRL",
+   "titulo": "𝐀𝐋𝐓𝐀 𝐑𝐄𝐒𝐈𝐒𝐓𝐄𝐍𝐂𝐈𝐀 🟢",
+   "dias": 40,
+   "moneda": "USD",
+   "url": "https://www.facebook.com/ads/library/?id=1063802636581401"
+  },
+  {
+   "id": "1785774572570031",
+   "anunciante": "Dentessa Odontologia",
+   "titulo": "Chatea con nosotros",
+   "dias": 38,
+   "moneda": "USD",
+   "url": "https://www.facebook.com/ads/library/?id=1785774572570031"
+  },
+  {
+   "id": "4541057556165751",
+   "anunciante": "Dentessa Odontologia",
+   "titulo": "Chatea con nosotros",
+   "dias": 38,
+   "moneda": "USD",
+   "url": "https://www.facebook.com/ads/library/?id=4541057556165751"
+  },
+  {
+   "id": "1053059820868275",
+   "anunciante": "Dentessa Odontologia",
+   "titulo": "",
+   "dias": 37,
+   "moneda": "USD",
+   "url": "https://www.facebook.com/ads/library/?id=1053059820868275"
+  },
+  {
+   "id": "4467971883476766",
+   "anunciante": "Clínica Dental Hurtado",
+   "titulo": "",
+   "dias": 35,
+   "moneda": "BOB",
+   "url": "https://www.facebook.com/ads/library/?id=4467971883476766"
+  },
+  {
+   "id": "4538848162928644",
+   "anunciante": "Clínica Dental Hurtado",
+   "titulo": "",
+   "dias": 35,
+   "moneda": "BOB",
+   "url": "https://www.facebook.com/ads/library/?id=4538848162928644"
+  },
+  {
+   "id": "1100137126304669",
+   "anunciante": "Gooddental kids",
+   "titulo": "🦷 GOODDENTAL busca Odontólogos Generales en Santa Cruz de la Sierra.",
+   "dias": 33,
+   "moneda": "USD",
+   "url": "https://www.facebook.com/ads/library/?id=1100137126304669"
+  },
+  {
+   "id": "1373193928320851",
+   "anunciante": "Gooddental kids",
+   "titulo": "🦷 GOODDENTAL busca Odontólogos Generales.",
+   "dias": 33,
+   "moneda": "USD",
+   "url": "https://www.facebook.com/ads/library/?id=1373193928320851"
+  },
+  {
+   "id": "1108444471840692",
+   "anunciante": "Happy Dent",
+   "titulo": "Happy Dent | Ortodoncia en Happy Dent | Renová tu sonrisa ✨",
+   "dias": 31,
+   "moneda": "BOB",
+   "url": "https://www.facebook.com/ads/library/?id=1108444471840692"
+  },
+  {
+   "id": "1603739021539953",
+   "anunciante": "Beby Bañón - Century 21 Avanti",
+   "titulo": "Consultorio en Venta | US$20.000",
+   "dias": 31,
+   "moneda": "BOB",
+   "url": "https://www.facebook.com/ads/library/?id=1603739021539953"
+  },
+  {
+   "id": "4526964274288249",
+   "anunciante": "Centro Medico Odontológico BAires",
+   "titulo": "",
+   "dias": 31,
+   "moneda": "BOB",
+   "url": "https://www.facebook.com/ads/library/?id=4526964274288249"
+  }
+ ],
+ "bolivia_rubro": [
+  {
+   "id": "1413635203501133",
+   "anunciante": "Clinica Fundepi",
+   "titulo": "{{product.name}}",
+   "dias": 261,
+   "moneda": "USD"
+  },
+  {
+   "id": "1449216796723735",
+   "anunciante": "Centro Medico Odontológico BAires",
+   "titulo": "",
+   "dias": 261,
+   "moneda": "BOB"
+  },
+  {
+   "id": "2163281054509971",
+   "anunciante": "Clínica Dental Innova Kids",
+   "titulo": "Cuidado dental para niños en Santa Cruz",
+   "dias": 249,
+   "moneda": "BOB"
+  },
+  {
+   "id": "820664586987377",
+   "anunciante": "Dra Mariel Garcia",
+   "titulo": "",
+   "dias": 208,
+   "moneda": "BOB"
+  },
+  {
+   "id": "943834975260406",
+   "anunciante": "Clínica Odontológica Beautiful",
+   "titulo": "",
+   "dias": 208,
+   "moneda": "BOB"
+  },
+  {
+   "id": "2018285798718218",
+   "anunciante": "Centro Medico Odontológico BAires",
+   "titulo": "",
+   "dias": 192,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1473799910992682",
+   "anunciante": "Consultorio Dental Solidario",
+   "titulo": "Protesis fija desde 200bs",
+   "dias": 184,
+   "moneda": "BOB"
+  },
+  {
+   "id": "939188535535792",
+   "anunciante": "Clínica Dental Hurtado",
+   "titulo": "",
+   "dias": 180,
+   "moneda": "BOB"
+  },
+  {
+   "id": "2006539226937171",
+   "anunciante": "Clínica Dental Hurtado",
+   "titulo": "",
+   "dias": 179,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1304430085162135",
+   "anunciante": "Dr. Abner Valdivia",
+   "titulo": "👋🏻 ¡Adios Complejos!",
+   "dias": 133,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1326306359672227",
+   "anunciante": "Brackets Solidario",
+   "titulo": "Protesis fija desde 200bs",
+   "dias": 121,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1714744242805112",
+   "anunciante": "Dra Mariel Garcia",
+   "titulo": "",
+   "dias": 117,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1596977809101542",
+   "anunciante": "Clínica Dental \"DS\"",
+   "titulo": "",
+   "dias": 110,
+   "moneda": "USD"
+  },
+  {
+   "id": "1022232073531685",
+   "anunciante": "Clínica Dental Hurtado",
+   "titulo": "",
+   "dias": 100,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1334742395472820",
+   "anunciante": "Global Medical - Centro de Especialidades Médicas",
+   "titulo": "Global Medical - Centro de Especialidades Médicas",
+   "dias": 95,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1773252564124093",
+   "anunciante": "OdontoAte",
+   "titulo": "",
+   "dias": 72,
+   "moneda": "PEN"
+  },
+  {
+   "id": "880275351585468",
+   "anunciante": "Clinica Dental ODES",
+   "titulo": "",
+   "dias": 61,
+   "moneda": "USD"
+  },
+  {
+   "id": "1341675747948454",
+   "anunciante": "Clínica TELLO",
+   "titulo": "Clínica TELLO",
+   "dias": 60,
+   "moneda": "PEN"
+  },
+  {
+   "id": "2118239265793863",
+   "anunciante": "Cosmetic Dental and Face Center",
+   "titulo": "Blanqueamiento con sistema de 3 luces",
+   "dias": 55,
+   "moneda": "BOB"
+  },
+  {
+   "id": "2895011917501287",
+   "anunciante": "Medilink Bolivia SRL",
+   "titulo": "𝐀𝐋𝐓𝐀 𝐑𝐄𝐒𝐈𝐒𝐓𝐄𝐍𝐂𝐈𝐀 🟢",
+   "dias": 50,
+   "moneda": "USD"
+  },
+  {
+   "id": "2031657187458545",
+   "anunciante": "Clinica Dental ROCHA",
+   "titulo": "Agenda tu cita",
+   "dias": 46,
+   "moneda": "BOB"
+  },
+  {
+   "id": "2238940340230090",
+   "anunciante": "Sonríe a La Vida",
+   "titulo": "",
+   "dias": 46,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1747102286632936",
+   "anunciante": "Sonríe a La Vida",
+   "titulo": "",
+   "dias": 46,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1068604272537511",
+   "anunciante": "Sonríe a La Vida",
+   "titulo": "",
+   "dias": 46,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1491190199436883",
+   "anunciante": "Sonríe a La Vida",
+   "titulo": "",
+   "dias": 46,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1685885462496505",
+   "anunciante": "Dr. Abner Valdivia",
+   "titulo": "Dr. Abner Valdivia | Simetría perfecta | Simetría perfecta | Simetría perfecta | Simetría perfecta | Simetría perfecta",
+   "dias": 45,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1076797885039023",
+   "anunciante": "MUN Odontopediatria by Dra. Tamara Llave",
+   "titulo": "Mas Informacion",
+   "dias": 44,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1586919549733766",
+   "anunciante": "MUN Clínica Odontología Especializada",
+   "titulo": "Chatea con nosotros",
+   "dias": 43,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1757214835585038",
+   "anunciante": "Sonríe a La Vida",
+   "titulo": "",
+   "dias": 43,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1614812920077838",
+   "anunciante": "Sonríe a La Vida",
+   "titulo": "",
+   "dias": 40,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1063802636581401",
+   "anunciante": "Medilink Bolivia SRL",
+   "titulo": "𝐀𝐋𝐓𝐀 𝐑𝐄𝐒𝐈𝐒𝐓𝐄𝐍𝐂𝐈𝐀 🟢",
+   "dias": 40,
+   "moneda": "USD"
+  },
+  {
+   "id": "1785774572570031",
+   "anunciante": "Dentessa Odontologia",
+   "titulo": "Chatea con nosotros",
+   "dias": 38,
+   "moneda": "USD"
+  },
+  {
+   "id": "4541057556165751",
+   "anunciante": "Dentessa Odontologia",
+   "titulo": "Chatea con nosotros",
+   "dias": 38,
+   "moneda": "USD"
+  },
+  {
+   "id": "1053059820868275",
+   "anunciante": "Dentessa Odontologia",
+   "titulo": "",
+   "dias": 37,
+   "moneda": "USD"
+  },
+  {
+   "id": "4467971883476766",
+   "anunciante": "Clínica Dental Hurtado",
+   "titulo": "",
+   "dias": 35,
+   "moneda": "BOB"
+  },
+  {
+   "id": "4538848162928644",
+   "anunciante": "Clínica Dental Hurtado",
+   "titulo": "",
+   "dias": 35,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1100137126304669",
+   "anunciante": "Gooddental kids",
+   "titulo": "🦷 GOODDENTAL busca Odontólogos Generales en Santa Cruz de la Sierra.",
+   "dias": 33,
+   "moneda": "USD"
+  },
+  {
+   "id": "1373193928320851",
+   "anunciante": "Gooddental kids",
+   "titulo": "🦷 GOODDENTAL busca Odontólogos Generales.",
+   "dias": 33,
+   "moneda": "USD"
+  },
+  {
+   "id": "1108444471840692",
+   "anunciante": "Happy Dent",
+   "titulo": "Happy Dent | Ortodoncia en Happy Dent | Renová tu sonrisa ✨",
+   "dias": 31,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1603739021539953",
+   "anunciante": "Beby Bañón - Century 21 Avanti",
+   "titulo": "Consultorio en Venta | US$20.000",
+   "dias": 31,
+   "moneda": "BOB"
+  },
+  {
+   "id": "4526964274288249",
+   "anunciante": "Centro Medico Odontológico BAires",
+   "titulo": "",
+   "dias": 31,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1017574291313346",
+   "anunciante": "Clínica Dental Imagina",
+   "titulo": "Chatea con nosotros",
+   "dias": 30,
+   "moneda": "USD"
+  },
+  {
+   "id": "963801876753393",
+   "anunciante": "Clínica Dental Imagina",
+   "titulo": "¡ Aprovecha AHORA!",
+   "dias": 30,
+   "moneda": "USD"
+  },
+  {
+   "id": "1588187616185416",
+   "anunciante": "Doctormaxilofacial",
+   "titulo": "",
+   "dias": 29,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1438575811499437",
+   "anunciante": "Centro Medico Odontológico BAires",
+   "titulo": "",
+   "dias": 25,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1847333596425363",
+   "anunciante": "COYR DENT",
+   "titulo": "",
+   "dias": 25,
+   "moneda": "USD"
+  },
+  {
+   "id": "857466584028311",
+   "anunciante": "Dra. Micaela Aliaga Rejas - Odontóloga",
+   "titulo": "",
+   "dias": 25,
+   "moneda": "BOB"
+  },
+  {
+   "id": "3519163944932245",
+   "anunciante": "Odontología Avanzada  Doctormaxilofacial",
+   "titulo": "",
+   "dias": 24,
+   "moneda": "BOB"
+  },
+  {
+   "id": "2150971942492786",
+   "anunciante": "Odontología Avanzada  Doctormaxilofacial",
+   "titulo": "",
+   "dias": 24,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1517973576760345",
+   "anunciante": "Ortobom odontologia Mutualista",
+   "titulo": "BRACKETS sin pagar una fortuna 👉",
+   "dias": 24,
+   "moneda": "USD"
+  },
+  {
+   "id": "1414216304009729",
+   "anunciante": "COYR DENT",
+   "titulo": "",
+   "dias": 23,
+   "moneda": "USD"
+  },
+  {
+   "id": "887948530916605",
+   "anunciante": "Sonríe a La Vida",
+   "titulo": "",
+   "dias": 22,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1598777304981929",
+   "anunciante": "Sonríe a La Vida",
+   "titulo": "",
+   "dias": 22,
+   "moneda": "BOB"
+  },
+  {
+   "id": "38761985366782185",
+   "anunciante": "Clínica Dental Ezequiel - Spadental",
+   "titulo": "Recupera tu sonrisa",
+   "dias": 20,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1424503752951807",
+   "anunciante": "Odontología Integral Digital",
+   "titulo": "",
+   "dias": 19,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1745812263380084",
+   "anunciante": "Clinica Dental \"Sarita\"",
+   "titulo": "",
+   "dias": 18,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1095956009747214",
+   "anunciante": "Odonto GROUP  Claure",
+   "titulo": "",
+   "dias": 17,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1083796481282689",
+   "anunciante": "Odonto GROUP  Claure",
+   "titulo": "",
+   "dias": 17,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1108989871818500",
+   "anunciante": "DMI - Diagnostico Medico por Imagen",
+   "titulo": "",
+   "dias": 17,
+   "moneda": "USD"
+  },
+  {
+   "id": "1621266912916009",
+   "anunciante": "Biounite",
+   "titulo": "Chatea con nosotros",
+   "dias": 16,
+   "moneda": "ARS"
+  },
+  {
+   "id": "28401146966210445",
+   "anunciante": "Biounite",
+   "titulo": "Chatea con nosotros",
+   "dias": 16,
+   "moneda": "ARS"
+  },
+  {
+   "id": "1635496317956143",
+   "anunciante": "Dr. Abner Valdivia",
+   "titulo": "😁 Conseguí la sonrisa que querés para vos",
+   "dias": 14,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1102782935549938",
+   "anunciante": "Elizabeth Vargas - Century 21 Integra",
+   "titulo": "UBICACIÓN ESTRATÉGICA PARA INVERSIÓN",
+   "dias": 13,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1713943399677539",
+   "anunciante": "Ortobom odontologia Mutualista",
+   "titulo": "BRACKETS sin pagar una fortuna 👉",
+   "dias": 12,
+   "moneda": "USD"
+  },
+  {
+   "id": "1127164236941832",
+   "anunciante": "Ortobom odontologia Mutualista",
+   "titulo": "BRACKETS sin pagar una fortuna 👉",
+   "dias": 12,
+   "moneda": "USD"
+  },
+  {
+   "id": "2613857125717086",
+   "anunciante": "Clinica Dental ODES",
+   "titulo": "",
+   "dias": 11,
+   "moneda": "USD"
+  },
+  {
+   "id": "1559654635476396",
+   "anunciante": "Clinica Dental ODES",
+   "titulo": "",
+   "dias": 11,
+   "moneda": "USD"
+  },
+  {
+   "id": "1848493196332984",
+   "anunciante": "Clinica Dental ODES",
+   "titulo": "",
+   "dias": 11,
+   "moneda": "USD"
+  },
+  {
+   "id": "1005460652573824",
+   "anunciante": "Clínica Dental Europea",
+   "titulo": "🚨 30% DE DESCUENTO EN MUELAS DEL JUICIO + VALORACIÓN 100% GRATUITA 🚨",
+   "dias": 10,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1589510412371664",
+   "anunciante": "Clínica Dental Europea",
+   "titulo": "",
+   "dias": 10,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1831950764472101",
+   "anunciante": "Clínica Dental Europea",
+   "titulo": "",
+   "dias": 10,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1812243696576064",
+   "anunciante": "Clínica Dental Europea",
+   "titulo": "",
+   "dias": 10,
+   "moneda": "BOB"
+  },
+  {
+   "id": "958433053967954",
+   "anunciante": "Importadora golden",
+   "titulo": "",
+   "dias": 10,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1412620390325689",
+   "anunciante": "Centro Odontológico Dental10",
+   "titulo": "",
+   "dias": 9,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1085421397440435",
+   "anunciante": "Dra. Shamira Torrez",
+   "titulo": "¿Hace cuánto tiempo no sonríes con total confianza? ☺️🦷",
+   "dias": 9,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1563793988853454",
+   "anunciante": "Clínica Dental San Pedro",
+   "titulo": "api.whatsapp.com",
+   "dias": 9,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1413023136866725",
+   "anunciante": "Dental Health suc. Suárez Arana",
+   "titulo": "",
+   "dias": 9,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1469762875025545",
+   "anunciante": "Formatos digitales",
+   "titulo": "",
+   "dias": 8,
+   "moneda": "MXN"
+  },
+  {
+   "id": "1298828145624663",
+   "anunciante": "Clínica Dental Imagina",
+   "titulo": "Chatea con nosotros",
+   "dias": 8,
+   "moneda": "USD"
+  },
+  {
+   "id": "1032771283139006",
+   "anunciante": "Clínica Dental Imagina",
+   "titulo": "Chatea con nosotros",
+   "dias": 8,
+   "moneda": "USD"
+  },
+  {
+   "id": "1396885898737029",
+   "anunciante": "Clínica Dentofacial Boquita Sana",
+   "titulo": "📣Estamos buscando pacientes!",
+   "dias": 8,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1526334862848606",
+   "anunciante": "Centro Odontológico Boquita Sana, Sucursal Udabol",
+   "titulo": "",
+   "dias": 8,
+   "moneda": "BOB"
+  },
+  {
+   "id": "2520527831804666",
+   "anunciante": "Clínica Dental Imagina",
+   "titulo": "Chatea con nosotros",
+   "dias": 8,
+   "moneda": "USD"
+  },
+  {
+   "id": "1454606779887771",
+   "anunciante": "Clinica Dental Stildent",
+   "titulo": "",
+   "dias": 8,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1020975044403637",
+   "anunciante": "Clínica Dentofacial Boquita Sana",
+   "titulo": "",
+   "dias": 8,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1792613435125013",
+   "anunciante": "Centro Odontológico Boquita Sana, Sucursal Udabol",
+   "titulo": "📣Estamos buscando pacientes!",
+   "dias": 8,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1796294688238157",
+   "anunciante": "Clínica Dental Imagina",
+   "titulo": "Chatea con nosotros",
+   "dias": 8,
+   "moneda": "USD"
+  },
+  {
+   "id": "4473319352996130",
+   "anunciante": "Clínica Dental Imagina",
+   "titulo": "Chatea con nosotros",
+   "dias": 8,
+   "moneda": "USD"
+  },
+  {
+   "id": "1129686506070403",
+   "anunciante": "Clinica Dental Stildent",
+   "titulo": "",
+   "dias": 8,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1650671959758943",
+   "anunciante": "Dra Laura 8a Pardoux",
+   "titulo": "Entranamiento gratuito para odontólogos | Entrenamiento Intensivo para odontólogos | Clase de odontología estética | Odontología Estética Rentable | Entrenamiento online para odontólogos",
+   "dias": 7,
+   "moneda": "USD"
+  },
+  {
+   "id": "1645617920631349",
+   "anunciante": "Clínica Dental Imagina",
+   "titulo": "Chatea con nosotros",
+   "dias": 7,
+   "moneda": "USD"
+  },
+  {
+   "id": "941281852387566",
+   "anunciante": "Consultorio Dental España-Dra. Gladis Rojas",
+   "titulo": "",
+   "dias": 7,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1126622173034542",
+   "anunciante": "Clínica Dental Imagina",
+   "titulo": "Chatea con nosotros",
+   "dias": 7,
+   "moneda": "USD"
+  },
+  {
+   "id": "1107608734968270",
+   "anunciante": "Yari-Dent Consultorio Odontológico",
+   "titulo": "",
+   "dias": 7,
+   "moneda": "BOB"
+  },
+  {
+   "id": "2314378842471352",
+   "anunciante": "Clínica Dental Dulce Sonrisa",
+   "titulo": "",
+   "dias": 7,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1063843346484121",
+   "anunciante": "Salud Bucal",
+   "titulo": "Salud Bucal",
+   "dias": 7,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1526639812564275",
+   "anunciante": "Clínica Dental Imagina",
+   "titulo": "Chatea con nosotros",
+   "dias": 7,
+   "moneda": "USD"
+  },
+  {
+   "id": "1568238354581394",
+   "anunciante": "Clínica Dental Imagina",
+   "titulo": "Chatea con nosotros",
+   "dias": 7,
+   "moneda": "USD"
+  },
+  {
+   "id": "1471126934851635",
+   "anunciante": "Blanceresem.MB06",
+   "titulo": "S-Shaped Vertical Soft Bristle Manual Toothbrush",
+   "dias": 7,
+   "moneda": "USD"
+  },
+  {
+   "id": "1049163134790966",
+   "anunciante": "Clínica Dental Imagina",
+   "titulo": "Chatea con nosotros",
+   "dias": 7,
+   "moneda": "USD"
+  },
+  {
+   "id": "2668965506901865",
+   "anunciante": "CEPAC Centro de Capacitación Especializado en Salud",
+   "titulo": "",
+   "dias": 6,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1145186907836421",
+   "anunciante": "Centro Dental Rivas",
+   "titulo": "",
+   "dias": 6,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1804179994149284",
+   "anunciante": "Dra. Ashley Viscarra G.",
+   "titulo": "Chatear en Messenger",
+   "dias": 6,
+   "moneda": "USD"
+  },
+  {
+   "id": "1058964403627144",
+   "anunciante": "Innova Consultorio Dental",
+   "titulo": "",
+   "dias": 6,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1397876781814721",
+   "anunciante": "Dra. Melissa Torres",
+   "titulo": "Agende su evaluación",
+   "dias": 6,
+   "moneda": "BOB"
+  },
+  {
+   "id": "3998601610434943",
+   "anunciante": "Servicios Médicos AYVI SRL  Central Cochabamba",
+   "titulo": "",
+   "dias": 6,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1480942130761055",
+   "anunciante": "Servicios Médicos AYVI SRL  Central Cochabamba",
+   "titulo": "",
+   "dias": 6,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1565407778224048",
+   "anunciante": "Dra. Escobar Odontología",
+   "titulo": "",
+   "dias": 5,
+   "moneda": "BOB"
+  },
+  {
+   "id": "2479632442568928",
+   "anunciante": "Consultorio Dental Solidario",
+   "titulo": "PROMOCION CARILLAS",
+   "dias": 5,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1412433171073903",
+   "anunciante": "Estudo Visual",
+   "titulo": "Estudo Visual | 🦷+170 fichas visuales para estudiar Odontología Restauradora | 🦷+170 fichas visuales para estudiar Odontología Restauradora | 🦷+170 fichas visuales para estudiar Odontología Restauradora | 🦷+170 fichas visuales para estudiar Odontología Restauradora | 🦷+170 fichas visuales para estudiar Odontología Restauradora | 🦷+170 fichas visuales para estudiar Odontología Restauradora | 🦷+170 fichas visuales para estudiar Odontología Restauradora | 🦷+170 fichas visuales para estudiar Odontología Restauradora | 🦷+170 fichas visuales para estudiar Odontología Restauradora | 🦷+170 fichas visuales para estudiar Odontología Restauradora",
+   "dias": 5,
+   "moneda": "USD"
+  },
+  {
+   "id": "1836528400692771",
+   "anunciante": "Armin Dental Group \" Odontologia Especializada\"",
+   "titulo": "Chatea con nosotros",
+   "dias": 5,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1125330439952222",
+   "anunciante": "Kadent",
+   "titulo": "",
+   "dias": 5,
+   "moneda": "USD"
+  },
+  {
+   "id": "1659005125939670",
+   "anunciante": "Punto Dental Bolivia",
+   "titulo": "",
+   "dias": 5,
+   "moneda": "BOB"
+  },
+  {
+   "id": "2056381298332255",
+   "anunciante": "Mi Angel Alexia Consultorio Dental",
+   "titulo": "Ortodoncia desde 200 Bs🦷",
+   "dias": 5,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1096551196684673",
+   "anunciante": "Dra . Pasapera",
+   "titulo": "",
+   "dias": 5,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1093290563104359",
+   "anunciante": "Clinica Dental Ramos",
+   "titulo": "",
+   "dias": 5,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1407418154313242",
+   "anunciante": "Dra. Ma. Eugenia Calvo - Odontóloga",
+   "titulo": "",
+   "dias": 5,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1414956296727597",
+   "anunciante": "AyniDent",
+   "titulo": "Haz la consulta",
+   "dias": 5,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1100524492557851",
+   "anunciante": "Tereza Paixão",
+   "titulo": "Tereza Paixão | +120 Mapas Visuales de Ortodoncia | +120 Mapas Visuales de Ortodoncia | +120 Mapas Visuales de Ortodoncia | +120 Mapas Visuales de Ortodoncia | +120 Mapas Visuales de Ortodoncia | +120 Mapas Visuales de Ortodoncia | +120 Mapas Visuales de Ortodoncia | +120 Mapas Visuales de Ortodoncia | +120 Mapas Visuales de Ortodoncia | +120 Mapas Visuales de Ortodoncia",
+   "dias": 5,
+   "moneda": "USD"
+  },
+  {
+   "id": "978747877829807",
+   "anunciante": "Brodent Dental Clinic-El Alto,La Paz",
+   "titulo": "",
+   "dias": 5,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1447184217476749",
+   "anunciante": "Clinica Dental Ramos",
+   "titulo": "",
+   "dias": 5,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1092347870199325",
+   "anunciante": "Dental Salazar",
+   "titulo": "",
+   "dias": 5,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1937157210579638",
+   "anunciante": "Dra. Ana Figueroa Ribera",
+   "titulo": "",
+   "dias": 5,
+   "moneda": "BOB"
+  },
+  {
+   "id": "2186976772224074",
+   "anunciante": "Dentall Bolivia",
+   "titulo": "",
+   "dias": 5,
+   "moneda": "USD"
+  },
+  {
+   "id": "2027285884646571",
+   "anunciante": "Dra. Ana Limaco Zegarra",
+   "titulo": "",
+   "dias": 5,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1155012750509263",
+   "anunciante": "Clinica Dental Ramos",
+   "titulo": "",
+   "dias": 5,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1762702808343208",
+   "anunciante": "Dra. Jessica Zelaya",
+   "titulo": "",
+   "dias": 5,
+   "moneda": "BOB"
+  },
+  {
+   "id": "2371209653624536",
+   "anunciante": "Clinica Dental Ramos",
+   "titulo": "",
+   "dias": 5,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1430940408976577",
+   "anunciante": "Estudo Visual",
+   "titulo": "Estudo Visual | 🦷+170 fichas visuales para estudiar Odontología Restauradora | 🦷+170 fichas visuales para estudiar Odontología Restauradora | 🦷+170 fichas visuales para estudiar Odontología Restauradora | 🦷+170 fichas visuales para estudiar Odontología Restauradora | 🦷+170 fichas visuales para estudiar Odontología Restauradora | 🦷+170 fichas visuales para estudiar Odontología Restauradora | 🦷+170 fichas visuales para estudiar Odontología Restauradora | 🦷+170 fichas visuales para estudiar Odontología Restauradora | 🦷+170 fichas visuales para estudiar Odontología Restauradora | 🦷+170 fichas visuales para estudiar Odontología Restauradora",
+   "dias": 5,
+   "moneda": "USD"
+  },
+  {
+   "id": "4311238102426813",
+   "anunciante": "Dr. Ricardo Robles R.",
+   "titulo": "",
+   "dias": 5,
+   "moneda": "BOB"
+  },
+  {
+   "id": "2953422698334489",
+   "anunciante": "Odont. Emma J. Cruz Castro",
+   "titulo": "Odont. Emma J. Cruz Castro",
+   "dias": 5,
+   "moneda": "BOB"
+  },
+  {
+   "id": "2252884265568284",
+   "anunciante": "Dra. Ana Limaco Zegarra",
+   "titulo": "",
+   "dias": 5,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1444894334407620",
+   "anunciante": "Clínica Vida Oral",
+   "titulo": "",
+   "dias": 5,
+   "moneda": "USD"
+  },
+  {
+   "id": "1616561553176231",
+   "anunciante": "AOF Academy By Dra. Dinair Sánchez Salvatierra",
+   "titulo": "",
+   "dias": 5,
+   "moneda": "USD"
+  },
+  {
+   "id": "1424518882980803",
+   "anunciante": "Kadmiel - Clínica Dental",
+   "titulo": "",
+   "dias": 5,
+   "moneda": "BOB"
+  },
+  {
+   "id": "2105274397024951",
+   "anunciante": "Estudo Visual",
+   "titulo": "Estudo Visual | 🦷+170 fichas visuales para estudiar Odontología Restauradora | 🦷+170 fichas visuales para estudiar Odontología Restauradora | 🦷+170 fichas visuales para estudiar Odontología Restauradora | 🦷+170 fichas visuales para estudiar Odontología Restauradora | 🦷+170 fichas visuales para estudiar Odontología Restauradora | 🦷+170 fichas visuales para estudiar Odontología Restauradora | 🦷+170 fichas visuales para estudiar Odontología Restauradora | 🦷+170 fichas visuales para estudiar Odontología Restauradora | 🦷+170 fichas visuales para estudiar Odontología Restauradora | 🦷+170 fichas visuales para estudiar Odontología Restauradora",
+   "dias": 5,
+   "moneda": "USD"
+  },
+  {
+   "id": "1116369744587066",
+   "anunciante": "Dra. Ingrid Suárez",
+   "titulo": "IMPERDIBLE BOTOX MASETEROS",
+   "dias": 5,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1113139208130165",
+   "anunciante": "Dr. Ricardo Robles R.",
+   "titulo": "",
+   "dias": 5,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1066489909535538",
+   "anunciante": "Ho Dental",
+   "titulo": "",
+   "dias": 5,
+   "moneda": "BOB"
+  },
+  {
+   "id": "3034037093614450",
+   "anunciante": "Dental Salazar",
+   "titulo": "",
+   "dias": 5,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1623454826085373",
+   "anunciante": "Clinica Dental Dent Family",
+   "titulo": "",
+   "dias": 5,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1742514583485901",
+   "anunciante": "DGSHAPE América Latina",
+   "titulo": "",
+   "dias": 4,
+   "moneda": "MXN"
+  },
+  {
+   "id": "2277729609744740",
+   "anunciante": "Corporativo Dions",
+   "titulo": "",
+   "dias": 4,
+   "moneda": "BOB"
+  },
+  {
+   "id": "2178474246383425",
+   "anunciante": "Odontología Valdivia",
+   "titulo": "Un toque de ingenieria en tu salud bucal 🤗😁",
+   "dias": 4,
+   "moneda": "USD"
+  },
+  {
+   "id": "1542759494557827",
+   "anunciante": "Dentalex- consultorio dental",
+   "titulo": "",
+   "dias": 4,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1081784461230683",
+   "anunciante": "FGM Dental Latinoamérica",
+   "titulo": "FGM Dental Latinoamérica | Blanqueador dental Whiteness HP Maxx - FGM Dental Group | Blanqueador dental Whiteness HP Maxx - FGM Dental Group | Blanqueador dental Whiteness HP Maxx - FGM Dental Group | Blanqueador dental Whiteness HP Maxx - FGM Dental Group | Blanqueador dental Whiteness HP Maxx - FGM Dental Group | Blanqueador dental Whiteness HP Maxx - FGM Dental Group",
+   "dias": 4,
+   "moneda": "BRL"
+  },
+  {
+   "id": "1086194774292089",
+   "anunciante": "Enfocate Santa Cruz",
+   "titulo": "Cupos Limitados",
+   "dias": 4,
+   "moneda": "BOB"
+  },
+  {
+   "id": "2583867188752042",
+   "anunciante": "Fresh Vitality",
+   "titulo": "Nuevo Video...",
+   "dias": 4,
+   "moneda": "USD"
+  },
+  {
+   "id": "4408590259358269",
+   "anunciante": "Implantes Dentales",
+   "titulo": "",
+   "dias": 4,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1479914713975196",
+   "anunciante": "Odontología Valdivia",
+   "titulo": "",
+   "dias": 4,
+   "moneda": "USD"
+  },
+  {
+   "id": "917929044533820",
+   "anunciante": "Nos Accords",
+   "titulo": "Más información sobre los implantes dentales.",
+   "dias": 4,
+   "moneda": "USD"
+  },
+  {
+   "id": "1420102520062701",
+   "anunciante": "Academia para odontólogos - Acospace",
+   "titulo": "",
+   "dias": 4,
+   "moneda": "USD"
+  },
+  {
+   "id": "958199626785261",
+   "anunciante": "Dr. Herbert Zelaya Justiniano",
+   "titulo": "",
+   "dias": 4,
+   "moneda": "BOB"
+  },
+  {
+   "id": "4610573049219848",
+   "anunciante": "Odontología Valdivia",
+   "titulo": "",
+   "dias": 4,
+   "moneda": "USD"
+  },
+  {
+   "id": "1084622570868042",
+   "anunciante": "SKY Dental Center Plus",
+   "titulo": "Agenda cita Ya!",
+   "dias": 4,
+   "moneda": "BOB"
+  },
+  {
+   "id": "2166190190637749",
+   "anunciante": "Clínica TELLO",
+   "titulo": "",
+   "dias": 4,
+   "moneda": "PEN"
+  },
+  {
+   "id": "1634649151726097",
+   "anunciante": "Clinica Dental Aguilar",
+   "titulo": "23 años haciendo implantes",
+   "dias": 4,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1432201592223348",
+   "anunciante": "Dra. Claudia Osinaga",
+   "titulo": "",
+   "dias": 4,
+   "moneda": "USD"
+  },
+  {
+   "id": "1834730047941884",
+   "anunciante": "Second Look",
+   "titulo": "Encontrar un Dentista para Adultos Mayores - Guía...",
+   "dias": 4,
+   "moneda": "USD"
+  },
+  {
+   "id": "1121727903663788",
+   "anunciante": "Dr. Diego Morote Estetica II",
+   "titulo": "",
+   "dias": 4,
+   "moneda": "BOB"
+  },
+  {
+   "id": "2512485592560725",
+   "anunciante": "Dra. Natalia Birnbaum Cirujana Dentista",
+   "titulo": "",
+   "dias": 4,
+   "moneda": "USD"
+  },
+  {
+   "id": "1481602570482680",
+   "anunciante": "TOP Dental",
+   "titulo": "",
+   "dias": 4,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1807538503895845",
+   "anunciante": "Clínica Dental Hurtado",
+   "titulo": "",
+   "dias": 4,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1460558952642880",
+   "anunciante": "Rodrigo Ivan Loayza Ibarra",
+   "titulo": "Radiovisiografo dental",
+   "dias": 4,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1482947213887219",
+   "anunciante": "Fresh Denture",
+   "titulo": "",
+   "dias": 4,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1638158897808630",
+   "anunciante": "Clínica Zeballos - Curso de Mejoramiento Profesional",
+   "titulo": "",
+   "dias": 4,
+   "moneda": "BOB"
+  },
+  {
+   "id": "952454911256594",
+   "anunciante": "DentoSmart",
+   "titulo": "",
+   "dias": 4,
+   "moneda": "USD"
+  },
+  {
+   "id": "1064521326419105",
+   "anunciante": "RJ Esthetic Clinica Dental",
+   "titulo": "",
+   "dias": 4,
+   "moneda": "USD"
+  },
+  {
+   "id": "1094892400195585",
+   "anunciante": "Clínica Dental MOLINA",
+   "titulo": "",
+   "dias": 4,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1082015317803010",
+   "anunciante": "Enfocate Santa Cruz",
+   "titulo": "Inscripciones Abiertas",
+   "dias": 4,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1141460225209914",
+   "anunciante": "Oncofem",
+   "titulo": "Oncofem",
+   "dias": 4,
+   "moneda": "BOB"
+  },
+  {
+   "id": "2058729558109772",
+   "anunciante": "Academia para odontólogos - Acospace",
+   "titulo": "",
+   "dias": 4,
+   "moneda": "USD"
+  },
+  {
+   "id": "1061775736619174",
+   "anunciante": "Euroclinic",
+   "titulo": "Seguro Dental",
+   "dias": 4,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1411326287175315",
+   "anunciante": "Offbeat Daily",
+   "titulo": "Una Guía Sobre Subvenciones Para Odontología...",
+   "dias": 4,
+   "moneda": "USD"
+  },
+  {
+   "id": "1797136838077660",
+   "anunciante": "Cursos de Mejoramiento Profesional-Clinica Dental Zeballos",
+   "titulo": "",
+   "dias": 4,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1641870434306957",
+   "anunciante": "Dental Esmeralda",
+   "titulo": "Dental Esmeralda",
+   "dias": 4,
+   "moneda": "BOB"
+  },
+  {
+   "id": "967747342421665",
+   "anunciante": "Clínica Dental Hurtado",
+   "titulo": "",
+   "dias": 4,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1673737227433537",
+   "anunciante": "Ribera Odontologia",
+   "titulo": "Estética Dental",
+   "dias": 4,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1603329148140329",
+   "anunciante": "Sorriso Dental Clinic Bolivia",
+   "titulo": "",
+   "dias": 4,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1144358651452512",
+   "anunciante": "Guia Autocuración Energética",
+   "titulo": "4.9/5 ⭐⭐⭐⭐⭐ y más de 1.500 reseñas positivas...",
+   "dias": 4,
+   "moneda": "BRL"
+  },
+  {
+   "id": "1741162466958959",
+   "anunciante": "Dra. Adriana Salinas",
+   "titulo": "",
+   "dias": 4,
+   "moneda": "USD"
+  },
+  {
+   "id": "1053503051023733",
+   "anunciante": "Hurdent - Estética Dental",
+   "titulo": "Zirconio Premium bs. 1200",
+   "dias": 4,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1102365512499700",
+   "anunciante": "Odontologica Henners",
+   "titulo": "",
+   "dias": 4,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1657119052435683",
+   "anunciante": "Crea Tu Camino",
+   "titulo": "CURSO TALLER PRESENCIAL DE CARILLAS - LA PAZ",
+   "dias": 4,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1109991954827040",
+   "anunciante": "Academia para odontólogos - Acospace",
+   "titulo": "",
+   "dias": 4,
+   "moneda": "USD"
+  },
+  {
+   "id": "1790539492205959",
+   "anunciante": "Academia para odontólogos - Acospace",
+   "titulo": "",
+   "dias": 4,
+   "moneda": "USD"
+  },
+  {
+   "id": "1628897552218746",
+   "anunciante": "Clinica Dental Cortez La Paz Bolivia",
+   "titulo": "",
+   "dias": 4,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1490680922887804",
+   "anunciante": "Consultorio dental Rondo - Sopocachi",
+   "titulo": "",
+   "dias": 4,
+   "moneda": "BOB"
+  },
+  {
+   "id": "4709883935955002",
+   "anunciante": "EndoClinic",
+   "titulo": "",
+   "dias": 4,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1477262211176408",
+   "anunciante": "Clinica Dental Aguilar",
+   "titulo": "23 años haciendo implantes",
+   "dias": 4,
+   "moneda": "BOB"
+  },
+  {
+   "id": "28522389450750537",
+   "anunciante": "Clinica Dental Aguilar",
+   "titulo": "23 años haciendo implantes",
+   "dias": 4,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1448252493888773",
+   "anunciante": "Deal Smart Daily",
+   "titulo": "Guía sobre Implantes Dentales para Mayores",
+   "dias": 4,
+   "moneda": "USD"
+  },
+  {
+   "id": "1518044647015967",
+   "anunciante": "Clinica Dental Aguilar",
+   "titulo": "🛡️ Implantes de calidad",
+   "dias": 4,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1839461887072772",
+   "anunciante": "Sorriso Dental Clinic Bolivia",
+   "titulo": "",
+   "dias": 4,
+   "moneda": "BOB"
+  },
+  {
+   "id": "2888088951562574",
+   "anunciante": "R&R Odontología",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "USD"
+  },
+  {
+   "id": "2345466289602485",
+   "anunciante": "R&R Odontología",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "USD"
+  },
+  {
+   "id": "1804972210838843",
+   "anunciante": "Enfócate Desarrollo integral",
+   "titulo": "Chatea con nosotros",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1778880416490415",
+   "anunciante": "Second Look",
+   "titulo": "Encontrar un Dentista para Adultos Mayores - Guía...",
+   "dias": 3,
+   "moneda": "USD"
+  },
+  {
+   "id": "1078701874930781",
+   "anunciante": "Paola Navarro",
+   "titulo": "Paola Navarro | 120+ Visual Orthodontics Maps | 120+ Visual Orthodontics Maps | 120+ Visual Orthodontics Maps | 120+ Visual Orthodontics Maps | 120+ Visual Orthodontics Maps | 120+ Visual Orthodontics Maps | 120+ Visual Orthodontics Maps | 120+ Visual Orthodontics Maps | 120+ Visual Orthodontics Maps | 120+ Visual Orthodontics Maps",
+   "dias": 3,
+   "moneda": "USD"
+  },
+  {
+   "id": "2307543976316535",
+   "anunciante": "Julissa Nicole Gonzales",
+   "titulo": "Brackets",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1503872954900767",
+   "anunciante": "Global Information Spot",
+   "titulo": "Obtenga más información sobre el costo de los implantes dentales.",
+   "dias": 3,
+   "moneda": "USD"
+  },
+  {
+   "id": "1140906221835544",
+   "anunciante": "ASISTA - Clínica Dental",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1443851780441223",
+   "anunciante": "Ceredent-Educación Especializada",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1145839128400947",
+   "anunciante": "Clínica Odontológica NJ",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "USD"
+  },
+  {
+   "id": "1435100268592402",
+   "anunciante": "Ledezma-Quezada Odontología Especializada",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1802533064212313",
+   "anunciante": "Enfócate Desarrollo integral",
+   "titulo": "Chatea con nosotros",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "2505921506551941",
+   "anunciante": "Ortobom Odontologia Santa Cruz de lá Sierra",
+   "titulo": "NUESTRO WHATSAPP👉",
+   "dias": 3,
+   "moneda": "USD"
+  },
+  {
+   "id": "1103805375733096",
+   "anunciante": "Iván Rojas",
+   "titulo": "Iván Rojas |   |   |   |   |   |   |   |   |   |",
+   "dias": 3,
+   "moneda": "USD"
+  },
+  {
+   "id": "917073781282966",
+   "anunciante": "Clinica Dental \"Sarita\"",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1738624337215395",
+   "anunciante": "Guessly",
+   "titulo": "Lol",
+   "dias": 3,
+   "moneda": "USD"
+  },
+  {
+   "id": "2977819065889304",
+   "anunciante": "Clínica Dental San Pablo - Odontología Avanzada",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1985741685445091",
+   "anunciante": "voestalpine Böhler Welding",
+   "titulo": "100 Years Böhler Welding | Böhler Welding - voestalpine Böhler Welding",
+   "dias": 3,
+   "moneda": "EUR"
+  },
+  {
+   "id": "2314809232707376",
+   "anunciante": "OsteoCompas Bolivia",
+   "titulo": "IPLOMADO EN ODONTOPEDIATRÍA – 3° VERSIÓN",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1806986314082336",
+   "anunciante": "OdontoElite",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "2578249539356183",
+   "anunciante": "Clinica Dental Sao Paulo",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1298699832736198",
+   "anunciante": "Cuid-Arte Clínica dental Sopocahi",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1446361227402386",
+   "anunciante": "Smile Lab - Ortodoncia La Paz",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1769639190754455",
+   "anunciante": "Alvarez Centro Odontológico",
+   "titulo": "Carillas en Resina",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "2024874088223277",
+   "anunciante": "Cero Caries",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "2531471617331458",
+   "anunciante": "Daily Vibes",
+   "titulo": "www.clueblog.com",
+   "dias": 3,
+   "moneda": "EUR"
+  },
+  {
+   "id": "3387486438102703",
+   "anunciante": "Clinica Dental Cortez La Paz Bolivia",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1927904441948733",
+   "anunciante": "Lucas Ferrari Venâncio",
+   "titulo": "El error que arruina tus carillas",
+   "dias": 3,
+   "moneda": "BRL"
+  },
+  {
+   "id": "4424574521100731",
+   "anunciante": "Enfócate Desarrollo integral",
+   "titulo": "Chatea con nosotros",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1652171353128584",
+   "anunciante": "Shandong steel",
+   "titulo": "Carbon Steel Angle | Carbon Steel Angle | Carbon Steel Angle | Carbon Steel Angle | Carbon Steel Angle",
+   "dias": 3,
+   "moneda": "CNY"
+  },
+  {
+   "id": "2025656808821990",
+   "anunciante": "Clínica Dental Vid",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1556657539565682",
+   "anunciante": "Clínica Odontológica NJ",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "USD"
+  },
+  {
+   "id": "2328407101309901",
+   "anunciante": "Dra. Ysabel",
+   "titulo": "DRA YSABEL",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1085219030984368",
+   "anunciante": "Dani Dentista Odontopediatría",
+   "titulo": "Simplifica tus pulpectomías",
+   "dias": 3,
+   "moneda": "CLP"
+  },
+  {
+   "id": "1849825809766945",
+   "anunciante": "Clínica Odontológica NJ",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "USD"
+  },
+  {
+   "id": "1117626514047788",
+   "anunciante": "OdontoMonica",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "4636659276660430",
+   "anunciante": "CN Steel Global Trade",
+   "titulo": "CN Steel Global Trade | Flat Steel Bar | Flat Steel Bar | Flat Steel Bar | Flat Steel Bar | Flat Steel Bar",
+   "dias": 3,
+   "moneda": "CNY"
+  },
+  {
+   "id": "1581227413747604",
+   "anunciante": "CLINICA PLUSDENT",
+   "titulo": "CLINICA PLUSDENT",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1614554187032144",
+   "anunciante": "HANSA - Soluciones Médicas",
+   "titulo": "HANSA - Soluciones Médicas |   |",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "4641418239422726",
+   "anunciante": "Smile Dental",
+   "titulo": "Chatea con nosotros",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1736721850732688",
+   "anunciante": "Dra Nicole Obando Cadena",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "3287449571644013",
+   "anunciante": "Colegio de Odontologos Santa Cruz",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "USD"
+  },
+  {
+   "id": "1621054949652024",
+   "anunciante": "Lucas Ferrari Venâncio",
+   "titulo": "El error que arruina tus carillas",
+   "dias": 3,
+   "moneda": "BRL"
+  },
+  {
+   "id": "1587299365690036",
+   "anunciante": "CIDES Capacitaciones Educa",
+   "titulo": "Chatea con nosotros",
+   "dias": 3,
+   "moneda": "PEN"
+  },
+  {
+   "id": "2254442368735472",
+   "anunciante": "Clinica Dental Ramos",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "2353577505468531",
+   "anunciante": "Clinica Platinum",
+   "titulo": "💎 Tratamiento Pink Glow | Clínica Platinum",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1862398621798121",
+   "anunciante": "Odontologia Soria",
+   "titulo": "Odontologia Soria",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "847154165121879",
+   "anunciante": "Health Fix Daily",
+   "titulo": "Lea más sobre los implantes dentales sin tornillos para personas mayores.",
+   "dias": 3,
+   "moneda": "USD"
+  },
+  {
+   "id": "967976839330486",
+   "anunciante": "Paola Navarro",
+   "titulo": "Paola Navarro | 120+ Visual Orthodontics Maps | 120+ Visual Orthodontics Maps | 120+ Visual Orthodontics Maps | 120+ Visual Orthodontics Maps | 120+ Visual Orthodontics Maps | 120+ Visual Orthodontics Maps | 120+ Visual Orthodontics Maps | 120+ Visual Orthodontics Maps | 120+ Visual Orthodontics Maps | 120+ Visual Orthodontics Maps",
+   "dias": 3,
+   "moneda": "USD"
+  },
+  {
+   "id": "1490668242885795",
+   "anunciante": "Guide Vault",
+   "titulo": "Conoce las opciones de atención dental para mayores",
+   "dias": 3,
+   "moneda": "USD"
+  },
+  {
+   "id": "2281657475899866",
+   "anunciante": "Lucas Ferrari Venâncio",
+   "titulo": "El error que arruina tus carillas",
+   "dias": 3,
+   "moneda": "BRL"
+  },
+  {
+   "id": "954708193853790",
+   "anunciante": "Absoliute/z",
+   "titulo": "Daily Care Toothpaste",
+   "dias": 3,
+   "moneda": "USD"
+  },
+  {
+   "id": "1100334912727366",
+   "anunciante": "Clinica Dental Aguilar",
+   "titulo": "¿Te dijeron que no hay solución?",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "27863228640019374",
+   "anunciante": "OsteoCompas Bolivia",
+   "titulo": "🦷 ESPECIALIDAD EN PERIODONCIA – 3° VERSIÓN",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1632147308693130",
+   "anunciante": "Athel - Materiales Dentales",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "928315810051556",
+   "anunciante": "Clinica Dental Aguilar",
+   "titulo": "🛡️ Implantes de calidad",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1567920777953664",
+   "anunciante": "Ortobom Odontologia Santa Cruz de lá Sierra",
+   "titulo": "NUESTRO WHATSAPP👉",
+   "dias": 3,
+   "moneda": "USD"
+  },
+  {
+   "id": "933782869463181",
+   "anunciante": "Clinica clarident plus",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1088472017280595",
+   "anunciante": "OdontoElite",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1648556793589172",
+   "anunciante": "Denta Belle odontología",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "972447511883198",
+   "anunciante": "Clinica Dental Cortez Santa Cruz Bolivia",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1306069078218413",
+   "anunciante": "Lucas Ferrari Venâncio",
+   "titulo": "El error que arruina tus carillas",
+   "dias": 3,
+   "moneda": "BRL"
+  },
+  {
+   "id": "3556134781230537",
+   "anunciante": "Clínica Dental Hurtado",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1623579469209194",
+   "anunciante": "Odontoclínica",
+   "titulo": "Chatea con nosotros",
+   "dias": 3,
+   "moneda": "USD"
+  },
+  {
+   "id": "4386608568257261",
+   "anunciante": "Enfócate Desarrollo integral",
+   "titulo": "Chatea con nosotros",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1610176913931614",
+   "anunciante": "Hailoyearn",
+   "titulo": "Hollow Wall Anchors & Molly Bolt Set",
+   "dias": 3,
+   "moneda": "USD"
+  },
+  {
+   "id": "1105044125332834",
+   "anunciante": "Clinica Dental Aguilar",
+   "titulo": "¿Te dijeron que no hay solución?",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "2087311315253910",
+   "anunciante": "Dentos Potosi",
+   "titulo": "Dentos Potosi | Dentos Potosi | Dentos Potosi | Dentos Potosi | Dentos Potosi | Dentos Potosi | Dentos Potosi | Dentos Potosi | Dentos Potosi | Dentos Potosi | Dentos Potosi",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1322562534278712",
+   "anunciante": "Epica Centro Odontológico",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1960613331582298",
+   "anunciante": "Clínica Dental San Pablo - Odontología Avanzada",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "4801852140140972",
+   "anunciante": "Bradent",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1096645676488373",
+   "anunciante": "Ultra Pack Dentista",
+   "titulo": "ARTES Y VIDEOS PARA DENTISTAS",
+   "dias": 3,
+   "moneda": "USD"
+  },
+  {
+   "id": "1617108100068000",
+   "anunciante": "Renovación Dental",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "2555562258280975",
+   "anunciante": "Lucas Ferrari Venâncio",
+   "titulo": "El error que arruina tus carillas",
+   "dias": 3,
+   "moneda": "BRL"
+  },
+  {
+   "id": "28545725201714657",
+   "anunciante": "Clínica Dental Apaza",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1516570983563780",
+   "anunciante": "Smart Health Tips",
+   "titulo": "Lee más sobre los implantes dentales sin tornillos y cómo funcionan.",
+   "dias": 3,
+   "moneda": "USD"
+  },
+  {
+   "id": "1042650765471812",
+   "anunciante": "Enfócate Desarrollo integral",
+   "titulo": "Chatea con nosotros",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1639963241064154",
+   "anunciante": "R&R Odontología",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "USD"
+  },
+  {
+   "id": "1138051768880820",
+   "anunciante": "Estudio Digital Co.",
+   "titulo": "🧠 ¿Tu cabeza va a mil? Ordénala en 3 minutos",
+   "dias": 3,
+   "moneda": "USD"
+  },
+  {
+   "id": "1779696566507304",
+   "anunciante": "OsteoCompas Bolivia",
+   "titulo": "🦷 DIPLOMADO EN CIRUGÍA BUCAL DENTOMAXILAR – 7° VERSIÓN",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "4015719348721885",
+   "anunciante": "Dra. Ysabel",
+   "titulo": "DRA YSABEL",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1125515953352145",
+   "anunciante": "voestalpine Böhler Welding",
+   "titulo": "Revolutionize Welding with CO-BRO",
+   "dias": 3,
+   "moneda": "EUR"
+  },
+  {
+   "id": "3328103790709630",
+   "anunciante": "Dra. Lourdes Robles Esp. en Rehabilitación Oral y Estética Dental",
+   "titulo": "Dra. Lourdes Robles Esp. en Rehabilitación Oral y Estética Dental | Dra. Lourdes Robles Esp. en Rehabilitación Oral y Estética Dental | Dra. Lourdes Robles Esp. en Rehabilitación Oral y Estética Dental | Dra. Lourdes Robles Esp. en Rehabilitación Oral y Estética Dental | Dra. Lourdes Robles Esp. en Rehabilitación Oral y Estética Dental | Dra. Lourdes Robles Esp. en Rehabilitación Oral y Estética Dental | Dra. Lourdes Robles Esp. en Rehabilitación Oral y Estética Dental | Dra. Lourdes Robles Esp. en Rehabilitación Oral y Estética Dental | Dra. Lourdes Robles Esp. en Rehabilitación Oral y Estética Dental",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1102927202441998",
+   "anunciante": "Estudio Digital Co.",
+   "titulo": "🔄 De Caos a Claridad: Misma persona, un día más ligero",
+   "dias": 3,
+   "moneda": "USD"
+  },
+  {
+   "id": "1591252515826337",
+   "anunciante": "Daily Vibes",
+   "titulo": "www.clueblog.com",
+   "dias": 3,
+   "moneda": "EUR"
+  },
+  {
+   "id": "1097688152969054",
+   "anunciante": "Lucas Ferrari Venâncio",
+   "titulo": "El error que arruina tus carillas",
+   "dias": 3,
+   "moneda": "BRL"
+  },
+  {
+   "id": "1639250681226232",
+   "anunciante": "OdontoGroup",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "USD"
+  },
+  {
+   "id": "1850896509595574",
+   "anunciante": "Paola Navarro",
+   "titulo": "Paola Navarro | 120+ Visual Orthodontics Maps | 120+ Visual Orthodontics Maps | 120+ Visual Orthodontics Maps | 120+ Visual Orthodontics Maps | 120+ Visual Orthodontics Maps | 120+ Visual Orthodontics Maps | 120+ Visual Orthodontics Maps | 120+ Visual Orthodontics Maps | 120+ Visual Orthodontics Maps | 120+ Visual Orthodontics Maps",
+   "dias": 3,
+   "moneda": "USD"
+  },
+  {
+   "id": "1883501883015448",
+   "anunciante": "Clinica clarident plus",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1412425240870096",
+   "anunciante": "OsteoCompas Bolivia",
+   "titulo": "🦷 ESPECIALIDAD EN PERIODONCIA – 3° VERSIÓN",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1075792535081290",
+   "anunciante": "Dra. Ysabel",
+   "titulo": "DRA YSABEL",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "848773381627868",
+   "anunciante": "Lucas Ferrari Venâncio",
+   "titulo": "El error que arruina tus carillas",
+   "dias": 3,
+   "moneda": "BRL"
+  },
+  {
+   "id": "1400364498833018",
+   "anunciante": "Yrlene Almanza - Estética Dental Preventiva y Limpieza Profunda",
+   "titulo": "Limpieza Dental sin Dolor - Promo Bs. 180 🦷✨",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "2160271514559855",
+   "anunciante": "Enfócate Desarrollo integral",
+   "titulo": "Chatea con nosotros",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1444810967500249",
+   "anunciante": "Fahl Center",
+   "titulo": "🗓️ 16 e 17 de Novembro de 2026",
+   "dias": 3,
+   "moneda": "BRL"
+  },
+  {
+   "id": "1107382525354377",
+   "anunciante": "Dra Daniela Quispe Coria",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1685658112987125",
+   "anunciante": "Mr. Dent Odontología",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1632101731904042",
+   "anunciante": "Scholarship Zone Pro",
+   "titulo": "Más información sobre becas de odontología en Japón",
+   "dias": 3,
+   "moneda": "USD"
+  },
+  {
+   "id": "39593308316934016",
+   "anunciante": "Clinica Dental Cortez Santa Cruz Bolivia",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "2336090457205040",
+   "anunciante": "SkyCam Cámara Intraoral",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "BRL"
+  },
+  {
+   "id": "1741995406861167",
+   "anunciante": "OsteoCompas Bolivia",
+   "titulo": "🦷 DIPLOMADO EN ODONTOPEDIATRÍA – 3° VERSIÓN Con mención en pacientes especiales",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1396786379267040",
+   "anunciante": "Clinica Dental Stildent",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1632166821947612",
+   "anunciante": "Oral Clean",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1627745608934975",
+   "anunciante": "Lucas Ferrari Venâncio",
+   "titulo": "El error que arruina tus carillas",
+   "dias": 3,
+   "moneda": "BRL"
+  },
+  {
+   "id": "1637107997991126",
+   "anunciante": "Enfócate Desarrollo integral",
+   "titulo": "Chatea con nosotros",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "2222687304948588",
+   "anunciante": "Clinica Una Mano Amiga",
+   "titulo": "Clinica Una Mano Amiga",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1434860751904563",
+   "anunciante": "Ortobom Odontologia Santa Cruz de lá Sierra",
+   "titulo": "NUESTRO WHATSAPP👉",
+   "dias": 3,
+   "moneda": "USD"
+  },
+  {
+   "id": "1773293147213792",
+   "anunciante": "Odontoclínica",
+   "titulo": "Chatea con nosotros",
+   "dias": 3,
+   "moneda": "USD"
+  },
+  {
+   "id": "2125003998376345",
+   "anunciante": "Paola Navarro",
+   "titulo": "Paola Navarro | 120+ Visual Orthodontics Maps | 120+ Visual Orthodontics Maps | 120+ Visual Orthodontics Maps | 120+ Visual Orthodontics Maps | 120+ Visual Orthodontics Maps | 120+ Visual Orthodontics Maps | 120+ Visual Orthodontics Maps | 120+ Visual Orthodontics Maps | 120+ Visual Orthodontics Maps | 120+ Visual Orthodontics Maps",
+   "dias": 3,
+   "moneda": "USD"
+  },
+  {
+   "id": "955593544273110",
+   "anunciante": "Ortobom Odontologia Santa Cruz de lá Sierra",
+   "titulo": "Chatea con nosotros",
+   "dias": 3,
+   "moneda": "USD"
+  },
+  {
+   "id": "990889554030277",
+   "anunciante": "OdontoElite",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "950696860957701",
+   "anunciante": "Lucas Ferrari Venâncio",
+   "titulo": "El error que arruina tus carillas",
+   "dias": 3,
+   "moneda": "BRL"
+  },
+  {
+   "id": "1417978639701487",
+   "anunciante": "MESH Nebulizadores",
+   "titulo": "QUIERO REALIZAR UN PEDIDO",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1081998961115648",
+   "anunciante": "Lucas Ferrari Venâncio",
+   "titulo": "El error que arruina tus carillas",
+   "dias": 3,
+   "moneda": "BRL"
+  },
+  {
+   "id": "1134051105696342",
+   "anunciante": "Clinica Dental Aguilar",
+   "titulo": "¿Te dijeron que no hay solución?",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "958514900650963",
+   "anunciante": "Ortobom Odontologia Santa Cruz de lá Sierra",
+   "titulo": "NUESTRO WHATSAPP👉",
+   "dias": 3,
+   "moneda": "USD"
+  },
+  {
+   "id": "2157835264801263",
+   "anunciante": "Clinica Dental Ramos",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "2326519974837240",
+   "anunciante": "Posgrado Cazorla Cochabamba",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "USD"
+  },
+  {
+   "id": "1076154678550495",
+   "anunciante": "Paola Navarro",
+   "titulo": "Paola Navarro | 120+ Visual Orthodontics Maps | 120+ Visual Orthodontics Maps | 120+ Visual Orthodontics Maps | 120+ Visual Orthodontics Maps | 120+ Visual Orthodontics Maps | 120+ Visual Orthodontics Maps | 120+ Visual Orthodontics Maps | 120+ Visual Orthodontics Maps | 120+ Visual Orthodontics Maps | 120+ Visual Orthodontics Maps",
+   "dias": 3,
+   "moneda": "USD"
+  },
+  {
+   "id": "2216300928950830",
+   "anunciante": "Jhimbo Import",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "USD"
+  },
+  {
+   "id": "1380748407375949",
+   "anunciante": "Estética Integral CMed Virgen del Socavón",
+   "titulo": "Campaña Cirugía Pediátrica + Odontopediatría",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1637360267994938",
+   "anunciante": "Consultorio Dental G. Dentis",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1676275120771861",
+   "anunciante": "OdontoGroup",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "USD"
+  },
+  {
+   "id": "960125020493134",
+   "anunciante": "Lucas Ferrari Venâncio",
+   "titulo": "El error que arruina tus carillas",
+   "dias": 3,
+   "moneda": "BRL"
+  },
+  {
+   "id": "1421935643364794",
+   "anunciante": "Edu Insight Daily",
+   "titulo": "Guía sobre costes y opciones de implantes dentales completos",
+   "dias": 3,
+   "moneda": "USD"
+  },
+  {
+   "id": "1541405201005069",
+   "anunciante": "Clínica Dental San Pablo - Odontología Avanzada",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1401457278819899",
+   "anunciante": "Yrlene Almanza - Estética Dental Preventiva y Limpieza Profunda",
+   "titulo": "Limpieza Dental sin Dolor - Promo Bs. 180 🦷✨",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1996243674381139",
+   "anunciante": "Dra. Ysabel",
+   "titulo": "DRA YSABEL",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "2127024101519999",
+   "anunciante": "OsteoCompas Bolivia",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1770411134201815",
+   "anunciante": "OdontoElite",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "2928020664226997",
+   "anunciante": "Smart Pulse",
+   "titulo": "Necesito brackets, pero no tengo el dinero: qué hacer (guía)",
+   "dias": 3,
+   "moneda": "EUR"
+  },
+  {
+   "id": "1415085736775190",
+   "anunciante": "Edu Insight Daily",
+   "titulo": "Guía sobre costes y opciones de implantes dentales completos",
+   "dias": 3,
+   "moneda": "USD"
+  },
+  {
+   "id": "1748694079682984",
+   "anunciante": "Ledezma-Quezada Odontología Especializada",
+   "titulo": "",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "2025369331509976",
+   "anunciante": "OsteoCompas Bolivia",
+   "titulo": "🦷 DIPLOMADO EN ORTOPEDIA DENTOFACIAL – 4° VERSIÓN",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "895284743538656",
+   "anunciante": "Smile Dental",
+   "titulo": "Chatea con nosotros",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1524525369508983",
+   "anunciante": "Bright Learning Daily",
+   "titulo": "Lee más sobre Becas Odontología en Canadá",
+   "dias": 3,
+   "moneda": "USD"
+  },
+  {
+   "id": "1768579021088577",
+   "anunciante": "OsteoCompas Bolivia",
+   "titulo": "🦷 DIPLOMADO EN ORTOPEDIA DENTOFACIAL – 4° VERSIÓN",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1091064440395930",
+   "anunciante": "Guessly",
+   "titulo": "Try Now!",
+   "dias": 3,
+   "moneda": "USD"
+  },
+  {
+   "id": "1653103296239693",
+   "anunciante": "Clinica Dental Aguilar",
+   "titulo": "🛡️ Implantes de calidad",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1612337577101050",
+   "anunciante": "OsteoCompas Bolivia",
+   "titulo": "🦷 MAESTRÍA EN CIRUGÍA BUCAL DENTOMAXILAR – 2° VERSIÓN",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "3256954181169753",
+   "anunciante": "Enfócate Desarrollo integral",
+   "titulo": "Chatea con nosotros",
+   "dias": 3,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1736872820732116",
+   "anunciante": "Now for you",
+   "titulo": "Aprende ampliamente sobre Clip In Teeth para dientes faltantes",
+   "dias": 2,
+   "moneda": "USD"
+  },
+  {
+   "id": "1612312057106689",
+   "anunciante": "Be Informed Like A Pro",
+   "titulo": "Más Información",
+   "dias": 2,
+   "moneda": "EUR"
+  },
+  {
+   "id": "2399314467482318",
+   "anunciante": "NovelPop",
+   "titulo": "El brillante regreso de la esposa rechazada",
+   "dias": 2,
+   "moneda": "USD"
+  },
+  {
+   "id": "2580949012389257",
+   "anunciante": "Newbecame.lm06",
+   "titulo": "Handheld Fat Trimmer for Beef & Pork",
+   "dias": 2,
+   "moneda": "USD"
+  },
+  {
+   "id": "2712638772526617",
+   "anunciante": "Dra. Andrea Roca",
+   "titulo": "",
+   "dias": 2,
+   "moneda": "USD"
+  },
+  {
+   "id": "2050685538917883",
+   "anunciante": "Festivalment",
+   "titulo": "Multi-Tier Wall Mounted Shelf",
+   "dias": 2,
+   "moneda": "USD"
+  },
+  {
+   "id": "1524373192834815",
+   "anunciante": "Academia para odontólogos - Acospace",
+   "titulo": "",
+   "dias": 2,
+   "moneda": "USD"
+  },
+  {
+   "id": "1646676523646468",
+   "anunciante": "Consumer Stuff",
+   "titulo": "Brackets cubiertos por el gobierno más información",
+   "dias": 2,
+   "moneda": "EUR"
+  },
+  {
+   "id": "1148125150973249",
+   "anunciante": "NovelPop",
+   "titulo": "El brillante regreso de la esposa rechazada",
+   "dias": 2,
+   "moneda": "USD"
+  },
+  {
+   "id": "1044756845186367",
+   "anunciante": "CEOS Odontologia Digital",
+   "titulo": "",
+   "dias": 2,
+   "moneda": "BOB"
+  },
+  {
+   "id": "962669892981418",
+   "anunciante": "Lucas Ferrari Venâncio",
+   "titulo": "El error que arruina tus carillas",
+   "dias": 2,
+   "moneda": "BRL"
+  },
+  {
+   "id": "4030006807301453",
+   "anunciante": "Academia para odontólogos - Acospace",
+   "titulo": "",
+   "dias": 2,
+   "moneda": "USD"
+  },
+  {
+   "id": "1569879354357561",
+   "anunciante": "NovelPop",
+   "titulo": "El brillante regreso de la esposa rechazada",
+   "dias": 2,
+   "moneda": "USD"
+  },
+  {
+   "id": "2113834286008111",
+   "anunciante": "Bradent Formación continua",
+   "titulo": "",
+   "dias": 2,
+   "moneda": "BOB"
+  },
+  {
+   "id": "948686721187561",
+   "anunciante": "Dental Care A&S",
+   "titulo": "",
+   "dias": 2,
+   "moneda": "BOB"
+  },
+  {
+   "id": "2157738881497808",
+   "anunciante": "Now for you",
+   "titulo": "Aprende ampliamente sobre Clip In Teeth para dientes faltantes",
+   "dias": 2,
+   "moneda": "USD"
+  },
+  {
+   "id": "3045206152484593",
+   "anunciante": "LuxuryTips",
+   "titulo": "Brackets Cubiertos por el Gobierno 2026: La última guía",
+   "dias": 2,
+   "moneda": "EUR"
+  },
+  {
+   "id": "1180273404426933",
+   "anunciante": "Dra. Nayra Suyo Rivera",
+   "titulo": "",
+   "dias": 2,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1721195520005669",
+   "anunciante": "Aristocrat 2026",
+   "titulo": "Aprende ampliamente sobre los alineadores invisibles para dientes que se pueden pagar mensualmente",
+   "dias": 2,
+   "moneda": "USD"
+  },
+  {
+   "id": "28200552832978841",
+   "anunciante": "Ledezma-Quezada Odontología Especializada",
+   "titulo": "",
+   "dias": 2,
+   "moneda": "BOB"
+  },
+  {
+   "id": "2234348127129775",
+   "anunciante": "Prof Mariana Garcia",
+   "titulo": "(4.9/5) ⭐ ⭐ ⭐ ⭐ ⭐",
+   "dias": 2,
+   "moneda": "BRL"
+  },
+  {
+   "id": "1578497323473858",
+   "anunciante": "Kaleidra: Short Drama Series",
+   "titulo": "",
+   "dias": 2,
+   "moneda": "USD"
+  },
+  {
+   "id": "1784290385949289",
+   "anunciante": "Consultorio Santa Apolonia",
+   "titulo": "",
+   "dias": 2,
+   "moneda": "USD"
+  },
+  {
+   "id": "1421959486783469",
+   "anunciante": "3Shape LATAM",
+   "titulo": "3Shape LATAM Forum",
+   "dias": 2,
+   "moneda": "DKK"
+  },
+  {
+   "id": "1825826128424724",
+   "anunciante": "CEOS Odontologia Digital",
+   "titulo": "",
+   "dias": 2,
+   "moneda": "BOB"
+  },
+  {
+   "id": "979671028479310",
+   "anunciante": "Bamaxisboon_hhh",
+   "titulo": "Belt Removal &amp; Installation Tools",
+   "dias": 2,
+   "moneda": "USD"
+  },
+  {
+   "id": "1096564729526197",
+   "anunciante": "Faceplastica by Dr. Ales",
+   "titulo": "",
+   "dias": 2,
+   "moneda": "USD"
+  },
+  {
+   "id": "972881335886060",
+   "anunciante": "Academia para odontólogos - Acospace",
+   "titulo": "",
+   "dias": 2,
+   "moneda": "USD"
+  },
+  {
+   "id": "2153819892159526",
+   "anunciante": "Smile Dental",
+   "titulo": "Chatea con nosotros",
+   "dias": 2,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1471844158234353",
+   "anunciante": "Newbecame.lm06",
+   "titulo": "Handheld Fat Trimmer for Beef & Pork",
+   "dias": 2,
+   "moneda": "USD"
+  },
+  {
+   "id": "1130727342868016",
+   "anunciante": "Prof Mariana Garcia",
+   "titulo": "(4.9/5) ⭐ ⭐ ⭐ ⭐ ⭐",
+   "dias": 2,
+   "moneda": "BRL"
+  },
+  {
+   "id": "2553887981779031",
+   "anunciante": "Endeavoried.EA08",
+   "titulo": "No Drill Curtain Rod Brackets",
+   "dias": 2,
+   "moneda": "USD"
+  },
+  {
+   "id": "1116338137799179",
+   "anunciante": "Ultra Pack Dentista",
+   "titulo": "+500 Publicaciones Dentales",
+   "dias": 2,
+   "moneda": "USD"
+  },
+  {
+   "id": "1106849712094263",
+   "anunciante": "CIOSP - Congresso Internacional de Odontologia de São Paulo",
+   "titulo": "CIOSP - Congresso Internacional de Odontologia de São Paulo | CIOSP - Congresso Internacional de Odontologia de São Paulo | CIOSP - Congresso Internacional de Odontologia de São Paulo | CIOSP - Congresso Internacional de Odontologia de São Paulo | CIOSP - Congresso Internacional de Odontologia de São Paulo",
+   "dias": 2,
+   "moneda": "BRL"
+  },
+  {
+   "id": "1084284997935022",
+   "anunciante": "J Visual Designer",
+   "titulo": "",
+   "dias": 2,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1587308619799985",
+   "anunciante": "Descuentos, Diplomados y Cursos Bolivia",
+   "titulo": "DESCUENTOS SOLO POR 2 DIAS",
+   "dias": 2,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1092250310057069",
+   "anunciante": "Wow view",
+   "titulo": "Aprende ampliamente sobre los brackets removibles para adultos que pueden ajustarse al presupuesto",
+   "dias": 2,
+   "moneda": "EUR"
+  },
+  {
+   "id": "1600392054886698",
+   "anunciante": "DentalYS",
+   "titulo": "DentalYS",
+   "dias": 2,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1110309644704463",
+   "anunciante": "3Shape LATAM",
+   "titulo": "3Shape LATAM Forum",
+   "dias": 2,
+   "moneda": "DKK"
+  },
+  {
+   "id": "2944078809276908",
+   "anunciante": "Business Pulse Trends",
+   "titulo": "Aprende ampliamente sobre cómo arreglar dientes faltantes con opciones más allá de la odontología tradicional",
+   "dias": 2,
+   "moneda": "USD"
+  },
+  {
+   "id": "2521509751593868",
+   "anunciante": "Dra.Mishel Rodriguez",
+   "titulo": "",
+   "dias": 2,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1088023380796800",
+   "anunciante": "3Shape LATAM",
+   "titulo": "3Shape LATAM Forum",
+   "dias": 2,
+   "moneda": "DKK"
+  },
+  {
+   "id": "1433936052028971",
+   "anunciante": "Goramblessip.FF06",
+   "titulo": "🔥 👨‍🌾🔥Portable Electric Drill Pump",
+   "dias": 2,
+   "moneda": "USD"
+  },
+  {
+   "id": "1527705012497108",
+   "anunciante": "Academia para odontólogos - Acospace",
+   "titulo": "",
+   "dias": 2,
+   "moneda": "USD"
+  },
+  {
+   "id": "1417550626500022",
+   "anunciante": "Sonrisitas Odontologia",
+   "titulo": "Promoción de DISEÑO DE SONRISA",
+   "dias": 2,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1141947285170242",
+   "anunciante": "Dental Sonríe.es",
+   "titulo": "",
+   "dias": 2,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1383489483771173",
+   "anunciante": "Prof Mariana Garcia",
+   "titulo": "(4.9/5) ⭐ ⭐ ⭐ ⭐ ⭐",
+   "dias": 2,
+   "moneda": "BRL"
+  },
+  {
+   "id": "1622608346175478",
+   "anunciante": "Formación Continua Odontología Gasproms",
+   "titulo": "",
+   "dias": 2,
+   "moneda": "USD"
+  },
+  {
+   "id": "4558640567726121",
+   "anunciante": "Kallos Institute",
+   "titulo": "",
+   "dias": 2,
+   "moneda": "BOB"
+  },
+  {
+   "id": "4622798244621556",
+   "anunciante": "Unandes Santa Cruz - Universidad de Los Andes",
+   "titulo": "Chatea con nosotros",
+   "dias": 2,
+   "moneda": "BOB"
+  },
+  {
+   "id": "3499015980281428",
+   "anunciante": "Endeavoried.EA08",
+   "titulo": "No Drill Curtain Rod Brackets",
+   "dias": 2,
+   "moneda": "USD"
+  },
+  {
+   "id": "1620931819386549",
+   "anunciante": "Dra . Pasapera",
+   "titulo": "",
+   "dias": 2,
+   "moneda": "BOB"
+  },
+  {
+   "id": "28716182084681495",
+   "anunciante": "Prof Mariana Garcia",
+   "titulo": "(4.9/5) ⭐ ⭐ ⭐ ⭐ ⭐",
+   "dias": 2,
+   "moneda": "BRL"
+  },
+  {
+   "id": "1416295859921871",
+   "anunciante": "Ultra Pack Dentista",
+   "titulo": "+500 Publicaciones Dentales",
+   "dias": 2,
+   "moneda": "USD"
+  },
+  {
+   "id": "1105984371915546",
+   "anunciante": "SmileTech Academy",
+   "titulo": "",
+   "dias": 2,
+   "moneda": "USD"
+  },
+  {
+   "id": "1082969858046152",
+   "anunciante": "Smart Pulse",
+   "titulo": "Brackets con poco dinero: Más información",
+   "dias": 2,
+   "moneda": "EUR"
+  },
+  {
+   "id": "1709661676767983",
+   "anunciante": "Kaleidra: Short Drama Series",
+   "titulo": "",
+   "dias": 2,
+   "moneda": "USD"
+  },
+  {
+   "id": "1393098365837333",
+   "anunciante": "CIOSP - Congresso Internacional de Odontologia de São Paulo",
+   "titulo": "",
+   "dias": 2,
+   "moneda": "BRL"
+  },
+  {
+   "id": "1800720084596070",
+   "anunciante": "Kallos Institute",
+   "titulo": "",
+   "dias": 2,
+   "moneda": "BOB"
+  },
+  {
+   "id": "2509483982861018",
+   "anunciante": "OdontoNicky GDLR",
+   "titulo": "",
+   "dias": 2,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1585718003296956",
+   "anunciante": "Clinica Dental \"Sarita\"",
+   "titulo": "",
+   "dias": 2,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1380738797154771",
+   "anunciante": "NovelPop",
+   "titulo": "El brillante regreso de la esposa rechazada",
+   "dias": 2,
+   "moneda": "USD"
+  },
+  {
+   "id": "1640210997447747",
+   "anunciante": "Awareness Station",
+   "titulo": "Tratamiento de ortodoncia cubierto por el gobierno: más información",
+   "dias": 2,
+   "moneda": "USD"
+  },
+  {
+   "id": "1433001899030589",
+   "anunciante": "Huamate New Materils",
+   "titulo": "Huamate New Materils | Carbon Steel Square Tube | Carbon Steel Square Tube | Carbon Steel Square Tube | Carbon Steel Square Tube",
+   "dias": 2,
+   "moneda": "USD"
+  },
+  {
+   "id": "2198676964022780",
+   "anunciante": "It Sounds Cool",
+   "titulo": "Aprende ampliamente sobre Clip In Teeth para dientes faltantes",
+   "dias": 2,
+   "moneda": "USD"
+  },
+  {
+   "id": "1345754337443733",
+   "anunciante": "Lucas Ferrari Venâncio",
+   "titulo": "El error que arruina tus carillas",
+   "dias": 2,
+   "moneda": "BRL"
+  },
+  {
+   "id": "2171567733796041",
+   "anunciante": "Prof Mariana Garcia",
+   "titulo": "(4.9/5) ⭐ ⭐ ⭐ ⭐ ⭐",
+   "dias": 2,
+   "moneda": "BRL"
+  },
+  {
+   "id": "2581492955701402",
+   "anunciante": "NovelPop",
+   "titulo": "",
+   "dias": 2,
+   "moneda": "USD"
+  },
+  {
+   "id": "4447966225518375",
+   "anunciante": "Centro Dental \"Denture\"",
+   "titulo": "",
+   "dias": 2,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1573633594012318",
+   "anunciante": "Newbecame.lm06",
+   "titulo": "Handheld Fat Trimmer for Beef & Pork",
+   "dias": 2,
+   "moneda": "USD"
+  },
+  {
+   "id": "2103276597223605",
+   "anunciante": "OdontoElite",
+   "titulo": "",
+   "dias": 2,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1112085354738161",
+   "anunciante": "Smart Pulse",
+   "titulo": "Brackets con poco dinero: Más información",
+   "dias": 2,
+   "moneda": "EUR"
+  },
+  {
+   "id": "2567135147080868",
+   "anunciante": "Dra. Cristiani Vargas",
+   "titulo": "",
+   "dias": 2,
+   "moneda": "BOB"
+  },
+  {
+   "id": "1133123372478292",
+   "anunciante": "AF Firma Inmobiliaria",
+   "titulo": "",
+   "dias": 2,
+   "moneda": "USD"
+  },
+  {
+   "id": "1802911910830355",
+   "anunciante": "SmileTech Academy",
+   "titulo": "api.whatsapp.com",
+   "dias": 2,
+   "moneda": "USD"
+  },
+  {
+   "id": "4707559789569129",
+   "anunciante": "Foihletpath.HE28",
+   "titulo": "Curtain Rod Brackets with Clips",
+   "dias": 2,
+   "moneda": "USD"
+  },
+  {
+   "id": "1101649005554402",
+   "anunciante": "More Info More",
+   "titulo": "Tratamiento de ortodoncia cubierto por el gobierno: más información",
+   "dias": 2,
+   "moneda": "USD"
+  },
+  {
+   "id": "1972162503870765",
+   "anunciante": "Newbecame.lm06",
+   "titulo": "Handheld Fat Trimmer for Beef & Pork",
+   "dias": 2,
+   "moneda": "USD"
+  },
+  {
+   "id": "1834583190889494",
+   "anunciante": "NovelPop",
+   "titulo": "El brillante regreso de la esposa rechazada",
+   "dias": 2,
+   "moneda": "USD"
+  },
+  {
+   "id": "2469766110181333",
+   "anunciante": "OsteoCompas Bolivia",
+   "titulo": "🦷 ESPECIALIDAD EN ODONTOPEDIATRÍA – 1° VERSIÓN",
+   "dias": 2,
+   "moneda": "BOB"
+  },
+  {
+   "id": "4030770287227521",
+   "anunciante": "Prof Mariana Garcia",
+   "titulo": "(4.9/5) ⭐ ⭐ ⭐ ⭐ ⭐",
+   "dias": 2,
+   "moneda": "BRL"
+  },
+  {
+   "id": "1067463439619154",
+   "anunciante": "Thefortunately%5",
+   "titulo": "No Drill Curtain Rod Brackets",
+   "dias": 2,
+   "moneda": "USD"
+  }
+ ],
+ "volumen_sin_detalle": {
+  "Jelou Latam (page 102068831276740)": "238 activos; se vieron 30, todos «¡Agenda una llamada!» de menos de 2 días: no hay antigüedad que medir",
+  "AgendaPro": "313 activos; se vieron 81 (tope 50 por consulta, más nuevos primero)",
+  "Dentalink": "92-106 activos según la consulta; se vieron 69",
+  "Medilink Bolivia SRL (page 421787564639894)": "124 activos de equipos e insumos médicos («COTIZAR», «CALIDAD GARANTIZADA», sets de infusión): NO es software clínico"
+ }
+}
