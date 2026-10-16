@@ -8,9 +8,9 @@
 ## Abierto (PRs en borrador, estado medido hoy)
 - [ ] #124 términos (punto 14): limpio contra master. Mergear y mirar el alta en prod.
 - [ ] #132 K1 (respuesta al recordatorio): limpio contra master.
-- [ ] #113 gracia C13: CONFLICTO con master. Rebasar, actualizar `PlanClient.estado-real` y `vencimientos`.
-- [ ] #140 widget W1/W1b (rama `integ/w1-w1b`): CONFLICTO. Rebasar. Aparte: bloquear `/public/api/` en Chatwoot y `hmac_mandatory` en los inboxes API.
-- [ ] #154 S2 (IP solo desde Cloudflare): CONFLICTO, CI cancelado. Rebasar y volver a correr.
+- [ ] #113 gracia C13: CONFLICTO con master en 11 archivos de suscripción (plan-state, vencimientos, aviso-solo-lectura, baja-programada, PlanClient, AvisoRenovacion, voseo-ratchet, CHANGELOG). Es lógica de cobro: va con Opus y la suite completa. Rebasar, actualizar `PlanClient.estado-real` y `vencimientos`.
+- [ ] #140 widget W1/W1b (rama `integ/w1-w1b`): CONFLICTO en 4 archivos (`lib/chatwoot.ts`, `proxy.ts`, CHANGELOG, PROJECT_BACKLOG). Rebasar. Aparte: bloquear `/public/api/` en Chatwoot y `hmac_mandatory` en los inboxes API.
+- [x] #154 S2 (IP solo desde Cloudflare): master mergeado en la rama (merge, sin reescribir historia), 1 conflicto en `lib/audit.test.ts` resuelto; tsc 0, suite 938 archivos / 15279 tests / 0 rojos — `b060fade`. Falta: CI del PR, mergear y publicar. modelos: sonnet.
 - [ ] #168 web guiada dental: CI en rojo (1 failure). Ver la causa.
 - [ ] #170 web business snapshot: limpio.
 - [ ] #184 pulido 13: la sesión `optimistic-ride` lo termina (falta la tarjeta de la ayuda). No tocar.
@@ -24,7 +24,7 @@
 - Merge y publicación desde el latido: sin la cola vigente no se mergean borradores con migraciones. Destraba: la sesión Plataforma con la cola al día.
 
 ## Próximas 3 destrabadas (para terminar la 1.0)
-- [ ] 1. Rebasar #113, #140 y #154 contra master y correr la suite completa (sin pushear entre :20 y :55 UTC en horas de publicación).
+- [ ] 1. (#154 hecho) Mergear master en #113 y #140 contra master y correr la suite completa (sin pushear entre :20 y :55 UTC en horas de publicación).
 - [ ] 2. Mergear #124 y #132 (limpios) con CI verde, publicar con `publicar.sh` y MIRAR en prod.
 - [ ] 3. Decidir #168 (CI rojo) y #170; después refrescar la demo y sacar C1-C7.
 
