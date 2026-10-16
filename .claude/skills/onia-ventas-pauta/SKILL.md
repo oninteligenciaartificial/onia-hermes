@@ -732,3 +732,15 @@ Reglas de edición de la pauta: las 11 de COMUNICACION §4 (subtítulos Archivo 
 - **Búsqueda por país** (`countries:["BO"]`) = anuncios cuyo alcance incluye Bolivia: sirve para ver quién le pauta a Santa Cruz (ADQ §2.6.1). **Ausencia ≠ inexistencia.**
 - **Lo que no sirve:** el navegador de la nube (Biblioteca 403, Pinterest pide sesión). **Pinterest no mide rendimiento**: es inspiración visual.
 - **No es raspado masivo:** pocas consultas dirigidas (la herramienta lo prohíbe).
+
+## 10. Prepago y webinar (16-oct)
+
+> Pedido de la jefa con el OK de Sergio Urcullo: caja de Bs 3.000 al 31-oct. Piezas: `sales-kit/07-PREPAGO-LEADS-Y-PROSPECTOS.md` y `08-WEBINAR-DUENOS-DE-CLINICAS.md`.
+
+- **La oferta de prepago es el plan anual que el producto ya tiene** (cobra 10 meses, K-02 ✅): Básico Bs 3.200, Crece 5.500, Profesional 8.900, Completo 12.900. Un solo Básico anual ya cubre la meta. No se inventa otro descuento ni urgencia.
+- **Prepago ≠ «si no le sirve no paga»:** A-08 es de la prueba sin tarjeta. La devolución a 14 días del prepago es decisión de Sergio Urcullo; mientras no la apruebe, ningún texto dice «devolvemos».
+- **El Básico no trae la lista diaria de pendientes** (agentes desde Crece, K-11): a quien se le ofrece Básico no se le vende esa lista.
+- **Los borradores en frío del 1-2 oct (`ONIA_PROSPECTOS_*_SCZ.md` §6.9) quedaron vencidos:** dicen «lo manda desde su propio WhatsApp» y «la IA escribe una sola vez el modelo», que el revisor de promesas rechaza. El molde vigente está en `07` §3.3. Caso: los detectó `promesa-que-el-producto-cumple.mjs` al correr el nuevo documento.
+- **Los dos gates tropiezan con lo que se escribe para PROHIBIR:** una fila «no se dice» que cita la frase mala, o un «Bs 198» del anuncio de un competidor, rompe `test:venta-honestidad` o el revisor. Se redacta la prohibición sin repetir la frase, y el precio ajeno no se cita.
+- **Re-leer la pauta el día del envío, en una sola consulta:** `ads_library_search` con 18 `page_id` juntos, `ACTIVE`, `BO`, 50 resultados: devuelve lo más nuevo primero; los que no salen se marcan «sin confirmar», no «dejaron de pautar». Del 1-oct al 16-oct, la mayoría de los negocios renovó anuncios esta semana y 6 de la lista (Gelinski, Jhimbo, Quevedo, Clarident Plus, Innova Kids, Henners) no aparecieron.
+- **Sin cuenta demo no hay webinar con producto** (L-05): plan B = cuenta nueva en vivo, o se posterga. No se dan webinars con capturas generadas.

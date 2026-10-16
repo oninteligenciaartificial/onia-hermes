@@ -9,6 +9,8 @@
 
 - [x] (10-oct, pedido de la madre) Borradores del seguimiento de los 7 leads de agosto y revisión de si son prospectos: `sales-kit/SEGUIMIENTO-LEADS.md` §0. Nada enviado. «El nuevo» y las 8 colgadas esperan los datos del VPS (la nube no tiene llave).
 
+- [x] (16-oct, pedido de la jefa) Prepago: 7 leads con evidencia, 6 mensajes de usted con oferta del plan anual, prospectos con pauta re-leída hoy y guion del webinar — `sales-kit/07-PREPAGO-LEADS-Y-PROSPECTOS.md` y `08-WEBINAR-DUENOS-DE-CLINICAS.md`. Nada enviado. Esperan el OK de Sergio Urcullo (envío, devolución a 14 días, fecha del webinar).
+
 ## Bloqueado
 - **Sergio Urcullo:** tarjeta en ONIA Ads (gasto); `ONIA_QA_EMAIL` y `ONIA_QA_PASSWORD` de una cuenta de prueba en el entorno de Ventas; las tomas a cámara T9, T10 y T12 del VSL.
 - **Plataforma:** la cuenta demo con la misma persona en agenda y Pendientes, y teléfono/correo de prueba propios; verificar G-01 (qué hace «Aprobar») antes del clic de C2. De ahí salen las tareas 1 y 2.
