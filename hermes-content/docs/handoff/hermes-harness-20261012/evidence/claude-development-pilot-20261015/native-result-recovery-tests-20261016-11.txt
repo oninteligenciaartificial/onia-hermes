@@ -1,0 +1,89 @@
+EEEEEE.............................................................................
+======================================================================
+ERROR: test_corrupt_sink_and_changed_request_hold_before_verifier (test_native_work_entrypoint.NativeResultRecoveryTests.test_corrupt_sink_and_changed_request_hold_before_verifier)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/hermes-native-bridge-work/test_native_work_entrypoint.py", line 378, in setUp
+    self.sink = FileResultSink(self.sink_path, _fixture_dir_fsync=lambda _path: None)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/hermes-native-bridge-work/native_result_store.py", line 102, in __init__
+    self._root_fingerprint = self._validate_root(initial=True)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/hermes-native-bridge-work/native_result_store.py", line 130, in _validate_root
+    raise ResultStoreIntegrityError("result root must be outside Git worktrees")
+native_result_store.ResultStoreIntegrityError: result root must be outside Git worktrees
+
+======================================================================
+ERROR: test_missing_receipt_or_verifier_holds_before_consuming_qa (test_native_work_entrypoint.NativeResultRecoveryTests.test_missing_receipt_or_verifier_holds_before_consuming_qa)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/hermes-native-bridge-work/test_native_work_entrypoint.py", line 378, in setUp
+    self.sink = FileResultSink(self.sink_path, _fixture_dir_fsync=lambda _path: None)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/hermes-native-bridge-work/native_result_store.py", line 102, in __init__
+    self._root_fingerprint = self._validate_root(initial=True)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/hermes-native-bridge-work/native_result_store.py", line 130, in _validate_root
+    raise ResultStoreIntegrityError("result root must be outside Git worktrees")
+native_result_store.ResultStoreIntegrityError: result root must be outside Git worktrees
+
+======================================================================
+ERROR: test_receipt_conflict_is_immutable (test_native_work_entrypoint.NativeResultRecoveryTests.test_receipt_conflict_is_immutable)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/hermes-native-bridge-work/test_native_work_entrypoint.py", line 378, in setUp
+    self.sink = FileResultSink(self.sink_path, _fixture_dir_fsync=lambda _path: None)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/hermes-native-bridge-work/native_result_store.py", line 102, in __init__
+    self._root_fingerprint = self._validate_root(initial=True)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/hermes-native-bridge-work/native_result_store.py", line 130, in _validate_root
+    raise ResultStoreIntegrityError("result root must be outside Git worktrees")
+native_result_store.ResultStoreIntegrityError: result root must be outside Git worktrees
+
+======================================================================
+ERROR: test_result_receipt_survives_reopen_and_qa_uses_exact_persisted_bytes_once (test_native_work_entrypoint.NativeResultRecoveryTests.test_result_receipt_survives_reopen_and_qa_uses_exact_persisted_bytes_once)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/hermes-native-bridge-work/test_native_work_entrypoint.py", line 378, in setUp
+    self.sink = FileResultSink(self.sink_path, _fixture_dir_fsync=lambda _path: None)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/hermes-native-bridge-work/native_result_store.py", line 102, in __init__
+    self._root_fingerprint = self._validate_root(initial=True)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/hermes-native-bridge-work/native_result_store.py", line 130, in _validate_root
+    raise ResultStoreIntegrityError("result root must be outside Git worktrees")
+native_result_store.ResultStoreIntegrityError: result root must be outside Git worktrees
+
+======================================================================
+ERROR: test_sink_store_without_checkpoint_never_recollects_or_recovers_by_filename (test_native_work_entrypoint.NativeResultRecoveryTests.test_sink_store_without_checkpoint_never_recollects_or_recovers_by_filename)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/hermes-native-bridge-work/test_native_work_entrypoint.py", line 378, in setUp
+    self.sink = FileResultSink(self.sink_path, _fixture_dir_fsync=lambda _path: None)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/hermes-native-bridge-work/native_result_store.py", line 102, in __init__
+    self._root_fingerprint = self._validate_root(initial=True)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/hermes-native-bridge-work/native_result_store.py", line 130, in _validate_root
+    raise ResultStoreIntegrityError("result root must be outside Git worktrees")
+native_result_store.ResultStoreIntegrityError: result root must be outside Git worktrees
+
+======================================================================
+ERROR: test_valid_recovered_bundle_closes_once_with_bound_review_after_restart (test_native_work_entrypoint.NativeResultRecoveryTests.test_valid_recovered_bundle_closes_once_with_bound_review_after_restart)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/hermes-native-bridge-work/test_native_work_entrypoint.py", line 378, in setUp
+    self.sink = FileResultSink(self.sink_path, _fixture_dir_fsync=lambda _path: None)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/hermes-native-bridge-work/native_result_store.py", line 102, in __init__
+    self._root_fingerprint = self._validate_root(initial=True)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/hermes-native-bridge-work/native_result_store.py", line 130, in _validate_root
+    raise ResultStoreIntegrityError("result root must be outside Git worktrees")
+native_result_store.ResultStoreIntegrityError: result root must be outside Git worktrees
+
+----------------------------------------------------------------------
+Ran 83 tests in 0.848s
+
+FAILED (errors=6)

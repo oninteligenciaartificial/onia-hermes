@@ -4,6 +4,7 @@ from dataclasses import replace
 import hashlib
 import io
 import json
+import os
 from pathlib import Path
 import tempfile
 import time
@@ -341,7 +342,12 @@ class NativeResultRecoveryTests(unittest.TestCase):
     """Real local queue/sink checkpoint recovery; provider and browser are fakes."""
 
     def setUp(self):
-        self.area = tempfile.TemporaryDirectory()
+        # Explicit parent avoids tempfile's cached default inside a Git worktree.
+        # This controls ONLY fixtures; FileResultSink still validates all ancestors.
+        self.area = tempfile.TemporaryDirectory(
+            prefix="hermes-native-result-test-",
+            dir=os.environ.get("HERMES_RESULT_TEST_TMPDIR") or None,
+        )
         self.addCleanup(self.area.cleanup)
         self.root = Path(self.area.name)
         self.db_path = self.root / "queue.sqlite3"

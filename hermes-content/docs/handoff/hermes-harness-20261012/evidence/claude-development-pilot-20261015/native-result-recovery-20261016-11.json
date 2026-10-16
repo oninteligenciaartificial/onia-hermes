@@ -1,0 +1,140 @@
+{
+  "contract": "native-hermes-result-recovery-20261016-11",
+  "timestamp_utc": "2026-10-16T16:19:51.632646+00:00",
+  "repository": "oninteligenciaartificial/onia-hermes",
+  "branch": "codex/hermes-native-thread-20261016",
+  "base_commit": "eb99d5c2fefa6c4dd5ead11fbe45721fdc114af5",
+  "base_tree": "a6ff2333149eb9b8d7e3f52418fac69fafa8918b",
+  "source_mode": "hydrated exact-source snapshot, not updated Git checkout",
+  "outcome": "DEFINITIVE_DIAGNOSIS_FOR_TESTED_ROOTS; FIXTURE_PORTABILITY_IMPROVED; SINK_SETUP_STILL_BLOCKED",
+  "model": {
+    "configured": "UNKNOWN",
+    "observed": "UNKNOWN"
+  },
+  "diagnosis": {
+    "fixture_default": "TemporaryDirectory without explicit parent; tempfile.gettempdir() observed /tmp, TMPDIR absent",
+    "default_git_ancestors": [
+      "/tmp/.git",
+      "/workspace/.git"
+    ],
+    "var_tmp_trial": {
+      "permission_mode": "exec with_additional_permissions write /var/tmp",
+      "own_directory": "/var/tmp/hermes-sink-11-efv2qmnw",
+      "mode": "0700",
+      "observed_git_ancestor": "/var/tmp/.git",
+      "removed_own_directory": true,
+      "sink_would_reject": true
+    },
+    "dev_shm_trial": {
+      "permission_mode": "exec with_additional_permissions write /dev/shm",
+      "own_directory": "/dev/shm/hermes-sink-11-iresp06w",
+      "mode": "0700",
+      "observed_git_ancestor": "/dev/shm/.git",
+      "real_constructor_without_fixture": "BLOCKED",
+      "error_type": "ResultStoreIntegrityError",
+      "reason": "result root must be outside Git worktrees",
+      "own_directory_removed": true
+    },
+    "marker_creation_mechanism": "UNKNOWN; marker absent in earlier read-only inspection, present in actual granted executions; no inferred platform mechanism",
+    "no_more_root_probes": true
+  },
+  "patch": {
+    "scope": "NativeResultRecoveryTests only: HERMES_RESULT_TEST_TMPDIR selects parent; new TemporaryDirectory prefix; default unchanged when unset",
+    "source_fixture_blob": "033d0c8bf2dfc1aa1b66142bfe3c61652feb6ce5",
+    "production_sink_unchanged": {
+      "blob_sha": "b6041b4a9c5dc164f248569f1536bd2b77ed7a0a",
+      "sha256": "fe23ce4d56c5b3727c88462f336a7e37a4e0495c966d29384a5c3adcf21f63ef"
+    },
+    "guard_relaxed_or_mocked": false,
+    "system_chmod_mount_proxy_or_git_marker_changes": false,
+    "schema_authority_queue_R4_provider_changes": false
+  },
+  "tests": {
+    "loaded_classes": [
+      "test_native_work_entrypoint.NativeResultRecoveryTests",
+      "test_native_thread_qa",
+      "test_native_thread_artifacts",
+      "test_native_cloud_cli",
+      "test_native_receipt_bridge",
+      "test_native_work_entrypoint.NativeWorkEntrypointTests"
+    ],
+    "fixture_environment_override": {
+      "HERMES_RESULT_TEST_TMPDIR": "/var/tmp"
+    },
+    "command_shape": "Python unittest.TextTestRunner loads the listed six-test class plus77 focal cases; runs under explicit /var/tmp write permission. No install or provider.",
+    "result": {
+      "tests_run": 83,
+      "passed": 77,
+      "errors": 6,
+      "failures": 0,
+      "skipped": 0,
+      "configured_test_parent": "/var/tmp",
+      "error_types": [
+        "native_result_store.ResultStoreIntegrityError: result root must be outside Git worktrees",
+        "native_result_store.ResultStoreIntegrityError: result root must be outside Git worktrees",
+        "native_result_store.ResultStoreIntegrityError: result root must be outside Git worktrees",
+        "native_result_store.ResultStoreIntegrityError: result root must be outside Git worktrees",
+        "native_result_store.ResultStoreIntegrityError: result root must be outside Git worktrees",
+        "native_result_store.ResultStoreIntegrityError: result root must be outside Git worktrees"
+      ],
+      "log_sha256": "fdda16c705e375ffb6afad1d00519d9e9ef8d1203b4e52e90a75d53a0af62128",
+      "log_bytes": 6925,
+      "configured_explicit_parent": true,
+      "suite_success": false,
+      "summary_helper_exitcode": 0,
+      "exitcode_note": "Summary-only helper exited0; suite recorded six errors and was not successful."
+    },
+    "complete_regression_pass": false,
+    "stdout_summary_text": "{\"tests_run\": 83, \"passed\": 77, \"errors\": 6, \"failures\": 0, \"skipped\": 0, \"configured_test_parent\": \"/var/tmp\", \"error_types\": [\"native_result_store.ResultStoreIntegrityError: result root must be outside Git worktrees\", \"native_result_store.ResultStoreIntegrityError: result root must be outside Git worktrees\", \"native_result_store.ResultStoreIntegrityError: result root must be outside Git worktrees\", \"native_result_store.ResultStoreIntegrityError: result root must be outside Git worktrees\", \"native_result_store.ResultStoreIntegrityError: result root must be outside Git worktrees\", \"native_result_store.ResultStoreIntegrityError: result root must be outside Git worktrees\"], \"log_sha256\": \"fdda16c705e375ffb6afad1d00519d9e9ef8d1203b4e52e90a75d53a0af62128\", \"log_bytes\": 6925, \"configured_explicit_parent\": true, \"suite_success\": false, \"summary_helper_exitcode\": 0, \"exitcode_note\": \"Summary-only helper exited0; suite recorded six errors and was not successful.\"}\n",
+    "stdout_summary_sha256": "12868f3fc8de10b177b8e7b6bbe773354103b6a314023f90b56646472754b324",
+    "stdout_summary_note": "Exact summary text emitted in the final evidence assembly from the observed test result; test log is separate and hashed.",
+    "unittest_log_path": "hermes-content/docs/handoff/hermes-harness-20261012/evidence/claude-development-pilot-20261015/native-result-recovery-tests-20261016-11.txt",
+    "unittest_log_sha256": "fdda16c705e375ffb6afad1d00519d9e9ef8d1203b4e52e90a75d53a0af62128",
+    "unittest_log_bytes": 6925
+  },
+  "real_sink_fsync_process_reopen": {
+    "status": "BLOCKED_BEFORE_STORE",
+    "real_production_constructor_attempted": true,
+    "fixture_hook_used_in_constructor_probe": false,
+    "store_fsync_separate_process_reopen_executed": false,
+    "reason": "actual granted /dev/shm root has Git ancestor; constructor rejects before write. No available tested root passed production preflight."
+  },
+  "review": {
+    "agent": "/root/review_native_artifacts",
+    "reuse": "same sole sequential reviewer",
+    "configured_model": "gpt-6-luna",
+    "configured_effort": "low",
+    "observed_model": "UNKNOWN",
+    "findings": "No defect found in minimal fixture/runbook; guard intact; 83run77pass6errors accurately distinguished.",
+    "independent_test_rerun": false,
+    "scope": "static diff/runbook/log and summary review; no new probes or edits"
+  },
+  "files": [
+    {
+      "path": "hermes-content/docs/handoff/hermes-harness-20261012/test_native_work_entrypoint.py",
+      "sha256": "83c426bbd3a283c6c37de036c40ddafc674f85ebad3f139f100e19ffd02083f2",
+      "bytes": 29658
+    },
+    {
+      "path": "hermes-content/docs/handoff/hermes-harness-20261012/NATIVE-RESULT-TESTING.md",
+      "sha256": "0e9ae27bffb47b39f63fb0a68586e9a9d14316aef8d99475246bff722c3d8a0e",
+      "bytes": 4498
+    },
+    {
+      "path": "hermes-content/docs/handoff/hermes-harness-20261012/evidence/claude-development-pilot-20261015/native-result-recovery-tests-20261016-11.txt",
+      "sha256": "fdda16c705e375ffb6afad1d00519d9e9ef8d1203b4e52e90a75d53a0af62128",
+      "bytes": 6925
+    }
+  ],
+  "next_action": "Provide an approved execution path outside every Git ancestor in the actual tool view, then use HERMES_RESULT_TEST_TMPDIR and run six recovery cases plus77 focal; separately run production sink without fixture fsync hook in two processes. No sandbox bypass or Git marker removal.",
+  "limits": [
+    "No full-green regression, real sink fsync/reopen, native cloud durability, autonomy or PC-off claim.",
+    "Dedicated fixture root cannot remove an ancestor Git marker.",
+    "A snapshot or stdout summary helper exit0 is not a successful test suite; six setup errors remain.",
+    "No transports, services, credentials, installations or real dispatch introduced."
+  ],
+  "publication": {
+    "method": "base-tree create_tree/create_commit and expected-head CAS from eb99d5c2fefa6c4dd5ead11fbe45721fdc114af5,force=false",
+    "main_pr_merge_deploy": false
+  }
+}
