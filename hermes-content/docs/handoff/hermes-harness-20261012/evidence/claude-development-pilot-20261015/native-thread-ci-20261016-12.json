@@ -1,0 +1,100 @@
+{
+  "contract": "native-hermes-ci-20261016-12",
+  "owner": "01a14185-4a94-7b60-8214-bf9943c9ec8f",
+  "timestamp_utc": "2026-10-16T16:28:56Z",
+  "status": "PREPARED_REVIEWED_NOT_DISPATCHED",
+  "repository": "oninteligenciaartificial/onia-hermes",
+  "branch": "codex/hermes-native-thread-20261016",
+  "base_commit": "f13ba1e51bcf0243082cb6bef248856b0d42c69f",
+  "base_tree": "7d071af516467673499c7f404050a4052e766596",
+  "snapshot": {
+    "kind": "GitHub MCP exact-source snapshot; not an updated local Git checkout",
+    "local_modules_verified_against_source_blobs": true
+  },
+  "rules": {
+    "ref": "892991f96c6fb4da52443ac178f2c67757b5ceb7",
+    "CODEX_blob": "1752d9421ccb05de13c4c3f541335907ec3f2b23",
+    "AGENTS_blob": "da342b2fa7e1e8c9fb78c9b10313b6145f276d1e",
+    "equipo_blob": "d3d410bdb0ca4b01ac9ad7be777cd073b10737e0",
+    "aprender_blob": "3e52632865692389aae634913d3885657a399c46",
+    "jarvis_blob": "2896c6e0707e4f8a39df558e4c009cf9c217c111",
+    "hash_is_not_compliance": true
+  },
+  "workflow": {
+    "path": ".github/workflows/hermes-jarvis-pruebas.yml",
+    "id": 372678841,
+    "id_evidence": "coordinator confirmed; direct ID metadata endpoint rejected by connector allowlist",
+    "original_blob": "cca614e3fd2bb44989fc9a0690ec19d644f097e8",
+    "original_job_preserved_except_authorized_gate": true,
+    "harness_only": {
+      "type": "boolean",
+      "default": false
+    },
+    "new_job_gate": "workflow_dispatch AND inputs.harness_only",
+    "runner": "ubuntu-latest",
+    "timeout_minutes": 5,
+    "permissions": {
+      "contents": "read"
+    },
+    "persist_credentials": false,
+    "installs": false,
+    "provider_calls": false,
+    "uploads": false
+  },
+  "files": {
+    ".github/workflows/hermes-jarvis-pruebas.yml": {
+      "sha256": "1278cf7ff731249c949baed3294e25c7c50f170d42d001040b53d2e2a278101c",
+      "git_blob_sha": "7c6337591abc84399cb0d13ee8c0bdc73d65a9c7"
+    },
+    "hermes-content/docs/handoff/hermes-harness-20261012/smoke_native_result_store.py": {
+      "sha256": "450f0abac89a57ded981e59d961fa65127a9fbdca70acc0efa4318ee87e0b44c",
+      "git_blob_sha": "aa85ee705d9c95b4acb95492df1a4bd4eafe9d4a"
+    }
+  },
+  "production_sink_unchanged": {
+    "sha256": "fe23ce4d56c5b3727c88462f336a7e37a4e0495c966d29384a5c3adcf21f63ef",
+    "git_blob_sha": "b6041b4a9c5dc164f248569f1536bd2b77ed7a0a"
+  },
+  "checks": {
+    "smoke_python_compile": "PASS",
+    "workflow_inline_python_compile": "PASS",
+    "child_python_compile": "PASS",
+    "cli_help": "PASS (no sink instantiated)",
+    "test_discovery": {
+      "recovery": 6,
+      "focal": 77
+    },
+    "original_job_comparison": "PASS",
+    "yaml_validation": "static structure review only; no YAML parser installed or claimed",
+    "sink_execution": "NOT_RUN",
+    "ci_execution": "NOT_RUN",
+    "prior_sink_regression": "INCOMPLETE: six setup errors under Codex Git ancestor layout; guard unchanged",
+    "no_new_temp_root_probe": true
+  },
+  "smoke": {
+    "source_inventory": "exact-source harness directory listing contained no smoke/sink-named reusable script; existing runbook has inline example",
+    "fixture_dir_fsync": false,
+    "root": "own TemporaryDirectory 0700 under supplied RUNNER_TEMP parent",
+    "store_process": "A",
+    "load_process": "B after A exits",
+    "verification": "exact synthetic bytes, SHA256, request, operation, receipt byte count",
+    "cleanup": "only TemporaryDirectory-owned roots",
+    "evidence_limit": "process reopen on runner does not prove crash durability, live provider auth, cloud persistence, transport or PC-off autonomy"
+  },
+  "review": {
+    "agent": "/root/review_native_artifacts",
+    "model_configured": "gpt-6-luna",
+    "effort": "low",
+    "model_observed": "UNKNOWN",
+    "method": "independent sequential static review plus AST/compile; no sink executed",
+    "initial_low_finding": "direct hidden child CLI could write synthetic data to caller root",
+    "resolution": "removed child/root CLI; parent creates own root and invokes constant Python child snippet via argv",
+    "remaining_findings": 0
+  },
+  "implementer": {
+    "model_configured": "UNKNOWN",
+    "model_observed": "UNKNOWN"
+  },
+  "dispatch_proposal_only": "gh workflow run 372678841 --repo oninteligenciaartificial/onia-hermes --ref codex/hermes-native-thread-20261016 -f harness_only=true",
+  "dispatch_gate": "Coordinator reviews published diff/head and existing limits before dispatch; worker must not activate."
+}
