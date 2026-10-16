@@ -3,6 +3,10 @@ name: aprender-de-todo
 description: Protocolo transversal de Claude y Codex para aprender por dimensión de todo material enviado por Sergio Urcullo; ficha con evidencia, regla en skill canónica y prueba de uso por una sesión. Link sin instrucción significa aprender, no producir.
 ---
 
+## Override de evidencia y publicación — 2026-10-16
+
+Se conserva el método de aprender por fuente, dimensiones, evidencia, regla transferible y prueba de uso. No copies la skill ni crees una ficha duplicada si ya hay una canónica. Este método no autoriza producción, publicación, gasto, despliegue ni contacto externo: la autorización aplicable se toma de `CLAUDE.md`, `AGENTS.md`, `CODEX.md` y el contrato vigente. Una regla incorporada o un hash no demuestra que se aplicó; acreditar uso con artefacto y verificación concretos.
+
 # Aprender de todo
 
 Vigente desde 2026-10-09, por pedido de Sergio Urcullo. Entrada común mediante

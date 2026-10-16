@@ -3,6 +3,12 @@ name: equipo-de-agentes
 description: El método del equipo de agentes de Onia (desde el 9-oct-2026). La madre local orquesta; cada sesión de la nube trabaja en loop su propia cola; Codex hace el código cerrado; los verificadores Haiku 5.5 controlan que se cumpla; a Sergio Urcullo solo le llega lo publicado. Invocar al arrancar una sesión madre, al despachar trabajo o al revisar si algo se cumplió.
 ---
 
+## Override vigente para el harness Cloud Hermes — 2026-10-16
+
+Este método se conserva como fuente, pero sus instrucciones de ownership, herramienta y cadencia fueron escritas para otro estado. Para el objetivo vigente, Hermes orquesta; los ejecutores autorizados son Codex Cloud nativo por suscripción y Claude Code Cloud, con PC apagada como criterio de aceptación. Prevalecen `AGENTS.md`, `CODEX.md` y el bloque vigente de `COORDINATION_MANIFEST.md`.
+
+No tratar como instrucciones operativas actuales las asignaciones a una madre Claude local, `scripts/codex-tarea.sh` como transporte de Codex Cloud, colas que se autorrellenan, loops/cron históricos, publicación/commit/push automático, ni los modelos fijados en esta skill. No activar ni crear schedulers ni despacho automático desde esta referencia. Reutilizar el controlador y los scripts canónicos existentes; máximo un ejecutor y un revisor secuencial según el contrato actual. Los gates Git y de efectos externos salen del contrato autorizado y fuentes vigentes, no del historial de esta skill.
+
 # Equipo de agentes de Onia
 
 Sergio Urcullo, 9-oct-2026:
