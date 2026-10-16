@@ -257,7 +257,7 @@ El diagnóstico no cambia nada en el VPS.
 
 | Sección | Bien si dice |
 |---|---|
-| 0 | «✅ resumen, lector de calendario, aduana, vigía de aprobaciones, guardia, pedidos y latido: al día» (desde el 9-oct exige el resumen en tres bloques: PASÓ · NECESITO · SIGUE; desde el 10-oct, `onia-latido.sh` en `/root/bin`) |
+| 0 | «✅ resumen, lector de calendario, aduana, vigía de aprobaciones, guardia, pedidos, latido y QA de publicación: al día» (desde el 9-oct exige el resumen en tres bloques: PASÓ · NECESITO · SIGUE; desde el 10-oct, `onia-latido.sh`, `onia-qa-release.sh` y `onia-mirar.js` en `/root/bin`) |
 | 1 | «✅ /root/backups/hermes-jarvis-…» |
 | 1b | nada con ❌ (si falta la llave, el VPS no llega a GitHub o n8n no responde, aborta acá sin tocar nada) |
 | 5 y 5b | 5: conectado al calendario; 5b: «✅ probado en su calendario: crear → mover → cancelar (la prueba ya no está)» |
@@ -276,6 +276,19 @@ El diagnóstico no cambia nada en el VPS.
 Si algo sale mal: `gh workflow run hermes-jarvis.yml --ref main -f accion=revertir`. `aplicar` es todo o nada:
 si falla la Fase A, no tocó nada.
 
+**El QA después de cada publicación (10-oct, `HERMES_ROL_QA.md` Q5).** `aplicar` agrega
+`*/15 … onia-latido.sh qa-release 900 '/root/bin/onia-qa-release.sh' >> /var/log/onia-qa-release.log`.
+Cuando cambia el release de `onia-platform`, abre /dashboard y /checkout con `onia-mirar.js` y la cuenta de
+prueba de QA, que va fija en el script. Lo que sale roto lo vuelve a mirar un minuto después. Si sigue roto,
+abre una tarea para Plataforma, y la interrupción 4 sale por la aduana solo si a los 30 min sigue igual. Si
+el que falla es el instrumento (Chromium, node, la cuenta de QA), es NO MEDIDO: tarea para este carril y
+código 2 en el latido, nunca una interrupción. Además lee cada ventana de las :50 en
+`/var/log/onia-publicar-solo.log`. Una ventana fallida es una línea y dos seguidas, una tarea que el resumen
+de las 06:30 nombra. Una espera de firma no cuenta como fallida. Verde en vivo: la primera corrida después
+de `aplicar` ya mira el release que corre, y su log dice «release <sha> (primera vez que lo miro): /dashboard
+OK … · /checkout OK …». Desde la nube se ve el latido, pero no ese renglón. Para eso el diagnóstico tiene que
+mostrar la cola del log (anotado en la cola del carril).
+
 **Pruebas después de `aplicar`:**
 
 | # | Cómo | Verde si |
@@ -284,6 +297,16 @@ si falla la Fase A, no tocó nada.
 | P3 | Sergio Urcullo le escribe a Hermes «pedile a Claude: ¿cuántos cambios entraron hoy al sistema?» → le llega el texto con un código → se lo contesta a Hermes → link → ✅ por la aduana (el recolector pasa cada 2 min). El tiempo, con `onia-pedido-claude.sh --lista` y los `.tsv` | Llega la respuesta firmada. Además mide por primera vez que la rutina pueda pushear `respuesta/*`; si no puede, el cierre de las 21:30 lo marca «sin respuesta» |
 | P4 | `aplicar` ya prueba crear, mover y cancelar su propio evento. La prueba real: «agendá una prueba mañana a las 7» → Hermes muestra el cambio → con su sí lo crea; «cancelá la prueba» → sí → lo cancela | El evento aparece y desaparece en su Google Calendar, y nada pasó sin su sí |
 | P5 | La madre, por SSH con el OK de Sergio Urcullo: `/root/bin/onia-tablero.sh create "Prueba P5"` y `/root/bin/onia-tablero.sh block <id> "Prueba P5: contestá ok <id>" --kind needs_input`. Él contesta `ok <id>` a Hermes | El aviso le llega en ≤2 min (fuera de la noche y de sus bloques) y la tarea sale de `blocked`. Después se completa |
+
+**El diagnóstico diario (10-oct, `HERMES_ROL_QA.md` Q2).** `.github/workflows/hermes-qa-diario.yml` corre
+`diagnostico.sh` todos los días a las 10:00 UTC (06:00 La Paz), en el mismo runner del VPS. Tiene su
+propio grupo de `concurrency`: si compartiera el de `aplicar`, podría cancelar un `revertir` pendiente.
+Solo lee, no tiene inputs y a mano corre solo desde `main`. `aplicar` y `revertir` siguen siendo
+manuales. La sesión de la nube lee su log con el MCP de GitHub, sin SSH. La sección 15 da cada línea del
+crontab con su cadencia (el hueco más largo entre dos corridas), su log y la última vez que escribió, y
+marca MUDO lo que tiene el log más viejo que su penúltima corrida programada, es decir, lo que faltó a
+dos seguidas. Sirve igual para un trabajo de cada 2 min, uno de día o uno semanal. Lo que escribe a una
+ruta armada al correr (`$(date)`) sale «sin log»; un trabajo anual, «no medible».
 
 ## 9. Riesgos y límites conocidos, sin maquillar
 

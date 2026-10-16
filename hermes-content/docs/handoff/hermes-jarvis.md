@@ -1,5 +1,52 @@
 # Handoff — carril `hermes-jarvis` (Hermes, el Telegram y el calendario de Sergio Urcullo)
 
+> **ESTADO 11-oct, 07:30 UTC — qué está en vuelo y quién lo mueve** (sesión `session_01SQ7cvuDX5w5jDHk5VdhAEo`, rama `claude/adoring-ramanujan-7sjzwv`, PR #194).
+> - **Producción, 11-oct 12:58 UTC (E22):** build nuevo `Lv2W45uYHdFOlYQCVcD01` con #152, #151 y M1 (#156); `/login`, `/book` y `/register` bien y de usted; **Q9b cerrado** (el paso 2 de `/register` dice «Nombre de su clínica»); `web-vs-producto` con 0 diferencias. #157 no entró. Sin medir desde la nube: `/agents`, el Inicio y la caja con M1 (detrás del login).
+> - **Producción antes, 11-oct 09:58 UTC (E11):** build nuevo tras la publicación de las 09:50, `buildId` `FTdbJ5YopG9Ll4v0Yivrq`; `/login`, `/book` y `/register` bien (capturas `despues-0950-*` en `docs/research/qa-publicacion/2026-10-11/`). **El paso 2 de `/register` sigue con «Nombre de tu clínica»** (#148 no está en `master`; Q9b abierto). Lo de #147 que está detrás del login (caja «1.500», borrado con caras) sigue sin medir desde la nube.
+> - **Producción antes de esa publicación (medido 06:58 UTC):** corre `onia-platform` `master` `a7d8c1ed` (#136 y #146). Huella: el `buildId` que Next pone en el HTML de `/login` (`\"b\":\"<id>\"`; `D5DzLXxrhp8Sx1o0cQhQs` a las 08:20 UTC; cambia con cada build) y el SHA-1 de `/manifest.json` y `/sw.js` contra
+>   `git show <commit>:public/...` (el nombre de `webpack-<hash>.js` NO sirve: no cambió). `/login` y `/book` bien, de usted. **#136 trae sus dos HIGH sin arreglar** (caja: «1.500» → Bs 1,50; borrar un paciente borra
+>   las caras del odontograma): los arregla onia-platform **#147 (F136)**, que revisé sin HIGH; tiene que estar mergeado antes de las 09:20 UTC para entrar en la publicación de las 09:50.
+> - **Revisado el 11-oct ~10:20 UTC (E18, detalle con archivo:línea en la cola):** onia-platform **#155** (cabeza `8ac7eb3f`) OK, mis tres puntos de E15 cerrados; **M1 = #156** (`10615fb8`) sin HIGH, entra antes de las 12:50 UTC, con dos MEDIUM: el CSV rechaza los precios con cuatro decimales de un ERP viejo, y las cantidades siguen leyendo «1.500» como 1,5 junto a montos que ahora leen 1.500.
+> - **M1 = #156 re-revisado a las ~10:50 UTC (E19):** cabeza `4dd41d1c`, mis dos MEDIUM arreglados y medidos; OK para mergear con el CI verde. #155 ya está en `master` (`a91708ca`).
+> - **#152 «usted-todo» re-revisado a las ~11:00 UTC (E20):** cabeza `80f6fef1`, solo texto (AST) y un campo ya existente (`negocioSu`), mezcla limpia con `master`; al entrar y publicarse cierra Q9b (paso 2 de `/register` → «Nombre de su clínica») y se puede lanzar V1. El runner del CI es uno solo: el CI de #156 espera detrás de #152 y de la fusión de #155 (verde estimado 11:35-11:45 UTC).
+> - **Revisados el 11-oct 13:20-13:30 UTC (E25-E27, detalle con archivo:línea en la cola):** onia-platform **#159 M1b** (OK; MEDIUM: `NuevaCotizacionForm`, `almacenes-panel` y `VentaForm` siguen leyendo cantidades con `Number()`), **#160 U8** (OK; mis 4 huecos de E23 cerrados) y **#158 F136c** (sin HIGH propio; dos MEDIUM: egreso con fecha pasada sin aprobador ni auditoría, y tope por movimiento = límite de la columna → 500 al cerrar). **HIGH preexistente aparte:** `app/api/payments/route.ts:105-127` compara floats, y el cobro que salda no marca la factura PAGADA en ~11 % de los pares con centavos (10,10 + 20,70 ≠ 30,80). El CI de los tres PRs estaba en cola desde las 13:16.
+> - **#158 F136c re-revisado a las ~13:45 UTC (E28, cabeza `b2c6146f`):** el HIGH de cobros (cobro que salda no marca PAGADA, ~11 %), el egreso con fecha pasada sin aprobador ni auditoría y el desborde de `numeric(10,2)` al cerrar están cerrados y medidos; OK con el CI verde (en cola desde las 13:39 detrás de #159 y #160). Ojo con la publicación de las 15:50: cada merge dispara un CI de `master` de ~20 min.
+> - **HALLAZGO 13:45 UTC (E29): #158, #159 y #160 chocan entre sí en `__tests__/voseo-ratchet.linea-base.json`** (los tres la reescribieron en orden ASCII; `master` está en `localeCompare("en")`). Simulado en las 6 órdenes de merge: #158 y #160 mezclan limpio; **#159 choca con el que entre antes o después**. Orden que menos cuesta: **#160 → #158 → #159 actualizado** (un push, antes de las 15:20). Regla agregada a U9, U10 y V1: la línea base solo cambia en valores, no se reordenan claves.
+> - **HALLAZGO 14:03 UTC (E30): cuatro campos de dinero/cantidad del rubro dental leen mal «1.500»** (`type="number"` + `parseFloat`/`Number`: precio del tratamiento, línea manual de factura, ítem y movimiento de inventario; con la interfaz en español «1,500» y «1.500» llegan iguales y se leen 1,5). Contrato `codex-tareas/plataforma-M1d-…` (pendiente, después de M1b y M1c) y un hueco en M1c: el traspaso (`almacenes-panel.tsx:252`) también es `type="number"`. E29 era redundante con lo que la madre de Plataforma ya tenía medido (corregido en E30).
+> - **Tanda de las 15:50 (E33, latido de las 14:57 UTC):** #158 mergeado 14:21 UTC (`a94afbd3`), #160 14:44 (`10925057`), ambos con la cabeza que revisé; **#159 en `28a2c518` OK** (arreglos `82668293` medidos, línea base = las 7 bajadas, mezcla limpia), CI en curso. El CI de `master` de `10925057` está en cola detrás: ~15:25 si no se pushea nada. M1c + M1d suben juntos a las ~16:12 (E31/E32).
+> - **Pendiente de merge por la madre, en orden:** #194 (Q2 + Q5 + docs de este carril) → #196 (C1 y C2 pasan sus pruebas; C3b aceptado; su base es mi rama) → L1, L1b y L1c
+>   (**ya están dentro de #194**: L1, L1b y L1c, y también C1 a C3b de #196, juntados el 11-oct a las 08:25 UTC para que Sergio Urcullo tenga UN solo merge que aprobar; #196 queda redundante).
+> - **Contratos Codex abiertos (los lanza la madre):** `hermes-L1c-web-vs-producto-html-real.md` (Luna). Q9 (`plataforma-Q9-alta-de-usted.md`) quedó `bloqueada`: lo cubre #148 (U4), sin verlo en `master`.
+> - **Revisados sin mergear ni comentar en GitHub (veredictos con archivo:línea en la cola, E3-E10):** onia-platform #124, #113, #140, #132, #136, #146, #147 (OK), #148 y #149 (OK), #150 (CAMBIOS, 1 HIGH: guarda por symlink),
+>   #151 (OK); onia-hermes #162 (BLOQUEAR, 3 HIGH, sin cambios desde el 8-oct), #145, #191, #172, #144, #195. Sin mirar: onia-platform #70 y onia-hermes #143 y #40 (solo docs, viejos).
+> - **Lo que sigue bloqueado y quién lo destraba:** Q1 (`aplicar`), Q2 en vivo (primera corrida de las 10:00 UTC, solo si #194 está en `main`), Q3 y Q5 en vivo → la madre y el «sí, aplicar» de Sergio Urcullo en esta
+>   sesión. E1b (agenda del día, odontograma, caja diaria e `/inbox` con sesión) → la madre desde la PC con `onia-mirar.js`, o Q5 después de `aplicar`.
+> - **Intentos fallidos de hoy:** la huella `webpack-<hash>.js` (se creyó que cambia con cada build: no); `htmlATexto` como equivalente del `innerText` (no); el ejemplo de mi contrato C3 con líneas de cron directas (el crontab real
+>   envuelve todo en `onia-latido.sh`); no pude partir #194 (otra rama pide permiso de Sergio Urcullo). Las dos últimas están en la skill como «el ejemplo de la prueba sale del sistema real».
+> - **Próximo paso con reloj:** a las ~09:58 UTC mirar la publicación de las 09:50 (`mirar-publico.mjs` + huella de `public/`), sin escribir nada. **Con Sergio Urcullo:** su «sí, aplicar», permiso para una segunda rama,
+>   y una sola convención de monto para toda la app (la caja diaria lee «1.500» como 1500; los formularios de comercio lo leen como 1,5).
+
+> **ESTADO 11-oct, mañana — el carril pasó a ser el QA de Onia y el turno de noche** (`HERMES_ROL_QA.md`).
+> - **#194 abierto (Q2 + Q5), CI verde, lo mergea la madre.** Trae el workflow `hermes-qa-diario.yml` (10:00 UTC, solo
+>   `diagnostico.sh`, solo desde `main`), la sección 15 del diagnóstico (cada trabajo del cron con su log y MUDO) y
+>   `qa-release.sh` (mira /dashboard y /checkout con la cuenta de QA cuando cambia el release y lee las ventanas del
+>   publicador de las :50). **Además** trae las docs de este carril de hoy: encargos E1-E3, Q7-Q9, los contratos
+>   Codex y las capturas. Este carril pushea a UNA rama: separar eso en otro PR pide permiso de Sergio Urcullo.
+> - **Nada de lo nuevo corre en el VPS hasta que `aplicar` instale su cron (Q1).** El sincronizador ya copia
+>   `onia-qa-release.sh`, `onia-mirar.js` y `onia-latido.sh` a `/root/bin`, pero ninguna línea del crontab los llama.
+> - **Q4 (relojes, colas paradas, vigías mudos en el resumen) está en `main` (#190, #192), inerte** hasta `aplicar`.
+> - **Revisiones hechas sin mergear nada (E2, E3):** #162 (bot) BLOQUEAR, #145 CAMBIOS, #191, #172 y #144 CAMBIOS, y
+>   #136 y #146 con sus HIGH. Veredictos y archivo:línea en `cola/loop/hermes-jarvis.md`.
+> - **Desde la nube se mira la web pública, no las pantallas con sesión.** El Chromium de la nube rechaza el
+>   certificado del proxy: se arregla con `route.fetch` de Node (skill, «Mirar páginas desde la nube»). Las
+>   pantallas con sesión las mira la madre desde la PC o Q5 en el VPS.
+> - **Tres contratos Codex del diagnóstico** (`codex-tareas/hermes-C1/C2/C3-*.md`) y dos más (L1, Q9) en `pendiente`:
+>   los lanza la madre después del merge de #194.
+> - **El modelo de la sesión de nube no se midió** (la decisión de bajarlo es de Sergio Urcullo, H7 de `madre.md`).
+> - **Sigue pendiente de Sergio Urcullo:** su línea de «sí, aplicar» en la sesión que lo use (el texto con que arrancó
+>   esta sesión la exige; HERMES_ROL_QA §5 Q1 dice que no se vuelve a pedir: la madre decide cuál manda), proteger
+>   `main`, y confirmar la cuenta de QA («ZZ QA Pago»).
+
 > **ESTADO 9-oct, tarde — el #176 está en `main` (`a1aa6246`), CI verde.**
 > - **Llega solo al VPS** (el sincronizador copia `main` a `/root/bin` en ~1 h):
 >   - `onia-parte-diario.sh` con UTF-8 fijo: es lo único que cambia algo que ya corre;

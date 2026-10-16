@@ -68,7 +68,8 @@ al_dia() {
     && grep -q '^SELLOS=' "$BIN/onia-pedido-claude.sh" 2>/dev/null \
     && grep -q -- '--probar' "$BIN/onia-respuestas-pedidos.sh" 2>/dev/null \
     && grep -q '^bajar()' "$BIN/onia-respuestas-pedidos.sh" 2>/dev/null \
-    && [ -x "$BIN/onia-latido.sh" ]
+    && [ -x "$BIN/onia-latido.sh" ] \
+    && [ -x "$BIN/onia-qa-release.sh" ] && [ -r "$BIN/onia-mirar.js" ]
   # Los pedidos: la versión con un solo candado para la vista previa y el --si, y el recolector de
   # la vuelta. Sin esto, con la llave cargada, aplicar salía 0 con los pedidos apagados (madre, 2-oct).
   # 5-oct: y las que cierran los MEDIUM de la madre v2 (el sello que ata la respuesta al pedido, y el
@@ -78,6 +79,7 @@ al_dia() {
   # cierre ya llegan así: con el resumen viejo en /root/bin, eso sería falso.
   # 10-oct: el envoltorio del latido. Cada línea que agrega el crontab lo llama: sin él en /root/bin,
   # ninguno de esos trabajos correría.
+  # 10-oct (Q5): el QA después de cada publicación y el onia-mirar.js que llama, los dos desde /root/bin.
 }
 if ! al_dia; then
   echo "todavía no: corro una vez el sincronizador de cada hora"
@@ -86,10 +88,11 @@ fi
 if ! al_dia; then
   echo "❌ El código de main todavía no está en /root/bin. No toqué nada."
   ls -la "$BIN/onia-jarvis-resumen.sh" "$BIN/onia-agenda.sh" "$BIN/onia-tg.sh" \
-    "$BIN/onia-pedido-claude.sh" "$BIN/onia-respuestas-pedidos.sh" "$BIN/onia-latido.sh" 2>&1 | redactar
+    "$BIN/onia-pedido-claude.sh" "$BIN/onia-respuestas-pedidos.sh" "$BIN/onia-latido.sh" \
+    "$BIN/onia-qa-release.sh" "$BIN/onia-mirar.js" 2>&1 | redactar
   exit 1
 fi
-echo "✅ resumen, lector de calendario, aduana, vigía de aprobaciones, guardia, pedidos y latido: al día"
+echo "✅ resumen, lector de calendario, aduana, vigía de aprobaciones, guardia, pedidos, latido y QA de publicación: al día"
 
 # ── 1. Respaldo ─────────────────────────────────────────────────────────────────
 sec "1. Respaldo"
@@ -151,7 +154,7 @@ for l in base:
         out.append(" ".join(c[:5]) + " ONIA_AVISO=sistema " + c[5] + MARCA)
     else:
         out.append(l)
-# Los cinco trabajos de este bloque corren dentro de onia-latido.sh (10-oct, HERMES_ROL_QA.md Q4c): dejan
+# Los seis trabajos de este bloque corren dentro de onia-latido.sh (10-oct, HERMES_ROL_QA.md Q4c): dejan
 # en /var/lib/onia-latido/<nombre> cuándo terminaron y con qué código, y el resumen de las 06:30 nombra el
 # que lleva más de dos veces su cadencia sin correr o terminó con error. Hasta entonces un trabajo mudo y
 # uno sano se veían igual. El latido no cambia lo que corre: el comando va entero, entre comillas simples.
@@ -169,6 +172,9 @@ for l in (
     # La vuelta de los pedidos a Claude (2-oct). Sin pedidos abiertos sale al instante, sin red. «! -x ||»
     # y no «-x &&»: sin el recolector copiado, el latido anotaría un código 1 que no es una falla.
     "*/2 * * * * " + LAT + " respuestas-pedidos 120 '[ ! -x /root/bin/onia-respuestas-pedidos.sh ] || /root/bin/onia-respuestas-pedidos.sh' >> /var/log/onia-respuestas-pedidos.log 2>&1",
+    # El QA después de cada publicación (10-oct, HERMES_ROL_QA.md Q5): mira /dashboard y /checkout cuando
+    # cambia el release y lee las ventanas del publicador de las :50. Sin LLM; avisa por la aduana.
+    "*/15 * * * * " + LAT + " qa-release 900 '/root/bin/onia-qa-release.sh' >> /var/log/onia-qa-release.log 2>&1",
 ):
     out.append(l + MARCA)
 print("\n".join(out))

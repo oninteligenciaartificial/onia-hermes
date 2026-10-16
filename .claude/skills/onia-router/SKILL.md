@@ -104,7 +104,8 @@ ni ejecutar Git fuera del encargo de la madre.
   resumen, cierre, aduana, calendario, pedidos a Claude, y el workflow hermes-jarvis; 2026-10-01) ·
   `equipo-de-agentes` (EL MÉTODO desde el 9-oct: colas en loop por sesión, Codex, verificadores Haiku, solo lo publicado a Sergio Urcullo) ·
   `onia-sesion-madre` (la madre local ordena a las sesiones de la nube por mensaje: ids, canales
-  medidos, formato).
+  medidos, formato) · `orca` (tablero LOCAL de agentes en la PC: qué ve y qué no, ajustes a
+  corregir; no ve la nube ni es la madre; 2026-10-16).
 - **Producto:** `onia-core` · `onia-chatbot` · `onia-contabilidad-bolivia`.
 - **Venta:** `onia-propuestas` (generador oficial, nunca HTML a mano) · `onia-web-factory`.
 - **Contenido y video:** `diseno-contenido-onia` (índice de diseño) · `edicion-referentes` (el molde de edición de los videos de Sergio Urcullo: recetas medidas de Santiago Muñoz y Erik Taveras + scripts) · `editor-videos` ·

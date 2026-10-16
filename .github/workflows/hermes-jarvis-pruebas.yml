@@ -16,6 +16,7 @@ on:
     paths:
       - "scripts/loops/**"
       - "scripts/herramientas-*"
+      - "scripts/onia-mirar.js"
       - "scripts/git-autosync.js"
       - ".claude/settings.json"
       - ".gitignore"
@@ -23,6 +24,7 @@ on:
       - "hermes-content/deploy/hermes-agent/**"
       - "hermes-content/skills/agenda-calendario.md"
       - "hermes-content/skills/pedir-a-claude.md"
+      - ".claude/skills/onia-hermes-jarvis/scripts/**"
       - ".github/workflows/hermes-*.yml"
   workflow_dispatch: {}
 
@@ -68,7 +70,7 @@ jobs:
         run: |
           set -o pipefail
           fallas=0
-          for s in test:pedidos test:jarvis-aplicar test:jarvis-resumen test:aduana test:agenda \
+          for s in test:pedidos test:jarvis-aplicar test:jarvis-diagnostico test:qa-diario-guarda test:jarvis-modelo test:jarvis-qa-release test:web-vs-producto test:jarvis-resumen test:aduana test:agenda test:qa-release \
                    test:herramientas-desplegadas test:herramientas-del-cron test:docs-hygiene; do
             echo "::group::$s"
             if npm run -s "$s"; then echo "✅ $s"; else echo "::error::$s en rojo"; fallas=$((fallas + 1)); fi

@@ -1,0 +1,43 @@
+{
+ "cuando": "2026-10-16T15:47:37.487Z",
+ "anchos": {
+  "390": {
+   "paso1": {
+    "tituloId": null,
+    "tituloTabindex": null,
+    "listaRol": null,
+    "listaNombre": null,
+    "botones": 1,
+    "conAriaPressed": 1,
+    "regionStatus": null,
+    "foco": "BODY#"
+   },
+   "paso2": {
+    "foco": "BODY#",
+    "focoTexto": "CSAgendar citaClínica SergiocallcheckProfesionalcalendar_tod",
+    "regionStatus": null,
+    "regionLive": null
+   },
+   "pedidosNoGet": []
+  },
+  "1440": {
+   "paso1": {
+    "tituloId": null,
+    "tituloTabindex": null,
+    "listaRol": null,
+    "listaNombre": null,
+    "botones": 1,
+    "conAriaPressed": 1,
+    "regionStatus": null,
+    "foco": "BODY#"
+   },
+   "paso2": {
+    "foco": "BODY#",
+    "focoTexto": "CSAgendar citaClínica SergiocallcheckProfesionalcalendar_tod",
+    "regionStatus": null,
+    "regionLive": null
+   },
+   "pedidosNoGet": []
+  }
+ }
+}

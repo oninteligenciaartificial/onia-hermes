@@ -1,0 +1,23 @@
+- banner:
+  - link "Ir a onia.com.bo":
+    - /url: https://onia.com.bo
+    - img "Onia"
+  - text: 14 días gratis
+- main:
+  - heading "Hola de nuevo" [level=1]
+  - paragraph: Ingrese a su cuenta para seguir donde quedó.
+  - text: Correo electrónico
+  - textbox "Correo electrónico":
+    - /placeholder: nombre@ejemplo.bo
+  - text: Contraseña
+  - button "Olvidé mi contraseña"
+  - textbox "Contraseña":
+    - /placeholder: "********"
+  - button "Iniciar sesión"
+  - paragraph: ¿Todavía no tiene cuenta?
+  - link "Cree su cuenta · 14 días gratis":
+    - /url: /register
+  - paragraph: Si su negocio ya usa Onia, solicite acceso al administrador.
+  - link "Conocer Onia":
+    - /url: https://onia.com.bo
+- alert

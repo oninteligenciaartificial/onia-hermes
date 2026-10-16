@@ -515,8 +515,8 @@ linea_colas() {
 # un trabajo que ya no existe no queda «mudo» para siempre. Y un trabajo frecuente sin ningún latido es
 # una línea que nunca corrió. Los resúmenes no cuentan: el de la mañana es el que está corriendo.
 LATIDOS="${ONIA_LATIDO_DIR:-/var/lib/onia-latido}"
-LATIDOS_ESPERADOS="resumen-manana resumen-noche aduana-soltar agenda-bloques respuestas-pedidos"
-LATIDOS_FRECUENTES="aduana-soltar agenda-bloques respuestas-pedidos"
+LATIDOS_ESPERADOS="resumen-manana resumen-noche aduana-soltar agenda-bloques respuestas-pedidos qa-release"
+LATIDOS_FRECUENTES="aduana-soltar agenda-bloques respuestas-pedidos qa-release"
 hace() {  # hace <segundos> -> «12 min», «5 h», «3 d»
   if [ "$1" -lt 5400 ]; then echo "$(( $1 / 60 )) min"
   elif [ "$1" -lt 172800 ]; then echo "$(( $1 / 3600 )) h"

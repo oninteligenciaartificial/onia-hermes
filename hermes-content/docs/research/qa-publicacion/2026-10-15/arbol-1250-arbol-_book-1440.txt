@@ -1,0 +1,11 @@
+- main:
+  - img "Onia"
+  - heading "Reservas en línea" [level=1]
+  - paragraph: Cada negocio tiene su propio enlace de reserva
+  - paragraph: ¿Desea agendar con un negocio?
+  - paragraph: Pida su enlace directo de reserva o búsquelo en sus redes sociales. Si recibió un enlace, ábralo para elegir su horario.
+  - paragraph: Disponible 24/7
+  - paragraph: Sin registro
+- contentinfo:
+  - paragraph: Reservas con Onia
+- alert

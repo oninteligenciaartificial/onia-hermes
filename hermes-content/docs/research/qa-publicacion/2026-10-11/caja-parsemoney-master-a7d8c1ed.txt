@@ -1,0 +1,7 @@
+# parseMoney de master a7d8c1ed (CajaDiariaClient.tsx:40-44), corrido con node el 2026-10-11 ~07:00 UTC
+"1500"     -> 1500
+"1.500"    -> 1.5
+"1,500"    -> 1.5
+"1.500,50" -> NaN
+"150,50"   -> 150.5
+"1 500"    -> NaN

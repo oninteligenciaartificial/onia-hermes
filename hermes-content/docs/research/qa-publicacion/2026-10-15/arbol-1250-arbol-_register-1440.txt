@@ -1,0 +1,37 @@
+- complementary:
+  - link "Ir a onia.com.bo":
+    - /url: https://onia.com.bo
+    - img "Onia"
+  - paragraph: Su negocio completo, en un solo sistema.
+  - list:
+    - listitem:
+      - paragraph: Activación acompañada
+      - paragraph: Su sistema llega con la configuración de su rubro puesta. Los datos los carga usted y, si necesita ayuda, hacemos una demo y le guiamos.
+    - listitem:
+      - paragraph: 14 días gratis, sin tarjeta
+      - paragraph: Pruebe el plan Profesional. Si no le sirve, no paga nada.
+    - listitem:
+      - paragraph: Agentes que preparan propuestas
+      - paragraph: "Le dejan listos seguimientos y avisos: cada mensaje de un agente sale solo cuando lo aprueba."
+  - paragraph: Clínicas dentales · Comercios · Importadoras · Estéticas y spas · Servicios profesionales — hecho en Bolivia
+- main:
+  - list:
+    - listitem: 1 Su rubro
+    - listitem: 2 Su cuenta
+  - heading "¿Qué tipo de negocio tiene?" [level=1]
+  - paragraph: Pantallas, palabras y agentes de su rubro.
+  - button "Clínica dental Pacientes, citas, tratamientos y cobros Empezar aquí"
+  - button "Comercio / tienda Catálogo, inventario, caja y clientes Empezar aquí"
+  - button "Importadora / distribuidora Catálogo, cotizaciones B2B y costeo de importación Empezar aquí"
+  - button "Estética y spa Agenda, clientas, tratamientos y caja Empezar aquí"
+  - button "Servicios profesionales Agenda, citas, cobros y contabilidad Empezar aquí"
+  - paragraph:
+    - text: ¿Otro rubro?
+    - link "Escríbanos":
+      - /url: https://wa.me/59175414930?text=Hola%2C%20quiero%20Onia%20para%20mi%20negocio.
+    - text: y lo vemos con usted.
+  - paragraph:
+    - text: ¿Ya tiene cuenta?
+    - link "Inicie sesión":
+      - /url: /login
+- alert
