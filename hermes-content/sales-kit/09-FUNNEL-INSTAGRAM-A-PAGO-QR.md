@@ -98,7 +98,14 @@ Sergio Urcullo dijo que sí a workshops y consultorías pagas para la caja de oc
 
 - En el mensaje directo (3.2), quien quiere aprender recibe el enlace o el texto que ese hilo entregue. Hasta que exista, se le responde: «Estoy armando un workshop; le aviso apenas tenga fecha» **(solo si Sergio Urcullo lo aprueba).**
 - El pago del workshop usa el mismo QR del BCP y el mismo paso de comprobante (3.5), con confirmación manual. **El monto lo fija ese hilo; acá no se escribe ninguno.**
-- Pendiente del hilo de Marca, a insertar acá: enlace al documento de la oferta. ⟦ENLACE-WORKSHOP⟧
+- **Oferta entregada por el hilo de Marca (16-oct). PROPUESTA, sin aprobar: espera el sí de Sergio Urcullo sobre precio y fecha.** Los números no se tocan acá:
+  - Workshop «Auditá tu negocio con IA»: 2 h, cupo 12, sábado 24-oct 10:00, con precio fundador hasta el miércoles 21 y precio normal después.
+  - Auditoría 1 a 1, con descuento del valor del workshop si la persona vino de él.
+  - **Los montos viven en el borrador del hilo de Marca, no acá:** el control de honestidad de este kit solo admite precios que el código sostiene, y el de un workshop no está en `pricing.ts`. Se leen de allí el día del envío.
+  - Camino que propone ese hilo: Instagram → link del perfil → página → WhatsApp → QR del BCP.
+  - Detalle y piezas: rama `claude/marca-workshops-ns83wx` de `onia-hermes` (carruseles de `carousels/briefs/marca-personal/sergio-workshop-*`).
+- **Cómo encaja con este funnel:** quien en el mensaje directo (3.2) quiere aprender, o no es clínica, va a esta oferta; quien es dueño de clínica va a la llamada de 20 minutos. Un asistente del workshop que además tiene clínica pasa a la llamada después, con el descuento del plan anual de `07` §0 como única oferta de Onia.
+- ⚠️ El texto «le aviso apenas tenga fecha» de arriba queda reemplazado por esta oferta **solo cuando Sergio Urcullo la apruebe**.
 
 ## 5. Qué se mide (a mano, en una planilla, cada día)
 
