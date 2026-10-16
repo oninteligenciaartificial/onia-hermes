@@ -1,5 +1,33 @@
 # Session handoff — native Claude Code Cloud + Codex Cloud orchestration
 
+## Estado vigente y siguiente acción — 2026-10-16
+
+**META:** completar Hermes orquestando Codex Cloud nativo por suscripción y Claude Code Cloud, con PC apagada: ejecución auténtica → artefacto privado recuperable → QA independiente → recibo y reconciliación sin duplicados. No sustituir por ChatGPT Work/Cloud, local, VPS ni API facturada de Claude Platform. Warp es visor pasivo; Orca queda posterior.
+
+**Estado:** tareas 07/08 son implementación parcial revisada en `codex/hermes-native-thread-20261016`: 07 `02a3835449f8fc59a8922997d2d45a90138cbd0c`; QA 08 `0cdb8f45a33fa99d93480c345625df01bd21463d`, padre exacto. Los cinco archivos declarados en cada recibo coinciden en bytes/SHA-256 con blobs Git, verificado por Root. QA reportó 77 PASS focales y 12 métodos nuevos; NO es suite completa. Seis errores de setup sink por `.git` en `/tmp`, `/workspace`, `/dev/shm` siguen sin resolver; luego se deben corregir y repetir las pruebas focales necesarias. No hay aún prueba E2E de transporte multi-provider ni PC-off. Recibos 01/07/08 y recibo root final permanecen inmutables; toda evidencia nueva tiene recibo separado.
+
+**Trabajo cloud activo:** El ejecutor Codex Cloud publicó el informe del contrato 09 de transporte en `native-hermes-transport-20261016-09.md`, commit `e404a44ebf7faaed9da8b08824b18f9e90b73bd4`, verificado por fetch de Root. Encontró documentación oficial de autenticación de suscripción desde CI privado con custodia/refresh serializado; esto no prueba que CI reemplace el transporte thread durable, y no hubo auth/dispatch test. Cualquier sustitución del objetivo requiere decisión previa. El contrato 10 de visor sigue en progreso en el mismo thread; consumir su resultado sin duplicar dispatch.
+
+**Claude existente, no reinventar:** `scripts/loops/pedido-claude.sh` y `scripts/loops/respuestas-pedidos.sh` están versionados en el repo fuente `C:/dev/proyectos/onia-hermes`, aunque faltan en este snapshot piloto. Implementan la ruta Hermes→Claude Code Routines y retorno por commit/respuesta con recolector; reutilizar esos contratos, no crear otro controller/cola/scheduler. Código presente no prueba que la rutina Pedidos, token, URL o entorno estén configurados actualmente. Las variables/secrets `ONIA_RUTINA_PEDIDOS_URL` y `ONIA_RUTINA_PEDIDOS_TOKEN` no aparecieron en los ámbitos GitHub revisados previamente; eso no demuestra ausencia en Claude, VPS u otros almacenes.
+
+**Rutina activa observada:** Root vio la rutina horaria `trig_01A9hCX7s5ZuaQ24TkK3Rr8d`, “Latido: Hermes-Jarvis retoma su cola”, que continúa `session_01SQ7cvuDX5w5jDHk5VdhAEo`, entorno Onia con conectores amplios. Su prompt histórico pide inventar tres QA ante bloqueo, recordatorios y commit/push automático, en conflicto con evitar trabajo/polling sin objetivo. No editarla, activarla ni usarla para Pedidos; primero conciliar su ownership. Búsqueda UI “Pedidos” sin resultados es una búsqueda limitada, no inventario exhaustivo.
+
+**Acceso/account observado:** crear una pestaña nueva a `claude.ai/code` falló `FILE_ERROR_NO_SPACE`, C: libre 0 bytes; Root reutilizó una pestaña existente y autenticó Claude Cloud. No es prueba de que todo el browser/cuenta esté inaccesible. Seis ambientes GitHub mostraron lista vacía de nombres de secrets; no inferir ausencia global. Root observó workflow HermesJarvis pruebas SUCCESS `38916371654` el 16-oct 14:30:52Z, HEAD `53e6254b274b909c56864c222cc93e8a51aa1542`, y tres corridas más SUCCESS hoy; esto prueba esos jobs, no la integración Cloud E2E ni presupuesto ilimitado. No se activó workflow.
+
+**Causa de demora:** la fase de planificación estaba en Plan Mode y prohibía cambios; por eso no hubo edición durante esa fase. Eso explica el tiempo de planificación, pero no justifica parar tras un plan cuando una instrucción posterior autoriza ejecutar, ni concluir ausencia sin buscar los canónicos/skills. Los bloqueos actuales se informan con alcance y evidencia exactos.
+
+### Plan ejecutable por gates
+
+1. Consumir resultados 09 (investigación de transporte) y 10 (visor) del mismo thread, sin replay; establecer qué interfaz nativa soportada y qué retorno muestran.
+2. Conciliar el latido horario actual con la skill `onia-hermes-jarvis` y los scripts de Pedidos. No alterar triggers ni abrir un scheduler nuevo.
+3. Verificar si el executor dispone de invocación nativa recuperable, lector/export de thread y almacenamiento privado compatible. Diferenciar herramienta ausente en el executor de falta de integración Hermes o incapacidad de producto; usar GitHub/artefactos existentes donde su contrato lo permita.
+4. Reutilizar la ruta `pedido-claude.sh`/`respuestas-pedidos.sh`; verificar el ámbito de configuración de la rutina correcta sin revelar/copiar secretos ni inferir su ausencia global.
+5. Resolver los seis sink setup errors y correr QA focales necesarios; mantener separado el dato histórico 77 PASS y no llamarlo suite completa. El QA08 histórico no se reescribe ni se trata como suite completa.
+6. Solo al cumplir gates anteriores, una prueba E2E acotada con PC apagada y ambos Cloud nativos; validar artefacto privado/hash, revisión independiente, recibo y reconcile sin duplicados. No deploy/publicación.
+
+## Historia y recibos previos — orden original preservado
+
+Los siguientes checkpoints se conservan como evidencia cronológica. Cuando difieran del estado vigente de arriba, el bloque vigente los supersede; recibos originales no se reescriben.
 Status: `ACK_OWNERSHIP_ACTIVE`; native Codex Cloud transport check completed but blocked by its offline environment on 2026-10-16. Predecessor: `01a13f7b-a156-7150-ba99-b4ff682163a1`. Successor: `01a14185-4a94-7b60-8214-bf9943c9ec8f`. Checkpoint verified: `fccfc19443b63b05e2a043551ff11c67dff349a0`. Do not archive either session.
 
 ## Goal and next action

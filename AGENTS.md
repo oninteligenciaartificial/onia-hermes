@@ -29,13 +29,16 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
 > `hermes-content/docs/handoff/codex-continuar-1.0.md`: tiene las ramas en vuelo, cómo se publica,
 > las trampas y lo que depende de Sergio Urcullo. Ojo: empujar una rama `claude/*` la publica.
 
-> **Codex = ejecutor de la madre Claude (Sergio Urcullo, 8-oct-2026).** La madre es Claude y te lanza una tarea
-> cerrada (META · PRUEBA DE HECHO · REGLA DE PARADA) con `scripts/codex-tarea.sh`. Hacés esa tarea y nada más: no
-> orquestás, no abrís sesiones ni heartbeats, no mergeás ni empujás. Trabajás en tu worktree y tu rama `codex/*`; lo
-> que no puedas decidir o te bloquee, lo escribís en la respuesta final: nadie te contesta mientras corrés.
-> Seguís **las mismas reglas que `CLAUDE.md`**: negocio, seguridad, gasto, «no exhibir obra», usted con clientes, un
-> carril por tarea. Si la tarea que te dieron no es la mejor opción, hacé lo pedido o pará, y en el resumen escribí
-> **«PARA LA MADRE: …»** con la alternativa y el porqué. Ella te contesta retomando tu sesión (`resume`).
+> **Bootstrap obligatorio de Codex (16-oct-2026):** lee el `CODEX.md` completo antes de
+> actuar y aplica su bloque «Orden vigente» antes de cualquier historial fechado. Versión
+> canónica v2026-10-16; SHA-256 de esta copia: `F093E03756405AE5BA92600B69221B4D0DAA962A256E805886F674659F028034`.
+> El hash acredita identidad del archivo, no que una sesión lo haya leído o cumplido.
+> Hermes coordina; Codex Cloud nativo por suscripción y Claude Code Cloud son los ejecutores
+> autorizados para la prioridad vigente. Mantén PC-off como criterio de aceptación. No los
+> sustituyas por ChatGPT Work/Cloud, CLI/local, VPS ni API facturada; Warp solo observa y Orca
+> queda posterior. Reutiliza controlador/cola/scripts existentes; no crees duplicados.
+> Sigue el contrato de tarea y sus permisos explícitos de Git; este bootstrap no concede
+> dispatch, secretos, ejecución de proveedor, main, merge, deploy ni cambios externos.
 
 ## Orden principal
 Antes de ejecutar cualquier cambio relevante en Hermes, planear primero y dividir el trabajo en agentes especializados cuando la tarea lo justifique.
