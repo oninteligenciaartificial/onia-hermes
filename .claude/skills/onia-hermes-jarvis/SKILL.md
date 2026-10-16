@@ -269,6 +269,9 @@ CLI de Hermes.
   defecto vivía de las 20:00 a las 24:00 de La Paz (00:00-04:00 UTC), cuando `min` salía mañana. Para probarlo hay que correr el script en esa franja (p. ej. 00:30 UTC) y ver `min` = el día de La Paz y no el de UTC. Un slug de QA
   conocido: `clinica-sergio-p2ljs` (la org de Sergio Urcullo, de pruebas; la reserva pública es pública). **Trampa del script:** el primer texto «Profesional» de la página es el rótulo del primer paso, no la tarjeta del profesional;
   hacer clic ahí no avanza y el script lee `fecha: null`.
+- **Árbol de accesibilidad de las pantallas públicas: contar íconos leídos como texto** (16-oct, #182): `hermes-content/docs/research/qa-publicacion/2026-10-15/mirar-arbol-de-accesibilidad.mjs <carpeta> <etiqueta> <ruta> [<ruta> ...]`
+  lista los íconos de Material Symbols del DOM, cuántos no están dentro de un `aria-hidden` y cuáles aparecen en el árbol (`ariaSnapshot`). Solo lectura. **Un ícono cuyo nombre es también una palabra visible da falso positivo**
+  («spa» en «Estética y spa» de `/register`): mirar la línea del árbol antes de dar un hallazgo. Un script que mira un solo build no distingue «antes» de «después»: para eso hace falta correrlo ANTES de la publicación.
 - **PR «de usted» (copia) de más de 20 archivos: probar que es SOLO texto, no leerlo a ojo** (15-oct, #174: 68 archivos, +1.189 −211). Tres pasos, con los scripts de
   `hermes-content/docs/research/qa-publicacion/2026-10-15/`: (1) `solo-texto.cjs <repo> <base> <cabeza> <archivos…>` normaliza cada `.ts/.tsx` con el AST de TypeScript
   (todo texto, plantilla fija, texto JSX y comentario pasa a «§») y dice cuáles quedan idénticos: de 50 archivos, **45 idénticos** y 5 con estructura distinta, que se
