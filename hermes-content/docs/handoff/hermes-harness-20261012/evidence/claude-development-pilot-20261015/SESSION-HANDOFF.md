@@ -2,6 +2,8 @@
 
 ## Estado vigente y siguiente acción — 2026-10-16
 
+**Traspaso de ownership:** por orden directa de Sergio, Claude pasa a ser coordinador sucesor del desarrollo de Hermes; Hermes sigue siendo el producto/orquestador. Transferencia PREPARADA, esperando ACK de Claude en un nuevo chat. No se envió nada a una sesión existente ni se creó destino. La ficha portable y el mensaje de bootstrap están en [`CLAUDE-TRANSFER-20261016.md`](CLAUDE-TRANSFER-20261016.md). Codex no inicia nuevas tareas mientras Claude revisa; puede quedar como apoyo técnico opcional elegido por Claude tras verificar herramienta/alcance.
+
 **META:** completar Hermes orquestando ejecución cloud autenticada: preferir Codex Cloud nativo por suscripción y Claude Code Cloud, con PC apagada como ruta principal; PC encendida queda como último recurso documentado. Flujo: ejecución auténtica → artefacto recuperable → QA independiente → recibo y reconciliación sin duplicados. No usar ChatGPT Work/Cloud, VPS ni API facturada de Claude Platform como sustituto tácito. Warp es visor pasivo; Orca queda posterior.
 
 **Estado:** tareas 07/08 son implementación parcial revisada en `codex/hermes-native-thread-20261016`: 07 `02a3835449f8fc59a8922997d2d45a90138cbd0c`; QA 08 `0cdb8f45a33fa99d93480c345625df01bd21463d`, padre exacto. Los cinco archivos declarados en cada recibo coinciden en bytes/SHA-256 con blobs Git, verificado por Root. QA reportó 77 PASS focales y 12 métodos nuevos; NO es suite completa. Esto es histórico y separado de contrato 11. No hay aún prueba E2E de transporte multi-provider ni PC-off. Recibos 01/07/08 y recibo root final permanecen inmutables; toda evidencia nueva tiene recibo separado.
