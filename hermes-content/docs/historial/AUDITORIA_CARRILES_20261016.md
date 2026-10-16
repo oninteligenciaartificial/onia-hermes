@@ -31,3 +31,8 @@ Conclusión: la rutina corría, pero estaba bloqueada por un permiso que nadie p
 
 ## Qué aprendió esta auditoría
 Una cola que se trabaja en una rama sin mergear es invisible para `main`: antes de dar un carril por parado, mirar su rama. Y una regla de «mostrame antes» sin quien responda frena el carril entero.
+
+## Actualización 16-oct, noche (respuesta de Sergio Urcullo)
+- «Mostrame antes de subir» aplica a las **piezas y los planes**, no a practicar: él los revisa y se controla calidad juntos.
+- **Lucía es autónoma** hasta que se vea que trabaja bien. La práctica de `lucia.md` ya no espera «mostrada, publicá».
+- Por ahora no se manda nada a leads ni terceros: Ventas desarrolla, no envía.

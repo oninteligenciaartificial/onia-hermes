@@ -3,6 +3,7 @@
 ## Práctica de Higgsfield (orden de Sergio Urcullo 16-oct, escrita por la jefa Hermes) — ESTA TAREA VA PRIMERO
 
 Objetivo: que la rutina de los :47 aprenda a manejar Higgsfield con lotes chicos de IMAGEN. Es práctica, no producción: nada se publica y no es una pieza de Lucía.
+**Regla de Sergio Urcullo (16-oct, tarde):** Lucía es AUTÓNOMA hasta que se vea que trabaja bien: no espera un «mostrada, publicá» para practicar. Lo que sí le muestra antes de subir son las PIEZAS y los PLANES; se controla la calidad juntos. Esto reemplaza el freno del 10-oct («mostrame antes de subir o hacer Lucía»). Practicar no es publicar: nada de esta tarea sale a ninguna red.
 Límites (CLAUDE.md, gasto 8-oct): menos de ~5 créditos por lote, sin fraccionar un lote mayor; tope de esta tarea 12 créditos en total (saldo medido 16-oct: 438,17). **Sin cara ni voz** (ni Lucía ni Sergio Urcullo ni personas reales), **sin video, sin Soul, sin lotes grandes**: eso pide el sí escrito de Sergio Urcullo.
 
 - [ ] **P1 · Lote 1: un mismo sujeto, tres modelos.** Sujeto sin personas (un escritorio de recepción de clínica, o una tablet con agenda). Mismo prompt en `gpt_image_2_5`, `nano_banana` y un tercero de `models_explore` (action `recommend`). 1 imagen por modelo, calidad media. Antes de generar: cotizar (`generate cost` en la CLI o `get_cost` en el conector) y anotar costo y cap. Después: mirar las 3 y anotar cuál obedece mejor el prompt, el texto en imagen y la luz.
