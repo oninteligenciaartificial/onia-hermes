@@ -82,7 +82,7 @@ la dirección de Sergio Urcullo.
 
 ## 4. EN VUELO (lo que se pierde o se traba si nadie lo sigue)
 
-**15-oct 22:05 UTC:**
+**16-oct 01:10 UTC:**
 - **#175 (barrido de usted 4) y #176 (pulido 5): PUBLICADOS** en `release-9c47a734` (18:55 UTC) y mirados con cuentas QA: las 16
   superficies medidas quedan sin tú ni vos; los nombres accesibles de las citas y el total de costeos, vistos en producción.
 - **#177 (pulido 6): PUBLICADO Y MIRADO** en `release-3bad4242` (21:55 UTC, healthy): «Ver la ficha de …» en Hoy y
@@ -174,11 +174,12 @@ la dirección de Sergio Urcullo.
    es suya, las pantallas de «Mi web» (#168, #170).
 8. **CAFC del piloto** (SIAT etapa VI) e **infra de la bandeja en tiempo real** (una línea, §4).
 
-## 8. Próximos pasos (en orden, 15-oct 22:05 UTC)
+## 8. Próximos pasos (en orden, 16-oct 01:10 UTC)
 
-1. 00:58 UTC del 16-oct: mirar #178 (pulido 7, merge `dfdf7d89`) en producción (recordatorio programado) y reportar
-   PUBLICADO. El pulido 8 se construye en `/home/user/wt-pulido8` (rama local `pulido-usted-8` sobre `10a6509c`): género en
-   estética, «Gestionar» de Equipo, hover en táctil, mayúsculas y la X del medicamento. Se empuja después de las 01:10.
+1. Pulido 8 (`pulido-usted-8`, `994085db`, en `/home/user/wt-pulido8`): empujar después de las 01:10 UTC a
+   `claude/optimistic-ride-1sp5fe`, PR, CI y merge antes de las 03:20 para salir a las 03:50; mirar a las 03:58 con una cuenta QA
+   (Equipo con Tab y a 390, Pacientes «Nuevo paciente» en el árbol de accesibilidad, y Cobros si hay una nota de venta QA).
+   #178 (pulido 7) quedó publicado y mirado el 16-oct a las 01:00 UTC.
 2. Cuando Sergio Urcullo apruebe el pago QA: mirar el plan activo, la factura por correo y el checkout en «Plan activo».
 3. Contratos para Codex escritos y `pendiente`: **M1e** (el servidor exige enteros en las unidades enteras) y **A1** (lo
    omitido por teléfono queda como descartada con motivo). Los lanza la madre.
