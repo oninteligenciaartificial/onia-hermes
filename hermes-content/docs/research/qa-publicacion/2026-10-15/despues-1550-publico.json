@@ -1,12 +1,12 @@
 {
-  "cuando": "2026-10-15T15:59:33.982Z",
+  "cuando": "2026-10-16T15:59:19.272Z",
   "rutas": {
     "/login": {
       "390": {
         "estado": 200,
-        "ms": 4183,
-        "buildId": "OgWXRmeB1BUOtUJuz896h",
-        "build": "webpack-9ffa0fdad875799f.js",
+        "ms": 3399,
+        "buildId": "gaosrR3gX7Bl6z_3fclYG",
+        "build": "webpack-2292cb4088fded35.js",
         "archivo": "despues-1550-login-390.png",
         "titulo": "Onia | El sistema con IA que maneja su negocio en Bolivia",
         "descripcion": "Plataforma con IA para negocios en Bolivia. Agenda, clientes, inventario, ventas listas para facturar, cobros por QR, reportes y agentes que le dejan listo cada mensaje para que usted lo apruebe — con módulos por rubro: clínicas dentales, comercio y más.",
@@ -41,9 +41,9 @@
       },
       "1440": {
         "estado": 200,
-        "ms": 3567,
-        "buildId": "OgWXRmeB1BUOtUJuz896h",
-        "build": "webpack-9ffa0fdad875799f.js",
+        "ms": 3044,
+        "buildId": "gaosrR3gX7Bl6z_3fclYG",
+        "build": "webpack-2292cb4088fded35.js",
         "archivo": "despues-1550-login-1440.png",
         "titulo": "Onia | El sistema con IA que maneja su negocio en Bolivia",
         "descripcion": "Plataforma con IA para negocios en Bolivia. Agenda, clientes, inventario, ventas listas para facturar, cobros por QR, reportes y agentes que le dejan listo cada mensaje para que usted lo apruebe — con módulos por rubro: clínicas dentales, comercio y más.",
@@ -80,9 +80,9 @@
     "/book": {
       "390": {
         "estado": 200,
-        "ms": 2659,
-        "buildId": "OgWXRmeB1BUOtUJuz896h",
-        "build": "webpack-9ffa0fdad875799f.js",
+        "ms": 2728,
+        "buildId": "gaosrR3gX7Bl6z_3fclYG",
+        "build": "webpack-2292cb4088fded35.js",
         "archivo": "despues-1550-book-390.png",
         "titulo": "Reservas en línea | Onia",
         "descripcion": "Elija el día y la hora que le queden bien. Sin registro, en menos de un minuto.",
@@ -115,9 +115,9 @@
       },
       "1440": {
         "estado": 200,
-        "ms": 3234,
-        "buildId": "OgWXRmeB1BUOtUJuz896h",
-        "build": "webpack-9ffa0fdad875799f.js",
+        "ms": 2780,
+        "buildId": "gaosrR3gX7Bl6z_3fclYG",
+        "build": "webpack-2292cb4088fded35.js",
         "archivo": "despues-1550-book-1440.png",
         "titulo": "Reservas en línea | Onia",
         "descripcion": "Elija el día y la hora que le queden bien. Sin registro, en menos de un minuto.",
@@ -152,9 +152,9 @@
     "/register": {
       "390": {
         "estado": 200,
-        "ms": 2892,
-        "buildId": "OgWXRmeB1BUOtUJuz896h",
-        "build": "webpack-9ffa0fdad875799f.js",
+        "ms": 2833,
+        "buildId": "gaosrR3gX7Bl6z_3fclYG",
+        "build": "webpack-2292cb4088fded35.js",
         "archivo": "despues-1550-register-390.png",
         "titulo": "Onia | El sistema con IA que maneja su negocio en Bolivia",
         "descripcion": "Plataforma con IA para negocios en Bolivia. Agenda, clientes, inventario, ventas listas para facturar, cobros por QR, reportes y agentes que le dejan listo cada mensaje para que usted lo apruebe — con módulos por rubro: clínicas dentales, comercio y más.",
@@ -189,9 +189,9 @@
       },
       "1440": {
         "estado": 200,
-        "ms": 3073,
-        "buildId": "OgWXRmeB1BUOtUJuz896h",
-        "build": "webpack-9ffa0fdad875799f.js",
+        "ms": 2830,
+        "buildId": "gaosrR3gX7Bl6z_3fclYG",
+        "build": "webpack-2292cb4088fded35.js",
         "archivo": "despues-1550-register-1440.png",
         "titulo": "Onia | El sistema con IA que maneja su negocio en Bolivia",
         "descripcion": "Plataforma con IA para negocios en Bolivia. Agenda, clientes, inventario, ventas listas para facturar, cobros por QR, reportes y agentes que le dejan listo cada mensaje para que usted lo apruebe — con módulos por rubro: clínicas dentales, comercio y más.",
@@ -222,6 +222,82 @@
           "Le dejan listos seguimientos y avisos: cada mensaje de un agente sale solo cuando lo aprueba.",
           "Clínicas dentales · Comercios · Importadoras · Estéticas y spas · Servicios profesionales — hecho en Bolivia",
           "1"
+        ]
+      }
+    },
+    "/book/clinica-sergio-p2ljs": {
+      "390": {
+        "estado": 200,
+        "ms": 2666,
+        "buildId": "gaosrR3gX7Bl6z_3fclYG",
+        "build": "webpack-2292cb4088fded35.js",
+        "archivo": "despues-1550-book-clinica-sergio-p2ljs-390.png",
+        "titulo": "Reserve su cita en Clínica Sergio",
+        "descripcion": "Elija el día y la hora que le queden bien en Clínica Sergio. Sin registro, en menos de un minuto.",
+        "ogTitulo": "Reserve su cita en Clínica Sergio",
+        "ogDescripcion": "Elija el día y la hora que le queden bien en Clínica Sergio. Sin registro, en menos de un minuto.",
+        "twTitulo": "Reserve su cita en Clínica Sergio",
+        "manifest": "/manifest.json",
+        "url": "/book/clinica-sergio-p2ljs",
+        "desbordeHorizontal": false,
+        "ligadurasComoTexto": [],
+        "precios": [],
+        "obra": [],
+        "voseoOTuteoVisible": [],
+        "errores": [
+          "An unknown error occurred when fetching the script.",
+          "[SW] registration failed: SecurityError: Failed to register a ServiceWorker for scope ('https://app.onia.com.bo/') with script ('https://app.onia.com.bo/sw.js')"
+        ],
+        "inicio": [
+          "CS",
+          "AGENDAR CITA",
+          "Clínica Sergio",
+          "call",
+          "Paso 1 de 4: Elija su profesional",
+          "badge",
+          "Profesional",
+          "calendar_today",
+          "Fecha",
+          "schedule",
+          "Horario",
+          "person"
+        ]
+      },
+      "1440": {
+        "estado": 200,
+        "ms": 2745,
+        "buildId": "gaosrR3gX7Bl6z_3fclYG",
+        "build": "webpack-2292cb4088fded35.js",
+        "archivo": "despues-1550-book-clinica-sergio-p2ljs-1440.png",
+        "titulo": "Reserve su cita en Clínica Sergio",
+        "descripcion": "Elija el día y la hora que le queden bien en Clínica Sergio. Sin registro, en menos de un minuto.",
+        "ogTitulo": "Reserve su cita en Clínica Sergio",
+        "ogDescripcion": "Elija el día y la hora que le queden bien en Clínica Sergio. Sin registro, en menos de un minuto.",
+        "twTitulo": "Reserve su cita en Clínica Sergio",
+        "manifest": "/manifest.json",
+        "url": "/book/clinica-sergio-p2ljs",
+        "desbordeHorizontal": false,
+        "ligadurasComoTexto": [],
+        "precios": [],
+        "obra": [],
+        "voseoOTuteoVisible": [],
+        "errores": [
+          "An unknown error occurred when fetching the script.",
+          "[SW] registration failed: SecurityError: Failed to register a ServiceWorker for scope ('https://app.onia.com.bo/') with script ('https://app.onia.com.bo/sw.js')"
+        ],
+        "inicio": [
+          "CS",
+          "AGENDAR CITA",
+          "Clínica Sergio",
+          "call",
+          "Paso 1 de 4: Elija su profesional",
+          "badge",
+          "Profesional",
+          "calendar_today",
+          "Fecha",
+          "schedule",
+          "Horario",
+          "person"
         ]
       }
     }
