@@ -240,6 +240,19 @@ transiciones más lentas. La música y los efectos se deducen del nivel y del es
 la ficha, porque el audio no se escuchó.
 Un JSON con `text` vacío es respuesta válida: el audio no tiene voz (así se confirmó que ese reel es solo música). `scripts/transcribe.sh` usa ese camino (base64 → SSH → docker exec en onia-center → Speaches). Detalle de infra: [[onia-hermes-stack-y-radar]].
 
+### Transcribir en la nube sin GPU, sin VPS (medido 16-oct-2026)
+Instalar una vez por contenedor: `python3 -m pip install faster-whisper "yt-dlp[default,curl-cffi]" "av==15.1.0"`
+(⚠ **`av` 19 rompe faster-whisper** con `TypeError: open() got an unexpected keyword argument 'metadata_errors'`; fijar `av==15.1.0`).
+Uso: `python3 -I .claude/skills/ver-videos/scripts/transcribe-local.py <audio|video> [small|base|tiny] [es]` → JSON con
+`segments[]` y tiempos. CPU 4 núcleos, int8, modelo `small`: **17 s de audio en 6 s** (~0,35x), carga 2 s. Español con ruido de fondo:
+`small` acierta todo salvo nombres propios; el script ya pasa un `initial_prompt` con «Sergio Urcullo, Onia Platform, WhatsApp…»
+y con eso `small` corrigió «Cononia» → «Onia Platform». `tiny` y `base` fallan más nombres y cifras: usar `small`. Agregar al
+`PROMPT` del script los nombres del video antes de correr. Probado con TTS en español (no con voz real de Sergio Urcullo).
+- **Carrusel de Instagram con láminas en video:** `yt-dlp` baja las láminas mp4 (8 de `/p/DecFE1oDNd3/`) pero **no tienen pista de
+  audio** (`ffprobe` solo `video`): no hay nada que transcribir, se leen por cuadros. Un post de imagen única da «There is no video in this post».
+- **YouTube desde la nube:** `yt-dlp` lista pero el medio da **HTTP 403** por el proxy; Wikimedia limita por peticiones. Los videos de
+  YouTube se transcriben desde la PC. Instagram sí baja.
+
 ## Common mistakes
 - **Afirmar que "viste" el video con 1-2 cuadros.** Muestreá una tanda repartida y decí la cobertura.
 - **Leer los 69 cuadros** (quema contexto). 10-15 repartidos alcanzan para el arco completo.
