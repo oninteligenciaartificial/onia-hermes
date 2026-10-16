@@ -1,0 +1,70 @@
+{
+ "title": "Qué sale de una auditoría de IA para tu negocio",
+ "theme": "blanco",
+ "serie": "auditoría · 2/2",
+ "caption": "No es un curso: es sentarte 2 horas con tu propio negocio y salir con algo hecho. La tabla de la lámina 3 es un ejemplo inventado para mostrar el formato de tu mapa.\n\nSábado 24 de octubre, 10:00 (La Paz), por Meet. Cupo 12. Link en mi perfil.",
+ "slides": [
+  {
+   "layout": "ensayo",
+   "theme": "verde",
+   "headline": "No es un curso. Es *tu* negocio sobre la mesa.",
+   "body": "2 horas. Salís con algo hecho.",
+   "next": "qué te llevás"
+  },
+  {
+   "layout": "lista",
+   "theme": "blanco",
+   "headline": "Te llevás *3 cosas*",
+   "body": "",
+   "items": [
+    {"label": "Tu mapa de tareas", "text": "Qué repetís y cuánto te cuesta"},
+    {"label": "Tu prioridad", "text": "Cuál automatizar primero"},
+    {"label": "Tu primer paso", "text": "Listo para probar el lunes"}
+   ],
+   "next": "así se ve"
+  },
+  {
+   "layout": "lista",
+   "theme": "blanco",
+   "headline": "Así se ve *tu mapa*",
+   "body": "Ejemplo inventado, para mostrar el formato",
+   "items": [
+    {"label": "Cotizaciones", "text": "6 h por semana · Bs 480 al mes"},
+    {"label": "Responder consultas", "text": "8 h por semana · Bs 640 al mes"},
+    {"label": "Pasar datos a planilla", "text": "3 h por semana · Bs 240 al mes"}
+   ],
+   "next": "para quién"
+  },
+  {
+   "layout": "lista",
+   "theme": "blanco",
+   "headline": "Para quién *no* es",
+   "body": "Mejor que lo sepas antes de reservar",
+   "items": [
+    {"label": "Tu negocio no repite tareas", "text": "No hay nada que ordenar"},
+    {"label": "Buscás un certificado", "text": "No lo hay"},
+    {"label": "Querés que otro lo haga por vos", "text": "Acá lo hacés vos, conmigo al lado"}
+   ],
+   "next": "cómo es"
+  },
+  {
+   "layout": "lista",
+   "theme": "blanco",
+   "headline": "Cómo *funciona*",
+   "body": "",
+   "items": [
+    {"label": "Cuándo", "text": "Sábado 24 de octubre, 10:00 (La Paz)"},
+    {"label": "Dónde", "text": "2 horas por Google Meet"},
+    {"label": "Cupo", "text": "12 personas como máximo"}
+   ],
+   "next": "reservá"
+  },
+  {
+   "layout": "ensayo",
+   "theme": "negro",
+   "headline": "Reservá tu cupo",
+   "body": "Escribime desde el link de mi perfil.\nSe paga por QR del BCP.",
+   "cta": "Link en mi perfil"
+  }
+ ]
+}

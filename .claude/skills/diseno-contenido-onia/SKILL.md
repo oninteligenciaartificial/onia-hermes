@@ -266,6 +266,16 @@ Fuente y evidencia: [`references/video-intake/2026-10-10-ig-carrusel-DePPPp5FgMh
   3. Portada-inventario con logos en arco: layout nuevo opcional; sin él, la portada va con foto `fotobn` + `dato` o captura.
 - **Logos:** hay 8 en `hermes-content/references/brand-logos/` y 3 en `hermes-content/references/brand-claude/`. Notion, Chrome, Spotify, NordVPN, Figma, Xcode y Cursor **no están**: un inventario que los nombre primero necesita su kit de prensa oficial (si hay que descargar, pide OK).
 
+## Carrusel de oferta o evento (workshop de pago) — aprendido el 16-oct-2026
+
+Caso: dos carruseles del workshop «Auditá tu negocio con IA» (`briefs/marca-personal/sergio-workshop-*-20261016.json`, render en `carousels/out/`). Sin imágenes ni gasto: solo layouts `dato`, `lista`, `ensayo`.
+- **Estructura que funcionó:** portada `dato` con **ejemplo rotulado** («Ejemplo: 5 h por semana, a Bs 20 la hora»; nunca un número que parezca dato de alguien) → la cuenta en `lista` → filtro «para quién no es» → fecha y cupo → cierre `ensayo` negro con `cta` y **una sola** acción («Link en mi perfil»). El precio no va en la lámina: va en la página, que es lo que se aprueba.
+- **Una lámina `ensayo` con 3 líneas queda con más de la mitad vacía** (falla el control §5.2). Se arregla pasándola a `lista` de 3 filas. Las de cierre negro y la portada verde pueden quedar así: son declaraciones.
+- **`cierre` no se usa** para estas piezas: imprime «Comentá» fijo y el DM por comentario no está probado. El cierre es `ensayo` con `cta`.
+- **Trampa del setup (medida hoy):** `eval "$(sh scripts/carousel_cloud_setup.sh)" 2>&1 | tail -3` falla con «No Edge/Chrome found» porque el pipe corre el `eval` en un subshell y `CAROUSEL_BROWSER` se pierde. Correr el `eval` **sin pipe**, o exportar `CAROUSEL_BROWSER=/root/.fonts/onia-carruseles/chromium-headless.sh` en el mismo comando.
+- La hoja de contactos se llama con `--dir <carpeta>` (no con la carpeta suelta).
+- Antes de publicar: la promesa («plantilla del Mapa», fecha, precio) tiene que existir y estar aprobada; ver `docs/ONIA_WORKSHOPS_AUDITORIA_IA.md` §8.
+
 ## 6. Gasto (CLAUDE.md, regla de Higgsfield)
 
 Cotizar siempre. **Actualización 8-oct, consolidada 9-oct:** imágenes de prueba/opciones por unos pocos créditos (menos de ~5 por lote) tienen autorización previa; mostrar después el resultado. Lotes grandes, entrenamiento Soul y subir cara/voz a servicios externos requieren autorización específica (cara/voz de Sergio Urcullo también la de Leslie Mercado Moreno). No fraccionar lotes para esquivar el límite. Registrar en

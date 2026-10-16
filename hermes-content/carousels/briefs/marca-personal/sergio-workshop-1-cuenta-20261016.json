@@ -1,0 +1,67 @@
+{
+ "title": "La cuenta que nadie hace: cuánto te cuesta lo que repetís",
+ "theme": "blanco",
+ "serie": "auditoría · 1/2",
+ "caption": "Buscá la tarea que repetís cada semana y hacé la cuenta: horas por semana × 4 × lo que vale tu hora. Los números de las láminas son un ejemplo para mostrar la cuenta, no un dato de nadie.\n\nSábado 24 de octubre, 10:00 (La Paz): workshop en vivo de 2 horas para salir con tu mapa de tareas y un primer paso. Cupo 12. Link en mi perfil.",
+ "slides": [
+  {
+   "layout": "dato",
+   "theme": "blanco",
+   "value": "Bs 400",
+   "headline": "al mes te cuesta *una sola* tarea que repetís",
+   "body": "Ejemplo: 5 horas por semana, a Bs 20 la hora",
+   "next": "la cuenta"
+  },
+  {
+   "layout": "lista",
+   "theme": "blanco",
+   "headline": "La cuenta, *de a un paso*",
+   "body": "",
+   "items": [
+    {"label": "Tarea", "text": "La que repetís cada semana"},
+    {"label": "Horas por semana", "text": "Contalas, no las supongas"},
+    {"label": "Por 4 semanas", "text": "Lo que te come al mes"},
+    {"label": "Por lo que vale tu hora", "text": "Ahí está el costo real"}
+   ],
+   "next": "hacela"
+  },
+  {
+   "layout": "lista",
+   "theme": "blanco",
+   "headline": "Hacela con *tus 3* tareas",
+   "body": "Ejemplos de tareas que se repiten",
+   "items": [
+    {"label": "Contestar lo mismo", "text": "Por WhatsApp, todos los días"},
+    {"label": "Armar cotizaciones", "text": "Una por una, a mano"},
+    {"label": "Pasar datos", "text": "De un lugar a otro"}
+   ],
+   "next": "elegí"
+  },
+  {
+   "layout": "lista",
+   "theme": "blanco",
+   "headline": "Después elegí *una*",
+   "body": "Gana la que cumple las tres",
+   "items": [
+    {"label": "Más horas", "text": "La que más tiempo te come"},
+    {"label": "Menos riesgo", "text": "Si sale mal, no pasa nada grave"},
+    {"label": "Sin plata ni datos de otros", "text": "Esas no van primero"}
+   ],
+   "next": "esto tiene nombre"
+  },
+  {
+   "layout": "ensayo",
+   "theme": "verde",
+   "headline": "Eso es una *auditoría*",
+   "body": "Tu mapa de tareas. Tu prioridad. Tu primer paso.\nLo hacemos con tu negocio, en vivo.",
+   "next": "fecha"
+  },
+  {
+   "layout": "ensayo",
+   "theme": "negro",
+   "headline": "Sáb 24 de octubre · 10:00",
+   "body": "Workshop en vivo de 2 horas. Cupo 12.\nSalís con tu mapa y un primer paso.",
+   "cta": "Link en mi perfil"
+  }
+ ]
+}
