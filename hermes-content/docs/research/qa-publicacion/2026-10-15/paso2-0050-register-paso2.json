@@ -1,0 +1,121 @@
+{
+ "cuando": "2026-10-16T00:58:47.977Z",
+ "rubros": {
+  "dental": {
+   "390": {
+    "archivo": "paso2-0050-register-paso2-dental-390.png",
+    "titulos": [
+     "Cree su cuenta"
+    ],
+    "etiquetas": [
+     "Su nombre",
+     "Correo electrónico",
+     "Contraseña",
+     "Nombre de su clínica",
+     "¿Cómo nos conoció? (opcional)",
+     "Quiero recibir novedades y tips de Onia. Puedo darme de baja cuando quiera."
+    ],
+    "placeholders": [
+     "Dr. Juan Pérez",
+     "doctor@clinica.bo",
+     "Mínimo 8 caracteres",
+     "Clínica Dental Sonrisa"
+    ],
+    "botones": [
+     "dentistry\nClínica dental\nedit\nCambiar rubro",
+     "visibility",
+     "Crear mi cuenta · 14 días gratis"
+    ],
+    "desbordeHorizontal": false,
+    "obra": [],
+    "voseoOTuteoVisible": []
+   },
+   "1440": {
+    "archivo": "paso2-0050-register-paso2-dental-1440.png",
+    "titulos": [
+     "Cree su cuenta"
+    ],
+    "etiquetas": [
+     "Su nombre",
+     "Correo electrónico",
+     "Contraseña",
+     "Nombre de su clínica",
+     "¿Cómo nos conoció? (opcional)",
+     "Quiero recibir novedades y tips de Onia. Puedo darme de baja cuando quiera."
+    ],
+    "placeholders": [
+     "Dr. Juan Pérez",
+     "doctor@clinica.bo",
+     "Mínimo 8 caracteres",
+     "Clínica Dental Sonrisa"
+    ],
+    "botones": [
+     "dentistry\nClínica dental\nedit\nCambiar rubro",
+     "visibility",
+     "Crear mi cuenta · 14 días gratis"
+    ],
+    "desbordeHorizontal": false,
+    "obra": [],
+    "voseoOTuteoVisible": []
+   }
+  },
+  "comercio": {
+   "390": {
+    "archivo": "paso2-0050-register-paso2-comercio-390.png",
+    "titulos": [
+     "Cree su cuenta"
+    ],
+    "etiquetas": [
+     "Su nombre",
+     "Correo electrónico",
+     "Contraseña",
+     "Nombre de su negocio",
+     "¿Cómo nos conoció? (opcional)",
+     "Quiero recibir novedades y tips de Onia. Puedo darme de baja cuando quiera."
+    ],
+    "placeholders": [
+     "María Pérez",
+     "dueno@negocio.bo",
+     "Mínimo 8 caracteres",
+     "Ferretería El Tornillo"
+    ],
+    "botones": [
+     "storefront\nComercio / tienda\nedit\nCambiar rubro",
+     "visibility",
+     "Crear mi cuenta · 14 días gratis"
+    ],
+    "desbordeHorizontal": false,
+    "obra": [],
+    "voseoOTuteoVisible": []
+   },
+   "1440": {
+    "archivo": "paso2-0050-register-paso2-comercio-1440.png",
+    "titulos": [
+     "Cree su cuenta"
+    ],
+    "etiquetas": [
+     "Su nombre",
+     "Correo electrónico",
+     "Contraseña",
+     "Nombre de su negocio",
+     "¿Cómo nos conoció? (opcional)",
+     "Quiero recibir novedades y tips de Onia. Puedo darme de baja cuando quiera."
+    ],
+    "placeholders": [
+     "María Pérez",
+     "dueno@negocio.bo",
+     "Mínimo 8 caracteres",
+     "Ferretería El Tornillo"
+    ],
+    "botones": [
+     "storefront\nComercio / tienda\nedit\nCambiar rubro",
+     "visibility",
+     "Crear mi cuenta · 14 días gratis"
+    ],
+    "desbordeHorizontal": false,
+    "obra": [],
+    "voseoOTuteoVisible": []
+   }
+  }
+ }
+}
