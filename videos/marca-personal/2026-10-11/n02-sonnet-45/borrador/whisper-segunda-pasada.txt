@@ -1,0 +1,24 @@
+Segunda pasada de faster-whisper small (int8, CPU) sobre el bruto, con initial_prompt de vocabulario (Claude, Sonnet 4.5/5.5, n8n, Bedrock, Usage, export, programó, ajustes, avisos…).
+Solo para contrastar las lecturas dudosas: NO es la fuente del transcript (esa es ../transcript-whisper-small.json, sin prompt). Tiempos del BRUTO, sin corregir.
+
+   0.70-   8.70  Si tenés un bot atendiendo clientes, ahora viene el 30 de noviembre. Si usás Sonnet 4.5, se va a apagar.
+   9.06-  12.52  Anthropic lo anunció el 30 de septiembre, quedan 46 días.
+  14.32-  19.00  Tres cosas que tenés que hacer ahora mismo, buscarlo, cambiarlo y probarlo.
+  27.40-  33.54  Para que se vea el resultado uno, buscálo en tu codio, busca este texto, cloud de guión
+  33.54-  41.00  sonnet guión 4 guión 5, no programas, en la consola de cloud and iusage export te vas
+  41.00-  46.48  a una pantalla con cada modelo que usaste, en n8n abrica nodo antropic, no lo llamaste
+  46.48-  54.56  de vos preguntarle a quién te aromó o a cloud mismo si es que él te aromó, por
+  54.56-  60.58  ejemplo en mi caso lo cambié al nuevo modelo que acaban de sacar sonnet 5.5 se
+  60.58-  64.80  lo cambié a mis agentes a mis nodos de 8n y obviamente a toda mi
+  64.80-  68.42  infraestructura de desarrollo de cloud code
+  71.94-  78.76  Como segundo, cambiarlo. Abrí Cloud Code en esa carpeta y escribí lo que ves. Barra
+  78.76-  84.96  Cloud API Migrate y el modelo nuevo. Antes de tocar nada te pregunta qué archivo al
+  84.96-  92.00  final te deja una lista para que revise. El precio baja de 3 dólares a 2, pero cuenta
+  92.00-  98.22  tu texto como cerca de un 30% más largo. Con eso, la cuenta puede bajar cerca de
+  98.22- 105.56  un 13%. Y ojo, ahora piensa antes de contestar y ese pensamiento se cobra, recontálo con
+ 105.56- 114.04  tu texto. Tres, probálo. Hay cinco ajustes que el modelo viejo aceptaba, el nuevo lo rechaza
+ 114.04- 124.60  con error. Tres de los cinco, una temperatura cambiada. Una respuesta prellenada y obligarlo
+ 124.60- 131.06  a usar una herramienta. Mandar un mensaje a tu bot. Si contesta, pasó. Si tiras error,
+ 131.50- 138.50  400 es uno de los 5. Ojo, esto vale para la API de Cloud. En Bedrock y Google Cloud, la
+ 138.50- 153.04  fecha es otra. La lista con los 5 justes está en mi comunidad. Gratis, link en mi
+ 153.04- 155.22  perfil, busca migrar en avisos.

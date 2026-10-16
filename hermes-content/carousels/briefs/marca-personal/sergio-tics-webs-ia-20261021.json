@@ -1,0 +1,109 @@
+{
+  "title": "Tics de webs con IA (inventario continuo, pack referentes) — BORRADOR: faltan [X][Y][X2][Y2] y la captura C1",
+  "estado": "BORRADOR. NO publicar: la portada espera la captura C1 de CC-02 y la lámina 4 los números [X][Y][X2][Y2] de la medición del jue 15. Sale mié 21-oct 16:00 (La Paz) con el video CC-02; el aviso DISEÑO tiene que estar pegado antes de las 12:30. Receta: .claude/skills/diseno-contenido-onia/SKILL.md «Inventario continuo». Brief de la madre: hermes-content/carousels/briefs/BRIEF-RECETA-DePPPp5FgMh.md Si la medición no muestra menos tics con la skill ([Y] < [X] y [Y2] < [X2]), «La skill saca tics» no vale: el carrusel no sale.",
+  "caption": "Buscá DISEÑO en Avisos · link en mi perfil.\n\nLe pedí a Claude la misma landing dos veces, para un negocio de ejemplo: sin skill de diseño y con Impeccable (de Paul Bakaus, impeccable.style).\n\n1 corrida, negocio de ejemplo, [fecha]. Detector de Impeccable: [X] → [Y]. A ciegas, con los 5 primeros: [X2] → [Y2]. Los 3 últimos no los medí.\n\nLa skill saca tics. No la vuelve humana.",
+  "hashtags": [
+    "#claudecode",
+    "#claude",
+    "#diseñoweb",
+    "#ia",
+    "#bolivia"
+  ],
+  "image_style": "captura",
+  "slides": [
+    {
+      "number": 1,
+      "layout": "ilustrado",
+      "theme": "blanco",
+      "badge": "[X] tics",
+      "headline": "*Tics* de webs con IA",
+      "alt_text": "Portada: «Tics de webs con IA»."
+    },
+    {
+      "number": 2,
+      "layout": "inventario",
+      "theme": "blanco",
+      "start": 1,
+      "items": [
+        {
+          "label": "Hero genérico",
+          "text": "Titular centrado, degradé y botón."
+        },
+        {
+          "label": "Tarjetas clonadas",
+          "text": "Todas iguales, mismo espacio."
+        },
+        {
+          "label": "Gris y acento",
+          "text": "Gris sobre blanco, un solo acento."
+        },
+        {
+          "label": "Letra por defecto",
+          "text": "Sin motivo."
+        },
+        {
+          "label": "Todo igual",
+          "text": "Mismo radio, sombra, espacio."
+        }
+      ],
+      "alt_text": "Los cinco primeros tics, numerados del 1 al 5: hero genérico, tarjetas clonadas, gris y acento, letra por defecto, todo igual."
+    },
+    {
+      "number": 3,
+      "layout": "inventario",
+      "theme": "blanco",
+      "start": 6,
+      "center": true,
+      "items": [
+        {
+          "label": "Librería sin tocar",
+          "text": "Los componentes de fábrica."
+        },
+        {
+          "label": "Capas planas",
+          "text": "Sin profundidad ni movimiento."
+        },
+        {
+          "label": "Tablero de manual",
+          "text": "Barra lateral, tarjetas, gráficos."
+        }
+      ],
+      "alt_text": "Los tics 6 a 8: librería sin tocar, capas planas, tablero de manual."
+    },
+    {
+      "number": 4,
+      "layout": "inventario",
+      "theme": "blanco",
+      "start": 9,
+      "center": true,
+      "ask": true,
+      "next": "",
+      "items": [
+        {
+          "label": "Detector",
+          "text": "[X] sin skill, [Y] con skill."
+        },
+        {
+          "label": "A ciegas",
+          "text": "[X2] contra [Y2] en los 5 primeros."
+        },
+        {
+          "n": "",
+          "label": "DISEÑO",
+          "text": "Pedido, webs y lista."
+        }
+      ],
+      "alt_text": "Remate: el resultado del detector, el conteo a ciegas de los 5 primeros tics y el recurso DISEÑO."
+    },
+    {
+      "number": 5,
+      "layout": "cierre",
+      "theme": "negro",
+      "kicker": "La skill saca tics. El gusto lo ponés vos.",
+      "pre": "Buscá",
+      "keyword": "DISEÑO",
+      "body": "en Avisos · link en mi perfil",
+      "alt_text": "Cierre: «Buscá DISEÑO en Avisos · link en mi perfil»."
+    }
+  ]
+}

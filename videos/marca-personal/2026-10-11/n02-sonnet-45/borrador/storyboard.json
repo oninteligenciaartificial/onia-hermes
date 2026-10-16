@@ -1,0 +1,1583 @@
+{
+ "titulo": "N02 · Sonnet 4.5 se apaga el 30 de noviembre (BORRADOR sobre el corte propuesto)",
+ "nota": "BORRADOR sobre el corte PROPUESTO, sin el «ok cortes» de Sergio Urcullo. Todo texto en pantalla sale de lo que dijo (segments-cut.json) o de una página oficial de Anthropic capturada el 11-oct-2026 (capturas/capturas.json trae URL y fecha). «Quedan 46 días» NO va como tarjeta (solo vale si sale el jue 15-oct): queda solo en los subtítulos. El bloque sin transcripción (bruto 142,15-144,52) va sin texto.",
+ "assets": "capturas",
+ "camara": {},
+ "capturas": [
+  {
+   "id": "dep-historial",
+   "url": "https://platform.claude.com/docs/en/about-claude/model-deprecations",
+   "ancho_css": 560,
+   "esquema": "dark",
+   "ancla": "2026-09-30: Claude Sonnet 4.5 model",
+   "margen": 14,
+   "alto_css": 300,
+   "fijos": "ocultar",
+   "frases": [
+    "On September 30, 2026",
+    "November 30, 2026",
+    "claude-sonnet-4-5-20250929",
+    "claude-sonnet-5-5"
+   ]
+  },
+  {
+   "id": "dep-auditoria",
+   "url": "https://platform.claude.com/docs/en/about-claude/model-deprecations",
+   "ancho_css": 460,
+   "esquema": "dark",
+   "ancla": "Auditing model usage",
+   "margen": 14,
+   "alto_css": 400,
+   "fijos": "ocultar",
+   "frases": [
+    "Usage page in Claude Console",
+    "Export",
+    "down by API key and model"
+   ]
+  },
+  {
+   "id": "dep-plataformas",
+   "url": "https://platform.claude.com/docs/en/about-claude/model-deprecations",
+   "ancho_css": 460,
+   "esquema": "dark",
+   "ancla": "The dates on this page apply to",
+   "margen": 14,
+   "alto_css": 260,
+   "fijos": "ocultar",
+   "frases": [
+    "Bedrock and Google Cloud"
+   ]
+  },
+  {
+   "id": "mig-comando",
+   "url": "https://platform.claude.com/docs/en/models/sonnet-5-5/migration-guide",
+   "ancho_css": 460,
+   "esquema": "dark",
+   "ancla": "Automate your migration with the Claude API skill",
+   "margen": 14,
+   "alto_css": 420,
+   "fijos": "ocultar",
+   "frases": [
+    "/claude-api migrate this project to claude-sonnet-5-5",
+    "confirm the migration scope",
+    "checklist of items to verify manually"
+   ]
+  },
+  {
+   "id": "mig-cinco",
+   "url": "https://platform.claude.com/docs/en/models/sonnet-5-5/migration-guide",
+   "ancho_css": 460,
+   "esquema": "dark",
+   "ancla": "Send a request to Claude Sonnet 5.5",
+   "margen": 14,
+   "alto_css": 340,
+   "fijos": "ocultar",
+   "frases": [
+    "five settings that return a 400",
+    "sampling parameters",
+    "prefill",
+    "forced tool choice"
+   ]
+  },
+  {
+   "id": "mig-pensar",
+   "url": "https://platform.claude.com/docs/en/models/sonnet-5-5/migration-guide",
+   "ancho_css": 460,
+   "esquema": "dark",
+   "ancla": "Handle thinking in responses",
+   "margen": 14,
+   "alto_css": 340,
+   "fijos": "ocultar",
+   "frases": [
+    "thinking tokens are billed as output tokens"
+   ]
+  },
+  {
+   "id": "precio-45",
+   "url": "https://platform.claude.com/docs/en/about-claude/pricing",
+   "ancho_css": 560,
+   "esquema": "dark",
+   "ancla": "Claude Sonnet 4.5",
+   "margen": 8,
+   "alto_css": 150,
+   "fijos": "ocultar",
+   "frases": [
+    "$3 / MTok"
+   ]
+  },
+  {
+   "id": "precio-55",
+   "url": "https://platform.claude.com/docs/en/about-claude/pricing",
+   "ancho_css": 560,
+   "esquema": "dark",
+   "ancla": "5m writes",
+   "margen": 14,
+   "alto_css": 330,
+   "fijos": "ocultar",
+   "frases": [
+    "$2 / MTok"
+   ]
+  },
+  {
+   "id": "precio-tokens",
+   "url": "https://platform.claude.com/docs/en/about-claude/pricing",
+   "ancho_css": 460,
+   "esquema": "dark",
+   "ancla": "Claude 4.7 and later models and Claude Mythos Preview use a newer tokenizer",
+   "margen": 2,
+   "alto_css": 190,
+   "fijos": "ocultar",
+   "frases": [
+    "approximately 30% more tokens"
+   ]
+  }
+ ],
+ "zooms": [
+  {
+   "tipo": "golpe",
+   "en": "apagar"
+  },
+  {
+   "tipo": "golpe",
+   "en": "13%"
+  },
+  {
+   "tipo": "golpe",
+   "en": "migrar"
+  }
+ ],
+ "escenas": [
+  {
+   "id": "gancho",
+   "layout": "split",
+   "fondo": "oscuro",
+   "desde": {
+    "t": 0
+   },
+   "etiqueta": [
+    "SONNET 4.5",
+    "AVISO OFICIAL"
+   ],
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "Sonnet 4.5\n*30 de noviembre*",
+     "tam": 84,
+     "pos": [
+      48,
+      104
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "captura",
+     "src": "dep-historial",
+     "recorte": [
+      0,
+      0,
+      1120,
+      450
+     ],
+     "ancho": 984,
+     "pos": [
+      48,
+      330
+     ],
+     "url": "platform.claude.com",
+     "marcas": [
+      {
+       "frase": "November 30, 2026",
+       "en": "noviembre",
+       "pad": 4
+      }
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "credito",
+     "texto": "Fuente: platform.claude.com/docs/en/about-claude/model-deprecations",
+     "pos": [
+      48,
+      830
+     ]
+    }
+   ]
+  },
+  {
+   "id": "anuncio",
+   "layout": "split",
+   "fondo": "oscuro",
+   "desde": {
+    "frase": "anthropic lo anunció",
+    "corte": true
+   },
+   "etiqueta": [
+    "SONNET 4.5",
+    "AVISO OFICIAL"
+   ],
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "Lo anunció el\n*30 de septiembre*",
+     "tam": 84,
+     "pos": [
+      48,
+      104
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "logo",
+     "src": "logo-anthropic.png",
+     "ancho": 110,
+     "pos": [
+      922,
+      104
+     ],
+     "en": {
+      "frase": "anthropic",
+      "offset": -0.1
+     }
+    },
+    {
+     "tipo": "captura",
+     "src": "dep-historial",
+     "recorte": [
+      0,
+      0,
+      1120,
+      450
+     ],
+     "ancho": 984,
+     "pos": [
+      48,
+      330
+     ],
+     "url": "platform.claude.com",
+     "marcas": [
+      {
+       "frase": "On September 30, 2026",
+       "en": "septiembre",
+       "pad": 2
+      }
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "credito",
+     "texto": "Fuente: platform.claude.com/docs/en/about-claude/model-deprecations",
+     "pos": [
+      48,
+      830
+     ]
+    }
+   ]
+  },
+  {
+   "id": "tres-cosas",
+   "layout": "pip",
+   "fondo": "papel",
+   "desde": {
+    "frase": "tres cosas",
+    "corte": true
+   },
+   "etiqueta": [
+    "TRES COSAS",
+    "AHORA MISMO"
+   ],
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "Tres\n*cosas*",
+     "tam": 118,
+     "pos": [
+      40,
+      200
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "fila",
+     "texto": "1 · Buscarlo",
+     "icono": "check",
+     "alto": 120,
+     "pos": [
+      48,
+      740
+     ],
+     "en": "buscarlo"
+    },
+    {
+     "tipo": "fila",
+     "texto": "2 · Cambiarlo",
+     "icono": "check",
+     "alto": 120,
+     "pos": [
+      48,
+      872
+     ],
+     "en": "cambiarlo"
+    },
+    {
+     "tipo": "fila",
+     "texto": "3 · Probarlo",
+     "icono": "check",
+     "alto": 120,
+     "pos": [
+      48,
+      1004
+     ],
+     "en": "probarlo"
+    }
+   ]
+  },
+  {
+   "id": "uno-buscalo",
+   "layout": "split",
+   "fondo": "oscuro",
+   "desde": {
+    "frase": "para que se",
+    "corte": true
+   },
+   "etiqueta": [
+    "SONNET 4.5",
+    "1 · BUSCARLO"
+   ],
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "Buscalo en\n*tu código*",
+     "tam": 92,
+     "pos": [
+      48,
+      104
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "texto",
+     "texto": "*claude-sonnet-4-5*",
+     "tam": 64,
+     "pos": [
+      48,
+      340
+     ],
+     "fuente": "mono",
+     "en": "claude guion"
+    },
+    {
+     "tipo": "captura",
+     "src": "dep-historial",
+     "recorte": [
+      0,
+      205,
+      1120,
+      245
+     ],
+     "ancho": 984,
+     "pos": [
+      48,
+      470
+     ],
+     "url": "platform.claude.com",
+     "marcas": [
+      {
+       "frase": "claude-sonnet-4-5-20250929",
+       "en": "guion 5",
+       "pad": 4
+      }
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "credito",
+     "texto": "Fuente: platform.claude.com/docs/en/about-claude/model-deprecations",
+     "pos": [
+      48,
+      750
+     ]
+    }
+   ]
+  },
+  {
+   "id": "consola",
+   "layout": "split",
+   "fondo": "oscuro",
+   "desde": {
+    "frase": "en la consola",
+    "corte": true
+   },
+   "etiqueta": [
+    "SONNET 4.5",
+    "1 · BUSCARLO"
+   ],
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "En la consola:\n*Usage,* *Export*",
+     "tam": 80,
+     "pos": [
+      48,
+      104
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "captura",
+     "src": "dep-auditoria",
+     "recorte": [
+      0,
+      90,
+      920,
+      340
+     ],
+     "ancho": 984,
+     "pos": [
+      48,
+      330
+     ],
+     "url": "platform.claude.com",
+     "marcas": [
+      {
+       "frase": "Usage page in Claude Console",
+       "en": "usage",
+       "pad": 3
+      },
+      {
+       "frase": "Export",
+       "en": "export",
+       "pad": 4
+      },
+      {
+       "frase": "down by API key and model",
+       "en": "cada modelo",
+       "pad": 3
+      }
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "credito",
+     "texto": "Fuente: platform.claude.com/docs/en/about-claude/model-deprecations",
+     "pos": [
+      48,
+      800
+     ]
+    }
+   ]
+  },
+  {
+   "id": "n8n",
+   "layout": "split",
+   "fondo": "oscuro",
+   "desde": {
+    "frase": "en n8n",
+    "corte": true
+   },
+   "etiqueta": [
+    "SONNET 4.5",
+    "1 · BUSCARLO"
+   ],
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "En *n8n:*",
+     "tam": 120,
+     "pos": [
+      48,
+      104
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "pildora",
+     "texto": "abrí cada nodo de Anthropic",
+     "icono": "check",
+     "tam": 44,
+     "pos": [
+      48,
+      340
+     ],
+     "en": "abrí cada nodo"
+    },
+    {
+     "tipo": "logo",
+     "src": "logo-anthropic.png",
+     "ancho": 170,
+     "pos": [
+      48,
+      520
+     ],
+     "en": {
+      "frase": "anthropic",
+      "n": 2,
+      "offset": -0.1
+     }
+    }
+   ]
+  },
+  {
+   "id": "armaste",
+   "layout": "full",
+   "desde": {
+    "frase": "no lo armaste",
+    "corte": true
+   },
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "No lo armaste *vos*",
+     "tam": 72,
+     "pos": [
+      "centro",
+      290
+     ],
+     "alinear": "centro",
+     "en": {
+      "frase": "no lo armaste",
+      "offset": 0.3
+     },
+     "hasta": {
+      "frase": "por ejemplo",
+      "corte": true
+     }
+    },
+    {
+     "tipo": "texto",
+     "texto": "Preguntarle a quién\n*te lo armó*",
+     "tam": 72,
+     "pos": [
+      "centro",
+      400
+     ],
+     "alinear": "centro",
+     "en": "preguntarle",
+     "hasta": {
+      "frase": "por ejemplo",
+      "corte": true
+     }
+    }
+   ]
+  },
+  {
+   "id": "mi-caso",
+   "layout": "split",
+   "fondo": "oscuro",
+   "desde": {
+    "frase": "por ejemplo",
+    "corte": true
+   },
+   "etiqueta": [
+    "MI CASO"
+   ],
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "Lo cambié al\n*nuevo modelo*",
+     "tam": 92,
+     "pos": [
+      48,
+      104
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "captura",
+     "src": "dep-historial",
+     "recorte": [
+      0,
+      205,
+      1120,
+      245
+     ],
+     "ancho": 984,
+     "pos": [
+      48,
+      400
+     ],
+     "url": "platform.claude.com",
+     "marcas": [
+      {
+       "frase": "claude-sonnet-5-5",
+       "en": "sonnet 5.5",
+       "pad": 4
+      }
+     ],
+     "en": "nuevo modelo"
+    },
+    {
+     "tipo": "credito",
+     "texto": "Fuente: platform.claude.com/docs/en/about-claude/model-deprecations",
+     "pos": [
+      48,
+      700
+     ],
+     "en": "nuevo modelo"
+    }
+   ]
+  },
+  {
+   "id": "agentes",
+   "layout": "pip",
+   "fondo": "papel",
+   "desde": "se lo cambié",
+   "etiqueta": [
+    "SE LO CAMBIÉ A"
+   ],
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "Se lo\n*cambié a*",
+     "tam": 118,
+     "pos": [
+      40,
+      200
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "fila",
+     "texto": "Mis agentes",
+     "icono": "check",
+     "alto": 120,
+     "pos": [
+      48,
+      740
+     ],
+     "en": "mis agentes"
+    },
+    {
+     "tipo": "fila",
+     "texto": "Mis nodos de n8n",
+     "icono": "check",
+     "alto": 120,
+     "pos": [
+      48,
+      872
+     ],
+     "en": "mis nodos"
+    },
+    {
+     "tipo": "fila",
+     "texto": "Toda mi infraestructura",
+     "icono": "check",
+     "alto": 132,
+     "pos": [
+      48,
+      1004
+     ],
+     "en": "toda mi infraestructura",
+     "sub": "de desarrollo de Claude Code"
+    }
+   ]
+  },
+  {
+   "id": "segundo",
+   "layout": "full",
+   "desde": {
+    "frase": "como segundo",
+    "corte": true
+   },
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "Como segundo,",
+     "tam": 84,
+     "pos": [
+      "centro",
+      370
+     ],
+     "alinear": "centro",
+     "en": {
+      "frase": "como segundo",
+      "offset": 0.3
+     },
+     "hasta": {
+      "frase": "abrí claude code",
+      "corte": true
+     }
+    },
+    {
+     "tipo": "texto",
+     "texto": "*cambiarlo*",
+     "tam": 112,
+     "pos": [
+      "centro",
+      480
+     ],
+     "alinear": "centro",
+     "en": {
+      "frase": "cambiarlo",
+      "n": 2
+     },
+     "hasta": {
+      "frase": "abrí claude code",
+      "corte": true
+     }
+    }
+   ]
+  },
+  {
+   "id": "abri",
+   "layout": "split",
+   "fondo": "oscuro",
+   "desde": {
+    "frase": "abrí claude code",
+    "corte": true
+   },
+   "etiqueta": [
+    "SONNET 4.5",
+    "2 · CAMBIARLO"
+   ],
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "Abrí *Claude Code*\nen esa carpeta",
+     "tam": 80,
+     "pos": [
+      48,
+      104
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "logo",
+     "src": "logo-claude.png",
+     "ancho": 190,
+     "pos": [
+      48,
+      420
+     ],
+     "en": {
+      "frase": "claude code",
+      "n": 2,
+      "offset": -0.1
+     }
+    }
+   ]
+  },
+  {
+   "id": "comando",
+   "layout": "split",
+   "fondo": "oscuro",
+   "desde": {
+    "frase": "escribí lo que",
+    "corte": true
+   },
+   "etiqueta": [
+    "SONNET 4.5",
+    "2 · CAMBIARLO"
+   ],
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "Escribí lo\nque *ves*",
+     "tam": 92,
+     "pos": [
+      48,
+      104
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "captura",
+     "src": "mig-comando",
+     "recorte": [
+      0,
+      0,
+      920,
+      400
+     ],
+     "ancho": 940,
+     "pos": [
+      48,
+      330
+     ],
+     "url": "platform.claude.com",
+     "marcas": [
+      {
+       "frase": "/claude-api migrate this project to claude-sonnet-5-5",
+       "en": "barra",
+       "pad": 4
+      }
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "credito",
+     "texto": "Fuente: platform.claude.com/docs/en/models/sonnet-5-5/migration-guide",
+     "pos": [
+      48,
+      815
+     ]
+    }
+   ]
+  },
+  {
+   "id": "antes",
+   "layout": "split",
+   "fondo": "oscuro",
+   "desde": {
+    "frase": "antes de tocar",
+    "corte": true
+   },
+   "etiqueta": [
+    "SONNET 4.5",
+    "2 · CAMBIARLO"
+   ],
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "Antes de\n*tocar nada*",
+     "tam": 92,
+     "pos": [
+      48,
+      104
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "captura",
+     "src": "mig-comando",
+     "recorte": [
+      0,
+      395,
+      920,
+      365
+     ],
+     "ancho": 940,
+     "pos": [
+      48,
+      330
+     ],
+     "url": "platform.claude.com",
+     "marcas": [
+      {
+       "frase": "confirm the migration scope",
+       "en": "pregunta",
+       "pad": 3
+      },
+      {
+       "frase": "checklist of items to verify manually",
+       "en": "lista",
+       "pad": 3
+      }
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "credito",
+     "texto": "Fuente: platform.claude.com/docs/en/models/sonnet-5-5/migration-guide",
+     "pos": [
+      48,
+      785
+     ]
+    }
+   ]
+  },
+  {
+   "id": "precio",
+   "layout": "split",
+   "fondo": "oscuro",
+   "desde": {
+    "frase": "el precio baja",
+    "corte": true
+   },
+   "etiqueta": [
+    "PRECIO",
+    "PÁGINA OFICIAL"
+   ],
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "De *3 dólares*",
+     "tam": 80,
+     "pos": [
+      48,
+      100
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "texto",
+     "texto": "a *2*",
+     "tam": 80,
+     "pos": [
+      690,
+      100
+     ],
+     "en": "a 2"
+    },
+    {
+     "tipo": "captura",
+     "src": "precio-45",
+     "recorte": [
+      0,
+      0,
+      880,
+      72
+     ],
+     "ancho": 780,
+     "pos": [
+      150,
+      215
+     ],
+     "url": "platform.claude.com",
+     "marcas": [
+      {
+       "frase": "$3 / MTok",
+       "en": "3",
+       "pad": 4
+      }
+     ],
+     "anim": "corte",
+     "marco": false
+    },
+    {
+     "tipo": "captura",
+     "src": "precio-55",
+     "recorte": [
+      0,
+      14,
+      880,
+      584
+     ],
+     "ancho": 780,
+     "pos": [
+      150,
+      300
+     ],
+     "url": "platform.claude.com",
+     "marcas": [
+      {
+       "frase": "$2 / MTok",
+       "en": "2",
+       "pad": 4
+      }
+     ],
+     "en": "a 2"
+    }
+   ]
+  },
+  {
+   "id": "tokens",
+   "layout": "split",
+   "fondo": "oscuro",
+   "desde": {
+    "frase": "pero cuenta",
+    "corte": true
+   },
+   "etiqueta": [
+    "SONNET 4.5",
+    "2 · CAMBIARLO"
+   ],
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "Tu texto:\n*30% más largo*",
+     "tam": 88,
+     "pos": [
+      48,
+      104
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "captura",
+     "src": "precio-tokens",
+     "recorte": [
+      0,
+      0,
+      920,
+      310
+     ],
+     "ancho": 984,
+     "pos": [
+      48,
+      330
+     ],
+     "url": "platform.claude.com",
+     "marcas": [
+      {
+       "frase": "approximately 30% more tokens",
+       "en": "30%",
+       "pad": 3
+      }
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "credito",
+     "texto": "Fuente: platform.claude.com/docs/en/about-claude/pricing",
+     "pos": [
+      48,
+      790
+     ]
+    }
+   ]
+  },
+  {
+   "id": "cuenta",
+   "layout": "pip",
+   "fondo": "papel",
+   "desde": {
+    "frase": "con eso la cuenta",
+    "corte": true
+   },
+   "etiqueta": [
+    "LA CUENTA"
+   ],
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "La cuenta\n*puede bajar*",
+     "tam": 80,
+     "pos": [
+      40,
+      200
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "texto",
+     "texto": "cerca de un",
+     "tam": 60,
+     "pos": [
+      48,
+      790
+     ],
+     "fuente": "bold",
+     "color": "gris_papel",
+     "en": {
+      "frase": "cerca",
+      "n": 2
+     }
+    },
+    {
+     "tipo": "texto",
+     "texto": "*13%*",
+     "tam": 300,
+     "pos": [
+      40,
+      860
+     ],
+     "en": "13%"
+    }
+   ]
+  },
+  {
+   "id": "piensa",
+   "layout": "split",
+   "fondo": "oscuro",
+   "desde": {
+    "frase": "y ojo ahora",
+    "corte": true
+   },
+   "etiqueta": [
+    "SONNET 4.5",
+    "2 · CAMBIARLO"
+   ],
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "Ahora *piensa*\nantes de contestar",
+     "tam": 76,
+     "pos": [
+      48,
+      104
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "captura",
+     "src": "mig-pensar",
+     "recorte": [
+      0,
+      350,
+      920,
+      300
+     ],
+     "ancho": 984,
+     "pos": [
+      48,
+      340
+     ],
+     "url": "platform.claude.com",
+     "marcas": [
+      {
+       "frase": "thinking tokens are billed as output tokens",
+       "en": "se cobra",
+       "pad": 3
+      }
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "sello",
+     "texto": "SE COBRA",
+     "tam": 56,
+     "rot": -8,
+     "pos": [
+      680,
+      775
+     ],
+     "en": "se cobra"
+    },
+    {
+     "tipo": "credito",
+     "texto": "Fuente: platform.claude.com/docs/en/models/sonnet-5-5/migration-guide",
+     "pos": [
+      48,
+      735
+     ]
+    }
+   ]
+  },
+  {
+   "id": "probalo",
+   "layout": "split",
+   "fondo": "oscuro",
+   "desde": {
+    "frase": "tres probalo",
+    "corte": true
+   },
+   "etiqueta": [
+    "SONNET 4.5",
+    "3 · PROBALO"
+   ],
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "Tres:\n*probalo*",
+     "tam": 100,
+     "pos": [
+      48,
+      104
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "captura",
+     "src": "mig-cinco",
+     "recorte": [
+      0,
+      95,
+      920,
+      285
+     ],
+     "ancho": 984,
+     "pos": [
+      48,
+      330
+     ],
+     "url": "platform.claude.com",
+     "marcas": [
+      {
+       "frase": "five settings that return a 400",
+       "en": "error",
+       "pad": 2
+      },
+      {
+       "frase": "sampling parameters",
+       "en": "temperatura",
+       "pad": 3
+      }
+     ],
+     "en": "hay cinco ajustes"
+    },
+    {
+     "tipo": "sello",
+     "texto": "3 DE LOS 5",
+     "tam": 54,
+     "rot": -8,
+     "pos": [
+      660,
+      130
+     ],
+     "en": "3 de los 5"
+    },
+    {
+     "tipo": "credito",
+     "texto": "Fuente: platform.claude.com/docs/en/models/sonnet-5-5/migration-guide",
+     "pos": [
+      48,
+      720
+     ]
+    }
+   ]
+  },
+  {
+   "id": "prellenada",
+   "layout": "split",
+   "fondo": "oscuro",
+   "desde": {
+    "frase": "una respuesta",
+    "corte": true
+   },
+   "etiqueta": [
+    "SONNET 4.5",
+    "3 · PROBALO"
+   ],
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "Una respuesta\n*prellenada*",
+     "tam": 72,
+     "pos": [
+      48,
+      100
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "texto",
+     "texto": "Obligarlo a usar\nuna *herramienta*",
+     "tam": 72,
+     "pos": [
+      48,
+      270
+     ],
+     "en": "obligarlo"
+    },
+    {
+     "tipo": "captura",
+     "src": "mig-cinco",
+     "recorte": [
+      0,
+      95,
+      920,
+      285
+     ],
+     "ancho": 900,
+     "pos": [
+      48,
+      470
+     ],
+     "url": "platform.claude.com",
+     "marcas": [
+      {
+       "frase": "prefill",
+       "en": "prellenada",
+       "pad": 3
+      },
+      {
+       "frase": "forced tool choice",
+       "en": "herramienta",
+       "pad": 3
+      }
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "credito",
+     "texto": "Fuente: platform.claude.com/docs/en/models/sonnet-5-5/migration-guide",
+     "pos": [
+      48,
+      830
+     ]
+    }
+   ]
+  },
+  {
+   "id": "mandar",
+   "layout": "split",
+   "fondo": "papel",
+   "desde": {
+    "frase": "mandar un mensaje",
+    "corte": true
+   },
+   "etiqueta": [
+    "SONNET 4.5",
+    "3 · PROBALO"
+   ],
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "Mandar un mensaje\na *tu bot*",
+     "tam": 84,
+     "pos": [
+      48,
+      104
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "caja",
+     "titulo": "Si contesta",
+     "ancho": 400,
+     "alto": 170,
+     "tam": 44,
+     "pos": [
+      48,
+      380
+     ],
+     "en": "si contesta"
+    },
+    {
+     "tipo": "flecha",
+     "largo": 90,
+     "pos": [
+      470,
+      450
+     ],
+     "en": "pasó"
+    },
+    {
+     "tipo": "caja",
+     "titulo": "*Pasó*",
+     "estilo": "verde",
+     "ancho": 400,
+     "alto": 170,
+     "tam": 56,
+     "pos": [
+      580,
+      380
+     ],
+     "en": "pasó"
+    },
+    {
+     "tipo": "caja",
+     "titulo": "Si tira error\n*400*",
+     "ancho": 400,
+     "alto": 190,
+     "tam": 44,
+     "pos": [
+      48,
+      600
+     ],
+     "en": "si tira error"
+    },
+    {
+     "tipo": "flecha",
+     "largo": 90,
+     "pos": [
+      470,
+      680
+     ],
+     "en": "uno de los 5"
+    },
+    {
+     "tipo": "caja",
+     "titulo": "Es uno\nde los 5",
+     "estilo": "tinta",
+     "ancho": 400,
+     "alto": 190,
+     "tam": 44,
+     "pos": [
+      580,
+      600
+     ],
+     "en": "uno de los 5"
+    },
+    {
+     "tipo": "credito",
+     "texto": "Fuente: platform.claude.com/docs/en/models/sonnet-5-5/migration-guide",
+     "pos": [
+      48,
+      840
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ojo",
+   "layout": "split",
+   "fondo": "oscuro",
+   "desde": {
+    "frase": "ojo esto vale",
+    "corte": true
+   },
+   "etiqueta": [
+    "SONNET 4.5",
+    "API DE CLAUDE"
+   ],
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "Ojo: esto vale para\nla *API de Claude*",
+     "tam": 72,
+     "pos": [
+      48,
+      104
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "captura",
+     "src": "dep-plataformas",
+     "recorte": [
+      0,
+      10,
+      920,
+      335
+     ],
+     "ancho": 940,
+     "pos": [
+      48,
+      330
+     ],
+     "url": "platform.claude.com",
+     "marcas": [
+      {
+       "frase": "Bedrock and Google Cloud",
+       "en": "bedrock",
+       "pad": 3
+      }
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "credito",
+     "texto": "Fuente: platform.claude.com/docs/en/about-claude/model-deprecations",
+     "pos": [
+      48,
+      745
+     ]
+    },
+    {
+     "tipo": "sello",
+     "texto": "OTRA FECHA",
+     "tam": 56,
+     "rot": -8,
+     "pos": [
+      640,
+      805
+     ],
+     "en": "otra"
+    }
+   ]
+  },
+  {
+   "id": "sin-palabras",
+   "layout": "full",
+   "desde": {
+    "t": 102.89
+   },
+   "elementos": []
+  },
+  {
+   "id": "cta-lista",
+   "layout": "split",
+   "fondo": "oscuro",
+   "desde": {
+    "frase": "la lista con los",
+    "corte": true
+   },
+   "etiqueta": [
+    "SONNET 4.5",
+    "LOS 5 AJUSTES"
+   ],
+   "elementos": [
+    {
+     "tipo": "tarjeta",
+     "ancho": 880,
+     "alto": 370,
+     "pos": [
+      "centro",
+      190
+     ],
+     "anim": "corte",
+     "lineas": [
+      {
+       "texto": "La lista con los",
+       "tam": 64,
+       "color": "blanco",
+       "aire": 8
+      },
+      {
+       "texto": "5 AJUSTES",
+       "tam": 128,
+       "color": "verde",
+       "aire": 22
+      },
+      {
+       "texto": "en mi comunidad",
+       "fuente": "semibold",
+       "tam": 54,
+       "color": "blanco"
+      }
+     ]
+    },
+    {
+     "tipo": "sello",
+     "texto": "GRATIS",
+     "tam": 60,
+     "rot": -8,
+     "pos": [
+      660,
+      610
+     ],
+     "en": "gratis"
+    }
+   ]
+  },
+  {
+   "id": "cta-link",
+   "layout": "split",
+   "fondo": "oscuro",
+   "desde": {
+    "frase": "link en mi perfil",
+    "corte": true
+   },
+   "etiqueta": [
+    "SONNET 4.5",
+    "LOS 5 AJUSTES"
+   ],
+   "elementos": [
+    {
+     "tipo": "tarjeta",
+     "ancho": 880,
+     "alto": 270,
+     "pos": [
+      "centro",
+      110
+     ],
+     "anim": "corte",
+     "lineas": [
+      {
+       "texto": "Link en",
+       "tam": 64,
+       "color": "blanco",
+       "aire": 4
+      },
+      {
+       "texto": "MI PERFIL",
+       "tam": 112,
+       "color": "verde",
+       "aire": 0
+      }
+     ]
+    },
+    {
+     "tipo": "tarjeta",
+     "ancho": 880,
+     "alto": 380,
+     "pos": [
+      "centro",
+      430
+     ],
+     "en": "buscá migrar",
+     "lineas": [
+      {
+       "texto": "Buscá",
+       "tam": 64,
+       "color": "blanco",
+       "aire": 6
+      },
+      {
+       "texto": "MIGRAR",
+       "tam": 128,
+       "color": "verde",
+       "aire": 20
+      },
+      {
+       "texto": "en Avisos",
+       "tam": 64,
+       "color": "blanco"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

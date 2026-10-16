@@ -1,0 +1,101 @@
+[
+ {
+  "nombre": "01-arbol",
+  "ruta": "onia-hermes/",
+  "fuente": 34,
+  "arbol": [
+   "{ruta:CLAUDE.md}├─ CLAUDE.md                        {verde}← 1{/}",
+   "{ruta:AGENTS.md}├─ AGENTS.md                        {verde}← 2{/}",
+   "{ruta:.claude/skills}├─ .claude/skills/                  {verde}← 3{/}",
+   "└─ hermes-content/docs/handoff/",
+   "{ruta:hermes-content/docs/handoff/marca-personal.md}   ├─ marca-personal.md              {verde}← 4{/}",
+   "{ruta:hermes-content/docs/handoff/codex-tareas/B1-bandeja-menos-llamadas.md}   └─ codex-tareas/B1-…llamadas.md     {verde}← 5{/}"
+  ]
+ },
+ {
+  "nombre": "02-claude-md",
+  "ruta": "CLAUDE.md",
+  "migas": "Objetivo por sesión (REGLA)",
+  "bloques": [
+   {
+    "archivo": "CLAUDE.md",
+    "desde": 43,
+    "hasta": 45,
+    "resaltar": [
+     "Un objetivo al inicio, escrito y explícito"
+    ]
+   }
+  ]
+ },
+ {
+  "nombre": "03-agents-md",
+  "ruta": "AGENTS.md",
+  "migas": "Codex = ejecutor de la madre Claude",
+  "bloques": [
+   {
+    "archivo": "AGENTS.md",
+    "desde": 32,
+    "hasta": 34,
+    "resaltar": [
+     "META · PRUEBA DE HECHO · REGLA DE PARADA"
+    ],
+    "cortar": "no mergeás ni empujás."
+   }
+  ]
+ },
+ {
+  "nombre": "04-skills",
+  "ruta": ".claude/skills/",
+  "fuente": 37,
+  "arbol": [
+   "{ruta:.claude/skills}.claude/skills/",
+   "{ruta:.claude/skills/onia-router/SKILL.md}├─ {verde}onia-router/{/}",
+   "{ruta:.claude/skills/edicion-referentes}├─ edicion-referentes/",
+   "{ruta:.claude/skills/diseno-contenido-onia}├─ diseno-contenido-onia/",
+   "{ruta:.claude/skills/ver-videos}├─ ver-videos/",
+   "{ruta:.claude/skills/editor-videos}├─ editor-videos/",
+   "└─ {gris}… {n:.claude/skills} en total{/}"
+  ]
+ },
+ {
+  "nombre": "05-handoff",
+  "ruta": "hermes-content/docs/handoff/README.md",
+  "bloques": [
+   {
+    "archivo": "hermes-content/docs/handoff/README.md",
+    "desde": 77,
+    "hasta": 80,
+    "resaltar": [
+     "Intentos fallidos"
+    ]
+   },
+   {
+    "archivo": "hermes-content/docs/handoff/README.md",
+    "desde": 85,
+    "hasta": 86,
+    "resaltar": [
+     "Próximos pasos"
+    ]
+   }
+  ]
+ },
+ {
+  "nombre": "06-tarea",
+  "ruta": "codex-tareas/B1-bandeja-menos-llamadas.md",
+  "esquema": [
+   "META",
+   "PRUEBA DE HECHO",
+   "REGLA DE PARADA"
+  ],
+  "bloques": [
+   {
+    "archivo": "hermes-content/docs/handoff/codex-tareas/B1-bandeja-menos-llamadas.md",
+    "desde": 19,
+    "hasta": 22,
+    "resaltar": [
+     "con la pestaña oculta no hay llamadas"
+    ]
+   }
+  ]
+ }
+]

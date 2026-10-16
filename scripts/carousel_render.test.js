@@ -101,13 +101,109 @@ test('todo pack listado RENDERIZA (no solo figura en la lista)', () => {
   }
 });
 test('referentes: cada layout renderiza y uno desconocido falla claro', () => {
-  for (const layout of ['logos', 'analogia', 'ensayo', 'ilustrado', 'lista', 'dato', 'captura', 'cierre']) {
+  for (const layout of ['logos', 'analogia', 'ensayo', 'ilustrado', 'lista', 'inventario', 'dato', 'captura', 'cierre']) {
     const html = referentesHtml({ layout, headline: 'H *x*', body: 'b', items: [{ label: 'L', text: 't' }] }, 1, 3, 'sergio', {});
     assert.ok(html.includes('</html>') && html.includes(`l-${layout}`), layout);
   }
   assert.throws(() => referentesHtml({ layout: 'nope' }, 0, 1, 'sergio', {}), /layout desconocido/);
   for (const theme of ['blanco', 'verde', 'negro']) assert.ok(referentesHtml({ layout: 'ensayo', body: 'b' }, 0, 1, 'sergio', { theme }).includes(`t-${theme}`), theme);
   assert.throws(() => referentesHtml({ layout: 'ensayo', theme: 'rosa' }, 0, 1, 'sergio', {}), /theme desconocido/);
+});
+test('referentes cierre: «Buscá» por defecto; `pre` y `kicker` cambian el verbo y suman una frase (10-oct)', () => {
+  // Antes el verbo por defecto era «Comentá» (DM automático sin probar). Ahora es «Buscá»; «Comentá» sólo si el brief lo pide.
+  const base = referentesHtml({ layout: 'cierre', keyword: 'DISEÑO', body: 'en Avisos · link en mi perfil' }, 0, 1, 'sergio', {});
+  assert.ok(base.includes('<p class="pre">Buscá</p>') && !base.includes('class="kick"') && !base.includes('Comentá'));
+  const viejo = referentesHtml({ layout: 'cierre', pre: 'Comentá', keyword: 'HOOK', body: 'y te paso el link' }, 0, 1, 'sergio', {});
+  assert.ok(viejo.includes('<p class="pre">Comentá</p>') && !viejo.includes('Buscá'));
+  const nuevo = referentesHtml({ layout: 'cierre', pre: 'Buscá', kicker: 'La IA también necesita *límites*.', keyword: 'ARCHIVOS', body: 'en Avisos · link en mi perfil' }, 0, 1, 'sergio', {});
+  assert.ok(nuevo.includes('<p class="pre">Buscá</p>') && nuevo.includes('class="kick"') && !nuevo.includes('Comentá'));
+});
+test('referentes ensayo: grande y fit ancho son opt-in; sin ellos el marcado no cambia (P2, 11-oct)', () => {
+  const base = referentesHtml({ layout: 'ensayo', headline: 'Hola', body: 'Texto.' }, 1, 3, 'sergio', {});
+  assert.ok(base.includes('class="c-ensayo"') && !base.includes('c-ensayo grande'), 'sin grande, la clase no cambia');
+  assert.ok(!base.includes('getComputedStyle(h)'), 'sin fit no hay script de ajuste');
+  const grande = referentesHtml({ layout: 'ensayo', grande: true, headline: 'Hola', body: 'Texto.' }, 1, 3, 'sergio', {});
+  assert.ok(grande.includes('class="c-ensayo grande"'));
+  const ancho = referentesHtml({ layout: 'ensayo', fit: 'ancho', headline: '*HERRAMIENTAS*' }, 9, 10, 'sergio', {});
+  assert.ok(ancho.includes('clientWidth-2*84') && ancho.includes('f+=4'), 'el título crece hasta el margen de 84 px');
+  assert.ok(!referentesHtml({ layout: 'ensayo', fit: 'ancho' }, 9, 10, 'sergio', {}).includes('getComputedStyle(h)'), 'sin título no hay nada que medir');
+});
+test('referentes captura: logo opcional delante del título, sin él igual que antes (P2, 11-oct)', () => {
+  const fs = require('fs');
+  const path = require('path');
+  const dir = path.join(__dirname, '..', 'hermes-content/references/brand-claude');
+  const logo = 'hermes-content/references/brand-claude/' + fs.readdirSync(dir).find((f) => /\.(png|svg)$/.test(f));
+  const con = referentesHtml({ layout: 'captura', headline: 'Claude Code', logo }, 1, 3, 'sergio', {});
+  assert.ok(/<h2 class="t"><img class="title-logo"/.test(con), 'el logo va dentro del título, antes del texto');
+  const sin = referentesHtml({ layout: 'captura', headline: 'Claude Code' }, 1, 3, 'sergio', {});
+  assert.ok(sin.includes('<h2 class="t">Claude Code</h2>') && !/<img class="title-logo"/.test(sin));
+});
+test('referentes inventario: 5, 3 y 2 filas en la MISMA grilla; sin tarjetas ni título; números continuos (10-oct)', () => {
+  const fila = (n) => ({ label: `Nombre ${n}`, text: `Línea ${n}.` });
+  const topes = (html) => [...html.matchAll(/class="inv-row" style="top:([\d.]+)%"/g)].map((m) => Number(m[1]));
+  const cinco = referentesHtml({ layout: 'inventario', items: [1, 2, 3, 4, 5].map(fila) }, 1, 5, 'sergio', {});
+  assert.ok(cinco.includes('l-inventario') && !cinco.includes('<h2'), 'sin título si falta headline');
+  // la grilla: centros a 13 % + 4 % y paso de 16,5 %
+  assert.deepStrictEqual(topes(cinco), [17, 33.5, 50, 66.5, 83]);
+  assert.deepStrictEqual([...cinco.matchAll(/class="inv-mark">(\d+)</g)].map((m) => m[1]), ['1', '2', '3', '4', '5']);
+  // la numeración sigue en la lámina siguiente (start) y `n` de la fila gana
+  const tres = referentesHtml({ layout: 'inventario', start: 6, center: true, items: [fila(6), fila(7), fila(8)] }, 2, 5, 'sergio', {});
+  assert.deepStrictEqual([...tres.matchAll(/class="inv-mark">(\d+)</g)].map((m) => m[1]), ['6', '7', '8']);
+  // sin center la primera fila de 3 queda en la misma y que la de 5; centrada, el bloque de 3 filas (41 %) queda en el medio
+  assert.deepStrictEqual(topes(referentesHtml({ layout: 'inventario', start: 6, items: [fila(6), fila(7), fila(8)] }, 2, 5, 'sergio', {})), [17, 33.5, 50]);
+  assert.deepStrictEqual(topes(tres), [33.5, 50, 66.5]);
+  assert.ok(tres.includes('centrada'));
+  // remate: 2 filas, la última aislada con aire y con la flecha; `ask` en texto suma la palabra junto a la flecha
+  const dos = referentesHtml({ layout: 'inventario', ask: true, items: [fila(1), fila(2)] }, 3, 5, 'sergio', {});
+  assert.deepStrictEqual(topes(dos), [17, 33.5 + 7]);
+  assert.ok(dos.includes('class="inv-ask"') && !dos.includes('<span>undefined'));
+  assert.ok(referentesHtml({ layout: 'inventario', ask: 'así', items: [fila(1), fila(2)] }, 3, 5, 'sergio', {}).includes('<span>así</span>'));
+  assert.ok(!cinco.includes('class="inv-ask"'), 'sin ask no hay flecha');
+  // sin cajas: ni borde ni tarjeta en las filas del inventario
+  assert.ok(!/\.inv-row\{[^}]*(border|background)/.test(cinco));
+  // el logo oficial reemplaza al número
+  const logo = referentesHtml({ layout: 'inventario', items: [{ icon: 'hermes-content/references/brand-claude/' + require('fs').readdirSync(require('path').join(__dirname, '..', 'hermes-content/references/brand-claude')).find((f) => /\.(png|svg)$/.test(f)), label: 'Claude', text: 'x' }] }, 1, 3, 'sergio', {});
+  assert.ok(logo.includes('class="inv-icon"') && !/class="inv-mark">\d/.test(logo));
+  // la grilla es fija: más de 5 filas no entran
+  assert.throws(() => referentesHtml({ layout: 'inventario', items: [1, 2, 3, 4, 5, 6].map(fila) }, 1, 3, 'sergio', {}), /hasta 5 filas/);
+  // el título es opcional y, si está, se dibuja
+  assert.ok(referentesHtml({ layout: 'inventario', headline: 'Hola', items: [fila(1)] }, 1, 3, 'sergio', {}).includes('class="inv-t"'));
+});
+test('referentes logos: UNA palabra conserva su marcado de siempre, sin script ni línea nueva (10-oct)', () => {
+  // Los 10 briefs viejos con `logos` llevan una palabra («Claude», «Worktree»…) y su aspecto no puede cambiar:
+  // se comparó pixel a pixel antes/después (74 láminas, 0 diferencias). Acá se fija el marcado, no el CSS: la hoja
+  // de estilos también contiene `word multi`, `wl` y `solo-nombres`, así que buscar la clase suelta daría falsos positivos.
+  const logo = 'hermes-content/references/brand-logos/git-color.svg';
+  const una = referentesHtml({ layout: 'logos', headline: 'Worktree', logos: [{ file: logo, label: 'git' }], body: 'b' }, 2, 8, 'sergio', {});
+  assert.ok(una.includes('<h1 class="word">Worktree</h1>'), 'el h1 histórico, sin span ni clase multi');
+  assert.ok(!una.includes('<span class="wl">') && !una.includes('class="word multi"'));
+  assert.ok(!una.includes('<script>'), 'sin ajuste por medición: el camino de una palabra no se toca');
+  assert.ok(una.includes('<div class="logo-row">') && una.includes('class="logo-img"') && una.includes('<figcaption>git</figcaption>'));
+});
+test('referentes logos: VARIAS palabras van una por línea, sin asteriscos, y el navegador las mide con 84 px de margen (10-oct)', () => {
+  // P2 «7 herramientas. / 4 son gratis.»: antes «HERRAMIENTAS.» sola medía ~1.600 px contra ~912 útiles y se cortaba.
+  const dos = referentesHtml({ layout: 'logos', headline: '7 herramientas.\n4 son gratis.', logos: [{ label: 'n8n' }] }, 0, 10, 'sergio', { theme: 'verde' });
+  assert.ok(dos.includes('<h1 class="word multi"><span class="wl">7 herramientas.</span><span class="wl">4 son gratis.</span></h1>'), 'dos líneas');
+  assert.ok(dos.includes('<script>') && dos.includes('document.fonts.ready') && dos.includes('2*84'), 'mide con la fuente cargada y 84 px por lado');
+  assert.ok(dos.includes("querySelector('.c-logos .word')") && dos.includes('f-=3'), 'achica de a 3 px, como cierreHtml');
+  // el título no pasa por emph(): un asterisco no se vuelve énfasis (el spec pide el título sin asteriscos)
+  const ast = referentesHtml({ layout: 'logos', headline: 'A *b* c', logos: [] }, 0, 1, 'sergio', {});
+  assert.ok(ast.includes('<span class="wl">A *b* c</span>') && !ast.includes('<span class="g">b</span>'));
+  // varias palabras sin `\n` quedan en UNA línea medida; el HTML se escapa
+  const una = referentesHtml({ layout: 'logos', headline: 'Dos <palabras>', logos: [] }, 0, 1, 'sergio', {});
+  assert.strictEqual(una.split('<span class="wl">').length - 1, 1);
+  assert.ok(una.includes('Dos &lt;palabras&gt;'));
+});
+test('referentes logos: sin `file` en ninguna marca van solo con su nombre; con un `file`, la fila de siempre (10-oct)', () => {
+  const marcas = ['Claude Code · pago', 'Codex · pago', 'Higgsfield · pago', 'HyperFrames', 'Buffer', 'n8n', 'faster-whisper'].map((label) => ({ label }));
+  const solo = referentesHtml({ layout: 'logos', headline: '7 herramientas.\n4 son gratis.', logos: marcas }, 0, 10, 'sergio', {});
+  assert.ok(solo.includes('<div class="logo-row solo-nombres">'));
+  assert.ok(!solo.includes('<img class="logo-img"'), 'sin tejas de logo');
+  assert.strictEqual(solo.split('<figure class="logo">').length - 1, 7);
+  for (const m of marcas) assert.ok(solo.includes(`<figcaption>${m.label}</figcaption>`), m.label);
+  const mixta = referentesHtml({ layout: 'logos', headline: 'Tres palabras acá', logos: [{ label: 'a' }, { file: 'hermes-content/references/brand-logos/git-color.svg', label: 'b' }] }, 0, 1, 'sergio', {});
+  assert.ok(mixta.includes('<div class="logo-row">') && !mixta.includes('solo-nombres"'), 'un solo file basta para no ser «solo nombres»');
+  assert.ok(referentesHtml({ layout: 'logos', headline: 'X', logos: [] }, 0, 1, 'sergio', {}).includes('<div class="logo-row"></div>'), 'sin marcas no hay modo solo-nombres');
 });
 test('community-editorial usa la cuenta elegida y CTA directo para pauta', () => {
   const html = communityEditorialHtml({

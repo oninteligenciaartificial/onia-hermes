@@ -76,13 +76,14 @@ Cada lámina elige `layout`:
 | `ilustrado` | Santiago: título con palabra en color + ilustración dominante + pie + flecha «seguí →». Con `badge` y `logo` es portada | título ≤ 8 palabras, pie ≤ 20 | acuarela de Higgsfield |
 | `logos` | Bastian: UNA palabra gigante espaciada + fila de logos oficiales con nombre | 1 palabra + 1 línea | logos oficiales |
 | `analogia` | Bastian: frase corta + objetos que explican solos (1 o 2 bloques «no es / es») | 1 frase por bloque | foto Pexels sobre blanco |
-| `lista` | Santiago: título + 3–5 filas con ícono/logo, etiqueta y una línea | etiqueta ≤ 3 palabras, línea ≤ 8 | logos o números |
+| `lista` | Santiago: título + 3–5 filas con ícono/logo, etiqueta y una línea (tarjetas con borde) | etiqueta ≤ 3 palabras, línea ≤ 8 | logos o números |
+| `inventario` | @iampascio (10-oct): lista larga partida en láminas, hasta 5 filas, grilla fija sin tarjetas ni título; número en tinta continuo (`start`); `center` y `ask` para la última lista y el remate. Receta «Inventario continuo», más abajo | nombre ≤ 3 palabras, línea ≤ 8; ≤ 30 por lámina | logos oficiales o número |
 | `ensayo` | Bastian: texto grande sobre papel, sin cajas | ≤ 60 palabras | ninguna |
 | `dato` | Erik / Ingeniero Binario: una cifra gigante + qué significa (`value`) | título ≤ 6 palabras | ninguna |
 | `captura` | Carlos: la pantalla real como prueba | título ≤ 8, pie ≤ 12 | captura real (nunca maqueta) |
 | `cierre` | «Buscá PALABRA en Avisos» + qué recibís (`keyword`), adaptación vigente 9-oct | 1 línea | ninguna; solo si el recurso ya existe |
 
-Pendientes del catálogo (en `patrones/`): P-COMPARA, P-FOTO-ESCENA, P-DIAGRAMA, P-TABLA-MARCADOR, **P-LISTA-CONTINUA** (receta «Inventario continuo», más abajo; sin layout todavía).
+Pendientes del catálogo (en `patrones/`): P-COMPARA, P-FOTO-ESCENA, P-DIAGRAMA, P-TABLA-MARCADOR, **P-LISTA-CONTINUA** (receta «Inventario continuo», más abajo; layout `inventario` hecho el 10-oct).
 Carlos Domínguez señala como rasgo de «plantilla IA» el fondo crema: por eso el pack pasó a
 blanco puro, verde y negro (decisión de Sergio, 29-sep).
 
@@ -133,9 +134,41 @@ lámina sale SIN título. `"next": ""` saca la flecha «seguí» (para historias
   ya era falsa (reemplazado por Antigravity CLI para el plan gratis el 18-jun) aunque el README seguía diciendo gratis.
   Manda el banner/blog oficial más nuevo, no el README.
 - **El pack no tiene layout de código ni monoespaciada.** Un bloque de código real necesita una captura.
+  **Capturas de líneas reales del repo (9-oct, carrusel «Los 5 archivos»):** `scripts/marca-personal/captura-editor.py --spec
+  capturas.json --out <carpeta>` lee las líneas `desde..hasta` de cada archivo y las pinta en un panel de editor oscuro
+  (verde de marca, sin rojo): la captura no puede parafrasear y se rehace sola si el archivo cambia. `{ruta:…}` verifica
+  que la ruta exista, `{n:dir}` cuenta entradas. Trampas pagadas: `--out` relativo da `ERR_INVALID_URL` (PNG de página de
+  error de ~24 KB; solo se vio mirando la hoja de contactos) y un `.p` con alto fijo hace que el alto medido sea el de la
+  ventana. El layout `captura` del pack no tiene panel de código: una captura del repo entra como imagen.
+- **`carousel_render.js` sin `--out` escribe en `./out/` del cwd, y `out/` de la raíz está VERSIONADO** (63 archivos de
+  Lucía). Pasá siempre `--out hermes-content/carousels/out/<slug>`; si se te escapa, borrá solo los `slide-*.png` sin
+  trackear (`git ls-files --others --exclude-standard out`), nunca `rm -rf out` (9-oct: lo borré y lo restauré con
+  `git checkout -- out`).
+- **Cierre del carrusel sin «Comentá»:** `cierre` acepta `pre` (**por defecto «Buscá» desde el 10-oct**; antes «Comentá») y `kicker` (frase grande encima).
+  «Buscá ARCHIVOS · en Avisos · link en mi perfil» no promete un mecanismo de comentario→DM sin probar (CLAUDE.md,
+  contenido en redes). El caption repite el mismo cierre. Los 19 briefs viejos que dependían del default llevan `"pre": "Comentá"` escrito: re-renderizarlos no cambia lo ya agendado. Un `kicker` de dos frases se parte donde cae: unilas con espacios duros (U+00A0) para que el renglón corte en el punto («La skill saca tics. / El gusto lo ponés vos.»; sin eso quedó «…tics. El» colgando).
 - **Foto con fondo gris en `analogia`**: el `multiply` solo borra el blanco puro y queda un recuadro gris. Sacale el fondo
   antes o elegí otra foto.
 
+- **P2 «7 herramientas» (11-oct): tres perillas nuevas del pack, todas opt-in (los briefs viejos no cambian: 74 láminas de 10 briefs
+  comparadas píxel a píxel antes y después, 0 diferencias).** `logos` con VARIAS palabras: una línea por `\n`, sin mayúsculas ni
+  letter-spacing, ajuste por medición a 84 px, y sin `file` en las marcas va solo el nombre (`solo-nombres`). `ensayo`: `grande: true`
+  (título 150 px, cuerpo 74 px) y `fit: "ancho"` (la palabra del CTA crece hasta el margen de 84 px). `captura`: `logo` delante del
+  título (como `ilustrado`). **Trampa pagada:** el primer `fit` de `ensayo` medía el ancho del `h2` y daba siempre 912 px (el margen),
+  porque un ítem flex se estira al ancho de la lámina: no crecía ni achicaba nada y el test (que solo mira el marcado) pasaba en verde.
+  Se mide el ancho del TEXTO con `width:max-content` + `align-self:flex-start`; y el único modo de verlo era mirar el render.
+  También: (1) un detector de «rojo» por matiz da falsos positivos con el antialiasing LCD de las letras (franjas de 1 px naranja y azul);
+  medí por bloques sólidos de 5×5 px; (2) una composición HyperFrames es un `<template>`: se le quita el envoltorio y se monta en un
+  documento; `intro.html` declara 1080×1920 pero su CSS es 1920×1080, y el cuadro vertical «oficial» sale con el título cortado;
+  (3) `captura-editor.py` parte a 43 caracteres: las líneas con sangría de 8 espacios envuelven, y se compone con PIL a ~2:1 para que
+  la lámina no quede vacía; (4) un `*énfasis*` partido deja barra suelta: NBSP dentro lo mantiene entero; (5) el layout `cierre` ya no
+  escribe «Comentá» fijo (por defecto «Buscá»): la spec de P2 estaba desactualizada; (6) las láminas de remate de una frase o de CTA
+  miden ~53-73 % de «vacío» aun agrandadas: el `cierre` aprobado mide igual (~71 %), no se rellenan con texto inventado.
+  Las capturas que piden cuentas (Buffer, n8n, terminal de la PC) no se sacan desde la nube: marcador «CAPTURA PENDIENTE · PC/Chrome»
+  (nunca una UI fabricada) y un PEDIDO PC por lámina en el README de la pieza.
+- **Control de un carrusel ya agendado (11-oct, K8/K2/K6): se revisa cada cifra, cada cita y cada ABSOLUTO.** K2 lámina 3 decía «Si es vaga, no la usa nunca»: la doc oficial de skills solo dice que la `description` sirve para decidir cuándo aplicarla; «nunca» era mío. Un «nunca/siempre» sobre una herramienta de terceros se busca en su doc o se quita. K6 cerraba con «las dos respuestas» cuando el recurso las tiene recortadas con […] (las completas no existen): **el cierre promete lo que el aviso entrega, con sus mismas palabras** («la prueba y la plantilla»). Y una prueba de n=1 no sostiene una causa: K6 lámina 6 decía «si la confirma, le faltan las dos listas», pero en la prueba el bot SIN listas tampoco prometió; se pide probar de nuevo, no se afirma la causa. Si en la prueba una cosa se llamó distinto que en la plantilla («NO confirmado» vs «Por confirmar»), el caption lo dice. **Al cambiar un cierre, se barren también los `next` de la lámina anterior** (el de K6 lámina 7 seguía diciendo «las dos respuestas») y la lista de qué cambia en el VPS. **El aviso existe ≠ el recurso está donde lo lee el validador:** PROMPT y PROMESA tienen su `## PALABRA ·` en `AVISOS-COMUNIDAD-8-16-OCT.md` pero el recurso completo vive en `drops/AVISOS-POR-DIA.md` (l.1090 y 5-3); el validador mira solo el encabezado. Un video de YouTube se comprueba con el oEmbed (`youtube.com/oembed?url=…`): 200 = no es privado, pero **no distingue público de no listado**. Cierre con `kicker` («La prueba y la plantilla.») renderiza bien en el pack. **Un segundo revisor (haiku, solo lectura, con la doc entera) encontró tres cosas que yo había dado por buenas**: `/skills` como prueba de que cargó una skill (la doc lo menciona solo para las sincronizadas de claude.ai; lo documentado es el menú `/` con el `name` o pedir algo que coincida con la `description`), «el video está en mi comunidad» (la comunidad lleva el LINK; el video vive en la página) y una lección sobredicha. Regla: un carrusel con datos de terceros se revisa dos veces, y el cierre nombra lo que el aviso entrega («el link del video», no «el video»). Detalle: `hermes-content/docs/cola/plan-3-semanas/AUDITORIA-AGENDADOS-K8-K2-K6-11OCT.md`.
+- **Una foto `fotobn` (B/N, fondo gris claro) va en lámina BLANCA, no en la portada verde (11-oct, medido con las fotos del 8-oct).** El pack mezcla la imagen con `mix-blend-mode:multiply` sobre el fondo del tema: en `blanco` la máscara radial la funde con el papel y el objeto verde se lee; en `verde` el gris se vuelve verde oscuro y el objeto pierde fuerza (turbio). Al pasar un carrusel de arcilla a `fotobn`, la portada pasa a `theme: blanco` (o se agrega un `blend: normal` al pack). La arcilla, de fondo blanco puro, no tenía el problema. **Cotizar con el conector de Higgsfield:** `generate_image` con `get_cost: true` devuelve el costo sin crear trabajos (`credits_exact`); el precio depende de modelo, calidad, resolución y aspecto, no del texto. Pero el clasificador de permisos del entorno bloqueó la 3.ª consulta seguida («transacciones»): no se reintenta ni se rodea; el total se declara «derivado» y se cierra con `carousel_images.mjs` sin `--yes` en la PC (la nube no tiene el CLI). Un lote de más de ~5 cr necesita el sí de Sergio Urcullo entero, sin partirlo. Detalle: `hermes-content/carousels/briefs/marca-personal/LOTE-ESTILO-NUEVO-SEMANA-12-16.md`.
+- **Una afirmación técnica sobre una herramienta de TERCEROS se verifica en su documentación o su código, no se escribe de memoria (11-oct, K4 v2).** La lámina 4 decía «si tu servidor tarda, Chatwoot lo vuelve a entregar»: el código de Chatwoot (`lib/webhooks/trigger.rb`) espera 5 s y **no reintenta un timeout** (solo los agent bots con 429 o 500 levantan un error reintentable), y su documentación no menciona reintentos; quien sí documenta que reintenta «hasta 7 días» y que puede duplicar es WhatsApp (Meta, `webhooks/overview`). Se encontró al escribir el aviso PRUEBAS, no antes: el carrusel ya estaba agendado. Regla: cada cifra o comportamiento de un tercero lleva su fuente en la tabla «Datos y fuentes» del aviso ANTES de agendar; si la única fuente es «lo recuerdo», se reescribe atribuyéndolo a quien sí lo documenta. Y el validador `marca-M2` (`scripts/marca-personal/validar-calendario.js`) lee la columna «Palabra» del calendario y exige su `## PALABRA ·` en algún `AVISOS-COMUNIDAD-*.md`: así se detectó que PRUEBAS y BRIEF cerraban con un aviso inexistente.
 **Historias (1080×1920):** mismo pack con `--format story`. Dejar libre el tercio de abajo: ahí va el sticker de
 link, que se pone a mano en Instagram. Ejemplo: `briefs/marca-personal/sergio-historias-comunidad-20261001.json`.
 
@@ -225,10 +258,33 @@ Lo que sigue (render, banda segura, trampas del headless) **sigue valiendo** com
   abajo. Se renderiza a 1080x2100 y se corta a 1080x1920 con `ffmpeg crop`. Y su ancho mínimo de ventana es 500 px: una
   captura «a 400 px» sale cortada aunque la página no desborde.
 - **La API no pone stickers.** Link, encuesta y música los pone Sergio Urcullo a mano.
+- **Secuencia que vende (9-oct): `scripts/marca-personal/generar-historia-venta.py`** → 4 historias gancho → mito → revelación → CTA
+  único (la asesoría gratis), con el diseño del kit aprobado (importa el CSS de `generar-historia-llamada.py`, no lo copia).
+  Salida `carousels/out/historias-venta-asesoria/`; gate `CHROME_BIN=$CAROUSEL_BROWSER python3 …/chequear-banda-segura-historias.py
+  <ruta ABSOLUTA>` (con ruta relativa falla con `as_uri`). Se lo mostré a Sergio Urcullo renderizado; no se agenda sin su OK.
+  Lecciones: el gancho y el mito van con texto GRANDE (78-92 px: el texto ES la historia; en la 1.ª versión salían chicos con
+  la mitad del verde vacío); la prueba en pantalla es el checklist real, no una maqueta; el sticker de link va solo en la última;
+  si se agrega una capa, `nth-of-type` cuenta la cinta (`div.cinta` es el 1.º hijo de la tarjeta). En la nube sale con Archivo
+  instalada y sin Geist Mono (cae a otra mono): igual de legible, no pixel-idéntico a la PC.
+  Ojo: Instagram dio 429 a la API de historias de la PC el 9-oct (la madre, 9-oct): las capturas de historias de referentes
+  esperan a que Sergio Urcullo las mire a mano en Chrome.
+- **Historias v2 (11-oct): `scripts/marca-personal/generar-historia-venta-v2.py` → `carousels/out/historias-venta-asesoria-v2/`.**
+  Pack `referentes` (#10C26B, Bricolage + DM Sans/Mono + Caveat), una prueba visual DISTINTA por historia (burbuja de cliente
+  sin respuesta · creencias tachadas · tarjeta de 5 preguntas · tarjeta de acción con el tercio de abajo libre), versión SIN foto
+  terminada y ventanas de foto declaradas (`FOTO-SLOTS.png`; círculo de 260 px: primer plano con la cara al 60-65 %).
+  Aprendido armándola (subagente sonnet, 11-oct): (1) **Playwright con `NODE_PATH=/opt/node-tools/node_modules`** captura 1080x1920
+  exacto y 390x844@2x sin el truco de 2100 + crop ni el mínimo de 500 px de la nota de arriba; (2) **`--disable-lcd-text`** en
+  Chromium Linux: sin eso el texto mono chico sale con flecos naranjas/azules que un detector de «terracota» confunde con color;
+  (3) Bricolage del repo llega a peso 700 y DM Sans del repo solo a 400-500: los 600-800 salen de fuentes del sistema (confirmalo con
+  CDP `CSS.getPlatformFontsForNode`); (4) el tamaño a 390 px se mide recorriendo los nodos de texto con `data-rol` (font-size × 390/1080)
+  y la banda segura con fondo plano se verifica por píxeles; (5) el recuadro-guía del sticker va SOLO en la copia de chequeo
+  (bandas azules, zona ámbar: nada de rojo). Medido: texto principal ≥ 18,1 px y secundario ≥ 12,3 px a 390 de ancho.
+  **Crítica de la v1 (la que ya salió el 10-oct):** las 4 eran el mismo afiche, la «prueba» era texto en un recuadro, la 4 imprimía
+  el recuadro «LINK ACÁ ↓» en la PNG final, usaba #00C661 y Archivo (fuera del pack) y afirmaba «5 min» y «10 seg» sin fuente.
 
 ## Receta de carrusel «Inventario continuo» (referencia DePPPp5FgMh, 10-oct-2026)
 
-Fuente y evidencia: [`references/video-intake/2026-10-10-ig-carrusel-DePPPp5FgMh.md`](../../../hermes-content/references/video-intake/2026-10-10-ig-carrusel-DePPPp5FgMh.md) (carrusel de `@iampascio`, 5 láminas, 12 apps). **Estado: incorporada, sin aplicar.** Aplicación propuesta: `hermes-content/carousels/briefs/BRIEF-RECETA-DePPPp5FgMh.md`.
+Fuente y evidencia: [`references/video-intake/2026-10-10-ig-carrusel-DePPPp5FgMh.md`](../../../hermes-content/references/video-intake/2026-10-10-ig-carrusel-DePPPp5FgMh.md) (carrusel de `@iampascio`, 5 láminas, 12 apps). **Estado: layout `inventario` hecho y probado el 10-oct; aplicada en 2 carruseles renderizados (sin publicar).** Aplicación propuesta: `hermes-content/carousels/briefs/BRIEF-RECETA-DePPPp5FgMh.md`.
 
 **Mecanismo:** una lista larga de cosas del mismo tipo (herramientas, tics, preguntas, tareas) partida en láminas con **grilla fija**, sin tarjetas ni título interior. La portada hace de título; el último ítem es lo que ofrecés; el cierre es personal. **Cuándo sí:** 6 o más ítems de un mismo tipo. **Cuándo no:** una noticia o una prueba (va `captura`, una por lámina, como P2): el inventario enseña *qué*, la captura enseña *cómo*.
 
@@ -258,12 +314,14 @@ Fuente y evidencia: [`references/video-intake/2026-10-10-ig-carrusel-DePPPp5FgMh
 
 **Control de calidad propio (suma a §5):** (1) **cada línea corresponde a su ítem**: la fuente publicó una línea cruzada (la de Spotify hablaba de maquetas) y escribió «Whatsapp»; leé fila por fila contra el logo o el número; (2) lámina, caption y recurso enlazado no se contradicen (la fuente, en su lámina 5, prometía notas diarias con envío semanal); (3) misma grilla en todas: sobreponé las láminas 2 y 3 y la x del ícono y del texto no se mueve; (4) la última lista queda centrada en vertical, no pegada arriba; (5) el número de la portada coincide con el de las láminas.
 
-**Qué plantilla hay hoy y qué falta (verificado en `scripts/carousel_pack_referentes.js` el 10-oct):**
-- **Hoy no hay plantilla para esta receta.** El `lista` más parecido (línea 56; CSS 172-193) dibuja cada fila como tarjeta con borde de 3 px y radio de 26 px, siempre imprime su `headline`, cambia a `compacta` con 4 filas o más y usa dos cuerpos (50 y 40 px). **No se usa como si fuera la receta.**
-- **Falta, en este orden** (encargo cerrado para Codex, con la hoja de contactos de los 2 briefs como prueba de hecho; no se construye hasta que la madre lo pida):
-  1. Layout `inventario` junto a `listaHtml`, registrado en `LAYOUTS` (línea 89): `items[{icon|n, label, text}]`, `headline` opcional que no dibuja nada si falta, filas sin caja a la grilla de arriba, `center` para la última lámina y `ask` para la flecha del remate. Sumarlo a la lista de `scripts/carousel_render.test.js:104` con casos de 5, 3 y 2 filas.
-  2. `cierre` escribe «Comentá» fijo (línea 86; lo confirma P2): darle un `pre` con «Buscá» por defecto, o armar el cierre con `ilustrado` (foto + frase + CTA) mientras tanto.
-  3. Portada-inventario con logos en arco: layout nuevo opcional; sin él, la portada va con foto `fotobn` + `dato` o captura.
+**Qué plantilla hay (hecho el 10-oct en `scripts/carousel_pack_referentes.js`, tests en `scripts/carousel_render.test.js`):**
+- **`inventario`** (junto a `listaHtml`, registrado en `LAYOUTS`): `items[{icon|n, label, text}]`, `start` (primer número de la lámina; la numeración es continua entre láminas), `headline` opcional que no dibuja nada si falta, `center`, `ask` (`true` o un texto corto). Grilla en % del alto/ancho: marca a 17 % (10 % de lado), texto a 32,5 %, primera fila a 13 %, paso 16,5 %, nombre y línea a 44 px; **más de 5 filas por lámina falla** a propósito (la grilla no cambia). El `lista` de tarjetas **no** sirve para esta receta (borde 3 px, título siempre, dos cuerpos).
+- **Trampas medidas al armarlo (carruseles «78h en una tarea» y «Tics de webs con IA»):**
+  - Una fila sin número ni logo (lista que no es de ítems, como la cuenta 30 × 3 × 52, o el recurso del remate) lleva `"n": ""`: la columna queda vacía en TODAS las filas de esa lámina y el texto conserva su x. Si sólo quedara vacía una, parece un número perdido.
+  - El remate (`ask: true` + `"next": ""`, porque la flecha ya es la de continuidad) se ve bien **centrado** (`center: true`; el bloque cuenta la flecha); pegado arriba deja la mitad de abajo en blanco.
+  - El `badge` de `ilustrado` es un círculo de 150 px: «7 TICS» en mayúsculas apenas entra y «12 TICS» se corta. En minúsculas («[X] tics», como «noticia») entra.
+  - Los `assert` de un test sobre el HTML completo de la página también ven el CSS: `includes('inv-t')` aprobaba aunque la lámina no dibujara título porque `.inv-t` está en la hoja de estilo. Afirmá sobre el marcado (`class="inv-t"`, `<h2`).
+- **Falta:** portada-inventario con logos en arco (layout opcional; sin él, la portada va con foto `fotobn` + `dato`, o con la captura). El fotograma de Sergio Urcullo para la lámina 5 todavía no existe: hoy el cierre es `cierre` negro, solo texto («Sin foto: texto negro», receta).
 - **Logos:** hay 8 en `hermes-content/references/brand-logos/` y 3 en `hermes-content/references/brand-claude/`. Notion, Chrome, Spotify, NordVPN, Figma, Xcode y Cursor **no están**: un inventario que los nombre primero necesita su kit de prensa oficial (si hay que descargar, pide OK).
 
 ## 6. Gasto (CLAUDE.md, regla de Higgsfield)

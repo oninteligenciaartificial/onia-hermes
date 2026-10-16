@@ -1,0 +1,14 @@
+Palabras a confirmar con el audio (segundo del BRUTO, toma 2). El subtítulo lleva la mejor lectura, sin [?].
+
+bruto  80.10- 80.72 s  Whisper oyó «Anthropics»  ->  subtítulo dice «Anthropic»
+bruto  90.62- 92.26 s  Whisper oyó «millón de token que entran»  ->  subtítulo dice «millón de tokens que entran»
+bruto 130.48-133.80 s  Whisper oyó «no no tiene la consulta la manda a quien corresponde»  ->  subtítulo dice «no atiende la consulta, la manda a quien corresponde»
+bruto 134.82-135.16 s  Whisper oyó «zonet»  ->  subtítulo dice «Sonnet»
+bruto 145.28-147.72 s  Whisper oyó «preguntala a quien termó el bot que modelo usa»  ->  subtítulo dice «preguntale a quien te armó el bot qué modelo usa»
+bruto 151.50-152.46 s  Whisper oyó «Ser más bots»  ->  subtítulo dice «Si armás bots»
+bruto 168.36-170.92 s  Whisper oyó «cloud guión haiku 5.5»  ->  subtítulo dice «claude-haiku-5-5»
+bruto 133.88-134.82 s  Whisper oyó «lo difícil se lo deja a»  ->  motivo: ¿«deja» o «dejás»? Whisper oyó «deja» (la toma 1 oyó «dejas»; el guion dice «dejás»). Con «se lo deja» el sujeto es Haiku y también tiene sentido: se dejó como Whisper
+bruto 162.26-163.66 s  Whisper oyó «apagarlo y probarlo»  ->  motivo: ¿«apagalo y probalo»? Whisper escribió el infinitivo; el guion dice «apagalo y medilo». Se dejó como Whisper
+bruto 128.80-130.18 s  Whisper oyó «como un recepcionista»  ->  motivo: el guion dice «una recepcionista»; Whisper oyó «un recepcionista». Se dejó «un recepcionista»
+bruto  92.26- 94.04 s  Whisper oyó «50 los que salen»  ->  motivo: Sergio dice «50» sin unidad: son 50 centavos (la página: $0.50 / MTok). En pantalla va «50 centavos»; el subtítulo queda como él lo dijo
+bruto 152.78-153.38 s  Whisper oyó «dos trampas»  ->  motivo: la toma 1 no traía este tramo; confirmar que dice «dos trampas»

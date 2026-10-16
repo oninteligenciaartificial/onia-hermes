@@ -1,0 +1,25 @@
+# Medición del render final-sin-variables-sin-repetido (2026-10-11 10:06 UTC)
+duración: 69.557000 s
+REGLA 15 · silencedetect noise=-35dB d=0.3 (debe dar 0 silencios):
+  (ninguno)
+silencios >= 0,3 s: 0
+silencios >= 0,2 s (informativo): 0
+ebur128 (LUFS integrado, LRA, true peak; Erik pide -14 LUFS, TP <= -1,5):
+    I:         -14.1 LUFS
+    LRA:         2.1 LU
+    Peak:       -2.3 dBFS
+salto de la cara en los empalmes SIN cambio de apoyo (YuNet sobre el render):
+empalmes sin cambio de apoyo: 16 · medidos 14 · sin cara detectada 2
+salto de ojos x máx 110 px, mediana 9.1 · y máx 48 px, mediana 8.3 (px de 1080; incluye el movimiento natural de 2 cuadros)
+los 5 mayores: 53.24 s (dx 110, dy 48) · 55.47 s (dx 30, dy 10) · 48.11 s (dx 10, dy 20) · 21.60 s (dx 6, dy 19) · 21.99 s (dx 15, dy 10)
+ritmo (del informe de erik_edit.py):
+duración: 69.56 s · cortes que se ven: 36 (5.2 cada 10 s; 4 jump cuts de ritmo; meta 4-4,5)
+  plano de cámara más largo: 3.28 s; de más de 3.3 s: ninguno
+  planos-flash de cámara (< 0,8 s): [(21.6, 0.39), (24.39, 0.54), (48.11, 0.8), (52.99, 0.25)]
+  tarjeta «TU CHATBOT / WHATSAPP» 3.72-10.90s (7.2 s) y=150-476 (frente desde y=860)
+  tarjeta «CÓMO FUNCIONA / VENTANA ABIERTA» 14.50-19.69s (5.2 s) y=150-476 (frente desde y=834)
+  tarjeta «LO QUE LE ENSEÑASTE / TU CLÍNICA» 25.73-30.42s (4.7 s) y=150-476 (frente desde y=831)
+  tarjeta «EJEMPLO / PLANTILLA» 41.28-45.72s (4.4 s) y=150-476 (frente desde y=831)
+  tarjeta «DESPUÉS DE LAS 24 HORAS / PLANTILLAS» 61.46-65.06s (3.6 s) y=150-476 (frente desde y=846)
+  subtítulos T: glifos entre y 1350 y 1501 (78.2 %, tope 80 %)
+  cortes del cutplan aprobado sin cambio de apoyo en ese cuadro: [4.59, 10.9, 21.6, 21.99, 24.39, 25.87, 29.34, 30.42, 39.82, 40.58, 42.56, 48.11, 50.97, 53.24, 55.47, 60.37]

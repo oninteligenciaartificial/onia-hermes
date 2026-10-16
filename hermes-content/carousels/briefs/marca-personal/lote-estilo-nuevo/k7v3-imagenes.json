@@ -1,0 +1,30 @@
+{
+  "title": "Lote estilo nuevo (fotobn) · K7 v3 · Carruseles por código",
+  "image_style": "fotobn",
+  "params": [
+    "--quality",
+    "medium",
+    "--resolution",
+    "2k"
+  ],
+  "slides": [
+    {
+      "number": 1,
+      "layout": "ilustrado",
+      "aspect": "4:3",
+      "image_prompt": "A fanned stack of plain blank rectangular ceramic tiles on a grey surface, next to a small black wooden sculpting tool. The top tile is the green object."
+    },
+    {
+      "number": 2,
+      "layout": "ilustrado",
+      "aspect": "4:3",
+      "image_prompt": "A black fountain pen lying flat on a sheet of plain white paper, its nib leaving a large uneven ink blot with a few scattered drops. The ink blot is the green object."
+    },
+    {
+      "number": 4,
+      "layout": "ilustrado",
+      "aspect": "4:3",
+      "image_prompt": "A black wooden painter's palette with a thumb hole, holding round blobs of white and grey paint, with a clean paintbrush resting across it. One single blob of paint is the green object."
+    }
+  ]
+}

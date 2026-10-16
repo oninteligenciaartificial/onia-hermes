@@ -882,15 +882,56 @@ def envolvente(x, paso=0.01):
     return 10 * np.log10((m[:k * n].reshape(k, n).astype(np.float64) ** 2).mean(1) + 1e-12)
 
 
+# OpenCV 5.0 sacó cv2.CascadeClassifier y los haarcascades (11-oct-2026: santiago.py reventaba con «module 'cv2' has no
+# attribute 'CascadeClassifier'»). Con OpenCV 4.x se sigue usando Haar, el detector del QA con que se midió la receta; sin
+# Haar se usa YuNet (cv2.FaceDetectorYN) con el modelo que YA está en el repo, sin descargar nada. santiago.py solo usa del
+# recuadro x + w/2 (centro), y + 0,4*h (ojos) y w (ancho de cara): con YuNet la caja se arma con su ancho y una altura tal
+# que y + 0,4*h caiga en la línea REAL de los ojos (landmarks).
+YUNET = AQUI.parents[2] / "editor-videos" / "assets" / "models" / "face_detection_yunet_2023mar.onnx"
+
+
+class _CarasYuNet:
+    """Misma interfaz que cv2.CascadeClassifier para lo que usa analizar_bruto()."""
+
+    def __init__(self):
+        if not YUNET.exists():
+            sys.exit(f"santiago: OpenCV sin Haar y falta el modelo YuNet {YUNET}")
+        self.det = cv2.FaceDetectorYN.create(str(YUNET), "", (540, 960), 0.7, 0.3, 50)
+
+    def detectMultiScale(self, gris, scaleFactor=1.1, minNeighbors=5, minSize=(0, 0)):
+        img = cv2.cvtColor(gris, cv2.COLOR_GRAY2BGR) if gris.ndim == 2 else gris
+        alto, ancho = img.shape[:2]
+        self.det.setInputSize((ancho, alto))
+        _, caras = self.det.detect(img)
+        out = []
+        for f in (caras if caras is not None else []):
+            x, y, bw, bh = (float(v) for v in f[:4])
+            if bw < minSize[0] or bh < minSize[1]:
+                continue
+            ojos_y = (float(f[5]) + float(f[7])) / 2  # landmarks: ojo derecho (4,5) e izquierdo (6,7)
+            out.append((int(round(x)), int(round(ojos_y - 0.4 * bh)), int(round(bw)), int(round(bh))))
+        return np.array(out, dtype=np.int32).reshape(-1, 4)
+
+
+def detector_cara():
+    """(detector, nombre): Haar si este OpenCV lo trae (4.x), YuNet si no (5.x)."""
+    if hasattr(cv2, "CascadeClassifier") and hasattr(cv2, "data"):
+        xml = Path(cv2.data.haarcascades) / "haarcascade_frontalface_default.xml"
+        if xml.exists():
+            return cv2.CascadeClassifier(str(xml)), "haar"
+    return _CarasYuNet(), "yunet"
+
+
 def analizar_bruto(bruto, work: Path):
-    """Saltos internos del bruto (tomas pegadas antes del corte), cara de cada toma (Haar, el mismo detector del QA)
+    """Saltos internos del bruto (tomas pegadas antes del corte), cara de cada toma (Haar si el OpenCV lo trae, YuNet si no)
     y envolvente de la voz. Va a work/ para no repetirlo en cada corrida.
 
     Nace de la prueba N03 (3-oct): el bruto traía 4 tomas pegadas; la de 43,93 s entraba corrida +46/+83 px y el
     salto de 34,10 caía en medio de un split sin cambio de panel — el control decía «a la vista: ninguno» porque
     solo conocía los cortes del cutplan."""
     st = Path(bruto).stat()
-    clave = f"{st.st_size}:{int(st.st_mtime)}:v2"
+    det, nombre_det = detector_cara()
+    clave = f"{st.st_size}:{int(st.st_mtime)}:v2:{nombre_det}"  # el detector entra en la clave: Haar y YuNet no se mezclan en caché
     cache, cache_voz = work / "bruto-analisis.json", work / "bruto-voz.npy"
     if cache.exists() and cache_voz.exists():
         d = json.loads(cache.read_text())
@@ -917,7 +958,6 @@ def analizar_bruto(bruto, work: Path):
     dur = len(fr) / FPS
     raw = subprocess.run(["ffmpeg", "-v", "error", "-i", str(bruto), "-vf", "fps=4,scale=540:960,format=gray",
                           "-f", "rawvideo", "-"], capture_output=True, check=True).stdout
-    det = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
     obs = []
     for i, f in enumerate(np.frombuffer(raw, np.uint8).reshape(-1, 960, 540)):
         fs = det.detectMultiScale(f, 1.1, 5, minSize=(100, 100))

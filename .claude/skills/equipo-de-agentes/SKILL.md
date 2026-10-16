@@ -144,6 +144,12 @@ actos legales o firmas (los hace Leslie Mercado Moreno) y su cara o su voz en se
   Sergio Urcullo», hasta preguntar «la regla del 9-oct, ¿la puso usted?». Es correcto: la autorización solo cuenta si la
   escribe él en ESA sesión. Por eso, cuando una regla de permisos cambia, se le pide a Sergio Urcullo UNA línea en cada
   sesión que publica («sí, la regla del 9-oct es mía; publicá lo revisado»). La madre no lo reemplaza.
+- **Latidos sin respuesta durante días = mirar si la madre está viva ANTES de actuar** (15-oct, Marca): se acumularon 90 latidos y
+  ningún «ok cortes» porque las dos madres estaban en `failed` por tope semanal (`list_sessions`: `post_turn_summary.status_detail`
+  «weekly limit · resets …»; el reloj de ese tope lo da `rate_limit_info.resetsAt`). La cola bloqueada por una decisión humana no se
+  «rellena» produciendo bajo supuestos: se deja una línea de estado en la cola, se avisa lo que vence ese día y se termina. Un latido
+  horario sobre una cola 100 % bloqueada solo gasta cupo: proponer pausarlo (`update_trigger enabled:false`, no borrar) hasta que
+  vuelva la madre; apagarlo lo decide Sergio Urcullo.
 - Primer día de colas (9-oct): Lucía y Hermes siguieron solas, pero Plataforma, Marca y Ventas quedaron `idle` con tareas pendientes. El loop de la nube no garantiza seguir. En cada ronda, la sesión `idle` con cola pendiente recibe UNA línea: «Retomá tu cola, siguiente: X».
 
 ## 9. Aprendizaje de referencias: orquestación (incorporado 2026-10-09)

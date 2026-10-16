@@ -1,0 +1,28 @@
+{
+  "url": "https://developers.facebook.com/documentation/business-messaging/whatsapp/messages/send-messages",
+  "ancho_css": 520,
+  "alto_salida": 606,
+  "tema": "light",
+  "capturas": [
+    {
+      "nombre": "cap-ventana",
+      "ancla": {
+        "texto": "When a WhatsApp user messages you or calls you, a 24-hour timer called a customer service window starts."
+      },
+      "margen_sup": 70,
+      "marca": {
+        "texto": "timer called a customer service window"
+      }
+    },
+    {
+      "nombre": "cap-solo-plantillas",
+      "ancla": {
+        "texto": "While the window is open, you can send any of the following service message types to the user."
+      },
+      "margen_sup": 40,
+      "marca": {
+        "texto": "can only send pre-approved template messages"
+      }
+    }
+  ]
+}

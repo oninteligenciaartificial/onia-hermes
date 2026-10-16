@@ -4,15 +4,18 @@
  * demasiado texto» (pills, tarjetas, header y footer en cada lámina).
  *
  * Cada slide elige `layout`:
- *   logos      Bastian Xu: una palabra gigante espaciada + fila de logos oficiales con nombre.
+ *   logos      Bastian Xu: una palabra gigante espaciada + fila de logos oficiales con nombre. Con varias palabras en el
+ *              título (`\n` = otra línea) se achica por medición; sin `file` en las marcas, van solo con su nombre.
  *   analogia   Bastian Xu: frase corta + imagen de objetos que explica sola (1 o 2 bloques).
  *   ensayo     Bastian Xu: texto grande sobre papel, sin cajas; párrafos cortos.
  *   ilustrado  Santiago Muñoz: título con énfasis de color, ilustración dominante, pie corto,
  *              flecha de continuidad manuscrita. Con `badge` sirve de portada.
  *   lista      Santiago Muñoz: título + 3–5 filas con ícono/logo, etiqueta y una línea.
+ *   inventario @iampascio (10-oct): hasta 5 filas por lámina en grilla fija, sin tarjetas ni título, número en tinta
+ *              continuo entre láminas; `center` y `ask` para la última lista y el remate.
  *   dato       Erik Taveras / Ingeniero Binario: una cifra gigante + qué significa.
  *   captura    Carlos Domínguez: captura real (pantalla, comando, prompt) como prueba.
- *   cierre     los 8 referentes: «Comentá PALABRA» + qué recibís.
+ *   cierre     los 8 referentes: «Buscá PALABRA en Avisos» (o `pre` propio) + qué recibís.
  * La imagen la pinta Higgsfield SIN letras (scripts/carousel_images.mjs); el texto va acá.
  * Los logos son los oficiales de hermes-content/references/brand-claude/ (nunca recreados).
  */
@@ -33,9 +36,29 @@ function crear({ esc, emph, ACCOUNTS, BRAND, getFmt }) {
   const img = (p, cls) => (p ? `<img class="${cls}" src="${dataUrl(p)}" alt="">` : '');
   const paras = (t) => String(t || '').split(/\n\s*\n/).filter(Boolean).map((x) => `<p>${emph(x.trim())}</p>`).join('');
 
+  // `logos` nació para UNA palabra gigante, espaciada y en mayúsculas (Bastian Xu): ese camino NO cambia (mismo marcado,
+  // sin script) porque los briefs viejos salen igual. Con VARIAS palabras (P2 «7 herramientas. 4 son gratis.», 10-oct):
+  //   - una línea por `\n` del título (`<span class="wl">`), sin letter-spacing ni mayúsculas;
+  //   - el navegador MIDE la línea más ancha, ya con la fuente cargada, y achica la letra de a 3 px hasta que entra con el
+  //     margen de la lámina (84 px): el mismo ajuste que `cierreHtml`;
+  //   - sin ningún `file` en la fila, las marcas van solo con su nombre (clase `solo-nombres`): la fila se envuelve y se centra.
   function logosHtml(s) {
-    const row = (s.logos || []).map((l) => `<figure class="logo">${img(l.file, 'logo-img')}<figcaption>${esc(l.label || '')}</figcaption></figure>`).join('');
-    return `<div class="c-logos"><h1 class="word">${esc(s.headline || '')}</h1><div class="logo-row">${row}</div>${s.body ? `<p class="under">${emph(s.body)}</p>` : ''}</div>`;
+    const titulo = String(s.headline || '');
+    const lineas = titulo.split(/\r?\n/).map((x) => x.trim()).filter(Boolean);
+    const varias = /\S\s+\S/.test(lineas.join(' '));
+    const logos = s.logos || [];
+    const row = logos.map((l) => `<figure class="logo">${img(l.file, 'logo-img')}<figcaption>${esc(l.label || '')}</figcaption></figure>`).join('');
+    const soloNombres = logos.length > 0 && !logos.some((l) => l.file);
+    const h1 = varias
+      ? `<h1 class="word multi">${lineas.map((x) => `<span class="wl">${esc(x)}</span>`).join('')}</h1>`
+      : `<h1 class="word">${esc(titulo)}</h1>`;
+    const fit = varias
+      ? `<script>document.fonts.ready.then(function(){var h=document.querySelector('.c-logos .word');if(!h)return;`
+        + `var ls=h.querySelectorAll('.wl'),max=document.documentElement.clientWidth-2*84,f=parseFloat(getComputedStyle(h).fontSize);`
+        + `function w(){var m=0;ls.forEach(function(e){m=Math.max(m,e.getBoundingClientRect().width);});return m;}`
+        + `h.style.whiteSpace='nowrap';while(w()>max&&f>60){f-=3;h.style.fontSize=f+'px';}});</script>`
+      : '';
+    return `<div class="c-logos">${h1}<div class="logo-row${soloNombres ? ' solo-nombres' : ''}">${row}</div>${s.body ? `<p class="under">${emph(s.body)}</p>` : ''}</div>${fit}`;
   }
 
   function analogiaHtml(s) {
@@ -43,8 +66,23 @@ function crear({ esc, emph, ACCOUNTS, BRAND, getFmt }) {
     return `<div class="c-analogia">${blocks.map((b) => `<section><h2>${emph(b.text || '')}</h2>${img(b.image, 'obj')}</section>`).join('')}${s.body ? `<p class="caption">${emph(s.body)}</p>` : ''}</div>`;
   }
 
+  // `ensayo` fija el título en 104 px: una lámina de dos frases queda con ~75 % de aire (P2 láminas 9 y 10, 11-oct).
+  // Dos perillas opcionales, que sin ellas no cambian nada (el marcado de los briefs viejos es el mismo):
+  //   grande: true   título a 150 px y cuerpo a 74 px (frase corta que ES la lámina)
+  //   fit: 'ancho'   el navegador MIDE el título con la fuente cargada y lo agranda de a 4 px hasta el margen de la lámina
+  //                  (84 px por lado, el mismo de `cierreHtml`); pensado para UNA palabra (la del CTA), en una línea.
+  //                  Se mide el ancho del TEXTO (`width:max-content`): el h2 es un ítem flex que se estira al ancho de la
+  //                  lámina, y medir ese ancho daba siempre 912 px (el margen) sin agrandar nada (11-oct)
   function ensayoHtml(s) {
-    return `<div class="c-ensayo">${s.headline ? `<h2>${emph(s.headline)}</h2>` : ''}${paras(s.body)}</div>`;
+    const ancho = s.fit === 'ancho' && s.headline;
+    const fit = ancho
+      ? `<script>document.fonts.ready.then(function(){var h=document.querySelector('.c-ensayo h2');if(!h)return;`
+        + `var max=document.documentElement.clientWidth-2*84,f=parseFloat(getComputedStyle(h).fontSize);`
+        + `h.style.whiteSpace='nowrap';h.style.width='max-content';h.style.alignSelf='flex-start';`
+        + `while(h.getBoundingClientRect().width<max&&f<340){f+=4;h.style.fontSize=f+'px';}`
+        + `while(h.getBoundingClientRect().width>max&&f>60){f-=1;h.style.fontSize=f+'px';}});</script>`
+      : '';
+    return `<div class="c-ensayo${s.grande ? ' grande' : ''}">${s.headline ? `<h2>${emph(s.headline)}</h2>` : ''}${paras(s.body)}</div>${fit}`;
   }
 
   function ilustradoHtml(s) {
@@ -58,6 +96,37 @@ function crear({ esc, emph, ACCOUNTS, BRAND, getFmt }) {
     return `<div class="c-lista${(s.items || []).length >= 4 ? ' compacta' : ''}"><h2 class="t">${emph(s.headline || '')}</h2>${s.body ? `<p class="sub">${emph(s.body)}</p>` : ''}<ul>${rows}</ul></div>`;
   }
 
+  // «Inventario continuo» (referencia DePPPp5FgMh, 10-oct): una lista larga de cosas del mismo tipo partida en
+  // láminas con GRILLA FIJA. A diferencia de `lista` NO dibuja tarjetas, NO escribe título y usa un solo cuerpo
+  // (44 px) para el nombre y la línea: la jerarquía sale del peso (800 / 400) y del color (tinta / gris).
+  // La grilla va en % para que valga en `square`: marca a 17 % del ancho (10 % de lado), texto desde 32,5 %,
+  // primera fila a 13 % del alto y paso de 16,5 %. Es la misma en todas las láminas: sobreponiendo la 2 y la 3
+  // la x del ícono y del texto no se mueve.
+  //   items[{icon | n, label, text}]  `icon` = logo oficial; sin él va el número en tinta (sin círculo, 800)
+  //   start     primer número de la lámina (la numeración es CONTINUA entre láminas: 6, 7, 8…); `n` de la fila gana
+  //   headline  opcional y de UN renglón; si falta no se dibuja nada
+  //   center    centra el bloque en vertical (última lista con menos de 5 filas)
+  //   ask       remate: aísla la última fila (el recurso) con aire y la une al cierre con una flecha Caveat;
+  //             `true` o un texto corto que va junto a la flecha. Usarlo con `next: ""` (la flecha ya es esa)
+  const INV = { top: 13, pitch: 16.5, row: 8, air: 7, arrow: 11.5, max: 5 }; // % del alto; `arrow` = aire + alto de la flecha del remate
+  function inventarioHtml(s) {
+    const items = s.items || [];
+    if (items.length > INV.max) throw new Error(`pack referentes: inventario admite hasta ${INV.max} filas por lámina (grilla fija), llegaron ${items.length}`);
+    const start = Number.isFinite(Number(s.start)) && s.start !== '' && s.start != null ? Number(s.start) : 1;
+    const gap = s.ask && items.length > 1 ? INV.air : 0; // aire extra antes de la última fila
+    const block = (items.length - 1) * INV.pitch + gap + INV.row + (gap ? INV.arrow : 0); // alto del bloque (con la flecha del remate)
+    const top0 = s.center ? 50 - block / 2 : INV.top;
+    const y = (i) => top0 + i * INV.pitch + (i === items.length - 1 ? gap : 0) + INV.row / 2; // centro de la fila i
+    const rows = items.map((it, i) => {
+      const mark = it.icon ? img(it.icon, 'inv-icon') : esc(String(it.n != null ? it.n : start + i));
+      return `<div class="inv-row" style="top:${y(i).toFixed(2)}%"><div class="inv-mark">${mark}</div><div class="inv-txt"><b>${emph(it.label || '')}</b>${it.text ? `<span>${emph(it.text)}</span>` : ''}</div></div>`;
+    }).join('');
+    const arrow = s.ask && items.length
+      ? `<div class="inv-ask" style="top:${(y(items.length - 1) + INV.row / 2 + 2.5).toFixed(2)}%">${typeof s.ask === 'string' ? `<span>${esc(s.ask)}</span>` : ''}<svg viewBox="0 0 645 120"><path d="M6 24 C 150 118, 330 -10, 596 76 M562 52 L598 78 L556 96"/></svg></div>`
+      : '';
+    return `<div class="c-inv${s.center ? ' centrada' : ''}">${s.headline ? `<h2 class="inv-t">${emph(s.headline)}</h2>` : ''}${rows}${arrow}</div>`;
+  }
+
   // Erik Taveras / Ingeniero Binario: el número ES la lámina.
   function datoHtml(s) {
     const v = String(s.value || '');
@@ -67,8 +136,10 @@ function crear({ esc, emph, ACCOUNTS, BRAND, getFmt }) {
   }
 
   // Carlos Domínguez: la prueba es la pantalla real (captura, comando, prompt), no un dibujo.
+  // `logo` (opcional, como en `ilustrado`): la marca oficial va delante del título, a .8em de alto (P2 láminas 2 y 3).
   function capturaHtml(s) {
-    return `<div class="c-captura">${s.headline ? `<h2 class="t">${emph(s.headline)}</h2>` : ''}<figure class="shot">${img(s.image, 'shot-img')}</figure>${s.body ? `<p class="caption">${emph(s.body)}</p>` : ''}</div>`;
+    const logo = s.logo ? img(s.logo, 'title-logo') : '';
+    return `<div class="c-captura">${s.headline ? `<h2 class="t">${logo}${emph(s.headline)}</h2>` : ''}<figure class="shot">${img(s.image, 'shot-img')}</figure>${s.body ? `<p class="caption">${emph(s.body)}</p>` : ''}</div>`;
   }
 
   // Los 8 referentes cierran igual: una palabra para comentar y qué recibís.
@@ -83,10 +154,16 @@ function crear({ esc, emph, ACCOUNTS, BRAND, getFmt }) {
       + `var max=document.documentElement.clientWidth-2*84,f=parseFloat(getComputedStyle(k).fontSize);`
       + `k.style.whiteSpace='nowrap';k.style.display='inline-block';`
       + `while(k.getBoundingClientRect().width>max&&f>60){f-=3;k.style.fontSize=f+'px';}});</script>`;
-    return `<div class="c-cierre"><p class="pre">Comentá</p><div class="kw"${kwSize}>${esc(kw)}</div><p class="sub2">${emph(s.body || '')}</p></div>${fit}`;
+    // `pre` cambia el verbo de arriba y `kicker` suma una frase corta arriba del verbo.
+    // Desde el 10-oct el verbo por defecto es «Buscá» («Buscá X en Avisos · link en mi perfil»): «Comentá X y te paso el
+    // link» promete un DM automático que no está probado (Meta rechazó 2 veces ese mecanismo, CLAUDE.md). Un brief que
+    // todavía quiera «Comentá» lo pide con `"pre": "Comentá"`; los 19 briefs que lo usaban lo llevan escrito.
+    const pre = s.pre != null ? String(s.pre) : 'Buscá';
+    const kicker = s.kicker ? `<p class="kick">${emph(String(s.kicker))}</p>` : '';
+    return `<div class="c-cierre">${kicker}<p class="pre">${esc(pre)}</p><div class="kw"${kwSize}>${esc(kw)}</div><p class="sub2">${emph(s.body || '')}</p></div>${fit}`;
   }
 
-  const LAYOUTS = { logos: logosHtml, analogia: analogiaHtml, ensayo: ensayoHtml, ilustrado: ilustradoHtml, lista: listaHtml, dato: datoHtml, captura: capturaHtml, cierre: cierreHtml };
+  const LAYOUTS = { logos: logosHtml, analogia: analogiaHtml, ensayo: ensayoHtml, ilustrado: ilustradoHtml, lista: listaHtml, inventario: inventarioHtml, dato: datoHtml, captura: capturaHtml, cierre: cierreHtml };
 
   return function referentesHtml(slide, idx, total, account, args) {
     const FMT = getFmt();
@@ -148,6 +225,14 @@ body{margin:0;font-family:'DM Sans',system-ui,sans-serif}
 .logo{display:flex;flex-direction:column;align-items:center;gap:14px}
 .logo-img{width:200px;height:200px;object-fit:contain;padding:36px;background:#FFFFFF;border-radius:46px;box-shadow:0 1px 0 rgba(10,15,13,.08),0 14px 30px oklch(40% 0.02 85 / .16)}
 .logo figcaption{font-family:'Instrument Serif',Georgia,serif;font-size:40px}
+/* logos con varias palabras (P2, 10-oct): sin espaciado ni mayúsculas, una línea por \n, ajustada por medición (ver logosHtml) */
+.word.multi{letter-spacing:-.025em;margin-right:0;text-transform:none;line-height:1.02}
+.wl{display:block;width:max-content;margin:0 auto}
+/* sin logos: solo nombres, centrados y envueltos en filas parejas */
+.c-logos:has(.solo-nombres){gap:124px}
+.logo-row.solo-nombres{gap:40px 54px;max-width:100%}
+.solo-nombres .logo figcaption{font-size:46px;line-height:1.1;white-space:nowrap}
+.solo-nombres + .under{font-size:56px;max-width:none}
 .under{font-size:42px;color:var(--soft);text-align:center;max-width:800px}
 /* analogia */
 .c-analogia{display:flex;flex-direction:column;justify-content:center;gap:40px}
@@ -158,6 +243,9 @@ body{margin:0;font-family:'DM Sans',system-ui,sans-serif}
 .c-ensayo{display:flex;flex-direction:column;gap:36px;max-width:920px}
 .c-ensayo h2{font-family:'Bricolage',sans-serif;font-weight:800;font-size:104px;line-height:1;letter-spacing:-3px;margin-bottom:6px}
 .c-ensayo p{font-weight:600;font-size:56px;line-height:1.18;letter-spacing:-.5px}
+.c-ensayo.grande{gap:48px;max-width:960px}
+.c-ensayo.grande h2{font-size:150px;line-height:.98;letter-spacing:-4px}
+.c-ensayo.grande p{font-size:74px}
 /* ilustrado */
 .c-ilustrado{flex:1;display:flex;flex-direction:column;min-height:0}
 .c-ilustrado .t{display:flex;flex-wrap:wrap;align-items:center;column-gap:.25em}
@@ -178,6 +266,18 @@ body{margin:0;font-family:'DM Sans',system-ui,sans-serif}
 .c-lista li div{display:flex;flex-direction:column;gap:4px}
 .c-lista b{font-size:50px;font-weight:800;letter-spacing:-.5px}
 .c-lista li span{font-size:40px;color:var(--soft)}
+/* inventario: grilla fija en % (receta DePPPp5FgMh). La capa ocupa TODA la lámina: el .main deja de ser el ancla */
+.l-inventario .main{position:static;padding:0}
+.c-inv{position:absolute;inset:0}
+.inv-t{position:absolute;left:84px;right:84px;top:84px;font-family:'Bricolage',sans-serif;font-weight:750;font-size:60px;line-height:1;letter-spacing:-1.5px}
+.inv-row{position:absolute;left:0;right:0;transform:translateY(-50%);display:flex;align-items:center;padding:0 84px 0 32.5%}
+.inv-mark{position:absolute;left:17%;top:50%;width:10%;aspect-ratio:1;transform:translateY(-50%);display:flex;align-items:center;justify-content:center;font-family:'DM Sans',system-ui,sans-serif;font-weight:800;font-size:76px;line-height:1;color:var(--ink)}
+.inv-icon{width:100%;height:100%;object-fit:contain}
+.inv-txt{font-size:44px;line-height:1.18}
+.inv-txt b{display:block;font-weight:800;color:var(--ink);letter-spacing:-.3px}
+.inv-txt span{display:block;font-weight:400;color:var(--soft)}
+.inv-ask{position:absolute;left:32.5%;right:84px;display:flex;flex-direction:column;color:var(--arrow);font-family:'Caveat',cursive;font-size:48px}
+.inv-ask svg{width:100%;height:120px;fill:none;stroke:var(--arrow);stroke-width:4;stroke-linecap:round;stroke-linejoin:round;flex:none}
 /* dato */
 .c-dato .big{font-family:'Bricolage',sans-serif;font-weight:800;font-size:420px;line-height:.82;letter-spacing:-.015em;white-space:nowrap;color:var(--acc);margin-bottom:28px}
 .t-blanco .c-dato .big{color:#0A0F0D;text-shadow:12px 12px 0 var(--mark)}
@@ -188,6 +288,7 @@ body{margin:0;font-family:'DM Sans',system-ui,sans-serif}
 .shot-img{display:block;width:100%;max-height:760px;object-fit:contain}
 /* cierre */
 .c-cierre{display:flex;flex-direction:column;align-items:center;text-align:center}
+.c-cierre .kick{font-family:'Bricolage',sans-serif;font-weight:700;font-size:58px;line-height:1.1;margin:0 0 44px;max-width:860px;text-wrap:balance}
 .c-cierre .pre{font-family:'Caveat',cursive;font-size:72px;color:var(--soft)}
 .c-cierre .kw{font-family:'Bricolage',sans-serif;font-weight:800;font-size:170px;letter-spacing:.06em;line-height:1;background:var(--mark);color:var(--mark-ink);padding:26px 50px 34px;border-radius:28px;margin:10px 0 18px}
 .compacta ul{gap:18px;margin-top:40px}.compacta li{padding:20px 30px}.compacta b{font-size:42px}.compacta li span{font-size:34px}.compacta .li-n{width:68px;height:68px;font-size:46px}.compacta .li-icon{width:76px;height:76px}

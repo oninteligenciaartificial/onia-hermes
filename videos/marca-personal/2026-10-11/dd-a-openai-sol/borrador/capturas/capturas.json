@@ -1,0 +1,86 @@
+{
+ "precios": {
+  "url": "https://developers.openai.com/api/docs/pricing",
+  "fecha": "2026-10-11",
+  "w": 1120,
+  "h": 344,
+  "frases": {
+   "Cached input": [
+    568,
+    119,
+    174,
+    32
+   ],
+   "astra-entrada": [
+    448,
+    209,
+    82,
+    32
+   ],
+   "sol-entrada": [
+    448,
+    291,
+    72,
+    32
+   ],
+   "astra-cache": [
+    568,
+    209,
+    66,
+    32
+   ],
+   "sol-cache": [
+    568,
+    291,
+    66,
+    32
+   ]
+  }
+ },
+ "modelo-sol": {
+  "url": "https://developers.openai.com/api/docs/models",
+  "fecha": "2026-10-11",
+  "w": 1120,
+  "h": 1040,
+  "frases": {
+   "Near-Astra performance for complex work at a lower cost.": [
+    64,
+    184,
+    722,
+    32
+   ]
+  }
+ },
+ "changelog-sol": {
+  "url": "https://developers.openai.com/api/docs/changelog",
+  "fecha": "2026-10-11",
+  "w": 1120,
+  "h": 520,
+  "frases": {
+   "Sep 29": [
+    52,
+    104,
+    90,
+    32
+   ],
+   "Released GPT-6.1 Sol": [
+    168,
+    160,
+    304,
+    38
+   ],
+   "$2 input": [
+    385,
+    338,
+    119,
+    38
+   ],
+   "$0.10 cached input": [
+    520,
+    338,
+    272,
+    38
+   ]
+  }
+ }
+}

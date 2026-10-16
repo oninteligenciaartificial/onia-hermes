@@ -1,0 +1,83 @@
+{
+ "precios-tabla": {
+  "url": "https://platform.claude.com/docs/en/about-claude/pricing",
+  "fecha": "2026-10-11",
+  "fecha_hora": "2026-10-11T15:01:31.666Z",
+  "w": 1520,
+  "h": 1224,
+  "frases": {
+   "fable-fila": [
+    153,
+    322,
+    252,
+    142
+   ],
+   "fable-entrada": [
+    462,
+    373,
+    128,
+    38
+   ],
+   "fable-salida": [
+    683,
+    373,
+    136,
+    38
+   ],
+   "opus-fila": [
+    153,
+    496,
+    234,
+    142
+   ],
+   "opus-entrada": [
+    462,
+    547,
+    118,
+    38
+   ],
+   "opus-salida": [
+    683,
+    547,
+    136,
+    38
+   ],
+   "sonnet-fila": [
+    153,
+    671,
+    262,
+    142
+   ],
+   "sonnet-entrada": [
+    462,
+    722,
+    118,
+    38
+   ],
+   "sonnet-salida": [
+    683,
+    722,
+    128,
+    38
+   ],
+   "haiku-fila": [
+    153,
+    898,
+    242,
+    244
+   ],
+   "haiku-entrada": [
+    462,
+    845,
+    152,
+    176
+   ],
+   "haiku-salida": [
+    683,
+    913,
+    160,
+    38
+   ]
+  }
+ }
+}

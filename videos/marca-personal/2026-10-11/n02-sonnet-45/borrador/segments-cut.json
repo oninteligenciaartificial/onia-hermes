@@ -1,0 +1,1604 @@
+{
+ "words": [
+  {
+   "word": "Si",
+   "start": 0.116,
+   "end": 0.21
+  },
+  {
+   "word": "tenés",
+   "start": 0.21,
+   "end": 0.53
+  },
+  {
+   "word": "un",
+   "start": 0.53,
+   "end": 0.67
+  },
+  {
+   "word": "bot",
+   "start": 0.67,
+   "end": 0.93
+  },
+  {
+   "word": "atendiendo",
+   "start": 0.93,
+   "end": 1.61
+  },
+  {
+   "word": "clientes,",
+   "start": 1.61,
+   "end": 2.23
+  },
+  {
+   "word": "ahora",
+   "start": 2.39,
+   "end": 2.51
+  },
+  {
+   "word": "viene",
+   "start": 2.51,
+   "end": 2.79
+  },
+  {
+   "word": "el",
+   "start": 2.79,
+   "end": 3.07
+  },
+  {
+   "word": "30",
+   "start": 3.07,
+   "end": 3.31
+  },
+  {
+   "word": "de",
+   "start": 3.31,
+   "end": 3.51
+  },
+  {
+   "word": "noviembre.",
+   "start": 3.51,
+   "end": 3.95
+  },
+  {
+   "word": "Si",
+   "start": 4.224,
+   "end": 4.32
+  },
+  {
+   "word": "usás",
+   "start": 4.32,
+   "end": 4.64
+  },
+  {
+   "word": "Sonnet",
+   "start": 4.64,
+   "end": 5.4
+  },
+  {
+   "word": "4.5,",
+   "start": 5.4,
+   "end": 6.44
+  },
+  {
+   "word": "se",
+   "start": 6.56,
+   "end": 6.72
+  },
+  {
+   "word": "va",
+   "start": 6.72,
+   "end": 6.88
+  },
+  {
+   "word": "a",
+   "start": 6.88,
+   "end": 7.1
+  },
+  {
+   "word": "apagar.",
+   "start": 7.1,
+   "end": 7.36
+  },
+  {
+   "word": "Anthropic",
+   "start": 7.671,
+   "end": 8.1
+  },
+  {
+   "word": "lo",
+   "start": 8.1,
+   "end": 8.4
+  },
+  {
+   "word": "anunció",
+   "start": 8.4,
+   "end": 8.84
+  },
+  {
+   "word": "el",
+   "start": 8.84,
+   "end": 9.02
+  },
+  {
+   "word": "30",
+   "start": 9.02,
+   "end": 9.24
+  },
+  {
+   "word": "de",
+   "start": 9.24,
+   "end": 9.4
+  },
+  {
+   "word": "septiembre,",
+   "start": 9.4,
+   "end": 9.78
+  },
+  {
+   "word": "quedan",
+   "start": 9.98,
+   "end": 10.2
+  },
+  {
+   "word": "46",
+   "start": 10.2,
+   "end": 10.8
+  },
+  {
+   "word": "días.",
+   "start": 10.8,
+   "end": 11.08
+  },
+  {
+   "word": "Tres",
+   "start": 11.332,
+   "end": 11.44
+  },
+  {
+   "word": "cosas",
+   "start": 11.44,
+   "end": 11.64
+  },
+  {
+   "word": "que",
+   "start": 11.64,
+   "end": 11.84
+  },
+  {
+   "word": "tenés",
+   "start": 11.84,
+   "end": 12.1
+  },
+  {
+   "word": "que",
+   "start": 12.1,
+   "end": 12.18
+  },
+  {
+   "word": "hacer",
+   "start": 12.18,
+   "end": 12.42
+  },
+  {
+   "word": "ahora",
+   "start": 12.42,
+   "end": 12.72
+  },
+  {
+   "word": "mismo,",
+   "start": 12.72,
+   "end": 13.04
+  },
+  {
+   "word": "buscarlo,",
+   "start": 13.336,
+   "end": 13.86
+  },
+  {
+   "word": "cambiarlo",
+   "start": 14.13,
+   "end": 14.58
+  },
+  {
+   "word": "y",
+   "start": 14.58,
+   "end": 14.98
+  },
+  {
+   "word": "probarlo.",
+   "start": 14.98,
+   "end": 15.27
+  },
+  {
+   "word": "Para",
+   "start": 15.693,
+   "end": 15.8
+  },
+  {
+   "word": "que",
+   "start": 15.8,
+   "end": 15.92
+  },
+  {
+   "word": "se",
+   "start": 15.92,
+   "end": 16.08
+  },
+  {
+   "word": "vea",
+   "start": 16.08,
+   "end": 16.32
+  },
+  {
+   "word": "el",
+   "start": 16.32,
+   "end": 16.44
+  },
+  {
+   "word": "resultado",
+   "start": 16.44,
+   "end": 16.84
+  },
+  {
+   "word": "uno,",
+   "start": 16.84,
+   "end": 17.46
+  },
+  {
+   "word": "buscalo",
+   "start": 17.78,
+   "end": 18.16
+  },
+  {
+   "word": "en",
+   "start": 18.16,
+   "end": 18.24
+  },
+  {
+   "word": "tu",
+   "start": 18.24,
+   "end": 18.32
+  },
+  {
+   "word": "código,",
+   "start": 18.32,
+   "end": 18.58
+  },
+  {
+   "word": "buscá",
+   "start": 18.8,
+   "end": 19.06
+  },
+  {
+   "word": "este",
+   "start": 19.06,
+   "end": 19.58
+  },
+  {
+   "word": "texto,",
+   "start": 19.58,
+   "end": 19.92
+  },
+  {
+   "word": "Claude",
+   "start": 20.193,
+   "end": 20.34
+  },
+  {
+   "word": "guion",
+   "start": 20.34,
+   "end": 20.88
+  },
+  {
+   "word": "Sonnet",
+   "start": 20.88,
+   "end": 21.5
+  },
+  {
+   "word": "guion",
+   "start": 21.5,
+   "end": 21.92
+  },
+  {
+   "word": "4",
+   "start": 21.92,
+   "end": 22.46
+  },
+  {
+   "word": "guion",
+   "start": 22.46,
+   "end": 23.02
+  },
+  {
+   "word": "5,",
+   "start": 23.02,
+   "end": 23.52
+  },
+  {
+   "word": "no",
+   "start": 23.775,
+   "end": 23.94
+  },
+  {
+   "word": "programás,",
+   "start": 23.94,
+   "end": 24.48
+  },
+  {
+   "word": "en",
+   "start": 24.6,
+   "end": 24.68
+  },
+  {
+   "word": "la",
+   "start": 24.68,
+   "end": 24.74
+  },
+  {
+   "word": "consola",
+   "start": 24.74,
+   "end": 25.12
+  },
+  {
+   "word": "de",
+   "start": 25.12,
+   "end": 25.24
+  },
+  {
+   "word": "Claude",
+   "start": 25.24,
+   "end": 25.56
+  },
+  {
+   "word": "andá",
+   "start": 25.56,
+   "end": 25.952
+  },
+  {
+   "word": "a",
+   "start": 25.952,
+   "end": 26.05
+  },
+  {
+   "word": "Usage",
+   "start": 26.05,
+   "end": 26.54
+  },
+  {
+   "word": "export",
+   "start": 26.54,
+   "end": 27.1
+  },
+  {
+   "word": "te",
+   "start": 27.1,
+   "end": 27.54
+  },
+  {
+   "word": "vas",
+   "start": 27.54,
+   "end": 27.66
+  },
+  {
+   "word": "a",
+   "start": 27.66,
+   "end": 27.7
+  },
+  {
+   "word": "una",
+   "start": 27.7,
+   "end": 27.84
+  },
+  {
+   "word": "pantalla",
+   "start": 27.84,
+   "end": 28.2
+  },
+  {
+   "word": "con",
+   "start": 28.2,
+   "end": 28.5
+  },
+  {
+   "word": "cada",
+   "start": 28.5,
+   "end": 28.68
+  },
+  {
+   "word": "modelo",
+   "start": 28.68,
+   "end": 28.96
+  },
+  {
+   "word": "que",
+   "start": 28.96,
+   "end": 29.2
+  },
+  {
+   "word": "usaste,",
+   "start": 29.2,
+   "end": 29.6
+  },
+  {
+   "word": "en",
+   "start": 29.859,
+   "end": 29.99
+  },
+  {
+   "word": "n8n",
+   "start": 29.99,
+   "end": 30.61
+  },
+  {
+   "word": "abrí",
+   "start": 30.61,
+   "end": 30.77
+  },
+  {
+   "word": "cada",
+   "start": 30.77,
+   "end": 30.93
+  },
+  {
+   "word": "nodo",
+   "start": 30.93,
+   "end": 31.47
+  },
+  {
+   "word": "de",
+   "start": 31.47,
+   "end": 31.56
+  },
+  {
+   "word": "Anthropic,",
+   "start": 31.56,
+   "end": 31.966
+  },
+  {
+   "word": "no",
+   "start": 32.208,
+   "end": 32.29
+  },
+  {
+   "word": "lo",
+   "start": 32.29,
+   "end": 32.348
+  },
+  {
+   "word": "armaste",
+   "start": 32.348,
+   "end": 32.553
+  },
+  {
+   "word": "vos,",
+   "start": 32.553,
+   "end": 32.67
+  },
+  {
+   "word": "preguntarle",
+   "start": 32.67,
+   "end": 33.61
+  },
+  {
+   "word": "a",
+   "start": 33.61,
+   "end": 33.93
+  },
+  {
+   "word": "quién",
+   "start": 33.93,
+   "end": 34.11
+  },
+  {
+   "word": "te",
+   "start": 34.11,
+   "end": 34.45
+  },
+  {
+   "word": "lo",
+   "start": 34.45,
+   "end": 34.57
+  },
+  {
+   "word": "armó",
+   "start": 34.57,
+   "end": 34.809
+  },
+  {
+   "word": "o",
+   "start": 35.054,
+   "end": 35.15
+  },
+  {
+   "word": "a",
+   "start": 35.15,
+   "end": 35.27
+  },
+  {
+   "word": "Claude",
+   "start": 35.27,
+   "end": 35.49
+  },
+  {
+   "word": "mismo",
+   "start": 35.49,
+   "end": 35.81
+  },
+  {
+   "word": "si",
+   "start": 35.81,
+   "end": 36.19
+  },
+  {
+   "word": "es",
+   "start": 36.19,
+   "end": 36.33
+  },
+  {
+   "word": "que",
+   "start": 36.33,
+   "end": 36.45
+  },
+  {
+   "word": "él",
+   "start": 36.45,
+   "end": 36.79
+  },
+  {
+   "word": "te",
+   "start": 36.79,
+   "end": 37.15
+  },
+  {
+   "word": "lo",
+   "start": 37.15,
+   "end": 37.233
+  },
+  {
+   "word": "armó.",
+   "start": 37.233,
+   "end": 37.398
+  },
+  {
+   "word": "Por",
+   "start": 37.644,
+   "end": 37.72
+  },
+  {
+   "word": "ejemplo",
+   "start": 37.72,
+   "end": 37.96
+  },
+  {
+   "word": "en",
+   "start": 37.96,
+   "end": 38.28
+  },
+  {
+   "word": "mi",
+   "start": 38.28,
+   "end": 38.38
+  },
+  {
+   "word": "caso",
+   "start": 38.38,
+   "end": 38.66
+  },
+  {
+   "word": "lo",
+   "start": 38.66,
+   "end": 39.2
+  },
+  {
+   "word": "cambié",
+   "start": 39.2,
+   "end": 39.6
+  },
+  {
+   "word": "al",
+   "start": 39.6,
+   "end": 39.78
+  },
+  {
+   "word": "nuevo",
+   "start": 39.78,
+   "end": 39.92
+  },
+  {
+   "word": "modelo",
+   "start": 39.92,
+   "end": 40.24
+  },
+  {
+   "word": "que",
+   "start": 40.24,
+   "end": 40.46
+  },
+  {
+   "word": "acaban",
+   "start": 40.46,
+   "end": 40.84
+  },
+  {
+   "word": "de",
+   "start": 40.84,
+   "end": 41.21
+  },
+  {
+   "word": "sacar",
+   "start": 41.21,
+   "end": 41.43
+  },
+  {
+   "word": "Sonnet",
+   "start": 41.43,
+   "end": 42.11
+  },
+  {
+   "word": "5.5",
+   "start": 42.11,
+   "end": 43.03
+  },
+  {
+   "word": "se",
+   "start": 43.03,
+   "end": 43.49
+  },
+  {
+   "word": "lo",
+   "start": 43.49,
+   "end": 43.61
+  },
+  {
+   "word": "cambié",
+   "start": 43.61,
+   "end": 44.01
+  },
+  {
+   "word": "a",
+   "start": 44.01,
+   "end": 44.15
+  },
+  {
+   "word": "mis",
+   "start": 44.15,
+   "end": 44.27
+  },
+  {
+   "word": "agentes",
+   "start": 44.27,
+   "end": 44.83
+  },
+  {
+   "word": "a",
+   "start": 44.83,
+   "end": 45.29
+  },
+  {
+   "word": "mis",
+   "start": 45.29,
+   "end": 45.47
+  },
+  {
+   "word": "nodos",
+   "start": 45.47,
+   "end": 45.95
+  },
+  {
+   "word": "de",
+   "start": 45.95,
+   "end": 46.03
+  },
+  {
+   "word": "n8n",
+   "start": 46.03,
+   "end": 46.51
+  },
+  {
+   "word": "y",
+   "start": 46.51,
+   "end": 46.81
+  },
+  {
+   "word": "obviamente",
+   "start": 46.81,
+   "end": 47.07
+  },
+  {
+   "word": "a",
+   "start": 47.07,
+   "end": 47.33
+  },
+  {
+   "word": "toda",
+   "start": 47.33,
+   "end": 47.43
+  },
+  {
+   "word": "mi",
+   "start": 47.43,
+   "end": 47.61
+  },
+  {
+   "word": "infraestructura",
+   "start": 47.61,
+   "end": 48.35
+  },
+  {
+   "word": "de",
+   "start": 48.35,
+   "end": 48.49
+  },
+  {
+   "word": "desarrollo",
+   "start": 48.49,
+   "end": 48.85
+  },
+  {
+   "word": "de",
+   "start": 48.85,
+   "end": 49.25
+  },
+  {
+   "word": "Claude",
+   "start": 49.25,
+   "end": 49.43
+  },
+  {
+   "word": "Code.",
+   "start": 49.43,
+   "end": 49.75
+  },
+  {
+   "word": "Como",
+   "start": 50.015,
+   "end": 50.13
+  },
+  {
+   "word": "segundo,",
+   "start": 50.13,
+   "end": 50.57
+  },
+  {
+   "word": "cambiarlo.",
+   "start": 50.933,
+   "end": 51.34
+  },
+  {
+   "word": "Abrí",
+   "start": 51.6,
+   "end": 51.82
+  },
+  {
+   "word": "Claude",
+   "start": 51.82,
+   "end": 52.2
+  },
+  {
+   "word": "Code",
+   "start": 52.2,
+   "end": 52.5
+  },
+  {
+   "word": "en",
+   "start": 52.5,
+   "end": 52.8
+  },
+  {
+   "word": "esa",
+   "start": 52.8,
+   "end": 53.02
+  },
+  {
+   "word": "carpeta",
+   "start": 53.02,
+   "end": 53.6
+  },
+  {
+   "word": "y",
+   "start": 53.6,
+   "end": 54.04
+  },
+  {
+   "word": "escribí",
+   "start": 54.04,
+   "end": 54.58
+  },
+  {
+   "word": "lo",
+   "start": 54.58,
+   "end": 54.88
+  },
+  {
+   "word": "que",
+   "start": 54.88,
+   "end": 55.0
+  },
+  {
+   "word": "ves.",
+   "start": 55.0,
+   "end": 55.22
+  },
+  {
+   "word": "Barra",
+   "start": 55.5,
+   "end": 55.89
+  },
+  {
+   "word": "Claude",
+   "start": 55.89,
+   "end": 56.27
+  },
+  {
+   "word": "API",
+   "start": 56.27,
+   "end": 56.85
+  },
+  {
+   "word": "migrate",
+   "start": 56.85,
+   "end": 57.64
+  },
+  {
+   "word": "y",
+   "start": 57.64,
+   "end": 57.96
+  },
+  {
+   "word": "el",
+   "start": 57.96,
+   "end": 58.06
+  },
+  {
+   "word": "modelo",
+   "start": 58.06,
+   "end": 58.28
+  },
+  {
+   "word": "nuevo.",
+   "start": 58.28,
+   "end": 58.54
+  },
+  {
+   "word": "Antes",
+   "start": 58.882,
+   "end": 59.05
+  },
+  {
+   "word": "de",
+   "start": 59.05,
+   "end": 59.17
+  },
+  {
+   "word": "tocar",
+   "start": 59.17,
+   "end": 59.33
+  },
+  {
+   "word": "nada,",
+   "start": 59.33,
+   "end": 59.67
+  },
+  {
+   "word": "te",
+   "start": 60.009,
+   "end": 60.06
+  },
+  {
+   "word": "pregunta",
+   "start": 60.06,
+   "end": 60.46
+  },
+  {
+   "word": "qué",
+   "start": 60.46,
+   "end": 60.78
+  },
+  {
+   "word": "archivos",
+   "start": 60.78,
+   "end": 61.18
+  },
+  {
+   "word": "al",
+   "start": 61.18,
+   "end": 61.42
+  },
+  {
+   "word": "final",
+   "start": 61.42,
+   "end": 61.64
+  },
+  {
+   "word": "te",
+   "start": 61.64,
+   "end": 61.82
+  },
+  {
+   "word": "deja",
+   "start": 61.82,
+   "end": 61.96
+  },
+  {
+   "word": "una",
+   "start": 61.96,
+   "end": 62.16
+  },
+  {
+   "word": "lista",
+   "start": 62.16,
+   "end": 62.46
+  },
+  {
+   "word": "para",
+   "start": 62.46,
+   "end": 62.72
+  },
+  {
+   "word": "que",
+   "start": 62.72,
+   "end": 62.86
+  },
+  {
+   "word": "revise.",
+   "start": 62.86,
+   "end": 63.2
+  },
+  {
+   "word": "El",
+   "start": 63.51,
+   "end": 63.59
+  },
+  {
+   "word": "precio",
+   "start": 63.59,
+   "end": 63.91
+  },
+  {
+   "word": "baja",
+   "start": 63.91,
+   "end": 64.27
+  },
+  {
+   "word": "de",
+   "start": 64.27,
+   "end": 64.53
+  },
+  {
+   "word": "3",
+   "start": 64.53,
+   "end": 64.77
+  },
+  {
+   "word": "dólares",
+   "start": 64.77,
+   "end": 65.03
+  },
+  {
+   "word": "a",
+   "start": 65.03,
+   "end": 65.51
+  },
+  {
+   "word": "2,",
+   "start": 65.51,
+   "end": 65.67
+  },
+  {
+   "word": "pero",
+   "start": 65.944,
+   "end": 66.16
+  },
+  {
+   "word": "cuenta",
+   "start": 66.16,
+   "end": 66.77
+  },
+  {
+   "word": "tu",
+   "start": 66.77,
+   "end": 67.21
+  },
+  {
+   "word": "texto",
+   "start": 67.21,
+   "end": 67.53
+  },
+  {
+   "word": "como",
+   "start": 67.53,
+   "end": 67.85
+  },
+  {
+   "word": "cerca",
+   "start": 67.85,
+   "end": 68.15
+  },
+  {
+   "word": "de",
+   "start": 68.15,
+   "end": 68.55
+  },
+  {
+   "word": "un",
+   "start": 68.55,
+   "end": 68.77
+  },
+  {
+   "word": "30%",
+   "start": 68.77,
+   "end": 69.35
+  },
+  {
+   "word": "más",
+   "start": 69.35,
+   "end": 69.91
+  },
+  {
+   "word": "largo,",
+   "start": 69.91,
+   "end": 70.23
+  },
+  {
+   "word": "con",
+   "start": 70.558,
+   "end": 70.68
+  },
+  {
+   "word": "eso",
+   "start": 70.68,
+   "end": 70.9
+  },
+  {
+   "word": "la",
+   "start": 70.9,
+   "end": 71.26
+  },
+  {
+   "word": "cuenta",
+   "start": 71.26,
+   "end": 71.46
+  },
+  {
+   "word": "puede",
+   "start": 71.46,
+   "end": 71.74
+  },
+  {
+   "word": "bajar",
+   "start": 71.74,
+   "end": 72.06
+  },
+  {
+   "word": "cerca",
+   "start": 72.06,
+   "end": 72.4
+  },
+  {
+   "word": "de",
+   "start": 72.4,
+   "end": 72.56
+  },
+  {
+   "word": "un",
+   "start": 72.56,
+   "end": 72.68
+  },
+  {
+   "word": "13%",
+   "start": 72.68,
+   "end": 73.8
+  },
+  {
+   "word": "y",
+   "start": 73.8,
+   "end": 74.4
+  },
+  {
+   "word": "ojo",
+   "start": 74.4,
+   "end": 74.625
+  },
+  {
+   "word": "ahora",
+   "start": 74.873,
+   "end": 75.21
+  },
+  {
+   "word": "piensa",
+   "start": 75.21,
+   "end": 75.59
+  },
+  {
+   "word": "antes",
+   "start": 75.59,
+   "end": 75.95
+  },
+  {
+   "word": "de",
+   "start": 75.95,
+   "end": 76.05
+  },
+  {
+   "word": "contestar",
+   "start": 76.05,
+   "end": 76.53
+  },
+  {
+   "word": "y",
+   "start": 76.53,
+   "end": 76.83
+  },
+  {
+   "word": "ese",
+   "start": 76.83,
+   "end": 76.95
+  },
+  {
+   "word": "pensamiento",
+   "start": 76.95,
+   "end": 77.59
+  },
+  {
+   "word": "se",
+   "start": 77.59,
+   "end": 78.07
+  },
+  {
+   "word": "cobra,",
+   "start": 78.07,
+   "end": 78.35
+  },
+  {
+   "word": "recontalo",
+   "start": 78.73,
+   "end": 79.27
+  },
+  {
+   "word": "con",
+   "start": 79.27,
+   "end": 79.45
+  },
+  {
+   "word": "tu",
+   "start": 79.45,
+   "end": 79.55
+  },
+  {
+   "word": "texto.",
+   "start": 79.55,
+   "end": 79.81
+  },
+  {
+   "word": "Tres,",
+   "start": 80.065,
+   "end": 80.19
+  },
+  {
+   "word": "probalo.",
+   "start": 80.59,
+   "end": 80.99
+  },
+  {
+   "word": "Hay",
+   "start": 81.37,
+   "end": 81.46
+  },
+  {
+   "word": "cinco",
+   "start": 81.46,
+   "end": 81.7
+  },
+  {
+   "word": "ajustes",
+   "start": 81.7,
+   "end": 82.04
+  },
+  {
+   "word": "que",
+   "start": 82.04,
+   "end": 82.2
+  },
+  {
+   "word": "el",
+   "start": 82.2,
+   "end": 82.3
+  },
+  {
+   "word": "modelo",
+   "start": 82.3,
+   "end": 82.46
+  },
+  {
+   "word": "viejo",
+   "start": 82.46,
+   "end": 82.88
+  },
+  {
+   "word": "aceptaba,",
+   "start": 82.88,
+   "end": 83.523
+  },
+  {
+   "word": "el",
+   "start": 83.763,
+   "end": 83.87
+  },
+  {
+   "word": "nuevo",
+   "start": 83.87,
+   "end": 84.07
+  },
+  {
+   "word": "los",
+   "start": 84.07,
+   "end": 84.51
+  },
+  {
+   "word": "rechaza",
+   "start": 84.51,
+   "end": 84.89
+  },
+  {
+   "word": "con",
+   "start": 84.89,
+   "end": 85.09
+  },
+  {
+   "word": "error,",
+   "start": 85.09,
+   "end": 85.33
+  },
+  {
+   "word": "3",
+   "start": 85.679,
+   "end": 85.8
+  },
+  {
+   "word": "de",
+   "start": 85.8,
+   "end": 85.92
+  },
+  {
+   "word": "los",
+   "start": 85.92,
+   "end": 86.02
+  },
+  {
+   "word": "5,",
+   "start": 86.02,
+   "end": 86.32
+  },
+  {
+   "word": "una",
+   "start": 86.585,
+   "end": 86.7
+  },
+  {
+   "word": "temperatura",
+   "start": 86.7,
+   "end": 87.2
+  },
+  {
+   "word": "cambiada.",
+   "start": 87.2,
+   "end": 88.04
+  },
+  {
+   "word": "Una",
+   "start": 88.28,
+   "end": 88.43
+  },
+  {
+   "word": "respuesta",
+   "start": 88.43,
+   "end": 88.93
+  },
+  {
+   "word": "prellenada",
+   "start": 88.93,
+   "end": 89.86
+  },
+  {
+   "word": "y",
+   "start": 89.86,
+   "end": 90.27
+  },
+  {
+   "word": "obligarlo",
+   "start": 90.27,
+   "end": 91.03
+  },
+  {
+   "word": "a",
+   "start": 91.03,
+   "end": 91.27
+  },
+  {
+   "word": "usar",
+   "start": 91.27,
+   "end": 91.57
+  },
+  {
+   "word": "una",
+   "start": 91.57,
+   "end": 91.81
+  },
+  {
+   "word": "herramienta.",
+   "start": 91.81,
+   "end": 92.322
+  },
+  {
+   "word": "Mandar",
+   "start": 92.561,
+   "end": 92.91
+  },
+  {
+   "word": "un",
+   "start": 92.91,
+   "end": 93.03
+  },
+  {
+   "word": "mensaje",
+   "start": 93.03,
+   "end": 93.31
+  },
+  {
+   "word": "a",
+   "start": 93.31,
+   "end": 93.45
+  },
+  {
+   "word": "tu",
+   "start": 93.45,
+   "end": 93.53
+  },
+  {
+   "word": "bot.",
+   "start": 93.53,
+   "end": 93.75
+  },
+  {
+   "word": "Si",
+   "start": 94.02,
+   "end": 94.12
+  },
+  {
+   "word": "contesta,",
+   "start": 94.12,
+   "end": 94.66
+  },
+  {
+   "word": "pasó.",
+   "start": 94.9,
+   "end": 95.1
+  },
+  {
+   "word": "Si",
+   "start": 95.48,
+   "end": 95.54
+  },
+  {
+   "word": "tira",
+   "start": 95.54,
+   "end": 95.76
+  },
+  {
+   "word": "error,",
+   "start": 95.76,
+   "end": 96.02
+  },
+  {
+   "word": "400",
+   "start": 96.328,
+   "end": 96.71
+  },
+  {
+   "word": "es",
+   "start": 96.71,
+   "end": 97.17
+  },
+  {
+   "word": "uno",
+   "start": 97.17,
+   "end": 97.33
+  },
+  {
+   "word": "de",
+   "start": 97.33,
+   "end": 97.47
+  },
+  {
+   "word": "los",
+   "start": 97.47,
+   "end": 97.57
+  },
+  {
+   "word": "5.",
+   "start": 97.57,
+   "end": 97.87
+  },
+  {
+   "word": "Ojo,",
+   "start": 98.179,
+   "end": 98.412
+  },
+  {
+   "word": "esto",
+   "start": 98.68,
+   "end": 98.84
+  },
+  {
+   "word": "vale",
+   "start": 98.84,
+   "end": 99.04
+  },
+  {
+   "word": "para",
+   "start": 99.04,
+   "end": 99.28
+  },
+  {
+   "word": "la",
+   "start": 99.28,
+   "end": 99.48
+  },
+  {
+   "word": "API",
+   "start": 99.48,
+   "end": 99.68
+  },
+  {
+   "word": "de",
+   "start": 99.68,
+   "end": 99.82
+  },
+  {
+   "word": "Claude.",
+   "start": 99.82,
+   "end": 100.02
+  },
+  {
+   "word": "En",
+   "start": 100.308,
+   "end": 100.43
+  },
+  {
+   "word": "Bedrock",
+   "start": 100.43,
+   "end": 100.87
+  },
+  {
+   "word": "y",
+   "start": 100.87,
+   "end": 101.17
+  },
+  {
+   "word": "Google",
+   "start": 101.17,
+   "end": 101.35
+  },
+  {
+   "word": "Cloud,",
+   "start": 101.35,
+   "end": 101.75
+  },
+  {
+   "word": "la",
+   "start": 101.91,
+   "end": 101.99
+  },
+  {
+   "word": "fecha",
+   "start": 101.99,
+   "end": 102.33
+  },
+  {
+   "word": "es",
+   "start": 102.33,
+   "end": 102.53
+  },
+  {
+   "word": "otra.",
+   "start": 102.53,
+   "end": 102.75
+  },
+  {
+   "word": "La",
+   "start": 105.278,
+   "end": 105.38
+  },
+  {
+   "word": "lista",
+   "start": 105.38,
+   "end": 105.6
+  },
+  {
+   "word": "con",
+   "start": 105.6,
+   "end": 105.88
+  },
+  {
+   "word": "los",
+   "start": 105.88,
+   "end": 106.0
+  },
+  {
+   "word": "5",
+   "start": 106.0,
+   "end": 106.2
+  },
+  {
+   "word": "ajustes",
+   "start": 106.2,
+   "end": 106.62
+  },
+  {
+   "word": "está",
+   "start": 106.62,
+   "end": 106.96
+  },
+  {
+   "word": "en",
+   "start": 106.96,
+   "end": 107.02
+  },
+  {
+   "word": "mi",
+   "start": 107.02,
+   "end": 107.12
+  },
+  {
+   "word": "comunidad.",
+   "start": 107.12,
+   "end": 107.615
+  },
+  {
+   "word": "Gratis.",
+   "start": 107.86,
+   "end": 108.3
+  },
+  {
+   "word": "Link",
+   "start": 108.48,
+   "end": 108.74
+  },
+  {
+   "word": "en",
+   "start": 108.74,
+   "end": 108.86
+  },
+  {
+   "word": "mi",
+   "start": 108.86,
+   "end": 108.96
+  },
+  {
+   "word": "perfil.",
+   "start": 108.96,
+   "end": 109.34
+  },
+  {
+   "word": "Buscá",
+   "start": 109.54,
+   "end": 109.86
+  },
+  {
+   "word": "migrar",
+   "start": 109.86,
+   "end": 110.46
+  },
+  {
+   "word": "en",
+   "start": 110.46,
+   "end": 110.72
+  },
+  {
+   "word": "Avisos.",
+   "start": 110.72,
+   "end": 111.1
+  }
+ ]
+}

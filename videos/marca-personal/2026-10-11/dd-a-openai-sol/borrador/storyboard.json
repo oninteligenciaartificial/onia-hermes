@@ -1,0 +1,166 @@
+{
+ "titulo": "DD-A · OpenAI Sol y la caché (BORRADOR, molde Santiago «noticia con tarjetas»)",
+ "nota": "BORRADOR sobre el corte PROPUESTO (sin el «ok cortes» de Sergio Urcullo). Cada escena dice su layout y la PALABRA que la dispara; 'corte': true la pega al límite del cutplan. Todo texto en pantalla sale de lo que Sergio dijo (segments-cut.json) o de una página oficial capturada el 2026-10-11 (capturas/capturas.json trae URL y fecha). Cierre: variante A (lo que dice el audio) vive en la escena «cta»; la B está en «cierre_alternativa_B» y se activa con armar-storyboard.py --cierre B. La cuenta de 100 mil mensajes va marcada [CONFIRMAR 01:01–01:09] hasta oír el audio.",
+ "assets": "capturas",
+ "camara": {},
+
+ "capturas": [
+  {"id": "precios", "url": "https://developers.openai.com/api/docs/pricing", "ancho_css": 560, "esquema": "dark",
+   "ancla": "Short context", "margen": 26, "alto_css": 172, "fijos": "ocultar",
+   "frases": ["Cached input"],
+   "celdas": {"astra-entrada": {"fila": "gpt-6-astra", "col": 1}, "sol-entrada": {"fila": "gpt-6.1-sol", "col": 1},
+              "astra-cache": {"fila": "gpt-6-astra", "col": 2}, "sol-cache": {"fila": "gpt-6.1-sol", "col": 2}}},
+  {"id": "modelo-sol", "url": "https://developers.openai.com/api/docs/models", "ancho_css": 560, "esquema": "dark",
+   "ancla": "Near-Astra performance for complex work at a lower cost.", "margen": 92, "alto_css": 520, "fijos": "ocultar",
+   "frases": ["Near-Astra performance for complex work at a lower cost."]},
+  {"id": "changelog-sol", "url": "https://developers.openai.com/api/docs/changelog", "ancho_css": 560, "esquema": "dark",
+   "ancla": "Released GPT-6.1 Sol", "margen": 80, "alto_css": 260, "fijos": "ocultar",
+   "frases": ["Sep 29", "Released GPT-6.1 Sol", "$2 input", "$0.10 cached input"]}
+ ],
+ "logos_svg": [{"id": "logo-openai", "svg": "hermes-content/references/brand-logos/openai.svg", "alto": 200, "tile": true}],
+
+ "zooms": [
+  {"tipo": "golpe", "en": "caché"},
+  {"tipo": "golpe", "en": "20 veces"}
+ ],
+
+ "escenas": [
+  {"id": "gancho-precios", "layout": "split", "fondo": "oscuro", "desde": {"t": 0},
+   "etiqueta": ["OPENAI", "PRECIOS OFICIALES"],
+   "elementos": [
+    {"tipo": "texto", "texto": "Sol cobra *2 dólares*\npor millón de tokens", "tam": 68, "pos": [48, 104], "anim": "corte"},
+    {"tipo": "captura", "src": "precios", "recorte": [40, 100, 750, 244], "ancho": 984, "pos": [48, 330], "anim": "corte",
+     "url": "developers.openai.com/api/docs/pricing",
+     "marcas": [{"frase": "sol-entrada", "en": "2 dólares"},
+                {"frase": "astra-entrada", "en": "astra cobra"}]},
+    {"tipo": "logo", "src": "logo-openai.png", "ancho": 130, "pos": [902, 100], "en": {"frase": "openai", "offset": -0.1}},
+    {"tipo": "credito", "texto": "developers.openai.com/api/docs/pricing · Standard · 11 oct 2026", "pos": [48, 740]}
+   ]},
+
+  {"id": "lanzamiento", "layout": "split", "fondo": "oscuro", "desde": {"frase": "este modelo", "corte": true},
+   "etiqueta": ["OPENAI", "CHANGELOG · 29 SEP 2026"],
+   "elementos": [
+    {"tipo": "texto", "texto": "GPT-6.1 *Sol*", "tam": 104, "pos": [48, 100], "anim": "corte"},
+    {"tipo": "captura", "src": "changelog-sol", "recorte": [40, 84, 1040, 176], "ancho": 984, "pos": [48, 300], "anim": "corte",
+     "url": "developers.openai.com/api/docs/changelog",
+     "marcas": [{"frase": "Sep 29", "en": "29"},
+                {"frase": "Released GPT-6.1 Sol", "en": "septiembre"}]},
+    {"tipo": "sello", "texto": "29 SEP", "tam": 56, "rot": -8, "pos": [700, 592], "en": "septiembre"},
+    {"tipo": "credito", "texto": "developers.openai.com/api/docs/changelog · 11 oct 2026", "pos": [48, 740]}
+   ]},
+
+  {"id": "lo-que-cobran", "layout": "full", "desde": {"frase": "los dos cobran", "corte": true},
+   "elementos": [
+    {"tipo": "texto", "texto": "Los dos cobran", "tam": 88, "alinear": "centro", "pos": ["centro", 110], "en": {"frase": "los dos cobran", "offset": 0.3}, "hasta": {"frase": "y según", "corte": true}},
+    {"tipo": "texto", "texto": "lo que *entra*", "tam": 88, "alinear": "centro", "pos": ["centro", 222], "en": "entra", "hasta": {"frase": "y según", "corte": true}},
+    {"tipo": "texto", "texto": "y lo que *sale*", "tam": 88, "alinear": "centro", "pos": ["centro", 334], "en": "sale", "hasta": {"frase": "y según", "corte": true}},
+    {"tipo": "pildora", "texto": "Sol cobra 2", "icono": "check", "tam": 40, "pos": [147, 470], "en": "sol cobra", "hasta": {"frase": "y según", "corte": true}},
+    {"tipo": "pildora", "texto": "Astra cobra 10", "icono": "check", "tam": 40, "pos": [521, 470], "en": "astra cobra#2", "hasta": {"frase": "y según", "corte": true}}
+   ]},
+
+  {"id": "segun-openai", "layout": "split", "fondo": "oscuro", "desde": {"frase": "y según", "corte": true},
+   "etiqueta": ["OPENAI", "DOCUMENTACIÓN OFICIAL · MODELOS"],
+   "elementos": [
+    {"tipo": "captura", "src": "modelo-sol", "recorte": [48, 108, 750, 130], "ancho": 984, "pos": [48, 104], "anim": "corte",
+     "url": "developers.openai.com/api/docs/models",
+     "marcas": [{"frase": "Near-Astra performance for complex work at a lower cost.", "en": "acerca"}]},
+    {"tipo": "texto", "texto": "Según OpenAI,\n*se acerca a Astra*", "tam": 76, "pos": [48, 400], "en": "según"},
+    {"tipo": "credito", "texto": "developers.openai.com/api/docs/models · 11 oct 2026", "pos": [48, 740]}
+   ]},
+
+  {"id": "probalo", "layout": "full", "desde": {"frase": "si tu bot"},
+   "elementos": [
+    {"tipo": "texto", "texto": "Si tu bot usa *Astra,*", "tam": 84, "alinear": "centro", "pos": ["centro", 150], "en": {"frase": "si tu bot", "offset": 0.3}, "hasta": {"frase": "pero para", "corte": true}},
+    {"tipo": "texto", "texto": "yo lo probaría con *Sol*", "tam": 84, "alinear": "centro", "pos": ["centro", 262], "en": "yo lo", "hasta": {"frase": "pero para", "corte": true}},
+    {"tipo": "texto", "texto": "antes de cambiarlo", "tam": 84, "alinear": "centro", "pos": ["centro", 374], "en": "antes", "hasta": {"frase": "pero para", "corte": true}}
+   ]},
+
+  {"id": "recomiendo", "layout": "lamina", "fondo": "papel", "desde": {"frase": "pero para", "corte": true},
+   "etiqueta": ["MI RECOMENDACIÓN"],
+   "elementos": [
+    {"tipo": "texto", "texto": "Pero para", "tam": 130, "pos": [40, 260], "anim": "corte"},
+    {"tipo": "fila", "texto": "Investigación científica", "icono": "check", "alto": 140, "pos": [48, 560], "en": "investigación"},
+    {"tipo": "fila", "texto": "Programación", "icono": "check", "alto": 140, "pos": [48, 724], "en": "programación"},
+    {"tipo": "texto", "texto": "te sigo recomendando", "fuente": "bold", "tam": 62, "color": "gris_papel", "pos": [48, 1000], "en": "te sigo"},
+    {"tipo": "texto", "texto": "*Astra*", "tam": 280, "pos": [40, 1090], "en": "recomendando astra"}
+   ]},
+
+  {"id": "tarifa", "layout": "split", "fondo": "papel", "desde": {"frase": "pero hay", "corte": true},
+   "etiqueta": ["LA CACHÉ", "UNA TARIFA MÁS ECONÓMICA"],
+   "elementos": [
+    {"tipo": "texto", "texto": "Hay una tarifa\n*mucho más económica*", "tam": 70, "pos": [48, 108], "anim": "corte"},
+    {"tipo": "caja", "titulo": "La caché", "estilo": "verde", "ancho": 300, "alto": 170, "pos": [48, 420], "en": "caché"},
+    {"tipo": "flecha", "largo": 60, "pos": [370, 485], "en": "es lo"},
+    {"tipo": "caja", "titulo": "Lo que va igual\nal principio", "ancho": 460, "alto": 170, "pos": [454, 420], "en": "igual"},
+    {"tipo": "pildora", "texto": "como tu lista de precios", "estilo": "papel-oscuro", "tam": 36, "pos": [48, 650], "en": "como tu"}
+   ]},
+
+  {"id": "cache-precio", "layout": "split", "fondo": "oscuro", "desde": {"frase": "si sale"},
+   "etiqueta": ["OPENAI", "CHANGELOG · PRECIOS OFICIALES"],
+   "elementos": [
+    {"tipo": "texto", "texto": "Si sale de la *caché*", "tam": 70, "pos": [48, 100], "anim": "corte"},
+    {"tipo": "captura", "src": "changelog-sol", "recorte": [160, 276, 900, 156], "ancho": 984, "pos": [48, 210], "anim": "corte",
+     "url": "developers.openai.com/api/docs/changelog",
+     "marcas": [{"frase": "$0.10 cached input", "en": "10 centavos"},
+                {"frase": "$2 input", "en": "20 veces"}]},
+    {"tipo": "texto", "texto": "*10 centavos* el millón", "tam": 76, "pos": [48, 500], "en": "cuesta"},
+    {"tipo": "sello", "texto": "20 VECES MENOS", "tam": 56, "rot": -8, "pos": [560, 680], "en": "20 veces"}
+   ]},
+
+  {"id": "cuenta-1", "layout": "lamina", "fondo": "papel", "desde": {"frase": "te hago", "corte": true},
+   "etiqueta": ["LA CUENTA", "POR MIL MENSAJES"],
+   "elementos": [
+    {"tipo": "texto", "texto": "La\n*cuenta*", "tam": 118, "pos": [40, 200], "anim": "corte"},
+    {"tipo": "fila", "texto": "2.000 tokens por mensaje", "sub": "instrucciones y lista de precios", "icono": "check", "alto": 120, "pos": [48, 740], "en": "instrucciones"}
+   ]},
+
+  {"id": "cuenta-2", "layout": "pip", "fondo": "papel", "desde": {"frase": "por mil", "corte": true},
+   "etiqueta": ["LA CUENTA", "POR MIL MENSAJES"],
+   "elementos": [
+    {"tipo": "texto", "texto": "La\n*cuenta*", "tam": 118, "pos": [40, 200], "anim": "corte"},
+    {"tipo": "fila", "texto": "2.000 tokens por mensaje", "sub": "instrucciones y lista de precios", "icono": "check", "alto": 120, "pos": [48, 740], "anim": "corte"},
+    {"tipo": "fila", "texto": "Por mil mensajes", "sub": "2 millones de tokens", "icono": "check", "alto": 120, "pos": [48, 872], "anim": "corte"},
+    {"tipo": "fila", "texto": "A 2 dólares el millón", "sub": "4 dólares", "icono": "check", "alto": 120, "pos": [48, 1004], "en": "a 2 dólares"},
+    {"tipo": "fila", "texto": "Con caché", "sub": "20 centavos", "icono": "check", "alto": 120, "pos": [48, 1136], "en": "4 con caché"}
+   ]},
+
+  {"id": "confirmar", "layout": "split", "fondo": "papel", "desde": {"frase": "o sea", "corte": true},
+   "etiqueta": ["LA CUENTA", "100 MIL MENSAJES AL MES"],
+   "elementos": [
+    {"tipo": "pildora", "texto": "[CONFIRMAR 01:01–01:09]", "estilo": "papel-oscuro", "icono": "pausa", "tam": 36, "pos": [48, 108], "anim": "corte"},
+    {"tipo": "texto", "texto": "100 mil mensajes\nal mes", "tam": 76, "pos": [48, 210], "en": "100 mil"},
+    {"tipo": "caja", "titulo": "Sol sin caché\n400 dólares", "ancho": 450, "alto": 180, "pos": [48, 480], "en": "400"},
+    {"tipo": "flecha", "largo": 54, "pos": [514, 550], "en": "en cambio"},
+    {"tipo": "caja", "titulo": "Sol con caché\n*20 dólares*", "estilo": "verde", "ancho": 450, "alto": 180, "pos": [580, 480], "en": "solo 20"},
+    {"tipo": "credito", "texto": "pendiente: confirmar con el audio si dijo «con Astra» o «con Sol»", "pos": [48, 740]}
+   ]},
+
+  {"id": "cta-cara", "layout": "full", "desde": {"frase": "si querés", "corte": true},
+   "elementos": [
+    {"tipo": "texto", "texto": "Si querés que lo probemos", "tam": 72, "alinear": "centro", "pos": ["centro", 150], "en": {"frase": "si querés", "offset": 0.3}, "hasta": {"frase": "asesoría", "offset": 0.15}},
+    {"tipo": "texto", "texto": "en *tu negocio*", "tam": 84, "alinear": "centro", "pos": ["centro", 250], "en": "en tu negocio", "hasta": {"frase": "asesoría", "offset": 0.15}}
+   ]},
+
+  {"id": "cta", "layout": "split", "fondo": "oscuro", "desde": {"frase": "asesoría", "offset": 0.15},
+   "elementos": [
+    {"tipo": "tarjeta", "ancho": 860, "alto": 470, "pos": ["centro", 190], "anim": "corte",
+     "lineas": [
+      {"texto": "Asesoría", "tam": 96, "color": "blanco", "aire": 14},
+      {"texto": "GRATIS", "tam": 140, "color": "verde", "aire": 26},
+      {"texto": "link en mi perfil", "fuente": "semibold", "tam": 46, "color": "blanco"}
+     ]}
+   ]}
+ ],
+
+ "cierre": {"variante_por_defecto": "A",
+  "nota": "A = lo que dice el audio («asesoría gratis, link en mi perfil»); el link de la asesoría en la bio TODAVÍA NO existe. B = alternativa de la madre para mientras no esté el link: «Lo que probé está en mi comunidad. Link en mi perfil.» (el audio sigue pidiendo la asesoría)."},
+ "cierre_alternativa_B": {"escena": "cta",
+  "elementos": [
+    {"tipo": "tarjeta", "ancho": 860, "alto": 470, "pos": ["centro", 190], "anim": "corte",
+     "lineas": [
+      {"texto": "Lo que probé está", "tam": 68, "color": "blanco", "aire": 18},
+      {"texto": "en mi *comunidad.*", "tam": 82, "color": "blanco", "aire": 30},
+      {"texto": "Link en mi perfil.", "fuente": "semibold", "tam": 46, "color": "blanco"}
+     ]}
+  ]}
+}

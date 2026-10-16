@@ -1,0 +1,46 @@
+# Medición del render final (2026-10-11 08:56 UTC) · /tmp/claude-0/-home-user-onia-hermes/0fd2553b-524b-53fe-9e97-5c1ac80566e6/scratchpad/N07/borrador/video.mp4
+duración: 81.733333 s · 1080,1920,30/1
+silencedetect noise=-35dB d=0.3 (regla 15: debe dar 0):
+  (ninguno)
+silencios contados (-35 dB, d=0,3): 0
+silencios contados (-35 dB, d=0,2): 11
+silencios contados (-45 dB, d=0,3): 0
+ebur128 (resumen):
+    I:         -13.0 LUFS
+    LRA:         2.6 LU
+    LRA low:   -14.5 LUFS
+    LRA high:  -11.8 LUFS
+    Peak:       -1.6 dBFS
+salto de cara en los empalmes del render final (medir-salto-cara.py, YuNet sobre cuadros −2/+1):
+empalmes medidos: 29 (cuadro −2 contra +1 alrededor de cada límite de bloque)
+    2.52 s  dx   +3.2  dy   -9.0  ancho   +9.6
+    3.31 s  dx   +1.5  dy   -3.1  ancho   -1.8   <- a la vista (sin cambio de panel)
+    5.43 s  dx   +7.5  dy   -4.0  ancho   -4.9
+    8.48 s  dx   +5.4  dy  -18.9  ancho   -7.6
+   10.33 s  dx   +8.8  dy   +1.8  ancho   -9.2
+   12.93 s  dx   -2.3  dy   -4.6  ancho   +2.1   <- a la vista (sin cambio de panel)
+   14.15 s  dx   +7.0  dy   -3.7  ancho  -12.7   <- a la vista (sin cambio de panel)
+   15.70 s  dx   -0.8  dy   -0.2  ancho  +28.6
+   16.84 s  dx   -8.8  dy   -8.4  ancho   +5.8   <- a la vista (sin cambio de panel)
+   19.03 s  dx +306.4  dy -923.1  ancho  -63.1
+   23.91 s  dx   -1.1  dy  -17.9  ancho   -0.7
+   26.71 s  dx  +20.1  dy  +11.3  ancho   +6.4
+   28.06 s  dx   -6.1  dy   -2.1  ancho   +2.4
+   30.45 s  dx  +10.2  dy   -9.0  ancho   -6.7
+   33.20 s  dx +295.1  dy -905.4  ancho  -49.9
+   34.32 s  dx   +0.8  dy   -8.7  ancho   -2.6
+   37.71 s  dx -294.8  dy +897.3  ancho  +49.2
+   40.17 s  dx   +7.4  dy   +3.8  ancho  -21.2   <- a la vista (sin cambio de panel)
+   42.51 s  dx   +6.1  dy  -17.4  ancho  +10.7
+   44.09 s  dx   -4.4  dy   -4.5  ancho   -5.3   <- a la vista (sin cambio de panel)
+   49.61 s  sin cara detectada (ventana reducida o cuadro sin cara)
+   51.23 s  dx   +5.3  dy   +2.0  ancho   -4.0   <- a la vista (sin cambio de panel)
+   55.72 s  dx   -3.4  dy  -27.0  ancho  +14.9   <- a la vista (sin cambio de panel)
+   58.31 s  dx  +13.0  dy  -22.0  ancho  -24.2
+   60.07 s  dx  +11.8  dy  +25.8  ancho   -7.6
+   67.79 s  dx   -0.7  dy  -21.2  ancho  +21.5
+   70.05 s  dx  +27.5  dy   -6.6  ancho  -11.0
+   72.83 s  dx   +0.7  dy   +0.8  ancho  -26.7   <- a la vista (sin cambio de panel)
+   78.83 s  dx   +9.5  dy   -5.2  ancho   -8.9   <- a la vista (sin cambio de panel)
+referencia sin corte (3 cuadros dentro de 27 bloques): ojos dx mediana 2.8 · p90 6.7 px; dy mediana 2.0 · p90 5.1 px (el máximo, 123 px, es un bloque con cambio de layout)
+a la vista, 10 medidos: salto máximo de ojos dx 9.5 px · dy 27.0 px

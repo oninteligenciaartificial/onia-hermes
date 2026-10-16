@@ -2,6 +2,135 @@
 
 **Archivo único del carril.** Actualizado 2026-09-29 por Claude (Opus 5.5).
 
+## ▶ 9-oct (noche, 16) — N03 «modo auto» verificado en las 4 redes; la restricción de IG ya no bloqueó el reel
+
+- **Medido 22:51 UTC (solo lectura: `journalctl -u pub-n03-*` y `buffer-post.mjs --estado`):** el reel N03 salió en las 4 redes, todas con `error: null`.
+  IG https://www.instagram.com/reel/DeSlht_Dhe7/ (22:31 UTC) · TikTok https://tiktok.com/@sergiourcullom/video/7694800291853602066 ·
+  YouTube https://www.youtube.com/shorts/doLZfxVs98o · LinkedIn https://www.linkedin.com/feed/update/urn:li:ugcPost:7514452990985129984.
+- **Lo que cambia respecto de la entrada 15:** el reel SÍ publicó en IG a las 22:31, así que la restricción dejó de bloquear entre las 20:00 y las
+  22:31 UTC. No sé si la levantó Sergio Urcullo o si solo afectaba al carrusel. Hasta que él lo confirme, no se da por resuelta.
+- **Sigue sin salir:** el carrusel de hoy en IG (`car-20261009`). No lo re-agendé: su lámina 8 usa el cierre «Comentá X» (decisión de Sergio Urcullo
+  pendiente: «Buscá X en Avisos») y llegaría 20 min después del reel del mismo tema. Los carruseles del 10 al 16-oct siguen agendados.
+- **Aprendizaje (skill `onia-infra`/README del publicador):** para saber si una restricción de IG sigue viva no hace falta publicar: el siguiente
+  timer real es la prueba. Mirar `publicado.jsonl` y `journalctl -u pub-<id>` después de cada hora de publicación.
+
+## ▶ 9-oct (noche, 15) — Instagram de @sergiourcullo restringida: el carrusel de las 16:00 no salió en IG
+
+- **Qué pasó (medido, solo lectura en el VPS, 20:28 UTC):** el timer `pub-car-20261009` (carrusel N03, 20:00 UTC) terminó en `failed` a los 6 s:
+  `ERROR 400 OAuthException, code 25, error_subcode 2207050, «User is restricted — The Instagram account is restricted»`. LinkedIn y TikTok
+  por Buffer sí publicaron (20:01:13 y 20:02:13 UTC). El 8-oct el mismo carrusel salió en IG (permalink en `publicado.jsonl`), así que la
+  restricción es posterior.
+- **Qué se rompe:** todo lo que publica la API de Instagram: el reel N03 de las 22:30 UTC (`pub-n03-ig`), los carruseles agendados del 10 al
+  16-oct y las historias. YouTube y TikTok por Buffer no dependen de Instagram.
+- **Qué NO hice:** no reintenté ni cancelé timers (escribir en el VPS lo negó el control de permisos antes, y es decisión de Sergio Urcullo).
+  No sé la causa: puede ser el rechazo de Meta al mecanismo comentario→DM o la automatización; no lo afirmo.
+- **Qué depende de Sergio Urcullo:** abrir Instagram → Centro de cuentas / «Estado de la cuenta» y ver qué pide (verificar identidad,
+  apelar, esperar). Cuando se levante: re-agendar el carrusel de hoy y comprobar que los de la semana siguen en pie.
+- **Aprendizaje (skill):** el fallo de un timer de IG se ve con `systemctl status pub-car-AAAAMMDD.service` y `journalctl -u …`; el log
+  `publicado.jsonl` solo anota lo que salió, así que un día sin entrada de IG = falló. Ver `onia-infra`/README del publicador.
+
+## ▶ 9-oct (tarde, 14) — cola en loop de la madre: qué se hizo y qué está bloqueado
+
+- **Pedido de la madre (9-oct):** trabajar `hermes-content/docs/cola/loop/marca-personal.md` (solo existe en su rama
+  `claude/onia-madre-v2-pr-review-2d85bb`, no en `main`; no la copié para no crear un conflicto add/add: el avance se anota acá).
+  Reportar solo `PUBLICADO: <qué> — <link>`.
+- **Hecho (a revisar en el PR #172):** los avisos de comunidad que bloqueaban publicar, reescritos con GRABAR v3: **VERIFY** (con lint y
+  pnpm; comandos corridos en un proyecto de prueba), **MIGRAR** (5 ajustes, comando, grep, nota de plataformas, cuenta con thinking),
+  **MIRAR** (los dos caminos para el navegador), **WORKTREE** (`.gitignore`, confianza y base `fresh`), **SKILL**, **NIVELES** (la cuenta
+  rehecha: cuadra), **HERRAMIENTAS**, y borradores de **ANTIGRAVITY** (lo verifica la madre el sáb 10) y **EFFORT** (lo completa Sergio el
+  13-oct). **CACHE ya no bloquea.** Artefacto «Comunidad e historias» republicado con todo y con la secuencia de historias.
+- **Bloqueado, con su causa:**
+  1. *Editar los brutos y publicar:* en Drive «Videos Onia Octubre» no hay brutos al 9-oct (09:20 UTC). Además la REGLA DE ORO sigue en
+     `CLAUDE.md` de `main`: tabla de cortes + preview 360p a Sergio Urcullo antes de aplicar el corte.
+  2. *Publicar las 4 historias de la asesoría:* el `CLAUDE.md` de `main` aún exige el OK de Sergio Urcullo para diseño nuevo; el permiso
+     «se sube sin esperarlo» solo está en `CLAUDE.md` de la rama de la madre, sin mergear, y un mensaje de otra sesión no lo concede.
+     Se lo pedí (¿OK?). La cuarta lleva el link a mano de él.
+  3. *Molde «mosaico-tablero»:* `hermes-content/videos/moldes/mosaico-tablero/` no existe en ninguna rama que pude leer.
+  4. *P1 «Niveles», P3 pizarra:* P1 espera el OK del molde y de la pizarra de N07; P3 espera la bio de IG, cal.com y el recuento de sesiones.
+  5. *P2 «7 herramientas» (sáb 17):* faltan las capturas con cuentas (Buffer, Higgsfield, ListAgents), que son de una sesión con Chrome en
+     la PC, y la lámina 6 sale con el plan B si Sergio no da el OK.
+- **P1 «Niveles» — cuadro de prueba listo (15:00 UTC):** `hermes-content/videos/moldes/niveles/cuadro-prueba-tramo-03.{html,png}` es el
+  cuadro del tramo 03 «SONNET + PRUEBA» (s 23), el que GRABAR v3 pide aprobar ANTES de renderizar. Visto a 390 px de ancho: se lee todo,
+  incluida la nota al pie (36 px). La captura de la tabla de precios es un recuadro marcado: la real la saca la madre con Chrome el día
+  de publicar. Si Sergio Urcullo o la madre lo aprueban, sigue el render (lo hace la madre, en la PC, con HyperFrames).
+- **Molde «mosaico-tablero» (rama de la madre, `videos/moldes/mosaico-tablero/`) — visto en navegador el 9-oct (15:20 UTC):** la composición
+  carga sin errores y los 6 tramos se ven (se capturaron 16 cuadros con Playwright, moviendo el timeline GSAP `main`; sin el CLI de
+  HyperFrames, que no está en la nube). Para la madre: (1) el rótulo verde «PRUEBA DE EDICIÓN» arriba a la derecha hay que sacarlo antes
+  de publicar; (2) en el cierre, «· link en mi perfil» cae solo en una 2.ª línea con un punto suelto: va en una línea o sin el punto;
+  (3) el timeline dura 27,63 s y el `data-duration` dice 30 s (hay que confirmar que HyperFrames sostiene el último cuadro); (3b) **en el corte de los 23 s queda un hueco de ~0,47 s** (23,00-23,43) con la pantalla casi vacía, solo «JUNTÁ LAS PIEZAS.»: el tablero sale y el mosaico entra tarde; los otros 4 cortes (2,5 / 9 / 16 / 26 s) son continuos (medido con `signalstats` sobre un render de prueba de 900 cuadros a 30 fps hecho con Playwright); (4) todo
+  vive en el 55 % de arriba y el 40 % de abajo queda vacío; (5) **muestra un «tablero» con Agenda, Clientes, Cobros y Chat**: es
+  mostrar funciones del producto, y `CLAUDE.md` (contenido en redes) exige el OK de Sergio Urcullo hasta que exista la tabla «se promete /
+  funciona»; el propio README del molde dice «revisión de Sergio antes de usar el molde. No publicar». Por eso NO lo usé en una pieza.
+- **Hecho (9-oct, 16:30 UTC):** `sergiourcullo.vercel.app/claude-code` mirada renderizada a 430 px: carga (200) y el video 02 «Instalarlo, y tu
+  primera skill» tiene su YouTube incrustado (`oXaqV-HDufA`; el 01 tiene `kAsAhGe6zyA`; el 03 no tiene video). Aviso SKILL consistente. Falta
+  que Sergio Urcullo confirme que el video es público.
+- **Pendiente mío, sin bloqueo:** verificar la publicación de N03 el vie 9 ~18:30 La Paz (revisión armada a las 22:50 UTC).
+
+## ▶ 9-oct (tarde, 13) — historias que venden: secuencia de 4 lista, espera el OK de Sergio Urcullo
+
+- **Madre (9-oct):** Instagram dio 429 a la API de historias de la sesión de la PC (reels sí bajan). No se fuerza: las historias de
+  @eriktaveras, @sanmunoz.ia y otros las mira Sergio Urcullo a mano con Chrome visible. Mientras tanto, el diseño sigue con
+  `historias-onia.md` y los kits.
+- **Hecho:** `scripts/marca-personal/generar-historia-venta.py` → 4 PNG 1080×1920 en `carousels/out/historias-venta-asesoria/`
+  (+ `CHEQUEO-banda-segura.png`, dentro de la banda segura). 1 gancho «¿Dónde perdés clientes por responder tarde?» · 2 mito
+  «Todos creen que automatizar es comprar un sistema enorme» · 3 revelación = el checklist real de 5 preguntas + «la que aparece
+  en 2 o más va primero» · 4 CTA único «Reservá la tuya» (asesoría gratis, 20 min) con zona del sticker de link. Mismo diseño que
+  los kits aprobados (verde de marca, tarjeta negra, remate, ícono 3D, sticker).
+- **Sin agendar y sin publicar.** Nuevo diseño: pasa por Sergio Urcullo antes. Si dice sí: el link (`cal.com/sergiourcullo/20min`,
+  o `/llamada` cuando renombre el evento) y cualquier sticker los pega él a mano; publicar con `ig-historia.mjs` en el VPS.
+- **Falta/idea:** variante con foto de Sergio Urcullo en el gancho y el CTA (la plantilla §2 dice «cara a cámara»); en Drive «Videos
+  Onia Octubre» no hay fotos nuevas al 9-oct. Si el gancho no convence, cambiar solo la pregunta (hay 5 en el checklist).
+
+## ▶ 9-oct (día, 12) — carrusel «Los 5 archivos»: hecho y guardado en el banco de ideas, SIN fecha
+
+- **Corrección de la madre (9-oct):** Sergio Urcullo mandó el post de los 5 archivos **para aprender, no para producirlo**. NO se
+  agenda ni se publica. Le gustó la idea: queda en `cola/plan-3-semanas/BANCO-IDEAS.md` con su aviso ARCHIVOS, sin fecha.
+  **Regla nueva de la madre:** un link que Sergio manda sin instrucción se analiza y se aprende (ficha en `references/video-intake/`);
+  no se convierte en pieza salvo que él lo pida. (La pregunta «¿OK y fecha?» que le hice quedó anulada.)
+- **Hecho:** brief `carousels/briefs/marca-personal/sergio-cinco-archivos-20261009.json`, 6 capturas en
+  `carousels/briefs/assets/sergio-cinco-archivos-20261009/` (salen de `capturas.json` con `scripts/marca-personal/captura-editor.py`),
+  láminas en `carousels/out/sergio-cinco-archivos-20261009/slide-01..07.png`, vistas enteras. Cierre «Buscá ARCHIVOS · en Avisos ·
+  link en mi perfil» (opciones `pre` y `kicker` nuevas en el layout `cierre`, con test). Aviso + recurso ARCHIVOS en
+  `AVISOS-COMUNIDAD-8-16-OCT.md` y en el artefacto «Comunidad e historias» (sección «Banco de ideas»).
+- **Si algún día se publica:** rehacer las capturas (`captura-editor.py`: las líneas salen del archivo vivo y pueden haber cambiado),
+  volver a mirar las 7 láminas, pegar el aviso ARCHIVOS antes y pedir el OK de Sergio Urcullo. Portada y cierre usan el árbol de
+  archivos (plan B), no foto `fotobn`.
+- **Sin agendar y sin publicar.** El reel B de esta idea no se toca: decide la madre.
+- **Hallazgo que sigue abierto (decide Sergio Urcullo):** los 8 carruseles ya agendados cierran con «Comentá X»; el mecanismo
+  comentario→DM no está probado (2 rechazos de Meta). Propuesta: «Buscá X en Avisos · link en mi perfil». El de N03 sale vie 9
+  16:00 La Paz. Si dice sí: editar los 8 briefs (cierre `pre`/`body` + último párrafo del caption), rerenderizar y reemplazar solo
+  `slide-08.png` y `caption.txt` en `/root/publicar/car-<slug>/` del VPS.
+- **Falta (no es de esta pieza):** capturas oficiales y pizarra para N07, C5 `/hooks` y C6 para D03-A (las trae la madre), el bruto
+  de ambos (vie 9 antes de las 18:00), los avisos que quedan por reescribir.
+
+## ▶ 9-oct (madrugada, 11) — guiones v3 de la madre: qué hice y qué falta antes de editar
+
+- **Pedido de la madre (8-oct noche):** los 16 guiones del 10 al 16-oct están en v3 (rama `claude/onia-madre-v2-pr-review-2d85bb`,
+  commit `e045c4a4` y siguientes; entran a `main` con su PR). Hay que editar cada pieza con su molde, usar las imágenes `fotobn`,
+  pegar su aviso antes de cada video y mandar lo aprendido a `edicion-referentes`. **N07 y D03-A salen el sáb 10; el bruto
+  llega el vie 9 antes de las 18:00.** Drive «Videos Onia Octubre» no tenía brutos nuevos al 9-oct de madrugada.
+- **Hecho (en `main` con este commit):**
+  - aviso **HAIKU** con **0,39 USD** (antes 0,30) y su recurso (texto de la v3), aviso **HOOK** con el dato real (19 archivos) y
+    su recurso con el **script de la guarda, probado en un repo de prueba** (con conflicto no commitea; con el árbol limpio sí; no hace push);
+  - cada aviso corto lleva su PALABRA al principio (`*HOOK* · …`), porque la búsqueda de «buscá HOOK en Avisos» no encontraba
+    avisos sin la palabra (lo midió la madre con MIRAR y CACHE);
+  - capturas C1-C4 de D03-A listas (terminal oscura, sin rojo): `19` del `git grep` sobre `be652820`, bloque Stop de
+    `.claude/settings.json`, líneas 75-76 de `scripts/git-autosync.js` y `217 +++` de `e4e7fa2a`. Salen de comandos reales
+    corridos el 9-oct. Viven en el scratchpad de la sesión; se rehacen con `d03a/caps.py` si se pierden.
+- **Verificado el 9-oct contra el repo:** `be652820` (2026-08-20 14:03 -0400) tiene **19** archivos con marcadores de conflicto;
+  `e4e7fa2a` (2026-08-23 11:19 -0400) trae 217 líneas en 1 archivo. **`CLAUDE.md` §«Git — auto-sync» y el comentario de
+  `scripts/git-autosync.js` (líneas 68-74) dicen «17»: están desactualizados.** No los toqué: `CLAUDE.md` no se edita a pedido de otra
+  sesión, y la decisión es de Sergio Urcullo.
+- **Falta antes de editar:**
+  - los brutos de Sergio Urcullo (N07, D03-A) y las capturas oficiales (página de precios de Anthropic, página de Haiku 5.5): las
+    saca la madre con Chrome, desde la nube Chrome no abre esas páginas;
+  - la pizarra `pizarra-cuentas` de HyperFrames para N07 (**la plantilla todavía no existe**; límite 9-oct 20:00; si no llega,
+    la cuenta va como contador en el panel oscuro);
+  - C5 (`/hooks` dentro de Claude Code) y C6 (grabación de pantalla del repo de prueba): C6 se arma desde el repo de prueba;
+  - los 7 avisos que siguen sin reescribir: ANTIGRAVITY, CACHE, VERIFY, EFFORT, MIGRAR, MIRAR, WORKTREE (+ NIVELES y HERRAMIENTAS).
+- **Regla nueva de la madre:** subir la cara o la voz de Sergio Urcullo a Higgsfield (Virality Predictor) lo aprueba **Leslie Mercado
+  Moreno** (él es menor de edad), no él. Ningún texto de `main` decía lo contrario.
+
 ## ▶ 8-oct (noche, 10) — estilo de imagen nuevo: foto B/N con un objeto verde (la arcilla se jubila)
 
 - **Decidido por Sergio Urcullo (8-oct, por la madre):** opción 9 de `galeria/estilos/opciones-estilo-2026-10-08.jpg`. Estilo
@@ -787,3 +916,40 @@ pilar y yap), `ONIA_DONDE_VA_CADA_COSA.md` (Instagram · YouTube · web · Onia 
 `EDICION-MARCA-PERSONAL-2026-09-21.md` · `marca-personal-carruseles.md` ·
 `marca-sergio-guiones-20260927.md` · `REINICIO-GUIONES-2026-09-28.md` ·
 `CONTINUAR-GUIONES-CLAUDE-2026-09-28.md`.
+
+## 10-11 oct (cola anterior, movida acá el 11-oct)
+
+Estado del carril entre el 9 y el 11-oct, copiado de `cola/loop/marca-personal.md` antes de reescribirla. Lo vigente está en esa cola; esto es historia con sus mediciones.
+
+### Bloqueado (causa · responsable · siguiente acción) — Marca personal, 9-oct 17:00 UTC
+- **⚠️ INSTAGRAM `@sergiourcullo` RESTRINGIDA (medido 9-oct 20:28 UTC):** el carrusel de las 16:00 La Paz falló en Instagram a las 20:00:06 UTC con `ERROR 400 OAuthException code 25, subcode 2207050: «The Instagram account is restricted»` (`journalctl -u pub-car-20261009.service`, `fbtrace_id Av58KFqjqmRQs_kD9dgKJOk`). En LinkedIn y TikTok (Buffer) sí salió (posts `6ac947ffc4de2d2b1204fc36` y `6ac9483bf91f772d456f0c55`). El del 8-oct salió en IG sin problema: la restricción empezó entre el 8-oct 20:00 y el 9-oct 20:00 UTC. Afecta TODO lo que va por la API: el reel N03 de las 22:30 UTC, los carruseles agendados hasta el 16-oct y las historias. Responsable: Sergio Urcullo (abrir la app de Instagram y ver el aviso de restricción / verificación / apelación en Centro de cuentas). Siguiente: no insistir por API hasta que la levante; cuando salga, volver a agendar el carrusel de hoy (`car-20261009`) y revisar los del resto de la semana.
+  - **Actualización 9-oct 22:51 UTC (medido):** el reel N03 SÍ salió en IG a las 22:31 UTC (`pub-n03-ig`: «Instagram procesó el video: FINISHED»; https://www.instagram.com/reel/DeSlht_Dhe7/). Entre las 20:00 y las 22:31 la restricción dejó de bloquear (levantada o solo afectaba a carruseles: no se sabe cuál). **N03 verificado en las 4 redes:** TikTok https://tiktok.com/@sergiourcullom/video/7694800291853602066 · YouTube https://www.youtube.com/shorts/doLZfxVs98o · LinkedIn https://www.linkedin.com/feed/update/urn:li:ugcPost:7514452990985129984 (todos `error: null`). **Sigue faltando** el carrusel de hoy en IG (`car-20261009`, falló a las 20:00 UTC): NO se re-agendó, porque su lámina 8 usa el cierre «Comentá X» (decisión de Sergio Urcullo pendiente) y llegaría tarde, 20 min después del reel del mismo tema. Los carruseles de los días siguientes siguen agendados; si la restricción volviera, fallan igual.
+- **Brutos (tarea 1):** no hay videos nuevos en Drive «Videos Onia Octubre» (revisado 09:19 y 14:00 UTC). Responsable: Sergio Urcullo (grabar y subir N07 y D03-A antes de las 18:00 La Paz). Siguiente: revisión a las 22:05 UTC; con bruto, tabla de cortes + preview 360p antes de cortar (regla de oro de `CLAUDE.md`).
+- **4 historias de la asesoría (tarea 2):** hechas, con el gate de banda segura en verde (`scripts/marca-personal/generar-historia-venta.py`, `carousels/out/historias-venta-asesoria/`, commit `a97a76c7a`). **Bloqueo técnico:** al agendar 1-3 en el VPS (`ig-historia.mjs`, 16:05 La Paz), el control de permisos del runtime lo negó («Unrequested Commit in a Connected App»): el pedido llegó de otra sesión y no de Sergio Urcullo, como midió el README del publicador el 5-oct. Responsable: Sergio Urcullo (escribir en ESTA sesión «publicá las historias») o una regla de permiso Bash en su configuración. No se rodeó. La 4 la sube él con el sticker de link. Siguiente: agendar a las 20:05 UTC apenas haya permiso.
+- **P1 «Niveles» (tarea 3):** cuadro de prueba del tramo 03 listo (`videos/moldes/niveles/cuadro-prueba-tramo-03.png`, commit `e9642e94b`). Responsable: la madre o Sergio Urcullo (aprobarlo) y la madre (capturar la tabla de precios y renderizar en la PC). **P3 pizarra:** espera la bio de IG con el link de la asesoría, el rename de cal.com y el recuento de sesiones (Sergio Urcullo).
+- **P2 carrusel «7 herramientas» (tarea 4):** faltan capturas con cuentas (Buffer, Higgsfield, lista de sesiones) y la tabla «se promete / funciona» para la lámina 6; sin ella sale el plan B. Responsable: la madre (capturas con Chrome) y Sergio Urcullo (lámina 6). Aviso HERRAMIENTAS ya escrito.
+- **Molde «mosaico-tablero» (tarea 5):** renderizado de prueba y mirado (16 cuadros y 900 cuadros a 30 fps). Faltan: sacar «PRUEBA DE EDICIÓN», cerrar el hueco de 0,47 s a los 23 s, arreglar el «· link en mi perfil» huérfano. **No se usa en una pieza:** muestra un «tablero» (Agenda, Clientes, Cobros, Chat) = función del producto sin la tabla «se promete / funciona» (excepción de `CLAUDE.md`) y su README exige la revisión de Sergio Urcullo. Responsable: la madre (correcciones) y Sergio Urcullo (OK).
+- **REGLA NUEVA de la madre v4 (10-oct ~20:30 UTC, «mostrame antes de subir» de Sergio Urcullo):** ninguna pieza nueva se publica (IG, Buffer, historias) hasta que la madre mande «mostrada, publicá <pieza>»; la pieza lista = renderizada en mi rama + commit con «LISTA PARA MOSTRAR: <pieza>» y la ruta. Lo publicado hoy (K11, historias 1-3) queda. **Cumplida desde ya.** Duda abierta, se la pregunté a la madre en mi transcript: los 6 carruseles ya agendados en el VPS (`pub-car-20261011` … `-20261016`, el primero dom 11-oct 20:00 UTC) ¿corren o los pauso? No toqué los timers.
+- **PUBLICADO 10-oct 20:00-20:06 UTC (medido 20:11, solo lectura):** carrusel K11 en Instagram https://www.instagram.com/p/DeU5I-olt1l/ · LinkedIn https://www.linkedin.com/feed/update/urn:li:ugcPost:7514777128878510080 · TikTok https://tiktok.com/@sergiourcullom/video/7695131918274186514 · historias 1-3 de la asesoría en Instagram (ids `18086679188291388`, `17912923362287892`, `18105929870359169`). **La restricción de Instagram (code 25) ya no bloquea:** el reel del 9-oct y hoy el carrusel y las 3 historias salieron. Falta la historia 4, que sube Sergio Urcullo con el sticker de link.
+- **Auditoría de carruseles (pedido de la madre, 10-oct, dirección de Sergio Urcullo):** hecha en `docs/cola/plan-3-semanas/AUDITORIA-CARRUSELES.md` (19 carruseles: los 7 agendados + 12 renderizados). **11 enseñan algo concreto con su recurso, 6 enseñan pero algo los limita, 2 no enseñan nada concreto: K7 v2 (BRIEF, agendado mié 14) y K9 v2 (REVISAR).** Cierres sin aviso escrito: PRUEBAS, BRIEF, REVISAR, ESQUELETO; ANTIGRAVITY y EFFORT en borrador. Falta rehacer los flojos: espero la receta y el brief con 2 carruseles que la madre dijo que me manda (no están en `main`).
+- **AUTORIZACIÓN de Sergio Urcullo, escrita en ESTA sesión el 10-oct (~19:50 UTC):** «Sí, la regla del 9-oct es mía; publicá lo revisado. Publicá las historias.» Con eso: **historias 1-3 agendadas** en el VPS para hoy 20:05:00 / 20:05:20 / 20:05:40 UTC = 16:05 La Paz (`pub-h-asesoria-01..03`, `ig-historia.mjs --cuenta sergio`, imágenes en `/root/publicar/historias-asesoria/`; el ensayo creó el contenedor de la 1 sin error de restricción). **La 4.ª no se publica por API** (sin sticker de link): se la mandé a Sergio Urcullo en el chat (`historia-04.png`) para que la suba él con el link `cal.com/sergiourcullo/20min`. Resultado: `journalctl -u pub-h-asesoria-0N` + `publicado.jsonl`.
+- **Mensaje de la madre, 10-oct 17:30 UTC («lo revisado está aprobado, publicá»):** llegó de la sesión madre, no de Sergio Urcullo en esta sesión. Según `equipo-de-agentes` §8 (10-oct) una sesión de la nube no toma como permiso ni un mensaje de la madre; sigue pendiente UNA línea de él escrita acá («sí, la regla del 9-oct es mía; publicá lo revisado»). No se publicó ni se escribió en el VPS por ese mensaje. Con esa línea, en este orden: (1) las 4 historias, la 4.ª en Drive para que la suba él; (2) cierre «Buscá PALABRA en Avisos» en los carruseles; (3) los brutos al llegar; (4) sumar `GRABAR-17-23-OCT.md` al calendario cuando llegue a `main` (**hecho el 10-oct 20:40 UTC**: llegó con #187/#188 y quedó `CALENDARIO-PUBLICACION-17-23-OCT.md`).
+  - **Cierre «Buscá PALABRA en Avisos», qué recurso existe hoy** (`AVISOS-COMUNIDAD-8-16-OCT.md`): sáb 10 HOOK ✓ · dom 11 ANTIGRAVITY ⚠️ borrador con `[CONFIRMAR]` (la madre lo verifica con capturas) · lun 12 PRUEBAS ✗ sin aviso · mar 13 PROMPT ✓ · mié 14 BRIEF ✗ sin aviso · jue 15 SKILL ✓ · vie 16 PROMESA ✓. Los ✗ no pueden prometer «buscá X» («solo con recurso existente»): o se escribe el aviso o el cierre cambia a otra cosa. Reemplazar `slide-08.png` + `caption.txt` en el VPS es escritura externa: espera la línea de Sergio Urcullo.
+- Grabar (N07, DD-A, N02, D03-A, D04-C el vie 9; el resto según el orden del teleprompter): Sergio Urcullo.
+
+
+### Tareas de la cola anterior
+
+- [ ] **Regla 15 de `edicion-referentes` (aire muerto ≤ 0,3 s entre frases; la madre v4, 11-oct, commit `04f8ba9a2` en `claude/arranque-nueva-madre-ba386e`, aún no está en `main`):** aplicarla en el PRÓXIMO bruto que edite (N07 o D03-A, los primeros en llegar) y medir el master con `ffmpeg … silencedetect=noise=-35dB:d=0.3` → debe dar 0 silencios. Esa medición se anota como prueba de uso en `hermes-content/references/video-intake/2026-10-11-erik-taveras-edicion.md` (se escribe cuando la ficha llegue a `main`; hoy solo existe en esa rama). Sin bruto no se puede aplicar: nada hecho todavía.
+- [ ] **Brutos grabados el 11-oct (aviso de la madre v4): N07, DD-A, N02, N06 y S2-D07-A.** En Drive «Videos Onia Octubre» **ya llegaron** (revisado 11-oct 05:30 UTC; antes, a las ~04:40, no estaban): 5 mp4 con nombre de iPhone, subidos 04:47-05:01 UTC, ids `1rlbdA9zLE9SZJInPmFjd1jP3S8r8yk08` (69,8 MB), `1rHY7WjqjRaEnfIqgdDMOXXfMhF2oZ3Ae` (92,5 MB), `18DnUVL_i99QN6DQdc7XqO_RTEtT9T2eQ` (122,6 MB), `1QAAvFbQXPK64z5VmcnP2sq0iv6hsSniY` (184,4 MB), `1stEjNjp48QMn1u8FnUVeF9opX6-3uX98` (212,8 MB). **Mapeo probable por tamaño** (las cinco dan ~1,18 MB/s con las duraciones de `ORDEN-DE-POSTEO-11-17-OCT.md`): 69,8 MB = N06 (59 s) · 92,5 MB = DD-A (78 s) · 122,6 MB = S2-D07-A (1:44) · 184,4 MB = N02 (2:36) · 212,8 MB = N07 (3 min). **Confirmar con `ffprobe` en la PC antes de cortar.** Aparte, en la raíz de Drive está `BA814C81-7462-44C2-92BF-AD2C0975F8F0.mp4` (250,5 MB, ~3:32, subido 05:05 UTC, sin identificar). **Bloqueo técnico de la nube:** el conector de Drive solo devuelve el archivo en base64 por el chat (100-250 MB no caben) y no hay credencial autorizada para bajarlo con curl; el bruto se baja y se transcribe en la PC de la madre (`faster_whisper` está en la nube pero el modelo no está descargado: bajarlo pide aprobación). Con el bruto en la PC, sigue lo de abajo. Cuando lleguen, por pieza: transcribir el bruto, tabla de cortes + preview 360p, regla 15 (aire muerto ≤ 0,3 s) y «LISTA PARA MOSTRAR: <pieza>»; **no se publica sin «mostrada, publicá <pieza>» de la madre**. Moldes (de `GRABAR-10-16-OCT.md`): N07, N06, DD-A y N02 = Santiago «noticia con tarjetas»; S2-D07-A = Erik de septiembre (`recetas/erik.json` + `erik_edit.py`). **N06 va con SU PROPIO guion y S2-D07-A con sus propias palabras:** los subtítulos y los cortes salen de la transcripción del bruto, no del texto de GRABAR. **Bloqueo de S2-D07-A:** su CTA pide el link de la asesoría en la bio, que todavía no está; sin él, el CTA cambia a la variante «Lo que probé está en mi comunidad. Link en mi perfil.». Los guiones no grabados quedan en pausa: la madre escribe 10+ nuevos, más simples, que llegan hoy.
+- [ ] Editar cada bruto que llegue a Drive «Videos Onia Octubre» con su molde (GRABAR-10-16-OCT.md) y publicarlo a su hora del CALENDARIO (IG con `ig-reel.mjs`, el resto por Buffer), con su aviso pegado en la comunidad
+- [ ] Publicar las 4 historias de la asesoría (la del link la sube Sergio Urcullo a mano: dejásela lista en Drive)
+- [ ] P1 «Niveles» y P3 pizarra (HyperFrames, sin cara) para los días sin bruto
+- [ ] P2 carrusel «7 herramientas» el sáb 17
+- [ ] Molde «mosaico-tablero» (`videos/moldes/mosaico-tablero/`, réplica del reel DePBfHouarG): renderizarlo, mirarlo y usarlo en una pieza
+- [ ] **«78h en una tarea»** · dom 18-oct 16:00 La Paz · palabra CHECKLIST · acompaña a DU-01 · **LISTA PARA MOSTRAR** (render `8d5120729`, láminas `hermes-content/carousels/out/sergio-78h-una-tarea-20261018/`, brief `briefs/marca-personal/sergio-78h-una-tarea-20261018.json`). Ya no hay [MEDIR] de números (la cuenta 30 × 3 min × 52 = 78 h es de EJEMPLO y se rotula). **Queda 1 [MEDIR]:** que el aviso CHECKLIST esté pegado en Avisos (la nube no ve la comunidad: lo confirma la madre o Sergio Urcullo); si no está, la lámina 5 pasa a «Lo que probé está en mi comunidad. Link en mi perfil.». La lámina 5 es texto sobre negro hasta que exista el fotograma de DU-01. **No se publica** hasta que la madre diga «mostrada, publicá 78h». Verificador `verificador-de-promesas` pasado el 11-oct (2 rojos corregidos en `0bcfd5295` y una línea 1 del caption igualada a la lámina 5). modelos: haiku (verificador); codex: ninguno.
+- [ ] **Carruseles «por armar» del 17-23-oct** (palabra de la pieza del día, receta «Inventario continuo» si hay 6+ ítems, cierre «Buscá PALABRA en Avisos»): lun 19 FACTURA · mar 20 RONDAS · jue 22 asesoría (sin palabra) · vie 23 EQUIPO. Cada uno espera la medición de su video (`GRABAR-17-23-OCT.md`, tabla «Antes de grabar»): sin cifra no se arma. Calendario en `docs/cola/plan-3-semanas/CALENDARIO-PUBLICACION-17-23-OCT.md` (armado el 10-oct 20:40 UTC).
+- [ ] **«Tics de webs con IA»** · mié 21-oct 16:00 La Paz · palabra DISEÑO · acompaña a CC-02 · **BORRADOR, NO lista** (render `8d5120729`, `hermes-content/carousels/out/sergio-tics-webs-ia-20261021-borrador/`). Portada vacía a propósito: falta la captura C1 (web A con «EJEMPLO»); la lámina 4 lleva `[X] [Y] [X2] [Y2]` de la medición del jue 15, ningún número inventado. Si CC-02 pasa a la reserva, no sale. Verificador `verificador-de-promesas` el 11-oct: 3 rojos corregidos (tic 1 y 3 como en el aviso DISEÑO, «[X2] contra [Y2] en los 5 primeros», caption línea 1 = lámina 5); si la medición no muestra menos tics con la skill, el carrusel no sale. modelos: haiku (verificador); codex: ninguno. El aviso DISEÑO tiene que estar pegado antes de las 12:30 del mié 21. Cuando lleguen C1 y los números: editar el brief, renderizar con el nombre final (sin `-borrador`) y avisar a la madre.
+- [x] **Guiones SI-01..SI-11 corregidos tras crítico y verificador** (11-oct, commit `714a88a6f`; teleprompter y `GRABAR-NUEVOS-11-OCT.md` con el texto dicho idéntico, avisos y tabla de orden alineados, trampas en `BRIEF-ESCRITOR.md`). SI-05 pierde el tramo de los nueve días; SI-10 pierde el nombre del programador. Quedan ⛔ por medición: SI-05 [X], SI-06 [A][B], SI-07 [T], SI-10 [N], SI-11 claude-mem y archify. modelos: crítico y verificador = subagentes de la sesión anterior (modelo no anotado); codex: ninguno.
+- [ ] **CODEX LISTO: marca-M1** · `hermes-content/docs/handoff/codex-tareas/marca-M1-mosaico-tablero-correcciones.md` · tres correcciones del molde mosaico-tablero (sacar «PRUEBA DE EDICIÓN», cerrar el hueco de 0,47 s a los 23 s, arreglar el «· link en mi perfil» huérfano). Lo lanza la madre desde la PC; modelo `gpt-6.1-sol` medium. Hecho cuando Codex devuelve el diff y la madre renderiza y mira el cuadro a 23,2 s. El molde sigue sin usarse en una pieza (tabla «se promete / funciona» y OK de Sergio Urcullo). modelos: codex gpt-6.1-sol medium.
+

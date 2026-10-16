@@ -1,0 +1,15 @@
+# Medición del render final (2026-10-11 08:56 UTC)
+duración: 111.300000 s
+REGLA 15 · silencedetect noise=-35dB d=0.3 (debe dar 0 silencios):
+  (ninguno)
+silencios >= 0,3 s: 0
+silencios >= 0,2 s (informativo): 18
+ebur128 (LUFS integrado, LRA, true peak):
+    I:         -13.2 LUFS
+    LRA:         2.0 LU
+    Peak:       -1.3 dBFS
+salto de la cara en los empalmes (YuNet sobre el render):
+cortes del cutplan: 54 · medidos 54 · sin cara detectada 0
+dentro de una escena (el salto de cara se vería): 37 · salto de ojos x máx 16 px, mediana 2.6 · y máx 15 px, mediana 2.2 (px de 1080; incluye el movimiento natural de 2 cuadros)
+en un cambio de layout (la cámara se mueve a propósito): 17 · salto de ojos x máx 325 px, mediana 8.2 · y máx 904 px, mediana 22.2 (px de 1080; incluye el movimiento natural de 2 cuadros)
+los 5 mayores dentro de una escena: 59.89 s (dx 16, dy 2) · 23.66 s (dx 5, dy 15) · 81.25 s (dx 6, dy 8) · 83.64 s (dx 9, dy 4) · 85.56 s (dx 2, dy 9)

@@ -1,0 +1,479 @@
+{
+  "titulo": "S2-D07-A · La ventana de 24 horas de WhatsApp y las plantillas de Meta (molde Erik, BORRADOR sobre el corte propuesto)",
+  "nota": "Todo texto en pantalla sale de lo que Sergio Urcullo dijo o de la documentación oficial de Meta capturada el 11-oct-2026 (capturas/indice.md). Cada pieza se ancla a la palabra que la nombra (frases únicas del transcript: si cambia el corte, se lee «— anclas —» del informe). `fuera_si` = el evento se descarta cuando esa opción de corte está activa (porque sus palabras se van); `solo_si` = el evento solo existe cuando alguna de esas opciones está activa (zooms que tapan el empalme del corte opcional). `corte_opcional` NO se aplica por defecto: rehacer.sh lo activa con QUITAR_VARIABLES=1 / QUITAR_REPETIDO=1 (o copiá su contenido a corte.quitar).",
+  "paleta": "onia",
+  "assets": [
+    "capturas/servicio",
+    "capturas/plantillas"
+  ],
+  "firma": {
+    "inicial": "S",
+    "nombre": "SERGIO URCULLO",
+    "handle": "@sergiourcullo"
+  },
+  "corte": {
+    "hueco_max": 0.25,
+    "quitar": []
+  },
+  "corte_opcional": {
+    "variables": [
+      {
+        "desde": {
+          "palabra": "y no puede estar cambiándose"
+        },
+        "hasta": {
+          "palabra": "rechazaría"
+        },
+        "por_que": "ALERTA: «no puede estar cambiándose con variables porque si no Meta te las rechazaría». Las plantillas SÍ admiten variables ({{1}} o nombradas): lo que Meta revisa es la plantilla aprobada. Decide Sergio Urcullo: cortar o regrabar"
+      }
+    ],
+    "repetido": [
+      {
+        "desde": {
+          "palabra": "entonces dentro de las primeras"
+        },
+        "hasta": {
+          "palabra": "único problema que exista"
+        },
+        "por_que": "tramo repetido (bruto 01:04-01:23): vuelve sobre «después de 24 horas, solo plantillas». Opcional, decide la madre o Sergio Urcullo"
+      }
+    ]
+  },
+  "subtitulos": {
+    "palabras_por_bloque": 3
+  },
+  "eventos": [
+    {
+      "tipo": "sello",
+      "en": {
+        "t": 0
+      },
+      "hasta": {
+        "palabra": "llama"
+      },
+      "texto": "VENTANA DE 24 HORAS",
+      "sub": "EN WHATSAPP",
+      "color": "kraft",
+      "centro": [
+        470,
+        330
+      ],
+      "rot": -6,
+      "cap": 62
+    },
+    {
+      "tipo": "lamina",
+      "desde": {
+        "palabra": "llama"
+      },
+      "hasta": {
+        "palabra": "tenés"
+      },
+      "gafete": {
+        "logo": "logo-whatsapp.png",
+        "titulo": "WHATSAPP",
+        "sub": "VENTANA DE ATENCIÓN AL CLIENTE"
+      },
+      "captura": "cap-ventana",
+      "fuente": "FUENTE: DEVELOPERS.FACEBOOK.COM",
+      "marca": {
+        "en": {
+          "palabra": "ventana"
+        }
+      }
+    },
+    {
+      "tipo": "tarjeta",
+      "rotulo": "TU CHATBOT",
+      "rotulo_der": "WHATSAPP",
+      "hasta": {
+        "corte": 4
+      },
+      "contenido": {
+        "tipo": "flujo",
+        "nodos": [
+          {
+            "icono": "logo:logo-whatsapp.png",
+            "texto": "Chatbot",
+            "nota": "de WhatsApp",
+            "en": {
+              "palabra": "chatbot"
+            }
+          },
+          {
+            "icono": "pausa",
+            "texto": "24 horas",
+            "nota": "DESDE QUE INICIA",
+            "en": {
+              "palabra": "24 horas de iniciar"
+            }
+          }
+        ],
+        "caja": 120
+      }
+    },
+    {
+      "tipo": "sello",
+      "en": {
+        "palabra": "mediante"
+      },
+      "hasta": {
+        "corte": 5
+      },
+      "texto": "MEDIANTE PLANTILLAS",
+      "sub": "DESPUÉS DE 24 HORAS",
+      "color": "kraft",
+      "centro": [
+        470,
+        330
+      ],
+      "rot": -5,
+      "cap": 56
+    },
+    {
+      "tipo": "zoom",
+      "en": {
+        "corte": 5
+      },
+      "escala": 1.12
+    },
+    {
+      "tipo": "tarjeta",
+      "rotulo": "CÓMO FUNCIONA",
+      "rotulo_der": "VENTANA ABIERTA",
+      "hasta": {
+        "corte": 8
+      },
+      "contenido": {
+        "tipo": "flujo",
+        "nodos": [
+          {
+            "icono": "persona",
+            "texto": "Cliente",
+            "nota": "TE ESCRIBE",
+            "en": {
+              "palabra": "cliente"
+            }
+          },
+          {
+            "icono": "servidor",
+            "estilo": "verde",
+            "texto": "Bot",
+            "nota": "LO QUE ENSEÑASTE",
+            "en": {
+              "palabra": "responde"
+            }
+          }
+        ],
+        "caja": 120
+      }
+    },
+    {
+      "tipo": "zoom",
+      "en": {
+        "corte": 8
+      },
+      "escala": 1.12
+    },
+    {
+      "tipo": "tarjeta",
+      "rotulo": "LO QUE LE ENSEÑASTE",
+      "rotulo_der": "TU CLÍNICA",
+      "hasta": {
+        "corte": 15
+      },
+      "contenido": {
+        "tipo": "lista",
+        "filas": [
+          {
+            "marca": "ok",
+            "texto": "Horarios",
+            "en": {
+              "palabra": "tenemos estos horarios"
+            }
+          },
+          {
+            "marca": "ok",
+            "texto": "Doctores",
+            "en": {
+              "palabra": "tenemos estos doctores"
+            }
+          },
+          {
+            "marca": "ok",
+            "texto": "Tratamientos",
+            "en": {
+              "palabra": "tenemos estos tratamientos"
+            }
+          }
+        ],
+        "mono": true,
+        "tam_mono": 36,
+        "alto_fila": 64
+      }
+    },
+    {
+      "tipo": "sello",
+      "en": {
+        "palabra": "24 horas que pasaron"
+      },
+      "hasta": {
+        "palabra": "ya no puede"
+      },
+      "texto": "PASARON 24 HORAS",
+      "sub": "VENTANA CERRADA",
+      "color": "kraft",
+      "centro": [
+        470,
+        330
+      ],
+      "rot": -6,
+      "cap": 62
+    },
+    {
+      "tipo": "zoom",
+      "en": {
+        "corte": 16
+      },
+      "escala": 1.12
+    },
+    {
+      "tipo": "lamina",
+      "desde": {
+        "corte": 17
+      },
+      "hasta": {
+        "palabra": "plantillas de meta"
+      },
+      "gafete": {
+        "logo": "logo-whatsapp.png",
+        "titulo": "WHATSAPP",
+        "sub": "CUANDO LA VENTANA SE CIERRA"
+      },
+      "captura": "cap-solo-plantillas",
+      "fuente": "FUENTE: DEVELOPERS.FACEBOOK.COM",
+      "marca": {
+        "en": {
+          "palabra": "solo puede ser"
+        }
+      }
+    },
+    {
+      "tipo": "lamina",
+      "desde": {
+        "palabra": "plantillas de meta"
+      },
+      "hasta": {
+        "corte": 20
+      },
+      "gafete": {
+        "logo": "logo-whatsapp.png",
+        "titulo": "WHATSAPP",
+        "sub": "ESTADO DE LA PLANTILLA"
+      },
+      "captura": "cap-aprobadas",
+      "fuente": "FUENTE: DEVELOPERS.FACEBOOK.COM",
+      "marca": {
+        "en": {
+          "palabra": "verificadas"
+        }
+      }
+    },
+    {
+      "tipo": "tarjeta",
+      "rotulo": "EJEMPLO",
+      "rotulo_der": "PLANTILLA",
+      "hasta": {
+        "corte": 22
+      },
+      "contenido": {
+        "tipo": "flujo",
+        "nodos": [
+          {
+            "icono": "archivo",
+            "estilo": "verde",
+            "texto": "Plantilla",
+            "nota": "APROBADA",
+            "en": {
+              "palabra": "plantilla"
+            }
+          },
+          {
+            "icono": "logo:logo-whatsapp.png",
+            "texto": "Mensaje",
+            "nota": "CON LOS HORARIOS",
+            "en": {
+              "palabra": "todos los horarios que tengan"
+            }
+          }
+        ],
+        "caja": 120
+      }
+    },
+    {
+      "tipo": "zoom",
+      "en": {
+        "corte": 22
+      },
+      "escala": 1.12
+    },
+    {
+      "tipo": "tarjeta",
+      "fuera_si": [
+        "repetido"
+      ],
+      "rotulo": "PRIMERAS 24 HORAS",
+      "rotulo_der": "LIBRE",
+      "hasta": {
+        "palabra": "agente conversacional"
+      },
+      "contenido": {
+        "tipo": "lista",
+        "filas": [
+          {
+            "marca": "ok",
+            "texto": "Le escribís libremente",
+            "en": {
+              "palabra": "reescribirle"
+            }
+          }
+        ],
+        "mono": true,
+        "tam_mono": 36,
+        "alto_fila": 64
+      }
+    },
+    {
+      "tipo": "tarjeta",
+      "fuera_si": [
+        "repetido"
+      ],
+      "rotulo": "DESPUÉS DE 24 HORAS",
+      "rotulo_der": "SOLO PLANTILLAS",
+      "hasta": {
+        "palabra": "ese es el único"
+      },
+      "contenido": {
+        "tipo": "lista",
+        "filas": [
+          {
+            "marca": "ok",
+            "texto": "Solo plantillas",
+            "en": {
+              "palabra": "plantillas fijas"
+            }
+          },
+          {
+            "marca": "ok",
+            "texto": "Horario sin personalización",
+            "en": {
+              "palabra": "horario sin personalización"
+            }
+          }
+        ],
+        "mono": true,
+        "tam_mono": 36,
+        "alto_fila": 64
+      }
+    },
+    {
+      "tipo": "zoom",
+      "solo_si": [
+        "variables"
+      ],
+      "en": {
+        "corte": 27
+      },
+      "escala": 1.12,
+      "nota": "tapa el empalme de QUITAR_VARIABLES (sin esto la cara salta ~99 px): el corte 27 del cutplan aprobado cae dentro de lo quitado y se lleva al empalme"
+    },
+    {
+      "tipo": "zoom",
+      "solo_si": [
+        "repetido"
+      ],
+      "en": {
+        "corte": 28
+      },
+      "escala": 1.12,
+      "nota": "tapa el empalme de QUITAR_REPETIDO y reemplaza al zoom de «solución» (corte 36), que caería 0,25 s después del empalme"
+    },
+    {
+      "tipo": "zoom",
+      "en": {
+        "corte": 36
+      },
+      "escala": 1.12,
+      "fuera_si": [
+        "repetido"
+      ]
+    },
+    {
+      "tipo": "sello",
+      "en": {
+        "palabra": "cerrar la venta"
+      },
+      "hasta": {
+        "palabra": "y que después"
+      },
+      "texto": "CERRÁ LA VENTA",
+      "sub": "DENTRO DE LAS 24 HORAS",
+      "color": "verde",
+      "centro": [
+        470,
+        330
+      ],
+      "rot": -5,
+      "cap": 60
+    },
+    {
+      "tipo": "tarjeta",
+      "rotulo": "DESPUÉS DE LAS 24 HORAS",
+      "rotulo_der": "PLANTILLAS",
+      "hasta": {
+        "palabra": "inteligencia artificial"
+      },
+      "contenido": {
+        "tipo": "lista",
+        "filas": [
+          {
+            "marca": "ok",
+            "texto": "De seguimiento",
+            "en": {
+              "palabra": "seguimiento"
+            }
+          },
+          {
+            "marca": "ok",
+            "texto": "De remarketing",
+            "en": {
+              "palabra": "remarketing"
+            }
+          }
+        ],
+        "mono": true,
+        "tam_mono": 36,
+        "alto_fila": 64
+      }
+    },
+    {
+      "tipo": "zoom",
+      "en": {
+        "corte": 41
+      },
+      "escala": 1.12
+    },
+    {
+      "tipo": "cta",
+      "desde": {
+        "palabra": "seguime"
+      },
+      "rotulo": "UNÍTE A MI",
+      "palabra": "COMUNIDAD",
+      "recibe": "LINK EN MI PERFIL",
+      "recibe_en": {
+        "palabra": "link"
+      }
+    }
+  ]
+}

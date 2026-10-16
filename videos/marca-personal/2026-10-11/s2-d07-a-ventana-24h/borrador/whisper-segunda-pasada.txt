@@ -1,0 +1,20 @@
+Segunda pasada de faster-whisper small (int8, CPU, beam 5) sobre el bruto, con initial_prompt de vocabulario (WhatsApp, plantillas de Meta verificadas y aprobadas, clínica dental, horarios, doctores, tratamientos, agente conversacional, remarketing, comunidad).
+Solo para contrastar lecturas dudosas: NO es la fuente del transcript (esa es ../transcript-whisper-small.json, sin prompt). OJO: el prompt trae «aprobadas» (sesga esa palabra). Tiempos del BRUTO, sin corregir.
+
+   0.00-   7.36  Hay algo en WhatsApp que se llama la ventana de 24 horas. Si tenés un chatbot de WhatsApp y querés que envíe
+   7.36-  12.92  mensajes después de las 24 horas de iniciar una conversación con tus clientes, tenés que hacerlo
+  12.92-  19.04  mediante plantillas. Y cómo funciona todo esto? Cuando un cliente te envió un mensaje, el bot le
+  19.04-  25.16  responde de la manera que vos le hayas enseñado. Si por ejemplo tu clínica se llama clínica dental
+  25.16-  31.14  de Sergio, por ejemplo, ahí vos le colocaste. Tenemos estos horarios, tenemos estos doctores,
+  31.20-  36.46  tenemos estos tratamientos y demás. Después de las 24 horas que pasaron de iniciar la
+  36.46-  41.60  conversación, ya no puede ser respondido de esa manera. Solo puede ser respondido mediante
+  41.60-  49.88  plantillas de Meta verificadas y aprobadas. Por ejemplo, una plantilla sería un mensaje
+  49.88-  56.60  directamente con todos los horarios que tengan, pero no un mensaje con todos los horarios que tienen
+  56.60-  62.66  disponibles en ese momento, porque la plantilla es fija y no puede estar cambiándose con variables,
+  63.20-  68.66  porque si no Meta te las rechazaría. Entonces, dentro de las primeras 24 horas puedes reescribirle
+  68.66-  74.86  libremente, pero luego con el agente conversacional de WhatsApp, después de las 24 horas es solo
+  74.86-  80.36  mediante plantillas fijas que por ejemplo sería el horario sin personalización de
+  80.36-  86.86  cobrarios estaría disponible. Ese es el único problema que existe. Entonces la solución que
+  86.86-  92.94  te daría sería intentar cerrar la venta dentro de las 24 horas y que después de las 24 horas
+  92.94-  98.02  sea mediante plantillas de seguimiento o de remarketing. Y si querés seguir aprendiendo
+  98.02- 102.88  sobre inteligencia artificial, seguime y unita mi comunidad que está en el link de mi perfil.

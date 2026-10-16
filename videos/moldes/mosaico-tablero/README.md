@@ -42,3 +42,20 @@ npx --offline hyperframes@0.8.65 render --quality draft --output prueba.mp4
 ```
 
 Revisar los seis tramos y los límites 2,5 / 9 / 16 / 23 / 26 s en preview antes de dar por aprobado el molde. La carpeta está lista para ese paso; no se operó git ni se publicó.
+
+## Correcciones del 11-oct
+
+- Se retiró el rótulo «PRUEBA DE EDICIÓN»; queda solo SERGIO URCULLO.
+- Las tarjetas del mosaico empiezan a los 23,05 s; duración 0,48 s y stagger 0,1 s sin cambios. Terminan a los 23,83 s, antes del caption (24,55 s) y del CTA (27,15 s).
+- CTA en dos renglones: «Asesoría gratis» / «Link en mi perfil», sin punto medio.
+
+Lint offline no validado: `npx --offline hyperframes@0.8.65 lint` falló con `ENOTCACHED`; la caché local consultada contiene 0.8.58 y 0.8.143, sin 0.8.65. No se instaló ni descargó nada. Render no validado visualmente: el navegador del sandbox no arranca (`spawn EPERM`). La madre debe renderizar en la PC y revisar el cuadro a 23,2 s para confirmar que las tarjetas ya están en pantalla. El molde sigue esperando la revisión de Sergio Urcullo; no usar en piezas ni publicar.
+
+## Revisión en la nube, 11-oct (Marca)
+
+Sin CLI de HyperFrames (no está en la nube y no se instaló): se abrió `index.html` en Chromium con Playwright, se movió el timeline GSAP `main` (27,63 s) y se midió la luz media del cuerpo de la pantalla a 30 cuadros por segundo. Hoja con los cuadros del corte de los 23 s: `revision-11-oct-corte-23s.png`.
+
+- **Rótulo «PRUEBA DE EDICIÓN»:** ya no está. **CTA:** «Asesoría gratis» / «Link en mi perfil», dos renglones, sin punto suelto.
+- **Hueco de los 23 s:** con el mosaico a los 23,05 s quedaban ~0,13 s casi vacíos (luz 0,1-2,2 entre 23,00 y 23,10; antes eran 0,47 s). Se movió el mosaico a **22,95 s**: el tablero sale a los 23,00 y el mínimo es 0,94 en UN cuadro (23,00), 2,2 en el siguiente y 5,2 a los 23,07. Se lee como corte, no como hueco. Las tarjetas terminan a los 23,73 s, antes del caption (24,55 s).
+- **Sigue sin validarse:** el lint de HyperFrames, el Seam Gate numérico y el MP4 (no hay render, solo cuadros). El timeline dura 27,63 s y `data-duration` dice 30: el último cuadro (CTA) se sostiene en los cuadros de 29,5 s, pero falta confirmarlo en un render de HyperFrames.
+- **Antes de usar el molde en una pieza:** muestra un «tablero» con Agenda, Clientes, Cobros y Chat, rotulado «Esquema propio · no es una captura del producto». Mientras no exista la tabla «se promete / funciona», una pieza con esto pasa por Sergio Urcullo (`CLAUDE.md`, contenido en redes).

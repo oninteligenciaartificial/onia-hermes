@@ -1,0 +1,1189 @@
+{
+ "words": [
+  {
+   "word": "¿Cuánto",
+   "start": 0.122,
+   "end": 0.31
+  },
+  {
+   "word": "te",
+   "start": 0.31,
+   "end": 0.43
+  },
+  {
+   "word": "cuesta",
+   "start": 0.43,
+   "end": 0.69
+  },
+  {
+   "word": "que",
+   "start": 0.69,
+   "end": 0.85
+  },
+  {
+   "word": "tu",
+   "start": 0.85,
+   "end": 1.01
+  },
+  {
+   "word": "bot",
+   "start": 1.01,
+   "end": 1.17
+  },
+  {
+   "word": "clasifique",
+   "start": 1.17,
+   "end": 1.65
+  },
+  {
+   "word": "mil",
+   "start": 1.65,
+   "end": 1.91
+  },
+  {
+   "word": "mensajes?",
+   "start": 1.91,
+   "end": 2.37
+  },
+  {
+   "word": "Antes,",
+   "start": 2.72,
+   "end": 3.1
+  },
+  {
+   "word": "tres",
+   "start": 3.433,
+   "end": 3.55
+  },
+  {
+   "word": "dólares,",
+   "start": 3.55,
+   "end": 3.89
+  },
+  {
+   "word": "ahora,",
+   "start": 4.13,
+   "end": 4.33
+  },
+  {
+   "word": "40",
+   "start": 4.33,
+   "end": 4.75
+  },
+  {
+   "word": "centavos.",
+   "start": 4.75,
+   "end": 5.305
+  },
+  {
+   "word": "Anthropic",
+   "start": 5.55,
+   "end": 6.09
+  },
+  {
+   "word": "sacó",
+   "start": 6.09,
+   "end": 6.37
+  },
+  {
+   "word": "Haiku",
+   "start": 6.37,
+   "end": 6.73
+  },
+  {
+   "word": "5.5",
+   "start": 6.73,
+   "end": 7.57
+  },
+  {
+   "word": "el",
+   "start": 7.57,
+   "end": 7.73
+  },
+  {
+   "word": "7",
+   "start": 7.73,
+   "end": 7.85
+  },
+  {
+   "word": "de",
+   "start": 7.85,
+   "end": 8.17
+  },
+  {
+   "word": "octubre.",
+   "start": 8.17,
+   "end": 8.364
+  },
+  {
+   "word": "Por",
+   "start": 8.6,
+   "end": 8.7
+  },
+  {
+   "word": "token",
+   "start": 8.7,
+   "end": 8.98
+  },
+  {
+   "word": "cobra",
+   "start": 8.98,
+   "end": 9.3
+  },
+  {
+   "word": "10",
+   "start": 9.3,
+   "end": 9.62
+  },
+  {
+   "word": "veces",
+   "start": 9.62,
+   "end": 9.9
+  },
+  {
+   "word": "menos.",
+   "start": 9.9,
+   "end": 10.18
+  },
+  {
+   "word": "Haiku",
+   "start": 10.447,
+   "end": 10.7
+  },
+  {
+   "word": "5.5",
+   "start": 10.7,
+   "end": 11.56
+  },
+  {
+   "word": "10",
+   "start": 11.56,
+   "end": 11.86
+  },
+  {
+   "word": "centavos",
+   "start": 11.86,
+   "end": 12.28
+  },
+  {
+   "word": "del",
+   "start": 12.28,
+   "end": 12.42
+  },
+  {
+   "word": "millón",
+   "start": 12.42,
+   "end": 12.74
+  },
+  {
+   "word": "de",
+   "start": 12.74,
+   "end": 13.11
+  },
+  {
+   "word": "tokens",
+   "start": 13.11,
+   "end": 13.35
+  },
+  {
+   "word": "que",
+   "start": 13.35,
+   "end": 13.63
+  },
+  {
+   "word": "entran",
+   "start": 13.63,
+   "end": 13.97
+  },
+  {
+   "word": "50",
+   "start": 13.97,
+   "end": 14.54
+  },
+  {
+   "word": "los",
+   "start": 14.54,
+   "end": 15.12
+  },
+  {
+   "word": "que",
+   "start": 15.12,
+   "end": 15.26
+  },
+  {
+   "word": "salen.",
+   "start": 15.26,
+   "end": 15.578
+  },
+  {
+   "word": "El",
+   "start": 15.822,
+   "end": 15.89
+  },
+  {
+   "word": "4.5",
+   "start": 15.89,
+   "end": 16.63
+  },
+  {
+   "word": "cobraba",
+   "start": 16.63,
+   "end": 17.31
+  },
+  {
+   "word": "un",
+   "start": 17.31,
+   "end": 17.59
+  },
+  {
+   "word": "dólar",
+   "start": 17.59,
+   "end": 17.91
+  },
+  {
+   "word": "y",
+   "start": 17.91,
+   "end": 18.25
+  },
+  {
+   "word": "5",
+   "start": 18.25,
+   "end": 18.57
+  },
+  {
+   "word": "dólares.",
+   "start": 18.57,
+   "end": 18.89
+  },
+  {
+   "word": "mil",
+   "start": 19.152,
+   "end": 19.29
+  },
+  {
+   "word": "mensajes",
+   "start": 19.29,
+   "end": 19.65
+  },
+  {
+   "word": "con",
+   "start": 19.65,
+   "end": 19.83
+  },
+  {
+   "word": "el",
+   "start": 19.83,
+   "end": 19.91
+  },
+  {
+   "word": "pensamiento",
+   "start": 19.91,
+   "end": 20.27
+  },
+  {
+   "word": "apagado",
+   "start": 20.27,
+   "end": 20.73
+  },
+  {
+   "word": "cada",
+   "start": 20.73,
+   "end": 20.91
+  },
+  {
+   "word": "uno,",
+   "start": 20.91,
+   "end": 21.25
+  },
+  {
+   "word": "2000",
+   "start": 21.59,
+   "end": 21.81
+  },
+  {
+   "word": "tokens",
+   "start": 21.81,
+   "end": 22.11
+  },
+  {
+   "word": "que",
+   "start": 22.11,
+   "end": 22.37
+  },
+  {
+   "word": "entran",
+   "start": 22.37,
+   "end": 22.69
+  },
+  {
+   "word": "y",
+   "start": 22.69,
+   "end": 22.91
+  },
+  {
+   "word": "200",
+   "start": 22.91,
+   "end": 23.13
+  },
+  {
+   "word": "que",
+   "start": 23.13,
+   "end": 23.51
+  },
+  {
+   "word": "salen.",
+   "start": 23.51,
+   "end": 23.786
+  },
+  {
+   "word": "Con",
+   "start": 24.029,
+   "end": 24.12
+  },
+  {
+   "word": "Haiku",
+   "start": 24.12,
+   "end": 24.48
+  },
+  {
+   "word": "4.5",
+   "start": 24.48,
+   "end": 25.6
+  },
+  {
+   "word": "eran",
+   "start": 25.6,
+   "end": 25.92
+  },
+  {
+   "word": "3",
+   "start": 25.92,
+   "end": 26.24
+  },
+  {
+   "word": "dólares.",
+   "start": 26.24,
+   "end": 26.58
+  },
+  {
+   "word": "10",
+   "start": 26.832,
+   "end": 26.99
+  },
+  {
+   "word": "veces",
+   "start": 26.99,
+   "end": 27.23
+  },
+  {
+   "word": "menos",
+   "start": 27.23,
+   "end": 27.43
+  },
+  {
+   "word": "serían",
+   "start": 27.43,
+   "end": 27.89
+  },
+  {
+   "word": "30",
+   "start": 27.89,
+   "end": 28.34
+  },
+  {
+   "word": "centavos,",
+   "start": 28.34,
+   "end": 28.94
+  },
+  {
+   "word": "pero",
+   "start": 29.0,
+   "end": 29.2
+  },
+  {
+   "word": "lo",
+   "start": 29.2,
+   "end": 29.58
+  },
+  {
+   "word": "que",
+   "start": 29.58,
+   "end": 29.68
+  },
+  {
+   "word": "nadie",
+   "start": 29.68,
+   "end": 29.84
+  },
+  {
+   "word": "te",
+   "start": 29.84,
+   "end": 30.0
+  },
+  {
+   "word": "cuenta,",
+   "start": 30.0,
+   "end": 30.26
+  },
+  {
+   "word": "el",
+   "start": 30.566,
+   "end": 30.68
+  },
+  {
+   "word": "modelo",
+   "start": 30.68,
+   "end": 30.86
+  },
+  {
+   "word": "nuevo",
+   "start": 30.86,
+   "end": 31.14
+  },
+  {
+   "word": "cuenta",
+   "start": 31.14,
+   "end": 31.54
+  },
+  {
+   "word": "el",
+   "start": 31.54,
+   "end": 31.68
+  },
+  {
+   "word": "mismo",
+   "start": 31.68,
+   "end": 31.88
+  },
+  {
+   "word": "texto",
+   "start": 31.88,
+   "end": 32.2
+  },
+  {
+   "word": "con",
+   "start": 32.2,
+   "end": 32.42
+  },
+  {
+   "word": "más",
+   "start": 32.42,
+   "end": 32.62
+  },
+  {
+   "word": "tokens,",
+   "start": 32.62,
+   "end": 32.92
+  },
+  {
+   "word": "un",
+   "start": 33.315,
+   "end": 33.41
+  },
+  {
+   "word": "30",
+   "start": 33.41,
+   "end": 33.61
+  },
+  {
+   "word": "%",
+   "start": 33.61,
+   "end": 33.81
+  },
+  {
+   "word": "más,",
+   "start": 33.81,
+   "end": 34.201
+  },
+  {
+   "word": "son",
+   "start": 34.435,
+   "end": 34.63
+  },
+  {
+   "word": "unos",
+   "start": 34.63,
+   "end": 34.93
+  },
+  {
+   "word": "40",
+   "start": 34.93,
+   "end": 35.21
+  },
+  {
+   "word": "centavos,",
+   "start": 35.21,
+   "end": 35.77
+  },
+  {
+   "word": "aun",
+   "start": 35.83,
+   "end": 35.93
+  },
+  {
+   "word": "así,",
+   "start": 35.93,
+   "end": 36.21
+  },
+  {
+   "word": "casi",
+   "start": 36.39,
+   "end": 36.55
+  },
+  {
+   "word": "8",
+   "start": 36.55,
+   "end": 37.01
+  },
+  {
+   "word": "veces",
+   "start": 37.01,
+   "end": 37.27
+  },
+  {
+   "word": "menos.",
+   "start": 37.27,
+   "end": 37.59
+  },
+  {
+   "word": "¿Para",
+   "start": 37.829,
+   "end": 37.93
+  },
+  {
+   "word": "qué",
+   "start": 37.93,
+   "end": 38.07
+  },
+  {
+   "word": "sirve?",
+   "start": 38.07,
+   "end": 38.35
+  },
+  {
+   "word": "Anthropic",
+   "start": 38.69,
+   "end": 39.17
+  },
+  {
+   "word": "lo",
+   "start": 39.17,
+   "end": 39.53
+  },
+  {
+   "word": "pone",
+   "start": 39.53,
+   "end": 39.73
+  },
+  {
+   "word": "para",
+   "start": 39.73,
+   "end": 39.99
+  },
+  {
+   "word": "clasificar,",
+   "start": 39.99,
+   "end": 40.8
+  },
+  {
+   "word": "sacar",
+   "start": 41.2,
+   "end": 41.28
+  },
+  {
+   "word": "datos",
+   "start": 41.28,
+   "end": 41.66
+  },
+  {
+   "word": "y",
+   "start": 41.66,
+   "end": 41.92
+  },
+  {
+   "word": "repartir,",
+   "start": 41.92,
+   "end": 42.39
+  },
+  {
+   "word": "como",
+   "start": 42.635,
+   "end": 42.8
+  },
+  {
+   "word": "un",
+   "start": 42.8,
+   "end": 43.16
+  },
+  {
+   "word": "recepcionista,",
+   "start": 43.16,
+   "end": 43.96
+  },
+  {
+   "word": "no",
+   "start": 44.21,
+   "end": 44.31
+  },
+  {
+   "word": "atiende",
+   "start": 44.31,
+   "end": 44.57
+  },
+  {
+   "word": "la",
+   "start": 44.57,
+   "end": 44.97
+  },
+  {
+   "word": "consulta,",
+   "start": 44.97,
+   "end": 45.55
+  },
+  {
+   "word": "la",
+   "start": 45.55,
+   "end": 45.91
+  },
+  {
+   "word": "manda",
+   "start": 45.91,
+   "end": 46.23
+  },
+  {
+   "word": "a",
+   "start": 46.23,
+   "end": 46.31
+  },
+  {
+   "word": "quien",
+   "start": 46.31,
+   "end": 46.51
+  },
+  {
+   "word": "corresponde,",
+   "start": 46.51,
+   "end": 47.45
+  },
+  {
+   "word": "lo",
+   "start": 47.53,
+   "end": 47.59
+  },
+  {
+   "word": "difícil",
+   "start": 47.59,
+   "end": 47.83
+  },
+  {
+   "word": "se",
+   "start": 47.83,
+   "end": 48.07
+  },
+  {
+   "word": "lo",
+   "start": 48.07,
+   "end": 48.13
+  },
+  {
+   "word": "deja",
+   "start": 48.13,
+   "end": 48.29
+  },
+  {
+   "word": "a",
+   "start": 48.29,
+   "end": 48.47
+  },
+  {
+   "word": "Sonnet",
+   "start": 48.47,
+   "end": 48.81
+  },
+  {
+   "word": "o",
+   "start": 48.81,
+   "end": 48.99
+  },
+  {
+   "word": "a",
+   "start": 48.99,
+   "end": 49.07
+  },
+  {
+   "word": "Opus.",
+   "start": 49.07,
+   "end": 49.47
+  },
+  {
+   "word": "Si",
+   "start": 49.726,
+   "end": 49.82
+  },
+  {
+   "word": "tenés",
+   "start": 49.82,
+   "end": 50.08
+  },
+  {
+   "word": "una",
+   "start": 50.08,
+   "end": 50.24
+  },
+  {
+   "word": "clínica",
+   "start": 50.24,
+   "end": 50.66
+  },
+  {
+   "word": "con",
+   "start": 50.66,
+   "end": 50.9
+  },
+  {
+   "word": "bot,",
+   "start": 50.9,
+   "end": 51.06
+  },
+  {
+   "word": "esto",
+   "start": 51.38,
+   "end": 51.6
+  },
+  {
+   "word": "te",
+   "start": 51.6,
+   "end": 51.98
+  },
+  {
+   "word": "toca,",
+   "start": 51.98,
+   "end": 52.22
+  },
+  {
+   "word": "repartir",
+   "start": 52.54,
+   "end": 52.98
+  },
+  {
+   "word": "mil",
+   "start": 52.98,
+   "end": 53.22
+  },
+  {
+   "word": "consultas",
+   "start": 53.22,
+   "end": 53.7
+  },
+  {
+   "word": "cuesta",
+   "start": 53.7,
+   "end": 53.96
+  },
+  {
+   "word": "menos",
+   "start": 53.96,
+   "end": 54.18
+  },
+  {
+   "word": "de",
+   "start": 54.18,
+   "end": 54.38
+  },
+  {
+   "word": "medio",
+   "start": 54.38,
+   "end": 54.58
+  },
+  {
+   "word": "dólar",
+   "start": 54.58,
+   "end": 54.94
+  },
+  {
+   "word": "en",
+   "start": 54.94,
+   "end": 55.16
+  },
+  {
+   "word": "el",
+   "start": 55.16,
+   "end": 55.26
+  },
+  {
+   "word": "modelo,",
+   "start": 55.26,
+   "end": 55.5
+  },
+  {
+   "word": "preguntale",
+   "start": 55.837,
+   "end": 56.23
+  },
+  {
+   "word": "a",
+   "start": 56.23,
+   "end": 56.41
+  },
+  {
+   "word": "quien",
+   "start": 56.41,
+   "end": 56.53
+  },
+  {
+   "word": "te",
+   "start": 56.53,
+   "end": 56.71
+  },
+  {
+   "word": "armó",
+   "start": 56.71,
+   "end": 57.07
+  },
+  {
+   "word": "el",
+   "start": 57.07,
+   "end": 57.15
+  },
+  {
+   "word": "bot",
+   "start": 57.15,
+   "end": 57.33
+  },
+  {
+   "word": "qué",
+   "start": 57.33,
+   "end": 57.57
+  },
+  {
+   "word": "modelo",
+   "start": 57.57,
+   "end": 57.83
+  },
+  {
+   "word": "usa.",
+   "start": 57.83,
+   "end": 58.185
+  },
+  {
+   "word": "Si",
+   "start": 58.428,
+   "end": 58.56
+  },
+  {
+   "word": "armás",
+   "start": 58.56,
+   "end": 58.72
+  },
+  {
+   "word": "bots,",
+   "start": 58.72,
+   "end": 59.04
+  },
+  {
+   "word": "dos",
+   "start": 59.36,
+   "end": 59.52
+  },
+  {
+   "word": "trampas,",
+   "start": 59.52,
+   "end": 59.948
+  },
+  {
+   "word": "si",
+   "start": 60.2,
+   "end": 60.28
+  },
+  {
+   "word": "el",
+   "start": 60.28,
+   "end": 60.38
+  },
+  {
+   "word": "prompt",
+   "start": 60.38,
+   "end": 60.64
+  },
+  {
+   "word": "pasa",
+   "start": 60.64,
+   "end": 61.08
+  },
+  {
+   "word": "de",
+   "start": 61.08,
+   "end": 61.28
+  },
+  {
+   "word": "100",
+   "start": 61.28,
+   "end": 61.38
+  },
+  {
+   "word": "mil",
+   "start": 61.38,
+   "end": 61.64
+  },
+  {
+   "word": "tokens,",
+   "start": 61.64,
+   "end": 62.04
+  },
+  {
+   "word": "cobra",
+   "start": 62.3,
+   "end": 62.48
+  },
+  {
+   "word": "5",
+   "start": 62.48,
+   "end": 62.82
+  },
+  {
+   "word": "veces",
+   "start": 62.82,
+   "end": 63.1
+  },
+  {
+   "word": "más",
+   "start": 63.1,
+   "end": 63.34
+  },
+  {
+   "word": "y",
+   "start": 63.34,
+   "end": 63.92
+  },
+  {
+   "word": "viene",
+   "start": 63.92,
+   "end": 64.1
+  },
+  {
+   "word": "con",
+   "start": 64.1,
+   "end": 64.28
+  },
+  {
+   "word": "el",
+   "start": 64.28,
+   "end": 64.4
+  },
+  {
+   "word": "pensamiento",
+   "start": 64.4,
+   "end": 64.84
+  },
+  {
+   "word": "prendido",
+   "start": 64.84,
+   "end": 65.36
+  },
+  {
+   "word": "lo",
+   "start": 65.36,
+   "end": 65.86
+  },
+  {
+   "word": "que",
+   "start": 65.86,
+   "end": 66.0
+  },
+  {
+   "word": "piensa",
+   "start": 66.0,
+   "end": 66.36
+  },
+  {
+   "word": "se",
+   "start": 66.36,
+   "end": 66.64
+  },
+  {
+   "word": "cobra",
+   "start": 66.64,
+   "end": 66.9
+  },
+  {
+   "word": "como",
+   "start": 66.9,
+   "end": 67.2
+  },
+  {
+   "word": "salida",
+   "start": 67.2,
+   "end": 67.671
+  },
+  {
+   "word": "para",
+   "start": 67.915,
+   "end": 68.03
+  },
+  {
+   "word": "clasificar",
+   "start": 68.03,
+   "end": 68.57
+  },
+  {
+   "word": "apagarlo",
+   "start": 68.57,
+   "end": 69.27
+  },
+  {
+   "word": "y",
+   "start": 69.27,
+   "end": 69.53
+  },
+  {
+   "word": "probarlo",
+   "start": 69.53,
+   "end": 69.933
+  },
+  {
+   "word": "para",
+   "start": 70.174,
+   "end": 70.29
+  },
+  {
+   "word": "ponerlo",
+   "start": 70.29,
+   "end": 70.73
+  },
+  {
+   "word": "en",
+   "start": 70.73,
+   "end": 70.93
+  },
+  {
+   "word": "tu",
+   "start": 70.93,
+   "end": 71.01
+  },
+  {
+   "word": "terminal",
+   "start": 71.01,
+   "end": 71.43
+  },
+  {
+   "word": "colocá",
+   "start": 71.43,
+   "end": 72.01
+  },
+  {
+   "word": "claude-haiku-5-5",
+   "start": 72.01,
+   "end": 74.48
+  },
+  {
+   "word": "y",
+   "start": 74.48,
+   "end": 74.72
+  },
+  {
+   "word": "empezá",
+   "start": 74.72,
+   "end": 75.12
+  },
+  {
+   "word": "a",
+   "start": 75.12,
+   "end": 75.32
+  },
+  {
+   "word": "probarlo",
+   "start": 75.32,
+   "end": 75.76
+  },
+  {
+   "word": "la",
+   "start": 75.76,
+   "end": 76.42
+  },
+  {
+   "word": "tabla",
+   "start": 76.42,
+   "end": 76.8
+  },
+  {
+   "word": "y",
+   "start": 76.8,
+   "end": 77.04
+  },
+  {
+   "word": "la",
+   "start": 77.04,
+   "end": 77.14
+  },
+  {
+   "word": "cuenta",
+   "start": 77.14,
+   "end": 77.42
+  },
+  {
+   "word": "están",
+   "start": 77.42,
+   "end": 77.86
+  },
+  {
+   "word": "en",
+   "start": 77.86,
+   "end": 78.04
+  },
+  {
+   "word": "mi",
+   "start": 78.04,
+   "end": 78.14
+  },
+  {
+   "word": "comunidad,",
+   "start": 78.14,
+   "end": 78.62
+  },
+  {
+   "word": "gratis.",
+   "start": 78.62,
+   "end": 79.33
+  },
+  {
+   "word": "Link",
+   "start": 79.33,
+   "end": 79.59
+  },
+  {
+   "word": "en",
+   "start": 79.59,
+   "end": 79.71
+  },
+  {
+   "word": "mi",
+   "start": 79.71,
+   "end": 79.81
+  },
+  {
+   "word": "perfil.",
+   "start": 79.81,
+   "end": 80.19
+  },
+  {
+   "word": "Buscá",
+   "start": 80.19,
+   "end": 80.55
+  },
+  {
+   "word": "HAIKU",
+   "start": 80.55,
+   "end": 80.95
+  },
+  {
+   "word": "en",
+   "start": 80.95,
+   "end": 81.15
+  },
+  {
+   "word": "Avisos.",
+   "start": 81.15,
+   "end": 81.53
+  }
+ ]
+}

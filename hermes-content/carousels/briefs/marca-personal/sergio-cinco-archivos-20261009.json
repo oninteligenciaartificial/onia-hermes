@@ -1,0 +1,16 @@
+{
+  "title": "Los 5 archivos que uso antes de programar con IA (pack referentes, capturas reales)",
+  "caption": "Antes de pedir código, dejo claro qué puede cambiar la IA y cómo voy a revisar el resultado.\n\nEn mi repo uso CLAUDE.md, AGENTS.md, la carpeta .claude/skills/, el handoff del carril y una tarea concreta para Codex.\n\nNo todos se leen siempre. Cargo lo que corresponde al trabajo. Y esto no reemplaza las pruebas ni la revisión.\n\nBuscá ARCHIVOS en Avisos · link en mi perfil.",
+  "hashtags": ["#claudecode", "#claude", "#codex", "#ia", "#programacion", "#bolivia"],
+  "serie": "Claude Code",
+  "image_style": "captura",
+  "slides": [
+    {"number": 1, "layout": "captura", "theme": "verde", "headline": "Los *5 archivos* que uso antes de programar con IA", "image": "hermes-content/carousels/briefs/assets/sergio-cinco-archivos-20261009/01-arbol.png", "body": "Dos reglas, una carpeta, un relevo y una tarea.", "next": "el primero", "alt_text": "Árbol de mi repo con las cinco entradas numeradas: CLAUDE.md, AGENTS.md, la carpeta de skills, el handoff y una tarea de Codex."},
+    {"number": 2, "layout": "captura", "theme": "blanco", "headline": "1 · *CLAUDE.md*", "image": "hermes-content/carousels/briefs/assets/sergio-cinco-archivos-20261009/02-claude-md.png", "body": "Las reglas del proyecto. Un objetivo al inicio.", "next": "el segundo", "alt_text": "Captura de CLAUDE.md, líneas 43 a 45: «Un objetivo al inicio, escrito y explícito»."},
+    {"number": 3, "layout": "captura", "theme": "blanco", "headline": "2 · *AGENTS.md*", "image": "hermes-content/carousels/briefs/assets/sergio-cinco-archivos-20261009/03-agents-md.png", "body": "El encargo para Codex: qué hace, qué prueba, dónde para.", "next": "el tercero", "alt_text": "Captura de AGENTS.md, líneas 32 y 33: la tarea cerrada con META, PRUEBA DE HECHO y REGLA DE PARADA."},
+    {"number": 4, "layout": "captura", "theme": "blanco", "headline": "3 · *.claude/skills/*", "image": "hermes-content/carousels/briefs/assets/sergio-cinco-archivos-20261009/04-skills.png", "body": "El método de cada tarea. Cargo la que corresponde, no todas.", "next": "el cuarto", "alt_text": "Árbol de la carpeta .claude/skills con onia-router resaltado."},
+    {"number": 5, "layout": "captura", "theme": "blanco", "headline": "4 · El *handoff*", "image": "hermes-content/carousels/briefs/assets/sergio-cinco-archivos-20261009/05-handoff.png", "body": "Dónde quedó el trabajo, qué falló y qué sigue.", "next": "el quinto", "alt_text": "Captura del README del handoff: los campos «Intentos fallidos» y «Próximos pasos»."},
+    {"number": 6, "layout": "captura", "theme": "blanco", "headline": "5 · La *tarea* de Codex", "image": "hermes-content/carousels/briefs/assets/sergio-cinco-archivos-20261009/06-tarea.png", "body": "Un cambio con límites: META, PRUEBA DE HECHO, REGLA DE PARADA.", "next": "el cierre", "alt_text": "Captura de la tarea B1: «con la pestaña oculta no hay llamadas», dentro de PRUEBA DE HECHO."},
+    {"number": 7, "layout": "cierre", "theme": "negro", "kicker": "La IA también necesita *límites*.", "pre": "Buscá", "keyword": "ARCHIVOS", "body": "en Avisos · link en mi perfil."}
+  ]
+}

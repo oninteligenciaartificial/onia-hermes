@@ -1,0 +1,174 @@
+[
+ {
+  "historia": "historia-01.png",
+  "fuentes": {
+   ".h1": [
+    "Bricolage Grotesque [repo]"
+   ],
+   ".burbuja": [
+    "DM Sans Medium [sistema]"
+   ],
+   ".tag": [
+    "DM Mono [sistema]"
+   ],
+   ".sigue": [
+    "Caveat SemiBold [sistema]"
+   ]
+  },
+  "titular_px_390": 41.9,
+  "principal": {
+   "min_px_390": 30.3,
+   "texto": "Hola, ¿cuánto cuesta?",
+   "umbral": 16.0,
+   "ok": true
+  },
+  "secundario": {
+   "min_px_390": 12.3,
+   "texto": "01/04",
+   "umbral": 11.0,
+   "ok": true
+  },
+  "sin_rol": [],
+  "pixeles": {
+   "y_min": 269,
+   "y_max": 1431,
+   "x_min": 72,
+   "x_max": 1004,
+   "limite_abajo": 1498,
+   "arriba_ok": true,
+   "abajo_ok": true,
+   "margen_lateral_ok": true,
+   "rojo_terracota_px": 0
+  }
+ },
+ {
+  "historia": "historia-02.png",
+  "fuentes": {
+   ".tag": [
+    "DM Mono [sistema]"
+   ],
+   ".lead": [
+    "DM Sans SemiBold [sistema]"
+   ],
+   ".sigue": [
+    "Caveat SemiBold [sistema]"
+   ],
+   ".verdad": [
+    "Bricolage Grotesque [repo]"
+   ]
+  },
+  "titular_px_390": 53.4,
+  "principal": {
+   "min_px_390": 21.7,
+   "texto": "Todos creen que automatizar es:",
+   "umbral": 16.0,
+   "ok": true
+  },
+  "secundario": {
+   "min_px_390": 12.3,
+   "texto": "02/04",
+   "umbral": 11.0,
+   "ok": true
+  },
+  "sin_rol": [],
+  "pixeles": {
+   "y_min": 269,
+   "y_max": 1431,
+   "x_min": 68,
+   "x_max": 1004,
+   "limite_abajo": 1498,
+   "arriba_ok": true,
+   "abajo_ok": true,
+   "margen_lateral_ok": true,
+   "rojo_terracota_px": 0
+  }
+ },
+ {
+  "historia": "historia-03.png",
+  "fuentes": {
+   ".h1": [
+    "Bricolage Grotesque [repo]"
+   ],
+   ".tag": [
+    "DM Mono [sistema]"
+   ],
+   ".fila": [
+    "DM Sans [sistema]"
+   ],
+   ".sigue": [
+    "Caveat SemiBold [sistema]"
+   ],
+   ".regla": [
+    "DM Sans [sistema]"
+   ]
+  },
+  "titular_px_390": 46.2,
+  "principal": {
+   "min_px_390": 18.8,
+   "texto": "¿Qué repito más de 3 veces?",
+   "umbral": 16.0,
+   "ok": true
+  },
+  "secundario": {
+   "min_px_390": 12.3,
+   "texto": "03/04",
+   "umbral": 11.0,
+   "ok": true
+  },
+  "sin_rol": [],
+  "pixeles": {
+   "y_min": 269,
+   "y_max": 1431,
+   "x_min": 72,
+   "x_max": 1019,
+   "limite_abajo": 1498,
+   "arriba_ok": true,
+   "abajo_ok": true,
+   "margen_lateral_ok": true,
+   "rojo_terracota_px": 0
+  }
+ },
+ {
+  "historia": "historia-04.png",
+  "fuentes": {
+   ".h1": [
+    "Bricolage Grotesque [repo]"
+   ],
+   ".tag": [
+    "DM Mono [sistema]"
+   ],
+   ".veinte": [
+    "Bricolage Grotesque [repo]"
+   ],
+   ".link": [
+    "Caveat [sistema]"
+   ]
+  },
+  "titular_px_390": 46.2,
+  "principal": {
+   "min_px_390": 18.1,
+   "texto": "qué automatizar primero",
+   "umbral": 16.0,
+   "ok": true
+  },
+  "secundario": {
+   "min_px_390": 12.3,
+   "texto": "04/04",
+   "umbral": 11.0,
+   "ok": true
+  },
+  "sin_rol": [],
+  "pixeles": {
+   "y_min": 269,
+   "y_max": 1234,
+   "x_min": 72,
+   "x_max": 1007,
+   "limite_abajo": 1280,
+   "arriba_ok": true,
+   "abajo_ok": true,
+   "margen_lateral_ok": true,
+   "rojo_terracota_px": 0,
+   "pixeles_en_tercio_inferior": 0
+  }
+ }
+]

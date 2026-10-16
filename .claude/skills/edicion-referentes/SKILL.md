@@ -361,6 +361,106 @@ antes de que lleguen a Sergio Urcullo.
 
 ## Trampas ya pagadas (3-oct-2026)
 
+- **Los brutos de Drive SÍ se bajan desde la nube (corregido el 11-oct-2026; antes esta línea decía que no).** `download_file_content` del
+  conector devuelve base64 por el chat y con 70-250 MB no sirve, pero los archivos que Sergio Urcullo sube a «Videos Onia Octubre»
+  quedan compartidos por enlace y se bajan con `curl -L "https://drive.usercontent.google.com/download?id=<ID>&export=download&confirm=t"`
+  (probado con 5 brutos de 70 a 213 MB en ~1 min; antes, `curl -r 0-1023` con respuesta 206 y `video/mp4` confirma que el enlace anda;
+  un 302 hacia el login indica que el archivo NO está compartido: `BA814C81…` en la raíz de Drive). **Transcripción:** `pip install
+  faster-whisper numpy scipy opencv-python-headless Pillow` y el modelo `small` int8 en CPU (se baja solo de Hugging Face, ~0,5 GB): 5 brutos
+  de 59 s a 3 min tardaron 13-39 s cada uno. **Pide la aprobación de Sergio Urcullo antes de instalar** («Acceso local…» de `CLAUDE.md`).
+  Con un `initial_prompt` de vocabulario (Gemini CLI, Antigravity, Sonnet, Haiku, Astra, Sol, skills, plantillas de Meta) Whisper small
+  corrige «Geminis CLI» y «Sonet», pero sigue oyendo mal «apagó» («pagó»), «descargate» y «skills» («Ains»): el transcript siempre se
+  corrige a mano antes de armar subtítulos. El mapeo de un bruto a su código se hace por lo que dice, no por el tamaño.
+
+- **Borrador de N06 (11-oct), Santiago sobre el corte PROPUESTO, antes del «ok cortes»: se arma con UN comando y se rehace en ~2 min.**
+  `videos/marca-personal/2026-10-11/n06-antigravity/borrador/rehacer.sh [cutplan] [bruto] [carpeta]` (con `RECAPTURAR=1` vuelve a sacar las
+  capturas del día; el README trae el mapa bloque → escenas para cuando se agrega o saca un bloque). Se corre con **`--sin-aire`**: la regla 15
+  (aire muerto ≤ 0,3 s) manda sobre las pausas de 0,34-0,52 s que el molde abre por defecto. Medido por mí sobre el render: `silencedetect -35 dB d=0.3`
+  → 0 silencios (a d=0,2 salen 4 pausas de 0,20-0,23 s), −13,2 LUFS, TP −1,6, LRA 2,2 (la receta pide 2,3 o más), 45,5 s. Trampas pagadas armándolo:
+  (1) **`santiago.py` revienta con OpenCV 5.0** (ya no existe `cv2.CascadeClassifier` ni los Haar). Con la nube en OpenCV 5, `santiago-cv5.py` (en
+  esa carpeta) lo corre con `runpy` y pone un detector de la misma interfaz hecho con YuNet (ojos desde los landmarks; el modelo ya está en el repo).
+  El arreglo de fondo es `FaceDetectorYN` en `analizar_bruto()` con Haar como alternativa donde exista, o fijar `opencv<5`. (2) **`capturar.mjs`:** `ancla`
+  toma la primera coincidencia visible y en los docs de Antigravity el índice «On this page» repite el título: anclar a un párrafo ÚNICO; y
+  `capturas.json` se escribe solo al final, así que un error repite las nueve capturas (28 s). (3) **Para que un cambio de escena tape un micro-corte, la frase
+  disparadora tiene que ser la palabra DESPUÉS del corte**: si el corte cae dentro de una palabra de Whisper, `corte:true` no lo encuentra; con 5 cambios
+  de escena extra y 3 golpes de zoom bajaron los cortes «a la vista» de 9 a 3. (4) Whisper small corre los bordes de palabra hasta 0,4 s y deja palabras de
+  0,14 s: se ajustaron a los silencios del cutplan (17 bordes), pero no es alineación forzada. (5) En títulos con acento la coma va DENTRO: `*Gratis,* Pro`
+  (si no, «Gratis , Pro»); la barra de URL del marco corta URLs largas (poné solo el dominio); el sello rotado choca con un título de 1 línea (va
+  debajo de la captura); en cara completa el texto sobre la pared clara (y≈200) pierde contraste, y≈370 anda; los marcos de captura con `pad` 8 tapan letras
+  vecinas en texto corrido (`pad` 2). (6) El marco de navegador del molde trae tres puntos de semáforo (`#FF5F57`, santiago.py:303) y el subtítulo activo
+  es amarillo `#FDC82F`, no verde: cambiar cualquiera pide tocar `santiago.py` (decisión de la madre). (7) `Broken pipe` en el log del render es el
+  decodificador del bruto cerrado al final: inofensivo. (8) Una noticia se contrasta con la fuente más nueva: el blog de Google del 19-may-2026 respalda
+  «Pro, Ultra y gratis, 18 de junio» y el cartel de geminicli.com dice «Unpaid tier and Google One users» sin contradecirlo; en pantalla va lo que dice la página.
+- **Borrador de DD-A (11-oct), mismo método que N06: `videos/marca-personal/2026-10-11/dd-a-openai-sol/borrador/rehacer.sh` (variables `CIERRE=A|B`,
+  `RECAPTURAR=1`, `BRUTO=`, `S=`).** Medido por mí sobre el render de 58,4 s: `silencedetect -35 dB d=0.3` → 0 silencios (a d=0,2 salen 9 pausas de 0,2-0,3 s
+  = los empalmes de 0,24 s), −13,0 LUFS, LRA 1,8 (receta 2,3-3,4: corto), TP −1,7; no cumple la receta en duración (58,4 contra 65-120 s) ni en cola (0,12 contra
+  0,3-0,65 s). Lo nuevo frente a N06: (1) **`capturar.mjs` con `ancla` falla en `developers.openai.com`** (la página scrollea el BODY, no el documento: «Clipped
+  area is empty»): `capturar-openai.mjs` usa viewport alto + clip, y una opción «celdas» (rectángulo de una celda de tabla, porque la página de precios trae filas
+  ocultas Batch/Flex/Fast/Ultrafast con el mismo nombre); sin ancla sí anda. (2) Los logos SVG `currentColor` (`openai.svg`) salen negros: en un tile blanco, no
+  directos sobre el panel oscuro. (3) **Un disparador toma la PRIMERA aparición de la frase en todo el transcript** («tu negocio» pegó a los 47,49 s): leer el
+  bloque «— disparos —» del `--plan`. (4) Una palabra mal oída que se parte en dos («Tavo» → «Te hago») se parte DESPUÉS de pasar a tiempo de salida; Whisper deja
+  bordes dentro del hueco tirado («pero» 32,00-34,52): inicio → start+pad, final → end−pad. (5) `caja(titulo, sub)` pisa el sub unos 6 px con un título de 2 líneas;
+  `tarjeta` con aire 0 pega las líneas (usar ≥ 14). (6) Solapes en transiciones (texto de escena «full» sobre el panel viejo 0,33 s): disparar con +0,3 s y
+  cerrar cada escena con `hasta` = inicio de la siguiente. (7) Medido: ojos 67,0-67,7 % en split y 45,6-46,6 % en cara completa en las 5 tomas; salto de cara en
+  los micro-cortes ≤ 13 px; subtítulo contra arranque de voz, mediana 0,00 s. (8) La changelog oficial de OpenAI es la mejor prueba de precios («Sep 29 … $2 input,
+  $0.10 cached input, $2.50 cache write, $10 output»); la cuenta de Sergio Urcullo ignora salida y escritura de caché. (9) **ALERTA de aritmética: «400 contra 20»
+  solo cuadra como Sol sin caché contra Sol con caché; si dijo «con Astra» el dato es falso (Astra sin caché serían US$2.000).** Una cuenta hablada se re-calcula con los
+  precios de la propia pieza antes del master. (10) Dos rodeos iguales para OpenCV 5 (`correr-santiago.py` y `santiago-cv5.py`): el arreglo va en `analizar_bruto()`.
+  (11) La REGLA 15 (aire muerto ≤ 0,3 s) vive en `tabla-de-cortes.py` y en los docs de la madre; esta rama la usa con `--sin-aire` y la mide con `silencedetect`.
+- **ARREGLADO el 11-oct: `santiago.py` ya corre con OpenCV 5** (`detector_cara()` en `analizar_bruto()`: Haar si el OpenCV lo trae, YuNet con el modelo del repo si no;
+  el detector entra en la clave del caché del análisis). Comprobado sin rodeo sobre el bruto de N06: el `--plan` sale **idéntico** (ojos, escala por toma, cortes a la
+  vista, aire, palabras/s) al hecho con el rodeo `santiago-cv5.py`, y tarda 29 s. Los dos rodeos de las carpetas `borrador/` de N06 y DD-A ya no hacen falta (siguen
+  funcionando: no parchean nada si Haar existe). Con OpenCV 4.x el camino es el de siempre.
+- **Borrador de N07 (11-oct), Santiago sobre el corte propuesto: `videos/marca-personal/2026-10-11/n07-haiku-55/borrador/rehacer.sh` (`RECAPTURAR=1`, `BRUTO=`, `S=`).**
+  Medido por mí sobre el render de 81,7 s: `silencedetect -35 dB d=0.3` → 0 silencios (a d=0,2 salen 11 = los empalmes de 0,24 s), −13,0 LUFS, LRA 2,6, TP −1,6; el
+  `--plan` da 22 escenas, 14 cambios de layout, 8,7 elementos por 10 s y 2,90 palabras/s; 10 de 29 cortes quedan «a la vista» (dx ≤ 9,5 px, dy ≤ 27 px). No cumple la
+  receta en cola (0,19 s contra 0,3-0,65) ni tiene remate; el CTA dura 2,4 s. `santiago.py` corrió directo con OpenCV 5, sin rodeo (el primer `--plan` tardó 126 s en esta
+  máquina, no 30). Verificación contra las páginas oficiales de Anthropic (capturadas el 11-oct): precios de Haiku 5.5 ($0,10 / $0,50 hasta 100 mil tokens, ×5 por encima) y
+  de Haiku 4.5 ($1 / $5), «Released October 7, 2026», «approximately 30% more tokens» y los tokens de pensamiento facturados como salida: todo cuadra; la cuenta
+  US$3,00 → US$0,30 → US$0,39 («casi 8 veces») cuadra con dos supuestos que ninguna página respalda (2.000 de entrada y 200 de salida por mensaje, y el +30 % también en
+  la salida). Lo nuevo: (1) **una 2.ª pasada de Whisper (beam 5) más el guion de la pieza resolvió «Ser más bots» = «Si armás bots» y «termó» = «te armó»**: la tabla de
+  cortes proponía otra lectura; el guion de GRABAR sirve de pista aunque la pieza no lo siga. (2) En `armar-transcript.py`, cuando un arreglo cambia la CANTIDAD de palabras
+  hay que repartir el tiempo de todo el tramo viejo; si no, la palabra siguiente arranca antes en el karaoke; los pedazos «5» + «.5» se pegan antes de aplicar arreglos.
+  (3) `platform.claude.com` tiene la cabecera «Pricing» **sticky**: `capturar-anthropic.mjs` (copia de la de OpenAI) la pasa a `static`; `code.claude.com/model-config`
+  cae a y≈46.500 px (más allá de un viewport de 15.000): fullPage + clip. (4) **Un `frase` cambiado en una captura que ya existe se salta** (queda la clave vieja en
+  `capturas.json`) y `santiago.py` falla con `KeyError`: borrar esa entrada o `--forzar`. (5) La página de «extended thinking» pinta el código en línea en rojo: se recortó
+  para que no entre (el único rojo permitido es el punto del marco del molde). (6) `medir-salto-cara.py` (YuNet sobre el render, con referencia sin corte) y partir las
+  escenas de panel en el corte bajaron los «a la vista» de 13 a 10. (7) Doc nueva (11-oct): en Claude Code NO se puede apagar el pensamiento en Haiku 5.5 (en la API sí, con
+  effort ≤ high), pide Claude Code ≥ 2.1.293, y Haiku 4.5 es «legacy» (retiro no antes del 15-oct-2026): el video dice «apagalo» y 15 s después manda a probarlo en la terminal,
+  donde no se puede: lo decide Sergio Urcullo.
+- **Borrador de N02 (11-oct), Santiago sobre el corte propuesto: `videos/marca-personal/2026-10-11/n02-sonnet-45/borrador/rehacer.sh` (`BRUTO`, `S`, `CUTPLAN`, `RECAPTURAR=1`).**
+  Medido por mí sobre el render de 111,3 s: `silencedetect -35 dB d=0.3` → 0 silencios (a d=0,2 salen 18 = empalmes y pausas de 0,2-0,3 s), −13,2 LUFS, LRA 2,0 (receta
+  2,3-3,4: corto), TP −1,3; 11 cambios de layout (0,99 por 10 s), 6,1 elementos nuevos por 10 s, 0 s sin cara; salto de cara en 37 empalmes dentro de escena ≤ 16 px; render de
+  256-305 s y primer análisis del bruto de 156 s en 113 s. No cumple la receta en cola (0,17 s) y le falta remate y despedida (hace falta una toma nueva). Verificado contra
+  `platform.claude.com` el 11-oct: retiro 30-nov, aviso del 30-sep, reemplazo `claude-sonnet-5-5`, de US$3 a US$2, +30 % de tokens, los 5 ajustes con error 400 (los tres que
+  nombra están entre ellos) y `/claude-api migrate`; la cuenta del 13 % cuadra (2 × 1,3 = 2,6 contra 3 = −13,3 %) y no incluye el pensamiento, que se cobra como salida (él lo
+  avisa con «puede»). Sin respaldo en página: n8n y su infraestructura (no se verifica desde la nube); y la página dice que Export baja un CSV, él dice «una pantalla».
+  Lo nuevo: (1) para capturar una celda de tabla usá la FILA como `ancla` y buscá «$3 / MTok» desde ahí; (2) **una marca sobre una frase que cruza dos renglones dibuja el
+  bloque de los dos**: marcá tramos de un renglón; bajar `ancho_css` a 460 agranda el texto ×1,27 pero hay que revisar las marcas; (3) Whisper parte «4»+«.5,» y «30»+«%»:
+  hay que pegarlos antes de aplicar arreglos; (4) un `credito` sin `en` sale ANTES que su captura; (5) `desde:{t}` no se pega a ningún corte; (6) la sintaxis `frase#2` solo
+  anda en la forma de texto, en diccionario es `"n": 2` (leído en el código, no probado fallando); (7) `medir-saltos.py` mide el salto de cara sobre el render (YuNet);
+  (8) **no apliques un arreglo `[?]` que inserta palabras sin oír**: en 1,3 s de voz continua con 7 núcleos silábicos, dos pasadas de Whisper coincidían en «Para que se vea el
+  resultado uno», y el `[?] Uno` propuesto no cabía; (9) un tramo de 2,4 s sin transcripción puede ser un arranque en falso del cierre (la 2.ª pasada oyó «La lista» y el bruto
+  tiene un salto de toma a los 144,4 s): se recomienda cortarlo y queda sin subtítulo hasta que alguien lo oiga; (10) «Quedan 46 días» solo vale el jueves 15-oct (hoy, 11-oct,
+  quedan 50): va solo en subtítulos, sin tarjeta con número.
+- **Borrador de S2-D07-A (11-oct), molde ERIK sobre el corte propuesto: `videos/marca-personal/2026-10-11/s2-d07-a-ventana-24h/borrador/rehacer.sh`** (variables `BRUTO`,
+  `S`, `CUTPLAN`, `RECAPTURAR=1`, `QUITAR_VARIABLES=1`, `QUITAR_REPETIDO=1`, `SOLO_CUADROS=`). Medido por mí sobre el render de 90,7 s: 0 decodificaciones con error, `silencedetect
+  -35 dB d=0.3` → 0 silencios (también a d=0,2), −14,1 LUFS (Erik pide −14), LRA 2,2, TP −2,2; 47 cortes que se ven (5,2 cada 10 s), plano más largo 3,28 s, subtítulos hasta el 78,2 %
+  del alto. `erik_edit.py` corrió directo con OpenCV 5 (NO usa Haar: usa YuNet) y con `--sin-vosk` (Vosk no está instalado: 23 de 30 anclas usan el tiempo de Whisper tal cual y
+  las piezas pueden entrar 0,1-0,3 s corridas; no se midió contra el audio). La receta Erik aprieta los huecos a 0,25 s: coherente con la regla 15 y la tabla derivada sale vacía.
+  Variantes con render completo y 0 silencios: sin la frase de las variables 86,1 s · sin el tramo repetido 74,2 s · las dos 69,6 s (con las dos queda un empalme de ~110 px a los
+  53,24 s). Lo nuevo: (1) **`developers.facebook.com`**: las clases son hashes, los párrafos son `<div>` y las cabeceras son fixed/sticky: anclar al elemento más profundo, ocultar lo
+  fixed y usar un spec y una carpeta de assets POR URL (`capturas.json` se sobreescribe por URL); los docs se mudaron a `/documentation/business-messaging/whatsapp/` (las URL
+  `/docs/whatsapp/` redirigen); `capturar-meta.mjs` es la copia que anda. (2) **Lanzar dos renders sobre la misma carpeta se pisan**: el MP4 salió con miles de «Invalid NAL unit»
+  (un `( … ) &` más un segundo render); se repitió limpio y solo, y desde entonces se verifica con `ffmpeg -v error -i f.mp4 -f null -` (debe dar 0 líneas). (3) Las notas de los
+  nodos de `flujo` se recortan fuera de la tarjeta (caja 120: ≤ 16 caracteres). (4) **Un evento que empieza unos cuadros después de un corte del cutplan crea un plano-flash:
+  anclar con `{corte: k}`**; un corte k que cae dentro de lo quitado se lleva al empalme y uno que cae después queda corrido 0,25 s (sirve para tapar el empalme con un zoom).
+  (5) Con encuadre selfie (ojos 52 %, mentón 63 %, medido con YuNet) el molde baja las tarjetas a la banda de arriba (y 150-476): es el respaldo documentado, porque el pecho
+  (51-75 %) taparía la boca. (6) Una 2.ª pasada de Whisper con vocabulario se sesga hacia las palabras del prompt. (7) El `armar-transcript.py` heredado de N02 borraba el «¿» al
+  aplicar arreglos: corregido en la copia de esta carpeta. (8) La pastilla de las láminas G tapaba texto de la captura: queda solo el contorno verde. (9) **Discrepancia de
+  contenido, NO resuelta (la decide Sergio Urcullo):** él dice (bruto 00:57-01:04) que una plantilla «no puede estar cambiándose con variables porque si no Meta te las rechazaría»;
+  la página de Meta («Template fundamentals», actualizada el 21-may-2026) dice que las plantillas SÍ llevan variables (`{{1}}` o nombradas): ninguna tarjeta, sello ni lámina
+  lo repite y los subtítulos muestran lo que dijo. Matiz: el reloj de 24 h corre desde el último mensaje del CLIENTE y se reinicia; él dice «desde que se inicia la conversación».
 - **El bruto puede venir ya editado** (el de N03 traía 5 tomas pegadas). Los saltos se detectan con picos aislados de
   diferencia entre cuadros (>5× la mediana y >2,5× sus vecinos) y se tratan como cortes. Si no, el control dice
   «ningún corte a la vista» y es falso.

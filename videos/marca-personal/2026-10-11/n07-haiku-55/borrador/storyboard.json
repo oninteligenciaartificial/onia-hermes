@@ -1,0 +1,1521 @@
+{
+ "titulo": "N07 · Haiku 5.5: el precio y la cuenta de un bot (BORRADOR, molde Santiago «noticia con tarjetas»)",
+ "nota": "BORRADOR sobre el corte PROPUESTO (sin el «ok cortes» de Sergio Urcullo). Cada escena dice su layout y la PALABRA que la dispara; 'corte': true la pega al límite del cutplan. Todo texto en pantalla sale de lo que Sergio dijo (segments-cut.json) o de una página oficial de Anthropic capturada el 2026-10-11 (capturas/capturas.json trae URL y fecha). Las cifras de la cuenta (US$3, US$0,30, US$0,39) se recalcularon con los precios de la página: ver README.",
+ "assets": "capturas",
+ "camara": {},
+ "capturas": [
+  {
+   "id": "haiku-spec",
+   "url": "https://platform.claude.com/docs/en/models/haiku-5-5/overview",
+   "ancho_css": 560,
+   "esquema": "dark",
+   "ancla": "Context window",
+   "margen": 16,
+   "alto_css": 160,
+   "fijos": "ocultar",
+   "frases": [
+    "From $0.10",
+    "From $0.50"
+   ]
+  },
+  {
+   "id": "haiku-precios",
+   "url": "https://platform.claude.com/docs/en/models/haiku-5-5/overview",
+   "ancho_css": 560,
+   "esquema": "dark",
+   "ancla": "for prompts up to 100,000 tokens",
+   "margen": 100,
+   "alto_css": 240,
+   "fijos": "ocultar",
+   "frases": [
+    "$0.10 / MTok for prompts up to 100,000 tokens",
+    "$0.50 / MTok for prompts over 100,000 tokens",
+    "$0.50 / MTok for prompts up to 100,000 tokens"
+   ]
+  },
+  {
+   "id": "haiku-liberado",
+   "url": "https://platform.claude.com/docs/en/models/haiku-5-5/overview",
+   "ancho_css": 560,
+   "esquema": "dark",
+   "ancla": "Released",
+   "margen": 110,
+   "alto_css": 200,
+   "fijos": "ocultar",
+   "frases": [
+    "October 7, 2026"
+   ]
+  },
+  {
+   "id": "haiku-30",
+   "url": "https://platform.claude.com/docs/en/models/haiku-5-5/overview",
+   "ancho_css": 560,
+   "esquema": "dark",
+   "ancla": "Claude Haiku 5.5 is built for high-volume",
+   "margen": 14,
+   "alto_css": 200,
+   "fijos": "ocultar",
+   "frases": [
+    "approximately 30% more tokens"
+   ]
+  },
+  {
+   "id": "haiku-uso",
+   "url": "https://platform.claude.com/docs/en/models/haiku-5-5/overview",
+   "ancho_css": 560,
+   "esquema": "dark",
+   "ancla": "For high-volume, latency-sensitive tasks",
+   "margen": 70,
+   "alto_css": 150,
+   "fijos": "ocultar",
+   "frases": [
+    "classification, extraction, and routing"
+   ]
+  },
+  {
+   "id": "haiku45-spec",
+   "url": "https://platform.claude.com/docs/en/models/haiku-4-5/overview",
+   "ancho_css": 560,
+   "esquema": "dark",
+   "ancla": "Context window",
+   "margen": 16,
+   "alto_css": 160,
+   "fijos": "ocultar",
+   "frases": [
+    "$1",
+    "$5"
+   ]
+  },
+  {
+   "id": "precio-larga",
+   "url": "https://platform.claude.com/docs/en/about-claude/pricing",
+   "ancho_css": 560,
+   "esquema": "dark",
+   "ancla": "Claude Haiku 5.5 is priced by prompt length",
+   "margen": 14,
+   "alto_css": 150,
+   "fijos": "ocultar",
+   "frases": [
+    "a request whose prompt is over 100,000 tokens pays higher prices"
+   ]
+  },
+  {
+   "id": "pensamiento-salida",
+   "url": "https://platform.claude.com/docs/en/build-with-claude/thinking",
+   "ancho_css": 560,
+   "esquema": "dark",
+   "ancla": "Thinking has a cost",
+   "margen": 14,
+   "alto_css": 150,
+   "fijos": "ocultar",
+   "frases": [
+    "billed as output tokens"
+   ]
+  },
+  {
+   "id": "pensamiento-apagar",
+   "url": "https://platform.claude.com/docs/en/build-with-claude/thinking",
+   "ancho_css": 560,
+   "esquema": "dark",
+   "ancla": "Claude Haiku 5.5 also has thinking on by default",
+   "margen": 14,
+   "alto_css": 130,
+   "fijos": "ocultar",
+   "frases": [
+    "thinking on by default"
+   ]
+  },
+  {
+   "id": "terminal",
+   "url": "https://code.claude.com/docs/en/model-config",
+   "ancho_css": 560,
+   "esquema": "dark",
+   "ancla": "Its model ID is claude-haiku-5-5",
+   "margen": 40,
+   "alto_css": 200,
+   "fijos": "ocultar",
+   "frases": [
+    "claude --model claude-"
+   ]
+  }
+ ],
+ "logos_svg": [
+  {
+   "id": "logo-anthropic",
+   "svg": "hermes-content/references/brand-claude/anthropic.svg",
+   "alto": 200,
+   "tile": true
+  }
+ ],
+ "zooms": [
+  {
+   "tipo": "golpe",
+   "en": "40 centavos"
+  },
+  {
+   "tipo": "golpe",
+   "en": "casi 8"
+  },
+  {
+   "tipo": "golpe",
+   "en": "cobra 5 veces"
+  }
+ ],
+ "escenas": [
+  {
+   "id": "gancho",
+   "layout": "split",
+   "fondo": "oscuro",
+   "desde": {
+    "t": 0
+   },
+   "etiqueta": [
+    "ANTHROPIC",
+    "HAIKU 5.5"
+   ],
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "Clasificar\n*mil mensajes*",
+     "tam": 96,
+     "pos": [
+      48,
+      100
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "captura",
+     "src": "haiku-spec",
+     "ancho": 984,
+     "pos": [
+      48,
+      360
+     ],
+     "anim": "corte",
+     "url": "platform.claude.com"
+    },
+    {
+     "tipo": "credito",
+     "texto": "platform.claude.com/docs/en/models/haiku-5-5/overview · 11 oct 2026",
+     "pos": [
+      48,
+      742
+     ]
+    }
+   ]
+  },
+  {
+   "id": "antes-ahora",
+   "layout": "split",
+   "fondo": "oscuro",
+   "desde": {
+    "frase": "antes",
+    "corte": true
+   },
+   "etiqueta": [
+    "TU BOT",
+    "MIL MENSAJES"
+   ],
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "Antes",
+     "fuente": "bold",
+     "tam": 60,
+     "color": "gris",
+     "pos": [
+      48,
+      120
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "texto",
+     "texto": "*3 dólares*",
+     "tam": 132,
+     "pos": [
+      48,
+      190
+     ],
+     "en": "tres"
+    },
+    {
+     "tipo": "texto",
+     "texto": "Ahora",
+     "fuente": "bold",
+     "tam": 60,
+     "color": "gris",
+     "pos": [
+      48,
+      470
+     ],
+     "en": "ahora"
+    },
+    {
+     "tipo": "texto",
+     "texto": "*40 centavos*",
+     "tam": 132,
+     "pos": [
+      48,
+      540
+     ],
+     "en": "40 centavos"
+    }
+   ]
+  },
+  {
+   "id": "lanzamiento",
+   "layout": "split",
+   "fondo": "oscuro",
+   "desde": {
+    "frase": "anthropic sacó",
+    "corte": true
+   },
+   "etiqueta": [
+    "ANTHROPIC",
+    "LANZAMIENTO"
+   ],
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "Haiku *5.5*",
+     "tam": 100,
+     "pos": [
+      48,
+      96
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "logo",
+     "src": "logo-anthropic.png",
+     "ancho": 130,
+     "pos": [
+      902,
+      100
+     ],
+     "en": {
+      "frase": "anthropic sacó",
+      "offset": 0.0
+     }
+    },
+    {
+     "tipo": "captura",
+     "src": "haiku-liberado",
+     "recorte": [
+      30,
+      24,
+      1060,
+      270
+     ],
+     "ancho": 984,
+     "pos": [
+      48,
+      240
+     ],
+     "anim": "corte",
+     "url": "platform.claude.com",
+     "marcas": [
+      {
+       "frase": "October 7, 2026",
+       "en": "7 de octubre"
+      }
+     ]
+    },
+    {
+     "tipo": "texto",
+     "texto": "Sacó el *7 de octubre*",
+     "tam": 74,
+     "pos": [
+      48,
+      590
+     ],
+     "en": "el 7"
+    },
+    {
+     "tipo": "sello",
+     "texto": "7 OCT",
+     "tam": 56,
+     "rot": -8,
+     "pos": [
+      600,
+      100
+     ],
+     "en": "octubre"
+    },
+    {
+     "tipo": "credito",
+     "texto": "platform.claude.com/docs/en/models/haiku-5-5/overview · 11 oct 2026",
+     "pos": [
+      48,
+      812
+     ]
+    }
+   ]
+  },
+  {
+   "id": "por-token",
+   "layout": "split",
+   "fondo": "oscuro",
+   "desde": {
+    "frase": "por token",
+    "corte": true
+   },
+   "etiqueta": [
+    "HAIKU 5.5",
+    "POR TOKEN"
+   ],
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "Por token",
+     "fuente": "bold",
+     "tam": 66,
+     "color": "gris",
+     "pos": [
+      48,
+      260
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "texto",
+     "texto": "cobra *10 veces\nmenos*",
+     "tam": 112,
+     "pos": [
+      48,
+      340
+     ],
+     "en": "cobra"
+    }
+   ]
+  },
+  {
+   "id": "precio-55",
+   "layout": "split",
+   "fondo": "oscuro",
+   "desde": {
+    "frase": "haiku 5.5 10 centavos",
+    "corte": true
+   },
+   "etiqueta": [
+    "ANTHROPIC",
+    "PRECIO POR MILLÓN DE TOKENS"
+   ],
+   "elementos": [
+    {
+     "tipo": "captura",
+     "src": "haiku-precios",
+     "recorte": [
+      30,
+      70,
+      1060,
+      334
+     ],
+     "ancho": 984,
+     "pos": [
+      48,
+      100
+     ],
+     "anim": "corte",
+     "url": "platform.claude.com",
+     "marcas": [
+      {
+       "frase": "$0.10 / MTok for prompts up to 100,000 tokens",
+       "en": "10 centavos"
+      },
+      {
+       "frase": "$0.50 / MTok for prompts up to 100,000 tokens",
+       "en": "50 los"
+      }
+     ]
+    },
+    {
+     "tipo": "texto",
+     "texto": "*10 centavos* entran",
+     "tam": 72,
+     "pos": [
+      48,
+      540
+     ],
+     "en": "10 centavos"
+    },
+    {
+     "tipo": "texto",
+     "texto": "*50 centavos* salen",
+     "tam": 72,
+     "pos": [
+      48,
+      634
+     ],
+     "en": "50 los"
+    },
+    {
+     "tipo": "pildora",
+     "texto": "por millón de tokens",
+     "tam": 36,
+     "pos": [
+      48,
+      722
+     ],
+     "en": "del millón"
+    },
+    {
+     "tipo": "credito",
+     "texto": "platform.claude.com/docs/en/models/haiku-5-5/overview · 11 oct 2026",
+     "pos": [
+      48,
+      812
+     ]
+    }
+   ]
+  },
+  {
+   "id": "precio-45",
+   "layout": "split",
+   "fondo": "oscuro",
+   "desde": {
+    "frase": "el 4.5 cobraba",
+    "corte": true
+   },
+   "etiqueta": [
+    "ANTHROPIC",
+    "EL ANTERIOR"
+   ],
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "Haiku *4.5*",
+     "tam": 88,
+     "pos": [
+      48,
+      96
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "captura",
+     "src": "haiku45-spec",
+     "ancho": 984,
+     "pos": [
+      48,
+      210
+     ],
+     "anim": "corte",
+     "url": "platform.claude.com",
+     "marcas": [
+      {
+       "frase": "$1",
+       "en": "un dólar"
+      },
+      {
+       "frase": "$5",
+       "en": "5 dólares"
+      }
+     ]
+    },
+    {
+     "tipo": "texto",
+     "texto": "*1 dólar* entra",
+     "tam": 68,
+     "pos": [
+      48,
+      590
+     ],
+     "en": "un dólar"
+    },
+    {
+     "tipo": "texto",
+     "texto": "*5 dólares* sale",
+     "tam": 68,
+     "pos": [
+      48,
+      682
+     ],
+     "en": "5 dólares"
+    },
+    {
+     "tipo": "credito",
+     "texto": "platform.claude.com/docs/en/models/haiku-4-5/overview · 11 oct 2026",
+     "pos": [
+      48,
+      812
+     ]
+    }
+   ]
+  },
+  {
+   "id": "cuenta-1",
+   "layout": "pip",
+   "fondo": "papel",
+   "desde": {
+    "frase": "mil mensajes con",
+    "corte": true
+   },
+   "etiqueta": [
+    "LA CUENTA",
+    "POR MIL MENSAJES"
+   ],
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "La\n*cuenta*",
+     "tam": 118,
+     "pos": [
+      40,
+      200
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "fila",
+     "texto": "Mil mensajes",
+     "sub": "con el pensamiento apagado",
+     "icono": "check",
+     "alto": 120,
+     "pos": [
+      48,
+      740
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "fila",
+     "texto": "2000 tokens entran",
+     "sub": "200 tokens salen",
+     "icono": "check",
+     "alto": 120,
+     "pos": [
+      48,
+      872
+     ],
+     "en": "2000 tokens"
+    },
+    {
+     "tipo": "fila",
+     "texto": "Con Haiku 4.5: US$3",
+     "sub": "2 millones × US$1 + 0,2 millones × US$5",
+     "icono": "check",
+     "alto": 120,
+     "pos": [
+      48,
+      1004
+     ],
+     "en": "con haiku 4.5"
+    },
+    {
+     "tipo": "fila",
+     "texto": "Con Haiku 5.5: US$0,30",
+     "sub": "2 millones × US$0,10 + 0,2 millones × US$0,50",
+     "icono": "check",
+     "alto": 120,
+     "pos": [
+      48,
+      1136
+     ],
+     "en": "30 centavos"
+    }
+   ]
+  },
+  {
+   "id": "nadie",
+   "layout": "split",
+   "fondo": "oscuro",
+   "desde": {
+    "frase": "pero lo que nadie",
+    "corte": true
+   },
+   "etiqueta": [
+    "HAIKU 5.5",
+    "LO QUE NADIE TE CUENTA"
+   ],
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "Lo que *nadie*\nte cuenta",
+     "tam": 112,
+     "pos": [
+      48,
+      150
+     ],
+     "anim": "corte"
+    }
+   ]
+  },
+  {
+   "id": "mismo-texto",
+   "layout": "split",
+   "fondo": "oscuro",
+   "desde": {
+    "frase": "el modelo nuevo",
+    "corte": true
+   },
+   "etiqueta": [
+    "HAIKU 5.5",
+    "EL MISMO TEXTO"
+   ],
+   "elementos": [
+    {
+     "tipo": "captura",
+     "src": "haiku-30",
+     "recorte": [
+      30,
+      20,
+      1060,
+      310
+     ],
+     "ancho": 984,
+     "pos": [
+      48,
+      100
+     ],
+     "anim": "corte",
+     "url": "platform.claude.com",
+     "marcas": [
+      {
+       "frase": "approximately 30% more tokens",
+       "en": "mismo texto"
+      }
+     ]
+    },
+    {
+     "tipo": "texto",
+     "texto": "El mismo texto,\n*30 % más tokens*",
+     "tam": 70,
+     "pos": [
+      48,
+      520
+     ],
+     "en": "el modelo nuevo"
+    },
+    {
+     "tipo": "credito",
+     "texto": "platform.claude.com/docs/en/models/haiku-5-5/overview · 11 oct 2026",
+     "pos": [
+      48,
+      812
+     ]
+    }
+   ]
+  },
+  {
+   "id": "cuarenta",
+   "layout": "pip",
+   "fondo": "papel",
+   "desde": {
+    "frase": "un 30 %",
+    "corte": true
+   },
+   "etiqueta": [
+    "LA CUENTA",
+    "CON 30 % MÁS DE TOKENS"
+   ],
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "La\n*cuenta*",
+     "tam": 118,
+     "pos": [
+      40,
+      200
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "fila",
+     "texto": "Haiku 4.5: US$3",
+     "icono": "check",
+     "alto": 120,
+     "pos": [
+      48,
+      740
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "fila",
+     "texto": "Haiku 5.5: US$0,30",
+     "icono": "check",
+     "alto": 120,
+     "pos": [
+      48,
+      872
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "fila",
+     "texto": "30 % más de tokens",
+     "sub": "2.600 entran · 260 salen",
+     "icono": "check",
+     "alto": 120,
+     "pos": [
+      48,
+      1004
+     ],
+     "en": "un 30 %"
+    },
+    {
+     "tipo": "fila",
+     "texto": "Unos 40 centavos",
+     "sub": "US$0,39 · casi 8 veces menos",
+     "icono": "check",
+     "alto": 120,
+     "pos": [
+      48,
+      1136
+     ],
+     "en": "son unos"
+    },
+    {
+     "tipo": "sello",
+     "texto": "CASI 8 VECES",
+     "tam": 50,
+     "rot": -8,
+     "pos": [
+      40,
+      560
+     ],
+     "en": "casi 8"
+    }
+   ]
+  },
+  {
+   "id": "para-que",
+   "layout": "split",
+   "fondo": "oscuro",
+   "desde": {
+    "frase": "para qué sirve",
+    "corte": true
+   },
+   "etiqueta": [
+    "ANTHROPIC",
+    "PARA QUÉ SIRVE"
+   ],
+   "elementos": [
+    {
+     "tipo": "captura",
+     "src": "haiku-uso",
+     "recorte": [
+      30,
+      62,
+      1060,
+      160
+     ],
+     "ancho": 984,
+     "pos": [
+      48,
+      100
+     ],
+     "anim": "corte",
+     "url": "platform.claude.com",
+     "marcas": [
+      {
+       "frase": "classification, extraction, and routing",
+       "en": "clasificar"
+      }
+     ]
+    },
+    {
+     "tipo": "pildora",
+     "texto": "Clasificar",
+     "icono": "check",
+     "tam": 48,
+     "pos": [
+      48,
+      430
+     ],
+     "en": "clasificar"
+    },
+    {
+     "tipo": "pildora",
+     "texto": "Sacar datos",
+     "icono": "check",
+     "tam": 48,
+     "pos": [
+      48,
+      520
+     ],
+     "en": "sacar datos"
+    },
+    {
+     "tipo": "pildora",
+     "texto": "Repartir",
+     "icono": "check",
+     "tam": 48,
+     "pos": [
+      48,
+      610
+     ],
+     "en": "repartir"
+    },
+    {
+     "tipo": "credito",
+     "texto": "platform.claude.com/docs/en/models/haiku-5-5/overview · 11 oct 2026",
+     "pos": [
+      48,
+      812
+     ]
+    }
+   ]
+  },
+  {
+   "id": "recepcionista",
+   "layout": "full",
+   "desde": {
+    "frase": "como un recepcionista",
+    "corte": true
+   },
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "Como un",
+     "tam": 84,
+     "alinear": "centro",
+     "pos": [
+      "centro",
+      300
+     ],
+     "en": {
+      "frase": "como un",
+      "offset": 0.3
+     },
+     "hasta": {
+      "frase": "lo difícil",
+      "corte": true
+     }
+    },
+    {
+     "tipo": "texto",
+     "texto": "*recepcionista*",
+     "tam": 112,
+     "alinear": "centro",
+     "pos": [
+      "centro",
+      390
+     ],
+     "en": "recepcionista",
+     "hasta": {
+      "frase": "lo difícil",
+      "corte": true
+     }
+    },
+    {
+     "tipo": "texto",
+     "texto": "No atiende la consulta,",
+     "tam": 52,
+     "alinear": "centro",
+     "pos": [
+      "centro",
+      540
+     ],
+     "en": "no atiende",
+     "hasta": {
+      "frase": "lo difícil",
+      "corte": true
+     }
+    },
+    {
+     "tipo": "texto",
+     "texto": "*la manda* a quien corresponde",
+     "tam": 52,
+     "alinear": "centro",
+     "pos": [
+      "centro",
+      606
+     ],
+     "en": "la manda",
+     "hasta": {
+      "frase": "lo difícil",
+      "corte": true
+     }
+    }
+   ]
+  },
+  {
+   "id": "lo-dificil",
+   "layout": "lamina",
+   "fondo": "papel",
+   "desde": {
+    "frase": "lo difícil",
+    "corte": true
+   },
+   "etiqueta": [
+    "LO DIFÍCIL"
+   ],
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "Lo difícil\nse lo deja a",
+     "tam": 104,
+     "pos": [
+      40,
+      240
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "fila",
+     "texto": "Sonnet",
+     "icono": "check",
+     "alto": 140,
+     "pos": [
+      48,
+      760
+     ],
+     "en": "sonnet"
+    },
+    {
+     "tipo": "fila",
+     "texto": "Opus",
+     "icono": "check",
+     "alto": 140,
+     "pos": [
+      48,
+      924
+     ],
+     "en": "opus"
+    }
+   ]
+  },
+  {
+   "id": "clinica",
+   "layout": "full",
+   "desde": {
+    "frase": "si tenés una",
+    "corte": true
+   },
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "Si tenés una",
+     "tam": 80,
+     "alinear": "centro",
+     "pos": [
+      "centro",
+      300
+     ],
+     "en": {
+      "frase": "si tenés una",
+      "offset": 0.3
+     },
+     "hasta": {
+      "frase": "repartir mil",
+      "corte": true
+     }
+    },
+    {
+     "tipo": "texto",
+     "texto": "*clínica con bot*",
+     "tam": 94,
+     "alinear": "centro",
+     "pos": [
+      "centro",
+      392
+     ],
+     "en": "clínica",
+     "hasta": {
+      "frase": "repartir mil",
+      "corte": true
+     }
+    }
+   ]
+  },
+  {
+   "id": "medio-dolar",
+   "layout": "split",
+   "fondo": "papel",
+   "desde": {
+    "frase": "repartir mil",
+    "corte": true
+   },
+   "etiqueta": [
+    "LA CUENTA",
+    "SOLO EL MODELO"
+   ],
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "Mil consultas",
+     "tam": 84,
+     "pos": [
+      48,
+      104
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "texto",
+     "texto": "*menos de medio dólar*",
+     "tam": 70,
+     "pos": [
+      48,
+      206
+     ],
+     "en": "menos de medio"
+    },
+    {
+     "tipo": "pildora",
+     "texto": "con el pensamiento apagado",
+     "estilo": "papel-oscuro",
+     "tam": 34,
+     "pos": [
+      48,
+      316
+     ],
+     "en": "en el modelo"
+    },
+    {
+     "tipo": "texto",
+     "texto": "Preguntale a quien\nte armó el bot",
+     "fuente": "bold",
+     "tam": 56,
+     "color": "gris_papel",
+     "pos": [
+      48,
+      470
+     ],
+     "en": "preguntale"
+    },
+    {
+     "tipo": "texto",
+     "texto": "*¿Qué modelo usa?*",
+     "tam": 82,
+     "pos": [
+      48,
+      640
+     ],
+     "en": "qué modelo"
+    }
+   ]
+  },
+  {
+   "id": "armas",
+   "layout": "full",
+   "desde": {
+    "frase": "si armás bots",
+    "corte": true
+   },
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "Si armás bots,",
+     "tam": 80,
+     "alinear": "centro",
+     "pos": [
+      "centro",
+      300
+     ],
+     "en": {
+      "frase": "si armás bots",
+      "offset": 0.3
+     },
+     "hasta": {
+      "frase": "si el prompt",
+      "corte": true
+     }
+    },
+    {
+     "tipo": "texto",
+     "texto": "*dos trampas*",
+     "tam": 108,
+     "alinear": "centro",
+     "pos": [
+      "centro",
+      392
+     ],
+     "en": "dos trampas",
+     "hasta": {
+      "frase": "si el prompt",
+      "corte": true
+     }
+    }
+   ]
+  },
+  {
+   "id": "trampa-1",
+   "layout": "split",
+   "fondo": "oscuro",
+   "desde": {
+    "frase": "si el prompt",
+    "corte": true
+   },
+   "etiqueta": [
+    "TRAMPA 1",
+    "MÁS DE 100 MIL TOKENS"
+   ],
+   "elementos": [
+    {
+     "tipo": "captura",
+     "src": "haiku-precios",
+     "recorte": [
+      30,
+      70,
+      1060,
+      334
+     ],
+     "ancho": 984,
+     "pos": [
+      48,
+      100
+     ],
+     "anim": "corte",
+     "url": "platform.claude.com",
+     "marcas": [
+      {
+       "frase": "$0.50 / MTok for prompts over 100,000 tokens",
+       "en": "pasa de"
+      }
+     ]
+    },
+    {
+     "tipo": "texto",
+     "texto": "Si el prompt pasa de\n*100 mil tokens*",
+     "tam": 62,
+     "pos": [
+      48,
+      530
+     ],
+     "en": "si el prompt"
+    },
+    {
+     "tipo": "texto",
+     "texto": "cobra *5 veces* más",
+     "tam": 70,
+     "pos": [
+      48,
+      688
+     ],
+     "en": "cobra 5"
+    },
+    {
+     "tipo": "sello",
+     "texto": "×5",
+     "tam": 120,
+     "rot": -8,
+     "pos": [
+      760,
+      590
+     ],
+     "en": "5 veces"
+    },
+    {
+     "tipo": "credito",
+     "texto": "platform.claude.com/docs/en/models/haiku-5-5/overview · 11 oct 2026",
+     "pos": [
+      48,
+      812
+     ]
+    }
+   ]
+  },
+  {
+   "id": "trampa-2",
+   "layout": "split",
+   "fondo": "oscuro",
+   "desde": {
+    "frase": "viene con el pensamiento",
+    "corte": true
+   },
+   "etiqueta": [
+    "TRAMPA 2",
+    "EL PENSAMIENTO SE COBRA"
+   ],
+   "elementos": [
+    {
+     "tipo": "captura",
+     "src": "pensamiento-salida",
+     "recorte": [
+      30,
+      10,
+      1060,
+      106
+     ],
+     "ancho": 984,
+     "pos": [
+      48,
+      100
+     ],
+     "anim": "corte",
+     "url": "platform.claude.com",
+     "marcas": [
+      {
+       "frase": "billed as output tokens",
+       "en": "como salida",
+       "pad": 3
+      }
+     ]
+    },
+    {
+     "tipo": "texto",
+     "texto": "Pensamiento *prendido*",
+     "tam": 64,
+     "pos": [
+      48,
+      456
+     ],
+     "en": "pensamiento prendido"
+    },
+    {
+     "tipo": "texto",
+     "texto": "se cobra como *salida*",
+     "tam": 70,
+     "pos": [
+      48,
+      556
+     ],
+     "en": "se cobra"
+    },
+    {
+     "tipo": "credito",
+     "texto": "platform.claude.com/docs/en/build-with-claude/thinking · 11 oct 2026",
+     "pos": [
+      48,
+      812
+     ]
+    }
+   ]
+  },
+  {
+   "id": "apagalo",
+   "layout": "full",
+   "desde": {
+    "frase": "para clasificar apagarlo",
+    "corte": true
+   },
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "Para clasificar,",
+     "tam": 70,
+     "alinear": "centro",
+     "pos": [
+      "centro",
+      300
+     ],
+     "en": {
+      "frase": "para clasificar apagarlo",
+      "offset": 0.3
+     },
+     "hasta": {
+      "frase": "para ponerlo en tu terminal",
+      "corte": true
+     }
+    },
+    {
+     "tipo": "texto",
+     "texto": "*apagalo*",
+     "tam": 120,
+     "alinear": "centro",
+     "pos": [
+      "centro",
+      380
+     ],
+     "en": "apagarlo",
+     "hasta": {
+      "frase": "para ponerlo en tu terminal",
+      "corte": true
+     }
+    },
+    {
+     "tipo": "texto",
+     "texto": "y probalo",
+     "tam": 80,
+     "alinear": "centro",
+     "pos": [
+      "centro",
+      520
+     ],
+     "en": "y probarlo",
+     "hasta": {
+      "frase": "para ponerlo en tu terminal",
+      "corte": true
+     }
+    }
+   ]
+  },
+  {
+   "id": "terminal",
+   "layout": "split",
+   "fondo": "oscuro",
+   "desde": {
+    "frase": "para ponerlo en tu terminal",
+    "corte": true
+   },
+   "etiqueta": [
+    "CLAUDE CODE",
+    "EN TU TERMINAL"
+   ],
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "Para ponerlo en tu *terminal*",
+     "tam": 56,
+     "pos": [
+      48,
+      100
+     ],
+     "anim": "corte"
+    },
+    {
+     "tipo": "captura",
+     "src": "terminal",
+     "recorte": [
+      20,
+      10,
+      1090,
+      330
+     ],
+     "ancho": 984,
+     "pos": [
+      48,
+      190
+     ],
+     "anim": "corte",
+     "url": "code.claude.com",
+     "marcas": [
+      {
+       "frase": "claude --model claude-",
+       "en": "colocá"
+      }
+     ]
+    },
+    {
+     "tipo": "texto",
+     "texto": "*claude-haiku-5-5*",
+     "tam": 66,
+     "pos": [
+      48,
+      600
+     ],
+     "en": "claude-haiku-5-5"
+    },
+    {
+     "tipo": "pildora",
+     "texto": "y empezá a probarlo",
+     "icono": "check",
+     "tam": 40,
+     "pos": [
+      48,
+      710
+     ],
+     "en": "empezá"
+    },
+    {
+     "tipo": "credito",
+     "texto": "code.claude.com/docs/en/model-config · 11 oct 2026",
+     "pos": [
+      48,
+      812
+     ]
+    }
+   ]
+  },
+  {
+   "id": "comunidad",
+   "layout": "full",
+   "desde": {
+    "frase": "la tabla y la cuenta",
+    "corte": true
+   },
+   "elementos": [
+    {
+     "tipo": "texto",
+     "texto": "La tabla y la cuenta",
+     "tam": 68,
+     "alinear": "centro",
+     "pos": [
+      "centro",
+      300
+     ],
+     "en": {
+      "frase": "la tabla y la cuenta",
+      "offset": 0.3
+     },
+     "hasta": {
+      "frase": "link en mi perfil",
+      "corte": true
+     }
+    },
+    {
+     "tipo": "texto",
+     "texto": "están en mi *comunidad*",
+     "tam": 70,
+     "alinear": "centro",
+     "pos": [
+      "centro",
+      384
+     ],
+     "en": "están en mi",
+     "hasta": {
+      "frase": "link en mi perfil",
+      "corte": true
+     }
+    },
+    {
+     "tipo": "texto",
+     "texto": "*gratis*",
+     "tam": 104,
+     "alinear": "centro",
+     "pos": [
+      "centro",
+      490
+     ],
+     "en": "gratis",
+     "hasta": {
+      "frase": "link en mi perfil",
+      "corte": true
+     }
+    }
+   ]
+  },
+  {
+   "id": "cta",
+   "layout": "split",
+   "fondo": "oscuro",
+   "desde": {
+    "frase": "link en mi perfil",
+    "corte": true
+   },
+   "elementos": [
+    {
+     "tipo": "tarjeta",
+     "ancho": 860,
+     "alto": 540,
+     "pos": [
+      "centro",
+      150
+     ],
+     "anim": "corte",
+     "lineas": [
+      {
+       "texto": "Buscá",
+       "tam": 92,
+       "color": "blanco",
+       "aire": 14
+      },
+      {
+       "texto": "HAIKU",
+       "tam": 150,
+       "color": "verde",
+       "aire": 20
+      },
+      {
+       "texto": "en Avisos",
+       "tam": 84,
+       "color": "blanco",
+       "aire": 28
+      },
+      {
+       "texto": "link en mi perfil",
+       "fuente": "semibold",
+       "tam": 46,
+       "color": "blanco"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,30 @@
+{
+  "title": "Lote estilo nuevo (fotobn) · K2 v4 · Tu primera skill",
+  "image_style": "fotobn",
+  "params": [
+    "--quality",
+    "medium",
+    "--resolution",
+    "2k"
+  ],
+  "slides": [
+    {
+      "number": 1,
+      "layout": "ilustrado",
+      "aspect": "4:3",
+      "image_prompt": "A single small seedling sprouting from dark soil in a plain pot on a grey surface. The seedling is the green object."
+    },
+    {
+      "number": 3,
+      "layout": "ilustrado",
+      "aspect": "4:3",
+      "image_prompt": "A single large metal key lying diagonally on a grey surface, with a small black keyring. The key is the green object."
+    },
+    {
+      "number": 7,
+      "layout": "ilustrado",
+      "aspect": "4:3",
+      "image_prompt": "A black wooden rubber stamp with a rounded handle standing upright on a grey surface, beside a neat row of identical round ink impressions on a sheet of plain white paper. The ink impressions are the green object."
+    }
+  ]
+}

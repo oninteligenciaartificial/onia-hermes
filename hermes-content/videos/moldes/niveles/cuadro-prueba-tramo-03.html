@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<!-- Cuadro de prueba del molde «Niveles» (P1): tramo 03 «SONNET + PRUEBA», segundo ~23,0 (GRABAR v3 §P1).
+     NO es el render final: es el cuadro que aprueban Sergio Urcullo o la madre antes de renderizar.
+     Lienzo 1080x1920. Negro #0A0F0D, blanco y grises; el verde #10C26B NO aparece acá (solo en el 0,10 final y en el CTA). Sin rojo. -->
+<style>
+@font-face{font-family:JBM;src:url(file:///home/user/onia-hermes/.claude/skills/edicion-referentes/scripts/erik/assets-ejemplo/fuentes/JetBrainsMono-Bold.ttf)}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1920px;background:#0A0F0D;overflow:hidden}
+body{font-family:'Archivo','DejaVu Sans',sans-serif;color:#fff}
+.mono{font-family:JBM,'DejaVu Sans Mono',monospace}
+.lienzo{position:absolute;left:0;top:0;width:1080px;height:1920px}
+.rotulo{position:absolute;left:80px;top:250px;font-size:38px;letter-spacing:.05em;color:#fff}
+.captura{position:absolute;right:80px;top:330px;width:250px;height:160px;border:3px dashed #4A5651;border-radius:14px;color:#8E9A94;font-size:20px;line-height:1.35;padding:20px 16px;text-align:center;display:flex;align-items:center;justify-content:center}
+.contador{position:absolute;left:80px;top:318px;font-size:200px;line-height:1;font-weight:700;letter-spacing:-.02em}
+.porTarea{position:absolute;left:84px;top:540px;font-size:40px;letter-spacing:.14em;color:#8E9A94}
+.chip{position:absolute;left:80px;top:640px;display:flex;align-items:center;gap:26px}
+.chip .n{font-size:38px;border:3px solid #fff;border-radius:999px;padding:6px 22px}
+.chip .t{font-size:62px;font-weight:800;letter-spacing:-.01em}
+.costo{position:absolute;left:80px;top:752px;font-size:52px}
+.falla{position:absolute;left:80px;top:826px;font-size:42px;color:#8E9A94}
+.casillas{position:absolute;left:80px;top:920px;display:flex;gap:12px}
+.c{width:78px;height:78px;border:3px solid #fff;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:48px}
+.c.x{background:#2A3430;border-color:#8E9A94;color:#C9D1CD}
+.flecha{position:absolute;font-size:44px;line-height:1;color:#C9D1CD;top:1004px}
+.opus{position:absolute;left:80px;top:1086px;display:flex;align-items:center;gap:22px}
+.opus .caja{border:3px solid #fff;border-radius:14px;padding:10px 22px;font-size:40px}
+.opus .nota{font-size:34px;color:#8E9A94}
+.cuenta{position:absolute;left:80px;top:1206px;font-size:38px}
+.cuenta b{font-weight:700}
+.barras{position:absolute;left:80px;top:1310px;height:112px;display:flex;align-items:flex-end;gap:26px}
+.b{width:150px;background:#fff;border-radius:6px 6px 0 0;position:relative}
+.b span{position:absolute;left:0;right:0;top:-44px;text-align:center;font-size:32px}
+.b.vacia{background:transparent;border:3px dashed #4A5651}
+.nota-pie{position:absolute;left:80px;top:1438px;font-size:36px;color:#8E9A94}
+</style></head>
+<body><div class="lienzo">
+  <div class="rotulo mono">MISMO TRABAJO: 0,60 → 0,10 USD</div>
+  <div class="captura mono">TABLA OFICIAL<br>(captura real, la saca la madre)</div>
+  <div class="contador mono">0,17</div>
+  <div class="porTarea mono">POR TAREA</div>
+  <div class="chip"><span class="n mono">03</span><span class="t">SONNET + PRUEBA</span></div>
+  <div class="costo mono">0,08 + 0,04 = 0,12</div>
+  <div class="falla mono">si falla → Opus</div>
+  <div class="casillas">
+    <div class="c mono">✓</div><div class="c mono">✓</div><div class="c mono">✓</div><div class="c x mono">✗</div><div class="c mono">✓</div>
+    <div class="c mono">✓</div><div class="c mono">✓</div><div class="c mono">✓</div><div class="c x mono">✗</div><div class="c mono">✓</div>
+  </div>
+  <div class="flecha mono" style="left:370px">↓</div><div class="flecha mono" style="left:820px">↓</div>
+  <div class="opus mono"><span class="caja">OPUS 0,24 × 2</span><span class="nota">las 2 ✗ se rehacen</span></div>
+  <div class="cuenta mono"><b>10 × 0,12 + 2 × 0,24 = 1,68 ÷ 10 = 0,168</b></div>
+  <div class="barras mono">
+    <div class="b" style="height:100px"><span>0,60</span></div>
+    <div class="b" style="height:42px"><span>0,24</span></div>
+    <div class="b" style="height:30px"><span>0,17</span></div>
+    <div class="b vacia" style="height:20px"></div>
+  </div>
+  <div class="nota-pie mono">Supuestos: falla 1 de 5 · reparto 6/3/1</div>
+</div></body></html>

@@ -1,0 +1,14 @@
+{
+  "url": "https://developers.facebook.com/documentation/business-messaging/whatsapp/templates/overview/",
+  "ancho_css": 520,
+  "alto_salida": 606,
+  "tema": "light",
+  "capturas": [
+    {
+      "nombre": "cap-aprobadas",
+      "ancla": { "texto": "Templates must have a status of APPROVED before they can be sent in template messages." },
+      "margen_sup": 70,
+      "marca": { "texto": "status of APPROVED" }
+    }
+  ]
+}

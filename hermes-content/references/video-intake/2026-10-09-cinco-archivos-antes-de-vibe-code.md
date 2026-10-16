@@ -204,3 +204,13 @@ Ficha completa: 7/7 láminas, caption, metadatos locales, evidencia propia, siet
 Antes de producir: capturar los fragmentos indicados, con texto legible y sin datos privados. Antes de publicar: aprobar la pieza y poner el recurso ARCHIVOS en Avisos; comprobar el link del perfil. No se consultó la comunidad, así que su disponibilidad sigue sin verificar.
 
 PARA LA MADRE: tomar el mecanismo «nombre de archivo + función + prueba visible». La adaptación ya usa cinco entradas reales y el CTA de Avisos. No promete que la IA deje de fallar. Falta producción y verificar/publicar el recurso con el permiso correspondiente; no se tocó git.
+
+## Prueba de uso por sesión
+
+Estado: **aplicado en borrador, sin publicar** (banco de ideas). La revisión externa de la madre sigue pendiente.
+Sesión + fecha: Marca personal (nube, `session_01WPecmppa9uZEc4fJDjSmaS`), 9-oct-2026.
+Tarea de cola: pedido de la madre «Propuesta A, carrusel de siete láminas»; después de su corrección queda en `hermes-content/docs/cola/plan-3-semanas/BANCO-IDEAS.md`, sin fecha.
+Regla usada: Estructura de contenido y Patrones, «nombre + función + prueba visible» (`diseno-contenido-onia`, Aprendizajes incorporados) y «un solo CTA con recurso real en Avisos».
+Artefacto: `hermes-content/carousels/out/sergio-cinco-archivos-20261009/slide-01..07.png` (brief `carousels/briefs/marca-personal/sergio-cinco-archivos-20261009.json`, capturas en `carousels/briefs/assets/sergio-cinco-archivos-20261009/`, hechas con `scripts/marca-personal/captura-editor.py` a partir de líneas reales del repo); aviso y recurso ARCHIVOS en `hermes-content/docs/cola/plan-3-semanas/AVISOS-COMUNIDAD-8-16-OCT.md`.
+Verificación: las 7 láminas se miraron enteras (hoja de contactos y la lámina 3 a tamaño completo; se corrigió una captura que cortaba la frase a mitad); cada línea mostrada sale del archivo vivo, no de memoria; cierre «Buscá ARCHIVOS en Avisos · link en mi perfil» con su recurso escrito; voseo de marca personal; sin «Comentá X». `fotobn` **no** se usó: portada y cierre salieron con el árbol de archivos (plan B de esta ficha) porque no hay lote de imágenes aprobado. Revisor: ninguno todavía.
+Pendiente: revisión de la madre; si la idea sale de banco, rehacer las capturas (el repo cambia) y decidir si portada y cierre llevan `fotobn` (2 cr, solo con aprobación de gasto).
