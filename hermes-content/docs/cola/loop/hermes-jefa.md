@@ -60,3 +60,27 @@ Decisión de Sergio Urcullo del 16-oct: **sí a workshops y consultorías pagas 
 - Aprobar el pago de prueba en `/admin/payments` (1 minuto) y confirmar la factura con Leslie.
 - Aprobar y mandar los mensajes de venta; dar demos y asesorías.
 - Cualquier gasto, texto legal, diseño nuevo o contacto con terceros.
+
+---
+
+## COLA DE LA JEFA — noche del 16-oct (la escribe la jefa)
+
+Reglas de comunicación (Sergio Urcullo, 16-oct): a Sergio Urcullo máximo 3 líneas por mensaje (Pasó · Necesito · Sigue), sin detalle técnico, sin listas largas ni números de PR. Solo se le escribe cuando se necesita una decisión suya o algo quedó PUBLICADO. Todo lo demás va al resumen único de las 18:00 La Paz. Las preguntas pendientes se juntan en UNA sola.
+
+Regla de PRs: borrador mientras el hilo trabaja; `gh pr ready` cuando termina; Codex revisa y QA (:57) publica.
+
+Hilos y su entrega (16-oct):
+- Ventas y pauta: prepago anual, 7 leads con mensaje de usted, guion de webinar, funnel de Instagram a pago por QR, repaso de la Biblioteca. Espera el sí de Sergio Urcullo para que él envíe los mensajes.
+- Competencia: 7 funciones para la 1.0 (docs/competencia). Entregado.
+- Auditoría de carriles: tabla del 16-oct y práctica de Higgsfield (≤12 créditos, sin cara/voz/video) en lucia.md. Entregado.
+- Marca, comunidad y workshops: oferta «Auditá tu negocio con IA», comunidad de WhatsApp, 2 carruseles. Espera el sí al precio y la fecha.
+- Plataforma 1.0 banco (hilo nuevo con acceso): 5 rubros y demo dental. Espera el sí a crear 5 cuentas ZZ QA en producción.
+- Reels y navegador: ver posts de Instagram desde la nube funciona en el entorno «Onia»; transcripción de audio sigue por la PC. Entregado.
+
+Pendiente de UNA sola pregunta a Sergio Urcullo (la jefa la plantea una vez): (1) workshop: Bs 150 precio fundador hasta el mié 21, luego Bs 200, cupo 12, sáb 24-oct 10:00, auditoría 1 a 1 Bs 350; (2) enviar los mensajes de venta que él manda; (3) devolver el prepago a 14 días; (4) crear 5 cuentas ZZ QA en producción; (5) reencender las rutinas de Plataforma (:17) y QA (:57).
+
+Cada vuelta de la jefa (:07): leer esta cola y la orden vigente, ejecutar lo que no espera a Sergio Urcullo, destrabar carriles con más de 3 h sin avanzar y no preguntar de nuevo lo ya preguntado.
+
+Ejecutable sin esperar: mover los PR entregados a listo; pasar la lista de competencia al hilo de la 1.0; completar ⟦ENLACE-WORKSHOP⟧ del funnel con la oferta (marcada propuesta); dejar a Lucía su tarea de práctica; seguir recorridos públicos de la 1.0 sin crear datos.
+
+Candidatos que NO se instalan sin OK de Sergio Urcullo: Ponytail, Diagram Design, Scrapling, yt-dlp en el VPS.
