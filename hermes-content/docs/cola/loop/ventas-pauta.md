@@ -19,3 +19,4 @@
 
 ## Verificación de aprendizaje · 2026-10-09
 - [x] (aplicado, sin revisor independiente: `carousels/briefs/ads/VSL-CORTO-TABLA-DE-CORTES.md` «Prueba de uso», fichas `2026-10-04-reels-para-lucia.md` y `2026-10-08-orquestacion-e-ingresos-5-posts.md`) En la próxima tarea de oferta o creativo ya encargada, cargar `equipo-de-agentes` y `aprender-de-todo`; aplicar un aprendizaje pertinente de `COBERTURA-APRENDIZAJE.md` (en `references/video-intake/`) y registrar en su ficha sesión, regla, artefacto y revisión de claims/usted. No implementar el cuestionario ni contactar a nadie por recibir una referencia.
+- [x] (16-oct, orden de la jefa) Funnel de Instagram al pago por QR (`sales-kit/09`) y repaso de la Biblioteca con lista de capturas para la PC (`research/competencia/anuncios/BIBLIOTECA-REPASO-16OCT.md`). Pendiente de la PC: las 17 capturas; de Sergio Urcullo: devolución a 14 días y OK a los textos
