@@ -173,6 +173,10 @@ la dirección de Sergio Urcullo.
 7. **OK de diseño:** W1f (chat de la web con el nombre de la clínica) y, si la dirección del 12-oct «un solo plan integrado»
    es suya, las pantallas de «Mi web» (#168, #170).
 8. **CAFC del piloto** (SIAT etapa VI) e **infra de la bandeja en tiempo real** (una línea, §4).
+9. **Cuánto dura un mes pagado (decisión, sin apuro):** `addMonths` suma en el calendario de UTC. Un pago aprobado entre las
+   20:00 y las 23:59 de La Paz en 12 días del año (28, 29 y 30-ene, 28-feb y el 30 de varios meses) vence de 3 días antes a 1
+   después de lo que diría el calendario de La Paz (pagado el 28-ene a las 21:00 vence el 27-feb, no el 28). 0,55 % de las
+   horas. Pasarlo al calendario de La Paz es una línea, pero cambia lo que dura lo pagado: sí o no.
 
 ## 8. Próximos pasos (en orden, 16-oct 01:10 UTC)
 
