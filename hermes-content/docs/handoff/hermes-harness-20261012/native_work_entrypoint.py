@@ -262,6 +262,11 @@ def _recover_result_bundle(runtime, request):
             or native.get("surface") not in {"cloud_cli_task", "codex_app_chat"}
             or native.get("remote_id") != bundle.get("remote_id")):
         raise ValueError("persisted bundle differs from native operation identity")
+    remote_pattern = {"cloud_cli_task": r"task_e_[0-9a-f]{32}",
+                      "codex_app_chat": r"[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}"}[native["surface"]]
+    if (type(native["remote_id"]) is not str or not re.fullmatch(remote_pattern, native["remote_id"])
+            or (native["surface"] == "cloud_cli_task" and "native_thread_provenance" in bundle)):
+        raise ValueError("persisted result remote ID/provenance differs from native surface")
     if native["surface"] == "codex_app_chat":
         from native_thread_artifacts import NativeThreadArtifacts, validate_bundle_provenance
         if type(runtime.transport) is not NativeThreadArtifacts or runtime.transport.request != request:
@@ -334,12 +339,6 @@ def handle_native_event(raw_input, runtime=None, now=None):
             recovered_bundle = _recover_result_bundle(runtime, request)
         except Exception:
             return _ambiguous_output(event["operation_id"], "result_bundle_recovery_failed")
-        # The existing controller's terminal QA ingest is CLI-only. Do not pass
-        # a thread UUID into that path or broaden its authority in this adapter.
-        native = runtime.bridge.read(request.operation_id)
-        if native.get("surface") == "codex_app_chat":
-            return {"state": "hold", "code": "native_chat_qa_closure_unbound",
-                    "operation_id": request.operation_id}
     try:
         output = step_native_work(
             runtime.queue, runtime.bridge, runtime.transport, event["event"], request,

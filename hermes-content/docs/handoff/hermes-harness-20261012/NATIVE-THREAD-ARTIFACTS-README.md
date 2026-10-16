@@ -1,6 +1,6 @@
 # Native chat thread artifact recovery (bounded adapter)
 
-Source snapshot: `569b5ed7f500aaf33a8171b72bb2834f403554b2`, obtained through the
+QA-extension snapshot: `02a3835449f8fc59a8922997d2d45a90138cbd0c`, obtained through the
 existing GitHub connector. This snapshot is not an updated Git checkout. The
 implementation receipt records source blob IDs/SHA-256 and validation limits.
 
@@ -53,24 +53,46 @@ records its receipt. Restart recovery uses only that exact receipt and revalidat
 the trusted provenance and file identities; it never rereads a provider by path.
 Raw artifacts and provenance are omitted from the sanitized event response.
 
-## QA and scope limit
+## Independent QA closure (contract 08)
 
-Artifact recovery returns `awaiting_independent_qa`; it never changes the native
-operation to completed or resolves the queue. The existing controller's terminal
-QA ingest is hardcoded to `cloud_cli_task`. Accordingly, a chat QA event verifies
-bundle recovery and then returns **HOLD / `native_chat_qa_closure_unbound`**, without
-invoking the CLI terminal path or a QA verifier. A separate reviewed contract is
-needed to wire independent chat QA closure. No schema, authority, controller,
-legacy, R4, delivery or queue guards were changed. CLI QA remains unchanged.
+Artifact recovery returns `awaiting_independent_qa`; recovery alone never changes
+the native operation to completed or resolves the queue. A QA event must first
+reload the exact sink receipt/bytes and validate the persisted surface/ID and
+trusted provenance. The existing controller admits the QA event before invoking
+the independently authenticated `qa_verifier` supplied by the trusted caller.
+There is no default verifier and no model/provider call in this module.
+
+For chat, the verifier must return `verified=True`, `request_sha=request.digest()`,
+`bundle_sha=controller_pilot.digest(bundle)`, exact `remote_id` (thread UUID),
+`operation_id`, `surface=codex_app_chat`, `host_id=durable`, and
+`provenance_sha256=controller_pilot.digest(asdict(trusted_provenance))`.
+It must supply nonblank `reviewer_id`, `authority_source`, `evidence_ref`, and
+`goal_outcome` of `completed` or `failed`. Reviewer identity must differ from the
+worker, bound thread and operation owner. The injected verifier must establish
+actual independent review and authentication; matching JSON fields alone do not.
+
+The controller rechecks the bundle's canonical-byte hash/length against the
+existing persisted receipt, plus artifact provenance/identity/hash, before QA.
+Only a passing bound review records a terminal observation on the **persisted
+surface** and resolves that finite closure. Missing/mismatched evidence stays
+unclosed. READY, text or a worker self-review cannot close it. Consumed QA event
+IDs do not rerun a verifier, including after a crash. Existing STOP semantics
+allow reconciliation of submitted work while preserving STOP and withholding the
+next candidate; they do not grant a new dispatch. No global goal is closed.
+
+This supersedes contract 07's unconditional chat QA HOLD, solely for the validated
+QA path above. No schema, migration, authority source, legacy, R4, delivery or
+queue guards changed. Existing CLI QA response requirements remain unchanged.
 
 ## Offline validation
 
 ```sh
-python -B -m unittest test_native_thread_artifacts test_native_cloud_cli test_native_receipt_bridge test_native_work_entrypoint.NativeWorkEntrypointTests -q
+python -B -m unittest test_native_thread_qa test_native_thread_artifacts test_native_cloud_cli test_native_receipt_bridge test_native_work_entrypoint.NativeWorkEntrypointTests -q
 ```
 
-These tests use offline reader/sink fakes and temporary ledger fixtures. They
-exercise admission ordering, result budgets, recovery, rejection and CLI
+These tests use offline reader/sink/reviewer fakes and temporary ledger fixtures.
+They exercise admission ordering, result budgets, restart recovery, QA closure,
+rejection, replay and CLI
 regression; they do not prove authenticated live transport or filesystem sink
 durability. Six existing `NativeResultRecoveryTests` require a private temporary
 root outside any Git worktree. On this executor, Git markers at writable roots

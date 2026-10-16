@@ -1,0 +1,131 @@
+{
+  "contract": "native-hermes-qa-20261016-08",
+  "timestamp_utc": "2026-10-16T04:33:07.746492+00:00",
+  "repository": "oninteligenciaartificial/onia-hermes",
+  "source_snapshot": {
+    "base_commit": "02a3835449f8fc59a8922997d2d45a90138cbd0c",
+    "base_tree": "efde3096046c1a9c2ce2f2bbbd81d02128a9f592",
+    "source": "existing GitHub connector at exact commit; not updated Git checkout",
+    "verified_source_blobs": [
+      {
+        "path": "controller_pilot.py",
+        "blob_sha": "135ad6afcf9c820ea04697055e4d9d1badfec019",
+        "sha256": "00f311285fb315d87495ffa0a48c87f25eacd52cfa91a2cfee67ecc53deaa2d2"
+      },
+      {
+        "path": "native_work_entrypoint.py",
+        "blob_sha": "881d5565df2efa00bca8de8628c7f9917963b9b0",
+        "sha256": "022dc0ae6fdc9ce7153e0436d54e1e73d0746397274b6cda4b16767e4b9d8db0"
+      },
+      {
+        "path": "native_thread_artifacts.py",
+        "blob_sha": "99113ac01a39bc71f31643d0dfbf3d098929c21c",
+        "sha256": "73d21e29390b4602deadee74bf7f347c3c4a3b4b9f1310f7bcdf07a8e1c87477"
+      },
+      {
+        "path": "test_native_thread_artifacts.py",
+        "blob_sha": "160d712fd223917ad574a01eab35d3517f40e292",
+        "sha256": "f0860d2a00945ee1fedfcc480183c171a0b0e62045c4b864ff6837196e27c56b"
+      }
+    ],
+    "carried_dependencies": "unchanged exact-source snapshot from contract07"
+  },
+  "branch": "codex/hermes-native-thread-20261016",
+  "model": {
+    "implementation_configured": "UNKNOWN",
+    "implementation_observed": "UNKNOWN"
+  },
+  "change": {
+    "qa_surface": "persisted native surface; strict CLI task_e vs chat UUID",
+    "chat_requirements": [
+      "same trusted cloud-execution provenance (durable host plus independent execution evidence supplied by trusted caller)",
+      "exact sink receipt canonical byte hash and length",
+      "artifact paths,operation,input_sha,expected/observed HEAD and byte hashes",
+      "independent injected verifier: verified,request_sha,bundle_sha,thread UUID,operation_id,surface,host_id,provenance_sha256,reviewer_id distinct worker/thread/owner,authority_source,evidence_ref,terminal goal outcome"
+    ],
+    "preserved": [
+      "event admission before QA call",
+      "event caps and no automatic retry",
+      "STOP remains set; reconciliation allowed without next candidate",
+      "no schema/migration/live queue/R4/authority provider/CLI transport modifications"
+    ],
+    "terminal_scope": "single admitted finite-work closure; not global goal or live pipeline"
+  },
+  "files": [
+    {
+      "path": "hermes-content/docs/handoff/hermes-harness-20261012/controller_pilot.py",
+      "sha256": "9ec51ef977f59c390f7a48c24eb15a5b2de06baf4f8b86fa44d718997268172f",
+      "bytes": 55821
+    },
+    {
+      "path": "hermes-content/docs/handoff/hermes-harness-20261012/native_work_entrypoint.py",
+      "sha256": "2046239cfa49976c675901f395b9f7f340fd822ceb306fee76b823cba75846d0",
+      "bytes": 20160
+    },
+    {
+      "path": "hermes-content/docs/handoff/hermes-harness-20261012/test_native_thread_artifacts.py",
+      "sha256": "9273ddc71ff502f5eddfc2945b571752cf23f22f9d97d6ce702d39498f207dbb",
+      "bytes": 13248
+    },
+    {
+      "path": "hermes-content/docs/handoff/hermes-harness-20261012/test_native_thread_qa.py",
+      "sha256": "892b168c2b8bb2677a44f7898d2bea2f2f9830421474926276208f0192f43c45",
+      "bytes": 12549
+    },
+    {
+      "path": "hermes-content/docs/handoff/hermes-harness-20261012/NATIVE-THREAD-ARTIFACTS-README.md",
+      "sha256": "88df340323889e0f62666073214896a8098af5d7839bc3acfd76df177a794440",
+      "bytes": 6301
+    }
+  ],
+  "tests": {
+    "command": "python -B -m unittest test_native_thread_qa test_native_thread_artifacts test_native_cloud_cli test_native_receipt_bridge test_native_work_entrypoint.NativeWorkEntrypointTests -q",
+    "passed": 77,
+    "failed": 0,
+    "new_qa_test_methods": 12,
+    "complete_regression_pass": false,
+    "status": "INCOMPLETE_ENVIRONMENT_BLOCKED_NOT_FULL_GREEN",
+    "initial_attempt": {
+      "tests": 77,
+      "failures": 1,
+      "fixed": "recovery now rejects persisted CLI surface with UUID/chat provenance before reviewer"
+    },
+    "sink_cases": {
+      "count": 6,
+      "status": "not executed again in contract08; remain environment-blocked, not passes",
+      "last_observed": "same reviewer reproduced six setup errors in contract07",
+      "diagnostic_attempts_in_contract08": 1,
+      "observed_roots": {
+        "/tmp": "/tmp/.git exists",
+        "/workspace": "/workspace/.git exists",
+        "/codex/browser/projectless/0001-contrato-native-hermes-readonly-20261016-01-meta": "declared path does not exist"
+      },
+      "exact_guard": "native_result_store.py:124-130 rejects sink root with any ancestor/.git",
+      "guard_bypassed_or_changed": false,
+      "new_mount_or_config": false
+    },
+    "test_limits": "Offline reader, reviewer and MemorySink fakes. Reopened real temporary SQLite receipt/ledger; no real sink durability or live authentication proof."
+  },
+  "review": {
+    "agent": "/root/review_native_artifacts",
+    "reuse": "same sole reviewer from contract07, sequential followup; no new agent",
+    "configured_model": "gpt-6-luna",
+    "configured_effort": "low",
+    "observed_model": "UNKNOWN",
+    "tests_passed": 77,
+    "findings": "No concrete security/correctness defect found; live authentication and sink durability unproved.",
+    "reviewer_file_writes": false
+  },
+  "limitations": [
+    "No native-thread live artifact reader or authenticated reviewer implementation was added.",
+    "Trusted provenance/verifier objects are in-process integration bindings, not authentication by field values.",
+    "Real sink recovery tests remain blocked; regression incomplete.",
+    "No proof of Claude dispatch/auth, cross-provider pipeline, PC-off continuity or cloud coordinator.",
+    "GitHub publication alone does not establish native cloud execution/provenance."
+  ],
+  "publication": {
+    "method": "base-tree create_tree; atomic create_commit with base parent; update_ref expected SHA=02a3835449f8fc59a8922997d2d45a90138cbd0c,force=false",
+    "self_commit_sha": "omitted to avoid self-reference; parent reports verified commit separately",
+    "main_pr_merge_deploy": false
+  }
+}

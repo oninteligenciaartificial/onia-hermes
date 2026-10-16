@@ -202,12 +202,13 @@ class ThreadArtifactTests(unittest.TestCase):
             self.assertEqual(adapter.collect_result(self.request.operation_id, None,
                                                    self.request.result_paths)["state"], "needs_reconcile")
 
-    def test_qa_is_explicit_hold_without_using_cli_terminal_authority(self):
+    def test_qa_unverified_review_does_not_use_cli_terminal_authority(self):
         self.event()
         verifier = unittest.mock.Mock()
         result = self.event("qa", "qa-1", replace(self.runtime, qa_verifier=verifier))
-        self.assertEqual(result["code"], "native_chat_qa_closure_unbound")
-        verifier.verify.assert_not_called()
+        self.assertEqual(result["state"], "awaiting_independent_qa")
+        self.assertEqual(result["reason"], "QA_identity_or_result_binding_unverified")
+        verifier.verify.assert_called_once()
         self.assertEqual(self.bridge.read(self.request.operation_id)["state"], "submitted")
         self.assertIsNone(self.queue.read_result(self.request.task_id))
 

@@ -7,6 +7,7 @@ from __future__ import annotations
 from dataclasses import dataclass, replace
 import hashlib
 import json
+import re
 import sqlite3
 import time
 from typing import Protocol
@@ -179,6 +180,30 @@ def step_native_work(queue, bridge, transport, event: str, request, plan, now: i
         return {**base, **transport.collect_result(request.operation_id, plan.executable, request.result_paths)}
     if qa_verifier is None or not isinstance(result_bundle, dict) or result_bundle.get("state") != "awaiting_independent_qa":
         return {**base, "state": "awaiting_independent_qa", "reason": "external_qa_and_recovered_bundle_required"}
+    surface = native.get("surface")
+    pattern = {"cloud_cli_task": r"task_e_[0-9a-f]{32}",
+               "codex_app_chat": r"[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}"}.get(surface)
+    if (pattern is None or type(native.get("remote_id")) is not str
+            or not re.fullmatch(pattern, native["remote_id"])
+            or (surface == "cloud_cli_task" and "native_thread_provenance" in result_bundle)):
+        raise ValueError("QA requires exact persisted native surface and remote ID")
+    provenance_sha = None
+    if surface == "codex_app_chat":
+        from dataclasses import asdict
+        from native_thread_artifacts import (NativeThreadArtifacts, canonical_bytes,
+                                             validate_bundle_provenance)
+        if (type(transport) is not NativeThreadArtifacts or transport.request != request
+                or transport.provenance.thread_id != native["remote_id"]):
+            raise ValueError("QA requires original trusted native thread binding")
+        validate_bundle_provenance(result_bundle, request, transport.provenance)
+        # Even a direct controller caller cannot substitute an in-memory candidate
+        # for the exact bundle acknowledged by the existing durable sink receipt.
+        receipt = bridge.read_result_bundle_receipt(request)
+        raw_bundle = canonical_bytes(result_bundle)
+        if (type(receipt) is not dict or receipt.get("bytes_written") != len(raw_bundle)
+                or receipt.get("sha256") != hashlib.sha256(raw_bundle).hexdigest()):
+            raise ValueError("chat QA requires the exact persisted result bundle receipt")
+        provenance_sha = digest(asdict(transport.provenance))
     if (result_bundle.get("operation_id") != request.operation_id
             or result_bundle.get("remote_id") != native["remote_id"]
             or result_bundle.get("input_sha") != request.input_sha
@@ -192,6 +217,17 @@ def step_native_work(queue, bridge, transport, event: str, request, plan, now: i
             raise ValueError("recovered artifact identity/checkout mismatch; no automatic QA")
     bundle_sha = digest(result_bundle)
     review = qa_verifier.verify(request, result_bundle, now)
+    if surface == "codex_app_chat" and (
+            type(review) is not dict or review.get("surface") != surface
+            or review.get("operation_id") != request.operation_id
+            or review.get("host_id") != "durable"
+            or review.get("provenance_sha256") != provenance_sha
+            or type(review.get("reviewer_id")) is not str
+            or not review["reviewer_id"].strip() or len(review["reviewer_id"]) > 512
+            or type(review.get("authority_source")) is not str
+            or not review["authority_source"].strip()
+            or review["reviewer_id"] in (request.worker_id, native["remote_id"], native.get("owner_id"))):
+        return {**base, "state": "awaiting_independent_qa", "reason": "QA_identity_or_result_binding_unverified"}
     if (not isinstance(review, dict) or review.get("verified") is not True
             or review.get("request_sha") != request.digest() or review.get("bundle_sha") != bundle_sha
             or review.get("remote_id") != native["remote_id"]
@@ -207,7 +243,7 @@ def step_native_work(queue, bridge, transport, event: str, request, plan, now: i
         if native.get("observation", {}).get("result_sha") != result_sha or native["state"] != review["goal_outcome"]:
             raise RuntimeError("terminal evidence conflicts; no rebind or overwrite")
     else:
-        bridge.ingest(NativeObservation(request.operation_id, "cloud_cli_task", native["remote_id"],
+        bridge.ingest(NativeObservation(request.operation_id, surface, native["remote_id"],
                       request.input_sha, review["goal_outcome"], now, review["evidence_ref"], result_sha), now)
     if task["status"] == "needs_reconcile":
         queue.resolve_reconciliation(request.task_id, "applied",
