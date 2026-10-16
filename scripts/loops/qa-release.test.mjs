@@ -618,3 +618,15 @@ process.stdout.write("URL_FINAL=https://app.onia.com.bo" + process.argv[3] + "\\
   assert.equal(vistos.length, 2);
   for (const f of vistos) assert.doesNotMatch(f, /\.candado/);
 });
+
+test("la cuenta de QA sin el alta terminada (/dashboard va a /onboarding) es el instrumento, no el release roto", () => {
+  const v = vps();
+  v.escena("/dashboard", { salida: sana("/onboarding") });
+  const r = v.correr();
+  assert.equal(r.codigo, 2);
+  assert.match(r.salida, /NO MEDIDO: \/dashboard la cuenta de QA no terminó el alta/);
+  assert.doesNotMatch(r.salida, /ROTO/);
+  assert.match(v.tareas()[0], /QA de publicación: no pude medir/);
+  assert.doesNotMatch(v.tareas()[0], /Plataforma/);
+  assert.equal(existsSync(join(v.dir, "aduana", "pendientes", "qa-release")), false, "no arranca la espera de la interrupción");
+});

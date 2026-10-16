@@ -177,6 +177,12 @@ juzgar_pantalla() {  # juzgar_pantalla <ruta> <ms> <salida>
   url="${url#https://app.onia.com.bo}"; url="${url%%\?*}"; url="${url%%#*}"
   texto=$(printf '%s\n' "$3" | sed -n '/^---TEXTO---$/,/^---ERRORES CONSOLA---$/p' | sed '1d;/^---ERRORES CONSOLA---$/d')
   errores=$(printf '%s\n' "$3" | sed -n '/^---ERRORES CONSOLA---$/,$p' | sed '1d' | grep -c .)
+  # El layout del panel manda a /onboarding a toda cuenta ADMIN cuya organización no terminó el alta
+  # (onboardingCompletedAt vacío). Para la cuenta de QA eso es su estado, no un release roto: se dijo ROTO el
+  # 16-oct (21:00Z, release a0488f04, que no toca ese layout) y se le habría gritado a Plataforma por un dato.
+  if [ "$url" = "/onboarding" ] && [ "$ruta" != "/onboarding" ]; then
+    echo "NOMEDIDO la cuenta de QA no terminó el alta: $ruta la manda a /onboarding"; return
+  fi
   if [ "$url" != "$ruta" ]; then echo "ROTO terminó en $(printf '%s' "${url:-?}" | limpiar)"; return; fi
   frase=$(printf '%s\n' "$texto" | grep -oE "$TEXTO_DE_ERROR" | awk 'NR == 1')
   [ -n "$frase" ] && { echo "ROTO muestra «$frase»"; return; }
