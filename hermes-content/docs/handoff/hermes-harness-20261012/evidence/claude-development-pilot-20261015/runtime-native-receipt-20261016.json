@@ -23,10 +23,6 @@
     "read_thread_error": null,
     "environment_status_tool": "cloud_environment.environment_status",
     "environment_status_duration_ms": 528,
-    "environment_status_result": "BLOCKED",
-    "observed_phase": "pending",
-    "connectivity": "offline",
-    "capabilities": [],
     "thread_metadata_cwd": "/workspace",
     "thread_metadata_cwd_is_actual_cwd_evidence": false,
     "ui_edit_environment_result": "failed",
@@ -51,7 +47,11 @@
     "branch": "UNKNOWN",
     "head": "UNKNOWN",
     "runtime": "UNKNOWN",
-    "model": "UNKNOWN"
+    "model": "UNKNOWN",
+    "environment_status_result": "BLOCKED",
+    "observed_phase": "pending",
+    "connectivity": "offline",
+    "capabilities": []
   },
   "limits": [
     "Thread metadata does not prove runtime workspace or actual cwd.",
