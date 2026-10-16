@@ -65,9 +65,10 @@ Tareas de QA destrabadas:
   1.290 = escalera C de `lib/pricing.ts`; «14 días del plan Profesional, sin tarjeta» = `ONIA_CATALOGO_DE_VENTA.md` línea 46.
   Sin «muy pronto» ni estado de obra en la home. Sin hallazgo. `modelos: opus (sin subagentes), codex: no`.
   Pendiente de esta tarea: leer las capturas (`/tmp` de la sesión, no versionadas).
-- [ ] **Q8 Revisar PRs abiertos de onia-hermes y onia-platform.** onia-hermes: 15 abiertos (#203, #202, #201, #200, #199, #198,
+- [x] **Q8 (parcial: #194) Revisar PRs abiertos de onia-hermes y onia-platform.** onia-hermes: 15 abiertos (#203, #202, #201, #200, #199, #198,
   #195, #194, #191, #172, #162, #145, #144, #143, #40); solo #194 y #195 no son borrador. onia-platform: la sesión no tiene
   acceso (`add_repo` pendiente). Revisión con Sonnet por PR, empezando por #194.
+- [ ] **Q10 Que el QA diario falle en rojo.** `diagnostico.sh` sale distinto de 0 ante MUDO y `qa-release.sh` re-mira /dashboard aunque el release no cambie. Va sobre el #194 una vez mergeado. **Hecho:** prueba con un latido viejo que da rojo.
 - [ ] **Q9 Mirar producción con login tras la publicación de las :50.** Necesita la cuenta de QA y el mecanismo local
   de CLAUDE.md «Acceso local…»; desde esta nube no hay credencial. Lo hace Q5 en el VPS cuando se mergee #194.
 
@@ -82,6 +83,18 @@ Tareas de QA destrabadas:
 - **Madre / integrador** · En `main` falla `scripts/integrador_puede_mergear.test.mjs` › «la via viva de loops.md
   nombra un script que existe en el repo»: la vía de onia-platform desde casa en `cola/loops.md` no tiene script
   versionado. No está en el CI de Hermes (medido el 10-oct).
+
+## Hallazgos para otros · revisión del #194 (16-oct, `modelos: sonnet`, solo lectura)
+
+- **Madre, antes de mergear el #194** · HIGH: el PR trae ~121 binarios (112 PNG de `research/qa-publicacion/` casi idénticos entre horas, más
+  `promesas-web/2026-10-11/servicios-webs-1440.jpg`, 894 KB) y ~145 archivos de investigación en `qa-publicacion/2026-10-15/`. Sacarlos o dejar
+  solo el script y un resumen. Sin secretos en lo revisado.
+- **Madre** · MEDIUM: `hermes-qa-diario.yml` tiene `concurrency: hermes-qa-diario` (no `hermes-jarvis`) en el mismo runner del VPS: puede
+  correr a la vez que `aplicar`/`revertir` (es solo lectura; confirmar que es deliberado).
+- **Este carril** · MEDIUM: falso verde. `diagnostico.sh` sale 0 aunque haya vigías MUDO (sección 15 solo imprime), y `qa-release.sh:116-118`
+  sale 0 con «sin cambios» sin volver a mirar si el release no cambió: una caída con el mismo release no se detecta. Tarea Q10.
+- **Madre** · MEDIUM: `StrictHostKeyChecking=no` con root en un workflow que ahora corre por schedule (igual que `hermes-jarvis.yml:82`).
+- `onia-mirar.js` vive en el VPS, no se pudo revisar.
 
 ## Hecho antes del 10-oct
 
