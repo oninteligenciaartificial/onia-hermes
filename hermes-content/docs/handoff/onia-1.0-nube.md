@@ -176,9 +176,10 @@ la dirección de Sergio Urcullo.
 
 ## 8. Próximos pasos (en orden, 16-oct 01:10 UTC)
 
-1. Pulido 8 (`pulido-usted-8`, `994085db`, en `/home/user/wt-pulido8`): empujar después de las 01:10 UTC a
-   `claude/optimistic-ride-1sp5fe`, PR, CI y merge antes de las 03:20 para salir a las 03:50; mirar a las 03:58 con una cuenta QA
-   (Equipo con Tab y a 390, Pacientes «Nuevo paciente» en el árbol de accesibilidad, y Cobros si hay una nota de venta QA).
+1. 03:58 UTC: mirar #179 (pulido 8, merge `e9bc3f06`) en producción (recordatorio programado): Pacientes y Equipo en el árbol
+   de accesibilidad, Equipo en táctil y con Tab, y estética en el bundle con pedazos sin tildes. En paralelo, un diagnóstico
+   de solo lectura de las 39 pruebas que caen con `TZ=Pacific/Auckland` (producción corre en UTC: si el cobro arma fechas con
+   la zona de la máquina, un cliente de La Paz ve un día corrido entre las 20:00 y las 24:00).
    #178 (pulido 7) quedó publicado y mirado el 16-oct a las 01:00 UTC.
 2. Cuando Sergio Urcullo apruebe el pago QA: mirar el plan activo, la factura por correo y el checkout en «Plan activo».
 3. Contratos para Codex escritos y `pendiente`: **M1e** (el servidor exige enteros en las unidades enteras) y **A1** (lo
