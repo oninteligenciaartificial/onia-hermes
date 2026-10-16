@@ -268,6 +268,19 @@ probar `curl -sS -o /dev/null -w "%{http_code}" https://www.youtube.com`: `000` 
   4. `gallery-dl` sin login se **cuelga** (>120 s, ni error): no usarlo. `pkill -f` dentro del mismo shell mata la sesión.
   5. Metadatos gratis del `<meta og:description>`: «N likes, M comments - autor on fecha: "caption"».
   Faltan: lámina 10 del carrusel (imagen, CTA «guarda/comenta»); con login saldría por `?img_index=N` (ver camino de la PC).
+- **Biblioteca de anuncios de Meta desde la nube SIN login (medido 16-oct-2026, entorno «Onia»):** funciona. Chromium abre
+  `https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=BO&q=<término>&search_type=keyword_unordered`
+  (el documento responde 403 pero la página se pinta igual), a los ~9 s ya hay tarjetas con **imagen/video, texto, anunciante,
+  fechas de inicio y fin, plataformas y «Library ID»**; «N results» sale en el encabezado (`dental` BO >50.000, `Nike` BO ~22.000).
+  Scroll con `page.mouse.wheel` carga más. Trampas: (1) tras 3-4 consultas seguidas Meta contesta
+  `{"errors":[{"message":"Rate limit exceeded"...}]}` en `/api/graphql/` y la página muestra **«No hay ningún anuncio…»
+  FALSO** (Nike BO salió vacío): espaciar consultas y, ante un vacío, repetir con un término seguro antes de concluir;
+  (2) algunos videos dicen «Sorry, we're having trouble playing this video» (no se pueden ver en vivo; la imagen sí);
+  (3) «Doctocliq» en Bolivia da 0 resultados reales (el término sí cargó datos: `dynamic_filter_options` vacío). Sin cuentas
+  ni login. Para los creativos de video completos sigue valiendo la madre en la PC.
+- **Investigar páginas públicas desde la nube (16-oct):** `WebFetch` trae y resume bien (lety.ai: titular y condiciones en
+  segundos); Chromium falla en algunos sitios con `ERR_CONNECTION_RESET` (`hormozi.com`) o navegación interrumpida (`lety.ai`):
+  la red no deja pasar todos los hosts, así que se prueba WebFetch primero y Chromium si hace falta captura.
 - **Camino de la PC (sesión de control, 16-oct):** en Chrome con sesión, `fetch('/api/v1/media/<id>/info/', {headers:
   {'x-ig-app-id':'936619743392459'}, credentials:'include'})` da caption, contadores y `media_type` (1 imagen, 8 carrusel); láminas
   de imagen por flecha + captura (`?img_index=N`). Fallaron: embed por `curl` (shell JS vacío), descargas encadenadas desde Chrome
