@@ -1,23 +1,23 @@
 {
   "schema": 1,
-  "source": "Root verified Git commits and cloud receipts",
-  "timestamp": "2026-10-16T14:52:03Z",
+  "source": "GitHub Actions run summary and logs verified read-only",
+  "timestamp": "2026-10-16T16:32:13Z",
   "goal": "Hermes unattended orchestration using native Codex Cloud subscription and Claude Code Cloud, with PC off",
-  "task": "Visor contrato 10 (tests solo visor)",
+  "task": "GitHub Actions sink recovery (contract 13)",
   "owner": "Root",
-  "provider": "Codex Cloud",
-  "model_configured": "GPT-6.1 Sol Ligero (UI observed by Root)",
+  "provider": "GitHub Actions hosted runner",
+  "model_configured": "UNKNOWN",
   "model_observed": "UNKNOWN",
-  "phase": "blocked",
+  "phase": "completed",
   "tests": {
-    "pass": 17,
+    "pass": 83,
     "fail": 0,
     "skip": 0
   },
   "links": [
-    "https://github.com/oninteligenciaartificial/onia-hermes/commit/e404a44ebf7faaed9da8b08824b18f9e90b73bd4",
-    "https://github.com/oninteligenciaartificial/onia-hermes/commit/eb99d5c2fefa6c4dd5ead11fbe45721fdc114af5"
+    "https://github.com/oninteligenciaartificial/onia-hermes/commit/5e45e8f71da49e0c24a0182705c8ab04d63b814d",
+    "https://github.com/oninteligenciaartificial/onia-hermes/actions/runs/38932496774"
   ],
-  "blocker": "Unattended native Codex Cloud transport is not established, and Claude Code Cloud configuration/dispatch remain unverified. The viewer snapshot is offline and does not prove a live feed or Warp UI test.",
-  "next_action": "Wait for the user's decision on the proposed Codex CLI subscription-auth GitHub Actions alternative before changing architecture."
+  "blocker": "The completed GitHub Actions harness job does not establish unattended native Codex transport, artifact persistence between jobs, Claude Code Cloud configuration/access, or PC-off end-to-end operation. The inherited Hermes Jarvis suite was skipped.",
+  "next_action": "Resolve supported unattended Codex transport and Claude Cloud configuration, then run a bounded end-to-end task-to-artifact-to-QA receipt test with no duplicate effects."
 }

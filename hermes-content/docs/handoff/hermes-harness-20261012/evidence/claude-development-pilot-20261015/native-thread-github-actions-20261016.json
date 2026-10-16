@@ -1,0 +1,41 @@
+{
+  "schema": 1,
+  "source": "GitHub Actions run summary and logs verified read-only",
+  "timestamp": "2026-10-16T16:32:13Z",
+  "contract": "native-hermes-github-actions-sink-20261016-13",
+  "run": {
+    "id": 38932496774,
+    "url": "https://github.com/oninteligenciaartificial/onia-hermes/actions/runs/38932496774",
+    "event": "workflow_dispatch",
+    "workflow_id": 372678841,
+    "branch": "codex/hermes-native-thread-20261016",
+    "head_sha": "5e45e8f71da49e0c24a0182705c8ab04d63b814d",
+    "status": "completed",
+    "conclusion": "success"
+  },
+  "jobs": {
+    "native_harness": "success",
+    "inherited_hermes_jarvis_suite": "skipped"
+  },
+  "tests": {
+    "pass": 83,
+    "fail": 0,
+    "skip": 0,
+    "breakdown": [
+      {"suite": "recovery", "pass": 6, "elapsed_seconds": 0.209},
+      {"suite": "focal_regression", "pass": 77, "elapsed_seconds": 1.515}
+    ]
+  },
+  "sink_smoke": {
+    "result": "pass",
+    "processes": 2,
+    "assertions": ["exact bytes", "matching hash", "owned temporary root cleaned"],
+    "artifact_digest_emitted_in_log": false
+  },
+  "model_observed": "UNKNOWN",
+  "limitations": [
+    "Does not prove persistence between jobs or artifact export from a Codex thread.",
+    "Does not prove unattended native Codex transport, Claude access/configuration, or PC-off end-to-end operation.",
+    "The earlier contract 11 result (77 PASS, 6 setup errors) remains historical and is not rewritten by this run."
+  ]
+}
