@@ -121,7 +121,7 @@ def _parse_input(raw_input):
     return value
 
 
-def _safe_output(step_result, operation_id):
+def _safe_output(step_result, operation_id, native_identity=None):
     if type(step_result) is not dict:
         return _ambiguous_output(operation_id, "unsafe_step_output")
     if step_result.get("operation_id") not in (None, operation_id):
@@ -140,7 +140,13 @@ def _safe_output(step_result, operation_id):
         elif key == "reason" and type(value) is str and value in _REASONS:
             result[key] = value
         elif key == "remote_id" and (value == "UNKNOWN" or
-                                     (type(value) is str and re.fullmatch(r"task_e_[0-9a-f]{32}", value))):
+                (type(value) is str and (
+                    (native_identity is None and re.fullmatch(r"task_e_[0-9a-f]{32}", value))
+                    or (type(native_identity) is dict and value == native_identity.get("remote_id")
+                        and ((native_identity.get("surface") == "cloud_cli_task"
+                              and re.fullmatch(r"task_e_[0-9a-f]{32}", value))
+                             or (native_identity.get("surface") == "codex_app_chat"
+                                 and re.fullmatch(r"[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}", value))))))):
             result[key] = value
         elif key == "native_state" and type(value) is str and value in _NATIVE_STATES:
             result[key] = value
@@ -253,9 +259,14 @@ def _recover_result_bundle(runtime, request):
     native = runtime.bridge.read(request.operation_id)
     if (type(native) is not dict or native.get("task_id") != request.task_id
             or native.get("input_sha") != request.input_sha
-            or native.get("surface") != "cloud_cli_task"
+            or native.get("surface") not in {"cloud_cli_task", "codex_app_chat"}
             or native.get("remote_id") != bundle.get("remote_id")):
         raise ValueError("persisted bundle differs from native operation identity")
+    if native["surface"] == "codex_app_chat":
+        from native_thread_artifacts import NativeThreadArtifacts, validate_bundle_provenance
+        if type(runtime.transport) is not NativeThreadArtifacts or runtime.transport.request != request:
+            raise ValueError("trusted thread artifact binding required for recovery")
+        validate_bundle_provenance(bundle, request, runtime.transport.provenance)
     for item in bundle["files"].values():
         artifact = item["json"]
         if (artifact.get("operation_id") != request.operation_id
@@ -323,6 +334,12 @@ def handle_native_event(raw_input, runtime=None, now=None):
             recovered_bundle = _recover_result_bundle(runtime, request)
         except Exception:
             return _ambiguous_output(event["operation_id"], "result_bundle_recovery_failed")
+        # The existing controller's terminal QA ingest is CLI-only. Do not pass
+        # a thread UUID into that path or broaden its authority in this adapter.
+        native = runtime.bridge.read(request.operation_id)
+        if native.get("surface") == "codex_app_chat":
+            return {"state": "hold", "code": "native_chat_qa_closure_unbound",
+                    "operation_id": request.operation_id}
     try:
         output = step_native_work(
             runtime.queue, runtime.bridge, runtime.transport, event["event"], request,
@@ -334,13 +351,27 @@ def handle_native_event(raw_input, runtime=None, now=None):
     except Exception:
         return _ambiguous_output(event["operation_id"], "dispatch_outcome_unknown")
 
-    sanitized = _safe_output(output, event["operation_id"])
+    identity_reader = getattr(runtime.bridge, "read", None)
+    try:
+        native_identity = identity_reader(request.operation_id) if callable(identity_reader) else None
+    except Exception:
+        return _ambiguous_output(event["operation_id"], "native_identity_unavailable")
+    sanitized = _safe_output(output, event["operation_id"], native_identity)
     if sanitized["state"] == "needs_reconcile" and sanitized["code"] != "ok":
         return sanitized
     if event["event"] != "result" or sanitized["state"] != "awaiting_independent_qa":
         return sanitized
     if not _valid_result_bundle(output, request, event["operation_id"]):
         return _ambiguous_output(event["operation_id"], "result_bundle_binding_invalid")
+    if type(native_identity) is dict and native_identity.get("surface") == "codex_app_chat":
+        try:
+            from native_thread_artifacts import NativeThreadArtifacts, validate_bundle_provenance
+            if (type(runtime.transport) is not NativeThreadArtifacts
+                    or runtime.transport.request != request):
+                raise ValueError("trusted native thread reader required")
+            validate_bundle_provenance(output, request, runtime.transport.provenance)
+        except Exception:
+            return _ambiguous_output(event["operation_id"], "result_bundle_binding_invalid")
     try:
         bundle_bytes = json.dumps(output, sort_keys=True, separators=(",", ":"),
                                   ensure_ascii=False, allow_nan=False).encode("utf-8")

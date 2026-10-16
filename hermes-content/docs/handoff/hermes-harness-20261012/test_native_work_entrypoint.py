@@ -348,7 +348,7 @@ class NativeResultRecoveryTests(unittest.TestCase):
         self.sink_path = self.root / "results"
         self.now = int(time.time())
         self.request = make_request()
-        self.sink_path.mkdir()
+        self.sink_path.mkdir(mode=0o700)
         self.plan = type("Plan", (), {
             "request": lambda _self: (None, None, PLAN_SHA),
             "branch": self.request.ref,

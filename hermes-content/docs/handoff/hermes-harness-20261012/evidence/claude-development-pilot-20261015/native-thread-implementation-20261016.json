@@ -1,0 +1,148 @@
+{
+  "contract": "native-hermes-artifacts-20261016-07",
+  "timestamp_utc": "2026-10-16T04:26:38.270165+00:00",
+  "source_snapshot": {
+    "repository": "oninteligenciaartificial/onia-hermes",
+    "ref": "569b5ed7f500aaf33a8171b72bb2834f403554b2",
+    "mode": "connector_source_snapshot_not_git_checkout",
+    "sources": [
+      {
+        "path": "hermes-content/docs/handoff/hermes-harness-20261012/sqlite_pilot.py",
+        "blob_sha": "ef80c785541bda93e26204931d12a5d96ceeda5a",
+        "sha256": "a0eab1cdbbd6e6ca5b73f8f7d7d0dfc59f658dcf9728123022528281173afda3"
+      },
+      {
+        "path": "hermes-content/docs/handoff/hermes-harness-20261012/controller_pilot.py",
+        "blob_sha": "135ad6afcf9c820ea04697055e4d9d1badfec019",
+        "sha256": "00f311285fb315d87495ffa0a48c87f25eacd52cfa91a2cfee67ecc53deaa2d2"
+      },
+      {
+        "path": "hermes-content/docs/handoff/hermes-harness-20261012/native_receipt_bridge.py",
+        "blob_sha": "817d8887d4b56159ff28feab7c98431f0adea8d0",
+        "sha256": "0eced6b42022cf227eb228147d7e6c512e0c551f153876d7ed9e3b2c6741dcc1"
+      },
+      {
+        "path": "hermes-content/docs/handoff/hermes-harness-20261012/native_cloud_cli.py",
+        "blob_sha": "f48c2ef451d79f668c41e62e77c3e40b9ecb50c5",
+        "sha256": "b7c4d68c1e48ff6dbdf7e088664612c32fa285d3f485ac504d1184a1bfb18806"
+      },
+      {
+        "path": "hermes-content/docs/handoff/hermes-harness-20261012/native_work_entrypoint.py",
+        "blob_sha": "b3bc9133bfd059f5f21ee7b06390244827e1fcc1",
+        "sha256": "2caa1ba49b505a169729907c1acbdd63afb2122f391e9e67a4d4d5a149dd2a05"
+      },
+      {
+        "path": "hermes-content/docs/handoff/hermes-harness-20261012/native_result_store.py",
+        "blob_sha": "b6041b4a9c5dc164f248569f1536bd2b77ed7a0a",
+        "sha256": "fe23ce4d56c5b3727c88462f336a7e37a4e0495c966d29384a5c3adcf21f63ef"
+      },
+      {
+        "path": "hermes-content/docs/handoff/hermes-harness-20261012/test_native_receipt_bridge.py",
+        "blob_sha": "53ad1820cf39d2f167ed12d8616e4a7f64aef440",
+        "sha256": "ac191568f0dffc9449ac4bc71f3e7ad091cb24e2fe9edc7560eb3f513cb8b130"
+      },
+      {
+        "path": "hermes-content/docs/handoff/hermes-harness-20261012/test_native_cloud_cli.py",
+        "blob_sha": "043a56d74c8048c1261fd6e07334bfb13844ebd5",
+        "sha256": "9d802feef697d1a6fd48dee1349d832327d45191f0d12b50e78a73af15b52ff8"
+      },
+      {
+        "path": "hermes-content/docs/handoff/hermes-harness-20261012/test_native_work_entrypoint.py",
+        "blob_sha": "bc2700c82722dfa840a0653a88a1c162ea2b4b77",
+        "sha256": "dd80846c91b05ea8c15aa5a18f7fa09a28e16a11e7c891303ab47c6acada4acc"
+      }
+    ]
+  },
+  "base_tree_sha": "fb0fd8036247b10fe2d566d124ba0810e47cb2f8",
+  "branch": "codex/hermes-native-thread-20261016",
+  "implementation_model": {
+    "configured": "UNKNOWN",
+    "observed": "UNKNOWN"
+  },
+  "files": [
+    {
+      "path": "hermes-content/docs/handoff/hermes-harness-20261012/native_thread_artifacts.py",
+      "sha256": "73d21e29390b4602deadee74bf7f347c3c4a3b4b9f1310f7bcdf07a8e1c87477",
+      "bytes": 10108
+    },
+    {
+      "path": "hermes-content/docs/handoff/hermes-harness-20261012/native_work_entrypoint.py",
+      "sha256": "022dc0ae6fdc9ce7153e0436d54e1e73d0746397274b6cda4b16767e4b9d8db0",
+      "bytes": 20106
+    },
+    {
+      "path": "hermes-content/docs/handoff/hermes-harness-20261012/test_native_thread_artifacts.py",
+      "sha256": "f0860d2a00945ee1fedfcc480183c171a0b0e62045c4b864ff6837196e27c56b",
+      "bytes": 13166
+    },
+    {
+      "path": "hermes-content/docs/handoff/hermes-harness-20261012/test_native_work_entrypoint.py",
+      "sha256": "912c25994ad63017f2ad5181d2f54c1fadc82d85fcc4c871f6596e18a99c9dc9",
+      "bytes": 29354
+    },
+    {
+      "path": "hermes-content/docs/handoff/hermes-harness-20261012/NATIVE-THREAD-ARTIFACTS-README.md",
+      "sha256": "0dabc2b6bcb3deb5a1964c53d36c6ba004adcd76e7f40e71e25f4b0384be7b77",
+      "bytes": 4823
+    }
+  ],
+  "validation": {
+    "focal_command": "python -B -m unittest test_native_thread_artifacts test_native_cloud_cli test_native_receipt_bridge test_native_work_entrypoint.NativeWorkEntrypointTests -q",
+    "passed": 65,
+    "failed": 0,
+    "new_thread_tests": 11,
+    "initial_regression_attempt": {
+      "total": 60,
+      "passed": 54,
+      "blocked_existing_sink_tests": 6,
+      "block_reason": "FileResultSink rejects .git ancestors; existing fixtures under writable roots cannot construct sink. Six existing recovery cases were observed failing during the 60-test pre-thread regression (54 passed,6 errors); not counted as passes. Production sink guard unchanged."
+    },
+    "regression_status": "INCOMPLETE_ENVIRONMENT_BLOCKED_NOT_FULL_GREEN",
+    "blocked_existing_sink_cases": [
+      "test_corrupt_sink_and_changed_request_hold_before_verifier",
+      "test_missing_receipt_or_verifier_holds_before_consuming_qa",
+      "test_receipt_conflict_is_immutable",
+      "test_result_receipt_survives_reopen_and_qa_uses_exact_persisted_bytes_once",
+      "test_sink_store_without_checkpoint_never_recollects_or_recovers_by_filename",
+      "test_valid_recovered_bundle_closes_once_with_bound_review_after_restart"
+    ],
+    "sink_block_evidence": {
+      "reviewer_command": "python -B -m unittest test_native_work_entrypoint.NativeResultRecoveryTests -q",
+      "result": "6 setup errors, zero passes in this class",
+      "exact_guard": "native_result_store.py:124-130; FileResultSink._validate_root rejects any ancestor/.git",
+      "permitted_roots_observed": {
+        "/tmp": "/tmp/.git exists (directory)",
+        "/workspace": "/workspace/.git exists (directory)",
+        "/dev/shm": "/dev/shm/.git observed during the single exec granted write permission; absent in later default read-only inspection",
+        "/codex/browser/projectless/0001-contrato-native-hermes-readonly-20261016-01-meta": "declared path does not exist in executor"
+      },
+      "guard_modified_or_bypassed": false,
+      "mount_or_config_modified": false
+    }
+  },
+  "independent_review": {
+    "agent": "review_native_artifacts",
+    "configured_model": "gpt-6-luna",
+    "configured_effort": "low",
+    "observed_model": "UNKNOWN",
+    "test_passed": 65,
+    "findings": "No concrete security/correctness defect reported. Trusted caller must enforce cloud attestation/authenticated-reader provenance; dataclass shape is not authentication.",
+    "files_changed_by_reviewer": false,
+    "sink_followup": "Same reviewer independently confirmed /tmp/.git and /workspace/.git directories and reproduced all six setup errors. Not a second reviewer."
+  },
+  "limitations": [
+    "Source snapshot via GitHub connector, not updated Git checkout.",
+    "No live authenticated thread transport or cloud execution attestation provider implemented or verified.",
+    "Provenance is a trusted in-process caller binding, not proof from UUID/host/boolean alone.",
+    "QA chat explicitly HOLD native_chat_qa_closure_unbound; no terminal ingest or queue resolution.",
+    "Offline fakes do not prove real authentication, cloud transport or filesystem durability.",
+    "No schema/authority/controller/R4/queue/legacy modifications.",
+    "No complete multi-provider pipeline or PC-off continuity claim.",
+    "Focal code-review skill absent at exact ref (.claude/skills/code-review/SKILL.md returned 404); independent requested reviewer used."
+  ],
+  "publication": {
+    "method": "GitHub create_tree with verified base tree, create_commit with exact base parent, branch fast-forward with expected head; no force/main/PR/merge/deploy",
+    "status": "atomic_implementation_commit_receipt_no_self_sha",
+    "verification": "Commit SHA and published branch/file verification reported separately; self-referential commit hash omitted."
+  }
+}
