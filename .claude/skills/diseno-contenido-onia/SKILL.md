@@ -276,6 +276,14 @@ Caso: dos carruseles del workshop «Auditá tu negocio con IA» (`briefs/marca-p
 - La hoja de contactos se llama con `--dir <carpeta>` (no con la carpeta suelta).
 - Antes de publicar: la promesa («plantilla del Mapa», fecha, precio) tiene que existir y estar aprobada; ver `docs/ONIA_WORKSHOPS_AUDITORIA_IA.md` §8.
 
+## Oferta de entrada o prepago de la marca personal — aprendido el 16-oct-2026
+
+Método y cifras en `docs/ONIA_LANZAMIENTO_PREPAGO.md` y `docs/research/FUNNELS_WEBINARS_Y_PREPAGO_REFERENTES.md`. Lo que sirve para piezas:
+- **Antes de diseñar una pieza de venta, hacer la cuenta de cuánta gente hace falta** (meta ÷ precio, y precio plano contra escalones por cupo). Con Bs 3.000: 60 inscripciones a Bs 50, 50 a Bs 60, 43 a Bs 70. Si la audiencia medida no alcanza, la pieza no arregla la cuenta: se dice.
+- **Escalones de precio por cupo real** (Bs 50 → 60 → 70), nunca por reloj falso ni «valor» inflado. La lámina no lleva el precio: va en la página, que es lo que aprueba Sergio Urcullo.
+- **No hay fuente pública sobre prepagos en Bolivia:** un caso de un amigo es anécdota, no dato. Antes de usarlo como meta, preguntarle su audiencia y los días que vendió.
+- Los carruseles de oferta repiten la fecha y el cupo: si cambian, **se cambian las láminas antes de publicar** (los de 16-oct dicen «sáb 24 / cupo 12»).
+
 ## 6. Gasto (CLAUDE.md, regla de Higgsfield)
 
 Cotizar siempre. **Actualización 8-oct, consolidada 9-oct:** imágenes de prueba/opciones por unos pocos créditos (menos de ~5 por lote) tienen autorización previa; mostrar después el resultado. Lotes grandes, entrenamiento Soul y subir cara/voz a servicios externos requieren autorización específica (cara/voz de Sergio Urcullo también la de Leslie Mercado Moreno). No fraccionar lotes para esquivar el límite. Registrar en

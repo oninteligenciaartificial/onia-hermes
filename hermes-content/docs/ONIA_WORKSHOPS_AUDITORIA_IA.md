@@ -6,6 +6,7 @@
 > consultorías pagas para la caja de octubre, excepción a «Onia vende software, nunca horas»).
 > Investigación y por qué esta forma: `docs/research/REFERENTES_WORKSHOPS_Y_CONSULTORIAS.md`.
 > Esto es de la **marca personal** (voseo en piezas públicas). Los mensajes 1 a 1 a quien compra van **de usted**.
+> **16-oct (noche): pasa a ser la ALTERNATIVA.** Sergio Urcullo pidió un lanzamiento prepago de Bs 50-70 para levantar la marca; la propuesta principal es ahora `docs/ONIA_LANZAMIENTO_PREPAGO.md` (§9 de ese doc explica cuándo gana esta).
 > El funnel de Onia Platform para clínicas es otro (hilo Ventas y pauta, webinar del 22-oct): no se mezcla ni se duplica.
 
 ## 0. En una hoja
