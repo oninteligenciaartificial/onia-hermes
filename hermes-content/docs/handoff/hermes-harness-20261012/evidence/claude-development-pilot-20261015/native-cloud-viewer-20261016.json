@@ -1,0 +1,143 @@
+{
+  "contract": "native-hermes-passive-viewer-20261016-10",
+  "timestamp_utc": "2026-10-16T14:48:38.651393+00:00",
+  "timestamp_utc_minus_4": "2026-10-16T10:48:38.651393-04:00",
+  "repository": "oninteligenciaartificial/onia-hermes",
+  "branch": "codex/hermes-native-thread-20261016",
+  "base_commit": "e404a44ebf7faaed9da8b08824b18f9e90b73bd4",
+  "base_tree": "91dd7847ef5a6e4b62d9004840094730b0c8cbde",
+  "source_snapshot_not_updated_checkout": true,
+  "reused_viewer": {
+    "path": "hermes-content/docs/handoff/hermes-harness-20261012/evidence/claude-development-pilot-20261015/show_progress.py",
+    "source_blob_sha": "9cf67ed90abcb1080e56e26507c5b1a2c20737fd",
+    "source_sha256": "c9abff150d7a0e025654cef713a3408c4b7057f66843babc5c2dee54c6b36897",
+    "new_parallel_viewer_created": false
+  },
+  "model": {
+    "configured": "UNKNOWN",
+    "observed": "UNKNOWN"
+  },
+  "rules_read": {
+    "CODEX.md": {
+      "commit": "f88096b07d1a406ca87c9b65aeaf054ce2c9d925",
+      "blob_sha": "9339629766a73b03652ac50b40c37d0497330344",
+      "read_scope": "complete",
+      "version": "v2026-10-16",
+      "hash_is_not_compliance": true
+    },
+    "AGENTS.md": {
+      "commit": "f88096b07d1a406ca87c9b65aeaf054ce2c9d925",
+      "blob_sha": "ce98d5ea00c861eb269822df7c11496519be2e8e",
+      "read_scope": "bootstrap lines 1-55",
+      "version": "override 2026-10-16",
+      "hash_is_not_compliance": true
+    },
+    ".claude/skills/equipo-de-agentes/SKILL.md": {
+      "commit": "f88096b07d1a406ca87c9b65aeaf054ce2c9d925",
+      "blob_sha": "d3d410bdb0ca4b01ac9ad7be777cd073b10737e0",
+      "read_scope": "complete",
+      "version": "override 2026-10-16",
+      "hash_is_not_compliance": true
+    },
+    ".claude/skills/aprender-de-todo/SKILL.md": {
+      "commit": "f88096b07d1a406ca87c9b65aeaf054ce2c9d925",
+      "blob_sha": "3e52632865692389aae634913d3885657a399c46",
+      "read_scope": "complete",
+      "version": "override 2026-10-16",
+      "hash_is_not_compliance": true
+    }
+  },
+  "rule_application_evidence": {
+    "Warp_passive": "viewer imports only stdlib, no provider/auth/network/subprocess/write operations; independent review and test_once_default_and_explicit_once_do_not_sleep_or_start_effects",
+    "single_worker_reviewer": "same review_native_artifacts reused sequentially; no new reviewer",
+    "hash_limit": "Recorded source identity/version does not establish compliance; evidence is bounded code/tests/review, not hashes.",
+    "mother_documents": "No CODEX/AGENTS/skills/handoff modifications or cherry-pick",
+    "actions_subscription": "Alternative still awaits Sergio Urcullo decision; no credentials copied or workflow run"
+  },
+  "behavior": {
+    "default": "--once; single bounded read",
+    "usage": "python show_progress.py --snapshot EXPORTED_SANITIZED.json --once",
+    "watch": "--watch opt-in; 30 seconds active,120 idle; no transport",
+    "schema": 1,
+    "max_bytes": 65536,
+    "allowed_fields": [
+      "schema",
+      "source",
+      "timestamp",
+      "goal",
+      "task",
+      "owner",
+      "provider",
+      "model_configured",
+      "model_observed",
+      "phase",
+      "tests",
+      "links",
+      "blocker",
+      "next_action"
+    ],
+    "unknown": "missing fields stay UNKNOWN; no inference from mtime/model/provider/filename",
+    "freshness": "source timestamp UTC-4; STALE after300 seconds; missing UNKNOWN; future CLOCK_SKEW; always NO LIVE",
+    "legacy": "same two implementation/fallback receipt names, safe projection only; raw tools/response/tests payloads not displayed",
+    "security": "strict duplicate/nonfinite/schema/type/count/path/link checks; rejects ANSI/OSC/control/bidi and common secret patterns; exporter must sanitize, arbitrary secret detection not guaranteed"
+  },
+  "files": [
+    {
+      "path": "hermes-content/docs/handoff/hermes-harness-20261012/evidence/claude-development-pilot-20261015/show_progress.py",
+      "sha256": "0382aa5de52af7e4ff039d604768aea3b4bb8ad83b72586cf4ffce61bbb0515a",
+      "bytes": 10469
+    },
+    {
+      "path": "hermes-content/docs/handoff/hermes-harness-20261012/evidence/claude-development-pilot-20261015/test_show_progress.py",
+      "sha256": "355a46b781ef4ee4c8c55aef769e7c6f2359323d5358bac0eef2a768c58f638d",
+      "bytes": 9990
+    }
+  ],
+  "validation": {
+    "command": "python -B -m unittest test_show_progress -q",
+    "passed": 17,
+    "failed": 0,
+    "skipped": 0,
+    "cli_help": "python -B show_progress.py --help; exit0, no source reads/effects",
+    "coverage": {
+      "method": "Python stdlib trace executable-line coverage, not branch coverage",
+      "executable_lines": 189,
+      "covered_executable_lines": 180,
+      "percent": 95.24
+    },
+    "terminal_fixture_command": "python -B show_progress.py --snapshot offline-fixture.json --once",
+    "terminal_fixture_exitcode": 0,
+    "terminal_fixture_output": "ONIA | SNAPSHOT PASIVO | NO LIVE | sin control de proveedores\nFuente: OFFLINE TEST FIXTURE\nFecha fuente UTC-4: 2026-10-15T10:00:00-04:00 | stale: STALE\nGoal: viewer fixture | Task: contract10 fixture\nOwner: fixture | Provider: UNKNOWN\nModelo configured: UNKNOWN | observed: UNKNOWN\nPhase (de fuente): idle\nTests pass/fail/skip: 17/0/0\nBlocker: No live transport tested\nNext action (informativa): Read exported snapshot only\nLinks: UNKNOWN\n",
+    "fixture_output_is_live_runtime_or_Warp_UI": false,
+    "ui_scope": "Actual stdout render in cloud shell; Warp window not opened; no laptop/browser used",
+    "unrelated_sink_regression": "Six existing harness sink cases remain environment-blocked, not rerun or counted as PASS. No sink guard changed."
+  },
+  "independent_review": {
+    "agent": "/root/review_native_artifacts",
+    "configured_model": "gpt-6-luna",
+    "configured_effort": "low",
+    "observed_model": "UNKNOWN",
+    "tests_passed": 17,
+    "findings": "No concrete security/correctness defect reported; bounded readonly schema/input/terminal safety and intervals reviewed.",
+    "writes": false
+  },
+  "effects": {
+    "dispatch": 0,
+    "provider_execution": 0,
+    "auth_or_secret_reads_by_viewer": 0,
+    "workflows_activated": 0,
+    "installations": 0,
+    "transport_created": false
+  },
+  "limitations": [
+    "Viewer displays declared sanitized snapshots; it does not authenticate cloud provenance or prove live progress.",
+    "No export/feed transport wired; no provider, coordinator or PC-off continuity proven.",
+    "Common secret-pattern filtering cannot detect all arbitrary secret values; exporter must sanitize.",
+    "No Warp UI visual QA was performed; only actual terminal text fixture inspected."
+  ],
+  "publication": {
+    "method": "base-tree GitHub objects and expected-head fast-forward CAS,force=false",
+    "self_commit_sha": "reported separately to avoid self-reference",
+    "main_pr_merge_deploy": false
+  }
+}
