@@ -9,9 +9,9 @@ description: "Invocar para el carril Competencia de Onia: mirar rivales de produ
 
 ## Antes de investigar, leer (en este orden)
 1. `hermes-content/research/competencia/FUNCIONES_PARA_LA_1_0.md` — la lista corta vigente y qué rubro tiene evidencia.
-2. `PRODUCTO_COMPETENCIA_RESUMEN.md` y `MAPA_COMPETENCIA.md` — 35 rivales con ficha.
-3. `BACKLOG_DE_PRODUCTO.md` (top 10) y `docs/ONIA_NIVEL_REFERENTES_BRECHA.md` (B01-B77, esfuerzo y evidencia).
-4. `docs/ONIA_PLAN_1.0_Y_CAJA.md` y `ONIA_CATALOGO_DE_VENTA.md` — qué ya está en el plan, para no duplicar.
+2. `hermes-content/research/competencia/PRODUCTO_COMPETENCIA_RESUMEN.md` y `MAPA_COMPETENCIA.md` (misma carpeta) — 35 rivales con ficha.
+3. `hermes-content/research/competencia/BACKLOG_DE_PRODUCTO.md` (top 10) y `hermes-content/docs/ONIA_NIVEL_REFERENTES_BRECHA.md` (B01-B77, esfuerzo y evidencia).
+4. `hermes-content/docs/ONIA_PLAN_1.0_Y_CAJA.md` y `hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md` — qué ya está en el plan, para no duplicar.
 
 ## Método que funcionó
 - Cruzar lo ya medido con el plan 1.0 en vez de rehacer fichas: ahorra horas y no contradice lo anterior.

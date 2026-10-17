@@ -20,7 +20,7 @@ rubro o al dental, que se vende primero. Lo que depende de Meta, del SIAT o de u
 | # | Función | Quién la tiene (fuente) | Rubros | Brecha | Esfuerzo |
 |---|---|---|---|---|---|
 | 1 | **Agenda de día y semana con una columna por profesional** | Doctocliq, Dentalink (`DOCTOCLIQ_TEARDOWN.md`, `DENTALINK_TEARDOWN.md`); AgendaPro (`AGENDAPRO_CITALO_TEARDOWN.md`) | dental, estética, servicios | B01 | M |
-| 2 | **Agenda que no miente:** estado en 1 clic, reprogramar devuelve la cita a «pendiente» con sus recordatorios, feriados y vacaciones que respeta la reserva online | Doctocliq, Dentalink, AgendaPro, NativeCode (`ANUNCIANTES_FICHAS_CORTAS.md`) | dental, estética, servicios | B02, B03, B04 | S |
+| 2 | **Agenda que no miente:** estado en 1 clic, reprogramar devuelve la cita a «pendiente» con sus recordatorios, feriados y vacaciones que respeta la reserva online | Doctocliq, Dentalink, AgendaPro, NativeCode (`ANUNCIANTES_FICHAS_CORTAS.md`) | dental, estética, servicios | B02, B03, B04 | S a M (feriados: S; vacaciones y bloqueos por profesional: M) |
 | 3 | **Botón «Enviar por WhatsApp» en cada cita** con el recordatorio y el link de confirmar ya armados (`wa.me`) | Doctocliq (recordatorio con botones encendido de fábrica), Huli, Calu (`HULI_FICHA.md`, `CALU_FICHA.md`) | dental, estética, servicios | B08 | S |
 | 4 | **Presupuesto por fases con estado** (aceptado, abandonado, terminado) y PDF o link. En estética es el **paquete de sesiones**: AgendaPro muestra en la ficha cuántas sesiones lleva cada tratamiento y cuáles están sin pagar | Doctocliq, Dentalink; AgendaPro (página de estética, 16-oct) | dental, estética, servicios | B14 (+ #2 del backlog) | M |
 | 5 | **Caja diaria con apertura, cierre por medio de pago y descuadre** | Doctocliq, Dentalink; el cierre de caja es el gancho de los sistemas de comercio (Control Facilito, YoFacturo) | dental, estética, servicios (comercio ya lo tiene) | B17 | M, reusa `cajaTotals` de comercio |
@@ -29,7 +29,7 @@ rubro o al dental, que se vende primero. Lo que depende de Meta, del SIAT o de u
 
 **Paso 0 (no es copiar, es arreglar):** el detector de tratamiento a medias hoy no encuentra a nadie (cuenta «En progreso»,
 la ficha carga «Pendiente») y es el argumento central contra Dentalink, AgendaPro y Doctocliq. Va antes de todo (B15, B16;
-`BACKLOG_DE_PRODUCTO.md` arriba). Sin eso, el punto 7 y el Recall no se pueden mostrar en la demo.
+`BACKLOG_DE_PRODUCTO.md` arriba). Sin eso, el Recall no se puede mostrar en la demo. El punto 7 es independiente: solo selecciona citas canceladas o con falta y las pasa al reprogramador que ya existe.
 
 ### Si sobra tiempo antes del 30-oct (en este orden)
 
