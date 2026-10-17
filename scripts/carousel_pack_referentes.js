@@ -50,7 +50,9 @@ function crear({ esc, emph, ACCOUNTS, BRAND, getFmt }) {
   function ilustradoHtml(s) {
     const badge = s.badge ? `<div class="badge">${esc(s.badge)}</div>` : '';
     const logo = s.logo ? img(s.logo, 'title-logo') : '';
-    return `<div class="c-ilustrado">${badge}<h2 class="t">${logo}${emph(s.headline || '')}</h2>${s.subtitle ? `<p class="sub">${emph(s.subtitle)}</p>` : ''}<div class="art">${img(s.image || s.bg, 'art-img')}</div>${s.body ? `<p class="caption">${emph(s.body)}</p>` : ''}</div>`;
+    // `fit: "contain"` (retratos, 17-oct): la foto entra entera, sin recorte ni máscara radial que le coma la cabeza.
+    const artCls = s.fit === 'contain' ? 'art-img art-contain' : s.fit === 'baked' ? 'art-img art-baked' : 'art-img';
+    return `<div class="c-ilustrado">${badge}<h2 class="t">${logo}${emph(s.headline || '')}</h2>${s.subtitle ? `<p class="sub">${emph(s.subtitle)}</p>` : ''}<div class="art">${img(s.image || s.bg, artCls)}</div>${s.body ? `<p class="caption">${emph(s.body)}</p>` : ''}</div>`;
   }
 
   function listaHtml(s) {
@@ -62,8 +64,12 @@ function crear({ esc, emph, ACCOUNTS, BRAND, getFmt }) {
   function datoHtml(s) {
     const v = String(s.value || '');
     // 420 px para 1-3 caracteres; más largo se achica para no partir la cifra en dos líneas
-    const size = v.length <= 3 ? 420 : Math.max(170, Math.round(1300 / v.length));
-    return `<div class="c-dato"><div class="big" style="font-size:${size}px">${esc(v)}</div><h2 class="t">${emph(s.headline || '')}</h2>${s.body ? `<p class="sub2">${emph(s.body)}</p>` : ''}</div>`;
+    const size = s.size || (v.length <= 3 ? 420 : Math.max(170, Math.round(1300 / v.length)));
+    const pre = s.pre ? `<div class="pre-d">${esc(s.pre)}</div>` : '';
+    // `side`: texto al lado de la cifra (estilo taller). Sin él, el marcado es el de siempre.
+    const bigHtml = `<div class="big" style="font-size:${size}px">${esc(v)}</div>`;
+    const cifra = s.side ? `<div class="d-row">${bigHtml}<div class="d-side">${emph(s.side)}</div></div>` : bigHtml;
+    return `<div class="c-dato">${pre}${cifra}<h2 class="t">${emph(s.headline || '')}</h2>${s.body ? `<p class="sub2">${emph(s.body)}</p>` : ''}</div>`;
   }
 
   // Carlos Domínguez: la prueba es la pantalla real (captura, comando, prompt), no un dibujo.
@@ -101,6 +107,11 @@ function crear({ esc, emph, ACCOUNTS, BRAND, getFmt }) {
     const tag = serie ? `<div class="tag">${String(idx + 1).padStart(2, '0')}/${String(total).padStart(2, '0')} · ${esc(serie)}</div>` : '';
     const next = idx < total - 1 && slide.next !== '' ? `<div class="next">${esc(slide.next || 'seguí')} <svg viewBox="0 0 90 30"><path d="M3 18 C 25 8, 50 26, 80 14 M68 5 L82 14 L70 24"/></svg></div>` : '';
     const cta = slide.cta ? `<div class="cta-btn">${emph(slide.cta)}</div>` : '';
+    // Estilo `taller` (17-oct, ronda 5 de TALLER_31_OCT.md): titular Bricolage 800 + palabra marcada en
+    // Instrument Serif cursiva (patrón Rocha). Opt-in por lámina: sin `"estilo": "taller"` nada cambia.
+    // `xl: true` sube cuerpo y titular para bajar el vacío.
+    const estilo = slide.estilo === 'taller' ? ' e-taller' : '';
+    const xl = estilo && slide.xl === true ? ' xl' : '';
     const tokens = fs.readFileSync(path.join(BRAND, 'tokens.css'), 'utf8');
     const bricolage = dataUrl('hermes-content/brand/fonts/BricolageGrotesque-var-latin.woff2');
 
@@ -190,9 +201,43 @@ body{margin:0;font-family:'DM Sans',system-ui,sans-serif}
 .c-cierre{display:flex;flex-direction:column;align-items:center;text-align:center}
 .c-cierre .pre{font-family:'Caveat',cursive;font-size:72px;color:var(--soft)}
 .c-cierre .kw{font-family:'Bricolage',sans-serif;font-weight:800;font-size:170px;letter-spacing:.06em;line-height:1;background:var(--mark);color:var(--mark-ink);padding:26px 50px 34px;border-radius:28px;margin:10px 0 18px}
+/* art-contain: retrato entero, solo se desvanece el borde inferior */
+.art-contain{object-fit:contain;mix-blend-mode:multiply;-webkit-mask-image:linear-gradient(#000 80%,transparent 100%);mask-image:linear-gradient(#000 80%,transparent 100%);filter:none!important}
+/* art-baked: la foto ya trae el óvalo difuminado sobre blanco (lo hace ImageMagick antes); no lleva máscara */
+.art-baked{object-fit:contain;mix-blend-mode:multiply;-webkit-mask-image:none;mask-image:none;filter:none!important}
+/* ===== estilo taller (opt-in por lámina) ===== */
+.e-taller.t-blanco{--acc:#007A44;--arrow:#007A44}
+.e-taller .tag{font-size:31px;padding:10px 18px;letter-spacing:1.2px}
+.e-taller .t,.e-taller .c-ensayo h2{font-family:'Bricolage',sans-serif;font-weight:800;letter-spacing:-.035em;line-height:1;text-wrap:balance;white-space:pre-line}
+.e-taller .c-ilustrado .t{display:block;font-size:104px}
+.e-taller .t .g,.e-taller .c-ensayo h2 .g{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-weight:400;font-size:1.14em;letter-spacing:-.01em;line-height:.9;box-shadow:none;white-space:nowrap;margin-right:.08em}
+.e-taller .caption,.e-taller .sub2,.e-taller .c-ensayo p{white-space:pre-line}
+.e-taller .next{font-size:52px;gap:12px}
+.e-taller .next svg{width:104px;height:34px}
+.e-taller .li-n{color:#0A0F0D;font-family:'DM Sans',sans-serif;font-weight:800;font-size:44px}
+.e-taller .g{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-weight:400;box-shadow:none;white-space:nowrap}
+.e-taller .d-row{display:flex;align-items:flex-end;gap:36px}
+.e-taller .d-row .big{margin-bottom:0}
+.e-taller .d-side{font-family:'Bricolage',sans-serif;font-weight:800;font-size:84px;line-height:1.02;letter-spacing:-.035em;white-space:pre-line;padding-bottom:34px}
+.e-taller .d-side .g{font-size:1.3em;line-height:.9}
+.e-taller .c-lista .t{font-size:104px}
+.e-taller.t-negro .cta-btn{background:transparent;border:3px solid #FFFFFF;color:#FFFFFF}
+.e-taller.t-negro .cta-btn .g{color:#00C661;box-shadow:none;font-family:inherit;font-style:normal;font-weight:800;font-size:1em}
+.e-taller .cta-btn .g{font-family:inherit;font-style:normal;font-weight:800;font-size:1em}
+/* xl: cuerpo y titular más grandes */
+.xl .c-ilustrado .t,.xl .c-lista .t{font-size:124px}
+.xl .c-ensayo h2{font-size:150px}
+.xl .c-ensayo p{font-size:66px}
+.xl .c-lista b{font-size:54px}.xl .c-lista li span{font-size:42px}
+.xl .c-lista .sub{font-size:52px}
+.xl .sub2,.xl .caption{font-size:54px}
+.e-taller .pre-d{font-family:'Bricolage',sans-serif;font-weight:800;font-size:104px;letter-spacing:-.035em;line-height:1;margin-bottom:6px}
+.e-taller .c-dato .big{margin-bottom:20px}
+.e-taller .c-dato .t{font-size:92px;line-height:1.02}
+.xl .c-dato .t{font-size:92px}
 .compacta ul{gap:18px;margin-top:40px}.compacta li{padding:20px 30px}.compacta b{font-size:42px}.compacta li span{font-size:34px}.compacta .li-n{width:68px;height:68px;font-size:46px}.compacta .li-icon{width:76px;height:76px}
 </style></head><body>
-<div class="slide l-${layout} t-${theme}${fonts === 'marca' ? ' f-marca' : ''}">${tag}<main class="main">${render(slide)}${cta}</main><div class="handle">${esc(acc.handle)}</div>${next}</div>
+<div class="slide l-${layout} t-${theme}${fonts === 'marca' ? ' f-marca' : ''}${estilo}${xl}">${tag}<main class="main">${render(slide)}${cta}</main><div class="handle">${esc(acc.handle)}</div>${next}</div>
 </body></html>`;
   };
 }
