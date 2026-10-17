@@ -78,3 +78,15 @@ Con `headless_shell` a 390 y 1440 px, sin crear cuentas:
 - `/empezar` y `/pricing` redirigen (307) a `/login` sin sesión: normal.
 - Pendiente: el paso 2 del alta, panel, agenda/ventas y checkout por rubro. Necesitan el servidor (ZZ QA)
   y un navegador con clic; esperan el sí de Sergio Urcullo para armar el acceso.
+
+## Plantilla precargada por rubro: lo que dice el código (17-oct-2026, solo lectura, 3 subagentes Haiku)
+Medido en `onia-platform` (rama `main` local), **sin confirmar en producción** (faltan las cuentas ZZ QA):
+- **Dental:** única con semilla de alta (`lib/platform/semilla-dental.ts`, vía `sembrar-dental-tras-alta.ts`).
+- **Comercio:** el catálogo sale de lo que el dueño escribe en el asistente (`aProductosComercio`, `lib/onboarding/aplicar.ts:365`).
+  Sin productos de ejemplo, horarios ni categorías sembradas: si no carga nada, el catálogo queda vacío.
+- **Servicios profesionales:** sin semilla de servicios ni horario. Solo hay borrador de chatbot (lun-vie 9-18, demo 60 min,
+  `lib/chatbot/plantillas.ts:103`), que no se guarda en el alta.
+- **Importadora:** sin catálogo, costeo ni agentes sembrados; los agentes nacen al encenderlos (`ensureAgentForOrg`).
+  Borrador de chatbot lun-vie 8-17.
+- **Brecha frente a la función 6 de `FUNCIONES_PARA_LA_1_0.md`:** en comercio, servicios e importadora el panel nuevo
+  arranca vacío (o casi). Falta decidir y construir una plantilla por rubro; sin tests que la fijen.
