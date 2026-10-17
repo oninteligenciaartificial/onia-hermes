@@ -34,5 +34,5 @@
   }
  },
  "medir": "scripts/face_identity_qa.py con los refs de v4/qa/manifest-dataset-v5-20260930.json; y MIRAR (edad, piel, luz)",
- "regla": "gana el que mida mas; si empatan (±0,02), Soul por costo. Lo decide Sergio Urcullo mirando las dos."
+ "regla": "el Soul pasa a principal solo si mide >= Seedream+ancla - 0,02 y se ve igual de joven al mirarlo (regla única de LUCIA-HIGGSFIELD-IDENTITY.json, soul_v5.decide; alineada 2026-10-17). Lo decide Sergio Urcullo mirando las dos."
 }
