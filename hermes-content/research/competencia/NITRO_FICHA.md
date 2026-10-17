@@ -42,8 +42,7 @@
   Bs 270/mes). La factura SIAT ya viene en Profesional (Bs 400/mes o Bs 4.000/año). Fuente: https://nitro.com.de/, leído 2026-10-17.
 
 ## Qué NO tiene (según la página)
-- Sin módulo de importaciones documentado: la única «importación» es la de los RCV del SIAT. Sin costeo de importación ni
-  seguimiento de cotizaciones B2B.
+- Sin módulo de importaciones documentado en la página vigente: lo único que muestra es la importación masiva de RCV del SIAT (leído 2026-10-17 en https://boliviaimpuestos.com/b/4Uq, lista de funciones actualizada 30-mar-2024; no se halló DUI ni costeo de importación). Ojo: el plan Empresarial (arriba) lista «importación masiva de ítems (DIM)» según las páginas heredadas; no está verificado qué es ese DIM ni si importa declaraciones de importación. Sin seguimiento de cotizaciones B2B.
 - Fiados y caja de mostrador no se mencionan. Sin agenda ni agentes que propongan mensajes.
 - Cifras de la página (experiencia, soporte) aparecen en «0»: no usarlas.
 
