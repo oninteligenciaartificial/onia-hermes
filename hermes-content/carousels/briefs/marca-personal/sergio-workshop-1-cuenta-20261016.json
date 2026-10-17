@@ -1,14 +1,14 @@
 {
  "title": "La cuenta que nadie hace: cuánto te cuesta lo que repetís",
  "theme": "blanco",
- "serie": "auditoría · 1/2",
- "caption": "Buscá la tarea que repetís cada semana y hacé la cuenta: horas por semana × 4 × lo que vale tu hora. Los números de las láminas son un ejemplo para mostrar la cuenta, no un dato de nadie.\n\nSábado 31 de octubre, 10:00 (La Paz): workshop en vivo de 90 minutos para salir con tu lista de tareas repetidas y un primer paso. Cupo 50. Link en mi perfil.",
+ "serie": "taller 1/2",
+ "caption": "Buscá la tarea que repetís cada semana y hacé la cuenta: horas por semana × 4 × lo que vale tu hora. Los números de las láminas son un ejemplo para mostrar la cuenta, no un dato de nadie.\n\nSábado 31 de octubre, 10:00 (La Paz): taller en vivo de 90 minutos para salir con tu lista de tareas repetidas y un primer paso. Cupo 50. Link en mi perfil.",
  "slides": [
   {
    "layout": "dato",
    "theme": "blanco",
    "value": "Bs 400",
-   "headline": "al mes te cuesta *una sola* tarea que repetís",
+   "headline": "al mes, de ejemplo, cuesta *una sola* tarea que repetís",
    "body": "Ejemplo: 5 horas por semana, a Bs 20 la hora",
    "next": "la cuenta"
   },
@@ -52,15 +52,15 @@
   {
    "layout": "ensayo",
    "theme": "verde",
-   "headline": "Eso es una *auditoría*",
+   "headline": "Eso es una auditoría de tu negocio",
    "body": "Tu lista de tareas repetidas. Tu prioridad. Tu primer paso.\nLo hacemos con tu negocio, en vivo.",
    "next": "fecha"
   },
   {
    "layout": "ensayo",
    "theme": "negro",
-   "headline": "Sáb 31 de octubre · 10:00",
-   "body": "Workshop en vivo de 90 minutos. Cupo 50.\nSalís con tu lista y un primer paso.",
+   "headline": "Sábado 31, 10:00",
+   "body": "Taller en vivo de 90 minutos. Cupo 50.\nSalís con tu lista y un primer paso.",
    "cta": "Link en mi perfil"
   }
  ]

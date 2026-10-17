@@ -1,13 +1,13 @@
 {
  "title": "Qué sale de una auditoría de IA para tu negocio",
  "theme": "blanco",
- "serie": "auditoría · 2/2",
+ "serie": "taller 2/2",
  "caption": "No es un curso: es sentarte 90 minutos con tu propio negocio y salir con tu primer paso. La tabla de la lámina 3 es un ejemplo inventado para mostrar cómo se ve una lista.\n\nSábado 31 de octubre, 10:00 (La Paz), por Meet. Cupo 50. Link en mi perfil.",
  "slides": [
   {
    "layout": "ensayo",
    "theme": "verde",
-   "headline": "No es un curso. Es *tu* negocio sobre la mesa.",
+   "headline": "No es un curso. Es tu negocio sobre la mesa.",
    "body": "90 minutos. Salís con tu primer paso.",
    "next": "qué te llevás"
   },
@@ -43,7 +43,7 @@
    "items": [
     {"label": "Tu negocio no repite tareas", "text": "No hay nada que ordenar"},
     {"label": "Buscás un certificado", "text": "No lo hay"},
-    {"label": "Querés que otro lo haga por vos", "text": "Acá lo hacés vos, conmigo al lado"}
+    {"label": "Querés que otro lo haga por vos", "text": "Acá lo hacés vos, con tu negocio"}
    ],
    "next": "cómo es"
   },
@@ -63,7 +63,7 @@
    "layout": "ensayo",
    "theme": "negro",
    "headline": "Reservá tu cupo",
-   "body": "Desde Bs 50 · 50 cupos.\nEscribime desde el link de mi perfil.\nSe paga por QR del BCP.",
+   "body": "Desde Bs 50 · 50 cupos.\nEscribime desde el link de mi perfil.\nSe paga por QR del BCP.\nInscripciones hasta el jueves 29, 20:00.",
    "cta": "Link en mi perfil"
   }
  ]
