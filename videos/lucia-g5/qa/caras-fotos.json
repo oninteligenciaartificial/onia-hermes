@@ -1,0 +1,95 @@
+{
+ "nota": "SCRFD det_10g; caja en lienzo 1080x1920 (object-fit:cover centrado); mentón = borde de abajo de la caja",
+ "fotos": {
+  "a": {
+   "archivo": "assets/ph-a.jpg",
+   "ancho": 1440,
+   "alto": 2560,
+   "escala_a_lienzo": 0.75,
+   "caja": [
+    445,
+    453,
+    623,
+    657
+   ],
+   "score": 0.898,
+   "cara_px_nativa": 237,
+   "caras_detectadas": 1
+  },
+  "f": {
+   "archivo": "assets/ph-f.jpg",
+   "ancho": 1080,
+   "alto": 1910,
+   "escala_a_lienzo": 1.0052,
+   "caja": [
+    413,
+    312,
+    711,
+    667
+   ],
+   "score": 0.879,
+   "cara_px_nativa": 297,
+   "caras_detectadas": 1
+  },
+  "cafe_b": {
+   "archivo": "assets/cafe-b.jpg",
+   "ancho": 1080,
+   "alto": 1912,
+   "escala_a_lienzo": 1.0042,
+   "caja": [
+    336,
+    257,
+    625,
+    647
+   ],
+   "score": 0.837,
+   "cara_px_nativa": 288,
+   "caras_detectadas": 1
+  },
+  "k": {
+   "archivo": "assets/ph-k.jpg",
+   "ancho": 1440,
+   "alto": 2560,
+   "escala_a_lienzo": 0.75,
+   "caja": [
+    616,
+    734,
+    816,
+    991
+   ],
+   "score": 0.912,
+   "cara_px_nativa": 266,
+   "caras_detectadas": 1
+  }
+ },
+ "frames": {
+  "fr_m5": {
+   "archivo": "assets-fijos/fr-m5.jpg",
+   "ancho": 480,
+   "alto": 600,
+   "caja": [
+    215,
+    218,
+    304,
+    328
+   ],
+   "score": 0.884,
+   "cara_px_nativa": 89,
+   "caras_detectadas": 1
+  },
+  "fr_m4": {
+   "archivo": "assets-fijos/fr-m4.jpg",
+   "ancho": 620,
+   "alto": 680,
+   "caja": [
+    239,
+    212,
+    551,
+    640
+   ],
+   "score": 0.817,
+   "cara_px_nativa": 312,
+   "caras_detectadas": 1
+  }
+ }
+}

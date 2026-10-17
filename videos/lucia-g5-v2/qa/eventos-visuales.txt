@@ -1,0 +1,15 @@
+eventos visuales: 48 en 26.625 s (más el cuadro 0 y el final)
+mayores huecos entre eventos:
+  24.21 → 26.11 s: 1.90 s   (c10 → c10 acento)
+  11.05 → 12.63 s: 1.58 s   (e3 caja → c5 acento)
+  0.95 → 2.45 s: 1.50 s   (gancho dato → gancho caja sale)
+  22.17 → 23.58 s: 1.41 s   (c9, costura → c9 acento)
+  4.37 → 5.33 s: 0.97 s   (p1 aro de las 8 → c3, costura)
+  9.80 → 10.75 s: 0.95 s   (c4 acento → c5, costura)
+  21.25 → 22.17 s: 0.92 s   (r3 el aro vuelve a marcar «inventados» → c9, costura)
+  18.63 → 19.54 s: 0.92 s   (r2 la banda marca «este margen» → c8, costura)
+   0-10.0 s: 23 eventos (23.0 por 10 s)
+  10-20.0 s: 18 eventos (18.0 por 10 s)
+  20-26.6 s: 7 eventos (10.6 por 10 s)
+eventos por 10 s (todo el video): 18.0
+✔ hueco máximo entre eventos 1.90 s (≤ 2.0 s)

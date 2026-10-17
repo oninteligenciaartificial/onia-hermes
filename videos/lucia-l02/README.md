@@ -1,5 +1,9 @@
 # L02 · Este video no fue grabado
 
+> ⛔ **RETIRADA el 8-oct (Sergio Urcullo, por la madre):** 6 s con tres tarjetas no es un video estructurado. No se
+> publica. El final se movió a `hermes-content/references/modelos/lucia/v4/feed/rechazado-20261008/`; el clip limpio
+> de la calle queda de plano de apoyo. Regla: skill `lucia` §0-bis.
+
 Reel 9:16 de 6,04 s, **sin voz** (el texto es la narración): b-roll Kling de Lucía caminando por una calle a la hora
 dorada + dos tarjetas de frase + sello «SEGUIME.» con golpe de zoom + 3 pops. Fórmula revelación → contraste → acción,
 en primera persona. Costo: **0** (nada generado: el clip ya existía; tarjetas y sello en HTML/CSS; SFX de la librería

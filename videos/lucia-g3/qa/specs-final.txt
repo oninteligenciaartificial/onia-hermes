@@ -1,0 +1,19 @@
+codec_name=h264
+codec_type=video
+width=1080
+height=1920
+color_space=bt709
+r_frame_rate=24/1
+duration=58.000000
+nb_frames=1392
+codec_name=aac
+codec_type=audio
+sample_rate=48000
+channels=2
+r_frame_rate=0/0
+duration=58.000000
+nb_frames=2720
+duration=58.000000
+size=23195697
+[Parsed_volumedetect_0 @ 0x556078e2cf00] mean_volume: -91.0 dB
+[Parsed_volumedetect_0 @ 0x556078e2cf00] max_volume: -91.0 dB

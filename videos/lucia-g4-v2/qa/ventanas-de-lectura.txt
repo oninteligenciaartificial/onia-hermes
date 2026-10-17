@@ -1,0 +1,38 @@
+ventana legible medida en el DOM (opacidad ≥ 0,9 y ≥ 95 % dentro del lienzo), cuadro a cuadro:
+  ok  c1        4 pal  0.00–2.00 s  2.00 s (pide 1.70, holgura 0.30)  «¿Cuál conserva su cara?»
+  ok  c2        6 pal  2.08–4.63 s  2.54 s (pide 2.40, holgura 0.14)  «Misma orden. Seis motores de imagen.»
+  ok  c3        6 pal  5.58–8.21 s  2.63 s (pide 2.40, holgura 0.23)  «Contra 8 fotos suyas. Piso: 0,70.»
+  ok  c4        4 pal  8.25–10.13 s  1.88 s (pide 1.70, holgura 0.18)  «Seedream 4.5 · 1 crédito»
+  ok  c5        5 pal  10.17–12.88 s  2.71 s (pide 2.05, holgura 0.66)  «Seedream 5.0 Pro · 2,5 créditos»
+  ok  c6        4 pal  12.92–15.04 s  2.13 s (pide 1.70, holgura 0.43)  «FLUX 3 · 3 créditos»
+  ok  c7        6 pal  15.08–17.71 s  2.63 s (pide 2.40, holgura 0.23)  «Pagar más no mejoró el parecido.»
+  ok  c8        6 pal  22.79–25.50 s  2.71 s (pide 2.40, holgura 0.31)  «Kling O1 Image perdió la cara.»
+  ok  c9        5 pal  25.54–28.04 s  2.50 s (pide 2.05, holgura 0.45)  «Seguime: cada semana, una prueba.»
+  ok  l1-nota1 10 pal  15.08–22.75 s  7.67 s (pide 3.80, holgura 3.87)  «Una toma cada uno: es una prueba, no una regla.»
+  ok  l1-nota2  9 pal  19.08–22.75 s  3.67 s (pide 3.45, holgura 0.22)  «Entre 0,66 y 0,70 la diferencia es ruido (±0,03).»
+  ok  rotulo    6 pal  0.00–3.13 s  3.13 s (pide 2.40, holgura 0.73)  «Lucía Antelo · personaje IA de Onia»
+  ok  dA-hk     2 pal  0.75–2.00 s  1.25 s (pide 1.00, holgura 0.25)  «parecido 0,81»
+  ok  sc-mkl    3 pal  6.50–8.25 s  1.75 s (pide 1.35, holgura 0.40)  «mi piso · 0,70»
+  ok  sc-ax1    2 pal  5.46–8.25 s  2.79 s (pide 1.00, holgura 1.79)  «idéntica · 1»
+  ok  l1-mkl    3 pal  15.08–22.79 s  7.71 s (pide 1.35, holgura 6.36)  «mi piso · 0,70»
+  ok  dA-a      2 pal  8.79–10.13 s  1.33 s (pide 1.00, holgura 0.33)  «parecido 0,81»
+  ok  dA-d      2 pal  10.75–12.88 s  2.13 s (pide 1.00, holgura 1.13)  «parecido 0,70»
+  ok  p-d       4 pal  11.00–12.88 s  1.88 s (pide 1.70, holgura 0.18)  «justo en el piso»
+  ok  dA-e      2 pal  13.46–15.04 s  1.58 s (pide 1.00, holgura 0.58)  «parecido 0,69»
+  ok  s-e       3 pal  13.58–15.04 s  1.46 s (pide 1.35, holgura 0.11)  «bajo el piso»
+  ok  l1-t1     5 pal  15.42–22.75 s  7.33 s (pide 2.05, holgura 5.28)  «Kling O1 Image · 0,5 créditos»
+  ok  l1-v1     1 pal  15.71–22.79 s  7.08 s (pide 0.65, holgura 6.43)  «0,79»
+  ok  l1-t2     4 pal  15.63–22.75 s  7.13 s (pide 1.70, holgura 5.42)  «Seedream 4.5 · 1 crédito»
+  ok  l1-v2     1 pal  15.92–22.79 s  6.88 s (pide 0.65, holgura 6.22)  «0,81»
+  ok  l1-t3     5 pal  15.83–22.75 s  6.92 s (pide 2.05, holgura 4.87)  «Nano Banana 2.1 · 2 créditos»
+  ok  l1-v3     1 pal  16.13–22.79 s  6.67 s (pide 0.65, holgura 6.02)  «0,74»
+  ok  l1-t4     5 pal  16.04–22.75 s  6.71 s (pide 2.05, holgura 4.66)  «Seedream 5.0 Pro · 2,5 créditos»
+  ok  l1-v4     1 pal  16.29–22.79 s  6.50 s (pide 0.65, holgura 5.85)  «0,70»
+  ok  l1-t5     5 pal  16.25–22.75 s  6.50 s (pide 2.05, holgura 4.45)  «GPT Image 2.5 · 2,75 créditos»
+  ok  l1-v5     1 pal  16.50–22.79 s  6.29 s (pide 0.65, holgura 5.64)  «0,66»
+  ok  l1-t6     4 pal  16.42–22.75 s  6.33 s (pide 1.70, holgura 4.63)  «FLUX 3 · 3 créditos»
+  ok  l1-v6     1 pal  16.71–22.79 s  6.08 s (pide 0.65, holgura 5.43)  «0,69»
+  ok  l2-cap1   3 pal  22.75–25.50 s  2.75 s (pide 1.35, holgura 1.40)  «Seedream 4.5 0,83»
+  ok  l2-cap2   4 pal  23.54–25.54 s  2.00 s (pide 1.70, holgura 0.30)  «Kling O1 Image 0,35»
+holgura más justa: s-e (0.11 s)
+✔ todas las ventanas medidas alcanzan la regla de lectura (0,35 s por palabra + 0,3 s)

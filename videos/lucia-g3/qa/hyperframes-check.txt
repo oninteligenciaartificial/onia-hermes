@@ -1,0 +1,32 @@
+◆  Checking lucia-g3
+[hyperframes] browserGpuMode probe → software (WebGL unavailable)
+
+Lint
+  ⚠ timeline_track_too_dense: Track 3 has 8 timed elements in this HTML file. Smaller sub-compositions keep timelines easier to read, iterate on, and diff.
+    /home/user/onia-hermes/videos/lucia-g3/index.html [data-composition-id] t=0s
+    Fix: Move coherent scene groups into separate .html files under compositions/ and mount them from the parent with data-composition-src so the timeline stays easier to inspect, revise, and validate.
+  ⚠ timeline_track_too_dense: Track 4 has 7 timed elements in this HTML file. Smaller sub-compositions keep timelines easier to read, iterate on, and diff.
+    /home/user/onia-hermes/videos/lucia-g3/index.html [data-composition-id] t=0s
+    Fix: Move coherent scene groups into separate .html files under compositions/ and mount them from the parent with data-composition-src so the timeline stays easier to inspect, revise, and validate.
+  ⚠ composition_heavy_overlay_count_high: This composition has 30 elements carrying "heavy overlay" CSS (filter:blur, radial-gradient, or clip-path). Field signal: a composition with ~40 such elements — including opacity:0 / visibility:hidden ones — captures solid-black for the first ~half of the render, recovering near the end. Reproduces identically via drawElement, forced screenshot capture, and snapshot, so the capture layer itself is the offender (not encoder/mux). Independent of duration. Presence alone matters; only display:none elements are excluded here.
+    /home/user/onia-hermes/videos/lucia-g3/index.html [data-composition-id] t=0s
+    Fix: Split coherent scenes / transitions into separate .html files under compositions/ and concat the pieces (FFmpeg or the runtime's slideshow) so each capture only sees a small subset of heavy overlays at once. Even hidden overlays (opacity:0 / visibility:hidden) contribute — either remove truly unused ones from the source or scope them into their own per-transition sub-composition. If an overlay is genuinely inert for the whole clip, use display:none so it never enters the render tree. Field ref ts=1784040753 (#hyperframes-cli-feedback).
+  (… 30 avisos de estilo nested_structure_needs_subcomposition omitidos: no frenan el render, ver README)
+  0 error(s), 33 warning(s), 0 info(s)
+
+Runtime
+  ◇ 0 errors, 0 warnings
+
+Layout
+  ◇ 0 issues across 9 sample(s)
+
+Motion
+  ◇ 0 errors, 0 warnings
+
+Contrast
+  ◇ 14/14 text checks pass WCAG AA
+
+Snapshots
+  ◇ disabled
+
+◇  Check passed

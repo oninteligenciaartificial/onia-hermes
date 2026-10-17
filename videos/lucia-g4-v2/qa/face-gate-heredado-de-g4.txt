@@ -1,0 +1,19 @@
+piso de caras negativas (max): 0.224   gate del repo: 0,70
+archivo                                        centroide  min_ref  max_ref  cara_px  veredicto
+k1-1-recepcion-celular-4afffb96.jpg                0.806    0.546    0.725      237  OK
+img-kling-omni-image-c3706d45.jpg                  0.789    0.587    0.728      234  OK
+img-nano-banana-2-1-a4dd1a48.jpg                   0.737    0.494    0.685      241  OK
+img-seedream-5-pro-b1abe43c.jpg                    0.707    0.537    0.659      180  OK (cara < 200 px: poco confiable)
+img-flux-3-af9c2d0c.jpg                            0.690    0.493    0.651      255  BAJO: mirar
+img-gpt-image-2-5-5da2fa1e.jpg                     0.672    0.479    0.613      296  BAJO: mirar
+img-omni-image-k2cafe-9f4b5172.jpg                 0.354    0.208    0.466      287  BAJO: mirar
+k2-1-cafe-mostrador-3e05cfd0.jpg                   0.830    0.590    0.759      225  OK
+img-omni-image-k4cafe-dad464de.jpg                 0.834    0.563    0.931      476  OK
+k4-3-cafe-teclado-186c82f0.jpg                     0.839    0.574    0.812      456  OK
+img-kling-omni-image-c3706d45.png                  0.794    0.581    0.739      335  OK
+img-nano-banana-2-1-a4dd1a48.png                   0.737    0.481    0.698      343  OK
+img-seedream-5-pro-b1abe43c.png                    0.702    0.529    0.657      256  OK
+img-flux-3-af9c2d0c.png                            0.691    0.498    0.661      362  BAJO: mirar
+img-gpt-image-2-5-5da2fa1e.png                     0.658    0.466    0.614      416  BAJO: mirar
+img-omni-image-k2cafe-9f4b5172.png                 0.350    0.197    0.468      409  BAJO: mirar
+img-omni-image-k4cafe-dad464de.png                 0.831    0.563    0.927      677  OK

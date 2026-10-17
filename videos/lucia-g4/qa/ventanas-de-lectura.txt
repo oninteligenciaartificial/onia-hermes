@@ -1,0 +1,57 @@
+ventana legible medida en el DOM (opacidad ≥ 0,9 y ≥ 95 % dentro del lienzo), cuadro a cuadro:
+  ok  rotulo    6 pal  0.00–3.13 s  3.13 s (pide 2.40)  «Lucía Antelo · personaje IA de Onia»
+  ok  sc-mkl    3 pal  10.17–11.92 s  1.75 s (pide 1.35)  «mi piso · 0,70»
+  ok  sc-ax1    2 pal  8.25–11.92 s  3.67 s (pide 1.00)  «idéntica · 1»
+  ok  l1-mkl    3 pal  41.92–49.67 s  7.75 s (pide 1.35)  «mi piso · 0,70»
+  ok  l1-nota1 10 pal  41.92–49.63 s  7.71 s (pide 3.80)  «Una toma cada uno: es una prueba, no una regla.»
+  ok  l1-nota2  9 pal  45.71–49.63 s  3.92 s (pide 3.45)  «Entre 0,66 y 0,70 la diferencia es ruido (±0,03).»
+  ok  l2-h1     2 pal  49.63–57.13 s  7.50 s (pide 1.00)  «Escena 1»
+  ok  l2-h2     2 pal  49.67–57.17 s  7.50 s (pide 1.00)  «Escena 2»
+  ok  l2-h3     2 pal  49.67–57.17 s  7.50 s (pide 1.00)  «Escena 3»
+  ok  l2-r1     2 pal  49.63–57.13 s  7.50 s (pide 1.00)  «Imagen A»
+  ok  l2-r2     2 pal  52.46–57.13 s  4.67 s (pide 1.00)  «Imagen B»
+  ok  dA-a      2 pal  12.79–16.63 s  3.83 s (pide 1.00)  «parecido 0,81»
+  ok  dA-b      2 pal  17.79–21.63 s  3.83 s (pide 1.00)  «parecido 0,79»
+  ok  dA-c      2 pal  22.79–26.63 s  3.83 s (pide 1.00)  «parecido 0,74»
+  ok  dA-d      2 pal  27.79–31.63 s  3.83 s (pide 1.00)  «parecido 0,70»
+  ok  p-d       4 pal  28.79–31.63 s  2.83 s (pide 1.70)  «justo en el piso»
+  ok  dA-e      2 pal  32.79–36.63 s  3.83 s (pide 1.00)  «parecido 0,69»
+  ok  s-e       3 pal  33.75–36.63 s  2.88 s (pide 1.35)  «bajo el piso»
+  ok  dA-f      2 pal  37.79–41.63 s  3.83 s (pide 1.00)  «parecido 0,66»
+  ok  s-f       3 pal  38.75–41.63 s  2.88 s (pide 1.35)  «bajo el piso»
+  ok  l1-t1     4 pal  42.25–49.63 s  7.38 s (pide 1.70)  «Imagen B · 0,5 créditos»
+  ok  l1-v1     1 pal  42.50–49.67 s  7.17 s (pide 0.65)  «0,79»
+  ok  l1-t2     4 pal  42.63–49.63 s  7.00 s (pide 1.70)  «Imagen A · 1 crédito»
+  ok  l1-v2     1 pal  42.92–49.67 s  6.75 s (pide 0.65)  «0,81»
+  ok  l1-t3     4 pal  43.04–49.63 s  6.58 s (pide 1.70)  «Imagen C · 2 créditos»
+  ok  l1-v3     1 pal  43.29–49.67 s  6.38 s (pide 0.65)  «0,74»
+  ok  l1-t4     4 pal  43.42–49.63 s  6.21 s (pide 1.70)  «Imagen D · 2,5 créditos»
+  ok  l1-v4     1 pal  43.71–49.67 s  5.96 s (pide 0.65)  «0,70»
+  ok  l1-t5     4 pal  43.83–49.63 s  5.79 s (pide 1.70)  «Imagen F · 2,75 créditos»
+  ok  l1-v5     1 pal  44.08–49.67 s  5.58 s (pide 0.65)  «0,66»
+  ok  l1-t6     4 pal  44.25–49.63 s  5.38 s (pide 1.70)  «Imagen E · 3 créditos»
+  ok  l1-v6     1 pal  44.50–49.67 s  5.17 s (pide 0.65)  «0,69»
+  ok  l2-c11    1 pal  49.96–57.13 s  7.17 s (pide 0.65)  «0,81»
+  ok  l2-c12    1 pal  50.08–57.17 s  7.08 s (pide 0.65)  «0,83»
+  ok  l2-c13    1 pal  50.25–57.17 s  6.92 s (pide 0.65)  «0,84»
+  ok  l2-c21    1 pal  52.58–57.13 s  4.54 s (pide 0.65)  «0,79»
+  ok  l2-c22    1 pal  52.75–57.17 s  4.42 s (pide 0.65)  «0,35»
+  ok  l2-c23    1 pal  52.92–57.17 s  4.25 s (pide 0.65)  «0,83»
+  ok  l2-cap1   4 pal  53.96–57.13 s  3.17 s (pide 1.70)  «Imagen A · café 0,83»
+  ok  l2-cap2   4 pal  54.25–57.17 s  2.92 s (pide 1.70)  «Imagen B · café 0,35»
+  ok  c1        4 pal  0.21–2.96 s  2.75 s (pide 1.70)  «¿Cuál conserva su cara?»
+  ok  c2        6 pal  3.04–5.88 s  2.83 s (pide 2.40)  «Misma orden. Seis motores de imagen.»
+  ok  c3        6 pal  5.92–8.96 s  3.04 s (pide 2.40)  «Se mide contra 8 fotos suyas.»
+  ok  c4        5 pal  9.04–11.88 s  2.83 s (pide 2.05)  «Idéntica es 1. Piso, 0,70.»
+  ok  c5        4 pal  11.92–16.88 s  4.96 s (pide 1.70)  «Imagen A · 1 crédito»
+  ok  c6        4 pal  16.92–21.88 s  4.96 s (pide 1.70)  «Imagen B · 0,5 créditos»
+  ok  c7        4 pal  21.92–26.88 s  4.96 s (pide 1.70)  «Imagen C · 2 créditos»
+  ok  c8        4 pal  26.92–31.88 s  4.96 s (pide 1.70)  «Imagen D · 2,5 créditos»
+  ok  c9        4 pal  31.92–36.88 s  4.96 s (pide 1.70)  «Imagen E · 3 créditos»
+  ok  c10       4 pal  36.92–41.88 s  4.96 s (pide 1.70)  «Imagen F · 2,75 créditos»
+  ok  c11       6 pal  41.92–49.63 s  7.71 s (pide 2.40)  «Pagar más no mejora el parecido.»
+  ok  c12       6 pal  49.67–52.21 s  2.54 s (pide 2.40)  «Imagen A: la sostuvo en tres.»
+  ok  c13       5 pal  52.29–54.50 s  2.21 s (pide 2.05)  «Una foto sola no mide.»
+  ok  c14       6 pal  54.63–57.13 s  2.50 s (pide 2.40)  «El café: B perdió la cara.»
+  ok  c15       5 pal  57.17–59.75 s  2.58 s (pide 2.05)  «Seguime: cada semana, una prueba.»
+✔ todas las ventanas medidas alcanzan la regla de lectura

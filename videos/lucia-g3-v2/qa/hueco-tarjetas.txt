@@ -1,0 +1,2 @@
+cuadros sin tarjeta narrativa visible: 0 de 670
+✔ los 670 cuadros (del 0 al 669) tienen una tarjeta visible (opacidad ≥ 5 % y ≥ 25 % de su caja en el lienzo)

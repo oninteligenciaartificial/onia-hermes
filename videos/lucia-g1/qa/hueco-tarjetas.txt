@@ -1,0 +1,4 @@
+cuadros sin tarjeta narrativa visible: 10 de 1344
+  cuadros 0–2 (0.000–0.125 s, 3 cuadro(s)) por diseño (arranque / morph)
+  cuadros 732–738 (30.500–30.792 s, 7 cuadro(s)) por diseño (arranque / morph)
+✔ en cada cambio de tarjeta hay siempre una tarjeta visible (≥ 5 % de opacidad)

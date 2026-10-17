@@ -1,0 +1,9 @@
+eventos visuales: 41 en 27.917 s = 14.7 por 10 s
+mayores huecos entre eventos:
+  15.967 → 17.583 s: 1.616 s   (contador → c8 acento)
+  26.375 → 27.917 s: 1.542 s   (c12 acento → fin)
+  0.000 → 1.500 s: 1.500 s   (gancho (cuadro 0) → aro)
+  21.083 → 22.542 s: 1.459 s   (sello → c11, empuje)
+  13.458 → 14.875 s: 1.417 s   (c7 → c7 acento)
+✔ hueco máximo entre eventos 1.616 s (≤ 2 s)
+tramo quieto de diseño (sin contar el empuje lento de las fotos ni el del visor): mayor 0.250 s   [11.71→11.96 (0.25 s), 22.29→22.54 (0.25 s), 13.21→13.42 (0.21 s), 2.25→2.42 (0.17 s)]

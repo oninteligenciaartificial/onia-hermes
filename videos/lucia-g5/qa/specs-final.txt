@@ -1,0 +1,27 @@
+codec_name=h264
+profile=High
+codec_type=video
+width=1080
+height=1920
+pix_fmt=yuv420p
+color_space=bt709
+color_transfer=bt709
+color_primaries=bt709
+r_frame_rate=24/1
+duration=57.500000
+bit_rate=5249776
+nb_frames=1380
+codec_name=aac
+profile=LC
+codec_type=audio
+sample_rate=48000
+channels=2
+r_frame_rate=0/0
+duration=57.500000
+bit_rate=2276
+nb_frames=2697
+duration=57.500000
+size=37779520
+bit_rate=5256281
+[Parsed_volumedetect_0 @ 0x55b4462daec0] mean_volume: -91.0 dB
+[Parsed_volumedetect_0 @ 0x55b4462daec0] max_volume: -91.0 dB

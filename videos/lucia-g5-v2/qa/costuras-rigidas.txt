@@ -1,0 +1,9 @@
+empuje rígido: 6 cuadros, el que entra pegado al que sale (borde con borde), 1080 px cada uno
+  3.417 s  f-gancho → pl-p1: separación máx 0.00 px · recorren 1080 y 1080 px · tarjetas c1 1080 / c2 1080 px  ok
+  5.333 s  pl-p1 → pl-p2: separación máx 0.00 px · recorren 1080 y 1080 px · tarjetas c2 1080 / c3 1080 px  ok
+  10.750 s  pl-p2 → f-e3: separación máx 0.00 px · recorren 1080 y 1080 px · tarjetas c4 1080 / c5 1080 px  ok
+  13.625 s  f-e3 → pl-r1: separación máx 0.00 px · recorren 1080 y 1080 px · tarjetas c5 1080 / c6 1080 px  ok
+  16.625 s  pl-r1 → pl-r2: separación máx 0.00 px · recorren 1080 y 1080 px · tarjetas c6 1080 / c7 1080 px  ok
+  19.542 s  pl-r2 → pl-r3: separación máx 0.00 px · recorren 1080 y 1080 px · tarjetas c7 1080 / c8 1080 px  ok
+  22.167 s  pl-r3 → f-cierre: separación máx 0.00 px · recorren 1080 y 1080 px · tarjetas c8 1080 / c9 1080 px  ok
+✔ 7 costuras rígidas de 6 cuadros (0,25 s): sin tiras de fondo y con las tarjetas viajando con la imagen

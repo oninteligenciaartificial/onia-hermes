@@ -1,0 +1,34 @@
+Control de cara (face-gate.sh, SCRFD + embeddings, gate >= 0,70) — 2da pasada, 8-oct-2026, sobre out/g3-final-1080x1920.mp4.
+H10: los instantes de la fuente se ALINEAN con el montaje. K4: cuadro 0 = 40,0 s del final (final 41,5 s = K4 1,5 s; 43,0 = 3,0 s).
+K1: cuadro 0 = 53,0 s del final (final 55,0 s = K1 2,0 s; 57,5 = 4,5 s). La 1ra pasada comparaba 55 y 57,5 s contra K1 2,5 y 5,0 s (0,5 s de desfase).
+piso de caras negativas (max): 0.224   gate del repo: 0,70
+
+== 6 cuadros del FINAL contra su fuente en el MISMO instante ==
+final (s)  fuente             final   fuente  diferencia  cara_px (final/fuente)  veredicto
+1,0        descartada-orig    0.830   0.835   0.005       185 / 247               OK (final < 200 px: poco confiable)
+24,5       buena.jpg          0.809   0.812   0.003       258 / 215               OK
+41,5       K4 a 1,5 s         0.732   0.726   0.006       264 / 176               OK
+43,0       K4 a 3,0 s         0.723   0.724   0.001       259 / 172               OK
+55,0       K1 a 2,0 s         0.731   0.762   0.031       180 / 120               OK (< 200 px: poco confiable)
+57,5       K1 a 4,5 s         0.717   0.726   0.009       174 / 116               OK (< 200 px: poco confiable)
+
+Todos >= 0,70 (mínimo 0,717). Diferencia máxima 0,031 en 55,0 s: cara de 180 px (120 px en K1), donde la medida es ruidosa.
+Se miró: el mismo K1 a 2,0 s llevado a 1080x1920 SIN compresión (lanczos) da 0,758 y los instantes vecinos dan, final / K1: 54,9 s 0,767 / 0,770 · 55,04-55,08 s 0,750 / 0,762.
+Lo mismo con otros instantes alineados del cierre: final 54 / 56 / 57 s = 0,784 / 0,744 / 0,760 contra K1 1 / 3 / 4 s = 0,793 / 0,734 / 0,761 (diferencias 0,009 / 0,010 / 0,001).
+Conclusión: no hay deformación (los otros 5 cuadros del final difieren <= 0,009 de su fuente); el 0,031 es sensibilidad de la medida a una cara chica + H.264, y pasa el gate.
+
+== filas completas (salida del script) ==
+archivo                                        centroide  min_ref  max_ref  cara_px  veredicto
+g3-final-1080x1920_t1.png                          0.830    0.534    0.791      185  OK (cara < 200 px: poco confiable)
+g3-final-1080x1920_t24.5.png                       0.809    0.567    0.763      258  OK
+g3-final-1080x1920_t41.5.png                       0.732    0.530    0.685      264  OK
+g3-final-1080x1920_t43.png                         0.723    0.468    0.674      259  OK
+g3-final-1080x1920_t55.png                         0.731    0.502    0.692      180  OK (cara < 200 px: poco confiable)
+g3-final-1080x1920_t57.5.png                       0.717    0.465    0.650      174  OK (cara < 200 px: poco confiable)
+descartada-orig.png                                0.835    0.539    0.803      247  OK
+buena.jpg                                          0.812    0.571    0.766      215  OK
+k4_t1.5.png                                        0.726    0.522    0.689      176  OK (cara < 200 px: poco confiable)
+k4_t3.png                                          0.724    0.474    0.671      172  OK (cara < 200 px: poco confiable)
+k1_t2.png                                          0.762    0.533    0.706      120  OK (cara < 200 px: poco confiable)
+k1_t4.5.png                                        0.726    0.480    0.652      116  OK (cara < 200 px: poco confiable)
+(extra) final t54 / t56 / t57:                     0.784 / 0.744 / 0.760 ; k1 t1 / t3 / t4: 0.793 / 0.734 / 0.761 ; k1 lanczos t1..t4: 0.800 / 0.758 / 0.738 / 0.762

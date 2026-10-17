@@ -1,0 +1,106 @@
+{
+  "titulo": "G3 v2 · Tres errores que casi publico",
+  "guion": "hermes-content/docs/cola/lucia-diario/guiones/G3-tres-errores-de-la-ia.md",
+  "version": "v2 (11-oct-2026): re-corte de G3 (58 s, muda) a ~27 s sin aire muerto, cronometrado para la voz de Lucía (todavía muda). Método: .claude/skills/lucia/montaje-hyperframes.md + videos/lucia-g3",
+  "nota_tiempos": "Todos los tiempos son CUADROS a 24 fps o expresiones: T<n> = inicio del tramo de voz n (línea n de guion-voz.txt), L<n> = fin de su voz, END = fin del video. build.mjs los resuelve y los valida contra guion-voz.txt; escribe plan-resuelto.json (en segundos) que leen los controles.",
+  "lienzo": { "w": 1080, "h": 1920, "fps": 24 },
+  "acento": "#10C26B",
+  "voz": {
+    "archivo": "guion-voz.txt",
+    "cps": 17,
+    "tramos_cuadros": [53, 47, 60, 47, 53, 27, 53, 53, 47, 47, 60, 47],
+    "hueco_cuadros": 6,
+    "cola_cuadros": 10,
+    "max_caracteres": 450,
+    "max_hueco_s": 0.25,
+    "sobra_obj_s": 0.25,
+    "sobra_max_s": 0.30,
+    "min_s": 26,
+    "max_s": 30,
+    "nota": "H1 (revisión 1, 11-oct): la voz se mide en CARACTERES (≈ 17 por segundo, G1 v2), no en palabras. Un tramo = una línea de guion-voz.txt = una VENTANA de voz de tramos_cuadros[n-1] cuadros (valores CONGELADOS = los de v2.0, para que las tarjetas, los empujes y los clips no se muevan); entre ventanas hay 6 cuadros (0,25 s), donde cae cada empuje. build.mjs exige para cada línea: chars/cps ≤ ventana (cabe) y ventana − chars/cps ≤ sobra_max_s (hueco). Si existe duraciones.json (duración REAL de cada pista, la escribe scripts/poner-voz.mjs --medir) manda sobre cps y tramos_cuadros: cada ventana = ceil(voz real × 24) cuadros, así que la pausa entre líneas queda en 0,25 s + menos de 1 cuadro. La cola de 10 cuadros (0,42 s) tras la última palabra deja que el CTA termine de leerse. Hoy NO hay audio: la pista es AAC en silencio."
+  },
+  "zona_segura": { "texto_hasta_y": 1490, "derecha_libre_px": 80, "derecha_libre_desde_y": 1000, "arriba_minimo_y": 280, "margen_bajo_menton": 40, "texto_min_px": 34, "rotulo_px": 40 },
+  "caras": {
+    "nota": "SCRFD det_10g (face_identity_qa.py) medido el 8-oct-2026 para G3 v1: fotos llevadas a 1080x1920 (cover), clips 720x1280 llevados a x1,5. v2 usa las mismas fotos/clips al mismo encuadre; las fotos llevan un empuje lento 1,00 a 1,03 (el mentón de la descartada sube 3 px: más margen).",
+    "desc": { "caja": [495, 599, 681, 847], "menton": 847, "texto_desde_y": 887, "cielo_hasta_y": 540 },
+    "buena": { "caja": [417, 1019, 675, 1364], "menton": 1364, "cabello_arriba_aprox": 925, "texto_hasta_y_arriba": 880 },
+    "k4": { "menton_max": 1405, "menton_min": 1346, "tope_caja": 1002, "cabello_arriba_aprox": 915, "texto_hasta_y_arriba": 885 },
+    "k1": { "menton_max": 667, "menton_min": 653, "tope": 446, "cuerpo_texto_desde_y": 707 }
+  },
+  "empuje": { "cuadros": 6, "ease": "power3.inOut", "nota": "Empuje rígido de 6 cuadros a la izquierda en la ventana [T-6, T]; cae justo en el hueco de 6 cuadros entre dos líneas de voz." },
+  "escenas": {
+    "desc": { "tipo": "foto", "src": "assets/descartada.jpg", "a": "0", "b": "T4", "zoom": 1.03, "capa": "foto descartada K4·1 (letrero inventado, difuminado) a pantalla completa: gancho + error 1" },
+    "buena": { "tipo": "foto", "src": "assets/buena.jpg", "a": "T4-6", "b": "T5", "zoom": 1.03, "capa": "foto nueva sin letrero (la regla 1)" },
+    "agenda": { "tipo": "foto", "src": "assets/agenda.jpg", "a": "T5-6", "b": "T8", "zoom": 1.03, "capa": "foto de la agenda K2·2: error 2" },
+    "k4": { "tipo": "clip", "src": "assets/k4.mp4", "a": "T8-6", "b": "T10", "media_inicio": "auto", "capa": "clip K4 a 1x (media_inicio automático: el cuadro 120 cae 12 cuadros antes de T10): error 3" },
+    "placa": { "tipo": "placa", "a": "T10-6", "b": "T11", "capa": "placa oscura con el recorte ampliado del cuadro 120 (la ceremonia de contar dedos, 1,96 s en reposo)" },
+    "k1": { "tipo": "clip", "src": "assets/k1.mp4", "a": "T11-6", "b": "END", "media_inicio": "auto", "capa": "cierre: clip K1 (media_inicio automático = 145 − cuadros − 2, máx 20)" }
+  },
+  "costuras": [
+    { "t": "T4", "sale": ["desc"], "entra": ["buena"], "tarjetas": { "sale": "c3", "entra": "c4" } },
+    { "t": "T5", "sale": ["buena"], "entra": ["agenda"], "tarjetas": { "sale": "c4", "entra": "c5" } },
+    { "t": "T8", "sale": ["agenda"], "entra": ["k4"], "tarjetas": { "sale": "c7", "entra": "c8" } },
+    { "t": "T10", "sale": ["k4", "cc-k4", "cc-ctr"], "entra": ["placa"], "tarjetas": { "sale": "c9", "entra": "c10" } },
+    { "t": "T11", "sale": ["placa"], "entra": ["k1"], "tarjetas": { "sale": "c10", "entra": "c11" } }
+  ],
+  "rotulo": { "texto": "Lucía Antelo · personaje IA de Onia", "a": "0", "b": "78", "top": 905 },
+  "tarjetas": [
+    { "id": "c1", "tramo": 1, "texto": "Tres errores que", "acento": "casi publico.", "a": "0", "b": "T2", "bottom": 1455, "sin_entrada": true },
+    { "id": "c2", "tramo": 2, "num": "1", "texto": "Letrero que", "acento": "no pedí.", "acento_t": "T2+28", "a": "T2", "b": "T3", "bottom": 1455 },
+    { "id": "c3", "tramo": 3, "texto": "La cara pasó.", "acento": "El fondo, no.", "acento_t": "T3+30", "a": "T3", "b": "T4", "bottom": 1455 },
+    { "id": "c4", "tramo": 4, "texto": "Mirar también", "acento": "el fondo.", "acento_t": "T4+26", "a": "T4", "b": "T5", "top": 300 },
+    { "id": "c5", "tramo": 5, "num": "2", "texto": "Letra que", "acento": "parece escrita.", "acento_t": "T5+30", "a": "T5", "b": "T6", "bottom": 1455 },
+    { "id": "c6", "tramo": 6, "texto": "Sin", "acento": "mensaje.", "acento_t": "T6+19", "a": "T6", "b": "T7", "bottom": 1455 },
+    { "id": "c7", "tramo": 7, "texto": "No se lee,", "acento": "no sirve.", "acento_t": "T7+34", "a": "T7", "b": "T8", "bottom": 1455 },
+    { "id": "c8", "tramo": 8, "num": "3", "texto": "Una mano", "acento": "tapa la otra.", "acento_t": "T8+40", "a": "T8", "b": "T9", "top": 290 },
+    { "id": "c9", "tramo": 9, "texto": "Si cruza,", "acento": "no cuento.", "acento_t": "T9+14", "a": "T9", "b": "T10", "top": 290 },
+    { "id": "c10", "tramo": 10, "texto": "Cuadro 120:", "acento": "cinco dedos.", "a": "T10", "b": "T11", "top": 290 },
+    { "id": "c11", "tramo": 11, "texto": "Reviso cuadro", "acento": "a cuadro.", "acento_t": "T11+24", "a": "T11", "b": "T12-14", "bottom": 1455 },
+    { "id": "c12", "tramo": 12, "texto": "Seguime: cada semana,", "acento": "una prueba.", "acento_t": "T12+20", "a": "T12-14", "b": "END", "bottom": 1455, "sin_salida": true }
+  ],
+  "cadenas_de_tarjetas": [["c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "c9", "c10", "c11", "c12"]],
+  "cta": { "texto": "Seguime: cada semana, una prueba.", "min_s": 2.4, "max_s": 5.5 },
+  "etiquetas": [
+    { "id": "e_orden", "texto": "Orden: «no signs anywhere»", "a": "T2+5", "b": "T3", "top": 1010, "fuente": "v4/PROCEDENCIA.jsonl línea 95: «No screens visible, no text, no logos, no signs anywhere.»" },
+    { "id": "e_cara", "texto": "Parecido: 0,835 · aprobado", "a": "T3+2", "b": "T4-10", "top": 1010, "fuente": "v4/PROCEDENCIA.jsonl línea 93: K4_1_descartada id 0,835 (piso del repo 0,70)" },
+    { "id": "e_nueva", "texto": "Foto nueva", "a": "T4", "b": "T5-6", "top": 600, "fuente": "foto nueva K4·1 eddca486 (línea 93), sin letrero" }
+  ],
+  "letrero": {
+    "nota": "El letrero «Equperarto» es texto inventado por la IA y se parece a un logo de banco: NO se muestra nítido. Se difumina en todas sus apariciones y el video lo declara en el recorte («Difuminado al editar»). Caja en px de la foto nativa 1440x2560. v2.1 (H8): sigma 9 → 44; con 9 quedaba la silueta de un logo (banda azul + arco rojo); con 44 queda una mancha gris lisa (mirada a 2x y 4x, y con contraste y saturación forzados).",
+    "desenfoque": { "activo": true, "sigma": 44, "caja_nativa": [985, 68, 300, 170], "pluma": 30 },
+    "aro": { "a": "T1+36", "centro": [850, 108], "ancho": 250, "alto": 124 },
+    "inset": { "activo": true, "a": "T1+46", "b": "T2+41", "x": 480, "y": 300, "w": 500, "h": 222, "recorte_nativo": [935, 62, 400, 178], "caption": "Difuminado al editar" }
+  },
+  "marco_cara": { "caja": [470, 574, 706, 872], "a": "T3+6", "b": "T4-12" },
+  "agenda": {
+    "origen1": { "recorte_nativo": [20, 1290, 600, 340] },
+    "inset1": { "x": 90, "y": 320, "w": 900, "h": 510, "a": "T5+8", "b": "T6+2" },
+    "origen2": { "recorte_nativo": [506, 346, 236, 320] },
+    "inset2": { "x": 580, "y": 330, "w": 420, "h": 569, "a": "T6+8", "b": "T8-10", "activo": true },
+    "nota": "recortes de la foto NATIVA 1440x2560; el recuadro verde de la foto es exactamente la región ampliada (caja nativa × 0,75). Origen2 = la nota amarilla en foco (garabato y «Cancam»)."
+  },
+  "k4": {
+    "cuadro_foco": 120,
+    "cuadros_clip": 145,
+    "contador": { "top": 600, "a": "T8" },
+    "origen": { "cuadros": 6, "recorte_fuente": [30, 950, 380, 320] },
+    "cruza_registro": [72, 104],
+    "nota": "Cuadros del clip K4 (v4/PROCEDENCIA.jsonl línea 94, contados de nuevo en G3 1ra/2da pasada): contables 48-60, 81-84, 96-99 y 111-126; la otra mano cruza en ~63-78, ~87-93 y ~102-108. El clip va a 1x entre los cuadros 14 y 131: la otra mano entra en el cuadro 60 (T8+40) y las tres cruzadas caen dentro de la línea «Si cruza, no puedo contar los dedos»."
+  },
+  "placa": {
+    "visor": { "x": 100, "y": 600, "w": 880, "h": 741 },
+    "cuadro": 120,
+    "recorte": [30, 950, 380, 320],
+    "sello_t": "T10+12",
+    "nota": "El visor es el recorte AMPLIADO del cuadro 120 (el mismo que acaba de verse en el clip, con su recuadro «origen»). Ceremonia comprimida: ~1,96 s en reposo; se quitaron los cuadros 72 y 104 de la placa de G3."
+  },
+  "quitado_de_g3": [
+    "pantalla partida y los dos morphs (descartada / buena): 4 s",
+    "«Descartada. Una foto, 1 crédito.» y «Fondo: letrero inventado (difuminado)»",
+    "tarjeta «Regla» de 4 s, reducida a una línea de 1,6 s sobre la foto nueva",
+    "el tercer error de la agenda como bloque de 13 s: ahora 5,8 s",
+    "placa de 7,5 s con los cuadros 72 y 104: ahora 1,9 s sin los dos cuadros",
+    "tarjetas de 4 a 5 s sobre fotos fijas: cada tarjeta dura lo de su línea de voz (1,4 a 2,8 s)"
+  ],
+  "audio": { "pista": "AAC 128 k estéreo 48 kHz en silencio (−91 dB)", "sfx_pops": "omitidos a propósito (G3: dejan sitio a la música/voz)" }
+}

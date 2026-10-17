@@ -1,0 +1,14 @@
+Zona segura medida en PIXELES del master v3.1 (barrido de 50 cuadros de la placa, 284-479 cada 4 + 479, a 1080x1920; fondo = #11191b, umbral 10 niveles; indices inclusivos; precision +-1 px). Las pastillas sobre video se miden en el DOM (qa/layout-dom.txt, qa/medir-dom.txt: 0 fallos, y de 300 a 1440).
+284 11.83 s  placa-contenido  y 300-933  x 80-999
+288 12.00 s  placa-contenido  y 300-1030  x 80-999
+300 12.50 s  placa-contenido  y 300-1023  x 80-999
+312 13.00 s  placa-contenido  y 300-1165  x 80-999
+332 13.83 s  placa-contenido  y 300-1165  x 80-999
+360 15.00 s  placa-contenido  y 300-1261  x 80-999
+400 16.67 s  placa-contenido  y 300-1259  x 80-999
+416 17.33 s  placa-contenido  y 300-1259  x 80-961
+424 17.67 s  placa-contenido  y 300-1455  x 80-999
+440 18.33 s  placa-contenido  y 300-1455  x 80-961
+479 19.96 s  placa-contenido  y 300-1455  x 80-961
+placa, cuadros 284-479: minimo y=300, maximo y=1455, x 80-999 (regla: contenido entre 292 y 1490; margen lateral 80 px: x 80-1000)
+EXIT 0

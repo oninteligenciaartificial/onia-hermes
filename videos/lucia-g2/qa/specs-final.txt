@@ -1,0 +1,24 @@
+== ffprobe ==
+codec_name=h264
+profile=High
+width=1080
+height=1920
+pix_fmt=yuv420p
+color_space=bt709
+r_frame_rate=24/1
+duration=58.000000
+bit_rate=8377339
+nb_frames=1392
+codec_name=aac
+profile=LC
+sample_rate=48000
+channels=2
+r_frame_rate=0/0
+duration=58.000000
+bit_rate=2275
+nb_frames=2720
+duration=58.000000
+size=60782844
+== volumen audio ==
+[Parsed_volumedetect_0 @ 0x55773b90de80] mean_volume: -91.0 dB
+[Parsed_volumedetect_0 @ 0x55773b90de80] max_volume: -91.0 dB

@@ -1,0 +1,572 @@
+{
+  "titulo": "G1 · Este video no fue grabado: así se hace, en 3 pasos",
+  "guion": "hermes-content/docs/cola/lucia-diario/guiones/G1-de-una-foto-a-un-video.md",
+  "version": "3ra pasada (8-oct-2026): aplica C1-C6 de la revisión independiente sobre la 2da pasada (H1-H11)",
+  "lienzo": {
+    "w": 1080,
+    "h": 1920,
+    "fps": 24,
+    "duracion": 56
+  },
+  "acento": "#10C26B",
+  "zona_segura": {
+    "texto_hasta_y": 1490,
+    "derecha_libre_px": 80,
+    "derecha_libre_desde_y": 1000,
+    "arriba_minimo_y": 280,
+    "margen_bajo_menton": 40,
+    "texto_min_px": 34
+  },
+  "caras": {
+    "nota": "SCRFD det_10g (scripts/face_identity_qa.py) cada 3 cuadros, clip 720x1280 llevado a 1080x1920 (x1,5). Medido el 8-oct-2026.",
+    "k1": {
+      "menton_max": 667,
+      "menton_min": 653,
+      "tope": 446,
+      "ancho_medio": 177,
+      "cuerpo_texto_desde_y": 707
+    },
+    "k1_foto": {
+      "caja": [
+        445,
+        453,
+        623,
+        657
+      ],
+      "nota": "igual al cuadro 0 del clip"
+    },
+    "k2": {
+      "menton_max": 859,
+      "menton_min": 785,
+      "tope": 529,
+      "ancho_medio": 186,
+      "cuerpo_texto_desde_y": 899
+    },
+    "k2_foto": {
+      "caja": [
+        449,
+        642,
+        618,
+        857
+      ]
+    },
+    "k4": {
+      "menton_max": 1405,
+      "menton_min": 1346,
+      "tope_caja": 1002,
+      "ancho_medio": 261,
+      "cabello_arriba_aprox": 915,
+      "nota": "EXCEPCION DOCUMENTADA (H9): no hay franja debajo del mentón (queda 85 px hasta 1490), así que en K4 el texto va ARRIBA, en el cielo (tarjeta y 290-452, recorte 492-885). La receta de editor-videos (texto entre mentón+40 y 1490) no contempla este caso: ahí manda 'no tapar la cara'. 3ra pasada (C3): el sello «5 dedos» sube para quedar también a y ≤ 885 (antes llegaba a y≈912, tangente al cabello en y≈915); scripts/medir-dom.mjs lo mide en cada cuadro de su entrada."
+    }
+  },
+  "empuje": {
+    "cuadros": 6,
+    "ease": "power3.inOut",
+    "nota": "Costura de pantalla completa (motion-doctrine, la corriente va a la IZQUIERDA): sale y entra el MISMO empuje rígido (misma curva, misma duración, adyacentes), así la velocidad coincide en cada cuadro y nunca queda un cuadro vacío. Ventana [T-6 cuadros, T]: el cuadro T ya es la imagen nueva en reposo."
+  },
+  "costuras": [
+    {
+      "t": 6.0,
+      "tipo": "empuje",
+      "sale": [
+        "k1a"
+      ],
+      "entra": [
+        "foto1"
+      ],
+      "porque": "H3: era un corte duro de sonrisa a cámara (K1, último cuadro) a la foto con la pose reiniciada"
+    },
+    {
+      "t": 30.5,
+      "tipo": "morph (3ra pasada: el clip sube con la foto)",
+      "porque": "la foto se encoge a la ventana de arriba y, en la misma curva y a la vez, el clip sube desde el borde de abajo (3ra pasada, C5: antes el clip entraba a 31,0 s y el lienzo quedaba oscuro y vacío de 30,5 a 31,04 s)"
+    },
+    {
+      "t": 35.0,
+      "tipo": "empuje",
+      "sale": [
+        "foto1",
+        "k1b",
+        "d2",
+        "d3"
+      ],
+      "entra": [
+        "plate"
+      ],
+      "porque": "H3: la pantalla partida se apagaba en 3 cuadros y el cuadro 840 quedaba VACÍO (luma 14,7). 3ra pasada (C4): la tarjeta ③ que sale y la tarjeta de la placa que entra viajan con el empuje (−1080 / +1080, misma curva), en lugar de quedarse fija 2-3 cuadros sobre la imagen que entra",
+      "tarjetas": {
+        "sale": "c6",
+        "entra": "c7"
+      }
+    },
+    {
+      "t": 41.0,
+      "tipo": "empuje",
+      "sale": [
+        "plate"
+      ],
+      "entra": [
+        "k4"
+      ],
+      "porque": "H3: de la placa oscura (luma 25) al cielo del K4 (luma 164) en un solo cuadro = destello. 3ra pasada (C4): la tarjeta de la placa que sale y la de K4 que entra viajan con el empuje (−1080 / +1080, misma curva), en lugar de quedarse fija 2-3 cuadros sobre el cuerpo de Lucía que entra",
+      "tarjetas": {
+        "sale": "c7",
+        "entra": "c8"
+      }
+    },
+    {
+      "t": 45.0,
+      "tipo": "empuje",
+      "sale": [
+        "k4",
+        "cc-k4"
+      ],
+      "entra": [
+        "foto2"
+      ],
+      "porque": "H3: corte duro entre fondos distintos (cielo exterior a interior)"
+    },
+    {
+      "t": 50.0,
+      "tipo": "corte de continuidad (sin cambios, a propósito)",
+      "porque": "la foto K2 ES el cuadro 0 del clip K2 (PSNR 42,2 dB medido el 8-oct): el corte no se ve. Un empuje ahí movería la misma imagen y rompería el momento en que la foto cobra vida."
+    }
+  ],
+  "medios": [
+    {
+      "id": "k1a",
+      "tipo": "clip",
+      "src": "assets/k1.mp4",
+      "a": 0,
+      "b": 6.0,
+      "cuadros": "0-143",
+      "capa": "S1 gancho, pantalla completa (sale en empuje 5,75-6,0)"
+    },
+    {
+      "id": "foto1",
+      "tipo": "foto",
+      "src": "assets/k1-foto.jpg",
+      "a": 5.75,
+      "b": 35.0,
+      "capa": "S2-S3 pantalla completa (entra en empuje 5,75-6,0); a 30,5 s se recorta a la ventana de arriba de la partida (morph); sale en empuje 34,75-35,0"
+    },
+    {
+      "id": "k1b",
+      "tipo": "clip",
+      "src": "assets/k1.mp4",
+      "a": 30.5,
+      "b": 35.0,
+      "cuadros": "0-107",
+      "capa": "S4 ventana de abajo de la partida; 3ra pasada (C5): arranca a 30,5 s y SUBE desde el borde de abajo del lienzo con el morph de la foto (antes entraba a 31,0 s con fundido)"
+    },
+    {
+      "id": "plate",
+      "tipo": "placa",
+      "a": 34.75,
+      "b": 41.0,
+      "agregado_al_guion": true,
+      "capa": "S5 hoja de 8 cuadros de K4 (recortes de la mano a resolución completa); entra y sale en empuje"
+    },
+    {
+      "id": "k4",
+      "tipo": "clip",
+      "src": "assets/k4.mp4",
+      "a": 40.75,
+      "b": 45.0,
+      "cuadros": "0-101",
+      "capa": "S6 pantalla completa; los cuadros 0-5 pasan DENTRO del empuje de entrada (40,75-41,0); sale en empuje 44,75-45,0"
+    },
+    {
+      "id": "foto2",
+      "tipo": "foto",
+      "src": "assets/k2-foto.jpg",
+      "a": 44.75,
+      "b": 50.0,
+      "capa": "S7 (entra en empuje 44,75-45,0)"
+    },
+    {
+      "id": "k2",
+      "tipo": "clip",
+      "src": "assets/k2.mp4",
+      "a": 50.0,
+      "b": 56.0,
+      "cuadros": "0-143",
+      "capa": "S8 cierre"
+    }
+  ],
+  "rotulo": {
+    "texto": "Lucía Antelo · personaje IA de Onia",
+    "a": 0,
+    "b": 2.4,
+    "top": 715
+  },
+  "tarjetas": [
+    {
+      "id": "c1",
+      "texto": "Este video no fue grabado.",
+      "acento": "",
+      "a": 0.1,
+      "b": 3.0,
+      "bottom": 1455,
+      "escena": "S1"
+    },
+    {
+      "id": "c2",
+      "texto": "Así se hace, en",
+      "acento": "3 pasos.",
+      "a": 3.0,
+      "b": 6.0,
+      "bottom": 1455,
+      "escena": "S1"
+    },
+    {
+      "id": "c3",
+      "num": "1",
+      "texto": "Una foto fija.",
+      "acento": "",
+      "a": 6.0,
+      "b": 10.0,
+      "bottom": 1455,
+      "escena": "S2"
+    },
+    {
+      "id": "c4",
+      "texto": "Primero la cara,",
+      "acento": "siempre igual.",
+      "acento_t": 14.2,
+      "a": 10.0,
+      "b": 16.0,
+      "bottom": 1455,
+      "escena": "S2"
+    },
+    {
+      "id": "c5",
+      "num": "2",
+      "texto": "Una orden corta.",
+      "acento": "",
+      "a": 16.0,
+      "b": 18.5,
+      "bottom": 1455,
+      "escena": "S3"
+    },
+    {
+      "id": "c6",
+      "num": "3",
+      "texto": "Y la foto se mueve.",
+      "acento": "",
+      "a": 30.75,
+      "b": 35.0,
+      "bottom": 967,
+      "escena": "S4"
+    },
+    {
+      "id": "c7",
+      "texto": "Después, se mira cuadro por cuadro.",
+      "acento": "",
+      "a": 35.0,
+      "b": 41.0,
+      "bottom": 1455,
+      "escena": "S5"
+    },
+    {
+      "id": "c8",
+      "texto": "Cuadro 60:",
+      "acento": "cinco dedos.",
+      "a": 41.0,
+      "b": 45.0,
+      "top": 290,
+      "escena": "S6"
+    },
+    {
+      "id": "c9",
+      "texto": "Foto y clip:",
+      "acento": "8,5 créditos.",
+      "a": 45.0,
+      "b": 50.0,
+      "bottom": 1345,
+      "escena": "S7"
+    },
+    {
+      "id": "c10",
+      "texto": "Foto, orden y revisión.",
+      "acento": "",
+      "a": 50.0,
+      "b": 53.0,
+      "bottom": 1455,
+      "escena": "S8"
+    },
+    {
+      "id": "c11",
+      "texto": "Seguime: cada semana,",
+      "acento": "una prueba.",
+      "a": 53.0,
+      "b": 56.0,
+      "bottom": 1455,
+      "escena": "S8",
+      "sin_salida": true
+    }
+  ],
+  "cadenas_de_tarjetas": [
+    [
+      "c1",
+      "c2",
+      "c3",
+      "c4",
+      "c5",
+      "panel"
+    ],
+    [
+      "c6",
+      "c7",
+      "c8",
+      "c9",
+      "c10",
+      "c11"
+    ]
+  ],
+  "etiquetas": [
+    {
+      "id": "d1",
+      "texto": "Imagen · 1 crédito",
+      "a": 7.6,
+      "b": 16.0,
+      "top": 1085,
+      "escena": "S2"
+    },
+    {
+      "id": "d2",
+      "texto": "Video 6 s · 7,5 créditos",
+      "a": 31.9,
+      "b": 35.0,
+      "top": 1347,
+      "escena": "S4"
+    },
+    {
+      "id": "d3",
+      "texto": "Imagen · 1 crédito",
+      "a": 31.6,
+      "b": 35.0,
+      "top": 580,
+      "escena": "S4",
+      "agregado_al_guion": true,
+      "activo": true
+    },
+    {
+      "id": "eq",
+      "texto": "1 + 7,5 = 8,5",
+      "a": 45.9,
+      "b": 50.0,
+      "top": 1375,
+      "escena": "S7",
+      "agregado_al_guion": true,
+      "activo": true,
+      "terminos_t": [
+        46.0,
+        46.8,
+        47.5,
+        48.2,
+        48.9
+      ]
+    }
+  ],
+  "agregados_al_guion": [
+    {
+      "id": "plate",
+      "que": "Placa de 35 a 41 s con el visor y la tira de los 8 cuadros de la hoja de manos de K4 (el guion no decía qué imagen iba ahí)",
+      "como_revertir": "No se puede apagar sin decidir qué va en esos 6 s (no se congela ni se estira nada). Si la madre prefiere otra cosa: cambiar el medio 'plate' de plan.json por otro clip o foto ya pagados y quitar la placa de scripts/build.mjs."
+    },
+    {
+      "id": "d3",
+      "que": "Etiqueta «Imagen · 1 crédito» sobre la foto de la pantalla partida (31,6-35,0 s)",
+      "como_revertir": "plan.json → etiquetas → d3 → \"activo\": false, node scripts/build.mjs"
+    },
+    {
+      "id": "eq",
+      "que": "Cuenta «1 + 7,5 = 8,5» (cada término entra de a uno, 46,0-48,9 s)",
+      "como_revertir": "plan.json → etiquetas → eq → \"activo\": false, node scripts/build.mjs"
+    },
+    {
+      "id": "lupa",
+      "que": "(2da pasada, H4) Lupa de la cara de la foto K1 a 12,5 s; no lleva texto ni afirmaciones nuevas",
+      "como_revertir": "plan.json → lupa → \"activo\": false, node scripts/build.mjs"
+    }
+  ],
+  "marco_cara": {
+    "caja": [
+      405,
+      395,
+      663,
+      700
+    ],
+    "a": 10.4,
+    "b": 16.0
+  },
+  "lupa": {
+    "activo": true,
+    "a": 12.5,
+    "b": 16.0,
+    "caja": {
+      "x": 690,
+      "y": 330,
+      "w": 320,
+      "h": 360
+    },
+    "aumento": 1.6,
+    "centro_cara": [
+      534,
+      553
+    ],
+    "nota": "recorte de la foto K1 (1440x2560 nativa) a x1,6 de la pantalla; entra desde el marco de la cara a 12,5 s. 3ra pasada (C2): el borde se queda NEUTRO (antes se confirmaba en verde a 14,2 s y sugería una verificación que el video no hace); solo el texto «siempre igual.» se enciende en verde a 14,2 s. Sin texto propio."
+  },
+  "panel_orden": {
+    "a": 18.5,
+    "b": 30.5,
+    "bottom": 1455,
+    "titulo": "Orden real",
+    "frase1": "She slowly lifts her eyes from the phone to the camera and gives a small knowing smile, the phone stays in her hands.",
+    "frase2_antes": "Subtle ",
+    "marca_camara": "handheld",
+    "frase2_medio": " camera, ",
+    "marca_luz": "natural morning light",
+    "frase2_despues": ", no cuts.",
+    "marcas": [
+      {
+        "id": "m1",
+        "etiqueta": "movimiento",
+        "t": 20.4
+      },
+      {
+        "id": "m2",
+        "etiqueta": "cámara",
+        "t": 24.2
+      },
+      {
+        "id": "m3",
+        "etiqueta": "luz",
+        "t": 27.0
+      }
+    ],
+    "marcas_nota": "las marcas se anclan a la entrada del panel (+1,9 / +5,7 / +8,5 s); solo color y subrayado sobre la cita, las insignias van en la fila de chips",
+    "fuente": "v4/PROCEDENCIA.jsonl línea 95, job e470ef4f (31 palabras, literal)"
+  },
+  "particion": {
+    "ventana_fuente_y": [
+      340,
+      920
+    ],
+    "arriba": {
+      "y": 210,
+      "h": 580
+    },
+    "abajo": {
+      "y": 980,
+      "h": 580
+    },
+    "morph": {
+      "a": 30.5,
+      "b": 31.0
+    },
+    "salida_panel": {
+      "a": 30.28,
+      "b": 30.5
+    }
+  },
+  "placa": {
+    "tiles": [
+      {
+        "n": 0,
+        "ok": true
+      },
+      {
+        "n": 60,
+        "ok": true
+      },
+      {
+        "n": 72,
+        "ok": false
+      },
+      {
+        "n": 84,
+        "ok": true
+      },
+      {
+        "n": 96,
+        "ok": true
+      },
+      {
+        "n": 104,
+        "ok": false
+      },
+      {
+        "n": 112,
+        "ok": true
+      },
+      {
+        "n": 120,
+        "ok": true
+      }
+    ],
+    "rotulos": {
+      "ok": "5 dedos",
+      "no": "cruza"
+    },
+    "fuente_rotulos": "v4/PROCEDENCIA.jsonl línea 94 (corregida el 8-oct tarde): 5 dedos contables en 0, 60, 84, 96, 112 y 120; en 72 y 104 el dedo de la otra mano cruza la mano abierta",
+    "entrada": 34.75,
+    "barrido": 35.75,
+    "paso": 0.45,
+    "foco": 39.45,
+    "salida": 40.75,
+    "visor": {
+      "x": 260,
+      "y": 290,
+      "w": 560,
+      "h": 620
+    },
+    "tira": {
+      "y": 950,
+      "w": 104,
+      "h": 115,
+      "gap": 12
+    }
+  },
+  "k4": {
+    "cuadro_foco": 60,
+    "inicio": 40.75,
+    "t_foco": 43.25,
+    "cuadros_barra": 102,
+    "recorte_fuente": {
+      "x": 92,
+      "y": 1018,
+      "w": 246,
+      "h": 252
+    },
+    "inset": {
+      "top": 492,
+      "ancho": 383,
+      "alto": 393
+    },
+    "origen": {
+      "visible_final": "f1038-f1041 (K4 cuadros 60-63)",
+      "invisible_desde_final": 1042,
+      "nota": "C1 (3ra pasada): el recuadro verde «origen» solo se muestra mientras el clip está en el cuadro 60 (f1038-f1041) y desaparece en f1042; antes seguía hasta 44,1 s (f1056), con el dedo de la otra mano cruzando (K4 cuadros 66-78 = f1044-f1056)."
+    },
+    "sello": {
+      "dy": -40,
+      "limite_y": 885,
+      "nota": "C3 (3ra pasada): el sello «5 dedos» subió 40 px (antes llegaba a y≈912, tangente a la coronilla en y≈915); su borde de abajo, rotado y en el cuadro de mayor escala, queda a y ≤ 885, el mismo límite que el recorte."
+    }
+  },
+  "publicacion": {
+    "portada_s": 0.6,
+    "nota": "H10: el cuadro 0 lleva el rótulo de IA pero el gancho entra de 0,1 a 0,25 s. Si Instagram toma el cuadro 0 como portada no dice nada: elegir como portada el cuadro a ≈ 0,6 s (rótulo + «Este video no fue grabado.»). El montaje NO cambia. Ver qa/portada-0.6s.jpg."
+  },
+  "audio": {
+    "pista": "AAC 128 k estéreo 48 kHz en silencio (−91 dB)",
+    "sfx_pops": "omitidos a propósito",
+    "motivos": [
+      "dejan sitio a la música que pone Sergio Urcullo (un pop en cada empuje se pisaría con el ritmo de la pista que elija)",
+      "los SFX de HyperFrames (catálogo de media-use) no están disponibles en esta nube: no hay material sonoro verificado para poner"
+    ],
+    "nota": "C6 (3ra pasada): decisión escrita. Si más adelante se quiere un pop en cada costura, caen en 5,75 / 34,75 / 40,75 / 44,75 s (inicio de cada empuje) y en 30,5 s (morph)."
+  }
+}

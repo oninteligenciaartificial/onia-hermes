@@ -1,0 +1,674 @@
+{
+  "titulo": "G3 · Tres errores de la IA que atrapé antes de publicar",
+  "guion": "hermes-content/docs/cola/lucia-diario/guiones/G3-tres-errores-de-la-ia.md",
+  "version": "2da pasada (8-oct-2026): aplica la revision independiente de la 1ra (H1-H10). Montaje con el metodo de G1 (videos/lucia-g1) + .claude/skills/lucia/montaje-hyperframes.md",
+  "lienzo": {
+    "w": 1080,
+    "h": 1920,
+    "fps": 24,
+    "duracion": 58
+  },
+  "acento": "#10C26B",
+  "zona_segura": {
+    "texto_hasta_y": 1490,
+    "derecha_libre_px": 80,
+    "derecha_libre_desde_y": 1000,
+    "arriba_minimo_y": 280,
+    "margen_bajo_menton": 40,
+    "texto_min_px": 34
+  },
+  "caras": {
+    "nota": "SCRFD det_10g (scripts/face_identity_qa.py) medido el 8-oct-2026: fotos llevadas a 1080x1920 (cover), clips 720x1280 llevados a x1,5 cada 3 cuadros.",
+    "desc": {
+      "caja": [
+        495,
+        599,
+        681,
+        847
+      ],
+      "menton": 847,
+      "texto_desde_y": 887,
+      "nota": "foto descartada K4·1 (1440x2560 nativa, escala 0,75)"
+    },
+    "buena": {
+      "caja": [
+        417,
+        1019,
+        675,
+        1364
+      ],
+      "menton": 1364,
+      "cabello_arriba_aprox": 925,
+      "texto_hasta_y_arriba": 880,
+      "nota": "EXCEPCION DOCUMENTADA (como K4 en G1): la cara queda abajo (mentón 1364: no hay franja hasta y=1490), así que la tarjeta «Regla» va ARRIBA, en el cielo, y termina antes del cabello (y≈925)"
+    },
+    "k4": {
+      "menton_max": 1405,
+      "menton_min": 1346,
+      "tope_caja": 1002,
+      "cabello_arriba_aprox": 915,
+      "texto_hasta_y_arriba": 885,
+      "nota": "EXCEPCION DOCUMENTADA (G1, H9): sin franja bajo el mentón; las tarjetas van ARRIBA, en el cielo (y 290-526) y nada baja de y=885"
+    },
+    "k1": {
+      "menton_max": 667,
+      "menton_min": 653,
+      "tope": 446,
+      "cuerpo_texto_desde_y": 707
+    }
+  },
+  "empuje": {
+    "cuadros": 6,
+    "ease": "power3.inOut",
+    "nota": "Costura de pantalla completa: empuje rígido de 6 cuadros hacia la izquierda, ventana [T-6 cuadros, T]. El clip que entra arranca en T-6 cuadros (su cuadro 0 cae ahí) y el que sale termina en T (el cuadro T ya es la imagen nueva en reposo)."
+  },
+  "costuras": [
+    {
+      "t": 27.0,
+      "tipo": "empuje",
+      "sale": [
+        "buena"
+      ],
+      "entra": [
+        "agenda"
+      ],
+      "tarjetas": {
+        "sale": "c7",
+        "entra": "c8"
+      },
+      "porque": "foto buena → agenda: capas de pantalla completa sin continuidad"
+    },
+    {
+      "t": 40.25,
+      "tipo": "empuje",
+      "sale": [
+        "agenda"
+      ],
+      "entra": [
+        "k4"
+      ],
+      "tarjetas": {
+        "sale": "c10",
+        "entra": "c11"
+      },
+      "porque": "agenda → clip K4. El clip arranca en 40,0 s (su cuadro 0 = 40,0 s, para que 43,0 / 44,3 / 45,0 s sean los cuadros 72 / 104 / 120 como dice el guion): el empuje ocupa 40,00-40,25 s y las tarjetas viajan con él"
+    },
+    {
+      "t": 46.0,
+      "tipo": "empuje",
+      "sale": [
+        "k4",
+        "cc-k4",
+        "cc-ctr"
+      ],
+      "entra": [
+        "placa"
+      ],
+      "porque": "clip K4 → placa oscura. El clip dura 145 cuadros (hasta 46,042 s): los 6 últimos pasan DENTRO del empuje de salida (45,75-46,0) y el cuadro 144 (46,0 s) ya cae fuera de pantalla. La tarjeta «Cuadro 120: cinco dedos.» (c13, arriba) NO viaja: entra a 45,0 s sobre el cuadro 120 y se queda quieta por encima de la costura (portadora: es la misma frase antes y después)"
+    },
+    {
+      "t": 53.25,
+      "tipo": "empuje",
+      "sale": [
+        "placa"
+      ],
+      "entra": [
+        "k1"
+      ],
+      "tarjetas": {
+        "sale": "c14",
+        "entra": "c15"
+      },
+      "porque": "placa → cierre K1. El clip arranca en 53,0 s (cuadro 0) y entra con el empuje 53,00-53,25 s"
+    },
+    {
+      "t": 19.0,
+      "tipo": "morph (foto descartada → ventana de arriba, foto buena sube a la ventana de abajo)",
+      "porque": "pantalla partida descartada / buena; la foto buena sube desde el borde de abajo en la misma curva, nunca se pisan los bordes"
+    },
+    {
+      "t": 23.0,
+      "tipo": "morph (la foto buena sube de la ventana de abajo a pantalla completa y cubre a la descartada)",
+      "porque": "arriba = conclusión: lo bueno sube sobre lo descartado (motion-doctrine, vectores reservados)"
+    },
+    {
+      "t": 6.0,
+      "tipo": "corte de continuidad (sin cambios, a propósito)",
+      "porque": "el gancho y el error 1 son LA MISMA foto descartada a pantalla completa: solo cambia la tarjeta"
+    }
+  ],
+  "medios": [
+    {
+      "id": "desc",
+      "tipo": "foto",
+      "src": "assets/descartada.jpg",
+      "a": 0,
+      "b": 23.5,
+      "capa": "foto descartada K4·1 a pantalla completa (0-19 s); a 19 s se encoge a la ventana de arriba; la cubre la foto buena a 23-23,5 s"
+    },
+    {
+      "id": "buena",
+      "tipo": "foto",
+      "src": "assets/buena.jpg",
+      "a": 19.0,
+      "b": 27.0,
+      "capa": "foto buena K4·1 sin letrero: sube a la ventana de abajo (19 s), a 23 s sube a pantalla completa, sale en empuje 26,75-27,0"
+    },
+    {
+      "id": "agenda",
+      "tipo": "foto",
+      "src": "assets/agenda.jpg",
+      "a": 26.75,
+      "b": 40.25,
+      "capa": "foto de la agenda K2·2 a pantalla completa; entra en empuje 26,75-27,0 y sale en empuje 40,0-40,25"
+    },
+    {
+      "id": "k4",
+      "tipo": "clip",
+      "src": "assets/k4.mp4",
+      "a": 40.0,
+      "b": 46.04166667,
+      "cuadros": "0-144",
+      "capa": "clip K4 completo (145 cuadros, 1x): cuadro 0 = 40,0 s, cuadro 72 = 43,0 s, cuadro 104 = 44,333 s, cuadro 120 = 45,0 s; entra en empuje 40,0-40,25 y sale en empuje 45,75-46,0"
+    },
+    {
+      "id": "placa",
+      "tipo": "placa",
+      "a": 45.75,
+      "b": 53.25,
+      "capa": "placa oscura con el recorte ampliado del cuadro 120 (+ agregado: cuadros 72 y 104)"
+    },
+    {
+      "id": "k1",
+      "tipo": "clip",
+      "src": "assets/k1.mp4",
+      "a": 53.0,
+      "b": 58.0,
+      "cuadros": "0-119",
+      "capa": "cierre: clip K1 de 0 a 5 s (cuadro 0 = 53,0 s); entra en empuje 53,0-53,25"
+    }
+  ],
+  "rotulo": {
+    "texto": "Lucía Antelo · personaje IA de Onia",
+    "a": 0,
+    "b": 2.4,
+    "top": 905
+  },
+  "tarjetas": [
+    {
+      "id": "c1",
+      "texto": "Tres errores de la IA.",
+      "acento": "",
+      "a": 0.1,
+      "b": 3.0,
+      "bottom": 1455,
+      "escena": "S1"
+    },
+    {
+      "id": "c2",
+      "texto": "Los atrapé antes de",
+      "acento": "publicar.",
+      "a": 3.0,
+      "b": 6.0,
+      "bottom": 1455,
+      "escena": "S1"
+    },
+    {
+      "id": "c3",
+      "num": "1",
+      "texto": "Un letrero que",
+      "acento": "no pedí.",
+      "acento_t": 8.0,
+      "a": 6.0,
+      "b": 10.0,
+      "bottom": 1455,
+      "escena": "S2"
+    },
+    {
+      "id": "c4",
+      "texto": "La orden decía:",
+      "acento": "sin letreros.",
+      "acento_t": 12.2,
+      "a": 10.0,
+      "b": 14.5,
+      "bottom": 1455,
+      "escena": "S2"
+    },
+    {
+      "id": "c5",
+      "texto": "Escribió",
+      "acento": "uno igual.",
+      "a": 14.5,
+      "b": 19.5,
+      "bottom": 1455,
+      "escena": "S2"
+    },
+    {
+      "id": "c6",
+      "texto": "Descartada.",
+      "acento": "Una foto, 1 crédito.",
+      "a": 19.5,
+      "b": 23.0,
+      "bottom": 988,
+      "escena": "S3"
+    },
+    {
+      "id": "c7",
+      "texto": "Regla: mirar también",
+      "acento": "el fondo.",
+      "acento_t": 25.0,
+      "a": 23.0,
+      "b": 27.0,
+      "top": 300,
+      "escena": "S4"
+    },
+    {
+      "id": "c8",
+      "num": "2",
+      "texto": "Letra que",
+      "acento": "no dice nada.",
+      "acento_t": 29.2,
+      "a": 27.0,
+      "b": 31.0,
+      "bottom": 1455,
+      "escena": "S5"
+    },
+    {
+      "id": "c9",
+      "texto": "Parece escrita.",
+      "acento": "No se lee.",
+      "acento_t": 33.4,
+      "a": 31.0,
+      "b": 35.5,
+      "bottom": 1455,
+      "escena": "S5"
+    },
+    {
+      "id": "c10",
+      "texto": "Si no se lee,",
+      "acento": "no sirve.",
+      "acento_t": 38.0,
+      "a": 35.5,
+      "b": 40.25,
+      "bottom": 1455,
+      "escena": "S5"
+    },
+    {
+      "id": "c11",
+      "num": "3",
+      "texto": "Una mano",
+      "acento": "tapa la otra.",
+      "acento_t": 42.375,
+      "a": 40.25,
+      "b": 42.875,
+      "top": 290,
+      "escena": "S6"
+    },
+    {
+      "id": "c12",
+      "texto": "Si cruza,",
+      "acento": "no se cuentan.",
+      "a": 42.875,
+      "b": 45.0,
+      "top": 290,
+      "escena": "S6"
+    },
+    {
+      "id": "c13",
+      "texto": "Cuadro 120:",
+      "acento": "cinco dedos.",
+      "a": 45.0,
+      "b": 50.0,
+      "escena": "S6-S7",
+      "top": 290
+    },
+    {
+      "id": "c14",
+      "texto": "Solo cuento",
+      "acento": "lo que se ve.",
+      "acento_t": 51.4,
+      "a": 50.0,
+      "b": 53.25,
+      "escena": "S7",
+      "top": 290
+    },
+    {
+      "id": "c15",
+      "texto": "Seguime: cada semana,",
+      "acento": "una prueba.",
+      "acento_t": 55.6,
+      "a": 53.25,
+      "b": 58.0,
+      "bottom": 1455,
+      "escena": "S8",
+      "sin_salida": true
+    }
+  ],
+  "cadenas_de_tarjetas": [
+    [
+      "c1",
+      "c2",
+      "c3",
+      "c4",
+      "c5",
+      "c6",
+      "c7",
+      "c8",
+      "c9",
+      "c10",
+      "c11",
+      "c12",
+      "c13",
+      "c14",
+      "c15"
+    ]
+  ],
+  "etiquetas": [
+    {
+      "id": "e_difum",
+      "texto": "Letrero difuminado al editar",
+      "a": 4.0,
+      "b": 9.0,
+      "top": 905,
+      "escena": "S1",
+      "agregado_al_guion": true,
+      "activo": true,
+      "fuente": "H2 (2da pasada): el difuminado del letrero es de edición y el video lo dice; va a y>=905 (mentón de la descartada + 40) porque el texto no puede ir sobre la cara"
+    },
+    {
+      "id": "e_orden",
+      "texto": "Orden: «no signs anywhere»",
+      "a": 10.5,
+      "b": 14.5,
+      "top": 905,
+      "escena": "S2",
+      "agregado_al_guion": true,
+      "activo": true,
+      "fuente": "v4/PROCEDENCIA.jsonl línea 95: «No screens visible, no text, no logos, no signs anywhere.»"
+    },
+    {
+      "id": "e_cara",
+      "texto": "Cara: 0,835 · aprobada",
+      "a": 14.5,
+      "b": 19.0,
+      "top": 905,
+      "escena": "S2",
+      "fuente": "v4/PROCEDENCIA.jsonl línea 93: id 0,835 (gate ≥ 0,70); registro del 3-oct (el control de la nube sobre la imagen de 720 px da 0,826)"
+    },
+    {
+      "id": "e_fondo",
+      "texto": "Fondo: letrero inventado (difuminado)",
+      "a": 16.7,
+      "b": 19.0,
+      "top": 1000,
+      "escena": "S2",
+      "agregado_al_guion": true,
+      "activo": true,
+      "fuente": "v4/PROCEDENCIA.jsonl línea 93: «DESCARTADA: letrero inventado»; «(difuminado)» = lo declara el montaje (2da pasada, H2)"
+    },
+    {
+      "id": "e_con",
+      "texto": "Con letrero",
+      "a": 19.7,
+      "b": 22.8,
+      "top": 330,
+      "escena": "S3",
+      "agregado_al_guion": true,
+      "activo": true
+    },
+    {
+      "id": "e_sin",
+      "texto": "Foto nueva",
+      "a": 20.1,
+      "b": 22.8,
+      "top": 1055,
+      "escena": "S3",
+      "agregado_al_guion": true,
+      "activo": true,
+      "nota": "H4 (2da pasada): antes decía «Sin letrero» sobre una nube, que no prueba nada; la ausencia de letrero se ve en la foto buena a pantalla completa (23-27 s)"
+    }
+  ],
+  "particion": {
+    "arriba": {
+      "y": 200,
+      "h": 540,
+      "fuente_y": [
+        0,
+        540
+      ]
+    },
+    "abajo": {
+      "y": 1010,
+      "h": 540,
+      "fuente_y": [
+        150,
+        690
+      ]
+    },
+    "morph_in": {
+      "a": 19.0,
+      "b": 19.5
+    },
+    "morph_out": {
+      "a": 23.0,
+      "b": 23.5
+    },
+    "tags_salen": 22.8
+  },
+  "letrero": {
+    "nota": "El letrero «Equperarto» de la torre es texto inventado por la IA y se parece a un logo de banco: NO se muestra nítido. Se desenfoca en todas sus apariciones (caja en px de la foto nativa 1440x2560), TAMBIÉN en el recorte ampliado (2da pasada, H3: el recorte sale de la foto ya difuminada) y el video lo declara («Letrero difuminado al editar», H2). Revertir el difuminado: desenfoque.activo=false y node scripts/build.mjs (borrar assets/descartada.jpg y assets/letrero-inset.jpg antes).",
+    "desenfoque": {
+      "activo": true,
+      "sigma": 9,
+      "caja_nativa": [
+        985,
+        68,
+        300,
+        170
+      ],
+      "pluma": 30
+    },
+    "aro": {
+      "a": 1.5,
+      "b": 22.8,
+      "centro": [
+        850,
+        108
+      ],
+      "ancho": 250,
+      "alto": 124
+    },
+    "inset": {
+      "activo": true,
+      "a": 4.0,
+      "b": 9.0,
+      "x": 480,
+      "y": 300,
+      "w": 500,
+      "h": 222,
+      "recorte_nativo": [
+        935,
+        62,
+        400,
+        178
+      ],
+      "nota": "H3 (2da pasada): recorte ampliado del letrero (ya difuminado) en el cielo, a y>=300 y x<=1000 (fuera de la barra de Instagram); el aro es su recuadro de origen. Sin capas de blur extra: solo box-shadow."
+    }
+  },
+  "marco_cara": {
+    "caja": [
+      470,
+      574,
+      706,
+      872
+    ],
+    "a": 14.6,
+    "b": 18.85
+  },
+  "agenda": {
+    "origen1": {
+      "caja": [
+        15,
+        968,
+        450,
+        255
+      ],
+      "recorte_nativo": [
+        20,
+        1290,
+        600,
+        340
+      ]
+    },
+    "inset1": {
+      "x": 90,
+      "y": 320,
+      "w": 900,
+      "h": 510,
+      "a": 31.0,
+      "b": 35.3
+    },
+    "origen2": {
+      "caja": [
+        380,
+        260,
+        177,
+        240
+      ],
+      "recorte_nativo": [
+        506,
+        346,
+        236,
+        320
+      ],
+      "nota": "H5 (2da pasada): la nota amarilla de arriba (garabato y «Cancam», EN FOCO). Antes: la otra página de la libreta, también fuera de foco"
+    },
+    "inset2": {
+      "x": 580,
+      "y": 330,
+      "w": 420,
+      "h": 569,
+      "a": 36.2,
+      "b": 39.75,
+      "activo": true
+    },
+    "nota": "recortes de la foto NATIVA 1440x2560; el recuadro verde de la foto es exactamente la región ampliada (caja nativa × 0,75)"
+  },
+  "k4": {
+    "inicio": 40.0,
+    "cuadro_foco": 120,
+    "t_foco": 45.0,
+    "cuadros_clip": 145,
+    "contador": {
+      "top": 600,
+      "a": 40.25,
+      "b": 46.0,
+      "activo": true
+    },
+    "origen": {
+      "a": 45.0,
+      "cuadros": 6,
+      "recorte_fuente": [
+        30,
+        950,
+        380,
+        320
+      ]
+    },
+    "cruza": [
+      72,
+      104
+    ],
+    "nota": "cuadros con 5 dedos contables (v4/PROCEDENCIA.jsonl línea 94): 0, 60, 84, 96, 112 y 120; la otra mano cruza SOLO en 72 y 104 (rotulados). 2da pasada (H1, contado de nuevo a resolución completa): son contables 48-60, 81-84, 96-99 y 111-126; la otra mano cruza en ~63-78, ~87-93 y ~102-108. Por eso la tarjeta c12 dice «Si cruza, no se cuentan.» (condicional, cierta en todo el bloque) y no una afirmación general."
+  },
+  "placa": {
+    "visor": {
+      "x": 220,
+      "y": 540,
+      "w": 640,
+      "h": 539
+    },
+    "cuadro": 120,
+    "tiles": [
+      {
+        "n": 72,
+        "x": 100,
+        "y": 1130,
+        "w": 410,
+        "h": 345,
+        "t": 48.2
+      },
+      {
+        "n": 104,
+        "x": 570,
+        "y": 1130,
+        "w": 410,
+        "h": 345,
+        "t": 48.9
+      }
+    ],
+    "recorte": [
+      30,
+      950,
+      380,
+      320
+    ],
+    "sello_t": 46.9,
+    "nota": "El visor es el recorte AMPLIADO del cuadro 120 (el que se vio a los 45,0 s). Los cuadros 72 y 104 son un AGREGADO al guion (rotulados «cruza» según el registro)."
+  },
+  "agregados_al_guion": [
+    {
+      "id": "insL",
+      "que": "Recorte ampliado del letrero (ya difuminado) en el cielo de 4,0 a 9,0 s, con el aro como recuadro de origen; el aro entra a 1,5 s (antes 4,0 s)",
+      "como_revertir": "plan.json → letrero → inset → \"activo\": false; letrero → aro → a: 4.0"
+    },
+    {
+      "id": "e_difum",
+      "que": "Etiqueta «Letrero difuminado al editar» 4,0-9,0 s: declara que el difuminado es de edición",
+      "como_revertir": "plan.json → etiquetas → e_difum → \"activo\": false"
+    },
+    {
+      "id": "e_orden",
+      "que": "Etiqueta «Orden: «no signs anywhere»» (10,5-14,5 s): fragmento literal del prompt, de PROCEDENCIA.jsonl línea 95",
+      "como_revertir": "plan.json → etiquetas → e_orden → \"activo\": false, node scripts/build.mjs"
+    },
+    {
+      "id": "e_fondo",
+      "que": "Etiqueta «Fondo: letrero inventado (difuminado)» (16,7-19 s): el contrapunto de «Cara: 0,835 · aprobada»; declara que el letrero está difuminado",
+      "como_revertir": "plan.json → etiquetas → e_fondo → \"activo\": false"
+    },
+    {
+      "id": "e_con/e_sin",
+      "que": "Rótulos «Con letrero» / «Foto nueva» en las dos ventanas de la pantalla partida",
+      "como_revertir": "plan.json → etiquetas → e_con y e_sin → \"activo\": false"
+    },
+    {
+      "id": "inset2",
+      "que": "Segundo recorte ampliado (la nota amarilla, en foco) de 36,2 a 39,75 s",
+      "como_revertir": "plan.json → agenda → inset2 → \"activo\": false"
+    },
+    {
+      "id": "contador",
+      "que": "Contador «cuadro N» sobre el clip K4 (40,25-46 s) y recuadro «origen» en los cuadros 120-125",
+      "como_revertir": "plan.json → k4 → contador → \"activo\": false"
+    },
+    {
+      "id": "tiles",
+      "que": "Cuadros 72 y 104 («cruza») en la placa de evidencia",
+      "como_revertir": "plan.json → placa → tiles → [] (lista vacía)"
+    }
+  ],
+  "audio": {
+    "pista": "AAC 128 k estéreo 48 kHz en silencio (−91 dB)",
+    "sfx_pops": "omitidos a propósito",
+    "motivos": [
+      "dejan sitio a la música que pone Sergio Urcullo",
+      "los SFX de HyperFrames no están disponibles en esta nube"
+    ],
+    "nota": "Si se quiere un pop por costura: 26,75 / 40,0 / 45,75 / 53,0 s (inicio de cada empuje) y 19,0 / 23,0 s (morphs)."
+  },
+  "publicacion": {
+    "portada_s": 0.6,
+    "nota": "El cuadro 0 lleva el rótulo de IA pero el gancho entra a 0,1 s. Elegir como portada el cuadro a ≈ 0,6 s (rótulo + «Tres errores de la IA.»). El montaje no cambia."
+  }
+}

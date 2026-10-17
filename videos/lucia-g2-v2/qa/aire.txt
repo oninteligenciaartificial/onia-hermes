@@ -1,0 +1,22 @@
+cuadros: 667 (27.792 s)   «idéntico» = menos de 8 píxeles (de 129600) cambian más de 6 niveles entre cuadros consecutivos
+píxeles cambiados entre cuadros consecutivos: mínimo 0 · mediana 1486 · percentil 5 0 · transiciones idénticas: 124 de 666
+MAYOR TRAMO QUIETO (pantalla idéntica, con o sin tarjeta): 1.000 s (24 cuadros)
+tramos idénticos de más de 0.3 s:
+   3.750– 4.083 s  0.333 s idénticos; sin tarjeta en lectura: 0.000 s  ok (tarjeta en lectura)
+   5.167– 5.917 s  0.750 s idénticos; sin tarjeta en lectura: 0.000 s  ok (tarjeta en lectura)
+   7.250– 8.250 s  1.000 s idénticos; sin tarjeta en lectura: 0.250 s  ok (tarjeta en lectura)
+  21.833–22.583 s  0.750 s idénticos; sin tarjeta en lectura: 0.167 s  ok (tarjeta en lectura)
+  22.875–23.750 s  0.875 s idénticos; sin tarjeta en lectura: 0.000 s  ok (tarjeta en lectura)
+  23.958–24.792 s  0.833 s idénticos; sin tarjeta en lectura: 0.042 s  ok (tarjeta en lectura)
+MAYOR TRAMO QUIETO SIN TARJETA EN LECTURA: 0.250 s (6 cuadros; tope 0.3 s)
+eventos visuales por 10 s (de plan.resuelto.json): mínimo 11, máximo 26, promedio 19.07; hueco máximo entre eventos 1.84 s (tope 2,0 s)
+
+resumen por escena (diferencia media entre cuadros; los clips de IA son los más tranquilos):
+  foto       0.000– 3.750 s  diferencia media   3.90  píxeles cambiados: mediana   1469, mínimo    888  transiciones idénticas 0
+  pl-regla   3.500– 8.458 s  diferencia media   4.60  píxeles cambiados: mediana    175, mínimo      0  transiciones idénticas 51
+  m1         8.208–11.000 s  diferencia media   8.59  píxeles cambiados: mediana   1719, mínimo     90  transiciones idénticas 0
+  m3        10.750–14.042 s  diferencia media   9.15  píxeles cambiados: mediana  18052, mínimo  10290  transiciones idénticas 0
+  m5        13.792–18.250 s  diferencia media   5.96  píxeles cambiados: mediana   8329, mínimo   3724  transiciones idénticas 0
+  pl-l      18.000–25.000 s  diferencia media   3.01  píxeles cambiados: mediana    211, mínimo      0  transiciones idénticas 73
+  k1        24.750–27.792 s  diferencia media   4.38  píxeles cambiados: mediana   1957, mínimo    108  transiciones idénticas 0
+✔ ningún tramo de más de 0.3 s con la pantalla idéntica y sin una tarjeta en lectura

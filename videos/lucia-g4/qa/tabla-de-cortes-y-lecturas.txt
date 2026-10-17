@@ -1,0 +1,100 @@
+Tabla de cortes (t en s):
+    0.000 – 6.000   f-gancho  foto  Foto A a pantalla completa (0-6 s) con empuje lento; sale en el empuje 5,75-6,0 junto con las miniaturas y la tarjeta
+    5.750 – 12.000  pl-regla  placa placa de la regla: las 8 referencias + escala 0-1 con la marca en 0,70
+   11.750 – 17.000  f-a       foto  Imagen A (el empuje de entrada ocupa 11,75-12,0; el de salida 16,75-17,0)
+   16.750 – 22.000  f-b       foto  Imagen B
+   21.750 – 27.000  f-c       foto  Imagen C (foto limpia)
+   26.750 – 32.000  f-d       foto  Imagen D
+   31.750 – 37.000  f-e       foto  Imagen E (foto limpia)
+   36.750 – 42.000  f-f       foto  Imagen F
+   41.750 – 49.750  pl-l1     placa lección 1: las 6 imágenes ordenadas por precio sobre la escala + la nota del ruido en dos instantes
+   49.500 – 57.250  pl-l2     placa lección 2: tabla de A y B en tres escenas y las dos fotos del café lado a lado
+   57.000 – 59.750  f-cierre  foto  cierre: Lucía mira a cámara y sonríe (foto K4·5) con empuje lento
+Costuras (empuje rígido de 6 cuadros):
+    6.00  empuje  sale f-gancho,thumbs → entra pl-regla
+   12.00  empuje  sale pl-regla → entra f-a
+   17.00  empuje  sale f-a → entra f-b
+   22.00  empuje  sale f-b → entra f-c
+   27.00  empuje  sale f-c → entra f-d
+   32.00  empuje  sale f-d → entra f-e
+   37.00  empuje  sale f-e → entra f-f
+   42.00  empuje  sale f-f → entra pl-l1
+   49.75  empuje  sale pl-l1 → entra pl-l2
+   57.25  empuje  sale pl-l2 → entra f-cierre
+Tarjetas (entra = 1 cuadro antes de a salvo en los empujes, donde viajan):
+    0.10 – 3.00   c1  4 pal (mín 1.7 s) «¿Cuál conserva su cara?»
+    3.00 – 6.00   c2  6 pal (mín 2.4 s) «Misma orden.  Seis motores de imagen.» [sale con el empuje]
+    6.00 – 9.00   c3  6 pal (mín 2.4 s) «Se mide contra 8 fotos suyas.» [entra con el empuje]
+    9.00 – 12.00  c4  5 pal (mín 2.05 s) «Idéntica es 1. Piso, 0,70.» [sale con el empuje]
+   12.00 – 17.00  c5  4 pal (mín 1.7 s) «Imagen A · 1 crédito» [entra con el empuje] [sale con el empuje]
+   17.00 – 22.00  c6  4 pal (mín 1.7 s) «Imagen B · 0,5 créditos» [entra con el empuje] [sale con el empuje]
+   22.00 – 27.00  c7  4 pal (mín 1.7 s) «Imagen C · 2 créditos» [entra con el empuje] [sale con el empuje]
+   27.00 – 32.00  c8  4 pal (mín 1.7 s) «Imagen D · 2,5 créditos» [entra con el empuje] [sale con el empuje]
+   32.00 – 37.00  c9  4 pal (mín 1.7 s) «Imagen E · 3 créditos» [entra con el empuje] [sale con el empuje]
+   37.00 – 42.00  c10 4 pal (mín 1.7 s) «Imagen F · 2,75 créditos» [entra con el empuje] [sale con el empuje]
+   42.00 – 49.75  c11 6 pal (mín 2.4 s) «Pagar más no  mejora el parecido.» [entra con el empuje] [sale con el empuje]
+   49.75 – 52.25  c12 6 pal (mín 2.4 s) «Imagen A:  la sostuvo en tres.» [entra con el empuje]
+   52.25 – 54.55  c13 5 pal (mín 2.05 s) «Una foto sola no mide.»
+   54.55 – 57.25  c14 6 pal (mín 2.4 s) «El café: B perdió la cara.» [sale con el empuje]
+   57.25 – 59.75  c15 5 pal (mín 2.05 s) «Seguime: cada semana, una prueba.» [entra con el empuje]
+Lecturas de rótulo, datos, sellos, placas (≥ 0,35 s/palabra + 0,3):
+  rótulo de IA            6 pal  0.00–3.00  3.00 s  (pide 2.40)  
+  A dato                  2 pal  12.88–16.60  3.72 s  (pide 1.00)  
+  B dato                  2 pal  17.88–21.60  3.72 s  (pide 1.00)  
+  C dato                  2 pal  22.88–26.60  3.72 s  (pide 1.00)  
+  D dato                  2 pal  27.88–31.60  3.72 s  (pide 1.00)  
+  D pastilla              4 pal  28.88–31.60  2.72 s  (pide 1.70)  
+  E dato                  2 pal  32.88–36.60  3.72 s  (pide 1.00)  
+  E sello                 3 pal  33.83–36.60  2.77 s  (pide 1.35)  
+  F dato                  2 pal  37.88–41.60  3.72 s  (pide 1.00)  
+  F sello                 3 pal  38.83–41.60  2.77 s  (pide 1.35)  
+  regla «mi piso»         3 pal  10.23–11.75  1.52 s  (pide 1.35)  ← justo
+  regla «idéntica · 1»    2 pal  8.25–11.75  3.50 s  (pide 1.00)  
+  l1 «mi piso»            3 pal  41.95–49.50  7.55 s  (pide 1.35)  
+  l1 nota 1              10 pal  41.95–49.50  7.55 s  (pide 3.80)  
+  l1 nota 2               9 pal  45.78–49.50  3.72 s  (pide 3.45)  
+  l1 fila B               4 pal  42.35–49.50  7.15 s  (pide 1.70)  
+  l1 valor B              1 pal  42.50–49.50  7.00 s  (pide 0.65)  
+  l1 fila A               4 pal  42.75–49.50  6.75 s  (pide 1.70)  
+  l1 valor A              1 pal  42.90–49.50  6.60 s  (pide 0.65)  
+  l1 fila C               4 pal  43.15–49.50  6.35 s  (pide 1.70)  
+  l1 valor C              1 pal  43.30–49.50  6.20 s  (pide 0.65)  
+  l1 fila D               4 pal  43.55–49.50  5.95 s  (pide 1.70)  
+  l1 valor D              1 pal  43.70–49.50  5.80 s  (pide 0.65)  
+  l1 fila F               4 pal  43.95–49.50  5.55 s  (pide 1.70)  
+  l1 valor F              1 pal  44.10–49.50  5.40 s  (pide 0.65)  
+  l1 fila E               4 pal  44.35–49.50  5.15 s  (pide 1.70)  
+  l1 valor E              1 pal  44.50–49.50  5.00 s  (pide 0.65)  
+  l2 Escena 1             2 pal  49.70–57.00  7.30 s  (pide 1.00)  
+  l2 Escena 2             2 pal  49.70–57.00  7.30 s  (pide 1.00)  
+  l2 Escena 3             2 pal  49.70–57.00  7.30 s  (pide 1.00)  
+  l2 etiqueta A           2 pal  49.70–57.00  7.30 s  (pide 1.00)  
+  l2 A1                   1 pal  50.10–57.00  6.90 s  (pide 0.65)  
+  l2 A2                   1 pal  50.25–57.00  6.75 s  (pide 0.65)  
+  l2 A3                   1 pal  50.40–57.00  6.60 s  (pide 0.65)  
+  l2 etiqueta B           2 pal  52.53–57.00  4.47 s  (pide 1.00)  
+  l2 B1                   1 pal  52.75–57.00  4.25 s  (pide 0.65)  
+  l2 B2                   1 pal  52.90–57.00  4.10 s  (pide 0.65)  
+  l2 B3                   1 pal  53.05–57.00  3.95 s  (pide 0.65)  
+  l2 pie foto A           4 pal  54.05–57.00  2.95 s  (pide 1.70)  
+  l2 pie foto B           4 pal  54.35–57.00  2.65 s  (pide 1.70)  
+Datos (de PROCEDENCIA.jsonl):
+  Imagen A: 1 cr · parecido 0,81 (medido 0.806) · ok
+  Imagen B: 0,5 cr · parecido 0,79 (medido 0.794) · ok
+  Imagen C: 2 cr · parecido 0,74 (medido 0.737) · ok
+  Imagen D: 2,5 cr · parecido 0,70 (medido 0.702) · justo
+  Imagen E: 3 cr · parecido 0,69 (medido 0.691) · bajo
+  Imagen F: 2,75 cr · parecido 0,66 (medido 0.658) · bajo
+Lo que el video afirma, contra los datos:
+  ok  «Pagar más no mejora el parecido»: la más cara (E, 3 cr, 0.691) queda bajo la de 1 cr (0.806) y la de 0,5 cr (0.794)
+  ok  ninguna de las que cuestan más que A (1 cr) mejora el parecido de A (0.806)
+  ok  A (1 cr) la sostuvo en tres escenas: 0.806 · 0.83 · 0.839 (todas ≥ 0,70)
+  ok  B (el más barato, 0.5 cr) la perdió en UNA de tres: 0.794 · 0.35 · 0.831
+  ok  la lección 2 dice B: 0,79 · 0,35 · 0,83
+  ok  la lección 2 dice A: 0,81 · 0,83 · 0,84 (PROCEDENCIA: 0.806 · 0.83 · 0.839)
+  ok  «Imagen A: la sostuvo en tres.»: las tres escenas de A están sobre el piso
+  ok  las fotos del café: A 0,83 contra B 0,35
+  ok  bajo el piso: E y F (D cae justo en el piso y no se anuncia como aprobada)
+  ok  seis imágenes distintas (A a F)
+Agregados al guion (reversibles, ver plan.json): A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14
+ok: index.html (36 KB)

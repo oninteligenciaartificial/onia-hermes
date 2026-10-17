@@ -1,0 +1,869 @@
+{
+ "anuncios-con-persona": {
+  "resumen": "1) Los siete anuncios que más duran tienen todos una persona. Los volví a mirar y los siete siguen activos el 5-oct. Pero cinco son de Doctocliq, y Doctocliq tiene 0 anuncios activos en BO: pauta en MXN a otros países [B]. De los anuncios con persona, el único que hoy llega a Bolivia es el de CitaPro: 80 días al aire, con presentadora real que habla a cámara, más su imagen de una mujer con el celular (60 d) [B].\n2) En BO hoy pautan solo cuatro softwares de clínica: Dentalink (4, venía de 15), Medilink (6), Ultra Pack / Agenda en Día (4) y CitaPro (5). Doctocliq, Dt.Dental, Reservo, Calu, Calendico, Medizona, AgendaPro y Eholo tienen 0 en BO [B].\n3) La estructura que dura [M sobre 3 cuadros por video]. Desde el segundo 0 hay una persona en cuadro con subtítulo quemado. El texto abre con la plata o el tiempo del dueño, en segunda persona. En los videos de 25 s o más, la pantalla real aparece a la mitad (tablet con agenda, reportes, odontograma). Cierra con una placa de marca o un CTA hablado, y el botón lleva a cuenta gratis o demo. Los de 10 s no muestran producto.\n4) Personas hechas con IA: Doctocliq las usa en 4 videos (una \"doctora\" con ambo y el logo deformado \"Doetoclinic\", una familia, una clínica \"ODONTOMEDICS\") y Medizona en 1 (un médico con estetoscopio). Hacen de personaje: doctora, papá, médico. Ninguno declara que es IA, ni en la tarjeta ni en los cuadros que miré [M].\n5) No encontré ningún presentador IA que hable a cámara vendiendo software de clínica. Los presentadores que vi son todos reales: CitaPro, Calendico, Dentalink UGC, los doctores de Doctocliq, Dt.Dental y Eholo. Hay 5 candidatos de software B2B sacados solo del metadato, sin creativo [B].\n6) Para Lucía: lo que se puede copiar es el formato CitaPro/Calendico (habla a cámara, subtítulo, pantalla real de Onia a mitad del video, un CTA hablado), con el gancho en la plata del dueño. Nadie declara la IA: si Lucía lo dice en el segundo 0, es diferencia y además cumple la regla.\n7) Lo que no se copia: testimonios con nombre, \"+4000/+3500/+20.000\", titular con IA o \"sin intervención humana\", urgencia por norma (1888, NOM, COFEPRIS; acá sería el SIAT), precio en la imagen, \"agenda llena\" o \"90% menos inasistencias\", y una IA en ambo haciendo de doctora (es justo lo que hace Doctocliq).",
+  "hallazgos": [
+   {
+    "dato": "Los 7 anuncios que pasaban las 6 semanas (§2.5) siguen activos el 5-oct: Doctocliq 1014591764512827 (80 d), 1952892278698712 (74 d), 895549733230235 (51 d), 1089330193788206 y 1684698082830679 (48 d), y CitaPro 1880949689530541 (80 d) y 2253602242100999 (60 d).",
+    "marca": "B",
+    "evidencia": "ads_library_search 5-oct, ACTIVE: búsqueda «Doctocliq» en BO/PE/CO/MX/AR/CL/EC y page_ids 117313424662542. Volcado en /tmp/claude-0/-home-user-onia-hermes/62db117f-72ad-5efb-b90b-9753e7a9129f/scratchpad/estudio/anuncios/biblioteca_5oct.json",
+    "implicancia_lucia": "La señal de que la persona funciona se mantiene, pero es una señal LatAm, no boliviana (ver el dato siguiente)."
+   },
+   {
+    "dato": "Doctocliq tiene 0 anuncios activos en BO (24 activos en 7 países, moneda MXN). En BO llegan solo Dentalink 4, Medilink 6, Ultra Pack/Agenda en Día 4 y CitaPro 5. Dt.Dental, Reservo, Calu, Calendico, Medizona, AgendaPro y Eholo: 0 en BO.",
+    "marca": "B",
+    "evidencia": "ads_library_search 5-oct con countries=[BO] por page_ids 122294408384514, 106612849382553, 407332546278146, 116497988215732, 117313424662542, 644396635996094, 1397618817156161, 292222707822649, 106847365632812, 197828183404270, 1429581593936821, 102752758103990. biblioteca_5oct.json → en_BO_hoy",
+    "implicancia_lucia": "El dentista boliviano ve hoy pocos anuncios de software con persona. El único es la presentadora de CitaPro. El hueco del formato con persona en BO está casi libre."
+   },
+   {
+    "dato": "Dentalink bajó en BO de 15 anuncios (30-sep) a 4 activos. Sus 3 anuncios de catálogo {{product.name}} del 15/19-nov-2025 siguen activos (320-324 d), y en 7 países tiene 84 activos.",
+    "marca": "B",
+    "evidencia": "ads_library_search page_ids 106612849382553 (BO: 4) y con search_terms «product.name» (3 activos: 1889191322026259, 865849959206370, 25372297812382741)",
+    "implicancia_lucia": "El anuncio que más dura no lleva persona: es catálogo dinámico. La persona no es condición para durar. Es lo que más dura entre los anuncios de video."
+   },
+   {
+    "dato": "Formato de los 6 videos que más duran, en sus cuadros de inicio, mitad y final: persona en cuadro desde el inicio, con subtítulo quemado (karaoke celeste en Doctocliq, texto cinético amarillo en CitaPro). En los de 25 s o más, la pantalla real del producto sale a la mitad. Cierre con placa de marca (+4000 doctores / Crea tu cuenta GRATIS) o con la presentadora diciendo «regístrate aquí abajo y solicita una demo».",
+    "marca": "M",
+    "evidencia": "/tmp/claude-0/-home-user-onia-hermes/62db117f-72ad-5efb-b90b-9753e7a9129f/scratchpad/estudio/anuncios/los_que_duran_video.png (6 tiras de cuadros) y tiras/*_tira.png",
+    "implicancia_lucia": "La pieza de Lucía puede seguir el mismo esqueleto: Lucía a cámara en el segundo 0 con subtítulo, la pantalla real de Onia a la mitad y un solo CTA hablado y escrito al final."
+   },
+   {
+    "dato": "La pantalla real aparece en el medio, nunca al principio. Ejemplos: Doctocliq 895549733230235, tablet con la agenda en ~15 s de 31; 1089330193788206, laptop con reportes reales en ~13 s de 26; 1684698082830679, odontograma a pantalla completa en ~33 s de 66. Los de 10 s (1952892278698712, 1476934190941729) no muestran producto.",
+    "marca": "M",
+    "evidencia": "tiras/doctocliq_895549733230235_tira.png, tiras/doctocliq_1089330193788206_tira.png, tiras/doctocliq_1684698082830679_tira.png, tiras/doctocliq_1952892278698712_tira.png",
+    "implicancia_lucia": "En un video de 20-30 s, la captura real de Onia va entre el segundo 8 y el 18, después del gancho. Una pieza de 10 s sin pantalla no cumple la regla «producto visible o no sale» del CLAUDE.md."
+   },
+   {
+    "dato": "Doctocliq usa personas hechas con IA en 4 videos y ninguno lo declara. En 1952892278698712 / 2611078469391009 hay una «doctora» con ambo azul y un logo deformado en el pecho (se lee «Doetoclinic» o «Doctoclinic», no Doctocliq), y el texto le dice «Doctora». En 1476934190941729 la clínica ficticia se llama «ODONTOMEDICS». En 1014591764512827 hay una escena de familia: un niño en la mesa y un médico con el celular. Medizona 1626779772573913 muestra un médico con estetoscopio. Ni la tarjeta ni los cuadros dicen «IA», «generado» o «Información de IA».",
+    "marca": "M",
+    "evidencia": "tiras/doctocliq_1952892278698712_tira.png (logo deformado), tiras/doctocliq_1476934190941729_tira.png, tiras/doctocliq_1014591764512827_tira.png, tiras/medizona_1626779772573913_tira.png; tarjetas /home/user/onia-hermes/hermes-content/research/competencia/anuncios/doctocliq/1952892278698712.png y medizona/1626779772573913.png",
+    "implicancia_lucia": "El mercado ya ve «doctoras IA en ambo» sin aviso. Si Lucía usa ambo, se va a leer como lo mismo. Se distingue declarándolo en el segundo 0 y con un rótulo fijo, y conviene revisar si el ambo es vestuario para pauta."
+   },
+   {
+    "dato": "Las personas IA de Doctocliq y Medizona hacen de personaje: la doctora que sufre la cancelación, el papá que llega tarde, el médico con agenda de papel. No hacen de presentador. Todas las personas que hablan a cámara presentando el producto son reales: la presentadora de CitaPro, la mujer de Calendico, la creadora UGC de Dentalink, los Dres. Juan González y Gustavo Watanabe de Doctocliq, y las personas de Dt.Dental y Eholo.",
+    "marca": "M",
+    "evidencia": "tiras de citapro_1880949689530541, calendico_1335618932975260, dentalink_1086920147535259, doctocliq_895549733230235, doctocliq_1684698082830679; tiras/dtdental_todas.png; tiras/eholo_6paises.png",
+    "implicancia_lucia": "No hay precedente en el rubro de una presentadora IA que se declara IA. No hay modelo para copiar, y tampoco competidor en ese formato."
+   },
+   {
+    "dato": "El anuncio de CitaPro con presentadora (1880949689530541, 61,7 s) es el único video con persona que llega a BO y lleva 80 días. En la cabina estética, ella habla a cámara con la palabra «TIENES» en grande. A la mitad hay una placa gráfica azul sin persona («Simplemente NO L…»). Al final vuelve ella: «regístrate aquí abajo y solicita una demo». La miniatura del video es una pantalla bloqueada con notificaciones de WhatsApp.",
+    "marca": "M",
+    "evidencia": "tiras/citapro_1880949689530541_tira.png; /home/user/onia-hermes/hermes-content/research/competencia/anuncios/citapro/1880949689530541.png; activo en BO por ads_library_search 5-oct",
+    "implicancia_lucia": "Es el molde más cercano y con prueba en BO: presentadora a cámara, gráfica a mitad y CTA hablado. Lucía lo puede hacer sin ser profesional, porque la presentadora de CitaPro tampoco se presenta como esteticista en los cuadros que vi."
+   },
+   {
+    "dato": "Calendico 1335618932975260 (18,8 s), sigue activo el 5-oct: abre con chats de WhatsApp superpuestos a una mujer y «¿Cuánto…». A los ~9 s muestra la pantalla real del flujo de reserva («Detalles de la cita», botón Finalizar) a pantalla completa. Cierra con una mujer real a cámara: «Obtené ya tu prueba gratuita haciendo click en el siguiente link».",
+    "marca": "M",
+    "evidencia": "tiras/calendico_1335618932975260_tira.png; ads_library_search «Calendico» 5-oct (activo, USD)",
+    "implicancia_lucia": "Es la versión corta (menos de 20 s) del mismo esqueleto, con la pantalla real llenando el cuadro. Solo tiene 4 días al aire: todavía no prueba nada."
+   },
+   {
+    "dato": "Dentalink 1086920147535259 (38 s): una creadora UGC real le habla al celular («Sabemos que…»). A la mitad aparece recortada sobre la pantalla real de Dentalink (Rx, fotos intraorales, fechas). Al final sonríe con brackets («agenda.»). En los 3 cuadros no se presenta como odontóloga.",
+    "marca": "M",
+    "evidencia": "tiras/dentalink_1086920147535259_tira.png y /home/user/onia-hermes/hermes-content/research/competencia/anuncios/dentalink/1086920147535259-v2.png",
+    "implicancia_lucia": "La técnica de la persona recortada delante de la pantalla real sirve para Lucía: presentadora y producto real en el mismo cuadro, sin fabricar UI."
+   },
+   {
+    "dato": "Los 4 anuncios más viejos de Dt.Dental (30-jun a 3-jul, 94-97 d, activos el 5-oct) son videos de 53-75 s. En ellos una persona real habla a cámara en exteriores o en un café (estilo UGC), con subtítulos como «Odontólogo, la res 1888 de 2025». El de «Hasta el mismo ChatGPT…» (1047754144273622) ya no aparece entre los 24 activos.",
+    "marca": "M",
+    "evidencia": "tiras/dtdental_todas.png (cuadros de 390×176 con botón de play); /home/user/onia-hermes/hermes-content/research/competencia/anuncios/dtdental/1540166734506785.png; ads_library_search page 644396635996094",
+    "implicancia_lucia": "Son los videos con persona que más duran (más que Doctocliq), pero se apoyan en la urgencia de la norma colombiana. Esa parte no se copia. Lo que sí: persona a cámara, larga, en un lugar real."
+   },
+   {
+    "dato": "Ninguno de los 13 anuncios con persona que miré pone precio en la pieza. El precio aparece solo en estáticos sin persona: Agenda en Día US$ 5,90/mes y AgendaClínica «Desde 14.990 mensual».",
+    "marca": "M",
+    "evidencia": "/home/user/onia-hermes/hermes-content/research/competencia/anuncios/ultrapack/1418092519699070-2.png, nativecode/1401049335530050-2.png, tiras/agendaendia_todas.png",
+    "implicancia_lucia": "Lucía no dice precio. Confirma la regla de §5.4."
+   },
+   {
+    "dato": "Prueba social numérica en el cierre de los que duran: «Únete a los +4000 doctores» (Doctocliq 1014591764512827 y 1089330193788206), «más de 3500 doctores» (1684698082830679), «+20.000 profesionales» (Dt.Dental), «35.568 dentistas ya han interactuado» (Ultra Pack).",
+    "marca": "M",
+    "evidencia": "tiras/doctocliq_1014591764512827_tira.png, tiras/doctocliq_1684698082830679_tira.png; textos dtdental/page-644396635996094.txt y ultrapack/1578803363704927.txt",
+    "implicancia_lucia": "No se puede copiar: hay cero clientes. La placa final de Lucía va con el CTA y la marca, sin número."
+   },
+   {
+    "dato": "Reservo: los 2 anuncios del 18-mar ya no aparecen entre sus 25 activos. Los más viejos ahora son catálogos del 30-mar al 2-abr (186-189 d). Tiene un testimonio activo con título «Dra. Bermejo: \"obvio que lo recomiendo\"» (1497441389090493, 61 d), sin mirar.",
+    "marca": "B",
+    "evidencia": "ads_library_search page_ids 1397618817156161, 6 países, 5-oct",
+    "implicancia_lucia": "El testimonio de una doctora con nombre es otro formato que dura y que Onia no puede usar."
+   },
+   {
+    "dato": "AgendaPro (190 activos en 6 países, 0 en BO) titula «Sofía trabaja por ti» (3240852072769613): le pone nombre humano a su asistente. Otros títulos: «Hasta 90% menos inasistencias» y «Agenda llena siempre».",
+    "marca": "B",
+    "evidencia": "ads_library_search page_ids 1429581593936821, 5-oct; busquedas_ia_5oct.json",
+    "implicancia_lucia": "[I] Ya hay competidores que personifican a la IA con nombre de mujer. Lucía se distingue si deja claro que es una IA que muestra el sistema, no el sistema."
+   },
+   {
+    "dato": "Las búsquedas «avatar IA», «presentadora IA», «presentadora virtual», «influencer IA», «creado con IA software», «asistente virtual clínica» y «recepcionista IA» (BO/PE/CO/MX/AR/CL) no devuelven ningún software de clínica con presentador IA. Lo que aparece son cursos, herramientas para crear influencers IA (HyperModels, Lumos) y 5 software B2B candidatos que solo conozco por el metadato.",
+    "marca": "B",
+    "evidencia": "/tmp/claude-0/-home-user-onia-hermes/62db117f-72ad-5efb-b90b-9753e7a9129f/scratchpad/estudio/anuncios/busquedas_ia_5oct.json",
+    "implicancia_lucia": "No hay referente directo para copiar. Para ver uno haría falta que la madre capture desde la PC los 5 candidatos."
+   },
+   {
+    "dato": "CitaPro titula con IA y promete lo contrario de Onia: «Citapro IA organiza tu WhatsApp y agenda por ti. Sin intervención humana», y «agenda llena de verdad».",
+    "marca": "M",
+    "evidencia": "/home/user/onia-hermes/hermes-content/research/competencia/anuncios/citapro/2253602242100999-2.png y citapro/1073401725052434.txt",
+    "implicancia_lucia": "Lucía no dice «sin intervención humana» ni «agenda llena». Onia propone y una persona aprueba: ese es el contraste."
+   }
+  ],
+  "huecos": [
+   "No escuché la voz de ningún video. No hay mp4 en el repo y desde la nube Facebook no abre. Lo que dicen los videos sale de los subtítulos quemados en 3 cuadros y de CAPTURAS-HECHAS.md del 1-oct (mirado por la madre, no por mí).",
+   "Tengo solo 3 cuadros por video (inicio, mitad, final). La estructura entre esos cuadros es reconstruida o inferida, y los segundos son aproximados (mitad = duración/2).",
+   "Los cuadros de Dt.Dental y Eholo son de 390×176 y tienen el botón de play encima. No se distingue si la persona es odontóloga o psicóloga, ni si muestran la pantalla.",
+   "No sé si Doctocliq o Medizona llevan la etiqueta «Información de IA» de Meta en el feed: la Biblioteca sin sesión no la muestra.",
+   "No pude verificar si Dentalink 1086920147535259 sigue activo el 5-oct. La página tiene 84 activos y el conector corta en 50. La búsqueda por texto devolvió otro id con el mismo título (1771864697352748).",
+   "Hay creativos de Reservo, Calu, AgendaPro, Medilink, Clinera y de los 3 Dentalink bloqueados que nunca se miraron, incluido el testimonio «Dra. Bermejo» de Reservo.",
+   "Los 5 candidatos de presentador IA que vende software B2B (Facture.ar, NEXIA, Sistemas KV, Soluciones Mongom, AgendaPro «Sofía») son solo metadato: no confirmé que tengan presentador IA.",
+   "Que un anuncio siga «activo» no dice cuánto rinde, cuánto gasta ni a quién apunta. Doctocliq con 0 en BO puede deberse a la segmentación o al filtro de país del conector, que trae países alcanzados.",
+   "No consulté la página «Reservo Software» (7 anuncios según la ronda 2) ni volví a contar Clinera, Huli y Fluker.",
+   "No sé si la mujer de la imagen de CitaPro 2253602242100999 es foto de stock o generada con IA."
+  ],
+  "anuncios_con_persona": [
+   {
+    "anunciante": "Doctocliq",
+    "id_anuncio": "1014591764512827",
+    "tipo_de_persona": "escena hecha con IA: historia de familia con un niño y un papá médico. [I] por el aspecto; CAPTURAS-HECHAS la da por IA [B]",
+    "habla_a_camara_o_texto": "relato en off del hijo con subtítulo quemado; nadie mira a cámara",
+    "duracion": "30,4 s",
+    "estructura_por_segundos": "~0 s: niño solo en la mesa, reloj, «MI PAPÁ ANTES SIEMPRE LLEGABA TARDE» · ~15 s: médico con bata mira el celular con una pantalla de reserva, «CON UN LINK QUE ÉL LES MANDA» · final: placa «Únete a los +4000 doctores que confían en Doctocliq» y laptop con «Crea tu cuenta GRATIS»",
+    "primera_linea": "Siempre hay un paciente más. / Una llamada más. / Un pendiente más.",
+    "donde_aparece_la_pantalla": "a la mitad (~15 s), chica, dentro del celular. No se distingue si es la UI real",
+    "cta": "Ver detalles → doctocliq.com/ecuador; placa «Crea tu cuenta GRATIS»",
+    "capturas_miradas": "/tmp/claude-0/-home-user-onia-hermes/62db117f-72ad-5efb-b90b-9753e7a9129f/scratchpad/estudio/anuncios/tiras/doctocliq_1014591764512827_tira.png; /home/user/onia-hermes/hermes-content/research/competencia/anuncios/doctocliq/1014591764512827.png",
+    "dias_al_aire": "desde 17-jul: 80 d",
+    "sigue_activo_5oct": "sí, en 7 países (ads_library_search «Doctocliq», 5-oct); 0 en BO"
+   },
+   {
+    "anunciante": "CitaPro",
+    "id_anuncio": "1880949689530541",
+    "tipo_de_persona": "presentadora real (actriz o del equipo) en una cabina estética con un equipo «FENIX»",
+    "habla_a_camara_o_texto": "habla a cámara, con texto cinético encima",
+    "duracion": "61,7 s",
+    "estructura_por_segundos": "~0 s: ella a cámara con la palabra «TIENES» en amarillo · ~31 s: placa gráfica azul sin persona, «Simplemente NO L…» · ~61 s: ella vuelve a cámara, «regístrate aquí abajo y solicita una demo». Según CAPTURAS-HECHAS [B], en el medio aparecen el logo con un robot, «asistente con INTELIGENCIA ARTIFICIAL» y recordatorios en la pantalla bloqueada",
+    "primera_linea": "✨ El secreto de los centros estéticos que llenan su agenda cada semana...",
+    "donde_aparece_la_pantalla": "no aparece en mis 3 cuadros. La miniatura de la tarjeta es una pantalla bloqueada con notificaciones de WhatsApp [M]",
+    "cta": "Más información → miagenteia.citapro.app (pide demo) + CTA hablado",
+    "capturas_miradas": "tiras/citapro_1880949689530541_tira.png; /home/user/onia-hermes/hermes-content/research/competencia/anuncios/citapro/1880949689530541.png",
+    "dias_al_aire": "desde 17-jul: 80 d",
+    "sigue_activo_5oct": "sí, y activo EN BO (ads_library_search page 117313424662542, countries BO, 5-oct)"
+   },
+   {
+    "anunciante": "Doctocliq",
+    "id_anuncio": "1952892278698712",
+    "tipo_de_persona": "escena hecha con IA: «doctora» con ambo azul y logo deformado «Doetoclinic» en el pecho, en un consultorio pastel",
+    "habla_a_camara_o_texto": "mira a cámara sin hablar (en los cuadros no hay subtítulos); según CAPTURAS lleva el título «Capítulo uno: la cita cancelada» [B]",
+    "duracion": "10,2 s",
+    "estructura_por_segundos": "~0 s: doctora sentada, seria, con un guante en la mano · ~5 s: la misma junto al sillón dental · final: placa «REDUCE CANCELACIONES CON Doctocliq»",
+    "primera_linea": "Doctora, tu tiempo (y tu almuerzo) valen demasiado para que te cancelen a última hora. Prueba Doctocliq hoy.",
+    "donde_aparece_la_pantalla": "no aparece",
+    "cta": "Ver detalles → doctocliq.com",
+    "capturas_miradas": "tiras/doctocliq_1952892278698712_tira.png; /home/user/onia-hermes/hermes-content/research/competencia/anuncios/doctocliq/1952892278698712.png",
+    "dias_al_aire": "desde 23-jul: 74 d",
+    "sigue_activo_5oct": "sí (ads_library_search «Doctocliq», 5-oct); 0 en BO"
+   },
+   {
+    "anunciante": "Doctocliq",
+    "id_anuncio": "2611078469391009",
+    "tipo_de_persona": "el mismo video IA de 1952892278698712 (doctora en ambo), con otro texto",
+    "habla_a_camara_o_texto": "igual al anterior",
+    "duracion": "10,2 s",
+    "estructura_por_segundos": "idéntica a 1952892278698712 (los cuadros coinciden)",
+    "primera_linea": "Doctora, un sillón vacío no solo te quita el tiempo, te cuesta dinero. Asegura tus citas con confirmaciones automáticas por WhatsApp.",
+    "donde_aparece_la_pantalla": "no aparece",
+    "cta": "Ver detalles → doctocliq.com",
+    "capturas_miradas": "tiras/doctocliq_2611078469391009_tira.png",
+    "dias_al_aire": "desde 13/14-sep: 22 d",
+    "sigue_activo_5oct": "sí (ads_library_search «Doctocliq», 5-oct)"
+   },
+   {
+    "anunciante": "CitaPro",
+    "id_anuncio": "2253602242100999",
+    "tipo_de_persona": "mujer con uniforme blanco de clínica, preocupada, con el celular (estático). No sé si es stock o IA",
+    "habla_a_camara_o_texto": "texto (imagen estática)",
+    "duracion": "imagen",
+    "estructura_por_segundos": "imagen única: titular «Muchos mensajes, poco orden.» a la izquierda, mujer a la derecha con burbujas de WhatsApp («¿Cuánto cuesta?», «Necesito agendar») y botón «AGENDA UNA DEMO»",
+    "primera_linea": "💡 El secreto de los negocios de salud y belleza que dejaron de vivir pegados al WhatsApp...",
+    "donde_aparece_la_pantalla": "no hay UI del producto: solo burbujas de chat ilustradas",
+    "cta": "Más información → demo; botón impreso «AGENDA UNA DEMO»",
+    "capturas_miradas": "/home/user/onia-hermes/hermes-content/research/competencia/anuncios/citapro/2253602242100999-2.png y 2253602242100999.png",
+    "dias_al_aire": "desde 6-ago: 60 d",
+    "sigue_activo_5oct": "sí, y activo EN BO (ads_library_search countries BO, 5-oct)"
+   },
+   {
+    "anunciante": "Doctocliq",
+    "id_anuncio": "895549733230235",
+    "tipo_de_persona": "odontólogo real con nombre y país: «Dr. Juan Gonzalez 🇪🇨», ortodoncia, en su clínica (testimonio)",
+    "habla_a_camara_o_texto": "habla a cámara con subtítulo karaoke resaltado en celeste",
+    "duracion": "30,7 s",
+    "estructura_por_segundos": "~0 s: él a cámara con rótulo de nombre y bandera, «DE 35 AÑOS» · ~15 s: sostiene una tablet con la agenda real, «PERFECTAMENTE REGISTRADAS» · final: «Doctocliq · Rentabiliza tu consultorio»",
+    "primera_linea": "Un paciente que te cancela a última hora no es solo un espacio vacío en tu agenda: es dinero que dejas de recibir.",
+    "donde_aparece_la_pantalla": "a la mitad (~15 s), la agenda real en una tablet que tiene en la mano",
+    "cta": "Ver detalles → doctocliq.com",
+    "capturas_miradas": "tiras/doctocliq_895549733230235_tira.png",
+    "dias_al_aire": "desde 14/15-ago: 51 d",
+    "sigue_activo_5oct": "sí (ads_library_search «Doctocliq», 5-oct); 0 en BO"
+   },
+   {
+    "anunciante": "Doctocliq",
+    "id_anuncio": "1089330193788206",
+    "tipo_de_persona": "relato en primera persona de una doctora de estética, con escenas sin rostro (manos). CAPTURAS las da por IA [B]; en el cuadro no lo puedo afirmar",
+    "habla_a_camara_o_texto": "voz en off con subtítulo; no hay rostro a cámara",
+    "duracion": "25,7 s",
+    "estructura_por_segundos": "~0 s: mano con llaves abre una puerta de vidrio, «CUANDO ABRÍ MÁS DE UNO ESPERABA» · ~13 s: manos en una laptop con los reportes reales de Doctocliq (torta y barras «Comparación de 2 fuentes»), «CUANDO FRENAR» · final: «+4000 doctores» y laptop «Crea tu cuenta GRATIS»",
+    "primera_linea": "Hay personas que cuando una doctora tiene éxito creen que tuvo suerte.",
+    "donde_aparece_la_pantalla": "a la mitad (~13 s), reportes reales en la laptop, a cuadro casi completo",
+    "cta": "Ver detalles («👉 Pruébalo gratis»)",
+    "capturas_miradas": "tiras/doctocliq_1089330193788206_tira.png; /home/user/onia-hermes/hermes-content/research/competencia/anuncios/doctocliq/1089330193788206.png",
+    "dias_al_aire": "desde 17/18-ago: 48 d",
+    "sigue_activo_5oct": "sí (ads_library_search «Doctocliq», 5-oct)"
+   },
+   {
+    "anunciante": "Doctocliq",
+    "id_anuncio": "1684698082830679",
+    "tipo_de_persona": "odontólogo real con nombre: Dr. Gustavo Watanabe (testimonio, «5 años usando Doctocliq»)",
+    "habla_a_camara_o_texto": "habla a cámara con subtítulo karaoke",
+    "duracion": "66,5 s",
+    "estructura_por_segundos": "~0 s: él hablando con gestos, «ANTES DE TRABAJAR CON TODO» · ~33 s: odontograma real de Doctocliq a pantalla completa con un menú abierto (Corona, Endodoncia, Extracción), «UNA HISTORIA GENERAL,» · final: placa «Únete a más de 3500 doctores que ya han digitalizado su consultorio con Doctocliq»",
+    "primera_linea": "Ser un gran doctor te trae pacientes.",
+    "donde_aparece_la_pantalla": "a la mitad (~33 s), a pantalla completa. CAPTURAS cuenta además la ficha desde el celular, reportes y campaña WhatsApp [B]",
+    "cta": "Ver detalles → doctocliq.com",
+    "capturas_miradas": "tiras/doctocliq_1684698082830679_tira.png",
+    "dias_al_aire": "desde 17/18-ago: 48 d",
+    "sigue_activo_5oct": "sí (ads_library_search «Doctocliq», 5-oct)"
+   },
+   {
+    "anunciante": "Doctocliq",
+    "id_anuncio": "1476934190941729",
+    "tipo_de_persona": "escena hecha con IA: médico con bata y recepcionista en la clínica ficticia «ODONTOMEDICS»",
+    "habla_a_camara_o_texto": "diálogo entre personajes con subtítulo («doctor.»); no hablan a cámara",
+    "duracion": "9,7 s",
+    "estructura_por_segundos": "~0 s: el médico camina hacia la recepción · ~5 s: la recepcionista le habla, «doctor.» · final: placa «Esa paz mental ES POSIBLE»",
+    "primera_linea": "Saber que tu agenda de mañana está 100% confirmada sin que tú o tu secretaria muevan un solo dedo... eso no tiene precio.",
+    "donde_aparece_la_pantalla": "no aparece (la recepcionista mira un monitor que no se ve)",
+    "cta": "Ver detalles → doctocliq.com",
+    "capturas_miradas": "tiras/doctocliq_1476934190941729_tira.png; /home/user/onia-hermes/hermes-content/research/competencia/anuncios/doctocliq/1476934190941729.png",
+    "dias_al_aire": "desde 24-sep: 11 d; impresiones <100 al capturarlo",
+    "sigue_activo_5oct": "sí (ads_library_search «Doctocliq», 5-oct)"
+   },
+   {
+    "anunciante": "Doctocliq",
+    "id_anuncio": "1552115046722567",
+    "tipo_de_persona": "doctor real (o actor) que cuenta su día caótico. [I] parece filmación real",
+    "habla_a_camara_o_texto": "voz y subtítulo mientras camina; no lo vi mirando a cámara",
+    "duracion": "30,8 s",
+    "estructura_por_segundos": "~0 s: camina por un pasillo con un café, «NO SÉ QUÉ VOY A HACER» · ~15 s: mano buscando en un archivo de carpetas, «SE ME TRASPAPELARON» · final: «Doctocliq · Rentabiliza tu consultorio»",
+    "primera_linea": "Tu asistente falta un día… ¿y de pronto nadie sabe qué citas hay, dónde están las historias clínicas o quién responde el WhatsApp?",
+    "donde_aparece_la_pantalla": "no aparece",
+    "cta": "Más información («Descubre qué tan dependiente es realmente tu operación»)",
+    "capturas_miradas": "tiras/doctocliq_1552115046722567_tira.png",
+    "dias_al_aire": "desde 28-sep: 7 d",
+    "sigue_activo_5oct": "sí (ads_library_search «Doctocliq», 5-oct)"
+   },
+   {
+    "anunciante": "Calendico",
+    "id_anuncio": "1335618932975260",
+    "tipo_de_persona": "mujer real que cierra a cámara (UGC)",
+    "habla_a_camara_o_texto": "habla a cámara al final; al principio, texto sobre chats",
+    "duracion": "18,8 s",
+    "estructura_por_segundos": "~0 s: chats de WhatsApp superpuestos a una mujer, «¿Cuánto…» · ~9 s: pantalla real del flujo de reserva «Detalles de la cita» a pantalla completa · ~19 s: mujer a cámara, «Obtené ya tu prueba gratuita haciendo click en el siguiente link»",
+    "primera_linea": "Con Calendico SOLO dedicate a tu negocio 😁",
+    "donde_aparece_la_pantalla": "a la mitad (~9 s), a pantalla completa",
+    "cta": "Ver detalles → calendico.com (prueba gratis) + CTA hablado",
+    "capturas_miradas": "tiras/calendico_1335618932975260_tira.png",
+    "dias_al_aire": "desde 1-oct: 4 d",
+    "sigue_activo_5oct": "sí, en 6 países (ads_library_search «Calendico», 5-oct); 0 en BO"
+   },
+   {
+    "anunciante": "Dentalink",
+    "id_anuncio": "1086920147535259",
+    "tipo_de_persona": "creadora UGC real (mujer joven, con brackets). En los cuadros no se presenta como odontóloga",
+    "habla_a_camara_o_texto": "habla al celular en selfie con subtítulo grande",
+    "duracion": "38 s",
+    "estructura_por_segundos": "~0 s: primer plano, «Sabemos que» · ~19 s: ella recortada sobre la pantalla real de Dentalink (Rx, fotos intraorales, fechas), «los procesos» · ~38 s: sonríe mostrando los brackets, «agenda.»",
+    "primera_linea": "v2: Unifica agenda, ficha clínica y cobros en un solo lugar. Deja el caos de las herramientas sueltas y toma el control con Dentalink.",
+    "donde_aparece_la_pantalla": "a la mitad, detrás de ella (persona recortada sobre la UI real)",
+    "cta": "Get Offer",
+    "capturas_miradas": "tiras/dentalink_1086920147535259_tira.png; /home/user/onia-hermes/hermes-content/research/competencia/anuncios/dentalink/1086920147535259-v2.png",
+    "dias_al_aire": "desde 30-sep: 5 d",
+    "sigue_activo_5oct": "no verificado: no salió en la búsqueda por texto y la página tiene 84 activos (el conector corta en 50)"
+   },
+   {
+    "anunciante": "Medizona",
+    "id_anuncio": "1626779772573913",
+    "tipo_de_persona": "escena hecha con IA: médico con bata y estetoscopio frustrado con su agenda de papel",
+    "habla_a_camara_o_texto": "actúa sin hablar a cámara; voz o subtítulo «Si tu agenda está…»",
+    "duracion": "30,2 s",
+    "estructura_por_segundos": "~0 s: médico con una agenda de papel llena de post-its, «Si tu agenda está» · ~15 s: se frota los ojos, cansado · final: placa violeta «Conoce la plataforma más completa para los profesionales de la salud / medicos.medizona.com.mx». En la miniatura de la tarjeta sostiene un celular con la app, «tiene una agenda inteligente»",
+    "primera_linea": "¿Cuántas citas se te pierden por anotarlas en una libreta?",
+    "donde_aparece_la_pantalla": "en un celular que sostiene el médico (miniatura de la tarjeta); no se distingue si es la real",
+    "cta": "Más información → formulario",
+    "capturas_miradas": "tiras/medizona_1626779772573913_tira.png; /home/user/onia-hermes/hermes-content/research/competencia/anuncios/medizona/1626779772573913.png",
+    "dias_al_aire": "desde 1-oct: 4 d; <100 impresiones al capturarlo",
+    "sigue_activo_5oct": "sí (ads_library_search «Medizona», 5-oct, MXN); 0 en BO"
+   },
+   {
+    "anunciante": "Dt.Dental Software Odontologico",
+    "id_anuncio": "1540166734506785 (y 1564664081944709, 1064012876297472, 1348150770768354)",
+    "tipo_de_persona": "personas reales (mujeres jóvenes; en 1047754144273622, un hombre) hablando a cámara en un parque, en el césped o en un café. No se ve si son odontólogas",
+    "habla_a_camara_o_texto": "habla a cámara con subtítulo («Odontólogo, la res 1888 de 2025», «El historial ya no le pertenece a…», «¿Te gustaría conocer cómo lo hacemos?»)",
+    "duracion": "53-75 s",
+    "estructura_por_segundos": "solo 3 miniaturas con botón de play: persona a cámara al inicio, a la mitad y al final. No se distingue la pantalla del producto",
+    "primera_linea": "⚠️ 15 de abril: esta es la fecha en que venció el plazo de la Resolución 1888…",
+    "donde_aparece_la_pantalla": "no visible en las miniaturas (hueco)",
+    "cta": "Más información (formulario «un asesor te contacta») o Ir al perfil de Instagram",
+    "capturas_miradas": "tiras/dtdental_todas.png; /home/user/onia-hermes/hermes-content/research/competencia/anuncios/dtdental/1540166734506785.png y 1047754144273622.png",
+    "dias_al_aire": "desde 30-jun a 3-jul: 94-97 d",
+    "sigue_activo_5oct": "sí los 4 (ads_library_search page 644396635996094, 5-oct); 1047754144273622 (ChatGPT) no aparece entre los activos; 0 en BO"
+   },
+   {
+    "anunciante": "Eholo.health",
+    "id_anuncio": "1102360395603347 y otros 9 de MX; fuera de los 6 países: 1280063063905377, 1004979025731699, 991950017078648, 1037281942115944, 862095700028012",
+    "tipo_de_persona": "personas reales (psicólogos o creadores) a cámara, en estilo sketch o UGC",
+    "habla_a_camara_o_texto": "habla a cámara con subtítulo; una versión lleva el rótulo «Inteligencia Artificial»",
+    "duracion": "16-86 s",
+    "estructura_por_segundos": "persona a cámara al inicio y a la mitad (en uno, la pantalla de facturación a la mitad: «cada sesión crea automáticamente su factura») y cierre en placa «eholo · Prioriza tus pacientes · Pruébalo gratis / Reserva tu demo»",
+    "primera_linea": "Una cita que cambia. / Una factura pendiente. / Una historia clínica por actualizar.",
+    "donde_aparece_la_pantalla": "a la mitad en algunas versiones (miniaturas chicas)",
+    "cta": "See Details / Registrarse / demo",
+    "capturas_miradas": "tiras/eholo_6paises.png; tiras/eholo_fuera_viejos.png",
+    "dias_al_aire": "MX: desde 2-oct (3-5 h al capturarlos); fuera de los 6 países: desde 11-jun (~116 d al 2-oct)",
+    "sigue_activo_5oct": "no verificado uno por uno; 0 en BO (ads_library_search 5-oct)"
+   }
+  ],
+  "presentadores_ia_que_venden_software": [
+   "CONFIRMADO NINGUNO [M]. Entre los anuncios de software de clínica no hay presentador IA que hable a cámara. Las personas IA de Doctocliq (1952892278698712, 2611078469391009, 1476934190941729, 1014591764512827) y Medizona (1626779772573913) hacen de personaje, no de presentador, y no lo declaran.",
+   "[B] CANDIDATO, sin mirar el creativo: Facture.ar (software de facturación, AR), id 1818206429594800, página 1328701396999439, entrega desde el 5-oct, sin titular. Coincidió con la búsqueda «presentadora IA».",
+   "[B] CANDIDATO, sin mirar el creativo: NEXIA (MX), id 1626497512200840, página 1313693218490422, desde el 5-oct, sin titular. Coincidió con «presentadora IA» y con «presentadora virtual».",
+   "[B] CANDIDATO, sin mirar el creativo: Sistemas KV, id 1646034836874580, página 1260674973806291, desde el 3-oct, titular «De Excel a un sistema web hecho a tu medida». Coincidió con «presentadora IA» y con «presentadora virtual».",
+   "[B] CANDIDATO, sin mirar el creativo: Soluciones Mongom (MX), ids 2202819050297260 y 1016641821437321, página 267602779775711, desde el 4-oct, titular «¡Hoy es el Futuro! | Recepcionistas IA».",
+   "[B] CANDIDATO, sin mirar el creativo: AgendaPro, id 3240852072769613, página 1429581593936821, desde el 30-sep, titular «Sofía trabaja por ti» (asistente IA con nombre humano; no sé si hay avatar)."
+  ]
+ },
+ "presentadores-ia": {
+  "resumen": "1. Con lo que se pudo medir, sigue sin aparecer una influencer IA con cuenta propia que venda software B2B en español. El espacio de Lucía sigue libre, pero no hay a quién copiar el resultado. La búsqueda dentro de TikTok no se pudo hacer: el dato es nivel buscador, no mirado.\n2. Ninguna presentadora IA en español muestra evidencia pública de negocio: ni demos, ni ventas, ni clientes. El único caso con cifras es Lu do Magalu (R$100M por WhatsApp, conversión 3×), y esas cifras las da la propia Magalu.\n3. Lo más cercano a evidencia de negocio es el «Comentá X». Da entre 0,2 y 1,1 comentarios por like en Aria, mindshft, pabloinpublic, barbuprime y Ramiro Cubria. Pero es una señal de interés inflada por el cebo, no son ventas.\n4. Casi todas las cuentas de formato venden el personaje: academias en Skool, cursos de «creá tu influencer IA» y programa de creadores de Higgsfield. Eso Lucía no lo copia.\n5. En vivo, el 5-oct, TikTok sin login: Aria Cruz 30,8K seguidores (en Instagram 107K) y declara la IA en el NOMBRE («Aria Cruz | Influencer IA»). Barbu Prime 370K, mindshft 114, Ramiro 306. El handle @ugc.studio.ia en TikTok es una cuenta francesa, otra persona. @imagineartofficial no existe en TikTok.\n6. Patrones que sirven: persona de la propia empresa que lleva a una conversación cerrada por un humano, IA declarada desde el nombre y el segundo 0, pantalla real en el primer cuadro, «Comentá DEMO» en una sola pieza A/B, serie fija producida en lote y humor sobre su límite físico.\n7. Riesgos: el ecosistema «influencer IA» en español es infoproducto, y Lucía se puede leer como uno más. Hay dos «Lucía» IA vivas: la de @mindshft.ai, que esconde la IA, y Lucía Libertaria, política y no declarada. Instagram y TikTok castigan la falta de etiqueta. TikTok deja que el usuario pida «ver menos IA».\n8. Bloqueos: Instagram tiene muro de login. La grilla de TikTok no carga en headless. El clasificador de permisos frenó la vía Chromium+SPKI que documenta la skill onia-infra. Último post y video más visto de cada cuenta quedan como hueco para la madre.",
+  "hallazgos": [
+   {
+    "dato": "@soy_aria_cruz sigue activa en TikTok: nombre visible «Aria Cruz | Influencer IA», 30.812 seguidores, 188.409 me gusta, 121 videos, 0 seguidos. Bio: «Crea conmigo tu Influencer IA / Hablo de IA sin complicaciones». El link va a skool.com/team-aria-cruz-8026, una comunidad de pago. Cuenta creada el 27-ago-2025. En Instagram tiene 107K (ficha de la madre, 3-oct): TikTok es más o menos un tercio.",
+    "marca": "M",
+    "evidencia": "/tmp/claude-0/-home-user-onia-hermes/62db117f-72ad-5efb-b90b-9753e7a9129f/scratchpad/estudio/ia/soy_aria_cruz/perfil.png (mirada) + raw/soy_aria_cruz.html (JSON webapp.user-detail) + evidencia.json",
+    "implicancia_lucia": "Declarar la IA en el campo NOMBRE, no solo en la bio: el nombre sale en la búsqueda y en cada video (p. ej. «Lucía Antelo · IA de Onia»). Instagram rinde más que TikTok para este formato [I]: Instagram primero, como ya dice el manual."
+   },
+   {
+    "dato": "La grilla de videos de TikTok no carga sin login en headless («Hubo un problema»). La API item_list devuelve cuerpo vacío. No hay fecha del último post ni video más visto en TikTok para ninguna cuenta.",
+    "marca": "M",
+    "evidencia": "soy_aria_cruz/perfil.png (mensaje «Hubo un problema» en la grilla); log de API en tools/tt_profile2.mjs: 5 respuestas 200 con cuerpo vacío",
+    "implicancia_lucia": "La actividad reciente de Aria sale solo de Instagram (madre, 2/3-oct: 12 publicaciones entre el 23-sep y el 2-oct). Para TikTok, la madre tiene que mirarlo desde la PC."
+   },
+   {
+    "dato": "@barbuprimeia en TikTok: 369.968 seguidores, 2.040.904 me gusta, 69 videos. Bio: «Únete a mi comunidad de Skool y comienza a aprender gratis!», link PrimeIA.app. Cuenta de dic-2019. En Instagram, el reel del 4-oct tenía 31 likes y 33 comentarios.",
+    "marca": "M",
+    "evidencia": "raw/barbuprimeia.html (JSON del perfil) + evidencia.json; reel IG DeDbHJujeAt en video-intake/2026-10-04-reels-para-lucia.md §1",
+    "implicancia_lucia": "Audiencia grande en TikTok, pero vende una academia de avatares (vende el personaje). Se toma solo el mecanismo «clic → hecho» con la pantalla real de Onia y la caja de comentario animada."
+   },
+   {
+    "dato": "@mindshft.ai en TikTok: «Mindshft AI», 114 seguidores, 6 videos, bio «Branding + Marketing IA / Se la ventaja injusta / Te enseño cómo». Su avatar «Lucía» vive en Instagram (reel del 29-sep: 395 likes y 397 comentarios). Ahí se vende con «nadie se entera».",
+    "marca": "M",
+    "evidencia": "raw/mindshft.ai.html + evidencia.json; reel IG Dd32mPssxV0 en 2026-10-04-reels-para-lucia.md §2",
+    "implicancia_lucia": "La colisión de nombre está en Instagram, no en TikTok. Hay que usar siempre «Lucía Antelo», con apellido, y reservar el handle en TikTok, YouTube, Threads y X antes de que crezca la otra (pendiente del manual §2)."
+   },
+   {
+    "dato": "@ugc.studio.ia en TikTok es otra cuenta: «ugc.studio.fr», en francés («Objectif 10k / Suis Mamie dans ses aventures»), 1 seguidor y 8 videos. @ramiro.cubria en TikTok es «Rama» (estoicismo y emprendedurismo), con 306 seguidores. @imagineartofficial no existe en TikTok (statusCode 10221).",
+    "marca": "M",
+    "evidencia": "raw/ugc.studio.ia.html, raw/ramiro.cubria.html, raw/imagineartofficial.html + evidencia.json",
+    "implicancia_lucia": "Lo que rindió de esas tres cuentas rindió en Instagram. Las cifras de TikTok no sirven para compararlas, y no se confirmó que sean las mismas personas [I]."
+   },
+   {
+    "dato": "Instagram desde la nube, un solo intento: 302 a /accounts/login. Hay muro.",
+    "marca": "M",
+    "evidencia": "curl https://www.instagram.com/soy_aria_cruz/ → 302 redirect a /accounts/login/?next=…",
+    "implicancia_lucia": "Todas las cifras de Instagram vienen de los intakes del 3/4-oct y de la ficha de la madre. Para medir de nuevo, la madre usa el Chrome de Sergio Urcullo."
+   },
+   {
+    "dato": "Biblioteca de Anuncios de Meta (MCP, 5-oct): «soy una influencer creada con inteligencia artificial» en 7 países hispanos da 0 anuncios activos. «presentadora virtual inteligencia artificial sistema para clínicas» da 0, sumando todos los estados. «influencer IA» en Bolivia da 4.477 coincidencias amplias, con ruido. Entre ellas está Infolabs Digital, «Crea tu influencer IA en 2 minutos» (desde el 1-oct).",
+    "marca": "B",
+    "evidencia": "ids 1216766144006874 / 2189917351557104 / 1396093192584062 (Infolabs); totales en evidencia.json",
+    "implicancia_lucia": "En pauta paga no hay ninguna presentadora IA vendiendo software a clínicas en la región. Lo que sí hay en «influencer IA» es infoproducto. Lucía no puede sonar a eso."
+   },
+   {
+    "dato": "«este video fue creado con inteligencia artificial software» da 3 anuncios activos. Uno es de Odental Agency, «SOLO Para Clínicas Dentales», activo desde el 19-ago-2026: una agencia de marketing para clínicas cuyo texto coincide con la frase de video hecho con IA. El creativo no se pudo ver.",
+    "marca": "B",
+    "evidencia": "Meta Ads Library id 1386613700099290 (https://www.facebook.com/ads/library/?id=1386613700099290)",
+    "implicancia_lucia": "Es el anuncio más cercano en audiencia: le habla al mismo dueño de clínica, y quizá con video IA. Que la madre lo capture antes de cerrar el plan v2. Hoy es un hueco."
+   },
+   {
+    "dato": "Dt.Dental (SaaS dental de Colombia) anunció un asistente IA con nombre propio, «Annita», por WhatsApp. Su web hoy habla de «Dete». Es una persona de chatbot, no una influencer con cuenta propia. Dentalink (Chile) tiene un «Asistente IA» en su contact center, sin cara ni presentadora.",
+    "marca": "B",
+    "evidencia": "https://startupslatam.com/saas-colombiano-lanzamiento-annita-asistente-virtual-con-ia/ ; https://dtdental.co/ ; https://softwaredentalink.com/",
+    "implicancia_lucia": "El competidor del rubro le pone nombre al bot, pero no tiene vocera en redes. Lucía como cara declarada del producto sigue siendo un diferencial. Si algún día es también la cara del WhatsApp de Onia, lo decide Sergio Urcullo (manual §2)."
+   },
+   {
+    "dato": "En LatAm, los «influencers IA» con empresa detrás son agencias que venden el personaje. Troop AI (México, socio de The Clueless) hizo a Olivia Roa y Kai Toledo, de lifestyle. Delfi (Argentina) hace embajadores IA de moda. Los Marketeros (Colombia) vende clones de creadores.",
+    "marca": "B",
+    "evidencia": "https://fastcompany.mx/2025/05/28/avatares-con-ia-futuro-del-marketing-en-mexico/ ; https://www.startuplinks.world/noticias/existen-100-influencers-creados-con-inteligencia-artificial-en-latam-en-2025 ; https://www.portafolio.co/emprendimiento/empresas-colombianas-apuestan-por-influenciadores-virtuales-impulsados-por-ia-636070",
+    "implicancia_lucia": "Ninguno vende software B2B. Confirma lo del 30-sep: no hay competidor directo. Tampoco hay un modelo regional del que copiar resultados."
+   },
+   {
+    "dato": "Riesgo de colisión de nombre: «Lucía Libertaria», avatar IA político argentino con más de 13K seguidores, no declara que es IA y un reel suyo pasó las 360K vistas. Se suma a la «Lucía» de @mindshft.ai.",
+    "marca": "B",
+    "evidencia": "https://www.minutouno.com/politica/quien-es-lucia-libertaria-la-influencer-hecha-ia-que-cautivo-un-estratega-clave-javier-milei-n6328488 ; https://www.c5n.com/politica/lucia-libertaria-la-rubia-influencer-creada-ia-que-abre-una-nueva-era-la-batalla-cultural-n248370",
+    "implicancia_lucia": "Las dos «Lucía» IA que circulan esconden la IA. La nuestra tiene que distinguirse por apellido, rótulo desde el segundo 0, etiqueta de plataforma y cero política."
+   },
+   {
+    "dato": "Riesgo de etiquetas. Instagram: desde el 31-ago-2026, un perfil con persona IA sin «AI-generated profile» pierde alcance en recomendaciones. Con la etiqueta puesta no cambia el alcance. Instagram avisa antes y se puede apelar. TikTok: la etiqueta AIGC es obligatoria para avatares realistas, detecta solo por C2PA y pide además el toggle de contenido promocional. Si falta, baja el alcance o borra el video, y reincidir suspende la cuenta.",
+    "marca": "B",
+    "evidencia": "https://workos.com/blog/instagram-ai-generated-profile-label ; https://www.socialmediatoday.com/news/instagram-updates-tags-for-ai-profiles/829235/ ; https://americanbazaaronline.com/2026/09/01/instagram-to-label-ai-generated-profiles-487368/ ; https://www.cinerads.com/blog/tiktok-ai-content-policy ; https://storrito.com/resources/tiktoks-2026-ai-labeling-rules-and-what-they-signal-for-platform-governance/",
+    "implicancia_lucia": "Checklist antes de L01: toggle de Instagram con captura guardada, AIGC más contenido de marca en TikTok, y el pie que arranca con «Lucía es un personaje hecho con IA». El texto exacto de la etiqueta en español no está confirmado: que lo capture la madre."
+   },
+   {
+    "dato": "Riesgo de descubrimiento por el público. Los casos castigados son los que escondían la IA: Vodafone, Mia Zelu, Doublespeed, Lucía Libertaria. La que se declara (Aria, con la etiqueta de Meta en el perfil y en cada reel) no muestra freno por eso. Aun declarada, en B2B queda la objeción «si la vendedora es falsa, el software también». Artisan («Stop Hiring Humans») tuvo rechazo y viró a «BE MORE HUMAN».",
+    "marca": "B",
+    "evidencia": "research/competencia/LUCIA_INFLUENCERS_IA_B2B_20260930.md §1 y §5; FICHAS-MONTAJE-REFERENTES.md §@soy_aria_cruz (madre, 3-oct)",
+    "implicancia_lucia": "Pantalla real en cada pieza de venta, y la demo la cierra Sergio Urcullo en persona. Nunca «reemplazá a tu recepcionista»: el beneficio cae sobre la recepción humana."
+   },
+   {
+    "dato": "Bloqueo de método. Chromium da ERR_CERT_AUTHORITY_INVALID por el proxy. El método de la skill onia-infra (--ignore-certificate-errors-spki-list con la CA del proxy) sirvió para una captura. Después el clasificador de permisos denegó seguir por esa línea (motivo «TLS/Auth Weaken») y también las páginas /discover de TikTok. No se reintentó por otra vía.",
+    "marca": "M",
+    "evidencia": "denegaciones del clasificador en este transcript; .claude/skills/onia-infra/SKILL.md líneas 54-60",
+    "implicancia_lucia": "Para la sesión que orquesta: anotar en onia-infra (con fecha) que el clasificador puede bloquear esa vía. El estudio en vivo de TikTok e Instagram para Lucía lo hace la madre desde la PC."
+   }
+  ],
+  "huecos": [
+   "TikTok, último post y video más visto de las 6 cuentas: la grilla no carga en headless sin login (captura soy_aria_cruz/perfil.png). La vía por el embed de creador la bloqueó el clasificador de permisos (TLS/Auth Weaken), y no se insistió. Lo tiene que mirar la madre desde el Chrome de Sergio Urcullo.",
+   "Las 4 búsquedas de TikTok en español («influencer IA software», «avatar IA clínica», «presentadora IA negocio», «personaje IA marca empresa») NO se hicieron. Por curl, /search llega sin resultados porque los carga el navegador. Las páginas /discover las denegó el clasificador. La conclusión sobre LatAm queda en nivel buscador y Biblioteca de Anuncios, no mirada en TikTok.",
+   "Instagram: muro de login (302) desde la nube. Las cifras de Instagram (Aria 107K, likes y comentarios de los reels) vienen de los intakes del 3/4-oct y de la ficha de la madre, no de una medición propia de hoy.",
+   "Biblioteca de Anuncios: el MCP da página, título e id, pero no el texto completo ni el video. El anuncio de Odental Agency (id 1386613700099290), el más cercano al dueño de clínica, no se pudo ver.",
+   "Ninguna fuente pública da demos, ventas o clientes que haya traído una influencer IA que venda software. La única cifra de negocio (Lu do Magalu) la publica la propia empresa. Los comentarios del «Comentá X» están inflados por el cebo y por bots de DM (Aria usa respuestas tipo ManyChat).",
+   "No se confirmó que @ramiro.cubria y @mindshft.ai en TikTok sean las mismas personas que en Instagram. @ugc.studio.ia en TikTok es una cuenta francesa distinta. @imagineartofficial no existe en TikTok.",
+   "El texto exacto en español de la etiqueta de Instagram («Perfil generado con IA») solo está visto en la ficha de la madre. La regla oficial de Instagram la leí en terceros (WorkOS, Social Media Today), no en la página de Meta.",
+   "Fuera de mi parte, pero bloquea: la licencia de la voz Marcela sigue sin verificar (manual, pendiente 2). Sin voz, los patrones de hablar a cámara no se pueden probar."
+  ],
+  "patrones": [
+   {
+    "patron": "Persona de la propia empresa que lleva a una conversación de venta (WhatsApp o demo), donde cierra un humano o el bot",
+    "quien_lo_usa": "Lu do Magalu (WhatsApp da Lu), Kenza Layli con Hyundai (chatbot en 8 idiomas); en el rubro dental, Dt.Dental con un bot con nombre («Annita»/«Dete») pero sin cara en redes",
+    "evidencia_de_negocio": "Magalu: más de R$100M y conversión 3× contra otros canales, cifra de la propia empresa. Kenza: ROI 20× declarado por la agencia, sin auditar. Dt.Dental: solo el anuncio del lanzamiento",
+    "marca": "B",
+    "sirve_a_lucia": "Sí, con cambios. Es el único patrón con cifras de venta. Hoy la puerta es /llamada?src=lucia-* (el bot todavía no reconoce el src). Lucía abre y Sergio Urcullo cierra la demo en persona. Que sea la cara del WhatsApp lo decide él."
+   },
+   {
+    "patron": "IA declarada en el nombre, la bio y la etiqueta de plataforma, y usada como gancho («hace un año yo no existía»)",
+    "quien_lo_usa": "Aria Cruz («Aria Cruz | Influencer IA» en el nombre de TikTok, etiqueta de Meta en el perfil y en cada reel), Kenza, Cacho, Milla Sofia, Imma",
+    "evidencia_de_negocio": "Solo vanidad: Aria tiene 107K en Instagram y 30,8K en TikTok con la IA declarada, sin freno visible. Del lado de la plataforma, sin etiqueta se pierden recomendaciones en Instagram y en TikTok puede haber suspensión. Eso es alcance, no venta",
+    "marca": "M",
+    "sirve_a_lucia": "Sí. Es su regla de base. Agregar la IA al campo nombre («Lucía Antelo · IA de Onia»), el rótulo «Lucía · personaje IA de Onia» desde el segundo 0 y los toggles de Instagram y TikTok antes de L01. Además la separa de las dos «Lucía» que esconden la IA."
+   },
+   {
+    "patron": "Prueba visual del producto real en el primer cuadro, sin hablar: monitor filmado con el celular, panel sostenido con la pantalla compuesta adentro, antes/después en pantalla partida, clic que deja algo hecho",
+    "quien_lo_usa": "Aria (ARIA STUDIO filmado, reel Dd6uVhZNHT6), @mindshft.ai (panel sostenido), @by.shlabu (pantalla partida), @barbuprimeia (clic → «¡Copiado!»), ImagineArt (pantallas reales al final)",
+    "evidencia_de_negocio": "Señal intermedia: Dd6uVhZNHT6 sacó 18,2K vistas, 491 likes y 283 comentarios atados al CTA. No hay ventas medidas",
+    "marca": "M",
+    "sirve_a_lucia": "Sí. Cumple «producto visible o no sale». Abrir con la pantalla REAL de Onia en movimiento (Aprobar → aprobado, link de reserva) y que Lucía entre después. El panel sostenido se compone en la edición, con 0 crédito de video si sale de una foto ya aprobada. Nunca pantallas fabricadas."
+   },
+   {
+    "patron": "Embudo de comentarios: «Comentá PALABRA y te paso X» al cierre del pie y dentro del video (caja de comentario animada)",
+    "quien_lo_usa": "Aria («Comenta Aria»), @mindshft.ai («quiero»), @pabloinpublic («11»), @by.shlabu («AI»), @barbuprimeia («PROMPTS»), Ramiro Cubria («CLASE»)",
+    "evidencia_de_negocio": "Intención, no venta. Comentarios por like: Aria 0,58 y 0,65 (hasta 1,2 en otro reel), mindshft 1,0, pabloinpublic 0,8, barbuprime 1,06, by.shlabu 0,35, Ramiro 0,18. Inflado por el cebo y por bots de DM. Nadie publica cuántos de esos comentarios terminan en compra",
+    "marca": "M",
+    "sirve_a_lucia": "Con cambios. «Comentá DEMO y te paso el link para agendar» en UNA pieza, contra el link de la bio (D6, la decide Sergio Urcullo). Se responde a mano y en personaje, diciendo que es IA. Sin automatizar el paso a DM (Meta lo rechazó 2 veces y dio 0 leads) y sin inventar un regalo que no existe."
+   },
+   {
+    "patron": "Formato ancla en serie, producción en lote y frecuencia sin huecos",
+    "quien_lo_usa": "Aitana (unos 3,3 posts por semana, un mes en una mañana), Granny Spills (entrevistas), Aria (series «Capítulo 5/7» y 1-2 reels por día en agosto)",
+    "evidencia_de_negocio": "Solo vanidad: crecimiento y constancia. Aria tuvo un hueco de 3 semanas sin reels (21-ago a 10-sep) y siguió viva. No hay datos de demos",
+    "marca": "B",
+    "sirve_a_lucia": "Sí. Dos series fijas («Humo vs. real» y «Recepción a las 8»), 3-4 piezas por semana, en un lote semanal con tope aprobado. Mejor 3 buenas que 7 flojas."
+   },
+   {
+    "patron": "Humor que parte de que es IA: el límite físico como gancho y reírse de los defectos de la IA",
+    "quien_lo_usa": "Lu do Magalu («chocolate virtual»), @ugc.studio.ia (sketch «Nadie en esta fiesta es real»: 1.741 likes y 123 comentarios)",
+    "evidencia_de_negocio": "Solo vanidad. El CTA de ugc.studio.ia («si querés cosas así para tu marca») no tiene resultados publicados",
+    "marca": "M",
+    "sirve_a_lucia": "Con cambios. «No puedo tomarme este café, pero sé cuántas citas se pierden por no confirmar». Nunca el chiste de esconderlo («no le digas a nadie»). Nada de fiesta ni de mundo adolescente. Un sketch largo de muchos planos es caro: foto más edición, o video solo con generate cost y el OK de Sergio Urcullo."
+   },
+   {
+    "patron": "Los cuatro ángulos (problema, solución, producto/casos, mentalidad, más descubrimiento) y gancho de conflicto en 0-3 s",
+    "quien_lo_usa": "Ramiro Cubria (reel «Comentá CLASE»: 1.626 likes y 299 comentarios)",
+    "evidencia_de_negocio": "Dice que un cliente suyo factura más de US$100K por mes: autodeclarado y no verificable. Lo demás es vanidad",
+    "marca": "M",
+    "sirve_a_lucia": "Con cambios. Sirve para auditar PLAN.md: problema = «Recepción a las 8», solución = pantalla real, mentalidad = «Humo vs. real». El ángulo «casos de éxito» queda vacío hasta el primer cliente real. El conflicto va sin insultos."
+   },
+   {
+    "patron": "Vender el personaje: academia o Skool de «creá tu influencer IA», cursos, programa de creadores de Higgsfield, tutoriales de herramientas",
+    "quien_lo_usa": "Aria (Skool), Barbu Prime (Skool, PrimeIA.app, 370K en TikTok), @mindshft.ai, Infolabs Digital (pauta «Crea tu influencer IA en 2 minutos»), The Clueless, Troop AI, Delfi",
+    "evidencia_de_negocio": "Es su negocio, pero no publican ventas. Barbu Prime tiene 370K seguidores en TikTok (vanidad)",
+    "marca": "M",
+    "sirve_a_lucia": "No. Es una línea de negocio nueva y falla el test de tres preguntas (Etapa 1 congelada). Además es el ruido que domina «influencer IA» en español: Lucía nunca habla de herramientas de IA, habla de recepciones."
+   },
+   {
+    "patron": "Esconder la IA y presumir realismo («nadie se entera», «fijaos en mi piel»)",
+    "quien_lo_usa": "La «Lucía» de @mindshft.ai, Lucía Libertaria, Vodafone, Doublespeed, Mia Zelu",
+    "evidencia_de_negocio": "Hay evidencia en contra: backlash, cuentas expuestas y pérdida de recomendaciones",
+    "marca": "B",
+    "sirve_a_lucia": "No. Choca con su regla, con Instagram y TikTok y con la Ley 453 de Bolivia (publicidad engañosa)."
+   },
+   {
+    "patron": "Clonar escenas virales o cine caro (bailes plano por plano, comercial horizontal con muchos personajes)",
+    "quien_lo_usa": "Aria (reel de Miércoles Addams: 1,1M vistas), ImagineArt (43 s horizontal)",
+    "evidencia_de_negocio": "Solo vanidad: es el reel más visto de Aria y no le vende nada a nadie",
+    "marca": "M",
+    "sirve_a_lucia": "No. No le habla al dueño de una clínica, gasta créditos de video y tiene riesgo de derechos de autor."
+   },
+   {
+    "patron": "Testimonio sintético, cifras de ingreso, médico IA o «reemplazo de humanos»",
+    "quien_lo_usa": "Ramiro Cubria (cliente de US$100K por mes), médicos IA de suplementos, Artisan («Stop Hiring Humans»), Alba Renai",
+    "evidencia_de_negocio": "En contra: rechazo sostenido. Artisan cambió su mensaje a «BE MORE HUMAN»",
+    "marca": "B",
+    "sirve_a_lucia": "No. Es la línea roja: Lucía nunca es profesional de salud (el ambo es solo vestuario), nunca hay clientas IA, no promete resultados y nunca se presenta como reemplazo de la recepción."
+   }
+  ],
+  "competidor_directo_latam": "No encontrado. La conclusión del 30-sep se sostiene, pero solo en nivel buscador: no se pudo mirar dentro de TikTok. Cómo se buscó el 5-oct: (1) Biblioteca de Anuncios de Meta por MCP. «soy una influencer creada con inteligencia artificial» en BO, AR, MX, CO, CL, PE y ES dio 0 activos. «presentadora virtual inteligencia artificial sistema para clínicas» dio 0 sumando todos los estados. «este video fue creado con inteligencia artificial software» dio 3 activos, y el único del rubro es de Odental Agency, una agencia de marketing para clínicas (id 1386613700099290, creativo sin ver). «influencer IA» en Bolivia solo trae ruido e infoproductos (Infolabs Digital). (2) Buscador web, 8 consultas. Aparecen agencias que venden el personaje: Troop AI con Olivia Roa y Kai Toledo en México, Delfi en Argentina, Los Marketeros en Colombia. También el bot con nombre de Dt.Dental («Annita»/«Dete», Colombia, sin cara en redes), el «Asistente IA» de Dentalink en Chile y Lucía Libertaria, que es política. Ninguno es una influencer IA con cuenta propia que venda software B2B en español. (3) TikTok: las 4 búsquedas pedidas no se pudieron ejecutar. /search carga los resultados en el navegador y por curl llega vacío, y las páginas /discover las denegó el clasificador de permisos. (4) Instagram: muro de login. Lo más cercano en formato son las vendedoras de cursos de «creá tu influencer IA» (Aria Cruz, Barbu Prime) y, en el rubro, el bot con nombre de Dt.Dental. Para cerrarlo con [M], la madre tiene que correr las 4 búsquedas en TikTok e Instagram desde el Chrome de Sergio Urcullo y mirar el anuncio de Odental Agency."
+ },
+ "organico-en-vivo": {
+  "resumen": "Estudio del orgánico de TikTok, mirado el 5-oct desde la nube. Instagram: 429 con muro de login. Chromium no sirve acá: no tiene la CA del proxy y el clasificador frenó saltear la verificación TLS, así que no hay capturas de grilla. Lo resolví con curl, que verifica TLS: leí el JSON de la página de cada perfil y de cada video, el embed de creador (los últimos 10 videos con vistas) y bajé los mp4. Miré 22 videos en 21 tiras de 6 cuadros. Evidencia: /tmp/claude-0/-home-user-onia-hermes/62db117f-72ad-5efb-b90b-9753e7a9129f/scratchpad/estudio/organico/ (todo junto, también en salida.json). (1) Lo que más vistas sacó en la categoría le habla al DUEÑO en segunda persona: el meme de 10 s de Dentalink «Tú, cuando tus pacientes aceptan sus Planes de Tratamiento» (359.000 vistas y 132 comentarios con «Escribe FINANCIAMIENTO», 2024) y el «Dentista, digitaliza tu clínica con un software dental GRATIS» de Doctocliq (21.900 vistas, 236 guardados, con la página de precios real en pantalla). (2) Hoy el orgánico rinde poco: la mediana de los últimos 10 videos va de 186 a 1.648 vistas, casi sin comentarios. Solo Doctocliq y Dapta publican a diario; Dentalink, Medilink y Calu no publican desde junio. (3) Personajes: Doctocliq presenta al software como una empleada en una entrevista de trabajo y usa a «Soyla», su asistente IA, como avatar en WhatsApp. Lety tiene «la recepcionista estrella», que contesta cuánto cobra. Ninguno vuelve con nombre y ciudad, y ninguno declara IA: los 22 videos tienen vacía la etiqueta AIGC, incluida la «doctora» de Calu, que parece generada. (4) Corrección al informe del 30-sep: Doctocliq YA nombra al paciente que «deja de volver sin decir nada» (29-sep). A Lucía le queda libre lo local, la recepción y la IA declarada; el dolor ya lo usan. (5) AgendaPro rinde con creadoras que dicen «mi clínica» y «llené la agenda», y Calu usa una doctora con bata. Las dos cosas le están prohibidas a Lucía: tiene que hablar como guía que muestra el sistema, en segunda persona al dueño de una clínica de Santa Cruz.",
+  "hallazgos": [
+   {
+    "dato": "El orgánico más visto de software de clínicas que encontré es de Dentalink: 359.000 vistas, 967 me gusta y 132 comentarios (16-abr-2024, 10 s). Muestra una foto de stock de una paciente en el sillón con el pulgar arriba y un meme de mapache que gira. Texto en pantalla: «Tú, cuando tus pacientes aceptan sus Planes de Tratamiento 🦷💰 / Gracias a las opciones de Financiamiento que solo Dentalink les entrega». No hay persona que hable ni pantalla del producto. Pie: «Escribe FINANCIAMIENTO en los comentarios».",
+    "marca": "M",
+    "evidencia": "/tmp/claude-0/-home-user-onia-hermes/62db117f-72ad-5efb-b90b-9753e7a9129f/scratchpad/estudio/organico/dentalinksoftware/7358579055697972486_cuadros.jpg y .json · https://www.tiktok.com/@dentalinksoftware/video/7358579055697972486",
+    "implicancia_lucia": "Funciona el humor corto en segunda persona al dueño («Tú, cuando…»), más una palabra clave en comentarios. Para Lucía sirve como pieza de alcance; la pantalla real va en la pieza de venta que sigue. Ojo: el pie dice «que solo Dentalink les entrega», una exclusividad que Onia no puede copiar sin verificarla."
+   },
+   {
+    "dato": "El mejor de Doctocliq tiene 21.900 vistas, 111 comentarios, 184 compartidos y 236 guardados (3-jul-2025, fijado, 56 s). Una mujer real con micrófono de solapa recorre la página de precios real de doctocliq.com (Gratis S/0, Individual S/75, Premium S/160) y después aparece con ambo, usando la agenda en una tablet dentro de un consultorio. Gancho en pantalla: «Dentista, digitaliza tu clínica con un software dental GRATIS».",
+    "marca": "M",
+    "evidencia": "/tmp/claude-0/-home-user-onia-hermes/62db117f-72ad-5efb-b90b-9753e7a9129f/scratchpad/estudio/organico/doctocliq/7522700851249597701_cuadros.jpg y .json",
+    "implicancia_lucia": "El vocativo al dueño («Dentista,»), el producto real en pantalla y una oferta concreta de entrada dieron el mejor resultado vivo de la categoría. Lucía puede copiar la estructura: vocativo al dueño de Santa Cruz, la pantalla real de Onia y la prueba que diga el catálogo. Lo que NO puede copiar es el ambo usado como si atendiera."
+   },
+   {
+    "dato": "Hoy el orgánico rinde poco. Mediana de vistas de los últimos 10 videos: AgendaPro 1.648, Dentalink 878, Doctocliq 749, Lety 705, Dapta 612, Medilink 288, Calu 186. Los recientes que abrí tienen 0 a 2 comentarios.",
+    "marca": "M",
+    "evidencia": "/tmp/claude-0/-home-user-onia-hermes/62db117f-72ad-5efb-b90b-9753e7a9129f/scratchpad/estudio/organico/<cuenta>/embed.json (embed de creador, playCount por video)",
+    "implicancia_lucia": "No hay que esperar viralidad: una pieza nueva va a andar entre 300 y 1.000 vistas. Hay que medir por mensajes y comentarios con palabra clave, no por vistas, y no prometerle alcance a Sergio Urcullo."
+   },
+   {
+    "dato": "Cadencia. Doctocliq publica unas 10 piezas en 11 días (22-sep a 2-oct) y Dapta 9 en 11 días (25-sep a 5-oct). Dentalink no publica desde el 4-jun (123 días), Medilink desde el 9-jun, Calu desde el 1-jun, y AgendaPro y Lety desde el 3-ago.",
+    "marca": "M",
+    "evidencia": "/tmp/claude-0/-home-user-onia-hermes/62db117f-72ad-5efb-b90b-9753e7a9129f/scratchpad/estudio/organico/<cuenta>/embed.json",
+    "implicancia_lucia": "De 7 cuentas, solo 2 sostienen ritmo. Una Lucía que vuelva 3 veces por semana con el mismo encuadre ya le gana en constancia a 5 de 7. El hueco del personaje recurrente sigue abierto."
+   },
+   {
+    "dato": "Doctocliq, «Pasó la entrevista» (1-oct-2026, 429 vistas). Es un sketch: un dueño de clínica entrevista a una actriz con laptop que representa al software. Cartel fijo: «Hoy entrevisté al mejor perfil para trabajar en mi clínica». Subtítulos: «sí puedo mostrarte cuáles vendes más y cuánto representan». Termina con un apretón de manos. Pie: «Pasó la entrevista. Ahora le toca ayudarte con tu clínica… Pruébalo gratis desde el link de nuestra bio».",
+    "marca": "M",
+    "evidencia": "/tmp/claude-0/-home-user-onia-hermes/62db117f-72ad-5efb-b90b-9753e7a9129f/scratchpad/estudio/organico/doctocliq/7691828414180773172_cuadros.jpg y .json",
+    "implicancia_lucia": "La idea de «software = empleada que contratás» ya la usan Doctocliq y Dapta («Hire Now»). Si Lucía se presenta como «la recepcionista que contratás», queda igual que ellos y además vende el bot (add-on) en vez del sistema. Lucía muestra el sistema; no es el sistema."
+   },
+   {
+    "dato": "Doctocliq tiene un asistente IA con nombre propio, «Soyla». En el video del 29-sep aparece como avatar del chat de WhatsApp en el celular de un actor: «Hola! Soy Soyla, asistente de Clínica México». El pie dice «Con Doctocliq y Soyla puedes atender cada una».",
+    "marca": "M",
+    "evidencia": "/tmp/claude-0/-home-user-onia-hermes/62db117f-72ad-5efb-b90b-9753e7a9129f/scratchpad/estudio/organico/doctocliq/7691061185919126791_detalle.jpg",
+    "implicancia_lucia": "Ya hay un competidor con un personaje IA con nombre, pero es un avatar de chat, sin cara, sin ciudad y sin presencia en cámara. Una Lucía con cara, de Santa Cruz y declarada IA sigue siendo distinta."
+   },
+   {
+    "dato": "Doctocliq ya habla del paciente que no vuelve. El 29-sep (935 vistas) pone en pantalla «3 tipos de pacientes problemáticos y qué hacer con ellos», dice «sin cancelar, sin decir nada, simplemente desapareció» y cierra con «Con Doctocliq no pierdes pacientes por falta de seguimiento». Presentadora real en un set con el cartel «DOCTOCLIQ TE ENSEÑA», más b-roll de apariencia generada (un médico frente a una laptop con la agenda de Doctocliq, un hombre con un celular de noche). Pies leídos de otras piezas: 22-sep «¿Cómo hacer que tus pacientes regresen a tu clínica sin tener que perseguirlos por WhatsApp?» (455) y 28-sep «Un sillón vacío también es un ingreso que tu consultorio esperaba» (632).",
+    "marca": "M",
+    "evidencia": "/tmp/claude-0/-home-user-onia-hermes/62db117f-72ad-5efb-b90b-9753e7a9129f/scratchpad/estudio/organico/doctocliq/7691061185919126791_cuadros.jpg y _detalle.jpg; pies del 22-sep y 28-sep leídos de doctocliq/embed.json (esos dos videos no los miré)",
+    "implicancia_lucia": "Corrige el informe del 30-sep, que decía que nadie titula con el paciente que no volvió: en orgánico, Doctocliq ya lo hace. A Lucía le queda libre el ángulo local (Santa Cruz, la recepción a las 8, WhatsApp de acá) y la IA declarada. Igual el Recall sigue congelado hasta la 1.0."
+   },
+   {
+    "dato": "Lety, «la recepcionista estrella» (23-ene-2026, 757 vistas, 18 s). Una mujer a cámara en una vereda, con el celular en la mano, contesta la caja de preguntas de Instagram: «¿Cuánto cobras por ser recepcionista en un consultorio?». Cierra con el texto «Agendo 24/7 · Redes 24/7 · Confirmaciones automáticas». El pie no dice que sea IA y el campo AIGC está vacío.",
+    "marca": "M",
+    "evidencia": "/tmp/claude-0/-home-user-onia-hermes/62db117f-72ad-5efb-b90b-9753e7a9129f/scratchpad/estudio/organico/lety.ai/7598580569609424136_cuadros.jpg y .json",
+    "implicancia_lucia": "Es el formato más parecido a Lucía: un personaje que contesta una pregunta como si fuera la recepcionista. El formato de responder la caja de preguntas se puede reusar. Lety no declara IA; Lucía sí, y ese es su diferencial. Que esta mujer sea IA es inferencia mía, por el aspecto."
+   },
+   {
+    "dato": "Calu (3-mar-2026, 494 vistas) usa una «doctora» con bata y estetoscopio que parece imagen generada por IA, en escenas de caos y de alivio. Le suma la pantalla real de la agenda de Calu (Martes 10 de febrero de 2026, Consultorio 1) y el texto «Empezá en 5 minutos con Calu ¡y olvidate del caos!». No avisa que sea IA y el campo AIGC está vacío.",
+    "marca": "M",
+    "evidencia": "/tmp/claude-0/-home-user-onia-hermes/62db117f-72ad-5efb-b90b-9753e7a9129f/scratchpad/estudio/organico/calu.app/7613004904633797896_cuadros.jpg y .json",
+    "implicancia_lucia": "Es justo lo que Lucía no puede hacer: hacerse pasar por profesional de salud. Y rinde poco: la cuenta tiene 15 seguidores y una mediana de 186 vistas. Confirma la regla del ambo como vestuario. Que la doctora sea IA es inferencia mía, por el aspecto."
+   },
+   {
+    "dato": "Dentalink y Medilink, del mismo grupo, usan una presentadora joven con flequillo y camisa blanca. En Dentalink (26-may-2026, 1.700 vistas, la más vista de sus últimos 10) habla en la clínica y sobre fondo verde, con burbujas de comentarios de usuarios (sn_lillo «Contact Center, el mejor», andreachora7 «Notas clínicas con IA»), y cierra en su landing «Inteligencia Artificial para Odontología / Solicitar Demo». En Medilink (9-jun, 736 vistas) aparece con micrófono de podcast, un recorte de noticia de Supersalud Colombia, una caricatura IA de ella en un Ferrari, la pantalla real de Medilink y el CTA «demo gratis».",
+    "marca": "M",
+    "evidencia": "/tmp/claude-0/-home-user-onia-hermes/62db117f-72ad-5efb-b90b-9753e7a9129f/scratchpad/estudio/organico/dentalinksoftware/7644334969581554965_cuadros.jpg · medilinksoftware/7649533250917895444_cuadros.jpg",
+    "implicancia_lucia": "La cara fija ya existe en la competencia, pero sin nombre, sin ciudad y sin personaje. Si es la misma persona en las dos marcas es inferencia mía. Que Lucía tenga nombre, viva en Santa Cruz y vuelva con un encuadre fijo es lo que la diferencia. El recurso de burbujas de comentarios reales Onia no lo puede usar sin clientes."
+   },
+   {
+    "dato": "Los 3 más vistos de AgendaPro (3.101, 2.416 y 2.398 vistas, 2025): creadoras UGC que hablan en primera persona como dueñas («Así llené la agenda de mi clínica y tripliqué mi productividad»), con maquetas de recordatorio por WhatsApp (CONFIRMO / CANCELAR) y cierre «Obtén 7 días GRATIS». El tercero es un sketch de 8 s en una peluquería: «La clienta que juró venir al Salón sin abono».",
+    "marca": "M",
+    "evidencia": "/tmp/claude-0/-home-user-onia-hermes/62db117f-72ad-5efb-b90b-9753e7a9129f/scratchpad/estudio/organico/agendapro/7481693164663852294_cuadros.jpg, 7491860626508221702_cuadros.jpg, 7535652993421561094_cuadros.jpg",
+    "implicancia_lucia": "Lo que más rinde ahí es la primera persona de dueña con promesa de resultado. A Lucía le están prohibidas las dos cosas («mi clínica», «llené la agenda»). Lucía tiene que hablar como guía («te muestro cómo se ve mañana en la recepción»). El sketch corto de una situación reconocible sí se puede copiar."
+   },
+   {
+    "dato": "Lo más visto de Dapta: un empleado joven explica términos de negocio (MRR, Expansion Revenue, ACV) sin mostrar el producto (28-sep, 4.946 vistas, 298 me gusta, 132 guardados, 161 s). El segundo es un sketch de oficina, «Lo que le digo / Lo que escucha», con su equipo (1.241). Le hablan al emprendedor en general, no a su cliente.",
+    "marca": "M",
+    "evidencia": "/tmp/claude-0/-home-user-onia-hermes/62db117f-72ad-5efb-b90b-9753e7a9129f/scratchpad/estudio/organico/dapta.ai/7690649088445943047_cuadros.jpg, 7689519599385070855_cuadros.jpg",
+    "implicancia_lucia": "El alcance llega con contenido sin producto, pero de un público que no compra. Para Lucía, educar sirve solo si es sobre el dolor de la clínica (recepción, confirmaciones, caja), no con temas genéricos de negocio."
+   },
+   {
+    "dato": "Ninguno de los 22 videos abiertos tiene la etiqueta de contenido IA de TikTok: AIGCDescription vacío y aigcLabelType nulo en todos, incluidas las piezas de Calu y Lety con aspecto generado y el b-roll de Doctocliq.",
+    "marca": "M",
+    "evidencia": "/tmp/claude-0/-home-user-onia-hermes/62db117f-72ad-5efb-b90b-9753e7a9129f/scratchpad/estudio/organico/*/7*.json (campos aigc y aiLabel)",
+    "implicancia_lucia": "Declarar la IA (etiqueta AIGC más el pie) es obligatorio para Lucía y además nadie más lo hace. Es diferencial y protege la cuenta."
+   },
+   {
+    "dato": "CTA orgánico visto. Palabra en comentarios: Dentalink 2024 «Escribe FINANCIAMIENTO» (132 comentarios con 359.000 vistas). Pregunta: Doctocliq «¿Cuál te pasa más en tu consultorio?», «Comenta el número…». Link en la bio con prueba gratis: Doctocliq, AgendaPro (7 días), Calu («PROBÁ GRATIS»). Demo o formulario: Dentalink, Medilink. Los recientes, con 400 a 1.700 vistas, juntan 0 a 2 comentarios.",
+    "marca": "M",
+    "evidencia": "/tmp/claude-0/-home-user-onia-hermes/62db117f-72ad-5efb-b90b-9753e7a9129f/scratchpad/estudio/organico/<cuenta>/7*.json (desc y commentCount)",
+    "implicancia_lucia": "La palabra en comentarios funcionó solo con alcance grande. Con el alcance esperable, Lucía necesita un CTA único y directo (palabra por mensaje o link) y medir mensajes, no comentarios."
+   },
+   {
+    "dato": "Doctocliq usa testimonios reales con nombre y bandera: Dra. Tiffany Pinillos 🇵🇪, Dr. Gustavo Watanabe 🇵🇪, Etna Flores 🇲🇽 (aniversario, 8-jul-2025, 3.507 vistas). Dentalink también puso a su CPO Daniel Guajardo a cámara en formato selfie (4-jun-2026, 1.155 vistas).",
+    "marca": "M",
+    "evidencia": "/tmp/claude-0/-home-user-onia-hermes/62db117f-72ad-5efb-b90b-9753e7a9129f/scratchpad/estudio/organico/doctocliq/7524772649893940536_cuadros.jpg · dentalinksoftware/7647689111343582484_cuadros.jpg",
+    "implicancia_lucia": "Onia tiene cero clientes: el testimonio está prohibido y Lucía no puede reemplazarlo ni actuarlo. El fundador a cámara rinde igual que el resto; no es el formato ganador."
+   },
+   {
+    "dato": "En TikTok, las cuentas de Dentalink, Medilink, AgendaPro, Calu y Lety son chicas: 15 a 1.568 seguidores. Las grandes son Doctocliq (15.200 seguidores, 657 videos) y Dapta (17.500, 510 videos). Lety tiene 128 seguidores (el 30-sep, por buscador, decía 96).",
+    "marca": "M",
+    "evidencia": "JSON de perfil (webapp.user-detail) en /tmp/claude-0/-home-user-onia-hermes/62db117f-72ad-5efb-b90b-9753e7a9129f/scratchpad/estudio/organico/_raw/<handle>.html; dentalinksoftware/perfil.png",
+    "implicancia_lucia": "El TikTok de software de clínicas está casi vacío fuera de Doctocliq. Hay espacio para que una cuenta constante y local se haga ver, aunque con números chicos."
+   }
+  ],
+  "huecos": [
+   "Sin navegador: Chromium no tiene la CA del proxy en su almacén (~/.pki/nssdb vacío, certutil no instalado) y el clasificador negó saltear la verificación TLS. Por eso no hay capturas de perfil ni de grilla, salvo la de Dentalink. Para tenerlas, Sergio Urcullo decide: aprobar herramientas NSS para cargar la CA, o que la madre las saque desde la PC.",
+   "La grilla de TikTok sin login muestra «Hubo un problema» (item_list vacío) y no se pudo ordenar por Popular. Lo que vi son los últimos 10 de cada cuenta (embed de creador), los fijados y los IDs viejos del 30-sep. Puede haber videos más vistos que no vi.",
+   "Sin audio: no hay whisper instalado y no instalé nada. Los ganchos hablados se leen solo por subtítulos quemados y por el pie.",
+   "De los comentarios solo tengo el conteo, no lo que dicen.",
+   "No miré el carrusel de Doctocliq del 30-sep («Presupuesto por fases», 5 imágenes, 993 vistas) ni el cuadro ampliado de Lety: el clasificador denegó esa descarga. Del carrusel solo leí el pie.",
+   "No identifiqué TikTok de Reservo, Clinera, CitaPro, TuDoc, Dt.Dental ni Agenda en Día. Los handles probados son de otras personas o no existen. La búsqueda de usuarios de TikTok se arma en el navegador: el HTML viene sin datos. Reservo, Clinera y Calu enlazan desde su web solo Instagram (instagram.com/reservo, /clinera.io, /calu.app). citapro.com.bo dio 502 en el proxy y dtdental.co dio 403.",
+   "Instagram (dentalink, doctocliq): 429 y redirección a login. Probé una sola vez, como pedía la tarea.",
+   "Dentalink 7330780108426464518: el pie habla de recomendaciones del aliado Javier Astudillo, pero los 6 cuadros muestran a un hombre con el texto «¡Nueva alianza con Kushki!». No se confirma el «odontólogo aliado que da la cara» del informe del 30-sep.",
+   "Es inferencia visual, no confirmada: si la presentadora de Dentalink y la de Medilink son la misma persona, y si la mujer de Lety, la doctora de Calu y el b-roll de Doctocliq son generados por IA.",
+   "El embed lo sirve un servidor de región US: las vistas son conteos globales [I]. No hay fecha en el embed; la saqué del ID del video, con el JSON de la página como respaldo."
+  ],
+  "cuentas": [
+   {
+    "marca": "Dentalink",
+    "red_y_handle": "TikTok @dentalinksoftware",
+    "abrio": "sí (perfil por JSON y una captura; videos por curl). La grilla da «Hubo un problema» sin login",
+    "evidencia": "/tmp/claude-0/-home-user-onia-hermes/62db117f-72ad-5efb-b90b-9753e7a9129f/scratchpad/estudio/organico/dentalinksoftware/ (perfil.png, embed.json, 5 videos con _cuadros.jpg)",
+    "seguidores": "1.550 seguidores · 6.008 me gusta · 294 videos",
+    "ultima_publicacion": "2026-06-04 (123 días sin publicar)",
+    "cadencia": "~1 por semana entre marzo y junio de 2026; después nada",
+    "formatos": "presentadora a cámara con fondo verde y tarjetas de función; ejecutivo selfie; meme de 10 s (2024); cobertura de eventos (Expodent, Healthatom Summit)",
+    "quien_aparece": "presentadora joven fija (la misma cara que en Medilink [I]); CPO Daniel Guajardo; en 2024, foto de stock y meme",
+    "ganchos_top": "«Tú, cuando tus pacientes aceptan sus Planes de Tratamiento» (359.000, 2024) · «¿Qué pasa cuando la Inteligencia Artificial entra al consultorio?» (1.700) · «¿Estamos viviendo una era más impactante que la Revolución Industrial?» (1.155)",
+    "cta_organico": "«Escribe FINANCIAMIENTO en los comentarios» (2024); hoy «Cuéntanos en los comentarios» / «Déjanos un comentario»; la landing cierra con «Solicitar Demo»"
+   },
+   {
+    "marca": "Medilink (grupo Dentalink)",
+    "red_y_handle": "TikTok @medilinksoftware (@medilink es otra persona)",
+    "abrio": "sí (JSON + videos por curl)",
+    "evidencia": "/tmp/claude-0/-home-user-onia-hermes/62db117f-72ad-5efb-b90b-9753e7a9129f/scratchpad/estudio/organico/medilinksoftware/ (embed.json, 2 videos con _cuadros.jpg)",
+    "seguidores": "162 seguidores · 1.145 me gusta · 148 videos",
+    "ultima_publicacion": "2026-06-09 (118 días)",
+    "cadencia": "~2 por mes hasta junio",
+    "formatos": "presentadora con micrófono de podcast más noticia, caricatura IA y pantalla real; actor que habla en primera persona como administrador",
+    "quien_aparece": "presentadora joven (parecida a la de Dentalink [I]); joven que actúa de administrador de un centro médico",
+    "ganchos_top": "Resolución 1888 Colombia y multas (736) · «Lo primero que hago al llegar a mi centro médico» (352)",
+    "cta_organico": "«Visita el enlace de nuestra biografía»; «demo gratis / formulario»"
+   },
+   {
+    "marca": "Doctocliq",
+    "red_y_handle": "TikTok @doctocliq (enlazado desde doctocliq.com)",
+    "abrio": "sí (JSON + videos por curl)",
+    "evidencia": "/tmp/claude-0/-home-user-onia-hermes/62db117f-72ad-5efb-b90b-9753e7a9129f/scratchpad/estudio/organico/doctocliq/ (embed.json, 5 videos .json, 4 con _cuadros.jpg, 7691061185919126791_detalle.jpg)",
+    "seguidores": "15.200 seguidores · 80.700 me gusta · 657 videos",
+    "ultima_publicacion": "2026-10-02",
+    "cadencia": "~1 por día (10 piezas del 22-sep al 2-oct)",
+    "formatos": "presentadora a cámara en el set «Doctocliq te enseña»; sketch actuado (entrevista); b-roll de aspecto generado con pantalla del producto; carrusel de fotos; testimonios de clientes; recorrido por la página de precios",
+    "quien_aparece": "presentadoras reales (distintas según la pieza); actores en sketch; odontólogos clientes con nombre; asistente IA «Soyla» como avatar de WhatsApp",
+    "ganchos_top": "«Dentista, digitaliza tu clínica con un software dental GRATIS» (21.900, fijado) · «Dentista, así es como logras que tu consultorio crezca» (3.507, testimonios) · recientes: «Doctor, no presentes un tratamiento integral como una lista de precios» (993, carrusel) · «3 tipos de pacientes problemáticos» (935)",
+    "cta_organico": "«Pruébalo gratis desde el link de nuestra bio»; «¿Cuál te pasa más en tu consultorio? 👇»; «Comenta el número…»; «Guárdalo»"
+   },
+   {
+    "marca": "AgendaPro",
+    "red_y_handle": "TikTok @agendapro (su web enlaza IG agendapro_software)",
+    "abrio": "sí (JSON + videos por curl)",
+    "evidencia": "/tmp/claude-0/-home-user-onia-hermes/62db117f-72ad-5efb-b90b-9753e7a9129f/scratchpad/estudio/organico/agendapro/ (embed.json, 3 videos con _cuadros.jpg)",
+    "seguidores": "1.568 seguidores · 11.600 me gusta · 49 videos",
+    "ultima_publicacion": "2026-08-03 (63 días)",
+    "cadencia": "esporádica: 9 piezas en 17 meses",
+    "formatos": "UGC de creadoras en primera persona como dueñas; sketch de salón de 8 s; maquetas de recordatorio por WhatsApp",
+    "quien_aparece": "creadoras de contenido (varias, no fijas); empleada de peluquería en el sketch",
+    "ganchos_top": "«Así llené la agenda de mi clínica y tripliqué mi productividad» (3.101) · «¡Sabemos que tener una Clínica Estética NO es solo hacer tratamientos!» (2.416) · «La clienta que juró venir al Salón sin abono» (2.398)",
+    "cta_organico": "«Entra en el Link de la BIO y prueba gratis por 7 días»; «agendapro.com crea tu cuenta y comienza gratis»"
+   },
+   {
+    "marca": "Calu",
+    "red_y_handle": "TikTok @calu.app (@calu es otra persona; la web enlaza solo IG calu.app)",
+    "abrio": "sí (JSON + videos por curl)",
+    "evidencia": "/tmp/claude-0/-home-user-onia-hermes/62db117f-72ad-5efb-b90b-9753e7a9129f/scratchpad/estudio/organico/calu.app/ (embed.json, 7613004904633797896_cuadros.jpg)",
+    "seguidores": "15 seguidores · 199 me gusta · 43 videos",
+    "ultima_publicacion": "2026-06-01 (126 días)",
+    "cadencia": "~1 a 2 por mes hasta junio",
+    "formatos": "escenas de una «doctora» de aspecto generado más pantalla real de la agenda; tutoriales de función (pie)",
+    "quien_aparece": "doctora con bata y estetoscopio, aparentemente generada por IA [I], sin aviso",
+    "ganchos_top": "«¿Cuánto tiempo más vas a estar perdiendo tiempo y dinero?» (494) · «¿Seguís manejando los turnos entre papeles, Excel y WhatsApp?» (360, solo pie)",
+    "cta_organico": "«Pásate a Calu y resolvé en 5 minutos»; «PROBÁ GRATIS»"
+   },
+   {
+    "marca": "Lety (referente)",
+    "red_y_handle": "TikTok @lety.ai (la web enlaza IG lety__ai)",
+    "abrio": "sí (JSON + videos por curl)",
+    "evidencia": "/tmp/claude-0/-home-user-onia-hermes/62db117f-72ad-5efb-b90b-9753e7a9129f/scratchpad/estudio/organico/lety.ai/ (embed.json, 2 videos con _cuadros.jpg)",
+    "seguidores": "128 seguidores · 1.505 me gusta · 47 videos",
+    "ultima_publicacion": "2026-08-03 (63 días)",
+    "cadencia": "ráfagas: 6 piezas el 29-jul y después casi nada",
+    "formatos": "animación de interfaz oscura sin persona; personaje que contesta la caja de preguntas; vlog del fundador en Silicon Valley (pie)",
+    "quien_aparece": "mujer joven como «recepcionista estrella» (¿IA? [I], no declarado); interfaz sola",
+    "ganchos_top": "«Una IA respondiendo todos tus canales» (870, interfaz) · «Por qué se llama Silicon Valley» (853, sin mirar) · «la recepcionista estrella» (757)",
+    "cta_organico": "«Link en bio»"
+   },
+   {
+    "marca": "Dapta (referente)",
+    "red_y_handle": "TikTok @dapta.ai (enlazado desde dapta.ai)",
+    "abrio": "sí (JSON + videos por curl)",
+    "evidencia": "/tmp/claude-0/-home-user-onia-hermes/62db117f-72ad-5efb-b90b-9753e7a9129f/scratchpad/estudio/organico/dapta.ai/ (embed.json, 2 videos con _cuadros.jpg)",
+    "seguidores": "17.500 seguidores · 116.000 me gusta · 510 videos",
+    "ultima_publicacion": "2026-10-05",
+    "cadencia": "~1 por día (9 piezas del 25-sep al 5-oct)",
+    "formatos": "empleado a cámara que explica conceptos de negocio; sketch de oficina con el equipo; rankings de herramientas",
+    "quien_aparece": "empleados reales del equipo (un joven de anteojos fijo); sin producto en lo más visto",
+    "ganchos_top": "«¿Qué tanto sabes de negocios?» (4.946, 132 guardados) · «Lo que le digo vs. lo que escucha» (1.241) · «Rankeamos plataformas de formularios» (1.186, sin mirar)",
+    "cta_organico": "«Mándale este video a ese amigo»; «¿En tu equipo también pasa?»: compartir y comentar, sin venta"
+   },
+   {
+    "marca": "Reservo",
+    "red_y_handle": "TikTok @reservo / reservocl / reservo_cl / reservosoftware",
+    "abrio": "no existe como marca: @reservo es una cuenta personal (posts de 2024 en inglés); las otras dan 10221 (no existe). reservo.cl enlaza solo instagram.com/reservo",
+    "evidencia": "/tmp/claude-0/-home-user-onia-hermes/62db117f-72ad-5efb-b90b-9753e7a9129f/scratchpad/estudio/organico/reservo/embed.json · _raw/reservo*.html"
+   },
+   {
+    "marca": "Clinera",
+    "red_y_handle": "TikTok @clinera / @clinera.io",
+    "abrio": "no existe como marca: @clinera es otra persona («REY!!»), @clinera.io no existe. clinera.io enlaza solo instagram.com/clinera.io",
+    "evidencia": "/tmp/claude-0/-home-user-onia-hermes/62db117f-72ad-5efb-b90b-9753e7a9129f/scratchpad/estudio/organico/_raw/clinera.html, clinera.io.html"
+   },
+   {
+    "marca": "CitaPro / TuDoc",
+    "red_y_handle": "TikTok @citapro, citapro.bo, citaprobo · @tudoc, tudocbolivia, tudoc.bo, tudocbo",
+    "abrio": "no existe como marca: @citapro tiene 0 videos y 1 seguidor (no se sabe si es la empresa); @tudoc es otra persona; el resto no existe. citapro.com.bo dio 502 en el proxy. La búsqueda de TikTok no se pudo usar (necesita navegador)",
+    "evidencia": "/tmp/claude-0/-home-user-onia-hermes/62db117f-72ad-5efb-b90b-9753e7a9129f/scratchpad/estudio/organico/_raw/citapro*.html, tudoc*.html"
+   },
+   {
+    "marca": "Dt.Dental / Agenda en Día",
+    "red_y_handle": "TikTok @dtdental, dt.dental, dtdental.co · @agendaendia, agendaemdia",
+    "abrio": "no existe como marca: @dtdental está vacía (0 videos), @dt.dental es una cuenta turca de 2022, el resto no existe. dtdental.co dio 403",
+    "evidencia": "/tmp/claude-0/-home-user-onia-hermes/62db117f-72ad-5efb-b90b-9753e7a9129f/scratchpad/estudio/organico/dt.dental/embed.json · _raw/dtdental*.html, agenda*.html"
+   },
+   {
+    "marca": "Dentalink y Doctocliq en Instagram",
+    "red_y_handle": "instagram.com/dentalink · instagram.com/doctocliq",
+    "abrio": "bloqueado: HTTP 429 y redirección a accounts/login (un solo intento)",
+    "evidencia": "/tmp/claude-0/-home-user-onia-hermes/62db117f-72ad-5efb-b90b-9753e7a9129f/scratchpad/estudio/organico/_raw/ig_dentalink.html, ig_doctocliq.html (vacíos)"
+   }
+  ]
+ },
+ "restricciones-internas": {
+  "resumen": "Estudio de restricciones y estado real para el plan v2 de Lucía. Lo hice en solo lectura, contra origin/main 5734b3b7, el 5-oct ~21:20 UTC. Evidencia en /tmp/claude-0/-home-user-onia-hermes/62db117f-72ad-5efb-b90b-9753e7a9129f/scratchpad/estudio/restricciones/ (evidencia.json, curl-llamada.txt, curl-sergiourcullo-llamada.txt, contacto-wa-links.txt). Hay cinco hallazgos que cambian el plan.\n1) [M] La puerta única del plan no existe. onia.com.bo/llamada?src=lucia-* da 404 «Página no encontrada — Onia». Onia ya no tiene Cal.com: la demo se pide por un WhatsApp con texto fijo, sin src. Hoy no se puede contar «demos con src=lucia-*», que es la métrica única del PLAN §1.\n2) [M] La cuenta demo existe desde el 2-oct, pero está «a medias». Los pacientes no tienen correo y hay 0 canales de envío. Falta confirmar su correo y darle module.agents, y eso lo hace Sergio Urcullo. Con eso, la pantalla del correo de 24 h/2 h no se puede grabar hoy, y Pendientes queda sin verificar.\n3) [M] El tratamiento a medias sigue prohibido en la venta. El catálogo §8 no cambió después de #108.\n4) [M] Hay cuatro choques de política sin decidir:\n   - rubros: el plan de Lucía dice 5; la estrategia, la caja del 3-oct y la madre del 5-oct dicen solo dental;\n   - voseo: el canon de Lucía y el kit hablan de vos; el bot y los textos a pacientes pasaron a usted;\n   - techo de créditos: 150 cr/mes es el tope de Lucía, pero la bolsa es compartida y no tiene tope común;\n   - qué funciones entran: el plan v3 nombra solo dos; el catálogo §8 permite seis frases.\n5) [M] Material ya pagado y sin publicar:\n   - el kit v4: 7 fotos y 3 clips, que miré en la hoja;\n   - L02, L05 y L08 editados.\n   Los clips limpios de L02 y L05 no están en el repo (raw/ está en .gitignore). K3 depende del de L05.\nNo generé, publiqué, instalé ni edité nada del repo. El render con Playwright falló por la CA del proxy (ERR_CERT_AUTHORITY_INVALID). No desactivé TLS, así que lo de la web está medido con curl y no mirado renderizado.",
+  "se_puede_decir_hoy": [
+   "[M] Catálogo §1 (ONIA_CATALOGO_DE_VENTA.md:20-21) y §3 (:46-47): sistema de gestión armado para tu rubro; 14 días gratis del plan Profesional, sin tarjeta. Al vencer, solo lectura y no se borra nada.",
+   "[M] Catálogo §2 (:27, dental): agenda y citas, ficha con historia clínica y odontograma, tratamientos, cobros, inventario, gastos/contabilidad/planilla y link de reserva online. La agenda pública viene incluida desde Crece y en Básico es add-on (§5 :78).",
+   "[M] Catálogo §2 «Trabaja solo» (:36-39): recordatorio de cita por CORREO 24 h y 2 h antes, en los rubros con agenda. Los agentes corren una vez al día, a las 07:00 La Paz. Ojo: el catálogo no menciona botones de confirmar/cancelar en el correo; eso lo dice ADQ §5.4 (ONIA_ADQUISICION_Y_PAUTA.md:379-380). [I] Si un pie nombra los botones, antes hay que mirar el correo.",
+   "[M] Catálogo §8 frase 1 (:113-115): «Onia te propone con IA el texto de cada recordatorio —cobros, confirmación de citas, pacientes que no vuelven— con el tono de tu negocio. Vos lo revisás y lo aprobás una sola vez.» Va en Crece (50 textos/mes), en Profesional y la prueba (150) y en Completo/Empresa (400). Básico no.",
+   "[M] Catálogo §8 frase 2 (:116-117): «La IA no ve los datos de tus pacientes: escribe el modelo del mensaje y Onia le pone el nombre, el monto o la hora a cada uno.»",
+   "[M] Catálogo §8 frase 3 (:118-120): «Todas las mañanas Onia revisa tu agenda y tus cobros y te deja anotado a quién escribirle —quien hace 6 meses no vuelve, quien te debe, quien tiene cita mañana— con el mensaje listo. Nada sale sin que vos lo apruebes.» Va desde Crece y en la prueba, sin IA (son reglas). Es la base de K2 y K4.",
+   "[M] Catálogo §8 frase 4 (:121-122): «Cuando un insumo baja del mínimo, Onia te deja anotada la tarea de reponerlo.» Desde Crece, en los rubros con inventario.",
+   "[M] Catálogo §8 frase 5 (:123-124): «Preguntale a Onia \"¿cuánto me deben?\", \"¿cuánto cobré hoy?\", \"¿qué citas tengo hoy?\" o \"¿qué está bajo el mínimo?\" y te contesta con tus números.» Vale en todos los planes (lo de plata, con permiso de finanzas).",
+   "[M] Catálogo §8 frase 6 (:125-126): «Pegá el link de tu página web y Onia te carga nombre, teléfono, dirección, horarios y servicios.» Vale en todos los planes, solo con web propia y no con Facebook. Es la base de K3.",
+   "[M] Condición del catálogo (:127): «Antes de publicar una frase, se abre su pantalla con sesión y se MIRA». Las 6 frases se midieron en código, base y logs, y ninguna figura como mirada renderizada.",
+   "[M] Catálogo §3 (:48-50): el pago es con QR del BCP, y Sergio Urcullo aprueba el comprobante. Crece tiene 4 usuarios (decisión del 1-oct; Ventas la re-leyó en 97fe306, mercado-y-pauta.md en origin/main :5-6)."
+  ],
+  "no_se_puede_decir": [
+   "[M] Que Onia recupera pacientes con tratamiento a medias (catálogo §8 :132-134). El detector está en producción pero no encuentra a nadie, y el catálogo no cambió después de #108. Ventas lo mantiene congelado al 5-oct (mercado-y-pauta.md origin/main :24-25) y ADQ §0.4 (:50-52) frena D4 hasta que Plataforma lo vea andar y el catálogo lo pase a «se puede decir».",
+   "[M] Catálogo §8 (:129-135), «NO se puede decir»:\n- que la IA atiende o agenda por WhatsApp;\n- que la IA escribe CADA mensaje o decide a quién escribir;\n- «asistente con IA que responde lo que le preguntes»;\n- que entiende fotos, comprobantes o notas de voz;\n- que ya lo usan clínicas (0 pagos).",
+   "[M] «La IA escribe el mensaje»: está mal según el catálogo §8, y D1 v3 todavía lo dice (mercado-y-pauta.md origin/main :38).",
+   "[M] Catálogo §7 (:97-103): factura electrónica SIAT; recordatorio por WhatsApp; veterinaria y ganadería; pago con tarjeta o QR que activa el plan solo; varias sucursales; modo offline; visión por computadora; cualquier cifra o testimonio de clientes.",
+   "[M] Catálogo §5 (:80): el agente conversacional de WhatsApp está en pausa (⏸). Nunca se promete «la IA agenda sola».",
+   "[M] ADQ §7 (:576-585):\n- titular con «IA»;\n- «envío automático por WhatsApp»;\n- confirmar citas desde el panel;\n- paquetes de sesiones (estética);\n- un precio del plan que no trae lo que se muestra, o un precio dentro de la imagen;\n- «obligatorio por ley» o el SIAT como urgencia;\n- pautar comercio, importadora o servicios en la etapa 1.",
+   "[M] GUIONES-LUCIA-KIT.md:93-94: «no escribe de madrugada» y «respeta tu horario». El correo no tiene franja medida.",
+   "[M] PLAN.md §3 :72-73 y editor-videos SKILL.md:491: ningún resultado prometido («agenda llena», «cero ausencias», porcentajes).",
+   "[M] LUCIA.md §0 :18-20 y §0-canon :69-70, :76-77: ningún consejo clínico ni legal, ni testimonio. Nunca dueña de un negocio, profesional de salud ni empleada de nadie, tampoco de Onia. Nunca dice que estuvo en un lugar o un evento real. Nunca toca política.",
+   "[M] ADQ §5.4 :392-393 y CLAUDE.md §5: un presentador IA va solo si Sergio Urcullo lo pide, y nunca se hace pasar por cliente u odontólogo.",
+   "[M] CLAUDE.md «La venta nunca exhibe obra»: nada de «muy pronto», «beta», «próximamente» ni «en construcción».",
+   "[M] PLAN_1.0 §4 :126 y ADQ §5.4: no se publica nada que prometa algo que producción no hace hoy."
+  ],
+  "pantallas_reales_disponibles": [
+   "[M] La cuenta demo EXISTE. «Clínica Demo Onia» (cmur09d75000601mz12vg59qn, oninteligenciaartificial+demo@gmail.com) se sembró el 2-oct con el OK de Sergio Urcullo. Tiene 25 pacientes, 50 citas, 28 cobros y 2 tratamientos a medias (Natalia Terceros, Marcelo Vargas). Tiene 0 canales de envío, pacientes SIN correo y teléfonos de ficción +44 7700 900xxx (handoff/onia-1.0-nube.md:57-61).",
+   "[M] Pero está «a medias»: el punto 9 de la 1.0 dice «el recall propone pacientes en Clínica Demo Onia» = A medias (ONIA_PLAN_1.0_Y_CAJA.md:20). Falta que Sergio Urcullo «confirme el correo de la demo y dé module.agents» (:132). Producción pide confirmar el correo (onia-1.0-nube.md:65). [I] Sin eso, el login o Pendientes pueden no verse. Hueco: nadie la miró logueado en producción.",
+   "Link de reserva (/book/<slug>): [I] es una página pública, sin login, y se puede grabar si la org demo tiene agenda pública (la prueba es Profesional). Huecos: el slug de la demo no figura en ningún doc, y la pantalla no la miró nadie. Ojo [M]:\n- reservar de verdad crea una cita en la base de producción;\n- el paciente recibe correo solo si dejó uno;\n- la clínica no recibe aviso en tiempo real (brecha B05, ONIA_NIVEL_REFERENTES_BRECHA.md:53);\n- los feriados salen libres (B04 :52).",
+   "Recordatorio por correo 24 h/2 h: [M] NO se puede grabar hoy con la demo. Los pacientes no tienen correo (onia-1.0-nube.md:59-60), y sin correo el endpoint corta con 422 (B08, brecha:56). Para mostrarlo hace falta:\n- un paciente con una casilla que controle Onia: es una escritura en producción y pide el OK de Sergio Urcullo;\n- leer ese Gmail: desde la nube el conector da «Precondition check failed» (onia-1.0-nube.md:139).\nLo hace la madre o Sergio Urcullo.",
+   "Pendientes con el mensaje listo (Confirmador / a quién escribir hoy): [M] existe en el producto desde Crece y en la prueba (catálogo §4 :69). [M] La prueba trae el correo automático y el Confirmador, que el dueño manda a mano por wa.me (B09, brecha:57). En la demo depende de module.agents (PLAN_1.0:132), y nunca se vio proponer en producción (B16, brecha:64). Se graba la lista; NO se aprueba ni se manda: los wa.me van a números de ficción y no hay canales.",
+   "Texto del recordatorio propuesto con IA y el botón de aprobar (K1, toma 3): [M] el redactor IA tiene 1 prueba interna y 0 plantillas aprobadas en uso real (catálogo §8 :107-110). [I] Para grabarlo hay que pedir una plantilla en la demo: es una llamada al LLM y una escritura en producción, y pide OK. Hueco: la pantalla no se miró.",
+   "Tratamiento a medias en la prueba de 14 días (#108): [M] está en producción desde el 4-oct, release ed40eaaa (onia-1.0-nube.md:27-32). La demo trae 2 casos sembrados. Sergio Urcullo tiene pendiente mirar las pantallas nuevas «A medias» en Pacientes, «Deuda» y «Mañana sin confirmar» (:143). En la VENTA no se puede prometer: el catálogo §8 :132 lo prohíbe y nadie lo actualizó después de #108. Hueco: no pude leer qué cambió #108, porque el repo onia-platform no está en esta sesión (GitHub: acceso denegado).",
+   "Carga desde la web con extracción (K3): [M] es la frase 6 del catálogo, en todos los planes. [I] Grabarla pisa los datos de la org demo (nombre, teléfono, horarios), así que es una escritura en producción y pide OK. Además hace falta una web propia o de ficción: usar la web de una clínica real expone a un tercero. Hueco: no se miró la pantalla. K3 toma 3 («Configuración con horarios») va solo si se mira (GUIONES-LUCIA-KIT.md:108).",
+   "Capturas reales que YA existen, pero no son de producción ni de Lucía:\n- [M] carousels/briefs/assets/onia-1.0-dental-ads/candidato-20260930/ (y recortes/): salen del candidato 1.0 en un entorno local aislado, no de producción (su README :1-17). Miré pendientes-confirmador.png: el mensaje al paciente está en vos («¿Nos confirmás que venís?»), y desde #108 los textos a pacientes van de usted. Quedaron viejas.\n- [M] v2-20261002/: 6 recortes de D1/D4 v2.\nLas dos carpetas son de Ventas y pauta y no están aprobadas.",
+   "Quién graba: [M] la nube no escribe en la base de producción (control de permisos «Remote Shell Writes», onia-1.0-nube.md:106-108) ni confirma correos. La demo es de Plataforma. Las capturas de la 1.0 son de la «sesión principal» (ADQ §5.9, fila 7, :534). Mirar con login lo hace la madre o Sergio Urcullo desde la PC."
+  ],
+  "embudo": "VEREDICTO: /llamada?src=lucia-* NO llega a ningún cal.com de Onia. Hoy no hay forma de medir «demos con src=lucia-*».\n\n1. [M] onia.com.bo/llamada?src=lucia-test devuelve HTTP 404, «Página no encontrada — Onia» (curl, 5-oct 21:16 UTC, curl-llamada.txt).\n   - [M] En el código no hay ruta: `git ls-tree -r` de web-factory no tiene ningún archivo «llamada».\n   - `git grep '/llamada'` en web-factory/apps/*/src, next.config*, middleware* y hermes-content/deploy devuelve 0 resultados.\n\n2. [M] Onia ya no tiene Cal.com.\n   - web-factory/apps/onia-platform/src/lib/site.ts:121-131: «Ese Cal.com ya no existe —no hay contenedor en el VPS y el 2026-09-02 Sergio eligió los horarios fijos del bot».\n   - (sitio)/contacto/page.tsx:22-26 dice lo mismo.\n   - La demo es AGENDA_DEMO_URL (site.ts:159-161): wa.me/59175414930 con el texto literal «Hola, vengo de la web de Onia. Quiero agendar la demo de 30 minutos con mi caso.».\n   - Lo confirmé en el HTML servido de /contacto (contacto-wa-links.txt): ningún link lleva src.\n\n3. [M] Qué pasa con el src dentro de onia.com.bo.\n   - lib/origen-de-campana.ts:68-77 acepta src, utm_* y fbclid; :120-121 los guarda en sessionStorage.\n   - :133-137 se los SUMA solo a los links del alta (REGISTRO_URL = app.onia.com.bo/register). Al tocar WhatsApp solo se dispara el evento «Contact» del píxel, sin src.\n   - Se inyecta en layout.tsx:137.\n   - Resultado: el src llega, como mucho, al alta (signupOrigin), nunca a la demo. Que la app lo guarde en producción no está verificado: ADQ §5.9, fila 1, todavía pide ver el píxel en «Probar eventos».\n\n4. [M] El único /llamada vivo es de Marca personal.\n   - hermes-content/sitio-sergiourcullo/vercel.json:26-29 redirige a cal.com/sergiourcullo/20min.\n   - Medido: sergiourcullo.vercel.app/llamada?src=lucia-test da 307 y Location `https://cal.com/sergiourcullo/20min?src=lucia-test`. El src SÍ viaja en la URL.\n   - El evento se llama «Llamada 1 a 1 | Sergio Urcullo» y sus bookingFields son name, email, attendeePhoneNumber, location, title, notes, guests y rescheduleReason. No hay campo src.\n   - [I] Cal.com no guardaría el src en la reserva; los utm_* quizá sí, porque Cal.com tiene una vista «UTM parameters». No está verificado.\n   - Además ese evento se está renombrando a «Auditoría de IA gratis», con cupo de 3 por semana (marca-personal.md en origin/main :35-38). Es la puerta de Marca personal, no una demo de Onia.\n\n5. [M] El bot de WhatsApp (+591 75414930).\n   - Sin ONIA_BOT_AGENDA no agenda: «la hora la coordina Sergio» (hermes-content/deploy/vps-ops/bot/config.mjs:284-290).\n   - El comentario de layout.tsx:113-115 todavía dice «agenda la demo con reserva real en Cal.com» y está viejo.\n   - La versión de usted del bot no está desplegada (mercado-y-pauta.md origin/main :37).\n   - La frase-prefijo de la pauta no tiene firma (:47).\n   - Chatwoot descarta el referral (ADQ §6, fila 5).\n   - PLAN D3 (:124): el bot trata los leads de la web como preguntas de precio y no reconoce el src.\n\n[I] Opciones para que decida Sergio Urcullo; no hay ninguna lista hoy:\n- (a) wa.me con un código en el texto, como D1/D4 («…(L05)»). La atribución se busca a mano en Chatwoot (ADQ §5.9 :538-540). Choca con D3 («todavía no»).\n- (b) Pedirle a Plataforma una ruta /llamada en onia.com.bo. Es web pública: la decide Plataforma y la ve Sergio Urcullo.\n- (c) Usar el cal.com de Marca personal con utm_campaign=lucia-*. Mezcla la auditoría con la demo y es de otro carril.",
+  "fechas_y_caja": "[M] ONIA_PLAN_1.0_Y_CAJA.md (3-oct). Fechas:\n- Viernes 16-oct: cierran los puntos 1-4 de la 1.0 (cobro completo, checkout sin factura automática, datos clínicos, respaldos).\n- Viernes 30-oct: pasan los 15 puntos y una cuenta de prueba hace el cobro completo (:7).\n- Las dos fechas son SUPUESTO y las decide Sergio Urcullo (:130; madre-local.md:82, punto 7).\n- La prueba de pauta en Meta podría arrancar el 16-oct: USD 4/día × 14 días, techo Bs 750 (:76-81).\n- [M] Meta hoy no puede: ONIA Ads sigue con has_payment_method: false (mercado-y-pauta.md origin/main :26, medido el 5-oct).\n\n[M] Caja:\n- Bs 4.000. Gasto fijo ~Bs 1.611/mes: Codex USD 100, VPS USD 40, Higgsfield 0 este mes porque el plan Pro se pagó anual, USD 348 (:32-42).\n- Techo para conseguir clientes: Bs 1.400, Meta 750 + 650 de auditorías, comunidad y eventos (:51, :97). Al llegar a ese monto se apaga todo.\n- §4 dice textual (:123-124): «No hay generaciones pagas de imagen o video (Higgsfield) para la pauta este mes» y «No se gasta la caja chica en octubre».\n- madre-local.md:21-23 lo repite: caja Bs 4.000, techo Bs 1.400, «Solo dental hasta tener la factura del SIAT».\n\n[M] Créditos de Higgsfield, octubre:\n- Van 52,5 de 150: 20 de L05/L08, 2 del maniquí y 30,5 del kit del 3-oct (handoff/higgsfield-lucia.md:29; PLAN.md:89).\n- La última fila de PROCEDENCIA.jsonl dice «mes_hf: octubre 52,5/150» y saldo_despues 541,26 cr.\n- Quedan 97,5 cr bajo el tope de 150 cr/mes que Sergio Urcullo aprobó el 1-oct (S1-PIEZAS.md:6; COORDINATION_MANIFEST.md:58).\n- [M] La bolsa es una sola para todos los carriles y «no hay tope común escrito» (COORDINATION_MANIFEST.md:287).\n- El plan Pro corre 4 trabajos a la vez como máximo (higgsfield-lucia.md:393).\n- Cada generación paga lleva `generate cost` antes y el OK de Sergio Urcullo (CLAUDE.md).\n\n[M] ElevenLabs:\n- Al 2-oct se usaron 9.547 de 10.000 caracteres: quedan ~453, tier payg (higgsfield-lucia.md:146 y :205).\n- La voz de Marcela tiene acento colombiano; D4 recomienda reels sin voz (PLAN.md:125).\n- [I] ElevenLabs no figura en la caja: Sergio Urcullo dijo «solo pago Codex 100 $, el servidor VPS y Higgsfield» (PLAN_1.0:34). Un excedente payg sería un gasto fuera de la cuenta. Más razón para ir sin voz.",
+  "activos_lucia": [
+   "[M, miré la hoja] Kit v4 (3-oct, 30,5 cr, OK de Sergio Urcullo), en hermes-content/references/modelos/lucia/v4/kit/. Son 7 fotos 9:16 con el ambo terracota:\n- k1-1-recepcion-celular-4afffb96.jpg (0,808; es además la prueba de ropa);\n- k2-1-cafe-mostrador-3e05cfd0.jpg (0,829);\n- k2-2-agenda-papel-1422fa94.jpg (sin persona, letra ilegible);\n- k4-1-saluda-eddca486-recorte.jpg (0,81);\n- k4-3-cafe-teclado-186c82f0.jpg (0,841);\n- k4-4-cuerpo-entero-cb86ea10.jpg (0,851; folleto con letra a recortar);\n- k4-5-senala-342c0ab5.jpg (0,835; el monitor está en negro).\nHoja de revisión: kit-fotos-hoja.jpg. Sergio Urcullo todavía no la miró (handoff :43).",
+   "[M, ffprobe] Tres clips del kit, Kling 3.0, 6,04 s, 720×1280, 24 fps:\n- k1-clip-mira-camara-e470ef4f.mp4;\n- k2-clip-deja-cafe-83130c4a.mp4;\n- k4-clip-cuenta-dedos-338b751f.mp4 (5 dedos en los 9 cuadros revisados).\nVista previa: kit-clips-preview.mp4 (18,1 s, 540×960). Los PNG originales quedaron locales, fuera de git (PROCEDENCIA.jsonl, fila kit_lucia_generacion).",
+   "[M, ffprobe] Reels editados el 1-oct, en v4/feed/:\n- l02-este-video-no-fue-grabado.mp4 (6,06 s, 1080×1920): espera el OK de Sergio Urcullo y se puede publicar;\n- l05-lunes-link-de-reserva.mp4 (6,06 s): no se publica así (PLAN.md:114-115);\n- l08-recordatorio-sin-mover-un-dedo.mp4 (9,64 s, voz de Marcela colombiana, con 1 cuadro fantasma): no se publica así;\n- l08-cafe-src.mp4: el clip limpio del café, 10,04 s, 720p.\nLos proyectos están en videos/lucia-l02, lucia-l05 y lucia-l08 (README con la tabla de cortes, INSTRUCCION.md y scripts/).",
+   "[M] Clips de lifestyle ya pagados, que el plan manda a «Un día en Santa Cruz» y al chiste (PLAN.md:116):\n- café, Kling f79eb10e: está en el repo (v4/feed/l08-cafe-src.mp4);\n- calle, Kling 1d2b5631-cc50-4a17-a472-cf6bb78c1098 (L02);\n- coworking, Kling 07b938b2 (L05).\nHUECO: videos/lucia-l0{2,5}/raw/ está en .gitignore (videos/lucia-l05/.gitignore:1), así que los clips LIMPIOS de calle y coworking no están en este checkout. K3 usa el de coworking (GUIONES-LUCIA-KIT.md:98). [I] Se pueden volver a bajar de Higgsfield por su rawUrl, a 0 cr, desde el entorno onia-higgsfield.",
+   "[M] L01, el carrusel fijado «Hola, soy Lucía. No existo.», aprobado el 1-oct:\n- láminas: hermes-content/carousels/out/lucia-l01-hola-no-existo-foto/slide-01..05.png;\n- brief: hermes-content/carousels/briefs/lucia/l01-hola-no-existo.json.",
+   "[M] Fotos del feed, en v4/feed/: anchor.jpg, v01.jpg, v03.jpg, v05.jpg y v07.jpg. Las fotos L03 (ed096c60) y L06 (761df099) figuran en PROCEDENCIA.jsonl, lote_publicar (S1-PIEZAS.md:35). Hueco: no comprobé cuál archivo es cuál.",
+   "[M] Vestuario: v4/vestuario/ambo-terracota-turnaround-8d138bd6.jpg y ambo-terracota-frente-8d138bd6.jpg (2 cr). La prueba de ropa ya quedó cubierta por K1·1 (GUIONES-LUCIA-KIT.md:69, :168).",
+   "[B] Identidades en Higgsfield, según los docs: Soul LUCIA-v5 cd42c065-e18c-4176-b9ad-e2de075fe362 (25 cr), Element lucia-skin-v1 58bbd635…, ancla abe2e6bd y proyecto c6c080a7-fbe9-4314-a5b5-e5f8ec6f59ad. No lo verifiqué en vivo.",
+   "[M] Guiones listos y sin generar más: K1, K2, K3 y K4 corta en hermes-content/references/modelos/lucia/GUIONES-LUCIA-KIT.md. Todos dependen de la pantalla REAL. K3 cuesta 0 cr."
+  ],
+  "decisiones_abiertas": [
+   "D1, el ambo como vestuario: DECIDIDO el 3-oct (PLAN.md:122). Nunca se identifica como odontóloga.",
+   "D2, ¿Reel primero? La recomendación es Sí (PLAN.md:123). En cuentas de menos de 50K el Reel es lo que más alcance trae, y no gasta créditos de video.",
+   "D3, ¿Lucía es la cara del WhatsApp de Onia? La recomendación es «Todavía no» (PLAN.md:124). Se agrava: el bot de usted no está desplegado, la frase-prefijo no tiene firma y el referral se pierde (mercado-y-pauta.md origin/main :37 y :47).",
+   "D4, ¿voz de Marcela? La recomendación es reels sin voz, con texto, durante la prueba (PLAN.md:125): la voz es colombiana. [I] También quedan solo ~453 caracteres payg.",
+   "D5, el canon de 10 datos (LUCIA.md:68-83): sin aprobar. Ojo: el punto 10, «voseo cruceño», choca con la regla nueva de usted (ver la decisión sobre vos y usted, más abajo).",
+   "D6, «Comentá DEMO y te paso el link» en el pie de UNA pieza (la #8): la recomendación es Sí, respondiendo a mano y en personaje (PLAN.md:127). Meta rechazó 2 veces el paso de comentario a DM.",
+   "NUEVA, la puerta: /llamada no existe (404) y Onia no tiene Cal.com. Sergio Urcullo tiene que elegir puerta y método de medición. [I] Opciones: wa.me con código en el texto, una ruta /llamada pedida a Plataforma, o utm al cal.com de Marca personal (detalle en «embudo»). Sin esto no hay métrica, y PLAN.md:16 dice «Si no lo conserva, no hay medición».",
+   "NUEVA, los rubros: el PLAN de Lucía §2 dice 5 (decisión del 2-oct). PLAN_1.0 :125 (3-oct) dice «sólo dental», y la madre el 5-oct dice «Solo dental hasta tener la factura del SIAT» (madre-local.md:23). [I] La recomendación es que el plan v2 arranque solo con dental, y que Sergio Urcullo confirme si la decisión del 2-oct sigue en pie.",
+   "NUEVA, ¿vos o usted? El bot de ventas y los textos a pacientes pasaron a usted («no se usa vos», mercado-y-pauta.md:25-26 en HEAD; #108). La madre tiene abierta la pregunta «¿La web y los anuncios pasan a usted?» (madre-local.md:82). Los guiones de Lucía, el kit y el canon están en vos. Falta la decisión de Sergio Urcullo.",
+   "Pendientes de Sergio Urcullo para Lucía (higgsfield-lucia.md:38-45; PLAN.md:131-134; FLUJO.md:63-71):\n- mirar kit-fotos-hoja.jpg y kit-clips-preview.mp4;\n- dar el OK de L02;\n- conectar @lucia.antelo.oficial como cuenta profesional;\n- activar «Perfil generado con IA»;\n- cargar el token en el VPS;\n- bio con link y utm;\n- cuenta de Buffer para TikTok.",
+   "Pendientes de Sergio Urcullo para la demo (PLAN_1.0:132): confirmar el correo de la cuenta demo y darle module.agents. Además, el OK para escribir en la demo (un paciente con un correo que controle Onia, una plantilla IA aprobada, la carga desde la web) si se quieren grabar esas pantallas.",
+   "Riesgo de nombre: @mindshft.ai vende otra «Lucía» IA. Siempre «Lucía Antelo», y queda reservar el handle en las demás redes (higgsfield-lucia.md:46-48). @lu.antelo es de una persona real (LUCIA.md:177).",
+   "L08, el cuadro fantasma: se arregla a 0 cr con el OK, alineando los fades a la grilla de 1/24 (higgsfield-lucia.md:212-213). Hoy no importa, porque L08 no se publica así.",
+   "Lucía como «pieza con persona» de la pauta: la brecha más grande de D1/D4 es que no tienen persona (mercado-y-pauta.md origin/main :63, :79). [I] Si se usa a Lucía, la pide Ventas y pauta con brief y tope (COORDINATION_MANIFEST.md:252-255), solo si Sergio Urcullo la pide como presentador IA (ADQ §5.4 :392-393). Además el anuncio necesitaría la declaración de IA de Meta: ADQ §5.8.1 :510-511 la excluye solo cuando no hay imágenes generadas.",
+   "El carril no tiene skill propia; CLAUDE.md pide crear una (higgsfield-lucia.md:80-81)."
+  ],
+  "carriles_y_duenos": "LUCÍA (este carril, COORDINATION_MANIFEST.md:54):\n- la identidad de Lucía (hermes-content/references/modelos/lucia/**);\n- la política de Higgsfield (HIGGSFIELD_VIDEO_SYSTEM.md);\n- el plan y la cola (hermes-content/docs/cola/lucia-diario/) y videos/lucia-*;\n- el contenido ORGÁNICO de @lucia.antelo.oficial, editado con editor-videos.\nGasta la bolsa compartida de Higgsfield solo con tope aprobado y registra todo en v4/PROCEDENCIA.jsonl. LUCIA.md:173 aclara que Lucía es un canal para vender Onia. «Te creamos tu influencer IA» queda congelado: falla el test de tres preguntas (ESTRATEGIA §10 :368).\n\nVENTAS Y PAUTA (COORDINATION_MANIFEST.md:55; ADQ §0.8 :71-75 y §5.8 :448):\n- Meta Ads de punta a punta: la campaña, D1 y D4 (diseño, render y subida);\n- @oniahq solo como la página que pauta;\n- los prospectos 1:1, el registro de objeciones y la competencia por adquisición.\nSi una pieza de pauta necesita a Lucía o gasto de Higgsfield, Ventas lo pide con brief y tope (MANIFEST :252-255). Lucía no hace piezas de pauta por su cuenta.\n\nPLATAFORMA (MANIFEST :52):\n- onia-platform, la web pública onia.com.bo (una ruta /llamada sería suya) y el sales-kit;\n- la cuenta demo y las capturas de la 1.0 (ADQ §5.9, fila 7).\nEl bot y el chatbot los arregla Sergio Urcullo o el carril chatbot (MANIFEST :288).\n\nMARCA PERSONAL:\n- el contenido de @sergiourcullo y los carruseles;\n- el pack «referentes»;\n- sergiourcullo.vercel.app/llamada y el evento cal.com /20min, la auditoría (marca-personal.md origin/main :35-38).\n\nMADRE (PC): lo que pide login (Facebook, Instagram, Meta, Gmail), mirar pantallas con sesión y mandar mensajes a las sesiones. INFRA: el token de IG en el VPS.\n\nLO QUE ESTA SESIÓN NO PUEDE HACER:\n- generar nada pago sin `generate cost` y el OK de Sergio Urcullo;\n- publicar, ni crear nada en Meta;\n- iniciar sesión en redes, ni contactar a nadie;\n- escribir en la base de producción: la nube lo tiene bloqueado («Remote Shell Writes», onia-1.0-nube.md:106-108), y eso incluye sembrar o editar la demo;\n- tocar onia-platform ni la web;\n- hacer piezas de pauta sin el pedido de Ventas, ni pautar otro rubro;\n- mergear en onia-hermes desde la nube, o commitear skills a pedido de otra sesión: el control de permisos lo frena (onia-1.0-nube.md:119-123);\n- usar SendMessage: falla desde la nube; el handoff dice que mcp__claude-code-remote__send_message sí anda (higgsfield-lucia.md:236-237);\n- tocar el portal del SIAT;\n- reabrir decisiones que solo toma Sergio Urcullo.",
+  "frases_prohibidas": [
+   "LITERAL de editor-videos SKILL.md § «Reels de Lucía» (:488-492): «hoy soy odontóloga»",
+   "editor-videos :489: «soy doctora»",
+   "editor-videos :489: «como odontóloga»",
+   "editor-videos :489: «mis pacientes»",
+   "editor-videos :489: «mi consultorio»",
+   "editor-videos :491: resultados: «agenda llena», «cero ausencias», porcentajes",
+   "editor-videos :491-492: el chiste de IA va con «No: soy IA», nunca con «no sé»",
+   "PLAN.md §3 :62-63: «hoy soy odontóloga», «soy doctora», «como odontóloga», «mis pacientes», «mi consultorio» «y cualquier frase que la ponga en el puesto»",
+   "PLAN.md §3 :66: «me pasó con un paciente». Lo que vale es «lo que veo en las recepciones».",
+   "PLAN.md §3 :72: «agenda llena», «cero ausencias», porcentajes",
+   "PLAN.md §3 :73: «no sé si soy real»",
+   "PLAN.md §3 :57: en el gancho, sin logo y sin «hola, soy Lucía»",
+   "LUCIA.md §0 :18-20: «hoy soy odontóloga», «soy doctora», «como odontóloga», «mis pacientes», «mi consultorio», «mi estudio». Tampoco consejo clínico o legal, testimonio ni resultados prometidos («agenda llena»).",
+   "LUCIA.md §0-canon :69-70 y :76-77: nunca dueña de un negocio, profesional de salud ni empleada de nadie, tampoco de Onia. Nunca dice que estuvo en un lugar o un evento real. No opina de salud, leyes ni impuestos.",
+   "GUIONES-LUCIA-KIT.md:32: nada de «soy», «mis pacientes» ni «mi consultorio»",
+   "Retirada el 3-oct (higgsfield-lucia.md:67-68): «Yo no existo. Tu agenda llena, sí.»",
+   "Del catálogo y ADQ, en voz de Lucía: «la IA escribe el mensaje», «la IA agenda sola», «tratamiento a medias», recordatorio «por WhatsApp», «envío automático por WhatsApp», «factura»/SIAT, titular con «IA», «no escribe de madrugada»/«respeta tu horario»"
+  ],
+  "contradicciones_entre_docs": [
+   "CUENTA DEMO.\n- Dicen que no existe: handoff/higgsfield-lucia.md:32-33 («no hay cuenta demo») y :156, :210-211; PLAN.md:90 y :130; GUIONES-LUCIA-KIT.md:35 y :195; S1-GUIONES.md:42 y :62; ADQ §5.4 :385; mercado-y-pauta.md origin/main :222.\n- Dicen que existe: handoff/onia-1.0-nube.md:57-61 (sembrada el 2-oct) y ONIA_PLAN_1.0_Y_CAJA.md:20 (existe, «a medias»).\n- MANDA onia-1.0-nube: es del dueño de la demo y es la más nueva. Con el matiz de PLAN_1.0:132: le falta el correo confirmado y module.agents.",
+   "RUBROS.\n- Solo dental/estética: ONIA_ESTRATEGIA_DE_EMPRESA.md §7 :224 (5-sep).\n- Cinco rubros en orden: ONIA_CLIENTE_IDEAL.md §6 :153-169 (30-sep) y PLAN.md §2 :22-40 (Lucía, 2-oct, con aviso en :39-40).\n- Solo dental: ONIA_PLAN_1.0_Y_CAJA.md:125 («No se abre otro rubro… sólo dental», 3-oct) y madre-local.md:23 («Solo dental hasta tener la factura del SIAT», 5-oct).\n- El texto de CLIENTE_IDEAL §6 se contradice dentro de sí: el bloque de arriba dice 5 rubros; la tabla (:175-179) y «¿uno o siete?» (:197) dicen un solo rubro.\n- [I] Para la venta y la pauta mandan los más nuevos (PLAN_1.0 y la madre: dental). Si Lucía muestra otros rubros en orgánico, lo tiene que reconfirmar Sergio Urcullo.",
+   "LA PUERTA.\n- PLAN.md:15-16, GUIONES-LUCIA-KIT.md:37 y MANUAL-PATRONES-INFLUENCERS-IA.md:56 y :152-153 mandan a onia.com.bo/llamada?src=…\n- Medido: 404, sin ruta en el código, y Cal.com de Onia no existe (site.ts:121-131).\n- S1-GUIONES.md:50 y :71, y FLUJO.md:35, usan otra puerta (onia.com.bo/?utm_…).\n- Son dos puertas distintas en los docs y ninguna llega a una demo medible. MANDA el código y la medición.",
+   "COMENTARIO VIEJO EN EL CÓDIGO: web-factory/apps/onia-platform/src/app/layout.tsx:113-115 dice que el bot «agenda la demo con reserva real en Cal.com». Lo contradicen site.ts:121-131 y bot/config.mjs:284-290 (sin agenda propia, la hora la coordina Sergio). Mandan site.ts y config.mjs.",
+   "CATÁLOGO CONTRA SÍ MISMO: §2 :27 lista «Tratamiento a medias» entre los agentes dentales «que hace»; §8 :132 lo prohíbe. MANDA §8: es posterior (2-oct) y específico.",
+   "CATÁLOGO DESACTUALIZADO EN EL ENCABEZADO: se midió el 1-oct contra 4dc829e (:9-10), y producción hoy es 97fe3061 (onia-1.0-nube.md:23-26).\n- §6.2 :87-88 dice que el checkout promete «te emitimos factura por cada pago». #111 lo cambió a «factura por correo después de verificar el pago».\n- #108 (tratamiento a medias en la prueba) tampoco figura.\n- Para lo que se puede decir sigue mandando el catálogo hasta que su dueño lo actualice.",
+   "CRITERIO VIEJO DEL TRATAMIENTO A MEDIAS: PLAN.md:68-69 («entra recién con la 1.0») y FLUJO.md:75-76 («recién con la 1.0 publicada»). La 1.0 ya está publicada y sigue prohibido. El criterio vigente es que el catálogo lo pase a «se puede decir» (ADQ §0.4 :50-52). Manda el catálogo.",
+   "FUNCIONES PERMITIDAS: PLAN.md §3 :68 («Solo funciones vivas: link de reserva y recordatorio por correo») es más estrecho que el catálogo §8, que permite 6 frases, y que K1, K2 y K4, que ya usan §8 frases 1-3. No es un error de seguridad. [I] El plan v2 debería citar el catálogo §8 como lista.",
+   "VOS O USTED:\n- en vos: LUCIA.md §0-canon :83 («voseo cruceño»), los guiones K1-K4, los pies y L08 («Vos no movés un dedo»);\n- en usted: el bot (mercado-y-pauta.md HEAD :25-31) y los textos a pacientes (#108, onia-1.0-nube.md:28);\n- abierta: madre-local.md:82.\nLas capturas candidatas también quedaron en vos (pendientes-confirmador.png). Decide Sergio Urcullo.",
+   "CAJA CONTRA SÍ MISMA, ONIA_PLAN_1.0_Y_CAJA.md:\n- la reserva es Bs 2.533 en la tabla (:50) y Bs 3.226 en §5 (:130);\n- habla de «12 puntos» (:125) pero hay 15;\n- pregunta si «Claude Max sale de esta caja» (:130), cuando :34-35 dice que contar Claude Max estaba mal.\nPara los montos manda la tabla de §2.",
+   "CRÉDITOS EN EL KIT: GUIONES-LUCIA-KIT.md:179 dice «Octubre va 52,5 de 150», y :193 todavía dice «Octubre va 22 de 150». Manda :179, que coincide con PROCEDENCIA.jsonl (mes_hf 52,5/150).",
+   "TOPE DE CRÉDITOS: COORDINATION_MANIFEST.md:58 dice que Sergio Urcullo aprobó 150 cr/mes para Lucía; :287 dice que la bolsa es compartida y que «no hay tope común escrito». FLUJO.md:20-22 todavía lo pide como «el techo que pido aprobar». [I] Vale como tope de Lucía, no como tope global.",
+   "DURACIÓN DE L08: higgsfield-lucia.md:195 dice 10,25 s; el archivo v4/feed/l08-recordatorio-sin-mover-un-dedo.mp4 mide 9,636 s (ffprobe). [I] Es un render posterior o un recorte. Manda el archivo.",
+   "EL GANCHO: PLAN.md:57 prohíbe «hola, soy Lucía» en el gancho; la pieza #1 aprobada (PLAN.md:79) se titula «Hola, soy Lucía. No existo.». [I] La regla es de reels y L01 es un carrusel. Hay que aclararlo en v2.",
+   "VOZ DESDE LA NUBE: FLUJO.md:69 dice «Desde la nube no se genera». S1-PIEZAS.md:27 y higgsfield-lucia.md:181 dicen que la nube sí ve ELEVENLABS_API_KEY. Manda el handoff (2-oct). Igual D4 recomienda ir sin voz.",
+   "MANIFEST VIEJO: COORDINATION_MANIFEST.md:23-27 y :54 todavía nombran la rama claude/lucia-v4-onia-higgsfield y la session_01RRD6v9…; el estado vigente del handoff dice session_01Whdadt8NdnYbZoyum1bRX6, rama claude/trusting-dirac-wjkua1 (higgsfield-lucia.md:11). También el encabezado del handoff (:4-6) habla de la rama del 30-sep. Manda el bloque «ESTADO VIGENTE 5-oct».",
+   "ESTRATEGIA VIEJA: ONIA_ESTRATEGIA_DE_EMPRESA.md:669 titula el Recall de tratamiento a medias «YA ESTÁ EN LA 1.0 SIN PUBLICAR», y ya está publicado (onia-1.0-nube.md:41).",
+   "CRECE: ONIA_CLIENTE_IDEAL.md:55 dice «3 usuarios (4… al publicarse)»; el catálogo §3 :50 dice 4 (decisión del 1-oct), y Ventas lo midió en 97fe306 (mercado-y-pauta.md origin/main :5-6). Manda el catálogo.",
+   "ROLES DE LUCÍA: LUCIA.md:17 junta abogada y contadora en «estudio», pero la tabla de vestuario (:33-34) todavía las tiene separadas. PLAN.md:33 dice que el ejemplo de la plataforma es «Estudio Contable». Es menor: manda PLAN.md."
+  ]
+ }
+}

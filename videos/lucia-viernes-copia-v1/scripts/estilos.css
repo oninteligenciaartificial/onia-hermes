@@ -1,0 +1,44 @@
+/* Fuentes locales de marca (familias/pesos de G5 v2 y P9). Sin red. */
+@font-face{font-family:"Bricolage Grotesque";src:url(assets/fonts/BricolageGrotesque-var-latin.woff2) format("woff2");font-weight:500 700;font-style:normal;font-display:block}
+@font-face{font-family:"DM Sans";src:url(assets/fonts/DMSans-var-latin.woff2) format("woff2");font-weight:400 500;font-style:normal;font-display:block}
+@font-face{font-family:"Spline Sans Mono";src:url(assets/fonts/SplineSansMono-var-latin.woff2) format("woff2");font-weight:400 500;font-style:normal;font-display:block}
+*{box-sizing:border-box}html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#11191b;font-family:"DM Sans",sans-serif;color:#fff;-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision;font-variant-ligatures:none}
+#root{position:relative;width:100%;height:100%;overflow:hidden}
+.escena{position:absolute;inset:0;width:1080px;height:1920px;background:#11191b;overflow:hidden}
+.foto-completa{position:absolute;left:0;top:0;width:1080px;height:1920px;object-fit:cover;display:block}
+.texto{position:absolute;left:80px;width:920px;line-height:1.1;font-weight:500;padding:12px 22px;background:#11191b;border-left:10px solid #83d5be;border-radius:12px;white-space:normal;overflow-wrap:normal}
+.titular{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;line-height:1.12;letter-spacing:-.01em}
+.nota{font-family:"DM Sans",sans-serif;font-weight:500;line-height:1.1}
+.dato{font-family:"DM Sans",sans-serif;font-weight:500}
+
+/* Escena 2: las dos fotos lado a lado (K4 a la izquierda, R3 —la foto de entrada— a la derecha), recortadas al mismo alto; los aros se dibujan encima. */
+.panel{position:absolute;overflow:hidden;background:#11191b}
+.panel img{position:absolute;display:block;max-width:none}
+.aro{position:absolute;left:0;top:0;pointer-events:none;overflow:visible;filter:drop-shadow(0 0 3px rgba(17,25,27,.95))}
+.aro *{/* butt y no round: con un trazo de longitud cero (aro aún sin dibujar) el remate redondo dejaba un punto naranja en el cuadro 72. pathLength=1000 (no 1): GSAP redondea strokeDashoffset a enteros y con 1 el aro saltaba de oculto a completo en 2 cuadros */fill:none;stroke:#ffbc94;stroke-width:7;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:1000 1000;stroke-dashoffset:0}
+#divisor{position:absolute;background:#11191b}
+.cap{display:flex;align-items:center}
+#cap-r3{border-left-color:#ffbc94;text-wrap:balance}
+
+/* Placa del gráfico: una escala 0 a 1 en tres filas (con esa foto · las otras siete · promedio de las 4 que no recibió). El piso 0,70 es del promedio: solo va en la fila del promedio de las 4 (revisión 1, H1). */
+.fila{font-size:44px}
+.fila .et{line-height:1.1;margin-bottom:12px}
+.fila .n{font-family:"Spline Sans Mono",monospace;font-weight:500}
+.fila.a .n{color:#ffbc94}
+.pista{position:relative;height:26px;background:#3c484b;border-radius:13px}
+.pista .fill{position:absolute;left:0;top:0;height:100%;width:0%;background:#83d5be;border-radius:13px}
+.fila.a .pista .fill{background:#ffbc94}
+.pista .banda{position:absolute;top:0;height:100%;width:0%;background:#68797c;border-radius:13px}
+.pista .pt{position:absolute;top:3px;width:20px;height:20px;margin-left:-10px;border-radius:50%;background:#83d5be;border:2px solid #11191b}
+.pista .piso{position:absolute;top:-7px;width:4px;height:40px;margin-left:-2px;background:#fff;opacity:.92;border-radius:2px}
+.leyenda{display:flex;align-items:center;margin-top:12px;font-family:"DM Sans",sans-serif;font-weight:500;font-size:36px;line-height:1.1;color:#a9bcbf;white-space:nowrap}
+.leyenda .sw{display:inline-block;flex:none;width:44px;height:16px;margin-right:14px;border-radius:8px;background:#68797c}
+.escala{position:relative;height:38px;margin-top:6px;font-family:"Spline Sans Mono",monospace;font-weight:500;font-size:34px;color:#a9bcbf}
+.escala span{position:absolute;top:0;line-height:1.1;white-space:nowrap}
+.escala .e0{left:0}.escala .e1{right:0}.escala .ep{width:240px;text-align:center;color:#fff}
+#nota-copia{border-left-color:#ffbc94;text-wrap:balance}
+#leccion{text-wrap:balance}
+#cta{border-color:#ffbc94;text-wrap:balance}
+.nb{white-space:nowrap}
+/* Estado inicial: la opacidad oculta de los tiles con entrada vive en CSS (el cuadro 0 no muestra lo que entra después). El desplazamiento de #s2/#placa NO va en CSS (lint gsap_css_transform_conflict): lo fija timeline.js con fromTo al inicio. */
+.oculto{opacity:0}

@@ -1,0 +1,2 @@
+cuadros sin tarjeta narrativa visible: 0 de 667
+✔ en los 667 cuadros hay siempre una tarjeta visible (≥ 5 % de opacidad y ≥ 25 % dentro del lienzo), desde el cuadro 0

@@ -1,0 +1,2 @@
+s1 → s2 a 3 s: 6 cuadros, separación máxima 0.000 px; los tiles viajan con su escena (desviación máxima 0.000 px)
+s2 → placa a 6.625 s: 6 cuadros, separación máxima 0.000 px; los tiles viajan con su escena (desviación máxima 0.000 px)

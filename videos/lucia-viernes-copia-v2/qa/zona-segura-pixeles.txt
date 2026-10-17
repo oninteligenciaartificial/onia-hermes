@@ -1,0 +1,5 @@
+Zona segura en píxeles del master (medido a media resolución, ±2 px):
+escena 1 (rótulo, título y dato): 10 cuadros; contenido y 1172-1471, x 80-999 (límites y 292-1490, x 80-1000)
+escena 3 (beats B y C y CTA): 22 cuadros; contenido y 1194-1395, x 80-999 (límites y 292-1490, x 80-1000)
+escena 2: 18 cuadros; encima del panel (y < 312) todo es fondo: sí; debajo del panel el contenido (rótulos, «misma pose…» y beat A) llega a y 1427 (límite 1490)
+EXIT 0

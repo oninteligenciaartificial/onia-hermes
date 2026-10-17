@@ -1,0 +1,50 @@
+piso de caras negativas (max): 0.224   gate del repo: 0,70
+archivo                                        centroide  min_ref  max_ref  cara_px  veredicto
+f-gancho_t3.42_FINAL.png                           0.789    0.524    0.714      182  OK (cara < 200 px: poco confiable)
+f-gancho_t3.42_fuente.png                          0.797    0.537    0.716      182  OK (cara < 200 px: poco confiable)
+f-gancho_t4.29_FINAL.png                           0.792    0.541    0.716      182  OK (cara < 200 px: poco confiable)
+f-gancho_t4.29_fuente.png                          0.794    0.532    0.718      184  OK (cara < 200 px: poco confiable)
+f-gancho_t5.21_FINAL.png                           0.795    0.535    0.714      184  OK (cara < 200 px: poco confiable)
+f-gancho_t5.21_fuente.png                          0.794    0.531    0.719      186  OK (cara < 200 px: poco confiable)
+f-a_t12.58_FINAL.png                               0.798    0.541    0.724      180  OK (cara < 200 px: poco confiable)
+f-a_t12.58_fuente.png                              0.806    0.548    0.730      180  OK (cara < 200 px: poco confiable)
+f-a_t14.38_FINAL.png                               0.793    0.533    0.725      182  OK (cara < 200 px: poco confiable)
+f-a_t14.38_fuente.png                              0.800    0.539    0.719      182  OK (cara < 200 px: poco confiable)
+f-a_t16.17_FINAL.png                               0.804    0.550    0.727      185  OK (cara < 200 px: poco confiable)
+f-a_t16.17_fuente.png                              0.794    0.530    0.718      186  OK (cara < 200 px: poco confiable)
+f-b_t17.58_FINAL.png                               0.783    0.585    0.721      236  OK
+f-b_t17.58_fuente.png                              0.788    0.587    0.723      237  OK
+f-b_t19.38_FINAL.png                               0.786    0.584    0.724      240  OK
+f-b_t19.38_fuente.png                              0.788    0.584    0.726      240  OK
+f-b_t21.17_FINAL.png                               0.788    0.586    0.731      242  OK
+f-b_t21.17_fuente.png                              0.786    0.585    0.731      241  OK
+f-c_t22.58_FINAL.png                               0.743    0.510    0.687      242  OK
+f-c_t22.58_fuente.png                              0.731    0.506    0.682      242  OK
+f-c_t24.38_FINAL.png                               0.727    0.502    0.679      243  OK
+f-c_t24.38_fuente.png                              0.729    0.503    0.679      244  OK
+f-c_t26.17_FINAL.png                               0.732    0.509    0.683      246  OK
+f-c_t26.17_fuente.png                              0.724    0.503    0.677      246  OK
+f-d_t27.58_FINAL.png                               0.696    0.524    0.646      182  BAJO: mirar (cara < 200 px: poco confiable)
+f-d_t27.58_fuente.png                              0.694    0.519    0.653      182  BAJO: mirar (cara < 200 px: poco confiable)
+f-d_t29.38_FINAL.png                               0.696    0.520    0.655      184  BAJO: mirar (cara < 200 px: poco confiable)
+f-d_t29.38_fuente.png                              0.689    0.513    0.647      184  BAJO: mirar (cara < 200 px: poco confiable)
+f-d_t31.17_FINAL.png                               0.691    0.519    0.652      186  BAJO: mirar (cara < 200 px: poco confiable)
+f-d_t31.17_fuente.png                              0.688    0.512    0.650      186  BAJO: mirar (cara < 200 px: poco confiable)
+f-e_t32.58_FINAL.png                               0.686    0.484    0.659      255  BAJO: mirar
+f-e_t32.58_fuente.png                              0.683    0.483    0.649      256  BAJO: mirar
+f-e_t34.38_FINAL.png                               0.682    0.480    0.657      260  BAJO: mirar
+f-e_t34.38_fuente.png                              0.679    0.475    0.659      259  BAJO: mirar
+f-e_t36.17_FINAL.png                               0.675    0.478    0.648      262  BAJO: mirar
+f-e_t36.17_fuente.png                              0.675    0.474    0.654      263  BAJO: mirar
+f-f_t37.58_FINAL.png                               0.695    0.497    0.626      300  BAJO: mirar
+f-f_t37.58_fuente.png                              0.694    0.489    0.625      301  BAJO: mirar
+f-f_t39.38_FINAL.png                               0.695    0.497    0.632      303  BAJO: mirar
+f-f_t39.38_fuente.png                              0.697    0.491    0.631      304  BAJO: mirar
+f-f_t41.17_FINAL.png                               0.685    0.482    0.626      308  BAJO: mirar
+f-f_t41.17_fuente.png                              0.690    0.480    0.626      308  BAJO: mirar
+f-cierre_t57.83_FINAL.png                          0.826    0.545    0.783      202  OK
+f-cierre_t57.83_fuente.png                         0.832    0.540    0.787      202  OK
+f-cierre_t58.38_FINAL.png                          0.829    0.543    0.782      205  OK
+f-cierre_t58.38_fuente.png                         0.827    0.534    0.779      205  OK
+f-cierre_t58.92_FINAL.png                          0.832    0.541    0.786      207  OK
+f-cierre_t58.92_fuente.png                         0.828    0.535    0.782      207  OK

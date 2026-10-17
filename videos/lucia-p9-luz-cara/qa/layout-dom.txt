@@ -1,0 +1,24 @@
+Medida DOM (Chromium real, fuentes de marca locales) de cada bloque de texto de P9 v3.1: top, alto, borde inferior y ancho de cada línea de texto (interior disponible 866 px; la nota del asterisco va a 38 px, el resto a 40-66 px).
+
+fila-m1      (t=15s) y     300 →   535.4  alto  235.4  líneas (fila)
+fila-m4      (t=15s) y   547.4 →   782.7  alto  235.4  líneas (fila)
+nota-ast     (t=15s) y     807 →   927.8  alto  120.8  líneas [645,394]
+toma         (t=15s) y     952 →  1024.4  alto   72.4  líneas [692]
+limite-cara  (t=15s) y    1048 →  1164.4  alto  116.4  líneas [845,828]
+brillo       (t=15s) y    1188 →  1260.4  alto   72.4  líneas [814]
+cta          (t=15s) y    1284 →  1455.8  alto  171.8  líneas [694,351]
+rotulo       (t=3s) y     300 →     368  alto     68  líneas [585]
+titulo       (t=3s) y     760 →   857.9  alto   97.9  líneas [605]
+dato-m1      (t=3s) y    1030 →  1100.2  alto   70.2  líneas [790]
+dato-m4      (t=8s) y    1090 →  1206.4  alto  116.4  líneas [780,386]
+reencuadre   (t=8s) y    1230 →  1300.2  alto   70.2  líneas [852]
+aviso-refs   (t=8s) y    1324 →  1440.4  alto  116.4  líneas [488,475]
+
+Huecos verticales de la placa: fila-m1→fila-m4 12.0 · fila-m4→nota del asterisco 24.3 · nota→toma 24.2 · toma→límite 23.6 · límite→brillo 23.6 · brillo→CTA 23.6
+Huecos de m4: dato→reencuadre 23.6 · reencuadre→aviso 23.8
+Borde inferior máximo: 1455.8 (tope 1490) · borde superior mínimo: 300.0 (mínimo 292)
+Líneas de cta: 694 / 351 px
+Líneas de aviso-refs: 488 / 475 px
+Líneas de limite-cara: 845 / 828 px
+Líneas de nota-ast: 645 / 394 px
+EXIT 0

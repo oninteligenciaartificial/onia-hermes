@@ -1,0 +1,7 @@
+m1 fuente f12 → master f12: PSNR 38.82 dB (ROI y400–700 sin tarjetas)
+m1 fuente f60 → master f60: PSNR 38.90 dB (ROI y400–700 sin tarjetas)
+m1 fuente f108 → master f108: PSNR 38.88 dB (ROI y400–700 sin tarjetas)
+m4 fuente f12 → master f150: PSNR 38.37 dB (ROI y400–700 sin tarjetas)
+m4 fuente f60 → master f198: PSNR 37.53 dB (ROI y400–700 sin tarjetas)
+m4 fuente f108 → master f246: PSNR 37.08 dB (ROI y400–700 sin tarjetas)
+PSNR mínimo 37.08 dB

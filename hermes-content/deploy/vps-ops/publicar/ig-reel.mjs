@@ -10,6 +10,9 @@
 // --trial manual: vos lo pasás a seguidores desde la app · --trial auto: Instagram lo pasa si rinde
 // (graduation_strategy MANUAL / SS_PERFORMANCE, doc ig-user/media, verificada 29-sep).
 // Sin --publicar el contenedor queda subido y validado, y expira solo a las 24 h: sirve de ensayo.
+// --ia pone la etiqueta «Información de IA» en la pieza (is_ai_generated, changelog de Meta del 22-jun-2026,
+// vale con Instagram Login). Las cuentas de CUENTAS_IA la llevan SIEMPRE, con o sin la flag: Lucía es un
+// personaje IA y declararlo no es opcional (LUCIA.md §0).
 // Publicar es una acción pública: solo con el OK de Sergio sobre ESA pieza (CLAUDE.md).
 import fs from 'node:fs';
 import path from 'node:path';
@@ -29,15 +32,43 @@ export const PUBLIC_URL = 'https://onia.com.bo/hermes-assets';
 const CONF = '/root/.config/onia-publicar';
 export const LEDGER = '/root/publicar/publicado.jsonl';
 const TRIAL = { manual: 'MANUAL', auto: 'SS_PERFORMANCE' };
+export const CUENTAS_IA = new Set(['lucia']);
+export const esIA = (cuenta, flag) => Boolean(flag) || CUENTAS_IA.has(cuenta);
 
-export function containerParams({ caption, trial, coverMs, videoUrl }) {
+export function containerParams({ caption, trial, coverMs, videoUrl, ia }) {
   const p = { media_type: 'REELS', video_url: videoUrl, caption };
+  if (ia) p.is_ai_generated = 'true';
   if (trial) {
     if (!TRIAL[trial]) throw new Error(`--trial debe ser manual|auto, no «${trial}»`);
     p.trial_params = JSON.stringify({ graduation_strategy: TRIAL[trial] });
   }
   if (coverMs) p.thumb_offset = String(coverMs);
   return p;
+}
+
+// Lee la pieza ya publicada. NUNCA lanza: la pieza ya salió y tiene que quedar en publicado.jsonl aunque la
+// lectura falle; si saliera con código 1, agendar-publicacion.sh avisaría «falló» y alguien la publicaría dos veces.
+// Si Instagram no acepta el campo is_ai_generated, se reintenta sin él.
+export async function leerPublicado(media, token, llamar = call) {
+  const base = `${API}/${media}?access_token=${token}&fields=permalink,media_product_type,timestamp`;
+  try {
+    return await llamar(`${base},is_ai_generated`);
+  } catch (e1) {
+    console.error(`⚠ no pude leer is_ai_generated de ${media}: ${e1.message}`);
+    try {
+      return await llamar(base);
+    } catch (e2) {
+      console.error(`⚠ PUBLICADO ${media} pero no pude leerlo: ${e2.message}`);
+      return { error_lectura: e2.message };
+    }
+  }
+}
+
+// Qué decir de la etiqueta IA después de publicar: confirmar, avisar que se rechazó o que no se pudo leer.
+export function avisoEtiquetaIA(ia, info) {
+  if (!ia || info.is_ai_generated === true) return null;
+  if (info.is_ai_generated === false) return '⚠ Instagram devolvió is_ai_generated=false: poné la etiqueta IA a mano';
+  return '⚠ no pude confirmar la etiqueta IA: mirá la pieza publicada';
 }
 
 export function loadEnv(cuenta) {
@@ -67,9 +98,10 @@ async function main() {
   const { values: a } = parseArgs({ options: {
     cuenta: { type: 'string' }, video: { type: 'string' }, caption: { type: 'string' },
     trial: { type: 'string' }, 'cover-ms': { type: 'string' }, publicar: { type: 'boolean' },
-    selftest: { type: 'boolean' } } });
+    ia: { type: 'boolean' }, selftest: { type: 'boolean' } } });
   if (a.selftest) return selftest();
   const env = loadEnv(a.cuenta);
+  const ia = esIA(a.cuenta, a.ia);
   const caption = fs.readFileSync(a.caption, 'utf8').trim();
   const v = probe(a.video);
   // Límites de Reels por API: 3 s a 15 min, hasta 300 MB. 9:16 es lo que no recorta.
@@ -84,10 +116,10 @@ async function main() {
   fs.chmodSync(tmp, 0o644);
   let container;
   try {
-    const body = new URLSearchParams({ ...containerParams({ caption, trial: a.trial, coverMs: a['cover-ms'],
+    const body = new URLSearchParams({ ...containerParams({ caption, trial: a.trial, coverMs: a['cover-ms'], ia,
       videoUrl: `${PUBLIC_URL}/${path.basename(tmp)}` }), access_token: env.IG_TOKEN });
     ({ id: container } = await call(`${API}/${env.IG_USER_ID}/media`, { method: 'POST', body }));
-    console.log(`contenedor ${container} creado (${a.trial ? 'trial ' + a.trial : 'reel normal'}); ${(v.size / 1e6).toFixed(1)} MB, ${v.dur.toFixed(1)} s, ${v.w}x${v.h}`);
+    console.log(`contenedor ${container} creado (${a.trial ? 'trial ' + a.trial : 'reel normal'}${ia ? ', etiqueta IA' : ''}); ${(v.size / 1e6).toFixed(1)} MB, ${v.dur.toFixed(1)} s, ${v.w}x${v.h}`);
     const t0 = Date.now();
     for (;;) {
       const s = await call(`${API}/${container}?fields=status_code,status&access_token=${env.IG_TOKEN}`);
@@ -104,10 +136,25 @@ async function main() {
 
   const { id: media } = await call(`${API}/${env.IG_USER_ID}/media_publish`, { method: 'POST',
     body: new URLSearchParams({ creation_id: container, access_token: env.IG_TOKEN }) });
-  const info = await call(`${API}/${media}?fields=permalink,media_product_type,timestamp&access_token=${env.IG_TOKEN}`);
+  const info = await leerPublicado(media, env.IG_TOKEN);
   fs.mkdirSync(path.dirname(LEDGER), { recursive: true });
   fs.appendFileSync(LEDGER, JSON.stringify({ cuenta: a.cuenta, media, trial: a.trial || null, video: a.video, ...info }) + '\n');
-  console.log(`PUBLICADO ${info.permalink}`);
+  console.log(`PUBLICADO ${info.permalink ?? `media ${media}`}`);
+  const aviso = avisoEtiquetaIA(ia, info);
+  if (aviso) console.error(aviso);
+}
+
+async function selftestLectura() {
+  const falla = async () => { throw new Error('429'); };
+  let n = 0;
+  const unaFalla = async (u) => { n += 1; if (u.includes('is_ai_generated')) throw new Error('400'); return { permalink: 'p' }; };
+  assert.deepEqual(await leerPublicado('m', 't', falla), { error_lectura: '429' });
+  assert.deepEqual(await leerPublicado('m', 't', unaFalla), { permalink: 'p' });
+  assert.equal(n, 2);
+  assert.equal(avisoEtiquetaIA(true, { is_ai_generated: true }), null);
+  assert.equal(avisoEtiquetaIA(false, {}), null);
+  assert.match(avisoEtiquetaIA(true, { is_ai_generated: false }), /=false/);
+  assert.match(avisoEtiquetaIA(true, { permalink: 'p' }), /no pude confirmar/);
 }
 
 function selftest() {
@@ -115,7 +162,10 @@ function selftest() {
   assert.equal(containerParams({ caption: 'x', trial: 'auto' }).trial_params, '{"graduation_strategy":"SS_PERFORMANCE"}');
   assert.equal(containerParams({ caption: 'x', trial: 'manual' }).trial_params, '{"graduation_strategy":"MANUAL"}');
   assert.throws(() => containerParams({ caption: 'x', trial: 'si' }), /manual\|auto/);
-  console.log('selftest ok');
+  assert.equal(containerParams({ caption: 'x', ia: true }).is_ai_generated, 'true');
+  assert.ok(!('is_ai_generated' in containerParams({ caption: 'x' })));
+  assert.ok(esIA('lucia', false) && esIA('sergio', true) && !esIA('sergio', undefined));
+  return selftestLectura().then(() => console.log('selftest ok'));
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

@@ -1,0 +1,479 @@
+# Parecido de Lucía SIN las fotos que el motor recibió como entrada — 11-oct-2026 · 0 cr · sin red · sin instalar nada
+#
+# PREGUNTA. Dos clips recibieron como entrada fotos que están entre las 8 oficiales, así que su puntaje contra el centroide de las 8 no es
+#   independiente. Seedance 2.0 Mini + refs (dd2d7c91): start_image K1 (4afffb96) + a7cfb766 = R1, d7d6d36a = R3, abe2e6bd (selfie «look ancla»).
+#   Kling O3 (948a89d3): abe2e6bd + a7cfb766 = R1, d7d6d36a = R3, df491c87 = R6, 8ce2f65c = R7. K1 y abe2e6bd NO están entre las 8: no se excluyen.
+#   Controles sin referencias de entrada: Kling 3.0 std (e470ef4f), Cinematic Studio 3.0 (cc8fa519), Seedance 2.0 Mini sin refs (a7f79a01).
+#
+# MÉTODO. ArcFace buffalo_l (SCRFD det_10g + w600k_r50) con las clases de scripts/face_identity_qa.py (importado por ruta, SIN modificarlo), a
+#   través del script NUEVO .claude/skills/lucia/scripts/parecido_sin_refs.py. Cuadros con el mismo ffmpeg que face-gate.sh
+#   (ffmpeg -ss t -i clip -frames:v 1). Referencias: las 8 locales de videos/lucia-g4-v2/assets/refs-orig/. Cara = la más grande del cuadro.
+#   A = coseno contra el centroide (normalizado) de las 8 fotos = lo que reporta el face-gate.
+#   B = coseno contra el centroide de SOLO las fotos que ese motor NO recibió (Seedance+refs: R2 R4 R5 R6 R7 R8; Kling O3: R2 R4 R5 R8;
+#       controles: B = A, no recibieron nada).
+#   C = coseno contra cada foto por separado; se anotan el mínimo y el máximo entre las no recibidas y la tabla completa por foto.
+#   MATRIZ CRUZADA (añadida): cada clip también se mide contra el subconjunto de cada motor. Sirve para separar «foto recibida» de «subconjunto
+#       distinto»: un centroide de 4 o 6 fotos no puntúa igual que uno de 8 aunque no haya fuga. «gap» = coseno medio a las fotos recibidas
+#       menos coseno medio a las no recibidas. EXCESO = lo del motor menos la media de los 3 controles (clips sin entradas) bajo el mismo subconjunto.
+#   COMPROBACIÓN: la columna A reproduce PROCEDENCIA.jsonl l.97 (columna PROC) en los 34 puntos (7+7+7+6+7 de los cinco clips de la primera parte; la prueba estricta de abajo suma Kling 3.0 pro: 41), diferencia <= 0,0005 (redondeo a 3 decimales).
+#
+# COMANDO (desde la raíz del repo; FACE_GATE_HOME = scratchpad con venv y modelos ya existentes; ~8 s por clip en CPU):
+#   S=$FACE_GATE_HOME; P=hermes-content/references/modelos/lucia/v4; M=$P/prueba-motores-20261008
+#   $S/venv/bin/python -I .claude/skills/lucia/scripts/parecido_sin_refs.py --refs-dir videos/lucia-g4-v2/assets/refs-orig \
+#     --models $S/models --frames-dir $S/frames-sin-refs --json-out $S/sin-refs-20261011.json \
+#     --clip "Seedance Mini + refs (dd2d7c91)|$M/seedance-mini-refs-dd2d7c91.mp4|0,1,2,3,4,5,5.9|R1,R3|0.707,0.762,0.754,0.726,0.796,0.777,0.801" \
+#     --clip "Kling O3 5 refs (948a89d3)|$M/kling-omni-948a89d3.mp4|0,1,2,3,4,5,5.9|R1,R3,R6,R7|0.798,0.783,0.785,0.814,0.815,0.81,0.824" \
+#     --clip "Kling 3.0 std control (e470ef4f)|$P/kit/k1-clip-mira-camara-e470ef4f.mp4|0,1,2,3,4,5,5.9||0.791,0.793,0.762,0.734,0.761,0.708,0.721" \
+#     --clip "Cinematic Studio 3.0 control (cc8fa519)|$M/cinema30-cc8fa519.mp4|0,0.8,1.6,2.4,3.2,3.85||0.785,0.772,0.787,0.799,0.79,0.771" \
+#     --clip "Seedance Mini sin refs control (a7f79a01)|$M/seedance-mini-a7f79a01.mp4|0,1,2,3,4,5,5.9||0.691,0.657,0.677,0.634,0.615,0.634,0.644"
+#   (el 5.º campo de cada --clip es el puntaje de PROCEDENCIA l.97 por t, solo para la comprobación; los originales mp4 no van a git: ver README.md de esta carpeta)
+#
+# ADVERTENCIAS (de la regla del face-gate, no de esta medición).
+#   - Caras < 200 px son poco confiables: se marcan en «nota». Kling O3 tiene 0 de 7 puntos >= 200 px (89-168 px); Seedance+refs 5 de 7 (139-347 px).
+#   - Ruido de ±0,03 entre cuadros y entre re-mediciones de la misma cara (G3 v2, montaje-hyperframes.md §11): una diferencia menor que eso no se distingue.
+#   - El piso 0,70 es una decisión del equipo, no una propiedad de ArcFace.
+#   - Mide IDENTIDAD, no belleza ni realismo; el 5.9 s es el último cuadro útil de un clip de 6,04 s.
+#
+# LECTURA NUMÉRICA (sin opinión; las cifras salen de las tablas de abajo).
+#   1. B-A crudo: Seedance+refs de -0,028 a -0,053 (media -0,042; 6 de 7 puntos pasan de 0,03). Kling O3 de -0,045 a -0,083 (media -0,068; 7 de 7).
+#   2. Parte de esa caída es del SUBCONJUNTO, no de la fuga: R2, R4 y R8 son las 3 fotos de menor coseno medio en los 5 clips (0,41-0,65). Los 3 controles sin entradas, medidos
+#      contra el mismo subconjunto, caen -0,017 (subconjunto Seedance) y -0,055 (subconjunto O3) en B-A.
+#   3. EXCESO sobre los controles en B-A: Seedance+refs -0,026; Kling O3 -0,012. En gap (R1,R3 vs resto): Seedance+refs +0,085; Kling O3 +0,019.
+#   4. Tamaño de cara de los controles: Kling std 115-120 px, Seedance sin refs 118-178 px, Cinema 117-238 px (3 de 6 puntos >= 200 px).
+#
+== Seedance Mini + refs (dd2d7c91)
+   recibió: R1, R3  ·  no recibió (6): R2, R4, R5, R6, R7, R8
+       t  cara_px      A   PROC  A-PROC      B     B-A   min no recib.  max no recib.  nota
+       0      139  0.707  0.707  -0.000  0.679  -0.028        R8 0.475       R7 0.624  cara < 200 px: poco confiable
+       1      181  0.762  0.762  +0.000  0.719  -0.043        R8 0.546       R6 0.643  cara < 200 px: poco confiable
+       2      243  0.754  0.754  -0.000  0.713  -0.041        R8 0.562       R7 0.624  
+       3      290  0.726  0.726  +0.000  0.673  -0.053        R8 0.507       R7 0.650  
+       4      305  0.796  0.796  -0.000  0.750  -0.045        R4 0.560       R7 0.724  
+       5      328  0.777  0.777  +0.000  0.731  -0.047        R4 0.520       R7 0.682  
+     5.9      347  0.801  0.801  +0.000  0.761  -0.040        R4 0.571       R6 0.677  
+   coseno por foto (* = recibida como entrada)      t    R1*     R2    R3*     R4     R5     R6     R7     R8
+                                                    0  0.614  0.549  0.674  0.533  0.608  0.607  0.624  0.475
+                                                    1  0.728  0.567  0.725  0.577  0.633  0.643  0.634  0.546
+                                                    2  0.723  0.568  0.709  0.597  0.592  0.623  0.624  0.562
+                                                    3  0.728  0.512  0.717  0.555  0.583  0.562  0.650  0.507
+                                                    4  0.779  0.591  0.741  0.560  0.647  0.654  0.724  0.577
+                                                    5  0.753  0.582  0.743  0.520  0.635  0.672  0.682  0.565
+                                                  5.9  0.777  0.604  0.727  0.571  0.665  0.677  0.676  0.613
+
+== Kling O3 5 refs (948a89d3)
+   recibió: R1, R3, R6, R7  ·  no recibió (4): R2, R4, R5, R8
+       t  cara_px      A   PROC  A-PROC      B     B-A   min no recib.  max no recib.  nota
+       0       89  0.798  0.798  +0.000  0.753  -0.045        R4 0.578       R5 0.719  cara < 200 px: poco confiable
+       1      100  0.783  0.783  -0.000  0.728  -0.055        R4 0.548       R5 0.693  cara < 200 px: poco confiable
+       2      110  0.785  0.785  +0.000  0.720  -0.066        R4 0.534       R5 0.699  cara < 200 px: poco confiable
+       3      132  0.814  0.814  -0.000  0.741  -0.073        R4 0.561       R5 0.705  cara < 200 px: poco confiable
+       4      139  0.815  0.815  +0.000  0.732  -0.083        R4 0.563       R5 0.696  cara < 200 px: poco confiable
+       5      159  0.810  0.810  +0.000  0.733  -0.077        R4 0.541       R5 0.694  cara < 200 px: poco confiable
+     5.9      168  0.824  0.824  -0.000  0.749  -0.075        R4 0.563       R5 0.713  cara < 200 px: poco confiable
+   coseno por foto (* = recibida como entrada)      t    R1*     R2    R3*     R4     R5    R6*    R7*     R8
+                                                    0  0.651  0.634  0.681  0.578  0.719  0.680  0.744  0.605
+                                                    1  0.657  0.612  0.682  0.548  0.693  0.658  0.738  0.600
+                                                    2  0.673  0.613  0.688  0.534  0.699  0.663  0.757  0.579
+                                                    3  0.685  0.636  0.684  0.561  0.705  0.712  0.816  0.597
+                                                    4  0.688  0.616  0.690  0.563  0.696  0.730  0.830  0.591
+                                                    5  0.682  0.647  0.699  0.541  0.694  0.706  0.812  0.588
+                                                  5.9  0.685  0.627  0.707  0.563  0.713  0.723  0.822  0.622
+
+== Kling 3.0 std control (e470ef4f)
+   recibió: (nada)  ·  no recibió (8): R1, R2, R3, R4, R5, R6, R7, R8  (B = A)
+       t  cara_px      A   PROC  A-PROC      B     B-A   min no recib.  max no recib.  nota
+       0      119  0.791  0.791  -0.000  0.791  +0.000               -              -  cara < 200 px: poco confiable
+       1      118  0.793  0.793  +0.000  0.793  +0.000               -              -  cara < 200 px: poco confiable
+       2      120  0.762  0.762  -0.000  0.762  +0.000               -              -  cara < 200 px: poco confiable
+       3      116  0.734  0.734  +0.000  0.734  +0.000               -              -  cara < 200 px: poco confiable
+       4      116  0.761  0.761  -0.000  0.761  +0.000               -              -  cara < 200 px: poco confiable
+       5      115  0.708  0.708  +0.000  0.708  +0.000               -              -  cara < 200 px: poco confiable
+     5.9      116  0.721  0.721  +0.000  0.721  +0.000               -              -  cara < 200 px: poco confiable
+   coseno por foto (* = recibida como entrada)      t     R1     R2     R3     R4     R5     R6     R7     R8
+                                                    0  0.708  0.596  0.708  0.539  0.701  0.710  0.689  0.591
+                                                    1  0.698  0.606  0.700  0.553  0.712  0.706  0.695  0.587
+                                                    2  0.680  0.554  0.671  0.533  0.706  0.676  0.665  0.565
+                                                    3  0.664  0.549  0.658  0.520  0.651  0.615  0.642  0.570
+                                                    4  0.638  0.622  0.662  0.492  0.699  0.683  0.644  0.603
+                                                    5  0.599  0.570  0.606  0.464  0.637  0.638  0.618  0.564
+                                                  5.9  0.605  0.601  0.636  0.430  0.631  0.648  0.637  0.592
+
+== Cinematic Studio 3.0 control (cc8fa519)
+   recibió: (nada)  ·  no recibió (8): R1, R2, R3, R4, R5, R6, R7, R8  (B = A)
+       t  cara_px      A   PROC  A-PROC      B     B-A   min no recib.  max no recib.  nota
+       0      117  0.785  0.785  +0.000  0.785  +0.000               -              -  cara < 200 px: poco confiable
+     0.8      142  0.772  0.772  -0.000  0.772  +0.000               -              -  cara < 200 px: poco confiable
+     1.6      175  0.787  0.787  -0.000  0.787  +0.000               -              -  cara < 200 px: poco confiable
+     2.4      208  0.799  0.799  +0.000  0.799  +0.000               -              -  
+     3.2      232  0.790  0.790  -0.000  0.790  +0.000               -              -  
+    3.85      238  0.771  0.771  +0.000  0.771  +0.000               -              -  
+   coseno por foto (* = recibida como entrada)      t     R1     R2     R3     R4     R5     R6     R7     R8
+                                                    0  0.672  0.584  0.697  0.550  0.717  0.718  0.689  0.579
+                                                  0.8  0.697  0.551  0.678  0.521  0.689  0.705  0.682  0.594
+                                                  1.6  0.713  0.598  0.684  0.548  0.684  0.705  0.682  0.600
+                                                  2.4  0.721  0.604  0.696  0.561  0.692  0.709  0.719  0.597
+                                                  3.2  0.695  0.587  0.660  0.563  0.683  0.729  0.693  0.627
+                                                 3.85  0.683  0.575  0.623  0.538  0.669  0.715  0.696  0.613
+
+== Seedance Mini sin refs control (a7f79a01)
+   recibió: (nada)  ·  no recibió (8): R1, R2, R3, R4, R5, R6, R7, R8  (B = A)
+       t  cara_px      A   PROC  A-PROC      B     B-A   min no recib.  max no recib.  nota
+       0      118  0.691  0.691  +0.000  0.691  +0.000               -              -  cara < 200 px: poco confiable
+       1      146  0.657  0.657  -0.000  0.657  +0.000               -              -  cara < 200 px: poco confiable
+       2      169  0.677  0.677  +0.000  0.677  +0.000               -              -  cara < 200 px: poco confiable
+       3      177  0.634  0.634  +0.000  0.634  +0.000               -              -  cara < 200 px: poco confiable
+       4      178  0.615  0.615  -0.000  0.615  +0.000               -              -  cara < 200 px: poco confiable
+       5      175  0.634  0.634  +0.000  0.634  +0.000               -              -  cara < 200 px: poco confiable
+     5.9      166  0.644  0.644  +0.000  0.644  +0.000               -              -  cara < 200 px: poco confiable
+   coseno por foto (* = recibida como entrada)      t     R1     R2     R3     R4     R5     R6     R7     R8
+                                                    0  0.592  0.522  0.629  0.493  0.638  0.610  0.582  0.518
+                                                    1  0.557  0.515  0.566  0.477  0.587  0.589  0.576  0.486
+                                                    2  0.610  0.507  0.587  0.478  0.611  0.605  0.611  0.481
+                                                    3  0.543  0.524  0.522  0.447  0.524  0.588  0.566  0.491
+                                                    4  0.543  0.544  0.508  0.435  0.473  0.529  0.543  0.498
+                                                    5  0.552  0.555  0.527  0.449  0.524  0.561  0.527  0.508
+                                                  5.9  0.536  0.547  0.564  0.410  0.530  0.583  0.578  0.520
+
+
+RESUMEN por clip (extremos sobre los puntos medidos; B-A < 0 = el parecido baja al sacar las fotos recibidas)
+   clip                                             A min-max     B min-max  B-A medio    B-A min/max  n n>=200px  B-A (>=200px)
+   Seedance Mini + refs (dd2d7c91)                0.707-0.801   0.673-0.761     -0.042  -0.053/-0.028  7        5         -0.045
+   Kling O3 5 refs (948a89d3)                     0.783-0.824   0.720-0.753     -0.068  -0.083/-0.045  7        0              -
+   Kling 3.0 std control (e470ef4f)               0.708-0.793   0.708-0.793     +0.000  +0.000/+0.000  7        0              -
+   Cinematic Studio 3.0 control (cc8fa519)        0.771-0.799   0.771-0.799     +0.000  +0.000/+0.000  6        3         +0.000
+   Seedance Mini sin refs control (a7f79a01)      0.615-0.691   0.615-0.691     +0.000  +0.000/+0.000  7        0              -
+
+MATRIZ CRUZADA: media de (B - A) y media del gap «cos medio a las fotos recibidas - cos medio a las no recibidas»,
+   midiendo CADA clip contra el subconjunto de cada motor (la diagonal es el caso real; las filas de control son el piso).
+   Un gap > 0 en un control sin entradas solo dice que esas fotos se parecen más a su cara; el exceso sobre el control es la fuga.
+   subconjunto de «Seedance Mini + refs (dd2d7c91)»  (recibidas: R1, R3)
+      clip                                          B-A medio  gap medio
+      Seedance Mini + refs (dd2d7c91)                  -0.042     +0.126  <- este motor
+      Kling O3 5 refs (948a89d3)                       -0.011     +0.021
+      Kling 3.0 std control (e470ef4f)                 -0.019     +0.048
+      Cinematic Studio 3.0 control (cc8fa519)          -0.019     +0.047
+      Seedance Mini sin refs control (a7f79a01)        -0.012     +0.028
+      EXCESO del motor sobre la media de 3 controles     -0.026     +0.085   (controles: B-A -0.017, gap +0.041)
+   subconjunto de «Kling O3 5 refs (948a89d3)»  (recibidas: R1, R3, R6, R7)
+      clip                                          B-A medio  gap medio
+      Seedance Mini + refs (dd2d7c91)                  -0.078     +0.111
+      Kling O3 5 refs (948a89d3)                       -0.068     +0.092  <- este motor
+      Kling 3.0 std control (e470ef4f)                 -0.056     +0.074
+      Cinematic Studio 3.0 control (cc8fa519)          -0.066     +0.089
+      Seedance Mini sin refs control (a7f79a01)        -0.044     +0.057
+      EXCESO del motor sobre la media de 3 controles     -0.012     +0.019   (controles: B-A -0.055, gap +0.073)
+
+
+== PRUEBA ESTRICTA: solo las 4 fotos que ningún clip ni K1 recibió (R2, R4, R5, R8) ==
+# Añadida el 11-oct-2026 · 0 cr · sin red · sin instalar nada · lo escrito arriba no se tocó.
+#
+# PREGUNTA. K1 (4afffb96) se generó con abe2e6bd, R1, R3, R6, R7 y 688d63a7; todos los clips con start_image K1 descienden de R1, R3, R6 y R7,
+#   Seedance+refs recibió además R1 y R3 directo y Kling O3 (sin K1) recibió R1, R3, R6 y R7 directo. No hay control limpio entre los 6 clips: solo
+#   R2, R4, R5 y R8 no entraron a ninguna parte del pipeline. B* = coseno contra el centroide (normalizado) de R2, R4, R5, R8, igual para los SEIS clips.
+#
+# MÉTODO. El de arriba, sin cambios: parecido_sin_refs.py (ArcFace buffalo_l, clases de scripts/face_identity_qa.py importadas por ruta, mismos cuadros
+#   con ffmpeg -ss t -i clip -frames:v 1, cara = la más grande, refs locales de videos/lucia-g4-v2/assets/refs-orig/). A = centroide de las 8 (lo que
+#   reporta el face-gate). B* = centroide de R2 R4 R5 R8. Tiempos: 0,1,2,3,4,5,5.9 s; Cinematic Studio 3.0 (clip de 4,04 s): 0, 0.8, 1.6, 2.4, 3.2, 3.85 s.
+#   En el script el 4.º campo de --clip es la lista de fotos EXCLUIDAS (acá R1,R3,R6,R7 en los seis); su tabla las rotula «recibió», pero para los
+#   clips sin entradas directas es solo «excluida de B*». La MATRIZ CRUZADA y el EXCESO que imprime esa corrida no se usan: sin clips de control
+#   (todos llevan el mismo subconjunto) el EXCESO sale NaN. Esta sección sale de los datos (JSON), con un formateador del scratchpad.
+#   COMPROBACIÓN: A reproduce PROCEDENCIA.jsonl l.97 (campo 5) en los 41 puntos, diferencia máxima 0,0005 (redondeo a 3 decimales).
+#
+# COMANDO (desde la raíz del repo; FACE_GATE_HOME = scratchpad con venv y modelos; ~8 s por clip en CPU):
+#   S=$FACE_GATE_HOME; P=hermes-content/references/modelos/lucia/v4; M=$P/prueba-motores-20261008; EX=R1,R3,R6,R7
+#   $S/venv/bin/python -I .claude/skills/lucia/scripts/parecido_sin_refs.py --refs-dir videos/lucia-g4-v2/assets/refs-orig \
+#     --models $S/models --frames-dir $S/frames-estricta --json-out $S/estricta-20261011.json \
+#     --clip "Kling 3.0 std (e470ef4f)|$P/kit/k1-clip-mira-camara-e470ef4f.mp4|0,1,2,3,4,5,5.9|$EX|0.791,0.793,0.762,0.734,0.761,0.708,0.721" \
+#     --clip "Kling 3.0 pro (9f43ee3c)|$M/kling-pro-9f43ee3c.mp4|0,1,2,3,4,5,5.9|$EX|0.805,0.8,0.791,0.771,0.75,0.748,0.739" \
+#     --clip "Seedance Mini sin refs (a7f79a01)|$M/seedance-mini-a7f79a01.mp4|0,1,2,3,4,5,5.9|$EX|0.691,0.657,0.677,0.634,0.615,0.634,0.644" \
+#     --clip "Seedance Mini + refs (dd2d7c91)|$M/seedance-mini-refs-dd2d7c91.mp4|0,1,2,3,4,5,5.9|$EX|0.707,0.762,0.754,0.726,0.796,0.777,0.801" \
+#     --clip "Kling O3 (948a89d3)|$M/kling-omni-948a89d3.mp4|0,1,2,3,4,5,5.9|$EX|0.798,0.783,0.785,0.814,0.815,0.81,0.824" \
+#     --clip "Cinematic Studio 3.0 (cc8fa519)|$M/cinema30-cc8fa519.mp4|0,0.8,1.6,2.4,3.2,3.85|$EX|0.785,0.772,0.787,0.799,0.79,0.771"
+#   (JSON y cuadros quedan en el scratchpad del face-gate: estricta-20261011.json, frames-estricta/; los mp4 no van a git, ver README.md de esta carpeta)
+#
+# ADVERTENCIAS. Caras < 200 px poco confiables (marcadas en «nota»; solo Seedance+refs, 5 de 7, y Cinematic, 3 de 6, tienen puntos >= 200 px).
+#   Ruido de ±0,03 entre cuadros y entre re-mediciones. El piso 0,70 es una decisión del equipo, no una propiedad de ArcFace. Mide IDENTIDAD.
+#   Un centroide de 4 fotos no puntúa igual que uno de 8: R4 es la foto de menor coseno en 37 de los 41 puntos (R8 en los otros 4, todos de Seedance+refs, t = 0-3), así que
+#   B*-A es negativo en los seis clips (-0,030 a -0,094) aunque ninguno haya recibido R2, R4, R5 ni R8. No hay clip sin descendencia de R1/R3/R6/R7
+#   con el que descontar ese efecto de subconjunto: la columna B*-A no aísla una fuga, solo muestra cuánto cae cada clip bajo el mismo centroide.
+#
+== Kling 3.0 std (e470ef4f)
+   excluidas de B* (R1 R3 R6 R7)  ·  B* = centroide de R2, R4, R5, R8
+       t  cara_px      A   PROC  A-PROC     B*    B*-A      R2    R4    R5    R8  nota
+       0      119  0.791  0.791  -0.000  0.720  -0.071   0.596 0.539 0.701 0.591  cara < 200 px: poco confiable
+       1      118  0.793  0.793  +0.000  0.730  -0.064   0.606 0.553 0.712 0.587  cara < 200 px: poco confiable
+       2      120  0.762  0.762  -0.000  0.700  -0.062   0.554 0.533 0.706 0.565  cara < 200 px: poco confiable
+       3      116  0.734  0.734  +0.000  0.680  -0.055   0.549 0.520 0.651 0.570  cara < 200 px: poco confiable
+       4      116  0.761  0.761  -0.000  0.717  -0.044   0.622 0.492 0.699 0.603  cara < 200 px: poco confiable
+       5      115  0.708  0.708  +0.000  0.663  -0.045   0.570 0.464 0.637 0.564  cara < 200 px: poco confiable
+     5.9      116  0.721  0.721  +0.000  0.669  -0.052   0.601 0.430 0.631 0.592  cara < 200 px: poco confiable
+
+== Kling 3.0 pro (9f43ee3c)
+   excluidas de B* (R1 R3 R6 R7)  ·  B* = centroide de R2, R4, R5, R8
+       t  cara_px      A   PROC  A-PROC     B*    B*-A      R2    R4    R5    R8  nota
+       0      179  0.805  0.805  +0.000  0.735  -0.070   0.610 0.559 0.714 0.593  cara < 200 px: poco confiable
+       1      180  0.800  0.800  +0.000  0.728  -0.073   0.606 0.550 0.708 0.587  cara < 200 px: poco confiable
+       2      177  0.791  0.791  +0.000  0.702  -0.089   0.585 0.527 0.677 0.577  cara < 200 px: poco confiable
+       3      176  0.771  0.771  +0.000  0.692  -0.079   0.569 0.513 0.682 0.568  cara < 200 px: poco confiable
+       4      176  0.750  0.750  -0.000  0.681  -0.069   0.558 0.500 0.680 0.555  cara < 200 px: poco confiable
+       5      176  0.748  0.748  -0.000  0.681  -0.067   0.569 0.513 0.677 0.535  cara < 200 px: poco confiable
+     5.9      172  0.739  0.739  -0.000  0.678  -0.061   0.568 0.501 0.675 0.539  cara < 200 px: poco confiable
+
+== Seedance Mini sin refs (a7f79a01)
+   excluidas de B* (R1 R3 R6 R7)  ·  B* = centroide de R2, R4, R5, R8
+       t  cara_px      A   PROC  A-PROC     B*    B*-A      R2    R4    R5    R8  nota
+       0      118  0.691  0.691  +0.000  0.644  -0.047   0.522 0.493 0.638 0.518  cara < 200 px: poco confiable
+       1      146  0.657  0.657  -0.000  0.613  -0.044   0.515 0.477 0.587 0.486  cara < 200 px: poco confiable
+       2      169  0.677  0.677  +0.000  0.616  -0.061   0.507 0.478 0.611 0.481  cara < 200 px: poco confiable
+       3      177  0.634  0.634  +0.000  0.589  -0.045   0.524 0.447 0.524 0.491  cara < 200 px: poco confiable
+       4      178  0.615  0.615  -0.000  0.579  -0.036   0.544 0.435 0.473 0.498  cara < 200 px: poco confiable
+       5      175  0.634  0.634  +0.000  0.605  -0.030   0.555 0.449 0.524 0.508  cara < 200 px: poco confiable
+     5.9      166  0.644  0.644  +0.000  0.596  -0.048   0.547 0.410 0.530 0.520  cara < 200 px: poco confiable
+
+== Seedance Mini + refs (dd2d7c91)
+   excluidas de B* (R1 R3 R6 R7)  ·  B* = centroide de R2, R4, R5, R8
+       t  cara_px      A   PROC  A-PROC     B*    B*-A      R2    R4    R5    R8  nota
+       0      139  0.707  0.707  -0.000  0.643  -0.064   0.549 0.533 0.608 0.475  cara < 200 px: poco confiable
+       1      181  0.762  0.762  +0.000  0.689  -0.073   0.567 0.577 0.633 0.546  cara < 200 px: poco confiable
+       2      243  0.754  0.754  -0.000  0.688  -0.066   0.568 0.597 0.592 0.562  
+       3      290  0.726  0.726  +0.000  0.640  -0.086   0.512 0.555 0.583 0.507  
+       4      305  0.796  0.796  -0.000  0.705  -0.091   0.591 0.560 0.647 0.577  
+       5      328  0.777  0.777  +0.000  0.683  -0.094   0.582 0.520 0.635 0.565  
+     5.9      347  0.801  0.801  +0.000  0.728  -0.073   0.604 0.571 0.665 0.613  
+
+== Kling O3 (948a89d3)
+   excluidas de B* (R1 R3 R6 R7)  ·  B* = centroide de R2, R4, R5, R8
+       t  cara_px      A   PROC  A-PROC     B*    B*-A      R2    R4    R5    R8  nota
+       0       89  0.798  0.798  +0.000  0.753  -0.045   0.634 0.578 0.719 0.605  cara < 200 px: poco confiable
+       1      100  0.783  0.783  -0.000  0.728  -0.055   0.612 0.548 0.693 0.600  cara < 200 px: poco confiable
+       2      110  0.785  0.785  +0.000  0.720  -0.066   0.613 0.534 0.699 0.579  cara < 200 px: poco confiable
+       3      132  0.814  0.814  -0.000  0.741  -0.073   0.636 0.561 0.705 0.597  cara < 200 px: poco confiable
+       4      139  0.815  0.815  +0.000  0.732  -0.083   0.616 0.563 0.696 0.591  cara < 200 px: poco confiable
+       5      159  0.810  0.810  +0.000  0.733  -0.077   0.647 0.541 0.694 0.588  cara < 200 px: poco confiable
+     5.9      168  0.824  0.824  -0.000  0.749  -0.075   0.627 0.563 0.713 0.622  cara < 200 px: poco confiable
+
+== Cinematic Studio 3.0 (cc8fa519)
+   excluidas de B* (R1 R3 R6 R7)  ·  B* = centroide de R2, R4, R5, R8
+       t  cara_px      A   PROC  A-PROC     B*    B*-A      R2    R4    R5    R8  nota
+       0      117  0.785  0.785  +0.000  0.721  -0.064   0.584 0.550 0.717 0.579  cara < 200 px: poco confiable
+     0.8      142  0.772  0.772  -0.000  0.699  -0.073   0.551 0.521 0.689 0.594  cara < 200 px: poco confiable
+     1.6      175  0.787  0.787  -0.000  0.721  -0.065   0.598 0.548 0.684 0.600  cara < 200 px: poco confiable
+     2.4      208  0.799  0.799  +0.000  0.728  -0.071   0.604 0.561 0.692 0.597  
+     3.2      232  0.790  0.790  -0.000  0.730  -0.060   0.587 0.563 0.683 0.627  
+    3.85      238  0.771  0.771  +0.000  0.711  -0.061   0.575 0.538 0.669 0.613  
+
+RESUMEN de extremos por clip (inicio -> fin; min / max sobre los puntos medidos; n>=200px = puntos con cara >= 200 px)
+   clip                                    A ini->fin     A min/max   B* ini->fin    B* min/max  B*-A medio   cara_px  n>=200
+   Kling 3.0 std (e470ef4f)              0.791->0.721   0.708/0.793  0.720->0.669   0.663/0.730      -0.056   115-120   0/7
+   Kling 3.0 pro (9f43ee3c)              0.805->0.739   0.739/0.805  0.735->0.678   0.678/0.735      -0.073   172-180   0/7
+   Seedance Mini sin refs (a7f79a01)     0.691->0.644   0.615/0.691  0.644->0.596   0.579/0.644      -0.044   118-178   0/7
+   Seedance Mini + refs (dd2d7c91)       0.707->0.801   0.707/0.801  0.643->0.728   0.640/0.728      -0.078   139-347   5/7
+   Kling O3 (948a89d3)                   0.798->0.824   0.783/0.824  0.753->0.749   0.720/0.753      -0.068    89-168   0/7
+   Cinematic Studio 3.0 (cc8fa519)       0.785->0.771   0.771/0.799  0.721->0.711   0.699/0.730      -0.066   117-238   3/6
+
+ORDEN por valor FINAL en A (último punto medido; 5.9 s, y 3.85 s en Cinematic):
+   1. Kling O3 (948a89d3)                  0.824
+   2. Seedance Mini + refs (dd2d7c91)      0.801
+   3. Cinematic Studio 3.0 (cc8fa519)      0.771
+   4. Kling 3.0 pro (9f43ee3c)             0.739
+   5. Kling 3.0 std (e470ef4f)             0.721
+   6. Seedance Mini sin refs (a7f79a01)    0.644
+ORDEN por valor FINAL en B* (R2, R4, R5, R8):
+   1. Kling O3 (948a89d3)                  0.749
+   2. Seedance Mini + refs (dd2d7c91)      0.728
+   3. Cinematic Studio 3.0 (cc8fa519)      0.711
+   4. Kling 3.0 pro (9f43ee3c)             0.678
+   5. Kling 3.0 std (e470ef4f)             0.669
+   6. Seedance Mini sin refs (a7f79a01)    0.596
+   ¿Cambia el orden por valor final? NO
+
+ORDEN por MEDIA de los puntos en A (referencia, menos sensible a un solo cuadro):
+   1. Kling O3 (948a89d3)                  0.804
+   2. Cinematic Studio 3.0 (cc8fa519)      0.784
+   3. Kling 3.0 pro (9f43ee3c)             0.772
+   4. Seedance Mini + refs (dd2d7c91)      0.761
+   5. Kling 3.0 std (e470ef4f)             0.753
+   6. Seedance Mini sin refs (a7f79a01)    0.650
+ORDEN por MEDIA de los puntos en B*:
+   1. Kling O3 (948a89d3)                  0.737
+   2. Cinematic Studio 3.0 (cc8fa519)      0.718
+   3. Kling 3.0 pro (9f43ee3c)             0.699
+   4. Kling 3.0 std (e470ef4f)             0.697
+   5. Seedance Mini + refs (dd2d7c91)      0.682
+   6. Seedance Mini sin refs (a7f79a01)    0.606
+   ¿Cambia el orden por media? SI
+
+DIFERENCIAS entre vecinos del orden por valor final (ruido de +-0,03: menor que eso no se distingue)
+   Kling O3 (948a89d3)            - Seedance Mini + refs (dd2d7c91  A +0.023  B* +0.021
+   Seedance Mini + refs (dd2d7c91 - Cinematic Studio 3.0 (cc8fa519  A +0.030  B* +0.017
+   Cinematic Studio 3.0 (cc8fa519 - Kling 3.0 pro (9f43ee3c)        A +0.032  B* +0.033
+   Kling 3.0 pro (9f43ee3c)       - Kling 3.0 std (e470ef4f)        A +0.018  B* +0.009
+   Kling 3.0 std (e470ef4f)       - Seedance Mini sin refs (a7f79a  A +0.077  B* +0.073
+
+LECTURA NUMÉRICA (sin opinión; las cifras salen de las tablas de arriba).
+   1. Orden por valor FINAL (último punto), en A y en B*: no cambia. Kling O3 > Seedance+refs > Cinematic 3.0 > Kling 3.0 pro > Kling 3.0 std > Seedance sin refs.
+      Finales A 0,824 / 0,801 / 0,771 / 0,739 / 0,721 / 0,644; finales B* 0,749 / 0,728 / 0,711 / 0,678 / 0,669 / 0,596.
+   2. Kling O3 y Seedance+refs (los dos con R1/R3 como entrada directa) mantienen el 1.º y el 2.º lugar en B*. Entre vecinos (A / B*): O3 - Seedance+refs +0,023 / +0,021;
+      Seedance+refs - Cinematic +0,030 / +0,017; Kling pro - Kling std +0,018 / +0,009: los tres dentro del ruido de ±0,03. Cinematic - Kling pro +0,032 / +0,033 (apenas por encima
+      del ruido) y Kling std - Seedance sin refs +0,077 / +0,073 (claramente por encima).
+   3. Orden por MEDIA de los puntos (referencia): en A es O3 0,804 > Cinematic 0,784 > Kling pro 0,772 > Seedance+refs 0,761 > Kling std 0,753 > Seedance sin refs 0,650; en B* es
+      O3 0,737 > Cinematic 0,718 > Kling pro 0,699 > Kling std 0,697 > Seedance+refs 0,682 > Seedance sin refs 0,606. Por media SÍ cambia un lugar: Seedance+refs pasa del 4.º al 5.º
+      y queda por debajo de Kling std (-0,015) y de Kling pro (-0,017), diferencias dentro del ruido; O3 sigue 1.º, Cinematic 2.º y Seedance sin refs último.
+   4. Extremos inicio -> fin (A; B*): O3 0,798 -> 0,824; 0,753 -> 0,749 (cara 89-168 px, ningún punto >= 200 px) · Seedance+refs 0,707 -> 0,801; 0,643 -> 0,728 (cara 139 -> 347 px;
+      t = 0 con 139 px) · Kling std 0,791 -> 0,721; 0,720 -> 0,669 · Kling pro 0,805 -> 0,739; 0,735 -> 0,678 · Cinematic 0,785 -> 0,771; 0,721 -> 0,711 · Seedance sin refs
+      0,691 -> 0,644; 0,644 -> 0,596.
+   5. Contra el piso 0,70 (decisión del equipo) en el último punto: en A pasan 5 de 6 (todos menos Seedance sin refs); en B* pasan 3 de 6 (O3, Seedance+refs, Cinematic);
+      Kling pro (0,678), Kling std (0,669) y Seedance sin refs (0,596) quedan debajo.
+
+
+== PRUEBA ESTRICTA PARA LOS MOTORES DE IMAGEN (G4/C2): solo R2, R4, R5, R8 ==
+# Añadida el 11-oct-2026 · 0 cr · sin red · sin instalar nada · lo escrito arriba no se tocó.
+#
+# ADVERTENCIA DE ENTRADAS. Los seis motores de imagen de G4 recibieron como entrada LAS MISMAS seis imágenes (verificado por la madre el 11-oct con job_display, 0 cr;
+#   no se repitió acá): la selfie «look ancla» abe2e6bd (no es de las 8), R1 (a7cfb766), R3 (d7d6d36a), R6 (df491c87), R7 (8ce2f65c) y 688d63a7 (referencia de ropa,
+#   no es de las 8). O sea, todas las imágenes vieron R1, R3, R6 y R7: la comparación ENTRE motores es pareja (todos con la misma ventaja), pero el número absoluto
+#   contra el centroide de las 8 (A) está inflado. Las únicas 4 fotos que ningún motor recibió son R2, R4, R5 y R8. No hay un motor de control sin entradas.
+#
+# MÉTODO. El de las secciones de arriba, aplicado a fotos fijas con el script NUEVO .claude/skills/lucia/scripts/parecido_sin_refs_fotos.py, que importa por ruta
+#   parecido_sin_refs.py y scripts/face_identity_qa.py SIN modificarlos (ArcFace buffalo_l: SCRFD det_10g 640 / 0,5 + w600k_r50; cara = la más grande; centroide = media de
+#   embeddings normalizados, vuelta a normalizar). Refs: las 8 locales de videos/lucia-g4-v2/assets/refs-orig/.
+#   A  = coseno contra el centroide de las 8 fotos (lo que reporta face-gate.sh; debe reproducir PROCEDENCIA.jsonl l.97, imagen_misma_escena_K1_mismas_6_refs, diferencia <= 0,001).
+#   B* = coseno contra el centroide de SOLO R2, R4, R5, R8, igual para las 10 imágenes. B*-A = cuánto cae cada imagen al sacar R1, R3, R6, R7. Además: coseno por foto y cara en px.
+#   ARCHIVOS MEDIDOS (tabla principal): los PNG originales de Higgsfield (1520-1536 px de ancho, en prueba-motores-20261008/, ignorados por git; se recuperan a 0 cr con
+#       job_display <id> -> results.rawUrl) para los motores de prueba-motores, y los jpg de 1440x2560 de kit/ para Seedream 4.5 K1, K2 y K4 (son los originales).
+#       Motivo: los jpg de 1080 px de fotos/ NO reproducen PROCEDENCIA (6 de los 7 jpg distintos difieren más de 0,001; el peor, GPT Image 2.5, mide 0,672 frente a 0,658 publicado);
+#       los originales sí (diferencia máxima 0,0005). La tabla CONTROL, más abajo, repite la medición sobre los jpg de fotos/.
+#   ESCENAS: K1 es la que los seis motores tienen en común (Seedream 4.5 K1 = 4afffb96; Kling O1 Image K1 = c3706d45). Seedream 4.5 y Kling O1 Image tienen además K2 y K4 café
+#       (Seedream 4.5: 3e05cfd0 y 186c82f0; Kling O1 Image: 9f4b5172 y dad464de). Nano Banana 2.1, GPT Image 2.5, FLUX 3 y Seedream 5.0 Pro solo tienen K1.
+#   ORDEN: por escena K1 (6 motores, misma escena) y por MEDIA de las escenas medidas (Seedream 4.5 y Kling O1 Image: sus 3 escenas, con la K2 de Kling O1 en la que perdió la cara;
+#       los demás: solo K1). La línea 5b da la media de los dos motores de varias escenas sin la K2.
+#
+# COMANDO (desde la raíz del repo; FACE_GATE_HOME = scratchpad con venv y modelos; unos segundos en CPU):
+#   S=$FACE_GATE_HOME; P=hermes-content/references/modelos/lucia/v4; G=$P/prueba-motores-20261008; F=$G/fotos
+#   $S/venv/bin/python -I .claude/skills/lucia/scripts/parecido_sin_refs_fotos.py --refs-dir videos/lucia-g4-v2/assets/refs-orig --models $S/models \
+#     --json-out $S/fotos-estricta-20261011.json --comparar-json $S/fotos-estricta-20261011-jpg1080.json --comparar-etiqueta "los jpg de 1080 px de fotos/" \
+#     --img "Seedream 4.5|K1|$P/kit/k1-1-recepcion-celular-4afffb96.jpg|0.806"   --img "Seedream 4.5|K2|$P/kit/k2-1-cafe-mostrador-3e05cfd0.jpg|0.83" \
+#     --img "Seedream 4.5|K4|$P/kit/k4-3-cafe-teclado-186c82f0.jpg|0.839"        --img "Kling O1 Image|K1|$G/img-kling-omni-image-c3706d45.png|0.794" \
+#     --img "Kling O1 Image|K2|$G/img-omni-image-k2cafe-9f4b5172.png|0.35"       --img "Kling O1 Image|K4|$G/img-omni-image-k4cafe-dad464de.png|0.831" \
+#     --img "Nano Banana 2.1|K1|$G/img-nano-banana-2-1-a4dd1a48.png|0.737"       --img "GPT Image 2.5|K1|$G/img-gpt-image-2-5-5da2fa1e.png|0.658" \
+#     --img "FLUX 3|K1|$G/img-flux-3-af9c2d0c.png|0.691"                         --img "Seedream 5.0 Pro|K1|$G/img-seedream-5-pro-b1abe43c.png|0.702"
+#   El JSON del control se generó antes con la misma orden sobre $F/*.jpg (los 3 de Seedream 4.5 son los mismos kit/*.jpg) y --json-out $S/fotos-estricta-20261011-jpg1080.json, sin --comparar-json.
+#   (4.º campo de cada --img = valor publicado de PROCEDENCIA, solo para la comprobación; JSON y salidas quedan en el scratchpad del face-gate: fotos-estricta-20261011*.json/.stdout.txt)
+#
+# ADVERTENCIAS. Caras < 200 px poco confiables (se marcan en «nota»). Ruido de ±0,03 entre cuadros y entre re-mediciones. El piso 0,70 es una decisión del equipo, no una propiedad
+#   de ArcFace. Mide IDENTIDAD, no belleza ni realismo. Un centroide de 4 fotos no puntúa igual que uno de 8 y como los seis motores recibieron las mismas entradas no hay control sin
+#   entradas con el que descontar ese efecto: la columna B*-A no aísla una fuga, solo muestra cuánto cae cada imagen bajo el mismo centroide. Ningún dato de esta sección dice qué motor
+#   «copió» una foto; compara motores entre sí con el mismo subconjunto de fotos.
+#
+TABLA POR IMAGEN (A = centroide de las 8; B* = centroide de R2, R4, R5, R8; coseno por foto con * = foto recibida como entrada por los seis motores)
+   B* = centroide de R2, R4, R5, R8  ·  * = foto que los seis motores recibieron como entrada (R1, R3, R6, R7), fuera de B*
+   motor / escena                     cara_px      A   PROC  A-PROC     B*    B*-A     R1*     R2    R3*     R4     R5    R6*    R7*     R8  nota
+   Seedream 4.5 K1                        237  0.806  0.806  +0.000  0.731  -0.075   0.718  0.584  0.723  0.546  0.717  0.725  0.713  0.617  
+   Seedream 4.5 K2                        225  0.830  0.830  +0.000  0.764  -0.067   0.759  0.590  0.741  0.603  0.749  0.708  0.722  0.632  
+   Seedream 4.5 K4                        456  0.839  0.839  +0.000  0.750  -0.090   0.733  0.577  0.793  0.574  0.733  0.702  0.812  0.642  
+   Kling O1 Image K1                      335  0.794  0.794  +0.000  0.753  -0.041   0.720  0.597  0.711  0.581  0.739  0.651  0.644  0.621  
+   Kling O1 Image K2                      409  0.350  0.350  -0.000  0.285  -0.065   0.328  0.211  0.468  0.197  0.284  0.233  0.330  0.269  
+   Kling O1 Image K4                      677  0.831  0.831  +0.000  0.743  -0.088   0.686  0.619  0.927  0.563  0.724  0.659  0.733  0.599  
+   Nano Banana 2.1 K1                     343  0.737  0.737  -0.000  0.707  -0.030   0.625  0.610  0.619  0.481  0.698  0.630  0.627  0.593  
+   GPT Image 2.5 K1                       416  0.658  0.658  +0.000  0.614  -0.044   0.575  0.466  0.614  0.495  0.566  0.556  0.551  0.542  
+   FLUX 3 K1                              362  0.691  0.691  -0.000  0.652  -0.038   0.583  0.553  0.661  0.498  0.643  0.577  0.559  0.504  
+   Seedream 5.0 Pro K1                    256  0.702  0.702  -0.000  0.646  -0.055   0.657  0.529  0.627  0.529  0.569  0.590  0.599  0.550  
+
+RESUMEN por motor (K1 = escena común; media sobre las escenas medidas; cara_px mín-máx; <200px = imágenes con cara < 200 px)
+   motor                      escenas   A K1  B* K1  A media  B* media  B*-A medio     A min/max    B* min/max   cara_px <200px
+   Seedream 4.5                     3  0.806  0.731    0.825     0.748      -0.077   0.806/0.839   0.731/0.764   225-456   0/3
+   Kling O1 Image                   3  0.794  0.753    0.658     0.594      -0.064   0.350/0.831   0.285/0.753   335-677   0/3
+   Nano Banana 2.1                  1  0.737  0.707    0.737     0.707      -0.030   0.737/0.737   0.707/0.707   343-343   0/1
+   GPT Image 2.5                    1  0.658  0.614    0.658     0.614      -0.044   0.658/0.658   0.614/0.614   416-416   0/1
+   FLUX 3                           1  0.691  0.652    0.691     0.652      -0.038   0.691/0.691   0.652/0.652   362-362   0/1
+   Seedream 5.0 Pro                 1  0.702  0.646    0.702     0.646      -0.055   0.702/0.702   0.646/0.646   256-256   0/1
+
+ORDEN por escena K1 (la misma escena en los 6 motores; comparación pareja):
+    # en A                                valor    en B* (R2, R4, R5, R8)              valor
+    1 Seedream 4.5                        0.806    Kling O1 Image                      0.753
+    2 Kling O1 Image                      0.794    Seedream 4.5                        0.731
+    3 Nano Banana 2.1                     0.737    Nano Banana 2.1                     0.707
+    4 Seedream 5.0 Pro                    0.702    FLUX 3                              0.652
+    5 FLUX 3                              0.691    Seedream 5.0 Pro                    0.646
+    6 GPT Image 2.5                       0.658    GPT Image 2.5                       0.614
+   ¿Cambia el orden entre A y B*? SI
+      Seedream 4.5: lugar 1 en A -> lugar 2 en B*
+      Kling O1 Image: lugar 2 en A -> lugar 1 en B*
+      Seedream 5.0 Pro: lugar 4 en A -> lugar 5 en B*
+      FLUX 3: lugar 5 en A -> lugar 4 en B*
+
+DIFERENCIAS entre vecinos, escena K1:
+   (ruido de ±0.03: una diferencia menor o igual que eso no se distingue; vecinos tomados del orden de cada columna)
+   A  Seedream 4.5                   - Kling O1 Image                 +0.012  dentro del ruido
+   A  Kling O1 Image                 - Nano Banana 2.1                +0.058  fuera del ruido
+   A  Nano Banana 2.1                - Seedream 5.0 Pro               +0.035  fuera del ruido
+   A  Seedream 5.0 Pro               - FLUX 3                         +0.011  dentro del ruido
+   A  FLUX 3                         - GPT Image 2.5                  +0.032  fuera del ruido
+   B* Kling O1 Image                 - Seedream 4.5                   +0.022  dentro del ruido
+   B* Seedream 4.5                   - Nano Banana 2.1                +0.024  dentro del ruido
+   B* Nano Banana 2.1                - FLUX 3                         +0.055  fuera del ruido
+   B* FLUX 3                         - Seedream 5.0 Pro               +0.006  dentro del ruido
+   B* Seedream 5.0 Pro               - GPT Image 2.5                  +0.032  fuera del ruido
+
+ORDEN por MEDIA de las escenas medidas (Seedream 4.5 y Kling O1 Image: sus 3 escenas; los demás: solo K1):
+    # en A                                valor    en B* (R2, R4, R5, R8)              valor
+    1 Seedream 4.5                        0.825    Seedream 4.5                        0.748
+    2 Nano Banana 2.1                     0.737    Nano Banana 2.1                     0.707
+    3 Seedream 5.0 Pro                    0.702    FLUX 3                              0.652
+    4 FLUX 3                              0.691    Seedream 5.0 Pro                    0.646
+    5 Kling O1 Image                      0.658    GPT Image 2.5                       0.614
+    6 GPT Image 2.5                       0.658    Kling O1 Image                      0.594
+   ¿Cambia el orden entre A y B*? SI
+      Seedream 5.0 Pro: lugar 3 en A -> lugar 4 en B*
+      FLUX 3: lugar 4 en A -> lugar 3 en B*
+      Kling O1 Image: lugar 5 en A -> lugar 6 en B*
+      GPT Image 2.5: lugar 6 en A -> lugar 5 en B*
+
+DIFERENCIAS entre vecinos, orden por media:
+   (ruido de ±0.03: una diferencia menor o igual que eso no se distingue; vecinos tomados del orden de cada columna)
+   A  Seedream 4.5                   - Nano Banana 2.1                +0.089  fuera del ruido
+   A  Nano Banana 2.1                - Seedream 5.0 Pro               +0.035  fuera del ruido
+   A  Seedream 5.0 Pro               - FLUX 3                         +0.011  dentro del ruido
+   A  FLUX 3                         - Kling O1 Image                 +0.032  fuera del ruido
+   A  Kling O1 Image                 - GPT Image 2.5                  +0.000  dentro del ruido (empate a 3 decimales: el orden lo decide el 4.º decimal)
+   B* Seedream 4.5                   - Nano Banana 2.1                +0.041  fuera del ruido
+   B* Nano Banana 2.1                - FLUX 3                         +0.055  fuera del ruido
+   B* FLUX 3                         - Seedream 5.0 Pro               +0.006  dentro del ruido
+   B* Seedream 5.0 Pro               - GPT Image 2.5                  +0.032  fuera del ruido
+   B* GPT Image 2.5                  - Kling O1 Image                 +0.020  dentro del ruido
+
+CONTROL: la misma medición sobre los jpg de 1080 px de fotos/ (los 3 de Seedream 4.5 son el mismo archivo) (control) frente a la tabla principal; dA, dB* = control - principal; A-PROC = A del control - valor publicado
+   motor / escena                     cara_px      A     B*   principal: cara_px      A     B*        dA     dB*  A-PROC  nota (del control)
+   Seedream 4.5 K1                        237  0.806  0.731                  237  0.806  0.731    +0.000  +0.000  +0.000  mismo archivo
+   Seedream 4.5 K2                        225  0.830  0.764                  225  0.830  0.764    +0.000  +0.000  +0.000  mismo archivo
+   Seedream 4.5 K4                        456  0.839  0.750                  456  0.839  0.750    +0.000  +0.000  +0.000  mismo archivo
+   Kling O1 Image K1                      234  0.789  0.751                  335  0.794  0.753    -0.005  -0.003  -0.005  
+   Kling O1 Image K2                      287  0.354  0.292                  409  0.350  0.285    +0.005  +0.007  +0.004  
+   Kling O1 Image K4                      476  0.834  0.748                  677  0.831  0.743    +0.003  +0.004  +0.003  
+   Nano Banana 2.1 K1                     241  0.737  0.712                  343  0.737  0.707    +0.000  +0.005  -0.000  
+   GPT Image 2.5 K1                       296  0.672  0.629                  416  0.658  0.614    +0.014  +0.015  +0.014  
+   FLUX 3 K1                              255  0.690  0.655                  362  0.691  0.652    -0.001  +0.002  -0.001  
+   Seedream 5.0 Pro K1                    180  0.707  0.661                  256  0.702  0.646    +0.005  +0.014  +0.005  cara < 200 px: poco confiable
+   En el control: 6 de 10 imágenes difieren de PROCEDENCIA en más de ±0,001; 1 de 10 con cara < 200 px.
+   Orden K1 en el control, A: Seedream 4.5 > Kling O1 Image > Nano Banana 2.1 > Seedream 5.0 Pro > FLUX 3 > GPT Image 2.5
+   Orden K1 en el control, B*: Kling O1 Image > Seedream 4.5 > Nano Banana 2.1 > Seedream 5.0 Pro > FLUX 3 > GPT Image 2.5
+   ¿Mismo orden K1 que el principal? A: SI; B*: NO
+
+LECTURA NUMÉRICA (sin opinión; las cifras salen de las tablas de arriba).
+   1. Comprobación: A vs PROCEDENCIA l.97 en 10 imágenes, diferencia máxima 0,0005; todas dentro de ±0,001.
+   2. Tamaño de cara: 0 de 10 imágenes tienen cara < 200 px; rango 225-677 px.
+   3. B* - A: de -0,090 a -0,030, media -0,059 en 10 imágenes; R4 es la foto de menor coseno en 8 de 10.
+      Por motor (media B* - A): Seedream 4.5 -0,077; Kling O1 Image -0,064; Nano Banana 2.1 -0,030; GPT Image 2.5 -0,044; FLUX 3 -0,038; Seedream 5.0 Pro -0,055.
+   4. Orden en la escena K1: A = Seedream 4.5 0,806 > Kling O1 Image 0,794 > Nano Banana 2.1 0,737 > Seedream 5.0 Pro 0,702 > FLUX 3 0,691 > GPT Image 2.5 0,658.
+      B* = Kling O1 Image 0,753 > Seedream 4.5 0,731 > Nano Banana 2.1 0,707 > FLUX 3 0,652 > Seedream 5.0 Pro 0,646 > GPT Image 2.5 0,614.
+      El orden SÍ cambia entre A y B*: Seedream 4.5 1.º -> 2.º; Kling O1 Image 2.º -> 1.º; Seedream 5.0 Pro 4.º -> 5.º; FLUX 3 5.º -> 4.º.
+   5. Orden por media de escenas: A = Seedream 4.5 0,825 > Nano Banana 2.1 0,737 > Seedream 5.0 Pro 0,702 > FLUX 3 0,691 > Kling O1 Image 0,658 > GPT Image 2.5 0,658.
+      B* = Seedream 4.5 0,748 > Nano Banana 2.1 0,707 > FLUX 3 0,652 > Seedream 5.0 Pro 0,646 > GPT Image 2.5 0,614 > Kling O1 Image 0,594.
+      El orden SÍ cambia entre A y B*: Seedream 5.0 Pro 3.º -> 4.º; FLUX 3 4.º -> 3.º; Kling O1 Image 5.º -> 6.º; GPT Image 2.5 6.º -> 5.º.
+      Empate a 3 decimales en A (el lugar lo decide el 4.º decimal): Kling O1 Image y GPT Image 2.5, ambos 0,658.
+   5b. Sin la escena K2 (hay una imagen con A < 0,50), media de los motores con varias escenas: Seedream 4.5 A 0,823 / B* 0,740 (2 escenas); Kling O1 Image A 0,813 / B* 0,748 (2 escenas).
+   6a. Escena K1, vecinos en A: 2 de 5 pares dentro de ±0,03 (Seedream 4.5 - Kling O1 Image +0,012; Seedream 5.0 Pro - FLUX 3 +0,011); 3 fuera.
+   6b. Escena K1, vecinos en B*: 3 de 5 pares dentro de ±0,03 (Kling O1 Image - Seedream 4.5 +0,022; Seedream 4.5 - Nano Banana 2.1 +0,024; FLUX 3 - Seedream 5.0 Pro +0,006); 2 fuera.
+   7. Contra el piso 0,70 (decisión del equipo), por imagen: en A pasan 7 de 10; en B* pasan 6 de 10.
+      Pasan en A y no en B*: Seedream 5.0 Pro K1. No pasan en A: Kling O1 Image K2, GPT Image 2.5 K1, FLUX 3 K1.
+   8. Control con los jpg de 1080 px de fotos/ (los 3 de Seedream 4.5 son el mismo archivo): dA de -0,005 a +0,014, dB* de -0,003 a +0,015 (control - principal); 6 de 10 imágenes difieren de PROCEDENCIA en más de ±0,001 y 1 de 10 tienen cara < 200 px. Orden K1 igual al principal: en A sí, en B* no.

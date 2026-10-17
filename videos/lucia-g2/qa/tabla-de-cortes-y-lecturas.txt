@@ -1,0 +1,84 @@
+Tabla de cortes (t en s):
+    0.000 – 6.000   foto     foto    foto K1 fija a pantalla completa; sale en el empuje 5,75-6,0 junto con las miniaturas y la tarjeta
+    5.750 – 12.250  pl-regla placa   placa de la regla: 5 de las 8 referencias + escala 0-1 con la marca en 0,70
+   12.000 – 17.250  m1       clip  cuadros 0-125  Motor 1: cuadro 0 = 12,0 s; el empuje de entrada ocupa 12,00-12,25 y el de salida 17,00-17,25
+   17.000 – 22.250  m2       clip  cuadros 0-125  Motor 2: cuadro 0 = 17,0 s
+   22.000 – 27.250  m3       clip  cuadros 0-125  Motor 3: cuadro 0 = 22,0 s
+   27.000 – 32.250  pl-l1    placa   lección 1: tres arranques y tres finales sobre la escala
+   32.000 – 37.250  m4       clip  cuadros 0-125  Motor 4: cuadro 0 = 32,0 s
+   37.000 – 42.250  m5       clip  cuadros 0-125  Motor 5: cuadro 0 = 37,0 s
+   42.000 – 44.500  m6       clip  cuadros 0-59  Motor 6, sus primeros 60 cuadros (2,5 s de los 4,04 s del clip, a 1×; H1: la placa del precio entra antes para poder leerse): cuadro 0 = 42,0 s; los 6 últimos pasan dentro del empuje de salida 44,25-44,5
+   44.250 – 47.250  pl-m6    placa   placa del Motor 6 (H1): puntaje final 0,77 sobre la escala + «Motor 6: 5 créditos por segundo» y «Motor 1: 1,25 créditos por segundo» juntas + sello «4× el precio por segundo» (2,5 s en reposo, 44,5-47,0)
+   47.000 – 54.750  pl-l2    placa   lección 2: los seis finales ordenados
+   54.500 – 58.000  k1       clip  cuadros 48-131 del clip  cierre (H7): clip K1 (el mismo del Motor 1) de 2,0 a 5,5 s, cuando Lucía ya mira a cámara y sonríe; cuadro 48 del clip = 54,5 s
+Costuras (empuje rígido de 6 cuadros):
+    6.00  empuje  sale foto,thumbs → entra pl-regla
+   12.25  empuje  sale pl-regla → entra m1
+   17.25  empuje  sale m1 → entra m2
+   22.25  empuje  sale m2 → entra m3
+   27.25  empuje  sale m3 → entra pl-l1
+   32.25  empuje  sale pl-l1 → entra m4
+   37.25  empuje  sale m4 → entra m5
+   42.25  empuje  sale m5 → entra m6
+   44.50  empuje  sale m6 → entra pl-m6
+   47.25  empuje  sale pl-m6 → entra pl-l2
+   54.75  empuje  sale pl-l2 → entra k1
+Tarjetas (entra = 1 cuadro antes de a salvo en los empujes, donde viajan):
+    0.10 – 3.00   c1  4 pal (mín 1.7 s) «Misma foto. Seis clips.»
+    3.00 – 6.00   c2  4 pal (mín 1.7 s) «¿Quién pierde la cara?» [sale con el empuje]
+    6.00 – 9.50   c3  6 pal (mín 2.4 s) «Se mide contra 8 fotos suyas.» [entra con el empuje]
+    9.50 – 12.25  c4  5 pal (mín 2.05 s) «Idéntica es 1. Piso, 0,70.» [sale con el empuje]
+   12.25 – 17.25  c5  4 pal (mín 1.7 s) «Motor 1 · 7,5 créditos» [entra con el empuje] [sale con el empuje]
+   17.25 – 22.25  c6  4 pal (mín 1.7 s) «Motor 2 · 9 créditos» [entra con el empuje] [sale con el empuje]
+   22.25 – 27.25  c7  4 pal (mín 1.7 s) «Motor 3 · 6 créditos» [entra con el empuje] [sale con el empuje]
+   27.25 – 32.25  c8  5 pal (mín 2.05 s) «Atado a la foto: baja.» [entra con el empuje] [sale con el empuje]
+   32.25 – 37.25  c9  6 pal (mín 2.4 s) «Motor 4 · 6 créditos  con referencias» [entra con el empuje] [sale con el empuje]
+   37.25 – 42.25  c10 6 pal (mín 2.4 s) «Motor 5 · 6 créditos  solo referencias» [entra con el empuje] [sale con el empuje]
+   42.25 – 47.25  c11 4 pal (mín 1.7 s) «Motor 6 · 20 créditos» [entra con el empuje] [sale con el empuje]
+   47.25 – 51.00  c12 6 pal (mín 2.4 s) «Con referencias, la cara se sostiene.» [entra con el empuje]
+   51.00 – 54.75  c13 6 pal (mín 2.4 s) «Pero el motor inventa la escena.» [sale con el empuje]
+   54.75 – 58.00  c14 5 pal (mín 2.05 s) «Seguime: cada semana, una prueba.» [entra con el empuje]
+Lecturas de sellos, pastillas, notas y placa (≥ 0,35 s/palabra + 0,3):
+  m1 dato A                     4 pal  12.70–16.80  4.10 s  (pide 1.70)  
+  m1 dato B                     3 pal  15.00–16.80  1.80 s  (pide 1.35)  
+  m2 dato A                     4 pal  17.70–21.80  4.10 s  (pide 1.70)  
+  m2 dato B                     3 pal  20.00–21.80  1.80 s  (pide 1.35)  
+  m2 pastilla                   6 pal  18.30–21.80  3.50 s  (pide 2.40)  
+  m3 dato A                     4 pal  22.70–26.80  4.10 s  (pide 1.70)  
+  m3 dato B                     3 pal  25.00–26.80  1.80 s  (pide 1.35)  
+  m3 sello                      3 pal  25.30–26.80  1.50 s  (pide 1.35)  ← justo
+  m4 dato A                     4 pal  32.70–36.50  3.80 s  (pide 1.70)  
+  m4 dato B                     3 pal  35.00–36.50  1.50 s  (pide 1.35)  ← justo
+  m4 sello                      3 pal  34.60–36.50  1.90 s  (pide 1.35)  
+  m5 dato A                     4 pal  37.70–41.80  4.10 s  (pide 1.70)  
+  m5 dato B                     3 pal  40.00–41.80  1.80 s  (pide 1.35)  
+  m5 sello                      3 pal  40.30–41.80  1.50 s  (pide 1.35)  ← justo
+  m6 dato A                     4 pal  42.35–44.30  1.95 s  (pide 1.70)  
+  l1 leyenda                    6 pal  27.60–32.00  4.40 s  (pide 2.40)  
+  l1 nota del final             9 pal  27.60–32.00  4.40 s  (pide 3.45)  
+  l2 nota línea 1              10 pal  50.00–54.50  4.50 s  (pide 3.80)  
+  l2 nota línea 2              11 pal  50.00–54.50  4.50 s  (pide 4.15)  
+  l2 rótulo Motor 5             4 pal  48.20–51.30  3.10 s  (pide 1.70)  
+  l2 rótulo Motor 5 (cambia)    5 pal  51.50–54.50  3.00 s  (pide 2.05)  
+  l2 rótulo Motor 4             4 pal  48.50–51.50  3.00 s  (pide 1.70)  
+  l2 rótulo Motor 4 (cambia)    5 pal  51.70–54.50  2.80 s  (pide 2.05)  
+  l2 rótulo Motor 6             4 pal  48.80–51.70  2.90 s  (pide 1.70)  
+  l2 rótulo Motor 6 (cambia)    5 pal  51.90–54.50  2.60 s  (pide 2.05)  
+  l2 rótulo Motor 2             4 pal  49.10–54.50  5.40 s  (pide 1.70)  
+  l2 rótulo Motor 1             4 pal  49.40–54.50  5.10 s  (pide 1.70)  
+  l2 rótulo Motor 3             4 pal  49.70–51.90  2.20 s  (pide 1.70)  
+  l2 rótulo Motor 3 (cambia)    5 pal  52.10–54.50  2.40 s  (pide 2.05)  
+  m6 placa «mi piso»            3 pal  44.58–47.00  2.42 s  (pide 1.35)  
+  m6 placa número               6 pal  44.50–47.00  2.50 s  (pide 2.40)  ← justo
+  m6 placa Motor 6              6 pal  44.50–47.00  2.50 s  (pide 2.40)  ← justo
+  m6 placa Motor 1              6 pal  44.50–47.00  2.50 s  (pide 2.40)  ← justo
+  m6 placa sello                5 pal  44.80–47.00  2.20 s  (pide 2.05)  ← justo
+Datos (de PROCEDENCIA.jsonl):
+  Motor 1: 7.5 cr · 0 s 0,79 → 5,9 s 0,72  (muestras 0.791 0.793 0.762 0.734 0.761 0.708 0.721)
+  Motor 2: 9 cr · 0 s 0,81 → 5,9 s 0,74  (muestras 0.805 0.8 0.791 0.771 0.75 0.748 0.739)
+  Motor 3: 6 cr · 0 s 0,69 → 5,9 s 0,64  (muestras 0.691 0.657 0.677 0.634 0.615 0.634 0.644)
+  Motor 4: 6 cr · 0 s 0,71 → 5,9 s 0,80  (muestras 0.707 0.762 0.754 0.726 0.796 0.777 0.801)
+  Motor 5: 6 cr · 0 s 0,80 → 5,9 s 0,82  (muestras 0.798 0.783 0.785 0.814 0.815 0.81 0.824)
+  Motor 6: 20 cr · 0 s 0,79 → 3,9 s 0,77  (muestras 0.785 0.772 0.787 0.799 0.79 0.771)
+Agregados al guion (reversibles, ver plan.json): A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11
+ok: index.html (40 KB)

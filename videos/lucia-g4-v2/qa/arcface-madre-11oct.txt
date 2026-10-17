@@ -1,0 +1,20 @@
+Control de cara de la MADRE sobre el master FINAL (11-oct-2026), independiente del editor.
+ArcFace buffalo_l (SCRFD det_10g + w600k_r50) con el venv y los modelos ya instalados (sin instalar nada, sin red), contra las 8 referencias oficiales LOCALES
+(videos/lucia-g4-v2/assets/refs-orig/, R1..R8). Piso del repo 0,70 (FLUJO.md:28); regla del repo final↔fuente ≤ 0,02. Caras < 200 px: poco confiables (se miran a ojo).
+
+Master: out/g4-v2-final-1080x1920.mp4  SHA-256 13cdd1d2f5f0ab2eef1fb0ffd065007d47bf5946a2bb15a5bd24c435142d2a43
+
+Fuente = puntaje de la foto original en v4/PROCEDENCIA.jsonl l.97 (0,806 Seedream 4.5 · 0,707 Seedream 5.0 Pro JPG · 0,687 FLUX 3 limpia · 0,832 K4·5). JSON completo: qa/arcface-madre-11oct.json
+
+cuadro          final   px  fuente      dif
+g4_t0.5.png     0.797  179   0.806   -0.009
+g4_t11.5.png    0.695  184   0.707   -0.012
+g4_t14.0.png    0.677  259   0.687   -0.010
+g4_t26.7.png    0.829  205   0.832   -0.003
+g4_t27.5.png    0.830  207   0.832   -0.002
+g4_t3.0.png     0.804  181   0.806   -0.002
+g4_t4.4.png     0.803  184   0.806   -0.003
+g4_t9.2.png     0.797  182   0.806   -0.009
+
+MÁXIMA diferencia final↔fuente: 0.012  (límite 0,02; la revisión 1 midió 0,012 sobre el master anterior).
+Nota: Seedream 5.0 Pro (0,695) y FLUX 3 (0,677) quedan bajo el piso a propósito: es lo que la pieza muestra.

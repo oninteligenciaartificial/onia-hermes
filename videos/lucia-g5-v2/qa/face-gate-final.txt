@@ -1,0 +1,40 @@
+ACTUALIZACIÓN 11-oct (madre): el master NUEVO SÍ se midió con ArcFace — ver qa/arcface-madre-11oct.txt (diferencia final↔fuente ≤ 0,009). La nota de abajo describe el estado del editor y queda como historia.
+
+NOTA DE LA REVISIÓN 1 (11-oct-2026): este archivo es el de la versión de la mañana (master SHA-256 72860a55…97af5fa, 644 cuadros). El master nuevo (SHA-256 en qa/sha-master.txt, 639 cuadros) NO se midió con ArcFace: en este contenedor no hay venv ni modelo buffalo_l y instalarlos pide aprobación.
+Lo que cambió respecto del master medido NO toca la cara (mismas fotos, mismo empuje lento 1,00 → 1,04 con origen en la cara, mismas cajas; solo cambió cuánto dura cada escena). Evidencia de pixeles en su lugar: qa/psnr-fotos.txt (PSNR del final contra la fuente dentro de la caja de la cara: 37,1 a 38,3 dB)
+y qa/cara-vs-manana.txt (la cara del master nuevo contra la del master de esta tabla: 40,7 a 43,7 dB). Para el puntaje de ArcFace: scripts/fuente-con-zoom.py + .claude/skills/lucia/scripts/face-gate.sh donde esté el venv.
+
+Control de cara del FINAL (out/g5-v2-final-1080x1920.mp4) contra la FUENTE llevada al mismo zoom, sin comprimir (scripts/fuente-con-zoom.py + .claude/skills/lucia/scripts/face-gate.sh; ArcFace buffalo_l contra las 8 referencias oficiales; piso 0,70). Regla del repo: diferencia final ↔ fuente ≤ 0,02.
+
+piso de caras negativas (max): 0.224   gate del repo: 0,70
+archivo                                        centroide  min_ref  max_ref  cara_px  veredicto
+f-gancho_t1.00_FINAL.png                           0.794    0.549    0.723      182  OK (cara < 200 px: poco confiable)
+f-gancho_t1.00_fuente.png                          0.802    0.547    0.723      181  OK (cara < 200 px: poco confiable)
+f-gancho_t2.00_FINAL.png                           0.796    0.546    0.722      185  OK (cara < 200 px: poco confiable)
+f-gancho_t2.00_fuente.png                          0.795    0.535    0.715      183  OK (cara < 200 px: poco confiable)
+f-gancho_t2.79_FINAL.png                           0.806    0.542    0.728      185  OK (cara < 200 px: poco confiable)
+f-gancho_t2.79_fuente.png                          0.793    0.530    0.718      186  OK (cara < 200 px: poco confiable)
+f-e3_t11.83_FINAL.png                              0.356    0.213    0.451      294  BAJO: mirar
+f-e3_t11.83_fuente.png                             0.357    0.211    0.461      293  BAJO: mirar
+f-e3_t12.50_FINAL.png                              0.364    0.222    0.463      299  BAJO: mirar
+f-e3_t12.50_fuente.png                             0.354    0.206    0.462      296  BAJO: mirar
+f-e3_t13.17_FINAL.png                              0.367    0.225    0.460      301  BAJO: mirar
+f-e3_t13.17_fuente.png                             0.358    0.209    0.462      298  BAJO: mirar
+f-cierre_t23.08_FINAL.png                          0.829    0.543    0.787      201  OK
+f-cierre_t23.08_fuente.png                         0.832    0.539    0.786      201  OK
+f-cierre_t24.54_FINAL.png                          0.829    0.541    0.781      205  OK
+f-cierre_t24.54_fuente.png                         0.827    0.534    0.779      205  OK
+f-cierre_t26.00_FINAL.png                          0.822    0.537    0.771      207  OK
+f-cierre_t26.00_fuente.png                         0.828    0.534    0.783      207  OK
+
+Diferencia final ↔ fuente (mismo zoom, sin comprimir):
+  f-gancho_t1.00           final 0.794  fuente 0.802  diferencia -0.008
+  f-gancho_t2.00           final 0.796  fuente 0.795  diferencia +0.001
+  f-gancho_t2.79           final 0.806  fuente 0.793  diferencia +0.013
+  f-e3_t11.83              final 0.356  fuente 0.357  diferencia -0.001
+  f-e3_t12.50              final 0.364  fuente 0.354  diferencia +0.010
+  f-e3_t13.17              final 0.367  fuente 0.358  diferencia +0.009
+  f-cierre_t23.08          final 0.829  fuente 0.832  diferencia -0.003
+  f-cierre_t24.54          final 0.829  fuente 0.827  diferencia +0.002
+  f-cierre_t26.00          final 0.822  fuente 0.828  diferencia -0.006
+MÁXIMA diferencia absoluta: 0.013 (9 pares) — ✔ ≤ 0,02: el escalado, el empuje lento, la caja de cara y el H.264 no deforman la cara

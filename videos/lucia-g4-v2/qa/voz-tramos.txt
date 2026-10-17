@@ -1,0 +1,36 @@
+VOZ POR CARACTERES — G4 v2 · Seis motores de imagen, una cara: ¿cuál la conserva? (re-corte de 28 s, con los motores nombrados)
+Estimación a 17 car/s (sensibilidad 16/18); pausa máxima entre frases 0.25 s (PLAN §4-bis); desfase máximo tras su costura 0.15 s. NO hay voz: son estimaciones; se derivan de las duraciones reales cuando exista el audio.
+Texto: 444 caracteres con saltos (433 sin ellos); cupo de voz restante hasta el 13-oct 01:17 UTC: 381 (la madre lo confirma).
+
+línea  car  voz@17   inicio   tramo   ¿cabe?   pausa → siguiente (16 · 17 · 18 car/s)    costura (desfase)   texto
+   1   30   1.76 s    0.100   1.92 s  cabe     +0.04  · +0.16  · +0.25▲                    —                 A ver, ¿cuál conserva su cara?
+   2   44   2.59 s    2.020   2.75 s  cabe     +0.00  · +0.16  · +0.31▲                    —                 Probé la misma orden en 6 motores de imagen.
+   3   26   1.53 s    4.770   1.64 s  cabe     +0.02  · +0.11  · +0.20                     4.750 (+0.020)    Medí contra 8 fotos suyas.
+   4   31   1.82 s    6.410   1.93 s  cabe     −0.01✖ · +0.11  · +0.21                     —                 Piso cero setenta: lo elegí yo.
+   5   33   1.94 s    8.340   2.03 s  cabe     −0.03✖ · +0.09  · +0.20                     8.333 (+0.007)    Seedream, 1 crédito: la sostiene.
+   6   42   2.47 s   10.370   2.69 s  cabe     +0.07  · +0.22  · +0.36▲                    10.250 (+0.120)   Seedream Pro, 2 y medio: justo en el piso.
+   7   32   1.88 s   13.060   2.11 s  cabe     +0.11  · +0.23  · +0.33▲                    13.000 (+0.060)   FLUX, el más caro, bajo el piso.
+   8   39   2.29 s   15.170   2.50 s  cabe     +0.06  · +0.21  · +0.33▲                    15.167 (+0.003)   Y ojo: pagar más no mejoró el parecido.
+   9   40   2.35 s   17.670   2.58 s  cabe     +0.08  · +0.23  · +0.36▲                    —                 Fue una toma cada uno: prueba, no regla.
+  10   43   2.53 s   20.250   2.77 s  cabe     +0.09  · +0.25  · +0.39▲                    —                 Si dos parecidos se rozan, eso ya es ruido.
+  11   40   2.35 s   23.025   2.60 s  cabe     +0.10  · +0.25  · +0.38▲                    22.875 (+0.150)   En otra escena, el Kling perdió la cara.
+  12   33   1.94 s   25.625   2.42 s  cabe     +0.35 · +0.48 · +0.58                       25.625 (+0.000)   Seguime: cada semana, una prueba.
+
+Cola: la voz termina a 27.57 s y el video a 28.04 s → 0.48 s (16 car/s: 0.35 · 18 car/s: 0.58). No es una pausa entre frases: es el final del video (el CTA queda 2.42 s en pantalla).
+Leyenda: ✖ = la línea se pisa con la siguiente; ▲ = pausa > 0,25 s. A 16 y 18 car/s solo informan (±1 car/s mueve cada pausa ±0,06-0,15 s).
+
+Sincronía (palabra estimada vs evento; − = el evento llega antes que la palabra):
+  línea  1 «su cara» ≈ 1.39 s · c1 acento «su cara?»                     1.50 s  (+0.11 s)
+  línea  2 «6 motores» ≈ 3.43 s · c2 acento «Seis motores…»                3.40 s  (−0.03 s)
+  línea  4 «Piso» ≈ 6.41 s · marca «mi piso · 0,70»                   6.35 s  (−0.06 s)
+  línea  5 «1 crédito» ≈ 8.93 s · c4 acento «1 crédito»                    8.90 s  (−0.03 s)
+  línea  6 «justo en el piso» ≈ 11.84 s · pastilla «justo en el piso» (golpe)      11.80 s  (−0.04 s)
+  línea  7 «bajo el piso» ≈ 14.18 s · sello «bajo el piso» (golpe)             14.50 s  (+0.32 s)
+  línea  8 «mejoró» ≈ 16.35 s · c7 acento «mejoró el parecido.»          16.60 s  (+0.25 s)
+  línea 10 «se rozan» ≈ 21.25 s · pulso de los tres puntos (último)        21.17 s  (−0.08 s)
+  línea 11 «el Kling» ≈ 23.97 s · anillo sobre Kling O1 Image              24.00 s  (+0.04 s)
+  línea 11 «perdió» ≈ 24.50 s · c8 acento «perdió la cara.»              24.30 s  (−0.20 s)
+  línea 12 «cada semana» ≈ 26.15 s · c9 acento «cada semana…»                 26.20 s  (+0.05 s)
+  mayor desfase evento-palabra: 0.32 s (la pastilla y el sello llegan antes que sus palabras a propósito: se leen primero)
+
+✔ las 12 líneas caben a 17 car/s y ninguna pausa pasa de 0.25 s (mayor: 0.25 s; menor: 0.09 s)

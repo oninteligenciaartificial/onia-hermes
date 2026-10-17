@@ -1,0 +1,452 @@
+{
+  "pieza": "Viernes · «Casi publico este 0,83» (El error de la semana) — v2 (placa simplificada: una idea por vez, con cara)",
+  "plantilla": "videos/lucia-viernes-copia-v1 (v1.1) y, antes, videos/lucia-p9-luz-cara (estructura y gates) y videos/lucia-g4-v2 (fotos fijas)",
+  "lienzo": {
+    "w": 1080,
+    "h": 1920,
+    "fps": 24,
+    "cuadros": 360,
+    "duracion": 15
+  },
+  "empuje": {
+    "cuadros": 6,
+    "ease": "power3.inOut"
+  },
+  "voz": {
+    "archivo": "guion-voz.txt",
+    "max_caracteres": 381,
+    "ultimo_tramo_cuadros": 63
+  },
+  "fotos": {
+    "k4": {
+      "archivo": "assets/k4.png",
+      "origen": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/img-omni-image-k4cafe-dad464de.png",
+      "job": "dad464de-75a8-45f5-b799-8d91e5a63d1d",
+      "sha256": "2a2e940147431146041d8ace6942a35a600ed91986f3030840751f33e8127200",
+      "ancho": 1536,
+      "alto": 2720
+    },
+    "r3": {
+      "archivo": "assets/r3.png",
+      "origen": "videos/lucia-g4-v2/assets/refs-orig/R3_casi_frontal.png",
+      "job": "d7d6d36a",
+      "sha256": "0dc08193977ee2a1a0b7a6564df83f6b45cdb8c8f2495afc693d5c5d050bf756",
+      "ancho": 1792,
+      "alto": 2400
+    }
+  },
+  "datos": {
+    "fuente": "PROCEDENCIA.jsonl línea 97 (imagen_misma_escena_K1_mismas_6_refs → kling_omni_image_K4cafe_dad464de) y medicion-sin-refs-entrada-20261011.txt, PRUEBA ESTRICTA PARA LOS MOTORES DE IMAGEN, fila «Kling O1 Image K4»",
+    "promedio8": 0.831,
+    "por_foto": {
+      "R1": 0.686,
+      "R2": 0.619,
+      "R3": 0.927,
+      "R4": 0.563,
+      "R5": 0.724,
+      "R6": 0.659,
+      "R7": 0.733,
+      "R8": 0.599
+    },
+    "sin_recibidas_4": 0.743,
+    "recibidas": [
+      "R1",
+      "R3",
+      "R6",
+      "R7"
+    ],
+    "no_recibidas": [
+      "R2",
+      "R4",
+      "R5",
+      "R8"
+    ],
+    "foto_copiada": "R3",
+    "creditos": 0.5,
+    "cara_px": 677,
+    "piso": 0.7,
+    "otras_escenas": {
+      "K1": 0.794,
+      "K2cafe": 0.35
+    },
+    "pares_oficiales": {
+      "fuente": "videos/lucia-p9-luz-cara/qa/face-gate-v31.json → refs_internal (pairwise_min, pairwise_mean y el máximo fuera de la diagonal de matrix; 28 parejas entre las 8 fotos oficiales)",
+      "n": 28,
+      "min": 0.509,
+      "max": 0.719,
+      "media": 0.642
+    }
+  },
+  "textos": {
+    "rotulo": "Lucía Antelo · personaje IA de Onia",
+    "titulo": "Casi publico este 0,83.",
+    "dato": "Kling O1 Image · parecido 0,83",
+    "cap_k4": "Kling O1 Image",
+    "cap_k4b": "una sola toma.",
+    "cap_r3": "Mirá una foto suya que recibió.",
+    "tile2": "Misma pose, ventana, taza.",
+    "beat_a": "Con esa foto: 0,93",
+    "beat_b": "Con sus otras 7 fotos: 0,56–0,73",
+    "beat_c": "Casi copia: no prueba identidad.",
+    "cta": "Seguime: cada semana, una prueba."
+  },
+  "paneles": {
+    "y": 312,
+    "w": 540,
+    "h": 860,
+    "k4": {
+      "ajuste": "ancho",
+      "ox": 0
+    },
+    "r3": {
+      "ajuste": "alto",
+      "ox": 100
+    }
+  },
+  "aros": [
+    {
+      "id": "pose",
+      "t": 4.041666666666667,
+      "que": "cabeza apoyada en la mano",
+      "k4": {
+        "tipo": "elipse",
+        "cx": 427,
+        "cy": 1146,
+        "rx": 156,
+        "ry": 171
+      },
+      "r3": {
+        "tipo": "elipse",
+        "cx": 795,
+        "cy": 1334,
+        "rx": 130,
+        "ry": 184
+      },
+      "dibujo": 0.6
+    },
+    {
+      "id": "ventana",
+      "t": 4.416666666666667,
+      "que": "marco de la ventana",
+      "k4": {
+        "tipo": "rect",
+        "x": 1300,
+        "y": 40,
+        "w": 215,
+        "h": 960
+      },
+      "r3": {
+        "tipo": "rect",
+        "x": 1590,
+        "y": 40,
+        "w": 140,
+        "h": 960
+      },
+      "dibujo": 0.6
+    },
+    {
+      "id": "taza",
+      "t": 4.791666666666667,
+      "que": "taza de barro junto a la laptop",
+      "k4": {
+        "tipo": "rect",
+        "x": 150,
+        "y": 1385,
+        "w": 270,
+        "h": 255
+      },
+      "r3": {
+        "tipo": "rect",
+        "x": 315,
+        "y": 1395,
+        "w": 300,
+        "h": 260
+      },
+      "dibujo": 0.6
+    }
+  ],
+  "escenas": [
+    {
+      "id": "s1",
+      "a": 0,
+      "b": 2.75,
+      "fotos": [
+        "k4"
+      ]
+    },
+    {
+      "id": "s2",
+      "a": 2.5,
+      "b": 7.875,
+      "fotos": [
+        "k4",
+        "r3"
+      ]
+    },
+    {
+      "id": "s3",
+      "a": 7.625,
+      "b": 15,
+      "fotos": [
+        "k4"
+      ]
+    }
+  ],
+  "costuras": [
+    {
+      "t": 2.75,
+      "sale": "s1",
+      "entra": "s2"
+    },
+    {
+      "t": 7.875,
+      "sale": "s2",
+      "entra": "s3"
+    }
+  ],
+  "layout": {
+    "comentario": "top (px del lienzo 1080x1920) de cada tile; medido en el DOM por scripts/layout-dom.mjs. Los beats ocupan siempre la misma casilla (y 'beat') debajo de la foto.",
+    "rotulo": 1172,
+    "titulo": 1273,
+    "dato": 1395,
+    "cap": 1194,
+    "tile2": 1344,
+    "beat": 1194,
+    "cta": 1194,
+    "rotulo_px": 48,
+    "titulo_px": 66,
+    "dato_px": 48,
+    "cap_px": 48,
+    "tile2_px": 52,
+    "beat_px": 56,
+    "beat_c_px": 64,
+    "cta_px": 66,
+    "medir_t": {
+      "rotulo": 2.0,
+      "titulo": 2.0,
+      "dato": 2.0,
+      "cap-k4": 4.0,
+      "cap-r3": 4.0,
+      "tile2": 5.5,
+      "beat-a": 7.0,
+      "beat-b": 9.5,
+      "beat-c": 11.5,
+      "cta": 14.0
+    }
+  },
+  "eventos": [
+    {
+      "t": 0,
+      "selector": "#titulo",
+      "que": "gancho: el error en el cuadro 0"
+    },
+    {
+      "t": 0.3333333333333333,
+      "selector": "#dato",
+      "que": "primer número antes de 3 s",
+      "entrada": true,
+      "fade": 0.12
+    },
+    {
+      "t": 1.75,
+      "selector": "#dato",
+      "que": "acento del parecido"
+    },
+    {
+      "t": 2.75,
+      "selector": "#s2",
+      "que": "entra la foto que recibió (empuje de 6 cuadros)",
+      "empuje": true
+    },
+    {
+      "t": 2.75,
+      "selector": "#cap-r3",
+      "que": "entra «mirá una foto suya que recibió»",
+      "entrada": true,
+      "fade": 0.15,
+      "voz": 3
+    },
+    {
+      "t": 3.625,
+      "selector": "#cap-r3",
+      "que": "acento de la foto recibida"
+    },
+    {
+      "t": 4.041666666666667,
+      "selector": "#tile2",
+      "que": "entra «misma pose, ventana, taza»",
+      "entrada": true,
+      "fade": 0.15,
+      "voz": 4
+    },
+    {
+      "t": 4.041666666666667,
+      "selector": "#aro-pose-k4,#aro-pose-r3",
+      "que": "aro: la mano y el pelo (se dibuja en 0,6 s)",
+      "aro": true,
+      "dur": 0.6
+    },
+    {
+      "t": 4.416666666666667,
+      "selector": "#aro-ventana-k4,#aro-ventana-r3",
+      "que": "aro: marco de la ventana (se dibuja en 0,6 s)",
+      "aro": true,
+      "dur": 0.6
+    },
+    {
+      "t": 4.791666666666667,
+      "selector": "#aro-taza-k4,#aro-taza-r3",
+      "que": "aro: taza junto a la laptop (se dibuja en 0,6 s)",
+      "aro": true,
+      "dur": 0.6
+    },
+    {
+      "t": 4.791666666666667,
+      "selector": "#tile2",
+      "que": "acento del texto de las coincidencias"
+    },
+    {
+      "t": 5.791666666666667,
+      "selector": "#cap-k4",
+      "que": "sale el rótulo de K4 (cede el lugar al beat A)",
+      "salida": true,
+      "fade": 0.1
+    },
+    {
+      "t": 5.791666666666667,
+      "selector": "#cap-r3",
+      "que": "sale «mirá una foto suya que recibió»",
+      "salida": true,
+      "fade": 0.1
+    },
+    {
+      "t": 5.791666666666667,
+      "selector": "#tile2",
+      "que": "sale «misma pose, ventana, taza»",
+      "salida": true,
+      "fade": 0.1
+    },
+    {
+      "t": 5.875,
+      "selector": "#beat-a",
+      "que": "BEAT A: «con esa foto: 0,93» sobre las dos caras",
+      "entrada": true,
+      "fade": 0.1,
+      "voz": 5
+    },
+    {
+      "t": 6.625,
+      "selector": "#beat-a",
+      "que": "acento del 0,93"
+    },
+    {
+      "t": 7.875,
+      "selector": "#s3",
+      "que": "entra K4 a pantalla completa (empuje de 6 cuadros)",
+      "empuje": true
+    },
+    {
+      "t": 7.875,
+      "selector": "#beat-b",
+      "que": "BEAT B: «con sus otras 7 fotos: 0,56–0,73» llega con la foto",
+      "voz": 6
+    },
+    {
+      "t": 8.75,
+      "selector": "#beat-b",
+      "que": "acento del rango"
+    },
+    {
+      "t": 10.25,
+      "selector": "#beat-b",
+      "que": "sale el beat B",
+      "salida": true,
+      "fade": 0.1
+    },
+    {
+      "t": 10.291666666666666,
+      "selector": "#beat-c",
+      "que": "BEAT C: «casi copia: no prueba identidad»",
+      "entrada": true,
+      "fade": 0.1,
+      "voz": 7
+    },
+    {
+      "t": 11.25,
+      "selector": "#beat-c",
+      "que": "acento de la conclusión"
+    },
+    {
+      "t": 12.416666666666666,
+      "selector": "#beat-c",
+      "que": "sale el beat C",
+      "salida": true,
+      "fade": 0.1
+    },
+    {
+      "t": 12.458333333333334,
+      "selector": "#cta",
+      "que": "CTA",
+      "entrada": true,
+      "fade": 0.08,
+      "voz": 8
+    },
+    {
+      "t": 13.833333333333334,
+      "selector": "#cta",
+      "que": "acento una prueba semanal"
+    }
+  ],
+  "aro_len": 1000,
+  "tipografia": {
+    "comentario": "mínimo de letra a 1080 px de ancho: TODO texto visible ≥ 48 px, sin excepción (el DOM mide cada nodo de texto; los beats llevan la etiqueta a ≥ 56 px y la cifra a ≥ 100 px)",
+    "absoluto": 48,
+    "general": 48,
+    "grandes": 48,
+    "grandes_ids": [
+      "titulo",
+      "cap-k4",
+      "cap-r3",
+      "tile2",
+      "beat-a",
+      "beat-b",
+      "beat-c",
+      "cta"
+    ]
+  },
+  "grupos": {
+    "gancho": [
+      "rotulo",
+      "titulo",
+      "dato"
+    ],
+    "comparacion": [
+      "cap-k4",
+      "cap-r3",
+      "tile2"
+    ],
+    "beat-a": [
+      "beat-a"
+    ],
+    "beat-b": [
+      "beat-b"
+    ],
+    "beat-c": [
+      "beat-c"
+    ],
+    "cta": [
+      "cta"
+    ]
+  },
+  "beats": [
+    "beat-a",
+    "beat-b",
+    "beat-c"
+  ],
+  "cara_visible": {
+    "muestreo": 0.5,
+    "min_px": 200,
+    "objetivo": 0.85,
+    "minimo": 0.5
+  }
+}

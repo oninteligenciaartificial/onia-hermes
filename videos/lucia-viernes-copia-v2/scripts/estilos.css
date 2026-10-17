@@ -1,0 +1,33 @@
+/* Fuentes locales de marca (Bricolage Grotesque y DM Sans; la mono de la v1.1 ya no se usa: no hay gráfico). Sin red. */
+@font-face{font-family:"Bricolage Grotesque";src:url(assets/fonts/BricolageGrotesque-var-latin.woff2) format("woff2");font-weight:500 700;font-style:normal;font-display:block}
+@font-face{font-family:"DM Sans";src:url(assets/fonts/DMSans-var-latin.woff2) format("woff2");font-weight:400 500;font-style:normal;font-display:block}
+*{box-sizing:border-box}html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#11191b;font-family:"DM Sans",sans-serif;color:#fff;-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision;font-variant-ligatures:none}
+#root{position:relative;width:100%;height:100%;overflow:hidden}
+.escena{position:absolute;inset:0;width:1080px;height:1920px;background:#11191b;overflow:hidden}
+.foto-completa{position:absolute;left:0;top:0;width:1080px;height:1920px;object-fit:cover;display:block}
+.texto{position:absolute;left:80px;width:920px;line-height:1.1;font-weight:500;padding:12px 22px;background:#11191b;border-left:10px solid #83d5be;border-radius:12px;white-space:normal;overflow-wrap:normal}
+.titular{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;line-height:1.12;letter-spacing:-.01em}
+.nota{font-family:"DM Sans",sans-serif;font-weight:500;line-height:1.1}
+.dato{font-family:"DM Sans",sans-serif;font-weight:500}
+
+/* Escena 2: las dos fotos lado a lado (K4 a la izquierda, R3 —la foto de entrada— a la derecha), recortadas al mismo alto; los aros se dibujan encima. */
+.panel{position:absolute;overflow:hidden;background:#11191b}
+.panel img{position:absolute;display:block;max-width:none}
+.aro{position:absolute;left:0;top:0;pointer-events:none;overflow:visible;filter:drop-shadow(0 0 3px rgba(17,25,27,.95))}
+.aro *{/* butt y no round: con un trazo de longitud cero (aro aún sin dibujar) el remate redondo dejaba un punto naranja en el cuadro 72. pathLength=1000 (no 1): GSAP redondea strokeDashoffset a enteros y con 1 el aro saltaba de oculto a completo en 2 cuadros */fill:none;stroke:#ffbc94;stroke-width:7;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:1000 1000;stroke-dashoffset:0}
+#divisor{position:absolute;background:#11191b}
+.cap{display:flex;align-items:center}
+#cap-r3{border-left-color:#ffbc94;text-wrap:balance}
+
+/* Beats de datos (6,6 a 15 s): UNA idea por vez, sobre una cara. Etiqueta de 56 px y cifra de 112 px (Bricolage, no mono: la coma de la fuente mono sale separada a ese tamaño); mínimo 48 px en todo texto. */
+.beat{padding:14px 28px 12px 24px;line-height:1.05}
+.beat .lb{display:block;font-family:"DM Sans",sans-serif;font-weight:500;line-height:1.1}
+.beat .num{display:block;margin-top:2px;font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:2em;line-height:1;letter-spacing:-.02em;white-space:nowrap}
+#beat-a{border-left-color:#ffbc94}
+#beat-a .num{color:#ffbc94}
+#beat-b .num{color:#83d5be}
+#beat-c{border-left-color:#ffbc94;font-family:"Bricolage Grotesque",sans-serif;font-weight:700;line-height:1.12;letter-spacing:-.01em;text-wrap:balance}
+#cta{border-color:#ffbc94;text-wrap:balance}
+.nb{white-space:nowrap}
+/* Estado inicial: la opacidad oculta de los tiles con entrada vive en CSS (el cuadro 0 no muestra lo que entra después). El desplazamiento de #s2/#s3 NO va en CSS (lint gsap_css_transform_conflict): lo fija timeline.js con fromTo al inicio. */
+.oculto{opacity:0}

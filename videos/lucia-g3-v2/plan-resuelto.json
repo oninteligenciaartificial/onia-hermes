@@ -1,0 +1,747 @@
+{
+ "lienzo": {
+  "w": 1080,
+  "h": 1920,
+  "fps": 24,
+  "duracion": 27.917,
+  "cuadros": 670
+ },
+ "acento": "#10C26B",
+ "zona_segura": {
+  "texto_hasta_y": 1490,
+  "derecha_libre_px": 80,
+  "derecha_libre_desde_y": 1000,
+  "arriba_minimo_y": 280,
+  "margen_bajo_menton": 40,
+  "texto_min_px": 34,
+  "rotulo_px": 40
+ },
+ "caras": {
+  "nota": "SCRFD det_10g (face_identity_qa.py) medido el 8-oct-2026 para G3 v1: fotos llevadas a 1080x1920 (cover), clips 720x1280 llevados a x1,5. v2 usa las mismas fotos/clips al mismo encuadre; las fotos llevan un empuje lento 1,00 a 1,03 (el mentón de la descartada sube 3 px: más margen).",
+  "desc": {
+   "caja": [
+    495,
+    599,
+    681,
+    847
+   ],
+   "menton": 847,
+   "texto_desde_y": 887,
+   "cielo_hasta_y": 540
+  },
+  "buena": {
+   "caja": [
+    417,
+    1019,
+    675,
+    1364
+   ],
+   "menton": 1364,
+   "cabello_arriba_aprox": 925,
+   "texto_hasta_y_arriba": 880
+  },
+  "k4": {
+   "menton_max": 1405,
+   "menton_min": 1346,
+   "tope_caja": 1002,
+   "cabello_arriba_aprox": 915,
+   "texto_hasta_y_arriba": 885
+  },
+  "k1": {
+   "menton_max": 667,
+   "menton_min": 653,
+   "tope": 446,
+   "cuerpo_texto_desde_y": 707
+  }
+ },
+ "empuje": {
+  "cuadros": 6,
+  "ease": "power3.inOut",
+  "nota": "Empuje rígido de 6 cuadros a la izquierda en la ventana [T-6, T]; cae justo en el hueco de 6 cuadros entre dos líneas de voz."
+ },
+ "voz": {
+  "archivo": "guion-voz.txt",
+  "cps": 17,
+  "tramos_cuadros": [
+   53,
+   47,
+   60,
+   47,
+   53,
+   27,
+   53,
+   53,
+   47,
+   47,
+   60,
+   47
+  ],
+  "hueco_cuadros": 6,
+  "cola_cuadros": 10,
+  "max_caracteres": 450,
+  "max_hueco_s": 0.25,
+  "sobra_obj_s": 0.25,
+  "sobra_max_s": 0.3,
+  "min_s": 26,
+  "max_s": 30,
+  "nota": "H1 (revisión 1, 11-oct): la voz se mide en CARACTERES (≈ 17 por segundo, G1 v2), no en palabras. Un tramo = una línea de guion-voz.txt = una VENTANA de voz de tramos_cuadros[n-1] cuadros (valores CONGELADOS = los de v2.0, para que las tarjetas, los empujes y los clips no se muevan); entre ventanas hay 6 cuadros (0,25 s), donde cae cada empuje. build.mjs exige para cada línea: chars/cps ≤ ventana (cabe) y ventana − chars/cps ≤ sobra_max_s (hueco). Si existe duraciones.json (duración REAL de cada pista, la escribe scripts/poner-voz.mjs --medir) manda sobre cps y tramos_cuadros: cada ventana = ceil(voz real × 24) cuadros, así que la pausa entre líneas queda en 0,25 s + menos de 1 cuadro. La cola de 10 cuadros (0,42 s) tras la última palabra deja que el CTA termine de leerse. Hoy NO hay audio: la pista es AAC en silencio.",
+  "caracteres": 412,
+  "tramos": [
+   {
+    "i": 1,
+    "texto": "Mirá: tres errores que casi publico.",
+    "palabras": 6,
+    "chars": 36,
+    "a": 0,
+    "b": 53,
+    "dur_s": 2.208,
+    "voz_s": 2.118,
+    "fuente": "estimada",
+    "sobra_s": 0.091,
+    "pausa_s": 0.341,
+    "a_s": 0,
+    "b_s": 2.208
+   },
+   {
+    "i": 2,
+    "texto": "Uno: sin letreros, y salió uno.",
+    "palabras": 6,
+    "chars": 31,
+    "a": 59,
+    "b": 106,
+    "dur_s": 1.958,
+    "voz_s": 1.824,
+    "fuente": "estimada",
+    "sobra_s": 0.135,
+    "pausa_s": 0.385,
+    "a_s": 2.458,
+    "b_s": 4.417
+   },
+   {
+    "i": 3,
+    "texto": "La cara pasó el control, pero el fondo no.",
+    "palabras": 9,
+    "chars": 42,
+    "a": 112,
+    "b": 172,
+    "dur_s": 2.5,
+    "voz_s": 2.471,
+    "fuente": "estimada",
+    "sobra_s": 0.029,
+    "pausa_s": 0.279,
+    "a_s": 4.667,
+    "b_s": 7.167
+   },
+   {
+    "i": 4,
+    "texto": "Mi regla: mirar también el fondo.",
+    "palabras": 6,
+    "chars": 33,
+    "a": 178,
+    "b": 225,
+    "dur_s": 1.958,
+    "voz_s": 1.941,
+    "fuente": "estimada",
+    "sobra_s": 0.017,
+    "pausa_s": 0.267,
+    "a_s": 7.417,
+    "b_s": 9.375
+   },
+   {
+    "i": 5,
+    "texto": "Dos: una letra que parece escrita.",
+    "palabras": 6,
+    "chars": 34,
+    "a": 231,
+    "b": 284,
+    "dur_s": 2.208,
+    "voz_s": 2,
+    "fuente": "estimada",
+    "sobra_s": 0.208,
+    "pausa_s": 0.458,
+    "a_s": 9.625,
+    "b_s": 11.833
+   },
+   {
+    "i": 6,
+    "texto": "Ahí no dice nada.",
+    "palabras": 4,
+    "chars": 17,
+    "a": 290,
+    "b": 317,
+    "dur_s": 1.125,
+    "voz_s": 1,
+    "fuente": "estimada",
+    "sobra_s": 0.125,
+    "pausa_s": 0.375,
+    "a_s": 12.083,
+    "b_s": 13.208
+   },
+   {
+    "i": 7,
+    "texto": "Si no se lee, no sirve para publicar.",
+    "palabras": 8,
+    "chars": 37,
+    "a": 323,
+    "b": 376,
+    "dur_s": 2.208,
+    "voz_s": 2.176,
+    "fuente": "estimada",
+    "sobra_s": 0.032,
+    "pausa_s": 0.282,
+    "a_s": 13.458,
+    "b_s": 15.667
+   },
+   {
+    "i": 8,
+    "texto": "Y tres: una mano le tapa a la otra.",
+    "palabras": 9,
+    "chars": 35,
+    "a": 382,
+    "b": 435,
+    "dur_s": 2.208,
+    "voz_s": 2.059,
+    "fuente": "estimada",
+    "sobra_s": 0.15,
+    "pausa_s": 0.4,
+    "a_s": 15.917,
+    "b_s": 18.125
+   },
+   {
+    "i": 9,
+    "texto": "Si cruza, no puedo contar dedos.",
+    "palabras": 6,
+    "chars": 32,
+    "a": 441,
+    "b": 488,
+    "dur_s": 1.958,
+    "voz_s": 1.882,
+    "fuente": "estimada",
+    "sobra_s": 0.076,
+    "pausa_s": 0.326,
+    "a_s": 18.375,
+    "b_s": 20.333
+   },
+   {
+    "i": 10,
+    "texto": "Y yo cuento solo lo que se ve.",
+    "palabras": 8,
+    "chars": 30,
+    "a": 494,
+    "b": 541,
+    "dur_s": 1.958,
+    "voz_s": 1.765,
+    "fuente": "estimada",
+    "sobra_s": 0.194,
+    "pausa_s": 0.444,
+    "a_s": 20.583,
+    "b_s": 22.542
+   },
+   {
+    "i": 11,
+    "texto": "Reviso cuadro a cuadro antes de publicar.",
+    "palabras": 7,
+    "chars": 41,
+    "a": 547,
+    "b": 607,
+    "dur_s": 2.5,
+    "voz_s": 2.412,
+    "fuente": "estimada",
+    "sobra_s": 0.088,
+    "pausa_s": 0.338,
+    "a_s": 22.792,
+    "b_s": 25.292
+   },
+   {
+    "i": 12,
+    "texto": "Seguime: cada semana, una prueba.",
+    "palabras": 5,
+    "chars": 33,
+    "a": 613,
+    "b": 660,
+    "dur_s": 1.958,
+    "voz_s": 1.941,
+    "fuente": "estimada",
+    "sobra_s": 0.017,
+    "pausa_s": null,
+    "a_s": 25.542,
+    "b_s": 27.5
+   }
+  ]
+ },
+ "escenas": {
+  "desc": {
+   "tipo": "foto",
+   "src": "assets/descartada.jpg",
+   "a": 0,
+   "b": 7.416666666666666,
+   "zoom": 1.03,
+   "capa": "foto descartada K4·1 (letrero inventado, difuminado) a pantalla completa: gancho + error 1",
+   "id": "desc",
+   "a_f": 0,
+   "b_f": 178
+  },
+  "buena": {
+   "tipo": "foto",
+   "src": "assets/buena.jpg",
+   "a": 7.166666666666666,
+   "b": 9.625,
+   "zoom": 1.03,
+   "capa": "foto nueva sin letrero (la regla 1)",
+   "id": "buena",
+   "a_f": 172,
+   "b_f": 231
+  },
+  "agenda": {
+   "tipo": "foto",
+   "src": "assets/agenda.jpg",
+   "a": 9.375,
+   "b": 15.916666666666666,
+   "zoom": 1.03,
+   "capa": "foto de la agenda K2·2: error 2",
+   "id": "agenda",
+   "a_f": 225,
+   "b_f": 382
+  },
+  "k4": {
+   "tipo": "clip",
+   "src": "assets/k4.mp4",
+   "a": 15.666666666666666,
+   "b": 20.583333333333332,
+   "media_inicio": 14,
+   "capa": "clip K4 a 1x (media_inicio automático: el cuadro 120 cae 12 cuadros antes de T10): error 3",
+   "id": "k4",
+   "a_f": 376,
+   "b_f": 494
+  },
+  "placa": {
+   "tipo": "placa",
+   "a": 20.333333333333332,
+   "b": 22.791666666666664,
+   "capa": "placa oscura con el recorte ampliado del cuadro 120 (la ceremonia de contar dedos, 1,96 s en reposo)",
+   "id": "placa",
+   "a_f": 488,
+   "b_f": 547
+  },
+  "k1": {
+   "tipo": "clip",
+   "src": "assets/k1.mp4",
+   "a": 22.541666666666664,
+   "b": 27.916666666666664,
+   "media_inicio": 14,
+   "capa": "cierre: clip K1 (media_inicio automático = 145 − cuadros − 2, máx 20)",
+   "id": "k1",
+   "a_f": 541,
+   "b_f": 670
+  }
+ },
+ "costuras": [
+  {
+   "t": 7.416666666666666,
+   "sale": [
+    "desc"
+   ],
+   "entra": [
+    "buena"
+   ],
+   "tarjetas": {
+    "sale": "c3",
+    "entra": "c4"
+   },
+   "t_f": 178
+  },
+  {
+   "t": 9.625,
+   "sale": [
+    "buena"
+   ],
+   "entra": [
+    "agenda"
+   ],
+   "tarjetas": {
+    "sale": "c4",
+    "entra": "c5"
+   },
+   "t_f": 231
+  },
+  {
+   "t": 15.916666666666666,
+   "sale": [
+    "agenda"
+   ],
+   "entra": [
+    "k4"
+   ],
+   "tarjetas": {
+    "sale": "c7",
+    "entra": "c8"
+   },
+   "t_f": 382
+  },
+  {
+   "t": 20.583333333333332,
+   "sale": [
+    "k4",
+    "cc-k4",
+    "cc-ctr"
+   ],
+   "entra": [
+    "placa"
+   ],
+   "tarjetas": {
+    "sale": "c9",
+    "entra": "c10"
+   },
+   "t_f": 494
+  },
+  {
+   "t": 22.791666666666664,
+   "sale": [
+    "placa"
+   ],
+   "entra": [
+    "k1"
+   ],
+   "tarjetas": {
+    "sale": "c10",
+    "entra": "c11"
+   },
+   "t_f": 547
+  }
+ ],
+ "rotulo": {
+  "texto": "Lucía Antelo · personaje IA de Onia",
+  "a": 0,
+  "b": 3.25,
+  "top": 905
+ },
+ "tarjetas": [
+  {
+   "id": "c1",
+   "tramo": 1,
+   "texto": "Tres errores que",
+   "acento": "casi publico.",
+   "a": 0,
+   "b": 2.458333333333333,
+   "bottom": 1455,
+   "sin_entrada": true,
+   "n_palabras": 5,
+   "min_s": 2.05,
+   "entra": 0,
+   "a_f": 0,
+   "b_f": 59
+  },
+  {
+   "id": "c2",
+   "tramo": 2,
+   "num": "1",
+   "texto": "Letrero que",
+   "acento": "no pedí.",
+   "acento_t": 3.625,
+   "a": 2.458333333333333,
+   "b": 4.666666666666666,
+   "bottom": 1455,
+   "n_palabras": 5,
+   "min_s": 2.05,
+   "entra": 2.416667,
+   "a_f": 59,
+   "b_f": 112
+  },
+  {
+   "id": "c3",
+   "tramo": 3,
+   "texto": "La cara pasó.",
+   "acento": "El fondo, no.",
+   "acento_t": 5.916666666666666,
+   "a": 4.666666666666666,
+   "b": 7.416666666666666,
+   "bottom": 1455,
+   "n_palabras": 6,
+   "min_s": 2.4,
+   "entra": 4.625,
+   "a_f": 112,
+   "b_f": 178
+  },
+  {
+   "id": "c4",
+   "tramo": 4,
+   "texto": "Mirar también",
+   "acento": "el fondo.",
+   "acento_t": 8.5,
+   "a": 7.416666666666666,
+   "b": 9.625,
+   "top": 300,
+   "n_palabras": 4,
+   "min_s": 1.7,
+   "entra": 7.166667,
+   "a_f": 178,
+   "b_f": 231
+  },
+  {
+   "id": "c5",
+   "tramo": 5,
+   "num": "2",
+   "texto": "Letra que",
+   "acento": "parece escrita.",
+   "acento_t": 10.875,
+   "a": 9.625,
+   "b": 12.083333333333332,
+   "bottom": 1455,
+   "n_palabras": 5,
+   "min_s": 2.05,
+   "entra": 9.375,
+   "a_f": 231,
+   "b_f": 290
+  },
+  {
+   "id": "c6",
+   "tramo": 6,
+   "texto": "Sin",
+   "acento": "mensaje.",
+   "acento_t": 12.875,
+   "a": 12.083333333333332,
+   "b": 13.458333333333332,
+   "bottom": 1455,
+   "n_palabras": 2,
+   "min_s": 1,
+   "entra": 12.041667,
+   "a_f": 290,
+   "b_f": 323
+  },
+  {
+   "id": "c7",
+   "tramo": 7,
+   "texto": "No se lee,",
+   "acento": "no sirve.",
+   "acento_t": 14.875,
+   "a": 13.458333333333332,
+   "b": 15.916666666666666,
+   "bottom": 1455,
+   "n_palabras": 5,
+   "min_s": 2.05,
+   "entra": 13.416667,
+   "a_f": 323,
+   "b_f": 382
+  },
+  {
+   "id": "c8",
+   "tramo": 8,
+   "num": "3",
+   "texto": "Una mano",
+   "acento": "tapa la otra.",
+   "acento_t": 17.583333333333332,
+   "a": 15.916666666666666,
+   "b": 18.375,
+   "top": 290,
+   "n_palabras": 6,
+   "min_s": 2.4,
+   "entra": 15.666667,
+   "a_f": 382,
+   "b_f": 441
+  },
+  {
+   "id": "c9",
+   "tramo": 9,
+   "texto": "Si cruza,",
+   "acento": "no cuento.",
+   "acento_t": 18.958333333333332,
+   "a": 18.375,
+   "b": 20.583333333333332,
+   "top": 290,
+   "n_palabras": 4,
+   "min_s": 1.7,
+   "entra": 18.333333,
+   "a_f": 441,
+   "b_f": 494
+  },
+  {
+   "id": "c10",
+   "tramo": 10,
+   "texto": "Cuadro 120:",
+   "acento": "cinco dedos.",
+   "a": 20.583333333333332,
+   "b": 22.791666666666664,
+   "top": 290,
+   "n_palabras": 4,
+   "min_s": 1.7,
+   "entra": 20.333333,
+   "a_f": 494,
+   "b_f": 547
+  },
+  {
+   "id": "c11",
+   "tramo": 11,
+   "texto": "Reviso cuadro",
+   "acento": "a cuadro.",
+   "acento_t": 23.791666666666664,
+   "a": 22.791666666666664,
+   "b": 24.958333333333332,
+   "bottom": 1455,
+   "n_palabras": 4,
+   "min_s": 1.7,
+   "entra": 22.541667,
+   "a_f": 547,
+   "b_f": 599
+  },
+  {
+   "id": "c12",
+   "tramo": 12,
+   "texto": "Seguime: cada semana,",
+   "acento": "una prueba.",
+   "acento_t": 26.375,
+   "a": 24.958333333333332,
+   "b": 27.916666666666664,
+   "bottom": 1455,
+   "sin_salida": true,
+   "n_palabras": 5,
+   "min_s": 2.05,
+   "pleno_a": 25,
+   "pleno_s": 2.9166666666666643,
+   "entra": 24.916667,
+   "a_f": 599,
+   "b_f": 670
+  }
+ ],
+ "etiquetas": [
+  {
+   "id": "e_orden",
+   "texto": "Orden: «no signs anywhere»",
+   "a": 2.6666666666666665,
+   "b": 4.666666666666666,
+   "top": 1010,
+   "fuente": "v4/PROCEDENCIA.jsonl línea 95: «No screens visible, no text, no logos, no signs anywhere.»",
+   "n_palabras": 4
+  },
+  {
+   "id": "e_cara",
+   "texto": "Parecido: 0,835 · aprobado",
+   "a": 4.75,
+   "b": 7,
+   "top": 1010,
+   "fuente": "v4/PROCEDENCIA.jsonl línea 93: K4_1_descartada id 0,835 (piso del repo 0,70)",
+   "n_palabras": 3
+  },
+  {
+   "id": "e_nueva",
+   "texto": "Foto nueva",
+   "a": 7.416666666666666,
+   "b": 9.375,
+   "top": 600,
+   "fuente": "foto nueva K4·1 eddca486 (línea 93), sin letrero",
+   "n_palabras": 2
+  }
+ ],
+ "aro": {
+  "a": 1.5,
+  "centro": [
+   850,
+   108
+  ],
+  "ancho": 250,
+  "alto": 124
+ },
+ "insL": {
+  "activo": true,
+  "a": 1.9166666666666665,
+  "b": 4.166666666666666,
+  "x": 480,
+  "y": 300,
+  "w": 500,
+  "h": 222,
+  "recorte_nativo": [
+   935,
+   62,
+   400,
+   178
+  ],
+  "caption": "Difuminado al editar"
+ },
+ "marco": {
+  "caja": [
+   470,
+   574,
+   706,
+   872
+  ],
+  "a": 4.916666666666666,
+  "b": 6.916666666666666
+ },
+ "agenda": {
+  "ins1": {
+   "x": 90,
+   "y": 320,
+   "w": 900,
+   "h": 510,
+   "a": 9.958333333333332,
+   "b": 12.166666666666666
+  },
+  "ins2": {
+   "x": 580,
+   "y": 330,
+   "w": 420,
+   "h": 569,
+   "a": 12.416666666666666,
+   "b": 15.5,
+   "activo": true
+  }
+ },
+ "k4": {
+  "cuadro_foco": 120,
+  "cuadros_clip": 145,
+  "contador": {
+   "top": 600,
+   "a": "T8"
+  },
+  "origen": {
+   "cuadros": 6,
+   "recorte_fuente": [
+    30,
+    950,
+    380,
+    320
+   ]
+  },
+  "cruza_registro": [
+   72,
+   104
+  ],
+  "nota": "Cuadros del clip K4 (v4/PROCEDENCIA.jsonl línea 94, contados de nuevo en G3 1ra/2da pasada): contables 48-60, 81-84, 96-99 y 111-126; la otra mano cruza en ~63-78, ~87-93 y ~102-108. El clip va a 1x entre los cuadros 14 y 131: la otra mano entra en el cuadro 60 (T8+40) y las tres cruzadas caen dentro de la línea «Si cruza, no puedo contar los dedos».",
+  "origen_caja": [
+   45,
+   1425,
+   570,
+   480
+  ],
+  "media_inicio": 14,
+  "t_clip": 15.666666666666666,
+  "t120": 20.083333333333332,
+  "t_origen_fin": 20.333333333333332
+ },
+ "placa": {
+  "visor": {
+   "x": 100,
+   "y": 600,
+   "w": 880,
+   "h": 741
+  },
+  "cuadro": 120,
+  "recorte": [
+   30,
+   950,
+   380,
+   320
+  ],
+  "sello_t": 21.083333333333332,
+  "nota": "El visor es el recorte AMPLIADO del cuadro 120 (el mismo que acaba de verse en el clip, con su recuadro «origen»). Ceremonia comprimida: ~1,96 s en reposo; se quitaron los cuadros 72 y 104 de la placa de G3."
+ },
+ "contador": {
+  "top": 600,
+  "a": 15.916666666666666,
+  "b": 20.583333333333332
+ },
+ "cta": {
+  "texto": "Seguime: cada semana, una prueba.",
+  "min_s": 2.4,
+  "max_s": 5.5
+ }
+}

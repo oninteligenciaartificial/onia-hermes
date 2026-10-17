@@ -1,0 +1,98 @@
+[
+ {
+  "n": 1,
+  "linea": "Mirá: tres errores que casi publico.",
+  "a": 0,
+  "b": 2.208,
+  "dura": 2.208,
+  "ultimo": false
+ },
+ {
+  "n": 2,
+  "linea": "Uno: sin letreros, y salió uno.",
+  "a": 2.458,
+  "b": 4.417,
+  "dura": 1.958,
+  "ultimo": false
+ },
+ {
+  "n": 3,
+  "linea": "La cara pasó el control, pero el fondo no.",
+  "a": 4.667,
+  "b": 7.167,
+  "dura": 2.5,
+  "ultimo": false
+ },
+ {
+  "n": 4,
+  "linea": "Mi regla: mirar también el fondo.",
+  "a": 7.417,
+  "b": 9.375,
+  "dura": 1.958,
+  "ultimo": false
+ },
+ {
+  "n": 5,
+  "linea": "Dos: una letra que parece escrita.",
+  "a": 9.625,
+  "b": 11.833,
+  "dura": 2.208,
+  "ultimo": false
+ },
+ {
+  "n": 6,
+  "linea": "Ahí no dice nada.",
+  "a": 12.083,
+  "b": 13.208,
+  "dura": 1.125,
+  "ultimo": false
+ },
+ {
+  "n": 7,
+  "linea": "Si no se lee, no sirve para publicar.",
+  "a": 13.458,
+  "b": 15.667,
+  "dura": 2.208,
+  "ultimo": false
+ },
+ {
+  "n": 8,
+  "linea": "Y tres: una mano le tapa a la otra.",
+  "a": 15.917,
+  "b": 18.125,
+  "dura": 2.208,
+  "ultimo": false
+ },
+ {
+  "n": 9,
+  "linea": "Si cruza, no puedo contar dedos.",
+  "a": 18.375,
+  "b": 20.333,
+  "dura": 1.958,
+  "ultimo": false
+ },
+ {
+  "n": 10,
+  "linea": "Y yo cuento solo lo que se ve.",
+  "a": 20.583,
+  "b": 22.542,
+  "dura": 1.958,
+  "ultimo": false
+ },
+ {
+  "n": 11,
+  "linea": "Reviso cuadro a cuadro antes de publicar.",
+  "a": 22.792,
+  "b": 25.292,
+  "dura": 2.5,
+  "ultimo": false
+ },
+ {
+  "n": 12,
+  "linea": "Seguime: cada semana, una prueba.",
+  "a": 25.542,
+  "b": 27.5,
+  "dura": 1.958,
+  "ultimo": true
+ }
+]

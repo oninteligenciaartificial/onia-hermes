@@ -1,0 +1,10 @@
+SHA-256 de las fotos del montaje v2 contra las de G4 (mismas fotos => los puntajes de cara de G4 siguen valiendo; qa/face-gate-heredado-de-g4.txt)
+ph-a.jpg  v2 e1b2c06199f5a374  g4 e1b2c06199f5a374  IGUAL
+ph-b.jpg  v2 9ca2131275aebdbd  g4 9ca2131275aebdbd  IGUAL
+ph-c.jpg  v2 5c3d570c17f3bd0e  g4 5c3d570c17f3bd0e  IGUAL
+ph-d.jpg  v2 352b08293aed549f  g4 352b08293aed549f  IGUAL
+ph-e.jpg  v2 dbf43e0cf9e9bfee  g4 dbf43e0cf9e9bfee  IGUAL
+ph-f.jpg  v2 204c73e1c4997375  g4 204c73e1c4997375  IGUAL
+ph-k.jpg  v2 cab1d1354ba9b9c3  g4 cab1d1354ba9b9c3  IGUAL
+cafe-a.jpg  v2 689901659b828be0  g4 689901659b828be0  IGUAL
+cafe-b.jpg  v2 4c11fb262238f75f  g4 4c11fb262238f75f  IGUAL

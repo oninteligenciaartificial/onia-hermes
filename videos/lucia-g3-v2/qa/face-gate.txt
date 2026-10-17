@@ -1,0 +1,36 @@
+Control de identidad de cara · G3 v2.1 (master out/g3-v2-final-1080x1920.mp4) — CORRIDO el 11-oct-2026 (en la revisión 1 el revisor lo corrió; acá se repite con el master nuevo)
+Método: scripts/face_identity_qa.py (SCRFD det_10g + ArcFace w600k_r50, insightface buffalo_l; coseno contra el centroide de las referencias) con el venv y los modelos ya instalados (nada se instaló ni se bajó).
+Referencias: las 8 fotos oficiales LOCALES de videos/lucia-g4-v2/assets/refs-orig/ (R1…R8), sin negativos (el piso de 0,224 sale de G5, mismas referencias). Entre sí: media de pares 0.642, par mínimo 0.509, mínimo leave-one-out 0.698.
+Piso del repo: 0,70 (media y centroide); diferencia final↔fuente ≤ 0,02. Una cara de menos de 200 px es «poco confiable» para el propio gate (aquí: la descartada, 186-190 px, y K1, 173-179 px; K4 y la foto nueva miden 252-269 px).
+«Fuente al mismo zoom»: la foto original llevada a 1080x1920 y con el empuje lento del cuadro (1,00→1,03); el clip original (720x1280) llevado a 1080x1920 (×1,5, lanczos) en el cuadro n = media_inicio + (F − inicio de la escena).
+
+A) 14 CUADROS DE MUESTRA (los mismos del revisor) — final vs fuente
+cuadro final   tramo       n del clip  parecido final  parecido fuente  dif      cara (px final/fuente)
+F24  ( 1.000 s)  descartada       -      0.834           0.832            +0.002   186/186
+F84  ( 3.500 s)  descartada       -      0.825           0.835            -0.010   187/188
+F108 ( 4.500 s)  descartada       -      0.831           0.832            -0.001   189/190
+F190 ( 7.917 s)  foto nueva       -      0.812           0.810            +0.002   261/260
+F215 ( 8.958 s)  foto nueva       -      0.809           0.813            -0.004   264/263
+F410 (17.083 s)  clip K4         48      0.706           0.710            -0.004   269/269
+F434 (18.083 s)  clip K4         72      0.722           0.719            +0.003   259/258
+F462 (19.250 s)  clip K4        100      0.746           0.748            -0.002   259/258
+F466 (19.417 s)  clip K4        104      0.718           0.735            -0.017   262/262
+F482 (20.083 s)  clip K4        120      0.775           0.762            +0.013   252/252
+F551 (22.958 s)  clip K1         24      0.780           0.800            -0.020   178/178
+F581 (24.208 s)  clip K1         54      0.733           0.741            -0.008   179/179
+F621 (25.875 s)  clip K1         94      0.760           0.762            -0.002   174/173
+F651 (27.125 s)  clip K1        124      0.699           0.715            -0.016   173/173
+Máxima diferencia absoluta final↔fuente en la muestra: 0.020 (F551_k1); límite del repo 0,02 → cumple por el borde. Por tramo (final): descartada 0,825-0,834 · foto nueva 0,809-0,812 · K4 0,706-0,775 · K1 0,699-0,780.
+El 0,835 de la etiqueta es el de la foto original descartada (PROCEDENCIA l.93); el cuadro 24 del master da 0,834 y la fuente al mismo zoom 0,832.
+
+B) TODOS LOS CUADROS EN REPOSO de los dos clips (la muestra no basta: ver abajo)
+  K4 (F382-487, 106 cuadros, cara 252-269 px): parecido mínimo 0,682 (F407, n45), media 0,737, máximo 0,775; 4 cuadros < 0,70 (F407 0,682 · F408 0,694 · F412 0,699 · F472 0,692). Diferencia final−fuente: -0,022 a +0,018 (2 cuadros pasan de 0,02: F484 -0,022 y F485 -0,021).
+       La FUENTE ya baja en esos mismos cuadros del clip (n43-47 y n110: 0,688-0,697; 5 cuadros < 0,70): es el material, no la edición.
+  K1 (F547-669, 123 cuadros, cara 173-179 px): parecido mínimo 0,680 (F659, n132; la fuente da 0,680 en ese mismo cuadro), media 0,740, máximo 0,801; 7 cuadros < 0,70 (F640 0,697 · F641 0,695 · F644 0,690 · F651 0,699 · F654 0,698 · F655 0,694 · F659 0,680). Diferencia final−fuente: -0,025 a +0,011 (2 cuadros pasan de 0,02: F640 -0,025 y F592 -0,022).
+       En v2.0 (master anterior, 112 cuadros en reposo) eran 5 cuadros < 0,70 (mínimo 0,678 en F653, el mismo cuadro 132 del clip): v2.1 usa 11 cuadros más de K1 (el CTA es más largo) y por eso son 7. PROCEDENCIA ya lo anotaba: «el 0,68 del final es por la inclinación; es ella» (mirado).
+  Foto descartada y foto nueva: solo se midieron los 5 cuadros de la muestra (A): todos ≥ 0,80.
+
+LECTURA HONESTA: el «todo ≥ 0,70» de la revisión 1 valía para sus 14 cuadros de muestra. Mirando TODOS los cuadros en reposo hay 11 de 229 (4 de K4, 7 de K1) entre 0,680 y 0,699 y la diferencia final↔fuente llega a 0,025 (sobre 0,02). Son cuadros sueltos, seguidos de otros ≥ 0,71, con caras de 173-179 px (K1) donde el gate no es confiable, y la fuente ya los trae. NO se mira como «otra persona» (se miraron las caras: es ella), pero no se puede decir «todos ≥ 0,70».
+Si la madre quiere cerrar el cuadro más bajo de K1 (n132 = 0,680) sin otro costo: plan.json → escenas.k1.media_inicio de «auto» (14) a 3 (la ventana de 129 cuadros termina en el n131) y re-renderizar. No se hizo: ya estaba en v2.0 y no cambia que otros cuadros de la cola de K1 den 0,69x.
+Qué NO mide: parecido ≠ calidad ni belleza; no detecta una mano o un fondo mal hechos. Las 8 referencias de medición pueden solaparse con las 6 de entrada de las imágenes (pendiente de la validación de la madre del 10-oct, afecta a todas las piezas por igual).
+Comando: V=…/venv-face/bin/python; FACE_QA_MODELS=…/face_models $V -I scripts/face_identity_qa.py manifest.json (manifest = {refs: R1..R8 locales, tests: cuadros del master y fuente al mismo zoom}); salidas JSON en el scratchpad de la sesión.

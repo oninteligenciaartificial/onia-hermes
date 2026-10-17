@@ -1,0 +1,1051 @@
+{
+ "titulo": "G5 v2 · Cómo mido si una cara es la de Lucía (y cuándo no creerle al número), re-cortada a 26,6 s y cronometrada para recibir voz (revisión 1 aplicada)",
+ "guion": "guion-voz.txt",
+ "guion_aprobado": "hermes-content/docs/cola/lucia-diario/guiones/G5-como-se-mide-una-cara.md",
+ "version": "v2 (11-oct-2026) + revisión 1 (qa/revision-1.md): re-corte de G5 con la regla de aire de la madre (pausa ≤ 0,3 s entre frases, ningún hueco quieto). Muda, lista para voz. 0 créditos.",
+ "lienzo": {
+  "w": 1080,
+  "h": 1920,
+  "fps": 24,
+  "cuadros": 639,
+  "duracion": 26.625
+ },
+ "acento": "#10C26B",
+ "alerta": "#FF7A66",
+ "voz": {
+  "car_por_segundo": 17,
+  "hueco_objetivo_s": 0.25,
+  "hueco_max_s": 0.3,
+  "cupo_caracteres": 450,
+  "ultimo_tramo_cuadros": 58,
+  "lectura_min_cuadros": {
+   "8": 63
+  },
+  "nota": "cada tramo = una línea de guion-voz.txt; dura (caracteres / 17 s, o la duración REAL de duraciones.json si existe) + un hueco objetivo de 0,25 s bajado al cuadro de 24 fps (tope 0,30 s si la lectura de una tarjeta o placa lo pide: lectura_min_cuadros). El último (CTA) dura 58 cuadros (2,417 s): el CTA tiene que verse ≥ 2,4 s y su línea habla ~1,94 s; el resto es el tiempo de lectura de la tarjeta, no aire. scripts/retemporizar.mjs vuelve a poner todos los tiempos de este archivo desde el cronograma de voz y la tabla «rel»."
+ },
+ "aire": {
+  "quieto_max_s": 0.3,
+  "evento_cada_max_s": 2,
+  "lectura": "0,35 s por palabra + 0,3 s (la misma de hueco-tarjetas / ventanas)"
+ },
+ "zona_segura": {
+  "texto_hasta_y": 1490,
+  "derecha_libre_px": 80,
+  "derecha_libre_desde_y": 1000,
+  "arriba_minimo_y": 280,
+  "margen_bajo_menton": 40,
+  "texto_min_px": 34,
+  "tarjeta_bottom_y": 1470
+ },
+ "zoom": {
+  "fin": 1.04,
+  "nota": "empuje lento sobre cada foto: escala 1,00 → 1,04 en línea recta (ease none) durante la vida de la foto, con el origen en el centro de la cara medida; sin morph. El contenedor recorta (overflow:hidden), así los empujes entre medios siguen rígidos. La caja de cara de cada foto hace el mismo zoom con el mismo origen."
+ },
+ "caras": {
+  "nota": "SCRFD det_10g (scripts/face_identity_qa.py) vía scripts/medir-caras.py: caja en el lienzo de 1080x1920 (object-fit:cover centrado). Mentón = borde de abajo de la caja. Datos completos: qa/caras-fotos.json (el build y medir-dom los leen de ahí). Los cuadros de clip (fr_m5, fr_m4) llevan su caja en píxeles del recorte nativo."
+ },
+ "empuje": {
+  "cuadros": 6,
+  "ease": "power3.inOut",
+  "nota": "Costura de pantalla completa: empuje rígido de 6 cuadros hacia la izquierda, ventana [T-6 cuadros, T] (T = el segundo del guion: a partir de T la escena nueva está en reposo). El medio entrante arranca en T-6 cuadros y el saliente termina en T. Las tarjetas viajan con el empuje."
+ },
+ "refs": {
+  "manifest": "hermes-content/references/modelos/lucia/v4/qa/manifest-escenas-seedream-20260930.json",
+  "fijos": "assets-fijos",
+  "total": 8,
+  "recortes": [
+   {
+    "id": "ref1",
+    "fuente": "R1_frontal_canon",
+    "recorte": [
+     0,
+     100,
+     768
+    ]
+   },
+   {
+    "id": "ref2",
+    "fuente": "R2_34_medio",
+    "recorte": [
+     172,
+     157,
+     522
+    ]
+   },
+   {
+    "id": "ref3",
+    "fuente": "R3_casi_frontal",
+    "recorte": [
+     75,
+     0,
+     1717
+    ]
+   },
+   {
+    "id": "ref4",
+    "fuente": "R4_casi_perfil",
+    "recorte": [
+     218,
+     208,
+     1183
+    ]
+   },
+   {
+    "id": "ref5",
+    "fuente": "R5_34_izq",
+    "recorte": [
+     61,
+     65,
+     727
+    ]
+   },
+   {
+    "id": "ref6",
+    "fuente": "R6_34_der",
+    "recorte": [
+     380,
+     198,
+     515
+    ]
+   },
+   {
+    "id": "ref7",
+    "fuente": "R7_frontal_2752",
+    "recorte": [
+     0,
+     8,
+     1536
+    ]
+   },
+   {
+    "id": "ref8",
+    "fuente": "R8_anchor_902eeebb",
+    "recorte": [
+     0,
+     109,
+     896
+    ]
+   }
+  ]
+ },
+ "escala": {
+  "x0": 100,
+  "x1": 980,
+  "piso": 0.7
+ },
+ "fotos": {
+  "a": {
+   "src": "assets/ph-a.jpg",
+   "origen": "hermes-content/references/modelos/lucia/v4/kit/k1-1-recepcion-celular-4afffb96.jpg"
+  },
+  "f": {
+   "src": "assets/ph-f.jpg",
+   "origen": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos/img-gpt-image-2-5-5da2fa1e.jpg",
+   "nota": "NO se usa en pantalla: queda como foto señuelo del control PSNR (psnr-fotos.py busca que el pico sea la foto del plan entre todas)"
+  },
+  "cafe_b": {
+   "src": "assets/cafe-b.jpg",
+   "origen": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/fotos/img-omni-image-k2cafe-9f4b5172.jpg",
+   "nota": "NO es Lucía: otra persona, estilo caricatura (0,35); se rotula «Imagen B · café»"
+  },
+  "k": {
+   "src": "assets/ph-k.jpg",
+   "origen": "hermes-content/references/modelos/lucia/v4/kit/k4-5-senala-342c0ab5.jpg",
+   "nota": "cierre: Lucía mira a cámara y sonríe (K4 toma 5, ya pagada; la misma de G4; face-gate 0,832)"
+  }
+ },
+ "frames": {
+  "m5": {
+   "src": "assets/fr-m5.jpg",
+   "fijo": "assets-fijos/fr-m5.jpg",
+   "clip": "kling_o3_image_reference_5_refs_948a89d3 (Motor 5 de G2)",
+   "cuadro": 0,
+   "recorte_nativo": [
+    100,
+    250,
+    480,
+    600
+   ]
+  },
+  "m4": {
+   "src": "assets/fr-m4.jpg",
+   "fijo": "assets-fijos/fr-m4.jpg",
+   "clip": "seedance_2_0_mini_start_mas_3_refs_dd2d7c91 (Motor 4 de G2)",
+   "cuadro": 96,
+   "t_clip": 4,
+   "recorte_nativo": [
+    0,
+    0,
+    620,
+    680
+   ],
+   "difuminado": {
+    "caja": [
+     0,
+     40,
+     220,
+     130
+    ],
+    "sigma": 3.5,
+    "pluma": 14,
+    "aro_nota": "el aro de r3 (x -6..226, y 34..136 del recorte) cubre TODO lo difuminado: el letrero y el trazo más débil de la fachada derecha"
+   }
+  }
+ },
+ "herramientas": {
+  "a": "Seedream 4.5",
+  "cafe_b": "Kling O1 Image",
+  "f": "GPT Image 2.5",
+  "m4": "Seedance 2.0 Mini + referencias",
+  "m5": "Kling O3",
+  "m6": "Cinematic Studio 3.0",
+  "regla": "D-N1 (11-oct-2026, Sergio Urcullo): ahora SÍ se nombran las herramientas, como uso propio y no como recomendación pagada. Imagen A = Seedream 4.5, B = Kling O1 Image, F = GPT Image 2.5; Motor 4 = Seedance 2.0 Mini + referencias, Motor 5 = Kling O3, Motor 6 = Cinematic Studio 3.0. Prohibidas: capturas de interfaces de terceros y frases de «el mejor» o recomendación general.",
+  "claves": {
+   "a": "seedream_4_5",
+   "f": "gpt_image_2_5",
+   "cafe_b": "kling_omni_image",
+   "m4": "seedance_2_0_mini_start_mas_3_refs",
+   "m5": "kling_o3_image_reference_5_refs",
+   "m6": "cinematic_studio_3_0"
+  }
+ },
+ "tramos": [
+  {
+   "id": "t1",
+   "linea": 1,
+   "a": 0,
+   "b": 3.416666666667,
+   "escena": "gancho"
+  },
+  {
+   "id": "t2",
+   "linea": 2,
+   "a": 3.416666666667,
+   "b": 5.333333333333,
+   "escena": "paso 1"
+  },
+  {
+   "id": "t3",
+   "linea": 3,
+   "a": 5.333333333333,
+   "b": 8.333333333333,
+   "escena": "paso 2"
+  },
+  {
+   "id": "t4",
+   "linea": 4,
+   "a": 8.333333333333,
+   "b": 10.75,
+   "escena": "paso 2"
+  },
+  {
+   "id": "t5",
+   "linea": 5,
+   "a": 10.75,
+   "b": 13.625,
+   "escena": "ejemplo B café"
+  },
+  {
+   "id": "t6",
+   "linea": 6,
+   "a": 13.625,
+   "b": 16.625,
+   "escena": "razón 1"
+  },
+  {
+   "id": "t7",
+   "linea": 7,
+   "a": 16.625,
+   "b": 19.541666666667,
+   "escena": "razón 2"
+  },
+  {
+   "id": "t8",
+   "linea": 8,
+   "a": 19.541666666667,
+   "b": 22.166666666667,
+   "escena": "razón 3"
+  },
+  {
+   "id": "t9",
+   "linea": 9,
+   "a": 22.166666666667,
+   "b": 24.208333333333,
+   "escena": "lección"
+  },
+  {
+   "id": "t10",
+   "linea": 10,
+   "a": 24.208333333333,
+   "b": 26.625,
+   "escena": "cierre"
+  }
+ ],
+ "medios": [
+  {
+   "id": "f-gancho",
+   "tipo": "foto",
+   "foto": "a",
+   "a": 0,
+   "b": 3.416666666667,
+   "track": 20,
+   "capa": "Foto A (K1) a pantalla completa con empuje lento; rótulo de IA 0-3,0 s; la caja de cara entra a 0,85 s con «Seedream 4.5 · parecido 0,81»; sale en el empuje"
+  },
+  {
+   "id": "pl-p1",
+   "tipo": "placa",
+   "a": 3.166666666667,
+   "b": 5.333333333333,
+   "capa": "paso 1: las 8 referencias oficiales (4x2); la fila de arriba ya está al llegar, la de abajo entra de a una"
+  },
+  {
+   "id": "pl-p2",
+   "tipo": "placa",
+   "a": 5.083333333333,
+   "b": 10.75,
+   "capa": "paso 2: las 8 en fila → flecha → la escala 0-1 con un cursor que va de 0 a 1 → «idéntica · 1» → cae la marca «piso · 0,70»"
+  },
+  {
+   "id": "f-e3",
+   "tipo": "foto",
+   "foto": "cafe_b",
+   "a": 10.5,
+   "b": 13.625,
+   "track": 23,
+   "capa": "Imagen del café de Kling O1 Image (NO es Lucía) + caja coral + pastilla «Kling O1 Image · parecido 0,35»"
+  },
+  {
+   "id": "pl-r1",
+   "tipo": "placa",
+   "a": 13.375,
+   "b": 16.625,
+   "capa": "razón 1: cuadro del clip crudo con la cara de 89 px, su caja, su lupa, la etiqueta «Kling O3» y la nota «Bajo 200 px, el medidor avisa.» (ya están al llegar)"
+  },
+  {
+   "id": "pl-r2",
+   "tipo": "placa",
+   "a": 16.375,
+   "b": 19.541666666667,
+   "capa": "razón 2: escala ampliada «Zoom: 0,70 a 0,90» y la etiqueta «Cinematic Studio 3.0 · mismo clip» (ya están al llegar) con las dos puntas de un MISMO clip (0,771 → 0,77 y 0,799 → 0,80) y la banda de ±0,03 alrededor de su promedio"
+  },
+  {
+   "id": "pl-r3",
+   "tipo": "placa",
+   "a": 19.291666666667,
+   "b": 22.166666666667,
+   "capa": "razón 3: cuadro del clip con el letrero inventado difuminado, la etiqueta «Seedance 2.0 Mini + referencias» y «Lo difuminé: lo inventó el motor.» (ya están al llegar), aro coral sobre TODO lo difuminado y «parecido 0,80»"
+  },
+  {
+   "id": "f-cierre",
+   "tipo": "foto",
+   "foto": "k",
+   "a": 21.916666666667,
+   "b": 26.625,
+   "track": 24,
+   "capa": "lección + cierre: foto K4·5 (Lucía mira a cámara y sonríe) con empuje lento; tarjeta «Mirá la imagen entera.» y después el CTA"
+  }
+ ],
+ "costuras": [
+  {
+   "t": 3.416666666667,
+   "tipo": "empuje",
+   "sale": [
+    "f-gancho"
+   ],
+   "entra": [
+    "pl-p1"
+   ],
+   "tarjetas": {
+    "sale": "c1",
+    "entra": "c2"
+   },
+   "porque": "foto → paso 1",
+   "tramo": 2
+  },
+  {
+   "t": 5.333333333333,
+   "tipo": "empuje",
+   "sale": [
+    "pl-p1"
+   ],
+   "entra": [
+    "pl-p2"
+   ],
+   "tarjetas": {
+    "sale": "c2",
+    "entra": "c3"
+   },
+   "porque": "paso 1 → paso 2",
+   "tramo": 3
+  },
+  {
+   "t": 10.75,
+   "tipo": "empuje",
+   "sale": [
+    "pl-p2"
+   ],
+   "entra": [
+    "f-e3"
+   ],
+   "tarjetas": {
+    "sale": "c4",
+    "entra": "c5"
+   },
+   "porque": "paso 2 → ejemplo B del café",
+   "tramo": 5
+  },
+  {
+   "t": 13.625,
+   "tipo": "empuje",
+   "sale": [
+    "f-e3"
+   ],
+   "entra": [
+    "pl-r1"
+   ],
+   "tarjetas": {
+    "sale": "c5",
+    "entra": "c6"
+   },
+   "porque": "ejemplo → razón 1",
+   "tramo": 6
+  },
+  {
+   "t": 16.625,
+   "tipo": "empuje",
+   "sale": [
+    "pl-r1"
+   ],
+   "entra": [
+    "pl-r2"
+   ],
+   "tarjetas": {
+    "sale": "c6",
+    "entra": "c7"
+   },
+   "porque": "razón 1 → razón 2",
+   "tramo": 7
+  },
+  {
+   "t": 19.541666666667,
+   "tipo": "empuje",
+   "sale": [
+    "pl-r2"
+   ],
+   "entra": [
+    "pl-r3"
+   ],
+   "tarjetas": {
+    "sale": "c7",
+    "entra": "c8"
+   },
+   "porque": "razón 2 → razón 3",
+   "tramo": 8
+  },
+  {
+   "t": 22.166666666667,
+   "tipo": "empuje",
+   "sale": [
+    "pl-r3"
+   ],
+   "entra": [
+    "f-cierre"
+   ],
+   "tarjetas": {
+    "sale": "c8",
+    "entra": "c9"
+   },
+   "porque": "razón 3 → lección + cierre (foto K4·5)",
+   "tramo": 9
+  }
+ ],
+ "rotulo": {
+  "texto": "Lucía Antelo · personaje IA de Onia",
+  "a": 0,
+  "b": 3,
+  "top": 720
+ },
+ "tarjetas": [
+  {
+   "id": "c1",
+   "tramo": "t1",
+   "texto": "¿Cómo sé que",
+   "acento": "sigue siendo ella?",
+   "acento_t": 0.765,
+   "a": 0,
+   "b": 3.416666666667,
+   "escena": "gancho",
+   "dato": "g"
+  },
+  {
+   "id": "c2",
+   "tramo": "t2",
+   "texto": "Ocho fotos",
+   "acento": "oficiales suyas.",
+   "acento_t": 4.064,
+   "a": 3.416666666667,
+   "b": 5.333333333333,
+   "escena": "paso 1"
+  },
+  {
+   "id": "c3",
+   "tramo": "t3",
+   "texto": "Un número,",
+   "acento": "de 0 a 1.",
+   "acento_t": 7.469,
+   "a": 5.333333333333,
+   "b": 8.333333333333,
+   "escena": "paso 2"
+  },
+  {
+   "id": "c4",
+   "tramo": "t4",
+   "texto": "Piso, 0,70.",
+   "acento": "Lo elegí yo.",
+   "acento_t": 9.804,
+   "a": 8.333333333333,
+   "b": 10.75,
+   "escena": "paso 2"
+  },
+  {
+   "id": "c5",
+   "tramo": "t5",
+   "texto": "Bajo el piso:",
+   "acento": "otra persona.",
+   "acento_t": 12.632,
+   "a": 10.75,
+   "b": 13.625,
+   "color": "bad",
+   "escena": "ejemplo B café",
+   "dato": "e3",
+   "acento_dur": 0.3
+  },
+  {
+   "id": "c6",
+   "tramo": "t6",
+   "texto": "Cara chica:",
+   "acento": "lo reviso a ojo.",
+   "acento_t": 15.449,
+   "a": 13.625,
+   "b": 16.625,
+   "escena": "razón 1"
+  },
+  {
+   "id": "c7",
+   "tramo": "t7",
+   "texto": "Esa variación",
+   "acento": "cabe en ±0,03.",
+   "acento_t": 18.154,
+   "a": 16.625,
+   "b": 19.541666666667,
+   "escena": "razón 2"
+  },
+  {
+   "id": "c8",
+   "tramo": "t8",
+   "texto": "El número no ve",
+   "acento": "letreros inventados.",
+   "acento_t": 20.718,
+   "a": 19.541666666667,
+   "b": 22.166666666667,
+   "escena": "razón 3"
+  },
+  {
+   "id": "c9",
+   "tramo": "t9",
+   "texto": "Mirá la",
+   "acento": "imagen entera.",
+   "acento_t": 23.578,
+   "a": 22.166666666667,
+   "b": 24.208333333333,
+   "escena": "lección",
+   "acento_dur": 0.35
+  },
+  {
+   "id": "c10",
+   "tramo": "t10",
+   "texto": "Seguime:\n",
+   "acento": "cada semana, una prueba.",
+   "acento_t": 26.108,
+   "a": 24.208333333333,
+   "b": 26.625,
+   "acento_dur": 0.35,
+   "escena": "cierre"
+  }
+ ],
+ "cadenas_de_tarjetas": [
+  [
+   "c1",
+   "c2",
+   "c3",
+   "c4",
+   "c5",
+   "c6",
+   "c7",
+   "c8",
+   "c9",
+   "c10"
+  ]
+ ],
+ "claves_procedencia": {
+  "a": "seedream_4_5_K1_4afffb96",
+  "b_cafe": "kling_omni_image_K2cafe_9f4b5172-f12b-4fb8-a03a-abb604380c47",
+  "kling_otra_k1": "kling_omni_image_K1_c3706d45-52c1-46a9-a7f4-0f766b6908d0",
+  "kling_otra_k4cafe": "kling_omni_image_K4cafe_dad464de-75a8-45f5-b799-8d91e5a63d1d"
+ },
+ "claves_video": {
+  "m4": "seedance_2_0_mini_start_mas_3_refs_dd2d7c91-ea3a-46a8-a29d-3861143dfe9e",
+  "m5": "kling_o3_image_reference_5_refs_948a89d3-c5c5-4e32-92f0-db624edc825b",
+  "m6": "cinematic_studio_3_0_4s_720p_cc8fa519-f8c2-49b5-bd4d-b3a1be52c875",
+  "sync": "sync_so_remap_sobre_K4_338b751f_eaaf369d-7667-4698-8443-4d544fa5faa2"
+ },
+ "gancho": {
+  "caja_t": 0.85,
+  "caja_fin": 2.65,
+  "dato": {
+   "id": "g",
+   "foto": "a",
+   "clave": "a",
+   "valor": 0.81,
+   "estado": "ok",
+   "pill": "Seedream 4.5 · parecido",
+   "t": 0.95,
+   "fin": 3,
+   "letra": null
+  }
+ },
+ "p1": {
+  "refs": {
+   "lado": 220,
+   "gap": 20,
+   "x0": 70,
+   "y": 420,
+   "y2": 660,
+   "fila2_t": 3.867,
+   "escalon": 0.1
+  },
+  "aro_t": 4.367
+ },
+ "p2": {
+  "fila": {
+   "lado": 100,
+   "gap": 10,
+   "x0": 105,
+   "y": 400
+  },
+  "flecha": {
+   "t": 5.733,
+   "x": 540,
+   "y1": 530,
+   "y2": 680
+  },
+  "escala": {
+   "y": 860,
+   "dibuja_t": 6.283,
+   "dura": 0.5,
+   "ejes_t": 6.883,
+   "cursor_t": 7.183,
+   "cursor_dura": 0.9,
+   "uno_t": 8.933,
+   "marca_t": 9.233,
+   "marca_label_y": 700
+  }
+ },
+ "ejemplos": [
+  {
+   "id": "e3",
+   "foto": "cafe_b",
+   "medio": "f-e3",
+   "tarjeta": "c5",
+   "letra": "B",
+   "clave": "b_cafe",
+   "valor": 0.35,
+   "estado": "bajo",
+   "pill": "Kling O1 Image · parecido",
+   "box_t": 11.05,
+   "t": 10.85,
+   "fin": 13.2
+  }
+ ],
+ "r1": {
+  "win": {
+   "x": 70,
+   "y": 320,
+   "w": 480,
+   "h": 600
+  },
+  "lupa": {
+   "x": 640,
+   "y": 380,
+   "w": 340,
+   "h": 340,
+   "region": 130
+  },
+  "box_t": 14.025,
+  "tag_t": 14.425,
+  "lupa_t": 14.825,
+  "nota": {
+   "texto": "Bajo 200 px, el medidor avisa.",
+   "y": 1050
+  },
+  "tool": {
+   "herr": "m5",
+   "x": 70,
+   "y": 932
+  },
+  "lupa_ping_t": 16.037
+ },
+ "r2": {
+  "eje": {
+   "desde": 0.7,
+   "hasta": 0.9,
+   "y": 760
+  },
+  "marcas": [
+   0.75,
+   0.8,
+   0.85,
+   0.9
+  ],
+  "d1": {
+   "t": 16.925
+  },
+  "d2": {
+   "t": 17.449
+  },
+  "banda": {
+   "mas_menos": 0.03,
+   "t": 18.154
+  },
+  "zoom": {
+   "texto": "Zoom: 0,70 a 0,90"
+  },
+  "tool": {
+   "herr": "m6",
+   "y": 470,
+   "sufijo": " · mismo clip"
+  },
+  "y_banda_label": 600,
+  "y_banda_linea": 660,
+  "y_valores": 680,
+  "y_marcas": 790,
+  "y_inferior": 870,
+  "nota_planes": "las dos puntas son el mínimo (0,771) y el máximo (0,799) de las 6 medidas del MISMO clip (Motor 6); la banda de ±0,03 va centrada en el promedio de las 6 (0,784); los valores salen de PROCEDENCIA (build.mjs)",
+  "banda_ping_t": 18.625
+ },
+ "r3": {
+  "win": {
+   "x": 230,
+   "y": 300,
+   "w": 620,
+   "h": 680
+  },
+  "aro": {
+   "x": 4,
+   "y": 34,
+   "w": 224,
+   "h": 102,
+   "t": 19.842,
+   "ping_t": 21.248
+  },
+  "llamada": {
+   "texto": "Lo difuminé:\nlo inventó el motor.",
+   "x": 468,
+   "y": 314,
+   "w": 380
+  },
+  "pills_y": 1005,
+  "tool": {
+   "herr": "m4",
+   "y": 1100
+  },
+  "pill_num_t": 20.442,
+  "clave": "m4",
+  "muestra": 4
+ },
+ "agregados_al_guion": [
+  {
+   "id": "V1",
+   "que": "Duración 26,6 s (G5: 57,5 s). Cada línea de guion-voz.txt es un tramo: caracteres / 17 por segundo (revisión 1, H1; antes palabras / 3,6) + un hueco objetivo de 0,25 s, tope 0,30 s; las 10 tarjetas coinciden con los 10 tramos (build.mjs corta si no). El CTA dura 2,417 s (la regla de marca pide ≥ 2,4 s) y su línea ~1,94 s: la cola de 0,48 s es lectura de la tarjeta, no aire.",
+   "revertir": "plan.json → lienzo, tramos, tarjetas y medios (scripts/retemporizar.mjs los recalcula desde guion-voz.txt) (y volver a plan.json de ../lucia-g5)"
+  },
+  {
+   "id": "V2",
+   "que": "Quitado el ejemplo F (0,66: bajo el piso) y la escena propia del ejemplo A (0,81): el 0,81 queda como pastilla «Seedream 4.5 · parecido 0,81» sobre la foto del gancho. Quedan la A (0,81) y la B del café (0,35).",
+   "revertir": "plan.json → medios[f-e1, f-e2], ejemplos[e1, e2] y las tarjetas de G5 (c9, c10)"
+  },
+  {
+   "id": "V3",
+   "que": "Quitada la lección con miniaturas; «Por eso, mirá la imagen entera.» pasa a la tarjeta «Mirá la imagen entera.» (4 palabras; la voz sí dice «Por eso») sobre la foto del cierre, antes del CTA.",
+   "revertir": "plan.json → c9 y volver a la placa pl-lec de ../lucia-g5"
+  },
+  {
+   "id": "V4",
+   "que": "Quitada la numeración «1 ·», «2 ·», «3 ·» y las tarjetas «Su cara oficial, fija.», «Un programa las compara.» e «Idéntica es 1.»: la voz las dice y la escala lo muestra («0», «idéntica · 1», un cursor que la recorre de 0 a 1).",
+   "revertir": "plan.json → tarjetas y p2"
+  },
+  {
+   "id": "V5",
+   "que": "«Bajo 200 px, el medidor avisa: lo reviso a ojo.» se parte: nota «Bajo 200 px, el medidor avisa.» (ya está en la placa al llegar) + tarjeta «Cara chica: lo reviso a ojo.». Dicen lo mismo que G5; no afirman que el número baje.",
+   "revertir": "plan.json → r1.nota y c6 (y alargar el tramo 6 a ≥ 4,5 s)"
+  },
+  {
+   "id": "V6",
+   "que": "«Mismo clip: de 0,77 a 0,80.» + «Esa variación cabe en ±0,03.» (6 s) pasan a UNA tarjeta. v2 la dejó «Mismo clip: cabe en ±0,03.»; la revisión 1 (H4) devolvió el sujeto: «Esa variación cabe en ±0,03.», y el «mismo clip» pasó a la etiqueta de la placa («Cinematic Studio 3.0 · mismo clip»). Las dos puntas rotuladas 0,77 y 0,80 y la banda ±0,03 siguen sobre la escala ampliada. La voz dice «varía, pero cabe en este margen» (sin cifras con coma).",
+   "revertir": "plan.json → c7 (texto «Mismo clip:») y r2.tool.sufijo"
+  },
+  {
+   "id": "V7",
+   "que": "La B del café: pastilla «Kling O1 Image · parecido 0,35» (D-N1; antes «Imagen B · parecido 0,35») y tarjeta «Bajo el piso: otra persona.» (G5: «Imagen B · café · parecido 0,35» y «0,35: otra persona.»). Sigue rotulada como otra persona, no como Lucía.",
+   "revertir": "plan.json → ejemplos[e3].pill y c5"
+  },
+  {
+   "id": "D-N1",
+   "que": "Regla del 11-oct-2026 (Sergio Urcullo, por la madre): se NOMBRAN las herramientas como uso propio, no como recomendación pagada. En pantalla: pastilla «Seedream 4.5 · parecido 0,81» (gancho), pastilla «Kling O1 Image · parecido 0,35» (café) y una etiqueta fija en cada placa de clip: «Kling O3» (razón 1), «Cinematic Studio 3.0» (razón 2), «Seedance 2.0 Mini + referencias» (razón 3). La voz NO dice ningún nombre (ahorra caracteres y evita que suene a veredicto de la herramienta). El pie suma «Nombro lo que uso; no es una recomendación pagada.»",
+   "revertir": "plan.json → herramientas, gancho.dato.pill, ejemplos[e3].pill, r1/r2/r3.tool; scripts/grep-prohibidas.mjs (PERMITIDAS); pie.txt"
+  },
+  {
+   "id": "V8",
+   "que": "Etiqueta del piso «mi piso · 0,70» → «piso · 0,70» (2 palabras: ventana de lectura de 1,0 s en lugar de 1,35 s).",
+   "revertir": "scripts/build.mjs (sc-mkl y r2-mkl)"
+  },
+  {
+   "id": "V9",
+   "que": "Quitada la nota «El programa solo compara caras.»; la llamada «Lo difuminé: lo inventó el motor.» ya está en la placa al llegar (ventana de 2,6 s) y el aro marca el letrero dos veces: cuando cae y cuando la voz dice «inventados» (revisión 1: la línea de voz ya no dice «este lo difuminé»).",
+   "revertir": "plan.json → r3.nota (G5) y r3.llamada.t"
+  },
+  {
+   "id": "V10",
+   "que": "Un CURSOR recorre la escala de 0 a 1 mientras la voz dice «de 0 a 1», y se enciende junto con «idéntica · 1»: evento con sentido que reemplaza el aire que dejaba la tarjeta de G5.",
+   "revertir": "plan.json → p2.escala.cursor_t/cursor_dura y build.mjs (sc-cur)"
+  },
+  {
+   "id": "V11",
+   "que": "La tarjeta del gancho está en pantalla desde el cuadro 0 (G5: entraba a 0,083 s), y la caja de cara y la pastilla del gancho salen antes del empuje para que no quede un tramo quieto.",
+   "revertir": "plan.json → c1.a = 0,125 (G5) y gancho.caja_fin"
+  },
+  {
+   "id": "V12",
+   "que": "Escenas más cortas: el rótulo de IA se mantiene 0-3,0 s y el primer corte empieza a 3,04 s (el tramo del gancho dura 3,29 s por sus 11 palabras).",
+   "revertir": "guion-voz.txt línea 1"
+  },
+  {
+   "id": "V13",
+   "que": "La voz es solo guion-voz.txt (418 caracteres con saltos de línea, 82 palabras, voseo): NO se generó audio. Las cifras con coma no se dicen (la tarjeta las muestra); «0 a 1» sí, porque el TTS lo lee «cero a uno».",
+   "revertir": "guion-voz.txt"
+  },
+  {
+   "id": "V14",
+   "que": "El pie es nuevo (el del guion aprobado habla de un video de 57 s). Revisión 1: abre con «Personaje hecho con IA: Lucía Antelo, de @oniahq.» (H3), nombra al medidor («un medidor (ArcFace)», H9) y cambia «Son tomas sueltas, no una comparación de herramientas.» por «Una toma de cada una: es una prueba, no una regla. En otras dos escenas, Kling O1 Image dio 0,79 y 0,83.» (H2). Lo comprueba build.mjs contra pantalla, voz y PROCEDENCIA.",
+   "revertir": "pie.txt"
+  },
+  {
+   "id": "R1-H1",
+   "que": "Voz: L2 «Ocho fotos oficiales de ella.», L3 «Un medidor las compara y da un número de 0 a 1.», L4 «Idéntica es uno. El piso lo elegí yo.», L8 «El número no ve los letreros inventados.» (el encargo decía sin «los»: con 36 caracteres el tramo no puede pasar de 2,42 s con hueco ≤ 0,30 s y la tarjeta c8 y la llamada de la placa (6 palabras cada una) piden 2,5 y 2,6 s; con «los» son 40 caracteres, 2,35 s de voz y un tramo de 2,625 s con hueco de 0,27 s). Tiempo de la voz en caracteres a 17/s; duraciones.json (si existe) manda; retemporizar.mjs mueve todo.",
+   "revertir": "guion-voz.txt; scripts/voz.mjs (CPS); plan.json → voz.lectura_min_cuadros"
+  },
+  {
+   "id": "R1-H4",
+   "que": "Tarjeta c7 «Esa variación cabe en ±0,03.» y etiqueta «Cinematic Studio 3.0 · mismo clip» (misma ventana de lectura).",
+   "revertir": "plan.json → c7 y r2.tool.sufijo"
+  },
+  {
+   "id": "R1-H6",
+   "que": "Nombres de herramienta (etiquetas y pastillas) y marcas de las escalas a 42 px (antes 34-38).",
+   "revertir": "scripts/estilos.css → .tag.tool, .tag-d, .ax"
+  },
+  {
+   "id": "R1-H10",
+   "que": "Aro de r3 dentro del marco del cuadro (x 4, ancho 224); marca del piso de la escala 0-1 sin tocar su pastilla (etiqueta a y 700); nota de r1 a y 1050 (la etiqueta sube a 42 px).",
+   "revertir": "plan.json → r3.aro, p2.escala.marca_label_y, r1.nota.y"
+  },
+  {
+   "id": "R1-aire",
+   "que": "Eventos nuevos con sentido para que no quede aire fuera de la lectura al cambiar los tramos: la lupa de la razón 1 vuelve a marcar en «a ojo», la banda de la razón 2 destella en «este margen»; acentos de tarjeta sincronizados con la palabra de la voz (ancla en plan.rel).",
+   "revertir": "plan.json → rel, r1.lupa_ping_t, r2.banda_ping_t; scripts/timeline.js"
+  },
+  {
+   "id": "R1-extra",
+   "que": "El acento de la tarjeta c5 («otra persona.») se enciende en CORAL (el color de lo que cae bajo el piso, como su caja y su pastilla), no en verde: en G4/G5 y en la v2 de la mañana el timeline lo encendía en verde, el color de lo que pasa. No lo pidió el revisor; el README ya lo documentaba como coral.",
+   "revertir": "scripts/timeline.js (color: c.bad ? BAD : ACC → ACC)"
+  }
+ ],
+ "rel": {
+  "gancho.caja_t": [
+   1,
+   0.85
+  ],
+  "gancho.caja_fin": [
+   1,
+   2.65
+  ],
+  "gancho.dato.t": [
+   1,
+   0.95
+  ],
+  "gancho.dato.fin": [
+   1,
+   3
+  ],
+  "p1.refs.fila2_t": [
+   2,
+   0.45
+  ],
+  "p1.aro_t": [
+   2,
+   0.95
+  ],
+  "p2.flecha.t": [
+   3,
+   0.4
+  ],
+  "p2.escala.dibuja_t": [
+   3,
+   0.95
+  ],
+  "p2.escala.ejes_t": [
+   3,
+   1.55
+  ],
+  "p2.escala.cursor_t": [
+   3,
+   1.85
+  ],
+  "p2.escala.uno_t": [
+   4,
+   0.6
+  ],
+  "p2.escala.marca_t": [
+   4,
+   {
+    "ancla": "el piso",
+    "dt": -0.1
+   }
+  ],
+  "ejemplos.0.t": [
+   5,
+   0.1
+  ],
+  "ejemplos.0.box_t": [
+   5,
+   0.3
+  ],
+  "ejemplos.0.fin": [
+   5,
+   2.45
+  ],
+  "r1.box_t": [
+   6,
+   0.4
+  ],
+  "r1.tag_t": [
+   6,
+   0.8
+  ],
+  "r1.lupa_t": [
+   6,
+   1.2
+  ],
+  "r2.d1.t": [
+   7,
+   0.3
+  ],
+  "r2.d2.t": [
+   7,
+   {
+    "ancla": "varía"
+   }
+  ],
+  "r2.banda.t": [
+   7,
+   {
+    "ancla": "cabe en"
+   }
+  ],
+  "r3.aro.t": [
+   8,
+   0.3
+  ],
+  "r3.pill_num_t": [
+   8,
+   0.9
+  ],
+  "r3.aro.ping_t": [
+   8,
+   {
+    "ancla": "inventados"
+   }
+  ],
+  "tarjetas.0.acento_t": [
+   1,
+   {
+    "ancla": "sigue siendo"
+   }
+  ],
+  "tarjetas.1.acento_t": [
+   2,
+   {
+    "ancla": "oficiales"
+   }
+  ],
+  "tarjetas.2.acento_t": [
+   3,
+   {
+    "ancla": "de 0 a 1",
+    "dt": -0.1
+   }
+  ],
+  "tarjetas.3.acento_t": [
+   4,
+   {
+    "ancla": "lo elegí"
+   }
+  ],
+  "tarjetas.4.acento_t": [
+   5,
+   {
+    "ancla": "otra persona"
+   }
+  ],
+  "tarjetas.5.acento_t": [
+   6,
+   {
+    "ancla": "la reviso"
+   }
+  ],
+  "tarjetas.6.acento_t": [
+   7,
+   {
+    "ancla": "cabe en"
+   }
+  ],
+  "tarjetas.7.acento_t": [
+   8,
+   {
+    "ancla": "letreros"
+   }
+  ],
+  "tarjetas.8.acento_t": [
+   9,
+   {
+    "ancla": "entera"
+   }
+  ],
+  "tarjetas.9.acento_t": [
+   10,
+   1.9
+  ],
+  "r1.lupa_ping_t": [
+   6,
+   {
+    "ancla": "a ojo"
+   }
+  ],
+  "r2.banda_ping_t": [
+   7,
+   {
+    "ancla": "este margen"
+   }
+  ]
+ }
+}

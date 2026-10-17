@@ -1,0 +1,358 @@
+{
+  "pieza": "Viernes · «Casi publico este 0,83» (El error de la semana)",
+  "plantilla": "videos/lucia-p9-luz-cara (estructura y gates) y videos/lucia-g4-v2 (fotos fijas)",
+  "lienzo": {
+    "w": 1080,
+    "h": 1920,
+    "fps": 24,
+    "cuadros": 360,
+    "duracion": 15
+  },
+  "empuje": {
+    "cuadros": 6,
+    "ease": "power3.inOut"
+  },
+  "voz": {
+    "archivo": "guion-voz.txt",
+    "max_caracteres": 381,
+    "ultimo_tramo_cuadros": 63
+  },
+  "fotos": {
+    "k4": {
+      "archivo": "assets/k4.png",
+      "origen": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/img-omni-image-k4cafe-dad464de.png",
+      "job": "dad464de-75a8-45f5-b799-8d91e5a63d1d",
+      "sha256": "2a2e940147431146041d8ace6942a35a600ed91986f3030840751f33e8127200",
+      "ancho": 1536,
+      "alto": 2720
+    },
+    "r3": {
+      "archivo": "assets/r3.png",
+      "origen": "videos/lucia-g4-v2/assets/refs-orig/R3_casi_frontal.png",
+      "job": "d7d6d36a",
+      "sha256": "0dc08193977ee2a1a0b7a6564df83f6b45cdb8c8f2495afc693d5c5d050bf756",
+      "ancho": 1792,
+      "alto": 2400
+    }
+  },
+  "datos": {
+    "fuente": "PROCEDENCIA.jsonl línea 97 (imagen_misma_escena_K1_mismas_6_refs → kling_omni_image_K4cafe_dad464de) y medicion-sin-refs-entrada-20261011.txt, PRUEBA ESTRICTA PARA LOS MOTORES DE IMAGEN, fila «Kling O1 Image K4»",
+    "promedio8": 0.831,
+    "por_foto": {
+      "R1": 0.686,
+      "R2": 0.619,
+      "R3": 0.927,
+      "R4": 0.563,
+      "R5": 0.724,
+      "R6": 0.659,
+      "R7": 0.733,
+      "R8": 0.599
+    },
+    "sin_recibidas_4": 0.743,
+    "recibidas": [
+      "R1",
+      "R3",
+      "R6",
+      "R7"
+    ],
+    "no_recibidas": [
+      "R2",
+      "R4",
+      "R5",
+      "R8"
+    ],
+    "foto_copiada": "R3",
+    "creditos": 0.5,
+    "cara_px": 677,
+    "piso": 0.7,
+    "otras_escenas": {
+      "K1": 0.794,
+      "K2cafe": 0.35
+    },
+    "pares_oficiales": {
+      "fuente": "videos/lucia-p9-luz-cara/qa/face-gate-v31.json → refs_internal (pairwise_min, pairwise_mean y el máximo fuera de la diagonal de matrix; 28 parejas entre las 8 fotos oficiales)",
+      "n": 28,
+      "min": 0.509,
+      "max": 0.719,
+      "media": 0.642
+    }
+  },
+  "textos": {
+    "rotulo": "Lucía Antelo · personaje IA de Onia",
+    "titulo": "Casi publico este 0,83.",
+    "dato": "Kling O1 Image · parecido 0,83",
+    "cap_k4": "Kling O1 Image",
+    "cap_k4b": "una sola toma.",
+    "cap_r3": "Mirá la foto que recibió.",
+    "tile2": "Misma pose, ventana, taza.",
+    "fila_a": "Con esa foto: 0,93",
+    "fila_b": "Con las otras siete: 0,56 a 0,73",
+    "fila_c": "Promedio de las 4 que no recibió: 0,74",
+    "leyenda_oficiales": "Fotos oficiales entre sí: 0,51 a 0,72",
+    "escala_0": "0",
+    "escala_piso": "piso 0,70",
+    "escala_1": "1",
+    "nota_copia": "Casi copia: no prueba identidad.",
+    "leccion": "Mirá el parecido foto por foto.",
+    "cta": "Seguime: cada semana, una prueba."
+  },
+  "paneles": {
+    "y": 370,
+    "w": 540,
+    "h": 880,
+    "k4": {
+      "ajuste": "ancho",
+      "ox": 0
+    },
+    "r3": {
+      "ajuste": "alto",
+      "ox": 100
+    }
+  },
+  "aros": [
+    {
+      "id": "pose",
+      "t": 4.5,
+      "que": "cabeza apoyada en la mano",
+      "k4": {
+        "tipo": "elipse",
+        "cx": 520,
+        "cy": 1200,
+        "rx": 250,
+        "ry": 290
+      },
+      "r3": {
+        "tipo": "elipse",
+        "cx": 850,
+        "cy": 1340,
+        "rx": 235,
+        "ry": 270
+      },
+      "dibujo": 0.6
+    },
+    {
+      "id": "ventana",
+      "t": 4.875,
+      "que": "marco de la ventana",
+      "k4": {
+        "tipo": "rect",
+        "x": 1300,
+        "y": 40,
+        "w": 215,
+        "h": 960
+      },
+      "r3": {
+        "tipo": "rect",
+        "x": 1590,
+        "y": 40,
+        "w": 140,
+        "h": 960
+      },
+      "dibujo": 0.6
+    },
+    {
+      "id": "taza",
+      "t": 5.25,
+      "que": "taza de barro junto a la laptop",
+      "k4": {
+        "tipo": "rect",
+        "x": 150,
+        "y": 1385,
+        "w": 270,
+        "h": 255
+      },
+      "r3": {
+        "tipo": "rect",
+        "x": 315,
+        "y": 1395,
+        "w": 300,
+        "h": 260
+      },
+      "dibujo": 0.6
+    }
+  ],
+  "escenas": [
+    {
+      "id": "s1",
+      "a": 0,
+      "b": 3
+    },
+    {
+      "id": "s2",
+      "a": 2.75,
+      "b": 6.625
+    },
+    {
+      "id": "placa",
+      "a": 6.375,
+      "b": 15
+    }
+  ],
+  "costuras": [
+    {
+      "t": 3,
+      "sale": "s1",
+      "entra": "s2"
+    },
+    {
+      "t": 6.625,
+      "sale": "s2",
+      "entra": "placa"
+    }
+  ],
+  "layout": {
+    "comentario": "top (px del lienzo 1080x1920) de cada tile; medido en el DOM por scripts/layout-dom.mjs",
+    "rotulo": 1190,
+    "titulo": 1282,
+    "dato": 1404,
+    "cap": 1270,
+    "tile2": 1406,
+    "fila_a": 360,
+    "fila_b": 559,
+    "fila_c": 884,
+    "nota_copia": 765,
+    "leccion": 1083,
+    "cta": 1245,
+    "cap_px": 42,
+    "fila_px": 48,
+    "nota_px": 50,
+    "leccion_px": 60
+  },
+  "eventos": [
+    {
+      "t": 0,
+      "selector": "#titulo",
+      "que": "gancho: el error en el cuadro 0"
+    },
+    {
+      "t": 0.5,
+      "selector": "#dato",
+      "que": "primer número antes de 3 s",
+      "entrada": true,
+      "fade": 0.12
+    },
+    {
+      "t": 1.75,
+      "selector": "#dato",
+      "que": "acento del parecido"
+    },
+    {
+      "t": 3,
+      "selector": "#s2",
+      "que": "entra la foto que recibió (empuje de 6 cuadros)",
+      "empuje": true
+    },
+    {
+      "t": 3,
+      "selector": "#cap-r3",
+      "que": "entra «mirá la foto que recibió»",
+      "entrada": true,
+      "fade": 0.15,
+      "voz": 3
+    },
+    {
+      "t": 3.875,
+      "selector": "#cap-r3",
+      "que": "acento de la foto recibida"
+    },
+    {
+      "t": 4.5,
+      "selector": "#tile2",
+      "que": "entra «misma pose, ventana, taza»",
+      "entrada": true,
+      "fade": 0.15,
+      "voz": 4
+    },
+    {
+      "t": 4.5,
+      "selector": "#aro-pose-k4,#aro-pose-r3",
+      "que": "aro: cabeza apoyada en la mano (se dibuja en 0,6 s)",
+      "aro": true,
+      "dur": 0.6
+    },
+    {
+      "t": 4.875,
+      "selector": "#aro-ventana-k4,#aro-ventana-r3",
+      "que": "aro: marco de la ventana (se dibuja en 0,6 s)",
+      "aro": true,
+      "dur": 0.6
+    },
+    {
+      "t": 5.25,
+      "selector": "#tile2",
+      "que": "acento del texto de las coincidencias"
+    },
+    {
+      "t": 5.25,
+      "selector": "#aro-taza-k4,#aro-taza-r3",
+      "que": "aro: taza junto a la laptop (se dibuja en 0,6 s)",
+      "aro": true,
+      "dur": 0.6
+    },
+    {
+      "t": 6.625,
+      "selector": "#placa",
+      "que": "entra el gráfico (empuje de 6 cuadros)",
+      "empuje": true
+    },
+    {
+      "t": 6.625,
+      "selector": "#fila-a",
+      "que": "barra con esa foto crece a 0,93",
+      "barra": true,
+      "voz": 5
+    },
+    {
+      "t": 7.5,
+      "selector": "#fila-b",
+      "que": "entra la fila de las otras siete, con sus siete puntos",
+      "entrada": true,
+      "fade": 0.2
+    },
+    {
+      "t": 8.25,
+      "selector": "#nota-copia",
+      "que": "entra «casi copia: no prueba identidad»",
+      "entrada": true,
+      "fade": 0.2,
+      "voz": 6
+    },
+    {
+      "t": 9.25,
+      "selector": "#fila-c",
+      "que": "entra la fila de las 4 que no recibió",
+      "entrada": true,
+      "fade": 0.2
+    },
+    {
+      "t": 10.375,
+      "selector": "#leccion",
+      "que": "entra la lección",
+      "entrada": true,
+      "fade": 0.2,
+      "voz": 7
+    },
+    {
+      "t": 11.5,
+      "selector": "#leccion",
+      "que": "acento de la lección"
+    },
+    {
+      "t": 12.375,
+      "selector": "#cta",
+      "que": "CTA",
+      "entrada": true,
+      "fade": 0.08,
+      "voz": 8
+    },
+    {
+      "t": 13.75,
+      "selector": "#cta",
+      "que": "acento una prueba semanal"
+    }
+  ],
+  "piso_en": [
+    "fila-c"
+  ],
+  "aro_len": 1000
+}

@@ -1,0 +1,5 @@
+Cara del final nuevo contra la del final de la mañana (SHA 72860a55…), mismo instante relativo de la escena, recorte = caja SCRFD (qa/caras-fotos.json). PSNR de ffmpeg; ruido H.264 de dos renders distintos.
+gancho n=24  (1,00 s) : average:41.405833
+gancho n=48  (2,00 s) : average:40.691825
+cafe   n=290 vs 300  : average:43.722594
+cierre n=585 vs 591  : average:42.413571

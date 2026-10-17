@@ -1,0 +1,23 @@
+archivo	voz	voice_id	acento_etiqueta	nota
+previews_elevenlabs/cuenta_Marcela_colombiana.mp3	Marcela (vigente)	86V9x9hrQds83qf7zaGn	colombian	referencia
+previews_elevenlabs/peru_Gaby.mp3	Gaby - Friendly, Expressive	5vkxOzoz40FrElmLP4P7	peruvian	joven, conversacional, 24.822 clones, aviso 730 d
+previews_elevenlabs/peru_Daniela.mp3	Daniela - Warm, Upbeat	VywzfvxxNk4yFAaoMm4Q	peruvian	joven, conversacional, aviso 730 d
+previews_elevenlabs/peru_Karla.mp3	Karla - Dynamic	saqk76H0L3GCnuHtLDw6	peruvian	joven, aviso solo 90 d
+previews_elevenlabs/peru_Gabriela.mp3	Gabriela - Warm and Talkative	4632xAJ5i6b4rvu0blu7	peruvian	joven, aviso 180 d
+previews_elevenlabs/peru_Nelly.mp3	Nelly - Warm Peruvian	34EkeMY6ezBFj41NQj1f	peruvian	joven; free_users_allowed false
+previews_elevenlabs/chile_Catalina.mp3	Catalina - Chilean	6Gr4AVmTax1pMJO0lHRK	chilean	joven, aviso 365 d
+previews_elevenlabs/chile_Camila.mp3	Camila	oJIuRMopN0sojGjwD6rQ	chilean	joven, aviso 365 d
+previews_elevenlabs/ecuador_Ana.mp3	Ana	tr6YFWVGFIcVUGrOMYMV	ecuadorian	joven; free_users_allowed false
+previews_elevenlabs/latam_Norah.mp3	Norah - Warm, Friendly	kcQkGnn0HAT2JRDQ4Ljp	latin american	joven, conversacional, 86.150 clones
+previews_elevenlabs/latam_Gaby_natural.mp3	Gaby - Natural & Casual	p5EUznrYaWnafKvUkNiR	latin american	joven, conversacional
+previews_elevenlabs/latam_Nathalia.mp3	Nathalia	tTQzD8U9VSnJgfwC6HbY	latin american	descripcion: colombiana neutra; sin aviso (se corta al instante)
+previews_elevenlabs/latam_Fernanda_Sanmiguel.mp3	Fernanda Sanmiguel	1aJyZpkt0vxhGPBnPyrs	latin american	mediana edad; menciona Bolivia en la descripcion
+previews_elevenlabs/cuenta_Jhenny_latam.mp3	Jhenny Antiques	2Lb1en5ujrODDIqmp7F3	latin american	ya en la cuenta; mediana edad, neutra
+previews_elevenlabs/cuenta_Daniela_latam.mp3	Daniela - Friendly Host	ajOR9IDAaubDK5qtLUqQ	latin american	ya en la cuenta
+previews_elevenlabs/cuenta_Sandra_latam.mp3	Sandra - Marketing Guru	rEVYTKPqwSMhytFPayIb	latin american	ya en la cuenta; tono vendedor
+previews_elevenlabs/cuenta_AnaMaria_mexicana.mp3	Ana Maria	m7yTemJqdIqrcNleANfX	mexican	ya en la cuenta
+previews_elevenlabs/cuenta_LuciaONIA_voicedesign_descartada.mp3	Lucia-ONIA (Voice Design)	wrXs6GqcC7X03dDKMoeT	-	descartada 15-ago; remezclable
+previews_higgsfield/Elena.mp3	Elena (preset)	ca83ca7f-c186-493d-bd69-0d765fa861b2	sin etiqueta	idioma sin verificar
+previews_higgsfield/Isabella.mp3	Isabella (preset)	80924413-1ea8-4e64-9719-e00b86796f05	sin etiqueta	base de Lucia-voz descartada
+previews_higgsfield/Ines.wav	Ines (preset)	023ebf5e-1970-40d8-825c-a5ef6a1dd4ff	sin etiqueta	idioma sin verificar
+previews_higgsfield/Marisol.wav	Marisol (preset)	75e72cd5-011b-4130-a474-e8b1ab341f04	sin etiqueta	idioma sin verificar

@@ -1,0 +1,1 @@
+480 cuadros; planos 0; quietud fuera de lectura 0.125 s (diferencia media <0,35).

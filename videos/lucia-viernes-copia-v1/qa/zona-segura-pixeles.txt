@@ -1,0 +1,4 @@
+Zona segura en píxeles del master (fondo #11191b, umbral 10 niveles; medido a media resolución, ±2 px):
+placa: 51 cuadros; contenido y 360-1417, x 80-999 (límites y 292-1490, x 80-1000)
+escena 2: 12 cuadros; encima del panel (y < 370) todo es fondo: sí; debajo del panel el contenido llega a y 1479 (límite 1490)
+EXIT 0

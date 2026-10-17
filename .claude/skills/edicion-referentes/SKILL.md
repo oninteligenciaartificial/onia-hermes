@@ -320,6 +320,12 @@ Cada regla trae su caso. Lo que solo dijo Gemini no entra.
     publicados en TikTok y YouTube Shorts. El recorte se hace local (regla 1 de Higgsfield).
 14. **Copiar el método, no la plantilla.** Erik cambia de sistema visual cada 4-6 semanas (8 épocas medidas entre
     marzo y octubre) y Santiago cambió de subtítulo 3 veces en 6 meses: ninguno tiene una plantilla fija. La identidad de Sergio Urcullo (verde, blanco y negro) no rota.
+15. **Aire muerto: ningún tramo quieto de más de 0,3 s fuera de lectura, y un evento visible nuevo cada ≤ 2 s** (regla de la madre para los reels de Lucía,
+    11-oct; antes estaba solo en el encargo y la numeración llegaba a la 14). **La lectura está EXENTA**: una tarjeta o nota cuenta como en curso mientras se lee (0,35 s por palabra + 0,3 s, `ventanas.mjs`);
+    lo que sobra de esa ventana sí se mide. Se escribe SIEMPRE con la exención y con las dos medidas: sin ella, los re-cortes v2 tienen quietos de 1,0 a 1,5 s dentro de una nota que se lee;
+    con ella, el máximo fue 0,167 a 0,208 s (G4 v2: 0,208 s en el DOM y 0,167 s en píxeles fuera de lectura; G5 v2: 0,208 s; hueco máximo entre eventos 1,68 a 1,90 s). Se mide en el DOM **y** en píxeles:
+    un empuje lento de foto (zoom del 4 %) no cuenta como cambio, y por eso el DOM da 0,000 donde el revisor, midiendo píxeles, encontró 1,25 s de placa casi fija (G3 v2). El audio de la regla
+    (pausas ≤ 0,25 s; ≤ 1 hueco ≥ 0,3 s por 10 s) solo se mide con voz. Caso: G2, G3, G4 y G5 v2 (≤ 30 s), 11-oct; método en `lucia/montaje-hyperframes.md` §11.
 
 ## Pruebas de edición pendientes (9-oct-2026; no cambian las recetas medidas)
 - [Gemini, sin medir] Antes de probar estas reglas, medir el caso con MP4 y cuadros; detalle en «Pasada nocturna 9-oct (Gemini, 15 videos)» de las fichas.

@@ -1,0 +1,34 @@
+Cara de Lucía a la vista en el master (SCRFD det_10g, muestreo cada 0.5 s, cara ≥ 200 px en el lienzo de 1080×1920):
+t(s)  cuadro  cara más grande (px)  con cara
+ 0.0      0       473  sí
+ 0.5     12       473  sí
+ 1.0     24       473  sí
+ 1.5     36       473  sí
+ 2.0     48       473  sí
+ 2.5     60       473  sí
+ 3.0     72       263  sí
+ 3.5     84       263  sí
+ 4.0     96       263  sí
+ 4.5    108       262  sí
+ 5.0    120       264  sí
+ 5.5    132       264  sí
+ 6.0    144       264  sí
+ 6.5    156       264  sí
+ 7.0    168       264  sí
+ 7.5    180       264  sí
+ 8.0    192       478  sí
+ 8.5    204       479  sí
+ 9.0    216       479  sí
+ 9.5    228       479  sí
+10.0    240       479  sí
+10.5    252       480  sí
+11.0    264       480  sí
+11.5    276       480  sí
+12.0    288       480  sí
+12.5    300       480  sí
+13.0    312       480  sí
+13.5    324       480  sí
+14.0    336       480  sí
+14.5    348       480  sí
+Muestras con cara ≥ 200 px: 30 de 30 = 100.0 % (mínimo exigido > 50 %, objetivo ≥ 85 %)
+Muestras sin cara: ninguna

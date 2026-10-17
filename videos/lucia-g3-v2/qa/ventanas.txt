@@ -1,0 +1,21 @@
+ventana legible medida en el DOM (opacidad ≥ 0,9 y ≥ 95 % dentro del lienzo), cuadro a cuadro:
+  ok  #c1 .card           5 pal  0.00–2.42 s  2.42 s (pide 2.05)  «Tres errores que casi publico.»
+  ok  #c2 .card           5 pal  2.50–4.63 s  2.13 s (pide 2.05)  «1Letrero que no pedí.»
+  ok  #c3 .card           6 pal  4.71–7.29 s  2.58 s (pide 2.40)  «La cara pasó. El fondo, no.»
+  ok  #c4 .card           4 pal  7.33–9.50 s  2.17 s (pide 1.70)  «Mirar también el fondo.»
+  ok  #c5 .card           5 pal  9.54–12.04 s  2.50 s (pide 2.05)  «2Letra que parece escrita.»
+  ok  #c6 .card           2 pal  12.13–13.42 s  1.29 s (pide 1.00)  «Sin mensaje.»
+  ok  #c7 .card           5 pal  13.50–15.79 s  2.29 s (pide 2.05)  «No se lee, no sirve.»
+  ok  #c8 .card           6 pal  15.83–18.33 s  2.50 s (pide 2.40)  «3Una mano tapa la otra.»
+  ok  #c9 .card           4 pal  18.42–20.46 s  2.04 s (pide 1.70)  «Si cruza, no cuento.»
+  ok  #c10 .card          4 pal  20.50–22.67 s  2.17 s (pide 1.70)  «Cuadro 120: cinco dedos.»
+  ok  #c11 .card          4 pal  22.71–24.92 s  2.21 s (pide 1.70)  «Reviso cuadro a cuadro.»
+  ok  #c12 .card          5 pal  25.00–27.92 s  2.92 s (pide 2.05; CTA: pide ≥ 2.4 s a opacidad plena)  «Seguime: cada semana, una prueba.»
+  ok  #rotulo .tag        6 pal  0.00–3.17 s  3.17 s (pide 3.00, desde el cuadro 0)  «Lucía Antelo · personaje IA de Onia»
+  ok  #e_orden .tag       4 pal  2.75–4.63 s  1.88 s (pide 1.70)  «Orden: «no signs anywhere»»
+  ok  #e_cara .tag        3 pal  4.83–6.96 s  2.13 s (pide 1.35)  «Parecido: 0,835 · aprobado»
+  ok  #e_nueva .tag       2 pal  7.50–9.33 s  1.83 s (pide 1.00)  «Foto nueva»
+  ok  #capL               3 pal  2.00–4.13 s  2.13 s (pide 1.35)  «Difuminado al editar»
+  ok  #sello              2 pal  21.17–22.71 s  1.54 s (pide 1.00)  «5 dedos»
+  ok  #visor .vn          2 pal  20.46–22.67 s  2.21 s (pide 1.00)  «cuadro 120»
+✔ todas las ventanas medidas alcanzan la regla de lectura

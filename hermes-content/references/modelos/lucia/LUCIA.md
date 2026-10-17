@@ -12,7 +12,7 @@
 > clínica, otro recorre una tienda o un showroom. **El rol es un disfraz de ella misma** (como el cosplay de Aitana
 > o Miquela vestida de Euphoria), nunca otra persona.
 > - ✅ **Decidido por Sergio Urcullo (3-oct): *«que no se identifique como ello pero que tenga la ropa»*.** Lleva el
->   ambo (u otra ropa del rubro) como VESTUARIO, y el texto la presenta siempre como «Lucía · personaje IA de Onia» que
+>   ambo (u otra ropa del rubro) como VESTUARIO, y el texto la presenta siempre como «Lucía Antelo · personaje IA de Onia» que
 >   muestra cómo funciona el sistema: «te muestro cómo trabaja una clínica con Onia». **Los rubros son solo los 5 de
 >   `onia-platform/lib/platform/rubros-activos.ts`**; abogada y contadora pasan a un solo rol, «estudio».
 > - ⛔ Nunca dice ni da a entender que es del rubro: «hoy soy odontóloga», «soy doctora», «como odontóloga», «mis
@@ -80,7 +80,7 @@
 > 7. **Lo que le molesta del humo de la IA:** que prometan «la IA lo hace todo». Ella muestra solo lo que funciona hoy.
 > 8. **Su color:** terracota, siempre en cuadro.
 > 9. **Su música:** la del carnaval cruceño. En sus piezas solo suena música con licencia.
-> 10. **Cómo habla:** voseo cruceño, frases cortas y con humor. Sin voz hasta resolver el acento (`PLAN.md` D4).
+> 10. **Cómo habla:** voseo cruceño, frases cortas y con humor. Voz Marcela: **D4 resuelta el 11-oct** (queda, con su acento colombiano; `PLAN.md` §4-bis y `cola/loop/madre.md:75`). Las piezas salen mudas y la voz se mezcla después, con el sí de la madre.
 
 > ## 🔴 Estado vigente — 2026-09-29: Lucía v4 = la cara ORIGINAL, fijada de verdad
 >
@@ -538,6 +538,9 @@ Marcela. Probado punta a punta el 18-ago.
 ⚠️ **Montar el mp3 encima sin `sync_so` NO funciona** — se probó y quedó hasta **1,4 s** fuera
 de sincronía, porque el video y la voz son dos interpretaciones distintas del mismo guion.
 `sync_so` cuesta **18,15 cr medidos** y no se puede evitar si la voz tiene que ser Marcela.
+> *Corregido el 5-oct:* `sync_so` cobra 3,6 cr/s (36 por 10 s). La prueba del 30-sep (`v4/PROCEDENCIA.jsonl`) dio a
+> Seedance 2.0 Mini con `audio_references` cara estable y boca natural (10 cr por 10 s); le falta el oído de Sergio
+> Urcullo. Además, Marcela tiene acento colombiano y la licencia de ElevenLabs está sin confirmar (skill `lucia` §4).
 
 | Con qué voz | Costo 5 s |
 |---|---:|
@@ -569,7 +572,7 @@ una hipótesis.
 |---|---|---|
 | `wan2_7` | start_image · end_image · **audio_references** | ⛔ descartado para lipsync |
 | `grok_video_v15` | start_image · image_references · **audio_references** | 2-15 s, hasta 1080p. **Sin probar** |
-| `seedance_2_0` / `_mini` | start · end · image_refs · video_refs · **audio_references** | El que ya usamos para b-roll. **Sin probar para lipsync** |
+| `seedance_2_0` / `_mini` | start · end · image_refs · video_refs · **audio_references** | El que ya usamos para b-roll. *Corregido el 5-oct:* **probado el 30-sep** con cara estable; falta el oído de Sergio Urcullo |
 
 **Ninguno de los dos candidatos está probado.** Antes de prometer UGC hablando hay que correr
 una toma corta con cada uno y mirar la boca. Es video: va con OK de Sergio.
@@ -829,6 +832,10 @@ Evidencia: `prueba-motor-20260813/` (la prueba que fijó el método) ·
 
 # §9. RECETA B-ROLL — cómo se hicieron los 4 videos que le encantaron a Sergio (21-ago)
 
+> ⛔ **HISTORIA desde el 29-sep (corregido el 5-oct): NO seguir esta receta.** El método vigente es Seedream 4.5 con el
+> ancla + Kling 3.0 std con `sound: "off"` (7,5 cr por 6 s). El Element `58bbd635` y Veo Lite «a 1 cr/s» ya no valen:
+> hoy Veo Lite cuesta 1,5 cr/s. Recetas y costos medidos: skill **`lucia`** §2-§3.
+>
 > Sergio: "me encantó el resultado, haz lo mismo pero más barato y aprende cómo los hiciste."
 > Esta sección ES ese aprendizaje. Para B-roll de Lucía, seguir esto al pie.
 

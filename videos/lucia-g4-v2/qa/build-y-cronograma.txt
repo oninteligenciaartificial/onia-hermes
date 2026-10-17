@@ -1,0 +1,91 @@
+Cronograma de la voz (guion-voz.txt: 444 caracteres con saltos, 85 palabras; tramos por CARACTERES a 17 car/s, sensibilidad 16/18; pausa máx 0.25 s; NO se genera audio):
+   1    0.100 – 1.865    6 pal 30 car  pausa→sig  0.16 (0.04 / 0.25)  A ver, ¿cuál conserva su cara?
+   2    2.020 – 4.608    9 pal 44 car  pausa→sig  0.16 (0.00 / 0.31)  Probé la misma orden en 6 motores de imagen.
+   3    4.770 – 6.299    5 pal 26 car  pausa→sig  0.11 (0.02 / 0.20)  costura 4.750 (+0.020)  Medí contra 8 fotos suyas.
+   4    6.410 – 8.234    6 pal 31 car  pausa→sig  0.11 (-0.01 / 0.21)  Piso cero setenta: lo elegí yo.
+   5    8.340 – 10.281   5 pal 33 car  pausa→sig  0.09 (-0.03 / 0.20)  costura 8.333 (+0.007)  Seedream, 1 crédito: la sostiene.
+   6   10.370 – 12.841   9 pal 42 car  pausa→sig  0.22 (0.07 / 0.36)  costura 10.250 (+0.120)  Seedream Pro, 2 y medio: justo en el piso.
+   7   13.060 – 14.942   7 pal 32 car  pausa→sig  0.23 (0.11 / 0.33)  costura 13.000 (+0.060)  FLUX, el más caro, bajo el piso.
+   8   15.170 – 17.464   8 pal 39 car  pausa→sig  0.21 (0.06 / 0.33)  costura 15.167 (+0.003)  Y ojo: pagar más no mejoró el parecido.
+   9   17.670 – 20.023   8 pal 40 car  pausa→sig  0.23 (0.08 / 0.36)  Fue una toma cada uno: prueba, no regla.
+  10   20.250 – 22.779   9 pal 43 car  pausa→sig  0.25 (0.09 / 0.39)  Si dos parecidos se rozan, eso ya es ruido.
+  11   23.025 – 25.378   8 pal 40 car  pausa→sig  0.25 (0.10 / 0.38)  costura 22.875 (+0.150)  En otra escena, el Kling perdió la cara.
+  12   25.625 – 27.566   5 pal 33 car  pausa→sig  0.48 (0.35 / 0.58)  costura 25.625 (+0.000)  Seguime: cada semana, una prueba.
+  el video dura 28.042 s (673 cuadros); la voz termina en 27.566 s (cola 0.48 s); el CTA está 2.417 s; pausa máxima a 17 car/s: 0.25 s
+  avisos (sensibilidad ±1 car/s; no frenan): línea 1 a 18 car/s: pausa de 0.25 s · línea 2 a 18 car/s: pausa de 0.31 s · línea 4 a 16 car/s: solape de 0.01 s · línea 5 a 16 car/s: solape de 0.03 s · línea 6 a 18 car/s: pausa de 0.36 s · línea 7 a 18 car/s: pausa de 0.33 s · línea 8 a 18 car/s: pausa de 0.33 s · línea 9 a 18 car/s: pausa de 0.36 s · línea 10 a 18 car/s: pausa de 0.39 s · línea 11 a 18 car/s: pausa de 0.38 s
+Tabla de cortes (t en s):
+    0.000 – 4.750   f-gancho  foto  Foto de Seedream 4.5 a pantalla completa con empuje lento; sale en el empuje junto con las miniaturas y la tarjeta
+    4.500 – 8.333   pl-regla  placa placa de la regla: las 8 referencias + escala 0-1 con la marca en 0,70 (una sola tarjeta)
+    8.083 – 10.250  f-a       foto  Seedream 4.5 (1 crédito, sostiene)
+   10.000 – 13.000  f-d       foto  Seedream 5.0 Pro (2,5 créditos, justo en el piso)
+   12.750 – 15.167  f-e       foto  FLUX 3 (3 créditos, bajo el piso; foto limpia)
+   14.917 – 22.875  pl-l1     placa lección: los 6 motores por precio sobre la escala + las dos notas de honestidad (44 px)
+   22.625 – 25.625  pl-l2     placa escena 2: Seedream 4.5 y Kling O1 Image lado a lado
+   25.375 – 28.042  f-cierre  foto  cierre: Lucía mira a cámara y sonríe (foto K4·5) con empuje lento
+Costuras (empuje rígido de 6 cuadros):
+    4.750  tramo  3  sale f-gancho,thumbs → entra pl-regla
+    8.333  tramo  5  sale pl-regla → entra f-a
+   10.250  tramo  6  sale f-a → entra f-d
+   13.000  tramo  7  sale f-d → entra f-e
+   15.167  tramo  8  sale f-e → entra pl-l1
+   22.875  tramo 11  sale pl-l1 → entra pl-l2
+   25.625  tramo 12  sale pl-l2 → entra f-cierre
+Tarjetas (entra = 1 cuadro antes de a salvo en los empujes, donde viajan):
+    0.000 – 2.042   c1  4 pal (mín 1.7 s, dura 2.04) «¿Cuál conserva su cara?»
+    2.042 – 4.750   c2  6 pal (mín 2.4 s, dura 2.71) «Misma orden.  Seis motores de imagen.» [sale con el empuje]
+    5.500 – 8.333   c3  6 pal (mín 2.4 s, dura 2.83) «Contra 8 fotos suyas.  Piso: 0,70.» [sale con el empuje]
+    8.333 – 10.250  c4  4 pal (mín 1.7 s, dura 1.92) «Seedream 4.5 · 1 crédito» [entra con el empuje] [sale con el empuje]
+   10.250 – 13.000  c5  5 pal (mín 2.05 s, dura 2.75) «Seedream 5.0 Pro · 2,5 créditos» [entra con el empuje] [sale con el empuje]
+   13.000 – 15.167  c6  4 pal (mín 1.7 s, dura 2.17) «FLUX 3 · 3 créditos» [entra con el empuje] [sale con el empuje]
+   15.167 – 17.750  c7  6 pal (mín 2.4 s, dura 2.58) «Pagar más no mejoró el parecido.» [entra con el empuje]
+   22.875 – 25.625  c8  6 pal (mín 2.4 s, dura 2.75) «Kling O1 Image  perdió la cara.» [entra con el empuje] [sale con el empuje]
+   25.625 – 28.042  c9  5 pal (mín 2.05 s, dura 2.42) «Seguime: cada semana, una prueba.» [entra con el empuje]
+Lecturas de rótulo, datos, sellos, placas (≥ 0,35 s/palabra + 0,3):
+  rótulo de IA            6 pal  0.00–3.00  3.00 s  (pide 2.40)  
+  gancho dato             2 pal  0.84–1.86  1.02 s  (pide 1.00)  ← justo
+  A dato                  2 pal  8.86–10.07  1.21 s  (pide 1.00)  
+  D dato                  2 pal  10.83–12.82  1.99 s  (pide 1.00)  
+  D pastilla              4 pal  11.08–12.82  1.74 s  (pide 1.70)  ← justo
+  E dato                  2 pal  13.53–14.99  1.46 s  (pide 1.00)  
+  E sello                 3 pal  13.63–14.99  1.36 s  (pide 1.35)  ← justo
+  regla «mi piso»         3 pal  6.58–8.15  1.57 s  (pide 1.35)  
+  regla «idéntica · 1»    2 pal  5.45–8.15  2.70 s  (pide 1.00)  
+  l1 «mi piso»            3 pal  15.12–22.70  7.58 s  (pide 1.35)  
+  l1 nota 1              10 pal  15.12–22.70  7.58 s  (pide 3.80)  
+  l1 nota 2               9 pal  19.15–22.70  3.55 s  (pide 3.45)  ← justo
+  l1 fila B               5 pal  15.56–22.70  7.14 s  (pide 2.05)  
+  l1 valor B              1 pal  15.71–22.70  6.99 s  (pide 0.65)  
+  l1 fila A               4 pal  15.76–22.70  6.94 s  (pide 1.70)  
+  l1 valor A              1 pal  15.91–22.70  6.79 s  (pide 0.65)  
+  l1 fila C               5 pal  15.96–22.70  6.74 s  (pide 2.05)  
+  l1 valor C              1 pal  16.11–22.70  6.59 s  (pide 0.65)  
+  l1 fila D               5 pal  16.16–22.70  6.54 s  (pide 2.05)  
+  l1 valor D              1 pal  16.31–22.70  6.39 s  (pide 0.65)  
+  l1 fila F               5 pal  16.36–22.70  6.34 s  (pide 2.05)  
+  l1 valor F              1 pal  16.51–22.70  6.19 s  (pide 0.65)  
+  l1 fila E               4 pal  16.56–22.70  6.14 s  (pide 1.70)  
+  l1 valor E              1 pal  16.71–22.70  5.99 s  (pide 0.65)  
+  l2 pie foto Seedream 4.5  3 pal  22.82–25.45  2.62 s  (pide 1.35)  
+  l2 pie foto Kling O1 Image  4 pal  23.65–25.45  1.79 s  (pide 1.70)  ← justo
+Datos (de PROCEDENCIA.jsonl):
+  Seedream 4.5: 1 cr · parecido 0,81 (medido 0.806) · ok · escena propia
+  Kling O1 Image: 0,5 cr · parecido 0,79 (medido 0.794) · ok
+  Nano Banana 2.1: 2 cr · parecido 0,74 (medido 0.737) · ok
+  Seedream 5.0 Pro: 2,5 cr · parecido 0,70 (medido 0.702) · justo · escena propia
+  FLUX 3: 3 cr · parecido 0,69 (medido 0.691) · bajo · escena propia
+  GPT Image 2.5: 2,75 cr · parecido 0,66 (medido 0.658) · bajo
+Lo que el video afirma, contra los datos:
+  ok  «Pagar más no mejoró el parecido»: el más caro (FLUX 3, 3 cr, 0.691) queda bajo el de 1 cr (0.806) y el de 0,5 cr (0.794)
+  ok  ninguno de los que cuestan más que Seedream 4.5 (1 cr) mejora su parecido (0.806)
+  ok  «Seedream, 1 crédito: la sostiene»: Seedream 4.5 (1 cr) da 0.806 (≥ 0.7)
+  ok  «Seedream Pro… justo en el piso»: Seedream 5.0 Pro (2,5 cr) da 0.702 (entre 0.7 y 0,71)
+  ok  «FLUX, el más caro, bajo el piso»: FLUX 3 (3 cr, el más caro) da 0.691 (< 0.7)
+  ok  franja de ruido 0,66-0,70: GPT Image 2.5 0.658 · FLUX 3 0.691 · Seedream 5.0 Pro 0.702 caen adentro (la franja va de 0.66 a 0.7)
+  ok  Kling O1 Image es el más barato (0.5 cr)
+  ok  «Kling O1 Image perdió la cara»: en el café Seedream 4.5 da 0.83 y Kling O1 Image 0.35
+  ok  las fotos de la escena 2: Seedream 4.5 0,83 contra Kling O1 Image 0,35
+  ok  seis motores distintos con su nombre real
+  ok  pie: Kling O1 Image dio 0.35 en el café y 0.794 y 0.831 en las otras dos escenas (0,35 · 0,79 · 0,83)
+  ok  Seedream 4.5 en las otras dos escenas: 0.83 y 0.839
+  ok  «una toma por motor en la primera escena; Seedream 4.5 y Kling O1 Image se repitieron en otras dos»: tomas por motor en PROCEDENCIA {"seedream_4_5":3,"kling":3,"nano_banana_2_1":1,"gpt_image_2_5":1,"flux_3":1,"seedream_v5_pro":1}
+ok: index.html (33 KB)

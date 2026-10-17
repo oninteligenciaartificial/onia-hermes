@@ -1,0 +1,12 @@
+video: g3-v2-final-1080x1920.mp4  670 cuadros  27.917 s
+cuadros quietos (< 0,02 % de píxeles cambiados > 3 niveles y dif. media < 0,05): 0; idénticos al anterior (dif. 0): 0
+los 5 cuadros con MENOS cambio respecto del anterior: 276 (11.50 s: 0.010 % de píxeles > 3 niveles, dif. media 0.089); 254 (10.58 s: 0.013 % de píxeles > 3 niveles, dif. media 0.084); 5 (0.21 s: 0.018 % de píxeles > 3 niveles, dif. media 0.165); 21 (0.88 s: 0.020 % de píxeles > 3 niveles, dif. media 0.162); 366 (15.25 s: 0.021 % de píxeles > 3 niveles, dif. media 0.111)
+mayor tramo quieto TOTAL: 0.000 s   [ninguno]
+mayor tramo idéntico (dif. exactamente 0): 0.000 s   [ninguno]
+mayor tramo quieto SIN tarjeta en lectura: 0.000 s   [ninguno]
+eventos visuales por 10 s: 14.69 (41 en 27.9 s); hueco máximo entre eventos: 1.616 s; tramo quieto de diseño (sin empuje lento ni clips): 0.25 s
+PLANO CASI FIJO (gris 108x192, diferencia media entre cuadros consecutivos; el empuje lento de las fotos SÍ cuenta como casi fijo si no pasa del umbral):
+  < 0,10: mayor tramo 1.250 s [21.33→22.58 s]; fuera de toda tarjeta en lectura 0.292 s [22.29→22.58 s]; otros: 0.50 s en 20.63, 0.04 s en 10.46, 0.04 s en 10.58
+  < 0,15: mayor tramo 1.250 s [21.33→22.58 s]; fuera de toda tarjeta en lectura 0.292 s [22.29→22.58 s]; otros: 0.83 s en 11.13, 0.50 s en 20.63, 0.46 s en 10.46
+  < 0,30: mayor tramo 1.958 s [4.92→6.88 s]; fuera de toda tarjeta en lectura 0.292 s [13.08→13.38 s]; otros: 1.92 s en 0.04, 1.75 s en 13.63, 1.71 s en 7.58
+✔ ningún tramo de más de 0,3 s con la pantalla quieta y sin una tarjeta en lectura

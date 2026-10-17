@@ -1,0 +1,13 @@
+Cronograma de voz ESTIMADO (17 car/s; no hay voz): 223 caracteres con saltos (cupo 381; ≈ 255 caben en 15 s), 8 líneas, 360 cuadros = 15.000 s
+CTA (L8) empieza a 12.375 s: 2.625 s de exposición (mínimo 2,4); cola sin voz 0.684 s (el único hueco ≥ 0,3 s)
+línea  caract   voz_ini   voz_fin  tramo_fin  hueco  pantalla que coincide
+  L1      25     0.000     1.471      1.708  0.24  —
+  L2      14     1.708     2.532      2.750  0.22  —
+  L3      25     2.750     4.221      4.458  0.24  #cap-r3 entra a 3 s (+0.25 s sobre el inicio de la línea)
+  L4      27     4.458     6.047      6.292  0.25  #tile2 entra a 4.5 s (+0.04 s sobre el inicio de la línea)
+  L5      29     6.292     7.998      8.208  0.21  #fila-a entra a 6.625 s (+0.33 s sobre el inicio de la línea)
+  L6      32     8.208    10.091     10.333  0.24  #nota-copia entra a 8.25 s (+0.04 s sobre el inicio de la línea)
+  L7      31    10.333    12.157     12.375  0.22  #leccion entra a 10.375 s (+0.04 s sobre el inicio de la línea)
+  L8      33    12.375    14.316     15.000  0.68  #cta entra a 12.375 s (+0.00 s sobre el inicio de la línea)
+Las entradas de L3 a L8 se re-miden cuando haya voz real (duraciones.json) y se corrigen en plan.json → eventos.
+EXIT 0

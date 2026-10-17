@@ -1,0 +1,109 @@
+◆  Checking lucia-g3-v2
+[hyperframes] browserGpuMode probe → software (WebGL unavailable)
+
+Lint
+  ⚠ timeline_track_too_dense: Track 3 has 6 timed elements in this HTML file. Smaller sub-compositions keep timelines easier to read, iterate on, and diff.
+    /home/user/onia-hermes/videos/lucia-g3-v2/index.html [data-composition-id] t=0s
+    Fix: Move coherent scene groups into separate .html files under compositions/ and mount them from the parent with data-composition-src so the timeline stays easier to inspect, revise, and validate.
+  ⚠ timeline_track_too_dense: Track 4 has 6 timed elements in this HTML file. Smaller sub-compositions keep timelines easier to read, iterate on, and diff.
+    /home/user/onia-hermes/videos/lucia-g3-v2/index.html [data-composition-id] t=0s
+    Fix: Move coherent scene groups into separate .html files under compositions/ and mount them from the parent with data-composition-src so the timeline stays easier to inspect, revise, and validate.
+  ⚠ nested_structure_needs_subcomposition: <div id="desc"> is a timeline element that contains nested <div id="z-desc">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-g3-v2/index.html #desc t=0s
+    Fix: Move <div id="desc"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="buena"> is a timeline element that contains nested <div id="z-buena">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-g3-v2/index.html #buena t=0s
+    Fix: Move <div id="buena"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="agenda"> is a timeline element that contains nested <div id="z-agenda">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-g3-v2/index.html #agenda t=0s
+    Fix: Move <div id="agenda"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="cc-rotulo"> is a timeline element that contains nested <div id="rotulo">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-g3-v2/index.html #cc-rotulo t=0s
+    Fix: Move <div id="cc-rotulo"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="cc-e_orden"> is a timeline element that contains nested <div id="e_orden">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-g3-v2/index.html #cc-e_orden t=0s
+    Fix: Move <div id="cc-e_orden"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="cc-e_cara"> is a timeline element that contains nested <div id="e_cara">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-g3-v2/index.html #cc-e_cara t=0s
+    Fix: Move <div id="cc-e_cara"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="cc-e_nueva"> is a timeline element that contains nested <div id="e_nueva">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-g3-v2/index.html #cc-e_nueva t=0s
+    Fix: Move <div id="cc-e_nueva"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="cc-insL"> is a timeline element that contains nested <div id="insL">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-g3-v2/index.html #cc-insL t=0s
+    Fix: Move <div id="cc-insL"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="cc-c1"> is a timeline element that contains nested <div id="c1">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-g3-v2/index.html #cc-c1 t=0s
+    Fix: Move <div id="cc-c1"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="cc-c2"> is a timeline element that contains nested <div id="c2">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-g3-v2/index.html #cc-c2 t=0s
+    Fix: Move <div id="cc-c2"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="cc-c3"> is a timeline element that contains nested <div id="c3">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-g3-v2/index.html #cc-c3 t=0s
+    Fix: Move <div id="cc-c3"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="cc-c4"> is a timeline element that contains nested <div id="c4">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-g3-v2/index.html #cc-c4 t=0s
+    Fix: Move <div id="cc-c4"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="cc-c5"> is a timeline element that contains nested <div id="c5">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-g3-v2/index.html #cc-c5 t=0s
+    Fix: Move <div id="cc-c5"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="cc-c6"> is a timeline element that contains nested <div id="c6">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-g3-v2/index.html #cc-c6 t=0s
+    Fix: Move <div id="cc-c6"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="cc-c7"> is a timeline element that contains nested <div id="c7">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-g3-v2/index.html #cc-c7 t=0s
+    Fix: Move <div id="cc-c7"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="cc-c8"> is a timeline element that contains nested <div id="c8">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-g3-v2/index.html #cc-c8 t=0s
+    Fix: Move <div id="cc-c8"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="cc-c9"> is a timeline element that contains nested <div id="c9">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-g3-v2/index.html #cc-c9 t=0s
+    Fix: Move <div id="cc-c9"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="cc-c10"> is a timeline element that contains nested <div id="c10">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-g3-v2/index.html #cc-c10 t=0s
+    Fix: Move <div id="cc-c10"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="cc-c11"> is a timeline element that contains nested <div id="c11">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-g3-v2/index.html #cc-c11 t=0s
+    Fix: Move <div id="cc-c11"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="cc-c12"> is a timeline element that contains nested <div id="c12">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-g3-v2/index.html #cc-c12 t=0s
+    Fix: Move <div id="cc-c12"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="cc-ins1"> is a timeline element that contains nested <div id="ins1">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-g3-v2/index.html #cc-ins1 t=0s
+    Fix: Move <div id="cc-ins1"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="cc-ins2"> is a timeline element that contains nested <div id="ins2">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-g3-v2/index.html #cc-ins2 t=0s
+    Fix: Move <div id="cc-ins2"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="cc-ctr"> is a timeline element that contains nested <div id="ctr">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-g3-v2/index.html #cc-ctr t=0s
+    Fix: Move <div id="cc-ctr"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="cc-k4"> is a timeline element that contains nested <div id="origen">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-g3-v2/index.html #cc-k4 t=0s
+    Fix: Move <div id="cc-k4"> and its contents into a sub-composition file and mount it with data-composition-src.
+  ⚠ nested_structure_needs_subcomposition: <div id="placa"> is a timeline element that contains nested <div id="visor">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.
+    /home/user/onia-hermes/videos/lucia-g3-v2/index.html #placa t=0s
+    Fix: Move <div id="placa"> and its contents into a sub-composition file and mount it with data-composition-src.
+  0 error(s), 27 warning(s), 0 info(s)
+
+Runtime
+  ◇ 0 errors, 0 warnings
+
+Layout
+  ℹ t=12.089s content_overlap #c5 > div:nth-of-type(1) > div:nth-of-type(2) > b:nth-of-type(1) inside #c6 > div:nth-of-type(1) > div:nth-of-type(2) "parece escrita." — Two text blocks overlap and may render unreadable.
+        Fix: Give each block its own zone, or mark intentional layering with data-layout-allow-overlap.
+  ℹ t=13.46s content_overlap #c6 > div:nth-of-type(1) > div:nth-of-type(2) inside #c7 > div:nth-of-type(1) > div:nth-of-type(2) "Sin mensaje." — Two text blocks overlap and may render unreadable.
+        Fix: Give each block its own zone, or mark intentional layering with data-layout-allow-overlap.
+  ℹ t=13.46s content_overlap #c6 > div:nth-of-type(1) > div:nth-of-type(2) > b:nth-of-type(1) inside #c7 > div:nth-of-type(1) > div:nth-of-type(2) "mensaje." — Two text blocks overlap and may render unreadable.
+        Fix: Give each block its own zone, or mark intentional layering with data-layout-allow-overlap.
+  0 error(s), 0 warning(s), 3 info(s)
+
+Motion
+  ◇ 0 errors, 0 warnings
+
+Contrast
+  ◇ 13/13 text checks pass WCAG AA
+
+Snapshots
+  ◇ disabled
+
+◇  Check passed

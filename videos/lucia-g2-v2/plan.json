@@ -1,0 +1,704 @@
+{
+  "titulo": "G2 v2 · ¿Quién pierde la cara? Seis clips con la misma orden (re-corte mudo, sin aire muerto, listo para voz; revisión 1 aplicada el 11-oct; v2.3: fotos recibidas dichas en el gancho, en el clip de Kling O3, en la lección y en el pie; revisión 2 aplicada; v2.4: revisión 3 aplicada, aviso del gancho con el clip como sujeto)",
+  "version": "v2.4 (11-oct-2026, noche, última pasada): v2.3 + revisión 3 (qa/revision-3.md: 0 ALTA · 1 MEDIA · 4 BAJA) y las 4 correcciones del verificador mecánico: aviso del gancho «Clip 0,82: recibió 4 fotos de comparación» (el clip es el sujeto; entra a 0,5 s con la pastilla; va bajo las miniaturas, que vuelven a y = 960, y ya no tapa teléfono ni manos); «fotos con que se compara» en pantalla, pie y README; pie con las tres salvedades de la medición, sin ids R1…R8, un solo sentido de «partir de», en pasado, con «en el clip original (720p)» y los segundos visibles contados en el video terminado; cierre K1 con lo medido. v2.3 (11-oct-2026, noche): v2.2 + revisión 2 (qa/revision-2.md) con los hechos nuevos de la sesión Lucía: la foto de arranque K1 se hizo con R1, R3, R6 y R7, así que ningún clip es independiente de las 8 fotos; se retira la estimación de exceso; el aviso va en el gancho, sobre el clip de Kling O3, en la lección y al principio del pie; la prueba estricta (solo R2, R4, R5 y R8) sale de la medición. Los números de la pantalla no cambian. v2.2 (11-oct, tarde): v2.1 + hallazgo de las fotos recibidas. v2.1 (11-oct-2026, revisión 1): re-corte de G2 con la regla de aire muerto. D-N1: se nombran las herramientas con su nombre real (uso propio, no recomendación pagada). Todos los tiempos salen de guion-voz.txt (scripts/voz.mjs: tramos a 17 CARACTERES por segundo, no a palabras; huecos de 6 cuadros); un tiempo escrito como «T6+0.8» es el inicio del tramo 6 más 0,8 s, «T7-6f» = 6 cuadros antes del inicio del tramo 7, «FIN» = el final del video. 0 créditos: mismos clips y la misma foto de G2.",
+  "guion": "hermes-content/docs/cola/lucia-diario/guiones/G2-la-misma-foto-seis-clips.md",
+  "voz": {
+    "archivo": "guion-voz.txt",
+    "cps": 17,
+    "inicio_cuadros": 3,
+    "hueco_cuadros": 6,
+    "gap_objetivo": 0.25,
+    "gap_max": 0.3,
+    "max_caracteres": 450,
+    "cupo_hoy": 381,
+    "cupo_hasta": "13-oct 01:17 UTC",
+    "min_palabras_por_linea": 3,
+    "cta_ventana_cuadros": 67,
+    "lectura_min_cuadros": {
+      "1": 38,
+      "2": 49,
+      "9": 63,
+      "11": 59
+    },
+    "nota": "cps = caracteres por segundo (G1 v2: 320 caracteres ≈ 19 s ≈ 17). lectura_min_cuadros = tramos que se extienden (hueco ≤ 0,30 s) para que su tarjeta alcance el tiempo de lectura medido en el DOM. v2.3: el tramo 9 sigue en 63 cuadros (la línea pasó de 41 a 40 caracteres: «sostiene» → «aguantó») para no mover ninguna costura; el hueco queda en 0,27 s."
+  },
+  "lienzo": {
+    "w": 1080,
+    "h": 1920,
+    "fps": 24
+  },
+  "acento": "#10C26B",
+  "alerta": "#FF7A66",
+  "zona_segura": {
+    "texto_hasta_y": 1490,
+    "derecha_libre_px": 80,
+    "derecha_libre_desde_y": 1000,
+    "arriba_minimo_y": 280,
+    "margen_bajo_menton": 40,
+    "texto_min_px": 34,
+    "tarjeta_bottom_y": 1470
+  },
+  "caras": {
+    "nota": "SCRFD det_10g (scripts/face_identity_qa.py) vía scripts/medir-caras.py: caja cada 2 cuadros en el lienzo de 1080x1920 (clips de 720 px llevados x1,5). Mentón = borde de abajo de la caja. Datos completos: qa/caras-por-clip.json",
+    "foto_k1": {
+      "caja": [
+        445,
+        453,
+        623,
+        657
+      ],
+      "menton": 657,
+      "texto_desde_y": 697
+    }
+  },
+  "empuje": {
+    "cuadros": 6,
+    "ease": "power3.inOut",
+    "nota": "Costura de pantalla completa: empuje rígido de 6 cuadros hacia la izquierda, ventana [T-6 cuadros, T] (T = inicio del tramo de voz que sigue; el empuje cae en el hueco de 0,25 s entre líneas). El medio entrante arranca en T-6 cuadros y el saliente termina en T. Las tarjetas y lo que cuelga de ellas viajan con el empuje."
+  },
+  "refs": {
+    "manifest": "hermes-content/references/modelos/lucia/v4/qa/manifest-escenas-seedream-20260930.json",
+    "total": 8,
+    "muestra": [
+      {
+        "id": "ref1",
+        "fuente": "R1_frontal_canon",
+        "recorte": [
+          0,
+          100,
+          768
+        ]
+      },
+      {
+        "id": "ref2",
+        "fuente": "R3_casi_frontal",
+        "recorte": [
+          75,
+          0,
+          1717
+        ]
+      },
+      {
+        "id": "ref3",
+        "fuente": "R4_casi_perfil",
+        "recorte": [
+          218,
+          208,
+          1183
+        ]
+      },
+      {
+        "id": "ref4",
+        "fuente": "R5_34_izq",
+        "recorte": [
+          61,
+          65,
+          727
+        ]
+      },
+      {
+        "id": "ref5",
+        "fuente": "R8_anchor_902eeebb",
+        "recorte": [
+          0,
+          109,
+          896
+        ]
+      }
+    ]
+  },
+  "escala": {
+    "x0": 100,
+    "x1": 980,
+    "piso": 0.7
+  },
+  "medios": [
+    {
+      "id": "foto",
+      "tipo": "foto",
+      "src": "assets/k1.jpg",
+      "a": 0,
+      "b": "T3",
+      "zoom": 1.05,
+      "ox": 534,
+      "oy": 555,
+      "capa": "foto K1 a pantalla completa con empuje lento 1,00 → 1,05 hacia la cara (nunca queda un cuadro idéntico); sale en el empuje de T3 junto con las miniaturas"
+    },
+    {
+      "id": "pl-regla",
+      "tipo": "placa",
+      "a": "T3-6f",
+      "b": "T6",
+      "capa": "placa de la regla: 5 de las 8 fotos suyas, escala 0-1 y la marca en 0,70"
+    },
+    {
+      "id": "m1",
+      "tipo": "clip",
+      "src": "assets/m1.mp4",
+      "media_inicio": 0,
+      "a": "T6-6f",
+      "b": "T7",
+      "capa": "Kling 3.0 std (clip 1): del cuadro 0 al 66 del clip, a 1×; 66 cuadros visibles = 2,75 s (el cuadro 0 cae fuera del lienzo, al arrancar el empuje de entrada: qa/cuadros-visibles.txt); el cuadro 0 es la foto K1"
+    },
+    {
+      "id": "m3",
+      "tipo": "clip",
+      "src": "assets/m3.mp4",
+      "media_inicio": 0,
+      "a": "T7-6f",
+      "b": "T9",
+      "capa": "Seedance 2.0 Mini (clip 3): del cuadro 0 al 78 del clip, a 1×; 78 cuadros visibles = 3,25 s (qa/cuadros-visibles.txt)"
+    },
+    {
+      "id": "m5",
+      "tipo": "clip",
+      "src": "assets/m5.mp4",
+      "media_inicio": 0,
+      "a": "T9-6f",
+      "b": "T11",
+      "capa": "Kling O3 (clip 5): del cuadro 0 al 106 del clip, a 1×; 106 cuadros visibles = 4,42 s (qa/cuadros-visibles.txt); con el aviso «recibió 4 de las 8 fotos con que se compara» encima del «5,9 s: 0,82» (viaja con el clip)"
+    },
+    {
+      "id": "pl-l",
+      "tipo": "placa",
+      "a": "T11-6f",
+      "b": "T14",
+      "capa": "lección: los finales de Kling 3.0 std, Seedance 2.0 Mini y Kling O3 sobre la escala"
+    },
+    {
+      "id": "k1",
+      "tipo": "clip",
+      "src": "assets/m1.mp4",
+      "media_inicio": 2.25,
+      "a": "T14-6f",
+      "b": "FIN",
+      "capa": "cierre: el clip K1 (el de Kling 3.0 std) del cuadro 54 (2,25 s) al 126 (5,25 s), con Lucía mirando a cámara; 4 cuadros medidos (qa/face-gate.txt: n606, n630, n660 y n665): final 0,693 a 0,749, fuente 0,708 a 0,751; el más bajo, 0,693, queda bajo 0,70"
+    }
+  ],
+  "costuras": [
+    {
+      "t": "T3",
+      "tipo": "empuje",
+      "sale": [
+        "foto",
+        "thumbs"
+      ],
+      "entra": [
+        "pl-regla"
+      ],
+      "tarjetas": {
+        "sale": "c2",
+        "entra": "c3"
+      },
+      "porque": "foto + miniaturas → placa de la regla"
+    },
+    {
+      "t": "T6",
+      "tipo": "empuje",
+      "sale": [
+        "pl-regla"
+      ],
+      "entra": [
+        "m1"
+      ],
+      "tarjetas": {
+        "sale": "c4",
+        "entra": "c5"
+      },
+      "porque": "placa → Kling 3.0 std (el clip arranca en T-6 cuadros)"
+    },
+    {
+      "t": "T7",
+      "tipo": "empuje",
+      "sale": [
+        "m1"
+      ],
+      "entra": [
+        "m3"
+      ],
+      "tarjetas": {
+        "sale": "c5",
+        "entra": "c6"
+      },
+      "porque": "Kling 3.0 std → Seedance 2.0 Mini"
+    },
+    {
+      "t": "T9",
+      "tipo": "empuje",
+      "sale": [
+        "m3"
+      ],
+      "entra": [
+        "m5",
+        "fg-m5"
+      ],
+      "tarjetas": {
+        "sale": "c6",
+        "entra": "c7"
+      },
+      "porque": "Seedance 2.0 Mini → Kling O3"
+    },
+    {
+      "t": "T11",
+      "tipo": "empuje",
+      "sale": [
+        "m5",
+        "fg-m5"
+      ],
+      "entra": [
+        "pl-l"
+      ],
+      "tarjetas": {
+        "sale": "c8",
+        "entra": "c9"
+      },
+      "porque": "Kling O3 → lección"
+    },
+    {
+      "t": "T14",
+      "tipo": "empuje",
+      "sale": [
+        "pl-l"
+      ],
+      "entra": [
+        "k1"
+      ],
+      "tarjetas": {
+        "sale": "c11",
+        "entra": "c12"
+      },
+      "porque": "lección → cierre K1"
+    }
+  ],
+  "rotulo": {
+    "texto": "Lucía Antelo · personaje IA de Onia",
+    "a": 0,
+    "b": 3.0,
+    "top": 720,
+    "px": 40
+  },
+  "tarjetas": [
+    {
+      "id": "c1",
+      "texto": "¿Quién pierde",
+      "acento": "la cara?",
+      "acento_t": 0.95,
+      "a": 0,
+      "b": "T2+2f",
+      "escena": "gancho"
+    },
+    {
+      "id": "c2",
+      "texto": "Misma orden.",
+      "acento": "Seis clips.",
+      "acento_t": "T3-1.0",
+      "a": "T2+2f",
+      "b": "T3",
+      "escena": "gancho"
+    },
+    {
+      "id": "c3",
+      "texto": "Se mide contra",
+      "acento": "8 fotos suyas.",
+      "acento_t": "T3+1.2",
+      "a": "T3",
+      "b": "T5-6f",
+      "escena": "regla"
+    },
+    {
+      "id": "c4",
+      "texto": "Mi piso:",
+      "acento": "0,70.",
+      "a": "T5-6f",
+      "b": "T6",
+      "escena": "regla"
+    },
+    {
+      "id": "c5",
+      "texto": "Kling 3.0 std\n",
+      "acento": "7,5 créditos",
+      "a": "T6",
+      "b": "T7",
+      "escena": "m1",
+      "motor": "m1"
+    },
+    {
+      "id": "c6",
+      "texto": "Seedance 2.0 Mini\n",
+      "acento": "6 créditos",
+      "a": "T7",
+      "b": "T9",
+      "escena": "m3",
+      "motor": "m3"
+    },
+    {
+      "id": "c7",
+      "texto": "Kling O3 · 6 créditos\n",
+      "acento": "solo referencias",
+      "a": "T9",
+      "b": "T10-3f",
+      "escena": "m5",
+      "motor": "m5"
+    },
+    {
+      "id": "c8",
+      "texto": "Inventó",
+      "acento": "el cuarto.",
+      "a": "T10-3f",
+      "b": "T11",
+      "escena": "m5"
+    },
+    {
+      "id": "c9",
+      "texto": "Con referencias,",
+      "acento": "aquí la cara aguantó.",
+      "acento_t": "T11+1.2",
+      "a": "T11",
+      "b": "T12",
+      "escena": "lección"
+    },
+    {
+      "id": "c10",
+      "texto": "Pero inventa",
+      "acento": "la escena.",
+      "acento_t": "T12+0.8",
+      "a": "T12",
+      "b": "T13-3f",
+      "escena": "lección"
+    },
+    {
+      "id": "c11",
+      "texto": "Una toma:",
+      "acento": "es una prueba.",
+      "acento_t": "T13+0.9",
+      "a": "T13-3f",
+      "b": "T14",
+      "escena": "lección"
+    },
+    {
+      "id": "c12",
+      "texto": "Seguime:",
+      "acento": "cada semana, una prueba.",
+      "acento_t": "T14+1.0",
+      "a": "T14",
+      "b": "FIN",
+      "escena": "cierre"
+    }
+  ],
+  "cadenas_de_tarjetas": [
+    [
+      "c1",
+      "c2",
+      "c3",
+      "c4",
+      "c5",
+      "c6",
+      "c7",
+      "c8",
+      "c9",
+      "c10",
+      "c11",
+      "c12"
+    ]
+  ],
+  "cta": {
+    "texto": "Seguime: cada semana, una prueba.",
+    "min_s": 2.4,
+    "max_s": 5.5
+  },
+  "gancho": {
+    "miniaturas": {
+      "a": 0.75,
+      "escalon": 0.12,
+      "w": 136,
+      "h": 242,
+      "gap": 16,
+      "x0": 92,
+      "y": 960,
+      "cuadro": 90
+    },
+    "pastilla": {
+      "t": 0.5,
+      "y": 838,
+      "etiqueta": "parecido final:"
+    },
+    "fuga": {
+      "motor": "m5",
+      "t": 0.5,
+      "y": 1216,
+      "nota": "v2.4 (revisión 3, H1): el aviso del 0,82 (Kling O3, que recibió 4 de las 8 fotos con que se compara) tiene al CLIP de sujeto y nombra el número: «Clip 0,82: recibió 4 fotos de comparación» (7 palabras: la ventana del gancho con la entrada a 0,5 s es de 3,0 s en el DOM y pide 2,75). Entra a 0,5 s junto con la pastilla del resultado (v2.3: 0,85 s) y va CENTRADO bajo las seis miniaturas (y = 1216-1271, entre ellas y la tarjeta c1), no bajo la pastilla: así no tapa teléfono ni manos (las miniaturas vuelven a y = 960, como en la v2.2). Pega con el 0,82 por el texto, no por la posición."
+    }
+  },
+  "regla": {
+    "refs": {
+      "a": "T3+0.3",
+      "escalon": 0.15,
+      "lado": 160,
+      "gap": 24,
+      "x0": 92,
+      "y": 470,
+      "etiqueta_t": "T3+0.95",
+      "etiqueta_y": 652
+    },
+    "escala": {
+      "a": "T4",
+      "d": 0.5,
+      "y": 967,
+      "ejes_t": "T4+0.45",
+      "uno_t": "T4+0.75",
+      "marca_t": "T5+0.05"
+    }
+  },
+  "motores": [
+    {
+      "id": "m1",
+      "n": 1,
+      "nombre": "Kling 3.0 std",
+      "cr": 7.5,
+      "clave": "kling3_0_std_control_e470ef4f",
+      "ini": 0.79,
+      "fin": 0.72,
+      "t_fin": 5.9,
+      "tag_a": "T6+0.1",
+      "tag_b": "T6+0.65",
+      "sello": null
+    },
+    {
+      "id": "m3",
+      "n": 3,
+      "nombre": "Seedance 2.0 Mini",
+      "cr": 6,
+      "clave": "seedance_2_0_mini_a7f79a01-4193-4135-9ba2-082378a2609d",
+      "ini": 0.69,
+      "fin": 0.64,
+      "t_fin": 5.9,
+      "tag_a": "T7+0.1",
+      "tag_b": "T7+0.6",
+      "sello": {
+        "texto": "bajo el piso",
+        "t": "T7+0.95"
+      }
+    },
+    {
+      "id": "m5",
+      "n": 5,
+      "nombre": "Kling O3",
+      "cr": 6,
+      "clave": "kling_o3_image_reference_5_refs_948a89d3-c5c5-4e32-92f0-db624edc825b",
+      "ini": 0.8,
+      "fin": 0.82,
+      "t_fin": 5.9,
+      "tag_a": "T9+0.1",
+      "tag_b": "T9+0.7",
+      "sello": null,
+      "fuga_escena": {
+        "y": 1068,
+        "x2": 973,
+        "nota": "v2.3 (revisión 2, H2) y v2.4: la misma etiqueta de la lección («recibió 4 de 8 fotos con que se compara»; v2.3 «recibió 4 de las 8 fotos con que se mide») sobre el clip de Kling O3, pegada encima del «5,9 s: 0,82» (alineada a su borde derecho, x = 973). Entra y sale con el empuje del clip (el contenedor viaja con él), así que se lee de T9 a T11-6f (3,96 s) y siempre que el 0,82 está en pantalla."
+      }
+    }
+  ],
+  "leccion": {
+    "titulo": {
+      "texto": "Parecido al final: 3 de los 6 clips",
+      "t": "T11+0.15",
+      "y": 300
+    },
+    "marca_t": "T11+0.05",
+    "marca_label_y": 392,
+    "orden": [
+      "m1",
+      "m3",
+      "m5"
+    ],
+    "barra": {
+      "y0": 540,
+      "paso": 170,
+      "alto": 80,
+      "t0": "T11+0.35",
+      "escalon": 0.3,
+      "d": 0.5,
+      "nombre_dy": 58
+    },
+    "descriptor": {
+      "m1": "foto sola",
+      "m3": "foto sola",
+      "m5": "referencias"
+    },
+    "resalte_t": "T11+1.25",
+    "resalte_motores": [
+      "m5"
+    ],
+    "cambios": [
+      {
+        "motor": "m5",
+        "t": "T12+0.2",
+        "texto": "inventó el cuarto"
+      },
+      {
+        "motor": "m3",
+        "t": "T12+0.55",
+        "texto": "cambió el plano"
+      },
+      {
+        "motor": "m1",
+        "t": "T12+0.9",
+        "texto": "mantiene el cuarto"
+      }
+    ],
+    "nota": {
+      "t": "T11+1.8",
+      "texto": "Final = segundo 5,9, que no se ve entero.",
+      "y": 1070
+    },
+    "fuga": {
+      "motor": "m5",
+      "t": "T11+1.4",
+      "x": 272,
+      "dy": -14,
+      "nota": "Hallazgo del 11-oct (fuga_refs): Kling O3 es el único clip con fotos recibidas que sale en pantalla. La etiqueta va en la fila de su barra, al lado del nombre; el texto sale de fuga_refs (recibio) y de refs.total, nunca escrito a mano. v2.3: dice «con que se mide» (no «de puntaje») y sube de 34 a 36 px. v2.4: dice «recibió 4 de 8 fotos con que se compara» (más concreto; sin «las»: con «de las 8» llegaba a x = 1046, así termina en 994)."
+    }
+  },
+  "fuga_refs": {
+    "fuente": "hermes-content/references/modelos/lucia/v4/prueba-motores-20261008/medicion-sin-refs-entrada-20261011.txt",
+    "nota": "Hechos de la sesión Lucía (11-oct, verificados con job_display, 0 cr). (1) La foto de arranque K1 (4afffb96, Seedream 4.5) se hizo con R1, R3, R6 y R7 como entrada: TODOS los clips que parten de K1 descienden de esas cuatro fotos y no existe un control limpio. (2) Seedance 2.0 Mini + referencias recibió además R1 y R3 directo y Kling O3 recibió R1, R3, R6 y R7 directo (sin K1). (3) Kling 3.0 std, Kling 3.0 pro, Seedance 2.0 Mini sin referencias y Cinematic Studio 3.0 recibieron SOLO la foto de arranque. (4) PRUEBA ESTRICTA: contra el centroide de las 4 fotos que nadie recibió (R2, R4, R5, R8) los seis clips bajan entre 0,03 y 0,09 y el orden por valor final no cambia. Los números de la pantalla NO cambian (siguen los de PROCEDENCIA l.97); se DICE: en el gancho, sobre el clip de Kling O3, en la lección y al principio del pie. v2.3 retira la estimación de exceso de la v2.2 (restaba controles que descienden de las mismas fotos). build.mjs valida cada cifra contra la medición (plan ≠ archivo corta el build) y exige que el pie diga lo que dice el archivo.",
+    "k1": {
+      "id": "4afffb96",
+      "recibio": [
+        "R1",
+        "R3",
+        "R6",
+        "R7"
+      ]
+    },
+    "clips": [
+      {
+        "id": "m4",
+        "nombre": "Seedance 2.0 Mini + referencias",
+        "etiqueta_medicion": "Seedance Mini + refs (dd2d7c91)",
+        "clave": "seedance_2_0_mini_start_mas_3_refs_dd2d7c91-ea3a-46a8-a29d-3861143dfe9e",
+        "imagenes": 3,
+        "recibio": [
+          "R1",
+          "R3"
+        ],
+        "en_pantalla": false
+      },
+      {
+        "id": "m5",
+        "nombre": "Kling O3",
+        "etiqueta_medicion": "Kling O3 5 refs (948a89d3)",
+        "clave": "kling_o3_image_reference_5_refs_948a89d3-c5c5-4e32-92f0-db624edc825b",
+        "imagenes": 5,
+        "recibio": [
+          "R1",
+          "R3",
+          "R6",
+          "R7"
+        ],
+        "cara_px": [
+          89,
+          168
+        ],
+        "en_pantalla": true
+      }
+    ],
+    "estricta": {
+      "sin_recibir": [
+        "R2",
+        "R4",
+        "R5",
+        "R8"
+      ],
+      "baja_entre": [
+        0.03,
+        0.09
+      ],
+      "orden_igual": true,
+      "sobre_piso": {
+        "con_8": 5,
+        "con_4": 3
+      },
+      "finales": [
+        {
+          "id": "m5",
+          "etiqueta": "Kling O3 (948a89d3)",
+          "valor": 0.75
+        },
+        {
+          "id": "m4",
+          "etiqueta": "Seedance Mini + refs (dd2d7c91)",
+          "valor": 0.73
+        },
+        {
+          "id": "m6",
+          "etiqueta": "Cinematic Studio 3.0 (cc8fa519)",
+          "valor": 0.71
+        },
+        {
+          "id": "m2",
+          "etiqueta": "Kling 3.0 pro (9f43ee3c)",
+          "valor": 0.68
+        },
+        {
+          "id": "m1",
+          "etiqueta": "Kling 3.0 std (e470ef4f)",
+          "valor": 0.67
+        },
+        {
+          "id": "m3",
+          "etiqueta": "Seedance Mini sin refs (a7f79a01)",
+          "valor": 0.6
+        }
+      ]
+    }
+  },
+  "omitidos": [
+    {
+      "id": "m2",
+      "nombre": "Kling 3.0 pro",
+      "clave": "kling3_0_pro_9f43ee3c-7a7c-4059-85ec-6facb71b81e4",
+      "cr": 9,
+      "ini": 0.81,
+      "fin": 0.74,
+      "entrada": "foto"
+    },
+    {
+      "id": "m4",
+      "nombre": "Seedance 2.0 Mini + referencias",
+      "clave": "seedance_2_0_mini_start_mas_3_refs_dd2d7c91-ea3a-46a8-a29d-3861143dfe9e",
+      "cr": 6,
+      "ini": 0.71,
+      "fin": 0.8,
+      "entrada": "foto + 3 referencias"
+    },
+    {
+      "id": "m6",
+      "nombre": "Cinematic Studio 3.0",
+      "clave": "cinematic_studio_3_0_4s_720p_cc8fa519-f8c2-49b5-bd4d-b3a1be52c875",
+      "cr": 20,
+      "ini": 0.79,
+      "fin": 0.77,
+      "entrada": "foto sola",
+      "t_fin": 3.85
+    }
+  ],
+  "quitado_de_g2": [
+    {
+      "que": "Kling 3.0 pro (9 cr, 1080p), Seedance 2.0 Mini + referencias (6 cr, foto de inicio + 3 referencias, letrero inventado) y Cinematic Studio 3.0 (20 cr, 4 s, foto sola)",
+      "porque": "no caben en 30 s con su tarjeta y su dato; con ellos la voz sumaría ~580 caracteres. Revisión 1 (H4): no pueden quedar insinuados sin decirse; el pie lleva UNA oración con sus tres números (0,81 a 0,74 · 0,71 a 0,80 · 0,79 a 0,77) y que no cupieron. Cinematic Studio 3.0 con la foto sola (20 cr) dio 0,79 a 0,77 (casi igual: 0,02 de diferencia, menos que el ±0,03 de la medida): ni el video ni el pie afirman que «la foto sola pierde la cara» como regla."
+    },
+    {
+      "que": "Placa del precio de Cinematic Studio 3.0 («5 créditos por segundo», «4×»)",
+      "porque": "no cabe: +55 caracteres de voz y +3 s. El precio de cada herramienta que sí sale sigue en su tarjeta y el de las tres que no salen, en el pie."
+    },
+    {
+      "que": "Lección 1 (placa con tres arranques y tres finales) y barras de seis herramientas",
+      "porque": "se reemplazan por una sola placa de tres barras (los finales de Kling 3.0 std, Seedance 2.0 Mini y Kling O3), en el orden en que aparecen en el video, no ordenadas por puntaje (para no sugerir un ranking ni una recomendación)."
+    },
+    {
+      "que": "Segmentos de 5 s por clip",
+      "porque": "cada clip se ve de 2,75 a 4,42 s visibles a 1× (cuadros del video terminado con alguna parte del clip a la vista ÷ 24; qa/cuadros-visibles.txt), recortado a los primeros cuadros, donde está la prueba."
+    }
+  ]
+}

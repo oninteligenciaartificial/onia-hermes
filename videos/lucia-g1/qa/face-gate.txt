@@ -1,0 +1,13 @@
+piso de caras negativas (max): 0.224   gate del repo: 0,70   (3ra pasada, 8-oct-2026: face-gate.sh del final a 1, 12, 33, 43, 52 y 55 s + clips fuente como referencia)
+archivo                                        centroide  min_ref  max_ref  cara_px  veredicto
+g1-final-1080x1920_t1.png                          0.779    0.544    0.709      178 OK (cara < 200 px: poco confiable)
+g1-final-1080x1920_t12.png                         0.796    0.539    0.717      177 OK (cara < 200 px: poco confiable)
+g1-final-1080x1920_t33.png                         0.796    0.537    0.715      176 OK (cara < 200 px: poco confiable)
+g1-final-1080x1920_t43.png                         0.728    0.494    0.682      264 OK
+g1-final-1080x1920_t52.png                         0.749    0.545    0.699      179 OK (cara < 200 px: poco confiable)
+g1-final-1080x1920_t55.png                         0.744    0.535    0.673      192 OK (cara < 200 px: poco confiable)
+k1_t2.6.png                                        0.745    0.515    0.677      118 OK (cara < 200 px: poco confiable)
+k1_t5.9.png                                        0.721    0.430    0.648      116 OK (cara < 200 px: poco confiable)
+k4_t1.0.png                                        0.757    0.534    0.716      179 OK (cara < 200 px: poco confiable)
+k2_t2.0.png                                        0.742    0.527    0.687      119 OK (cara < 200 px: poco confiable)
+k2_t5.9.png                                        0.734    0.530    0.673      146 OK (cara < 200 px: poco confiable)

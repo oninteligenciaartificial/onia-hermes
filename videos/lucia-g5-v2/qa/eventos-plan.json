@@ -1,0 +1,234 @@
+[
+ {
+  "t": 0,
+  "que": "c1"
+ },
+ {
+  "t": 0.765,
+  "que": "c1 acento"
+ },
+ {
+  "t": 3.417,
+  "que": "c2"
+ },
+ {
+  "t": 4.064,
+  "que": "c2 acento"
+ },
+ {
+  "t": 5.333,
+  "que": "c3"
+ },
+ {
+  "t": 7.469,
+  "que": "c3 acento"
+ },
+ {
+  "t": 8.333,
+  "que": "c4"
+ },
+ {
+  "t": 9.804,
+  "que": "c4 acento"
+ },
+ {
+  "t": 10.75,
+  "que": "c5"
+ },
+ {
+  "t": 12.632,
+  "que": "c5 acento"
+ },
+ {
+  "t": 13.625,
+  "que": "c6"
+ },
+ {
+  "t": 15.449,
+  "que": "c6 acento"
+ },
+ {
+  "t": 16.625,
+  "que": "c7"
+ },
+ {
+  "t": 18.154,
+  "que": "c7 acento"
+ },
+ {
+  "t": 19.542,
+  "que": "c8"
+ },
+ {
+  "t": 20.718,
+  "que": "c8 acento"
+ },
+ {
+  "t": 22.167,
+  "que": "c9"
+ },
+ {
+  "t": 23.578,
+  "que": "c9 acento"
+ },
+ {
+  "t": 24.208,
+  "que": "c10"
+ },
+ {
+  "t": 26.108,
+  "que": "c10 acento"
+ },
+ {
+  "t": 3,
+  "que": "rótulo IA sale"
+ },
+ {
+  "t": 0.85,
+  "que": "gancho caja de cara"
+ },
+ {
+  "t": 2.45,
+  "que": "gancho caja sale"
+ },
+ {
+  "t": 0.95,
+  "que": "gancho dato"
+ },
+ {
+  "t": 3,
+  "que": "gancho dato sale"
+ },
+ {
+  "t": 3.867,
+  "que": "p1 ref 5"
+ },
+ {
+  "t": 3.967,
+  "que": "p1 ref 6"
+ },
+ {
+  "t": 4.067,
+  "que": "p1 ref 7"
+ },
+ {
+  "t": 4.167,
+  "que": "p1 ref 8"
+ },
+ {
+  "t": 4.367,
+  "que": "p1 aro de las 8"
+ },
+ {
+  "t": 5.733,
+  "que": "p2 flecha"
+ },
+ {
+  "t": 6.283,
+  "que": "p2 escala"
+ },
+ {
+  "t": 6.883,
+  "que": "p2 ejes"
+ },
+ {
+  "t": 7.183,
+  "que": "p2 cursor sale de 0"
+ },
+ {
+  "t": 8.083,
+  "que": "p2 cursor llega a 1"
+ },
+ {
+  "t": 8.933,
+  "que": "p2 «1» se enciende"
+ },
+ {
+  "t": 9.233,
+  "que": "p2 marca 0,70"
+ },
+ {
+  "t": 11.05,
+  "que": "e3 caja"
+ },
+ {
+  "t": 10.85,
+  "que": "e3 dato"
+ },
+ {
+  "t": 13.2,
+  "que": "e3 dato sale"
+ },
+ {
+  "t": 14.025,
+  "que": "r1 caja"
+ },
+ {
+  "t": 14.425,
+  "que": "r1 «89 px»"
+ },
+ {
+  "t": 14.825,
+  "que": "r1 lupa"
+ },
+ {
+  "t": 16.037,
+  "que": "r1 la lupa marca «a ojo»"
+ },
+ {
+  "t": 16.925,
+  "que": "r2 punta baja"
+ },
+ {
+  "t": 17.449,
+  "que": "r2 punta alta"
+ },
+ {
+  "t": 18.154,
+  "que": "r2 banda"
+ },
+ {
+  "t": 18.625,
+  "que": "r2 la banda marca «este margen»"
+ },
+ {
+  "t": 19.842,
+  "que": "r3 aro"
+ },
+ {
+  "t": 21.248,
+  "que": "r3 el aro vuelve a marcar «inventados»"
+ },
+ {
+  "t": 20.442,
+  "que": "r3 número"
+ },
+ {
+  "t": 3.417,
+  "que": "costura"
+ },
+ {
+  "t": 5.333,
+  "que": "costura"
+ },
+ {
+  "t": 10.75,
+  "que": "costura"
+ },
+ {
+  "t": 13.625,
+  "que": "costura"
+ },
+ {
+  "t": 16.625,
+  "que": "costura"
+ },
+ {
+  "t": 19.542,
+  "que": "costura"
+ },
+ {
+  "t": 22.167,
+  "que": "costura"
+ }
+]

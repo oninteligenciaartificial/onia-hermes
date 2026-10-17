@@ -1,0 +1,2 @@
+Regresión pura: cinco fallos conservados (CTA inferior en f440/f441; nota superior/lateral y dos ideas a la vez en f440) y letras de 40 px en un beat / 36 px rechazadas. No es una medición DOM real.
+EXIT 0

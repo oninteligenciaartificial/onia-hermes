@@ -1,12 +1,190 @@
-# Handoff — Lucía v4 y Higgsfield
+# Handoff — Lucía (influencer IA) y Higgsfield
 
 > Formato: [`README.md`](README.md). Se **sobrescribe**: es el estado ACTUAL del carril.
-> Rama `claude/confident-ramanujan-j79bkq` (sesión en la nube, entorno `Default`). Todo está en
-> `main`: PR oninteligenciaartificial/onia-hermes#42, #43 y #44, integrados por el autosync.
-> Última escritura: **2026-09-30 ~02:50 UTC**, en el cambio de sesión.
+> Última escritura: **2026-10-09**, sesión `session_01XSzFcs1k18ijqjSHGjnzD4` (nube, entorno `onia-higgsfield`), rama
+> `claude/zealous-babbage-fvtjck`. El estado vigente es el primer bloque de abajo; lo demás es historia.
 > Reemplaza a `HIGGSFIELD-LUCIA-SYSTEM-2026-09-22.md`, que queda como historia.
 
-## ▶ ESTADO VIGENTE — 5-oct-2026 (cambio de sesión madre; lo de abajo es historia)
+## ▶ ESTADO VIGENTE — 9-oct-2026, loop de la madre (lo de abajo es el contexto)
+
+**Orden de la madre (Sergio Urcullo, 9-oct):** `/loop` sobre `hermes-content/docs/cola/loop/lucia.md` hasta vaciarla; reportar solo
+`PUBLICADO: <qué> — <link>`. La cola está en esa carpeta (marcada `[x]`, con lo bloqueado).
+
+**Listo para publicar (nada publicado todavía):** videos G1, G3, G2, G4, G5 (`videos/lucia-entrega/`, con SHA-256), carruseles L01 (reescrito a
+la v5), C1 y C2 (`hermes-content/carousels/out/lucia-*`). Receta exacta, orden y ritmo: **`videos/lucia-entrega/README.md`**.
+
+**Bloqueado, y por qué:** publicar corre en el VPS. La llave vive solo en la sesión «Onia» (decisión de la madre, 5-oct), esta nube
+no tiene cliente `ssh` y instalarlo no está aprobado. Además falta (a) el token de Lucía en `ig-lucia.env` (vence 13-18-oct) y
+(b) que la madre mire los previews 360p. **Quien corra la receta reporta `PUBLICADO:`.**
+
+**En vuelo:** nada sin commitear. **G4 y G5 están terminados** (`videos/lucia-g4/`, `videos/lucia-g5/`; revisiones independientes en `qa/`): **la madre aprobó sus guiones el 10-oct**
+(`cola/lucia-diario/VALIDACION-G4-G5-MADRE.md`; sellos rojos de E/F se dejan). Sigue abierto si G2 difumina el letrero inventado como G5. Desde el 10-oct 20:25 UTC nada sale sin «mostrada, publicá <pieza>».
+
+**Aprendido el 9-oct** (ya en la skill `lucia` §8): el render de carruseles con el Chromium normal deja una franja blanca de 88 px
+(usar `headless_shell` y `--pack editorial-photo`); el contenedor se recicla y `out/` no está en git, por eso los finales se entregan
+en `videos/lucia-entrega/`; fueron **6 motores de imagen**, no 7 (7 fotos nuevas).
+
+**Depende de Sergio Urcullo o de la madre:** confirmar el tope de 97 cr; la voz (D4); grabar 10 s para Motion Control (L3);
+el token, el nombre y la bio del perfil; la mirada a los previews.
+
+## ▶ ESTADO 8-oct-2026 noche, plan v5 (contexto de lo anterior)
+
+**Objetivo de la sesión:** Lucía es una influencer IA que **graba videos estructurados y aprende Higgsfield a fondo sin perder su
+cara** (Sergio Urcullo, 8-oct: *«aprendas todo lo que es Higgsfield, todas sus funciones… y podés editarlo con el material que
+aprendimos»*). **Hecho =** G1, G2 y G3 montados, revisados y publicados según `CLAUDE.md` § «Qué se publica sin preguntar»; cada
+prueba con su aprendizaje en la skill `lucia`.
+
+**En producción:** nada publicado ni desplegado en el VPS.
+**Gasto del 8-oct: 86,5 cr** (541,26 → 454,76). Octubre: 139 de 150. Cada generación se cotizó con `get_cost` antes; `sync_so`
+no se puede cotizar (cobró 21,75). El tope de 97 cr lo fijó la sesión: Sergio Urcullo no dio una cifra → **pendiente de confirmar**.
+
+**Hecho, en la rama y su PR (#144):**
+- **Relevamiento de TODAS las funciones de Higgsfield** (imagen e identidad, video y motores, audio-voz-labios, estudios-presets-apps;
+  el grupo de cuenta se hizo a mano): `v4/qa/higgsfield-relevamiento-20261008.json` y `.claude/skills/lucia/higgsfield-mapa.md`.
+- **Pruebas pagadas con la misma foto K1 y la misma orden** (`v4/prueba-motores-20261008/`, ids y puntajes en `PROCEDENCIA.jsonl`):
+  6 clips de video, 6 motores de imagen y 2 vías de labios, todos medidos con el control de cara. Resultado: `start_image` ata la
+  escena pero la cara decae; las referencias de cara la sostienen pero el motor inventa la escena; Seedream 4.5 sigue siendo el
+  método de imagen; `sync_so` conserva la cara. Resumen: skill `lucia` §0-quater.
+- **Control de cara en la nube:** `.claude/skills/lucia/scripts/face-gate.sh` (pip + buffalo_l, fuera del repo); reproduce las
+  medidas guardadas.
+- **G1** «Este video no fue grabado: así se hace, en 3 pasos» (56 s): montado con HyperFrames, **tres pasadas con revisor
+  independiente** (`videos/lucia-g1/`, preview 360p real en `qa/`). Cara dentro del gate. Método: `.claude/skills/lucia/montaje-hyperframes.md`.
+- **G2** «La misma foto, seis clips: ¿quién pierde la cara?» (58 s): guion con todos los datos reales y **montado** el 9-oct
+  (`videos/lucia-g2/`, preview 360p real en `qa/`; montar → revisor independiente → corregir). Decisiones para la madre en su README
+  (resolución del Motor 2, clip del Motor 6 recortado a 2,5 s, letrero del Motor 4 sin desenfocar, ver el reel en el teléfono).
+- **G3** «Tres errores de la IA que atrapé antes de publicar» (58 s): **montado** (`videos/lucia-g3/`, revisor independiente y
+  pasada de corrección hechas el 8-oct).
+- Skill `lucia` y `editor-videos` corregidas (premisa, upscale 1 cr, Cinema 3.0, trampas fechadas).
+
+**⚠️ Choque de instrucciones, abierto:** el 8-oct la madre dio por aprobado el G1 de **producto** («Recordatorio de cita») y pidió
+G2 «El link de reserva». Sergio Urcullo escribió después que Lucía **no muestra el producto**. Se aplicó lo de Sergio Urcullo; el guion de
+producto está en pausa (`guiones/G-producto-1-recordatorio-de-cita.md`). La madre no contestó.
+
+**A medias, y dónde:**
+- **Nada de montaje en vuelo.** G1, G2 y G3 están montados; falta la mirada de la madre.
+- **Validación de la madre:** G1, G2 y G3 esperan su mirada al preview 360p (regla de oro de `CLAUDE.md`).
+- **Publicadores:** solo en el repo. La madre los copia **juntos** a `/root/bin` y corre `--selftest`.
+- **Token de Instagram de Lucía:** no se midió (vencía entre el 13 y el 18-oct). El hook de arranque dice «`ssh onia-vps` listo», pero
+  esta nube no trae el binario `ssh`.
+
+**Archivos:** `.claude/skills/lucia/` (SKILL.md, higgsfield-mapa.md, montaje-hyperframes.md, scripts/face-gate.sh),
+`docs/cola/lucia-diario/` (PLAN.md, guiones/, paquete-s1/), `videos/lucia-g1/`, `videos/lucia-g3/`, `references/modelos/lucia/v4/`
+(PROCEDENCIA.jsonl, qa/, kit/, prueba-motores-20261008/).
+
+**Intentos fallidos (no repetir):** los del bloque de abajo, más:
+- **`sandbox_exec` de Higgsfield:** el control de permisos lo rechazó y el agente que lo llamó quedó colgado (el relevamiento perdió su
+  quinto grupo). Los agentes de workflow no lo usan.
+- **`jobs_wait`:** devuelve `timed_out` cada ~10 s (se vuelve a llamar) y una vez el control de permisos lo rechazó («Real-World
+  Transactions»); `job_display` mira el estado sin gastar.
+- **Inventar el uuid largo de un job** (dos veces): se copia de `PROCEDENCIA.jsonl`.
+- **Rotular un bloque de cuadros por dos muestras:** «tapada» sobre 72-104 era falso para 84 y 96.
+- **Cambiar de motor por una sola toma:** Kling Omni Image dio 0,79 y 0,35 con el mismo método.
+
+**Qué depende de Sergio Urcullo:**
+1. **Confirmar o corregir el tope de 97 cr** que se fijó la sesión (quedan 10,5 de él; el mes tiene 11 de 150).
+2. **Que la madre mire los previews** (o decir que Lucía queda eximida de verlos antes del render final).
+3. D4 (la voz): escuchar las muestras de `research/competencia/lucia-20261005/voces/`; el audio de las pruebas de labios es de Marcela
+   (acento colombiano) y no se publica.
+4. D5: el canon de 10 datos de Lucía (`LUCIA.md` §0-canon).
+5. Nombre y bio desde el celular de Lucía; token de Instagram antes del 13-oct; cuenta gratis de TikTok en Buffer.
+6. Para L3: grabar 10 s de gestos como video guía.
+
+**Próximos pasos:**
+1. La madre mira los previews 360p de G1, G2 y G3 y decide lo que cada README le deja (G3: letrero difuminado y texto del error 3; G2:
+   resolución del Motor 2 y letrero del Motor 4).
+2. La madre valida G1, G2 y G3 → publica con `ig-reel.mjs --cuenta lucia` (portada ≈ 0,6 s).
+3. Reescribir L01 a la premisa v5; va fijado después de G1.
+4. Tras cada edición: lo aprendido a la skill `lucia`, con caso y fecha, en el mismo commit.
+
+## ▶ ESTADO — 8-oct-2026 mañana, plan v4 (historia: lo manda el bloque v5 de arriba)
+
+**Objetivo de la sesión:**
+- el plan v2 de Lucía, definido después del estudio de la competencia (madre, 5-oct);
+- terminar de estudiar Higgsfield y que Lucía pueda postear normalmente (Sergio Urcullo, 5-oct);
+- seguir el kit desde donde lo dejó Codex (madre, 8-oct).
+
+**Hecho =** plan v4 + estudio mirado + skill `lucia` + publicadores con etiqueta IA + kit con K3 recuperado y cutlists
+corregidos + paquete de la semana 1, todo en el PR de la rama.
+
+**En producción:** nada publicado ni desplegado en el VPS. **Gasto: 0 cr** (saldo de Higgsfield: 541,26 el 5 y el
+8-oct).
+
+**Hecho, en la rama y su PR:**
+- **Estudio** `research/competencia/LUCIA_COMPETENCIA_20261005.md`, corregido el 8-oct:
+  - anuncios con persona mirados;
+  - orgánico de TikTok mirado por curl;
+  - presentadoras IA;
+  - costos de Higgsfield cotizados;
+  - voz y circuito de publicación.
+  Su evidencia está en `lucia-20261005/`, con 18 muestras de voz.
+- **`docs/cola/lucia-diario/PLAN.md` v4:**
+  - prueba de 14 días, 3 piezas por semana, 0 cr nuevos;
+  - solo dental, trato de usted, rótulo con apellido;
+  - D6, D7, D8 y D10 para Sergio Urcullo.
+- **Skill nueva `lucia`** (en `onia-router`) con el método, los costos y las trampas. `higgsfield-generate` avisa que el
+  video por defecto para Lucía es Kling y no Seedance 2.5.
+- **Publicadores** (`deploy/vps-ops/publicar/ig-reel.mjs`, `ig-carrusel.mjs`, README):
+  - etiqueta «Información de IA» por API (`is_ai_generated`, Meta 22-jun-2026), siempre para la cuenta `lucia`;
+  - `leerPublicado` no lanza nunca, así una pieza publicada no se pierde del registro ni se re-publica;
+  - selftests verdes.
+- **Kit:**
+  - se trajeron los borradores de Codex (K1, K2 y K4 en 360p, cutlists y `estado-montaje.json`);
+  - **K3 recuperado:** el clip `07b938b2` bajado de Higgsfield por `rawUrl` a 0 cr, mirado, en
+    `v4/kit/k3-clip-coworking-07b938b2.mp4`;
+  - cutlists corregidos: CTA, GIRO de K4 y rótulo con apellido.
+- **`paquete-s1/PAQUETE.md`:** perfil, L01, L02 y chiste, con los pies de usted y el ensayo bien descrito.
+- **⛔ Chiste de 10 s: RECHAZADO el 8-oct por Sergio Urcullo** (*«es literal un video de 10 segundos. Tienen que ser videos
+  estructurados»*). **L02 se retira por el mismo motivo.**
+  - Los finales están en `v4/feed/rechazado-20261008/`; el proyecto quedó en `videos/lucia-chiste/` como ejemplo.
+  - **Regla nueva (skill `lucia` §0-bis, `PLAN.md` §3):** cada video lleva gancho en 3 s, desarrollo con valor y cierre
+    con CTA, dura de 30 a 60 s, deja algo aprendido, y su guion se valida con la madre ANTES de editar.
+  - Error de método: se verificó la forma (legibilidad, mentón, specs) y no si la pieza enseñaba algo.
+- **Guion G1** «Recordatorio de cita: 3 datos» (53 s, `docs/cola/lucia-diario/guiones/G1-recordatorio-de-cita.md`):
+  - gancho / desarrollo con valor / demostración con la pantalla real de Pendientes / cierre con CTA;
+  - todo con material ya pagado; **espera la validación de la madre** y la captura P2;
+  - L01 (carrusel) tiene estructura pero no enseña: va fijado después de G1.
+- **Barrido** de la puerta, la cuenta demo, el lipsync y la receta vieja en FLUJO, LUCIA.md, MANUAL, GUIONES,
+  HIGGSFIELD_VIDEO_SYSTEM y editor-videos.
+
+**A medias, y dónde:**
+- **Publicadores:** están solo en el repo. La madre los copia **juntos** a `/root/bin` y corre `--selftest`; si se copia
+  uno solo, se rompen los carruseles de `@sergiourcullo`.
+- **Token de Instagram de Lucía:** no se midió. El 4-sep vencía entre el 13 y el 18-oct.
+  - Quería verificarlo con `ls -l /root/.config/onia-publicar/` (solo nombres), para saber si existe `ig-lucia.env`.
+  - No hay ssh en esta nube, y la madre recibió «Production Reads» al intentarlo: lo decide Sergio Urcullo.
+- **Pantallas reales:** faltan todas (P1, P2, CORREO, EXTRACCION y CONFIGURACION; `v4/kit/estado-montaje.json`). La
+  demo está a medias: le falta el correo confirmado y `module.agents`.
+- **Montaje:**
+  - el próximo render de K4 saca CORREO y HORARIOS si no hay captura (`k4-borrador-cutlist.json` →
+    `correcciones8oct`);
+  - L01 y L02 se re-renderizan de usted si se confirma D8 (0 cr).
+- **Verificación:** la lente de completitud no corrió (se agotó la semana el 5-oct). Las otras 3 se aplicaron.
+
+**Intentos fallidos (no repetir):**
+- **Instalar `openssh-client` desde esta sesión:** el clasificador lo frenó («Unauthorized Persistence»). La madre
+  recomienda no tener la llave del VPS acá, aunque este entorno trae `ONIA_VPS_SSH_KEY_B64`.
+- **Reescribir el mensaje de un commit del autosync (amend + force):** frenado («Git Destructive»). Hay que commitear a
+  mano antes de soltar el turno.
+- **Chromium headless:** sin la CA del proxy (ERR_CERT_AUTHORITY_INVALID), y saltearlo está frenado. TikTok se lee con
+  curl; Instagram da 429.
+- **`onia.com.bo/llamada`:** da 404. La métrica `src=lucia-*` nunca existió.
+- **Codex no encontró el crudo de K3 en la PC:** vive en Higgsfield (`job_display` → `rawUrl`).
+
+**Qué depende de Sergio Urcullo:** `PLAN.md` §8.
+1. OK al paquete de la semana 1 y al usted.
+2. El nombre y la bio desde el celular de Lucía.
+3. El token, por una de dos vías: el OK a la madre para encender solo `postiz-postgres`, o generarlo en
+   developers.facebook.com.
+4. Confirmar el correo de la demo y darle `module.agents`.
+5. D6, D7 y D10.
+6. Mirar en el panel de ElevenLabs si la cuenta dice Free (solo hace falta si algún día hay voz).
+
+**Próximos pasos:**
+1. La madre valida G1 → se edita (0 cr) cuando haya captura de Pendientes.
+2. Con el OK de Sergio Urcullo: re-render de L01 de usted (0 cr), la madre despliega los publicadores y el token.
+3. Revisar K1, K2 y K4 con el criterio de estructura y escribir G2 («El link de reserva: 3 cosas»).
+
+## ▶ ESTADO VIGENTE — 5-oct-2026 (historia)
 
 **Sesión:** `session_01Whdadt8NdnYbZoyum1bRX6`, rama `claude/trusting-dirac-wjkua1`. Todo lo de abajo está en `main`; el
 último PR mergeado es el #118.

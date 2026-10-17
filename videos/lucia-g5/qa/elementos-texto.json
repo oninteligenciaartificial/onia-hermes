@@ -1,0 +1,227 @@
+[
+ {
+  "id": "rotulo",
+  "que": "rótulo de IA",
+  "texto": "Lucía Antelo · personaje IA de Onia",
+  "n": 6,
+  "a": 0,
+  "b": 3,
+  "min": 2.3999999999999995
+ },
+ {
+  "id": "dA-g",
+  "que": "gancho dato",
+  "texto": "parecido 0,81",
+  "n": 2,
+  "a": 3.98,
+  "b": 5.550000000000001,
+  "min": 1
+ },
+ {
+  "id": "sc-ax0",
+  "que": "p2 «0»",
+  "texto": "0",
+  "n": 1,
+  "a": 14.85,
+  "b": 20.75,
+  "min": 0.6499999999999999
+ },
+ {
+  "id": "sc-ax1",
+  "que": "p2 «idéntica · 1»",
+  "texto": "idéntica · 1",
+  "n": 2,
+  "a": 17.15,
+  "b": 20.75,
+  "min": 1
+ },
+ {
+  "id": "sc-mkl",
+  "que": "p2 «mi piso»",
+  "texto": "mi piso · 0,70",
+  "n": 3,
+  "a": 18.830000000000002,
+  "b": 20.75,
+  "min": 1.3499999999999999
+ },
+ {
+  "id": "dA-e1",
+  "que": "ejemplo A dato",
+  "texto": "Imagen A · parecido 0,81",
+  "n": 4,
+  "a": 21.48,
+  "b": 23.599999999999998,
+  "min": 1.7
+ },
+ {
+  "id": "dA-e2",
+  "que": "ejemplo F dato",
+  "texto": "Imagen F · parecido 0,66",
+  "n": 4,
+  "a": 24.48,
+  "b": 26.599999999999998,
+  "min": 1.7
+ },
+ {
+  "id": "dA-e3",
+  "que": "ejemplo B dato",
+  "texto": "Imagen B · café · parecido 0,35",
+  "n": 5,
+  "a": 27.48,
+  "b": 29.599999999999998,
+  "min": 2.05
+ },
+ {
+  "id": "r1-tag",
+  "que": "r1 «89 px»",
+  "texto": "89 px",
+  "n": 2,
+  "a": 31.2,
+  "b": 36.75,
+  "min": 1
+ },
+ {
+  "id": "r1-nota",
+  "que": "r1 nota",
+  "texto": "Bajo 200 px, el medidor avisa: lo reviso a ojo.",
+  "n": 10,
+  "a": 32.18,
+  "b": 36.75,
+  "min": 3.8
+ },
+ {
+  "id": "r2-mkl",
+  "que": "r2 «mi piso»",
+  "texto": "mi piso · 0,70",
+  "n": 3,
+  "a": 36.95,
+  "b": 42.75,
+  "min": 1.3499999999999999
+ },
+ {
+  "id": "r2-zoom",
+  "que": "r2 «Zoom»",
+  "texto": "Zoom: 0,70 a 0,90",
+  "n": 4,
+  "a": 36.95,
+  "b": 42.75,
+  "min": 1.7
+ },
+ {
+  "id": "r2-m1",
+  "que": "r2 marca 0,75",
+  "texto": "0,75",
+  "n": 1,
+  "a": 36.95,
+  "b": 42.75,
+  "min": 0.6499999999999999
+ },
+ {
+  "id": "r2-m2",
+  "que": "r2 marca 0,80",
+  "texto": "0,80",
+  "n": 1,
+  "a": 36.95,
+  "b": 42.75,
+  "min": 0.6499999999999999
+ },
+ {
+  "id": "r2-m3",
+  "que": "r2 marca 0,85",
+  "texto": "0,85",
+  "n": 1,
+  "a": 36.95,
+  "b": 42.75,
+  "min": 0.6499999999999999
+ },
+ {
+  "id": "r2-m4",
+  "que": "r2 marca 0,90",
+  "texto": "0,90",
+  "n": 1,
+  "a": 36.95,
+  "b": 42.75,
+  "min": 0.6499999999999999
+ },
+ {
+  "id": "r2-v1",
+  "que": "r2 valor 1",
+  "texto": "0,77",
+  "n": 1,
+  "a": 37.35,
+  "b": 42.75,
+  "min": 0.6499999999999999
+ },
+ {
+  "id": "r2-v2",
+  "que": "r2 valor 2",
+  "texto": "0,80",
+  "n": 1,
+  "a": 38.05,
+  "b": 42.75,
+  "min": 0.6499999999999999
+ },
+ {
+  "id": "r2-bl",
+  "que": "r2 banda",
+  "texto": "±0,03",
+  "n": 1,
+  "a": 40.3,
+  "b": 42.75,
+  "min": 0.6499999999999999
+ },
+ {
+  "id": "r3-call",
+  "que": "r3 «Lo difuminé»",
+  "texto": "Lo difuminé: lo inventó el motor.",
+  "n": 6,
+  "a": 44.18,
+  "b": 48.25,
+  "min": 2.3999999999999995
+ },
+ {
+  "id": "r3-num",
+  "que": "r3 número",
+  "texto": "parecido 0,80",
+  "n": 2,
+  "a": 44.78,
+  "b": 48.25,
+  "min": 1
+ },
+ {
+  "id": "r3-nota",
+  "que": "r3 nota",
+  "texto": "El programa solo compara caras.",
+  "n": 5,
+  "a": 45.38,
+  "b": 48.25,
+  "min": 2.05
+ },
+ {
+  "id": "le-t1",
+  "que": "lección 1",
+  "texto": "Cara chica",
+  "n": 2,
+  "a": 49.55,
+  "b": 53.25,
+  "min": 1
+ },
+ {
+  "id": "le-t2",
+  "que": "lección 2",
+  "texto": "Mismo clip: 0,771-0,799",
+  "n": 3,
+  "a": 50.25,
+  "b": 53.25,
+  "min": 1.3499999999999999
+ },
+ {
+  "id": "le-t3",
+  "que": "lección 3",
+  "texto": "Letrero inventado",
+  "n": 2,
+  "a": 50.95,
+  "b": 53.25,
+  "min": 1
+ }
+]

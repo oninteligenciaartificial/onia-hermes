@@ -1,0 +1,17 @@
+piso de caras negativas (max): 0.224   gate del repo: 0,70
+archivo                                        centroide  min_ref  max_ref  cara_px  veredicto
+fuente-b1-k4.png                                   0.825    0.566    0.938      473  OK
+master-b1-f12.png                                  0.825    0.569    0.938      472  OK
+master-b1-f36.png                                  0.825    0.570    0.938      472  OK
+master-b1-f60.png                                  0.825    0.569    0.938      472  OK
+master-b3-f210.png                                 0.832    0.578    0.926      478  OK
+master-b3-f246.png                                 0.832    0.577    0.926      478  OK
+master-b3-f330.png                                 0.829    0.575    0.922      479  OK
+fuente-b2-k4.png                                   0.824    0.576    0.924      238  OK
+fuente-b2-r3.png                                   0.822    0.539    0.957      265  OK
+master-b2-k4-f78.png                               0.817    0.566    0.920      237  OK
+master-b2-r3-f78.png                               0.826    0.543    0.955      265  OK
+master-b2-k4-f84.png                               0.818    0.567    0.920      237  OK
+master-b2-r3-f84.png                               0.826    0.543    0.956      265  OK
+master-b2-k4-f96.png                               0.818    0.568    0.921      237  OK
+master-b2-r3-f96.png                               0.827    0.545    0.955      265  OK

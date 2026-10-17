@@ -1,0 +1,33 @@
+piso de caras negativas (max): 0.224   gate del repo: 0,70
+archivo                                        centroide  min_ref  max_ref  cara_px  veredicto
+g2-final-1080x1920_t13.5.png                       0.777    0.552    0.717      179  OK (cara < 200 px: poco confiable)
+g2-final-1080x1920_t19.5.png                       0.777    0.506    0.724      175  OK (cara < 200 px: poco confiable)
+g2-final-1080x1920_t24.5.png                       0.622    0.439    0.554      256  BAJO: mirar
+g2-final-1080x1920_t35.png                         0.723    0.499    0.722      435  OK
+g2-final-1080x1920_t40.png                         0.810    0.555    0.809      197  OK (cara < 200 px: poco confiable)
+g2-final-1080x1920_t44.png                         0.790    0.554    0.729      285  OK
+g2-final-1080x1920_t55.5.png                       0.736    0.512    0.667      175  OK (cara < 200 px: poco confiable)
+g2-final-1080x1920_t56.5.png                       0.761    0.490    0.697      174  OK (cara < 200 px: poco confiable)
+g2-final-1080x1920_t57.8.png                       0.701    0.447    0.629      172  OK (cara < 200 px: poco confiable)
+m1_t1.5.png                                        0.778    0.547    0.710      119  OK (cara < 200 px: poco confiable)
+m1_t3.png                                          0.734    0.520    0.664      116  OK (cara < 200 px: poco confiable)
+m1_t4.png                                          0.761    0.492    0.699      116  OK (cara < 200 px: poco confiable)
+m1_t5.3.png                                        0.707    0.441    0.632      115  OK (cara < 200 px: poco confiable)
+m2_t2.5.png                                        0.785    0.513    0.734      174  OK (cara < 200 px: poco confiable)
+m3_t2.5.png                                        0.628    0.448    0.558      171  BAJO: mirar (cara < 200 px: poco confiable)
+m4_t3.png                                          0.726    0.507    0.728      290  OK
+m5_t3.png                                          0.814    0.561    0.816      132  OK (cara < 200 px: poco confiable)
+m6_t2.png                                          0.796    0.547    0.733      190  OK (cara < 200 px: poco confiable)
+
+Instantes ALINEADOS (final ↔ fuente en el mismo instante del clip; cuadro 0 de cada clip = su `a` de plan.json; el cierre K1 arranca en el segundo 2,0 del clip, H7):
+  final 13,5 s ↔ Motor 1 @1,5 s:  0,777 ↔ 0,778  (dif 0,001)
+  final 19,5 s ↔ Motor 2 @2,5 s:  0,777 ↔ 0,785  (dif 0,008)
+  final 24,5 s ↔ Motor 3 @2,5 s:  0,622 ↔ 0,628  (dif 0,006)   <- bajo 0,70 en la fuente Y en el final (es lo que muestra el sello)
+  final 35,0 s ↔ Motor 4 @3,0 s:  0,723 ↔ 0,726  (dif 0,003)
+  final 40,0 s ↔ Motor 5 @3,0 s:  0,810 ↔ 0,814  (dif 0,004)
+  final 44,0 s ↔ Motor 6 @2,0 s:  0,790 ↔ 0,796  (dif 0,006)
+  final 55,5 s ↔ Motor 1 @3,0 s (cierre K1, clip 2,0 + 1,0): 0,736 ↔ 0,734  (dif 0,002)
+  final 56,5 s ↔ Motor 1 @4,0 s (cierre K1):                  0,761 ↔ 0,761  (dif 0,000)
+  final 57,8 s ↔ Motor 1 @5,3 s (cierre K1):                  0,701 ↔ 0,707  (dif 0,006)
+Máxima diferencia 0,008 (≤ 0,02): el escalado x1,5 del navegador y el H.264 no deforman la cara. Caras de 115-290 px nativos: cifras orientativas (el propio gate marca < 200 px como poco confiable).
+H7: la ventana nueva del cierre (clip 2,0-5,5 s) tiene la cara en 0,76 (4,0 s) y 0,70 (5,3 s): igual o algo menos que la ventana vieja (0-3,5 s: 0,79 → 0,73). Es el precio de que mire a cámara; sigue en el piso, no por debajo.

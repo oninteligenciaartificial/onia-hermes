@@ -1,0 +1,159 @@
+(sin mutar): el build pasa (salida 0), así que cada rechazo de abajo se debe a la mutación y no a otra cosa
+RECHAZADO correctamente · pie: borrar las frases sobre la foto de arranque y lo que recibió cada clip
+    ↳ pie.txt: falta decir de dónde salió la foto de arranque: falta «La foto de arranque se hizo con 4 de las 8, así que ningún clip es independiente.»
+RECHAZADO correctamente · pie: borrar el hecho de que la foto de arranque (K1) se hizo con R1, R3, R6 y R7
+    ↳ pie.txt: falta decir de dónde salió la foto de arranque: falta «La foto de arranque se hizo con 4 de las 8, así que ningún clip es independiente.»
+RECHAZADO correctamente · pie: K1 «se hizo con 3 de las 8» (la medición dice 4: R1, R3, R6 y R7)
+    ↳ pie.txt: falta decir de dónde salió la foto de arranque: falta «La foto de arranque se hizo con 4 de las 8, así que ningún clip es independiente.»
+RECHAZADO correctamente · pie: «el orden de los finales no cambia» → «el orden de los finales cambia» (lo contrario)
+    ↳ pie.txt: la medición estricta (solo las fotos que nadie recibió) no dice lo que dice el archivo de la medición: falta «Con solo las 4 fotos que nadie recibió, los seis cl
+RECHAZADO correctamente · pie: restituir «dentro del ruido» (frase retirada)
+    ↳ pie.txt: «dentro del ruido» es una frase RETIRADA (prohibidas.mjs → RETIRADAS: la v2.3 retiró la resta de controles; la v2.4, «con que se mide»)
+RECHAZADO correctamente · pie: restituir «exceso atribuible ≈ 0,012, dentro del ruido de ±0,03» (frase retirada)
+    ↳ pie.txt: «exceso» es una frase RETIRADA (prohibidas.mjs → RETIRADAS: la v2.3 retiró la resta de controles; la v2.4, «con que se mide»)
+RECHAZADO correctamente · pie: el aviso del principio fuera
+    ↳ pie.txt: falta el aviso del principio: «Aviso: los 6 clips parten de 4 de las 8 fotos con que se compara (abajo).»
+RECHAZADO correctamente · pie: el aviso pasa al final (fuera de los primeros 125 caracteres)
+    ↳ pie.txt: el aviso empieza en el carácter 2061: tiene que ir justo después de la apertura (carácter ≤ 60)
+RECHAZADO correctamente · pie: la apertura se alarga y empuja el aviso pasados los 125 caracteres
+    ↳ pie.txt: el aviso empieza en el carácter 70: tiene que ir justo después de la apertura (carácter ≤ 60)
+RECHAZADO correctamente · pie: «los 6 clips parten de 4 de las 8» → «de 2 de las 8» (la medición dice 4)
+    ↳ pie.txt: falta el aviso del principio: «Aviso: los 6 clips parten de 4 de las 8 fotos con que se compara (abajo).»
+RECHAZADO correctamente · pie: Kling O3 «recibió 2 de las 8» (la medición dice 4: R1, R3, R6 y R7)
+    ↳ pie.txt: falta decir qué recibió cada uno de los dos clips: falta «Seedance 2.0 Mini + referencias recibió 2 de las 8, y Kling O3, 4.»
+RECHAZADO correctamente · pie: Seedance + referencias «recibió 3 de las 8» (la medición dice 2: R1 y R3)
+    ↳ pie.txt: falta decir qué recibió cada uno de los dos clips: falta «Seedance 2.0 Mini + referencias recibió 2 de las 8, y Kling O3, 4.»
+RECHAZADO correctamente · pie: final de Kling O3 con las 4 fotos 0,79 (la medición dice 0,749 → 0,75)
+    ↳ pie.txt: la medición estricta (solo las fotos que nadie recibió) no dice lo que dice el archivo de la medición: falta «Con solo las 4 fotos que nadie recibió, los seis cl
+RECHAZADO correctamente · pie: «bajan entre 0,03 y 0,05» (la medición dice 0,03 y 0,09)
+    ↳ pie.txt: la medición estricta (solo las fotos que nadie recibió) no dice lo que dice el archivo de la medición: falta «Con solo las 4 fotos que nadie recibió, los seis cl
+RECHAZADO correctamente · pie: orden de los finales intercambiado (Kling 3.0 std antes que Kling 3.0 pro)
+    ↳ pie.txt: la medición estricta (solo las fotos que nadie recibió) no dice lo que dice el archivo de la medición: falta «Con solo las 4 fotos que nadie recibió, los seis cl
+RECHAZADO correctamente · pie: «las 3 fotos que nadie recibió» (la medición dice 4: R2, R4, R5 y R8)
+    ↳ pie.txt: la medición estricta (solo las fotos que nadie recibió) no dice lo que dice el archivo de la medición: falta «Con solo las 4 fotos que nadie recibió, los seis cl
+RECHAZADO correctamente · pie: sin el tamaño de cara de Kling O3 (89 a 168 px)
+    ↳ pie.txt: falta el tamaño de cara de Kling O3 y que son píxeles del clip original (720p): falta «en el clip original (720p) las caras de los tres clips del video miden men
+RECHAZADO correctamente · pie: tamaño de cara «89 a 170 px» (la medición dice 89 a 168)
+    ↳ pie.txt: el tamaño de cara «89 a 170 px» no sale de la medición (fuga_refs.cara_px: 89-168)
+RECHAZADO correctamente · pie: sin «las caras de los tres clips del video miden menos de 200 px»
+    ↳ pie.txt: debe decir «en el clip original (720p) las caras de los tres clips del video miden menos de 200 px» (máximo medido 180 px, qa/caras-por-clip.json; son px del cli
+RECHAZADO correctamente · pie: sin «poco confiable»
+    ↳ pie.txt: no dice «poco confiable»
+RECHAZADO correctamente · pie: pasa de 2.200 caracteres
+    ↳ pie.txt: 2292 caracteres (tope de Instagram 2.200)
+RECHAZADO correctamente · pie: ya no abre con «Personaje hecho con IA»
+    ↳ pie.txt: debe abrir con «Personaje hecho con IA»
+RECHAZADO correctamente · pie: sin el aviso «Nombro lo que uso…» (D-N1)
+    ↳ pie.txt: falta el aviso «Nombro lo que uso; no es una recomendación pagada.» (D-N1)
+RECHAZADO correctamente · pie: cifra que no sale de los datos (0,72 → 0,73)
+    ↳ pie.txt: falta «0,79 a 0,72» de Kling 3.0 std
+RECHAZADO correctamente · pie: cifra que no sale de ningún dato (0,64 → 0,66 en el pie de Seedance 2.0 Mini)
+    ↳ pie.txt: la cifra 0,66 no sale de los datos del video ni de PROCEDENCIA
+RECHAZADO correctamente · pie: «Higgsfield» fuera (plataforma de los créditos)
+    ↳ pie.txt: no dice la plataforma de los créditos («Higgsfield»)
+RECHAZADO correctamente · pantalla: quitar la etiqueta de la lección (plan.leccion.fuga)
+    ↳ fuga_refs m5: sale en pantalla y la placa de la lección no lleva su etiqueta (plan.leccion.fuga)
+RECHAZADO correctamente · pantalla: la etiqueta de la lección apunta a un clip que no sale (m4)
+    ↳ leccion.fuga: «m4» no es un clip con fotos recibidas que salga en pantalla
+RECHAZADO correctamente · pantalla: la etiqueta de la lección llega sin ventana de lectura (T14-6f)
+    ↳ lectura «lección: fotos recibidas (Kling O3)» (9 palabras): -0.18 s y pide 3.45 s
+RECHAZADO correctamente · pantalla: la etiqueta de la lección llega con ventana corta (T13+1.5: 0,24 s, pide 3,8)
+    ↳ lectura «lección: fotos recibidas (Kling O3)» (9 palabras): 0.24 s y pide 3.45 s
+RECHAZADO correctamente · pantalla: quitar el aviso del gancho (el 0,82 de la pastilla sin aviso)
+    ↳ gancho: el 0,82 de la pastilla es el de Kling O3, que recibió fotos, y el gancho no lleva su aviso (plan.gancho.fuga)
+RECHAZADO correctamente · pantalla: el aviso del gancho llega con ventana corta (3,0 s)
+    ↳ lectura «gancho: aviso del clip del 0,82» (7 palabras): 0.32 s y pide 2.75 s
+RECHAZADO correctamente · pantalla: quitar el aviso del clip de Kling O3 (plan.motores.m5.fuga_escena)
+    ↳ fuga_refs m5: sale en pantalla y su clip no lleva el aviso (plan.motores.m5.fuga_escena)
+RECHAZADO correctamente · pantalla: el clip de Kling O3 termina antes (T10) y el aviso se queda sin ventana de lectura
+    ↳ lectura «Kling O3: aviso sobre el clip» (9 palabras): 2.38 s y pide 3.45 s
+RECHAZADO correctamente · datos: Kling O3 «recibió R1, R3 y R6» (la medición dice R1, R3, R6 y R7)
+    ↳ fuga_refs m5: recibió R1, R3, R6 y la medición dice R1, R3, R6, R7
+RECHAZADO correctamente · datos: Seedance + referencias «recibió R1, R3 y R6» (la medición dice R1, R3)
+    ↳ fuga_refs m4: recibió R1, R3, R6 y la medición dice R1, R3
+RECHAZADO correctamente · datos: K1 «se hizo con R1, R3 y R6» (la medición dice R1, R3, R6 y R7)
+    ↳ fuga_refs: K1 se hizo con R1, R3, R6 y la medición dice R1, R3, R6, R7
+RECHAZADO correctamente · datos: cara de Kling O3 89-170 px (la medición dice 89-168)
+    ↳ fuga_refs m5: cara de 89-170 px y la medición dice 89-168
+RECHAZADO correctamente · datos: imágenes de Seedance + referencias 4 (la clave dice 3_refs)
+    ↳ fuga_refs m4: 4 imágenes y la clave de PROCEDENCIA dice 3
+RECHAZADO correctamente · datos: Kling O3 «no sale en pantalla» (el plan lo muestra)
+    ↳ fuga_refs m5: en_pantalla=false pero el plan lo muestra
+RECHAZADO correctamente · datos: fuente de la medición inexistente
+    ↳ fuga_refs: falta la fuente hermes-content/references/modelos/lucia/v4/no-existe.txt
+RECHAZADO correctamente · datos: sección de la medición con otro nombre
+    ↳ fuga_refs m5: la medición no tiene la sección «== Kling O3 7 refs (948a89d3)»
+RECHAZADO correctamente · estricta: «las fotos que nadie recibió son R2, R4, R5 y R7» (la medición dice R8)
+    ↳ estricta: las fotos que nadie recibió son R2, R4, R5, R7 y la medición dice R2, R4, R5, R8
+RECHAZADO correctamente · estricta: «bajan entre 0,03 y 0,05» (la medición dice 0,03 y 0,09)
+    ↳ estricta: los seis clips bajan entre 0.03 y 0.05 en el plan y la medición dice 0.03 y 0.09
+RECHAZADO correctamente · estricta: orden_igual=false (la medición dice que NO cambia)
+    ↳ estricta: orden_igual=false y la medición dice que el orden por valor final NO cambia
+RECHAZADO correctamente · estricta: final de Kling O3 0,76 (la medición dice 0,749 → 0,75)
+    ↳ estricta m5: final 0.76 con las 4 fotos y la medición dice 0.749 → 0.75
+RECHAZADO correctamente · estricta: finales en otro orden en el plan (Kling 3.0 std antes que Kling 3.0 pro)
+    ↳ estricta: los finales van m5 > m4 > m6 > m1 > m2 > m3 en el plan y la medición los ordena m5 > m4 > m6 > m2 > m1 > m3
+RECHAZADO correctamente · estricta: sobre el piso «4 de 6 con las 4 fotos» (la medición da 3)
+    ↳ estricta: sobre el piso 0,70 quedan 5 con las 8 fotos y 4 con las 4 en el plan; la medición da 5 y 3
+RECHAZADO correctamente · medición: K1 se generó solo con R1, R3 y R6 (el plan y el pie dicen R1, R3, R6 y R7)
+    ↳ fuga_refs: K1 se hizo con R1, R3, R6, R7 y la medición dice R1, R3, R6
+RECHAZADO correctamente · medición: el final de Kling O3 con las 4 fotos es 0,790 (el plan y el pie dicen 0,75)
+    ↳ estricta m5: final 0.75 con las 4 fotos y la medición dice 0.79 → 0.79
+RECHAZADO correctamente · medición: «¿Cambia el orden por valor final? SI» (el plan y el pie dicen que no cambia)
+    ↳ estricta: la línea «¿Cambia el orden por valor final?» de la medición (¿Cambia el orden por valor final? SI) no coincide con el orden calculado (no cambia)
+RECHAZADO correctamente · medición: Kling O3 recibió directo R1, R3 y R6 (cabecera de la prueba estricta)
+    ↳ fuga_refs m5: la cabecera de la prueba estricta dice que recibió directo R1, R3, R6 y el plan dice R1, R3, R6, R7
+RECHAZADO correctamente · medición: sin la sección «PRUEBA ESTRICTA»
+    ↳ fuga_refs: la medición no trae la sección «== PRUEBA ESTRICTA…» (linaje de K1)
+RECHAZADO correctamente · gancho: el aviso entra a 0,85 s con la pastilla (como la v2.3): 7 palabras piden 2,75 s y la ventana da 2,47
+    ↳ lectura «gancho: aviso del clip del 0,82» (7 palabras): 2.47 s y pide 2.75 s
+RECHAZADO correctamente · gancho: el aviso entra a 0,6 s y la pastilla a 0,5 s (el aviso y el número tienen que entrar juntos)
+    ↳ gancho.fuga: el aviso entra a 0.6 s y la pastilla a 0.5 s: deben entrar juntos y a 0,5 s o antes (7 palabras piden 2,75 s)
+RECHAZADO correctamente · gancho: el aviso vuelve a y = 945 (bajo la pastilla, sobre las miniaturas: tapaba teléfono y manos)
+    ↳ gancho.fuga: y = 945 queda sobre las miniaturas (terminan en 1202); el aviso va debajo de ellas: no tapa teléfono ni manos
+RECHAZADO correctamente · pie: salvedad (a) fuera («bajan todos, incluso los que no recibieron fotos directas»)
+    ↳ pie.txt: faltan las tres salvedades de la medición estricta (la caída no es la fuga, no se compara con el piso, vecinos dentro de ±0,03): falta «Esa caída no mide la fuga
+RECHAZADO correctamente · pie: salvedad (b) falseada («4 de los 6 quedan bajo 0,70»; la medición da 3)
+    ↳ pie.txt: faltan las tres salvedades de la medición estricta (la caída no es la fuga, no se compara con el piso, vecinos dentro de ±0,03): falta «Esa caída no mide la fuga
+RECHAZADO correctamente · pie: salvedad (b) sin «se compara entre clips, no con el piso»
+    ↳ pie.txt: faltan las tres salvedades de la medición estricta (la caída no es la fuga, no se compara con el piso, vecinos dentro de ±0,03): falta «Esa caída no mide la fuga
+RECHAZADO correctamente · pie: salvedad (c) falseada («4 de las 5 diferencias entre vecinos»; la medición da 3)
+    ↳ pie.txt: faltan las tres salvedades de la medición estricta (la caída no es la fuga, no se compara con el piso, vecinos dentro de ±0,03): falta «Esa caída no mide la fuga
+RECHAZADO correctamente · medición: la diferencia B* entre Kling 3.0 pro y Kling 3.0 std pasa de +0,009 a +0,039 (el pie dice 3 de 5 dentro de ±0,03)
+    ↳ estricta: 3 de las 5 diferencias entre vecinos dentro de ±0,03 en las tablas y 2 en el bloque «DIFERENCIAS entre vecinos» de la medición
+RECHAZADO correctamente · pie: vuelven los ids «(R1 a R8)» (H3: no le dicen nada a un espectador)
+    ↳ pie.txt: ids «R1, R8» sin definir (H3): se dice «4 de las 8» y «las 4 fotos que nadie recibió»
+RECHAZADO correctamente · pie: vuelve «cinco partieron de la misma foto» («partir de» con dos sentidos)
+    ↳ pie.txt: «parten de» / «partieron de» aparece 2 veces; debe tener un solo sentido (el aviso del principio; la foto de arranque «salió»)
+RECHAZADO correctamente · pie: vuelve «sostiene la cara» en presente (H5)
+    ↳ pie.txt: «sostiene la cara» en presente (H5): una toma por clip se cuenta en pasado («aguantó», «perdió», «quedó», «inventó», «cambió»)
+RECHAZADO correctamente · pie: vuelve «pierde parecido» en presente (H5)
+    ↳ pie.txt: «pierde parecido» en presente (H5): una toma por clip se cuenta en pasado («aguantó», «perdió», «quedó», «inventó», «cambió»)
+RECHAZADO correctamente · pie: vuelve «con que se mide» (la palabra pasó a «se compara»)
+    ↳ pie.txt: «con que se mide» es una frase RETIRADA (prohibidas.mjs → RETIRADAS: la v2.3 retiró la resta de controles; la v2.4, «con que se mide»)
+RECHAZADO correctamente · verificador 1 (720p): el pie dice «las caras de los tres clips del video miden menos de 200 px» sin «en el clip original (720p)»
+    ↳ pie.txt: debe decir «en el clip original (720p) las caras de los tres clips del video miden menos de 200 px» (máximo medido 180 px, qa/caras-por-clip.json; son px del cli
+RECHAZADO correctamente · verificador 2 (máximo de px): una cara de Seedance 2.0 Mini mide 201 px en qa/caras-por-clip.json (el pie dice «menos de 200 px»)
+    ↳ pie.txt: las caras de los tres clips del video llegan a 201 px en qa/caras-por-clip.json y el pie dice «menos de 200 px»
+RECHAZADO correctamente · verificador 2 (máximo de px): el README vuelve a decir «máximo 179 px» (qa/caras-por-clip.json da 180)
+    ↳ README.md: dice «máximo 179 px» y qa/caras-por-clip.json da 180
+RECHAZADO correctamente · verificador 3 (cierre K1): plan.medios.k1.capa vuelve a decir «parecido medido cada 6 cuadros: 0,71-0,76» (esa serie no existe)
+    ↳ plan.medios.k1.capa: «parecido medido cada 6 cuadros» (esa serie no existe: qa/face-gate.txt trae solo unos cuadros medidos del cierre)
+RECHAZADO correctamente · verificador 3 (cierre K1): qa/face-gate.txt trae el cuadro 660 del cierre en 0,720 (no 0,693) y la anotación del plan sigue diciendo «el más bajo, 0,693»
+    ↳ plan.medios.k1.capa: debe decir «4 cuadros medidos (qa/face-gate.txt: n606, n630, n660 y n665): final 0,700 a 0,749, fuente 0,708 a 0,751; ninguno bajo 0,70» (lo que trae
+RECHAZADO correctamente · verificador 4 (segundos visibles): el pie vuelve a decir «2,8 a 4,5 s» (la tabla de cortes, b − a) y no «2,8 a 4,4 s» (cuadros visibles ÷ 24)
+    ↳ pie.txt: debe decir «se ven los primeros 2,8 a 4,4 s de cada clip» (segundos visibles: 66 · 78 · 106 cuadros ÷ 24, lo que muestra el plan)
+RECHAZADO correctamente · verificador 4 (segundos visibles): qa/cuadros-visibles.txt cuenta 107 cuadros visibles de Kling O3 en el master y el plan da 106
+    ↳ qa/cuadros-visibles.txt: m5 tiene 107 cuadros visibles en el master y el plan da 106 (el pie dice 2,8 a 4,4 s)
+RECHAZADO correctamente · cifra: final de Kling 3.0 std 0,73 contra PROCEDENCIA
+    ↳ m1: final 0.73 y PROCEDENCIA dice 0.721 → 0.72
+RECHAZADO correctamente · créditos: Kling O3 7 contra PROCEDENCIA
+    ↳ m5: 7 créditos y PROCEDENCIA dice 6
+RECHAZADO correctamente · CTA: texto distinto
+    ↳ CTA: «Seguime: cada semana»
+RECHAZADO correctamente · voz: frase prohibida en el guion
+    ↳ tramo 3: frase prohibida «mis pacientes» en la voz
+RECHAZADO correctamente · voz: frase retirada en el guion («dentro del ruido»)
+    ↳ tramo 8: «dentro del ruido» es una frase RETIRADA en la v2.3 (prohibidas.mjs → RETIRADAS)
+✔ 78 de 78 mutaciones rechazadas por el motivo esperado (y el build sin mutar pasa)
+EXIT 0

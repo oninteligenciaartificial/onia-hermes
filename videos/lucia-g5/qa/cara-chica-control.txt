@@ -1,0 +1,15 @@
+centroide de 8 referencias oficiales; ArcFace buffalo_l; gate 0,70
+foto                                                 nativa         178 px         120 px          89 px          60 px
+k1-1-recepcion-celular-4afffb96.jpg           0.806 (237px)  0.800 (177px)  0.796 (120px)  0.801 ( 89px)  0.798 ( 60px)
+k2-1-cafe-mostrador-3e05cfd0.jpg              0.830 (225px)  0.828 (178px)  0.824 (120px)  0.829 ( 89px)  0.826 ( 60px)
+k4-3-cafe-teclado-186c82f0.jpg                0.839 (456px)  0.841 (178px)  0.840 (119px)  0.834 ( 88px)  0.829 ( 59px)
+k4-5-senala-342c0ab5.jpg                      0.832 (266px)  0.828 (178px)  0.829 (120px)  0.826 ( 89px)  0.825 ( 59px)
+img-gpt-image-2-5-5da2fa1e.jpg                0.672 (296px)  0.695 (178px)  0.695 (120px)  0.688 ( 89px)  0.652 ( 60px)
+img-kling-omni-image-c3706d45.jpg             0.789 (234px)  0.789 (178px)  0.785 (120px)  0.784 ( 89px)  0.779 ( 60px)
+
+LECTURA (G5, 9-oct-2026, 0 créditos): la MISMA foto reducida con INTER_AREA hasta que su cara mida 178 / 120 / 89 / 60 px, medida con el mismo medidor (ArcFace buffalo_l, centroide de las 8 referencias).
+- En 5 de 6 fotos el número a 60 px es 0,004 a 0,010 MÁS BAJO que el nativo (K1 −0,008, K2·1 −0,004, K4·3 −0,010, K4·5 −0,007, Kling Omni −0,010): una caída suave y consistente, unas tres veces menor que los ±0,03.
+  A 89 px (la cara de G5) el cambio es −0,005 a +0,000 en esas cinco.
+- La sexta (F, GPT Image 2.5, 0,672 nativa) sube +0,023 a 178 px y baja −0,020 a 60 px: un rango de 0,043 solo por el tamaño, del orden de los ±0,03 de la razón 2.
+- Ninguna foto que estaba sobre el piso cruza el piso por achicarle la cara. «Cara chica: baja sola» (guion del repo) NO se sostiene para este medidor; el video dice «poco confiable»
+  (regla del gate: < 200 px) y mira la imagen a ojo. Límite: reducir con INTER_AREA es una cara chica LIMPIA; en un clip real la cara chica además viene borrosa o comprimida.

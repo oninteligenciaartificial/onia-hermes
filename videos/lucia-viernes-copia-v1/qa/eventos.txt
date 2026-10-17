@@ -1,0 +1,22 @@
+0.000: gancho: el error en el cuadro 0
+0.500: primer número antes de 3 s
+1.750: acento del parecido
+3.000: entra la foto que recibió (empuje de 6 cuadros)
+3.000: entra «mirá la foto que recibió»
+3.875: acento de la foto recibida
+4.500: entra «misma pose, ventana, taza»
+4.500: aro: cabeza apoyada en la mano (se dibuja en 0,6 s)
+4.875: aro: marco de la ventana (se dibuja en 0,6 s)
+5.250: acento del texto de las coincidencias
+5.250: aro: taza junto a la laptop (se dibuja en 0,6 s)
+6.625: entra el gráfico (empuje de 6 cuadros)
+6.625: barra con esa foto crece a 0,93
+7.500: entra la fila de las otras siete, con sus siete puntos
+8.250: entra «casi copia: no prueba identidad»
+9.250: entra la fila de las 4 que no recibió
+10.375: entra la lección
+11.500: acento de la lección
+12.375: CTA
+13.750: acento una prueba semanal
+20 eventos, hueco máximo 1.375 s
+EXIT 0

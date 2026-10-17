@@ -1,0 +1,6 @@
+ok T=7.417 s (cuadros 172-178) sale desc → entra buena; hueco de voz T3→T4 (7.167–7.417 s); separación entre bordes por cuadro: 0.0 -0.0 -0.0 0.0 0.0 -0.0 0.0
+ok T=9.625 s (cuadros 225-231) sale buena → entra agenda; hueco de voz T4→T5 (9.375–9.625 s); separación entre bordes por cuadro: 0.0 -0.0 -0.0 0.0 -0.0 -0.0 0.0
+ok T=15.917 s (cuadros 376-382) sale agenda → entra k4; hueco de voz T7→T8 (15.667–15.917 s); separación entre bordes por cuadro: 0.0 -0.0 -0.0 0.0 0.0 -0.0 0.0
+ok T=20.583 s (cuadros 488-494) sale k4 → entra placa; hueco de voz T9→T10 (20.333–20.583 s); separación entre bordes por cuadro: 0.0 -0.0 0.0 0.0 -0.0 -0.0 0.0
+ok T=22.792 s (cuadros 541-547) sale placa → entra k1; hueco de voz T10→T11 (22.542–22.792 s); separación entre bordes por cuadro: 0.0 -0.0 -0.0 0.0 0.0 -0.0 0.0
+✔ las 5 costuras son empujes rígidos de 6 cuadros, pegados borde con borde y dentro del hueco de voz

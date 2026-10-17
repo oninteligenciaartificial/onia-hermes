@@ -1,0 +1,130 @@
+@font-face{font-family:"Bricolage Grotesque";src:url(assets/fonts/BricolageGrotesque-var-latin.woff2) format("woff2");font-weight:500 700;font-style:normal;font-display:block}
+@font-face{font-family:"DM Sans";src:url(assets/fonts/DMSans-var-latin.woff2) format("woff2");font-weight:400 500;font-style:normal;font-display:block}
+@font-face{font-family:"Spline Sans Mono";src:url(assets/fonts/SplineSansMono-var-latin.woff2) format("woff2");font-weight:400 500;font-style:normal;font-display:block}
+:root{--acc:{{ACC}};--bad:{{BAD}};--ink:#0A0C11;--ink2:#15181F;--txt:#F6F8FB;--mut:rgba(246,248,251,.88);--hair:rgba(255,255,255,.12)}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#0A0C11}
+body{font-family:"DM Sans",sans-serif;-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision;font-variant-ligatures:none}
+#root{position:relative;width:1080px;height:1920px;overflow:hidden;background:#0A0C11}
+/* el fondo va en un hijo a sangre completa: el productor puede perder el background del propio root */
+#ground{position:absolute;left:0;top:0;width:1080px;height:1920px;background:linear-gradient(180deg,#10141B 0%,#0A0C11 100%);z-index:0}
+
+/* ── contenedores de tarjeta: un clip por tarjeta, a lienzo completo; el ancla fija dónde cae ── */
+.cc{position:absolute;left:0;top:0;width:1080px;height:1920px;display:flex;justify-content:center;pointer-events:none;z-index:10}
+.cc-bot{align-items:flex-end;padding-bottom:calc(1920px - var(--b))}
+.cc-top{align-items:flex-start;padding-top:var(--t)}
+.cw{position:relative;width:max-content;max-width:920px}
+/* pila de la parte baja: [sello] / [dato] / tarjeta. La posición la fija el navegador: nada se mide a mano */
+.stk{display:flex;flex-direction:column;align-items:center;gap:16px}
+/* sombra de la tarjeta: dos capas con filter:blur (el box-shadow grande de Chromium deja costuras por mosaicos de 256 px) */
+.sh{position:absolute;display:block}
+.sh1{left:24px;right:24px;top:70px;bottom:-22px;border-radius:10px;background:rgba(0,0,0,.62);filter:blur(48px)}
+.sh2{left:0;right:0;top:10px;bottom:-10px;border-radius:34px;background:rgba(0,0,0,.32);filter:blur(13px)}
+.card{position:relative;width:100%;background:linear-gradient(158deg,var(--ink2) 0%,var(--ink) 62%);border:1px solid var(--hair);border-radius:35px;padding:41px 53px 45px 64px;overflow:hidden}
+.rail{position:absolute;left:0;top:0;bottom:0;width:12px;background:linear-gradient(180deg,var(--acc),#0a7a43)}
+.t{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:66px;line-height:1.12;letter-spacing:-.01em;color:var(--txt);text-wrap:balance}
+.t b{color:var(--acc);font-weight:700}
+.t b.late{color:var(--txt)}
+
+/* ── rótulo de IA y etiquetas de dato (pastilla) ── */
+.tag{display:inline-flex;align-items:center;gap:16px;padding:14px 28px;border-radius:999px;background:rgba(10,12,17,.84);border:1px solid rgba(255,255,255,.16);box-shadow:0 14px 36px rgba(0,0,0,.38);font-family:"DM Sans",sans-serif;font-weight:500;color:#F6F8FB;font-size:34px;letter-spacing:.01em;white-space:nowrap}
+.tag i{flex:none;width:15px;height:15px;border-radius:50%;background:var(--acc);box-shadow:0 0 18px var(--acc)}
+.tag.bajo i{background:var(--bad);box-shadow:0 0 18px var(--bad)}
+.tag-d{font-size:42px;padding:14px 28px}
+.tag b,.rt b{font-family:"Spline Sans Mono",monospace;font-weight:500}
+.drow{display:flex;align-items:center;gap:14px}
+
+
+
+/* ── placas de evidencia (regla, lecciones, puntaje del Motor 6) ── */
+.pl{position:absolute;left:0;top:0;width:1080px;height:1920px;overflow:hidden;background:linear-gradient(180deg,#10141B 0%,#0A0C11 100%);z-index:4}
+.ab{position:absolute}
+.ref{position:absolute;border-radius:24px;overflow:hidden;border:4px solid rgba(255,255,255,.22);background:#0A0C11;box-shadow:0 22px 50px -16px rgba(0,0,0,.7)}
+.ref img{display:block;width:100%;height:100%;object-fit:cover}
+.cen{position:absolute;left:0;width:1080px;display:flex;justify-content:center}
+.trk{position:absolute;height:26px;border-radius:13px;background:#2B303A;overflow:hidden}
+.trk .zona{position:absolute;top:0;bottom:0;background:var(--acc);opacity:.9}
+.mkv{position:absolute;width:6px;margin-left:-3px;border-radius:3px;background:var(--acc);box-shadow:0 0 16px rgba(16,194,107,.6)}
+.mkl{position:absolute;transform:translateX(-50%)}
+.ax{position:absolute;font-family:"Spline Sans Mono",monospace;font-weight:500;font-size:42px;line-height:1.2;color:var(--mut);white-space:nowrap}
+.ax.r{text-align:right}
+.rt{position:absolute;font-family:"DM Sans",sans-serif;font-weight:500;font-size:40px;line-height:1.2;color:#F6F8FB;white-space:nowrap}
+.rl{position:absolute;height:10px;border-radius:5px;background:#2B303A}
+.dot{position:absolute;width:34px;height:34px;margin-left:-17px;margin-top:-17px;border-radius:50%}
+.dot.s{border:5px solid #F6F8FB;background:#0A0C11}
+.dot.f{background:var(--acc);box-shadow:0 0 18px rgba(16,194,107,.5)}
+.dot.f.bajo{background:var(--bad);box-shadow:0 0 18px rgba(255,122,102,.5)}
+.vl{position:absolute;font-family:"Spline Sans Mono",monospace;font-weight:500;font-size:38px;line-height:1.2;color:#F6F8FB;white-space:nowrap;transform:translateX(-50%);background:rgba(10,12,17,.92);padding:0 10px;border-radius:10px}
+.vl.bajo{color:var(--bad)}
+.barring{position:absolute;border:5px solid #F6F8FB;border-radius:18px;box-shadow:0 0 22px rgba(246,248,251,.35)}
+
+
+/* ── G4: fotos a pantalla completa (el contenedor viaja en el empuje y recorta; la <img> hace el empuje lento) ── */
+.ph{position:absolute;left:0;top:0;width:1080px;height:1920px;overflow:hidden;background:#0A0C11}
+.ph img{position:absolute;left:0;top:0;width:1080px;height:1920px;object-fit:cover;display:block}
+/* imagen que cae justo en el piso (D, 0,702): ni verde ni coral, para no anunciarla como aprobada */
+.tag.ne i{background:#F6F8FB;box-shadow:0 0 18px rgba(246,248,251,.55)}
+.dot.f.ne{background:#F6F8FB;box-shadow:0 0 18px rgba(246,248,251,.5)}
+.vl.ne{color:#F6F8FB}
+/* lección 2: tres escenas de B (fichas) y las dos fotos del café con su pie */
+.chip{position:absolute;border-radius:28px;background:linear-gradient(158deg,var(--ink2) 0%,var(--ink) 62%);border:1px solid var(--hair);overflow:hidden}
+.chip .rt{position:absolute;left:0;right:0;top:12px;text-align:center}
+.chip .cn{position:absolute;left:0;right:0;top:58px;text-align:center;font-family:"Spline Sans Mono",monospace;font-weight:500;font-size:84px;line-height:1;color:var(--acc)}
+.chip .cn.bajo{color:var(--bad)}
+.cph{position:absolute;border-radius:24px;overflow:hidden;border:4px solid rgba(255,255,255,.22);background:#0A0C11;box-shadow:0 22px 50px -16px rgba(0,0,0,.7)}
+.cph img{display:block;width:100%;height:100%;object-fit:cover}
+.cap{display:flex;flex-direction:column;align-items:center;gap:2px;white-space:nowrap}
+.cap .cv{font-family:"Spline Sans Mono",monospace;font-weight:500;font-size:48px;line-height:1.1;color:var(--acc)}
+.cap .cv.bajo{color:var(--bad)}
+/* el número es el dato de cada escena: más grande que el resto de la pastilla */
+.tag.dg{padding:8px 30px 10px}
+.tag.dg b{font-size:64px;line-height:1}
+
+/* ── 2da pasada (revisión 1) ── */
+/* rótulo de IA a 40 px (H7) */
+.tag.tag-r{font-size:40px;padding:14px 30px}
+/* la nota del ruido (lección 1): texto principal, 44 px, blanco pleno (H3+H7) */
+.note{font-family:"DM Sans",sans-serif;font-weight:500;font-size:44px;line-height:1.2;color:#F6F8FB;text-align:center;text-wrap:balance;max-width:940px}
+/* franja entre 0,66 y 0,70 sobre la escala de la lección 1 */
+.ruido{position:absolute;background:rgba(246,248,251,.15);border-left:2px solid rgba(246,248,251,.45);border-right:2px solid rgba(246,248,251,.45)}
+/* lección 2: tabla de A y B en tres escenas */
+.thd{position:absolute;text-align:center;font-family:"DM Sans",sans-serif;font-weight:500;font-size:38px;line-height:1.2;color:rgba(246,248,251,.92);white-space:nowrap}
+.rl2{position:absolute;font-family:"DM Sans",sans-serif;font-weight:500;font-size:40px;line-height:1.2;color:#F6F8FB;white-space:nowrap}
+.chip.s .cn{top:18px;font-size:64px}
+
+/* ── G5 ── */
+/* acento de tarjeta en coral (lo que sale bajo el piso) */
+.t b.bad{color:var(--bad)}
+.t b.late.bad{color:var(--txt)}
+/* caja de cara (la caja SCRFD con margen): verde si pasa el piso, coral si no; hace el mismo empuje lento que la foto */
+.fz{position:absolute}
+.fbox{position:absolute;left:0;top:0;right:0;bottom:0;border:5px solid var(--acc);border-radius:26px;box-shadow:0 0 26px rgba(16,194,107,.55),0 0 0 2px rgba(0,0,0,.28);opacity:0}
+.fbox.bad{border-color:var(--bad);box-shadow:0 0 26px rgba(255,122,102,.55),0 0 0 2px rgba(0,0,0,.28)}
+/* ventanas de cuadro (clip crudo) y lupa */
+.win{position:absolute;overflow:hidden;border-radius:24px;border:4px solid rgba(255,255,255,.28);background:#0A0C11;box-shadow:0 22px 50px -16px rgba(0,0,0,.7)}
+.win img{position:absolute;left:0;top:0;display:block;width:100%;height:100%}
+.lupa{position:absolute;border-radius:28px;border:6px solid var(--acc);background-repeat:no-repeat;box-shadow:0 22px 50px -16px rgba(0,0,0,.7),0 0 26px rgba(16,194,107,.35)}
+.lupa.bad{border-color:var(--bad);box-shadow:0 22px 50px -16px rgba(0,0,0,.7),0 0 26px rgba(255,122,102,.35)}
+/* aro sobre el letrero inventado: coral (lo que está mal) */
+.aro{position:absolute;border:6px solid var(--bad);border-radius:50%;box-shadow:0 0 22px rgba(255,122,102,.55),0 0 0 2px rgba(0,0,0,.28)}
+/* escala ampliada de la razón 2: corchete de ±0,03, marcas, valores */
+.brk{position:absolute;height:18px;border:4px solid #F6F8FB;border-bottom:0;border-radius:10px 10px 0 0}
+.tkm{position:absolute;width:4px;height:14px;background:rgba(246,248,251,.7);border-radius:2px}
+.ax.c{text-align:center}
+.vl.g{font-size:48px;line-height:1.2}
+.note.g{font-family:"Spline Sans Mono",monospace;font-weight:500;font-size:48px}
+.cap2{font-family:"DM Sans",sans-serif;font-weight:500;font-size:44px;line-height:1.2;color:#F6F8FB;white-space:nowrap}
+/* lección: tres filas (miniatura + nombre) y la caja de «imagen entera» */
+.thumb{position:absolute;border-radius:26px;border:5px solid rgba(255,255,255,.28);background-color:#10141B;background-repeat:no-repeat;overflow:hidden;box-shadow:0 18px 40px -12px rgba(0,0,0,.7)}
+.thumb .trk{position:absolute}
+.rowt{position:absolute;font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:56px;line-height:1.1;color:#F6F8FB;white-space:nowrap}
+.anillo{position:absolute;border:6px solid var(--acc);border-radius:44px;box-shadow:0 0 34px rgba(16,194,107,.45);opacity:0}
+/* paso 2: las 8 referencias en fila */
+.ref.q{border-radius:16px;border-width:3px}
+
+/* G5 2da pasada (3ra: «el motor»): «Lo difuminé: lo inventó el motor.» junto al aro; el nombre de las filas de la lección entra en 52 px */
+.call{position:absolute;padding:12px 24px 14px;border-radius:26px;background:rgba(10,12,17,.88);border:1px solid rgba(255,255,255,.22);border-left:8px solid var(--bad);font-family:"DM Sans",sans-serif;font-weight:500;font-size:38px;line-height:1.2;color:#F6F8FB;white-space:nowrap;box-shadow:0 14px 36px rgba(0,0,0,.38)}
+.rowt{font-size:52px}
+
+/* revisión 1 (11-oct-2026, H6): los NOMBRES de herramienta (etiquetas de placa, nombre dentro de las pastillas, marcas de la escala) a 40-44 px: son el contenido de D-N1 y en un teléfono de 390 px el 34 quedaba en ~12 px */
+.tag.tool{font-size:42px;padding:14px 30px}

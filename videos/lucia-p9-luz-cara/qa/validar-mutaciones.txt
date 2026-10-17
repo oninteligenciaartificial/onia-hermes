@@ -1,0 +1,57 @@
+parecido: RECHAZADO correctamente
+créditos: RECHAZADO correctamente
+brillo: RECHAZADO correctamente
+cara 139: RECHAZADO correctamente
+cara 347: RECHAZADO correctamente
+todas las caras <200: RECHAZADO correctamente
+H1 rev.1: «Seedance parte de 139 px» como única mención de tamaño (pantalla): RECHAZADO correctamente
+H1 rev.1: «Seedance parte de 139 px» como única mención de tamaño (pie): RECHAZADO correctamente
+H1 rev.1: etiqueta sin «del clip original»: RECHAZADO correctamente
+H5 rev.2: límite de cara sin «(clip original)»: RECHAZADO correctamente
+H1 rev.3: límite de cara con la versión de 19 palabras de la v3: RECHAZADO correctamente
+H1 rev.3: límite de cara sin «Ruido ±0,03»: RECHAZADO correctamente
+H1 rev.3: límite de cara que deja de nombrar a Seedance («solo Kling»): RECHAZADO correctamente
+H3 rev.1: titular afirmativo: RECHAZADO correctamente
+H6 rev.1: delta de brillo con decimal en la pastilla: RECHAZADO correctamente
+cifra pantalla: RECHAZADO correctamente
+cifra pie: RECHAZADO correctamente
+declaración IA pie: RECHAZADO correctamente
+H1 rev.2: aviso de la toma de Seedance borrado de la pantalla: RECHAZADO correctamente
+H1 rev.2: «fotos de puntaje» en vez de «fotos con que se compara» (pastilla): RECHAZADO correctamente
+H3 rev.3: «fotos con que se mide» (formulación vieja) en la pastilla: RECHAZADO correctamente
+H3 rev.3: «fotos con que se mide» (formulación vieja) en la nota del asterisco: RECHAZADO correctamente
+H3 rev.3: «fotos con que se mide el parecido» (formulación vieja) en el pie: RECHAZADO correctamente
+H1 rev.2: nota del asterisco borrada de la placa: RECHAZADO correctamente
+H1 rev.2: nota del asterisco con otra cantidad de fotos: RECHAZADO correctamente
+H1 rev.2: fila de Seedance sin asterisco: RECHAZADO correctamente
+H1 rev.2: asterisco también en la fila de Kling: RECHAZADO correctamente
+H5 rev.3: pie sin definir R1 a R8 («ocho fotos oficiales» a secas): RECHAZADO correctamente
+H5 rev.3: pie sin aclarar con cuántas fotos se calcularon 0,79 a 0,72 y 0,71 a 0,80: RECHAZADO correctamente
+H5 rev.3: pie sin aclarar que 4 fotos puntúan más bajo (el 0,72 de 8 no es el 0,72 de 4): RECHAZADO correctamente
+H5 rev.3: pie con las dos diferencias sin decir con cuántas fotos: RECHAZADO correctamente
+H2 rev.2: pie sin el dato de las 2 fotos que Seedance recibió como entrada: RECHAZADO correctamente
+H2 rev.2: pie sin el hecho de la foto de arranque K1: RECHAZADO correctamente
+H2 rev.2: pie con «Kling no recibió ninguna» (imprecisa): RECHAZADO correctamente
+H3 rev.2: pie con el sentido invertido («el sentido cambia»): RECHAZADO correctamente
+H3 rev.2: pie con otra cifra de la prueba estricta: RECHAZADO correctamente
+H3 rev.2: plan con otra cifra de la prueba estricta: RECHAZADO correctamente
+H3 rev.2: plan con otras fotos que nadie recibió: RECHAZADO correctamente
+Retirada: «efecto estimado ≈ 0,03» en la pastilla de Seedance: RECHAZADO correctamente
+Retirada: «ventaja ≈ 0,03» en la pastilla de Seedance: RECHAZADO correctamente
+Retirada: «ventaja» en la nota del asterisco: RECHAZADO correctamente
+Retirada: «≈ 0,03» en el pie: RECHAZADO correctamente
+Retirada: «dentro del ruido» en el pie: RECHAZADO correctamente
+Retirada: «ventaja» en el pie: RECHAZADO correctamente
+Retirada: «dentro del ruido» en la voz: RECHAZADO correctamente
+H6 rev.2: orden de entrada con el límite de cara antes de «Una toma cada uno»: RECHAZADO correctamente
+H2 rev.3: la nota del asterisco entra después del brillo: RECHAZADO correctamente
+H2 rev.3: la nota del asterisco entra después de «Una toma cada uno»: RECHAZADO correctamente
+H2 rev.3: la nota del asterisco vuelve a entrar a 13,6 s (1,8 s de 0,80* sin nota), con el orden intacto: RECHAZADO correctamente
+H2 rev.3: el aviso de la pastilla vuelve a entrar a 6,5 s (0,5 s de 0,80 sin aviso): RECHAZADO correctamente
+H2 rev.3: la pila vertical de la placa no sigue el orden de entrada (nota debajo del brillo): RECHAZADO correctamente
+H6 rev.3: CTA sin text-wrap: balance («prueba.» huérfana): RECHAZADO correctamente
+H5 rev.1: letrero inventado ausente del pie: RECHAZADO correctamente
+H5 rev.1: scrim del letrero ausente: RECHAZADO correctamente
+H4 rev.1: la voz habla decimales: RECHAZADO correctamente
+H4 rev.1: L3 vuelve a cruzar el corte («Kling 3.0 std»): RECHAZADO correctamente
+EXIT 0

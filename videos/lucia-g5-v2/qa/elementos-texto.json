@@ -1,0 +1,200 @@
+[
+ {
+  "id": "rotulo",
+  "que": "rótulo de IA",
+  "texto": "Lucía Antelo · personaje IA de Onia",
+  "n": 6,
+  "a": 0,
+  "b": 3,
+  "min": 2.3999999999999995
+ },
+ {
+  "id": "dA-g",
+  "que": "gancho dato",
+  "texto": "parecido 0,81",
+  "n": 2,
+  "a": 1.13,
+  "b": 2.9,
+  "min": 1
+ },
+ {
+  "id": "sc-ax0",
+  "que": "p2 «0»",
+  "texto": "0",
+  "n": 1,
+  "a": 7.133,
+  "b": 10.5,
+  "min": 0.6499999999999999
+ },
+ {
+  "id": "sc-ax1",
+  "que": "p2 «idéntica · 1»",
+  "texto": "idéntica · 1",
+  "n": 2,
+  "a": 9.183,
+  "b": 10.5,
+  "min": 1
+ },
+ {
+  "id": "sc-mkl",
+  "que": "p2 «piso»",
+  "texto": "piso · 0,70",
+  "n": 2,
+  "a": 9.463000000000001,
+  "b": 10.5,
+  "min": 1
+ },
+ {
+  "id": "dA-e3",
+  "que": "ejemplo B dato",
+  "texto": "Kling O1 Image · parecido 0,35",
+  "n": 5,
+  "a": 11.03,
+  "b": 13.1,
+  "min": 2.05
+ },
+ {
+  "id": "r1-tag",
+  "que": "r1 «89 px»",
+  "texto": "89 px",
+  "n": 2,
+  "a": 14.675,
+  "b": 16.375,
+  "min": 1
+ },
+ {
+  "id": "r1-nota",
+  "que": "r1 nota (ya está al llegar)",
+  "texto": "Bajo 200 px, el medidor avisa.",
+  "n": 6,
+  "a": 13.575,
+  "b": 16.375,
+  "min": 2.3999999999999995
+ },
+ {
+  "id": "tool-r1",
+  "que": "r1 herramienta (ya está al llegar)",
+  "texto": "Kling O3",
+  "n": 2,
+  "a": 13.575,
+  "b": 16.375,
+  "min": 1
+ },
+ {
+  "id": "r2-mkl",
+  "que": "r2 «piso»",
+  "texto": "piso · 0,70",
+  "n": 2,
+  "a": 16.575,
+  "b": 19.291666666667,
+  "min": 1
+ },
+ {
+  "id": "r2-zoom",
+  "que": "r2 «Zoom»",
+  "texto": "Zoom: 0,70 a 0,90",
+  "n": 4,
+  "a": 16.575,
+  "b": 19.291666666667,
+  "min": 1.7
+ },
+ {
+  "id": "tool-r2",
+  "que": "r2 herramienta (ya está al llegar)",
+  "texto": "Cinematic Studio 3.0 · mismo clip",
+  "n": 5,
+  "a": 16.575,
+  "b": 19.291666666667,
+  "min": 2.05
+ },
+ {
+  "id": "r2-m1",
+  "que": "r2 marca 0,75",
+  "texto": "0,75",
+  "n": 1,
+  "a": 16.575,
+  "b": 19.291666666667,
+  "min": 0.6499999999999999
+ },
+ {
+  "id": "r2-m2",
+  "que": "r2 marca 0,80",
+  "texto": "0,80",
+  "n": 1,
+  "a": 16.575,
+  "b": 19.291666666667,
+  "min": 0.6499999999999999
+ },
+ {
+  "id": "r2-m3",
+  "que": "r2 marca 0,85",
+  "texto": "0,85",
+  "n": 1,
+  "a": 16.575,
+  "b": 19.291666666667,
+  "min": 0.6499999999999999
+ },
+ {
+  "id": "r2-m4",
+  "que": "r2 marca 0,90",
+  "texto": "0,90",
+  "n": 1,
+  "a": 16.575,
+  "b": 19.291666666667,
+  "min": 0.6499999999999999
+ },
+ {
+  "id": "r2-v1",
+  "que": "r2 valor 1",
+  "texto": "0,77",
+  "n": 1,
+  "a": 17.175,
+  "b": 19.291666666667,
+  "min": 0.6499999999999999
+ },
+ {
+  "id": "r2-v2",
+  "que": "r2 valor 2",
+  "texto": "0,80",
+  "n": 1,
+  "a": 17.699,
+  "b": 19.291666666667,
+  "min": 0.6499999999999999
+ },
+ {
+  "id": "r2-bl",
+  "que": "r2 banda",
+  "texto": "±0,03",
+  "n": 1,
+  "a": 18.454,
+  "b": 19.291666666667,
+  "min": 0.6499999999999999
+ },
+ {
+  "id": "r3-call",
+  "que": "r3 «Lo difuminé» (ya está al llegar)",
+  "texto": "Lo difuminé: lo inventó el motor.",
+  "n": 6,
+  "a": 19.491666666666998,
+  "b": 21.916666666667,
+  "min": 2.3999999999999995
+ },
+ {
+  "id": "tool-r3",
+  "que": "r3 herramienta (ya está al llegar)",
+  "texto": "Seedance 2.0 Mini + referencias",
+  "n": 5,
+  "a": 19.491666666666998,
+  "b": 21.916666666667,
+  "min": 2.05
+ },
+ {
+  "id": "r3-num",
+  "que": "r3 número",
+  "texto": "parecido 0,80",
+  "n": 2,
+  "a": 20.622,
+  "b": 21.916666666667,
+  "min": 1
+ }
+]

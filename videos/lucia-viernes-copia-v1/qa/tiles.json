@@ -1,0 +1,122 @@
+[
+ {
+  "id": "rotulo",
+  "text": "Lucía Antelo · personaje IA de Onia",
+  "y": 1190,
+  "size": 40,
+  "card": false,
+  "clip": "s1",
+  "x": 80,
+  "w": 920
+ },
+ {
+  "id": "titulo",
+  "text": "Casi publico este 0,83.",
+  "y": 1282,
+  "size": 66,
+  "card": true,
+  "clip": "s1",
+  "x": 80,
+  "w": 920
+ },
+ {
+  "id": "dato",
+  "text": "Kling O1 Image · parecido 0,83",
+  "y": 1404,
+  "size": 42,
+  "card": true,
+  "clip": "s1",
+  "x": 80,
+  "w": 920
+ },
+ {
+  "id": "cap-k4",
+  "text": "Kling O1 Image una sola toma.",
+  "y": 1270,
+  "size": 42,
+  "card": true,
+  "clip": "s2",
+  "x": 80,
+  "w": 440
+ },
+ {
+  "id": "cap-r3",
+  "text": "Mirá la foto que recibió.",
+  "y": 1270,
+  "size": 42,
+  "card": true,
+  "clip": "s2",
+  "x": 560,
+  "w": 440
+ },
+ {
+  "id": "tile2",
+  "text": "Misma pose, ventana, taza.",
+  "y": 1406,
+  "size": 44,
+  "card": true,
+  "clip": "s2",
+  "x": 80,
+  "w": 920
+ },
+ {
+  "id": "fila-a",
+  "text": "Con esa foto: 0,93 0 1",
+  "y": 360,
+  "size": 48,
+  "card": true,
+  "clip": "placa",
+  "x": 80,
+  "w": 920
+ },
+ {
+  "id": "fila-b",
+  "text": "Con las otras siete: 0,56 a 0,73 Fotos oficiales entre sí: 0,51 a 0,72",
+  "y": 559,
+  "size": 48,
+  "card": true,
+  "clip": "placa",
+  "x": 80,
+  "w": 920
+ },
+ {
+  "id": "fila-c",
+  "text": "Promedio de las 4 que no recibió: 0,74 piso 0,70",
+  "y": 884,
+  "size": 48,
+  "card": true,
+  "clip": "placa",
+  "x": 80,
+  "w": 920
+ },
+ {
+  "id": "nota-copia",
+  "text": "Casi copia: no prueba identidad.",
+  "y": 765,
+  "size": 50,
+  "card": true,
+  "clip": "placa",
+  "x": 80,
+  "w": 920
+ },
+ {
+  "id": "leccion",
+  "text": "Mirá el parecido foto por foto.",
+  "y": 1083,
+  "size": 60,
+  "card": true,
+  "clip": "placa",
+  "x": 80,
+  "w": 920
+ },
+ {
+  "id": "cta",
+  "text": "Seguime: cada semana, una prueba.",
+  "y": 1245,
+  "size": 66,
+  "card": true,
+  "clip": "placa",
+  "x": 80,
+  "w": 920
+ }
+]

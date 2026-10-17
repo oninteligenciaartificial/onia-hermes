@@ -1,0 +1,34 @@
+ventana legible medida en el DOM (opacidad ≥ 0,9 y ≥ 95 % dentro del lienzo), cuadro a cuadro:
+  ok  rotulo    6 pal  0.00–3.13 s  3.13 s (pide 2.40)  «Lucía Antelo · personaje IA de Onia»
+  ok  dA-g      4 pal  1.04–2.96 s  1.92 s (pide 1.70)  «Seedream 4.5 · parecido 0,81»
+  ok  sc-ax0    1 pal  7.13–10.58 s  3.46 s (pide 0.65)  «0»
+  ok  sc-ax1    2 pal  7.13–10.67 s  3.54 s (pide 1.00)  «idéntica · 1»
+  ok  sc-mkl    2 pal  9.38–10.67 s  1.29 s (pide 1.00)  «piso · 0,70»
+  ok  dA-e3     5 pal  10.96–13.13 s  2.17 s (pide 2.05)  «Kling O1 Image · parecido 0,35»
+  ok  r1-tag    2 pal  14.54–16.50 s  1.96 s (pide 1.00)  «89 px»
+  ok  r1-nota   6 pal  13.54–16.50 s  2.96 s (pide 2.40)  «Bajo 200 px, el medidor avisa.»
+  ok  tool-r1   2 pal  13.50–16.46 s  2.96 s (pide 1.00)  «Kling O3»
+  ok  r2-mkl    2 pal  16.50–19.38 s  2.88 s (pide 1.00)  «piso · 0,70»
+  ok  r2-zoom   4 pal  16.58–19.46 s  2.88 s (pide 1.70)  «Zoom: 0,70 a 0,90»
+  ok  tool-r2   5 pal  16.54–19.42 s  2.88 s (pide 2.05)  «Cinematic Studio 3.0 · mismo clip»
+  ok  r2-m1     1 pal  16.50–19.42 s  2.92 s (pide 0.65)  «0,75»
+  ok  r2-m2     1 pal  16.54–19.42 s  2.88 s (pide 0.65)  «0,80»
+  ok  r2-m3     1 pal  16.54–19.46 s  2.92 s (pide 0.65)  «0,85»
+  ok  r2-m4     1 pal  16.58–19.46 s  2.88 s (pide 0.65)  «0,90»
+  ok  r2-v1     1 pal  17.21–19.42 s  2.21 s (pide 0.65)  «0,77»
+  ok  r2-v2     1 pal  17.75–19.42 s  1.67 s (pide 0.65)  «0,80»
+  ok  r2-bl     1 pal  18.50–19.42 s  0.92 s (pide 0.65)  «±0,03»
+  ok  r3-call   6 pal  19.46–22.04 s  2.58 s (pide 2.40)  «Lo difuminé: lo inventó el motor.»
+  ok  tool-r3   5 pal  19.46–22.04 s  2.58 s (pide 2.05)  «Seedance 2.0 Mini + referencias»
+  ok  r3-num    2 pal  20.54–22.04 s  1.50 s (pide 1.00)  «parecido 0,80»
+  ok  c1        6 pal  0.00–3.29 s  3.29 s (pide 2.40)  «¿Cómo sé que sigue siendo ella?»
+  ok  c2        4 pal  3.33–5.21 s  1.88 s (pide 1.70)  «Ocho fotos oficiales suyas.»
+  ok  c3        6 pal  5.25–8.29 s  3.04 s (pide 2.40)  «Un número, de 0 a 1.»
+  ok  c4        5 pal  8.38–10.63 s  2.25 s (pide 2.05)  «Piso, 0,70. Lo elegí yo.»
+  ok  c5        5 pal  10.67–13.50 s  2.83 s (pide 2.05)  «Bajo el piso: otra persona.»
+  ok  c6        6 pal  13.54–16.50 s  2.96 s (pide 2.40)  «Cara chica: lo reviso a ojo.»
+  ok  c7        5 pal  16.54–19.42 s  2.88 s (pide 2.05)  «Esa variación cabe en ±0,03.»
+  ok  c8        6 pal  19.46–22.04 s  2.58 s (pide 2.40)  «El número no ve letreros inventados.»
+  ok  c9        4 pal  22.08–24.17 s  2.08 s (pide 1.70)  «Mirá la imagen entera.»
+  ok  c10       5 pal  24.25–26.63 s  2.38 s (pide 2.05)  «Seguime: cada semana, una prueba.»
+✔ todas las ventanas medidas alcanzan la regla de lectura

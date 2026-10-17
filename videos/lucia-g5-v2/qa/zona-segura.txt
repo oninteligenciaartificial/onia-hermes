@@ -1,0 +1,26 @@
+muestras: 213 instantes (cada 3 cuadros), 720 cajas de texto medidas
+margen mínimo entre el mentón y el texto que queda debajo: 59 px (t=3.125 s, rotulo/tag: texto desde y=720, mentón y=661; la regla pide ≥ 40)
+tamaños de texto en el DOM (px: cuántos elementos): {"38":1,"40":1,"42":17,"44":2,"48":3,"64":3,"66":20}
+  ok  r2 punta baja 0,77 (0.771)               medido 412.0  esperado 412.0
+  ok  r2 punta alta 0,80 (0.799)               medido 536.0  esperado 536.0
+  ok  r2 banda (borde izq. = 0.754)            medido 338.0  esperado 338.0
+  ok  r2 banda (borde der. = 0.814)            medido 602.0  esperado 602.0
+  ok  r2 corchete (borde izq.)                 medido 338.0  esperado 338.0
+  ok  r2 corchete (borde der.)                 medido 602.0  esperado 602.0
+  ok  r2 pista (x = 0,70)                      medido 100.0  esperado 100.0
+  ok  r2 pista (x = 0,90)                      medido 980.0  esperado 980.0
+  ok  r2 marca del piso (x = 0,70)             medido 100.0  esperado 100.0
+  ok  r2 marca 0,75 (centro)                   medido 320.0  esperado 320.0
+  ok  r2 marca 0,80 (centro)                   medido 540.0  esperado 540.0
+  ok  r2 marca 0,85 (centro)                   medido 760.0  esperado 760.0
+  ok  r2 marca 0,90 (centro)                   medido 980.0  esperado 980.0
+  ok  p2 cursor en 0 (sale de x = 0)           medido 100.0  esperado 100.0
+  ok  p2 cursor llega a 1 (x = 1)              medido 980.0  esperado 980.0
+  ok  r2 valor 0,77                            dice «0,77»  esperado «0,77»
+  ok  r2 valor 0,80                            dice «0,80»  esperado «0,80»
+  ok  r3 número en pantalla                    dice «0,80»  esperado «0,80»
+  ok  p2 marca 0,70                            medido 716.0  esperado 716.0
+  ok  p2 pista (x = 0)                         medido 100.0  esperado 100.0
+  ok  p2 pista (x = 1)                         medido 980.0  esperado 980.0
+  ok  p2 zona verde (borde izq. = 0,70)        medido 716.0  esperado 716.0
+✔ todo el texto dentro de la zona segura, sin pisarse, ≥ 34 px, y los datos están donde dice el número

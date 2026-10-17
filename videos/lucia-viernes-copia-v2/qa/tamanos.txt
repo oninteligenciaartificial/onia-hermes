@@ -1,0 +1,19 @@
+Tamaños de letra a 1080 px de ancho (cada nodo de texto medido en el DOM; el mínimo absoluto es 40 px, general 44 px y 48 px en los textos grandes: letra de beats ≥ 56 px).
+
+texto | nodo (tamaño · fuente) | contenido | mínimo exigido
+---|---|---|---
+rotulo | 48 px · DM Sans | Lucía Antelo · personaje IA de Onia | 48
+titulo | 66 px · Bricolage Grotesque | Casi publico este 0,83. | 48
+dato | 48 px · DM Sans | Kling O1 Image · parecido 0,83 | 48
+cap-k4 | 48 px · DM Sans | Kling O1 Image una sola toma. | 48
+cap-r3 | 48 px · DM Sans | Mirá una foto suya que recibió. | 48
+tile2 | 52 px · DM Sans | Misma pose, ventana, taza. | 48
+beat-a | 56 px · DM Sans | Con esa foto: | 48
+beat-a | 112 px · Bricolage Grotesque | 0,93 | 48
+cta | 66 px · Bricolage Grotesque | Seguime: cada semana, una prueba. | 48
+beat-b | 56 px · DM Sans | Con sus otras 7 fotos: | 48
+beat-b | 112 px · Bricolage Grotesque | 0,56–0,73 | 48
+beat-c | 64 px · Bricolage Grotesque | Casi copia: no prueba identidad. | 48
+
+Letra más chica de toda la pieza: 48 px.
+EXIT 0

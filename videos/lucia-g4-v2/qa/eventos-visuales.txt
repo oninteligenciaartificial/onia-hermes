@@ -1,0 +1,12 @@
+eventos visuales nuevos: 65 en 28.04 s (más el inicio 0,1 s y el final) = 23.2 por 10 s
+por 10 s: 0-10.0 s: 25 · 10-20.0 s: 28 · 20-28.0 s: 12
+mayores huecos entre eventos:
+  6.40 → 8.08 s: 1.68 s   (c3 acento → costura)
+  17.47 → 18.97 s: 1.50 s   (l1 pulso e → l1 nota 2)
+  21.17 → 22.63 s: 1.46 s   (l1 pulso f → costura)
+  26.20 → 27.63 s: 1.43 s   (c9 acento → CTA pulso)
+  18.97 → 20.17 s: 1.20 s   (l1 nota 2 → l1 franja de ruido)
+  3.40 → 4.50 s: 1.10 s   (c2 acento → costura)
+  24.30 → 25.38 s: 1.07 s   (c8 acento → costura)
+  13.50 → 14.50 s: 1.00 s   (c6 acento, E sello → E énfasis sello)
+✔ hueco máximo 1.68 s (≤ 2.0 s)

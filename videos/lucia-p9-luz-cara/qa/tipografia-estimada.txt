@@ -1,0 +1,1 @@
+OBSOLETO en la v2: el modelo estático (scripts/estimar-tipografia.py, requiere fontTools) no se corrió en este contenedor y no se instala nada. La medida vigente es DOM real: qa/layout-dom.txt y qa/medir-dom.txt.

@@ -1,0 +1,743 @@
+#!/usr/bin/env node
+// Lucía · G2 v2.4 «¿Quién pierde la cara? Seis clips con la misma orden» (≈ 27,8 s, 1080x1920, 24 fps) — re-corte de G2 (58 s, muda) con la regla de aire muerto, la revisión 1 aplicada, el hallazgo del 11-oct
+// (dos clips recibieron fotos de las 8 con que se compara) y la revisión 2 (la foto de arranque K1 se hizo con R1, R3, R6 y R7: ningún clip es independiente; aviso en el gancho, sobre el clip de Kling O3, en la lección y
+// al principio del pie; cada cifra y cada frase del pie se validan contra la medición, plan.json → fuga_refs; la resta de controles de la v2.2 se retiró: ver RETIRADAS en prohibidas.mjs).
+// v2.4 (revisión 3 + 4 correcciones del verificador): aviso del gancho con el CLIP de sujeto («Clip 0,82: recibió 4 fotos de comparación», bajo las miniaturas), «fotos con que se compara», pie con las tres salvedades de la
+// medición (todo construido desde el archivo), sin ids R1…R8, en pasado y con un solo sentido de «partir de», «en el clip original (720p)», segundos VISIBLES contados cuadro a cuadro y el cierre K1 con lo medido (qa/face-gate.txt).
+// Lee guion-voz.txt (UNA línea por tramo; cada tramo dura caracteres/17 s + hueco, scripts/voz.mjs; con duraciones.json manda la voz REAL) y plan.json (tiempos anclados a los tramos: «T6+0.8»)
+// → resuelve todos los tiempos → valida reglas de texto, de voz, de CTA y LOS NÚMEROS contra v4/PROCEDENCIA.jsonl → escribe index.html y plan.resuelto.json.
+// 0 créditos: mismos clips y misma foto de G2 (cinco de los seis clips parten de la foto K1; Kling O3 solo recibió referencias). Método y trampas: .claude/skills/lucia/montaje-hyperframes.md. Plantilla: videos/lucia-g2/.
+// Uso:  node scripts/build.mjs   (copia el material si falta, valida e imprime la tabla de cortes)
+import { execFileSync } from 'node:child_process';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { buscarProhibidas, buscarProhibidasPie, buscarRecomendacion, buscarGenerales, buscarRetiradas, AVISO_PIE } from './prohibidas.mjs';
+import { cronograma, leerDuraciones, holgura, tablaCaben, ORIGINALES_V2_0 } from './voz.mjs';
+
+const P = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const plan0 = JSON.parse(fs.readFileSync(path.join(P, 'plan.json'), 'utf8'));
+const { w: W, h: H, fps: FPS } = plan0.lienzo;
+const ACC = plan0.acento, BAD = plan0.alerta;
+const Z = plan0.zona_segura;
+const FR = 1 / FPS;
+const E_IN = 0.18, E_OUT = 0.18;               // entrada y salida de las tarjetas: misma duración y distancia (80 px), eases espejados
+const PUSH = plan0.empuje.cuadros * FR;
+const SC = plan0.escala;
+const X = (v) => Math.round(SC.x0 + v * (SC.x1 - SC.x0));       // valor 0-1 → x del lienzo (los puntos salen de los datos, nunca a mano)
+const r2 = (v) => Math.round(v * 100 + 1e-7) / 100;             // 2 decimales, media hacia arriba (0,805 → 0,81; 0,785 → 0,79; 0,798 → 0,80)
+const f2 = (n) => +(+n).toFixed(6);
+// data-start SIEMPRE redondeado hacia abajo (6 decimales) y data-duration hacia arriba: si el inicio de un clip queda 3e-7 s DESPUÉS del cuadro, el render muestra el cuadro 0 dos veces
+// y el clip llega un cuadro atrasado (medido en esta pieza: Seedance 2.0 Mini y Kling O3 con el pico del PSNR en n−1).
+const fs_ = (n) => Math.floor(+n * 1e6 + 1e-3) / 1e6;
+const fc_ = (n) => Math.ceil(+n * 1e6 - 1e-3) / 1e6;
+const fm = (v) => v.toFixed(2).replace('.', ',');
+const fm1 = (v) => (Math.round(v * 10 + 1e-7) / 10).toFixed(1).replace('.', ',');
+const errores = [];
+
+// ───────────────────────── 0) material (se copia SOLO si falta; todo va al .gitignore) ─────────────────────────
+const R0 = path.resolve(P, '../..');
+const V4 = path.join(R0, 'hermes-content/references/modelos/lucia/v4');
+const KIT = path.join(V4, 'kit');
+const PM = path.join(V4, 'prueba-motores-20261008');
+const FONTS = path.join(R0, 'hermes-content/brand/fonts');
+const COPIAS = [
+  ['assets/k1.jpg', path.join(KIT, 'k1-1-recepcion-celular-4afffb96.jpg')],
+  ['assets/m1.mp4', path.join(KIT, 'k1-clip-mira-camara-e470ef4f.mp4')],
+  ['assets/m2.mp4', path.join(PM, 'kling-pro-9f43ee3c.mp4')],            // m2, m4 y m6 NO van en el video: solo dan la miniatura del gancho (6 clips)
+  ['assets/m3.mp4', path.join(PM, 'seedance-mini-a7f79a01.mp4')],
+  ['assets/m4.mp4', path.join(PM, 'seedance-mini-refs-dd2d7c91.mp4')],
+  ['assets/m5.mp4', path.join(PM, 'kling-omni-948a89d3.mp4')],
+  ['assets/m6.mp4', path.join(PM, 'cinema30-cc8fa519.mp4')],
+  ['assets/fonts/BricolageGrotesque-var-latin.woff2', path.join(FONTS, 'BricolageGrotesque-var-latin.woff2')],
+  ['assets/fonts/DMSans-var-latin.woff2', path.join(FONTS, 'DMSans-var-latin.woff2')],
+  ['assets/fonts/SplineSansMono-var-latin.woff2', path.join(FONTS, 'SplineSansMono-var-latin.woff2')],
+];
+for (const [dest, src] of COPIAS) {
+  const d = path.join(P, dest);
+  if (fs.existsSync(d)) continue;
+  if (!fs.existsSync(src)) { console.error(`✖ falta ${src}`); process.exit(1); }
+  fs.mkdirSync(path.dirname(d), { recursive: true });
+  fs.copyFileSync(src, d);
+}
+const curl = (url, out) => execFileSync('curl', ['-sSf', '-m', '120', '-o', out, url], { stdio: 'inherit' });
+const gs = path.join(P, 'assets/vendor/gsap.min.js');      // GSAP local (el render no puede depender de la red): 3.14.2, la versión del scaffold de HyperFrames 0.8.142
+if (!fs.existsSync(gs)) {
+  fs.mkdirSync(path.dirname(gs), { recursive: true });
+  const cands = ['lucia-g2', 'lucia-g3', 'lucia-g1'].map((n) => path.join(R0, 'videos', n, 'assets/vendor/gsap.min.js')).filter((f) => fs.existsSync(f));
+  if (cands.length) fs.copyFileSync(cands[0], gs); else curl('https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js', gs);
+}
+const ff = (args) => execFileSync('ffmpeg', ['-v', 'error', '-y', ...args], { stdio: 'inherit' });
+const A = (n) => path.join(P, 'assets', n);
+// 8 referencias oficiales (0 cr: URL públicas del manifiesto de v4/qa) → recortes de cara de 5 de ellas (assets/ref1-5.jpg)
+const manifest = JSON.parse(fs.readFileSync(path.join(R0, plan0.refs.manifest), 'utf8'));
+const refNames = Object.keys(manifest.refs);
+fs.mkdirSync(A('refs-orig'), { recursive: true });
+for (const m of plan0.refs.muestra) {
+  const out = A(`ref${m.id.slice(3)}.jpg`);
+  if (fs.existsSync(out)) continue;
+  const key = refNames.find((k) => k.startsWith(m.fuente.split('_')[0] + '_'));
+  const url = manifest.refs[key];
+  const orig = A(`refs-orig/${key}${path.extname(url)}`);
+  if (!fs.existsSync(orig)) curl(url, orig);
+  const [ox, oy, s] = m.recorte;
+  ff(['-i', orig, '-vf', `crop=${s}:${s}:${ox}:${oy},scale=360:360:flags=lanczos`, '-frames:v', '1', '-q:v', '2', '-update', '1', out]);
+}
+// miniaturas de los SEIS clips del gancho (cuadro 90 = 3,75 s). El video solo muestra tres; el gancho promete seis y las seis miniaturas están a la vista.
+const SEIS = [1, 2, 3, 4, 5, 6];
+for (const n of SEIS) {
+  const out = A(`th${n}.jpg`);
+  if (!fs.existsSync(out)) ff(['-i', A(`m${n}.mp4`), '-vf', `select=eq(n\\,${plan0.gancho.miniaturas.cuadro}),scale=272:484:flags=lanczos`, '-frames:v', '1', '-vsync', '0', '-q:v', '2', '-update', '1', out]);
+}
+
+// ───────────────────────── 1) la voz manda: tramos = líneas de guion-voz.txt (scripts/voz.mjs: 17 CARACTERES por segundo, o la duración real en duraciones.json) ─────────────────────────
+const VZ = plan0.voz;
+const vozTxt = fs.readFileSync(path.join(P, VZ.archivo), 'utf8');
+const crono = cronograma(vozTxt, VZ, { duraciones: leerDuraciones(P) });
+const lineas = crono.lineas;
+const sumaChars = crono.chars;
+if (sumaChars > VZ.max_caracteres) errores.push(`guion-voz.txt: ${sumaChars} caracteres (máx ${VZ.max_caracteres})`);
+if ([...lineas.join('\n')].length > VZ.max_caracteres) errores.push(`guion-voz.txt: con los saltos de línea pasa de ${VZ.max_caracteres} caracteres`);
+const tramos = crono.tramos;
+for (const t of tramos) {
+  if (t.palabras < VZ.min_palabras_por_linea) errores.push(`tramo ${t.i} «${t.texto}»: ${t.palabras} palabras (mín ${VZ.min_palabras_por_linea}: una línea más corta no cabe en una frase natural)`);
+  for (const f of buscarProhibidas(t.texto)) errores.push(`tramo ${t.i}: frase prohibida «${f}» en la voz`);
+  for (const f of buscarRecomendacion(t.texto)) errores.push(`tramo ${t.i}: «${f}» suena a recomendación (D-N1: es una prueba, una toma, no una regla)`);
+  for (const f of buscarGenerales(t.texto)) errores.push(`tramo ${t.i}: «${f}» afirma una regla general (la foto sola no siempre pierde la cara: Cinematic Studio 3.0 dio 0,79 a 0,77)`);
+  for (const f of buscarRetiradas(t.texto)) errores.push(`tramo ${t.i}: «${f}» es una frase RETIRADA en la v2.3 (prohibidas.mjs → RETIRADAS)`);
+  if (t.lecturaCorta) errores.push(`tramo ${t.i}: la lectura pide ${t.pide} cuadros y el hueco ≤ ${VZ.gap_max} s no lo permite (cambiar la línea o la tarjeta)`);
+  // H1: cada línea CABE a 17 c/s: termina antes de que empiece la siguiente y deja ≤ gap_max de silencio
+  const h = holgura(t, VZ.cps);
+  if (!t.ultimo && (h < -1e-9 || h > VZ.gap_max + 1e-9)) errores.push(`tramo ${t.i} «${t.texto}»: a ${VZ.cps} c/s ${h < 0 ? 'pisa a la siguiente' : 'deja ' + h.toFixed(2) + ' s de silencio'} (hueco ${h.toFixed(3)} s; permitido 0 a ${VZ.gap_max})`);
+}
+const NT = tramos.length;
+const FIN = fs_(tramos[NT - 1].w);       // hacia ABAJO a 6 decimales: 667 cuadros / 24 no es decimal exacto y un redondeo hacia arriba (27,791667) haría que el render cuente un cuadro de más
+tramos[NT - 1].w = FIN;
+for (let k = 0; k + 1 < NT; k++) {
+  const hueco = (tramos[k + 1].sf - (tramos[k].sf + tramos[k].df)) / FPS;
+  if (hueco > 0.25 + 1e-9) errores.push(`hueco entre las líneas ${k + 1} y ${k + 2}: ${hueco.toFixed(3)} s (máx 0,25)`);
+}
+const DUR = FIN;
+if (DUR < 26 || DUR > 30) errores.push(`duración ${DUR} s fuera de 26-30 s`);
+
+// resolución de anclas: «T6», «T6+0.8», «T7-6f», «E6», «W6», «FIN»
+const RE = /^([TEW])(\d+)(?:([+-])(\d+(?:\.\d+)?)(f?))?$/;
+const resolver = (v) => {
+  if (v === 'FIN') return FIN;
+  if (typeof v !== 'string') return v;
+  const m = RE.exec(v);
+  if (!m) return v;
+  const k = +m[2];
+  if (k < 1 || k > NT) { errores.push(`ancla «${v}»: no hay tramo ${k}`); return 0; }
+  const tr = tramos[k - 1];
+  let base = m[1] === 'T' ? tr.t : m[1] === 'E' ? tr.e : tr.w;
+  if (m[3]) { const d = +m[4] / (m[5] ? FPS : 1); base += m[3] === '+' ? d : -d; }
+  return base;
+};
+const walk = (o) => Array.isArray(o) ? o.map(walk) : (o && typeof o === 'object') ? Object.fromEntries(Object.entries(o).map(([k, v]) => [k, walk(v)])) : resolver(o);
+const plan = walk(plan0);
+plan.lienzo.duracion = DUR;
+plan.tramos = tramos;
+
+// ───────────────────────── 2) reglas (se corta el build si alguna falla) ─────────────────────────
+const nw = (t) => String(t).replace(/<[^>]+>/g, ' ').split(/\s+/).filter((x) => x && x !== '·' && x !== '→' && x !== '=').length;
+const palabras = (t) => nw(`${t.texto} ${t.acento || ''}`);
+for (const c of plan.tarjetas) {
+  const n = palabras(c), min = n * 0.35 + 0.3, dur = c.b - c.a;
+  if (n > 6) errores.push(`${c.id}: ${n} palabras (máx 6)`);
+  if (dur < min - 1e-9) errores.push(`${c.id}: dura ${dur.toFixed(3)} s y necesita ${min.toFixed(2)} s para ${n} palabras`);
+  if (c.id === 'c1' && c.a > 0.15 + 1e-9) errores.push('c1: la primera tarjeta entra después de 0,15 s');
+  if (c.acento_t != null && (c.acento_t < c.a + 0.5 - 1e-9 || c.acento_t > c.b - 0.5 + 1e-9)) errores.push(`${c.id}: acento_t ${c.acento_t} fuera de [a+0,5, b-0,5]`);
+  c.n_palabras = n; c.min_s = +min.toFixed(2);
+}
+const med = Object.fromEntries(plan.medios.map((m) => [m.id, m]));
+const tj = Object.fromEntries(plan.tarjetas.map((c) => [c.id, c]));
+for (const m of plan.medios) if (m.tipo === 'clip') {
+  const n = (m.b - m.a) * FPS + (m.media_inicio || 0) * FPS;
+  if (n > 145 + 1e-6) errores.push(`${m.id}: pide hasta el cuadro ${n.toFixed(2)} y el clip tiene 145`);
+  if (Math.abs(n - Math.round(n)) > 1e-3) errores.push(`${m.id}: ${n.toFixed(3)} cuadros: el clip no cae en la cuadrícula de 24 fps`);
+}
+for (const cad of plan.cadenas_de_tarjetas) for (let i = 1; i < cad.length; i++) {
+  if (Math.abs(tj[cad[i]].a - tj[cad[i - 1]].b) > 1e-9) errores.push(`${cad[i - 1]}→${cad[i]}: no son contiguas (${tj[cad[i - 1]].b} vs ${tj[cad[i]].a})`);
+}
+// costuras: el medio entrante arranca en T−6 cuadros; el saliente termina en T; la tarjeta saliente termina en T y la entrante entra en T
+for (const c of plan.costuras) if (c.tipo === 'empuje') {
+  for (const id of c.entra) if (med[id] && Math.abs(med[id].a - (c.t - PUSH)) > 1e-6) errores.push(`costura ${c.t}: «${id}» debe empezar en ${(c.t - PUSH).toFixed(3)} y empieza en ${med[id].a}`);
+  for (const id of c.sale) if (med[id] && Math.abs(med[id].b - c.t) > 1e-6) errores.push(`costura ${c.t}: «${id}» debe terminar en ${c.t} y termina en ${med[id].b}`);
+  const k = plan.tramos.findIndex((t) => Math.abs(t.t - c.t) < 1e-9);
+  if (k < 0) errores.push(`costura ${c.t}: no cae en el inicio de ningún tramo de voz`);
+  else if (k > 0) { const hu = plan.tramos[k].t - (plan.tramos[k - 1].t + plan.tramos[k - 1].df / FPS); if (hu < PUSH - 1e-6) errores.push(`costura ${c.t}: el hueco de voz (${hu.toFixed(3)} s) es menor que el empuje (${PUSH} s)`); }
+  if (c.tarjetas) {
+    const s = tj[c.tarjetas.sale], e = tj[c.tarjetas.entra];
+    if (!s || !e) { errores.push(`costura ${c.t}: tarjeta «${c.tarjetas.sale}» o «${c.tarjetas.entra}» no existe`); continue; }
+    if (Math.abs(s.b - c.t) > 1e-6) errores.push(`costura ${c.t}: la tarjeta «${s.id}» debe terminar en ${c.t} y termina en ${s.b}`);
+    if (Math.abs(e.a - c.t) > 1e-6) errores.push(`costura ${c.t}: la tarjeta «${e.id}» debe entrar en ${c.t} y entra en ${e.a}`);
+  }
+}
+// gancho: texto exacto, rótulo desde el cuadro 0 hasta los 3 s a 40 px, seis miniaturas a la vista dentro de los 3 s
+{
+  const t12 = `${tj.c1.texto} ${tj.c1.acento} ${tj.c2.texto} ${tj.c2.acento}`;
+  if (t12 !== '¿Quién pierde la cara? Misma orden. Seis clips.') errores.push(`gancho: «${t12}»`);
+  if (nw(`${tj.c1.texto} ${tj.c1.acento}`) < 3 || nw(`${tj.c1.texto} ${tj.c1.acento}`) > 7) errores.push('gancho: el título del cuadro 0 debe tener 3-7 palabras');
+  if (tj.c1.a !== 0) errores.push('gancho: el título (c1) debe estar en el cuadro 0');
+  const r = plan.rotulo;
+  if (r.texto !== 'Lucía Antelo · personaje IA de Onia' || r.a !== 0 || Math.abs(r.b - 3.0) > 1e-9 || r.px !== 40) errores.push('rótulo: texto, 0-3 s o 40 px incorrectos');
+  const g = plan.gancho.miniaturas, ult = g.a + (SEIS.length - 1) * g.escalon + 0.28;
+  if (ult > 3.0) errores.push(`gancho: la sexta miniatura termina de entrar a ${ult.toFixed(2)} s (> 3 s)`);
+}
+// CTA exacto, visible de 2,4 a 5,5 s y hasta el último cuadro
+{
+  const c = tj.c12, txt = `${c.texto} ${c.acento}`, d = DUR - c.a;
+  if (txt !== plan.cta.texto || txt !== 'Seguime: cada semana, una prueba.') errores.push(`CTA: «${txt}»`);
+  if (d < plan.cta.min_s - 1e-9 || d > plan.cta.max_s + 1e-9) errores.push(`CTA: visible ${d.toFixed(2)} s (debe ser 2,4-5,5 s)`);
+  if (Math.abs(c.b - DUR) > 1e-6) errores.push('CTA: no llega al último cuadro');
+}
+// los números salen de PROCEDENCIA.jsonl (última línea «resultados»): arranque, final y créditos de cada motor
+let procV = null;                                     // PROCEDENCIA l.97 (los seis clips), la usa también la prueba estricta de abajo
+const permitidos = new Set([fm(SC.piso)]);
+const permitidosPie = new Set([fm(SC.piso), '0,03', '5,9']);      // el pie suma los números de los tres clips que no salen, el rango de la pastilla, el ruido de ±0,03 y el segundo del final; lo que se ve de cada clip se agrega abajo (sale del plan)
+{
+  const lines = fs.readFileSync(path.join(V4, 'PROCEDENCIA.jsonl'), 'utf8').split('\n').filter(Boolean).map((l) => { try { return JSON.parse(l); } catch { return null; } }).filter(Boolean);
+  const res = lines.filter((l) => /resultados$/.test(l.type || '')).at(-1);
+  if (!res) errores.push('PROCEDENCIA.jsonl: no hay línea «resultados»');
+  else {
+    const v = res.video_misma_foto_K1_misma_orden;
+    procV = v;
+    for (const m of plan.motores) {
+      const d = v[m.clave];
+      if (!d) { errores.push(`${m.id}: «${m.clave}» no está en PROCEDENCIA.jsonl`); continue; }
+      const ini = r2(d.id[0]), fin = r2(d.id.at(-1));
+      if (ini !== m.ini) errores.push(`${m.id}: arranque ${m.ini} y PROCEDENCIA dice ${d.id[0]} → ${ini}`);
+      if (fin !== m.fin) errores.push(`${m.id}: final ${m.fin} y PROCEDENCIA dice ${d.id.at(-1)} → ${fin}`);
+      if (d.cr !== m.cr) errores.push(`${m.id}: ${m.cr} créditos y PROCEDENCIA dice ${d.cr}`);
+      const tf = d.t ? d.t.at(-1) : 5.9;
+      if (!d.t && d.id.length !== 7) errores.push(`${m.id}: se esperaban 7 muestras y hay ${d.id.length}`);
+      if (Math.abs(tf - m.t_fin) > 0.051) errores.push(`${m.id}: t_fin ${m.t_fin} y la última muestra es ${tf}`);
+      m._valores = d.id;
+      permitidos.add(fm(m.ini)); permitidos.add(fm(m.fin)); permitidosPie.add(fm(m.ini)); permitidosPie.add(fm(m.fin)); permitidosPie.add(String(m.cr).replace('.', ','));
+    }
+    // H4: los tres clips que no salen (el pie los declara con sus números) y el rango del parecido final de los SEIS (la pastilla del gancho, H2)
+    for (const m of plan.omitidos) {
+      const d = v[m.clave];
+      if (!d) { errores.push(`${m.id}: «${m.clave}» no está en PROCEDENCIA.jsonl`); continue; }
+      if (r2(d.id[0]) !== m.ini) errores.push(`${m.id} (omitido): arranque ${m.ini} y PROCEDENCIA dice ${d.id[0]} → ${r2(d.id[0])}`);
+      if (r2(d.id.at(-1)) !== m.fin) errores.push(`${m.id} (omitido): final ${m.fin} y PROCEDENCIA dice ${d.id.at(-1)} → ${r2(d.id.at(-1))}`);
+      if (d.cr !== m.cr) errores.push(`${m.id} (omitido): ${m.cr} créditos y PROCEDENCIA dice ${d.cr}`);
+      if (m.t_fin && Math.abs(d.t.at(-1) - m.t_fin) > 0.051) errores.push(`${m.id} (omitido): t_fin ${m.t_fin} y la última muestra es ${d.t.at(-1)}`);
+      permitidosPie.add(fm(m.ini)); permitidosPie.add(fm(m.fin)); permitidosPie.add(String(m.cr).replace('.', ','));
+    }
+    {
+      const finales = [...plan.motores, ...plan.omitidos].map((m) => v[m.clave]?.id.at(-1)).filter((x) => x != null);
+      if (finales.length !== 6) errores.push(`pastilla: se esperaban 6 finales y hay ${finales.length}`);
+      const lo = r2(Math.min(...finales)), hi = r2(Math.max(...finales));
+      plan.gancho.pastilla.valor = `${fm(lo)} a ${fm(hi)}`;
+      plan.gancho.pastilla.min_max_crudo = [Math.min(...finales), Math.max(...finales)];
+      permitidosPie.add(fm(lo)); permitidosPie.add(fm(hi));
+    }
+    // afirmaciones del video contra los datos
+    const M = Object.fromEntries(plan.motores.map((m) => [m.id, m]));
+    if (!(M.m1.fin < M.m1.ini)) errores.push('«pierde parecido» (Motor 1): el final no es menor que el arranque');
+    if (!(M.m3.ini < SC.piso && M.m3.fin < SC.piso)) errores.push('«queda bajo el piso» (Motor 3): arranque y final no están bajo 0,70');
+    if (!(M.m5.ini >= SC.piso && M.m5.fin >= SC.piso && M.m5.fin >= M.m5.ini - 0.03)) errores.push('«sostiene la cara» (Motor 5): no se sostiene sobre 0,70');
+    if (!res.video_misma_foto_K1_misma_orden || Object.keys(v).length !== 6) errores.push('PROCEDENCIA: no hay seis clips para la misma foto y la misma orden');
+  }
+}
+// ── Hallazgo del 11-oct (sesión Lucía) y revisión 2 (v2.3): dos clips RECIBIERON fotos de las 8 con que se compara y, además, la foto de arranque K1 (de la que parten cinco clips) se hizo con R1, R3, R6 y R7:
+//    ningún clip es independiente de esas cuatro. Los números de la pantalla no cambian (PROCEDENCIA l.97); se DICE: en el gancho (junto al 0,82), sobre el clip de Kling O3, en la lección y al principio del
+//    pie. Cada cifra y cada frase sale de la medición (plan.fuga_refs.fuente), no de la memoria: plan ≠ archivo corta el build y el pie tiene que decir lo que dice el archivo (HF.frases).
+//    v2.3 RETIRA la resta de controles de la v2.2 (los controles descienden de las mismas fotos): ya no se estima nada, solo se mide contra las 4 fotos que nadie recibió. ──
+const FG = plan.fuga_refs;
+const enPantalla = (c) => plan.motores.some((m) => m.id === c.id);
+const listaY = (a) => (a.length < 2 ? a.join('') : `${a.slice(0, -1).join(', ')} y ${a.at(-1)}`);       // «R1, R3, R6 y R7»
+const mismos = (a, b) => JSON.stringify([...a].sort()) === JSON.stringify([...b].sort());
+const lstR = (s) => String(s || '').match(/R\d/g) || [];
+const todos = [...plan.motores, ...plan.omitidos];
+const nombreDe = Object.fromEntries(todos.map((m) => [m.id, m.nombre]));
+const claveDe = Object.fromEntries(todos.map((m) => [m.id, m.clave]));
+const finDe = Object.fromEntries(todos.map((m) => [m.id, m.fin]));
+let fugaTxt = null, fugaTxtGancho = null;
+let HF = null;                         // hechos leídos de la medición; de ahí salen las frases que el pie tiene que decir
+let VISIBLES = null;                   // segundos visibles de cada clip (cuadros ÷ 24), para el pie y el README
+{
+  if (FG.clips.length !== 2) errores.push(`fuga_refs: se esperaban 2 clips con fotos recibidas y hay ${FG.clips.length}`);
+  const fp = path.join(R0, FG.fuente);
+  const mLin = fs.existsSync(fp) ? fs.readFileSync(fp, 'utf8').split('\n') : null;
+  if (!mLin) errores.push(`fuga_refs: falta la fuente ${FG.fuente}`);
+  const recibidasEn = {};
+  for (const c of FG.clips) {
+    if (claveDe[c.id] !== c.clave) errores.push(`fuga_refs ${c.id}: la clave «${c.clave}» no es la del plan (${claveDe[c.id]})`);
+    if (enPantalla(c) !== !!c.en_pantalla) errores.push(`fuga_refs ${c.id}: en_pantalla=${c.en_pantalla} pero el plan ${enPantalla(c) ? 'lo muestra' : 'no lo muestra'}`);
+    const nImg = +((/(\d+)_refs/.exec(c.clave) || [])[1]);
+    if (nImg !== c.imagenes) errores.push(`fuga_refs ${c.id}: ${c.imagenes} imágenes y la clave de PROCEDENCIA dice ${nImg}`);
+    if (!mLin) continue;
+    const ini = mLin.findIndex((l) => l.trim() === `== ${c.etiqueta_medicion}`);
+    if (ini < 0) { errores.push(`fuga_refs ${c.id}: la medición no tiene la sección «== ${c.etiqueta_medicion}»`); continue; }
+    let fin = mLin.findIndex((l, i) => i > ini && (l.startsWith('== ') || l.startsWith('RESUMEN')));
+    if (fin < 0) fin = mLin.length;
+    const sec = mLin.slice(ini, fin);
+    // fotos recibidas entre las 8: «recibió: R1, R3  ·  no recibió (6): …»
+    const rec = /recibió:\s*([^·]*?)\s+·/.exec(sec[1] || '');
+    const recibidas = rec ? rec[1].split(',').map((x) => x.trim()).filter((x) => /^R\d$/.test(x)) : [];
+    recibidasEn[c.id] = recibidas;
+    if (!mismos(recibidas, c.recibio)) errores.push(`fuga_refs ${c.id}: recibió ${c.recibio.join(', ')} y la medición dice ${recibidas.join(', ') || 'ninguna'}`);
+    // tamaño de cara en el clip: columna cara_px de la tabla (t, cara_px, A, PROC, A-PROC, …)
+    const px = sec.map((l) => /^\s+(\d+(?:\.\d+)?)\s+(\d+)\s+\d\.\d{3}\s+\d\.\d{3}\s+[+-]\d\.\d{3}/.exec(l)).filter(Boolean).map((m) => +m[2]);
+    if (c.cara_px && (px.length < 5 || Math.min(...px) !== c.cara_px[0] || Math.max(...px) !== c.cara_px[1])) errores.push(`fuga_refs ${c.id}: cara de ${c.cara_px.join('-')} px y la medición dice ${px.length ? Math.min(...px) + '-' + Math.max(...px) : 'nada'}`);
+  }
+  // ── PRUEBA ESTRICTA (solo las fotos que nadie recibió): linaje de K1, entradas directas, caída de cada clip, orden y piso ──
+  const E = FG.estricta;
+  const iE = mLin ? mLin.findIndex((l) => l.startsWith('== PRUEBA ESTRICTA')) : -1;
+  if (mLin && iE < 0) errores.push('fuga_refs: la medición no trae la sección «== PRUEBA ESTRICTA…» (linaje de K1)');
+  if (mLin && iE >= 0) {
+    const parte = mLin.slice(iE);
+    const iSec = parte.findIndex((l, i) => i > 0 && l.startsWith('== '));
+    const cab = parte.slice(1, iSec < 0 ? parte.length : iSec).map((l) => l.replace(/^#\s?/, '')).join(' ').replace(/\s+/g, ' ');
+    const ok0 = errores.length;
+    // 1) linaje: «K1 (4afffb96) se generó con abe2e6bd, R1, R3, R6, R7 y 688d63a7; todos los clips con start_image K1 descienden de R1, R3, R6 y R7»
+    const mK1 = /K1 \((\w+)\) se generó con ([^;]+);/.exec(cab);
+    const k1 = mK1 ? lstR(mK1[2]) : [];
+    if (!mK1 || mK1[1] !== FG.k1.id) errores.push(`fuga_refs: la medición no dice con qué se generó la foto de arranque ${FG.k1.id}`);
+    else if (!mismos(k1, FG.k1.recibio)) errores.push(`fuga_refs: K1 se hizo con ${FG.k1.recibio.join(', ')} y la medición dice ${k1.join(', ') || 'nada'}`);
+    const dS = /Seedance\+refs recibió además ((?:R\d(?:, | y )?)+) directo/.exec(cab), dO = /Kling O3 \(sin K1\) recibió ((?:R\d(?:, | y )?)+) directo/.exec(cab);
+    const cS = FG.clips.find((c) => c.id === 'm4'), cO = FG.clips.find((c) => c.id === 'm5');
+    if (!dS || !cS || !mismos(lstR(dS[1]), cS.recibio)) errores.push(`fuga_refs m4: la cabecera de la prueba estricta dice que recibió directo ${dS ? lstR(dS[1]).join(', ') : 'nada legible'} y el plan dice ${cS ? cS.recibio.join(', ') : 'nada'}`);
+    if (!dO || !cO || !mismos(lstR(dO[1]), cO.recibio)) errores.push(`fuga_refs m5: la cabecera de la prueba estricta dice que recibió directo ${dO ? lstR(dO[1]).join(', ') : 'nada legible'} y el plan dice ${cO ? cO.recibio.join(', ') : 'nada'}`);
+    // 2) tablas por clip: A (las 8 fotos, debe ser la de PROCEDENCIA l.97) y B* (solo R2, R4, R5, R8) en cada punto medido
+    const filaRe = /^\s+(\d+(?:\.\d+)?)\s+(\d+)\s+(\d\.\d{3})\s+(\d\.\d{3})\s+([+-]\d\.\d{3})\s+(\d\.\d{3})\s+([+-]\d\.\d{3})\s+\d\.\d{3}\s+\d\.\d{3}\s+\d\.\d{3}\s+\d\.\d{3}/;
+    const fin = {}, deltas = [];
+    let sinFile = null;
+    for (const f of E.finales) {
+      const i0 = parte.findIndex((l, i) => i > 0 && l.trim() === `== ${f.etiqueta}`);
+      if (i0 < 0) { errores.push(`estricta ${f.id}: la medición no tiene la sección «== ${f.etiqueta}» de la prueba estricta`); continue; }
+      let i1 = parte.findIndex((l, i) => i > i0 && (l.startsWith('== ') || l.startsWith('RESUMEN')));
+      if (i1 < 0) i1 = parte.length;
+      const bloque = parte.slice(i0, i1);
+      const filas = bloque.map((l) => filaRe.exec(l)).filter(Boolean).map((m) => ({ A: +m[3], proc: +m[4], B: +m[6], d: +m[7] }));
+      if (filas.length < 6) { errores.push(`estricta ${f.id}: se esperaban al menos 6 puntos medidos y hay ${filas.length}`); continue; }
+      const mSin = /B\* = centroide de ((?:R\d(?:, )?)+)/.exec(bloque[1] || '');
+      if (!sinFile && mSin) sinFile = lstR(mSin[1]);
+      const ult = filas.at(-1), pv = procV && procV[claveDe[f.id]];
+      if (!pv) errores.push(`estricta ${f.id}: «${claveDe[f.id]}» no está en PROCEDENCIA.jsonl`);
+      else if (Math.abs(ult.A - pv.id.at(-1)) > 0.0006) errores.push(`estricta ${f.id}: el puntaje A final de la medición (${ult.A}) no es el de PROCEDENCIA (${pv.id.at(-1)})`);
+      if (r2(ult.B) !== f.valor) errores.push(`estricta ${f.id}: final ${f.valor} con las ${E.sin_recibir.length} fotos y la medición dice ${ult.B} → ${r2(ult.B)}`);
+      fin[f.id] = ult;
+      for (const x of filas) deltas.push(Math.abs(x.d));
+    }
+    if (!sinFile || !mismos(sinFile, E.sin_recibir)) errores.push(`estricta: las fotos que nadie recibió son ${E.sin_recibir.join(', ')} y la medición dice ${sinFile ? sinFile.join(', ') : 'nada'}`);
+    {
+      // las que nadie recibió = las 8 menos lo que recibió K1 y lo que recibió cada clip directo
+      const ocho = Array.from({ length: plan.refs.total }, (_, i) => `R${i + 1}`);
+      const dadas = new Set([...k1, ...Object.values(recibidasEn).flat()]);
+      const nadie = ocho.filter((r) => !dadas.has(r));
+      if (sinFile && !mismos(nadie, sinFile)) errores.push(`estricta: las 8 fotos menos lo que recibieron K1 y los dos clips son ${nadie.join(', ')} y la medición usa ${sinFile.join(', ')}`);
+    }
+    if (errores.length === ok0 && Object.keys(fin).length === E.finales.length) {
+      const ids = E.finales.map((f) => f.id);
+      const porB = [...ids].sort((a, b) => fin[b].B - fin[a].B), porA = [...ids].sort((a, b) => fin[b].A - fin[a].A);
+      const ordenIgual = JSON.stringify(porB) === JSON.stringify(porA);
+      if (JSON.stringify(porB) !== JSON.stringify(ids)) errores.push(`estricta: los finales van ${ids.join(' > ')} en el plan y la medición los ordena ${porB.join(' > ')}`);
+      if (ordenIgual !== !!E.orden_igual) errores.push(`estricta: orden_igual=${E.orden_igual} y la medición dice que el orden por valor final ${ordenIgual ? 'NO cambia' : 'SÍ cambia'}`);
+      const lineaOrden = mLin.slice(iE).find((l) => /¿Cambia el orden por valor final\?/.test(l));
+      if (!lineaOrden || /\bNO\s*$/.test(lineaOrden.trim()) !== ordenIgual) errores.push(`estricta: la línea «¿Cambia el orden por valor final?» de la medición (${lineaOrden ? lineaOrden.trim() : 'no está'}) no coincide con el orden calculado (${ordenIgual ? 'no cambia' : 'cambia'})`);
+      const lo = r2(Math.min(...deltas)), hi = r2(Math.max(...deltas));
+      if (lo !== E.baja_entre[0] || hi !== E.baja_entre[1]) errores.push(`estricta: los seis clips bajan entre ${E.baja_entre.join(' y ')} en el plan y la medición dice ${lo} y ${hi}`);
+      const nA = ids.filter((id) => fin[id].A >= SC.piso - 1e-9).length, nB = ids.filter((id) => fin[id].B >= SC.piso - 1e-9).length;
+      if (nA !== E.sobre_piso.con_8 || nB !== E.sobre_piso.con_4) errores.push(`estricta: sobre el piso ${fm(SC.piso)} quedan ${E.sobre_piso.con_8} con las 8 fotos y ${E.sobre_piso.con_4} con las ${E.sin_recibir.length} en el plan; la medición da ${nA} y ${nB}`);
+      for (const f of E.finales) permitidosPie.add(fm(f.valor));
+      permitidosPie.add(fm(lo)); permitidosPie.add(fm(hi));
+      const lf = ids.map((id) => `${nombreDe[id]} ${fm(r2(fin[id].B))}`);
+      // v2.4 (revisión 3, H2): las tres salvedades del pie salen del archivo, no de la memoria.
+      //  (a) con el centroide de las 4 fotos puntúan más bajo TODOS los clips, también los que no recibieron ninguna foto directo: la caída no es el tamaño de la fuga;
+      //  (b) con las 4 fotos algunos finales quedan bajo el piso: la prueba estricta se compara entre clips, no con el piso;
+      //  (c) entre vecinos del orden, algunas diferencias caen dentro de ±0,03 (se cuentan de las columnas B* del archivo y se cruzan con su bloque «DIFERENCIAS entre vecinos»).
+      const sinFotos = todos.filter((m) => !FG.clips.some((c) => c.id === m.id));
+      const bajanTodos = ids.every((id) => fin[id].B < fin[id].A - 1e-9) && sinFotos.length > 0 && sinFotos.every((m) => fin[m.id] && fin[m.id].B < fin[m.id].A - 1e-9);
+      if (!bajanTodos) errores.push(`estricta: «bajan todos, incluso los que no recibieron fotos directas» ya no es cierto en la medición (finales A→B*: ${ids.map((id) => `${id} ${fin[id].A}→${fin[id].B}`).join(', ')}; sin fotos directas: ${sinFotos.map((m) => m.id).join(', ') || 'ninguno'})`);
+      const vecinos = ids.slice(1).map((id, k) => fin[ids[k]].B - fin[id].B), cerca = vecinos.filter((d) => d <= 0.03 + 1e-9).length;
+      {
+        const iD = parte.findIndex((l) => /^DIFERENCIAS entre vecinos del orden por valor final/.test(l));
+        const dArch = iD < 0 ? [] : parte.slice(iD + 1, iD + ids.length).map((l) => /B\*\s+([+-]\d\.\d{3})/.exec(l)).filter(Boolean).map((m) => Math.abs(+m[1]));
+        if (dArch.length !== ids.length - 1) errores.push(`estricta: la medición no trae las ${ids.length - 1} «DIFERENCIAS entre vecinos» de B*`);
+        else if (dArch.filter((d) => d <= 0.03 + 1e-9).length !== cerca) errores.push(`estricta: ${cerca} de las ${ids.length - 1} diferencias entre vecinos dentro de ±0,03 en las tablas y ${dArch.filter((d) => d <= 0.03 + 1e-9).length} en el bloque «DIFERENCIAS entre vecinos» de la medición`);
+      }
+      const bajoPiso = ids.length - nB;
+      const carasLst = FG.clips.filter((c) => c.cara_px).map((c) => `en ${c.nombre}, ${c.cara_px[0]} a ${c.cara_px[1]} px: poco confiable`);
+      HF = {
+        k1, sin: sinFile, lo, hi, ordenIgual, nA, nB, bajoPiso, cerca, vecinos,
+        frases: {
+          aviso: `Aviso: los ${todos.length} clips parten de ${k1.length} de las ${plan.refs.total} fotos con que se compara (abajo).`,
+          k1: `La foto de arranque se hizo con ${k1.length} de las ${plan.refs.total}, así que ningún clip es independiente.`,
+          directas: `${FG.clips[0].nombre} recibió ${FG.clips[0].recibio.length} de las ${plan.refs.total}, y ${FG.clips[1].nombre}, ${FG.clips[1].recibio.length}.`,
+          estricta: `Con solo las ${sinFile.length} fotos que nadie recibió, los seis clips bajan entre ${fm(lo)} y ${fm(hi)} y el orden de los finales ${ordenIgual ? 'no cambia' : 'cambia'}: ${lf.slice(0, -1).join(', ')} y ${lf.at(-1)}.`,
+          salvedades: `Esa caída no mide la fuga (bajan todos, incluso los que no recibieron fotos directas); con esas ${sinFile.length}, ${bajoPiso} de los ${ids.length} quedan bajo ${fm(SC.piso)} (se compara entre clips, no con el piso); y ${cerca} de las ${ids.length - 1} diferencias entre vecinos están dentro de ±0,03.`,
+          caras: `en el clip original (720p) las caras de los tres clips del video miden menos de 200 px (${carasLst.join('; ')})`,
+        },
+      };
+    }
+  }
+  // el clip que SALE en pantalla lleva su etiqueta en la lección, sobre su clip, y si su número es un extremo de la pastilla del gancho, también ahí (≤ 12 palabras; ventana de lectura en `lecturas`)
+  const Fl = plan.leccion.fuga;
+  for (const c of FG.clips.filter(enPantalla)) {
+    if (!Fl || Fl.motor !== c.id) errores.push(`fuga_refs ${c.id}: sale en pantalla y la placa de la lección no lleva su etiqueta (plan.leccion.fuga)`);
+    if (!plan.motores.find((m) => m.id === c.id)?.fuga_escena) errores.push(`fuga_refs ${c.id}: sale en pantalla y su clip no lleva el aviso (plan.motores.${c.id}.fuga_escena)`);
+  }
+  const Gf = plan.gancho.fuga;
+  if (Fl) {
+    const c = FG.clips.find((x) => x.id === Fl.motor && enPantalla(x));
+    if (!c) errores.push(`leccion.fuga: «${Fl.motor}» no es un clip con fotos recibidas que salga en pantalla`);
+    else {
+      // v2.4: «recibió 4 de 8 fotos con que se compara» (sin «las»: con «de las» y «se compara» la etiqueta de la lección llegaba a x = 1046; así termina en ≈ 978 y la ventana pide una palabra menos)
+      fugaTxt = `recibió ${c.recibio.length} de ${plan.refs.total} fotos con que se compara`;
+      if (nw(fugaTxt) > 12) errores.push(`leccion.fuga: ${nw(fugaTxt)} palabras (máx 12)`);
+    }
+  }
+  // gancho: el 0,82 de la pastilla («parecido final: 0,64 a 0,82») es el de un clip con fotos recibidas: cada vez que sale en pantalla, el aviso va al lado (pastilla pequeña pegada al número; 6 palabras como máximo)
+  for (const c of FG.clips) {
+    const f = r2(finDe[c.id]), pil = plan.gancho.pastilla.valor;      // «0,64 a 0,82» (build lo calcula arriba de PROCEDENCIA)
+    if (pil && pil.split(' a ').includes(fm(f)) && (!Gf || Gf.motor !== c.id)) errores.push(`gancho: el ${fm(f)} de la pastilla es el de ${c.nombre}, que recibió fotos, y el gancho no lleva su aviso (plan.gancho.fuga)`);
+  }
+  if (Gf) {
+    const c = FG.clips.find((x) => x.id === Gf.motor);
+    if (!c) errores.push(`gancho.fuga: «${Gf.motor}» no es un clip con fotos recibidas`);
+    else {
+      // v2.4 (revisión 3, H1): el CLIP es el sujeto («Clip 0,82: recibió 4 fotos de comparación»; la v2.3 decía «0,82 recibió 4 de 8 fotos»: el sujeto era el número y «8 fotos» no estaba definido).
+      // 7 palabras como máximo: la pastilla y el aviso entran a 0,5 s y se leen 3,0 s en el DOM (0,35 s por palabra + 0,3 → 7 palabras = 2,75 s)
+      fugaTxtGancho = `Clip ${fm(r2(finDe[c.id]))}: recibió ${c.recibio.length} fotos de comparación`;
+      if (nw(fugaTxtGancho) > 7) errores.push(`gancho.fuga: ${nw(fugaTxtGancho)} palabras (máx 7: la pastilla del gancho se lee ≈ 3,0 s)`);
+      if (!(Gf.t <= 0.5 + 1e-9 && Gf.t === plan.gancho.pastilla.t)) errores.push(`gancho.fuga: el aviso entra a ${Gf.t} s y la pastilla a ${plan.gancho.pastilla.t} s: deben entrar juntos y a 0,5 s o antes (7 palabras piden 2,75 s)`);
+      if (!(Gf.y >= plan.gancho.miniaturas.y + plan.gancho.miniaturas.h + 8)) errores.push(`gancho.fuga: y = ${Gf.y} queda sobre las miniaturas (terminan en ${plan.gancho.miniaturas.y + plan.gancho.miniaturas.h}); el aviso va debajo de ellas: no tapa teléfono ni manos`);
+    }
+  }
+}
+if (refNames.length !== plan.refs.total) errores.push(`el manifiesto trae ${refNames.length} referencias y la tarjeta dice ${plan.refs.total}`);
+// pie: abre con «personaje hecho con IA», dice lo mismo que el video (mismos nombres y cifras), lleva el aviso de D-N1 y no suena a recomendación.
+// Revisión 1 (H3, H4, H5, H7, H8): nombra Higgsfield (de dónde son los créditos y la fecha de los precios) y ArcFace (con qué se mide), dice qué clips llevan foto de inicio y cuál solo
+// referencias, declara los tres clips que no salen CON sus números (y que no cupieron), da los límites del método y no afirma que «la foto sola pierde la cara» como regla.
+{
+  const pp = path.join(P, 'pie.txt');
+  if (!fs.existsSync(pp)) errores.push('falta pie.txt');
+  else {
+    const pie = fs.readFileSync(pp, 'utf8').trim(), low = pie.toLowerCase();
+    if (!/^personaje hecho con ia/i.test(pie)) errores.push('pie.txt: debe abrir con «Personaje hecho con IA»');
+    if (!pie.includes(AVISO_PIE)) errores.push(`pie.txt: falta el aviso «${AVISO_PIE}» (D-N1)`);
+    for (const f of buscarProhibidasPie(pie)) errores.push(`pie.txt: frase prohibida «${f}»`);
+    for (const f of buscarRecomendacion(pie)) errores.push(`pie.txt: «${f}» suena a recomendación`);
+    for (const f of buscarGenerales(pie)) errores.push(`pie.txt: «${f}» afirma una regla general`);
+    for (const m of plan.motores) if (!pie.includes(m.nombre)) errores.push(`pie.txt: no nombra «${m.nombre}»`);
+    // los tres que salen: su arranque a final y sus créditos tal cual (v2.3: «0,73» ya es una cifra legítima del pie —el final de Seedance 2.0 Mini + referencias con las 4 fotos—, así que no alcanza con que la cifra «salga de los datos»)
+    for (const m of plan.motores) {
+      if (!pie.includes(`${fm(m.ini)} a ${fm(m.fin)}`)) errores.push(`pie.txt: falta «${fm(m.ini)} a ${fm(m.fin)}» de ${m.nombre}`);
+      if (!new RegExp(`${String(m.cr).replace('.', ',')} cr[ée]ditos`).test(pie)) errores.push(`pie.txt: falta «${m.cr} créditos» de ${m.nombre}`);
+    }
+    // H4: los tres omitidos, con su nombre, sus créditos y sus números (arranque a final), y que no cupieron
+    for (const m of plan.omitidos) {
+      if (!pie.includes(m.nombre)) errores.push(`pie.txt: no nombra el clip que no salió «${m.nombre}»`);
+      if (!pie.includes(`${fm(m.ini)} a ${fm(m.fin)}`)) errores.push(`pie.txt: falta «${fm(m.ini)} a ${fm(m.fin)}» de ${m.nombre}`);
+      if (!new RegExp(`${String(m.cr).replace('.', ',')} cr[ée]ditos`).test(pie)) errores.push(`pie.txt: falta «${m.cr} créditos» de ${m.nombre}`);
+    }
+    if (!/no cupieron/i.test(pie)) errores.push('pie.txt: debe decir que los otros tres no cupieron');
+    // H8: plataforma, fecha de los precios, con qué se mide, la regla y los límites
+    for (const [f, que] of [['Higgsfield', 'la plataforma de los créditos'], ['8-oct', 'la fecha de los precios'], ['ArcFace', 'con qué se calcula el parecido'], ['0 a 1', 'la escala'], ['±0,03', 'el ruido'], ['segundo 5,9', 'el segundo del final'], ['orientativ', 'que los números son orientativos'], ['Kling O3 solo recibió referencias', 'que Kling O3 no tuvo foto de arranque (solo referencias)'], ['pr' + 'ueba, no una regla', 'el límite']]) {
+      if (!pie.includes(f)) errores.push(`pie.txt: no dice ${que} («${f}»)`);
+    }
+    if (/atad/i.test(pie)) errores.push('pie.txt: «atado» (H7): la pantalla dice «foto sola»');
+    // v2.3 (revisión 2, H1-H3): el aviso va DENTRO de los primeros 125 caracteres (antes del corte de Instagram), en lenguaje llano, y TODO lo que dice sobre la medición sale del archivo de la
+    // medición (HF.frases): borrar una frase, cambiar una foto, una cifra, el orden o el sentido de «el orden de los finales no cambia» rompe el build (validar-mutaciones.mjs lo prueba).
+    // v2.4 (revisión 3): H2 las tres salvedades (HF.frases.salvedades, con sus cifras del archivo); H3 sin ids «R1…R8» y «partir de» con un solo sentido; H5 en pasado (lo que una toma por clip puede decir).
+    {
+      for (const f of buscarRetiradas(pie)) errores.push(`pie.txt: «${f}» es una frase RETIRADA (prohibidas.mjs → RETIRADAS: la v2.3 retiró la resta de controles; la v2.4, «con que se mide»)`);
+      if (HF) {
+        const F = HF.frases, exigir = (frase, que) => { if (!pie.includes(frase)) errores.push(`pie.txt: ${que}: falta «${frase}»`); };
+        const ia = pie.indexOf(F.aviso);
+        if (ia < 0) errores.push(`pie.txt: falta el aviso del principio: «${F.aviso}»`);
+        else {
+          if (ia > 60) errores.push(`pie.txt: el aviso empieza en el carácter ${ia}: tiene que ir justo después de la apertura (carácter ≤ 60)`);
+          if (ia + F.aviso.length > 125) errores.push(`pie.txt: el aviso termina en el carácter ${ia + F.aviso.length}: tiene que caber en los primeros 125 (antes del corte de Instagram)`);
+        }
+        exigir(F.k1, 'falta decir de dónde salió la foto de arranque');
+        exigir(F.directas, 'falta decir qué recibió cada uno de los dos clips');
+        exigir(F.estricta, 'la medición estricta (solo las fotos que nadie recibió) no dice lo que dice el archivo de la medición');
+        exigir(F.salvedades, 'faltan las tres salvedades de la medición estricta (la caída no es la fuga, no se compara con el piso, vecinos dentro de ±0,03)');
+        exigir(F.caras, 'falta el tamaño de cara de Kling O3 y que son píxeles del clip original (720p)');
+      }
+      if (!pie.includes('poco confiable')) errores.push('pie.txt: no dice «poco confiable»');
+      // H3 (revisión 3): los ids R1…R8 no le dicen nada a un espectador (van en el README, el plan y el build, no en el pie) y «partir de» tiene un solo sentido (el aviso: los 6 clips parten de 4 de las 8 fotos)
+      if (/\bR\d\b/.test(pie)) errores.push(`pie.txt: ids «${[...new Set(pie.match(/\bR\d\b/g))].join(', ')}» sin definir (H3): se dice «4 de las 8» y «las 4 fotos que nadie recibió»`);
+      const nPartir = (pie.match(/\bpart(?:en|ieron) de\b/gi) || []).length;
+      if (nPartir !== 1) errores.push(`pie.txt: «parten de» / «partieron de» aparece ${nPartir} veces; debe tener un solo sentido (el aviso del principio; la foto de arranque «salió»)`);
+      // H5 (revisión 3): una toma por clip se cuenta en pasado, como la voz y la tarjeta c9 («aguantó»)
+      for (const f of ['sostiene la cara', 'pierde parecido', 'queda bajo el piso', 'inventa el cuarto', 'cambia el plano']) if (low.includes(f)) errores.push(`pie.txt: «${f}» en presente (H5): una toma por clip se cuenta en pasado («aguantó», «perdió», «quedó», «inventó», «cambió»)`);
+      // un solo tamaño de cara por clip y con su fuente: ningún «N a M px» fuera de los de fuga_refs
+      const pxs = [...pie.matchAll(/(\d+) a (\d+) px/g)].map((m) => `${m[1]}-${m[2]}`), pxOk = FG.clips.filter((c) => c.cara_px).map((c) => c.cara_px.join('-'));
+      for (const x of pxs) if (!pxOk.includes(x)) errores.push(`pie.txt: el tamaño de cara «${x.replace('-', ' a ')} px» no sale de la medición (fuga_refs.cara_px: ${pxOk.join(', ')})`);
+      if ([...pie].length > 2200) errores.push(`pie.txt: ${[...pie].length} caracteres (tope de Instagram 2.200)`);
+    }
+    // H5 (revisión 1) y verificador 1, 2 y 4 (v2.4): lo que de verdad se ve de cada clip y el tamaño de las caras en los clips crudos, calculados y no escritos a mano.
+    //  · SEGUNDOS VISIBLES (una sola definición): cuadros del video terminado con alguna parte del clip a la vista ÷ 24. El clip entra y sale con un empuje de 6 cuadros; el primer cuadro de su
+    //    ventana [a, b) lo deja fuera del lienzo (x = ancho: todavía no se ve nada), así que cuentan (b − a) × 24 − 1 cuadros: 66, 78 y 106 = 2,75 · 3,25 · 4,42 s. (La v2.3 mezclaba la tabla de
+    //    cortes, b − a = 2,79 · 3,29 · 4,46 s, con los comentarios del plan, 2,7 · 3,0 · 4,1 s.) qa/cuadros-visibles.txt (scripts/cuadros-visibles.py) lo cuenta en el master y se cruza abajo.
+    //  · CARAS: los px son los del CLIP ORIGINAL (720p; qa/caras-por-clip.json, columna de px guardada: máximo 180, no 179 = ancho de caja ÷ 1,5 redondeado); en el lienzo de 1080 la cara de
+    //    Seedance 2.0 Mini llega a 201-255 px en qa/face-gate.txt. El pie y el README lo dicen así.
+    {
+      const visF = ['m1', 'm3', 'm5'].map((id) => Math.round((med[id].b - med[id].a) * FPS) - 1), vis = visF.map((n) => n / FPS), lo = fm1(Math.min(...vis)), hi = fm1(Math.max(...vis));
+      VISIBLES = { cuadros: visF, segundos: vis, lo, hi };
+      if (!pie.includes(`se ven los primeros ${lo} a ${hi} s de cada clip`)) errores.push(`pie.txt: debe decir «se ven los primeros ${lo} a ${hi} s de cada clip» (segundos visibles: ${visF.join(' · ')} cuadros ÷ 24, lo que muestra el plan)`);
+      const cvf = path.join(P, 'qa/cuadros-visibles.txt');
+      if (fs.existsSync(cvf)) {
+        const t = fs.readFileSync(cvf, 'utf8');
+        ['m1', 'm3', 'm5'].forEach((id, k) => { const m = new RegExp(`^${id}: (\\d+) cuadros visibles`, 'm').exec(t); if (!m || +m[1] !== visF[k]) errores.push(`qa/cuadros-visibles.txt: ${id} tiene ${m ? m[1] : 'nada'} cuadros visibles en el master y el plan da ${visF[k]} (el pie dice ${lo} a ${hi} s)`); });
+      }
+      const cf = path.join(P, 'qa/caras-por-clip.json');
+      if (fs.existsSync(cf)) {
+        const cj = JSON.parse(fs.readFileSync(cf, 'utf8')), ws = ['m1', 'm3', 'm5'].flatMap((k) => cj.clips[k].filas.filter((r) => r[1]).map((r) => r[3]));
+        const mx = Math.max(...ws);
+        if (mx >= 200) errores.push(`pie.txt: las caras de los tres clips del video llegan a ${mx} px en qa/caras-por-clip.json y el pie dice «menos de 200 px»`);
+        if (!pie.includes('en el clip original (720p) las caras de los tres clips del video miden menos de 200 px')) errores.push('pie.txt: debe decir «en el clip original (720p) las caras de los tres clips del video miden menos de 200 px» (máximo medido ' + mx + ' px, qa/caras-por-clip.json; son px del clip original: en el lienzo de 1080 la cara de Seedance 2.0 Mini llega a 201 px o más)');
+        // el README cita ese máximo: no puede quedar con otro número (la v2.3 decía 179: ancho de caja ÷ 1,5 redondeado)
+        const rd = path.join(P, 'README.md');
+        if (fs.existsSync(rd)) { const rt = fs.readFileSync(rd, 'utf8'); for (const m of rt.matchAll(/máximo (\d+) px/g)) if (+m[1] !== mx) errores.push(`README.md: dice «máximo ${m[1]} px» y qa/caras-por-clip.json da ${mx}`); if (!rt.includes(`máximo ${mx} px`)) errores.push(`README.md: no dice «máximo ${mx} px» (el máximo de qa/caras-por-clip.json)`); }
+      }
+    }
+    // verificador 3: la anotación del cierre K1 sale de lo medido (qa/face-gate.txt), no de una serie «cada 6 cuadros» que no existe
+    {
+      const capa = String(med.k1.capa);
+      if (/cada 6 cuadros/.test(capa)) errores.push('plan.medios.k1.capa: «parecido medido cada 6 cuadros» (esa serie no existe: qa/face-gate.txt trae solo unos cuadros medidos del cierre)');
+      const gf = path.join(P, 'qa/face-gate.txt');
+      if (fs.existsSync(gf)) {
+        const f3 = (v) => v.toFixed(3).replace('.', ',');
+        const filas = fs.readFileSync(gf, 'utf8').split('\n').map((l) => /^cierre K1 (n\d+) .*?\s(\d\.\d{3})\s+\d+\s+(\d\.\d{3})\s+\d+\s+\d\.\d{3}/.exec(l)).filter(Boolean).map((m) => ({ n: m[1], fin: +m[2], src: +m[3] }));
+        if (!filas.length) errores.push('qa/face-gate.txt: no trae cuadros del cierre K1');
+        else {
+          const F = filas.map((x) => x.fin), S = filas.map((x) => x.src), ns = filas.map((x) => x.n), mn = Math.min(...F, ...S);
+          const esperado = `${filas.length} cuadros medidos (qa/face-gate.txt: ${ns.slice(0, -1).join(', ')} y ${ns.at(-1)}): final ${f3(Math.min(...F))} a ${f3(Math.max(...F))}, fuente ${f3(Math.min(...S))} a ${f3(Math.max(...S))}; ${mn >= SC.piso ? 'ninguno bajo 0,70' : 'el más bajo, ' + f3(mn) + ', queda bajo 0,70'}`;
+          if (!capa.includes(esperado)) errores.push(`plan.medios.k1.capa: debe decir «${esperado}» (lo que trae qa/face-gate.txt)`);
+        }
+      }
+    }
+    for (const id of ['m1', 'm3', 'm5']) permitidosPie.add(fm1((Math.round((med[id].b - med[id].a) * FPS) - 1) / FPS));
+    const decs = pie.match(/\d,\d+/g) || [];
+    for (const d of decs) if (!permitidosPie.has(d)) errores.push(`pie.txt: la cifra ${d} no sale de los datos del video ni de PROCEDENCIA`);
+    for (const f of ['seis clips', 'ocho fotos', 'una toma', 'Seguime']) if (!low.includes(f.toLowerCase()) && !low.includes(f.replace('ocho', '8').toLowerCase())) errores.push(`pie.txt: no dice «${f}»`);
+    const tags = (pie.match(/#\w+/g) || []).join(' ');
+    if (tags !== '#inteligenciaartificial #ia #santacruz #bolivia') errores.push(`pie.txt: hashtags «${tags}»`);
+  }
+}
+// los nombres de las herramientas salen de plan.motores[].nombre y las tarjetas de los motores los llevan
+for (const m of plan.motores) {
+  const c = plan.tarjetas.find((t) => t.motor === m.id);
+  if (!c || !`${c.texto} ${c.acento}`.includes(m.nombre)) errores.push(`${m.id}: la tarjeta no lleva el nombre «${m.nombre}»`);
+  if (/motor\s*\d/i.test(`${c?.texto} ${c?.acento}`)) errores.push(`${m.id}: la tarjeta todavía dice «Motor N» (D-N1)`);
+}
+// tags y sellos dentro de la vida de su tarjeta
+const mot = Object.fromEntries(plan.motores.map((m) => [m.id, m]));
+const cardDe = (m) => plan.tarjetas.find((t) => t.motor === m.id);
+const pushSale = new Set(plan.costuras.filter((c) => c.tarjetas).map((c) => c.tarjetas.sale));
+const salidaDe = (c) => c.b - (pushSale.has(c.id) ? PUSH : E_OUT);       // desde cuándo ya no se lee lo que cuelga de la tarjeta
+for (const m of plan.motores) {
+  const c = cardDe(m);
+  if (m.tag_a < c.a - 1e-9 || m.tag_b <= m.tag_a || m.tag_b > salidaDe(c) - 0.5 || (m.sello && (m.sello.t < m.tag_a || m.sello.t > salidaDe(c) - 0.5))) errores.push(`${m.id}: tags (${m.tag_a}/${m.tag_b}) fuera de la vida de su tarjeta (${c.a}-${salidaDe(c).toFixed(2)})`);
+}
+// ── tiempo de lectura de TODO texto que no es una tarjeta: ≥ 0,35 s por palabra + 0,3 s, ya descontada la entrada (0,18 s). El script ventanas.mjs lo mide en el DOM. ──
+const lecturas = [];
+{
+  const L = (id, que, texto, a, b) => lecturas.push({ id, que, texto: String(texto).replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim(), n: nw(texto), a: f2(a), b: f2(b), dur: f2(b - a - E_IN), min: f2(nw(texto) * 0.35 + 0.3) });
+  L('rotulo', 'rótulo de IA', plan.rotulo.texto, 0, plan.rotulo.b - E_OUT + E_IN);
+  L('pastilla', 'gancho: resultado de los seis', `${plan.gancho.pastilla.etiqueta} ${plan.gancho.pastilla.valor}`, plan.gancho.pastilla.t, med.foto.b - PUSH);
+  for (const m of plan.motores) {
+    const c = cardDe(m), fin = salidaDe(c);
+    L(`dA-${m.id}`, `${m.nombre} dato A`, `parecido 0 s: ${fm(m.ini)}`, m.tag_a, fin);
+    L(`dB-${m.id}`, `${m.nombre} dato B`, `${fm1(m.t_fin)} s: ${fm(m.fin)}`, m.tag_b, fin);
+    if (m.sello) L(`s-${m.id}`, `${m.nombre} sello`, m.sello.texto, m.sello.t, fin);
+  }
+  const lf = med['pl-l'].b - PUSH, rf = med['pl-regla'].b - PUSH, Lc = plan.leccion;
+  L('rf-l', 'regla: etiqueta de las 8 fotos', `${plan.refs.muestra.length} de las ${plan.refs.total} fotos suyas`, plan.regla.refs.etiqueta_t, rf);
+  L('l-tit', 'lección: título', Lc.titulo.texto, Lc.titulo.t, lf);
+  L('l-mkl', 'lección: «mi piso»', `mi piso · ${fm(SC.piso)}`, Lc.marca_t + 0.05, lf);
+  L('l-nota', 'lección: nota del final', Lc.nota.texto, Lc.nota.t, lf);
+  if (fugaTxt) L('l-fuga', 'lección: fotos recibidas (Kling O3)', fugaTxt, Lc.fuga.t, lf);
+  // v2.3 (revisión 2, H2): el aviso también en el gancho (junto al 0,82 de la pastilla) y sobre el clip de Kling O3 (viaja con el clip: se lee desde que termina el empuje de entrada hasta que empieza el de salida)
+  if (fugaTxtGancho) L('fg-gancho', 'gancho: aviso del clip del 0,82', fugaTxtGancho, plan.gancho.fuga.t, med.foto.b - PUSH);
+  if (fugaTxt) for (const m of plan.motores.filter((x) => x.fuga_escena)) L(`fg-${m.id}`, `${m.nombre}: aviso sobre el clip`, fugaTxt, med[m.id].a + PUSH - E_IN, med[m.id].b - PUSH);
+  Lc.orden.forEach((id, i) => {
+    const B = Lc.barra, tb = B.t0 + i * B.escalon, t0 = tb + B.d, ch = Lc.cambios.find((c) => c.motor === id);
+    L(`l-t${i + 1}`, `lección: nombre ${mot[id].nombre}`, mot[id].nombre, tb, lf);
+    L(`l-l${i + 1}`, `lección: rótulo ${mot[id].nombre}`, Lc.descriptor[id], t0 - E_IN, ch ? ch.t : lf);
+    if (ch) L(`l-m${i + 1}`, `lección: rótulo ${mot[id].nombre} (cambia)`, ch.texto, ch.t + 0.2 - E_IN, lf);
+  });
+  for (const x of lecturas) if (x.dur < x.min - 1e-9) errores.push(`lectura «${x.que}» (${x.n} palabras): ${x.dur.toFixed(2)} s y pide ${x.min.toFixed(2)} s`);
+}
+plan.lecturas = lecturas;
+plan.visibles = VISIBLES;
+if (errores.length) { console.error('✖ reglas:\n  ' + errores.join('\n  ')); process.exit(1); }
+
+// ───────────────────────── 3) HTML ─────────────────────────
+const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+// H7: la letra O de «Kling O3» se leía «03» en la fuente de las tarjetas: el nombre «O3» va en la fuente mono (la O y el 0 se distinguen)
+const nom = (h) => h.replace(/\bO3\b/g, '<span class="o3">O3</span>');
+let html = '';
+let track = 40;
+const nextTrack = () => track++;
+const kM = med;
+const FULL = 'position:absolute;left:0;top:0;width:1080px;height:1920px;object-fit:cover;';
+const vid = (m, z, tr) => `<video id="${m.id}" src="${m.src}" data-start="${fs_(m.a)}"${m.media_inicio ? ` data-media-start="${fs_(m.media_inicio)}"` : ''} data-duration="${fc_(m.b - m.a)}" data-track-index="${tr}" muted playsinline preload="auto" style="${FULL}z-index:${z};"></video>`;
+const FULLDIV = (id, a, b, z, inner, cls = '') => `<div id="${id}" class="clip ${cls}" data-start="${fs_(a)}" data-duration="${fc_(b - a)}" data-track-index="${nextTrack()}" style="position:absolute;left:0;top:0;width:1080px;height:1920px;z-index:${z}">${inner}</div>\n`;
+const cent = (cx, top, inner, w = 760) => `<div class="ab" style="left:${Math.round(cx - w / 2)}px;top:${top}px;width:${w}px;display:flex;justify-content:center">${inner}</div>`;
+
+// foto K1: contenedor a lienzo completo (viaja en el empuje) + <img> con el empuje lento hacia la cara
+html += `<div id="foto" class="clip ph" data-start="${fs_(kM.foto.a)}" data-duration="${fc_(kM.foto.b - kM.foto.a)}" data-track-index="1" style="position:absolute;left:0;top:0;width:1080px;height:1920px;z-index:1"><img id="foto-i" src="${kM.foto.src}" data-layout-allow-overflow alt=""></div>\n`;
+html += vid(kM.m1, 1, 20) + '\n' + vid(kM.m3, 1, 22) + '\n' + vid(kM.m5, 1, 24) + '\n' + vid(kM.k1, 1, 26) + '\n';
+
+// rótulo de IA (cuadro 0 → 3 s, 40 px)
+{
+  const r = plan.rotulo;
+  html += `<div id="cc-rotulo" class="clip cc cc-top" data-start="${fs_(r.a)}" data-duration="${fc_(r.b - r.a)}" data-track-index="${nextTrack()}" style="--t:${r.top}px"><div class="cw" id="rotulo"><span class="tag r"><i></i>${esc(r.texto)}</span></div></div>\n`;
+}
+// gancho: las seis miniaturas de los clips (viajan con la foto en el empuje de T3)
+{
+  const g = plan.gancho.miniaturas;
+  const items = SEIS.map((n, i) => `<div class="th" id="th${n}" style="left:${g.x0 + i * (g.w + g.gap)}px;top:${g.y}px;width:${g.w}px;height:${g.h}px"><img src="assets/th${n}.jpg" alt=""><span>${n}</span></div>`).join('');
+  // H2: el RESULTADO antes de los 3 s: «parecido final: 0,64 a 0,82» (rango de los SEIS clips, de PROCEDENCIA.jsonl). Va en el mismo contenedor: viaja con la foto en el empuje de T3
+  const pa = plan.gancho.pastilla;
+  // v2.4 (revisión 3, H1): el aviso del 0,82 (Kling O3) tiene al CLIP de sujeto («Clip 0,82: recibió 4 fotos de comparación») y va CENTRADO bajo las seis miniaturas (entre ellas y la tarjeta c1), no
+  // bajo la pastilla: en la v2.3 (y = 945-1000, bajo la pastilla) tapaba teléfono y manos. La pastilla del resultado no se mueve (y = 838) y las miniaturas vuelven a y = 960 (v2.2).
+  const avisoG = fugaTxtGancho ? cent(540, plan.gancho.fuga.y, `<span class="tag tag-f" id="fg-gancho"><i></i>${esc(fugaTxtGancho).replace(/(\d,\d+:?)/, '<b>$1</b>')}</span>`, 1000) : '';
+  const pastilla = cent(540, pa.y, `<span class="tag tag-g" id="pastilla"><i></i>${esc(pa.etiqueta)}&nbsp;<b>${esc(pa.valor)}</b></span>`, 900);
+  html += FULLDIV('thumbs', Math.min(g.a, pa.t) - 0.1, kM.foto.b, 8, items + pastilla + avisoG);
+}
+// v2.3 (revisión 2, H2): aviso sobre el clip de Kling O3, pegado encima del «5,9 s: 0,82» (borde derecho alineado). Contenedor propio que entra y sale con el empuje del clip (está en la lista de la costura).
+for (const m of plan.motores.filter((x) => x.fuga_escena)) if (fugaTxt) {
+  const f = m.fuga_escena;
+  html += FULLDIV(`fg-${m.id}`, med[m.id].a, med[m.id].b, 9, `<span class="tag tag-f ab" id="fgt-${m.id}" style="right:${W - f.x2}px;top:${f.y}px"><i></i>${esc(fugaTxt)}</span>`);
+}
+// ── placa de la regla: 5 de las 8 referencias + escala 0-1 con la marca en 0,70 (la marca lleva el rótulo «mi piso» en la tarjeta c4, no en la placa) ──
+{
+  const rg = plan.regla, rf = rg.refs, es = rg.escala, y = es.y;
+  let h = '';
+  plan.refs.muestra.forEach((m, i) => { h += `<div class="ref" id="rf${i + 1}" style="left:${rf.x0 + i * (rf.lado + rf.gap)}px;top:${rf.y}px;width:${rf.lado}px;height:${rf.lado}px"><img src="assets/ref${i + 1}.jpg" alt=""></div>`; });
+  h += cent(540, rf.etiqueta_y, `<span class="tag tag-d" id="rf-l"><i></i>${plan.refs.muestra.length} de las ${plan.refs.total} fotos suyas</span>`, 900);
+  h += `<div class="trk" id="sc-trk" style="left:${SC.x0}px;top:${y}px;width:${SC.x1 - SC.x0}px"><div class="zona" id="sc-zona" style="left:${X(SC.piso) - SC.x0}px;right:0"></div></div>`;
+  h += `<div class="mkv" id="sc-mk" style="left:${X(SC.piso)}px;top:${y - 62}px;height:96px"></div>`;
+  h += `<div class="ax" id="sc-ax0" style="left:${SC.x0}px;top:${y + 50}px">0</div>`;
+  h += `<div class="ax r" id="sc-ax1" style="left:${SC.x1 - 420}px;width:420px;top:${y + 50}px">idéntica · 1</div>`;
+  html += FULLDIV('pl-regla', kM['pl-regla'].a, kM['pl-regla'].b, 4, h, 'pl');
+}
+// ── lección: los finales de los Motores 5, 1 y 3 (barras sobre la escala 0-1, marca en 0,70) ──
+const bajo = (v) => v < SC.piso - 1e-9;
+const Lc = plan.leccion;
+const lrows = Lc.orden.map((id, i) => {
+  const m = mot[id], B = Lc.barra, w = Math.round(m.fin * (SC.x1 - SC.x0)), top = B.y0 + i * B.paso;
+  return { id, m, w, top, t: B.t0 + i * B.escalon, ch: Lc.cambios.find((c) => c.motor === id) };
+});
+{
+  const B = Lc.barra, nb = lrows.length, yb = B.y0 + (nb - 1) * B.paso + B.alto + 14;
+  let h = cent(540, Lc.titulo.y, `<span class="tag tag-d" id="l-tit"><i></i>${esc(Lc.titulo.texto)}</span>`, 940);
+  h += cent(X(SC.piso), Lc.marca_label_y, `<span class="tag tag-d" id="l-mkl"><i></i>mi piso · <b>${fm(SC.piso)}</b></span>`, 560);
+  h += `<div class="mkv" id="l-mk" style="left:${X(SC.piso)}px;top:${Lc.marca_label_y + 70}px;height:${yb - (Lc.marca_label_y + 70)}px"></div>`;
+  lrows.forEach((r, i) => {
+    const n = i + 1;
+    h += `<div class="rt" id="l-t${n}" style="left:${SC.x0}px;top:${r.top - B.nombre_dy}px">${nom(esc(r.m.nombre))}</div>`;
+    h += `<div class="bar${bajo(r.m.fin) ? ' bajo' : ''}" id="l-b${n}" style="left:${SC.x0}px;top:${r.top}px;width:${r.w}px;height:${B.alto}px"><span class="lb" id="l-l${n}" data-layout-allow-overflow data-layout-allow-overlap style="width:${SC.x1 - SC.x0}px">${esc(Lc.descriptor[r.id])}</span>${r.ch ? `<span class="lb lb2" id="l-m${n}" data-layout-allow-overflow data-layout-allow-overlap style="width:${SC.x1 - SC.x0}px">${esc(r.ch.texto)}</span>` : ''}</div>`;
+    h += `<div class="barv" id="l-v${n}" style="left:${SC.x0 + r.w + 14}px;top:${r.top + 16}px">${fm(r.m.fin)}</div>`;
+    if (Lc.resalte_motores.includes(r.id)) h += `<div class="barring" id="l-q${n}" style="left:${SC.x0 - 8}px;top:${r.top - 8}px;width:${r.w + 16}px;height:${B.alto + 16}px"></div>`;
+  });
+  h += `<div class="ax" id="l-ax0" style="left:${SC.x0}px;top:${yb + 4}px">0</div><div class="ax r" id="l-ax1" style="left:${SC.x1 - 420}px;width:420px;top:${yb + 4}px">1</div>`;
+  h += cent(540, Lc.nota.y, `<span class="tag" id="l-nota" style="font-size:38px;white-space:normal;text-align:center"><i></i>${esc(Lc.nota.texto)}</span>`, 960);
+  // hallazgo 11-oct: «recibió 4 de las 8 fotos de puntaje», en la fila de Kling O3, al lado de su nombre (el texto sale de fuga_refs + la medición)
+  if (fugaTxt) {
+    const r = lrows.find((x) => x.id === Lc.fuga.motor);
+    h += `<span class="tag tag-f ab" id="l-fuga" style="left:${Lc.fuga.x}px;top:${r.top - B.nombre_dy + Lc.fuga.dy}px"><i></i>${esc(fugaTxt)}</span>`;
+  }
+  html += FULLDIV('pl-l', kM['pl-l'].a, kM['pl-l'].b, 4, h, 'pl');
+}
+// ── tarjetas narrativas (+ pila de dato y sello en los motores). La entrada arranca 1 cuadro ANTES de que termine la anterior, salvo en los empujes (viajan) ──
+const viajaEntra = new Set(plan.costuras.filter((c) => c.tarjetas).map((c) => c.tarjetas.entra));
+const viajaSale = new Set(plan.costuras.filter((c) => c.tarjetas).map((c) => c.tarjetas.sale));
+const primeras = new Set(plan.cadenas_de_tarjetas.map((c) => c[0]));
+for (const c of plan.tarjetas) c.entra = c.a - (viajaEntra.has(c.id) ? PUSH : primeras.has(c.id) ? 0 : FR);
+const extrasDe = {};                                       // ids que cuelgan de cada tarjeta (viajan con ella en el empuje)
+for (const c of plan.tarjetas) {
+  const t = c.texto.endsWith('\n') ? nom(esc(c.texto.slice(0, -1))) + '<br>' : nom(esc(c.texto)) + (c.acento ? ' ' : '');
+  const acento = c.acento ? `<b${c.acento_t ? ' class="late"' : ''}>${nom(esc(c.acento))}</b>` : '';
+  let extras = '';
+  extrasDe[c.id] = [];
+  if (c.motor) {
+    const m = mot[c.motor];
+    if (m.sello) { extras += `<div class="sello" id="s-${m.id}">${esc(m.sello.texto)}</div>`; extrasDe[c.id].push(`s-${m.id}`); }
+    extras += `<div class="drow" id="d-${m.id}"><span class="tag tag-d${bajo(m.ini) ? ' bajo' : ''}" id="dA-${m.id}"><i></i>parecido <b>0 s:</b> <b>${fm(m.ini)}</b></span>` +
+      `<span class="arr" id="dX-${m.id}">→</span><span class="tag tag-d${bajo(m.fin) ? ' bajo' : ''}" id="dB-${m.id}"><i></i><b>${fm1(m.t_fin)} s:</b> <b>${fm(m.fin)}</b></span></div>`;
+    extrasDe[c.id].push(`d-${m.id}`);
+  }
+  html += `<div id="cc-${c.id}" class="clip cc cc-bot" data-start="${fs_(c.entra)}" data-duration="${fc_(c.b - c.entra)}" data-track-index="${3 + (plan.tarjetas.indexOf(c) % 2)}" style="--b:${Z.tarjeta_bottom_y}px">` +
+    `<div class="stk">${extras}<div class="cw" id="${c.id}"><i class="sh sh1"></i><i class="sh sh2"></i><div class="card"><div class="rail"></div><div class="t">${t}${acento}</div></div></div></div></div>\n`;
+}
+const css = fs.readFileSync(path.join(P, 'scripts/estilos.css'), 'utf8').replaceAll('{{ACC}}', ACC).replaceAll('{{BAD}}', BAD);
+const tlJs = fs.readFileSync(path.join(P, 'scripts/timeline.js'), 'utf8');
+const existe = (id) => html.includes(`id="${id}"`);
+const costuras = plan.costuras.filter((c) => c.tipo === 'empuje').map((c) => ({
+  t: c.t,
+  sale: [...c.sale, ...(c.tarjetas ? [c.tarjetas.sale, ...(extrasDe[c.tarjetas.sale] || [])] : [])].filter(existe),
+  entra: [...c.entra, ...(c.tarjetas ? [c.tarjetas.entra] : [])].filter(existe),
+}));
+const PLAN_JS = {
+  W, H, FR, PUSH, PEASE: plan.empuje.ease, E_IN, E_OUT, costuras, ACC, FIN: DUR - 1e-6,
+  tarjetas: plan.tarjetas.map(({ id, entra, b, acento_t }) => ({ id, a: +entra, b, acento_t: acento_t || null, en_empuje_entra: viajaEntra.has(id), en_empuje_sale: viajaSale.has(id), sin_entrada: primeras.has(id) })),
+  rotulo: plan.rotulo,
+  foto: { a: kM.foto.a, b: kM.foto.b, zoom: kM.foto.zoom, ox: kM.foto.ox, oy: kM.foto.oy },
+  gancho: { a: plan.gancho.miniaturas.a, esc: plan.gancho.miniaturas.escalon, n: SEIS.length, pastilla_t: plan.gancho.pastilla.t, fuga_t: fugaTxtGancho ? plan.gancho.fuga.t : null },
+  regla: { refs: { a: plan.regla.refs.a, esc: plan.regla.refs.escalon, n: plan.refs.muestra.length, etiqueta_t: plan.regla.refs.etiqueta_t }, escala: plan.regla.escala },
+  leccion: { marca_t: Lc.marca_t, titulo_t: Lc.titulo.t, d: Lc.barra.d, filas: lrows.map((r, i) => ({ n: i + 1, t: r.t, w: r.w, ch: r.ch ? r.ch.t : null, ring: Lc.resalte_motores.includes(r.id) })), resalte_t: Lc.resalte_t, nota_t: Lc.nota.t, fuga_t: fugaTxt ? Lc.fuga.t : null },
+  motores: plan.motores.map((m) => { const c = cardDe(m); return { id: m.id, a: m.tag_a, b: m.tag_b, sello: m.sello, sale_con_tarjeta: !viajaSale.has(c.id), card_b: c.b }; }),
+};
+const out = `<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=${W}, height=${H}">
+<title>Lucía · G2 v2</title>
+<script src="assets/vendor/gsap.min.js"></script>
+<style>
+${css}
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="${DUR}" data-width="${W}" data-height="${H}" data-fps="${FPS}">
+<div id="ground"></div>
+${html}</div>
+<script>
+window.__timelines = window.__timelines || {};
+const PLAN = ${JSON.stringify(PLAN_JS)};
+${tlJs}
+</script>
+</body>
+</html>
+`;
+fs.writeFileSync(path.join(P, 'index.html'), out);
+fs.writeFileSync(path.join(P, 'plan.resuelto.json'), JSON.stringify(plan, null, 1));
+
+// ───────────────────────── 4) tabla de cortes ─────────────────────────
+const hms = (t) => t.toFixed(3).padStart(7);
+console.log(`Voz (guion-voz.txt: ${sumaChars} caracteres, ${tramos.reduce((s, t) => s + t.palabras, 0)} palabras; ${leerDuraciones(P) ? 'duraciones REALES de duraciones.json' : `ESTIMADA a ${VZ.cps} caracteres por segundo, sin voz generada`}; hueco de ${VZ.hueco_cuadros} cuadros = ${(VZ.hueco_cuadros / FPS).toFixed(2)} s antes de cada tramo; cupo de voz hoy ${VZ.cupo_hoy}):`);
+for (const t of tramos) console.log(`  T${String(t.i).padEnd(2)} ${hms(t.t)} – ${hms(t.e)} (${String(t.caracteres).padStart(2)} car, ${t.df} cuadros) ventana hasta ${hms(+t.w)} hueco a ${VZ.cps} c/s ${holgura(t, VZ.cps).toFixed(2)}${t.extendido ? ' (extendido por lectura)' : ''}  «${t.texto}»`);
+// qa/tramos-voz.json (lo lee poner-voz.mjs) y la tabla caben/no caben (H1)
+fs.mkdirSync(path.join(P, 'qa'), { recursive: true });
+fs.writeFileSync(path.join(P, 'qa/tramos-voz.json'), JSON.stringify(tramos.map((t) => ({ n: t.i, linea: t.texto, chars: t.caracteres, a: t.t, b: +t.w, dura: +(+t.w - t.t).toFixed(6), ultimo: !!t.ultimo })), null, 1) + '\n');
+fs.writeFileSync(path.join(P, 'qa/voz-caben.txt'), tablaCaben(crono, VZ, ORIGINALES_V2_0) + '\n');
+console.log(`Duración: ${DUR.toFixed(3)} s (${Math.round(DUR * FPS)} cuadros)`);
+console.log('Medios:');
+for (const m of plan.medios) console.log(`  ${hms(m.a)} – ${hms(m.b)} ${m.id.padEnd(9)} ${m.tipo.padEnd(5)} ${m.capa}`);
+console.log('Costuras (empuje rígido de 6 cuadros, caen en el hueco de la voz):');
+for (const c of plan.costuras) console.log(`  ${hms(c.t - PUSH)} → ${hms(c.t)}  sale ${c.sale.join(',')} → entra ${c.entra.join(',')}`);
+console.log('Tarjetas:');
+for (const c of plan.tarjetas) console.log(`  ${hms(c.a)} – ${hms(c.b)} ${c.id.padEnd(3)} ${String(c.n_palabras)} pal (mín ${c.min_s} s, dura ${(c.b - c.a).toFixed(2)}) «${(c.texto.replace(/\n/g, ' ') + ' ' + (c.acento || '')).trim()}»${viajaEntra.has(c.id) ? ' [entra con el empuje]' : ''}${viajaSale.has(c.id) ? ' [sale con el empuje]' : ''}`);
+console.log('Lecturas de rótulo, datos, sellos y placas (≥ 0,35 s/palabra + 0,3, ya descontada la entrada):');
+for (const x of lecturas) console.log(`  ${x.id.padEnd(8)} ${x.que.padEnd(36)} ${String(x.n).padStart(2)} pal  ${x.a.toFixed(2)}–${x.b.toFixed(2)}  ${x.dur.toFixed(2)} s (pide ${x.min.toFixed(2)})  ${x.dur - x.min < 0.2 ? '← justo' : ''}`);
+if (VISIBLES) console.log(`Cuadros visibles de cada clip (alguna parte del clip a la vista; cuenta (b − a) × 24 − 1): m1 ${VISIBLES.cuadros[0]} = ${VISIBLES.segundos[0].toFixed(2)} s · m3 ${VISIBLES.cuadros[1]} = ${VISIBLES.segundos[1].toFixed(2)} s · m5 ${VISIBLES.cuadros[2]} = ${VISIBLES.segundos[2].toFixed(2)} s (el pie dice «${VISIBLES.lo} a ${VISIBLES.hi} s»)`);
+console.log('Datos (de PROCEDENCIA.jsonl):');
+for (const m of plan.motores) console.log(`  ${m.nombre}: ${m.cr} cr · 0 s ${fm(m.ini)} → ${fm1(m.t_fin)} s ${fm(m.fin)}  (muestras ${m._valores.join(' ')})`);
+console.log('Fotos recibidas como entrada (plan.fuga_refs ← medición del 11-oct; cada cifra validada contra la fuente):');
+for (const c of FG.clips) console.log(`  ${c.nombre}: ${c.imagenes} imágenes de entrada (${c.imagenes === 3 ? 'más la foto de arranque' : 'sin foto de arranque'}), ${c.recibio.length} entre las ${plan.refs.total} (${listaY(c.recibio)})${c.cara_px ? ` · cara ${c.cara_px.join('-')} px` : ''} · ${enPantalla(c) ? 'SALE en pantalla: aviso en el gancho «' + fugaTxtGancho + '», sobre su clip y en la lección «' + fugaTxt + '»' : 'no sale en pantalla: solo el pie'}`);
+if (HF) {
+  console.log(`  K1 (4afffb96, la foto de arranque de cinco clips) se hizo con ${listaY(HF.k1)}: ningún clip es independiente de esas ${HF.k1.length} fotos`);
+  console.log(`  prueba estricta (solo ${listaY(HF.sin)}): los seis clips bajan entre ${fm(HF.lo)} y ${fm(HF.hi)}; el orden por valor final ${HF.ordenIgual ? 'NO cambia' : 'CAMBIA'}; sobre el piso ${fm(SC.piso)}: ${HF.nA} de 6 con las 8 fotos y ${HF.nB} de 6 con las ${HF.sin.length}`);
+}
+console.log(`ok: index.html (${Math.round(out.length / 1024)} KB), plan.resuelto.json`);

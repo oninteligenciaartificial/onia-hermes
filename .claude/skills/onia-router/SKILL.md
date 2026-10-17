@@ -59,6 +59,7 @@ ni ejecutar Git fuera del encargo de la madre.
 | **chatbot** (motor, guion, conocimiento, voz) | **cargar `onia-chatbot`** — ese archivo nombra el stack completo del carril | — | `onia-chatbot` |
 | **hermes-jarvis** (Hermes, Telegram de Sergio Urcullo, su calendario, pedidos a Claude) | **cargar `onia-hermes-jarvis`** — método, trampas y pruebas del carril; estado en `handoff/hermes-jarvis.md` | — | `onia-hermes-jarvis` |
 | **G** infra / n8n | `n8n-workflow-patterns` `n8n-mcp-tools-expert` `n8n-node-configuration` `n8n-code-javascript` `n8n-validation-expert` `docker-patterns` `deployment-patterns` | — | — |
+| **Lucía** (influencer IA de Onia: fotos y clips en Higgsfield, sus reels, publicación en IG/TikTok, su plan) | **cargar `lucia` primero** (costos medidos, recetas, voz, pantallas reales, circuito de publicación) · `editor-videos` `higgsfield-generate` `motion-doctrine` | — | `lucia` |
 | **H** contenido · **J** video-remotion | **`diseno-contenido-onia` primero** (índice de imágenes, galería, packs y patrones) · **`edicion-referentes` para todo video nuevo de Sergio Urcullo** (Santiago Muñoz / Erik Taveras por sus mecanismos medidos (sin copiar identidad ni guion), desde el 3-oct) · `editor-videos` `ver-videos` `sacar-prompt` `hyperframes` `banner-design` `brand` + Higgsfield MCP | — | — |
 | **I** research/estrategia | `deep-research` `exa-search` `iterative-retrieval` `office-hours` | — | — |
 | **K** yt-canal/meta-ads · **L** yt-ciencia-cuerpo | `article-writing` `deep-research` (L=salud/YMYL: fuentes obligatorias) + video stack | — | — |
@@ -108,6 +109,7 @@ ni ejecutar Git fuera del encargo de la madre.
   corregir; no ve la nube ni es la madre; 2026-10-16).
 - **Producto:** `onia-core` · `onia-chatbot` · `onia-contabilidad-bolivia`.
 - **Venta:** `onia-propuestas` (generador oficial, nunca HTML a mano) · `onia-web-factory`.
+- **Lucía:** `lucia` (el carril de la influencer IA: Higgsfield, edición, publicación y plan; 2026-10-05).
 - **Contenido y video:** `diseno-contenido-onia` (índice de diseño) · `edicion-referentes` (el molde de edición de los videos de Sergio Urcullo: recetas medidas de Santiago Muñoz y Erik Taveras + scripts) · `editor-videos` ·
   `ver-videos` · `sacar-prompt` · `higgsfield-generate` · `higgsfield-soul-id` ·
   `motion-doctrine` con sus rutas `cut-the-curve` `oversized-cursor` `seam-craft`

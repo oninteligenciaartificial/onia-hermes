@@ -1,0 +1,11 @@
+# renders pesados y temporales
+renders/
+out/
+node_modules/
+.hyperframes/
+# material copiado del kit por scripts/build.mjs (no se duplica en git)
+assets/*.mp4
+assets/*.jpg
+assets/k4cuadros/
+assets/fonts/
+assets/vendor/

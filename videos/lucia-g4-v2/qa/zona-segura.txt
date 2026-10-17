@@ -1,0 +1,19 @@
+muestras: 225 instantes (cada 3 cuadros), 1412 cajas de texto medidas
+margen mínimo entre el mentón y el texto que queda debajo: 60 px (t=3.125 s, rotulo/tag: texto desde y=720, mentón y=660; la regla pide ≥ 40)
+tamaños de texto en el DOM (px: cuántos elementos): {"38":19,"40":9,"44":3,"48":2,"64":4,"66":18}
+  ok  rótulos de fila de la lección: el más largo («Seedream 5.0 Pro · 2,5 créditos», 40 px) termina en x=628; la marca de 0,70 está en x=713 (holgura 82 px)
+  ok  nota 1                                   44 px (mínimo 44)
+  ok  nota 2                                   44 px (mínimo 44)
+  ok  rótulo de IA                             40 px (mínimo 40)
+  ok  escena 2: fotos x 90-990, y 290-1054; pies hasta y=1171; la tarjeta arranca en y=1234
+  ok  L1 marca 0,70                            medido 716.0  esperado 716.0
+  ok  L1 Imagen B punto 0.79                   medido 795.0  esperado 795.2
+  ok  L1 Imagen A punto 0.81                   medido 813.0  esperado 812.8
+  ok  L1 Imagen C punto 0.74                   medido 751.0  esperado 751.2
+  ok  L1 Imagen D punto 0.7                    medido 716.0  esperado 716.0
+  ok  L1 Imagen F punto 0.66                   medido 681.0  esperado 680.8
+  ok  L1 Imagen E punto 0.69                   medido 707.0  esperado 707.2
+  ok  L1 franja de ruido (borde izquierdo = 0,66) medido 681.0  esperado 680.8
+  ok  L1 franja de ruido (borde derecho = 0,70) medido 716.0  esperado 716.0
+  ok  regla marca 0,70                         medido 716.0  esperado 716.0
+✔ todo el texto dentro de la zona segura, sin pisarse, ≥ 34 px, y los datos están donde dice el número

@@ -1,0 +1,14 @@
+ventana legible medida en el DOM (opacidad ≥ 0,9 y ≥ 95 % dentro del lienzo), cuadro a cuadro:
+  ok  q-p6      6 pal  44.42–47.13 s  2.71 s (pide 2.40)  «Motor 6: 5 créditos por segundo»
+  ok  q-p1      6 pal  44.42–47.13 s  2.71 s (pide 2.40)  «Motor 1: 1,25 créditos por segundo»
+  ok  q-sello   5 pal  44.88–47.13 s  2.25 s (pide 2.05)  «4× el precio por segundo»
+  ok  q-num     6 pal  44.42–47.17 s  2.75 s (pide 2.40)  «0,77 cierre del clip (3,9 s)»
+  ok  s-m4      3 pal  34.67–36.46 s  1.79 s (pide 1.35)  «inventó un letrero»
+  ok  s-m3      3 pal  25.38–26.75 s  1.38 s (pide 1.35)  «bajo el piso»
+  ok  s-m5      3 pal  40.38–41.75 s  1.38 s (pide 1.35)  «inventó el cuarto»
+  ok  dA-m6     4 pal  42.46–44.25 s  1.79 s (pide 1.70)  «parecido 0 s: 0,79»
+  ok  dB-m4     3 pal  35.08–36.46 s  1.38 s (pide 1.35)  «5,9 s: 0,80»
+  ok  p-m2      6 pal  18.42–21.75 s  3.33 s (pide 2.40)  «Este clip: 1080p, los otros 720p»
+  ok  l1-nota   8 pal  27.83–32.13 s  4.29 s (pide 3.10)  «Final: cierre del clip, que no se ve entero.»
+  ok  l2-nota  11 pal  50.08–54.63 s  4.54 s (pide 4.15)  «nota de la lección 2 (línea 2: 11 palabras)»
+✔ todas las ventanas medidas alcanzan la regla de lectura

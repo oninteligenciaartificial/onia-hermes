@@ -1,137 +1,174 @@
-# Plan de contenido de Lucía — primero la idea, después se genera (v3, 2-oct)
+# Plan de Lucía — v5 (8-oct-2026): influencer que graba y aprende Higgsfield
 
-> **Este archivo manda** sobre qué se publica y por qué. Se arma con tres cosas:
-> - lo que pidió Sergio Urcullo (2-oct): *«organizá primero qué idea vas a subir… recién generá»* y *«el plan lo
->   verificamos con las competencias de modelos ai»*;
-> - el **manual verificado** de cómo trabajan las influencers IA que funcionan:
->   `references/modelos/lucia/MANUAL-PATRONES-INFLUENCERS-IA.md` (madre, 2-oct, 16 agentes);
-> - **los rubros que ya vende la plataforma**.
->
-> Quién es Lucía, su firma visual y sus lugares: `references/modelos/lucia/LUCIA.md` § 0. Cómo se edita:
-> `editor-videos`. **No se genera ni se publica nada sin el OK de Sergio Urcullo a este plan y al costo de cada lote.**
+> **Este archivo manda** sobre qué publica Lucía y por qué. Reemplaza la v4 (queda en git).
+> **Premisa de Sergio Urcullo, 8-oct:** *«Lucía no es necesario que muestres el producto, recordá que sos una influencer.
+> Grabar y aprender a usar Higgsfield: esa es tu tarea.»*
+> - **Evidencia de mercado:** `research/competencia/LUCIA_COMPETENCIA_20261005.md`.
+> - **Personaje y límites:** `references/modelos/lucia/LUCIA.md` §0.
+> - **Método, costos y trampas de Higgsfield:** skill `lucia`.
+> - **Guiones:** `guiones/`.
 
-## 1. Para qué existe la cuenta
-- **La métrica son las demos agendadas con `src=lucia-*`.** Seguidores y likes no cuentan como resultado.
-- **Una sola puerta, en la bio y en cada pieza:** «Agendá tu demo» → `onia.com.bo/llamada?src=lucia-<pieza>`.
-  Antes de L01 hay que verificar que `/llamada` conserve el `src` hasta cal.com. Si no lo conserva, no hay medición.
-- Le habla al **dueño de un negocio de Santa Cruz**, primero la clínica de 2 a 6 profesionales con recepción
-  (`ONIA_CLIENTE_IDEAL.md`).
-- **Lucía es UNA influencer cruceña IA que te muestra cómo trabaja cada negocio con Onia.** Además tiene su vida en
-  Santa Cruz.
+## 0. En una línea
 
-## 2. Los rubros: solo los que ya tenemos
-**Decisión de Sergio Urcullo, 2-oct.** En esta sesión dijo «todos»; por la madre llegó «con los rubros que ya
-tenemos, no abogada, de todo». La lista no se arma de memoria: sale de
-`onia-platform/lib/platform/rubros-activos.ts` (`RUBROS_ACTIVOS`, la que ofrece el alta).
+Lucía es una **influencer IA de Santa Cruz que declara que es IA**. Su tarea es **grabar videos estructurados y aprender a
+usar Higgsfield haciéndolos**. No tiene que mostrar ni vender el producto. Cada prueba deja un video y deja un aprendizaje
+escrito en la skill `lucia`, con el caso, el costo y la fecha.
 
-| Rubro (como lo nombra el alta) | Dónde lo muestra Lucía | Orden |
-|---|---|---|
-| Clínica dental | la recepción de una clínica en una torre de Equipetrol | 1.º (cliente ideal) |
-| Estética y spa | un centro de estética | 3.º |
-| Comercio / tienda | una tienda de galería | 3.º (espera la factura del SIN dentro del sistema) |
-| Importadora / distribuidora | un showroom o depósito | 2.º |
-| Servicios profesionales | un estudio contable o jurídico: **un solo rol** (el ejemplo de la plataforma es «Estudio Contable») | 3.º (espera la factura del SIN dentro del sistema) |
+## 1. Qué cambia respecto de la v4
 
-- **El orden** es el de empuje que decidió Sergio Urcullo el 29-sep (CLAUDE.md § ONIA Core): dental → importadora →
-  el resto.
-- **Fuera:** veterinaria y ganadería, que el alta no ofrece.
-- La abogada y la contadora de la v2 se juntan en un solo rol: «estudio».
-- ⚠️ `ONIA_ESTRATEGIA_DE_EMPRESA.md` §7 dice que la Etapa 1 vende solo dental y estética. Sergio Urcullo decidió
-  que en Lucía entran los 5. El dueño de ese doc tiene que actualizarlo; se le avisó a la madre.
+| Antes (v4) | Ahora (v5) |
+|---|---|
+| Prueba para conseguir clínicas: se medían conversaciones | Influencer que enseña; se mide si el video sirvió (guardados, envíos) y qué se aprendió |
+| Toda pieza de venta llevaba la pantalla real de Onia | **No hace falta mostrar el producto.** La cuenta demo y las capturas ya no bloquean nada |
+| Puerta de demo (WhatsApp o cal.com) y trato de usted | La puerta queda **pausada**. El trato es **voseo cruceño**, que es su canon |
+| 5 rubros → solo dental | No hay rubro: no habla de un negocio |
 
-## 3. Los formatos (manual §1 y §2)
+- **Si una pieza nombra o muestra una función de Onia**, vuelve la regla de `CLAUDE.md` § «Qué se publica sin preguntar»:
+  tabla «se promete / funciona» y OK de Sergio Urcullo. El guion de producto quedó en pausa:
+  `guiones/G-producto-1-recordatorio-de-cita.md`.
+- **Lo que enseñó el mercado y sigue valiendo** (5-oct): nadie declara la IA en la pieza, y eso es lo que distingue a
+  Lucía; el orgánico rinde poco, así que ganan la constancia y el contenido que se guarda; Aria Cruz declara la IA hasta
+  en el nombre.
 
-| Formato | Qué es | Créditos |
+## 2. Reglas de toda pieza
+
+- **⛔ Un video de Lucía es un video estructurado** (Sergio Urcullo, 8-oct; el chiste de 10 s y L02 se rechazaron):
+  - **gancho** en los primeros 3 s;
+  - **desarrollo con valor**: pasos, un caso o una demostración;
+  - **cierre** con un solo CTA;
+  - **30 a 60 s**, y deja algo aprendido;
+  - el **guion se escribe y se valida ANTES de editar**. Moldes: `FORMULAS-REFERENTES.md` y `edicion-referentes`.
+- **IA declarada, siempre:** nombre «Lucía Antelo · IA de Onia», bio, etiqueta de perfil IA, etiqueta «Información de IA» en
+  cada pieza por API, rótulo «Lucía Antelo · personaje IA de Onia» desde el cuadro 0 y el pie.
+- **Nunca profesional de salud.** El ambo es vestuario. No consejo clínico ni legal, no testimonio, no clienta, no
+  «agenda llena», no resultados, no dice que estuvo en un lugar o evento real. No toca política.
+- **Las herramientas SÍ se nombran, como uso propio y no como recomendación pagada** (Sergio Urcullo, D-N1, 11-oct ~04:05 UTC; antes valía «Motor 1»). El pie suma
+  «Nombro lo que uso; no es una recomendación pagada.» Siguen prohibidos los logos y las capturas de interfaces de terceros, y toda frase que suene a «el mejor» o a recomendación general.
+- **Voz Marcela: D4 decidida el 11-oct** (queda, con su acento colombiano; `cola/loop/madre.md:75`). Las piezas salen mudas y la voz se mezcla después, con el sí de la madre y el cupo. Ninguna voz de ElevenLabs se publica sin licencia comercial confirmada (no verificada). Sin música sin
+  licencia: la pone Sergio Urcullo.
+- **Nombre con apellido** siempre.
+- **QA completo antes de publicar:** receta de `editor-videos` § «Reels de Lucía» §12 (cuadro 0, cada entrada, último
+  cuadro, texto debajo del mentón + 40 y sobre y=1490) y `grep` contra la lista de frases prohibidas.
+- **Publicación** (`CLAUDE.md`, 8-oct): una pieza que pasa el QA, se miró renderizada completa y no toca el producto ni
+  nombra a terceros, se publica sin el OK pieza por pieza; después se le avisa a Sergio Urcullo con el enlace.
+- **Regla de oro del video** (`CLAUDE.md` § Video, sin excepción decidida para Lucía): la tabla de cortes y el preview 360p
+  se muestran ANTES del render final. La tabla de tiempos del guion es la tabla de cortes. Orden: guion validado por la
+  madre → preview 360p a la madre → render final → QA → publicar. Si Sergio Urcullo quiere eximir a Lucía de ver el preview,
+  lo dice él.
+- **Toda generación paga:** costo cotizado con `get_cost` y OK de Sergio Urcullo al lote.
+
+## 3. Qué se aprende de Higgsfield (currículo)
+
+Cada fila es una prueba chica, con su video. Los costos son cotizaciones en vivo del 8-oct, sin gastar.
+
+| # | Prueba | Costo | Qué se aprende | Video que sale |
+|---|---|---:|---|---|
+| — | Cómo se hace un clip: foto, orden, revisión (ya pagado) | 0 | El método y el costo real de una pieza | **G1** |
+| — | Errores que se escapan: letrero inventado, letra que no dice nada, mano que tapa a la otra (ya pagado) | 0 | Qué mirar en cada cuadro | **G3** |
+| **L1** ✅ hecho el 8-oct: misma orden en 6 clips, cinco desde la misma foto (Kling std ya pagado, Kling pro 9, Seedance mini 6, mini + 3 referencias 6, Cinema Studio 3.0 de 4 s 20) y Kling Omni con 5 referencias y sin foto de arranque (6) y 6 motores de imagen | **86,5 gastados** (clips 47, fotos 11,75, labios 27,75) | Cuánto sostiene cada vía la cara: con `start_image`, Kling std y Seedance mini la dejan decaer (Kling pro, a 9 cr, igual); Cinematic Studio 3.0 con la foto sola (20 cr) la mantuvo dentro del ruido de ±0,03; las referencias la sostienen pero el motor inventa la escena. Una toma por clip: no hay regla de precio ni de «foto sola». Detalle: skill `lucia` §0-quater | **G2** (v2 muda de 27,8 s con la revisión 1 aplicada; falta voz) |
+| L2 | Voz y labios con audio propio. **Labios medidos el 8-oct:** Seedance mini 6 cr (cae bajo el gate, sin audio en el mp4) y `sync_so` 21,75 cr sobre un clip hecho (conserva la cara y trae el audio). Falta la voz | ~10-20 | Si hay una voz que suene cruceña. Primero Sergio Urcullo escucha las muestras (`research/competencia/lucia-20261005/voces/`) | por definir |
+| L3 | Copiar los gestos de un video guía (Motion Control, 17 por 10 s) | 17 | Control de «mira a cámara y gesticula». Requiere que Sergio Urcullo grabe 10 s | por definir |
+| — | Fotos de lifestyle con la cara fija (Seedream + ancla, 1 por foto) | 0-5 | Consistencia en escenas nuevas | carruseles |
+
+- **Créditos:** al 8-oct hay 541,26 (medido en vivo) y lo que sobra se **borra en cada renovación** (el 1-oct se borraron 387,57). Octubre va
+  **139 de 150** (52,5 + 86,5 del lote de aprendizaje del 8-oct); saldo real **438,17** medido el 10-oct (454,76 era una resta; el libro de movimientos muestra 16,59 cr más gastados el 8-oct por otra mano).
+- Lo que se aprende se escribe en la skill `lucia`, en el mismo commit que el video.
+
+## 4. Formatos
+
+| Formato | Molde (`FORMULAS-REFERENTES.md`) | Créditos |
 |---|---|---:|
-| **Ancla: Reel de 30–45 s** | 2–5 s de Lucía (foto del banco o b-roll ya pagado) + **grabación de la pantalla REAL de Onia** con subtítulos + cierre | 0 |
-| Serie **«Recepción a las 8»** | Lucía cuenta, como observadora, el caos real de una recepción (WhatsApp sin contestar, el paciente que no confirma) y cierra con Onia en pantalla | 0–7,5 |
-| Serie **«Humo vs. real»** | Lo que la IA NO hace, después lo que Onia SÍ hace hoy, en pantalla | 0 |
-| Carrusel de utilidad (1–2 por semana) | Lo que se guarda: el paso a paso del link de reserva, «3 cosas que bajan las inasistencias» | 0–1 |
-| Personaje | «Un día en Santa Cruz» (clips ya pagados + fotos), el chiste de 10 s, «Este video no fue grabado» | 0–5 |
-| Historias | Las fotos sueltas (no van al feed), la caja «¿Tu peor día de agenda?» y el sticker con `src=lucia-story` | 0 |
+| **Receta en pasos con el paso crítico marcado** (G1) | F7 | 0 |
+| **Misma tarea, varios niveles: «así no / así sí»** (G2) | F4 | según la prueba |
+| **Caso real → error → por qué → corrección → regla** (G3) | F3 | 0 |
+| **Carrusel paso a paso** con fotos reales de las pruebas | C1 | 0-5 |
+| **Historias:** recortes del mismo lote | — | 0 |
 
-**Reglas de toda pieza:**
-- **IA declarada en tres lugares:**
-  - bio, línea 1: «IA creada por @oniahq · equipo humano en Santa Cruz»;
-  - etiqueta «Perfil generado con IA» de Instagram;
-  - sobreimpreso «Lucía · personaje IA de Onia» desde el segundo 0.
-- **Gancho de 0 a 2 s:** el problema escrito o «Hace un año yo no existía». Sin logo y sin «hola, soy Lucía».
-- **Lucía puede llevar el ambo o la ropa del rubro como VESTUARIO, pero nunca dice ni da a entender que es
-  odontóloga ni profesional de salud** (D1, decidido el 3-oct). El texto siempre la presenta como «Lucía · personaje IA
-  de Onia» que muestra cómo funciona el sistema.
-  - **Prohibido en guion, pie y subtítulos:** «hoy soy odontóloga», «soy doctora», «como odontóloga», «mis
-    pacientes», «mi consultorio» y cualquier frase que la ponga en el puesto.
-  - **Sí vale:** «te muestro cómo trabaja una clínica con Onia» o «esto pasa en la recepción».
-- **Lucía OBSERVA y muestra; no ocupa el puesto.**
-  - Dice «lo que veo en las recepciones», nunca «me pasó con un paciente».
-  - No finge experiencias físicas. Usa su límite como gancho: «no puedo tomarme este café, pero…».
-- **Solo funciones vivas:** link de reserva y recordatorio por correo 24 h y 2 h. «Tratamiento a medias» entra recién
-  con la 1.0.
-- **Cierre de venta:** «Mandáselo a quien contesta tu WhatsApp» + «Agendá tu demo».
-- Nada en vivo y nada de música sin licencia.
-- **Nunca se promete un resultado:** nada de «agenda llena», «cero ausencias» ni porcentajes. Se muestra el mecanismo
-  vivo (recordatorio, link de reserva), no lo que va a lograr. La IA se declara siempre: nunca «no sé si soy real».
+~~Reel de personaje de 6-10 s~~: **rechazado el 8-oct.**
 
-## 4. Prueba de 2 semanas (manual §4, con lo que hay hoy)
+## 4-bis. Estructura semanal fija (11-oct)
 
-| # | Pieza | Formato | ¿Sale ya? | Créditos |
-|---|---|---|---|---:|
-| 1 | L01 «Hola, soy Lucía. No existo.» (fijado) | Carrusel | ✅ aprobado el 1-oct | 0 |
-| 2 | L02 «Este video no fue grabado» + sobreimpreso IA | Reel personaje | ✅ editado; falta el OK | 0 |
-| 3 | «Un día en Santa Cruz» | Reel personaje | ✅ 3 clips pagados + 5 fotos de lugares reales | ~5 |
-| 4 | Chiste de 10 s: «¿Lucía es real? No: soy IA. Los recordatorios que te muestro, sí.» | Reel personaje | ✅ clip pagado | 0 |
-| 5 | «Humo vs. real» #1, gancho A «Hace un año yo no existía» → link de reserva | Reel venta | ⛔ falta la pantalla real | 0 |
-| 6 | «Recepción a las 8» #1 → recordatorio 24 h y 2 h | Reel venta | ⛔ falta la pantalla real | 0–7,5 |
-| 7 | «3 cosas que bajan las inasistencias» | Carrusel venta | ⛔ falta la captura real | 0 |
-| 8 | #5 con gancho B, «¿Cuántas citas se te caen por no confirmar?» | Reel venta | ⛔ igual que #5 | 0 |
+> **APROBADA por Sergio Urcullo el 11-oct ~03:55 UTC (vía la madre v4).** **D-N1 y D4 decididas el 11-oct ~04:05 UTC** (abajo). Sigue pendiente el token de Instagram (recomendé B). Dirección de Sergio Urcullo, 11-oct: *«arma su estructura de contenido y enseña cosas de IA»*, sobre
+> *«Lucía sigue aprendiendo Higgsfield para venderlo y ser una modelo AI independiente»*. **Una prueba por semana saca tres piezas:** lo que cuesta
+> se paga una vez y lo demás sale de la misma prueba a 0 créditos. Hasta 3 piezas por semana, **19:00 La Paz (23:00 UTC)**.
 
-- **Costo de las 2 semanas: ≤ 12,5 cr.**
-- **Octubre va 52,5 de 150 cr** (20 + 2 del maniquí + 30,5 del kit, el 3-oct).
-- Para 4 por semana faltan las pantallas reales: sin cuenta demo solo salen las piezas de personaje.
+| Día | Formato | Duración | Qué enseña | Gancho (0 a 3 s) | Cierre |
+|---|---|---|---|---|---|
+| **Lun** | **Reel «La prueba»**, con voz | 20-30 s | La prueba de la semana: la orden, **el número medido** y **el costo real en créditos** | La pregunta de la prueba en 3-7 palabras, rótulo de IA desde el cuadro 0 y el resultado en pantalla antes de los 3 s | «Seguime: cada semana, una prueba.» en los últimos 2,4-5,5 s |
+| **Mié** | **Carrusel «Para guardar»** | 5 láminas, 1080×1350 | La misma prueba como tabla o receta: la orden exacta, los créditos y el parecido | Lámina 1: la pregunta y la foto del resultado | Lámina 5 y pie: «Guardalo para cuando armes el tuyo. Cada semana hago una prueba. Seguime.» |
+| **Vie** | **Reel corto «El error de la semana»**, con voz | 15-20 s | El error que se atrapó en esa prueba: qué era, cómo se vio y qué se hizo | El error ya en el cuadro 0 («Casi publico esto.») | «Seguime: cada semana, una prueba.» |
 
-**Qué se mide a las 48 h de cada pieza:**
-- demos con `src`;
-- clics al link;
-- preguntas de dueños («¿cómo funciona?», «¿cuánto cuesta?»);
-- envíos y guardados;
-- el alcance de #5 contra #8;
-- que Estado de la cuenta siga apta para recomendaciones.
+- **Qué se enseña, en rotación de 4 semanas:** A) **Imagen** (motor, prompt, fondo) · B) **Video** (clip, referencias, escena) · C) **Medir** (cara, manos, luz,
+  movimiento) · D) **Otras herramientas de IA** (cuánto cuesta un segundo de voz, transcripción, render). Siempre el número medido, el costo en créditos y un límite dicho.
+- **Historia: extra, no cuenta entre las 3.** La lámina 1 del carrusel en 1080×1920 el mismo miércoles, solo foto (la API no admite stickers). Se suma cuando haya seguidores a quienes
+  avisarles: una historia solo la ven los seguidores, y hoy la cuenta no tiene ninguno. El reel es el único formato que llega a quien no la sigue.
+- **Reglas de toda pieza (no cambian):** rótulo «Lucía Antelo · personaje IA de Onia» desde el cuadro 0, a 40 px · etiqueta de IA por API · el pie abre con «personaje hecho con IA» · ni
+  profesional de salud, ni producto de Onia, ni cifra inventada, ni cara o voz de Sergio Urcullo · **las herramientas se nombran con su nombre real** (D-N1) y el pie suma «Nombro lo que uso; no es una recomendación pagada.»
+- **Regla de edición con voz (11-oct):** voz Marcela (ElevenLabs) · **pausa máxima 0,25 s entre frases**, sin acelerar la voz (se aprietan las pausas) · 3,2-4,1 palabras por segundo · −14 LUFS ·
+  sin cama de música · título de 3-7 palabras con la promesa en el cuadro 0 · CTA en los últimos 2,4-5,5 s. Es la receta Erik de `edicion-referentes`; **G1 v2 (20 s) es el modelo**.
+- **Cupo de voz:** G1 v2 usó **320 caracteres** para unos 19 s hablados, o sea **≈ 17 caracteres por segundo** (corregido por la madre el 11-oct; antes decía 381, que es lo que *queda* hasta el 13-oct 01:17 UTC). Un reel de 25 s ≈ 425;
+  uno corto de 18 s ≈ 305. Una semana ≈ 730 caracteres, y con retomas (×1,3) ≈ 950. **Hasta el 13-oct solo quedan 381**; el cupo renovado hay que confirmarlo (lo sabe la madre).
+- **Decididas por Sergio Urcullo el 11-oct ~04:05 UTC (vía la madre v4):** **D-N1 = SÍ**, se nombran las herramientas (Higgsfield, Kling y las demás) como uso propio y no como recomendación pagada;
+  **D4 = la voz Marcela queda, con su acento colombiano.** Cambió también el «Motor 1 a 6» / «Imagen A a F» de los guiones de G2, G4, G5, C2 y la pieza 9. Nombres: **video** Kling 3.0 std · Kling 3.0 pro ·
+  Seedance 2.0 Mini · Seedance 2.0 Mini + referencias · Kling O3 · Cinematic Studio 3.0; **imagen** Seedream 4.5 · Kling O1 Image (el nombre con que Higgsfield lo lista; el guion decía «Kling Omni Image») ·
+  Nano Banana 2.1 · Seedream 5.0 Pro · FLUX 3 · GPT Image 2.5. Quien mira puede repetir la prueba.
 
-**El día 14:**
-- **Seguir** con ≥ 1 demo.
-- **Extender 2 semanas, una sola vez,** con 0 demos pero ≥ 3 preguntas reales o ≥ 10 clics.
-- **Ajustar formato o ritmo** si no se llega a eso. Antes decía «Pausar»: superado el 10-oct (Sergio Urcullo: Lucía «no se
-  pausa»).
-- **Parar cualquier día** si la cuenta queda «no recomendable» o si domina el comentario «esto reemplaza gente».
+## 5. Las próximas 6 piezas, y las que siguen (todas las listas entran primero)
 
-## 5. Vestuario
-- **El maniquí del ambo terracota está hecho** (2-oct, 2 cr):
-  - `references/modelos/lucia/v4/vestuario/ambo-terracota-turnaround-8d138bd6.jpg`;
-  - el recorte de frente, `ambo-terracota-frente-8d138bd6.jpg`, es la referencia de la prenda.
-- **D1 decidido (3-oct): el ambo SÍ, como vestuario.** La prueba de ropa (~5,4 cr) vuelve a hacer falta, pero no se
-  corre con el alcance congelado: queda para cuando Sergio Urcullo diga cómo se sigue, y con su OK al costo.
+La semana 1 (S1) empieza el día en que salga G1; hoy no hay fecha porque falta el token (abajo).
 
-## 6. Qué pasa con lo hecho el 1-oct
-- **L05 y L08 no se publican así.** Son clips de lifestyle vendiendo, sin pantalla real. Su idea (link de reserva y
-  recordatorio) pasa a #5 y #6.
-- **Los clips pagados** (café, calle, coworking) van a «Un día en Santa Cruz» (#3) y al chiste (#4).
+| # | Semana · día | Pieza | Formato | Qué enseña y con qué número | Gancho (propuesta) | Créditos | Voz | Qué falta |
+|---|---|---|---|---|---|---:|---:|---|
+| 1 | S1 · Lun | **G1 v2** «Este video no fue grabado» | Reel 20 s | Cómo se hace un video: orden, foto y clip, **8,5 cr** | «Este video no fue grabado.» | 0 | 320 (hecha) | La armó la madre; falta su SHA. Sergio Urcullo dijo «publicá G1». **Bloqueada por el token** |
+| 2 | S1 · Mié | **L01** «Hola, soy Lucía. No existo.» | Carrusel, se fija | Quién es y qué hace: una prueba por semana | — | 0 | — | Nada: lista |
+| 3 | S1 · Vie | **G3 v2** «Tres errores que atrapé» | Reel ≤ 30 s | Tres errores reales: letrero inventado, letra que no dice nada, mano que tapa a la otra | «Casi publico esto.» | 0 | ≤ 450 | Re-corte mudo en curso (11-oct); falta voz, revisión y SHA |
+| 4 | S2 · Lun | **G2 v2** «¿Quién pierde la cara? Seis clips, una orden» | Reel 27,8 s | 6 clips de video con la misma orden (en pantalla 3, de 6 a 7,5 cr; los otros 3, de 6 a 20 cr, van en el pie): parecido final **0,64 a 0,82** | «¿Quién pierde la cara?» + pastilla «parecido final: 0,64 a 0,82» | 0 | 402 (cupo hoy 381) | Re-corte mudo hecho y revisado (11-oct); falta la voz (cupo), el SHA con voz y publicar |
+| 5 | S2 · Mié | **C1** «Un video sin grabar, en 3 pasos» | Carrusel | G1 para guardar, con la orden real | — | 0 | — | Nada: lista |
+| 6 | S2 · Vie | **G5 v2** «¿Cómo sé que sigue siendo ella?» | Reel ≤ 30 s | El control de cara: piso 0,70 (lo elegí yo), ruido ±0,03, bajo 200 px se mira a ojo | «¿Cómo sé que sigue siendo ella?» | 0 | ≤ 450 | Lo mismo que G3 |
+| 7 | S3 · Lun | **G4 v2** «Seis motores de imagen, una cara» | Reel ≤ 30 s | 6 motores de imagen: **0,5 a 3 cr**, parecido **0,66 a 0,81**; pagar más no mejoró | «¿Cuál conserva su cara?» | 0 | ≤ 450 | Lo mismo que G3 |
+| 8 | S3 · Mié | **C2** «Seis motores de imagen» | Carrusel | G4 para guardar | — | 0 | — | Nada: lista |
+| 9 | S3 · Vie | **NUEVA** «La luz cambia cuando la cara se sostiene» | Reel corto 18 s | Medido el 11-oct con los 6 clips ya pagados: el clip atado a la foto mantiene la luz (Kling 3.0 std: luma −1,0) y pierde la cara (parecido 0,79 a 0,72); el que mejor la sostiene con referencias (Seedance 2.0 Mini con referencias: 0,71 a 0,80) oscurece la imagen (luma −34) y reencuadra | «La cara o la escena.» | 0 | ≈ 305 | Guion, voz, montaje. Datos: `v4/prueba-motores-20261008/medicion-luz-movimiento-20261011.txt` |
 
-## 7. Lo que decide Sergio Urcullo (con la cuenta delante)
+**Qué falta producir, en orden:**
 
-| # | Decisión | Recomendación | Por qué |
-|---|---|---|---|
-| D1 | ¿Lucía se pone el uniforme del rubro o visita el negocio como ella? | ✅ **DECIDIDO por Sergio Urcullo, 3-oct:** *«que no se identifique como ello pero que tenga la ropa»* | Lleva el ambo como vestuario; nunca dice ni da a entender que es odontóloga ni profesional de salud. Reglas en la §3 |
-| D2 | ¿«Reel primero» en vez de la mezcla 70/20/10? | **Sí** | En cuentas de menos de 50K el Reel es lo que más alcance trae. Es el mismo material y no gasta créditos de video |
-| D3 | ¿Lucía es la cara declarada del WhatsApp de Onia? | **Todavía no** | El bot trata los leads de la web como preguntas de precio y no reconoce `src`. Por ahora la puerta es `/llamada?src=` |
-| D4 | La voz de Marcela | **Reels sin voz (con texto) durante la prueba** | Medido el 2-oct: es una voz de la Voice Library («Marcela - Colombian Girl») con **acento colombiano**. Lucía es cruceña y el público boliviano critica el acento que no es de acá. La licencia está en orden: plan pago `payg` activo y 730 días de aviso si la retiran |
-| D5 | El canon de Lucía: 10 datos fijos (`LUCIA.md` § 0-canon) | OK o corregir | Es lo que hace que la sigan como una vida y no como fotos sueltas |
-| D6 | ¿Probamos «Comentá DEMO y te paso el link» en el pie de UNA pieza, contra el link en la bio? | **Sí, en la #8**, respondiendo a mano y en personaje | @soy_aria_cruz saca 283 comentarios sobre 491 likes con ese embudo (manual § 2-bis), y los comentarios son el indicador que ya medimos. No se automatiza: Meta rechazó 2 veces el paso de comentario a DM |
+1. **El token de Instagram de Lucía (`ig-lucia.env`).** Sin él no sale nada. La madre le pidió a Sergio Urcullo elegir A (bajar `postgres:17` en el VPS y sacar el token viejo de Postiz) o B (token nuevo
+   desde Meta). **Recomiendo B:** A corre contra el vencimiento (estimado entre el 13 y el 18-oct, sin medir; si ya venció, A falla y hay que hacer B igual), pide instalar una imagen en el VPS
+   y obliga a tocar la base de Postiz, que ya publicó posts viejos sin OK una vez. B no depende de nada viejo y da 60 días. Pasos en la cola.
+2. **Cuatro versiones con voz: G3, G2, G5 y G4** (las que hoy son mudas de 56 a 59 s). Por pieza: guion de voz de ≤ 30 s, voz, retemporizar `plan.json` a la voz con pausa ≤ 0,25 s, render (3 a 4 min),
+   preview 360p, revisión independiente y SHA nuevo en `videos/lucia-entrega/README.md`. **0 créditos.** En total ≤ 1.800 caracteres de voz: **no caben en los 381 que quedan antes del 13-oct.**
+3. **La pieza 9** (luz): guion, voz y montaje. Los datos ya están medidos (honesto: son promedios del cuadro entero, mezclan luz con lo que entra al plano; miden «cuánto cambia la imagen»).
+4. **De la semana 4 en adelante, una prueba nueva por semana** (tema B, C y D de la rotación): **P1** fondo en positivo (3 cr, lote chico) · **P2** referencias con cámara fija (6 cr, video) · **P3** MiniMax H3 (12 cr, video) ·
+   **L2** voz y labios · **L3** Motion Control (17 cr; Sergio Urcullo graba 10 s). Los de video piden su sí escrito en esta sesión; **P3 no cabe en el tope de octubre** (quedan 11 de 150).
+5. **El cupo de voz renovado** (cifra que confirma la madre). D-N1 y D4 ya están decididas.
 
-**Pendiente de otros:**
-- **Cuenta demo dental en producción**, para las pantallas reales. Se le pidió a la madre el 1-oct. Bloquea #5 a #8.
-- **Sergio Urcullo:**
-  - conectar `@lucia.antelo.oficial` como cuenta profesional;
-  - activar «Perfil generado con IA»;
-  - cargar el token en el VPS.
+- **Qué se mide por pieza:** guardados y envíos (señal de que enseñó algo), seguidores nuevos y que la cuenta siga «apta
+  para recomendaciones». No hay umbral de conversaciones.
+- **Día 14:** Sergio Urcullo decide con los números delante. **No se pausa** (Sergio Urcullo, 10-oct): se sigue, se extiende
+  2 semanas una sola vez o se ajusta formato y ritmo. **Se para** cualquier día si la cuenta queda «no recomendable»
+  o si domina el comentario «esto reemplaza gente». (`LUCIA_COMO_SE_USA.md` §1 propone medir demos con `src=lucia-<pieza>`, pero `onia.com.bo/llamada` da 404 al 11-oct: falta definir la puerta.)
 
-**Orden:** Sergio Urcullo decide D2–D6 → piezas ✅ (#2, #3, #4) → piezas de venta cuando esté la cuenta demo.
+## 6. Cómo se publica
+
+Circuito completo en la skill `lucia` § 6.
+- **Instagram:** `ig-reel.mjs` / `ig-carrusel.mjs --cuenta lucia`, que ponen la etiqueta IA solos. Corre en el VPS: esta
+  nube no tiene ssh, así que lo corre la madre.
+- **Antes de la primera pieza:**
+  1. el token de Lucía (estaba en Postiz el 4-sep; vencía entre el 13 y el 18-oct; no se midió desde entonces);
+  2. los dos publicadores nuevos copiados **juntos** a `/root/bin`, con `--selftest` en los dos; se le avisa a Marca
+     personal, porque sus carruseles usan el mismo archivo;
+  3. en el ensayo, el reel dice FINISHED y el carrusel «listo en Instagram»; la etiqueta se confirma después de publicar
+     (`is_ai_generated` en `publicado.jsonl`) y mirando la pieza.
+- **TikTok:** por Buffer, con una cuenta gratis aparte y `isAiGenerated`. Falta crear la cuenta.
+- **Perfil:** nombre `Lucía Antelo · IA de Onia`. Bio: `Personaje IA creado por @oniahq` / `Pruebas con IA, cada semana.`
+  Sin link de venta. La etiqueta de perfil IA se informó activa el 31-ago y nadie la miró.
+
+## 7. Decisiones de Sergio Urcullo
+
+| # | Decisión | Recomendación |
+|---|---|---|
+| ~~L1~~ | Ya ejecutado el 8-oct (86,5 cr con los labios, dentro del tope de 97 que se fijó la sesión): Sergio Urcullo había escrito *«tenés derecho a usar todo lo que querrás»* sin dar una cifra | **Confirmar o corregir el tope.** Quedan 10,5 del tope y 11 del mes (150) |
+| D4 | La voz | Sin voz por ahora. L2 empieza cuando escuches las muestras |
+| D5 | El canon de 10 datos (`LUCIA.md` §0-canon) | Entra con tu OK al primer video |
+
+**Lo que lo destraba** (la madre o vos): token de Instagram antes del 13-oct, nombre y bio desde el celular de Lucía,
+publicadores en el VPS, y la cuenta de TikTok en Buffer cuando se quiera.

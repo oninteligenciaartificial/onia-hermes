@@ -1,0 +1,3 @@
+m1 → m4: 6 cuadros, separación máxima 0.000 px; tarjetas recorren 1080 px
+m4 → placa: 6 cuadros, separación máxima 0.000 px; tarjetas recorren 1080 px
+EXIT 0

@@ -1,0 +1,129 @@
+[
+ {
+  "que": "r2 punta baja 0,77 (0.771)",
+  "sel": "#r2-d1",
+  "t": 17.525000000000002,
+  "m": "cx",
+  "esp": 412
+ },
+ {
+  "que": "r2 punta alta 0,80 (0.799)",
+  "sel": "#r2-d2",
+  "t": 18.049000000000003,
+  "m": "cx",
+  "esp": 536
+ },
+ {
+  "que": "r2 banda (borde izq. = 0.754)",
+  "sel": "#r2-band",
+  "t": 18.754,
+  "m": "x1",
+  "esp": 338
+ },
+ {
+  "que": "r2 banda (borde der. = 0.814)",
+  "sel": "#r2-band",
+  "t": 18.754,
+  "m": "x2",
+  "esp": 602
+ },
+ {
+  "que": "r2 corchete (borde izq.)",
+  "sel": "#r2-brk",
+  "t": 18.754,
+  "m": "x1",
+  "esp": 338
+ },
+ {
+  "que": "r2 corchete (borde der.)",
+  "sel": "#r2-brk",
+  "t": 18.754,
+  "m": "x2",
+  "esp": 602
+ },
+ {
+  "que": "r2 pista (x = 0,70)",
+  "sel": "#r2-trk",
+  "t": 16.925,
+  "m": "x1",
+  "esp": 100
+ },
+ {
+  "que": "r2 pista (x = 0,90)",
+  "sel": "#r2-trk",
+  "t": 16.925,
+  "m": "x2",
+  "esp": 980
+ },
+ {
+  "que": "r2 marca del piso (x = 0,70)",
+  "sel": "#r2-mk",
+  "t": 16.925,
+  "m": "cx",
+  "esp": 100
+ },
+ {
+  "que": "r2 marca 0,75 (centro)",
+  "sel": "#r2-m1",
+  "t": 16.925,
+  "m": "cx",
+  "esp": 320,
+  "tol": 2
+ },
+ {
+  "que": "r2 marca 0,80 (centro)",
+  "sel": "#r2-m2",
+  "t": 16.925,
+  "m": "cx",
+  "esp": 540,
+  "tol": 2
+ },
+ {
+  "que": "r2 marca 0,85 (centro)",
+  "sel": "#r2-m3",
+  "t": 16.925,
+  "m": "cx",
+  "esp": 760,
+  "tol": 2
+ },
+ {
+  "que": "r2 marca 0,90 (centro)",
+  "sel": "#r2-m4",
+  "t": 16.925,
+  "m": "cx",
+  "esp": 980,
+  "tol": 2
+ },
+ {
+  "que": "p2 cursor en 0 (sale de x = 0)",
+  "sel": "#sc-cur",
+  "t": 7.183,
+  "m": "cx",
+  "esp": 100
+ },
+ {
+  "que": "p2 cursor llega a 1 (x = 1)",
+  "sel": "#sc-cur",
+  "t": 8.933,
+  "m": "cx",
+  "esp": 980
+ },
+ {
+  "que": "r2 valor 0,77",
+  "sel": "#r2-v1",
+  "t": 17.525000000000002,
+  "txt": "0,77"
+ },
+ {
+  "que": "r2 valor 0,80",
+  "sel": "#r2-v2",
+  "t": 18.049000000000003,
+  "txt": "0,80"
+ },
+ {
+  "que": "r3 número en pantalla",
+  "sel": "#r3-num b",
+  "t": 21.042,
+  "txt": "0,80"
+ }
+]

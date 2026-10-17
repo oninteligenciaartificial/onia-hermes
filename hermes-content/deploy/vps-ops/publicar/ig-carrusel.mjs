@@ -6,6 +6,8 @@
 //   node ig-carrusel.mjs ... --publicar
 // Toma de --dir las láminas slide-01.png, slide-02.png… en orden (ignora la hoja de contacto), las
 // pasa a JPEG porque la API no acepta PNG, y las sirve un rato desde onia.com.bo/hermes-assets.
+// --ia (o una cuenta de CUENTAS_IA, como lucia) pone «Información de IA»: va SOLO en el contenedor del
+// carrusel, no en las láminas (changelog de Meta del 22-jun-2026).
 // Publicar es una acción pública: solo con el OK de Sergio sobre ESA pieza (CLAUDE.md).
 import fs from 'node:fs';
 import path from 'node:path';
@@ -14,13 +16,13 @@ import crypto from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { parseArgs } from 'node:util';
 import { fileURLToPath } from 'node:url';
-import { API, PUBLIC_DIR, PUBLIC_URL, LEDGER, loadEnv, call } from './ig-reel.mjs';
+import { API, PUBLIC_DIR, PUBLIC_URL, LEDGER, loadEnv, call, esIA, leerPublicado, avisoEtiquetaIA } from './ig-reel.mjs';
 
 export const LAMINA = /^slide-\d+\.(png|jpe?g)$/i;
 
-export function carouselParams({ caption, children }) {
+export function carouselParams({ caption, children, ia }) {
   if (children.length < 2 || children.length > 10) throw new Error(`un carrusel lleva de 2 a 10 láminas, no ${children.length}`);
-  return { media_type: 'CAROUSEL', children: children.join(','), caption };
+  return { media_type: 'CAROUSEL', children: children.join(','), caption, ...(ia ? { is_ai_generated: 'true' } : {}) };
 }
 
 async function esperar(id, token) {
@@ -36,9 +38,11 @@ async function esperar(id, token) {
 
 async function main() {
   const { values: a } = parseArgs({ options: { cuenta: { type: 'string' }, dir: { type: 'string' },
-    caption: { type: 'string' }, publicar: { type: 'boolean' }, selftest: { type: 'boolean' } } });
+    caption: { type: 'string' }, publicar: { type: 'boolean' }, ia: { type: 'boolean' },
+    selftest: { type: 'boolean' } } });
   if (a.selftest) return selftest();
   const env = loadEnv(a.cuenta);
+  const ia = esIA(a.cuenta, a.ia);
   const caption = fs.readFileSync(a.caption, 'utf8').trim();
   if (caption.length > 2200) throw new Error('caption de más de 2.200 caracteres');
   const laminas = fs.readdirSync(a.dir).filter((f) => LAMINA.test(f)).sort();
@@ -60,26 +64,29 @@ async function main() {
     }
     for (const id of hijos) await esperar(id, env.IG_TOKEN);
     ({ id: carrusel } = await call(`${API}/${env.IG_USER_ID}/media`, { method: 'POST',
-      body: new URLSearchParams({ ...carouselParams({ caption, children: hijos }), access_token: env.IG_TOKEN }) }));
+      body: new URLSearchParams({ ...carouselParams({ caption, children: hijos, ia }), access_token: env.IG_TOKEN }) }));
     await esperar(carrusel, env.IG_TOKEN);
   } finally {
     for (const t of tmps) fs.rmSync(t, { force: true }); // las copias públicas no quedan ni si falla
   }
-  console.log(`carrusel ${carrusel} listo en Instagram: ${laminas.length} láminas`);
+  console.log(`carrusel ${carrusel} listo en Instagram: ${laminas.length} láminas${ia ? ', etiqueta IA' : ''}`);
   if (!a.publicar) return console.log('NO publicado (falta --publicar). El contenedor expira solo en 24 h.');
 
   const { id: media } = await call(`${API}/${env.IG_USER_ID}/media_publish`, { method: 'POST',
     body: new URLSearchParams({ creation_id: carrusel, access_token: env.IG_TOKEN }) });
-  const info = await call(`${API}/${media}?fields=permalink,media_product_type,timestamp&access_token=${env.IG_TOKEN}`);
+  const info = await leerPublicado(media, env.IG_TOKEN);
   fs.mkdirSync(path.dirname(LEDGER), { recursive: true });
   fs.appendFileSync(LEDGER, JSON.stringify({ cuenta: a.cuenta, media, tipo: 'carrusel', dir: a.dir, ...info }) + '\n');
-  console.log(`PUBLICADO ${info.permalink}`);
+  console.log(`PUBLICADO ${info.permalink ?? `media ${media}`}`);
+  const aviso = avisoEtiquetaIA(ia, info);
+  if (aviso) console.error(aviso);
 }
 
 function selftest() {
   assert.deepEqual(carouselParams({ caption: 'c', children: ['1', '2'] }), { media_type: 'CAROUSEL', children: '1,2', caption: 'c' });
   assert.throws(() => carouselParams({ caption: 'c', children: ['1'] }), /de 2 a 10/);
   assert.throws(() => carouselParams({ caption: 'c', children: Array(11).fill('x') }), /de 2 a 10/);
+  assert.equal(carouselParams({ caption: 'c', children: ['1', '2'], ia: true }).is_ai_generated, 'true');
   assert.ok(LAMINA.test('slide-01.png') && LAMINA.test('slide-12.JPG'));
   assert.ok(!LAMINA.test('_contactsheet.png') && !LAMINA.test('brief.json'));
   console.log('selftest ok');

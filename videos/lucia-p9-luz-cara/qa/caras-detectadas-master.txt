@@ -1,0 +1,33 @@
+NOTA v2 (11-oct, editor): este archivo es de la v1 (master 969ac27d). En la v2 no se movieron ni el rótulo, ni el título, ni el dato de Kling, ni el dato de Seedance (y 1090-1206): los márgenes de arriba valen igual (mínimo 58 px a 11,5 s). La etiqueta del reencuadre bajó de y 1270 a 1230 (1 línea, hasta 1300) y el aviso nuevo va en y 1324-1440, o sea 200 px o más bajo el mentón más bajo (y 1032 a 11,5 s). El desenfoque de la esquina (x 0-440, y 0-290) no toca la caja de la cara (x 335-858, y 327-1032). La separación cara-pastilla de la v2 se midió con el gate medir-dom (cajas heredadas de G2, margen mínimo mentón-texto 59 px, 0 fallos) y qa/layout-dom.txt.
+
+Deteccion NUEVA de caras sobre el MASTER (SCRFD det_10g de insightface buffalo_l, 11-oct, sesion Lucia): 24 cuadros a 2 fps (0 a 276 = 0 a 11,5 s; la placa no lleva cara). Cierra el pendiente 'caras heredadas de G2' de medir-dom.
+Pastillas (DOM del master): m1 y300-367, y760-857, y1030-1099; m4 y1090-1205, y1270-1339. Margen = hueco vertical entre la caja de la cara (sin pelo) y la pastilla mas cercana; negativo = solapan.
+
+0 0.0 cara y 451-657 x 444-623 (179x205 px) margen min a pastilla 84 px
+12 0.5 cara y 450-656 x 443-624 (181x206 px) margen min a pastilla 83 px
+24 1.0 cara y 450-654 x 447-626 (180x204 px) margen min a pastilla 83 px
+36 1.5 cara y 450-657 x 450-630 (180x207 px) margen min a pastilla 83 px
+48 2.0 cara y 449-661 x 452-633 (181x211 px) margen min a pastilla 82 px
+60 2.5 cara y 457-666 x 454-633 (179x210 px) margen min a pastilla 90 px
+72 3.0 cara y 450-662 x 457-632 (175x213 px) margen min a pastilla 83 px
+84 3.5 cara y 444-659 x 462-634 (173x216 px) margen min a pastilla 77 px
+96 4.0 cara y 452-664 x 463-637 (174x212 px) margen min a pastilla 85 px
+108 4.5 cara y 456-666 x 474-647 (173x210 px) margen min a pastilla 89 px
+120 5.0 cara y 459-668 x 481-653 (172x208 px) margen min a pastilla 92 px
+132 5.5 cara y 456-667 x 483-657 (174x211 px) margen min a pastilla 89 px
+144 6.0 cara y 486-740 x 438-660 (222x255 px) margen min a pastilla 350 px
+156 6.5 cara y 488-785 x 424-681 (257x297 px) margen min a pastilla 305 px
+168 7.0 cara y 481-835 x 411-708 (298x354 px) margen min a pastilla 255 px
+180 7.5 cara y 451-876 x 393-737 (344x426 px) margen min a pastilla 214 px
+192 8.0 cara y 432-907 x 373-759 (385x475 px) margen min a pastilla 183 px
+204 8.5 cara y 394-934 x 358-779 (421x540 px) margen min a pastilla 156 px
+216 9.0 cara y 353-942 x 360-807 (446x589 px) margen min a pastilla 148 px
+228 9.5 cara y 325-959 x 361-823 (462x634 px) margen min a pastilla 131 px
+240 10.0 cara y 318-977 x 360-824 (464x659 px) margen min a pastilla 113 px
+252 10.5 cara y 319-1004 x 342-822 (481x685 px) margen min a pastilla 86 px
+264 11.0 cara y 321-1020 x 336-841 (505x699 px) margen min a pastilla 70 px
+276 11.5 cara y 327-1032 x 335-858 (522x705 px) margen min a pastilla 58 px
+margen minimo caja-de-cara a pastilla en los cuadros muestreados (2 fps): 58 px
+
+Lectura: ninguna pastilla toca la cara en los 24 cuadros (margen minimo 58 px a 11,5 s). Es una muestra a 2 fps, no los 480 cuadros; los 480 los cubre medir-dom con las cajas heredadas de G2 (margen menton-texto >= 59 px).
+Nota de escala: el ancho de la caja en el lienzo de 1080 dividido por 1,5 da los px del clip 720p: 179/1,5 = 119 px (m1, ~0 s) y 522/1,5 = 348 px (m4, 11,5 s) = el 139 -> 347 px de PROCEDENCIA l.97. La pantalla muestra esas cifras del clip fuente; en el lienzo del video la cara mide ~209 -> ~520 px.

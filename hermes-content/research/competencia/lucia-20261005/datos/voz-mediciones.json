@@ -1,0 +1,29 @@
+{
+  "fecha": "2026-10-05",
+  "gasto_real": {"higgsfield_cr": 0, "elevenlabs_chars": 0, "prueba": "saldo Higgsfield 541,26 antes y despues; ElevenLabs character_count 9547 antes y despues"},
+  "elevenlabs_cuenta": {"tier_api": "payg", "character_count": 9547, "character_limit": 10000, "quedan": 453, "reset_utc": "2026-10-13T01:17:19", "voice_limit": 3, "voice_slots_used": 2, "can_use_instant_voice_cloning": false, "professional_voice_limit": 0, "is_eligible_for_starter_promo": true, "lectura": "plan subyacente FREE con PAYG activado (doc pay-as-you-go: PAYG no cambia el tier). Doc 'can-i-publish': free plan sin licencia comercial."},
+  "elevenlabs_modelos_es": {"eleven_v4": 1.0, "eleven_v4_turbo": 0.5, "eleven_v3": 1.0, "eleven_v3_conversational": 0.5, "eleven_multilingual_v2": 1.0, "eleven_flash_v2_5": 0.5, "eleven_turbo_v2_5": 0.5},
+  "elevenlabs_acentos_es": ["latin american","peninsular","andalusian","argentine","basque","canary islands","caribbean","chilean","colombian","cuban","dominican","ecuadorian","galician","mexican","peruvian","puerto rican","venezuelan"],
+  "elevenlabs_busquedas": {"accent=bolivian": 0, "accent=andean": 0, "accent=paraguayan": 0, "locale=es-BO": "HTTP 400", "search=cruceña/camba/santa cruz": 0, "peruvian_fem": 14, "chilean_fem": 11, "ecuadorian_fem": 1},
+  "higgsfield_cotizaciones_cr": {
+    "text2speech_v2 elevenlabs, 153 chars": 0.6,
+    "text2speech_v2 minimax, 153 chars": 0.6,
+    "seed_audio": "BLOQUEADO por el clasificador de permisos; sin medir",
+    "elevenlabs_v4": "sin medir",
+    "minimax_h3 2K 9:16 5s": 10, "minimax_h3 2K 9:16 10s": 20,
+    "minimax_h3_max 768p 10s": 25,
+    "seedance_2_0_mini 720p 10s generate_audio false": 10,
+    "seedance_2_0_mini 720p 10s generate_audio true": 10,
+    "seedance_2_0 fast 720p 10s sin audio": 25,
+    "seedance_2_5 omni_reference 720p 10s sin audio": 70,
+    "wan3_0 720p 10s sin audio": 17.5,
+    "grok_video_v15 720p 10s": 45,
+    "cinematic_studio_video_3_5 720p 10s sin audio": 50,
+    "kling3_0 std 10s sound on": 17.5,
+    "gemini_omni_flash_1_1 720p 10s": 30,
+    "sync_so 5s": 18, "sync_so 10s": 36,
+    "voice_change 10s": 1, "voice_change 15s": 2,
+    "nota": "cotizaciones sin medias; con audio_references el precio no se midio"
+  },
+  "higgsfield_voces": {"elements": ["Lucia-voz 8de5db95 (descartada 25-jul, robotica)"], "presets": "~114, sin etiqueta de idioma ni acento", "create_voice": "solo clonar desde audio grabado/subido (10 s a 3 min); no diseña por descripcion; cobra 'voice-clone credit cost' sin cifra"}
+}

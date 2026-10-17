@@ -1,0 +1,8 @@
+Verificación del cuadro 60 de K4 (3ra pasada, 8-oct-2026)
+Método: PSNR de la región de la mano (368x378 px en x=138,y=1527 del lienzo 1080x1920) entre el cuadro n del FINAL y cada cuadro k de assets/k4.mp4 llevado a 1080x1920 (x1,5, OpenCV lineal).
+K4 arranca a 40,75 s = cuadro 978 del final, así que el cuadro 60 de K4 debe caer en el cuadro 1038 del final = 43,250 s. Se mira CUÁL k da el pico (no el valor absoluto: el escalado de OpenCV no es el del render).
+  final 1035 (43.125 s): mejor cuadro de K4 = 57 (36.3 dB; el siguiente mejor 23.1 dB)  esperado 57
+  final 1036 (43.167 s): mejor cuadro de K4 = 58 (36.4 dB; el siguiente mejor 23.0 dB)  esperado 58
+  final 1037 (43.208 s): mejor cuadro de K4 = 59 (36.5 dB; el siguiente mejor 22.8 dB)  esperado 59
+  final 1038 (43.250 s): mejor cuadro de K4 = 60 (36.4 dB; el siguiente mejor 23.4 dB)  esperado 60   ← cuadro 60 en t_foco
+  (desde f1039 la región lleva encima el golpe de zoom +3 %, el recuadro «origen» —solo f1038-f1041— y el recorte)
