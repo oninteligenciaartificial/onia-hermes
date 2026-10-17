@@ -1,5 +1,5 @@
 {
-  "title": "Taller 2/2: qué sale de una lectura de tu negocio (v3)",
+  "title": "Taller 2/2: qué sale de una lectura de tu negocio (v4)",
   "caption": "No es un curso: es tu negocio sobre la mesa. 90 minutos en vivo, sábado 31 de octubre, 10:00 (hora de La Paz), por Google Meet. Cupo 50.\n\nSalís con tu lista de tareas repetidas, tu prioridad y tu primer paso.\n\nDesde Bs 50. Se paga por QR del BCP. Inscripciones hasta el jueves 29, 20:00 (hora de La Paz).\n\nLink en mi perfil.",
   "hashtags": [
     "#ia",
@@ -9,7 +9,7 @@
   ],
   "serie": "TALLER 2/2 · QUÉ SALE",
   "theme": "blanco",
-  "nota": "Pieza del miércoles 21, SOLO si la compuerta (6 condiciones) está abierta. «Desde Bs 50» solo en la lámina 6 y se cambia a mano cuando se agoten los primeros 15 cupos (revisar antes de subirla). Lámina 1 con imagen de galería (s35); una imagen nueva (~1 cr, gpt_image_2_5 2k) es mejora opcional sujeta a cotización y OK de Sergio.",
+  "nota": "Pieza del miércoles 21, SOLO si la compuerta (6 condiciones) está abierta. «Desde Bs 50» solo en la lámina 6 y se cambia a mano cuando se agoten los primeros 15 cupos (revisar antes de subirla). v4: lámina 1 con reloj de arena de la galería (objetos/reloj-arena-crudo.jpg, Pexels License, Aziz Hasan AY; arena recoloreada a verde); lámina 2 con s33 recortada a las 3 hojas que entran a la caja. s35 queda libre para la página.",
   "slides": [
     {
       "number": 1,
@@ -17,9 +17,9 @@
       "layout": "ilustrado",
       "headline": "No es un curso. Es *tu negocio* sobre la mesa.",
       "body": "90 minutos. Salís con tu primer paso.",
-      "image": "hermes-content/carousels/briefs/assets/sergio-taller-20261017/s35-balanza.jpg",
+      "image": "hermes-content/carousels/briefs/assets/sergio-taller-20261017/reloj-arena-verde-v4.jpg",
       "next": "qué te llevás",
-      "alt_text": "Balanza antigua de cadenas con un cubo gris",
+      "alt_text": "Reloj de arena con arena verde: 90 minutos",
       "fit": "baked"
     },
     {
@@ -28,9 +28,9 @@
       "layout": "ilustrado",
       "headline": "Te llevás *3 cosas*",
       "body": "Tu lista de tareas repetidas.\nTu prioridad. Tu primer paso.",
-      "image": "hermes-content/carousels/briefs/assets/sergio-taller-20261017/s33-hojas.jpg",
+      "image": "hermes-content/carousels/briefs/assets/sergio-taller-20261017/hojas-3-v4.jpg",
       "next": "así se ve",
-      "alt_text": "Hojas que entran ordenadas a una caja, una de ellas verde",
+      "alt_text": "Tres hojas entran a una caja negra: tu lista, tu prioridad, tu primer paso",
       "fit": "baked"
     },
     {

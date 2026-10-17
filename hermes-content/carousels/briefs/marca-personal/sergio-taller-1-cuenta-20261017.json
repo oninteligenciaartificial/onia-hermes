@@ -1,5 +1,5 @@
 {
-  "title": "Taller 1/2: la cuenta que nadie hace (v3)",
+  "title": "Taller 1/2: la cuenta que nadie hace (v4)",
   "caption": "Ejemplo: 5 horas por semana en una tarea que se repite, a Bs 20 la hora, son Bs 400 al mes. Contá las tuyas.\n\nEl sábado 31 de octubre, 10:00 (hora de La Paz), lo hacemos en vivo con tu negocio: 90 minutos por Meet, cupo 50. Salís con tu lista de tareas repetidas, tu prioridad y tu primer paso.\n\nLink en mi perfil.",
   "hashtags": [
     "#ia",
@@ -9,17 +9,42 @@
   ],
   "serie": "TALLER 1/2 · CUENTA",
   "theme": "blanco",
-  "nota": "Taller «Auditá tu negocio con IA». Fuente de textos: marca/TALLER_31_OCT.md. Pieza del lunes 19, SOLO si la compuerta (6 condiciones) está abierta. Los Bs son un ejemplo y la lámina 1 lo dice. Sin precio del taller en este carrusel.",
+  "nota": "Taller «Auditá tu negocio con IA». Fuente de textos: marca/TALLER_31_OCT.md. Pieza del lunes 19, SOLO si la compuerta (6 condiciones) está abierta. v4: la lámina 1 arma la cuenta en pantalla («Ejemplo» en el rótulo); s31 solo c1-02 y s32 (original 2048×1528, sin recorte) solo c1-04. Los Bs son un ejemplo y la lámina 1 lo dice. Sin precio del taller en este carrusel.",
   "slides": [
     {
       "number": 1,
       "estilo": "taller",
-      "layout": "ilustrado",
-      "headline": "Ejemplo: *Bs 400*\nal mes en una tarea\nque repetís",
-      "body": "5 horas por semana, a Bs 20 la hora.",
-      "image": "hermes-content/galeria/fotos-bn/lote-fotobn-s36-1a27a52e.jpg",
+      "layout": "dato",
+      "xl": true,
+      "pre": "*Ejemplo*",
+      "eq": [
+        {
+          "t": "5 h",
+          "l": "por semana"
+        },
+        {
+          "op": "×"
+        },
+        {
+          "t": "4",
+          "l": "semanas"
+        },
+        {
+          "op": "×"
+        },
+        {
+          "t": "Bs 20",
+          "l": "la hora"
+        },
+        {
+          "op": "="
+        }
+      ],
+      "value": "Bs 400",
+      "size": 270,
+      "headline": "al mes en una tarea\nque repetís",
       "next": "la cuenta",
-      "alt_text": "Balanza con una esfera verde: ejemplo de Bs 400 al mes en una tarea repetida"
+      "alt_text": "Ejemplo: 5 horas por semana, por 4 semanas, por Bs 20 la hora, igual a Bs 400 al mes en una tarea que repetís"
     },
     {
       "number": 2,
@@ -61,7 +86,7 @@
       "layout": "ilustrado",
       "headline": "Después elegí *una*",
       "body": "La de más horas y menos riesgo. Con plata o datos de otros, esa no va primero.",
-      "image": "hermes-content/carousels/briefs/assets/sergio-taller-20261017/s32-un-sobre.jpg",
+      "image": "hermes-content/galeria/fotos-bn/lote-fotobn-s32-c5e1d3d0.jpg",
       "next": "esto tiene nombre",
       "alt_text": "Un solo sobre verde en una bandeja de metal"
     },

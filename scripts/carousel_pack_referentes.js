@@ -65,11 +65,17 @@ function crear({ esc, emph, ACCOUNTS, BRAND, getFmt }) {
     const v = String(s.value || '');
     // 420 px para 1-3 caracteres; más largo se achica para no partir la cifra en dos líneas
     const size = s.size || (v.length <= 3 ? 420 : Math.max(170, Math.round(1300 / v.length)));
-    const pre = s.pre ? `<div class="pre-d">${esc(s.pre)}</div>` : '';
+    // `pre` admite *énfasis* (estilo taller: «*Ejemplo*» en cursiva verde); sin asteriscos sale igual que siempre.
+    const pre = s.pre ? `<div class="pre-d">${String(s.pre).includes('*') ? emph(s.pre) : esc(s.pre)}</div>` : '';
+    // `eq` (estilo taller, 17-oct): la cuenta armándose sobre la cifra. [{t:'5 h', l:'por semana'}, {op:'×'}, …, {op:'='}].
+    // Cada término lleva su rótulo debajo; el operador va en verde. Sin `eq` el marcado no cambia.
+    const eq = Array.isArray(s.eq) && s.eq.length
+      ? `<div class="d-eq">${s.eq.map((e) => (e.op ? `<span class="eq-op">${esc(e.op)}</span>` : `<span class="eq-term"><b>${esc(e.t || '')}</b>${e.l ? `<i>${esc(e.l)}</i>` : ''}</span>`)).join('')}</div>`
+      : '';
     // `side`: texto al lado de la cifra (estilo taller). Sin él, el marcado es el de siempre.
     const bigHtml = `<div class="big" style="font-size:${size}px">${esc(v)}</div>`;
     const cifra = s.side ? `<div class="d-row">${bigHtml}<div class="d-side">${emph(s.side)}</div></div>` : bigHtml;
-    return `<div class="c-dato">${pre}${cifra}<h2 class="t">${emph(s.headline || '')}</h2>${s.body ? `<p class="sub2">${emph(s.body)}</p>` : ''}</div>`;
+    return `<div class="c-dato">${pre}${eq}${cifra}<h2 class="t">${emph(s.headline || '')}</h2>${s.body ? `<p class="sub2">${emph(s.body)}</p>` : ''}</div>`;
   }
 
   // Carlos Domínguez: la prueba es la pantalla real (captura, comando, prompt), no un dibujo.
@@ -235,6 +241,12 @@ body{margin:0;font-family:'DM Sans',system-ui,sans-serif}
 .e-taller .c-dato .big{margin-bottom:20px}
 .e-taller .c-dato .t{font-size:92px;line-height:1.02}
 .xl .c-dato .t{font-size:92px}
+/* d-eq: la operación arriba de la cifra (c1-01 del taller). Una sola fila, sin partir términos. */
+.d-eq{display:flex;align-items:flex-start;gap:20px;margin:14px 0 10px;white-space:nowrap}
+.d-eq .eq-term{display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+.d-eq .eq-term b{font-family:'Bricolage',sans-serif;font-weight:800;font-size:112px;line-height:.9;letter-spacing:-.035em;color:var(--ink)}
+.d-eq .eq-term i{font-family:'DM Sans',sans-serif;font-style:normal;font-weight:600;font-size:38px;line-height:1.1;color:var(--soft)}
+.d-eq .eq-op{font-family:'Bricolage',sans-serif;font-weight:800;font-size:112px;line-height:.9;color:var(--acc)}
 .compacta ul{gap:18px;margin-top:40px}.compacta li{padding:20px 30px}.compacta b{font-size:42px}.compacta li span{font-size:34px}.compacta .li-n{width:68px;height:68px;font-size:46px}.compacta .li-icon{width:76px;height:76px}
 </style></head><body>
 <div class="slide l-${layout} t-${theme}${fonts === 'marca' ? ' f-marca' : ''}${estilo}${xl}">${tag}<main class="main">${render(slide)}${cta}</main><div class="handle">${esc(acc.handle)}</div>${next}</div>
