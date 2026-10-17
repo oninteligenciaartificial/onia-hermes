@@ -22,3 +22,4 @@ Retoma el hilo nuevo (rama `claude/plataforma-1-0-banco-v2`, entorno «Onia» co
   `PATCH /api/treatments/[id]` no reevalúan la notificación). Va en un PR aparte, la madre lo aprobó como seguimiento.
 - **Sigue bloqueado:** recorrer los 5 rubros en producción hasta que la sesión de control en la PC cree y anuncie las cuentas ZZ QA.
 - **Recuperación de contraseña:** causa de raíz es configuración de producción no aplicada (no es código); lo decide la jefa con Sergio Urcullo.
+- **Idea de cobro (baja prioridad, sin decidir):** pasarela boliviana que genera un QR por pedido y marca pagado sola (la «de Guilherme», no identificada; candidata sin verificar: Livees Checkout), junto al trámite de la API QR del BCP / OpenBCB. «Sin NIT» no está confirmado por ninguna fuente. Resumen con fuentes: `/mnt/project-files/plataforma/COBRO_QR_PASARELAS_BOLIVIA.md`. Sin contacto con terceros ni gasto.
