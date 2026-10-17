@@ -28,6 +28,7 @@ Las rutas de fuente de la tabla son relativas a esta carpeta; las skills viven e
 | 8-oct, investigación de referente | [Alex Hormozi](2026-10-08-referente-hormozi.md), §5 | Pregunta inicial, analogía, cuenta por pasos, pizarra, color por hablante | `edicion-referentes`, reglas medidas 8-oct | Pendiente; diálogo real y permiso antes de caso |
 | 8-oct, investigación de referente | [Iman Gadzhi](2026-10-08-referente-gadzhi.md), §5 | Resultado, capítulos y demostración en largo; no copiar riqueza ni negocio | `edicion-referentes`, reglas de largo; `ver-videos`, límite del prompt CLI | Pendiente |
 | 9-oct | [Cinco entradas antes de vibe code](2026-10-09-cinco-archivos-antes-de-vibe-code.md), Qué toma Sergio Urcullo y qué NO | Nombre + función + prueba visible; reglas, skills, handoff y tarea sin duplicación | `diseno-contenido-onia`, Aprendizajes incorporados; `aprender-de-todo` | Ficha contiene borradores, no producción ni uso posterior demostrado |
+| 16-oct | [FLUNA: 4 mini clases, 10 skills del flujo, anunciante-supremo](2026-10-16-fluna-mini-clases-y-anunciante-supremo.md), §Contradicciones | 4 grupos de renovación; criterio de Biblioteca; checkout (3 de 6 piezas); lo que NO se adopta | `onia-ventas-pauta` §9.9, incorporado 17-oct; los 2 Canva bloqueados (403) | Pendiente; sin artefacto |
 | 9-oct | [DePBfHouarG](2026-10-09-reel-DePBfHouarG.md), Qué aprende Onia | Jerarquía, repetición, comparación y centralización; mosaico previo al cierre | `diseno-contenido-onia`; `edicion-referentes`, caso 45,3 → 47,0 s | Pendiente; audio y ritmo no medidos |
 
 ## Feedback fechado y memoria
@@ -50,3 +51,4 @@ Fuente: índice de memoria de Claude leído el 9-oct. Los enlaces son nombres de
 ## Cierre de cobertura
 
 Las 12 fichas están representadas; los lotes se separaron por referencia (21 filas). Las cinco fichas de catálogos son investigación fechada, no prueba de que cada video listado fue enviado por Sergio Urcullo ese día. No se afirma cobertura de enlaces ausentes del repo ni de feedback sin fecha en el índice. Para cerrar aprendizaje aplicado, cada carril registra en la ficha: sesión, regla usada, artefacto, prueba, resultado y fecha, según `aprender-de-todo`.
+
