@@ -79,10 +79,12 @@ Hilos y su entrega (16-oct):
 - Plataforma 1.0 banco (hilo nuevo con acceso): 5 rubros y demo dental. Espera el sí a crear 5 cuentas ZZ QA en producción.
 - Reels y navegador: ver posts de Instagram desde la nube funciona en el entorno «Onia»; transcripción de audio sigue por la PC. Entregado.
 
-Pendiente de UNA sola pregunta a Sergio Urcullo (la jefa la plantea una vez): (1) workshop: Bs 150 precio fundador hasta el mié 21, luego Bs 200, cupo 12, sáb 24-oct 10:00, auditoría 1 a 1 Bs 350; (2) enviar los mensajes de venta que él manda; (3) devolver el prepago a 14 días; (4) crear 5 cuentas ZZ QA en producción. HECHO, ya no se pregunta: rutinas de Plataforma (:17) y QA (:57) reencendidas a las 22:16 UTC del 16-oct (Sergio Urcullo confirmó que no las apagó; ver handoff/madre-control.md).
+Pendiente de UNA sola pregunta a Sergio Urcullo (la jefa la plantea una vez): (1) workshop: Bs 150 precio fundador hasta el mié 21, luego Bs 200, cupo 12, sáb 24-oct 10:00, auditoría 1 a 1 Bs 350; (2) enviar los mensajes de venta que él manda; (3) devolver el prepago a 14 días; (4) crear 5 cuentas ZZ QA en producción. Acción de seguridad pendiente (no es pregunta, la hace Sergio Urcullo o la madre, nunca la jefa): rotar el token de n8n de `~/.codex/config.toml`, expuesto en un registro local (handoff/madre-control.md §6.6); no se escribe su valor en ningún lado. HECHO, ya no se pregunta: rutinas de Plataforma (:17) y QA (:57) reencendidas a las 22:16 UTC del 16-oct (Sergio Urcullo confirmó que no las apagó; ver handoff/madre-control.md).
 
 Cada vuelta de la jefa (:07): leer esta cola y la orden vigente, ejecutar lo que no espera a Sergio Urcullo, destrabar carriles con más de 3 h sin avanzar y no preguntar de nuevo lo ya preguntado.
 
-Ejecutable sin esperar: mover los PR entregados a listo; pasar la lista de competencia al hilo de la 1.0; completar ⟦ENLACE-WORKSHOP⟧ del funnel con la oferta (marcada propuesta); dejar a Lucía su tarea de práctica; seguir recorridos públicos de la 1.0 sin crear datos.
+PC: agregar onia.com.bo y app.onia.com.bo al acceso de red del entorno «Onia» (claude.ai/code → entornos → Onia → acceso de red; Sergio Urcullo ya dijo SÍ pero madre-control.md §3 y §6.2 aún lo registran como pendiente, devuelven 403) y dejar el resultado en handoff/madre-control.md. El recorrido público de la 1.0 depende de esto.
+
+Ejecutable sin esperar (salvo el recorrido de la 1.0, que depende de la línea «PC:»): mover los PR entregados a listo; pasar la lista de competencia al hilo de la 1.0; completar ⟦ENLACE-WORKSHOP⟧ del funnel con la oferta (marcada propuesta); dejar a Lucía su tarea de práctica; seguir recorridos públicos de la 1.0 sin crear datos.
 
 Candidatos que NO se instalan sin OK de Sergio Urcullo: Ponytail, Diagram Design, Scrapling. yt-dlp ya está instalado en el VPS (/usr/local/bin, ver handoff/madre-control.md): solo falta probarlo con reels.
