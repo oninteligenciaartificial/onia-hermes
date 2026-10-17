@@ -64,12 +64,12 @@ Supuestos: las auditorías salen del 10-15 % de los asistentes; cada escenario e
 | # | Paso | Quién | Qué pasa |
 |---|---|---|---|
 | 1 | **Pieza** | Marca personal | Los 2 carruseles ya renderizados (hay que **cambiar la lámina 6**: ver §8) y reels con el molde Erik. **Un solo CTA:** «Link en mi perfil». Sin «comentá y te mando» (el DM automático no está probado) |
-| 2 | **Página** `/auditoria` | La persona | Una pantalla: promesa, «para quién no es», los 3 escalones con cupos que se ven bajar a mano, fecha de cierre, política de devolución, precio final en Bs |
+| 2 | **Página** `/auditoria` | La persona | Una pantalla: promesa, «para quién no es», los 3 escalones con cupos que se ven bajar a mano, fecha de cierre, aviso de que no hay devolución salvo que el taller no se dicte, precio final en Bs |
 | 3 | **Botón a WhatsApp** | La persona | Mensaje precargado: «Hola, quiero mi cupo del taller del sábado 31». Un toque |
 | 4 | **Respuesta con QR** | Sergio Urcullo | Plantilla A: 2 preguntas (negocio y tarea que repite) + precio vigente + QR + «el QR aparece a nombre de {titular}» |
 | 5 | **Pago** | La persona | QR del BCP; manda el comprobante por el mismo chat |
 | 6 | **Verificación** | Sergio Urcullo | Mira el movimiento en la app del BCP. Una fila en el registro (`sales-kit/SEGUIMIENTO-LEADS.md`: fecha, origen, rubro, monto, escalón) |
-| 7 | **Confirmación** | Sergio Urcullo | Plantilla B: constancia escrita (fecha, hora, qué incluye, política de devolución), link de Meet y pre-trabajo de 3 preguntas |
+| 7 | **Confirmación** | Sergio Urcullo | Plantilla B: constancia escrita (fecha, hora, qué incluye, aviso de no devolución), link de Meet y pre-trabajo de 3 preguntas |
 | 8 | **Recordatorios** | Sergio Urcullo | Jue 29, vie 30 y sáb 31 a las 8:00 y a las 9:45 (secuencia en §5) |
 | 9 | **Después** | Sergio Urcullo | 48 h: Plantilla E con la auditoría 1 a 1 y su crédito |
 
@@ -83,7 +83,7 @@ Se anotan por WhatsApp escribiendo «CLASE». Quien se anota queda en la **lista
 | 3-8 | **Quién soy y por qué** (historia real y corta de Sergio Urcullo; nada que no se pueda probar) |
 | 8-24 | **Una idea, tres creencias falsas:** «necesito saber programar», «automatizar es para empresas grandes», «las herramientas cuestan caro». Cada una: la creencia, por qué se cree, lo que pasa de verdad y un ejemplo. En medio, **la cuenta de a un paso** con el ejemplo de la sala |
 | 24-30 | **Demo corta:** el Mapa con una tarea de un asistente (con su permiso) |
-| 30-34 | **La oferta, una sola vez:** qué incluye, fecha, escalón vigente y cuántos cupos quedan **de verdad**, política de devolución. Tres preguntas antes del precio: «¿repetís tareas cada semana?», «¿querés dejar de contarlas en la cabeza?», «¿podés estar el sábado 31 a las 10?» |
+| 30-34 | **La oferta, una sola vez:** qué incluye, fecha, escalón vigente y cuántos cupos quedan **de verdad**, y que no hay devolución salvo que el taller no se dicte. Tres preguntas antes del precio: «¿repetís tareas cada semana?», «¿querés dejar de contarlas en la cabeza?», «¿podés estar el sábado 31 a las 10?» |
 | 34-35 | **Cierre:** «Escribime TALLER por WhatsApp y te mando el QR» |
 
 ## 4. Calendario (con el sí de Sergio Urcullo; fechas en hora de La Paz)
@@ -106,7 +106,7 @@ Se anotan por WhatsApp escribiendo «CLASE». Quien se anota queda en la **lista
 ## 5. Mensajes (voseo; cada uno con el OK de Sergio Urcullo; nada se manda desde la nube)
 
 - **A · Respuesta al botón:** «Hola, soy Sergio Urcullo. Gracias por escribir. El taller es el sábado 31 a las 10:00 (La Paz), 90 minutos por Meet. Hoy el cupo cuesta Bs {50|60|70} ({n} lugares quedan a ese precio). Antes de mandarte el QR, contame: ¿qué negocio tenés y qué tarea repetís todas las semanas? El QR aparece a nombre de **{titular}**.»
-- **B · Confirmación (constancia escrita):** «Recibido: tu cupo está confirmado. Taller "Auditá tu negocio con IA", sábado 31 de octubre, 10:00 (La Paz), 90 min por Meet: {link}. Incluye: la plantilla del Mapa de tareas y tu primer paso hecho en vivo. Devolución completa si lo pedís hasta 24 h antes o si el taller no se dicta. Antes del sábado mandame: 1) qué vendés y cuántas personas trabajan, 2) tus 5 tareas más repetidas, 3) cuántas horas por semana te toma cada una.»
+- **B · Confirmación (constancia escrita):** «Recibido: tu cupo está confirmado. Taller "Auditá tu negocio con IA", sábado 31 de octubre, 10:00 (La Paz), 90 min por Meet: {link}. Incluye: la plantilla del Mapa de tareas y tu primer paso hecho en vivo. Sin devolución una vez pagado (solo si el taller no se dicta). Si no podés venir, podés ceder tu cupo a otra persona avisando antes. Antes del sábado mandame: 1) qué vendés y cuántas personas trabajan, 2) tus 5 tareas más repetidas, 3) cuántas horas por semana te toma cada una.»
 - **C · Seguimiento a la lista de interés (1 por vez, solo a quien pidió la clase):** día de la inscripción (confirmación + link); día siguiente (un dato útil: la cuenta de a un paso, en 3 líneas); 24 h antes de la clase (recordatorio); 1 h antes de la clase (link); al terminar (el aviso con el escalón y los cupos reales).
 - **D · Si no paga en 24 h:** una sola vez, «¿Pudiste ver el QR? Si preferís, te aviso cuando abra otra fecha.»
 - **E · Después del taller:** «Gracias por venir. Si querés que revisemos tu caso uno a uno, la auditoría de 45 minutos cuesta Bs 350; como ya pagaste Bs {monto}, te queda en Bs {350-monto}. Te dejo un informe de una página con tus 3 prioridades. Vale hasta el jueves 5 de noviembre.»
@@ -138,7 +138,7 @@ Está en `docs/ONIA_WORKSHOPS_AUDITORIA_IA.md`. **Cuándo gana:** si Sergio Urcu
 ## 10. Lo que necesita de Sergio Urcullo (una hoja, sí o no)
 1. **Precio y fecha:** escalones Bs 50 / 60 / 70, cupo 50, taller sáb 31-oct 10:00.
 2. **A nombre de quién se cobra por QR y cómo se factura.** Lo define Leslie Mercado Moreno antes del primer cobro.
-3. **OK a la política de devolución** (completa hasta 24 h antes o si no se dicta). Texto final: Leslie Mercado Moreno.
+3. **Devolución: DECIDIDA por Sergio Urcullo (17-oct), opción C, sin devolución** (Términos actuales). Aplicada: solo se devuelve si el taller no se dicta. Falta que Leslie Mercado Moreno revise el texto. Si luego se ofrece Onia Platform en el cierre, avisar que el plan anual no se reembolsa y que conviene probar antes los 14 días sin tarjeta.
 4. **Crear** la plantilla del Mapa y probar que su Meet admite una sesión de 90 minutos con 50 personas **[verificar: la cuenta gratis de Google puede limitar la duración de las reuniones grupales]**.
 5. **OK a publicar** las piezas (con el CTA «Link en mi perfil») y a mandar cada mensaje de §5.
 6. Preguntarle a **Fabricio**: cuántos seguidores tenía, cuántos días vendió, qué entregó y cuántas devoluciones hubo. Con eso se afina la cuenta de §2.
