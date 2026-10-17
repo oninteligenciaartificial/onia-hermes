@@ -77,6 +77,7 @@ Una tarea que no trae los 7 campos no se manda.
 - A los clientes se les habla de «usted».
 
 ## El loop: por eventos, sin esperas
+- El puente es el mensaje del hilo: todo hilo cierra CADA tarea publicando en su hilo (1 a 3 líneas). Eso despierta a la jefa sola (wake «thread-activity», medido el 17-oct). Un hilo que termina sin publicar deja el loop parado: está prohibido.
 - No hay vueltas por hora. Cuando un hilo termina una tarea, la jefa se despierta, la verifica y le da la siguiente de la cola de su frente. Cuando Sergio Urcullo contesta una tarjeta, la jefa se despierta y se la pasa al hilo en ese momento.
 - Cada frente tiene su cola en `/mnt/project-files/cola/<frente>.md` con sus próximas 5 tareas, ya escritas en el molde de 7 campos. La jefa la mantiene llena.
 - Ningún hilo se queda parado esperando una decisión: manda la tarjeta y sigue con la siguiente tarea de la cola que no dependa de ella.
