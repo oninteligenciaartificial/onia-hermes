@@ -5,7 +5,7 @@
 ## 1. Qué es y para qué (Sergio Urcullo, 10-oct)
 - **Laboratorio de Higgsfield:** cada pieza prueba un método (identidad, motor, clip, QA). Lo aprendido se anota en este doc, `HIGGSFIELD_VIDEO_SYSTEM.md` o la skill, en el mismo commit.
 - **Cuenta a facturar después:** `@lucia.antelo.oficial`, vitrina de lo que el sistema produce. Métrica única: demos con `src=lucia-*` (`onia.com.bo/llamada?src=lucia-<pieza>`).
-- **No se pausa.** Se ajusta con datos (la regla «pausar el día 14» de PLAN §4 queda superada). El cron viejo de video (38 cr/día) sigue apagado: rompe el tope. Se avanza por piezas, ordenadas por la madre.
+- **No se pausa.** Se ajusta con datos (la regla «pausar el día 14» de PLAN §4 queda superada). El cron viejo de video (38 cr/día) sigue apagado: rompe el tope. Se avanza por piezas, ordenadas por la jefa (`AGENTS.md` §1).
 
 ## 2. Flujo, paso a paso
 | # | Paso | Herramienta / comando exacto |
@@ -22,7 +22,7 @@
 - **Tope Lucía: 150 cr/mes** (Sergio Urcullo, 1-oct); octubre llevaba 52,5 al 5-oct. Semana tipo ≈ 35 cr. Saldo: NO lo leí (era ~438 el 8-oct, plan Pro, 4 jobs a la vez); se lee con `higgsfield account status` al empezar.
 - **Medido:** Soul 2k 0,12 · still Seedream 1 · Nano Banana Pro 2 · GPT Image 2.5 1 a 2,75 · Kling std sin sonido 6 s 7,5 y 10 s 12,5 · entrenar Soul 25 · `sync_so` 18,15 (FLUJO.md estima ~22, sin medir).
 - **Siempre** `generate cost` antes de `create`; job, modelo, costo y decisión de QA a `v4/PROCEDENCIA.jsonl`. Lo caro se avisa, no se lanza.
-- **Sin preguntar:** imágenes y lotes chicos (menos de ~5 cr) dentro del tope; se avisa después con la lámina. **Lo revisado ya está aprobado** (10-oct): pasa el QA, se publica y se avisa con el enlace.
+- **Sin preguntar:** imágenes y lotes chicos (menos de ~5 cr) dentro del tope; se avisa después con la lámina. **El QA no es aprobación** (corregido 17-oct, `AGENTS.md` §4): se publica lo que Sergio Urcullo aprobó (versión, cuenta y calendario); el control de identidad y el QA son gates previos a su OK, no lo reemplazan. Publicado, se avisa con el enlace.
 - **Con aprobación específica:** lote de video, entrenar un Soul, y todo lo que suba la cara o la voz de Sergio Urcullo (es menor de edad: además el OK de Leslie Mercado Moreno).
 
 ## 4. Listo para publicar hoy, orden y ritmo

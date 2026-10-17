@@ -1,5 +1,7 @@
 # Las colas — un carril, un objetivo, una pantalla que lo prueba
 
+> **HISTÓRICO desde el 17-oct-2026.** Reemplazado por `AGENTS.md` §1 (quién hace qué: la jefa reparte, la madre controla la PC, Codex solo revisa) y §4 (`main` solo por PR con CI verde y revisión de Codex; «Quién decide»). Donde diga que `onia-cola` o la madre mergean, que un loop se rearma contra esta lista o que lo visual se publica sin esperar, ya no rige. Las colas vigentes: `cola/loop/README.md`.
+
 > **Por qué existe esta carpeta.** El 2026-08-31 se midió: **349 commits repartidos en 5 ramas
 > y ninguno en `main`**. El trabajo estaba hecho y no llegaba a ningún lado. La sensación de
 > "no avanzamos" no venía de los loops ni de las sesiones: venía de que nada converge.
@@ -73,9 +75,9 @@ hecha y, más abajo, la repetía como pendiente.
 - Bajar o apagar una superficie viva.
 - Gastar plata.
 
-## Lo que sí está pre-autorizado
+## Lo que NO está pre-autorizado (corregido el 17-oct)
 
-Mergear a `main` con los tres gates en verde (Sergio, 2026-08-29). Avisar después, no antes.
+Mergear a `main`. La autorización del 29-ago («con los tres gates en verde, avisar después») quedó retirada: `main` solo se mueve por PR con CI verde y revisión de Codex, y lo une la jefa o la rutina QA bajo la lista de `AGENTS.md` §4 «Quién mueve `main`».
 
 ## Los loops — cómo se ponen para que trabajen sin que Sergio promptee
 
@@ -162,9 +164,7 @@ copia la tabla: dos copias de los mismos `cron` es exactamente cómo se llega a 
 que no existe. Este archivo explica el **porqué**; `loops.md` es la **lista** contra la que los
 loops se comparan al arrancar.
 
-**Hoy son cinco activos** — `chatbot-cola`, `onia-cola`, `contenido-cola`, `canario-visual` y
-`web-factory-dev-loop` — con los horarios **escalonados a propósito**: comparten CPU y disco, y
-dos loops sobre el mismo árbol se pisan.
+**Lista de agosto-septiembre, histórica (cinco activos entonces; `onia-cola`, el integrador, está MUERTO desde el 27-sep y no se rearma).** Los loops vigentes son las colas de `cola/loop/README.md` y las rutinas de `AGENTS.md` §1. Los horarios se escalonan a propósito: comparten CPU y disco, y dos loops sobre el mismo árbol se pisan.
 
 > ⚠️ **Corregido el 2026-08-31 (segunda pasada).** Acá decía "los seis que están puestos" con una
 > tabla de cadencias tipo `3,23,43`, y **ninguna** de esas seis líneas coincidía con lo registrado

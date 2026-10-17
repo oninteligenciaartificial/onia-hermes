@@ -5,7 +5,9 @@
 > *"quiero que te sientes y organices tu equipo, porque chocan tanto — uno desarrolla, otro
 > audita, otro investiga, otro perfecciona, otro revisa"*.
 
-**Este archivo dice QUIÉN hace qué.** La lista de qué loops deben existir y con qué horario vive
+> **HISTÓRICO desde el 17-oct-2026.** Reemplazado por `AGENTS.md` §1 (quién hace qué: la jefa reparte, la madre controla la PC, Codex solo revisa) y §4 (`main` solo por PR con CI verde y revisión de Codex; «Quién decide»). Donde diga que `onia-cola` o la madre mergean, que un loop se rearma contra esta lista o que lo visual se publica sin esperar, ya no rige. Las colas vigentes: `cola/loop/README.md`.
+
+**Este archivo dice QUIÉN hacía qué (septiembre).** La lista de qué loops deben existir y con qué horario vive
 en [`loops.md`](loops.md); la doctrina de cómo se arma uno, en
 [`COMO_SE_ARMA_UN_LOOP.md`](../COMO_SE_ARMA_UN_LOOP.md). Un tema, un lugar.
 
@@ -35,9 +37,7 @@ El canario y el auditor **sólo agregan** ítems `[ ]` al final de la sección. 
 es el único que los marca `[x]` y el único que edita su texto. Agregar al final se mergea solo;
 editar la misma línea desde dos lados, no.
 
-**3. `main` la toca UNO solo.** El integrador, y hay un hook `pre-push` que lo hace cumplir
-(`.githooks/pre-push`, sólo pasa con `ONIA_LOOP_ID=onia-cola`). Es un cerrojo, no una
-instrucción: los loops corren sin nadie mirando.
+**3. `main` solo por PR revisado.** *(Histórico: antes lo tocaba un único integrador, `onia-cola`, muerto desde el 27-sep.)* Hoy: CI verde y revisión de Codex, y lo une la jefa o la rutina QA bajo la lista de `AGENTS.md` §4. El hook `pre-push` (`.githooks/pre-push`) es un cerrojo para los clones del VPS; aún deja pasar `ONIA_LOOP_ID=onia-cola`, hueco anotado en AGENTS §4.
 
 ---
 
@@ -45,7 +45,7 @@ instrucción: los loops corren sin nadie mirando.
 
 | oficio | loop | qué hace | escribe SÓLO en |
 |---|---|---|---|
-| **Integra** | `onia-cola` | Mergea UN carril por vuelta a `main` con los gates. Con el tiempo que sobre, construye la cola de plataforma | `main` · `onia-platform/**` · `COLA.md` (sus ítems) |
+| ~~**Integra**~~ | ~~`onia-cola`~~ (muerto desde el 27-sep) | Era el integrador. Hoy no hay integrador: une la jefa o la rutina QA por PR (`AGENTS.md` §4) | - |
 | **Desarrolla la venta** | `web-venta` | `onia.com.bo/` y `/empezar` — la puerta de entrada | `web-factory/apps/onia-platform/**` |
 | **Desarrolla el chatbot** | `chatbot-cola` | Que un desconocido escriba y esa charla se vea en la bandeja | `hermes-content/deploy/vps-ops/**` · `cola/chatbot.md` |
 | **Revisa** | `canario-visual` | Abre y **MIRA** 10 pantallas de cliente. Cada diferencia se vuelve ítem en la cola del **dueño** | ítems `[ ]` nuevos, nada más |

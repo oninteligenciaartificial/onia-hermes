@@ -4,7 +4,7 @@
 
 Rol: `hermes-content/docs/HERMES_ROL_QA.md` (madre, PR #187). Sergio Urcullo, 10-oct: *«pasalo a QA pero dale un uso»*.
 Un PR por tarea, con el CI en verde y revisión antes de mergear. En el VPS, solo lectura: lo que cambie el crontab,
-n8n, el SOUL o `/root/.hermes` va por PR y lo aplica la madre. Orden de la madre: **Q4 primero** entre las que este
+n8n, el SOUL o `/root/.hermes` va por PR y la madre aplica en el VPS lo ya aprobado (`AGENTS.md` §1). Orden del 10-oct (histórica): **Q4 primero** entre las que este
 carril puede hacer solo. Q1 espera `aplicar` (ver «Bloqueado»).
 
 - [ ] **Q1 Verificar el encendido.** La madre corre `diagnostico` y después `aplicar` desde la PC, entre las 06:30 y las
@@ -23,10 +23,10 @@ carril puede hacer solo. Q1 espera `aplicar` (ver «Bloqueado»).
   4. ¿Cuál es la cadencia real de `vigia-aprobaciones`?
 
   **Hecho:** la primera corrida programada en verde con la tabla, y las cuatro respuestas en «Hallazgos para otros»
-  con su dueño. Lo mergea la madre.
-  - [x] Código: el workflow y la sección 15, con pruebas. Va en un PR **para que lo mergee la madre** (lo dice el rol).
+  con su dueño. Va por PR: lo une la jefa o QA con CI verde y revisión de Codex (`AGENTS.md` §4).
+  - [x] Código: el workflow y la sección 15, con pruebas. Va en un PR (lo une la jefa o QA, `AGENTS.md` §4).
   - [ ] La primera corrida programada (10:00 UTC del día después del merge) y las cuatro respuestas.
-  - **Bloquea (11-oct): el merge de #194, que es de la madre** (el rol lo dice: agrega un workflow programado que entra al
+  - **Bloquea (11-oct): el merge de #194, que va por PR (jefa o QA, con revisión de Codex; `AGENTS.md` §4)** (el rol lo dice: agrega un workflow programado que entra al
     VPS). No falta ningún secreto ni ningún permiso: el CI está en verde desde el 10-oct a las 21:38 UTC y no tiene
     conflictos. Este carril pushea a una sola rama: mientras #194 no entre, todo lo que pushee va en ese PR.
 - [ ] **Q3 Fase 2 de la aduana: que nada le avise por fuera.** Pasan por `onia-tg.sh` los avisos de n8n «Vigia lead sin
@@ -1063,7 +1063,7 @@ carril puede hacer solo. Q1 espera `aplicar` (ver «Bloqueado»).
 - [x] En la próxima tarea del carril, cargar `equipo-de-agentes` y `aprender-de-todo`; aplicar los checkpoints de la ficha `2026-10-08-orquestacion-e-ingresos-5-posts.md` y registrar allí sesión, contrato, artefacto y verificación. No instalar Foreman ni activar otro orquestador. — aplicado sobre el runbook de `aplicar` (§8: correr `diagnostico` antes); registro en la ficha, «Prueba de uso por sesión», commit de esta línea
 
 ## Bloqueado
-- **#194 (Q2 y Q5) sin mergear desde el 11-oct 14:59 UTC.** Lo mergea la madre (el rol lo dice: agrega un workflow programado que entra al VPS). Medido el 15-oct 09:00 UTC: CI verde sobre la cabeza `b8d548b8` (`suite del carril hermes-jarvis`, success), y `main` sigue en `2cdefca7`, así que no hay conflicto posible. Mientras no entre, Q2 (primera corrida programada), Q5 (en vivo), el renglón de Q5 en el diagnóstico y Q3 no avanzan, y este carril no pushea nada fuera de esa rama.
+- **#194 (Q2 y Q5) sin mergear desde el 11-oct 14:59 UTC.** Se une por PR (jefa o QA, con revisión de Codex; `AGENTS.md` §4); la madre solo lo aplica en el VPS después (el rol lo dice: agrega un workflow programado que entra al VPS). Medido el 15-oct 09:00 UTC: CI verde sobre la cabeza `b8d548b8` (`suite del carril hermes-jarvis`, success), y `main` sigue en `2cdefca7`, así que no hay conflicto posible. Mientras no entre, Q2 (primera corrida programada), Q5 (en vivo), el renglón de Q5 en el diagnóstico y Q3 no avanzan, y este carril no pushea nada fuera de esa rama.
 - **E32 (revisar M1d):** la rama `codex/m1d-…` no existe en el remoto (15-oct). Lo desbloquea la madre, que tiene `07f52b32` en su PC.
 - **Q1 y las pruebas P2-P5 (`aplicar`).** El texto con que Sergio Urcullo arrancó esta sesión dice: «Nada se aplica en
   el VPS sin el «sí» de Sergio Urcullo en ESTA sesión». Desde el 10-oct, `equipo-de-agentes` §8 agrega que la

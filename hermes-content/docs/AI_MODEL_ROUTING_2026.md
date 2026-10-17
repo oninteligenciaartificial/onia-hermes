@@ -1,6 +1,6 @@
 # Enrutamiento de modelos para ONIA/Hermes
 
-Estado: actualizado 2026-10-09 (Sol 6.1 para contratos cerrados, alineado con `equipo-de-agentes`). Aplica a Codex, subagentes y automatizaciones que permitan
+Estado: actualizado 2026-10-09 (alcance de Codex corregido el 17-oct: solo revisa PRs, `AGENTS.md` §1; esta tabla elige el modelo de esa revisión y de los subagentes, no autoriza a Codex a ejecutar código ni contratos cerrados). Aplica a Codex, subagentes y automatizaciones que permitan
 elegir modelo. La disponibilidad puede variar por producto y cuenta.
 
 ## Decisión

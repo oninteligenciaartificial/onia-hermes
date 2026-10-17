@@ -1,9 +1,9 @@
 # Handoff — onia-1.0-nube (carril Plataforma, en la nube)
 
 Sesión saliente: `session_014HGgof9kHQkdLXhsZsAq6A` (1-oct-2026, sucesora de `session_01VGmpNv4eSMnpA3wXrypR4L`).
-La sesión **madre** (local, PC de Sergio Urcullo) ordena por mensaje (CLAUDE.md §1, skill `onia-sesion-madre` en la rama
-`claude/onia-sesion-madre-77f719`). Las respuestas a la madre se escriben en el transcript propio: la nube no puede
-mandar mensajes. Historia anterior: `git log -- hermes-content/docs/handoff/onia-1.0-nube.md`.
+La sesión **madre** (local, PC de Sergio Urcullo) controla lo que exige la PC y le habla a la nube con `claude -p --cloud`;
+el reparto de tareas es de la jefa (`AGENTS.md` §1; skill `onia-sesion-madre`). Las respuestas se escriben en el transcript
+propio: la nube no puede mandar mensajes. Historia anterior: `git log -- hermes-content/docs/handoff/onia-1.0-nube.md`.
 
 ## 0. Al arrancar (medido 1-oct)
 
@@ -31,8 +31,11 @@ Desarrollar y publicar Onia Platform 1.0 hasta cobrar al primer cliente. Qué sa
   - Verificado: bundle `payload:{id}`, usted 3 / voseo viejo 0, login a 390 y 1440 renderizado.
   - Las 2 tablas abiertas a anon siguen en 200 hasta correr el SQL (§6).
 
-- **Regla de Sergio Urcullo (2-oct):** lo que pasa los gates se mergea y se publica SIN preguntar; solo diseño
-  nuevo y legales pasan por él (AGENTS.md §4 «Quién decide»). No se le habla de PRs.
+- **Regla vigente (17-oct, `AGENTS.md` §4 «Quién decide»):** lo técnico que pasa los gates (revisión de Codex o de un
+  revisor independiente, tsc y tests) se publica sin consultarle. Antes va a Sergio Urcullo lo visual (pantalla o sección
+  nueva, rediseño, marca, piezas de contenido) y lo serio (textos legales, precios o cifras, gasto, terceros, datos reales
+  de producción, borrado sin copia, secretos y permisos). La regla del 2-oct («solo diseño nuevo y legales») quedó
+  superada. No se le habla de PRs.
 - **Alcance congelado (madre, 2-oct):** solo se termina lo asignado; lo nuevo va a pendientes. Excepciones con OK de
   Sergio Urcullo del 3-oct: el arreglo de seguridad del botón, el barrido de promesas de la web y el estudio del SIAT.
 - **Plataforma en `release-13b67dda`** (3-oct 16:21 UTC, «PUBLICADO Y VERIFICADO», rollback

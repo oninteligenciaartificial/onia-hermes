@@ -1,5 +1,7 @@
 # La cola — qué se hace ahora
 
+> **HISTÓRICO desde el 17-oct-2026.** La cola de producto vigente es `cola/loop/plataforma.md`. Este archivo trata a `onia-cola` como integrador vivo (muerto desde el 27-sep) y a `main` como destino de merges pre-autorizados: ya no rige. `main` solo por PR con CI verde y revisión de Codex (`AGENTS.md` §4).
+
 > **Este archivo es la memoria del trabajo.** Vive en el repo a propósito: los loops de una
 > sesión mueren cuando se cierra Claude Code, y con ellos se perdía la cola entera.
 > Cualquier sesión lo lee, lo ejecuta y lo actualiza. Sergio también lo puede editar.
@@ -70,8 +72,8 @@ Sergio Urcullo, no de código.)*
    lo desbloqueado**. Un ítem trabado no frena la cola.
 
 **Nunca:** desplegar al VPS, tocar worktrees o ramas de otras sesiones, gastar plata, ni bajar una
-superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes (Sergio, 2026-08-29)
-— avisar después, no antes.
+superficie viva. Mergear a master **ya no** está pre-autorizado (la autorización del 29-ago se retiró el 17-oct):
+va por PR con CI verde y revisión de Codex (`AGENTS.md` §4).
 
 ---
 

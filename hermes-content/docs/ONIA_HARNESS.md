@@ -1,6 +1,8 @@
 # Harness de Onia
 
-> **Fuente de verdad del harness:** qué lo compone, dónde corre cada loop y quién es dueño de cada frente. Doc vivo,
+> **Superado en parte por `AGENTS.md` §1/§4 y `ONIA_SISTEMA_AUTONOMO.md` (17-oct-2026):** `onia-cola` está muerto desde el 27-sep; la madre no es dueña única ni mergea; Codex solo revisa; `main` solo por PR con CI verde y revisión de Codex. Las filas que digan otra cosa son del 10-oct.
+>
+> **Fuente de verdad del harness (inventario del 10-oct):** qué lo compone, dónde corre cada loop y quién es dueño de cada frente. Doc vivo,
 > sin fecha en el nombre: se EDITA. Pedido de Sergio Urcullo del 10-oct (A5 en `cola/loop/madre.md`): *«investigar qué
 > es un harness y cómo lo tenemos hecho, loops, subagentes y que toquemos todos los frentes»*.
 > Salió del workflow `wf_da25d090-4e5`: teoría con fuentes, 2 inventarios, frentes, arquitecto y crítico. El crítico
@@ -60,7 +62,7 @@ Abreviaturas: G = `C:/Users/PC/.claude` · WT = este worktree. Las cifras se con
 | Latido de Hermes-Jarvis | servidor, RemoteTrigger | :57 cada hora | Igual, pero su cola tiene 0 tareas abiertas y 19 cerradas | Sí | Hermes | Activo, sin trabajo |
 | Ventas | su propio ScheduleWakeup | ? | Su cola | Solo si se programó | Ventas | **No verificable** |
 | Guardián `claude-guardia.sh` | VPS, cron | cada 10 min | Autocura contenedores y avisa por Telegram | Sí | VPS | **No** (credencial de hace 36 días) |
-| `onia-loop.sh` (7 casos: `onia-cola`, `chatbot-cola`, `web-venta`, `marca-personal`, `canario-visual`, `docs-auditoria`, `kpis-semanal`) | VPS / nodo-casa, cron | `chatbot-cola` cada hora; el resto ? | `onia-cola` mergea `claude/*` a main; `web-venta` es dueño de onia.com.bo; `chatbot-cola` lleva el chatbot | Sí, si corre en el VPS | VPS | **No** |
+| `onia-loop.sh` (7 casos: `onia-cola`, `chatbot-cola`, `web-venta`, `marca-personal`, `canario-visual`, `docs-auditoria`, `kpis-semanal`) | VPS / nodo-casa, cron | `chatbot-cola` cada hora; el resto ? | `onia-cola` (muerto desde el 27-sep) mergeaba `claude/*` a main; `web-venta` es dueño de onia.com.bo; `chatbot-cola` lleva el chatbot | Sí, si corre en el VPS | VPS | **No** |
 | Unos 20 vigías (`vigia-ci`, `vigia-disco`, `vigia-aprobaciones`, `vigia-loops-remotos`, `vigia-comprobantes`, `vigia-credito-ia`…) | VPS, cron | `aprobaciones` cada 2 min; `credito-ia` cada 15 min | Avisan a Telegram | Sí | VPS | **No** (la cuenta de 20 es del 27-sep) |
 | n8n | VPS | barridos cada hora | Bot y barridos del embudo (44 workflows activos el 20-ago) | Sí | sin dueño | **No** |
 | Publicación de onia-platform | VPS (probable) | cada ~3 h | Publica master | Sí | ? | **No** (no está en `.github/workflows`) |
@@ -77,7 +79,7 @@ Etapa vigente: la 1 (de 0 a 5 clientes). Se congela todo lo que no sea Onia Plat
 
 | # | Frente | Dueño hoy | Loop hoy | Dueño propuesto |
 |---|---|---|---|---|
-| 1 | 1.0 Plataforma (15 puntos) | Plataforma; la madre integra | :17 + ronda | igual |
+| 1 | 1.0 Plataforma (15 puntos) | Plataforma; une la jefa o QA por PR (AGENTS §4) | :17 + ronda | igual |
 | 2 | Cobro y QR del BCP | Plataforma el código; Sergio Urcullo el trámite | :17 | 🔴 el trámite no tiene recordatorio → reloj "BCP" en el parte |
 | 3 | Respaldos (punto 4) | Plataforma | :17 | igual; el bucket R2 está en C7 |
 | 4 | SIAT (vence el 4-nov) | Plataforma con capturas; el portal solo lo abre Sergio Urcullo | 🔴 ninguno | la madre lleva el reloj |
@@ -89,7 +91,7 @@ Etapa vigente: la 1 (de 0 a 5 clientes). Se congela todo lo que no sea Onia Plat
 | 10 | Asesorías y cal.com | Marca las historias | 🔴 nadie sigue las reservas | la madre lee la agenda en el parte |
 | 11 | Web onia.com.bo (la puerta del 16-oct) | 🔴 nadie en la nube; `web-venta` en el VPS sin verificar | 🔴 | Review/QA, solo si `web-venta` está muerto |
 | 12 | Fiscal y legal (NIT el 13-oct según memoria, homologación el 30-oct, términos #124) | Sergio Urcullo y Leslie Mercado Moreno | 🔴 ninguno | la madre lleva los relojes |
-| 13 | Infra y costo | 🔴 sin dueño único: Plataforma, Hermes y la madre tienen la llave del VPS, y `onia-cola` puede mergear solo | guardián (sin verificar) | la madre, dueña única de la infra |
+| 13 | Infra y costo | 🔴 sin dueño único: Plataforma, Hermes y la madre tienen la llave del VPS, y `onia-cola` (muerto desde el 27-sep) podía mergear solo | guardián (sin verificar) | la madre, dueña única de la infra |
 | 14 | Competencia | Ventas | ninguno (aceptable) | igual |
 | 15 | Harness | madre | ronda | madre, en el "lunes del harness" |
 | 16 | Add-ons del 8-oct | sin tarea | ninguno | congelados detrás de la 1.0 (correcto) |
@@ -137,7 +139,7 @@ Etapa vigente: la 1 (de 0 a 5 clientes). Se congela todo lo que no sea Onia Plat
   - Hermes pasa a ser Review/QA: los miércoles mira onia.com.bo a 390 y 1440 px, la salud del chatbot y la lista de herramientas de Meta, todo en solo lectura.
   - El vigía diario de relojes manda **un** resumen al día por Telegram.
 - **Aprobación:**
-  - Clase A, sin preguntar: lo que pasa los gates (regla del 9-oct).
+  - Técnico, sin consultarle: lo que pasa los gates (`AGENTS.md` §4 «Quién decide», 17-oct; reemplaza la regla del 9-oct).
   - Clase B, con su sí: gasto, terceros, SIAT, actos legales, cara o voz, credenciales, instalaciones, CLAUDE.md o la configuración.
   - El sí vale solo escrito en la sesión que actúa. La línea fija de cada carril vive en `handoff/ARRANQUE-SESIONES.md`, y Sergio Urcullo la pega al reabrir.
   - El `ok <id>` de Telegram solo dispara scripts del VPS que no usan LLM.
@@ -163,7 +165,7 @@ Etapa vigente: la 1 (de 0 a 5 clientes). Se congela todo lo que no sea Onia Plat
 | 2 | **Inventario en vivo de la capa VPS/casa:** `crontab -l` en el VPS y en casa, los 7 casos de `onia-loop.sh`, los vigías, `onia-cola`, el tablero SQLite, la credencial del guardián, n8n y cuántos mensajes de Telegram llegan por día. Se vuelca acá en §3. **Va antes que el 3 y el 4.** | la madre por SSH, solo lectura; Haiku arma la tabla | No para leer. **Sí** para pausar lo que él usa. | cada línea de cron con la salida del comando; vivo o muerto con la fecha de su último log; la lista de pausas en C |
 | 3 | Libro único, "Relojes" y verificador (§6); las 12 `codex-tareas` con su fila; la §F de madre.md apunta a §3 de este doc | la madre con Sonnet; Codex Sol escribe el verificador **y la madre lo prueba** (el sandbox no tiene git ni tests) | No | el verificador sale ≠0 ante un `[x]` sin prueba y lista los relojes a 72 h |
 | 4 | Dueños de §4 en madre.md; latido de Ventas a las :37; Hermes pasa a Review/QA | la madre (RemoteTrigger y mensajes) | No. **Sí** para congelar Lucía. | `RemoteTrigger list` muestra a Ventas; la cola de Hermes tiene 3 o más tareas; un `get_run_log` de Ventas muestra una tarea tomada |
-| 5 | Guarda de migraciones: `deploy/onia-platform/publicar.sh` aborta si falta en `_prisma_migrations` de producción alguna migración de `prisma/migrations`. Los PRs con migración solo los mergea la madre. | Codex Astra escribe, Sonnet revisa, la madre despliega | No (infra revisada, regla del 9-oct) | en seco, con una migración ficticia sin aplicar, aborta con mensaje |
+| 5 | Guarda de migraciones: `deploy/onia-platform/publicar.sh` aborta si falta en `_prisma_migrations` de producción alguna migración de `prisma/migrations`. Los PRs con migración van por PR con CI verde y revisión de Codex (los une la jefa, AGENTS §4); la madre aplica la migración con backup. | Codex Astra escribe, Sonnet revisa, la madre despliega | No (infra revisada; AGENTS §4 «Quién decide») | en seco, con una migración ficticia sin aplicar, aborta con mensaje |
 | 6 | CI: `concurrency: {group: ci-${{ github.ref }}, cancel-in-progress: true}` y medir los minutos | Plataforma o Codex Sol | No para `concurrency`. **Sí** para C6 (retirar la suite local) y para el scope `user` | un segundo push cancela la corrida anterior; se conocen los minutos del mes |
 | 7 | Billetera diaria y costo por punto; `--disable multi_agent` y `meta.json` en `codex-tarea.sh`; corregir la cabecera astra/sol | la madre + Codex Sol | No | 3 días seguidos con línea en §E |
 | 8 | Vigía de relojes en el VPS: **se suma a los vigías que ya existen** (mismo patrón, `onia-tg.sh`), con un resumen por día | Codex Sol escribe, Sonnet revisa, la madre despliega | No, si el VPS ya tiene el clon de onia-hermes. **Sí**, si necesita un token de GitHub. | un reloj de prueba a mañana manda 1 resumen y no más de 1 por día |

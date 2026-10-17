@@ -7,6 +7,8 @@
 > El método operativo vive en la skill `equipo-de-agentes`; cuando una parte de este plan se aplica, se pasa a la skill.
 > **Leer la §Crítica antes de ejecutar:** marca qué afirmaciones del plan están CONFIRMED, UNVERIFIED o FALSE.
 > Texto de los agentes en inglés; se deja tal cual para no perder precisión.
+>
+> **Superado en parte por `AGENTS.md` §1 y §4 (17-oct-2026).** Donde diga que la madre es la única que ordena o que mergea, que Codex ejecuta contratos, que `onia-cola` integra, o que lo visual o el contenido se publica sin esperar (reglas del 8 y 9-oct), vale `AGENTS.md`: la jefa reparte, la madre controla la PC, Codex solo revisa, `main` solo por PR con CI verde y revisión de Codex, y lo visual y lo serio van antes a Sergio Urcullo.
 
 ## Plan
 
@@ -43,13 +45,13 @@
 
 ## 1) Final architecture in 10 lines
 
-1. The madre (Opus 5.5 with Ultracode, on the PC) is the only orchestrator. It handles intake, dispatch, browser and PC work, migration and infra merges, and reads cloud run logs.
+1. *(Superseded 17-oct by AGENTS.md §1: the jefa assigns work, one Sonnet thread per lane; the madre is the PC control session.)* The madre (Opus 5.5 with Ultracode, on the PC) is the only orchestrator. It handles intake, dispatch, browser and PC work, migration and infra merges, and reads cloud run logs.
 2. The madre's round runs every 20 minutes as one workflow led by Haiku. It covers queues, PRs and CI, Codex output, bundles, ledger reconciliation, and PC health (paged pool, disk).
 3. 5 cloud lanes run on an hourly heartbeat plus `/loop`. Each lane spreads its work across 2-5 subagents, one per point. Hermes-Jarvis becomes the Review/QA lane.
-4. A local Codex pool of 3 Sol executors and 1 reviewer takes tasks from `codex-tareas/*.md`. A Codex cloud batch goes out after the 14-oct 03:57Z reset.
+4. *(Superseded 17-oct: Codex only reviews PRs, AGENTS.md §1.)* A local Codex pool of 3 Sol executors and 1 reviewer takes tasks from `codex-tareas/*.md`. A Codex cloud batch goes out after the 14-oct 03:57Z reset.
 5. The gate is: CI green, plus a review from the other model family posted as a PR comment, plus a Haiku check of the proof. The local 9.9k-test vitest run is retired.
 6. Merges happen one at a time: `gh pr ready`, then a re-check of `origin/master`, then `gh pr merge`.
-7. Routine (class-A) PRs are merged by the owning lane, or by the madre if the lane can't. Migrations and infra are merged by the madre only.
+7. *(Superseded 17-oct: `main` only via PR with green CI and Codex review; the jefa merges and the QA routine merges under the list in AGENTS.md §4. The madre does not push `main`.)* Routine (class-A) PRs are merged by the owning lane, or by the madre if the lane can't. Migrations and infra are merged by the madre only.
 8. Anything needing Sergio Urcullo's yes (class B: spend, contacting third parties, SIAT, legal acts, his face or voice) goes on one "Necesito" list, and lanes never wait on it.
 9. The ledger is `ENTRADA.md` (written only by the madre), plus lane files with one writer each, plus one file per Codex task with lease and attempts. `--union` is never used.
 10. With the PC off, `vigia-carriles.sh` on the VPS (bash, Telegram) watches for stalls. Fan-out is scaled weekly from the quota page.

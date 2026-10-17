@@ -14,7 +14,7 @@
 - **Su uso: ser lo único que trabaja y le habla a Sergio Urcullo con la PC apagada.** Le toca hacer QA con los
   vigías que ya existen, pasar todos los avisos por la aduana y ordenar el turno de noche (relojes, colas
   paradas, aprobaciones `ok`/`block`). No suma monitores: hace que los que ya existen se vean vivos.
-- **No orquesta a las sesiones ni al código.** Las sesiones de la nube las ordena solo la madre (la nube no puede
+- **No orquesta a las sesiones ni al código.** Las sesiones de la nube las reparte la jefa (`AGENTS.md` §1; la nube no puede
   mandar mensajes), y Hermes no programa: un modelo barato ya inventó una agenda entera.
 
 ## 1. QA: qué mira, cada cuánto, con qué y a quién avisa
@@ -33,7 +33,7 @@ saber si cada vigía está vivo (tarea Q2) y que avise por la aduana (Q3).
 | Respaldos | diario | JSON de `backup-onia-postgres` | `restoreVerified:false` por diseño: nunca se restauró | falta el de hoy o pesa 20 % menos que el anterior: tarea para Plataforma + salud. La restauración probada es el punto 4 de Plataforma; Hermes la nombra los miércoles hasta que exista |
 | CI de master, disco, crédito de IA | su cron | `vigia-ci.sh`, `vigia-disco.sh`, `vigia-credito-ia.sh` | logs vacíos | tablero (Plataforma o madre) + línea de salud |
 | Los vigías mismos | diario | latido (Q4) + diagnóstico programado (Q2) | no existe: hoy mudo y sano se ven igual | resumen: «N vigías mudos: …» |
-| Revisión semanal | miércoles, latido de las 10:57 | la sesión de la nube lee el diagnóstico de la semana | no existe | 3 bloques en su cola, sección «Hallazgos para otros»; la madre los reparte |
+| Revisión semanal | miércoles, latido de las 10:57 | la sesión de la nube lee el diagnóstico de la semana | no existe | 3 bloques en su cola, sección «Hallazgos para otros»; la jefa los reparte |
 
 **Embudo.** Ya se cubren las conversaciones (sin respuesta) y los pagos (comprobantes). Las **altas nuevas**
 quedan afuera: avisarlas exige leer `organizations` de producción y eso espera el OK de Sergio Urcullo (§6).
@@ -130,7 +130,7 @@ un PR por tarea, CI verde y revisión antes de mergear.
     4. la cadencia real de `vigia-aprobaciones` (2 min según el harness, 30 min según lo medido hoy).
 
   **Hecho:** la primera corrida programada en verde con la tabla, y las cuatro respuestas en «Hallazgos para
-  otros» con su dueño. **Sí: no** (solo lectura); lo mergea la madre.
+  otros» con su dueño. **Sí: no** (solo lectura); lo une la jefa o QA por PR (`AGENTS.md` §4).
 - [ ] **Q3 Fase 2 de la aduana: nada le grita por fuera.**
   - Pasan por `onia-tg.sh`: «Vigia lead sin respuesta» de n8n (`*/30`), «Chatbot: seguimiento», el aviso de
     «Backup diario» (el respaldo sigue; se saca solo el aviso) y «Monitor de Salud n8n».
@@ -185,7 +185,7 @@ Hermes-Jarvis: desde hoy sos el QA de Onia y la ventanilla del turno de noche (S
 Tu cola (cola/loop/hermes-jarvis.md) tiene Q1-Q5: van en ese orden, un PR por tarea, CI verde y revisión antes de mergear.
 Q1: `aplicar` lo corro yo hoy desde la PC; vos leés el log del run en Actions y verificás sección por sección. No le vuelvas a pedir el sí a Sergio Urcullo: el 10-oct dijo «todo lo que esté revisado está aprobado».
 En el VPS sos de solo lectura: lo que cambie el crontab, n8n, el SOUL o /root/.hermes va por PR y lo aplico yo. No publicás, no gastás, no le escribís a terceros y no tocás la base de producción.
-A Sergio Urcullo solo le llegan el resumen de las 06:30, el cierre de las 21:30 y las cuatro interrupciones. Lo demás va al tablero o a «Hallazgos para otros» en tu cola, con dueño, y yo lo reparto.
+A Sergio Urcullo solo le llegan el resumen de las 06:30, el cierre de las 21:30 y las cuatro interrupciones. Lo demás va al tablero o a «Hallazgos para otros» en tu cola, con dueño, y la jefa lo reparte.
 Tu latido pasa a 07:57, 10:57, 13:57, 16:57 y 19:57 La Paz, en Sonnet; con la cola vacía contestás en una línea y terminás. El de los miércoles a las 10:57 es el QA semanal.
 Hecho del rol: 24 h medidas en su Telegram sin nada fuera de la regla de entrega, y un resumen que nombra cada vigía mudo y cada reloj a 72 h o menos.
 ```

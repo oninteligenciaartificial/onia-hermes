@@ -5,6 +5,8 @@ de los errores de la anterior sesión madre»*. Un solo escritor: la madre. Cada
 LLM, Codex, sesión o Sergio Urcullo), **estado** y **prueba**. La ronda (Haiku, cada 20 min) relee este archivo, marca lo
 cerrado con su prueba y avisa lo que lleva más de 24 h sin moverse. Una sola madre: dos orquestadores se pisan.
 
+> **Reglas vigentes: `AGENTS.md` §1 y §4 (17-oct).** Quedan reemplazados: la sección D (la jefa reparte; la madre no manda la siguiente tarea), la J (Codex solo revisa: cupo de revisión, no de ejecutores), C1 y C2 (la línea «la regla del 9-oct es mía» ya no se pide: lo técnico se publica solo; lo visual y lo serio van antes a Sergio Urcullo), I1 (la madre no mergea ni empuja `main`: va por PR con CI verde y revisión de Codex) y la ronda de la sección F (vigila; no empuja sesiones ni lanza Codex).
+
 Leyenda de dueño: `H` Haiku · `S` Sonnet · `O` Opus · `CxSol` / `CxAstra` Codex local · `CxNube` Codex cloud ·
 `Plat` / `Marca` / `Ventas` / `Lucía` / `Hermes` sesiones de la nube · `SU` Sergio Urcullo.
 
@@ -51,8 +53,8 @@ Leyenda de dueño: `H` Haiku · `S` Sonnet · `O` Opus · `CxSol` / `CxAstra` Co
 - [ ] B10 #118 agenda por profesional — CLEAN, sin migración — diseño.
 
 ## C. Espera a Sergio Urcullo (se le pide UNA vez, en la sesión que corresponde)
-- [ ] C1 En **Plataforma**: «sí, la regla del 9-oct es mía; publicá lo revisado; registrá y aplicá las migraciones con backup».
-- [ ] C2 En **Marca**: la misma línea + «publicá las historias» + CTA «buscá X en Avisos» + grabar N07 y D03-A.
+- [ ] C1 *(reemplazado el 17-oct)* ~~En **Plataforma**: «sí, la regla del 9-oct es mía; publicá lo revisado…»~~. Hoy lo técnico y las migraciones con backup se publican sin consultarle; lo visual y lo serio van antes (`AGENTS.md` §4 «Quién decide»).
+- [ ] C2 En **Marca**: su OK sobre cada historia (la línea del 9-oct quedó superada) + «publicá las historias» + CTA «buscá X en Avisos» + grabar N07 y D03-A.
 - [ ] C3 En **Hermes**: sí/no a `aplicar`.
 - [ ] C4 Acá: Lucía G1 + renovar token de IG (vence 13-18 oct). El ensayo en el VPS lo frenó el control de permisos.
 - [ ] C5 Acá: paridad nube = PC (16 skills + 2 agentes + reglas de memoria a CLAUDE.md/AGENTS.md). Frenado por permisos.
@@ -60,14 +62,14 @@ Leyenda de dueño: `H` Haiku · `S` Sonnet · `O` Opus · `CxSol` / `CxAstra` Co
 - [ ] C7 Gasto: bucket R2 (punto 4) · tarjeta en ONIA Ads + US$56 · el SIAT (CAFC, reloj 4-nov) · OK al REVOKE del B22.
 - [ ] C8 Punto 1: aprobar en `/admin/payments` el pago de prueba de «ZZ QA Pago» (la madre lo prepara con Chrome).
 
-## D. Sesiones de la nube (la madre les manda su siguiente tarea; la ronda verifica que la tomen)
+## D. Sesiones de la nube (HISTÓRICO: hoy las reparte la jefa, `AGENTS.md` §1; la ronda solo verifica que avancen)
 - [ ] D1 Ventas: go/no-go del 13-oct + campaña lista para crear en pausa (mensaje 10-oct ~15 UTC; no lo tomó todavía).
 - [ ] D2 Plataforma: demo refrescada (primera ventana: lunes 12-oct 07-11 UTC) + capturas C1-C7 → destraba Ventas y Lucía.
 - [ ] D3 Marca: recibe GRABAR-17-23-OCT.md (A1) y su equipo.
 
 ## I. Olvidos de la auditoría (research/2026-10-10-auditoria-madre-v3.md §c) — dueño y estado
 - [ ] I1 La rama de la madre (`claude/onia-sesion-madre-9313fb`, 10+ commits) NO está en main: el integrador `onia-cola` está
-  apagado desde el 7-sep. Dueño: madre → PR propio y merge **después de las 19:00 UTC** (no chocar con la publicación).
+  apagado desde el 7-sep. Dueño: madre → PR propio; lo une la jefa con CI verde y revisión de Codex (`AGENTS.md` §4), **después de las 19:00 UTC** (no chocar con la publicación). La madre no mergea.
 - [ ] I2 Los PRs #136 y #140 no apuntan a `integ/bandeja-master` ni a `integ/w1-fixes`. Dueño: madre → fast-forward de
   `integ/w1-w1b` a `f981cd4a` después de las 19:00 UTC; la bandeja se la pasa a Plat (su rama).
 - [ ] I3 La ronda disparó 1 vez en 3 h 20 min (los cron de la sesión solo corren con la sesión ociosa). Dueño: SU decide R1
@@ -87,13 +89,12 @@ Leyenda de dueño: `H` Haiku · `S` Sonnet · `O` Opus · `CxSol` / `CxAstra` Co
 - [ ] K2 La madre anterior (`202a717e`) consumió 584 M tokens en 6 h (99 % releyendo). Regla vigente: madres cortas,
   relevo con handoff antes de que la conversación se haga larga (cierre del día 21:53 avisa).
 
-## J. Codex: cupos (R8) — 56 % semanal al 9-oct, reinicio 13-oct 23:57 La Paz, refills solo al tope
+## J. Codex: cupo de REVISIÓN (HISTÓRICO: antes eran cupos de ejecutores; hoy Codex solo revisa PRs, `AGENTS.md` §1) — 56 % semanal al 9-oct, reinicio 13-oct 23:57 La Paz, refills solo al tope
 | Cupo | Modelo | En curso | Desde |
 |---|---|---|---|
-| Plat-1 | Sol | VACÍO | 15:58 UTC |
-| Plat-2 | Sol | VACÍO | 15:58 UTC |
-| Hermes | Luna/Sol | VACÍO (nunca usado) | — |
-| Revisor | Astra | VACÍO | 15:55 UTC |
+| Revisor | Sol (Astra si toca cobros, producción o permisos) | VACÍO | 15:55 UTC |
+
+Los cupos Plat-1, Plat-2 y Hermes (ejecutores) se retiraron el 17-oct.
 
 ## Correcciones a lo dicho a SU (R4: integrado ≠ mergeado ≠ publicado ≠ mirado)
 - «/book ya le habla de usted»: falso. Está en el PR #144, sin mergear ni publicar.
@@ -130,7 +131,7 @@ Leyenda de dueño: `H` Haiku · `S` Sonnet · `O` Opus · `CxSol` / `CxAstra` Co
 ## F. Loops (pedido de SU 10-oct: «organizá tus loops y que trabajen a diario»)
 | Loop | Dónde corre | Cuándo (La Paz) | Qué hace | ¿Sigue con la PC apagada? |
 |---|---|---|---|---|
-| Ronda | madre, CronCreate `708dccce` | :07 :27 :47 | H verifica cada punto de este libro + colas; empuja sesiones paradas; lanza Codex | No |
+| Ronda | madre, CronCreate `708dccce` | :07 :27 :47 | H verifica cada punto de este libro + colas y avisa las paradas (no empuja sesiones ni lanza Codex: `AGENTS.md` §1) | No |
 | Parte de la mañana | madre, CronCreate `dbec7299` | 07:53 | Publicado ayer (mirado), qué grabar hoy, qué necesito de SU, medir PC/Codex | No |
 | Cierre del día | madre, CronCreate `915aadba` | 21:53 | Libro + handoff + billetera 24 h + commit; avisa si la madre necesita relevo | No |
 | Lote de contenido | madre, CronCreate `3f6ca99f` | lunes 08:13 | Guiones de la semana con scouts de tendencias si falta el GRABAR-*.md | No |

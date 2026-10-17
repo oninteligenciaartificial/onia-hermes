@@ -1,5 +1,7 @@
 # Handoff — madre-local (sesión MADRE, en la PC de Sergio Urcullo)
 
+> **Reglas vigentes: `AGENTS.md` §1 y §4 (17-oct).** La jefa reparte (un hilo por carril); la madre es la sesión de control de la PC (instala lo ya aprobado, vigila, logins, Chrome, capturas, `claude -p --cloud`); Codex solo revisa; la madre no empuja ni mergea `main`. Los bloques «ARRANQUE» de abajo y la frase «la madre mergea y publica» son del 10-oct: históricos, no se pegan; el arranque vigente está en `handoff/ARRANQUE-SESIONES.md`.
+
 Regla: CLAUDE.md §1. Método (ids, canales, cómo se delega a Codex, tokens): **skill `onia-sesion-madre`**.
 **Corrección 2026-10-09:** mandan HANDOFF 9-oct, GOAL VIGENTE y colas; el estado del
 5-oct de abajo es historial. Sus pedidos de OK de diseño/infra/migraciones quedan
@@ -9,7 +11,7 @@ párrafo describe el relevo del 5-oct.
 La madre saliente (`cfdce1bb…`, rama `claude/onia-sesion-madre-77f719`, worktree `infra-loops-revision-3fc7b1`) llevaba
 días abierta y su conversación costó ~777 M de tokens. **La madre nueva arranca de cero y lee solo esto.**
 
-## ▶ ARRANQUE de la madre v4 (texto para pegar, 10-oct 20 UTC)
+## ▶ ARRANQUE de la madre v4 (HISTÓRICO 10-oct 20 UTC: no pegar)
 
 > Sos la sesión MADRE de Onia, en la PC de Sergio Urcullo, y la única madre. Llamalo siempre «Sergio Urcullo».
 > Invocá `onia-router`, `equipo-de-agentes` y `onia-sesion-madre`. Leé SOLO: este bloque, el HANDOFF v3 de abajo y
@@ -69,7 +71,7 @@ días abierta y su conversación costó ~777 M de tokens. **La madre nueva arran
   Ventas (Sonnet) parada desde 9-oct 16:45, sin latido → se le mandó tarea (go/no-go + campaña lista en pausa);
   Lucía (Sonnet) espera la receta desde la PC; Hermes (Opus, 0 tareas) espera su sí a `aplicar`.
 
-## ▶ ARRANQUE de la madre nueva (texto para pegar, 10-oct)
+## ▶ ARRANQUE de la madre nueva (HISTÓRICO 10-oct: no pegar)
 
 > Sos la sesión MADRE de Onia, en la PC de Sergio Urcullo, y la ÚNICA madre. Invocá `onia-router`, `equipo-de-agentes`,
 > `onia-sesion-madre` y `aprender-de-todo`. Leé `hermes-content/docs/handoff/madre-local.md` (§ TERMINAR TODO y HANDOFF
@@ -104,7 +106,7 @@ primera semana. El cuello de botella son los sí de Sergio Urcullo y los merges 
 1. **Plataforma publica la cadena** (dueño: Plataforma; freno: los 4 sí de Sergio Urcullo **en esa sesión**: F1, #142,
    #140 con infra, «la regla del 9-oct es mía»). #143 F1 → `publicar.sh` → MIRAR /login → #142 → #136+#130 → #140 + infra
    → #139 (migración antes de la imagen) → #114 → #124 → #113 → #118/#119/#110/#132. Hecho = cada uno en `master`,
-   publicado y mirado. Si Sergio Urcullo prefiere, la madre mergea y publica desde la PC con su sí escrito acá.
+   publicado y mirado. (Histórico: hoy la madre no mergea ni empuja `main`; lo une la jefa o QA por PR, `AGENTS.md` §4.)
 2. **Refrescar la demo + capturas C1-C7** (Plataforma; necesita la cadena publicada). Destraba Ventas, el VSL y Lucía G1.
 3. **Tabla «se promete / funciona»** (Ventas; freno: `ONIA_QA_EMAIL`/`ONIA_QA_PASSWORD` en el entorno de Ventas, lo carga
    Sergio Urcullo). Hecho = 101 promesas medidas; sin tabla en verde no se contacta a nadie.

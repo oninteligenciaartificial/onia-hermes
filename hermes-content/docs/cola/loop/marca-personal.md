@@ -1,7 +1,7 @@
 # Cola · Marca personal de Sergio Urcullo
 
-- [ ] Editar cada bruto que llegue a Drive «Videos Onia Octubre» con su molde (GRABAR-10-16-OCT.md) y publicarlo a su hora del CALENDARIO (IG con `ig-reel.mjs`, el resto por Buffer), con su aviso pegado en la comunidad
-- [ ] Publicar las 4 historias de la asesoría (la del link la sube Sergio Urcullo a mano: dejásela lista en Drive)
+- [ ] Editar cada bruto que llegue a Drive «Videos Onia Octubre» con su molde (GRABAR-10-16-OCT.md) y publicarlo a su hora del CALENDARIO, con el OK de Sergio Urcullo sobre esa versión, cuenta y calendario (`AGENTS.md` §4) (IG con `ig-reel.mjs`, el resto por Buffer), con su aviso pegado en la comunidad
+- [ ] Publicar las 4 historias de la asesoría, con su OK sobre esa versión (`AGENTS.md` §4) (la del link la sube Sergio Urcullo a mano: dejásela lista en Drive)
 - [ ] P1 «Niveles» y P3 pizarra (HyperFrames, sin cara) para los días sin bruto
 - [ ] P2 carrusel «7 herramientas» el sáb 17
 - [ ] Molde «mosaico-tablero» (`videos/moldes/mosaico-tablero/`, réplica del reel DePBfHouarG): renderizarlo, mirarlo y usarlo en una pieza

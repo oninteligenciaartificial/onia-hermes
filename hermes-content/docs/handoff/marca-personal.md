@@ -112,7 +112,7 @@
   - los 4 trucos de la ficha `video-intake/2026-10-08-orquestacion-e-ingresos-5-posts.md` §3 se prueban en P1 «Niveles»;
   - lo que exige la PC se pide como «PEDIDO PC: video <url> — para qué lo querés»; las tareas de código van a
     `codex-tareas/`;
-  - la regla de publicar sin OK pieza por pieza ya está en el `AGENTS.md` de `main` (§4 «Quién decide»).
+  - publicar: las piezas de contenido van ANTES a Sergio Urcullo; lo aprobado sale sin re-OK solo en esa versión, cuenta y calendario (`AGENTS.md` §4 «Quién decide»). La regla del 8-oct «sin OK pieza por pieza» quedó superada.
 
 - **Lote de 14 imágenes mostrado a Sergio Urcullo (8-oct), sin generar:** pidió «mostrámelas y digo sí» (por la madre).
   10 reemplazan las láminas que no se entienden (K13-2, K5-3, K5-7, K9-5, K9-6, K12-7, N02-3, N02-7, K1-7, K10-5) y 4

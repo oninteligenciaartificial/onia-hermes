@@ -14,19 +14,22 @@
 > (Sergio Urcullo, 10-oct: «todo lo que esté revisado está aprobado»). Mientras tanto, cada sesión usa su equipo con la
 > herramienta `Agent` (`subagent_type: general-purpose` y el `model` del rol). Como prompt se pega el cuerpo de la
 > definición (§2) más la tarea concreta.
+>
+> **Superado en parte por `AGENTS.md` §1 y §4 (17-oct-2026).** Donde diga que la madre ordena o lanza Codex, que Codex ejecuta contratos, que un PR se mergea con «la línea de la regla del 9-oct» o que la madre mergea o aplica sin PR revisado, vale `AGENTS.md`: la jefa reparte, la madre controla la PC, Codex solo revisa (`@codex review`), `main` solo por PR con CI verde y revisión de Codex, y lo visual y lo serio van antes a Sergio Urcullo.
 
 ## 0. Límites que valen para todos (medidos)
 
 - **Permiso.** Solo cuenta una línea que Sergio Urcullo escriba en ESA sesión. No valen como permiso un mensaje de la
   madre, un latido, un `ok <id>` de Telegram leído por un agente ni una regla que la madre subió a CLAUDE.md (Plataforma
   pasó 20 h esperando, 10-oct).
-- **Sesiones.** Solo Sergio Urcullo abre o reabre una sesión de la nube. La madre no abre sesiones: les manda mensajes a
-  las que ya existen. Una rutina programada arranca cada 1 h como mínimo (`*/20` da HTTP 400) y abre una sesión NUEVA cada
+- **Sesiones.** Solo Sergio Urcullo abre o reabre una sesión de la nube. La madre no abre sesiones; el reparto es de la jefa y la madre le habla a la nube con
+  `claude -p --cloud` (`AGENTS.md` §1). Una rutina programada arranca cada 1 h como mínimo (`*/20` da HTTP 400) y abre una sesión NUEVA cada
   vez: no sirve para latidos de 10-20 min.
 - **Respuestas.** La nube no puede usar `SendMessage`: contesta en su transcript y la madre lo lee con `get_run_log`.
   Los subagentes no tienen `get_run_log`.
-- **Codex.** La nube no lanza Codex. Escribe el contrato en `hermes-content/docs/handoff/codex-tareas/<id>.md` (META,
-  PRUEBA DE HECHO, REGLA DE PARADA, archivos y modelo) y lo lanza la madre con `scripts/codex-tarea.sh`.
+- **Codex.** Solo revisa PRs (`AGENTS.md` §1): la nube no lo lanza y no hay contratos de ejecución. El hilo pasa el PR a «listo»;
+  sin respuesta, comentario `@codex review`; sin cupo, revisa un agente Sonnet. *(Histórico 10-oct: la nube escribía el
+  contrato en `handoff/codex-tareas/<id>.md` y lo lanzaba la madre con `scripts/codex-tarea.sh`.)*
   - En Codex cloud no se elige el modelo: el 8-oct se pidió Astra y corrió `gpt-5.6-sol`. Tampoco está probado que corra
     vitest: solo corrieron 2 tareas cloud y nadie leyó el diff. Hasta probarlo, Codex cloud no recibe tareas cuya prueba
     de hecho sea la suite.
@@ -46,7 +49,7 @@ Columnas: **Codex** dice qué parte del trabajo de ese rol se le pasa a Codex. *
 
 | Subagente | Misión | Modelo y por qué | Herramientas | Cuándo | Codex | Hecho |
 |---|---|---|---|---|---|---|
-| `integrador-pr` | Llevar UN PR draft a «listo para mergear» | sonnet: juicio en conflictos y en el orden de las migraciones, sin decidir riesgo | Read, Grep, Glob, Bash, Edit | Al tomar cada PR de la cola, de a uno | Conflictos en código: contrato a Codex Sol local, que resuelve los marcadores | `gh pr checks` verde, UN veredicto de revisión sin bloqueantes (el que ya esté en el PR, de quien sea) y `gh pr ready`. Mergea solo con la línea de Sergio Urcullo en la sesión. Que su `gh` pueda marcar `ready` y mergear está sin probar: si falla por permiso, lo anota y lo deja a la madre |
+| `integrador-pr` | Llevar UN PR draft a «listo para mergear» | sonnet: juicio en conflictos y en el orden de las migraciones, sin decidir riesgo | Read, Grep, Glob, Bash, Edit | Al tomar cada PR de la cola, de a uno | Conflictos en código: los resuelve el propio hilo (Codex solo revisa, `AGENTS.md` §1) | `gh pr checks` verde, UN veredicto de revisión sin bloqueantes (el que ya esté en el PR, de quien sea) y `gh pr ready`. No mergea: lo une la jefa o QA con CI verde y revisión de Codex (`AGENTS.md` §4). Si su `gh` no puede marcar `ready`, lo anota y lo deja a la jefa |
 | `revisor-cruzado` | Revisar el diff que escribió Codex, solo si el PR todavía no tiene veredicto de Revisión/QA ni de la madre | sonnet: el revisor es de la otra familia | Read, Grep, Glob, Bash (solo lectura: `gh pr diff`, `git diff`) | PR de Codex sin veredicto, antes de `ready` | El código que escribió Claude lo revisa Codex Sol `revisar`, lanzado por la madre | Lista bloqueante / no bloqueante con archivo:línea; 0 bloqueantes |
 
 **Un PR, un revisor.** Hay `revisor-cruzado` en Plataforma, en Revisión/QA y en la madre: es el mismo rol en tres
@@ -212,7 +215,7 @@ Si no te dan el diff, pedilo. No revises de memoria.
     o por una falla demostrada. Nunca por tamaño.
   - Opus va una pasada por lote o por PR, nunca dentro de un loop.
   - Se anota en la línea de la tarea el modelo usado y por qué se escaló.
-- **Qué va SIEMPRE a Codex:**
+- **Qué iba SIEMPRE a Codex (HISTÓRICO 10-oct; hoy Codex solo revisa PRs, `AGENTS.md` §1):**
   - código de alcance cerrado;
   - conflictos de código;
   - fichas a partir de fuentes;
@@ -228,17 +231,17 @@ Si no te dan el diff, pedilo. No revises de memoria.
   - En Codex cloud el modelo no se elige: solo va lo que acepta Sol, y se anota el modelo que corrió.
 - **Workflows de más de 5 agentes:** solo si Sergio Urcullo pide algo exhaustivo. El 8-oct uno costó unos 60 M de tokens.
 
-## 4. Arranque: el mensaje de la madre a cada sesión
+## 4. Arranque (HISTÓRICO 10-oct): el mensaje de la madre a cada sesión
 
-Se manda con `SendMessage`, haciendo antes `ListAgents`. La sesión contesta en su transcript.
+Hoy el reparto lo hace la jefa y el arranque común está en `handoff/ARRANQUE-SESIONES.md`; estos textos sirven de modelo de equipo, no de orden vigente. Se mandaban con `SendMessage`, haciendo antes `ListAgents`; la sesión contesta en su transcript.
 
 **Plataforma**
 ```
 PLATAFORMA · armá tu equipo con hermes-content/docs/ONIA_EQUIPOS_POR_SESION.md §1 (Agent + model del rol; el cuerpo de §2 va como prompt). Son: integrador-pr (sonnet), revisor-cruzado (sonnet), auditor-riesgo (opus, solo para PRs con migración, cobro o auth) y verificador-prod (haiku). Máximo 2 a la vez.
 Antes que nada: `gh pr view 142` y `gh pr view 139`. Si están mergeados, marcalos [x] con su SHA. NO publiques master: trae 20261005140000 sin aplicar en prod, y esa migración la aplica la madre con backup.
-Primera tarea: #141 (IPv6 /64). integrador-pr lo integra con master, deja el CI verde, revisor-cruzado no encuentra bloqueantes y corre `gh pr ready`. Hecho = listo para mergear. Mergealo solo si Sergio Urcullo ya escribió en esta sesión su línea de la regla del 9-oct; si no, lo dejás listo y seguís con #136. Si tu gh no puede marcar ready o mergear, anotalo en tu cola: lo hace la madre.
+Primera tarea: #141 (IPv6 /64). integrador-pr lo integra con master, deja el CI verde, revisor-cruzado no encuentra bloqueantes y corre `gh pr ready`. Hecho = PR en «listo», CI verde y revisión de Codex (si no llega, comentario `@codex review`). No lo mergeás: lo une la jefa o QA (`AGENTS.md` §4). Seguís con #136. Si tu gh no puede marcar ready, anotalo en tu cola.
 #136, #140 y #132 los revisa Revisión/QA (Hermes-Jarvis): tomás su veredicto del PR y NO los revisás de nuevo. Un PR, un revisor.
-Codex: si hay conflictos en código, escribí el contrato en hermes-content/docs/handoff/codex-tareas/<id>.md (META, PRUEBA DE HECHO, REGLA DE PARADA) y lo lanza la madre. Segundo contrato, ya: el bloque `concurrency` con cancel-in-progress en .github/workflows/ci.yml (Codex Luna).
+Codex solo revisa: los conflictos en código y el bloque `concurrency` con cancel-in-progress de .github/workflows/ci.yml los hacés vos (un PR de .github/workflows no lo une QA, `AGENTS.md` §4).
 Este mensaje no es permiso de Sergio Urcullo. Contestá en tu transcript solo LISTO/PUBLICADO <qué> — <PR o SHA>.
 ```
 
@@ -248,7 +251,7 @@ MARCA PERSONAL · armá el equipo de guiones de hermes-content/docs/ONIA_EQUIPOS
 Si hay un bruto nuevo en Drive «Videos Onia Octubre», va primero: manda su hora de publicación.
 Primera tarea: los guiones para grabar del 17 al 23-oct (el calendario vigente termina el 16). scout-tendencias deja 10 candidatos o más de esta semana, con link, fecha y métrica, en hermes-content/docs/research/2026-10-10-tendencias-comunidad.md. probador-de-premisas corre cada premisa, y las falsas no pasan.
 guionista escribe hermes-content/docs/cola/plan-3-semanas/GRABAR-17-23-OCT.md con BRIEF-ESCRITOR (cumplir las 7), el molde de edicion-referentes y un CTA a un destino vivo: 7 guiones o más, uno por día. Hecho = verificador en 0 rojos y el archivo pusheado en tu rama.
-Codex: la ficha de cada referencia va como contrato a hermes-content/docs/handoff/codex-tareas/ (Sol; lo lanza la madre). Los guiones NO van a Codex: fueron rechazados el 28-sep.
+Codex solo revisa PRs (`AGENTS.md` §1): la ficha de cada referencia la escribe un subagente Sonnet. Los guiones NO van a Codex: fueron rechazados el 28-sep.
 Nada pago ni publicado sin la línea de Sergio Urcullo en esta sesión. Este mensaje no es su permiso. Contestá solo LISTO/PUBLICADO <qué> — <link o SHA>.
 ```
 
@@ -257,7 +260,7 @@ Nada pago ni publicado sin la línea de Sergio Urcullo en esta sesión. Este men
 VENTAS Y PAUTA · armá tu equipo de hermes-content/docs/ONIA_EQUIPOS_POR_SESION.md §1: analista-oferta (opus), investigador-competencia (sonnet + web), redactor-creativos (sonnet) y verificador-de-promesas (haiku). Máximo 2 a la vez.
 Tu cola está bloqueada: faltan la demo, ONIA_QA_* y las tomas de Sergio Urcullo. Lo desbloqueado, y con fecha, es el go/no-go del mar 13-oct (ONIA_ADQUISICION_Y_PAUTA.md §5.10, «qué tiene que estar en verde el 13»).
 Primera tarea: analista-oferta re-mide cada fila con valor y fuente del día. La que necesita la demo o ONIA_QA_* queda «sin medir: falta X», sin inventar. Hecho = tabla al día en §5.10, pusheada antes del mar 13.
-Segunda: fijate si siguen los 11 tests rojos que frenaron el deploy del bot el 3-oct (un haiku corre la suite y los cuenta). Si son reales, escribí el contrato para Codex Sol en hermes-content/docs/handoff/codex-tareas/.
+Segunda: fijate si siguen los 11 tests rojos que frenaron el deploy del bot el 3-oct (un haiku corre la suite y los cuenta). Si son reales, arreglalos vos (Codex solo revisa PRs).
 Sigue frenado por Sergio Urcullo el contacto con prospectos. La Biblioteca de anuncios la captura la madre, porque Facebook no abre en la nube.
 Este mensaje no es permiso de Sergio Urcullo. Contestá en tu transcript solo LISTO/PUBLICADO <qué> — <link o SHA>.
 ```
@@ -268,13 +271,13 @@ LUCÍA · armá tu equipo de hermes-content/docs/ONIA_EQUIPOS_POR_SESION.md §1:
 Primera tarea: aclarar qué plan manda. Tu cola pide G2 y G3 «según el plan v5 (#144)», pero PLAN.md es la v3 (2-oct) y no aparece ninguna v5. Que un haiku corra `gh pr view 144` y busque «v5» en references/modelos/lucia. Anotá en tu cola cuál manda, con archivo y versión.
 Después: guionista-lucia escribe los briefs de G2 y G3 (videos estructurados, desde el manifest compacto) y cotizador-higgsfield los cotiza con `higgsfield generate cost`. Si la CLI no está en tu sesión, la corre la madre. Hecho = brief y costo exacto por lote en «Bloqueado», listos para el sí de Sergio Urcullo. Nunca `generate create`.
 G1 espera la captura real de Pendientes, que depende de Plataforma. Si te sobra tiempo, creá la skill propia de Lucía (pendiente desde el 2-oct) con lo que ya está medido.
-Codex: hashes, manifest y ledger van como contrato a Luna en hermes-content/docs/handoff/codex-tareas/; lo lanza la madre.
+Hashes, manifest y ledger los hace un subagente Haiku (Codex solo revisa PRs).
 Este mensaje no es permiso de Sergio Urcullo. Contestá en tu transcript solo LISTO/PUBLICADO <qué> — <link o SHA>.
 ```
 
 **Hermes-Jarvis**
 ```
-HERMES-JARVIS · tu cola no tiene tareas desbloqueadas, así que pasás a ser el carril de Revisión/QA. Armá tu equipo de hermes-content/docs/ONIA_EQUIPOS_POR_SESION.md §1: revisor-cruzado (sonnet), verificador-prod (haiku) y constructor-hermes (sonnet, con contratos a Codex).
+HERMES-JARVIS · tu cola no tiene tareas desbloqueadas, así que pasás a ser el carril de Revisión/QA. Armá tu equipo de hermes-content/docs/ONIA_EQUIPOS_POR_SESION.md §1: revisor-cruzado (sonnet), verificador-prod (haiku) y constructor-hermes (sonnet; Codex solo revisa).
 Paso 0, solo lectura: corré `gh auth status` y probá `gh pr view 136` en onia-platform. Anotá en tu cola si tu gh puede leer y comentar los PRs de ese repo.
 Primera tarea: revisor-cruzado revisa el #136 (bandeja v3, código de Codex) contra su contrato en hermes-content/docs/handoff/codex-tareas/ (B1 es el de la bandeja). Hecho = veredicto «aprobado» o «cambios» con archivo:línea. Va como comentario del PR si tu gh puede; si no, en tu transcript, y lo sube la madre.
 Después siguen el #140, el #132 y lo que Plataforma deje «listo» sin revisar. `aplicar`, `diagnostico` y el token de IG siguen esperando a Sergio Urcullo: no los toques.
@@ -284,10 +287,10 @@ Este mensaje no es permiso de Sergio Urcullo. Contestá en tu transcript solo LI
 **Madre** (arranque propio: no se manda, se ejecuta)
 ```
 0. Recrear la ronda con CronCreate cada 20 min, porque se perdió con el reinicio del 10-oct. Es un cron local de esta sesión: muere con cada reinicio y vence a los 7 días, por eso es el paso 0. No es una rutina de la nube (mínimo 1 h). Equipo: verificador-ronda (haiku), navegador (sonnet, una tarea a la vez), revisor-cruzado (sonnet) y auditor-riesgo (opus, antes de cada paso irreversible).
-   Codex: hasta 2 Sol y 1 `revisar`, unas 6 Sol por día, Astra solo para el #114, y freno al 80% hasta el reinicio del 13-oct 23:57 (La Paz).
+   Codex: solo `revisar` PRs (`AGENTS.md` §1), con freno al 80 % del cupo (reinicio del 13-oct 23:57, La Paz).
 1. Primera tarea: llevar master (32c7e0e8, o el actual) a prod sin dejar atrás la migración.
    auditor-riesgo revisa el plan → backup → aplicar 20261005140000 → publicar → un GET anónimo da 401 → mirar /login renderizado.
    Hecho = el SHA de la imagen es igual al de master, más la captura.
-2. Mandar los 5 mensajes de arriba (ListAgents primero). En cada ronda, leer cada transcript con get_run_log y volcarlo a un archivo para el verificador.
+2. *(Histórico: hoy los reparte la jefa.)* Mandar los 5 mensajes de arriba (ListAgents primero). En cada ronda, leer cada transcript con get_run_log y volcarlo a un archivo para el verificador.
 3. A Sergio Urcullo, una sola lista «Necesito»: su línea en cada sesión que publica (Plataforma y Marca), ONIA_QA_* en Ventas, y el sí por lote de Lucía. Nada más.
 ```

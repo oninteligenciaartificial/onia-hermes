@@ -50,16 +50,16 @@ Sergio Urcullo (Telegram)
 | Una pregunta de estado que Hermes no sabe contestar | Claude, carril `consulta` | rutina (solo lectura) |
 | Algo que necesita su PC | **la sesión madre** | tarea `[madre] …` en el tablero |
 
-**Por qué una sesión NUEVA por pedido, y no la sesión viva de cada carril:** desde el 1-oct solo la
-madre les manda mensajes a las sesiones (AGENTS.md §1, «Madre local»). Dos
-orquestadores se pisan. La sesión del pedido trabaja en su propia rama (`pedido/<id>`) y deja
-un PR. Integrarlo sigue siendo del dueño del carril, o de un pedido explícito «mergeá el PR N».
+**Por qué una sesión NUEVA por pedido, y no la sesión viva de cada carril:** las sesiones de la nube
+las reparte la jefa (`AGENTS.md` §1); un pedido de Telegram que les escribiera sería un segundo
+orquestador y se pisan. La sesión del pedido trabaja en su propia rama (`pedido/<id>`) y deja
+un PR en borrador. Unirlo es de la jefa o de la rutina QA (`AGENTS.md` §4); el pedido explícito «mergeá el PR N» solo lo une con CI verde, revisión de Codex y fuera de la lista que QA no une.
 
-**Por qué `pedido/` y no `claude/` (medido el 2-oct):** el integrador (`onia-cola`) y `ramas_varadas.mjs`
+**Por qué `pedido/` y no `claude/` (medido el 2-oct):** el integrador (`onia-cola`, muerto desde el 27-sep) y `ramas_varadas.mjs`
 enumeran solo `origin/claude/*`, así que no ven una rama `pedido/*`. Y la sesión de la rutina carga el
 hook Stop del repo (`git-autosync.js`), que hacía fast-forward de `main` desde cualquier rama: con
-`claude/pedido-<id>`, el cambio entraba a `main` sin revisar al terminar el turno. **Desde el 5-oct el
-hook no mueve `main` sin permiso** (solo la madre y el integrador lo tienen; la rutina no), con
+`claude/pedido-<id>`, el cambio entraba a `main` sin revisar al terminar el turno. **Desde el 17-oct el
+hook nunca mueve `main`** (ni la madre ni nadie: solo empuja la rama), con
 cualquier nombre de rama; `pedido/*` y `respuesta/*` quedan como segunda llave (`pedido-rama.test.mjs`).
 
 ## 3. Cómo dispara: la rutina por API
@@ -160,8 +160,10 @@ Hermes, su asistente, por Telegram. Cada corrida es UN pedido. Hablale siempre c
      No cambies nada.
    - Cambio (código, documento, material) → ANTES de tocar nada, `git switch -c pedido/<id>`; los
      gates del carril, commit, push de esa rama y PR en BORRADOR. No mergees. Nunca commitees en main.
-   - «Mergeá el PR N» → solo si es de onia-hermes, de una rama pedido/*, con CI verde y sin
-     conflictos. Si falta algo, no mergees y decí qué falta.
+   - «Mergeá el PR N» → solo si es de onia-hermes, de una rama pedido/*, con CI verde, sin
+     conflictos y con la revisión de Codex hecha; nunca uno que toque `AGENTS.md`, `CLAUDE.md`, `CODEX.md`,
+     `COORDINATION_MANIFEST.md`, `.claude/settings.json`, `.github/workflows` ni `hermes-content/deploy`
+     (`AGENTS.md` §4). Si falta algo, no mergees y decí qué falta.
    - Si cae en la lista NUNCA, o necesita la PC de Sergio Urcullo → no lo hagas. Respondé
      «necesita-ok» o «no-se-pudo» diciendo qué haría falta y quién (la sesión madre, con él en la PC).
 4. NUNCA: desplegar ni publicar (plataforma, web, anuncios, redes); gastar plata o créditos (Higgsfield,
@@ -230,7 +232,7 @@ Hermes, su asistente, por Telegram. Cada corrida es UN pedido. Hablale siempre c
 | Escribirle a un tercero | regla de propuestas y prospectos; Hermes prepara, él manda | él |
 | Cambiar precios, borrar datos, escribir en producción | fuente única de precios; respaldo antes de tocar datos | la madre con él |
 | Abrir el portal del SIAT | aviso del SIN por uso automatizado (1-oct) | nadie |
-| Mergear sin un «sí» a ESE PR | `main` siempre compila y alimenta los deploys | Claude, con su «mergeá el PR N» y CI verde |
+| Mergear sin un «sí» a ESE PR | `main` siempre compila y alimenta los deploys | Claude, con su «mergeá el PR N», CI verde y la revisión de Codex (y fuera de la lista de `AGENTS.md` §4) |
 
 ## 8. Cómo se enciende: `aplicar` y las pruebas P2 a P5
 

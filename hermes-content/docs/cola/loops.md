@@ -1,5 +1,8 @@
 # Los loops — qué debe estar registrado
 
+> **HISTÓRICO desde el 17-oct-2026.** Reemplazado por `AGENTS.md` §1 (quién hace qué: la jefa reparte, la madre controla la PC, Codex solo revisa) y §4 (`main` solo por PR con CI verde y revisión de Codex; «Quién decide»). Donde diga que `onia-cola` o la madre mergean, que un loop se rearma contra esta lista o que lo visual se publica sin esperar, ya no rige. Las colas vigentes: `cola/loop/README.md`.
+> **`onia-cola` está MUERTO desde el 27-sep:** no debe existir ni rearmarse, y nada de lo que sigue lo autoriza a mergear.
+
 **Fuente de verdad de QUÉ loops deben existir y DÓNDE corre cada uno.** Un loop es un prompt en
 disco con un horario registrado en algún lado — y desde el 2026-09-05 ese "algún lado" son **tres**:
 
@@ -19,7 +22,7 @@ solo.
 | nombre | máquina | qué es | cómo se reconoce |
 |---|---|---|---|
 | **laptop** | `DESKTOP-ENV6SDA` | HP Victus 16, 12 hilos, 23,6 GB, **con batería**, Win 11 Home. Donde Sergio Urcullo trabaja y habla con las sesiones. **No tiene nada del nodo** | su Ubuntu **no** tiene `/root/loops` ni `/root/.onia-nodo` |
-| **nodo-casa** | `DESKTOP-0GGGNMF` | El tercer nodo: `/root/loops`, los worktrees, y **los CUATRO loops vivos** — `web-venta`, `onia-cola`, `chatbot-cola`, `recorrido-cliente` | existe `/root/.onia-nodo` |
+| **nodo-casa** | `DESKTOP-0GGGNMF` | El tercer nodo: `/root/loops`, los worktrees, y los loops de entonces — `web-venta`, `chatbot-cola`, `recorrido-cliente` (y `onia-cola`, muerto desde el 27-sep) | existe `/root/.onia-nodo` |
 | **VPS** | `srv1360183` · 187.77.16.63 | Producción: la app, Supabase, Chatwoot y los publicadores. **Ya no corre ningún loop** | existe `/usr/local/lib/hermes-agent/venv/bin/python` |
 
 ⚠️ **Esas dos celdas decían otra cosa hasta el 2026-09-07 — corregidas contra la medición.**
@@ -30,7 +33,7 @@ líneas activas y el VPS **cero** (`crontab -l | grep -c 'onia-loop\.sh'` da `0`
 prosa y no la lee ningún gate. Se ve con: `crontab -l | grep onia-loop.sh` en cada máquina.
 
 🔴 **La mudanza dejó al integrador sin poder mergear uno de sus dos repos, y en silencio.**
-`onia-cola` es el único loop autorizado a mergear, y le tocan **dos** repos. En nodo-casa,
+`onia-cola` *(MUERTO desde el 27-sep; esto es historia)* era el único loop autorizado a mergear, y le tocaban **dos** repos. En nodo-casa,
 `/root/loops/onia-platform` tiene la url de push puesta a mano en
 `DESHABILITADO-NODO-DE-DESARROLLO` (es un seguro, puesto a propósito), y la llave de deploy
 `/root/.ssh/deploy_onia-platform` **sólo existe en el VPS**. Con el VPS ya sin loops, ninguna
@@ -199,7 +202,7 @@ manda. Un loop se compara **sólo contra el registro de su propia máquina**:
 | id | dónde corre | cron | para qué sirve |
 |---|---|---|---|
 | `chatbot-cola` | **casa** | `13,43 * * * *` (UTC) | **Carril `plataforma-v1` desde el 2026-09-05** (el id no se renombró: cambiarlo tocaría cron, worktrees, logs y gate sin ganar nada). Dos colas en orden: `cola/chatbot.md` mientras le queden 🔴, después `cola/plataforma-v1.md`. **Es el único loop que escribe en el repo `onia-platform`** |
-| `onia-cola` | **casa** | `33 * * * *` (UTC) | **El integrador**: mergea las ramas de carril a `main`; después su cola de plataforma |
+| `onia-cola` | **casa** | `33 * * * *` (UTC) | **MUERTO desde el 27-sep: no se rearma.** Era el integrador (mergeaba las ramas de carril a `main`); hoy `main` solo por PR con CI verde y revisión de Codex (`AGENTS.md` §4) |
 | `web-venta` | **casa** | `48 */2 * * *` (UTC) | **Dueño de `onia.com.bo/` y `/empezar`** (rama `claude/web-venta`, zona `web-factory/apps/onia-platform/`): la puerta de entrada del producto |
 | `recorrido-cliente` | **casa** | `9 * * * *` (UTC) | Recorre el camino del cliente de punta a punta (rama `claude/recorrido-cliente`) y dice **en qué paso exacto se rompe**, con la captura como prueba |
 
@@ -558,7 +561,7 @@ arranque las rearma y el congelamiento se revierte solo. Por eso el orden no es 
 
 | id | por qué se queda |
 |---|---|
-| `onia-cola` | **El integrador.** Sin él nada de lo que se desarrolle llega a `main`, y por lo tanto al cliente. No es opcional: es el único camino a producción. |
+| `onia-cola` | **Muerto desde el 27-sep.** Era el integrador; hoy a `main` se llega por PR con CI verde y revisión de Codex (`AGENTS.md` §4). No se rearma. |
 | `chatbot-cola` | **El único loop que escribe en el repo `onia-platform`** — 28 commits en 7 días, medidos. Su carril hoy es el add-on chatbot; ver el hueco de abajo. |
 | `recorrido-cliente` | Recorre el camino del cliente de punta a punta y dice **en qué paso exacto se rompe**, con la captura como prueba. Es el instrumento que encuentra lo que frena un cierre. |
 | `web-venta` | Dueño de `onia.com.bo/` y `/empezar`: la puerta por donde entra el lead. El 2026-09-04 encontró que los dos CTA de `/contacto` agendaban contra un Cal.com muerto — un lead que no puede agendar no se convierte en cliente. |

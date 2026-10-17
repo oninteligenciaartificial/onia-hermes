@@ -321,9 +321,49 @@ Codex marcó tres hallazgos; se corrigen en un solo commit, sin pushear todavía
 **P2 - skills obligatorias contradecían el modelo nuevo (jefa coordina, madre = control de la PC, Codex = revisor)**
 - `.claude/skills/equipo-de-agentes/SKILL.md`: descripción, tabla §1 (filas Jefa, Madre, Sesiones, Codex), §3 (ronda de vigilancia; PR «listo» sin revisión de Codex pide `@codex review`) y §4/§4 bis (el despacho a Codex y «Codex al máximo» pasan a «Codex revisa»; lo del 9-oct queda marcado como histórico). §5 ya remitía a «Quién decide» (17-oct) y se dejó como estaba.
 - `.claude/skills/onia-router/SKILL.md`: paso 4 de «Cómo usar», stack común (sin «encargo de la madre»), fila de referencia recibida (sin Codex como subagente), reglas duras de carriles, `main` y Git (sin «Codex entrega a la madre», sin «La madre integra», sin «FF de `main`»), nota del autosync y las dos líneas del índice de skills.
-- **Estado: NO aplicado en el repo.** Esta sesión no puede escribir en `.claude/skills/` (la herramienta lo rechaza como configuración del proyecto). Las dos ediciones quedaron como parche verificado con `git apply --check`; se aplican desde el checkout principal. No hay copias de estas dos skills en `.agents/skills/`.
-- Las notas históricas de `onia-hermes-jarvis/SKILL.md` (L120-134, L376-382) y el permiso de `onia-sesion-madre/SKILL.md` (L192-212, la marca del git-dir) siguen describiendo el permiso de `main` que ya no existe: mismo bloqueo, quedan para el mismo parche posterior.
+- **Estado: NO aplicado en el repo** (ver «5.ª ronda»: el parche ya viaja en el PR). Esta sesión no puede escribir en `.claude/skills/` (la herramienta lo rechaza como configuración del proyecto). No hay copias de estas dos skills en `.agents/skills/`.
+- Las notas históricas de `onia-hermes-jarvis/SKILL.md` (L120-134, L376-382) y el permiso de `onia-sesion-madre/SKILL.md` (L192-212, la marca del git-dir) siguen describiendo el permiso de `main` que ya no existe: mismo bloqueo; en la 5.ª ronda entran en el parche.
 
 **P2 - protocolos de publicación**
 - Verificado: `hermes-content/docs/cola/loop/README.md`, `hermes-content/docs/EXECUTION_PROTOCOL.md` y `.claude/skills/equipo-de-agentes/SKILL.md` §5 ya no dicen que el diseño o lo visual se publica sin esperar.
 - Completados los huecos: la lista de lo visual suma «rediseño de algo vivo» y «su cara o su voz» (README de colas y protocolo de ejecución); el README de colas ya no dice «mergeada» (a `main` solo por PR) y la línea «Codex ejecuta solo el encargo cerrado» pasa a «Codex solo revisa»; el protocolo de ejecución cambia «mother's review loop» por la coordinación de la jefa.
+
+## Correcciones del 17-oct, 5.ª ronda: la revisión de las 4 primeras (PR #226)
+
+La revisión pidió alinear todo lo que un arranque normal todavía lee. Se corrigió en este commit; lo único que no se pudo
+escribir en el repo son las skills (ver «Parche de skills»).
+
+**Docs y colas alineados con `AGENTS.md` §1/§4** (banner «HISTÓRICO» o «Superado en parte» y corrección de las líneas vivas):
+- `cola/README.md`, `cola/loops.md`, `cola/EQUIPO.md`, `COLA.md`: fuera la pre-autorización de mergear a `main` (29-ago) y
+  `onia-cola` marcado MUERTO desde el 27-sep (no se rearma; ningún loop se compara contra esa lista).
+- `LUCIA_COMO_SE_USA.md` §1 y §3, `cola/loop/lucia.md`, `cola/loop/marca-personal.md`, `handoff/marca-personal.md`: «lo revisado ya
+  está aprobado» y «publicar sin OK pieza por pieza» pasan a «el control de identidad y el QA son gates previos; sale lo que
+  Sergio Urcullo aprobó (versión, cuenta y calendario)».
+- `cola/loop/plataforma.md`: el hilo deja el PR en «listo»; lo une la jefa o QA; #124 (texto legal) va antes a Sergio Urcullo.
+- `cola/loop/madre.md` (D, J, C1/C2, I1 y la ronda), `cola/loop/hermes-jarvis.md` y `handoff/hermes-jarvis.md` (lo une la jefa o QA;
+  el permiso de autosync, histórico y sin efecto), `handoff/madre-local.md`, `handoff/onia-1.0-nube.md` (regla vigente completa
+  de «lo visual» y «lo serio»), `ONIA_EQUIPO_DE_AGENTES.md`, `ONIA_HARNESS.md`, `ONIA_EQUIPOS_POR_SESION.md`, `HERMES_ROL_QA.md`,
+  `TELEGRAM_COMMAND_CENTER.md` (el pedido «mergeá el PR N» exige la revisión de Codex y la lista que QA no une),
+  `AI_MODEL_ROUTING_2026.md` (Codex solo revisa).
+- `handoff/ARRANQUE-SESIONES.md` regenerado: PASO 0, jefa y madre de `AGENTS.md` §1; fuera la «madre v2» y el pendiente del autosync.
+- `scripts/loops/README.md`: el hueco de `ONIA_LOOP_ID=onia-cola` en el `pre-push` queda como hueco conocido, no como camino.
+- `AGENTS.md` §4 «Hueco»: la PC no tiene `pre-push`; checkouts con el script viejo (hash de blob) y qué hacer tras el merge.
+
+**Parche de skills (no escribible desde esta sesión).** La herramienta rechaza cualquier escritura en `.claude/skills/` del
+worktree (es configuración del proyecto del checkout principal). Las siete skills quedaron como un único parche,
+`PARCHE_SKILLS_REGLAS_20261017.patch` (esta carpeta), probado con `git apply --check`:
+`onia-sesion-madre` (control de la PC en vez de «única que ordena»; fuera el permiso de mover `main` y el despacho a Codex;
+Codex solo revisa), `equipo-de-agentes` (tabla de roles, ronda de vigilancia sin empuje y §4 «Revisión por Codex»; §4 y
+§4 bis a historial), `onia-router` (Git por rol, sin «La madre integra»), `edicion-referentes` (el control de calidad es un
+gate previo al OK, no su reemplazo), `onia-hermes-jarvis` y `editor-videos` (permiso de `main` e integrador, retirados) y `onia-continuidad` (apunta a `cola/loop/README.md`, no al índice histórico).
+El texto retirado de las dos primeras está en `METODO_MADRE_CODEX_RETIRADO_20261017.md`. **Para aplicarlo (desde el checkout
+principal, con quien puede escribir `.claude/`):** `git apply --ignore-whitespace hermes-content/docs/historial/PARCHE_SKILLS_REGLAS_20261017.patch`
+(`--ignore-whitespace` porque con `core.autocrlf` el parche llega con CRLF), commit y borrar el parche. Hasta entonces las skills obligatorias de arranque siguen con el modelo viejo.
+
+**Fuera de este repo (no se resuelven con un commit):**
+- 16 de 17 checkouts de la PC con `scripts/git-autosync.js` siguen con una versión que empuja `main` (medido por hash de blob; hoy
+  ninguno puede hacer fast-forward porque todos están divergidos de `origin/main`). Tras el merge, actualizar cada checkout vivo y
+  comparar `git hash-object scripts/git-autosync.js`. El `main` local del checkout primario trae 3 commits «chore: auto-sync» del
+  hook viejo; no llegaron a `origin/main` solo porque este divergió.
+- La PC no tiene `pre-push`: instalar `scripts/loops/pre-push` (`core.hooksPath`) pide el OK de Sergio Urcullo (instalación, §1),
+  o GitHub Pro / repo público para rulesets. Mientras tanto el script es la única barrera.

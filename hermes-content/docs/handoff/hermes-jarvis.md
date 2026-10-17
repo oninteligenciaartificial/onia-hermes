@@ -1,5 +1,7 @@
 # Handoff — carril `hermes-jarvis` (Hermes, el Telegram y el calendario de Sergio Urcullo)
 
+> **Permiso de `main`: histórico y sin efecto desde el 17-oct.** `ONIA_AUTOSYNC_MAIN`, la marca `onia-autosync-main`, `ONIA_LOOP_ID=onia-cola` y el «Sí, la madre sigue directo» del 5-oct que aparecen más abajo ya no habilitan nada: `scripts/git-autosync.js` solo empuja la rama y `main` se mueve por PR con CI verde y revisión de Codex (`AGENTS.md` §4). Lo que diga «lo mergea la madre» se lee «lo une la jefa o QA».
+
 > **ESTADO 11-oct, 07:30 UTC — qué está en vuelo y quién lo mueve** (sesión `session_01SQ7cvuDX5w5jDHk5VdhAEo`, rama `claude/adoring-ramanujan-7sjzwv`, PR #194).
 > - **Producción, 11-oct 12:58 UTC (E22):** build nuevo `Lv2W45uYHdFOlYQCVcD01` con #152, #151 y M1 (#156); `/login`, `/book` y `/register` bien y de usted; **Q9b cerrado** (el paso 2 de `/register` dice «Nombre de su clínica»); `web-vs-producto` con 0 diferencias. #157 no entró. Sin medir desde la nube: `/agents`, el Inicio y la caja con M1 (detrás del login).
 > - **Producción antes, 11-oct 09:58 UTC (E11):** build nuevo tras la publicación de las 09:50, `buildId` `FTdbJ5YopG9Ll4v0Yivrq`; `/login`, `/book` y `/register` bien (capturas `despues-0950-*` en `docs/research/qa-publicacion/2026-10-11/`). **El paso 2 de `/register` sigue con «Nombre de tu clínica»** (#148 no está en `master`; Q9b abierto). Lo de #147 que está detrás del login (caja «1.500», borrado con caras) sigue sin medir desde la nube.
@@ -27,7 +29,7 @@
 >   y una sola convención de monto para toda la app (la caja diaria lee «1.500» como 1500; los formularios de comercio lo leen como 1,5).
 
 > **ESTADO 11-oct, mañana — el carril pasó a ser el QA de Onia y el turno de noche** (`HERMES_ROL_QA.md`).
-> - **#194 abierto (Q2 + Q5), CI verde, lo mergea la madre.** Trae el workflow `hermes-qa-diario.yml` (10:00 UTC, solo
+> - **#194 abierto (Q2 + Q5), CI verde; se une por PR (jefa o QA, con revisión de Codex; `AGENTS.md` §4).** Trae el workflow `hermes-qa-diario.yml` (10:00 UTC, solo
 >   `diagnostico.sh`, solo desde `main`), la sección 15 del diagnóstico (cada trabajo del cron con su log y MUDO) y
 >   `qa-release.sh` (mira /dashboard y /checkout con la cuenta de QA cuando cambia el release y lee las ventanas del
 >   publicador de las :50). **Además** trae las docs de este carril de hoy: encargos E1-E3, Q7-Q9, los contratos
