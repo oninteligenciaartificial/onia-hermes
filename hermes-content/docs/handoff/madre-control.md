@@ -6,7 +6,7 @@
 
 ## 1. Objetivo vigente (Sergio Urcullo, 16-oct)
 1.0 de Onia Platform para el banco (API QR del BCP), con los 5 rubros probados, y Bs 3.000 al 31-oct (taller de IA del
-sáb 31-oct, Bs 50/60/70, 50 cupos, sin devolución; consultorías; prepago). Orden: `docs/cola/loop/hermes-jefa.md`.
+sáb 31-oct, Bs 50/60/70, 50 cupos, sin devolución; consultorías; prepago). Orden: `hermes-content/docs/cola/loop/hermes-jefa.md`.
 El objetivo no cambia: la madre lo empuja controlando a la jefa, no haciendo el trabajo de los hilos.
 
 ## 2. Qué quedó en producción / encendido (17-oct)
@@ -72,7 +72,7 @@ Memoria local: 4 archivos nuevos y el índice MEMORY.md.
 
 ## 7. Próximos pasos de la madre nueva
 1. Arrancar con la skill `onia-sesion-madre`, este handoff y la memoria `nube-proyectos-aprendizajes-17-oct`.
-2. Ronda cada 30 min (CronCreate `13,43 * * * *`): `RemoteTrigger get_run_log cse_011cQSargj5qz516CNpPQEko`; buscar
+2. Ronda cada 20 min con la cadencia de la skill `onia-sesion-madre` (CronCreate `7,27,47 * * * *`; una sola ronda, no dos): `RemoteTrigger get_run_log cse_011cQSargj5qz516CNpPQEko`; buscar
    «PC:»; comprobar que la jefa le escribe a Sergio Urcullo cada hora y que usa subagentes.
 3. Mergear #226 cuando Codex lo apruebe y actualizar `git-autosync.js` en los checkouts vivos.
 4. Verificar que un hilo NUEVO siguió las instrucciones del proyecto (PASO 0, subagentes, «Subagentes: N»).

@@ -40,7 +40,7 @@ Lo que acerca la caja va primero. La orden vigente está en `hermes-content/docs
 
 ## Publicar
 - Todo cambio va por PR. Nadie pushea a `main` (en onia-platform, `master`).
-- Se mergea solo si cumple todo: no es borrador; el CI está verde; tiene la revisión de Codex del ÚLTIMO commit sin P0/P1 abiertos (si Codex no responde en 2 vueltas, revisa un Sonnet de otra sesión); no tiene conflictos. Lo mergea la jefa, respetando la ventana sin pushes de :20 a :10 en horas de publicación.
+- Se mergea solo si cumple todo: no es borrador; el CI está verde; tiene la revisión de Codex del ÚLTIMO commit sin P0/P1 abiertos (si Codex no responde en 2 vueltas, revisa un Sonnet de otra sesión); no tiene conflictos. Lo mergea la jefa, sin pushear ni mergear entre las :20 y las :55 UTC de las horas de publicación (00, 03, 06, 09, 12, 15, 18 y 21 UTC; el publicador corre a las :50).
 - Después de pushear, se pide «@codex review» una sola vez y no se vuelve a pushear hasta que Codex responda.
 - No se tocan ni se mergean `CLAUDE.md`, `AGENTS.md`, `.claude/settings.json`, `.github/workflows` ni `hermes-content/deploy` sin la madre.
 - Lo publicado se MIRA en producción con una captura: un HTTP 200 no alcanza.
