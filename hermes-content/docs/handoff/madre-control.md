@@ -1,72 +1,80 @@
-# Handoff — sesión de control (madre local en la PC) · 16-oct-2026
+# Handoff — sesión de control (madre local en la PC) · 17-oct-2026, 01:00 La Paz
 
-> Lo retoma la próxima sesión de control en la PC de Sergio Urcullo. Estado medido, no de memoria.
-> Detalle de cómo funciona todo: `hermes-content/docs/ONIA_SISTEMA_AUTONOMO.md` (si ya se publicó; borrador
-> en el scratchpad de la sesión 16-oct). Memoria: `harness-codex-archivar-16-oct.md`, `canal-terminal-a-sesiones-nube.md`.
+> Lo retoma la próxima madre en la PC de Sergio Urcullo. Estado medido, no de memoria. Reemplaza el del 16-oct
+> (queda en git). Memoria local: `nube-proyectos-aprendizajes-17-oct.md`, `feedback-tecnico-no-consultar.md`,
+> `feedback-decisiones-visibles.md`. Cómo funciona todo: `hermes-content/docs/ONIA_SISTEMA_AUTONOMO.md`.
 
 ## 1. Objetivo vigente (Sergio Urcullo, 16-oct)
-Construir Onia Platform y dejar una **1.0 operativa para presentar al banco** (API QR del BCP). Además:
-5 rubros probados, funciones de la competencia, workshops/consultorías pagos para llegar a **Bs 3.000 al
-31-oct**, comunidad de WhatsApp, marca personal, Meta Ads, Higgsfield para Lucía. Todo autónomo en la nube.
-La orden completa está en `hermes-content/docs/cola/loop/hermes-jefa.md`.
+1.0 de Onia Platform para el banco (API QR del BCP), con los 5 rubros probados, y Bs 3.000 al 31-oct (taller de IA del
+sáb 31-oct, Bs 50/60/70, 50 cupos, sin devolución; consultorías; prepago). Orden: `docs/cola/loop/hermes-jefa.md`.
+El objetivo no cambia: la madre lo empuja controlando a la jefa, no haciendo el trabajo de los hilos.
 
-## 2. Qué quedó en producción / encendido hoy
-- **Jefa en la nube:** proyecto «ONIA · Hermes» en claude.ai/code (`chan_01CKhuvNSZr6eucUZ8zrV1PJ`), conversación
-  `cse_011cQSargj5qz516CNpPQEko`. Hilos abiertos: Plataforma 1.0 para el banco (BLOQUEADO por red), Competencia,
-  Ventas y pauta, Marca/comunidad/workshops, Auditoría de carriles, Pruebas de navegador y reels.
-  Encadena sola sus vueltas a los :07 y el resumen de las 18:00 (sin tarea fija: decisión de Sergio Urcullo).
-- **Canal PC → nube:** `claude -p "msg" --cloud <cse_id> --output-format json` (o `scripts/hermes/jefa.sh`). Abrir
-  una sesión de la nube en vivo NO está habilitado en la cuenta.
-- **Orca:** pestañas «PANEL ONIA» (`/e/onia-wt/panel/panel.sh`, copia de `scripts/hermes/panel.sh`) y «HABLAR CON LA
-  JEFA» (`jefa "mensaje"`). Orca no ve la nube.
-- **Jarvis en el VPS:** `aplicar` corrido 2 veces (runs 38958901608 y 38965335916, fallas 0): resumen 06:30, cierre
-  21:30, aduana, qa-release cada 15 min. Pedidos a Claude por Telegram APAGADOS (falta rutina + llave).
-- **Codex revisor:** revisión automática prendida en onia-hermes y onia-platform (no revisa borradores; se pide con
-  «@codex review»). Cupo semanal al 72 % el 16-oct.
-- **Correo al BCP** enviado el 16-oct (reenvío con los 8 datos y los adjuntos SEPREC, NIT y CI).
-- **Limpieza:** 136 ramas remotas borradas (227 → 91; SHAs en `E:/onia-wt/archivo-20261016/`), 1.410 archivos
-  generados fuera del repo, 8 worktrees quitados, bundle de ramas solo locales en E:.
-- **Publicados en main:** #194 (QA Q2/Q5), #203, #205 (skill orca), #208 (orden de la jefa), #210 (limpieza),
-  #214 (panel y jefa.sh).
+## 2. Qué quedó en producción / encendido (17-oct)
+- **La jefa publica** (orden de Sergio Urcullo: «Sí, que publique la jefa»): mergea lo que tenga la revisión de Codex
+  del último commit sin P0/P1, el CI verde y ningún conflicto. Ya publicó #212. La rutina QA :57 no puede mergear ni
+  comentar (su control de permisos lo frena).
+- **Vuelta horaria de la jefa** a los :07 (send_later re-armado). Orden del 17-oct: en cada vuelta le escribe SIEMPRE a
+  Sergio Urcullo en 3 líneas y la hace con subagentes; resúmenes a las 06:30 y 18:00 La Paz.
+- **Cómo hablarle:** lo técnico no se le consulta ni se le cuenta. Lo visual y lo serio van por tarjeta, de a una
+  (memoria `feedback-tecnico-no-consultar`). Las decisiones van en AskUserQuestion o en el mensaje final, nunca a
+  mitad de turno (memoria `feedback-decisiones-visibles`).
+- **Entorno «Onia»:** red Completo. Script de configuración nuevo (lo pegó Sergio Urcullo): cloudflared + alias
+  `ssh onia-vps` por `ssh.onia.com.bo`. La llave NO llega al script: el hilo la escribe en su PASO 0. Probado el 17-oct
+  04:01 UTC: túnel OK, web 200; falta el sí de Sergio Urcullo en el hilo Plataforma para escribir la llave.
+- **Skills de la cuenta:** Sergio Urcullo subió 36 + anunciante-supremo (ZIP en `Descargas\onia-skills` y `tanda-2`).
+  Si cambia una skill del repo, hay que volver a subir su ZIP.
+- **Instrucciones del proyecto** (Configuración → Memoria): estaban VACÍAS. Texto fuente en
+  `hermes-content/docs/PROYECTO_ONIA_HERMES_INSTRUCCIONES.md`; se le dejó en el portapapeles a Sergio Urcullo para
+  pegarlo. Verificar que quedó pegado y que un hilo NUEVO lo sigue.
+- **Mods locales** (`~/.claude/dev-mods/f9748e74-…/`): `/codex` (estado de Codex en los PRs) y `/subagentes` («Equipo
+  ONIA», ayudantes por sesión). Solo cargan en la sesión que los creó. En la madre nueva: copiar esas dos carpetas a su
+  carpeta de mods (cargar la skill plugin-authoring para que la cree) o abrirla con `--plugin-dir`.
+- **GitHub sin correos:** Watching, Participating, Actions y Agent sessions quedaron solo «on GitHub».
+- **Correo al BCP** del 16-oct: sin respuesta medida todavía.
 
 ## 3. Qué quedó a medias y dónde
-- **Rutinas horarias de Plataforma (:17) y QA (:57) APAGADAS** desde ~20:54 UTC por alguien desde la web (la jefa
-  dice que no fue ella). QA ya tiene modelo Sonnet. Sin ellas nadie publica el cerebro ni trabaja el cobro.
-  Preguntado a Sergio Urcullo si las apagó; si no, re-prenderlas (RemoteTrigger update `{"enabled": true}`).
-- **Entorno del proyecto (ARREGLADO 16-oct ~22:00 UTC: Sergio Urcullo puso «Onia» y el coordinador en Sonnet 5.5; los hilos nuevos ya llevan la llave):** antes los hilos corrían SIN la llave del VPS y con red cerrada (solo github.com y pypi.org);
-  onia.com.bo, app.onia.com.bo, Instagram y YouTube dan 403. Hay que poner el entorno «Onia» en la configuración
-  del proyecto (app de escritorio o celular) y abrir dominios en ese entorno. Decisión de seguridad de Sergio Urcullo.
-- **Reglas unificadas:** borrador listo en `E:/onia-wt/archivo-20261016/reglas/` (AGENTS.md 12 KB, CLAUDE.md 2 KB, CAMBIOS.md y REVISION.md). La revisión adversarial encontró 4 P0 a corregir ANTES de mostrar: Higgsfield/Meta Ads por conector sin cotizar, faltan «datos de producción y precios» en lo que pasa por Sergio Urcullo, `hermes-jefa.md` no puede aflojar aprobaciones, y faltan las reglas de seguridad de código. Antes decía: workflow `wf_66f856e3-001` escribió en el scratchpad `reglas/AGENTS.md`, `CLAUDE.md`,
-  `CAMBIOS.md` y un revisor adversarial. Falta mostrárselo a Sergio Urcullo y publicar con su OK.
-- **Documento de cómo funciona todo:** borrador `ONIA_SISTEMA_AUTONOMO.md` en el scratchpad (257 líneas, sección 9
-  corregida). Falta publicarlo en `hermes-content/docs/`.
-- **Ficha de los 2 posts de Instagram** (DedkCc6olmo y DecFE1oDNd3): un agente los está viendo desde la PC.
-- **PRs de la jefa listos para revisión:** auditoría, ventas, marca/workshops (#213), competencia (#209); #215
-  (prueba de navegador). Con QA apagado no se publican solos.
+- **PR #226 (reglas unificadas):** rama `claude/reglas-unificadas-20261017` (worktree `E:/onia-wt/reglas-unificadas`).
+  7 rondas de Codex resueltas; última `fc2a8fdf` (QA también exige Codex). Esperando a Codex. Toca CLAUDE.md, AGENTS.md
+  y git-autosync.js: lo mergea la MADRE (no la jefa) cuando Codex dé 👍 o no queden P0/P1. Después del merge, todo
+  checkout vivo debe traer el `scripts/git-autosync.js` nuevo (el viejo todavía empuja `main`).
+- **PR #227 (aprendizajes de la nube):** rama `claude/learning-nube-20261017`. Esperando a Codex; lo publica la jefa.
+- **PR #224 (FLUNA + anunciante-supremo):** lo había congelado por error; reabierto el 17-oct. Esperando a Codex.
+- **PR #228 (este handoff + instrucciones del proyecto):** rama `claude/madre-relevo-20261017`.
+- **PRs de la jefa:** #207 (ventas; precios y textos pasan por Sergio Urcullo), #209, #221 y onia-platform #185 (semilla
+  por rubro) siguen en el ciclo de Codex.
+- **Diagnóstico** `trig_01NWcLV1tHDpTP2XjH2bKVqE`: deshabilitado; no hace falta borrarlo.
 
-## 4. Archivos tocados hoy
-`hermes-content/docs/cola/loop/hermes-jefa.md`, `scripts/hermes/{jefa,panel}.sh`, `.claude/skills/orca/SKILL.md`,
-`.claude/skills/onia-router/SKILL.md`, `.claude/skills/onia-sesion-madre/SKILL.md`, `.gitignore`; prompts de las
-rutinas de Plataforma y QA (RemoteTrigger); memoria local (`integrador-mergea-ramas-claude.md`, etc.).
+## 4. Archivos tocados
+#226: AGENTS.md, CLAUDE.md, scripts/git-autosync.js, scripts/loops/pedido-rama.test.mjs y 7 skills (por patch).
+#227: `ONIA_SISTEMA_AUTONOMO.md` §10 y onia-sesion-madre. #228: este handoff y `PROYECTO_ONIA_HERMES_INSTRUCCIONES.md`.
+Memoria local: 4 archivos nuevos y el índice MEMORY.md.
 
 ## 5. Intentos fallidos y su causa
-- Escribir en la web del proyecto desde Chrome: la página se abre en la app de escritorio y queda inerte.
-- `claude --cloud <id>` interactivo en Orca: «Attaching to an existing cloud session is not enabled for your account».
-- Borrador del BCP en Gmail por el navegador: lo frenó el clasificador (datos personales). Se envió por el MCP de Gmail.
-- Bajar reels desde la nube (403 del proxy) y desde el VPS (no hay `yt-dlp`).
-- El harness Python de Codex (rama `codex/hermes-controller-hardening-20261013`): archivado, no se mergea.
+- El control de permisos de la madre frena leer la base de producción, aprobar por Sergio Urcullo un cambio de
+  producción (plantilla de login), editar la config del entorno («Unauthorized Persistence») y mandarle a la jefa la
+  orden de crear cuentas en producción. No se rodea: lo hace Sergio Urcullo o va por tarjeta.
+- Los subagentes no pueden escribir en `.claude/skills/`: dejan un `.patch` y lo aplica la madre.
+- `RemoteTrigger update` del prompt no cambia el evento de un trigger ya creado: se crea uno nuevo.
+- El reset de contraseña de superadmin falló: lo pedí desde el navegador de la app y Sergio Urcullo abrió el correo en
+  Chrome (PKCE). Tiene que repetirlo todo en Chrome. La falla de producto quedó como tarea para Plataforma.
+- Congelé #224 (aprendizaje) junto con el tooling de video. Error: el aprendizaje de ventas nunca se congela.
+- Las órdenes por `claude -p --cloud` no se ven en el chat del proyecto: la jefa tiene que publicar «📥 De la madre».
 
 ## 6. Qué depende de Sergio Urcullo
-1. HECHO 16-oct 22:16 UTC: Sergio Urcullo NO apagó las rutinas; se re-prendieron (Plataforma :17, QA :57 con Sonnet). Quién las apagó a las 20:54: desconocido.
-2. HECHO el entorno «Onia» en el proyecto. Sergio Urcullo dijo SÍ a abrir la red: falta hacerlo (claude.ai/code → entornos → Onia → acceso de red: agregar onia.com.bo, app.onia.com.bo y los de investigación) (onia.com.bo, app.onia.com.bo y los de investigación).
-3. HECHO: coordinador del proyecto en Sonnet 5.5.
-4. HECHO: `yt-dlp` instalado en el VPS (/usr/local/bin, binario oficial). Falta probarlo con reels desde un hilo con el entorno Onia.
-5. Aprobar el pago de prueba en `/admin/payments` y confirmar con Leslie la factura del SIN.
-6. Rotar el token de n8n de `~/.codex/config.toml` línea 150 (quedó expuesto en un registro local).
-7. Aprobar las reglas unificadas y la oferta de workshops (Bs 150 fundador, auditoría 1 a 1 Bs 350, sáb 24-oct).
+1. Pegar las instrucciones del proyecto (ya están en su portapapeles).
+2. En el hilo Plataforma 1.0: «Autorizo: escribí la llave y probá ssh onia-vps» (QA con login de la 1.0).
+3. Tarjetas del proyecto: carruseles y página del taller; plantilla de recuperación de contraseña; cortes de 5 videos.
+4. Leslie: a nombre de quién va el QR del taller.
+5. ¿Se crean cuentas de prueba de estética, comercio y servicios en producción? (hoy hay 3 dental + 1 importadora).
+6. Su acceso de admin: repetir «Olvidé mi contraseña» desde Chrome con superadmin@onia.com.bo.
+7. Confirmar o no la regla «Lucía autónoma» que entró con #212 (sin fuente; mientras tanto, «mostrar antes»).
+8. Rotar el token de n8n de `~/.codex/config.toml` (pendiente desde el 16-oct).
 
-## 7. Próximos pasos
-1. Leer la respuesta de Sergio Urcullo a los puntos de §6 y actuar.
-2. Mostrar las reglas unificadas y publicarlas; publicar `ONIA_SISTEMA_AUTONOMO.md`.
-3. Verificar con `scripts/hermes/panel.sh` y `RemoteTrigger get_run_log cse_011cQSargj5qz516CNpPQEko` que la jefa
-   avanza; prueba con la PC apagada esta noche y revisión del resumen de las 06:30.
+## 7. Próximos pasos de la madre nueva
+1. Arrancar con la skill `onia-sesion-madre`, este handoff y la memoria `nube-proyectos-aprendizajes-17-oct`.
+2. Ronda cada 30 min (CronCreate `13,43 * * * *`): `RemoteTrigger get_run_log cse_011cQSargj5qz516CNpPQEko`; buscar
+   «PC:»; comprobar que la jefa le escribe a Sergio Urcullo cada hora y que usa subagentes.
+3. Mergear #226 cuando Codex lo apruebe y actualizar `git-autosync.js` en los checkouts vivos.
+4. Verificar que un hilo NUEVO siguió las instrucciones del proyecto (PASO 0, subagentes, «Subagentes: N»).
+5. Prueba con la PC apagada: a la mañana, mirar el resumen de las 06:30 y el log de la jefa de la noche.
+6. Relevo antes de ~150 k tokens (esta madre llegó a ~400 k: demasiado).
