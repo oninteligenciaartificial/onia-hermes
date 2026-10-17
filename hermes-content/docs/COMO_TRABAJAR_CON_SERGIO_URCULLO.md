@@ -67,7 +67,7 @@ Lo que la memoria de la sesión madre sabe y el repo no dice. Complementa CLAUDE
 - **La sesión de la CLI en el VPS puede revocarse del lado del servidor.** Renovarla lo hace Sergio con un clic en Allow; la sesión no lo hace sola. (3-sep)
 - **No tocar la suscripción de Higgsfield.** Se emitió un cobro anual no deseado (1-sep), el reclamo a soporte sigue sin respuesta confirmada. No existe control de downgrade y cancelar apaga los packs. Dejar rebotar el cobro no es salida.
 - **Lotes chicos de imágenes (menos de unos 5 créditos, ej. pruebas de estilo) se generan sin preguntar**, cotizando con `generate cost` y avisando después con la lámina. Video, entrenar Soul, lotes grandes y publicar piden su sí. (8-oct)
-- **Práctica de Lucía (sin confirmar, de segunda mano, 16-oct):** imagen de práctica con tope de 12 créditos, sin personas y sin salir a la red, corre sin esperar OK. Toda pieza o plan de Lucía se muestra antes de subir.
+- **Práctica de Lucía (sin confirmar, de segunda mano, 16-oct):** imagen de práctica con tope de 12 créditos, sin personas y sin salir a la red. NO se ejecuta sin OK hasta que Sergio Urcullo confirme esta regla: mientras tanto, toda generación de Lucía pide su OK con brief y costo. Toda pieza o plan de Lucía se muestra antes de subir.
 - **Vigilar el token de Instagram de Lucía:** vencía entre el 13 y el 18-oct. (10-oct)
 
 ## 4. Ventas y pauta
@@ -116,7 +116,7 @@ Lo que la memoria de la sesión madre sabe y el repo no dice. Complementa CLAUDE
 ## 6. Publicar y gasto
 
 - **Quién decide qué (17-oct, manda sobre la sección "Qué se publica sin preguntar" de CLAUDE.md):** Sergio decide lo VISUAL (diseño nuevo, rediseño de algo vivo, piezas de contenido, su cara o su voz) y lo SERIO (textos legales, precios, gasto, contacto con clientes o terceros, datos reales de producción, borrado sin copia, SIAT y banco). Todo lo técnico se publica sin preguntarle cuando pasa sus gates.
-- **Mostrar ANTES de subir o generar lo que se ve afuera** (Lucía, carruseles, historias, reels, pantallas nuevas): captura o video REAL, nunca dibujado, más el archivo. Las sesiones de la nube dejan la pieza renderizada en su rama y no publican piezas nuevas sin que la madre la haya mostrado. (10-oct)
+- **Mostrar ANTES de subir o generar lo que se ve afuera** (Lucía, carruseles, historias, reels, pantallas nuevas): antes de GENERAR, el brief y el costo con su OK; antes de SUBIR o publicar, la captura o el video REAL ya renderizado (nunca dibujado) más el archivo. Las sesiones de la nube dejan la pieza renderizada en su rama y no publican piezas nuevas sin que la madre la haya mostrado. (10-oct)
 - **Sin confirmar:** si además de mostrar hay que esperar su OK. Hasta que conteste, esperar el OK para Lucía y contenido nuevo. Los arreglos de código siguen CLAUDE.md.
 - **Reemplazadas por las dos de arriba:** "contenido que pasa control de calidad se publica sin OK pieza por pieza" (8-oct) y "todo lo revisado se sube, incluso diseño" (9-oct).
 - **Actos legales, firmas y registros (contratos, SIN, SEPREC, aduana, banco, firma digital): los firma Leslie Mercado (titular SEPREC).** Nunca proponer que Sergio firme o sea apoderado. Antes de abrir cuentas nuevas a nombre de alguien, preferir lo que se migra fácil. (6-ago)
@@ -140,7 +140,7 @@ Lo que la memoria de la sesión madre sabe y el repo no dice. Complementa CLAUDE
 - **Síntomas que se buscan a propósito en una pantalla:** nombres de iconos como texto, contraste menor a 4,5:1, contenido en `opacity:0` que nunca aparece, saltos de layout. Capturar a mitad de la animación. Lo que depende de la red del visitante (fuentes, imágenes, scripts) puede fallar: el diseño debe aguantarlo. (14-ago)
 - **Reportar un merge separando lo que escribí de lo que heredé:** `git log --format="%h %ad %an %s" -- <archivo>` antes de atribuir nada. (5-sep)
 - **Las ramas "sin mergear" mienten con squash:** comparar CONTENIDO (`git diff origin/<principal> <rama> --stat`, con `main` en onia-hermes y `master` en onia-platform; compara las dos puntas), no ancestros. Mergear una "sin mergear" reintrodujo un bug. (4-sep)
-- **"Pusheado" significa EN main, no en la rama del carril.** Un handoff pusheado solo a su rama no existe para la sesión siguiente: `git log origin/main -- <ruta>`. (21-sep)
+- **"Pusheado" significa EN main, no en la rama del carril.** Un handoff pusheado solo a su rama no existe para la sesión siguiente: después de `git fetch origin`, `git diff origin/main HEAD -- <ruta>` tiene que salir vacío (si sale algo, tu versión todavía no está en main). (21-sep)
 
 ## 8. Sesiones, git y nube
 
@@ -153,7 +153,7 @@ Lo que la memoria de la sesión madre sabe y el repo no dice. Complementa CLAUDE
 - **Modelo por rol en subagentes:** Haiku cuenta y verifica, Sonnet sintetiza y analiza, Opus solo decide lo riesgoso (producción, plata). Poner el `model` explícito. (10-oct)
 - **Codex solo para trabajo cerrado y verificable** (tests de rutas sin test, refactors con criterio grep o tsc, auditorías en tabla, segunda opinión de un PR riesgoso). Rama `codex/<tarea>`, NUNCA `claude/*`. No mergea ni publica. Luna para lo mecánico, Sol para código, Astra para revisión. Tope de unos 10 % de la semana por tarea. (2 y 8-oct)
 - **No construir orquestación nueva.** El harness de Codex (20 mil líneas en 5 días, sin prueba de PC apagada) se archiva. Lo que ya corre con la PC apagada se apunta a cobrar y vender, no a pulir. (16-oct)
-- **Cómo llega algo a main (16-oct):** una rama `claude/*` o `pedido/*` con CI verde, sin conflictos y no borrador la mergea el latido de QA a las :57. No tocar CLAUDE.md, AGENTS.md, CODEX.md, COORDINATION_MANIFEST.md, settings, workflows ni deploy: eso lo decide la madre con Sergio. Empujar la rama ya NO publica sola.
+- **Cómo llega algo a main (16-oct):** una rama `claude/*` o `pedido/*` la mergea la jefa cuando cumple las reglas de «Publicar» de las instrucciones (CI verde, revisión de Codex del último commit sin P0/P1, sin conflictos, no borrador). La rutina QA de las :57 no mergea. No tocar CLAUDE.md, AGENTS.md, CODEX.md, COORDINATION_MANIFEST.md, settings, workflows ni deploy: eso lo decide la madre con Sergio. Empujar la rama ya NO publica sola.
 - **El hook Stop de autosync también corre en la nube:** 24 a 41 commits por día por rama, casi todos `docs(qa)` de ruido. No dejar commits vacíos de contenido.
 - **Skills en la nube:** las del repo solo cargan si la sesión arranca DENTRO del repo, y los hilos arrancan fuera. Con 2 repos en el proyecto no corre ningún hook del repo. Por eso las skills viven también como skills de cuenta (ZIP subido por Sergio); si una skill del repo cambia, hay que re-subir su ZIP. (17-oct)
 - **Los subagentes pueden no poder escribir en `.claude/skills/`** (el harness lo trata como configuración). Dejar un `.patch` y aplicarlo desde la sesión principal con `git apply --ignore-whitespace`. (17-oct)
