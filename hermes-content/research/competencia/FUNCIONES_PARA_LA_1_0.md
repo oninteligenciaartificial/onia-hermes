@@ -4,8 +4,8 @@
 > funciones que nos sirvan»). Un tema = un archivo sin fecha: se EDITA.
 > **Alcance:** solo investigación. No toca código. La lista va al hilo Plataforma 1.0, que decide el orden de construcción.
 > **Fuentes:** no se rehizo el análisis. Se cruzaron `BACKLOG_DE_PRODUCTO.md` (8-oct, 14 rivales),
-> `PRODUCTO_COMPETENCIA_RESUMEN.md`, `MAPA_COMPETENCIA.md` y `docs/ONIA_NIVEL_REFERENTES_BRECHA.md` (B01-B77) con el plan
-> `docs/ONIA_PLAN_1.0_Y_CAJA.md`, y se sumó una pasada web del 16-oct para comercio, importadora, estética y servicios
+> `PRODUCTO_COMPETENCIA_RESUMEN.md`, `MAPA_COMPETENCIA.md` y `hermes-content/docs/ONIA_NIVEL_REFERENTES_BRECHA.md` (B01-B77) con el plan
+> `hermes-content/docs/ONIA_PLAN_1.0_Y_CAJA.md`, y se sumó una pasada web del 16-oct para comercio, importadora, estética y servicios
 > (los rubros que las pasadas anteriores casi no cubrían). Estado de cada brecha: medido el 2-8 oct; **el hilo Plataforma
 > lo reconfirma en producción antes de construir**.
 
@@ -21,8 +21,8 @@ rubro o al dental, que se vende primero. Lo que depende de Meta, del SIAT o de u
 |---|---|---|---|---|---|
 | 1 | **Agenda de día y semana con una columna por profesional** | Doctocliq, Dentalink (`DOCTOCLIQ_TEARDOWN.md`, `DENTALINK_TEARDOWN.md`); AgendaPro (`AGENDAPRO_CITALO_TEARDOWN.md`) | dental, estética, servicios | B01 | M |
 | 2 | **Agenda que no miente:** estado en 1 clic, reprogramar devuelve la cita a «pendiente» con sus recordatorios, feriados y vacaciones que respeta la reserva online | Doctocliq, Dentalink, AgendaPro, NativeCode (`ANUNCIANTES_FICHAS_CORTAS.md`) | dental, estética, servicios | B02, B03, B04 | S a M (feriados: S; vacaciones y bloqueos por profesional: M) |
-| 3 | **Botón «Enviar por WhatsApp» en cada cita** con el recordatorio y el link de confirmar ya armados (`wa.me`) | Doctocliq (recordatorio con botones encendido de fábrica), Huli, Calu (`HULI_FICHA.md`, `CALU_FICHA.md`) | dental, estética, servicios | B08 | S |
-| 4 | **Presupuesto por fases con estado** (aceptado, abandonado, terminado) y PDF o link. En estética es el **paquete de sesiones**: AgendaPro muestra en la ficha cuántas sesiones lleva cada tratamiento y cuáles están sin pagar | Doctocliq, Dentalink; AgendaPro (página de estética, 16-oct) | dental, estética, servicios | B14 (+ #2 del backlog) | M |
+| 3 | **Botón «Enviar por WhatsApp» en cada cita** con el recordatorio y el link de confirmar ya armados (`wa.me`) | Doctocliq («Enviar WhatsApp manual»), Dentalink (WhatsApp Web con mensaje y link), AgendaPro (manual gratis desde la cita); fuente: B08 en `hermes-content/docs/ONIA_NIVEL_REFERENTES_BRECHA.md` | dental, estética, servicios | B08 | S |
+| 4 | **Presupuesto por fases con estado** (aceptado, abandonado, terminado) y PDF o link. En estética es el **paquete de sesiones**: AgendaPro muestra en la ficha cuántas sesiones lleva cada tratamiento y cuáles están sin pagar | Doctocliq, Dentalink; AgendaPro (página de estética, 16-oct) | dental, estética, servicios | B14 (+ #2 del backlog) | M a L (el PDF o link público sin login no existe hoy; solo el estado: M) |
 | 5 | **Caja diaria con apertura, cierre por medio de pago y descuadre** | Doctocliq, Dentalink; el cierre de caja es el gancho de los sistemas de comercio (Control Facilito, YoFacturo) | dental, estética, servicios (comercio ya lo tiene) | B17 | M, reusa `cajaTotals` de comercio |
 | 6 | **Plantilla precargada por rubro al registrarse** (servicios, horarios, mensajes de ejemplo, categorías) | Lety (`LETY_FICHA.md`) | los 5 | #3 del backlog | S |
 | 7 | **Lista de citas canceladas y faltas por recuperar**, conectada al reprogramador que ya existe | Dentalink (tarea «Cita»), Fluker (`FLUKER_FICHA.md`) | dental, estética, servicios | #1 del backlog | S |

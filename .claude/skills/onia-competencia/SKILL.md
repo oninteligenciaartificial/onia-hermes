@@ -16,7 +16,7 @@ description: "Invocar para el carril Competencia de Onia: mirar rivales de produ
 ## Método que funcionó
 - Cruzar lo ya medido con el plan 1.0 en vez de rehacer fichas: ahorra horas y no contradice lo anterior.
 - Criterio de entrada a la 1.0: un rival conocido la tiene, se ve en demo o primera semana, se construye sin Meta/SIAT/gasto,
-  sirve a más de un rubro.
+  sirve a más de un rubro o al dental, que se vende primero.
 - WebSearch devuelve solo títulos; WebFetch sobre la URL devuelta da las funciones. Preguntarle a WebFetch por «solo lo que
   dice la página» evita que invente funciones (AgendaPro estética: no menciona consentimiento ni antes/después).
 
