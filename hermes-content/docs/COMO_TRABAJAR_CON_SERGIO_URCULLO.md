@@ -2,6 +2,12 @@
 
 Lo que la memoria de la sesión madre sabe y el repo no dice. Complementa CLAUDE.md y AGENTS.md, no los repite. Todas las fechas son de 2026. Si dos reglas chocan, gana la más nueva. "(sin confirmar)" marca lo que falta validar con él. Los secretos, ids de cuentas y datos personales no están acá a propósito.
 
+
+## 0. Si te falta algo, pedíselo a la madre (17-oct)
+- Si te falta una skill, un archivo de la PC (videos, documentos), un acceso, una referencia o un ejemplo para aprender, NO lo inventes ni trabajes sin eso: escribí en tu hilo «PC: necesito <qué> para <tarea del molde>». La jefa se lo pasa a la madre en ese turno.
+- La madre lo resuelve (sube la skill, copia el archivo a /mnt/project-files, da el acceso) y lo deja cargado para el próximo arranque. Mientras tanto, seguí con otra tarea de tu cola.
+- Al cerrar cada tarea, anotá en /mnt/project-files/estado/<frente>-faltantes.md qué te faltó para hacerlo mejor. La madre lo revisa y lo suma.
+
 ## 1. Cómo hablarle y pedirle decisiones
 
 - **Mensajes cortos: máximo 3 bloques.** Qué pasó, qué se necesita de él (sí o no, o pasos numerados), qué sigue. El método, las hipótesis y las fuentes van al handoff o a la skill. (8-oct: "me entregas demasiado texto y me pierdo")
