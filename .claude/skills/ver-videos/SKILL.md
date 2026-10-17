@@ -381,3 +381,13 @@ estructura. Los mp4 van fuera del repo.
   día siguiente.
 - **Chrome con la ventana oculta (Sergio Urcullo fuera de la PC) congela la pestaña:** el renderer no responde a capturas
   ni a JavaScript (`Runtime.evaluate timed out`). Con la PC sin uso, la ruta del navegador no sirve; queda la API.
+
+## Transcribir desde la nube (medido 2026-10-17)
+
+- **Bajar el bruto:** el MCP de Drive solo baja hasta 10 MB. Si el archivo está compartido por enlace (`get_file_permissions` →
+  `anyone`), `curl -L "https://drive.usercontent.google.com/download?id=<ID>&export=download&confirm=t"` baja 70-250 MB sin login.
+- **Transcribir:** `python3 -m venv` + `pip install faster-whisper`; modelo `small`, `language="es"`, CPU int8. 109 s de video →
+  34 s. El `av` instalado falla con `metadata_errors`: decodificar antes con
+  `ffmpeg -i v.mp4 -ac 1 -ar 16000 -f f32le -` y pasar el arreglo numpy a `transcribe()`.
+- **Pausas para la tabla de cortes:** `ffmpeg -af silencedetect=n=-35dB:d=0.5`.
+- La transcripción confunde nombres propios (Claude→«Cloud», Anthropic→«Antropic», Sonnet→«Sonet»): corregir antes de citar.
