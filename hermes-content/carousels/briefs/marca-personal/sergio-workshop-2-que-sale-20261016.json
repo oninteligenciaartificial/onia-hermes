@@ -2,13 +2,13 @@
  "title": "Qué sale de una auditoría de IA para tu negocio",
  "theme": "blanco",
  "serie": "auditoría · 2/2",
- "caption": "No es un curso: es sentarte 90 minutos con tu propio negocio y salir con algo hecho. La tabla de la lámina 3 es un ejemplo inventado para mostrar el formato de tu mapa.\n\nSábado 31 de octubre, 10:00 (La Paz), por Meet. Cupo 50. Link en mi perfil.",
+ "caption": "No es un curso: es sentarte 90 minutos con tu propio negocio y salir con tu primer paso. La tabla de la lámina 3 es un ejemplo inventado para mostrar cómo se ve una lista.\n\nSábado 31 de octubre, 10:00 (La Paz), por Meet. Cupo 50. Link en mi perfil.",
  "slides": [
   {
    "layout": "ensayo",
    "theme": "verde",
    "headline": "No es un curso. Es *tu* negocio sobre la mesa.",
-   "body": "90 minutos. Salís con algo hecho.",
+   "body": "90 minutos. Salís con tu primer paso.",
    "next": "qué te llevás"
   },
   {
@@ -17,17 +17,17 @@
    "headline": "Te llevás *3 cosas*",
    "body": "",
    "items": [
-    {"label": "Tu mapa de tareas", "text": "Qué repetís y cuánto te cuesta"},
+    {"label": "Tu lista de tareas repetidas", "text": "La armás vos, en vivo, con tu negocio"},
     {"label": "Tu prioridad", "text": "Cuál automatizar primero"},
-    {"label": "Tu primer paso", "text": "Listo para probar el lunes"}
+    {"label": "Tu primer paso", "text": "Un primer paso concreto"}
    ],
    "next": "así se ve"
   },
   {
    "layout": "lista",
    "theme": "blanco",
-   "headline": "Así se ve *tu mapa*",
-   "body": "Ejemplo inventado, para mostrar el formato",
+   "headline": "Un ejemplo de *lista*",
+   "body": "Ejemplo inventado, no es un caso real",
    "items": [
     {"label": "Cotizaciones", "text": "6 h por semana · Bs 480 al mes"},
     {"label": "Responder consultas", "text": "8 h por semana · Bs 640 al mes"},
@@ -63,7 +63,7 @@
    "layout": "ensayo",
    "theme": "negro",
    "headline": "Reservá tu cupo",
-   "body": "Escribime desde el link de mi perfil.\nSe paga por QR del BCP.",
+   "body": "Desde Bs 50 · 50 cupos.\nEscribime desde el link de mi perfil.\nSe paga por QR del BCP.",
    "cta": "Link en mi perfil"
   }
  ]

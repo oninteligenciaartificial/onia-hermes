@@ -20,7 +20,7 @@ comunidad → workshop → auditoría. Eso es lo de abajo.
 |---|---|---|
 | **Avisos** (canal, ya existe) | Un recurso por aviso, link del video del día, y avisos de eventos (workshop). Sin charla | Solo Sergio Urcullo |
 | **General** (grupo, ya existe) | Presentaciones, preguntas, qué probaste | Todos, con las reglas de §3 |
-| **«Workshop 31-oct» (grupo temporal, NUEVO)** | Materiales del evento, dudas de la semana siguiente y el empuje a la auditoría 1 a 1. **Se cierra a los 7 días** | Sergio Urcullo y asistentes pagos |
+| **«Workshop 31-oct» (grupo temporal, NUEVO)** | Materiales del evento. **No se ofrece hasta que Sergio Urcullo lo decida** | Sergio Urcullo y asistentes pagos |
 
 Por qué un grupo aparte y no mezclar: quien pagó espera atención diferenciada y quien solo mira el General no tiene por qué ver las
 conversaciones de pago. **No se crea hasta que haya al menos 6 pagos** (si el workshop no se dicta, no hay grupo). Crear el grupo real
@@ -52,8 +52,7 @@ El horario de respuesta sale de las ventanas de agenda vigentes (`ESTADO_COMUNID
 **B · Mensaje 1 a 1 a quien se presenta** (lo manda Sergio Urcullo; de vos porque es la comunidad, no un cliente que paga):
 > Gracias por presentarte. Dime una cosa: de lo que repetís cada semana, ¿cuál es la tarea que más tiempo te come? Con eso te digo por dónde empezar.
 
-**C · Quien viene de un workshop** (mensaje de confirmación, de usted, ver `ONIA_WORKSHOPS_AUDITORIA_IA.md` §5, plantilla B): además, se le invita al
-grupo temporal y, al terminar, a Avisos.
+**C · Quien viene de un workshop** (mensaje de confirmación, de vos, ver `ONIA_LANZAMIENTO_PREPAGO.md` §5, plantilla B, y `TALLER_31_OCT.md`): además, al terminar, se le invita a Avisos.
 
 **D · Quick win en los primeros 10 minutos:** el último aviso siempre tiene algo para probar en 10 minutos (el D0 de `ONIA_COMUNIDAD_CONTENIDO.md` regala los 3
 cursos con certificado; si ese recurso ya no está vigente, se reemplaza por el de la semana, no se promete nada que no exista).
@@ -61,16 +60,15 @@ cursos con certificado; si ese recurso ya no está vigente, se reemplaza por el 
 ## 5. El escalón hacia los workshops (lo que se publica en Avisos, con el OK)
 Un solo aviso de convocatoria (después de aprobado el precio y la fecha), sin presión y con el cupo real:
 > **Workshop en vivo · sáb 31 de octubre · 10:00 (La Paz)**
-> «Auditá tu negocio con IA»: 90 minutos por Meet para salir con tu mapa de tareas (qué repetís, cuánto te cuesta y qué automatizar primero) y un primer paso hecho.
-> Cupo: 50, con precio por escalón: Bs 50 los primeros 15, Bs 60 los siguientes 20 y Bs 70 los últimos 15. Sin devolución una vez pagado, salvo que el taller no se dicte. Reservá escribiéndome «TALLER» al privado o en sergiourcullo.vercel.app/auditoria.
+> «Auditá tu negocio con IA»: 90 minutos por Meet para salir con tu lista de tareas repetidas, tu prioridad y tu primer paso.
+> Cupo, precio por escalón, política y cómo reservar: se copian de `TALLER_31_OCT.md` el día en que se abra la compuerta (la página `/auditoria` todavía no está viva y no se anuncia antes).
 
-Un recordatorio el miércoles 28 y otro el jueves 29 (cupo restante real). **No** se anuncia nada del workshop antes de que el precio esté aprobado, y no se
-anuncia la plantilla del Mapa hasta que exista.
+Recordatorios el jueves 29, el viernes 30 y el sábado 31 (cupo restante real, solo si es real a esa fecha). **No** se anuncia nada del workshop antes de que el precio esté aprobado y la compuerta abierta, y no se
+menciona ninguna «plantilla del Mapa» (no existe).
 
 ## 6. Cómo se mide (para saber si sirve y no seguir a ciegas)
 Una fila por semana en `docs/comunidad/` o en el registro de Ventas y pauta: miembros activos (escribieron o reaccionaron), presentaciones nuevas,
-reservas de la asesoría gratis, pagos del workshop, pasadas de workshop a auditoría. **Con 10 pagos del workshop o 2 auditorías vendidas, se arma la
-segunda cohorte; con 0 pagos, se reconsidera la oferta, no se baja el precio por reflejo.**
+reservas de la asesoría gratis, pagos del workshop, pasadas de workshop a auditoría. **Los umbrales del taller (6 pagos para dictarlo, regla de parada del miércoles 21) están en `TALLER_31_OCT.md`. Una segunda cohorte no se promete: solo si se llena, Sergio evalúa una; si hay pocos pagos, se reconsidera la oferta, no se baja el precio por reflejo.**
 
 ## 7. Trampas
 - No prometer «certificado» del workshop: no existe.

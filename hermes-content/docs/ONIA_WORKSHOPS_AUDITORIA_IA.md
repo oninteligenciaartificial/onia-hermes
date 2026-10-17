@@ -1,7 +1,9 @@
 # Workshops y auditorías de IA para negocios (marca personal de Sergio Urcullo)
 
+> **DESCARTADA el 17-oct-2026: ver `TALLER_31_OCT.md`. Se conserva solo como historia; nada de lo que sigue es vigente.**
+
 > Doc vivo, sin fecha: se EDITA. Creado el 16-oct-2026 por el carril Marca personal, comunidad y workshops.
-> **Estado: PROPUESTA. Nada publicado, nada cobrado, nada enviado a nadie.** Precio, fecha y textos esperan el OK de
+> **Estado: HISTORIAL (descartada). Nada publicado, nada cobrado, nada enviado a nadie.** Precio, fecha y textos esperan el OK de
 > Sergio Urcullo. Orden de origen: `docs/cola/loop/hermes-jefa.md`, punto 4 (decisión del 16-oct: sí a workshops y
 > consultorías pagas para la caja de octubre, excepción a «Onia vende software, nunca horas»).
 > Investigación y por qué esta forma: `docs/research/REFERENTES_WORKSHOPS_Y_CONSULTORIAS.md`.
