@@ -83,8 +83,10 @@ Pendiente de UNA sola pregunta a Sergio Urcullo (la jefa la plantea una vez): (1
 
 Cada vuelta de la jefa (:07): leer esta cola y la orden vigente, ejecutar lo que no espera a Sergio Urcullo, destrabar carriles con más de 3 h sin avanzar y no preguntar de nuevo lo ya preguntado.
 
-PC: agregar onia.com.bo y app.onia.com.bo al acceso de red del entorno «Onia» (claude.ai/code → entornos → Onia → acceso de red; Sergio Urcullo ya dijo SÍ pero madre-control.md §3 y §6.2 aún lo registran como pendiente, devuelven 403) y dejar el resultado en handoff/madre-control.md. El recorrido público de la 1.0 depende de esto.
+Pendiente: diagnóstico de red/SSH de 1 minuto, solo lectura, en el hilo Plataforma 1.0; su salida vuelve como UNA línea «PC:». (La red del entorno «Onia» figura «Completo», visto por la madre el 17-oct 03:05 UTC, y el setup script deja la clave en ~/.ssh/onia_vps: nada más está pendiente de la PC.)
 
-Ejecutable sin esperar (salvo el recorrido de la 1.0, que depende de la línea «PC:»): mover los PR entregados a listo; pasar la lista de competencia al hilo de la 1.0; completar ⟦ENLACE-WORKSHOP⟧ del funnel con la oferta (marcada propuesta); dejar a Lucía su tarea de práctica; seguir recorridos públicos de la 1.0 sin crear datos.
+Ejecutable sin esperar: mover los PR entregados a listo; pasar la lista de competencia al hilo de la 1.0; completar ⟦ENLACE-WORKSHOP⟧ del funnel con la oferta (marcada propuesta); dejar a Lucía su tarea de práctica; seguir recorridos públicos de la 1.0 sin crear datos.
+
+Lucía: práctica en hermes-content/docs/cola/loop/lucia.md
 
 Candidatos que NO se instalan sin OK de Sergio Urcullo: Ponytail, Diagram Design, Scrapling. yt-dlp ya está instalado en el VPS (/usr/local/bin, ver handoff/madre-control.md): solo falta probarlo con reels.
