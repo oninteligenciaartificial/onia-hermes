@@ -1,5 +1,51 @@
 # Handoff — carril `hermes-jarvis` (Hermes, el Telegram y el calendario de Sergio Urcullo)
 
+> **ESTADO 17-oct, ~18:20 UTC — Hermes quedó de VIGÍA de la nube (encendido y probado).** Lo pidió Sergio Urcullo el 17-oct (~10:45 La Paz)
+> después de que la «jefa» de la nube quedó archivada 8 h sin que nadie le avisara. Hermes **solo avisa**: no ordena ni orquesta.
+> - **Dos trabajos de Hermes, modo SIN AGENTE (cero LLM, cero tokens):** un script corre a la hora y su salida es el mensaje de
+>   Telegram; salida vacía = silencio. Se eligió esto en vez de gpt-5-nano/mini: es gratis, no inventa (nano inventó un «rate limit»
+>   el 17-sep) y es lo que Hermes documenta para vigías (`website/docs/guides/cron-script-only.md` del repo upstream).
+>
+>   | Id | Nombre | Cuándo (hora La Paz; Hermes tiene `timezone: America/La_Paz`) | Qué manda |
+>   |---|---|---|---|
+>   | `f56e642fb47e` | `onia-nube-resumen` | `30 6 * * *` | 3 líneas: Pasó (24 h: commits y PRs que entraron a main en onia-hermes y onia-platform) · Movió (ramas con commits, PRs con CI, última actividad de la nube) · Trabado (CI en rojo, corridas en cola >2 h) |
+>   | `367c33dbee78` | `onia-nube-vigia` | `0 8-22/2 * * *` (08:00 a 22:00 cada 2 h) | «⚠️ La nube está quieta desde <hora>. Mirá el proyecto ONIA · Hermes» solo si no hubo actividad de la nube en las últimas 3 h; si la hubo, nada |
+>
+> - **Actividad de la nube = un commit o una corrida cuyo mensaje trae el trailer `Claude-Session: https://claude.ai/code/session_…`**
+>   (medido: las sesiones de la nube lo llevan; la madre local y sus subagentes no). Se mira la punta de cada rama `claude/*`, los commits de
+>   main de las últimas 24 h y las corridas de Actions. **No se miran comentarios de PR**: no hay permiso (abajo).
+> - **Cómo lee GitHub, sin credenciales nuevas:** (1) `git fetch` solo-commits (`--filter=tree:0`) con las llaves deploy que ya estaban
+>   (`/root/.ssh/deploy_onia-hermes` y `deploy_onia-platform`) a un repo bare propio en `/root/.hermes/vigia-nube/` (no toca `/root/loops`);
+>   (2) la API de Actions con **`/root/.config/onia/github-token`**, el mismo archivo que ya lee `onia-vigia-ci.sh`. Hermes mismo NO tiene token
+>   de GitHub (su `.env` no trae ninguno). ⚠️ **Ese token es un fine-grained PAT con solo «Actions: read»** (medido: `pulls`, `commits` y `branches`
+>   dan 403 «Resource not accessible»). Por eso **no se cuentan PRs abiertos ni comentarios**: se cuentan PRs mergeados (del log de main) y PRs
+>   con CI en las últimas 24 h. Para tenerlos hace falta que Sergio Urcullo agregue «Pull requests: read» (y «Contents: read») a ese PAT en GitHub:
+>   un clic suyo, sin crear nada nuevo. Los repos son privados (la API sin token da 404).
+> - **El aviso no se repite antes de 4 h por la misma quietud** (`REPEAT_H`, estado en `/root/.hermes/vigia-nube/estado.json`); sin esto,
+>   una nube pausada a propósito mandaría 8 avisos al día. Se vuelve a avisar si la última actividad cambia y vuelve a quedar quieta.
+>   Si falla GitHub o el filtro, el script sale con error y Hermes manda ese error (un vigía mudo es justo lo que se quiere evitar).
+> - **Prueba (17-oct 14:16 y 14:19 La Paz):** `hermes cron run` de cada uno → «Ran now: succeeded», `last_status=ok`, `last_delivery_error=None`
+>   y la línea del log `cron.scheduler: Job '<id>': delivered to telegram:6830070978` (el chat de Sergio Urcullo). El resumen real salió con
+>   23 commits en main de onia-hermes, platform 0, y se verificó contra la API de GitHub desde la laptop (23 y 0; sin CI en rojo). El vigía mandó
+>   su aviso real («quieta desde 02:13»: la última actividad de la nube fue el 17-oct 06:13 UTC) y una segunda corrida seguida salió en silencio
+>   (la regla de 4 h). `nube-vigia.py selftest` pasa en la laptop y en el VPS. El camino «hubo actividad → silencio» solo está probado por el selftest.
+> - **Costo:** LLM $0. GitHub: ≈6 llamadas por corrida, 8 corridas al día (límite 5.000 por hora). VPS: ≈0,6 s de CPU por corrida; el primer fetch tardó 5,5 s.
+> - **Cómo se apaga:** `hermes cron pause 367c33dbee78` (vigía) y `hermes cron pause f56e642fb47e` (resumen); se reanudan con `hermes cron resume <id>`.
+>   Borrarlos: `hermes cron remove <id>`; los archivos: `rm /root/.hermes/scripts/nube-vigia.py /root/.hermes/scripts/nube-vigia.sh
+>   /root/.hermes/scripts/nube-resumen.sh` y `rm -r /root/.hermes/vigia-nube`. No se tocó ningún otro trabajo de Hermes, ni el SOUL, ni el gateway, ni el crontab.
+> - **Fuente y cómo se despliega:** `hermes-content/deploy/hermes-vigia/nube-vigia.py` (sin commitear al escribir esto). Hermes solo corre scripts de
+>   `/root/.hermes/scripts/` y **sin argumentos**, por eso hay dos envolturas de dos líneas: `exec /usr/bin/python3 /root/.hermes/scripts/nube-vigia.py resumen|vigia`.
+>   El sincronizador **no** copia esta carpeta: cambiar el script = `scp` a esa ruta (+ `sed -i 's/\r$//'`) y listo; no hace falta reiniciar Hermes.
+> - **⚠️ Chocan con la regla de silencio de `ONIA_CEREBRO.md` (nada de 22:00 a 06:30):** el vigía corre hasta las 22:00 La Paz (pedido de Sergio Urcullo: «entre 08:00 y 23:00»)
+>   y entrega por el gateway de Hermes, **sin pasar por la aduana `onia-tg.sh`** (que sigue apagada hasta `aplicar`). El resumen de las 06:30 coincide con el del diseño de
+>   `jarvis-resumen.sh` y ese día llegarían dos (el de Hermes y el de `aplicar`, si se aplica): al encender `aplicar`, apagar uno.
+> - **🔴 HALLAZGO del VPS (no es de este trabajo, no se tocó):** el VPS estuvo **caído 27 min** (apagado 17:45 UTC, vuelta 18:13; kernel 6.8.0-138 → 147; antes llevaba 54 días
+>   encendido). Con la caída, el sitio dio 522 y el SSH timeout; volvió solo. **Desde ese arranque hay DOS gateways de Hermes:** el unit de usuario
+>   (`/root/.config/systemd/user/hermes-gateway.service`, habilitado, `Linger=yes`, de septiembre; PID 909, es el que atiende Telegram y los cron) y el unit de sistema
+>   `hermes-gateway.service`, que choca contra él («Gateway already running (PID 909)») y se reinicia cada ~22 s (`NRestarts` 17 a las 18:20 UTC, ~1,7 s de CPU cada vuelta).
+>   Funciona (Telegram y cron andan), pero es el mismo choque de las 939 líneas del 17-sep. El arreglo es de la madre/dueña del VPS: `systemctl --user disable --now hermes-gateway.service`
+>   (reinicia el gateway: el de sistema lo toma en ≤10 s). Verificar después con `systemctl is-active hermes-gateway.service` y que `NRestarts` deje de subir.
+
 > **ESTADO 11-oct, 07:30 UTC — qué está en vuelo y quién lo mueve** (sesión `session_01SQ7cvuDX5w5jDHk5VdhAEo`, rama `claude/adoring-ramanujan-7sjzwv`, PR #194).
 > - **Producción, 11-oct 12:58 UTC (E22):** build nuevo `Lv2W45uYHdFOlYQCVcD01` con #152, #151 y M1 (#156); `/login`, `/book` y `/register` bien y de usted; **Q9b cerrado** (el paso 2 de `/register` dice «Nombre de su clínica»); `web-vs-producto` con 0 diferencias. #157 no entró. Sin medir desde la nube: `/agents`, el Inicio y la caja con M1 (detrás del login).
 > - **Producción antes, 11-oct 09:58 UTC (E11):** build nuevo tras la publicación de las 09:50, `buildId` `FTdbJ5YopG9Ll4v0Yivrq`; `/login`, `/book` y `/register` bien (capturas `despues-0950-*` en `docs/research/qa-publicacion/2026-10-11/`). **El paso 2 de `/register` sigue con «Nombre de tu clínica»** (#148 no está en `master`; Q9b abierto). Lo de #147 que está detrás del login (caja «1.500», borrado con caras) sigue sin medir desde la nube.
