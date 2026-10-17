@@ -1,7 +1,7 @@
 # Lanzamiento prepago de entrada (Bs 50-70) para levantar la marca de Sergio Urcullo
 
 > Doc vivo, sin fecha: se EDITA. Creado el 16-oct-2026 (carril Marca personal, comunidad y workshops).
-> **Estado: PROPUESTA. Nada publicado, cobrado ni enviado a nadie.** Precios, fecha y textos son propuesta hasta el **sí explícito de Sergio Urcullo**.
+> **Estado: precio aprobado por Sergio Urcullo el 17-oct (escalera 50/60/70, cupo 50, sáb 31). Textos y página, pendientes de su visto bueno. Nada publicado, cobrado ni enviado a nadie.**
 > Pedido: su mensaje del 16-oct (lanzamiento prepago alrededor de Bs 50-70, porque aún no es muy conocido; caso de Fabricio).
 > **Reemplaza como propuesta principal** a la de Bs 150/200 de `docs/ONIA_WORKSHOPS_AUDITORIA_IA.md`, que queda como **alternativa** (§9).
 > Base de investigación y fuentes: `docs/research/FUNNELS_WEBINARS_Y_PREPAGO_REFERENTES.md`.
@@ -53,7 +53,7 @@ Hoy la audiencia medida es corta: **~30 miembros** en la comunidad (30-sep), 6 l
 | Escenario (la columna «Revisión» es de la versión descartada: sin ella, restar esa columna) | Inscripciones | Revisión (descartada) | Auditorías 1 a 1 (Bs 290 con crédito de Bs 60) | Total aprox. |
 |---|---|---|---|---|
 | Pesimista | 15 (mezcla de Bs 50 y Bs 60) = Bs 800 | 1 = Bs 140 | 1 = Bs 290 | **Bs 1.230** |
-| Base | 30 (10×50 + 15×60 + 5×70) = Bs 1.750 | 3 = Bs 420 | 3 = Bs 870 | **Bs 3.040** |
+| Base | 30 (10×50 + 15×60 + 5×70) = Bs 1.750 | 3 = Bs 420 | 3 = Bs 870 | **Bs 3.040** (con la revisión descartada; sin ella: Bs 2.620) |
 | Bueno | 40 (15×50 + 20×60 + 5×70) = Bs 2.300 | 5 = Bs 700 | 4 = Bs 1.160 | **Bs 4.160** |
 | Una venta alta | Base sin revisión ni auditorías: Bs 1.750 | | 1 Instalación Starter | **Bs 3.650** |
 
