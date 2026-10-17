@@ -16,10 +16,10 @@ Antes de pedirle algo a Sergio Urcullo, probá en este orden: la herramienta o e
 
 ## Un frente = un hilo
 Hay 4 frentes y cada uno tiene UN solo hilo, con nombre fijo:
-1. «Plataforma 1.0»: producto, banco BCP, los 5 rubros y la competencia de producto.
-2. «Marca personal y taller»: contenido de Sergio Urcullo, noticias, guiones, videos, carruseles, página y prepago del taller del 31-oct, comunidad.
-3. «Ventas y pauta»: prospección, anuncios, consultorías, propuestas.
-4. «Lucía»: la influencer IA y Higgsfield.
+1. «Plataforma 1.0»: producto, banco BCP, los 5 rubros y la competencia de producto. Handoff: `hermes-content/docs/handoff/onia-1.0-nube.md`.
+2. «Marca personal y taller»: contenido de Sergio Urcullo, noticias, guiones, videos, carruseles, página y prepago del taller del 31-oct, comunidad. Handoff: `hermes-content/docs/handoff/marca-personal.md`.
+3. «Ventas y pauta»: prospección, anuncios, consultorías, propuestas. Handoff: `hermes-content/docs/handoff/mercado-y-pauta.md`.
+4. «Lucía»: la influencer IA y Higgsfield. Handoff: `hermes-content/docs/handoff/higgsfield-lucia.md`.
 - Todo lo que es de un frente se hace DENTRO de su hilo, con subagentes. No se abre un hilo aparte para videos, noticias o una pieza suelta.
 - Solo se abre un hilo nuevo para reemplazar a uno lleno: el viejo deja su handoff y la jefa lo archiva. Nunca hay dos hilos vivos del mismo frente.
 - Un hilo de prueba o de diagnóstico se archiva al terminar.
@@ -28,7 +28,7 @@ Hay 4 frentes y cada uno tiene UN solo hilo, con nombre fijo:
 1. Hacé `cd` al repo: `/home/user/onia-hermes` o `/home/claude/onia-hermes`. El producto está en `onia-platform`, rama `master`.
 2. Leé `/mnt/project-files/reglas/COMO_TRABAJAR_CON_SERGIO_URCULLO.md` (copia de `hermes-content/docs/COMO_TRABAJAR_CON_SERGIO_URCULLO.md`): son las reglas que Sergio Urcullo ya dio. No se le vuelven a preguntar.
 3. Cargá con la herramienta Skill `onia-router` y la skill de tu carril. Están subidas a la cuenta: onia-ventas-pauta, diseno-contenido-onia, editor-videos, edicion-referentes, ver-videos, sacar-prompt, higgsfield-generate, anunciante-supremo, onia-backend, onia-db, onia-deploy, onia-frontend, onia-seguridad, onia-verificacion, onia-chatbot, onia-propuestas, onia-contabilidad-bolivia e hyperframes.
-4. Leé `AGENTS.md` (las reglas) y tu handoff en `hermes-content/docs/handoff/<carril>.md`.
+4. Leé `AGENTS.md` (las reglas) y el handoff de tu frente (la ruta está en «Un frente = un hilo»).
 5. Si usás el VPS: `printf '%s' "$ONIA_VPS_SSH_KEY_B64" | base64 -d > ~/.ssh/onia_vps && chmod 600 ~/.ssh/onia_vps && ssh onia-vps 'echo VPS_OK'`. Entra por el túnel de Cloudflare, porque el puerto 22 directo no sale. Nunca imprimas la llave. Si el control de permisos lo frena, pedí el sí de Sergio Urcullo en tu hilo.
 
 ## Cómo la jefa le pide una tarea a un hilo (molde obligatorio)

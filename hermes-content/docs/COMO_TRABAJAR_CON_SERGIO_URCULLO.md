@@ -27,7 +27,7 @@ Lo que la memoria de la sesión madre sabe y el repo no dice. Complementa CLAUDE
 
 ## 2. Contenido y marca personal
 
-- **Link o reel sin instrucción = para APRENDER.** Se hace la ficha (mensaje, tema, edición) en `references/video-intake/`, lo aprendido va a la skill y una buena idea al banco de ideas. No se produce nada salvo que diga "hacé uno así". (9-oct: se produjo un carrusel que no pidió)
+- **Link o reel sin instrucción = para APRENDER.** Se hace la ficha (mensaje, tema, edición) en `hermes-content/references/video-intake/`, lo aprendido va a la skill y una buena idea al banco de ideas. No se produce nada salvo que diga "hacé uno así". (9-oct: se produjo un carrusel que no pidió)
 - **De cada contenido que manda se analizan tres cosas, mirando el video entero:** el mensaje, el tema y la edición (ritmo de corte, subtítulos, transiciones, b-roll, sonido, primeros 3 s). (3-oct)
 - **Guiones con ejemplos REALES de Onia** (hook, skill, bot, loops, editor, errores reales), nunca negocios inventados. Probar la premisa antes de escribir. Cero disclaimers a cámara ("todavía no ejecutamos la prueba"). Cifras verificadas el mismo día en fuente primaria. No repetir el tema entre piezas. (28-sep: rechazó tandas enteras por "vacías")
 - **Él solo habla, la IA edita.** Meta: mínimo 10 piezas por día, 1 hora de grabación. Referentes: Santiago Muñoz, Enrique Rocha, Erik Taveras, Ian Lee, Tiago Lemos, Carlos Domínguez. El cierre manda a la comunidad de WhatsApp o a la web /claude-code. (28-sep y 30-ago)
@@ -132,7 +132,7 @@ Lo que la memoria de la sesión madre sabe y el repo no dice. Complementa CLAUDE
 - **Las vistas previas se sacan de la página real:** Playwright abre producción y se cambia SOLO el elemento en el DOM local. Nunca un mock dibujado a mano con otra letra o colores aproximados. (10-oct)
 - **Síntomas que se buscan a propósito en una pantalla:** nombres de iconos como texto, contraste menor a 4,5:1, contenido en `opacity:0` que nunca aparece, saltos de layout. Capturar a mitad de la animación. Lo que depende de la red del visitante (fuentes, imágenes, scripts) puede fallar: el diseño debe aguantarlo. (14-ago)
 - **Reportar un merge separando lo que escribí de lo que heredé:** `git log --format="%h %ad %an %s" -- <archivo>` antes de atribuir nada. (5-sep)
-- **Las ramas "sin mergear" mienten con squash:** comparar CONTENIDO (`git diff origin/master...<rama> --stat`), no ancestros. Mergear una "sin mergear" reintrodujo un bug. (4-sep)
+- **Las ramas "sin mergear" mienten con squash:** comparar CONTENIDO (`git diff origin/master <rama> --stat`, que compara las dos puntas), no ancestros. Mergear una "sin mergear" reintrodujo un bug. (4-sep)
 - **"Pusheado" significa EN main, no en la rama del carril.** Un handoff pusheado solo a su rama no existe para la sesión siguiente: `git log origin/main -- <ruta>`. (21-sep)
 
 ## 8. Sesiones, git y nube
