@@ -19,7 +19,7 @@
 | Cuándo | **Sáb 31-oct, 10:00 (La Paz).** Se vende del **lun 19** al **jue 29 20:00** (10 días). Antes decía sáb 24: se mueve para tener 10 días de venta y no 5 |
 | Puerta | **Clase gratis de 35 min, mar 27-oct 19:00**: «La cuenta que nadie hace». Cierra la venta de los que dudan |
 | Cómo se paga | QR del BCP por WhatsApp, antes del taller. Sergio Urcullo verifica el movimiento en la app del BCP y confirma |
-| Escalera | Prepago Bs 50-70 → **Auditoría 1 a 1 Bs 350** (con lo pagado descontado) → Diagnóstico + Roadmap (Bs 790-1.200) o Instalación Starter (Bs 1.900) → Onia Platform solo si el negocio calza |
+| Escalera | **NO VIGENTE: los precios de Onia salen solo de `onia-platform/lib/pricing.ts`, `lib/subscription-plans.ts` y `ONIA_CATALOGO_DE_VENTA.md`, no de este documento.** (Antes: Prepago Bs 50-70 → Auditoría 1 a 1 Bs 350 → Diagnóstico + Roadmap Bs 790-1.200 o Instalación Starter Bs 1.900; esas cifras no están aprobadas.) El prepago del taller no promete ningún escalón posterior |
 
 **Por qué ese precio sí y no más:** a Bs 50-70 el objetivo es **juntar gente y contactos recientes**, no ganar por asistente. Ya existe un taller de IA gratis en Bolivia (Taller 24E): por eso el nuestro entrega algo propio de cada persona y no teoría.
 
@@ -49,16 +49,16 @@ Lo único con cifras reales que encontré: contactos recientes de un imán compr
 - Con la clase gratis: **~600 a 2.500 inscritos** a la clase para llegar a 50 compradores.
 
 ### Lectura franca (para decidir con la cuenta delante)
-Hoy la audiencia medida es corta: **~30 miembros** en la comunidad (30-sep), 6 leads de agosto, seguidores de Instagram de Sergio Urcullo **[MEDIR]**. Si el alcance real es de unos cientos de personas, lo **probable** es quedar entre **15 y 30 inscripciones (Bs 800 a Bs 1.750)**; **Bs 3.000 solo con prepago exige ~1.700 personas que vean la oferta con intención (§2, 3 % de conversión; entre 1.300 y 10.000 según la conversión real)**. La cuenta cierra con el siguiente peldaño:
+Hoy la audiencia medida es corta: **~30 miembros** en la comunidad (30-sep), 6 leads de agosto, seguidores de Instagram de Sergio Urcullo **[MEDIR]**. Si el alcance real es de unos cientos de personas, lo **probable** es quedar entre **15 y 30 inscripciones (Bs 750 a Bs 1.650, llenando los escalones en orden)**; **Bs 3.000 solo con prepago exige ~1.700 personas que vean la oferta con intención (§2, 3 % de conversión; entre 1.300 y 10.000 según la conversión real)**. La cuenta por escenarios:
 
-| Escenario (la columna «Revisión» es de la versión descartada: sin ella, restar esa columna) | Inscripciones | Revisión (descartada) | Auditorías 1 a 1 (Bs 350 menos lo pagado en el taller) | Total aprox. |
-|---|---|---|---|---|
-| Pesimista | 15 (mezcla de Bs 50 y Bs 60) = Bs 800 | 1 = Bs 140 | 1 = Bs 290 (crédito de Bs 60) | **Bs 1.230** |
-| Base | 30 (10×50 + 15×60 + 5×70) = Bs 1.750 | 3 = Bs 420 | 3 = Bs 870 (crédito de Bs 60 c/u) | **Bs 3.040** (con la revisión descartada; sin ella: Bs 2.620) |
-| Bueno | 40 (15×50 + 20×60 + 5×70) = Bs 2.300 | 5 = Bs 700 | 4 = Bs 1.160 (crédito de Bs 60 c/u) | **Bs 4.160** |
-| Una venta alta | Base sin revisión ni auditorías: Bs 1.750 | | 1 Instalación Starter | **Bs 3.650** |
+| Escenario | Inscripciones (escalones llenados en orden: 15 a Bs 50, 20 a Bs 60, 15 a Bs 70) | Ingreso del taller |
+|---|---|---|
+| Pesimista | 15 (15×50) | **Bs 750** |
+| Base | 30 (15×50 + 15×60) | **Bs 1.650** |
+| Bueno | 40 (15×50 + 20×60 + 5×70) | **Bs 2.300** |
+| Lleno | 50 (15×50 + 20×60 + 15×70) | **Bs 3.000** |
 
-Supuestos: el crédito de la auditoría es **lo que cada persona pagó** (Bs 50, 60 o 70); acá se usa Bs 60 como promedio. Las auditorías salen del 10-15 % de los asistentes; cada escenario es una **suposición para ordenar el trabajo**, no una predicción. El valor de este lanzamiento es **la lista de contactos recientes** (la que convierte 7 veces más que una vieja), más que el dinero del prepago.
+Cifras recalculadas el 17-oct (ronda 2) llenando los escalones en orden; antes mezclaban escalones y sumaban la revisión descartada y auditorías 1 a 1 (**NO VIGENTE**: precios de Onia solo de `lib/pricing.ts`, `lib/subscription-plans.ts` y `ONIA_CATALOGO_DE_VENTA.md`); por eso salieron las columnas «Revisión» y «Auditorías» y las filas con Instalación Starter, y el «Bs 2.620» (era 3.040 menos la revisión descartada: ya no existe). Cada escenario es una **suposición para ordenar el trabajo**, no una predicción. El valor de este lanzamiento es **la lista de contactos recientes** (la que convierte 7 veces más que una vieja), más que el dinero del prepago.
 
 ## 3. El funnel de punta a punta (Instagram → pago)
 
@@ -70,7 +70,7 @@ Supuestos: el crédito de la auditoría es **lo que cada persona pagó** (Bs 50,
 | 4 | **Respuesta con QR** | Sergio Urcullo | Plantilla A: 2 preguntas (negocio y tarea que repite) + precio vigente + QR + «el QR aparece a nombre de {titular}» |
 | 5 | **Pago** | La persona | QR del BCP; manda el comprobante por el mismo chat |
 | 6 | **Verificación** | Sergio Urcullo | Mira el movimiento en la app del BCP. Una fila en el registro (`sales-kit/SEGUIMIENTO-LEADS.md`: fecha, origen, rubro, monto, escalón) |
-| 7 | **Confirmación** | Sergio Urcullo | Plantilla B: constancia escrita (fecha, hora, qué incluye, aviso de no devolución), link de Meet y pre-trabajo de 3 preguntas |
+| 7 | **Confirmación** | Sergio Urcullo | Plantilla B: constancia escrita (fecha, hora, qué incluye, aviso de no devolución, «el link de Meet te llega el viernes 30») y pre-trabajo de 3 preguntas |
 | 8 | **Recordatorios** | Sergio Urcullo | Jue 29, vie 30 y sáb 31 a las 8:00 y a las 9:45 (secuencia en §5) |
 | 9 | **Después** | Sergio Urcullo | 48 h: Gracias y encuesta de 3 preguntas |
 
@@ -107,7 +107,7 @@ Se anotan por WhatsApp escribiendo «CLASE». Quien se anota queda en la **lista
 ## 5. Mensajes (voseo; cada uno con el OK de Sergio Urcullo; nada se manda desde la nube)
 
 - **A · Respuesta al botón:** «Hola, soy Sergio Urcullo. Gracias por escribir. El taller es el sábado 31 a las 10:00 (La Paz), 90 minutos por Meet. Ahora el cupo cuesta Bs {50|60|70} ({n} lugares a ese precio). Vale el precio del momento en que se acredita el pago. Antes de mandarte el QR, contame: ¿qué negocio tenés y qué tarea repetís todas las semanas? El QR aparece a nombre de **{titular}**.»
-- **B · Confirmación (constancia escrita):** «Recibido: tu cupo está confirmado. Taller "Auditá tu negocio con IA", sábado 31 de octubre, 10:00 (La Paz), 90 min por Meet: {link}. Incluye: tu lista de tareas repetidas, tu prioridad y tu primer paso, hechos en vivo. Sin devolución una vez confirmado el cupo (solo si el taller no se dicta). Antes del sábado mandame: 1) qué vendés y cuántas personas trabajan, 2) tus 5 tareas más repetidas, 3) cuántas horas por semana te toma cada una.»
+- **B · Confirmación (constancia escrita):** «Recibido: tu cupo está confirmado. Taller "Auditá tu negocio con IA", sábado 31 de octubre, 10:00 (La Paz), 90 min por Meet. El link de Meet te llega el viernes 30. Incluye: tu lista de tareas repetidas, tu prioridad y tu primer paso, hechos en vivo. Sin devolución una vez confirmado el cupo (solo si el taller no se dicta). Antes del sábado mandame: 1) qué vendés y cuántas personas trabajan, 2) tus 5 tareas más repetidas, 3) cuántas horas por semana te toma cada una.»
 - **C · Seguimiento a la lista de interés (1 por vez, solo a quien pidió la clase):** día de la inscripción (confirmación + link); día siguiente (un dato útil: la cuenta de a un paso, en 3 líneas); 24 h antes de la clase (recordatorio); 1 h antes de la clase (link); al terminar (el aviso con el escalón y los cupos reales).
 - **D · Si no paga en 24 h:** una sola vez, «¿Pudiste ver el QR? El cupo se confirma cuando se acredita el pago.»
 - **E · Después del taller — NO VIGENTE: precio Bs 350 sin aprobar y vende horas de Sergio (ver `TALLER_31_OCT.md`):** «Gracias por venir. Si querés que revisemos tu caso uno a uno, la auditoría de 45 minutos cuesta Bs 350; como ya pagaste Bs {monto}, te queda en Bs {350-monto}. Te dejo un informe de una página con tus 3 prioridades. Vale hasta el jueves 5 de noviembre.»
@@ -129,7 +129,7 @@ Se anotan por WhatsApp escribiendo «CLASE». Quien se anota queda en la **lista
 **Sin pauta paga:** gastar en Meta Ads exige el OK específico de Sergio Urcullo.
 
 ## 8. Qué cambia en lo ya hecho (y qué no)
-- Los **2 carruseles** (`carousels/briefs/marca-personal/sergio-workshop-*-20261016.json`) hablan de «sáb 24» y «cupo 12»: **ya re-renderizados el 17-oct** con «Sáb 31 de octubre · 10:00», «Cupo 50» y 90 minutos, y dicen «lista de tareas repetidas». No dicen el precio (va en la página). **Pendiente del visto bueno de Sergio Urcullo** antes de subir.
+- Los **2 carruseles** (`carousels/briefs/marca-personal/sergio-workshop-*-20261016.json`) hablan de «sáb 24» y «cupo 12»: **ya re-renderizados el 17-oct** con «Sáb 31 de octubre · 10:00», «Cupo 50» y 90 minutos, y dicen «lista de tareas repetidas». Dicen «Desde Bs 50 · 50 cupos» solo en la lámina final del carrusel 2 (lámina 6); la escalera completa vive en la página (regla de `TALLER_31_OCT.md`). **Pendiente del visto bueno de Sergio Urcullo** antes de subir.
 - `docs/comunidad/COMUNIDAD_WHATSAPP_ESTRUCTURA.md`: **actualizado el 17-oct:** el aviso dice sáb 31, cupo 50 y los 3 escalones. El grupo temporal «Workshop» sigue siendo con ≥ 6 pagos y el OK de Sergio Urcullo.
 - El evento de cal.com `/auditoria` (auditorías 1 a 1) y el texto de la página: siguen sin existir.
 
@@ -173,7 +173,7 @@ Precio aprobado por Sergio Urcullo el 17-oct: escalera Bs 50 / 60 / 70 por cupo,
 > - Últimos 15: Bs 70
 > Cupos restantes de cada escalón: se actualizan a mano (número real, nunca un reloj).
 >
-> **Cómo reservar:** escribime por WhatsApp. Te mando el QR del BCP; cuando se acredita tu pago, recibís la confirmación con la fecha, la hora y el link.
+> **Cómo reservar:** escribime por WhatsApp. Te mando el QR del BCP; cuando se acredita tu pago, recibís la confirmación escrita con la fecha y la hora; el link de Meet te llega el viernes 30.
 >
 > **Importante:** una vez confirmado tu cupo no hay devolución. Solo si el taller no se dicta (menos de 6 pagos acreditados al jueves 29 a las 20:00, o por una causa de mi lado), te devuelvo el pago completo.
 > **Cierre de inscripciones:** jueves 29 de octubre, 20:00.
