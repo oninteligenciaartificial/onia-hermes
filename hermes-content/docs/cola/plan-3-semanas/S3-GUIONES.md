@@ -232,7 +232,7 @@ Si todavía no usás Claude Code, en mi web está la guía para empezar.
 
 ### D16-C · YouTube · Generar con IA sin fundirte: el costo antes de crear
 **Fórmula:** F7 Receta en N pasos con el paso crítico marcado · **Pilar:** 4 Contenido con IA · **Destino:** comunidad de WhatsApp
-**Evidencia:** costos cotizados por CLI el 29-sep (`text2image_soul_v2` 0,12 · `seedream_v5_lite` 1 · `nano_banana_flash` 1,5 · `gpt_image_2` 6,5) · `.claude/skills/higgsfield-generate/SKILL.md` UX rule 5 · `CLAUDE.md` Higgsfield · `ONIA_MARCA_PERSONAL_HIGGSFIELD_RECETAS.md` (0,12 cotizado = 0,12 debitado; `grace_daily_limit_reached` 02-sep) · `CONOCIMIENTO_DE_LOS_LOOPS.md` §7 · higgsfield.ai help center «What is the Higgsfield API» y changelog 16-sep · memoria `higgsfield-cobro-anual-no-deseado.md` · pantalla: drop D7
+**Evidencia:** costos cotizados por CLI el 29-sep (`text2image_soul_v2` 0,12 · `seedream_v5_lite` 1 · `nano_banana_flash` 1,5 · `gpt_image_2` 6,5) · `.claude/skills/higgsfield-generate/SKILL.md` UX rule 5 · `CLAUDE.md` Higgsfield · `ONIA_MARCA_PERSONAL_HIGGSFIELD_RECETAS.md` (0,12 cotizado = 0,12 debitado; `grace_daily_limit_reached` 02-sep) · `hermes-content/docs/historial/orquestacion-vieja/CONOCIMIENTO_DE_LOS_LOOPS.md` §7 · higgsfield.ai help center «What is the Higgsfield API» y changelog 16-sep · memoria `higgsfield-cobro-anual-no-deseado.md` · pantalla: drop D7
 
 #### Resultado
 
@@ -560,7 +560,7 @@ Lo tenés completo en la comunidad: el link está en mi web.
 
 ### D20-B · Vertical · Un loop sin cola inventa trabajo
 **Fórmula:** F5 Abrí la fuente: número primero → lectura → consecuencia práctica · **Pilar:** 2 Agentes y loops · **Destino:** web `sergiourcullo.vercel.app/claude-code`
-**Evidencia:** `hermes-content/docs/COMO_SE_ARMA_UN_LOOP.md` (25 %–46 % inexistente; once párrafos «sigue igual»; seis consumidores y cero productores; el cron que no existía)
+**Evidencia:** `hermes-content/docs/historial/orquestacion-vieja/COMO_SE_ARMA_UN_LOOP.md` (25 %–46 % inexistente; once párrafos «sigue igual»; seis consumidores y cero productores; el cron que no existía)
 
 Entre el veinticinco y el cuarenta y seis por ciento de las tareas que mis loops tenían pendientes no existían.
 
@@ -576,7 +576,7 @@ En mi web, la guía de Claude Code muestra cómo dejarlo trabajando por horario.
 
 ### D20-C · Vertical · «Ya está hecho»: tres niveles, y solo uno vale
 **Fórmula:** F4 Misma tarea, varios niveles · **Pilar:** 6 Errores y lecciones · **Destino:** comunidad de WhatsApp
-**Evidencia:** `CLAUDE.md` «Nada a medias» (2026-08-01: capa multi-rubro construida y apagada) · `hermes-content/docs/CONOCIMIENTO_DE_LOS_LOOPS.md` §2 (mergeado · construido · vivo; build cerrado con 8 commits detrás)
+**Evidencia:** `CLAUDE.md` «Nada a medias» (2026-08-01: capa multi-rubro construida y apagada) · `hermes-content/docs/historial/orquestacion-vieja/CONOCIMIENTO_DE_LOS_LOOPS.md` §2 (mergeado · construido · vivo; build cerrado con 8 commits detrás)
 
 «Ya está hecho». Hay tres niveles de hecho, y solo uno vale plata.
 

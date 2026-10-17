@@ -7,7 +7,7 @@
 
 **Este archivo dice QUIÉN hace qué.** La lista de qué loops deben existir y con qué horario vive
 en [`loops.md`](loops.md); la doctrina de cómo se arma uno, en
-[`COMO_SE_ARMA_UN_LOOP.md`](../COMO_SE_ARMA_UN_LOOP.md). Un tema, un lugar.
+[`COMO_SE_ARMA_UN_LOOP.md`](../historial/orquestacion-vieja/COMO_SE_ARMA_UN_LOOP.md). Un tema, un lugar.
 
 ---
 

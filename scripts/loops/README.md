@@ -46,7 +46,7 @@ sólo explica cómo se instala y se apaga lo de acá.
 Integradas en `main` (`063e5e54`) y aplicadas al VPS el 21-sep a las 20:40 UTC,
 con aprobación de Sergio, respaldo privado y rollback. Solo tres scripts; sin
 reinicios, cambios de cron ni reactivar loops. El
-[handoff](../../hermes-content/docs/handoff/infra-cerebro-loops.md) registra hashes,
+[handoff](../../hermes-content/docs/historial/orquestacion-vieja/infra-cerebro-loops.md) registra hashes,
 respaldo y evidencia. La entrega real de alertas no se certifica con mocks.
 
 - `consolidar-memoria.sh` limita sus incorporaciones a `MEMORY.md` a **65.536 bytes**

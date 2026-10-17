@@ -74,7 +74,7 @@ description: Invocar ANTES de tocar a Hermes (el asistente de Sergio Urcullo por
 - **Pausar un trabajo:** `hermes cron pause <id>` deja `enabled=False`, `state=paused` y `paused_at`
   en `jobs.json`. `estado_job()` de `aplicar.sh` lo lee así.
 - **Hermes NO programa.** Es un modelo barato: ya inventó una agenda entera
-  (`handoff/infra-cerebro-loops.md` §5). El trabajo real va a Claude en la nube (skill
+  (`historial/orquestacion-vieja/infra-cerebro-loops.md` §5). El trabajo real va a Claude en la nube (skill
   `pedir-a-claude`). Hermes no publica, no gasta y no le escribe a nadie.
 - **El «sí» de un pedido es un CÓDIGO que le llega a él directo por la aduana**, no por la salida
   que lee Hermes (revisión de la madre, 1-oct: con un sí que solo pasaba por Hermes, vista previa y

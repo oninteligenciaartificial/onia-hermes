@@ -673,7 +673,7 @@ Este documento complementa y manda para recuperacion de capital operativo:
 - `FINANCE_LOG_2026.md`
 - `hermes-content/docs/ONIA_INTERNAL_CAPITAL_ALLOCATION_2026.md`
 - `hermes-content/docs/ONIA_NUVIA_ACCOUNTING_MODEL_2026.md`
-- `hermes-content/docs/ONIA_COMPANY_OPERATING_MODEL_2026.md`
+- `hermes-content/docs/historial/orquestacion-vieja/ONIA_COMPANY_OPERATING_MODEL_2026.md`
 - `hermes-content/docs/ONIA_SUSTAINABILITY_DASHBOARD_SPEC_2026.md`
 - `hermes-content/docs/ONIA_ACUERDO_ARTHUR_FUENTES_60_DIAS_2026.md`
 

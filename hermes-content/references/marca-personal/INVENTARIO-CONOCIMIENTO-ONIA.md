@@ -111,7 +111,7 @@ Leyenda: **Nivel** P = principiante, I = intermedio, A = avanzado. **Formato** V
   redactar; no lanzar 3+ subagentes del modelo caro en paralelo; prompts estables para
   aprovechar el cache.
 - **Evidencia:** `hermes-content/docs/ONIA_MODELOS_CLAUDE_Y_CUOTA.md` (límite semanal agotado
-  el 2026-09-10, pool compartido entre web, Code y loops); `CONOCIMIENTO_DE_LOS_LOOPS.md` §1
+  el 2026-09-10, pool compartido entre web, Code y loops); `hermes-content/docs/historial/orquestacion-vieja/CONOCIMIENTO_DE_LOS_LOOPS.md` §1
   (04-sep: 13 de 15 loops en el modelo caro, 3 horarios se llevaban el 58 % de la cuota);
   `AI_MODEL_ROUTING_2026.md` (misma idea aplicada a Codex).
 - **Nivel:** I - **Formato:** YT (ya guionado: YT Opus vs Sonnet, V1, V4) + V60 sobre la cuota -
@@ -125,21 +125,21 @@ Leyenda: **Nivel** P = principiante, I = intermedio, A = avanzado. **Formato** V
 ### A-01 - Cómo se arma un loop: un corredor para todos, un prompt por carril
 - **Replica:** separar el script (lock, log, timeout, aviso) del prompt (qué hace y qué tiene
   prohibido); un loop nuevo = un `.md` + una línea de cron.
-- **Evidencia:** `hermes-content/docs/COMO_SE_ARMA_UN_LOOP.md`; `scripts/loops/onia-loop.sh`.
+- **Evidencia:** `hermes-content/docs/historial/orquestacion-vieja/COMO_SE_ARMA_UN_LOOP.md`; `scripts/loops/onia-loop.sh`.
 - **Nivel:** A - **Formato:** HL - **Riesgo:** Medio: el doc cita rutas del servidor; mostrar
   el diagrama, no la terminal del VPS.
 
 ### A-02 - Las tres barandas que casi nadie pone: flock, cd verificado, aviso al morir
 - **Replica:** `flock -n` para que una vuelta no se pise con la anterior; verificar el `cd`
   antes de trabajar; avisar una vez cada 6 h cuando falla.
-- **Evidencia:** `COMO_SE_ARMA_UN_LOOP.md` (el guardián pasó semanas "diagnosticando" desde el
+- **Evidencia:** `hermes-content/docs/historial/orquestacion-vieja/COMO_SE_ARMA_UN_LOOP.md` (el guardián pasó semanas "diagnosticando" desde el
   directorio equivocado); `scripts/loops/onia-loop.sh` (bloque flock).
 - **Nivel:** A - **Formato:** V60 - **Riesgo:** Bajo.
 
 ### A-03 - Claude Code en un servidor, sin API key: las trampas del modo headless
 - **Replica:** correr `claude -p` con la suscripción; `unset ANTHROPIC_API_KEY`; tools en una
   sola cadena; prompt por stdin (`< prompt.md`).
-- **Evidencia:** `COMO_SE_ARMA_UN_LOOP.md` "Las cinco trampas"; `hermes-content/deploy/vps-ops/claude-guardia.sh`.
+- **Evidencia:** `hermes-content/docs/historial/orquestacion-vieja/COMO_SE_ARMA_UN_LOOP.md` "Las cinco trampas"; `hermes-content/deploy/vps-ops/claude-guardia.sh`.
 - **Nivel:** A - **Formato:** HL - **Riesgo:** Medio: no mostrar archivos de credenciales ni
   el `.env`; contar la trampa con un ejemplo vacío.
 
@@ -187,7 +187,7 @@ Leyenda: **Nivel** P = principiante, I = intermedio, A = avanzado. **Formato** V
 - **Replica:** cada agente deja su aprendizaje en una bandeja; un solo consolidador con cerrojo
   lo mete en la memoria; tope por bytes y archivo para lo que no cabe.
 - **Evidencia:** `scripts/loops/aprender.sh`; `scripts/loops/consolidar-memoria.sh`;
-  `CONOCIMIENTO_DE_LOS_LOOPS.md` §1 (corregido 2026-09-26: 278 lecciones desviadas sin aviso
+  `hermes-content/docs/historial/orquestacion-vieja/CONOCIMIENTO_DE_LOS_LOOPS.md` §1 (corregido 2026-09-26: 278 lecciones desviadas sin aviso
   porque el aviso medía la variable equivocada).
 - **Nivel:** A - **Formato:** HL - **Riesgo:** Bajo.
 
@@ -200,7 +200,7 @@ Leyenda: **Nivel** P = principiante, I = intermedio, A = avanzado. **Formato** V
 ### A-11 - Un loop sin cola inventa trabajo
 - **Replica:** antes de automatizar un carril, tener una cola de ítems reales y verificables;
   medir contra producción al arrancar cada vuelta.
-- **Evidencia:** `COMO_SE_ARMA_UN_LOOP.md` (entre 25 % y 46 % de lo declarado pendiente no
+- **Evidencia:** `hermes-content/docs/historial/orquestacion-vieja/COMO_SE_ARMA_UN_LOOP.md` (entre 25 % y 46 % de lo declarado pendiente no
   existía); memoria `loops-objetivo-medible-leer-lo-real.md` (2026-09-03).
 - **Nivel:** I - **Formato:** V60 - **Riesgo:** Bajo.
 
@@ -513,7 +513,7 @@ Leyenda: **Nivel** P = principiante, I = intermedio, A = avanzado. **Formato** V
 - **Replica:** "hecho" = encendido en producción y verificado ahí; prohibido reportar como hecho
   lo que está detrás de un flag apagado.
 - **Evidencia:** `CLAUDE.md` "Nada a medias" (2026-08-01: capa multi-rubro construida y
-  apagada); `hermes-content/docs/CONOCIMIENTO_DE_LOS_LOOPS.md` §2 (las tres medidas: mergeado,
+  apagada); `hermes-content/docs/historial/orquestacion-vieja/CONOCIMIENTO_DE_LOS_LOOPS.md` §2 (las tres medidas: mergeado,
   construido, vivo).
 - **Nivel:** P - **Formato:** V60 - **Riesgo:** Bajo.
 

@@ -80,7 +80,7 @@ días abierta y su conversación costó ~777 M de tokens. **La madre nueva arran
 > 1. Ronda con `CronCreate` cada 20 min (`7,27,47 * * * *`, §3 de `equipo-de-agentes`) + medir `PoolPagedBytes` (avisar si
 >    pasa de 3 GB). No cierres Chrome ni WhatsApp. Los latidos por hora de la nube ya existen: no los recrees.
 > 2. `ListAgents`. Juntá en UNA lista lo que cada sesión espera de Sergio Urcullo y dáselo una sola vez.
-> 3. Codex a trabajar YA: 2 ejecutores Platform (Sol medium) + 1 Hermes (Sol/Luna) + 1 revisor, desde `codex-tareas/`.
+> 3. Codex a trabajar YA: 2 ejecutores Platform (Sol medium) + 1 Hermes (Sol/Luna) + 1 revisor, desde `hermes-content/docs/historial/orquestacion-vieja/codex-tareas/`.
 > 4. A Sergio Urcullo: solo PUBLICADO y lo que necesita de él, en 3 bloques.
 
 ## 🔥 TERMINAR TODO (10-oct, pedido de Sergio Urcullo)
@@ -116,7 +116,7 @@ primera semana. El cuello de botella son los sí de Sergio Urcullo y los merges 
 6. **Vender** (Sergio Urcullo + Ventas): 7 leads esperando + 12 mensajes de prospección + plantillas A/B y seguimiento
    D3/7/14/30. Solo después de la tabla en verde, y cada envío con su OK.
 7. **Codex a fondo:** tareas cerradas de `onia-1.0-nube.md` §7 (costos de Meta en `pricing.ts`, `/book` en usted ~35
-   textos) y lo que deje cada carril en `codex-tareas/`.
+   textos) y lo que deje cada carril en `hermes-content/docs/historial/orquestacion-vieja/codex-tareas/`.
 
 **Lo de la PC (solo la madre, con Chrome):** capturas de la Biblioteca de anuncios de Meta, evento de cal.com, plantillas
 en WhatsApp Manager (enviar a terceros = OK de Sergio Urcullo), mail `+qapago`, bucket R2 y snapshot de Hostinger, bio de
@@ -314,7 +314,7 @@ Lo de abajo (§0-§7) sigue valiendo; esto es lo nuevo.
 - Competencia: **no abrir sesiones** (mapa de 28 + fichas; faltan clientes, no estudio).
 
 **Lo que estaba en vuelo (ya en `main`; la madre de la nube se puede archivar):**
-1. ✅ Hecho (onia-hermes#141): cola de Codex en `docs/handoff/codex-relevo.md` + 5 prompts en `docs/handoff/codex-tareas/`
+1. ✅ Hecho (onia-hermes#141): cola de Codex en `docs/historial/orquestacion-vieja/codex-relevo.md` + 5 prompts en `docs/historial/orquestacion-vieja/codex-tareas/`
    (C15, C13, C14, C11a, C11b), con el estado medido de los 15 puntos; la lista completa de pendientes de Sergio Urcullo
    está en §6b. Plataforma ya sabe qué archivos no toca. Falta que la madre v2 la lance (su handoff, tarea 2).
 2. ✅ Hecho: el TikTok `https://vt.tiktok.com/ZSbm3Scje/` (mandado el 3-oct, nunca analizado) está en
@@ -330,7 +330,7 @@ Lo de abajo (§0-§7) sigue valiendo; esto es lo nuevo.
 - **Lucía:** bloqueada (cuenta demo para las pantallas reales; pide VPS).
 - **Hermes:** abrió el PR #138 con 2 revisores. Verificar qué es: su handoff dice que nada avanza sin el sí de Sergio Urcullo.
 - **Madre v2 nueva:** `session_01CYBTxzz2ti5WAStSfSAruE` (local, «Madre v2 de Onia: revisión de PRs»), esperando tarea.
-  Sus tareas están en `madre-v2-revision.md` § «VIGENTE — 5-oct». Desde la PC se le escribe con `SendMessage`.
+  Sus tareas están en `hermes-content/docs/historial/orquestacion-vieja/madre-v2-revision.md` § «VIGENTE — 5-oct». Desde la PC se le escribe con `SendMessage`.
 
 **Intentos fallidos desde la nube (no repetir):**
 - `list_events` / `send_message` a una sesión local: `elevated_session_untrusted_device`; a una local cerrada: `session_inactive`.
@@ -392,13 +392,13 @@ Techo para conseguir clientes: **Bs 1.400** (Meta 750). Solo dental hasta tener 
 | **Plantillas A y B para los 6 leads de agosto** | Texto aprobado («está bueno»). Desde la nube el control de permisos frenó crearlas porque la orden vino de la madre. El seguimiento ya está (`sales-kit/SEGUIMIENTO-LEADS.md`). | Sergio Urcullo las crea en WhatsApp Manager o se lo pide directo a Plataforma en esa sesión. Después: «salen». |
 | **Meta / pauta** | ONIA Ads sigue SIN tarjeta: a Sergio Urcullo le falta el «control total» de la cuenta publicitaria («Unable to update permissions»). El número del bot **+591 75414930** hay que vincularlo a la página «Onia» («Conectar otro número»; no borrar su celular 78491375). | Configuración de la empresa → Usuarios → Personas → él → control total de ONIA Ads → Métodos de pago → Visa 4028. Verificar con `ads_get_ad_accounts` (`has_payment_method`). La pauta va desde el 16-oct, con reglas de corte (plan §3). |
 | **Firma de la respuesta del bot a la pauta** | Versión de USTED en el chat del 3-oct; el commit `363dcf10` está en main sin publicar. | Pedir «firmo»; Ventas actualiza el knowledge y lo publica. |
-| **Grabación** | Sergio Urcullo grababa el 3/4-oct con PLAN-GRABACION. | Cuando mande los brutos: T1 de Codex (`docs/handoff/codex-relevo.md`) o Marca → tabla de cortes + preview 360p ANTES de cortar. |
+| **Grabación** | Sergio Urcullo grababa el 3/4-oct con PLAN-GRABACION. | Cuando mande los brutos: T1 de Codex (`docs/historial/orquestacion-vieja/codex-relevo.md`) o Marca → tabla de cortes + preview 360p ANTES de cortar. |
 | **Hermes** | #94 en main y apagado. Propuesta: que el autosync deje de hacer fast-forward de main (variable para el integrador). Toca CLAUDE.md. | Sí o no de Sergio Urcullo. Si es sí, los 3 MEDIUM + el cambio del autosync, con revisión fuerte. |
-| **Codex** | CLI `0.139` viejo: `gpt-6-*` falla y se usa `-m gpt-5.5`. | Preguntar si se actualiza el CLI (`npm i -g @openai/codex`, pide OK). Cola: `docs/handoff/codex-relevo.md`. |
+| **Codex** | CLI `0.139` viejo: `gpt-6-*` falla y se usa `-m gpt-5.5`. | Preguntar si se actualiza el CLI (`npm i -g @openai/codex`, pide OK). Cola: `docs/historial/orquestacion-vieja/codex-relevo.md`. |
 
 ## 4. Archivos de la madre
 `.claude/skills/onia-sesion-madre/SKILL.md` (tokens y delegación a Codex) · `.claude/skills/ver-videos/SKILL.md` (regla
-mensaje/tema/edición) · `AGENTS.md` (skills para Codex) · `docs/handoff/codex-relevo.md` · este archivo.
+mensaje/tema/edición) · `AGENTS.md` (skills para Codex) · `docs/historial/orquestacion-vieja/codex-relevo.md` · este archivo.
 
 ## 5. Intentos fallidos (y su causa)
 - **Aviso por Telegram programado vía Hermes (3-oct):** no salió. La nube no entra al VPS si la orden viene de otra

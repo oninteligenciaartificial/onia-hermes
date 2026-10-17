@@ -102,7 +102,7 @@ A medida, ~USD 150-1.000, con poca evidencia (B). Región: proyectos USD 1.000-5
 
 ## 5. App móvil — una app «Onia», no una por cliente
 
-**Qué existe.** *«Instalá Onia»* (la PWA) está en producción **según doc**, sin probar en un iPhone real (`handoff/codex-continuar-1.0.md`). **No hay app de tienda:** ni Capacitor, ni Expo, ni TestFlight en el repo.
+**Qué existe.** *«Instalá Onia»* (la PWA) está en producción **según doc**, sin probar en un iPhone real (`historial/orquestacion-vieja/codex-continuar-1.0.md`). **No hay app de tienda:** ni Capacitor, ni Expo, ni TestFlight en el repo.
 La decisión D7 del producto era *«App Store solo si la piden»*.
 
 **Quién la ofrece.**

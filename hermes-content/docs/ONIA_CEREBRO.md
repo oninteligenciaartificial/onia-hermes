@@ -93,14 +93,14 @@ que todavía lo hacen están listados, con su plan, en `handoff/hermes-jarvis.md
   enrutador (inventario del 29-sep).
 - Y cortó el canal al revés: el aviso de **5 prospectos reales esperando 23-28 días** —uno
   de ellos una clínica evaluando un sistema, justo el cliente de la etapa vigente— se volvió
-  una tarea que nadie leía (`handoff/infra-cerebro-loops.md`). **Callar no puede ser el
+  una tarea que nadie leía (`historial/orquestacion-vieja/infra-cerebro-loops.md`). **Callar no puede ser el
   precio de no molestar**: por eso el prospecto es la interrupción número uno.
 
 ## La superficie: Glance, no HTML propio
 
 > ⚠️ **Corregido el 2026-09-29 — esta sección ya no es vigente.** El panel (Glance y los
 > dos anteriores) se **apagó** el 17-sep por decisión de Sergio Urcullo: *"mucha
-> información innecesaria"*; el canal es **solo Telegram** (`handoff/infra-cerebro-loops.md`,
+> información innecesaria"*; el canal es **solo Telegram** (`historial/orquestacion-vieja/infra-cerebro-loops.md`,
 > §2 y §5). Acá seguía escrito como decisión en curso, y el paso 1 del roadmap mandaba a
 > construirlo: una sesión nueva lo habría levantado por tercera vez. Se conserva como
 > historia; el contenedor `onia-glance` está parado y nada se borró.

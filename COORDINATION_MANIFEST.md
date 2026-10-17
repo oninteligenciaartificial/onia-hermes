@@ -58,7 +58,7 @@ Dueña de Hermes y del cerebro: qué le llega a Sergio Urcullo por Telegram, el 
 |---|---|---|
 | **Marca personal: comunidad y contenido** (`claude/marca-personal-contenido-ae658c`) | guiones, carruseles, comunidad, plan de 3 semanas | El resumen de las 06:30 lista «Para grabar hoy» leyendo `cola/plan-3-semanas/S*-GUIONES.md`. Acepta la fecha del `## ` en los dos formatos que ya conviven (`Mié 30-sep` / `Miércoles 14-oct` y `Miércoles 7 de octubre`) y cada pieza como `### DNN-X · Formato · Título`. Un tercer formato o un archivo nuevo = avisar acá (medido el 29-sep: con un solo formato, la semana 2 salía vacía sin error). **Los bloques de ONIA del calendario de Sergio Urcullo del 3 al 10-oct los llenó la sesión de control con estos títulos**: si cambia el plan de esos días, avisar acá para re-llenarlos. |
 | **Onia platform development handoff — sesión principal** (nube, entorno «Onia»; ramas `wip/v1-*`) | onia-platform, SIAT, sales-kit, web pública (código). Opera el VPS con la llave revocable `claude-cloud-20260930`: **infra es de un dueño a la vez**, así que lo que control corra en el VPS fuera de su workflow se pide acá antes | El resumen cuenta prospectos por la tarea `[leads-esperando]` del tablero (`scripts/vigia_sin_respuesta.mjs`). Si el aviso de solicitudes de acceso (`lib/aviso-acceso.ts`) cambia, avisar acá: tiene que pasar por la aduana. La plataforma **no manda Telegram directo** salvo el pedido de acceso heredado: su aviso propio de «alta nueva» quedó detrás de `ONIA_AVISO_ALTA_DIRECTO=1`, apagado (commit `59f5c368`, 30-sep). |
-| **Infra (Codex)** — `handoff/infra-cerebro-loops.md` | VPS, n8n, loops, backups | ⚠️ Desde el 29-sep la **entrega a Sergio Urcullo** (Telegram, `onia-tg.sh`, resumen, cierre, su calendario) es de la sesión de control. El resto del VPS sigue siendo de infra. **En el crontab, las líneas marcadas `#jarvis` son de la sesión de control**: no editarlas a mano (`revertir` las deshace por marca). Los 12 flujos de n8n que apaga `hermes-jarvis/aplicar.sh` y el flujo nuevo «ONIA - Agenda hoy (Jarvis)» también. |
+| **Infra (Codex)** — `historial/orquestacion-vieja/infra-cerebro-loops.md` | VPS, n8n, loops, backups | ⚠️ Desde el 29-sep la **entrega a Sergio Urcullo** (Telegram, `onia-tg.sh`, resumen, cierre, su calendario) es de la sesión de control. El resto del VPS sigue siendo de infra. **En el crontab, las líneas marcadas `#jarvis` son de la sesión de control**: no editarlas a mano (`revertir` las deshace por marca). Los 12 flujos de n8n que apaga `hermes-jarvis/aplicar.sh` y el flujo nuevo «ONIA - Agenda hoy (Jarvis)» también. |
 | **Lucía v4 y Higgsfield** (`claude/lucia-v4-onia-higgsfield`, entorno `onia-higgsfield`; antes `claude/confident-ramanujan-j79bkq`) — `handoff/higgsfield-lucia.md` | identidad de Lucía (`hermes-content/references/modelos/lucia/**`), política Higgsfield (`hermes-content/docs/HIGGSFIELD_VIDEO_SYSTEM.md`) | Estado de Lucía y de las identidades de Higgsfield: **solo** `LUCIA-HIGGSFIELD-IDENTITY.json`. Desde el 29-sep se retiran las identidades viejas de Higgsfield (incluidos los 5 Souls de Sergio Urcullo), **salvo las fuentes de la cara original de Lucía**, que se conservan (`lucia_original_sources_keep` en el manifest; la cara es 100% IA, corregido el mismo día). Los créditos de Higgsfield son **una sola bolsa** para todas las sesiones (533,87 el 30-sep 02:30 UTC): este carril gasta con tope aprobado y registra cada imagen en `v4/PROCEDENCIA.jsonl`. En la nube, este carril trabaja en el entorno `onia-higgsfield`. |
 | **Ventas y pauta Onia Platform** (antes «Análisis de mercado» / «Mercado»; en la nube, `session_01BnctfaNRsm3ogJ46A7B5P5`; lo que exige la PC lo hace la madre; rama `claude/nice-lamport-5og9lv`) — `handoff/mercado-y-pauta.md` | A quién y por dónde se le vende Onia Platform: foco de rubros, tamaño de mercado, **cómo consigue clientes la competencia** (Biblioteca de Anuncios de Meta, canales, mensajes), **la pauta de Meta Ads de Onia Platform** (estructura, público, presupuesto, brief de creativos; nada se crea en la cuenta ni se gasta sin el OK de Sergio Urcullo), radar de funciones y tendencias, y productos nuevos pasados por el test de tres preguntas. **Desde el 30-sep, de noche (Sergio Urcullo), es dueña de conseguir clínicas:** la lista de las 10 para el contacto 1:1, el registro de objeciones de las demos, **Meta Ads de punta a punta con las piezas del anuncio** (D1/D4) y @oniahq solo como la página que pauta. **No toca** código, web pública, precios, chatbot, VPS ni los carruseles de contenido de Marca personal: lo que necesite de ahí lo pide acá | Nada por ahora. Si el resumen llega a informar la pauta, leerá de `handoff/mercado-y-pauta.md`. |
 
@@ -398,7 +398,7 @@ Sergio Urcullo trasladó el carril de Claude a la tarea Codex de ONIA Platform.
 Integración aislada: rama `codex/infra-producto-integracion-20260921`, worktree
 `C:/dev/proyectos/onia-hermes-infra-integracion`, sobre `origin/main` (`90769552`).
 Alcance: `scripts/loops/{consolidar-memoria,parte-diario,vigia-loops-remotos}.sh`,
-sus pruebas, README y handoff `infra-cerebro-loops.md`. Un subagente revisó sin editar.
+sus pruebas, README y handoff `hermes-content/docs/historial/orquestacion-vieja/infra-cerebro-loops.md`. Un subagente revisó sin editar.
 Sergio aprobó integrar/pushear y aplicar SOLO esos tres scripts al VPS con respaldo
 y rollback; NO reinicios, cambios de cron, migraciones, mensajes de prueba ni loops.
 El worktree original y sus temporales se preservan. No se integran los otros commits
@@ -588,7 +588,7 @@ Canonical files:
 - `HERMES_VIDEO_LAB.md`
 - `HERMES_TELEGRAM_COMMAND_CENTER.md`
 - `HERMES_EXECUTION_PROTOCOL.md`
-- `hermes-content/docs/HERMES_CLOSED_EXECUTION_AND_CONTINUOUS_WORK_2026.md`
+- `hermes-content/docs/historial/orquestacion-vieja/HERMES_CLOSED_EXECUTION_AND_CONTINUOUS_WORK_2026.md`
 - `HERMES_DAILY_CRONS.md`
 - `HERMES_WEEKLY_OPERATING_SYSTEM.md`
 - `.github/workflows/onia-hygiene-daily.yml`
@@ -619,9 +619,9 @@ Canonical files:
 - `FINANCE_LOG_2026.md`
 - `ONIA_CONTEXT_INTAKE.md`
 - `hermes-content/docs/ONIA.md`
-- `hermes-content/docs/ORCHESTRATOR.md`
-- `hermes-content/docs/DASHBOARD.md`
-- `hermes-content/docs/OPERATIONS.md`
+- `hermes-content/docs/historial/orquestacion-vieja/ORCHESTRATOR.md`
+- `hermes-content/docs/historial/orquestacion-vieja/DASHBOARD.md`
+- `hermes-content/docs/historial/orquestacion-vieja/OPERATIONS.md`
 - `hermes-content/docs/CONTENT_WORKFLOW.md`
 - `hermes-content/docs/SECURITY.md`
 - `hermes-content/docs/VIDEO_LAB.md`
@@ -630,7 +630,7 @@ Canonical files:
 - `hermes-content/docs/STORY_REFERENCES.md`
 - `hermes-content/docs/STYLE_REFERENCES.md`
 - `hermes-content/docs/EXECUTION_PROTOCOL.md`
-- `hermes-content/docs/HERMES_CLOSED_EXECUTION_AND_CONTINUOUS_WORK_2026.md`
+- `hermes-content/docs/historial/orquestacion-vieja/HERMES_CLOSED_EXECUTION_AND_CONTINUOUS_WORK_2026.md`
 - `hermes-content/docs/DAILY_CRONS.md`
 - `hermes-content/docs/WEEKLY_OPERATING_SYSTEM.md`
 - `hermes-content/docs/N8N_CANONICAL.md`
@@ -687,7 +687,7 @@ Canonical files:
 - `hermes-content/docs/ONIA_CENTER_CODEX_INTEGRATION_RUNBOOK_2026.md`
 - `hermes-content/docs/ONIA_CENTER_AI_MODEL_ROUTING_2026.md`
 - `hermes-content/docs/ONIA_CENTER_DAILY_N8N_BRIEFING_RUNBOOK_2026.md`
-- `hermes-content/docs/ONIA_PROJECT_HYGIENE_AUTOMATION_2026.md`
+- `hermes-content/docs/historial/orquestacion-vieja/ONIA_PROJECT_HYGIENE_AUTOMATION_2026.md`
 - `hermes-content/docs/ONIA_N8N_TELEGRAM_CLEANUP_20260630.md`
 - `hermes-content/docs/ONIA_MEETING_INTELLIGENCE_SYSTEM_2026.md`
 - `hermes-content/docs/ONIA_7000_BOB_PRODUCTION_INFRA_INVESTMENT_PLAN_2026.md`
@@ -700,9 +700,9 @@ Canonical files:
 - `hermes-content/docs/ONIA_CAPITAL_RECOVERY_AND_ARTHUR_INVESTMENT_POLICY_2026.md`
 - `hermes-content/docs/BOLIVIAN_TR4_LOCAL_STATIC_AUDIT_20260624.md`
 - `hermes-content/docs/ONIA_SUSTAINABILITY_DASHBOARD_SPEC_2026.md`
-- `hermes-content/docs/ONIA_COMPANY_OPERATING_MODEL_2026.md`
+- `hermes-content/docs/historial/orquestacion-vieja/ONIA_COMPANY_OPERATING_MODEL_2026.md`
 - `hermes-content/docs/ONIA_CASH_ENGINE_SERVICE_CATALOG_2026.md`
-- `hermes-content/docs/HERMES_OS_CONTROL_CENTER_2026.md`
+- `hermes-content/docs/historial/orquestacion-vieja/HERMES_OS_CONTROL_CENTER_2026.md`
 - `hermes-content/docs/ONIA_PANEL_VENDEDORES_2026.md`
 - `hermes-content/deploy/selfhosted/`
 - `hermes-content/deploy/n8n/workflows/onia-center-daily-briefing.json`
@@ -828,9 +828,9 @@ Canonical files:
 - `hermes-content/skills/inteligencia-reuniones-onia.md`
 - `hermes-content/skills/marca-personal-sergio.md`
 - `hermes-content/skills/historias-sergio.md`
-- `hermes-content/skills/crons-diarios-hermes.md`
+- `hermes-content/docs/historial/orquestacion-vieja/crons-diarios-hermes.md`
 - `hermes-content/skills/sistema-semanal-hermes.md`
-- `hermes-content/skills/orquestacion-proyectos-onia.md`
+- `hermes-content/docs/historial/orquestacion-vieja/orquestacion-proyectos-onia.md`
 - `hermes-content/skills/radar-creativo-onia.md`
 - `hermes-content/skills/consultoria-onia.md`
 

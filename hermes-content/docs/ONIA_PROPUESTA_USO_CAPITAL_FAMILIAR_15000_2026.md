@@ -208,8 +208,8 @@ la bolsa de crecimiento y se vuelve a operacion minima + ventas.
 - `FINANCE_LOG_2026.md`
 - `hermes-content/docs/ONIA_INTERNAL_CAPITAL_ALLOCATION_2026.md`
 - `hermes-content/docs/ONIA_CASH_ENGINE_SERVICE_CATALOG_2026.md`
-- `hermes-content/docs/ONIA_COMPANY_OPERATING_MODEL_2026.md`
-- `hermes-content/docs/HERMES_OS_CONTROL_CENTER_2026.md`
+- `hermes-content/docs/historial/orquestacion-vieja/ONIA_COMPANY_OPERATING_MODEL_2026.md`
+- `hermes-content/docs/historial/orquestacion-vieja/HERMES_OS_CONTROL_CENTER_2026.md`
 
 ## Fuentes externas revisadas
 

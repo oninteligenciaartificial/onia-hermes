@@ -17,7 +17,7 @@ mandándolo `ONIA_CEREBRO.md` §«La regla de entrega»: esto lo usa, no lo camb
 ## 1. La idea en una línea
 
 **Hermes no programa: pasa el pedido.** Hermes es `gpt-5-mini`, un modelo barato que ya inventó una
-agenda entera (`handoff/infra-cerebro-loops.md` §5). Lo que necesita trabajo real se lo pasa a
+agenda entera (`historial/orquestacion-vieja/infra-cerebro-loops.md` §5). Lo que necesita trabajo real se lo pasa a
 **Claude Code en la nube**, que trabaja con las reglas de la casa. Siempre después de que Sergio
 Urcullo vio el pedido exacto y lo confirmó con un **código que le llega a él directo**, no a Hermes.
 

@@ -74,7 +74,7 @@ Aprobacion necesaria: (nada se publica sin OK de Sergio)
   `video-lab-higgsfield`.
 - Publicacion (con aprobacion): `instagram-publicacion`,
   `descripciones-sociales-onia`.
-- Orquestacion diaria: ver `ONIA_CONTENT_FACTORY_ORCHESTRATION_2026.md`.
+- Orquestacion diaria: ver `hermes-content/docs/historial/orquestacion-vieja/ONIA_CONTENT_FACTORY_ORCHESTRATION_2026.md`.
 - Automatizacion: workflow `onia-guiones-diarios.json`. AUTONOMO, nada local:
   cron -> LLM gestionado (credencial n8n) con este prompt inline -> Telegram para
   aprobar. No depende de ONIA Center ni de SearXNG local.

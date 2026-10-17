@@ -9,7 +9,7 @@ aportan capital, pagados 100% por resultado, en prueba de 60 dias por fases.
 > (`ONIA_ACUERDO_COLABORADOR_COMERCIAL_PLANTILLA_2026.md`) y la spec del panel
 > (`ONIA_COLABORADORES_PANEL_SPEC_2026.md`) cuelgan de este documento. Reusa la
 > mecanica ya probada; no la duplica. Fuentes madre:
-> `ONIA_COMPANY_OPERATING_MODEL_2026.md`, `ONIA_ACUERDO_ARTHUR_FUENTES_60_DIAS_2026.md`,
+> `hermes-content/docs/historial/orquestacion-vieja/ONIA_COMPANY_OPERATING_MODEL_2026.md`, `ONIA_ACUERDO_ARTHUR_FUENTES_60_DIAS_2026.md`,
 > `ONIA_VENDOR_MANUAL_2026.md`, `ONIA_PANEL_VENDEDORES_2026.md`,
 > `ONIA_HERMES_COLLABORATOR_ACCESS_MODEL_2026.md`,
 > `ONIA_HERMES_COLLABORATOR_SETUP_RUNBOOK_2026.md`.
@@ -237,7 +237,7 @@ subir de nivel.
 
 ## Fuentes canonicas
 
-- `ONIA_COMPANY_OPERATING_MODEL_2026.md`
+- `hermes-content/docs/historial/orquestacion-vieja/ONIA_COMPANY_OPERATING_MODEL_2026.md`
 - `ONIA_ACUERDO_ARTHUR_FUENTES_60_DIAS_2026.md`
 - `ONIA_VENDOR_MANUAL_2026.md`
 - `ONIA_PANEL_VENDEDORES_2026.md`

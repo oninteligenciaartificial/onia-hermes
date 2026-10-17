@@ -46,7 +46,7 @@
 1. The madre (Opus 5.5 with Ultracode, on the PC) is the only orchestrator. It handles intake, dispatch, browser and PC work, migration and infra merges, and reads cloud run logs.
 2. The madre's round runs every 20 minutes as one workflow led by Haiku. It covers queues, PRs and CI, Codex output, bundles, ledger reconciliation, and PC health (paged pool, disk).
 3. 5 cloud lanes run on an hourly heartbeat plus `/loop`. Each lane spreads its work across 2-5 subagents, one per point. Hermes-Jarvis becomes the Review/QA lane.
-4. A local Codex pool of 3 Sol executors and 1 reviewer takes tasks from `codex-tareas/*.md`. A Codex cloud batch goes out after the 14-oct 03:57Z reset.
+4. A local Codex pool of 3 Sol executors and 1 reviewer takes tasks from `hermes-content/docs/historial/orquestacion-vieja/codex-tareas/*.md`. A Codex cloud batch goes out after the 14-oct 03:57Z reset.
 5. The gate is: CI green, plus a review from the other model family posted as a PR comment, plus a Haiku check of the proof. The local 9.9k-test vitest run is retired.
 6. Merges happen one at a time: `gh pr ready`, then a re-check of `origin/master`, then `gh pr merge`.
 7. Routine (class-A) PRs are merged by the owning lane, or by the madre if the lane can't. Migrations and infra are merged by the madre only.
@@ -90,7 +90,7 @@ The peak is about 30-35 agents at once. Raise the count weekly only while Claude
 - Each line is: `id | request | lane | class A/B | state | lease_until | attempts | proof (sha/url) | updated`.
 - Only the madre writes it.
 - Each lane file `cola/loop/<lane>.md` has one writer: its own lane.
-- Codex tasks live one per file in `codex-tareas/`, with a header of `estado`, `modelo`, `archivos`, `lease`.
+- Codex tasks live one per file in `hermes-content/docs/historial/orquestacion-vieja/codex-tareas/`, with a header of `estado`, `modelo`, `archivos`, `lease`.
 
 **Steps:**
 1. **Intake.** The madre writes the line and commits it before doing anything else.
@@ -240,7 +240,7 @@ Lucía's free G2/G3 parts are filler, after these 20.
    - Task #19 depends on (b)3 (Meta OAuth).
    - Task #8 (`#114`, invoice): check whether it emits real SIAT invoices. If it does, it is a legal act and goes through Leslie Mercado Moreno.
 9. **Two ledgers.**
-   - **Fix:** mark `TABLERO.md` as superseded inside `ENTRADA.md`'s header. Keep one file per Codex task in `handoff/codex-tareas/`, which already holds 10+ tasks.
+   - **Fix:** mark `TABLERO.md` as superseded inside `ENTRADA.md`'s header. Keep one file per Codex task in `historial/orquestacion-vieja/codex-tareas/`, which already holds 10+ tasks.
 10. **Intake and lease reclaim stop when the PC is off.**
     - **Fix:** say so explicitly. `vigia-carriles.sh` only alerts.
     - It must watch `claude/*` branches and PR updates, not just main, because cloud commits never land on main directly.
@@ -257,7 +257,7 @@ Lucía's free G2/G3 parts are filler, after these 20.
     - Only Sergio can reopen a dead lane. **Fix:** keep a current startup text per lane in `handoff/`.
 14. **The Ads Library browser work (task #17) may not need the browser.** This session lists a Meta Ads MCP with `ads_library_search` (the tool is deferred and its auth is unverified). **Fix:** try it read-only before using Chrome.
 
-**Verified live in this review:** the 403 on branch protection, the PR states, master `32c7e0e8` with the `#139` migration, the 21-min CI, the self-hosted runner, the CI steps, the `--disable` flag, and the `TABLERO.md` and `codex-tareas/` contents.
+**Verified live in this review:** the 403 on branch protection, the PR states, master `32c7e0e8` with the `#139` migration, the 21-min CI, the self-hosted runner, the CI steps, the `--disable` flag, and the `TABLERO.md` and `hermes-content/docs/historial/orquestacion-vieja/codex-tareas/` contents.
 
 **Not verified:** Actions minutes, VPS and nodo-casa state, whether cloud `gh` can merge or comment, and Codex cloud vitest.
 

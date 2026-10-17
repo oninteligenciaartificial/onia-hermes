@@ -166,7 +166,7 @@ Fuente canonica:
 - `hermes-content/docs/ONIA_INTERNAL_CAPITAL_ALLOCATION_2026.md`
 - `hermes-content/docs/ONIA_NUVIA_ACCOUNTING_MODEL_2026.md`
 - `hermes-content/docs/ONIA_SUSTAINABILITY_DASHBOARD_SPEC_2026.md`
-- `hermes-content/docs/ONIA_COMPANY_OPERATING_MODEL_2026.md`
+- `hermes-content/docs/historial/orquestacion-vieja/ONIA_COMPANY_OPERATING_MODEL_2026.md`
 - `hermes-content/references/onia-vendor-panel-20260620.json` en
   `operation_60_days.internal_capital_allocation`.
 
@@ -437,7 +437,7 @@ server-side o n8n usando credenciales privadas.
 - `ONIA_VENDOR_MANUAL_2026.md`
 - `ONIA_VENDOR_SALES_PLAYBOOK_2026.md`
 - **Precios: `onia-platform/lib/subscription-plans.ts` (planes) y `onia-platform/lib/pricing.ts` (add-ons)** — la fuente. Transcritos junto a sus funciones en `ONIA_QUE_SE_VENDE_Y_A_QUE_PRECIO.md`. *(`ONIA_PRICING_2026.md` quedó degradado el 2026-08-27: es historia de junio, no fuente.)*
-- `hermes-content/docs/ONIA_COMPANY_OPERATING_MODEL_2026.md`
+- `hermes-content/docs/historial/orquestacion-vieja/ONIA_COMPANY_OPERATING_MODEL_2026.md`
 - `hermes-content/docs/ONIA_CASH_ENGINE_SERVICE_CATALOG_2026.md`
 - `hermes-content/references/onia-projects-registry.json`
 - `hermes-content/references/onia-vendor-panel-20260620.json`

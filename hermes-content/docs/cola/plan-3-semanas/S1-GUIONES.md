@@ -451,7 +451,7 @@ Lo tenés completo en la comunidad: el link está en mi web.
 
 ### D06-C · YouTube · Claude Code en un servidor, sin API key y con barandas
 **Fórmula:** F1 Resultado primero → cómo → comprobación → siguiente paso (horizontal) · **Pilar:** Agentes y loops · **Destino:** comunidad (drop 8)
-**Evidencia:** `hermes-content/docs/COMO_SE_ARMA_UN_LOOP.md` (dos capas; flock, `cd` verificado, aviso cada 6 h; las cinco trampas; 2-sep «line 157: l: command not found»; dos de seis loops apagados, uno con 7 de 8 corridas vacías) · `scripts/loops/onia-loop.sh` (`exec 9>`/`flock -n 9`, `unset ANTHROPIC_API_KEY ANTHROPIC_TOKEN`, `claude -p ... --allowedTools "$TOOLS" < prompt`) · `hermes-content/deploy/vps-ops/claude-guardia.sh` · `claude setup-token` en CLI 2.1.267. Mostrar el diagrama y el esqueleto; nunca la terminal del servidor, `.env` ni credenciales. Recontar los loops activos antes de grabar; no decir cantidad.
+**Evidencia:** `hermes-content/docs/historial/orquestacion-vieja/COMO_SE_ARMA_UN_LOOP.md` (dos capas; flock, `cd` verificado, aviso cada 6 h; las cinco trampas; 2-sep «line 157: l: command not found»; dos de seis loops apagados, uno con 7 de 8 corridas vacías) · `scripts/loops/onia-loop.sh` (`exec 9>`/`flock -n 9`, `unset ANTHROPIC_API_KEY ANTHROPIC_TOKEN`, `claude -p ... --allowedTools "$TOOLS" < prompt`) · `hermes-content/deploy/vps-ops/claude-guardia.sh` · `claude setup-token` en CLI 2.1.267. Mostrar el diagrama y el esqueleto; nunca la terminal del servidor, `.env` ni credenciales. Recontar los loops activos antes de grabar; no decir cantidad.
 
 #### Resultado primero
 
