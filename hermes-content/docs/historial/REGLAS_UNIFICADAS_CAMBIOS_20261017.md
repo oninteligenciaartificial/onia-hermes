@@ -367,3 +367,13 @@ principal, con quien puede escribir `.claude/`):** `git apply --ignore-whitespac
   hook viejo; no llegaron a `origin/main` solo porque este divergió.
 - La PC no tiene `pre-push`: instalar `scripts/loops/pre-push` (`core.hooksPath`) pide el OK de Sergio Urcullo (instalación, §1),
   o GitHub Pro / repo público para rulesets. Mientras tanto el script es la única barrera.
+
+## Correcciones del 17-oct, 6.ª ronda: hallazgo P2 de Codex sobre `add -A` en el hook Stop (PR #226)
+
+**P2 - `scripts/git-autosync.js` hacía `git add -A` en el checkout compartido de la PC, contra «`git add` con rutas explícitas» (AGENTS.md §4 «Carriles»)**
+- En la PC (`CLAUDE_CODE_REMOTE` distinto de `true`), si el checkout es el PRINCIPAL (`git rev-parse --git-dir` igual a `--git-common-dir`; lo comparten varias sesiones), el hook ya no hace `add -A`: commitea y pushea solo lo que la sesión dejó en el índice. Con el índice vacío imprime `[autosync] checkout compartido, sin staging automático` y no commitea.
+- Sin cambio: un worktree enlazado de la PC y la nube (`CLAUDE_CODE_REMOTE=true`, un contenedor por sesión) siguen con `add -A`; también todas las guardas y que el hook nunca salga distinto de 0.
+- Decisión de implementación a revisar: con el índice vacío el hook NO sale ahí; solo se salta el commit y sigue con el push de lo que la sesión ya commiteó a mano (y la rama de rescate si está parada en `main`). Cortar antes dejaría sin pushear commits explícitos, que es lo contrario de lo que pide la regla.
+- `scripts/loops/pedido-rama.test.mjs`: de 28 a 32 pruebas. Las existentes simulan la nube por defecto (`CLAUDE_CODE_REMOTE=true`); las nuevas fijan (a) PC + principal + archivo sin agregar: no se commitea; (b) PC + principal + archivo agregado: se commitea solo ese; (c) PC + worktree enlazado: `add -A`; (d) nube: `add -A`.
+- `AGENTS.md` §4 «Carriles»: una línea tras «`git add` con rutas explícitas».
+- Pendiente de la sección «Fuera de este repo» (checkouts vivos con el script viejo) sigue igual: tras el merge, actualizar cada checkout y comparar `git hash-object scripts/git-autosync.js`.

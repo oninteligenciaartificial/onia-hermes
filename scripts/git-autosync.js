@@ -5,6 +5,8 @@
  *
  * Seguro por diseño:
  *  - Respeta .gitignore (nunca sube secretos/node_modules).
+ *  - En el checkout principal de la PC (compartido entre sesiones) no hace `add -A`: commitea solo lo ya
+ *    agregado al índice. En un worktree enlazado o en la nube (CLAUDE_CODE_REMOTE=true) sí.
  *  - No falla la sesión: cualquier error sale con código 0.
  *  - No actúa en HEAD desacoplado ni sin remoto.
  *  - Pushea la RAMA y NUNCA `main`: a `main` solo se llega por PR con CI verde y revisión de
@@ -20,6 +22,7 @@
 
 const { execFileSync } = require('child_process');
 const os = require('os');
+const path = require('path');
 
 // Una sesión parada EN main no pushea main: sus commits van a esta rama, para un PR.
 // Una por sesión (su id; si no hay, el nombre de la máquina), así las vueltas siguientes la siguen
@@ -47,6 +50,16 @@ function tryGit(args) {
 }
 
 const MAIN_REMOTA = 'refs/remotes/origin/main';
+
+// P2 de Codex en #226 (17-oct): en la PC el checkout PRINCIPAL (git-dir == git-common-dir) lo comparten varias
+// sesiones, y `add -A` subiría el trabajo de las otras (AGENTS.md §4 «Carriles»: `git add` con rutas explícitas).
+// Un worktree enlazado de la PC y la nube (un contenedor por sesión) son de una sola sesión: ahí `add -A` es seguro.
+function checkoutCompartido(env = process.env) {
+  if (env.CLAUDE_CODE_REMOTE === 'true') return false;
+  const dir = tryGit(['rev-parse', '--git-dir']);
+  const comun = tryGit(['rev-parse', '--git-common-dir']);
+  return dir.ok && comun.ok && path.resolve(dir.out) === path.resolve(comun.out);
+}
 
 function nombreConSha() {
   const sha = tryGit(['rev-parse', '--short=8', 'HEAD']);
@@ -137,15 +150,21 @@ function main() {
     return;
   }
 
-  // 4. ¿Hay cambios?
+  // 4. ¿Hay cambios? En el checkout compartido de la PC no se hace `add -A`: se commitea solo lo que la
+  // sesión ya agregó al índice; si no hay nada, no se commitea y se sigue con el push de lo ya commiteado.
   const status = tryGit(['status', '--porcelain']);
   if (status.ok && status.out) {
-    tryGit(['add', '-A']);
-    const stamp = new Date().toISOString().slice(0, 16).replace('T', ' ');
-    const msg = process.argv[2] || `chore: auto-sync ${stamp}`;
-    const commit = tryGit(['commit', '-m', msg]);
-    if (!commit.ok) console.log('[autosync] nada para commitear o commit falló:', commit.out.slice(0, 200));
-    else console.log('[autosync] commit:', msg);
+    const compartido = checkoutCompartido();
+    if (!compartido) tryGit(['add', '-A']);
+    if (compartido && tryGit(['diff', '--cached', '--quiet']).ok) {
+      console.log('[autosync] checkout compartido, sin staging automático');
+    } else {
+      const stamp = new Date().toISOString().slice(0, 16).replace('T', ' ');
+      const msg = process.argv[2] || `chore: auto-sync ${stamp}`;
+      const commit = tryGit(['commit', '-m', msg]);
+      if (!commit.ok) console.log('[autosync] nada para commitear o commit falló:', commit.out.slice(0, 200));
+      else console.log('[autosync] commit:', msg);
+    }
   }
 
   // 4a. Parada EN main: main no se pushea, nunca; lo nuevo va a la rama de rescate, para un PR.
