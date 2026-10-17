@@ -956,6 +956,38 @@ test("un bot_stage desconocido en la base no rompe: cae a 'nuevo'", () => {
   assert.equal(state.botStage, "nuevo");
 });
 
+test("WhatsApp huerfano: runTurn no envia ni llama al LLM y registra una sola vez", async () => {
+  const fake = memoryStore();
+  const audits = [];
+  const apply = fake.store.applySideEffects;
+  fake.store.applySideEffects = async (effects, state) => {
+    audits.push(...effects.filter((e) => e.type === "audit_log"));
+    return apply(effects, state);
+  };
+  const config = { ...CONFIG, modo: "recepcionista", bandejaHuerfana: true };
+  for (const [i, text] of ["hola", "servicios", "precio"].entries()) {
+    const result = await runTurn(turn({ channel: "whatsapp", text, message_key: `wa:${i}` }), {
+      store: fake.store, config,
+      llm: () => { throw new Error("no debe llamar al LLM"); },
+    });
+    assert.deepEqual(result.send, []);
+    assert.deepEqual(result.notify, []);
+  }
+  assert.equal(audits.length, 1);
+  assert.equal(audits[0].payload.detail.reason, "bandeja huérfana, no se responde");
+});
+
+test("el registro de bandeja huerfana es unico por conversacion y no pisa auditorias de etapa", async () => {
+  const { requests, store } = recorder();
+  const state = createState({ channel: "whatsapp", contactRef: "huerfana" });
+  await store.writeAudit({ action: "bot_stage_change" }, state, 0);
+  await store.writeAudit({ action: "bandeja_huerfana" }, state, 0);
+  await store.writeAudit({ action: "bandeja_huerfana" }, state, 3);
+  assert.notEqual(requests[0].body.audit_key, requests[1].body.audit_key);
+  assert.equal(requests[1].body.audit_key, requests[2].body.audit_key);
+  assert.match(requests[2].prefer, /ignore-duplicates/);
+});
+
 test("TODO campo que el motor guarda en raw sobrevive el viaje completo (la clase del acuse triple)", async () => {
   // 2026-09-10, conv 11: el acuse del handoff salio TRES veces porque
   // `handoffAckAt` vivia en toConversationRow (el motor) pero NO en el raw que
@@ -974,6 +1006,7 @@ test("TODO campo que el motor guarda en raw sobrevive el viaje completo (la clas
     publicContact: "+59175414930",
     inboxId: "5",
     handoffAckAt: "2026-09-10T20:16:49.000Z",
+    bandejaHuerfanaRegistrada: true,
     branchAsked: true,
   };
   const canon = toConversationRow(state).raw;

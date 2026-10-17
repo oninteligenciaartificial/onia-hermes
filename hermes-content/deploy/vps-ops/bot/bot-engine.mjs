@@ -107,6 +107,7 @@ export function createState(input = {}) {
     // calla para no pisar al humano; si ese humano no existe, el silencio ademas es invisible.
     // Una sola vez, por el mismo canal saturado. Vive en `raw`, como los dos de arriba: sin DDL.
     handoffMudoAvisadoAt: input.handoffMudoAvisadoAt || null,
+    bandejaHuerfanaRegistrada: input.bandejaHuerfanaRegistrada === true,
     optInAt: input.optInAt || null,
     optInSource: input.optInSource || null,
     optOutAt: input.optOutAt || null,
@@ -252,6 +253,7 @@ export function toConversationRow(state) {
       handoffAckAt: state.handoffAckAt,
       urgenteAvisadoAt: state.urgenteAvisadoAt,
       handoffMudoAvisadoAt: state.handoffMudoAvisadoAt,
+      bandejaHuerfanaRegistrada: state.bandejaHuerfanaRegistrada,
     },
   };
 }
@@ -721,6 +723,19 @@ function pasoDelMotor(state, incoming, options = {}) {
   const config = options.config || DEFAULT_CONFIG;
   const msg = readIncoming(incoming);
   const prev = state;
+
+  // Sin organizacion no hay negocio que atender en WhatsApp. Antes de cualquier
+  // bienvenida, cuota, menu o fallback; la marca vive en raw y sobrevive reinicios.
+  if (config.bandejaHuerfana && (state.channel === "whatsapp" || state.channelType === "Channel::Whatsapp")) {
+    const next = { ...state, bandejaHuerfanaRegistrada: true,
+      lastInboundAt: msg.author === "contact" ? msg.receivedAt || state.lastInboundAt : state.lastInboundAt };
+    const effects = state.bandejaHuerfanaRegistrada ? [] : [{
+      type: "audit_log",
+      payload: { action: "bandeja_huerfana", conversationKey: state.conversationKey,
+        detail: { reason: "bandeja huérfana, no se responde" } },
+    }];
+    return finalize({ config, msg, prev }, next, [], effects, ["silencio:bandeja_huerfana"]);
+  }
 
   // --- Barrera 0: conversacion VENCIDA (>N dias sin actividad de nadie) => se reinicia al
   // saludo ANTES de evaluar cualquier candado. Ningun estado puede producir 0 mensajes ante

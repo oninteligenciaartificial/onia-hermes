@@ -103,6 +103,7 @@ export function stateFromRow(row) {
     handoffAckAt: raw.handoffAckAt || null,
     urgenteAvisadoAt: raw.urgenteAvisadoAt || null,
     handoffMudoAvisadoAt: raw.handoffMudoAvisadoAt || null,
+    bandejaHuerfanaRegistrada: raw.bandejaHuerfanaRegistrada === true,
     branchAsked: Boolean(raw.branchAsked),
     inboxId: raw.inboxId || null,
     displayName: row.display_name,
@@ -518,6 +519,7 @@ export function createStore(options = {}) {
         handoffAckAt: state.handoffAckAt || null,
         urgenteAvisadoAt: state.urgenteAvisadoAt || null,
         handoffMudoAvisadoAt: state.handoffMudoAvisadoAt || null,
+        bandejaHuerfanaRegistrada: state.bandejaHuerfanaRegistrada === true,
         branchAsked: Boolean(state.branchAsked),
       },
     };
@@ -919,7 +921,10 @@ export function createStore(options = {}) {
   }
 
   async function writeAudit(payload = {}, state, seq = 0) {
-    const auditKey = `aud-bot-${slug(state.conversationKey, 40)}-${seq}`;
+    // El silencio no incrementa outboundSeq: su registro no debe chocar con un
+    // cambio de etapa previo ni duplicarse si se reintenta persistir el turno.
+    const auditSeq = payload.action === "bandeja_huerfana" ? "bandeja-huerfana" : seq;
+    const auditKey = `aud-bot-${slug(state.conversationKey, 40)}-${auditSeq}`;
     const rows = await rest("writeAudit", "audit_logs?on_conflict=audit_key", {
       method: "POST",
       headers: { Prefer: "resolution=ignore-duplicates,return=representation" },
