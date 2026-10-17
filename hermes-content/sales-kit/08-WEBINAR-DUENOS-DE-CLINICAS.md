@@ -29,7 +29,7 @@
 
 ## 2. Invitación (texto libre, 1:1, de Sergio Urcullo)
 
-> Buen día, le escribe Sergio Urcullo, de Onia. El jueves 22 a las 19:00 doy una charla gratis de 45 minutos, por Google Meet, para dueños de clínicas dentales: «Las citas que se pierden por no confirmar, y cómo ordenar su clínica cada mañana». Voy a mostrar cómo trabajamos con la agenda, los cobros y el seguimiento de pacientes, y cómo se ve todo en un sistema. Puede preguntar lo que quiera.
+> Buen día, le escribe Sergio Urcullo, de Onia. El jueves 22 a las 19:00 doy una charla gratis de 45 minutos, por Google Meet, para dueños de clínicas dentales: «Las citas que se pierden por no confirmar, y cómo ordenar su clínica cada mañana». Voy a mostrar el orden de la mañana y cómo se ve en un sistema, con un caso de ejemplo. Puede preguntar lo que quiera.
 >
 > Si quiere un lugar, respóndame «Webinar» y me dice cuántos profesionales atienden en su clínica. Le mando el enlace el jueves al mediodía.
 
@@ -60,11 +60,11 @@ Tiempo de la rutina en papel o planilla: pizarra o Excel, 15-20 minutos al día.
 ### Bloque 3 (0:22-0:32) — demo: la misma persona de ejemplo en todas las pantallas
 **Requisito: cuenta demo (§1, punto 1).** Pantallas y qué se dice, en este orden:
 1. **Registro:** «Elige su rubro y queda armada con las pantallas, las palabras y los agentes de su rubro» (A-03 ⬜: se mira con la cuenta). Muestra los 5 rubros (A-02 ✅).
-2. **Agenda y paciente:** la agenda, la ficha con historia clínica y odontograma. «Esta paciente de ejemplo…» — **nunca** «clínica de ejemplo» como promesa; se dice «datos de ejemplo».
+2. **Agenda y paciente:** ⟦solo si B-01, C-01, C-02 y C-03 están ✅; si no, se muestra sin prometer⟧ la agenda, la ficha con historia clínica y odontograma. Si siguen ⬜, se dice «le muestro cómo se ve con su caso» y no se describe la función. «Esta paciente de ejemplo…» — **nunca** «clínica de ejemplo» como promesa; se dice «datos de ejemplo».
 3. **Pendientes** (⛔ **no se presenta como hecho mientras G-01, G-04, G-06, G-07, G-08 y G-11 de `ONIA_PROMESA_VS_PRODUCTO.md` estén ⬜**: una cuenta demo sola no las verifica y el revisor automático no mira sus estados. Si siguen ⬜ el día del webinar, este punto se salta o se muestra solo la pantalla sin prometer qué hace): «Cada mañana el sistema le deja anotado a quién escribirle: quién tiene cita mañana y no confirmó, quién canceló o faltó y no volvió a agendar, quién le debe, con el mensaje ya preparado. Con IA le propone el texto de cada recordatorio y usted lo aprueba una sola vez. Nada sale sin su aprobación.» Aparece la tarjeta; se señala el dato con un anillo.
-4. **Cobros e inventario:** el cobro, el saldo y una línea de inventario de insumos.
+4. **Cobros e inventario:** ⟦solo si D-01, E-01 y F-01 están ✅; si no, se muestra sin prometer⟧ el cobro, el saldo y una línea de inventario de insumos.
 5. **Reservas online (K-12 ✅):** el link por donde el paciente reserva.
-> Esto viene desde el plan Crece. El Básico es agenda, ficha, cobros e inventario, sin la lista diaria.
+> Esto viene desde el plan Crece. ⟦solo si B-01, C-01, E-01 y F-01 están ✅; si no, se muestra sin prometer⟧ El Básico es agenda, ficha, cobros e inventario, sin la lista diaria.
 - **Frenos (G-01):** antes de hacer clic en «Aprobar» durante la demo, la cuenta lleva contactos de prueba propios: un clic puede enviar un mensaje de verdad (skill §4.4). Si hay duda, se muestra sin hacer clic.
 - Nunca se muestra el tratamiento a medias (D-03), el envío por WhatsApp (G-03 🟡), el agente de WhatsApp (J-*) ni la factura SIAT.
 

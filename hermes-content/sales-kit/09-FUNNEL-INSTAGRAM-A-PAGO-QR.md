@@ -87,7 +87,7 @@ Si en 24 horas no agendó: **un solo** recordatorio («¿Pudo ver el link de la 
 
 > Este flujo es del **plan anual de Onia**. Workshops y consultorías se cobran aparte (§4).
 
-1. Si no tiene cuenta, la crea primero en `app.onia.com.bo/register` (`/checkout` sin sesión lo manda al login). Después entra a `app.onia.com.bo/checkout`, elige plan **anual** y ve el QR. La cuenta nueva abre también la prueba de 14 días; pagar el año no la anula.
+1. Si no tiene cuenta, la crea primero con `app.onia.com.bo/register?plan=<clave>` (`/checkout` sin sesión lo manda al login). Claves: `basic` = Básico, `crece` = Crece, `professional` = Profesional, `clinic` = Completo. El plan solo sobrevive al registro con ese enlace. Después entra a `app.onia.com.bo/checkout`, **confirma que el plan marcado es el elegido antes de pagar**, elige ciclo **anual** y ve el QR. La cuenta nueva abre también la prueba de 14 días; pagar el año no la anula.
 2. Paga desde su banco y **sube el comprobante** (o lo manda por WhatsApp si la pantalla falla).
 3. Sergio Urcullo lo aprueba en `/admin/payments`. El plan queda activo.
 4. Se emite la factura aparte desde el portal del SIN; **ese portal lo abre solo Sergio Urcullo.**
@@ -100,12 +100,7 @@ Sergio Urcullo dijo que sí a workshops y consultorías pagas para la caja de oc
 
 - En el mensaje directo (3.2), quien quiere aprender recibe el enlace o el texto que ese hilo entregue. Hasta que exista, se le responde: «Estoy armando un workshop; le aviso apenas tenga fecha» **(solo si Sergio Urcullo lo aprueba).**
 - **El pago del workshop NO pasa por `/checkout`:** esa pantalla solo vende los cuatro planes anuales y activa un plan al aprobarse. El workshop se cobra con el QR del BCP enviado directamente por Sergio Urcullo (monto abierto), comprobante por WhatsApp y confirmación manual suya, sin tocar `/admin/payments`. El procedimiento y el monto los fija el hilo de Marca; acá no se escribe ninguno.
-- **Oferta entregada por el hilo de Marca (16-oct). PROPUESTA, sin aprobar: espera el sí de Sergio Urcullo sobre precio y fecha.** Los números no se tocan acá:
-  - Workshop «Auditá tu negocio con IA»: 2 h, cupo 12, sábado 24-oct 10:00, con precio fundador hasta el miércoles 21 y precio normal después.
-  - Auditoría 1 a 1, con descuento del valor del workshop si la persona vino de él.
-  - **Los montos viven en el borrador del hilo de Marca, no acá:** el control de honestidad de este kit solo admite precios que el código sostiene, y el de un workshop no está en `pricing.ts`. Se leen de allí el día del envío.
-  - Camino que propone ese hilo: Instagram → link del perfil → página → WhatsApp → QR del BCP.
-  - Detalle y piezas: rama `claude/marca-workshops-ns83wx` de `onia-hermes` (carruseles de `carousels/briefs/marca-personal/sergio-workshop-*`).
+- **Oferta de workshop: en definición; sin precio ni promesa hasta que Sergio Urcullo la apruebe y quede en el árbol.**
 - **Cómo encaja con este funnel:** quien en el mensaje directo (3.2) quiere aprender, o no es clínica, va a esta oferta; quien es dueño de clínica va a la llamada de 20 minutos. Un asistente del workshop que además tiene clínica pasa a la llamada después, con el descuento del plan anual de `07` §0 como única oferta de Onia.
 - ⚠️ El texto «le aviso apenas tenga fecha» de arriba queda reemplazado por esta oferta **solo cuando Sergio Urcullo la apruebe**.
 

@@ -71,7 +71,7 @@ Cómo salen (las tres cosas que cambian el resultado, de `SEGUIMIENTO-LEADS.md` 
 
 > Buen día, le escribe Sergio Urcullo, de Onia. En agosto usted nos escribió por un sistema de gestión para su clínica de 4 doctores, con preguntas muy concretas, y no le respondí a tiempo. Le pido disculpas, fue mi falla.
 >
-> Prefiero contestarle mirando el sistema y no por mensaje. En 20 minutos de videollamada se lo muestro en pantalla, incluida la lista de a quién escribirle cada mañana (quién no confirmó la cita de mañana, quién canceló o faltó y no volvió a agendar, quién le debe), y le respondo sus preguntas sobre pacientes pendientes mirándolas ahí.
+> Prefiero contestarle mirando el sistema y no por mensaje. En 20 minutos de videollamada le muestro cómo se ve con el caso de su clínica y le respondo sus preguntas mirándolas ahí. ⟦solo si G-01, G-04, G-06, G-07 y G-08 están ✅; si no, se muestra sin prometer⟧ Incluye la lista de a quién escribirle cada mañana (quién no confirmó la cita de mañana, quién canceló o faltó y no volvió a agendar, quién le debe).
 >
 > Para 4 doctores y una asistente le corresponde el plan Profesional: Bs 890 al mes. Si decide quedarse, el plan anual cobra 10 meses y usted usa 12: Bs 8.900 por el año. Puede pagar el año al terminar la demo o, si prefiere, probar antes 14 días sin tarjeta.
 >
@@ -84,7 +84,7 @@ Cómo salen (las tres cosas que cambian el resultado, de `SEGUIMIENTO-LEADS.md` 
 
 > Buen día, le escribe Sergio Urcullo, de Onia. En agosto usted pidió acceso a nuestro sistema y no le respondí a tiempo. Le pido disculpas, fue mi falla.
 >
-> Onia es un sistema de gestión para clínicas dentales: agenda, ficha del paciente con historia clínica y odontograma, tratamientos, cobros e inventario, todo en un lugar. Se lo muestro en una videollamada de 20 minutos para ver si le sirve.
+> Onia es un sistema de gestión para clínicas dentales. Le muestro cómo se ve con el caso de su clínica en una videollamada de 20 minutos, para ver si le sirve. ⟦solo si B-01, C-01, C-02, C-03, D-01, E-01 y F-01 están ✅; si no, se muestra sin prometer⟧ Agenda, ficha del paciente con historia clínica y odontograma, tratamientos, cobros e inventario, todo en un lugar.
 >
 > Si decide quedarse: el plan Básico (2 usuarios) cuesta Bs 320 al mes, o Bs 3.200 por el año completo (se cobran 10 meses y usted usa 12). Si en la clínica trabajan 3 o 4 personas con el sistema, le recomiendo el Crece (Bs 550 al mes, 4 usuarios); con 5 corresponde el Profesional y con 6 o más el Completo. Si prefiere, puede probar antes 14 días sin tarjeta; es opcional.
 >
@@ -94,7 +94,7 @@ Cómo salen (las tres cosas que cambian el resultado, de `SEGUIMIENTO-LEADS.md` 
 
 > Buen día, le escribe Sergio Urcullo, de Onia. En agosto usted pidió acceso a nuestro sistema y no le respondí a tiempo. Le pido disculpas, fue mi falla.
 >
-> Onia es un sistema de gestión para centros de estética: agenda, ficha de cada clienta, tratamientos, cobros e inventario, todo en un lugar. Se lo muestro en una videollamada de 20 minutos para ver si le sirve.
+> Onia es un sistema de gestión para centros de estética. Le muestro cómo se ve con el caso de su centro en una videollamada de 20 minutos, para ver si le sirve. ⟦solo si B-01, C-01, D-01, E-01 y F-01 están ✅; si no, se muestra sin prometer⟧ Agenda, ficha de cada clienta, tratamientos, cobros e inventario, todo en un lugar.
 >
 > Si decide quedarse: el plan Básico (2 usuarios) cuesta Bs 320 al mes, o Bs 3.200 por el año completo (se cobran 10 meses y usted usa 12). Si prefiere, puede probar antes 14 días sin tarjeta; es opcional.
 >
@@ -106,7 +106,7 @@ Cómo salen (las tres cosas que cambian el resultado, de `SEGUIMIENTO-LEADS.md` 
 
 > Buen día, le escribe Sergio Urcullo, de Onia. En agosto usted pidió acceso a nuestro sistema para su consultorio y no le respondí a tiempo. Le pido disculpas, fue mi falla.
 >
-> Onia es un sistema de gestión para consultorios y clínicas dentales: agenda, ficha del paciente con historia clínica y odontograma, tratamientos, cobros e inventario, todo en un lugar. Se lo muestro en una videollamada de 20 minutos.
+> Onia es un sistema de gestión para consultorios y clínicas dentales. Le muestro cómo se ve con el caso de su consultorio en una videollamada de 20 minutos. ⟦solo si B-01, C-01, C-02, C-03, D-01, E-01 y F-01 están ✅; si no, se muestra sin prometer⟧ Agenda, ficha del paciente con historia clínica y odontograma, tratamientos, cobros e inventario, todo en un lugar.
 >
 > Para un consultorio con 1 o 2 personas le calza el plan Básico: Bs 320 al mes, o Bs 3.200 por el año (se cobran 10 meses y usted usa 12). Si prefiere, puede probar antes 14 días sin tarjeta; es opcional.
 >
@@ -132,7 +132,7 @@ Cómo salen (las tres cosas que cambian el resultado, de `SEGUIMIENTO-LEADS.md` 
 >
 > Buen día, le escribe Sergio Urcullo, de Onia, en Santa Cruz. En agosto usted nos dejó su correo pidiendo información y no le respondí a tiempo. Le pido disculpas, fue mi falla.
 >
-> Onia es un sistema de gestión armado para cada rubro (clínicas, centros de estética, servicios profesionales, comercios e importadoras): agenda, ficha del cliente, tratamientos o servicios, cobros e inventario, todo en un lugar. La prueba de 14 días sin tarjeta es opcional.
+> Onia es un sistema de gestión armado para cada rubro (clínicas, centros de estética, servicios profesionales, comercios e importadoras). ⟦solo si B-01, C-01, D-01, E-01 y F-01 están ✅; si no, se muestra sin prometer⟧ Agenda, ficha del cliente, tratamientos o servicios, cobros e inventario, todo en un lugar. La prueba de 14 días sin tarjeta es opcional.
 >
 > Para decirle si le sirve, cuénteme qué negocio tiene y cuántas personas trabajan con usted. Si prefiere verlo funcionando, en 20 minutos de videollamada se lo muestro: https://cal.com/sergiourcullo/20min
 >
@@ -146,7 +146,7 @@ Cómo salen (las tres cosas que cambian el resultado, de `SEGUIMIENTO-LEADS.md` 
 - **«Ahora no»** → «Entendido, gracias por decírmelo. ¿Le parece bien que le escriba en un mes? Si prefiere que no, no le escribo más.» Callar no es permiso.
 - **Silencio** → días 3, 7 y 14 de `SEGUIMIENTO-LEADS.md` §3. Contando desde el día de envío, si sale el lunes 19-oct: día 3 = 22-oct, día 7 = 26-oct, día 14 = 2-nov. Para cobrar antes del 31-oct, **el día 7 es el último toque que importa**.
 - **Pregunta de precio** → la respuesta de `SEGUIMIENTO-LEADS.md` §2 («Pregunta de precio») + «el anual cobra 10 meses».
-- **Cierre del prepago** (cuando dicen «sí, quiero el anual»): «Perfecto. Primero crea su cuenta en app.onia.com.bo/register (si ya tiene una, entra con ella); ahí mismo elige {plan}. Luego paga en app.onia.com.bo/checkout (anual). Paga con QR; al subir el comprobante yo lo apruebo y el plan queda activo. Aparecerá a nombre de {titular del QR}. Le aviso que el plan anual no se reembolsa; si prefiere, antes puede probar 14 días sin tarjeta. Le mando la factura aparte.» — **Verificar antes** que el checkout anual funcione de punta a punta con una cuenta de prueba nuestra (fila K-02 está ✅ en la web, pero el cobro de punta a punta lo está cerrando el carril Plataforma, plan 1.0 punto 13 y 15).
+- **Cierre del prepago** (cuando dicen «sí, quiero el anual»): «Perfecto. Primero crea su cuenta con este enlace: app.onia.com.bo/register?plan={clave} (si ya tiene una, entra con ella). Claves: basic = Básico, crece = Crece, professional = Profesional, clinic = Completo. El plan solo se conserva si entra por ese enlace; en `/checkout`, antes de pagar, confirme que el plan marcado es el que eligió. Luego paga en app.onia.com.bo/checkout (anual). Paga con QR; al subir el comprobante yo lo apruebo y el plan queda activo. Aparecerá a nombre de {titular del QR}. Le aviso que el plan anual no se reembolsa; si prefiere, antes puede probar 14 días sin tarjeta. Le mando la factura aparte.» — **Verificar antes** que el checkout anual funcione de punta a punta con una cuenta de prueba nuestra (fila K-02 está ✅ en la web, pero el cobro de punta a punta lo está cerrando el carril Plataforma, plan 1.0 punto 13 y 15).
 
 ---
 
