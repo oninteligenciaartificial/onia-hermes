@@ -49,6 +49,8 @@
 > El motivo verificado: el MCP pedía `nano_banana_2` y el servidor resolvía a
 > `nano_banana_flash` **sin avisar**. En la web el modelo se elige a mano.
 >
+> ⚠️ **Explicación REFUTADA (marcado 2026-10-17):** `nano_banana_2` no existe como ID; la web llama «Nano Banana 2» a `nano_banana_flash` y el ID de Nano Banana Pro es `nano_banana_pro`. No hubo sustitución en silencio: era un desfase entre nombre visible e ID (`TECNICA-HIGGSFIELD.md:1067-1089`). El resto de esta nota es historia.
+>
 > ⚠️ **Corregido el 2026-08-28**: acá decía que la web «no gasta créditos» por el toggle
 > `Unlimited`. **Es falso.** Ese toggle abre una venta de $5 a $23 por día o semana, aparte del
 > plan. Generar por web cuesta los mismos 2 créditos. No tocar el toggle sin permiso.

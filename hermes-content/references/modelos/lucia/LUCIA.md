@@ -1092,7 +1092,7 @@ funciona"* — buscar referencias espectaculares es lo que hace que el UGC se ve
 
 ## Characters (Souls)
 
-> Fuente única de los Souls (v3, v4, v5 y su A/B): `LUCIA-HIGGSFIELD-IDENTITY.json` §`soul_*`; entrenamientos y duplicados: `v4/PROCEDENCIA.jsonl`. Esta tabla solo lista los Souls v3 y REAL-v2; v4, v5 y v5b no están acá (2026-10-17).
+> Fuentes de los Souls: v4 y v5 y su A/B en `LUCIA-HIGGSFIELD-IDENTITY.json` (`soul_v4`, `soul_v5`); v3 y REAL-v2 en esta tabla y su veredicto de abajo; entrenamientos y duplicados (incluido v5b) en `v4/PROCEDENCIA.jsonl` (2026-10-17).
 
 | Soul | id | Estado |
 |---|---|---|
