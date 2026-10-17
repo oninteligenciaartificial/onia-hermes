@@ -1,0 +1,257 @@
+# CAMBIOS - unificación de reglas (16-oct-2026)
+
+Fuentes leídas en `origin/main` (`cef4a28f`): `CLAUDE.md` (CL), `AGENTS.md` (AG), `CODEX_SKILL_ROUTING.md` (CSR), `COORDINATION_MANIFEST.md` (CM), `hermes-content/docs/AI_MODEL_ROUTING_2026.md` (MR), `hermes-content/docs/EXECUTION_PROTOCOL.md` (EP); `CODEX.md` de `origin/codex/hermes-controller-hardening-20261013` (CX). Contexto vigente: `hermes-content/docs/cola/loop/hermes-jefa.md` (16-oct) y skills `onia-sesion-madre`, `orca`.
+
+Destino: A§n = `AGENTS.md` nuevo, sección n · C = `CLAUDE.md` nuevo · "doc X" = la regla ya vive en ese archivo, que no se mueve.
+
+Tipos: **igual** · **condensada** (misma regla, sin la historia larga) · **actualizada** (cambia por una orden posterior) · **movida** (sale de las reglas, vive en un doc o skill que ya existe) · **eliminada** (con motivo).
+
+| # | Regla | Estaba en | Queda en | Cambio |
+|---|---|---|---|---|
+| 1 | Credenciales y sesiones locales (bóveda, reusar sesión, no volcar secretos, MFA, instalar con OK, acceso no amplía alcance) | CL, AG, CX | A§1 | condensada; 17-oct (2.ª ronda): restituidas las prohibiciones duras (no volcar la bóveda ni exportar secretos a texto; no pedir ni guardar la clave maestra; Google, consentimiento, MFA, desbloqueo y sesión caducada son de él; sin sesiones permanentes; perfiles fuera de Git y serializados; el VPS no aloja la bóveda). Detalle en `hermes-content/skills/seguridad-credenciales.md` |
+| 2 | Nuevos accesos a cuentas con OK previo | CX (12-oct) | A§1 | condensada en «cuenta nueva o descargar/instalar (herramientas, dependencias, navegadores, plugins, extensiones): qué, de dónde y para qué, con OK» (17-oct (2.ª ronda)) |
+| 3 | Un objetivo por sesión, con «hecho»; lo demás a pendientes | CL, CX | A§1 | condensada |
+| 4 | «UNA madre local, varios carriles; Codex ejecuta el encargo de la madre» | CL | A§1 Quién hace qué | actualizada: 16-oct la jefa es el proyecto «ONIA · Hermes»; la madre instala y vigila |
+| 5 | Codex sin Git; la madre commitea por él | CL (9-oct) | - | eliminada: obsoleta, Codex pasó a revisor de PR (16-oct); Git queda «según contrato» (A§1 Arranque) |
+| 6 | Mismo carril en serie, carriles distintos en paralelo | CL, CX | A§4 Carriles | igual |
+| 7 | Subagente: worktree con ruta explícita, `git branch --show-current` | CL, CX | C | movida a C (mecánica de Claude Code) |
+| 8 | El negocio manda: etapa vigente de ONIA_ESTRATEGIA_DE_EMPRESA.md | CL, CX | A§1 | condensada |
+| 9 | No abrir línea de negocio nueva; congelar no es borrar | CL, CX | A§1 | condensada (sin el conteo del 5-sep) |
+| 10 | Test de 3 preguntas para un añadido | CL, CX | A§1 | condensada (sin el ejemplo del chatbot) |
+| 11 | El techo son horas de soporte | CL, CX | A§1 | condensada (sin cifras de costo) |
+| 12 | Financiación o equipo de desarrollo: no | CL, CX | A§1 | condensada |
+| 13 | La etapa la cambia solo Sergio Urcullo | CL, CX | A§1 | condensada |
+| 14 | `onia-router` al arrancar | CL, AG, CX | A§1 Arranque + C (cómo se invoca) | igual |
+| 15 | Cargar `equipo-de-agentes` y `aprender-de-todo` | CL, AG, CX | A§1 Arranque | condensada; «registrar por dimensión» queda en la skill `aprender-de-todo` |
+| 16 | Skills de `onia-platform` obligatorias al tocar el producto | CL, AG, CX | C | movida a C por pedido. Ojo: Codex ya no ve la lista de 6 en AGENTS; A§3 nombra `onia-db` y `onia-deploy` |
+| 17 | Trampa nueva: editar la skill, no doc suelto; skill pública que sirve se usa | CL, CX | A§1 Skills | condensada |
+| 18 | Autoconocimiento: leer la skill antes, escribir lo aprendido en el mismo commit; carril sin skill crea una | CL, CX | A§1 Skills | condensada |
+| 19 | Skills fuente única en `.claude/skills/`, no copiar a `.agents/` | AG, CX | A§1 Skills | corregida 17-oct (2.ª ronda): `.agents/skills/` SÍ existe en origin/main (30 carpetas, copias para Codex de `.claude/skills/`; verificado con `git ls-tree`). AGENTS §1: la fuente es `.claude/skills/` y las copias no se editan. Sin resolver: no se halló ningún script que las sincronice; decidir quién |
+| 20 | Modelo por rol (Haiku/Sonnet/Opus; Codex Astra/Sol/Luna) | CL, AG, CX, MR | A§1 + C (`model` explícito) + doc MR | condensada |
+| 21 | Presupuesto de contexto (manifest corto, subagente con pregunta cerrada, una generación paga antes de variantes) | MR | doc MR | movida: sigue en MR, que no se mueve |
+| 22 | Routing «modo ahorro» 12-oct (madres Luna low, etc.) | CX | - | eliminada: obsoleta, era para las 2 madres del 12-oct |
+| 23 | Canario «Sergio Urcullo» | CL, CX | A§1 | condensada (el límite del canario queda en media línea) |
+| 24 | Simple: 3 bloques Pasó/Necesito/Sigue, sin PRs ni hipótesis | CL, AG, CX | A§1 | condensada |
+| 25 | Lo que necesita a Sergio Urcullo, junto | CL («en una hoja») | A§1 | actualizada: «UNA lista diaria» (hermes-jefa.md 16-oct) |
+| 26 | En producto, menos pasos/clics | CL | A§1 Simple | condensada |
+| 27 | Usted con clientes y prospectos; vos con él | CL, AG, CX | A§1 | condensada |
+| 28 | Comandos para él en PowerShell | CL, AG, CX | A§1 | condensada (sin ejemplos de sintaxis) |
+| 29 | Horas de La Paz; en crons no se resta | CL, AG, CX | A§1 | condensada |
+| 30 | Criterio propio, contradecir con evidencia | CL, AG, CX | A§1 | condensada |
+| 31 | No preguntar lo razonable | CL, CX | A§1 | condensada |
+| 32 | Escalera de autonomía (MCP, CLI, skill, script, recién preguntar) | CL, AG, CX | A§1 + C (`ToolSearch`) | condensada |
+| 33 | Bajar el consumo ante un tope; pausar, no borrar | CL, AG, CX | A§1 | condensada |
+| 34 | Onia vende software, nunca horas | CL, AG, CX | A§1 | actualizada: excepción 16-oct, workshops y consultorías pagas para la caja de octubre. 17-oct (2.ª ronda): se restituye «ningún trato exige presencia de Sergio Urcullo; nunca comisión ni equity; sociedad solo por earn-in con hitos» y la excepción queda acotada (hasta el 31-oct, solo para eso, el producto sigue siendo Onia Platform) |
+| 35 | 5 rubros, no solo dental | CL, AG, CX | A§1 + A§3 | condensada |
+| 36 | Cuidar tokens, no releer | CL, AG, CX | A§1 + C (Bash: rutas absolutas, exit code) | condensada |
+| 37 | La madre orquesta: ronda, lee transcripts, una línea por sesión | CL | - | eliminada: obsoleta, coordina la jefa (16-oct) |
+| 38 | Madre local + carriles en la nube; ordena por mensaje | CL | A§1 Quién hace qué | actualizada: madre le habla a la nube con `claude -p --cloud <cse_id>`; las órdenes se anotan en hermes-jefa.md |
+| 39 | Solo la madre manda con `SendMessage`; la nube no puede mandar | CL | - | eliminada: obsoleta (16-oct); el detalle de canales sigue en la skill `onia-sesion-madre` |
+| 40 | Nada de mensajes programados (`create_trigger`) entre sesiones | CL, CM | A§1 («nada de otro scheduler, cola ni puente») | condensada |
+| 41 | El canal es el mensaje; el handoff solo para retomar | CL | A§1 | condensada en Quién hace qué y Cambio de sesión |
+| 42 | El portal del SIAT solo lo abre Sergio Urcullo | CL, CX | A§1 | ampliada 17-oct (2.ª ronda): «nunca en la nube ni en ninguna sesión, tampoco la madre»: SIAT, BCP Credinet, bóveda, cookies de la PC, login de Google y códigos de verificación (SISTEMA §7) |
+| 43 | «Cambio de sesión» → handoff de 7 campos, commit y push, con lo incómodo | CL, CX | A§1 | condensada |
+| 44 | Precios: subscription-plans.ts (planes) y pricing.ts (add-ons) | CL, CX | A§2 | condensada; se nombra el repo `onia-platform` (esas rutas no están en origin/main de onia-hermes). 17-oct (2.ª ronda): restituido «ningún doc, propuesta, one-pager ni cotizador define precio: lo LEE de ahí; otro número = roto»; A§5 Propuestas apunta a `subscription-plans.ts` (planes) y `pricing.ts` (add-ons), no solo a `pricing.ts` |
+| 45 | Qué se vende: ONIA_CATALOGO_DE_VENTA.md | CL | A§2 | igual |
+| 46 | A quién: ONIA_CLIENTE_IDEAL.md | CL | A§2 | condensada (el perfil vive en el doc) |
+| 47 | Cómo se consiguen clientes: ONIA_ADQUISICION_Y_PAUTA.md; ningún anuncio promete lo que prod no hace | CL | A§2 | condensada |
+| 48 | Un tema = un archivo sin fecha; no crear `-v2`/`-new` | CL, CM | A§2 | condensada, unidas |
+| 49 | Fecha en el nombre = historia; gana el sin fecha | CL | A§2 | igual |
+| 50 | Antes de una cifra, buscarla; si hay dos, preguntar | CL | A§2 | igual |
+| 51 | Una promesa que cambia se barre en toda la superficie, también en las reglas | CL | A§2 | condensada; sale la historia del `/register` (ejemplo de agosto, ya corregido) |
+| 52 | Verificar es mirar el render | CL | A§2 | condensada |
+| 53 | Verificar contra el sistema correcto; peso y tiempo; grep solo descarta | CL | A§2 | condensada |
+| 54 | Un dato heredado se recuenta | CL, CX | A§2 | condensada |
+| 55 | El login no prueba la base | CL | A§2 | igual |
+| 56 | Herramienta visible, hash o plan no prueban ejecución; marcar observado/inferido/desconocido | CX | A§2 | condensada |
+| 57 | Construido ≠ terminado; flag apagado no se reporta como hecho | CL | A§2 | condensada |
+| 58 | Cerrar antes de abrir; handoff al cerrar | CL, CM | A§2 | condensada |
+| 59 | Gate de cierre: probada / delegada / bloqueada con causa | CX, AG, EP | A§2 | condensada |
+| 60 | Un solo producto con packs por rubro; nombres viejos | CL, CX | A§3 | condensada |
+| 61 | Vocabulario por rubro | CL | A§3 | condensada (la ruta del vocabulario es del repo onia-platform) |
+| 62 | Gestios y Ganaderos-Os son legado | CL | A§3 | igual |
+| 63 | Se vende el sistema; bot add-on; cero autobombo; medir contra lety/dapta | CL | A§3 | condensada |
+| 64 | La venta nunca exhibe obra | CL | A§3 | condensada; 17-oct (2.ª ronda): restituidos la lista completa («en construcción», «próximamente»), «¿Otro rubro? Escribinos» y el contrapeso: solo rige para la venta; docs internos, privacidad, textos legales y lo que se presenta al banco son honestos sobre límites |
+| 65 | No fabricar testimonios, logos ni cifras | CL | A§3 | condensada (unida a la anterior) |
+| 66 | No hay equipo de ventas; sales-kit; comisiones suspendidas; /vendedores lo baja él | CL | A§3 | condensada |
+| 67 | ONIA Core: encender rubro desde el core; orden dental → importadora → resto | CL | A§3 | condensada |
+| 68 | Base de producción self-hosted en el VPS | CL | A§3 | igual |
+| 69 | Dirección visual: Bench, Garabato, HSB Engineers; solo info relevante | AG | A§3 | condensada |
+| 70 | Ejecución cerrada por defecto | AG, EP | A§4 | condensada; el protocolo completo sigue en EP |
+| 71 | Data-first antes de preguntar | AG, EP | A§4 | condensada; fuentes de Notion siguen en EP |
+| 72 | Completitud: «todo» es todo, muestras marcadas | AG | A§4 | condensada |
+| 73 | Autonomía y bloqueos: pedir el permiso que falta ya, agrupado; silencio no es sí | CX | A§4 | condensada |
+| 74 | Ejecutar hasta cierre; un bloqueo no frena los otros frentes | CX, AG | A§4 | condensada |
+| 75 | No fingir 24/7, no inventar tareas, no decir «activo» sin medirlo | CX | A§4 | condensada |
+| 76 | Plan breve antes de deploy, secretos, infra o publicar | AG, EP | A§4 | condensada |
+| 77 | Máx. 1 implementador + 1 revisor por lote | CX | A§4 | igual |
+| 78 | Carril = 1 sesión/worktree/rama/carpeta | CL, CM | A§4 | igual |
+| 79 | Avisar antes de tocar los 4 archivos raíz de web-factory | CL, CM | A§4 | igual |
+| 80 | Dueño de archivos de cada carril en COORDINATION_MANIFEST | CL, CM | A§4 | actualizada: se declara en el handoff del carril (el manifest pasa al historial) |
+| 81 | Trabajo de otro carril: nota, nunca implementación duplicada | CM | A§4 | condensada |
+| 82 | Un carril = un puerto = un `.next`; apagar server al cerrar | CM | A§4 | condensada |
+| 83 | Infra tiene turno, uno por vez | CL, CM | A§4 | condensada |
+| 84 | `git add` con rutas explícitas, nunca `-A` | CM | A§4 | igual |
+| 85 | Calidad de código (inmutable, <50/<800, errores, validación, tests 80 %, revisión, seguridad) | CL | A§4 + C (agentes code-reviewer/security-reviewer) | condensada; sale el detalle web (CSP/SRI, CLS, INP, fuentes, animación, breakpoints): queda LCP. Si hace falta en la nube, va a `onia-frontend`/`onia-verificacion` |
+| 86 | `main` siempre compila; entra por PR revisado | CL, CM, CX | A§4 | actualizada: sale «la madre y el integrador lo mueven directo» (integrador muerto); el permiso de la madre queda en C |
+| 87 | Si un archivo nuevo importa otro nuevo, van los dos | CL, CM | A§4 | igual |
+| 88 | Casing de imports | CL, CM | A§4 | igual |
+| 89 | `main` alimenta VPS y Vercel | CL, CM | A§4 | igual |
+| 90 | `main` se mueve debajo: BASE + diff antes de concluir | CL | A§4 | condensada |
+| 91 | Un aviso por Telegram en cada merge no es la solución | CL | - | eliminada: hablaba del integrador de ~28 commits/día, que ya no existe |
+| 92 | Conventional commits con el porqué | CL | A§4 | igual |
+| 93 | Autosync hook Stop pushea la rama | CL, CX | C | movida a C |
+| 94 | Permiso de fast-forward a main: madre (`ONIA_AUTOSYNC_MAIN` + marca) e integrador (`ONIA_LOOP_ID=onia-cola`) | CL | C | actualizada: queda solo la madre; el integrador onia-cola está muerto |
+| 95 | Merge con conflictos nunca abierto al soltar el turno | CL, CM | A§4 | condensada |
+| 96 | El hook puede publicar estado a medias: el árbol compila en cada turno | CL | A§4 + C | condensada |
+| 97 | El hook no autoriza publicar | CX | C | igual |
+| 98 | Nunca buildear producción con `.env.local` | CL | A§4 | condensada |
+| 99 | Velocidad: método correcto, `impeccable` antes de UI | CL | A§4 | condensada |
+| 100 | Paralelizar lo independiente | CL, AG | A§4 | igual |
+| 101 | Verificación fuerte solo en prod, plata o `main` | CL | A§4 | condensada |
+| 102 | Lo aprobado no se reabre | CL | A§4 | igual |
+| 103 | Publicar sin preguntar lo que pasa los gates (código, migraciones con backup, infra) | CL, AG, EP | A§4 | actualizada: suma «revisión de Codex» (16-oct) |
+| 104 | Diseño nuevo/rediseño se publica sin OK de él (9-oct) | CL | A§4 | actualizada: vuelve a pasar por Sergio Urcullo con capturas (corrección suya del 10-oct en CX; hermes-jefa.md 16-oct lo lista) |
+| 105 | Textos legales pasan por él | CL (2-oct, sacado el 9-oct), CX | A§4 | actualizada: restituida (hermes-jefa.md 16-oct: «texto legal») |
+| 106 | Contenido en redes sale por Buffer sin OK pieza por pieza si pasa control de calidad (8-oct) | CL | A§4 | actualizada: contenido nuevo pasa por él y lo aprobado sale sin re-OK (gates del 12-oct en CX). 17-oct (2.ª ronda): «sin re-OK» rige solo para esa versión, cuenta y calendario; un cambio, otra cuenta, función prometida sin tabla, tercero o competidor nombrado o CTA sin probar (comentario a DM de Instagram, 2 rechazos de Meta) vuelve a él (A§4 «lo visual»). La vía (Buffer, ig-reel.mjs) es operativa: skills de contenido |
+| 107 | Gate 12-oct de Codex: «cambios en producción y publicaciones nuevas con OK previo» | CX | A§4 | actualizada: para código manda la regla del 9-oct, confirmada por la orden del 16-oct (latidos publican); queda para contenido, diseño, gasto y accesos. **Resuelta el 17-oct** por decisión de Sergio Urcullo (ver «Decisión del 17-oct» al final) |
+| 108 | Siguen con su OK: gasto, contactar, SIAT, cara/voz; actos legales y firmas por Leslie Mercado Moreno | CL, CX | A§4 | condensada |
+| 109 | A Sergio Urcullo no se le habla de PRs | CL | A§1 Simple | condensada |
+| 110 | Preservar conocimiento en el repo y pushear | AG, CM | A§4 | condensada |
+| 111 | «commit all» primero revisa secretos; nunca `.env`, llaves, tokens; solo el nombre de la variable | AG, CM, CL | A§4 | condensada; 17-oct (2.ª ronda): se restablece la lista de lo que nunca se sube (contraseñas, dumps sin limpiar, archivos personales sensibles, datos personales de clientes y de la titular: CI, documentos) |
+| 112 | Dónde va cada cosa (tabla) | CL | A§4 | condensada a una línea |
+| 113 | Skills de Hermes con nombre en español | CM | A§4 | igual |
+| 114 | Docs operativos de repo en inglés y mayúsculas; references para datos máquina | CM | - | eliminada: regla de nombres de junio, contradicha por los docs vigentes (en español) |
+| 115 | Si no sabés dónde va, preguntar | CL | A§4 | igual |
+| 116 | Cuándo separar un repo | CL | A§4 | condensada |
+| 117 | Propuestas: generador, nunca HTML a mano, precios de pricing.ts, no fabricar | CL | A§5 | condensada; las 9 reglas siguen en la skill `onia-propuestas` |
+| 118 | Publicidad: trabajo de venta, sin afiches repetidos, UI real, UGC IA sin falso cliente, mirar la pieza completa | CL | A§5 | condensada |
+| 119 | Pauta de Onia Platform con la marca de la web, no la personal; pack `referentes` solo para la marca personal | CL | A§5 | condensada; sale la historia de las dos correcciones del 2-oct |
+| 120 | Primero la Biblioteca de anuncios, después el diseño; prometer solo lo del catálogo | CL | A§5 | condensada |
+| 121 | Desde la nube Facebook no abre: los creativos los captura la madre | CL | A§1 (la madre hace lo de la PC) | condensada |
+| 122 | Radar creativo: fuentes actuales antes de contenido; referencias por estructura, no copiar | AG, EP | A§5 | condensada; el flujo sigue en EP y `radar-creativo-onia.md` |
+| 123 | Aprendizaje aplicado (X, Hugging Face, NotebookLM: fuentes primarias, licencia, costo) | CX | A§5 Radar | condensada |
+| 124 | Intake por evento: cada link nuevo se indexa una vez | CX | A§5 | actualizada: el registro citado (`codex-cloud-pc-20261011.md`) no existe en origin/main; se usa la skill `onia-continuidad`/`aprender-de-todo` |
+| 125 | Higgsfield: fuente operativa y docs de Lucía | CL | A§5 | condensada a la carpeta de Lucía |
+| 126 | CLI oficial + skills; web solo identidad y QA; no automatizar la web desde el VPS | CL | A§5 | condensada (el «MCP para agentes de chat» sale: no aplica a Codex ni a Claude Code) |
+| 127 | API de Higgsfield para una fábrica futura; no mezclar saldo API con créditos del plan | CL | - | eliminada: describe algo que no existe; se escribe cuando exista |
+| 128 | Flujo de Lucía (derechos → banco → Soul → A/B → still → video → QA) | CL | doc HIGGSFIELD_VIDEO_SYSTEM.md | eliminada de las reglas: el propio doc dice que el A/B contra los Elements «quedó sin objeto»; manda el doc |
+| 129 | `generate cost` antes de `create`; nunca `auth token` en logs | CL | A§5 | igual |
+| 130 | IDs, modelos y saldos se resuelven en vivo | CL | A§5 | igual |
+| 131 | Gasto Higgsfield: lotes chicos autorizados; grandes, video y Soul con su sí; cara/voz también con Leslie | CL | A§5 | condensada |
+| 132 | Tabla de cortes + preview 360p antes del master | CL | A§5 | condensada |
+| 133 | ver-videos/editor-videos; HyperFrames del repo gana sobre la global | CL | A§5 | condensada; corregida 17-oct (2.ª ronda): AGENTS dice «HyperFrames del repo gana sobre la global»; la ruta `.claude/skills/hyperframes*` y su copia `.agents/skills/` sí existen en origin/main |
+| 134 | sacar-prompt: recuperar vs reconstruir; UGC vs cine | CL | skill `sacar-prompt` | movida: el método vive en la skill; A§5 la nombra |
+| 135 | Rostro de Sergio generado no se publica sin aprobación | EP | A§5 + EP | igual |
+| 136 | Puntero «¿Venís a continuar la 1.0 (Codex)?» | AG | - | eliminada: estado de un día, no regla; la 1.0 se sigue por hermes-jefa.md |
+| 137 | «Empujar una rama `claude/*` la publica» | AG | - | eliminada: lo hacía el integrador onia-cola, muerto |
+| 138 | Codex = ejecutor de la madre vía `scripts/codex-tarea.sh`; «PARA LA MADRE: …» | AG | A§1 | actualizada: 16-oct Codex revisa PRs. 17-oct (2.ª ronda): sale «respaldo de cupo» y las ramas `codex/*`; Codex solo revisa (no orquesta, no abre sesiones, no mergea ni empuja; no revisa borradores) y a `main` une solo la jefa con CI verde y revisión de Codex (SISTEMA §3, §5, §9) |
+| 139 | Cola de tareas de Codex en `codex-relevo.md` | AG | - | eliminada: Codex dejó de ser ejecutor con cola propia |
+| 140 | Effort medio, sesiones cortas | AG | doc MR | movida: es parámetro de modelo, vive en MR |
+| 141 | Flujo obligatorio (leer COORDINATION_MANIFEST primero, etc.) | AG, CSR, CX | A§1 Arranque | actualizada: el manifest pasa al historial; se lee cola + handoff del carril |
+| 142 | Agentes por frente (checklist de 10 frentes) | AG | - | eliminada: duplicaba `equipo-de-agentes` |
+| 143 | Sin subagentes, simular la delegación en pasadas | AG | - | eliminada: hoy hay hilos y subagentes siempre |
+| 144 | Mínimo para tareas pequeñas (plan de una línea) | AG | A§4 Plan breve | condensada (el plan solo se exige en deploy, secretos, infra o publicar) |
+| 145 | Límites (no imprimir secretos, no duplicar, no deploy sin validar) | AG | A§1, A§2, A§4 | condensada |
+| 146 | Cierre de cada tarea: qué, frentes, validación, pendiente | AG | A§2 gate de cierre + A§1 Simple | condensada |
+| 147 | Tabla de skills de ONIA para Codex | AG | skill `onia-router` | eliminada: duplicaba el índice de `onia-router` |
+| 148 | Hermes orquesta una sola cola; no segundo controlador | CX | A§1 | condensada |
+| 149 | Ruta preferida: Codex Cloud y Claude Code Cloud; PC apagada preferida | CX | A§1 | condensada («todo sigue con la PC apagada», hermes-jefa.md 16-oct) |
+| 150 | No sustituir por ChatGPT Work, VPS ni API facturada de Claude sin decisión | CX | A§1 «Descartado» | corregida 17-oct (2.ª ronda): no es solo gasto sino términos de servicio. AGENTS lista lo descartado (SISTEMA §9: harness propio de Codex, Hermes Agent como jefe, Warp Oz, dots, Grok Bot, Muse), prohíbe la suscripción de Claude desde otro programa y la API facturada, y manda preguntar a Sergio Urcullo si algo vuelve a proponerse |
+| 151 | Warp visor pasivo; Orca «para después» | CX | A§1 | actualizada: Orca ya es el tablero de la PC (skill `orca`, 16-oct). 17-oct (2.ª ronda): sale «Warp: visor» (sin fuente del 16-oct; Warp Oz está descartado en SISTEMA §9) |
+| 152 | Reusar `pedido-claude.sh`/`respuestas-pedidos.sh`; no crear otro puente | CX | A§1 | actualizada 17-oct (2.ª ronda): sale el nombre del script (el pedido por Telegram está apagado, SISTEMA §8); queda `scripts/hermes/jefa.sh` y «nada de otro scheduler, cola ni puente». Horas y estado de las rutinas salen de las reglas: viven en `docs/handoff/madre-control.md` |
+| 153 | Distinguir herramienta ausente de capacidad de producto | CX | A§2 | condensada |
+| 154 | Estados del día van al handoff, no a la política; recibos inmutables | CX | A§1 Skills («el handoff es estado») | condensada; «recibos inmutables» sale: era de la fase de recuperación Codex Cloud |
+| 155 | 2 madres locales + 5 ejecutores Codex Cloud (12-oct) | CX | - | eliminada: obsoleta (16-oct, jefa en la nube + una madre) |
+| 156 | Canal único de avisos = Telegram como PROPUESTA; no usar Claude Code por falta de cuota | CX | - | eliminada: obsoleta, la jefa es Claude Code y Hermes Agent es el teléfono |
+| 157 | Git del worker según contrato; no inferir main/merge/deploy | CX | A§4 | condensada |
+| 158 | npm por lockfile ya autorizado; nada de apt/pip globales por inferencia | CX | A§1 (instalar con OK) | condensada |
+| 159 | Loops: no crear nuevos ni reactivar históricos; IDs viejos no son activos | CX, CM | A§1 | condensada |
+| 160 | Plan de recuperación en `codex-cloud-pc-20261011.md` | CX | - | eliminada: la ruta no existe en origin/main y la fase cerró |
+| 161 | PR, docs o tests no prueban el resultado de negocio | CX | A§2 Nada a medias | condensada |
+| 162 | Elegir la skill nombrada o la más específica; conjunto mínimo | CSR | skill `onia-router` | movida |
+| 163 | Limpieza de skills del 29-sep | CSR | - | eliminada: revertida el 2-oct |
+| 164 | Lista de skills globales de openai/skills y matriz de uso | CSR | EP (skill routing de Codex) | eliminada de las reglas: inventario de máquina; EP conserva su lista |
+| 165 | Session A / Session B | CSR, CM | - | eliminada: modelo de junio |
+| 166 | Ruta `HERMES_EXECUTION_PROTOCOL.md` | CSR | A§4/A§5 → `docs/EXECUTION_PROTOCOL.md` | actualizada: ruta corregida |
+| 167 | Skills locales de Hermes (lista) | CSR | skill `onia-router` | eliminada: índice duplicado |
+| 168 | Avisar si hay que reiniciar Codex para cargar skills | CSR | - | eliminada: detalle de runtime, no regla |
+| 169 | EL HILO: sesiones vivas, IDs y mensajes pendientes (29-30 sep) | CM | - | eliminada: el propio manifest la marcó historia el 9-oct |
+| 170 | Telegram a Sergio Urcullo solo por `onia-tg.sh` (silencio 22-06:30, bloques del calendario) | CM | skill `onia-hermes-jarvis` + `scripts/loops/onia-tg.sh` | movida: vive en la skill; verificar si sigue vigente con Hermes Agent como teléfono |
+| 171 | Agendar en su calendario con `onia-agenda.sh --si` | CM | - | corregida 17-oct (2.ª ronda): sí existen `scripts/loops/agenda.sh` y `hermes-content/skills/agenda-calendario.md` en origin/main (verificado con `git cat-file`). Queda en A§1 «Conectores»: su calendario cambia solo con su sí a ese cambio. La eliminación anterior era falsa |
+| 172 | Declaraciones de carriles 21-28 sep (marca personal, guiones, tandas, infra) | CM | - | eliminada: carriles cerrados, historia |
+| 173 | Tabla de 8 ramas del 23-ago | CM | - | eliminada: historia |
+| 174 | Modelo de carriles A-H del 5-jul y carril L | CM | - | eliminada: histórico, ya superado en el propio manifest |
+| 175 | Listas de archivos canónicos de Session A/B | CM | - | eliminada: inventario de junio |
+| 176 | Rutas de Nuvia y del design stack | CM | - | eliminada: índice de un cliente y ruta de máquina, no regla |
+| 177 | Comandos de deploy (`npm run deploy:*`, video-lab, hermes-command) | CM, CSR | `package.json` + EP | movida: son comandos, no reglas |
+| 178 | Estado validado de junio (asset server, crons, Supabase, LiteLLM) | CM | - | eliminada: foto de junio vencida |
+| 179 | Rotar la clave del VPS y el token de Meta pegados en el chat | CM | - | reabierta 17-oct (2.ª ronda): la rotación sí consta como pendiente abierto (ONIA_PENDIENTES_PARA_LANZAR.md, ONIA_N8N_AUTOMATIONS_LIVE_2026.md, ONIA_INFRA_LIMPIEZA_Y_ORDEN.md y handoff/madre-control.md §6.6, según la revisión; líneas no recontadas aquí). AGENTS §4 Seguridad: las rotaciones abiertas se listan en un handoff y no se pegan secretos en chat ni docs; rotar en un panel con su login es de él (A§4 «Qué se le dice») |
+| 180 | Secretos solo en `/root/.hermes/.env`; verificar por presencia o largo | CM | A§1 (presencia o largo) | condensada; la ubicación del VPS sale (dato de junio, sin verificar hoy) |
+| 181 | Protocolo de trabajo paralelo (abrir, editar, cerrar carril) | CM | A§4 Carriles + A§2 + C | condensada |
+| 182 | Colas en loop con `/loop`; cola vacía → sacar las 3 siguientes | doc cola/loop/README.md | C (`/loop`) + README | condensada; el README sigue |
+| 183 | Plan visible en la app con estado y criterio de hecho | skill onia-sesion-madre | C | movida a C |
+| 184 | Workflows solo si Sergio Urcullo optó, con `workflow-authoring` | (nueva, pedido) | C | nueva |
+
+## Para integrar (no lo hace este paso)
+
+- `hermes-content/docs/EXECUTION_PROTOCOL.md`, `hermes-content/docs/cola/loop/README.md` y varias skills citan `CLAUDE.md` §«Qué se publica sin preguntar» o «§1 Sesión MADRE»: apuntarlas a `AGENTS.md` §4 y §1.
+- El README de colas dice «también el diseño» se publica sin esperar (9-oct): contradice la fila 104.
+- Fila 107: resuelta el 17-oct (ver «Decisión del 17-oct» al final).
+- Fila 16: si Codex necesita la lista de las 6 skills de `onia-platform`, va en `AGENTS.md` y sale de `CLAUDE.md`.
+- (17-oct, 2.ª ronda) Editar `hermes-content/docs/EXECUTION_PROTOCOL.md` L33-37 en el MISMO PR que las reglas: hoy dice que diseño, infra y migraciones no esperan otro OK y contradice AGENTS §4 «Quién decide»; debe citarlo. Hasta entonces AGENTS §5 limita el puntero a comandos y fuentes.
+- (17-oct, 2.ª ronda) `docs/ONIA_SISTEMA_AUTONOMO.md` §3 dice «Opus 5.5, esfuerzo medio» y `handoff/madre-control.md` §6.3 dice «coordinador en Sonnet 5.5»: corregir §3. Si Sergio Urcullo confirma Higgsfield/Meta Ads en rutinas (ver abajo), cambiar también §7 «Cuidado» y la fila de §8 «Una rutina gasta sin preguntar».
+- (17-oct, 2.ª ronda) `.agents/skills/` (30 copias) sin dueño de sincronización: decidir quién las regenera o dejar de versionarlas.
+
+## Correcciones del 17-oct (antes de mostrárselo a Sergio Urcullo)
+
+Salen de `REVISION.md` (P0 1-4) y de 3 reglas medidas el 17-oct. Los originales quedan en `AGENTS.antes.md` y `CLAUDE.antes.md`.
+
+- **P0-1** Higgsfield: CLI o conector MCP; cotizar siempre; mismas reglas de gasto. Higgsfield y Meta Ads nunca en rutinas automáticas; Meta Ads sin OK no crea ni gasta (AGENTS §5, CLAUDE).
+- **P0-2** «Antes, a Sergio Urcullo» suma datos reales de producción, precios/cifras de venta y borrado destructivo sin copia (AGENTS §4).
+- **P0-3** La cola `hermes-jefa.md` registra la orden de él; no afloja Credenciales ni «Antes, a Sergio Urcullo» (AGENTS, línea 3).
+- **P0-4** Nueva viñeta «Seguridad» (secretos, `service_role`, SQL parametrizado, HTML sanitizado, CSRF, rate limit, CSP/SRI, rotar lo expuesto, redactar exports de n8n, revisión antes de mergear) y métricas web (AGENTS §4).
+- **Nueva** A él le habla solo la jefa o la madre: máx. 3 líneas, lo PUBLICADO o UNA decisión por vez. Reemplaza «UNA lista diaria» (16-oct) y el formato de 3 bloques.
+- **Nueva** Subagentes con `model` explícito: haiku lee/cuenta/verifica, sonnet escribe (uno por grupo de archivos), opus decide lo riesgoso (AGENTS «Modelo por rol»; CLAUDE).
+- **Nueva** PASO 0 en la nube: `cd` al repo y cargar `onia-router` con la herramienta Skill (AGENTS «PASO 0»; CLAUDE).
+
+Siguen abiertos (no tocados): P1 #5-#12, P2 (referencias colgantes) y P3 de `REVISION.md`; filas #19, #133 y #171 de esta tabla (falsas según la revisión).
+
+## Decisión del 17-oct (Sergio Urcullo, textual)
+
+«Quiero que todo lo que sea visual o cosas serias yo decido, pero si tiene cosas técnicas no me lo digas y aceptalo, porque sabes que no lo entiendo, solo hago vibe coding».
+
+- **Resuelve la fila #107:** el código revisado y probado se publica sin su OK y sin avisarle. El gate del 12-oct de Codex queda superado para lo técnico.
+- **Una sola regla:** `AGENTS.md` §4 «Quién decide» reemplaza a «Publicar sin preguntar» + «Antes, a Sergio Urcullo». Técnico (código, infraestructura, revisiones, merges, migraciones con backup, configuración, herramientas) = se decide y se publica sin consultarle ni contárselo, si pasa los gates y se mira en producción. Visual (diseño nuevo, rediseño de algo vivo, piezas de contenido, su cara o voz) y serio (legales, precios o cifras, gasto, clientes o terceros, datos reales de producción, borrado sin copia, SIAT y banco) = antes a él.
+- **Citas ajustadas para no contradecir:** `AGENTS.md` línea 3 (apunta a «Quién decide»), §1 Simple (lo técnico no se le cuenta; solo lo publicado que él ve o una decisión por vez), §4 Ejecución cerrada (preguntas y permisos solo los que le tocan a él; los técnicos los resuelve la jefa o la madre), §4 «Dónde va cada cosa» (si dudás, a la jefa). `CLAUDE.md`: puntero a esa regla y fuera «así sigue el avance Sergio Urcullo». `RESUMEN_PARA_SERGIO.md`: línea 3 ajustada y última línea reemplazada.
+- **Lo que NO se aflojó:** Credenciales (§1) sigue pidiendo su OK para cuenta nueva o instalar/descargar una herramienta; la decisión dice «herramientas» pero esa regla es suya y de seguridad. Si quiere que instalar también sea técnico, lo dice y se cambia en una línea.
+- **Sin tocar:** `REVISION.md` (línea 124 aún menciona #107 como pendiente: es el informe previo, queda como historia) y `AGENTS.antes.md`/`CLAUDE.antes.md`.
+
+## Correcciones del 17-oct, 2.ª ronda (hallazgos de la revisión)
+
+AGENTS.md pasa de 15.014 a 16.916 bytes (con CRLF; unos 90 menos con LF), por encima del objetivo de ~16 KB. Para volver a ~16 KB hay que sacar otro bloque entero; ver «Recortes por tamaño». CLAUDE.md y RESUMEN_PARA_SERGIO.md se ajustan para no contradecir.
+
+**Credenciales (AGENTS §1)**
+- Restituidas las prohibiciones duras (volcar/exportar, clave maestra, Google/consentimiento/MFA/desbloqueo/sesión caducada, sesiones permanentes, perfiles, VPS no aloja la bóveda) y «descargar o instalar» con qué, de dónde y para qué. La ruta de la bóveda queda en la skill (no en AGENTS).
+
+**Quién decide (AGENTS §4)**
+- Frontera técnico/visual: técnico = arreglo, texto o feature que no cambia composición, jerarquía ni flujo de una pantalla viva; visual = pantalla o sección nueva, composición o jerarquía distinta, cambio de marca, pieza de contenido. «Ante la duda, es visual.» Reemplaza «si cambia lo que ve un cliente o él, es visual».
+- «Qué se le dice»: excepciones aunque sean técnicas, en 1 línea: incidente de seguridad (secreto expuesto, acceso indebido, caída de producción con clientes, riesgo legal) y lo que solo él puede ejecutar (rotar una clave en un panel con su login, MFA, pagos, SIAT, banco), como UNA decisión con los pasos mínimos. Se aclara que «lo irreversible» es lo que se le pide aprobar. Esto matiza su frase del 17-oct («lo técnico no me lo digas»): **pendiente que Sergio Urcullo confirme el alcance**; RESUMEN_PARA_SERGIO.md se lo pregunta.
+- Una sola regla: se quita «Lo técnico no se le cuenta» de §1 Simple y la duplicación de §4 Ejecución cerrada; CLAUDE.md queda con punteros (Subagentes, Revisión, Conectores y rutinas, Qué se le consulta).
+- Contenido aprobado: «sin re-OK» solo para esa versión, cuenta y calendario (ver fila 106).
+
+**Higgsfield y Meta Ads en rutinas (contradicción AGENTS/CLAUDE/CAMBIOS)**
+- Se deja la postura estricta en todos lados: **no se conectan a rutinas automáticas** (SISTEMA §7: «sacar esos conectores de la rutina»; una rutina sin humano no puede pedir su sí). AGENTS §5 deja de decir «pueden quedar conectados»; CLAUDE.md apunta a AGENTS; RESUMEN_PARA_SERGIO.md cambia «siguen conectados (lo decidiste hoy)» por la postura estricta.
+- Motivo: la supuesta decisión del 17-oct solo figuraba en RESUMEN, sin frase textual en CAMBIOS ni en el handoff. **Pendiente:** si Sergio Urcullo confirma con sus palabras que sí quiere los conectores en rutinas, registrar su frase aquí, volver a la versión permisiva en AGENTS §5 y corregir SISTEMA §7 y §8.
+
+**Codex, rutinas y proveedor (AGENTS §1)**
+- Codex solo revisa (filas 138 y 150); a `main` une solo la jefa (también en §4 Git). Rutinas sin horas ni nombre de script; sin «Opus coordina» (el modelo del coordinador vive en SISTEMA §3); sin «Warp: visor»; «Descartado» con la lista de SISTEMA §9; «Nunca en la nube ni en ninguna sesión» y «Conectores que sí llegan» con reglas por conector.
+- Skills: `.agents/skills/` existe; AGENTS dice que son copias para Codex y no se editan.
+
+**Dominios y otros**
+- Onia vende software (fila 34), precios (fila 44), venta no exhibe obra (fila 64), preservar (fila 111), rotación de claves (fila 179) y las filas 19, 133, 150, 151, 152 y 171, corregidas en la tabla.
+- AGENTS §5 «Telegram, Video Lab, Notion»: el puntero a `EXECUTION_PROTOCOL.md` se limita a comandos y fuentes; en aprobaciones manda §4 (ver «Para integrar»).
+
+**Recortes por tamaño (para entrar en ~16 KB)**
+- Sacados de AGENTS: «Velocidad» pasa a una frase dentro de «Calidad»; «Base de producción» se une a «ONIA Core»; «Separar un repo» se une a «Dónde va cada cosa»; «Plan breve» se une a «Ejecución cerrada»; fuera la ruta de la bóveda, el comando del generador de propuestas, `habla a la nube con "msg"`, la ruta `.claude/skills/hyperframes*` y dos frases históricas («Mezclar metas pierde el hilo», «Lo escaso son clientes»). Ninguna regla se eliminó.
+- Si hace falta bajar más: mover «Radar creativo» y «Telegram, Video Lab, Notion» a `EXECUTION_PROTOCOL.md`.
