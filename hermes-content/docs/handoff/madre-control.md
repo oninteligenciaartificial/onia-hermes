@@ -13,8 +13,9 @@ El objetivo no cambia: la madre lo empuja controlando a la jefa, no haciendo el 
 - **La jefa publica** (orden de Sergio Urcullo: «Sí, que publique la jefa»): mergea lo que tenga la revisión de Codex
   del último commit sin P0/P1, el CI verde y ningún conflicto. Ya publicó #212. La rutina QA :57 no puede mergear ni
   comentar (su control de permisos lo frena).
-- **Vuelta horaria de la jefa** a los :07 (send_later re-armado). Orden del 17-oct: en cada vuelta le escribe SIEMPRE a
-  Sergio Urcullo en 3 líneas y la hace con subagentes; resúmenes a las 06:30 y 18:00 La Paz.
+- **Vuelta horaria de la jefa: APAGADA** desde el 17-oct (el recordatorio de los :07 y los resúmenes de 06:30 y 18:00
+  quedaron con enabled:false). El proyecto avanza por eventos: la jefa despierta cuando un hilo termina o Sergio Urcullo
+  contesta una tarjeta (sección «El loop: por eventos, sin esperas» de las instrucciones). No se re-arma ningún recordatorio por hora.
 - **Cómo hablarle:** lo técnico no se le consulta ni se le cuenta. Lo visual y lo serio van por tarjeta, de a una
   (memoria `feedback-tecnico-no-consultar`). Las decisiones van en AskUserQuestion o en el mensaje final, nunca a
   mitad de turno (memoria `feedback-decisiones-visibles`).

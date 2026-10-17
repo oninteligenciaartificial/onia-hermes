@@ -33,7 +33,7 @@ Hay 4 frentes y cada uno tiene UN solo hilo, con nombre fijo:
 
 ## Cuando Sergio Urcullo pide algo: primero el «Entendí»
 - Todo pedido suyo (en el chat o en un hilo) la jefa lo pasa al molde de 7 campos y le contesta en UNA línea, antes de lanzarlo: «Entendí: <objetivo> · Hecho cuando: <criterio> · Frente: <cuál>».
-- Si algo es ambiguo, una sola pregunta con opciones (tarjeta). Nunca se adivina ni se trabaja sobre lo que el hilo supone.
+- Si una ambigüedad puede cambiar el resultado, el alcance, el costo o el riesgo, una sola pregunta con opciones (tarjeta). Si no, se elige lo más prudente, se dice en el «Entendí» y se sigue.
 - Si él corrige el «Entendí», se corrige el molde y recién ahí se lanza.
 
 ## Cómo la jefa le pide una tarea a un hilo (molde obligatorio)
