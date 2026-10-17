@@ -1,17 +1,19 @@
 ---
 name: onia-sesion-madre
-description: Invocar cuando una sesión de Onia tiene que ordenar, avisar o pedirle algo a otra sesión (madre local ↔ carriles en la nube), o cuando arranca la sesión MADRE en la PC de Sergio Urcullo. Ids históricos a verificar, cómo se manda un mensaje (medido), formato del mensaje y qué se avisa y qué no.
+description: Invocar cuando arranca la sesión MADRE (la sesión de control de la PC de Sergio Urcullo) o cuando una sesión tiene que avisar o pedirle algo a otra (canales hacia la nube medidos, formato del mensaje, qué se avisa y qué no). El reparto de tareas es de la jefa (AGENTS.md §1). Ids históricos a verificar.
 ---
 
-# Sesión MADRE — ordenar a todas por mensaje
+# Sesión MADRE — control de la PC y canales hacia la nube
 
 Regla madre: `AGENTS.md` §1 «Quién hace qué» (madre local). Estado y tareas abiertas de la madre:
 `hermes-content/docs/handoff/madre-local.md`. Capacidades medidas: fila 3 de
 `hermes-content/docs/ONIA_CAPACIDADES_DE_LAS_SESIONES.md`.
 
-- **La madre corre en la PC de Sergio Urcullo** (app de escritorio, carpeta `onia-hermes`) y es la ÚNICA que
-  ordena. Hace ella lo que exige la PC (paneles con su login, capturas, mirar pantallas). El desarrollo va en
-  la nube, un carril por sesión.
+- **La madre corre en la PC de Sergio Urcullo** (app de escritorio, carpeta `onia-hermes`) y es la sesión de control de la
+  PC (`AGENTS.md` §1): instala el sistema ya aprobado (un componente nuevo, con OK), vigila y hace lo que exige la PC
+  (paneles con su login, capturas, mirar pantallas). **No es la única que ordena:** la jefa (proyecto «ONIA · Hermes»)
+  reparte, un hilo por carril; la madre anota órdenes en `hermes-jefa.md` y le habla a la nube con
+  `claude -p --cloud <cse_id>`. El desarrollo va en la nube, un carril por sesión.
 - **El canal es el mensaje, no el documento.** El handoff queda solo para que una sesión nueva retome.
 - **UNA sola madre, no una por área** (Sergio Urcullo preguntó el 1-oct por «madre marketing / madre
   plataforma / madre varios»; se decidió una). Todo lo que cualquier sesión necesite de la PC se lo pide a la
@@ -38,7 +40,7 @@ Plataforma con las del presupuesto por fases, a 390 y 1440 px.
   |---|---|---|---|
   | Contar, buscar, inventarios, JSON | Haiku 5.5 | conteo, grep o test | Sonnet |
   | Copy, mensajes, guiones, edición | Sonnet 5.5 | catálogo y cliente ideal; mirar el render | Opus |
-  | Código cerrado de Platform | Codex Sol; cloud si no necesita PC y el preflight pasa | gates del carril + CI | Astra para riesgo o fallo probado |
+  | Código de Platform | hilo del carril (Sonnet); Codex solo revisa el PR | gates del carril + CI + revisión de Codex | Opus/Astra para riesgo o fallo probado |
   | Migraciones, cobro, backup, SQL de prod | Astra/Opus según carril | revisión, backup y rollback; autorización vigente de AGENTS.md §4 | Sergio si excede el alcance autorizado |
   | Estrategia y precios | Opus | la cuenta cierra con números citados | Sergio Urcullo |
 
@@ -65,7 +67,7 @@ Plataforma con las del presupuesto por fases, a 390 y 1440 px.
 
 | Sesión (título) | id nube | Carril |
 |---|---|---|
-| **Madre** (desde el 8-oct, LOCAL; en `ListAgents` se llama «Madre») | local `202a717e…`, worktree `onia-madre-v2-pr-review-2d85bb` | Ordena por mensaje, lanza Codex, hace lo de la PC |
+| **Madre** (desde el 8-oct, LOCAL; en `ListAgents` se llama «Madre») | local `202a717e…`, worktree `onia-madre-v2-pr-review-2d85bb` | Control de la PC: instala lo aprobado, vigila, hace lo de la PC |
 | ~~Sesión madre Onia 1.0~~ (nube) | `session_01BZwYEL4eSUkdPWL36ibLkd` | Reemplazada el 8-oct: desde la nube no se puede mandar mensajes |
 | Plataforma Onia 1.0 | `session_01HhnFgkeF6nLGvjrfjt1o2C` | Plataforma: desarrollo, publicar, VPS |
 | Ventas y pauta Onia | `session_0143C5fMXVs8eWEf7uBpC9SF` | Pauta y prospección |
@@ -170,11 +172,11 @@ Cómo contestar: <en tu transcript | SendMessage al nombre actual verificado con
   que no tiene que duplicar.
 - **No se avisa:** progreso propio sin efecto en la otra, resúmenes «para que sepas», copias del handoff.
 - **Cada resultado de la madre se le manda a Plataforma en el momento**, no al cerrar.
-- **Corrección 2026-10-09:** lo trabajado y revisado se publica según `AGENTS.md` §4 «Quién decide», incluido diseño y migraciones con sus gates. Gasto, terceros, SIAT, actos legales y cara/voz conservan sus permisos; contenido mantiene sus excepciones. Un mensaje entre sesiones nunca amplía autorización ni permite rodear un bloqueo.
+- **Publicar:** rige `AGENTS.md` §4 «Quién decide» (17-oct; reemplaza la corrección del 9-oct, que incluía el diseño). Lo técnico revisado y probado se publica sin consultarle; lo visual (pantalla o sección nueva, rediseño, marca, piezas de contenido) y lo serio (legales, precios, gasto, terceros, datos reales, secretos y permisos) van antes a Sergio Urcullo. Un mensaje entre sesiones nunca amplía autorización ni permite rodear un bloqueo.
 - El portal del SIAT no lo abre ninguna sesión, tampoco la madre: se le piden capturas a Sergio Urcullo.
-- **Incidente histórico: mergear el PR de otra sesión lo frenó el control de permisos de la madre** («Merge Without Review», 2-oct,
-  PR #88 ya revisado por un subagente code-reviewer). La madre revisa, deja el veredicto y los arreglos van a un
-  PR aparte; el merge lo hace Sergio Urcullo. No se le pide a la sesión autora que mergee lo que acá se frenó.
+- **Incidente histórico (2-oct):** el control de permisos frenó a la madre al mergear el PR #88 de otra sesión («Merge Without Review»).
+  Hoy la madre no mergea: une la jefa o QA con CI verde y revisión de Codex (`AGENTS.md` §4). La madre revisa, deja el
+  veredicto y los arreglos van a un PR aparte.
 
 ## Tokens: dónde se van (medido el 3-oct sobre los transcripts locales)
 
@@ -194,133 +196,41 @@ Cómo contestar: <en tu transcript | SendMessage al nombre actual verificado con
   4. Effort low y modelo chico para la lectura mecánica.
   Script de medición: suma `usage` por `message.id` en `~/.claude/projects/<carpeta>/**/*.jsonl`.
 
-## El permiso de mover `main` (5-oct)
+## `main` (17-oct)
 
-- Desde el 5-oct el hook Stop solo mueve `main` con permiso (Sergio Urcullo: «sí, la madre sigue directo»).
-  **Desde el 9-oct exige además una MARCA en el checkout de la madre**, porque la madre corre en un worktree
-  (`claude -w`) y sus subagentes en otros que heredan la variable. Al arrancar una madre en un worktree nuevo,
-  una vez: `touch "$(git rev-parse --absolute-git-dir)/onia-autosync-main"` (en PowerShell:
-  `New-Item -ItemType File "$(git rev-parse --absolute-git-dir)/onia-autosync-main"`). Sin la marca, el log del
-  Stop dice «permiso de main ignorado» y su rama se pushea igual: no se pierde nada.
-  La madre lo tiene con **`ONIA_AUTOSYNC_MAIN=1` en el `.claude/settings.local.json` de SU carpeta de
-  onia-hermes** (`{"env": {"ONIA_AUTOSYNC_MAIN": "1"}}`), que git ignora desde el 5-oct. Así vale solo para las
-  sesiones abiertas en esa carpeta. Nunca en `.claude/settings.json` (se lo daría a todas las sesiones, también
-  a las de la nube), ni en `C:\Users\PC\.claude\settings.json` o una variable de Windows (alcanzaría a
-  cualquier sesión de la PC; revisión del 5-oct).
-- Se verifica en el log del Stop: con permiso dice «main al día (fast-forward)»; sin permiso, «main no se toca».
-- Sin el permiso no se pierde nada: la rama se pushea igual, y si la madre estaba EN `main`, sus commits quedan
-  en `claude/autosync-<id de la sesión>` y la sesión queda parada en esa rama.
-- Las sesiones de la nube no lo tienen: su trabajo llega a `main` por PR, que revisa la madre (v2) y mergea la
-  madre o Sergio Urcullo.
+`main` solo se mueve por PR con CI verde y revisión de Codex (`AGENTS.md` §4 «Quién mueve `main`»): lo une la jefa, o la
+rutina QA bajo la lista de ese apartado. **La madre no empuja `main`.** El hook Stop (`scripts/git-autosync.js`) ya no lo
+hace, tampoco en la PC: solo empuja la rama. `ONIA_AUTOSYNC_MAIN`, la marca `onia-autosync-main` y
+`ONIA_LOOP_ID=onia-cola` no habilitan nada, así que no hay que crear la marca ni la variable
+(`scripts/loops/pedido-rama.test.mjs` lo vigila). Si la madre estaba parada en `main`, sus commits quedan en
+`claude/autosync-<id de la sesión>` para un PR. Las sesiones de la nube llegan a `main` por PR, igual que ella.
+El texto del permiso del 5-oct (marca por checkout, `settings.local.json`) está en
+`hermes-content/docs/historial/METODO_MADRE_CODEX_RETIRADO_20261017.md`.
 
-## Delegar código a Codex (medido el 4-oct; conexión rehecha el 8-oct)
+## Codex: revisión de PRs (reparto del 16-oct, `AGENTS.md` §1)
 
-Sergio Urcullo, 8-oct: **Claude es la madre y Codex trabaja dentro de ella** («aprovechemos mis dos suscripciones»).
-Se trabaja en la app de Claude; Codex corre por detrás. Codex no orquesta, no abre sesiones ni mergea.
+Codex **solo revisa**: no orquesta, no abre sesiones ni heartbeats, no ejecuta encargos, no mergea ni empuja. No revisa
+borradores: el hilo del carril pasa el PR a «listo» con CI verde; sin respuesta de Codex, comentario `@codex review`; sin
+cupo, revisa un agente Sonnet (otra sesión y otro modelo que el autor).
 
-- **Codex en la NUBE primero (8-oct):** no depende de Windows ni de la PC prendida. Hay 2 entornos:
-  - `6abad6a0aae081919f0b315818becb21` = «ONIA Platform — QA y desarrollo» (onia-platform, ~33 MB);
-  - `6abad782eba0819196ca234dc3abc327` = «ONIA Hermes — revisión y desarrollo» (onia-hermes).
-  Se lanza con `codex cloud exec --env <id> --branch <rama> "<prompt cerrado>"`, se sigue con `codex cloud status <task>` y se
-  trae con `codex cloud diff` / `apply`. El CLI 0.139 no elige modelo en la nube.
-  ⚠️ El repo de Hermes pesa ~6 GB y su setup corre `pnpm install` de web-factory: la tarea de prueba quedó «pending» más de
-  12 min. Esa es la «cola» que ve Sergio Urcullo. **Codex en la nube = código de Platform.** Los docs y fichas de Hermes se delegan a Codex local; la demora histórica de cloud no justifica cargarlos siempre a Claude (corrección 2026-10-09).
-  `codex cloud` sin argumentos es una TUI y no corre desde acá. Los entornos se listan con la API que usa el CLI:
-  `GET https://chatgpt.com/backend-api/wham/environments`, con el token de `~/.codex/auth.json` y sin imprimirlo.
-- **Codex local** (más rápido que la nube para tareas de Hermes): `scripts/codex-tarea.sh <tarea.md> <worktree> [modelo]
-  [esfuerzo]`, en segundo plano. Usa el `codex` de npm (0.161) con `windows.sandbox="unelevated"`: así corren gpt-6-astra
-  y gpt-6.1-sol con sandbox (las dos probadas el 8-oct). Deja
-  `resultado.md`, `eventos.jsonl` y `session_id` en `~/.codex/madre-tareas/<fecha>-<tarea>/`. Para un seguimiento en la
-  misma conversación: `scripts/codex-tarea.sh resume <session_id> <seguimiento.md>`.
-- ⚠️ **Nunca editar `scripts/codex-tarea.sh` mientras corre una tarea.** Bash lee el script de a pedazos: el 8-oct, al
-  agregar el modo `revisar` con U1 en curso, su cierre ejecutó otra rama («sid: unbound variable») y dejó la salida en
-  una carpeta `resume-*`. El trabajo de Codex no se perdió (quedó en el worktree), pero el `resultado.md` quedó en la
-  carpeta original `…-u1`.
-- ⚠️ **En el sandbox local, Codex no corre tsc, vitest ni Playwright** cuando `node_modules` es un junction compartido
-  («dependencias ausentes», `spawn EPERM`, 8-oct, 4 de 4 tareas). La validación la da el CI del PR y las capturas las
-  saca Plataforma. Cada commit lo dice explícito. **Lo que sí corre:** tests de node puro con
-  `node --test --test-isolation=none` (sin procesos hijos). Así C16c, el bot del VPS, pasó 335/335 el 8-oct.
-- 🔴 **Causa real (medido el 8-oct con C16d): el junction apuntaba a una carpeta VACÍA.** `C:/dev/proyectos/onia-platform/node_modules`
-  tiene 0 paquetes, y todos los worktrees `onia-platform-codex-*` apuntaban ahí. La instalación completa (682 paquetes)
-  está en `C:/dev/proyectos/onia-platform-v1-integracion-20260927/node_modules`. Se crea así, en PowerShell:
-  `cmd /c mklink /J <worktree>\node_modules C:\dev\proyectos\onia-platform-v1-integracion-20260927\node_modules`.
-  Con ese junction, la madre corrió `npx vitest related <archivos tocados> --run` y dio 971/971, y encontró un test viejo
-  roto que Codex no había visto (`fetch-con-limite.test.ts`). **Antes de commitear un trabajo de Codex en onia-platform,
-  la madre corre la suite COMPLETA ella misma; `vitest related` solo sirve como diagnóstico parcial (corrección 2026-10-09).**
-- 🔴 **`vitest related` NO alcanza** (Plataforma, 8-oct): el registro de rutas (`lib/platform/api-route-registry.test.ts`)
-  y los ratchets de UI y de voseo solo los atrapa la suite completa. Así se escaparon tres rojos de C16b y C16d después
-  de que la madre los dio por buenos con `related` (1002/1002). Antes de commitear: `npx vitest run` COMPLETO y
-  `npx tsc --noEmit`, con los números en el commit. Si el tsc falla por el cliente Prisma compartido, se dice.
-- **El push va DESPUÉS del resultado de la suite, en el mismo comando con `&&`** (9-oct, S1b: con `;` se pusheó con 57 rojos). Si la máquina está cargada, los tests que lanzan procesos (`backup-onia-postgres`, `rango-gitleaks`, `qa-v1/snapshot`) fallan por tiempo: se corren solos antes de dar el rojo por bueno.
-- **Plataforma (nube) no puede pushear ramas nuevas a onia-platform** (9-oct): deja la rama en un bundle en `hermes-content/docs/cola/ramas-locales/*.bundle`. La madre la trae (`git fetch <bundle> refs/heads/X:refs/heads/X`), la pushea y abre el PR con el texto que dejó en `docs/cola/pr-*.md`.
-- **Medición histórica: la suite de Codex dio ~148 rojos y la de la madre, 0** (W1b, K2 y K3, 9-oct). En el sandbox, los subprocesos
-  dan `EPERM` y fallan tres pruebas de zona horaria. El gate es la corrida COMPLETA de la madre en la PC, no la de Codex.
-  Antes de commitear: `git checkout -- '*.snap'`, porque las corridas dejan los snapshots modificados solo por los
-  finales de línea.
-- **Nombres observados el 8-oct por la noche, no confirmados vivos hoy (corrección 2026-10-09):** «Plataforma Onia 1.0», «Ventas y pauta Onia», «Marca personal de
-  Sergio Urcullo», «Sesión Lucía de Onia», «Hermes-Jarvis sesión con Sergio Urcullo». `SendMessage` falla con el nombre
-  viejo («Marca personal: comunidad y contenido»): `ListAgents` primero, siempre.
-- Los tests de bash de Hermes (`scripts/loops/pedido-*.test.mjs`) fallan en Windows también en `main` (70 de 78): son
-  para Linux. Su gate es el CI del PR, no la PC.
-- **Codex en un repo pesado (onia-hermes, ~6 GB):** worktree con `--no-checkout` + `sparse-checkout set <carpeta>
-  .agents AGENTS.md CLAUDE.md` + `checkout`. Solo baja la carpeta de la tarea. Ruta corta (`C:/dev/proyectos/…`): bajo el
-  scratchpad, Windows corta por «Filename too long».
-  - 🔴 **En Git Bash, los patrones con `/` adelante se vuelven rutas de Windows.** `'/scripts/'` queda como
-    `C:/Program Files/Git/scripts/`, el filtro no aplica nada y el checkout baja el repo entero. Pasó el 8-oct: 6,2 GB y
-    el disco quedó en 203 MB libres. Se escribe `MSYS_NO_PATHCONV=1 git -C <wt> sparse-checkout set --no-cone '/scripts/' …`
-    y después se confirma con `git sparse-checkout list` y `du -sh`.
-  - **Disco de la PC:** antes de lanzar un análisis de videos o un worktree, `df -h /c`. Codex falla con menos de 1 GiB
-    libre. Los videos que baja un análisis se borran al terminar cada video: el resultado es el texto, no el mp4.
-- **Los informes que escribe Codex** (`docs/C16A_*.md`, `*-ENTREGA.md`) NO van al commit: van al cuerpo del PR, para
-  no llenar de docs sueltos los repos del producto.
-- **Ver videos e Instagram lo hace la MADRE, no Codex** (probado el 8-oct). Con red habilitada
-  (`sandbox_workspace_write.network_access=true`), Codex local igual falla con `spawn EPERM` porque el sandbox sin elevar
-  no deja que node lance yt-dlp. La nube no abre Instagram. La madre sí: `fetch-video.mjs` + Gemini + láminas leídas (los 5
-  posts del 8-oct). Regla: todo link que Sergio Urcullo le mande a una sesión de la nube, la sesión se lo pasa a la madre;
-  ella lo analiza (mensaje, tema, edición), deja la ficha en `references/video-intake/` y lo aprendido en la skill.
-- **Codex atiende pedidos de las sesiones de la nube** que ellas no pueden hacer (código y tests). Decide la madre con el
-  router, por si conviene Claude o Codex. Codex sigue las mismas reglas (`AGENTS.md` remite a `CLAUDE.md`). «Habla» con la
-  madre por su `resultado.md`: si le queda una duda, la escribe ahí, y la madre le contesta con `codex-tarea.sh resume`.
-- **Codex verifica a la madre; no hay madre 2 abierta** (Sergio Urcullo eligió esto el 8-oct). Una madre 2 sería un
-  segundo orquestador y relee todo el contexto, así que gasta mucho. Antes de mergear un PR propio, la madre corre
-  `scripts/codex-tarea.sh revisar <carpeta> origin/main` (gpt-6.1-sol, esfuerzo medio, para no quemar la cuenta; Astra
-  solo si toca cobros, producción o permisos) y pega `resultado.md` como comentario del PR. Con esa revisión el control
-  de permisos deja mergear. La primera corrida, el 8-oct, tardó ~3 min. Si la madre se cae, el fallback es el handoff
-  al día: una madre nueva arranca leyéndolo.
-- **Modelos (actualización 2026-10-09, `equipo-de-agentes`):** código cerrado, fichas, auditorías y síntesis con `gpt-6.1-sol` medium por defecto; `gpt-6-astra` medium para seguridad, cobros o arquitectura y decisiones de riesgo. Si el resultado es malo, se escala con la prueba del fallo, no por costumbre. Lista viva:
-  `~/.codex/models_cache.json`.
-- **La tarea es un prompt cerrado:** META · PRUEBA DE HECHO · REGLA DE PARADA · archivos que toca y los que no · reglas
-  fijas (sin push, sin VPS, sin producción, sin instalar). Modelo: `hermes-content/docs/handoff/codex-tareas/*.md`.
-- **Cupo:** semanal (plan `prolite`). El uso se lee en el último `rate_limits` de `~/.codex/sessions/**`. Con 80 % usado
-  no se lanza nada nuevo (reserva del 20 %, decidida el 6-oct).
-- ⚠️ **Sandbox de Windows (8-oct):** el CLI que trae la app de Codex (0.162-alpha) falla SIEMPRE con sandbox
-  («setup refresh had errors»: `node_repl.exe` del runtime `cua_node` «en uso»), aun con la app y sus procesos cerrados.
-  Correrlo sin sandbox lo frena el control de permisos de Claude Code («Create Unsafe Agents»), y no se rodea: tampoco se
-  pueden matar procesos ajenos («Interfere With Workloads»). Qué se probó:
-  - el npm 0.161 con el config («elevated») falla igual;
-  - con `--ignore-user-config` responde «bloqueado por la política»;
-  - con `-c windows.sandbox="unelevated"` **funciona**.
-  El npm 0.139 también andaba, pero solo con gpt-5.5, que deja Codex el 14-oct según el aviso oficial que citó Codex.
-  Cuando falla, Codex lo reporta honesto en `resultado.md` y no inventa.
-- **Codex en la nube SÍ corre:** la prueba del 8-oct en el entorno Hermes terminó READY a los ~20 min (el repo pesa). El
-  resultado se trae con `codex cloud diff <task>` y `codex cloud apply <task>`.
-- ⚠️ **El modelo de Codex en la nube NO se elige desde la CLI** (medido el 8-oct con el punto 14): se pidió
-  `-c model="gpt-6-astra"` y la tarea corrió con **gpt-5.6-sol**. Se verifica con `model_version` en
-  `GET /wham/tasks/<task>`. Lo que necesite Astra va a Codex local; la nube sirve para trabajo de calidad Sol.
-- **Llevar un diff de Codex a onia-platform sin hacer checkout:** el repo tiene rutas demasiado largas para Windows y
-  `git worktree add` falla con «Filename too long». Se arma el commit con un índice temporal:
-  `GIT_INDEX_FILE=<tmp> git read-tree origin/master && git apply --cached x.diff && git commit-tree $(git write-tree) -p
-  origin/master -F msg`. Después `git branch -f` y `push`. Así salió onia-platform#124.
-- Worktree aislado por tarea, rama `codex/<tarea>-<fecha>` (nunca `claude/*`); en onia-platform, `node_modules` por
-  junction. **Codex NO commitea:** no se le da el `.git` común, porque sus `hooks/` y su `config` se ejecutan fuera del
-  sandbox la próxima vez que la madre usa git (revisión del #151, 8-oct). La red sigue cerrada. La madre revisa el diff
-  de la carpeta, commitea, empuja y abre el PR, con 1 o 2 lentes de revisión según el riesgo.
-- El `tsc` local falla con el cliente de Prisma compartido: el CI del PR es el gate de tipos.
-- **La madre commitea SOLO con los tests en verde, con un gate en el mismo comando**
-  (`echo "$out" | grep -q failed && exit 1`). El 4-oct se subió `5c58175c` con un test rojo porque el `grep` de la
-  salida no cortaba la cadena; se arregló en `83f93948`.
-- Los arreglos de una revisión vuelven al mismo worktree de Codex, en otra corrida con la lista de hallazgos, y
-  después vuelve a revisar la madre con Codex; la madre v2 separada es histórica (corrección 2026-10-09). Así salieron los 9 puntos del #110 en 2 vueltas.
+- **Revisión local (PC):** `bash scripts/codex-tarea.sh revisar <carpeta> origin/main` (`gpt-6.1-sol`, esfuerzo medio;
+  `gpt-6-astra` solo si toca cobros, producción o permisos). El `resultado.md` se pega como comentario del PR. La madre no
+  mergea: une la jefa o QA (`AGENTS.md` §4).
+- **Hallazgos:** vuelven al hilo autor, que los corrige en su rama y pide otra revisión (así salieron los 9 puntos del #110 en
+  2 vueltas).
+- **Cupo:** semanal (plan `prolite`); el uso se lee en el último `rate_limits` de `~/.codex/sessions/**`. Con 80 % usado no se
+  pide más (reserva del 20 %, decidida el 6-oct).
+- **Ver videos e Instagram lo hace la madre, no Codex** (probado el 8-oct): el sandbox no deja que node lance yt-dlp y la nube
+  no abre Instagram. Todo link que Sergio Urcullo le mande a una sesión de la nube, la sesión se lo pasa a la madre; ella lo
+  analiza (mensaje, tema, edición) con `fetch-video.mjs` + Gemini + láminas leídas, deja la ficha en
+  `references/video-intake/` y lo aprendido en la skill.
+- **Trampas medidas que siguen valiendo:** `vitest related` no alcanza (el registro de rutas y los ratchets solo los atrapa la
+  suite completa: `npx vitest run` y `npx tsc --noEmit`); el push va DESPUÉS del resultado de la suite, en el mismo comando
+  con `&&` (9-oct: con `;` se pusheó con 57 rojos); antes de commitear, `git checkout -- '*.snap'`; la nube no pushea ramas
+  nuevas a onia-platform y deja un bundle en `hermes-content/docs/cola/ramas-locales/*.bundle` que la madre sube como PR;
+  `df -h /c` antes de bajar videos o crear un worktree.
+- El despacho de código a Codex (cloud y local, junctions, sandbox de Windows, worktrees sparse, contratos `codex-tareas/`)
+  era del 4 al 9-oct y está retirado: `hermes-content/docs/historial/METODO_MADRE_CODEX_RETIRADO_20261017.md`.
 
 ## Histórico: madre v2 revisora (medido del 2 al 5 de octubre)
 

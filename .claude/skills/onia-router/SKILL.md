@@ -33,13 +33,13 @@ carril, cargá su stack, respetá las reglas duras. Fuente viva del mapa complet
 2. **Cargá el stack de proceso común** (siempre) + las skills del carril.
 3. **Delegá en subagentes** (`general-purpose`/`Explore`; `onia-crm-prospeccion` para prospección)
    cuando la tarea tiene fan-out o varios ángulos.
-4. **Respetá los gates** antes de mergear a `main`.
+4. **Respetá los gates** antes de pasar el PR a «listo» (a `main` solo por PR, `AGENTS.md` §4).
 
 ## Stack de proceso común (TODA sesión, cualquier carril)
 **Corrección 2026-10-09:** cargar primero `equipo-de-agentes` (roles y loop) y
 `aprender-de-todo` (referencias, 12 dimensiones y prueba de uso), también en Codex.
 Las herramientas siguientes se aplican según la tarea; no iniciar orquestadores
-ni ejecutar Git fuera del encargo de la madre.
+ni ejecutar Git fuera del encargo de tu hilo (tu rama; `main` solo por PR, `AGENTS.md` §4).
 
 `using-superpowers` · `brainstorming` (antes de construir) · `make-plan`/`writing-plans` ·
 `test-driven-development` · `systematic-debugging`/`investigate` (bugs: no adivinar la causa) ·
@@ -50,7 +50,7 @@ ni ejecutar Git fuera del encargo de la madre.
 
 | Carril / Proyecto | Skills núcleo | Subagente | Skill ONIA propia |
 |---|---|---|---|
-| **Referencia recibida** (link, reel, post, web, app, captura, audio o documento) | **`aprender-de-todo` primero**; link sin instrucción = aprender, no producir; después las skills por dimensión | Codex para ficha/síntesis con evidencia; revisión del carril | `aprender-de-todo` |
+| **Referencia recibida** (link, reel, post, web, app, captura, audio o documento) | **`aprender-de-todo` primero**; link sin instrucción = aprender, no producir; después las skills por dimensión | subagente Sonnet para ficha/síntesis con evidencia (Codex solo revisa PRs); revisión del carril | `aprender-de-todo` |
 | **A** onia-center (panel Next.js) | `impeccable` `ui-ux-pro-max` `taste-design` `frontend-design:frontend-design` `frontend-patterns` `react-components` `shadcn-ui` `ui-styling` `nextjs-turbopack` `design-review` `emil-design-eng` | — | `onia-web-factory` |
 | **B** wf-landing (landings cliente) | `impeccable` `taste-design` `design`/`design-md` `image-to-code` `98669c11ca63:web-artifacts-builder` `landing-report` `land-and-deploy` `imagegen-frontend-web` `banner-design` `design-dna` (teardown de referencia → JSON de tokens/estilo/efectos; tipografía SIEMPRE verificada contra el CSS real, no a ojo) `gsap-*` (plugin oficial GreenSock, scrollytelling) | — | `onia-web-factory` |
 | **C** propuestas (comercial) | `article-writing` `make-pdf` `slides` `document-generate` `brand` | — | `onia-propuestas` |
@@ -78,13 +78,13 @@ ni ejecutar Git fuera del encargo de la madre.
   cara disponible** con una sola persona.
 - **Objetivo único por sesión.** Definirlo al inicio; no descarrilar; terminarlo antes de cerrar.
 - **Carriles = 1 sesión = 1 worktree = 1 rama.** Un subagente nunca edita archivos de otro carril.
-  La madre verifica rama y ruta antes de integrar; en encargos Codex sin Git,
-  el ejecutor comprueba solo la ruta y entrega para revisión (corrección 2026-10-09).
+  Cada hilo verifica su rama y su ruta antes de empujar; Codex no ejecuta encargos: solo revisa
+  el PR (`AGENTS.md` §1).
 - **`main` SIEMPRE compila.** Si el avance toca `web-factory/apps/site/**`, `tsc --noEmit` verde
-  antes de FF de `main`. Nunca filtrar WIP parcial (import a archivo nuevo → van los dos o ninguno).
-- **Git según rol y encargo (corrección 2026-10-09):** Codex entrega a la madre;
-  no ejecuta Git si el encargo lo prohíbe. No asumir autosync activo ni usarlo para
-  publicar trabajo parcial. La madre integra lo revisado según `equipo-de-agentes`.
+  antes de pasar el PR a «listo». Nunca filtrar WIP parcial (import a archivo nuevo → van los dos o ninguno).
+- **Git según rol (17-oct, `AGENTS.md` §1 y §4):** cada hilo empuja su propia rama; Codex solo revisa
+  (no ejecuta Git, no mergea ni empuja); la madre no empuja ni mergea `main`; a `main` une la jefa o la
+  rutina QA con CI verde y revisión de Codex. No asumir autosync activo ni usarlo para publicar trabajo parcial.
 - **Auto-sync activado** (hook Stop `scripts/git-autosync.js`): commitear y pushear la rama al terminar;
   respeta `.gitignore`. **`main` solo por PR revisado** desde el 5-oct; quién lo mueve y qué no se une solo:
   `AGENTS.md` §4 «Quién mueve `main`» (el integrador `onia-cola` está muerto desde el 27-sep).
@@ -102,9 +102,8 @@ ni ejecutar Git fuera del encargo de la madre.
 - **Índice y operación:** `onia-router` (este índice) · `onia-continuidad` (arranque y rumbo de
   sesión) · `onia-infra` (VPS, Docker, n8n por SSH) · `onia-hermes-jarvis` (Hermes por Telegram:
   resumen, cierre, aduana, calendario, pedidos a Claude, y el workflow hermes-jarvis; 2026-10-01) ·
-  `equipo-de-agentes` (EL MÉTODO desde el 9-oct: colas en loop por sesión, Codex, verificadores Haiku, solo lo publicado a Sergio Urcullo) ·
-  `onia-sesion-madre` (la madre local ordena a las sesiones de la nube por mensaje: ids, canales
-  medidos, formato) · `orca` (tablero LOCAL de agentes en la PC: qué ve y qué no, ajustes a
+  `equipo-de-agentes` (EL MÉTODO: reparto de `AGENTS.md` §1, colas en loop por sesión, Codex revisor, verificadores Haiku, a Sergio Urcullo lo publicado que él ve y antes lo visual y lo serio) ·
+  `onia-sesion-madre` (la madre local = sesión de control de la PC: canales hacia la nube medidos, formato del mensaje; el reparto es de la jefa) · `orca` (tablero LOCAL de agentes en la PC: qué ve y qué no, ajustes a
   corregir; no ve la nube ni es la madre; 2026-10-16).
 - **Producto:** `onia-core` · `onia-chatbot` · `onia-contabilidad-bolivia`.
 - **Venta:** `onia-propuestas` (generador oficial, nunca HTML a mano) · `onia-web-factory`.

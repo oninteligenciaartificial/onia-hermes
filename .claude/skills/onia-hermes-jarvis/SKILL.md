@@ -117,21 +117,15 @@ CLI de Hermes.
 
 ## Trampas ya pagadas
 
-- **El hook Stop hacía avanzar `main` solo** (`scripts/git-autosync.js`, hasta el 5-oct): pusheaba la
-  rama y, si `main` era ancestro, la empujaba a `main`. El PR #68 apareció «merged» sin que nadie lo
-  mergeara. **Desde el 5-oct solo lo hace con permiso** (la madre con `ONIA_AUTOSYNC_MAIN=1`, el
-  integrador con `ONIA_LOOP_ID=onia-cola`; Sergio Urcullo eligió «sí, la madre sigue directo»). Lo que
-  llega a `main` llega igual, ≈1 h después, al VPS (el sincronizador de `/root/bin`): lo nuevo se diseña
-  INERTE hasta encenderlo. **Mientras el cambio del 5-oct no esté en `main`,** con una rama que sale de
-  `main` y un PR sin revisar: pushear a mano y soltar el turno con `git checkout --detach`. Con el hook
-  nuevo en tu árbol ya no hace falta, pero no cuesta nada.
-- **El permiso de la madre exige una marca en SU checkout** (revisiones de la madre al #138 y al #173, 9-oct):
-  sus procesos hijos heredan `ONIA_AUTOSYNC_MAIN`, y los subagentes trabajan en worktrees. **Intento fallido:**
-  «solo en el clon principal» (`--git-dir` == `--git-common-dir`) dejaba sin permiso a la madre real, que corre
-  en el worktree `onia-madre-v2-pr-review-2d85bb` (`claude -w`); lo encontró el revisor del #173. Ahora vale
-  con la variable Y el archivo `onia-autosync-main` en `git rev-parse --absolute-git-dir` de ese checkout: no
-  se versiona, no se hereda y ningún otro worktree lo comparte. Residuo: un worktree en una rama anterior
-  al #138 corre el autosync viejo, que movía main sin mirar nada.
+- **El hook Stop hacía avanzar `main` solo** (`scripts/git-autosync.js`, hasta el 5-oct): pusheaba la rama y, si `main` era
+  ancestro, la empujaba a `main`. El PR #68 apareció «merged» sin que nadie lo mergeara. **Desde el 17-oct el hook solo
+  empuja la RAMA, nunca `main`** (`AGENTS.md` §4 «Quién mueve `main`»): el permiso del 5-oct (`ONIA_AUTOSYNC_MAIN=1`,
+  `ONIA_LOOP_ID=onia-cola`, «sí, la madre sigue directo») y su marca por checkout se retiraron y no habilitan nada;
+  `onia-cola` está muerto desde el 27-sep. Lo que llega a `main` llega igual, ≈1 h después, al VPS (el sincronizador de
+  `/root/bin`): lo nuevo se diseña INERTE hasta encenderlo.
+- **El permiso de la madre exigía una marca en SU checkout** (revisiones al #138 y al #173, 9-oct). Historia retirada el
+  17-oct: «solo en el clon principal» dejaba sin permiso a la madre real, que corre en un worktree (`claude -w`); lo
+  encontró el revisor del #173. Hoy no hay permiso ni marca que mantener.
 - **Un runbook se escribe con los `echo` del script delante, no de memoria** (9-oct). El §8 del doc de
   pedidos decía que 1b imprime «✅ llego a GitHub» y 5d «✅ pedidos a Claude: configurado»: 1b es muda
   salvo que falle (`--probar` y `--estado` van a `/dev/null`) y 5d dice «✅ llave de la rutina guardada…».
@@ -145,11 +139,9 @@ CLI de Hermes.
   `session_01Whdadt…`, y Marca personal, `session_01CE21my…`; `environment_kind: anthropic_cloud`). El
   proxy de git no lo frena. Contarlo: `git log --first-parent --no-merges --since=… origin/main` y el
   trailer `Claude-Session` de cada commit.
-- **El permiso de mover `main` no puede vivir en el repo.** `.claude/settings.local.json` no estaba en
-  `.gitignore` (5-oct): si la madre lo hubiera puesto ahí, el `add -A` del autosync lo subía y todas las
-  sesiones tenían el permiso. Ahora `**/.claude/settings.local.json` está ignorado y `pedido-rama.test.mjs`
-  lo verifica. La madre lo pone en el `settings.local.json` de SU carpeta: la config de usuario o una
-  variable de Windows alcanzarían a cualquier sesión de la PC (revisión del 5-oct).
+- **`.claude/settings.local.json` sigue ignorado** (`**/.claude/settings.local.json`; `pedido-rama.test.mjs` lo verifica): lo
+  usaba la madre para el permiso de `main`, que ya no existe, y no debe versionarse (el autosync lo habría subido y todas
+  las sesiones habrían tenido el permiso, 5-oct).
 - **El autosync arma los comandos de git SIN shell** (`execFileSync('git', args)`, 5-oct). Antes eran
   cadenas para `execSync`, y una rama `x$(touch${IFS}/ruta)` —nombre válido para git— ejecutaba el
   comando en la máquina de quien la abriera (la madre, al revisar la rama de otra sesión). Y la rama se
@@ -157,14 +149,11 @@ CLI de Hermes.
   igual movía `refs/heads/main`.
 - **Lo rescatado sale de `main`** (5-oct): el autosync pushea a `claude/autosync-<id>`, deja la sesión
   parada en esa rama (con upstream) y vuelve el `main` local a `origin/main`. Si quedaba en el `main`
-  local, la primera corrida CON permiso en ese clon lo publicaba sin PR. Una rama de rescate reescrita
+  local, (antes del 17-oct) la primera corrida CON permiso en ese clon lo publicaba sin PR. Una rama de rescate reescrita
   (rebase, amend), o una local con commits que HEAD no tiene, no se fuerza ni se pisa: va a
   `claude/autosync-<id>-<sha>` y la sesión sigue ahí.
-- **A quien TIENE permiso el hook nunca lo mueve de rama** (tercera pasada de revisión, 5-oct). Una
-  versión intermedia exigía `tsc` también en `main` con permiso y, si fallaba, rescataba: el integrador
-  quedaba fuera de `main`, y `onia-loop.sh` aborta si no está ahí, así que dejaba de integrar para
-  siempre. Hueco conocido, como antes del 5-oct: con permiso y parado en `main`, se pushea sin `tsc` de
-  `apps/site` (el integrador tiene sus gates; la madre, la regla «main siempre compila»).
+- **Sin permiso no hay excepciones** (17-oct): ya nadie puede mover `main` desde el hook, así que la rama de rescate
+  `claude/autosync-<id>` solo protege el trabajo de una sesión parada en `main`, y el integrador `onia-cola` murió el 27-sep.
 - **Una sección del SOUL se copia con un rango.** El `aplicar` viejo hacía `sed '/^## Su calendario/,$p'`:
   arrastraba TODO lo que viniera después. La sección de pedidos va ANTES de la del calendario, y
   cada copia termina en el próximo `---`.
@@ -431,8 +420,8 @@ CLI de Hermes.
   de qué versión del repo `onia-platform` haya clonada. Las pruebas del carril se corren sueltas:
   `test:pedidos`, `test:jarvis-aplicar`, `test:jarvis-resumen`, `test:aduana`, `test:agenda`,
   `test:herramientas-desplegadas`, `test:herramientas-del-cron`.
-- **Hablar con otras sesiones:** desde el 1-oct solo la **sesión madre** (local) manda mensajes. Las
-  sesiones de la nube contestan en su transcript. Las rutinas de un disparo a otra sesión
+- **Hablar con otras sesiones:** el reparto es de la jefa; la madre (local) le habla a la nube con
+  `claude -p --cloud <cse_id>` (`AGENTS.md` §1). Las sesiones de la nube contestan en su transcript. Las rutinas de un disparo a otra sesión
   (`create_trigger` con `persistent_session_id`) ya no se usan para ordenar.
 - **El control de permisos frenó investigar cómo aflojarlo** («Auto-Mode Bypass», 1-oct). No se
   insiste: la configuración de permisos la decide Sergio Urcullo.

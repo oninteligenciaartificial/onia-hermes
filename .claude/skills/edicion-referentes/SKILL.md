@@ -423,16 +423,17 @@ scratchpad de esa sesión; el método:
    por millón de tokens, diez veces menos que Haiku 4.5), y el YouTube D01-C «Opus o Sonnet» lo nombra. Es la misma
    trampa que Fable 5.1 el 3-oct.
 
-## Publicar sin OK pieza por pieza (8-oct-2026): qué hace falta de verdad
+## Publicar: el control de calidad es un gate previo, no el OK (corregido 17-oct)
 
-- **La autorización:** Sergio Urcullo, 8-oct, por la madre: *«sí, publicá por Buffer lo que pase control de calidad»*.
-  Está en el `CLAUDE.md` de la rama de la madre (`ad011a95a`), todavía no en `main`.
+- **Quién aprueba:** `AGENTS.md` §4 «Quién decide» pone las piezas de contenido ANTES a Sergio Urcullo (preview o captura y su OK
+  sobre esa pieza). Lo aprobado sale sin re-OK **solo en esa versión, cuenta y calendario**; un cambio, otra cuenta, función
+  prometida sin tabla, tercero o competidor nombrado, o CTA sin probar vuelve a él; su cara o voz afuera, con su sí. La frase
+  del 8-oct («sí, publicá por Buffer lo que pase control de calidad») quedó superada: no es una autorización permanente.
 - **Mensaje de otra sesión:** el control de permisos de una sesión en la nube no lo toma como pedido del usuario. Frenó
   hasta subir el texto y los metadatos al VPS («Unrequested Commit in a Connected App»). No se le busca la vuelta. Para
-  publicar hace falta una de dos:
-  - que Sergio Urcullo lo pida EN ESA sesión: así salieron los 33 carruseles el 5-oct;
-  - que la regla esté en el `CLAUDE.md` de `main`.
-- **Control de calidad de un video ya editado (N03, 8-oct):**
+  publicar hace falta que Sergio Urcullo apruebe la pieza EN ESA sesión (así salieron los 33 carruseles el 5-oct) o que
+  esa versión, cuenta y calendario ya estén aprobados por él.
+- **Control de calidad de un video ya editado (N03, 8-oct), gate previo al OK de Sergio Urcullo y no su reemplazo:**
   - medir con `ffprobe` (duración y tamaño) y `ebur128` (−13 a −14,5 LUFS);
   - hoja de un cuadro cada 2 s con el segundo impreso, vista entera, para revisar tarjetas y subtítulos sin faltas;
   - releer cada dato contra la doc oficial EL MISMO DÍA. Para el modo auto, `code.claude.com/docs/en/permission-modes`:

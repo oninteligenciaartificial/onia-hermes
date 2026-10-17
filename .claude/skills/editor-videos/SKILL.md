@@ -500,11 +500,10 @@ node scripts/fondo-verde.mjs --toma toma.mp4 --fondo captura.png --crop 0:0:1440
 >    - **REGLA DE PARADA**: cuándo se frena.
 > 2. **Nada entra a `main` sin revisión: se trabaja en una rama y con un PR.** Antes, cada guion se compara con
 >    `LUCIA.md` §0: IA declarada, nunca profesional de salud, sin promesas de resultado.
->    - Desde el 5-oct el hook Stop (`scripts/git-autosync.js`) ya no empuja la rama a `main`: solo la madre y el
->      integrador mueven `main` (CLAUDE.md, «Git — auto-sync»). Hasta ese día sí lo hacía, y por eso estaba el
->      truco de abajo.
->    - Para que el PR espere la revisión: pushear la rama, abrir el PR y **estacionar el checkout en `main`**
->      (`git checkout -B main origin/main`). Sigue sirviendo en la PC de la madre, que tiene el permiso.
+>    - El hook Stop (`scripts/git-autosync.js`) solo empuja la rama; `main` solo se mueve por PR con CI verde y revisión
+>      de Codex (`AGENTS.md` §4 «Quién mueve `main`»). Hasta el 5-oct empujaba la rama a `main`, y por eso existía el truco
+>      de estacionar el checkout en `main`: ya no hace falta (una sesión parada en `main` empuja a `claude/autosync-<id>`).
+>    - Para que el PR espere la revisión: pushear la rama y abrir el PR; no hay que tocar `main`.
 >    - Medido el 3-oct: con `git reset --keep origin/main` sobre la rama del PR, esa rama queda adelante y atrás de su
 >      remoto, y el hook Stop pide un push que GitHub rechaza.
 >    - Así entró «Hoy soy odontóloga» (#82) el 2-oct.

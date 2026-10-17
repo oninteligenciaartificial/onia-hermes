@@ -46,7 +46,7 @@ ls hermes-content/docs/handoff/
 git log -1 --format='%cd' --date=short -- hermes-content/docs/handoff/<mi-carril>.md
 
 # 3. ¿Cuál es la cola de mi carril, y tiene fantasmas?
-cat hermes-content/docs/cola/README.md          # el índice: qué cola es de quién
+cat hermes-content/docs/cola/loop/README.md     # el protocolo de colas; la tuya es cola/loop/<mi-carril>.md (cola/README.md es histórico desde el 17-oct)
 node scripts/verificar_cola.js <mi-cola.md>      # exit 1 si un ítem no existe
 
 # 4. ¿Qué se movió desde mi último handoff?
@@ -182,7 +182,7 @@ baja una cuenta servía de algo.
 |---|---|---|
 | `onia-router` | qué skill/agente uso | qué ya sabemos antes de elegir |
 | `hermes-content/docs/handoff/README.md` | plantilla del estado al cerrar | **obliga a leerlo al abrir** |
-| `hermes-content/docs/cola/README.md` | índice de colas por carril | cómo verificar que no tiene fantasmas |
+| `hermes-content/docs/cola/loop/README.md` | protocolo de las colas por carril (`cola/README.md` es histórico desde el 17-oct) | cómo se trabaja una cola en loop |
 | `scripts/verificar_cola.js` | la regla de evidencia, mecánica | cuándo correrlo |
 | `CLAUDE.md` §2 | las reglas y su historia | el ritual que las hace pasar |
 
