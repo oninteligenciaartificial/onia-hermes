@@ -29,7 +29,7 @@ Hay 4 frentes y cada uno tiene UN solo hilo, con nombre fijo:
 2. Leé `/mnt/project-files/reglas/COMO_TRABAJAR_CON_SERGIO_URCULLO.md` (copia de `hermes-content/docs/COMO_TRABAJAR_CON_SERGIO_URCULLO.md`): son las reglas que Sergio Urcullo ya dio. No se le vuelven a preguntar.
 3. Cargá con la herramienta Skill `onia-router` y la skill de tu carril. Están subidas a la cuenta: onia-ventas-pauta, diseno-contenido-onia, editor-videos, edicion-referentes, ver-videos, sacar-prompt, higgsfield-generate, anunciante-supremo, onia-backend, onia-db, onia-deploy, onia-frontend, onia-seguridad, onia-verificacion, onia-chatbot, onia-propuestas, onia-contabilidad-bolivia e hyperframes.
 4. Leé `AGENTS.md` (las reglas) y el handoff de tu frente (la ruta está en «Un frente = un hilo»).
-5. Si usás el VPS: `mkdir -p ~/.ssh && rm -f ~/.ssh/onia_vps && [ -n "$ONIA_VPS_SSH_KEY_B64" ] && (umask 077 && printf '%s' "$ONIA_VPS_SSH_KEY_B64" | base64 -d > ~/.ssh/onia_vps) && [ -s ~/.ssh/onia_vps ] && ssh onia-vps 'echo VPS_OK' || { rm -f ~/.ssh/onia_vps; echo LLAVE_O_SSH_FALLO; }` (la llave vieja se borra, la nueva nace con permisos 600, una variable vacía o un decode fallido no llegan a ssh, y si algo falla la llave se borra). Entra por el túnel de Cloudflare, porque el puerto 22 directo no sale. Nunca imprimas la llave. Si el control de permisos lo frena, pedí el sí de Sergio Urcullo en tu hilo.
+5. Si usás el VPS: `mkdir -p ~/.ssh && rm -f ~/.ssh/onia_vps && [ -n "$ONIA_VPS_SSH_KEY_B64" ] && (umask 077 && printf '%s' "$ONIA_VPS_SSH_KEY_B64" | base64 -d > ~/.ssh/onia_vps) && [ -s ~/.ssh/onia_vps ] && ssh onia-vps 'echo VPS_OK' || { rm -f ~/.ssh/onia_vps; echo LLAVE_O_SSH_FALLO; false; }` (la llave vieja se borra, la nueva nace con permisos 600, una variable vacía o un decode fallido no llegan a ssh, y si algo falla la llave se borra). Entra por el túnel de Cloudflare, porque el puerto 22 directo no sale. Nunca imprimas la llave. Si el control de permisos lo frena, pedí el sí de Sergio Urcullo en tu hilo.
 
 ## Cómo la jefa le pide una tarea a un hilo (molde obligatorio)
 - OBJETIVO: una frase.
@@ -52,7 +52,7 @@ Una tarea que no trae los 7 campos no se manda.
 - Codex revisa CADA PR. Los arreglos de su revisión los hace el hilo autor.
 
 ## Cero contradicciones
-- Cada tema tiene UNA fuente: precios en `onia-platform/lib/subscription-plans.ts` y `lib/pricing.ts`; qué se vende en `hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md`; a quién en `hermes-content/docs/ONIA_CLIENTE_IDEAL.md`; el taller en un solo documento del frente Marca.
+- Cada tema tiene UNA fuente: precios en `onia-platform/lib/subscription-plans.ts` y `lib/pricing.ts`; qué se vende en `hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md`; a quién en `hermes-content/docs/ONIA_CLIENTE_IDEAL.md`; el taller del 31-oct en `/mnt/project-files/marca/TALLER_31_OCT.md` (si otro documento dice otra fecha, precio o cupo, por ejemplo la oferta vieja de Bs 150/350 del 24-oct, gana ese archivo).
 - Antes de mostrarle algo a Sergio Urcullo, un subagente sonnet lo compara contra esas fuentes y contra los demás documentos de la semana. Si dos documentos dicen cosas distintas, se corrige el que no es la fuente; no se elige el más lindo.
 - Un tema = un archivo sin fecha: si cambia, se edita ese archivo, no se crea otro.
 
