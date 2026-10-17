@@ -1,7 +1,7 @@
 # Repaso de la Biblioteca de anuncios de Meta: qué replicar (16-oct-2026)
 
 > Pedido de Sergio Urcullo (16-oct, punto 3 de `docs/cola/loop/hermes-jefa.md`). Hilo Ventas y pauta.
-> **Método y límite:** conector `ads_library_search` (solo lectura). Trae título, fecha de inicio y moneda; **no trae imagen ni texto**. Facebook no abre desde la nube, así que **los creativos no se vieron**: lo que sigue sale de títulos y de días al aire. La señal pública de rendimiento es una sola: **días al aire** (un anuncio que sigue vivo a los 30+ días le rinde a quien lo paga; no se sabe cuánto). Días contados al 16-oct, hora de La Paz.
+> **Método y límite:** conector `ads_library_search` (solo lectura). Trae título, fecha de inicio y moneda; **no trae imagen ni texto**. Facebook no abre desde la nube, así que **los creativos no se vieron**: lo que sigue sale de títulos y de días al aire. La única señal pública es **la antigüedad del anuncio**, y **no prueba rendimiento**: puede ser una campaña siempre activa o descuidada. Se usa como **hipótesis a probar** (qué formatos vale la pena ensayar), no como prueba de que a esos anunciantes les rinda. Días contados al 16-oct, hora de La Paz.
 > Complementa a `FORMATOS-QUE-SOSTIENEN.md` (8-oct, 39 anuncios capturados el 1-2 oct). No lo reemplaza.
 
 ## 1. Lo que se leyó hoy
@@ -18,7 +18,7 @@
 
 ## 2. Qué se replica y qué no
 
-### Replicar (cada punto sale de lo que dura, no de lo que se ve bonito)
+### Replicar como hipótesis a probar (salen de lo que dura, que no prueba rendimiento)
 
 1. **Titular de dolor o de duda en vez de función.** Lo más antiguo de Doctocliq son preguntas («¿crece o solo sobrevive?») y una orden de dolor («Dejá de perder citas»). Versión Onia: «¿Quién de mañana no confirmó?» (F4 de `FORMATOS-QUE-SOSTIENEN.md`, ya hecho en código).
 2. **Una persona a cámara, voz natural, una sola idea** (Dt.Dental 107 d). Es el formato más barato de sostener. Versión Onia: el selfie de Sergio Urcullo, guion F1/F3 ya escrito. Encaja con el funnel de `sales-kit/09`.

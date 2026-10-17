@@ -71,7 +71,7 @@ Tiempo de la rutina en papel o planilla: pizarra o Excel, 15-20 minutos al día.
 ### Bloque 4 (0:32-0:36) — la oferta (solo filas ✅)
 > Se prueba 14 días sin tarjeta; si no le sirve, no paga nada. Sin contrato de permanencia, sin costo de implementación, precios finales en bolivianos. Su información es suya: no se vende ni se usa para entrenar IA.
 > Para una clínica con 2 a 4 personas usando el sistema, el plan Crece cuesta Bs 550 al mes. Con 5 personas, el Profesional: Bs 890. Con 6 o más personas usando el sistema (por ejemplo 5 profesionales y recepción), el Completo, que no tiene tope de usuarios: Bs 1.290. Para un consultorio chico, el Básico: Bs 320.
-> Hay una forma de pagar que conviene: el plan anual cobra 10 meses y usted usa 12. Básico anual Bs 3.200, Crece Bs 5.500, Profesional Bs 8.900, Completo Bs 12.900. El plan anual no se reembolsa; por eso primero se prueba 14 días sin tarjeta.
+> Hay una forma de pagar que conviene: el plan anual cobra 10 meses y usted usa 12. Básico anual Bs 3.200, Crece Bs 5.500, Profesional Bs 8.900, Completo Bs 12.900. El plan anual no se reembolsa. Puede pagarlo hoy al terminar la demo, sabiéndolo, o probar antes 14 días sin tarjeta; si prueba primero, el pago llega en noviembre.
 > **Les tengo que ser honesto:** Onia es nueva. Usted sería de los primeros clientes y no tengo testimonios que mostrarle. Por eso le ofrezco la prueba sin tarjeta, y por eso quiero saber qué le falta. A cambio, le pido sus observaciones.
 (Esta frase es la única «prueba» que se tiene. No se improvisa otra.)
 

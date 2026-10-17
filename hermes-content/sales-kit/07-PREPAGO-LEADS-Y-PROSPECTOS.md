@@ -146,7 +146,7 @@ Cómo salen (las tres cosas que cambian el resultado, de `SEGUIMIENTO-LEADS.md` 
 - **«Ahora no»** → «Entendido, gracias por decírmelo. ¿Le parece bien que le escriba en un mes? Si prefiere que no, no le escribo más.» Callar no es permiso.
 - **Silencio** → días 3, 7 y 14 de `SEGUIMIENTO-LEADS.md` §3. Contando desde el día de envío, si sale el lunes 19-oct: día 3 = 22-oct, día 7 = 26-oct, día 14 = 2-nov. Para cobrar antes del 31-oct, **el día 7 es el último toque que importa**.
 - **Pregunta de precio** → la respuesta de `SEGUIMIENTO-LEADS.md` §2 («Pregunta de precio») + «el anual cobra 10 meses».
-- **Cierre del prepago** (cuando dicen «sí, quiero el anual»): «Perfecto. Le paso el link para pagar: app.onia.com.bo/checkout (elija {plan}, anual). Paga con QR; al subir el comprobante yo lo apruebo y el plan queda activo. Aparecerá a nombre de {titular del QR}. Le aviso que el plan anual no se reembolsa; por eso conviene haber probado antes. Le mando la factura aparte.» — **Verificar antes** que el checkout anual funcione de punta a punta con una cuenta de prueba nuestra (fila K-02 está ✅ en la web, pero el cobro de punta a punta lo está cerrando el carril Plataforma, plan 1.0 punto 13 y 15).
+- **Cierre del prepago** (cuando dicen «sí, quiero el anual»): «Perfecto. Le paso el link para pagar: app.onia.com.bo/checkout (elija {plan}, anual). Paga con QR; al subir el comprobante yo lo apruebo y el plan queda activo. Aparecerá a nombre de {titular del QR}. Le aviso que el plan anual no se reembolsa; si prefiere, antes puede probar 14 días sin tarjeta. Le mando la factura aparte.» — **Verificar antes** que el checkout anual funcione de punta a punta con una cuenta de prueba nuestra (fila K-02 está ✅ en la web, pero el cobro de punta a punta lo está cerrando el carril Plataforma, plan 1.0 punto 13 y 15).
 
 ---
 
@@ -185,6 +185,9 @@ Es lo único que mide el conector: título, fecha de inicio y moneda; no el text
 Hoy la primera tanda mezcla estética porque es donde hay más pauta viva; el que decide es Sergio Urcullo.
 
 ### 3.3 Mensajes en frío (de usted, sin precio, cada frase contra el catálogo)
+
+> ⛔ **No se envía ningún molde de §3.3 mientras estas filas de `ONIA_PROMESA_VS_PRODUCTO.md` sigan en ⬜:** G-01, G-04, G-06, G-07, G-08 y G-11 (dental y estética) y E-07 (importadora). Los moldes describen esas funciones. El revisor automático solo busca frases prohibidas; **no verifica estas filas**. Hasta que Plataforma las pase a ✅ con la cuenta demo, se puede mandar solo el primer párrafo (la observación del anuncio y el dolor) y la invitación a la demo, **sin** describir lo que hace el sistema.
+
 
 **Cambio respecto de los borradores del 1-2 oct (`ONIA_PROSPECTOS_*_SCZ.md` §6.9):** esos prometían el envío desde el WhatsApp propio del negocio y decían que la IA fabrica el modelo del mensaje. **Las dos ideas ya no se pueden decir** (el envío por WhatsApp es G-03 🟡; el revisor de promesas rechaza ligar la IA con redactar el mensaje; ver skill `onia-ventas-pauta` §3). Este molde usa la frase del catálogo §8.3 y §8.1. Los borradores viejos quedan en su doc con esa advertencia; **no se mandan**.
 
