@@ -65,7 +65,9 @@ Decisión de Sergio Urcullo del 16-oct: **sí a workshops y consultorías pagas 
 
 ## COLA DE LA JEFA — noche del 16-oct (la escribe la jefa)
 
-Reglas de comunicación (Sergio Urcullo, 16-oct): a Sergio Urcullo máximo 3 líneas por mensaje (Pasó · Necesito · Sigue), sin detalle técnico, sin listas largas ni números de PR. Solo se le escribe cuando se necesita una decisión suya o algo quedó PUBLICADO. Todo lo demás va al resumen único de las 18:00 La Paz. Las preguntas pendientes se juntan en UNA sola.
+Reglas de comunicación (Sergio Urcullo, 16-oct; orden de control del 17-oct): solo la jefa le habla a Sergio Urcullo, máximo 3 líneas, y solo como «PUBLICADO: qué — link» o UNA decisión por tarjeta (sí/no). Los hilos responden en su hilo en 1 a 3 líneas, con el detalle en archivo adjunto, y sus preguntas van a la jefa, no a él. Una lista diaria a las 18:00 La Paz. Las preguntas pendientes se juntan en UNA sola.
+
+Reglas de trabajo (orden de control del 17-oct): subagentes en toda tarea con `model` explícito (haiku lee/cuenta/verifica, sonnet escribe, opus decide lo riesgoso) y cierre «Subagentes: N (modelo, tarea)». Los pedidos a la PC van en una línea que empiece con «PC:». El tooling de video y aprendizaje está congelado y unificado en #223; #211 se cerró por duplicar #217.
 
 Regla de PRs: borrador mientras el hilo trabaja; `gh pr ready` cuando termina; Codex revisa y QA (:57) publica.
 
@@ -77,7 +79,7 @@ Hilos y su entrega (16-oct):
 - Plataforma 1.0 banco (hilo nuevo con acceso): 5 rubros y demo dental. Espera el sí a crear 5 cuentas ZZ QA en producción.
 - Reels y navegador: ver posts de Instagram desde la nube funciona en el entorno «Onia»; transcripción de audio sigue por la PC. Entregado.
 
-Pendiente de UNA sola pregunta a Sergio Urcullo (la jefa la plantea una vez): (1) workshop: Bs 150 precio fundador hasta el mié 21, luego Bs 200, cupo 12, sáb 24-oct 10:00, auditoría 1 a 1 Bs 350; (2) enviar los mensajes de venta que él manda; (3) devolver el prepago a 14 días; (4) crear 5 cuentas ZZ QA en producción; (5) reencender las rutinas de Plataforma (:17) y QA (:57).
+Pendiente de UNA sola pregunta a Sergio Urcullo (la jefa la plantea una vez): (1) workshop: Bs 150 precio fundador hasta el mié 21, luego Bs 200, cupo 12, sáb 24-oct 10:00, auditoría 1 a 1 Bs 350; (2) enviar los mensajes de venta que él manda; (3) devolver el prepago a 14 días; (4) crear 5 cuentas ZZ QA en producción. HECHO, ya no se pregunta: rutinas de Plataforma (:17) y QA (:57) reencendidas a las 22:16 UTC del 16-oct (Sergio Urcullo confirmó que no las apagó; ver handoff/madre-control.md).
 
 Cada vuelta de la jefa (:07): leer esta cola y la orden vigente, ejecutar lo que no espera a Sergio Urcullo, destrabar carriles con más de 3 h sin avanzar y no preguntar de nuevo lo ya preguntado.
 
