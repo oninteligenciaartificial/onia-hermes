@@ -85,4 +85,4 @@ Cada vuelta de la jefa (:07): leer esta cola y la orden vigente, ejecutar lo que
 
 Ejecutable sin esperar: mover los PR entregados a listo; pasar la lista de competencia al hilo de la 1.0; completar ⟦ENLACE-WORKSHOP⟧ del funnel con la oferta (marcada propuesta); dejar a Lucía su tarea de práctica; seguir recorridos públicos de la 1.0 sin crear datos.
 
-Candidatos que NO se instalan sin OK de Sergio Urcullo: Ponytail, Diagram Design, Scrapling, yt-dlp en el VPS.
+Candidatos que NO se instalan sin OK de Sergio Urcullo: Ponytail, Diagram Design, Scrapling. yt-dlp ya está instalado en el VPS (/usr/local/bin, ver handoff/madre-control.md): solo falta probarlo con reels.
