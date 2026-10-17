@@ -13,7 +13,7 @@
 |---|---|
 | Producto | **Taller en vivo «Auditá tu negocio con IA»**: 90 minutos por Meet. Salís con **tu Mapa de tareas** (qué repetís, cuántas horas y bolivianos te cuesta, cuál automatizar primero) y **un primer paso hecho** |
 | Precio (escalones **por cupo**, no por reloj) | **Fundadores: Bs 50** (primeros 15) → **Bs 60** (siguientes 20) → **Bs 70** (últimos 15). Cupo total **50** (incluye las de revisión) |
-| Versión «Con revisión» (opcional) | **Bs 140**, cupo 8: lo mismo + 15 minutos tuyos con Sergio Urcullo revisando tu Mapa por Meet. Es la versión con algo personal (ver §6) |
+| ~~Versión «Con revisión»~~ (DESCARTADA el 17-oct, ver §6) | **Bs 140**, cupo 8: lo mismo + 15 minutos tuyos con Sergio Urcullo revisando tu Mapa por Meet. Es la versión con algo personal (ver §6) |
 | Cuándo | **Sáb 31-oct, 10:00 (La Paz).** Se vende del **lun 19** al **jue 29 20:00** (10 días). Antes decía sáb 24: se mueve para tener 10 días de venta y no 5 |
 | Puerta | **Clase gratis de 35 min, mar 27-oct 19:00**: «La cuenta que nadie hace». Cierra la venta de los que dudan |
 | Cómo se paga | QR del BCP por WhatsApp, antes del taller. Sergio Urcullo verifica el movimiento en la app del BCP y confirma |
@@ -40,7 +40,7 @@
 | Bs 70 plano | **43** (42,9) |
 | **Escalones 15 × Bs 50 + 20 × Bs 60 + 15 × Bs 70** | **50 inscripciones = Bs 3.000 justos** |
 
-**Con la versión «Con revisión» (Bs 140, máx. 8):** 8 de esas inscripciones valen Bs 1.120 en vez de ~Bs 480, así que con **~40 inscripciones** (32 de entrada + 8 de revisión) se llega a **~Bs 2.900**, y a Bs 3.000 con 2 más.
+**(Versión «Con revisión» descartada el 17-oct; el cálculo queda solo como referencia.)** Con la versión «Con revisión» (Bs 140, máx. 8): 8 de esas inscripciones valen Bs 1.120 en vez de ~Bs 480, así que con **~40 inscripciones** (32 de entrada + 8 de revisión) se llega a **~Bs 2.900**, y a Bs 3.000 con 2 más.
 
 ### Cuánta gente tiene que ver la oferta (supuestos, no promesas)
 Lo único con cifras reales que encontré: contactos recientes de un imán compraron ~3,75 % y una lista antigua ~0,5 % (Arturo García, España). La cadena de la clase gratis da 2-8 % (asistencia 20-40 % × cierre 10-20 %, de fuentes que venden webinars).
@@ -50,7 +50,7 @@ Lo único con cifras reales que encontré: contactos recientes de un imán compr
 ### Lectura franca (para decidir con la cuenta delante)
 Hoy la audiencia medida es corta: **~30 miembros** en la comunidad (30-sep), 6 leads de agosto, seguidores de Instagram de Sergio Urcullo **[MEDIR]**. Si el alcance real es de unos cientos de personas, lo **probable** es quedar entre **15 y 30 inscripciones (Bs 800 a Bs 1.750)**; **Bs 3.000 solo con prepago exige ~1.000 o más personas interesadas en 10 días**. La cuenta cierra con el siguiente peldaño:
 
-| Escenario | Inscripciones | Revisión (Bs 140, aparte de las inscripciones) | Auditorías 1 a 1 (Bs 290 con crédito de Bs 60) | Total aprox. |
+| Escenario (la columna «Revisión» es de la versión descartada: sin ella, restar esa columna) | Inscripciones | Revisión (descartada) | Auditorías 1 a 1 (Bs 290 con crédito de Bs 60) | Total aprox. |
 |---|---|---|---|---|
 | Pesimista | 15 (mezcla de Bs 50 y Bs 60) = Bs 800 | 1 = Bs 140 | 1 = Bs 290 | **Bs 1.230** |
 | Base | 30 (10×50 + 15×60 + 5×70) = Bs 1.750 | 3 = Bs 420 | 3 = Bs 870 | **Bs 3.040** |
@@ -174,7 +174,7 @@ Precio aprobado por Sergio Urcullo el 17-oct: escalera Bs 50 / 60 / 70 por cupo,
 >
 > **Cómo reservar:** escribime por WhatsApp. Te mando el QR del BCP; cuando se acredita tu pago, recibís la confirmación con la fecha, la hora y el link.
 >
-> **Importante:** una vez pagado no hay devolución. Solo si el taller no se dicta (menos de 6 inscriptos al jueves 29), se devuelve el pago completo o se pasa a otra fecha, a tu elección.
+> **Importante:** una vez pagado no hay devolución. Solo si el taller no se dicta (menos de 6 pagos al jueves 29), se devuelve el pago completo o se pasa a otra fecha, a tu elección.
 > **Cierre de inscripciones:** jueves 29 de octubre, 20:00.
 
 Falta: que exista la página (sergiourcullo.vercel.app/auditoria), el botón de WhatsApp y el QR. Hoy esto es solo el texto.
