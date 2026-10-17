@@ -150,6 +150,9 @@ Los conectores (Meta Ads, GitHub, Higgsfield) son de la cuenta, no del entorno.
   de `editor-videos` (método Santiago). Carril con video → `editor-videos` + `motion-doctrine` siempre.
 - Una sesión con acceso al VPS **no** la abre otra sesión: el control de permisos lo bloquea
   (hermes-jarvis §5.10).
+- **Lo medido el 17-oct sobre la nube** (skills de la cuenta por ZIP, entorno «Onia», SSH por el túnel, mensajes
+  `--cloud` que no se ven, qué frena el control de permisos de la madre y de la rutina QA, y que los subagentes no
+  escriben en `.claude/skills/`): `hermes-content/docs/ONIA_SISTEMA_AUTONOMO.md` §10. Fuente única, no se copia acá.
 
 ## Formato del mensaje
 
