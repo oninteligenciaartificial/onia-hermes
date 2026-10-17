@@ -24,6 +24,9 @@ description: "Invocar para el carril Competencia de Onia: mirar rivales de produ
 - **Servicios profesionales, comercio e importadora tienen poca evidencia de producto.** No inventar qué hace la competencia:
   escribir «sin dato». Los artículos de blogs de proveedores (YoFacturo, Argentina) describen funciones, no prueban que un rival
   boliviano las tenga.
+- **Repartir la lectura en ayudantes** (17-oct, orden de la madre): haiku lee los sitios de un rubro y devuelve «literal o sin dato»;
+  sonnet escribe la ficha. 2 haiku + 1 sonnet cubrieron estética y servicios en minutos. Los ayudantes traen casos de España/Argentina:
+  decir el país, no mezclarlos con Bolivia. Fichas: `ESTETICA_Y_SERVICIOS_FICHA.md`, `NITRO_FICHA.md`.
 - **Comercio e importadora no compiten sin factura SIAT** (Mi Factura Bolivia Bs 320, Control Facilito Bs 772). No es una
   función suelta que copiar.
 - Los precios de rivales vienen de fichas del 3-oct: recontar antes de usarlos en venta.
