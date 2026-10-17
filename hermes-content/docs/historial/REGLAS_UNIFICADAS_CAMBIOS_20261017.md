@@ -393,3 +393,7 @@ Codex (P1, comment 4301367209) marcó que AGENTS.md dejaba a la rutina QA unir c
 - La ronda de la madre (cron de su sesión, solo lee) queda aclarada como no-scheduler en AGENTS.md §1 y equipo-de-agentes §3; §2 bis vale solo para QA y Plataforma (P1 4301453160).
 - El arranque obligatorio es para sesiones de Claude; Codex solo revisa (P1 4301453161).
 - edicion-referentes y onia-ventas-pauta dejan de decir «no esperar OK de diseño» (P2 4301453164).
+
+## 10.ª ronda (17-oct)
+
+- Loops del VPS: el crontab los tiene comentados desde el 4 y 5-sep (medido el 17-oct: solo `onia-loops-sync.sh`). AGENTS.md §1 lo dice y prohíbe reactivarlos; el README de loops marca su instalación como RETIRADA (P1 4301484980).

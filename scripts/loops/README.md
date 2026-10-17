@@ -146,6 +146,8 @@ Desde entonces ninguno había corrido. Y con la laptop apagada no corren en abso
 
 ## Instalación en el VPS
 
+> **RETIRADO (17-oct-2026, `AGENTS.md` §1):** los loops de `onia-loop.sh` NO se instalan ni se programan. En el crontab del VPS están comentados desde el 4 y 5-sep; medido el 17-oct, solo corre `onia-loops-sync.sh`. Las rutinas vigentes son QA (:57) y Plataforma (:17), en la nube. Lo de abajo queda como historia.
+
 Los scripts se **copian** a `/root/bin/` (no se enlazan al clon: un loop no debe poder romper su
 propio corredor a mitad de vuelta). Desde la raíz de un checkout del repo en el VPS:
 
