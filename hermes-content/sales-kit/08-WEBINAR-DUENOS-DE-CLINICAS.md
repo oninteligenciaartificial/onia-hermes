@@ -59,11 +59,11 @@ Tiempo de la rutina en papel o planilla: pizarra o Excel, 15-20 minutos al día.
 
 ### Bloque 3 (0:22-0:32) — demo: la misma persona de ejemplo en todas las pantallas
 **Requisito: cuenta demo (§1, punto 1).** Pantallas y qué se dice, en este orden:
-1. **Registro:** «Elige su rubro y queda armada con las pantallas, las palabras y los agentes de su rubro» (A-03 ⬜: se mira con la cuenta). Muestra los 5 rubros (A-02 ✅).
+1. **Registro:** ⟦solo si A-03 de `ONIA_PROMESA_VS_PRODUCTO.md` está ✅; si no, se muestra el registro sin describir qué arma⟧ «Elige su rubro y queda armada con las pantallas, las palabras y los agentes de su rubro» (A-03 ⬜: se mira con la cuenta). Muestra los 5 rubros (A-02 ✅).
 2. **Agenda y paciente:** ⟦solo si B-01, C-01, C-02 y C-03 están ✅; si no, se muestra sin prometer⟧ la agenda, la ficha con historia clínica y odontograma. Si siguen ⬜, se dice «le muestro cómo se ve con su caso» y no se describe la función. «Esta paciente de ejemplo…» — **nunca** «clínica de ejemplo» como promesa; se dice «datos de ejemplo».
 3. **Pendientes** (⛔ **no se presenta como hecho mientras G-01, G-04, G-06, G-07, G-08 y G-11 de `ONIA_PROMESA_VS_PRODUCTO.md` estén ⬜**: una cuenta demo sola no las verifica y el revisor automático no mira sus estados. Si siguen ⬜ el día del webinar, este punto se salta o se muestra solo la pantalla sin prometer qué hace): «Cada mañana el sistema le deja anotado a quién escribirle: quién tiene cita mañana y no confirmó, quién canceló o faltó y no volvió a agendar, quién le debe, con el mensaje ya preparado. Con IA le propone el texto de cada recordatorio y usted lo aprueba una sola vez. Nada sale sin su aprobación.» Aparece la tarjeta; se señala el dato con un anillo.
 4. **Cobros e inventario:** ⟦solo si D-01, E-01 y F-01 están ✅; si no, se muestra sin prometer⟧ el cobro, el saldo y una línea de inventario de insumos.
-5. **Reservas online (K-12 ✅):** el link por donde el paciente reserva.
+5. **Reservas online:** ⟦solo si I-01 está ✅; si no, se menciona sin demostrar el flujo⟧ el link por donde el paciente reserva. (K-12 ✅ solo cubre precio e inclusión en el plan; el comportamiento es I-01 🟡, no se presenta como verificado.)
 > Esto viene desde el plan Crece. ⟦solo si B-01, C-01, E-01 y F-01 están ✅; si no, se muestra sin prometer⟧ El Básico es agenda, ficha, cobros e inventario, sin la lista diaria.
 - **Frenos (G-01):** antes de hacer clic en «Aprobar» durante la demo, la cuenta lleva contactos de prueba propios: un clic puede enviar un mensaje de verdad (skill §4.4). Si hay duda, se muestra sin hacer clic.
 - Nunca se muestra el tratamiento a medias (D-03), el envío por WhatsApp (G-03 🟡), el agente de WhatsApp (J-*) ni la factura SIAT.
