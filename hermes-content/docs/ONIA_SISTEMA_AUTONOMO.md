@@ -1,5 +1,5 @@
 ONIA - Cómo funciona hoy el sistema autónomo
-Fecha: 16 de octubre de 2026
+Fecha: 16 de octubre de 2026 (sección 10 agregada el 17 de octubre)
 Para: Sergio Urcullo y las sesiones de agentes
 
 ----------------------------------------------------------------------
@@ -258,3 +258,24 @@ pedidos van a la jefa.
 | Muse (Meta) | Corre en tu PC y reemplaza a Claude y Codex en vez de coordinarlos. |
 
 Si algo de esta lista vuelve a proponerse, primero se le pregunta a Sergio Urcullo.
+
+----------------------------------------------------------------------
+
+## 10. Lo medido en la nube el 17-oct
+
+Medido en la auditoría de la jefa, cuando Sergio Urcullo pidió dejarlo anotado
+("este tipo de cosas anótalas, es learning"). Son mediciones de un día y la
+interfaz cambia: si algo falla, se vuelve a medir antes de repetirlas.
+La skill `onia-sesion-madre` remite a esta sección.
+
+| Tema | Qué se midió | Qué hacer |
+|---|---|---|
+| Skills en la nube | Las del repo solo cargan si la sesión arranca dentro del repo, y los hilos arrancan en `/home/user`. Con 2 repos en el Proyecto no corre ningún hook del repo (SessionStart). | Subirlas como skills de la cuenta: Personalización, Skills, +, Subir skill (ZIP). Así las tienen todas las sesiones y los hilos, y salen en el menú del proyecto. |
+| ZIP de una skill | El 17-oct se armaron 18 ZIP en `Descargas\onia-skills` y Sergio Urcullo los subió. Hay otros 18 en `tanda-2\` (no consta que estén subidos). | `git archive --format=zip --prefix=<skill>/ -o <skill>.zip origin/main:.claude/skills/<skill>` (probado el 17-oct; en Git Bash con `MSYS_NO_PATHCONV=1`). Si cambia una skill del repo que ya está subida, volver a subir su ZIP. |
+| Entorno "Onia" (`env_01BLwXdgpqDS3sx4rg3r2uvg`) | La red está en "Completo". El script de configuración se edita solo desde la interfaz (Nuevo, Elegir entorno, Nube, engranaje en Onia): no hay API y el control de permisos lo frena ("Unauthorized Persistence"). Si el script no cambia, queda en caché y no vuelve a correr. | Lo pega Sergio Urcullo. |
+| SSH de la nube al VPS | El puerto 22 directo no sale. La variable `ONIA_VPS_SSH_KEY_B64` NO llega al script de configuración, pero sí a la sesión. | Entrar por el túnel `ssh.onia.com.bo` con cloudflared (alias `onia-vps`; el script nuevo del entorno lo instala). La llave se escribe en el PASO 0 del hilo y nunca se imprime. Esa escritura la frena el control de permisos del hilo ("Auto-Mode Bypass") hasta que Sergio Urcullo la autoriza en ese hilo. |
+| Mensajes a la jefa | `claude -p ... --cloud cse_...` le llega como un turno interno y NO se ve en el chat del proyecto. | La jefa republica el aviso empezando con "De la madre:" para que Sergio Urcullo lo vea. |
+| Diagnosticar sin molestar a la jefa | Un `update` del prompt de un trigger ya creado no cambia su evento. | `RemoteTrigger create` (`environment_id`, modelo haiku, `allowed_tools` Bash), `run`, `update {enabled:false}`, y leer con `get_run_log`. Para cambiar el prompt, crear un trigger nuevo. |
+| Control de permisos de la madre | Frena leer la base de producción, aprobar por Sergio Urcullo un cambio de producción (plantilla de login), editar la config del entorno y crear cuentas en producción. | No se rodea: lo hace o lo autoriza Sergio Urcullo. |
+| Control de permisos de la rutina QA | Frena "@codex review" y mergear (External System Writes). | QA revisa y deja el veredicto en el PR; el merge y el "@codex review" los hace la jefa, que es quien publica. |
+| Subagentes de la madre | No pueden escribir en `.claude/skills/`: el harness lo rechaza como configuración del proyecto (se volvió a medir el 17-oct al editar `onia-sesion-madre`). | Si un workflow cambia skills, deja un `.patch` y lo aplica la madre misma con `git apply --ignore-whitespace` (así se hizo en `b8935f99`, PR #226). |
