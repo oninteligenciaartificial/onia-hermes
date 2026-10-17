@@ -377,3 +377,7 @@ principal, con quien puede escribir `.claude/`):** `git apply --ignore-whitespac
 - `scripts/loops/pedido-rama.test.mjs`: de 28 a 32 pruebas. Las existentes simulan la nube por defecto (`CLAUDE_CODE_REMOTE=true`); las nuevas fijan (a) PC + principal + archivo sin agregar: no se commitea; (b) PC + principal + archivo agregado: se commitea solo ese; (c) PC + worktree enlazado: `add -A`; (d) nube: `add -A`.
 - `AGENTS.md` §4 «Carriles»: una línea tras «`git add` con rutas explícitas».
 - Pendiente de la sección «Fuera de este repo» (checkouts vivos con el script viejo) sigue igual: tras el merge, actualizar cada checkout y comparar `git hash-object scripts/git-autosync.js`.
+
+## 7.ª ronda (17-oct): QA también exige la revisión de Codex
+
+Codex (P1, comment 4301367209) marcó que AGENTS.md dejaba a la rutina QA unir con solo CI. Ahora QA exige la revisión de Codex del último commit sin P0/P1 abiertos, con el mismo respaldo Sonnet que la jefa. El prompt de la rutina ya lo pedía; la regla escrita quedó igual.
