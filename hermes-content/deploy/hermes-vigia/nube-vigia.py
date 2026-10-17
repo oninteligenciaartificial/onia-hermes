@@ -193,18 +193,24 @@ def main(modo):
     sys.stdout.reconfigure(encoding="utf-8")
     token = open(TOKEN_FILE).read().strip()
     data = [analyse(r, token) for r in REPOS]
-    cloud = max((t for d in data for t in d["cloud"]), default=None)
-    if cloud is None:
-        sys.exit("vigia roto: ninguna actividad de la nube en GitHub (filtro Claude-Session o acceso)")
-    if modo == "resumen":
-        print(resumen(data, cloud))
-        return
     estado = f"{CACHE}/estado.json"
     try:
         state = json.load(open(estado))
     except (OSError, ValueError):
         state = {}
+    # The 24 h windows can miss the last activity (branches deleted, quiet day): keep it in the state.
+    seen = [t for d in data for t in d["cloud"]] + ([state["last_cloud"]] if state.get("last_cloud") else [])
+    cloud = max(seen, default=None)
+    if cloud is None:
+        sys.exit("vigia roto: ninguna actividad de la nube registrada (ni en GitHub ni en el estado)")
+    if modo == "resumen":
+        state["last_cloud"] = cloud
+        with open(estado, "w") as f:
+            json.dump(state, f)
+        print(resumen(data, cloud))
+        return
     msg, state = vigia(cloud, state)
+    state["last_cloud"] = cloud
     with open(estado, "w") as f:
         json.dump(state, f)
     if msg:
