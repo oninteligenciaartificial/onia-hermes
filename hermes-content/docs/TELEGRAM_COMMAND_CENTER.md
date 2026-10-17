@@ -225,8 +225,8 @@ Hermes, su asistente, por Telegram. Cada corrida es UN pedido. Hablale siempre c
 |---|---|---|
 | Programar, tocar el repo o el VPS | modelo débil; un error en `main` rompe el deploy del VPS y de Vercel | Claude en la nube (PR en borrador) |
 | Mandar un pedido sin su confirmación | el «sí» tiene que ser a un texto exacto, y venir de él | — (sin el código que le llegó a él, sale 66) |
-| Publicar o desplegar | superficie viva: Sergio Urcullo la ve terminada primero (CLAUDE.md §4) | él, o la madre con él |
-| Gastar plata o créditos | regla de gasto (CLAUDE.md §5) | él, con cotización previa |
+| Publicar o desplegar | visual y serio: Sergio Urcullo lo ve antes (AGENTS.md §4 «Quién decide») | él, o la madre con él |
+| Gastar plata o créditos | regla de gasto (AGENTS.md §5) | él, con cotización previa |
 | Escribirle a un tercero | regla de propuestas y prospectos; Hermes prepara, él manda | él |
 | Cambiar precios, borrar datos, escribir en producción | fuente única de precios; respaldo antes de tocar datos | la madre con él |
 | Abrir el portal del SIAT | aviso del SIN por uso automatizado (1-oct) | nadie |

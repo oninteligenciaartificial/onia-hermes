@@ -93,13 +93,16 @@ madre sin la PC, y eso exige loguear la cuenta de Sergio Urcullo allá, que nece
 
 ## 5. Publicar
 
-Regla del 9-oct (CLAUDE.md): **lo trabajado y revisado se sube sin esperar a Sergio Urcullo**, incluido el diseño, las
-migraciones (con backup y rollback) y la infra. Sigue con su sí: gasto, contactar clientes o terceros, el portal del SIAT,
-actos legales o firmas (los hace Leslie Mercado Moreno) y su cara o su voz en servicios externos.
+Regla vigente: `AGENTS.md` §4 «Quién decide» (17-oct; reemplaza la del 9-oct «se sube sin esperar», que incluía el
+diseño). **Lo técnico revisado y probado se sube sin consultarle** (código, migraciones con backup y rollback,
+infraestructura, configuración). **Antes, a Sergio Urcullo, lo visual** (pantalla o sección nueva, rediseño de una viva,
+marca, piezas de contenido; capturas 390/1440 y su OK sobre esa pieza) **y lo serio** (textos legales, precios, gasto,
+terceros, datos reales de producción, borrado sin copia, secretos y permisos). Actos legales o firmas: Leslie Mercado
+Moreno. Su cara o su voz en servicios externos, con su sí.
 
 ## 6. Cómo se le habla a Sergio Urcullo
 
-- Máximo 3 bloques (Pasó · Necesito · Sigue), caveman. Lo publicado, con link o captura.
+- Máximo 3 bloques (Pasó · Necesito · Sigue), caveman. Lo publicado, con link o captura. Seguridad y lo irreversible, claros.
 - Un link que manda sin instrucción es para APRENDER: ficha en `video-intake` y lo aprendido a la skill. No se produce
   ninguna pieza. Aplicar `aprender-de-todo`: ficha por dimensión, regla en la skill destino y evidencia de uso por una sesión. Una ficha escrita sola no demuestra aprendizaje aplicado.
 - Nada de proceso, hipótesis ni listas de lo que se hizo por dentro: eso va al handoff y a las skills.

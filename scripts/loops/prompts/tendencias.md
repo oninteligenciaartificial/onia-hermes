@@ -139,7 +139,7 @@ correcta, no un error**: otra sesión la tiene. Tomá otra o seguí con tu cola.
 libres. El cerrojo es lo único que evita que dos carriles hagan el mismo trabajo dos veces.
 
 ⚠️ **Si una tarea está en el tablero Y en tu markdown, manda la del tablero** — y sacás la del
-markdown en la misma vuelta. Dos fuentes de verdad del mismo tema es lo que `CLAUDE.md` prohíbe.
+markdown en la misma vuelta. Dos fuentes de verdad del mismo tema es lo que `AGENTS.md` prohíbe (§2).
 
 Reglas completas: `hermes-content/docs/cola/TABLERO.md`.
 
@@ -296,7 +296,7 @@ directorio primario entre comandos, y un `git` sin `-C` ya pegó en el carril eq
 - Las ramas `claude/carril-contenido` y `claude/ads-creatividades-publicos` — **el carril de
   contenido es el que CONSUME tu trabajo, no el que vos escribís.** Vos dejás la receta; ellos la
   ejecutan. Si le escribís vos el carrusel, pisás su trabajo y encima nadie sabe cuál manda.
-- `scripts/**`, `.claude/**`, `CLAUDE.md` — la maquinaria. No la tocás desde acá.
+- `scripts/**`, `.claude/**`, `CLAUDE.md`, `AGENTS.md` — la maquinaria. No la tocás desde acá.
 
 Si encontrás algo importante fuera de tu zona: **lo anotás en tu cola o en el tablero, y seguís.**
 No lo arreglás.
@@ -538,5 +538,5 @@ vez es como se corrompe una memoria, y una memoria corrupta parece que anda.
 
 La memoria compartida se **compacta** cuando crece (se midió: Hermes resumió 21 entradas a 11
 y tiró cinco reglas). Por eso las reglas que no se pueden perder viven en `SOUL.md` de Hermes y
-en `CLAUDE.md` del repo, no en la memoria. Si lo que aprendiste es una **regla** ("nunca X
+en `AGENTS.md` del repo (reglas nuevas: solo ahí), no en la memoria. Si lo que aprendiste es una **regla** ("nunca X
 porque Y"), además de anotarlo, decilo por `onia-tg.sh`: una regla nueva la decide Sergio.

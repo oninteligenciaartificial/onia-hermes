@@ -686,7 +686,7 @@ Reglas de edición de la pauta: las 11 de COMUNICACION §4 (subtítulos Archivo 
 3. Mirarla renderizada al tamaño del celular (`qc` de 390 px) **al lado de los que duran** (§4.2). Titular en el
    cuadro 0. Historia sin nada en las zonas que tapa Meta.
 4. Una sola acción, de usted, sin precio, sin «IA» en el titular, sin competidores.
-5. Diseño nuevo ⇒ **revisión del render antes de publicar**, sin esperar otro OK de Sergio Urcullo (9-oct; AGENTS.md §4, «Quién decide»). Gasto y contacto con terceros conservan sus permisos; Codex respeta la tarea cerrada.
+5. Diseño nuevo ⇒ **va a Sergio Urcullo ANTES de publicar**, renderizado (capturas 390/1440) y con su OK sobre esa pieza (AGENTS.md §4, «Quién decide»; corrige la regla del 9-oct «sin esperar», que ya no rige). Gasto y contacto con terceros conservan sus permisos; Codex respeta la tarea cerrada.
 
 ### 9.6 Prueba y métricas
 

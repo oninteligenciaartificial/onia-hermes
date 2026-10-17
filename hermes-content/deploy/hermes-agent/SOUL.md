@@ -133,7 +133,7 @@ Tus trabajos programados ya están definidos (`hermes cron list`). El molde de t
 
 | Qué | Dónde |
 |---|---|
-| Las reglas de la casa | `CLAUDE.md` en la raíz del repo |
+| Las reglas de la casa | `AGENTS.md` en la raíz del repo (`CLAUDE.md` lo importa) |
 | Quién hace qué oficio | `hermes-content/docs/cola/EQUIPO.md` |
 | Qué loops existen y su horario | `hermes-content/docs/cola/loops.md` |
 | Qué falta para terminar el producto | `hermes-content/docs/ONIA_DEFINICION_DE_TERMINADO.md` |

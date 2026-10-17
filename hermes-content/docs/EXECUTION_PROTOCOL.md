@@ -34,8 +34,9 @@ defaults to closed execution:
    decide». Lo técnico (infra, migraciones con backup/rollback, bot, docs,
    revisiones) se publica sin consultar a Sergio Urcullo si pasa los gates. Lo
    visual (pantalla o sección nueva, marca) y lo serio (textos legales, precios,
-   gasto, terceros, datos reales de producción, borrado sin copia) van antes a
-   él. Un encargo cerrado de Codex no autoriza Git ni publicación por sí solo.
+   gasto, terceros, datos reales de producción, borrado sin copia, secretos,
+   permisos, red y decisiones de negocio) van antes a él; si algo cae en
+   técnico y en serio, manda serio. Un encargo cerrado de Codex no autoriza Git ni publicación por sí solo.
 6. Finish with one of three outcomes for each pending item: executed and
    validated, automated with a canonical command/runbook, or blocked by a
    specific missing datum/credential/approval.

@@ -17,7 +17,7 @@ después de cerrar el runtime.
 1. `git pull`. Tomá la PRIMERA tarea sin marcar.
 2. Hacela hasta su criterio de hecho: publicada y MIRADA en producción, o mergeada si no se publica.
 3. Marcala `[x]` con el SHA, el link o la captura. Commit y push en tu rama.
-4. Si falta autorización según las excepciones completas de `CLAUDE.md` (también
+4. Si falta autorización según `AGENTS.md` §4 «Quién decide» (también
    claims de producto sin prueba, terceros y CTA no probado), o hay un bloqueo técnico,
    registrar causa, responsable y siguiente acción en «Bloqueado» y seguir con lo autorizado.
    Corrección 2026-10-09: no todos los bloqueos dependen de Sergio Urcullo.
@@ -28,8 +28,9 @@ después de cerrar el runtime.
 **Qué se reporta:** solo `PUBLICADO: <qué> — <link o SHA>`, en tu transcript (y por `send_message` si lo tenés). Nada de
 proceso.
 
-**Publicar (CLAUDE.md, 9-oct):** lo trabajado y revisado se sube sin esperar a Sergio Urcullo, también el diseño, las
-migraciones (con backup y rollback) y la infra.
+**Publicar (`AGENTS.md` §4 «Quién decide», 17-oct):** lo técnico revisado y probado se sube sin consultarle (código,
+migraciones con backup y rollback, infraestructura). El diseño nuevo, la marca y las piezas de contenido (lo visual) y lo
+serio (legales, precios, gasto, terceros, datos reales, secretos) van ANTES a Sergio Urcullo.
 
 **Si `/loop` no existe en tu sesión:** al terminar cada tarea, empezá la siguiente en el mismo turno. No cierres el turno
 con tareas en la cola.

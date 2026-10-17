@@ -169,7 +169,7 @@ export default ({ flow, cards, code, terminal, compare, checklist, decision, bri
         ),
         notes:
           "Mostrá el archivo: se llama CLAUDE punto md. Una regla sola dice no hagas esto; una con historia dice no hagas esto porque tal día pasó esto y costó esto. Prometé tres reglas reales, una regla tonta que avisa cuando la sesión se degrada y dos errores tuyos en ese mismo archivo.",
-        screen: "CLAUDE.md abierto en su encabezado. Sin scroll por precios ni VPS.",
+        screen: "AGENTS.md (el CLAUDE.md lo importa) abierto en su encabezado. Sin scroll por precios ni VPS.",
       },
       {
         eyebrow: "Por qué importa",
@@ -195,7 +195,7 @@ export default ({ flow, cards, code, terminal, compare, checklist, decision, bri
         visual: stack(["AL ARRANCAR", "LO QUE SE ROMPE", "PRODUCTO Y MARCA", "CÓMO SE TRABAJA", "DETALLE"]),
         notes:
           "El archivo va en la raíz y se llama CLAUDE, en mayúsculas, punto md. Si no tenés uno, abrí Claude Code en la carpeta y escribí barra init. Después ordenalo por cuándo se necesita: lo de cada sesión, las tres reglas que más se rompen, producto y marca, cómo se trabaja y el detalle de cada área.",
-        screen: "Índice de CLAUDE.md con sus cinco partes.",
+        screen: "Índice de AGENTS.md con sus cinco partes.",
       },
       {
         eyebrow: "Paso dos",
@@ -216,7 +216,7 @@ export default ({ flow, cards, code, terminal, compare, checklist, decision, bri
         ),
         notes:
           "Cada regla tiene tres partes: un título que dice REGLA, una línea con quién la pidió, cuándo y qué pasó, y las instrucciones, cortas y verificables. Contá la historia: un precio en el código, otro en un cotizador público, otro en propuestas firmables y otro en un folleto. La historia no es decoración: le dice a Claude qué error evitar.",
-        screen: "La regla «Una sola fuente de verdad» en CLAUDE.md; solo esa sección.",
+        screen: "La regla «Una sola fuente de verdad» en AGENTS.md; solo esa sección.",
       },
       {
         eyebrow: "Paso tres",
@@ -252,7 +252,7 @@ no se nombra.`,
         ),
         notes:
           "Explicá el canario de los mineros: si el pájaro dejaba de cantar, había algo mal en el aire. No es vanidad. Y leé su límite, que también está escrito: se vuelve a cargar en cada pedido, así que no detecta contexto perdido. Detecta algo peor: si falla teniéndola delante, dejó de leer.",
-        screen: "La regla «Canario» en CLAUDE.md; solo esa sección.",
+        screen: "La regla «Canario» en AGENTS.md; solo esa sección.",
       },
       {
         eyebrow: "La prueba",
@@ -921,7 +921,7 @@ sin secreto        → 503, no abre`,
         ),
         notes:
           "Para ellos es razonable; para vos no. Las instrucciones de tu proyecto mandan sobre las de una skill que instalaste.",
-        screen: "La regla de Higgsfield en CLAUDE.md; solo esa sección.",
+        screen: "La regla de Higgsfield en AGENTS.md; solo esa sección.",
       },
       {
         eyebrow: "Paso uno",

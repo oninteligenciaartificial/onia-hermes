@@ -175,5 +175,5 @@ vez es como se corrompe una memoria, y una memoria corrupta parece que anda.
 
 La memoria compartida se **compacta** cuando crece (se midió: Hermes resumió 21 entradas a 11
 y tiró cinco reglas). Por eso las reglas que no se pueden perder viven en `SOUL.md` de Hermes y
-en `CLAUDE.md` del repo, no en la memoria. Si lo que aprendiste es una **regla** ("nunca X
+en `AGENTS.md` del repo (reglas nuevas: solo ahí), no en la memoria. Si lo que aprendiste es una **regla** ("nunca X
 porque Y"), además de anotarlo, decilo por `onia-tg.sh`: una regla nueva la decide Sergio.

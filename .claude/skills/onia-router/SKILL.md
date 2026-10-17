@@ -29,7 +29,7 @@ carril, cargá su stack, respetá las reglas duras. Fuente viva del mapa complet
 
 ## Cómo usar
 1. **Identificá el carril** de la tarea (tabla abajo). Ante duda, ver
-   `CLAUDE.md` §4 "Carriles (REGLA)" y `COORDINATION_MANIFEST.md`.
+   `AGENTS.md` §4 «Carriles» y `COORDINATION_MANIFEST.md`.
 2. **Cargá el stack de proceso común** (siempre) + las skills del carril.
 3. **Delegá en subagentes** (`general-purpose`/`Explore`; `onia-crm-prospeccion` para prospección)
    cuando la tarea tiene fan-out o varios ángulos.
@@ -69,7 +69,7 @@ ni ejecutar Git fuera del encargo de la madre.
 | **competencia por dentro** (cómo funcionan los programas rivales) | Leer primero `hermes-content/research/competencia/PRODUCTO_COMPETENCIA_RESUMEN.md` (1-oct: Dentalink, Doctocliq, TuDoc, AgendaPro, Citalo). Método que funcionó: centros de ayuda públicos + capturas Playwright; YouTube y Zendesk privado NO abren desde la nube (videos desde la PC); cuentas de prueba solo desde la PC (piden código al WhatsApp de Sergio Urcullo) | — | — |
 | **extracción web** (alta por URL · prospección) | **NO instalar scrapers nuevos** (ScrapeGraphAI evaluado y descartado). Crawl4AI del VPS + LiteLLM ya resuelven: `scripts/alta-por-extraccion.py`. Doc: `hermes-content/docs/platform/ONIA_EXTRACCION_WEB_DECISION.md` | `onia-crm-prospeccion` | — |
 
-## Reglas duras que aplican SIEMPRE (de CLAUDE.md)
+## Reglas duras que aplican SIEMPRE (de AGENTS.md)
 - 🎯 **Antes de elegir carril, leer `hermes-content/docs/ONIA_ESTRATEGIA_DE_EMPRESA.md`.**
   Dice cuál es la **etapa vigente** del negocio y su criterio de salida numérico. Una tarea que
   no sirve a esa etapa **se anota como pendiente y NO se hace** — por buena que sea. Ahí está
@@ -86,10 +86,10 @@ ni ejecutar Git fuera del encargo de la madre.
   no ejecuta Git si el encargo lo prohíbe. No asumir autosync activo ni usarlo para
   publicar trabajo parcial. La madre integra lo revisado según `equipo-de-agentes`.
 - **Auto-sync activado** (hook Stop `scripts/git-autosync.js`): commitear y pushear la rama al terminar;
-  respeta `.gitignore`. **`main` solo por PR revisado** desde el 5-oct: el hook mueve `main` únicamente en la
-  madre (`ONIA_AUTOSYNC_MAIN=1`) y el integrador (`ONIA_LOOP_ID=onia-cola`).
+  respeta `.gitignore`. **`main` solo por PR revisado** desde el 5-oct; quién lo mueve y qué no se une solo:
+  `AGENTS.md` §4 «Quién mueve `main`» (el integrador `onia-cola` está muerto desde el 27-sep).
 - **Autonomía máxima:** MCP → CLI/API → skill → script → recién ahí preguntar.
-- **Gasto (actualizado 2026-10-09):** seguir `CLAUDE.md` §Higgsfield: pruebas pequeñas
+- **Gasto (actualizado 2026-10-09):** seguir `AGENTS.md` §5 Higgsfield: pruebas pequeñas
   de imagen autorizadas el 8-oct, cotizadas y registradas, sin fraccionar lotes.
   Video, Soul, lotes grandes, cara/voz y plataformas nuevas conservan sus permisos.
   Los costos históricos no prueban precio ni saldo actual.

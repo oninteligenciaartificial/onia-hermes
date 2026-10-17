@@ -148,7 +148,7 @@ correcta, no un error**: otra sesión la tiene. Tomá otra o seguí con tu cola.
 libres. El cerrojo es lo único que evita que dos carriles hagan el mismo trabajo dos veces.
 
 ⚠️ **Si una tarea está en el tablero Y en tu markdown, manda la del tablero** — y sacás la del
-markdown en la misma vuelta. Dos fuentes de verdad del mismo tema es lo que `CLAUDE.md` prohíbe.
+markdown en la misma vuelta. Dos fuentes de verdad del mismo tema es lo que `AGENTS.md` prohíbe (§2).
 
 Reglas completas: `hermes-content/docs/cola/TABLERO.md`.
 
@@ -482,7 +482,7 @@ Nace del 2026-09-02, la primera vuelta de este loop en el VPS: intentó los cinc
 corrido, **se quedó sin turnos a mitad del tercero** y dejó `MERGE_HEAD` abierto sobre `main`
 con el índice entero montado. No había ni un conflicto —git había resuelto todo— pero un merge
 abierto es el estado que cualquier `add -A` convierte en un commit a ciegas. **Es el modo de
-falla que `CLAUDE.md` prohíbe**, y ya llegó una vez a `main` con 17 archivos con marcadores
+falla que `AGENTS.md` §4 prohíbe**, y ya llegó una vez a `main` con 17 archivos con marcadores
 adentro.
 
 **Mergeá, no rebasees.** Acá hay varios worktrees sobre el mismo repo: un `checkout` de la rama
@@ -770,5 +770,5 @@ vez es como se corrompe una memoria, y una memoria corrupta parece que anda.
 
 La memoria compartida se **compacta** cuando crece (se midió: Hermes resumió 21 entradas a 11
 y tiró cinco reglas). Por eso las reglas que no se pueden perder viven en `SOUL.md` de Hermes y
-en `CLAUDE.md` del repo, no en la memoria. Si lo que aprendiste es una **regla** ("nunca X
+en `AGENTS.md` del repo (reglas nuevas: solo ahí), no en la memoria. Si lo que aprendiste es una **regla** ("nunca X
 porque Y"), además de anotarlo, decilo por `onia-tg.sh`: una regla nueva la decide Sergio.

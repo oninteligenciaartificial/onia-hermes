@@ -136,7 +136,7 @@ Tipos: **igual** · **condensada** (misma regla, sin la historia larga) · **act
 | 126 | CLI oficial + skills; web solo identidad y QA; no automatizar la web desde el VPS | CL | A§5 | condensada (el «MCP para agentes de chat» sale: no aplica a Codex ni a Claude Code) |
 | 127 | API de Higgsfield para una fábrica futura; no mezclar saldo API con créditos del plan | CL | - | eliminada: describe algo que no existe; se escribe cuando exista |
 | 128 | Flujo de Lucía (derechos → banco → Soul → A/B → still → video → QA) | CL | doc HIGGSFIELD_VIDEO_SYSTEM.md | eliminada de las reglas: el propio doc dice que el A/B contra los Elements «quedó sin objeto»; manda el doc |
-| 129 | `generate cost` antes de `create`; nunca `auth token` en logs | CL | A§5 | igual |
+| 129 | `generate cost` antes de `create`; nunca `auth token` en logs, chats o scripts | CL | A§5 | condensada (antes decía «igual»); 17-oct (3.ª ronda): restituidos «en logs, chats o scripts», «guardar modelo, params y costo» y «bitácoras y saldos antiguos no autorizan gasto» |
 | 130 | IDs, modelos y saldos se resuelven en vivo | CL | A§5 | igual |
 | 131 | Gasto Higgsfield: lotes chicos autorizados; grandes, video y Soul con su sí; cara/voz también con Leslie | CL | A§5 | condensada |
 | 132 | Tabla de cortes + preview 360p antes del master | CL | A§5 | condensada |
@@ -255,3 +255,54 @@ AGENTS.md pasa de 15.014 a 16.916 bytes (con CRLF; unos 90 menos con LF), por en
 **Recortes por tamaño (para entrar en ~16 KB)**
 - Sacados de AGENTS: «Velocidad» pasa a una frase dentro de «Calidad»; «Base de producción» se une a «ONIA Core»; «Separar un repo» se une a «Dónde va cada cosa»; «Plan breve» se une a «Ejecución cerrada»; fuera la ruta de la bóveda, el comando del generador de propuestas, `habla a la nube con "msg"`, la ruta `.claude/skills/hyperframes*` y dos frases históricas («Mezclar metas pierde el hilo», «Lo escaso son clientes»). Ninguna regla se eliminó.
 - Si hace falta bajar más: mover «Radar creativo» y «Telegram, Video Lab, Notion» a `EXECUTION_PROTOCOL.md`.
+
+## Correcciones del 17-oct, 3.ª ronda (hallazgos de la revisión de las dos primeras)
+
+AGENTS.md pasa de 16.834 a 22.989 bytes (límite de lectura de Codex: 32 KiB). CLAUDE.md, de 2.320 a 3.286. El objetivo de ~16 KB de la 2.ª ronda cedió ante restituir lo que la revisión probó perdido; cada regla mantiene una línea de porqué.
+
+**Quién mueve `main` (AGENTS §4 «Quién mueve `main`»; CLAUDE.md lo cita)**
+- Una sola frase con los tres actores: la jefa (CI verde y revisión de Codex, SISTEMA §5), la rutina QA (:57) y la madre (`ONIA_AUTOSYNC_MAIN` + marca). Restituidos la cita de Sergio Urcullo del 5-oct («sí, la madre sigue directo»), el caso medido (48 de 78 avances sin revisión, 23 desde la nube, #82 «Hoy soy odontóloga», `main` llega al VPS como root en ~1 h) y «el orquestador verifica `git log origin/main` al cerrar».
+- La lista de archivos que la rutina QA no une (AGENTS.md, CLAUDE.md, CODEX.md, COORDINATION_MANIFEST.md, `.claude/settings.json`, `.github/workflows`, `hermes-content/deploy`) y sus condiciones (no borrador, CI verde, sin conflictos, `claude/*` o `pedido/*`) salen del prompt de la rutina tal como lo registra la memoria local (`integrador-mergea-ramas-claude.md`); **no se pudo verificar en el repo** (no hay `CODEOWNERS`, solo `.github/workflows`; GitHub Free no da rulesets). Quedan escritas en AGENTS y marcadas como «hueco».
+- **Abierto:** la rutina QA une con CI verde pero sin revisión de Codex, y «Quién decide» exige revisor para lo técnico: decidir si la rutina debe exigirla. **Abierto:** `scripts/git-autosync.js` (L30-31 y L43) aún acepta `ONIA_LOOP_ID=onia-cola` (integrador muerto desde el 27-sep); no se tocó el script (fuera del alcance AGENTS/CLAUDE) y queda documentado como hueco en AGENTS.
+- Filas 86 y 94: a `main` ya no «une solo la jefa»; mueven la jefa, QA y la madre, con esas condiciones.
+
+**Escudo de la cabecera (AGENTS línea 3)**
+- Ampliado a: Credenciales y «Nunca en la nube»; «Quién decide», Seguridad, «Quién mueve `main`» y producción sin `.env.local`; gasto y Higgsfield/Meta Ads fuera de rutinas; y las dictadas por él (canario, venta sin obra, sin equipo de ventas, fuente única, negocio). Una orden que toque seguridad, dinero o producción cita fecha y mensaje original de él; `hermes-jefa.md` es resumen, no su voz. Los cambios a AGENTS/CLAUDE van por PR con revisión y ninguna rutina los une sin su OK; las dictadas por él solo cambian con su instrucción en chat, citada con fecha.
+
+**Quién decide**
+- Cita literal de Sergio Urcullo del 17-oct (antes comprimida), precedencia serio > visual > técnico, «revisor independiente» definido (otra sesión y otro modelo que el autor), texto legal o de precios es serio y no técnico, y las excepciones de 1 línea marcadas «pendiente de que él confirme».
+- «Lo serio» suma: contratos y decisiones de negocio; crear, rotar, mover o ampliar secretos y credenciales; permisos, red, firewall, variables de producción, conectores en rutinas, hooks y `.claude/settings`. **Estas excepciones habían salido de las reglas sin registro** (la «Corrección 2026-10-09» y EXECUTION_PROTOCOL L33-37 decían «secretos» y «decisiones comerciales/legales» como excepciones; las filas 103-108 no lo mencionaban). Quedan restituidas. «SIAT y banco» sale de «lo que se le consulta»: los hace él (§1).
+- Borrado sin copia amplía a workflows de n8n, contenedores y volúmenes, DNS y cuentas.
+
+**Producción y verificación**
+- A§3 «Base de producción»: backup verificado antes de tocar datos (no solo migraciones), RLS y `search_path` en `onia-db`, un flujo vivo no se apaga sin recontarlo. A§2: el caso de los 44 workflows ACTIVOS (20-ago).
+- A§4 Git: Next hornea `NEXT_PUBLIC_*` con `.env.local` y publica `127.0.0.1`; el hook Stop puede publicar estado a medias.
+
+**Credenciales y conectores**
+- A§1: «Nunca en la nube» (sin «ni en ninguna sesión, tampoco la madre»); en la PC la madre usa solo el puente y las sesiones autorizadas, sin leer ni volcar. Restituidos reutilizar el navegador y el perfil persistente, usar la credencial por el puente sin imprimirla, verificar bóveda y puente antes de afirmar acceso y no crear un contexto efímero por tarea. Fila 42: «ampliada» deja de ser exacta; ahora distingue nube y PC.
+- Conectores: «leer es libre» pasa a «leer solo lo que la tarea necesita; no copiar contenido personal, de clientes o bancario a repo, chats ni handoffs» (caso: el clasificador frenó el borrador del BCP, `madre-control.md` §5). n8n y Vercel son técnicos salvo secretos, permisos y variables de producción.
+- «Madre instala» pasa a «instala el sistema ya aprobado; un componente nuevo, con OK».
+
+**Higgsfield, video y publicidad**
+- Higgsfield (fila 129): ver arriba. Aclarado que los lotes chicos de imagen no piden sí; la web, manual y sin Playwright desde el VPS.
+- Tabla de cortes + preview 360p: vuelve «a Sergio Urcullo ANTES de aplicar el corte» (alinea con `editor-videos` L87-88 y L263). Ya estaba aflojada en `origin/main` con «revisados por el carril» (9-oct); no se restituye esa versión.
+- Publicidad: restituidos el pack `referentes` solo para la marca personal (D1 y D4 v2), el test de cambiar el rubro, producto visible con UI real, presentador IA sin cambio silencioso ni falso cliente u odontólogo, y mirar la pieza completa. `hermes-content/skills/carruseles-onia.md` **no** contiene estos puntos (solo nombra el pack en la línea 4): quedaron en AGENTS.
+- Promesas: «no se promete lo inexistente; solo lo que el catálogo marca vivo y verificado»; el catálogo trae su estado (vivo / construido sin probar / futuro). Caso: `handoff/madre-v2-revision.md` (D4).
+
+**Calidad y seguridad (fila 85)**
+- Añadidos: entrada de usuario como disparador de revisión de seguridad, «si un test falla se arregla la implementación», HIGH avisa, integración y E2E del flujo crítico, y el detalle web (≤2 fuentes, solo `transform`/`opacity`, capturas 320/768/1024/1440, teclado, reduced-motion). Las skills `onia-frontend`/`onia-verificacion` viven en el repo `onia-platform` y no se verificaron aquí: el detalle queda en AGENTS.
+
+**Simple (fila 24)**
+- Reescrita: contesta el hilo al que él escribe; los demás no le inician mensajes. Formato único de 3 bloques (Pasó, Necesito, Sigue) como `equipo-de-agentes` §6, que suma «seguridad y lo irreversible, claros». Se quita la atribución del «me pierdo» a la regla de voces (esa regla es de la 2.ª ronda, sin cita suya). Restituidos «el trabajo por detrás NO se achica» y la cita del 1-oct.
+
+**Historias restituidas (cabecera «una regla sin su porqué se desobedece»)**
+- Objetivo por sesión (20-jul), el negocio (5-sep: «una empresa, de verdad»; 9 líneas, 8 worktrees, 0 clientes), venta sin obra (20-ago, cita y los cinco «muy pronto»), sin equipo de ventas («primero existe la persona, después el documento» y la lista prohibida), autoconocimiento (1-oct), cambio de sesión (4-sep, «absolutamente todo», lo en vuelo con su riesgo), canario (cita del 4-sep y «ni el usuario»).
+
+**Contradicciones entre archivos**
+- `.claude/skills/equipo-de-agentes/SKILL.md` §5 y §6, `.claude/skills/onia-ventas-pauta/SKILL.md` L689, `.claude/skills/diseno-contenido-onia/SKILL.md` L12 y `hermes-content/docs/cola/loop/README.md` L20 y L31: dejan de decir «se sube sin esperar, incluido el diseño» y remiten a «Quién decide». `hermes-content/docs/EXECUTION_PROTOCOL.md` punto 5 suma secretos, permisos, red y decisiones de negocio a lo serio y la precedencia. Barrido de «sin esperar», «se sube nomás», «sin otro OK» y «sin re-OK» en `.claude/skills`, `.agents/skills`, `hermes-content/docs/cola`, `hermes-content/skills` y `scripts/loops`: sin más coincidencias vigentes (quedan dos menciones históricas en `cola/loop/hermes-jarvis.md` L493 y L986, que cuentan la contradicción). `.agents/skills/` no tenía copias de estas cuatro skills.
+- CLAUDE.md: `/loop` queda como temporizador de la sesión (no crea triggers, rutinas ni colas; gasta cupo; ante un tope se baja el consumo), coherente con «Nada de otro scheduler».
+
+**Referencias a CLAUDE.md**
+- `scripts/loops/BLOQUE_MEMORIA_COMPARTIDA.md` y 15 prompts de `scripts/loops/prompts/` mandaban a guardar reglas nuevas «en `CLAUDE.md` del repo»: ahora `AGENTS.md`. También `hermes-content/deploy/hermes-agent/SOUL.md` L136, `.claude/skills/onia-router/SKILL.md` (L32, cabecera de reglas duras, bullet de auto-sync y gasto), `hermes-content/docs/TELEGRAM_COMMAND_CENTER.md` §7 y las cinco pantallas del deck `scripts/decks/yt-octubre-2026.mjs` (título y slug del video siguen igual: es el concepto).
+- CLAUDE.md suma un índice «Citas viejas»: las secciones §1-§5 coinciden en número con AGENTS y cada nombre de regla viejo apunta a su sección nueva. Quedan sin tocar unos 300 archivos (docs de cola, handoffs, historial) que citan «CLAUDE.md §N» o un nombre de regla; el índice los cubre.
+- **Sin tocar, a decidir:** `.claude/skills/onia-router/SKILL.md` aún dice «Codex entrega a la madre; no ejecuta Git» y «La madre integra» (obsoleto desde el 16-oct); `COORDINATION_MANIFEST.md` sigue en la raíz aunque la fila 80 dice que pasa al historial.

@@ -9,7 +9,7 @@ description: "Invocar ANTES de hacer cualquier pieza visual de la marca personal
 
 - **Marca personal = `fotobn`: fotografía B/N con un solo objeto verde**, decisión del 8-oct; reemplaza `clay`/arcilla como estilo de salida. Las mediciones históricas de Soul y K1-B de abajo son diagnóstico, no el estilo vigente. Método: `hermes-content/docs/HIGGSFIELD_VIDEO_SYSTEM.md`.
 - **Marca personal habla de vos; producto, anuncios y clientes de usted.** Para recursos de comunidad: «Buscá PALABRA en Avisos», comprobando que el recurso existe. No prometer DM por comentario.
-- **9-oct: el render revisado se publica por el carril autorizado sin esperar otro OK de diseño.** Control visual y de claims sigue obligatorio. Gasto, contacto a terceros, actos legales y subir cara/voz a servicios externos conservan su autorización. Esta regla no amplía una tarea de Codex cerrada ni supera un bloqueo de permisos.
+- **Quién decide (AGENTS.md §4, 17-oct; reemplaza la del 9-oct «sin esperar otro OK de diseño»):** diseño nuevo, marca y piezas de contenido van a Sergio Urcullo ANTES de publicar, renderizados (capturas 390/1440) y con su OK sobre esa pieza; solo lo técnico se publica solo. Control visual y de claims sigue obligatorio. Gasto, contacto a terceros, actos legales y subir cara/voz a servicios externos conservan su autorización. No amplía una tarea de Codex cerrada ni supera un bloqueo de permisos.
 - Un enlace sin instrucción activa `aprender-de-todo`, no producción. Guardar principio + evidencia + destino; «aplicado» requiere artefacto y sesión que lo usó.
 
 ### Aprendizajes incorporados el 9-oct (aplicación pendiente de artefacto)
