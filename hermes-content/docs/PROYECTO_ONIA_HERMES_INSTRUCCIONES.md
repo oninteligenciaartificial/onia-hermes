@@ -67,15 +67,22 @@ Una tarea que no trae los 7 campos no se manda.
 - Pasan por él ANTES (decisión de Sergio Urcullo del 17-oct: «lo visual y lo serio lo decido yo». Es más nueva que «Qué se publica sin preguntar» de CLAUDE.md y la reemplaza en lo visual), como tarjeta de decisión (una por vez, 3 líneas): diseño nuevo o rediseño de algo vivo, piezas de contenido, su cara o su voz, textos legales, precios, gasto (Higgsfield, Meta Ads, APIMART y toda API paga: primero se cotiza), contacto con clientes o terceros, datos reales de producción, borrado sin copia, SIAT y banco.
 - Toda tarjeta trae la PIEZA MISMA (imagen o captura renderizada, video o enlace que abre directo) y la línea exacta que tiene que escribir («ok carruseles taller»). Un aviso sin la pieza al lado no sirve.
 - Mensajes de 3 bloques como máximo: qué pasó · qué necesito de vos · qué sigue.
-- La jefa le escribe en cada vuelta horaria en 3 líneas (en qué trabaja cada frente, qué se publicó, qué le espera y cuántos ayudantes se usaron), y un resumen a las 06:30 y otro a las 18:00 (hora de La Paz).
+- La jefa le escribe cuando hay algo para él (una tarjeta) o algo publicado, y un resumen a las 06:30 y otro a las 18:00 (hora de La Paz). Sin mensajes por hora.
 - Los hilos responden en su hilo en 1 a 3 líneas; el detalle va en un archivo adjunto.
 - A los clientes se les habla de «usted».
+
+## El loop: por eventos, sin esperas
+- No hay vueltas por hora. Cuando un hilo termina una tarea, la jefa se despierta, la verifica y le da la siguiente de la cola de su frente. Cuando Sergio Urcullo contesta una tarjeta, la jefa se despierta y se la pasa al hilo en ese momento.
+- Cada frente tiene su cola en `/mnt/project-files/cola/<frente>.md` con sus próximas 5 tareas, ya escritas en el molde de 7 campos. La jefa la mantiene llena.
+- Ningún hilo se queda parado esperando una decisión: manda la tarjeta y sigue con la siguiente tarea de la cola que no dependa de ella.
+- Una tarjeta por decisión, apenas hace falta. No se juntan para un resumen.
 
 ## Cuidar la cuota
 - Los subagentes reciben la ruta del archivo que importa, nunca un documento ni un registro entero pegado.
 - Leer, contar y buscar: haiku. Sonnet solo para escribir; opus solo para decidir lo riesgoso.
 - Un hilo que se llenó deja su handoff y se reemplaza: un hilo largo gasta más en cada vuelta.
-- Máximo 4 hilos vivos más la jefa. Nada de rondas o recordatorios de más de uno por hora.
+- Máximo 4 hilos vivos más la jefa. Sin rondas ni recordatorios por hora: el loop va por eventos.
+- Muchos haiku en paralelo antes que un sonnet largo. Un contexto corto es lo que más ahorra.
 
 ## Publicar
 - Todo cambio va por PR. Nadie pushea a `main` (en onia-platform, `master`).
