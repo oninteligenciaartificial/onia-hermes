@@ -47,8 +47,8 @@ la ficha carga «Pendiente») y es el argumento central contra Dentalink, Agenda
 | Dental | Doctocliq, Dentalink/Medilink, TuDoc, Huli, Dt.Dental, Calu, Reservo, Clinera | Cubierto a fondo. Las funciones 1-5 y 7 salen de acá. Ventaja de Onia: el tratamiento a medias solo (cuando funcione). |
 | Estética | AgendaPro (16-oct), Agenda en Día, Fluker, Calendico, CitaPro | Piden agenda por profesional, sesiones por tratamiento, comisión automática y recordatorio de 1 a 3 días. AgendaPro no menciona consentimiento ni «antes y después» como función explícita; Onia puede ganar ahí después (no es 1.0). |
 | Servicios profesionales | Casi ninguno boliviano con producto visible; Odoo/Datec como alternativa de integrador | **Hueco de evidencia.** Ningún rival directo hallado. No se copia nada con fuente firme; la función 6 y la cuenta corriente son lo más defendible. No inventar «lo que hace la competencia» para este rubro. |
-| Comercio | Control Facilito, Mi Factura Bolivia, eDoc Pyme, YoFacturo (aún sin Bolivia), Odoo | **No compite sin factura SIAT**: Mi Factura da ventas, inventario y SIAT por Bs 320; Control Facilito, Bs 772 con SIAT. Mientras el SIAT esté apagado, comercio se muestra como caja, fiados y kardex y **no se compara** con ellos. Lo que ellos tienen y a Onia le falta es la factura, no una función suelta. Factura de contingencia sin internet (Mi Factura): después, junto al SIAT. |
-| Importadora | Control Facilito (la nombra como cliente), NITRO (contable, sin módulo de importaciones documentado), Odoo/Datec | **No se halló ningún rival con costeo de importación ni seguimiento de cotizaciones B2B**: es probable ventaja de Onia, pero «no lo encontré» no prueba «no existe». Misma barrera que comercio: la factura. |
+| Comercio | Control Facilito, Mi Factura Bolivia, eDoc Pyme, **NITRO** (`NITRO_FICHA.md`, nuevo: ERP con SIAT, inventario multialmacén y QR del BCB desde Bs 990 al año), YoFacturo (aún sin Bolivia), Odoo | **No compite sin factura SIAT**: Mi Factura da ventas, inventario y SIAT por Bs 320; Control Facilito, Bs 772 con SIAT. Mientras el SIAT esté apagado, comercio se muestra como caja, fiados y kardex y **no se compara** con ellos. Lo que ellos tienen y a Onia le falta es la factura, no una función suelta. Factura de contingencia sin internet (Mi Factura): después, junto al SIAT. |
+| Importadora | Control Facilito (la nombra como cliente), NITRO (ERP; su página no documenta costeo de importación, solo la importación de los RCV del SIAT), Odoo/Datec | **No se halló ningún rival con costeo de importación ni seguimiento de cotizaciones B2B**: es probable ventaja de Onia, pero «no lo encontré» no prueba «no existe». Misma barrera que comercio: la factura. |
 
 ## Para después de la 1.0 (con su motivo)
 
@@ -77,6 +77,6 @@ Facilito), límites por cantidad de facturas (Mi Factura).
 
 - Web pública de hoy, sin cuentas de prueba. Los precios de los rivales de comercio vienen de las fichas del 3-oct y deben
   recontarse antes de usarlos en material de venta.
-- YoFacturo no tiene precios ni producto para Bolivia todavía (lista de espera). NITRO no publica precios.
+- YoFacturo no tiene precios ni producto para Bolivia todavía (lista de espera) y ninguna página mira «fiados». Ver 17-oct: `NITRO_FICHA.md`.
 - Los rubros servicios, comercio e importadora se pueden profundizar con la Biblioteca de anuncios y cuentas de prueba, que
   salen de la PC (la nube no abre esas cuentas ni Facebook).
