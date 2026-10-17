@@ -24,7 +24,7 @@ variable de entorno puede pisarlos (`PROMESA_VS_PRODUCTO` K-01).
 
 - **La oferta es el plan anual:** el anual cobra 10 meses y se usan 12 (K-02 ✅, catálogo §3). Es el descuento que ya tiene el producto; **no se
   inventa otro** y no se pone una cuenta regresiva ni un «solo esta semana»: no hay motivo real (reglas de §9.3 de la skill).
-- **Antes de pagar, la prueba:** 14 días del plan Profesional, sin tarjeta (A-04 ✅). Quien quiere asegurar el año, paga y arranca.
+- **La prueba es opcional, no obligatoria:** 14 días del plan Profesional, sin tarjeta (A-04 ✅). Quien quiere asegurar el año, paga y arranca.
 - **Cómo paga:** QR del BCP, sube el comprobante, Sergio Urcullo lo aprueba en `/admin/payments` y el plan se activa (catálogo §3).
   Riesgo conocido: el QR muestra un nombre de persona, distinto de «OniaAgency» (catálogo, `ONIA_CATALOGO_DE_VENTA.md` §6, punto 3): puede frenar el pago.
   Avisarlo antes («aparecerá a nombre de…»).
@@ -44,7 +44,7 @@ Evidencia: `docs/ONIA_LEADS_ESPERANDO.md` §1 y §2 (leídos de `access_requests
 | # | Lead | Entró | Días | Evidencia (de dónde sale) | ¿Prospecto? | Plan que se le ofrece |
 |---|---|---|---|---|---|---|
 | 1 | **«F»**, clínica odontológica de 4 doctores · WhatsApp +59173232758 | 25-ago | 52 | Chatwoot inbox 5, conv 35: 6 preguntas concretas y el costo total | **Sí, el más calificado** | Profesional: anual Bs 8.900 (o Bs 890 al mes) |
-| 2 | **Maximo Romano**, clínica Klein (dental) · +591 57400703 | 21-ago | 56 | `access_requests`, formulario de acceso. Primer registro real del sistema | Sí | Básico anual Bs 3.200 (Crece si son más de 2 usuarios) |
+| 2 | **Maximo Romano**, clínica Klein (dental) · +591 57400703 | 21-ago | 56 | `access_requests`, formulario de acceso. Primer registro real del sistema | Sí | Básico anual Bs 3.200 (Crece con 3-4 usuarios, Profesional con 5, Completo con 6 o más) |
 | 3 | **Leonardo Chuquimia**, Clínica Leonardo (estética) · +591 70077133 | 23-ago | 54 | `access_requests` | Sí, segundo rubro | Básico anual Bs 3.200 |
 | 4 | **Edwin Benavidez Ayala**, consultorio dental Sonrisa Feliz · +59169016505 | 28-ago | 49 | `access_requests` | Sí. Si atiende solo, es Básico | Básico anual Bs 3.200 |
 | 5 | **Mario** («mariohassen») · WhatsApp +59173021804 | 28-ago | 49 | Chatwoot inbox 5, conv 37: «vengo de la web de Onia, quiero saber si me sirve para mi negocio» | Probable: no dijo su rubro | Se pregunta primero. Piso: Básico |
@@ -73,7 +73,7 @@ Cómo salen (las tres cosas que cambian el resultado, de `SEGUIMIENTO-LEADS.md` 
 >
 > Prefiero contestarle mirando el sistema y no por mensaje. En 20 minutos de videollamada se lo muestro en pantalla, incluida la lista de a quién escribirle cada mañana (quién no confirmó la cita de mañana, quién canceló o faltó y no volvió a agendar, quién le debe), y le respondo sus preguntas sobre pacientes pendientes mirándolas ahí.
 >
-> Para 4 doctores y una asistente le corresponde el plan Profesional: Bs 890 al mes. Si decide quedarse, el plan anual cobra 10 meses y usted usa 12: Bs 8.900 por el año. Antes de pagar nada se prueba 14 días sin tarjeta.
+> Para 4 doctores y una asistente le corresponde el plan Profesional: Bs 890 al mes. Si decide quedarse, el plan anual cobra 10 meses y usted usa 12: Bs 8.900 por el año. Puede pagar el año al terminar la demo o, si prefiere, probar antes 14 días sin tarjeta.
 >
 > ¿Coordinamos? Elija su horario aquí: https://cal.com/sergiourcullo/20min
 
@@ -86,7 +86,7 @@ Cómo salen (las tres cosas que cambian el resultado, de `SEGUIMIENTO-LEADS.md` 
 >
 > Onia es un sistema de gestión para clínicas dentales: agenda, ficha del paciente con historia clínica y odontograma, tratamientos, cobros e inventario, todo en un lugar. Se lo muestro en una videollamada de 20 minutos para ver si le sirve.
 >
-> Si decide quedarse: el plan Básico (2 usuarios) cuesta Bs 320 al mes, o Bs 3.200 por el año completo (se cobran 10 meses y usted usa 12). Si en la clínica trabajan más de 2 personas con el sistema, le recomiendo el Crece (Bs 550 al mes, 4 usuarios). Se prueba 14 días sin tarjeta antes de pagar.
+> Si decide quedarse: el plan Básico (2 usuarios) cuesta Bs 320 al mes, o Bs 3.200 por el año completo (se cobran 10 meses y usted usa 12). Si en la clínica trabajan 3 o 4 personas con el sistema, le recomiendo el Crece (Bs 550 al mes, 4 usuarios); con 5 corresponde el Profesional y con 6 o más el Completo. Si prefiere, puede probar antes 14 días sin tarjeta; es opcional.
 >
 > ¿Coordinamos? https://cal.com/sergiourcullo/20min
 
@@ -96,7 +96,7 @@ Cómo salen (las tres cosas que cambian el resultado, de `SEGUIMIENTO-LEADS.md` 
 >
 > Onia es un sistema de gestión para centros de estética: agenda, ficha de cada clienta, tratamientos, cobros e inventario, todo en un lugar. Se lo muestro en una videollamada de 20 minutos para ver si le sirve.
 >
-> Si decide quedarse: el plan Básico (2 usuarios) cuesta Bs 320 al mes, o Bs 3.200 por el año completo (se cobran 10 meses y usted usa 12). Se prueba 14 días sin tarjeta antes de pagar.
+> Si decide quedarse: el plan Básico (2 usuarios) cuesta Bs 320 al mes, o Bs 3.200 por el año completo (se cobran 10 meses y usted usa 12). Si prefiere, puede probar antes 14 días sin tarjeta; es opcional.
 >
 > ¿Coordinamos? https://cal.com/sergiourcullo/20min
 
@@ -108,7 +108,7 @@ Cómo salen (las tres cosas que cambian el resultado, de `SEGUIMIENTO-LEADS.md` 
 >
 > Onia es un sistema de gestión para consultorios y clínicas dentales: agenda, ficha del paciente con historia clínica y odontograma, tratamientos, cobros e inventario, todo en un lugar. Se lo muestro en una videollamada de 20 minutos.
 >
-> Para un consultorio con 1 o 2 personas le calza el plan Básico: Bs 320 al mes, o Bs 3.200 por el año (se cobran 10 meses y usted usa 12). Se prueba 14 días sin tarjeta antes de pagar.
+> Para un consultorio con 1 o 2 personas le calza el plan Básico: Bs 320 al mes, o Bs 3.200 por el año (se cobran 10 meses y usted usa 12). Si prefiere, puede probar antes 14 días sin tarjeta; es opcional.
 >
 > ¿Coordinamos? https://cal.com/sergiourcullo/20min
 
@@ -120,7 +120,7 @@ Cómo salen (las tres cosas que cambian el resultado, de `SEGUIMIENTO-LEADS.md` 
 >
 > Para decirle con franqueza si le sirve, necesito saber dos cosas: ¿qué negocio tiene y cuántas personas trabajan con usted? Con eso le digo qué plan le corresponde y, si quiere, se lo muestro en 20 minutos de videollamada.
 >
-> Para que tenga la referencia: los planes van desde Bs 320 al mes, y el anual cobra 10 meses y usted usa 12. Se prueba 14 días sin tarjeta.
+> Para que tenga la referencia: los planes van desde Bs 320 al mes, y el anual cobra 10 meses y usted usa 12. La prueba de 14 días sin tarjeta es opcional.
 
 - Sin prepago hasta saber rubro y tamaño: el Básico no le sirve a todo negocio y no se le empuja un plan a ciegas.
 
@@ -132,7 +132,7 @@ Cómo salen (las tres cosas que cambian el resultado, de `SEGUIMIENTO-LEADS.md` 
 >
 > Buen día, le escribe Sergio Urcullo, de Onia, en Santa Cruz. En agosto usted nos dejó su correo pidiendo información y no le respondí a tiempo. Le pido disculpas, fue mi falla.
 >
-> Onia es un sistema de gestión armado para cada rubro (clínicas, centros de estética, servicios profesionales, comercios e importadoras): agenda, ficha del cliente, tratamientos o servicios, cobros e inventario, todo en un lugar. Se prueba 14 días sin tarjeta.
+> Onia es un sistema de gestión armado para cada rubro (clínicas, centros de estética, servicios profesionales, comercios e importadoras): agenda, ficha del cliente, tratamientos o servicios, cobros e inventario, todo en un lugar. La prueba de 14 días sin tarjeta es opcional.
 >
 > Para decirle si le sirve, cuénteme qué negocio tiene y cuántas personas trabajan con usted. Si prefiere verlo funcionando, en 20 minutos de videollamada se lo muestro: https://cal.com/sergiourcullo/20min
 >

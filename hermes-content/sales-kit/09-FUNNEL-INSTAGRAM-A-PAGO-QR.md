@@ -85,6 +85,8 @@ Si en 24 horas no agendó: **un solo** recordatorio («¿Pudo ver el link de la 
 
 ### 3.5 Pagar por QR del BCP
 
+> Este flujo es del **plan anual de Onia**. Workshops y consultorías se cobran aparte (§4).
+
 1. El cliente entra a `app.onia.com.bo/checkout`, elige plan **anual** y ve el QR.
 2. Paga desde su banco y **sube el comprobante** (o lo manda por WhatsApp si la pantalla falla).
 3. Sergio Urcullo lo aprueba en `/admin/payments`. El plan queda activo.
@@ -97,7 +99,7 @@ Si la pantalla de pago falla en la prueba del carril Plataforma, el plan B es QR
 Sergio Urcullo dijo que sí a workshops y consultorías pagas para la caja de octubre. **Esa oferta (temario, precio, fechas, mensajes) la arma el hilo «Marca, comunidad y workshops».** Este funnel solo prevé dos cosas:
 
 - En el mensaje directo (3.2), quien quiere aprender recibe el enlace o el texto que ese hilo entregue. Hasta que exista, se le responde: «Estoy armando un workshop; le aviso apenas tenga fecha» **(solo si Sergio Urcullo lo aprueba).**
-- El pago del workshop usa el mismo QR del BCP y el mismo paso de comprobante (3.5), con confirmación manual. **El monto lo fija ese hilo; acá no se escribe ninguno.**
+- **El pago del workshop NO pasa por `/checkout`:** esa pantalla solo vende los cuatro planes anuales y activa un plan al aprobarse. El workshop se cobra con el QR del BCP enviado directamente por Sergio Urcullo (monto abierto), comprobante por WhatsApp y confirmación manual suya, sin tocar `/admin/payments`. El procedimiento y el monto los fija el hilo de Marca; acá no se escribe ninguno.
 - **Oferta entregada por el hilo de Marca (16-oct). PROPUESTA, sin aprobar: espera el sí de Sergio Urcullo sobre precio y fecha.** Los números no se tocan acá:
   - Workshop «Auditá tu negocio con IA»: 2 h, cupo 12, sábado 24-oct 10:00, con precio fundador hasta el miércoles 21 y precio normal después.
   - Auditoría 1 a 1, con descuento del valor del workshop si la persona vino de él.
