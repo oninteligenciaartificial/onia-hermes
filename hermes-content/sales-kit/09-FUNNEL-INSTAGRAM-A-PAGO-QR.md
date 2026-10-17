@@ -87,7 +87,7 @@ Si en 24 horas no agendó: **un solo** recordatorio («¿Pudo ver el link de la 
 
 > Este flujo es del **plan anual de Onia**. Workshops y consultorías se cobran aparte (§4).
 
-1. El cliente entra a `app.onia.com.bo/checkout`, elige plan **anual** y ve el QR.
+1. Si no tiene cuenta, la crea primero en `app.onia.com.bo/register` (`/checkout` sin sesión lo manda al login). Después entra a `app.onia.com.bo/checkout`, elige plan **anual** y ve el QR. La cuenta nueva abre también la prueba de 14 días; pagar el año no la anula.
 2. Paga desde su banco y **sube el comprobante** (o lo manda por WhatsApp si la pantalla falla).
 3. Sergio Urcullo lo aprueba en `/admin/payments`. El plan queda activo.
 4. Se emite la factura aparte desde el portal del SIN; **ese portal lo abre solo Sergio Urcullo.**
