@@ -95,7 +95,7 @@ Marca :27, Lucía :47, QA :57). Ahora los carriles son hilos de la jefa.
 | Dato | Valor |
 |---|---|
 | Dónde vive | claude.ai/code, sección Proyectos (beta), proyecto "ONIA · Hermes" |
-| Quién coordina | Opus 5.5, esfuerzo medio |
+| Quién coordina | Sonnet 5.5, esfuerzo medio; para decidir lo riesgoso llama a un subagente Opus |
 | Quién trabaja en los hilos | Sonnet 5.5 |
 | Repos que ve | onia-hermes y onia-platform |
 | Entorno de nube | "Onia" |

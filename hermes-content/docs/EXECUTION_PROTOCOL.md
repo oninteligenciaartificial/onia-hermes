@@ -30,11 +30,12 @@ defaults to closed execution:
    assumption, document it and continue.
 4. Do not ask step-by-step for reversible local work such as edits, docs,
    scripts, tests, commits and safe pushes.
-5. Corrección 2026-10-09: la autorización vigente es `CLAUDE.md`, sección
-   «Qué se publica sin preguntar». Diseño, infra y migraciones revisados (con
-   backup/rollback) no esperan otro OK. Conservar sus excepciones de contenido,
-   secretos, pagos, terceros, actos legales, borrado y decisiones de negocio.
-   Un encargo cerrado de Codex no autoriza Git ni publicación por sí solo.
+5. Corrección 2026-10-17: la autorización vigente es `AGENTS.md` §4, «Quién
+   decide». Lo técnico (infra, migraciones con backup/rollback, bot, docs,
+   revisiones) se publica sin consultar a Sergio Urcullo si pasa los gates. Lo
+   visual (pantalla o sección nueva, marca) y lo serio (textos legales, precios,
+   gasto, terceros, datos reales de producción, borrado sin copia) van antes a
+   él. Un encargo cerrado de Codex no autoriza Git ni publicación por sí solo.
 6. Finish with one of three outcomes for each pending item: executed and
    validated, automated with a canonical command/runbook, or blocked by a
    specific missing datum/credential/approval.

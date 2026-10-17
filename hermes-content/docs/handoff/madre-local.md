@@ -3,7 +3,7 @@
 Regla: CLAUDE.md §1. Método (ids, canales, cómo se delega a Codex, tokens): **skill `onia-sesion-madre`**.
 **Corrección 2026-10-09:** mandan HANDOFF 9-oct, GOAL VIGENTE y colas; el estado del
 5-oct de abajo es historial. Sus pedidos de OK de diseño/infra/migraciones quedan
-sustituidos por `CLAUDE.md` §«Qué se publica sin preguntar», con sus excepciones.
+sustituidos por `AGENTS.md` §4 «Quién decide», con sus excepciones.
 Esta auditoría documental no verifica sesiones vivas ni producción. El siguiente
 párrafo describe el relevo del 5-oct.
 La madre saliente (`cfdce1bb…`, rama `claude/onia-sesion-madre-77f719`, worktree `infra-loops-revision-3fc7b1`) llevaba

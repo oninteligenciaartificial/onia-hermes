@@ -51,7 +51,7 @@ Sergio Urcullo (Telegram)
 | Algo que necesita su PC | **la sesión madre** | tarea `[madre] …` en el tablero |
 
 **Por qué una sesión NUEVA por pedido, y no la sesión viva de cada carril:** desde el 1-oct solo la
-madre les manda mensajes a las sesiones (CLAUDE.md §«Sesión MADRE local + carriles en la nube»). Dos
+madre les manda mensajes a las sesiones (AGENTS.md §1, «Madre local»). Dos
 orquestadores se pisan. La sesión del pedido trabaja en su propia rama (`pedido/<id>`) y deja
 un PR. Integrarlo sigue siendo del dueño del carril, o de un pedido explícito «mergeá el PR N».
 

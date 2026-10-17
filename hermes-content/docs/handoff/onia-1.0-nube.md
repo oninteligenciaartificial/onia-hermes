@@ -32,7 +32,7 @@ Desarrollar y publicar Onia Platform 1.0 hasta cobrar al primer cliente. Qué sa
   - Las 2 tablas abiertas a anon siguen en 200 hasta correr el SQL (§6).
 
 - **Regla de Sergio Urcullo (2-oct):** lo que pasa los gates se mergea y se publica SIN preguntar; solo diseño
-  nuevo y legales pasan por él (CLAUDE.md «Qué se publica sin preguntar»). No se le habla de PRs.
+  nuevo y legales pasan por él (AGENTS.md §4 «Quién decide»). No se le habla de PRs.
 - **Alcance congelado (madre, 2-oct):** solo se termina lo asignado; lo nuevo va a pendientes. Excepciones con OK de
   Sergio Urcullo del 3-oct: el arreglo de seguridad del botón, el barrido de promesas de la web y el estudio del SIAT.
 - **Plataforma en `release-13b67dda`** (3-oct 16:21 UTC, «PUBLICADO Y VERIFICADO», rollback

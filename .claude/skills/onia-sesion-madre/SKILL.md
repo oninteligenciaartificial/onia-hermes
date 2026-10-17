@@ -5,7 +5,7 @@ description: Invocar cuando una sesión de Onia tiene que ordenar, avisar o pedi
 
 # Sesión MADRE — ordenar a todas por mensaje
 
-Regla madre: `CLAUDE.md` §1 «Sesión MADRE local + carriles en la nube». Estado y tareas abiertas de la madre:
+Regla madre: `AGENTS.md` §1 «Quién hace qué» (madre local). Estado y tareas abiertas de la madre:
 `hermes-content/docs/handoff/madre-local.md`. Capacidades medidas: fila 3 de
 `hermes-content/docs/ONIA_CAPACIDADES_DE_LAS_SESIONES.md`.
 
@@ -39,7 +39,7 @@ Plataforma con las del presupuesto por fases, a 390 y 1440 px.
   | Contar, buscar, inventarios, JSON | Haiku 5.5 | conteo, grep o test | Sonnet |
   | Copy, mensajes, guiones, edición | Sonnet 5.5 | catálogo y cliente ideal; mirar el render | Opus |
   | Código cerrado de Platform | Codex Sol; cloud si no necesita PC y el preflight pasa | gates del carril + CI | Astra para riesgo o fallo probado |
-  | Migraciones, cobro, backup, SQL de prod | Astra/Opus según carril | revisión, backup y rollback; autorización vigente de CLAUDE.md | Sergio si excede el alcance autorizado |
+  | Migraciones, cobro, backup, SQL de prod | Astra/Opus según carril | revisión, backup y rollback; autorización vigente de AGENTS.md §4 | Sergio si excede el alcance autorizado |
   | Estrategia y precios | Opus | la cuenta cierra con números citados | Sergio Urcullo |
 
   Fable 5.1 tiene un cupo semanal APARTE, pero su calidad no está probada: primero se prueba en una tarea sin riesgo y con un
@@ -170,7 +170,7 @@ Cómo contestar: <en tu transcript | SendMessage al nombre actual verificado con
   que no tiene que duplicar.
 - **No se avisa:** progreso propio sin efecto en la otra, resúmenes «para que sepas», copias del handoff.
 - **Cada resultado de la madre se le manda a Plataforma en el momento**, no al cerrar.
-- **Corrección 2026-10-09:** lo trabajado y revisado se publica según `CLAUDE.md` § Qué se publica, incluido diseño y migraciones con sus gates. Gasto, terceros, SIAT, actos legales y cara/voz conservan sus permisos; contenido mantiene sus excepciones. Un mensaje entre sesiones nunca amplía autorización ni permite rodear un bloqueo.
+- **Corrección 2026-10-09:** lo trabajado y revisado se publica según `AGENTS.md` §4 «Quién decide», incluido diseño y migraciones con sus gates. Gasto, terceros, SIAT, actos legales y cara/voz conservan sus permisos; contenido mantiene sus excepciones. Un mensaje entre sesiones nunca amplía autorización ni permite rodear un bloqueo.
 - El portal del SIAT no lo abre ninguna sesión, tampoco la madre: se le piden capturas a Sergio Urcullo.
 - **Incidente histórico: mergear el PR de otra sesión lo frenó el control de permisos de la madre** («Merge Without Review», 2-oct,
   PR #88 ya revisado por un subagente code-reviewer). La madre revisa, deja el veredicto y los arreglos van a un

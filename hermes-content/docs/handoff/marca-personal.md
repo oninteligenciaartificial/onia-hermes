@@ -112,7 +112,7 @@
   - los 4 trucos de la ficha `video-intake/2026-10-08-orquestacion-e-ingresos-5-posts.md` §3 se prueban en P1 «Niveles»;
   - lo que exige la PC se pide como «PEDIDO PC: video <url> — para qué lo querés»; las tareas de código van a
     `codex-tareas/`;
-  - la regla de publicar sin OK pieza por pieza ya está en el `CLAUDE.md` de `main` («Qué se publica sin preguntar»).
+  - la regla de publicar sin OK pieza por pieza ya está en el `AGENTS.md` de `main` (§4 «Quién decide»).
 
 - **Lote de 14 imágenes mostrado a Sergio Urcullo (8-oct), sin generar:** pidió «mostrámelas y digo sí» (por la madre).
   10 reemplazan las láminas que no se entienden (K13-2, K5-3, K5-7, K9-5, K9-6, K12-7, N02-3, N02-7, K1-7, K10-5) y 4
@@ -137,7 +137,7 @@
 
 ## ▶ 8-oct (noche, 3) — N03 v2 listo, publicar frenado por el control de permisos
 
-- **La regla ya está en `main`** (CLAUDE.md, «Qué se publica sin preguntar», #151). Se aplicó a N03 y falló en una
+- **La regla ya está en `main`** (AGENTS.md §4, «Quién decide»; #151). Se aplicó a N03 y falló en una
   condición: el video traía la tarjeta final y la frase hablada «Comentá COMUNIDAD y te paso el link». Es un CTA
   comentario → DM, que queda fuera.
 - **N03 v2:** el del 1-oct cortado en la pausa de 53,1 s (después de «manual mode on») y con una tarjeta de cierre nueva,

@@ -52,7 +52,7 @@ que uno realmente va a hacer.
 
 > **En la nube (10-oct-2026):** las skills de este mapa que están en `.claude/skills/` del repo, la nube las ve. Estas
 > siguen **solo en la PC** (`~/.claude/skills/`) y una sesión de la nube no las carga; si una tarea las necesita, se
-> la pide a la madre (`CLAUDE.md` «Sesión MADRE»), no se improvisa de memoria: `ads` · `agentic-engineering` ·
+> la pide a la madre (`AGENTS.md` §1, «Madre local»), no se improvisa de memoria: `ads` · `agentic-engineering` ·
 > `analytics` · `architecture-decision-records` · `article-writing` · `autonomous-loops` · `banner-design` · `brand` ·
 > `brandkit` · `browse` · `caveman-review` · `click-path-audit` · `codebase-onboarding` · `community-marketing` ·
 > `competitors` · `context-budget` · `context-restore` · `context-save` · `continuous-agent-loop` · `copy-editing` ·

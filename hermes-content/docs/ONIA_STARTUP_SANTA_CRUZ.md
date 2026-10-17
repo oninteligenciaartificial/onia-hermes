@@ -135,7 +135,7 @@ para después de la prueba real), factura SIAT (§7), "la IA agenda sola", cualq
    del 8-oct la mostró hablando de un agente de WhatsApp y de la factura, dos cosas que el catálogo (§5 y §7) manda no
    prometer todavía. Si se confirma, el enlace arrastra esa promesa al directorio del Gobierno.
 2. Una página nueva `onia.com.bo/startup` con el pitch. **Es diseño nuevo, pasa por Sergio Urcullo antes de publicarse**
-   (CLAUDE.md, "Qué se publica sin preguntar"). No se construyó.
+   (AGENTS.md §4, «Quién decide»). No se construyó.
 El contenido que esa página necesita (para que el enlace "no se altere" y se pueda revisar siempre): qué es Onia en una
 frase; a quién (la clínica dental de Santa Cruz con 2-6 profesionales y recepción, `ONIA_CLIENTE_IDEAL.md` §1); el
 producto, ya en `app.onia.com.bo` con prueba de 14 días; el equipo (Leslie Mercado Moreno como titular, Sergio Urcullo

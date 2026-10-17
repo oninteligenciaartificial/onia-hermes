@@ -67,7 +67,7 @@ el hallazgo en la ficha y asignarlo al carril, sin inventar que se actualizó su
   No prometer comentario→DM sin prueba del mecanismo.
 - Copiar principios, no identidad, guiones, música ni claims ajenos. Una referencia
   no autoriza gasto, exposición de terceros ni uso externo de cara/voz.
-- Publicación: `CLAUDE.md` §«Qué se publica sin preguntar» y sus excepciones. Aprender
+- Publicación: `AGENTS.md` §4 «Quién decide» y sus excepciones. Aprender
   de un enlace no equivale a autorización para crear/publicar una pieza.
 
 ## Ficha canónica (todos los formatos)

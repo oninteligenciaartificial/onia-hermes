@@ -196,7 +196,7 @@
 > **ESTADO AL 1-oct ~21:30 UTC — leé esto primero.** Sesión `session_0154pQRYB6icZn9Z3SuJp35D`
 > (entorno «Onia»), rama `claude/kind-cannon-7hkc3c`, **PR #79** (borrador, sin conflictos con main).
 > Desde el 1-oct manda la **sesión madre** (local, PC de Sergio Urcullo): ella ordena por mensaje y las
-> sesiones de la nube contestan en su transcript (CLAUDE.md §«Sesión MADRE»). **El método del carril
+> sesiones de la nube contestan en su transcript (AGENTS.md §1, «Madre local»). **El método del carril
 > está en la skill `onia-hermes-jarvis`; esto es el estado.**
 > - **`aplicar` NUNCA corrió** (medido por la madre el 1-oct ~20:23 UTC: 0 marcas `#jarvis`, sin
 >   interruptor, sin respaldos). Hermes todavía no es su asistente diario.
