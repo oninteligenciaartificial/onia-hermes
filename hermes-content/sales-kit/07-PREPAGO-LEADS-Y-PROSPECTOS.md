@@ -1,6 +1,7 @@
 # Prepago: los leads de agosto, los prospectos con señal y los mensajes listos
 
-**Estado (16-oct-2026): borrador para Sergio Urcullo. No se mandó nada, no se gastó nada.** Cada mensaje sale solo con su
+**Estado (16-oct-2026): borrador para Sergio Urcullo. No se mandó nada, no se gastó nada.**
+**Re-verificado el 17-oct (19:30 UTC, hilo Ventas y pauta T1):** precios y planes releídos de `origin/master` (`lib/subscription-plans.ts:40-43`, `lib/plan-catalogo.ts`; coinciden con §0); §2 reescrita solo con lo ✅ (las 12 filas que condicionaban los bloques ⟦⟧ siguen en ⬜). Detector de promesas sobre los 6 textos: sin promesa. **Lo que falta antes de enviar:** estado de cada lead en `/admin/solicitudes` y Chatwoot (lectura de producción: no se hizo, necesita el sí de Sergio Urcullo), cuenta demo (L-05 ❌), pago anual por QR probado (K-16 🟡) y titular del QR confirmado. `ONIA_PROMESA_VS_PRODUCTO.md` §1 (8-oct) sigue diciendo «hoy no se contacta a nadie»: la decisión de enviar es de Sergio Urcullo. Cada mensaje sale solo con su
 OK sobre el texto y el canal, y lo manda él. Todo va **de usted**. Pedido de la jefa de ONIA con el OK de Sergio Urcullo del
 16-oct («mensajes listos… con oferta de prepago»). **Eso cubre el texto; no cubre el envío** (CLAUDE.md, «Qué se publica sin preguntar»).
 
@@ -31,7 +32,7 @@ variable de entorno puede pisarlos (`PROMESA_VS_PRODUCTO` K-01).
 - **Una factura por cobro, manual, en el Portal Web del SIN** (`docs/ONIA_PLAN_1.0_Y_CAJA.md`, punto 15). El portal del SIAT lo abre solo Sergio Urcullo.
 
 **Decidido por Sergio Urcullo (16-oct): el prepago anual NO se devuelve** (como dicen los Términos §3.3). No se promete devolución en ningún mensaje.
-Lo que protege al cliente es la **prueba de 14 días sin tarjeta, antes de pagar**: por eso el prepago se ofrece al terminar la demo o la prueba, y se dice claro antes de pasar el QR que el pago anual no se reembolsa. Propuesta archivada: `research/PREPAGO-POLITICA-DE-DEVOLUCION-PROPUESTA.md`.
+Lo que protege al cliente es la **prueba de 14 días sin tarjeta, antes de pagar**: por eso el prepago se ofrece como opción desde el primer mensaje (precio y «el anual cobra 10 meses» solo a quienes ya dijeron su tamaño o rubro; a Mario y a la conv 36 no) y se cierra al terminar la demo o la prueba, y se dice claro antes de pasar el QR que el pago anual no se reembolsa. Propuesta archivada: `research/PREPAGO-POLITICA-DE-DEVOLUCION-PROPUESTA.md`.
 
 ---
 
@@ -44,10 +45,10 @@ Evidencia: `docs/ONIA_LEADS_ESPERANDO.md` §1 y §2 (leídos de `access_requests
 | # | Lead | Entró | Días | Evidencia (de dónde sale) | ¿Prospecto? | Plan que se le ofrece |
 |---|---|---|---|---|---|---|
 | 1 | **«F»**, clínica odontológica de 4 doctores · WhatsApp +59173232758 | 25-ago | 52 | Chatwoot inbox 5, conv 35: 6 preguntas concretas y el costo total | **Sí, el más calificado** | Profesional: anual Bs 8.900 (o Bs 890 al mes) |
-| 2 | **Maximo Romano**, clínica Klein (dental) · +591 57400703 | 21-ago | 56 | `access_requests`, formulario de acceso. Primer registro real del sistema | Sí | Básico anual Bs 3.200 (Crece con 3-4 usuarios, Profesional con 5; con 6 o más, Profesional o Crece con usuarios extra a mano, o Completo) |
+| 2 | **Maximo Romano**, clínica Klein (dental) · +591 57400703 | 21-ago | 56 | `access_requests`, formulario de acceso. Primer registro real del sistema | Sí | Básico anual Bs 3.200 (Crece con 3-4 usuarios, Profesional con 5; con 6 o más se ve en la llamada) |
 | 3 | **Leonardo Chuquimia**, Clínica Leonardo (estética) · +591 70077133 | 23-ago | 54 | `access_requests` | Sí, segundo rubro | Básico anual Bs 3.200 |
 | 4 | **Edwin Benavidez Ayala**, consultorio dental Sonrisa Feliz · +59169016505 | 28-ago | 49 | `access_requests` | Sí. Si atiende solo, es Básico | Básico anual Bs 3.200 |
-| 5 | **Mario** («mariohassen») · WhatsApp +59173021804 | 28-ago | 49 | Chatwoot inbox 5, conv 37: «vengo de la web de Onia, quiero saber si me sirve para mi negocio» | Probable: no dijo su rubro | Se pregunta primero. Piso: Básico |
+| 5 | **Mario** («mariohassen») · WhatsApp +59173021804 | 28-ago | 49 | Chatwoot inbox 5, conv 37: «vengo de la web de Onia, quiero saber si me sirve para mi negocio» | Probable: no dijo su rubro | Se pregunta primero; sin plan hasta saber rubro y tamaño |
 | 6 | **Conv 36**, widget web · correo `Saguilera@ds-santacruz.bo` | 27-ago | 50 | Chatwoot inbox 4, conv 36: «Quiero información» + el correo escrito en el cuerpo | Probable: solo hay correo, ni nombre ni rubro | Se pregunta primero |
 | 7 | **Conv 34**, widget web, «hola» | 24-ago | 53 | Chatwoot inbox 4, conv 34 | **No**: sin ningún dato de contacto. Nada que mandar | — |
 
@@ -58,6 +59,8 @@ La jefa o quien tenga el VPS pasa, por cada una, **id, canal, nombre o negocio, 
 ---
 
 ## 2. Los 6 mensajes, listos para copiar (uno por lead con contacto)
+
+Revisado el 17-oct contra ONIA_PROMESA_VS_PRODUCTO: solo se dice lo ✅ (A-02, A-04, K-01, K-02, K-07); «20 minutos» es L-04 🟡 declarado en el punto 3. Las funciones en ⬜ (agenda, ficha, inventario, lista diaria, cuenta demo) no se nombran hasta estar en ✅.
 
 Cómo salen (las tres cosas que cambian el resultado, de `SEGUIMIENTO-LEADS.md` §0.3 y §1):
 
@@ -71,32 +74,35 @@ Cómo salen (las tres cosas que cambian el resultado, de `SEGUIMIENTO-LEADS.md` 
 
 > Buen día, le escribe Sergio Urcullo, de Onia. En agosto usted nos escribió por un sistema de gestión para su clínica de 4 doctores, con preguntas muy concretas, y no le respondí a tiempo. Le pido disculpas, fue mi falla.
 >
-> Prefiero contestarle mirando el sistema y no por mensaje. En 20 minutos de videollamada le muestro cómo se ve con el caso de su clínica y le respondo sus preguntas mirándolas ahí. ⟦solo si G-01, G-04, G-06, G-07 y G-08 están ✅; si no, se muestra sin prometer⟧ Incluye la lista de a quién escribirle cada mañana (quién no confirmó la cita de mañana, quién canceló o faltó y no volvió a agendar, quién le debe).
+> Prefiero contestarle mirando el sistema y no por mensaje. En 20 minutos de videollamada le muestro el sistema en pantalla.
 >
-> Para 4 doctores y una asistente le corresponde el plan Profesional: Bs 890 al mes. Si decide quedarse, el plan anual cobra 10 meses y usted usa 12: Bs 8.900 por el año. Puede pagar el año al terminar la demo o, si prefiere, probar antes 14 días sin tarjeta.
+> Para una clínica de 4 doctores con recepción le corresponde el plan Profesional (5 usuarios): Bs 890 al mes, o Bs 8.900 por el año. Si decide quedarse, el plan anual cobra 10 meses y usted usa 12. Puede probar antes 14 días sin tarjeta; es opcional.
 >
 > ¿Coordinamos? Elija su horario aquí: https://cal.com/sergiourcullo/20min
 
-- No dice «lo que usted preguntó»: dos de sus seis preguntas (lista de tratamiento pendiente sin cita y períodos de 15/30/60 días) el catálogo §8 no deja prometerlas (`SEGUIMIENTO-LEADS.md` §0.2).
+- No dice «lo que usted preguntó»: dos de sus seis preguntas (lista de tratamiento pendiente sin cita y períodos de 15/30/60 días) el catálogo §8 no deja prometerlas (`SEGUIMIENTO-LEADS.md` §0.2). Tampoco se nombra el PDF.
+- Lógica única: 4 profesionales + recepción = Profesional (CLIENTE_IDEAL, tabla de tamaños; coincide con la tabla de §1). Dijo solo «4 doctores», así que el mensaje habla de «con recepción» como supuesto razonable; si F contesta que solo usan el sistema los 4 doctores (sin recepción), le corresponde el Crece (4 usuarios): Bs 550 al mes, Bs 5.500 por el año.
 - **Si contesta «¿y el PDF?»**: «eso se lo confirmo en la llamada, mirándolo en el sistema». El PDF no consta en el catálogo.
 
 ### 2.2 Maximo Romano — clínica Klein (dental)
 
 > Buen día, le escribe Sergio Urcullo, de Onia. En agosto usted pidió acceso a nuestro sistema y no le respondí a tiempo. Le pido disculpas, fue mi falla.
 >
-> Onia es un sistema de gestión para clínicas dentales. Le muestro cómo se ve con el caso de su clínica en una videollamada de 20 minutos, para ver si le sirve. ⟦solo si B-01, C-01, C-02, C-03, D-01, E-01 y F-01 están ✅; si no, se muestra sin prometer⟧ Agenda, ficha del paciente con historia clínica y odontograma, tratamientos, cobros e inventario, todo en un lugar.
+> Onia es un sistema de gestión para clínicas dentales. Le muestro el sistema en pantalla en una videollamada de 20 minutos, para ver si le sirve.
 >
-> Si decide quedarse: el plan Básico (2 usuarios) cuesta Bs 320 al mes, o Bs 3.200 por el año completo (se cobran 10 meses y usted usa 12). Si en la clínica trabajan 3 o 4 personas con el sistema, le recomiendo el Crece (Bs 550 al mes, 4 usuarios); con 5 corresponde el Profesional; con 6 o más le ofrezco primero el Profesional (o el Crece) sumando usuarios extra, que yo le dejo activados a mano, a Bs 70 al mes por usuario, y el Completo como alternativa. Si prefiere, puede probar antes 14 días sin tarjeta; es opcional.
+> Si decide quedarse: el plan Básico (2 usuarios) cuesta Bs 320 al mes, o Bs 3.200 por el año completo (se cobran 10 meses y usted usa 12). Si en la clínica van a usar el sistema 3 o 4 personas, le recomiendo el Crece (Bs 550 al mes, 4 usuarios); con 5, el Profesional (Bs 890 al mes). Si prefiere, puede probar antes 14 días sin tarjeta; es opcional.
 >
 > ¿Coordinamos? https://cal.com/sergiourcullo/20min
+
+- Con 6 o más usuarios no se cotiza por mensaje: se ve en la llamada (el usuario extra a Bs 70 es 🟡 K-08, «a pedido», y el Completo se ofrece en la conversación).
 
 ### 2.3 Leonardo Chuquimia — Clínica Leonardo (estética)
 
 > Buen día, le escribe Sergio Urcullo, de Onia. En agosto usted pidió acceso a nuestro sistema y no le respondí a tiempo. Le pido disculpas, fue mi falla.
 >
-> Onia es un sistema de gestión para centros de estética. Le muestro cómo se ve con el caso de su centro en una videollamada de 20 minutos, para ver si le sirve. ⟦solo si B-01, C-01, D-01, E-01 y F-01 están ✅; si no, se muestra sin prometer⟧ Agenda, ficha de cada clienta, tratamientos, cobros e inventario, todo en un lugar.
+> Onia es un sistema de gestión para centros de estética. Le muestro el sistema en pantalla en una videollamada de 20 minutos, para ver si le sirve.
 >
-> Si decide quedarse: el plan Básico (2 usuarios) cuesta Bs 320 al mes, o Bs 3.200 por el año completo (se cobran 10 meses y usted usa 12). Si prefiere, puede probar antes 14 días sin tarjeta; es opcional.
+> Si decide quedarse: el plan Básico (2 usuarios) cuesta Bs 320 al mes, o Bs 3.200 por el año completo (se cobran 10 meses y usted usa 12). Si en el centro van a usar el sistema 3 o 4 personas, le recomiendo el Crece (Bs 550 al mes, 4 usuarios). Si prefiere, puede probar antes 14 días sin tarjeta; es opcional.
 >
 > ¿Coordinamos? https://cal.com/sergiourcullo/20min
 
@@ -106,7 +112,7 @@ Cómo salen (las tres cosas que cambian el resultado, de `SEGUIMIENTO-LEADS.md` 
 
 > Buen día, le escribe Sergio Urcullo, de Onia. En agosto usted pidió acceso a nuestro sistema para su consultorio y no le respondí a tiempo. Le pido disculpas, fue mi falla.
 >
-> Onia es un sistema de gestión para consultorios y clínicas dentales. Le muestro cómo se ve con el caso de su consultorio en una videollamada de 20 minutos. ⟦solo si B-01, C-01, C-02, C-03, D-01, E-01 y F-01 están ✅; si no, se muestra sin prometer⟧ Agenda, ficha del paciente con historia clínica y odontograma, tratamientos, cobros e inventario, todo en un lugar.
+> Onia es un sistema de gestión para consultorios y clínicas dentales. Le muestro el sistema en pantalla en una videollamada de 20 minutos.
 >
 > Para un consultorio con 1 o 2 personas le calza el plan Básico: Bs 320 al mes, o Bs 3.200 por el año (se cobran 10 meses y usted usa 12). Si prefiere, puede probar antes 14 días sin tarjeta; es opcional.
 >
@@ -120,9 +126,9 @@ Cómo salen (las tres cosas que cambian el resultado, de `SEGUIMIENTO-LEADS.md` 
 >
 > Para decirle con franqueza si le sirve, necesito saber dos cosas: ¿qué negocio tiene y cuántas personas trabajan con usted? Con eso le digo qué plan le corresponde y, si quiere, se lo muestro en 20 minutos de videollamada.
 >
-> Para que tenga la referencia: los planes van desde Bs 320 al mes, y el anual cobra 10 meses y usted usa 12. La prueba de 14 días sin tarjeta es opcional.
+> La prueba de 14 días sin tarjeta es opcional.
 
-- Sin prepago hasta saber rubro y tamaño: el Básico no le sirve a todo negocio y no se le empuja un plan a ciegas.
+- Sin prepago, plan ni precio hasta saber rubro y tamaño: el Básico no le sirve a todo negocio y no se le empuja un plan a ciegas.
 
 ### 2.6 Conv 36 — solo dejó un correo (`Saguilera@ds-santacruz.bo`)
 
@@ -132,21 +138,25 @@ Cómo salen (las tres cosas que cambian el resultado, de `SEGUIMIENTO-LEADS.md` 
 >
 > Buen día, le escribe Sergio Urcullo, de Onia, en Santa Cruz. En agosto usted nos dejó su correo pidiendo información y no le respondí a tiempo. Le pido disculpas, fue mi falla.
 >
-> Onia es un sistema de gestión armado para cada rubro (clínicas, centros de estética, servicios profesionales, comercios e importadoras). ⟦solo si B-01, C-01, D-01, E-01 y F-01 están ✅; si no, se muestra sin prometer⟧ Agenda, ficha del cliente, tratamientos o servicios, cobros e inventario, todo en un lugar. La prueba de 14 días sin tarjeta es opcional.
+> Onia es un sistema de gestión para cinco rubros: dental, estética, servicios profesionales, comercio e importadora. La prueba de 14 días sin tarjeta es opcional.
 >
 > Para decirle si le sirve, cuénteme qué negocio tiene y cuántas personas trabajan con usted. Si prefiere verlo funcionando, en 20 minutos de videollamada se lo muestro: https://cal.com/sergiourcullo/20min
 >
-> Los planes van desde Bs 320 al mes; si se queda, el plan anual cobra 10 meses y usted usa 12.
->
 > Sergio Urcullo · Onia · onia.com.bo
+
+- Sin plan ni precio hasta saber rubro y tamaño (mismo criterio que 2.5).
 
 ### 2.7 Si contestan
 
 - **«Sí, coordinemos»** → «¡Gracias! Le propongo {horario 1} o {horario 2}. Son 20 minutos por videollamada. Si prefiere elegir, esta es mi agenda: https://cal.com/sergiourcullo/20min» (`SEGUIMIENTO-LEADS.md` §2).
 - **«Ahora no»** → «Entendido, gracias por decírmelo. ¿Le parece bien que le escriba en un mes? Si prefiere que no, no le escribo más.» Callar no es permiso.
-- **Silencio** → días 3, 7 y 14 de `SEGUIMIENTO-LEADS.md` §3. Contando desde el día de envío, si sale el lunes 19-oct: día 3 = 22-oct, día 7 = 26-oct, día 14 = 2-nov. Para cobrar antes del 31-oct, **el día 7 es el último toque que importa**.
-- **Pregunta de precio** → la respuesta de `SEGUIMIENTO-LEADS.md` §2 («Pregunta de precio») + «el anual cobra 10 meses».
-- **Cierre del prepago** (cuando dicen «sí, quiero el anual»): «Perfecto. Primero crea su cuenta con este enlace: app.onia.com.bo/register?plan={clave} (si ya tiene una, entra con ella). Claves: basic = Básico, crece = Crece, professional = Profesional, clinic = Completo. El plan solo se conserva si entra por ese enlace; en `/checkout`, antes de pagar, confirme que el plan marcado es el que eligió. Luego paga en app.onia.com.bo/checkout (anual). Paga con QR; al subir el comprobante yo lo apruebo y el plan queda activo. Aparecerá a nombre de {titular del QR}. Le aviso que el plan anual no se reembolsa; si prefiere, antes puede probar 14 días sin tarjeta. Le mando la factura aparte.» — **Verificar antes** que el checkout anual funcione de punta a punta con una cuenta de prueba nuestra (fila K-02 está ✅ en la web, pero el cobro de punta a punta lo está cerrando el carril Plataforma, plan 1.0 punto 13 y 15).
+- **Silencio** → días 3, 7 y 14 de `SEGUIMIENTO-LEADS.md` §3. Contando desde el día de envío, si sale el lunes 19-oct: día 3 = 22-oct, día 7 = 26-oct, día 14 = 2-nov. Para cobrar antes del 31-oct, **el día 7 es el último toque que importa** (nota interna: este plazo no se menciona al lead).
+- **Pregunta de precio** → la respuesta de `SEGUIMIENTO-LEADS.md` §2 («Pregunta de precio») + «el anual cobra 10 meses», con tres cambios sobre ese texto: el Crece va como «Bs 550 (4 usuarios)», sin «la lista diaria de pendientes»; el Profesional como «Bs 890 (5 usuarios)», sin «reportes»; y «En 20 minutos se lo muestro en pantalla», no «con sus números».
+- **Cierre del prepago** (cuando dicen «sí, quiero el anual»):
+
+  > **NO USAR hasta que Plataforma pruebe un pago anual por QR de punta a punta (K-16 🟡, 0 pagos) y se confirme el titular del QR.** (Nota interna, no es texto de envío.)
+
+  «Perfecto. Primero cree su cuenta con este enlace: app.onia.com.bo/register?plan={clave} (si ya tiene una, entre con ella). Claves: basic = Básico, crece = Crece, professional = Profesional, clinic = Completo. En `/checkout`, antes de pagar, confirme que el plan marcado es el que eligió. Luego pague en app.onia.com.bo/checkout (anual). Se paga con QR; al subir usted el comprobante, yo lo apruebo y el plan queda activo. Aparecerá a nombre de {titular del QR}. El plan anual cubre el año completo y, según nuestros Términos (§3.3), lo pagado no se reembolsa de forma anticipada; por eso, si prefiere, antes puede probar 14 días sin tarjeta. La factura se emite aparte, en el portal del SIN.»
 
 ---
 
