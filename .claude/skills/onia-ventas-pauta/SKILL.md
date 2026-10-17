@@ -724,6 +724,47 @@ Reglas de edición de la pauta: las 11 de COMUNICACION §4 (subtítulos Archivo 
 - **8-oct:** el pedido de «VSL» no decía de qué oferta. Son dos (Onia de usted y la asesoría gratis de vos) y se
   escribieron por separado. El VSL de un curso sigue prohibido hasta que el curso exista
   (`ONIA_COMUNIDAD_CONTENIDO.md`, «Semana 4+»).
+
+### 9.9 Renovación en 4 grupos, criterios de Biblioteca y checkout (FLUNA, 10-oct; aprendido el 17-oct)
+
+> Origen: 4 mini clases + «Las 10 skills del flujo» + skill `anunciante-supremo` que Sergio Urcullo mandó el 16-oct.
+> Ficha con las 12 dimensiones, contradicciones y evidencia: `references/video-intake/2026-10-16-fluna-mini-clases-y-anunciante-supremo.md`.
+> Todo es **declarado por terceros** de un grupo de infoproductos (compra web, US$ 17): las cifras no son de ONIA.
+
+- **Los 4 grupos son un orden de aprendizaje, no un calendario diario.** Se testea un eje por vez: **G1 réplica** del top de la
+  competencia (ya hecho: `FORMATOS-QUE-SOSTIENEN.md`) → **G2 formatos**: mismo ángulo y comunicación del que dio conversaciones,
+  formato distinto → **G3 variaciones** mínimas (hook de los 3 primeros segundos, titular, color) → **G4 ángulos nuevos** con los
+  formatos que ya sostuvieron. Con el tope de US$ 56 (§5) no hay estadística: una campaña, un conjunto, 2-3 anuncios (§9.6);
+  el G2 llega recién tras el corte del día 3-7 de `ONIA_ADQUISICION_Y_PAUTA.md` §5.7. Cada grupo = una campaña con el nombre
+  `PRODUCTO-PAIS-G#-ABO` o `-CBO`, todas con el mismo píxel (`ONIA Web`). Lo que sigue vendiendo se deja prendido.
+  Nunca dos ejes en la misma variante; oferta, precio y plazos no se tocan entre variantes.
+- **Criterio de Biblioteca (de `/cazar` y `/auditor-supremo`):** se cuentan los anuncios que **sobreviven**, no los que hay.
+  ≥8 con 7+ días en un anunciante = empieza a convertir; ≥15 con 8+ días **sobre la misma oferta** = validado; un creativo
+  repetido muchas veces = ese es el ángulo. «100 activos con 0 de 7+ días» es una fábrica de creativos, no un ganador.
+  ⚠️ El conector `Meta_ads` **no da impresiones ni el creativo** (§8.2): «Claude te da el top 5 por impresiones» (Franco) **no
+  se puede afirmar**. Solo antigüedad; para videos y para los más viejos de un anunciante con >50, la captura la hace la PC.
+- **Hooks (de `anunciante-supremo/plantillas/hooks.md`, suma a §9.3):** el test de alineación es obligatorio — tapando el texto,
+  lo hablado o lo visual, se adivinan los otros dos; titular de máximo 2 líneas con `|` para forzar el corte; número específico;
+  y se mira **un cuadro del hook renderizado** antes de darlo por bueno (un bloque `*énfasis*` no se parte y deja un conector
+  huérfano en un tercer renglón).
+- **Checkout del prepago (de la clase de Rodrigo): sirven 3 de sus 6 piezas.** (1) Banner con la promesa, lo que incluye y el
+  precio final; (2) botón de WhatsApp de soporte («¿dudas? escríbanos»); (3) FAQ de pago y «cómo pagar con QR en 3 pasos»
+  (¿por qué el QR muestra un nombre de persona?, ¿cuándo se activa?, ¿puedo pedir factura?). Pedir solo lo necesario
+  (email, nombre, teléfono). ⛔ **No** se copian: testimonios (cero clientes), **garantía** (el prepago es sin devolución,
+  decidido el 16-oct; la prueba de 14 días sin tarjeta es otra cosa y no se presenta como garantía del prepago), cuenta
+  regresiva. Es propuesta al carril Plataforma; no se toca el checkout desde Ventas.
+- **Prohibido de ese material:** testimonios o capturas de WhatsApp «hechas con IA», «POV habla la clienta», «entrevista
+  en la calle» y chat de grupo simulados (fabricar clientes); cuenta regresiva de 7 min o reloj de 72 h; cobrar por cuentas
+  bancarias de otros países o retiro a Binance para «pasar desapercibido» (choca con el modelo Facilitador y con la
+  transparencia del QR); cualquier cifra de ROAS o de ingresos del creador.
+- **`anunciante-supremo` no se instala** sin OK (llave de APIMART de un tercero, ~300 MB, gasto por tanda ≈ US$ 1; hace
+  anuncios de infoproducto con B-roll, no «producto visible»). De ahí se usa la receta de reuso: música, B-roll y voz
+  guardados, y variantes que mueven un solo eje.
+- **«Antes de 3 ventas solo se lanza la promesa»** vale para ONIA solo con fecha y contenido reales (taller del 31-oct, cupos
+  verdaderos): se vende lo que existirá en fecha, sin exhibir obra ni inventar entregables.
+- **Pendiente:** ver los dos Canva (403 de Cloudflare desde la nube, 17-oct); decisión de Sergio Urcullo sobre devolución y
+  sobre un proveedor de QR sin NIT («Tesavis [?]», no verificado).
+
 ### 8.2 Biblioteca de Anuncios por el conector `Meta_ads` (8-oct): cómo se usa y qué NO dice
 - **Herramienta:** `mcp__Meta_ads__ads_library_search` (se carga con ToolSearch). **Pide en cada llamada** `client_conversation_id` (20 caracteres alfanuméricos, el mismo toda la conversación) y `client_model`; exige al menos `search_terms`, `page_ids` o `countries`. Solo funciona con una cuenta de anuncios activa (ONIA Ads lo es).
 - **Devuelve:** nombre de página, titular, fecha de inicio (epoch), moneda y enlace. **No devuelve el creativo ni el texto.** Los **más nuevos van primero y el tope es 50**: de un anunciante con más de 50 activos **no se ven los más viejos** (error de lectura que casi cometo con Dentalink, 92 activos). Para los viejos, `page_ids` + capturar desde la PC.
