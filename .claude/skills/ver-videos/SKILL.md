@@ -231,6 +231,26 @@ usá `text-frames.mjs` (arriba), que muestrea por densidad y no por reloj.
 Speaches gratis alcanza para casi todo.
 ⚠ **Desde una sesión en la nube** (4-oct-2026): `transcribe.sh` va por defecto a `root@187.77.16.63` con su clave, y
 desde la nube eso se cuelga (más de 120 s, JSON vacío). Correrlo con `ONIA_VPS_HOST=onia-vps`, que pasa por el túnel.
+⛔ **Nube con red por lista blanca (medido 16-oct-2026, hilo de pruebas, sesión del proyecto «ONIA · Hermes»):** en ESTE
+entorno la red solo deja pasar lo que una regla permite (`request blocked: no rule or allowlist entry allows host "…"`,
+403 en el CONNECT). Medido: **bloqueados** `onia.com.bo`, `app.onia.com.bo`, `www.instagram.com`, `www.youtube.com`,
+`youtu.be`, `cdninstagram.com`, `googlevideo.com`, `google.com`, `huggingface.co`; **pasan** `github.com` y `pypi.org`.
+Por lo tanto aquí NO se baja ningún reel ni Short, ni con `yt-dlp` ni con `fetch-video.mjs`: el error exacto es
+`Unable to connect to proxy … Tunnel connection failed: 403 Forbidden`. No se rodea (ni WebFetch ni otro puente): se
+reporta el host y el reel se manda a la madre en la PC (Chrome + `fetch-video.mjs`). Diagnóstico en 10 s:
+`curl -sS "$HTTPS_PROXY/__agentproxy/status"` (ver `recentRelayFailures[].host`) y un `CONNECT` crudo por socket a
+`127.0.0.1:<puerto>` para leer el cuerpo del 403 (curl lo esconde). Antes de planear una tarea de video en la nube,
+probar `curl -sS -o /dev/null -w "%{http_code}" https://www.youtube.com`: `000` + «CONNECT tunnel failed, response 403»
+= no hay ruta, ahorrar el intento.
+- **Carrusel desde la nube (2.º caso, 16-oct, `/p/DecFE1oDNd3/`):** Chromium → `ERR_TUNNEL_CONNECTION_FAILED`, `yt-dlp` → 403 del proxy, `gallery-dl` (pip, 3 s) → `ProxyError: 403 Forbidden`. Las tres herramientas chocan con el mismo host bloqueado, así que cambiar de herramienta no sirve: el carrusel lo baja la madre con `ig-carousel.mjs` y las láminas se leen con visión. Fichas de esos dos posts: pendientes hasta tener los archivos.
+- **VPS desde la nube:** sin `ssh` en el PATH y sin `ONIA_VPS_SSH_KEY_B64` en el entorno ⇒ no hay camino `onia-vps`
+  (ni `transcribe.sh`). No buscar otra forma de entrar.
+- **Playwright + Chromium en la nube (medido 16-oct):** el entorno trae Chromium (`/opt/pw-browsers/chromium-1194/chrome-linux/chrome`)
+  y Playwright 1.56.1 global (`/opt/node22/lib/node_modules/playwright`). Sin `playwright install`. Lanzar con
+  `executablePath` y `--no-sandbox`; primer arranque ~8 s, siguientes ~0,15 s; captura de `github.com` 5 s en total
+  (salió sin CSS: los estáticos viven en otro host que la lista no abre, mirar la captura siempre). Hosts bloqueados
+  dan `net::ERR_TUNNEL_CONNECTION_FAILED`. Hosts que van fuera del proxy (`pypi.org`) dan `ERR_CERT_AUTHORITY_INVALID`:
+  no se desactiva TLS. `pip install yt-dlp` sí funciona (4 s, versión 2026.08.19).
 ⚠ **En una nube SIN `ssh` ni `yt-dlp`** (entorno «onia-higgsfield», 5-oct-2026, TikTok de @kevinarce98): `transcribe.sh`
 falla con «scp al VPS falló». Camino que funcionó, todo dentro del contenedor y sin VPS:
 `pip install "yt-dlp[default,curl-cffi]" faster-whisper` → bajar con `fetch-video.mjs` → transcribir con `faster-whisper`
