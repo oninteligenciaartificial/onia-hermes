@@ -20,7 +20,7 @@ POST / REEL / HISTORIA (cuenta de Sergio Urcullo)
         ▼
 MENSAJE DIRECTO (Sergio Urcullo contesta, de usted)  ── 3 preguntas ──┐
         │                                                          │
-   dueño de clínica, 2-6 profesionales            quiere aprender / no es clínica
+   dueño de clínica, 2-6 profesionales            quiere aprender / es colega
         │                                                          │
         ▼                                                          ▼
 LLAMADA DE 20 MIN (sergiourcullo.vercel.app/llamada)     WORKSHOP o CONSULTORÍA (hilo de Marca, §4)
@@ -69,7 +69,7 @@ Formatos que sostienen más días en la competencia (ver `research/competencia/a
 > 3) ¿Qué es lo que más le hace perder citas?
 > Con eso le digo si vale la pena una llamada de 20 minutos.»
 
-**Si es clínica con 2 a 6 profesionales y recepción:** pasa a la llamada (3.3). **Si es otro rubro o un solo consultorio:** se le ofrece el plan que le corresponde en `07` §0 y se mira caso por caso. **Si quiere aprender o es colega:** workshop (§4). **Si no encaja:** respuesta cortés y se termina; no se insiste.
+**Si es clínica con 2 a 6 profesionales y recepción:** pasa a la llamada (3.3). **Si es otro rubro (estética, servicios, comercio, importadora) o un solo consultorio:** se le ofrece el plan que le corresponde en `07` §0 y se mira caso por caso. **Si quiere aprender o es colega:** workshop (§4). **Si no encaja:** respuesta cortés y se termina; no se insiste.
 
 ### 3.3 Agendar la demo (mismo hilo)
 
@@ -79,7 +79,7 @@ Si en 24 horas no agendó: **un solo** recordatorio («¿Pudo ver el link de la 
 
 ### 3.4 Cerrar: la oferta al final de la demo
 
-- **Oferta única:** plan anual (se cobra 10 meses y se usan 12), con la prueba de 14 días de respaldo. No se inventa descuento ni cuenta regresiva.
+- **Oferta única:** plan anual (se cobra 10 meses y se usan 12), y, como alternativa, probar antes 14 días sin tarjeta; si paga, la prueba termina al activarse el plan. No se inventa descuento ni cuenta regresiva.
 - **Texto de cierre y manejo de objeciones:** `07` §2.7 (texto del cierre) y `04-OBJECIONES.md`. Precios: `07` §0, leídos de `subscription-plans.ts`.
 - **Antes de pasar el QR, avisar el nombre que aparece** («aparecerá a nombre de {titular del QR}») para que no frene el pago.
 
@@ -87,7 +87,7 @@ Si en 24 horas no agendó: **un solo** recordatorio («¿Pudo ver el link de la 
 
 > Este flujo es del **plan anual de Onia**. Workshops y consultorías se cobran aparte (§4).
 
-1. Si no tiene cuenta, la crea primero con `app.onia.com.bo/register?plan=<clave>` (`/checkout` sin sesión lo manda al login). Claves: `basic` = Básico, `crece` = Crece, `professional` = Profesional, `clinic` = Completo. El plan solo sobrevive al registro con ese enlace. Después entra a `app.onia.com.bo/checkout`, **confirma que el plan marcado es el elegido antes de pagar**, elige ciclo **anual** y ve el QR. La cuenta nueva abre también la prueba de 14 días; pagar el año no la anula.
+1. Si no tiene cuenta, la crea primero con `app.onia.com.bo/register?plan=<clave>` (`/checkout` sin sesión lo manda al login). Claves: `basic` = Básico, `crece` = Crece, `professional` = Profesional, `clinic` = Completo. El plan solo sobrevive al registro con ese enlace. Después entra a `app.onia.com.bo/checkout`, **confirma que el plan marcado es el elegido antes de pagar**, elige ciclo **anual** y ve el QR. Al aprobarse el pago el plan pago se activa de inmediato y la prueba termina; el anual no se reembolsa.
 2. Paga desde su banco y **sube el comprobante** (o lo manda por WhatsApp si la pantalla falla).
 3. Sergio Urcullo lo aprueba en `/admin/payments`. El plan queda activo.
 4. Se emite la factura aparte desde el portal del SIN; **ese portal lo abre solo Sergio Urcullo.**
@@ -101,7 +101,7 @@ Sergio Urcullo dijo que sí a workshops y consultorías pagas para la caja de oc
 - En el mensaje directo (3.2), quien quiere aprender recibe el enlace o el texto que ese hilo entregue. Hasta que exista, se le responde: «Estoy armando un workshop; le aviso apenas tenga fecha» **(solo si Sergio Urcullo lo aprueba).**
 - **El pago del workshop NO pasa por `/checkout`:** esa pantalla solo vende los cuatro planes anuales y activa un plan al aprobarse. El workshop se cobra con el QR del BCP enviado directamente por Sergio Urcullo (monto abierto), comprobante por WhatsApp y confirmación manual suya, sin tocar `/admin/payments`. El procedimiento y el monto los fija el hilo de Marca; acá no se escribe ninguno.
 - **Oferta de workshop: en definición; sin precio ni promesa hasta que Sergio Urcullo la apruebe y quede en el árbol.**
-- **Cómo encaja con este funnel:** quien en el mensaje directo (3.2) quiere aprender, o no es clínica, va a esta oferta; quien es dueño de clínica va a la llamada de 20 minutos. Un asistente del workshop que además tiene clínica pasa a la llamada después, con el descuento del plan anual de `07` §0 como única oferta de Onia.
+- **Cómo encaja con este funnel:** quien en el mensaje directo (3.2) quiere aprender o es colega va a esta oferta; quien es dueño de clínica va a la llamada de 20 minutos, y el dueño de otro rubro sigue en el flujo de plan y demo (`07` §0), no en el workshop. Un asistente del workshop que además tiene clínica pasa a la llamada después, con el descuento del plan anual de `07` §0 como única oferta de Onia.
 - ⚠️ El texto «le aviso apenas tenga fecha» de arriba queda reemplazado por esta oferta **solo cuando Sergio Urcullo la apruebe**.
 
 ## 5. Qué se mide (a mano, en una planilla, cada día)

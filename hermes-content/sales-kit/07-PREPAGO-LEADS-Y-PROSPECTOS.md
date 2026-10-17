@@ -24,7 +24,7 @@ variable de entorno puede pisarlos (`PROMESA_VS_PRODUCTO` K-01).
 
 - **La oferta es el plan anual:** el anual cobra 10 meses y se usan 12 (K-02 ✅, catálogo §3). Es el descuento que ya tiene el producto; **no se
   inventa otro** y no se pone una cuenta regresiva ni un «solo esta semana»: no hay motivo real (reglas de §9.3 de la skill).
-- **La prueba es opcional, no obligatoria:** 14 días del plan Profesional, sin tarjeta (A-04 ✅). Quien quiere asegurar el año, paga y arranca.
+- **La prueba es opcional, no obligatoria:** 14 días del plan Profesional, sin tarjeta (A-04 ✅). Quien quiere asegurar el año, paga y arranca: al aprobarse el pago el plan pago se activa de inmediato y la prueba termina.
 - **Cómo paga:** QR del BCP, sube el comprobante, Sergio Urcullo lo aprueba en `/admin/payments` y el plan se activa (catálogo §3).
   Riesgo conocido: el QR muestra un nombre de persona, distinto de «OniaAgency» (catálogo, `ONIA_CATALOGO_DE_VENTA.md` §6, punto 3): puede frenar el pago.
   Avisarlo antes («aparecerá a nombre de…»).
@@ -44,7 +44,7 @@ Evidencia: `docs/ONIA_LEADS_ESPERANDO.md` §1 y §2 (leídos de `access_requests
 | # | Lead | Entró | Días | Evidencia (de dónde sale) | ¿Prospecto? | Plan que se le ofrece |
 |---|---|---|---|---|---|---|
 | 1 | **«F»**, clínica odontológica de 4 doctores · WhatsApp +59173232758 | 25-ago | 52 | Chatwoot inbox 5, conv 35: 6 preguntas concretas y el costo total | **Sí, el más calificado** | Profesional: anual Bs 8.900 (o Bs 890 al mes) |
-| 2 | **Maximo Romano**, clínica Klein (dental) · +591 57400703 | 21-ago | 56 | `access_requests`, formulario de acceso. Primer registro real del sistema | Sí | Básico anual Bs 3.200 (Crece con 3-4 usuarios, Profesional con 5, Completo con 6 o más) |
+| 2 | **Maximo Romano**, clínica Klein (dental) · +591 57400703 | 21-ago | 56 | `access_requests`, formulario de acceso. Primer registro real del sistema | Sí | Básico anual Bs 3.200 (Crece con 3-4 usuarios, Profesional con 5; con 6 o más, Profesional o Crece con usuarios extra a mano, o Completo) |
 | 3 | **Leonardo Chuquimia**, Clínica Leonardo (estética) · +591 70077133 | 23-ago | 54 | `access_requests` | Sí, segundo rubro | Básico anual Bs 3.200 |
 | 4 | **Edwin Benavidez Ayala**, consultorio dental Sonrisa Feliz · +59169016505 | 28-ago | 49 | `access_requests` | Sí. Si atiende solo, es Básico | Básico anual Bs 3.200 |
 | 5 | **Mario** («mariohassen») · WhatsApp +59173021804 | 28-ago | 49 | Chatwoot inbox 5, conv 37: «vengo de la web de Onia, quiero saber si me sirve para mi negocio» | Probable: no dijo su rubro | Se pregunta primero. Piso: Básico |
@@ -86,7 +86,7 @@ Cómo salen (las tres cosas que cambian el resultado, de `SEGUIMIENTO-LEADS.md` 
 >
 > Onia es un sistema de gestión para clínicas dentales. Le muestro cómo se ve con el caso de su clínica en una videollamada de 20 minutos, para ver si le sirve. ⟦solo si B-01, C-01, C-02, C-03, D-01, E-01 y F-01 están ✅; si no, se muestra sin prometer⟧ Agenda, ficha del paciente con historia clínica y odontograma, tratamientos, cobros e inventario, todo en un lugar.
 >
-> Si decide quedarse: el plan Básico (2 usuarios) cuesta Bs 320 al mes, o Bs 3.200 por el año completo (se cobran 10 meses y usted usa 12). Si en la clínica trabajan 3 o 4 personas con el sistema, le recomiendo el Crece (Bs 550 al mes, 4 usuarios); con 5 corresponde el Profesional y con 6 o más el Completo. Si prefiere, puede probar antes 14 días sin tarjeta; es opcional.
+> Si decide quedarse: el plan Básico (2 usuarios) cuesta Bs 320 al mes, o Bs 3.200 por el año completo (se cobran 10 meses y usted usa 12). Si en la clínica trabajan 3 o 4 personas con el sistema, le recomiendo el Crece (Bs 550 al mes, 4 usuarios); con 5 corresponde el Profesional; con 6 o más le ofrezco primero el Profesional (o el Crece) sumando usuarios extra, que yo le dejo activados a mano, a Bs 70 al mes por usuario, y el Completo como alternativa. Si prefiere, puede probar antes 14 días sin tarjeta; es opcional.
 >
 > ¿Coordinamos? https://cal.com/sergiourcullo/20min
 
