@@ -72,7 +72,7 @@ Una tarea que no trae los 7 campos no se manda.
 - Pasan por él ANTES (decisión de Sergio Urcullo del 17-oct: «lo visual y lo serio lo decido yo». Es más nueva que «Qué se publica sin preguntar» de CLAUDE.md y la reemplaza en lo visual), como tarjeta de decisión (una por vez, 3 líneas): diseño nuevo o rediseño de algo vivo, piezas de contenido, su cara o su voz, textos legales, precios, gasto (Higgsfield, Meta Ads, APIMART y toda API paga: primero se cotiza), contacto con clientes o terceros, datos reales de producción, borrado sin copia, SIAT y banco.
 - Toda tarjeta trae la PIEZA MISMA (imagen o captura renderizada, video o enlace que abre directo) y la línea exacta que tiene que escribir («ok carruseles taller»). Un aviso sin la pieza al lado no sirve.
 - Mensajes de 3 bloques como máximo: qué pasó · qué necesito de vos · qué sigue.
-- La jefa le escribe cuando hay algo para él (una tarjeta) o algo publicado, y un resumen a las 06:30 y otro a las 18:00 (hora de La Paz). Sin mensajes por hora.
+- La jefa le escribe cuando hay algo para él (una tarjeta) o algo publicado, y un resumen a las 06:30 y otro a las 18:00 (hora de La Paz), cada uno con su propio recordatorio diario (los dos únicos que existen; durante una pausa quedan apagados y la madre los vuelve a prender al relanzar). Sin mensajes por hora.
 - Los hilos responden en su hilo en 1 a 3 líneas; el detalle va en un archivo adjunto.
 - A los clientes se les habla de «usted».
 
