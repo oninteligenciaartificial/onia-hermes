@@ -14,3 +14,11 @@ Retoma el hilo nuevo (rama `claude/plataforma-1-0-banco-v2`, entorno «Onia» co
 7. **Próximos pasos:** ejecutar el guion con cuentas ZZ QA y capturas 390/1440; arreglar lo roto; refrescar la demo
    (`seed-demo.sql reset=2` entre 00:00 y 07:00 La Paz); confirmar la plantilla precargada por rubro (comercio, servicios, importadora).
    No tocar los frentes del latido de Plataforma (gracia 7 días, términos, cobro) ni `plataforma.md`.
+
+## Actualización 17-oct-2026 (hilo v2)
+
+- **onia-platform #185 (semilla por rubro):** Codex P1 y 3 P2 corregidos (18527f1, 184926c, 008211e). Último hallazgo P2 **sin arreglar a propósito**:
+  el aviso de la semilla no se lee si el dueño completa precios por Catálogo/Tratamientos (`PATCH /api/comercio/products/[id]` y
+  `PATCH /api/treatments/[id]` no reevalúan la notificación). Va en un PR aparte, la madre lo aprobó como seguimiento.
+- **Sigue bloqueado:** recorrer los 5 rubros en producción hasta que la sesión de control en la PC cree y anuncie las cuentas ZZ QA.
+- **Recuperación de contraseña:** causa de raíz es configuración de producción no aplicada (no es código); lo decide la jefa con Sergio Urcullo.
