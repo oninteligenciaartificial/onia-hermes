@@ -74,7 +74,7 @@ Memoria local: 4 archivos nuevos y el índice MEMORY.md.
 ## 7. Próximos pasos de la madre nueva
 1. Arrancar con la skill `onia-sesion-madre`, este handoff y la memoria `nube-proyectos-aprendizajes-17-oct`.
 2. Ronda cada 20 min con la cadencia de la skill `onia-sesion-madre` (CronCreate `7,27,47 * * * *`; una sola ronda, no dos): `RemoteTrigger get_run_log cse_011cQSargj5qz516CNpPQEko`; buscar
-   «PC:»; comprobar que la jefa le escribe a Sergio Urcullo cada hora y que usa subagentes.
+   «PC:»; comprobar que avanza por eventos (cada hilo que termina recibe su siguiente tarea de la cola), que avisa al instante los permisos pendientes y que usa subagentes reales. Que no haya mensajes por hora es lo correcto.
 3. Mergear #226 cuando Codex lo apruebe y actualizar `git-autosync.js` en los checkouts vivos.
 4. Verificar que un hilo NUEVO siguió las instrucciones del proyecto (PASO 0, subagentes, «Subagentes: N»).
 5. Prueba con la PC apagada: a la mañana, mirar el resumen de las 06:30 y el log de la jefa de la noche.
