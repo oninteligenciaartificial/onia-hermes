@@ -76,7 +76,7 @@ identidad, costo y QA. El Soul v3 existente no cumple esos gates.
 
 | Rol | Qué | ID |
 |---|---|---|
-| **ANCLA** — con esto se genera | `lucia-skin-v1` · **7 fotos**: frontal canon, 3/4 medio, casi frontal, casi perfil, 3/4 izq, 3/4 der y frontal alta. Va como `<<<58bbd635-…>>>`, motor `nano_banana_2` @ 2k (⚠️ la etiqueta `nano_banana_2` pudo resolver a otro motor: ver B:49-50 y el método diario vigente en J `metodo_diario`; 2026-10-17) | `58bbd635-9b90-4bd2-b08a-1cd4915bd563` |
+| **ANCLA** — con esto se genera | `lucia-skin-v1` · **7 fotos**: frontal canon, 3/4 medio, casi frontal, casi perfil, 3/4 izq, 3/4 der y frontal alta. Va como `<<<58bbd635-…>>>`, motor `nano_banana_pro` @ 2k (ID real; `nano_banana_2` no existe como ID y la web llama «Nano Banana 2» a `nano_banana_flash`: TECNICA-HIGGSFIELD.md:1067-1089; método diario vigente en J `metodo_diario`; 2026-10-17) | `58bbd635-9b90-4bd2-b08a-1cd4915bd563` |
 | **RESPALDO** — si el ancla falla en un encuadre | `lucia-surgical-anchor` | `902eeebb-89e9-4477-8426-c555b20f7ecc` |
 | ⛔ **Jubilado** — 1 sola foto, inventaba el perfil | `lucia-ancla-2026-08` | `452d8375-…` |
 | **VARA de QA** — se compara, NO se genera | `STACK-rasgos-10-angulos.jpg` | — |
