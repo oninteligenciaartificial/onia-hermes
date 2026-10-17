@@ -29,7 +29,7 @@ Hay 4 frentes y cada uno tiene UN solo hilo, con nombre fijo:
 2. Leé `/mnt/project-files/reglas/COMO_TRABAJAR_CON_SERGIO_URCULLO.md` (copia de `hermes-content/docs/COMO_TRABAJAR_CON_SERGIO_URCULLO.md`): son las reglas que Sergio Urcullo ya dio. No se le vuelven a preguntar.
 3. Cargá con la herramienta Skill `onia-router` y la skill de tu carril. Están subidas a la cuenta: onia-ventas-pauta, diseno-contenido-onia, editor-videos, edicion-referentes, ver-videos, sacar-prompt, higgsfield-generate, anunciante-supremo, onia-backend, onia-db, onia-deploy, onia-frontend, onia-seguridad, onia-verificacion, onia-chatbot, onia-propuestas, onia-contabilidad-bolivia e hyperframes.
 4. Leé `AGENTS.md` (las reglas) y el handoff de tu frente (la ruta está en «Un frente = un hilo»).
-5. Si usás el VPS: `mkdir -p ~/.ssh && rm -f ~/.ssh/onia_vps && (umask 077 && printf '%s' "$ONIA_VPS_SSH_KEY_B64" | base64 -d > ~/.ssh/onia_vps) || rm -f ~/.ssh/onia_vps; ssh onia-vps 'echo VPS_OK'` (se borra la vieja, la nueva nace con permisos 600 y se borra si el decode falla). Entra por el túnel de Cloudflare, porque el puerto 22 directo no sale. Nunca imprimas la llave. Si el control de permisos lo frena, pedí el sí de Sergio Urcullo en tu hilo.
+5. Si usás el VPS: `mkdir -p ~/.ssh && rm -f ~/.ssh/onia_vps && [ -n "$ONIA_VPS_SSH_KEY_B64" ] && (umask 077 && printf '%s' "$ONIA_VPS_SSH_KEY_B64" | base64 -d > ~/.ssh/onia_vps) && [ -s ~/.ssh/onia_vps ] && ssh onia-vps 'echo VPS_OK' || { rm -f ~/.ssh/onia_vps; echo LLAVE_O_SSH_FALLO; }` (la llave vieja se borra, la nueva nace con permisos 600, una variable vacía o un decode fallido no llegan a ssh, y si algo falla la llave se borra). Entra por el túnel de Cloudflare, porque el puerto 22 directo no sale. Nunca imprimas la llave. Si el control de permisos lo frena, pedí el sí de Sergio Urcullo en tu hilo.
 
 ## Cómo la jefa le pide una tarea a un hilo (molde obligatorio)
 - OBJETIVO: una frase.
@@ -64,7 +64,7 @@ Una tarea que no trae los 7 campos no se manda.
 
 ## Cómo se le habla a Sergio Urcullo
 - No es programador. Lo técnico NO se le consulta ni se le cuenta: se decide y se publica cuando pasa sus gates.
-- Pasan por él ANTES, como tarjeta de decisión (una por vez, 3 líneas): diseño nuevo o rediseño de algo vivo, piezas de contenido, su cara o su voz, textos legales, precios, gasto (Higgsfield, Meta Ads, APIMART y toda API paga: primero se cotiza), contacto con clientes o terceros, datos reales de producción, borrado sin copia, SIAT y banco.
+- Pasan por él ANTES (decisión de Sergio Urcullo del 17-oct: «lo visual y lo serio lo decido yo». Es más nueva que «Qué se publica sin preguntar» de CLAUDE.md y la reemplaza en lo visual), como tarjeta de decisión (una por vez, 3 líneas): diseño nuevo o rediseño de algo vivo, piezas de contenido, su cara o su voz, textos legales, precios, gasto (Higgsfield, Meta Ads, APIMART y toda API paga: primero se cotiza), contacto con clientes o terceros, datos reales de producción, borrado sin copia, SIAT y banco.
 - Toda tarjeta trae la PIEZA MISMA (imagen o captura renderizada, video o enlace que abre directo) y la línea exacta que tiene que escribir («ok carruseles taller»). Un aviso sin la pieza al lado no sirve.
 - Mensajes de 3 bloques como máximo: qué pasó · qué necesito de vos · qué sigue.
 - La jefa le escribe en cada vuelta horaria en 3 líneas (en qué trabaja cada frente, qué se publicó, qué le espera y cuántos ayudantes se usaron), y un resumen a las 06:30 y otro a las 18:00 (hora de La Paz).
