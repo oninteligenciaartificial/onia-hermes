@@ -397,3 +397,12 @@ Codex (P1, comment 4301367209) marcó que AGENTS.md dejaba a la rutina QA unir c
 ## 10.ª ronda (17-oct)
 
 - Loops del VPS: el crontab los tiene comentados desde el 4 y 5-sep (medido el 17-oct: solo `onia-loops-sync.sh`). AGENTS.md §1 lo dice y prohíbe reactivarlos; el README de loops marca su instalación como RETIRADA (P1 4301484980).
+
+## 11.ª ronda (17-oct)
+
+Codex (P2, comment 4301516876, `scripts/git-autosync.js:61`) marcó que `checkoutCompartido()` trataba como compartido CUALQUIER clon principal local, y un clon local dedicado dejaba de hacer `git add -A` sin motivo.
+
+- Ahora el checkout es compartido solo con una MARCA POSITIVA: existe `<git-common-dir>/onia-checkout-compartido` (dentro de `.git`, no se versiona) y es el principal (git-dir igual a git-common-dir), en la PC (`CLAUDE_CODE_REMOTE` distinto de `true`). Sin la marca, el clon principal local hace `add -A` como antes. Guardas, salida 0 y nube sin cambios.
+- La marca se crea solo en el clon compartido de la PC, `C:/dev/proyectos/onia-hermes` (a mano: `New-Item .git/onia-checkout-compartido`). Pendiente fuera del repo: crearla ahí; mientras no exista, ese clon vuelve a `add -A`.
+- `scripts/loops/pedido-rama.test.mjs`: de 32 a 33 pruebas. Casos: PC + principal CON la marca sin agregar (no se commitea), CON la marca y agregado (solo ese), SIN la marca (`add -A`), worktree enlazado aunque la marca exista en el `.git` común (`add -A`), nube (`add -A`).
+- `AGENTS.md` §4 «Carriles»: la misma línea ahora nombra la marca.

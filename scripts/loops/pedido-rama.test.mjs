@@ -44,7 +44,8 @@ function entorno(gitconfig, extra) {
 // Un origin y un clon con main en un commit base; la sesión trabaja en `rama` y suelta el turno.
 // `sinCommitear`: el cambio queda en el árbol, como lo deja una sesión, y lo commitea el hook.
 // `agregado`: un archivo que la sesión agregó al índice a mano antes de soltar el turno.
-function sesion(rama, { env: extra = {}, sinCommitear = false, sinCambio = false, agregado = false } = {}) {
+// `marca`: el archivo `.git/onia-checkout-compartido` que solo lleva el clon compartido de la PC.
+function sesion(rama, { env: extra = {}, sinCommitear = false, sinCambio = false, agregado = false, marca = false } = {}) {
   const dir = mkdtempSync(join(tmpdir(), "autosync-main-"));
   const gitconfig = join(dir, "gitconfig");
   writeFileSync(gitconfig, "[user]\n\tname = Prueba\n\temail = prueba@example.com\n[commit]\n\tgpgsign = false\n[init]\n\tdefaultBranch = main\n");
@@ -66,6 +67,7 @@ function sesion(rama, { env: extra = {}, sinCommitear = false, sinCambio = false
   // La marca que la madre ponía en su checkout hasta el 16-oct: se deja puesta a propósito, para probar que
   // ni con ella (y con la variable) el hook mueve main.
   writeFileSync(join(git(clon, "rev-parse", "--absolute-git-dir"), "onia-autosync-main"), "");
+  if (marca) writeFileSync(join(git(clon, "rev-parse", "--absolute-git-dir"), "onia-checkout-compartido"), "");
   const base = git(clon, "rev-parse", "HEAD");
   if (rama !== "main") git(clon, "switch", "-q", "-c", rama);
   if (!sinCambio) writeFileSync(join(clon, "cambio.md"), "el cambio que pidió Sergio Urcullo\n");
@@ -305,14 +307,15 @@ test("ni en el worktree de la madre (variable + marca en su git-dir) ni en el de
 });
 
 // P2 de Codex en #226 (17-oct): `add -A` en el hook Stop subía el trabajo de otras tareas cuando varias sesiones
-// comparten el checkout principal de la PC (AGENTS.md §4 «Carriles»: rutas explícitas). En ese checkout
-// (PC = CLAUDE_CODE_REMOTE distinto de "true"; principal = git-dir igual a git-common-dir) solo se commitea lo
-// que la sesión ya agregó al índice. Un worktree enlazado de la PC y la nube siguen con `add -A`.
+// comparten el checkout principal de la PC (AGENTS.md §4 «Carriles»: rutas explícitas). Un checkout es compartido
+// solo con una MARCA POSITIVA (`<git-common-dir>/onia-checkout-compartido`) y siendo el principal (git-dir igual a
+// git-common-dir) en la PC (CLAUDE_CODE_REMOTE distinto de "true"): ahí solo se commitea lo que la sesión ya agregó
+// al índice. Sin la marca (clon local dedicado), en un worktree enlazado o en la nube sigue `add -A`.
 const PC = { CLAUDE_CODE_REMOTE: "false" };
 const archivosDelCommit = (s, cwd, ref = "HEAD") => s.git(cwd, "show", "--name-only", "--format=", ref).split("\n").filter(Boolean);
 
-test("PC + checkout principal + archivo sin agregar: no se commitea, y lo ya commiteado sí se pushea", () => {
-  const s = sesion("claude/un-carril", { env: PC, sinCommitear: true });
+test("PC + principal CON la marca + archivo sin agregar: no se commitea, y lo ya commiteado sí se pushea", () => {
+  const s = sesion("claude/un-carril", { env: PC, sinCommitear: true, marca: true });
   assert.equal(s.r.status, 0, s.r.stdout + s.r.stderr);
   assert.match(s.r.stdout, /checkout compartido, sin staging automático/);
   assert.equal(s.cabeza(), s.base, "no se creó ningún commit");
@@ -321,8 +324,8 @@ test("PC + checkout principal + archivo sin agregar: no se commitea, y lo ya com
   assert.equal(s.mainRemoto(), s.base);
 });
 
-test("PC + checkout principal + archivo agregado al índice: se commitea solo ese", () => {
-  const s = sesion("claude/un-carril", { env: PC, sinCommitear: true, agregado: true });
+test("PC + principal CON la marca + archivo agregado al índice: se commitea solo ese", () => {
+  const s = sesion("claude/un-carril", { env: PC, sinCommitear: true, agregado: true, marca: true });
   assert.equal(s.r.status, 0, s.r.stdout + s.r.stderr);
   assert.notEqual(s.cabeza(), s.base, "se creó el commit");
   assert.deepEqual(archivosDelCommit(s, s.clon), ["agregado.md"], "solo lo agregado a mano");
@@ -331,8 +334,16 @@ test("PC + checkout principal + archivo agregado al índice: se commitea solo es
   assert.doesNotMatch(s.r.stdout, /sin staging automático/);
 });
 
-test("PC + worktree enlazado: add -A como antes", () => {
-  const s = sesion("claude/un-carril", { env: PC, sinCambio: true });
+test("PC + principal SIN la marca (clon local dedicado): add -A como antes", () => {
+  const s = sesion("claude/un-carril", { env: PC, sinCommitear: true });
+  assert.equal(s.r.status, 0, s.r.stdout + s.r.stderr);
+  assert.deepEqual(archivosDelCommit(s, s.clon), ["cambio.md"], "el hook agregó y commiteó el archivo");
+  assert.equal(s.remota("claude/un-carril"), s.cabeza());
+  assert.doesNotMatch(s.r.stdout, /sin staging automático/);
+});
+
+test("PC + worktree enlazado: add -A como antes, aunque la marca exista en el .git común", () => {
+  const s = sesion("claude/un-carril", { env: PC, sinCambio: true, marca: true });
   const env = entorno(join(s.dir, "gitconfig"), PC);
   const wt = join(s.dir, "worktree-enlazado");
   s.git(s.clon, "worktree", "add", "-q", "-b", "claude/enlazado", wt);
@@ -344,8 +355,8 @@ test("PC + worktree enlazado: add -A como antes", () => {
   assert.doesNotMatch(r.stdout, /sin staging automático/);
 });
 
-test("CLAUDE_CODE_REMOTE=true (nube): add -A como antes, aunque sea el checkout principal", () => {
-  const s = sesion("claude/un-carril", { env: { CLAUDE_CODE_REMOTE: "true" }, sinCommitear: true });
+test("CLAUDE_CODE_REMOTE=true (nube): add -A como antes, aunque tenga la marca y sea el checkout principal", () => {
+  const s = sesion("claude/un-carril", { env: { CLAUDE_CODE_REMOTE: "true" }, sinCommitear: true, marca: true });
   assert.equal(s.r.status, 0, s.r.stdout + s.r.stderr);
   assert.deepEqual(archivosDelCommit(s, s.clon), ["cambio.md"], "el hook agregó y commiteó el archivo");
   assert.equal(s.remota("claude/un-carril"), s.cabeza());

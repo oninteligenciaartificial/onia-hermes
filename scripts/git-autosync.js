@@ -5,8 +5,9 @@
  *
  * Seguro por diseño:
  *  - Respeta .gitignore (nunca sube secretos/node_modules).
- *  - En el checkout principal de la PC (compartido entre sesiones) no hace `add -A`: commitea solo lo ya
- *    agregado al índice. En un worktree enlazado o en la nube (CLAUDE_CODE_REMOTE=true) sí.
+ *  - En el checkout compartido de la PC (el principal CON la marca `.git/onia-checkout-compartido`) no hace
+ *    `add -A`: commitea solo lo ya agregado al índice. Sin la marca, en un worktree enlazado o en la nube
+ *    (CLAUDE_CODE_REMOTE=true) sí.
  *  - No falla la sesión: cualquier error sale con código 0.
  *  - No actúa en HEAD desacoplado ni sin remoto.
  *  - Pushea la RAMA y NUNCA `main`: a `main` solo se llega por PR con CI verde y revisión de
@@ -21,6 +22,7 @@
  */
 
 const { execFileSync } = require('child_process');
+const fs = require('fs');
 const os = require('os');
 const path = require('path');
 
@@ -51,14 +53,19 @@ function tryGit(args) {
 
 const MAIN_REMOTA = 'refs/remotes/origin/main';
 
-// P2 de Codex en #226 (17-oct): en la PC el checkout PRINCIPAL (git-dir == git-common-dir) lo comparten varias
-// sesiones, y `add -A` subiría el trabajo de las otras (AGENTS.md §4 «Carriles»: `git add` con rutas explícitas).
-// Un worktree enlazado de la PC y la nube (un contenedor por sesión) son de una sola sesión: ahí `add -A` es seguro.
+// P2 de Codex en #226 (17-oct): en la PC el checkout compartido por varias sesiones no puede hacer `add -A`, que
+// subiría el trabajo de las otras (AGENTS.md §4 «Carriles»: `git add` con rutas explícitas). Es compartido solo con
+// una MARCA POSITIVA: el archivo `<git-common-dir>/onia-checkout-compartido` (dentro de .git, no se versiona) y,
+// además, que sea el principal (git-dir == git-common-dir), no un worktree enlazado. Sin la marca (un clon local
+// dedicado), un worktree enlazado o la nube (un contenedor por sesión), `add -A` es seguro.
+const MARCA_COMPARTIDO = 'onia-checkout-compartido';
 function checkoutCompartido(env = process.env) {
   if (env.CLAUDE_CODE_REMOTE === 'true') return false;
   const dir = tryGit(['rev-parse', '--git-dir']);
   const comun = tryGit(['rev-parse', '--git-common-dir']);
-  return dir.ok && comun.ok && path.resolve(dir.out) === path.resolve(comun.out);
+  if (!dir.ok || !comun.ok) return false;
+  const raiz = path.resolve(comun.out);
+  return path.resolve(dir.out) === raiz && fs.existsSync(path.join(raiz, MARCA_COMPARTIDO));
 }
 
 function nombreConSha() {
