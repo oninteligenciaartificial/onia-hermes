@@ -41,11 +41,11 @@
    "layout": "lista",
    "theme": "blanco",
    "headline": "Después elegí *una*",
-   "body": "Gana la que cumple las tres",
+   "body": "Gana la de más horas y menos riesgo",
    "items": [
     {"label": "Más horas", "text": "La que más tiempo te come"},
     {"label": "Menos riesgo", "text": "Si sale mal, no pasa nada grave"},
-    {"label": "Sin plata ni datos de otros", "text": "Esas no van primero"}
+    {"label": "Con plata o datos de otros", "text": "Esa no va primero"}
    ],
    "next": "esto tiene nombre"
   },

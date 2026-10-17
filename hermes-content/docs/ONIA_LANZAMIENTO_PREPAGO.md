@@ -28,7 +28,7 @@
 **Entrada (Bs 50-70):**
 1. Los 90 minutos en vivo, con su día y hora fijos.
 2. **Tu lista de tareas repetidas y tu prioridad**, armadas en vivo. ⚠️ La «plantilla del Mapa» **no existe y no se promete** (decidido el 17-oct).
-3. **Tu primer paso**, hecho en vivo con tu propio negocio.
+3. **Tu primer paso**: lo definís en vivo, con tu propio negocio.
 
 **No se promete:** ahorro en bolivianos, «triplicar ventas», certificado, resultados ni nada que Onia Platform aún no haga. La segunda fecha **no se promete**: solo si el taller se llena, Sergio evalúa una el mié 4-nov 19:00, sin anunciarla ni lista de espera.
 
@@ -58,19 +58,19 @@ Hoy la audiencia medida es corta: **~30 miembros** en la comunidad (30-sep), 6 l
 | Bueno | 40 (15×50 + 20×60 + 5×70) | **Bs 2.300** |
 | Lleno | 50 (15×50 + 20×60 + 15×70) | **Bs 3.000** |
 
-Cifras recalculadas el 17-oct (ronda 2) llenando los escalones en orden; antes mezclaban escalones y sumaban la revisión descartada y auditorías 1 a 1 (**NO VIGENTE**: precios de Onia solo de `lib/pricing.ts`, `lib/subscription-plans.ts` y `ONIA_CATALOGO_DE_VENTA.md`); por eso salieron las columnas «Revisión» y «Auditorías» y las filas con Instalación Starter, y el «Bs 2.620» (era 3.040 menos la revisión descartada: ya no existe). Cada escenario es una **suposición para ordenar el trabajo**, no una predicción. El valor de este lanzamiento es **la lista de contactos recientes** (la que convierte 7 veces más que una vieja), más que el dinero del prepago.
+Cifras recalculadas el 17-oct (ronda 2) llenando los escalones en orden; antes mezclaban escalones y sumaban la revisión descartada y auditorías 1 a 1 (**NO VIGENTE**: precios de Onia solo de `lib/pricing.ts`, `lib/subscription-plans.ts` y `ONIA_CATALOGO_DE_VENTA.md`); por eso salieron la columna «Revisión», las filas con Instalación Starter y la cifra intermedia que restaba la revisión descartada (ya no existe). Cada escenario es una **suposición para ordenar el trabajo**, no una predicción. El valor de este lanzamiento es **la lista de contactos recientes** (la que convierte 7 veces más que una vieja), más que el dinero del prepago.
 
 ## 3. El funnel de punta a punta (Instagram → pago)
 
 | # | Paso | Quién | Qué pasa |
 |---|---|---|---|
-| 1 | **Pieza** | Marca personal | Los 2 carruseles ya renderizados (hay que **cambiar la lámina 6**: ver §8) y reels con el molde Erik. **Un solo CTA:** «Link en mi perfil». Sin «comentá y te mando» (el DM automático no está probado) |
+| 1 | **Pieza** | Marca personal | Los 2 carruseles ya renderizados y reels con el molde Erik. **Un solo CTA:** «Link en mi perfil». Sin «comentá y te mando» (el DM automático no está probado) |
 | 2 | **Página** `/auditoria` | La persona | Una pantalla: promesa, «para quién no es», los 3 escalones con cupos que se ven bajar a mano, fecha de cierre, aviso de que no hay devolución salvo que el taller no se dicte, precio final en Bs |
 | 3 | **Botón a WhatsApp** | La persona | Mensaje precargado: «Hola, quiero mi cupo del taller del sábado 31». Un toque |
 | 4 | **Respuesta con QR** | Sergio Urcullo | Plantilla A: 2 preguntas (negocio y tarea que repite) + precio vigente + QR + «el QR aparece a nombre de {titular}» |
 | 5 | **Pago** | La persona | QR del BCP; manda el comprobante por el mismo chat |
 | 6 | **Verificación** | Sergio Urcullo | Mira el movimiento en la app del BCP. Una fila en el registro (`sales-kit/SEGUIMIENTO-LEADS.md`: fecha, origen, rubro, monto, escalón) |
-| 7 | **Confirmación** | Sergio Urcullo | Plantilla B: constancia escrita (fecha, hora, qué incluye, aviso de no devolución, «el link de Meet te llega el viernes 30») y pre-trabajo de 3 preguntas |
+| 7 | **Confirmación** | Sergio Urcullo | Plantilla B: constancia escrita (fecha, hora, qué incluye, aviso de no devolución, «el link de Meet te llega el viernes 30»); el pre-trabajo de 3 preguntas se manda el viernes 30, con el link |
 | 8 | **Recordatorios** | Sergio Urcullo | Jue 29, vie 30 y sáb 31 a las 8:00 y a las 9:45 (secuencia en §5) |
 | 9 | **Después** | Sergio Urcullo | 48 h: Gracias y encuesta de 3 preguntas |
 
@@ -92,8 +92,8 @@ Se anotan por WhatsApp escribiendo «CLASE». Quien se anota queda en la **lista
 | Cuándo | Qué |
 |---|---|
 | Sáb 17 - dom 18 | Sergio Urcullo decide precio, escalones y fecha. Se ajusta el texto de la página (no se publica sin su OK) |
-| Lun 19 | Objetivo de apertura de **Fundadores (Bs 50, 15 plazas)**, **solo si la compuerta de `TALLER_31_OCT.md` está abierta** (página viva y textos aprobados). Ese día: carrusel 1 + historia + aviso en la comunidad |
-| Mar 20 | Mensajes 1 a 1 a quienes respondieron (cada uno con su OK). El primer reel con CTA al taller sale el sáb 24, con la página viva y los textos aprobados |
+| Lun 19 | Objetivo de apertura de **Fundadores (Bs 50, 15 plazas)**, **solo con la compuerta de `TALLER_31_OCT.md` abierta** (5 condiciones: página viva, textos aprobados, número de WhatsApp atendido por Sergio, QR y titular de Leslie Mercado Moreno, plazo de devolución decidido). Ese día: carrusel 1 + historia + aviso en la comunidad |
+| Mar 20 | Mensajes 1 a 1 a quienes respondieron (cada uno con su OK). El primer reel con CTA al taller sale el sáb 24, solo con la compuerta de `TALLER_31_OCT.md` abierta (5 condiciones) |
 | Mié 21 | Carrusel 2. **Chequeo 1** (§7) |
 | Jue 22 | Webinar a clínicas (otro hilo): este carril no publica nada ese día |
 | Vie 23 - dom 25 | Reel 2; pregunta en historias («¿qué tarea te come más horas?»); Bs 60 si ya se llenaron los fundadores |
@@ -107,11 +107,11 @@ Se anotan por WhatsApp escribiendo «CLASE». Quien se anota queda en la **lista
 ## 5. Mensajes (voseo; cada uno con el OK de Sergio Urcullo; nada se manda desde la nube)
 
 - **A · Respuesta al botón:** «Hola, soy Sergio Urcullo. Gracias por escribir. El taller es el sábado 31 a las 10:00 (La Paz), 90 minutos por Meet. Ahora el cupo cuesta Bs {50|60|70} ({n} lugares a ese precio). Vale el precio del momento en que se acredita el pago. Antes de mandarte el QR, contame: ¿qué negocio tenés y qué tarea repetís todas las semanas? El QR aparece a nombre de **{titular}**.»
-- **B · Confirmación (constancia escrita):** «Recibido: tu cupo está confirmado. Taller "Auditá tu negocio con IA", sábado 31 de octubre, 10:00 (La Paz), 90 min por Meet. El link de Meet te llega el viernes 30. Incluye: tu lista de tareas repetidas, tu prioridad y tu primer paso, hechos en vivo. Sin devolución una vez confirmado el cupo (solo si el taller no se dicta). Antes del sábado mandame: 1) qué vendés y cuántas personas trabajan, 2) tus 5 tareas más repetidas, 3) cuántas horas por semana te toma cada una.»
+- **B · Confirmación (constancia escrita):** «Recibido: tu cupo está confirmado. Taller "Auditá tu negocio con IA", sábado 31 de octubre, 10:00 (La Paz), 90 min por Meet. El link de Meet te llega el viernes 30. Incluye: tu lista de tareas repetidas, tu prioridad y tu primer paso, que definís en vivo. Sin devolución una vez confirmado el cupo (solo si el taller no se dicta). El viernes 30, junto con el link, te pido el pre-trabajo: 1) qué vendés y cuántas personas trabajan, 2) tus 5 tareas más repetidas, 3) cuántas horas por semana te toma cada una.»
 - **C · Seguimiento a la lista de interés (1 por vez, solo a quien pidió la clase):** día de la inscripción (confirmación + link); día siguiente (un dato útil: la cuenta de a un paso, en 3 líneas); 24 h antes de la clase (recordatorio); 1 h antes de la clase (link); al terminar (el aviso con el escalón y los cupos reales).
 - **D · Si no paga en 24 h:** una sola vez, «¿Pudiste ver el QR? El cupo se confirma cuando se acredita el pago.»
 - **E · Después del taller — NO VIGENTE: precio Bs 350 sin aprobar y vende horas de Sergio (ver `TALLER_31_OCT.md`):** «Gracias por venir. Si querés que revisemos tu caso uno a uno, la auditoría de 45 minutos cuesta Bs 350; como ya pagaste Bs {monto}, te queda en Bs {350-monto}. Te dejo un informe de una página con tus 3 prioridades. Vale hasta el jueves 5 de noviembre.»
-- **Recordatorios del taller:** jueves 29 (cupos finales), viernes 30 (pre-trabajo + link) y sábado 31 a las 8:00 y a las 9:45 (link). Fuente: `TALLER_31_OCT.md`.
+- **Recordatorios del taller:** jueves 29 (cupos finales), viernes 30 (pre-trabajo + link) y sábado 31 a las 8:00 y a las 9:45 (recordatorio, sin link nuevo; el link salió el viernes 30). Fuente: `TALLER_31_OCT.md`.
 
 ## 6. Versión «Con revisión» (Bs 140, cupo 8): por qué existe (DESCARTADA el 17-oct: el análisis independiente recomienda la escalera sola; vende horas de Sergio Urcullo)
 - En el único caso documentado con cifras, la versión del doble de precio con una hora personal la eligió **62 %** de los compradores (Arturo García; España, 2017, otro producto). No se asegura nada parecido acá: **se prueba con cupo 8** y se mide.
@@ -143,6 +143,7 @@ Está en `docs/ONIA_WORKSHOPS_AUDITORIA_IA.md`. **Cuándo gana:** si Sergio Urcu
 4. Probar que su Meet admite una sesión de 90 minutos con 50 personas **[verificar: la cuenta gratis de Google puede limitar la duración de las reuniones grupales]**.
 5. **OK a publicar** las piezas (con el CTA «Link en mi perfil») y a mandar cada mensaje de §5.
 6. Preguntarle a **Fabricio**: cuántos seguidores tenía, cuántos días vendió, qué entregó y cuántas devoluciones hubo. Con eso se afina la cuenta de §2.
+7. **Plazo y forma de devolución:** decide Sergio Urcullo con Leslie Mercado Moreno (propuesta: 3 días hábiles, a la cuenta de origen), antes de abrir la venta.
 
 ## 11. Trampas
 - No decir «certificado», «garantizado» ni «resultados»: no existen.
@@ -163,7 +164,7 @@ Precio aprobado por Sergio Urcullo el 17-oct: escalera Bs 50 / 60 / 70 por cupo,
 > **Qué te llevás**
 > 1. Tu lista de tareas repetidas: qué repetís y cuánto te cuesta al mes (ejemplo: 5 horas por semana a Bs 20 la hora son Bs 400).
 > 2. Tu prioridad: una sola tarea para empezar.
-> 3. Tu primer paso, con tu propio negocio.
+> 3. Tu primer paso: lo definís en vivo, con tu propio negocio.
 >
 > **Para quién no es:** si tu negocio no repite tareas, si buscás un certificado o si querés que otro lo haga por vos.
 >
