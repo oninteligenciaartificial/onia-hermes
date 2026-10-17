@@ -251,6 +251,43 @@ probar `curl -sS -o /dev/null -w "%{http_code}" https://www.youtube.com`: `000` 
   (salió sin CSS: los estáticos viven en otro host que la lista no abre, mirar la captura siempre). Hosts bloqueados
   dan `net::ERR_TUNNEL_CONNECTION_FAILED`. Hosts que van fuera del proxy (`pypi.org`) dan `ERR_CERT_AUTHORITY_INVALID`:
   no se desactiva TLS. `pip install yt-dlp` sí funciona (4 s, versión 2026.08.19).
+
+- ✅ **Entorno «Onia» (red abierta), medido 16-oct-2026 — REEMPLAZA los bloqueos de arriba para ese entorno.** `onia.com.bo` y
+  `app.onia.com.bo/login` dan 200 en ~1,4 s (captura 1440 con CSS y fuentes completos, 5 s el script entero con Playwright
+  global `/opt/node22/lib/node_modules/playwright` + `chromium-1194`, `--no-sandbox`); `instagram.com`, `youtube.com` y la CDN
+  `scontent-*.cdninstagram.com` también pasan. Antes de decir «bloqueado», probar `curl -s -o /dev/null -w '%{http_code}' <host>`.
+- **Instagram desde la nube SIN login (método medido, 2 posts):**
+  1. `pip install yt-dlp curl_cffi` (sin `curl_cffi`, `--impersonate chrome` falla: «target not available»).
+  2. **Carrusel:** `yt-dlp --impersonate chrome -o "s%(playlist_index)02d.%(ext)s" --write-info-json <url>`: baja las láminas
+     de VIDEO (8 de 10 en `/p/DecFE1oDNd3/`, 100-180 KB c/u, 1080x1438, 10 s) y el `s00.info.json` trae el **caption completo**,
+     likes y autor. Las láminas de IMAGEN fallan («No video formats found»). `-o` con nombre fijo se pisa.
+  3. **Post de imagen única** (`/p/DedkCc6olmo/`): yt-dlp dice «There is no video in this post». Camino: Playwright abre
+     `/p/<id>/` (5 s, sale un modal de login que no estorba) y **se guardan las respuestas de imagen de `cdninstagram`**
+     (`page.on('response')`, `r.body()`, quedarse con las >40 KB): la mayor es la imagen completa (2048x2731, 450 KB), mejor
+     que `og:image`, que viene recortada a 640. Lo mismo da la lámina 1 (imagen) de un carrusel (2160x2877).
+  4. `gallery-dl` sin login se **cuelga** (>120 s, ni error): no usarlo. `pkill -f` dentro del mismo shell mata la sesión.
+  5. Metadatos gratis del `<meta og:description>`: «N likes, M comments - autor on fecha: "caption"».
+  Faltan: lámina 10 del carrusel (imagen, CTA «guarda/comenta»); con login saldría por `?img_index=N` (ver camino de la PC).
+- **Biblioteca de anuncios de Meta desde la nube SIN login (medido 16-oct-2026, entorno «Onia»):** funciona. Chromium abre
+  `https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=BO&q=<término>&search_type=keyword_unordered`
+  (el documento responde 403 pero la página se pinta igual), a los ~9 s ya hay tarjetas con **imagen/video, texto, anunciante,
+  fechas de inicio y fin, plataformas y «Library ID»**; «N results» sale en el encabezado (`dental` BO >50.000, `Nike` BO ~22.000).
+  Scroll con `page.mouse.wheel` carga más. Trampas: (1) tras 3-4 consultas seguidas Meta contesta
+  `{"errors":[{"message":"Rate limit exceeded"...}]}` en `/api/graphql/` y la página muestra **«No hay ningún anuncio…»
+  FALSO** (Nike BO salió vacío): espaciar consultas y, ante un vacío, repetir con un término seguro antes de concluir;
+  (2) algunos videos dicen «Sorry, we're having trouble playing this video» (no se pueden ver en vivo; la imagen sí);
+  (3) «Doctocliq» en Bolivia da 0 resultados reales (el término sí cargó datos: `dynamic_filter_options` vacío). Sin cuentas
+  ni login. Para los creativos de video completos sigue valiendo la madre en la PC.
+- **Investigar páginas públicas desde la nube (16-oct):** `WebFetch` trae y resume bien (lety.ai: titular y condiciones en
+  segundos); Chromium falla en algunos sitios con `ERR_CONNECTION_RESET` (`hormozi.com`) o navegación interrumpida (`lety.ai`):
+  la red no deja pasar todos los hosts, así que se prueba WebFetch primero y Chromium si hace falta captura.
+- **Camino de la PC (sesión de control, 16-oct):** en Chrome con sesión, `fetch('/api/v1/media/<id>/info/', {headers:
+  {'x-ig-app-id':'936619743392459'}, credentials:'include'})` da caption, contadores y `media_type` (1 imagen, 8 carrusel); láminas
+  de imagen por flecha + captura (`?img_index=N`). Fallaron: embed por `curl` (shell JS vacío), descargas encadenadas desde Chrome
+  (solo aterriza la primera).
+- **VPS desde esta nube:** `ONIA_VPS_SSH_KEY_B64` SÍ existe en el entorno, pero `ssh root@187.77.16.63` da `Connection timed
+  out` (puerto 22) y el alias `onia-vps` no resuelve: el túnel no está en este entorno. No hace falta: yt-dlp + Chromium
+  locales resuelven reels y carruseles. Transcripción de audio de un reel sigue necesitando el VPS o Whisper local.
 ⚠ **En una nube SIN `ssh` ni `yt-dlp`** (entorno «onia-higgsfield», 5-oct-2026, TikTok de @kevinarce98): `transcribe.sh`
 falla con «scp al VPS falló». Camino que funcionó, todo dentro del contenedor y sin VPS:
 `pip install "yt-dlp[default,curl-cffi]" faster-whisper` → bajar con `fetch-video.mjs` → transcribir con `faster-whisper`
