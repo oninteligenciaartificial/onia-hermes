@@ -9,16 +9,20 @@
 //
 // 5-oct: Sergio Urcullo eligió que main avance SOLO por PR revisado. Medido ese día: desde el 28-sep,
 // 48 de los 78 avances de main entraron por el fast-forward del autosync, 23 desde sesiones de la
-// nube (Lucía y Marca personal; #82 entró así con «Hoy soy odontóloga»). Ahora el hook pushea la rama
-// y no toca main, salvo con permiso: `ONIA_AUTOSYNC_MAIN=1` (la madre, en la PC) u
-// `ONIA_LOOP_ID=onia-cola` (el integrador). Ya no depende del nombre de la rama.
+// nube (Lucía y Marca personal; #82 entró así con «Hoy soy odontóloga»). Entonces quedaron dos permisos
+// (`ONIA_AUTOSYNC_MAIN=1` + marca para la madre, `ONIA_LOOP_ID=onia-cola` para el integrador).
+//
+// 17-oct (hallazgo P1 de Codex en #226): la regla nueva (AGENTS.md §4 «Quién mueve main») es que a main
+// solo se llega por PR con CI verde y revisión de Codex, también desde la PC. Los dos permisos se
+// quitaron, junto con el fast-forward de otras ramas. El hook pushea la rama ACTUAL y nada más: estas
+// pruebas fijan que ni la variable, ni la marca, ni la identidad retirada habilitan main.
 //
 // Se corre con: node --test scripts/loops/pedido-rama.test.mjs
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { mkdtempSync, writeFileSync, readFileSync, existsSync, mkdirSync, chmodSync } from "node:fs";
+import { mkdtempSync, writeFileSync, readFileSync, existsSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -37,7 +41,7 @@ function entorno(gitconfig, extra) {
 
 // Un origin y un clon con main en un commit base; la sesión trabaja en `rama` y suelta el turno.
 // `sinCommitear`: el cambio queda en el árbol, como lo deja una sesión, y lo commitea el hook.
-function sesion(rama, { env: extra = {}, sinCommitear = false, sinCambio = false, sinMarca = false } = {}) {
+function sesion(rama, { env: extra = {}, sinCommitear = false, sinCambio = false } = {}) {
   const dir = mkdtempSync(join(tmpdir(), "autosync-main-"));
   const gitconfig = join(dir, "gitconfig");
   writeFileSync(gitconfig, "[user]\n\tname = Prueba\n\temail = prueba@example.com\n[commit]\n\tgpgsign = false\n[init]\n\tdefaultBranch = main\n");
@@ -56,9 +60,9 @@ function sesion(rama, { env: extra = {}, sinCommitear = false, sinCambio = false
   git(clon, "commit", "-qm", "base");
   git(clon, "remote", "add", "origin", origin);
   git(clon, "push", "-q", "-u", "origin", "main");
-  // La marca del checkout de la madre (9-oct): sin ella, ONIA_AUTOSYNC_MAIN=1 no vale. Los casos «sin permiso»
-  // no ponen la variable, así que la marca no les cambia nada.
-  if (!sinMarca) writeFileSync(join(git(clon, "rev-parse", "--absolute-git-dir"), "onia-autosync-main"), "");
+  // La marca que la madre ponía en su checkout hasta el 16-oct: se deja puesta a propósito, para probar que
+  // ni con ella (y con la variable) el hook mueve main.
+  writeFileSync(join(git(clon, "rev-parse", "--absolute-git-dir"), "onia-autosync-main"), "");
   const base = git(clon, "rev-parse", "HEAD");
   if (rama !== "main") git(clon, "switch", "-q", "-c", rama);
   if (!sinCambio) writeFileSync(join(clon, "cambio.md"), "el cambio que pidió Sergio Urcullo\n");
@@ -76,56 +80,56 @@ function sesion(rama, { env: extra = {}, sinCommitear = false, sinCambio = false
 
 const RESCATE = `claude/autosync-${SESION}`;
 
-test("sin permiso, una rama de trabajo se pushea pero main NO avanza", () => {
+// Todo lo que alguna vez habilitó main: la variable de la madre (con y sin marca en el git-dir), la identidad
+// retirada del integrador y valores parecidos. Ninguno hace nada.
+const PERMISOS_VIEJOS = [
+  ["ONIA_AUTOSYNC_MAIN=1 con la marca de la madre", { ONIA_AUTOSYNC_MAIN: "1" }],
+  ["ONIA_LOOP_ID=onia-cola (integrador retirado)", { ONIA_LOOP_ID: "onia-cola" }],
+  ["las dos a la vez", { ONIA_AUTOSYNC_MAIN: "1", ONIA_LOOP_ID: "onia-cola" }],
+  ["ONIA_AUTOSYNC_MAIN=true", { ONIA_AUTOSYNC_MAIN: "true" }],
+  ["ONIA_LOOP_ID=web-venta", { ONIA_LOOP_ID: "web-venta" }],
+];
+
+test("una rama de trabajo se pushea y main NO avanza", () => {
   const s = sesion("claude/un-carril");
   assert.equal(s.r.status, 0, s.r.stdout + s.r.stderr);
   assert.equal(s.remota("claude/un-carril"), s.cabeza(), "la rama queda en el remoto, para su PR");
   assert.equal(s.mainRemoto(), s.base, "main sigue donde estaba");
-  assert.match(s.r.stdout, /main no se toca: entra por PR revisado/);
+  assert.match(s.r.stdout, /push -> origin\/claude\/un-carril/);
 });
 
-test("ya no depende del nombre: un pedido con el prefijo viejo `claude/` tampoco adelanta main", () => {
+test("un pedido con el prefijo `claude/` tampoco adelanta main", () => {
   const s = sesion("claude/pedido-p_1a2b3c4d");
   assert.equal(s.r.status, 0, s.r.stdout + s.r.stderr);
   assert.equal(s.mainRemoto(), s.base);
 });
 
-for (const [nombre, env] of [
-  ["la madre (ONIA_AUTOSYNC_MAIN=1)", { ONIA_AUTOSYNC_MAIN: "1" }],
-  ["el integrador (ONIA_LOOP_ID=onia-cola)", { ONIA_LOOP_ID: "onia-cola" }],
-]) {
-  test(`con permiso de ${nombre}, main sí avanza por fast-forward (como antes)`, () => {
+// (a)+(c) en una rama de trabajo: ningún permiso viejo habilita main ni un fast-forward.
+for (const [nombre, env] of PERMISOS_VIEJOS) {
+  test(`en una rama claude/*, ${nombre} ya no habilita nada: se pushea la rama y main no avanza`, () => {
     const s = sesion("claude/un-carril", { env });
     assert.equal(s.r.status, 0, s.r.stdout + s.r.stderr);
-    assert.equal(s.mainRemoto(), s.cabeza(), "main al día con la rama");
-    assert.match(s.r.stdout, /main al día \(fast-forward\)/);
-  });
-}
-
-for (const env of [{ ONIA_AUTOSYNC_MAIN: "true" }, { ONIA_AUTOSYNC_MAIN: "0" }, { ONIA_LOOP_ID: "web-venta" }]) {
-  test(`un permiso que no es exactamente el pactado no habilita main (${JSON.stringify(env)})`, () => {
-    const s = sesion("claude/un-carril", { env });
-    assert.equal(s.mainRemoto(), s.base);
-  });
-}
-
-for (const rama of ["pedido/p_1a2b3c4d", "respuesta/p_1a2b3c4d"]) {
-  test(`una rama ${rama.split("/")[0]}/* nunca adelanta main, ni con permiso`, () => {
-    const s = sesion(rama, { env: { ONIA_AUTOSYNC_MAIN: "1" } });
-    assert.equal(s.r.status, 0, s.r.stdout + s.r.stderr);
-    assert.match(s.r.stdout, /rama de pedido: se pushea, main NO se toca/);
-    assert.equal(s.remota(rama), s.cabeza(), "la rama del pedido queda en el remoto, para su PR");
+    assert.equal(s.remota("claude/un-carril"), s.cabeza(), "la rama sí se pushea");
     assert.equal(s.mainRemoto(), s.base, "main sigue donde estaba");
+    assert.doesNotMatch(s.r.stdout, /fast-forward|main al día|permiso/);
   });
 }
 
-test("parada EN main y sin permiso: no pushea main; el trabajo queda en claude/autosync-<sesión>", () => {
+// (a)+(c) parado EN main: nunca se pushea main; el trabajo va a la rama de rescate.
+for (const [nombre, env] of [["sin ningún permiso", {}], ...PERMISOS_VIEJOS]) {
+  test(`parada EN main, ${nombre}: main no se pushea y el trabajo queda en claude/autosync-<sesión>`, () => {
+    const s = sesion("main", { env, sinCommitear: true });
+    assert.equal(s.r.status, 0, s.r.stdout + s.r.stderr);
+    assert.equal(s.mainRemoto(), s.base, "main del remoto no se toca");
+    assert.equal(s.remota(RESCATE), s.cabeza(), "el commit del hook quedó a salvo en la rama de rescate");
+    assert.equal(s.git(s.clon, "rev-parse", "refs/heads/main"), s.base, "el main local volvió a origin/main");
+    assert.match(s.r.stdout, /main solo por PR/);
+    assert.ok(s.r.stdout.includes(`quedaron en origin/${RESCATE}`), s.r.stdout);
+  });
+}
+
+test("la vuelta siguiente, parada en la rama de rescate, la sigue sin forzar nada", () => {
   const s = sesion("main", { sinCommitear: true });
-  assert.equal(s.r.status, 0, s.r.stdout + s.r.stderr);
-  assert.equal(s.mainRemoto(), s.base, "main del remoto no se toca");
-  assert.equal(s.remota(RESCATE), s.cabeza(), "el commit del hook quedó a salvo en la rama de rescate");
-  assert.match(s.r.stdout, new RegExp(`quedaron en origin/${RESCATE.replace(/[/]/g, "\\/")}`));
-  // La vuelta siguiente sigue en la misma rama de rescate, sin forzar nada.
   writeFileSync(join(s.clon, "otro.md"), "más trabajo\n");
   const r2 = s.correr();
   assert.equal(r2.status, 0, r2.stdout + r2.stderr);
@@ -133,11 +137,34 @@ test("parada EN main y sin permiso: no pushea main; el trabajo queda en claude/a
   assert.equal(s.mainRemoto(), s.base);
 });
 
-test("parada en main sin permiso y sin nada nuevo: no crea ninguna rama", () => {
+// (d) el fast-forward de otra rama no existe: con todos los permisos viejos puestos, el hook solo toca la rama actual.
+test("no hace fast-forward de otra rama: la rama ajena y main siguen donde estaban", () => {
+  const s = sesion("claude/un-carril", { env: { ONIA_AUTOSYNC_MAIN: "1", ONIA_LOOP_ID: "onia-cola" } });
+  s.git(s.clon, "push", "-q", "origin", `${s.base}:refs/heads/claude/otra`);
+  writeFileSync(join(s.clon, "mas.md"), "más trabajo en la rama actual\n");
+  const r = s.correr({ ONIA_AUTOSYNC_MAIN: "1", ONIA_LOOP_ID: "onia-cola" });
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.equal(s.remota("claude/un-carril"), s.cabeza(), "la rama actual sí avanza");
+  assert.equal(s.remota("claude/otra"), s.base, "la otra rama no se adelanta");
+  assert.equal(s.mainRemoto(), s.base, "main tampoco");
+  assert.doesNotMatch(r.stdout, /fast-forward/);
+});
+
+for (const rama of ["pedido/p_1a2b3c4d", "respuesta/p_1a2b3c4d"]) {
+  test(`una rama ${rama.split("/")[0]}/* se pushea y main no avanza, ni con los permisos viejos`, () => {
+    const s = sesion(rama, { env: { ONIA_AUTOSYNC_MAIN: "1" } });
+    assert.equal(s.r.status, 0, s.r.stdout + s.r.stderr);
+    assert.equal(s.remota(rama), s.cabeza(), "la rama del pedido queda en el remoto, para su PR");
+    assert.equal(s.mainRemoto(), s.base, "main sigue donde estaba");
+  });
+}
+
+test("parada en main y sin nada nuevo: no crea ninguna rama", () => {
   const s = sesion("main", { sinCambio: true });
   assert.equal(s.r.status, 0, s.r.stdout + s.r.stderr);
   assert.equal(s.remota(RESCATE), "");
   assert.equal(s.mainRemoto(), s.base);
+  assert.match(s.r.stdout, /main solo por PR/);
 });
 
 test("en la PC (sin id de sesión de la nube) la rama de rescate lleva el nombre de la máquina", () => {
@@ -147,15 +174,8 @@ test("en la PC (sin id de sesión de la nube) la rama de rescate lleva el nombre
   assert.match(ramas, /^claude\/autosync-[A-Za-z0-9_-]+$/);
 });
 
-test("parada en main CON permiso: pushea main como antes", () => {
-  const s = sesion("main", { env: { ONIA_AUTOSYNC_MAIN: "1" } });
-  assert.equal(s.r.status, 0, s.r.stdout + s.r.stderr);
-  assert.equal(s.mainRemoto(), s.cabeza());
-  assert.equal(s.remota(RESCATE), "");
-});
-
-// El permiso de mover main es de UNA máquina (la PC de la madre) y vive fuera del repo. Si entrara a la
-// configuración versionada, el autosync se lo daría a todas las sesiones, también a las de la nube.
+// Ningún permiso de mover main puede entrar a la configuración versionada: el hook ya no lee ninguno, y si
+// alguien lo reintrodujera, vivir en .claude/settings.json se lo daría a todas las sesiones, también a las de la nube.
 const RAIZ = resolve(AQUI, "..", "..");
 test("el permiso de mover main no está en la configuración versionada", () => {
   const compartida = readFileSync(join(RAIZ, ".claude", "settings.json"), "utf8");
@@ -171,8 +191,8 @@ test("lo rescatado sale de main: una corrida CON permiso después, en el mismo c
   assert.equal(s.remota(RESCATE), s.cabeza());
   assert.equal(s.ramaLocal(), RESCATE, "la sesión quedó parada en su rama de rescate");
   assert.equal(s.git(s.clon, "rev-parse", "refs/heads/main"), s.base, "el main local volvió a origin/main");
-  // Lo que no puede pasar es que el commit viaje SOLO, desde el main local, en la primera corrida con
-  // permiso en ese clon (antes del arreglo seguía en el main local y se publicaba sin PR).
+  // Lo que no puede pasar es que el commit viaje SOLO, desde el main local, en la corrida siguiente de ese
+  // clon (antes del arreglo seguía en el main local y se publicaba sin PR). Ahora, además, ni con la variable.
   const s2 = sesion("main", { sinCommitear: true });
   s2.git(s2.clon, "switch", "-q", "main");
   const r2 = s2.correr({ ONIA_AUTOSYNC_MAIN: "1" });
@@ -210,7 +230,7 @@ test("un nombre de rama con $(…) es dato: no se ejecuta", () => {
   assert.equal(s.mainRemoto(), s.base);
 });
 
-test("con un tag llamado `main`, parada en main sin permiso, main del remoto no se mueve", () => {
+test("con un tag llamado `main`, parada en main, main del remoto no se mueve", () => {
   const dir = sesion("main", { sinCambio: true });
   dir.git(dir.clon, "tag", "main");
   writeFileSync(join(dir.clon, "cambio.md"), "con un tag ambiguo\n");
@@ -218,24 +238,6 @@ test("con un tag llamado `main`, parada en main sin permiso, main del remoto no 
   assert.equal(r.status, 0, r.stdout + r.stderr);
   assert.equal(dir.mainRemoto(), dir.base);
   assert.equal(dir.remota(RESCATE), dir.cabeza());
-});
-
-// Tercera pasada de revisión (5-oct): el hook NUNCA mueve el checkout de quien tiene permiso. El
-// integrador corre en /root/loops/onia-hermes parado en main y aborta si no lo está (onia-loop.sh):
-// sacarlo de main lo frenaba para siempre. El tsc de la app no se le exige en main: tiene sus gates.
-test("con permiso y parada en main, el hook nunca la saca de main (el integrador aborta si no está ahí)", () => {
-  const s = sesion("main", { env: { ONIA_LOOP_ID: "onia-cola" }, sinCambio: true });
-  const bin = join(s.dir, "bin");
-  mkdirSync(bin);
-  writeFileSync(join(bin, "npx"), "#!/usr/bin/env bash\necho 'error TS2307' ; exit 2\n");
-  chmodSync(join(bin, "npx"), 0o755);
-  mkdirSync(join(s.clon, "web-factory", "apps", "site"), { recursive: true });
-  writeFileSync(join(s.clon, "web-factory", "apps", "site", "pagina.ts"), "export const x = 1;\n");
-  const r = s.correr({ ONIA_LOOP_ID: "onia-cola", PATH: `${bin}:${process.env.PATH}` });
-  assert.equal(r.status, 0, r.stdout + r.stderr);
-  assert.equal(s.ramaLocal(), "main");
-  assert.equal(s.mainRemoto(), s.cabeza(), "como antes de este cambio: el integrador publica main");
-  assert.equal(s.remota(RESCATE), "");
 });
 
 test("una rama de rescate local con commits que HEAD no tiene no se pisa: se usa otra con el sha", () => {
@@ -272,35 +274,25 @@ test("ningún settings.local.json está versionado, en ninguna carpeta", () => {
   assert.equal(sub.status, 0, "también en las subcarpetas con su propio .claude/");
 });
 
-// Revisiones de la madre al #138 y al #173 (9-oct): ONIA_AUTOSYNC_MAIN lo heredan los procesos hijos de la madre,
-// también los subagentes que trabajan en otros worktrees; y la madre misma corre en un worktree (`claude -w`).
-// Por eso el permiso exige además una MARCA en el git-dir del checkout, que no se versiona ni se hereda.
-test("con la variable pero sin la marca de su checkout, el permiso no vale", () => {
-  const s = sesion("claude/un-carril", { env: { ONIA_AUTOSYNC_MAIN: "1" }, sinMarca: true });
-  assert.equal(s.r.status, 0, s.r.stdout + s.r.stderr);
-  assert.match(s.r.stdout, /permiso de main ignorado: este checkout no tiene la marca/);
-  assert.equal(s.mainRemoto(), s.base);
-});
-
-test("el permiso de la madre no vale en el worktree de un subagente; en un worktree con SU marca, sí", () => {
+// Revisiones de la madre al #138 y al #173 (9-oct) y hallazgo P1 de Codex en #226 (17-oct): la madre corre en
+// un worktree (`claude -w`) y sus subagentes en otros. Con la variable heredada, la marca en SU git-dir y
+// ninguna otra señal, ningún worktree mueve main: se pushea la rama de cada uno y nada más.
+test("ni en el worktree de la madre (variable + marca en su git-dir) ni en el de un subagente se mueve main", () => {
   const s = sesion("main", { env: { ONIA_AUTOSYNC_MAIN: "1" }, sinCambio: true }); // el clon tiene la marca
   const env = entorno(join(s.dir, "gitconfig"), { ONIA_AUTOSYNC_MAIN: "1" });
   const enWt = (wt) => spawnSync("node", [AUTOSYNC], { cwd: wt, env, encoding: "utf8" });
-  // Un subagente: hereda la variable, trabaja en su worktree, no tiene marca.
   const sub = join(s.dir, "worktree-subagente");
   s.git(s.clon, "worktree", "add", "-q", "-b", "claude/subagente", sub);
   writeFileSync(join(sub, "a-medias.md"), "trabajo de un subagente a medias\n");
   const r = enWt(sub);
   assert.equal(r.status, 0, r.stdout + r.stderr);
-  assert.match(r.stdout, /permiso de main ignorado/);
-  assert.equal(s.mainRemoto(), s.base, "main no se movió");
   assert.equal(s.remota("claude/subagente"), s.git(sub, "rev-parse", "HEAD"), "la rama del subagente sí se pusheó");
-  // La madre, como corre hoy: en su propio worktree (claude -w), con la marca en SU git-dir.
   const madre = join(s.dir, "worktree-madre");
   s.git(s.clon, "worktree", "add", "-q", "-b", "claude/madre", madre);
   writeFileSync(join(s.git(madre, "rev-parse", "--absolute-git-dir"), "onia-autosync-main"), "");
   writeFileSync(join(madre, "de-la-madre.md"), "revisado\n");
   const r2 = enWt(madre);
   assert.equal(r2.status, 0, r2.stdout + r2.stderr);
-  assert.equal(s.mainRemoto(), s.git(madre, "rev-parse", "HEAD"), "en el checkout marcado el permiso vale");
+  assert.equal(s.remota("claude/madre"), s.git(madre, "rev-parse", "HEAD"), "la rama de la madre sí se pushea");
+  assert.equal(s.mainRemoto(), s.base, "main no se movió, ni con la marca");
 });

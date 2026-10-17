@@ -33,10 +33,11 @@ defaults to closed execution:
 5. Corrección 2026-10-17: la autorización vigente es `AGENTS.md` §4, «Quién
    decide». Lo técnico (infra, migraciones con backup/rollback, bot, docs,
    revisiones) se publica sin consultar a Sergio Urcullo si pasa los gates. Lo
-   visual (pantalla o sección nueva, marca) y lo serio (textos legales, precios,
+   visual (pantalla o sección nueva, rediseño de una viva, marca, piezas de
+   contenido, su cara o su voz) y lo serio (textos legales, precios,
    gasto, terceros, datos reales de producción, borrado sin copia, secretos,
    permisos, red y decisiones de negocio) van antes a él; si algo cae en
-   técnico y en serio, manda serio. Un encargo cerrado de Codex no autoriza Git ni publicación por sí solo.
+   técnico y en serio, manda serio. Codex solo revisa PRs: ningún encargo suyo autoriza Git ni publicación.
 6. Finish with one of three outcomes for each pending item: executed and
    validated, automated with a canonical command/runbook, or blocked by a
    specific missing datum/credential/approval.
@@ -46,7 +47,8 @@ an execution loop: pick the next item, inspect, implement, validate, document,
 commit/push when coherent, and continue until done or specifically blocked.
 
 Hermes cannot truly run forever inside a single chat turn. Continuous work must
-follow `equipo-de-agentes`: one queue per lane and the mother's review loop.
+follow `equipo-de-agentes`: one queue per lane, coordinated by the jefa (the
+mother only watches and does what the PC requires).
 Correction 2026-10-09: Codex must not create a competing heartbeat/orchestrator.
 If the runtime cannot continue, record the blocker and next task; do not claim a live loop.
 

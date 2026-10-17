@@ -7,7 +7,8 @@
  *  - Respeta .gitignore (nunca sube secretos/node_modules).
  *  - No falla la sesión: cualquier error sale con código 0.
  *  - No actúa en HEAD desacoplado ni sin remoto.
- *  - Pushea la RAMA y no toca `main`, salvo con permiso (ver puedeMoverMain).
+ *  - Pushea la RAMA y NUNCA `main`: a `main` solo se llega por PR con CI verde y revisión de
+ *    Codex (AGENTS.md §4 «Quién mueve `main`»). Ni permiso, ni marca, ni identidad lo habilitan.
  *
  * Uso:
  *   node scripts/git-autosync.js                 # commit + push de la rama actual
@@ -17,39 +18,10 @@
  * correrse a mano. Node >= 18, CommonJS.
  */
 
-const { execSync, execFileSync } = require('child_process');
-const fs = require('fs');
+const { execFileSync } = require('child_process');
 const os = require('os');
-const path = require('path');
 
-// ¿Esta sesión puede mover `main`? (Sergio Urcullo, 2026-10-05: «sí, la madre sigue directo».)
-// Medido ese día: desde el 28-sep, 48 de los 78 avances de main entraron por el fast-forward de este
-// hook, sin revisión, y 23 vinieron de sesiones de la nube (Lucía y Marca personal; #82 entró así con
-// «Hoy soy odontóloga»). main llega al VPS como root en ~1 h (el sincronizador de /root/bin). Desde
-// hoy main avanza solo por PR revisado, salvo dos que revisan antes de publicar:
-//   - la sesión madre, en la PC de Sergio Urcullo: ONIA_AUTOSYNC_MAIN=1;
-//   - el integrador (loop onia-cola): ONIA_LOOP_ID=onia-cola, la identidad que ya le exporta su corredor.
-// Exactamente esos valores: «true», «0» u otro loop no habilitan nada. Frena el ACCIDENTE (el
-// fast-forward automático al soltar el turno), no a una sesión que pushee a main a propósito.
-// Pruebas: scripts/loops/pedido-rama.test.mjs.
-//
-// El de la madre vale SOLO en el checkout que ella marcó (revisiones del #138 y del #173, 9-oct). Sus procesos
-// hijos heredan la variable y sus subagentes trabajan en otros worktrees; y la madre misma corre en un
-// worktree (`claude -w`), así que «el clon principal» no la distingue. La marca es un archivo en el git-dir
-// de SU checkout: no se versiona, no se hereda y ningún otro worktree la comparte. Se pone una vez por
-// checkout: touch "$(git rev-parse --absolute-git-dir)/onia-autosync-main".
-const MARCA_MAIN = 'onia-autosync-main';
-function puedeMoverMain(env = process.env) {
-  if (env.ONIA_LOOP_ID === 'onia-cola') return true;
-  if (env.ONIA_AUTOSYNC_MAIN !== '1') return false;
-  const gd = tryGit(['rev-parse', '--absolute-git-dir']);
-  if (gd.ok && gd.out && fs.existsSync(path.join(gd.out, MARCA_MAIN))) return true;
-  console.log(`[autosync] permiso de main ignorado: este checkout no tiene la marca ${MARCA_MAIN} en su git-dir ` +
-    '(la madre la pone una vez en el suyo: touch "$(git rev-parse --absolute-git-dir)/onia-autosync-main")');
-  return false;
-}
-
-// Una sesión parada EN main y sin permiso no pushea main: sus commits van a esta rama, para un PR.
+// Una sesión parada EN main no pushea main: sus commits van a esta rama, para un PR.
 // Una por sesión (su id; si no hay, el nombre de la máquina), así las vueltas siguientes la siguen
 // sin forzar nada. Empieza con `claude/` para que la vean el integrador y ramas_varadas.
 function ramaDeRescate(env = process.env) {
@@ -74,40 +46,7 @@ function tryGit(args) {
   }
 }
 
-function repoRoot() {
-  const r = tryGit(['rev-parse', '--show-toplevel']);
-  return r.ok && r.out ? r.out : process.cwd();
-}
-
-// Verifica que la app Next compile (tsc --noEmit) antes de dejar avanzar main.
-// Regla: main SIEMPRE compila. Si tsc no puede correr (sin deps) también devuelve
-// no-ok, y el llamador trata "no verificable" como "no avanzar main" (seguro).
-function appCompiles() {
-  const appDir = path.join(repoRoot(), 'web-factory', 'apps', 'site');
-  try {
-    execSync('npx tsc --noEmit', { cwd: appDir, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
-    return { ok: true, out: '' };
-  } catch (e) {
-    return { ok: false, out: (e.stdout || '') + (e.stderr || e.message || '') };
-  }
-}
-
 const MAIN_REMOTA = 'refs/remotes/origin/main';
-
-// ¿Puede `desde` llegar a main sin romper la app? Guard (regla: NUNCA dejar imports colgando / main
-// SIEMPRE compila): si el avance toca la app Next, tsc --noEmit tiene que pasar. Un árbol a medio
-// mergear (imports a archivos que no llegaron) rompía Vercel y el auto-deploy del VPS. tsc sólo corre
-// cuando el avance trae cambios de app, así los sync de docs/contenido siguen siendo instantáneos.
-function compilaParaMain(desde) {
-  const appDiff = tryGit(['diff', '--name-only', `${MAIN_REMOTA}..${desde}`, '--', 'web-factory/apps/site']);
-  if (!(appDiff.ok && appDiff.out.trim() !== '')) return true;
-  const check = appCompiles();
-  if (!check.ok) {
-    const firstError = check.out.split('\n').map((l) => l.trim()).filter(Boolean)[0] || '';
-    console.log('[autosync] main BLOQUEADO: apps/site no compila (tsc). ' + firstError.slice(0, 200));
-  }
-  return check.ok;
-}
 
 function nombreConSha() {
   const sha = tryGit(['rev-parse', '--short=8', 'HEAD']);
@@ -139,30 +78,28 @@ function llevarA(destino) {
   return { ok: true, destino, movida };
 }
 
-// Saca de main los commits de una sesión SIN permiso, sin perder ninguno: van a su rama de rescate, la
+// Saca de main los commits de una sesión parada en main, sin perder ninguno: van a su rama de rescate, la
 // sesión queda parada ahí y el main local vuelve a origin/main. Revisión del 5-oct: si quedaban en el
-// main local, la primera corrida CON permiso en ese clon los publicaba sin PR. Solo para sesiones sin
-// permiso: el integrador aborta si no está parado en main (onia-loop.sh), nunca se lo mueve.
+// main local, una corrida posterior en ese clon los publicaba sin PR.
 function rescatar() {
   const nuevos = tryGit(['rev-list', '--count', `${MAIN_REMOTA}..HEAD`]);
   if (nuevos.ok && nuevos.out === '0') {
-    console.log('[autosync] en main, nada nuevo; main no se toca');
+    console.log('[autosync] main solo por PR: en main, nada nuevo; main no se toca');
     return;
   }
   const r = llevarA(ramaDeRescate());
   if (!r.ok) {
-    console.log(`[autosync] push a ${r.destino} falló (main NO se tocó; los commits siguen en este clon): ` + r.out.slice(0, 300));
+    console.log(`[autosync] main solo por PR: push a ${r.destino} falló (main NO se tocó; los commits siguen en este clon): ` + r.out.slice(0, 300));
     return;
   }
   if (r.movida && tryGit(['rev-parse', '-q', '--verify', MAIN_REMOTA]).ok) tryGit(['branch', '-f', 'main', MAIN_REMOTA]);
-  // Sin checkout (la rama de rescate abierta en otro worktree) los commits siguen en el main local, y una corrida
-  // CON permiso en este clon los publicaría (revisión de seguridad de #138, 8-oct): se avisa fuerte.
+  // Sin checkout (la rama de rescate abierta en otro worktree) los commits siguen en el main local: se avisa fuerte.
   if (!r.movida) {
     console.log(`[autosync] ⚠ ATENCIÓN: tus commits están en origin/${r.destino} pero SIGUEN en el main local de este clon. ` +
       `No pushees main: pasate a la rama con «git checkout -B ${r.destino} origin/${r.destino}» y abrí un PR.`);
     return;
   }
-  console.log(`[autosync] main solo avanza por PR revisado: tus commits quedaron en origin/${r.destino}` +
+  console.log(`[autosync] main solo por PR: tus commits quedaron en origin/${r.destino}` +
     ' y la sesión sigue en esa rama (abrí un PR desde ahí)');
 }
 
@@ -211,12 +148,8 @@ function main() {
     else console.log('[autosync] commit:', msg);
   }
 
-  const permiso = puedeMoverMain();
-
-  // 4a. Parada EN main y sin permiso: main no se pushea; lo nuevo va a la rama de rescate. Con permiso
-  // (madre, integrador) se pushea main como siempre, sin tsc: es como era antes del 5-oct, y el
-  // integrador tiene sus propios gates (hueco conocido, anotado en la skill onia-hermes-jarvis).
-  if (rama === 'main' && !permiso) return rescatar();
+  // 4a. Parada EN main: main no se pushea, nunca; lo nuevo va a la rama de rescate, para un PR.
+  if (rama === 'main') return rescatar();
 
   // 4b. ¿Hay commits locales sin pushear? Push, con refs completos.
   const ahead = tryGit(['rev-list', '--count', `refs/remotes/origin/${rama}..${local}`]);
@@ -233,32 +166,6 @@ function main() {
     }
   } else {
     console.log('[autosync] rama al día, nada que pushear');
-  }
-
-  // 5. Mantener main al día, SOLO con permiso (puedeMoverMain): si la rama actual no es main y
-  // origin/main es ancestro (avance lineal, sin conflictos), fast-forward de main. Si no es FF, se
-  // omite (merge manual). Sin permiso, main entra por PR revisado.
-  //
-  // Una rama de PEDIDO nunca, ni con permiso (2026-10-02). Los pedidos que Sergio Urcullo le hace a
-  // Claude desde Hermes corren en una rutina de la nube que carga ESTE hook; su trabajo va en
-  // `pedido/<id>` como PR en borrador, y lo aprueba él (hermes-content/docs/TELEGRAM_COMMAND_CENTER.md).
-  // La rutina corre sin permiso igual: esto es una segunda llave, no la única.
-  const ramaDePedido = /^(pedido|respuesta)\//.test(rama);
-  if (ramaDePedido) console.log('[autosync] rama de pedido: se pushea, main NO se toca');
-  else if (rama !== 'main' && !permiso) {
-    console.log('[autosync] main no se toca: entra por PR revisado (solo la madre y el integrador lo mueven)');
-  }
-  if (rama !== 'main' && !ramaDePedido && permiso) {
-    tryGit(['fetch', 'origin', 'main']);
-    const ff = tryGit(['merge-base', '--is-ancestor', MAIN_REMOTA, local]);
-    if (!ff.ok) {
-      console.log('[autosync] main divergió de la rama; no es fast-forward, merge manual pendiente');
-    } else if (!compilaParaMain(local)) {
-      console.log('[autosync] Rama pusheada, main SIN avanzar.');
-    } else {
-      const toMain = tryGit(['push', 'origin', `${local}:refs/heads/main`]);
-      console.log(toMain.ok ? '[autosync] main al día (fast-forward)' : '[autosync] FF a main omitido: ' + toMain.out.slice(0, 200));
-    }
   }
 }
 
