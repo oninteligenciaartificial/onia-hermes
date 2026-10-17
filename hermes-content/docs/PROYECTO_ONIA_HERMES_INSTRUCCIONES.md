@@ -52,7 +52,7 @@ Una tarea que no trae los 7 campos no se manda.
 - Codex revisa CADA PR. Los arreglos de su revisión los hace el hilo autor.
 
 ## Cero contradicciones
-- Cada tema tiene UNA fuente: precios en `onia-platform/lib/subscription-plans.ts` y `lib/pricing.ts`; qué se vende en `hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md`; a quién en `hermes-content/docs/ONIA_CLIENTE_IDEAL.md`; el taller del 31-oct en `/mnt/project-files/marca/TALLER_31_OCT.md` (si otro documento dice otra fecha, precio o cupo, por ejemplo la oferta vieja de Bs 150/350 del 24-oct, gana ese archivo).
+- Cada tema tiene UNA fuente: precios en el repo onia-platform (`/home/user/onia-platform` o `/home/claude/onia-platform`): `lib/subscription-plans.ts` y `lib/pricing.ts`, nunca la copia de `web-factory/apps/onia-platform`; qué se vende en `hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md`; a quién en `hermes-content/docs/ONIA_CLIENTE_IDEAL.md`; el taller del 31-oct en `/mnt/project-files/marca/TALLER_31_OCT.md` (si otro documento dice otra fecha, precio o cupo, por ejemplo la oferta vieja de Bs 150/350 del 24-oct, gana ese archivo).
 - Antes de mostrarle algo a Sergio Urcullo, un subagente sonnet lo compara contra esas fuentes y contra los demás documentos de la semana. Si dos documentos dicen cosas distintas, se corrige el que no es la fuente; no se elige el más lindo.
 - Un tema = un archivo sin fecha: si cambia, se edita ese archivo, no se crea otro.
 
