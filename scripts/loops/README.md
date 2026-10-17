@@ -162,7 +162,7 @@ install -d /root/bin/loops
 install -m 644 scripts/loops/prompts/canario-visual.md /root/bin/loops/canario-visual.md
 install -m 644 scripts/loops/prompts/chatbot-cola.md   /root/bin/loops/chatbot-cola.md
 install -m 644 scripts/loops/prompts/marca-personal.md /root/bin/loops/marca-personal.md
-install -m 644 scripts/loops/prompts/onia-cola.md      /root/bin/loops/onia-cola.md
+# onia-cola: RETIRADO el 17-oct (main solo por PR); su prompt ya no se instala
 install -m 644 scripts/loops/prompts/docs-auditoria.md /root/bin/loops/docs-auditoria.md
 install -m 644 scripts/loops/prompts/web-venta.md      /root/bin/loops/web-venta.md
 install -m 644 scripts/loops/prompts/investigacion.md  /root/bin/loops/investigacion.md

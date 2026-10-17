@@ -381,3 +381,9 @@ principal, con quien puede escribir `.claude/`):** `git apply --ignore-whitespac
 ## 7.ª ronda (17-oct): QA también exige la revisión de Codex
 
 Codex (P1, comment 4301367209) marcó que AGENTS.md dejaba a la rutina QA unir con solo CI. Ahora QA exige la revisión de Codex del último commit sin P0/P1 abiertos, con el mismo respaldo Sonnet que la jefa. El prompt de la rutina ya lo pedía; la regla escrita quedó igual.
+
+## 8.ª ronda (17-oct): integrador retirado, QA en la skill y deck
+
+- `onia-loop.sh onia-cola` sale sin hacer nada; el README ya no instala su prompt y el prompt queda marcado RETIRADO (P1 4301418656).
+- `equipo-de-agentes`: la fila de QA exige la revisión de Codex del último commit (P1 4301418658).
+- `scripts/decks/yt-octubre-2026.mjs` vuelve a filmar CLAUDE.md, como su título y su narración (P2 4301418663).

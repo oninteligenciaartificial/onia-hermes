@@ -1,3 +1,5 @@
+> **RETIRADO el 17-oct-2026 (PR #226):** no se instala ni se corre; `onia-loop.sh onia-cola` sale sin hacer nada. A `main` solo se llega por PR con CI verde y revisión de Codex (AGENTS.md §4). Se conserva como historia.
+
 Loop del carril PRODUCTO/PLATAFORMA de ONIA — **el integrador**. Arrancás sin memoria: todo está
 
 ## OBJETIVO (medible)

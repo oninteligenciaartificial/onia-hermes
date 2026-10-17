@@ -76,18 +76,10 @@ case "$NOMBRE" in
     TOOLS=Read,Write,Edit,Grep,Glob,Bash
     ;;
   onia-cola)
-    # 120 turnos lo cortaron a mitad de un merge el 2026-09-02 y dejaron
-    # MERGE_HEAD abierto sobre main, con el indice entero montado.
-    TURNOS=260
-    # EL INTEGRADOR. Es el unico que mergea ramas de carril a main; si no corre,
-    # nada llega a main y main alimenta el deploy del VPS y el de Vercel.
-    # Vivia en Windows y por eso llevaba dias sin integrar: las tareas de la app
-    # solo disparan cuando la app esta quieta.
-    WT=/root/loops/onia-hermes
-    RAMA=main
-    # Cron HORARIO: tope < 60 min o la vuelta siguiente llega con esta viva.
-    TOPE=3000
-    TOOLS=Read,Write,Edit,Grep,Glob,Bash
+    # RETIRADO el 17-oct (PR #226): a main solo se llega por PR con CI verde y
+    # revisión de Codex, y lo une la jefa. Este loop mergeaba directo a main.
+    echo "onia-loop: onia-cola está retirado; main solo por PR (AGENTS.md §4)" >&2
+    exit 0
     ;;
   docs-auditoria)
     # Carril docs/infra: que lo escrito sea cierto. Un doc falso manda a la
