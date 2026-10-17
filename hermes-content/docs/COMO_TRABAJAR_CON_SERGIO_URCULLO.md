@@ -162,3 +162,89 @@ Lo que la memoria de la sesión madre sabe y el repo no dice. Complementa CLAUDE
 - **Git en worktree:** todo comando lleva `git -C <ruta-absoluta>`, y antes de mover refs (`reset`, `checkout`, `merge`, `push`) se verifica `git -C <ruta> branch --show-current`. A un subagente se le dice la ruta exacta del worktree y que primero confirme la rama. Mezclar la raíz y el worktree ya perdió trabajo. (1-sep y 8-jul)
 - **Cuidar tokens:** no releer lo ya leído, leer fragmentos (grep, offset), rutas absolutas siempre, nunca `| tail` que enmascare el exit de un gate, y barridos anchos con Explore que devuelve conclusión, no volcados. (29-ago)
 - **Si trabaja en una rama larga que otros leen como canónica** (ej. `onia-core`), sincronizar con main y empujar antes de decir "ya está". El checkout raíz también cuenta. (7-jul)
+
+## Equipo de skills por frente (17-oct-2026)
+Cómo se usa: en el PASO 0 se cargan las «Siempre»; las de «Por tarea» se cargan cuando toca esa tarea; al lanzar un subagente, el prompt le dice qué skill cargar con la herramienta Skill (ej: «Cargá la skill onia-db con la herramienta Skill, después hacé X»); modelos: haiku lee y verifica, sonnet escribe y edita, opus decide lo riesgoso.
+
+### Plataforma 1.0
+- **Siempre:** onia-router, onia-verificacion, onia-db. (Las skills onia-backend, onia-frontend, onia-db, onia-seguridad, onia-deploy y onia-verificacion no se autolistan en la nube: se cargan por nombre.)
+- **Por tarea:**
+
+| Tarea típica | Skill(s) | Modelo |
+|---|---|---|
+| Cobro con QR del BCP (checkout, webhook, titular del QR) | onia-backend + onia-seguridad + security-review | opus decide, sonnet escribe |
+| Pantalla o componente (vocabulario por rubro, planes, precios en UI) | onia-frontend + impeccable | sonnet |
+| Encender o ajustar un rubro (dental, estética, servicios, comercio, importadora) | onia-core + onia-frontend | sonnet; opus si cambia contract.json |
+| Migración, RLS, respaldo, datos de producción | onia-db + database-migrations | opus (toca datos reales) |
+| Publicar en el VPS | onia-deploy + onia-infra | opus decide, haiku verifica |
+| Bot de WhatsApp y flujos n8n | onia-chatbot + n8n-workflow-patterns + n8n-mcp-tools-expert | sonnet |
+| Factura, IVA, SIAT, textos fiscales | onia-contabilidad-bolivia (+ deep-research para la norma vigente) | opus |
+| Competencia de producto (Dentalink, AgendaPro, etc.) | competitor-profiling + deep-research | haiku lee, sonnet resume |
+| Precio de planes o add-ons | pricing (analiza; el número sale de lib/subscription-plans.ts y lib/pricing.ts) | opus |
+
+Competencia: leer antes hermes-content/research/competencia/PRODUCTO_COMPETENCIA_RESUMEN.md. YouTube y Zendesk privado no abren desde la nube.
+- **Antes de mostrarle algo a Sergio Urcullo:** onia-verificacion (la pantalla se abre y se MIRA renderizada; un 200 y un grep no cuentan) + verification-loop.
+- **Falta en la cuenta:** systematic-debugging y test-driven-development (el onia-router las nombra; están zipeadas en Descargas, 2-orquestacion-agentes). n8n-node-configuration y n8n-validation-expert (zipeadas en 6-resto-util) para armar o corregir flujos del bot.
+
+### Marca personal y taller
+- **Siempre:** diseno-contenido-onia, copywriting, edicion-referentes.
+- **Prioridad del frente:** lo que lleva a la caja es la página y el prepago del taller del 31-oct. Los reels sirven para llenar ese taller, no al revés.
+- **Por tarea:**
+
+| Tarea típica | Skill(s) | Modelo |
+|---|---|---|
+| Página del taller del 31-oct | onia-web-factory + copywriting + impeccable | sonnet escribe, opus decide la oferta |
+| Prepago del taller (precio y cobro) | pricing; si pasa por el QR del BCP del producto: onia-backend + onia-seguridad | opus |
+| Presentación o PDF del taller | pptx, pdf | sonnet |
+| Guion, reel, noticia del día | copywriting + content-strategy | sonnet |
+| Sergio manda un link sin instrucción (es para aprender, no producir) | aprender-de-todo + ver-videos | haiku mira, sonnet hace la ficha |
+| Sacar el prompt de una imagen o video de referencia | sacar-prompt + ver-videos | haiku mira, sonnet reconstruye |
+| Carrusel, portada, miniatura, lámina de YouTube | diseno-contenido-onia (+ higgsfield-generate para imágenes) | sonnet; haiku revisa |
+| Editar un video nuevo de Sergio (talking head vertical) | edicion-referentes + editor-videos | sonnet |
+| Subtítulos y gráficos sobre un video ya cortado | embedded-captions + captions-overlay + talking-head-recut | sonnet |
+| Animación o motion con HyperFrames | hyperframes + hyperframes-core + motion-doctrine | sonnet |
+
+- **Antes de mostrarle algo a Sergio Urcullo:** ver-videos (mirar el video o las hojas de contacto ya renderizadas) + el control de calidad de diseno-contenido-onia. Se le muestra captura o enlace ANTES de subir; nada sale sin ese paso.
+- **Falta en la cuenta:** media-use (zipeada en Descargas, 6-resto-util/media-use.zip): editor-videos la usa para los efectos de sonido.
+
+### Ventas y pauta
+- **Siempre:** onia-ventas-pauta, ad-creative, copywriting.
+- **Por tarea:**
+
+| Tarea típica | Skill(s) | Modelo |
+|---|---|---|
+| Prospectar negocios con señal (Biblioteca de Anuncios de Meta) | onia-ventas-pauta + deep-research (subagente onia-crm-prospeccion si existe) | haiku busca, sonnet filtra |
+| Mensaje 1:1, respuesta a un lead, guion de demo, objeciones | onia-ventas-pauta + copywriting (a clientes se les habla de usted) | sonnet |
+| Anuncio (piezas D1/D4) y campaña en ONIA Ads | ad-creative + anunciante-supremo + onia-ventas-pauta + diseno-contenido-onia | sonnet; opus decide el gasto, Sergio lo aprueba |
+| Propuesta o cotización | onia-propuestas (los precios se leen de pricing.ts, nunca se inventan) | sonnet |
+| Consultoría (diagnóstico y oferta) | onia-propuestas + pricing + deep-research | opus |
+| Qué pauta la competencia y cómo capta clientes | competitor-profiling + deep-research | haiku lee, sonnet resume |
+
+Meta no abre desde la nube: los creativos de la Biblioteca los captura la madre desde la PC.
+- **Antes de mostrarle algo a Sergio Urcullo:** onia-ventas-pauta (cifras y promesas contra el catálogo y pricing.ts) + diseno-contenido-onia (mirar la pieza completa; si solo está «bonita» y no vende, se rehace).
+- **Falta en la cuenta:** ads (estrategia de campaña y segmentación; el ad-creative la nombra; zipeada en 6-resto-util/ads.zip). lead-intelligence (zipeada en 6-resto-util) si se sube el volumen de prospección.
+
+### Lucía
+- **Siempre:** higgsfield-generate, ver-videos.
+- **Por tarea:**
+
+| Tarea típica | Skill(s) | Modelo |
+|---|---|---|
+| Imágenes o stills (lote chico, con brief y tope de costo) | higgsfield-generate + higgsfield-soul-id | sonnet pide, haiku revisa |
+| Video image-to-video | higgsfield-generate: cotizar con generate cost y pedir OK de Sergio por cada video | opus decide, sonnet ejecuta |
+| Sacar el prompt de una referencia | sacar-prompt + ver-videos | haiku mira, sonnet reconstruye |
+| Editar y subtitular un video de Lucía | editor-videos + embedded-captions | sonnet |
+| Carrusel, portada o lámina con Lucía | diseno-contenido-onia | sonnet; haiku revisa |
+| Voz | no hay skill en la cuenta; leer hermes-content/references/modelos/lucia/LUCIA.md | sonnet |
+
+Antes de generar: leer LUCIA.md, BANCO-OFICIAL.md y LUCIA-HIGGSFIELD-IDENTITY.json (en hermes-content/references/modelos/lucia/).
+- **Antes de mostrarle algo a Sergio Urcullo:** ver-videos (control de identidad: misma cara, misma voz, sin deriva) y captura o video real antes de subir.
+- **Falta en la cuenta:** higgsfield-soul-id (NO está zipeada en Descargas; sale de .claude/skills/higgsfield-soul-id del repo onia-hermes y hay que subirla).
+
+### Todos los frentes
+- **onia-continuidad:** al arrancar el hilo y cuando se hace largo. Dice qué ya sabemos antes de actuar y cuándo cortar: relevo con handoff en hermes-content/docs/handoff/<carril>.md.
+- **equipo-de-agentes:** al repartir trabajo entre subagentes o al revisar si algo se cumplió. Cada hilo trabaja su propia cola y un verificador haiku controla; a Sergio solo le llega lo publicado.
+- **verification-loop:** antes de decir «hecho»: construye, tipos, pruebas y revisión. No reemplaza mirar la pantalla.
+- **deep-research:** cuando hace falta un dato con fuente citada (norma boliviana vigente, mercado, precios de competidores). Haiku busca, sonnet sintetiza.
+- **competitor-profiling:** solo para perfilar a UN competidor desde su URL. Antes revisar lo ya medido (PRODUCTO_COMPETENCIA_RESUMEN.md y ONIA_ADQUISICION_Y_PAUTA.md) para no repetir.
+- **onia-router:** nombra un «stack de proceso común» (using-superpowers, brainstorming, code-review, etc.) que NO está en la cuenta. Si no carga, se sigue sin ella; no se inventa.
