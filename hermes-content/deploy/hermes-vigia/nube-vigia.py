@@ -102,9 +102,15 @@ def git_data(repo):
                      ("remote.origin.promisor", "true"), ("remote.origin.partialclonefilter", "tree:0")):
             sh(["git", "-C", d, "config", k, v])
     f = ["git", "-C", d, "fetch", "-q", "--no-tags", "--filter=tree:0"]
-    sh(f + ["--prune", "--depth=1", "origin", "+refs/heads/claude/*:refs/remotes/origin/claude/*"], env)
+    # A repo can have no claude/* branch (all merged and deleted): that refspec then fails, so check first.
+    if sh(["git", "-C", d, "ls-remote", "--heads", "origin", "refs/heads/claude/*"], env).strip():
+        sh(f + ["--prune", "--depth=1", "origin", "+refs/heads/claude/*:refs/remotes/origin/claude/*"], env)
+    else:
+        for ref in sh(["git", "-C", d, "for-each-ref", "--format=%(refname)", "refs/remotes/origin/claude/"]).split():
+            sh(["git", "-C", d, "update-ref", "-d", ref])
     sh(f + ["--depth=300", "origin", "+HEAD:refs/vigia/default"], env)
-    tips = parse(sh(["git", "-C", d, "log", "--no-walk", "--glob=refs/remotes/origin/claude/*", "--format=%ct%x1f%B%x1e"]))
+    has_tips = sh(["git", "-C", d, "for-each-ref", "--count=1", "refs/remotes/origin/claude/"]).strip()
+    tips = parse(sh(["git", "-C", d, "log", "--no-walk", "--glob=refs/remotes/origin/claude/*", "--format=%ct%x1f%B%x1e"])) if has_tips else []
     main = parse(sh(["git", "-C", d, "log", "refs/vigia/default", f"--max-age={int(NOW - 86400)}", "--format=%ct%x1f%B%x1e"]))
     return tips, main
 
