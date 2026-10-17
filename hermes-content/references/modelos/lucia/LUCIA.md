@@ -128,6 +128,7 @@
 >
 > **Element canónico: `lucia-skin-v1` · `58bbd635-9b90-4bd2-b08a-1cd4915bd563`**
 > Se escribe `@lucia` en la web y autocompleta. Motor **Nano Banana Pro**, 2K (camino de navegador; el método diario por CLI es `seedream_v4_5` + ancla espejo, ver J `metodo_diario`, 2026-10-17).
+> ⚠️ En las recetas de este documento `nano_banana_2` era una etiqueta, no un ID válido: se reemplazó por `nano_banana_pro` (2026-10-17; ver `TECNICA-HIGGSFIELD.md:1067-1089`).
 > Construido el 28-ago con **7 ángulos** (no con una foto).
 >
 > **⚠️ Corregido el 2026-08-31.** Este mismo archivo mandaba en SEIS líneas al Element
@@ -618,7 +619,7 @@ Los Elements de outfit y lugar quedan solo para match EXACTO (producto de un cli
 que debe verse igual).
 
 ```
-model: nano_banana_2  ·  resolution: 2k  ·  aspect_ratio: 9:16 | 3:4 | 1:1  ·  use_unlim: false
+model: nano_banana_pro  ·  resolution: 2k  ·  aspect_ratio: 9:16 | 3:4 | 1:1  ·  use_unlim: false
 costo: 2 cr a 2k · 1,5 cr a 1k
 ```
 
@@ -660,7 +661,7 @@ generada, que es **la luz demasiado perfecta y la óptica demasiado limpia.**
 > El bloque 10 queda solo para piezas que PIDEN grade (campaña, carrusel con overlay).
 | 11 | Cierre | `Shot on iPhone, natural light, slight film grain, no beauty filter, no smoothing. Not a 3D render, not AI-looking, not plastic, not doll-like, not airbrushed. No brand logos, no text, no watermark.` |
 
-⚠️ El bloque 11 lleva **negaciones**: funcionan en la vía `nano_banana_2` + Element. Con
+⚠️ El bloque 11 lleva **negaciones**: funcionan en la vía `nano_banana_pro` + Element. Con
 `text2image_soul_v2` producen lo que nombran — ahí se corta después de *"no smoothing"*.
 
 **Cámara — 4 colas:**
@@ -835,7 +836,7 @@ Evidencia: `prueba-motor-20260813/` (la prueba que fijó el método) ·
 
 ## El pipeline (2 pasos, ~6-8 cr por escena)
 
-**PASO 1 — Imagen de escena (nano_banana_2, 2.00 cr, NO se puede abaratar):**
+**PASO 1 — Imagen de escena (nano_banana_pro, 2.00 cr, NO se puede abaratar):**
 - Prompt = `<<<58bbd635-9b90-4bd2-b08a-1cd4915bd563>>>` + molde §6, con estas líneas fijas:
   - `A casual candid snapshot of this exact woman [ACCIÓN] in [LUGAR]`
   - vestuario + `small gold hoop earrings`
@@ -898,7 +899,7 @@ el prompt.)
 
 ## Receta UGC (2 pasos)
 
-1. **Selfie image (nano_banana_2 + ancla, 2 cr):** "A casual handheld selfie video still of
+1. **Selfie image (nano_banana_pro + ancla, 2 cr):** "A casual handheld selfie video still of
    this exact woman holding the phone with one extended arm, talking directly to the camera
    mid-sentence, mouth slightly open as if speaking" + escena casual (cama/cocina/calle) +
    las líneas fijas de color natural y cara idéntica del §9.
@@ -1131,7 +1132,7 @@ b-roll actual y no tiene turnaround propio.
 
 ## Cómo se combinan (regla que no cambia)
 
-- **Primer plano / cara reconocible** → Element ancla `58bbd635-9b90-4bd2-b08a-1cd4915bd563` + `nano_banana_2`, fondo simple.
+- **Primer plano / cara reconocible** → Element ancla `58bbd635-9b90-4bd2-b08a-1cd4915bd563` + `nano_banana_pro`, fondo simple.
 - **Variedad de escena** → ancla + descripción de escena EN TEXTO. Nunca combinar cara +
   outfit-Element + lugar-Element en la misma pieza de feed: se promedian y la cara deriva.
 - **Soul nuevo** → solo con `text2image_soul_v2`, y se valida contra el ancla antes de darlo por bueno.
@@ -1141,7 +1142,7 @@ b-roll actual y no tiene turnaround propio.
 Misma escena, mismo prompt, dos vías. Resultado mirado, no supuesto
 (`prueba-soul-v3/A-soul-v3.png` vs `B-ancla-actual.png`):
 
-| | Soul v3 (`text2image_soul_v2`) | **Ancla `58bbd635-9b90-4bd2-b08a-1cd4915bd563` (`nano_banana_2`)** |
+| | Soul v3 (`text2image_soul_v2`) | **Ancla `58bbd635-9b90-4bd2-b08a-1cd4915bd563` (`nano_banana_pro`)** |
 |---|---|---|
 | Mirada a cámara (pedida en el prompt) | ❌ mira de costado | ✅ obedece |
 | Pecas (rasgo sagrado) | tenues | ✅ marcadas |
