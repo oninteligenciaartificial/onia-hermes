@@ -132,14 +132,14 @@ Lo que la memoria de la sesión madre sabe y el repo no dice. Complementa CLAUDE
 
 - **Leer la consigna LITERAL antes de contestar.** Un formulario que pide 3 cosas lleva 3 partes visibles. Un filtro que devuelve vacío NO prueba ausencia: primero el listado completo. Antes de declarar algo "caído", comparar con un control ajeno. (15-ago)
 - **Antes de decir "no existe":** consultar primero el doc o catálogo propio; verificar con el listado COMPLETO sin filtro, no con `search`. Un nombre propio se busca solo y entre comillas, con variantes (rn y m, s z c, b v, separado o junto) y el dominio directo. Decir qué variantes se probaron. (7-jul y 8-ago)
-- **Antes de diseñar o construir en un carril, buscar su doc:** `ls hermes-content/docs | grep -i <tema>` (y en `docs/research/`). Si existe, se cita y se corrige, no se reescribe al lado. Encendido no es hecho: comprobar que un cron del proveedor no lo revierta. (16-ago)
+- **Antes de diseñar o construir en un carril, buscar su doc:** `grep -ril <tema> hermes-content/docs hermes-content/research` (recursivo: incluye `hermes-content/docs/research/` y `hermes-content/research/`). Si existe, se cita y se corrige, no se reescribe al lado. Encendido no es hecho: comprobar que un cron del proveedor no lo revierta. (16-ago)
 - **Un comando que se escribe en un prompt o regla se corre ENTERO tal como queda, y se mide el ESTADO resultante** (no el exit code). La nota dice "medido con X, dio Y", nunca "verificado". Vale también para rutas, nombres de modelo y flags. (3-sep)
 - **Una ejecución verde no prueba que el efecto ocurrió.** Un nodo con `neverError` deja un rechazo como "success". Confirmar el efecto (el DM llegó, el cobro entró). (27-ago)
 - **Un CTA se verifica APRETÁNDOLO**, no leyendo su `href`. (19-sep: un enlace apuntaba a un 404)
 - **Las vistas previas se sacan de la página real:** Playwright abre producción y se cambia SOLO el elemento en el DOM local. Nunca un mock dibujado a mano con otra letra o colores aproximados. (10-oct)
 - **Síntomas que se buscan a propósito en una pantalla:** nombres de iconos como texto, contraste menor a 4,5:1, contenido en `opacity:0` que nunca aparece, saltos de layout. Capturar a mitad de la animación. Lo que depende de la red del visitante (fuentes, imágenes, scripts) puede fallar: el diseño debe aguantarlo. (14-ago)
 - **Reportar un merge separando lo que escribí de lo que heredé:** `git log --format="%h %ad %an %s" -- <archivo>` antes de atribuir nada. (5-sep)
-- **Las ramas "sin mergear" mienten con squash:** comparar CONTENIDO (`git diff origin/master <rama> --stat`, que compara las dos puntas), no ancestros. Mergear una "sin mergear" reintrodujo un bug. (4-sep)
+- **Las ramas "sin mergear" mienten con squash:** comparar CONTENIDO (`git diff origin/<principal> <rama> --stat`, con `main` en onia-hermes y `master` en onia-platform; compara las dos puntas), no ancestros. Mergear una "sin mergear" reintrodujo un bug. (4-sep)
 - **"Pusheado" significa EN main, no en la rama del carril.** Un handoff pusheado solo a su rama no existe para la sesión siguiente: `git log origin/main -- <ruta>`. (21-sep)
 
 ## 8. Sesiones, git y nube
