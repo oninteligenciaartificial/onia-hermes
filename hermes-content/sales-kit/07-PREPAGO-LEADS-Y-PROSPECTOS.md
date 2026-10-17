@@ -199,9 +199,19 @@ Hoy la primera tanda mezcla estética porque es donde hay más pauta viva; el qu
 >
 > Cuando entran pacientes (o clientas) nuevas por los anuncios, la cita de mañana que no se confirmó suele descubrirse recién a la hora, con la silla vacía.
 >
-> Onia es un sistema de gestión para {clínicas dentales / centros de estética}. Cada mañana le deja anotado a quién escribirle (quién tiene cita mañana y no confirmó, quién canceló o faltó y no volvió a agendar, quién le debe) con el mensaje ya preparado. Con IA le propone el texto de cada recordatorio y usted lo aprueba una sola vez. Nada sale sin que usted lo apruebe.
+> ⟦solo si G-01, G-04, G-06, G-07, G-08 y G-11 están ✅; si no, usar la variante sin función⟧ Onia es un sistema de gestión para {clínicas dentales / centros de estética}. Cada mañana le deja anotado a quién escribirle (quién tiene cita mañana y no confirmó, quién canceló o faltó y no volvió a agendar, quién le debe) con el mensaje ya preparado. Con IA le propone el texto de cada recordatorio y usted lo aprueba una sola vez. Nada sale sin que usted lo apruebe.
 >
 > ¿Cuántos profesionales atienden hoy? Con eso le muestro cómo se ve en una demo de 20 minutos.
+
+**Variante sin función (la única permitida mientras haya filas ⬜)** para dental y estética:
+
+> Buen día, soy Sergio Urcullo, de Onia, aquí en Santa Cruz. Este mensaje es para el dueño o la dueña de {negocio}.
+>
+> Vi {lo observable, con fecha}.
+>
+> Cuando entran pacientes (o clientas) nuevas por los anuncios, la cita de mañana que no se confirmó suele descubrirse recién a la hora, con la silla vacía.
+>
+> ¿Le interesaría verlo en una demo de 20 minutos?
 
 **Importadora** (solo lo que consta):
 
@@ -211,9 +221,19 @@ Hoy la primera tanda mezcla estética porque es donde hay más pauta viva; el qu
 >
 > Con mercadería que se paga en dólares, un movimiento del tipo de cambio puede dejar un precio por debajo del costo sin que nadie lo note a tiempo.
 >
-> Onia es un sistema de gestión. Para importadoras calcula el costo real de cada producto importado (arancel, IVA de importación y gastos del embarque repartidos), lo pasa a su catálogo y le avisa qué productos quedan bajo costo con el tipo de cambio del día.
+> ⟦solo si E-07 está ✅; si no, usar la variante sin función⟧ Onia es un sistema de gestión. Para importadoras calcula el costo real de cada producto importado (arancel, IVA de importación y gastos del embarque repartidos), lo pasa a su catálogo y le avisa qué productos quedan bajo costo con el tipo de cambio del día.
 >
 > ¿Importan ustedes directo? Con eso le muestro cómo se ve en una demo de 20 minutos.
+
+**Variante sin función (la única permitida mientras haya filas ⬜)** para importadora:
+
+> Buen día, soy Sergio Urcullo, de Onia, aquí en Santa Cruz. Este mensaje es para el dueño o la dueña de {negocio}.
+>
+> Vi {lo observable, con fecha}.
+>
+> Con mercadería que se paga en dólares, un movimiento del tipo de cambio puede dejar un precio por debajo del costo sin que nadie lo note a tiempo.
+>
+> ¿Importan ustedes directo? Si le interesa, lo vemos en una demo de 20 minutos.
 
 - **No** se promete que la cotización sale del sistema ni la factura SIAT (catálogo §7).
 - Prepago en frío: **no**. El precio y el anual entran cuando la persona dice «sí, muéstreme»: es la respuesta a «Pregunta de precio» + «el anual cobra 10 meses».
