@@ -2,13 +2,13 @@
  "title": "Qué sale de una auditoría de IA para tu negocio",
  "theme": "blanco",
  "serie": "auditoría · 2/2",
- "caption": "No es un curso: es sentarte 2 horas con tu propio negocio y salir con algo hecho. La tabla de la lámina 3 es un ejemplo inventado para mostrar el formato de tu mapa.\n\nSábado 24 de octubre, 10:00 (La Paz), por Meet. Cupo 12. Link en mi perfil.",
+ "caption": "No es un curso: es sentarte 90 minutos con tu propio negocio y salir con algo hecho. La tabla de la lámina 3 es un ejemplo inventado para mostrar el formato de tu mapa.\n\nSábado 31 de octubre, 10:00 (La Paz), por Meet. Cupo 50. Link en mi perfil.",
  "slides": [
   {
    "layout": "ensayo",
    "theme": "verde",
    "headline": "No es un curso. Es *tu* negocio sobre la mesa.",
-   "body": "2 horas. Salís con algo hecho.",
+   "body": "90 minutos. Salís con algo hecho.",
    "next": "qué te llevás"
   },
   {
@@ -53,9 +53,9 @@
    "headline": "Cómo *funciona*",
    "body": "",
    "items": [
-    {"label": "Cuándo", "text": "Sábado 24 de octubre, 10:00 (La Paz)"},
-    {"label": "Dónde", "text": "2 horas por Google Meet"},
-    {"label": "Cupo", "text": "12 personas como máximo"}
+    {"label": "Cuándo", "text": "Sábado 31 de octubre, 10:00 (La Paz)"},
+    {"label": "Dónde", "text": "90 minutos por Google Meet"},
+    {"label": "Cupo", "text": "50 personas como máximo"}
    ],
    "next": "reservá"
   },

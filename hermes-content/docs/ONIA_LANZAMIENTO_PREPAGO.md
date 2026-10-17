@@ -112,7 +112,7 @@ Se anotan por WhatsApp escribiendo «CLASE». Quien se anota queda en la **lista
 - **E · Después del taller:** «Gracias por venir. Si querés que revisemos tu caso uno a uno, la auditoría de 45 minutos cuesta Bs 350; como ya pagaste Bs {monto}, te queda en Bs {350-monto}. Te dejo un informe de una página con tus 3 prioridades. Vale hasta el jueves 5 de noviembre.»
 - **Recordatorios del taller:** jueves 29 (cupos finales), viernes 30 (pre-trabajo + link) y sábado 31 a las 8:00 y a las 9:45 (link).
 
-## 6. Versión «Con revisión» (Bs 140, cupo 8): por qué existe
+## 6. Versión «Con revisión» (Bs 140, cupo 8): por qué existe (DESCARTADA el 17-oct: el análisis independiente recomienda la escalera sola; vende horas de Sergio Urcullo)
 - En el único caso documentado con cifras, la versión del doble de precio con una hora personal la eligió **62 %** de los compradores (Arturo García; España, 2017, otro producto). No se asegura nada parecido acá: **se prueba con cupo 8** y se mide.
 - Cuesta ~2 horas de Sergio Urcullo (8 × 15 min). Si eso no cierra con su semana, se saca y queda solo la entrada.
 - Es lo que une el prepago con la auditoría 1 a 1 y con una posible Instalación.
@@ -121,15 +121,15 @@ Se anotan por WhatsApp escribiendo «CLASE». Quien se anota queda en la **lista
 
 | Chequeo | Cuándo | Si pasa | Si no pasa |
 |---|---|---|---|
-| **1** | Mié 21-oct | **≥ 8 pagos**: se sigue | **< 5 pagos**: parar y revisar el mensaje o el alcance antes de seguir publicando; no bajar el precio por reflejo |
+| **1** | Mié 21-oct (aprobado por Sergio Urcullo el 17-oct) | **≥ 15 pagos**: sigue la meta de Bs 3.000. **8 a 14**: se sigue, la meta baja a ~Bs 1.500 | **5 a 7**: se revisa el mensaje y se da 3 días más. **< 5**: parar y revisar mensaje y alcance; no bajar el precio por reflejo |
 | **2** | Mar 27-oct (clase) | **≥ 25 pagos**: el taller se dicta con 50 como tope | **< 15**: se dicta igual si hay 6 o más (mínimo), con foco en las auditorías 1 a 1 |
 | Cancelación | Jue 29 20:00 | — | **Menos de 6 pagos: no se dicta**, devolución completa o cambio a la fecha siguiente (a elección de cada persona) |
 
 **Sin pauta paga:** gastar en Meta Ads exige el OK específico de Sergio Urcullo.
 
 ## 8. Qué cambia en lo ya hecho (y qué no)
-- Los **2 carruseles** (`carousels/briefs/marca-personal/sergio-workshop-*-20261016.json`) hablan de «sáb 24» y «cupo 12»: antes de publicar, la lámina 6 pasa a «Sáb 31 de octubre · 10:00» y «Cupo 50». No dicen el precio (va en la página). **Todavía no se re-renderizan:** se hace con el sí.
-- `docs/comunidad/COMUNIDAD_WHATSAPP_ESTRUCTURA.md`: el aviso de §5 pasa a decir sáb 31 y a nombrar los 3 escalones. El grupo temporal «Workshop» sigue siendo con ≥ 6 pagos y el OK de Sergio Urcullo.
+- Los **2 carruseles** (`carousels/briefs/marca-personal/sergio-workshop-*-20261016.json`) hablan de «sáb 24» y «cupo 12»: **ya re-renderizados el 17-oct** con «Sáb 31 de octubre · 10:00», «Cupo 50» y 90 minutos. No dicen el precio (va en la página). Falta el visto bueno de Sergio Urcullo antes de subir.
+- `docs/comunidad/COMUNIDAD_WHATSAPP_ESTRUCTURA.md`: **actualizado el 17-oct:** el aviso dice sáb 31, cupo 50 y los 3 escalones. El grupo temporal «Workshop» sigue siendo con ≥ 6 pagos y el OK de Sergio Urcullo.
 - La **plantilla del Mapa**, el evento de cal.com `/auditoria` (auditorías 1 a 1) y el texto de la página: siguen sin existir.
 
 ## 9. La alternativa (Bs 150/200, cupo 12, sáb 24)
@@ -149,3 +149,32 @@ Está en `docs/ONIA_WORKSHOPS_AUDITORIA_IA.md`. **Cuándo gana:** si Sergio Urcu
 - No nombrar a Onia Platform en el taller salvo a una clínica dental que pregunte, y solo con la cuenta demo lista.
 - No abrir el grupo real de WhatsApp ni cobrar nada sin el OK de §10.
 - No inflar un «precio de lista» ni un «valor del paquete»: se dice el precio real y los cupos reales.
+
+## 12. Texto de la página `/auditoria` (para su visto bueno, 17-oct)
+
+Precio aprobado por Sergio Urcullo el 17-oct: escalera Bs 50 / 60 / 70 por cupo, 50 cupos, taller sáb 31-oct. Sin devolución salvo que el taller no se dicte. El QR y la factura los define Leslie Mercado Moreno.
+
+> **Auditá tu negocio con IA**
+> Un taller en vivo de 90 minutos para salir con tu mapa de tareas y un primer paso hecho.
+>
+> **Sábado 31 de octubre · 10:00 (La Paz) · por Google Meet**
+>
+> **Qué te llevás**
+> 1. Tu mapa de tareas: qué repetís, cuánto te cuesta al mes y qué automatizar primero.
+> 2. Tu prioridad: una sola tarea para empezar.
+> 3. Tu primer paso, hecho en vivo con tu propio negocio.
+>
+> **Para quién no es:** si tu negocio no repite tareas, si buscás un certificado o si querés que otro lo haga por vos.
+>
+> **Precio por cupo (50 en total)**
+> - Primeros 15: Bs 50
+> - Siguientes 20: Bs 60
+> - Últimos 15: Bs 70
+> Cupos restantes de cada escalón: se actualizan a mano (número real, nunca un reloj).
+>
+> **Cómo reservar:** escribime por WhatsApp. Te mando el QR del BCP; cuando se acredita tu pago, recibís la confirmación con la fecha, la hora y el link.
+>
+> **Importante:** una vez pagado no hay devolución. Solo si el taller no se dicta (menos de 6 inscriptos al jueves 29), se devuelve el pago completo o se pasa a otra fecha, a tu elección.
+> **Cierre de inscripciones:** jueves 29 de octubre, 20:00.
+
+Falta: que exista la página (sergiourcullo.vercel.app/auditoria), el botón de WhatsApp y el QR. Hoy esto es solo el texto.
