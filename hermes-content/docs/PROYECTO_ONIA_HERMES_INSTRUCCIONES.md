@@ -29,7 +29,7 @@ Hay 4 frentes y cada uno tiene UN solo hilo, con nombre fijo:
 2. Leé `/mnt/project-files/reglas/COMO_TRABAJAR_CON_SERGIO_URCULLO.md` (copia de `hermes-content/docs/COMO_TRABAJAR_CON_SERGIO_URCULLO.md`): son las reglas que Sergio Urcullo ya dio. No se le vuelven a preguntar.
 3. Cargá con la herramienta Skill `onia-router` y la skill de tu carril. Están subidas a la cuenta: onia-ventas-pauta, diseno-contenido-onia, editor-videos, edicion-referentes, ver-videos, sacar-prompt, higgsfield-generate, anunciante-supremo, onia-backend, onia-db, onia-deploy, onia-frontend, onia-seguridad, onia-verificacion, onia-chatbot, onia-propuestas, onia-contabilidad-bolivia e hyperframes.
 4. Leé `AGENTS.md` (las reglas) y el handoff de tu frente (la ruta está en «Un frente = un hilo»).
-5. Si usás el VPS: `mkdir -p ~/.ssh && (umask 077 && printf '%s' "$ONIA_VPS_SSH_KEY_B64" | base64 -d > ~/.ssh/onia_vps) || rm -f ~/.ssh/onia_vps; ssh onia-vps 'echo VPS_OK'` (la llave nace con permisos 600 y se borra si el decode falla). Entra por el túnel de Cloudflare, porque el puerto 22 directo no sale. Nunca imprimas la llave. Si el control de permisos lo frena, pedí el sí de Sergio Urcullo en tu hilo.
+5. Si usás el VPS: `mkdir -p ~/.ssh && rm -f ~/.ssh/onia_vps && (umask 077 && printf '%s' "$ONIA_VPS_SSH_KEY_B64" | base64 -d > ~/.ssh/onia_vps) || rm -f ~/.ssh/onia_vps; ssh onia-vps 'echo VPS_OK'` (se borra la vieja, la nueva nace con permisos 600 y se borra si el decode falla). Entra por el túnel de Cloudflare, porque el puerto 22 directo no sale. Nunca imprimas la llave. Si el control de permisos lo frena, pedí el sí de Sergio Urcullo en tu hilo.
 
 ## Cómo la jefa le pide una tarea a un hilo (molde obligatorio)
 - OBJETIVO: una frase.
