@@ -387,3 +387,9 @@ Codex (P1, comment 4301367209) marcó que AGENTS.md dejaba a la rutina QA unir c
 - `onia-loop.sh onia-cola` sale sin hacer nada; el README ya no instala su prompt y el prompt queda marcado RETIRADO (P1 4301418656).
 - `equipo-de-agentes`: la fila de QA exige la revisión de Codex del último commit (P1 4301418658).
 - `scripts/decks/yt-octubre-2026.mjs` vuelve a filmar CLAUDE.md, como su título y su narración (P2 4301418663).
+
+## 9.ª ronda (17-oct)
+
+- La ronda de la madre (cron de su sesión, solo lee) queda aclarada como no-scheduler en AGENTS.md §1 y equipo-de-agentes §3; §2 bis vale solo para QA y Plataforma (P1 4301453160).
+- El arranque obligatorio es para sesiones de Claude; Codex solo revisa (P1 4301453161).
+- edicion-referentes y onia-ventas-pauta dejan de decir «no esperar OK de diseño» (P2 4301453164).

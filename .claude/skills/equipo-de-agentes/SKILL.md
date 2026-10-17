@@ -33,6 +33,8 @@ handoff y el GOAL. Nunca termina el turno con tareas pendientes.
 
 ## 2 bis. Latido por hora (en el servidor, corre con la PC apagada)
 
+> **Vigente solo para QA (:57) y Plataforma (:17)** (`AGENTS.md` §1). No se crean latidos nuevos por carril: los carriles son hilos de la jefa. Lo de abajo sirve para reencender o reemplazar esas dos rutinas, nada más.
+
 > Estado 17-oct: `AGENTS.md` §1 deja como rutinas horarias vigentes solo QA (:57) y Plataforma, sin otro scheduler, cola ni puente. La tabla de abajo es la medición del 9-oct, no un inventario vigente.
 
 Medido el 9-oct: el loop dentro de la sesión no alcanza, porque Plataforma, Marca y Ventas quedaron `idle`. Cada sesión de la
@@ -62,6 +64,8 @@ el id nuevo y se apaga el viejo. **Homelab:** no hace falta para que las nubes s
 madre sin la PC, y eso exige loguear la cuenta de Sergio Urcullo allá, que necesita su OK.
 
 ## 3. La ronda de vigilancia de la madre (cada 20 min, cron de su sesión)
+
+> Es un cron de la propia sesión de la madre en la PC: solo lee el estado y anota. No reparte trabajo ni crea rutinas, así que no es un scheduler en el sentido de `AGENTS.md` §1.
 
 1. **Verificador Haiku** (uno solo, barato): por cada cola, cuántas tareas `[x]` desde la última ronda y cuál es la siguiente;
    `ListAgents` para ver quién está `idle` con tareas pendientes; PRs nuevos o mergeados.

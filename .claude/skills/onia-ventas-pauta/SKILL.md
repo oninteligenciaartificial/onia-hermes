@@ -298,7 +298,7 @@ Trampas pagadas armando v3 (2-oct):
 - **Las capturas viajan con el brief**, en `carousels/briefs/assets/onia-1.0-dental-ads/`. Las del 30-sep están en
   `candidato-20260930/`: sus textos están en producción (`release-8f07e537`), pero la pieza igual espera el OK de
   Sergio Urcullo.
-- Cada pieza se revisa **renderizada** antes de subirla por el carril autorizado (actualización 9-oct: no esperar otro OK de diseño). La activación de pauta que gasta conserva el OK de presupuesto y canal.
+- Cada pieza se revisa **renderizada** antes de subirla por el carril autorizado (17-oct: lo visual nuevo pasa antes por la tarjeta de Sergio Urcullo; reemplaza el «no esperar OK de diseño» del 9-oct). La activación de pauta que gasta conserva el OK de presupuesto y canal.
 
 ### 4.1 Mirar la competencia antes de escribir (método del 2-oct)
 

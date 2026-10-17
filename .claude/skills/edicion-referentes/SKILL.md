@@ -137,7 +137,7 @@ de fines de septiembre. El vigente, del 3 al 8-oct (Tamagotchi, Muse vs Dots, Mo
 
 Es casi la variante partida de Santiago. **Para esta semana no se cambia el molde de las piezas ya asignadas a Erik**:
 el script implementa el de septiembre y sale una versión. El sistema vigente entra cuando se actualicen `erik.json` y
-`erik_edit.py` y una pieza de prueba terminada pase revisión visual (9-oct: no esperar OK de diseño de Sergio Urcullo). Desde entonces, la
+`erik_edit.py` y una pieza de prueba terminada pase revisión visual y, por ser lo visual nuevo, la tarjeta de Sergio Urcullo (17-oct; reemplaza el «no esperar OK de diseño» del 9-oct). Desde entonces, la
 regla de «cuál molde» queda así: **panel con tarjetas propias** → Erik vigente; **captura oficial grande y cambios de
 layout** → Santiago.
 
