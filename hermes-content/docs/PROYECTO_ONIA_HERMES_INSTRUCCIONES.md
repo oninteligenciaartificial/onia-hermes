@@ -31,6 +31,11 @@ Hay 4 frentes y cada uno tiene UN solo hilo, con nombre fijo:
 4. Leé `AGENTS.md` (las reglas) y el handoff de tu frente (la ruta está en «Un frente = un hilo»).
 5. Si usás el VPS: `mkdir -p ~/.ssh && rm -f ~/.ssh/onia_vps && [ -n "$ONIA_VPS_SSH_KEY_B64" ] && (umask 077 && printf '%s' "$ONIA_VPS_SSH_KEY_B64" | base64 -d > ~/.ssh/onia_vps) && [ -s ~/.ssh/onia_vps ] && ssh onia-vps 'echo VPS_OK' || { rm -f ~/.ssh/onia_vps; echo LLAVE_O_SSH_FALLO; false; }` (la llave vieja se borra, la nueva nace con permisos 600, una variable vacía o un decode fallido no llegan a ssh, y si algo falla la llave se borra). Entra por el túnel de Cloudflare, porque el puerto 22 directo no sale. Nunca imprimas la llave. Si el control de permisos lo frena, pedí el sí de Sergio Urcullo en tu hilo.
 
+## Cuando Sergio Urcullo pide algo: primero el «Entendí»
+- Todo pedido suyo (en el chat o en un hilo) la jefa lo pasa al molde de 7 campos y le contesta en UNA línea, antes de lanzarlo: «Entendí: <objetivo> · Hecho cuando: <criterio> · Frente: <cuál>».
+- Si algo es ambiguo, una sola pregunta con opciones (tarjeta). Nunca se adivina ni se trabaja sobre lo que el hilo supone.
+- Si él corrige el «Entendí», se corrige el molde y recién ahí se lanza.
+
 ## Cómo la jefa le pide una tarea a un hilo (molde obligatorio)
 - OBJETIVO: una frase.
 - HECHO CUANDO: el criterio que se puede comprobar (qué archivo, qué captura, qué número).
