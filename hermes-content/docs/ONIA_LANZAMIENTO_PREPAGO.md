@@ -92,7 +92,7 @@ Se anotan por WhatsApp escribiendo «CLASE». Quien se anota queda en la **lista
 |---|---|
 | Sáb 17 - dom 18 | Sergio Urcullo decide precio, escalones y fecha. Se crea la plantilla del Mapa. Se ajusta el texto de la página (no se publica sin su OK) |
 | Lun 19 | Abre **Fundadores (Bs 50, 15 plazas)**. Carrusel 1 + historia + aviso en la comunidad |
-| Mar 20 | Reel con CTA; mensajes 1 a 1 a quienes respondieron (cada uno con su OK) |
+| Mar 20 | Mensajes 1 a 1 a quienes respondieron (cada uno con su OK). El primer reel con CTA al taller sale el sáb 24, con la página viva y los textos aprobados |
 | Mié 21 | Carrusel 2. **Chequeo 1** (§7) |
 | Jue 22 | Webinar a clínicas (otro hilo): este carril no publica nada ese día |
 | Vie 23 - dom 25 | Reel 2; pregunta en historias («¿qué tarea te come más horas?»); Bs 60 si ya se llenaron los fundadores |
