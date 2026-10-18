@@ -49,7 +49,7 @@ function sesionEnLaNube(rama) {
     ramaRemota: spawnSync("git", ["rev-parse", "--verify", "-q", `refs/heads/${rama}`], { cwd: origin, env, encoding: "utf8" }).stdout.trim() };
 }
 
-for (const rama of ["pedido/p_1a2b3c4d", "respuesta/p_1a2b3c4d"]) {
+for (const rama of ["pedido/p_1a2b3c4d", "respuesta/p_1a2b3c4d", "orquesta/marca-12"]) {
   test(`una rama ${rama.split("/")[0]}/* se pushea pero NO adelanta main`, () => {
     const s = sesionEnLaNube(rama);
     assert.equal(s.r.status, 0, s.r.stdout + s.r.stderr);

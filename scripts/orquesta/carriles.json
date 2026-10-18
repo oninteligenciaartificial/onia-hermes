@@ -1,0 +1,111 @@
+{
+  "repo_cola": "oninteligenciaartificial/onia-hermes",
+  "autores": [
+    "oninteligenciaartificial"
+  ],
+  "paralelo": 3,
+  "minutos_max": 40,
+  "carpeta_trabajo": "C:/dev/proyectos/.orquesta",
+  "carriles": {
+    "plataforma": {
+      "que": "Desarrollo de Onia Platform (codigo, tests, PRs)",
+      "motor": "codex",
+      "repo": "C:/dev/proyectos/onia-platform",
+      "base": "master",
+      "salida": "docs/orquesta",
+      "modelos": {
+        "rapido": "gpt-6-luna",
+        "normal": "gpt-6.1-sol",
+        "profundo": "gpt-6-astra"
+      },
+      "herramientas_extra": [
+        "Bash(gh pr view *)",
+        "Bash(gh pr checks *)",
+        "Bash(gh pr diff *)",
+        "Bash(gh run view *)",
+        "Bash(npm test *)",
+        "Bash(npx tsc *)"
+      ]
+    },
+    "marca": {
+      "que": "Marca personal de Sergio Urcullo (guiones, piezas, calendario)",
+      "motor": "claude",
+      "repo": "C:/dev/proyectos/onia-hermes",
+      "base": "main",
+      "salida": "hermes-content/docs/orquesta/marca",
+      "modelos": {
+        "rapido": "haiku",
+        "normal": "claude-sonnet-5-5",
+        "profundo": "claude-opus-5-5"
+      }
+    },
+    "comunidad": {
+      "que": "Comunidad y talleres (taller de IA, inscripciones, material)",
+      "motor": "claude",
+      "repo": "C:/dev/proyectos/onia-hermes",
+      "base": "main",
+      "salida": "hermes-content/docs/orquesta/comunidad",
+      "modelos": {
+        "rapido": "haiku",
+        "normal": "claude-sonnet-5-5",
+        "profundo": "claude-opus-5-5"
+      }
+    },
+    "video": {
+      "que": "Edicion de video (cortes, subtitulos, previews; nunca publica)",
+      "motor": "claude",
+      "repo": "C:/dev/proyectos/onia-hermes",
+      "base": "main",
+      "salida": "hermes-content/docs/orquesta/video",
+      "dirs_extra": [
+        "C:/Users/PC/Videos/ONIA-brutos"
+      ],
+      "herramientas_extra": [
+        "Bash(ffmpeg *)",
+        "Bash(ffprobe *)",
+        "Bash(node *)",
+        "Bash(python *)",
+        "Bash(npx *)"
+      ],
+      "modelos": {
+        "rapido": "haiku",
+        "normal": "claude-sonnet-5-5",
+        "profundo": "claude-opus-5-5"
+      }
+    },
+    "investigacion": {
+      "que": "Investigacion y aprendizaje de creadores y competencia",
+      "motor": "claude",
+      "repo": "C:/dev/proyectos/onia-hermes",
+      "base": "main",
+      "salida": "hermes-content/docs/orquesta/investigacion",
+      "modelos": {
+        "rapido": "haiku",
+        "normal": "claude-sonnet-5-5",
+        "profundo": "claude-opus-5-5"
+      },
+      "herramientas_extra": [
+        "WebSearch",
+        "WebFetch"
+      ]
+    }
+  },
+  "herramientas_claude": [
+    "Read",
+    "Write",
+    "Edit",
+    "Glob",
+    "Grep",
+    "Skill",
+    "TodoWrite",
+    "Bash(git status *)",
+    "Bash(git diff *)",
+    "Bash(git log *)",
+    "Bash(git show *)",
+    "Bash(git ls-tree *)",
+    "Bash(git add *)",
+    "Bash(git commit *)",
+    "Bash(git rev-parse *)",
+    "Bash(mkdir *)"
+  ]
+}

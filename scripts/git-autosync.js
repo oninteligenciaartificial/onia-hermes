@@ -109,7 +109,8 @@ function main() {
   // va en `pedido/<id>` como PR en borrador, y lo aprueba él. Sin esta guarda, el Stop
   // de esa sesión hacía fast-forward de main con el cambio sin revisar
   // (hermes-content/docs/TELEGRAM_COMMAND_CENTER.md, scripts/loops/pedido-rama.test.mjs).
-  const ramaDePedido = /^(pedido|respuesta)\//.test(branch.out);
+  // Lo mismo para `orquesta/*` (2026-10-18): el trabajo del orquestador va por PR, no directo a main.
+  const ramaDePedido = /^(pedido|respuesta|orquesta)\//.test(branch.out);
   if (ramaDePedido) console.log('[autosync] rama de pedido: se pushea, main NO se toca');
   if (branch.out !== 'main' && !ramaDePedido) {
     tryGit('fetch origin main');

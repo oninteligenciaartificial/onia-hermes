@@ -1,0 +1,26 @@
+{
+  "disableAllHooks": true,
+  "enabledPlugins": {
+    "caveman@caveman": false,
+    "ponytail@ponytail": false,
+    "superpowers@claude-plugins-official": false,
+    "claude-mem@thedotmack": false,
+    "everything-claude-code@everything-claude-code": false,
+    "understand-anything@understand-anything": false,
+    "gsap-skills@gsap-skills": false,
+    "cloudflare@cloudflare": false
+  },
+  "permissions": {
+    "deny": [
+      "Read(~/.ssh/**)",
+      "Read(~/.codex/**)",
+      "Read(~/.claude/.credentials.json)",
+      "Read(~/.config/gh/**)",
+      "Read(**/.env*)",
+      "Read(//c/Users/PC/BovedaPrivada/**)",
+      "Bash(git push *)",
+      "Bash(git remote *)",
+      "Bash(git config *)"
+    ]
+  }
+}
