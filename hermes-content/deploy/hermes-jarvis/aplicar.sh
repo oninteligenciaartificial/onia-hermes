@@ -63,10 +63,23 @@ al_dia() {
     && grep -q '^avisar()' "$BIN/claude-guardia.sh" 2>/dev/null \
     && grep -q ONIA_AGENDA_CAMBIOS_URL "$BIN/onia-agenda.sh" 2>/dev/null \
     && grep -q cierre-bloques "$BIN/onia-jarvis-resumen.sh" 2>/dev/null \
+    && grep -q 'grupo NECESITO' "$BIN/onia-jarvis-resumen.sh" 2>/dev/null \
     && grep -q '^candado()' "$BIN/onia-pedido-claude.sh" 2>/dev/null \
-    && grep -q -- '--probar' "$BIN/onia-respuestas-pedidos.sh" 2>/dev/null
+    && grep -q '^SELLOS=' "$BIN/onia-pedido-claude.sh" 2>/dev/null \
+    && grep -q -- '--probar' "$BIN/onia-respuestas-pedidos.sh" 2>/dev/null \
+    && grep -q '^bajar()' "$BIN/onia-respuestas-pedidos.sh" 2>/dev/null \
+    && [ -x "$BIN/onia-latido.sh" ] \
+    && [ -x "$BIN/onia-qa-release.sh" ] && [ -r "$BIN/onia-mirar.js" ]
   # Los pedidos: la versión con un solo candado para la vista previa y el --si, y el recolector de
   # la vuelta. Sin esto, con la llave cargada, aplicar salía 0 con los pedidos apagados (madre, 2-oct).
+  # 5-oct: y las que cierran los MEDIUM de la madre v2 (el sello que ata la respuesta al pedido, y el
+  # tope mientras baja). Con el comando viejo la rutina no recibe sello y no puede firmar; con el
+  # recolector viejo una respuesta firmada no se entrega y una sin firmar sí.
+  # 9-oct: el resumen en tres bloques (grupo NECESITO). El SOUL le dice a Hermes que el resumen y el
+  # cierre ya llegan así: con el resumen viejo en /root/bin, eso sería falso.
+  # 10-oct: el envoltorio del latido. Cada línea que agrega el crontab lo llama: sin él en /root/bin,
+  # ninguno de esos trabajos correría.
+  # 10-oct (Q5): el QA después de cada publicación y el onia-mirar.js que llama, los dos desde /root/bin.
 }
 if ! al_dia; then
   echo "todavía no: corro una vez el sincronizador de cada hora"
@@ -75,10 +88,11 @@ fi
 if ! al_dia; then
   echo "❌ El código de main todavía no está en /root/bin. No toqué nada."
   ls -la "$BIN/onia-jarvis-resumen.sh" "$BIN/onia-agenda.sh" "$BIN/onia-tg.sh" \
-    "$BIN/onia-pedido-claude.sh" "$BIN/onia-respuestas-pedidos.sh" 2>&1 | redactar
+    "$BIN/onia-pedido-claude.sh" "$BIN/onia-respuestas-pedidos.sh" "$BIN/onia-latido.sh" \
+    "$BIN/onia-qa-release.sh" "$BIN/onia-mirar.js" 2>&1 | redactar
   exit 1
 fi
-echo "✅ resumen, lector de calendario, aduana, vigía de aprobaciones, guardia y pedidos: al día"
+echo "✅ resumen, lector de calendario, aduana, vigía de aprobaciones, guardia, pedidos, latido y QA de publicación: al día"
 
 # ── 1. Respaldo ─────────────────────────────────────────────────────────────────
 sec "1. Respaldo"
@@ -140,14 +154,27 @@ for l in base:
         out.append(" ".join(c[:5]) + " ONIA_AVISO=sistema " + c[5] + MARCA)
     else:
         out.append(l)
+# Los seis trabajos de este bloque corren dentro de onia-latido.sh (10-oct, HERMES_ROL_QA.md Q4c): dejan
+# en /var/lib/onia-latido/<nombre> cuándo terminaron y con qué código, y el resumen de las 06:30 nombra el
+# que lleva más de dos veces su cadencia sin correr o terminó con error. Hasta entonces un trabajo mudo y
+# uno sano se veían igual. El latido no cambia lo que corre: el comando va entero, entre comillas simples.
+# Los nombres los repite LATIDOS_ESPERADOS de jarvis-resumen.sh (una prueba los compara). Las dos líneas
+# de arriba (la voz y el vigía de loops) no llevan latido: no son de este bloque.
+LAT = "/root/bin/onia-latido.sh"
 for l in (
     "# hermes-jarvis: resumen 06:30, cierre 21:30, bloques de su calendario, aduana (hermes-content/deploy/hermes-jarvis)",
-    "30 10 * * * /root/bin/onia-jarvis-resumen.sh manana >> /var/log/onia-jarvis-resumen.log 2>&1",
-    "30 1 * * * /root/bin/onia-jarvis-resumen.sh noche >> /var/log/onia-jarvis-resumen.log 2>&1",
-    "*/5 * * * * ONIA_AVISO_SOLTAR=1 /root/bin/onia-tg.sh >> /var/log/onia-tg-soltar.log 2>&1",
-    "25,55 0-1,10-23 * * * /root/bin/onia-agenda.sh --bloques >> /var/log/onia-agenda.log 2>&1",
-    # La vuelta de los pedidos a Claude (2-oct). Sin pedidos abiertos sale al instante, sin red.
-    "*/2 * * * * [ -x /root/bin/onia-respuestas-pedidos.sh ] && /root/bin/onia-respuestas-pedidos.sh >> /var/log/onia-respuestas-pedidos.log 2>&1",
+    "30 10 * * * " + LAT + " resumen-manana 86400 '/root/bin/onia-jarvis-resumen.sh manana' >> /var/log/onia-jarvis-resumen.log 2>&1",
+    "30 1 * * * " + LAT + " resumen-noche 86400 '/root/bin/onia-jarvis-resumen.sh noche' >> /var/log/onia-jarvis-resumen.log 2>&1",
+    "*/5 * * * * " + LAT + " aduana-soltar 300 'ONIA_AVISO_SOLTAR=1 /root/bin/onia-tg.sh' >> /var/log/onia-tg-soltar.log 2>&1",
+    # Corre cada 30 min de 06:25 a 21:55 de La Paz: su cadencia es de día, y el resumen de las 06:30 lo
+    # lee cinco minutos después de su primera corrida. De madrugada no se mide.
+    "25,55 0-1,10-23 * * * " + LAT + " agenda-bloques 1800 '/root/bin/onia-agenda.sh --bloques' >> /var/log/onia-agenda.log 2>&1",
+    # La vuelta de los pedidos a Claude (2-oct). Sin pedidos abiertos sale al instante, sin red. «! -x ||»
+    # y no «-x &&»: sin el recolector copiado, el latido anotaría un código 1 que no es una falla.
+    "*/2 * * * * " + LAT + " respuestas-pedidos 120 '[ ! -x /root/bin/onia-respuestas-pedidos.sh ] || /root/bin/onia-respuestas-pedidos.sh' >> /var/log/onia-respuestas-pedidos.log 2>&1",
+    # El QA después de cada publicación (10-oct, HERMES_ROL_QA.md Q5): mira /dashboard y /checkout cuando
+    # cambia el release y lee las ventanas del publicador de las :50. Sin LLM; avisa por la aduana.
+    "*/15 * * * * " + LAT + " qa-release 900 '/root/bin/onia-qa-release.sh' >> /var/log/onia-qa-release.log 2>&1",
 ):
     out.append(l + MARCA)
 print("\n".join(out))
@@ -198,6 +225,8 @@ git -C "$REPO_VPS" show origin/main:hermes-content/skills/agenda-calendario.md 2
   || falla "no encontré la skill del calendario en origin/main del VPS"
 git -C "$REPO_VPS" show origin/main:hermes-content/deploy/hermes-agent/SOUL.md 2>/dev/null | grep -q '^## Su calendario y el cierre del día' \
   || falla "no encontré la regla del calendario en el SOUL de origin/main del VPS"
+git -C "$REPO_VPS" show origin/main:hermes-content/deploy/hermes-agent/SOUL.md 2>/dev/null | grep -q '^## Formato fijo de cada mensaje' \
+  || falla "no encontré la regla del formato en el SOUL de origin/main del VPS"
 [ -f /root/.hermes/SOUL.md ] || falla "no existe /root/.hermes/SOUL.md: no hay a quién enseñarle"
 # La llave de la rutina, con forma estricta: un token con espacios (mal pegado) dejaba el aplicar a
 # medias porque recién fallaba en 5d, con el crontab ya cambiado (revisión de la madre, 2-oct).
@@ -599,7 +628,7 @@ if [ "$N8N_OK" = 1 ]; then
 fi
 
 # ── 5c. Que Hermes lo sepa usar ────────────────────────────────────────────────
-sec "5c. Hermes: la skill de su calendario y la regla en su SOUL"
+sec "5c. Hermes: la skill de su calendario y las reglas en su SOUL"
 REPO_VPS=/root/loops/onia-hermes
 NUEVA=$(git -C "$REPO_VPS" show origin/main:hermes-content/skills/agenda-calendario.md 2>/dev/null)
 if ! printf '%s' "$NUEVA" | grep -q 'onia-agenda.sh crear'; then
@@ -632,6 +661,21 @@ else
     printf '\n---\n\n%s\n' "$SECCION" >> "$SOUL" && { HERMES_CAMBIO=1; echo "✅ regla del calendario agregada al SOUL de Hermes"; }
   else
     falla "no pude agregar la regla al SOUL (falta la sección en main o el archivo en el VPS)"
+  fi
+fi
+# El formato fijo de cada mensaje (Sergio Urcullo, 8-oct: «me entregás demasiado texto y me pierdo»).
+# Va en su propia sección porque acá se copian solo las secciones que se nombran: una regla escrita
+# dentro de «Cómo hablarle a Sergio» nunca llegaba al SOUL del VPS.
+if grep -q '^## Formato fijo de cada mensaje' "$SOUL" 2>/dev/null; then
+  echo "· su SOUL ya tenía la regla del formato"
+else
+  SECCION=$(git -C "$REPO_VPS" show origin/main:hermes-content/deploy/hermes-agent/SOUL.md 2>/dev/null \
+            | awk '/^## Formato fijo de cada mensaje/ {on = 1} on && /^---$/ {exit} on {print}')
+  if [ -n "$SECCION" ] && [ -f "$SOUL" ]; then
+    [ -f "$BK/SOUL.md.antes" ] || cp -a "$SOUL" "$BK/SOUL.md.antes"
+    printf '\n---\n\n%s\n' "$SECCION" >> "$SOUL" && { HERMES_CAMBIO=1; echo "✅ regla del formato agregada al SOUL de Hermes"; }
+  else
+    falla "no pude agregar la regla del formato al SOUL"
   fi
 fi
 

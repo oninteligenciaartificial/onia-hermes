@@ -49,6 +49,12 @@
 | Clinera | Clínicas con agentes IA, EC/CL/MX/PE | USD 279/mes (223 anual) + implementación USD 450, 6 meses mínimo | Sin prueba (demo o llamada) | Stripe, Mercado Pago, WebPay | Agentes que agendan por WhatsApp y llaman por teléfono | `CLINERA_FICHA.md` |
 | Calu | Consultorios médicos y odontológicos, Argentina | 23/mes por agenda (moneda no visible, prob. USD); ARS 40.192 + IVA; −20 % anual; Bolivia no visible | 7 días; 1.ª pantalla sin tarjeta | Mercado Pago (seña) | Recordatorio WhatsApp con cupo + seña automática | `CALU_FICHA.md` |
 | Fluker AI | Clínicas y estética, Colombia | no visible (/precios da 404) | no visible (demo por WhatsApp) | no visible | Re-escribe a quien preguntó precio y no reservó | `FLUKER_FICHA.md` |
+| Jelou | Agentes de IA para empresas grandes y revendedores (sin vertical de salud) | USD 0 / 25 / 299 por mes; Enterprise a medida; Meta aparte | Free sin tarjeta | Prepago; **dejó de cobrar por conversación** | Explica en la página de precios por qué cambió el cobro | `JELOU_FICHA.md` |
+| Datec | Integrador de TI y partner de Odoo (SCZ y 5 países más), sin producto para clínicas | Sin precio público | — | — | Presencia y 26 años | `DATEC_FICHA.md` |
+| CitaPro | Agente de IA por WhatsApp para centros médicos y estéticos (LATAM) | USD 59 / 99 por mes + USD 0,10 por conversación extra | Demo de 30 min con asesor; 7 días | sin dato | Anuncios que duran 83 días con «No es X… Es Z» | `ANUNCIANTES_FICHAS_CORTAS.md` |
+| Calendico | Asistente de reservas por WhatsApp (AR) | USD 29 / 99 / 199; add-ons USD 10-15 | 7 días | sin dato | Add-ons chicos que suben el ticket | `ANUNCIANTES_FICHAS_CORTAS.md` |
+| Medizona | Expediente electrónico NOM-024 (México) | MXN 215 / 450 / 1.200 + IVA *(moneda no escrita)* | Registro gratis sin tarjeta | sin dato | La norma como titular | `ANUNCIANTES_FICHAS_CORTAS.md` |
+| NativeCode | «Agenda Clínica» (recordatorios por WhatsApp) | sin dato (no se encontró su web) | sin dato | sin dato | — | `ANUNCIANTES_FICHAS_CORTAS.md` |
 
 Volumen de pauta activa en Meta (2-oct, `anuncios/CAPTURAS-HECHAS.md` §Ronda 2): Huli ~140 · Dentalink 81 · Medilink 41-69 ·
 Reservo 31 · Dt.Dental 24 · Clinera 20 · Doctocliq 19 · Calu, Fluker y Calendico 15 · CitaPro 13 · NativeCode 10 ·
@@ -76,5 +82,5 @@ Agenda en Día 4 · Medizona 2.
 vendedor y sin precio (Dentalink, Dt.Dental, Doctoralia); borrar datos al no pagar (Wati, Dentalink); mínimos de 6 meses
 por adelantado (Kommo).
 
-**Pendiente:** Huli, Reservo, Clinera, Calu y Fluker ya tienen ficha (4-oct). Sin ficha quedan Calendico, CitaPro,
-NativeCode y Medizona (solo conteo de anuncios).
+**Pendiente:** Huli, Reservo, Clinera, Calu y Fluker ya tienen ficha (4-oct). Calendico, CitaPro, Medizona y NativeCode tienen una
+ficha corta del 8-oct (NativeCode sin web). Tandas semanales: `docs/ONIA_UI_MEJORAS_1.0.md` §8.

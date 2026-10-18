@@ -183,3 +183,14 @@ asistente hace cosas. **Las pantallas reales recién al final**, como prueba.
 | Siempre «Lucía Antelo», con apellido, y la IA declarada desde el segundo 0 | §2 (la otra Lucía) | Ya es regla; se refuerza |
 | Los cuatro ángulos para auditar el plan; «producto / casos» queda vacío hasta el primer cliente real | §4 | `PLAN.md` §3, en la próxima revisión del plan |
 | Gancho de conflicto en 0–3 s con el dolor del dueño, sin insultos | §4 | «Recepción a las 8» |
+
+## Prueba de uso por sesión · Ventas y pauta (§4, @ramiro.cubria)
+
+Estado: aplicado, sin revisor independiente
+Sesión + fecha: Ventas y pauta, `session_0143C5fMXVs8eWEf7uBpC9SF`, 9-oct-2026 (pedido de la madre: cargar `equipo-de-agentes` y `aprender-de-todo`).
+Tarea de cola: `hermes-content/docs/cola/loop/ventas-pauta.md`, «Verificación de aprendizaje · 2026-10-09», sobre la tarea 2 (corto de 60 s del VSL dental).
+Regla usada: §4, los cuatro ángulos para auditar: problema, solución, producto (casos de éxito), mentalidad/objeciones y descubrimiento.
+Artefacto: `hermes-content/carousels/briefs/ads/VSL-CORTO-TABLA-DE-CORTES.md`, sección «Prueba de uso · `aprender-de-todo`».
+Verificación: el ángulo «producto» queda **vacío a propósito** (0 clientes pagando, sin testimonios, cifras ni logos); el detector de promesas del repo da 0
+hallazgos en las 7 líneas de voz y 2 en la frase de control prohibida; 0 voseo o tuteo. Límite: el detector mira formas, no que el producto cumpla.
+Pendiente: que otra sesión lo revise contra esta ficha para pasarlo a «aplicado y verificado».

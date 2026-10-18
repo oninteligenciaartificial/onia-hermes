@@ -1,0 +1,229 @@
+{
+  "cuando": "2026-10-11T09:58:00.835Z",
+  "rutas": {
+    "/login": {
+      "390": {
+        "estado": 200,
+        "ms": 3877,
+        "buildId": "FTdbJ5YopG9Ll4v0Yivrq",
+        "build": "webpack-2a706587264c6b91.js",
+        "archivo": "despues-0950-login-390.png",
+        "titulo": "Onia | El sistema con IA que maneja su negocio en Bolivia",
+        "descripcion": "Plataforma con IA para negocios en Bolivia. Agenda, clientes, inventario, ventas listas para facturar, cobros por QR, reportes y agentes que le dejan listo cada mensaje para que usted lo apruebe — con módulos por rubro: clínicas dentales, comercio y más.",
+        "ogTitulo": "Onia | El sistema con IA que maneja su negocio en Bolivia",
+        "ogDescripcion": "Agenda, clientes, inventario, ventas listas para facturar, cobros por QR, reportes y agentes con IA que esperan su aprobación — módulos por rubro en una sola plataforma.",
+        "twTitulo": "Onia | El sistema con IA que maneja su negocio en Bolivia",
+        "manifest": "/manifest.json",
+        "url": "/login",
+        "desbordeHorizontal": false,
+        "ligadurasComoTexto": [],
+        "precios": [],
+        "obra": [],
+        "voseoOTuteoVisible": [],
+        "errores": [
+          "An unknown error occurred when fetching the script.",
+          "[SW] registration failed: SecurityError: Failed to register a ServiceWorker for scope ('https://app.onia.com.bo/') with script ('https://app.onia.com.bo/sw.js')"
+        ],
+        "inicio": [
+          "14 días gratis",
+          "Hola de nuevo",
+          "Ingrese a su cuenta para seguir donde quedó.",
+          "Correo electrónico",
+          "Contraseña",
+          "Olvidé mi contraseña",
+          "Iniciar sesión",
+          "¿Todavía no tiene cuenta?",
+          "person_add",
+          "Cree su cuenta · 14 días gratis",
+          "Si su negocio ya usa Onia, solicite acceso al administrador.",
+          "Conocer Onia"
+        ]
+      },
+      "1440": {
+        "estado": 200,
+        "ms": 2837,
+        "buildId": "FTdbJ5YopG9Ll4v0Yivrq",
+        "build": "webpack-2a706587264c6b91.js",
+        "archivo": "despues-0950-login-1440.png",
+        "titulo": "Onia | El sistema con IA que maneja su negocio en Bolivia",
+        "descripcion": "Plataforma con IA para negocios en Bolivia. Agenda, clientes, inventario, ventas listas para facturar, cobros por QR, reportes y agentes que le dejan listo cada mensaje para que usted lo apruebe — con módulos por rubro: clínicas dentales, comercio y más.",
+        "ogTitulo": "Onia | El sistema con IA que maneja su negocio en Bolivia",
+        "ogDescripcion": "Agenda, clientes, inventario, ventas listas para facturar, cobros por QR, reportes y agentes con IA que esperan su aprobación — módulos por rubro en una sola plataforma.",
+        "twTitulo": "Onia | El sistema con IA que maneja su negocio en Bolivia",
+        "manifest": "/manifest.json",
+        "url": "/login",
+        "desbordeHorizontal": false,
+        "ligadurasComoTexto": [],
+        "precios": [],
+        "obra": [],
+        "voseoOTuteoVisible": [],
+        "errores": [
+          "An unknown error occurred when fetching the script.",
+          "[SW] registration failed: SecurityError: Failed to register a ServiceWorker for scope ('https://app.onia.com.bo/') with script ('https://app.onia.com.bo/sw.js')"
+        ],
+        "inicio": [
+          "Su negocio completo, en un solo sistema.",
+          "bolt",
+          "Activación acompañada",
+          "Su sistema llega con la configuración de su rubro puesta. Los datos los carga usted y, si necesita ayuda, hacemos una demo y le guiamos.",
+          "credit_card_off",
+          "14 días gratis, sin tarjeta",
+          "Pruebe el plan Profesional. Si no le sirve, no paga nada.",
+          "smart_toy",
+          "Agentes que preparan propuestas",
+          "Le dejan listos seguimientos y avisos: cada mensaje de un agente sale solo cuando lo aprueba.",
+          "Clínicas dentales · Comercios · Importadoras · Estéticas y spas · Servicios profesionales — hecho en Bolivia",
+          "Hola de nuevo"
+        ]
+      }
+    },
+    "/book": {
+      "390": {
+        "estado": 200,
+        "ms": 2542,
+        "buildId": "FTdbJ5YopG9Ll4v0Yivrq",
+        "build": "webpack-2a706587264c6b91.js",
+        "archivo": "despues-0950-book-390.png",
+        "titulo": "Reservas en línea | Onia",
+        "descripcion": "Elija el día y la hora que le queden bien. Sin registro, en menos de un minuto.",
+        "ogTitulo": "Onia | El sistema con IA que maneja su negocio en Bolivia",
+        "ogDescripcion": "Agenda, clientes, inventario, ventas listas para facturar, cobros por QR, reportes y agentes con IA que esperan su aprobación — módulos por rubro en una sola plataforma.",
+        "twTitulo": "Onia | El sistema con IA que maneja su negocio en Bolivia",
+        "manifest": "/manifest.json",
+        "url": "/book",
+        "desbordeHorizontal": false,
+        "ligadurasComoTexto": [],
+        "precios": [],
+        "obra": [],
+        "voseoOTuteoVisible": [],
+        "errores": [
+          "An unknown error occurred when fetching the script.",
+          "[SW] registration failed: SecurityError: Failed to register a ServiceWorker for scope ('https://app.onia.com.bo/') with script ('https://app.onia.com.bo/sw.js')"
+        ],
+        "inicio": [
+          "Reservas en línea",
+          "Cada negocio tiene su propio enlace de reserva",
+          "calendar_month",
+          "¿Desea agendar con un negocio?",
+          "Pida su enlace directo de reserva o búsquelo en sus redes sociales. Si recibió un enlace, ábralo para elegir su horario.",
+          "schedule",
+          "Disponible 24/7",
+          "verified",
+          "Sin registro",
+          "Reservas con Onia"
+        ]
+      },
+      "1440": {
+        "estado": 200,
+        "ms": 2623,
+        "buildId": "FTdbJ5YopG9Ll4v0Yivrq",
+        "build": "webpack-2a706587264c6b91.js",
+        "archivo": "despues-0950-book-1440.png",
+        "titulo": "Reservas en línea | Onia",
+        "descripcion": "Elija el día y la hora que le queden bien. Sin registro, en menos de un minuto.",
+        "ogTitulo": "Onia | El sistema con IA que maneja su negocio en Bolivia",
+        "ogDescripcion": "Agenda, clientes, inventario, ventas listas para facturar, cobros por QR, reportes y agentes con IA que esperan su aprobación — módulos por rubro en una sola plataforma.",
+        "twTitulo": "Onia | El sistema con IA que maneja su negocio en Bolivia",
+        "manifest": "/manifest.json",
+        "url": "/book",
+        "desbordeHorizontal": false,
+        "ligadurasComoTexto": [],
+        "precios": [],
+        "obra": [],
+        "voseoOTuteoVisible": [],
+        "errores": [
+          "An unknown error occurred when fetching the script.",
+          "[SW] registration failed: SecurityError: Failed to register a ServiceWorker for scope ('https://app.onia.com.bo/') with script ('https://app.onia.com.bo/sw.js')"
+        ],
+        "inicio": [
+          "Reservas en línea",
+          "Cada negocio tiene su propio enlace de reserva",
+          "calendar_month",
+          "¿Desea agendar con un negocio?",
+          "Pida su enlace directo de reserva o búsquelo en sus redes sociales. Si recibió un enlace, ábralo para elegir su horario.",
+          "schedule",
+          "Disponible 24/7",
+          "verified",
+          "Sin registro",
+          "Reservas con Onia"
+        ]
+      }
+    },
+    "/register": {
+      "390": {
+        "estado": 200,
+        "ms": 2867,
+        "buildId": "FTdbJ5YopG9Ll4v0Yivrq",
+        "build": "webpack-2a706587264c6b91.js",
+        "archivo": "despues-0950-register-390.png",
+        "titulo": "Onia | El sistema con IA que maneja su negocio en Bolivia",
+        "descripcion": "Plataforma con IA para negocios en Bolivia. Agenda, clientes, inventario, ventas listas para facturar, cobros por QR, reportes y agentes que le dejan listo cada mensaje para que usted lo apruebe — con módulos por rubro: clínicas dentales, comercio y más.",
+        "ogTitulo": "Onia | El sistema con IA que maneja su negocio en Bolivia",
+        "ogDescripcion": "Agenda, clientes, inventario, ventas listas para facturar, cobros por QR, reportes y agentes con IA que esperan su aprobación — módulos por rubro en una sola plataforma.",
+        "twTitulo": "Onia | El sistema con IA que maneja su negocio en Bolivia",
+        "manifest": "/manifest.json",
+        "url": "/register",
+        "desbordeHorizontal": false,
+        "ligadurasComoTexto": [],
+        "precios": [],
+        "obra": [],
+        "voseoOTuteoVisible": [],
+        "errores": [
+          "An unknown error occurred when fetching the script.",
+          "[SW] registration failed: SecurityError: Failed to register a ServiceWorker for scope ('https://app.onia.com.bo/') with script ('https://app.onia.com.bo/sw.js')"
+        ],
+        "inicio": [
+          "14 días gratis",
+          "1",
+          "Su rubro",
+          "2",
+          "Su cuenta",
+          "¿Qué tipo de negocio tiene?",
+          "Pantallas, palabras y agentes de su rubro.",
+          "dentistry",
+          "Clínica dental",
+          "Pacientes, citas, tratamientos y cobros",
+          "chevron_right",
+          "storefront"
+        ]
+      },
+      "1440": {
+        "estado": 200,
+        "ms": 2996,
+        "buildId": "FTdbJ5YopG9Ll4v0Yivrq",
+        "build": "webpack-2a706587264c6b91.js",
+        "archivo": "despues-0950-register-1440.png",
+        "titulo": "Onia | El sistema con IA que maneja su negocio en Bolivia",
+        "descripcion": "Plataforma con IA para negocios en Bolivia. Agenda, clientes, inventario, ventas listas para facturar, cobros por QR, reportes y agentes que le dejan listo cada mensaje para que usted lo apruebe — con módulos por rubro: clínicas dentales, comercio y más.",
+        "ogTitulo": "Onia | El sistema con IA que maneja su negocio en Bolivia",
+        "ogDescripcion": "Agenda, clientes, inventario, ventas listas para facturar, cobros por QR, reportes y agentes con IA que esperan su aprobación — módulos por rubro en una sola plataforma.",
+        "twTitulo": "Onia | El sistema con IA que maneja su negocio en Bolivia",
+        "manifest": "/manifest.json",
+        "url": "/register",
+        "desbordeHorizontal": false,
+        "ligadurasComoTexto": [],
+        "precios": [],
+        "obra": [],
+        "voseoOTuteoVisible": [],
+        "errores": [
+          "An unknown error occurred when fetching the script.",
+          "[SW] registration failed: SecurityError: Failed to register a ServiceWorker for scope ('https://app.onia.com.bo/') with script ('https://app.onia.com.bo/sw.js')"
+        ],
+        "inicio": [
+          "Su negocio completo, en un solo sistema.",
+          "bolt",
+          "Activación acompañada",
+          "Su sistema llega con la configuración de su rubro puesta. Los datos los carga usted y, si necesita ayuda, hacemos una demo y le guiamos.",
+          "credit_card_off",
+          "14 días gratis, sin tarjeta",
+          "Pruebe el plan Profesional. Si no le sirve, no paga nada.",
+          "smart_toy",
+          "Agentes que preparan propuestas",
+          "Le dejan listos seguimientos y avisos: cada mensaje de un agente sale solo cuando lo aprueba.",
+          "Clínicas dentales · Comercios · Importadoras · Estéticas y spas · Servicios profesionales — hecho en Bolivia",
+          "1"
+        ]
+      }
+    }
+  }
+}

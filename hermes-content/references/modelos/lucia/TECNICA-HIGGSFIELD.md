@@ -1041,7 +1041,7 @@ Connector MCP: `https://mcp.higgsfield.ai/mcp`.
 ### ⚠️ Lo que NO queda resuelto, y hay que probar
 
 Sergio prohibió el **MCP** el 28-ago por una razón concreta: *«sustituye el modelo en silencio y
-cobra créditos»* — pedía `nano_banana_2` y el servidor resolvía a `nano_banana_flash`.
+cobra créditos»* — pedía `nano_banana_2` y el servidor resolvía a `nano_banana_flash`. (⚠️ Explicación refutada más abajo, en «CORRECCIÓN GRANDE»: `nano_banana_2` no existe como ID.)
 
 **El CLI es otra pieza y puede no tener ese defecto**, pero eso **no está medido**. Antes de
 producir con él hay que hacer UNA generación de prueba y verificar en el panel de detalle que el

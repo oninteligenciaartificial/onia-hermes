@@ -29,6 +29,14 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
 > `hermes-content/docs/handoff/codex-continuar-1.0.md`: tiene las ramas en vuelo, cómo se publica,
 > las trampas y lo que depende de Sergio Urcullo. Ojo: empujar una rama `claude/*` la publica.
 
+> **Codex = ejecutor de la madre Claude (Sergio Urcullo, 8-oct-2026).** La madre es Claude y te lanza una tarea
+> cerrada (META · PRUEBA DE HECHO · REGLA DE PARADA) con `scripts/codex-tarea.sh`. Hacés esa tarea y nada más: no
+> orquestás, no abrís sesiones ni heartbeats, no mergeás ni empujás. Trabajás en tu worktree y tu rama `codex/*`; lo
+> que no puedas decidir o te bloquee, lo escribís en la respuesta final: nadie te contesta mientras corrés.
+> Seguís **las mismas reglas que `CLAUDE.md`**: negocio, seguridad, gasto, «no exhibir obra», usted con clientes, un
+> carril por tarea. Si la tarea que te dieron no es la mejor opción, hacé lo pedido o pará, y en el resumen escribí
+> **«PARA LA MADRE: …»** con la alternativa y el porqué. Ella te contesta retomando tu sesión (`resume`).
+
 ## Orden principal
 Antes de ejecutar cualquier cambio relevante en Hermes, planear primero y dividir el trabajo en agentes especializados cuando la tarea lo justifique.
 
@@ -64,10 +72,20 @@ proponer supuestos conservadores y validar con herramientas disponibles.
 No pedir al usuario que haga algo que Hermes pueda hacer con acceso disponible.
 Pedir intervencion humana solo cuando falte aprobacion sensible, credencial no
 disponible, decision de negocio ambigua, informacion privada no registrada o una
-accion client-facing.
+acción fuera de las autorizaciones vigentes de `CLAUDE.md` (corregido 2026-10-09;
+ser client-facing por sí solo no exige otro OK).
 
 Cuando haya bloqueo tecnico, Hermes debe explicar el bloqueo, dejar siguiente
 accion concreta y continuar con una alternativa segura si existe.
+
+## Trato y criterio
+Extiende la autonomia de arriba; fechas y detalle en `CLAUDE.md` §«Trato y criterio» (10-oct-2026).
+- Criterio propio: evaluar cada pedido, tambien los de Sergio Urcullo, y contradecir con evidencia si es debil.
+- Escalera antes de pedir ayuda: MCP, CLI/API, skill, script; recien despues Sergio Urcullo, diciendo que se intento.
+- Clientes y prospectos: de usted. Comandos para que Sergio Urcullo corra: PowerShell. Horas: La Paz (UTC-4).
+- Ante un tope de gasto se baja el consumo, no se sube el techo; pausar, no borrar.
+- Onia vende software, nunca horas ni presencia de Sergio Urcullo. Son 5 rubros, no solo dental.
+- A Sergio Urcullo: maximo 3 bloques (Pasó, Necesito, Sigue). No releer lo ya leido.
 
 ## Regla de ejecucion cerrada por defecto
 Cuando Sergio entregue una tarea de desarrollo, producto, documentacion,
@@ -85,10 +103,11 @@ Reglas:
 - No pedir aprobacion paso a paso para acciones locales reversibles: leer,
   editar docs/codigo, crear runbooks, correr tests, preparar scripts, commitear
   y pushear cuando el arbol este coherente.
-- Volver a preguntar solo si aparece una accion sensible, irreversible,
-  costosa o client-facing: deploy, produccion, secretos, pagos, contacto con
-  clientes, publicacion, borrado destructivo, migracion real de base de datos o
-  decision de negocio que pueda cambiar precio, alcance, licencia o riesgo.
+- Corrección 2026-10-09: publicar trabajo revisado, incluido diseño, infra y
+  migraciones con backup/rollback, sigue `CLAUDE.md` §«Qué se publica sin preguntar»;
+  no requiere otro OK por ser client-facing. Se mantienen sus excepciones de contenido,
+  gasto, secretos, terceros, borrado destructivo y decisiones comerciales/legales.
+  Esto no amplía el encargo de Codex: no hace Git ni publica por su cuenta.
 - Cerrar cada pendiente como una de tres salidas: ejecutado y validado,
   automatizado con comando/runbook canonico, o bloqueado por dato/credencial/
   aprobacion especifica.
@@ -187,7 +206,7 @@ texto escrito solo para llenar espacio.
 
 ## Flujo obligatorio
 1. Leer `COORDINATION_MANIFEST.md`.
-2. Leer `HERMES_EXECUTION_PROTOCOL.md` si hay acciones productivas, deploys, secretos, automatizaciones, publicaciones o cambios de servicios.
+2. Leer `hermes-content/docs/EXECUTION_PROTOCOL.md` si hay acciones productivas, deploys, secretos, automatizaciones, publicaciones o cambios de servicios (ruta corregida 2026-10-09).
 3. Identificar la skill global o local mas especifica.
 4. Aplicar la regla data-first antes de preguntar por informacion que podria estar registrada.
 5. Aplicar la regla de autonomia operativa antes de delegar trabajo al usuario.
@@ -229,7 +248,10 @@ Si no hay subagentes disponibles, simular la delegacion en el plan y ejecutar po
 Para preguntas simples, inspecciones locales, comandos read-only o cambios triviales, basta un plan de una linea y no hace falta crear todos los frentes.
 
 ## Limites
-- No publicar contenido, videos con cara, ni cambios client-facing sin aprobacion explicita.
+- Corrección 2026-10-09: usar la autorización de `CLAUDE.md` §«Qué se publica sin
+  preguntar», con revisión visual y todas sus excepciones. Se retira el veto genérico
+  a cambios client-facing; cara/voz en servicios externos conserva aprobación.
+  Codex entrega a la madre y no publica fuera de su encargo.
 - No imprimir secretos completos.
 - No crear archivos duplicados si ya existe un archivo canonico.
 - No tocar areas de otra sesion sin coordinar en `COORDINATION_MANIFEST.md`.
@@ -250,6 +272,8 @@ se desincronizan. Antes de cada tarea, Codex lee la que corresponde:
 | Skill | Cuando |
 |---|---|
 | `onia-router` / `onia-continuidad` | al empezar: rutea la tarea y dice que ya sabemos |
+| `equipo-de-agentes` | obligatorio al arrancar también en Codex: roles, colas, revisión y límites del encargo |
+| `aprender-de-todo` | obligatorio al arrancar: aprender por dimensión de cada material y verificar uso real |
 | `onia-sesion-madre` | coordinar sesiones; tokens: donde se van y como bajarlos |
 | `onia-ventas-pauta` / `onia-chatbot` | prospeccion, pauta de Meta / bot, Chatwoot, WhatsApp |
 | `onia-core` / `onia-infra` / `onia-hermes-jarvis` | core y rubros / VPS, Docker, n8n / Hermes por Telegram |
@@ -263,7 +287,8 @@ Del producto, en `onia-platform/.claude/skills/`: `onia-frontend`, `onia-backend
 `onia-deploy` y `onia-verificacion`.
 
 Reglas de Sergio Urcullo vigentes desde el 3-oct:
-- Onia les habla de **usted** a clientes y prospectos.
+- Onia/producto les habla de **usted** a clientes y prospectos; marca personal usa
+  **vos** (alcance aclarado 2026-10-09). Las transcripciones conservan lo dicho.
 - Cada tarea arranca con META, PRUEBA DE HECHO y REGLA DE PARADA escritas.
 - Nada llega a main sin revision.
 - Effort medio, sesiones cortas, sin releer documentos enteros.

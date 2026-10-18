@@ -14,7 +14,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { spawnSync, execFileSync } from "node:child_process";
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, chmodSync, existsSync, readdirSync, copyFileSync, unlinkSync } from "node:fs";
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, chmodSync, existsSync, readdirSync, copyFileSync, unlinkSync, rmSync, utimesSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -30,7 +30,7 @@ function ejecutable(f, contenido) {
   chmodSync(f, 0o755);
 }
 
-function vps({ leeCalendario = true, escribeCalendario = true } = {}) {
+function vps({ leeCalendario = true, escribeCalendario = true, conLatido = true, conQa = true } = {}) {
   const dir = mkdtempSync(join(tmpdir(), "jarvis-vps-"));
   const F = join(dir, "fs");
   const R = join(F, "root");
@@ -69,12 +69,19 @@ function vps({ leeCalendario = true, escribeCalendario = true } = {}) {
   git("update-ref", "refs/remotes/origin/main", "HEAD");
 
   // El código de main ya copiado a /root/bin (lo que mira el paso 0).
-  ejecutable(join(bin, "onia-jarvis-resumen.sh"), "#!/usr/bin/env bash\n# cierre-bloques\necho 'vista previa del resumen'\n");
+  ejecutable(join(bin, "onia-jarvis-resumen.sh"), "#!/usr/bin/env bash\n# cierre-bloques · grupo NECESITO\necho 'vista previa del resumen'\n");
   ejecutable(join(bin, "onia-tg.sh"), `#!/usr/bin/env bash\n# ONIA_AVISO_PUEDO\nprintf '%s\\n---\\n' "$1" >> ${log}/telegram\n`);
   ejecutable(join(bin, "onia-vigia-aprobaciones.sh"), "#!/usr/bin/env bash\n# ONIA_AVISO_PUEDO\n");
   // El recolector de respuestas de los pedidos: --probar dice si el VPS llega a GitHub.
-  ejecutable(join(bin, "onia-respuestas-pedidos.sh"), `#!/usr/bin/env bash\n[ "$1" = --probar ] || exit 0\necho "$ONIA_PEDIDOS_ESTADO" >> ${log}/respuestas-probar\n[ -z "\${RESPUESTAS_SIN_GITHUB:-}" ] || exit 1\necho "✅ llego a GitHub"\n`);
+  ejecutable(join(bin, "onia-respuestas-pedidos.sh"), `#!/usr/bin/env bash\nbajar() { :; }\n[ "$1" = --probar ] || exit 0\necho "$ONIA_PEDIDOS_ESTADO" >> ${log}/respuestas-probar\n[ -z "\${RESPUESTAS_SIN_GITHUB:-}" ] || exit 1\necho "✅ llego a GitHub"\n`);
   ejecutable(join(bin, "claude-guardia.sh"), "#!/usr/bin/env bash\navisar() { :; }\n");
+  // El envoltorio del latido (10-oct, Q4c): el de verdad, porque las líneas del crontab lo llaman.
+  if (conLatido) ejecutable(join(bin, "onia-latido.sh"), readFileSync(join(AQUI, "latido.sh"), "utf8"));
+  // El QA después de cada publicación (10-oct, Q5) y el onia-mirar.js que abre las pantallas.
+  if (conQa) {
+    ejecutable(join(bin, "onia-qa-release.sh"), "#!/usr/bin/env bash\nexit 0\n");
+    writeFileSync(join(bin, "onia-mirar.js"), "// onia-mirar.js\n");
+  }
   ejecutable(
     join(bin, "onia-agenda.sh"),
     `#!/usr/bin/env bash
@@ -245,7 +252,7 @@ test("con todo en verde: aplica, reinicia el gateway, verifica que volvió y le 
   const r = v.aplicar();
   assert.equal(r.status, 0, r.stdout + r.stderr);
   assert.match(r.stdout, /✅ requisitos en verde/);
-  assert.match(v.crontab(), /onia-jarvis-resumen\.sh manana .* #jarvis/);
+  assert.match(v.crontab(), /onia-jarvis-resumen\.sh manana' .* #jarvis/);
   assert.match(v.crontab(), /^#jarvis# .*onia-parte-diario\.sh/m);
   assert.ok(v.jobs().every((j) => !j.enabled && j.state === "paused"));
   assert.equal(apagados(v.leer("n8n")).length, 12, "los 12 flujos de reportes se apagan");
@@ -515,9 +522,66 @@ test("con llave, si a main le falta la skill de pedidos o su regla en el SOUL, n
   nadaCreado(sinRegla);
 });
 
+test("el formato fijo (Pasó · Necesito · Sigue) entra a su SOUL una sola vez, sin arrastrar lo que le sigue", () => {
+  // Sergio Urcullo, 8-oct: «me entregás demasiado texto y me pierdo». aplicar copia del SOUL de main
+  // solo las secciones que nombra: una regla escrita en otra sección nunca llegaba al VPS.
+  const v = vps();
+  const r = v.aplicar();
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(r.stdout, /✅ regla del formato agregada al SOUL de Hermes/);
+  spawnSync("/bin/sleep", ["1.1"]); // el respaldo se nombra por segundo
+  assert.equal(v.aplicar().status, 0);
+  const soul = readFileSync(join(v.R, ".hermes", "SOUL.md"), "utf8");
+  assert.equal((soul.match(/^## Formato fijo de cada mensaje/gm) || []).length, 1);
+  assert.match(soul, /\*\*Pasó\*\*[\s\S]*\*\*Necesito\*\*[\s\S]*\*\*Sigue\*\*/);
+  assert.doesNotMatch(soul, /^## Qué ES Onia hoy/m, "solo esa sección, hasta su «---»");
+});
+
+test("sección 0: con el resumen de antes del formato fijo en /root/bin, no aplica nada", () => {
+  // Revisión del 9-oct: el SOUL le dice a Hermes que el resumen ya llega en tres bloques; con el
+  // resumen viejo corriendo, eso sería falso.
+  const v = vps();
+  writeFileSync(join(v.R, "bin", "onia-jarvis-resumen.sh"), "#!/usr/bin/env bash\n# cierre-bloques\n");
+  const r = v.aplicar();
+  assert.equal(r.status, 1, r.stdout);
+  nadaCreado(v);
+});
+
+test("con la regla del calendario ya en su SOUL, el paso del formato toma su propio respaldo y revertir lo deja exacto", () => {
+  // Revisión del 9-oct: en las otras pruebas el respaldo lo toma siempre el paso del calendario.
+  // En el VPS de verdad el SOUL ya puede tener esa regla: el respaldo es del paso del formato.
+  const v = vps();
+  const soulPath = join(v.R, ".hermes", "SOUL.md");
+  const main = readFileSync(join(RAIZ, "hermes-content/deploy/hermes-agent/SOUL.md"), "utf8");
+  const cal = main.slice(main.indexOf("## Su calendario y el cierre del día"));
+  const inicial = "# SOUL de Hermes\n\n---\n\n" + cal.split(/^---$/m)[0];
+  writeFileSync(soulPath, inicial);
+  const r = v.aplicar();
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(r.stdout, /su SOUL ya tenía la regla del calendario/);
+  assert.match(r.stdout, /✅ regla del formato agregada al SOUL de Hermes/);
+  const bk = join(v.R, "backups", v.respaldos().at(-1), "SOUL.md.antes");
+  assert.equal(readFileSync(bk, "utf8"), inicial, "el respaldo es el SOUL de antes del formato");
+  const rev = v.revertir();
+  assert.equal(rev.status, 0, rev.stdout + rev.stderr);
+  assert.equal(readFileSync(soulPath, "utf8"), inicial);
+});
+
+test("si a main le falta la regla del formato en el SOUL, no aplica nada", () => {
+  const v = vps();
+  cambiarMain(v, (repo) => {
+    const f = join(repo, "hermes-content/deploy/hermes-agent/SOUL.md");
+    writeFileSync(f, readFileSync(f, "utf8").replace(/^## Formato fijo de cada mensaje/m, "## Otra cosa"));
+  });
+  const r = v.aplicar();
+  assert.equal(r.status, 1, r.stdout);
+  assert.match(r.stdout, /no encontré la regla del formato en el SOUL de origin\/main/);
+  nadaCreado(v);
+});
+
 test("con llave, si el comando de pedidos no la acepta (--estado), no aplica nada", () => {
   const v = vps();
-  writeFileSync(join(v.R, "bin", "onia-pedido-claude.sh"), "#!/usr/bin/env bash\ncandado() { :; }\n[ \"$1\" = --estado ] && exit 69\nexit 0\n");
+  writeFileSync(join(v.R, "bin", "onia-pedido-claude.sh"), "#!/usr/bin/env bash\ncandado() { :; }\nSELLOS=x\n[ \"$1\" = --estado ] && exit 69\nexit 0\n");
   const r = v.aplicar(LLAVE);
   assert.equal(r.status, 1, r.stdout);
   assert.match(r.stdout, /no acepta la llave de la rutina \(--estado\)/);
@@ -542,6 +606,20 @@ test("sección 0: sin el recolector, o con el comando de pedidos sin su candado,
   assert.equal(r2.status, 1, r2.stdout);
   assert.match(r2.stdout, /El código de main todavía no está en \S*\/root\/bin/);
   nadaCreado(viejo);
+
+  // 5-oct, los MEDIUM de la madre v2: el comando sin sello o el recolector sin tope tampoco sirven.
+  const sinSello = vps();
+  writeFileSync(join(sinSello.R, "bin", "onia-pedido-claude.sh"), "#!/usr/bin/env bash\ncandado() { :; }\nexit 0\n");
+  const r3 = sinSello.aplicar(LLAVE);
+  assert.equal(r3.status, 1, r3.stdout);
+  assert.match(r3.stdout, /El código de main todavía no está en \S*\/root\/bin/);
+  nadaCreado(sinSello);
+  const sinTope = vps();
+  writeFileSync(join(sinTope.R, "bin", "onia-respuestas-pedidos.sh"), "#!/usr/bin/env bash\n# --probar, sin tope\nexit 0\n");
+  const r4 = sinTope.aplicar(LLAVE);
+  assert.equal(r4.status, 1, r4.stdout);
+  assert.match(r4.stdout, /El código de main todavía no está en \S*\/root\/bin/);
+  nadaCreado(sinTope);
 });
 
 test("con llave, si el VPS no llega a GitHub para recoger las respuestas, no aplica nada", () => {
@@ -557,7 +635,7 @@ test("con llave: el cron del recolector entra con la marca, y revertir lo saca",
   const v = vps();
   const r = v.aplicar(LLAVE);
   assert.equal(r.status, 0, r.stdout + r.stderr);
-  assert.match(v.crontab(), /^\*\/2 \* \* \* \* \[ -x \S+\/bin\/onia-respuestas-pedidos\.sh \] && \S+\/bin\/onia-respuestas-pedidos\.sh >> \/var\/log\/onia-respuestas-pedidos\.log 2>&1 #jarvis$/m);
+  assert.match(v.crontab(), /^\*\/2 \* \* \* \* \S+\/bin\/onia-latido\.sh respuestas-pedidos 120 '\[ ! -x \S+\/bin\/onia-respuestas-pedidos\.sh \] \|\| \S+\/bin\/onia-respuestas-pedidos\.sh' >> \/var\/log\/onia-respuestas-pedidos\.log 2>&1 #jarvis$/m);
   assert.match(r.stdout, /la respuesta vuelve sola: onia-respuestas-pedidos\.sh/);
   assert.equal(v.revertir().status, 0);
   assert.doesNotMatch(v.crontab(), /onia-respuestas-pedidos/);
@@ -627,4 +705,345 @@ test("el CI no deja la credencial de GitHub en el checkout", () => {
   const paso = resto.slice(0, (resto.indexOf("\n      - ", 1) + 1 || resto.length + 1) - 1);
   assert.match(paso, /^\s+persist-credentials: false$/m);
   assert.doesNotMatch(wf, /runs-on:.*self-hosted/, "nunca en el runner del VPS");
+});
+
+// ── diagnostico: el recolector de respuestas de los pedidos (pendiente 6 del handoff, 9-oct) ──────
+// Sin esto, una respuesta que no llegaba solo se veía entrando al VPS. Se corre la sección 12 del
+// diagnostico.sh REAL con /var/log, /var/lib y /root llevados a una carpeta temporal.
+function diagnosticoPedidos({ conCron = true, conLog = true } = {}) {
+  const dir = mkdtempSync(join(tmpdir(), "jarvis-diag-"));
+  const F = join(dir, "fs");
+  const EP = join(F, "var", "lib", "onia-pedidos");
+  const LOG = join(F, "var", "log");
+  mkdirSync(join(EP, "sellos"), { recursive: true });
+  mkdirSync(LOG, { recursive: true });
+  writeFileSync(join(EP, "sellos", "p_1a2b3c4d"), "0123456789abcdef0123456789abcdef\n");
+  writeFileSync(join(EP, "respuestas.tsv"), "1759999999\tp_1a2b3c4d\tlisto\n");
+  writeFileSync(join(EP, "rechazos-avisados.tsv"), "1759999999\tp_5e6f7a8b\n");
+  const iso = (horas) => new Date(Date.now() - horas * 3600e3).toISOString().replace(/\.\d+Z$/, "Z");
+  if (conLog) {
+    writeFileSync(
+      join(LOG, "onia-respuestas-pedidos.log"),
+      [
+        `${iso(100)} ✅ p_00000000: respuesta «listo» entregada a la aduana`, // fuera de la ventana de 72 h
+        `${iso(5)} ✅ p_1a2b3c4d: respuesta «listo» entregada a la aduana`,
+        `${iso(1)} ❌ no pude consultar GitHub`,
+        "",
+      ].join("\n"),
+    );
+  }
+  const dobles = join(dir, "dobles");
+  const linea = "*/2 * * * * [ -x /root/bin/onia-respuestas-pedidos.sh ] && /root/bin/onia-respuestas-pedidos.sh >> /var/log/onia-respuestas-pedidos.log 2>&1";
+  ejecutable(join(dobles, "crontab"), `#!/usr/bin/env bash\n${conCron ? `echo '${linea}'` : "echo '#*/2 * * * * /root/bin/onia-respuestas-pedidos.sh'"}\n`);
+  const diag = readFileSync(join(DIR, "diagnostico.sh"), "utf8");
+  const inicio12 = diag.indexOf('sec "12.');
+  const s12 = diag.slice(inicio12, diag.indexOf('\nsec "', inicio12 + 1));
+  assert.ok(s12.length > 0, "no encontré la sección 12 del diagnóstico");
+  const guion =
+    `REDACTAR_SED='s/a^//'\n` +
+    readFileSync(join(DIR, "comun.sh"), "utf8") +
+    `\nDESDE=${iso(72)}\n` +
+    s12.replaceAll("/var/log/", LOG + "/").replaceAll("/var/lib/onia-pedidos", EP).replaceAll("/root/", join(F, "root") + "/");
+  return spawnSync("bash", ["-s"], { input: guion, env: { ...process.env, PATH: `${dobles}:${process.env.PATH}` }, encoding: "utf8" });
+}
+
+test("diagnóstico: muestra el recolector de respuestas (cron, la ventana y el final del log) sin leer un sello", () => {
+  const r = diagnosticoPedidos();
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(r.stdout, /en el crontab: sí/);
+  assert.match(r.stdout, /en la ventana: 1 entregada\(s\) · 1 con falla/);
+  assert.match(r.stdout, /❌ no pude consultar GitHub/);
+  assert.match(r.stdout, /respuestas\.tsv: 1 fila\(s\)/);
+  assert.match(r.stdout, /rechazos-avisados\.tsv: 1 fila\(s\)/);
+  assert.match(r.stdout, /sellos de pedidos abiertos: 1 \(no se leen\)/);
+  assert.doesNotMatch(r.stdout + r.stderr, /0123456789abcdef/, "un sello nunca sale en el diagnóstico");
+});
+
+test("diagnóstico: sin la línea del cron (o comentada) y sin log, lo dice", () => {
+  const r = diagnosticoPedidos({ conCron: false, conLog: false });
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(r.stdout, /en el crontab: NO/);
+  assert.match(r.stdout, /no existe .*onia-respuestas-pedidos\.log/);
+});
+
+// ── diagnostico: lo publicado y lo agendado (9-oct; GOAL del 8-oct: una pieza por día) ──────────────
+// Corre la sección 13 del diagnostico.sh REAL con /root llevado a una carpeta temporal y un systemctl
+// de mentira. Solo lectura: lista, no toca nada.
+function diagnosticoPublicaciones({ conRegistro = true } = {}) {
+  const dir = mkdtempSync(join(tmpdir(), "jarvis-diag-pub-"));
+  const F = join(dir, "fs");
+  const pub = join(F, "root", "publicar");
+  mkdirSync(pub, { recursive: true });
+  // Fechas fijas: la sección mira desde DESDE, no desde «ahora», y así el conteo por día no depende
+  // de la hora en que corre la prueba.
+  if (conRegistro) {
+    writeFileSync(
+      join(pub, "publicado.jsonl"),
+      [
+        { cuenta: "sergio", media: "1", trial: null, permalink: "https://www.instagram.com/reel/VIEJO/", timestamp: "2026-10-05T16:00:00+0000" },
+        { cuenta: "sergio", media: "2", trial: null, permalink: "https://www.instagram.com/reel/NUEVO/", timestamp: "2026-10-09T16:31:00+0000" },
+        { cuenta: "sergio", media: "3", tipo: "carrusel", permalink: "https://www.instagram.com/p/CAR/", timestamp: "2026-10-09T20:00:00+0000" },
+        { red: "youtube", id: "e", url: "https://youtu.be/ENSAYO", privacidad: "private", fecha: "2026-10-09T21:00:00.000Z" },
+        { red: "buffer", canal: "c1", post: "p9", estado: "agendado", cuando: "2026-10-10T16:35:00.000Z", fecha: "2026-10-09T21:05:00.000Z" },
+      ].map((r) => JSON.stringify(r)).join("\n") + "\n{roto\n",
+    );
+  }
+  const dobles = join(dir, "dobles");
+  ejecutable(join(dobles, "systemctl"), `#!/usr/bin/env bash\necho "$*" >> ${dir}/systemctl.log\necho 'Sat 2026-10-10 16:30:00 UTC 1h left - - pub-n07.timer pub-n07.service'\n`);
+  const diag = readFileSync(join(DIR, "diagnostico.sh"), "utf8");
+  const inicio13 = diag.indexOf('sec "13.');
+  const s13 = diag.slice(inicio13, diag.indexOf('\nsec "', inicio13 + 1));
+  assert.ok(s13.length > 0, "no encontré la sección 13 del diagnóstico");
+  const guion =
+    `REDACTAR_SED='s/a^//'\n` + readFileSync(join(DIR, "comun.sh"), "utf8") + `\nDESDE=2026-10-06T12:00:00Z\n` + s13.replaceAll("/root/", join(F, "root") + "/");
+  const r = spawnSync("bash", ["-s"], { input: guion, env: { ...process.env, PATH: `${dobles}:${process.env.PATH}` }, encoding: "utf8" });
+  return { r, systemctl: existsSync(join(dir, "systemctl.log")) ? readFileSync(join(dir, "systemctl.log"), "utf8") : "" };
+}
+
+test("diagnóstico: lo publicado en la ventana, con link y por día, y lo agendado, sin tocar nada", () => {
+  const { r, systemctl } = diagnosticoPublicaciones();
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(r.stdout, /10-09 12:31 Reel · https:\/\/www\.instagram\.com\/reel\/NUEVO\//);
+  assert.match(r.stdout, /Carrusel · https:\/\/www\.instagram\.com\/p\/CAR\//);
+  assert.match(r.stdout, /YouTube \(private\) · https:\/\/youtu\.be\/ENSAYO/, "el ensayo privado se ve como tal");
+  assert.match(r.stdout, /Buffer agendado · p9/);
+  assert.doesNotMatch(r.stdout, /VIEJO/, "lo de antes de la ventana no sale");
+  assert.match(r.stdout, /publicadas por día \(La Paz, Instagram y YouTube público\): 10-09: 2$/m);
+  assert.match(r.stdout, /pub-n07\.timer/);
+  assert.match(systemctl, /^list-timers pub-\* --all --no-pager$/m);
+  assert.doesNotMatch(systemctl, /^(start|stop|restart|enable|disable)/m, "solo lectura");
+});
+
+test("diagnóstico: sin registro de publicaciones, lo dice", () => {
+  const { r } = diagnosticoPublicaciones({ conRegistro: false });
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(r.stdout, /no existe .*publicado\.jsonl/);
+});
+
+// ── diagnostico: qué secciones del SOUL le faltan a Hermes (9-oct) ─────────────────────────────────
+// `aplicar` copia del SOUL del repo solo las secciones que nombra. Para decidir qué más copiar hay que
+// ver qué tiene el SOUL del VPS. Sección 14, solo lectura: títulos `##` del VPS contra origin/main.
+test("diagnóstico: lista las secciones del SOUL de main que le faltan al SOUL del VPS", () => {
+  const v = vps();
+  writeFileSync(join(v.R, ".hermes", "SOUL.md"), "# SOUL viejo\n\n## Quién sos y cuál es tu oficio\n\ntexto\n\n## Su calendario y el cierre del día\n\nmás\n");
+  const diag = readFileSync(join(DIR, "diagnostico.sh"), "utf8");
+  const inicio14 = diag.indexOf('sec "14.');
+  const s14 = diag.slice(inicio14, diag.indexOf('\nsec "', inicio14 + 1));
+  assert.ok(s14.length > 0, "no encontré la sección 14 del diagnóstico");
+  const guion = `REDACTAR_SED='s/a^//'\n` + readFileSync(join(DIR, "comun.sh"), "utf8") + "\n" + s14.replaceAll("/root/", v.R + "/");
+  const antes = readFileSync(join(v.R, ".hermes", "SOUL.md"), "utf8");
+  const r = spawnSync("bash", ["-s"], { input: guion, encoding: "utf8" });
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  const faltan = r.stdout.slice(r.stdout.indexOf("--- de main, le faltan:"), r.stdout.indexOf("--- tiene y main no:"));
+  assert.match(faltan, /## Formato fijo de cada mensaje/);
+  assert.match(faltan, /## Pedidos a Claude/);
+  assert.doesNotMatch(faltan, /## Su calendario y el cierre del día/, "la que ya tiene no falta");
+  assert.match(r.stdout, /el SOUL del VPS tiene 2 sección\(es\)/);
+  assert.match(r.stdout, /--- tiene y main no:\n\(ninguna\)/, "«Su calendario…» sin la fecha es la misma sección");
+  assert.equal(readFileSync(join(v.R, ".hermes", "SOUL.md"), "utf8"), antes, "solo lectura");
+});
+
+// ── El latido de cada trabajo que agrega aplicar (10-oct, HERMES_ROL_QA.md Q4c) ────────────
+// Antes, un trabajo mudo y uno sano se veían igual: los dos no decían nada.
+
+const LATIDO = join(AQUI, "latido.sh");
+function correrLatido(args, env = {}) {
+  const dir = mkdtempSync(join(tmpdir(), "latido-"));
+  const r = spawnSync("bash", [LATIDO, ...args], { env: { ...process.env, ONIA_LATIDO_DIR: join(dir, "lat"), ...env }, encoding: "utf8" });
+  const leer = (n) => (existsSync(join(dir, "lat", n)) ? readFileSync(join(dir, "lat", n), "utf8") : null);
+  return { ...r, dir, leer };
+}
+
+test("latido: corre el comando, sale con SU código y anota «epoch código cadencia»", () => {
+  const ok = correrLatido(["aduana-soltar", "300", "ONIA_X=hola sh -c 'echo $ONIA_X'"]);
+  assert.equal(ok.status, 0);
+  assert.equal(ok.stdout, "hola\n", "el comando corre entero, con su variable");
+  assert.match(ok.leer("aduana-soltar"), /^\d{10} 0 300\n$/);
+  const mal = correrLatido(["agenda-bloques", "1800", "exit 3"]);
+  assert.equal(mal.status, 3, "el código del trabajo no se pierde");
+  assert.match(mal.leer("agenda-bloques"), /^\d{10} 3 1800\n$/);
+});
+
+test("latido: nunca rompe el trabajo, ni con un nombre inválido ni sin dónde escribir", () => {
+  const raro = correrLatido(["../etc/x", "300", "echo corrió; exit 4"]);
+  assert.equal(raro.status, 4);
+  assert.equal(raro.stdout, "corrió\n");
+  assert.match(raro.stderr, /inválidos: corrió sin latido/);
+  assert.equal(existsSync(join(raro.dir, "lat")), false, "un nombre inválido no escribe nada");
+  const sinLugar = correrLatido(["respuestas-pedidos", "120", "echo corrió"], { ONIA_LATIDO_DIR: "/proc/no-se-puede/lat" });
+  assert.equal(sinLugar.status, 0);
+  assert.equal(sinLugar.stdout, "corrió\n");
+  assert.match(sinLugar.stderr, /no pude anotar el latido/);
+  assert.equal(correrLatido(["x", "300"]).status, 2, "sin comando no corre nada");
+});
+
+test("aplicar no toca el crontab si el QA de publicación todavía no llegó a /root/bin", () => {
+  const v = vps({ conQa: false });
+  const r = v.aplicar();
+  assert.notEqual(r.status, 0, r.stdout);
+  assert.match(r.stdout, /onia-qa-release\.sh/);
+  assert.equal(v.crontab(), v.crontabInicial, "su línea correría un archivo que nadie copió");
+});
+
+test("aplicar no toca el crontab si el latido todavía no llegó a /root/bin", () => {
+  const v = vps({ conLatido: false });
+  const r = v.aplicar();
+  assert.notEqual(r.status, 0, r.stdout);
+  assert.equal(v.crontab(), v.crontabInicial, "sin el envoltorio, cada línea nueva fallaría");
+});
+
+test("cada línea que agrega aplicar corre dentro del latido, y corre ENTERA: su comando, con sus argumentos", () => {
+  const v = vps();
+  assert.equal(v.aplicar().status, 0);
+  const nuevas = v.crontab().split("\n").filter((l) => l.endsWith(" #jarvis") && !l.startsWith("#"));
+  const conLatido = nuevas.filter((l) => l.includes("/root/bin/onia-latido.sh "));
+  const nombres = conLatido.map((l) => l.match(/onia-latido\.sh (\S+) (\d+) /).slice(1).join(" "));
+  assert.deepEqual(nombres, ["resumen-manana 86400", "resumen-noche 86400", "aduana-soltar 300", "agenda-bloques 1800", "respuestas-pedidos 120", "qa-release 900"]);
+  // El resumen lee exactamente esos nombres: si uno cambia acá y no allá, su latido no se mira nunca.
+  const esperados = readFileSync(join(AQUI, "jarvis-resumen.sh"), "utf8").match(/^LATIDOS_ESPERADOS="([^"]+)"/m)[1];
+  assert.deepEqual(esperados.split(" "), nombres.map((n) => n.split(" ")[0]));
+  // Las mismas líneas, sin el horario, contra un /root/bin que anota con qué la llamaron. Revisión del
+  // 10-oct: sin las comillas, la línea de la aduana corría «sh -c 'ONIA_AVISO_SOLTAR=1'», salía 0, y el
+  // latido decía «sano» de un trabajo que nunca corrió. Esto lo agarra.
+  const tmp = mkdtempSync(join(tmpdir(), "linea-"));
+  const grabador = join(tmp, "bin");
+  for (const s of ["onia-jarvis-resumen.sh", "onia-tg.sh", "onia-agenda.sh", "onia-respuestas-pedidos.sh", "onia-qa-release.sh"]) {
+    ejecutable(join(grabador, s), `#!/usr/bin/env bash\necho "$(basename "$0") $* soltar=\${ONIA_AVISO_SOLTAR:-}" >> ${tmp}/llamadas\n`);
+  }
+  for (const l of conLatido) {
+    const cmd = l.replace(/ #jarvis$/, "").split(" ").slice(5).join(" ")
+      .replace(/\S*\/onia-latido\.sh/, LATIDO).replaceAll("/var/log/", `${tmp}/`).replace(/[^\s']*\/root\/bin\//g, `${grabador}/`);
+    spawnSync("sh", ["-c", cmd], { env: { ...process.env, ONIA_LATIDO_DIR: join(tmp, "lat") } });
+  }
+  assert.deepEqual(readFileSync(join(tmp, "llamadas"), "utf8").trim().split("\n"), [
+    "onia-jarvis-resumen.sh manana soltar=",
+    "onia-jarvis-resumen.sh noche soltar=",
+    "onia-tg.sh  soltar=1",
+    "onia-agenda.sh --bloques soltar=",
+    "onia-respuestas-pedidos.sh  soltar=",
+    "onia-qa-release.sh  soltar=",
+  ]);
+  for (const n of ["resumen-manana", "resumen-noche", "aduana-soltar", "agenda-bloques", "respuestas-pedidos", "qa-release"]) {
+    assert.match(readFileSync(join(tmp, "lat", n), "utf8"), /^\d{10} 0 \d+\n$/, n);
+  }
+  // Sin el recolector copiado, «! -x ||» sale 0: no es una falla.
+  rmSync(join(grabador, "onia-respuestas-pedidos.sh"));
+  const pedidos = conLatido.find((l) => l.includes(" respuestas-pedidos ")).replace(/ #jarvis$/, "").split(" ").slice(5).join(" ")
+    .replace(/\S*\/onia-latido\.sh/, LATIDO).replaceAll("/var/log/", `${tmp}/`).replace(/[^\s']*\/root\/bin\//g, `${grabador}/`);
+  assert.equal(spawnSync("sh", ["-c", pedidos], { env: { ...process.env, ONIA_LATIDO_DIR: join(tmp, "lat") } }).status, 0);
+  assert.match(readFileSync(join(tmp, "lat", "respuestas-pedidos"), "utf8"), /^\d{10} 0 120\n$/);
+});
+
+test("latido: corridas que se pisan no se roban el archivo temporal", () => {
+  const dir = mkdtempSync(join(tmpdir(), "latido-carrera-"));
+  const r = spawnSync("bash", ["-c", `for i in $(seq 40); do bash ${LATIDO} respuestas-pedidos 120 true & done; wait`],
+    { env: { ...process.env, ONIA_LATIDO_DIR: join(dir, "lat") }, encoding: "utf8" });
+  assert.equal(r.stderr, "", "ninguna dice «no pude anotar»");
+  assert.deepEqual(readdirSync(join(dir, "lat")), ["respuestas-pedidos"], "y no quedan temporales");
+});
+
+// ── diagnostico: los latidos del cron (10-oct, HERMES_ROL_QA.md Q2) ────────────────────────────────
+// Hoy un vigía mudo y uno sano se ven igual. Se corre la sección 15 del diagnostico.sh REAL con un
+// crontab doble y logs con fechas puestas a mano.
+function diagnosticoLatidos({ lineasExtra = null, logsExtra = {} } = {}) {
+  const dir = mkdtempSync(join(tmpdir(), "jarvis-diag-lat-"));
+  const LOG = join(dir, "log");
+  const LAT = join(dir, "lat");
+  mkdirSync(LOG, { recursive: true });
+  mkdirSync(LAT, { recursive: true });
+  const hace = (seg) => new Date(Date.now() - seg * 1000);
+  const log = (n, seg) => { writeFileSync(join(LOG, n), "x\n"); utimesSync(join(LOG, n), hace(seg), hace(seg)); };
+  log("aduana.log", 3600);       // corre cada 5 min y no escribe hace 1 h: MUDO
+  log("diario.log", 2 * 3600);   // corre una vez por día y escribió hace 2 h: ok
+  for (const [n, seg] of Object.entries(logsExtra)) log(n, seg);
+  writeFileSync(join(LAT, "aduana-soltar"), "1760000000 0 300\n");
+  const lineas = lineasExtra || [
+    "SHELL=/bin/bash",
+    // El sano va primero en el crontab: la salida igual tiene que poner lo mudo arriba.
+    "0 10 * * * /root/bin/onia-diario.sh >> /var/log/diario.log 2>&1",
+    "*/5 * * * * ONIA_AVISO_SOLTAR=1 /root/bin/onia-tg.sh >> /var/log/aduana.log 2>&1",
+    "*/10 * * * * /root/bin/onia-vigia-sin-log.sh",
+    "25,55 0-1,10-23 * * * /root/bin/onia-latido.sh agenda-bloques 1800 '/root/bin/onia-agenda.sh --bloques' >> /var/log/agenda.log 2>&1",
+    "@reboot /root/bin/onia-al-arrancar.sh",
+    "# 0 * * * * /root/bin/pausado.sh >> /var/log/pausado.log",
+  ];
+  const dobles = join(dir, "dobles");
+  ejecutable(join(dobles, "crontab"), `#!/usr/bin/env bash\ncat <<'CRON'\n${lineas.join("\n")}\nCRON\n`);
+  const diag = readFileSync(join(DIR, "diagnostico.sh"), "utf8");
+  const inicio15 = diag.indexOf('sec "15.');
+  const s15 = diag.slice(inicio15, diag.indexOf('\nsec "', inicio15 + 1));
+  assert.ok(s15.length > 0, "no encontré la sección 15 del diagnóstico");
+  const guion = `REDACTAR_SED='s/a^//'\n` + readFileSync(join(DIR, "comun.sh"), "utf8") + "\n" +
+    s15.replaceAll("/var/log/", LOG + "/").replaceAll("/var/lib/onia-latido", LAT);
+  // Las líneas del crontab doble también apuntan a /var/log: el python lee esas rutas.
+  writeFileSync(join(dobles, "crontab"), `#!/usr/bin/env bash\ncat <<'CRON'\n${lineas.join("\n").replaceAll("/var/log/", LOG + "/")}\nCRON\n`);
+  chmodSync(join(dobles, "crontab"), 0o755);
+  return spawnSync("bash", ["-s"], { input: guion, env: { ...process.env, PATH: `${dobles}:${process.env.PATH}` }, encoding: "utf8" });
+}
+
+test("diagnóstico: cada línea del cron con su cadencia real, su log y si está muda", () => {
+  const r = diagnosticoLatidos();
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  const filas = r.stdout.split("\n");
+  const fila = (que) => filas.find((l) => l.includes(que)) || "";
+  assert.match(fila("aduana.log"), /^MUDO\s+cada 5 min\s+hace 60 min\s+onia-tg\.sh → /);
+  assert.match(fila("diario.log"), /^ok\s+cada 24 h\s+hace 2 h\s+onia-diario\.sh → /);
+  assert.match(fila("onia-vigia-sin-log.sh"), /^sin log\s+cada 10 min/);
+  // De 01:55 a 10:25 UTC no corre: su cadencia real es el hueco más largo, 8 h 30.
+  assert.match(fila("latido:agenda-bloques"), /^MUDO \(no hay log\)\s+cada 8 h/);
+  assert.match(fila("@reboot"), /—/);
+  assert.doesNotMatch(r.stdout, /pausado|SHELL/, "ni lo comentado ni las variables");
+  assert.ok(filas.findIndex((l) => l.startsWith("MUDO")) < filas.findIndex((l) => l.startsWith("ok")), "lo mudo va primero");
+  assert.match(r.stdout, /--- 5 línea\(s\): 2 MUDA\(S\), 1 sin log/);
+  assert.match(r.stdout, /aduana-soltar: 1760000000 0 300 \(2025-10-09T08:53:20Z\)/);
+});
+
+test("el QA diario corre SOLO el diagnóstico, por horario o a mano desde main, sin inputs y sin cancelar un aplicar", () => {
+  const wf = readFileSync(join(RAIZ, ".github", "workflows", "hermes-qa-diario.yml"), "utf8");
+  assert.match(wf, /^\s+- cron: "0 10 \* \* \*"/m, "una vez por día, antes del resumen de las 06:30");
+  const on = wf.slice(wf.indexOf("\non:"), wf.indexOf("\npermissions:"));
+  assert.deepEqual([...on.matchAll(/^  ([a-z_]+):/gm)].map((m) => m[1]), ["schedule", "workflow_dispatch"], "ni push ni pull_request");
+  // Su propio grupo: compartir el de hermes-jarvis le dejaba cancelar un revertir pendiente.
+  assert.match(wf, /^concurrency:\n\s+group: hermes-qa-diario\n\s+cancel-in-progress: false$/m);
+  assert.match(wf, /\[ "\$GITHUB_REF" = refs\/heads\/main \] \|\| \{/, "a mano, solo desde main");
+  assert.match(wf, /umask 077\n\s+printf '%s\\n' "\$KEY"/, "la llave nace sin permisos para otros");
+  assert.doesNotMatch(wf, /^\s+inputs:|\$\{\{\s*(github\.event\.)?inputs/m, "nada de afuera elige qué corre");
+  assert.doesNotMatch(wf, /aplicar\.sh|revertir\.sh|ACTIVOS_B64|RUTINA_/, "ni aplicar, ni revertir, ni la llave de la rutina");
+  assert.match(wf, /cat "\$DIR\/diagnostico\.sh"/);
+  assert.match(wf, /\| sed -E -f "\$DIR\/redactar\.sed"/, "la salida se redacta también acá");
+  assert.match(wf, /^\s+persist-credentials: false$/m);
+});
+
+test("diagnóstico: semanal y mensual muertos salen MUDO; rutas armadas al correr, nombres y alias (revisión del 10-oct)", () => {
+  const D = 86400;
+  const r = diagnosticoLatidos({
+    lineasExtra: [
+      "0 3 * * 0 /root/bin/semanal-muerto.sh >> /var/log/semanal-muerto.log 2>&1",
+      "0 3 * * 0 /root/bin/semanal-vivo.sh >> /var/log/semanal-vivo.log 2>&1",
+      "0 4 1 * * /root/bin/mensual-muerto.sh >> /var/log/mensual-muerto.log 2>&1",
+      "0 5 1 1 * /root/bin/anual.sh >> /var/log/anual.log 2>&1",
+      "0 * * * mon-fri /root/bin/nombres.sh >> /var/log/nombres.log 2>&1",
+      "@hourly /root/bin/cada-hora.sh >> /var/log/cada-hora.log 2>&1",
+      "0 2 * * * /root/bin/pct.sh >> /var/log/pct-$(date +\\%F).log 2>&1",
+      '0 2 * * * /root/bin/comillas.sh >> "/var/log/con espacio.log" 2>&1',
+    ],
+    logsExtra: {
+      "semanal-muerto.log": 120 * D,
+      "semanal-vivo.log": 60,          // recién escrito: está al día haga lo que haga el calendario
+      "mensual-muerto.log": 120 * D,
+      "anual.log": 60,
+      "nombres.log": 30 * D,
+      "cada-hora.log": 60,
+    },
+  });
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  const fila = (que) => r.stdout.split("\n").find((l) => l.includes(que)) || "";
+  assert.match(fila("semanal-muerto.log"), /^MUDO\s+cada 7 d\s+hace 120 d/, "antes salía «ok» con cadencia vacía");
+  assert.match(fila("semanal-vivo.log"), /^ok\s+cada 7 d/);
+  assert.match(fila("mensual-muerto.log"), /^MUDO\s+cada 3\d d/);
+  assert.match(fila("anual.log"), /^no medible .*menos de dos corridas/, "un anual no se mide, ni ok ni MUDO");
+  assert.match(fila("nombres.log"), /^MUDO\s+cada 2 d/, "«mon-fri» se lee (su hueco más largo es el fin de semana): un muerto de lunes a viernes se ve");
+  assert.match(fila("cada-hora.log"), /^ok\s+cada 60 min/);
+  assert.match(fila("pct.sh"), /^sin log/, "una ruta con $(date) no se puede mirar: nunca MUDO");
+  assert.match(fila("comillas.sh"), /^sin log/);
 });

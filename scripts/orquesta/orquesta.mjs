@@ -169,7 +169,7 @@ function prepararWorktree(c, carril, numero) {
     try { git(c.repo, 'worktree', 'remove', '--force', wt); } catch { fs.rmSync(wt, { recursive: true, force: true }); }
   }
   git(c.repo, 'worktree', 'prune');
-  git(c.repo, 'worktree', 'add', '-B', rama, wt, `origin/${c.base}`);
+  git(c.repo, 'worktree', 'add', '--quiet', '-B', rama, wt, `origin/${c.base}`);
   return { wt, rama };
 }
 

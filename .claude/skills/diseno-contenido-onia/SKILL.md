@@ -5,6 +5,21 @@ description: "Invocar ANTES de hacer cualquier pieza visual de la marca personal
 
 # Diseño de contenido ONIA — el único lugar
 
+## Vigente desde el 8–9 oct de 2026
+
+- **Marca personal = `fotobn`: fotografía B/N con un solo objeto verde**, decisión del 8-oct; reemplaza `clay`/arcilla como estilo de salida. Las mediciones históricas de Soul y K1-B de abajo son diagnóstico, no el estilo vigente. Método: `hermes-content/docs/HIGGSFIELD_VIDEO_SYSTEM.md`.
+- **Marca personal habla de vos; producto, anuncios y clientes de usted.** Para recursos de comunidad: «Buscá PALABRA en Avisos», comprobando que el recurso existe. No prometer DM por comentario.
+- **9-oct: el render revisado se publica por el carril autorizado sin esperar otro OK de diseño.** Control visual y de claims sigue obligatorio. Gasto, contacto a terceros, actos legales y subir cara/voz a servicios externos conservan su autorización. Esta regla no amplía una tarea de Codex cerrada ni supera un bloqueo de permisos.
+- Un enlace sin instrucción activa `aprender-de-todo`, no producción. Guardar principio + evidencia + destino; «aplicado» requiere artefacto y sesión que lo usó.
+
+### Aprendizajes incorporados el 9-oct (aplicación pendiente de artefacto)
+
+Fuentes bajo `hermes-content/references/video-intake/`:
+- `2026-10-05-tiktok-ZSbm3Scje.md`, «Qué tomar»: titular de dos niveles (contexto chico + palabra dominante), serie numerada y datos reales que se arman. No inferir que UI/UX Pro Max está instalada ni copiar sus cifras como actuales.
+- `2026-10-08-orquestacion-e-ingresos-5-posts.md`, §3–4: antes de animar, cargar identidad de marca; sincronizar apoyos con música cuando el molde la admita; evaluar efecto abierto con licencia antes de reutilizarlo. Carrusel de herramientas: una herramienta, nombre, función y captura real por lámina; ninguna instalación implícita.
+- `2026-10-09-reel-DePBfHouarG.md`, «Qué aprende Onia»: jerarquía de una palabra; repetición visual con datos propios; dos columnas para comparar el mismo proceso; un tablero para explicar centralización sin atribuir funciones no probadas. El mosaico de cierre queda en `edicion-referentes`.
+- `2026-10-09-cinco-archivos-antes-de-vibe-code.md`, «Qué toma Sergio Urcullo y qué NO»: nombre de entrada + función + prueba visible; una idea por lámina y documento propio legible. No duplicar reglas ni fabricar cinco archivos para seguir el titular del referente.
+
 > Nace el 29-sep-2026. Sergio Urcullo: *«coloca tus skills de design, tus elementos y cómo lo
 > hagas en un solo lugar, ordenados»*. Todo lo de diseño de contenido se entra por acá; los
 > detalles viven en los archivos que este índice nombra, y no se copian a otro lado.
@@ -12,6 +27,15 @@ description: "Invocar ANTES de hacer cualquier pieza visual de la marca personal
 > **Alcance:** diseño de CONTENIDO (redes, YouTube, piezas de marca). La UI del PRODUCTO (el
 > SaaS) no vive acá: `onia-platform/DESIGN.md` + skill `onia-frontend` de ese repo (acordado
 > con la sesión de onia-platform el 29-sep).
+
+> ⚠️ **8-oct-2026: la arcilla se jubila.** Sergio Urcullo eligió la opción 9 de la lámina de estilos: **foto editorial en blanco y negro
+> con UN solo objeto en verde esmeralda** (`image_style: "fotobn"` en `scripts/carousel_images.mjs`, `--model gpt_image_2_5`,
+> `params ["--quality","medium","--resolution","2k"]`, **1 cr por imagen**). Soul 2.0 inventó letras en 5 de 7 imágenes de
+> arcilla. Prompt: describir la escena y decir cuál es «el objeto verde». Fuente completa: `HIGGSFIELD_VIDEO_SYSTEM.md` §
+> «Higgsfield en la edición de la marca personal» (entra a `main` con el PR de la madre). Todo lo de abajo que diga «arcilla»
+> es el estilo anterior. Carruseles nuevos (P2, P3): `fotobn`. Los 7 carruseles en espera (K1, N02, K9, K12, K5, K13, K10)
+> mezclan 10 imágenes flojas con 10 de arcilla que sí sirven: el lote en `docs/cola/plan-3-semanas/lote-14-imagenes.json` está
+> en `fotobn` (14 cr) y falta que Sergio Urcullo decida si se rehace todo el carrusel en el estilo nuevo (+10 cr).
 
 ## La regla que ordena todo
 
@@ -29,7 +53,7 @@ impreso en una taza y un post de Instagram falso con caption inventado).
 | # | Fuente | Para qué | Cómo |
 |---|---|---|---|
 | 1 | **Galería propia** | Lo que ya tenemos | Buscá en `hermes-content/galeria/galeria.json` (tags, prompt) antes de generar |
-| 2 | **Higgsfield** (generada) | Ilustraciones y metáforas visuales: la fuente principal | `node scripts/carousel_images.mjs --brief <b> --out <dir>` cotiza gratis; `--yes` genera (lote aprobado, §6) → `galeria/ilustraciones/` o `galeria/fotos/`. Estilos: `acuarela`, `linea`, `clay`, `foto`, `objeto` |
+| 2 | **Higgsfield** (generada) | Imágenes y metáforas visuales | `node scripts/carousel_images.mjs --brief <b> --out <dir>` cotiza; `--yes` genera dentro del permiso de §6 → `galeria/ilustraciones/` o `galeria/fotos/`. Marca personal: `fotobn` (8-oct); demás estilos solo para otros alcances autorizados |
 | 3 | **Logo oficial** | Cuando se NOMBRA una marca | Claude/Claude Code/Anthropic: `hermes-content/references/brand-claude/` · n8n, OpenAI, Meta, Google, Gemini, WhatsApp: `hermes-content/references/brand-logos/`. Nunca recrear ni generar un logo |
 | 4 | **Captura real** | Mostrar producto o pantalla | Captura de la pantalla real (layout `captura`), nunca una UI inventada |
 | 5 | Pexels / Unsplash | Solo si hace falta una FOTO REAL con licencia (no generada) | `python scripts/marca-personal/buscar-objetos.py --fuente pexels --sin-recorte --galeria --objeto nombre="consulta"` |
@@ -56,9 +80,9 @@ Cada lámina elige `layout`:
 | `ensayo` | Bastian: texto grande sobre papel, sin cajas | ≤ 60 palabras | ninguna |
 | `dato` | Erik / Ingeniero Binario: una cifra gigante + qué significa (`value`) | título ≤ 6 palabras | ninguna |
 | `captura` | Carlos: la pantalla real como prueba | título ≤ 8, pie ≤ 12 | captura real (nunca maqueta) |
-| `cierre` | los 8 referentes: «Comentá PALABRA» + qué recibís (`keyword`) | 1 línea | ninguna; solo si el recurso ya existe |
+| `cierre` | «Buscá PALABRA en Avisos» + qué recibís (`keyword`), adaptación vigente 9-oct | 1 línea | ninguna; solo si el recurso ya existe |
 
-Pendientes del catálogo (en `patrones/`): P-COMPARA, P-FOTO-ESCENA, P-DIAGRAMA, P-TABLA-MARCADOR.
+Pendientes del catálogo (en `patrones/`): P-COMPARA, P-FOTO-ESCENA, P-DIAGRAMA, P-TABLA-MARCADOR, **P-LISTA-CONTINUA** (receta «Inventario continuo», más abajo; sin layout todavía).
 Carlos Domínguez señala como rasgo de «plantilla IA» el fondo crema: por eso el pack pasó a
 blanco puro, verde y negro (decisión de Sergio, 29-sep).
 
@@ -79,7 +103,7 @@ lámina sale SIN título. `"next": ""` saca la flecha «seguí» (para historias
 - **Título de `ensayo` que se parte** («8 / bloques»): un espacio duro (U+00A0) dentro del `*…*` lo mantiene junto.
 - **`dato` con un dígito angosto** («1», «2») deja vacía la derecha: alargá el título a 2-3 líneas.
 - **Sin imagen no hay K1-B.** El 1-oct, sin lote aprobado, K8, K11, K12 y K13 salieron solo con texto y se acercan a lo
-  que Sergio Urcullo rechazó («vacío y con demasiado texto»). Lo que hace vender a K1-B son sus dos imágenes de arcilla:
+  que Sergio Urcullo rechazó («vacío y con demasiado texto»). En K1-B histórico la función visual la daban dos imágenes de arcilla (desde 8-oct se conserva esa función con `fotobn`):
   pedí el lote de portada + 1 interior ANTES de armar el carrusel, no después.
 - **`ilustrado` con `badge`:** si el primer renglón del título es largo, pasa por DEBAJO del sello sin avisar.
   Arrancá el título con el énfasis o sacá el badge. Cada tramo y cada `*énfasis*` es un bloque: un énfasis en el
@@ -95,6 +119,10 @@ lámina sale SIN título. `"next": ""` saca la flecha «seguí» (para historias
 - **Foto 4:3 en `ilustrado`:** el `object-fit: cover` la recorta arriba y abajo y no se entiende. Centrala en un lienzo
   blanco ancho (`convert … -gravity center -extent 4400x2400`, ~1,85:1) y entra entera (N06, 2-oct).
 - **Un logo como imagen de `ilustrado`:** ponelo sobre un lienzo blanco con margen; la máscara radial lo corta.
+- **⚠ 5-oct, misma ruta, otra sesión de la nube:** el almacén de certificados del navegador (`/root/.pki/nssdb`) estaba
+  vacío, todas las páginas daban `ERR_CERT_AUTHORITY_INVALID`, y el modo «Auto» frenó la importación del certificado del
+  proxy («TLS/Auth Weaken»). No se le busca la vuelta: o Sergio Urcullo lo aprueba en esa sesión (cambiando el modo), o
+  las capturas las saca una sesión en su PC con Chrome. Probalo con UNA página antes de prometer capturas desde la nube.
 - **Capturas reales desde la nube (2-oct):** Chromium con `--proxy-server=$HTTPS_PROXY`; si da
   `ERR_CERT_AUTHORITY_INVALID`, la confianza en la CA del proxy se resuelve como dice `/root/.ccr/README.md` (nunca
   apagando TLS). Cargan `platform.claude.com`, `developers.openai.com`, `geminicli.com`, `developers.googleblog.com`;
@@ -172,9 +200,75 @@ Letras: Bricolage (títulos, local), DM Sans (texto), Caveat (flechas y sello), 
    `carousel_contactsheet.js` lee `CAROUSEL_BROWSER` y pasa `--no-sandbox` desde el 1-oct; antes fallaba en la nube con
    «No Edge/Chrome found» aunque se hubiera corrido el setup. El `eval` va en el MISMO comando que el render.
 
+### Historias con foto de Sergio Urcullo (8-oct)
+
+> ⚠️ **El diseño «foto + etiqueta + titular» fue RECHAZADO por Sergio Urcullo el 8-oct** («no me gustan las historias, el diseño
+> hay que mejorarlo, y recordá que hay estructuras de contenido para vender»). Falló mi método, no solo el estilo: armé el
+> diseño sin leer las fuentes del carril. Antes de diseñar una historia, leer **en este orden**:
+> 1. `hermes-content/skills/historias-onia.md` y `hermes-content/docs/STORY_REFERENCES.md` (tipos de historia y secuencia
+>    de 5: mood/prueba → problema → desglose → interacción → CTA);
+> 2. `ONIA_MARCA_PERSONAL_ETAPA2_OPERACION.md` §2: **4 láminas = gancho → mito → revelación → CTA único**, con prueba en
+>    pantalla y una sola acción;
+> 3. los kits ya aprobados: `carousels/out/curso-dia1/` y `historias-llamada/` (fondo verde de marca, tarjetas negras,
+>    stickers collage, zona punteada para el sticker real).
+> Una historia que vende es una **secuencia** con una acción final, no un afiche con titular. Lo que no se ve desde la nube
+> (cómo lo hacen cuentas que funcionan) se le pide a la madre: «PEDIDO PC: historias de <cuentas> — para qué lo querés».
+
+Lo que sigue (render, banda segura, trampas del headless) **sigue valiendo** como herramienta; lo que cambia es el diseño.
+
+- **Método:** `scripts/marca-personal/historia-foto.mjs --foto <jpg> --titulo "Hoy: *Haiku 5.5* cuesta 10 veces menos"
+  --etiqueta "HOY · SÁB 10 OCT" --out h01.png`. Título de hasta 70 caracteres; `*palabra*` sale en verde ONIA. El texto
+  queda en la banda segura: la interfaz de Instagram tapa los primeros 230 px y los últimos 422 px de 1080x1920.
+- **Antes de publicar:** mirar la foto (nadie más en el fondo, la cara no queda bajo el texto) y la historia renderizada.
+  Publica `ig-historia.mjs` en el VPS (ver `hermes-content/deploy/vps-ops/publicar/README.md`).
+- **Trampa medida el 8-oct:** el Chrome headless nuevo resta ~90 px de la ventana al capturar y deja una franja negra
+  abajo. Se renderiza a 1080x2100 y se corta a 1080x1920 con `ffmpeg crop`. Y su ancho mínimo de ventana es 500 px: una
+  captura «a 400 px» sale cortada aunque la página no desborde.
+- **La API no pone stickers.** Link, encuesta y música los pone Sergio Urcullo a mano.
+
+## Receta de carrusel «Inventario continuo» (referencia DePPPp5FgMh, 10-oct-2026)
+
+Fuente y evidencia: [`references/video-intake/2026-10-10-ig-carrusel-DePPPp5FgMh.md`](../../../hermes-content/references/video-intake/2026-10-10-ig-carrusel-DePPPp5FgMh.md) (carrusel de `@iampascio`, 5 láminas, 12 apps). **Estado: incorporada, sin aplicar.** Aplicación propuesta: `hermes-content/carousels/briefs/BRIEF-RECETA-DePPPp5FgMh.md`.
+
+**Mecanismo:** una lista larga de cosas del mismo tipo (herramientas, tics, preguntas, tareas) partida en láminas con **grilla fija**, sin tarjetas ni título interior. La portada hace de título; el último ítem es lo que ofrecés; el cierre es personal. **Cuándo sí:** 6 o más ítems de un mismo tipo. **Cuándo no:** una noticia o una prueba (va `captura`, una por lámina, como P2): el inventario enseña *qué*, la captura enseña *cómo*.
+
+| # | Lámina | Función | Palabras | Qué va |
+|---|---|---|---|---|
+| 1 | Portada | Gancho de curiosidad e identificación: «qué hay» | título ≤5 + «seguí →» (≤8; la flecha del pack) | Una de tres: **captura real** del objeto medido; foto `fotobn` del escritorio con **un solo objeto verde**, sin texto en pantalla, y los logos oficiales montados por código en arco; o `dato` gigante. Nunca un render con logos generados |
+| 2 | Lista 1 | 5 filas | 25-30 | Logo oficial si el ítem es una marca; número en tinta (DM Sans 800, sin círculo) si es tarea, tic o pregunta, **continuo entre láminas** (6, 7, 8…): el `li-n` actual es un círculo `#10C26B` y 5 por lámina rompen «un solo verde». Sin captura |
+| 3 | Lista 2 | Hasta 5 filas, **misma grilla** | 25-30 | Igual. Si hay menos de 5 filas, el bloque va **centrado en vertical** |
+| 4 | Remate | 2-3 filas; la última es **el recurso**, aislado por aire y unido al cierre con la flecha Caveat | ≤20 | Ícono simple del recurso o ninguno. **No lleva pedido**: el único pedido está en la 5 |
+| 5 | Cierre personal | Una frase de firma + el único CTA | ≤25 | **Foto real** de Sergio Urcullo (fotograma de su video del día, B/N, editado en local; no se sube a servicios externos: cara y voz piden autorización específica). El único verde de la lámina es el marcador sobre la PALABRA del CTA. Sin foto: `ensayo` negro solo texto |
+
+**Tipografía y jerarquía (1080×1350, pack `referentes`, tema `blanco`):**
+- Portada: Bricolage 800, ~140 px, interlineado 1,0, tracking -0,03 em, centrada, 2 renglones de ≤3 palabras.
+- Lista: **nombre y línea al MISMO cuerpo (44 px)**; la jerarquía sale del peso y el color: nombre DM Sans 800 `#0A0F0D`, línea DM Sans 400 `#4F5A55`. Nombre ≤3 palabras; línea ≤8 palabras, hasta 2 renglones; la lámina de 5 filas suma ≤30 (en promedio 2 + 4).
+- Grilla (en % para que valga en `square`): ícono a 17 % del ancho y ~10 % de lado (184 px y 108 px); texto desde 32,5 % (351 px) hasta el padding de 84 px (645 px de columna: el castellano ocupa ~20 % más que el inglés de la fuente); paso de fila 16,5 % del alto (223 px); 5 filas ocupan 13-87 % del alto. La grilla **no cambia entre láminas**.
+- Trazo a mano (Caveat): solo la flecha del remate y la de continuidad. Es el cambio de registro: el pulido es el valor, lo manuscrito es el momento de pedir.
+
+**Paleta nuestra:** fondo `#FFFFFF`, tinta `#0A0F0D`, línea `#4F5A55` (~7:1 sobre blanco; el `#808080` de la fuente da ~3,9:1 y no entra). Verde profundo `#0B8F4F` solo en UNA palabra del título; el eléctrico `#10C26B` en un único objeto o subrayado, nunca como texto sobre blanco. Los logos oficiales a color dentro de la fila son el único otro color; en la portada, 9 logos a color rompen «un solo verde» y son una **excepción que decide Sergio Urcullo**.
+
+**Cierre y CTA (una sola acción):** «Buscá PALABRA en Avisos · link en mi perfil» (8 palabras), tecleado en la lámina 5 y como línea 1 del caption. La palabra es la de la pieza del día y **solo si su aviso ya está pegado antes de la hora del carrusel**; si no, «Lo que probé está en mi comunidad. Link en mi perfil.». Sin pregunta para comentar, sin correo, sin «comentá y te lo mando» (el DM automático no está probado). LinkedIn: si su perfil no muestra el link, el link va en el texto.
+
+**Qué NO copiar:**
+- La mascota, el avatar caricatura y la firma manuscrita de la fuente (nuestro personaje es la foto real); el inglés, «Swipe →» y el humor autocrítico.
+- **Líneas de uso inventadas:** cada línea tiene que ser verdad para Sergio Urcullo o va marcada `[MEDIR]`.
+- Los tres pedidos de la fuente (palabra clave, correo, pregunta) y la promesa de un correo que no existe.
+- La portada con íconos 3D generados, el gris `#808080` y el producto propio camuflado en una lista de marca personal (mezcla carriles: CLAUDE.md, 2-oct).
+
+**Control de calidad propio (suma a §5):** (1) **cada línea corresponde a su ítem**: la fuente publicó una línea cruzada (la de Spotify hablaba de maquetas) y escribió «Whatsapp»; leé fila por fila contra el logo o el número; (2) lámina, caption y recurso enlazado no se contradicen (la fuente, en su lámina 5, prometía notas diarias con envío semanal); (3) misma grilla en todas: sobreponé las láminas 2 y 3 y la x del ícono y del texto no se mueve; (4) la última lista queda centrada en vertical, no pegada arriba; (5) el número de la portada coincide con el de las láminas.
+
+**Qué plantilla hay hoy y qué falta (verificado en `scripts/carousel_pack_referentes.js` el 10-oct):**
+- **Hoy no hay plantilla para esta receta.** El `lista` más parecido (línea 56; CSS 172-193) dibuja cada fila como tarjeta con borde de 3 px y radio de 26 px, siempre imprime su `headline`, cambia a `compacta` con 4 filas o más y usa dos cuerpos (50 y 40 px). **No se usa como si fuera la receta.**
+- **Falta, en este orden** (encargo cerrado para Codex, con la hoja de contactos de los 2 briefs como prueba de hecho; no se construye hasta que la madre lo pida):
+  1. Layout `inventario` junto a `listaHtml`, registrado en `LAYOUTS` (línea 89): `items[{icon|n, label, text}]`, `headline` opcional que no dibuja nada si falta, filas sin caja a la grilla de arriba, `center` para la última lámina y `ask` para la flecha del remate. Sumarlo a la lista de `scripts/carousel_render.test.js:104` con casos de 5, 3 y 2 filas.
+  2. `cierre` escribe «Comentá» fijo (línea 86; lo confirma P2): darle un `pre` con «Buscá» por defecto, o armar el cierre con `ilustrado` (foto + frase + CTA) mientras tanto.
+  3. Portada-inventario con logos en arco: layout nuevo opcional; sin él, la portada va con foto `fotobn` + `dato` o captura.
+- **Logos:** hay 8 en `hermes-content/references/brand-logos/` y 3 en `hermes-content/references/brand-claude/`. Notion, Chrome, Spotify, NordVPN, Figma, Xcode y Cursor **no están**: un inventario que los nombre primero necesita su kit de prensa oficial (si hay que descargar, pide OK).
+
 ## 6. Gasto (CLAUDE.md, regla de Higgsfield)
 
-Cotizar siempre (gratis), pedir aprobación del lote con costo y cantidad, registrar en
+Cotizar siempre. **Actualización 8-oct, consolidada 9-oct:** imágenes de prueba/opciones por unos pocos créditos (menos de ~5 por lote) tienen autorización previa; mostrar después el resultado. Lotes grandes, entrenamiento Soul y subir cara/voz a servicios externos requieren autorización específica (cara/voz de Sergio Urcullo también la de Leslie Mercado Moreno). No fraccionar lotes para esquivar el límite. Registrar en
 `hermes-content/docs/ONIA_MARCA_PERSONAL_HIGGSFIELD_RECETAS.md`. Costos vistos el 29-sep:
 `text2image_soul_v2` 0,12 cr · `seedream_v5_lite` 1 · `nano_banana_flash` 1,5 · `gpt_image_2` 6,5.
 El CLI autenticado está en el VPS: `HF_CMD="ssh -i <llave> -o BatchMode=yes root@<vps> higgsfield"`.
@@ -186,8 +280,8 @@ El CLI autenticado está en el VPS: `HF_CMD="ssh -i <llave> -o BatchMode=yes roo
 - Pedir «espacio vacío» deja un bloque gris.
 - Lo que funciona: un objeto simple sin impresión, descrito en positivo, y el bloque de estilo
   del script (`STYLES` en `scripts/carousel_images.mjs`).
-- **Estilos medidos el 29-sep con Soul 2.0:** `clay` (3D arcilla) sale limpio y en paleta; es el
-  que mejor rinde. `acuarela` queda linda pero INVENTA UNA FIRMA en una esquina (2 de 2): se
+- **Estilos medidos el 29-sep con Soul 2.0 (histórico; reemplazado por `fotobn` el 8-oct):** `clay` (3D arcilla) salió limpio y en paleta en esa prueba.
+  `acuarela` queda linda pero INVENTA UNA FIRMA en una esquina (2 de 2): se
   recorta. `linea` sale como foto de un papel con bordes oscuros. Soul es un modelo de fotos:
   lo que se puede fotografiar (arcilla, objetos) le sale; el dibujo, no.
 - **Medido el 1-oct (lote K2v3/K11/K12):** «toy train» y «locomotive» salen con cara (tipo Thomas) y «tipped over» no

@@ -1,0 +1,38 @@
+{
+ "cuando": "2026-10-16T15:59:43.581Z",
+ "hoyEnUtc": "2026-10-16",
+ "esperado": {
+  "min": "2026-10-16",
+  "max": "2026-11-15"
+ },
+ "anchos": {
+  "390": {
+   "archivo": "reserva-1550-reserva-paso2-390.png",
+   "fecha": {
+    "min": "2026-10-16",
+    "max": "2026-11-15",
+    "value": ""
+   },
+   "coincideConLoEsperado": true,
+   "pedidosNoGet": [
+    "POST https://app.onia.com.bo/cdn-cgi/rum?",
+    "POST https://app.onia.com.bo/cdn-cgi/rum?",
+    "POST https://app.onia.com.bo/cdn-cgi/rum?"
+   ]
+  },
+  "1440": {
+   "archivo": "reserva-1550-reserva-paso2-1440.png",
+   "fecha": {
+    "min": "2026-10-16",
+    "max": "2026-11-15",
+    "value": ""
+   },
+   "coincideConLoEsperado": true,
+   "pedidosNoGet": [
+    "POST https://app.onia.com.bo/cdn-cgi/rum?",
+    "POST https://app.onia.com.bo/cdn-cgi/rum?",
+    "POST https://app.onia.com.bo/cdn-cgi/rum?"
+   ]
+  }
+ }
+}

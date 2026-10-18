@@ -5,7 +5,7 @@
   ],
   "paralelo": 3,
   "minutos_max": 40,
-  "carpeta_trabajo": "C:/dev/proyectos/.orquesta",
+  "carpeta_trabajo": "E:/onia-orquesta",
   "carriles": {
     "plataforma": {
       "que": "Desarrollo de Onia Platform (codigo, tests, PRs)",

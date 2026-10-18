@@ -30,7 +30,7 @@ Hecho cuando: cómo se comprueba.
 ## Qué hace una pasada
 
 1. Toma la tarea abierta más vieja de cada carril (máx. `paralelo` a la vez) y le pone `en-curso`.
-2. Crea un worktree limpio desde `origin/<base>` en `C:/dev/proyectos/.orquesta/<carril>-<n>`.
+2. Crea un worktree limpio desde `origin/<base>` en `E:/onia-orquesta/<carril>-<n>` (en E: porque cada copia de onia-hermes pesa ~5,5 GB y C: tiene poco libre).
 3. Corre el agente sin pantalla. Claude: hooks y plugins ruidosos apagados, credenciales y `git push`
    negados (`trabajador.settings.json`, un tercio del costo de arranque), y herramientas por área
    (solo `investigacion` navega la web; solo `video` corre scripts y ffmpeg). Codex: sandbox

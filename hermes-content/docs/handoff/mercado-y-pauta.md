@@ -1,5 +1,126 @@
 # Handoff — carril `mercado-y-pauta` (sesión «Ventas y pauta Onia Platform», antes «Análisis de mercado»)
 
+> 🔁 **9-oct — loop sobre la cola `cola/loop/ventas-pauta.md`** (la cola y el commit `06ae72789` de la madre viven en `origin/claude/onia-madre-v2-pr-review-2d85bb`, **no en `main`**; allí está también el cambio de CLAUDE.md que sube el diseño sin esperar: **sin mergear, no rige para mí**).
+> - ✅ **Tarea 3 (creativos de §5.11):** `carousels/briefs/ads/PRUEBA-1-PIEZAS.md`: A1-E y A1-V listas y miradas con el copy corregido; A1-S espera la cara de Sergio Urcullo.
+> - ✅ **Tarea 4 (fichas de contenido):** `research/competencia/anuncios/FICHAS_DE_CONTENIDO.md` (Huli, Reservo, Dt.Dental, Calu, bolivianos: ningún proveedor boliviano pauta en Meta).
+> - ⛔ **Tareas 1 y 2 bloqueadas por Plataforma:** la tabla «se promete / funciona» y el corto de 60 s necesitan la cuenta demo y las capturas C1-C7 (y que Sergio Urcullo vea la tabla de cortes y el preview 360p antes de cortar).
+> - Bloqueado de Sergio Urcullo: tarjeta en ONIA Ads y OK de gasto.
+> 🔎 **10-oct, noche — revisión independiente de la campaña (JSON + §5.10):** 10 hallazgos, aplicados: sin Instagram vinculado los US$ 56 corren solo por Facebook; el `nota` del brief se renderiza y decía «20 minutos» (el bot dice 30); el anuncio había perdido el filtro «Para dueños y dueñas…»; la captura muestra el botón de G-03 (🟡); faltaban condiciones (quién contesta, minutos, canales 1 y 2, Instagram, declaración de IA); la firma del bot es de Sergio Urcullo (FIRMA_HUMANA). A1, A2 y los dos videos se re-renderizaron con el texto corregido. **Pendiente de él:** Instagram sí o no, minutos 20 o 30, firma, tarjeta, OK escrito.
+> 📨 **10-oct, tarde — Sergio Urcullo (por la madre): «todo lo que esté revisado está aprobado».** Cubre el texto, no el envío: contactar a terceros sigue pidiendo su sí aparte. Pedido: borradores de seguimiento de los
+> 7 leads de agosto más uno nuevo, y revisar si las «8 colgadas / 5 sin respuesta» del vigía son prospectos. **Hecho:** `sales-kit/SEGUIMIENTO-LEADS.md` §0 (¿son prospectos?, textos A, A estética, B, B′ y N, y lo que falta para mandarlos).
+> **Sin ver:** Chatwoot, el log del vigía y las plantillas aprobadas están en el VPS y la nube no tiene llave: «el nuevo» y las 8 colgadas quedan con el pedido a la madre (id, canal, nombre, una línea de lo que escribió, hace cuánto, si hubo salida humana, y si el último entrante tiene < 24 h).
+> **Corregido de paso:** el playbook prometía «con una clínica de ejemplo» en la llamada; no hay cuenta demo (L-05). **No consta** que las plantillas A/B existan aprobadas en Meta (no vi la lista) y el método de pago de la WABA sigue sin verse: el repo se contradice (agosto: cargado; 19-sep: previsto que falle desde el 1-oct, sin medir). Revisado por un subagente independiente, que corrigió 5 cosas (la fecha de la lista de plantillas, el tablero que no era el del pago, la coexistencia, B que prometía «lo que preguntó» y «tres» plantillas que eran cuatro).
+> 🎯 **10-oct — pedido de la madre (sin crear nada en Meta, sin contactar a nadie):** (a) **go/no-go del 13-oct clasificado** en ADQ §5.10: pasan a ✅ sin Sergio Urcullo las filas
+> 1, 2, 8 y la mitad de la 4 y la 5; dependen de él la 3 (tarjeta: **medido `has_payment_method: false`**), la 6, la 9, la prueba con teléfono de la 5 y, sin tope duro, la 7. **Veredicto de hoy: NO-GO.**
+> (b) **Campaña lista para crear:** `carousels/briefs/ads/CAMPANA-1-LISTA-PARA-CREAR.json` + `scripts/campana-lista.test.mjs`. (c) **Defecto propio corregido:** los códigos `D1V`/`D1S` del 9-oct el bot no los lee
+> (el lead nacía sin origen): ahora `D2`/`D3`. (d) Leído en Meta: 0 campañas, 0 borradores; píxel «ONIA Web» activo (disparó el 9-oct 18:40 UTC-7). **Dónde se retoma:** cuando Plataforma refresque la demo,
+> `grabar-captura.mjs` con los planes C1-C7, re-render de A1 y las filas B-02, G-01, G-06, G-11 y L-05; PR de esta tanda en `claude/onia-ventas-pauta-rmdv5j`.
+> - ✅ **Lo desbloqueable de las tareas 1 y 2 (9-oct, madre: «encadená todas las tareas desbloqueadas»; `/loop` existe en mi sesión):** `scripts/grabar-captura.mjs`
+>   (el «script de grabación» que el VSL dice que no existe; planes C1-C7 y C2-clic como esqueleto, frenos probados, **la app real sin probar**) y
+>   `carousels/briefs/ads/VSL-CORTO-TABLA-DE-CORTES.md` + preview de 60 s en `carousels/out/ads/vsl-corto-animatic/`. **Siguen bloqueadas** la tabla «se promete / funciona»
+>   y el corto real: cuenta demo (Plataforma), `ONIA_QA_EMAIL`/`ONIA_QA_PASSWORD` en el entorno de Ventas (Sergio Urcullo) y las tomas T9/T10/T12.
+> - ✅ **`equipo-de-agentes` y `aprender-de-todo` (madre, commit `ca1fde0a`, 9-oct):** leídas con `git show`; **no mezclé su rama** (trae CLAUDE.md, AGENTS.md y 90 archivos, y toca el mismo
+>   `onia-ventas-pauta/SKILL.md` que yo: ensuciaría el PR #175). Entran por `main` cuando ella las mergee. Prueba de uso del aprendizaje en
+>   `carousels/briefs/ads/VSL-CORTO-TABLA-DE-CORTES.md` (4 ángulos de Ramiro Cubría + «no prometer respuesta no probada» de Marco Machado; detector de promesas 0, control 2): **aplicado, sin revisor independiente**.
+> - ✅ **Tanda 2 de competencia (T1-9, 9-oct):** `ONIA_UI_MEJORAS_1.0.md` §8. **Historia clínica:** *Normas en Salud Oral* (R.M. 1320, 2010, «documento de trabajo») pide
+>   historia clínica en todo paciente y prontuario «archivado por lo menos por unos 10 años», digital permitido; la Ley 3131 trata el consentimiento y el
+>   secreto como documentos oficiales. Ninguna de las dos fija obligación probada para un consultorio privado: **titular solo como pregunta y con el OK de
+>   Sergio Urcullo**, tras confirmar vigencia con el SEDES o el Colegio de Odontólogos. **Factura:** el 30-sep el SIN **abrogó** las RND de los grupos 9-12
+>   (RND 102600000038, título leído en su lista oficial): **no hay fecha para usar de gancho**, y el SIAT de Onia sigue apagado. **Bots locales:** nada por la web
+>   pública (ausencia de evidencia). **Quedan como PEDIDO PC** Google Maps/Facebook, Instagram de Doctocliq/Dentalink/CitaPro y una pregunta a un odontólogo.
+
+> ✏️ **9-oct — copy corregido (pedido de la madre): ya no dice «lo envía, con un toque».** El envío con un toque (G-03) está a medias en
+> `ONIA_PROMESA_VS_PRODUCTO.md`. Ahora dice **«Usted lo aprueba. Nada sale sin su OK.»** en A1, A2, carrusel (lámina 3), micro-video y los guiones F1/F3.
+> Se quitó también el anillo y el pulso sobre el botón «Enviar yo mismo»: la pantalla real lo sigue mostrando, pero sin énfasis. El pulso del video
+> ahora es opt-in (`video.pulso`). **Corto de 60 s con `editor-videos`: espera las capturas C1-C7 de Plataforma** y que Sergio Urcullo vea tabla de cortes
+> y preview 360p. **No se instalan** marketingskills ni Motion-Creative sin su OK. El commit `30bc87b8` de la madre (skill §9, `06-VSL-DENTAL.md`,
+> ADQ §5.11) **no estaba en `origin/main`** al leer: no lo pude leer.
+
+> 🔎 **8-oct, noche — Biblioteca por el conector (Sergio Urcullo: «mirá Pinterest y la Biblioteca para ver cuáles funcionan»).**
+> - **Navegador de la nube:** Biblioteca 403 y Pinterest con muro de sesión; no se rodearon. **Conector `Meta_ads`:** sí, con titular y fecha, sin creativo.
+> - **Hallazgo:** AgendaPro (id `1429581593936821`) tiene los anuncios activos más viejos (**245 días**) y un asistente con nombre, «Sofía», de **141 días**.
+>   Dt.Dental, Doctocliq y CitaPro siguen 83-100 días. A Bolivia solo le llega pauta de software dental de Dentalink. Todo en `ONIA_ADQUISICION_Y_PAUTA.md` §2.6.1.
+> - **Error evitado:** Dentalink tiene 92 activos y el conector solo muestra los 50 más nuevos; «nada de más de 14 días» sería falso (§2.6 dice 322 días).
+> - **Pedido PC:** Pinterest con la sesión de Sergio Urcullo y los creativos de 7 ids (en §2.6.1).
+
+> 🧪 **8-oct, noche — Tanda 1 de competencia y laboratorio de creativos (pedidos de la madre por Sergio Urcullo).**
+> - **Tanda semanal de competencia:** `ONIA_UI_MEJORAS_1.0.md` §8 (9 hallazgos con versión Onia, dueño y Codex) + fichas `JELOU_FICHA.md`,
+>   `DATEC_FICHA.md` y `ANUNCIANTES_FICHAS_CORTAS.md`; `MAPA_COMPETENCIA.md` al día. **Próxima: 15-oct** (norma boliviana de
+>   historia clínica y factura, Instagram de Doctocliq/Dentalink/CitaPro, bots de clínicas locales). Codex esta semana: ninguna tarea.
+> - **Laboratorio de creativos:** `anuncios/FORMATOS-QUE-SOSTIENEN.md` (5 formatos con más días, una versión Onia por vía). Hecho con código:
+>   A1 v5 estático 4:5 y 9:16, video de 11 s, micro-video de 10 s y carrusel de 4 láminas 1:1. Guiones para Sergio Urcullo (F1 y F3) y una
+>   propuesta de Higgsfield **sin cotizar** (se cotiza con la CLI desde la PC).
+> - **Plan visible:** la lista de tareas de la sesión (TaskCreate) trae el criterio de hecho de cada una.
+> - ✅ **`ONIA_ADDONS.md`** (los 6 add-ons del 8-oct, pedido de la madre): potencial, mercado de hoy, test de 3 preguntas, esfuerzo, cómo se
+>   vende al mismo cliente, **orden para después de la 1.0** (web conectada · puesta en marcha · app · campañas de Meta · influencers IA · IA
+>   local) y primer paso de cada uno. **Ojo:** el bloque de decisión del 8-oct que la madre cita en el §12 de la estrategia **no está en `main`**.
+>   Verificado en vivo: `/servicios/webs` responde 200; `/servicios/marketing-ia` y `/servicios/consultoria` redirigen a la portada.
+> - **Intentos fallidos:** rutas de precios adivinadas (`/precios`, `/pricing`) dieron 404; el buscador dio precios viejos de Jelou; el control de
+>   seguridad bloqueó un `rm -f $VAR/*` (se sobrescribió por nombre).
+
+> 🎨 **8-oct, noche — Rediseño de los anuncios (Sergio Urcullo: «demasiado básicos… mejora tus trabajos»).**
+> - **Hecho:** se miraron los 22 anuncios de la competencia fotograma a fotograma + 5 sitios de referencia y se rehízo D1
+>   como **A1 v5 «Las 10:00»** y A2 como **A2 v2** (feed, historia y video de 11 s para A1). Tabla de qué hacen ellos y qué
+>   hacíamos nosotros: `research/competencia/anuncios/COMPARACION-DISENO-8OCT.md` (hojas en `_hojas/`).
+> - **Código:** plantilla `bloques` en `anuncio-render.js` + `anuncio-video.js` (skill `onia-ventas-pauta` §4.2).
+> - **Sigue mal:** no hay **persona** (los 7 que sobreviven la tienen; guion de 25 s para Sergio Urcullo, opcional); la
+>   captura es provisoria; A2 espera E-03; sin gasto no hay cifra de rendimiento. **Nada se subió ni se gastó en Meta.**
+> - **Intentos fallidos:** la Biblioteca de Anuncios no abre desde la nube (403 de Facebook; no se rodea); Doctolib
+>   bloquea con Cloudflare; mi primera plantilla (tres filas con tiras blancas) quedó plana y se descartó; un anillo
+>   sobre el nombre del paciente tachaba el texto (margen de 8 px, bajado a 6 y sin anillo en esa línea).
+> - **Lo que depende de otros:** Sergio Urcullo ve las piezas renderizadas (diseño nuevo); cuenta demo para recapturar.
+
+> 📣 **8-oct, noche — Meta Ads retomada (pedido de la madre; Sergio Urcullo: «¿no se supone que tiene que ver Meta Ads?»).**
+> - **Hecho (todo en `ONIA_ADQUISICION_Y_PAUTA.md`, nada creado ni gastado en Meta):** techo alineado a la caja (**US$ 56 =
+>   Bs 750**, no USD 140); reglas de corte del plan §3 (§5.7); lo medido hoy (§5.9.1); a dónde lleva cada anuncio, públicos y
+>   el go/no-go del 13-oct (§5.10). **D1 v4**: texto corregido y de usted, render mirado en feed e historias.
+> - **Medido en ONIA Ads:** sigue **sin medio de pago**; la página «Onia» existe en el negocio; el píxel dispara; sin
+>   Instagram vinculado; el número del bot no se ve desde el conector.
+> - **El 16-oct no está asegurado:** el plan pide haber contactado antes a los canales 1 y 2, y Sergio Urcullo frenó todo
+>   contacto el 8-oct. Se decide el 13-oct; una fila en ❌ y no se enciende.
+> - **Falta de Sergio Urcullo:** tarjeta, vincular el número del bot a la página, firmar la respuesta a la pauta, el OK de
+>   gasto (US$ 56 · 14 días · Bs 750) y el «usted» en los anuncios.
+> - **Ninguna pieza sube:** las capturas de D1 son del candidato del 30-sep, no de producción. Se rehacen con la cuenta demo.
+
+> ⏸️ **8-oct, tarde — Sergio Urcullo (por la madre): «no vamos a escribirle a nadie aún».** Se frena todo contacto:
+> los 7 de la §6.9 y los leads de agosto. El conteo de los leads de agosto **quedó sin hacer**: la nube no tiene llave
+> del VPS ni token de Chatwoot. El comando para la PC está en `ONIA_LEADS_ESPERANDO.md`, «Conteo de hoy en una sola
+> corrida». Tarea nueva: auditar la promesa contra lo que funciona y los referentes de UI. Para mirar la app por dentro:
+> `.claude/skills/onia-ventas-pauta/scripts/auditar-app.mjs` (solo lectura). Necesita una cuenta de prueba en
+> `ONIA_QA_EMAIL` y `ONIA_QA_PASSWORD`; está pedida a la madre.
+
+> ✅ **8-oct (`session_0143C5fMXVs8eWEf7uBpC9SF`, rama `claude/onia-ventas-pauta-rmdv5j`): pedido de la madre, 10 dentales
+> nuevas con señal y mensaje. Quedan 7 de 10.**
+> - **Dónde:** `ONIA_PROSPECTOS_DENTAL_SCZ.md` §6.9. Las 7, por orden: Clarident Plus, Hurtado, Smile Dental, San Pablo,
+>   Innova Kids, COYR DENT y Henners. Todas tienen Santa Cruz, canal y pauta activa verificados, y ninguna tiene el
+>   equipo contado. Cada mensaje cierra preguntando cuántos odontólogos atienden. Los 7 mensajes pasan el revisor de
+>   promesas. Nadie contactado.
+> - **Faltan 3:** 7 candidatas EN ESPERA para la PC, con el id del anuncio para abrir (Dentessa, BAires,
+>   Doctormaxilofacial, Ramos, Gooddental kids, Cosmetic y Epica).
+> - **Aprendido (en la skill §2 y §3):**
+>   - `dentists10.com` por `page_id` resuelve la ciudad de las dentales (27 de 81).
+>   - La búsqueda web no sirve para estas páginas: 0 de 23.
+>   - El revisor de promesas rechaza «la IA escribe una sola vez el modelo».
+> - **Riesgo de merge:** la §6.8 de Codex (rama `codex/madre-orquestacion-20261005`) se inserta en el mismo lugar,
+>   antes de la §7. Al mergear las dos ramas, se conservan las dos secciones.
+> - **Depende de Sergio Urcullo:** el OK a los 7 mensajes y si «Clarident Duo» es otra sede. Desde la PC, la madre o
+>   Sergio Urcullo: las 7 EN ESPERA y confirmar que cada número tiene WhatsApp.
+
+> ✅ **5-oct, tarde (`session_0143C5fMXVs8eWEf7uBpC9SF`, rama `claude/onia-ventas-pauta-rmdv5j`): mensajes a los leads
+> contra el catálogo.**
+> - **Medido:** ONIA Ads sigue con `has_payment_method: false`. Precios y usuarios re-leídos en `onia-platform`
+>   `97fe306`: Crece Bs 550 con 4 usuarios, Profesional Bs 890 con 5.
+> - **`ONIA_LEADS_ESPERANDO.md` §3:** se sacaron los borradores del 1-oct. El de «F» contestaba «Sí» al tratamiento a
+>   medias, y eran textos libres con la ventana de 24 h cerrada. Ahora §3 apunta al playbook
+>   (`sales-kit/SEGUIMIENTO-LEADS.md`, plantillas A/B). §3.1 tiene las 6 preguntas de «F» contra el catálogo, para la
+>   llamada. §3.3 tiene el correo de la conv 36, alineado al catálogo §8.3 y con revisor de promesas en 0.
+> - **`main` tenía rojo `npm run test:venta-honestidad`** por el «≈ Bs 17» del playbook (un costo interno leído como
+>   precio). Pasado a USD: 17/17.
+> - **Abierto, para Plataforma:** la exportación a CSV no figura en el catálogo. Hasta que la miren en pantalla y la
+>   sumen, la pregunta 6 de «F» no se contesta por escrito.
+> - **Sigue dependiendo de Sergio Urcullo:** el OK a las plantillas A/B y al correo de la conv 36; la tarjeta en ONIA
+>   Ads.
+
 > ⏹️ **CIERRE 5-oct (cambio de sesión madre). Nada en vuelo ni sin commitear; todo en `main`.**
 > - **Hecho:**
 >   - competencia en la Biblioteca (`ONIA_ADQUISICION_Y_PAUTA.md` §2.5-2.6);
@@ -17,7 +138,7 @@
 >   - aprobar las plantillas A/B y las 4 del seguimiento, el audio del día 7 y la imagen;
 >   - el OK a los 12 mensajes y la decisión sobre MUN.
 > - **Riesgos:**
->   - El borrador del 1-oct a «F» (`ONIA_LEADS_ESPERANDO.md` §3.1) promete el tratamiento a medias: no se manda.
+>   - ~~El borrador del 1-oct a «F» promete el tratamiento a medias.~~ Sacado el 5-oct (entrada de arriba).
 >   - Las plantillas a leads salen de Chatwoot con el usuario de Sergio Urcullo; si no, el bot les contesta.
 >   - El bot de usted no está desplegado.
 >   - D1 v3 todavía dice «La IA escribe el mensaje».
@@ -304,7 +425,7 @@ Lista anterior (sigue vigente salvo el punto 4, que ya está hecho):
 4. **OK al primer lote de mensajes 1:1** de la página de 28, después de la verificación de la tabla de abajo.
 5. **Meta:** reconectar el conector con el usuario que administra ONIA Ads, poner la tarjeta en ONIA Ads,
    confirmar la página «Onia» y su WhatsApp, y averiguar a qué tipo de cambio cobra el banco. Después, el OK de
-   gasto con techo (USD 140, 14 días).
+   gasto con techo (~~USD 140~~ **USD 56, 14 días, Bs 750**: corregido el 8-oct).
 6. Lo de siempre: quién contesta las conversaciones de la pauta (fila 6 de §5.9) y la fecha del CIO 2026.
 
 **Próximos pasos — vigentes desde el 1-oct, de noche:**

@@ -1,0 +1,125 @@
+{
+ "cuando": "2026-10-16T12:59:23.820Z",
+ "rutas": {
+  "/login": {
+   "390": {
+    "iconosEnElDom": 4,
+    "nombresDeIcono": [
+     "bolt",
+     "credit_card_off",
+     "smart_toy",
+     "person_add"
+    ],
+    "sinAriaHidden": 0,
+    "leidosEnElArbol": [],
+    "lineasDelArbol": 23
+   },
+   "1440": {
+    "iconosEnElDom": 4,
+    "nombresDeIcono": [
+     "bolt",
+     "credit_card_off",
+     "smart_toy",
+     "person_add"
+    ],
+    "sinAriaHidden": 0,
+    "leidosEnElArbol": [],
+    "lineasDelArbol": 34
+   }
+  },
+  "/register": {
+   "390": {
+    "iconosEnElDom": 18,
+    "nombresDeIcono": [
+     "bolt",
+     "credit_card_off",
+     "smart_toy",
+     "dentistry",
+     "chevron_right",
+     "arrow_forward",
+     "storefront",
+     "local_shipping",
+     "spa",
+     "work"
+    ],
+    "sinAriaHidden": 0,
+    "leidosEnElArbol": [
+     "spa"
+    ],
+    "lineasDelArbol": 26
+   },
+   "1440": {
+    "iconosEnElDom": 18,
+    "nombresDeIcono": [
+     "bolt",
+     "credit_card_off",
+     "smart_toy",
+     "dentistry",
+     "chevron_right",
+     "arrow_forward",
+     "storefront",
+     "local_shipping",
+     "spa",
+     "work"
+    ],
+    "sinAriaHidden": 0,
+    "leidosEnElArbol": [
+     "spa"
+    ],
+    "lineasDelArbol": 37
+   }
+  },
+  "/book": {
+   "390": {
+    "iconosEnElDom": 3,
+    "nombresDeIcono": [
+     "calendar_month",
+     "schedule",
+     "verified"
+    ],
+    "sinAriaHidden": 0,
+    "leidosEnElArbol": [],
+    "lineasDelArbol": 11
+   },
+   "1440": {
+    "iconosEnElDom": 3,
+    "nombresDeIcono": [
+     "calendar_month",
+     "schedule",
+     "verified"
+    ],
+    "sinAriaHidden": 0,
+    "leidosEnElArbol": [],
+    "lineasDelArbol": 11
+   }
+  },
+  "/book/clinica-sergio-p2ljs": {
+   "390": {
+    "iconosEnElDom": 5,
+    "nombresDeIcono": [
+     "call",
+     "badge",
+     "calendar_today",
+     "schedule",
+     "person"
+    ],
+    "sinAriaHidden": 0,
+    "leidosEnElArbol": [],
+    "lineasDelArbol": 14
+   },
+   "1440": {
+    "iconosEnElDom": 5,
+    "nombresDeIcono": [
+     "call",
+     "badge",
+     "calendar_today",
+     "schedule",
+     "person"
+    ],
+    "sinAriaHidden": 0,
+    "leidosEnElArbol": [],
+    "lineasDelArbol": 14
+   }
+  }
+ }
+}

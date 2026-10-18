@@ -1,5 +1,13 @@
 # Hermes Coordination Manifest
 
+> **Vigencia corregida 2026-10-09:** el hilo de septiembre de abajo es historial,
+> no inventario vivo ni permiso para reactivar sesiones. La madre Claude local
+> sustituye a «Control» como orquestadora. Método: `equipo-de-agentes` y
+> `onia-sesion-madre`; consultar `ListAgents` antes de usar nombres/IDs.
+> No usar los triggers de septiembre como canal ordinario.
+> Encargo local 9-oct: auditoría documental y `aprender-de-todo`; frentes separados
+> de cobertura y reglas del equipo. Sin Git ni código de producto.
+
 ## 🧵 EL HILO — sesiones vivas y qué le pasa cada una a la otra (lo mantiene la sesión de control)
 
 > Sergio Urcullo, 2026-09-29: *"habla entre sesiones para no perder el hilo"*. Las sesiones en

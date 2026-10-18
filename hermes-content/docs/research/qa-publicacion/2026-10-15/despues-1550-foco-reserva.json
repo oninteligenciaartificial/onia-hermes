@@ -1,0 +1,43 @@
+{
+ "cuando": "2026-10-16T15:58:45.003Z",
+ "anchos": {
+  "390": {
+   "paso1": {
+    "tituloId": "book-paso-1-titulo",
+    "tituloTabindex": "-1",
+    "listaRol": "group",
+    "listaNombre": "book-paso-1-titulo",
+    "botones": 1,
+    "conAriaPressed": 0,
+    "regionStatus": "Paso 1 de 4: Elija su profesional",
+    "foco": "BODY#"
+   },
+   "paso2": {
+    "foco": "H2#book-paso-2-titulo",
+    "focoTexto": "Elija la fecha",
+    "regionStatus": "Paso 2 de 4: Elija la fecha",
+    "regionLive": "polite"
+   },
+   "pedidosNoGet": []
+  },
+  "1440": {
+   "paso1": {
+    "tituloId": "book-paso-1-titulo",
+    "tituloTabindex": "-1",
+    "listaRol": "group",
+    "listaNombre": "book-paso-1-titulo",
+    "botones": 1,
+    "conAriaPressed": 0,
+    "regionStatus": "Paso 1 de 4: Elija su profesional",
+    "foco": "BODY#"
+   },
+   "paso2": {
+    "foco": "H2#book-paso-2-titulo",
+    "focoTexto": "Elija la fecha",
+    "regionStatus": "Paso 2 de 4: Elija la fecha",
+    "regionLive": "polite"
+   },
+   "pedidosNoGet": []
+  }
+ }
+}

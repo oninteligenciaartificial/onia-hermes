@@ -1,0 +1,11 @@
+{
+  "fps": 30,
+  "current": "LEFT",
+  "seams": [
+    {"id":"gancho-chat","cut":2.5,"technique":"cut-the-curve LEFT","exit":{"selector":"#hook-wrap","axis":"x","dir":-1},"entry":{"selector":"#chat-wrap","axis":"x","dir":-1}},
+    {"id":"chat-comparacion","cut":9,"technique":"cut-the-curve LEFT","exit":{"selector":"#chat-wrap","axis":"x","dir":-1},"entry":{"selector":"#compare-wrap","axis":"x","dir":-1}},
+    {"id":"comparacion-tablero","cut":16,"technique":"cut-the-curve LEFT","exit":{"selector":"#compare-wrap","axis":"x","dir":-1},"entry":{"selector":"#board-wrap","axis":"x","dir":-1}},
+    {"id":"tablero-mosaico","cut":23,"technique":"cut-the-curve LEFT","exit":{"selector":"#board-wrap","axis":"x","dir":-1},"entry":{"selector":"#mosaic-wrap","axis":"x","dir":-1}},
+    {"id":"mosaico-cierre","cut":26,"technique":"cut-the-curve LEFT","exit":{"selector":"#mosaic-wrap","axis":"x","dir":-1},"entry":{"selector":"#close-wrap","axis":"x","dir":-1}}
+  ]
+}

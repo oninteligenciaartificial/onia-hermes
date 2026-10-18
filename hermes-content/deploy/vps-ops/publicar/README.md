@@ -43,6 +43,29 @@ node /root/bin/ig-reel.mjs ... --trial auto --publicar    # yap a Trial
 /root/bin/agendar-publicacion.sh --lista          # · --cancelar a-0930
 ```
 
+**Carruseles en LinkedIn y TikTok (5-oct):** `buffer-post.mjs --imagenes <dir>` manda las `slide-NN` de la carpeta como
+carrusel. Las pasa a JPEG porque TikTok no toma PNG. YouTube no toma imágenes. El 5-oct se probó como borrador en las dos
+redes y Buffer lo aceptó; esos borradores ya se borraron. `agendar-carruseles.sh --agendar-buffer` agenda LinkedIn a
+las 20:01 y TikTok a las 20:02. El post se crea en Buffer recién a esa hora y se publica en el momento. Así no gasta la
+cola de 10 posts por canal del plan gratis, y el archivo público no vence antes de tiempo con la limpieza de 48 h.
+
+**Carruseles de @sergiourcullo (desde la nube o la PC, con `ssh onia-vps`):** `agendar-carruseles.sh --ensayo <slug>`
+sube uno y lo deja listo en Instagram SIN publicar; `--agendar` sube y agenda todo el calendario `CAL` del script (uno
+por día, 20:00 UTC = 16:00 La Paz). El calendario se edita en el script, que no lleva fechas en el nombre. Volver a
+correr `--agendar` falla en el día que ya tiene timer: cancelalo antes con `--cancelar car-AAAAMMDD`.
+
+> **Medido el 5-oct:** desde una sesión de la nube en modo «Auto», el ensayo y `--agendar` de 11 carruseles pasaron el
+> control de permisos cuando Sergio Urcullo lo pidió EN ESA MISMA sesión («agendemos los carruseles para empezar a
+> postear»). El 2 y el 3-oct se frenaron cuando el pedido venía de la madre o de un mensaje viejo. En la nube falta
+> `ssh`: `apt-get install -y openssh-client`.
+
+**Historias de @sergiourcullo (8-oct):** `ig-historia.mjs --cuenta sergio --imagen <png|jpg> [--publicar]` publica una
+historia de foto (la pasa a JPEG 1080x1920 y la recorta al centro si viene con otra proporción). Sin `--publicar` es
+ensayo: el contenedor expira solo a las 24 h. La foto con texto de marca se arma antes con
+`scripts/marca-personal/historia-foto.mjs`. **Límite de la API:** no admite stickers (link, encuesta, pregunta, música);
+lo que lleve sticker lo sube Sergio Urcullo desde la app. Agendar: `agendar-publicacion.sh h-0900 "2026-10-09 13:00:00"
+node /root/bin/ig-historia.mjs --cuenta sergio --imagen /root/publicar/historias/h01.png --publicar`.
+
 ## Cómo funciona por dentro (y por qué)
 
 - **API oficial de Instagram (Instagram Login)**, app `OnIA Social API`. Los tokens de

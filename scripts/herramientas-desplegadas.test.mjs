@@ -70,6 +70,22 @@ export function destinosDeclarados (fuenteDelSincronizador) {
   )
 }
 
+/**
+ * Lo que de verdad copia cada `poner "$FUENTE|$RAIZ/<origen>" "$DESTINO_BIN/<destino>"`, como
+ * Map destino -> origen relativo al repo. $FUENTE es scripts/loops (sincronizar.sh:84).
+ */
+export function ponerDeclarados (fuenteDelSincronizador) {
+  const re = /^[ \t]*poner\s+"\$(FUENTE|RAIZ)\/([^"]+)"\s+"\$DESTINO_BIN\/([^"]+)"/gm
+  return new Map(
+    [...fuenteDelSincronizador.matchAll(re)].map((m) => [m[3], m[1] === 'FUENTE' ? `scripts/loops/${m[2]}` : m[2]])
+  )
+}
+
+/** Las carpetas desde las que el sync copia: solo ahí un `x.sh` puede ser la fuente de onia-x.sh. */
+export function carpetasDelSync (poner) {
+  return new Set([...poner.values()].map((f) => f.slice(0, f.lastIndexOf('/') + 1)))
+}
+
 // Lo que sincronizar.sh POSEE. Medido el 2026-09-10: sus 20 lineas `poner` copian
 // todas desde scripts/ (15 de scripts/loops, 4 de scripts/kanban, 1 suelto), y hay
 // un caso abajo que se pone rojo si eso deja de ser cierto.
@@ -136,13 +152,17 @@ function versionados () {
     .filter(Boolean)
 }
 
-function fuenteDeEnElRepo (todos) {
+function fuenteDeEnElRepo (todos, carpetas) {
   return (nombre) => {
-    const base = nombre.replace(/^onia-/, '')
-    // El despliegue RENOMBRA (tablero.sh -> onia-tablero.sh), asi que se acepta la
-    // fuente con o sin el prefijo. Solo importa para los NO declarados.
-    const re = new RegExp(`(^|/)(onia-)?${base.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`)
-    return todos.find((f) => re.test(f)) ?? null
+    // Con el nombre exacto (onia-x.sh), cuenta en cualquier carpeta.
+    const exacta = todos.find((f) => f === nombre || f.endsWith(`/${nombre}`))
+    if (exacta) return exacta
+    // El despliegue RENOMBRA (tablero.sh -> onia-tablero.sh), pero solo desde las carpetas de
+    // donde copia: fuera de ellas, un `x.sh` es otra cosa que se llama igual (9-oct, ver abajo).
+    // Solo importa para los NO declarados.
+    if (!nombre.startsWith('onia-')) return null
+    const base = nombre.slice('onia-'.length)
+    return todos.find((f) => carpetas.has(f.slice(0, f.lastIndexOf('/') + 1)) && f.slice(f.lastIndexOf('/') + 1) === base) ?? null
   }
 }
 
@@ -171,7 +191,7 @@ const TODOS = versionados()
 const SINC = readFileSync(path.join(RAIZ, SINCRONIZADOR), 'utf8')
 const NOMBRADAS = herramientasNombradas(textosDeLaMaquinaria(TODOS))
 const DECLARADOS = destinosDeclarados(SINC)
-const AGUJEROS = agujeros(NOMBRADAS, DECLARADOS, fuenteDeEnElRepo(TODOS))
+const AGUJEROS = agujeros(NOMBRADAS, DECLARADOS, fuenteDeEnElRepo(TODOS, carpetasDelSync(ponerDeclarados(SINC))))
 
 test('toda herramienta de /root/bin con fuente versionada la despliega sincronizar.sh', () => {
   assert.deepEqual(
@@ -260,5 +280,34 @@ test('sincronizar.sh sigue desplegando SOLO desde scripts/ (si no, este gate que
     [],
     'sincronizar.sh despliega desde una zona que DUENO_DEL_DESPLIEGUE no declara, ' +
       'porque el barrido ya no cubre todo lo que este script publica'
+  )
+})
+
+// ── La fuente sale del `poner`, no del nombre (pendiente 4 del handoff de Hermes-Jarvis, 9-oct) ──
+// El 2-oct, `scripts/velocidad/vps.sh` —un atajo de Windows— pasó por la fuente de onia-vps.sh (el
+// shim que crea instalar-homelab.sh) solo por llamarse `vps.sh`, y el gate pidió un `poner` que
+// habría pisado el shim con un script roto. El despliegue RENOMBRA (tablero.sh -> onia-tablero.sh)
+// solo desde las carpetas de donde copia, así que un nombre sin `onia-` cuenta como fuente solo ahí.
+// Y un `poner` que apunta a un archivo que no existe tampoco despliega nada.
+
+test('un `X.sh` cualquiera fuera de las carpetas del sync NO es la fuente de onia-X.sh', () => {
+  const carpetas = carpetasDelSync(ponerDeclarados(
+    'poner "$FUENTE/agenda.sh" "$DESTINO_BIN/onia-agenda.sh"\n' +
+      'poner "$RAIZ/scripts/kanban/tablero.sh" "$DESTINO_BIN/onia-tablero.sh"\n'
+  ))
+  const fuenteDe = fuenteDeEnElRepo(['scripts/velocidad/vps.sh', 'scripts/kanban/nuevo.sh', 'scripts/velocidad/onia-otro.sh'], carpetas)
+  assert.equal(fuenteDe('onia-vps.sh'), null, 'el atajo de Windows volvió a pasar por la fuente del shim')
+  assert.equal(fuenteDe('onia-nuevo.sh'), 'scripts/kanban/nuevo.sh', 'en una carpeta del sync, el renombre sigue valiendo')
+  assert.equal(fuenteDe('onia-otro.sh'), 'scripts/velocidad/onia-otro.sh', 'con el nombre exacto, cuenta en cualquier carpeta')
+})
+
+test('toda línea `poner` a /root/bin apunta a una fuente versionada', () => {
+  const versionadas = new Set(TODOS)
+  const poner = ponerDeclarados(SINC)
+  assert.ok(poner.size >= 40, `solo ${poner.size} líneas \`poner\` leídas: el patrón no matchea`)
+  assert.deepEqual(
+    [...poner].filter(([, fuente]) => !versionadas.has(fuente)).map(([destino, fuente]) => `${destino} <- ${fuente}`),
+    [],
+    'sincronizar.sh copia desde un archivo que no existe: esa herramienta no se despliega'
   )
 })

@@ -35,9 +35,14 @@ afuera sin aprobación** — la autonomía termina en tu canal.
 
 | Qué | Cuándo | Qué lleva |
 |---|---|---|
-| ☀️ **Resumen de la mañana** | **06:30** La Paz | agenda del día · prospectos esperando · guiones para grabar hoy · decisiones (máx. 5, con `ok <id>`) · lo que pasó de noche · UNA línea de salud del sistema |
-| 🌙 **Cierre del día** | **21:30** La Paz | qué se hizo hoy, en castellano llano · sus bloques de ONIA del día, numerados, con «¿se hicieron?» · qué sigue esperando · mañana |
+| ☀️ **Resumen de la mañana** | **06:30** La Paz | agenda del día · prospectos esperando · qué sale hoy (el calendario de publicación vigente; sin él, los guiones del plan) · decisiones (máx. 5, con `ok <id>`) · lo que pasó de noche · UNA línea de salud del sistema · los relojes que vencen en 72 h o menos (tabla §G de `cola/loop/madre.md`; los suyos en NECESITO, vencidos en 🔴) · las colas de `cola/loop/` sin commit hace más de 24 h · los trabajos del cron mudos o con error (`/var/lib/onia-latido/`) |
+| 🌙 **Cierre del día** | **21:30** La Paz | qué se hizo hoy, en castellano llano · qué salió publicado hoy, con su link (`/root/publicar/publicado.jsonl`) · sus bloques de ONIA del día, numerados, con «¿se hicieron?» · qué sigue esperando · mañana |
 | 🔔 **Interrupción** | al momento, **solo** entre 06:30 y 22:00 y **fuera de sus bloques** | una de las cuatro de abajo, y nada más |
+
+**El resumen y el cierre llegan en tres bloques fijos: PASÓ · NECESITO · SIGUE** (Sergio Urcullo,
+8-oct: *«me entregás demasiado texto y me pierdo»*). Lo que le pide algo (prospectos, decisiones,
+bloques sin confirmar) va junto en NECESITO; si no hay nada, dice «Nada.», salvo que el tablero no
+haya respondido. Lo que conversa Hermes sigue la misma regla, desde su SOUL.
 
 **Las cuatro interrupciones (elegidas por él):**
 1. **Un prospecto o cliente escribió y nadie contestó.**

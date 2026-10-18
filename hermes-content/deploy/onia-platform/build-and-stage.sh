@@ -19,6 +19,34 @@
 # Uso:  build-and-stage.sh <sha|ref> [--dry-run]     (default: origin/master)
 # Sale 0 solo si la imagen quedo armada y paso TODOS los gates (o si el seco no
 # encontro nada que lo frene). Sale 1 si no se armo, 2 si se llamo mal.
+say()   { echo "[$(date -u +%H:%M:%S)] $*"; }
+fatal() { echo "FATAL: $*"; exit 1; }
+
+esperar_otro_build() {
+  local espera=${ONIA_BUILD_ESPERA_SEG:-1200} intervalo=${ONIA_BUILD_INTERVALO_SEG:-30}
+  local inicio=$SECONDS transcurrido siguiente_log=0 pausa
+  [[ "$espera" =~ ^[1-9][0-9]{0,8}$ && "$intervalo" =~ ^[1-9][0-9]{0,8}$ ]] \
+    || fatal "ONIA_BUILD_ESPERA_SEG y ONIA_BUILD_INTERVALO_SEG deben ser segundos enteros positivos (hasta 9 digitos)"
+  (( espera <= 3600 )) || fatal "ONIA_BUILD_ESPERA_SEG no puede superar 3600 segundos"
+  # Runner.Worker cubre el job entero, incluidos los huecos entre npm ci y next build.
+  # Runner.Listener permanece activo aun sin job: no debe bloquear el build.
+  while ps -eo args 2>/dev/null | grep -E 'next build|npm ci|docker build|docker buildx|Runner\.Worker' | grep -v grep >/dev/null; do
+    transcurrido=$((SECONDS - inicio))
+    if [ -n "${DRY:-}" ] || (( transcurrido >= espera )); then
+      fatal "hay otro build corriendo (next build / npm ci / docker build): no encimo otro"
+    fi
+    if (( transcurrido >= siguiente_log )); then
+      say "espero a que termine otro build: $transcurrido s"
+      siguiente_log=$(( (transcurrido / 60 + 1) * 60 ))
+    fi
+    pausa=$intervalo
+    (( pausa > espera - transcurrido )) && pausa=$((espera - transcurrido))
+    sleep "$pausa" || fatal "no pude esperar al otro build"
+  done
+}
+
+# Permite probar solo el chequeo con: source build-and-stage.sh; esperar_otro_build
+[[ "${BASH_SOURCE[0]}" != "$0" ]] && return 0
 set -uo pipefail
 
 REPO=${ONIA_PLATFORM_REPO:-/root/loops/onia-platform}
@@ -43,18 +71,13 @@ for a in "$@"; do
 done
 REF=${REF:-origin/master}
 
-say()   { echo "[$(date -u +%H:%M:%S)] $*"; }
-fatal() { echo "FATAL: $*"; exit 1; }
-
 [ -d "$BASE" ] || fatal "no existe $BASE"
 
 # ── [1/7] UN build a la vez ─────────────────────────────────────────────────
 # Dos builds encimados tumbaron el VPS el 2026-08-22 (load 18, npm de 40 min) y el
 # 2026-09-03 uno ajeno dejo un artefacto a medias que otro proceso publico. El
 # cerrojo es el MISMO que usa swap-imagen.sh: nadie arma mientras alguien publica.
-if ps -eo args 2>/dev/null | grep -E 'next build|npm ci|docker build|docker buildx' | grep -v grep >/dev/null; then
-  fatal "hay otro build corriendo (next build / npm ci / docker build): no encimo otro"
-fi
+esperar_otro_build
 if [ -z "$DRY" ]; then
   command -v flock >/dev/null || fatal "no hay flock: sin cerrojo no armo"
   exec 8>"$LOCK" || fatal "no puedo abrir el cerrojo $LOCK"

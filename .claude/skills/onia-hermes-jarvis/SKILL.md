@@ -17,8 +17,12 @@ description: Invocar ANTES de tocar a Hermes (el asistente de Sergio Urcullo por
 | Qué le llega a Sergio Urcullo y cuándo (06:30, 21:30, las 4 interrupciones) | `hermes-content/docs/ONIA_CEREBRO.md` §«La regla de entrega» |
 | Pedidos a Claude desde Telegram: diseño, prompt de la rutina, llave | `hermes-content/docs/TELEGRAM_COMMAND_CENTER.md` |
 | El acceso al VPS y sus tres acciones | `hermes-content/deploy/hermes-jarvis/` (+ `README.md`) |
+| El VPS visto cada día sin la PC (10-oct, Q2) | `.github/workflows/hermes-qa-diario.yml`: a las 10:00 UTC corre SOLO `diagnostico.sh` (24 h). La sección 15 da cada línea del crontab con su cadencia, su log y si está MUDA (log más viejo que su penúltima corrida programada; «el hueco más largo en 8 días» daba «ok» a un semanal muerto). Su propio grupo de `concurrency`: el de `aplicar` le dejaba cancelar un `revertir` pendiente. Se lee con el MCP de GitHub: `actions_list` → `get_job_logs` |
 | La constitución de Hermes y sus skills | `hermes-content/deploy/hermes-agent/SOUL.md` · `hermes-content/skills/{agenda-calendario,pedir-a-claude}.md` |
 | Resumen y cierre · aduana · calendario · pedidos · su vuelta | `scripts/loops/{jarvis-resumen,onia-tg,agenda,pedido-claude,respuestas-pedidos}.sh` |
+| ¿Hermes o el asistente de Codex / dots? Decisión, pruebas y cuándo revisarla (8-oct: queda Hermes; dots bloqueado por edad) | `hermes-content/docs/ASISTENTE_CODEX_VS_HERMES.md` |
+| Fuentes del resumen/cierre que no son del carril (9-oct) | qué sale: `hermes-content/docs/cola/plan-3-semanas/CALENDARIO-PUBLICACION-<d1>-<d2>-<MES>.md` (el rango sale del nombre); qué salió: `/root/publicar/publicado.jsonl` del VPS (lo escriben los publicadores de `hermes-content/deploy/vps-ops/publicar/`); relojes (10-oct): tabla §G de `hermes-content/docs/cola/loop/madre.md`, leída de `origin/main` del clon; colas paradas: `git log` de `cola/loop/*.md` en `origin/main`; trabajos mudos: `/var/lib/onia-latido/<nombre>` («epoch código cadencia», lo escribe `onia-latido.sh`) |
+| Formato de todo lo que le llega (8-oct) | PASÓ · NECESITO · SIGUE: `jarvis-resumen.sh` (`parte`/`grupo`), SOUL `## Formato fijo de cada mensaje`, prompt de la rutina §5 |
 
 ## Cómo se llega al VPS desde la nube, y qué NO anda
 
@@ -55,6 +59,12 @@ description: Invocar ANTES de tocar a Hermes (el asistente de Sergio Urcullo por
 
 - **Gateway:** `hermes-gateway.service` (systemd), vivo desde el 18-sep con 0 reinicios, v0.21.0,
   `gpt-5-mini` por LiteLLM `:4000`. Bot `@aalfredhq_bot` por polling.
+- **Modelos, por trabajo** (la pregunta «¿mini o nano?» de la madre, 8-oct: son los dos). `gpt-5-mini`: el chat
+  del gateway y los trabajos de las 08:00 (agenda) y 08:10 (plan de video). `gpt-5-nano`: el ordenador del
+  tablero de las 13:00 y el veredicto de las 16:00. Medido el 27-sep (`jobs.json` y config viva) y el 1-oct
+  (gateway); no se volvió a medir. Después de `aplicar` quedan pausados 08:00, 08:10 y 16:00, y el resumen y
+  el cierre de Jarvis usan `gpt-5-mini` (`ONIA_JARVIS_MODELO`): en `nano` queda solo el tablero. Se mira en
+  solo lectura con `diagnostico` (imprime «modelo:» por trabajo) y `grep -n model /root/.hermes/config.yaml`.
 - **Arma su lista de skills al ARRANCAR** (`.skills_prompt_snapshot.json`). El 1-oct la lista era del
   08-sep y no nombraba `agenda-calendario`, que existía desde el 28-sep: una skill copiada en caliente
   existe en el disco y él no la conoce. **Toda skill o SOUL nuevo exige reiniciar el gateway**:
@@ -107,16 +117,205 @@ CLI de Hermes.
 
 ## Trampas ya pagadas
 
-- **El hook Stop hace avanzar `main` solo** (`scripts/git-autosync.js`): al terminar el turno pushea la
-  rama y, si `main` es ancestro, la empuja a `main`. El PR #68 apareció «merged» sin que nadie lo
-  mergeara. **Todo lo que dejás en tu rama llega a `main` y, ≈1 h después, al VPS** (el sincronizador
-  de `/root/bin`). Por eso lo nuevo se diseña INERTE hasta encenderlo: los pedidos no instalan nada
-  sin la llave de la rutina. **Con una rama que sale de `main` y un PR que todavía tiene que revisar
-  la madre:** pushear a mano y soltar el turno con `git checkout --detach` (el hook no toca un HEAD
-  desacoplado). Si no, el PR llega a `main` sin revisión (2-oct).
+- **El hook Stop hacía avanzar `main` solo** (`scripts/git-autosync.js`, hasta el 5-oct): pusheaba la
+  rama y, si `main` era ancestro, la empujaba a `main`. El PR #68 apareció «merged» sin que nadie lo
+  mergeara. **Desde el 5-oct solo lo hace con permiso** (la madre con `ONIA_AUTOSYNC_MAIN=1`, el
+  integrador con `ONIA_LOOP_ID=onia-cola`; Sergio Urcullo eligió «sí, la madre sigue directo»). Lo que
+  llega a `main` llega igual, ≈1 h después, al VPS (el sincronizador de `/root/bin`): lo nuevo se diseña
+  INERTE hasta encenderlo. **Mientras el cambio del 5-oct no esté en `main`,** con una rama que sale de
+  `main` y un PR sin revisar: pushear a mano y soltar el turno con `git checkout --detach`. Con el hook
+  nuevo en tu árbol ya no hace falta, pero no cuesta nada.
+- **El permiso de la madre exige una marca en SU checkout** (revisiones de la madre al #138 y al #173, 9-oct):
+  sus procesos hijos heredan `ONIA_AUTOSYNC_MAIN`, y los subagentes trabajan en worktrees. **Intento fallido:**
+  «solo en el clon principal» (`--git-dir` == `--git-common-dir`) dejaba sin permiso a la madre real, que corre
+  en el worktree `onia-madre-v2-pr-review-2d85bb` (`claude -w`); lo encontró el revisor del #173. Ahora vale
+  con la variable Y el archivo `onia-autosync-main` en `git rev-parse --absolute-git-dir` de ese checkout: no
+  se versiona, no se hereda y ningún otro worktree lo comparte. Residuo: un worktree en una rama anterior
+  al #138 corre el autosync viejo, que movía main sin mirar nada.
+- **Un runbook se escribe con los `echo` del script delante, no de memoria** (9-oct). El §8 del doc de
+  pedidos decía que 1b imprime «✅ llego a GitHub» y 5d «✅ pedidos a Claude: configurado»: 1b es muda
+  salvo que falle (`--probar` y `--estado` van a `/dev/null`) y 5d dice «✅ llave de la rutina guardada…».
+  Con eso, quien corría `aplicar` iba a buscar una línea que nunca aparece. Se sacan con
+  `grep -n '^sec \|echo "✅' aplicar.sh`.
+- **Una respuesta rechazada avisa, una vez por pedido** («⛔ Rechazada · id · link», sin el texto rechazado;
+  9-oct). Antes se descartaba en silencio. «⚠️ Respuesta rechazada» con un link real pasaba los 90 bytes y
+  la aduana guardaba solo el emoji: la etiqueta se eligió por bytes, no por gusto.
+- **Las sesiones de la NUBE sí pueden pushear a `main`** (medido el 5-oct): 23 de los 48 avances directos
+  de `main` del 28-sep al 5-oct traen el `Claude-Session` de dos sesiones de la nube (Lucía,
+  `session_01Whdadt…`, y Marca personal, `session_01CE21my…`; `environment_kind: anthropic_cloud`). El
+  proxy de git no lo frena. Contarlo: `git log --first-parent --no-merges --since=… origin/main` y el
+  trailer `Claude-Session` de cada commit.
+- **El permiso de mover `main` no puede vivir en el repo.** `.claude/settings.local.json` no estaba en
+  `.gitignore` (5-oct): si la madre lo hubiera puesto ahí, el `add -A` del autosync lo subía y todas las
+  sesiones tenían el permiso. Ahora `**/.claude/settings.local.json` está ignorado y `pedido-rama.test.mjs`
+  lo verifica. La madre lo pone en el `settings.local.json` de SU carpeta: la config de usuario o una
+  variable de Windows alcanzarían a cualquier sesión de la PC (revisión del 5-oct).
+- **El autosync arma los comandos de git SIN shell** (`execFileSync('git', args)`, 5-oct). Antes eran
+  cadenas para `execSync`, y una rama `x$(touch${IFS}/ruta)` —nombre válido para git— ejecutaba el
+  comando en la máquina de quien la abriera (la madre, al revisar la rama de otra sesión). Y la rama se
+  lee con `symbolic-ref` (ref completa): con un tag `main`, `--abbrev-ref` decía `heads/main` y el push
+  igual movía `refs/heads/main`.
+- **Lo rescatado sale de `main`** (5-oct): el autosync pushea a `claude/autosync-<id>`, deja la sesión
+  parada en esa rama (con upstream) y vuelve el `main` local a `origin/main`. Si quedaba en el `main`
+  local, la primera corrida CON permiso en ese clon lo publicaba sin PR. Una rama de rescate reescrita
+  (rebase, amend), o una local con commits que HEAD no tiene, no se fuerza ni se pisa: va a
+  `claude/autosync-<id>-<sha>` y la sesión sigue ahí.
+- **A quien TIENE permiso el hook nunca lo mueve de rama** (tercera pasada de revisión, 5-oct). Una
+  versión intermedia exigía `tsc` también en `main` con permiso y, si fallaba, rescataba: el integrador
+  quedaba fuera de `main`, y `onia-loop.sh` aborta si no está ahí, así que dejaba de integrar para
+  siempre. Hueco conocido, como antes del 5-oct: con permiso y parado en `main`, se pushea sin `tsc` de
+  `apps/site` (el integrador tiene sus gates; la madre, la regla «main siempre compila»).
 - **Una sección del SOUL se copia con un rango.** El `aplicar` viejo hacía `sed '/^## Su calendario/,$p'`:
   arrastraba TODO lo que viniera después. La sección de pedidos va ANTES de la del calendario, y
   cada copia termina en el próximo `---`.
+- **El registro de publicaciones miente si se lo lee a la ligera** (9-oct, segunda revisión del #176).
+  `yt-video.mjs` sube en PRIVADO por defecto (ensayo) y lo anota igual: solo cuenta `privacidad: public`.
+  `ig-historia.mjs` no pide `permalink`: la historia va sin link. `buffer-post` anota el envío, no la
+  salida: se cuenta por `cuando` (o `fecha` si es «ya») y solo lo que ya pasó. Y no ve lo que Sergio
+  Urcullo sube a mano: se dice «en el registro», nunca «no salió nada».
+- **Un calendario sin año** (`CALENDARIO-PUBLICACION-28-3-ENE.md`): el año es el que hace que el rango
+  cubra la fecha; la fila se casa por el número de día (normalizado a NFC); entre dos que se solapan
+  gana el que empieza después; y desde que existe uno, los `S*-GUIONES` (sin año) no vuelven nunca.
+- **Leer una tabla de un `.md` de la madre** (10-oct, relojes de `madre.md` §G). La cabecera se guarda al
+  entrar a la sección y NO se borra al salir: el primer parser la borraba en cada `## `, y como §G no es la
+  última sección, la `## H.` de abajo la dejaba en `None` y el resumen decía «no pude leer los relojes»
+  con la tabla sana. Columnas por nombre exacto (`fecha`, `qué`, `dueño`; un prefijo `qu` casaba «Quién»),
+  nunca por posición. Fecha sin año = la PRÓXIMA vez que cae, salvo que haya pasado hace 60 días o menos
+  («la más cercana» leía un 15-abr en octubre como «vencido hace 178 días»). Un rango arranca a mostrarse
+  desde su primer día y vence al terminar («28 al 2-nov»: el 28 es de octubre). Lo que no entiende sale
+  con ❓, no se calla: NECESITO diría «Nada.» con un reloj vivo. Probado contra el `madre.md` real de la
+  rama de la madre antes de escribir la prueba: el fixture solo no lo habría encontrado.
+- **El latido del cron (10-oct, Q4c).** Cada línea que agrega `aplicar` corre como
+  `/root/bin/onia-latido.sh <nombre> <cada-seg> '<comando>'`. El envoltorio nunca rompe el trabajo: si no
+  puede anotar, igual corre y sale con el código del comando. Por eso `aplicar` exige verlo en `/root/bin`
+  ANTES de tocar el crontab: sin él, ninguna línea nueva correría. Un `[ -x X ] && X` adentro anotaría
+  código 1 cuando X falta, que no es una falla: se escribe `[ ! -x X ] || X`. La cadencia de
+  `agenda-bloques` (1800) es de día: de madrugada no corre, y el resumen de las 06:30 la lee cinco minutos
+  después de su primera corrida. El resumen lee SOLO los nombres de `LATIDOS_ESPERADOS` (una prueba los
+  compara con el crontab de `aplicar`): así un archivo viejo de un trabajo renombrado no queda «mudo»
+  para siempre, y un trabajo frecuente sin ningún latido sale como «nunca corrió». La prueba que importa
+  corre cada línea instalada contra un `/root/bin` que anota sus argumentos: sin las comillas, la línea
+  de la aduana corría `sh -c 'ONIA_AVISO_SOLTAR=1'`, salía 0 y el latido la daba por sana (revisión del
+  10-oct, lo vio una revisión Opus; la prueba anterior solo miraba que hubiera latido).
+- **El QA después de cada publicación (10-oct, Q5): `scripts/loops/qa-release.sh`.** Lee el release con
+  `docker inspect --format '{{.Config.Image}}' onia-platform`, lo mismo que `deploy-vivo.mjs`. El correo de
+  QA va en una constante `readonly`: el script no acepta argumentos ni lo lee del entorno, porque
+  `onia-mirar.js` abre sesión con CUALQUIER correo usando la clave service role.
+  - **ROTO solo con evidencia de la plataforma:** la URL final, el texto de error, la pantalla vacía,
+    la lentitud, `page.*`, `fetch failed`, `generate_link` 5xx o el contenedor parado. `docker inspect` da
+    la etiqueta aunque el contenedor esté parado; lo que falla es el `docker exec` de la clave.
+  - **Todo lo demás es NO MEDIDO**, con exit 2 y una tarea del carril, nunca la interrupción 4: el
+    `generate_link` 4xx, Chromium que no arranca o que murió (`Page crashed`, `has been closed`), el DNS
+    del VPS, una salida sin `FALLO:` (SIGKILL, un `onia-mirar.js` con error de sintaxis), una salida con
+    código 0 sin `URL_FINAL=` ni `---TEXTO---` (archivo truncado) o el tope de 150 s.
+  - La primera versión mandaba cualquier salida distinta de 0 a ROTO. Así un Chromium faltante habría
+    despertado a Sergio Urcullo con «la app está rota» (revisión del 10-oct).
+  - Lo roto se vuelve a mirar una vez, 60 s después, antes de abrir la tarea: recién swapeado, Next puede
+    estar arrancando.
+  - Todo hijo corre con tope de tiempo y `8>&-`. Si un Chromium huérfano se quedaba con el candado, cada
+    corrida saltaba con exit 0 y el latido decía «sano». Ahora una corrida trabada más de 20 min sale con 75.
+  - Cada tarea guarda su id y se cierra sola cuando vuelve. Antes de confiar en el id se mira que siga
+    abierta: si alguien la cerró a mano, la próxima falla abre otra.
+  - Las ventanas del publicador se leen por su encabezado `== AAAA-MM-DD HH:MM La Paz ==` (lo escribe al
+    tomar el lock o al rendirse), en la hora que sigue a la :50 y una hora y diez después.
+    - «al dia» no cuenta como fallida, y «NO publico solo» por un monto tampoco: espera una firma.
+    - El `--dry-run` («publicaria») no cuenta.
+    - Si el bloque no tiene veredicto y el lock del publicador está tomado, se lee en la próxima corrida.
+    - Sin el log no se da la ventana por leída: exit 2 y una tarea.
+  - En las pruebas, `onia-tg.sh` del repo no tiene permiso de ejecución: se llama con un envoltorio
+    `exec bash`. Si no, `"$TG"` falla mudo y no se crea ninguna tarea.
+- **Mirar páginas desde la nube** (11-oct): el Chromium de Playwright rechaza el certificado del proxy de salida
+  (`ERR_CERT_AUTHORITY_INVALID`, también con `channel: "chromium"`). Funciona si cada pedido lo hace Node:
+  `context.route("**/*", async r => r.fulfill({ response: await r.fetch() }))`, que usa `NODE_EXTRA_CA_CERTS`. La
+  verificación TLS sigue entera; nunca `--ignore-certificate-errors`. El «[SW] registration failed» que aparece así
+  es del interceptor. **El BUILD_ID de Next SÍ está en el HTML** (corregido el 11-oct: había escrito que no): en el payload RSC de `/login`, como `\"b\":\"<id>\"`
+  (`curl -s https://app.onia.com.bo/login | grep -o '\\"b\\":\\"[^\\"]*'`; `mirar-publico.mjs` lo saca como `buildId`). Cambia con CADA build: es la huella para saber que hubo una publicación nueva (medido: `D5DzLXxrhp8Sx1o0cQhQs`
+  con #136 y #146). No dice QUÉ commit trae; eso lo da la hora de la publicación (:50) y lo que `master` tenía entonces. **El nombre de `webpack-<hash>.js` NO sirve de huella**
+  (corregido el 11-oct, E1: la imagen cambió, con `sw.js`, `manifest.json` y los títulos nuevos, y el nombre fue el mismo
+  `webpack-2a706587264c6b91.js` antes y después). Huella que sí funciona: el SHA-1 de `public/manifest.json` y de
+  `public/sw.js` servidos por `app.onia.com.bo`, contra `git show <commit>:public/<archivo> | sha1sum` en `onia-platform`
+  (así se supo que corría `a7d8c1ed` y no el anterior a #136), más el `Last-Modified` de esos archivos como hora aproximada
+  del checkout del build (06:55:58 GMT). Solo cambia si ese archivo cambió en el commit: elegí uno que sí. Para saber
+  QUÉ commit corre sin acceso al VPS, comparar varios archivos de `public/` contra varios commits de `master`.
+  **La hora del build SIN depender de qué archivo cambió (15-oct):** `curl -sI https://app.onia.com.bo/_next/static/<buildId>/_buildManifest.js | grep -i last-modified`.
+  Ese archivo se regenera en CADA build, así que su `Last-Modified` es la hora del build (medido: `LIM7jeUwfaFnEKQWS22-R` → `12:54:16 GMT` en la publicación
+  de las 12:50, con `master` en `e28c7e90`, #172 mergeado a las 12:02). Une el `buildId` (qué build) con su hora (cuándo); sigue sin decir qué commit, pero la hora
+  más lo que `master` tenía entonces lo cierra. Hay que medir el `buildId` ANTES de la publicación para tener con qué compararlo.
+  **La imagen nueva se ve ~5 min DESPUÉS de la hora del build** (medido dos veces el 15-oct: build `12:54:16` → ya servida a las 12:58:46; build `15:54:24` → todavía la vieja a las
+  15:58:45 y la nueva a las 15:59:21). Medir a las :58 da «sin cambio» aunque la publicación haya salido: se espera hasta las :00 o más, con
+  `hermes-content/docs/research/qa-publicacion/2026-10-15/espera-build.sh <buildId viejo>` (mira cada 20 s hasta 9 min y imprime el nuevo y la hora de su manifiesto), en segundo plano.
+  `app.onia.com.bo` está detrás de Cloudflare (`server: cloudflare`).
+- **El ejemplo de la prueba de un instrumento sale del sistema real, no del contrato** (11-oct, dos veces el mismo día). C3 (sección 16 del
+  diagnóstico) pasó sus 10 pruebas con líneas de crontab directas y, con el crontab que instala `aplicar.sh` (todo envuelto en `onia-latido.sh '<comando>'`),
+  nombró seis veces `onia-latido.sh` y dejó vacío el modelo del resumen. L1 (`web-vs-producto.mjs`) pasó 13 pruebas con HTML inventado y, con el HTML
+  real de `onia.com.bo`, no ubicó ni un plan. Al revisar a Codex: correr el instrumento contra el sistema real (las líneas de `aplicar.sh`, `curl` de las
+  páginas, el código de `master`) ANTES de aceptar «N de N en verde», y escribir el contrato pidiendo que la prueba **lea** esa fuente real.
+- **Revisar PRs de otros carriles (11-oct, E2):** una lente sonnet por PR (dos si toca el VPS, plata o el bot), cada
+  HIGH verificado por un haiku que cita líneas y corre el repro, y nada se comenta en GitHub. Lee las ramas con `git
+  show origin/<rama>:<ruta>` y `git archive … | tar -x` en `/tmp`: nunca `checkout` en el árbol del carril. La
+  verificación cambia veredictos: el «cursor CAFC repite números» de #145 bajó a MEDIUM porque el runner falla cerrado
+  sin conciliación. Y dos lentes del mismo PR (#162) se contradijeron sobre si el silencio dispara; el repro lo decidió.
+- **Verificar las promesas de `onia.com.bo` desde la nube, sin bajar el HTML a mano** (15-oct): `NODE_USE_ENV_PROXY=1 NODE_EXTRA_CA_CERTS=/root/.ccr/ca-bundle.crt node
+  .claude/skills/onia-hermes-jarvis/scripts/web-vs-producto.mjs --base-web https://onia.com.bo --platform <carpeta con lib/pricing.ts, lib/subscription-plans.ts y
+  lib/plan-catalogo.ts>`. El `fetch` de Node no usa el proxy de la nube sin `NODE_USE_ENV_PROXY=1`. Los tres archivos de `lib/` se sacan de `master` con `git archive origin/master lib/…`
+  a una carpeta de `/tmp` (el árbol del carril no se toca). Medido el 15-oct 20:58 UTC: 0 diferencias de precio, los cuatro topes «coincide», 0 textos de obra, 7 promesas «sigue».
+  `registro-nombre` no se mide sin navegador: lo cubre `hermes-content/docs/research/qa-publicacion/2026-10-15/mirar-register-paso2.mjs <carpeta> <etiqueta>`, que elige el rubro
+  (dental y comercio), lee el paso 2 del alta y se va **sin escribir ni enviar** (crear cuentas es otra autorización). **Las anclas de este instrumento leen el copy público: cuando una
+  pantalla pasa de usted, la ancla se rompe en silencio.** El 15-oct `registro-nombre` buscaba «Nombre de tu» y producción ya dice «Nombre de su clínica»; ahora acepta «tu» o «su»
+  (prueba con mutación: sin el arreglo cae). Al pasar una pantalla a usted, buscar sus frases en `PROMESAS` y `ANCLAS` del script.
+- **Mirar el paso «Fecha» de la reserva pública sin reservar, y cuándo se puede distinguir de verdad** (16-oct, #181): `hermes-content/docs/research/qa-publicacion/2026-10-15/mirar-reserva-paso2.mjs <carpeta> <etiqueta> <slug>`
+  elige al profesional, lee `min` y `max` del `<input type="date">` y se va: no elige fecha ni horario, no envía nada (solo GET; lo único que no es GET son las señales `cdn-cgi/rum` de Cloudflare, que el script lista). Compara contra
+  lo esperado: `min` = hoy en La Paz y `max` = hoy + 30 días sobre el calendario. **A las 05:58 de La Paz (09:58 UTC) el día de UTC y el de La Paz coinciden, así que esa corrida confirma los valores pero NO prueba el arreglo**: el
+  defecto vivía de las 20:00 a las 24:00 de La Paz (00:00-04:00 UTC), cuando `min` salía mañana. Para probarlo hay que correr el script en esa franja (p. ej. 00:30 UTC) y ver `min` = el día de La Paz y no el de UTC. Un slug de QA
+  conocido: `clinica-sergio-p2ljs` (la org de Sergio Urcullo, de pruebas; la reserva pública es pública). **Trampa del script:** el primer texto «Profesional» de la página es el rótulo del primer paso, no la tarjeta del profesional;
+  hacer clic ahí no avanza y el script lee `fecha: null`.
+- **Árbol de accesibilidad de las pantallas públicas: contar íconos leídos como texto** (16-oct, #182): `hermes-content/docs/research/qa-publicacion/2026-10-15/mirar-arbol-de-accesibilidad.mjs <carpeta> <etiqueta> <ruta> [<ruta> ...]`
+  lista los íconos de Material Symbols del DOM, cuántos no están dentro de un `aria-hidden` y cuáles aparecen en el árbol (`ariaSnapshot`). Solo lectura. **Un ícono cuyo nombre es también una palabra visible da falso positivo**
+  («spa» en «Estética y spa» de `/register`): mirar la línea del árbol antes de dar un hallazgo. Un script que mira un solo build no distingue «antes» de «después»: para eso hace falta correrlo ANTES de la publicación.
+- **Foco y aviso de lector de pantalla al cambiar de paso en la reserva pública** (16-oct, #183): `hermes-content/docs/research/qa-publicacion/2026-10-15/mirar-foco-reserva.mjs <carpeta> <etiqueta> <slug>`
+  elige al profesional con un clic (solo GET: no elige fecha ni horario y no envía nada) y anota el rol y el nombre de la lista de profesionales, si los botones llevan `aria-pressed`, el texto de la región `role=status` y
+  **dónde cae `document.activeElement`**. Medido E67: antes de #183 `BODY` y sin región; después `H2#book-paso-2-titulo` y «Paso 2 de 4: Elija la fecha». Como todo «antes/después», se corre ANTES de la publicación de las :50.
+  Trampas: el primer texto «Profesional» de la página es el rótulo del indicador de pasos, no la tarjeta (los botones del profesional son los que **terminan** en «Profesional»); la baliza `POST /cdn-cgi/rum` es de Cloudflare, no un envío de la reserva (el script la descarta).
+  Si el marcado cambia y el script da `tituloId: null` en los dos lados, falla el selector, no la página: arreglar el selector antes de concluir. **Teclear la fecha en el campo de fecha** (para probar el tope `max`) no se puede automatizar con fiabilidad: el orden de los segmentos (dd/mm o mm/dd) lo decide el Chromium, no el `locale` del contexto (E66: «16102026» terminó en 2026-12-01).
+- **PR «de usted» (copia) de más de 20 archivos: probar que es SOLO texto, no leerlo a ojo** (15-oct, #174: 68 archivos, +1.189 −211). Tres pasos, con los scripts de
+  `hermes-content/docs/research/qa-publicacion/2026-10-15/`: (1) `solo-texto.cjs <repo> <base> <cabeza> <archivos…>` normaliza cada `.ts/.tsx` con el AST de TypeScript
+  (todo texto, plantilla fija, texto JSX y comentario pasa a «§») y dice cuáles quedan idénticos: de 50 archivos, **45 idénticos** y 5 con estructura distinta, que se
+  leen a mano. (2) `literales-logicos.cjs` busca, en los idénticos, cadenas de **un solo token** que hayan cambiado (rutas, `href`, estados, códigos, palabras que espera el
+  bot): el paso 1 NO las ve porque también las reemplaza por «§»; en #174 salieron 0 de 45. Los números y las expresiones regulares sí se comparan en el paso 1. (3) Si el PR
+  toca el DETECTOR de tú/vos, `comparar-detector-tu-y-vos.mts` corre el viejo y el nuevo sobre casos escritos a mano (usted que no debe cazar, tú/vos que sí) y cuenta las
+  regresiones: el de #174 acertó 86 de 87 contra 68 del anterior, 0 regresiones. (4) Esas 87 frases **se saturan**: en #175 dieron 86 y 86 (0 mejoras) porque lo que el PR
+  agrega son palabras que no escribí. Lo que vale es `comparar-detector-en-el-arbol.mts <carpeta>`: corre los dos detectores sobre TODO el texto real de `app`, `components` y `lib`
+  de un árbol sacado con `git archive … | tar -x -C <carpeta fuera del repo>` y lista lo que solo marca el viejo (regresión: el nuevo dejó pasar algo) y lo que solo marca el nuevo
+  (lo que corrige). #175 (15-oct): 51.859 textos de `master`, **0 que el nuevo deje pasar y 10 nuevos reales**; sobre el árbol del PR, viejo y nuevo dan lo mismo. Los hallazgos que
+  quedan en el árbol del PR se agrupan por carpeta: `admin`, `dev` y `api/admin` son voseo a Sergio Urcullo (permitido); el resto se lee a mano, y en #175 fueron 7 archivos de `lib/`,
+  todos falsos positivos o excluidos a propósito. Límite: el método dice «solo texto», no «el texto es correcto»; la gramática de
+  `negocioSu` y los artículos del rubro se leen aparte. El TypeScript sale de `/opt/node22/lib/node_modules/typescript` (la nube no instala nada).
+- **Mirar páginas públicas con un solo script** (11-oct): `hermes-content/docs/research/qa-publicacion/2026-10-11/mirar-publico.mjs
+  <carpeta> <etiqueta> <ruta>...`, con `BASE=https://onia.com.bo` para la web (por omisión, la app). Por ruta y ancho
+  (390 y 1440) saca estado, tiempo, título de la pestaña, descripción, tarjeta al compartir, huella del build, ligaduras de
+  íconos dibujadas como texto, desborde horizontal, textos de obra, voseo o tuteo visible y los precios en Bs. Corre con
+  `NODE_EXTRA_CA_CERTS=/root/.ccr/ca-bundle.crt`. Para un asistente de pasos (el alta) se hace clic en la tarjeta del
+  paso 1 y se mira el paso 2 **sin escribir ni enviar nada**: `/register` no se tocó más que eso. Trampas: `getByText`
+  del rubro agarra primero un texto oculto del pie («Clínicas dentales · Comercios…»): hay que pedir el `button` por nombre;
+  y el nombre del PNG puede pisar una captura vieja de otro script si comparten etiqueta.
+- **Una revisión con lentes se verifica DESPUÉS, y baja severidades** (11-oct, E3, #136): de 5 HIGH que dieron cuatro
+  lentes sonnet, el haiku verificador confirmó 2, bajó 2 a MEDIUM (una carrera de milisegundos que no pierde plata, un
+  reenvío que el cupo de 10 por hora acota) y dejó 1 como compuerta que solo mide la madre en el VPS. Además corrigió dos
+  citas de línea que no existían (un archivo de 89 líneas citado en la 147) y desmintió una frase («el CI lo atraparía»:
+  el test deriva solo relaciones sin `onDelete`, y un `Cascade` le es invisible). Dos lentes que llegan a lo mismo por
+  caminos distintos (el «1.500» de la caja lo vieron la A y la D) es la mejor señal de que es real: igual se corre el
+  `node -e` con la función copiada, que dio 1,5.
+- **El texto legal también se mide en la web** (11-oct): `/terminos` y `/privacidad` están de vos como el resto de
+  `onia.com.bo`. Las palabras «borrador» y «beta» que el barrido marca ahí son de la IA que propone borradores, no
+  de obra: un barrido de obra sin leer la línea da falsos positivos en esas dos páginas.
+- **`git show … | grep -q` con `pipefail` miente en archivos grandes** (10-oct). `grep -q` sale al primer
+  acierto, `git` recibe SIGPIPE y el pipeline da error: una cola de más de 64 KB con tareas se leía «sin
+  tareas». Usar `grep -c … >/dev/null` (lee todo) o leer a una variable primero.
+- **`aplicar` copia del SOUL SOLO las secciones que nombra** (9-oct). Una regla nueva escrita dentro de
+  otra sección («Cómo hablarle a Sergio») existe en `main` y nunca llega a `/root/.hermes/SOUL.md`. Regla
+  nueva = sección propia que termina en `---`, su paso en 5c (o 5d si depende de la llave), su chequeo
+  en la Fase A y su prueba en `hermes-jarvis-aplicar.test.mjs`. Así entró el formato fijo
+  (Pasó · Necesito · Sigue).
 - **`git stash -u` con un `git mv` en el medio:** el pop no puede restaurar un archivo nuevo en la ruta
   que dejó libre el `mv`, y deja el stash guardado. Antes de soltarlo, compará archivo por archivo con
   `git show stash@{0}^3:<ruta>`. Mejor no mezclar stash con renombres.
@@ -169,11 +368,42 @@ CLI de Hermes.
 - **El integrador y `ramas_varadas` enumeran SOLO `origin/claude/*`** (`onia-cola.md`,
   `ramas_varadas.mjs:129`, `integrador_puede_mergear.mjs:224`; medido el 2-oct). Una rama que no
   debe integrarse nunca va con otro prefijo: `pedido/<id>`, `respuesta/<id>`.
-- **El hook Stop (`git-autosync.js`) hace fast-forward de `main` desde la rama de trabajo**, y la
+- **`git ls-files` del repo entero pasa de 1 MB desde el 10-oct** (1.061.877 bytes). `execFileSync`
+  corta en 1 MiB con `ENOBUFS`: el gate del integrador quedaba en NO MEDIDO para siempre, su prueba de
+  la vía viva en rojo y `herramientas-del-cron` tiraba, sin que nada de eso hubiera cambiado. Toda lista
+  del repo entero lleva `maxBuffer` (64 MiB); en el gate, por `archivosVersionados()`, que usa también
+  su prueba. Una lista con ruta (`ls-files -- <carpeta>`) no lo necesita todavía: medir antes de asumir.
+- **El hook Stop (`git-autosync.js`) hacía fast-forward de `main` desde la rama de trabajo**, y la
   sesión de una RUTINA lo carga igual que cualquier sesión. Con `claude/pedido-<id>`, el cambio de un
-  pedido entraba a `main` sin revisar al terminar el turno. Guarda desde el 2-oct: `pedido/*` y
-  `respuesta/*` se pushean y nunca adelantan `main` (`pedido-rama.test.mjs`, con un caso de control
-  que muestra que una rama cualquiera sí lo adelanta).
+  pedido entraba a `main` sin revisar al terminar el turno. La guarda del 2-oct miraba el NOMBRE de la
+  rama (`pedido/*`, `respuesta/*`): el tercer MEDIUM de la madre v2. Desde el 5-oct la rutina no tiene
+  permiso (su entorno no tiene variables) y no mueve `main` con ningún nombre; el de la rama queda como
+  segunda llave. Una sesión parada EN `main` sin permiso tampoco lo pushea: sus commits van a
+  `claude/autosync-<sesión>` (`pedido-rama.test.mjs`, 22 casos).
+- **La respuesta de un pedido va FIRMADA** (5-oct, primer MEDIUM de la madre v2). `pedido-claude.sh` le
+  da a cada pedido un sello de 32 hex que viaja solo en el disparo («Sello: …») y queda en
+  `/var/lib/onia-pedidos/sellos/<id>` (600). La sesión responde con `scripts/loops/responder-pedido.sh
+  <id> <estado> <sello> < respuesta.txt`, que firma HMAC-SHA256(sello, "respuesta <id> <estado>\n" +
+  texto sin espacios ASCII en las puntas). El recolector rechaza otra firma, la forma vieja sin firma y
+  un pedido sin sello. Límites: quien lea la sesión de la rutina ve el sello; y quien pueda pushear a
+  `main` cambia el verificador (el sincronizador lo copia a `/root/bin` como root) — eso solo lo cierra
+  proteger `main` en GitHub, decisión de Sergio Urcullo. El sello se borra al cerrarse el pedido o a las
+  48 h, y no firma texto que no sea UTF-8 válido (git lo reescribiría y la firma no cerraría).
+- **Un tope de descarga se pone MIENTRAS baja, no después** (5-oct, segundo MEDIUM). `cat-file -s` mide
+  lo que ya bajó. Lo que funciona (medido en este contenedor): `( ulimit -f 64 && exec timeout 60 git -c
+  transfer.unpackLimit=1 fetch … )`. Con `unpackLimit=1` git guarda el paquete en `tmp_pack_*` mientras
+  lo recibe, y el kernel lo corta en 64 KB (3 MB al azar y 200 MB comprimibles se cortaron ahí; git
+  sale 128 con «died of signal 25»). Medido también: con `--filter` git ya usa `index-pack` aunque no
+  se le pida (el paquete es *promisor*); `unpackLimit=1` lo asegura si eso cambia, porque con
+  `unpack-objects` no se escribe nada hasta tener el objeto entero. Para distinguir el tope de una
+  falla de red queda un `tmp_pack_*` de 64 KB; se borra siempre.
+- **Un `ulimit` en un repo que dura alcanza al gc** (revisión fuerte del 5-oct, medido por el revisor):
+  con `unpackLimit=1` cada fetch deja un paquete, a los ~51 git lanza `gc --auto`, el gc hereda el tope,
+  muere y deja un `tmp_pack_*` de 64 KB que hacía pasar una falla de red por «demasiado grande». Y el
+  `shallow` crecía 41 bytes por respuesta hasta que el fetch chocaba con el tope y dejaba `shallow.lock`.
+  Arreglo: el repo del recolector se arma DE CERO en cada vuelta, con `gc.auto=0`.
+- **`onia-platform` no tiene hook Stop** (medido el 5-oct: su `.claude/settings.json` solo trae
+  permisos). Un pedido de `plataforma` no tiene autosync que le mueva `master`.
 - **El rojo de main no es tuyo, pero te tiñe el CI.** El 2-oct `test:herramientas-desplegadas`
   (`onia-vps.sh` sin `poner` en `sincronizar.sh`, de `5b3f980b`) y `test:guards-cableados`
   (`tandas-v1.test.mjs` sin cablear) fallaban en main SOLO. Antes de culpar a tu cambio, se corre la
@@ -212,6 +442,10 @@ CLI de Hermes.
   `onia-vps.sh` (el shim que crea `instalar-homelab.sh`) tenía fuente y pidió desplegarla. El `poner`
   que pedía habría pisado el shim con un script roto. Se renombró el atajo (`vps-desde-windows.sh`).
   Antes de agregar un `poner`, se abre la «fuente» y se mira si de verdad es esa herramienta.
+  **Desde el 9-oct el test lee las carpetas de los `poner`**: un `x.sh` sin prefijo cuenta como fuente
+  de `onia-x.sh` solo si está en una carpeta desde la que el sync ya copia (`scripts/loops/`,
+  `scripts/kanban/`, `hermes-content/deploy/vps-ops/`…). Con el nombre exacto (`onia-x.sh`) cuenta en
+  cualquier lado. Y cada `poner` a `/root/bin` tiene que apuntar a un archivo versionado.
 - **En esta nube, un proceso muerto puede seguir «vivo» para `kill(pid, 0)`** (2-oct). El PID 1 del
   contenedor (`process_api`) no recoge huérfanos: un nieto matado con SIGKILL queda en
   `State: Z` para siempre. Una prueba de «el árbol murió» tiene que tratar al zombi como muerto

@@ -1,0 +1,10 @@
+idioma de la interfaz: en-US
+1.500  -> value="1.500"  Number()=1.5    parseFloat()=1.5    badInput=false stepMismatch=false
+1,500  -> value="1500"   Number()=1500   parseFloat()=1500   badInput=false stepMismatch=false
+1,5    -> value="15"     Number()=15     parseFloat()=15     badInput=false stepMismatch=false
+3.000  -> value="3.000"  Number()=3      parseFloat()=3      badInput=false stepMismatch=false
+1.000  -> value="1.000"  Number()=1      parseFloat()=1      badInput=false stepMismatch=false
+0,25   -> value="025"    Number()=25     parseFloat()=25     badInput=false stepMismatch=false
+1500   -> value="1500"   Number()=1500   parseFloat()=1500   badInput=false stepMismatch=false
+1.5    -> value="1.5"    Number()=1.5    parseFloat()=1.5    badInput=false stepMismatch=false
+1,250  -> value="1250"   Number()=1250   parseFloat()=1250   badInput=false stepMismatch=false
