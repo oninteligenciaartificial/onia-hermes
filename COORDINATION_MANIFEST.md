@@ -828,9 +828,9 @@ Canonical files:
 - `hermes-content/skills/inteligencia-reuniones-onia.md`
 - `hermes-content/skills/marca-personal-sergio.md`
 - `hermes-content/skills/historias-sergio.md`
-- `hermes-content/docs/historial/orquestacion-vieja/crons-diarios-hermes.md`
+- `hermes-content/skills/crons-diarios-hermes.md`
 - `hermes-content/skills/sistema-semanal-hermes.md`
-- `hermes-content/docs/historial/orquestacion-vieja/orquestacion-proyectos-onia.md`
+- `hermes-content/skills/orquestacion-proyectos-onia.md`
 - `hermes-content/skills/radar-creativo-onia.md`
 - `hermes-content/skills/consultoria-onia.md`
 

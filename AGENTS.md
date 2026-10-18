@@ -292,4 +292,4 @@ Reglas de Sergio Urcullo vigentes desde el 3-oct:
 - Cada tarea arranca con META, PRUEBA DE HECHO y REGLA DE PARADA escritas.
 - Nada llega a main sin revision.
 - Effort medio, sesiones cortas, sin releer documentos enteros.
-- La cola de tareas de Codex esta en `hermes-content/docs/historial/orquestacion-vieja/codex-relevo.md`.
+- La cola de tareas de Codex quedo RETIRADA el 17-oct (harness archivado el 16-oct; ahora coordina Hermes Agent). Su historia esta en `hermes-content/docs/historial/orquestacion-vieja/codex-relevo.md`: no lanzar tareas desde ahi.
