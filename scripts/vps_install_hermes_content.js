@@ -15,6 +15,34 @@ const { connectSsh, exec, sftp, putFile } = require("./lib/ssh");
 
 const repoRoot = path.resolve(__dirname, "..");
 
+// Archivados el 17-oct (historial/orquestacion-vieja). El tar no borra lo que ya no viene en el
+// paquete, así que se podan a mano para que el VPS no siga sirviendo la orquestación retirada.
+// ponytail: lista fija; si se archiva más seguido, podar contra el manifiesto del paquete.
+const RETIRED_HERMES_PATHS = [
+  "docs/COMO_SE_ARMA_UN_LOOP.md",
+  "docs/CONOCIMIENTO_DE_LOS_LOOPS.md",
+  "docs/DASHBOARD.md",
+  "docs/HERMES_CLOSED_EXECUTION_AND_CONTINUOUS_WORK_2026.md",
+  "docs/HERMES_OS_CONTROL_CENTER_2026.md",
+  "docs/HERMES_PRODUCT_BRIDGE_2026.md",
+  "docs/ONIA_COMPANY_OPERATING_MODEL_2026.md",
+  "docs/ONIA_CONTENT_FACTORY_ORCHESTRATION_2026.md",
+  "docs/ONIA_PROJECT_HYGIENE_AUTOMATION_2026.md",
+  "docs/OPERATIONS.md",
+  "docs/ORCHESTRATOR.md",
+  "docs/handoff/ARRANQUE-SESIONES.md",
+  "docs/handoff/codex-continuar-1.0.md",
+  "docs/handoff/codex-relevo.md",
+  "docs/handoff/codex-tareas",
+  "docs/handoff/docs-auditoria.md",
+  "docs/handoff/hermes-cal-nube-20260928.md",
+  "docs/handoff/homelab-orquestacion-20260927.md",
+  "docs/handoff/infra-cerebro-loops.md",
+  "docs/handoff/madre-v2-revision.md",
+  "docs/handoff/onia-cola.md",
+  "docs/handoff/publicacion-y-nodo-casa.md",
+];
+
 function remotePythonCommand(source) {
   const encoded = Buffer.from(source, "utf8").toString("base64");
   return `python3 -c "import base64; exec(base64.b64decode('${encoded}').decode('utf-8'))"`;
@@ -174,6 +202,13 @@ async function main() {
       );
       if (extractArchive.code !== 0) {
         throw new Error(`Failed to extract Hermes content: ${extractArchive.stderr}`);
+      }
+      const pruneRetired = await exec(
+        conn,
+        `cd /root/.hermes && rm -rf -- ${RETIRED_HERMES_PATHS.map(shellQuote).join(" ")}`
+      );
+      if (pruneRetired.code !== 0) {
+        throw new Error(`Failed to prune retired Hermes content: ${pruneRetired.stderr}`);
       }
     } finally {
       fs.rmSync(stageRoot, { recursive: true, force: true });
