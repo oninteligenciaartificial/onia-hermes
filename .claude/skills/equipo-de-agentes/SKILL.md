@@ -60,10 +60,10 @@ madre sin la PC, y eso exige loguear la cuenta de Sergio Urcullo allá, que nece
 ## 3. La ronda de la madre (cada 20 min, `CronCreate`)
 
 1. **Verificador Haiku** (uno solo, barato): por cada cola, cuántas tareas `[x]` desde la última ronda y cuál es la siguiente;
-   `ListAgents` para ver quién está `idle` con tareas pendientes; PRs nuevos o mergeados; NO escanear `historial/orquestacion-vieja/codex-tareas/` (cola de Codex retirada el 17-oct) y
+   `ListAgents` para ver quién está `idle` con tareas pendientes; PRs nuevos o mergeados; tareas nuevas en `codex-tareas/` y
    bundles en `docs/cola/ramas-locales/`. Devuelve una tabla corta.
 2. Sesión `idle` con cola pendiente → UN mensaje: «retomá tu cola, siguiente tarea: X».
-3. Tareas de Codex: ya no hay cola propia (retirada el 17-oct); las reparte Hermes Agent. La sección 4 queda como método, no como cola.
+3. Tarea de Codex nueva → la madre la lanza (sección 4).
 4. Bundle nuevo → la madre lo trae, lo pushea y abre el PR.
 5. A Sergio Urcullo: solo `PUBLICADO: <qué> — <link>`. Si no se publicó nada, no se le escribe.
 

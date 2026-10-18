@@ -26,7 +26,7 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
 
 
 > **¿Venís a continuar la 1.0 (Codex)?** Leé primero la sección «🧭 EMPEZÁ ACÁ» de
-> `hermes-content/docs/historial/orquestacion-vieja/codex-continuar-1.0.md`: tiene las ramas en vuelo, cómo se publica,
+> `hermes-content/docs/handoff/codex-continuar-1.0.md`: tiene las ramas en vuelo, cómo se publica,
 > las trampas y lo que depende de Sergio Urcullo. Ojo: empujar una rama `claude/*` la publica.
 
 > **Codex = ejecutor de la madre Claude (Sergio Urcullo, 8-oct-2026).** La madre es Claude y te lanza una tarea
@@ -292,4 +292,4 @@ Reglas de Sergio Urcullo vigentes desde el 3-oct:
 - Cada tarea arranca con META, PRUEBA DE HECHO y REGLA DE PARADA escritas.
 - Nada llega a main sin revision.
 - Effort medio, sesiones cortas, sin releer documentos enteros.
-- La cola de tareas de Codex quedo RETIRADA el 17-oct (harness archivado el 16-oct; ahora coordina Hermes Agent). Su historia esta en `hermes-content/docs/historial/orquestacion-vieja/codex-relevo.md`: no lanzar tareas desde ahi.
+- La cola de tareas de Codex esta en `hermes-content/docs/handoff/codex-relevo.md`.

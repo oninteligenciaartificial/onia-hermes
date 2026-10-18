@@ -111,7 +111,7 @@
     `motion-doctrine`, y lo aprendido va a la skill con su fecha en el mismo commit;
   - los 4 trucos de la ficha `video-intake/2026-10-08-orquestacion-e-ingresos-5-posts.md` §3 se prueban en P1 «Niveles»;
   - lo que exige la PC se pide como «PEDIDO PC: video <url> — para qué lo querés»; las tareas de código van a
-    `hermes-content/docs/historial/orquestacion-vieja/codex-tareas/`;
+    `hermes-content/docs/handoff/codex-tareas/`;
   - la regla de publicar sin OK pieza por pieza ya está en el `CLAUDE.md` de `main` («Qué se publica sin preguntar»).
 
 - **Lote de 14 imágenes mostrado a Sergio Urcullo (8-oct), sin generar:** pidió «mostrámelas y digo sí» (por la madre).

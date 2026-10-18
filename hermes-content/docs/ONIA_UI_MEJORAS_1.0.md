@@ -83,7 +83,7 @@ Revisé qué mejoras de la lista son «código cerrado» y no hay ninguna que Co
 
 | Mejora | Por qué no es de Codex hoy |
 |---|---|
-| B1, B2 | Diseño nuevo; B1 y B2 tocan el mismo archivo (`AgendaClient.tsx`). Es de Plataforma (`hermes-content/docs/historial/orquestacion-vieja/codex-relevo.md` §7) |
+| B1, B2 | Diseño nuevo; B1 y B2 tocan el mismo archivo (`AgendaClient.tsx`). Es de Plataforma (`hermes-content/docs/handoff/codex-relevo.md` §7) |
 | B4, B5, B6 | Mismo `FichaVista.tsx` que el parche P2; hasta aplicarlo, cualquier cambio rompe su `git apply` |
 | B3 | Depende de que C11a (reserva avisa) esté mergeado |
 | B7, A1 | Es mirar, no construir |
@@ -92,7 +92,7 @@ Revisé qué mejoras de la lista son «código cerrado» y no hay ninguna que Co
 
 **Cuándo sí:** B3 (la banda) pasa a Codex cuando C11a esté en `master`, y los arreglos que salgan de A1 (si son chicos),
 con el código de ese día. Un prompt escrito hoy se quedaría viejo: `master` de `onia-platform` pasó de `97fe306` a `b2d9d31` entre mis dos lecturas del 8-oct.
-Formato: `hermes-content/docs/historial/orquestacion-vieja/codex-tareas/` (META, PRUEBA DE HECHO, REGLA DE PARADA).
+Formato: `hermes-content/docs/handoff/codex-tareas/` (META, PRUEBA DE HECHO, REGLA DE PARADA).
 
 ## 6. Cómo venden Lety y Dapta hoy (8-oct, solo páginas públicas)
 
@@ -121,7 +121,7 @@ Cruz: no hay aquí un referente de cómo explicarle a un dueño de clínica el r
 
 > Pedido de Sergio Urcullo por la madre (8-oct): **seguir investigando a la competencia y qué se puede copiar** (ideas que
 > funcionan, no copia literal). Cada hallazgo lleva su versión Onia, el carril dueño y, si es código cerrado, la tarea para
-> Codex en `hermes-content/docs/historial/orquestacion-vieja/codex-tareas/`. **Hecho de cada semana = esta sección + las fichas nuevas.**
+> Codex en `hermes-content/docs/handoff/codex-tareas/`. **Hecho de cada semana = esta sección + las fichas nuevas.**
 > Solo web pública. Lo que pide login o Instagram va como «PEDIDO PC» en el transcript de la sesión.
 
 ### Tanda 2 · 9-oct (T1-9: la norma boliviana; fuentes primarias leídas, no resúmenes)

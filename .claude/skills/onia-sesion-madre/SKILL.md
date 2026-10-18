@@ -290,7 +290,7 @@ Se trabaja en la app de Claude; Codex corre por detrás. Codex no orquesta, no a
 - **Modelos (actualización 2026-10-09, `equipo-de-agentes`):** código cerrado, fichas, auditorías y síntesis con `gpt-6.1-sol` medium por defecto; `gpt-6-astra` medium para seguridad, cobros o arquitectura y decisiones de riesgo. Si el resultado es malo, se escala con la prueba del fallo, no por costumbre. Lista viva:
   `~/.codex/models_cache.json`.
 - **La tarea es un prompt cerrado:** META · PRUEBA DE HECHO · REGLA DE PARADA · archivos que toca y los que no · reglas
-  fijas (sin push, sin VPS, sin producción, sin instalar). Modelo: `hermes-content/docs/historial/orquestacion-vieja/codex-tareas/*.md`.
+  fijas (sin push, sin VPS, sin producción, sin instalar). Modelo: `hermes-content/docs/handoff/codex-tareas/*.md`.
 - **Cupo:** semanal (plan `prolite`). El uso se lee en el último `rate_limits` de `~/.codex/sessions/**`. Con 80 % usado
   no se lanza nada nuevo (reserva del 20 %, decidida el 6-oct).
 - ⚠️ **Sandbox de Windows (8-oct):** el CLI que trae la app de Codex (0.162-alpha) falla SIEMPRE con sandbox
