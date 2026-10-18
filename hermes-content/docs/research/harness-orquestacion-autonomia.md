@@ -117,7 +117,28 @@ KeePassXC, los videos locales y la memoria automática.
 | Marca personal | 30-50 % | Voz, ángulo, aprobar y grabar |
 | Comunidad, talleres, ventas | 5-15 % | La relación y el cierre ([CRMArena-Pro](https://arxiv.org/abs/2505.18878): 35 % multi-turno) |
 
+## Prueba en vivo (18-oct, 5 tareas reales, issues #233-#237)
+
+| Área | Modelo | Resultado | Entrega |
+|---|---|---|---|
+| Investigación | claude-sonnet-5-5 | ✅ sola, 4 min, enlaces verificados | PR #239 |
+| Marca | claude-sonnet-5-5 | Trabajo completo; la entrega la cortó la red con GitHub | PR #240 |
+| Comunidad | claude-sonnet-5-5 | Trabajo completo; ídem | PR #241 |
+| Plataforma | Codex gpt-6.1-sol, 6 min | Diagnóstico completo (1 test de fechas, con archivo y línea); marcó BLOQUEADO porque su sandbox no deja commitear | onia-platform PR #186 |
+| Video | — | No arrancó (red); queda pendiente | — |
+
+Hallazgos de la propia prueba, ya corregidos en `scripts/orquesta/`:
+- Cada copia de onia-hermes pesa ~5,5 GB y llenó el disco C (1,8 GB libres). Las copias van a `E:/onia-orquesta`.
+- Cortes de red con la API de GitHub tumbaban la entrega: ahora `gh`, `fetch` y `push` se reintentan.
+- El prompt pedía commitear y el sandbox de Codex no puede: ahora el trabajador no commitea, lo hace el orquestador.
+- Dos trabajadores encontraron solos un problema de fondo: `TALLER_31_OCT.md`, la «fuente única» del taller,
+  **no existe en el repo** (vive solo en la nube de Projects), y hay 6 contradicciones de precio y fechas.
+- Una sesión en modo auto no puede lanzar trabajadores autónomos (`Create Unsafe Agents`), ni con el OK de una
+  corrida para la siguiente: la pasada tiene que correrla la tarea programada o Sergio Urcullo.
+
 ## Pendiente (no se hizo en esta sesión)
+
+- Activar la pasada automática cada 3 h (comando en `scripts/orquesta/README.md`) y correr el carril video.
 
 - VPS: apagar el servicio de sistema duplicado de Hermes, pausar `onia-ordenador-tablero` y sacar
   las credenciales OAuth de Anthropic del pool de Hermes. Es infra con dueño: la madre la tenía

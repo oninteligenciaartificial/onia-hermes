@@ -98,7 +98,7 @@ ENTREGA OBLIGATORIA: escribí el resultado completo en ${salida} (creá las carp
 Lo lee Sergio Urcullo: arrancá con 3 líneas (qué hiciste · qué encontraste · qué sigue) y después el detalle.
 Si no podés terminar, escribí igual ${salida} empezando con "BLOQUEADO: <motivo concreto>" y lo que sí hiciste.
 
-REGLAS DURAS: no publiques en redes, no gastes dinero ni créditos, no le escribas a nadie, no toques producción ni el VPS, no hagas push ni merge (eso lo hace el orquestador). Usá las skills del carril cuando apliquen. Al terminar, hacé commit de tus cambios con el mensaje "orquesta(${carril}): ${issue.title}".`;
+REGLAS DURAS: no publiques en redes, no gastes dinero ni créditos, no le escribas a nadie, no toques producción ni el VPS. NO hagas commit, push ni merge: el orquestador commitea y entrega tus cambios (si no podés commitear, no es un bloqueo). Usá las skills del carril cuando apliquen.`;
 }
 
 export function argsAgente({ motor, modelo }, carril, wt, ultimo, conf = CONF) {
@@ -116,8 +116,19 @@ export function argsAgente({ motor, modelo }, carril, wt, ultimo, conf = CONF) {
 
 // ---------- efectos ----------
 
+// Un corte de red con GitHub no es una tarea fallida: se reintenta (medido el 18-oct: 4 de 5 cayeron así).
+const RED = /TLS handshake timeout|unexpected EOF|connectex|ECONNRESET|ETIMEDOUT|i\/o timeout|Could not resolve host|HTTP 50[234]/i;
+const esperar = (ms) => Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
+function reintentar(fn) {
+  for (let intento = 1; ; intento++) {
+    try { return fn(); } catch (e) {
+      if (intento >= 4 || !RED.test(String(e.stderr || e.message))) throw e;
+      esperar(intento * 10_000);
+    }
+  }
+}
 const git = (cwd, ...a) => execFileSync('git', ['-C', cwd, ...a], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
-const gh = (...a) => execFileSync('gh', a, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
+const gh = (...a) => reintentar(() => execFileSync('gh', a, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim());
 const leerSiExiste = (f) => (fs.existsSync(f) ? fs.readFileSync(f, 'utf8') : null);
 const intentar = (fn) => { try { return fn(); } catch (e) { console.error(`[orquesta] ${String(e.stderr || e.message).trim().slice(0, 200)}`); return null; } };
 
@@ -164,7 +175,7 @@ function enFila(repo, fn) {
 function prepararWorktree(c, carril, numero) {
   const rama = `orquesta/${carril}-${numero}`;
   const wt = path.join(CONF.carpeta_trabajo, `${carril}-${numero}`);
-  git(c.repo, 'fetch', '--quiet', 'origin', c.base);
+  reintentar(() => git(c.repo, 'fetch', '--quiet', 'origin', c.base));
   if (fs.existsSync(wt)) {
     try { git(c.repo, 'worktree', 'remove', '--force', wt); } catch { fs.rmSync(wt, { recursive: true, force: true }); }
   }
@@ -210,7 +221,7 @@ function entregar(c, wt, rama, carril, issue) {
     git(wt, 'commit', '-m', `orquesta(${carril}): ${issue.title}`);
   }
   if (git(wt, 'rev-list', '--count', `origin/${c.base}..HEAD`) === '0') throw new Error('el agente no dejó cambios para entregar');
-  git(wt, 'push', '--force', '-u', 'origin', rama); // `orquesta/*` es solo del orquestador
+  reintentar(() => git(wt, 'push', '--force', '-u', 'origin', rama)); // `orquesta/*` es solo del orquestador
   const repo = git(c.repo, 'remote', 'get-url', 'origin').replace(/^https:\/\/github\.com\/|\.git$/g, '');
   try {
     return gh('pr', 'create', '-R', repo, '--base', c.base, '--head', rama, '--title', `orquesta(${carril}): ${issue.title}`,
@@ -246,7 +257,7 @@ async function hacerTarea({ carril, issue }) {
   const inicio = Date.now();
   let res;
   try {
-    gh('issue', 'edit', String(issue.number), '-R', CONF.repo_cola, '--add-label', 'en-curso');
+    intentar(() => gh('issue', 'edit', String(issue.number), '-R', CONF.repo_cola, '--add-label', 'en-curso'));
     res = await trabajar(c, carril, issue, pedido, ruta);
   } catch (e) {
     res = { ok: false, falla: String(e.stderr || e.message || e).trim().slice(0, 400) };
