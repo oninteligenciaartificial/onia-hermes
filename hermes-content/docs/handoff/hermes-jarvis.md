@@ -665,3 +665,53 @@ aplicar,revertir}.sh` · `scripts/loops/onia-tg.sh` + `onia-tg-aduana.test.mjs` 
    - Pedidos por Telegram: Hermes los deja como tarea en el tablero, y una rutina despierta a la
      sesión de control cada tanto para tomarlos y ejecutarlos. Así él maneja todo desde Telegram
      sin darle las llaves del código a un modelo débil.
+
+## 19-oct: limpieza y actualización
+
+> Subagente de la madre, con el OK de Sergio Urcullo del 19-oct («Limpiar y actualizar Hermes»). Horas en UTC.
+
+**Hecho y verificado**
+- **Respaldo:** `/root/respaldo-hermes-20261019/` (3,5 GB, modo 700). `hermes-home.tar.gz` (1,6 GB, `~/.hermes` entero),
+  `hermes-agent-code.tar.gz` (1,9 GB, `/usr/local/lib/hermes-agent` con venv y node_modules, v0.21.0 @ `7166071`),
+  `sqlite/` (copias consistentes con la API `backup`), `systemd/` (las dos unidades), `crontab.txt`, `config.yaml.antes`,
+  `kanban-onia-ready-47.json`, logs del update. Verificado con `pigz -t`, listado, archivos clave e `integrity_check`.
+- **Servicio duplicado:** atendía la unidad de **USUARIO** (`/root/.config/systemd/user/hermes-gateway.service`, PID 909,
+  cgroup `user@0`). La de **SISTEMA** (`/etc/systemd/system/hermes-gateway.service`) llevaba 8.092 reinicios desde el
+  arranque del 17-oct («Gateway already running (PID 909)», uno cada ~22 s) y había llenado `errors.log` (6.207 líneas).
+  `systemctl disable --now` a las 19:35: cero reinicios después. El archivo de la unidad sigue en disco, deshabilitado.
+- **Tablero `onia`:** las 47 `ready` archivadas con `hermes kanban --board onia archive` (antes, exportadas al JSON).
+  Las 18 `blocked` y las 5 `todo` no se tocaron. A las 19:46 un automático creó `t_949f5970` («[auto] Plataforma: el
+  release publicado está roto — /dashboard terminó en /onboarding…»): no es de las 47 y quedó `ready`.
+- **`onia-ordenador-tablero`** (`244b744e7f95`) pausado con `hermes cron pause`. Siguen activos `onia-nube-resumen` y
+  `onia-nube-vigia` (corrió bien a las 20:01, antes del update).
+- **v0.21.0 → v0.22.2:** `hermes update --branch release/0.22.2 --yes` a las 20:02 (rc 0, 4,5 min). HEAD `d923a5eb`
+  = commit del tag `v0.22.2`. El updater reinició el gateway de usuario (sale con 75 y systemd lo levanta: por eso
+  `NRestarts=1`). Telegram conectado a las 20:07:15, 0 ERROR/CRITICAL, mismo PID más de 3 min. Config v40 → v50 con el
+  modelo intacto (`gpt-5-mini` por LiteLLM `:4000`); cambió `curator` 30/90 → 14/30 días (solo toca skills creadas por
+  el agente) y se quitaron `security.tirith_*` y `terminal.*_image`.
+- **Cambió por dentro:** el gateway corre con un Python 3.14 aislado (`/root/.hermes/tools/python-3.14.7…`), el updater
+  reescribió la unidad de usuario e instaló `agent-browser` y `cua-driver` (herramientas por defecto). Las próximas
+  actualizaciones siguen el canal `stable` (de release en release).
+
+**Cómo se deshace** (vuelve a v0.21.0; el servicio de sistema queda apagado)
+1. `XDG_RUNTIME_DIR=/run/user/0 systemctl --user stop hermes-gateway`
+2. `mv /usr/local/lib/hermes-agent /usr/local/lib/hermes-agent.v0222 && tar -I pigz -xpf /root/respaldo-hermes-20261019/hermes-agent-code.tar.gz -C /usr/local/lib`
+3. `cp -p /root/respaldo-hermes-20261019/config.yaml.antes /root/.hermes/config.yaml`; `cp -p /root/respaldo-hermes-20261019/systemd/user-hermes-gateway.service /root/.config/systemd/user/hermes-gateway.service`; `XDG_RUNTIME_DIR=/run/user/0 systemctl --user daemon-reload`
+4. Si la 0.21 no arranca por el `state.db` migrado: copiar `sqlite/state.db` del respaldo (se pierde lo posterior).
+5. `XDG_RUNTIME_DIR=/run/user/0 systemctl --user start hermes-gateway`. El ordenador vuelve con `hermes cron resume 244b744e7f95`;
+   las 47 tareas, con la copia `sqlite/kanban__boards__onia__kanban.db` o recreándolas desde el JSON.
+
+**Aprendido**
+- 🔴 **El gateway de verdad es la unidad de USUARIO.** La skill (§«Hermes por dentro»), `aplicar.sh` (líneas 546, 775,
+  792) y `diagnostico.sh` (34-35) usan `systemctl … hermes-gateway.service` de SISTEMA: un `restart` ARRANCA la unidad
+  deshabilitada y vuelve el bucle. Reiniciar es `hermes gateway restart` o
+  `XDG_RUNTIME_DIR=/run/user/0 systemctl --user restart hermes-gateway`. **Pendiente:** corregir skill y scripts, y
+  borrar la unidad de sistema (`hermes gateway uninstall --system`; `hermes doctor` avisa «Both user and system gateway
+  services are installed»).
+- **`hermes update` no acepta un tag:** va a la punta de `main`. Para fijar una versión hay ramas
+  `release/<versión>` en origin (`git ls-remote origin | grep <sha del tag>`), y se usa `--branch release/<versión>`.
+- **`session_reset.mode: both` ya no se aplica en 0.22:** las conversaciones de Telegram se reinician solo con `/new`
+  o `/reset`. Volver al reinicio diario pide `hermes plugins install hermes-session-reset` (instalar = OK de Sergio Urcullo).
+- Una tarea programada no se pisa con un reinicio: el update se lanzó por script que esperó a que `onia-nube-vigia`
+  marcara su corrida de las 16:00 en `jobs.json`.
+- `hermes doctor` sale 1 solo por proveedores opcionales sin configurar; no es falla del update.

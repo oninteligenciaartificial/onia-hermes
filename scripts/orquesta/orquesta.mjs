@@ -19,10 +19,19 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const AQUI = path.dirname(fileURLToPath(import.meta.url));
-export const CONF = JSON.parse(fs.readFileSync(path.join(AQUI, 'carriles.json'), 'utf8'));
+// El mismo programa corre en la PC y en GitHub Actions: allá los repos viven en ORQUESTA_RAIZ, el trabajo
+// en ORQUESTA_TRABAJO, y no hay carpetas de la PC (dirs_extra).
+export function ajustarAlEntorno(conf, env) {
+  const raiz = env.ORQUESTA_RAIZ;
+  const carriles = Object.fromEntries(Object.entries(conf.carriles).map(([k, c]) => [k,
+    raiz ? { ...c, repo: path.join(raiz, path.posix.basename(c.repo)), dirs_extra: [] } : c]));
+  return { ...conf, carpeta_trabajo: env.ORQUESTA_TRABAJO || conf.carpeta_trabajo, carriles };
+}
+
+export const CONF = ajustarAlEntorno(JSON.parse(fs.readFileSync(path.join(AQUI, 'carriles.json'), 'utf8')), process.env);
 const ESTADO = path.join(os.homedir(), '.onia-orquesta');
 const NIVELES = ['rapido', 'normal', 'profundo'];
-const CAMPOS = /^(nivel|motor|modelo|salida|check|base|ok)\s*:\s*(.+)$/i;
+const CAMPOS = /^(nivel|motor|modelo|salida|check|base|ok|donde)\s*:\s*(.+)$/i;
 
 // ---------- lógica pura (probada en orquesta.test.mjs) ----------
 
@@ -44,6 +53,13 @@ const nombresDe = (issue) => (issue.labels || []).map((l) => l.name || l);
 export function carrilDe(issue) {
   const l = nombresDe(issue).find((n) => n.startsWith('carril:'));
   return l ? l.slice('carril:'.length) : null;
+}
+
+// Dónde corre la tarea: `donde:` del pedido, o el del carril. Lo que pide sesiones o archivos de Sergio
+// Urcullo es «pc» (su regla de credenciales); el resto puede ir a la nube (GitHub Actions con su Max).
+export function dondeDe(issue, conf = CONF) {
+  const pedido = leerPedido(issue.body).donde;
+  return ['pc', 'nube'].includes(pedido) ? pedido : conf.carriles[carrilDe(issue)]?.donde || 'pc';
 }
 
 export function elegirTareas(issues, conf = CONF, soloCarril = null) {
@@ -284,7 +300,13 @@ function prepararWorktree(c, base, carril, numero) {
     try { git(c.repo, 'worktree', 'remove', '--force', wt); } catch { fs.rmSync(wt, { recursive: true, force: true }); }
   }
   git(c.repo, 'worktree', 'prune');
-  git(c.repo, 'worktree', 'add', '--quiet', '-B', rama, wt, sigue ? `origin/${rama}` : `origin/${base}`);
+  const desde = sigue ? `origin/${rama}` : `origin/${base}`;
+  if (process.env.ORQUESTA_SIN_MEDIA === '1') {
+    // En la nube cada copia baja solo texto: de 5,5 GB, 4,1 son videos e imágenes de referencias (medido 19-oct).
+    git(c.repo, 'worktree', 'add', '--quiet', '--no-checkout', '-B', rama, wt, desde);
+    git(wt, 'sparse-checkout', 'set', '--no-cone', ...CONF.sin_media);
+    git(wt, 'checkout', '--quiet');
+  } else git(c.repo, 'worktree', 'add', '--quiet', '-B', rama, wt, desde);
   return { wt, rama, sigue, inicio: git(wt, 'rev-parse', 'HEAD') };
 }
 

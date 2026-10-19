@@ -7,6 +7,55 @@
   "minutos_max": 40,
   "revisor": "claude-sonnet-5-5",
   "carpeta_trabajo": "E:/onia-orquesta",
+  "herramientas_claude": [
+    "Read",
+    "Write",
+    "Edit",
+    "Glob",
+    "Grep",
+    "Skill",
+    "TodoWrite",
+    "Bash(git status *)",
+    "Bash(git diff *)",
+    "Bash(git log *)",
+    "Bash(git show *)",
+    "Bash(git ls-tree *)",
+    "Bash(git add *)",
+    "Bash(git commit *)",
+    "Bash(git rev-parse *)",
+    "Bash(mkdir *)"
+  ],
+  "sin_media": [
+    "/*",
+    "!*.mp4",
+    "!*.MP4",
+    "!*.mov",
+    "!*.MOV",
+    "!*.webm",
+    "!*.WEBM",
+    "!*.mkv",
+    "!*.MKV",
+    "!*.m4a",
+    "!*.M4A",
+    "!*.mp3",
+    "!*.MP3",
+    "!*.wav",
+    "!*.WAV",
+    "!*.png",
+    "!*.PNG",
+    "!*.jpg",
+    "!*.JPG",
+    "!*.jpeg",
+    "!*.JPEG",
+    "!*.webp",
+    "!*.WEBP",
+    "!*.gif",
+    "!*.GIF",
+    "!*.psd",
+    "!*.PSD",
+    "!*.zip",
+    "!*.ZIP"
+  ],
   "carriles": {
     "plataforma": {
       "que": "Desarrollo de Onia Platform (codigo, tests, PRs)",
@@ -34,7 +83,8 @@
         ".claude/skills/onia-db/SKILL.md",
         ".claude/skills/onia-frontend/SKILL.md",
         ".claude/skills/onia-seguridad/SKILL.md"
-      ]
+      ],
+      "donde": "pc"
     },
     "marca": {
       "que": "Marca personal de Sergio Urcullo (guiones, piezas, calendario)",
@@ -54,9 +104,10 @@
         "hermes-content/skills/guiones-diarios-onia.md",
         "hermes-content/skills/marca-personal-sergio.md",
         "hermes-content/skills/carruseles-onia.md",
-        "C:/Users/PC/.claude/skills/copywriting/SKILL.md",
-        "C:/Users/PC/.claude/skills/humanizer/SKILL.md"
-      ]
+        "scripts/orquesta/cuartitos/copywriting/SKILL.md",
+        "scripts/orquesta/cuartitos/humanizer/SKILL.md"
+      ],
+      "donde": "nube"
     },
     "comunidad": {
       "que": "Comunidad y talleres (taller de IA, inscripciones, material)",
@@ -73,11 +124,12 @@
         "hermes-content/docs/comunidad/ESTADO_COMUNIDAD.md",
         "hermes-content/docs/ONIA_COMUNIDAD_QUE_LA_HACE_VALER.md",
         "hermes-content/docs/ONIA_COMUNIDAD_CONTENIDO.md",
-        "C:/Users/PC/.claude/skills/community-marketing/SKILL.md",
-        "C:/Users/PC/.claude/skills/lead-magnets/SKILL.md",
-        "C:/Users/PC/.claude/skills/onboarding/SKILL.md",
-        "C:/Users/PC/.claude/skills/copywriting/SKILL.md"
-      ]
+        "scripts/orquesta/cuartitos/community-marketing/SKILL.md",
+        "scripts/orquesta/cuartitos/lead-magnets/SKILL.md",
+        "scripts/orquesta/cuartitos/onboarding/SKILL.md",
+        "scripts/orquesta/cuartitos/copywriting/SKILL.md"
+      ],
+      "donde": "nube"
     },
     "video": {
       "que": "Edicion de video (cortes, subtitulos, previews; nunca publica)",
@@ -107,7 +159,8 @@
         ".claude/skills/ver-videos/SKILL.md",
         ".claude/skills/hyperframes/SKILL.md",
         ".claude/skills/embedded-captions/SKILL.md"
-      ]
+      ],
+      "donde": "pc"
     },
     "investigacion": {
       "que": "Investigacion y aprendizaje de creadores y competencia",
@@ -125,29 +178,12 @@
         "WebFetch"
       ],
       "leer": [
-        "C:/Users/PC/.claude/skills/deep-research/SKILL.md",
-        "C:/Users/PC/.claude/skills/competitor-profiling/SKILL.md",
+        "scripts/orquesta/cuartitos/deep-research/SKILL.md",
+        "scripts/orquesta/cuartitos/competitor-profiling/SKILL.md",
         ".claude/skills/ver-videos/SKILL.md",
         ".claude/skills/sacar-prompt/SKILL.md"
-      ]
+      ],
+      "donde": "nube"
     }
-  },
-  "herramientas_claude": [
-    "Read",
-    "Write",
-    "Edit",
-    "Glob",
-    "Grep",
-    "Skill",
-    "TodoWrite",
-    "Bash(git status *)",
-    "Bash(git diff *)",
-    "Bash(git log *)",
-    "Bash(git show *)",
-    "Bash(git ls-tree *)",
-    "Bash(git add *)",
-    "Bash(git commit *)",
-    "Bash(git rev-parse *)",
-    "Bash(mkdir *)"
-  ]
+  }
 }
