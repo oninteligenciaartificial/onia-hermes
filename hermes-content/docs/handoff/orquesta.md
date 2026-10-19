@@ -10,6 +10,9 @@ y **la PC trabaja lo que usa sus logins o archivos** (por su regla de credencial
 
 **Hecho cuando:** una tarea real de la cola cierra sola en GitHub Actions (revisor + PR + comentario) y otra cierra en la PC por el horario.
 
+**Estado (19-oct, 21:15 UTC):** mitad nube ✅ (#245 cerró sola, PR #247). Mitad PC ⏳: falta que Sergio Urcullo instale la tarea
+programada de Windows (punto 6c).
+
 ## 2. Qué quedó en producción (main, 19-oct)
 
 - [PR #238](https://github.com/oninteligenciaartificial/onia-hermes/pull/238) mergeado: `scripts/orquesta/` con cuartito por área,
@@ -68,9 +71,23 @@ Hechos el 19-oct por la sesión siguiente (commit `3b304b2f` en esta rama, 23/23
    fuerza bubblewrap y el runner Ubuntu no lo deja (anthropics/claude-code#50167). Sacado del workflow en el PR siguiente.
    Sin secreto, antes, el job cortó en rojo en 2 s en el primer paso (medido, como estaba previsto).
 
+6b. ✅ [PR #246](https://github.com/oninteligenciaartificial/onia-hermes/pull/246) mergeado (`14285fbe`). **#245 cerró sola en la
+   nube** ([run 39325602090](https://github.com/oninteligenciaartificial/onia-hermes/actions/runs/39325602090)): trabajador Sonnet 5.5,
+   `check: urls` pasó, revisor Sonnet APROBADO, [PR #247](https://github.com/oninteligenciaartificial/onia-hermes/pull/247) con
+   `hermes-content/docs/orquesta/investigacion/245.md` y el issue cerrado con el comentario. Medido:
+   - **Actions:** job 2 min 15 s (21:12:08 → 21:14:23 UTC) → se cobran 3 min (GitHub redondea cada job hacia arriba). Las corridas
+     vacías o cortadas duran 2-27 s → 1 min cada una. Horario: 6 pasadas/día ≈ 180 min/mes aunque no haya tareas. Cuenta Free:
+     2.000 min/mes en privados. Una tarea pesada puede llegar a 50 min (tope 40 + revisión 10).
+   - **Max:** US$ 0,52 equivalentes el trabajador (lo informa Claude Code; no se cobra con el token de Max). El revisor no sale en
+     el comentario y el registro `registro.jsonl` se pierde con el runner. El cupo de Max **no se puede leer desde la sesión**: lo ve
+     Sergio Urcullo en claude.ai → Settings → Usage.
+   - El revisor no puede abrir enlaces (`--restricted`); el que comprueba que abren es el `check: urls` del orquestador.
+
 Falta:
-6b. Mergear el PR del arreglo (OK de Sergio Urcullo), redisparar `gh workflow run orquesta.yml` y medir minutos de Actions y cupo
-   de Max con #245 (le queda un reintento: la falla del scrub contó como la primera).
+6c. **Mitad PC del «hecho cuando»:** que una tarea cierre en la PC por el horario. Necesita que Sergio Urcullo instale la tarea
+   programada (el control de permisos no deja a una sesión): el `schtasks` del README, con `--donde pc`. Cola de la PC hoy: #236
+   (video) y #242 (plataforma).
+6d. Para medir dos semanas: sumar el costo del revisor al comentario y guardar el registro de la nube (hoy se pierde con el runner).
 6. Primera tarea real en la nube (por ejemplo una de investigación) y medir minutos de Actions y cupo de Max.
 7. Arreglar `aplicar.sh` (líneas ~546, 775, 792) y `diagnostico.sh` de la skill `onia-hermes-jarvis`: reinician el servicio de
    **sistema** y revivirían el bucle; pasar a `systemctl --user` o `hermes gateway restart`.
@@ -103,9 +120,10 @@ memorias `orquesta-programa-fijo-18-oct.md` y `feedback-prs-con-enlace.md`.
    de `gh` de la PC (el `gho_…` del keyring de Windows). Quedó en la conversación de esa sesión (no se publicó ni se commiteó), pero conviene rotarlo: GitHub → Settings → Applications
    → Authorized OAuth Apps → GitHub CLI → Revoke, y después `gh auth login`. Método para no repetirlo: probar helpers de credenciales
    solo con un valor falso en `GH_TOKEN`, nunca sin él (sin `GH_TOKEN`, `gh auth git-credential get` imprime el token real).
-0b. Activar «Allow GitHub Actions to create and approve pull requests» (Settings → Actions → General); medido: hoy está en `false`.
-1. `claude setup-token` y cargarlo con `gh secret set CLAUDE_CODE_OAUTH_TOKEN -R oninteligenciaartificial/onia-hermes` (credencial: la crea él).
-2. Login de Codex en Hermes: `ssh -i $HOME\.ssh\onia_hermes_vps_ed25519 root@187.77.16.63` y `hermes auth add openai-codex`.
+   Hizo `gh auth login` de nuevo el 19-oct; falta confirmar que revocó el token viejo.
+0b. ✅ «Allow GitHub Actions to create and approve pull requests» activado el 19-oct (por la sesión, con su OK).
+1. ✅ Secreto `CLAUDE_CODE_OAUTH_TOKEN` cargado el 19-oct (vence en un año: octubre de 2027).
+2. ✅ Login de Codex en Hermes, según Sergio Urcullo (19-oct).
 3. Token fine-grained de GitHub solo con Issues de onia-hermes, para que Hermes cargue tareas.
 4. `gh auth refresh -s project` para crear el tablero de GitHub Projects (vista elegida para el celular).
 5. La tarea programada de la PC (`schtasks`, con `--donde pc`, cada hora): el control de permisos no deja que la instale una sesión.
@@ -118,5 +136,5 @@ memorias `orquesta-programa-fijo-18-oct.md` y `feedback-prs-con-enlace.md`.
 
 ## 7. Próximos pasos
 
-Los ocho de la sección 3, en ese orden; después, dos semanas de medición con las metas de la sección «v3» del doc de investigación
+De la sección 3 quedan 6c, 6d, 7 y 8 (para 8 ya está el login de Codex; falta el token de Issues). Después, dos semanas de medición con las metas de la sección «v3» del doc de investigación
 (≥6 de 10 tareas cerradas sin intervención, ninguna trabada más de un día, <15 min/día de Sergio Urcullo, cupo de Max sin agotarse).
