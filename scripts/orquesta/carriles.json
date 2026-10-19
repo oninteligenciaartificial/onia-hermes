@@ -8,11 +8,6 @@
   "revisor": "claude-sonnet-5-5",
   "carpeta_trabajo": "E:/onia-orquesta",
   "herramientas_claude": [
-    "Read",
-    "Write",
-    "Edit",
-    "Glob",
-    "Grep",
     "Skill",
     "TodoWrite",
     "Bash(git status *)",

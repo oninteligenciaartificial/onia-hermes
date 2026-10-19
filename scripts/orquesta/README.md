@@ -16,7 +16,13 @@ Cada carril tiene `donde` en `carriles.json` (hoy `plataforma` y `video` → `pc
 PC no suelta el `en-curso` ni contesta el «ok» de una tarea que está en la nube, y al revés.
 
 En la nube: clon sin blobs, cada worktree sin media (`sin_media`, `ORQUESTA_SIN_MEDIA=1`), sin
-`dirs_extra`, y los agentes corren sin `GH_TOKEN` (solo el orquestador pushea y comenta). Comenta como
+`dirs_extra`, y los agentes corren sin `GH_TOKEN` (solo el orquestador pushea y comenta).
+
+Blindaje (revisión del 19-oct): el trabajador no tiene `Read`/`Write` sin ruta (con ellos escribía fuera
+de su carpeta, medido); su carpeta y `--add-dir` le alcanzan. No puede tocar `scripts/orquesta/`,
+`.claude/settings*.json` ni `.mcp.json` (los cargaría el intento siguiente). El orquestador corre git
+sin hooks, el `check: cmd` corre sin el token de Max, y solo valen comentarios del dueño de la cola.
+Sin cupo de Max o sin login la tarea se suelta sin comentar ni gastar el reintento (⏸ en el resumen). Comenta como
 `github-actions[bot]`; los PRs que abre no disparan el CI. Para abrirlos hace falta «Allow GitHub
 Actions to create and approve pull requests» (Settings → Actions → General).
 
@@ -97,8 +103,8 @@ node --test scripts/orquesta/orquesta.test.mjs
 gh workflow run orquesta.yml -R oninteligenciaartificial/onia-hermes   # una pasada de la nube
 ```
 
-Automático en la PC (Windows, cada 3 h de 8 a 23 con la PC prendida). Sin `--donde pc` tomaría
-también las tareas de la nube:
+Sin `--donde`, la PC es `pc` y Actions es `nube` (`GITHUB_ACTIONS`). Automático en la PC (Windows,
+cada 3 h de 8 a 23 con la PC prendida):
 
 ```powershell
 schtasks /Create /TN "ONIA Orquesta" /SC DAILY /ST 08:00 /RI 180 /DU 15:00 /TR "cmd /c cd /d C:\dev\proyectos\onia-hermes && set ORQUESTA_TELEGRAM=1 && node scripts\orquesta\orquesta.mjs --donde pc >> %USERPROFILE%\.onia-orquesta\pasadas.log 2>&1"

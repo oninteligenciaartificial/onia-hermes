@@ -37,13 +37,21 @@ jobs:
   pasada:
     if: >-
       github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' ||
-      (github.event_name == 'issues' && (github.event.label.name == 'orquesta' || startsWith(github.event.label.name, 'carril:'))) ||
+      (github.event_name == 'issues' && github.event.sender.login == 'oninteligenciaartificial' &&
+        (github.event.label.name == 'orquesta' || startsWith(github.event.label.name, 'carril:'))) ||
       (github.event_name == 'issue_comment' && !github.event.issue.pull_request &&
-        contains(github.event.issue.labels.*.name, 'orquesta') && github.event.comment.user.login == 'oninteligenciaartificial')
+        contains(github.event.issue.labels.*.name, 'orquesta') && github.event.comment.user.login == 'oninteligenciaartificial' &&
+        !startsWith(github.event.comment.body, '<!-- orquesta'))
     runs-on: ubuntu-latest
     # minutos_max (40) + revisión (10) + git y gh.
     timeout-minutes: 75
     steps:
+      # Sin el secreto, cada tarea fallaría dos veces y quedaría `bloqueada`: mejor cortar acá, en rojo.
+      - name: Token de Max
+        run: test -n "$T" || { echo "::error::falta el secreto CLAUDE_CODE_OAUTH_TOKEN (claude setup-token)"; exit 1; }
+        env:
+          T: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+
       # Clon sin blobs y solo scripts/orquesta a la vista: cada worktree baja su texto aparte, sin la media
       # de hermes-content/references (4,1 de 5,5 GB, medido el 19-oct). Historia completa para merge-base.
       - uses: actions/checkout@v4
@@ -75,6 +83,8 @@ jobs:
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           GH_TOKEN: ${{ github.token }}
           DISABLE_AUTOUPDATER: "1"
+          # Los comandos que lanza el agente no heredan el token de Max.
+          CLAUDE_CODE_SUBPROCESS_ENV_SCRUB: "1"
           ORQUESTA_RAIZ: ${{ github.workspace }}
           ORQUESTA_TRABAJO: ${{ runner.temp }}/orquesta
           ORQUESTA_SIN_MEDIA: "1"

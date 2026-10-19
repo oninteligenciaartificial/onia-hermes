@@ -32,19 +32,36 @@ Rama **`claude/orquesta-stack-v3`** (worktree `C:/dev/proyectos/onia-hermes/.cla
 - `orquesta.mjs`: `ajustarAlEntorno` (`ORQUESTA_RAIZ`, `ORQUESTA_TRABAJO`), campo `donde:` del pedido, `dondeDe()` **definida pero
   todavía no usada**, sparse sin media en `prepararWorktree` cuando `ORQUESTA_SIN_MEDIA=1` (receta probada en un repo de juguete).
 
-Falta, en orden:
-1. `main()`: filtrar por `--donde pc|nube` (o `ORQUESTA_DONDE`) **antes** de `atenderRespuestas` y `soltarHuerfanas`, así cada lado
-   toca solo sus issues: `listar().filter((it) => !donde || dondeDe(it) === donde)`. (Sergio Urcullo interrumpió esa edición para pedir el cambio de sesión; no la rechazó por el contenido.)
-2. Tests de `dondeDe`, `ajustarAlEntorno` y del sparse.
-3. `.github/workflows/orquesta.yml`: disparos `issues: labeled` (solo `orquesta` o `carril:*`), `issue_comment: created` (si el issue
-   tiene `orquesta`), `schedule` cada hora 12:00-03:00 UTC (8 a 23 en La Paz), `workflow_dispatch`; `concurrency` sin cancelar;
-   `permissions: contents, issues, pull-requests: write`; checkout con `filter: blob:none` y sparse no-cone igual a `sin_media`;
-   `setup-node`; `npm i -g @anthropic-ai/claude-code`; `git config user.*`; env `CLAUDE_CODE_OAUTH_TOKEN` (secreto),
-   `GH_TOKEN: ${{ github.token }}`, `ORQUESTA_RAIZ`, `ORQUESTA_TRABAJO`, `ORQUESTA_SIN_MEDIA=1`, `ORQUESTA_DONDE=nube`.
-   Ojo: los comentarios saldrán como `github-actions[bot]` (las marcas `<!-- orquesta -->` ya los distinguen) y los PRs creados con
-   `GITHUB_TOKEN` no disparan el CI.
-4. README de `scripts/orquesta/` (stack v3, `donde`, nube).
-5. `code-reviewer` → PR con enlace para Sergio Urcullo → merge con su OK (el control de permisos frena el merge sin OK explícito).
+Hechos el 19-oct por la sesión siguiente (commit `3b304b2f` en esta rama, 23/23 tests):
+1. ✅ `main()` filtra por `--donde pc|nube` (o `ORQUESTA_DONDE`) antes de `atenderRespuestas` y `soltarHuerfanas`; un valor raro corta.
+2. ✅ Tests de `dondeDe`, `ajustarAlEntorno` y del sparse (repo de juguete con clon parcial `blob:none` + sparse cone, como Actions).
+3. ✅ `.github/workflows/orquesta.yml`. Cambios contra lo planeado, con su motivo:
+   - `schedule` **cada 3 h** (0, 3, 12, 15, 18, 21 UTC = 8 a 23 en La Paz), no cada hora: la cuenta es **GitHub Free** (2.000 min/mes
+     en repos privados; medido: branch protection da 403 «Upgrade to GitHub Pro») y una pasada vacía cobra 1 min redondeado. Las tareas
+     nuevas y los comentarios ya disparan solos; el horario es para los reintentos.
+   - Checkout sparse **solo `scripts/orquesta`** (implica `blob:none`), no `sin_media`: cada worktree aplica su propio sparse; así no
+     hay dos listas que se desincronicen. `fetch-depth: 0` para que `merge-base` ande al seguir una rama vieja.
+   - `persist-credentials: false` + helper `!gh auth git-credential` (lee `GH_TOKEN`, probado) y los agentes corren **sin `GH_TOKEN`**
+     (`ENV_AGENTE` en `orquesta.mjs`): sin branch protection, un token filtrado por una web inyectada podía pushear a `main`, que
+     despliega el VPS. Más `Read(//proc/**)` negado (el `environ` tiene el token de Max).
+   - Claude Code fijado en `2.1.288` (la de la PC) y `DISABLE_AUTOUPDATER=1`.
+4. ✅ README de `scripts/orquesta/` con el stack v3, `donde` y el `schtasks` de la PC con `--donde pc`.
+
+5. ✅ `code-reviewer` + `security-reviewer` (con experimentos). Arreglado, 25/25 tests:
+   - **`git add -A` salía con 1** ante una captura PNG nueva en un worktree sin media → tarea perdida. Ahora `--sparse` (test).
+   - **`Read`/`Write`/`Edit`/`Glob`/`Grep` sin ruta** dejaban al trabajador escribir fuera de su carpeta (medido): podía pisar
+     `trabajador.settings.json` del clon principal y ganar hooks con los tokens. Sacados de `herramientas_claude`; dentro de su
+     carpeta y de `--add-dir` sigue leyendo y escribiendo (medido).
+   - `PROTEGIDAS` suma `scripts/orquesta/`, `.claude/settings*.json` y `.mcp.json`; git del orquestador sin hooks
+     (`core.hooksPath=os.devNull`, probado en Windows); `check: cmd` sin el token de Max; `CLAUDE_CODE_SUBPROCESS_ENV_SCRUB=1`;
+     solo cuentan comentarios del dueño (`leerHilo`) y el disparo por label exige `sender` = dueño.
+   - Sin cupo de Max o sin login (`sinMotor`): la tarea se suelta sin comentar ni gastar el reintento (⏸). Falta el secreto → el job
+     corta en rojo en el primer paso. Sin el permiso de PRs de Actions, entrega el enlace `compare` en vez de fallar.
+   - Sin `--donde`: la PC es `pc` y Actions `nube` (antes tomaba todo y podían pisarse).
+
+Falta:
+5b. PR con enlace para Sergio Urcullo → merge con su OK (el control de permisos frena el merge sin OK explícito).
+   El workflow solo corre desde `main` (schedule, issues y `workflow_dispatch` lo exigen): la primera prueba es después del merge.
 6. Primera tarea real en la nube (por ejemplo una de investigación) y medir minutos de Actions y cupo de Max.
 7. Arreglar `aplicar.sh` (líneas ~546, 775, 792) y `diagnostico.sh` de la skill `onia-hermes-jarvis`: reinician el servicio de
    **sistema** y revivirían el bucle; pasar a `systemctl --user` o `hermes gateway restart`.
@@ -66,9 +83,18 @@ memorias `orquesta-programa-fijo-18-oct.md` y `feedback-prs-con-enlace.md`.
 - Kanban de Hermes: «single-host by design»; Claude Code como trabajador «not yet a paved path».
 - `hermes update` no acepta tag → `hermes update --branch release/0.22.2 --yes`.
 - `--cookies-from-browser chrome` no anda (cifrado ABE de Chrome); Instagram anda sin cookies.
+- `aprende_en` de marca y video apunta a `.claude/skills/...`, que es **ruta protegida** de Claude Code (doc permission-modes:
+  en `acceptEdits` y `-p` se pide permiso → se niega). Ningún trabajador Claude pudo escribir ahí nunca; no es de este cambio.
+  Arreglo posible: que deje lo aprendido en su salida y que lo pase a la skill quien mergea. Pendiente, no hecho.
+- Sin branch protection (GitHub Free da 403): un `GH_TOKEN` filtrado podía pushear a `main`. Por eso los agentes no lo tienen.
 
 ## 6. Qué depende de Sergio Urcullo
 
+0. **Seguridad (19-oct):** al probar el helper de credenciales, un comando de la sesión imprimió en su transcript local el token
+   de `gh` de la PC (el `gho_…` del keyring de Windows). Quedó en la conversación de esa sesión (no se publicó ni se commiteó), pero conviene rotarlo: GitHub → Settings → Applications
+   → Authorized OAuth Apps → GitHub CLI → Revoke, y después `gh auth login`. Método para no repetirlo: probar helpers de credenciales
+   solo con un valor falso en `GH_TOKEN`, nunca sin él (sin `GH_TOKEN`, `gh auth git-credential get` imprime el token real).
+0b. Activar «Allow GitHub Actions to create and approve pull requests» (Settings → Actions → General); medido: hoy está en `false`.
 1. `claude setup-token` y cargarlo con `gh secret set CLAUDE_CODE_OAUTH_TOKEN -R oninteligenciaartificial/onia-hermes` (credencial: la crea él).
 2. Login de Codex en Hermes: `ssh -i $HOME\.ssh\onia_hermes_vps_ed25519 root@187.77.16.63` y `hermes auth add openai-codex`.
 3. Token fine-grained de GitHub solo con Issues de onia-hermes, para que Hermes cargue tareas.
