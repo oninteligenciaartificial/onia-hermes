@@ -88,6 +88,9 @@ export function motivoAnterior(issue) {
   return c?.body.match(/^Motivo: (.+)$/m)?.[1] ?? null;
 }
 
+// Lo que GitHub corre al abrir el PR (workflows, con secrets) o git al commitear (hooks) no lo cambia un trabajador.
+export const PROTEGIDAS = /^(\.github|\.githooks|\.husky)\//;
+
 export function revisarSalida(texto) {
   if (texto == null) return 'no escribió el archivo de salida';
   if (texto.trim().length < 300) return 'la salida es muy corta (menos de 300 caracteres)';
@@ -138,7 +141,7 @@ export function leerVeredicto(salida) {
   try { texto = JSON.parse(salida).result ?? ''; } catch { /* texto plano */ }
   texto = String(texto).trim();
   const primera = texto.split('\n')[0].replace(/[*_`#]/g, '').trim();
-  if (/^APROBADO\b/i.test(primera)) return { ok: true, notas: texto.split('\n').slice(1).join('\n').trim() };
+  if (/^APROBADO\s*[.!]?$/i.test(primera)) return { ok: true, notas: texto.split('\n').slice(1).join('\n').trim() };
   const m = primera.match(/^RECHAZADO\s*:?\s*(.*)$/i);
   return { ok: false, motivo: m ? m[1] || 'sin motivo' : `el revisor no dio veredicto: ${primera.slice(0, 120)}` };
 }
@@ -159,7 +162,7 @@ export function argsAgente({ motor, modelo }, carril, wt, ultimo, conf = CONF) {
 // ---------- efectos ----------
 
 // Un corte de red con GitHub no es una tarea fallida: se reintenta (medido el 18-oct: 4 de 5 cayeron así).
-const RED = /TLS handshake timeout|unexpected EOF|connectex|ECONNRESET|ETIMEDOUT|i\/o timeout|Could not resolve host|HTTP 50[234]/i;
+const RED = /TLS handshake timeout|unexpected EOF|connectex|ECONNRESET|ETIMEDOUT|i\/o timeout|Could not resolve host|HTTP 50[234]|returned error: 50[234]|Failed to connect|Connection was reset|SSL_read|schannel|RPC failed|hung up unexpectedly|early EOF/i;
 const esperar = (ms) => Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
 function reintentar(fn) {
   for (let intento = 1; ; intento++) {
@@ -169,8 +172,9 @@ function reintentar(fn) {
     }
   }
 }
-const git = (cwd, ...a) => execFileSync('git', ['-C', cwd, ...a], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
-const gh = (...a) => reintentar(() => execFileSync('gh', a, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim());
+// Con timeout: un git o gh colgado congela el event loop y con él los relojes de las otras tareas.
+const git = (cwd, ...a) => execFileSync('git', ['-C', cwd, ...a], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], timeout: 600_000 }).trim();
+const gh = (...a) => reintentar(() => execFileSync('gh', a, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], timeout: 180_000 }).trim());
 const leerSiExiste = (f) => (fs.existsSync(f) ? fs.readFileSync(f, 'utf8') : null);
 const intentar = (fn) => { try { return fn(); } catch (e) { console.error(`[orquesta] ${String(e.stderr || e.message).trim().slice(0, 200)}`); return null; } };
 
@@ -246,15 +250,20 @@ async function verificar(wt, base, salida, pedido, r) {
     || git(wt, 'diff', '--name-only', `origin/${base}...HEAD`, '--', salida) !== '';
   if (texto != null && !tocada) return { texto, falla: 'la salida ya existía y el agente no la cambió' };
   let falla = revisarSalida(texto);
+  git(wt, 'add', '-A');
+  const rutas = git(wt, 'diff', '--cached', '--name-only', '-z', `origin/${base}`).split('\0').filter(Boolean);
+  const prohibidas = rutas.filter((x) => PROTEGIDAS.test(x));
+  if (!falla && prohibidas.length) falla = `tocó archivos que solo cambia una persona: ${prohibidas.join(', ')}`;
   if (!falla && pedido.check === 'urls') {
     const rotas = await urlsRotas(urlsDe(texto));
     if (rotas.length) falla = `enlaces que no abren: ${rotas.join(' · ')}`;
   }
   if (!falla && pedido.check?.startsWith('cmd ')) {
+    // ponytail: corre fuera del sandbox el código que dejó el trabajador (tests, scripts de npm); aislarlo si la plataforma lee contenido ajeno.
     const k = await correr(pedido.check.slice(4), [], { cwd: wt, minutos: 15, shell: true });
     if (k.code !== 0) falla = `el check "${pedido.check.slice(4)}" falló: ${(k.err || k.out).trim().slice(-300)}`;
   }
-  return { texto, falla };
+  return { texto, falla, rutas };
 }
 
 function entregar(c, base, wt, rama, carril, issue) {
@@ -273,12 +282,12 @@ function entregar(c, base, wt, rama, carril, issue) {
   }
 }
 
-async function revisar(wt, base, issue, pedido, salida) {
-  const cambios = [git(wt, 'status', '--porcelain'), git(wt, 'diff', '--name-only', `origin/${base}...HEAD`)]
-    .join('\n').trim().split('\n').slice(0, 40).join('\n') || salida;
+async function revisar(wt, issue, pedido, salida, rutas) {
+  const cambios = rutas.slice(0, 40).join('\n') || salida;
   const [cmd, ...pre] = ejecutable('claude');
-  const args = [...pre, '-p', '--model', CONF.revisor, '--output-format', 'json', '--max-turns', '20',
-    '--settings', path.join(AQUI, 'trabajador.settings.json'), '--allowedTools', 'Read', 'Grep', 'Glob'];
+  // --restricted: solo lee, confinado al worktree, y no carga settings ni MCP que haya dejado el trabajador.
+  const args = [...pre, '-p', '--restricted', '--tools', 'Read,Grep,Glob', '--strict-mcp-config', '--model', CONF.revisor,
+    '--output-format', 'json', '--max-turns', '20', '--settings', path.join(AQUI, 'trabajador.settings.json')];
   const r = await correr(cmd, args, { cwd: wt, entrada: armarRevision({ issue, pedido, salida, cambios }), minutos: 10 });
   if (r.code !== 0) return { ok: false, motivo: `no se pudo revisar (código ${r.code}): ${r.err.trim().slice(-200)}` };
   return { ...leerVeredicto(r.out), usd: costoDe(r, { motor: 'claude' }).usd };
@@ -297,13 +306,13 @@ async function trabajar(c, carril, issue, pedido, ruta) {
   const [cmd, ...pre] = ejecutable(ruta.motor);
   const prompt = armarPrompt({ carril, issue, pedido, salida, rama });
   const r = await correr(cmd, [...pre, ...argsAgente(ruta, carril, wt, ultimo)], { cwd: wt, entrada: prompt, minutos: CONF.minutos_max });
-  const { texto, falla } = await verificar(wt, base, salida, pedido, r);
+  const { texto, falla, rutas } = await verificar(wt, base, salida, pedido, r);
   if (falla) return { ok: false, falla, salida, texto, wt, ...costoDe(r, ruta) };
-  const rev = await revisar(wt, base, issue, pedido, salida); // el que revisa nunca es el que hizo
+  const rev = await revisar(wt, issue, pedido, salida, rutas); // el que revisa nunca es el que hizo
   const extra = { ...costoDe(r, ruta), usd_revision: rev.usd };
   if (!rev.ok) return { ok: false, falla: `el revisor lo rechazó: ${rev.motivo}`, salida, texto, wt, ...extra };
   const pr = await enFila(c.repo, () => entregar(c, base, wt, rama, carril, issue));
-  intentar(() => git(c.repo, 'worktree', 'remove', '--force', wt)); // si Windows lo tiene tomado, queda para la próxima
+  await enFila(c.repo, () => intentar(() => git(c.repo, 'worktree', 'remove', '--force', wt))); // si Windows lo tiene tomado, queda para la próxima
   return { ok: true, pr, salida, texto, notas: rev.notas, ...extra };
 }
 
@@ -333,9 +342,11 @@ function cerrarIssue(n, res) {
     : `⛔ No se cerró (${datos})\n\nMotivo: ${res.falla}${res.wt ? `\nLo que dejó el agente: \`${res.wt}\`` : ''}\n\nPara reintentar: sacá el label \`bloqueada\`.`;
   const R = CONF.repo_cola;
   intentar(() => gh('issue', 'comment', n, '-R', R, '--body', cuerpo));
-  intentar(() => gh('issue', 'edit', n, '-R', R, '--remove-label', 'en-curso'));
-  if (res.ok) intentar(() => gh('issue', 'close', n, '-R', R));
-  else intentar(() => gh('issue', 'edit', n, '-R', R, '--add-label', 'bloqueada'));
+  // Un solo cambio de labels: si la red cae en el medio, el issue no queda suelto para que la próxima pasada lo rehaga.
+  if (res.ok) {
+    intentar(() => gh('issue', 'close', n, '-R', R));
+    intentar(() => gh('issue', 'edit', n, '-R', R, '--remove-label', 'en-curso'));
+  } else intentar(() => gh('issue', 'edit', n, '-R', R, '--add-label', 'bloqueada', '--remove-label', 'en-curso'));
 }
 
 async function enParalelo(items, n, fn) {

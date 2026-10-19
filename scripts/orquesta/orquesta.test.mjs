@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
   CONF, leerPedido, elegirTareas, rutear, rutaSalida, revisarSalida, urlsDe, argsAgente,
-  baseDe, motivoAnterior, armarPrompt, leerVeredicto,
+  baseDe, motivoAnterior, armarPrompt, leerVeredicto, PROTEGIDAS,
 } from './orquesta.mjs';
 
 const issue = (number, carril, extra = {}) => ({
@@ -88,4 +88,15 @@ test('leerVeredicto: solo APROBADO explícito aprueba', () => {
   assert.deepEqual(leerVeredicto('RECHAZADO: inventa una cifra\n- x'), { ok: false, motivo: 'inventa una cifra' });
   assert.equal(leerVeredicto(JSON.stringify({ result: 'Creo que está bien' })).ok, false);
   assert.equal(leerVeredicto('').ok, false);
+});
+
+test('APROBADO con reservas no aprueba', () => {
+  assert.equal(leerVeredicto('APROBADO: no cumple el hecho cuando').ok, false);
+  assert.equal(leerVeredicto('APROBADO CON RESERVAS').ok, false);
+  assert.equal(leerVeredicto('Aprobado.\n- ok').ok, true);
+});
+
+test('PROTEGIDAS: workflows y hooks no los cambia un trabajador', () => {
+  for (const r of ['.github/workflows/x.yml', '.githooks/pre-push', '.husky/pre-commit']) assert.ok(PROTEGIDAS.test(r), r);
+  for (const r of ['docs/.github.md', 'hermes-content/docs/orquesta/marca/1.md', 'lib/x.ts']) assert.ok(!PROTEGIDAS.test(r), r);
 });
