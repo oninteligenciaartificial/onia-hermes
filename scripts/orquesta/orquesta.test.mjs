@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {
   CONF, leerPedido, elegirTareas, rutear, rutaSalida, revisarSalida, urlsDe, argsAgente,
   baseDe, motivoAnterior, armarPrompt, leerVeredicto, PROTEGIDAS, armarCuartito,
-  leerHilo, esOk, decidirRespuesta, cuerpoCierre,
+  leerHilo, esOk, decidirRespuesta, cuerpoCierre, firmar,
 } from './orquesta.mjs';
 
 const issue = (number, carril, extra = {}) => ({
@@ -99,7 +99,8 @@ test('APROBADO con reservas no aprueba', () => {
 
 test('PROTEGIDAS: workflows y hooks no los cambia un trabajador', () => {
   for (const r of ['.github/workflows/x.yml', '.githooks/pre-push', '.husky/pre-commit']) assert.ok(PROTEGIDAS.test(r), r);
-  for (const r of ['docs/.github.md', 'hermes-content/docs/orquesta/marca/1.md', 'lib/x.ts']) assert.ok(!PROTEGIDAS.test(r), r);
+  for (const r of ['.env', 'apps/web/.env.local', 'certs/a.pem', 'x/id_ed25519', 'gcp/credentials.json']) assert.ok(PROTEGIDAS.test(r), r);
+  for (const r of ['docs/.github.md', 'hermes-content/docs/orquesta/marca/1.md', 'lib/x.ts', 'docs/environment.md']) assert.ok(!PROTEGIDAS.test(r), r);
 });
 
 test('cada carril tiene su cuartito y el prompt lo nombra', () => {
@@ -124,9 +125,24 @@ test('leerHilo separa lo de Sergio Urcullo de lo del orquestador', () => {
   assert.equal(tras.respuesta, 'ok');
 });
 
-test('esOk: aprobar solo sin pedido de cambios', () => {
-  for (const t of ['ok', 'Sí, me gustó, continúa', 'dale 👍', 'listo']) assert.ok(esOk(t), t);
-  for (const t of ['ok pero cambiá el título', 'no me gustó', 'cambiá el fondo', 'falta el logo']) assert.ok(!esOk(t), t);
+test('esOk: aprueba solo un mensaje hecho de palabras de aprobación', () => {
+  for (const t of ['ok', 'Sí, me gustó, continúa', 'dale 👍', 'listo', 'Perfecto!']) assert.ok(esOk(t), t);
+  for (const t of ['ok pero cambiá el título', 'no me gustó', 'Sin el logo, por favor', 'Simplificá el texto',
+    'Me gusta, agregá el precio', '']) assert.ok(!esOk(t), t);
+});
+
+test('un comentario de Sergio Urcullo que empieza con emoji sigue siendo suyo', () => {
+  const it = issue(6, 'marca', { labels: [{ name: 'espera-ok' }], comments: hilo(firmar(0, '👀 Listo para tu OK'), '✅ dale') });
+  assert.equal(leerHilo(it).respuesta, '✅ dale');
+  assert.equal(decidirRespuesta(it), 'seguir'); // «✅ dale» no es solo palabras de aprobación: sigue, no se pierde
+});
+
+test('lo que Sergio Urcullo escribe mientras la tarea trabaja cuenta como respuesta', () => {
+  // vio 1 comentario al empezar; Sergio escribió durante la corrida; después llegó la entrega
+  const it = issue(7, 'marca', { labels: [{ name: 'espera-ok' }], comments: hilo('pedido extra', 'usá fondo blanco', firmar(1, '👀 Listo para tu OK')) });
+  assert.equal(leerHilo(it).respuesta, 'usá fondo blanco');
+  assert.deepEqual(leerHilo(it).indicaciones, ['usá fondo blanco']);
+  assert.equal(decidirRespuesta(it), 'seguir');
 });
 
 test('decidirRespuesta: ok cierra, otra cosa sigue, sin respuesta nada', () => {
@@ -144,7 +160,7 @@ test('cuerpoCierre: una falla reintenta, dos frenan; espera-ok muestra capturas'
   assert.equal(cuerpoCierre({ ...base, ok: false, falla: 'x' }, 0).bloquea, false);
   assert.equal(cuerpoCierre({ ...base, ok: false, falla: 'x' }, 1).bloquea, true);
   const ok = cuerpoCierre({ ...base, ok: true, esperaOk: true, pr: 'P', salida: 's', capturas: ['https://g/x.png?raw=true'] }, 0);
-  assert.match(ok.cuerpo, /^👀 Listo para tu OK/);
+  assert.match(ok.cuerpo, /^<!-- orquesta vistos:0 -->\n👀 Listo para tu OK/);
   assert.match(ok.cuerpo, /!\[captura\]\(https:\/\/g\/x\.png\?raw=true\)/);
 });
 

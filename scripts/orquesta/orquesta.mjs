@@ -82,30 +82,43 @@ export function baseDe(c, pedido) {
   return b;
 }
 
-// El hilo del issue es la conversación con Sergio Urcullo: el orquestador firma sus comentarios con
-// ✅ ⛔ 👀; todo lo demás lo escribió él (desde el celular) y manda sobre el pedido original.
-const DEL_ORQUESTADOR = /^(✅|⛔|👀)/u;
+// El hilo del issue es la conversación con Sergio Urcullo, y los dos escriben desde la MISMA cuenta.
+// El orquestador firma con una marca invisible que dice cuántos comentarios había visto al empezar:
+// lo que Sergio escribió mientras la tarea trabajaba cuenta como respuesta a esa entrega.
+const MARCA = /^<!-- orquesta(?: vistos:(\d+))? -->\s*/;
+const FIRMAS = /^(✅ Hecho|✅ Aprobada|⛔ No se cerró|👀 Listo para tu OK)/u; // comentarios de antes de la marca
+export const firmar = (vistos, texto) => `<!-- orquesta vistos:${vistos} -->\n${texto}`;
 
 export function leerHilo(issue) {
-  const cs = (issue.comments || []).map((x) => String(x.body || '').trim());
-  const ultimaEntrega = cs.findLastIndex((b) => /^(✅|👀)/u.test(b));
-  const ultimoOrq = cs.findLastIndex((b) => DEL_ORQUESTADOR.test(b));
-  const ultimoSergio = cs.findLastIndex((b) => b && !DEL_ORQUESTADOR.test(b));
-  const fallas = cs.slice(Math.max(ultimaEntrega, ultimoSergio) + 1).filter((b) => b.startsWith('⛔'));
+  const cs = (issue.comments || []).map((x, i) => {
+    const crudo = String(x.body || '').trim();
+    const m = crudo.match(MARCA);
+    const body = crudo.replace(MARCA, '');
+    const orq = Boolean(m) || FIRMAS.test(body);
+    return { i, body, orq, vistos: m?.[1] != null ? Number(m[1]) : i + 1, entrega: orq && /^(✅ Hecho|👀 Listo)/u.test(body) };
+  });
+  const deSergio = cs.filter((c) => !c.orq && c.body);
+  const ultimaEntrega = cs.findLast((c) => c.entrega);
+  const ultimoOrq = cs.findLast((c) => c.orq);
+  const ultimoSergio = deSergio.at(-1);
+  const fallas = cs.filter((c) => c.orq && c.body.startsWith('⛔') && c.i > Math.max(ultimaEntrega?.i ?? -1, ultimoSergio?.i ?? -1));
   return {
-    indicaciones: cs.slice(ultimaEntrega + 1).filter((b) => b && !DEL_ORQUESTADOR.test(b)),
+    indicaciones: deSergio.filter((c) => c.i >= (ultimaEntrega?.vistos ?? 0)).map((c) => c.body),
     fallasSeguidas: fallas.length, // una indicación nueva de Sergio Urcullo vuelve a cero
-    motivo: fallas.at(-1)?.match(/^Motivo: (.+)$/m)?.[1] ?? null, // reintentar sin el motivo repite el error
-    respuesta: ultimoOrq >= 0 && ultimoSergio > ultimoOrq ? cs[ultimoSergio] : null,
+    motivo: fallas.at(-1)?.body.match(/^Motivo: (.+)$/m)?.[1] ?? null, // reintentar sin el motivo repite el error
+    respuesta: ultimoOrq && ultimoSergio && ultimoSergio.i >= ultimoOrq.vistos ? ultimoSergio.body : null,
   };
 }
 
 export const motivoAnterior = (issue) => leerHilo(issue).motivo;
 
+// Aprueba solo un mensaje hecho entero de palabras de aprobación: «Me gusta, agregá el precio» es una indicación.
+const PALABRAS_OK = new Set(['ok', 'okey', 'okay', 'sí', 'si', 'dale', 'listo', 'aprobado', 'aprobada', 'perfecto', 'bien',
+  'genial', 'excelente', 'me', 'gusta', 'gustó', 'gusto', 'encanta', 'encantó', 'continúa', 'continua', 'seguí', 'segui',
+  'sigue', 'adelante', 'muy', 'todo', 'está', 'esta', '👍']);
 export function esOk(texto) {
-  const t = texto.trim().toLowerCase();
-  return /^(ok|okey|okay|sí|si|dale|listo|aprobad[oa]|me gust|perfecto|bien|👍)/u.test(t)
-    && !/(pero|cambi|falta|mejor|arregl|correg|\bno\b)/.test(t);
+  const palabras = texto.trim().toLowerCase().split(/[\s,.;:!¡?¿]+/u).filter(Boolean);
+  return palabras.length > 0 && palabras.every((p) => PALABRAS_OK.has(p));
 }
 
 // Qué hacer con un issue frenado al que Sergio Urcullo le contestó: «ok» lo cierra, cualquier otra cosa lo hace seguir.
@@ -118,8 +131,9 @@ export function decidirRespuesta(issue) {
   return null;
 }
 
-// Lo que GitHub corre al abrir el PR (workflows, con secrets) o git al commitear (hooks) no lo cambia un trabajador.
-export const PROTEGIDAS = /^(\.github|\.githooks|\.husky)\//;
+// Lo que GitHub corre al abrir el PR (workflows, con secrets) o git al commitear (hooks) no lo cambia un
+// trabajador, y lo que parece un secreto no se sube nunca (el avance se sube sin revisión).
+export const PROTEGIDAS = /^(\.github|\.githooks|\.husky)\/|(^|\/)\.env($|\.)|\.(pem|key|p12|pfx)$|(^|\/)id_(rsa|ed25519)|credentials\.json$/i;
 
 export function revisarSalida(texto) {
   if (texto == null) return 'no escribió el archivo de salida';
@@ -274,16 +288,18 @@ function prepararWorktree(c, base, carril, numero) {
   return { wt, rama, sigue, inicio: git(wt, 'rev-parse', 'HEAD') };
 }
 
+// Contra el punto donde nació la rama, no contra la punta de la base: lo que otros cambiaron en la base no es de la tarea.
 function cambiosDe(wt, base) {
   git(wt, 'add', '-A');
-  return git(wt, 'diff', '--cached', '--name-only', '-z', `origin/${base}`).split('\0').filter(Boolean);
+  const desde = git(wt, 'merge-base', 'HEAD', `origin/${base}`);
+  return git(wt, 'diff', '--cached', '--name-only', '-z', desde).split('\0').filter(Boolean);
 }
 
 // Lo hecho en un intento que no cerró se sube a su rama: el próximo sigue desde ahí en vez de empezar de cero.
 function guardarAvance(base, wt, rama, carril, issue) {
   if (cambiosDe(wt, base).some((x) => PROTEGIDAS.test(x))) return;
   if (git(wt, 'status', '--porcelain') !== '') git(wt, 'commit', '-m', `orquesta(${carril}): avance de #${issue.number}`);
-  if (git(wt, 'rev-list', '--count', `origin/${base}..HEAD`) !== '0') reintentar(() => git(wt, 'push', '--force', '-u', 'origin', rama));
+  if (git(wt, 'rev-list', '--count', `origin/${base}..HEAD`) !== '0') reintentar(() => git(wt, 'push', '--force-with-lease', '-u', 'origin', rama));
 }
 
 const repoDe = (c) => git(c.repo, 'remote', 'get-url', 'origin').replace(/^https:\/\/github\.com\/|\.git$/g, '');
@@ -301,12 +317,13 @@ async function urlsRotas(urls) {
   return rotas;
 }
 
-async function verificar(wt, base, inicio, salida, pedido, r) {
+async function verificar(wt, base, inicio, sigue, salida, pedido, r) {
   const texto = leerSiExiste(path.join(wt, salida));
   if (r.code !== 0) return { texto, falla: `el agente no terminó bien (código ${r.code}): ${r.err.trim().slice(-300)}` };
   const tocada = git(wt, 'status', '--porcelain', '--', salida) !== ''
     || git(wt, 'diff', '--name-only', `${inicio}..HEAD`, '--', salida) !== '';
-  if (texto != null && !tocada) return { texto, falla: 'la salida ya existía y el agente no la cambió en esta vuelta' };
+  // Al seguir una tarea, una vuelta puede arreglar solo código: que la salida no cambie ahí no es falla (lo juzga el revisor).
+  if (texto != null && !tocada && !sigue) return { texto, falla: 'la salida ya existía y el agente no la cambió' };
   let falla = revisarSalida(texto);
   const rutas = cambiosDe(wt, base);
   const prohibidas = rutas.filter((x) => PROTEGIDAS.test(x));
@@ -329,7 +346,7 @@ function entregar(c, base, wt, rama, carril, issue) {
     git(wt, 'commit', '-m', `orquesta(${carril}): ${issue.title}`);
   }
   if (git(wt, 'rev-list', '--count', `origin/${base}..HEAD`) === '0') throw new Error('el agente no dejó cambios para entregar');
-  reintentar(() => git(wt, 'push', '--force', '-u', 'origin', rama)); // `orquesta/*` es solo del orquestador
+  reintentar(() => git(wt, 'push', '--force-with-lease', '-u', 'origin', rama)); // no pisa lo que alguien sumó al PR mientras tanto
   const repo = repoDe(c);
   try {
     return gh('pr', 'create', '-R', repo, '--base', base, '--head', rama, '--title', `orquesta(${carril}): ${issue.title}`,
@@ -367,7 +384,7 @@ async function trabajar(c, carril, issue, pedido, ruta) {
     await enFila(c.repo, () => intentar(() => guardarAvance(base, wt, rama, carril, issue)));
     return { ok: false, falla, salida, texto, wt, ...extra };
   };
-  const { texto, falla, rutas } = await verificar(wt, base, inicio, salida, pedido, r);
+  const { texto, falla, rutas } = await verificar(wt, base, inicio, sigue, salida, pedido, r);
   if (falla) return fallar(falla, costoDe(r, ruta));
   const rev = await revisar(wt, issue, pedido, salida, rutas); // el que revisa nunca es el que hizo
   const extra = { ...costoDe(r, ruta), usd_revision: rev.usd };
@@ -397,33 +414,34 @@ async function hacerTarea({ carril, issue }) {
 }
 
 // Primera falla: se reintenta sola en la próxima pasada, desde donde quedó. Segunda seguida: se frena y se avisa.
-export function cuerpoCierre(res, fallasPrevias) {
+export function cuerpoCierre(res, fallasPrevias, vistos = 0) {
   const cabeza = (res.texto || '').split('\n').slice(0, 12).join('\n');
   const datos = `${res.motor} · ${res.modelo} · ${res.minutos} min${res.usd ? ` · US$ ${res.usd.toFixed(2)} equiv.` : ''}`;
   const revision = res.notas ? `\n\nRevisión (${CONF.revisor}):\n${res.notas}` : '';
   if (res.ok && res.esperaOk) {
     const fotos = (res.capturas || []).map((u) => `![captura](${u})`).join('\n');
-    return { bloquea: false, cuerpo: `👀 Listo para tu OK (${datos})\n\n${fotos ? `${fotos}\n\n` : ''}Entrega: ${res.pr}\nArchivo: \`${res.salida}\`\n\n${cabeza}${revision}\n\n**Respondé acá:** «ok» la cierra; si querés cambios, escribilos y sigue desde donde quedó.` };
+    return { bloquea: false, cuerpo: firmar(vistos, `👀 Listo para tu OK (${datos})\n\n${fotos ? `${fotos}\n\n` : ''}Entrega: ${res.pr}\nArchivo: \`${res.salida}\`\n\n${cabeza}${revision}\n\n**Respondé acá:** «ok» la cierra; si querés cambios, escribilos y sigue desde donde quedó.`) };
   }
-  if (res.ok) return { bloquea: false, cuerpo: `✅ Hecho y revisado (${datos})\n\nEntrega: ${res.pr}\nArchivo: \`${res.salida}\`\n\n${cabeza}${revision}` };
+  if (res.ok) return { bloquea: false, cuerpo: firmar(vistos, `✅ Hecho y revisado (${datos})\n\nEntrega: ${res.pr}\nArchivo: \`${res.salida}\`\n\n${cabeza}${revision}`) };
   const bloquea = fallasPrevias >= 1;
   const sigue = bloquea
     ? 'Dos intentos seguidos sin cerrar: la frené. Para seguir, escribí acá qué cambiar (o sacá `bloqueada`).'
     : 'Lo reintento solo en la próxima pasada, desde donde quedó y con este motivo.';
-  return { bloquea, cuerpo: `⛔ No se cerró (${datos})\n\nMotivo: ${res.falla}\n\n${sigue}` };
+  return { bloquea, cuerpo: firmar(vistos, `⛔ No se cerró (${datos})\n\nMotivo: ${res.falla}\n\n${sigue}`) };
 }
 
 function cerrarIssue(issue, res) {
   const n = String(issue.number);
   const R = CONF.repo_cola;
-  const { bloquea, cuerpo } = cuerpoCierre(res, leerHilo(issue).fallasSeguidas);
-  intentar(() => gh('issue', 'comment', n, '-R', R, '--body', cuerpo));
+  const vistos = (issue.comments || []).length;
+  const { bloquea, cuerpo } = cuerpoCierre(res, leerHilo(issue).fallasSeguidas, vistos);
+  // Sin el comentario no hay hilo que leer: ni el «ok» de Sergio Urcullo se atendería ni las fallas se contarían.
+  const comentado = intentar(() => gh('issue', 'comment', n, '-R', R, '--body', cuerpo)) !== null;
   // Un solo cambio de labels: si la red cae en el medio, el issue no queda suelto para que la próxima pasada lo rehaga.
-  if (res.ok && res.esperaOk) intentar(() => gh('issue', 'edit', n, '-R', R, '--add-label', 'espera-ok', '--remove-label', 'en-curso'));
-  else if (res.ok) {
-    intentar(() => gh('issue', 'close', n, '-R', R));
-    intentar(() => gh('issue', 'edit', n, '-R', R, '--remove-label', 'en-curso'));
-  } else if (bloquea) intentar(() => gh('issue', 'edit', n, '-R', R, '--add-label', 'bloqueada', '--remove-label', 'en-curso'));
+  if (res.ok && !res.esperaOk) {
+    if (intentar(() => gh('issue', 'close', n, '-R', R)) !== null) intentar(() => gh('issue', 'edit', n, '-R', R, '--remove-label', 'en-curso'));
+  } else if (res.ok && comentado) intentar(() => gh('issue', 'edit', n, '-R', R, '--add-label', 'espera-ok', '--remove-label', 'en-curso'));
+  else if (bloquea || !comentado) intentar(() => gh('issue', 'edit', n, '-R', R, '--add-label', 'bloqueada', '--remove-label', 'en-curso'));
   else intentar(() => gh('issue', 'edit', n, '-R', R, '--remove-label', 'en-curso'));
 }
 
@@ -435,9 +453,9 @@ function atenderRespuestas(issues) {
     if (!d) return true;
     const n = String(it.number);
     if (d === 'cerrar') {
-      intentar(() => gh('issue', 'close', n, '-R', R, '--comment', '✅ Aprobada por Sergio Urcullo.'));
-      intentar(() => gh('issue', 'edit', n, '-R', R, '--remove-label', 'espera-ok'));
-      return false;
+      const cerrado = intentar(() => gh('issue', 'close', n, '-R', R, '--comment', firmar((it.comments || []).length, '✅ Aprobada por Sergio Urcullo.'))) !== null;
+      if (cerrado) intentar(() => gh('issue', 'edit', n, '-R', R, '--remove-label', 'espera-ok'));
+      return false; // cerrado o no, en esta pasada no se trabaja
     }
     intentar(() => gh('issue', 'edit', n, '-R', R, '--remove-label', 'espera-ok', '--remove-label', 'bloqueada'));
     it.labels = (it.labels || []).filter((l) => !['espera-ok', 'bloqueada'].includes(l.name || l));
