@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
   CONF, leerPedido, elegirTareas, rutear, rutaSalida, revisarSalida, urlsDe, argsAgente,
-  baseDe, motivoAnterior, armarPrompt, leerVeredicto, PROTEGIDAS,
+  baseDe, motivoAnterior, armarPrompt, leerVeredicto, PROTEGIDAS, armarCuartito,
 } from './orquesta.mjs';
 
 const issue = (number, carril, extra = {}) => ({
@@ -99,4 +99,13 @@ test('APROBADO con reservas no aprueba', () => {
 test('PROTEGIDAS: workflows y hooks no los cambia un trabajador', () => {
   for (const r of ['.github/workflows/x.yml', '.githooks/pre-push', '.husky/pre-commit']) assert.ok(PROTEGIDAS.test(r), r);
   for (const r of ['docs/.github.md', 'hermes-content/docs/orquesta/marca/1.md', 'lib/x.ts']) assert.ok(!PROTEGIDAS.test(r), r);
+});
+
+test('cada carril tiene su cuartito y el prompt lo nombra', () => {
+  for (const [nombre, c] of Object.entries(CONF.carriles)) assert.ok(c.leer?.length >= 3, nombre);
+  const p = armarPrompt({ carril: 'video', issue: issue(1, 'video'), pedido: { pedido: 'X' }, salida: 's.md', rama: 'r' });
+  assert.match(p, /TU CUARTITO.*edicion-referentes/s);
+  assert.match(p, /agregalo con la fecha a \.claude\/skills\/editor-videos\/SKILL\.md/);
+  assert.doesNotMatch(armarCuartito(CONF.carriles.comunidad), /agregalo/);
+  assert.equal(armarCuartito({}), '');
 });

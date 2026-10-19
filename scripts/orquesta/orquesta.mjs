@@ -103,10 +103,20 @@ export function urlsDe(texto = '') {
   return [...new Set(crudas.map((u) => u.replace(/[.,;:*]+$/, '')))];
 }
 
+// El "cuartito" del carril: lo que su trabajador lee antes de empezar y dónde deja lo que aprende.
+export function armarCuartito(c) {
+  if (!c.leer?.length) return '';
+  const [primero, ...resto] = c.leer;
+  const aprende = c.aprende_en
+    ? `\nAl terminar, si aprendiste un método, una trampa o un dato medido, agregalo con la fecha a ${c.aprende_en}.`
+    : '';
+  return `\nTU CUARTITO (el método de tu área). Leé ${primero} antes de empezar; de estos, solo los que apliquen a la tarea:\n${resto.map((p) => `- ${p}`).join('\n')}${aprende}\n`;
+}
+
 export function armarPrompt({ carril, issue, pedido, salida, rama }, conf = CONF) {
   return `Sos el trabajador del carril "${carril}" de ONIA (${conf.carriles[carril].que}).
 Trabajás SOLO en esta carpeta: es un worktree aislado en la rama ${rama}.
-
+${armarCuartito(conf.carriles[carril])}
 TAREA #${issue.number}: ${issue.title}
 ${pedido.pedido}
 ${motivoAnterior(issue) ? `\nINTENTO ANTERIOR RECHAZADO: ${motivoAnterior(issue)}\nCorregí eso primero.\n` : ''}

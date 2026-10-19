@@ -26,6 +26,14 @@
         "Bash(gh run view *)",
         "Bash(npm test *)",
         "Bash(npx tsc *)"
+      ],
+      "aprende_en": ".claude/skills/onia-verificacion/SKILL.md",
+      "leer": [
+        ".claude/skills/onia-verificacion/SKILL.md",
+        ".claude/skills/onia-backend/SKILL.md",
+        ".claude/skills/onia-db/SKILL.md",
+        ".claude/skills/onia-frontend/SKILL.md",
+        ".claude/skills/onia-seguridad/SKILL.md"
       ]
     },
     "marca": {
@@ -38,7 +46,17 @@
         "rapido": "haiku",
         "normal": "claude-sonnet-5-5",
         "profundo": "claude-opus-5-5"
-      }
+      },
+      "aprende_en": ".claude/skills/diseno-contenido-onia/SKILL.md",
+      "leer": [
+        ".claude/skills/diseno-contenido-onia/SKILL.md",
+        "hermes-content/docs/handoff/marca-personal.md",
+        "hermes-content/skills/guiones-diarios-onia.md",
+        "hermes-content/skills/marca-personal-sergio.md",
+        "hermes-content/skills/carruseles-onia.md",
+        "C:/Users/PC/.claude/skills/copywriting/SKILL.md",
+        "C:/Users/PC/.claude/skills/humanizer/SKILL.md"
+      ]
     },
     "comunidad": {
       "que": "Comunidad y talleres (taller de IA, inscripciones, material)",
@@ -50,7 +68,16 @@
         "rapido": "haiku",
         "normal": "claude-sonnet-5-5",
         "profundo": "claude-opus-5-5"
-      }
+      },
+      "leer": [
+        "hermes-content/docs/comunidad/ESTADO_COMUNIDAD.md",
+        "hermes-content/docs/ONIA_COMUNIDAD_QUE_LA_HACE_VALER.md",
+        "hermes-content/docs/ONIA_COMUNIDAD_CONTENIDO.md",
+        "C:/Users/PC/.claude/skills/community-marketing/SKILL.md",
+        "C:/Users/PC/.claude/skills/lead-magnets/SKILL.md",
+        "C:/Users/PC/.claude/skills/onboarding/SKILL.md",
+        "C:/Users/PC/.claude/skills/copywriting/SKILL.md"
+      ]
     },
     "video": {
       "que": "Edicion de video (cortes, subtitulos, previews; nunca publica)",
@@ -72,7 +99,15 @@
         "rapido": "haiku",
         "normal": "claude-sonnet-5-5",
         "profundo": "claude-opus-5-5"
-      }
+      },
+      "aprende_en": ".claude/skills/editor-videos/SKILL.md",
+      "leer": [
+        ".claude/skills/edicion-referentes/SKILL.md",
+        ".claude/skills/editor-videos/SKILL.md",
+        ".claude/skills/ver-videos/SKILL.md",
+        ".claude/skills/hyperframes/SKILL.md",
+        ".claude/skills/embedded-captions/SKILL.md"
+      ]
     },
     "investigacion": {
       "que": "Investigacion y aprendizaje de creadores y competencia",
@@ -88,6 +123,12 @@
       "herramientas_extra": [
         "WebSearch",
         "WebFetch"
+      ],
+      "leer": [
+        "C:/Users/PC/.claude/skills/deep-research/SKILL.md",
+        "C:/Users/PC/.claude/skills/competitor-profiling/SKILL.md",
+        ".claude/skills/ver-videos/SKILL.md",
+        ".claude/skills/sacar-prompt/SKILL.md"
       ]
     }
   },
