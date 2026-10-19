@@ -59,9 +59,18 @@ Hechos el 19-oct por la sesión siguiente (commit `3b304b2f` en esta rama, 23/23
      corta en rojo en el primer paso. Sin el permiso de PRs de Actions, entrega el enlace `compare` en vez de fallar.
    - Sin `--donde`: la PC es `pc` y Actions `nube` (antes tomaba todo y podían pisarse).
 
+5b. ✅ [PR #244](https://github.com/oninteligenciaartificial/onia-hermes/pull/244) mergeado con OK de Sergio Urcullo (`a961c162`).
+   Secreto `CLAUDE_CODE_OAUTH_TOKEN` cargado por él (20:52 UTC); permiso «Actions puede abrir PRs» activado por la sesión con su OK.
+   Login de Codex en Hermes: hecho según Sergio Urcullo (sin verificar desde la sesión).
+6a. Primera corrida en la nube ([run 39322983959](https://github.com/oninteligenciaartificial/onia-hermes/actions/runs/39322983959),
+   tarea [#245](https://github.com/oninteligenciaartificial/onia-hermes/issues/245)): checkout ralo, `gh`, worktree, comentario como
+   `github-actions` y labels anduvieron (27 s el job entero), pero **Claude Code no arrancó**: `CLAUDE_CODE_SUBPROCESS_ENV_SCRUB=1`
+   fuerza bubblewrap y el runner Ubuntu no lo deja (anthropics/claude-code#50167). Sacado del workflow en el PR siguiente.
+   Sin secreto, antes, el job cortó en rojo en 2 s en el primer paso (medido, como estaba previsto).
+
 Falta:
-5b. PR con enlace para Sergio Urcullo → merge con su OK (el control de permisos frena el merge sin OK explícito).
-   El workflow solo corre desde `main` (schedule, issues y `workflow_dispatch` lo exigen): la primera prueba es después del merge.
+6b. Mergear el PR del arreglo (OK de Sergio Urcullo), redisparar `gh workflow run orquesta.yml` y medir minutos de Actions y cupo
+   de Max con #245 (le queda un reintento: la falla del scrub contó como la primera).
 6. Primera tarea real en la nube (por ejemplo una de investigación) y medir minutos de Actions y cupo de Max.
 7. Arreglar `aplicar.sh` (líneas ~546, 775, 792) y `diagnostico.sh` de la skill `onia-hermes-jarvis`: reinician el servicio de
    **sistema** y revivirían el bucle; pasar a `systemctl --user` o `hermes gateway restart`.

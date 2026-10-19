@@ -82,9 +82,9 @@ jobs:
         env:
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           GH_TOKEN: ${{ github.token }}
+          # Sin CLAUDE_CODE_SUBPROCESS_ENV_SCRUB: fuerza bubblewrap y en este runner Claude Code no arranca (medido el
+          # 19-oct, run 39322983959). El agente igual queda acotado: Bash solo de git, sin /proc, sin GH_TOKEN.
           DISABLE_AUTOUPDATER: "1"
-          # Los comandos que lanza el agente no heredan el token de Max.
-          CLAUDE_CODE_SUBPROCESS_ENV_SCRUB: "1"
           ORQUESTA_RAIZ: ${{ github.workspace }}
           ORQUESTA_TRABAJO: ${{ runner.temp }}/orquesta
           ORQUESTA_SIN_MEDIA: "1"
