@@ -1,8 +1,24 @@
 # Orquesta ONIA
 
-Un programa fijo reparte el trabajo; los modelos solo trabajan. Corre en la PC de Sergio Urcullo,
-donde están las skills, los plugins, la memoria, Chrome, los videos y los logins de Claude y Codex.
-Por qué así y no un coordinador de IA: `hermes-content/docs/research/harness-orquestacion-autonomia.md`.
+Un programa fijo reparte el trabajo; los modelos solo trabajan. Por qué así y no un coordinador de IA:
+`hermes-content/docs/research/harness-orquestacion-autonomia.md` (secciones v2 y v3).
+
+## Stack v3 (19-oct): dónde corre cada cosa
+
+| Pieza | Dónde | Qué hace |
+|---|---|---|
+| Cerebro | Hermes en el VPS | Planifica y carga issues en la cola (pendiente: login de Codex y token de Issues) |
+| Manos 24/7 | GitHub Actions (`.github/workflows/orquesta.yml`) | `orquesta.mjs --donde nube` con Claude Code y el token de Max (`CLAUDE_CODE_OAUTH_TOKEN`) |
+| Manos con logins | PC de Sergio Urcullo | `orquesta.mjs --donde pc`: lo que usa sus sesiones o archivos (video, Meta, Instagram, Higgsfield, Buffer) |
+
+Cada carril tiene `donde` en `carriles.json` (hoy `plataforma` y `video` → `pc`; `marca`, `comunidad`,
+`investigacion` → `nube`), y un pedido lo cambia con `donde: pc|nube`. Cada lado ve solo sus issues: la
+PC no suelta el `en-curso` ni contesta el «ok» de una tarea que está en la nube, y al revés.
+
+En la nube: clon sin blobs, cada worktree sin media (`sin_media`, `ORQUESTA_SIN_MEDIA=1`), sin
+`dirs_extra`, y los agentes corren sin `GH_TOKEN` (solo el orquestador pushea y comenta). Comenta como
+`github-actions[bot]`; los PRs que abre no disparan el CI. Para abrirlos hace falta «Allow GitHub
+Actions to create and approve pull requests» (Settings → Actions → General).
 
 ## Cómo se pide una tarea
 
@@ -17,6 +33,7 @@ motor: codex           # opcional: cambia el motor del carril
 salida: ruta/archivo.md  # opcional: dónde escribe el resultado
 base: codex/mi-rama    # opcional: trabaja sobre esa rama (p. ej. la de un PR) y entrega contra ella
 ok: sergio             # opcional: al terminar no cierra; espera el OK de Sergio Urcullo con capturas
+donde: nube            # opcional: pc | nube (si no, el del carril)
 
 Qué hay que hacer.
 Hecho cuando: cómo se comprueba.
@@ -32,7 +49,7 @@ Hecho cuando: cómo se comprueba.
 ## Qué hace una pasada
 
 1. Toma la tarea abierta más vieja de cada carril (máx. `paralelo` a la vez) y le pone `en-curso`.
-2. Crea un worktree limpio desde `origin/<base>` en `E:/onia-orquesta/<carril>-<n>` (en E: porque cada copia de onia-hermes pesa ~5,5 GB y C: tiene poco libre).
+2. Crea un worktree limpio desde `origin/<base>` en `E:/onia-orquesta/<carril>-<n>` (en E: porque cada copia de onia-hermes pesa ~5,5 GB y C: tiene poco libre; en la nube, `ORQUESTA_TRABAJO`).
 3. Corre el agente sin pantalla. Claude: hooks y plugins ruidosos apagados, credenciales y `git push`
    negados (`trabajador.settings.json`, un tercio del costo de arranque), y herramientas por área
    (solo `investigacion` navega la web; solo `video` corre scripts y ffmpeg). Codex: sandbox
@@ -74,15 +91,20 @@ de Windows o Sergio Urcullo desde una terminal.
 ## Correr
 
 ```bash
-node scripts/orquesta/orquesta.mjs --dry      # qué tomaría y con qué modelo
-node scripts/orquesta/orquesta.mjs            # una pasada
+node scripts/orquesta/orquesta.mjs --dry --donde pc   # qué tomaría la PC y con qué modelo
+node scripts/orquesta/orquesta.mjs --donde pc         # una pasada de la PC
 node --test scripts/orquesta/orquesta.test.mjs
+gh workflow run orquesta.yml -R oninteligenciaartificial/onia-hermes   # una pasada de la nube
 ```
 
-Automático (Windows, cada 3 h de 8 a 23 con la PC prendida):
+Automático en la PC (Windows, cada 3 h de 8 a 23 con la PC prendida). Sin `--donde pc` tomaría
+también las tareas de la nube:
 
 ```powershell
-schtasks /Create /TN "ONIA Orquesta" /SC DAILY /ST 08:00 /RI 180 /DU 15:00 /TR "cmd /c cd /d C:\dev\proyectos\onia-hermes && set ORQUESTA_TELEGRAM=1 && node scripts\orquesta\orquesta.mjs >> %USERPROFILE%\.onia-orquesta\pasadas.log 2>&1"
+schtasks /Create /TN "ONIA Orquesta" /SC DAILY /ST 08:00 /RI 180 /DU 15:00 /TR "cmd /c cd /d C:\dev\proyectos\onia-hermes && set ORQUESTA_TELEGRAM=1 && node scripts\orquesta\orquesta.mjs --donde pc >> %USERPROFILE%\.onia-orquesta\pasadas.log 2>&1"
 ```
+
+La nube corre sola: al etiquetar o comentar un issue de la orquesta y cada 3 h de 8 a 23 (La Paz).
+Necesita el secreto `CLAUDE_CODE_OAUTH_TOKEN` (lo crea Sergio Urcullo con `claude setup-token`).
 
 `ORQUESTA_TELEGRAM=1` manda el resumen de la pasada al resumen diario de Hermes (aduana, sin interrumpir).

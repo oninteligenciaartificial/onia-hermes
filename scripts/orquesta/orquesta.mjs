@@ -267,9 +267,13 @@ function matar(pid) {
   } catch { /* ya terminó */ }
 }
 
+// El que habla con GitHub es el orquestador: los agentes y los checks corren sin su token (en la nube es
+// GH_TOKEN), así un pedido inyectado desde una web no tiene con qué escribir en el repo.
+const { GH_TOKEN, GITHUB_TOKEN, ...ENV_AGENTE } = process.env;
+
 function correr(cmd, args, { cwd, entrada = '', minutos, shell = false }) {
   return new Promise((resolve) => {
-    const p = spawn(cmd, args, { cwd, windowsHide: true, shell });
+    const p = spawn(cmd, args, { cwd, windowsHide: true, shell, env: ENV_AGENTE });
     let out = '';
     let err = '';
     p.stdout.on('data', (d) => (out += d));
@@ -291,9 +295,9 @@ function enFila(repo, fn) {
 }
 
 // Si la rama de la tarea ya existe (un intento cortado, o una vuelta con indicaciones), se sigue desde ella.
-function prepararWorktree(c, base, carril, numero) {
+export function prepararWorktree(c, base, carril, numero, conf = CONF) {
   const rama = `orquesta/${carril}-${numero}`;
-  const wt = path.join(CONF.carpeta_trabajo, `${carril}-${numero}`);
+  const wt = path.join(conf.carpeta_trabajo, `${carril}-${numero}`);
   const sigue = reintentar(() => git(c.repo, 'ls-remote', '--heads', 'origin', rama)) !== '';
   reintentar(() => git(c.repo, 'fetch', '--quiet', 'origin', base, ...(sigue ? [rama] : [])));
   if (fs.existsSync(wt)) {
@@ -304,7 +308,7 @@ function prepararWorktree(c, base, carril, numero) {
   if (process.env.ORQUESTA_SIN_MEDIA === '1') {
     // En la nube cada copia baja solo texto: de 5,5 GB, 4,1 son videos e imágenes de referencias (medido 19-oct).
     git(c.repo, 'worktree', 'add', '--quiet', '--no-checkout', '-B', rama, wt, desde);
-    git(wt, 'sparse-checkout', 'set', '--no-cone', ...CONF.sin_media);
+    git(wt, 'sparse-checkout', 'set', '--no-cone', ...conf.sin_media);
     git(wt, 'checkout', '--quiet');
   } else git(c.repo, 'worktree', 'add', '--quiet', '-B', rama, wt, desde);
   return { wt, rama, sigue, inicio: git(wt, 'rev-parse', 'HEAD') };
@@ -536,8 +540,12 @@ function soltarHuerfanas(issues) {
 async function main() {
   const argv = process.argv.slice(2);
   const soloCarril = argv.includes('--carril') ? argv[argv.indexOf('--carril') + 1] : null;
+  // La PC y la nube corren a la vez con candados distintos: cada lado ve solo sus issues, así ninguno
+  // suelta el `en-curso` ni contesta el «ok» de una tarea que está trabajando el otro.
+  const donde = argv.includes('--donde') ? argv[argv.indexOf('--donde') + 1] : process.env.ORQUESTA_DONDE || null;
+  if (donde && !['pc', 'nube'].includes(donde)) throw new Error(`--donde inválido: ${donde} (pc | nube)`);
   const listar = () => JSON.parse(gh('issue', 'list', '-R', CONF.repo_cola, '-l', 'orquesta', '--state', 'open',
-    '--limit', '200', '--json', 'number,title,body,labels,author,createdAt,comments'));
+    '--limit', '200', '--json', 'number,title,body,labels,author,createdAt,comments')).filter((it) => !donde || dondeDe(it) === donde);
   if (argv.includes('--dry')) {
     for (const t of elegirTareas(listar(), CONF, soloCarril)) {
       console.log(`${t.carril}\t#${t.issue.number}\t${JSON.stringify(rutear(t.carril, leerPedido(t.issue.body)))}\t${t.issue.title}`);

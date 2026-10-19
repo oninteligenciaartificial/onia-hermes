@@ -1,0 +1,81 @@
+name: ONIA Orquesta (nube)
+
+# Las manos en la nube del stack v3: corre scripts/orquesta/orquesta.mjs con Claude Code oficial y el
+# token de la suscripción Max de Sergio Urcullo (`claude setup-token`, documentado para Pro/Max en
+# code.claude.com/docs/en/authentication). Solo toma los carriles con `donde: nube` (marca, comunidad,
+# investigación); lo que usa sus logins o archivos lo corre la PC con `--donde pc`.
+#
+# Se dispara:
+#   - al ponerle a un issue el label `orquesta` o `carril:*` (una tarea nueva),
+#   - cuando Sergio Urcullo comenta un issue de la orquesta («ok» o una indicación),
+#   - cada 3 h de 8 a 23 en La Paz (reintentos de la primera falla), y a mano:
+#       gh workflow run orquesta.yml -R oninteligenciaartificial/onia-hermes
+#
+# Los comentarios salen como github-actions[bot] (la marca <!-- orquesta --> los distingue) y los PRs
+# abiertos con GITHUB_TOKEN no disparan el CI. Requiere «Allow GitHub Actions to create and approve
+# pull requests» en Settings → Actions.
+
+on:
+  issues:
+    types: [labeled]
+  issue_comment:
+    types: [created]
+  schedule:
+    - cron: "0 0,3,12,15,18,21 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+concurrency:
+  group: orquesta-nube
+  cancel-in-progress: false
+
+jobs:
+  pasada:
+    if: >-
+      github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'issues' && (github.event.label.name == 'orquesta' || startsWith(github.event.label.name, 'carril:'))) ||
+      (github.event_name == 'issue_comment' && !github.event.issue.pull_request &&
+        contains(github.event.issue.labels.*.name, 'orquesta') && github.event.comment.user.login == 'oninteligenciaartificial')
+    runs-on: ubuntu-latest
+    # minutos_max (40) + revisión (10) + git y gh.
+    timeout-minutes: 75
+    steps:
+      # Clon sin blobs y solo scripts/orquesta a la vista: cada worktree baja su texto aparte, sin la media
+      # de hermes-content/references (4,1 de 5,5 GB, medido el 19-oct). Historia completa para merge-base.
+      - uses: actions/checkout@v4
+        with:
+          path: onia-hermes
+          fetch-depth: 0
+          sparse-checkout: scripts/orquesta
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Claude Code
+        run: npm i -g @anthropic-ai/claude-code@2.1.288
+
+      # Sin token en disco: git pide la credencial a gh, que la lee de GH_TOKEN. Los agentes corren sin
+      # GH_TOKEN (orquesta.mjs se lo saca), así que solo el orquestador puede pushear.
+      - name: Git
+        run: |
+          git config --global credential.https://github.com.helper '!gh auth git-credential'
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Pasada
+        working-directory: onia-hermes
+        run: node scripts/orquesta/orquesta.mjs --donde nube
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
+          DISABLE_AUTOUPDATER: "1"
+          ORQUESTA_RAIZ: ${{ github.workspace }}
+          ORQUESTA_TRABAJO: ${{ runner.temp }}/orquesta
+          ORQUESTA_SIN_MEDIA: "1"
+          ORQUESTA_DONDE: nube

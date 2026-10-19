@@ -1,9 +1,14 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 import {
   CONF, leerPedido, elegirTareas, rutear, rutaSalida, revisarSalida, urlsDe, argsAgente,
   baseDe, motivoAnterior, armarPrompt, leerVeredicto, PROTEGIDAS, armarCuartito,
-  leerHilo, esOk, decidirRespuesta, cuerpoCierre, firmar,
+  leerHilo, esOk, decidirRespuesta, cuerpoCierre, firmar, dondeDe, ajustarAlEntorno, prepararWorktree,
 } from './orquesta.mjs';
 
 const issue = (number, carril, extra = {}) => ({
@@ -171,4 +176,61 @@ test('espera-ok frena la tarea y el prompt lleva indicaciones y continuidad', ()
   assert.match(p, /YA HAY TRABAJO HECHO/);
   assert.match(p, /INDICACIONES DE SERGIO URCULLO[^]*- más corto/);
   assert.match(p, /a\/b\/5-390\.png/);
+});
+
+test('dondeDe: el pedido manda, si no el carril, y lo desconocido va a la PC', () => {
+  assert.equal(dondeDe(issue(1, 'marca')), 'nube');
+  assert.equal(dondeDe(issue(2, 'video')), 'pc');
+  assert.equal(dondeDe(issue(3, 'marca', { body: 'donde: pc\n\nX' })), 'pc');
+  assert.equal(dondeDe(issue(4, 'video', { body: 'donde: nube\n\nX' })), 'nube');
+  assert.equal(dondeDe(issue(5, 'marca', { body: 'donde: luna\n\nX' })), 'nube');
+  assert.equal(dondeDe(issue(6, 'inventado')), 'pc');
+});
+
+test('ajustarAlEntorno: en la nube los repos viven en ORQUESTA_RAIZ y no hay carpetas de la PC', () => {
+  const conf = { carpeta_trabajo: 'E:/onia-orquesta', carriles: {
+    marca: { repo: 'C:/dev/proyectos/onia-hermes', base: 'main' },
+    video: { repo: 'C:/dev/proyectos/onia-hermes', dirs_extra: ['C:/Users/PC/Videos/ONIA-brutos'] },
+  } };
+  assert.deepEqual(ajustarAlEntorno(conf, {}), conf);
+  const nube = ajustarAlEntorno(conf, { ORQUESTA_RAIZ: '/w', ORQUESTA_TRABAJO: '/t' });
+  assert.equal(nube.carpeta_trabajo, '/t');
+  assert.equal(nube.carriles.marca.repo, path.join('/w', 'onia-hermes'));
+  assert.equal(nube.carriles.marca.base, 'main');
+  assert.deepEqual(nube.carriles.video.dirs_extra, []);
+  assert.equal(conf.carriles.video.dirs_extra.length, 1); // no toca el original
+});
+
+test('prepararWorktree sin media: baja solo texto desde un clon parcial y ralo, como en Actions', (t) => {
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'orquesta-'));
+  const antes = process.env.ORQUESTA_SIN_MEDIA;
+  t.after(() => {
+    if (antes === undefined) delete process.env.ORQUESTA_SIN_MEDIA; else process.env.ORQUESTA_SIN_MEDIA = antes;
+    fs.rmSync(tmp, { recursive: true, force: true });
+  });
+  const g = (cwd, ...a) => execFileSync('git', ['-C', cwd, '-c', 'user.name=t', '-c', 'user.email=t@t', ...a], { encoding: 'utf8' });
+  const semilla = path.join(tmp, 'semilla');
+  for (const f of ['docs/a.md', 'docs/foto.PNG', 'refs/clip.mp4', 'scripts/orquesta/x.mjs']) {
+    fs.mkdirSync(path.dirname(path.join(semilla, f)), { recursive: true });
+    fs.writeFileSync(path.join(semilla, f), f);
+  }
+  g(tmp, 'init', '-q', '-b', 'main', semilla);
+  g(semilla, 'add', '-A');
+  g(semilla, 'commit', '-qm', 'semilla');
+  const origen = path.join(tmp, 'origen.git');
+  g(tmp, 'clone', '-q', '--bare', semilla, origen);
+  g(origen, 'config', 'uploadpack.allowFilter', 'true');
+  const repo = path.join(tmp, 'onia-hermes');
+  // Lo mismo que hace actions/checkout con `sparse-checkout`: clon sin blobs y solo scripts/orquesta a la vista.
+  g(tmp, 'clone', '-q', '--filter=blob:none', '--sparse', pathToFileURL(origen).href, repo);
+  g(repo, 'sparse-checkout', 'set', 'scripts/orquesta');
+  process.env.ORQUESTA_SIN_MEDIA = '1';
+  const { wt, rama, sigue } = prepararWorktree({ repo }, 'main', 'marca', 7, { ...CONF, carpeta_trabajo: path.join(tmp, 'trabajo') });
+  assert.equal(rama, 'orquesta/marca-7');
+  assert.equal(sigue, false);
+  assert.ok(fs.existsSync(path.join(wt, 'docs/a.md')));
+  assert.ok(fs.existsSync(path.join(wt, 'scripts/orquesta/x.mjs')));
+  assert.ok(!fs.existsSync(path.join(wt, 'docs/foto.PNG')));
+  assert.ok(!fs.existsSync(path.join(wt, 'refs/clip.mp4')));
+  assert.ok(!fs.existsSync(path.join(repo, 'docs/a.md'))); // el clon principal sigue ralo
 });
