@@ -109,7 +109,7 @@ for (const env of [{ ONIA_AUTOSYNC_MAIN: "true" }, { ONIA_AUTOSYNC_MAIN: "0" }, 
   });
 }
 
-for (const rama of ["pedido/p_1a2b3c4d", "respuesta/p_1a2b3c4d"]) {
+for (const rama of ["pedido/p_1a2b3c4d", "respuesta/p_1a2b3c4d", "orquesta/marca-12"]) {
   test(`una rama ${rama.split("/")[0]}/* nunca adelanta main, ni con permiso`, () => {
     const s = sesion(rama, { env: { ONIA_AUTOSYNC_MAIN: "1" } });
     assert.equal(s.r.status, 0, s.r.stdout + s.r.stderr);

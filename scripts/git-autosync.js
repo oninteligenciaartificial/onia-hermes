@@ -243,7 +243,8 @@ function main() {
   // Claude desde Hermes corren en una rutina de la nube que carga ESTE hook; su trabajo va en
   // `pedido/<id>` como PR en borrador, y lo aprueba él (hermes-content/docs/TELEGRAM_COMMAND_CENTER.md).
   // La rutina corre sin permiso igual: esto es una segunda llave, no la única.
-  const ramaDePedido = /^(pedido|respuesta)\//.test(rama);
+  // Lo mismo para `orquesta/*` (2026-10-18): el trabajo del orquestador entra por PR, nunca directo a main.
+  const ramaDePedido = /^(pedido|respuesta|orquesta)\//.test(rama);
   if (ramaDePedido) console.log('[autosync] rama de pedido: se pushea, main NO se toca');
   else if (rama !== 'main' && !permiso) {
     console.log('[autosync] main no se toca: entra por PR revisado (solo la madre y el integrador lo mueven)');

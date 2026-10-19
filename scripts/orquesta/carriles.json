@@ -1,0 +1,153 @@
+{
+  "repo_cola": "oninteligenciaartificial/onia-hermes",
+  "autores": [
+    "oninteligenciaartificial"
+  ],
+  "paralelo": 3,
+  "minutos_max": 40,
+  "revisor": "claude-sonnet-5-5",
+  "carpeta_trabajo": "E:/onia-orquesta",
+  "carriles": {
+    "plataforma": {
+      "que": "Desarrollo de Onia Platform (codigo, tests, PRs)",
+      "motor": "codex",
+      "repo": "C:/dev/proyectos/onia-platform",
+      "base": "master",
+      "salida": "docs/orquesta",
+      "modelos": {
+        "rapido": "gpt-6-luna",
+        "normal": "gpt-6.1-sol",
+        "profundo": "gpt-6-astra"
+      },
+      "herramientas_extra": [
+        "Bash(gh pr view *)",
+        "Bash(gh pr checks *)",
+        "Bash(gh pr diff *)",
+        "Bash(gh run view *)",
+        "Bash(npm test *)",
+        "Bash(npx tsc *)"
+      ],
+      "aprende_en": ".claude/skills/onia-verificacion/SKILL.md",
+      "leer": [
+        ".claude/skills/onia-verificacion/SKILL.md",
+        ".claude/skills/onia-backend/SKILL.md",
+        ".claude/skills/onia-db/SKILL.md",
+        ".claude/skills/onia-frontend/SKILL.md",
+        ".claude/skills/onia-seguridad/SKILL.md"
+      ]
+    },
+    "marca": {
+      "que": "Marca personal de Sergio Urcullo (guiones, piezas, calendario)",
+      "motor": "claude",
+      "repo": "C:/dev/proyectos/onia-hermes",
+      "base": "main",
+      "salida": "hermes-content/docs/orquesta/marca",
+      "modelos": {
+        "rapido": "haiku",
+        "normal": "claude-sonnet-5-5",
+        "profundo": "claude-opus-5-5"
+      },
+      "aprende_en": ".claude/skills/diseno-contenido-onia/SKILL.md",
+      "leer": [
+        ".claude/skills/diseno-contenido-onia/SKILL.md",
+        "hermes-content/docs/handoff/marca-personal.md",
+        "hermes-content/skills/guiones-diarios-onia.md",
+        "hermes-content/skills/marca-personal-sergio.md",
+        "hermes-content/skills/carruseles-onia.md",
+        "C:/Users/PC/.claude/skills/copywriting/SKILL.md",
+        "C:/Users/PC/.claude/skills/humanizer/SKILL.md"
+      ]
+    },
+    "comunidad": {
+      "que": "Comunidad y talleres (taller de IA, inscripciones, material)",
+      "motor": "claude",
+      "repo": "C:/dev/proyectos/onia-hermes",
+      "base": "main",
+      "salida": "hermes-content/docs/orquesta/comunidad",
+      "modelos": {
+        "rapido": "haiku",
+        "normal": "claude-sonnet-5-5",
+        "profundo": "claude-opus-5-5"
+      },
+      "leer": [
+        "hermes-content/docs/comunidad/ESTADO_COMUNIDAD.md",
+        "hermes-content/docs/ONIA_COMUNIDAD_QUE_LA_HACE_VALER.md",
+        "hermes-content/docs/ONIA_COMUNIDAD_CONTENIDO.md",
+        "C:/Users/PC/.claude/skills/community-marketing/SKILL.md",
+        "C:/Users/PC/.claude/skills/lead-magnets/SKILL.md",
+        "C:/Users/PC/.claude/skills/onboarding/SKILL.md",
+        "C:/Users/PC/.claude/skills/copywriting/SKILL.md"
+      ]
+    },
+    "video": {
+      "que": "Edicion de video (cortes, subtitulos, previews; nunca publica)",
+      "motor": "claude",
+      "repo": "C:/dev/proyectos/onia-hermes",
+      "base": "main",
+      "salida": "hermes-content/docs/orquesta/video",
+      "dirs_extra": [
+        "C:/Users/PC/Videos/ONIA-brutos"
+      ],
+      "herramientas_extra": [
+        "Bash(ffmpeg *)",
+        "Bash(ffprobe *)",
+        "Bash(node *)",
+        "Bash(python *)",
+        "Bash(npx *)"
+      ],
+      "modelos": {
+        "rapido": "haiku",
+        "normal": "claude-sonnet-5-5",
+        "profundo": "claude-opus-5-5"
+      },
+      "aprende_en": ".claude/skills/editor-videos/SKILL.md",
+      "leer": [
+        ".claude/skills/edicion-referentes/SKILL.md",
+        ".claude/skills/editor-videos/SKILL.md",
+        ".claude/skills/ver-videos/SKILL.md",
+        ".claude/skills/hyperframes/SKILL.md",
+        ".claude/skills/embedded-captions/SKILL.md"
+      ]
+    },
+    "investigacion": {
+      "que": "Investigacion y aprendizaje de creadores y competencia",
+      "motor": "claude",
+      "repo": "C:/dev/proyectos/onia-hermes",
+      "base": "main",
+      "salida": "hermes-content/docs/orquesta/investigacion",
+      "modelos": {
+        "rapido": "haiku",
+        "normal": "claude-sonnet-5-5",
+        "profundo": "claude-opus-5-5"
+      },
+      "herramientas_extra": [
+        "WebSearch",
+        "WebFetch"
+      ],
+      "leer": [
+        "C:/Users/PC/.claude/skills/deep-research/SKILL.md",
+        "C:/Users/PC/.claude/skills/competitor-profiling/SKILL.md",
+        ".claude/skills/ver-videos/SKILL.md",
+        ".claude/skills/sacar-prompt/SKILL.md"
+      ]
+    }
+  },
+  "herramientas_claude": [
+    "Read",
+    "Write",
+    "Edit",
+    "Glob",
+    "Grep",
+    "Skill",
+    "TodoWrite",
+    "Bash(git status *)",
+    "Bash(git diff *)",
+    "Bash(git log *)",
+    "Bash(git show *)",
+    "Bash(git ls-tree *)",
+    "Bash(git add *)",
+    "Bash(git commit *)",
+    "Bash(git rev-parse *)",
+    "Bash(mkdir *)"
+  ]
+}
