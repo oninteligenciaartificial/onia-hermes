@@ -14,13 +14,13 @@
 import { mkdirSync, writeFileSync, readFileSync, existsSync } from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { IG_SESSION } from './ig-session.mjs';
 
 // Tambien es libreria: video-intake.mjs importa shortcodeOf/cookieHeader/fetchMediaItem
 // para bajar el caption de un reel. Sin este guard, importar ejecutaba el CLI entero.
 const esMain = process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href;
 
-const REPO = path.resolve(import.meta.dirname, '../../../..');
-const JAR = path.join(REPO, '.hermes', 'ig-session', 'cookies.txt');
+const JAR = path.join(IG_SESSION, 'cookies.txt');
 const IG_APP_ID = '936619743392459'; // app id publico del IG web
 
 const args = process.argv.slice(2);

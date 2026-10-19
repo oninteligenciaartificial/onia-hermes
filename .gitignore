@@ -99,3 +99,6 @@ hermes-content/docs/recorrido/**/*.png
 # Galeria unica de imagenes (29-sep): solo finales. Temporales de descarga y copias por carrusel, fuera.
 hermes-content/galeria/**/*.tmp
 hermes-content/carousels/out/*/assets/
+
+# yt-dlp: el .info.json puede llevar cookies de sesion (ver-videos/fetch-video.mjs)
+*.info.json

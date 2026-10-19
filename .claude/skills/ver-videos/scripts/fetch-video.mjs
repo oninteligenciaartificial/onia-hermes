@@ -5,19 +5,20 @@
 //   node fetch-video.mjs --login          # una sola vez: abre Chromium para loguear IG
 //
 // TikTok / YouTube: yt-dlp directo, cero cookies.
-// Instagram: exige sesion. Usamos un perfil de Chromium PROPIO de Playwright
-// (no el Chrome del usuario) => sus cookies se leen por API, sin DPAPI ni
-// App-Bound Encryption. Login manual una vez; despues es headless y automatico.
+// Instagram (medido el 19-oct-2026): los reels publicos bajan SIN cookies. Orden:
+// sin cookies -> --impersonate chrome -> recien al final la sesion guardada.
+// La sesion es un perfil de Chromium PROPIO de Playwright (no el Chrome del usuario)
+// => sus cookies se leen por API, sin DPAPI ni App-Bound Encryption.
+// Siempre deja <id>.info.json al lado del mp4 (caption, likes, comentarios), sin cookies.
 
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
-import { mkdirSync, writeFileSync, existsSync, statSync, copyFileSync } from 'node:fs';
+import { mkdirSync, writeFileSync, readFileSync, existsSync, statSync, copyFileSync, readdirSync, rmSync } from 'node:fs';
 import path from 'node:path';
+import { IG_SESSION as SESSION_DIR } from './ig-session.mjs';
 
 const run = promisify(execFile);
 
-const REPO = path.resolve(import.meta.dirname, '../../../..');
-const SESSION_DIR = path.join(REPO, '.hermes', 'ig-session');
 const PROFILE_DIR = path.join(SESSION_DIR, 'profile');
 const JAR = path.join(SESSION_DIR, 'cookies.txt');
 const JAR_MAX_AGE_MS = 12 * 60 * 60 * 1000;
@@ -49,7 +50,12 @@ function toNetscape(c) {
 }
 
 async function readProfileCookies({ headed = false } = {}) {
-  const { chromium } = await import('playwright');
+  const { chromium } = await import('playwright').catch(() => {
+    throw new Error(
+      'Playwright no esta instalado: no se puede leer ni renovar la sesion de IG ' +
+        '(instalarlo pide OK de Sergio Urcullo).',
+    );
+  });
   mkdirSync(PROFILE_DIR, { recursive: true });
   const opts = {
     headless: !headed,
@@ -95,14 +101,23 @@ async function readProfileCookies({ headed = false } = {}) {
 }
 
 async function ensureJar({ force = false } = {}) {
-  const fresh =
-    !force && existsSync(JAR) && Date.now() - statSync(JAR).mtimeMs < JAR_MAX_AGE_MS;
-  if (fresh) return JAR;
+  const exists = existsSync(JAR);
+  if (!force && exists && Date.now() - statSync(JAR).mtimeMs < JAR_MAX_AGE_MS) return JAR;
 
   // Con --login se abre la ventana SIEMPRE: un sessionid presente no prueba nada
   // (IG revoca sesiones server-side y el cookie queda en el perfil como zombie;
   // el 2026-09-17 eso dejo el "--login" saliendo sin abrir ventana).
-  let cookies = force ? null : await readProfileCookies();
+  let cookies = null;
+  if (!force) {
+    try {
+      cookies = await readProfileCookies();
+    } catch (e) {
+      // Sin Playwright (o perfil trabado) no se renueva, pero el jar viejo puede seguir vivo.
+      if (!exists) throw e;
+      process.stderr.write(`${e.message}\nSe prueba con el cookies.txt viejo.\n`);
+      return JAR;
+    }
+  }
   if (!cookies?.some((c) => c.name === 'sessionid' && c.value)) {
     if (!force) {
       throw new Error(
@@ -120,11 +135,41 @@ async function ensureJar({ force = false } = {}) {
   return JAR;
 }
 
-async function download(url, jar) {
+let jarPromise; // una sola lectura del perfil aunque bajen varios links de IG en paralelo
+const getJar = () => (jarPromise ??= ensureJar());
+
+function cookieFlags(jar, tmp) {
+  // Copia descartable: yt-dlp REESCRIBE el archivo de cookies al salir, y en un
+  // intento fallido guarda el estado post-rechazo SIN sessionid (IG lo borra via
+  // Set-Cookie). Asi nos vacio el jar dos veces el 2026-09-17.
+  // Una copia por llamada: con varios links en paralelo se pisaban la misma.
+  copyFileSync(jar, tmp);
+  return ['--cookies', tmp, '--sleep-requests', '2'];
+}
+
+// Con --cookies, yt-dlp copia la cookie (sessionid incluido) en cada formato del .info.json,
+// y ese archivo termina citado en fichas del repo. El campo se borra siempre.
+// Se limpia la carpeta entera y SIEMPRE (finally): yt-dlp escribe el .info.json antes de bajar el
+// video, asi que un intento con sesion que fallaba a mitad dejaba el sessionid escrito (19-oct-2026).
+function scrubInfoJsons(dir) {
+  for (const f of readdirSync(dir).filter((x) => x.endsWith('.info.json'))) {
+    try {
+      const file = path.join(dir, f);
+      const data = JSON.parse(readFileSync(file, 'utf8'));
+      writeFileSync(file, JSON.stringify(data, (k, v) => (k === 'cookies' ? undefined : v)));
+    } catch { /* un info.json a medio escribir no convierte una bajada buena en fallo */ }
+  }
+}
+
+async function download(url, extra = []) {
   const out = path.join(OUT, '%(extractor_key)s-%(id)s.%(ext)s');
   const flags = [
-    '-f',
-    'b[height<=720]/bv[height<=720]+ba/b',
+    // -S y no -f: con -f "b[height<=720]" los reels salian 360x640 (19-oct-2026).
+    // ext:mp4:m4a mantiene mp4 en YouTube (si no, mezcla webm); vcodec:h264 evita AV1, que
+    // editor-videos y el Chromium headless decodifican mal. res va primero: IG sigue en 720p.
+    '-S',
+    'res:720,vcodec:h264,ext:mp4:m4a',
+    '--write-info-json',
     '-o',
     out,
     '--no-playlist',
@@ -133,17 +178,39 @@ async function download(url, jar) {
     '--no-simulate',
     '--quiet',
     '--no-warnings',
+    ...extra,
   ];
-  if (jar) {
-    // Copia descartable: yt-dlp REESCRIBE el archivo de cookies al salir, y en un
-    // intento fallido guarda el estado post-rechazo SIN sessionid (IG lo borra via
-    // Set-Cookie). Asi nos vacio el jar dos veces el 2026-09-17.
-    const tmp = jar + '.ytdlp';
-    copyFileSync(jar, tmp);
-    flags.push('--cookies', tmp, '--sleep-requests', '2');
+  try {
+    const { stdout } = await run('yt-dlp', [...flags, url], { maxBuffer: 1 << 24 });
+    return stdout.trim().split('\n').filter(Boolean).pop();
+  } finally {
+    scrubInfoJsons(OUT);
   }
-  const { stdout } = await run('yt-dlp', [...flags, url], { maxBuffer: 1 << 24 });
-  return stdout.trim().split('\n').filter(Boolean).pop();
+}
+
+const lastLine = (e) => String(e.stderr || e.message).trim().split('\n').filter(Boolean).pop();
+
+async function downloadIG(url) {
+  const fallos = [];
+  for (const [via, extra] of [
+    ['sin cookies', []],
+    ['--impersonate chrome', ['--impersonate', 'chrome']],
+  ]) {
+    try {
+      return await download(url, extra);
+    } catch (e) {
+      fallos.push(`${via}: ${lastLine(e)}`);
+    }
+  }
+  const tmp = path.join(SESSION_DIR, `cookies.${process.pid}.${Math.random().toString(36).slice(2)}.ytdlp`);
+  try {
+    return await download(url, cookieFlags(await getJar(), tmp));
+  } catch (e) {
+    fallos.push(`sesion guardada: ${lastLine(e)}`);
+  } finally {
+    rmSync(tmp, { force: true });
+  }
+  throw new Error(fallos.join('\n  '));
 }
 
 const main = async () => {
@@ -156,10 +223,9 @@ const main = async () => {
     process.exit(1);
   }
   mkdirSync(OUT, { recursive: true });
-  const jar = urls.some(isIG) ? await ensureJar() : null;
 
   const results = await Promise.allSettled(
-    urls.map((u) => download(u, isIG(u) ? jar : null)),
+    urls.map((u) => (isIG(u) ? downloadIG(u) : download(u))),
   );
   let failed = 0;
   results.forEach((r, i) => {

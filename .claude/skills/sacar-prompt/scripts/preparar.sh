@@ -8,7 +8,7 @@
 #     es carrusel de imagenes), trayendo tambien el caption
 #   - si es un video -> saca fotogramas MUESTREADOS POR DENSIDAD DE TEXTO, no a intervalo fijo,
 #     porque un prompt en pantalla puede durar un solo cuadro
-#   - si tiene voz -> transcribe con Speaches (gratis, idioma en auto)
+#   - si tiene voz -> transcribe (faster-whisper local en la PC; Speaches del VPS en la nube; idioma en auto)
 #   - si es una imagen -> no hace nada, se lee directo
 #
 # NO genera, NO sube nada a ningun lado y NO gasta creditos.
@@ -39,6 +39,7 @@ esac
 
 DUR=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")
 echo "VIDEO: $F  ${DUR}s"
+[ -f "${F%.*}.info.json" ] && echo "caption: ${F%.*}.info.json (campo description) — leerlo PRIMERO"
 
 # ---------- 2. fotogramas por densidad de texto ----------
 # COSTO (medido 2026-08-23): quien lee estos fotogramas es un modelo, y una imagen de 1080px
