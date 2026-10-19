@@ -189,6 +189,35 @@ junto con `common`. Recomendado de afuera (verificado el 19-oct, sin instalar):
 Instagram (19-oct): yt-dlp 2026.08.19 baja reels sin login; lo roto era `ver-videos/scripts/fetch-video.mjs`
 (exigía una cookie vencida y elegía 360p).
 
+## v3 (19-oct): dónde corren las manos
+
+Sergio Urcullo cuestionó dos descartes («la nube se puede equipar», «Hermes puede manejar Claude Code
+con API key»). Tenía razón en los dos; comparados con fuentes primarias el 19-oct:
+
+| Ejecutor | PC apagada | Plugins | Logins personales | Costo/mes (~5 tareas/día) | Política |
+|---|---|---|---|---|---|
+| PC (actual) | No | Sí | Sí | 0 extra (cupo Max) | Sí |
+| Nube web / routines | Sí | **No** (no instala los del settings del repo) | No | 0 extra | Sí; routines no se disparan por issues |
+| **GitHub Actions + Claude Code con `claude setup-token`** | Sí | **Sí** (`plugins`, `plugin_marketplaces`) | No | 0 de Claude; ~1.500 min de Actions (estimado) | Sí, documentado para Pro/Max |
+| VPS + API key | Sí | Sí | No | Sonnet 5.5 ~US$155 · Opus 5.5 ~US$310 (medido: US$1,03/tarea) | Sí, explícito |
+
+Fuentes: code.claude.com/docs (cloud-environments, routines, github-actions, authentication, legal-and-compliance),
+platform.claude.com pricing, github.com/anthropics/claude-code-action, docs.github.com billing. Costo medido en
+`~/.onia-orquesta/registro.jsonl`.
+
+Stack recomendado:
+- **Cerebro:** Hermes en el VPS planifica con Codex por OAuth (OpenAI lo permite en apps propias: 0 extra);
+  API de Anthropic solo si Codex no rinde. Nunca con el token de Max (tercero = prohibido).
+- **Manos en la nube (24/7):** el mismo `orquesta.mjs` corriendo en GitHub Actions con Claude Code oficial y el
+  token de Max: investigación, marca (guiones), comunidad y plataforma.
+- **Manos en la PC:** lo que pide sesiones o archivos de Sergio Urcullo (su regla de credenciales): video, Meta Ads,
+  Instagram, Higgsfield, Buffer, paneles.
+- **API key:** solo de respaldo si se agota el cupo de Max.
+
+Sin verificar: plan de GitHub de la cuenta (minutos gratis), navegador/yt-dlp/Whisper en el runner, WebSearch con
+el token OAuth en Actions, y cuánto aguanta Max con uso automatizado (sus límites suponen uso «ordinary,
+individual»). Faltaron fuentes: Exa y Firecrawl no están conectados.
+
 ## Pendiente (no se hizo en esta sesión)
 
 - Activar la pasada automática cada 3 h (comando en `scripts/orquesta/README.md`) y correr el carril video.
