@@ -1,6 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { CONF, leerPedido, elegirTareas, rutear, rutaSalida, revisarSalida, urlsDe, argsAgente } from './orquesta.mjs';
+import {
+  CONF, leerPedido, elegirTareas, rutear, rutaSalida, revisarSalida, urlsDe, argsAgente,
+  baseDe, motivoAnterior, armarPrompt, leerVeredicto,
+} from './orquesta.mjs';
 
 const issue = (number, carril, extra = {}) => ({
   number, title: `t${number}`, body: '', createdAt: `2026-10-18T0${number}:00:00Z`,
@@ -58,4 +61,31 @@ test('argsAgente: codex con sandbox, claude con herramientas acotadas', () => {
   const cl = argsAgente({ motor: 'claude', modelo: 'claude-sonnet-5-5' }, 'video', 'W', 'U');
   assert.ok(cl.includes('acceptEdits') && cl.includes('Bash(ffmpeg *)') && cl.includes('C:/Users/PC/Videos/ONIA-brutos'));
   assert.ok(!cl.includes('bypassPermissions'));
+});
+
+test('baseDe: rama del pedido o la del carril, sin refs raras', () => {
+  const c = CONF.carriles.plataforma;
+  assert.equal(baseDe(c, {}), 'master');
+  assert.equal(baseDe(c, { base: 'codex/web-guiada-dental' }), 'codex/web-guiada-dental');
+  assert.throws(() => baseDe(c, { base: '--upload-pack=x' }));
+  assert.throws(() => baseDe(c, { base: 'a/../b' }));
+});
+
+test('el motivo del último rechazo vuelve al prompt', () => {
+  const it = issue(9, 'marca', { comments: [
+    { body: '⛔ No se cerró (x)\n\nMotivo: viejo' }, { body: 'comentario suelto' },
+    { body: '⛔ No se cerró (y)\n\nMotivo: el revisor lo rechazó: inventa precios' },
+  ] });
+  assert.equal(motivoAnterior(it), 'el revisor lo rechazó: inventa precios');
+  assert.equal(motivoAnterior(issue(9, 'marca')), null);
+  const p = armarPrompt({ carril: 'marca', issue: it, pedido: { pedido: 'X' }, salida: 's.md', rama: 'r' });
+  assert.match(p, /INTENTO ANTERIOR RECHAZADO: el revisor lo rechazó: inventa precios/);
+  assert.doesNotMatch(armarPrompt({ carril: 'marca', issue: issue(9, 'marca'), pedido: { pedido: 'X' }, salida: 's.md', rama: 'r' }), /INTENTO ANTERIOR/);
+});
+
+test('leerVeredicto: solo APROBADO explícito aprueba', () => {
+  assert.deepEqual(leerVeredicto(JSON.stringify({ result: '**APROBADO**\n- bien' })), { ok: true, notas: '- bien' });
+  assert.deepEqual(leerVeredicto('RECHAZADO: inventa una cifra\n- x'), { ok: false, motivo: 'inventa una cifra' });
+  assert.equal(leerVeredicto(JSON.stringify({ result: 'Creo que está bien' })).ok, false);
+  assert.equal(leerVeredicto('').ok, false);
 });

@@ -22,7 +22,7 @@ const AQUI = path.dirname(fileURLToPath(import.meta.url));
 export const CONF = JSON.parse(fs.readFileSync(path.join(AQUI, 'carriles.json'), 'utf8'));
 const ESTADO = path.join(os.homedir(), '.onia-orquesta');
 const NIVELES = ['rapido', 'normal', 'profundo'];
-const CAMPOS = /^(nivel|motor|modelo|salida|check)\s*:\s*(.+)$/i;
+const CAMPOS = /^(nivel|motor|modelo|salida|check|base)\s*:\s*(.+)$/i;
 
 // ---------- lógica pura (probada en orquesta.test.mjs) ----------
 
@@ -75,6 +75,19 @@ export function rutaSalida(c, pedido, numero) {
   return s;
 }
 
+// `base:` en el pedido: trabajar sobre otra rama (p. ej. la de un PR) y entregar el PR contra ella.
+export function baseDe(c, pedido) {
+  const b = pedido.base || c.base;
+  if (!/^\w[\w./-]*$/.test(b) || b.includes('..')) throw new Error(`base inválida: ${b}`);
+  return b;
+}
+
+// El motivo del último rechazo vuelve al trabajador: reintentar sin él repite el error.
+export function motivoAnterior(issue) {
+  const c = [...(issue.comments || [])].reverse().find((x) => /^⛔ No se cerró/.test(x.body || ''));
+  return c?.body.match(/^Motivo: (.+)$/m)?.[1] ?? null;
+}
+
 export function revisarSalida(texto) {
   if (texto == null) return 'no escribió el archivo de salida';
   if (texto.trim().length < 300) return 'la salida es muy corta (menos de 300 caracteres)';
@@ -93,12 +106,41 @@ Trabajás SOLO en esta carpeta: es un worktree aislado en la rama ${rama}.
 
 TAREA #${issue.number}: ${issue.title}
 ${pedido.pedido}
-
+${motivoAnterior(issue) ? `\nINTENTO ANTERIOR RECHAZADO: ${motivoAnterior(issue)}\nCorregí eso primero.\n` : ''}
 ENTREGA OBLIGATORIA: escribí el resultado completo en ${salida} (creá las carpetas que falten).
 Lo lee Sergio Urcullo: arrancá con 3 líneas (qué hiciste · qué encontraste · qué sigue) y después el detalle.
 Si no podés terminar, escribí igual ${salida} empezando con "BLOQUEADO: <motivo concreto>" y lo que sí hiciste.
 
 REGLAS DURAS: no publiques en redes, no gastes dinero ni créditos, no le escribas a nadie, no toques producción ni el VPS. NO hagas commit, push ni merge: el orquestador commitea y entrega tus cambios (si no podés commitear, no es un bloqueo). Usá las skills del carril cuando apliquen.`;
+}
+
+export function armarRevision({ issue, pedido, salida, cambios }) {
+  return `Sos el REVISOR de ONIA. Otro agente hizo este trabajo: vos lo juzgás con contexto limpio y no lo corregís.
+
+TAREA #${issue.number}: ${issue.title}
+${pedido.pedido}
+
+ENTREGA: ${salida}
+ARCHIVOS CAMBIADOS:
+${cambios}
+
+Leé la entrega (y los archivos cambiados que haga falta) y comprobá:
+1. Hace lo que pide la tarea y cumple su "Hecho cuando".
+2. No inventa: cada cifra, precio, nombre, ruta o afirmación sobre el repo tiene fuente o se puede comprobar acá.
+3. Arranca con 3 líneas para Sergio Urcullo (qué hizo · qué encontró · qué sigue).
+4. No publica, gasta, escribe a terceros ni toca producción.
+
+Respondé SOLO así. Primera línea: APROBADO, o RECHAZADO: <qué falla, en una frase>. Después, hasta 5 observaciones cortas.`;
+}
+
+export function leerVeredicto(salida) {
+  let texto = salida;
+  try { texto = JSON.parse(salida).result ?? ''; } catch { /* texto plano */ }
+  texto = String(texto).trim();
+  const primera = texto.split('\n')[0].replace(/[*_`#]/g, '').trim();
+  if (/^APROBADO\b/i.test(primera)) return { ok: true, notas: texto.split('\n').slice(1).join('\n').trim() };
+  const m = primera.match(/^RECHAZADO\s*:?\s*(.*)$/i);
+  return { ok: false, motivo: m ? m[1] || 'sin motivo' : `el revisor no dio veredicto: ${primera.slice(0, 120)}` };
 }
 
 export function argsAgente({ motor, modelo }, carril, wt, ultimo, conf = CONF) {
@@ -172,15 +214,15 @@ function enFila(repo, fn) {
   return turno;
 }
 
-function prepararWorktree(c, carril, numero) {
+function prepararWorktree(c, base, carril, numero) {
   const rama = `orquesta/${carril}-${numero}`;
   const wt = path.join(CONF.carpeta_trabajo, `${carril}-${numero}`);
-  reintentar(() => git(c.repo, 'fetch', '--quiet', 'origin', c.base));
+  reintentar(() => git(c.repo, 'fetch', '--quiet', 'origin', base));
   if (fs.existsSync(wt)) {
     try { git(c.repo, 'worktree', 'remove', '--force', wt); } catch { fs.rmSync(wt, { recursive: true, force: true }); }
   }
   git(c.repo, 'worktree', 'prune');
-  git(c.repo, 'worktree', 'add', '--quiet', '-B', rama, wt, `origin/${c.base}`);
+  git(c.repo, 'worktree', 'add', '--quiet', '-B', rama, wt, `origin/${base}`);
   return { wt, rama };
 }
 
@@ -215,20 +257,31 @@ async function verificar(wt, base, salida, pedido, r) {
   return { texto, falla };
 }
 
-function entregar(c, wt, rama, carril, issue) {
+function entregar(c, base, wt, rama, carril, issue) {
   if (git(wt, 'status', '--porcelain') !== '') {
     git(wt, 'add', '-A');
     git(wt, 'commit', '-m', `orquesta(${carril}): ${issue.title}`);
   }
-  if (git(wt, 'rev-list', '--count', `origin/${c.base}..HEAD`) === '0') throw new Error('el agente no dejó cambios para entregar');
+  if (git(wt, 'rev-list', '--count', `origin/${base}..HEAD`) === '0') throw new Error('el agente no dejó cambios para entregar');
   reintentar(() => git(wt, 'push', '--force', '-u', 'origin', rama)); // `orquesta/*` es solo del orquestador
   const repo = git(c.repo, 'remote', 'get-url', 'origin').replace(/^https:\/\/github\.com\/|\.git$/g, '');
   try {
-    return gh('pr', 'create', '-R', repo, '--base', c.base, '--head', rama, '--title', `orquesta(${carril}): ${issue.title}`,
+    return gh('pr', 'create', '-R', repo, '--base', base, '--head', rama, '--title', `orquesta(${carril}): ${issue.title}`,
       '--body', `Tarea ${CONF.repo_cola}#${issue.number}, hecha por el orquestador (carril ${carril}).`);
   } catch {
     return gh('pr', 'view', rama, '-R', repo, '--json', 'url', '-q', '.url');
   }
+}
+
+async function revisar(wt, base, issue, pedido, salida) {
+  const cambios = [git(wt, 'status', '--porcelain'), git(wt, 'diff', '--name-only', `origin/${base}...HEAD`)]
+    .join('\n').trim().split('\n').slice(0, 40).join('\n') || salida;
+  const [cmd, ...pre] = ejecutable('claude');
+  const args = [...pre, '-p', '--model', CONF.revisor, '--output-format', 'json', '--max-turns', '20',
+    '--settings', path.join(AQUI, 'trabajador.settings.json'), '--allowedTools', 'Read', 'Grep', 'Glob'];
+  const r = await correr(cmd, args, { cwd: wt, entrada: armarRevision({ issue, pedido, salida, cambios }), minutos: 10 });
+  if (r.code !== 0) return { ok: false, motivo: `no se pudo revisar (código ${r.code}): ${r.err.trim().slice(-200)}` };
+  return { ...leerVeredicto(r.out), usd: costoDe(r, { motor: 'claude' }).usd };
 }
 
 function costoDe(r, ruta) {
@@ -238,16 +291,20 @@ function costoDe(r, ruta) {
 
 async function trabajar(c, carril, issue, pedido, ruta) {
   const salida = rutaSalida(c, pedido, issue.number);
-  const { wt, rama } = await enFila(c.repo, () => prepararWorktree(c, carril, issue.number));
+  const base = baseDe(c, pedido);
+  const { wt, rama } = await enFila(c.repo, () => prepararWorktree(c, base, carril, issue.number));
   const ultimo = path.join(ESTADO, `ultimo-${carril}-${issue.number}.txt`);
   const [cmd, ...pre] = ejecutable(ruta.motor);
   const prompt = armarPrompt({ carril, issue, pedido, salida, rama });
   const r = await correr(cmd, [...pre, ...argsAgente(ruta, carril, wt, ultimo)], { cwd: wt, entrada: prompt, minutos: CONF.minutos_max });
-  const { texto, falla } = await verificar(wt, c.base, salida, pedido, r);
+  const { texto, falla } = await verificar(wt, base, salida, pedido, r);
   if (falla) return { ok: false, falla, salida, texto, wt, ...costoDe(r, ruta) };
-  const pr = await enFila(c.repo, () => entregar(c, wt, rama, carril, issue));
+  const rev = await revisar(wt, base, issue, pedido, salida); // el que revisa nunca es el que hizo
+  const extra = { ...costoDe(r, ruta), usd_revision: rev.usd };
+  if (!rev.ok) return { ok: false, falla: `el revisor lo rechazó: ${rev.motivo}`, salida, texto, wt, ...extra };
+  const pr = await enFila(c.repo, () => entregar(c, base, wt, rama, carril, issue));
   intentar(() => git(c.repo, 'worktree', 'remove', '--force', wt)); // si Windows lo tiene tomado, queda para la próxima
-  return { ok: true, pr, salida, texto, ...costoDe(r, ruta) };
+  return { ok: true, pr, salida, texto, notas: rev.notas, ...extra };
 }
 
 async function hacerTarea({ carril, issue }) {
@@ -272,7 +329,7 @@ function cerrarIssue(n, res) {
   const cabeza = (res.texto || '').split('\n').slice(0, 12).join('\n');
   const datos = `${res.motor} · ${res.modelo} · ${res.minutos} min${res.usd ? ` · US$ ${res.usd.toFixed(2)} equiv.` : ''}`;
   const cuerpo = res.ok
-    ? `✅ Hecho (${datos})\n\nEntrega: ${res.pr}\nArchivo: \`${res.salida}\`\n\n${cabeza}`
+    ? `✅ Hecho y revisado (${datos})\n\nEntrega: ${res.pr}\nArchivo: \`${res.salida}\`\n\n${cabeza}${res.notas ? `\n\nRevisión (${CONF.revisor}):\n${res.notas}` : ''}`
     : `⛔ No se cerró (${datos})\n\nMotivo: ${res.falla}${res.wt ? `\nLo que dejó el agente: \`${res.wt}\`` : ''}\n\nPara reintentar: sacá el label \`bloqueada\`.`;
   const R = CONF.repo_cola;
   intentar(() => gh('issue', 'comment', n, '-R', R, '--body', cuerpo));
@@ -331,7 +388,7 @@ async function main() {
   const argv = process.argv.slice(2);
   const soloCarril = argv.includes('--carril') ? argv[argv.indexOf('--carril') + 1] : null;
   const listar = () => JSON.parse(gh('issue', 'list', '-R', CONF.repo_cola, '-l', 'orquesta', '--state', 'open',
-    '--limit', '200', '--json', 'number,title,body,labels,author,createdAt'));
+    '--limit', '200', '--json', 'number,title,body,labels,author,createdAt,comments'));
   if (argv.includes('--dry')) {
     for (const t of elegirTareas(listar(), CONF, soloCarril)) {
       console.log(`${t.carril}\t#${t.issue.number}\t${JSON.stringify(rutear(t.carril, leerPedido(t.issue.body)))}\t${t.issue.title}`);

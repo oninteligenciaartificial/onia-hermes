@@ -5,6 +5,7 @@
   ],
   "paralelo": 3,
   "minutos_max": 40,
+  "revisor": "claude-sonnet-5-5",
   "carpeta_trabajo": "E:/onia-orquesta",
   "carriles": {
     "plataforma": {

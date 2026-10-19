@@ -15,6 +15,7 @@ nivel: normal          # rapido | normal | profundo (elige el modelo)
 check: urls            # opcional: urls | cmd <comando que debe salir 0>
 motor: codex           # opcional: cambia el motor del carril
 salida: ruta/archivo.md  # opcional: dónde escribe el resultado
+base: codex/mi-rama    # opcional: trabaja sobre esa rama (p. ej. la de un PR) y entrega contra ella
 
 Qué hay que hacer.
 Hecho cuando: cómo se comprueba.
@@ -37,9 +38,12 @@ Hecho cuando: cómo se comprueba.
    `workspace-write`.
 4. Comprueba el "hecho": existe el archivo de salida, tiene contenido, no dice `BLOQUEADO`, y pasa
    el `check` del pedido.
-5. Si pasa: commit, push de la rama `orquesta/<carril>-<n>`, PR y cierra el issue con el resumen.
-   Si no: label `bloqueada` y el motivo en el issue. Para reintentar, sacar `bloqueada`.
-6. Registro de cada corrida: `~/.onia-orquesta/registro.jsonl`.
+5. Revisión con contexto limpio: otro Claude (`revisor` en `carriles.json`), solo con lectura, juzga
+   si cumple el "Hecho cuando" y si inventa algo. El que revisa nunca es el que hizo.
+6. Si pasa: commit, push de la rama `orquesta/<carril>-<n>`, PR y cierra el issue con el resumen y
+   las notas del revisor. Si no: label `bloqueada` y el motivo en el issue. Para reintentar, sacar
+   `bloqueada`: el motivo del rechazo vuelve al trabajador en el intento siguiente.
+7. Registro de cada corrida: `~/.onia-orquesta/registro.jsonl`.
 
 Nunca publica, gasta, escribe a terceros, toca producción ni mergea. Los PRs quedan para el gate.
 Las ramas `orquesta/*` no adelantan `main` aunque corra el autosync (`scripts/git-autosync.js`).
