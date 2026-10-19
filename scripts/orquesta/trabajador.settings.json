@@ -18,6 +18,7 @@
       "Read(~/.config/gh/**)",
       "Read(**/.env*)",
       "Read(//c/Users/PC/BovedaPrivada/**)",
+      "Read(//proc/**)",
       "Bash(git push *)",
       "Bash(git remote *)",
       "Bash(git config *)"

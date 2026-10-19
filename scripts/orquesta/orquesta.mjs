@@ -19,10 +19,19 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const AQUI = path.dirname(fileURLToPath(import.meta.url));
-export const CONF = JSON.parse(fs.readFileSync(path.join(AQUI, 'carriles.json'), 'utf8'));
+// El mismo programa corre en la PC y en GitHub Actions: allá los repos viven en ORQUESTA_RAIZ, el trabajo
+// en ORQUESTA_TRABAJO, y no hay carpetas de la PC (dirs_extra).
+export function ajustarAlEntorno(conf, env) {
+  const raiz = env.ORQUESTA_RAIZ;
+  const carriles = Object.fromEntries(Object.entries(conf.carriles).map(([k, c]) => [k,
+    raiz ? { ...c, repo: path.join(raiz, path.posix.basename(c.repo)), dirs_extra: [] } : c]));
+  return { ...conf, carpeta_trabajo: env.ORQUESTA_TRABAJO || conf.carpeta_trabajo, carriles };
+}
+
+export const CONF = ajustarAlEntorno(JSON.parse(fs.readFileSync(path.join(AQUI, 'carriles.json'), 'utf8')), process.env);
 const ESTADO = path.join(os.homedir(), '.onia-orquesta');
 const NIVELES = ['rapido', 'normal', 'profundo'];
-const CAMPOS = /^(nivel|motor|modelo|salida|check|base|ok)\s*:\s*(.+)$/i;
+const CAMPOS = /^(nivel|motor|modelo|salida|check|base|ok|donde)\s*:\s*(.+)$/i;
 
 // ---------- lógica pura (probada en orquesta.test.mjs) ----------
 
@@ -44,6 +53,13 @@ const nombresDe = (issue) => (issue.labels || []).map((l) => l.name || l);
 export function carrilDe(issue) {
   const l = nombresDe(issue).find((n) => n.startsWith('carril:'));
   return l ? l.slice('carril:'.length) : null;
+}
+
+// Dónde corre la tarea: `donde:` del pedido, o el del carril. Lo que pide sesiones o archivos de Sergio
+// Urcullo es «pc» (su regla de credenciales); el resto puede ir a la nube (GitHub Actions con su Max).
+export function dondeDe(issue, conf = CONF) {
+  const pedido = leerPedido(issue.body).donde;
+  return ['pc', 'nube'].includes(pedido) ? pedido : conf.carriles[carrilDe(issue)]?.donde || 'pc';
 }
 
 export function elegirTareas(issues, conf = CONF, soloCarril = null) {
@@ -89,15 +105,16 @@ const MARCA = /^<!-- orquesta(?: vistos:(\d+))? -->\s*/;
 const FIRMAS = /^(✅ Hecho|✅ Aprobada|⛔ No se cerró|👀 Listo para tu OK)/u; // comentarios de antes de la marca
 export const firmar = (vistos, texto) => `<!-- orquesta vistos:${vistos} -->\n${texto}`;
 
-export function leerHilo(issue) {
+export function leerHilo(issue, conf = CONF) {
   const cs = (issue.comments || []).map((x, i) => {
     const crudo = String(x.body || '').trim();
     const m = crudo.match(MARCA);
     const body = crudo.replace(MARCA, '');
     const orq = Boolean(m) || FIRMAS.test(body);
-    return { i, body, orq, vistos: m?.[1] != null ? Number(m[1]) : i + 1, entrega: orq && /^(✅ Hecho|👀 Listo)/u.test(body) };
+    return { i, body, orq, autor: x.author?.login, vistos: m?.[1] != null ? Number(m[1]) : i + 1, entrega: orq && /^(✅ Hecho|👀 Listo)/u.test(body) };
   });
-  const deSergio = cs.filter((c) => !c.orq && c.body);
+  // Las indicaciones mandan sobre el pedido: solo valen las del dueño de la cola, como los issues.
+  const deSergio = cs.filter((c) => !c.orq && c.body && conf.autores.includes(c.autor));
   const ultimaEntrega = cs.findLast((c) => c.entrega);
   const ultimoOrq = cs.findLast((c) => c.orq);
   const ultimoSergio = deSergio.at(-1);
@@ -133,7 +150,16 @@ export function decidirRespuesta(issue) {
 
 // Lo que GitHub corre al abrir el PR (workflows, con secrets) o git al commitear (hooks) no lo cambia un
 // trabajador, y lo que parece un secreto no se sube nunca (el avance se sube sin revisión).
-export const PROTEGIDAS = /^(\.github|\.githooks|\.husky)\/|(^|\/)\.env($|\.)|\.(pem|key|p12|pfx)$|(^|\/)id_(rsa|ed25519)|credentials\.json$/i;
+// Tampoco lo que carga el intento siguiente (que sigue desde la rama subida sin revisión) ni el propio orquestador.
+export const PROTEGIDAS = /^(\.github|\.githooks|\.husky)\/|(^|\/)\.env($|\.)|\.(pem|key|p12|pfx)$|(^|\/)id_(rsa|ed25519)|credentials\.json$|^\.claude\/settings[^/]*\.json$|(^|\/)\.mcp\.json$|^scripts\/orquesta\//i;
+
+// Sin cupo de Max o sin login no es culpa de la tarea: no se comenta ni se cuenta como falla (si no, todo queda `bloqueada`).
+const SIN_MOTOR = /usage limit|limit will reset|hit your (usage )?limit|invalid api key|oauth token (has )?(expired|been revoked)|authentication_error|not logged in|please run \/login/i;
+export function sinMotor(r) {
+  let res = '';
+  try { const d = JSON.parse(r.out); if (d.is_error) res = String(d.result); } catch { /* codex: texto plano */ }
+  return SIN_MOTOR.test(`${r.err}\n${res}`);
+}
 
 export function revisarSalida(texto) {
   if (texto == null) return 'no escribió el archivo de salida';
@@ -229,7 +255,8 @@ function reintentar(fn) {
   }
 }
 // Con timeout: un git o gh colgado congela el event loop y con él los relojes de las otras tareas.
-const git = (cwd, ...a) => execFileSync('git', ['-C', cwd, ...a], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], timeout: 600_000 }).trim();
+// Sin hooks: el orquestador tiene GH_TOKEN, y un hook plantado por un trabajador correría con él (ningún repo usa hooks hoy).
+const git = (cwd, ...a) => execFileSync('git', ['-C', cwd, '-c', `core.hooksPath=${os.devNull}`, ...a], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], timeout: 600_000 }).trim();
 const gh = (...a) => reintentar(() => execFileSync('gh', a, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], timeout: 180_000 }).trim());
 const leerSiExiste = (f) => (fs.existsSync(f) ? fs.readFileSync(f, 'utf8') : null);
 const intentar = (fn) => { try { return fn(); } catch (e) { console.error(`[orquesta] ${String(e.stderr || e.message).trim().slice(0, 200)}`); return null; } };
@@ -251,9 +278,15 @@ function matar(pid) {
   } catch { /* ya terminó */ }
 }
 
-function correr(cmd, args, { cwd, entrada = '', minutos, shell = false }) {
+// El que habla con GitHub es el orquestador: los agentes y los checks corren sin su token (en la nube es
+// GH_TOKEN), así un pedido inyectado desde una web no tiene con qué escribir en el repo.
+const { GH_TOKEN, GITHUB_TOKEN, ...ENV_AGENTE } = process.env;
+// El `check: cmd` corre código que dejó el trabajador, fuera de todo sandbox: ni el token de Max le llega.
+const { CLAUDE_CODE_OAUTH_TOKEN, ...ENV_CHECK } = ENV_AGENTE;
+
+function correr(cmd, args, { cwd, entrada = '', minutos, shell = false, env = ENV_AGENTE }) {
   return new Promise((resolve) => {
-    const p = spawn(cmd, args, { cwd, windowsHide: true, shell });
+    const p = spawn(cmd, args, { cwd, windowsHide: true, shell, env });
     let out = '';
     let err = '';
     p.stdout.on('data', (d) => (out += d));
@@ -275,22 +308,29 @@ function enFila(repo, fn) {
 }
 
 // Si la rama de la tarea ya existe (un intento cortado, o una vuelta con indicaciones), se sigue desde ella.
-function prepararWorktree(c, base, carril, numero) {
+export function prepararWorktree(c, base, carril, numero, conf = CONF) {
   const rama = `orquesta/${carril}-${numero}`;
-  const wt = path.join(CONF.carpeta_trabajo, `${carril}-${numero}`);
+  const wt = path.join(conf.carpeta_trabajo, `${carril}-${numero}`);
   const sigue = reintentar(() => git(c.repo, 'ls-remote', '--heads', 'origin', rama)) !== '';
   reintentar(() => git(c.repo, 'fetch', '--quiet', 'origin', base, ...(sigue ? [rama] : [])));
   if (fs.existsSync(wt)) {
     try { git(c.repo, 'worktree', 'remove', '--force', wt); } catch { fs.rmSync(wt, { recursive: true, force: true }); }
   }
   git(c.repo, 'worktree', 'prune');
-  git(c.repo, 'worktree', 'add', '--quiet', '-B', rama, wt, sigue ? `origin/${rama}` : `origin/${base}`);
+  const desde = sigue ? `origin/${rama}` : `origin/${base}`;
+  if (process.env.ORQUESTA_SIN_MEDIA === '1') {
+    // En la nube cada copia baja solo texto: de 5,5 GB, 4,1 son videos e imágenes de referencias (medido 19-oct).
+    git(c.repo, 'worktree', 'add', '--quiet', '--no-checkout', '-B', rama, wt, desde);
+    git(wt, 'sparse-checkout', 'set', '--no-cone', ...conf.sin_media);
+    git(wt, 'checkout', '--quiet');
+  } else git(c.repo, 'worktree', 'add', '--quiet', '-B', rama, wt, desde);
   return { wt, rama, sigue, inicio: git(wt, 'rev-parse', 'HEAD') };
 }
 
 // Contra el punto donde nació la rama, no contra la punta de la base: lo que otros cambiaron en la base no es de la tarea.
-function cambiosDe(wt, base) {
-  git(wt, 'add', '-A');
+// --sparse: sin él, una captura PNG nueva en un worktree sin media hace salir `git add` con 1 y se pierde la tarea.
+export function cambiosDe(wt, base) {
+  git(wt, 'add', '-A', '--sparse');
   const desde = git(wt, 'merge-base', 'HEAD', `origin/${base}`);
   return git(wt, 'diff', '--cached', '--name-only', '-z', desde).split('\0').filter(Boolean);
 }
@@ -334,7 +374,7 @@ async function verificar(wt, base, inicio, sigue, salida, pedido, r) {
   }
   if (!falla && pedido.check?.startsWith('cmd ')) {
     // ponytail: corre fuera del sandbox el código que dejó el trabajador (tests, scripts de npm); aislarlo si la plataforma lee contenido ajeno.
-    const k = await correr(pedido.check.slice(4), [], { cwd: wt, minutos: 15, shell: true });
+    const k = await correr(pedido.check.slice(4), [], { cwd: wt, minutos: 15, shell: true, env: ENV_CHECK });
     if (k.code !== 0) falla = `el check "${pedido.check.slice(4)}" falló: ${(k.err || k.out).trim().slice(-300)}`;
   }
   return { texto, falla, rutas };
@@ -342,7 +382,7 @@ async function verificar(wt, base, inicio, sigue, salida, pedido, r) {
 
 function entregar(c, base, wt, rama, carril, issue) {
   if (git(wt, 'status', '--porcelain') !== '') {
-    git(wt, 'add', '-A');
+    git(wt, 'add', '-A', '--sparse');
     git(wt, 'commit', '-m', `orquesta(${carril}): ${issue.title}`);
   }
   if (git(wt, 'rev-list', '--count', `origin/${base}..HEAD`) === '0') throw new Error('el agente no dejó cambios para entregar');
@@ -352,7 +392,9 @@ function entregar(c, base, wt, rama, carril, issue) {
     return gh('pr', 'create', '-R', repo, '--base', base, '--head', rama, '--title', `orquesta(${carril}): ${issue.title}`,
       '--body', `Tarea ${CONF.repo_cola}#${issue.number}, hecha por el orquestador (carril ${carril}).`);
   } catch {
-    return gh('pr', 'view', rama, '-R', repo, '--json', 'url', '-q', '.url');
+    // Sin «Allow GitHub Actions to create … pull requests» no hay PR, pero la rama ya está subida: se entrega el enlace igual.
+    return intentar(() => gh('pr', 'view', rama, '-R', repo, '--json', 'url', '-q', '.url'))
+      ?? `https://github.com/${repo}/compare/${base}...${rama}?expand=1`;
   }
 }
 
@@ -363,8 +405,8 @@ async function revisar(wt, issue, pedido, salida, rutas) {
   const args = [...pre, '-p', '--restricted', '--tools', 'Read,Grep,Glob', '--strict-mcp-config', '--model', CONF.revisor,
     '--output-format', 'json', '--max-turns', '20', '--settings', path.join(AQUI, 'trabajador.settings.json')];
   const r = await correr(cmd, args, { cwd: wt, entrada: armarRevision({ issue, pedido, salida, cambios }), minutos: 10 });
-  if (r.code !== 0) return { ok: false, motivo: `no se pudo revisar (código ${r.code}): ${r.err.trim().slice(-200)}` };
-  return { ...leerVeredicto(r.out), usd: costoDe(r, { motor: 'claude' }).usd };
+  if (r.code !== 0) return { ok: false, infra: sinMotor(r), motivo: `no se pudo revisar (código ${r.code}): ${r.err.trim().slice(-200)}` };
+  return { ...leerVeredicto(r.out), infra: sinMotor(r), usd: costoDe(r, { motor: 'claude' }).usd };
 }
 
 function costoDe(r, ruta) {
@@ -385,10 +427,10 @@ async function trabajar(c, carril, issue, pedido, ruta) {
     return { ok: false, falla, salida, texto, wt, ...extra };
   };
   const { texto, falla, rutas } = await verificar(wt, base, inicio, sigue, salida, pedido, r);
-  if (falla) return fallar(falla, costoDe(r, ruta));
+  if (falla) return fallar(falla, { ...costoDe(r, ruta), infra: sinMotor(r) });
   const rev = await revisar(wt, issue, pedido, salida, rutas); // el que revisa nunca es el que hizo
   const extra = { ...costoDe(r, ruta), usd_revision: rev.usd };
-  if (!rev.ok) return fallar(`el revisor lo rechazó: ${rev.motivo}`, extra);
+  if (!rev.ok) return fallar(`el revisor lo rechazó: ${rev.motivo}`, { ...extra, infra: rev.infra });
   const pr = await enFila(c.repo, () => entregar(c, base, wt, rama, carril, issue));
   await enFila(c.repo, () => intentar(() => git(c.repo, 'worktree', 'remove', '--force', wt))); // si Windows lo tiene tomado, queda para la próxima
   const capturas = rutas.filter((x) => /\.png$/i.test(x)).map((x) => `https://github.com/${repoDe(c)}/blob/${rama}/${x}?raw=true`);
@@ -433,6 +475,8 @@ export function cuerpoCierre(res, fallasPrevias, vistos = 0) {
 function cerrarIssue(issue, res) {
   const n = String(issue.number);
   const R = CONF.repo_cola;
+  // Lo hecho ya quedó en la rama: se suelta y la próxima pasada sigue desde ahí, sin gastar el reintento.
+  if (res.infra) return intentar(() => gh('issue', 'edit', n, '-R', R, '--remove-label', 'en-curso'));
   const vistos = (issue.comments || []).length;
   const { bloquea, cuerpo } = cuerpoCierre(res, leerHilo(issue).fallasSeguidas, vistos);
   // Sin el comentario no hay hilo que leer: ni el «ok» de Sergio Urcullo se atendería ni las fallas se contarían.
@@ -476,6 +520,7 @@ function resumen(resultados) {
   const lineas = resultados.map((r) => {
     if (r.ok && r.esperaOk) return `👀 ${r.carril}: ${r.titulo} — espera tu OK: https://github.com/${CONF.repo_cola}/issues/${r.issue}`;
     if (r.ok) return `✅ ${r.carril}: ${r.titulo} (${r.modelo}, ${r.minutos} min) ${r.pr}`;
+    if (r.infra) return `⏸ ${r.carril}: ${r.titulo} — sin cupo o sin login, sigue en la próxima pasada: ${r.falla}`;
     return `⛔ ${r.carril}: ${r.titulo} — ${r.falla}`;
   });
   return `Orquesta ONIA · ${resultados.filter((r) => r.ok).length}/${resultados.length} hechas\n${lineas.join('\n')}`;
@@ -514,8 +559,14 @@ function soltarHuerfanas(issues) {
 async function main() {
   const argv = process.argv.slice(2);
   const soloCarril = argv.includes('--carril') ? argv[argv.indexOf('--carril') + 1] : null;
+  // La PC y la nube corren a la vez con candados distintos: cada lado ve solo sus issues, así ninguno
+  // suelta el `en-curso` ni contesta el «ok» de una tarea que está trabajando el otro.
+  // Sin flag, cada lado es el suyo: una corrida a mano en la PC nunca toma una tarea de la nube.
+  const donde = argv.includes('--donde') ? argv[argv.indexOf('--donde') + 1]
+    : process.env.ORQUESTA_DONDE || (process.env.GITHUB_ACTIONS ? 'nube' : 'pc');
+  if (!['pc', 'nube'].includes(donde)) throw new Error(`--donde inválido: ${donde} (pc | nube)`);
   const listar = () => JSON.parse(gh('issue', 'list', '-R', CONF.repo_cola, '-l', 'orquesta', '--state', 'open',
-    '--limit', '200', '--json', 'number,title,body,labels,author,createdAt,comments'));
+    '--limit', '200', '--json', 'number,title,body,labels,author,createdAt,comments')).filter((it) => dondeDe(it) === donde);
   if (argv.includes('--dry')) {
     for (const t of elegirTareas(listar(), CONF, soloCarril)) {
       console.log(`${t.carril}\t#${t.issue.number}\t${JSON.stringify(rutear(t.carril, leerPedido(t.issue.body)))}\t${t.issue.title}`);
