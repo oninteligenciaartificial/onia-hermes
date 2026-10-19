@@ -49,27 +49,31 @@ GEMINI_API_KEY=... node scripts/gemini-see-video.mjs /ruta/video.mp4
 
 ```bash
 node .claude/skills/ver-videos/scripts/fetch-video.mjs <url> [<url>...] --out DIR
-node .claude/skills/ver-videos/scripts/fetch-video.mjs --login   # 1 sola vez, para IG
+node .claude/skills/ver-videos/scripts/fetch-video.mjs --login   # solo si un post de IG no baja sin sesion (necesita Playwright)
 ```
 
-Imprime `<url>\t<ruta del mp4>` por linea. Varias URLs bajan en paralelo.
+Imprime `<url>\t<ruta del mp4>` por linea. Varias URLs bajan en paralelo. Al lado de cada mp4
+deja `<Extractor>-<id>.info.json` (caption en `description`, `like_count`, `comment_count`,
+`uploader`), **sin cookies**: el script borra el campo `cookies` que yt-dlp mete en cada formato.
+Calidad: `-S res:720,ext:mp4:m4a` (con el viejo `-f "b[height<=720]"` los reels salían 360x640).
 
-Medido 2026-08-09: TikTok 5,4 MB en **3,9 s**; reel de IG 15 s / 1,9 MB (h264+aac, con
-audio) en **1,7 s**. Ambos sin abrir el navegador.
-
-- **TikTok / YouTube:** `yt-dlp` directo, cero cookies, cero navegador.
-- **Instagram desde la NUBE (medido el 4-oct-2026):** un reel PÚBLICO bajó con `yt-dlp` pelado, sin cookies ni
-  sesión (`DeDZx1BopXS`, 12 s, con audio y `--write-info-json`: caption, likes, comentarios y 15 comentarios).
-  Probarlo primero; si falla, recién ahí la sesión de abajo, que solo existe en la PC de Sergio Urcullo.
-- **Instagram:** exige sesion. Usa un **perfil de Chromium propio de Playwright**
-  (`.hermes/ig-session/profile`, gitignoreado) — NO el Chrome del usuario. Las cookies
-  se leen por CDP (`context.cookies()`), asi que el cifrado en disco no estorba.
-  Login manual **una vez** (`--login`, ventana headed); despues headless ~1 s y jar
-  reusado 12 h. `--sleep-requests 2` para no gatillar rate limit de IG.
-- **Instagram desde la NUBE (sesión de Claude sin login), medido el 4-oct-2026:** con un reel público,
-  `yt-dlp --impersonate chrome -o reel.%(ext)s --write-info-json <url>` bajó el video 1080×1920 con audio, el pie y
-  los likes y comentarios, sin cookies. El 1-oct la misma ruta había dado 429. Funciona a veces: se prueba UNA vez
-  y, si da 429, se le pide a la madre que lo mire desde Chrome.
+- **TikTok / YouTube:** `yt-dlp` directo, cero cookies, cero navegador. ⚠ El 19-oct-2026 YouTube le pidió
+  «Sign in to confirm you're not a bot» a yt-dlp desde la PC; para VER un YouTube, Gemini toma la URL directa.
+- **Instagram — los reels PÚBLICOS bajan SIN sesión (medido el 19-oct-2026 en la PC).** `DcE8336Ixby` de
+  @sanmunoz.ia: 720x1280 + audio, 74,6 s, 5,6 MB en **5 s**, sin cookies. Antes el script exigía la sesión con
+  cualquier link de IG, la daba por vieja a las 12 h, intentaba renovarla con Playwright (no instalado) y abortaba
+  con `ERR_MODULE_NOT_FOUND` **sin probar nunca sin cookies**. Orden actual, del más barato al más caro:
+  1. `yt-dlp` sin cookies → 2. `--impersonate chrome` (curl_cffi) → 3. recién ahí la sesión guardada.
+  Si fallan las tres, el error lista el motivo de cada una. El 720p de IG es **VP9** dentro de mp4 (no hay h264 a
+  esa resolución): si un editor lo pide en h264, re-codificar.
+- **La sesión guardada (último recurso):** perfil de Chromium propio de Playwright + `cookies.txt` en
+  `ONIA_IG_SESSION` o, sin esa variable, en `<checkout principal>/.hermes/ig-session` (se resuelve con
+  `git rev-parse --git-common-dir`, así un worktree usa la del checkout principal; `scripts/ig-session.mjs`).
+  NO es el Chrome del usuario: las cookies se leen por CDP, así que el cifrado en disco no estorba. Login manual
+  **una vez** (`--login`, ventana headed, necesita Playwright); jar reusado 12 h; si Playwright no carga, avisa y
+  prueba con el `cookies.txt` viejo. `--sleep-requests 2` para no gatillar rate limit de IG.
+- **Desde la NUBE (medido el 4-oct-2026):** `DeDZx1BopXS` bajó sin cookies y con `--impersonate chrome`
+  (1080x1920). El 1-oct la misma ruta había dado 429: si da 429, se le pide a la madre que lo mire desde Chrome.
 
 **Por que NO usar `--cookies-from-browser` (medido en la maquina de Sergio, 2026-08-09):**
 
@@ -98,6 +102,26 @@ lo hace Sergio en la ventana.
   reCAPTCHA se niega a validar y Sergio queda trabado. El script lanza con
   `ignoreDefaultArgs: ['--enable-automation']` + `--disable-blink-features=AutomationControlled`
   y arranca en la portada (no en `/accounts/login/`).
+
+## Receta — desarmar un reel (probada el 19-oct-2026 con `DcE8336Ixby`, ~1 min en total)
+
+```bash
+V=.claude/skills/ver-videos/scripts; D=<carpeta fuera del repo>; R=$D/Instagram-<id>
+node $V/fetch-video.mjs https://www.instagram.com/reel/<id>/ --out $D        # 1. mp4 720p + .info.json (5 s)
+node -e "const i=require(process.argv[1]);console.log(i.description,i.like_count,i.comment_count)" $R.info.json  # 2. caption PRIMERO
+GEMINI_MODEL=gemini-flash-lite-latest GEMINI_MEDIA_RES=low node $V/gemini-see-video.mjs $R.mp4 > $D/gemini.md  # 3. ver (1 llamada, 20 s)
+ffmpeg -v error -i $R.mp4 -vn -ac 1 -ar 16000 $D/audio.wav && bash $V/transcribe.sh $D/audio.wav > $D/transcript.json  # 4. local (20 s)
+ffmpeg -i $R.mp4 -vf "select='gt(scene,0.25)',showinfo" -f null - 2>&1 | grep -o "pts_time:[0-9.]*"   # 5. cortes (1 s)
+node $V/text-frames.mjs $R.mp4 --out $D/texto --max 8                        # 6. texto en pantalla (10 s)
+```
+
+- **2 antes que 3:** el caption es texto y es gratis; a veces trae el contenido entero.
+- **3:** el lite basta para mensaje y estructura; las cifras chicas se confirman con los cuadros de 6.
+- **5:** los picos a menos de ~0,3 s son la MISMA transición (destello, zoom): se cuentan como un corte. En
+  `DcE8336Ixby` salieron 10 picos = 6 cortes (9,0 · 42,4 · 46,7 · 50,0 · 57,1 · 63,0 s) en 74,6 s.
+- **6:** se leen los cuadros con visión (Read); ahí están los subtítulos, las tablas y el estilo de pantalla.
+- Atajo para sacar un prompt: `bash .claude/skills/sacar-prompt/scripts/preparar.sh <url> --out DIR` hace 1, 4 y
+  fotogramas densos en 29 s.
 
 ## Carruseles de imágenes — `scripts/ig-carousel.mjs` (2026-08-11)
 
@@ -141,10 +165,10 @@ Regla: reportar la cobertura real de cada camino ("audio 100%, 5 de 7 láminas")
 
 ## Instagram por MCP de navegador (ruta VIEJA — solo si falla la de arriba)
 
-**El problema, para no volver a chocar:** IG no reproduce reels sin sesion; el `<video>` usa
-MSE (blob, no descargable); `yt-dlp` necesita cookies y **desde Chrome 127 estan cifradas con
-App-Bound Encryption** -> falla con `Failed to decrypt with DPAPI` aunque le pases un snapshot
-de la base. Capturar fotogramas por canvas da imagen pero **NO audio**.
+**El problema, para no volver a chocar:** para lo que NO baja sin sesión (privados, 429), el
+`<video>` usa MSE (blob, no descargable) y las cookies de Chrome **desde Chrome 127 estan cifradas
+con App-Bound Encryption** -> `--cookies-from-browser` falla con `Failed to decrypt with DPAPI`
+aunque le pases un snapshot de la base. Capturar fotogramas por canvas da imagen pero **NO audio**.
 
 **La ruta que SI funciona** (probada con 2 reels: 70 s / 10,3 MB y 32 s / 4,1 MB):
 
@@ -171,12 +195,12 @@ de la base. Capturar fotogramas por canvas da imagen pero **NO audio**.
 
 ## FALLBACK — frames + transcript (sin key)
 1. **Conseguir el video.**
-   - URL (YouTube/etc.): `yt-dlp -f 18 -o in.mp4 "<url>"` (instalar: `pip install -U yt-dlp`; formato 18 = mp4 360p, liviano y suficiente para leer). Para mejor imagen: `-f "b[height<=720]"`.
+   - URL: `node scripts/fetch-video.mjs "<url>" --out DIR` (arriba). Para solo leer alcanza 360p: `yt-dlp -f 18`.
    - Archivo local o nota de Telegram: usalo directo.
 2. **Extraer audio + fotogramas:** `bash scripts/see-video.sh <video> <workdir>`
    → `audio.mp3` (mono 16k) + `frames/f_XX.jpg` (1 cada N s, N auto según duración para ~40-70 cuadros, 640px) + imprime la lista y el intervalo.
-3. **Transcribir** (elegí camino en la tabla de abajo). Gratis por defecto: Speaches (VPS).
-   `bash scripts/transcribe.sh <audio.mp3>` → JSON `{ segments[], words[] }` con timestamps.
+3. **Transcribir** (elegí camino en la tabla de abajo). Por defecto en la PC: faster-whisper LOCAL.
+   `bash scripts/transcribe.sh <audio>` → JSON `{ ok, model, segments[], words[] }` con timestamps.
    Para solo-texto rápido no hace falta timestamps; para subtítulos/edición SÍ (`verbose_json`).
 4. **Leer fotogramas con visión (tool Read):** abrí una **muestra repartida** (10-15 cuadros
    de principio a fin, NO los 69). Elegí cuadros a intervalos regulares + los que el transcript
@@ -224,11 +248,12 @@ usá `text-frames.mjs` (arriba), que muestrea por densidad y no por reloj.
 ## Transcripción — opciones
 | Camino | Costo | Timestamps | Cuándo |
 | --- | --- | --- | --- |
-| **Speaches (VPS)** default | gratis | segment + word (`verbose_json`) | uso diario; corre en onia-center vía SSH, modelo `Systran/faster-whisper-small` multilingüe (NO el distil = English-only) |
+| **faster-whisper LOCAL** default en la PC (19-oct-2026) | gratis, sin red | segment + word | `transcribe.sh` lo elige solo si `faster_whisper` importa (`scripts/transcribe_local.py`, modelo `small` = el mismo del VPS, `ONIA_LOCAL_STT_MODEL` para `base`/`medium`). Reel de 74,6 s en **20 s**, mismo JSON que Speaches |
+| **Speaches (VPS)** | gratis | segment + word (`verbose_json`) | la nube, o forzado con `ONIA_STT=vps`; vía SSH, modelo `Systran/faster-whisper-small` multilingüe (NO el distil = English-only) |
 | OpenAI Whisper API | ~$0.006/min | verbose_json | si el key local está vigente (hoy suele estar vencido → rotar) |
 | AssemblyAI | pago (needs OK) | word, mejor en silencios | solo con permiso de Sergio ([[gasto-plataformas-validar-primero]]) |
 
-Speaches gratis alcanza para casi todo.
+En la PC el local alcanza para casi todo; Speaches es el camino de la nube.
 ⚠ **Desde una sesión en la nube** (4-oct-2026): `transcribe.sh` va por defecto a `root@187.77.16.63` con su clave, y
 desde la nube eso se cuelga (más de 120 s, JSON vacío). Correrlo con `ONIA_VPS_HOST=onia-vps`, que pasa por el túnel.
 ⚠ **En una nube SIN `ssh` ni `yt-dlp`** (entorno «onia-higgsfield», 5-oct-2026, TikTok de @kevinarce98): `transcribe.sh`

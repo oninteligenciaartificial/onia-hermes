@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# ver-videos — transcribe con timestamps (segment + word) via Speaches (VPS, gratis).
+# ver-videos — transcribe con timestamps (segment + word): faster-whisper local si está, si no Speaches (VPS).
 # FUERZA el modelo multilingüe: el default del contenedor es el distil (English-only) y
 # traduce el español al inglés. Uso: bash transcribe.sh <audio.(mp3|ogg|wav|m4a)>
 # Salida (stdout): JSON {ok, model, duration, n_segments, n_words, segments[], words[]}
@@ -21,6 +21,13 @@ MJS="$(dirname "$0")/verbose-transcribe.mjs"
 FN="$(basename "$AUDIO")"
 
 [ -f "$AUDIO" ] || { echo "{\"ok\":false,\"error\":\"no existe $AUDIO\"}"; exit 0; }
+
+# Por DEFECTO en la PC (19-oct-2026): faster-whisper LOCAL, mismo JSON, sin VPS ni red.
+# Speaches del VPS (abajo) queda para la nube, o forzado con ONIA_STT=vps.
+PY="${ONIA_PYTHON:-python}"
+if [ "${ONIA_STT:-local}" != "vps" ] && "$PY" -c "import importlib.util as u,sys; sys.exit(u.find_spec('faster_whisper') is None)" >/dev/null 2>&1; then
+  exec "$PY" "$(dirname "$0")/transcribe_local.py" "$AUDIO"
+fi
 
 scp -i "$KEY" -o StrictHostKeyChecking=no "$MJS" "$AUDIO" "$H":/tmp/ >/dev/null 2>&1 \
   || { echo '{"ok":false,"error":"scp al VPS falló"}'; exit 0; }
