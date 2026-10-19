@@ -22,7 +22,7 @@ const AQUI = path.dirname(fileURLToPath(import.meta.url));
 export const CONF = JSON.parse(fs.readFileSync(path.join(AQUI, 'carriles.json'), 'utf8'));
 const ESTADO = path.join(os.homedir(), '.onia-orquesta');
 const NIVELES = ['rapido', 'normal', 'profundo'];
-const CAMPOS = /^(nivel|motor|modelo|salida|check|base)\s*:\s*(.+)$/i;
+const CAMPOS = /^(nivel|motor|modelo|salida|check|base|ok)\s*:\s*(.+)$/i;
 
 // ---------- lógica pura (probada en orquesta.test.mjs) ----------
 
@@ -47,7 +47,7 @@ export function carrilDe(issue) {
 }
 
 export function elegirTareas(issues, conf = CONF, soloCarril = null) {
-  const frenadas = new Set(['en-curso', 'bloqueada']);
+  const frenadas = new Set(['en-curso', 'bloqueada', 'espera-ok']);
   const porCarril = {};
   const orden = [...issues].sort((a, b) => a.createdAt.localeCompare(b.createdAt));
   for (const it of orden) {
@@ -82,10 +82,40 @@ export function baseDe(c, pedido) {
   return b;
 }
 
-// El motivo del último rechazo vuelve al trabajador: reintentar sin él repite el error.
-export function motivoAnterior(issue) {
-  const c = [...(issue.comments || [])].reverse().find((x) => /^⛔ No se cerró/.test(x.body || ''));
-  return c?.body.match(/^Motivo: (.+)$/m)?.[1] ?? null;
+// El hilo del issue es la conversación con Sergio Urcullo: el orquestador firma sus comentarios con
+// ✅ ⛔ 👀; todo lo demás lo escribió él (desde el celular) y manda sobre el pedido original.
+const DEL_ORQUESTADOR = /^(✅|⛔|👀)/u;
+
+export function leerHilo(issue) {
+  const cs = (issue.comments || []).map((x) => String(x.body || '').trim());
+  const ultimaEntrega = cs.findLastIndex((b) => /^(✅|👀)/u.test(b));
+  const ultimoOrq = cs.findLastIndex((b) => DEL_ORQUESTADOR.test(b));
+  const ultimoSergio = cs.findLastIndex((b) => b && !DEL_ORQUESTADOR.test(b));
+  const fallas = cs.slice(Math.max(ultimaEntrega, ultimoSergio) + 1).filter((b) => b.startsWith('⛔'));
+  return {
+    indicaciones: cs.slice(ultimaEntrega + 1).filter((b) => b && !DEL_ORQUESTADOR.test(b)),
+    fallasSeguidas: fallas.length, // una indicación nueva de Sergio Urcullo vuelve a cero
+    motivo: fallas.at(-1)?.match(/^Motivo: (.+)$/m)?.[1] ?? null, // reintentar sin el motivo repite el error
+    respuesta: ultimoOrq >= 0 && ultimoSergio > ultimoOrq ? cs[ultimoSergio] : null,
+  };
+}
+
+export const motivoAnterior = (issue) => leerHilo(issue).motivo;
+
+export function esOk(texto) {
+  const t = texto.trim().toLowerCase();
+  return /^(ok|okey|okay|sí|si|dale|listo|aprobad[oa]|me gust|perfecto|bien|👍)/u.test(t)
+    && !/(pero|cambi|falta|mejor|arregl|correg|\bno\b)/.test(t);
+}
+
+// Qué hacer con un issue frenado al que Sergio Urcullo le contestó: «ok» lo cierra, cualquier otra cosa lo hace seguir.
+export function decidirRespuesta(issue) {
+  const labels = nombresDe(issue);
+  const { respuesta } = leerHilo(issue);
+  if (!respuesta) return null;
+  if (labels.includes('espera-ok')) return esOk(respuesta) ? 'cerrar' : 'seguir';
+  if (labels.includes('bloqueada')) return 'seguir';
+  return null;
 }
 
 // Lo que GitHub corre al abrir el PR (workflows, con secrets) o git al commitear (hooks) no lo cambia un trabajador.
@@ -113,13 +143,15 @@ export function armarCuartito(c) {
   return `\nTU CUARTITO (el método de tu área). Leé ${primero} antes de empezar; de estos, solo los que apliquen a la tarea:\n${resto.map((p) => `- ${p}`).join('\n')}${aprende}\n`;
 }
 
-export function armarPrompt({ carril, issue, pedido, salida, rama }, conf = CONF) {
+export function armarPrompt({ carril, issue, pedido, salida, rama, sigue = false }, conf = CONF) {
+  const hilo = leerHilo(issue);
+  const dir = path.posix.dirname(salida);
   return `Sos el trabajador del carril "${carril}" de ONIA (${conf.carriles[carril].que}).
 Trabajás SOLO en esta carpeta: es un worktree aislado en la rama ${rama}.
 ${armarCuartito(conf.carriles[carril])}
 TAREA #${issue.number}: ${issue.title}
 ${pedido.pedido}
-${motivoAnterior(issue) ? `\nINTENTO ANTERIOR RECHAZADO: ${motivoAnterior(issue)}\nCorregí eso primero.\n` : ''}
+${sigue ? '\nYA HAY TRABAJO HECHO en esta rama (intentos o vueltas anteriores): seguí desde ahí, no empieces de cero.\n' : ''}${hilo.indicaciones.length ? `\nINDICACIONES DE SERGIO URCULLO (mandan sobre el pedido; la última es la más nueva):\n${hilo.indicaciones.map((x) => `- ${x}`).join('\n')}\n` : ''}${hilo.motivo ? `\nINTENTO ANTERIOR RECHAZADO: ${hilo.motivo}\nCorregí eso primero.\n` : ''}${pedido.ok === 'sergio' ? `\nSergio Urcullo mira esto desde el celular antes de seguir. Si tiene algo visual, guardá capturas PNG a 390 y 1440 de ancho en ${dir}/${issue.number}-390.png y ${dir}/${issue.number}-1440.png.\n` : ''}
 ENTREGA OBLIGATORIA: escribí el resultado completo en ${salida} (creá las carpetas que falten).
 Lo lee Sergio Urcullo: arrancá con 3 líneas (qué hiciste · qué encontraste · qué sigue) y después el detalle.
 Si no podés terminar, escribí igual ${salida} empezando con "BLOQUEADO: <motivo concreto>" y lo que sí hiciste.
@@ -132,7 +164,7 @@ export function armarRevision({ issue, pedido, salida, cambios }) {
 
 TAREA #${issue.number}: ${issue.title}
 ${pedido.pedido}
-
+${leerHilo(issue).indicaciones.length ? `\nINDICACIONES DE SERGIO URCULLO (deben estar aplicadas):\n${leerHilo(issue).indicaciones.map((x) => `- ${x}`).join('\n')}\n` : ''}
 ENTREGA: ${salida}
 ARCHIVOS CAMBIADOS:
 ${cambios}
@@ -228,17 +260,33 @@ function enFila(repo, fn) {
   return turno;
 }
 
+// Si la rama de la tarea ya existe (un intento cortado, o una vuelta con indicaciones), se sigue desde ella.
 function prepararWorktree(c, base, carril, numero) {
   const rama = `orquesta/${carril}-${numero}`;
   const wt = path.join(CONF.carpeta_trabajo, `${carril}-${numero}`);
-  reintentar(() => git(c.repo, 'fetch', '--quiet', 'origin', base));
+  const sigue = reintentar(() => git(c.repo, 'ls-remote', '--heads', 'origin', rama)) !== '';
+  reintentar(() => git(c.repo, 'fetch', '--quiet', 'origin', base, ...(sigue ? [rama] : [])));
   if (fs.existsSync(wt)) {
     try { git(c.repo, 'worktree', 'remove', '--force', wt); } catch { fs.rmSync(wt, { recursive: true, force: true }); }
   }
   git(c.repo, 'worktree', 'prune');
-  git(c.repo, 'worktree', 'add', '--quiet', '-B', rama, wt, `origin/${base}`);
-  return { wt, rama };
+  git(c.repo, 'worktree', 'add', '--quiet', '-B', rama, wt, sigue ? `origin/${rama}` : `origin/${base}`);
+  return { wt, rama, sigue, inicio: git(wt, 'rev-parse', 'HEAD') };
 }
+
+function cambiosDe(wt, base) {
+  git(wt, 'add', '-A');
+  return git(wt, 'diff', '--cached', '--name-only', '-z', `origin/${base}`).split('\0').filter(Boolean);
+}
+
+// Lo hecho en un intento que no cerró se sube a su rama: el próximo sigue desde ahí en vez de empezar de cero.
+function guardarAvance(base, wt, rama, carril, issue) {
+  if (cambiosDe(wt, base).some((x) => PROTEGIDAS.test(x))) return;
+  if (git(wt, 'status', '--porcelain') !== '') git(wt, 'commit', '-m', `orquesta(${carril}): avance de #${issue.number}`);
+  if (git(wt, 'rev-list', '--count', `origin/${base}..HEAD`) !== '0') reintentar(() => git(wt, 'push', '--force', '-u', 'origin', rama));
+}
+
+const repoDe = (c) => git(c.repo, 'remote', 'get-url', 'origin').replace(/^https:\/\/github\.com\/|\.git$/g, '');
 
 async function urlsRotas(urls) {
   const rotas = [];
@@ -253,15 +301,14 @@ async function urlsRotas(urls) {
   return rotas;
 }
 
-async function verificar(wt, base, salida, pedido, r) {
+async function verificar(wt, base, inicio, salida, pedido, r) {
   const texto = leerSiExiste(path.join(wt, salida));
   if (r.code !== 0) return { texto, falla: `el agente no terminó bien (código ${r.code}): ${r.err.trim().slice(-300)}` };
   const tocada = git(wt, 'status', '--porcelain', '--', salida) !== ''
-    || git(wt, 'diff', '--name-only', `origin/${base}...HEAD`, '--', salida) !== '';
-  if (texto != null && !tocada) return { texto, falla: 'la salida ya existía y el agente no la cambió' };
+    || git(wt, 'diff', '--name-only', `${inicio}..HEAD`, '--', salida) !== '';
+  if (texto != null && !tocada) return { texto, falla: 'la salida ya existía y el agente no la cambió en esta vuelta' };
   let falla = revisarSalida(texto);
-  git(wt, 'add', '-A');
-  const rutas = git(wt, 'diff', '--cached', '--name-only', '-z', `origin/${base}`).split('\0').filter(Boolean);
+  const rutas = cambiosDe(wt, base);
   const prohibidas = rutas.filter((x) => PROTEGIDAS.test(x));
   if (!falla && prohibidas.length) falla = `tocó archivos que solo cambia una persona: ${prohibidas.join(', ')}`;
   if (!falla && pedido.check === 'urls') {
@@ -283,7 +330,7 @@ function entregar(c, base, wt, rama, carril, issue) {
   }
   if (git(wt, 'rev-list', '--count', `origin/${base}..HEAD`) === '0') throw new Error('el agente no dejó cambios para entregar');
   reintentar(() => git(wt, 'push', '--force', '-u', 'origin', rama)); // `orquesta/*` es solo del orquestador
-  const repo = git(c.repo, 'remote', 'get-url', 'origin').replace(/^https:\/\/github\.com\/|\.git$/g, '');
+  const repo = repoDe(c);
   try {
     return gh('pr', 'create', '-R', repo, '--base', base, '--head', rama, '--title', `orquesta(${carril}): ${issue.title}`,
       '--body', `Tarea ${CONF.repo_cola}#${issue.number}, hecha por el orquestador (carril ${carril}).`);
@@ -311,19 +358,24 @@ function costoDe(r, ruta) {
 async function trabajar(c, carril, issue, pedido, ruta) {
   const salida = rutaSalida(c, pedido, issue.number);
   const base = baseDe(c, pedido);
-  const { wt, rama } = await enFila(c.repo, () => prepararWorktree(c, base, carril, issue.number));
+  const { wt, rama, sigue, inicio } = await enFila(c.repo, () => prepararWorktree(c, base, carril, issue.number));
   const ultimo = path.join(ESTADO, `ultimo-${carril}-${issue.number}.txt`);
   const [cmd, ...pre] = ejecutable(ruta.motor);
-  const prompt = armarPrompt({ carril, issue, pedido, salida, rama });
+  const prompt = armarPrompt({ carril, issue, pedido, salida, rama, sigue });
   const r = await correr(cmd, [...pre, ...argsAgente(ruta, carril, wt, ultimo)], { cwd: wt, entrada: prompt, minutos: CONF.minutos_max });
-  const { texto, falla, rutas } = await verificar(wt, base, salida, pedido, r);
-  if (falla) return { ok: false, falla, salida, texto, wt, ...costoDe(r, ruta) };
+  const fallar = async (falla, extra) => {
+    await enFila(c.repo, () => intentar(() => guardarAvance(base, wt, rama, carril, issue)));
+    return { ok: false, falla, salida, texto, wt, ...extra };
+  };
+  const { texto, falla, rutas } = await verificar(wt, base, inicio, salida, pedido, r);
+  if (falla) return fallar(falla, costoDe(r, ruta));
   const rev = await revisar(wt, issue, pedido, salida, rutas); // el que revisa nunca es el que hizo
   const extra = { ...costoDe(r, ruta), usd_revision: rev.usd };
-  if (!rev.ok) return { ok: false, falla: `el revisor lo rechazó: ${rev.motivo}`, salida, texto, wt, ...extra };
+  if (!rev.ok) return fallar(`el revisor lo rechazó: ${rev.motivo}`, extra);
   const pr = await enFila(c.repo, () => entregar(c, base, wt, rama, carril, issue));
   await enFila(c.repo, () => intentar(() => git(c.repo, 'worktree', 'remove', '--force', wt))); // si Windows lo tiene tomado, queda para la próxima
-  return { ok: true, pr, salida, texto, notas: rev.notas, ...extra };
+  const capturas = rutas.filter((x) => /\.png$/i.test(x)).map((x) => `https://github.com/${repoDe(c)}/blob/${rama}/${x}?raw=true`);
+  return { ok: true, esperaOk: pedido.ok === 'sergio', pr, salida, texto, capturas, notas: rev.notas, ...extra };
 }
 
 async function hacerTarea({ carril, issue }) {
@@ -339,24 +391,58 @@ async function hacerTarea({ carril, issue }) {
     res = { ok: false, falla: String(e.stderr || e.message || e).trim().slice(0, 400) };
   }
   res = { ...res, carril, issue: issue.number, titulo: issue.title, ...ruta, minutos: Math.round((Date.now() - inicio) / 60_000) };
-  cerrarIssue(String(issue.number), res);
+  cerrarIssue(issue, res);
   intentar(() => fs.appendFileSync(path.join(ESTADO, 'registro.jsonl'), JSON.stringify({ ...res, texto: undefined, fecha: new Date().toISOString() }) + '\n'));
   return res;
 }
 
-function cerrarIssue(n, res) {
+// Primera falla: se reintenta sola en la próxima pasada, desde donde quedó. Segunda seguida: se frena y se avisa.
+export function cuerpoCierre(res, fallasPrevias) {
   const cabeza = (res.texto || '').split('\n').slice(0, 12).join('\n');
   const datos = `${res.motor} · ${res.modelo} · ${res.minutos} min${res.usd ? ` · US$ ${res.usd.toFixed(2)} equiv.` : ''}`;
-  const cuerpo = res.ok
-    ? `✅ Hecho y revisado (${datos})\n\nEntrega: ${res.pr}\nArchivo: \`${res.salida}\`\n\n${cabeza}${res.notas ? `\n\nRevisión (${CONF.revisor}):\n${res.notas}` : ''}`
-    : `⛔ No se cerró (${datos})\n\nMotivo: ${res.falla}${res.wt ? `\nLo que dejó el agente: \`${res.wt}\`` : ''}\n\nPara reintentar: sacá el label \`bloqueada\`.`;
+  const revision = res.notas ? `\n\nRevisión (${CONF.revisor}):\n${res.notas}` : '';
+  if (res.ok && res.esperaOk) {
+    const fotos = (res.capturas || []).map((u) => `![captura](${u})`).join('\n');
+    return { bloquea: false, cuerpo: `👀 Listo para tu OK (${datos})\n\n${fotos ? `${fotos}\n\n` : ''}Entrega: ${res.pr}\nArchivo: \`${res.salida}\`\n\n${cabeza}${revision}\n\n**Respondé acá:** «ok» la cierra; si querés cambios, escribilos y sigue desde donde quedó.` };
+  }
+  if (res.ok) return { bloquea: false, cuerpo: `✅ Hecho y revisado (${datos})\n\nEntrega: ${res.pr}\nArchivo: \`${res.salida}\`\n\n${cabeza}${revision}` };
+  const bloquea = fallasPrevias >= 1;
+  const sigue = bloquea
+    ? 'Dos intentos seguidos sin cerrar: la frené. Para seguir, escribí acá qué cambiar (o sacá `bloqueada`).'
+    : 'Lo reintento solo en la próxima pasada, desde donde quedó y con este motivo.';
+  return { bloquea, cuerpo: `⛔ No se cerró (${datos})\n\nMotivo: ${res.falla}\n\n${sigue}` };
+}
+
+function cerrarIssue(issue, res) {
+  const n = String(issue.number);
   const R = CONF.repo_cola;
+  const { bloquea, cuerpo } = cuerpoCierre(res, leerHilo(issue).fallasSeguidas);
   intentar(() => gh('issue', 'comment', n, '-R', R, '--body', cuerpo));
   // Un solo cambio de labels: si la red cae en el medio, el issue no queda suelto para que la próxima pasada lo rehaga.
-  if (res.ok) {
+  if (res.ok && res.esperaOk) intentar(() => gh('issue', 'edit', n, '-R', R, '--add-label', 'espera-ok', '--remove-label', 'en-curso'));
+  else if (res.ok) {
     intentar(() => gh('issue', 'close', n, '-R', R));
     intentar(() => gh('issue', 'edit', n, '-R', R, '--remove-label', 'en-curso'));
-  } else intentar(() => gh('issue', 'edit', n, '-R', R, '--add-label', 'bloqueada', '--remove-label', 'en-curso'));
+  } else if (bloquea) intentar(() => gh('issue', 'edit', n, '-R', R, '--add-label', 'bloqueada', '--remove-label', 'en-curso'));
+  else intentar(() => gh('issue', 'edit', n, '-R', R, '--remove-label', 'en-curso'));
+}
+
+// Lo que Sergio Urcullo contestó desde la última pasada: «ok» cierra, una indicación destraba.
+function atenderRespuestas(issues) {
+  const R = CONF.repo_cola;
+  return issues.filter((it) => {
+    const d = decidirRespuesta(it);
+    if (!d) return true;
+    const n = String(it.number);
+    if (d === 'cerrar') {
+      intentar(() => gh('issue', 'close', n, '-R', R, '--comment', '✅ Aprobada por Sergio Urcullo.'));
+      intentar(() => gh('issue', 'edit', n, '-R', R, '--remove-label', 'espera-ok'));
+      return false;
+    }
+    intentar(() => gh('issue', 'edit', n, '-R', R, '--remove-label', 'espera-ok', '--remove-label', 'bloqueada'));
+    it.labels = (it.labels || []).filter((l) => !['espera-ok', 'bloqueada'].includes(l.name || l));
+    return true;
+  });
 }
 
 async function enParalelo(items, n, fn) {
@@ -369,9 +455,11 @@ async function enParalelo(items, n, fn) {
 }
 
 function resumen(resultados) {
-  const lineas = resultados.map((r) => (r.ok
-    ? `✅ ${r.carril}: ${r.titulo} (${r.modelo}, ${r.minutos} min) ${r.pr}`
-    : `⛔ ${r.carril}: ${r.titulo} — ${r.falla}`));
+  const lineas = resultados.map((r) => {
+    if (r.ok && r.esperaOk) return `👀 ${r.carril}: ${r.titulo} — espera tu OK: https://github.com/${CONF.repo_cola}/issues/${r.issue}`;
+    if (r.ok) return `✅ ${r.carril}: ${r.titulo} (${r.modelo}, ${r.minutos} min) ${r.pr}`;
+    return `⛔ ${r.carril}: ${r.titulo} — ${r.falla}`;
+  });
   return `Orquesta ONIA · ${resultados.filter((r) => r.ok).length}/${resultados.length} hechas\n${lineas.join('\n')}`;
 }
 
@@ -421,7 +509,7 @@ async function main() {
   const soltar = () => fs.rmSync(candado, { force: true });
   process.once('SIGINT', () => { soltar(); process.exit(130); });
   try {
-    const issues = listar();
+    const issues = atenderRespuestas(listar());
     soltarHuerfanas(issues);
     const tareas = elegirTareas(issues, CONF, soloCarril);
     if (!tareas.length) return console.log('Orquesta ONIA: no hay tareas pendientes.');

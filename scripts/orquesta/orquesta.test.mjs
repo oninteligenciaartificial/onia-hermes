@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {
   CONF, leerPedido, elegirTareas, rutear, rutaSalida, revisarSalida, urlsDe, argsAgente,
   baseDe, motivoAnterior, armarPrompt, leerVeredicto, PROTEGIDAS, armarCuartito,
+  leerHilo, esOk, decidirRespuesta, cuerpoCierre,
 } from './orquesta.mjs';
 
 const issue = (number, carril, extra = {}) => ({
@@ -108,4 +109,50 @@ test('cada carril tiene su cuartito y el prompt lo nombra', () => {
   assert.match(p, /agregalo con la fecha a \.claude\/skills\/editor-videos\/SKILL\.md/);
   assert.doesNotMatch(armarCuartito(CONF.carriles.comunidad), /agregalo/);
   assert.equal(armarCuartito({}), '');
+});
+
+const hilo = (...bodies) => bodies.map((body) => ({ body }));
+
+test('leerHilo separa lo de Sergio Urcullo de lo del orquestador', () => {
+  const h = leerHilo(issue(1, 'marca', { comments: hilo('⛔ No se cerró\n\nMotivo: a', 'cambiá el color', '⛔ No se cerró\n\nMotivo: b') }));
+  assert.deepEqual(h.indicaciones, ['cambiá el color']);
+  assert.equal(h.fallasSeguidas, 1); // la indicación reinicia la cuenta
+  assert.equal(h.motivo, 'b');
+  assert.equal(h.respuesta, null); // lo último es del orquestador
+  const tras = leerHilo(issue(1, 'marca', { comments: hilo('vieja', '👀 Listo para tu OK', 'ok') }));
+  assert.deepEqual(tras.indicaciones, ['ok']);
+  assert.equal(tras.respuesta, 'ok');
+});
+
+test('esOk: aprobar solo sin pedido de cambios', () => {
+  for (const t of ['ok', 'Sí, me gustó, continúa', 'dale 👍', 'listo']) assert.ok(esOk(t), t);
+  for (const t of ['ok pero cambiá el título', 'no me gustó', 'cambiá el fondo', 'falta el logo']) assert.ok(!esOk(t), t);
+});
+
+test('decidirRespuesta: ok cierra, otra cosa sigue, sin respuesta nada', () => {
+  const espera = (txt) => issue(1, 'marca', { labels: [{ name: 'orquesta' }, { name: 'carril:marca' }, { name: 'espera-ok' }], comments: hilo('👀 Listo para tu OK', ...(txt ? [txt] : [])) });
+  assert.equal(decidirRespuesta(espera('dale, me gustó')), 'cerrar');
+  assert.equal(decidirRespuesta(espera('hacé el título más corto')), 'seguir');
+  assert.equal(decidirRespuesta(espera(null)), null);
+  const frenada = issue(2, 'marca', { labels: [{ name: 'bloqueada' }], comments: hilo('⛔ No se cerró\n\nMotivo: x', 'usá la foto 3') });
+  assert.equal(decidirRespuesta(frenada), 'seguir');
+  assert.equal(decidirRespuesta(issue(3, 'marca', { comments: hilo('⛔ x', 'hola') })), null); // sin label frenado no hay nada que destrabar
+});
+
+test('cuerpoCierre: una falla reintenta, dos frenan; espera-ok muestra capturas', () => {
+  const base = { motor: 'claude', modelo: 'm', minutos: 3 };
+  assert.equal(cuerpoCierre({ ...base, ok: false, falla: 'x' }, 0).bloquea, false);
+  assert.equal(cuerpoCierre({ ...base, ok: false, falla: 'x' }, 1).bloquea, true);
+  const ok = cuerpoCierre({ ...base, ok: true, esperaOk: true, pr: 'P', salida: 's', capturas: ['https://g/x.png?raw=true'] }, 0);
+  assert.match(ok.cuerpo, /^👀 Listo para tu OK/);
+  assert.match(ok.cuerpo, /!\[captura\]\(https:\/\/g\/x\.png\?raw=true\)/);
+});
+
+test('espera-ok frena la tarea y el prompt lleva indicaciones y continuidad', () => {
+  const it = issue(4, 'marca', { labels: [{ name: 'orquesta' }, { name: 'carril:marca' }, { name: 'espera-ok' }] });
+  assert.deepEqual(elegirTareas([it]), []);
+  const p = armarPrompt({ carril: 'marca', issue: issue(5, 'marca', { comments: hilo('👀 Listo', 'más corto') }), pedido: { pedido: 'X', ok: 'sergio' }, salida: 'a/b/5.md', rama: 'r', sigue: true });
+  assert.match(p, /YA HAY TRABAJO HECHO/);
+  assert.match(p, /INDICACIONES DE SERGIO URCULLO[^]*- más corto/);
+  assert.match(p, /a\/b\/5-390\.png/);
 });
