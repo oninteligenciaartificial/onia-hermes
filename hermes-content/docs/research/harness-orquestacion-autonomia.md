@@ -136,9 +136,63 @@ Hallazgos de la propia prueba, ya corregidos en `scripts/orquesta/`:
 - Una sesión en modo auto no puede lanzar trabajadores autónomos (`Create Unsafe Agents`), ni con el OK de una
   corrida para la siguiente: la pasada tiene que correrla la tarea programada o Sergio Urcullo.
 
+## v2 (19-oct): Hermes piensa, la PC trabaja
+
+Sergio Urcullo, 19-oct: quiere a Hermes Agent como orquestador (planifica, delega, investiga siempre,
+modelo chico/mediano/grande según la tarea, ciclos con plan → hacer → verificar → ajustar) y un
+«cuartito» de skills por área. Se puede, con este reparto:
+
+| Pieza | Hace | Dónde |
+|---|---|---|
+| Hermes | Habla con Sergio Urcullo, planifica, investiga en la web con trabajadores baratos (`delegation.model`), crea issues `orquesta` + `carril:x` + `origen:hermes` con «Hecho cuando» y `check:`, y cada 3 h lee resultados y re-encola o cierra | VPS, 24/7 |
+| Cola | GitHub Issues: una sola fuente, visible desde el celular | GitHub |
+| Despachador | `scripts/orquesta/orquesta.mjs`: toma la cola, corre `claude -p` / `codex exec` con el cuartito del área, revisor de contexto limpio, PR | PC, con la tarea programada |
+| Trabajadores | Claude Code y Codex con el login de Sergio Urcullo, sus skills, Chrome y videos | PC |
+
+Por qué la ejecución no va en Hermes (medido el 19-oct, docs v0.22.2):
+- Kanban de Hermes: «single-host by design»; Claude Code / Codex como trabajadores «not yet a paved
+  path» (`website/docs/user-guide/features/kanban.md`, `kanban-worker-lanes.md`).
+- `delegate_task`: un solo modelo para todos los hijos y sus resultados no sobreviven un reinicio.
+- Anthropic prohíbe que un tercero use el login Pro/Max; lo permitido es el binario oficial de Claude
+  Code con el propio login (code.claude.com/docs/en/legal-and-compliance). Por eso Hermes no ejecuta Claude.
+- La vía segura entre los dos es la cola: la PC sale a buscar trabajo y nadie entra a la PC. SSH del
+  VPS a la PC daría shell desde un servidor de producción (y el túnel `casa.sh` está caído).
+
+Modelo del planificador: no gpt-5-nano (inventó prioridades el 17-sep). Codex por OAuth está
+permitido por OpenAI para apps propias (developers.openai.com/siwc/token-sharing-open-source) y su costo
+marginal es cero dentro del plan; por API, gpt-6.1-sol ronda US$0,60 por corrida (estimación: 200k de
+entrada y 20k de salida).
+
+Guardarraíles: tope diario de issues `origen:hermes`; no se encola nada sin `check:` ejecutable; dos
+rechazos dejan la tarea `bloqueada` y avisan a Sergio Urcullo; Hermes nunca declara algo hecho, lo
+declara el check + el revisor; publicar, gastar, contactar, producción y merge llevan `necesita-ok`.
+
+Estado del VPS el 19-oct (solo lectura): Hermes v0.21.0 (8 versiones atrás); `hermes-gateway.service`
+del sistema con 8.032 reinicios («already running»); tablero `onia` con 47 tareas, 44 sin asignado;
+modelo `gpt-5-mini`; sin credencial `openai-codex`, sin `gh` ni `codex`; dos OAuth de Anthropic en
+el pool, `/root/.claude/.credentials.json` y el MCP `onia_claude_text` (las tres chocan con la política).
+
+### Cuartito por área y lo que conviene sumar
+
+Lo que cada trabajador lee primero está en `scripts/orquesta/carriles.json` (`leer`, `aprende_en`).
+Inventario del 19-oct: 108 skills globales, ECC instalado 4 veces, `~/.claude/rules/zh` cargándose
+junto con `common`. Recomendado de afuera (verificado el 19-oct, sin instalar):
+
+| Área | Sumar | Por qué |
+|---|---|---|
+| Navegador sin pantalla (todas) | `vercel-labs/agent-browser` (44k★, Apache-2.0) | Binario Windows, pocos tokens (`snapshot -i`), perfil persistente, dominios permitidos. Playwright MCP gasta más; browser-use y Stagehand meten otro modelo |
+| Investigación | Exa MCP alojado (gratis limitado, US$10/mes con clave) | `deep-research` ya lo espera y hoy no tiene buscador conectado |
+| Plataforma | `vercel/next.js` skill `next-dev-loop` + `prisma/skills` (`prisma-cli`) | Oficiales, para Next 16 y Prisma 7; Prisma frena solo los comandos destructivos de un agente |
+| Video / referentes | Nada nuevo: `ffmpeg select='gt(scene,…)'`; PySceneDetect solo si falta precisión | Lista de cortes y ritmo |
+| No instalar | BMAD-METHOD (el «BM Army»: duplica el orquestador; copiar solo la idea de la story file), `morluto/rea` (es para binarios, no video), Playwright MCP, browser-use | |
+
+Instagram (19-oct): yt-dlp 2026.08.19 baja reels sin login; lo roto era `ver-videos/scripts/fetch-video.mjs`
+(exigía una cookie vencida y elegía 360p).
+
 ## Pendiente (no se hizo en esta sesión)
 
 - Activar la pasada automática cada 3 h (comando en `scripts/orquesta/README.md`) y correr el carril video.
+- Conectar Hermes como planificador (lista ordenada arriba; los pasos del VPS y los logins dependen de Sergio Urcullo).
 
 - VPS: apagar el servicio de sistema duplicado de Hermes, pausar `onia-ordenador-tablero` y sacar
   las credenciales OAuth de Anthropic del pool de Hermes. Es infra con dueño: la madre la tenía
