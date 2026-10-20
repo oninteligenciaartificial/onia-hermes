@@ -715,3 +715,56 @@ aplicar,revertir}.sh` · `scripts/loops/onia-tg.sh` + `onia-tg-aduana.test.mjs` 
 - Una tarea programada no se pisa con un reinicio: el update se lanzó por script que esperó a que `onia-nube-vigia`
   marcara su corrida de las 16:00 en `jobs.json`.
 - `hermes doctor` sale 1 solo por proveedores opcionales sin configurar; no es falla del update.
+
+## 19-oct: sin token de Max en el VPS
+
+> Subagente de la madre, con el OK de Sergio Urcullo del 19-oct («Sí, sacalo»). Horas en UTC. Ningún valor se imprimió.
+
+**Qué había** (todo OAuth de la suscripción, `sk-ant-oat…`; API key de Anthropic: **ninguna**, `ANTHROPIC_API_KEY` vacía en todos lados)
+- Pool de Hermes (`~/.hermes/auth.json`, `anthropic`): `ANTHROPIC_TOKEN` (fuente `env:ANTHROPIC_TOKEN`) y `claude_code` (lee
+  `/root/.claude/.credentials.json`). Hermes no los usaba: el proveedor activo es `openai-codex` y los trabajos van por `openai-api`.
+- `ANTHROPIC_TOKEN=` con valor en `~/.hermes/.env`, sus 5 `.env.bak-*`, `state-snapshots/20260906-141020-pre-update/.env`,
+  `/root/backups/hermes-20260902T190828Z/env`, el zip `~/.hermes/backups/pre-update-2026-09-06-141022.zip` y
+  `respaldo-hermes-20261019/hermes-home.tar.gz`. Además `/root/.claude/.credentials.json` (`claudeAiOauth` + `mcpOAuth`).
+- Lo usaban: el MCP `onia_claude_text` (`/opt/onia/claude-cli/2.1.288/claude --execute`), `claude-guardia.sh` (cron `*/10`,
+  `claude -p` para diagnosticar errores de Sentry) y los ya pausados `onia-loop.sh` y `lucia-{ugc,perfeccion,cierre}.sh`.
+
+**Qué se hizo** (log: `/root/respaldo-token-20261019/cambios.log`)
+- Respaldo sin token en `/root/respaldo-token-20261019/`: `config.yaml.antes`, `crontab.antes`, unidad de usuario.
+- MCP `onia_claude_text`: `enabled: false` (`config.yaml`, línea 513; único cambio del archivo).
+- Gateway de USUARIO parado → `hermes auth remove anthropic 7bc277` (borra la línea de `.env` y suprime `env:ANTHROPIC_TOKEN`) →
+  `claude_code` ya no figuraba al recargar el pool y se suprimió con `hermes_cli.auth.suppress_credential_source` → borrado
+  `/root/.claude/.credentials.json` → gateway arrancado a las 21:35:18. Queda `anthropic: []` y las dos fuentes suprimidas.
+- Copias viejas del `.env` y `/root/backups/…/env`: la línea quedó `ANTHROPIC_TOKEN=` (vacía), el resto intacto y con su fecha.
+- El zip y `hermes-home.tar.gz` se rehicieron con `/root/limpiar-token.py` (texto: vacía la variable; binario: pisa el token con
+  `x` del mismo largo). El tar nuevo se verificó antes de reemplazar al viejo: abre (`pigz -t`), 14.702 miembros como el viejo,
+  0 tokens, zip interno limpio. Sigue sirviendo para el «Cómo se deshace» de la sección anterior, ahora sin Claude.
+- `hermes-agent-code.tar.gz` no se tocó: sus coincidencias son datos de prueba del código (la más larga mide 33 caracteres; uno real, 108).
+- `claude -p` en el VPS ahora responde «Not logged in» en 1 s.
+- Verificado: gateway de usuario con el mismo PID y 0 reinicios hasta las 22:01, Telegram conectado a las 21:35:38, 0
+  ERROR/CRITICAL; `onia-nube-vigia` corrió ok a las 22:00 y `onia-nube-resumen` sigue programado; el de sistema sigue
+  deshabilitado; crontab sin cambios. Búsqueda de tokens reales (`sk-ant-o[ar]t` + 80 caracteres) en `~/.hermes`,
+  `/root/.claude`, los respaldos, `/root/backups`, `/root/bin`, `/etc`, `/opt/onia`, `/root/.cache` y `/root/tmp`: 0.
+
+**No se apagó, a propósito: `claude-guardia.sh`.** Además del diagnóstico levanta 5 contenedores caídos, corre los canarios de
+login/kong/bot y avisa cada error nuevo de Sentry. Sin credencial su paso de Claude falla en 1 s y el script ya cae a «diagnóstico
+automático no disponible». Comentarlo en el crontab apagaba ese monitoreo de producción. Si igual se quiere apagar:
+`crontab -l | sed 's|^\*/10 \* \* \* \* /root/bin/claude-guardia.sh|# apagado 19-oct: sin token de Max en el VPS — &|' | crontab -`.
+**Pendiente en el repo** (el sincronizador pisa `/root/bin` cada hora): en `hermes-content/deploy/vps-ops/claude-guardia.sh`, sacar el
+paso de Claude y cambiar el texto «revisar credencial de Claude en el VPS», que invita a volver a ponerla.
+
+**Queda, sin tocar por la regla del encargo:** el contenedor `onia_selfhosted-litellm-1` tiene `ANTHROPIC_TOKEN` en su entorno
+porque su compose carga `env_file: /root/.hermes/.env` al CREARSE (también está en el `config.v2.json` de Docker). LiteLLM no tiene
+ningún modelo de Anthropic y no lo nombró en 72 h. Se va al recrearlo: `cd /opt/onia-selfhosted && docker compose up -d
+--force-recreate litellm` (Hermes sin modelo ~30 s). Pide el OK del dueño del VPS.
+
+**Cómo se vuelve a encender, si Sergio Urcullo lo pide**
+- **Con API key** (se factura por uso): `hermes auth add anthropic --type api-key` (pide la key sin mostrarla y borra las
+  supresiones). Para el guardián y el MCP: `ANTHROPIC_API_KEY` en el entorno de `claude` (hoy los scripts la `unset`ean: cambiarlo
+  en el repo) y `enabled: true` en `config.yaml` + `hermes gateway restart`.
+- **Con Codex:** Hermes ya planifica con `openai-codex`. El diagnóstico del guardián y `onia_claude_text` necesitarían un
+  adaptador a `codex exec`, que no existe.
+- **Nunca** volver a copiar `.credentials.json` de la PC ni pegar un `claude setup-token` de la cuenta Max. ⚠️ La memoria
+  `claude-guardia-vps.md` todavía dice «si expira: recopiar»: está vieja.
+- **En la cuenta:** claude.ai → Settings → Claude Code lista los tokens; el tacho de basura borra uno y cierra esa sesión de Claude
+  Code (support.claude.com, artículo 10310342). Borrado el archivo, el token sigue vivo del lado de Anthropic hasta que se borra ahí.
