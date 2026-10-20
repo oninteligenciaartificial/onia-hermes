@@ -122,7 +122,7 @@ Flujo de tres toques: perfil → botón de WhatsApp → QR. Plantillas A-D en `O
 
 | Pieza | Ruta | Estado 19-oct |
 |---|---|---|
-| Página | `hermes-content/sitio-sergiourcullo/auditoria/index.html` | Versión «Auditá» del 17-oct, `noindex`: hay que rehacerla con el enfoque nuevo |
+| Página | `hermes-content/sitio-sergiourcullo/taller/index.html` (nueva, ruta `/taller`) | Borrador del 20-oct con el enfoque nuevo, botón a su WhatsApp, `noindex`; falta su OK y definir el estilo. `/auditoria` queda vieja, sin publicar |
 | Carrusel 1 «la cuenta» | `hermes-content/carousels/briefs/marca-personal/sergio-taller-1-cuenta-20261017.json` | Versión «Auditá»: hay que rehacerlo con el enfoque nuevo |
 | Carrusel 2 «qué sale» | `hermes-content/carousels/briefs/marca-personal/sergio-taller-2-que-sale-20261017.json` | Ídem |
 | 3 guiones de reel | `hermes-content/docs/orquesta/marca/234.md` | Reescritos el 20-oct con el enfoque nuevo; falta grabar |
