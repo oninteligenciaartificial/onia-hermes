@@ -89,7 +89,7 @@ Extiende la autonomia de arriba; fechas y detalle en `CLAUDE.md` §«Trato y cri
 - Ante un tope de gasto se baja el consumo, no se sube el techo; pausar, no borrar.
 - Onia vende software, nunca horas ni presencia de Sergio Urcullo. Son 5 rubros, no solo dental; el orden de empuje
   es dental → importadora → el resto (29-sep, confirmado el 19-oct).
-- A Sergio Urcullo: maximo 3 bloques (Pasó, Necesito, Sigue). No releer lo ya leido.
+- A Sergio Urcullo: prosa normal, corta y al grano, sin rotulos «Pasó / Necesito / Sigue» (20-oct). No releer lo ya leido.
 
 ## Regla de ejecucion cerrada por defecto
 Cuando Sergio entregue una tarea de desarrollo, producto, documentacion,

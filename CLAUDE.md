@@ -128,9 +128,10 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
   El diagnóstico, las hipótesis descartadas y las fuentes van al handoff, no al mensaje.
 - **En el producto y la web:** cada paso o página extra se justifica o se saca. Ante dos
   soluciones, gana la de menos clics para el cliente.
-- **Formato fijo de cada mensaje a Sergio Urcullo (8-oct: «me entregás demasiado texto y me pierdo; probá
-  /caveman»):** máximo 3 bloques: **Pasó** (1-2 líneas) · **Necesito** (sí/no o pasos mínimos, o «nada») · **Sigue**
-  (1 línea). Estilo caveman (frases cortas, sin relleno), tablas solo si ordenan. Método, hipótesis, fuentes y detalle
+- **Cómo se le escribe a Sergio Urcullo (20-oct: «que no hablen de esa manera, con pasó, sigue… que hablen normal
+  pero resumido y al grano»):** prosa normal y corta, sin rótulos «Pasó / Necesito / Sigue» (el formato fijo del
+  8-oct queda superado). Primero lo que importa, después lo que le toca hacer a él, si hay algo. ~5 líneas; tablas
+  solo si tiene que elegir. Método, hipótesis, fuentes y detalle
   van al handoff, la skill o el PR, nunca al mensaje. **El trabajo por detrás NO se achica:** mismo desarrollo,
   verificación y aprendizaje; solo se acorta lo que se le dice. Seguridad y lo irreversible se escriben claros.
 
