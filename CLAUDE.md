@@ -94,6 +94,9 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
 
 - Toda sesión arranca invocando **`onia-router`**: él es el índice y rutea la tarea a su
   carril, su stack de skills, su subagente y sus docs fuente.
+- **La primera respuesta de cada sesión nombra las skills que cargó** (Sergio Urcullo, 20-oct: el taller hizo la
+  página sin las skills de diseño y nadie lo vio). Una línea, con los nombres exactos de la fila de su área en
+  `onia-router`. Quien abre una sesión de un área le pasa esa fila en el prompt, no solo «arrancá con onia-router».
 - **Desde 2026-10-09, Claude y Codex cargan también `equipo-de-agentes` y
   `aprender-de-todo`.** Registrar cada referencia por dimensión; guardar una regla
   no demuestra aprendizaje aplicado: hace falta una tarea que la use.
