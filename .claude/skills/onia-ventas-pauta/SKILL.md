@@ -742,9 +742,8 @@ Sirve para la demo con clínicas (usted) y para el taller de la marca personal (
 - **Cuenta antes que pieza.** Antes de pautar o de vender: cuánto vale un cliente, cuánto se puede pagar por conseguirlo
   y la única métrica que se mira. Si la cuenta no da, no se vende (él rechaza clientes por eso). Taller del 31-oct:
   tope de Bs 30 por inscripto pagado; se corta la pauta si al día 3 lo supera.
-- **Orden de la conversación 1 a 1:** marco («los dos tenemos que ver que sirve») → **meta en número** → **costo de hoy**
-  (horas por semana, plata) → por qué quiere cambiar → recién ahí la solución. El comprador dice con sus palabras por qué
-  lo necesita. Al que «solo quiere información» se le pregunta con qué quería ayuda.
+- **Orden de la conversación 1 a 1:** uno solo, el CLOSER de §10.1, con dos aportes de Gadzhi en el primer paso: marco
+  («los dos tenemos que ver que sirve») y **meta en número** + **costo de hoy** (horas por semana, plata).
 - **Primer mensaje en frío:** algo concreto de la persona + qué gana ella + una pregunta. **Su objetivo es que conteste**,
   no vender: sin precio ni link en el primero.
 - **Valor contra lo que ya paga o pierde** (horas del dueño, un empleado, la tarea que repite), nunca contra el precio
@@ -761,15 +760,16 @@ Sirve para la demo con clínicas (usted) y para el taller de la marca personal (
 ### 10.1 Hormozi: la oferta y el cierre
 
 Ficha: `hermes-content/references/video-intake/2026-10-20-hormozi-oferta-y-cierre.md` (su marco de cierre, 9 hábitos
-medidos en sus equipos, «la oferta es la reina» y la ecuación de valor leída de su libro).
+que él dice haber medido en sus equipos, «la oferta es la reina» y la ecuación de valor leída de su libro).
 
 - **Antes de una pieza o un precio, pasar la oferta por la ecuación:** (resultado × probabilidad de lograrlo) ÷
   (demora × esfuerzo). Lo que más sube el valor es **bajar la demora y el esfuerzo** (que funcione hoy y sin trabajo
-  del comprador); subir promesas es lo fácil y lo que todos copian. En Onia: «el bot contesta desde el primer día»
-  vale más que otra función.
+  del comprador); subir promesas es lo fácil y lo que todos copian. En Onia: «creás la cuenta y la usás el mismo día»
+  (alta en 2 pasos, verificada) vale más que otra función.
 - **La oferta cabe en una frase y trae su razón** (primera edición, cupos de fundador). Sin razón, lo barato no se cree.
-- **Garantía = más probabilidad percibida = se puede cobrar más.** Que no cueste horas de Sergio Urcullo.
-- **CLOSER** en toda conversación 1 a 1: clarificar por qué está → etiquetar el problema con sus palabras → qué probó
+- **Garantía = más probabilidad percibida = se puede cobrar más.** Que no cueste horas de Sergio Urcullo. En el taller
+  rige su decisión del 17-oct (sin devolución salvo que no se dicte): cambiarla la decide Sergio Urcullo.
+- **CLOSER** en toda conversación 1 a 1: clarificar por qué está (marco, meta en número y costo de hoy, §10) → etiquetar el problema con sus palabras → qué probó
   y por qué no fue su culpa → vender el destino en ≤ 3 min con 3 pilares y una historia cotidiana por pilar → «¿cuál
   es tu duda principal?» → reforzar en las primeras 48 h después del pago.
 - **En la conversación solo hay preguntas, reformulaciones e historias.** Escuchar el doble de lo que se habla.
@@ -778,3 +778,19 @@ medidos en sus equipos, «la oferta es la reina» y la ecuación de valor leída
   (pide un nombre). Nunca terminar sin la próxima fecha.
 - **Lo gratis vende si después se vende igual:** la clase o la prueba gratis no cierra sola.
 - **No se copia:** sorteos, promesas de ingreso o peso, presión al pedir referidos, cobrar «y pedir perdón después».
+
+### 10.2 Embudos: lo que se ve de afuera (20-oct)
+
+Ficha: `hermes-content/references/video-intake/2026-10-20-embudos-referentes.md` (tododeia, Erik Taveras, Santiago Muñoz,
+Gadzhi, Hormozi y Alkimia; webs, checkout y Biblioteca de Meta; solo lo público).
+
+- **El anuncio que dura no vende el producto:** regala algo útil (guía, marcos, hoja de ruta), filtra («solo para dueños
+  con…») y vende después. Los de Hormozi que más imprimen llevan 40-80 días así.
+- **Evento con fecha = pauta en ráfaga** hasta el día (Gadzhi: todos sus anuncios desde 13 días antes).
+- **Creador chico = orgánico:** cada reel promete un recurso concreto que se entrega en la comunidad, y en la comunidad se
+  vende el taller o la suscripción (Erik, Santiago y tododeia casi no pautan).
+- **Página de evento:** episodios o bloques con fecha y 3 promesas cada uno, detalles en un bloque (qué, cuándo, dónde),
+  la pregunta «¿por qué es gratis/barato?» contestada de frente, botón repetido.
+- **Escasez y garantía verdaderas:** ediciones numeradas, precio que sube por cantidad real de miembros, garantía atada
+  a un resultado medible. Nunca relojes, «solo por hoy» o anclas de «valor» inventadas (Alkimia, como antiejemplo).
+- **Cobro en Bolivia:** las plataformas extranjeras ofrecen tarjeta y PayPal; el QR local es ventaja.
