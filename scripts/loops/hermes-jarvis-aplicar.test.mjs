@@ -1190,6 +1190,39 @@ test("con el token: skill, su regla (una vez, hasta su ---), la revisión cada 3
   assert.doesNotMatch(v.leer("systemctl"), /restart/, "sin cambios no reinicia");
 });
 
+test("con la skill del calendario suelta en skills/ (como en el VPS), la de la orquesta va a skills/planificar-orquesta/SKILL.md", () => {
+  // Medido el 20-oct: «junto a la del calendario» la dejó en /root/.hermes/planificar-orquesta/SKILL.md, y Hermes
+  // solo carga ~/.hermes/skills/<…>/<nombre>/SKILL.md.
+  const v = vps({ tokenIssues: 0o600 });
+  writeFileSync(join(v.R, ".hermes", "skills", "agenda-calendario.md"), "la del calendario, suelta\n");
+  const r = v.aplicar();
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.ok(existsSync(SKILL_ORQ(v)), r.stdout);
+  assert.equal(existsSync(join(v.R, ".hermes", "planificar-orquesta")), false, "nada fuera de skills/");
+});
+
+test("la copia que un aplicar anterior dejó fuera de skills/ se borra, y revertir quita la del lugar nuevo", () => {
+  const v = vps({ tokenIssues: 0o600 });
+  const fuera = join(v.R, ".hermes", "planificar-orquesta", "SKILL.md");
+  mkdirSync(dirname(fuera), { recursive: true });
+  writeFileSync(fuera, "la de afuera\n");
+  // El respaldo del aplicar del 20-oct, sin revertir: el nuevo hereda sus listas.
+  const previo = join(v.R, "backups", "hermes-jarvis-20261020-210014");
+  mkdirSync(previo, { recursive: true });
+  writeFileSync(join(previo, "aplicado"), "");
+  writeFileSync(join(previo, "skill-orquesta-destino"), fuera + "\n");
+  writeFileSync(join(previo, "skill-orquesta-no-existia"), "");
+  spawnSync("/bin/sleep", ["1.1"]); // el respaldo nuevo, más nuevo que el previo
+  const r = v.aplicar();
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(r.stdout, /saqué la copia que había quedado fuera de la carpeta de skills/);
+  assert.equal(existsSync(join(v.R, ".hermes", "planificar-orquesta")), false);
+  assert.ok(existsSync(SKILL_ORQ(v)));
+  const rev = v.revertir();
+  assert.equal(rev.status, 0, rev.stdout + rev.stderr);
+  assert.equal(existsSync(SKILL_ORQ(v)), false, "revertir quita la del lugar nuevo");
+});
+
 test("revertir pausa la revisión (no la borra), quita la skill y su regla; el próximo aplicar la reanuda", () => {
   const v = vps({ tokenIssues: 0o600 });
   assert.equal(v.aplicar().status, 0);

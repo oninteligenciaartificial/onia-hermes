@@ -797,10 +797,10 @@ if [ -s "$PEDIDOS_ENV" ] && [ -x "$BIN/onia-pedido-claude.sh" ] && [ "${RC:-1}" 
   if ! printf '%s' "$NUEVA" | grep -q 'onia-pedido-claude.sh'; then
     falla "no encontré la skill pedir-a-claude en origin/main del VPS"
   else
-    # Junto a la del calendario: Hermes agrupa sus skills por carpeta y ahí ya sabe buscar.
-    D_AGENDA=$(cat "$BK/skill-destino" 2>/dev/null || echo /root/.hermes/skills/agenda-calendario/SKILL.md)
-    DEST=$(find /root/.hermes/skills -maxdepth 4 \( -path '*/pedir-a-claude/SKILL.md' -o -name 'pedir-a-claude.md' \) 2>/dev/null | head -1)
-    [ -n "$DEST" ] || DEST="$(dirname "$(dirname "$D_AGENDA")")/pedir-a-claude/SKILL.md"
+    # Hermes solo carga ~/.hermes/skills/<…>/<nombre>/SKILL.md (su documentación, features/skills.md).
+    # «Junto a la del calendario» la dejaba FUERA de skills/: en el VPS esa es un .md suelto (20-oct, 5e).
+    DEST=$(find /root/.hermes/skills -mindepth 2 -maxdepth 4 -path '*/pedir-a-claude/SKILL.md' 2>/dev/null | head -1)
+    [ -n "$DEST" ] || DEST=/root/.hermes/skills/pedir-a-claude/SKILL.md
     [ -f "$BK/skill-pedidos-destino" ] || echo "$DEST" > "$BK/skill-pedidos-destino"
     if [ ! -f "$BK/skill-pedidos-antes.md" ] && [ ! -f "$BK/skill-pedidos-no-existia" ]; then
       if [ -f "$DEST" ]; then cp -a "$DEST" "$BK/skill-pedidos-antes.md"; else touch "$BK/skill-pedidos-no-existia"; fi
@@ -846,10 +846,19 @@ else
   if ! printf '%s' "$NUEVA" | grep -q 'onia-orquesta-hermes.sh'; then
     falla "no encontré la skill planificar-orquesta en origin/main del VPS"
   else
-    # Junto a la del calendario, como pedir-a-claude.
-    D_AGENDA=$(cat "$BK/skill-destino" 2>/dev/null || echo /root/.hermes/skills/agenda-calendario/SKILL.md)
-    DEST=$(find /root/.hermes/skills -maxdepth 4 \( -path '*/planificar-orquesta/SKILL.md' -o -name 'planificar-orquesta.md' \) 2>/dev/null | head -1)
-    [ -n "$DEST" ] || DEST="$(dirname "$(dirname "$D_AGENDA")")/planificar-orquesta/SKILL.md"
+    # Hermes solo carga ~/.hermes/skills/<…>/<nombre>/SKILL.md (su documentación, features/skills.md).
+    # Medido el 20-oct: «junto a la del calendario», que en el VPS es un .md suelto en skills/, la dejó
+    # en /root/.hermes/planificar-orquesta/SKILL.md, fuera de la carpeta, y Hermes no la veía.
+    DEST=$(find /root/.hermes/skills -mindepth 2 -maxdepth 4 -path '*/planificar-orquesta/SKILL.md' 2>/dev/null | head -1)
+    [ -n "$DEST" ] || DEST=/root/.hermes/skills/planificar-orquesta/SKILL.md
+    FUERA=/root/.hermes/planificar-orquesta/SKILL.md
+    if [ "$(cat "$BK/skill-orquesta-destino" 2>/dev/null)" = "$FUERA" ]; then
+      # La marcha atrás heredada apunta a la copia de afuera: se borra y la marcha atrás pasa al lugar nuevo.
+      rm -f "$FUERA"; rmdir "$(dirname "$FUERA")" 2>/dev/null
+      echo "$DEST" > "$BK/skill-orquesta-destino"
+      if [ -f "$DEST" ]; then cp -a "$DEST" "$BK/skill-orquesta-antes.md"; rm -f "$BK/skill-orquesta-no-existia"; fi
+      echo "· saqué la copia que había quedado fuera de la carpeta de skills: $FUERA"
+    fi
     [ -f "$BK/skill-orquesta-destino" ] || echo "$DEST" > "$BK/skill-orquesta-destino"
     if [ ! -f "$BK/skill-orquesta-antes.md" ] && [ ! -f "$BK/skill-orquesta-no-existia" ]; then
       if [ -f "$DEST" ]; then cp -a "$DEST" "$BK/skill-orquesta-antes.md"; else touch "$BK/skill-orquesta-no-existia"; fi
