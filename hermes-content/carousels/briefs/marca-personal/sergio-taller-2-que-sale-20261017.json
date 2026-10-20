@@ -1,0 +1,95 @@
+{
+  "title": "Taller 2/2: qué sale de una lectura de tu negocio (v4)",
+  "caption": "No es un curso: es tu negocio sobre la mesa. 90 minutos en vivo, sábado 31 de octubre, 10:00 (hora de La Paz), por Google Meet. Cupo 50.\n\nSalís con tu lista de tareas repetidas, tu prioridad y tu primer paso.\n\nDesde Bs 50. Se paga por QR del BCP. Inscripciones hasta el jueves 29, 20:00 (hora de La Paz).\n\nLink en mi perfil.",
+  "hashtags": [
+    "#ia",
+    "#bolivia",
+    "#negocios",
+    "#automatizacion"
+  ],
+  "serie": "TALLER 2/2 · QUÉ SALE",
+  "theme": "blanco",
+  "nota": "Pieza del miércoles 21, SOLO si la compuerta (6 condiciones) está abierta. «Desde Bs 50» solo en la lámina 6 y se cambia a mano cuando se agoten los primeros 15 cupos (revisar antes de subirla). v4: lámina 1 con reloj de arena de la galería (objetos/reloj-arena-crudo.jpg, Pexels License, Aziz Hasan AY; arena recoloreada a verde); lámina 2 con s33 recortada a las 3 hojas que entran a la caja. s35 queda libre para la página.",
+  "slides": [
+    {
+      "number": 1,
+      "estilo": "taller",
+      "layout": "ilustrado",
+      "headline": "No es un curso. Es *tu negocio* sobre la mesa.",
+      "body": "90 minutos. Salís con tu primer paso.",
+      "image": "hermes-content/carousels/briefs/assets/sergio-taller-20261017/reloj-arena-verde-v4.jpg",
+      "next": "qué te llevás",
+      "alt_text": "Reloj de arena con arena verde: 90 minutos",
+      "fit": "baked"
+    },
+    {
+      "number": 2,
+      "estilo": "taller",
+      "layout": "ilustrado",
+      "headline": "Te llevás *3 cosas*",
+      "body": "Tu lista de tareas repetidas.\nTu prioridad. Tu primer paso.",
+      "image": "hermes-content/carousels/briefs/assets/sergio-taller-20261017/hojas-3-v4.jpg",
+      "next": "así se ve",
+      "alt_text": "Tres hojas entran a una caja negra: tu lista, tu prioridad, tu primer paso",
+      "fit": "baked"
+    },
+    {
+      "number": 3,
+      "estilo": "taller",
+      "layout": "lista",
+      "xl": true,
+      "headline": "Un ejemplo de *lista*",
+      "body": "Ejemplo inventado, no es un caso real",
+      "items": [
+        {
+          "label": "Cotizaciones",
+          "text": "6 h por semana · Bs 480 al mes"
+        },
+        {
+          "label": "Responder consultas",
+          "text": "8 h por semana · Bs 640 al mes"
+        },
+        {
+          "label": "Pasar datos a planilla",
+          "text": "3 h por semana · Bs 240 al mes"
+        }
+      ],
+      "next": "para quién",
+      "alt_text": "Ejemplo inventado de lista de tareas repetidas"
+    },
+    {
+      "number": 4,
+      "estilo": "taller",
+      "layout": "ensayo",
+      "xl": true,
+      "headline": "Para quién\n*no* es",
+      "body": "Tu negocio no repite tareas.\n\nBuscás un certificado.\n\nQuerés que otro lo haga por vos.",
+      "next": "cuándo",
+      "alt_text": "Para quién no es el taller"
+    },
+    {
+      "number": 5,
+      "estilo": "taller",
+      "layout": "dato",
+      "xl": true,
+      "pre": "sábado",
+      "value": "31",
+      "size": 600,
+      "headline": "90 minutos por Google Meet.\n*Cupo 50.*",
+      "next": "reservá",
+      "alt_text": "Sábado 31 de octubre, 10:00 hora de La Paz, 90 minutos por Google Meet, cupo 50",
+      "side": "de octubre\n*10:00*\n(La Paz)"
+    },
+    {
+      "number": 6,
+      "estilo": "taller",
+      "layout": "ensayo",
+      "xl": true,
+      "theme": "negro",
+      "headline": "Reservá\ntu *cupo*",
+      "body": "Desde Bs 50 · 50 cupos.\n\nSe paga por QR del BCP.\n\nInscripciones hasta el jueves 29, 20:00 (La Paz).",
+      "cta": "Link en mi *perfil*",
+      "alt_text": "Reservá tu cupo: desde Bs 50, 50 cupos, pago por QR del BCP, inscripciones hasta el jueves 29 a las 20:00"
+    }
+  ]
+}

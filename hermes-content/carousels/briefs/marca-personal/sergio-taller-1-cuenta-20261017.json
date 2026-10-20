@@ -1,0 +1,117 @@
+{
+  "title": "Taller 1/2: la cuenta que nadie hace (v4)",
+  "caption": "Ejemplo: 5 horas por semana en una tarea que se repite, a Bs 20 la hora, son Bs 400 al mes. Contá las tuyas.\n\nEl sábado 31 de octubre, 10:00 (hora de La Paz), lo hacemos en vivo con tu negocio: 90 minutos por Meet, cupo 50. Salís con tu lista de tareas repetidas, tu prioridad y tu primer paso.\n\nLink en mi perfil.",
+  "hashtags": [
+    "#ia",
+    "#bolivia",
+    "#negocios",
+    "#automatizacion"
+  ],
+  "serie": "TALLER 1/2 · CUENTA",
+  "theme": "blanco",
+  "nota": "Taller «Auditá tu negocio con IA». Fuente de textos: marca/TALLER_31_OCT.md. Pieza del lunes 19, SOLO si la compuerta (6 condiciones) está abierta. v4: la lámina 1 arma la cuenta en pantalla («Ejemplo» en el rótulo); s31 solo c1-02 y s32 (original 2048×1528, sin recorte) solo c1-04. Los Bs son un ejemplo y la lámina 1 lo dice. Sin precio del taller en este carrusel.",
+  "slides": [
+    {
+      "number": 1,
+      "estilo": "taller",
+      "layout": "dato",
+      "xl": true,
+      "pre": "*Ejemplo*",
+      "eq": [
+        {
+          "t": "5 h",
+          "l": "por semana"
+        },
+        {
+          "op": "×"
+        },
+        {
+          "t": "4",
+          "l": "semanas"
+        },
+        {
+          "op": "×"
+        },
+        {
+          "t": "Bs 20",
+          "l": "la hora"
+        },
+        {
+          "op": "="
+        }
+      ],
+      "value": "Bs 400",
+      "size": 270,
+      "headline": "al mes en una tarea\nque repetís",
+      "next": "la cuenta",
+      "alt_text": "Ejemplo: 5 horas por semana, por 4 semanas, por Bs 20 la hora, igual a Bs 400 al mes en una tarea que repetís"
+    },
+    {
+      "number": 2,
+      "estilo": "taller",
+      "layout": "ilustrado",
+      "headline": "La cuenta, *de a un paso*",
+      "body": "Horas por semana × 4 × lo que vale tu hora. Contalas, no las supongas.",
+      "image": "hermes-content/galeria/fotos-bn/lote-fotobn-s31-61421ccd.jpg",
+      "next": "hacela",
+      "alt_text": "Pila de sobres iguales y un sobre verde en una bandeja"
+    },
+    {
+      "number": 3,
+      "estilo": "taller",
+      "layout": "lista",
+      "xl": true,
+      "headline": "Hacela con *tus 3* tareas",
+      "body": "Ejemplos de tareas que se repiten",
+      "items": [
+        {
+          "label": "Contestar lo mismo",
+          "text": "Por WhatsApp, todos los días"
+        },
+        {
+          "label": "Armar cotizaciones",
+          "text": "Una por una, a mano"
+        },
+        {
+          "label": "Pasar datos",
+          "text": "De un lugar a otro"
+        }
+      ],
+      "next": "elegí",
+      "alt_text": "Tres ejemplos de tareas que se repiten"
+    },
+    {
+      "number": 4,
+      "estilo": "taller",
+      "layout": "ilustrado",
+      "headline": "Después elegí *una*",
+      "body": "La de más horas y menos riesgo. Con plata o datos de otros, esa no va primero.",
+      "image": "hermes-content/galeria/fotos-bn/lote-fotobn-s32-c5e1d3d0.jpg",
+      "next": "esto tiene nombre",
+      "alt_text": "Un solo sobre verde en una bandeja de metal"
+    },
+    {
+      "number": 5,
+      "estilo": "taller",
+      "layout": "ensayo",
+      "xl": true,
+      "theme": "verde",
+      "headline": "Eso es una *lectura* de tu negocio",
+      "body": "Tu lista de tareas repetidas.\nTu prioridad. Tu primer paso.\n\nLo hacemos con tu negocio, en vivo.",
+      "next": "fecha",
+      "alt_text": "Eso es una lectura de tu negocio: tu lista, tu prioridad, tu primer paso"
+    },
+    {
+      "number": 6,
+      "estilo": "taller",
+      "layout": "ilustrado",
+      "fit": "contain",
+      "headline": "Sábado 31 · *10:00*\n(La Paz)",
+      "body": "Taller en vivo por Meet, 90 minutos.\nCupo 50. Salís con tu lista y un primer paso.",
+      "image": "hermes-content/carousels/briefs/assets/sergio-taller-20261017/sergio-bn.jpg",
+      "cta": "Link en mi perfil",
+      "next": "",
+      "alt_text": "Sergio Urcullo en blanco y negro: taller en vivo el sábado 31 a las 10:00 hora de La Paz"
+    }
+  ]
+}
