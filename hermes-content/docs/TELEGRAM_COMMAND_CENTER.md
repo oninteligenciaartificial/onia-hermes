@@ -257,7 +257,7 @@ El diagnóstico no cambia nada en el VPS.
 
 | Sección | Bien si dice |
 |---|---|
-| 0 | «✅ resumen, lector de calendario, aduana, vigía de aprobaciones, guardia, pedidos, latido y QA de publicación: al día» (desde el 9-oct exige el resumen en tres bloques y, desde el 20-oct, sin sus rótulos: la marca es «nada pendiente»; desde el 10-oct, `onia-latido.sh`, `onia-qa-release.sh` y `onia-mirar.js` en `/root/bin`) |
+| 0 | «✅ resumen, lector de calendario, aduana, vigía de aprobaciones, guardia, pedidos, latido, QA de publicación y orquesta: al día» (si falta algo corre el sincronizador hasta dos veces; desde el 20-oct exige también `onia-orquesta-hermes.sh`) (desde el 9-oct exige el resumen en tres bloques y, desde el 20-oct, sin sus rótulos: la marca es «nada pendiente»; desde el 10-oct, `onia-latido.sh`, `onia-qa-release.sh` y `onia-mirar.js` en `/root/bin`) |
 | 1 | «✅ /root/backups/hermes-jarvis-…» |
 | 1b | nada con ❌ (si falta la llave, el VPS no llega a GitHub o n8n no responde, aborta acá sin tocar nada) |
 | 5 y 5b | 5: conectado al calendario; 5b: «✅ probado en su calendario: crear → mover → cancelar (la prueba ya no está)» |
