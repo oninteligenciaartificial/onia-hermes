@@ -109,7 +109,25 @@ Falta:
    Lo que decía antes: arreglar `aplicar.sh` (líneas ~546, 775, 792) y `diagnostico.sh` de la skill `onia-hermes-jarvis`: reinician el servicio de
    **sistema** y revivirían el bucle; pasar a `systemctl --user` o `hermes gateway restart`.
 8. ✅ Mergeado el 20-oct (`96771040`, 18:56 UTC) [PR #252](https://github.com/oninteligenciaartificial/onia-hermes/pull/252).
-   **Estado 20-oct 19:50 UTC:** token de Issues en el VPS (600, lo cargó Sergio Urcullo); `onia-orquesta-hermes.sh`
+   ✅ **ENCENDIDO y verificado el 20-oct, 21:50 UTC**, con el sí de Sergio Urcullo en la sesión que lo aplicó:
+   `aplicar` 39496727472 y 39503283126 (fallas: 0), diagnóstico 39503533428. Sección 18: «✅ cola de la orquesta:
+   token y labels listos», revisión `26deb0b4121c` cada 180 min, `enabled=True`, `--deliver local`, skill
+   `planificar-orquesta` en `/root/.hermes/skills/planificar-orquesta/SKILL.md`; primera corrida a las 00:00 UTC
+   (20:00 La Paz). Sección 2: unidad de usuario reiniciada, la de sistema `inactive` y `disabled`. Telegram:
+   «✅ Jarvis encendido» (`message_id` 8676). Lo que hizo falta en el camino:
+   - [#261](https://github.com/oninteligenciaartificial/onia-hermes/pull/261): la vuelta de las 20:44 UTC se
+     actualizó a sí misma y NO trajo el comando (el `poner` vive en `sincronizar.sh`: tarda dos vueltas). Ahora la
+     sección 0 exige el comando y corre el sincronizador hasta dos veces.
+   - [#262](https://github.com/oninteligenciaartificial/onia-hermes/pull/262): la skill había quedado en
+     `/root/.hermes/planificar-orquesta/SKILL.md`, fuera de `skills/`, donde Hermes no carga nada. El 2.º aplicar
+     la movió y borró la copia de afuera.
+   - [#260](https://github.com/oninteligenciaartificial/onia-hermes/pull/260): Hermes le escribe en prosa corta,
+     sin Pasó · Necesito · Sigue (resumen, cierre, SOUL, aviso de app rota). El SOUL del VPS ya tiene la sección nueva.
+   **Queda abierto (no es de este punto):** `skills/agenda-calendario.md` es un `.md` suelto y Hermes tampoco lo
+   carga (por eso su `.skills_prompt_snapshot.json`, del 08-sep, no la nombra); el prompt §5 de la rutina de
+   pedidos hay que volver a pegarlo en la web; 11 vigías viejos sin latido salen MUDO en la sección 15 (miden por
+   el log, que quizás solo escriben cuando pasa algo, como los 4 falsos del #255).
+   **Lo que decía a las 19:50 UTC:** token de Issues en el VPS (600, lo cargó Sergio Urcullo); `onia-orquesta-hermes.sh`
    todavía NO en `/root/bin`: el sincronizador copia lo bajado en la pasada ANTERIOR (arma la copia antes del fetch),
    así que llega en la de las 20:44 UTC. `aplicar` con el sí de Sergio Urcullo, después de esa copia; verificar con
    la sección 18 del diagnóstico. Falsos MUDOS de la sección 15: arreglo en el
