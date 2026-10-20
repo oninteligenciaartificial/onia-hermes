@@ -153,7 +153,11 @@ memorias `orquesta-programa-fijo-18-oct.md` y `feedback-prs-con-enlace.md`.
 0b. ✅ «Allow GitHub Actions to create and approve pull requests» activado el 19-oct (por la sesión, con su OK).
 1. ✅ Secreto `CLAUDE_CODE_OAUTH_TOKEN` cargado el 19-oct (vence en un año: octubre de 2027).
 2. ✅ Login de Codex en Hermes, según Sergio Urcullo (19-oct).
-3. Token fine-grained de GitHub solo con Issues de onia-hermes, para que Hermes cargue tareas.
+3. Token fine-grained de GitHub solo con Issues de onia-hermes, para que Hermes cargue tareas. Con el PR #252 tiene
+   que ser `github_pat_…` (uno clásico se rechaza) y quedar en 600. Después, su sí para correr `aplicar`.
+3b. Decisión (revisión de seguridad del #252): con el token de SU cuenta, un Hermes inyectado que use curl directo
+   escribe como él. Se cierra con una cuenta de GitHub aparte para Hermes (gratis, invitada al repo) y que
+   `orquesta.mjs` le pida su label de aprobación salvo `nube` + `urls`. Hasta entonces, el freno es el comando.
 4. `gh auth refresh -s project` para crear el tablero de GitHub Projects (vista elegida para el celular).
 5. La tarea programada de la PC (`schtasks`, con `--donde pc`, cada hora): el control de permisos no deja que la instale una sesión.
 6. Decisiones abiertas: instalar agent-browser, Exa, `claude-security`, ponytail 5.3.2, diagram-design; apagar `~/.claude/rules/zh`,
