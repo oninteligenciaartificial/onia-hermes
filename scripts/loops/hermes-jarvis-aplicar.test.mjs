@@ -606,6 +606,40 @@ test("sección 0: con el resumen de antes del formato fijo en /root/bin, no apli
   nadaCreado(v);
 });
 
+test("sección 0: sin el comando de la orquesta, corre el sincronizador hasta dos veces y sigue", () => {
+  // Medido el 20-oct: el sincronizador copia lo que bajó la vuelta ANTERIOR. La de las 20:44 UTC se
+  // actualizó a sí misma y el comando de la orquesta no llegó. Acá la vuelta 1 trae el comando (lo
+  // que ya estaba bajado) y la 2 el resumen sin rótulos (lo que bajó la 1).
+  const v = vps({ tokenIssues: 0o600 });
+  const bin = join(v.R, "bin");
+  const guardado = join(v.log, "orquesta-bajada.sh");
+  copyFileSync(join(bin, "onia-orquesta-hermes.sh"), guardado);
+  rmSync(join(bin, "onia-orquesta-hermes.sh"));
+  writeFileSync(join(bin, "onia-jarvis-resumen.sh"), "#!/usr/bin/env bash\n# cierre-bloques · grupo NECESITO\n");
+  writeFileSync(join(bin, "onia-loops-sync.sh"), `#!/usr/bin/env bash
+n=$(( $(cat ${v.log}/sync-vueltas 2>/dev/null || echo 0) + 1 )); echo "$n" > ${v.log}/sync-vueltas
+cp -p ${guardado} ${bin}/onia-orquesta-hermes.sh
+[ "$n" -lt 2 ] || printf '#!/usr/bin/env bash\\n# cierre-bloques · grupo NECESITO · nada pendiente\\necho vista\\n' > ${bin}/onia-jarvis-resumen.sh
+echo "sincronizados"
+`);
+  chmodSync(join(bin, "onia-loops-sync.sh"), 0o755);
+  const r = v.aplicar();
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(r.stdout, /vuelta 1 de 2[\s\S]*vuelta 2 de 2/);
+  assert.equal(v.leer("sync-vueltas").trim(), "2");
+  assert.match(r.stdout, /✅ .*QA de publicación y orquesta: al día/);
+  assert.match(r.stdout, /✅ revisión de la orquesta cada 3 h: /);
+});
+
+test("sección 0: si dos vueltas del sincronizador no traen el comando de la orquesta, no aplica nada", () => {
+  const v = vps({ tokenIssues: 0o600 });
+  rmSync(join(v.R, "bin", "onia-orquesta-hermes.sh"));
+  const r = v.aplicar();
+  assert.equal(r.status, 1, r.stdout);
+  assert.match(r.stdout, /❌ El código de main todavía no está en /);
+  nadaCreado(v);
+});
+
 test("con la regla del calendario ya en su SOUL, el paso del formato toma su propio respaldo y revertir lo deja exacto", () => {
   // Revisión del 9-oct: en las otras pruebas el respaldo lo toma siempre el paso del calendario.
   // En el VPS de verdad el SOUL ya puede tener esa regla: el respaldo es del paso del formato.

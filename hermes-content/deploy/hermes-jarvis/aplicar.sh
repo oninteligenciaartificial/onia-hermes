@@ -91,7 +91,10 @@ al_dia() {
     && grep -q -- '--probar' "$BIN/onia-respuestas-pedidos.sh" 2>/dev/null \
     && grep -q '^bajar()' "$BIN/onia-respuestas-pedidos.sh" 2>/dev/null \
     && [ -x "$BIN/onia-latido.sh" ] \
-    && [ -x "$BIN/onia-qa-release.sh" ] && [ -r "$BIN/onia-mirar.js" ]
+    && [ -x "$BIN/onia-qa-release.sh" ] && [ -r "$BIN/onia-mirar.js" ] \
+    && [ -x "$BIN/onia-orquesta-hermes.sh" ]
+  # 20-oct: el comando de la orquesta. Sin él, 5e decía «todavía no lo copió» y salía 0 con la
+  # revisión de cada 3 h sin programar.
   # Los pedidos: la versión con un solo candado para la vista previa y el --si, y el recolector de
   # la vuelta. Sin esto, con la llave cargada, aplicar salía 0 con los pedidos apagados (madre, 2-oct).
   # 5-oct: y las que cierran los MEDIUM de la madre v2 (el sello que ata la respuesta al pedido, y el
@@ -103,18 +106,23 @@ al_dia() {
   # ninguno de esos trabajos correría.
   # 10-oct (Q5): el QA después de cada publicación y el onia-mirar.js que llama, los dos desde /root/bin.
 }
-if ! al_dia; then
-  echo "todavía no: corro una vez el sincronizador de cada hora"
+# Dos vueltas como mucho: el sincronizador copia lo que bajó la vuelta ANTERIOR y recién después baja
+# main (sincronizar.sh). Medido el 20-oct: la de las 20:44 UTC se actualizó a sí misma y no trajo el
+# comando de la orquesta, que estaba en main desde las 18:56. La segunda vuelta copia lo que acaba de
+# bajar la primera.
+for VUELTA in 1 2; do
+  al_dia && break
+  echo "todavía no: corro el sincronizador de cada hora (vuelta $VUELTA de 2)"
   timeout 600 "$BIN/onia-loops-sync.sh" </dev/null 2>&1 | tail -4 | redactar
-fi
+done
 if ! al_dia; then
   echo "❌ El código de main todavía no está en /root/bin. No toqué nada."
   ls -la "$BIN/onia-jarvis-resumen.sh" "$BIN/onia-agenda.sh" "$BIN/onia-tg.sh" \
     "$BIN/onia-pedido-claude.sh" "$BIN/onia-respuestas-pedidos.sh" "$BIN/onia-latido.sh" \
-    "$BIN/onia-qa-release.sh" "$BIN/onia-mirar.js" 2>&1 | redactar
+    "$BIN/onia-qa-release.sh" "$BIN/onia-mirar.js" "$BIN/onia-orquesta-hermes.sh" 2>&1 | redactar
   exit 1
 fi
-echo "✅ resumen, lector de calendario, aduana, vigía de aprobaciones, guardia, pedidos, latido y QA de publicación: al día"
+echo "✅ resumen, lector de calendario, aduana, vigía de aprobaciones, guardia, pedidos, latido, QA de publicación y orquesta: al día"
 
 # ── 1. Respaldo ─────────────────────────────────────────────────────────────────
 sec "1. Respaldo"
