@@ -18,6 +18,9 @@ paciente con un tratamiento a medias que no volvió a agendar.
 | `04-OBJECIONES.md` | qué responder cuando frenan |
 | `05-CHECKLIST-CAPTURAS.md` | qué capturas hacen falta antes de mostrar |
 | `06-VSL-DENTAL.md` | el video de venta (largo de ~4 min y corto de 60 s), cada frase atada a su fila de `ONIA_PROMESA_VS_PRODUCTO.md`; no se publica hasta tener la cuenta demo |
+| `07-PREPAGO-LEADS-Y-PROSPECTOS.md` | oferta de prepago (plan anual), los 7 leads de agosto, los prospectos con pauta viva y un mensaje listo por lead; nada enviado (16-oct) |
+| `08-WEBINAR-DUENOS-DE-CLINICAS.md` | guion del webinar gratis de 45 min que termina en demo y plan anual; espera la cuenta demo (16-oct) |
+| `09-FUNNEL-INSTAGRAM-A-PAGO-QR.md` | mapa y textos del post/mensaje directo a la llamada, el plan anual y el pago por QR del BCP; enlaza (no duplica) los workshops (16-oct) |
 
 **Kit 1.0 (2026-09-28).** Se reescribió entero sobre lo que hace la 1.0 de onia-platform
 (candidato `ed163e26`, verificado contra el código). Lo que cambió respecto del kit de julio:

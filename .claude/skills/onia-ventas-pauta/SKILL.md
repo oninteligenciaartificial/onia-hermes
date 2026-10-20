@@ -732,3 +732,17 @@ Reglas de edición de la pauta: las 11 de COMUNICACION §4 (subtítulos Archivo 
 - **Búsqueda por país** (`countries:["BO"]`) = anuncios cuyo alcance incluye Bolivia: sirve para ver quién le pauta a Santa Cruz (ADQ §2.6.1). **Ausencia ≠ inexistencia.**
 - **Lo que no sirve:** el navegador de la nube (Biblioteca 403, Pinterest pide sesión). **Pinterest no mide rendimiento**: es inspiración visual.
 - **No es raspado masivo:** pocas consultas dirigidas (la herramienta lo prohíbe).
+
+## 10. Prepago y webinar (16-oct)
+
+> Pedido de la jefa con el OK de Sergio Urcullo: caja de Bs 3.000 al 31-oct. Piezas: `sales-kit/07-PREPAGO-LEADS-Y-PROSPECTOS.md` y `08-WEBINAR-DUENOS-DE-CLINICAS.md`.
+
+- **La oferta de prepago es el plan anual que el producto ya tiene** (cobra 10 meses, K-02 ✅): Básico Bs 3.200, Crece 5.500, Profesional 8.900, Completo 12.900. Un solo Básico anual ya cubre la meta. No se inventa otro descuento ni urgencia.
+- **Prepago sin devolución (decidido por Sergio Urcullo, 16-oct, opción C, como los Términos §3.3):** el plan anual no se reembolsa. Ningún texto promete «devolvemos»; se avisa antes del QR y se ofrece la prueba de 14 días sin tarjeta como alternativa **opcional** (si prueba primero, el pago llega en noviembre). A-08 es de la prueba sin tarjeta, no del prepago. No reabrir sin datos nuevos.
+- **El Básico no trae la lista diaria de pendientes** (agentes desde Crece, K-11): a quien se le ofrece Básico no se le vende esa lista.
+- **Los borradores en frío del 1-2 oct (`ONIA_PROSPECTOS_*_SCZ.md` §6.9) quedaron vencidos:** dicen «lo manda desde su propio WhatsApp» y «la IA escribe una sola vez el modelo», que el revisor de promesas rechaza. El molde vigente está en `07` §3.3. Caso: los detectó `promesa-que-el-producto-cumple.mjs` al correr el nuevo documento.
+- **Los dos gates tropiezan con lo que se escribe para PROHIBIR:** una fila «no se dice» que cita la frase mala, o un «Bs 198» del anuncio de un competidor, rompe `test:venta-honestidad` o el revisor. Se redacta la prohibición sin repetir la frase, y el precio ajeno no se cita.
+- **Re-leer la pauta el día del envío, en una sola consulta:** `ads_library_search` con 18 `page_id` juntos, `ACTIVE`, `BO`, 50 resultados: devuelve lo más nuevo primero; los que no salen se marcan «sin confirmar», no «dejaron de pautar». Del 1-oct al 16-oct, la mayoría de los negocios renovó anuncios esta semana y 6 de la lista (Gelinski, Jhimbo, Quevedo, Clarident Plus, Innova Kids, Henners) no aparecieron.
+- **Sin cuenta demo no hay webinar con producto** (L-05): plan B = cuenta nueva en vivo, o se posterga. No se dan webinars con capturas generadas.
+- **Funnel de Instagram (16-oct, `sales-kit/09`):** con 15 días y una prueba de 14, el pago tiene que ocurrir al cerrar la demo o el workshop, no al terminar la prueba. Comentar-una-palabra→mensaje automático no se usa (2 rechazos de Meta): se pide escribir por mensaje directo. Los workshops los arma el hilo de Marca; el funnel solo los enlaza.
+- **Repaso de la Biblioteca sin creativos:** el conector da título y fecha, no imagen. Se calculan días al aire desde `ad_delivery_start_time` (restar 4 h para La Paz), se cruzan con los ids de `PEDIDO-CAPTURAS.md` y se pide la captura. Buscar por nombre de marca sin `page_id` trae ruido (CitaPro devolvió 2.407 anuncios ajenos): usar el `page_id` o los ids ya conocidos.
