@@ -177,14 +177,15 @@ export function urlsDe(texto = '') {
   return [...new Set(crudas.map((u) => u.replace(/[.,;:*]+$/, '')))];
 }
 
-// El "cuartito" del carril: lo que su trabajador lee antes de empezar y dónde deja lo que aprende.
+// El "cuartito" del carril: lo que su trabajador lee antes de empezar y dónde va lo que aprende.
+// Los dos primeros de `leer` son obligatorios (el handoff del carril va primero cuando existe).
+// .claude/skills/ es ruta protegida para `claude -p`: lo aprendido sale en la entrega y lo pasa a la skill quien revisa el PR.
 export function armarCuartito(c) {
   if (!c.leer?.length) return '';
-  const [primero, ...resto] = c.leer;
-  const aprende = c.aprende_en
-    ? `\nAl terminar, si aprendiste un método, una trampa o un dato medido, agregalo con la fecha a ${c.aprende_en}.`
-    : '';
-  return `\nTU CUARTITO (el método de tu área). Leé ${primero} antes de empezar; de estos, solo los que apliquen a la tarea:\n${resto.map((p) => `- ${p}`).join('\n')}${aprende}\n`;
+  const [primero, segundo, ...resto] = c.leer;
+  const obligatorios = segundo ? `${primero} y ${segundo}` : primero;
+  const aprende = c.aprende_en ? ` Quien revise el PR lo pasa a ${c.aprende_en}.` : '';
+  return `\nTU CUARTITO (el método de tu área). Leé ${obligatorios} antes de empezar; de estos, solo los que apliquen a la tarea:\n${resto.map((p) => `- ${p}`).join('\n')}\nCerrá la entrega con dos secciones: «## Leí» (los archivos del cuartito que leíste) y «## Aprendido» (método, trampa o dato medido, con la fecha; o «nada nuevo»).${aprende}\n`;
 }
 
 export function armarPrompt({ carril, issue, pedido, salida, rama, sigue = false }, conf = CONF) {
@@ -218,6 +219,7 @@ Leé la entrega (y los archivos cambiados que haga falta) y comprobá:
 2. No inventa: cada cifra, precio, nombre, ruta o afirmación sobre el repo tiene fuente o se puede comprobar acá.
 3. Arranca con 3 líneas para Sergio Urcullo (qué hizo · qué encontró · qué sigue).
 4. No publica, gasta, escribe a terceros ni toca producción.
+5. Cierra con «## Leí» y «## Aprendido».
 
 Respondé SOLO así. Primera línea: APROBADO, o RECHAZADO: <qué falla, en una frase>. Después, hasta 5 observaciones cortas.`;
 }

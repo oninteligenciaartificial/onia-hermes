@@ -123,8 +123,10 @@ test('cada carril tiene su cuartito y el prompt lo nombra', () => {
   for (const [nombre, c] of Object.entries(CONF.carriles)) assert.ok(c.leer?.length >= 3, nombre);
   const p = armarPrompt({ carril: 'video', issue: issue(1, 'video'), pedido: { pedido: 'X' }, salida: 's.md', rama: 'r' });
   assert.match(p, /TU CUARTITO.*edicion-referentes/s);
-  assert.match(p, /agregalo con la fecha a \.claude\/skills\/editor-videos\/SKILL\.md/);
-  assert.doesNotMatch(armarCuartito(CONF.carriles.comunidad), /agregalo/);
+  assert.match(p, /Leé \.claude\/skills\/edicion-referentes\/SKILL\.md y \.claude\/skills\/editor-videos\/SKILL\.md antes/);
+  assert.match(p, /«## Leí».*«## Aprendido».*lo pasa a \.claude\/skills\/editor-videos\/SKILL\.md/s);
+  assert.match(armarCuartito(CONF.carriles.comunidad), /Leé hermes-content\/docs\/handoff\/comunidad\.md y/);
+  assert.doesNotMatch(armarCuartito(CONF.carriles.comunidad), /lo pasa a/);
   assert.equal(armarCuartito({}), '');
 });
 
