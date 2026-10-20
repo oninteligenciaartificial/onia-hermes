@@ -1,0 +1,70 @@
+{
+ "title": "Qué sale de una auditoría de IA para tu negocio",
+ "theme": "blanco",
+ "serie": "taller 2/2",
+ "caption": "No es un curso: es sentarte 90 minutos con tu propio negocio y salir con tu primer paso. La tabla de la lámina 3 es un ejemplo inventado para mostrar cómo se ve una lista.\n\nSábado 31 de octubre, 10:00 (La Paz), por Meet. Cupo 50. Link en mi perfil.",
+ "slides": [
+  {
+   "layout": "ensayo",
+   "theme": "verde",
+   "headline": "No es un curso. Es tu negocio sobre la mesa.",
+   "body": "90 minutos. Salís con tu primer paso.",
+   "next": "qué te llevás"
+  },
+  {
+   "layout": "lista",
+   "theme": "blanco",
+   "headline": "Te llevás *3 cosas*",
+   "body": "",
+   "items": [
+    {"label": "Tu lista de tareas repetidas", "text": "La armás vos, en vivo, con tu negocio"},
+    {"label": "Tu prioridad", "text": "Cuál automatizar primero"},
+    {"label": "Tu primer paso", "text": "Un primer paso concreto"}
+   ],
+   "next": "así se ve"
+  },
+  {
+   "layout": "lista",
+   "theme": "blanco",
+   "headline": "Un ejemplo de *lista*",
+   "body": "Ejemplo inventado, no es un caso real",
+   "items": [
+    {"label": "Cotizaciones", "text": "6 h por semana · Bs 480 al mes"},
+    {"label": "Responder consultas", "text": "8 h por semana · Bs 640 al mes"},
+    {"label": "Pasar datos a planilla", "text": "3 h por semana · Bs 240 al mes"}
+   ],
+   "next": "para quién"
+  },
+  {
+   "layout": "lista",
+   "theme": "blanco",
+   "headline": "Para quién *no* es",
+   "body": "Mejor que lo sepas antes de reservar",
+   "items": [
+    {"label": "Tu negocio no repite tareas", "text": "No hay nada que ordenar"},
+    {"label": "Buscás un certificado", "text": "No lo hay"},
+    {"label": "Querés que otro lo haga por vos", "text": "Acá lo hacés vos, con tu negocio"}
+   ],
+   "next": "cómo es"
+  },
+  {
+   "layout": "lista",
+   "theme": "blanco",
+   "headline": "Cómo *funciona*",
+   "body": "",
+   "items": [
+    {"label": "Cuándo", "text": "Sábado 31 de octubre, 10:00 (La Paz)"},
+    {"label": "Dónde", "text": "90 minutos por Google Meet"},
+    {"label": "Cupo", "text": "50 personas como máximo"}
+   ],
+   "next": "reservá"
+  },
+  {
+   "layout": "ensayo",
+   "theme": "negro",
+   "headline": "Reservá tu cupo",
+   "body": "Desde Bs 50 · 50 cupos.\nEscribime desde el link de mi perfil.\nSe paga por QR del BCP.\nInscripciones hasta el jueves 29, 20:00.",
+   "cta": "Link en mi perfil"
+  }
+ ]
+}
