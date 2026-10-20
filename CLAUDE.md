@@ -43,13 +43,13 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
 - **Un objetivo al inicio, escrito y explícito**, con su definición de "hecho". Todo lo
   que no sirva a ese objetivo se **anota como pendiente**, no se hace.
 - **No se cierra la sesión hasta terminarlo.** Nada a medias, nada de saltar a otra cosa.
-- **UNA madre local, varios carriles y subagentes.** Corrección 2026-10-09: se evita
-  tener varios orquestadores; los carriles independientes sí trabajan en paralelo
-  según `equipo-de-agentes`. Codex ejecuta el encargo cerrado de la madre.
+- **Orquestan Hermes y el programa fijo, no una sesión** (Sergio Urcullo, 19-oct-2026; ver «Quién orquesta»,
+  abajo). La sesión principal es donde él trabaja conmigo; sus subagentes y los carriles independientes sí
+  trabajan en paralelo. Codex ejecuta encargos cerrados.
 - Cada subagente: worktree con **ruta explícita** y gates en su propio árbol.
-  Corrección 2026-10-09: en un encargo Codex sin Git, la madre verifica rama y hace
-  commit/integración; Codex no ejecuta ni siquiera consultas Git. El orquestador
-  mantiene el objetivo, el orden y el merge a `main`.
+  Corrección 2026-10-09: en un encargo Codex sin Git, quien lo lanzó verifica rama y hace
+  commit/integración; Codex no ejecuta ni siquiera consultas Git. Quien lo lanzó
+  mantiene el objetivo, el orden y el PR a `main`.
 - Mismo carril (misma carpeta) → subagentes **secuenciales**. Carriles distintos →
   paralelo.
 
@@ -140,8 +140,8 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
 > origen (aprobado por Sergio Urcullo, 10-oct-2026).
 
 - **Usted con clientes y prospectos** (Sergio Urcullo, 3-oct-2026: «no se usa vos, es muy informal, usted»): bot,
-  agentes de voz, plantillas de WhatsApp, mensajes 1:1 y respuestas a la pauta. En el chat con él y en su marca
-  personal sigue el voseo; si la web y los anuncios pasan a usted, lo decide él.
+  agentes de voz, plantillas de WhatsApp, mensajes 1:1 y respuestas a la pauta. **Desde el 19-oct también la web y
+  los anuncios** (lo decidió Sergio Urcullo). En el chat con él y en su marca personal sigue el voseo.
 - **Comandos para que los corra Sergio Urcullo: PowerShell, nunca bash** (29-sep-2026: un `rm -rf` falló). Usar
   `Remove-Item -Recurse -Force`, `$HOME\` y `;` en vez de `&&`; si borra, avisar que no se deshace.
 - **Horas en La Paz, UTC-4** (31-ago-2026: un correo de las 22:18 se le dijo «02:18»). Restar 4 h a logs, correos y
@@ -167,33 +167,26 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
 - **Cuidar tokens, no releer** (Sergio Urcullo, 29-ago-2026): lo ya leído no se relee salvo que pudo cambiar; fragmentos
   (offset, grep) antes que archivos enteros; rutas absolutas en Bash; verificar con el exit code, nunca con `| tail`.
   El largo del mensaje a él ya lo fija «Simple», arriba (8-oct-2026).
-- **La madre orquesta con un modelo por rol** (Sergio Urcullo, 10-oct-2026): subagentes con `model` por rol (Haiku
-  cuenta y verifica, Sonnet sintetiza, Opus decide lo riesgoso) y código cerrado a Codex; en cada ronda lee el
-  transcript de cada sesión de la nube y le manda UNA línea con su próxima tarea. Codex no hace git; la madre commitea
-  con la suite completa en verde. Tabla de modelos: skill `onia-sesion-madre`.
+- **Un modelo por rol** (Sergio Urcullo, 10-oct-2026): subagentes con `model` por rol (Haiku cuenta y verifica,
+  Sonnet sintetiza, Opus decide lo riesgoso) y código cerrado a Codex. Codex no hace git; quien lo lanzó commitea
+  con la suite completa en verde. En la orquesta, la tabla de modelos vive en `scripts/orquesta/carriles.json`.
 
-## Sesión MADRE local + carriles en la nube (REGLA)
+## Quién orquesta: Hermes + el programa fijo (REGLA)
 
-> Sergio Urcullo, 2026-10-01: *«madre local para que comunique a ellas, pero las de desarrollo y tareas que no
-> son de uso PC, nube; creemos la madre y que ordene a todas con sus tareas, subs y demás, mediante mensaje»*.
-> Y: *«prefiero que hable entre sesiones, así no dejamos documentos que no leen»*.
+> Sergio Urcullo, 19-oct-2026, al resolver las contradicciones entre CLAUDE.md, AGENTS.md y las memorias:
+> Hermes planifica y el programa fijo reparte; la sesión principal es donde él trabaja conmigo.
 
-- **La MADRE corre en la PC de Sergio Urcullo** y es la única que ordena. Reparte las tareas a cada sesión
-  **por mensaje** y hace ella misma lo que exige la PC: paneles con su login (Meta, Cloudflare, Hostinger),
-  capturas, mirar pantallas. Reemplaza a la vieja sesión de «Control» como orquestadora: dos orquestadores
-  se pisan.
-- **Desarrollo y todo lo que no necesita la PC, en la NUBE**, un carril por sesión (Plataforma, Ventas y pauta,
-  Marca personal, Lucía…). Siguen trabajando con la PC apagada.
-- **El canal principal es el MENSAJE, no el documento.** Lo que una sesión necesita de otra se le manda, no se
-  deja escrito esperando que lo lea. El handoff (`hermes-content/docs/handoff/<carril>.md`) queda solo para que
-  una sesión NUEVA retome si otra muere.
-- **Cómo se manda (medido el 1-oct):** solo la MADRE manda mensajes, con `SendMessage`, y le llegan al
-  instante a las sesiones de la nube. La nube **no** puede mandar (`SendMessage` falla: «this cloud session
-  cannot message other sessions yet»): contesta **en su propio transcript** y la madre lo lee desde allá.
-  **Nada de mensajes programados** (`create_trigger`) entre sesiones: tardan demasiado (Sergio Urcullo, 1-oct).
-- Detalle operativo (ids vivos, formato del mensaje, qué se avisa y qué no): **skill `onia-sesion-madre`**.
-- **El portal del SIAT no lo abre ninguna sesión, tampoco la madre.** Lo abre solo Sergio Urcullo a mano; la
-  sesión le pide capturas.
+- **Hermes planifica** (VPS, por Telegram): arma las tareas y las carga como issues `orquesta` + `carril:<área>`.
+- **El programa fijo reparte** (`scripts/orquesta/orquesta.mjs`, sin LLM que coordine): toma cada issue, corre al
+  trabajador del carril con su modelo, lo hace revisar con contexto limpio y deja PR + comentario. Corre en
+  **GitHub Actions** lo que no usa logins (marca, comunidad, investigación) y **en la PC** lo que usa sus sesiones
+  o archivos (video, plataforma, Meta, Instagram, Higgsfield). Método: `scripts/orquesta/README.md`.
+- **La sesión principal** es donde Sergio Urcullo trabaja conmigo. **Ya no hay una «madre» que ordene a otras
+  sesiones por mensaje** (la regla del 1-oct, «Sesión MADRE local + carriles en la nube», queda como historia; los
+  canales medidos siguen en la skill `onia-sesion-madre`). Lo que una sesión necesita de otra trabajando en
+  paralelo se le puede seguir mandando por mensaje, pero el trabajo de fondo se pide por issue a la orquesta.
+- El handoff (`hermes-content/docs/handoff/<carril>.md`) sigue siendo cómo una sesión NUEVA retoma.
+- **El portal del SIAT no lo abre ninguna sesión.** Lo abre solo Sergio Urcullo a mano; la sesión le pide capturas.
 
 ## «Cambio de sesión» → handoff completo (REGLA)
 
@@ -388,7 +381,8 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
 
 - **Un rubro nuevo se ENCIENDE desde el core, no se escribe de cero.** Los 5 que se ofrecen ya
   están encendidos (dental, estética, servicios profesionales, comercio, importadora).
-- **Orden de empuje (venta, pauta y desarrollo), decidido por Sergio Urcullo el 2026-09-29:**
+- **Orden de empuje (venta, pauta y desarrollo), decidido por Sergio Urcullo el 2026-09-29 y confirmado el 19-oct**
+  (el «dental y estética» del 30-sep queda superado):
   dental → **importadora** → el resto. Comercio y servicios esperan a que la factura del SIN esté
   dentro del sistema: sin ella no compiten con los sistemas bolivianos que sí facturan.
   ⚠️ Antes decía «dental → comercio → importadora»; era el orden de ENCENDIDO de julio y se leía
@@ -437,7 +431,7 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
 
 ## `main` siempre compila (REGLA DURA)
 
-- `main` avanza por PR revisado; solo la madre y el integrador lo mueven directo (regla
+- `main` avanza por PR revisado; solo la sesión principal (antes «madre») y el integrador lo mueven directo (regla
   «Git — auto-sync»). Esos dos: **nunca dejar que arrastre WIP parcial**. Si un archivo
   nuevo importa otro archivo nuevo, van los DOS o ninguno.
 - `main` alimenta el deploy del VPS y el de Vercel: roto, rompe ambos.
@@ -478,7 +472,7 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
 - **Auto-sync activado**: al terminar, commitear y pushear la RAMA sin que lo pidan (hook
   `Stop` → `node scripts/git-autosync.js`).
 - **`main` solo avanza por PR revisado** (Sergio Urcullo, 2026-10-05: *«sí, la madre sigue
-  directo»*). El hook ya no hace fast-forward de `main`, salvo con permiso: la **madre** en la PC
+  directo»*). El hook ya no hace fast-forward de `main`, salvo con permiso: la **sesión principal** (antes «madre») en la PC
   (`ONIA_AUTOSYNC_MAIN=1` en el `.claude/settings.local.json` de SU carpeta, que git ignora, y además
   la marca `onia-autosync-main` en el git-dir de SU checkout: los worktrees de sus subagentes no la tienen) y el
   **integrador** (`ONIA_LOOP_ID=onia-cola`). Una sesión parada en `main` sin permiso no lo pushea:
@@ -498,7 +492,7 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
   en un "resuelto" que hizo fast-forward a main (2026-08-20, cuando todavía lo hacía; el CI
   lo contuvo). El autosync ya tiene la guarda (se niega con MERGE_HEAD/paths unmerged), pero
   la regla es del que mergea: resolver ANTES de soltar el turno, y verificar cero marcadores.
-- ⚠️ **El hook Stop puede publicar el estado A MEDIAS de un subagente** (hoy, solo en la madre y
+- ⚠️ **El hook Stop puede publicar el estado A MEDIAS de un subagente** (hoy, solo en la sesión principal y
   el integrador, los únicos que mueven `main` directo; en el resto queda en su rama). El autosync corre
   cuando un subagente termina su turno, no cuando el trabajo está terminado. El 2026-08-23
   se llevó **217 líneas de CSS a `origin/main` antes de que existiera el markup que las
@@ -524,40 +518,30 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
 - **Decidir y actuar.** Verificación fuerte solo para lo que toca producción, plata o
   `main`. Lo reversible y de bajo riesgo: hacerlo y seguir.
 - **No re-hacer lo aprobado.** Diseño o plan ya aprobado se porta fiel, no se reabre.
-- **Un rediseño se revisa renderizado antes de publicar.** Corrección 2026-10-09:
-  la madre/carril mira capturas a 390/1440 y verifica los gates; lo revisado se publica
-  sin otro OK de diseño de Sergio Urcullo, según la sección siguiente. Se sustituye
-  el permiso por pieza de agosto, conservando la revisión visual.
+- **Un rediseño se revisa renderizado antes de publicar**: el carril mira capturas a 390/1440 y verifica los
+  gates, y después **le llega a Sergio Urcullo con esas capturas y espera su OK** (sección siguiente, 19-oct).
 
 ## Qué se publica sin preguntar (REGLA)
 
-> Antecedente sustituido el 9-oct: Sergio Urcullo, 2-oct, al preguntar «¿por qué tengo que dar OK? no sé qué significa PR»:
-> eligió **«Solo diseño nuevo y legales»** como lo único que pasa por él. Dos PRs listos
-> (el Recall y la web v1) esperaban su OK sobre algo que él no puede revisar.
+> Sergio Urcullo, 19-oct-2026: lo que ve un cliente o el público pasa por él con captura; el resto se publica solo
+> tras la revisión. **Sustituye** el «lo trabajado y revisado se sube sin esperarlo» del 9-oct, que dejaba salir
+> diseño y piezas públicas sin que él las viera. Historia: 2-oct «solo diseño nuevo y legales»; 9-oct «se sube nomás»
+> (18 PRs frenados); 8-oct permiso de publicar por Buffer lo que pasara control de calidad.
 
-- **Se publica sin preguntar** lo que pasa los gates del carril (tsc, tests, revisión) y se
-  MIRA en producción después: arreglos, features sobre pantallas existentes, bot, textos de
-  producto, docs. Se mergea el PR y se corre el `publicar.sh` del destino.
-- **Desde el 9-oct, lo que se trabajó y pasó revisión SE SUBE, sin esperarlo.** Sergio Urcullo, 9-oct, al ver 18 PRs
-  frenados esperando su OK: *«se supone que si lo trabajaron y fue revisado se tiene que subir, no esperen a mí, se sube
-  nomás»*. Incluye diseño nuevo y rediseños de pantallas (con las capturas 390/1440 mirando el render), migraciones (con
-  backup y rollback según `onia-db`/`onia-deploy`) y cambios de infraestructura revisados. Después se le avisa SOLO lo
-  publicado, con captura o link. Sigue pidiendo su sí lo que no es «publicar código»: gasto, contactar clientes o terceros,
-  el portal del SIAT, actos legales o firmas (van por Leslie Mercado Moreno) y la cara o la voz de él en servicios externos.
-  ⚠️ Antes (2-oct al 8-oct) el diseño nuevo y los textos legales pasaban por él antes de publicar; eso frenó 18 PRs.
-- **Contenido en redes (Sergio Urcullo, 8-oct: «sí, publicá por Buffer lo que pase control de calidad»):**
-  una pieza que pasa el control de calidad de su skill (`diseno-contenido-onia` / `edicion-referentes`) y se MIRÓ
-  renderizada completa se publica por Buffer (Instagram, por `ig-reel.mjs`, que es la vía verificada) sin pedirle el
-  OK pieza por pieza. Después se le avisa con el enlace. Siguen pasando por él:
-  - **toda pieza que prometa o muestre una función del producto**, hasta que exista la tabla «se promete / funciona»
-    en `hermes-content/docs/` y esa función esté en verde. Sin tabla no hay permiso;
-  - lo que nombre, cite o muestre a un cliente, a un tercero o a un competidor (imagen, voz o marca);
-  - los CTA de mecanismos sin probar, como comentario → DM de Instagram (2 rechazos de Meta);
-  - generación paga fuera de los lotes pequeños de imagen autorizados el 8-oct
-    (ver regla de gasto abajo); autorizar gasto no autoriza publicar la pieza.
-- **No cambia** lo que ya pide aprobación por su riesgo: escribir datos de producción fuera
-  de lo autorizado, gasto pago, contactar clientes, tocar el portal del SIAT.
-- A Sergio Urcullo no se le habla de PRs: se le dice qué quedó publicado y qué necesita mirar.
+- **Le llega con captura y espera su OK** todo lo que ve un cliente o el público: la web, los anuncios, las piezas de
+  redes, las pantallas nuevas y los rediseños del producto. Va con la captura (390/1440 si es pantalla; la pieza
+  completa si es contenido) o el video real, nunca un «revisá tal cosa». Con su OK se mergea y se publica.
+- **Se publica solo tras la revisión** lo que no cambia nada visible: arreglos, código sin cambio en pantalla, bot,
+  docs, migraciones (con backup y rollback según `onia-db`/`onia-deploy`) y cambios de infraestructura revisados.
+  Pasa los gates del carril (tsc, tests, revisión), se mergea el PR, se corre el `publicar.sh` del destino y se MIRA
+  en producción después. Se le avisa solo lo publicado.
+- **Siguen pidiendo su sí** por su riesgo: gasto, contactar clientes o terceros, escribir datos de producción fuera de
+  lo autorizado, el portal del SIAT, actos legales o firmas (van por Leslie Mercado Moreno) y la cara o la voz de él
+  en servicios externos. En contenido, además: toda pieza que prometa o muestre una función del producto, lo que
+  nombre o muestre a un cliente, tercero o competidor, los CTA de mecanismos sin probar (comentario → DM de
+  Instagram: 2 rechazos de Meta) y la generación paga fuera de los lotes chicos de imagen (autorizar gasto no
+  autoriza publicar). La vía verificada para Instagram sigue siendo Buffer por `ig-reel.mjs`.
+- Cada PR que se le muestra va con su **enlace completo y una línea de qué hace** (19-oct).
 
 ## Dónde va cada cosa (REGLA)
 
@@ -618,7 +602,7 @@ Si no sabés dónde va, **preguntá** antes de inventar carpeta.
   - **Primero se estudia la Biblioteca, después se diseña.** Sergio Urcullo, mismo día:
     *«DEJA DE ARMAR, PRIMERO MIRA LA META ADS LIBRARY Y MIRA COMPETENCIAS»*. El formato
     sale de lo que sostienen los competidores (`ONIA_ADQUISICION_Y_PAUTA.md` §2.5), no de
-    un pack nuestro. Desde la nube Facebook no abre: los creativos los captura la madre.
+    un pack nuestro. Desde la nube Facebook no abre: los creativos se capturan desde la PC.
   - Lleva la marca de la WEB (lockup `onia | dental`, letra Archivo, verde solo en lo que
     se aprieta: `web-factory/docs/ONIA_BRAND_IDENTITY_2026.md`), no la de la marca personal.
   - Lo que promete sale de `ONIA_CATALOGO_DE_VENTA.md`, no del código: el 2-oct se armó D4
@@ -663,10 +647,9 @@ Detalle operativo: skills `carruseles-onia` y `ugc-empresas-higgsfield`.
 - IDs, modelos, precios y saldos se resuelven en vivo. Lo escrito en bitácoras
   antiguas es evidencia histórica, no autorización ni catálogo vigente.
 
-- **Revisión de montaje (corrección 2026-10-09):** tabla de cortes + preview 360p
-  revisados por el carril antes del master. El permiso de contenido del 8-oct y la
-  regla de publicación del 9-oct sustituyen el OK rutinario de Sergio por pieza;
-  siguen las excepciones de claims, terceros y cara/voz. Nunca cortar a ciegas.
+- **Revisión de montaje:** tabla de cortes + preview 360p revisados por el carril antes del master. Desde el
+  19-oct el video que se publica le llega a Sergio Urcullo y espera su OK («Qué se publica sin preguntar»; sustituye
+  el permiso del 8-oct y la regla del 9-oct). Nunca cortar a ciegas.
 - **Gasto — actualización 8-oct, consolidada 2026-10-09:** cotizar y registrar
   brief, costo/cap y cantidad. Imágenes de prueba/opciones de estilo por pocos
   créditos (menos de ~5 por lote) tienen autorización previa: generar y mostrar

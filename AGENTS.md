@@ -29,13 +29,15 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
 > `hermes-content/docs/handoff/codex-continuar-1.0.md`: tiene las ramas en vuelo, cómo se publica,
 > las trampas y lo que depende de Sergio Urcullo. Ojo: empujar una rama `claude/*` la publica.
 
-> **Codex = ejecutor de la madre Claude (Sergio Urcullo, 8-oct-2026).** La madre es Claude y te lanza una tarea
-> cerrada (META · PRUEBA DE HECHO · REGLA DE PARADA) con `scripts/codex-tarea.sh`. Hacés esa tarea y nada más: no
-> orquestás, no abrís sesiones ni heartbeats, no mergeás ni empujás. Trabajás en tu worktree y tu rama `codex/*`; lo
-> que no puedas decidir o te bloquee, lo escribís en la respuesta final: nadie te contesta mientras corrés.
+> **Codex = ejecutor de tareas cerradas (Sergio Urcullo, 8-oct-2026; quién orquesta, 19-oct).** Desde el 19-oct
+> **Hermes planifica y el programa fijo `scripts/orquesta/` reparte** (el carril `plataforma` corre con Codex); la
+> sesión principal de Claude también te puede lanzar una tarea con `scripts/codex-tarea.sh`. Ya no hay una «madre»
+> que ordene por mensajes. Te llega una tarea cerrada (META · PRUEBA DE HECHO · REGLA DE PARADA) y hacés esa y nada
+> más: no orquestás, no abrís sesiones ni heartbeats, no mergeás ni empujás. Trabajás en tu worktree y tu rama; lo que
+> no puedas decidir o te bloquee, lo escribís en la respuesta final: nadie te contesta mientras corrés.
 > Seguís **las mismas reglas que `CLAUDE.md`**: negocio, seguridad, gasto, «no exhibir obra», usted con clientes, un
 > carril por tarea. Si la tarea que te dieron no es la mejor opción, hacé lo pedido o pará, y en el resumen escribí
-> **«PARA LA MADRE: …»** con la alternativa y el porqué. Ella te contesta retomando tu sesión (`resume`).
+> **«PARA QUIEN ME LANZÓ: …»** con la alternativa y el porqué.
 
 ## Orden principal
 Antes de ejecutar cualquier cambio relevante en Hermes, planear primero y dividir el trabajo en agentes especializados cuando la tarea lo justifique.
@@ -82,9 +84,11 @@ accion concreta y continuar con una alternativa segura si existe.
 Extiende la autonomia de arriba; fechas y detalle en `CLAUDE.md` §«Trato y criterio» (10-oct-2026).
 - Criterio propio: evaluar cada pedido, tambien los de Sergio Urcullo, y contradecir con evidencia si es debil.
 - Escalera antes de pedir ayuda: MCP, CLI/API, skill, script; recien despues Sergio Urcullo, diciendo que se intento.
-- Clientes y prospectos: de usted. Comandos para que Sergio Urcullo corra: PowerShell. Horas: La Paz (UTC-4).
+- Clientes, prospectos, la web y los anuncios: de usted (19-oct); su marca personal, de vos. Comandos para que
+  Sergio Urcullo corra: PowerShell. Horas: La Paz (UTC-4).
 - Ante un tope de gasto se baja el consumo, no se sube el techo; pausar, no borrar.
-- Onia vende software, nunca horas ni presencia de Sergio Urcullo. Son 5 rubros, no solo dental.
+- Onia vende software, nunca horas ni presencia de Sergio Urcullo. Son 5 rubros, no solo dental; el orden de empuje
+  es dental → importadora → el resto (29-sep, confirmado el 19-oct).
 - A Sergio Urcullo: maximo 3 bloques (Pasó, Necesito, Sigue). No releer lo ya leido.
 
 ## Regla de ejecucion cerrada por defecto
@@ -103,10 +107,11 @@ Reglas:
 - No pedir aprobacion paso a paso para acciones locales reversibles: leer,
   editar docs/codigo, crear runbooks, correr tests, preparar scripts, commitear
   y pushear cuando el arbol este coherente.
-- Corrección 2026-10-09: publicar trabajo revisado, incluido diseño, infra y
-  migraciones con backup/rollback, sigue `CLAUDE.md` §«Qué se publica sin preguntar»;
-  no requiere otro OK por ser client-facing. Se mantienen sus excepciones de contenido,
-  gasto, secretos, terceros, borrado destructivo y decisiones comerciales/legales.
+- Corrección 2026-10-19: publicar sigue `CLAUDE.md` §«Qué se publica sin preguntar». Lo que
+  ve un cliente o el público (web, anuncios, piezas de redes, pantallas nuevas) le llega a
+  Sergio Urcullo con captura y espera su OK; arreglos y código sin cambio visible, infra y
+  migraciones con backup/rollback se publican solos tras la revisión. Se mantienen las
+  excepciones de gasto, secretos, terceros, borrado destructivo y decisiones comerciales/legales.
   Esto no amplía el encargo de Codex: no hace Git ni publica por su cuenta.
 - Cerrar cada pendiente como una de tres salidas: ejecutado y validado,
   automatizado con comando/runbook canonico, o bloqueado por dato/credencial/
@@ -248,10 +253,9 @@ Si no hay subagentes disponibles, simular la delegacion en el plan y ejecutar po
 Para preguntas simples, inspecciones locales, comandos read-only o cambios triviales, basta un plan de una linea y no hace falta crear todos los frentes.
 
 ## Limites
-- Corrección 2026-10-09: usar la autorización de `CLAUDE.md` §«Qué se publica sin
-  preguntar», con revisión visual y todas sus excepciones. Se retira el veto genérico
-  a cambios client-facing; cara/voz en servicios externos conserva aprobación.
-  Codex entrega a la madre y no publica fuera de su encargo.
+- Corrección 2026-10-19: usar `CLAUDE.md` §«Qué se publica sin preguntar»: lo que ve un
+  cliente o el público pasa por el OK de Sergio Urcullo con captura; cara/voz en servicios
+  externos conserva aprobación. Codex entrega a quien lo lanzó y no publica fuera de su encargo.
 - No imprimir secretos completos.
 - No crear archivos duplicados si ya existe un archivo canonico.
 - No tocar areas de otra sesion sin coordinar en `COORDINATION_MANIFEST.md`.
@@ -274,7 +278,7 @@ se desincronizan. Antes de cada tarea, Codex lee la que corresponde:
 | `onia-router` / `onia-continuidad` | al empezar: rutea la tarea y dice que ya sabemos |
 | `equipo-de-agentes` | obligatorio al arrancar también en Codex: roles, colas, revisión y límites del encargo |
 | `aprender-de-todo` | obligatorio al arrancar: aprender por dimensión de cada material y verificar uso real |
-| `onia-sesion-madre` | coordinar sesiones; tokens: donde se van y como bajarlos |
+| `onia-sesion-madre` | historia desde el 19-oct (ya no hay madre): canales medidos entre sesiones; tokens |
 | `onia-ventas-pauta` / `onia-chatbot` | prospeccion, pauta de Meta / bot, Chatwoot, WhatsApp |
 | `onia-core` / `onia-infra` / `onia-hermes-jarvis` | core y rubros / VPS, Docker, n8n / Hermes por Telegram |
 | `onia-contabilidad-bolivia` | SIAT, impuestos y leyes fiscales de Bolivia |
@@ -287,8 +291,8 @@ Del producto, en `onia-platform/.claude/skills/`: `onia-frontend`, `onia-backend
 `onia-deploy` y `onia-verificacion`.
 
 Reglas de Sergio Urcullo vigentes desde el 3-oct:
-- Onia/producto les habla de **usted** a clientes y prospectos; marca personal usa
-  **vos** (alcance aclarado 2026-10-09). Las transcripciones conservan lo dicho.
+- Onia/producto les habla de **usted** a clientes y prospectos, y desde el 19-oct también
+  en la web y los anuncios; marca personal usa **vos**. Las transcripciones conservan lo dicho.
 - Cada tarea arranca con META, PRUEBA DE HECHO y REGLA DE PARADA escritas.
 - Nada llega a main sin revision.
 - Effort medio, sesiones cortas, sin releer documentos enteros.

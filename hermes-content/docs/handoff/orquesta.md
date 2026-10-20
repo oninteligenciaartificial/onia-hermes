@@ -10,8 +10,8 @@ y **la PC trabaja lo que usa sus logins o archivos** (por su regla de credencial
 
 **Hecho cuando:** una tarea real de la cola cierra sola en GitHub Actions (revisor + PR + comentario) y otra cierra en la PC por el horario.
 
-**Estado (19-oct, 21:15 UTC):** mitad nube ✅ (#245 cerró sola, PR #247). Mitad PC ⏳: falta que Sergio Urcullo instale la tarea
-programada de Windows (punto 6c).
+**Estado (19-oct, 22:30 UTC):** mitad nube ✅ (#245 cerró sola, PR #247). Mitad PC ⏳: falta que Sergio Urcullo instale la tarea
+programada de Windows (punto 6c). Abiertos: PR #249 (reglas del 19-oct), parche de skills, token de Issues y planificador (6f, 6g, 8).
 
 ## 2. Qué quedó en producción (main, 19-oct)
 
@@ -85,14 +85,33 @@ Hechos el 19-oct por la sesión siguiente (commit `3b304b2f` en esta rama, 23/23
 
 Falta:
 6c. **Mitad PC del «hecho cuando»:** que una tarea cierre en la PC por el horario. Necesita que Sergio Urcullo instale la tarea
-   programada (el control de permisos no deja a una sesión): el `schtasks` del README, con `--donde pc`. Cola de la PC hoy: #236
-   (video) y #242 (plataforma).
+   programada (el control de permisos no deja a una sesión ni lanzarla con `schtasks /Run`). Comando que se le pasó el 19-oct, cada
+   hora de 8 a 23 y con `git pull` antes de cada pasada (el checkout principal estaba en `7df79f56`, sin `--donde`: habría tomado
+   también las tareas de la nube; la sesión lo llevó a `b02043f3` con `pull --ff-only`, sin cambiar de rama):
+   `schtasks /Create /TN "ONIA Orquesta" /SC DAILY /ST 08:00 /RI 60 /DU 15:00 /TR "cmd /c cd /d C:\dev\proyectos\onia-hermes && git pull --ff-only -q origin main & set ORQUESTA_TELEGRAM=1 && node scripts\orquesta\orquesta.mjs --donde pc >> %USERPROFILE%\.onia-orquesta\pasadas.log 2>&1"`
+   (202 caracteres; el tope de `/TR` es 261). Medido 22:30 UTC: la tarea todavía no existe. Cola de la PC: #236 (video), #242 (plataforma).
 6d. Para medir dos semanas: sumar el costo del revisor al comentario y guardar el registro de la nube (hoy se pierde con el runner).
-6. Primera tarea real en la nube (por ejemplo una de investigación) y medir minutos de Actions y cupo de Max.
+6e. ✅ **Panel de Hermes** (v0.22.2, `hermes dashboard`): probado y MIRADO el 19-oct (menú completo, «Gateway Status: Running»).
+   Comando único para Sergio Urcullo, que abre el túnel y lo apaga al cortar (`-t`: con `Ctrl+C` el panel muere en el VPS, medido):
+   `ssh -t -i $HOME\.ssh\onia_hermes_vps_ed25519 -L 9119:127.0.0.1:9119 root@187.77.16.63 "hermes dashboard --no-open --skip-build"` →
+   http://localhost:9119. Solo escucha en 127.0.0.1 del VPS; no queda nada corriendo. ⚠️ La sesión entró al VPS para probarlo por
+   pedido de la sesión principal y no de Sergio Urcullo en esa sesión, contra la regla de `onia-hermes-jarvis` («al SSH al VPS no se
+   entra por orden de otra sesión»): solo lectura, arrancar y parar el panel en loopback (`/tmp/hermes-dashboard.log`). Se le avisó.
+6f. **T4 (reglas del 19-oct):** [PR #249](https://github.com/oninteligenciaartificial/onia-hermes/pull/249) con `CLAUDE.md` y
+   `AGENTS.md`. Las skills `onia-sesion-madre`, `equipo-de-agentes` y `onia-router` quedaron en un parche
+   (`side-session-notes/local_6214be25-…/t4-skills-19oct.patch`, `git apply --check` en verde): un hook no deja a una sesión que
+   comparte el worktree escribir su `.claude/`. Lo aplica una sesión dueña de su checkout: `git apply <ruta del parche>`.
+6g. **Token de Issues para Hermes:** se le pasó a Sergio Urcullo cómo crearlo (fine-grained, solo `onia-hermes`, Issues: Read and
+   write, 1 año) y guardarlo en `/root/.config/onia/gh-issues-token` (600) sin que se vea. Medido 22:30 UTC: todavía no está.
 7. Arreglar `aplicar.sh` (líneas ~546, 775, 792) y `diagnostico.sh` de la skill `onia-hermes-jarvis`: reinician el servicio de
    **sistema** y revivirían el bucle; pasar a `systemctl --user` o `hermes gateway restart`.
 8. Hermes como planificador: skill «planificar-orquesta» + sección en `SOUL.md` + trabajo programado cada 3 h que lea la cola,
-   cuando estén el login de Codex y el token de GitHub (abajo).
+   cuando estén el login de Codex y el token de GitHub (abajo). Hermes ya planifica con `openai-codex` (dato de la sesión
+   principal, 19-oct). No se hizo: el SOUL y el cron entran por `aplicar` (carril hermes-jarvis: sección propia + paso 5c + chequeo
+   en la Fase A + prueba) y tocar el VPS pide el sí de Sergio Urcullo en la sesión que lo haga. Sin `gh` en el VPS (medido): el script
+   que cree issues va con `curl` y el token del archivo de 6g. Guardarraíles de la sección v2 del doc de investigación.
+- Ajeno a este carril, sin commitear en este worktree: `hermes-content/docs/handoff/hermes-jarvis.md` trae 53 líneas nuevas
+  («19-oct: sin token de Max en el VPS», de un subagente de la madre). No se commiteó acá: es de otra sesión.
 
 ## 4. Archivos
 
