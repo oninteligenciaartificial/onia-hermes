@@ -77,7 +77,10 @@
         ".claude/skills/onia-backend/SKILL.md",
         ".claude/skills/onia-db/SKILL.md",
         ".claude/skills/onia-frontend/SKILL.md",
-        ".claude/skills/onia-seguridad/SKILL.md"
+        ".claude/skills/onia-seguridad/SKILL.md",
+        "C:/Users/PC/.claude/skills/next-dev-loop/SKILL.md",
+        "C:/Users/PC/.claude/skills/prisma-cli/SKILL.md",
+        "C:/Users/PC/.claude/skills/diagnosing-bugs/SKILL.md"
       ],
       "donde": "pc"
     },
@@ -174,6 +177,7 @@
       ],
       "leer": [
         "scripts/orquesta/cuartitos/deep-research/SKILL.md",
+        ".claude/skills/aprender-de-todo/SKILL.md",
         "scripts/orquesta/cuartitos/competitor-profiling/SKILL.md",
         ".claude/skills/ver-videos/SKILL.md",
         ".claude/skills/sacar-prompt/SKILL.md"

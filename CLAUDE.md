@@ -43,6 +43,13 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
 - **Un objetivo al inicio, escrito y explícito**, con su definición de "hecho". Todo lo
   que no sirva a ese objetivo se **anota como pendiente**, no se hace.
 - **No se cierra la sesión hasta terminarlo.** Nada a medias, nada de saltar a otra cosa.
+- **Relevo al 80 % de contexto** (Sergio Urcullo, 20-oct-2026: *«llega al límite de contexto, así que revisá que
+  lleguen al límite, handoff, se anota y se continúa, y la otra se deja archivada como historia»*). Al 80 %: se
+  escribe el handoff del carril (los siete campos de «Cambio de sesión», abajo, con commit y push), el mismo
+  objetivo sigue en una sesión nueva que arranca leyendo ese handoff, y la vieja se archiva como historia: no se
+  le pide nada más. Relevar no es cerrar a medias: el objetivo no cambia de dueño ni de definición de «hecho».
+  El aviso del 80 % lo arma el Panel ONIA (en construcción el 20-oct); mientras no esté, se mira el indicador de
+  contexto de la app.
 - **Orquestan Hermes y el programa fijo, no una sesión** (Sergio Urcullo, 19-oct-2026; ver «Quién orquesta»,
   abajo). La sesión principal es donde él trabaja conmigo; sus subagentes y los carriles independientes sí
   trabajan en paralelo. Codex ejecuta encargos cerrados.
