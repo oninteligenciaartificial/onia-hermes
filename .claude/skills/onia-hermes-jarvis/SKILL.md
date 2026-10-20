@@ -121,6 +121,11 @@ CLI de Hermes.
 
 ## Trampas ya pagadas
 
+- **Un MUDO de la sección 15 no es un trabajo caído si su latido está fresco** (20-oct). La sección juzgaba por la
+  fecha del LOG también las líneas con `onia-latido.sh`, y el resumen, el cierre, la aduana y el recolector solo
+  escriben su log cuando pasa algo: salían «MUDO hace 3 d» estando sanos (los latidos decían código 0 de hoy), y
+  una sesión creyó que a Sergio Urcullo no le llegaba el resumen. Ahora esas líneas se miden por su latido y lo
+  dicen («(por su latido)»). Antes de dar un trabajo por caído: la lista «--- latidos» al pie de la sección.
 - **Hermes solo carga `~/.hermes/skills/<…>/<nombre>/SKILL.md`** (su documentación, `features/skills.md`; 20-oct).
   `aplicar` del 20-oct (corrida 39496727472) dejó la de la orquesta en `/root/.hermes/planificar-orquesta/SKILL.md`:
   5d y 5e la ponían «junto a la del calendario» con `dirname(dirname(...))`, y en el VPS esa es un `.md` suelto
@@ -154,7 +159,10 @@ CLI de Hermes.
   rama y, si `main` era ancestro, la empujaba a `main`. El PR #68 apareció «merged» sin que nadie lo
   mergeara. **Desde el 5-oct solo lo hace con permiso** (la madre con `ONIA_AUTOSYNC_MAIN=1`, el
   integrador con `ONIA_LOOP_ID=onia-cola`; Sergio Urcullo eligió «sí, la madre sigue directo»). Lo que
-  llega a `main` llega igual, ≈1 h después, al VPS (el sincronizador de `/root/bin`): lo nuevo se diseña
+  llega a `main` llega igual, **entre 1 y 2 h después**, al VPS (el sincronizador de `/root/bin`, `44 * * * *`,
+  arma la copia ANTES del fetch: copia lo que bajó en la pasada anterior; medido el 20-oct, un merge de las 18:56
+  UTC no estaba a las 19:47 y llega a las 20:44). Antes de `aplicar` algo recién mergeado, el diagnóstico tiene que
+  mostrarlo en `/root/bin` (la línea «fuente: origin/main (<sha>)» de `onia-loops-sync.log` dice qué main copió): lo nuevo se diseña
   INERTE hasta encenderlo. **Mientras el cambio del 5-oct no esté en `main`,** con una rama que sale de
   `main` y un PR sin revisar: pushear a mano y soltar el turno con `git checkout --detach`. Con el hook
   nuevo en tu árbol ya no hace falta, pero no cuesta nada.

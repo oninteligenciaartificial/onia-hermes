@@ -108,7 +108,12 @@ Falta:
    Queda borrar la unidad de sistema del disco (`hermes gateway uninstall --system`), que es tocar el VPS.
    Lo que decía antes: arreglar `aplicar.sh` (líneas ~546, 775, 792) y `diagnostico.sh` de la skill `onia-hermes-jarvis`: reinician el servicio de
    **sistema** y revivirían el bucle; pasar a `systemctl --user` o `hermes gateway restart`.
-8. ✅ (en PR, 20-oct) [PR #252](https://github.com/oninteligenciaartificial/onia-hermes/pull/252): `scripts/loops/orquesta-hermes.sh`
+8. ✅ Mergeado el 20-oct (`96771040`, 18:56 UTC) [PR #252](https://github.com/oninteligenciaartificial/onia-hermes/pull/252).
+   **Estado 20-oct 19:50 UTC:** token de Issues en el VPS (600, lo cargó Sergio Urcullo); `onia-orquesta-hermes.sh`
+   todavía NO en `/root/bin`: el sincronizador copia lo bajado en la pasada ANTERIOR (arma la copia antes del fetch),
+   así que llega en la de las 20:44 UTC. `aplicar` con el sí de Sergio Urcullo, después de esa copia; verificar con
+   la sección 18 del diagnóstico. Falsos MUDOS de la sección 15: arreglo en el
+   [PR #255](https://github.com/oninteligenciaartificial/onia-hermes/pull/255). Lo que entró en el #252: `scripts/loops/orquesta-hermes.sh`
    (`--crear` / `--revisar` / `--cerrar` / `--estado`, curl + token del archivo de 6g, guardarraíles v2), skill
    `hermes-content/skills/planificar-orquesta.md`, sección «## Planificar la orquesta» del SOUL, paso **5e** de `aplicar`
    (inerte sin token; trabajo de Hermes `onia-planificar-orquesta` «every 3h», `--deliver local`), sección 18 del

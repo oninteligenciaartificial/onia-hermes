@@ -481,8 +481,17 @@ for l in sys.stdin:
     if len(cs) < 2:
         filas.append((3, "no medible", cada, "—", "%s → %s (menos de dos corridas en 70 días)" % (nombre, log)))
         continue
+    # Con latido se mide el latido, no el log (20-oct): el resumen, el cierre, la aduana y el recolector solo
+    # escriben su log cuando pasa algo, así que su log quedaba viejo y salían MUDOS estando sanos.
+    mtime, por = None, ""
+    if m:
+        try:
+            mtime, por = int(open("/var/lib/onia-latido/" + m.group(1)).read().split()[0]), " (por su latido)"
+        except (OSError, ValueError, IndexError):
+            mtime = None
     try:
-        mtime = os.path.getmtime(log)
+        if mtime is None:
+            mtime = os.path.getmtime(log)
     except OSError:
         filas.append((1, "MUDO (no hay log)", cada, "—", "%s → %s" % (nombre, log)))
         continue
@@ -491,7 +500,7 @@ for l in sys.stdin:
     # igual para cada 2 min, para un horario de día y para uno semanal o mensual.
     penultima = cs[-2].replace(tzinfo=datetime.timezone.utc).timestamp()
     estado = "MUDO" if mtime < penultima - 60 else "ok"
-    filas.append((0 if estado == "MUDO" else 4, estado, cada, "hace " + hace(edad), "%s → %s" % (nombre, log)))
+    filas.append((0 if estado == "MUDO" else 4, estado, cada, "hace " + hace(edad), "%s → %s%s" % (nombre, log, por)))
 for _, estado, cada, ultimo, que in sorted(filas, key=lambda f: f[0]):
     print("%-18s cada %-7s %-12s %s" % (estado, cada, ultimo, que))
 print("--- %d línea(s): %d MUDA(S), %d sin log, %d no medibles" % (len(filas), sum(f[1].startswith("MUDO") for f in filas),
