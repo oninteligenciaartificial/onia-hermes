@@ -36,6 +36,6 @@ Nada publicado, cobrado ni enviado al 19-oct 22:45. La página y los carruseles 
 
 ## 7. Próximos pasos
 1. Con el número: ponerlo en la página, sacar el `noindex`, publicar en Vercel (deploy por MCP, ver `sitio-sergiourcullo/README.md`) y mirarla viva a 390 y 1440.
-2. Issues de la orquesta (textos sin login) ya cargados: ver `TALLER_31_OCT.md` §6. Al llegar las entregas, revisar y pasarle a Sergio Urcullo solo lo que ve el público, con captura.
+2. **Issues de la orquesta NO cargados** (la venta se pausó antes): al retomar, abrir los de `TALLER_31_OCT.md` §6 (`orquesta` + `carril:marca`/`carril:comunidad`, «Hecho cuando» y `ok: sergio`). Al llegar las entregas, revisar y pasarle a Sergio Urcullo solo lo que ve el público, con captura.
 3. Con los brutos de los reels: issue `carril:video` (PC) para editar con el molde de cada guion.
 4. Chequeo 1 el vie 23: contar pagos en `sales-kit/SEGUIMIENTO-LEADS.md` y aplicar la tabla de `TALLER_31_OCT.md` §7.
