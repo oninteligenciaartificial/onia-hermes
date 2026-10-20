@@ -204,7 +204,8 @@ Si no podés terminar, escribí igual ${salida} empezando con "BLOQUEADO: <motiv
 REGLAS DURAS: no publiques en redes, no gastes dinero ni créditos, no le escribas a nadie, no toques producción ni el VPS. NO hagas commit, push ni merge: el orquestador commitea y entrega tus cambios (si no podés commitear, no es un bloqueo). Usá las skills del carril cuando apliquen.`;
 }
 
-export function armarRevision({ issue, pedido, salida, cambios }) {
+export function armarRevision({ issue, pedido, salida, cambios }, conf = CONF) {
+  const cuartito = conf.carriles[carrilDe(issue)]?.leer?.length;
   return `Sos el REVISOR de ONIA. Otro agente hizo este trabajo: vos lo juzgás con contexto limpio y no lo corregís.
 
 TAREA #${issue.number}: ${issue.title}
@@ -218,8 +219,7 @@ Leé la entrega (y los archivos cambiados que haga falta) y comprobá:
 1. Hace lo que pide la tarea y cumple su "Hecho cuando".
 2. No inventa: cada cifra, precio, nombre, ruta o afirmación sobre el repo tiene fuente o se puede comprobar acá.
 3. Arranca con 3 líneas para Sergio Urcullo (qué hizo · qué encontró · qué sigue).
-4. No publica, gasta, escribe a terceros ni toca producción.
-5. Cierra con «## Leí» y «## Aprendido».
+4. No publica, gasta, escribe a terceros ni toca producción.${cuartito ? '\n5. Cierra con «## Leí» y «## Aprendido».' : ''}
 
 Respondé SOLO así. Primera línea: APROBADO, o RECHAZADO: <qué falla, en una frase>. Después, hasta 5 observaciones cortas.`;
 }

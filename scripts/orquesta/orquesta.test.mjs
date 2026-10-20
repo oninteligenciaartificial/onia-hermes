@@ -7,7 +7,7 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import {
   CONF, leerPedido, elegirTareas, rutear, rutaSalida, revisarSalida, urlsDe, argsAgente,
-  baseDe, motivoAnterior, armarPrompt, leerVeredicto, PROTEGIDAS, armarCuartito,
+  baseDe, motivoAnterior, armarPrompt, leerVeredicto, PROTEGIDAS, armarCuartito, armarRevision,
   leerHilo, esOk, decidirRespuesta, cuerpoCierre, firmar, dondeDe, ajustarAlEntorno, prepararWorktree, cambiosDe, sinMotor,
 } from './orquesta.mjs';
 
@@ -128,6 +128,10 @@ test('cada carril tiene su cuartito y el prompt lo nombra', () => {
   assert.match(armarCuartito(CONF.carriles.comunidad), /Leé hermes-content\/docs\/handoff\/comunidad\.md y/);
   assert.doesNotMatch(armarCuartito(CONF.carriles.comunidad), /lo pasa a/);
   assert.equal(armarCuartito({}), '');
+  const rev = (carril) => armarRevision({ issue: issue(1, carril), pedido: { pedido: 'X' }, salida: 's.md', cambios: 's.md' });
+  assert.match(rev('video'), /5\. Cierra con «## Leí»/);
+  assert.doesNotMatch(armarRevision({ issue: issue(1, 'video'), pedido: { pedido: 'X' }, salida: 's.md', cambios: '' },
+    { carriles: { video: {} } }), /## Leí/);
 });
 
 const hilo = (...bodies) => bodies.map((body) => ({ body, author: { login: 'oninteligenciaartificial' } }));
