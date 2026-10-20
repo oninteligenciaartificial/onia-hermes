@@ -116,7 +116,10 @@ esac
     join(dobles, "systemctl"),
     `#!/usr/bin/env bash
 echo "$*" >> ${log}/systemctl
-case "$1" in
+# La unidad de usuario necesita el bus de root: sin XDG_RUNTIME_DIR, «systemctl --user» no llega (19-oct).
+[ "$1" = --user ] && echo "\${XDG_RUNTIME_DIR:-}" >> ${log}/systemctl-xdg
+a="$1"; [ "$a" = --user ] && a="$2"
+case "$a" in
   restart|start)
     ls ${R}/.hermes/skills/*/ ${R}/.hermes/skills 2>/dev/null > ${R}/.hermes/.skills_prompt_snapshot.json ;;
 esac
@@ -283,7 +286,9 @@ test("con todo en verde: aplica, reinicia el gateway, verifica que volvió y le 
   assert.ok(v.jobs().every((j) => !j.enabled && j.state === "paused"));
   assert.equal(apagados(v.leer("n8n")).length, 12, "los 12 flujos de reportes se apagan");
   assert.equal(v.interruptor(), true);
-  assert.match(v.leer("systemctl"), /^restart hermes-gateway\.service$/m, "reinicio controlado por systemd");
+  assert.match(v.leer("systemctl"), /^--user restart hermes-gateway\.service$/m, "reinicio controlado de la unidad de USUARIO");
+  assert.doesNotMatch(v.leer("systemctl"), /^(restart|start) hermes-gateway/m, "nunca la de sistema: arrancarla vuelve el bucle de 8.092 reinicios");
+  assert.match(v.leer("systemctl-xdg"), /^\/run\/user\/0$/m);
   assert.match(r.stdout, /✅ gateway de Hermes reiniciado y vivo/);
   assert.match(r.stdout, /✅ su lista de skills ya nombra agenda-calendario/);
   assert.match(v.leer("telegram"), /Jarvis encendido/);
@@ -314,7 +319,8 @@ test("revertir deshace por marcas, reanuda lo pausado y reinicia el gateway para
   assert.equal(r.status, 0, r.stdout + r.stderr);
   assert.equal(v.crontab().trim(), v.crontabInicial.trim());
   assert.match(r.stdout, /hermes: SOUL restaurado/);
-  assert.match(v.leer("systemctl"), /^restart hermes-gateway\.service$/m);
+  assert.match(v.leer("systemctl"), /^--user restart hermes-gateway\.service$/m);
+  assert.doesNotMatch(v.leer("systemctl"), /^(restart|start) hermes-gateway/m, "revertir tampoco toca la de sistema");
   assert.equal(v.interruptor(), false);
 });
 
@@ -1110,7 +1116,7 @@ test("con el token: skill, su regla (una vez, hasta su ---), la revisión cada 3
   assert.equal(jobOrq(v).enabled, true);
   assert.match(r.stdout, /✅ revisión de la orquesta cada 3 h: orq\d+/);
   assert.match(v.leer("n8n"), /^GET https:\/\/api\.github\.com\/repos\/oninteligenciaartificial\/onia-hermes\/labels\/necesita-ok$/m, "la Fase A miró los labels");
-  assert.match(v.leer("systemctl"), /^restart hermes-gateway\.service$/m);
+  assert.match(v.leer("systemctl"), /^--user restart hermes-gateway\.service$/m);
   assert.match(r.stdout, /✅ y nombra planificar-orquesta/);
   assert.match(v.leer("telegram"), /📋 Y cargo tareas en la orquesta/);
 

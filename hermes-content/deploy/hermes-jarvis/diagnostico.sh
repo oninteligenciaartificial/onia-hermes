@@ -31,8 +31,15 @@ for f in /etc/cron.d/*; do
 done 2>/dev/null | redactar
 
 sec "2. Hermes — gateway y trabajos programados"
+# La que atiende es la unidad de USUARIO; la de sistema quedó deshabilitada el 19-oct (8.092 reinicios):
+# si vuelve a decir «active», volvió el bucle.
+echo "--- unidad de usuario (la que atiende):"
+XDG_RUNTIME_DIR=/run/user/0 systemctl --user is-active hermes-gateway.service
+XDG_RUNTIME_DIR=/run/user/0 systemctl --user show hermes-gateway.service -p ActiveEnterTimestamp -p NRestarts
+echo "--- unidad de sistema (tiene que estar inactive y disabled):"
 systemctl is-active hermes-gateway.service
-systemctl show hermes-gateway.service -p ActiveEnterTimestamp -p NRestarts
+systemctl is-enabled hermes-gateway.service 2>&1
+systemctl show hermes-gateway.service -p NRestarts
 # Sin `hermes cron list`: el CLI escribe en /root/.hermes/logs al arrancar (lo midió la sesión
 # madre el 1-oct). jobs.json dice lo mismo y se lee sin tocar nada.
 echo "--- detalle de /root/.hermes/cron/jobs.json:"

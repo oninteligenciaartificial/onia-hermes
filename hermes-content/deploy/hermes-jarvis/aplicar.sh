@@ -590,10 +590,12 @@ if [ -f "$BK/SOUL.md.antes" ]; then
   cp -a "$BK/SOUL.md.antes" /root/.hermes/SOUL.md && { HERMES_TOCADO=1; echo "hermes: SOUL restaurado"; } || mal "hermes: no pude restaurar el SOUL"
 fi
 # Que el gateway lea el SOUL y las skills de antes (mismo reinicio controlado que aplicar 6b).
+# Solo la unidad de USUARIO: la de sistema está deshabilitada a propósito (19-oct) y arrancarla vuelve el bucle.
 if [ "$HERMES_TOCADO" = 1 ]; then
-  if systemctl cat hermes-gateway.service >/dev/null 2>&1; then
-    timeout 90 systemctl restart hermes-gateway.service </dev/null >/dev/null 2>&1; sleep 10
-    systemctl is-active --quiet hermes-gateway.service && echo "hermes: gateway reiniciado" || mal "hermes: el gateway no volvió (systemctl start hermes-gateway)"
+  if XDG_RUNTIME_DIR=/run/user/0 systemctl --user cat hermes-gateway.service >/dev/null 2>&1; then
+    timeout 90 env XDG_RUNTIME_DIR=/run/user/0 systemctl --user restart hermes-gateway.service </dev/null >/dev/null 2>&1; sleep 10
+    XDG_RUNTIME_DIR=/run/user/0 systemctl --user is-active --quiet hermes-gateway.service && echo "hermes: gateway reiniciado" \
+      || mal "hermes: el gateway no volvió (XDG_RUNTIME_DIR=/run/user/0 systemctl --user start hermes-gateway)"
   elif [ -x /root/bin/hermes-gateway-restart.sh ]; then
     timeout 120 /root/bin/hermes-gateway-restart.sh </dev/null >/dev/null 2>&1 && echo "hermes: gateway reiniciado" || mal "hermes: el gateway no volvió"
   fi
@@ -885,13 +887,17 @@ mkdir -p "$ESTADO" && touch "$ESTADO/activo" && echo "✅ $ESTADO/activo" || fal
 sec "6b. Hermes: reinicio controlado del gateway para que lea la skill y el SOUL nuevos"
 SNAP=$(find /root/.hermes -maxdepth 3 -name '.skills_prompt_snapshot.json' 2>/dev/null | head -1)
 snapshot_nombra() { [ -n "$SNAP" ] && grep -q "$1" "$SNAP" 2>/dev/null; }
+# 🔴 SOLO la unidad de USUARIO (medido el 19-oct, handoff/hermes-jarvis.md «19-oct»): el gateway de verdad es
+# /root/.config/systemd/user/hermes-gateway.service. La de SISTEMA quedó deshabilitada después de 8.092
+# reinicios («Gateway already running»): un `systemctl restart` de esa la ARRANCA y vuelve el bucle.
+sc_user() { XDG_RUNTIME_DIR=/run/user/0 systemctl --user "$@"; }
 gateway_vivo() {
-  if systemctl cat hermes-gateway.service >/dev/null 2>&1; then systemctl is-active --quiet hermes-gateway.service
+  if sc_user cat hermes-gateway.service >/dev/null 2>&1; then sc_user is-active --quiet hermes-gateway.service
   else pgrep -f "hermes_cli.main gateway run" >/dev/null; fi
 }
 reiniciar_gateway() {
-  if systemctl cat hermes-gateway.service >/dev/null 2>&1; then
-    timeout 90 systemctl restart hermes-gateway.service </dev/null 2>&1 | redactar
+  if sc_user cat hermes-gateway.service >/dev/null 2>&1; then
+    timeout 90 env XDG_RUNTIME_DIR=/run/user/0 systemctl --user restart hermes-gateway.service </dev/null 2>&1 | redactar
   else
     timeout 120 "$BIN/hermes-gateway-restart.sh" </dev/null 2>&1 | redactar
   fi
@@ -909,7 +915,7 @@ else
   if gateway_vivo; then
     echo "✅ gateway de Hermes reiniciado y vivo"
   else
-    systemctl start hermes-gateway.service </dev/null >/dev/null 2>&1; sleep 10
+    sc_user cat hermes-gateway.service >/dev/null 2>&1 && sc_user start hermes-gateway.service </dev/null >/dev/null 2>&1; sleep 10
     if gateway_vivo; then echo "✅ gateway vivo (al segundo intento)"
     else falla "❗ el gateway de Hermes NO volvió después del reinicio: Sergio Urcullo se queda sin Hermes. «revertir» restaura su SOUL y sus skills y lo reinicia"; fi
   fi

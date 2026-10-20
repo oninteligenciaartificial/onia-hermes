@@ -23,6 +23,7 @@ description: Invocar ANTES de tocar a Hermes (el asistente de Sergio Urcullo por
 | ¿Hermes o el asistente de Codex / dots? Decisión, pruebas y cuándo revisarla (8-oct: queda Hermes; dots bloqueado por edad) | `hermes-content/docs/ASISTENTE_CODEX_VS_HERMES.md` |
 | Fuentes del resumen/cierre que no son del carril (9-oct) | qué sale: `hermes-content/docs/cola/plan-3-semanas/CALENDARIO-PUBLICACION-<d1>-<d2>-<MES>.md` (el rango sale del nombre); qué salió: `/root/publicar/publicado.jsonl` del VPS (lo escriben los publicadores de `hermes-content/deploy/vps-ops/publicar/`); relojes (10-oct): tabla §G de `hermes-content/docs/cola/loop/madre.md`, leída de `origin/main` del clon; colas paradas: `git log` de `cola/loop/*.md` en `origin/main`; trabajos mudos: `/var/lib/onia-latido/<nombre>` («epoch código cadencia», lo escribe `onia-latido.sh`) |
 | Formato de todo lo que le llega (8-oct) | PASÓ · NECESITO · SIGUE: `jarvis-resumen.sh` (`parte`/`grupo`), SOUL `## Formato fijo de cada mensaje`, prompt de la rutina §5 |
+| Hermes carga y revisa tareas de la orquesta (20-oct) | `scripts/loops/orquesta-hermes.sh` (→ `/root/bin/onia-orquesta-hermes.sh`), skill `hermes-content/skills/planificar-orquesta.md`, SOUL `## Planificar la orquesta`, paso 5e de `aplicar` (inerte sin `/root/.config/onia/gh-issues-token`), sección 18 del diagnóstico. Pruebas: `npm run test:orquesta-hermes` |
 
 ## Cómo se llega al VPS desde la nube, y qué NO anda
 
@@ -57,8 +58,9 @@ description: Invocar ANTES de tocar a Hermes (el asistente de Sergio Urcullo por
 
 ## Hermes por dentro
 
-- **Gateway:** `hermes-gateway.service` (systemd), vivo desde el 18-sep con 0 reinicios, v0.21.0,
-  `gpt-5-mini` por LiteLLM `:4000`. Bot `@aalfredhq_bot` por polling.
+- **Gateway:** la unidad de **USUARIO** `/root/.config/systemd/user/hermes-gateway.service` (corregido el 20-oct con
+  lo medido el 19-oct: la de SISTEMA llevaba 8.092 reinicios «already running» y quedó deshabilitada). Desde el
+  19-oct, v0.22.2, `gpt-5-mini` por LiteLLM `:4000`. Bot `@aalfredhq_bot` por polling.
 - **Modelos, por trabajo** (la pregunta «¿mini o nano?» de la madre, 8-oct: son los dos). `gpt-5-mini`: el chat
   del gateway y los trabajos de las 08:00 (agenda) y 08:10 (plan de video). `gpt-5-nano`: el ordenador del
   tablero de las 13:00 y el veredicto de las 16:00. Medido el 27-sep (`jobs.json` y config viva) y el 1-oct
@@ -68,7 +70,9 @@ description: Invocar ANTES de tocar a Hermes (el asistente de Sergio Urcullo por
 - **Arma su lista de skills al ARRANCAR** (`.skills_prompt_snapshot.json`). El 1-oct la lista era del
   08-sep y no nombraba `agenda-calendario`, que existía desde el 28-sep: una skill copiada en caliente
   existe en el disco y él no la conoce. **Toda skill o SOUL nuevo exige reiniciar el gateway**:
-  `systemctl restart hermes-gateway.service` y verificar que volvió. Nunca `pkill`: el 03-sep dejó al
+  `XDG_RUNTIME_DIR=/run/user/0 systemctl --user restart hermes-gateway` (o `hermes gateway restart`) y verificar
+  que volvió; **nunca** el `systemctl` de sistema, que arranca la unidad deshabilitada y vuelve el bucle (`aplicar`
+  6b y `rollback.sh` usan la de usuario desde el 20-oct). Nunca `pkill`: el 03-sep dejó al
   supervisor vivo y hubo «Gateway (re)started 6 times in 120s» (`hermes-gateway-restart.sh` cuenta
   por qué).
 - **Pausar un trabajo:** `hermes cron pause <id>` deja `enabled=False`, `state=paused` y `paused_at`
@@ -116,6 +120,24 @@ con las rutas desviadas a una carpeta temporal y dobles para crontab, la API de 
 CLI de Hermes.
 
 ## Trampas ya pagadas
+
+- **Un trabajo de Hermes que crea `aplicar` se PAUSA al revertir, no se borra** (20-oct, 5e). `hermes cron create
+  "every 3h" "<prompt>" --skill … --name … --deliver local` sale de la documentación de Hermes
+  (`website/docs/user-guide/features/cron.md`), no de una corrida en el VPS: la Fase A pide `cron create --help` con
+  `--deliver` antes de tocar nada, y el trabajo se busca por `name` en `jobs.json` (nunca se crean dos; uno pausado se
+  reanuda). `rollback.sh` lo pausa con `cron pause`, lo único del CLI medido, y lo deja en `jobs.json`.
+- **El token de Issues es de la cuenta de Sergio Urcullo** (20-oct). Lo que se cree con él lo firma su usuario y
+  `orquesta.mjs` lo toma con plena confianza (autores). `onia-orquesta-hermes.sh` frena el error del modelo (check
+  `cmd` con cualquier comando, publicar sin su ok, bucles que llenan la cola), no a un Hermes que use curl directo.
+  El `check: cmd` corre con shell y sin sandbox en su PC: de Hermes solo valen `npm run|test` y `node --test`, sin
+  opciones, sin `/` inicial, sin `..` y sin un solo caracter que interprete una shell.
+- **`readonly X` y después `X=valor cmd`** aborta el comando con «X: readonly variable» (20-oct, humo de
+  `orquesta-hermes.sh` en WSL): al pasarle una constante a python por el entorno, va con otro nombre (`ORQ_CARRILES`).
+  Y un f-string con comillas dobles adentro de otro (`f"{d["x"]}"`) solo anda desde Python 3.12: comillas simples.
+- **Las pruebas del carril no corren en la PC** (20-oct): el `stat` de Git Bash dice 644 después de `chmod 600`, no
+  hay `flock`, `python3` es el atajo de la tienda de Windows, y WSL no tiene Node. Se corren en el CI del carril
+  (`hermes-jarvis-pruebas.yml`, Ubuntu) al abrir el PR; para iterar, un humo en WSL (`bash` + `python3` + `flock`
+  reales) con un curl falso en python. Instalar Node en WSL pide el ok de Sergio Urcullo (regla de instalaciones).
 
 - **El hook Stop hacía avanzar `main` solo** (`scripts/git-autosync.js`, hasta el 5-oct): pusheaba la
   rama y, si `main` era ancestro, la empujaba a `main`. El PR #68 apareció «merged» sin que nadie lo

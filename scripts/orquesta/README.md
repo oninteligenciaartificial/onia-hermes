@@ -7,7 +7,7 @@ Un programa fijo reparte el trabajo; los modelos solo trabajan. Por qué así y 
 
 | Pieza | Dónde | Qué hace |
 |---|---|---|
-| Cerebro | Hermes en el VPS | Planifica y carga issues en la cola (pendiente: login de Codex y token de Issues) |
+| Cerebro | Hermes en el VPS | Planifica, carga issues `origen:hermes` con `scripts/loops/orquesta-hermes.sh` y los revisa cada 3 h (skill `planificar-orquesta`; apagado hasta que esté el token de Issues en el VPS) |
 | Manos 24/7 | GitHub Actions (`.github/workflows/orquesta.yml`) | `orquesta.mjs --donde nube` con Claude Code y el token de Max (`CLAUDE_CODE_OAUTH_TOKEN`) |
 | Manos con logins | PC de Sergio Urcullo | `orquesta.mjs --donde pc`: lo que usa sus sesiones o archivos (video, Meta, Instagram, Higgsfield, Buffer) |
 
@@ -29,7 +29,7 @@ Actions to create and approve pull requests» (Settings → Actions → General)
 ## Cómo se pide una tarea
 
 Un issue en `oninteligenciaartificial/onia-hermes` con dos labels: `orquesta` y `carril:<área>`.
-Lo puede abrir Sergio Urcullo desde el celular, cualquier sesión o Hermes (con `gh`). Solo se toman
+Lo puede abrir Sergio Urcullo desde el celular, cualquier sesión o Hermes (con `scripts/loops/orquesta-hermes.sh`, abajo). Solo se toman
 issues de los autores en `carriles.json` → `autores`.
 
 ```
@@ -88,7 +88,18 @@ Las ramas `orquesta/*` no adelantan `main` aunque corra el autosync (`scripts/gi
 
 Labels que usa (creados el 18 y 19-oct): `orquesta`, `en-curso`, `bloqueada`, `espera-ok`, `carril:plataforma`,
 `carril:marca`, `carril:comunidad`, `carril:video`, `carril:investigacion`. Carril nuevo = entrada en
-`carriles.json` + `gh label create carril:<nombre>`.
+`carriles.json` + `gh label create carril:<nombre>` + el carril en `CARRILES` de `scripts/loops/orquesta-hermes.sh`
+(una prueba los compara).
+
+## Lo que carga Hermes (20-oct)
+
+Hermes no usa `gh` (el VPS no lo tiene): `scripts/loops/orquesta-hermes.sh` va con curl y un token fine-grained de
+la cuenta de Sergio Urcullo (solo Issues de `onia-hermes`, en `/root/.config/onia/gh-issues-token`, 600). Lo que crea
+lleva `origen:hermes` (label creado el 20-oct) y pasa los guardarraíles de la sección «v2» del doc de investigación:
+10 por día, `check:` solo `urls`, `cmd npm run|test …` o `cmd node --test …` (corre sin sandbox), y `necesita-ok`
+(label creado el 20-oct) si publica, gasta, contacta, toca producción o mergea. **Con `necesita-ok` el orquestador
+no la toma**: Sergio Urcullo la suelta sacándole el label (el workflow no escucha `unlabeled`: la toma la próxima
+pasada o el próximo comentario). Hermes solo cierra sin hacer (`not_planned`) lo suyo que no empezó.
 
 Trampa medida (18-oct): una sesión de Claude Code en modo auto NO puede lanzar estos trabajadores (el
 control de permisos lo bloquea como «Create Unsafe Agents»). La pasada la corre la tarea programada

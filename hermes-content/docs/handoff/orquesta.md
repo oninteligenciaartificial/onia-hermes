@@ -105,7 +105,15 @@ Falta:
    write, 1 año) y guardarlo en `/root/.config/onia/gh-issues-token` (600) sin que se vea. Medido 22:30 UTC: todavía no está.
 7. Arreglar `aplicar.sh` (líneas ~546, 775, 792) y `diagnostico.sh` de la skill `onia-hermes-jarvis`: reinician el servicio de
    **sistema** y revivirían el bucle; pasar a `systemctl --user` o `hermes gateway restart`.
-8. Hermes como planificador: skill «planificar-orquesta» + sección en `SOUL.md` + trabajo programado cada 3 h que lea la cola,
+8. ✅ (en PR, 20-oct) [PR #252](https://github.com/oninteligenciaartificial/onia-hermes/pull/252): `scripts/loops/orquesta-hermes.sh`
+   (`--crear` / `--revisar` / `--cerrar` / `--estado`, curl + token del archivo de 6g, guardarraíles v2), skill
+   `hermes-content/skills/planificar-orquesta.md`, sección «## Planificar la orquesta» del SOUL, paso **5e** de `aplicar`
+   (inerte sin token; trabajo de Hermes `onia-planificar-orquesta` «every 3h», `--deliver local`), sección 18 del
+   diagnóstico, y `necesita-ok` frena en `orquesta.mjs`. Labels `origen:hermes` y `necesita-ok` creados el 20-oct.
+   **Falta:** el token de 6g en el VPS, arreglar el punto 7 (6b de `aplicar` reiniciaría el servicio de sistema
+   deshabilitado) y correr `aplicar` con el sí de Sergio Urcullo. `hermes cron create` sale de la documentación de
+   Hermes, no de una corrida en el VPS: la Fase A lo comprueba con `--help` antes de tocar nada.
+   Lo que decía antes este punto: Hermes como planificador: skill «planificar-orquesta» + sección en `SOUL.md` + trabajo programado cada 3 h que lea la cola,
    cuando estén el login de Codex y el token de GitHub (abajo). Hermes ya planifica con `openai-codex` (dato de la sesión
    principal, 19-oct). No se hizo: el SOUL y el cron entran por `aplicar` (carril hermes-jarvis: sección propia + paso 5c + chequeo
    en la Fase A + prueba) y tocar el VPS pide el sí de Sergio Urcullo en la sesión que lo haga. Sin `gh` en el VPS (medido): el script
