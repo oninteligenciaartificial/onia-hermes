@@ -268,7 +268,7 @@ Fuente y evidencia: [`references/video-intake/2026-10-10-ig-carrusel-DePPPp5FgMh
 
 ## Carrusel de oferta o evento (workshop de pago) — aprendido el 16-oct-2026
 
-Caso: dos carruseles del workshop «Auditá tu negocio con IA» (`briefs/marca-personal/sergio-workshop-*-20261016.json`, render en `carousels/out/`). Sin imágenes ni gasto: solo layouts `dato`, `lista`, `ensayo`.
+Caso: dos carruseles del workshop «Auditá tu negocio con IA» (`briefs/marca-personal/sergio-workshop-*-20261016.json` del 16-oct; la versión vigente es `sergio-taller-*-20261017.json`). Sin imágenes ni gasto: solo layouts `dato`, `lista`, `ensayo`.
 - **Estructura que funcionó:** portada `dato` con **ejemplo rotulado** («Ejemplo: 5 h por semana, a Bs 20 la hora»; nunca un número que parezca dato de alguien) → la cuenta en `lista` → filtro «para quién no es» → fecha y cupo → cierre `ensayo` negro con `cta` y **una sola** acción («Link en mi perfil»). El precio no va en la lámina: va en la página, que es lo que se aprueba.
 - **Una lámina `ensayo` con 3 líneas queda con más de la mitad vacía** (falla el control §5.2). Se arregla pasándola a `lista` de 3 filas. Las de cierre negro y la portada verde pueden quedar así: son declaraciones.
 - **`cierre` no se usa** para estas piezas: imprime «Comentá» fijo y el DM por comentario no está probado. El cierre es `ensayo` con `cta`.

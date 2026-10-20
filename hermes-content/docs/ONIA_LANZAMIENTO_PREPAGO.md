@@ -16,7 +16,7 @@
 | Producto | **Taller en vivo «Auditá tu negocio con IA»**: 90 minutos por Meet. Salís con **tu lista de tareas repetidas** (qué repetís, cuántas horas y bolivianos te cuesta), **tu prioridad** (cuál automatizar primero) y **tu primer paso** |
 | Precio (escalones **por cupo**, no por reloj) | **Fundadores: Bs 50** (primeros 15) → **Bs 60** (siguientes 20) → **Bs 70** (últimos 15). Cupo total **50** (todo incluido: no hay cupos aparte) |
 | ~~Versión «Con revisión»~~ (DESCARTADA el 17-oct, ver §6) | **Bs 140**, cupo 8: lo mismo + 15 minutos tuyos con Sergio Urcullo revisando tu lista por Meet. Es la versión con algo personal (ver §6) |
-| Cuándo | **Sáb 31-oct, 10:00 (La Paz).** Se vende del **lun 19** al **jue 29 20:00** (10 días). Antes decía sáb 24: se mueve para tener 10 días de venta y no 5 |
+| Cuándo | **Sáb 31-oct, 10:00 (La Paz).** Se vende del **mié 21** al **jue 29 20:00** (9 días; decidido el 19-oct, ver `TALLER_31_OCT.md`). Antes decía sáb 24: se mueve para tener 10 días de venta y no 5 |
 | Puerta | **Clase gratis de 35 min, mar 27-oct 19:00**: «La cuenta que nadie hace». Cierra la venta de los que dudan |
 | Cómo se paga | QR del BCP por WhatsApp, antes del taller. Sergio Urcullo verifica el movimiento en la app del BCP y confirma |
 | Escalera | **NO VIGENTE: los precios de Onia salen solo de `onia-platform/lib/pricing.ts`, `lib/subscription-plans.ts` y `ONIA_CATALOGO_DE_VENTA.md`, no de este documento.** (Antes: Prepago Bs 50-70 → Auditoría 1 a 1 Bs 350 → Diagnóstico + Roadmap Bs 790-1.200 o Instalación Starter Bs 1.900; esas cifras no están aprobadas.) El prepago del taller no promete ningún escalón posterior |
@@ -30,7 +30,7 @@
 2. **Tu lista de tareas repetidas y tu prioridad**, armadas en vivo. ⚠️ La «plantilla del Mapa» **no existe y no se promete** (decidido el 17-oct).
 3. **Tu primer paso**: lo definís en vivo, con tu propio negocio.
 
-**No se promete:** ahorro en bolivianos, «triplicar ventas», certificado, resultados ni nada que Onia Platform aún no haga. La segunda fecha **no se promete**: solo si el taller se llena, Sergio evalúa una el mié 4-nov 19:00, sin anunciarla ni lista de espera.
+**No se promete:** ahorro en bolivianos, «triplicar ventas», certificado, resultados ni nada que Onia Platform aún no haga. La segunda fecha **no se promete**: solo si el taller se llena, Sergio evalúa una, sin anunciarla ni lista de espera.
 
 ## 2. Cuánta gente hace falta (la aritmética de Bs 3.000)
 
@@ -49,7 +49,7 @@ Lo único con cifras reales que encontré: contactos recientes de un imán compr
 - Con la clase gratis: **~600 a 2.500 inscritos** a la clase para llegar a 50 compradores.
 
 ### Lectura franca (para decidir con la cuenta delante)
-Hoy la audiencia medida es corta: **~30 miembros** en la comunidad (30-sep), 6 leads de agosto, seguidores de Instagram de Sergio Urcullo **[MEDIR]**. Si el alcance real es de unos cientos de personas, lo **probable** es quedar entre **15 y 30 inscripciones (Bs 750 a Bs 1.650, llenando los escalones en orden)**; **Bs 3.000 solo con prepago exige ~1.700 personas que vean la oferta con intención (§2, 3 % de conversión; entre 1.300 y 10.000 según la conversión real)**. La cuenta por escenarios:
+Hoy la audiencia medida es corta: **~30 miembros** en la comunidad (30-sep), 6 leads de agosto, **497 seguidores** en Instagram (medido el 19-oct). Si el alcance real es de unos cientos de personas, lo **probable** es quedar entre **15 y 30 inscripciones (Bs 750 a Bs 1.650, llenando los escalones en orden)**; **Bs 3.000 solo con prepago exige ~1.700 personas que vean la oferta con intención (§2, 3 % de conversión; entre 1.300 y 10.000 según la conversión real)**. La cuenta por escenarios:
 
 | Escenario | Inscripciones (escalones llenados en orden: 15 a Bs 50, 20 a Bs 60, 15 a Bs 70) | Ingreso del taller |
 |---|---|---|
@@ -104,7 +104,7 @@ Se anotan por WhatsApp escribiendo «CLASE». Quien se anota queda en la **lista
 | Mié 28 - jue 29 | Último empuje: escalón y cupos reales. **Cierre jue 29 20:00** |
 | Vie 30 | Pre-trabajo y link de Meet a los confirmados |
 | **Sáb 31, 10:00** | **Taller** |
-| Dom 1 - mié 4 | Gracias y encuesta de 3 preguntas. Mié 4-nov 19:00: segunda fecha **no prometida**; solo si el taller se llena, Sergio evalúa una |
+| Dom 1 - mié 4 | Gracias y encuesta de 3 preguntas. Segunda fecha **no prometida** |
 
 ## 5. Mensajes (voseo; cada uno con el OK de Sergio Urcullo; nada se manda desde la nube)
 
@@ -124,14 +124,14 @@ Se anotan por WhatsApp escribiendo «CLASE». Quien se anota queda en la **lista
 
 | Chequeo | Cuándo | Si pasa | Si no pasa |
 |---|---|---|---|
-| **1** | Mié 21-oct (regla única, ver `TALLER_31_OCT.md`) | **≥ 15 pagos**: sigue la meta de Bs 3.000. **8 a 14**: se sigue, la meta baja a ~Bs 1.500 | **5 a 7**: se revisa el mensaje y se dan 3 días más. **< 5**: parar y revisar mensaje y alcance; no bajar el precio por reflejo |
+| **1** | Vie 23-oct (regla única, ver `TALLER_31_OCT.md` §7) | **≥ 15 pagos**: sigue la meta de Bs 3.000. **8 a 14**: se sigue, la meta baja a ~Bs 1.500 | **5 a 7**: se revisa el mensaje y se dan 3 días más. **< 5**: parar y revisar mensaje y alcance; no bajar el precio por reflejo |
 | **2** | Mar 27-oct (clase) | **≥ 25 pagos**: el taller se dicta con 50 como tope | **< 15**: se dicta igual si hay 6 o más (mínimo) |
 | Cancelación | Jue 29 20:00 | — | **Menos de 6 pagos acreditados: no se dicta**, devolución completa |
 
-**Sin pauta paga:** gastar en Meta Ads exige el OK específico de Sergio Urcullo.
+**Pauta:** Sergio Urcullo aprobó Bs 300 en Meta el 19-oct (`TALLER_31_OCT.md` §0). Más gasto exige otro OK.
 
 ## 8. Qué cambia en lo ya hecho (y qué no)
-- Los **2 carruseles** (`carousels/briefs/marca-personal/sergio-workshop-*-20261016.json`) hablan de «sáb 24» y «cupo 12»: **ya re-renderizados el 17-oct** con «Sáb 31 de octubre · 10:00», «Cupo 50» y 90 minutos, y dicen «lista de tareas repetidas». Dicen «Desde Bs 50 · 50 cupos» solo en la lámina final del carrusel 2 (lámina 6); la escalera completa vive en la página (regla de `TALLER_31_OCT.md`). **Pendiente del visto bueno de Sergio Urcullo** antes de subir.
+- Los **2 carruseles** (`carousels/briefs/marca-personal/sergio-taller-*-20261017.json`, v4; los v1 `sergio-workshop-*-20261016` no entraron al repo) hablan de «sáb 24» y «cupo 12»: **ya re-renderizados el 17-oct** con «Sáb 31 de octubre · 10:00», «Cupo 50» y 90 minutos, y dicen «lista de tareas repetidas». Dicen «Desde Bs 50 · 50 cupos» solo en la lámina final del carrusel 2 (lámina 6); la escalera completa vive en la página (regla de `TALLER_31_OCT.md`). **Pendiente del visto bueno de Sergio Urcullo** antes de subir.
 - `docs/comunidad/COMUNIDAD_WHATSAPP_ESTRUCTURA.md`: **actualizado el 17-oct:** el aviso dice sáb 31, cupo 50 y los 3 escalones. El grupo temporal «Workshop» sigue siendo con ≥ 6 pagos y el OK de Sergio Urcullo.
 - El evento de cal.com `/auditoria` (auditorías 1 a 1) y el texto de la página: siguen sin existir.
 
@@ -141,8 +141,8 @@ Está en `docs/historial/2026-10-16-workshops-auditoria-ia-descartada.md` (histo
 ## 10. Lo que necesita de Sergio Urcullo (una hoja, sí o no)
 1. **Precio y fecha:** escalones Bs 50 / 60 / 70, cupo 50, taller sáb 31-oct 10:00.
 2. **A nombre de quién se cobra por QR y cómo se factura.** Lo define Leslie Mercado Moreno antes del primer cobro.
-3. **Devolución: DECIDIDA por Sergio Urcullo (17-oct), opción C, sin devolución** (Términos actuales). Aplicada: solo se devuelve si el taller no se dicta. Falta que Leslie Mercado Moreno revise el texto. Si luego se ofrece Onia Platform en el cierre, avisar que el plan anual no se reembolsa y que conviene probar antes los 14 días sin tarjeta.
-4. Probar que su Meet admite una sesión de 90 minutos con 50 personas **[verificar: la cuenta gratis de Google puede limitar la duración de las reuniones grupales]**.
+3. **Devolución: DECIDIDA por Sergio Urcullo (17-oct), opción C, sin devolución** (Términos actuales). Aplicada: solo se devuelve si el taller no se dicta. Falta que Leslie Mercado Moreno revise el texto. (Onia Platform no se nombra en el taller: `TALLER_31_OCT.md` §1.)
+4. ~~Probar Meet de 90 min~~ **Resuelto el 19-oct:** Meet gratis corta a los 60 min; el taller va en dos bloques de 45 (`TALLER_31_OCT.md` §1).
 5. **OK a publicar** las piezas (con el CTA «Link en mi perfil») y a mandar cada mensaje de §5.
 6. Preguntarle a **Fabricio**: cuántos seguidores tenía, cuántos días vendió, qué entregó y cuántas devoluciones hubo. Con eso se afina la cuenta de §2.
 7. **Plazo y forma de devolución:** (aplica solo si el taller no se dicta; vigente en `TALLER_31_OCT.md` §3) decide Sergio Urcullo con Leslie Mercado Moreno (propuesta: 3 días hábiles, a la cuenta de origen), antes de abrir la venta.

@@ -50,15 +50,15 @@ El horario de respuesta sale de las ventanas de agenda vigentes (`ESTADO_COMUNID
 > probar hoy. 3) Si querés que lo mire con vos, reservá 20 minutos gratis: sergiourcullo.vercel.app/llamada. Reglas: están fijadas arriba.
 
 **B · Mensaje 1 a 1 a quien se presenta** (lo manda Sergio Urcullo; de vos porque es la comunidad, no un cliente que paga):
-> Gracias por presentarte. Dime una cosa: de lo que repetís cada semana, ¿cuál es la tarea que más tiempo te come? Con eso te digo por dónde empezar.
+> Gracias por presentarte. Decime una cosa: de lo que repetís cada semana, ¿cuál es la tarea que más tiempo te come? Con eso te digo por dónde empezar.
 
 **C · Quien viene de un workshop** (mensaje de confirmación, de vos, ver `ONIA_LANZAMIENTO_PREPAGO.md` §5, plantilla B, y `TALLER_31_OCT.md`): además, al terminar, se le invita a Avisos.
 
-**D · Quick win en los primeros 10 minutos:** el último aviso siempre tiene algo para probar en 10 minutos (el D0 de `ONIA_COMUNIDAD_CONTENIDO.md` regala los 3
+**D · Quick win en los primeros 10 minutos:** el último aviso siempre tiene algo para probar en 10 minutos (recurso de la comunidad, no del taller: el D0 de `ONIA_COMUNIDAD_CONTENIDO.md` regala los 3
 cursos con certificado; si ese recurso ya no está vigente, se reemplaza por el de la semana, no se promete nada que no exista).
 
 ## 5. El escalón hacia los workshops (lo que se publica en Avisos, con el OK)
-Un solo aviso de convocatoria (después de aprobado el precio y la fecha), sin presión y con el cupo real:
+Avisos de convocatoria en los días que marca `TALLER_31_OCT.md` §4 (mié 21, dom 25, lun 26 y el cierre), sin presión y con el cupo real:
 > **Workshop en vivo · sáb 31 de octubre · 10:00 (La Paz)**
 > «Auditá tu negocio con IA»: 90 minutos por Meet para salir con tu lista de tareas repetidas, tu prioridad y tu primer paso.
 > Cupo, precio por escalón, política y cómo reservar: se copian de `TALLER_31_OCT.md` el día en que se abra la compuerta (la página `/auditoria` todavía no está viva y no se anuncia antes).
