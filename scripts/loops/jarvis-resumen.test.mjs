@@ -192,7 +192,7 @@ test("entregado: la noche se da por leída y la voz queda lista, limpia para el 
   assert.deepEqual(readdirSync(join(b.estado, "nocturnos")), []);
   const voz = readFileSync(join(b.out, "brief-hoy.txt"), "utf8");
   assert.match(voz, /^Buen día, Sergio Urcullo/);
-  assert.match(voz, /^Pasó\.$/m, "el título del bloque se lee como palabra, no deletreado en mayúsculas");
+  assert.doesNotMatch(voz, /PASÓ|NECESITO|SIGUE|^Pasó\.$/m, "sin rótulos tampoco en la voz (20-oct)");
   assert.doesNotMatch(voz, /→|<b>|🧲|ok t_/);
 });
 
