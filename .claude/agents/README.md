@@ -21,9 +21,47 @@ retirados antes de la limpieza y, dentro de `.claude/agents/`, el harness los vo
 
 ## Generalistas (globales, `~/.claude/agents/`)
 
-Los que se usan de verdad: `general-purpose`, `Explore`, `code-reviewer`, `security-reviewer`.
 `code-reviewer` y `security-reviewer` viven también en este repo (`.claude/agents/`, copia idéntica de la global)
 para que la nube los vea (10-oct-2026). Si se edita uno, se edita en los dos sitios.
+
+## Qué agente usar en cada área (revisado el 20-oct-2026)
+
+Se revisaron los 5 del repo, los 43 de `~/.claude/agents/` (casi todos de ECC), los de plugins
+(`claude-security`, `superpowers`, `skill-creator`, `understand-anything`) y los integrados (`general-purpose`,
+`Explore`, `Plan`). Modelo por rol (`CLAUDE.md`): Haiku cuenta y verifica, Sonnet sintetiza, Opus decide lo riesgoso.
+El stack de skills de cada área está en `onia-router` § «Apartados por área».
+
+| Agente | Área | Cuándo y cómo |
+|---|---|---|
+| `code-reviewer` | toda área que toca código | Antes de cada PR, con el diff. CRITICAL bloquea, HIGH avisa |
+| `security-reviewer` | plataforma, infra, scripts | Antes del PR si toca auth, input de usuario, SQL, archivos, APIs externas, cripto o pagos |
+| skill `claude-security:claude-security` (plugin, 20-oct) | plataforma | Escaneo profundo de un módulo sensible (cobro, alta, RLS) antes de publicarlo. Lanza varios agentes: lo pide Sergio Urcullo, no va en cada PR |
+| `typescript-reviewer` | plataforma, web | PR grande de TypeScript o Next, junto a `code-reviewer` |
+| `database-reviewer` | plataforma | Migración, RLS o consulta nueva de Postgres/Supabase |
+| `onia-core-guardian` | plataforma (core) | Todo cambio a `contract.json`, adapters o `base-schema.sql` |
+| `healthcare-reviewer` | plataforma (dental) | Cambios que tocan historia clínica o datos de pacientes |
+| `tdd-guide` | plataforma | Feature o bug nuevo: el test primero |
+| `build-error-resolver` | plataforma, web | `tsc` o build rotos: arreglo mínimo, sin rediseñar |
+| `e2e-runner` | plataforma, web | Flujo crítico (alta, cobro, agenda) con `agent-browser` |
+| `planner` · `architect` | plataforma, infra | Antes de un cambio de varias piezas o de una decisión de arquitectura. Solo leen |
+| `performance-optimizer` | plataforma, web | LCP, INP o bundle fuera de meta |
+| `refactor-cleaner` · `doc-updater` | plataforma, docs | En una tarea propia, nunca mezclados con una feature |
+| `onia-creative-radar` | marca, video, pauta | Plan de pieza o video: investiga tendencias y extrae estructura. Nunca publica |
+| `onia-crm-prospeccion` | ventas | Pocos prospectos con señal y fuente pública. Nunca contacta sin el OK del mensaje y el canal |
+| `general-purpose` · `Explore` | investigación y todas | Búsqueda con muchos archivos o fuentes. `Explore` solo lee |
+| `loop-operator` · `harness-optimizer` | infra/Hermes | Un loop trabado, o sesiones que arrancan pesadas |
+| `python-reviewer` | infra | Scripts `.py` del repo |
+
+**No usar**, y por qué:
+- Lenguajes que ONIA no tiene: `cpp-*`, `csharp-reviewer`, `dart-build-resolver`, `flutter-reviewer`, `go-*`,
+  `java-*`, `kotlin-*`, `rust-*`, `pytorch-build-resolver`. Quedan instalados: Sergio Urcullo no aprobó tocarlos.
+- `gan-planner` · `gan-generator` · `gan-evaluator`: otro orquestador; duplica `scripts/orquesta`.
+- `chief-of-staff`: triage de correo y chats; eso es de Hermes.
+- `opensource-forker` · `-packager` · `-sanitizer`: ONIA no publica repos.
+- `docs-lookup`: necesita el MCP Context7, que no está conectado.
+- `market-*` (5 en `~/.claude/agents/`): no tienen cabecera, así que el harness no los carga como agentes.
+- `superpowers:code-reviewer`: duplica `code-reviewer`. Los agentes de `skill-creator` y `understand-anything`
+  son piezas internas de esas skills: no se llaman sueltos.
 
 ## Reglas de delegación (de AGENTS.md)
 1. Data-first antes de preguntar. 2. Autonomía operativa antes de delegar al

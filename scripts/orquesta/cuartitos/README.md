@@ -12,3 +12,9 @@ trabajador las lee por ruta, porque así lo dice su cuartito en `../carriles.jso
 | deep-research | github.com/affaan-m/ECC | MIT, `deep-research/LICENSE` |
 
 Copiadas el 19-oct-2026, sin las carpetas `evals/`. Si la skill global se actualiza, se vuelve a copiar.
+
+Los carriles que corren en la PC (`"donde": "pc"`) con motor codex pueden leer una skill global por ruta absoluta
+(`C:/Users/PC/.claude/skills/...`), como plataforma con `next-dev-loop`, `prisma-cli` y `diagnosing-bugs` (20-oct).
+Con motor claude, además hay que sumar la carpeta a `dirs_extra`. Un carril de la nube no puede: `orquesta.test.mjs`
+falla si su `leer` tiene una ruta de la PC o una que no existe. Riesgo aceptado: esas copias globales no pasan por PR;
+solo cambian cuando alguien las reinstala o actualiza, y eso pide el sí de Sergio Urcullo.

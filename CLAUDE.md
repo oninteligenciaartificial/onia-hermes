@@ -43,6 +43,13 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
 - **Un objetivo al inicio, escrito y explícito**, con su definición de "hecho". Todo lo
   que no sirva a ese objetivo se **anota como pendiente**, no se hace.
 - **No se cierra la sesión hasta terminarlo.** Nada a medias, nada de saltar a otra cosa.
+- **Relevo al 80 % de contexto** (Sergio Urcullo, 20-oct-2026: *«llega al límite de contexto, así que revisá que
+  lleguen al límite, handoff, se anota y se continúa, y la otra se deja archivada como historia»*). Al 80 %: se
+  escribe el handoff del carril (los siete campos de «Cambio de sesión», abajo, con commit y push), el mismo
+  objetivo sigue en una sesión nueva que arranca leyendo ese handoff, y la vieja se archiva como historia: no se
+  le pide nada más. Relevar no es cerrar a medias: el objetivo no cambia de dueño ni de definición de «hecho».
+  El aviso del 80 % lo arma el Panel ONIA (en construcción el 20-oct); mientras no esté, se mira el indicador de
+  contexto de la app.
 - **Orquestan Hermes y el programa fijo, no una sesión** (Sergio Urcullo, 19-oct-2026; ver «Quién orquesta»,
   abajo). La sesión principal es donde él trabaja conmigo; sus subagentes y los carriles independientes sí
   trabajan en paralelo. Codex ejecuta encargos cerrados.
@@ -87,6 +94,9 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
 
 - Toda sesión arranca invocando **`onia-router`**: él es el índice y rutea la tarea a su
   carril, su stack de skills, su subagente y sus docs fuente.
+- **La primera respuesta de cada sesión nombra las skills que cargó** (Sergio Urcullo, 20-oct: el taller hizo la
+  página sin las skills de diseño y nadie lo vio). Una línea, con los nombres exactos de la fila de su área en
+  `onia-router`. Quien abre una sesión de un área le pasa esa fila en el prompt, no solo «arrancá con onia-router».
 - **Desde 2026-10-09, Claude y Codex cargan también `equipo-de-agentes` y
   `aprender-de-todo`.** Registrar cada referencia por dimensión; guardar una regla
   no demuestra aprendizaje aplicado: hace falta una tarea que la use.
@@ -128,9 +138,10 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
   El diagnóstico, las hipótesis descartadas y las fuentes van al handoff, no al mensaje.
 - **En el producto y la web:** cada paso o página extra se justifica o se saca. Ante dos
   soluciones, gana la de menos clics para el cliente.
-- **Formato fijo de cada mensaje a Sergio Urcullo (8-oct: «me entregás demasiado texto y me pierdo; probá
-  /caveman»):** máximo 3 bloques: **Pasó** (1-2 líneas) · **Necesito** (sí/no o pasos mínimos, o «nada») · **Sigue**
-  (1 línea). Estilo caveman (frases cortas, sin relleno), tablas solo si ordenan. Método, hipótesis, fuentes y detalle
+- **Cómo se le escribe a Sergio Urcullo (20-oct: «que no hablen de esa manera, con pasó, sigue… que hablen normal
+  pero resumido y al grano»):** prosa normal y corta, sin rótulos «Pasó / Necesito / Sigue» (el formato fijo del
+  8-oct queda superado). Primero lo que importa, después lo que le toca hacer a él, si hay algo. ~5 líneas; tablas
+  solo si tiene que elegir. Método, hipótesis, fuentes y detalle
   van al handoff, la skill o el PR, nunca al mensaje. **El trabajo por detrás NO se achica:** mismo desarrollo,
   verificación y aprendizaje; solo se acorta lo que se le dice. Seguridad y lo irreversible se escriben claros.
 

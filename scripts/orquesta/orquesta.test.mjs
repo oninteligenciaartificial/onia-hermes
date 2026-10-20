@@ -4,7 +4,7 @@ import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { pathToFileURL } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import {
   CONF, leerPedido, elegirTareas, rutear, rutaSalida, revisarSalida, urlsDe, argsAgente,
   baseDe, motivoAnterior, armarPrompt, leerVeredicto, PROTEGIDAS, armarCuartito,
@@ -129,6 +129,17 @@ test('cada carril tiene su cuartito y el prompt lo nombra', () => {
 });
 
 const hilo = (...bodies) => bodies.map((body) => ({ body, author: { login: 'oninteligenciaartificial' } }));
+
+test('cuartito: lo que se lee existe, y una ruta de la PC solo va en un carril que corre en la PC', () => {
+  const crudo = JSON.parse(fs.readFileSync(new URL('./carriles.json', import.meta.url), 'utf8'));
+  const raiz = fileURLToPath(new URL('../..', import.meta.url));
+  for (const [nombre, c] of Object.entries(crudo.carriles)) {
+    for (const p of c.leer) {
+      if (path.win32.isAbsolute(p) || path.posix.isAbsolute(p)) assert.equal(c.donde, 'pc', `${nombre}: ${p}`);
+      else if (path.posix.basename(c.repo) === 'onia-hermes') assert.ok(fs.existsSync(path.join(raiz, p)), `${nombre}: ${p}`);
+    }
+  }
+});
 
 test('leerHilo: un comentario de otra cuenta no es una indicación ni un «ok»', () => {
   const it = issue(8, 'marca', { labels: [{ name: 'espera-ok' }], comments: [

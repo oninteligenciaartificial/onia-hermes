@@ -22,7 +22,7 @@ description: Invocar ANTES de tocar a Hermes (el asistente de Sergio Urcullo por
 | Resumen y cierre · aduana · calendario · pedidos · su vuelta | `scripts/loops/{jarvis-resumen,onia-tg,agenda,pedido-claude,respuestas-pedidos}.sh` |
 | ¿Hermes o el asistente de Codex / dots? Decisión, pruebas y cuándo revisarla (8-oct: queda Hermes; dots bloqueado por edad) | `hermes-content/docs/ASISTENTE_CODEX_VS_HERMES.md` |
 | Fuentes del resumen/cierre que no son del carril (9-oct) | qué sale: `hermes-content/docs/cola/plan-3-semanas/CALENDARIO-PUBLICACION-<d1>-<d2>-<MES>.md` (el rango sale del nombre); qué salió: `/root/publicar/publicado.jsonl` del VPS (lo escriben los publicadores de `hermes-content/deploy/vps-ops/publicar/`); relojes (10-oct): tabla §G de `hermes-content/docs/cola/loop/madre.md`, leída de `origin/main` del clon; colas paradas: `git log` de `cola/loop/*.md` en `origin/main`; trabajos mudos: `/var/lib/onia-latido/<nombre>` («epoch código cadencia», lo escribe `onia-latido.sh`) |
-| Formato de todo lo que le llega (8-oct) | PASÓ · NECESITO · SIGUE: `jarvis-resumen.sh` (`parte`/`grupo`), SOUL `## Formato fijo de cada mensaje`, prompt de la rutina §5 |
+| Formato de todo lo que le llega (8-oct; 20-oct sin rótulos) | prosa corta: lo que pasó, lo que le toca, lo que viene. `jarvis-resumen.sh` (`parte`/`grupo`; `ONIA_JARVIS_GRUPOS=1` muestra los bloques solo en las pruebas), SOUL `## Formato fijo de cada mensaje` (aplicar 5c la REEMPLAZA si cambió), aviso de `qa-release.sh`, prompt de la rutina §5 |
 | Hermes carga y revisa tareas de la orquesta (20-oct) | `scripts/loops/orquesta-hermes.sh` (→ `/root/bin/onia-orquesta-hermes.sh`), skill `hermes-content/skills/planificar-orquesta.md`, SOUL `## Planificar la orquesta`, paso 5e de `aplicar` (inerte sin `/root/.config/onia/gh-issues-token`), sección 18 del diagnóstico. Pruebas: `npm run test:orquesta-hermes` |
 
 ## Cómo se llega al VPS desde la nube, y qué NO anda
@@ -126,7 +126,14 @@ CLI de Hermes.
   escriben su log cuando pasa algo: salían «MUDO hace 3 d» estando sanos (los latidos decían código 0 de hoy), y
   una sesión creyó que a Sergio Urcullo no le llegaba el resumen. Ahora esas líneas se miden por su latido y lo
   dicen («(por su latido)»). Antes de dar un trabajo por caído: la lista «--- latidos» al pie de la sección.
-
+- **Hermes solo carga `~/.hermes/skills/<…>/<nombre>/SKILL.md`** (su documentación, `features/skills.md`; 20-oct).
+  `aplicar` del 20-oct (corrida 39496727472) dejó la de la orquesta en `/root/.hermes/planificar-orquesta/SKILL.md`:
+  5d y 5e la ponían «junto a la del calendario» con `dirname(dirname(...))`, y en el VPS esa es un `.md` suelto
+  (`skills/agenda-calendario.md`). Ahora 5d y 5e van a `skills/<nombre>/SKILL.md` y 5e borra la copia de afuera.
+  ⚠️ **Sigue abierto:** `agenda-calendario.md` y otros `.md` sueltos en `skills/` tampoco los carga; por eso
+  `.skills_prompt_snapshot.json` (del 08-sep) nunca nombró `agenda-calendario`. Y el sincronizador copia lo que
+  bajó la vuelta ANTERIOR: un `poner` nuevo en `sincronizar.sh` tarda DOS vueltas (la primera se actualiza a sí
+  misma); `aplicar` corre el sincronizador hasta dos veces (#261).
 - **Un trabajo de Hermes que crea `aplicar` se PAUSA al revertir, no se borra** (20-oct, 5e). `hermes cron create
   "every 3h" "<prompt>" --skill … --name … --deliver local` sale de la documentación de Hermes
   (`website/docs/user-guide/features/cron.md`), no de una corrida en el VPS: la Fase A pide `cron create --help` con
@@ -350,6 +357,13 @@ CLI de Hermes.
   nueva = sección propia que termina en `---`, su paso en 5c (o 5d si depende de la llave), su chequeo
   en la Fase A y su prueba en `hermes-jarvis-aplicar.test.mjs`. Así entró el formato fijo
   (Pasó · Necesito · Sigue).
+- **Una sección del SOUL que CAMBIA no llega con «agregar si falta»** (20-oct). La del formato pasó de
+  tres bloques a prosa corta, y 5c solo la agregaba si faltaba el título: el VPS se quedaba con la del
+  8-oct para siempre. Ahora 5c compara la sección del VPS con la de `main` y, si difiere, la REEMPLAZA
+  (de su título al próximo `---`, con `cat >` para no cambiar dueño ni permisos; el SOUL de antes queda
+  en `$BK/SOUL.md.antes`). Las otras secciones siguen con «agregar si falta»: si cambian, necesitan lo
+  mismo. Y una marca de versión de `al_dia()` se cambia junto con el texto que la lleva: el resumen sin
+  rótulos se reconoce por «nada pendiente», no por `grupo NECESITO`, que también tenía el viejo.
 - **`git stash -u` con un `git mv` en el medio:** el pop no puede restaurar un archivo nuevo en la ruta
   que dejó libre el `mv`, y deja el stash guardado. Antes de soltarlo, compará archivo por archivo con
   `git show stash@{0}^3:<ruta>`. Mejor no mezclar stash con renombres.

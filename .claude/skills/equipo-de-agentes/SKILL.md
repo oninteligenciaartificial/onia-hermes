@@ -1,9 +1,17 @@
 ---
 name: equipo-de-agentes
-description: El método del equipo de agentes de Onia (desde el 9-oct-2026). La madre local orquesta; cada sesión de la nube trabaja en loop su propia cola; Codex hace el código cerrado; los verificadores Haiku 5.5 controlan que se cumpla; a Sergio Urcullo solo le llega lo publicado. Invocar al arrancar una sesión madre, al despachar trabajo o al revisar si algo se cumplió.
+description: El método del equipo de agentes de Onia. Desde el 19-oct-2026 Hermes planifica y el programa fijo scripts/orquesta reparte (ya no hay madre); Codex hace el código cerrado; los verificadores Haiku 5.5 controlan que se cumpla; lo que ve un cliente llega a Sergio Urcullo con captura y espera su OK. Invocar al despachar trabajo o al revisar si algo se cumplió.
 ---
 
 # Equipo de agentes de Onia
+
+> ⚠️ **Corrección del 19-oct-2026 (Sergio Urcullo), manda sobre lo de abajo:**
+> 1. **Quién orquesta:** Hermes planifica y `scripts/orquesta/` reparte por issues (`orquesta` + `carril:<área>`):
+>    GitHub Actions para lo que no usa logins, la PC para lo que sí. La sesión principal es donde él trabaja conmigo;
+>    **no hay madre** que ordene por mensaje ni rondas de 20 min. Donde abajo dice «madre», hoy es la orquesta (para
+>    repartir) o la sesión principal (para lo que exige la PC). Método: `scripts/orquesta/README.md`.
+> 2. **Publicar:** lo que ve un cliente o el público llega con captura y espera su OK (§5 corregida).
+> 3. **Usted** también en la web y los anuncios. 4. **Rubros:** dental → importadora → el resto.
 
 Sergio Urcullo, 9-oct-2026:
 - *«te ahogás en tareas y no me das los resultados que quiero… menos texto en el output… en el backend bien desarrolladas y con lógica»*;
@@ -93,13 +101,15 @@ madre sin la PC, y eso exige loguear la cuenta de Sergio Urcullo allá, que nece
 
 ## 5. Publicar
 
-Regla del 9-oct (CLAUDE.md): **lo trabajado y revisado se sube sin esperar a Sergio Urcullo**, incluido el diseño, las
-migraciones (con backup y rollback) y la infra. Sigue con su sí: gasto, contactar clientes o terceros, el portal del SIAT,
-actos legales o firmas (los hace Leslie Mercado Moreno) y su cara o su voz en servicios externos.
+Regla del 19-oct (CLAUDE.md §«Qué se publica sin preguntar»; sustituye la del 9-oct, «se sube sin esperar»):
+**lo que ve un cliente o el público** (web, anuncios, piezas de redes, pantallas nuevas) le llega a Sergio Urcullo con
+captura y espera su OK. **Arreglos y código sin cambio visible**, migraciones (con backup y rollback) e infra revisada se
+publican solos tras la revisión. Sigue con su sí: gasto, contactar clientes o terceros, el portal del SIAT, actos legales o
+firmas (los hace Leslie Mercado Moreno) y su cara o su voz en servicios externos.
 
 ## 6. Cómo se le habla a Sergio Urcullo
 
-- Máximo 3 bloques (Pasó · Necesito · Sigue), caveman. Lo publicado, con link o captura.
+- Prosa normal, corta y al grano, sin rótulos «Pasó / Necesito / Sigue» (Sergio Urcullo, 20-oct). Lo publicado, con link o captura.
 - Un link que manda sin instrucción es para APRENDER: ficha en `video-intake` y lo aprendido a la skill. No se produce
   ninguna pieza. Aplicar `aprender-de-todo`: ficha por dimensión, regla en la skill destino y evidencia de uso por una sesión. Una ficha escrita sola no demuestra aprendizaje aplicado.
 - Nada de proceso, hipótesis ni listas de lo que se hizo por dentro: eso va al handoff y a las skills.

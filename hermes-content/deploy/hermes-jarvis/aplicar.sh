@@ -85,36 +85,44 @@ al_dia() {
     && grep -q '^avisar()' "$BIN/claude-guardia.sh" 2>/dev/null \
     && grep -q ONIA_AGENDA_CAMBIOS_URL "$BIN/onia-agenda.sh" 2>/dev/null \
     && grep -q cierre-bloques "$BIN/onia-jarvis-resumen.sh" 2>/dev/null \
-    && grep -q 'grupo NECESITO' "$BIN/onia-jarvis-resumen.sh" 2>/dev/null \
+    && grep -q 'nada pendiente' "$BIN/onia-jarvis-resumen.sh" 2>/dev/null \
     && grep -q '^candado()' "$BIN/onia-pedido-claude.sh" 2>/dev/null \
     && grep -q '^SELLOS=' "$BIN/onia-pedido-claude.sh" 2>/dev/null \
     && grep -q -- '--probar' "$BIN/onia-respuestas-pedidos.sh" 2>/dev/null \
     && grep -q '^bajar()' "$BIN/onia-respuestas-pedidos.sh" 2>/dev/null \
     && [ -x "$BIN/onia-latido.sh" ] \
-    && [ -x "$BIN/onia-qa-release.sh" ] && [ -r "$BIN/onia-mirar.js" ]
+    && [ -x "$BIN/onia-qa-release.sh" ] && [ -r "$BIN/onia-mirar.js" ] \
+    && [ -x "$BIN/onia-orquesta-hermes.sh" ]
+  # 20-oct: el comando de la orquesta. Sin él, 5e decía «todavía no lo copió» y salía 0 con la
+  # revisión de cada 3 h sin programar.
   # Los pedidos: la versión con un solo candado para la vista previa y el --si, y el recolector de
   # la vuelta. Sin esto, con la llave cargada, aplicar salía 0 con los pedidos apagados (madre, 2-oct).
   # 5-oct: y las que cierran los MEDIUM de la madre v2 (el sello que ata la respuesta al pedido, y el
   # tope mientras baja). Con el comando viejo la rutina no recibe sello y no puede firmar; con el
   # recolector viejo una respuesta firmada no se entrega y una sin firmar sí.
-  # 9-oct: el resumen en tres bloques (grupo NECESITO). El SOUL le dice a Hermes que el resumen y el
+  # 9-oct: el resumen en tres bloques; 20-oct: sin sus rótulos («nada pendiente»). El SOUL le dice a Hermes que el resumen y el
   # cierre ya llegan así: con el resumen viejo en /root/bin, eso sería falso.
   # 10-oct: el envoltorio del latido. Cada línea que agrega el crontab lo llama: sin él en /root/bin,
   # ninguno de esos trabajos correría.
   # 10-oct (Q5): el QA después de cada publicación y el onia-mirar.js que llama, los dos desde /root/bin.
 }
-if ! al_dia; then
-  echo "todavía no: corro una vez el sincronizador de cada hora"
+# Dos vueltas como mucho: el sincronizador copia lo que bajó la vuelta ANTERIOR y recién después baja
+# main (sincronizar.sh). Medido el 20-oct: la de las 20:44 UTC se actualizó a sí misma y no trajo el
+# comando de la orquesta, que estaba en main desde las 18:56. La segunda vuelta copia lo que acaba de
+# bajar la primera.
+for VUELTA in 1 2; do
+  al_dia && break
+  echo "todavía no: corro el sincronizador de cada hora (vuelta $VUELTA de 2)"
   timeout 600 "$BIN/onia-loops-sync.sh" </dev/null 2>&1 | tail -4 | redactar
-fi
+done
 if ! al_dia; then
   echo "❌ El código de main todavía no está en /root/bin. No toqué nada."
   ls -la "$BIN/onia-jarvis-resumen.sh" "$BIN/onia-agenda.sh" "$BIN/onia-tg.sh" \
     "$BIN/onia-pedido-claude.sh" "$BIN/onia-respuestas-pedidos.sh" "$BIN/onia-latido.sh" \
-    "$BIN/onia-qa-release.sh" "$BIN/onia-mirar.js" 2>&1 | redactar
+    "$BIN/onia-qa-release.sh" "$BIN/onia-mirar.js" "$BIN/onia-orquesta-hermes.sh" 2>&1 | redactar
   exit 1
 fi
-echo "✅ resumen, lector de calendario, aduana, vigía de aprobaciones, guardia, pedidos, latido y QA de publicación: al día"
+echo "✅ resumen, lector de calendario, aduana, vigía de aprobaciones, guardia, pedidos, latido, QA de publicación y orquesta: al día"
 
 # ── 1. Respaldo ─────────────────────────────────────────────────────────────────
 sec "1. Respaldo"
@@ -718,20 +726,32 @@ else
     falla "no pude agregar la regla al SOUL (falta la sección en main o el archivo en el VPS)"
   fi
 fi
-# El formato fijo de cada mensaje (Sergio Urcullo, 8-oct: «me entregás demasiado texto y me pierdo»).
+# El formato de cada mensaje (Sergio Urcullo, 8-oct: «me entregás demasiado texto y me pierdo»).
 # Va en su propia sección porque acá se copian solo las secciones que se nombran: una regla escrita
-# dentro de «Cómo hablarle a Sergio» nunca llegaba al SOUL del VPS.
-if grep -q '^## Formato fijo de cada mensaje' "$SOUL" 2>/dev/null; then
+# dentro de «Cómo hablarle a Sergio» nunca llegaba al SOUL del VPS. A diferencia de las otras, esta
+# se REEMPLAZA si cambió en main: el 20-oct pasó de tres bloques a prosa corta, y con «agregar si
+# falta» la nueva nunca habría llegado a un SOUL que ya tenía la del 8-oct.
+formato_de() { awk '/^## Formato fijo de cada mensaje/ {on = 1} on && /^---$/ {exit} on {print}'; }
+SECCION=$(git -C "$REPO_VPS" show origin/main:hermes-content/deploy/hermes-agent/SOUL.md 2>/dev/null | formato_de)
+ACTUAL=$(formato_de 2>/dev/null < "$SOUL")
+if [ -z "$SECCION" ] || [ ! -f "$SOUL" ]; then
+  falla "no pude poner la regla del formato en el SOUL"
+elif [ "$ACTUAL" = "$SECCION" ]; then
   echo "· su SOUL ya tenía la regla del formato"
+elif [ -z "$ACTUAL" ]; then
+  [ -f "$BK/SOUL.md.antes" ] || cp -a "$SOUL" "$BK/SOUL.md.antes"
+  printf '\n---\n\n%s\n' "$SECCION" >> "$SOUL" && { HERMES_CAMBIO=1; echo "✅ regla del formato agregada al SOUL de Hermes"; }
 else
-  SECCION=$(git -C "$REPO_VPS" show origin/main:hermes-content/deploy/hermes-agent/SOUL.md 2>/dev/null \
-            | awk '/^## Formato fijo de cada mensaje/ {on = 1} on && /^---$/ {exit} on {print}')
-  if [ -n "$SECCION" ] && [ -f "$SOUL" ]; then
-    [ -f "$BK/SOUL.md.antes" ] || cp -a "$SOUL" "$BK/SOUL.md.antes"
-    printf '\n---\n\n%s\n' "$SECCION" >> "$SOUL" && { HERMES_CAMBIO=1; echo "✅ regla del formato agregada al SOUL de Hermes"; }
-  else
-    falla "no pude agregar la regla del formato al SOUL"
-  fi
+  [ -f "$BK/SOUL.md.antes" ] || cp -a "$SOUL" "$BK/SOUL.md.antes"
+  # Desde su título hasta el próximo «---» (o el final); lo demás queda igual. Se escribe con `cat >`
+  # para conservar el dueño y los permisos del SOUL.
+  printf '%s\n' "$SECCION" > "$BK/formato-nuevo.md"
+  awk -v f="$BK/formato-nuevo.md" '
+    /^## Formato fijo de cada mensaje/ { while ((getline l < f) > 0) print l; print ""; salto = 1; next }
+    salto && /^---$/ { salto = 0 }
+    !salto { print }' "$SOUL" > "$BK/SOUL.formato" && [ -s "$BK/SOUL.formato" ] && cat "$BK/SOUL.formato" > "$SOUL" \
+    && { HERMES_CAMBIO=1; echo "✅ regla del formato actualizada en el SOUL de Hermes (prosa corta, sin rótulos)"; } \
+    || falla "no pude actualizar la regla del formato en el SOUL"
 fi
 
 # ── 5d. Pedidos a Claude: manejar todo desde Telegram (2026-10-01) ───────────────
@@ -777,10 +797,10 @@ if [ -s "$PEDIDOS_ENV" ] && [ -x "$BIN/onia-pedido-claude.sh" ] && [ "${RC:-1}" 
   if ! printf '%s' "$NUEVA" | grep -q 'onia-pedido-claude.sh'; then
     falla "no encontré la skill pedir-a-claude en origin/main del VPS"
   else
-    # Junto a la del calendario: Hermes agrupa sus skills por carpeta y ahí ya sabe buscar.
-    D_AGENDA=$(cat "$BK/skill-destino" 2>/dev/null || echo /root/.hermes/skills/agenda-calendario/SKILL.md)
-    DEST=$(find /root/.hermes/skills -maxdepth 4 \( -path '*/pedir-a-claude/SKILL.md' -o -name 'pedir-a-claude.md' \) 2>/dev/null | head -1)
-    [ -n "$DEST" ] || DEST="$(dirname "$(dirname "$D_AGENDA")")/pedir-a-claude/SKILL.md"
+    # Hermes solo carga ~/.hermes/skills/<…>/<nombre>/SKILL.md (su documentación, features/skills.md).
+    # «Junto a la del calendario» la dejaba FUERA de skills/: en el VPS esa es un .md suelto (20-oct, 5e).
+    DEST=$(find /root/.hermes/skills -mindepth 2 -maxdepth 4 -path '*/pedir-a-claude/SKILL.md' 2>/dev/null | head -1)
+    [ -n "$DEST" ] || DEST=/root/.hermes/skills/pedir-a-claude/SKILL.md
     [ -f "$BK/skill-pedidos-destino" ] || echo "$DEST" > "$BK/skill-pedidos-destino"
     if [ ! -f "$BK/skill-pedidos-antes.md" ] && [ ! -f "$BK/skill-pedidos-no-existia" ]; then
       if [ -f "$DEST" ]; then cp -a "$DEST" "$BK/skill-pedidos-antes.md"; else touch "$BK/skill-pedidos-no-existia"; fi
@@ -826,10 +846,19 @@ else
   if ! printf '%s' "$NUEVA" | grep -q 'onia-orquesta-hermes.sh'; then
     falla "no encontré la skill planificar-orquesta en origin/main del VPS"
   else
-    # Junto a la del calendario, como pedir-a-claude.
-    D_AGENDA=$(cat "$BK/skill-destino" 2>/dev/null || echo /root/.hermes/skills/agenda-calendario/SKILL.md)
-    DEST=$(find /root/.hermes/skills -maxdepth 4 \( -path '*/planificar-orquesta/SKILL.md' -o -name 'planificar-orquesta.md' \) 2>/dev/null | head -1)
-    [ -n "$DEST" ] || DEST="$(dirname "$(dirname "$D_AGENDA")")/planificar-orquesta/SKILL.md"
+    # Hermes solo carga ~/.hermes/skills/<…>/<nombre>/SKILL.md (su documentación, features/skills.md).
+    # Medido el 20-oct: «junto a la del calendario», que en el VPS es un .md suelto en skills/, la dejó
+    # en /root/.hermes/planificar-orquesta/SKILL.md, fuera de la carpeta, y Hermes no la veía.
+    DEST=$(find /root/.hermes/skills -mindepth 2 -maxdepth 4 -path '*/planificar-orquesta/SKILL.md' 2>/dev/null | head -1)
+    [ -n "$DEST" ] || DEST=/root/.hermes/skills/planificar-orquesta/SKILL.md
+    FUERA=/root/.hermes/planificar-orquesta/SKILL.md
+    if [ "$(cat "$BK/skill-orquesta-destino" 2>/dev/null)" = "$FUERA" ]; then
+      # La marcha atrás heredada apunta a la copia de afuera: se borra y la marcha atrás pasa al lugar nuevo.
+      rm -f "$FUERA"; rmdir "$(dirname "$FUERA")" 2>/dev/null
+      echo "$DEST" > "$BK/skill-orquesta-destino"
+      if [ -f "$DEST" ]; then cp -a "$DEST" "$BK/skill-orquesta-antes.md"; rm -f "$BK/skill-orquesta-no-existia"; fi
+      echo "· saqué la copia que había quedado fuera de la carpeta de skills: $FUERA"
+    fi
     [ -f "$BK/skill-orquesta-destino" ] || echo "$DEST" > "$BK/skill-orquesta-destino"
     if [ ! -f "$BK/skill-orquesta-antes.md" ] && [ ! -f "$BK/skill-orquesta-no-existia" ]; then
       if [ -f "$DEST" ]; then cp -a "$DEST" "$BK/skill-orquesta-antes.md"; else touch "$BK/skill-orquesta-no-existia"; fi

@@ -175,9 +175,9 @@ Hermes, su asistente, por Telegram. Cada corrida es UN pedido. Hablale siempre c
    2 minutos y se la manda por la aduana.
    a. Con la herramienta de escribir archivos, creá /tmp/respuesta.txt SOLO con la respuesta para
       leer en el teléfono: castellano llano, sin siglas ni nombres de archivo, máx. 1500
-      caracteres, con el link del PR si hay. Sin encabezado. Como máximo tres bloques, en este
-      orden: «Pasó:» (1-2 líneas, qué hiciste), «Necesito:» (un sí/no o los pasos mínimos; si no
-      le pedís nada, «nada») y «Sigue:» (1 línea). Frases cortas; lo que toca plata, seguridad o
+      caracteres, con el link del PR si hay. Sin encabezado y sin rótulos («Pasó:», «Necesito:»,
+      «Sigue:»): prosa normal y corta, unas cinco líneas. Primero qué hiciste; después, si hay
+      algo, lo que le toca a él, como un sí/no o los pasos mínimos. Lo que toca plata, seguridad o
       algo que no se deshace va claro y completo.
    b. En el clon de onia-hermes corré esto, con el id del pedido, el estado (listo, necesita-ok o
       no-se-pudo) y el sello de la línea «Sello:»:
@@ -257,7 +257,7 @@ El diagnóstico no cambia nada en el VPS.
 
 | Sección | Bien si dice |
 |---|---|
-| 0 | «✅ resumen, lector de calendario, aduana, vigía de aprobaciones, guardia, pedidos, latido y QA de publicación: al día» (desde el 9-oct exige el resumen en tres bloques: PASÓ · NECESITO · SIGUE; desde el 10-oct, `onia-latido.sh`, `onia-qa-release.sh` y `onia-mirar.js` en `/root/bin`) |
+| 0 | «✅ resumen, lector de calendario, aduana, vigía de aprobaciones, guardia, pedidos, latido, QA de publicación y orquesta: al día» (si falta algo corre el sincronizador hasta dos veces; desde el 20-oct exige también `onia-orquesta-hermes.sh`) (desde el 9-oct exige el resumen en tres bloques y, desde el 20-oct, sin sus rótulos: la marca es «nada pendiente»; desde el 10-oct, `onia-latido.sh`, `onia-qa-release.sh` y `onia-mirar.js` en `/root/bin`) |
 | 1 | «✅ /root/backups/hermes-jarvis-…» |
 | 1b | nada con ❌ (si falta la llave, el VPS no llega a GitHub o n8n no responde, aborta acá sin tocar nada) |
 | 5 y 5b | 5: conectado al calendario; 5b: «✅ probado en su calendario: crear → mover → cancelar (la prueba ya no está)» |

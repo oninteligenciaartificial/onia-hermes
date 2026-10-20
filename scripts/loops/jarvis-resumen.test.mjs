@@ -112,7 +112,7 @@ ${tgFalla ? "exit 1" : "exit 0"}
       },
       encoding: "utf8",
     });
-  const imprimir = (modo, env = {}) => correr(modo, { ONIA_JARVIS_SOLO_IMPRIMIR: "1", ...env }).stdout;
+  const imprimir = (modo, env = {}) => correr(modo, { ONIA_JARVIS_SOLO_IMPRIMIR: "1", ONIA_JARVIS_GRUPOS: "1", ...env }).stdout;
   const cola = (lineas) => writeFileSync(join(estado, "resumen.log"), lineas.join("\n") + "\n");
   const leer = (f) => (existsSync(join(dir, f)) ? readFileSync(join(dir, f), "utf8") : "");
   return { dir, estado, out, correr, imprimir, cola, leer, escribir };
@@ -192,7 +192,7 @@ test("entregado: la noche se da por leída y la voz queda lista, limpia para el 
   assert.deepEqual(readdirSync(join(b.estado, "nocturnos")), []);
   const voz = readFileSync(join(b.out, "brief-hoy.txt"), "utf8");
   assert.match(voz, /^Buen día, Sergio Urcullo/);
-  assert.match(voz, /^Pasó\.$/m, "el título del bloque se lee como palabra, no deletreado en mayúsculas");
+  assert.doesNotMatch(voz, /PASÓ|NECESITO|SIGUE|^Pasó\.$/m, "sin rótulos tampoco en la voz (20-oct)");
   assert.doesNotMatch(voz, /→|<b>|🧲|ok t_/);
 });
 
@@ -351,9 +351,20 @@ test("un día sin pedidos, o sin el comando, el cierre no inventa la sección", 
   assert.doesNotMatch(b.imprimir("noche"), /🤖/);
 });
 
-// ── El formato fijo: Pasó · Necesito · Sigue (Sergio Urcullo, 2026-10-08) ───────
+// ── Los tres bloques: lo que pasó, lo que le toca, lo que viene (Sergio Urcullo, 8 y 20-oct) ───
 // «me entregás demasiado texto y me pierdo». Máximo tres bloques, en ese orden; lo que le pide
-// algo va en NECESITO, y si no hay nada se dice «Nada.» — salvo que no se haya podido medir.
+// algo va en NECESITO, y si no hay nada se dice «De tu lado, nada pendiente.» — salvo que no se haya
+// podido medir. Desde el 20-oct los rótulos no se le muestran («que hablen normal pero resumido y al
+// grano»): `imprimir` los pide con ONIA_JARVIS_GRUPOS=1 para poder partir el mensaje acá.
+
+test("a Sergio Urcullo le llega sin los rótulos Pasó · Necesito · Sigue", () => {
+  const b = banco();
+  for (const [modo, env] of [["manana", {}], ["noche", { ONIA_HOY: "2026-09-29" }]]) {
+    const msg = b.imprimir(modo, { ...env, ONIA_JARVIS_GRUPOS: "0" });
+    assert.doesNotMatch(msg, /PASÓ|NECESITO|SIGUE|Pasó|Necesito|Sigue/, modo);
+    assert.match(msg, /🩺 Sistema:/, modo);
+  }
+});
 
 // Devuelve { PASÓ, NECESITO, SIGUE } con el texto de cada bloque, o falla si faltan o se desordenan.
 function bloques(msg) {
@@ -390,30 +401,30 @@ test("el cierre viene en tres bloques: lo que se hizo, lo que le pide, mañana",
   assert.match(SIGUE, /📅 <b>Mañana<\/b>/);
 });
 
-test("sin nada que pedirle, NECESITO dice «Nada.» en vez de desaparecer", () => {
+test("sin nada que pedirle, NECESITO dice «De tu lado, nada pendiente.» en vez de desaparecer", () => {
   const lista = "▶ t_9c0d1e2f ready (unassigned) [auto:abc123] 🔴 CI en ROJO en main";
   const parte = "⚠️ <b>1 cosa(s) que no pude arreglar solo</b>\n\n• 🔴 CI en ROJO en main\n\n<i>Parte diario · 30/09 06:30</i>";
   const b = banco({ lista, parte, repo: conMadre(repoConCommits([]), MADRE_LEJOS) });
-  assert.equal(bloques(b.imprimir("manana")).NECESITO.trim(), "Nada.");
-  assert.equal(bloques(b.imprimir("noche", { ONIA_HOY: "2026-09-29" })).NECESITO.trim(), "Nada.");
+  assert.equal(bloques(b.imprimir("manana")).NECESITO.trim(), "De tu lado, nada pendiente.");
+  assert.equal(bloques(b.imprimir("noche", { ONIA_HOY: "2026-09-29" })).NECESITO.trim(), "De tu lado, nada pendiente.");
 });
 
-test("con el tablero caído, NECESITO nunca dice «Nada.»: dice que no lo pudo ver", () => {
+test("con el tablero caído, NECESITO nunca dice «De tu lado, nada pendiente.»: dice que no lo pudo ver", () => {
   const b = banco({ tableroVivo: false, parte: "⚠️ No pude verificar el tablero.", repo: repoConCommits([]) });
   for (const [modo, env] of [["manana", {}], ["noche", { ONIA_HOY: "2026-09-29" }]]) {
     const { NECESITO } = bloques(b.imprimir(modo, env));
-    assert.doesNotMatch(NECESITO, /^\s*Nada\./, modo);
+    assert.doesNotMatch(NECESITO, /nada pendiente/, modo);
     assert.match(NECESITO, /No pude leer el tablero|el tablero no respondió/, modo);
   }
 });
 
-test("con el parte caído (el tablero vivo y sin prospectos), NECESITO tampoco dice «Nada.»", () => {
+test("con el parte caído (el tablero vivo y sin prospectos), NECESITO tampoco dice «De tu lado, nada pendiente.»", () => {
   const lista = "▶ t_9c0d1e2f ready (unassigned) [auto:abc123] 🔴 CI en ROJO en main";
   const b = banco({ lista, parte: "", repo: repoConCommits([]) });
   for (const [modo, env] of [["manana", {}], ["noche", { ONIA_HOY: "2026-09-29" }]]) {
     const msg = b.imprimir(modo, env);
     const { NECESITO } = bloques(msg);
-    assert.doesNotMatch(NECESITO, /^\s*Nada\./, modo);
+    assert.doesNotMatch(NECESITO, /nada pendiente/, modo);
     assert.match(NECESITO, /el parte diario no respondió/, modo);
     assert.doesNotMatch(msg, /el tablero no respondió/, `${modo}: el tablero sí respondió; el que falló fue el parte`);
   }
@@ -430,7 +441,7 @@ test("con el parte caído y prospectos esperando, NECESITO igual avisa que falta
   }
 });
 
-test("un pedido a Claude que espera su ok va en NECESITO, no en PASÓ, y NECESITO no dice «Nada.»", () => {
+test("un pedido a Claude que espera su ok va en NECESITO, no en PASÓ, y NECESITO no dice «De tu lado, nada pendiente.»", () => {
   // Revisión del 9-oct: con un pedido «necesita-ok» y sin decisiones, el cierre decía «Nada.».
   const lista = "▶ t_9c0d1e2f ready (unassigned) [auto:abc123] 🔴 CI en ROJO en main";
   const parte = "⚠️ <b>1 cosa(s) que no pude arreglar solo</b>\n\n• 🔴 CI en ROJO en main\n\n<i>Parte diario · 30/09 06:30</i>";
@@ -446,17 +457,17 @@ printf '15:40\\tp_5e6f7a8b\\tventas\\tnecesita-ok\\thttps://claude.ai/code/sessi
   assert.match(PASÓ, /• 10:05 plataforma — ✅ listo/);
   assert.doesNotMatch(PASÓ, /ventas/);
   assert.match(NECESITO, /🙋 <b>Pedidos a Claude que esperan tu ok<\/b>\n• 15:40 ventas — https:\/\/claude\.ai\/code\/session_2/);
-  assert.doesNotMatch(NECESITO, /^\s*Nada\./);
+  assert.doesNotMatch(NECESITO, /nada pendiente/);
 });
 
-test("si no puede leer los bloques de hoy, el cierre lo dice en NECESITO en vez de «Nada.»", () => {
+test("si no puede leer los bloques de hoy, el cierre lo dice en NECESITO en vez de «nada pendiente»", () => {
   const lista = "▶ t_9c0d1e2f ready (unassigned) [auto:abc123] 🔴 CI en ROJO en main";
   const parte = "⚠️ <b>1 cosa(s) que no pude arreglar solo</b>\n\n• 🔴 CI en ROJO en main\n\n<i>Parte diario · 30/09 06:30</i>";
   const b = banco({ lista, parte, repo: repoConCommits([]) });
   const agenda = b.escribir("agenda-rota.sh", "#!/usr/bin/env bash\n[ \"$1\" = --ids ] && exit 1\necho '08:00–12:30 🎒 Colegio'\n");
   const { NECESITO } = bloques(b.imprimir("noche", { ONIA_HOY: "2026-09-29", ONIA_AGENDA: agenda }));
   assert.match(NECESITO, /No pude leer tus bloques de hoy/);
-  assert.doesNotMatch(NECESITO, /^\s*Nada\./);
+  assert.doesNotMatch(NECESITO, /nada pendiente/);
 });
 
 test("el recorte de Telegram corta entre líneas: nunca deja una etiqueta abierta", () => {
@@ -766,13 +777,13 @@ test("relojes: una fecha sin año es la próxima (2-ene el 30-dic) salvo que hay
   assert.match(bloques(msg).PASÓ, /• 🔴 20-dic, vencido hace 10 días: Ya pasó hace rato — Plat/);
 });
 
-test("sin la tabla de la madre, NECESITO no dice «Nada.»: dice que no pudo leer los relojes", () => {
+test("sin la tabla de la madre, NECESITO no dice «De tu lado, nada pendiente.»: dice que no pudo leer los relojes", () => {
   const sinMadre = repoPlanViejo();
   writeFileSync(join(sinMadre, "hermes-content", "docs", "cola", "loop", "madre.md"), "# Cola · MADRE\n\n## A. Otra cosa\n");
   const b = banco({ repo: sinMadre, lista: "", show: "", parte: "✅ Todo en orden." });
   const necesito = bloques(b.imprimir("manana")).NECESITO;
   assert.match(necesito, /⏰ No pude leer los relojes de la madre \(cola\/loop\/madre\.md §G\): no sé qué vence\./);
-  assert.doesNotMatch(necesito, /Nada\./);
+  assert.doesNotMatch(necesito, /nada pendiente/);
 });
 
 // Un clon con colas commiteadas en fechas dadas. origin/main apunta al último commit.
@@ -913,7 +924,7 @@ printf '#257\thecha\tinvestigacion\tOtra\thttps://github.com/oninteligenciaartif
     const NECESITO = necesitoDe(msg);
     assert.match(NECESITO, /📋 <b>La orquesta te espera<\/b>\n• #260 Publicar el carrusel de la semana — espera su ok para empezar · https:\/\/github\.com\/\S+\/issues\/260\n• #259 Precios de la competencia — bloqueada · /, modo);
     assert.doesNotMatch(msg, /#258|#257/, `${modo}: en curso y hecha no le piden nada`);
-    assert.doesNotMatch(NECESITO, /^\s*Nada\./, modo);
+    assert.doesNotMatch(NECESITO, /nada pendiente/, modo);
   }
 });
 

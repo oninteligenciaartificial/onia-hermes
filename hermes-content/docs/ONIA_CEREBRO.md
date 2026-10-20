@@ -39,9 +39,10 @@ afuera sin aprobación** — la autonomía termina en tu canal.
 | 🌙 **Cierre del día** | **21:30** La Paz | qué se hizo hoy, en castellano llano · qué salió publicado hoy, con su link (`/root/publicar/publicado.jsonl`) · sus bloques de ONIA del día, numerados, con «¿se hicieron?» · qué sigue esperando · mañana |
 | 🔔 **Interrupción** | al momento, **solo** entre 06:30 y 22:00 y **fuera de sus bloques** | una de las cuatro de abajo, y nada más |
 
-**El resumen y el cierre llegan en tres bloques fijos: PASÓ · NECESITO · SIGUE** (Sergio Urcullo,
+**El resumen y el cierre llegan en tres partes, en prosa y sin rótulos** (Sergio Urcullo, 20-oct: *«que
+hablen normal pero resumido y al grano»*; los rótulos PASÓ · NECESITO · SIGUE eran del
 8-oct: *«me entregás demasiado texto y me pierdo»*). Lo que le pide algo (prospectos, decisiones,
-bloques sin confirmar) va junto en NECESITO; si no hay nada, dice «Nada.», salvo que el tablero no
+bloques sin confirmar) va junto, en la parte del medio; si no hay nada, dice «De tu lado, nada pendiente.», salvo que el tablero no
 haya respondido. Lo que conversa Hermes sigue la misma regla, desde su SOUL.
 
 **Las cuatro interrupciones (elegidas por él):**

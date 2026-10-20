@@ -70,7 +70,7 @@ function vps({ leeCalendario = true, escribeCalendario = true, conLatido = true,
   git("update-ref", "refs/remotes/origin/main", "HEAD");
 
   // El código de main ya copiado a /root/bin (lo que mira el paso 0).
-  ejecutable(join(bin, "onia-jarvis-resumen.sh"), "#!/usr/bin/env bash\n# cierre-bloques · grupo NECESITO\necho 'vista previa del resumen'\n");
+  ejecutable(join(bin, "onia-jarvis-resumen.sh"), "#!/usr/bin/env bash\n# cierre-bloques · grupo NECESITO · nada pendiente\necho 'vista previa del resumen'\n");
   ejecutable(join(bin, "onia-tg.sh"), `#!/usr/bin/env bash\n# ONIA_AVISO_PUEDO\nprintf '%s\\n---\\n' "$1" >> ${log}/telegram\n`);
   ejecutable(join(bin, "onia-vigia-aprobaciones.sh"), "#!/usr/bin/env bash\n# ONIA_AVISO_PUEDO\n");
   // El recolector de respuestas de los pedidos: --probar dice si el VPS llega a GitHub.
@@ -554,7 +554,7 @@ test("con llave, si a main le falta la skill de pedidos o su regla en el SOUL, n
   nadaCreado(sinRegla);
 });
 
-test("el formato fijo (Pasó · Necesito · Sigue) entra a su SOUL una sola vez, sin arrastrar lo que le sigue", () => {
+test("el formato de cada mensaje entra a su SOUL una sola vez, sin arrastrar lo que le sigue", () => {
   // Sergio Urcullo, 8-oct: «me entregás demasiado texto y me pierdo». aplicar copia del SOUL de main
   // solo las secciones que nombra: una regla escrita en otra sección nunca llegaba al VPS.
   const v = vps();
@@ -565,8 +565,35 @@ test("el formato fijo (Pasó · Necesito · Sigue) entra a su SOUL una sola vez,
   assert.equal(v.aplicar().status, 0);
   const soul = readFileSync(join(v.R, ".hermes", "SOUL.md"), "utf8");
   assert.equal((soul.match(/^## Formato fijo de cada mensaje/gm) || []).length, 1);
-  assert.match(soul, /\*\*Pasó\*\*[\s\S]*\*\*Necesito\*\*[\s\S]*\*\*Sigue\*\*/);
+  assert.match(soul, /prosa normal y corta/);
   assert.doesNotMatch(soul, /^## Qué ES Onia hoy/m, "solo esa sección, hasta su «---»");
+});
+
+test("el formato del 8-oct (Pasó · Necesito · Sigue) se REEMPLAZA por el de main, sin tocar el resto del SOUL", () => {
+  // Sergio Urcullo, 20-oct: «que hablen normal pero resumido y al grano». Con «agregar si falta», el
+  // SOUL del VPS se quedaba con los tres bloques para siempre.
+  const v = vps();
+  const soulPath = join(v.R, ".hermes", "SOUL.md");
+  const viejo = "## Formato fijo de cada mensaje (2026-10-08)\n\nCada mensaje tiene tres bloques:\n\n" +
+    "- **Pasó**: qué pasó.\n- **Necesito**: lo que le pedís.\n- **Sigue**: qué viene.\n";
+  const inicial = "# SOUL de Hermes\n\nAntes.\n\n---\n\n" + viejo + "\n---\n\n## Otra regla\n\nDespués.\n";
+  writeFileSync(soulPath, inicial);
+  const r = v.aplicar();
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(r.stdout, /✅ regla del formato actualizada en el SOUL de Hermes/);
+  const soul = readFileSync(soulPath, "utf8");
+  assert.equal((soul.match(/^## Formato fijo de cada mensaje/gm) || []).length, 1);
+  assert.match(soul, /prosa normal y corta/);
+  assert.doesNotMatch(soul, /\*\*Pasó\*\*|\*\*Necesito\*\*|\*\*Sigue\*\*/);
+  assert.ok(soul.startsWith("# SOUL de Hermes\n\nAntes.\n\n---\n\n## Formato fijo de cada mensaje (2026-10-20)"), soul);
+  assert.match(soul, /\n\n---\n\n## Otra regla\n\nDespués\.\n/, "lo que le sigue queda igual, con su «---»");
+  spawnSync("/bin/sleep", ["1.1"]); // el respaldo se nombra por segundo
+  const r2 = v.aplicar();
+  assert.equal(r2.status, 0, r2.stdout + r2.stderr);
+  assert.match(r2.stdout, /su SOUL ya tenía la regla del formato/);
+  assert.equal(readFileSync(soulPath, "utf8"), soul, "la segunda vez no cambia nada");
+  const bk = join(v.R, "backups", v.respaldos().at(-2), "SOUL.md.antes");
+  assert.equal(readFileSync(bk, "utf8"), inicial, "el respaldo es el SOUL con el formato viejo");
 });
 
 test("sección 0: con el resumen de antes del formato fijo en /root/bin, no aplica nada", () => {
@@ -576,6 +603,40 @@ test("sección 0: con el resumen de antes del formato fijo en /root/bin, no apli
   writeFileSync(join(v.R, "bin", "onia-jarvis-resumen.sh"), "#!/usr/bin/env bash\n# cierre-bloques\n");
   const r = v.aplicar();
   assert.equal(r.status, 1, r.stdout);
+  nadaCreado(v);
+});
+
+test("sección 0: sin el comando de la orquesta, corre el sincronizador hasta dos veces y sigue", () => {
+  // Medido el 20-oct: el sincronizador copia lo que bajó la vuelta ANTERIOR. La de las 20:44 UTC se
+  // actualizó a sí misma y el comando de la orquesta no llegó. Acá la vuelta 1 trae el comando (lo
+  // que ya estaba bajado) y la 2 el resumen sin rótulos (lo que bajó la 1).
+  const v = vps({ tokenIssues: 0o600 });
+  const bin = join(v.R, "bin");
+  const guardado = join(v.log, "orquesta-bajada.sh");
+  copyFileSync(join(bin, "onia-orquesta-hermes.sh"), guardado);
+  rmSync(join(bin, "onia-orquesta-hermes.sh"));
+  writeFileSync(join(bin, "onia-jarvis-resumen.sh"), "#!/usr/bin/env bash\n# cierre-bloques · grupo NECESITO\n");
+  writeFileSync(join(bin, "onia-loops-sync.sh"), `#!/usr/bin/env bash
+n=$(( $(cat ${v.log}/sync-vueltas 2>/dev/null || echo 0) + 1 )); echo "$n" > ${v.log}/sync-vueltas
+cp -p ${guardado} ${bin}/onia-orquesta-hermes.sh
+[ "$n" -lt 2 ] || printf '#!/usr/bin/env bash\\n# cierre-bloques · grupo NECESITO · nada pendiente\\necho vista\\n' > ${bin}/onia-jarvis-resumen.sh
+echo "sincronizados"
+`);
+  chmodSync(join(bin, "onia-loops-sync.sh"), 0o755);
+  const r = v.aplicar();
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(r.stdout, /vuelta 1 de 2[\s\S]*vuelta 2 de 2/);
+  assert.equal(v.leer("sync-vueltas").trim(), "2");
+  assert.match(r.stdout, /✅ .*QA de publicación y orquesta: al día/);
+  assert.match(r.stdout, /✅ revisión de la orquesta cada 3 h: /);
+});
+
+test("sección 0: si dos vueltas del sincronizador no traen el comando de la orquesta, no aplica nada", () => {
+  const v = vps({ tokenIssues: 0o600 });
+  rmSync(join(v.R, "bin", "onia-orquesta-hermes.sh"));
+  const r = v.aplicar();
+  assert.equal(r.status, 1, r.stdout);
+  assert.match(r.stdout, /❌ El código de main todavía no está en /);
   nadaCreado(v);
 });
 
@@ -1145,6 +1206,39 @@ test("con el token: skill, su regla (una vez, hasta su ---), la revisión cada 3
   assert.match(r2.stdout, /la revisión de la orquesta ya estaba programada/);
   assert.equal(v.leer("hermes-create").trim().split("\n").length, 1, "nunca dos trabajos");
   assert.doesNotMatch(v.leer("systemctl"), /restart/, "sin cambios no reinicia");
+});
+
+test("con la skill del calendario suelta en skills/ (como en el VPS), la de la orquesta va a skills/planificar-orquesta/SKILL.md", () => {
+  // Medido el 20-oct: «junto a la del calendario» la dejó en /root/.hermes/planificar-orquesta/SKILL.md, y Hermes
+  // solo carga ~/.hermes/skills/<…>/<nombre>/SKILL.md.
+  const v = vps({ tokenIssues: 0o600 });
+  writeFileSync(join(v.R, ".hermes", "skills", "agenda-calendario.md"), "la del calendario, suelta\n");
+  const r = v.aplicar();
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.ok(existsSync(SKILL_ORQ(v)), r.stdout);
+  assert.equal(existsSync(join(v.R, ".hermes", "planificar-orquesta")), false, "nada fuera de skills/");
+});
+
+test("la copia que un aplicar anterior dejó fuera de skills/ se borra, y revertir quita la del lugar nuevo", () => {
+  const v = vps({ tokenIssues: 0o600 });
+  const fuera = join(v.R, ".hermes", "planificar-orquesta", "SKILL.md");
+  mkdirSync(dirname(fuera), { recursive: true });
+  writeFileSync(fuera, "la de afuera\n");
+  // El respaldo del aplicar del 20-oct, sin revertir: el nuevo hereda sus listas.
+  const previo = join(v.R, "backups", "hermes-jarvis-20261020-210014");
+  mkdirSync(previo, { recursive: true });
+  writeFileSync(join(previo, "aplicado"), "");
+  writeFileSync(join(previo, "skill-orquesta-destino"), fuera + "\n");
+  writeFileSync(join(previo, "skill-orquesta-no-existia"), "");
+  spawnSync("/bin/sleep", ["1.1"]); // el respaldo nuevo, más nuevo que el previo
+  const r = v.aplicar();
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(r.stdout, /saqué la copia que había quedado fuera de la carpeta de skills/);
+  assert.equal(existsSync(join(v.R, ".hermes", "planificar-orquesta")), false);
+  assert.ok(existsSync(SKILL_ORQ(v)));
+  const rev = v.revertir();
+  assert.equal(rev.status, 0, rev.stdout + rev.stderr);
+  assert.equal(existsSync(SKILL_ORQ(v)), false, "revertir quita la del lugar nuevo");
 });
 
 test("revertir pausa la revisión (no la borra), quita la skill y su regla; el próximo aplicar la reanuda", () => {

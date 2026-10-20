@@ -687,11 +687,14 @@ seccion_sigue() {
   return 0
 }
 
-# ── Armado: tres bloques fijos, PASÓ · NECESITO · SIGUE ─────────────────────────
+# ── Armado: lo que pasó, lo que le toca a él, lo que viene ──────────────────────
 # Sergio Urcullo, 2026-10-08: «me entregás demasiado texto y me pierdo». Lo que le pide algo va
-# junto, en NECESITO, y no repartido entre la agenda y los guiones. Las secciones no cambian: se
-# agrupan. Un bloque vacío no se muestra, salvo NECESITO, que dice «Nada.» (él tiene que saber
-# que no le falta nada)… y solo si se pudo medir: con el tablero caído, «Nada.» sería mentira.
+# junto, en el bloque NECESITO, y no repartido entre la agenda y los guiones. Las secciones no
+# cambian: se agrupan. 20-oct: «que no hablen de esa manera, con pasó, sigue… que hablen normal
+# pero resumido y al grano»: los bloques siguen, sus rótulos ya no se muestran (ONIA_JARVIS_GRUPOS=1
+# los marca, solo para las pruebas). Un bloque vacío no se muestra, salvo NECESITO, que dice «De tu
+# lado, nada pendiente.» (él tiene que saber que no le falta nada)… y solo si se pudo medir: con el
+# tablero caído, eso sería mentira.
 # `$(...)` se come los saltos del final: por eso cada sección se AGREGA con su separador,
 # en vez de concatenar sustituciones (que pegaban una sección al final de la otra).
 CUERPO="" GRUPO=""
@@ -699,7 +702,8 @@ parte() { local b; b=$("$@"); [ -n "$b" ] && GRUPO+="$b"$'\n\n'; return 0; }
 grupo() {  # grupo <TÍTULO> [<texto si quedó vacío>]: cierra lo juntado con parte()
   local g=${GRUPO%$'\n\n'}
   [ -n "$g" ] || g=${2:-}
-  [ -n "$g" ] && CUERPO+="<b>$1</b>"$'\n'"$g"$'\n\n'
+  [ "${ONIA_JARVIS_GRUPOS:-0}" = 1 ] && [ -n "$g" ] && g="<b>$1</b>"$'\n'"$g"
+  [ -n "$g" ] && CUERPO+="$g"$'\n\n'
   GRUPO=""; return 0
 }
 # Lo que no se pudo medir se dice SIEMPRE, haya o no otras cosas en NECESITO (revisión del 9-oct: solo
@@ -715,12 +719,12 @@ falta_medir() {
 if [ "$MODO" = manana ]; then
   CABEZA="☀️ <b>Buen día, Sergio Urcullo</b> — $(dia_largo "$HOY")"
   parte seccion_cola noche 'Mientras dormías'; parte linea_salud; parte linea_latidos; parte linea_relojes_otros; parte linea_colas; grupo PASÓ
-  parte seccion_prospectos; parte seccion_relojes; parte seccion_decisiones; parte seccion_orquesta_ok; parte falta_medir; grupo NECESITO 'Nada.'
+  parte seccion_prospectos; parte seccion_relojes; parte seccion_decisiones; parte seccion_orquesta_ok; parte falta_medir; grupo NECESITO 'De tu lado, nada pendiente.'
   parte seccion_agenda "$HOY" 'Tu día'; parte seccion_plan "$HOY" 'Hoy sale' 'Para grabar hoy'; grupo SIGUE
 else
   CABEZA="🌙 <b>Cierre del $(dia_largo "$HOY")</b>"
   parte seccion_hoy; parte seccion_salio; parte seccion_pedidos; parte seccion_cola resumen 'Avisos del día'; parte linea_salud; grupo PASÓ
-  parte seccion_bloques_hoy; parte seccion_pedidos_ok; parte seccion_orquesta_ok; parte seccion_sigue; parte falta_medir; grupo NECESITO 'Nada.'
+  parte seccion_bloques_hoy; parte seccion_pedidos_ok; parte seccion_orquesta_ok; parte seccion_sigue; parte falta_medir; grupo NECESITO 'De tu lado, nada pendiente.'
   parte seccion_agenda "$MANANA" 'Mañana'; parte seccion_plan "$MANANA" 'Mañana sale' 'Mañana grabás'; grupo SIGUE
 fi
 MSG="$CABEZA
@@ -728,7 +732,7 @@ MSG="$CABEZA
 ${CUERPO%$'\n\n'}"
 # Telegram corta en 4.096 caracteres; se deja margen y se avisa del corte. Se corta en el último salto
 # de línea: cada etiqueta abre y cierra en su línea, y una partida hace que Telegram rechace el
-# mensaje entero (revisión del 9-oct). Lo que se pierde primero es lo último: SIGUE.
+# mensaje entero (revisión del 9-oct). Lo que se pierde primero es lo último: lo que viene.
 if [ "${#MSG}" -gt 3900 ]; then MSG="${MSG:0:3850}"; MSG="${MSG%$'\n'*}
 … (recortado)"; fi
 
@@ -742,7 +746,6 @@ if [ "$MODO" = manana ]; then
 import sys, re, html
 t = html.unescape(re.sub(r"<[^>]+>", "", sys.stdin.read()))
 t = "\n".join(l for l in t.splitlines() if "→" not in l)
-t = re.sub(r"(?m)^(PASÓ|NECESITO|SIGUE)$", lambda m: m.group(1).capitalize() + ".", t)
 t = re.sub(r"\(\+?\d[\d …-]*\)", "", t)
 t = re.sub("[\U0001F300-\U0001FAFF\u2300-\u23FF\u2600-\u27BF\uFE0F•]", "", t)
 t = re.sub(r"[ \t]+", " ", t)
