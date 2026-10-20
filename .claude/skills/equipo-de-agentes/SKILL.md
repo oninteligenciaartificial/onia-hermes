@@ -99,7 +99,7 @@ actos legales o firmas (los hace Leslie Mercado Moreno) y su cara o su voz en se
 
 ## 6. Cómo se le habla a Sergio Urcullo
 
-- Máximo 3 bloques (Pasó · Necesito · Sigue), caveman. Lo publicado, con link o captura.
+- Prosa normal, corta y al grano, sin rótulos «Pasó / Necesito / Sigue» (Sergio Urcullo, 20-oct). Lo publicado, con link o captura.
 - Un link que manda sin instrucción es para APRENDER: ficha en `video-intake` y lo aprendido a la skill. No se produce
   ninguna pieza. Aplicar `aprender-de-todo`: ficha por dimensión, regla en la skill destino y evidencia de uso por una sesión. Una ficha escrita sola no demuestra aprendizaje aplicado.
 - Nada de proceso, hipótesis ni listas de lo que se hizo por dentro: eso va al handoff y a las skills.
