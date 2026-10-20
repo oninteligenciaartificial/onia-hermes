@@ -298,6 +298,14 @@ Método y cifras en `docs/ONIA_LANZAMIENTO_PREPAGO.md` y `docs/research/FUNNELS_
   `gpt_image_2_5` + `fotobn`, 4:3, limpias a la primera: `galeria/fotos-bn/taller-20261020-{campana,celular,silla}-*.jpg`.
   Prompt que funcionó: escena concreta + «The green object is the …». Sin `n` en la lámina del brief el archivo
   sale como `s-undefined`: renombrarlo y corregir `galeria.json`.
+- **Estilo «Ficha del taller» (elegido por Sergio Urcullo el 20-oct):** papel #F1F2EE con cuadrícula, tinta #101318, un
+  solo verde #047857, Big Shoulders Display 900 + Hanken Grotesk. Carruseles con
+  `node hermes-content/carousels/ficha-taller/generar.cjs <brief.json> <salida>` (tipos: portada, numero, cuenta, frase,
+  chat, atajos, filtro, cierre; el chat dibujado va siempre con sello «Ejemplo»). Medido al armarlo: con letra de 36 px
+  las láminas quedaban medio vacías y chicas en el celular; los textos van a 40-46 px y las cifras de 520 px en adelante.
+- **Captura de página entera con imágenes `loading="lazy"`:** bajar por la página antes de capturar, o la foto sale en
+  blanco (pasó con la de Sergio Urcullo en «Quién lo dicta»). La barra fija sale pegada en el medio de una captura
+  `fullPage`: se oculta para esa captura y se muestra aparte, en una de pantalla.
 - **La foto recortada de Sergio Urcullo (`sergio-bn.jpg`) tiene fondo blanco:** sobre fondo oscuro queda un recuadro.
   Va sobre blanco, con el título arriba y sin pisarle la cabeza.
 

@@ -61,9 +61,10 @@ function medir() {
     for (const [ancho, alto, movil] of [[390, 844, true], [1440, 900, false]]) {
       const ctx = await browser.newContext({ viewport: { width: ancho, height: alto }, deviceScaleFactor: movil ? 2 : 1, isMobile: movil, hasTouch: movil, locale: "es-419" });
       const page = await ctx.newPage();
-      await page.goto(url, { waitUntil: "networkidle", timeout: 60000 }).catch(() => page.waitForTimeout(4000));
+      // networkidle puede no llegar nunca (chats, analítica): ante TimeoutError se sigue; cualquier otro error corta.
+      await page.goto(url, { waitUntil: "networkidle", timeout: 60000 }).catch((e) => { if (e.name !== "TimeoutError") throw e; });
       // bajar despacio para que carguen las imágenes perezosas y las animaciones de entrada
-      await page.evaluate(async () => { for (let y = 0; y < document.body.scrollHeight; y += 600) { scrollTo(0, y); await new Promise((r) => setTimeout(r, 120)); } scrollTo(0, 0); });
+      await page.evaluate(async () => { for (let y = 0, i = 0; y < document.body.scrollHeight && i < 40; y += 600, i++) { scrollTo(0, y); await new Promise((r) => setTimeout(r, 120)); } scrollTo(0, 0); });
       await page.waitForTimeout(1500);
       await page.screenshot({ path: path.join(out, `${nombre}-${ancho}.png`), fullPage: true });
       datos[ancho] = await page.evaluate(medir);

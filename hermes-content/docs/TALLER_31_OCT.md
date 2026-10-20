@@ -123,9 +123,9 @@ Flujo de tres toques: perfil → botón de WhatsApp → QR. Plantillas A-D en `O
 
 | Pieza | Ruta | Estado 19-oct |
 |---|---|---|
-| Página | `hermes-content/sitio-sergiourcullo/taller/index.html` (nueva, ruta `/taller`) | Borrador del 20-oct con el enfoque nuevo, botón a su WhatsApp, `noindex`; falta su OK y definir el estilo. `/auditoria` queda vieja, sin publicar |
-| Carrusel 1 «la cuenta» | `hermes-content/carousels/briefs/marca-personal/sergio-taller-1-cuenta-20261017.json` | Versión «Auditá»: hay que rehacerlo con el enfoque nuevo |
-| Carrusel 2 «qué sale» | `hermes-content/carousels/briefs/marca-personal/sergio-taller-2-que-sale-20261017.json` | Ídem |
+| Página | `hermes-content/sitio-sergiourcullo/taller/index.html` (nueva, ruta `/taller`) | Rehecha el 20-oct en el estilo «Ficha del taller» (elegido por Sergio Urcullo), botón a su WhatsApp, `noindex`; falta su OK a las capturas. `/auditoria` queda vieja, sin publicar |
+| Carrusel 1 «la cuenta» | `hermes-content/carousels/ficha-taller/1-la-cuenta.json` (render: `node hermes-content/carousels/ficha-taller/generar.cjs <brief> <salida>`) | Rehecho el 20-oct en estilo Ficha, 6 láminas; falta su OK. El brief del 17-oct queda viejo |
+| Carrusel 2 «qué te llevás» | `hermes-content/carousels/ficha-taller/2-que-te-llevas.json` | Rehecho el 20-oct en estilo Ficha, 6 láminas; falta su OK |
 | 3 guiones de reel | `hermes-content/docs/orquesta/marca/234.md` | Reescritos el 20-oct con el enfoque nuevo; falta grabar |
 | Investigación de 5 creadores | `hermes-content/docs/orquesta/investigacion/237.md` (PR #239) | Referencia |
 | Comunidad de WhatsApp | `hermes-content/docs/comunidad/COMUNIDAD_WHATSAPP_ESTRUCTURA.md` | Vigente salvo la oferta posterior |

@@ -30,8 +30,9 @@ Sesión/carril: sesión local «taller No pierdas clientes» (estilo de la pági
 - Script reutilizable: `scripts/disenio-pagina-medir.cjs` (captura 390/1440 + CSS computado).
 
 ## Prueba de uso por sesión
-Estado: incorporado
-Sesión + fecha: sesión local «taller No pierdas clientes», 20-oct-2026
+Estado: aplicado, falta el OK de Sergio Urcullo
+Sesión + fecha: sesión local «taller No pierdas clientes», 20-oct-2026 (Sergio Urcullo eligió el estilo 1, «Ficha del taller»)
 Tarea de cola: página `/taller` y 2 carruseles (`docs/TALLER_31_OCT.md` §8)
-Regla usada: Patrones, Tipografía, Estilo visual y UI/UX (`onia-web-factory` §Página de taller)
-Artefacto: pendiente de la elección de estilo de Sergio Urcullo · Verificación: pendiente
+Regla usada: las 8 de `onia-web-factory` §«Página de venta de un taller»: un verde (botón), un botón repetido + barra fija que aparece al bajar, foto real de Sergio Urcullo, ficha con fecha y GMT-4, tarjeta de precio con 2 seguridades, escalones con estado, «¿Es para vos?», programa por bloques con hora, Big Shoulders + Hanken Grotesk.
+Artefacto: `hermes-content/sitio-sergiourcullo/taller/index.html`; `hermes-content/carousels/ficha-taller/` (generador + 2 briefs).
+Verificación: capturas mirando 390 y 1440 (`E:/onia-render/taller/ficha/`), sin desborde a 390 (scrollWidth 390), barra fija escondida arriba y visible al bajar (probado con Playwright); hojas de los 2 carruseles miradas lámina por lámina.

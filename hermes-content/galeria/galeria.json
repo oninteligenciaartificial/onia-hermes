@@ -1719,5 +1719,39 @@
       "sergio-taller-fotos-20261020"
     ],
     "tags": []
+  },
+  {
+    "id": "taller-20261020-delantal-372a97a6",
+    "file": "hermes-content/galeria/fotos-bn/taller-20261020-delantal-372a97a6.jpg",
+    "fecha": "2026-10-20",
+    "tipo": "fotos-bn",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "gpt_image_2_5",
+    "prompt": "A plain apron hanging on a wooden hook on the wall behind a small shop counter, a stack of folded paper bags on the counter. The green object is the apron.",
+    "estilo": "fotobn",
+    "costo_cr": 1,
+    "job": "372a97a6-924d-4a7c-8e14-0e8531eb5fcc",
+    "usado_en": [
+      "taller-20261020"
+    ],
+    "tags": []
+  },
+  {
+    "id": "taller-20261020-bolsa-49a3d1cc",
+    "file": "hermes-content/galeria/fotos-bn/taller-20261020-bolsa-49a3d1cc.jpg",
+    "fecha": "2026-10-20",
+    "tipo": "fotos-bn",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "gpt_image_2_5",
+    "prompt": "A paper shopping bag with rope handles standing on a wooden shop counter, ready to be handed over, soft morning light from the side. The green object is the shopping bag.",
+    "estilo": "fotobn",
+    "costo_cr": 1,
+    "job": "49a3d1cc-29dc-49b3-8670-57b11fdc63be",
+    "usado_en": [
+      "taller-20261020"
+    ],
+    "tags": []
   }
 ]
