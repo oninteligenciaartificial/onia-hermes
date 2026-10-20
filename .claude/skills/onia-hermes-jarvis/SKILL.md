@@ -121,6 +121,12 @@ CLI de Hermes.
 
 ## Trampas ya pagadas
 
+- **Un MUDO de la sección 15 no es un trabajo caído si su latido está fresco** (20-oct). La sección juzgaba por la
+  fecha del LOG también las líneas con `onia-latido.sh`, y el resumen, el cierre, la aduana y el recolector solo
+  escriben su log cuando pasa algo: salían «MUDO hace 3 d» estando sanos (los latidos decían código 0 de hoy), y
+  una sesión creyó que a Sergio Urcullo no le llegaba el resumen. Ahora esas líneas se miden por su latido y lo
+  dicen («(por su latido)»). Antes de dar un trabajo por caído: la lista «--- latidos» al pie de la sección.
+
 - **Un trabajo de Hermes que crea `aplicar` se PAUSA al revertir, no se borra** (20-oct, 5e). `hermes cron create
   "every 3h" "<prompt>" --skill … --name … --deliver local` sale de la documentación de Hermes
   (`website/docs/user-guide/features/cron.md`), no de una corrida en el VPS: la Fase A pide `cron create --help` con

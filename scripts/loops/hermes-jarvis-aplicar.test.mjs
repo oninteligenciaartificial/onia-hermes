@@ -977,7 +977,7 @@ test("latido: corridas que se pisan no se roban el archivo temporal", () => {
 // ── diagnostico: los latidos del cron (10-oct, HERMES_ROL_QA.md Q2) ────────────────────────────────
 // Hoy un vigía mudo y uno sano se ven igual. Se corre la sección 15 del diagnostico.sh REAL con un
 // crontab doble y logs con fechas puestas a mano.
-function diagnosticoLatidos({ lineasExtra = null, logsExtra = {} } = {}) {
+function diagnosticoLatidos({ lineasExtra = null, logsExtra = {}, latidos = {} } = {}) {
   const dir = mkdtempSync(join(tmpdir(), "jarvis-diag-lat-"));
   const LOG = join(dir, "log");
   const LAT = join(dir, "lat");
@@ -989,6 +989,7 @@ function diagnosticoLatidos({ lineasExtra = null, logsExtra = {} } = {}) {
   log("diario.log", 2 * 3600);   // corre una vez por día y escribió hace 2 h: ok
   for (const [n, seg] of Object.entries(logsExtra)) log(n, seg);
   writeFileSync(join(LAT, "aduana-soltar"), "1760000000 0 300\n");
+  for (const [n, seg] of Object.entries(latidos)) writeFileSync(join(LAT, n), `${Math.floor(Date.now() / 1000) - seg} 0 86400\n`);
   const lineas = lineasExtra || [
     "SHELL=/bin/bash",
     // El sano va primero en el crontab: la salida igual tiene que poner lo mudo arriba.
@@ -1028,6 +1029,23 @@ test("diagnóstico: cada línea del cron con su cadencia real, su log y si está
   assert.ok(filas.findIndex((l) => l.startsWith("MUDO")) < filas.findIndex((l) => l.startsWith("ok")), "lo mudo va primero");
   assert.match(r.stdout, /--- 5 línea\(s\): 2 MUDA\(S\), 1 sin log/);
   assert.match(r.stdout, /aduana-soltar: 1760000000 0 300 \(2025-10-09T08:53:20Z\)/);
+});
+
+test("diagnóstico: una línea con latido se mide por su latido, no por su log (20-oct: 4 falsos MUDOS)", () => {
+  // El resumen solo escribe su log si algo falla: con el log de hace 3 días y el latido de hace 2 h está sano.
+  const r = diagnosticoLatidos({
+    lineasExtra: [
+      "30 10 * * * /root/bin/onia-latido.sh resumen-manana 86400 '/root/bin/onia-jarvis-resumen.sh manana' >> /var/log/onia-jarvis-resumen.log 2>&1",
+      "*/5 * * * * /root/bin/onia-latido.sh aduana-soltar 300 'ONIA_AVISO_SOLTAR=1 /root/bin/onia-tg.sh' >> /var/log/onia-tg-soltar.log 2>&1",
+    ],
+    logsExtra: { "onia-jarvis-resumen.log": 3 * 86400, "onia-tg-soltar.log": 60 },
+    latidos: { "resumen-manana": 2 * 3600 },
+  });
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  const fila = (que) => r.stdout.split("\n").find((l) => l.includes(que)) || "";
+  assert.match(fila("latido:resumen-manana"), /^ok\s+cada 24 h\s+hace 2 h\s+latido:resumen-manana → .*onia-jarvis-resumen\.log \(por su latido\)$/);
+  // Y al revés: el log fresco no tapa un latido viejo (el de aduana-soltar es de 2025).
+  assert.match(fila("latido:aduana-soltar"), /^MUDO\s+cada 5 min\s+.*\(por su latido\)$/);
 });
 
 test("el QA diario corre SOLO el diagnóstico, por horario o a mano desde main, sin inputs y sin cancelar un aplicar", () => {
