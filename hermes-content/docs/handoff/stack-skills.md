@@ -42,7 +42,9 @@ Nada en el código. El PR de este carril lleva el parche del 19-oct, los apartad
 **Qué depende de Sergio**
 1. Apagar el registro por turno de ponytail (PowerShell, en su PC):
    `'{"ledger":"false"}' | claude plugin configure ponytail@ponytail --values-stdin; Set-Content -Path "$HOME\.claude\.ponytail-band" -Value off -NoNewline`
-2. Subir `E:/onia-skills-zip/ver-videos.zip` en claude.ai → Personalización → Skills, reemplazando la `ver-videos` vieja.
+2. ~~Subir `ver-videos` a claude.ai~~ Hecho el 20-oct desde su Chrome (con su OK): «Subir y reemplazar» dejó la v2
+   activa (328 líneas, 15 archivos) y la v1 en el historial de versiones. Trampa: el `file_upload` de Chrome solo lee
+   carpetas de la sesión; el ZIP de `E:` se copió a la carpeta de notas para subirlo.
 3. Reiniciar Claude Code para cargar los plugins actualizados.
 
 **Próximos pasos**
