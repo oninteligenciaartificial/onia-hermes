@@ -3,6 +3,8 @@
 Archivo único del carril. Actualizado 19-oct-2026, 22:45 La Paz, por Claude (Opus 5.5), sesión local «taller + contenido diario».
 Fuente del taller: `hermes-content/docs/TALLER_31_OCT.md` (manda sobre todo lo demás).
 
+**⏸ 20-oct: venta en pausa por decisión de Sergio Urcullo** (19-oct, 23:00): «la página queda para después; por ahora haremos investigación y aprendizaje y ordenaremos las sesiones». Los carruseles «aún no salen». Pidió aprender a vender valor y psicología de compra con Iman Gadzhi: hecho en `references/video-intake/2026-10-20-gadzhi-vender-valor-psicologia.md` (§3 = auditoría del taller con propuestas, nada cambiado) y regla en `onia-ventas-pauta` §10. Cada día sin vender resta uno de los 9 días de venta: si la apertura pasa del vie 23, revisar la fecha del taller antes de abrir.
+
 ## 1. Objetivo
 Sergio Urcullo, 19-oct: «el más importante ahora es ese, tenemos que conseguir 3k». Decidido: **Bs 3.000 cobrados con el taller del sáb 31-oct** (50 cupos 50/60/70) y contenido diario de la marca personal.
 Hecho cuando: venta abierta con su OK y contenido diario corriendo.
@@ -26,7 +28,7 @@ Nada publicado, cobrado ni enviado al 19-oct 22:45. La página y los carruseles 
 - El primer intento de corregir referencias con `perl -e 's#…#…#'` falló porque el patrón tenía `#`: usar `s{…}{…}`.
 
 ## 6. Qué depende de Sergio Urcullo
-1. Escribir su número de WhatsApp (va en los 3 botones de la página).
+1. ~~Número de WhatsApp~~ dado el 19-oct: **+591 71654992** (va en los 3 botones de la página al retomarla).
 2. OK o cambios a la página y a los 2 carruseles (capturas enviadas el 19-oct).
 3. Pedirle a Leslie Mercado Moreno: QR, titular, cómo se factura y revisar el texto de devolución.
 4. Grabar los 3 reels del taller (mar 20, ~1 h) y subir los brutos a Drive.

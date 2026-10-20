@@ -29,6 +29,7 @@ Las rutas de fuente de la tabla son relativas a esta carpeta; las skills viven e
 | 8-oct, investigación de referente | [Iman Gadzhi](2026-10-08-referente-gadzhi.md), §5 | Resultado, capítulos y demostración en largo; no copiar riqueza ni negocio | `edicion-referentes`, reglas de largo; `ver-videos`, límite del prompt CLI | Pendiente |
 | 9-oct | [Cinco entradas antes de vibe code](2026-10-09-cinco-archivos-antes-de-vibe-code.md), Qué toma Sergio Urcullo y qué NO | Nombre + función + prueba visible; reglas, skills, handoff y tarea sin duplicación | `diseno-contenido-onia`, Aprendizajes incorporados; `aprender-de-todo` | Ficha contiene borradores, no producción ni uso posterior demostrado |
 | 9-oct | [DePBfHouarG](2026-10-09-reel-DePBfHouarG.md), Qué aprende Onia | Jerarquía, repetición, comparación y centralización; mosaico previo al cierre | `diseno-contenido-onia`; `edicion-referentes`, caso 45,3 → 47,0 s | Pendiente; audio y ritmo no medidos |
+| Pedido 19-oct, ficha 20-oct | [Iman Gadzhi, venta](2026-10-20-gadzhi-vender-valor-psicologia.md), §1-§3 | Cuenta primero; marco → meta → dolor → valor → riesgo cero → precio → paso inmediato; primer mensaje para que conteste | `onia-ventas-pauta` §10 (20-oct) | Pendiente: aplicar §3 al taller con OK de Sergio Urcullo |
 
 ## Feedback fechado y memoria
 
