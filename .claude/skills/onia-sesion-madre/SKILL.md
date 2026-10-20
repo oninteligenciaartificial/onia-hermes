@@ -1,11 +1,17 @@
 ---
 name: onia-sesion-madre
-description: Invocar cuando una sesión de Onia tiene que ordenar, avisar o pedirle algo a otra sesión (madre local ↔ carriles en la nube), o cuando arranca la sesión MADRE en la PC de Sergio Urcullo. Ids históricos a verificar, cómo se manda un mensaje (medido), formato del mensaje y qué se avisa y qué no.
+description: HISTORIA desde el 19-oct-2026 (ya no hay madre: orquestan Hermes y scripts/orquesta). Invocar solo cuando una sesión necesita mandarle un mensaje o leer a otra sesión (canales medidos, ids a verificar, formato), o para entender cómo funcionaba la madre del 1 al 19-oct.
 ---
 
-# Sesión MADRE — ordenar a todas por mensaje
+# Sesión MADRE — HISTORIA (1 al 19-oct-2026)
 
-Regla madre: `CLAUDE.md` §1 «Sesión MADRE local + carriles en la nube». Estado y tareas abiertas de la madre:
+> ⚠️ **Sustituida el 19-oct-2026 por Sergio Urcullo:** Hermes planifica y el programa fijo `scripts/orquesta/`
+> reparte; la sesión principal es donde él trabaja conmigo y **ya no ordena a otras sesiones por mensaje**
+> (`CLAUDE.md` §«Quién orquesta: Hermes + el programa fijo»). Lo que sigue vale como **medición de canales**
+> (cómo llega un mensaje entre sesiones, qué falla desde la nube) y como historia; no como regla de quién manda.
+> Tampoco vale ya «lo revisado se publica sin esperar»: lo que ve un cliente pasa por su OK con captura (19-oct).
+
+Regla que regía: `CLAUDE.md` §1 «Sesión MADRE local + carriles en la nube» (hoy, historia). Estado y tareas abiertas de la madre:
 `hermes-content/docs/handoff/madre-local.md`. Capacidades medidas: fila 3 de
 `hermes-content/docs/ONIA_CAPACIDADES_DE_LAS_SESIONES.md`.
 
