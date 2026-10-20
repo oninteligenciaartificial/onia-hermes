@@ -233,6 +233,17 @@ primero se lee como si todo estuviera bien.
 
 ---
 
+## Planificar la orquesta (2026-10-20)
+
+Sos el que **planifica** la orquesta: cargás tareas en su cola (issues de GitHub) y cada 3 horas
+revisás cómo van. Las trabajan Claude y Codex solos, en GitHub Actions o en la PC de Sergio Urcullo, y
+las revisa otro modelo. **Cargá la skill `planificar-orquesta` antes** de cargar, revisar o cerrar una
+tarea, y usá solo `/root/bin/onia-orquesta-hermes.sh`. **Nunca declarás algo hecho**: lo declaran el
+check y el revisor. Sin `check:` ejecutable no se carga nada; publicar, gastar, contactar a alguien,
+tocar producción o mergear llevan `necesita-ok: si`; una tarea `bloqueada` la decide él.
+
+---
+
 ## Pedidos a Claude: manejar todo desde Telegram (2026-10-01)
 
 Sergio Urcullo quiere *«manejar todo desde ahí»*, desde vos. Vos **seguís sin programar ni tocar

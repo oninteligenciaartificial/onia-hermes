@@ -89,6 +89,7 @@ trabajador de la nube no lo tiene.
 | **F** Bolivian Electric *(prospecto REAL desde 2026-08-24 — 10 puestos relevados, ver handoff)* | mismo stack backend | — | `onia-core` |
 | **chatbot** (motor, guion, conocimiento, voz) | **cargar `onia-chatbot`** — ese archivo nombra el stack completo del carril | — | `onia-chatbot` |
 | **hermes-jarvis** (Hermes, Telegram de Sergio Urcullo, su calendario, pedidos a Claude) | **cargar `onia-hermes-jarvis`** — método, trampas y pruebas del carril; estado en `handoff/hermes-jarvis.md` | — | `onia-hermes-jarvis` |
+| **panel-onia** (mod de la app de Claude: sesiones, cola de la orquesta, nube, PC, Hermes y uso en vivo) | **cargar `panel-onia`** — el mod vive fuera del repo (`~/.claude/onia-mods/panel-onia`); la app corre la copia del cache: cambio = subir versión + 3 comandos (20-oct) | — | `panel-onia` |
 | **G** infra / n8n | `n8n-workflow-patterns` `n8n-mcp-tools-expert` `n8n-node-configuration` `n8n-code-javascript` `n8n-validation-expert` `docker-patterns` `deployment-patterns` | — | — |
 | **H** contenido · **J** video-remotion | **`diseno-contenido-onia` primero** (índice de imágenes, galería, packs y patrones) · **`edicion-referentes` para todo video nuevo de Sergio Urcullo** (Santiago Muñoz / Erik Taveras por sus mecanismos medidos (sin copiar identidad ni guion), desde el 3-oct) · `editor-videos` `ver-videos` `sacar-prompt` `hyperframes` `banner-design` `brand` + Higgsfield MCP | — | — |
 | **I** research/estrategia | `deep-research` `exa-search` `iterative-retrieval` `office-hours` | — | — |
@@ -140,7 +141,8 @@ trabajador de la nube no lo tiene.
   `equipo-de-agentes` (el método: Codex, verificadores Haiku; corregido el 19-oct: orquestan Hermes y `scripts/orquesta/`) ·
   `onia-sesion-madre` (HISTORIA desde el 19-oct: ya no hay madre; queda por los canales medidos entre
   sesiones) · `orca` (tablero LOCAL de agentes en la PC: qué ve y qué no, ajustes a
-  corregir; no ve la nube ni es la madre; 2026-10-16).
+  corregir; no ve la nube ni es la madre; 2026-10-16) · `panel-onia` (el Panel ONIA, mod de la app
+  de Claude: dónde vive, cómo se publica un cambio, de dónde lee cada sección; 2026-10-20).
 - **Producto:** `onia-core` · `onia-chatbot` · `onia-contabilidad-bolivia`.
 - **Venta:** `onia-propuestas` (generador oficial, nunca HTML a mano) · `onia-web-factory`.
 - **Contenido y video:** `diseno-contenido-onia` (índice de diseño) · `edicion-referentes` (el molde de edición de los videos de Sergio Urcullo: recetas medidas de Santiago Muñoz y Erik Taveras + scripts) · `editor-videos` ·

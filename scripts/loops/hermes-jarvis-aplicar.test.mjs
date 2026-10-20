@@ -30,7 +30,7 @@ function ejecutable(f, contenido) {
   chmodSync(f, 0o755);
 }
 
-function vps({ leeCalendario = true, escribeCalendario = true, conLatido = true, conQa = true } = {}) {
+function vps({ leeCalendario = true, escribeCalendario = true, conLatido = true, conQa = true, tokenIssues = null } = {}) {
   const dir = mkdtempSync(join(tmpdir(), "jarvis-vps-"));
   const F = join(dir, "fs");
   const R = join(F, "root");
@@ -58,7 +58,8 @@ function vps({ leeCalendario = true, escribeCalendario = true, conLatido = true,
 
   // El repo del VPS: origin/main con las skills y el SOUL de este commit.
   const repo = join(R, "loops", "onia-hermes");
-  for (const f of ["hermes-content/skills/agenda-calendario.md", "hermes-content/skills/pedir-a-claude.md", "hermes-content/deploy/hermes-agent/SOUL.md"]) {
+  for (const f of ["hermes-content/skills/agenda-calendario.md", "hermes-content/skills/pedir-a-claude.md",
+                   "hermes-content/skills/planificar-orquesta.md", "hermes-content/deploy/hermes-agent/SOUL.md"]) {
     mkdirSync(dirname(join(repo, f)), { recursive: true });
     copyFileSync(join(RAIZ, f), join(repo, f));
   }
@@ -115,7 +116,10 @@ esac
     join(dobles, "systemctl"),
     `#!/usr/bin/env bash
 echo "$*" >> ${log}/systemctl
-case "$1" in
+# La unidad de usuario necesita el bus de root: sin XDG_RUNTIME_DIR, «systemctl --user» no llega (19-oct).
+[ "$1" = --user ] && echo "\${XDG_RUNTIME_DIR:-}" >> ${log}/systemctl-xdg
+a="$1"; [ "$a" = --user ] && a="$2"
+case "$a" in
   restart|start)
     ls ${R}/.hermes/skills/*/ ${R}/.hermes/skills 2>/dev/null > ${R}/.hermes/.skills_prompt_snapshot.json ;;
 esac
@@ -160,8 +164,25 @@ exit 0
   ejecutable(
     hpy,
     `#!/usr/bin/env bash
-# hermes_cli.main cron pause|resume <id>
+# hermes_cli.main cron pause|resume <id> · cron create <horario> <prompt> --skill S --name N --deliver D
 [ "$3" = cron ] || exit 0
+if [ "$4" = create ]; then
+  if [ "$5" = --help ]; then
+    [ -n "\${HERMES_SIN_CREATE:-}" ] && { echo "invalid choice: 'create'"; exit 2; }
+    echo "usage: hermes cron create SCHEDULE PROMPT [--skill SKILL] [--name NAME] [--deliver TARGET]"; exit 0
+  fi
+  printf '%s\\n' "$*" >> ${log}/hermes-create
+  python3 - "$@" <<'PY'
+import json, sys
+a = sys.argv[1:]
+p = "${R}/.hermes/cron/jobs.json"
+d = json.load(open(p))
+d["jobs"].append({"id": "orq%03d" % len(d["jobs"]), "name": a[a.index("--name") + 1], "enabled": True,
+                  "state": "scheduled", "schedule": a[4], "deliver": a[a.index("--deliver") + 1]})
+json.dump(d, open(p, "w"))
+PY
+  exit 0
+fi
 [ "$4" = resume ] && [ "\${HERMES_RESUME_FALLA:-}" = 1 ] && exit 1
 python3 - "$4" "$5" <<'PY'
 import json, os, sys
@@ -196,6 +217,14 @@ PY
       .replaceAll("/root/", R + "/")
       .replace(/HOME=\/root\b/g, `HOME=${R}`);
   ejecutable(join(bin, "onia-pedido-claude.sh"), deVps(readFileSync(pedidoReal, "utf8")).replaceAll("/var/lib/onia-pedidos", join(F, "var", "lib", "onia-pedidos")));
+  // La orquesta (5e): el comando real, y el token de Issues solo si la prueba lo pide (lo deja Sergio Urcullo).
+  ejecutable(join(bin, "onia-orquesta-hermes.sh"),
+    deVps(readFileSync(join(AQUI, "orquesta-hermes.sh"), "utf8")).replaceAll("/var/lib/onia-orquesta-hermes", join(F, "var", "lib", "onia-orquesta-hermes")));
+  if (tokenIssues !== null) {
+    mkdirSync(join(R, ".config", "onia"), { recursive: true });
+    writeFileSync(join(R, ".config", "onia", "gh-issues-token"), "github_pat_11ABCDEFG0NoSeImprimeNunca_" + "x".repeat(55) + "\n");
+    chmodSync(join(R, ".config", "onia", "gh-issues-token"), tokenIssues);
+  }
   const guion = (accion = "aplicar", cortarAntesDe = null) => {
     let a = deVps(readFileSync(join(DIR, `${accion}.sh`), "utf8"));
     if (cortarAntesDe) a = a.replace(cortarAntesDe, "exit 9 # la conexión se cortó acá\n" + cortarAntesDe);
@@ -257,7 +286,9 @@ test("con todo en verde: aplica, reinicia el gateway, verifica que volvió y le 
   assert.ok(v.jobs().every((j) => !j.enabled && j.state === "paused"));
   assert.equal(apagados(v.leer("n8n")).length, 12, "los 12 flujos de reportes se apagan");
   assert.equal(v.interruptor(), true);
-  assert.match(v.leer("systemctl"), /^restart hermes-gateway\.service$/m, "reinicio controlado por systemd");
+  assert.match(v.leer("systemctl"), /^--user restart hermes-gateway\.service$/m, "reinicio controlado de la unidad de USUARIO");
+  assert.doesNotMatch(v.leer("systemctl"), /^(restart|start) hermes-gateway/m, "nunca la de sistema: arrancarla vuelve el bucle de 8.092 reinicios");
+  assert.match(v.leer("systemctl-xdg"), /^\/run\/user\/0$/m);
   assert.match(r.stdout, /✅ gateway de Hermes reiniciado y vivo/);
   assert.match(r.stdout, /✅ su lista de skills ya nombra agenda-calendario/);
   assert.match(v.leer("telegram"), /Jarvis encendido/);
@@ -288,7 +319,8 @@ test("revertir deshace por marcas, reanuda lo pausado y reinicia el gateway para
   assert.equal(r.status, 0, r.stdout + r.stderr);
   assert.equal(v.crontab().trim(), v.crontabInicial.trim());
   assert.match(r.stdout, /hermes: SOUL restaurado/);
-  assert.match(v.leer("systemctl"), /^restart hermes-gateway\.service$/m);
+  assert.match(v.leer("systemctl"), /^--user restart hermes-gateway\.service$/m);
+  assert.doesNotMatch(v.leer("systemctl"), /^(restart|start) hermes-gateway/m, "revertir tampoco toca la de sistema");
   assert.equal(v.interruptor(), false);
 });
 
@@ -1046,4 +1078,108 @@ test("diagnóstico: semanal y mensual muertos salen MUDO; rutas armadas al corre
   assert.match(fila("cada-hora.log"), /^ok\s+cada 60 min/);
   assert.match(fila("pct.sh"), /^sin log/, "una ruta con $(date) no se puede mirar: nunca MUDO");
   assert.match(fila("comillas.sh"), /^sin log/);
+});
+
+// ── 5e. Hermes planifica la orquesta (2026-10-20) ────────────────────────────────────────────
+// Carga issues con onia-orquesta-hermes.sh y los revisa cada 3 h con un trabajo propio. Inerte sin el
+// token de Issues, como los pedidos sin llave; con él, todo o nada como el resto de aplicar.
+
+const SKILL_ORQ = (v) => join(v.R, ".hermes", "skills", "planificar-orquesta", "SKILL.md");
+const jobOrq = (v) => v.jobs().find((j) => j.name === "onia-planificar-orquesta");
+
+test("sin el token de Issues, la orquesta queda apagada y a Hermes no se le enseña nada", () => {
+  const v = vps();
+  const r = v.aplicar();
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(r.stdout, /planificar la orquesta APAGADO: falta el token de Issues/);
+  assert.equal(existsSync(SKILL_ORQ(v)), false);
+  assert.doesNotMatch(readFileSync(join(v.R, ".hermes", "SOUL.md"), "utf8"), /^## Planificar la orquesta/m);
+  assert.equal(v.leer("hermes-create"), "", "no programa nada");
+  assert.doesNotMatch(v.leer("n8n"), /api\.github\.com/, "ni siquiera mira GitHub");
+  assert.doesNotMatch(v.leer("telegram"), /orquesta/);
+});
+
+test("con el token: skill, su regla (una vez, hasta su ---), la revisión cada 3 h sin entrega, y reinicio", () => {
+  const v = vps({ tokenIssues: 0o600 });
+  const r = v.aplicar();
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.doesNotMatch(r.stdout + r.stderr, /NoSeImprimeNunca/);
+  assert.ok(existsSync(SKILL_ORQ(v)), "la skill va junto a la del calendario");
+  assert.equal(readFileSync(SKILL_ORQ(v), "utf8"), readFileSync(join(RAIZ, "hermes-content", "skills", "planificar-orquesta.md"), "utf8"));
+  const soul = readFileSync(join(v.R, ".hermes", "SOUL.md"), "utf8");
+  assert.equal((soul.match(/^## Planificar la orquesta/gm) || []).length, 1);
+  assert.doesNotMatch(soul, /^## Pedidos a Claude/m, "solo su sección: la de pedidos que le sigue no entra sin llave");
+  const create = v.leer("hermes-create");
+  assert.equal(create.trim().split("\n").length, 1);
+  for (const parte of ["cron create every 3h", "--skill planificar-orquesta", "--name onia-planificar-orquesta", "--deliver local"])
+    assert.ok(create.includes(parte), parte);
+  assert.equal(jobOrq(v).enabled, true);
+  assert.match(r.stdout, /✅ revisión de la orquesta cada 3 h: orq\d+/);
+  assert.match(v.leer("n8n"), /^GET https:\/\/api\.github\.com\/repos\/oninteligenciaartificial\/onia-hermes\/labels\/necesita-ok$/m, "la Fase A miró los labels");
+  assert.match(v.leer("systemctl"), /^--user restart hermes-gateway\.service$/m);
+  assert.match(r.stdout, /✅ y nombra planificar-orquesta/);
+  assert.match(v.leer("telegram"), /📋 Y cargo tareas en la orquesta/);
+
+  spawnSync("/bin/sleep", ["1.1"]); // el respaldo se nombra por segundo
+  writeFileSync(join(v.log, "systemctl"), "");
+  const r2 = v.aplicar();
+  assert.equal(r2.status, 0, r2.stdout);
+  assert.match(r2.stdout, /la revisión de la orquesta ya estaba programada/);
+  assert.equal(v.leer("hermes-create").trim().split("\n").length, 1, "nunca dos trabajos");
+  assert.doesNotMatch(v.leer("systemctl"), /restart/, "sin cambios no reinicia");
+});
+
+test("revertir pausa la revisión (no la borra), quita la skill y su regla; el próximo aplicar la reanuda", () => {
+  const v = vps({ tokenIssues: 0o600 });
+  assert.equal(v.aplicar().status, 0);
+  const bk = join(v.R, "backups", v.respaldos().at(-1));
+  const r = spawnSync("bash", [join(bk, "rollback.sh")], {
+    env: { ...process.env, PATH: `${join(v.dir, "dobles")}:${process.env.PATH}`, HERMES_RESUME_ESTRICTO: "1" },
+    encoding: "utf8",
+  });
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(r.stdout, /hermes: pausado orq\d+ \(la revisión de la orquesta\)/);
+  assert.equal(jobOrq(v).state, "paused");
+  assert.equal(existsSync(SKILL_ORQ(v)), false, "la skill no existía: se quita");
+  assert.doesNotMatch(readFileSync(join(v.R, ".hermes", "SOUL.md"), "utf8"), /^## Planificar la orquesta/m);
+  assert.ok(v.jobs().filter((j) => j.name !== "onia-planificar-orquesta").every((j) => j.enabled), "los 3 de antes vuelven");
+
+  spawnSync("/bin/sleep", ["1.1"]);
+  const r2 = v.aplicar();
+  assert.equal(r2.status, 0, r2.stdout);
+  assert.equal(v.leer("hermes-create").trim().split("\n").length, 1, "reanuda el mismo, no crea otro");
+  assert.equal(jobOrq(v).enabled, true);
+  assert.match(r2.stdout, /✅ revisión de la orquesta cada 3 h/, "lo reanudó esta corrida: el próximo revertir lo pausa");
+});
+
+test("con el token, si falta la skill o la regla en main, el token no sirve o el CLI no trae cron create: no aplica nada", () => {
+  const sinSkill = vps({ tokenIssues: 0o600 });
+  cambiarMain(sinSkill, (repo, g) => g("rm", "-q", "hermes-content/skills/planificar-orquesta.md"));
+  const a = sinSkill.aplicar();
+  assert.equal(a.status, 1, a.stdout);
+  assert.match(a.stdout, /no encontré la skill planificar-orquesta en origin\/main/);
+  nadaCreado(sinSkill);
+
+  const sinRegla = vps({ tokenIssues: 0o600 });
+  cambiarMain(sinRegla, (repo) => {
+    const f = join(repo, "hermes-content/deploy/hermes-agent/SOUL.md");
+    writeFileSync(f, readFileSync(f, "utf8").replace(/^## Planificar la orquesta/m, "## Otra cosa"));
+  });
+  const b = sinRegla.aplicar();
+  assert.equal(b.status, 1, b.stdout);
+  assert.match(b.stdout, /no encontré la regla de la orquesta/);
+  nadaCreado(sinRegla);
+
+  const abierto = vps({ tokenIssues: 0o644 });
+  const c = abierto.aplicar();
+  assert.equal(c.status, 1, c.stdout);
+  assert.match(c.stdout, /la cola de la orquesta no está lista: El token de Issues tiene permisos 644/);
+  nadaCreado(abierto);
+
+  const sinCreate = vps({ tokenIssues: 0o600 });
+  const d = sinCreate.aplicar({ HERMES_SIN_CREATE: "1" });
+  assert.equal(d.status, 1, d.stdout);
+  assert.match(d.stdout, /no tiene «cron create … --deliver»/);
+  nadaCreado(sinCreate);
+  assert.equal(sinCreate.leer("hermes-create"), "");
 });
