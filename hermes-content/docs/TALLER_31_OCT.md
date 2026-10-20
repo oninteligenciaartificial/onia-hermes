@@ -15,6 +15,7 @@
 | 19-oct | El botón va a **su WhatsApp personal** (él atiende y confirma cada pago) |
 | 19-oct | Alcance: mensajes 1 a 1 que manda él, bio de Instagram al taller, **pauta en Meta de Bs 300** y orgánico |
 | 19-oct, 23:00 | La página y los carruseles quedan para después; primero investigar cómo venden los referentes |
+| 20-oct | Marca: es **marca personal de Sergio Urcullo** (foto B/N con un objeto verde, voseo), no Onia. Antes de elegir estilo, «aprendamos las webs de los referentes»: medidas en `references/video-intake/2026-10-20-diseno-paginas-referentes.md` |
 | 20-oct | **Enfoque: «No pierdas clientes»** (descartados «Auditá tu negocio con IA» y «Editá tus videos con IA»). Para el público general: **nada técnico** (ni Hermes ni herramientas internas) |
 
 ## 1. La oferta (lo único que se promete)
