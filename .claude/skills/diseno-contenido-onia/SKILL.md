@@ -266,6 +266,30 @@ Fuente y evidencia: [`references/video-intake/2026-10-10-ig-carrusel-DePPPp5FgMh
   3. Portada-inventario con logos en arco: layout nuevo opcional; sin él, la portada va con foto `fotobn` + `dato` o captura.
 - **Logos:** hay 8 en `hermes-content/references/brand-logos/` y 3 en `hermes-content/references/brand-claude/`. Notion, Chrome, Spotify, NordVPN, Figma, Xcode y Cursor **no están**: un inventario que los nombre primero necesita su kit de prensa oficial (si hay que descargar, pide OK).
 
+## Carrusel de oferta o evento (workshop de pago) — aprendido el 16-oct-2026
+
+Caso: dos carruseles del workshop «Auditá tu negocio con IA» (`briefs/marca-personal/sergio-workshop-*-20261016.json`, render en `carousels/out/`). Sin imágenes ni gasto: solo layouts `dato`, `lista`, `ensayo`.
+- **Estructura que funcionó:** portada `dato` con **ejemplo rotulado** («Ejemplo: 5 h por semana, a Bs 20 la hora»; nunca un número que parezca dato de alguien) → la cuenta en `lista` → filtro «para quién no es» → fecha y cupo → cierre `ensayo` negro con `cta` y **una sola** acción («Link en mi perfil»). El precio no va en la lámina: va en la página, que es lo que se aprueba.
+- **Una lámina `ensayo` con 3 líneas queda con más de la mitad vacía** (falla el control §5.2). Se arregla pasándola a `lista` de 3 filas. Las de cierre negro y la portada verde pueden quedar así: son declaraciones.
+- **`cierre` no se usa** para estas piezas: imprime «Comentá» fijo y el DM por comentario no está probado. El cierre es `ensayo` con `cta`.
+- **Trampa del setup (medida hoy):** `eval "$(sh scripts/carousel_cloud_setup.sh)" 2>&1 | tail -3` falla con «No Edge/Chrome found» porque el pipe corre el `eval` en un subshell y `CAROUSEL_BROWSER` se pierde. Correr el `eval` **sin pipe**, o exportar `CAROUSEL_BROWSER=/root/.fonts/onia-carruseles/chromium-headless.sh` en el mismo comando.
+- La hoja de contactos se llama con `--dir <carpeta>` (no con la carpeta suelta).
+- Antes de publicar: la promesa («plantilla del Mapa», fecha, precio) tiene que existir y estar aprobada; ver `docs/TALLER_31_OCT.md` (fuente única del taller).
+
+## Oferta de entrada o prepago de la marca personal — aprendido el 16-oct-2026
+
+Método y cifras en `docs/ONIA_LANZAMIENTO_PREPAGO.md` y `docs/research/FUNNELS_WEBINARS_Y_PREPAGO_REFERENTES.md`. Lo que sirve para piezas:
+- **Antes de diseñar una pieza de venta, hacer la cuenta de cuánta gente hace falta** (meta ÷ precio, y precio plano contra escalones por cupo). Con Bs 3.000: 60 inscripciones a Bs 50, 50 a Bs 60, 43 a Bs 70. Si la audiencia medida no alcanza, la pieza no arregla la cuenta: se dice.
+- **Escalones de precio por cupo real** (Bs 50 → 60 → 70), nunca por reloj falso ni «valor» inflado. La lámina no lleva el precio: va en la página, que es lo que aprueba Sergio Urcullo.
+- **No hay fuente pública sobre prepagos en Bolivia:** un caso de un amigo es anécdota, no dato. Antes de usarlo como meta, preguntarle su audiencia y los días que vendió.
+- Los carruseles de oferta repiten la fecha y el cupo: si cambian, **se cambian las láminas antes de publicar** (los de 16-oct dicen «sáb 24 / cupo 12»).
+
+**Aprendido el 19-oct-2026 (taller del 31-oct, fuente única `docs/TALLER_31_OCT.md`):**
+- **La fuente de una oferta vive en el repo, nunca solo en un disco de proyecto.** `TALLER_31_OCT.md` se escribió en `/mnt/project-files/` de la nube, 5 documentos la citaban como «la que manda» y nadie podía leerla: 7 contradicciones y la apertura del lun 19 perdida. Se recreó en git.
+- **Medir la audiencia antes de prometer la meta.** Los seguidores públicos se leen sin login abriendo `instagram.com/<cuenta>/` en el navegador del panel y leyendo `meta[property="og:description"]` (con `curl` vuelve vacío). 19-oct: 497 seguidores para 50 cupos → hace falta pauta y mensajes 1 a 1, no solo piezas.
+- **Google Meet gratis corta a los 60 min** cuando entran 3 o más personas (lo fija la cuenta del anfitrión). Un taller de 90 min se arma en dos bloques de 45 con pausa y se vuelve al mismo link, y se avisa en la página y en la confirmación.
+- **Captura móvil de una página:** Edge sin pantalla con `--window-size=390,…` dibuja más ancho y recorta (parece que el texto se sale). Se captura un HTML marco con `<iframe style="width:390px">` apuntando a la página, o se mira en el panel del navegador con el preset móvil.
+
 ## 6. Gasto (CLAUDE.md, regla de Higgsfield)
 
 Cotizar siempre. **Actualización 8-oct, consolidada 9-oct:** imágenes de prueba/opciones por unos pocos créditos (menos de ~5 por lote) tienen autorización previa; mostrar después el resultado. Lotes grandes, entrenamiento Soul y subir cara/voz a servicios externos requieren autorización específica (cara/voz de Sergio Urcullo también la de Leslie Mercado Moreno). No fraccionar lotes para esquivar el límite. Registrar en

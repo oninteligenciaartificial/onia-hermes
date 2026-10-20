@@ -109,6 +109,22 @@ test('referentes: cada layout renderiza y uno desconocido falla claro', () => {
   for (const theme of ['blanco', 'verde', 'negro']) assert.ok(referentesHtml({ layout: 'ensayo', body: 'b' }, 0, 1, 'sergio', { theme }).includes(`t-${theme}`), theme);
   assert.throws(() => referentesHtml({ layout: 'ensayo', theme: 'rosa' }, 0, 1, 'sergio', {}), /theme desconocido/);
 });
+test('referentes: estilo taller es opt-in (sin estilo no cambia el marcado) y xl/fit/side se activan por lámina', () => {
+  const base = referentesHtml({ layout: 'ilustrado', headline: 'H *x*', body: 'b' }, 0, 2, 'sergio', {});
+  assert.ok(!/class="slide[^"]*e-taller/.test(base) && !/class="slide[^"]* xl"/.test(base));
+  const t = referentesHtml({ layout: 'ilustrado', estilo: 'taller', xl: true, headline: 'H *x*', body: 'b' }, 0, 2, 'sergio', {});
+  assert.ok(/class="slide[^"]* e-taller xl"/.test(t));
+  const d = referentesHtml({ layout: 'dato', estilo: 'taller', pre: 'sábado', value: '31', side: 'de octubre', headline: 'h' }, 0, 2, 'sergio', {});
+  assert.ok(d.includes('<div class="d-row">') && d.includes('<div class="pre-d">'));
+  assert.ok(!referentesHtml({ layout: 'dato', value: '31', headline: 'h' }, 0, 2, 'sergio', {}).includes('<div class="d-row">'));
+});
+test('referentes: dato con `eq` arma la cuenta sobre la cifra y `pre` admite énfasis; sin ellos el marcado no cambia', () => {
+  const e = referentesHtml({ layout: 'dato', estilo: 'taller', pre: '*Ejemplo*', value: 'Bs 400', eq: [{ t: '5 h', l: 'por semana' }, { op: '×' }, { t: '4', l: 'semanas' }, { op: '=' }], headline: 'h' }, 0, 2, 'sergio', {});
+  assert.ok(e.includes('<div class="d-eq">') && e.includes('class="eq-op">×<') && e.includes('<i>por semana</i>'));
+  assert.ok(/class="pre-d"><span class="g">Ejemplo/.test(e) || /class="pre-d">[^<]*<[^>]*class="g"/.test(e), 'pre con *énfasis* debe pasar por emph');
+  const sin = referentesHtml({ layout: 'dato', pre: 'sábado', value: '31', headline: 'h' }, 0, 2, 'sergio', {});
+  assert.ok(!sin.includes('<div class="d-eq">') && sin.includes('<div class="pre-d">sábado</div>'));
+});
 test('community-editorial usa la cuenta elegida y CTA directo para pauta', () => {
   const html = communityEditorialHtml({
     role: 'cta',
