@@ -31,6 +31,12 @@ HERMES_PAUSAR="9089322cc256 4ac955b47726 94f352c07554"   # agenda 08:00 · plan 
 # que hacen trabajo real (respaldo, seguimiento del bot, leads, webhooks, recordatorios).
 N8N_APAGAR="QGXVyRSgrArxfolj OovRU4r0o7pvglJP GFeCZKr1zQT6CVN8 aHFLqEtzqvq6SE3e C96NmbalLhaTEf0G nZkaXaZVKzgtwUqU oKSTNdvS58ixBgnl nkPMoUYQ9DMIL9gM TBECCNhi334cOLTG Su4vVZCB9rtJ3gAy GjNeraAVnY7HduCG VaX3lx0zibnNbg57"
 
+# Hermes planifica la orquesta (2026-10-20, 5e): carga issues con el token de Issues que Sergio Urcullo
+# deja en el VPS (handoff/orquesta.md, 6g) y los revisa cada 3 h con un trabajo propio de Hermes.
+ORQ_TOKEN=/root/.config/onia/gh-issues-token
+ORQ_JOB=onia-planificar-orquesta
+ORQ_PROMPT="Revisión de la cola de la orquesta. Cargá la skill planificar-orquesta y seguí su sección «La revisión de cada 3 horas». Si no hiciste nada, respondé solo [SILENT]."
+
 FALLAS=0
 HERMES_CAMBIO=0   # 1 = Hermes tiene skill o SOUL nuevos: hay que reiniciar su gateway (6b)
 falla() { FALLAS=$((FALLAS + 1)); echo "  ❌ $*"; }
@@ -49,6 +55,22 @@ for j in jobs:
         print("activo" if j.get("enabled") and j.get("state") != "paused" else "pausado")
         raise SystemExit
 print("?")
+PY
+}
+job_por_nombre() {  # imprime «<id> activo|pausado» del trabajo de Hermes con ese nombre, o nada (5e)
+  python3 - "$1" <<'PY'
+import json, sys
+try:
+    d = json.load(open("/root/.hermes/cron/jobs.json"))
+except Exception:
+    raise SystemExit
+jobs = d.get("jobs", d) if isinstance(d, dict) else d
+if isinstance(jobs, dict):
+    jobs = [dict(v, id=v.get("id", k)) for k, v in jobs.items() if isinstance(v, dict)]
+for j in jobs:
+    if isinstance(j, dict) and j.get("name") == sys.argv[1]:
+        print(j.get("id"), "activo" if j.get("enabled") and j.get("state") != "paused" else "pausado")
+        break
 PY
 }
 
@@ -109,7 +131,8 @@ if [ -n "$PREVIO" ]; then
   echo "hay un aplicar anterior sin revertir ($PREVIO): heredo sus listas"
   for f in interruptor.antes hermes-pausados.txt n8n-apagados.txt n8n-agenda-id n8n-cambios-id \
            skill-destino skill-antes.md skill-no-existia SOUL.md.antes \
-           skill-pedidos-destino skill-pedidos-antes.md skill-pedidos-no-existia pedidos-env-creado; do
+           skill-pedidos-destino skill-pedidos-antes.md skill-pedidos-no-existia pedidos-env-creado \
+           skill-orquesta-destino skill-orquesta-antes.md skill-orquesta-no-existia hermes-creados.txt; do
     [ -f "$PREVIO/$f" ] && cp "$PREVIO/$f" "$BK/$f"
   done
 fi
@@ -271,6 +294,22 @@ if { llave_ok || [ -s "$PEDIDOS_ENV" ]; } && [ -x "$BIN/onia-pedido-claude.sh" ]
   # llegar a GitHub, el pedido sale y la respuesta no vuelve nunca. La prueba usa un estado aparte.
   ONIA_PEDIDOS_ESTADO="$BK/respuestas-prueba" "$BIN/onia-respuestas-pedidos.sh" --probar </dev/null >/dev/null 2>&1 \
     || falla "el VPS no llega a GitHub para recoger las respuestas de los pedidos (onia-respuestas-pedidos.sh --probar)"
+fi
+# La orquesta (5e), con el mismo criterio: sin el token de Issues no se mira nada (queda apagada); con
+# el token y el comando ya copiados, lo que 5e va a necesitar se comprueba ACÁ, antes de tocar nada.
+if [ -f "$ORQ_TOKEN" ] && [ -x "$BIN/onia-orquesta-hermes.sh" ]; then
+  git -C "$REPO_VPS" show origin/main:hermes-content/skills/planificar-orquesta.md 2>/dev/null | grep -q 'onia-orquesta-hermes.sh' \
+    || falla "no encontré la skill planificar-orquesta en origin/main del VPS"
+  grep -q '^## Planificar la orquesta' /root/.hermes/SOUL.md 2>/dev/null \
+    || git -C "$REPO_VPS" show origin/main:hermes-content/deploy/hermes-agent/SOUL.md 2>/dev/null | grep -q '^## Planificar la orquesta' \
+    || falla "no encontré la regla de la orquesta en el SOUL de origin/main del VPS"
+  # Token (forma y 600), repo y los labels orquesta, origen:hermes y necesita-ok. Solo lee.
+  ORQ_EST=$("$BIN/onia-orquesta-hermes.sh" --estado </dev/null 2>&1) \
+    || falla "la cola de la orquesta no está lista: $(printf '%s' "$ORQ_EST" | head -c 200)"
+  # «cron create» con --skill y --deliver sale de la documentación de Hermes, no de una corrida en el VPS:
+  # si su CLI no lo trae, se sabe acá y no después de tocar el crontab.
+  timeout 60 "$HPY" -m hermes_cli.main cron create --help </dev/null 2>&1 | grep -q -- '--deliver' \
+    || falla "el CLI de Hermes no tiene «cron create … --deliver»: no puedo programar la revisión de cada 3 h"
 fi
 [ "$N8N_OK" = 1 ]   || abortar "la API de n8n no responde con la llave de gestión"
 [ "$FALLAS" -eq 0 ] || abortar "$FALLAS falla(s) en los requisitos (arriba, con ❌), antes de crear nada"
@@ -507,6 +546,16 @@ for id in $(cat "$BK/hermes-pausados.txt" 2>/dev/null); do
   en_pausa "$id"; e=$?
   [ "$e" = 10 ] && echo "hermes: reanudado $id" || mal "hermes: $id sigue en pausa después de reanudarlo"
 done
+# El trabajo que ESTE aplicar creó o reanudó (la revisión de la orquesta, 5e) se PAUSA, no se borra:
+# «cron pause» es lo único del CLI medido en el VPS, y queda en jobs.json para el próximo aplicar.
+for id in $(cat "$BK/hermes-creados.txt" 2>/dev/null); do
+  en_pausa "$id"; e=$?
+  if [ "$e" = 0 ]; then echo "hermes: $id ya estaba en pausa"; continue; fi
+  if [ "$e" = 11 ]; then echo "hermes: $id ya no está en jobs.json: nada que pausar"; continue; fi
+  timeout 60 $HPY -m hermes_cli.main cron pause "$id" </dev/null >/dev/null 2>&1
+  en_pausa "$id"; e=$?
+  [ "$e" = 0 ] && echo "hermes: pausado $id (la revisión de la orquesta)" || mal "hermes: $id sigue activo después de pausarlo"
+done
 KEY=$(grep -oP '(?<=^N8N_MANAGEMENT_API_KEY=).*' /opt/onia-platform/app.env 2>/dev/null | tr -d "\"'" | head -1)
 # Un flujo que ya no existe en n8n (404) no tiene nada que deshacer: no es un error.
 n8n_post() {  # n8n_post <id> activate|deactivate -> imprime el código HTTP; la respuesta queda en $BK/n8n-resp.json
@@ -528,7 +577,7 @@ for f in agenda cambios; do
   elif grep -qE '"active": ?false' "$BK/n8n-resp.json" 2>/dev/null; then echo "n8n: flujo de $f del calendario apagado (queda guardado)"
   else mal "n8n: no pude apagar el flujo de $f (HTTP $code)"; fi
 done
-for s in skill skill-pedidos; do
+for s in skill skill-pedidos skill-orquesta; do
   [ -f "$BK/$s-destino" ] || continue
   D=$(cat "$BK/$s-destino")
   if [ -f "$BK/$s-antes.md" ]; then cp -a "$BK/$s-antes.md" "$D" && { HERMES_TOCADO=1; echo "hermes: $s restaurada"; } || mal "hermes: no pude restaurar $s"
@@ -753,6 +802,76 @@ if [ -s "$PEDIDOS_ENV" ] && [ -x "$BIN/onia-pedido-claude.sh" ] && [ "${RC:-1}" 
   echo "✅ la respuesta vuelve sola: onia-respuestas-pedidos.sh la recoge cada 2 minutos (sin token de Actions)"
 fi
 
+# ── 5e. Hermes planifica la orquesta (2026-10-20) ───────────────────────────────
+# Stack v3 (scripts/orquesta/README.md): Hermes carga tareas en la cola de issues con
+# onia-orquesta-hermes.sh, que hace cumplir los guardarraíles de la sección «v2» del doc de
+# investigación, y cada 3 h las revisa con un trabajo propio. Acá: la skill, su regla en el SOUL y
+# ese trabajo. 🔴 INERTE SIN TOKEN, como 5d sin llave: hasta que Sergio Urcullo deje el token de Issues
+# en $ORQ_TOKEN no se le enseña nada (una skill que nombra un comando sin token lo haría prometer algo
+# que no anda). El token lo pone él en el VPS; aplicar nunca lo trae, lo copia ni lo imprime.
+sec "5e. Hermes: planificar la orquesta"
+ORQ_OK=0
+if [ ! -f "$ORQ_TOKEN" ]; then
+  echo "· planificar la orquesta APAGADO: falta el token de Issues en $ORQ_TOKEN (handoff/orquesta.md, 6g). No toqué nada."
+elif [ ! -x "$BIN/onia-orquesta-hermes.sh" ]; then
+  echo "· el sincronizador todavía no copió onia-orquesta-hermes.sh a $BIN: la orquesta queda apagada por ahora"
+else
+  NUEVA=$(git -C "$REPO_VPS" show origin/main:hermes-content/skills/planificar-orquesta.md 2>/dev/null)
+  if ! printf '%s' "$NUEVA" | grep -q 'onia-orquesta-hermes.sh'; then
+    falla "no encontré la skill planificar-orquesta en origin/main del VPS"
+  else
+    # Junto a la del calendario, como pedir-a-claude.
+    D_AGENDA=$(cat "$BK/skill-destino" 2>/dev/null || echo /root/.hermes/skills/agenda-calendario/SKILL.md)
+    DEST=$(find /root/.hermes/skills -maxdepth 4 \( -path '*/planificar-orquesta/SKILL.md' -o -name 'planificar-orquesta.md' \) 2>/dev/null | head -1)
+    [ -n "$DEST" ] || DEST="$(dirname "$(dirname "$D_AGENDA")")/planificar-orquesta/SKILL.md"
+    [ -f "$BK/skill-orquesta-destino" ] || echo "$DEST" > "$BK/skill-orquesta-destino"
+    if [ ! -f "$BK/skill-orquesta-antes.md" ] && [ ! -f "$BK/skill-orquesta-no-existia" ]; then
+      if [ -f "$DEST" ]; then cp -a "$DEST" "$BK/skill-orquesta-antes.md"; else touch "$BK/skill-orquesta-no-existia"; fi
+    fi
+    if [ "$(cat "$DEST" 2>/dev/null)" = "$NUEVA" ]; then
+      echo "· la skill de la orquesta ya estaba al día: $DEST"
+    else
+      mkdir -p "$(dirname "$DEST")" && printf '%s\n' "$NUEVA" > "$DEST" \
+        && { HERMES_CAMBIO=1; echo "✅ skill instalada: $DEST"; } || falla "no pude escribir la skill en $DEST"
+    fi
+  fi
+  if grep -q '^## Planificar la orquesta' "$SOUL" 2>/dev/null; then
+    echo "· su SOUL ya tenía la regla de la orquesta"
+  else
+    SECCION=$(git -C "$REPO_VPS" show origin/main:hermes-content/deploy/hermes-agent/SOUL.md 2>/dev/null \
+              | awk '/^## Planificar la orquesta/ {on = 1} on && /^---$/ {exit} on {print}')
+    if [ -n "$SECCION" ] && [ -f "$SOUL" ]; then
+      [ -f "$BK/SOUL.md.antes" ] || cp -a "$SOUL" "$BK/SOUL.md.antes"
+      printf '\n---\n\n%s\n' "$SECCION" >> "$SOUL" && { HERMES_CAMBIO=1; echo "✅ regla de la orquesta agregada al SOUL de Hermes"; }
+    else
+      falla "no pude agregar la regla de la orquesta al SOUL"
+    fi
+  fi
+  # La revisión de cada 3 h: un trabajo de Hermes con la skill y SIN entrega a Telegram (--deliver
+  # local): lo que le importa a Sergio Urcullo ya le llega por la aduana, desde el comando. Si ya existe
+  # se reusa (uno pausado por un revertir se reanuda); nunca se crean dos.
+  read -r JID JEST < <(job_por_nombre "$ORQ_JOB")
+  if [ -z "${JID:-}" ]; then
+    timeout 60 "$HPY" -m hermes_cli.main cron create "every 3h" "$ORQ_PROMPT" --skill planificar-orquesta \
+      --name "$ORQ_JOB" --deliver local </dev/null >/dev/null 2>&1
+  elif [ "$JEST" = pausado ]; then
+    timeout 60 "$HPY" -m hermes_cli.main cron resume "$JID" </dev/null >/dev/null 2>&1
+  fi
+  read -r JID2 JEST2 < <(job_por_nombre "$ORQ_JOB")
+  if [ -n "${JID2:-}" ] && [ "$JEST2" = activo ]; then
+    # A la lista del respaldo si lo creó o lo reanudó esta corrida: revertir lo pausa.
+    if [ "${JID:-}" != "$JID2" ] || [ "${JEST:-}" = pausado ]; then
+      grep -qx "$JID2" "$BK/hermes-creados.txt" 2>/dev/null || echo "$JID2" >> "$BK/hermes-creados.txt"
+      echo "✅ revisión de la orquesta cada 3 h: $JID2"
+    else
+      echo "· la revisión de la orquesta ya estaba programada: $JID2"
+    fi
+    ORQ_OK=1
+  else
+    falla "no pude programar la revisión de la orquesta cada 3 h (jobs.json: ${JID2:-no está} ${JEST2:-})"
+  fi
+fi
+
 # ── 6. El interruptor ───────────────────────────────────────────────────────────
 sec "6. Interruptor de la aduana"
 mkdir -p "$ESTADO" && touch "$ESTADO/activo" && echo "✅ $ESTADO/activo" || falla "no pude crear $ESTADO/activo"
@@ -780,6 +899,7 @@ reiniciar_gateway() {
 FALTA_EN_SNAP=0
 snapshot_nombra agenda-calendario || FALTA_EN_SNAP=1
 [ "$PEDIDOS_OK" = 1 ] && ! snapshot_nombra pedir-a-claude && FALTA_EN_SNAP=1
+[ "$ORQ_OK" = 1 ] && ! snapshot_nombra planificar-orquesta && FALTA_EN_SNAP=1
 if [ "$HERMES_CAMBIO" != 1 ] && [ "$FALTA_EN_SNAP" != 1 ]; then
   echo "· su skill, su SOUL y su lista de skills ya estaban al día: no hace falta reiniciar"
 else
@@ -804,6 +924,9 @@ else
   if [ "$PEDIDOS_OK" = 1 ]; then
     snapshot_nombra pedir-a-claude && echo "✅ y nombra pedir-a-claude" || echo "⚠️ todavía no nombra pedir-a-claude"
   fi
+  if [ "$ORQ_OK" = 1 ]; then
+    snapshot_nombra planificar-orquesta && echo "✅ y nombra planificar-orquesta" || echo "⚠️ todavía no nombra planificar-orquesta"
+  fi
 fi
 
 # ── 7. Mirar antes de mandar ────────────────────────────────────────────────────
@@ -826,6 +949,9 @@ Apagué los reportes automáticos que te llegaban. Todo se puede deshacer."
   [ "$PEDIDOS_OK" = 1 ] && AVISO="$AVISO
 
 🤖 Y lo que necesite trabajo de verdad (un arreglo, un documento, revisar cómo está algo) pedímelo: te llega el pedido con un código y, cuando me lo contestás, se lo paso a Claude. Te aviso cuando termine."
+  [ "$ORQ_OK" = 1 ] && AVISO="$AVISO
+
+📋 Y cargo tareas en la orquesta (máximo 10 por día) y las reviso cada 3 horas. Lo que publique, gaste, contacte a alguien o toque producción espera tu ok: arranca cuando le quitás el label «necesita-ok». Cada tarea te llega en el resumen."
   if ONIA_AVISO=interrumpe ONIA_AVISO_AHORA=1 ONIA_AVISO_CLAVE="jarvis-encendido-$HOY" ONIA_AVISO_EMISOR=jarvis \
        "$BIN/onia-tg.sh" "$AVISO" </dev/null >/dev/null 2>&1; then
     echo "✅ le avisé por Telegram"

@@ -35,6 +35,13 @@ test('elegirTareas: la más vieja por carril, sin frenadas ni autores ajenos', (
   assert.deepEqual(elegirTareas(lista, CONF, 'plataforma').map((t) => t.issue.number), [6]);
 });
 
+test('elegirTareas: una tarea de Hermes con necesita-ok no arranca hasta que le sacan el label', () => {
+  const conOk = issue(1, 'marca', { labels: [{ name: 'orquesta' }, { name: 'carril:marca' }, { name: 'origen:hermes' }, { name: 'necesita-ok' }] });
+  assert.deepEqual(elegirTareas([conOk, issue(2, 'marca')]).map((t) => t.issue.number), [2], 'la siguiente del carril sí');
+  conOk.labels = conOk.labels.filter((l) => l.name !== 'necesita-ok');
+  assert.deepEqual(elegirTareas([conOk, issue(2, 'marca')]).map((t) => t.issue.number), [1]);
+});
+
 test('rutear: nivel y motor eligen el modelo de la tabla', () => {
   assert.deepEqual(rutear('marca', {}), { motor: 'claude', nivel: 'normal', modelo: 'claude-sonnet-5-5' });
   assert.equal(rutear('marca', { nivel: 'profundo' }).modelo, 'claude-opus-5-5');

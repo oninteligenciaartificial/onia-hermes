@@ -326,6 +326,10 @@ poner "$FUENTE/pedido-claude.sh"                   "$DESTINO_BIN/onia-pedido-cla
 # `respuesta/<id>` y la entrega por la aduana, sin ningún token de Actions. Su cron lo instala
 # aplicar.sh con esta ruta exacta: sin esta línea, ese cron correría un archivo que nadie copió.
 poner "$FUENTE/respuestas-pedidos.sh"              "$DESTINO_BIN/onia-respuestas-pedidos.sh"
+# Hermes carga y revisa tareas de la orquesta (2026-10-20). La skill planificar-orquesta lo llama en esta
+# ruta exacta y aplicar.sh lo consulta con --estado: sin esta línea la skill nombraría un comando que
+# nadie copió. Sin el token de Issues en el VPS sale 69 y no hace nada.
+poner "$FUENTE/orquesta-hermes.sh"                 "$DESTINO_BIN/onia-orquesta-hermes.sh"
 # El latido de cada trabajo que agrega aplicar.sh (2026-10-10, HERMES_ROL_QA.md Q4c): todas esas líneas
 # del crontab lo llaman en esta ruta exacta, y aplicar.sh no toca el crontab hasta verlo acá.
 poner "$FUENTE/latido.sh"                          "$DESTINO_BIN/onia-latido.sh"

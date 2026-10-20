@@ -63,7 +63,9 @@ export function dondeDe(issue, conf = CONF) {
 }
 
 export function elegirTareas(issues, conf = CONF, soloCarril = null) {
-  const frenadas = new Set(['en-curso', 'bloqueada', 'espera-ok']);
+  // `necesita-ok`: lo pone Hermes (scripts/loops/orquesta-hermes.sh) a lo que publica, gasta, contacta,
+  // toca producción o mergea; arranca recién cuando Sergio Urcullo le saca el label.
+  const frenadas = new Set(['en-curso', 'bloqueada', 'espera-ok', 'necesita-ok']);
   const porCarril = {};
   const orden = [...issues].sort((a, b) => a.createdAt.localeCompare(b.createdAt));
   for (const it of orden) {

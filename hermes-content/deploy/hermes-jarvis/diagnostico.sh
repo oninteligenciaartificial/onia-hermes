@@ -662,5 +662,27 @@ else
   qa_emitir "--- últimas 15 líneas de $LOG_QA"
   if [ -f "$LOG_QA" ]; then tail -n 15 "$LOG_QA" | redactar | cut -c 1-200; else qa_emitir "(no existe: qa-release todavía no escribió)"; fi
 fi
+sec "18. Orquesta: Hermes planifica (20-oct) — token, labels y su revisión de cada 3 h, sin cambiar nada"
+# --estado solo lee (GET al repo y a los labels) y nunca imprime el token; jobs.json se lee con python.
+if [ -x /root/bin/onia-orquesta-hermes.sh ]; then
+  /root/bin/onia-orquesta-hermes.sh --estado </dev/null 2>&1 | redactar
+else
+  echo "(el comando todavía no está en /root/bin)"
+fi
+stat -c '%a %n' /root/.config/onia/gh-issues-token 2>/dev/null || echo "(sin token de Issues en /root/.config/onia/gh-issues-token)"
+python3 - <<'PY'
+import json
+try:
+    d = json.load(open("/root/.hermes/cron/jobs.json"))
+except Exception:
+    print("(no pude leer jobs.json)"); raise SystemExit
+jobs = d.get("jobs", d) if isinstance(d, dict) else d
+if isinstance(jobs, dict):
+    jobs = [dict(v, id=v.get("id", k)) for k, v in jobs.items() if isinstance(v, dict)]
+j = next((j for j in jobs if isinstance(j, dict) and j.get("name") == "onia-planificar-orquesta"), None)
+print("revisión de cada 3 h: " + ("no está programada" if not j else
+      f"{j.get('id')} · enabled={j.get('enabled')} · state={j.get('state')} · última={j.get('last_run_at') or j.get('last_run') or '?'}"))
+PY
+
 sec "fin"
 echo "diagnóstico terminado $(date -u +%FT%TZ) — no se modificó nada"
