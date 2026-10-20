@@ -269,7 +269,7 @@ test("sin token, con permisos abiertos o mal pegado: sale 69 sin llamar a nadie 
   for (const [opts, msg] of [
     [{ token: null }, /Falta el token de Issues/],
     [{ permisos: 0o644 }, /permisos 644/],
-    [{ token: "github_pat_ con espacio" }, /no tiene la forma/],
+    [{ token: "github_pat_ con espacio" }, /no es uno fine-grained/],
   ]) {
     const b = banco({ ...opts, respuestas: [creada()] });
     const r = b.correr(["--crear"], TAREA);
@@ -425,7 +425,7 @@ test("solo tokens fine-grained (github_pat_): uno clásico trae el scope repo en
 });
 
 test("--lista solo lee (lo usa el resumen); una bloqueada destrabada que vuelve a trabarse se avisa otra vez", () => {
-  const cola = (labels259) => [{ metodo: "GET", ruta: "issues\?labels=origen%3Ahermes", http: "200",
+  const cola = (labels259) => [{ metodo: "GET", ruta: "issues\\?labels=origen%3Ahermes", http: "200",
     cuerpo: [{ number: 259, title: "T", state: "open", html_url: URL_ISSUE(259), labels: labels259.map((name) => ({ name })) }] }];
   const b = banco({ respuestas: cola(["carril:marca", "origen:hermes", "bloqueada"]) });
   const l = b.correr(["--lista"]);
