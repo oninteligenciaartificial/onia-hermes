@@ -1,0 +1,12 @@
+{
+  "nombre": "Taller · carrusel 2 · Qué te llevás",
+  "caption": "Tres cosas que armás en vivo, con tu negocio y desde tu celular: tu WhatsApp contestando al instante, respuestas listas y un mensaje para el que no volvió. Sábado 31 de octubre, 10:00 (La Paz), por Meet. Link en mi perfil.",
+  "laminas": [
+    { "tipo": "portada", "foto": "taller-20261020-bolsa-49a3d1cc.jpg", "kicker": "Taller en vivo · sáb 31 oct", "titulo": "Lo que armás en *90 minutos*" },
+    { "tipo": "chat", "num": "1", "titulo": "Tu WhatsApp contestando *al instante*", "chat": [{ "t": "Hola, ¿están atendiendo?", "h": "23:40" }, { "de": "auto", "t": "¡Hola! Gracias por escribir. Te contesto mañana desde las 9:00.", "h": "23:40" }], "sub": "Mensaje de bienvenida y de ausencia en WhatsApp Business." },
+    { "tipo": "atajos", "num": "2", "titulo": "Respuestas *listas*", "atajos": [["Precio", "La docena está Bs 60. Hacemos envíos."], ["Horario", "Lunes a sábado, de 9:00 a 19:00."], ["Dónde estamos", "Te paso la ubicación por acá."]], "sub": "Lo que más te preguntan, escrito con un chat de IA gratis para tu negocio." },
+    { "tipo": "chat", "num": "3", "titulo": "Un mensaje para *el que no volvió*", "chat": [{ "t": "¿Cuánto cuesta?", "h": "Lun 18:02" }, { "de": "yo", "t": "Bs 80, con envío incluido.", "h": "18:10" }, { "sep": "Al otro día" }, { "de": "yo", "t": "Hola, ¿pudiste verlo? Te lo aparto hasta el sábado si querés.", "h": "Mar 10:00" }], "sub": "Qué escribirle y cuándo, para que no suene a insistir." },
+    { "tipo": "filtro", "foto": "taller-20261020-delantal-372a97a6.jpg", "titulo": "¿Es para vos?", "si": ["Vendés por WhatsApp", "Hoy contestás a mano, cuando podés"], "no": ["No vendés por WhatsApp", "Buscás un certificado", "Querés que otro lo haga por vos"] },
+    { "tipo": "cierre", "kicker": "Taller en vivo · No pierdas clientes", "titulo": "Lo armamos *juntos*, desde tu celular", "ficha": [["Fecha", "Sáb 31 oct"], ["Hora", "10:00 La Paz"], ["Dura", "90 min"]], "cta": "Link en mi perfil" }
+  ]
+}

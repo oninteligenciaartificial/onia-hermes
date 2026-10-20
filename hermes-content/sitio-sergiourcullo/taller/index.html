@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>No pierdas clientes · taller en vivo, sáb 31 oct</title>
+<meta name="description" content="Taller en vivo por Google Meet, sábado 31 de octubre a las 10:00 (La Paz). Dejás tu WhatsApp contestando al instante, con respuestas listas y un mensaje para el que no volvió. 50 cupos.">
+<!-- QUITAR al publicar (cuando Sergio Urcullo apruebe la página): la línea de abajo -->
+<meta name="robots" content="noindex">
+<link rel="canonical" href="https://sergiourcullo.vercel.app/taller">
+<meta property="og:type" content="website">
+<meta property="og:title" content="No pierdas clientes · taller en vivo">
+<meta property="og:description" content="Taller en vivo por Google Meet, sábado 31 de octubre, 10:00 (La Paz). 50 cupos.">
+<meta property="og:url" content="https://sergiourcullo.vercel.app/taller">
+<meta property="og:site_name" content="sergiourcullo">
+<meta property="og:locale" content="es_BO">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23047857'/><text x='16' y='23' font-family='Arial,sans-serif' font-size='18' font-weight='bold' text-anchor='middle' fill='%23F1F2EE'>S</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- 2 familias, como Erik Taveras (medido el 20-oct): Big Shoulders Display para títulos y cifras, Hanken Grotesk para el texto -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800;900&family=Hanken+Grotesk:wght@400;500;600;700&family=Caveat:wght@600&display=swap">
+<style>
+/* Estilo «Ficha del taller», elegido por Sergio Urcullo el 20-oct-2026.
+   Reglas medidas en 6 referentes: .claude/skills/onia-web-factory/SKILL.md §«Página de venta de un taller».
+   Un solo verde (el del botón), un solo botón repetido, foto real de Sergio Urcullo, fecha con zona horaria. */
+:root{
+  --papel:#F1F2EE; --hoja:#FBFBF9; --tinta:#101318; --gris:#4F5A55; --linea:#C9CFCC;
+  --verde:#047857; --verde-hover:#03684B;
+  --display:'Big Shoulders Display','Arial Narrow',Arial,sans-serif;
+  --texto:'Hanken Grotesk','Helvetica Neue',Arial,sans-serif;
+  --gut:16px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;color-scheme:light}
+body{margin:0;background:var(--papel);color:var(--tinta);font-family:var(--texto);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:var(--verde)}
+a:focus-visible,summary:focus-visible{outline:3px solid var(--tinta);outline-offset:3px;border-radius:3px}
+.wrap{max-width:1152px;margin:0 auto;padding:0 var(--gut)}
+.cuadricula{background-image:linear-gradient(#10131810 1px,transparent 1px),linear-gradient(90deg,#10131810 1px,transparent 1px);background-size:24px 24px}
+
+/* barra */
+.barra{border-bottom:1px solid var(--linea);background:var(--papel)}
+.barra .wrap{display:flex;justify-content:space-between;align-items:center;min-height:56px}
+.marca{font-weight:700;font-size:16px;letter-spacing:.04em;text-transform:uppercase;color:var(--tinta);text-decoration:none;min-height:44px;display:inline-flex;align-items:center}
+.barra .cupo-mini{font-size:14px;color:var(--gris)}
+
+/* botón: el único verde de la página */
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;background:var(--verde);color:#F7FAF8;text-decoration:none;
+  font-weight:700;font-size:18px;min-height:56px;padding:14px 24px;border-radius:7px;transition:background .2s,transform .2s}
+.btn svg{width:22px;height:22px;flex:none}
+.btn:hover{background:var(--verde-hover)}
+.btn:active{transform:translateY(1px)}
+
+/* hero */
+.hero{padding:36px 0 44px}
+.hero-grid{display:grid;grid-template-columns:1fr;gap:28px}
+.kicker{margin:0 0 12px;font-weight:700;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--verde)}
+h1{font-family:var(--display);font-weight:900;font-size:clamp(76px,13vw,140px);line-height:.86;letter-spacing:-.005em;text-transform:uppercase;margin:0;overflow-wrap:anywhere}
+.bajada{font-size:clamp(19px,2.2vw,23px);line-height:1.45;margin:20px 0 0;max-width:34ch;text-wrap:pretty}
+.ficha{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:24px 0 0;border:1.5px solid var(--tinta);border-radius:7px;background:var(--hoja);max-width:100%}
+.ficha div{padding:10px 14px;border-left:1px solid var(--linea)}
+.ficha div:first-child{border-left:0}
+.ficha small{display:block;font-weight:700;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--gris)}
+.ficha strong{font-size:16px;display:block;line-height:1.3}
+
+/* tarjeta de oferta (Erik /trabaja-conmigo: cifra grande + 2 seguridades + 1 botón) */
+.oferta{background:var(--hoja);border:1.5px solid var(--tinta);border-radius:8px;align-self:start}
+.oferta .cab{padding:20px 22px 0}
+.oferta .esc-hoy{margin:0;font-weight:700;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--gris)}
+.oferta .monto{display:flex;align-items:baseline;gap:14px;margin:4px 0 0}
+.oferta .monto b{font-family:var(--display);font-weight:900;font-size:84px;line-height:.9}
+.oferta .monto span{font-weight:700;font-size:15px;color:var(--verde)}
+.oferta .que{margin:10px 0 16px;color:var(--gris);font-size:16px}
+.oferta .cta{padding:0 22px 20px}
+.oferta ul{list-style:none;margin:0;padding:14px 22px;border-top:1px solid var(--linea)}
+.oferta li{display:flex;gap:10px;font-size:15.5px;margin:4px 0}
+.oferta li::before{content:"";flex:none;width:16px;height:9px;margin-top:6px;border:solid var(--verde);border-width:0 0 2.5px 2.5px;transform:rotate(-45deg)}
+.oferta .pie{margin:0;padding:12px 22px;border-top:1px solid var(--linea);font-size:14px;color:var(--gris)}
+
+/* la foto que plantea el problema */
+.problema{border-top:1.5px solid var(--tinta);border-bottom:1.5px solid var(--tinta);background:var(--hoja)}
+.problema-grid{display:grid;grid-template-columns:1fr}
+.problema figure{margin:0;border-bottom:1.5px solid var(--tinta)}
+.problema figure img{width:100%;height:auto;aspect-ratio:1400/1045;object-fit:cover}
+.problema .tx{padding:28px var(--gut) 32px}
+h2{font-family:var(--display);font-weight:900;font-size:clamp(44px,7vw,76px);line-height:.9;text-transform:uppercase;margin:0 0 18px;text-wrap:balance}
+.sintomas{list-style:none;margin:0;padding:0}
+.sintomas li{padding:14px 0;border-top:1px solid var(--linea);font-size:18px;line-height:1.45}
+.sintomas li:last-child{border-bottom:1px solid var(--linea)}
+.remate{margin:18px 0 0;font-size:19px;font-weight:600}
+
+/* secciones */
+.sec{padding:64px 0 0}
+.lead{font-size:19px;color:var(--gris);margin:-6px 0 22px;max-width:56ch}
+
+/* programa: bloques con hora (Gadzhi: cada episodio con su hora y lo que te llevás) */
+.bloques{display:grid;grid-template-columns:1fr;gap:16px}
+.bloque{border:1.5px solid var(--tinta);border-radius:8px;background:var(--hoja);padding:22px}
+.bloque .hora{display:flex;align-items:baseline;gap:12px;margin:0 0 14px}
+.bloque .hora b{font-family:var(--display);font-weight:900;font-size:56px;line-height:.9}
+.bloque .hora span{font-weight:700;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--gris)}
+.bloque h3{font-size:22px;line-height:1.25;margin:0 0 10px}
+.bloque ol{margin:0;padding:0;list-style:none;counter-reset:n}
+.bloque li{counter-increment:n;display:grid;grid-template-columns:28px 1fr;padding:10px 0;border-top:1px solid var(--linea);font-size:16.5px}
+.bloque li::before{content:counter(n);font-family:var(--display);font-weight:900;font-size:24px;line-height:1.05;color:var(--verde)}
+.pausa{display:flex;align-items:center;gap:12px;color:var(--gris);font-size:15px}
+.pausa::before,.pausa::after{content:"";flex:1;border-top:1px dashed var(--linea)}
+
+/* para quién (tododeia: «¿Para quién?» y «Esto NO es») */
+.filtro{display:grid;grid-template-columns:1fr;gap:16px}
+.filtro div{border-top:3px solid var(--tinta);padding-top:14px}
+.filtro div.no{border-top-color:var(--linea)}
+.filtro h3{font-size:20px;margin:0 0 8px}
+.filtro ul{margin:0;padding-left:20px}
+.filtro li{margin:6px 0}
+
+/* escalones con su estado real (Hormozi: lleno / quedan / abierto) */
+.escalones{display:grid;grid-template-columns:1fr;gap:12px}
+.esc{border:1.5px solid var(--linea);border-radius:8px;padding:16px 18px;background:var(--hoja);display:grid;grid-template-columns:1fr auto;align-items:center;gap:4px 12px}
+.esc.hoy{border-color:var(--tinta)}
+.esc .nom{font-weight:700;font-size:16px}
+.esc .est{font-size:14px;color:var(--gris)}
+.esc.hoy .est{color:var(--verde);font-weight:700}
+.esc .pr{grid-row:1 / span 2;grid-column:2;font-family:var(--display);font-weight:900;font-size:52px;line-height:.9}
+.esc:not(.hoy) .pr{color:#7A847F}
+.nota{font-size:15.5px;color:var(--gris);margin:14px 0 0}
+
+/* quién lo dicta: foto real + carta firmada (Erik: foto real con borde; Hormozi: carta firmada) */
+.quien{display:grid;grid-template-columns:1fr;gap:20px;align-items:start}
+.quien figure{margin:0;border:1.5px solid var(--tinta);border-radius:8px;overflow:hidden;background:#FFFFFF;max-width:360px}
+.quien figure img{width:100%;height:auto;aspect-ratio:900/980;object-fit:cover}
+.quien figcaption{padding:10px 14px;border-top:1px solid var(--linea);font-size:14px;color:var(--gris);background:var(--hoja)}
+.carta p{font-size:19px;line-height:1.55;margin:0 0 14px;max-width:46ch}
+.firma{font-family:'Caveat',cursive;font-weight:600;font-size:38px;line-height:1;margin:6px 0 0}
+
+/* pago y preguntas */
+.pago{border:1.5px solid var(--tinta);border-radius:8px;background:var(--hoja);padding:20px 22px;font-size:18px;max-width:64ch}
+.pago p{margin:0 0 10px}.pago p:last-child{margin:0}
+.faq{border-top:1.5px solid var(--tinta);max-width:760px}
+.faq details{border-bottom:1px solid var(--linea)}
+.faq summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:16px;min-height:56px;padding:12px 0;font-weight:700;font-size:18px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-family:var(--display);font-weight:900;font-size:30px;color:var(--verde);transition:transform .2s}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq .resp{padding:0 0 18px;color:var(--gris);max-width:64ch}
+.faq .resp p{margin:0}
+
+/* cierre */
+.cierre{margin:72px 0 0;background:var(--tinta);color:var(--papel)}
+.cierre .wrap{padding-top:48px;padding-bottom:56px}
+.cierre h2{color:var(--papel)}
+.cierre .ficha{background:transparent;border-color:#F1F2EE66}
+.cierre .ficha div{border-left-color:#F1F2EE33}
+.cierre .ficha small{color:#B9C2BE}
+.cierre .btn{margin:24px 0 0;max-width:420px}
+.cierre a:focus-visible{outline-color:var(--papel)}
+.cierre .chico{display:block;margin:12px 0 0;font-size:15px;color:#B9C2BE}
+.pie-sitio{padding:20px 0 96px;font-size:14px;color:var(--gris)}
+
+/* barra fija en el celular (Santiago: el botón siempre a mano) */
+.sticky{position:fixed;left:0;right:0;bottom:0;z-index:20;padding:10px var(--gut) calc(10px + env(safe-area-inset-bottom));background:var(--papel);border-top:1.5px solid var(--tinta);transition:transform .35s cubic-bezier(.16,1,.3,1)}
+/* se esconde mientras el botón de la tarjeta está a la vista: dos botones iguales juntos confunden */
+.sticky.oculta{transform:translateY(110%);visibility:hidden;transition:transform .35s cubic-bezier(.16,1,.3,1),visibility 0s .35s}
+.oferta .btn{font-size:16.5px;padding:14px 12px;gap:8px}
+
+@media (min-width:860px){
+  .hero{padding:56px 0 64px}
+  .hero-grid{grid-template-columns:minmax(0,1.35fr) minmax(340px,.85fr);gap:56px;align-items:start}
+  .oferta{margin-top:30px}
+  .ficha{grid-template-columns:repeat(3,auto);width:fit-content}
+  .ficha strong{white-space:nowrap}
+  .problema-grid{grid-template-columns:1.1fr 1fr}
+  .problema figure{border-bottom:0;border-right:1.5px solid var(--tinta)}
+  .problema figure img{height:100%}
+  .problema .tx{padding:44px 48px}
+  .bloques{grid-template-columns:1fr auto 1fr;align-items:stretch}
+  .pausa{flex-direction:column;justify-content:center;writing-mode:vertical-rl}
+  .filtro{grid-template-columns:1fr 1fr;gap:40px}
+  .escalones{grid-template-columns:repeat(3,1fr)}
+  .quien{grid-template-columns:360px 1fr;gap:48px}
+  .sticky{display:none}
+  .pie-sitio{padding-bottom:40px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="barra"><div class="wrap"><a class="marca" href="/">Sergio Urcullo</a><span class="cupo-mini">Taller en vivo · sáb 31 oct</span></div></header>
+
+<main>
+<!-- 1. HERO: qué es, cuándo (con zona horaria) y el precio de hoy en su tarjeta -->
+<section class="hero cuadricula">
+  <div class="wrap hero-grid">
+    <div>
+      <p class="kicker">Taller en vivo · por Google Meet</p>
+      <h1>No pierdas clientes</h1>
+      <p class="bajada">Dejá tu WhatsApp contestando al instante, con respuestas listas y un mensaje para el que preguntó y no volvió. Desde tu celular, sin programar.</p>
+      <div class="ficha">
+        <div><small>Fecha</small><strong>Sáb 31 oct</strong></div>
+        <div><small>Hora</small><strong>10:00 La Paz (GMT-4)</strong></div>
+        <div><small>Dura</small><strong>90 min</strong></div>
+      </div>
+    </div>
+    <!-- Escalón vigente: se cambia a mano cuando se acreditan los pagos 15 y 35 (acá, en «Precio por cupo» y en la barra fija). «Quedan» es el número real, no un contador. -->
+    <aside class="oferta" aria-label="Precio de hoy">
+      <div class="cab">
+        <p class="esc-hoy">Precio de hoy · primeros 15</p>
+        <p class="monto"><b>Bs 50</b><span>Quedan 15</span></p>
+        <p class="que">El taller en vivo de 90 minutos, con lo que armás en tu celular.</p>
+      </div>
+      <div class="cta">
+        <a class="btn" href="https://wa.me/59171654992?text=Hola%2C%20quiero%20mi%20cupo%20del%20taller%20del%20s%C3%A1bado%2031">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 2s.8 2.3.9 2.5c.1.2 1.6 2.5 4 3.5 1.5.6 2 .7 2.8.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg>
+          Reservar mi cupo por WhatsApp
+        </a>
+      </div>
+      <ul>
+        <li>Te mando el QR del BCP por WhatsApp</li>
+        <li>Cuando se acredita, te confirmo por escrito</li>
+      </ul>
+      <p class="pie">El link de Meet te llega el viernes 30.</p>
+    </aside>
+  </div>
+</section>
+
+<!-- 2. EL PROBLEMA: síntomas concretos antes del método (Hormozi) -->
+<section class="problema" aria-labelledby="t-problema">
+  <div class="problema-grid">
+    <figure><img src="img/campana.webp" width="1400" height="1045" alt="Una campanita verde de mostrador sobre un mostrador vacío, sin nadie que atienda" loading="lazy"></figure>
+    <div class="tx">
+      <h2 id="t-problema">El cliente no espera</h2>
+      <ul class="sintomas">
+        <li>Te escriben a la noche y contestás al otro día.</li>
+        <li>Repetís el precio, el horario y la dirección varias veces por día.</li>
+        <li>El que preguntó el precio y no respondió, no vuelve solo.</li>
+      </ul>
+      <p class="remate">Casi nunca es que no te quieran comprar. Es que contestó otro primero.</p>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+<!-- 3. PROGRAMA: dos bloques con su hora y lo que te llevás de cada uno (Gadzhi) -->
+<section class="sec" aria-labelledby="t-programa">
+  <h2 id="t-programa">Lo que armamos en vivo</h2>
+  <p class="lead">Dos bloques de 45 minutos con una pausa de 5. Al volver entrás al mismo link.</p>
+  <div class="bloques">
+    <article class="bloque">
+      <p class="hora"><b>10:00</b><span>Bloque 1</span></p>
+      <h3>Tu WhatsApp contestando al instante</h3>
+      <ol>
+        <li>WhatsApp Business configurado con los datos de tu negocio.</li>
+        <li>Mensaje de bienvenida: el que te escribe recibe respuesta al momento.</li>
+        <li>Mensaje de ausencia para cuando estás ocupado o cerraste.</li>
+      </ol>
+    </article>
+    <p class="pausa">Pausa 5 min</p>
+    <article class="bloque">
+      <p class="hora"><b>10:50</b><span>Bloque 2</span></p>
+      <h3>Respuestas listas y el que no volvió</h3>
+      <ol>
+        <li>Respuestas guardadas para precio, horario y dónde estás, escritas con un chat de IA gratis para tu negocio.</li>
+        <li>Un mensaje de seguimiento para el que preguntó y no compró.</li>
+        <li>Cuándo mandarlo para que no suene a insistir.</li>
+      </ol>
+    </article>
+  </div>
+</section>
+
+<!-- 4. FILTRO en vez de preguntas sueltas (tododeia) -->
+<section class="sec" aria-labelledby="t-quien-es">
+  <h2 id="t-quien-es">¿Es para vos?</h2>
+  <div class="filtro">
+    <div><h3>Sí, si…</h3><ul><li>Tenés un negocio y vendés por WhatsApp.</li><li>Hoy contestás a mano, cuando podés.</li><li>Tenés un celular y 90 minutos el sábado.</li></ul></div>
+    <div class="no"><h3>No, si…</h3><ul><li>No vendés por WhatsApp.</li><li>Buscás un certificado.</li><li>Querés que otro lo haga por vos.</li></ul></div>
+  </div>
+</section>
+
+<!-- 5. PRECIO POR CUPO: escalones con su estado real -->
+<section class="sec" aria-labelledby="t-precio">
+  <h2 id="t-precio">Precio por cupo</h2>
+  <p class="lead">50 cupos en total. El precio sube por escalón a medida que se llenan.</p>
+  <div class="escalones">
+    <div class="esc hoy"><span class="nom">Primeros 15</span><span class="est">Precio de hoy · quedan 15</span><span class="pr">Bs 50</span></div>
+    <div class="esc"><span class="nom">Siguientes 20</span><span class="est">Después · quedan 20</span><span class="pr">Bs 60</span></div>
+    <div class="esc"><span class="nom">Últimos 15</span><span class="est">Después · quedan 15</span><span class="pr">Bs 70</span></div>
+  </div>
+  <p class="nota">Inscripciones hasta el jueves 29 de octubre, 20:00 (hora de La Paz).</p>
+</section>
+
+<!-- 6. QUIÉN LO DICTA: foto real + carta firmada. Sin testimonios: entran solo si son reales y con permiso. -->
+<section class="sec" aria-labelledby="t-dicta">
+  <h2 id="t-dicta">Quién lo dicta</h2>
+  <div class="quien">
+    <figure><img src="img/sergio-bn.webp" width="900" height="980" alt="Sergio Urcullo" loading="lazy"><figcaption>Sergio Urcullo · Bolivia</figcaption></figure>
+    <div class="carta">
+      <p>Hola, soy Sergio. En Bolivia casi todo se vende por WhatsApp, y casi siempre se contesta tarde.</p>
+      <p>En este taller dejamos el tuyo contestando al instante, con herramientas gratis y desde tu celular. Sin programar y sin pagar nada más que tu cupo.</p>
+      <p class="firma">Sergio Urcullo</p>
+    </div>
+  </div>
+</section>
+
+<!-- 7. PAGO CLARO Y PREGUNTAS -->
+<section class="sec" aria-labelledby="t-pago">
+  <h2 id="t-pago">Tu pago, claro</h2>
+  <div class="pago">
+    <p>Una vez confirmado tu cupo, <strong>no hay devolución</strong>.</p>
+    <p>Si el taller <strong>no se dicta</strong> (menos de 6 pagos acreditados al jueves 29 a las 20:00, o por una causa de mi lado), te devuelvo el pago completo.</p>
+  </div>
+</section>
+
+<section class="sec" aria-labelledby="t-faq">
+  <h2 id="t-faq">Preguntas</h2>
+  <div class="faq">
+    <details open><summary>¿Cómo pago?</summary><div class="resp"><p>Me escribís por WhatsApp y te mando el QR del BCP con el monto de tu cupo. Pagás desde la app de tu banco. Cuando el pago se acredita, te mando la confirmación escrita con fecha y hora. El link de Meet te llega el viernes 30.</p></div></details>
+    <details><summary>¿Qué necesito?</summary><div class="resp"><p>Un celular con WhatsApp Business (es gratis) y tu negocio en mente. No hace falta saber programar ni pagar ninguna herramienta.</p></div></details>
+    <details><summary>¿Y si no puedo asistir?</summary><div class="resp"><p>Una vez confirmado tu cupo, no hay devolución. Solo si el taller no se dicta te devuelvo el pago completo.</p></div></details>
+    <details><summary>¿Por qué cuesta tan poco?</summary><div class="resp"><p>Es la primera edición. Los primeros 15 pagan menos porque me ayudan a mejorarla; después el precio sube por escalón.</p></div></details>
+  </div>
+</section>
+</div>
+
+<!-- 8. CIERRE: los datos otra vez y el mismo botón -->
+<section class="cierre" id="reservar" aria-labelledby="t-cierre">
+  <div class="wrap">
+    <h2 id="t-cierre">Reservá tu cupo</h2>
+    <div class="ficha">
+      <div><small>Fecha</small><strong>Sáb 31 oct</strong></div>
+      <div><small>Hora</small><strong>10:00 La Paz</strong></div>
+      <div><small>Desde</small><strong>Bs 50</strong></div>
+    </div>
+    <a class="btn" href="https://wa.me/59171654992?text=Hola%2C%20quiero%20mi%20cupo%20del%20taller%20del%20s%C3%A1bado%2031">Reservar mi cupo por WhatsApp</a>
+    <span class="chico">Inscripciones hasta el jueves 29, 20:00 (La Paz).</span>
+  </div>
+</section>
+<p class="wrap pie-sitio">Sergio Urcullo · Bolivia</p>
+</main>
+
+<!-- Botón fijo, solo en el celular. «desde Bs 50» se cambia con el escalón. -->
+<div class="sticky oculta"><a class="btn" href="https://wa.me/59171654992?text=Hola%2C%20quiero%20mi%20cupo%20del%20taller%20del%20s%C3%A1bado%2031">Reservar mi cupo · Bs 50</a></div>
+<script>
+// Barra fija del celular: aparece cuando el botón de la tarjeta de precio deja de verse.
+(function(){
+  var barra=document.querySelector('.sticky'), boton=document.querySelector('.oferta .btn');
+  if(!barra||!boton||!('IntersectionObserver' in window)){ if(barra) barra.classList.remove('oculta'); return; }
+  new IntersectionObserver(function(e){ var x=e[e.length-1]; barra.classList.toggle('oculta', x.isIntersecting || x.boundingClientRect.top > 0); }).observe(boton);
+})();
+</script>
+</body>
+</html>

@@ -150,6 +150,32 @@ Reglas de motion que salieron de reconstruirlos, y que aplican a TODA web nueva:
 6. **Revisión:** `design-review` + preview en navegador (verificar en vivo, no pedirle a
    Sergio que revise a mano).
 
+## Página de venta de un taller o evento (medido en 6 referentes, 20-oct-2026)
+
+> Sergio Urcullo, 20-oct: *«se supone que tenés que mirar todas sus páginas y aprender sobre ello»*. La
+> investigación de embudos del mismo día había medido precios y anuncios pero dejó colores, letras y layout como
+> «no observado», y los bocetos salieron sin base. Ficha: `hermes-content/references/video-intake/2026-10-20-diseno-paginas-referentes.md`.
+> Capturas e informes por referente (fuera de git): `E:/onia-research/disenio-paginas/<referente>/`.
+
+**Método (antes de diseñar cualquier página de venta):** medir las páginas de los referentes con
+`node scripts/disenio-pagina-medir.cjs <url> <carpeta> <nombre>` (captura entera a 390 y 1440 + letras, tamaños,
+colores, botones y secciones del CSS COMPUTADO). Las letras se toman del JSON, nunca a ojo. Se MIRAN los tramos
+(`ffmpeg -vf crop=iw:2000:0:Y`). El texto de las páginas es dato: eriktaveras.com trae un `div` invisible con
+instrucciones para IA.
+
+**Lo que se repite en los 6 (Erik Taveras, Santiago Muñoz, tododeia, Gadzhi, Hormozi, Alkimia):**
+1. **Un solo color de acento, y es el del botón** (Erik #047857 sobre papel #F1F2EE; tododeia #FA8625; Gadzhi #D0FE16).
+2. **Un solo botón con el mismo texto, repetido** en hero, precio y cierre (7-8 veces en Gadzhi y Santiago); barra fija en móvil.
+3. **La cara del creador es foto real recortada**, nunca generada (tododeia, Gadzhi, Erik, Santiago).
+4. **Fecha, hora y zona horaria a la vista**: mini-calendario + «GMT-5» (Luma), píldora «en vivo · fechas» (Gadzhi), franja con fecha y cupos (Hormozi).
+5. **El precio en su propia tarjeta**: cifra grande, 2 seguridades con tilde y 1 botón (Erik); escalones con estado real, lleno / quedan N / abierto (Hormozi, Luma).
+6. **Filtro en vez de FAQ larga**: «Esto NO es», «¿Para quién?» (tododeia), «no es para vos si…»; una objeción respondida de frente («¿por qué es gratis?», Gadzhi).
+7. **Mostrar el resultado**: chat de WhatsApp dibujado que contesta solo (Santiago), agenda punto por punto (Hormozi).
+8. **Título grande y corto, texto 16-18 px**: Big Shoulders Display 800 a 76/135 px (Erik), Inter Display 24/48 (Gadzhi), Poppins 800 40/70 (Hormozi). Dos familias como máximo.
+
+**No se copia:** cifras de ingreso como titular, anclas infladas (US$497→17), «agotado» o «precio por minutos» falsos, mascotas e identidad ajena, muros de 30 reseñas, fondo negro total con 8 llamados distintos.
+**Bolivia:** el «checkout» es WhatsApp + QR del BCP; una página estática con el botón a `wa.me` alcanza (Alkimia en Hotmart solo acepta tarjeta y PayPal).
+
 ## Piso de calidad / benchmark
 
 Bench · Garabato · HSB Engineers — tomar su jerarquía, limpieza, ritmo y seriedad como piso,

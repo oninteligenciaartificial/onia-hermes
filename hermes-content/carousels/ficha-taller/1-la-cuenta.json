@@ -1,0 +1,12 @@
+{
+  "nombre": "Taller · carrusel 1 · La cuenta del cliente que se fue",
+  "caption": "Hacé la cuenta con tus números: cuántos te preguntan por día y cuántos no vuelven. El sábado 31 de octubre, en vivo por Meet, dejamos tu WhatsApp contestando al instante, desde tu celular. Link en mi perfil.",
+  "laminas": [
+    { "tipo": "portada", "foto": "taller-20261020-silla-c87d731f.jpg", "kicker": "La cuenta", "titulo": "Cada mensaje sin contestar es *un cliente que se va*" },
+    { "tipo": "numero", "ejemplo": true, "kicker": "Hagamos la cuenta", "n": "10", "titulo": "Te preguntan el precio por día", "sub": "Un negocio de ejemplo que vende por WhatsApp." },
+    { "tipo": "numero", "ejemplo": true, "kicker": "Contestás a la noche", "n": "3", "titulo": "Ya le compraron a otro", "sub": "Cuando por fin contestás, ya resolvieron." },
+    { "tipo": "cuenta", "titulo": "Lo que se fue", "filas": [["Ventas perdidas por día", "3"], ["Lo que te deja cada venta", "Bs 50"], ["Por día", "Bs 150"], ["En 22 días hábiles", "Bs 3.300"]], "sub": "Cambiá los números por los tuyos." },
+    { "tipo": "frase", "foto": "taller-20261020-campana-aad234c2.jpg", "kicker": "Casi nunca es que no te quieran comprar", "titulo": "Es que contestó *otro primero*" },
+    { "tipo": "cierre", "kicker": "Taller en vivo · No pierdas clientes", "titulo": "Dejamos tu WhatsApp *contestando al instante*", "ficha": [["Fecha", "Sáb 31 oct"], ["Hora", "10:00 La Paz"], ["Dónde", "Google Meet"]], "cta": "Link en mi perfil" }
+  ]
+}

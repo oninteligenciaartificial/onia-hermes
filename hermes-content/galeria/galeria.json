@@ -1668,5 +1668,90 @@
       "L3",
       "miniatura"
     ]
+  },
+  {
+    "id": "taller-20261020-campana-aad234c2",
+    "file": "hermes-content/galeria/fotos-bn/taller-20261020-campana-aad234c2.jpg",
+    "fecha": "2026-10-20",
+    "tipo": "fotos-bn",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "gpt_image_2_5",
+    "prompt": "A small brass service bell standing alone on an empty wooden shop counter, a paper shopping bag folded beside it, nobody around. The green object is the service bell.",
+    "estilo": "fotobn",
+    "costo_cr": 1,
+    "job": "aad234c2-9900-4f47-8031-946c9b149935",
+    "usado_en": [
+      "sergio-taller-fotos-20261020"
+    ],
+    "tags": []
+  },
+  {
+    "id": "taller-20261020-celular-24621178",
+    "file": "hermes-content/galeria/fotos-bn/taller-20261020-celular-24621178.jpg",
+    "fecha": "2026-10-20",
+    "tipo": "fotos-bn",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "gpt_image_2_5",
+    "prompt": "A smartphone lying face down on a wooden shop counter next to a folded paper receipt and a pen, late evening light. The green object is the smartphone case.",
+    "estilo": "fotobn",
+    "costo_cr": 1,
+    "job": "24621178-3cae-4d2b-8c87-2304b23a25bf",
+    "usado_en": [
+      "sergio-taller-fotos-20261020"
+    ],
+    "tags": []
+  },
+  {
+    "id": "taller-20261020-silla-c87d731f",
+    "file": "hermes-content/galeria/fotos-bn/taller-20261020-silla-c87d731f.jpg",
+    "fecha": "2026-10-20",
+    "tipo": "fotos-bn",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "gpt_image_2_5",
+    "prompt": "A shop doorway seen from inside, the glass door slightly open to the street, an empty wooden chair next to the door. The green object is the chair.",
+    "estilo": "fotobn",
+    "costo_cr": 1,
+    "job": "c87d731f-3224-46e8-a236-521b69e02685",
+    "usado_en": [
+      "sergio-taller-fotos-20261020"
+    ],
+    "tags": []
+  },
+  {
+    "id": "taller-20261020-delantal-372a97a6",
+    "file": "hermes-content/galeria/fotos-bn/taller-20261020-delantal-372a97a6.jpg",
+    "fecha": "2026-10-20",
+    "tipo": "fotos-bn",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "gpt_image_2_5",
+    "prompt": "A plain apron hanging on a wooden hook on the wall behind a small shop counter, a stack of folded paper bags on the counter. The green object is the apron.",
+    "estilo": "fotobn",
+    "costo_cr": 1,
+    "job": "372a97a6-924d-4a7c-8e14-0e8531eb5fcc",
+    "usado_en": [
+      "taller-20261020"
+    ],
+    "tags": []
+  },
+  {
+    "id": "taller-20261020-bolsa-49a3d1cc",
+    "file": "hermes-content/galeria/fotos-bn/taller-20261020-bolsa-49a3d1cc.jpg",
+    "fecha": "2026-10-20",
+    "tipo": "fotos-bn",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "gpt_image_2_5",
+    "prompt": "A paper shopping bag with rope handles standing on a wooden shop counter, ready to be handed over, soft morning light from the side. The green object is the shopping bag.",
+    "estilo": "fotobn",
+    "costo_cr": 1,
+    "job": "49a3d1cc-29dc-49b3-8670-57b11fdc63be",
+    "usado_en": [
+      "taller-20261020"
+    ],
+    "tags": []
   }
 ]

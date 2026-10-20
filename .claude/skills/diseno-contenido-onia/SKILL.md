@@ -290,6 +290,25 @@ Método y cifras en `docs/ONIA_LANZAMIENTO_PREPAGO.md` y `docs/research/FUNNELS_
 - **Google Meet gratis corta a los 60 min** cuando entran 3 o más personas (lo fija la cuenta del anfitrión). Un taller de 90 min se arma en dos bloques de 45 con pausa y se vuelve al mismo link, y se avisa en la página y en la confirmación.
 - **Captura móvil de una página:** Edge sin pantalla con `--window-size=390,…` dibuja más ancho y recorta (parece que el texto se sale). Se captura un HTML marco con `<iframe style="width:390px">` apuntando a la página, o se mira en el panel del navegador con el preset móvil.
 
+**Aprendido el 20-oct-2026 (página y carruseles del taller «No pierdas clientes»):**
+- **Antes de proponer estilos para una página de venta, medir las páginas de los referentes** (no solo sus embudos):
+  método y las 8 reglas que se repiten en `onia-web-factory` §«Página de venta de un taller». Los primeros bocetos
+  del 20-oct salieron sin esa medición y Sergio Urcullo los frenó.
+- **Las fotos nuevas salen de Higgsfield, no solo de la galería** (Sergio Urcullo, 20-oct). Lote del taller, 3 cr con
+  `gpt_image_2_5` + `fotobn`, 4:3, limpias a la primera: `galeria/fotos-bn/taller-20261020-{campana,celular,silla}-*.jpg`.
+  Prompt que funcionó: escena concreta + «The green object is the …». Sin `n` en la lámina del brief el archivo
+  sale como `s-undefined`: renombrarlo y corregir `galeria.json`.
+- **Estilo «Ficha del taller» (elegido por Sergio Urcullo el 20-oct):** papel #F1F2EE con cuadrícula, tinta #101318, un
+  solo verde #047857, Big Shoulders Display 900 + Hanken Grotesk. Carruseles con
+  `node hermes-content/carousels/ficha-taller/generar.cjs <brief.json> <salida>` (tipos: portada, numero, cuenta, frase,
+  chat, atajos, filtro, cierre; el chat dibujado va siempre con sello «Ejemplo»). Medido al armarlo: con letra de 36 px
+  las láminas quedaban medio vacías y chicas en el celular; los textos van a 40-46 px y las cifras de 520 px en adelante.
+- **Captura de página entera con imágenes `loading="lazy"`:** bajar por la página antes de capturar, o la foto sale en
+  blanco (pasó con la de Sergio Urcullo en «Quién lo dicta»). La barra fija sale pegada en el medio de una captura
+  `fullPage`: se oculta para esa captura y se muestra aparte, en una de pantalla.
+- **La foto recortada de Sergio Urcullo (`sergio-bn.jpg`) tiene fondo blanco:** sobre fondo oscuro queda un recuadro.
+  Va sobre blanco, con el título arriba y sin pisarle la cabeza.
+
 ## 6. Gasto (CLAUDE.md, regla de Higgsfield)
 
 Cotizar siempre. **Actualización 8-oct, consolidada 9-oct:** imágenes de prueba/opciones por unos pocos créditos (menos de ~5 por lote) tienen autorización previa; mostrar después el resultado. Lotes grandes, entrenamiento Soul y subir cara/voz a servicios externos requieren autorización específica (cara/voz de Sergio Urcullo también la de Leslie Mercado Moreno). No fraccionar lotes para esquivar el límite. Registrar en

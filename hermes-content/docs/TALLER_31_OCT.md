@@ -1,4 +1,4 @@
-# Taller «Auditá tu negocio con IA» · sáb 31-oct-2026
+# Taller «No pierdas clientes» · sáb 31-oct-2026
 
 > **Esta es la fuente única del taller.** Lo que diga otro documento (`ONIA_LANZAMIENTO_PREPAGO.md`, `comunidad/COMUNIDAD_WHATSAPP_ESTRUCTURA.md`, briefs, la página, guiones) se corrige con lo de acá.
 > Doc vivo: se EDITA, no se copia con otra fecha. Recreado en git el 19-oct-2026: la versión original vivía en el disco del proyecto de la nube (`/mnt/project-files/marca/`) y nunca entró al repo (ver `docs/orquesta/comunidad/235.md` en el PR #241).
@@ -14,13 +14,22 @@
 | 19-oct | Meet gratis corta a los 60 min con 3+ personas: **dos bloques de 45 min con pausa de 5**, todos vuelven al mismo link |
 | 19-oct | El botón va a **su WhatsApp personal** (él atiende y confirma cada pago) |
 | 19-oct | Alcance: mensajes 1 a 1 que manda él, bio de Instagram al taller, **pauta en Meta de Bs 300** y orgánico |
+| 19-oct, 23:00 | La página y los carruseles quedan para después; primero investigar cómo venden los referentes |
+| 20-oct | Marca: es **marca personal de Sergio Urcullo** (foto B/N con un objeto verde, voseo), no Onia. Antes de elegir estilo, «aprendamos las webs de los referentes»: medidas en `references/video-intake/2026-10-20-diseno-paginas-referentes.md` |
+| 20-oct | **Enfoque: «No pierdas clientes»** (descartados «Auditá tu negocio con IA» y «Editá tus videos con IA»). Para el público general: **nada técnico** (ni Hermes ni herramientas internas) |
 
 ## 1. La oferta (lo único que se promete)
 
 - **Taller en vivo de 90 minutos por Google Meet**, sáb 31-oct, 10:00 (La Paz): dos bloques de 45 min con una pausa de 5. Al volver se entra al mismo link.
-- **Salís con:** tu lista de tareas repetidas (qué repetís y cuánto te cuesta al mes), tu prioridad (una tarea para empezar) y tu primer paso, armados en vivo con tu propio negocio.
-- **Para quién no es:** si tu negocio no repite tareas, si buscás un certificado o si querés que otro lo haga por vos.
-- **No se promete:** certificado, ahorro en bolivianos, resultados, grabación, plantilla del «Mapa» (no existe), segunda fecha, ni nada de Onia Platform.
+- **Para quién es:** dueños de negocio que venden por WhatsApp y contestan a mano.
+- **Salís con, armado en vivo desde tu celular** (borrador del 20-oct; el texto público pasa por el OK de Sergio Urcullo):
+  1. Tu WhatsApp Business contestando al instante: mensaje de bienvenida y de ausencia.
+  2. Respuestas listas para las preguntas que más te hacen (precio, horario, dónde están), escritas con IA para tu negocio.
+  3. Un mensaje de seguimiento para el que preguntó y no compró, y cuándo mandarlo.
+- **Herramientas:** solo gratuitas y del celular (WhatsApp Business y un chat de IA gratis). Sin programar.
+- **Para quién no es:** si no vendés por WhatsApp, si buscás un certificado o si querés que otro lo haga por vos.
+- **No se promete:** certificado, cuántos clientes más vas a tener, ahorro en bolivianos, grabación, segunda fecha, ni nada de Onia Platform.
+- **Hay que rehacer con el enfoque nuevo:** la página `/auditoria` (y su ruta), los 2 carruseles y las plantillas A-D. Los 3 guiones ya están reescritos (`docs/orquesta/marca/234.md`).
 
 ## 2. Precio, cupos y la cuenta de los Bs 3.000
 
@@ -51,7 +60,7 @@ Briefs viejos decían «6 condiciones»: la sexta no está escrita en ningún ar
 
 | # | Condición | Dueño | Estado 19-oct 22:40 |
 |---|---|---|---|
-| 1 | Página `/auditoria` publicada con el botón a WhatsApp | Agente (deploy Vercel) con OK de Sergio Urcullo a las capturas | Lista en el repo; falta el número y su OK |
+| 1 | Página `/auditoria` publicada con el botón a WhatsApp | Agente (deploy Vercel) con OK de Sergio Urcullo a las capturas | Hay que rehacerla con el enfoque nuevo; número ya dado (+591 71654992) |
 | 2 | Textos aprobados: página, carruseles, plantillas A-D (§5) | Sergio Urcullo | Capturas enviadas el 19-oct |
 | 3 | Número de WhatsApp atendido por Sergio Urcullo | Sergio Urcullo | Decidió su número personal; falta escribirlo |
 | 4 | QR del BCP, titular y cómo se factura | Leslie Mercado Moreno | Pendiente |
@@ -114,10 +123,10 @@ Flujo de tres toques: perfil → botón de WhatsApp → QR. Plantillas A-D en `O
 
 | Pieza | Ruta | Estado 19-oct |
 |---|---|---|
-| Página | `hermes-content/sitio-sergiourcullo/auditoria/index.html` | Lista, `noindex`, falta número y OK |
-| Carrusel 1 «la cuenta» | `hermes-content/carousels/briefs/marca-personal/sergio-taller-1-cuenta-20261017.json` | Render v4 en `E:/onia-render/taller/`, esperando OK |
-| Carrusel 2 «qué sale» | `hermes-content/carousels/briefs/marca-personal/sergio-taller-2-que-sale-20261017.json` | Ídem |
-| 3 guiones de reel | `hermes-content/docs/orquesta/marca/234.md` (PR #240) | Faltan los datos `[FECHA]`/`[PRECIO]` y grabar |
+| Página | `hermes-content/sitio-sergiourcullo/taller/index.html` (nueva, ruta `/taller`) | Rehecha el 20-oct en el estilo «Ficha del taller» (elegido por Sergio Urcullo), botón a su WhatsApp, `noindex`; falta su OK a las capturas. `/auditoria` queda vieja, sin publicar |
+| Carrusel 1 «la cuenta» | `hermes-content/carousels/ficha-taller/1-la-cuenta.json` (render: `node hermes-content/carousels/ficha-taller/generar.cjs <brief> <salida>`) | Rehecho el 20-oct en estilo Ficha, 6 láminas; falta su OK. El brief del 17-oct queda viejo |
+| Carrusel 2 «qué te llevás» | `hermes-content/carousels/ficha-taller/2-que-te-llevas.json` | Rehecho el 20-oct en estilo Ficha, 6 láminas; falta su OK |
+| 3 guiones de reel | `hermes-content/docs/orquesta/marca/234.md` | Reescritos el 20-oct con el enfoque nuevo; falta grabar |
 | Investigación de 5 creadores | `hermes-content/docs/orquesta/investigacion/237.md` (PR #239) | Referencia |
 | Comunidad de WhatsApp | `hermes-content/docs/comunidad/COMUNIDAD_WHATSAPP_ESTRUCTURA.md` | Vigente salvo la oferta posterior |
 | Propuesta descartada (Bs 150/200, sáb 24) | `hermes-content/docs/historial/2026-10-16-workshops-auditoria-ia-descartada.md` | Historia, no fuente |
