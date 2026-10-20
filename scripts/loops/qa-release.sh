@@ -239,9 +239,8 @@ Release $2 en app.onia.com.bo, medido con la cuenta de QA. Arreglarlo o volver a
 Captura: $ESTADO/capturas/"
   ONIA_AVISO=interrumpe ONIA_AVISO_CLAVE=qa-release ONIA_AVISO_ESPERA=30 ONIA_AVISO_EMISOR=qa-release \
     aduana "🚨 <b>Onia: la app publicada está rota</b>
-Pasó: $(printf '%s' "$3" | esc) (release $2), desde las $(date -u -d "@$(( desde - 4 * 3600 ))" +%H:%M) de La Paz.
-Necesito: nada; Plataforma lo arregla o vuelve al release anterior.
-Sigue: lo miro cada 15 min y te aviso cuando vuelva." >/dev/null || true
+$(printf '%s' "$3" | esc) (release $2), desde las $(date -u -d "@$(( desde - 4 * 3600 ))" +%H:%M) de La Paz.
+No tenés que hacer nada: Plataforma lo arregla o vuelve al release anterior. Lo miro cada 15 min y te aviso cuando vuelva." >/dev/null || true
 }
 
 quedo_sano() {  # quedo_sano <que> <sha> <resumen>
@@ -251,7 +250,7 @@ quedo_sano() {  # quedo_sano <que> <sha> <resumen>
   cerrar_tarea tarea-roto "Volvió: release $2 sano ($3)"
   ONIA_AVISO=interrumpe ONIA_AVISO_CLAVE=qa-release ONIA_AVISO_RECUPERADO=1 ONIA_AVISO_EMISOR=qa-release \
     aduana "✅ <b>Onia: la app volvió</b>
-Pasó: release $2 sano ($(printf '%s' "$3" | esc))." >/dev/null || true
+El release $2 está sano ($(printf '%s' "$3" | esc))." >/dev/null || true
 }
 
 paso_release() {

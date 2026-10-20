@@ -85,7 +85,7 @@ al_dia() {
     && grep -q '^avisar()' "$BIN/claude-guardia.sh" 2>/dev/null \
     && grep -q ONIA_AGENDA_CAMBIOS_URL "$BIN/onia-agenda.sh" 2>/dev/null \
     && grep -q cierre-bloques "$BIN/onia-jarvis-resumen.sh" 2>/dev/null \
-    && grep -q 'grupo NECESITO' "$BIN/onia-jarvis-resumen.sh" 2>/dev/null \
+    && grep -q 'nada pendiente' "$BIN/onia-jarvis-resumen.sh" 2>/dev/null \
     && grep -q '^candado()' "$BIN/onia-pedido-claude.sh" 2>/dev/null \
     && grep -q '^SELLOS=' "$BIN/onia-pedido-claude.sh" 2>/dev/null \
     && grep -q -- '--probar' "$BIN/onia-respuestas-pedidos.sh" 2>/dev/null \
@@ -97,7 +97,7 @@ al_dia() {
   # 5-oct: y las que cierran los MEDIUM de la madre v2 (el sello que ata la respuesta al pedido, y el
   # tope mientras baja). Con el comando viejo la rutina no recibe sello y no puede firmar; con el
   # recolector viejo una respuesta firmada no se entrega y una sin firmar sí.
-  # 9-oct: el resumen en tres bloques (grupo NECESITO). El SOUL le dice a Hermes que el resumen y el
+  # 9-oct: el resumen en tres bloques; 20-oct: sin sus rótulos («nada pendiente»). El SOUL le dice a Hermes que el resumen y el
   # cierre ya llegan así: con el resumen viejo en /root/bin, eso sería falso.
   # 10-oct: el envoltorio del latido. Cada línea que agrega el crontab lo llama: sin él en /root/bin,
   # ninguno de esos trabajos correría.
@@ -718,20 +718,32 @@ else
     falla "no pude agregar la regla al SOUL (falta la sección en main o el archivo en el VPS)"
   fi
 fi
-# El formato fijo de cada mensaje (Sergio Urcullo, 8-oct: «me entregás demasiado texto y me pierdo»).
+# El formato de cada mensaje (Sergio Urcullo, 8-oct: «me entregás demasiado texto y me pierdo»).
 # Va en su propia sección porque acá se copian solo las secciones que se nombran: una regla escrita
-# dentro de «Cómo hablarle a Sergio» nunca llegaba al SOUL del VPS.
-if grep -q '^## Formato fijo de cada mensaje' "$SOUL" 2>/dev/null; then
+# dentro de «Cómo hablarle a Sergio» nunca llegaba al SOUL del VPS. A diferencia de las otras, esta
+# se REEMPLAZA si cambió en main: el 20-oct pasó de tres bloques a prosa corta, y con «agregar si
+# falta» la nueva nunca habría llegado a un SOUL que ya tenía la del 8-oct.
+formato_de() { awk '/^## Formato fijo de cada mensaje/ {on = 1} on && /^---$/ {exit} on {print}'; }
+SECCION=$(git -C "$REPO_VPS" show origin/main:hermes-content/deploy/hermes-agent/SOUL.md 2>/dev/null | formato_de)
+ACTUAL=$(formato_de 2>/dev/null < "$SOUL")
+if [ -z "$SECCION" ] || [ ! -f "$SOUL" ]; then
+  falla "no pude poner la regla del formato en el SOUL"
+elif [ "$ACTUAL" = "$SECCION" ]; then
   echo "· su SOUL ya tenía la regla del formato"
+elif [ -z "$ACTUAL" ]; then
+  [ -f "$BK/SOUL.md.antes" ] || cp -a "$SOUL" "$BK/SOUL.md.antes"
+  printf '\n---\n\n%s\n' "$SECCION" >> "$SOUL" && { HERMES_CAMBIO=1; echo "✅ regla del formato agregada al SOUL de Hermes"; }
 else
-  SECCION=$(git -C "$REPO_VPS" show origin/main:hermes-content/deploy/hermes-agent/SOUL.md 2>/dev/null \
-            | awk '/^## Formato fijo de cada mensaje/ {on = 1} on && /^---$/ {exit} on {print}')
-  if [ -n "$SECCION" ] && [ -f "$SOUL" ]; then
-    [ -f "$BK/SOUL.md.antes" ] || cp -a "$SOUL" "$BK/SOUL.md.antes"
-    printf '\n---\n\n%s\n' "$SECCION" >> "$SOUL" && { HERMES_CAMBIO=1; echo "✅ regla del formato agregada al SOUL de Hermes"; }
-  else
-    falla "no pude agregar la regla del formato al SOUL"
-  fi
+  [ -f "$BK/SOUL.md.antes" ] || cp -a "$SOUL" "$BK/SOUL.md.antes"
+  # Desde su título hasta el próximo «---» (o el final); lo demás queda igual. Se escribe con `cat >`
+  # para conservar el dueño y los permisos del SOUL.
+  printf '%s\n' "$SECCION" > "$BK/formato-nuevo.md"
+  awk -v f="$BK/formato-nuevo.md" '
+    /^## Formato fijo de cada mensaje/ { while ((getline l < f) > 0) print l; print ""; salto = 1; next }
+    salto && /^---$/ { salto = 0 }
+    !salto { print }' "$SOUL" > "$BK/SOUL.formato" && [ -s "$BK/SOUL.formato" ] && cat "$BK/SOUL.formato" > "$SOUL" \
+    && { HERMES_CAMBIO=1; echo "✅ regla del formato actualizada en el SOUL de Hermes (prosa corta, sin rótulos)"; } \
+    || falla "no pude actualizar la regla del formato en el SOUL"
 fi
 
 # ── 5d. Pedidos a Claude: manejar todo desde Telegram (2026-10-01) ───────────────

@@ -218,7 +218,7 @@ test("gemelo: si a los 30 min sigue roto, le llega la interrupción 4; y cuando 
   const sigue = v.correr({ ahora: "2026-10-10T14:45:00Z" });
   assert.match(sigue.salida, /\(vuelvo a mirar\) ROTO: .*roto desde 14:15Z/);
   assert.equal(v.telegram().length, 1);
-  assert.match(v.telegram()[0], /la app publicada está rota[\s\S]*Pasó: \/checkout terminó en \/login \(release bad00bad\), desde las 10:15 de La Paz/);
+  assert.match(v.telegram()[0], /la app publicada está rota[\s\S]*\n\/checkout terminó en \/login \(release bad00bad\), desde las 10:15 de La Paz/);
   assert.equal(v.tareas().length, 1, "la misma tarea, no una por corrida");
 
   v.escena("/checkout", { salida: sana("/checkout") });
