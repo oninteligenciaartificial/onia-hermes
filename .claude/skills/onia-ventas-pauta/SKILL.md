@@ -733,7 +733,7 @@ Reglas de edición de la pauta: las 11 de COMUNICACION §4 (subtítulos Archivo 
 - **Lo que no sirve:** el navegador de la nube (Biblioteca 403, Pinterest pide sesión). **Pinterest no mide rendimiento**: es inspiración visual.
 - **No es raspado masivo:** pocas consultas dirigidas (la herramienta lo prohíbe).
 
-## 10. Vender valor y psicología de compra (Iman Gadzhi, medido el 20-oct)
+## 10. Vender valor y psicología de compra (Gadzhi y Hormozi, medido el 20-oct)
 
 Ficha con evidencia por video: `hermes-content/references/video-intake/2026-10-20-gadzhi-vender-valor-psicologia.md`
 (2 llamadas reales suyas, su embudo, mensajes en frío, producto barato y una llamada comentada por su vendedor).
@@ -757,3 +757,24 @@ Sirve para la demo con clínicas (usted) y para el taller de la marca personal (
 - **Cierre con paso inmediato:** QR o alta en el mismo chat; si hay dos que deciden, que lo hablen y se vuelve el mismo día.
 - **No se copia:** escasez inventada (relojes, «quedan 150»), listas de espera de marketing, cifras de ingreso como
   promesa, sorteos, lujo como prueba, ni decirle al comprador que se busca «que se sienta en deuda».
+
+### 10.1 Hormozi: la oferta y el cierre
+
+Ficha: `hermes-content/references/video-intake/2026-10-20-hormozi-oferta-y-cierre.md` (su marco de cierre, 9 hábitos
+medidos en sus equipos, «la oferta es la reina» y la ecuación de valor leída de su libro).
+
+- **Antes de una pieza o un precio, pasar la oferta por la ecuación:** (resultado × probabilidad de lograrlo) ÷
+  (demora × esfuerzo). Lo que más sube el valor es **bajar la demora y el esfuerzo** (que funcione hoy y sin trabajo
+  del comprador); subir promesas es lo fácil y lo que todos copian. En Onia: «el bot contesta desde el primer día»
+  vale más que otra función.
+- **La oferta cabe en una frase y trae su razón** (primera edición, cupos de fundador). Sin razón, lo barato no se cree.
+- **Garantía = más probabilidad percibida = se puede cobrar más.** Que no cueste horas de Sergio Urcullo.
+- **CLOSER** en toda conversación 1 a 1: clarificar por qué está → etiquetar el problema con sus palabras → qué probó
+  y por qué no fue su culpa → vender el destino en ≤ 3 min con 3 pilares y una historia cotidiana por pilar → «¿cuál
+  es tu duda principal?» → reforzar en las primeras 48 h después del pago.
+- **En la conversación solo hay preguntas, reformulaciones e historias.** Escuchar el doble de lo que se habla.
+- **Obstáculos antes del precio** (tiempo, pareja o socio, «no sé si puedo»): después del precio ya son objeciones.
+- **Asistencia y referidos:** pregunta de preferencia antes del evento; «¿a quién conocés que…?» después de pagar
+  (pide un nombre). Nunca terminar sin la próxima fecha.
+- **Lo gratis vende si después se vende igual:** la clase o la prueba gratis no cierra sola.
+- **No se copia:** sorteos, promesas de ingreso o peso, presión al pedir referidos, cobrar «y pedir perdón después».
