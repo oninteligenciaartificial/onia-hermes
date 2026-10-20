@@ -43,6 +43,7 @@ REPO="${ONIA_REPO:-/root/loops/onia-hermes}"
 ESTADO="${ONIA_AVISO_ESTADO:-/var/lib/onia-aviso}"
 AGENDA="${ONIA_AGENDA:-/root/bin/onia-agenda.sh}"
 PEDIDOS="${ONIA_PEDIDOS:-/root/bin/onia-pedido-claude.sh}"
+ORQUESTA="${ONIA_ORQUESTA:-/root/bin/onia-orquesta-hermes.sh}"   # las tareas que carga Hermes (20-oct)
 PUBLICADO="${ONIA_PUBLICADO:-/root/publicar/publicado.jsonl}"  # lo escriben ig-reel, ig-carrusel, yt-video…
 OUT="${ONIA_JARVIS_OUT:-/root/.hermes/out}"
 LLM="${ONIA_JARVIS_LLM:-}"          # comando que traduce commits (stdin -> viñetas); vacío = LiteLLM
@@ -657,6 +658,23 @@ seccion_pedidos() {
   [ "$n" -gt "$MAX" ] && printf '… y %s más.\n' $((n - MAX))
   return 0
 }
+# Las tareas que Hermes cargó en la orquesta y que lo esperan a él (20-oct): las que no arrancan sin su ok
+# (`necesita-ok`), las bloqueadas y las que esperan su ok de la entrega. Van en NECESITO por lo mismo que
+# los pedidos: en PASÓ, «Nada.» mentía (revisión del PR #252). `--lista` solo lee. Sin el token (69) la
+# orquesta está apagada y no se dice nada; si no se pudo leer, se dice.
+ORQ_LISTA=""; ORQ_RC=69
+[ -x "$ORQUESTA" ] && { ORQ_LISTA=$(timeout 60 "$ORQUESTA" --lista 2>/dev/null </dev/null); ORQ_RC=$?; }
+seccion_orquesta_ok() {
+  if [ "$ORQ_RC" != 0 ] && [ "$ORQ_RC" != 69 ]; then
+    printf '⏳ <b>No pude leer la cola de la orquesta</b>: no sé si alguna tarea espera tu ok.\n'; return 0
+  fi
+  local filas
+  filas=$(printf '%s\n' "$ORQ_LISTA" | awk -F'\t' '$2 == "espera su ok para empezar" || $2 == "bloqueada" || $2 == "espera su ok de la entrega"')
+  [ -n "$filas" ] || return 0
+  printf '📋 <b>La orquesta te espera</b>\n'
+  printf '%s\n' "$filas" | awk -F'\t' '{ printf "• %s %s — %s · %s\n", $1, $4, $2, $5 }' | head -"$MAX" | esc
+  return 0
+}
 seccion_sigue() {
   local p d
   [ "$TABLERO_OK" = 1 ] || { printf '⏳ <b>No pude leer el tablero</b>: no sé quién te espera.\n'; return; }
@@ -697,12 +715,12 @@ falta_medir() {
 if [ "$MODO" = manana ]; then
   CABEZA="☀️ <b>Buen día, Sergio Urcullo</b> — $(dia_largo "$HOY")"
   parte seccion_cola noche 'Mientras dormías'; parte linea_salud; parte linea_latidos; parte linea_relojes_otros; parte linea_colas; grupo PASÓ
-  parte seccion_prospectos; parte seccion_relojes; parte seccion_decisiones; parte falta_medir; grupo NECESITO 'Nada.'
+  parte seccion_prospectos; parte seccion_relojes; parte seccion_decisiones; parte seccion_orquesta_ok; parte falta_medir; grupo NECESITO 'Nada.'
   parte seccion_agenda "$HOY" 'Tu día'; parte seccion_plan "$HOY" 'Hoy sale' 'Para grabar hoy'; grupo SIGUE
 else
   CABEZA="🌙 <b>Cierre del $(dia_largo "$HOY")</b>"
   parte seccion_hoy; parte seccion_salio; parte seccion_pedidos; parte seccion_cola resumen 'Avisos del día'; parte linea_salud; grupo PASÓ
-  parte seccion_bloques_hoy; parte seccion_pedidos_ok; parte seccion_sigue; parte falta_medir; grupo NECESITO 'Nada.'
+  parte seccion_bloques_hoy; parte seccion_pedidos_ok; parte seccion_orquesta_ok; parte seccion_sigue; parte falta_medir; grupo NECESITO 'Nada.'
   parte seccion_agenda "$MANANA" 'Mañana'; parte seccion_plan "$MANANA" 'Mañana sale' 'Mañana grabás'; grupo SIGUE
 fi
 MSG="$CABEZA

@@ -63,7 +63,9 @@ export function dondeDe(issue, conf = CONF) {
 }
 
 export function elegirTareas(issues, conf = CONF, soloCarril = null) {
-  const frenadas = new Set(['en-curso', 'bloqueada', 'espera-ok']);
+  // `necesita-ok`: lo pone Hermes (scripts/loops/orquesta-hermes.sh) a lo que publica, gasta, contacta,
+  // toca producción o mergea; arranca recién cuando Sergio Urcullo le saca el label.
+  const frenadas = new Set(['en-curso', 'bloqueada', 'espera-ok', 'necesita-ok']);
   const porCarril = {};
   const orden = [...issues].sort((a, b) => a.createdAt.localeCompare(b.createdAt));
   for (const it of orden) {
@@ -151,7 +153,9 @@ export function decidirRespuesta(issue) {
 // Lo que GitHub corre al abrir el PR (workflows, con secrets) o git al commitear (hooks) no lo cambia un
 // trabajador, y lo que parece un secreto no se sube nunca (el avance se sube sin revisión).
 // Tampoco lo que carga el intento siguiente (que sigue desde la rama subida sin revisión) ni el propio orquestador.
-export const PROTEGIDAS = /^(\.github|\.githooks|\.husky)\/|(^|\/)\.env($|\.)|\.(pem|key|p12|pfx)$|(^|\/)id_(rsa|ed25519)|credentials\.json$|^\.claude\/settings[^/]*\.json$|(^|\/)\.mcp\.json$|^scripts\/orquesta\//i;
+// Tampoco lo que el sincronizador del VPS copia como root a /root/bin ni lo que `aplicar` le instala a Hermes
+// (scripts/loops, hermes-content/deploy y skills): revisión de seguridad del PR #252, 20-oct.
+export const PROTEGIDAS = /^(\.github|\.githooks|\.husky)\/|(^|\/)\.env($|\.)|\.(pem|key|p12|pfx)$|(^|\/)id_(rsa|ed25519)|credentials\.json$|^\.claude\/settings[^/]*\.json$|(^|\/)\.mcp\.json$|^scripts\/orquesta\/|^scripts\/loops\/|^hermes-content\/(deploy|skills)\//i;
 
 // Sin cupo de Max o sin login no es culpa de la tarea: no se comenta ni se cuenta como falla (si no, todo queda `bloqueada`).
 const SIN_MOTOR = /usage limit|limit will reset|hit your (usage )?limit|invalid api key|oauth token (has )?(expired|been revoked)|authentication_error|not logged in|please run \/login/i;

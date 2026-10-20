@@ -103,6 +103,7 @@ ${tgFalla ? "exit 1" : "exit 0"}
         ONIA_AVISO_ESTADO: estado,
         ONIA_AGENDA: join(dir, "no-existe"),
         ONIA_PEDIDOS: join(dir, "no-existe-pedidos"),
+        ONIA_ORQUESTA: join(dir, "no-existe-orquesta"),
         ONIA_PUBLICADO: join(dir, "no-existe-publicado.jsonl"),
         ONIA_JARVIS_OUT: out,
         ONIA_HOY: "2026-09-30",
@@ -882,4 +883,45 @@ test("sin latidos (antes de aplicar) o con todos sanos, no dice nada", () => {
   const b = banco();
   assert.doesNotMatch(b.imprimir("manana"), /🫀/, "sin la carpeta");
   assert.doesNotMatch(latidos(b, SANOS), /🫀/, "sanos, y sin el de la mañana, que es el que está corriendo");
+});
+
+// ── Las tareas que Hermes carga en la orquesta (20-oct, PR #252) ───────────────────────────
+// Las que esperan su ok (para empezar o de la entrega) y las bloqueadas van en NECESITO, mañana y noche.
+// En PASÓ (el aviso que deja la aduana) «Nada.» mentía: lo encontró la revisión del PR.
+
+// Solo el bloque NECESITO (sin exigir que PASÓ y SIGUE tengan algo, como bloques()).
+const necesitoDe = (msg) => {
+  const m = msg.match(/<b>NECESITO<\/b>\n([\s\S]*?)(?=\n<b>SIGUE<\/b>|$)/);
+  assert.ok(m, msg);
+  return m[1];
+};
+
+test("las tareas de la orquesta que lo esperan van en NECESITO; las demás no se nombran", () => {
+  const b = banco();
+  const orq = b.escribir(
+    "orquesta.sh",
+    `#!/usr/bin/env bash
+[ "$1" = --lista ] || exit 9
+printf '#260\tespera su ok para empezar\tmarca\tPublicar el carrusel de la semana\thttps://github.com/oninteligenciaartificial/onia-hermes/issues/260\n'
+printf '#259\tbloqueada\tinvestigacion\tPrecios de la competencia\thttps://github.com/oninteligenciaartificial/onia-hermes/issues/259\n'
+printf '#258\ten curso\tplataforma\tArreglar el alta\thttps://github.com/oninteligenciaartificial/onia-hermes/issues/258\n'
+printf '#257\thecha\tinvestigacion\tOtra\thttps://github.com/oninteligenciaartificial/onia-hermes/issues/257\n'
+`,
+  );
+  for (const modo of ["manana", "noche"]) {
+    const msg = b.imprimir(modo, { ONIA_ORQUESTA: orq });
+    const NECESITO = necesitoDe(msg);
+    assert.match(NECESITO, /📋 <b>La orquesta te espera<\/b>\n• #260 Publicar el carrusel de la semana — espera su ok para empezar · https:\/\/github\.com\/\S+\/issues\/260\n• #259 Precios de la competencia — bloqueada · /, modo);
+    assert.doesNotMatch(msg, /#258|#257/, `${modo}: en curso y hecha no le piden nada`);
+    assert.doesNotMatch(NECESITO, /^\s*Nada\./, modo);
+  }
+});
+
+test("orquesta: sin token (69) no se nombra; si no se pudo leer, se dice", () => {
+  const b = banco();
+  const apagada = b.escribir("orq-69.sh", "#!/usr/bin/env bash\nexit 69\n");
+  assert.doesNotMatch(b.imprimir("noche", { ONIA_ORQUESTA: apagada }), /orquesta/i);
+  const caida = b.escribir("orq-1.sh", "#!/usr/bin/env bash\nexit 1\n");
+  const NECESITO = necesitoDe(b.imprimir("manana", { ONIA_ORQUESTA: caida }));
+  assert.match(NECESITO, /No pude leer la cola de la orquesta/);
 });
