@@ -5,6 +5,65 @@
 > Índice operativo vivo = skill **`onia-router`** (`.claude/skills/onia-router/SKILL.md`).
 > Este doc es la versión legible + la spec para los repos separados.
 
+## Mapa único del sistema (20-oct-2026) — manda sobre lo de abajo
+
+Sergio Urcullo, 20-oct: que la orquesta reparta todo «correctamente con sus agentes, skills, documentos… que no
+pierdan conciencia y que tengan sus agentes y LLMs bien configurados». Inventarios de solo lectura del 20-oct:
+`side-session-notes/local_6214be25-…/inventario-skills-20oct.md` e `inventario-modelos-navegadores-20oct.md`.
+
+**Quién reparte:** Hermes planifica (issues `orquesta` + `carril:<área>`) → `scripts/orquesta/orquesta.mjs` corre al
+trabajador del carril → un revisor con contexto limpio aprueba o rechaza → PR. Las sesiones de área revisan esos PR y
+hacen lo que exige la PC o a Sergio Urcullo. Skills y agentes por área: tabla «Apartados por área» de `onia-router`.
+
+### Modelo por rol (una sola escala, dos proveedores)
+
+| Rol | Claude (sesiones y orquesta) | Codex (plataforma en la orquesta) | Hermes (VPS) |
+|---|---|---|---|
+| Contar, verificar, tareas mecánicas | `haiku` | `gpt-6-luna` | — |
+| Trabajo cotidiano con juicio | `claude-sonnet-5-5` | `gpt-6.1-sol` | `gpt-5-mini` (chat, resumen, cierre, planificar) |
+| Decidir lo ambiguo o riesgoso (seguridad, plata, arquitectura) | `claude-opus-5-5` | `gpt-6-astra` | — |
+| Revisor de la orquesta | `claude-sonnet-5-5`, solo lectura | (lo revisa Claude) | — |
+
+- Fuente de los modelos de la orquesta: `scripts/orquesta/carriles.json`; el nivel por defecto es `normal` y un issue
+  puede pedir `rapido` o `profundo`. `AI_MODEL_ROUTING_2026.md` describe la columna Codex; esta tabla es la cruzada.
+- Sesiones de la app: parten en Sonnet (`~/.claude/settings.json`); para lo riesgoso se sube a Opus a mano.
+- Pendientes medidos: (1) el esfuerzo de Codex no se pasa (`orquesta.mjs`, llamada a codex solo con `-m`);
+  (2) el job `onia-planificar-orquesta` de Hermes no declara modelo: hereda el del gateway, y los docs dicen
+  `gpt-5-mini` por LiteLLM o `openai-codex` según cuál se lea. Se mide en vivo (`/root/.hermes/config.yaml`) y se
+  decide con la primera planificación real: si las tareas salen flojas, se sube el modelo de ese job.
+
+### Conciencia: qué lee y qué deja cada trabajador (PR #265)
+
+- Antes: los **dos primeros** archivos de `leer` son obligatorios; el handoff del carril va primero donde existe
+  (marca, comunidad). Video, investigación y plataforma no tienen handoff propio: su primero es la skill.
+- Al cerrar: la entrega termina con «## Leí» y «## Aprendido»; el revisor lo exige. `.claude/skills/` es ruta
+  protegida para `claude -p`: **la sesión de área que revisa el PR pasa «Aprendido» a la skill del carril.**
+- Hueco abierto (carril Hermes): `listar()` de `scripts/loops/orquesta-hermes.sh` le da a Hermes solo el estado de
+  cada tarea, no su resultado; para planificar el paso siguiente necesita el comentario de cierre o el PR.
+- Ningún trabajador usa los agentes de `.claude/agents/` (son para sesiones interactivas).
+
+### Navegador para cada uso
+
+| Uso | Herramienta | Sesión iniciada |
+|---|---|---|
+| Mirar una pantalla nuestra renderizada (producto, web) desde la PC | `agent-browser` | no hace falta |
+| Lo mismo desde la nube, el VPS o un script | Playwright + Chromium headless | no |
+| QA de `app.onia.com.bo` tras publicar | `scripts/onia-mirar.js` (VPS) | sí, magic link |
+| Páginas con login: Higgsfield, Meta Ads Library, reels privados, Gmail | Chrome real (claude-in-chrome) | sí, la de Sergio Urcullo |
+| Instagram desde scripts | Playwright con perfil persistente `.hermes/ig-session/` | sí |
+| Páginas públicas rápidas | navegador de la app | no |
+| Investigación del carril de la nube | WebFetch / `exa` (allá no hay `agent-browser`) | no |
+| Portal del SIAT | **ninguno**: lo abre solo Sergio Urcullo | — |
+
+### Skills duplicadas (decisión)
+
+- 148 nombres; 46 repetidos. **Gana la copia del repo** (`.claude/skills/`) sobre la global, siempre. Las 15
+  distintas son HyperFrames, `impeccable`, `media-use`, `motion-graphics`, `slideshow`, `talking-head-recut`,
+  `general-video`, `remotion-to-hyperframes` y `embedded-captions`.
+- A borrar de `~/.claude/skills/` (fuera del repo, lo confirma Sergio Urcullo): las 15 copias globales distintas,
+  los `caveman-*` (plugin desactivado) y la carpeta oculta `.trash` (127 skills).
+- Sin fila y útiles: `stop-slop` y `humanizer` (textos a clientes sin tono de IA) van a Ventas y Comunidad.
+
 ## Las 3 capas de "skills" en Onia (no confundir)
 
 1. **Skills de Claude Code** (`.claude/skills/`) — las que Claude Code auto-descubre e
