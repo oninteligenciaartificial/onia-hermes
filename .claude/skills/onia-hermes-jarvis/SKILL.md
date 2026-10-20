@@ -121,6 +121,14 @@ CLI de Hermes.
 
 ## Trampas ya pagadas
 
+- **Hermes solo carga `~/.hermes/skills/<…>/<nombre>/SKILL.md`** (su documentación, `features/skills.md`; 20-oct).
+  `aplicar` del 20-oct (corrida 39496727472) dejó la de la orquesta en `/root/.hermes/planificar-orquesta/SKILL.md`:
+  5d y 5e la ponían «junto a la del calendario» con `dirname(dirname(...))`, y en el VPS esa es un `.md` suelto
+  (`skills/agenda-calendario.md`). Ahora 5d y 5e van a `skills/<nombre>/SKILL.md` y 5e borra la copia de afuera.
+  ⚠️ **Sigue abierto:** `agenda-calendario.md` y otros `.md` sueltos en `skills/` tampoco los carga; por eso
+  `.skills_prompt_snapshot.json` (del 08-sep) nunca nombró `agenda-calendario`. Y el sincronizador copia lo que
+  bajó la vuelta ANTERIOR: un `poner` nuevo en `sincronizar.sh` tarda DOS vueltas (la primera se actualiza a sí
+  misma); `aplicar` corre el sincronizador hasta dos veces (#261).
 - **Un trabajo de Hermes que crea `aplicar` se PAUSA al revertir, no se borra** (20-oct, 5e). `hermes cron create
   "every 3h" "<prompt>" --skill … --name … --deliver local` sale de la documentación de Hermes
   (`website/docs/user-guide/features/cron.md`), no de una corrida en el VPS: la Fase A pide `cron create --help` con
