@@ -152,7 +152,10 @@ CLI de Hermes.
   rama y, si `main` era ancestro, la empujaba a `main`. El PR #68 apareció «merged» sin que nadie lo
   mergeara. **Desde el 5-oct solo lo hace con permiso** (la madre con `ONIA_AUTOSYNC_MAIN=1`, el
   integrador con `ONIA_LOOP_ID=onia-cola`; Sergio Urcullo eligió «sí, la madre sigue directo»). Lo que
-  llega a `main` llega igual, ≈1 h después, al VPS (el sincronizador de `/root/bin`): lo nuevo se diseña
+  llega a `main` llega igual, **entre 1 y 2 h después**, al VPS (el sincronizador de `/root/bin`, `44 * * * *`,
+  arma la copia ANTES del fetch: copia lo que bajó en la pasada anterior; medido el 20-oct, un merge de las 18:56
+  UTC no estaba a las 19:47 y llega a las 20:44). Antes de `aplicar` algo recién mergeado, el diagnóstico tiene que
+  mostrarlo en `/root/bin` (la línea «fuente: origin/main (<sha>)» de `onia-loops-sync.log` dice qué main copió): lo nuevo se diseña
   INERTE hasta encenderlo. **Mientras el cambio del 5-oct no esté en `main`,** con una rama que sale de
   `main` y un PR sin revisar: pushear a mano y soltar el turno con `git checkout --detach`. Con el hook
   nuevo en tu árbol ya no hace falta, pero no cuesta nada.
