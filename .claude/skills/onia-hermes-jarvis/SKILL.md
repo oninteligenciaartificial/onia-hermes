@@ -129,8 +129,11 @@ CLI de Hermes.
 - **El token de Issues es de la cuenta de Sergio Urcullo** (20-oct). Lo que se cree con él lo firma su usuario y
   `orquesta.mjs` lo toma con plena confianza (autores). `onia-orquesta-hermes.sh` frena el error del modelo (check
   `cmd` con cualquier comando, publicar sin su ok, bucles que llenan la cola), no a un Hermes que use curl directo.
-  El `check: cmd` corre con shell y sin sandbox en su PC: de Hermes solo valen `npm run|test` y `node --test`, sin
-  opciones, sin `/` inicial, sin `..` y sin un solo caracter que interprete una shell.
+  El `check: cmd` corre con shell y sin sandbox en su PC: de Hermes solo valen `npm run test:<x>`, `npm test` y
+  `node --test`, sin opciones, sin `/` inicial, sin `..` y sin un solo caracter que interprete una shell (un
+  `npm run` libre corría `deploy:*` del package.json: revisión de seguridad del #252). Y todo `cmd` o `donde: pc`
+  espera su ok: solo arranca solo `nube` + `urls`. El respaldo de palabras se rodeaba con un caracter invisible
+  o una letra cirílica: el texto se rechaza si trae algo que no es latino o no se ve.
 - **`readonly X` y después `X=valor cmd`** aborta el comando con «X: readonly variable» (20-oct, humo de
   `orquesta-hermes.sh` en WSL): al pasarle una constante a python por el entorno, va con otro nombre (`ORQ_CARRILES`).
   Y un f-string con comillas dobles adentro de otro (`f"{d["x"]}"`) solo anda desde Python 3.12: comillas simples.

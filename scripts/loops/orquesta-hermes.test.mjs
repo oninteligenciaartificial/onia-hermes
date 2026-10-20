@@ -67,6 +67,8 @@ fs.appendFileSync(${JSON.stringify(join(dir, "llamados.jsonl"))}, JSON.stringify
 const rs = JSON.parse(fs.readFileSync(${JSON.stringify(join(dir, "respuestas.json"))}, "utf8"));
 const ruta = url.replace("https://api.github.com", "");
 const r = rs.find((x) => x.metodo === metodo && new RegExp(x.ruta).test(ruta)) || { http: "404", cuerpo: { message: "Not Found" } };
+// eco: GitHub pega los labels que le pidieron (lo normal); sin eco, contesta los de la respuesta.
+if (r.eco && llamado.cuerpo) r.cuerpo = { ...r.cuerpo, labels: llamado.cuerpo.labels.map((name) => ({ name })) };
 const fin = () => {
   if (o && r.rc === undefined) fs.writeFileSync(o, typeof r.cuerpo === "string" ? r.cuerpo : JSON.stringify(r.cuerpo ?? {}));
   if (w) process.stdout.write(r.rc ? "000" : String(r.http));
@@ -106,10 +108,12 @@ ${demora ? `setTimeout(fin, ${demora});` : "fin();"}
   return { dir, estado, guion, correr, correrAsync, leer, llamados, registro: () => leer("estado/creadas.tsv") };
 }
 
-const creada = (n = 251, labels = ["orquesta", "carril:investigacion", "origen:hermes"]) => ({
-  metodo: "POST", ruta: "^/repos/oninteligenciaartificial/onia-hermes/issues$", http: "201",
-  cuerpo: { number: n, html_url: URL_ISSUE(n), labels: labels.map((name) => ({ name })) },
+const creada = (n = 251, labels = null) => ({
+  metodo: "POST", ruta: "^/repos/oninteligenciaartificial/onia-hermes/issues$", http: "201", eco: labels === null,
+  cuerpo: { number: n, html_url: URL_ISSUE(n), labels: (labels || []).map((name) => ({ name })) },
 });
+// El día de La Paz empieza a las 04:00 UTC: «hoy» es desde ahí, aunque la prueba corra a las 04:00:30.
+const inicioDia = () => Math.floor((Math.floor(Date.now() / 1000) - 14400) / 86400) * 86400 + 14400;
 const posts = (b) => b.llamados().filter((l) => l.metodo === "POST" && /\/issues$/.test(l.url));
 
 test("crea la tarea: cuerpo que lee orquesta.mjs, labels, aviso al resumen y registro", () => {
@@ -207,7 +211,7 @@ test("publicar, gastar, contactar, producción o merge esperan su ok aunque el m
 
 test("si GitHub no pega «necesita-ok», la cierra antes de que arranque y sale 1", () => {
   const b = banco({
-    respuestas: [creada(251), { metodo: "PATCH", ruta: "/issues/251$", http: "200", cuerpo: { state: "closed" } }],
+    respuestas: [creada(251, ["orquesta", "carril:investigacion", "origen:hermes"]), { metodo: "PATCH", ruta: "/issues/251$", http: "200", cuerpo: { state: "closed" } }],
   });
   const r = b.correr(["--crear"], TAREA.replace("necesita-ok: no", "necesita-ok: si"));
   assert.equal(r.status, 1, r.stdout);
@@ -218,15 +222,15 @@ test("si GitHub no pega «necesita-ok», la cierra antes de que arranque y sale 
 
 test("tope del día: con 10 cargadas hoy no carga la 11; las de ayer no cuentan", () => {
   const b = banco({ respuestas: [creada()] });
-  const ahora = Math.floor(Date.now() / 1000);
+  const ahora = inicioDia() + 1;
   spawnSync("mkdir", ["-p", b.estado]);
   const lineas = (ts, n) => Array.from({ length: n }, (_, i) => `${ts}\t${100 + i}\tmarca\th${i}\t${URL_ISSUE(100 + i)}`).join("\n") + "\n";
-  writeFileSync(join(b.estado, "creadas.tsv"), lineas(ahora - 60, 10));
+  writeFileSync(join(b.estado, "creadas.tsv"), lineas(ahora, 10));
   const r = b.correr(["--crear"], TAREA);
   assert.equal(r.status, 75, r.stdout);
   assert.match(r.stderr, /Ya cargaste 10 tareas hoy \(tope 10\)/);
   assert.deepEqual(posts(b), []);
-  writeFileSync(join(b.estado, "creadas.tsv"), lineas(ahora - 2 * 86400, 10) + lineas(ahora - 60, 9));
+  writeFileSync(join(b.estado, "creadas.tsv"), lineas(ahora - 2 * 86400, 10) + lineas(ahora, 9));
   assert.equal(b.correr(["--crear"], TAREA).status, 0, "9 de hoy + 10 de anteayer: entra");
 });
 
@@ -324,6 +328,7 @@ test("--cerrar: solo lo suyo y sin empezar; cierra primero y el motivo va con la
     [["orquesta", "origen:hermes", "en-curso"], /está «en-curso»/],
     [["orquesta", "origen:hermes", "bloqueada"], /está «bloqueada»/],
     [["orquesta", "origen:hermes", "espera-ok"], /está «espera-ok»/],
+    [["orquesta", "origen:hermes", "necesita-ok"], /está «necesita-ok»/],
   ]) {
     const x = banco({ respuestas: resp(labels) });
     const s = x.correr(["--cerrar", "255"], motivo);
@@ -356,4 +361,83 @@ test("los carriles del comando son los de carriles.json", () => {
   const conf = JSON.parse(readFileSync(join(RAIZ, "scripts", "orquesta", "carriles.json"), "utf8"));
   const m = readFileSync(SCRIPT, "utf8").match(/^readonly CARRILES="([^"]+)"/m);
   assert.deepEqual(m[1].split(" ").sort(), Object.keys(conf.carriles).sort());
+});
+
+// ── Revisiones del PR #252 (code-reviewer y security-reviewer, 20-oct) ─────────────────────
+
+test("lo único que arranca solo es nube + urls: la PC y todo check «cmd» esperan su ok", () => {
+  for (const [cambio, por] of [
+    [(t) => t.replace("donde: nube", "donde: pc"), /corre en la PC/],
+    [(t) => t.replace("check: urls", "check: cmd npm run test:orquesta-hermes"), /su check corre un comando/],
+  ]) {
+    const b = banco({ respuestas: [creada()] });
+    const r = b.correr(["--crear"], cambio(TAREA));
+    assert.equal(r.status, 0, r.stderr);
+    assert.ok(posts(b)[0].cuerpo.labels.includes("necesita-ok"));
+    assert.match(r.stdout, por);
+  }
+});
+
+test("check «npm run» solo con scripts de prueba; salida solo a docs (revisión de seguridad)", () => {
+  for (const [t, msg] of [
+    [TAREA.replace("check: urls", "check: cmd npm run deploy:selfhosted"), /corre sin sandbox/],
+    [TAREA.replace("check: urls", "check: cmd npm run carousel:publish"), /corre sin sandbox/],
+    [TAREA.replace("check: urls", "check: cmd npm run test:x --script-shell=sh"), /corre sin sandbox/],
+    [TAREA.replace("necesita-ok: no", "necesita-ok: no\nsalida: scripts/loops/orquesta-hermes.sh"), /hermes-content\/docs/],
+  ]) {
+    const b = banco({ respuestas: [creada()] });
+    const r = b.correr(["--crear"], t);
+    assert.equal(r.status, 65, r.stdout + r.stderr);
+    assert.match(r.stderr, msg);
+    assert.deepEqual(b.llamados(), []);
+  }
+  const b = banco({ respuestas: [creada()] });
+  assert.equal(b.correr(["--crear"], TAREA.replace("necesita-ok: no", "necesita-ok: no\nsalida: hermes-content/docs/orquesta/x.md")).status, 0);
+});
+
+test("texto que no se lee como se ve (invisibles, otros alfabetos) no entra; «1º» y «ñ» sí", () => {
+  for (const raro of ["Pub​licar el reel.", "рublicar el reel.", "Precios ocultos.", "Hola\u001b[2J.", "ｐｕｂｌｉｃａｒ."]) {
+    const b = banco({ respuestas: [creada()] });
+    const r = b.correr(["--crear"], TAREA.replace("Buscar los precios", raro + " Buscar los precios"));
+    assert.equal(r.status, 65, JSON.stringify(raro) + r.stderr);
+    assert.match(r.stderr, /no se ve o no es del alfabeto latino/);
+  }
+  const b = banco({ respuestas: [creada()] });
+  assert.equal(b.correr(["--crear"], TAREA.replace("Buscar los precios", "1º año, señal, «comillas» y 📈. Buscar los precios")).status, 0);
+  assert.match(posts(b)[0].cuerpo.body, /1º año, señal, «comillas» y 📈\./, "llega tal cual");
+});
+
+test("más verbos sensibles en voseo: «pagale», «subí … a Instagram», «git push»", () => {
+  for (const frase of ["Pagale a Samuel.", "Subí el video nuevo a Instagram.", "Hacer git push origin main.", "Facturar al cliente."]) {
+    const b = banco({ respuestas: [creada()] });
+    const r = b.correr(["--crear"], TAREA.replace("Buscar los precios", frase + " Buscar los precios"));
+    assert.equal(r.status, 0, frase + r.stderr);
+    assert.ok(posts(b)[0].cuerpo.labels.includes("necesita-ok"), frase);
+  }
+});
+
+test("solo tokens fine-grained (github_pat_): uno clásico trae el scope repo entero", () => {
+  const b = banco({ token: "ghp_" + "a".repeat(36), respuestas: [creada()] });
+  const r = b.correr(["--crear"], TAREA);
+  assert.equal(r.status, 69);
+  assert.match(r.stderr, /no es uno fine-grained/);
+  assert.deepEqual(b.llamados(), []);
+});
+
+test("--lista solo lee (lo usa el resumen); una bloqueada destrabada que vuelve a trabarse se avisa otra vez", () => {
+  const cola = (labels259) => [{ metodo: "GET", ruta: "issues\?labels=origen%3Ahermes", http: "200",
+    cuerpo: [{ number: 259, title: "T", state: "open", html_url: URL_ISSUE(259), labels: labels259.map((name) => ({ name })) }] }];
+  const b = banco({ respuestas: cola(["carril:marca", "origen:hermes", "bloqueada"]) });
+  const l = b.correr(["--lista"]);
+  assert.equal(l.status, 0, l.stderr);
+  assert.equal(l.stdout, `#259\tbloqueada\tmarca\tT\t${URL_ISSUE(259)}\n`);
+  assert.equal(b.leer("telegram"), "", "--lista no avisa");
+  assert.equal(existsSync(b.estado), false, "ni crea nada");
+
+  assert.equal(b.correr(["--revisar"]).status, 0);
+  writeFileSync(join(b.dir, "respuestas.json"), JSON.stringify(cola(["carril:marca", "origen:hermes"])));
+  assert.equal(b.correr(["--revisar"]).status, 0, "la destrabó");
+  writeFileSync(join(b.dir, "respuestas.json"), JSON.stringify(cola(["carril:marca", "origen:hermes", "bloqueada"])));
+  assert.equal(b.correr(["--revisar"]).status, 0, "se volvió a trabar");
+  assert.equal((b.leer("telegram").match(/⛔ #259 · /g) || []).length, 2);
 });

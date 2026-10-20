@@ -113,7 +113,8 @@ test('PROTEGIDAS: workflows y hooks no los cambia un trabajador', () => {
   for (const r of ['.github/workflows/x.yml', '.githooks/pre-push', '.husky/pre-commit']) assert.ok(PROTEGIDAS.test(r), r);
   for (const r of ['.env', 'apps/web/.env.local', 'certs/a.pem', 'x/id_ed25519', 'gcp/credentials.json']) assert.ok(PROTEGIDAS.test(r), r);
   for (const r of ['.claude/settings.json', '.claude/settings.local.json', '.mcp.json', 'apps/x/.mcp.json',
-    'scripts/orquesta/carriles.json', 'scripts/orquesta/trabajador.settings.json', 'scripts/orquesta/cuartitos/a/SKILL.md']) assert.ok(PROTEGIDAS.test(r), r);
+    'scripts/orquesta/carriles.json', 'scripts/orquesta/trabajador.settings.json', 'scripts/orquesta/cuartitos/a/SKILL.md',
+    'scripts/loops/orquesta-hermes.sh', 'hermes-content/deploy/hermes-agent/SOUL.md', 'hermes-content/skills/planificar-orquesta.md']) assert.ok(PROTEGIDAS.test(r), r);
   for (const r of ['docs/.github.md', 'hermes-content/docs/orquesta/marca/1.md', 'lib/x.ts', 'docs/environment.md',
     '.claude/skills/editor-videos/SKILL.md', 'scripts/otro/orquesta.mjs']) assert.ok(!PROTEGIDAS.test(r), r);
 });

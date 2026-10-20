@@ -3,7 +3,8 @@
 # (accion=diagnostico), detrás de comun.sh.
 #
 # No escribe archivos, no reinicia servicios, no manda mensajes, no toca crontab.
-# Lo único que sale a la red es `getMe` de Telegram (nombre del bot, de solo lectura).
+# Lo que sale a la red es de solo lectura: `getMe` de Telegram (nombre del bot) y, desde el 20-oct (sección 18),
+# GET a la API de GitHub con el token de Issues (el repo y sus labels, por `onia-orquesta-hermes.sh --estado`).
 # Toda salida pasa por `redactar`.
 #
 # Por qué existe: el inventario del repo (29-sep) encontró ~30 emisores y la mayoría

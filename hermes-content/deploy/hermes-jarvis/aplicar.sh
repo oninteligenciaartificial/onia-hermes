@@ -306,10 +306,13 @@ if [ -f "$ORQ_TOKEN" ] && [ -x "$BIN/onia-orquesta-hermes.sh" ]; then
   # Token (forma y 600), repo y los labels orquesta, origen:hermes y necesita-ok. Solo lee.
   ORQ_EST=$("$BIN/onia-orquesta-hermes.sh" --estado </dev/null 2>&1) \
     || falla "la cola de la orquesta no está lista: $(printf '%s' "$ORQ_EST" | head -c 200)"
-  # «cron create» con --skill y --deliver sale de la documentación de Hermes, no de una corrida en el VPS:
-  # si su CLI no lo trae, se sabe acá y no después de tocar el crontab.
-  timeout 60 "$HPY" -m hermes_cli.main cron create --help </dev/null 2>&1 | grep -q -- '--deliver' \
-    || falla "el CLI de Hermes no tiene «cron create … --deliver»: no puedo programar la revisión de cada 3 h"
+  # «cron create» con --skill, --name y --deliver sale de la documentación de Hermes, no de una corrida en
+  # el VPS: si su CLI no trae una de las tres, se sabe acá y no después de tocar el crontab.
+  AYUDA=$(timeout 60 "$HPY" -m hermes_cli.main cron create --help </dev/null 2>&1)
+  for op in --skill --name --deliver; do
+    printf '%s' "$AYUDA" | grep -q -- "$op" \
+      || falla "el CLI de Hermes no tiene «cron create … $op»: no puedo programar la revisión de cada 3 h"
+  done
 fi
 [ "$N8N_OK" = 1 ]   || abortar "la API de n8n no responde con la llave de gestión"
 [ "$FALLAS" -eq 0 ] || abortar "$FALLAS falla(s) en los requisitos (arriba, con ❌), antes de crear nada"
@@ -520,14 +523,15 @@ fi
 # Solo se reanuda lo que sigue en pausa (verificación del 1-oct): al reintentar un revertir que se
 # cortó a mitad, lo que ya volvió no se toca, y lo que ya no existe no se puede reanudar. No está
 # medido qué hace el CLI de Hermes en esos dos casos; si diera error, este rollback no llegaría
-# nunca a «revertido». Códigos: 0 en pausa (o no se sabe: se intenta) · 10 ya activo · 11 no está.
+# nunca a «revertido». Códigos: 0 en pausa · 10 ya activo · 11 no está · 12 jobs.json ilegible (no se sabe:
+# se intenta, y como después tampoco se puede comprobar, cuenta como no deshecho).
 en_pausa() {
   python3 - "$1" <<'PY'
 import json, sys
 try:
     d = json.load(open("/root/.hermes/cron/jobs.json"))
 except Exception:
-    raise SystemExit(0)                     # ilegible: se intenta reanudar igual
+    raise SystemExit(12)                    # ilegible: se intenta igual, pero no cuenta como hecho
 jobs = d.get("jobs", d) if isinstance(d, dict) else d
 if isinstance(jobs, dict):
     jobs = [dict(v, id=v.get("id", k)) for k, v in jobs.items() if isinstance(v, dict)]
@@ -554,7 +558,7 @@ for id in $(cat "$BK/hermes-creados.txt" 2>/dev/null); do
   if [ "$e" = 11 ]; then echo "hermes: $id ya no está en jobs.json: nada que pausar"; continue; fi
   timeout 60 $HPY -m hermes_cli.main cron pause "$id" </dev/null >/dev/null 2>&1
   en_pausa "$id"; e=$?
-  [ "$e" = 0 ] && echo "hermes: pausado $id (la revisión de la orquesta)" || mal "hermes: $id sigue activo después de pausarlo"
+  [ "$e" = 0 ] && echo "hermes: pausado $id (la revisión de la orquesta)" || mal "hermes: no pude comprobar que $id quedó en pausa (código $e)"
 done
 KEY=$(grep -oP '(?<=^N8N_MANAGEMENT_API_KEY=).*' /opt/onia-platform/app.env 2>/dev/null | tr -d "\"'" | head -1)
 # Un flujo que ya no existe en n8n (404) no tiene nada que deshacer: no es un error.

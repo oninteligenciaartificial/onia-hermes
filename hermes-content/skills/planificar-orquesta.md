@@ -15,11 +15,13 @@ description: Cargar tareas en la cola de la orquesta de ONIA (issues de GitHub q
 1. **Vos nunca declarás algo hecho.** Lo declaran el `check:` y el revisor de la orquesta. Si una tarea
    cerró, decí «la orquesta la cerró» con el link; si no, decí en qué estado está.
 2. **Nada sin `check:` ejecutable.** Corre sin sandbox: el comando solo acepta `urls`,
-   `cmd npm run <script>`, `cmd npm test` o `cmd node --test <ruta>`. Si no sabés cómo se comprobaría,
-   la tarea no está lista: no la cargues.
+   `cmd npm run test:<x>`, `cmd npm test` o `cmd node --test <ruta>`, sin opciones. Si no sabés cómo se
+   comprobaría, la tarea no está lista: no la cargues.
 3. **Publicar, gastar, contactar a alguien, tocar producción o mergear llevan `necesita-ok: si`.** La
    tarea queda esperando hasta que Sergio Urcullo le saque el label. El comando lo fuerza igual si el
-   texto lo menciona: no lo rodees cambiando las palabras.
+   texto lo menciona: no lo rodees cambiando las palabras. **También lo fuerza a todo lo que corre en
+   la PC (`donde: pc`) y a todo `check: cmd`**: lo único que arranca solo es `nube` + `check: urls`.
+   Escribí en texto común: un caracter invisible o de otro alfabeto hace que el comando no la cargue.
 4. **Tope: 10 tareas por día.** Mejor 2 buenas que 10 flojas. Una tarea repetida en 24 h no entra.
 5. **Una `bloqueada` es de Sergio Urcullo.** La orquesta ya la intentó dos veces y él decide. No la
    destrabes ni la vuelvas a cargar con otras palabras: el comando ya se la avisó en su resumen.
@@ -61,10 +63,10 @@ y entre comillas (así ningún `$`, comilla ni renglón del texto pasa por la sh
 |---|---|---|
 | `carril` | `plataforma` · `marca` · `comunidad` · `video` · `investigacion` | el área del trabajo |
 | `nivel` | `rapido` · `normal` · `profundo` | elige el modelo: `rapido` para contar o resumir, `normal` casi siempre, `profundo` solo si equivocarse es caro |
-| `donde` | `nube` · `pc` | `pc` solo si necesita sus logins o sus archivos (video, Meta, Instagram, Higgsfield, Buffer); el resto, `nube` |
-| `check` | `urls` · `cmd npm run <script>` · `cmd npm test` · `cmd node --test <ruta>` | `urls` para investigación; un test para código |
+| `donde` | `nube` · `pc` | `pc` solo si necesita sus logins o sus archivos (video, Meta, Instagram, Higgsfield, Buffer); el resto, `nube`. `pc` siempre espera su ok |
+| `check` | `urls` · `cmd npm run test:<x>` · `cmd npm test` · `cmd node --test <ruta>` | `urls` para investigación; un test para código (espera su ok) |
 | `necesita-ok` | `si` · `no` | `si` ante cualquier duda de la regla 3 |
-| opcionales | `salida: <ruta>` · `base: <rama>` · `ok: sergio` | `ok: sergio` = al terminar espera que él mire la entrega |
+| opcionales | `salida: hermes-content/docs/…` · `base: <rama>` · `ok: sergio` | sin `salida` va la carpeta del carril; `ok: sergio` = al terminar espera que él mire la entrega |
 
 Después de una línea en blanco, **qué hay que hacer** y una línea **`Hecho cuando:`** con cómo se
 comprueba. Escribilo para un trabajador que no sabe nada de la conversación: qué, dónde, para qué.

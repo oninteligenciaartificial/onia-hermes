@@ -18,7 +18,7 @@
 #   carril: plataforma|marca|comunidad|video|investigacion
 #   nivel: rapido|normal|profundo
 #   donde: pc|nube
-#   check: urls  |  check: cmd npm run <script>  |  check: cmd node --test <ruta>
+#   check: urls  |  check: cmd npm run test:<x>  |  check: cmd npm test  |  check: cmd node --test <ruta>
 #   necesita-ok: si|no
 #   (opcionales: salida: <ruta> · base: <rama> · ok: sergio)
 #
@@ -31,6 +31,7 @@
 #   el motivo                                                          que todavía no empezó
 #   FIN_TAREA_ONIA_4b9e
 #   onia-orquesta-hermes.sh --estado           ¿token y labels listos? (solo lee; no crea nada)
+#   onia-orquesta-hermes.sh --lista            lo mismo que --revisar, sin avisar nada (lo lee el resumen)
 #
 # 🔴 EL TOKEN ES DE LA CUENTA DE SERGIO URCULLO. Lo que se crea con él lo firma su usuario, y el
 # orquestador le cree (autores de carriles.json). Este comando frena el ERROR del modelo —una tarea
@@ -39,7 +40,7 @@
 #
 # Salidas: 0 hecho · 64 uso (o el texto como argumento) · 65 tarea inválida · 69 sin token, sin labels
 # o sin flock · 75 tope del día, repetida u otra carga en curso · 1 no salió o no se sabe (lo dice).
-set -uo pipefail
+set +x -uo pipefail   # nunca con traza: el token pasa por una variable (revisión de seguridad, 20-oct)
 export LC_ALL=C.UTF-8
 
 # Sin variables de entorno a propósito: un modelo que se equivoca no se sube el tope ni se borra el
@@ -58,7 +59,13 @@ AVISADAS="$ESTADO/avisadas"         # números de bloqueadas ya avisadas
 
 uso() { sed -n '/^# Uso/,/^# 🔴/p' "$0" | sed '$d; s/^# \{0,1\}//' >&2; exit 64; }
 esc() { sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g'; }
-dia_lp() { date -u -d "@$(( $1 - 14400 ))" +%F; }   # Bolivia: UTC-4 todo el año
+# Bolivia: UTC-4 todo el año, así que el día de La Paz empieza a las 04:00 UTC. Se cuenta con awk sobre
+# el registro (sin un `date` por línea bajo el candado).
+cargadas_hoy() {
+  local inicio=$(( ($(date -u +%s) - 14400) / 86400 * 86400 + 14400 ))
+  [ -f "$REGISTRO" ] || { echo 0; return; }
+  awk -F'\t' -v d="$inicio" '$1 >= d { n++ } END { print n + 0 }' "$REGISTRO"
+}
 
 TMP=$(mktemp -d) || exit 1
 trap 'rm -rf "$TMP"' EXIT
@@ -71,8 +78,9 @@ cargar_token() {
   case "$permisos" in 600|400) ;; *) echo "El token de Issues tiene permisos ${permisos:-?}: dejalo en 600 (chmod 600 $TOKEN_ARCHIVO). No lo usé." >&2; return 69 ;; esac
   local t=""
   read -r t 2>/dev/null < "$TOKEN_ARCHIVO"
-  [[ "$t" =~ ^(github_pat_[A-Za-z0-9_]{20,}|ghp_[A-Za-z0-9]{20,})$ ]] \
-    || { echo "El token de Issues no tiene la forma de un token de GitHub (¿mal pegado?): no lo usé." >&2; return 69; }
+  # Solo fine-grained (github_pat_): un clásico (ghp_) trae el scope `repo` entero, no solo Issues.
+  [[ "$t" =~ ^github_pat_[A-Za-z0-9_]{20,}$ ]] \
+    || { echo "El token de Issues no es uno fine-grained de GitHub (github_pat_…; ¿mal pegado o clásico?): no lo usé." >&2; return 69; }
   ( umask 077; printf 'Authorization: Bearer %s\n' "$t" > "$TMP/h" )
 }
 
@@ -125,7 +133,19 @@ import hashlib, json, os, re, sys, unicodedata
 def no(msg):
     print(msg, file=sys.stderr); raise SystemExit(65)
 
-lineas = os.environ["ENTRADA"].replace("\r", "").split("\n")
+# Solo texto que se lee igual que se ve (revisión de seguridad, 20-oct): sin caracteres invisibles
+# (Pub<U+200B>licar), sin controles y sin letras de otros alfabetos (la «р» cirílica de рublicar). Si no, el
+# respaldo de palabras de abajo se rodea sin que nadie lo note. Las de ancho completo («ＡＢＣ») tampoco
+# entran: su nombre no empieza con LATIN. NFC y no NFKC: NFKC cambiaría «1º» por «1o».
+entrada = unicodedata.normalize("NFC", os.environ["ENTRADA"].replace("\r", ""))
+for ch in entrada:
+    cat = unicodedata.category(ch)
+    if ch in "\n\t":
+        continue
+    if cat[0] == "C" or cat in ("Zl", "Zp") or (cat[0] == "L" and ord(ch) > 0x7F
+                                                 and not unicodedata.name(ch, "").startswith(("LATIN", "FEMININE ORDINAL", "MASCULINE ORDINAL"))):
+        no(f"la tarea trae un caracter que no se ve o no es del alfabeto latino (U+{ord(ch):04X}): escribila en texto común")
+lineas = entrada.split("\n")
 PERMITIDOS = ["titulo", "carril", "nivel", "donde", "check", "necesita-ok", "salida", "base", "ok"]
 campos, i = {}, 0
 def sin_tildes(s):
@@ -158,19 +178,23 @@ if campos["nivel"] not in ("rapido", "normal", "profundo"):
 if campos["donde"] not in ("pc", "nube"):
     no("donde: pc o nube")
 # El check corre FUERA de todo sandbox, con shell, en la PC de Sergio Urcullo o en Actions
-# (orquesta.mjs, «check: cmd»). De Hermes solo valen dos comandos de prueba, sin un solo caracter que
-# la shell interprete (ni ; | & $ ` < > ( ) * ? ~ ni comillas), sin opciones propias (un «--require=»
-# carga lo que sea) y sin salir de la carpeta de la tarea (ni «/» al principio ni «..»).
+# (orquesta.mjs, «check: cmd»). De Hermes solo valen comandos de PRUEBA, sin un solo caracter que la
+# shell interprete (ni ; | & $ ` < > ( ) * ? ~ % ^ ! ni comillas), sin opciones propias (un «--require=»
+# carga lo que sea) y sin salir de la carpeta de la tarea (ni «/» al principio ni «..»). `npm run`
+# solo con scripts `test…`: el package.json también tiene `deploy:*` y `carousel:publish` (revisión de
+# seguridad, 20-oct). Y como corre lo que dejó el trabajador, todo `cmd` espera su ok (abajo).
 TOK = r"[A-Za-z0-9_.][A-Za-z0-9._/:@=+-]*"
 check = campos["check"]
-if ".." in check or not re.fullmatch(rf"urls|cmd npm test|cmd npm (run|test) {TOK}( {TOK})*|cmd node --test( {TOK})+", check):
-    no("check: «urls», «cmd npm run <script>», «cmd npm test» o «cmd node --test <ruta>», sin opciones (nada más: corre sin sandbox)")
+if ".." in check or not re.fullmatch(rf"urls|cmd npm test|cmd npm run test(:[A-Za-z0-9._-]+)*|cmd node --test( {TOK})+", check):
+    no("check: «urls», «cmd npm run test:<x>», «cmd npm test» o «cmd node --test <ruta>», sin opciones (nada más: corre sin sandbox)")
 if campos["necesita-ok"] not in ("si", "sí", "no"):
     no("necesita-ok: si o no")
-if "salida" in campos and (not re.fullmatch(r"[A-Za-z0-9._/-]+", campos["salida"]) or campos["salida"].startswith("/")
+# La salida de Hermes es un documento: con `salida: scripts/loops/…` un trabajador escribiría lo que el
+# sincronizador copia como root a /root/bin.
+if "salida" in campos and (not re.fullmatch(r"(hermes-content/)?docs/[A-Za-z0-9._/-]+", campos["salida"])
                            or ".." in campos["salida"].split("/")):
-    no("salida: una ruta relativa dentro del repo")
-if "base" in campos and (not re.fullmatch(r"\w[\w./-]*", campos["base"]) or ".." in campos["base"]):
+    no("salida: una ruta dentro de hermes-content/docs/ (docs/ en plataforma), o sin esa línea: va la del carril")
+if "base" in campos and (not re.fullmatch(r"[A-Za-z0-9_][A-Za-z0-9_./-]*", campos["base"]) or ".." in campos["base"]):
     no("base: un nombre de rama")
 if "ok" in campos and campos["ok"] != "sergio":
     no("ok: sergio (o sin esa línea)")
@@ -186,22 +210,26 @@ if not re.search(r"(?im)^\s*hecho cuando\s*:\s*\S", texto):
 # los verbos («publicar», «publicá») y no los sustantivos que usa una investigación («publicaciones»).
 plano = sin_tildes((titulo + "\n" + texto).lower())
 SENSIBLE = re.compile(r"(?<![a-z])(publicar\w*|publique\w*|publica(lo|la|los|las)?|postear\w*|postea(lo|la)?"
-                      r"|sub(ir|e|a|elo|irlo|ilo)\w* (a|en) (instagram|youtube|tiktok|facebook|redes|buffer)"
+                      r"|sub(i|ir|e|a|elo|irlo|ilo)\w*( \w+){0,3} (a|en) (instagram|youtube|tiktok|facebook|redes|buffer)"
                       r"|gastar\w*|gaste\w*|gasta|pagar\w*|pague\w*|paga(lo|la)?|comprar\w*|compre\w*|compra(lo|la)?"
-                      r"|cobrar\w*|cobra(le|les)?|higgsfield"
+                      r"|paga(le|les)|cobrar\w*|cobra(le|les)?|facturar\w*|factura(le|les)|higgsfield|meta ads|difundi\w*|difund(e|ir|an)\w*"
                       r"|contactar\w*|contacte\w*|contacta(lo|la|los|las)?"
                       r"|escrib\w* a (un |una |el |la |los |las )?(cliente|prospecto|tercero|clinica)\w*"
                       r"|(mand|envi)\w* (un |una |el |la |los |las )?(mensaje|correo|mail|email|whatsapp|dm)\w*"
-                      r"|produccion|deploy\w*|despleg\w*|despliegue\w*|merge\w*|mergea\w*|vps)(?![a-z])")
+                      r"|produccion|deploy\w*|despleg\w*|despliegue\w*|merge\w*|mergea\w*|push|vps)(?![a-z])")
 hallado = SENSIBLE.search(plano)
-pide_ok = campos["necesita-ok"] in ("si", "sí") or bool(hallado)
+# Lo que corre en la PC (con sus logins) y todo `check: cmd` (corre sin sandbox lo que dejó el
+# trabajador) esperan su ok SIEMPRE: lo único que arranca solo es `nube` + `urls`.
+motivo = ("el texto habla de «" + hallado.group(0) + "»" if hallado else "corre en la PC" if campos["donde"] == "pc"
+          else "su check corre un comando" if check.startswith("cmd ") else "")
+pide_ok = campos["necesita-ok"] in ("si", "sí") or bool(motivo)
 
 orden = ["nivel", "check", "donde", "salida", "base", "ok"]
 cuerpo = "\n".join(f"{c}: {campos[c]}" for c in orden if c in campos) + "\n\n" + texto
 labels = ["orquesta", f"carril:{campos['carril']}", "origen:hermes"] + (["necesita-ok"] if pide_ok else [])
 huella = hashlib.md5((campos["carril"] + "\n" + titulo + "\n" + texto).encode()).hexdigest()[:12]
 json.dump({"title": titulo, "body": cuerpo, "labels": labels, "carril": campos["carril"], "hash": huella,
-           "forzado": bool(hallado) and campos["necesita-ok"] == "no", "por": hallado.group(0) if hallado else ""},
+           "forzado": bool(motivo) and campos["necesita-ok"] == "no", "por": motivo},
           open(sys.argv[1], "w"), ensure_ascii=False)
 PY
 }
@@ -229,13 +257,13 @@ crear() {
   # Contar, crear y anotar bajo UN candado: sin él, dos cargas en paralelo cuentan lo mismo y se pasan
   # del tope (la trampa de pedido-claude.sh, medida por la madre el 2-oct).
   candado
-  local ahora hoy huella carril hechos repe
-  ahora=$(date -u +%s); hoy=$(dia_lp "$ahora")
+  local ahora huella carril hechos repe
+  ahora=$(date -u +%s)
   huella=$(campo_json "$TMP/tarea.json" hash); carril=$(campo_json "$TMP/tarea.json" carril)
   if [ -f "$REGISTRO" ]; then
     repe=$(awk -F'\t' -v h="$huella" -v desde=$((ahora - 86400)) '$4 == h && $1 >= desde { print ($5 == "" ? "(no se sabe si salió)" : $5) }' "$REGISTRO" | tail -1)
     [ -n "$repe" ] && { echo "Esa misma tarea ya se cargó en las últimas 24 h: $repe. No la repito." >&2; exit 75; }
-    hechos=$(while IFS=$'\t' read -r ts _r; do [ "$(dia_lp "$ts")" = "$hoy" ] && echo x; done < "$REGISTRO" | grep -c x)
+    hechos=$(cargadas_hoy)
     [ "$hechos" -ge "$TOPE" ] && { echo "Ya cargaste $hechos tareas hoy (tope $TOPE). Lo demás, mañana o que lo cargue Sergio Urcullo." >&2; exit 75; }
   fi
   python3 - "$TMP/tarea.json" "$TMP/cuerpo.json" <<'PY'
@@ -285,7 +313,7 @@ Hermes cargó: $(printf '%s' "$titulo" | esc) (carril $carril)"
   echo "✅ Tarea #$numero cargada (carril $carril): $url"
   if [ -n "$pide" ]; then
     [ -n "$(campo_json "$TMP/tarea.json" forzado)" ] \
-      && echo "Le puse «necesita-ok» aunque dijiste que no: el texto habla de «$(campo_json "$TMP/tarea.json" por)»."
+      && echo "Le puse «necesita-ok» aunque dijiste que no: $(campo_json "$TMP/tarea.json" por)."
     echo "🙋 No arranca hasta que Sergio Urcullo le quite «necesita-ok». Ya va en su resumen."
   else
     echo "La toma la orquesta sola. Vos no la das por hecha: la cierran el check y el revisor."
@@ -293,15 +321,11 @@ Hermes cargó: $(printf '%s' "$titulo" | esc) (carril $carril)"
 }
 
 # ── --revisar ──────────────────────────────────────────────────────────────────
-revisar() {
+listar() {  # las 30 tareas más nuevas de Hermes -> $TMP/lista.tsv (#n estado carril título url). Solo lee.
   cargar_token || exit $?
-  mkdir -p "$ESTADO" 2>/dev/null && chmod 700 "$ESTADO" 2>/dev/null
-  local code ahora hoy hechos=0
+  local code
   code=$(gh_api GET "/repos/$REPO/issues?labels=origen%3Ahermes&state=all&sort=created&direction=desc&per_page=30")
   [ "$code" = 200 ] || { echo "No pude leer la cola (HTTP ${code:-000})." >&2; exit 1; }
-  ahora=$(date -u +%s); hoy=$(dia_lp "$ahora")
-  [ -f "$REGISTRO" ] && hechos=$(while IFS=$'\t' read -r ts _r; do [ "$(dia_lp "$ts")" = "$hoy" ] && echo x; done < "$REGISTRO" | grep -c x)
-  echo "Tus tareas en la orquesta (hoy cargaste $hechos de $TOPE):"
   python3 - "$TMP/r" > "$TMP/lista.tsv" <<'PY'
 import json, sys
 for it in json.load(open(sys.argv[1])):
@@ -316,19 +340,28 @@ for it in json.load(open(sys.argv[1])):
                                  ("espera-ok", "espera su ok de la entrega"), ("en-curso", "en curso")] if l in ls), "en cola")
     print("\t".join([f"#{it['number']}", e, carril, " ".join(str(it.get("title", "")).split()), it.get("html_url", "")]))
 PY
+}
+
+revisar() {
+  listar
+  mkdir -p "$ESTADO" 2>/dev/null && chmod 700 "$ESTADO" 2>/dev/null
+  echo "Tus tareas en la orquesta (hoy cargaste $(cargadas_hoy) de $TOPE):"
   if [ ! -s "$TMP/lista.tsv" ]; then echo "(ninguna)"; return 0; fi
   cat "$TMP/lista.tsv"
   # Dos rechazos dejan la tarea bloqueada (orquesta.mjs) y la decide Sergio Urcullo: se le avisa UNA
-  # vez por tarea, en su resumen. Hermes no la destraba.
+  # vez por bloqueo, en su resumen. Hermes no la destraba. La que dejó de estar bloqueada sale de la
+  # lista: si él la destraba y vuelve a trabarse, se avisa otra vez.
   local n e _c t u
+  : > "$TMP/avisadas"
   while IFS=$'\t' read -r n e _c t u; do
     [ "$e" = bloqueada ] || continue
-    grep -qx "${n#\#}" "$AVISADAS" 2>/dev/null && continue
+    if grep -qx "${n#\#}" "$AVISADAS" 2>/dev/null; then echo "${n#\#}" >> "$TMP/avisadas"; continue; fi
     if aviso "orquesta-bloqueada-${n#\#}" "⛔ $n · $u
 Bloqueada: $(printf '%s' "$t" | esc). La orquesta la intentó dos veces: comentá en el issue qué cambiar, o cerrala."; then
-      echo "${n#\#}" >> "$AVISADAS"
+      echo "${n#\#}" >> "$TMP/avisadas"
     fi
   done < "$TMP/lista.tsv"
+  mv -f "$TMP/avisadas" "$AVISADAS"
 }
 
 # ── --cerrar ───────────────────────────────────────────────────────────────────
@@ -346,7 +379,7 @@ cerrar() {
   [ -z "$(campo_json "$TMP/r" pull_request)" ] || { echo "#$n es un PR, no una tarea." >&2; exit 65; }
   ls=" $(campo_json "$TMP/r" labels) "
   [[ "$ls" == *" origen:hermes "* ]] || { echo "#$n no es una tarea tuya (sin origen:hermes): esa la decide Sergio Urcullo." >&2; exit 65; }
-  for l in en-curso bloqueada espera-ok; do
+  for l in en-curso bloqueada espera-ok necesita-ok; do
     [[ "$ls" == *" $l "* ]] && { echo "#$n está «$l»: esa ya es de la orquesta o de Sergio Urcullo, no la cierres." >&2; exit 65; }
   done
   # Primero se cierra y después se comenta: el orquestador mira solo las abiertas, y el comentario lleva
@@ -366,6 +399,7 @@ Hermes la cerró sin hacer: $(printf '%s' "$ENTRADA" | esc)"
 case "${1:-}" in
   --estado)  [ "$#" = 1 ] || uso; estado ;;
   --revisar) [ "$#" = 1 ] || uso; revisar ;;
+  --lista)   [ "$#" = 1 ] || uso; listar; cat "$TMP/lista.tsv" ;;
   --crear)   [ "$#" = 1 ] || { echo "La tarea va por la entrada estándar (heredoc <<'FIN_TAREA_ONIA_4b9e' de la skill), nunca como argumento: así pasaría por la shell." >&2; exit 64; }
              crear ;;
   --cerrar)  [ "$#" = 2 ] || { echo "--cerrar <número>; el motivo va por la entrada estándar." >&2; exit 64; }
