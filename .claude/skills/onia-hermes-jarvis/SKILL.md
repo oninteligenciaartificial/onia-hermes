@@ -121,6 +121,11 @@ CLI de Hermes.
 
 ## Trampas ya pagadas
 
+- **Un «ok» de Hermes no es trabajo hecho** (20-oct). La primera revisión de la orquesta quedó `last_status: ok` y su
+  salida (`/root/.hermes/cron/output/<id>/`, sección 18 del diagnóstico desde el #266) era `[SILENT]`: la sección
+  «La revisión de cada 3 horas» solo miraba SUS tareas (`--revisar` lista `origen:hermes`) y no decía de dónde
+  sacar una nueva con la cola vacía. Ahora el paso 4 lo obliga a cargar una de `principal.md` o del «Próximos
+  pasos» de un carril. Para saber si un trabajo de Hermes hace algo, se lee su salida, no `last_status`.
 - **Un MUDO de la sección 15 no es un trabajo caído si su latido está fresco** (20-oct). La sección juzgaba por la
   fecha del LOG también las líneas con `onia-latido.sh`, y el resumen, el cierre, la aduana y el recolector solo
   escriben su log cuando pasa algo: salían «MUDO hace 3 d» estando sanos (los latidos decían código 0 de hoy), y
