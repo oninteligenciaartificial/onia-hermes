@@ -9,7 +9,7 @@ description: "Invocar ANTES de hacer cualquier pieza visual de la marca personal
 
 - **Marca personal = `fotobn`: fotografía B/N con un solo objeto verde**, decisión del 8-oct; reemplaza `clay`/arcilla como estilo de salida. Las mediciones históricas de Soul y K1-B de abajo son diagnóstico, no el estilo vigente. Método: `hermes-content/docs/HIGGSFIELD_VIDEO_SYSTEM.md`.
 - **Marca personal habla de vos; producto, anuncios y clientes de usted.** Para recursos de comunidad: «Buscá PALABRA en Avisos», comprobando que el recurso existe. No prometer DM por comentario.
-- **9-oct: el render revisado se publica por el carril autorizado sin esperar otro OK de diseño.** Control visual y de claims sigue obligatorio. Gasto, contacto a terceros, actos legales y subir cara/voz a servicios externos conservan su autorización. Esta regla no amplía una tarea de Codex cerrada ni supera un bloqueo de permisos.
+- **19-oct: toda pieza de redes le llega a Sergio Urcullo completa (imágenes o video reales) y espera su OK antes de publicarse** (`CLAUDE.md` §«Qué se publica sin preguntar»; sustituye el «sin esperar» del 9-oct). Control visual y de claims sigue obligatorio. Gasto, contacto a terceros, actos legales y subir cara/voz a servicios externos conservan su autorización. Esta regla no amplía una tarea de Codex cerrada ni supera un bloqueo de permisos.
 - Un enlace sin instrucción activa `aprender-de-todo`, no producción. Guardar principio + evidencia + destino; «aplicado» requiere artefacto y sesión que lo usó.
 
 ### Aprendizajes incorporados el 9-oct (aplicación pendiente de artefacto)
@@ -32,7 +32,7 @@ Fuentes bajo `hermes-content/references/video-intake/`:
 > con UN solo objeto en verde esmeralda** (`image_style: "fotobn"` en `scripts/carousel_images.mjs`, `--model gpt_image_2_5`,
 > `params ["--quality","medium","--resolution","2k"]`, **1 cr por imagen**). Soul 2.0 inventó letras en 5 de 7 imágenes de
 > arcilla. Prompt: describir la escena y decir cuál es «el objeto verde». Fuente completa: `HIGGSFIELD_VIDEO_SYSTEM.md` §
-> «Higgsfield en la edición de la marca personal» (entra a `main` con el PR de la madre). Todo lo de abajo que diga «arcilla»
+> «Higgsfield en la edición de la marca personal» (ya en `main`). Todo lo de abajo que diga «arcilla»
 > es el estilo anterior. Carruseles nuevos (P2, P3): `fotobn`. Los 7 carruseles en espera (K1, N02, K9, K12, K5, K13, K10)
 > mezclan 10 imágenes flojas con 10 de arcilla que sí sirven: el lote en `docs/cola/plan-3-semanas/lote-14-imagenes.json` está
 > en `fotobn` (14 cr) y falta que Sergio Urcullo decida si se rehace todo el carrusel en el estilo nuevo (+10 cr).
@@ -80,7 +80,7 @@ Cada lámina elige `layout`:
 | `ensayo` | Bastian: texto grande sobre papel, sin cajas | ≤ 60 palabras | ninguna |
 | `dato` | Erik / Ingeniero Binario: una cifra gigante + qué significa (`value`) | título ≤ 6 palabras | ninguna |
 | `captura` | Carlos: la pantalla real como prueba | título ≤ 8, pie ≤ 12 | captura real (nunca maqueta) |
-| `cierre` | «Buscá PALABRA en Avisos» + qué recibís (`keyword`), adaptación vigente 9-oct | 1 línea | ninguna; solo si el recurso ya existe |
+| `cierre` | **No usar hoy:** el layout imprime «Comentá» fijo (`cierreHtml` en `scripts/carousel_pack_referentes.js`) y el DM por comentario no está probado. El cierre vigente es `ensayo` con `cta` «Buscá PALABRA en Avisos» | 1 línea | ninguna; solo si el recurso ya existe |
 
 Pendientes del catálogo (en `patrones/`): P-COMPARA, P-FOTO-ESCENA, P-DIAGRAMA, P-TABLA-MARCADOR, **P-LISTA-CONTINUA** (receta «Inventario continuo», más abajo; sin layout todavía).
 Carlos Domínguez señala como rasgo de «plantilla IA» el fondo crema: por eso el pack pasó a
@@ -212,7 +212,7 @@ Letras: Bricolage (títulos, local), DM Sans (texto), Caveat (flechas y sello), 
 > 3. los kits ya aprobados: `carousels/out/curso-dia1/` y `historias-llamada/` (fondo verde de marca, tarjetas negras,
 >    stickers collage, zona punteada para el sticker real).
 > Una historia que vende es una **secuencia** con una acción final, no un afiche con titular. Lo que no se ve desde la nube
-> (cómo lo hacen cuentas que funcionan) se le pide a la madre: «PEDIDO PC: historias de <cuentas> — para qué lo querés».
+> (cómo lo hacen cuentas que funcionan) se pide a la sesión principal en la PC (o con un issue `orquesta` + `carril:marca`): «PEDIDO PC: historias de <cuentas> — para qué lo querés».
 
 Lo que sigue (render, banda segura, trampas del headless) **sigue valiendo** como herramienta; lo que cambia es el diseño.
 
@@ -259,16 +259,16 @@ Fuente y evidencia: [`references/video-intake/2026-10-10-ig-carrusel-DePPPp5FgMh
 **Control de calidad propio (suma a §5):** (1) **cada línea corresponde a su ítem**: la fuente publicó una línea cruzada (la de Spotify hablaba de maquetas) y escribió «Whatsapp»; leé fila por fila contra el logo o el número; (2) lámina, caption y recurso enlazado no se contradicen (la fuente, en su lámina 5, prometía notas diarias con envío semanal); (3) misma grilla en todas: sobreponé las láminas 2 y 3 y la x del ícono y del texto no se mueve; (4) la última lista queda centrada en vertical, no pegada arriba; (5) el número de la portada coincide con el de las láminas.
 
 **Qué plantilla hay hoy y qué falta (verificado en `scripts/carousel_pack_referentes.js` el 10-oct):**
-- **Hoy no hay plantilla para esta receta.** El `lista` más parecido (línea 56; CSS 172-193) dibuja cada fila como tarjeta con borde de 3 px y radio de 26 px, siempre imprime su `headline`, cambia a `compacta` con 4 filas o más y usa dos cuerpos (50 y 40 px). **No se usa como si fuera la receta.**
-- **Falta, en este orden** (encargo cerrado para Codex, con la hoja de contactos de los 2 briefs como prueba de hecho; no se construye hasta que la madre lo pida):
-  1. Layout `inventario` junto a `listaHtml`, registrado en `LAYOUTS` (línea 89): `items[{icon|n, label, text}]`, `headline` opcional que no dibuja nada si falta, filas sin caja a la grilla de arriba, `center` para la última lámina y `ask` para la flecha del remate. Sumarlo a la lista de `scripts/carousel_render.test.js:104` con casos de 5, 3 y 2 filas.
+- **Hoy no hay plantilla para esta receta.** El `lista` más parecido (`listaHtml` y su CSS) dibuja cada fila como tarjeta con borde de 3 px y radio de 26 px, siempre imprime su `headline`, cambia a `compacta` con 4 filas o más y usa dos cuerpos (50 y 40 px). **No se usa como si fuera la receta.**
+- **Falta, en este orden** (encargo cerrado para Codex, con la hoja de contactos de los 2 briefs como prueba de hecho; no se construye hasta que Sergio Urcullo o Hermes lo pidan con un issue `orquesta`):
+  1. Layout `inventario` junto a `listaHtml`, registrado en `LAYOUTS`: `items[{icon|n, label, text}]`, `headline` opcional que no dibuja nada si falta, filas sin caja a la grilla de arriba, `center` para la última lámina y `ask` para la flecha del remate. Sumarlo a la lista de `scripts/carousel_render.test.js:104` con casos de 5, 3 y 2 filas.
   2. `cierre` escribe «Comentá» fijo (línea 86; lo confirma P2): darle un `pre` con «Buscá» por defecto, o armar el cierre con `ilustrado` (foto + frase + CTA) mientras tanto.
   3. Portada-inventario con logos en arco: layout nuevo opcional; sin él, la portada va con foto `fotobn` + `dato` o captura.
 - **Logos:** hay 8 en `hermes-content/references/brand-logos/` y 3 en `hermes-content/references/brand-claude/`. Notion, Chrome, Spotify, NordVPN, Figma, Xcode y Cursor **no están**: un inventario que los nombre primero necesita su kit de prensa oficial (si hay que descargar, pide OK).
 
 ## Carrusel de oferta o evento (workshop de pago) — aprendido el 16-oct-2026
 
-Caso: dos carruseles del workshop «Auditá tu negocio con IA» (`briefs/marca-personal/sergio-workshop-*-20261016.json` del 16-oct; la versión vigente es `sergio-taller-*-20261017.json`). Sin imágenes ni gasto: solo layouts `dato`, `lista`, `ensayo`.
+Caso: dos carruseles del workshop «Auditá tu negocio con IA» (versión vigente: `hermes-content/carousels/briefs/marca-personal/sergio-taller-*-20261017.json`; los `sergio-workshop-*` del 16-oct ya no están en el repo). Sin imágenes ni gasto: solo layouts `dato`, `lista`, `ensayo`.
 - **Estructura que funcionó:** portada `dato` con **ejemplo rotulado** («Ejemplo: 5 h por semana, a Bs 20 la hora»; nunca un número que parezca dato de alguien) → la cuenta en `lista` → filtro «para quién no es» → fecha y cupo → cierre `ensayo` negro con `cta` y **una sola** acción («Link en mi perfil»). El precio no va en la lámina: va en la página, que es lo que se aprueba.
 - **Una lámina `ensayo` con 3 líneas queda con más de la mitad vacía** (falla el control §5.2). Se arregla pasándola a `lista` de 3 filas. Las de cierre negro y la portada verde pueden quedar así: son declaraciones.
 - **`cierre` no se usa** para estas piezas: imprime «Comentá» fijo y el DM por comentario no está probado. El cierre es `ensayo` con `cta`.
@@ -282,7 +282,7 @@ Método y cifras en `docs/ONIA_LANZAMIENTO_PREPAGO.md` y `docs/research/FUNNELS_
 - **Antes de diseñar una pieza de venta, hacer la cuenta de cuánta gente hace falta** (meta ÷ precio, y precio plano contra escalones por cupo). Con Bs 3.000: 60 inscripciones a Bs 50, 50 a Bs 60, 43 a Bs 70. Si la audiencia medida no alcanza, la pieza no arregla la cuenta: se dice.
 - **Escalones de precio por cupo real** (Bs 50 → 60 → 70), nunca por reloj falso ni «valor» inflado. La lámina no lleva el precio: va en la página, que es lo que aprueba Sergio Urcullo.
 - **No hay fuente pública sobre prepagos en Bolivia:** un caso de un amigo es anécdota, no dato. Antes de usarlo como meta, preguntarle su audiencia y los días que vendió.
-- Los carruseles de oferta repiten la fecha y el cupo: si cambian, **se cambian las láminas antes de publicar** (los de 16-oct dicen «sáb 24 / cupo 12»).
+- Los carruseles de oferta repiten la fecha y el cupo: si cambian, **se cambian las láminas antes de publicar** (los del 16-oct decían «sáb 24 / cupo 12»; fecha y cupo vigentes en `hermes-content/docs/TALLER_31_OCT.md`).
 
 **Aprendido el 19-oct-2026 (taller del 31-oct, fuente única `docs/TALLER_31_OCT.md`):**
 - **La fuente de una oferta vive en el repo, nunca solo en un disco de proyecto.** `TALLER_31_OCT.md` se escribió en `/mnt/project-files/` de la nube, 5 documentos la citaban como «la que manda» y nadie podía leerla: 7 contradicciones y la apertura del lun 19 perdida. Se recreó en git.

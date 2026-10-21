@@ -5,7 +5,7 @@
 > texto alternativo del post. Medidas en % sobre 1080x1350 (4:5): son aproximadas, tomadas
 > a ojo sobre capturas, y alcanzan para maquetar.
 > Índice de la skill: [`../SKILL.md`](../SKILL.md). Layouts ya implementados en
-> `scripts/carousel_pack_referentes.js`: `ilustrado`, `logos`, `analogia`, `lista`, `ensayo`.
+> `scripts/carousel_pack_referentes.js`: `ilustrado`, `logos`, `analogia`, `lista`, `ensayo`, `dato`, `captura`, `cierre`.
 
 ---
 
@@ -361,7 +361,7 @@ letra del título en % del ancho.
 ### P-CAPTURA-REAL · la prueba: pantalla, comando o prompt verdaderos
 - **Quién:** Carlos (landing real + cifras; prompt real en terminal), Enrique (comando en
   tarjeta con logo), Erik (`brew install …`), Tiago (fotograma real enmarcado).
-  **No implementado.**
+  Implementado como layout `captura`.
 - **Anatomía:** etiqueta y 4-6 % · título y 7-16 % · artefacto y 20-58 %: captura con radio 2 %
   y sombra suave, a 90 % del ancho; o terminal oscura con UN acento en el borde y texto mono
   2,2 % (≥ 24 px) · debajo: cifras 2x2 (cap 7 % + leyenda mono) o «Por qué:» + 20 palabras.
@@ -379,7 +379,7 @@ letra del título en % del ancho.
   negra · 1-2 líneas de qué recibe y 62-72 % · handle abajo.
 - **Densidad máx.:** 25 palabras.
 - **Imagen:** opcional foto real de Sergio Urcullo. **Cómo:** código.
-- **Cuándo:** siempre en la última lámina; UNA palabra, la misma que dice el caption.
+- **Cuándo:** observación de los referentes. Para Sergio Urcullo no se copia el «Comenta»: el cierre es «Buscá PALABRA en Avisos» (SKILL §2), sin prometer DM por comentario.
 
 ### Formatos de serie (no son una lámina, son una piel para todo el carrusel)
 - **Documento prestado** (Carlos, receta médica): elegir un objeto del mundo del cliente
@@ -437,7 +437,7 @@ el texto es chico y está amontonado en una franja, y el resto de la lámina no 
 | 04 código difícil | P-DATOS: cifra gigante «+8 pts» |
 | 05 misma tarea | P-CAPTURA-REAL: los tres presupuestos reales, o P-ENSAYO |
 | 06 elegí por la tarea | P-COMPARA: Sonnet (editar, scripts, contenido) / Opus (migraciones, arquitectura) |
-| 07 cierre | P-CIERRE-PALABRA: fondo verde lleno + «Comenta PALABRA» |
+| 07 cierre | P-CIERRE-PALABRA adaptado: fondo verde lleno + «Buscá PALABRA en Avisos» |
 
 ---
 

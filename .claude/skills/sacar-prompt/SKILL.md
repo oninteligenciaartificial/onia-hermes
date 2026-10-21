@@ -180,7 +180,7 @@ veces en el corpus y después apareció. *"No está hoy"* no es lo mismo que *"n
 models_explore (search/get)  ·  balance  ·  presets_show
 ```
 
-**Gasto:** generar **imagen** es barato y está permitido. Generar **video** cuesta créditos y
+**Gasto:** cotizar siempre con `higgsfield generate cost`; imágenes de menos de ~5 créditos por lote van sin preguntar (8-oct), lotes mayores piden aprobación; cara o voz de Sergio Urcullo, OK previo. Generar **video** cuesta créditos y
 necesita **OK explícito de Sergio, caso por caso**. Se entrega el prompt + el modelo + el costo
 estimado, y se para.
 

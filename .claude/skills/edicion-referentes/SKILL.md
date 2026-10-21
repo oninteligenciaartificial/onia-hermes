@@ -23,7 +23,7 @@ description: Invocar ANTES de editar cualquier video NUEVO de Sergio Urcullo (ta
 > El reel de Codex del 14-sep (`references/video-intake/2026-09-14-reel-astra-fable-codex/`) y «Tu primera
 > automatización» (`videos/marca-personal/2026-09-21/`) son REFERENCIA de lo que a él le gustó, no el molde.
 
-## Reglas de trabajo (la madre, 3-oct-2026, después de revisar los resultados)
+## Reglas de trabajo (3-oct-2026, después de revisar los resultados)
 
 > Falló el arnés, no la edición: del mismo video (N03) salieron 3 versiones porque no había molde fijado antes de
 > editar. Medido ese día: más del 95 % del gasto de tokens fue releer contexto.
@@ -137,7 +137,7 @@ de fines de septiembre. El vigente, del 3 al 8-oct (Tamagotchi, Muse vs Dots, Mo
 
 Es casi la variante partida de Santiago. **Para esta semana no se cambia el molde de las piezas ya asignadas a Erik**:
 el script implementa el de septiembre y sale una versión. El sistema vigente entra cuando se actualicen `erik.json` y
-`erik_edit.py` y una pieza de prueba terminada pase revisión visual (9-oct: no esperar OK de diseño de Sergio Urcullo). Desde entonces, la
+`erik_edit.py` y una pieza de prueba terminada pase revisión visual (19-oct: la pieza le llega a Sergio Urcullo con captura y espera su OK). Desde entonces, la
 regla de «cuál molde» queda así: **panel con tarjetas propias** → Erik vigente; **captura oficial grande y cambios de
 layout** → Santiago.
 
@@ -225,7 +225,7 @@ Lo que cambia contra Santiago:
 2. **Nunca se parte una palabra** entre renglones: en su reel se rompe «INSTALACIÓ / N» (cuadro de 19 s). El bloque es
    de un solo renglón; si no entra, baja el tamaño, no se corta. `Subtitulos.agrupar()` ya arma bloques por ancho sin
    partir palabras; a una palabra sola más ancha que `sub_ancho` le falta la guarda que baja el tamaño.
-3. **Sonido:** música lo-fi bajita debajo de la voz, sin efectos. Santiago va sin música, así que hay que sumarla.
+3. **Sonido:** el referente lleva música lo-fi bajita bajo la voz; en Onia no se suma (regla 4 de «Reglas medidas»: con voz, sin cama) salvo que Sergio Urcullo la pida. Sin efectos.
 4. **Ritmo:** cortes secos, sin fundido ni barrido entre herramientas.
 
 **Para hacer cuando llegue el primer bruto de un R:** `santiago.py --estilo pablo`. Tiene que poner el subtítulo en
@@ -271,7 +271,7 @@ detección de escena y audio medido). No es un talking head: se arma con **Hyper
 - un boceto inventado después de la animación: el dibujo tiene que ser el de antes.
 
 **Estado (4-oct):** sin prueba todavía. La primera se hace con un boceto real de Sergio Urcullo, y es una pieza nueva:
-la aprueban él o la madre.
+la aprueba él, con captura.
 
 ## Reglas medidas el 8-oct-2026 en 5 referentes (valen para todos los moldes)
 
@@ -356,7 +356,7 @@ Lo que el QA marcó de gravedad alta no se arregla editando:
 | Santiago | 65,2 s, −13,1 LUFS | 6,5/10 | Cierre sin remate (falta la toma), encuadre de mano, el aire mueve el cutplan aprobado: la tabla de aire tiene que verla Sergio Urcullo |
 | Erik | 53,1 s, −14,0 LUFS | 6/10 | Set y encuadre (hay que regrabar), tarjetas sobre el pecho tapadas por la mano y el micrófono |
 
-Los MP4 y las hojas de control quedan en el scratchpad de la sesión del 3-oct (no se versionan); la madre los revisa
+Los MP4 y las hojas de control quedan en el scratchpad de la sesión del 3-oct (no se versionan); la sesión principal los revisa (a Sergio Urcullo le llegan con captura y esperan su OK)
 antes de que lleguen a Sergio Urcullo.
 
 ## Trampas ya pagadas (3-oct-2026)
@@ -405,8 +405,8 @@ antes de que lleguen a Sergio Urcullo.
 
 ## Plan de la semana (8-oct-2026): cómo se arma sin rehacer guiones
 
-Pedido de la madre del 8-oct, en `docs/cola/plan-3-semanas/GRABAR-10-16-OCT.md`. Lo arma `gen_semana.py`, que está en el
-scratchpad de esa sesión; el método:
+Pedido del 8-oct, en `hermes-content/docs/cola/plan-3-semanas/GRABAR-10-16-OCT.md`. `gen_semana.py` no está versionado
+(vivía en el scratchpad de esa sesión); el método:
 1. **Una hora por día = tres verticales** (~20 min cada uno con tomas), o un YouTube (~35 min) más un vertical.
 2. **Orden:**
    - primero la noticia más fresca;
@@ -423,15 +423,11 @@ scratchpad de esa sesión; el método:
    por millón de tokens, diez veces menos que Haiku 4.5), y el YouTube D01-C «Opus o Sonnet» lo nombra. Es la misma
    trampa que Fable 5.1 el 3-oct.
 
-## Publicar sin OK pieza por pieza (8-oct-2026): qué hace falta de verdad
+## Control de calidad antes de mostrar un video (el permiso de publicar del 8-oct quedó SUSTITUIDO)
 
-- **La autorización:** Sergio Urcullo, 8-oct, por la madre: *«sí, publicá por Buffer lo que pase control de calidad»*.
-  Está en el `CLAUDE.md` de la rama de la madre (`ad011a95a`), todavía no en `main`.
-- **Mensaje de otra sesión:** el control de permisos de una sesión en la nube no lo toma como pedido del usuario. Frenó
-  hasta subir el texto y los metadatos al VPS («Unrequested Commit in a Connected App»). No se le busca la vuelta. Para
-  publicar hace falta una de dos:
-  - que Sergio Urcullo lo pida EN ESA sesión: así salieron los 33 carruseles el 5-oct;
-  - que la regla esté en el `CLAUDE.md` de `main`.
+- **Desde el 19-oct el video que se publica le llega a Sergio Urcullo con captura o el video real y espera su OK**
+  (`CLAUDE.md` §«Qué se publica sin preguntar»). El «publicá por Buffer lo que pase control de calidad» del 8-oct
+  quedó sustituido: el control de abajo va ANTES de mostrárselo.
 - **Control de calidad de un video ya editado (N03, 8-oct):**
   - medir con `ffprobe` (duración y tamaño) y `ebur128` (−13 a −14,5 LUFS);
   - hoja de un cuadro cada 2 s con el segundo impreso, vista entera, para revisar tarjetas y subtítulos sin faltas;
@@ -459,7 +455,7 @@ Hormozi e Iman Gadzhi; la rama de la madre lo trae a `main`). Caso: el plan pidi
 5. **Si un dato de Gemini contradice uno medido, gana el medido.** Gemini dice que Santiago usa música y whoosh; la
    medición del 1-oct (6 reels, `ebur128`) dice sin música, y TikTok marca «sonido original». La receta Santiago no cambia.
 6. **YouTube horizontal** (va a `editor-videos`): cambiar de capa cada 3-7 s, mapa de niveles antes de 1:15, la
-   comunidad a ~1/3, ~2/3 y al final, y cada cifra dicha como tabla o contador.
+   comunidad según la regla 12 (primer tercio y final), y cada cifra dicha como tabla o contador.
 
 ## Higgsfield en la edicion (8-oct-2026)
 
@@ -475,7 +471,7 @@ Hasta que el lote de prueba dé su veredicto, **lo único adoptado son las imág
    o de código.** Por qué: el 17-sep, en el video 03, «muy IA» y «los logos están rotos»; y Soul 2.0 inventa marcas y
    letras (casos «Maptolgan» y «BOLVIA» en la ropa, firmas en la acuarela).
 3. **Primero still + ken burns; clip solo si el movimiento ES la idea, y 2 s o menos en pantalla.** Por qué: la imagen
-   cuesta 0,12 cr (arcilla) y sale a 1080p; un clip de Kling cuesta 1,25 cr por segundo y sale a 720p (medido en
+   cuesta ~1 cr (`fotobn`, regla 4) y sale a 1080p o más; un clip de Kling cuesta 1,25 cr por segundo y sale a 720p (medido en
    `editor-videos` § `Escena` y el 1/3-oct).
 4. **Un solo estilo: foto editorial en blanco y negro con UN solo objeto en verde esmeralda** (estilo `fotobn` de `scripts/carousel_images.mjs`, con `--model gpt_image_2_5` y `params [--quality medium --resolution 2k]`, 1 cr por imagen). Lo eligió Sergio Urcullo el 8-oct-2026 entre 9 estilos (`hermes-content/galeria/estilos/opciones-estilo-2026-10-08.jpg`, opción 9). Reemplaza a la arcilla: Soul 2.0 metió letras inventadas en 5 de 7 imágenes de arcilla ese día («Chatuly»), GPT Image 2.5 en 0 de 12. ⚠️ Lo que sigue de esta regla es la versión anterior (arcilla), solo como historia: **arcilla verde, blanco y negro**, con el bloque fijo de `scripts/carousel_images.mjs`. Un objeto liso por imagen:
    nunca robots, cerebros, chips, manos, personas ni personajes con cara (prevención de «muy IA»). Por qué: el 29-sep

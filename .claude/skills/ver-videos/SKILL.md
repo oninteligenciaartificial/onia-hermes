@@ -216,8 +216,8 @@ Solo videos **< 3 min**: la propia herramienta degrada en largos. NO reemplaza l
 pantalla: el prompt se lee con los ojos, siempre.
 
 El MCP de Higgsfield vive solo en sesiones de Claude (OAuth; no hay API key). Por eso
-`scripts/video-intake.mjs` **encola** (`.hermes/video-intake/scenes-queue.jsonl`) y una sesión
-con el MCP **drena** con `scripts/video-scenes.mjs` (flujo exacto en su cabecera): `next` →
+`scripts/video-intake.mjs` (raíz del repo) **encola** (`.hermes/video-intake/scenes-queue.jsonl`) y una sesión
+con el MCP **drena** con `scripts/video-scenes.mjs` (raíz del repo; flujo exacto en su cabecera): `next` →
 `media_upload` + curl PUT + `media_confirm` → `balance` ANTES → `video_analysis_create` →
 `mark` → seguir con otra cosa (3-5 min) → `video_analysis_status` → `balance` DESPUÉS → `save`.
 Tope por corrida `ONIA_SCENES_TOPE` (default 10); si el balance BAJA, `save` corta la cola

@@ -54,7 +54,7 @@ Ese es el eje: **la narración es la timeline**. No se eligen tiempos a mano; se
 storyboard en palabras ("cuando diga X entra la tarjeta") y `sync-plan.mjs` le pone el
 timestamp real del transcript word-level. Corolario del mismo reel, que ya cumplimos:
 **la tipografía y los marcos se dibujan en código, no se generan con IA** ("IA erra letra,
-código não") — para eso están `make-mockup.mjs` (PNG) y `scripts/remotion` / `scripts/hyperframes`
+código não") — para eso están `make-mockup.mjs` (PNG) y `scripts/hyperframes` (raíz del repo; Remotion está jubilado)
 (animados).
 
 ## Estilo TikTok 17/18-sep — referencia, no molde (lo que se replica: Erik Taveras y Santiago Muñoz)
@@ -68,7 +68,7 @@ código não") — para eso están `make-mockup.mjs` (PNG) y `scripts/remotion` 
 >    son referencia. El video bueno que él recuerda es «tu primera automatización» (22-sep).
 > Lección: «como antes» no se adivina. Tres ediciones del mismo video, y cada una copió lo más parecido que había en el
 > repo. Antes de rehacer un estilo «como antes»,
-> preguntá CUÁL video y pedile a la madre el archivo si no está en el repo.
+> preguntá CUÁL video y pedile el archivo a Sergio Urcullo si no está en el repo.
 
 Si él pide este estilo, la receta está en `videos/tiktok-20260917/README.md`:
 - corte fino (silencios + sonido sin palabra);
@@ -131,13 +131,15 @@ el mismo corpus: `Seedance` → "see dance 2.0", `VSL` → "viesel") vive en
 ## 💸 Regla de gasto
 Generación paga (Higgsfield, AssemblyAI, ElevenLabs) = **permiso explícito de Sergio caso por
 caso** ([[gasto-plataformas-validar-primero]]). Por defecto todo gratis: Speaches (transcripción),
-HyperFrames (render + SFX), imagen barata. Validar la idea antes de generar.
+HyperFrames (render + SFX), imagen barata. Validar la idea antes de generar. Excepción (8-oct, `CLAUDE.md`
+§Higgsfield): imágenes de prueba de menos de ~5 créditos por lote van sin preguntar, siempre tras `higgsfield
+generate cost`; video, Soul, lotes grandes y cara o voz piden OK.
 
 ## 🎛 Orquestación (Sergio, 18-sep: "mandá subagentes, dejás a medias cada video")
 - **UN subagente por pieza, pipeline COMPLETO de una vez** (comp → karaoke → SFX → master →
   QA mirando frames → editado/). El orquestador prepara plantillas/configs y despacha en
   paralelo; nunca edita las piezas en serie él mismo.
-- **SIN música de cama: la pone Sergio.** Entregar con voz + SFX solamente.
+- **SIN música de cama: la pone Sergio Urcullo.** Entregar con voz; SFX solo si él los pide (el pop por tarjeta se rechazó el 2-oct).
 - **El karaoke es el rail; lo IMPORTANTE se resalta ADEMÁS** con keyword grande en pantalla
   (blanca 900 + subrayado naranja) cuando se dice — no basta transcribir.
 - **Mención hablada de una marca → su logo ORIGINAL en pantalla** (Sergio, 18-sep: "cuando
@@ -275,7 +277,7 @@ actualización anotada. WebFetch y las fuentes secundarias sirven para descartar
    corrección va en el transcript; recién con el barrido limpio se pasa al paso 6.
 6. **Subtítulos karaoke** (pieza propia, PROBADA). `node scripts/karaoke-captions.mjs --segments scripts/segments.json --video renders/cut.mp4 --out renders/karaoke.mp4 [--fix "Fergio=Sergio"]`
    → agrupa en frases de ≤4 palabras/1.6s y genera un **.ass** con la palabra activa resaltada
-   (base blanco + activa amarillo, Arial Black escalado al alto del video, MarginV 220 en 9:16 para
+   (base blanco + activa verde ONIA #10C26B, el default de `karaoke-captions.mjs`; Arial Black escalado al alto del video, MarginV 220 en 9:16 para
    no tapar la cara), y lo quema con ffmpeg. Imprime la tabla de frases (mostrar a Sergio).
    Flags: `--words-per-line --margin-v --font-size --outline --base-color --active-color --dry-run`.
    Alternativa cinematográfica (matte de la persona, embed detrás del sujeto): `embedded-captions`.
@@ -290,7 +292,7 @@ actualización anotada. WebFetch y las fuentes secundarias sirven para descartar
    `mix-blend-mode:multiply` sobre la foto en `grayscale(1) contrast(1.45)`; borde de recorte =
    `clip-path: polygon(...)` con puntos irregulares FIJOS; papel = dos `repeating-linear-gradient`;
    sello = borde + rotación + `multiply`.
-   Apoyo **animado** (contar un número, revelar texto): `scripts/hyperframes/render.mjs`.
+   Apoyo **animado** (contar un número, revelar texto): `scripts/hyperframes/render.mjs` (raíz del repo).
    **Decisión CERRADA (A/B medido 2026-07-30): el motor es HyperFrames. No se reabre.**
    `scripts/remotion/render.mjs` corre las MISMAS 5 composiciones
    (`Stat · Browser · Phone · Quote · LowerThird`) pero es **baseline histórico**, no una
@@ -336,7 +338,7 @@ actualización anotada. WebFetch y las fuentes secundarias sirven para descartar
     o el dato fuerte (`--plan zooms.json` con `{zooms:[{start,end,from,to,anchor}]}`).
     En 9:16 usar `--anchor top` (ahí está la cara). Máx 2.0× (arriba se pixela); el script lo bloquea.
     **Va ANTES de los apoyos y los subtítulos** — si no, se zoomean el mockup y el texto.
-12. **Ilustraciones — el modelo pone el CONTENIDO, el código pone el ESTILO** (PROBADO).
+12. **Ilustraciones — el modelo pone el CONTENIDO, el código pone el ESTILO** (PROBADO; serie de campaña. Para la marca personal vale un solo estilo, `fotobn`, decisión del 8-oct: `edicion-referentes`, regla 4).
     Generar con Higgsfield `recraft_v4_1` (**1.25 créditos** por imagen a 1k, preflight con
     `get_cost:true`; saldo y modelo en [[higgsfield-models-roster]]) → tratar SIEMPRE con
     `node scripts/illustration-style.mjs --image bruta.png --out assets/ilu.png --preset diario`
@@ -493,21 +495,14 @@ node scripts/fondo-verde.mjs --toma toma.mp4 --fondo captura.png --crop 0:0:1440
 > - **Cómo se llegó acá:** «Hoy soy odontóloga» entró a `main` el 2-oct en el plan v2 sin revisión. Antes de renderizar
 >   se hace grep del guion y del pie contra esta lista.
 >
-> 📋 **Cómo trabaja el carril Lucía (reglas de la madre, 3-oct).**
+> 📋 **Cómo trabaja el carril Lucía (3-oct).**
 > 1. **Cada tarea arranca con tres cosas escritas en el transcript:**
 >    - **META**: qué se hace;
 >    - **PRUEBA DE HECHO**: qué se mira para darla por terminada;
 >    - **REGLA DE PARADA**: cuándo se frena.
 > 2. **Nada entra a `main` sin revisión: se trabaja en una rama y con un PR.** Antes, cada guion se compara con
 >    `LUCIA.md` §0: IA declarada, nunca profesional de salud, sin promesas de resultado.
->    - Desde el 5-oct el hook Stop (`scripts/git-autosync.js`) ya no empuja la rama a `main`: solo la madre y el
->      integrador mueven `main` (CLAUDE.md, «Git — auto-sync»). Hasta ese día sí lo hacía, y por eso estaba el
->      truco de abajo.
->    - Para que el PR espere la revisión: pushear la rama, abrir el PR y **estacionar el checkout en `main`**
->      (`git checkout -B main origin/main`). Sigue sirviendo en la PC de la madre, que tiene el permiso.
->    - Medido el 3-oct: con `git reset --keep origin/main` sobre la rama del PR, esa rama queda adelante y atrás de su
->      remoto, y el hook Stop pide un push que GitHub rechaza.
->    - Así entró «Hoy soy odontóloga» (#82) el 2-oct.
+>    - El hook Stop no empuja a `main` sin permiso (`CLAUDE.md`, «Git — auto-sync»): push de la rama + PR.
 > 3. **Tokens:**
 >    - workflows de 5 agentes como máximo;
 >    - nada de leer transcripts ni documentos enteros: se lee la sección que hace falta;
@@ -545,7 +540,7 @@ node scripts/fondo-verde.mjs --toma toma.mp4 --fondo captura.png --crop 0:0:1440
 9. **Apoyos clavados a la palabra** con `sync-plan.mjs --lead -0.15`; entrada 0,15 s, salida 0,22 s. Un evento
    visual cada 1,5–3 s.
 10. **Audio:** con voz, −14 LUFS / −1,5 dBTP (`master.mjs`) y ≤ 1 SFX cada 2,5 s, cada uno con causa visible y
-    ~10 dB bajo el pico de la voz. Sin voz, un pop por tarjeta y pico ≤ −3 dBTP (sin `loudnorm`: subiría los pops a
+    ~10 dB bajo el pico de la voz. Sin voz, pop por tarjeta solo si Sergio Urcullo lo aprueba (rechazado el 2-oct en N03) y pico ≤ −3 dBTP (sin `loudnorm`: subiría los pops a
     nivel de voz). Música de cama: la pone Sergio Urcullo.
 11. **Generaciones:** gen1 en UNA pasada (escala + zoompan + overlays + audio, CRF 14 slow) → karaoke
     `--crf 14 --preset slow` → `sfx.mjs` y `master.mjs` copian el video. Etiquetar bt709.
@@ -707,7 +702,7 @@ Cada transición **acorta** el video su propia duración: los dos bloques se sol
 - **Aplicar el SQL a producción desde la skill.** La skill es DRY-RUN (imprime SQL); lo aplica el
   orquestador por SSH a `supabase-db`.
 - **Subtitular todo como embed** — la mayoría va al rail; embed solo el pico (ver `embedded-captions`).
-- **Gastar en Higgsfield/AssemblyAI sin OK.** Default gratis. Con OK: preflight `get_cost` y reportar lo gastado.
+- **Gastar en Higgsfield/AssemblyAI sin OK** (salvo imágenes de menos de ~5 cr por lote). Default gratis. Siempre `higgsfield generate cost` antes y reportar lo gastado.
 - **Confiar el ESTILO al modelo de imagen.** Obedece el pedido "más o menos" y ese margen cambia
   entre imagen e imagen: a los 155 videos no hay serie. El estilo lo fija `illustration-style.mjs`.
 - **Poner el sello sobre la foto** en el recorte de diario: usa `multiply` y sobre un plano oscuro
@@ -718,8 +713,6 @@ Cada transición **acorta** el video su propia duración: los dos bloques se sol
 - **Poner un apoyo en `bottom` cuando hay subtítulos.** Abajo vive el rail del karaoke: la placa y
   el texto se pisan (medido 2026-07-30, ver el A/B). Los apoyos van `top` / `center`; si el apoyo
   tiene que ir abajo sí o sí, subí el `--margin-v` del karaoke.
-- **Mezclar apoyos de los DOS motores en la misma pieza.** Remotion y HyperFrames corren las mismas
-  composiciones pero el reveal no resuelve en el mismo frame (comprobado a los 5.6s). Elegí uno por pieza.
 - **Poner los tiempos de los apoyos a ojo** en vez de `sync-plan.mjs`: ahí es donde el motion deja
   de estar pegado a la voz. Y si el cue se repite ("vez", "sistema"), a ojo dispara en la aparición
   equivocada — el macheo monotónico existe para eso.
@@ -739,14 +732,14 @@ Cada transición **acorta** el video su propia duración: los dos bloques se sol
 Fuente: `references/marca-personal/PLAN-REFERENTES.md` §4. Se midió sobre el formato de Iman Gadzhi («Dame 26 minutos…»,
 1,4 M de vistas); las fechas de sus videos no constan y los cortes salen de Gemini, sin medir.
 
-1. **Cambiar de capa cada 3-7 s**: cámara, pantalla grabada o gráfico. Un sonido en cada cosa que aparece.
+1. **Cambiar de capa cada 3-7 s**: cámara, pantalla grabada o gráfico. Sonido solo si Sergio Urcullo lo pide (`edicion-referentes`, regla 4).
 2. **Mapa de niveles o capítulos en pantalla antes de 1:15.**
-3. **El CTA de la comunidad aparece 2 o 3 veces**: a ~1/3, a ~2/3 y al final. La asesoría gratis va solo en la descripción.
+3. **Un CTA de la comunidad en el primer tercio y otro al final** (`edicion-referentes`, regla 12, medida el 8-oct). La asesoría gratis va solo en la descripción.
 4. **Cada cifra dicha entra como tabla o contador**, con su cuenta a la vista.
 5. El primer minuto es un **filtro de dolor**: «si te sirve pagar el doble por la misma tarea, no sigas». Caso: D01-C.
 
 ## Relacionadas
-`ver-videos` · `embedded-captions` · `talking-head-recut` · `hyperframes-cli` · `media-use` · [[onia-video-hyperframes]] · [[content-engine-remotion]].
+`ver-videos` · `embedded-captions` · `talking-head-recut` · `hyperframes-cli` · `media-use` · [[onia-video-hyperframes]] · [[content-engine-remotion]] (jubilado).
 
 ---
 
